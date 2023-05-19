@@ -1,7 +1,7 @@
 {
   "name": "@alch/aa-ethers",
   "license": "MIT",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "type": "module",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
