@@ -9,39 +9,39 @@ Alchemy's Account Abstraction Kit is an SDK that enables easy interactions with 
 via `yarn`:
 
 ```bash
-yarn add @alchemy/aa-kit-core
+yarn add @alchemy/aa-core
 ```
 
 via `npm`:
 
 ```bash
-npm i -s @alchemy/aa-kit-core
+npm i -s @alchemy/aa-core
 ```
 
-If you are using `ethers` and want to use an `ethers` compatible `Provider` and `Signer` you can also add the the `@alchemy/aa-kit-ethers` library.
+If you are using `ethers` and want to use an `ethers` compatible `Provider` and `Signer` you can also add the the `@alchemy/aa-ethers` library.
 
 via `yarn`:
 
 ```bash
-yarn add @alchemy/aa-kit-ethers
+yarn add @alchemy/aa-ethers
 ```
 
 via `npm`:
 
 ```bash
-npm i -s @alchemy/aa-kit-ethers
+npm i -s @alchemy/aa-ethers
 ```
 
 ## Example Usage to Interact with [Simple Accounts](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol)
 
-### via `aa-kit-core`
+### via `aa-core`
 
 ```ts
 import {
   SimpleSmartContractAccount,
   SmartAccountProvider,
   type SimpleSmartAccountOwner,
-} from "@alchemy/aa-kit-core";
+} from "@alchemy/aa-core";
 import { mnemonicToAccount } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
 import { toHex } from "viem";
@@ -96,13 +96,13 @@ import {
   alchemyPaymasterAndDataMiddleware,
   getChain,
   SimpleSmartContractAccount,
-} from "@alchemy/aa-kit-core";
+} from "@alchemy/aa-core";
 import { AlchemyProvider } from "@ethersproject/providers";
 import { Wallet } from "@ethersproject/wallet";
 import {
   EthersProviderAdapter,
   convertWalletToAccountSigner,
-} from "@alchemy/aa-kit-ethers";
+} from "@alchemy/aa-ethers";
 
 const SIMPLE_ACCOUNT_FACTORY_ADDRESS =
   "0x9406Cc6185a346906296840746125a0E44976454";
@@ -146,7 +146,7 @@ The `SmartAccountProvider` is an ERC-1193 compliant Provider that wraps JSON RPC
 1. `sendUserOperation` -- this takes in `target`, `callData`, and an optional `value` which then constructs a UserOperation (UO), sends it, and returns the `hash` of the UO. It handles estimating gas, fetching fee data, (optionally) requesting paymasterAndData, and lastly signing. This is done via a middleware stack that runs in a specific order. The middleware order is `getDummyPaymasterData` => `estimateGas` => `getFeeData` => `getPaymasterAndData`. The paymaster fields are set to `0x` by default. They can be changed using `provider.withPaymasterMiddleware`.
 2. `sendTransaction` -- this takes in a traditional Transaction Request object which then gets converted into a UO. Currently, the only data being used from the Transaction Request object is `to`, `callData` and `value`. Support for other fields is coming soon.
 
-If you want to add support for your own `SmartAccounts` then you will need to provide an implementation of `BaseSmartContractAccount`. You can see an example of this in [SimpleSmartContractAccount](packages/erc4337-primitives/src/account/simple.ts). You will need to implement 4 methods:
+If you want to add support for your own `SmartAccounts` then you will need to provide an implementation of `BaseSmartContractAccount`. You can see an example of this in [SimpleSmartContractAccount](packages/core/src/account/simple.ts). You will need to implement 4 methods:
 
 1. `getDummySignature` -- this method should return a signature that will not `revert` during validation. It does not have to pass validation, just not cause the contract to revert. This is required for gas estimation so that the gas estimate are accurate.
 2. `encodeExecute` -- this method should return the abi encoded function data for a call to your contract's `execute` method
