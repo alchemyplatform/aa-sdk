@@ -1,0 +1,119 @@
+import type { Address } from "abitype";
+import type { Hash, RpcTransactionRequest, Transport } from "viem";
+import type { BaseSmartContractAccount } from "../account/base.js";
+import type {
+  PublicErc4337Client,
+  SupportedTransports,
+} from "../client/types.js";
+import type { UserOperationRequest, UserOperationStruct } from "../types.js";
+
+export type SendUserOperationResult = {
+  hash: string;
+  request: UserOperationRequest;
+};
+
+export type AccountMiddlewareFn = (
+  struct: UserOperationStruct
+) => Promise<UserOperationStruct>;
+
+// TODO: this also will need to implement EventEmitteer
+export interface ISmartAccountProvider<
+  TTransport extends SupportedTransports = Transport
+> {
+  readonly rpcClient: PublicErc4337Client<TTransport>;
+  readonly dummyPaymasterDataMiddleware: AccountMiddlewareFn;
+  readonly paymasterMiddleware: AccountMiddlewareFn;
+  readonly gasEstimator: AccountMiddlewareFn;
+  readonly feeDataGetter: AccountMiddlewareFn;
+
+  readonly account?: BaseSmartContractAccount;
+
+  /**
+   * Sends a user operation using the connected account.
+   * Before executing, sendUserOperation will run the user operation through the middleware pipeline.
+   * The order of the middlewares is:
+   * 1. dummyPaymasterDataMiddleware -- populates a dummy paymaster data to use in estimation (default: "0x")
+   * 2. gasEstimator -- calls eth_estimateUserOperationGas
+   * 3. feeDataGetter -- sets maxfeePerGas and maxPriorityFeePerGas
+   * 4. paymasterMiddleware -- used to set paymasterAndData. (default: "0x")
+   *
+   * @param target - the address receiving the call data
+   * @param data - the call data or "0x" if empty
+   * @param value - optionally the amount of native token to send
+   * @returns - {@link SendUserOperationResult} containing the hash and request
+   */
+  sendUserOperation: (
+    target: string,
+    data: string,
+    value?: bigint
+  ) => Promise<SendUserOperationResult>;
+
+  /**
+   * This takes an ethereum transaction and converts it into a UserOperation, sends the UserOperation, and waits
+   * on the receipt of that UserOperation (ie. has it been mined). If you don't want to wait for the UserOperation
+   * to mine, it's recommended to user {@link sendUserOperation} instead.
+   *
+   * @param request - a {@link RpcTransactionRequest} object representing a traditional ethereum transaction
+   * @returns the transaction hash
+   */
+  sendTransaction: (request: RpcTransactionRequest) => Promise<Hash>;
+
+  /**
+   * EIP-1193 compliant request method
+   *
+   * @param args - object containing the method and params to execute
+   * @returns the result of the method call
+   */
+  request(args: { method: string; params?: any[] }): Promise<any>;
+
+  // TODO: potentially add methods here for signing or something like viem's walletActions?
+  /**
+   * @returns the address of the connected account
+   */
+  getAddress: () => Promise<Address>;
+
+  // Middelware Overriders
+  /**
+   * This method allows you to override the default dummy paymaster data middleware and get paymaster
+   * and data middleware. These middleware are often used together. The dummy paymaster data is used in
+   * gas estimation before we actually have paymaster data. Because the paymaster data has an impact on
+   * the gas estimation, it's good to supply dummy paymaster data that is valid for your paymaster contract.
+   * The getPaymasterAndDataMiddleware is used to make an RPC call to the paymaster contract to get the value
+   * for paymasterAndData.
+   *
+   * @param overrides - optional functions for overriding the default paymaster middleware
+   * @returns an update instance of this, which now uses the new middleware
+   */
+  withPaymasterMiddleware: (overrides: {
+    dummyPaymasterMiddleware?: AccountMiddlewareFn;
+    getPaymasterAndDataMiddleware?: AccountMiddlewareFn;
+  }) => this;
+
+  /**
+   * Overrides the gasEstimator middleware which is used for setting the gasLimit fields on the UserOperation
+   * prior to execution.
+   *
+   * @param override - a function for overriding the default gas estimator middleware
+   * @returns
+   */
+  withGasEstimator: (override: AccountMiddlewareFn) => this;
+
+  /**
+   * Overrides the feeDataGetter middleware which is used for setting the fee fields on the UserOperation
+   * prior to execution.
+   *
+   * @param override - a function for overriding the default feeDataGetter middleware
+   * @returns
+   */
+  withFeeDataGetter: (override: AccountMiddlewareFn) => this;
+
+  /**
+   * Sets the current account to the account returned by the given function. The function parameter
+   * provides the public rpc client that is used by this provider so the account can make RPC calls.
+   *
+   * @param fn - a function that given public rpc client, returns a smart contract account
+   */
+  connect(
+    fn: (provider: PublicErc4337Client<TTransport>) => BaseSmartContractAccount
+  ): this & { account: BaseSmartContractAccount };
+}

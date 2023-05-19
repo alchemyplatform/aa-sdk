@@ -1,0 +1,53 @@
+{
+  "name": "root",
+  "type": "module",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "templates/*"
+  ],
+  "scripts": {
+    "build": "lerna run build",
+    "clean": "lerna run clean",
+    "test": "vitest run",
+    "lint:write": "eslint . --fix && prettier --write --ignore-unknown .",
+    "lint:check": "eslint . && prettier --check . && npmPkgJsonLint -q .",
+    "prepare": "husky install",
+    "preversion": "yarn build"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.6.3",
+    "@commitlint/config-conventional": "^17.6.3",
+    "eslint": "^8.39.0",
+    "eslint-config-react-app": "^7.0.1",
+    "husky": "^8.0.0",
+    "lerna": "^6.6.1",
+    "lint-staged": "^13.2.2",
+    "node-fetch": "^3.3.1",
+    "prettier": "^2.8.8",
+    "vitest": "^0.31.0"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "npx --no -- commitlint --edit ${1}"
+    }
+  },
+  "lint-staged": {
+    "**/src/*.{tsx,jsx,ts,js}": [
+      "eslint --fix",
+      "prettier --write --ignore-unknown"
+    ]
+  }
+}

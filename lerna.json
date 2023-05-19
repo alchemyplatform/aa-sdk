@@ -1,0 +1,9 @@
+{
+  "$schema": "node_modules/lerna/schemas/lerna-schema.json",
+  "useWorkspaces": true,
+  "version": "0.0.1-alpha.0",
+  "useNx": true,
+  "npmClient": "yarn",
+  "conventionalCommits": true,
+  "conventionalPrerelease": true
+}
