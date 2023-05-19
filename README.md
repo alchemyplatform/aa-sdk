@@ -1,4 +1,4 @@
-# Account Abstraction Kit (aa-kit)
+# Account Abstraction SDK (aa-sdk)
 
 ⚠️ This repo is actively being developed and certain features might not be fully implemented yet or are subject to change ⚠️
 
@@ -89,7 +89,7 @@ const { hash } = provider.sendUserOperation(
 );
 ```
 
-### via `aa-kit-ethers`
+### via `aa-ethers`
 
 ```ts
 import {
