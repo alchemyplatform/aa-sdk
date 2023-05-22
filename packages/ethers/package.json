@@ -2,6 +2,8 @@
   "name": "@alchemy/aa-ethers",
   "license": "MIT",
   "version": "0.0.1-alpha.0",
+  "description": "Ethers.js wrapper for @alchemy/aa-core",
+  "author": "Alchemy",
   "type": "module",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -54,6 +56,13 @@
     "@ethersproject/keccak256": "^5.7.0",
     "@ethersproject/providers": "^5.7.2",
     "@ethersproject/wallet": "^5.7.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alchemyplatform/aa-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alchemyplatform/aa-sdk/issues"
   },
   "gitHead": "89509891df3122649465bd2bc05bce9461d35e3d"
 }
