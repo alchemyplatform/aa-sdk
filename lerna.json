@@ -6,6 +6,5 @@
   "npmClient": "yarn",
   "conventionalCommits": true,
   "conventionalPrerelease": true,
-  "changelog": true,
-  "access": "public"
+  "changelog": true
 }
