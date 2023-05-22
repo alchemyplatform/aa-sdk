@@ -1,7 +1,7 @@
 {
   "name": "@alchemy/aa-ethers",
   "license": "MIT",
-  "version": "0.0.1-alpha.0",
+  "version": "0.0.1-alpha.1",
   "type": "module",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -41,7 +41,7 @@
     "vitest": "^0.31.0"
   },
   "dependencies": {
-    "@alchemy/aa-core": "^0.0.1-alpha.0",
+    "@alchemy/aa-core": "^0.0.1-alpha.1",
     "@ethersproject/abi": "^5.7.0",
     "@ethersproject/abstract-signer": "^5.7.0",
     "@ethersproject/bytes": "^5.7.0",
