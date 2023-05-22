@@ -44,5 +44,6 @@
   "dependencies": {
     "abitype": "^0.8.3",
     "viem": "0.3.17"
-  }
+  },
+  "gitHead": "b5403193f054f2b963cc0a8e670f98c2ea308fe4"
 }

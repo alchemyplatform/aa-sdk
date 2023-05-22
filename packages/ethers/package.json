@@ -50,5 +50,6 @@
     "@ethersproject/keccak256": "^5.7.0",
     "@ethersproject/providers": "^5.7.2",
     "@ethersproject/wallet": "^5.7.0"
-  }
+  },
+  "gitHead": "b5403193f054f2b963cc0a8e670f98c2ea308fe4"
 }
