@@ -1,7 +1,7 @@
 {
   "name": "@alchemy/aa-core",
   "license": "MIT",
-  "version": "0.0.1-alpha.0",
+  "version": "0.0.0",
   "description": "various primitives and types for interacting with 4337 infrastructure. ABIs are based off the definitions generated in @account-abstraction/contracts",
   "type": "module",
   "main": "./dist/cjs/index.js",

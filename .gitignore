@@ -19,3 +19,4 @@ tsconfig*.tsbuildinfo
 .envrc
 .npmrc
 yarn-error.log
+lerna-debug.log
