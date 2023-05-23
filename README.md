@@ -97,7 +97,7 @@ import {
   getChain,
   SimpleSmartContractAccount,
 } from "@alchemy/aa-core";
-import { AlchemyProvider } from "@ethersproject/providers";
+import { Alchemy, Network } from "alchemy-sdk";
 import { Wallet } from "@ethersproject/wallet";
 import {
   EthersProviderAdapter,
@@ -108,7 +108,11 @@ const SIMPLE_ACCOUNT_FACTORY_ADDRESS =
   "0x9406Cc6185a346906296840746125a0E44976454";
 
 // 1. connect to an RPC Provider and a Wallet
-const alchemyProvider = new AlchemyProvider(80001, API_KEY);
+const alchemy = new Alchemy({
+  apiKey: API_KEY,
+  network: Network.MATIC_MUMBAI,
+});
+const alchemyProvider = await alchemy.config.getProvider();
 const owner = Wallet.fromMnemonic(MNEMONIC);
 
 // 2. Create the SimpleAccount signer
