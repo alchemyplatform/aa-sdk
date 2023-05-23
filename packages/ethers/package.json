@@ -41,6 +41,7 @@
     "test:run": "vitest run"
   },
   "devDependencies": {
+    "alchemy-sdk": "^2.8.3",
     "dotenv": "^16.0.3",
     "typescript": "^5.0.4",
     "typescript-template": "*",

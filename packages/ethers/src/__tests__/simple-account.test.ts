@@ -3,8 +3,8 @@ import {
   getChain,
   SimpleSmartContractAccount,
 } from "@alchemy/aa-core";
-import { AlchemyProvider } from "@ethersproject/providers";
 import { Wallet } from "@ethersproject/wallet";
+import { Alchemy, Network } from "alchemy-sdk";
 import { EthersProviderAdapter } from "../provider-adapter.js";
 import { convertWalletToAccountSigner } from "../utils.js";
 
@@ -15,8 +15,12 @@ const PAYMASTER_POLICY_ID = process.env.PAYMASTER_POLICY_ID!;
 const SIMPLE_ACCOUNT_FACTORY_ADDRESS =
   "0x9406Cc6185a346906296840746125a0E44976454";
 
-describe("Simple Account Tests", () => {
-  const alchemyProvider = new AlchemyProvider(80001, API_KEY);
+describe("Simple Account Tests", async () => {
+  const alchemy = new Alchemy({
+    apiKey: API_KEY,
+    network: Network.MATIC_MUMBAI,
+  });
+  const alchemyProvider = await alchemy.config.getProvider();
   const owner = Wallet.fromMnemonic(OWNER_MNEMONIC);
   const signer = EthersProviderAdapter.fromEthersProvider(
     alchemyProvider,
