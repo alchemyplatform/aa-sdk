@@ -78,7 +78,7 @@ function UnMemoProfilePage() {
         <VStack alignItems="start" gap={5}>
           <Box
             cursor="pointer"
-            onClick={copyAddressTextToClipboard(eoaAddress!)}
+            onClick={copyAddressTextToClipboard(scwAddress!)}
           >
             <ProfileAttribute
               value={`${eoaAddress?.substring(0, 15)}...`}
