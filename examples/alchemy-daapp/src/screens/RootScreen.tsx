@@ -30,11 +30,7 @@ export default function RootScreen() {
       <ChakraProvider>
         <WalletContext>
           <NavigationBar />
-<<<<<<< HEAD
           <LandingScreen />
-=======
-          <ProfileScreen />
->>>>>>> 07da5f0 (feat: clean up components for profile and nft fetching)
         </WalletContext>
       </ChakraProvider>
       <ToastContainer />
