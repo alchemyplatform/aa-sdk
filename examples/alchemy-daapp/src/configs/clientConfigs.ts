@@ -1,0 +1,27 @@
+import { Chain, polygonMumbai, sepolia } from "viem/chains";
+
+export interface DAAppConfiguration {
+  nftContractAddress: `0x${string}`;
+  simpleAccountFactoryAddress: `0x${string}`;
+  gasManagerPolicyId: string;
+  rpcUrl: string;
+  chain: Chain;
+}
+
+// TODO: Replace with your own contract addresses and policy ids, feel free to add or remove chains.
+export const daappConfigurations: Record<number, DAAppConfiguration> = {
+  [polygonMumbai.id]: {
+    nftContractAddress: "0x5679b0de84bba361d31b2e7152ab20f0f8565245",
+    simpleAccountFactoryAddress: "0x9406Cc6185a346906296840746125a0E44976454",
+    gasManagerPolicyId: "469689aa-4fdd-43bd-a721-697f7d5e2c5d",
+    rpcUrl: `/api/rpc/proxy?chainId=${polygonMumbai.id}`,
+    chain: polygonMumbai,
+  },
+  [sepolia.id]: {
+    nftContractAddress: "0x5679b0de84bba361d31b2e7152ab20f0f8565245",
+    simpleAccountFactoryAddress: "0xc8c5736988F4Ea76B9f620dc678c23d5cBf3C83c",
+    gasManagerPolicyId: "97ca8953-1692-40ff-9cb8-202accb1416c",
+    rpcUrl: `/api/rpc/proxy?chainId=${sepolia.id}`,
+    chain: sepolia,
+  },
+};

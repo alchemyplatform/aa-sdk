@@ -1,5 +1,5 @@
 import { useAccount } from "wagmi";
-import { useNFTsQuery } from "./nfts";
+import { useNFTsQuery } from "../surfaces/profile/NftSection";
 import { useEffect, useState } from "react";
 
 export type AppState =
@@ -26,7 +26,8 @@ export type AppState =
 
 export function useAppState(): AppState {
   const { address, isConnected } = useAccount();
-  const nfts = useNFTsQuery(address);
+  const scwAddress = address ? localStorage.getItem(address) : undefined;
+
   const [state, setState] = useState<AppState>({
     state: "UNCONNECTED",
     eoaAddress: undefined,
@@ -42,21 +43,7 @@ export function useAppState(): AppState {
       return;
     }
 
-    if (nfts.isLoading) {
-      setState({
-        state: "LOADING",
-        eoaAddress: undefined,
-        scwAddress: undefined,
-      });
-      return;
-    }
-    const scwNFT = nfts?.data?.ownedNfts.find((value) => {
-      return value.contract.address === "0x0000000000000000";
-    });
-    const scwAttribute = scwNFT?.metadata.attributes?.find((attribute) => {
-      attribute.trait_type === "SCW";
-    });
-    if (!scwNFT || !scwAttribute) {
+    if (!scwAddress) {
       setState({
         state: "NO_SCW",
         eoaAddress: address as `0x${string}`,
@@ -66,9 +53,9 @@ export function useAppState(): AppState {
       setState({
         state: "HAS_SCW",
         eoaAddress: address as `0x${string}`,
-        scwAddress: scwAttribute.value!,
+        scwAddress: scwAddress!,
       });
     }
-  }, [address, isConnected, nfts]);
+  }, [address, isConnected, scwAddress]);
   return state;
 }

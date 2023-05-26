@@ -5,22 +5,27 @@ import {
   RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { polygonMumbai } from "wagmi/chains";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { injectedWallet } from "@rainbow-me/rainbowkit/wallets";
+import { daappConfigurations } from "~/configs/clientConfigs";
 
-const { chains, publicClient } = configureChains(
-  [polygonMumbai],
-  [
-    jsonRpcProvider({
-      rpc: () => {
-        return {
-          http: "/api/rpc/proxy",
-        };
-      },
-    }),
-  ]
-);
+const configuredChains = Object.values(daappConfigurations).map((config) => {
+  return config.chain;
+});
+
+const { chains, publicClient } = configureChains(configuredChains, [
+  jsonRpcProvider({
+    rpc: (c) => {
+      const http = daappConfigurations[c.id]?.rpcUrl;
+      if (!http) {
+        throw new Error(`Chain ${c.id} not configured`);
+      }
+      return {
+        http,
+      };
+    },
+  }),
+]);
 
 const connectors = connectorsForWallets([
   {

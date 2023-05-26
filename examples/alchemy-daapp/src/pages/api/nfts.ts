@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { daappConfigurations } from "~/configs/clientConfigs";
+import { getApiUrl } from "~/configs/serverConfigs";
 import { callEndpoint } from "~/http/http";
-import { ALCHEMY_API_URL, NFT_CONTRACT_ADDRESS } from "~/settings";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const {
@@ -9,9 +10,22 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     address?: string;
   } = req.query;
   try {
+    const chainId = req.query.chainId;
+    if (!chainId) {
+      throw new Error("chainId is required");
+    }
+
+    const contractAddress =
+      daappConfigurations[Number(chainId)]?.nftContractAddress;
+    if (!contractAddress) {
+      throw new Error("Unsupported chainID.");
+    }
+
     const repsonse = await callEndpoint(
       "GET",
-      `${ALCHEMY_API_URL}/getNFTs/?owner=${address}&contractAddresses[]=${NFT_CONTRACT_ADDRESS}`
+      `${getApiUrl(
+        chainId as string
+      )}/getNFTs/?owner=${address}&contractAddresses[]=${contractAddress}`
     );
     return res.send(repsonse);
   } catch (e) {

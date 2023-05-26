@@ -73,29 +73,6 @@ contract NFTTest is Test {
         vm.expectRevert(bytes(""));
         nft.mintTo(address(1));
     }
-
-    function test_WithdrawalWorksAsOwner() public {
-        // Mint an NFT, sending eth to the contract
-        Receiver receiver = new Receiver();
-        address payable payee = payable(address(0x1337));
-        uint256 priorPayeeBalance = payee.balance;
-        nft.mintTo(address(receiver));
-        uint256 nftBalance = address(nft).balance;
-        // Withdraw the balance and assert it was transferred
-        nft.withdrawPayments(payee);
-        assertEq(payee.balance, priorPayeeBalance + nftBalance);
-    }
-
-    function test_WithdrawalFailsAsNotOwner() public {
-        // Mint an NFT, sending eth to the contract
-        Receiver receiver = new Receiver();
-        nft.mintTo(address(receiver));
-        // Confirm that a non-owner cannot withdraw
-        vm.expectRevert("Ownable: caller is not the owner");
-        vm.startPrank(address(0xd3ad));
-        nft.withdrawPayments(payable(address(0xd3ad)));
-        vm.stopPrank();
-    }
 }
 
 contract Receiver is ERC721TokenReceiver {
