@@ -1,5 +1,5 @@
-import {Tooltip, Image} from "@chakra-ui/react";
-import {Link} from "react-router-dom";
+import { Tooltip, Image } from "@chakra-ui/react";
+import Link from "next/link";
 
 interface NFTProps {
   address: string;
@@ -8,15 +8,15 @@ interface NFTProps {
   imageUrl: string;
 }
 
-export default function NFT({address, tokenId, title, imageUrl}: NFTProps) {
+export default function NFT({ address, tokenId, title, imageUrl }: NFTProps) {
   return (
     <Link
-      to={`https://testnets.opensea.io/assets/mumbai/${address}/${Number(
-        tokenId,
+      href={`https://testnets.opensea.io/assets/mumbai/${address}/${Number(
+        tokenId
       )}`}
       target="_blank"
       rel="noopener noreferrer"
-      style={{display: "block"}}
+      style={{ display: "block" }}
     >
       <Tooltip label={title}>
         <Image

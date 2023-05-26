@@ -8,6 +8,8 @@ export const env = createEnv({
    */
   server: {
     NODE_ENV: z.enum(["development", "test", "production"]),
+    NFT_CONTRACT_ADDRESS: z.string().min(1),
+    ALCHEMY_API_URL: z.string().min(1),
   },
 
   /**
@@ -25,6 +27,7 @@ export const env = createEnv({
    */
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
-    // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
+    NFT_CONTRACT_ADDRESS: process.env.NFT_CONTRACT_ADDRESS,
+    ALCHEMY_API_URL: process.env.NFT_CONTRACT_ADDRESS,
   },
 });

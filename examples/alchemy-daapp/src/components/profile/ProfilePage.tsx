@@ -1,5 +1,12 @@
-import {Box, BoxProps, Heading, HStack, VStack} from "@chakra-ui/react";
-import {memo, useCallback} from "react";
+import {
+  Avatar,
+  Box,
+  BoxProps,
+  Heading,
+  HStack,
+  VStack,
+} from "@chakra-ui/react";
+import { memo, useCallback } from "react";
 import NFTs from "./NFTs";
 
 const ProfileAttribute = ({
@@ -14,7 +21,7 @@ const ProfileAttribute = ({
       size="sm"
       fontWeight="semibold"
       color="gray.500"
-      style={{margin: "0px"}}
+      style={{ margin: "0px" }}
     >
       {label}:
     </Heading>
@@ -22,7 +29,7 @@ const ProfileAttribute = ({
       size="sm"
       fontWeight="medium"
       color="gray.700"
-      style={{margin: "0px"}}
+      style={{ margin: "0px" }}
     >
       {value}
     </Heading>
@@ -45,29 +52,43 @@ const ProfileDetailCard = ({
   </VStack>
 );
 
-function UnMemoProfilePage({address}: {address: string}) {
-  const copyAddressTextToClipboard = useCallback(async () => {
-    if ("clipboard" in navigator && address) {
-      await navigator.clipboard.writeText(address);
-      alert("Copied Address to Clipboard");
-      return;
-    }
-  }, [address]);
+function UnMemoProfilePage({ address }: { address: string }) {
+  const copyAddressTextToClipboard = useCallback((address: string) => {
+    return async () => {
+      if ("clipboard" in navigator && address) {
+        await navigator.clipboard.writeText(address);
+        alert("Copied Address to Clipboard");
+        return;
+      }
+    };
+  }, []);
 
   return (
     <HStack gap={5} alignItems="flex-start" padding={25}>
-      <VStack gap={5} w="300px">
-        <Box cursor="pointer" onClick={copyAddressTextToClipboard}>
-          <ProfileAttribute
-            label="Address"
-            value={`${address?.substring(0, 15)}...`}
-          />
-        </Box>
+      <VStack alignItems="center" gap={5} w="300px">
+        <Avatar size="2xl" />
+        <VStack alignItems="start" gap={5}>
+          <Box cursor="pointer" onClick={copyAddressTextToClipboard(address)}>
+            <ProfileAttribute
+              value={`${address?.substring(0, 15)}...`}
+              label="Owner Address"
+            />
+          </Box>
+          <Box
+            cursor="pointer"
+            onClick={copyAddressTextToClipboard("0xsmartContractAddress")}
+          >
+            <ProfileAttribute
+              label="Smart Contract Address"
+              value={`${address?.substring(0, 15)}...`}
+            />
+          </Box>
+        </VStack>
       </VStack>
       <VStack flex={1} gap={5} padding="10px" overflow="hidden">
         <ProfileDetailCard>
           <Heading size="sm" margin={0} fontWeight="semibold" color="gray.500">
-            Achievements
+            NFTs
           </Heading>
           <NFTs maxH="225px" overflowY="auto" address={address} />
         </ProfileDetailCard>

@@ -1,14 +1,14 @@
-import {ProfilePage} from "../components/profile/ProfilePage";
-import {OnboardingPage} from "../components/onboarding/OnboardingPage";
-import {useAddress} from "../context/address";
+import { ProfilePage } from "../components/profile/ProfilePage";
+import { OnboardingPage } from "../components/onboarding/OnboardingPage";
+import { useAccount } from "wagmi";
 
 export default function ProfileScreen() {
-  const {address, hasAddress} = useAddress();
+  const { address, isConnected } = useAccount();
 
   // Show onboarding if is current user
-  if (!hasAddress) {
+  if (!isConnected) {
     return <OnboardingPage />;
   } else {
-    return <ProfilePage address={address} />;
+    return <ProfilePage address={address!} />;
   }
 }
