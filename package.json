@@ -4,7 +4,8 @@
   "private": true,
   "workspaces": [
     "packages/*",
-    "templates/*"
+    "templates/*",
+    "examples/*"
   ],
   "scripts": {
     "build": "lerna run build",
