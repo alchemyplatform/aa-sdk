@@ -1,15 +1,15 @@
-import {memo} from "react";
+import { memo } from "react";
 import NFT from "./NFT";
-import {useNFTsQuery} from "../../clients/nfts";
-import {LoadingScreen} from "../../screens/LoadingScreen";
-import {ErrorScreen} from "../../screens/ErrorScreen";
-import {BoxProps, Grid, Text} from "@chakra-ui/react";
+import { useNFTsQuery } from "../../clients/nfts";
+import { LoadingScreen } from "../../screens/LoadingScreen";
+import { ErrorScreen } from "../../screens/ErrorScreen";
+import { BoxProps, Grid, Text } from "@chakra-ui/react";
 
 interface NFTsProps extends BoxProps {
-  address?: string;
+  address: string;
 }
 
-const NFTs = memo(function Achievements({address, ...boxProps}: NFTsProps) {
+const NFTs = memo(function Achievements({ address, ...boxProps }: NFTsProps) {
   const ownedNFTsQuery = useNFTsQuery(address);
   if (!address) {
     return <Text size="sm">No Address to Assoicate Achievements</Text>;

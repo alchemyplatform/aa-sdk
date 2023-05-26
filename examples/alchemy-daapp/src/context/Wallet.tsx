@@ -1,9 +1,13 @@
 import "@rainbow-me/rainbowkit/styles.css";
 
-import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import {
+  connectorsForWallets,
+  RainbowKitProvider,
+} from "@rainbow-me/rainbowkit";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { polygonMumbai } from "wagmi/chains";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
+import { injectedWallet } from "@rainbow-me/rainbowkit/wallets";
 
 const { chains, publicClient } = configureChains(
   [polygonMumbai],
@@ -18,11 +22,12 @@ const { chains, publicClient } = configureChains(
   ]
 );
 
-const { connectors } = getDefaultWallets({
-  appName: "Alchemy DAApp",
-  projectId: "alchemy-daapp",
-  chains,
-});
+const connectors = connectorsForWallets([
+  {
+    groupName: "Recommended",
+    wallets: [injectedWallet({ chains })],
+  },
+]);
 
 const wagmiConfig = createConfig({
   autoConnect: true,

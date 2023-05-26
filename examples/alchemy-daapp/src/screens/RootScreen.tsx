@@ -1,10 +1,28 @@
-import ProfileScreen from "./ProfileScreen";
 import NavigationBar from "../components/NavigationBar";
 import { ChakraProvider } from "@chakra-ui/react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "../clients/query";
 import { ToastContainer } from "~/utils/toast";
 import { WalletContext } from "~/context/Wallet";
+import { OnboardingPage } from "../components/onboarding/OnboardingPage";
+import { useAppState } from "~/clients/appState";
+import { ProfilePage } from "~/components/profile/ProfilePage";
+import { ConnectPage } from "~/components/connect/ConnectPage";
+import { LoadingScreen } from "./LoadingScreen";
+
+function LandingScreen() {
+  const { state } = useAppState();
+  switch (state) {
+    case "HAS_SCW":
+      return <ProfilePage />;
+    case "NO_SCW":
+      return <OnboardingPage />;
+    case "UNCONNECTED":
+      return <ConnectPage />;
+    case "LOADING":
+      return <LoadingScreen />;
+  }
+}
 
 export default function RootScreen() {
   return (
@@ -12,7 +30,7 @@ export default function RootScreen() {
       <ChakraProvider>
         <WalletContext>
           <NavigationBar />
-          <ProfileScreen />
+          <LandingScreen />
         </WalletContext>
       </ChakraProvider>
       <ToastContainer />

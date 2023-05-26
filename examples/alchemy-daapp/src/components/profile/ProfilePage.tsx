@@ -8,6 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { memo, useCallback } from "react";
 import NFTs from "./NFTs";
+import { useAppState } from "../../clients/appState";
 
 const ProfileAttribute = ({
   label,
@@ -52,7 +53,8 @@ const ProfileDetailCard = ({
   </VStack>
 );
 
-function UnMemoProfilePage({ address }: { address: string }) {
+function UnMemoProfilePage() {
+  const { state, eoaAddress, scwAddress } = useAppState();
   const copyAddressTextToClipboard = useCallback((address: string) => {
     return async () => {
       if ("clipboard" in navigator && address) {
@@ -63,14 +65,21 @@ function UnMemoProfilePage({ address }: { address: string }) {
     };
   }, []);
 
+  if (state !== "HAS_SCW") {
+    return null;
+  }
+
   return (
     <HStack gap={5} alignItems="flex-start" padding={25}>
       <VStack alignItems="center" gap={5} w="300px">
         <Avatar size="2xl" />
         <VStack alignItems="start" gap={5}>
-          <Box cursor="pointer" onClick={copyAddressTextToClipboard(address)}>
+          <Box
+            cursor="pointer"
+            onClick={copyAddressTextToClipboard(eoaAddress!)}
+          >
             <ProfileAttribute
-              value={`${address?.substring(0, 15)}...`}
+              value={`${eoaAddress?.substring(0, 15)}...`}
               label="Owner Address"
             />
           </Box>
@@ -80,7 +89,7 @@ function UnMemoProfilePage({ address }: { address: string }) {
           >
             <ProfileAttribute
               label="Smart Contract Address"
-              value={`${address?.substring(0, 15)}...`}
+              value={`${scwAddress?.substring(0, 15)}...`}
             />
           </Box>
         </VStack>
@@ -90,7 +99,7 @@ function UnMemoProfilePage({ address }: { address: string }) {
           <Heading size="sm" margin={0} fontWeight="semibold" color="gray.500">
             NFTs
           </Heading>
-          <NFTs maxH="225px" overflowY="auto" address={address} />
+          <NFTs maxH="225px" overflowY="auto" address={eoaAddress} />
         </ProfileDetailCard>
       </VStack>
     </HStack>
