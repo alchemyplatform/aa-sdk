@@ -24,7 +24,7 @@ const { chains, publicClient } = configureChains(
 
 const connectors = connectorsForWallets([
   {
-    groupName: "Recommended",
+    groupName: "Alchemy DAApp",
     wallets: [injectedWallet({ chains })],
   },
 ]);
