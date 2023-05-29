@@ -1,14 +1,18 @@
 import {
+  PublicErc4337Client,
   SimpleSmartAccountOwner,
   SmartAccountProvider,
 } from "@alchemy/aa-core";
 import { Chain } from "viem";
 import { RequestFunds } from "./RequestFunds";
+import { use } from "react";
 
 // .01 in wei
 export const MIN_ONBOARDING_WALLET_BALANCE = BigInt("10000000000000000");
 
 export interface OnboardingContext {
+  useGasManager: boolean;
+  client: PublicErc4337Client;
   ownerAddress: `0x${string}`;
   owner: SimpleSmartAccountOwner;
   smartAccountAddress: `0x${string}`;
@@ -23,7 +27,7 @@ export interface OnboardingStep {
   description: string | JSX.Element;
   title: string;
   identifier: OnboardingStepIdentifier;
-  params: Partial<OnboardingContext>;
+  context: Partial<OnboardingContext>;
 }
 
 export enum OnboardingStepIdentifier {
@@ -37,7 +41,30 @@ export enum OnboardingStepIdentifier {
   DONE,
 }
 
-export async function metaForStepIdentifier(
+export function initialStep(
+  ownerAddress: `0x${string}`,
+  client: PublicErc4337Client,
+  chain: Chain,
+  useGasManager: boolean
+): OnboardingStep {
+  const meta = metaForStepIdentifier(
+    OnboardingStepIdentifier.INITIAL_STEP,
+    {},
+    chain
+  );
+  return {
+    ...meta,
+    identifier: OnboardingStepIdentifier.INITIAL_STEP,
+    context: {
+      ownerAddress,
+      client,
+      chain,
+      useGasManager,
+    },
+  };
+}
+
+export function metaForStepIdentifier(
   step: OnboardingStepIdentifier,
   context: Partial<OnboardingContext>,
   chain: Chain
@@ -84,10 +111,9 @@ export async function metaForStepIdentifier(
         title: `Waiting for operation ${context.mintDeployOpHash} to complete.`,
       };
     case OnboardingStepIdentifier.STORE_SCWALLET:
-      const scwAddressReport = await context.smartAccountSigner?.getAddress();
       return {
         percent: 80,
-        description: `Storing SCW: ${scwAddressReport} in local storage.`,
+        description: `Storing SCW: ${context.smartAccountAddress} in local storage.`,
         title: "Storing Smart Contract Wallet",
       };
     case OnboardingStepIdentifier.DONE:
