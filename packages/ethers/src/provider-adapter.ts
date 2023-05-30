@@ -2,10 +2,12 @@ import {
   BaseSmartContractAccount,
   SmartAccountProvider,
   getChain,
-  type AccountMiddlewareFn,
   type Address,
   type HttpTransport,
   type PublicErc4337Client,
+  type PaymasterAndDataMiddleware,
+  type FeeDataMiddleware,
+  type GasEstimatorMiddleware,
 } from "@alchemy/aa-core";
 import { defineReadOnly } from "@ethersproject/properties";
 import { JsonRpcProvider } from "@ethersproject/providers";
@@ -56,20 +58,20 @@ export class EthersProviderAdapter extends JsonRpcProvider {
     return new AccountSigner(this);
   }
 
-  withPaymasterMiddleware: (overrides: {
-    dummyPaymasterMiddleware: AccountMiddlewareFn;
-    getPaymasterAndDataMiddleware: AccountMiddlewareFn;
-  }) => this = (overrides) => {
+  withPaymasterMiddleware = (overrides: {
+    dummyPaymasterDataMiddleware?: PaymasterAndDataMiddleware;
+    paymasterDataMiddleware?: PaymasterAndDataMiddleware;
+  }): this => {
     this.accountProvider.withPaymasterMiddleware(overrides);
     return this;
   };
 
-  withGasEstimator: (override: AccountMiddlewareFn) => this = (override) => {
+  withGasEstimator = (override: GasEstimatorMiddleware): this => {
     this.accountProvider.withGasEstimator(override);
     return this;
   };
 
-  withFeeDataGetter: (override: AccountMiddlewareFn) => this = (override) => {
+  withFeeDataGetter = (override: FeeDataMiddleware): this => {
     this.accountProvider.withFeeDataGetter(override);
     return this;
   };

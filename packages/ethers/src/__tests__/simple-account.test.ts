@@ -43,11 +43,10 @@ describe("Simple Account Tests", async () => {
   });
 
   it("should execute successfully", async () => {
-    const result = signer.sendUserOperation(
-      await signer.getAddress(),
-      "0x",
-      0n
-    );
+    const result = signer.sendUserOperation({
+      target: (await signer.getAddress()) as `0x${string}`,
+      data: "0x",
+    });
 
     await expect(result).resolves.not.toThrowError();
   });
@@ -79,11 +78,10 @@ describe("Simple Account Tests", async () => {
         })
     );
 
-    const result = signer.sendUserOperation(
-      await signer.getAddress(),
-      "0x",
-      0n
-    );
+    const result = signer.sendUserOperation({
+      target: (await signer.getAddress()) as `0x${string}`,
+      data: "0x",
+    });
 
     await expect(result).rejects.toThrowError();
   });
@@ -101,11 +99,10 @@ describe("Simple Account Tests", async () => {
       })
     );
 
-    const result = signer.sendUserOperation(
-      await signer.getAddress(),
-      "0x",
-      0n
-    );
+    const result = signer.sendUserOperation({
+      target: (await signer.getAddress()) as `0x${string}`,
+      data: "0x",
+    });
 
     await expect(result).resolves.not.toThrowError();
   }, 10000);

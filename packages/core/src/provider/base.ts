@@ -12,7 +12,12 @@ import type {
   PublicErc4337Client,
   SupportedTransports,
 } from "../client/types.js";
-import { isValidRequest, type UserOperationStruct } from "../types.js";
+import {
+  isValidRequest,
+  type BatchUserOperationCallData,
+  type UserOperationCallData,
+  type UserOperationStruct,
+} from "../types.js";
 import {
   asyncPipe,
   deepHexlify,
@@ -136,11 +141,32 @@ export class SmartAccountProvider<
     }
 
     // TODO: need to add support for overriding gas prices
-    const { hash } = await this.sendUserOperation(
-      request.to,
-      request.data ?? "0x",
-      request.value ? fromHex(request.value, "bigint") : 0n
-    );
+    const { hash } = await this.sendUserOperation({
+      target: request.to,
+      data: request.data ?? "0x",
+      value: request.value ? fromHex(request.value, "bigint") : 0n,
+    });
+
+    return await this.waitForUserOperationTransaction(hash as Hash);
+  };
+
+  sendTransactions = async (requests: RpcTransactionRequest[]) => {
+    const batch = requests.map((request) => {
+      if (!request.to) {
+        throw new Error(
+          "one transaction in the batch is missing a target address"
+        );
+      }
+
+      // TODO: need to add support for overriding gas prices
+      return {
+        target: request.to,
+        data: request.data ?? "0x",
+        value: request.value ? fromHex(request.value, "bigint") : 0n,
+      };
+    });
+
+    const { hash } = await this.sendUserOperation(batch);
 
     return await this.waitForUserOperationTransaction(hash as Hash);
   };
@@ -165,9 +191,7 @@ export class SmartAccountProvider<
   }
 
   sendUserOperation = async (
-    target: string,
-    data: string,
-    value?: bigint | undefined
+    data: UserOperationCallData | BatchUserOperationCallData
   ): Promise<SendUserOperationResult> => {
     if (!this.account) {
       throw new Error("account not connected!");
@@ -183,7 +207,9 @@ export class SmartAccountProvider<
       initCode,
       sender: this.getAddress(),
       nonce: this.account.getNonce(),
-      callData: this.account.encodeExecute(target, value ?? 0n, data),
+      callData: Array.isArray(data)
+        ? this.account.encodeBatchExecute(data)
+        : this.account.encodeExecute(data.target, data.value ?? 0n, data.data),
       signature: this.account.getDummySignature(),
     } as UserOperationStruct);
 

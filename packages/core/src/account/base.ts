@@ -15,6 +15,7 @@ import type {
   SupportedTransports,
 } from "../client/types.js";
 import type { ISmartContractAccount } from "./types.js";
+import type { BatchUserOperationCallData } from "../types.js";
 
 export interface BaseSmartAccountParams<
   TTransport extends SupportedTransports = Transport
@@ -68,6 +69,12 @@ export abstract class BaseSmartContractAccount<
   ): Promise<`0x${string}`>;
   abstract signMessage(msg: string | Uint8Array): Promise<`0x${string}`>;
   protected abstract getAccountInitCode(): Promise<`0x${string}`>;
+
+  async encodeBatchExecute(
+    _txs: BatchUserOperationCallData
+  ): Promise<`0x${string}`> {
+    throw new Error("encodeBatchExecute not supported");
+  }
 
   async getNonce(): Promise<bigint> {
     if (!this.isDeployed) {

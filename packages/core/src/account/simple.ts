@@ -9,6 +9,7 @@ import {
 } from "viem";
 import { SimpleAccountAbi } from "../abis/SimpleAccountAbi.js";
 import { SimpleAccountFactoryAbi } from "../abis/SimpleAccountFactoryAbi.js";
+import type { BatchUserOperationCallData } from "../types.js";
 import {
   BaseSmartContractAccount,
   type BaseSmartAccountParams,
@@ -55,6 +56,26 @@ export class SimpleSmartContractAccount<
       abi: SimpleAccountAbi,
       functionName: "execute",
       args: [target, value, data],
+    });
+  }
+
+  override async encodeBatchExecute(
+    _txs: BatchUserOperationCallData
+  ): Promise<`0x${string}`> {
+    const [targets, datas] = _txs.reduce(
+      (accum, curr) => {
+        accum[0].push(curr.target);
+        accum[1].push(curr.data);
+
+        return accum;
+      },
+      [[], []] as [Address[], Hex[]]
+    );
+
+    return encodeFunctionData({
+      abi: SimpleAccountAbi,
+      functionName: "executeBatch",
+      args: [targets, datas],
     });
   }
 
