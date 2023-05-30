@@ -2,6 +2,7 @@ import type { Address, Hex } from "viem";
 import type { PublicErc4337Client } from "../client/types.js";
 import type { UserOperationRequest, UserOperationStruct } from "../types.js";
 import { deepHexlify, resolveProperties } from "../utils.js";
+import type { ISmartAccountProvider } from "../provider/types.js";
 
 type ClientWithAlchemyMethod = PublicErc4337Client & {
   request: PublicErc4337Client["request"] &
@@ -27,13 +28,14 @@ export interface AlchemyPaymasterConfig {
 
 export const alchemyPaymasterAndDataMiddleware = (
   config: AlchemyPaymasterConfig
-) => ({
-  dummyPaymasterMiddleware: async (struct: UserOperationStruct) => {
-    struct.paymasterAndData =
-      "0xc03aac639bb21233e0139381970328db8bceeb67fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
-    return struct;
+): Parameters<ISmartAccountProvider["withPaymasterMiddleware"]>["0"] => ({
+  dummyPaymasterDataMiddleware: async (_struct: UserOperationStruct) => {
+    return {
+      paymasterAndData:
+        "0xc03aac639bb21233e0139381970328db8bceeb67fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c",
+    };
   },
-  getPaymasterAndDataMiddleware: async (struct: UserOperationStruct) => {
+  paymasterDataMiddleware: async (struct: UserOperationStruct) => {
     const { paymasterAndData } = await (
       config.provider as ClientWithAlchemyMethod
     ).request({
@@ -47,7 +49,6 @@ export const alchemyPaymasterAndDataMiddleware = (
       ],
     });
 
-    struct.paymasterAndData = paymasterAndData;
-    return struct;
+    return { paymasterAndData };
   },
 });
