@@ -37,7 +37,7 @@ async function pollForLambdaForComplete(
     }
   } while (!reciept && txnRetryCount++ < txnMaxDurationSeconds);
   if (!reciept) {
-    throw new Error("Timedout waiting for contrat deployment and NFT mint.");
+    throw new Error("Timedout waiting for processs completion.");
   }
   return reciept;
 }
