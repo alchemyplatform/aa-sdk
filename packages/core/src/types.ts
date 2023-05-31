@@ -8,6 +8,17 @@ export type PromiseOrValue<T> = T | Promise<T>;
 export type BigNumberish = string | bigint | number;
 export type BytesLike = Uint8Array | string;
 
+export interface UserOperationCallData {
+  /* the target of the call */
+  target: Address;
+  /* the data passed to the target */
+  data: Hex;
+  /* the amount of native token to send to the target (default: 0) */
+  value?: bigint;
+}
+
+export type BatchUserOperationCallData = UserOperationCallData[];
+
 // represents the request as it needs to be formatted for RPC requests
 export interface UserOperationRequest {
   /* the origin of the request */

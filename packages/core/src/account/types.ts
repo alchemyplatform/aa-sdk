@@ -1,5 +1,6 @@
 import type { Address } from "abitype";
 import type { Hex } from "viem";
+import type { BatchUserOperationCallData } from "../types";
 
 export interface ISmartContractAccount {
   /**
@@ -23,6 +24,14 @@ export interface ISmartContractAccount {
    * @param data - the call data or "0x" if empty
    */
   encodeExecute(target: string, value: bigint, data: string): Promise<Hex>;
+
+  /**
+   * Encodes a batch of transactions to the account's batch execute function.
+   * NOTE: not all accounts support batching.
+   * @param txs - An Array of objects containing the target, value, and data for each transaction
+   * @returns the encoded callData for a UserOperation
+   */
+  encodeBatchExecute(txs: BatchUserOperationCallData): Promise<Hex>;
 
   /**
    * @returns the nonce of the account

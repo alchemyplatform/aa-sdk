@@ -7,6 +7,7 @@ import {
 } from "../account/simple.js";
 import { alchemyPaymasterAndDataMiddleware } from "../middleware/alchemy-paymaster.js";
 import { SmartAccountProvider } from "../provider/base.js";
+import type { BatchUserOperationCallData } from "../types.js";
 
 const ENTRYPOINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
 const API_KEY = process.env.API_KEY!;
@@ -58,11 +59,10 @@ describe("Simple Account Tests", () => {
   });
 
   it("should execute successfully", async () => {
-    const result = signer.sendUserOperation(
-      await signer.getAddress(),
-      "0x",
-      0n
-    );
+    const result = signer.sendUserOperation({
+      target: await signer.getAddress(),
+      data: "0x",
+    });
 
     await expect(result).resolves.not.toThrowError();
   });
@@ -85,11 +85,10 @@ describe("Simple Account Tests", () => {
         })
     );
 
-    const result = newSigner.sendUserOperation(
-      await newSigner.getAddress(),
-      "0x",
-      0n
-    );
+    const result = newSigner.sendUserOperation({
+      target: await newSigner.getAddress(),
+      data: "0x",
+    });
 
     await expect(result).rejects.toThrowError();
   });
@@ -107,12 +106,27 @@ describe("Simple Account Tests", () => {
       })
     );
 
-    const result = newSigner.sendUserOperation(
-      await newSigner.getAddress(),
-      "0x",
-      0n
-    );
+    const result = newSigner.sendUserOperation({
+      target: await newSigner.getAddress(),
+      data: "0x",
+    });
 
     await expect(result).resolves.not.toThrowError();
   }, 10000);
+
+  it("should correctly encode batch transaction data", async () => {
+    const account = signer.account;
+    const data = [
+      {
+        target: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+        data: "0xdeadbeef",
+      },
+      {
+        target: "0x8ba1f109551bd432803012645ac136ddd64dba72",
+        data: "0xcafebabe",
+      },
+    ] satisfies BatchUserOperationCallData;
+
+    expect(await account.encodeBatchExecute(data)).toMatchInlineSnapshot('"0x18dfb3c7000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000002000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef0000000000000000000000008ba1f109551bd432803012645ac136ddd64dba720000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000004deadbeef000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004cafebabe00000000000000000000000000000000000000000000000000000000"');
+  });
 });

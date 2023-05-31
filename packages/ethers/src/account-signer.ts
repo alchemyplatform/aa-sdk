@@ -1,7 +1,9 @@
 import {
   BaseSmartContractAccount,
   resolveProperties,
-  type AccountMiddlewareFn,
+  type FeeDataMiddleware,
+  type GasEstimatorMiddleware,
+  type PaymasterAndDataMiddleware,
   type PublicErc4337Client,
 } from "@alchemy/aa-core";
 import { Signer } from "@ethersproject/abstract-signer";
@@ -54,20 +56,20 @@ export class AccountSigner extends Signer {
     return this.account.signMessage(message);
   }
 
-  withPaymasterMiddleware: (overrides: {
-    dummyPaymasterMiddleware: AccountMiddlewareFn;
-    getPaymasterAndDataMiddleware: AccountMiddlewareFn;
-  }) => this = (overrides) => {
+  withPaymasterMiddleware = (overrides: {
+    dummyPaymasterDataMiddleware?: PaymasterAndDataMiddleware;
+    paymasterDataMiddleware?: PaymasterAndDataMiddleware;
+  }): this => {
     this.provider.withPaymasterMiddleware(overrides);
     return this;
   };
 
-  withGasEstimator: (override: AccountMiddlewareFn) => this = (override) => {
+  withGasEstimator = (override: GasEstimatorMiddleware): this => {
     this.provider.withGasEstimator(override);
     return this;
   };
 
-  withFeeDataGetter: (override: AccountMiddlewareFn) => this = (override) => {
+  withFeeDataGetter = (override: FeeDataMiddleware): this => {
     this.provider.withFeeDataGetter(override);
     return this;
   };

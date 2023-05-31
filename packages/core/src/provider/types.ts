@@ -5,7 +5,12 @@ import type {
   PublicErc4337Client,
   SupportedTransports,
 } from "../client/types.js";
-import type { UserOperationRequest, UserOperationStruct } from "../types.js";
+import type {
+  BatchUserOperationCallData,
+  UserOperationCallData,
+  UserOperationRequest,
+  UserOperationStruct,
+} from "../types.js";
 
 export type SendUserOperationResult = {
   hash: string;
@@ -53,15 +58,11 @@ export interface ISmartAccountProvider<
    * 3. feeDataGetter -- sets maxfeePerGas and maxPriorityFeePerGas
    * 4. paymasterMiddleware -- used to set paymasterAndData. (default: "0x")
    *
-   * @param target - the address receiving the call data
-   * @param data - the call data or "0x" if empty
-   * @param value - optionally the amount of native token to send
+   * @param data - either {@link UserOperationCallData} or {@link BatchUserOperationCallData}
    * @returns - {@link SendUserOperationResult} containing the hash and request
    */
   sendUserOperation: (
-    target: string,
-    data: string,
-    value?: bigint
+    data: UserOperationCallData | BatchUserOperationCallData
   ) => Promise<SendUserOperationResult>;
 
   /**
@@ -73,6 +74,18 @@ export interface ISmartAccountProvider<
    * @returns the transaction hash
    */
   sendTransaction: (request: RpcTransactionRequest) => Promise<Hash>;
+
+  /**
+   * This takes a set of  ethereum transactions and converts them into one UserOperation, sends the UserOperation, and waits
+   * on the receipt of that UserOperation (ie. has it been mined). If you don't want to wait for the UserOperation
+   * to mine, it's recommended to user {@link sendUserOperation} instead.
+   *
+   * NOTE: the account you're sending the transactions to MUST support batch transactions.
+   *
+   * @param request - a {@link RpcTransactionRequest} Array representing a traditional ethereum transaction
+   * @returns the transaction hash
+   */
+  sendTransactions: (request: RpcTransactionRequest[]) => Promise<Hash>;
 
   /**
    * EIP-1193 compliant request method
