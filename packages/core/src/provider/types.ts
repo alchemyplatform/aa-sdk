@@ -16,13 +16,29 @@ export type AccountMiddlewareFn = (
   struct: UserOperationStruct
 ) => Promise<UserOperationStruct>;
 
+export type AccountMiddlewareOverrideFn<
+  K extends keyof UserOperationStruct = never
+> = (
+  struct: UserOperationStruct
+) => Promise<Required<Pick<UserOperationStruct, K>>>;
+
+export type PaymasterAndDataMiddleware =
+  AccountMiddlewareOverrideFn<"paymasterAndData">;
+
+export type GasEstimatorMiddleware = AccountMiddlewareOverrideFn<
+  "callGasLimit" | "preVerificationGas" | "verificationGasLimit"
+>;
+export type FeeDataMiddleware = AccountMiddlewareOverrideFn<
+  "maxFeePerGas" | "maxPriorityFeePerGas"
+>;
+
 // TODO: this also will need to implement EventEmitteer
 export interface ISmartAccountProvider<
   TTransport extends SupportedTransports = Transport
 > {
   readonly rpcClient: PublicErc4337Client<TTransport>;
   readonly dummyPaymasterDataMiddleware: AccountMiddlewareFn;
-  readonly paymasterMiddleware: AccountMiddlewareFn;
+  readonly paymasterDataMiddleware: AccountMiddlewareFn;
   readonly gasEstimator: AccountMiddlewareFn;
   readonly feeDataGetter: AccountMiddlewareFn;
 
@@ -85,8 +101,8 @@ export interface ISmartAccountProvider<
    * @returns an update instance of this, which now uses the new middleware
    */
   withPaymasterMiddleware: (overrides: {
-    dummyPaymasterMiddleware?: AccountMiddlewareFn;
-    getPaymasterAndDataMiddleware?: AccountMiddlewareFn;
+    dummyPaymasterDataMiddleware?: PaymasterAndDataMiddleware;
+    paymasterDataMiddleware?: PaymasterAndDataMiddleware;
   }) => this;
 
   /**
@@ -96,7 +112,7 @@ export interface ISmartAccountProvider<
    * @param override - a function for overriding the default gas estimator middleware
    * @returns
    */
-  withGasEstimator: (override: AccountMiddlewareFn) => this;
+  withGasEstimator: (override: GasEstimatorMiddleware) => this;
 
   /**
    * Overrides the feeDataGetter middleware which is used for setting the fee fields on the UserOperation
@@ -105,7 +121,7 @@ export interface ISmartAccountProvider<
    * @param override - a function for overriding the default feeDataGetter middleware
    * @returns
    */
-  withFeeDataGetter: (override: AccountMiddlewareFn) => this;
+  withFeeDataGetter: (override: FeeDataMiddleware) => this;
 
   /**
    * Sets the current account to the account returned by the given function. The function parameter

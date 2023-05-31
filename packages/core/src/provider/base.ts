@@ -21,7 +21,11 @@ import {
 } from "../utils.js";
 import type {
   AccountMiddlewareFn,
+  AccountMiddlewareOverrideFn,
+  FeeDataMiddleware,
+  GasEstimatorMiddleware,
   ISmartAccountProvider,
+  PaymasterAndDataMiddleware,
   SendUserOperationResult,
 } from "./types.js";
 
@@ -174,7 +178,7 @@ export class SmartAccountProvider<
       this.dummyPaymasterDataMiddleware,
       this.gasEstimator,
       this.feeDataGetter,
-      this.paymasterMiddleware
+      this.paymasterDataMiddleware
     )({
       initCode,
       sender: this.getAddress(),
@@ -222,11 +226,10 @@ export class SmartAccountProvider<
     return struct;
   };
 
-  readonly paymasterMiddleware: AccountMiddlewareFn = async (
+  readonly paymasterDataMiddleware: AccountMiddlewareFn = async (
     struct: UserOperationStruct
   ): Promise<UserOperationStruct> => {
     struct.paymasterAndData = "0x";
-
     return struct;
   };
 
@@ -271,30 +274,37 @@ export class SmartAccountProvider<
   };
 
   withPaymasterMiddleware = (overrides: {
-    dummyPaymasterMiddleware?: AccountMiddlewareFn;
-    getPaymasterAndDataMiddleware?: AccountMiddlewareFn;
+    dummyPaymasterDataMiddleware?: PaymasterAndDataMiddleware;
+    paymasterDataMiddleware?: PaymasterAndDataMiddleware;
   }): this => {
-    defineReadOnly(
-      this,
-      "dummyPaymasterDataMiddleware",
-      overrides.dummyPaymasterMiddleware ?? this.dummyPaymasterDataMiddleware
-    );
-    defineReadOnly(
-      this,
-      "paymasterMiddleware",
-      overrides.getPaymasterAndDataMiddleware ?? this.paymasterMiddleware
-    );
+    const newDummyMiddleware = overrides.dummyPaymasterDataMiddleware
+      ? this.overrideMiddlewareFunction(overrides.dummyPaymasterDataMiddleware)
+      : this.dummyPaymasterDataMiddleware;
+    defineReadOnly(this, "dummyPaymasterDataMiddleware", newDummyMiddleware);
+
+    const newPaymasterMiddleware = overrides.paymasterDataMiddleware
+      ? this.overrideMiddlewareFunction(overrides.paymasterDataMiddleware)
+      : this.paymasterDataMiddleware;
+    defineReadOnly(this, "paymasterDataMiddleware", newPaymasterMiddleware);
 
     return this;
   };
 
-  withGasEstimator = (override: AccountMiddlewareFn): this => {
-    defineReadOnly(this, "gasEstimator", override);
+  withGasEstimator = (override: GasEstimatorMiddleware): this => {
+    defineReadOnly(
+      this,
+      "gasEstimator",
+      this.overrideMiddlewareFunction(override)
+    );
     return this;
   };
 
-  withFeeDataGetter = (override: AccountMiddlewareFn): this => {
-    defineReadOnly(this, "feeDataGetter", override);
+  withFeeDataGetter = (override: FeeDataMiddleware): this => {
+    defineReadOnly(
+      this,
+      "feeDataGetter",
+      this.overrideMiddlewareFunction(override)
+    );
     return this;
   };
 
@@ -305,4 +315,15 @@ export class SmartAccountProvider<
     defineReadOnly(this, "account", account);
     return this as this & { account: typeof account };
   }
+
+  private overrideMiddlewareFunction = (
+    override: AccountMiddlewareOverrideFn
+  ): AccountMiddlewareFn => {
+    return async (struct: UserOperationStruct) => {
+      return {
+        ...struct,
+        ...(await override(struct)),
+      };
+    };
+  };
 }

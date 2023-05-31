@@ -32,7 +32,7 @@ export const asyncPipe =
     for (const fn of fns) {
       result = await fn(result);
     }
-    return x;
+    return result;
   };
 
 // based on @ethersproject/properties, but pulled in here to minize the dependency on ethers
