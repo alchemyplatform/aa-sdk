@@ -9,6 +9,7 @@ import {
 import { memo, useCallback } from "react";
 import NftSection from "./NftSection";
 import { useAppState } from "../../clients/appState";
+import { useChainId } from "wagmi";
 
 const ProfileAttribute = ({
   label,
@@ -54,7 +55,8 @@ const ProfileDetailCard = ({
 );
 
 function UnMemoProfilePage() {
-  const { state, eoaAddress, scwAddress } = useAppState();
+  const { state, eoaAddress, scwAddresses } = useAppState();
+  const chainId = useChainId();
   const copyAddressTextToClipboard = useCallback((address: string) => {
     return async () => {
       if ("clipboard" in navigator && address) {
@@ -76,31 +78,59 @@ function UnMemoProfilePage() {
         <VStack alignItems="start" gap={5}>
           <Box
             cursor="pointer"
-            onClick={copyAddressTextToClipboard(scwAddress!)}
+            onClick={copyAddressTextToClipboard(eoaAddress!)}
           >
             <ProfileAttribute
               value={`${eoaAddress?.substring(0, 15)}...`}
               label="Owner Address"
             />
           </Box>
-          <Box
-            cursor="pointer"
-            onClick={copyAddressTextToClipboard("0xsmartContractAddress")}
-          >
-            <ProfileAttribute
-              label="Smart Contract Address"
-              value={`${scwAddress?.substring(0, 15)}...`}
-            />
-          </Box>
+          {scwAddresses.map((address) => {
+            return (
+              <Box
+                key={address}
+                cursor="pointer"
+                onClick={copyAddressTextToClipboard(address!)}
+              >
+                <ProfileAttribute
+                  label="Smart Contract Address"
+                  value={`${address?.substring(0, 15)}...`}
+                />
+              </Box>
+            );
+          })}
         </VStack>
       </VStack>
       <VStack flex={1} gap={5} padding="10px" overflow="hidden">
         <ProfileDetailCard>
           <Heading size="sm" margin={0} fontWeight="semibold" color="gray.500">
-            NFTs
+            <b>EOA:</b> {eoaAddress.slice(0, 9)}... NFTs
           </Heading>
-          <NftSection maxH="225px" overflowY="auto" address={eoaAddress} />
+          <NftSection
+            maxH="225px"
+            overflowY="auto"
+            address={eoaAddress}
+            chainId={chainId}
+          />
         </ProfileDetailCard>
+        {scwAddresses.map((address) => (
+          <ProfileDetailCard key={address}>
+            <Heading
+              size="sm"
+              margin={0}
+              fontWeight="semibold"
+              color="gray.500"
+            >
+              <b>SCW:</b> {address.slice(0, 9)}... NFTs
+            </Heading>
+            <NftSection
+              maxH="225px"
+              overflowY="auto"
+              address={address}
+              chainId={chainId}
+            />
+          </ProfileDetailCard>
+        ))}
       </VStack>
     </HStack>
   );

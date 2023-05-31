@@ -8,46 +8,46 @@ import React from "react";
 
 interface NFTsProps extends BoxProps {
   address: string;
+  chainId: number;
 }
 
-const NftSection = memo(function NftSection({
-  address,
-  ...boxProps
-}: NFTsProps) {
-  const ownedNFTsQuery = useNFTsQuery(address);
-  if (!address) {
-    return <Text size="sm">No Address to Assoicate Achievements</Text>;
-  }
+const NftSection: React.NamedExoticComponent<NFTsProps> = memo(
+  function NftSection({ address, chainId, ...boxProps }: NFTsProps) {
+    const ownedNFTsQuery = useNFTsQuery(address, chainId);
+    if (!address) {
+      return <Text size="sm">No Address to Assoicate Achievements</Text>;
+    }
 
-  if (ownedNFTsQuery.isLoading) {
-    return <LoadingScreen />;
-  }
+    if (ownedNFTsQuery.isLoading) {
+      return <LoadingScreen />;
+    }
 
-  if (!ownedNFTsQuery.data) {
-    return <ErrorScreen />;
-  }
+    if (!ownedNFTsQuery.data) {
+      return <ErrorScreen />;
+    }
 
-  const ownedNfts = ownedNFTsQuery.data.ownedNfts;
-  return (
-    <>
-      <Grid {...boxProps} templateColumns="repeat(8, 1fr)" gap={6}>
-        {ownedNfts.map((value, idx) => (
-          <NFT
-            key={idx}
-            title={value.title}
-            imageUrl={value.metadata.image!}
-            address={value.contract.address}
-            tokenId={value.id.tokenId}
-          />
-        ))}
-      </Grid>
-      {ownedNfts.length === 0 && (
-        <Text color="gray.500" size="sm">
-          No Achievements for Address
-        </Text>
-      )}
-    </>
-  );
-});
+    const ownedNfts = ownedNFTsQuery.data.ownedNfts;
+    return (
+      <>
+        <Grid {...boxProps} templateColumns="repeat(8, 1fr)" gap={6}>
+          {ownedNfts.map((value, idx) => (
+            <NFT
+              key={idx}
+              title={value.title}
+              imageUrl={value.metadata.image!}
+              address={value.contract.address}
+              tokenId={value.id.tokenId}
+            />
+          ))}
+        </Grid>
+        {ownedNfts.length === 0 && (
+          <Text color="gray.500" size="sm">
+            No NFTs for this wallet
+          </Text>
+        )}
+      </>
+    );
+  }
+);
 
 export default NftSection;

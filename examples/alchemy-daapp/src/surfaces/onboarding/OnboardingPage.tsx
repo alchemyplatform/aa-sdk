@@ -18,35 +18,32 @@ import {
 } from "@chakra-ui/react";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-<<<<<<< HEAD
 import { useOnboardingOrchestrator } from "./OnboardingController";
-=======
-import { useOnboardingController } from "./OnboardingController";
->>>>>>> 245641f (feat: integrate sdk + nft contract for onboarding)
 import { queryClient } from "../../clients/query";
 import { memo, useState } from "react";
 import { useAccount } from "wagmi";
 import { LoadingScreen } from "~/surfaces/shared/LoadingScreen";
 import { OnboardingStepIdentifier } from "./OnboardingDataModels";
+import { useSimpleAccountOwner } from "~/clients/simpleAccountOwner";
+import { SimpleSmartAccountOwner } from "@alchemy/aa-core";
 
 export function OnboardingPage() {
   const { isConnected } = useAccount();
-  if (isConnected) {
-    return <Onboarding />;
+  const ownerResult = useSimpleAccountOwner();
+  if (isConnected && !ownerResult.isLoading) {
+    return <Onboarding owner={ownerResult.owner} />;
   } else {
     return <LoadingScreen />;
   }
 }
 
-function UnmemoOnboarding() {
+function UnmemoOnboarding({ owner }: { owner: SimpleSmartAccountOwner }) {
   const router = useRouter();
   const [gasManagerChecked, setGasManagerChecked] = useState(false);
-<<<<<<< HEAD
-  const { go, reset, currentStep } =
-    useOnboardingOrchestrator(gasManagerChecked);
-=======
-  const { go, reset, currentStep } = useOnboardingController(gasManagerChecked);
->>>>>>> 245641f (feat: integrate sdk + nft contract for onboarding)
+  const { go, reset, currentStep } = useOnboardingOrchestrator(
+    gasManagerChecked,
+    owner
+  );
 
   const memberOnboardingMutation = useMutation<
     void,
@@ -97,16 +94,10 @@ function UnmemoOnboarding() {
       <Modal
         isOpen={!memberOnboardingMutation.isIdle}
         onClose={() => {
-<<<<<<< HEAD
           reset();
           memberOnboardingMutation.reset();
           if (currentStep.identifier === OnboardingStepIdentifier.DONE)
             router.reload();
-=======
-          if (currentStep.percent === 100) router.push(`/profile/me`);
-          reset();
-          memberOnboardingMutation.reset();
->>>>>>> 245641f (feat: integrate sdk + nft contract for onboarding)
         }}
         closeOnOverlayClick={false}
       >
@@ -184,6 +175,9 @@ function UnmemoOnboarding() {
                       {memberOnboardingMutation.error.cause.message} (
                       {memberOnboardingMutation.error.cause.code})
                     </b>
+                  )}
+                  {!memberOnboardingMutation.error?.cause && (
+                    <b>{`${memberOnboardingMutation.error}`}</b>
                   )}
                   {memberOnboardingMutation.error?.metaMessages?.map((v, i) => (
                     <Box key={i}>{v}</Box>
