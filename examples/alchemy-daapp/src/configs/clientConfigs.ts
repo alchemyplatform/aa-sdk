@@ -1,4 +1,4 @@
-import { Chain, polygon, polygonMumbai, sepolia } from "viem/chains";
+import { Chain, polygon, polygonMumbai, sepolia, arbitrum } from "viem/chains";
 
 export interface DAAppConfiguration {
   nftContractAddress: `0x${string}`;
@@ -13,7 +13,7 @@ export const daappConfigurations: Record<number, DAAppConfiguration> = {
   [polygon.id]: {
     nftContractAddress: "0xb7b9424ef3d1b9086b7e53276c4aad68a1dd971c",
     simpleAccountFactoryAddress: "0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232",
-    gasManagerPolicyId: "f0f6fb99-28b0-4e9e-a40d-201ceb1f2b3b",
+    gasManagerPolicyId: "b888d426-485d-4a0e-be81-7c94ced3d4b1",
     rpcUrl: `/api/rpc/proxy?chainId=${polygon.id}`,
     chain: polygon,
   },
@@ -30,5 +30,12 @@ export const daappConfigurations: Record<number, DAAppConfiguration> = {
     gasManagerPolicyId: "97ca8953-1692-40ff-9cb8-202accb1416c",
     rpcUrl: `/api/rpc/proxy?chainId=${sepolia.id}`,
     chain: sepolia,
+  },
+  [arbitrum.id]: {
+    nftContractAddress: "0xb7b9424ef3d1b9086b7e53276c4aad68a1dd971c",
+    simpleAccountFactoryAddress: "0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232",
+    gasManagerPolicyId: "04a10add-f2d6-4f53-93ef-50feec3d7309",
+    rpcUrl: `/api/rpc/proxy?chainId=${arbitrum.id}`,
+    chain: arbitrum,
   },
 };

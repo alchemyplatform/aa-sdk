@@ -19,3 +19,9 @@ Transaction hash: 0x59b65a2bd7a730efbea86376c986efcc2cd65c076f39a47cea84a6d4246c
 Deployer: 0x15a411507e901f26965f0ebcd3155834b058a6b2
 Deployed to: 0xb7b9424ef3d1b9086b7e53276c4aad68a1dd971c
 Transaction hash: 0xdc73899cf183cf852605c7a7473c0b110554155d5f4cc03452c11a4ce0d4ff33
+
+# Arbitrum Mainnet
+
+Deployer: 0x15a411507e901f26965f0ebcd3155834b058a6b2
+Deployed to: 0xb7b9424ef3d1b9086b7e53276c4aad68a1dd971c
+Transaction hash: 0x4ca9a016935f5634d009e4580ea0dc9c4b3edf0d8
