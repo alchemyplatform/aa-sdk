@@ -202,7 +202,8 @@ export class SmartAccountProvider<
       this.dummyPaymasterDataMiddleware,
       this.gasEstimator,
       this.feeDataGetter,
-      this.paymasterDataMiddleware
+      this.paymasterDataMiddleware,
+      this.customMiddleware ?? noOpMiddleware
     )({
       initCode,
       sender: this.getAddress(),
@@ -299,6 +300,8 @@ export class SmartAccountProvider<
     return struct;
   };
 
+  readonly customMiddleware?: AccountMiddlewareFn | undefined = undefined;
+
   withPaymasterMiddleware = (overrides: {
     dummyPaymasterDataMiddleware?: PaymasterAndDataMiddleware;
     paymasterDataMiddleware?: PaymasterAndDataMiddleware;
@@ -331,6 +334,12 @@ export class SmartAccountProvider<
       "feeDataGetter",
       this.overrideMiddlewareFunction(override)
     );
+    return this;
+  };
+
+  withCustomMiddleware = (override: AccountMiddlewareFn): this => {
+    defineReadOnly(this, "customMiddleware", override);
+
     return this;
   };
 

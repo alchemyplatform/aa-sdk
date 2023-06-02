@@ -157,6 +157,17 @@ If you want to add support for your own `SmartAccounts` then you will need to pr
 3. `signMessage` -- this should return an ERC-191 compliant message and is used to sign UO Hashes
 4. `getAccountInitCode` -- this should return the init code that will be used to create an account if one does not exist. Usually this is the concatenation of the account's factory address and the abi encoded function data of the account factory's `createAccount` method.
 
+### Alchemy Gas Manager Middleware
+
+Alchemy has two separate RPC methods for interacting with our Gas Manager services. The first is `alchemy_requestPaymasterAndData` and the second is `alchemy_requestGasAndPaymasterAndData`.
+The former is useful if you want to do your own gas estimation + fee estimation (or you're happy using the default middlewares for gas and fee estimation), but want to use the Alchemy Gas Manager service.
+The latter is will handle gas + fee estimation and return `paymasterAndData` in a single request.
+
+We provide two utility methods in `aa-sdk/core` for interacting with these RPC methods:
+
+1. `alchemyPaymasterAndDataMiddleware` which is used in conjunction with `withPaymasterMiddleware` to add the `alchemy_requestPaymasterAndData` RPC method to the middleware stack.
+2. `withAlchemyGasManager` which wraps a connected `SmartAccountProvider` with the middleware overrides to use `alchemy_requestGasAndPaymasterAndData` RPC method.
+
 ## Contributing
 
 1. clone the repo
