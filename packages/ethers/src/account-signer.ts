@@ -1,6 +1,7 @@
 import {
   BaseSmartContractAccount,
   resolveProperties,
+  type AccountMiddlewareFn,
   type FeeDataMiddleware,
   type GasEstimatorMiddleware,
   type PaymasterAndDataMiddleware,
@@ -71,6 +72,11 @@ export class AccountSigner extends Signer {
 
   withFeeDataGetter = (override: FeeDataMiddleware): this => {
     this.provider.withFeeDataGetter(override);
+    return this;
+  };
+
+  withCustomMiddleware = (override: AccountMiddlewareFn): this => {
+    this.provider.withCustomMiddleware(override);
     return this;
   };
 

@@ -46,6 +46,7 @@ export interface ISmartAccountProvider<
   readonly paymasterDataMiddleware: AccountMiddlewareFn;
   readonly gasEstimator: AccountMiddlewareFn;
   readonly feeDataGetter: AccountMiddlewareFn;
+  readonly customMiddleware?: AccountMiddlewareFn;
 
   readonly account?: BaseSmartContractAccount;
 
@@ -135,6 +136,16 @@ export interface ISmartAccountProvider<
    * @returns
    */
   withFeeDataGetter: (override: FeeDataMiddleware) => this;
+
+  /**
+   * This adds a final middleware step to the middleware stack that runs right before signature verification.
+   * This can be used if you have an RPC that does most of the functions of the other middlewares for you and
+   * you want to delegate that work to that RPC instead of chaining together multiple RPC calls via the default middlwares.
+   *
+   * @param override - the UO transform function to run
+   * @returns
+   */
+  withCustomMiddleware: (override: AccountMiddlewareFn) => this;
 
   /**
    * Sets the current account to the account returned by the given function. The function parameter
