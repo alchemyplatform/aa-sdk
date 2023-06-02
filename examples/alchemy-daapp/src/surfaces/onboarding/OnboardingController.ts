@@ -168,19 +168,20 @@ const onboardingStepHandlers: Record<
     if (!context.smartAccountSigner?.account || !targetAddress) {
       throw new Error("No SCW account was found");
     }
-    const { hash: mintDeployOpHash } =
-      await context.smartAccountSigner.sendUserOperation(
-        appConfig.nftContractAddress,
-        encodeFunctionData({
-          abi: NFTContractABI.abi,
-          functionName: "mintTo",
-          args: [targetAddress],
-        })
-      );
+    const mintDeployTxnHash = await context.smartAccountSigner.sendTransaction({
+      from: await context.smartAccountSigner.account.getAddress(),
+      to: appConfig.nftContractAddress,
+      data: encodeFunctionData({
+        abi: NFTContractABI.abi,
+        functionName: "mintTo",
+        args: [targetAddress],
+      }),
+    });
+
     return {
       nextStep: OnboardingStepIdentifier.CHECK_OP_COMPLETE,
       addedContext: {
-        mintDeployOpHash: mintDeployOpHash as `0x${string}`,
+        mintDeployTxnHash: mintDeployTxnHash as `0x${string}`,
       },
     };
   },
@@ -190,11 +191,11 @@ const onboardingStepHandlers: Record<
    */
   [OnboardingStepIdentifier.CHECK_OP_COMPLETE]: async (context) => {
     await pollForLambdaForComplete(async () => {
-      if (!context.mintDeployOpHash) {
+      if (!context.mintDeployTxnHash) {
         throw new Error("No mint deploy operation Hash was found");
       }
       return context
-        .client!.getUserOperationReceipt(context.mintDeployOpHash)
+        .client!.getTransactionReceipt({ hash: context.mintDeployTxnHash })
         .then((receipt) => {
           return receipt !== null;
         });

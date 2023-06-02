@@ -21,7 +21,7 @@ export interface OnboardingContext {
   smartAccountSigner: SmartAccountProvider;
   chain: Chain;
   entrypointAddress: `0x${string}`;
-  mintDeployOpHash: `0x${string}`;
+  mintDeployTxnHash: `0x${string}`;
 }
 
 export interface OnboardingStep {
@@ -115,10 +115,10 @@ export function metaForStepIdentifier(
           <Text>
             Waiting for operation{" "}
             <Link
-              href={`${chain.blockExplorers?.default}/${context.mintDeployOpHash}`}
+              href={`${chain.blockExplorers?.default}/${context.mintDeployTxnHash}`}
               target="_blank"
             >
-              ${context.mintDeployOpHash}
+              ${context.mintDeployTxnHash}
             </Link>{" "}
             to complete.
           </Text>
