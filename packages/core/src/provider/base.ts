@@ -6,6 +6,7 @@ import {
   type RpcTransactionRequest,
   type Transport,
 } from "viem";
+import { arbitrum, arbitrumGoerli } from "viem/chains";
 import { BaseSmartContractAccount } from "../account/base.js";
 import { createPublicErc4337Client } from "../client/create-client.js";
 import type {
@@ -68,6 +69,11 @@ export interface SmartAccountProviderOpts {
   minPriorityFeePerBid?: bigint;
 }
 
+const minPriorityFeePerBidDefaults = new Map<number, bigint>([
+  [arbitrum.id, 10_000_000n],
+  [arbitrumGoerli.id, 10_000_000n],
+]);
+
 export class SmartAccountProvider<
   TTransport extends SupportedTransports = Transport
 > implements ISmartAccountProvider<TTransport>
@@ -86,7 +92,11 @@ export class SmartAccountProvider<
   ) {
     this.txMaxRetries = opts?.txMaxRetries ?? 5;
     this.txRetryIntervalMs = opts?.txRetryIntervalMs ?? 2000;
-    this.minPriorityFeePerBid = opts?.minPriorityFeePerBid ?? 1000000000n;
+    this.minPriorityFeePerBid =
+      opts?.minPriorityFeePerBid ??
+      minPriorityFeePerBidDefaults.get(chain.id) ??
+      100_000_000n;
+
     this.rpcClient =
       typeof rpcProvider === "string"
         ? createPublicErc4337Client({
