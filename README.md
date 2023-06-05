@@ -9,16 +9,16 @@ Alchemy's Account Abstraction Kit is an SDK that enables easy interactions with 
 via `yarn`:
 
 ```bash
-yarn add @alchemy/aa-core
+yarn add @alchemy/aa-core viem
 ```
 
 via `npm`:
 
 ```bash
-npm i -s @alchemy/aa-core
+npm i -s @alchemy/aa-core viem
 ```
 
-If you are using `ethers` and want to use an `ethers` compatible `Provider` and `Signer` you can also add the the `@alchemy/aa-ethers` library.
+If you are using `ethers` and want to use an `ethers` compatible `Provider` and `Signer` you can also add the the `@alchemy/aa-ethers` library (the above packages are required still).
 
 via `yarn`:
 
@@ -82,11 +82,11 @@ const provider = new SmartAccountProvider(
 );
 
 // 3. send a UserOperation
-const { hash } = provider.sendUserOperation(
-  "0xTargetAddress",
-  "0xcallData",
-  0n // value: bigint or undefined
-);
+const { hash } = provider.sendUserOperation({
+  target: "0xTargetAddress",
+  data: "0xcallData",
+  value: 0n, // value: bigint or undefined
+});
 ```
 
 ### via `aa-ethers`
@@ -132,11 +132,11 @@ const signer = EthersProviderAdapter.fromEthersProvider(
 );
 
 // 3. send a user op
-const { hash } = signer.sendUserOperation(
-  "0xTargetAddress",
-  "0xcallData",
-  0n // value: bigint or undefined
-);
+const { hash } = signer.sendUserOperation({
+  target: "0xTargetAddress",
+  data: "0xcallData",
+  value: 0n, // value: bigint or undefined
+});
 ```
 
 ## Components

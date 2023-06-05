@@ -46,11 +46,14 @@
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4",
     "typescript-template": "*",
+    "viem": "^0.3.50",
     "vitest": "^0.31.0"
   },
   "dependencies": {
-    "abitype": "^0.8.3",
-    "viem": "0.3.17"
+    "abitype": "^0.8.3"
+  },
+  "peerDependencies": {
+    "viem": "^0.3.50"
   },
   "repository": {
     "type": "git",

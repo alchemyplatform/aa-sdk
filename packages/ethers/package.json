@@ -41,14 +41,17 @@
     "test:run": "vitest run"
   },
   "devDependencies": {
+    "@alchemy/aa-core": "^0.1.0-alpha.1",
     "alchemy-sdk": "^2.8.3",
     "dotenv": "^16.0.3",
     "typescript": "^5.0.4",
     "typescript-template": "*",
     "vitest": "^0.31.0"
   },
+  "peerDependencies": {
+    "@alchemy/aa-core": "^0.1.0-alpha.1"
+  },
   "dependencies": {
-    "@alchemy/aa-core": "^0.1.0-alpha.1",
     "@ethersproject/abi": "^5.7.0",
     "@ethersproject/abstract-signer": "^5.7.0",
     "@ethersproject/bytes": "^5.7.0",
