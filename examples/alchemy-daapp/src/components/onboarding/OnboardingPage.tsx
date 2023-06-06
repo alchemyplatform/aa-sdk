@@ -15,14 +15,14 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import {useMutation} from "@tanstack/react-query";
-import {useNavigate} from "react-router-dom";
-import {useOnboardingController} from "../../clients/onboarding";
-import {queryClient} from "../../clients/query";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/router";
+import { useOnboardingController } from "../../clients/onboarding";
+import { queryClient } from "../../clients/query";
 
 export function OnboardingPage() {
-  const navigate = useNavigate();
-  const {go, reset, currentStep} = useOnboardingController();
+  const router = useRouter();
+  const { go, reset, currentStep } = useOnboardingController();
 
   const memberOnboardingMutation = useMutation(go, {
     onSuccess: () => {
@@ -51,7 +51,7 @@ export function OnboardingPage() {
       <Modal
         isOpen={!memberOnboardingMutation.isIdle}
         onClose={() => {
-          if (currentStep.percent === 100) navigate(`/profile/me`);
+          if (currentStep.percent === 100) router.push(`/profile/me`);
           reset();
           memberOnboardingMutation.reset();
         }}

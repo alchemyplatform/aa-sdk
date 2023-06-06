@@ -1,16 +1,16 @@
-import {useEffect} from "react";
-import {useNavigate} from "react-router-dom";
-import {Flex, Spinner} from "@chakra-ui/react";
-import {useAddress} from "../../context/address";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
+import { Flex, Spinner } from "@chakra-ui/react";
+import { useAccount } from "wagmi";
 
 export default function ProfileRedirect() {
-  const navigate = useNavigate();
-  const {address, hasAddress} = useAddress();
+  const router = useRouter();
+  const { address, isConnected } = useAccount();
   useEffect(() => {
-    if (hasAddress) {
-      navigate(`/profile/${address}`);
+    if (isConnected) {
+      router.push(`/profile/${address}`);
     }
-  }, [navigate, address, hasAddress]);
+  }, [router, address, isConnected]);
 
   return (
     <Flex
