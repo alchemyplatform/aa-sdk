@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { signMessage } from "@wagmi/core";
-import { toHex, encodeFunctionData } from "viem";
+import { encodeFunctionData } from "viem";
 import {
   createPublicErc4337Client,
   SimpleSmartContractAccount,
@@ -22,6 +21,7 @@ import {
   initialStep,
   metaForStepIdentifier,
 } from "./OnboardingDataModels";
+import { localSmartContractStore } from "~/clients/localStorage";
 
 async function pollForLambdaForComplete(
   lambda: () => Promise<boolean>,
@@ -37,7 +37,7 @@ async function pollForLambdaForComplete(
     }
   } while (!reciept && txnRetryCount++ < txnMaxDurationSeconds);
   if (!reciept) {
-    throw new Error("Timedout waiting for contrat deployment and NFT mint.");
+    throw new Error("Timedout waiting for processs completion.");
   }
   return reciept;
 }
@@ -54,23 +54,17 @@ const onboardingStepHandlers: Record<
   OnboardingStepIdentifier,
   OnboardingFunction
 > = {
-  // This is the first step it checks for and creates the owener signer.
+  // This is the first step it checks for the owner signer.
   [OnboardingStepIdentifier.INITIAL_STEP]: async (context) => {
     if (!context.ownerAddress) {
       throw new Error("No connected account or address");
     }
-    const owner: SimpleSmartAccountOwner = {
-      signMessage: async (msg) =>
-        signMessage({
-          message: toHex(msg),
-        }),
-      getAddress: async () => context.ownerAddress!,
-    };
+    if (!context.owner) {
+      throw new Error("No connected account or address");
+    }
     return {
       nextStep: OnboardingStepIdentifier.GET_ENTRYPOINT,
-      addedContext: {
-        owner,
-      },
+      addedContext: {},
     };
   },
   // This step gets the entrypoint for the smart account.
@@ -174,19 +168,20 @@ const onboardingStepHandlers: Record<
     if (!context.smartAccountSigner?.account || !targetAddress) {
       throw new Error("No SCW account was found");
     }
-    const { hash: mintDeployOpHash } =
-      await context.smartAccountSigner.sendUserOperation(
-        appConfig.nftContractAddress,
-        encodeFunctionData({
-          abi: NFTContractABI.abi,
-          functionName: "mintTo",
-          args: [targetAddress],
-        })
-      );
+    const mintDeployTxnHash = await context.smartAccountSigner.sendTransaction({
+      from: await context.smartAccountSigner.account.getAddress(),
+      to: appConfig.nftContractAddress,
+      data: encodeFunctionData({
+        abi: NFTContractABI.abi,
+        functionName: "mintTo",
+        args: [targetAddress],
+      }),
+    });
+
     return {
       nextStep: OnboardingStepIdentifier.CHECK_OP_COMPLETE,
       addedContext: {
-        mintDeployOpHash: mintDeployOpHash as `0x${string}`,
+        mintDeployTxnHash: mintDeployTxnHash as `0x${string}`,
       },
     };
   },
@@ -196,11 +191,11 @@ const onboardingStepHandlers: Record<
    */
   [OnboardingStepIdentifier.CHECK_OP_COMPLETE]: async (context) => {
     await pollForLambdaForComplete(async () => {
-      if (!context.mintDeployOpHash) {
+      if (!context.mintDeployTxnHash) {
         throw new Error("No mint deploy operation Hash was found");
       }
       return context
-        .client!.getUserOperationReceipt(context.mintDeployOpHash)
+        .client!.getTransactionReceipt({ hash: context.mintDeployTxnHash })
         .then((receipt) => {
           return receipt !== null;
         });
@@ -222,7 +217,11 @@ const onboardingStepHandlers: Record<
     if (!context.smartAccountAddress) {
       throw new Error("No SCW was found");
     }
-    localStorage.setItem(inMemOwnerAddress, context.smartAccountAddress);
+    localSmartContractStore.addSmartContractAccount(
+      inMemOwnerAddress,
+      context.smartAccountAddress,
+      context.chain?.id!
+    );
     return {
       nextStep: OnboardingStepIdentifier.DONE,
       addedContext: {},
@@ -237,7 +236,10 @@ const onboardingStepHandlers: Record<
   },
 };
 
-export function useOnboardingOrchestrator(useGasManager: boolean) {
+export function useOnboardingOrchestrator(
+  useGasManager: boolean,
+  owner: SimpleSmartAccountOwner
+) {
   // Setup initial data and state
   const { address: ownerAddress } = useAccount();
   const { chain } = useNetwork();
@@ -258,12 +260,15 @@ export function useOnboardingOrchestrator(useGasManager: boolean) {
     return { client, appConfig };
   }, [chain]);
   const [currentStep, updateStep] = useState<OnboardingStep>(
-    initialStep(ownerAddress!, client, chain!, useGasManager)
+    initialStep(owner!, ownerAddress!, client, chain!, useGasManager)
   );
   const [isLoading, setIsLoading] = useState(false);
 
   const reset = useCallback(
-    () => updateStep(initialStep(ownerAddress!, client, chain!, useGasManager)),
+    () =>
+      updateStep(
+        initialStep(owner!, ownerAddress!, client, chain!, useGasManager)
+      ),
     [ownerAddress, client, chain, useGasManager]
   );
 
@@ -318,6 +323,7 @@ export function useOnboardingOrchestrator(useGasManager: boolean) {
           });
       }
     } catch (e) {
+      console.error(e);
       throw e;
     } finally {
       setIsLoading(false);

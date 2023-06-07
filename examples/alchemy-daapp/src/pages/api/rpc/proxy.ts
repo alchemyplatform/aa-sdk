@@ -8,7 +8,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return res.send(
       await callEndpoint("POST", getApiUrl(chainId as string), req.body)
     );
-  } catch {
+  } catch (e) {
+    console.error(e);
     return res.status(500).send("Internal Server Error");
   }
 };

@@ -5,7 +5,8 @@ import {
 } from "@alchemy/aa-core";
 import { Chain } from "viem";
 import { RequestFunds } from "./RequestFunds";
-import { use } from "react";
+import { UseQueryResult } from "@tanstack/react-query";
+import { Link, Text } from "@chakra-ui/react";
 
 // .01 in wei
 export const MIN_ONBOARDING_WALLET_BALANCE = BigInt("10000000000000000");
@@ -14,12 +15,13 @@ export interface OnboardingContext {
   useGasManager: boolean;
   client: PublicErc4337Client;
   ownerAddress: `0x${string}`;
+  ownerQuery: UseQueryResult<SimpleSmartAccountOwner>;
   owner: SimpleSmartAccountOwner;
   smartAccountAddress: `0x${string}`;
   smartAccountSigner: SmartAccountProvider;
   chain: Chain;
   entrypointAddress: `0x${string}`;
-  mintDeployOpHash: `0x${string}`;
+  mintDeployTxnHash: `0x${string}`;
 }
 
 export interface OnboardingStep {
@@ -42,6 +44,7 @@ export enum OnboardingStepIdentifier {
 }
 
 export function initialStep(
+  owner: SimpleSmartAccountOwner,
   ownerAddress: `0x${string}`,
   client: PublicErc4337Client,
   chain: Chain,
@@ -56,6 +59,7 @@ export function initialStep(
     ...meta,
     identifier: OnboardingStepIdentifier.INITIAL_STEP,
     context: {
+      owner,
       ownerAddress,
       client,
       chain,
@@ -107,8 +111,19 @@ export function metaForStepIdentifier(
     case OnboardingStepIdentifier.CHECK_OP_COMPLETE:
       return {
         percent: 60,
-        description: "Waiting for deploy and mint operation to be completed.",
-        title: `Waiting for operation ${context.mintDeployOpHash} to complete.`,
+        description: (
+          <Text>
+            Waiting for operation{" "}
+            <Link
+              href={`${chain.blockExplorers?.default}/${context.mintDeployTxnHash}`}
+              target="_blank"
+            >
+              ${context.mintDeployTxnHash}
+            </Link>{" "}
+            to complete.
+          </Text>
+        ),
+        title: `Waiting for user op completion.`,
       };
     case OnboardingStepIdentifier.STORE_SCWALLET:
       return {

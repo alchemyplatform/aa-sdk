@@ -1,61 +1,64 @@
-import { useAccount } from "wagmi";
-import { useNFTsQuery } from "../surfaces/profile/NftSection";
+import { useAccount, useChainId } from "wagmi";
 import { useEffect, useState } from "react";
+import { localSmartContractStore } from "./localStorage";
 
 export type AppState =
   | {
       state: "LOADING";
       eoaAddress: undefined;
-      scwAddress: undefined;
+      scwAddresses: undefined;
     }
   | {
       state: "UNCONNECTED";
       eoaAddress: undefined;
-      scwAddress: undefined;
+      scwAddresses: undefined;
     }
   | {
       state: "NO_SCW";
       eoaAddress: string;
-      scwAddress: undefined;
+      scwAddresses: undefined;
     }
   | {
       state: "HAS_SCW";
       eoaAddress: string;
-      scwAddress: string;
+      scwAddresses: string[];
     };
 
 export function useAppState(): AppState {
   const { address, isConnected } = useAccount();
-  const scwAddress = address ? localStorage.getItem(address) : undefined;
+  const chainId = useChainId();
 
   const [state, setState] = useState<AppState>({
     state: "UNCONNECTED",
     eoaAddress: undefined,
-    scwAddress: undefined,
+    scwAddresses: undefined,
   });
   useEffect(() => {
     if (!isConnected || !address) {
       setState({
         state: "UNCONNECTED",
         eoaAddress: undefined,
-        scwAddress: undefined,
+        scwAddresses: undefined,
       });
       return;
     }
-
-    if (!scwAddress) {
+    const scwAddresses = localSmartContractStore.smartAccountAddresses(
+      address,
+      chainId
+    );
+    if (scwAddresses.length === 0) {
       setState({
         state: "NO_SCW",
         eoaAddress: address as `0x${string}`,
-        scwAddress: undefined,
+        scwAddresses: undefined,
       });
     } else {
       setState({
         state: "HAS_SCW",
         eoaAddress: address as `0x${string}`,
-        scwAddress: scwAddress!,
+        scwAddresses: scwAddresses,
       });
     }
-  }, [address, isConnected, scwAddress]);
+  }, [address, isConnected, chainId]);
   return state;
 }
