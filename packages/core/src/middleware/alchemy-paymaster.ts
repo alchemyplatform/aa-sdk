@@ -110,10 +110,20 @@ export const alchemyPaymasterAndDataMiddleware = (
   config: AlchemyPaymasterConfig
 ): Parameters<ISmartAccountProvider["withPaymasterMiddleware"]>["0"] => ({
   dummyPaymasterDataMiddleware: async (_struct: UserOperationStruct) => {
-    return {
-      paymasterAndData:
-        "0xc03aac639bb21233e0139381970328db8bceeb67fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c",
-    };
+    switch (config.provider.chain.id) {
+      case 1:
+      case 137:
+      case 42161:
+        return {
+          paymasterAndData:
+            "0x4Fd9098af9ddcB41DA48A1d78F91F1398965addcfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c",
+        };
+      default:
+        return {
+          paymasterAndData:
+            "0xc03aac639bb21233e0139381970328db8bceeb67fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c",
+        };
+    }
   },
   paymasterDataMiddleware: async (struct: UserOperationStruct) => {
     const { paymasterAndData } = await (

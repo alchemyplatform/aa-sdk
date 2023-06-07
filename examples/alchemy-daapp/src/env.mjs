@@ -11,6 +11,7 @@ export const env = createEnv({
     MUMBAI_ALCHEMY_API_URL: z.string().url(),
     SEPOLIA_ALCHEMY_API_URL: z.string().url(),
     POLYGON_ALCHEMY_API_URL: z.string().url(),
+    ARB_ALCHEMY_API_URL: z.string().url(),
   },
 
   /**
@@ -27,6 +28,7 @@ export const env = createEnv({
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
     POLYGON_ALCHEMY_API_URL: process.env.POLYGON_ALCHEMY_API_URL,
+    ARB_ALCHEMY_API_URL: process.env.ARB_ALCHEMY_API_URL,
     MUMBAI_ALCHEMY_API_URL: process.env.MUMBAI_ALCHEMY_API_URL,
     SEPOLIA_ALCHEMY_API_URL: process.env.SEPOLIA_ALCHEMY_API_URL,
   },
