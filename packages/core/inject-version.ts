@@ -1,12 +1,13 @@
-import { writeFileSync } from "fs";
+import { writeFileSync, readFileSync } from "fs";
 import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
-import packageJSON from "./package.json" assert { type: "json" };
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const VERSION_FILE_PATH = "src/version.ts";
+
+const packageJSON = JSON.parse(readFileSync("./package.json").toString());
 
 writeFileSync(
   resolve(__dirname, VERSION_FILE_PATH),

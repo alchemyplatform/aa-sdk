@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { useOnboardingController } from "./OnboardingController";
+import { useOnboardingOrchestrator } from "./OnboardingController";
 import { queryClient } from "../../clients/query";
 import { memo, useState } from "react";
 import { useAccount } from "wagmi";
@@ -37,7 +37,8 @@ export function OnboardingPage() {
 function UnmemoOnboarding() {
   const router = useRouter();
   const [gasManagerChecked, setGasManagerChecked] = useState(false);
-  const { go, reset, currentStep } = useOnboardingController(gasManagerChecked);
+  const { go, reset, currentStep } =
+    useOnboardingOrchestrator(gasManagerChecked);
 
   const memberOnboardingMutation = useMutation<
     void,
@@ -88,9 +89,10 @@ function UnmemoOnboarding() {
       <Modal
         isOpen={!memberOnboardingMutation.isIdle}
         onClose={() => {
-          if (currentStep.percent === 100) router.push(`/profile/me`);
           reset();
           memberOnboardingMutation.reset();
+          if (currentStep.identifier === OnboardingStepIdentifier.DONE)
+            router.reload();
         }}
         closeOnOverlayClick={false}
       >
