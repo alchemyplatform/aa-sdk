@@ -1,10 +1,13 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { getApiUrl } from "~/configs/serverConfigs";
 import { callEndpoint } from "~/http/http";
-import { ALCHEMY_API_URL } from "~/settings";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  const { chainId } = req.query;
   try {
-    return res.send(await callEndpoint("POST", ALCHEMY_API_URL, req.body));
+    return res.send(
+      await callEndpoint("POST", getApiUrl(chainId as string), req.body)
+    );
   } catch {
     return res.status(500).send("Internal Server Error");
   }

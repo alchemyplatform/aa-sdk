@@ -8,8 +8,8 @@ export const env = createEnv({
    */
   server: {
     NODE_ENV: z.enum(["development", "test", "production"]),
-    NFT_CONTRACT_ADDRESS: z.string().min(1),
-    ALCHEMY_API_URL: z.string().min(1),
+    MUMBAI_ALCHEMY_API_URL: z.string().url(),
+    SEPOLIA_ALCHEMY_API_URL: z.string().url(),
   },
 
   /**
@@ -17,9 +17,7 @@ export const env = createEnv({
    * isn't built with invalid env vars. To expose them to the client, prefix them with
    * `NEXT_PUBLIC_`.
    */
-  client: {
-    // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
-  },
+  client: {},
 
   /**
    * You can't destruct `process.env` as a regular object in the Next.js edge runtimes (e.g.
@@ -27,7 +25,7 @@ export const env = createEnv({
    */
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
-    NFT_CONTRACT_ADDRESS: process.env.NFT_CONTRACT_ADDRESS,
-    ALCHEMY_API_URL: process.env.NFT_CONTRACT_ADDRESS,
+    MUMBAI_ALCHEMY_API_URL: process.env.MUMBAI_ALCHEMY_API_URL,
+    SEPOLIA_ALCHEMY_API_URL: process.env.SEPOLIA_ALCHEMY_API_URL,
   },
 });

@@ -21,3 +21,6 @@ tsconfig*.tsbuildinfo
 yarn-error.log
 lerna-debug.log
 .tool-versions
+
+# example ignores
+examples/contracts/**/out

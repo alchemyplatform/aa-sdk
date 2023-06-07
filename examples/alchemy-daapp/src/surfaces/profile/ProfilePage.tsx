@@ -7,7 +7,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { memo, useCallback } from "react";
-import NFTs from "./NFTs";
+import NftSection from "./NftSection";
 import { useAppState } from "../../clients/appState";
 
 const ProfileAttribute = ({
@@ -76,7 +76,7 @@ function UnMemoProfilePage() {
         <VStack alignItems="start" gap={5}>
           <Box
             cursor="pointer"
-            onClick={copyAddressTextToClipboard(eoaAddress!)}
+            onClick={copyAddressTextToClipboard(scwAddress!)}
           >
             <ProfileAttribute
               value={`${eoaAddress?.substring(0, 15)}...`}
@@ -99,7 +99,7 @@ function UnMemoProfilePage() {
           <Heading size="sm" margin={0} fontWeight="semibold" color="gray.500">
             NFTs
           </Heading>
-          <NFTs maxH="225px" overflowY="auto" address={eoaAddress} />
+          <NftSection maxH="225px" overflowY="auto" address={eoaAddress} />
         </ProfileDetailCard>
       </VStack>
     </HStack>
