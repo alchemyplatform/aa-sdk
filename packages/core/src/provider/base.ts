@@ -40,7 +40,7 @@ export const noOpMiddleware: AccountMiddlewareFn = async (
 ) => struct;
 
 // borrowed from ethers.js
-function defineReadOnly<T, K extends keyof T>(
+export function defineReadOnly<T, K extends keyof T>(
   object: T,
   key: K,
   value: T[K]
