@@ -17,6 +17,12 @@ import type {
 import type { ISmartContractAccount } from "./types.js";
 import type { BatchUserOperationCallData } from "../types.js";
 
+export enum DeploymentState {
+  undefined = '0x0',
+  not_deployed = '0x1',
+  deployed = '0x2',
+}
+
 export interface BaseSmartAccountParams<
   TTransport extends SupportedTransports = Transport
 > {
@@ -30,7 +36,7 @@ export abstract class BaseSmartContractAccount<
   TTransport extends SupportedTransports = Transport
 > implements ISmartContractAccount
 {
-  protected isDeployed?: boolean = undefined;
+  protected isDeployed?: DeploymentState = DeploymentState.undefined;
   protected accountAddress?: Address;
   protected entryPoint: GetContractReturnType<
     typeof EntryPointAbi,
@@ -77,7 +83,7 @@ export abstract class BaseSmartContractAccount<
   }
 
   async getNonce(): Promise<bigint> {
-    if (!this.isDeployed) {
+    if(!await this.isAccountDeployed()) {
       return 0n;
     }
     const address = await this.getAddress();
@@ -85,7 +91,7 @@ export abstract class BaseSmartContractAccount<
   }
 
   async getInitCode(): Promise<Hex> {
-    if (this.isDeployed) {
+    if (this.isDeployed === DeploymentState.deployed) {
       return "0x";
     }
     const contractCode = await this.rpcProvider.getContractCode(
@@ -93,7 +99,7 @@ export abstract class BaseSmartContractAccount<
     );
 
     if ((contractCode?.length ?? 0) > 2) {
-      this.isDeployed = true;
+      this.isDeployed = DeploymentState.deployed;
       return "0x";
     }
 
@@ -116,5 +122,19 @@ export abstract class BaseSmartContractAccount<
     }
 
     return this.accountAddress;
+  }
+
+
+  // Extra implementations
+  async isAccountDeployed(): Promise<Boolean> {
+    return await this.getDeploymentState()  === DeploymentState.deployed
+  }
+
+  async getDeploymentState(): Promise<DeploymentState> {
+    if(this.isDeployed === DeploymentState.undefined) {
+      const initCode = await this.getInitCode();
+      this.isDeployed =  (initCode === "0x") ? DeploymentState.deployed : DeploymentState.not_deployed
+    }
+    return this.isDeployed
   }
 }
