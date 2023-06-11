@@ -11,13 +11,13 @@ export enum ValidatorMode {
 }
 
 export interface BaseValidatorParams {
-    validatorAddress: `0x${string}`
+    validatorAddress: Hex
     mode: ValidatorMode
     owner: SmartAccountSigner
 }
 
 export abstract class BaseValidator {
-    validatorAddress: `0x${string}`
+    readonly validatorAddress: Hex
     mode: ValidatorMode
     owner: SmartAccountSigner
 
@@ -26,16 +26,16 @@ export abstract class BaseValidator {
         this.mode = params.mode
         this.owner = params.owner
     }
-    abstract async signMessage(message: string | Uint8Array | Hex): Promise<`0x${string}`>
+    abstract async signMessage(message: string | Uint8Array | Hex): Promise<Hex>
 
-    getAddress(): `0x${string}` {
+    getAddress(): Hex {
         return this.validatorAddress
     }
 
-    async getOwner (): Promise<`0x${string}`> {
+    async getOwner (): Promise<Hex> {
         return this.owner.getAddress();
     }
-    async getSignature(userOpHash: `0x${string}`): Promise<`0x${string}`> {
+    async getSignature(userOpHash: Hex): Promise<Hex> {
         if (this.mode === ValidatorMode.sudo || this.mode === ValidatorMode.plugin) {
             try {
                 const signature = await this.signMessage(userOpHash)
