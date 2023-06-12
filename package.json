@@ -8,8 +8,8 @@
     "examples/*"
   ],
   "scripts": {
-    "build": "lerna run build",
-    "build:packages": "lerna run build --ignore=alchemy-daapp",
+    "build": "lerna run build --ignore=alchemy-daapp",
+    "build:examples": "lerna run build",
     "clean": "lerna run clean",
     "test": "vitest run",
     "lint:write": "eslint . --fix && prettier --write --ignore-unknown .",
