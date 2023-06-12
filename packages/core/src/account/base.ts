@@ -133,7 +133,7 @@ export abstract class BaseSmartContractAccount<
   async getDeploymentState(): Promise<DeploymentState> {
     if(this.isDeployed === DeploymentState.undefined) {
       const initCode = await this.getInitCode();
-      this.isDeployed =  (initCode === "0x") ? DeploymentState.deployed : DeploymentState.not_deployed
+      this.isDeployed = (initCode === "0x") ? DeploymentState.deployed : DeploymentState.not_deployed
     }
     return this.isDeployed
   }
