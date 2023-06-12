@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "build": "lerna run build",
+    "build:packages": "lerna run build --ignore=alchemy-daapp",
     "clean": "lerna run clean",
     "test": "vitest run",
     "lint:write": "eslint . --fix && prettier --write --ignore-unknown .",

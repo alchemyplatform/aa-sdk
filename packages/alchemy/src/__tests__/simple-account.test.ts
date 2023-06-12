@@ -1,16 +1,17 @@
+import {
+  SimpleSmartContractAccount,
+  type BatchUserOperationCallData,
+  type SimpleSmartAccountOwner,
+} from "@alchemy/aa-core";
 import { toHex } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
-import {
-  SimpleSmartContractAccount,
-  type SimpleSmartAccountOwner,
-} from "../account/simple.js";
-import { SmartAccountProvider } from "../provider/base.js";
-import type { BatchUserOperationCallData } from "../types.js";
+import { AlchemyProvider } from "../provider";
 
 const ENTRYPOINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
 const API_KEY = process.env.API_KEY!;
 const OWNER_MNEMONIC = process.env.OWNER_MNEMONIC!;
+const PAYMASTER_POLICY_ID = process.env.PAYMASTER_POLICY_ID!;
 const SIMPLE_ACCOUNT_FACTORY_ADDRESS =
   "0x9406Cc6185a346906296840746125a0E44976454";
 
@@ -24,11 +25,11 @@ describe("Simple Account Tests", () => {
     getAddress: async () => ownerAccount.address,
   };
   const chain = polygonMumbai;
-  const signer = new SmartAccountProvider(
-    `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
-    ENTRYPOINT_ADDRESS,
-    chain
-  ).connect(
+  const signer = new AlchemyProvider({
+    apiKey: API_KEY,
+    chain,
+    entryPointAddress: ENTRYPOINT_ADDRESS,
+  }).connect(
     (provider) =>
       new SimpleSmartContractAccount({
         entryPointAddress: ENTRYPOINT_ADDRESS,
@@ -67,11 +68,11 @@ describe("Simple Account Tests", () => {
 
   it("should fail to execute if account address is not deployed and not correct", async () => {
     const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
-    const newSigner = new SmartAccountProvider(
-      `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
-      ENTRYPOINT_ADDRESS,
-      chain
-    ).connect(
+    const newSigner = new AlchemyProvider({
+      apiKey: API_KEY,
+      chain,
+      entryPointAddress: ENTRYPOINT_ADDRESS,
+    }).connect(
       (provider) =>
         new SimpleSmartContractAccount({
           entryPointAddress: ENTRYPOINT_ADDRESS,
@@ -90,6 +91,25 @@ describe("Simple Account Tests", () => {
 
     await expect(result).rejects.toThrowError();
   });
+
+  it("should successfully execute with alchemy paymaster info", async () => {
+    // TODO: this is super hacky right now
+    // we have to wait for the test above to run and be confirmed so that this one submits successfully using the correct nonce
+    // one way we could do this is by batching the two UOs together
+    await new Promise((resolve) => setTimeout(resolve, 7500));
+    const newSigner = signer.withAlchemyGasManager({
+      provider: signer.rpcClient,
+      policyId: PAYMASTER_POLICY_ID,
+      entryPoint: ENTRYPOINT_ADDRESS,
+    });
+
+    const result = newSigner.sendUserOperation({
+      target: await newSigner.getAddress(),
+      data: "0x",
+    });
+
+    await expect(result).resolves.not.toThrowError();
+  }, 10000);
 
   it("should correctly encode batch transaction data", async () => {
     const account = signer.account;

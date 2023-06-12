@@ -1,8 +1,4 @@
-import {
-  alchemyPaymasterAndDataMiddleware,
-  getChain,
-  SimpleSmartContractAccount,
-} from "@alchemy/aa-core";
+import { getChain, SimpleSmartContractAccount } from "@alchemy/aa-core";
 import { Wallet } from "@ethersproject/wallet";
 import { Alchemy, Network } from "alchemy-sdk";
 import { EthersProviderAdapter } from "../provider-adapter.js";
@@ -11,7 +7,6 @@ import { convertWalletToAccountSigner } from "../utils.js";
 const ENTRYPOINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
 const API_KEY = process.env.API_KEY!;
 const OWNER_MNEMONIC = process.env.OWNER_MNEMONIC!;
-const PAYMASTER_POLICY_ID = process.env.PAYMASTER_POLICY_ID!;
 const SIMPLE_ACCOUNT_FACTORY_ADDRESS =
   "0x9406Cc6185a346906296840746125a0E44976454";
 
@@ -85,25 +80,4 @@ describe("Simple Account Tests", async () => {
 
     await expect(result).rejects.toThrowError();
   });
-
-  it("should successfully execute with alchemy paymaster info", async () => {
-    // TODO: this is super hacky right now
-    // we have to wait for the test above to run and be confirmed so that this one submits successfully using the correct nonce
-    // one way we could do this is by batching the two UOs together
-    await new Promise((resolve) => setTimeout(resolve, 7500));
-    signer.withPaymasterMiddleware(
-      alchemyPaymasterAndDataMiddleware({
-        provider: signer.getPublicErc4337Client(),
-        policyId: PAYMASTER_POLICY_ID,
-        entryPoint: ENTRYPOINT_ADDRESS,
-      })
-    );
-
-    const result = signer.sendUserOperation({
-      target: (await signer.getAddress()) as `0x${string}`,
-      data: "0x",
-    });
-
-    await expect(result).resolves.not.toThrowError();
-  }, 10000);
 });

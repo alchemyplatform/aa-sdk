@@ -18,6 +18,20 @@ via `npm`:
 npm i -s @alchemy/aa-core viem
 ```
 
+If you are using Alchemy APIs for Account Abstraction, then you can also add the `@alchemy/aa-alchemy` package:
+
+via `yarn`:
+
+```bash
+yarn add @alchemy/aa-alchemy
+```
+
+via `npm`:
+
+```bash
+npm i -s @alchemy/aa-alchemy
+```
+
 If you are using `ethers` and want to use an `ethers` compatible `Provider` and `Signer` you can also add the the `@alchemy/aa-ethers` library (the above packages are required still).
 
 via `yarn`:
@@ -80,6 +94,65 @@ const provider = new SmartAccountProvider(
       accountAddress: "0x000...000",
     })
 );
+
+// 3. send a UserOperation
+const { hash } = provider.sendUserOperation({
+  target: "0xTargetAddress",
+  data: "0xcallData",
+  value: 0n, // value: bigint or undefined
+});
+```
+
+### via `aa-alchemy`
+
+```ts
+import {
+  SimpleSmartContractAccount,
+  type SimpleSmartAccountOwner,
+} from "@alchemy/aa-core";
+import { toHex } from "viem";
+import { mnemonicToAccount } from "viem/accounts";
+import { polygonMumbai } from "viem/chains";
+import { AlchemyProvider } from "@alchemy/aa-alchemy";
+
+const SIMPLE_ACCOUNT_FACTORY_ADDRESS =
+  "0x9406Cc6185a346906296840746125a0E44976454";
+
+// 1. define the EOA owner of the Smart Account
+// This is just one exapmle of how to interact with EOAs, feel free to use any other interface
+const ownerAccount = mnemonicToAccount(MNEMONIC);
+// All that is important for defining an owner is that it provides a `signMessage` and `getAddress` function
+const owner: SimpleSmartAccountOwner = {
+  // this should sign a message according to ERC-191
+  signMessage: async (msg) =>
+    ownerAccount.signMessage({
+      message: toHex(msg),
+    }),
+  getAddress: async () => ownerAccount.address,
+};
+
+// 2. initialize the provider and connect it to the account
+let provider = new AlchemyProvider({
+  apiKey: API_KEY,
+  chain,
+  entryPointAddress: ENTRYPOINT_ADDRESS,
+}).connect(
+  (rpcClient) =>
+    new SimpleSmartContractAccount({
+      entryPointAddress: ENTRYPOINT_ADDRESS,
+      chain: polygonMumbai, // ether a viem Chain or chainId that supports account abstraction at Alchemy
+      owner,
+      factoryAddress: SIMPLE_ACCOUNT_FACTORY_ADDRESS,
+      rpcClient,
+    })
+);
+
+// [OPTIONAL] Use Alchemy Gas Manager
+prpvider = provider.withAlchemyGasManager({
+  provider: provider.rpcClient,
+  policyId: PAYMASTER_POLICY_ID,
+  entryPoint: ENTRYPOINT_ADDRESS,
+});
 
 // 3. send a UserOperation
 const { hash } = provider.sendUserOperation({
@@ -157,13 +230,19 @@ If you want to add support for your own `SmartAccounts` then you will need to pr
 3. `signMessage` -- this should return an ERC-191 compliant message and is used to sign UO Hashes
 4. `getAccountInitCode` -- this should return the init code that will be used to create an account if one does not exist. Usually this is the concatenation of the account's factory address and the abi encoded function data of the account factory's `createAccount` method.
 
+### Paymaster Middleware
+
+You can use `provider.withPaymasterMiddleware` to add middleware to the stack which will set the `paymasterAndData` field during `sendUserOperation` calls. The `withPaymasterMiddleware` method has two overrides. One of the overrides takes a `dummyPaymasterData` generator function. This `dummyPaymasterData` is needed to estimate gas correctly when using a paymaster and is specific to the paymaster you're using. The second override is the actually `paymasterAndData` generator function. This function is called after gas estimation and fee estimation and is used to set the `paymasterAndData` field. The default `dummyPaymasterData` generator function returns `0x` for both the `paymasterAndData` fields. The default `paymasterAndData` generator function returns `0x` for both the `paymasterAndData` fields.
+
+Both of the override methods can return new gas estimates. This allows for paymaster RPC urls that handle gas estimation for you. It's important to note that if you're using an ERC-20 paymaster and your RPC endpoint does not return estimates, you should add an additional 75k gas to the gas estimate for `verificationGasLimit`.
+
 ### Alchemy Gas Manager Middleware
 
 Alchemy has two separate RPC methods for interacting with our Gas Manager services. The first is `alchemy_requestPaymasterAndData` and the second is `alchemy_requestGasAndPaymasterAndData`.
 The former is useful if you want to do your own gas estimation + fee estimation (or you're happy using the default middlewares for gas and fee estimation), but want to use the Alchemy Gas Manager service.
 The latter is will handle gas + fee estimation and return `paymasterAndData` in a single request.
 
-We provide two utility methods in `aa-sdk/core` for interacting with these RPC methods:
+We provide two utility methods in `@alchemy/aa-alchemy` for interacting with these RPC methods:
 
 1. `alchemyPaymasterAndDataMiddleware` which is used in conjunction with `withPaymasterMiddleware` to add the `alchemy_requestPaymasterAndData` RPC method to the middleware stack.
 2. `withAlchemyGasManager` which wraps a connected `SmartAccountProvider` with the middleware overrides to use `alchemy_requestGasAndPaymasterAndData` RPC method.
