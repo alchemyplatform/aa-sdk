@@ -127,7 +127,7 @@ export abstract class BaseSmartContractAccount<
 
   // Extra implementations
   async isAccountDeployed(): Promise<Boolean> {
-    return await this.getDeploymentState()  === DeploymentState.deployed
+    return await this.getDeploymentState() === DeploymentState.deployed
   }
 
   async getDeploymentState(): Promise<DeploymentState> {
