@@ -77,7 +77,7 @@ export class KernelSmartContractAccount<
 
             return sig
         } catch (err: any) {
-            console.log("Got Error - ",err.message)
+            console.error("Got Error - ",err.message)
             throw new Error("Message Signing with EIP6492 failed")
         }
 
@@ -85,7 +85,7 @@ export class KernelSmartContractAccount<
     }
 
     signMessage(msg: Uint8Array | string | Hex): Promise<Hex> {
-        return this.validator.signMessage(msg)
+        return this.validator.getSignature(msg)
     }
 
     protected encodeExecuteAction(target: Hex, value: bigint, data: Hex, code: bigint): Hex {

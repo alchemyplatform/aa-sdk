@@ -35,7 +35,7 @@ export abstract class BaseValidator {
     async getOwner (): Promise<Hex> {
         return this.owner.getAddress();
     }
-    async getSignature(userOpHash: Hex): Promise<Hex> {
+    async getSignature(userOpHash: Uint8Array | string | Hex): Promise<Hex> {
         if (this.mode === ValidatorMode.sudo || this.mode === ValidatorMode.plugin) {
             try {
                 const signature = await this.signMessage(userOpHash)
