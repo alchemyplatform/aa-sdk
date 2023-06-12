@@ -1,9 +1,11 @@
+import {
+  deepHexlify,
+  resolveProperties,
+  type ConnectedSmartAccountProvider,
+  type PublicErc4337Client,
+  type UserOperationRequest,
+} from "@alchemy/aa-core";
 import type { Address, Hex, Transport } from "viem";
-import type { BaseSmartContractAccount } from "../account/base.js";
-import type { PublicErc4337Client } from "../client/types.js";
-import type { SmartAccountProvider } from "../provider/base.js";
-import type { UserOperationRequest } from "../types.js";
-import { deepHexlify, resolveProperties } from "../utils.js";
 
 type ClientWithAlchemyMethods = PublicErc4337Client & {
   request: PublicErc4337Client["request"] &
@@ -39,7 +41,7 @@ type ClientWithAlchemyMethods = PublicErc4337Client & {
     }["request"];
 };
 
-export interface AlchemyPaymasterConfig {
+export interface AlchemyGasManagerConfig {
   policyId: string;
   entryPoint: Address;
   provider: PublicErc4337Client;
@@ -55,12 +57,10 @@ export interface AlchemyPaymasterConfig {
  */
 export const withAlchemyGasManager = <
   T extends Transport,
-  Provider extends SmartAccountProvider<T> & {
-    account: BaseSmartContractAccount<T>;
-  }
+  Provider extends ConnectedSmartAccountProvider<T>
 >(
   provider: Provider,
-  config: AlchemyPaymasterConfig
+  config: AlchemyGasManagerConfig
 ): Provider => {
   return (
     provider
@@ -96,3 +96,48 @@ export const withAlchemyGasManager = <
       })
   );
 };
+
+/**
+ * This is the middleware for calling the alchemy paymaster API which does not estimate gas. It's recommend to use
+ * {@link withAlchemyGasManager} instead which handles estimating gas + getting paymaster data in one go.
+ *
+ * @param config {@link AlchemyPaymasterConfig}
+ * @returns middleware overrides for paymaster middlewares
+ */
+export const alchemyPaymasterAndDataMiddleware = (
+  config: AlchemyGasManagerConfig
+): Parameters<
+  ConnectedSmartAccountProvider["withPaymasterMiddleware"]
+>["0"] => ({
+  dummyPaymasterDataMiddleware: async (_struct) => {
+    switch (config.provider.chain.id) {
+      case 1:
+      case 137:
+      case 42161:
+        return {
+          paymasterAndData:
+            "0x4Fd9098af9ddcB41DA48A1d78F91F1398965addcfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c",
+        };
+      default:
+        return {
+          paymasterAndData:
+            "0xc03aac639bb21233e0139381970328db8bceeb67fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c",
+        };
+    }
+  },
+  paymasterDataMiddleware: async (struct) => {
+    const { paymasterAndData } = await (
+      config.provider as ClientWithAlchemyMethods
+    ).request({
+      method: "alchemy_requestPaymasterAndData",
+      params: [
+        {
+          policyId: config.policyId,
+          entryPoint: config.entryPoint,
+          userOperation: deepHexlify(await resolveProperties(struct)),
+        },
+      ],
+    });
+    return { paymasterAndData };
+  },
+});
