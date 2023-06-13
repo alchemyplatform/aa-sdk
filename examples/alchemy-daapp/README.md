@@ -1,6 +1,6 @@
 # Alchemy dAApp
 
-This example dapp contains an account abstraction enblaed web3 application that is designed to onboard people onto the Alchemy Account Abstraction SDK. It provides a quick starter for developers to use these technologies; by creating a Smart Contract Wallet and minting it an NFT!
+This example dapp contains an account abstraction-enabled web3 application designed to onboard people onto the Alchemy Account Abstraction SDK. It provides a quick starter for developers to use these technologies; by creating a Smart Contract Wallet and minting it an NFT!
 
 ## Installation
 1. Clone the repository:
@@ -40,7 +40,7 @@ export const serverConfigs: Record<number, ServerConfiguration> = {
   // Repeat for other chains as needed
 };
 ```
-3. Update the serverConfigs.ts file with your alchemy api keys:
+3. Update the serverConfigs.ts file with your alchemy API keys:
 ```typescript
 const API_URLs: Record<number, string> = {
   [polygonMumbai.id]: env.MUMBAI_ALCHEMY_API_URL,
@@ -54,11 +54,11 @@ yarn dev
 ```
 
 ## How This Works
-The [`onboarding-controller.ts`](https://github.com/alchemyplatform/aa-sdk/blob/master/examples/alchemy-daapp/src/surfaces/onboarding/OnboardingController.ts) file contains the onboarding controller, which handles the onboarding process for new users. The controller uses the Alchemy SDK to create a new account and mint an NFT to it.
+The [`onboarding-controller.ts`](https://github.com/alchemyplatform/aa-sdk/blob/master/examples/alchemy-daapp/src/surfaces/onboarding/OnboardingController.ts) file contains the onboarding controller, which handles the onboarding process for new users. The controller uses the Alchemy SDK to create a new account and mint an NFT.
 
 In the [`clientConfigs.ts`](https://github.com/alchemyplatform/aa-sdk/blob/main/examples/alchemy-daapp/src/configs/clientConfigs.ts) file, you will find the configuration for the DAApp, including the nft contract address, simple account factory address, gas manager policy id, rpc url, and chain. You'll also find an example NFT contract in [`examples/contracts/DAAppNFT`](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/contracts/DAAppNFT)
 
-You can replace the default values with your own contract addresses, policy ids, and add or remove chains as needed.
+You can replace the default values with your contract addresses and policy ids and add or remove chains as needed.
 
 ## Contributing
 We welcome contributions to the examples/alchemy-daapp repo! If you would like to contribute, please follow these steps:
@@ -67,7 +67,7 @@ We welcome contributions to the examples/alchemy-daapp repo! If you would like t
 2. Create a new branch for your changes
 3. Make your changes and commit them
 4. Push your changes to your forked repository
-5. Submit a pull request to the examples/aa-sdk repo
+5. Submit a pull request to the examples/aa-SDK repo
 
 Please ensure that your code follows our coding standards and that you have added appropriate tests for your changes. We appreciate your contributions and look forward to working with you.
 
