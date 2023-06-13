@@ -4,6 +4,6 @@ export default defineProject({
   test: {
     globals: true,
     setupFiles: ["../../.vitest/setupTests.ts"],
-    name: "aa-alchemy",
+    name: "accounts",
   },
 });
