@@ -1,7 +1,7 @@
-import {SmartAccountSigner} from "../interfaces/signer";
 import {Address} from "abitype";
 import {HDAccount, HDOptions, Hex, toHex} from "viem";
 import {mnemonicToAccount, privateKeyToAccount} from "viem/accounts";
+import {SmartAccountSigner} from "./types";
 
 export class HdAccountSigner implements SmartAccountSigner {
     owner: HDAccount

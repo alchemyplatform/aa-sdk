@@ -8,11 +8,11 @@ import {
     type Transport,
 } from "viem";
 import {type BaseSmartAccountParams, BaseSmartContractAccount,} from "./base.js";
-import {SmartAccountSigner} from "../interfaces/signer";
 import {BaseValidator, ValidatorMode} from "../validator/kernel/base";
 import {KernelAccountAbi} from "../abis/KernelAccountAbi";
 import {parseAbiParameters} from "abitype";
 import {KernelFactoryAbi} from "../abis/KernelFactoryAbi";
+import {SmartAccountSigner} from "../signer/types";
 
 export interface KernelSmartAccountParams<
     TTransport extends Transport | FallbackTransport = Transport

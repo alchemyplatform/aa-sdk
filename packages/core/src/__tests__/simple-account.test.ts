@@ -3,11 +3,11 @@ import { mnemonicToAccount } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
 import {
   SimpleSmartContractAccount,
-  type SimpleSmartAccountOwner,
 } from "../account/simple.js";
 import { withAlchemyGasManager } from "../middleware/alchemy-paymaster.js";
 import { SmartAccountProvider } from "../provider/base.js";
 import type { BatchUserOperationCallData } from "../types.js";
+import {SmartAccountSigner} from "../signer/types";
 
 const ENTRYPOINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
 const API_KEY = process.env.API_KEY!;
@@ -18,7 +18,7 @@ const SIMPLE_ACCOUNT_FACTORY_ADDRESS =
 
 describe("Simple Account Tests", () => {
   const ownerAccount = mnemonicToAccount(OWNER_MNEMONIC);
-  const owner: SimpleSmartAccountOwner = {
+  const owner: SmartAccountSigner = {
     signMessage: async (msg) =>
       ownerAccount.signMessage({
         message: toHex(msg),

@@ -1,6 +1,5 @@
 import {concatHex, Hex} from "viem";
-import {Address} from "abitype";
-import {SmartAccountSigner} from "../../interfaces/signer";
+import {SmartAccountSigner} from "../../signer/types";
 
 export enum ValidatorMode {
     sudo = '0x00000000',

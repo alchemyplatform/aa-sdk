@@ -1,7 +1,8 @@
-import {defineReadOnly, SmartAccountProvider, SmartAccountProviderOpts} from "./base";
+import {SmartAccountProvider, SmartAccountProviderOpts} from "./base";
 import {PublicErc4337Client, SupportedTransports} from "../client/types";
 import {Address, Chain, Transport} from "viem";
 import {KernelSmartContractAccount} from "../account/kernel";
+import {defineReadOnly} from "../utils";
 
 export class KernelAccountProvider<
     TTransport extends SupportedTransports = Transport
