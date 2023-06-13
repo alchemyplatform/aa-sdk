@@ -10,7 +10,7 @@ import {
   polygonMumbai,
   sepolia,
 } from "viem/chains";
-import { GasFeeStrategy, type GasFeeMode } from "./middleware/gas-fees";
+import { GasFeeStrategy, type GasFeeMode } from "./middleware/gas-fees.js";
 
 export const SupportedChains = new Map<number, Chain>([
   [polygonMumbai.id, polygonMumbai],

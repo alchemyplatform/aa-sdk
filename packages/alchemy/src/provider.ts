@@ -13,15 +13,15 @@ import {
   optimism,
   optimismGoerli,
 } from "viem/chains";
-import { ChainFeeStrategies, SupportedChains } from "./chains";
+import { ChainFeeStrategies, SupportedChains } from "./chains.js";
 import {
   GasFeeStrategy,
   withAlchemyGasFeeEstimator,
-} from "./middleware/gas-fees";
+} from "./middleware/gas-fees.js";
 import {
   withAlchemyGasManager,
   type AlchemyGasManagerConfig,
-} from "./middleware/gas-manager";
+} from "./middleware/gas-manager.js";
 
 export type AlchemyProviderConfig = {
   apiKey: string;

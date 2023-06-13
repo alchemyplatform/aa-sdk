@@ -1,4 +1,4 @@
-import type { AlchemyProvider } from "../provider";
+import type { AlchemyProvider } from "../provider.js";
 
 export enum GasFeeStrategy {
   DEFAULT = "DEFAULT",
