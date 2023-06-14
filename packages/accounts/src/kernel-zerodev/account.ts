@@ -7,12 +7,12 @@ import {
     type Hex,
     type Transport,
 } from "viem";
-import {type BaseSmartAccountParams, BaseSmartContractAccount,} from "./base.js";
-import {BaseValidator, ValidatorMode} from "../validator/kernel/base";
-import {KernelAccountAbi} from "../abis/KernelAccountAbi";
+import {type BaseSmartAccountParams, BaseSmartContractAccount,} from "@alchemy/aa-core/src/account/base";
+import {BaseValidator, ValidatorMode} from "src/kernel-zerodev/validator/base";
+import {KernelAccountAbi} from "src/kernel-zerodev/abis/KernelAccountAbi";
 import {parseAbiParameters} from "abitype";
-import {KernelFactoryAbi} from "../abis/KernelFactoryAbi";
-import {SmartAccountSigner} from "../signer/types";
+import {KernelFactoryAbi} from "src/kernel-zerodev/abis/KernelFactoryAbi";
+import {SmartAccountSigner} from "@alchemy/aa-core/src/signer/types";
 
 export interface KernelSmartAccountParams<
     TTransport extends Transport | FallbackTransport = Transport

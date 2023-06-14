@@ -1,7 +1,7 @@
 import {SmartAccountProvider, SmartAccountProviderOpts} from "./base";
 import {PublicErc4337Client, SupportedTransports} from "../client/types";
 import {Address, Chain, Transport} from "viem";
-import {KernelSmartContractAccount} from "../account/kernel";
+import {KernelSmartContractAccount} from "../../../accounts/src/kernel-zerodev/account";
 import {defineReadOnly} from "../utils";
 
 export class KernelAccountProvider<

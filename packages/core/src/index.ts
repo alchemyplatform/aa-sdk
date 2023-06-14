@@ -9,11 +9,10 @@ export { SimpleAccountFactoryAbi } from "./abis/SimpleAccountFactoryAbi.js";
 export { BaseSmartContractAccount } from "./account/base.js";
 export type { BaseSmartAccountParams } from "./account/base.js";
 export { SimpleSmartContractAccount } from "./account/simple.js";
-export type {
-  SimpleSmartAccountOwner,
-  SimpleSmartAccountParams,
-} from "./account/simple.js";
+export type { SimpleSmartAccountParams } from "./account/simple.js";
 export type * from "./account/types.js";
+export { type SmartAccountSigner } from "./signer/types";
+export { HdAccountSigner } from "./signer/hd-account";
 
 export {
   createPublicErc4337Client,
