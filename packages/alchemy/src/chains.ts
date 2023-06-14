@@ -43,7 +43,7 @@ export const ChainFeeStrategies: Map<number, GasFeeMode> = new Map<
   defineChainStrategy(optimismGoerli.id, GasFeeStrategy.FIXED, 0n),
   defineChainStrategy(arbitrumGoerli.id, GasFeeStrategy.FIXED, 0n),
   // mainnets
-  defineChainStrategy(mainnet.id, GasFeeStrategy.PRIORITY_FEE_PERCENTAGE, 25n),
+  defineChainStrategy(mainnet.id, GasFeeStrategy.PRIORITY_FEE_PERCENTAGE, 57n),
   defineChainStrategy(polygon.id, GasFeeStrategy.PRIORITY_FEE_PERCENTAGE, 25n),
   defineChainStrategy(optimism.id, GasFeeStrategy.BASE_FEE_PERCENTAGE, 5n),
   defineChainStrategy(arbitrum.id, GasFeeStrategy.BASE_FEE_PERCENTAGE, 5n),
