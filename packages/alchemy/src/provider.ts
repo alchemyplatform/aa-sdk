@@ -29,6 +29,10 @@ export type AlchemyProviderConfig = {
   entryPointAddress: Address;
   account?: BaseSmartContractAccount;
   opts?: SmartAccountProviderOpts;
+  feeOpts?: {
+    /** this adds a percent buffer on top of the fee estimated (default 5%)*/
+    maxPriorityFeeBufferPercent?: bigint;
+  };
 };
 
 export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
@@ -38,6 +42,7 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
     entryPointAddress,
     account,
     opts,
+    feeOpts,
   }: AlchemyProviderConfig) {
     const _chain =
       typeof chain === "number" ? SupportedChains.get(chain) : chain;
@@ -53,7 +58,8 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
       ChainFeeStrategies.get(_chain.id) ?? {
         strategy: GasFeeStrategy.DEFAULT,
         value: 0n,
-      }
+      },
+      feeOpts?.maxPriorityFeeBufferPercent ?? 5n
     );
   }
 
