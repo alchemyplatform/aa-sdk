@@ -21,14 +21,11 @@ export {
 } from "./client/create-client.js";
 export type * from "./client/types.js";
 
-export {
-  alchemyPaymasterAndDataMiddleware,
-  withAlchemyGasManager,
-} from "./middleware/alchemy-paymaster.js";
-export type { AlchemyPaymasterConfig } from "./middleware/alchemy-paymaster.js";
-
 export { SmartAccountProvider, noOpMiddleware } from "./provider/base.js";
-export type { SmartAccountProviderOpts } from "./provider/base.js";
+export type {
+  ConnectedSmartAccountProvider,
+  SmartAccountProviderOpts,
+} from "./provider/base.js";
 export type * from "./provider/types.js";
 
 export type * from "./types.js";

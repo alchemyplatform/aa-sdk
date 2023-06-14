@@ -63,20 +63,26 @@ const minPriorityFeePerBidDefaults = new Map<number, bigint>([
   [arbitrumGoerli.id, 10_000_000n],
 ]);
 
+export type ConnectedSmartAccountProvider<
+  TTransport extends SupportedTransports = Transport
+> = SmartAccountProvider<TTransport> & {
+  account: BaseSmartContractAccount<TTransport>;
+};
+
 export class SmartAccountProvider<
   TTransport extends SupportedTransports = Transport
 > implements ISmartAccountProvider<TTransport>
 {
   private txMaxRetries: number;
   private txRetryIntervalMs: number;
-  private minPriorityFeePerBid: bigint;
+  minPriorityFeePerBid: bigint;
   rpcClient: PublicErc4337Client<Transport>;
 
   constructor(
     rpcProvider: string | PublicErc4337Client<TTransport>,
-    private entryPointAddress: Address,
-    private chain: Chain,
-    readonly account?: BaseSmartContractAccount,
+    protected entryPointAddress: Address,
+    protected chain: Chain,
+    readonly account?: BaseSmartContractAccount<TTransport>,
     opts?: SmartAccountProviderOpts
   ) {
     this.txMaxRetries = opts?.txMaxRetries ?? 5;
@@ -348,6 +354,10 @@ export class SmartAccountProvider<
     const account = fn(this.rpcClient);
     defineReadOnly(this, "account", account);
     return this as this & { account: typeof account };
+  }
+
+  isConnected(): this is ConnectedSmartAccountProvider<TTransport> {
+    return this.account !== undefined;
   }
 
   private overrideMiddlewareFunction = (

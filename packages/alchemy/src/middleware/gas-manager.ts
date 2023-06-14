@@ -1,10 +1,11 @@
+import {
+  deepHexlify,
+  resolveProperties,
+  type ConnectedSmartAccountProvider,
+  type PublicErc4337Client,
+  type UserOperationRequest,
+} from "@alchemy/aa-core";
 import type { Address, Hex, Transport } from "viem";
-import type { BaseSmartContractAccount } from "../account/base.js";
-import type { PublicErc4337Client } from "../client/types.js";
-import type { SmartAccountProvider } from "../provider/base.js";
-import type { ISmartAccountProvider } from "../provider/types.js";
-import type { UserOperationRequest, UserOperationStruct } from "../types.js";
-import { deepHexlify, resolveProperties } from "../utils.js";
 
 type ClientWithAlchemyMethods = PublicErc4337Client & {
   request: PublicErc4337Client["request"] &
@@ -40,7 +41,7 @@ type ClientWithAlchemyMethods = PublicErc4337Client & {
     }["request"];
 };
 
-export interface AlchemyPaymasterConfig {
+export interface AlchemyGasManagerConfig {
   policyId: string;
   entryPoint: Address;
   provider: PublicErc4337Client;
@@ -56,12 +57,10 @@ export interface AlchemyPaymasterConfig {
  */
 export const withAlchemyGasManager = <
   T extends Transport,
-  Provider extends SmartAccountProvider<T> & {
-    account: BaseSmartContractAccount<T>;
-  }
+  Provider extends ConnectedSmartAccountProvider<T>
 >(
   provider: Provider,
-  config: AlchemyPaymasterConfig
+  config: AlchemyGasManagerConfig
 ): Provider => {
   return (
     provider
@@ -76,25 +75,24 @@ export const withAlchemyGasManager = <
         maxFeePerGas: 0n,
         maxPriorityFeePerGas: 0n,
       }))
-      .withCustomMiddleware(async (struct) => {
-        const result = await (
-          config.provider as ClientWithAlchemyMethods
-        ).request({
-          method: "alchemy_requestGasAndPaymasterAndData",
-          params: [
-            {
-              policyId: config.policyId,
-              entryPoint: config.entryPoint,
-              userOperation: deepHexlify(await resolveProperties(struct)),
-              dummySignature: provider.account.getDummySignature(),
-            },
-          ],
-        });
+      .withPaymasterMiddleware({
+        paymasterDataMiddleware: async (struct) => {
+          const result = await (
+            config.provider as ClientWithAlchemyMethods
+          ).request({
+            method: "alchemy_requestGasAndPaymasterAndData",
+            params: [
+              {
+                policyId: config.policyId,
+                entryPoint: config.entryPoint,
+                userOperation: deepHexlify(await resolveProperties(struct)),
+                dummySignature: provider.account.getDummySignature(),
+              },
+            ],
+          });
 
-        return {
-          ...struct,
-          ...result,
-        };
+          return result;
+        },
       })
   );
 };
@@ -107,9 +105,11 @@ export const withAlchemyGasManager = <
  * @returns middleware overrides for paymaster middlewares
  */
 export const alchemyPaymasterAndDataMiddleware = (
-  config: AlchemyPaymasterConfig
-): Parameters<ISmartAccountProvider["withPaymasterMiddleware"]>["0"] => ({
-  dummyPaymasterDataMiddleware: async (_struct: UserOperationStruct) => {
+  config: AlchemyGasManagerConfig
+): Parameters<
+  ConnectedSmartAccountProvider["withPaymasterMiddleware"]
+>["0"] => ({
+  dummyPaymasterDataMiddleware: async (_struct) => {
     switch (config.provider.chain.id) {
       case 1:
       case 137:
@@ -125,7 +125,7 @@ export const alchemyPaymasterAndDataMiddleware = (
         };
     }
   },
-  paymasterDataMiddleware: async (struct: UserOperationStruct) => {
+  paymasterDataMiddleware: async (struct) => {
     const { paymasterAndData } = await (
       config.provider as ClientWithAlchemyMethods
     ).request({
@@ -138,7 +138,6 @@ export const alchemyPaymasterAndDataMiddleware = (
         },
       ],
     });
-
     return { paymasterAndData };
   },
 });

@@ -12,6 +12,9 @@ import type {
   UserOperationStruct,
 } from "../types.js";
 
+type WithRequired<T, K extends keyof T> = Required<Pick<T, K>>;
+type WithOptional<T, K extends keyof T> = Pick<Partial<T>, K>;
+
 export type SendUserOperationResult = {
   hash: string;
   request: UserOperationRequest;
@@ -22,13 +25,23 @@ export type AccountMiddlewareFn = (
 ) => Promise<UserOperationStruct>;
 
 export type AccountMiddlewareOverrideFn<
-  K extends keyof UserOperationStruct = never
+  Req extends keyof UserOperationStruct = never,
+  Opt extends keyof UserOperationStruct = never
 > = (
   struct: UserOperationStruct
-) => Promise<Required<Pick<UserOperationStruct, K>>>;
+) => Promise<
+  WithRequired<UserOperationStruct, Req> &
+    WithOptional<UserOperationStruct, Opt>
+>;
 
-export type PaymasterAndDataMiddleware =
-  AccountMiddlewareOverrideFn<"paymasterAndData">;
+export type PaymasterAndDataMiddleware = AccountMiddlewareOverrideFn<
+  "paymasterAndData",
+  | "callGasLimit"
+  | "preVerificationGas"
+  | "verificationGasLimit"
+  | "maxFeePerGas"
+  | "maxPriorityFeePerGas"
+>;
 
 export type GasEstimatorMiddleware = AccountMiddlewareOverrideFn<
   "callGasLimit" | "preVerificationGas" | "verificationGasLimit"

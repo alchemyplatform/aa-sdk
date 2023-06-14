@@ -1,9 +1,10 @@
 {
-  "name": "@alchemy/aa-core",
-  "license": "MIT",
+  "name": "@alchemy/aa-accounts",
   "version": "0.1.0-alpha.2",
-  "description": "viem based SDK that enables interactions with ERC-4337 Smart Accounts. ABIs are based off the definitions generated in @account-abstraction/contracts",
+  "description": "A collection of ERC-4337 compliant smart contract account interfaces",
   "author": "Alchemy",
+  "license": "MIT",
+  "private": false,
   "type": "module",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -27,12 +28,7 @@
     },
     "./package.json": "./package.json"
   },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
-  },
   "scripts": {
-    "prebuild": "ts-node-esm inject-version",
     "build": "yarn clean && yarn build:cjs && yarn build:esm && yarn build:types",
     "build:cjs": "tsc --project tsconfig.build.json --module commonjs --outDir ./dist/cjs --removeComments --verbatimModuleSyntax false && echo > ./dist/cjs/package.json '{\"type\":\"commonjs\"}'",
     "build:esm": "tsc --project tsconfig.build.json --module es2015 --outDir ./dist/esm --removeComments && echo > ./dist/esm/package.json '{\"type\":\"module\"}'",
@@ -42,18 +38,19 @@
     "test:run": "vitest run"
   },
   "devDependencies": {
-    "dotenv": "^16.0.3",
-    "ts-node": "^10.9.1",
+    "@alchemy/aa-core": "^0.1.0-alpha.2",
     "typescript": "^5.0.4",
     "typescript-template": "*",
     "viem": "^0.3.50",
     "vitest": "^0.31.0"
   },
-  "dependencies": {
-    "abitype": "^0.8.3"
-  },
   "peerDependencies": {
+    "@alchemy/aa-core": "^0.1.0-alpha.1",
     "viem": "^0.3.50"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "repository": {
     "type": "git",
