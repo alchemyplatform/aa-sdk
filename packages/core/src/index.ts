@@ -14,8 +14,6 @@ export type {
   SimpleSmartAccountParams,
 } from "./account/simple.js";
 export type * from "./account/types.js";
-export { type SmartAccountSigner } from "./signer/types";
-export { HdAccountSigner } from "./signer/hd-account";
 
 export {
   createPublicErc4337Client,
@@ -37,5 +35,4 @@ export {
   getChain,
   getUserOperationHash,
   resolveProperties,
-  defineReadOnly,
 } from "./utils.js";
