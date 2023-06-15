@@ -24,8 +24,8 @@ import {
 import { localSmartContractStore } from "~/clients/localStorage";
 
 async function pollForLambdaForComplete(
-    lambda: () => Promise<boolean>,
-    txnMaxDurationSeconds: number = 20
+  lambda: () => Promise<boolean>,
+  txnMaxDurationSeconds: number = 20
 ) {
   let txnRetryCount = 0;
   let reciept;
@@ -43,16 +43,16 @@ async function pollForLambdaForComplete(
 }
 
 type OnboardingFunction = (
-    context: Partial<OnboardingContext>,
-    appConfig: DAAppConfiguration
+  context: Partial<OnboardingContext>,
+  appConfig: DAAppConfiguration
 ) => Promise<{
   nextStep: OnboardingStepIdentifier;
   addedContext: Partial<OnboardingContext>;
 }>;
 
 const onboardingStepHandlers: Record<
-    OnboardingStepIdentifier,
-    OnboardingFunction
+  OnboardingStepIdentifier,
+  OnboardingFunction
 > = {
   // This is the first step it checks for the owner signer.
   [OnboardingStepIdentifier.INITIAL_STEP]: async (context) => {
@@ -73,13 +73,13 @@ const onboardingStepHandlers: Record<
       throw new Error("No owner");
     }
     const entrypointAddress = await context
-        .client!.getSupportedEntryPoints()
-        .then((entrypoints) => {
-          if (entrypoints.length === 0) {
-            throw new Error("No entrypoints found");
-          }
-          return entrypoints[0];
-        });
+      .client!.getSupportedEntryPoints()
+      .then((entrypoints) => {
+        if (entrypoints.length === 0) {
+          throw new Error("No entrypoints found");
+        }
+        return entrypoints[0];
+      });
     return {
       nextStep: OnboardingStepIdentifier.CREATE_SCWALLET,
       addedContext: {
@@ -98,9 +98,9 @@ const onboardingStepHandlers: Record<
     }
     const entryPointAddress = context.entrypointAddress;
     const baseSigner = new SmartAccountProvider(
-        appConfig.rpcUrl,
-        context.entrypointAddress!,
-        context.chain!
+      appConfig.rpcUrl,
+      context.entrypointAddress!,
+      context.chain!
     ).connect((provider: any) => {
       if (!context.owner) {
         throw new Error("No owner for account was found");
@@ -116,11 +116,11 @@ const onboardingStepHandlers: Record<
     const smartAccountAddress = await baseSigner.getAddress();
     if (context.useGasManager) {
       const smartAccountSigner = await baseSigner.withPaymasterMiddleware(
-          alchemyPaymasterAndDataMiddleware({
-            provider: baseSigner.rpcClient,
-            policyId: appConfig.gasManagerPolicyId,
-            entryPoint: entryPointAddress,
-          })
+        alchemyPaymasterAndDataMiddleware({
+          provider: baseSigner.rpcClient,
+          policyId: appConfig.gasManagerPolicyId,
+          entryPoint: entryPointAddress,
+        })
       );
       return {
         nextStep: OnboardingStepIdentifier.MINT_NFT,
@@ -149,10 +149,10 @@ const onboardingStepHandlers: Record<
         throw new Error("An account address to add funds was not found");
       }
       return context
-          .client!.getBalance({ address: context.smartAccountAddress })
-          .then((val) => {
-            return val >= MIN_ONBOARDING_WALLET_BALANCE;
-          });
+        .client!.getBalance({ address: context.smartAccountAddress })
+        .then((val) => {
+          return val >= MIN_ONBOARDING_WALLET_BALANCE;
+        });
     }, 60 * 5); // wait up to 5 minutes
     return {
       nextStep: OnboardingStepIdentifier.MINT_NFT,
@@ -195,10 +195,10 @@ const onboardingStepHandlers: Record<
         throw new Error("No mint deploy operation Hash was found");
       }
       return context
-          .client!.getTransactionReceipt({ hash: context.mintDeployTxnHash })
-          .then((receipt) => {
-            return receipt !== null;
-          });
+        .client!.getTransactionReceipt({ hash: context.mintDeployTxnHash })
+        .then((receipt) => {
+          return receipt !== null;
+        });
     });
     return {
       nextStep: OnboardingStepIdentifier.STORE_SCWALLET,
@@ -218,9 +218,9 @@ const onboardingStepHandlers: Record<
       throw new Error("No SCW was found");
     }
     localSmartContractStore.addSmartContractAccount(
-        inMemOwnerAddress,
-        context.smartAccountAddress,
-        context.chain?.id!
+      inMemOwnerAddress,
+      context.smartAccountAddress,
+      context.chain?.id!
     );
     return {
       nextStep: OnboardingStepIdentifier.DONE,
@@ -237,8 +237,8 @@ const onboardingStepHandlers: Record<
 };
 
 export function useOnboardingOrchestrator(
-    useGasManager: boolean,
-    owner: SimpleSmartAccountOwner
+  useGasManager: boolean,
+  owner: SimpleSmartAccountOwner
 ) {
   // Setup initial data and state
   const { address: ownerAddress } = useAccount();
@@ -250,7 +250,7 @@ export function useOnboardingOrchestrator(
     const appConfig = daappConfigurations[chain.id];
     if (!appConfig) {
       throw new Error(
-          "Couldn't find a configuration for ap chain. Please connect to a valid chain first."
+        "Couldn't find a configuration for ap chain. Please connect to a valid chain first."
       );
     }
     const client = createPublicErc4337Client({
@@ -260,16 +260,16 @@ export function useOnboardingOrchestrator(
     return { client, appConfig };
   }, [chain]);
   const [currentStep, updateStep] = useState<OnboardingStep>(
-      initialStep(owner!, ownerAddress!, client, chain!, useGasManager)
+    initialStep(owner!, ownerAddress!, client, chain!, useGasManager)
   );
   const [isLoading, setIsLoading] = useState(false);
 
   const reset = useCallback(
-      () =>
-          updateStep(
-              initialStep(owner!, ownerAddress!, client, chain!, useGasManager)
-          ),
-      [ownerAddress, client, chain, useGasManager]
+    () =>
+      updateStep(
+        initialStep(owner!, ownerAddress!, client, chain!, useGasManager)
+      ),
+    [ownerAddress, client, chain, useGasManager]
   );
 
   // Reset onboarding if key account and onboarding attributes change
@@ -281,17 +281,17 @@ export function useOnboardingOrchestrator(
     try {
       let inMemStep = currentStep;
       async function _updateStep(
-          stepIdentifier: OnboardingStepIdentifier,
-          context: Partial<OnboardingContext>
+        stepIdentifier: OnboardingStepIdentifier,
+        context: Partial<OnboardingContext>
       ) {
         const assembledContext = {
           ...inMemStep.context,
           ...context,
         };
         const meta = await metaForStepIdentifier(
-            stepIdentifier,
-            context,
-            chain!
+          stepIdentifier,
+          context,
+          chain!
         );
         const resolvedStep = {
           identifier: stepIdentifier,
@@ -313,14 +313,14 @@ export function useOnboardingOrchestrator(
        */
       while (inMemStep.identifier !== OnboardingStepIdentifier.DONE) {
         await onboardingStepHandlers[inMemStep.identifier](
-            inMemStep.context,
-            appConfig
+          inMemStep.context,
+          appConfig
         )
-            .then((step) => _updateStep(step.nextStep, step.addedContext))
-            .catch((e) => {
-              console.error(e);
-              throw e;
-            });
+          .then((step) => _updateStep(step.nextStep, step.addedContext))
+          .catch((e) => {
+            console.error(e);
+            throw e;
+          });
       }
     } catch (e) {
       console.error(e);
