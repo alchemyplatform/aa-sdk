@@ -19,6 +19,7 @@ export interface SimpleSmartAccountOwner {
   signMessage: (msg: Uint8Array) => Promise<Address>;
   getAddress: () => Promise<Address>;
 }
+
 export interface SimpleSmartAccountParams<
   TTransport extends Transport | FallbackTransport = Transport
 > extends BaseSmartAccountParams<TTransport> {

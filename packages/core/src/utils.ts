@@ -141,16 +141,3 @@ function packUo(request: UserOperationRequest): Hex {
     ]
   );
 }
-
-// borrowed from ethers.js
-export function defineReadOnly<T, K extends keyof T>(
-  object: T,
-  key: K,
-  value: T[K]
-): void {
-  Object.defineProperty(object, key, {
-    enumerable: true,
-    value: value,
-    writable: false,
-  });
-}
