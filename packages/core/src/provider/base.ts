@@ -22,6 +22,7 @@ import {
 import {
   asyncPipe,
   deepHexlify,
+  defineReadOnly,
   getUserOperationHash,
   resolveProperties,
 } from "../utils.js";
@@ -38,20 +39,6 @@ import type {
 export const noOpMiddleware: AccountMiddlewareFn = async (
   struct: UserOperationStruct
 ) => struct;
-
-// borrowed from ethers.js
-function defineReadOnly<T, K extends keyof T>(
-  object: T,
-  key: K,
-  value: T[K]
-): void {
-  Object.defineProperty(object, key, {
-    enumerable: true,
-    value: value,
-    writable: false,
-  });
-}
-
 export interface SmartAccountProviderOpts {
   /**
    * The maximum number of times tot try fetching a transaction receipt before giving up
