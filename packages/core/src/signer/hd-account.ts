@@ -9,7 +9,7 @@ export class HdAccountSigner implements SmartAccountSigner {
         this.owner = owner;
     }
 
-    signMessage(msg: Uint8Array): Promise<Address> {
+    signMessage(msg: Uint8Array): Promise<Hex> {
         return this.owner.signMessage({
             message: toHex(msg),
         })

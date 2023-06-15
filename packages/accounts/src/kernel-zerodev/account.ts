@@ -8,11 +8,11 @@ import {
     type Transport,
 } from "viem";
 import {type BaseSmartAccountParams, BaseSmartContractAccount,} from "@alchemy/aa-core/src/account/base";
-import {BaseValidator, ValidatorMode} from "src/kernel-zerodev/validator/base";
-import {KernelAccountAbi} from "src/kernel-zerodev/abis/KernelAccountAbi";
 import {parseAbiParameters} from "abitype";
-import {KernelFactoryAbi} from "src/kernel-zerodev/abis/KernelFactoryAbi";
 import {SmartAccountSigner} from "@alchemy/aa-core/src/signer/types";
+import {BaseValidator, ValidatorMode} from "./validator/base";
+import {KernelAccountAbi} from "./abis/KernelAccountAbi";
+import {KernelFactoryAbi} from "./abis/KernelFactoryAbi";
 
 export interface KernelSmartAccountParams<
     TTransport extends Transport | FallbackTransport = Transport

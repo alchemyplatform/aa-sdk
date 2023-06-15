@@ -3,7 +3,6 @@ import { encodeFunctionData } from "viem";
 import {
   createPublicErc4337Client,
   SimpleSmartContractAccount,
-  type SimpleSmartAccountOwner,
   SmartAccountProvider,
   alchemyPaymasterAndDataMiddleware,
 } from "@alchemy/aa-core";
@@ -22,6 +21,7 @@ import {
   metaForStepIdentifier,
 } from "./OnboardingDataModels";
 import { localSmartContractStore } from "~/clients/localStorage";
+import {SmartAccountSigner} from "@alchemy/aa-core/src/signer/types";
 
 async function pollForLambdaForComplete(
   lambda: () => Promise<boolean>,
@@ -238,7 +238,7 @@ const onboardingStepHandlers: Record<
 
 export function useOnboardingOrchestrator(
   useGasManager: boolean,
-  owner: SimpleSmartAccountOwner
+  owner: SmartAccountSigner
 ) {
   // Setup initial data and state
   const { address: ownerAddress } = useAccount();

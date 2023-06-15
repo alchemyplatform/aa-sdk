@@ -1,8 +1,12 @@
-import {SmartAccountProvider, SmartAccountProviderOpts} from "./base";
-import {PublicErc4337Client, SupportedTransports} from "../client/types";
 import {Address, Chain, Transport} from "viem";
-import {KernelSmartContractAccount} from "../../../accounts/src/kernel-zerodev/account";
-import {defineReadOnly} from "../utils";
+import {KernelSmartContractAccount} from "./account";
+import {defineReadOnly} from "@alchemy/aa-core/src/utils";
+import {
+    PublicErc4337Client,
+    SmartAccountProvider,
+    SmartAccountProviderOpts,
+    SupportedTransports
+} from "@alchemy/aa-core/src";
 
 export class KernelAccountProvider<
     TTransport extends SupportedTransports = Transport
