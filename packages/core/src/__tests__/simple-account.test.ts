@@ -2,8 +2,8 @@ import { toHex } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
 import {
-    type SimpleSmartAccountOwner,
     SimpleSmartContractAccount,
+    type SimpleSmartAccountOwner,
 } from "../account/simple.js";
 import { SmartAccountProvider } from "../provider/base.js";
 import type { BatchUserOperationCallData } from "../types.js";
