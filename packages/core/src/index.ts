@@ -37,4 +37,5 @@ export {
   getChain,
   getUserOperationHash,
   resolveProperties,
+  defineReadOnly,
 } from "./utils.js";
