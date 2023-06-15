@@ -14,12 +14,15 @@ import {
   BaseSmartContractAccount,
   type BaseSmartAccountParams,
 } from "./base.js";
-import {SmartAccountSigner} from "../signer/types";
 
+export interface SimpleSmartAccountOwner {
+  signMessage: (msg: Uint8Array) => Promise<Address>;
+  getAddress: () => Promise<Address>;
+}
 export interface SimpleSmartAccountParams<
   TTransport extends Transport | FallbackTransport = Transport
 > extends BaseSmartAccountParams<TTransport> {
-  owner: SmartAccountSigner;
+  owner: SimpleSmartAccountOwner;
   factoryAddress: Address;
   index?: bigint;
 }
@@ -27,7 +30,7 @@ export interface SimpleSmartAccountParams<
 export class SimpleSmartContractAccount<
   TTransport extends Transport | FallbackTransport = Transport
 > extends BaseSmartContractAccount<TTransport> {
-  private owner: SmartAccountSigner;
+  private owner: SimpleSmartAccountOwner;
   private factoryAddress: Address;
   private index: bigint;
 

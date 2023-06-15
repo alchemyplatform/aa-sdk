@@ -1,18 +1,27 @@
 import {Address} from "abitype";
-import {HDAccount, HDOptions, Hex, toHex} from "viem";
+import {HDAccount, HDOptions, Hex} from "viem";
 import {mnemonicToAccount, privateKeyToAccount} from "viem/accounts";
 import {SmartAccountSigner} from "./types";
 
 export class HdAccountSigner implements SmartAccountSigner {
     owner: HDAccount
+
     constructor(owner) {
         this.owner = owner;
     }
 
-    signMessage(msg: Uint8Array): Promise<Hex> {
-        return this.owner.signMessage({
-            message: toHex(msg),
-        })
+    signMessage(msg: Uint8Array | Hex | string): Promise<Hex> {
+        if (typeof msg === "string") {
+            return this.owner.signMessage({
+                message: msg
+            })
+        } else {
+            return this.owner.signMessage({
+                message: {
+                    raw: msg
+                }
+            })
+        }
     }
 
     getAddress(): Promise<Address> {
