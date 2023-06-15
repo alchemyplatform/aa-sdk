@@ -1,12 +1,12 @@
 import type {Address} from "abitype";
-import type {HDAccount, Hex} from "viem";
-import {mnemonicToAccount} from "viem/accounts";
+import type {Hex, PrivateKeyAccount} from "viem";
+import {privateKeyToAccount} from "viem/accounts";
 import type {SmartAccountSigner} from "./types";
 
-export class HdAccountSigner implements SmartAccountSigner {
-    owner: HDAccount
+export class PrivateKeySigner implements SmartAccountSigner {
+    owner: PrivateKeyAccount
 
-    constructor(owner: HDAccount) {
+    constructor(owner: PrivateKeyAccount) {
         this.owner = owner;
     }
 
@@ -28,8 +28,8 @@ export class HdAccountSigner implements SmartAccountSigner {
         return Promise.resolve(this.owner.address);
     }
 
-    static mnemonicToAccountSigner(key: Hex): HdAccountSigner {
-        const owner = mnemonicToAccount(key)
-        return new HdAccountSigner(owner)
+    static privateKeyToAccountSigner(key: Hex): PrivateKeySigner {
+        const owner = privateKeyToAccount(key)
+        return new PrivateKeySigner(owner)
     }
 }

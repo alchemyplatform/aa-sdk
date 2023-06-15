@@ -1,12 +1,12 @@
-import {HdAccountSigner} from "../signer/hd-account";
+import {PrivateKeySigner} from "../signer/private-key";
 
 
-describe("HD Account Signer Tests", () => {
+describe("Private Key Account Signer Tests", () => {
 
     const dummyPrivateKey = "0x022430a80f723d8789f0d4fb346bdd013b546e4b96fcacf8aceca2b1a65a19dc"
     const dummyAddress = "0xabcfC3DB1e0f5023F5a4f40c03D149f316E6A5cc"
 
-    const signer: HdAccountSigner = HdAccountSigner.privateKeyToHdAccountSigner(dummyPrivateKey)
+    const signer: PrivateKeySigner = PrivateKeySigner.privateKeyToAccountSigner(dummyPrivateKey)
 
     it("should sign a hex message properly", async () => {
         expect(await signer.signMessage("0xab3430fgk78")).toMatchInlineSnapshot(

@@ -15,6 +15,7 @@ export type {
 } from "./account/simple.js";
 export type * from "./account/types.js";
 export { type SmartAccountSigner } from "./signer/types";
+export { PrivateKeySigner } from "./signer/private-key";
 export { HdAccountSigner } from "./signer/hd-account";
 
 export {
