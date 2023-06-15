@@ -14,7 +14,8 @@ export interface GasFeeMode {
 
 export const withAlchemyGasFeeEstimator = (
   provider: AlchemyProvider,
-  feeMode: GasFeeMode
+  feeMode: GasFeeMode,
+  maxPriorityFeeBufferPercent: bigint
 ): AlchemyProvider => {
   if (feeMode.strategy === GasFeeStrategy.DEFAULT) {
     return provider;
@@ -26,9 +27,11 @@ export const withAlchemyGasFeeEstimator = (
     if (baseFeePerGas == null) {
       throw new Error("baseFeePerGas is null");
     }
-    const maxPriorityFeePerGas = BigInt(
-      await provider.rpcClient.getMaxPriorityFeePerGas()
-    );
+    // add a buffer here to account for potential spikes in priority fee
+    const maxPriorityFeePerGas =
+      (BigInt(await provider.rpcClient.getMaxPriorityFeePerGas()) *
+        (100n + maxPriorityFeeBufferPercent)) /
+      100n;
     // add 25% overhead to ensure mine
     const baseFeeScaled = (baseFeePerGas * 5n) / 4n;
 

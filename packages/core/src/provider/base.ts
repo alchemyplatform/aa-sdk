@@ -17,6 +17,8 @@ import {
   isValidRequest,
   type BatchUserOperationCallData,
   type UserOperationCallData,
+  type UserOperationReceipt,
+  type UserOperationResponse,
   type UserOperationStruct,
 } from "../types.js";
 import {
@@ -174,7 +176,7 @@ export class SmartAccountProvider<
     return await this.waitForUserOperationTransaction(hash as Hash);
   };
 
-  private async waitForUserOperationTransaction(hash: Hash): Promise<Hash> {
+  waitForUserOperationTransaction = async (hash: Hash): Promise<Hash> => {
     for (let i = 0; i < this.txMaxRetries; i++) {
       await new Promise((resolve) =>
         setTimeout(resolve, this.txRetryIntervalMs)
@@ -191,7 +193,15 @@ export class SmartAccountProvider<
     }
 
     throw new Error("Failed to find transaction for User Operation");
-  }
+  };
+
+  getUserOperationByHash = (hash: Hash): Promise<UserOperationResponse> => {
+    return this.rpcClient.getUserOperationByHash(hash);
+  };
+
+  getUserOperationReceipt = (hash: Hash): Promise<UserOperationReceipt> => {
+    return this.rpcClient.getUserOperationReceipt(hash);
+  };
 
   sendUserOperation = async (
     data: UserOperationCallData | BatchUserOperationCallData
