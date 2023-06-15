@@ -85,7 +85,7 @@ export class KernelSmartContractAccount<
     }
 
     signMessage(msg: Uint8Array | string | Hex): Promise<Hex> {
-        return this.validator.getSignature(msg)
+        return this.validator.signMessageWithValidatorParams(msg)
     }
 
     protected encodeExecuteAction(target: Hex, value: bigint, data: Hex, code: bigint): Hex {
