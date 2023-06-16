@@ -43,14 +43,14 @@ export const withAlchemyGasFeeEstimator = (
           return (baseFeeScaled * feeMode.value) / 100n;
         case GasFeeStrategy.PRIORITY_FEE_PERCENTAGE:
           // add 10% to required priority fee to ensure mine
-          return (maxPriorityFeePerGas * (110n + feeMode.value)) / 100n;
+          return (maxPriorityFeePerGas * (100n + feeMode.value)) / 100n;
         default:
           throw new Error("fee mode not supported");
       }
     })();
 
     return {
-      maxPriorityFeePerGas,
+      maxPriorityFeePerGas: prioFee,
       maxFeePerGas: baseFeeScaled + prioFee,
     };
   });
