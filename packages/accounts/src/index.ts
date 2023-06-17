@@ -6,6 +6,4 @@ export { KernelFactoryAbi } from "./kernel-zerodev/abis/KernelFactoryAbi";
 export { KernelAccountAbi } from "./kernel-zerodev/abis/KernelAccountAbi";
 export type { KernelSmartAccountParams } from "./kernel-zerodev/account";
 export { KernelSmartContractAccount } from "./kernel-zerodev/account";
-export { KernelAccountProvider } from "./kernel-zerodev/provider";
-export { BaseValidator } from "./kernel-zerodev/validator/base";
-export { ECDSAValidator } from "./kernel-zerodev/validator/ecdsa";
+export { KernelBaseValidator } from "./kernel-zerodev/validator/base";
