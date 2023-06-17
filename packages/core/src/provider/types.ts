@@ -8,7 +8,9 @@ import type {
 import type {
   BatchUserOperationCallData,
   UserOperationCallData,
+  UserOperationReceipt,
   UserOperationRequest,
+  UserOperationResponse,
   UserOperationStruct,
 } from "../types.js";
 
@@ -78,6 +80,31 @@ export interface ISmartAccountProvider<
   sendUserOperation: (
     data: UserOperationCallData | BatchUserOperationCallData
   ) => Promise<SendUserOperationResult>;
+
+  /**
+   * This will wait for the user operation to be included in a transaction that's been mined.
+   * The default retry and wait logic is configured on the Provider itself
+   *
+   * @param hash the user operation hash you want to wait for
+   * @returns the tx hash that included this user operation
+   */
+  waitForUserOperationTransaction: (hash: Hash) => Promise<Hash>;
+
+  /**
+   * calls `eth_getUserOperationByHash` and returns the {@link UserOperationResponse}
+   *
+   * @param hash - the hash of the UserOperation to get the receipt for
+   * @returns - {@link UserOperationResponse}
+   */
+  getUserOperationByHash: (hash: Hash) => Promise<UserOperationResponse>;
+
+  /**
+   * calls `eth_getUserOperationReceipt` and returns the {@link UserOperationReceipt}
+   *
+   * @param hash - the hash of the UserOperation to get the receipt for
+   * @returns - {@link UserOperationResponse}
+   */
+  getUserOperationReceipt: (hash: Hash) => Promise<UserOperationReceipt>;
 
   /**
    * This takes an ethereum transaction and converts it into a UserOperation, sends the UserOperation, and waits

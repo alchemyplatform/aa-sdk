@@ -14,7 +14,8 @@ export interface GasFeeMode {
 
 export const withAlchemyGasFeeEstimator = (
   provider: AlchemyProvider,
-  feeMode: GasFeeMode
+  feeMode: GasFeeMode,
+  maxPriorityFeeBufferPercent: bigint
 ): AlchemyProvider => {
   if (feeMode.strategy === GasFeeStrategy.DEFAULT) {
     return provider;
@@ -26,9 +27,11 @@ export const withAlchemyGasFeeEstimator = (
     if (baseFeePerGas == null) {
       throw new Error("baseFeePerGas is null");
     }
-    const maxPriorityFeePerGas = BigInt(
-      await provider.rpcClient.getMaxPriorityFeePerGas()
-    );
+    // add a buffer here to account for potential spikes in priority fee
+    const maxPriorityFeePerGas =
+      (BigInt(await provider.rpcClient.getMaxPriorityFeePerGas()) *
+        (100n + maxPriorityFeeBufferPercent)) /
+      100n;
     // add 25% overhead to ensure mine
     const baseFeeScaled = (baseFeePerGas * 5n) / 4n;
 
@@ -40,14 +43,14 @@ export const withAlchemyGasFeeEstimator = (
           return (baseFeeScaled * feeMode.value) / 100n;
         case GasFeeStrategy.PRIORITY_FEE_PERCENTAGE:
           // add 10% to required priority fee to ensure mine
-          return (maxPriorityFeePerGas * (110n + feeMode.value)) / 100n;
+          return (maxPriorityFeePerGas * (100n + feeMode.value)) / 100n;
         default:
           throw new Error("fee mode not supported");
       }
     })();
 
     return {
-      maxPriorityFeePerGas,
+      maxPriorityFeePerGas: prioFee,
       maxFeePerGas: baseFeeScaled + prioFee,
     };
   });
