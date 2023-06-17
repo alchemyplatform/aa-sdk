@@ -7,12 +7,11 @@ import {
     type Hex,
     type Transport,
 } from "viem";
-import {type BaseSmartAccountParams, BaseSmartContractAccount,} from "@alchemy/aa-core/src/account/base";
 import {parseAbiParameters} from "abitype";
-import {SmartAccountSigner} from "@alchemy/aa-core/src/signer/types";
-import {BaseValidator, ValidatorMode} from "./validator/base";
+import {KernelBaseValidator, ValidatorMode} from "./validator/base";
 import {KernelAccountAbi} from "./abis/KernelAccountAbi";
 import {KernelFactoryAbi} from "./abis/KernelFactoryAbi";
+import {BaseSmartAccountParams, BaseSmartContractAccount, SmartAccountSigner} from "@alchemy/aa-core";
 
 export interface KernelSmartAccountParams<
     TTransport extends Transport | FallbackTransport = Transport
@@ -20,8 +19,8 @@ export interface KernelSmartAccountParams<
     owner: SmartAccountSigner;
     factoryAddress: Address;
     index?: bigint;
-    defaultValidator: BaseValidator
-    validator?: BaseValidator
+    defaultValidator: KernelBaseValidator
+    validator?: KernelBaseValidator
 }
 
 export class KernelSmartContractAccount<
@@ -31,8 +30,8 @@ export class KernelSmartContractAccount<
     private readonly factoryAddress: Address;
     private readonly index: bigint;
 
-    private defaultValidator: BaseValidator;
-    private validator: BaseValidator;
+    private defaultValidator: KernelBaseValidator;
+    private validator: KernelBaseValidator;
 
 
     constructor(params: KernelSmartAccountParams) {
@@ -62,7 +61,7 @@ export class KernelSmartContractAccount<
 
     async signWithEip6492(msg: string | Uint8Array | Hex): Promise<Hex> {
         try {
-            let sig = await this.validator.signMessage(msg);
+            let sig = await this.validator.signMessageWithValidatorParams(msg);
             // If the account is undeployed, use ERC-6492
             if (!await this.isAccountDeployed()) {
                 sig = encodeAbiParameters(
