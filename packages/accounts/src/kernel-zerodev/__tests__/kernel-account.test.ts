@@ -1,58 +1,95 @@
-import {KernelHdConfig, KernelHdWalletProvider} from "../provider/implementation/kernel-hd-wallet";
 import {concatHex, encodeAbiParameters, Hex, parseEther} from "viem";
 import {polygonMumbai} from "viem/chains";
-import {mnemonicToAccount} from "viem/accounts";
 import {parseAbiParameters} from "abitype";
+import {KernelBaseValidator, ValidatorMode} from "../validator/base";
+import {KernelSmartAccountParams, KernelSmartContractAccount} from "../account";
 
 
 describe("Kernel Account Tests", () => {
-    const chain = polygonMumbai
-    const config: KernelHdConfig = {
-        mnemonic: process.env.OWNER_MNEMONIC,
-        chain,
-        rpcProvider: `${chain.rpcUrls.alchemy.http[0]}/${[process.env.ALCHEMY_KEY]}`,
+    const config = {
+        //dummy
+        privateKey: "0x022430a80f723d8789f0d4fb346bdd013b546e4b96fcacf8aceca2b1a65a19dc",
+        chain: polygonMumbai,
+        rpcProvider: `${polygonMumbai.rpcUrls.alchemy.http[0]}/${[process.env.API_KEY]}`,
         validatorAddress: "0x180D6465F921C7E0DEA0040107D342c87455fFF5",
         accountFactoryAddress: "0x5D006d3880645ec6e254E18C1F879DAC9Dd71A39",
+        entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789"
     }
+
+    // Summary of accounts
+    //  We are using same private key to derive to multiple smart accounts
+    // Account 1 is undeployed
+    // Account 2 is deployed with no transaction (1 transaction)
+    // Account 3 is deployed with 2 transactions (3 transactions)
+    // Accont 4 is generally used to perform new transactions. We have deposited sufficient matic faucet for testing
+
+    const owner = PrivateKeySigner.privateKeyToAccountSigner(config.privateKey)
+
+    const validator: KernelBaseValidator = new KernelBaseValidator(({
+        validatorAddress: config.validatorAddress,
+        mode: ValidatorMode.sudo,
+        owner
+    }))
+
+    const provider = new KernelAccountProvider(
+        config.rpcProvider,
+        config.entryPointAddress,
+        config.chain
+    )
+
     const gasPolicy = process.env.GAS_POLICY_ID
     const dummyHash = "0x6fc7396f56df15b5860f7e50fd3d98069fe561f0d941b1e94d6f4f198bb73d790f50ac8bbb71cd983e98f6acf2f0e31033c9b725d865552a502d98dafd405e8a1c"
-    const ownerAccount = mnemonicToAccount(process.env.OWNER_MNEMONIC)
+    // const ownerAccount = mnemonicToAccount(process.env.OWNER_MNEMONIC)
 
-    const provider = new KernelHdWalletProvider(config)
+    // const provider = new KernelHdWalletProvider(config)
+
+    function connect(index) {
+        const accountParams: KernelSmartAccountParams = {
+            rpcClient: provider.rpcClient,
+            entryPointAddress: config.entryPointAddress,
+            chain: config.chain,
+            owner: owner,
+            factoryAddress: config.accountFactoryAddress,
+            index: index,
+            defaultValidator: validator,
+            validator: validator
+        }
+        return this.provider.connect((provider) => new KernelSmartContractAccount(accountParams))
+    }
 
 
     it("getAddress returns valid counterfactual address", async () => {
 
         //contract already deployed
-        let signerWithProvider =  provider.connect()
+        let signerWithProvider =  connect(0n)
         expect(await signerWithProvider.getAddress()).toMatchInlineSnapshot(
             `"0x97925A25C6B8E8902D2c68A4fcd90421a701d2E8"`
         );
 
         //contract already deployed
-        signerWithProvider =  provider.connect(3n)
+        signerWithProvider =  connect(3n)
         expect(await signerWithProvider.getAddress()).toMatchInlineSnapshot(
             `"0xA7b2c01A5AfBCf1FAB17aCf95D8367eCcFeEb845"`
         );
 
         //contract not deployed
-        signerWithProvider =  provider.connect(4n)
+        signerWithProvider =  connect(4n)
         expect(await signerWithProvider.getAddress()).toMatchInlineSnapshot(
             `"0x701a7FB6B53149aF2B1c73A1C9b30b0228382c55"`
         );
 
         //contract not deployed
-        signerWithProvider =  provider.connect(5n)
+        signerWithProvider =  connect(5n)
         expect(await signerWithProvider.getAddress()).toMatchInlineSnapshot(
             `"0x5DBf2A2Ac5Be247A4Fc3852B41de136D3FbE0D3b"`
         );
-    });
+     });
 
 
     it("getNonce returns valid nonce", async () => {
 
         //contract deployed but no transaction
-        let signerWithProvider =  provider.connect()
+        let signerWithProvider =  connect(1n)
         expect(await signerWithProvider.account?.getNonce()).eql(0n);
 
         //contract not deployed
