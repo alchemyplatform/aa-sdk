@@ -29,7 +29,6 @@ export class KernelSmartContractAccount<
     private owner: SmartAccountSigner;
     private readonly factoryAddress: Address;
     private readonly index: bigint;
-
     private defaultValidator: KernelBaseValidator;
     private validator: KernelBaseValidator;
 
@@ -83,8 +82,9 @@ export class KernelSmartContractAccount<
 
     }
 
-    signMessage(msg: Uint8Array | string | Hex): Promise<Hex> {
-        return this.validator.signMessageWithValidatorParams(toBytes(msg))
+    signMessage(msg: Uint8Array | string): Promise<Hex> {
+        const formattedMessage = typeof msg === "string" ? toBytes(msg): msg
+        return this.validator.signMessageWithValidatorParams(formattedMessage)
     }
 
     protected encodeExecuteAction(target: Hex, value: bigint, data: Hex, code: bigint): Hex {
