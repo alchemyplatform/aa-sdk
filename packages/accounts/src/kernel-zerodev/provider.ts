@@ -9,10 +9,6 @@ import {
 
 export class KernelAccountProvider extends SmartAccountProvider<HttpTransport> {
 
-    async useCustomGasEstimator(struct: UserOperationStruct) {
-
-    }
-
     gasEstimator: AccountMiddlewareFn = async (struct) => {
         const request = deepHexlify(await resolveProperties(struct));
         const estimates = await this.rpcClient.estimateUserOperationGas(
