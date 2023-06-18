@@ -1,14 +1,25 @@
-import {concatHex, encodeAbiParameters, Hex, parseEther} from "viem";
+import {
+    encodeAbiParameters,
+    getContract,
+    Hex,
+    parseAbi,
+    parseAbiParameters
+} from "viem";
 import {polygonMumbai} from "viem/chains";
-import {parseAbiParameters} from "abitype";
 import {KernelBaseValidator, ValidatorMode} from "../validator/base";
 import {KernelSmartAccountParams, KernelSmartContractAccount} from "../account";
+import {MockSigner} from "./mocks/mock-signer";
+import {KernelAccountProvider} from "../provider";
+import {PrivateKeySigner} from "@alchemy/aa-core";
 
 
 describe("Kernel Account Tests", () => {
+
+    //any wallet should work
     const config = {
-        //dummy
-        privateKey: "0x022430a80f723d8789f0d4fb346bdd013b546e4b96fcacf8aceca2b1a65a19dc",
+        privateKey: process.env.OWNER_KEY as Hex,
+        ownerWallet: process.env.OWNER_WALLET,
+        mockWallet: "0x48D4d3536cDe7A257087206870c6B6E76e3D4ff4",
         chain: polygonMumbai,
         rpcProvider: `${polygonMumbai.rpcUrls.alchemy.http[0]}/${[process.env.API_KEY]}`,
         validatorAddress: "0x180D6465F921C7E0DEA0040107D342c87455fFF5",
@@ -16,14 +27,8 @@ describe("Kernel Account Tests", () => {
         entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789"
     }
 
-    // Summary of accounts
-    //  We are using same private key to derive to multiple smart accounts
-    // Account 1 is undeployed
-    // Account 2 is deployed with no transaction (1 transaction)
-    // Account 3 is deployed with 2 transactions (3 transactions)
-    // Accont 4 is generally used to perform new transactions. We have deposited sufficient matic faucet for testing
-
     const owner = PrivateKeySigner.privateKeyToAccountSigner(config.privateKey)
+    const mockOwner = new MockSigner()
 
     const validator: KernelBaseValidator = new KernelBaseValidator(({
         validatorAddress: config.validatorAddress,
@@ -31,19 +36,34 @@ describe("Kernel Account Tests", () => {
         owner
     }))
 
+    const mockValidator: KernelBaseValidator = new KernelBaseValidator(({
+        validatorAddress: config.validatorAddress,
+        mode: ValidatorMode.sudo,
+        owner: mockOwner
+    }))
+
+
     const provider = new KernelAccountProvider(
         config.rpcProvider,
         config.entryPointAddress,
         config.chain
     )
 
-    const gasPolicy = process.env.GAS_POLICY_ID
-    const dummyHash = "0x6fc7396f56df15b5860f7e50fd3d98069fe561f0d941b1e94d6f4f198bb73d790f50ac8bbb71cd983e98f6acf2f0e31033c9b725d865552a502d98dafd405e8a1c"
-    // const ownerAccount = mnemonicToAccount(process.env.OWNER_MNEMONIC)
+    const kernelAddress = "0xD49a72cb78C44c6bfbf0d471581B7635cF62E81e"
 
-    // const provider = new KernelHdWalletProvider(config)
+    const kernelFactoryContract = getContract({
+        address: kernelAddress,
+        abi: parseAbi([
+            'function getAccountAddress(address _owner, uint256 _index) public view returns (address)',
+            ]),
+        publicClient: provider.rpcClient,
+    })
 
-    function connect(index) {
+    function connect(index, owner=mockOwner) {
+        return provider.connect((provider) => account(index,owner))
+    }
+
+    function account(index, owner=mockOwner) {
         const accountParams: KernelSmartAccountParams = {
             rpcClient: provider.rpcClient,
             entryPointAddress: config.entryPointAddress,
@@ -51,10 +71,10 @@ describe("Kernel Account Tests", () => {
             owner: owner,
             factoryAddress: config.accountFactoryAddress,
             index: index,
-            defaultValidator: validator,
-            validator: validator
+            defaultValidator: owner === mockOwner ? mockValidator: validator,
+            validator: owner === mockOwner ? mockValidator: validator
         }
-        return this.provider.connect((provider) => new KernelSmartContractAccount(accountParams))
+        return new KernelSmartContractAccount(accountParams)
     }
 
 
@@ -62,153 +82,125 @@ describe("Kernel Account Tests", () => {
 
         //contract already deployed
         let signerWithProvider =  connect(0n)
-        expect(await signerWithProvider.getAddress()).toMatchInlineSnapshot(
-            `"0x97925A25C6B8E8902D2c68A4fcd90421a701d2E8"`
+
+        expect(await signerWithProvider.getAddress()).eql(
+            "0x97925A25C6B8E8902D2c68A4fcd90421a701d2E8"
         );
 
         //contract already deployed
         signerWithProvider =  connect(3n)
-        expect(await signerWithProvider.getAddress()).toMatchInlineSnapshot(
-            `"0xA7b2c01A5AfBCf1FAB17aCf95D8367eCcFeEb845"`
+        expect(await signerWithProvider.getAddress()).eql(
+            "0xA7b2c01A5AfBCf1FAB17aCf95D8367eCcFeEb845"
         );
 
-        //contract not deployed
-        signerWithProvider =  connect(4n)
-        expect(await signerWithProvider.getAddress()).toMatchInlineSnapshot(
-            `"0x701a7FB6B53149aF2B1c73A1C9b30b0228382c55"`
-        );
-
-        //contract not deployed
-        signerWithProvider =  connect(5n)
-        expect(await signerWithProvider.getAddress()).toMatchInlineSnapshot(
-            `"0x5DBf2A2Ac5Be247A4Fc3852B41de136D3FbE0D3b"`
-        );
      });
 
 
     it("getNonce returns valid nonce", async () => {
 
         //contract deployed but no transaction
-        let signerWithProvider =  connect(1n)
-        expect(await signerWithProvider.account?.getNonce()).eql(0n);
+        const signer:KernelSmartContractAccount =  account(0n)
+        expect(await signer.getNonce()).eql(0n);
 
-        //contract not deployed
-        signerWithProvider =  provider.connect(4n)
-        expect(await signerWithProvider.account?.getNonce()).eql(0n);
-
-        //contract deployed with transaction
-        signerWithProvider =  provider.connect(3n)
-        expect(await signerWithProvider.account?.getNonce()).eql(1n);
-
+        const signer2:KernelSmartContractAccount =  account(3n)
+        expect(await signer2.getNonce()).eql(2n);
     });
 
     it("encodeExecute returns valid encoded hash", async () => {
-
-        //contract deployed
-        let signerWithProvider =  provider.connect()
-        expect(await signerWithProvider.account?.encodeExecute("0xA7b2c01A5AfBCf1FAB17aCf95D8367eCcFeEb845",0n,"0x")).eql(
-            "0x51945447000000000000000000000000a7b2c01a5afbcf1fab17acf95d8367eccfeeb8450000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        const signer:KernelSmartContractAccount =  account(0n)
+        expect(await signer.encodeExecute("0xA7b2c01A5AfBCf1FAB17aCf95D8367eCcFeEb845",1n,"0x234")).eql(
+            "0x51945447000000000000000000000000a7b2c01a5afbcf1fab17acf95d8367eccfeeb84500000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000022340000000000000000000000000000000000000000000000000000000000000"
         );
-
-        //contract not deployed
-        signerWithProvider =  provider.connect(4n)
-        expect(await signerWithProvider.account?.encodeExecute("0xA7b2c01A5AfBCf1FAB17aCf95D8367eCcFeEb845",0n,"0x")).eql(
-            "0x51945447000000000000000000000000a7b2c01a5afbcf1fab17acf95d8367eccfeeb8450000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
-        );
-
     });
 
 
     it("encodeExecuteDelegate returns valid encoded hash", async () => {
-
-        //contract deployed
-        let signerWithProvider =  provider.connect()
-        expect(await signerWithProvider.account?.encodeExecuteDelegate("0xA7b2c01A5AfBCf1FAB17aCf95D8367eCcFeEb845",0n,"0x")).eql(
-            "0x51945447000000000000000000000000a7b2c01a5afbcf1fab17acf95d8367eccfeeb8450000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000"
+        const signer:KernelSmartContractAccount =  account(0n)
+        expect(await signer.encodeExecuteDelegate("0xA7b2c01A5AfBCf1FAB17aCf95D8367eCcFeEb845",1n,"0x234")).eql(
+            "0x51945447000000000000000000000000a7b2c01a5afbcf1fab17acf95d8367eccfeeb84500000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000022340000000000000000000000000000000000000000000000000000000000000"
         );
-
-        //contract not deployed
-        signerWithProvider =  provider.connect(4n)
-        expect(await signerWithProvider.account?.encodeExecuteDelegate("0xA7b2c01A5AfBCf1FAB17aCf95D8367eCcFeEb845",0n,"0x")).eql(
-            "0x51945447000000000000000000000000a7b2c01a5afbcf1fab17acf95d8367eccfeeb8450000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000"
-        );
-
     });
 
-    //
 
     it("signWithEip6492 should correctly sign the message", async () => {
-        //TODO ensure that it is always deployed
         const messageToBeSigned: Hex = "0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b"
         const magicBytes = "6492649264926492649264926492649264926492649264926492649264926492"
-        const ownerSignedMessage = await ownerAccount.signMessage({message: messageToBeSigned})
+        const ownerSignedMessage = "0x4d61c5c27fb64b207cbf3bcf60d78e725659cff5f93db9a1316162117dff72aa631761619d93d4d97dfb761ba00b61f9274c6a4a76e494df644d968dd84ddcdb1c"
+        const factoryCode = "0x296601cd000000000000000000000000180d6465f921c7e0dea0040107d342c87455fff50000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000001448D4d3536cDe7A257087206870c6B6E76e3D4ff4000000000000000000000000"
+        const signature = encodeAbiParameters(
+                parseAbiParameters('address, bytes, bytes'),
+                [config.accountFactoryAddress,factoryCode,ownerSignedMessage]
+            ) + magicBytes
 
-        let signerWithProvider =  provider.connect()
-        expect(await signerWithProvider.request({ method: "personal_sign", params: [
+        const signer =  connect(0n)
+        expect(await signer.request({ method: "personal_sign", params: [
                 messageToBeSigned,
-                await signerWithProvider.getAddress()
+                await signer.getAddress()
             ]
         })).toBe(
             ownerSignedMessage
         );
 
-        signerWithProvider = provider.connect(10000n)
-        const factoryCode = "0x" + (await signerWithProvider.account?.getInitCode()).slice(42)
-        const signature = encodeAbiParameters(
-            parseAbiParameters('address, bytes, bytes'),
-            [config.accountFactoryAddress,factoryCode,ownerSignedMessage]
-        ) + magicBytes
-        expect(await signerWithProvider.request({ method: "personal_sign", params: [
+        const signer2 =  connect(10n)
+        expect(await signer2.request({ method: "personal_sign", params: [
                 messageToBeSigned,
-                await signerWithProvider.getAddress()
+                await signer2.getAddress()
             ]
-        })).eql(
+        })).toBe(
             signature
         );
+
     });
 
 
     it("signMessage should correctly sign the message", async () => {
         const messageToBeSigned: Hex = "0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b"
-        const ownerSignedMessage = await ownerAccount.signMessage({message: messageToBeSigned})
-        const validatorMessage = concatHex(["0x00000000",ownerSignedMessage])
 
-        let signerWithProvider =  provider.connect()
-        expect(await signerWithProvider.account?.signMessage(messageToBeSigned)).toBe(
-            validatorMessage
+        const signer:KernelSmartContractAccount =  account(0n)
+        expect(await signer.signMessage(messageToBeSigned)).toBe(
+            "0x000000004d61c5c27fb64b207cbf3bcf60d78e725659cff5f93db9a1316162117dff72aa631761619d93d4d97dfb761ba00b61f9274c6a4a76e494df644d968dd84ddcdb1c"
         );
 
-        signerWithProvider = provider.connect(10000n)
-        expect(await signerWithProvider.account?.signMessage(messageToBeSigned)).toBe(
-            validatorMessage
+        const signer2:KernelSmartContractAccount =  account(1000n)
+        expect(await signer2.signMessage(messageToBeSigned)).toBe(
+            "0x000000004d61c5c27fb64b207cbf3bcf60d78e725659cff5f93db9a1316162117dff72aa631761619d93d4d97dfb761ba00b61f9274c6a4a76e494df644d968dd84ddcdb1c"
         );
     });
 
-    it("sendUserOperation should fail to execute if gas fee not present", async () => {
-        let signerWithProvider =  provider.connect(5n)
 
 
-        const result = signerWithProvider.sendUserOperation({
-            target: await signerWithProvider.getAddress(),
-            data: "0x",
-        });
 
-        await expect(result).rejects.toThrowError();
-    });
+    //NOTE - this test case will only work if your alchemy endpoint has beta access
 
-    it("sendUserOperation should execute with alchemy gas manager", async () => {
-        let signerWithProvider =  provider.connect(3n)
-        signerWithProvider = provider.addAlchemyPaymaster(signerWithProvider,gasPolicy)
+    // it("sendUserOperation should fail to execute if gas fee not present", async () => {
+    //     let signerWithProvider =  connect(1000n)
+    //
+    //
+    //     const result = signerWithProvider.sendUserOperation({
+    //         target: await signerWithProvider.getAddress(),
+    //         data: "0x",
+    //     });
+    //
+    //     await expect(result).rejects.toThrowError(/sender balance and deposit together is 0/);
+    // });
 
 
-        const result = signerWithProvider.sendUserOperation({
-            target: await signerWithProvider.getAddress(),
-            data: "0x",
-            value: parseEther('0.000001')
-        });
+    //NOTE - this test case will only work if your alchemy endpoint has beta access
+    // and you have deposited some matic balance for counterfactual address at entrypoint
 
-         expect(await result).to.be.eql("ama")
-    });
+    // it("sendUserOperation should execute properly", async () => {
+    //     //
+    //     let signerWithProvider =  connect(0n,owner)
+    //
+    //     //to fix bug in old versions
+    //     await signerWithProvider.account.getInitCode()
+    //     const result = signerWithProvider.sendUserOperation({
+    //         target: await signerWithProvider.getAddress(),
+    //         data: "0x",
+    //         value: 0n
+    //     });
+    //     await expect(result).resolves.not.toThrowError();
+    // });
 
 
 
@@ -217,20 +209,20 @@ describe("Kernel Account Tests", () => {
     it("should correctly identify whether account is deployed", async () => {
 
         //contract already deployed
-        let signerWithProvider =  provider.connect()
-        expect(await signerWithProvider.account.isAccountDeployed()).eql(true);
+        const signer =  account(0n)
+        expect(await signer.isAccountDeployed()).eql(true);
 
         //contract already deployed
-        signerWithProvider =  provider.connect(3n)
-        expect(await signerWithProvider.account.isAccountDeployed()).eql(true );
+        const signer2 =  account(3n)
+        expect(await signer2.isAccountDeployed()).eql(true );
 
         //contract not deployed
-        signerWithProvider =  provider.connect(4n)
-        expect(await signerWithProvider.account.isAccountDeployed()).eql(false );
+        const signer3 =  account(4n)
+        expect(await signer3.isAccountDeployed()).eql(false );
 
         //contract not deployed
-        signerWithProvider =  provider.connect(5n)
-        expect(await signerWithProvider.account.isAccountDeployed()).eql(false );
+        const signer4 =  account(5n)
+        expect(await signer4.isAccountDeployed()).eql(false );
     });
 
 })

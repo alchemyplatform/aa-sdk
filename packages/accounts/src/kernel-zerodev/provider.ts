@@ -1,67 +1,52 @@
-import {Address, Chain, Transport} from "viem";
-import {KernelSmartContractAccount} from "./account";
-// import {defineReadOnly} from "@alchemy/aa-core/src/utils";
-// import {
-//     PublicErc4337Client,
-//     SmartAccountProvider,
-//     SmartAccountProviderOpts,
-//     SupportedTransports
-// } from "@alchemy/aa-core";
-//
-// export class KernelAccountProvider<
-//     TTransport extends SupportedTransports = Transport
-// > extends SmartAccountProvider<TTransport> {
-//
-//     constructor(
-//         rpcProvider: string | PublicErc4337Client<TTransport>,
-//         private entryPointAddress: Address,
-//         private chain: Chain,
-//         readonly account?: KernelSmartContractAccount,
-//         opts?: SmartAccountProviderOpts
-//     ) {
-//         super(rpcProvider,entryPointAddress,chain,account,opts)
-//     }
-//
-//     connect(
-//         fn: (provider: PublicErc4337Client<TTransport>) => KernelSmartContractAccount
-//     ): this & { account: KernelSmartContractAccount } {
-//         const account = fn(this.rpcClient);
-//         defineReadOnly(this, "account", account);
-//         return this as this & { account: typeof account };
-//     }
-//
-//     request: (args: { method: string; params?: any[] }) => Promise<any> = async (
-//         args
-//     ) => {
-//         const { method, params } = args;
-//         if(method === "personal_sign") {
-//             if (!this.account) {
-//                 throw new Error("account not connected!");
-//             }
-//             const [data, address] = params!;
-//             if (address !== (await this.getAddress())) {
-//                 throw new Error(
-//                     "cannot sign for address that is not the current account"
-//                 );
-//             }
-//             return this.account.signWithEip6492(data);
-//         } else {
-//             return super.request(args)
-//         }
-//     };
-//
-// }
-//
-//
-// // borrowed from ethers.js
-// export function defineReadOnly<T, K extends keyof T>(
-//     object: T,
-//     key: K,
-//     value: T[K]
-// ): void {
-//     Object.defineProperty(object, key, {
-//         enumerable: true,
-//         value: value,
-//         writable: false,
-//     });
-// }
+import {HttpTransport} from "viem";
+import {
+    AccountMiddlewareFn,
+    deepHexlify, resolveProperties,
+    SmartAccountProvider,
+    UserOperationStruct
+} from "@alchemy/aa-core";
+
+
+export class KernelAccountProvider extends SmartAccountProvider<HttpTransport> {
+
+    async useCustomGasEstimator(struct: UserOperationStruct) {
+
+    }
+
+    gasEstimator: AccountMiddlewareFn = async (struct) => {
+        const request = deepHexlify(await resolveProperties(struct));
+        const estimates = await this.rpcClient.estimateUserOperationGas(
+            request,
+            this.entryPointAddress
+        );
+
+        estimates.verificationGasLimit =
+            (BigInt(estimates.verificationGasLimit) * 130n) / 100n;
+
+        return {
+            ...struct,
+            ...estimates,
+        };
+    };
+
+    request: (args: { method: string; params?: any[] }) => Promise<any> = async (
+        args
+    ) => {
+        const { method, params } = args;
+        if(method === "personal_sign") {
+            if (!this.account) {
+                throw new Error("account not connected!");
+            }
+            const [data, address] = params!;
+            if (address !== (await this.getAddress())) {
+                throw new Error(
+                    "cannot sign for address that is not the current account"
+                );
+            }
+            return this.account.signWithEip6492(data);
+        } else {
+            return super.request(args)
+        }
+    };
+
+}

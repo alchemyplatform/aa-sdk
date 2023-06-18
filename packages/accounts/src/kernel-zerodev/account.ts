@@ -3,8 +3,8 @@ import {
     concatHex,
     encodeAbiParameters,
     encodeFunctionData,
-    type FallbackTransport,
-    type Hex,
+    type FallbackTransport, hashMessage,
+    type Hex, toBytes,
     type Transport,
 } from "viem";
 import {parseAbiParameters} from "abitype";
@@ -61,7 +61,7 @@ export class KernelSmartContractAccount<
 
     async signWithEip6492(msg: string | Uint8Array | Hex): Promise<Hex> {
         try {
-            let sig = await this.validator.signMessageWithValidatorParams(msg);
+            let sig = await this.owner.signMessage(toBytes(hashMessage({raw: toBytes(msg)})))
             // If the account is undeployed, use ERC-6492
             if (!await this.isAccountDeployed()) {
                 sig = encodeAbiParameters(
@@ -84,7 +84,7 @@ export class KernelSmartContractAccount<
     }
 
     signMessage(msg: Uint8Array | string | Hex): Promise<Hex> {
-        return this.validator.signMessageWithValidatorParams(msg)
+        return this.validator.signMessageWithValidatorParams(toBytes(msg))
     }
 
     protected encodeExecuteAction(target: Hex, value: bigint, data: Hex, code: bigint): Hex {

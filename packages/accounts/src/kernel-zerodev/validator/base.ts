@@ -9,7 +9,7 @@ export enum ValidatorMode {
     // enable = '0x00000002',
 }
 
-export interface BaseValidatorParams {
+export interface KernelBaseValidatorParams {
     validatorAddress: Hex
     mode: ValidatorMode
     owner: SmartAccountSigner
@@ -24,7 +24,7 @@ export class KernelBaseValidator {
     mode: ValidatorMode
     owner: SmartAccountSigner
 
-    constructor(params: BaseValidatorParams) {
+    constructor(params: KernelBaseValidatorParams) {
         this.validatorAddress = params.validatorAddress
         this.mode = params.mode
         this.owner = params.owner
