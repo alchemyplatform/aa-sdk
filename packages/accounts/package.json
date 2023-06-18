@@ -38,7 +38,7 @@
     "test:run": "vitest run"
   },
   "devDependencies": {
-    "@alchemy/aa-core": "0.1.0-alpha.6",
+    "@alchemy/aa-core": "^0.1.0-alpha.6",
     "typescript": "^5.0.4",
     "typescript-template": "*",
     "viem": "^0.3.50",
