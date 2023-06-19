@@ -54,8 +54,7 @@ export type FeeDataMiddleware = AccountMiddlewareOverrideFn<
 
 // TODO: this also will need to implement EventEmitteer
 export interface ISmartAccountProvider<
-    TTransport extends SupportedTransports = Transport,
-    TSmartContractAccount extends BaseSmartContractAccount<TTransport> = BaseSmartContractAccount<TTransport>,
+  TTransport extends SupportedTransports = Transport
 > {
   readonly rpcClient: PublicErc4337Client<TTransport>;
   readonly dummyPaymasterDataMiddleware: AccountMiddlewareFn;
@@ -64,7 +63,7 @@ export interface ISmartAccountProvider<
   readonly feeDataGetter: AccountMiddlewareFn;
   readonly customMiddleware?: AccountMiddlewareFn;
 
-  readonly account?: TSmartContractAccount;
+  readonly account?: BaseSmartContractAccount;
 
   /**
    * Sends a user operation using the connected account.
@@ -195,6 +194,6 @@ export interface ISmartAccountProvider<
    * @param fn - a function that given public rpc client, returns a smart contract account
    */
   connect(
-      fn: (provider: PublicErc4337Client<TTransport>) => TSmartContractAccount
-  ): this & { account: TSmartContractAccount };
+    fn: (provider: PublicErc4337Client<TTransport>) => BaseSmartContractAccount
+  ): this & { account: BaseSmartContractAccount };
 }

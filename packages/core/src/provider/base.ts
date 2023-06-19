@@ -70,9 +70,8 @@ export type ConnectedSmartAccountProvider<
 };
 
 export class SmartAccountProvider<
-    TTransport extends SupportedTransports = Transport,
-    TSmartContractAccount extends BaseSmartContractAccount<TTransport> = BaseSmartContractAccount<TTransport>,
-> implements ISmartAccountProvider<TTransport, TSmartContractAccount>
+  TTransport extends SupportedTransports = Transport
+> implements ISmartAccountProvider<TTransport>
 {
   private txMaxRetries: number;
   private txRetryIntervalMs: number;
@@ -83,7 +82,7 @@ export class SmartAccountProvider<
     rpcProvider: string | PublicErc4337Client<TTransport>,
     protected entryPointAddress: Address,
     protected chain: Chain,
-    readonly account?: TSmartContractAccount,
+    readonly account?: BaseSmartContractAccount<TTransport>,
     opts?: SmartAccountProviderOpts
   ) {
     this.txMaxRetries = opts?.txMaxRetries ?? 5;
@@ -358,8 +357,8 @@ export class SmartAccountProvider<
   };
 
   connect(
-      fn: (provider: PublicErc4337Client<TTransport>) => TSmartContractAccount
-  ): this & { account: TSmartContractAccount } {
+    fn: (provider: PublicErc4337Client<TTransport>) => BaseSmartContractAccount
+  ): this & { account: BaseSmartContractAccount } {
     const account = fn(this.rpcClient);
     defineReadOnly(this, "account", account);
     return this as this & { account: typeof account };
