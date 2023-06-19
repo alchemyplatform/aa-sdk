@@ -1,9 +1,8 @@
-import {HttpTransport} from "viem";
+import type {HttpTransport} from "viem";
 import {
-    AccountMiddlewareFn,
+    type AccountMiddlewareFn,
     deepHexlify, resolveProperties,
-    SmartAccountProvider,
-    UserOperationStruct
+    SmartAccountProvider
 } from "@alchemy/aa-core";
 
 
@@ -39,6 +38,7 @@ export class KernelAccountProvider extends SmartAccountProvider<HttpTransport> {
                     "cannot sign for address that is not the current account"
                 );
             }
+            // @ts-ignore
             return this.account.signWithEip6492(data);
         } else {
             return super.request(args)

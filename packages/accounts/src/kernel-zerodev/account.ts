@@ -11,7 +11,7 @@ import {parseAbiParameters} from "abitype";
 import {KernelBaseValidator, ValidatorMode} from "./validator/base";
 import {KernelAccountAbi} from "./abis/KernelAccountAbi";
 import {KernelFactoryAbi} from "./abis/KernelFactoryAbi";
-import {BaseSmartAccountParams, BaseSmartContractAccount, SmartAccountSigner} from "@alchemy/aa-core";
+import {type BaseSmartAccountParams, BaseSmartContractAccount, type SmartAccountSigner} from "@alchemy/aa-core";
 
 export interface KernelSmartAccountParams<
     TTransport extends Transport | FallbackTransport = Transport
@@ -50,20 +50,21 @@ export class KernelSmartContractAccount<
         if (this.validator.mode !== ValidatorMode.sudo) {
             throw new Error("Validator Mode not supported")
         } else {
-            return this.encodeExecuteAction(target, value, data, 0n)
+            return this.encodeExecuteAction(target, value, data, 0)
         }
     }
 
     async encodeExecuteDelegate (target: Hex, value: bigint, data: Hex): Promise<Hex> {
-        return this.encodeExecuteAction(target, value, data, 1n)
+        return this.encodeExecuteAction(target, value, data, 1)
     }
 
-    async signWithEip6492(msg: string | Uint8Array | Hex): Promise<Hex> {
+    async signWithEip6492(msg: string | Uint8Array): Promise<Hex> {
         try {
-            let sig = await this.owner.signMessage(toBytes(hashMessage({raw: toBytes(msg)})))
+            const formattedMessage = typeof msg === "string" ? toBytes(msg): msg
+            let sig = await this.owner.signMessage(toBytes(hashMessage({raw: formattedMessage})))
             // If the account is undeployed, use ERC-6492
             if (!await this.isAccountDeployed()) {
-                sig = encodeAbiParameters(
+                sig = (encodeAbiParameters(
                     parseAbiParameters('address, bytes, bytes'),
                     [
                         this.factoryAddress,
@@ -71,6 +72,7 @@ export class KernelSmartContractAccount<
                         sig
                     ]
                 ) + '6492649264926492649264926492649264926492649264926492649264926492' // magic suffix
+                ) as Hex
             }
 
             return sig
@@ -87,7 +89,7 @@ export class KernelSmartContractAccount<
         return this.validator.signMessageWithValidatorParams(formattedMessage)
     }
 
-    protected encodeExecuteAction(target: Hex, value: bigint, data: Hex, code: bigint): Hex {
+    protected encodeExecuteAction(target: Hex, value: bigint, data: Hex, code: number): Hex {
         return encodeFunctionData({
             abi: KernelAccountAbi,
             functionName: "execute",
