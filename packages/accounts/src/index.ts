@@ -2,9 +2,13 @@
 // Don't use wildcard exports, instead use named exports
 
 //kernel exports
-import { KernelAccountProvider } from "./kernel-zerodev/provider";
 export { KernelFactoryAbi } from "./kernel-zerodev/abis/KernelFactoryAbi";
 export { KernelAccountAbi } from "./kernel-zerodev/abis/KernelAccountAbi";
-export { KernelBaseValidator } from "./kernel-zerodev/validator/base";
+export {
+  ValidatorMode,
+  KernelBaseValidator,
+} from "./kernel-zerodev/validator/base";
+export type { KernelBaseValidatorParams } from "./kernel-zerodev/validator/base";
 export type { KernelSmartAccountParams } from "./kernel-zerodev/account";
 export { KernelSmartContractAccount } from "./kernel-zerodev/account";
+export { KernelAccountProvider } from "./kernel-zerodev/provider";
