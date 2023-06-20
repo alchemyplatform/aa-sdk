@@ -1,7 +1,10 @@
 import {
+  encodeDeployData,
   fromHex,
+  zeroAddress,
   type Address,
   type Chain,
+  type EncodeDeployDataParameters,
   type Hash,
   type RpcTransactionRequest,
   type Transport,
@@ -141,10 +144,6 @@ export class SmartAccountProvider<
   };
 
   sendTransaction = async (request: RpcTransactionRequest): Promise<Hash> => {
-    if (!request.to) {
-      throw new Error("transaction is missing to address");
-    }
-
     // TODO: need to add support for overriding gas prices
     const { hash } = await this.sendUserOperation({
       target: request.to,
@@ -157,12 +156,6 @@ export class SmartAccountProvider<
 
   sendTransactions = async (requests: RpcTransactionRequest[]) => {
     const batch = requests.map((request) => {
-      if (!request.to) {
-        throw new Error(
-          "one transaction in the batch is missing a target address"
-        );
-      }
-
       // TODO: need to add support for overriding gas prices
       return {
         target: request.to,
@@ -222,8 +215,18 @@ export class SmartAccountProvider<
       sender: this.getAddress(),
       nonce: this.account.getNonce(),
       callData: Array.isArray(data)
-        ? this.account.encodeBatchExecute(data)
-        : this.account.encodeExecute(data.target, data.value ?? 0n, data.data),
+        ? this.account.encodeBatchExecute(
+            data.map((x) => ({
+              ...x,
+              target: x.target ?? zeroAddress,
+              value: x.value ?? 0n,
+            }))
+          )
+        : this.account.encodeExecute(
+            data.target ?? zeroAddress,
+            data.value ?? 0n,
+            data.data
+          ),
       signature: this.account.getDummySignature(),
     } as UserOperationStruct);
 
@@ -254,6 +257,18 @@ export class SmartAccountProvider<
       ),
       request,
     };
+  };
+
+  deployContract = async (
+    params: EncodeDeployDataParameters
+  ): Promise<Hash> => {
+    const deployData = encodeDeployData(params);
+    const { hash } = await this.sendUserOperation({
+      target: zeroAddress,
+      data: deployData,
+    });
+
+    return hash;
   };
 
   // These are dependent on the specific paymaster being used

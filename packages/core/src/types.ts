@@ -10,7 +10,7 @@ export type BytesLike = Uint8Array | string;
 
 export interface UserOperationCallData {
   /* the target of the call */
-  target: Address;
+  target?: Address;
   /* the data passed to the target */
   data: Hex;
   /* the amount of native token to send to the target (default: 0) */

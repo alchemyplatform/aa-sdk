@@ -1,5 +1,10 @@
 import type { Address } from "abitype";
-import type { Hash, RpcTransactionRequest, Transport } from "viem";
+import type {
+  EncodeDeployDataParameters,
+  Hash,
+  RpcTransactionRequest,
+  Transport,
+} from "viem";
 import type { BaseSmartContractAccount } from "../account/base.js";
 import type {
   PublicErc4337Client,
@@ -18,7 +23,7 @@ type WithRequired<T, K extends keyof T> = Required<Pick<T, K>>;
 type WithOptional<T, K extends keyof T> = Pick<Partial<T>, K>;
 
 export type SendUserOperationResult = {
-  hash: string;
+  hash: Hash;
   request: UserOperationRequest;
 };
 
@@ -127,6 +132,14 @@ export interface ISmartAccountProvider<
    * @returns the transaction hash
    */
   sendTransactions: (request: RpcTransactionRequest[]) => Promise<Hash>;
+
+  /**
+   * This takes contract deploy parameters and crafts a UserOperation to deploy the contract.
+   *
+   * @param params the parameters for the contract deploy call
+   * @returns the hash of the user operation
+   */
+  deployContract: (params: EncodeDeployDataParameters) => Promise<Hash>;
 
   /**
    * EIP-1193 compliant request method

@@ -3,6 +3,7 @@ import {
   concatHex,
   encodeFunctionData,
   hexToBytes,
+  zeroAddress,
   type FallbackTransport,
   type Hex,
   type Transport,
@@ -64,7 +65,7 @@ export class SimpleSmartContractAccount<
   ): Promise<`0x${string}`> {
     const [targets, datas] = _txs.reduce(
       (accum, curr) => {
-        accum[0].push(curr.target);
+        accum[0].push(curr.target ?? zeroAddress);
         accum[1].push(curr.data);
 
         return accum;

@@ -1,4 +1,6 @@
 import { getChain, SimpleSmartContractAccount } from "@alchemy/aa-core";
+import { Interface } from "@ethersproject/abi";
+import { ContractFactory } from "@ethersproject/contracts";
 import { Wallet } from "@ethersproject/wallet";
 import { Alchemy, Network } from "alchemy-sdk";
 import { EthersProviderAdapter } from "../provider-adapter.js";
@@ -79,5 +81,20 @@ describe("Simple Account Tests", async () => {
     });
 
     await expect(result).rejects.toThrowError();
+  });
+
+  it("should successfully deploy a contract", async () => {
+    const factory = new ContractFactory(
+      new Interface([]),
+      {
+        object:
+          "0x60566037600b82828239805160001a607314602a57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220e5284ae00a989ec593ad1aebb69c9082d4820ccd98f6b493e4c442fa44a950c364736f6c63430008110033",
+      },
+      signer
+    );
+
+    const result = factory.deploy();
+
+    await expect(result).resolves.not.toThrowError();
   });
 });
