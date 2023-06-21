@@ -49,16 +49,6 @@ describe("Kernel Account Tests", () => {
         config.chain
     )
 
-    const kernelAddress = "0xD49a72cb78C44c6bfbf0d471581B7635cF62E81e"
-
-    const kernelFactoryContract = getContract({
-        address: kernelAddress,
-        abi: parseAbi([
-            'function getAccountAddress(address _owner, uint256 _index) public view returns (address)',
-            ]),
-        publicClient: provider.rpcClient,
-    })
-
     function connect(index, owner=mockOwner) {
         return provider.connect((provider) => account(index,owner))
     }
