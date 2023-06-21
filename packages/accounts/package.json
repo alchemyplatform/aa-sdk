@@ -36,8 +36,6 @@
     "clean": "rm -rf ./dist",
     "test": "vitest",
     "test:run": "vitest run",
-    "lint:write": "eslint . --fix && prettier --write --ignore-unknown .",
-    "lint:check": "eslint . && prettier --check ."
   },
   "devDependencies": {
     "@alchemy/aa-core": "^0.1.0-alpha.7",
