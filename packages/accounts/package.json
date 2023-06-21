@@ -1,6 +1,6 @@
 {
   "name": "@alchemy/aa-accounts",
-  "version": "0.1.0-alpha.5",
+  "version": "0.1.0-alpha.7",
   "description": "A collection of ERC-4337 compliant smart contract account interfaces",
   "author": "Alchemy",
   "license": "MIT",
@@ -38,7 +38,7 @@
     "test:run": "vitest run"
   },
   "devDependencies": {
-    "@alchemy/aa-core": "^0.1.0-alpha.6",
+    "@alchemy/aa-core": "^0.1.0-alpha.7",
     "typescript": "^5.0.4",
     "typescript-template": "*",
     "viem": "^0.3.50",
