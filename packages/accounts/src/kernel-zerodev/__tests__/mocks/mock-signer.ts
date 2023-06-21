@@ -1,6 +1,4 @@
-import {SmartAccountSigner} from "../../signer/types";
-import {Address, Hex} from "@alchemy/aa-core";
-import {toHex} from "viem";
+import {Address, Hex, SmartAccountSigner} from "@alchemy/aa-core";
 
 
 export class MockSigner implements SmartAccountSigner {
