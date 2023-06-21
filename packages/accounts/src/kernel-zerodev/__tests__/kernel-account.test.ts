@@ -1,8 +1,6 @@
 import {
     encodeAbiParameters,
-    getContract,
     Hex,
-    parseAbi,
     parseAbiParameters
 } from "viem";
 import {polygonMumbai} from "viem/chains";
