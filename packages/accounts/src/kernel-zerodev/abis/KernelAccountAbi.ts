@@ -577,4 +577,3 @@ export const KernelAccountAbi = [
     type: "receive",
   },
 ] as const;
-
