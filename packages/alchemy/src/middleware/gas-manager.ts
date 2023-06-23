@@ -112,6 +112,7 @@ export const alchemyPaymasterAndDataMiddleware = (
   dummyPaymasterDataMiddleware: async (_struct) => {
     switch (config.provider.chain.id) {
       case 1:
+      case 10:
       case 137:
       case 42161:
         return {
