@@ -1,6 +1,6 @@
 {
   "name": "@alchemy/aa-alchemy",
-  "version": "0.1.0-alpha.7",
+  "version": "0.1.0-alpha.8",
   "description": "adapters for @alchemy/aa-core for interacting with alchemy services",
   "author": "Alchemy",
   "license": "MIT",
