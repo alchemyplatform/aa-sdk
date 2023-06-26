@@ -14,8 +14,8 @@ import type {
   PublicErc4337Client,
   SupportedTransports,
 } from "../client/types.js";
-import type { ISmartContractAccount } from "./types.js";
 import type { BatchUserOperationCallData } from "../types.js";
+import type { ISmartContractAccount } from "./types.js";
 
 export enum DeploymentState {
   UNDEFINED = "0x0",

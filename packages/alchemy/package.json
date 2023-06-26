@@ -41,12 +41,12 @@
     "@alchemy/aa-core": "^0.1.0-alpha.7",
     "typescript": "^5.0.4",
     "typescript-template": "*",
-    "viem": "^0.3.50",
+    "viem": "^1.1.7",
     "vitest": "^0.31.0"
   },
   "peerDependencies": {
     "@alchemy/aa-core": "^0.1.0-alpha.1",
-    "viem": "^0.3.50"
+    "viem": "^1.1.7"
   },
   "publishConfig": {
     "access": "public",
