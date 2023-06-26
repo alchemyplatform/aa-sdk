@@ -1,13 +1,18 @@
-import { encodeAbiParameters, Hex, parseAbiParameters } from "viem";
-import { polygonMumbai } from "viem/chains";
-import { KernelBaseValidator, ValidatorMode } from "../validator/base";
-import {
-  KernelSmartAccountParams,
-  KernelSmartContractAccount,
-} from "../account";
-import { MockSigner } from "./mocks/mock-signer";
-import { KernelAccountProvider } from "../provider";
 import { PrivateKeySigner } from "@alchemy/aa-core";
+import {
+  encodeAbiParameters,
+  parseAbiParameters,
+  type Address,
+  type Hex,
+} from "viem";
+import { polygonMumbai } from "viem/chains";
+import {
+  KernelSmartContractAccount,
+  type KernelSmartAccountParams,
+} from "../account";
+import { KernelAccountProvider } from "../provider";
+import { KernelBaseValidator, ValidatorMode } from "../validator/base";
+import { MockSigner } from "./mocks/mock-signer";
 
 describe("Kernel Account Tests", () => {
   //any wallet should work
@@ -19,9 +24,10 @@ describe("Kernel Account Tests", () => {
     rpcProvider: `${polygonMumbai.rpcUrls.alchemy.http[0]}/${[
       process.env.API_KEY,
     ]}`,
-    validatorAddress: "0x180D6465F921C7E0DEA0040107D342c87455fFF5",
-    accountFactoryAddress: "0x5D006d3880645ec6e254E18C1F879DAC9Dd71A39",
-    entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
+    validatorAddress: "0x180D6465F921C7E0DEA0040107D342c87455fFF5" as Address,
+    accountFactoryAddress:
+      "0x5D006d3880645ec6e254E18C1F879DAC9Dd71A39" as Address,
+    entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789" as Address,
   };
 
   const owner = PrivateKeySigner.privateKeyToAccountSigner(config.privateKey);
@@ -45,11 +51,11 @@ describe("Kernel Account Tests", () => {
     config.chain
   );
 
-  function connect(index, owner = mockOwner) {
+  function connect(index: bigint, owner = mockOwner) {
     return provider.connect((provider) => account(index, owner));
   }
 
-  function account(index, owner = mockOwner) {
+  function account(index: bigint, owner = mockOwner) {
     const accountParams: KernelSmartAccountParams = {
       rpcClient: provider.rpcClient,
       entryPointAddress: config.entryPointAddress,
