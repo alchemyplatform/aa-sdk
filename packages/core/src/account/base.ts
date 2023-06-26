@@ -14,6 +14,7 @@ import type {
   PublicErc4337Client,
   SupportedTransports,
 } from "../client/types.js";
+import { Logger } from "../logger.js";
 import type { BatchUserOperationCallData } from "../types.js";
 import type { ISmartContractAccount } from "./types.js";
 
@@ -111,9 +112,17 @@ export abstract class BaseSmartContractAccount<
   async getAddress(): Promise<Address> {
     if (!this.accountAddress) {
       const initCode = await this.getAccountInitCode();
+      Logger.debug(
+        "[BaseSmartContractAccount](getAddress) initCode: ",
+        initCode
+      );
       try {
         await this.entryPoint.simulate.getSenderAddress([initCode]);
       } catch (err: any) {
+        Logger.debug(
+          "[BaseSmartContractAccount](getAddress) entrypoint.getSenderAddress result: ",
+          err
+        );
         if (err.cause?.data?.errorName === "SenderAddressResult") {
           this.accountAddress = err.cause.data.args[0] as Address;
           return this.accountAddress;
