@@ -48,7 +48,7 @@ export class KernelSmartContractAccount<
   }
 
   getDummySignature(): Hex {
-    return "0x4046ab7d9c387d7a5ef5ca0777eded29767fd9863048946d35b3042d2f7458ff7c62ade2903503e15973a63a296313eab15b964a18d79f4b06c8c01c7028143c1c";
+    return "0x00000000b650d28e51cf39d5c0bb7db6d81cce5f0a77baba8bf8de587c0bc83fa70e374f3bfef2afb697dc5627c669de7dc13e96c85697e0f6aae2f2ebe227552d00cb181c";
   }
 
   async encodeExecute(target: Hex, value: bigint, data: Hex): Promise<Hex> {
