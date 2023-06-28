@@ -155,7 +155,7 @@ export class SmartAccountProvider<
       throw new Error("account not connected!");
     }
     return this.account.signMessage(msg);
-  }
+  };
 
   sendTransactions = async (requests: RpcTransactionRequest[]) => {
     const batch = requests.map((request) => {
