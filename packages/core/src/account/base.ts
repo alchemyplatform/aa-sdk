@@ -14,13 +14,14 @@ import type {
   PublicErc4337Client,
   SupportedTransports,
 } from "../client/types.js";
-import type { ISmartContractAccount } from "./types.js";
+import { Logger } from "../logger.js";
 import type { BatchUserOperationCallData } from "../types.js";
+import type { ISmartContractAccount } from "./types.js";
 
 export enum DeploymentState {
-  UNDEFINED = '0x0',
-  NOT_DEPLOYED = '0x1',
-  DEPLOYED = '0x2',
+  UNDEFINED = "0x0",
+  NOT_DEPLOYED = "0x1",
+  DEPLOYED = "0x2",
 }
 
 export interface BaseSmartAccountParams<
@@ -83,7 +84,7 @@ export abstract class BaseSmartContractAccount<
   }
 
   async getNonce(): Promise<bigint> {
-    if(!await this.isAccountDeployed()) {
+    if (!(await this.isAccountDeployed())) {
       return 0n;
     }
     const address = await this.getAddress();
@@ -111,9 +112,17 @@ export abstract class BaseSmartContractAccount<
   async getAddress(): Promise<Address> {
     if (!this.accountAddress) {
       const initCode = await this.getAccountInitCode();
+      Logger.debug(
+        "[BaseSmartContractAccount](getAddress) initCode: ",
+        initCode
+      );
       try {
         await this.entryPoint.simulate.getSenderAddress([initCode]);
       } catch (err: any) {
+        Logger.debug(
+          "[BaseSmartContractAccount](getAddress) entrypoint.getSenderAddress result: ",
+          err
+        );
         if (err.cause?.data?.errorName === "SenderAddressResult") {
           this.accountAddress = err.cause.data.args[0] as Address;
           return this.accountAddress;
@@ -128,15 +137,17 @@ export abstract class BaseSmartContractAccount<
 
   // Extra implementations
   async isAccountDeployed(): Promise<boolean> {
-    return await this.getDeploymentState() === DeploymentState.DEPLOYED
+    return (await this.getDeploymentState()) === DeploymentState.DEPLOYED;
   }
 
   async getDeploymentState(): Promise<DeploymentState> {
-    if(this.deploymentState === DeploymentState.UNDEFINED) {
+    if (this.deploymentState === DeploymentState.UNDEFINED) {
       const initCode = await this.getInitCode();
-      return (initCode === "0x") ? DeploymentState.DEPLOYED : DeploymentState.NOT_DEPLOYED
+      return initCode === "0x"
+        ? DeploymentState.DEPLOYED
+        : DeploymentState.NOT_DEPLOYED;
     } else {
-      return this.deploymentState
+      return this.deploymentState;
     }
   }
 }

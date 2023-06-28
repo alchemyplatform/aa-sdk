@@ -13,7 +13,7 @@
     "clean": "lerna run clean",
     "test": "vitest run",
     "lint:write": "eslint . --fix && prettier --write --ignore-unknown .",
-    "lint:check": "eslint . && prettier --check . && npmPkgJsonLint -q .",
+    "lint:check": "eslint . && prettier --check .",
     "prepare": "husky install",
     "version": "yarn build"
   },

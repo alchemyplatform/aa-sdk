@@ -10,7 +10,10 @@ import {
   type PublicClient,
   type Transport,
 } from "viem";
-import type { PublicRequests } from "viem/dist/types/types/eip1193";
+import type {
+  EIP1193RequestFn,
+  PublicRpcSchema,
+} from "viem/dist/types/types/eip1193";
 import type {
   BigNumberish,
   UserOperationEstimateGasResponse,
@@ -19,7 +22,7 @@ import type {
   UserOperationResponse,
 } from "../types.js";
 import { VERSION } from "../version.js";
-import type { Erc4337Requests, PublicErc4337Client } from "./types.js";
+import type { Erc337RpcSchema, PublicErc4337Client } from "./types.js";
 
 export const createPublicErc4337FromClient: <
   T extends Transport | FallbackTransport = Transport
@@ -31,7 +34,9 @@ export const createPublicErc4337FromClient: <
   client: PublicClient<T, Chain>
 ): PublicErc4337Client<T> => {
   const clientAdapter = client as PublicClient<T, Chain> & {
-    request: (PublicRequests & Erc4337Requests)["request"];
+    request: EIP1193RequestFn<
+      [Erc337RpcSchema[number], PublicRpcSchema[number]]
+    >;
   };
 
   return {

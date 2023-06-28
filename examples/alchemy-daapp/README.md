@@ -1,6 +1,6 @@
 # Alchemy dAApp
 
-This example dapp contains an account abstraction-enabled web3 application designed to onboard people onto the Alchemy Account Abstraction SDK. It provides a quick starter for developers to use these technologies; by creating a Smart Contract Wallet and minting it an NFT!
+This example dapp contains an account abstraction-enabled web3 application designed to onboard people onto the Alchemy Account Abstraction SDK. It provides a quick starter for developers to use these technologies, by creating a Smart Contract Wallet and minting it an NFT!
 
 ## Installation
 1. Clone the repository:
@@ -17,7 +17,7 @@ yarn install
 ```
 
 ## Getting Started
-1. Update the .env file with your Alchemy API key:
+1. Update the .env file with your Alchemy API key(s):
 ```bash
 MUMBAI_ALCHEMY_API_URL=https://polygon-mumbai.g.alchemy.com/v2/<YOUR_API_KEY>
 ```
@@ -28,7 +28,6 @@ export const alchemyApiKey = "<your-api-key>";
 ```
 
 3. Update the configs/clientConfigs.ts file with your contract addresses and policy ids:
-
 ```typescript
 export const serverConfigs: Record<number, ServerConfiguration> = {
   [polygonMumbai.id]: {
@@ -40,7 +39,8 @@ export const serverConfigs: Record<number, ServerConfiguration> = {
   // Repeat for other chains as needed
 };
 ```
-3. Update the serverConfigs.ts file with your alchemy API keys:
+
+4. Update the serverConfigs.ts file with your alchemy API keys:
 ```typescript
 const API_URLs: Record<number, string> = {
   [polygonMumbai.id]: env.MUMBAI_ALCHEMY_API_URL,
@@ -66,7 +66,7 @@ We welcome contributions to the examples/alchemy-daapp repo! If you would like t
 1. Clone the repository
 2. Create a new branch for your changes
 3. Make your changes and commit them
-4. Push your changes to your forked repository
+4. Push your changes to the repository
 5. Submit a pull request to the examples/aa-SDK repo
 
 Please ensure that your code follows our coding standards and that you have added appropriate tests for your changes. We appreciate your contributions and look forward to working with you.

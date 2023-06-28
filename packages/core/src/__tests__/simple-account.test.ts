@@ -1,11 +1,12 @@
-import { toHex } from "viem";
-import { mnemonicToAccount } from "viem/accounts";
+import { isAddress, toHex } from "viem";
+import { generatePrivateKey, mnemonicToAccount } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
 import {
   SimpleSmartContractAccount,
   type SimpleSmartAccountOwner,
 } from "../account/simple.js";
 import { SmartAccountProvider } from "../provider/base.js";
+import { PrivateKeySigner } from "../signer/private-key.js";
 import type { BatchUserOperationCallData } from "../types.js";
 
 const ENTRYPOINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
@@ -107,5 +108,29 @@ describe("Simple Account Tests", () => {
     expect(await account.encodeBatchExecute(data)).toMatchInlineSnapshot(
       '"0x18dfb3c7000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000002000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef0000000000000000000000008ba1f109551bd432803012645ac136ddd64dba720000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000004deadbeef000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004cafebabe00000000000000000000000000000000000000000000000000000000"'
     );
+  });
+
+  it("should get counterfactual for undeployed account", async () => {
+    const owner = PrivateKeySigner.privateKeyToAccountSigner(
+      generatePrivateKey()
+    );
+    const provider = new SmartAccountProvider(
+      `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
+      ENTRYPOINT_ADDRESS,
+      chain
+    ).connect(
+      (rpcClient) =>
+        new SimpleSmartContractAccount({
+          entryPointAddress: ENTRYPOINT_ADDRESS,
+          chain,
+          owner,
+          factoryAddress: SIMPLE_ACCOUNT_FACTORY_ADDRESS,
+          rpcClient,
+        })
+    );
+
+    const address = provider.getAddress();
+    await expect(address).resolves.not.toThrowError();
+    expect(isAddress(await address)).toBe(true);
   });
 });

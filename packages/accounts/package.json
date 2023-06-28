@@ -1,6 +1,6 @@
 {
   "name": "@alchemy/aa-accounts",
-  "version": "0.1.0-alpha.5",
+  "version": "0.1.0-alpha.11",
   "description": "A collection of ERC-4337 compliant smart contract account interfaces",
   "author": "Alchemy",
   "license": "MIT",
@@ -38,15 +38,15 @@
     "test:run": "vitest run"
   },
   "devDependencies": {
-    "@alchemy/aa-core": "^0.1.0-alpha.5",
+    "@alchemy/aa-core": "^0.1.0-alpha.11",
     "typescript": "^5.0.4",
     "typescript-template": "*",
-    "viem": "^0.3.50",
+    "viem": "^1.1.7",
     "vitest": "^0.31.0"
   },
   "peerDependencies": {
     "@alchemy/aa-core": "^0.1.0-alpha.1",
-    "viem": "^0.3.50"
+    "viem": "^1.1.7"
   },
   "publishConfig": {
     "access": "public",
@@ -60,5 +60,5 @@
     "url": "https://github.com/alchemyplatform/aa-sdk/issues"
   },
   "homepage": "https://github.com/alchemyplatform/aa-sdk#readme",
-  "gitHead": "b7e4cd3253f6d93032419a9a559ea16d2a4f71d8"
+  "gitHead": "ee46e8bb857de3b631044fa70714ea706d9e317d"
 }
