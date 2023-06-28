@@ -1,7 +1,10 @@
 name: Publish new Package
 
 # workflow dispatch requires a maintainer to go to the Actions tab and manually trigger the workflow
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    branches:
+      - main
 
 # If we ever migrate this to not be manual, we HAVE to check that the commit
 # it is running against DOES NOT contain [skip-ci] in the commit message
