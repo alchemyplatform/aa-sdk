@@ -112,18 +112,13 @@ export class SmartAccountProvider<
       // TODO: will probably need to handle typed message signing too?
       case "eth_sign":
       case "personal_sign":
-        if (!this.account) {
-          throw new Error("account not connected!");
-        }
-
         const [data, address] = params!;
         if (address !== (await this.getAddress())) {
           throw new Error(
             "cannot sign for address that is not the current account"
           );
         }
-
-        return await this.account.signMessage(data);
+        return this.signMessage(data);
       default:
         // TODO: there's probably a number of methods we just don't support, will need to test most of them out
         // first let's get something working though
@@ -153,6 +148,13 @@ export class SmartAccountProvider<
     });
 
     return await this.waitForUserOperationTransaction(hash as Hash);
+  };
+
+  signMessage = async (msg: string | Uint8Array): Promise<Hash> => {
+    if (!this.account) {
+      throw new Error("account not connected!");
+    }
+    return this.account.signMessage(msg);
   };
 
   sendTransactions = async (requests: RpcTransactionRequest[]) => {
