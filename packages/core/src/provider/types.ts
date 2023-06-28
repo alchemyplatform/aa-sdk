@@ -136,7 +136,15 @@ export interface ISmartAccountProvider<
    */
   request(args: { method: string; params?: any[] }): Promise<any>;
 
-  // TODO: potentially add methods here for signing or something like viem's walletActions?
+  /**
+   * This method returns an ERC-191 compliant signed message
+   *
+   * @param msg - message to be signed
+   * @returns the signed hash for the message passed
+   */
+  signMessage: (msg: string | Uint8Array) => Promise<Hash>;
+
+  // TODO: potentially add methods here for something like viem's walletActions?
   /**
    * @returns the address of the connected account
    */
