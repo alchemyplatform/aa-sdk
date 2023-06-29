@@ -19,6 +19,11 @@ jobs:
           git config --global user.name "Alchemy Bot"
           git config --global user.email "alchemy-bot@alchemy.com"
 
+      - name: Set NPM Permissions
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
+
       - name: Set Node.js 16.x
         uses: actions/setup-node@v3
         with:
@@ -38,6 +43,4 @@ jobs:
 
       # Lerna publish will, compute the new version, update files, run precommit hooks, tag, publish, and push change log
       - name: Publish using Lerna
-        run: yarn lerna publish --no-private --yes
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: yarn lerna publish --no-private --yes --no-verify-access
