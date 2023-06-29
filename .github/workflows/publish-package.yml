@@ -1,0 +1,46 @@
+name: Publish new Package
+
+# workflow dispatch requires a maintainer to go to the Actions tab and manually trigger the workflow
+on: workflow_dispatch
+
+# If we ever migrate this to not be manual, we HAVE to check that the commit
+# it is running against DOES NOT contain [skip-ci] in the commit message
+jobs:
+  build_test_and_deploy:
+    name: Build, Test, and Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.ALCHEMY_BOT_PAT }}
+
+      - name: Set Github User Details
+        run: |
+          git config --global user.name "Alchemy Bot"
+          git config --global user.email "alchemy-bot@alchemy.com"
+
+      - name: Set NPM Permissions
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
+
+      - name: Set Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16.20"
+          cache: "yarn"
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Build
+        run: yarn build
+
+      # TODO: we still need to make the tests work in CI environments
+      # will come back to this
+      # - name: Test
+      #   run: yarn test
+
+      # Lerna publish will, compute the new version, update files, run precommit hooks, tag, publish, and push change log
+      - name: Publish using Lerna
+        run: yarn lerna publish --no-private --yes --no-verify-access
