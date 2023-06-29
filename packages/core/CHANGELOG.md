@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.1.0-alpha.14 (2023-06-29)
+
+### Bug Fixes
+
+- npm 404 error ([f34f581](https://github.com/alchemyplatform/aa-sdk/commit/f34f581a0399a2e30f33161d8b4cc1d778122b1f))
+
 # 0.1.0-alpha.13 (2023-06-29)
 
 ### Bug Fixes
