@@ -1,12 +1,12 @@
-import { isAddress, toHex } from "viem";
-import { generatePrivateKey, mnemonicToAccount } from "viem/accounts";
+import { isAddress } from "viem";
+import { generatePrivateKey } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
 import {
   SimpleSmartContractAccount,
   type SimpleSmartAccountOwner,
 } from "../account/simple.js";
 import { SmartAccountProvider } from "../provider/base.js";
-import { PrivateKeySigner } from "../signer/private-key.js";
+import { LocalAccountSigner } from "../signer/local-account.js";
 import type { BatchUserOperationCallData } from "../types.js";
 
 const ENTRYPOINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
@@ -16,14 +16,8 @@ const SIMPLE_ACCOUNT_FACTORY_ADDRESS =
   "0x9406Cc6185a346906296840746125a0E44976454";
 
 describe("Simple Account Tests", () => {
-  const ownerAccount = mnemonicToAccount(OWNER_MNEMONIC);
-  const owner: SimpleSmartAccountOwner = {
-    signMessage: async (msg) =>
-      ownerAccount.signMessage({
-        message: { raw: toHex(msg) },
-      }),
-    getAddress: async () => ownerAccount.address,
-  };
+  const owner: SimpleSmartAccountOwner =
+    LocalAccountSigner.mnemonicToAccountSigner(OWNER_MNEMONIC);
   const chain = polygonMumbai;
   const signer = new SmartAccountProvider(
     `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
@@ -111,7 +105,7 @@ describe("Simple Account Tests", () => {
   });
 
   it("should get counterfactual for undeployed account", async () => {
-    const owner = PrivateKeySigner.privateKeyToAccountSigner(
+    const owner = LocalAccountSigner.privateKeyToAccountSigner(
       generatePrivateKey()
     );
     const provider = new SmartAccountProvider(

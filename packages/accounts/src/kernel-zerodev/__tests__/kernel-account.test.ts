@@ -5,6 +5,7 @@ import {
   type Address,
   type Hex,
 } from "viem";
+import { generatePrivateKey } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
 import {
   KernelSmartContractAccount,
@@ -17,8 +18,7 @@ import { MockSigner } from "./mocks/mock-signer";
 describe("Kernel Account Tests", () => {
   //any wallet should work
   const config = {
-    privateKey: process.env.OWNER_KEY as Hex,
-    ownerWallet: process.env.OWNER_WALLET,
+    privateKey: generatePrivateKey(),
     mockWallet: "0x48D4d3536cDe7A257087206870c6B6E76e3D4ff4",
     chain: polygonMumbai,
     rpcProvider: `${polygonMumbai.rpcUrls.alchemy.http[0]}/${[
@@ -52,7 +52,7 @@ describe("Kernel Account Tests", () => {
   );
 
   function connect(index: bigint, owner = mockOwner) {
-    return provider.connect((provider) => account(index, owner));
+    return provider.connect((_provider) => account(index, owner));
   }
 
   function account(index: bigint, owner = mockOwner) {
