@@ -7,11 +7,17 @@ on: workflow_dispatch
 # it is running against DOES NOT contain [skip-ci] in the commit message
 jobs:
   build_test_and_deploy:
+    name: Build, Test, and Deploy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
           token: ${{ secrets.ALCHEMY_BOT_PAT }}
+
+      - name: Set Github User Details
+        run: |
+          git config --global user.name "Alchemy Bot"
+          git config --global user.email "alchemy-bot@alchemy.com"
 
       - name: Set Node.js 16.x
         uses: actions/setup-node@v3
