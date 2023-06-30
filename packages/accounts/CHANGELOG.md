@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.1.0-alpha.15 (2023-06-30)
+
+### Bug Fixes
+
+- local account signers were not correctly handling hex inputs ([#42](https://github.com/alchemyplatform/aa-sdk/issues/42)) ([9d56a5b](https://github.com/alchemyplatform/aa-sdk/commit/9d56a5b721263c8fc976ddda341458f6666b9e2d))
+
 # 0.1.0-alpha.14 (2023-06-29)
 
 ### Bug Fixes
