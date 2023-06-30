@@ -1,5 +1,5 @@
 import { encodePacked, toBytes } from "viem";
-import { KernelUserOperationCallData } from "./types";
+import type { KernelUserOperationCallData } from "./types";
 
 export const encodeCall = (call: KernelUserOperationCallData): string => {
   const data = toBytes(call.data);

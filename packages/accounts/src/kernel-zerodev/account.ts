@@ -18,7 +18,7 @@ import {
   BaseSmartContractAccount,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
-import { BatchUserOperationCallData } from "@alchemy/aa-core/src";
+import type { BatchUserOperationCallData } from "@alchemy/aa-core/src";
 import { MultiSendAbi } from "./abis/MultiSendAbi";
 import { encodeCall } from "./utils";
 

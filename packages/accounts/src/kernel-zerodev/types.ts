@@ -1,4 +1,4 @@
-import { UserOperationCallData } from "@alchemy/aa-core";
+import type { UserOperationCallData } from "@alchemy/aa-core";
 
 export interface KernelUserOperationCallData extends UserOperationCallData {
   delegateCall?: boolean;
