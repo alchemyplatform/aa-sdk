@@ -55,6 +55,7 @@ import {
   SimpleSmartContractAccount,
   SmartAccountProvider,
   type SimpleSmartAccountOwner,
+  LocalAccountSigner,
 } from "@alchemy/aa-core";
 import { mnemonicToAccount } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
@@ -64,17 +65,10 @@ const SIMPLE_ACCOUNT_FACTORY_ADDRESS =
   "0x9406Cc6185a346906296840746125a0E44976454";
 
 // 1. define the EOA owner of the Smart Account
-// This is just one exapmle of how to interact with EOAs, feel free to use any other interface
-const ownerAccount = mnemonicToAccount(MNEMONIC);
-// All that is important for defining an owner is that it provides a `signMessage` and `getAddress` function
-const owner: SimpleSmartAccountOwner = {
-  // this should sign a message according to ERC-191
-  signMessage: async (msg) =>
-    ownerAccount.signMessage({
-      message: toHex(msg),
-    }),
-  getAddress: async () => ownerAccount.address,
-};
+// this uses a utility method for creating an account signer using mnemonic
+// we also have a utility for creating an account signer from a private key
+const owner: SimpleSmartAccountOwner =
+  LocalAccountSigner.mnemonicToAccountSigner(MNEMONIC);
 
 // 2. initialize the provider and connect it to the account
 const provider = new SmartAccountProvider(
@@ -109,6 +103,7 @@ const { hash } = provider.sendUserOperation({
 import {
   SimpleSmartContractAccount,
   type SimpleSmartAccountOwner,
+  LocalAccountSigner,
 } from "@alchemy/aa-core";
 import { toHex } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
@@ -119,17 +114,10 @@ const SIMPLE_ACCOUNT_FACTORY_ADDRESS =
   "0x9406Cc6185a346906296840746125a0E44976454";
 
 // 1. define the EOA owner of the Smart Account
-// This is just one exapmle of how to interact with EOAs, feel free to use any other interface
-const ownerAccount = mnemonicToAccount(MNEMONIC);
-// All that is important for defining an owner is that it provides a `signMessage` and `getAddress` function
-const owner: SimpleSmartAccountOwner = {
-  // this should sign a message according to ERC-191
-  signMessage: async (msg) =>
-    ownerAccount.signMessage({
-      message: toHex(msg),
-    }),
-  getAddress: async () => ownerAccount.address,
-};
+// this uses a utility method for creating an account signer using mnemonic
+// we also have a utility for creating an account signer from a private key
+const owner: SimpleSmartAccountOwner =
+  LocalAccountSigner.mnemonicToAccountSigner(MNEMONIC);
 
 // 2. initialize the provider and connect it to the account
 let provider = new AlchemyProvider({
