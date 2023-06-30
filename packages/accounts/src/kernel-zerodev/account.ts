@@ -19,12 +19,9 @@ import {
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import { BatchUserOperationCallData } from "@alchemy/aa-core/src";
-import {
-  KernelBatchUserOperationCallData,
-
-} from "./types";
+import { KernelBatchUserOperationCallData } from "./types";
 import { MultiSendAbi } from "./abis/MultiSendAbi";
-import {encodeCall, transformToKernelBatch} from "./utils";
+import { encodeCall, transformToKernelBatch } from "./utils";
 
 export interface KernelSmartAccountParams<
   TTransport extends Transport | FallbackTransport = Transport
