@@ -9,7 +9,7 @@ export const encodeCall = (call: KernelUserOperationCallData): string => {
       call.delegateCall ? 1 : 0,
       call.target,
       call.value || BigInt(0),
-      data.length,
+      BigInt(data.length),
       call.data,
     ]
   );

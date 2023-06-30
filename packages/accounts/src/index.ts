@@ -16,4 +16,3 @@ export type {
 export type { KernelSmartAccountParams } from "./kernel-zerodev/account";
 export { KernelSmartContractAccount } from "./kernel-zerodev/account";
 export { KernelAccountProvider } from "./kernel-zerodev/provider";
-export { transformToKernelBatch } from "./kernel-zerodev/utils";
