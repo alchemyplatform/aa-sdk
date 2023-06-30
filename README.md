@@ -84,13 +84,14 @@ const provider = new SmartAccountProvider(
       chain: polygonMumbai,
       factoryAddress: SIMPLE_ACCOUNT_FACTORY_ADDRESS,
       rpcClient,
+      owner,
       // optionally if you already know the account's address
       accountAddress: "0x000...000",
     })
 );
 
 // 3. send a UserOperation
-const { hash } = provider.sendUserOperation({
+const { hash } = await provider.sendUserOperation({
   target: "0xTargetAddress",
   data: "0xcallData",
   value: 0n, // value: bigint or undefined
@@ -143,7 +144,7 @@ prpvider = provider.withAlchemyGasManager({
 });
 
 // 3. send a UserOperation
-const { hash } = provider.sendUserOperation({
+const { hash } = await provider.sendUserOperation({
   target: "0xTargetAddress",
   data: "0xcallData",
   value: 0n, // value: bigint or undefined
@@ -193,7 +194,7 @@ const signer = EthersProviderAdapter.fromEthersProvider(
 );
 
 // 3. send a user op
-const { hash } = signer.sendUserOperation({
+const { hash } = await signer.sendUserOperation({
   target: "0xTargetAddress",
   data: "0xcallData",
   value: 0n, // value: bigint or undefined
