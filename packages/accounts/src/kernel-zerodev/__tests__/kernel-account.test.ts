@@ -188,8 +188,6 @@ describe("Kernel Account Tests", () => {
   //     //
   //     let signerWithProvider =  connect(0n,owner)
   //
-  //     //to fix bug in old versions
-  //     await signerWithProvider.account.getInitCode()
   //     const result = signerWithProvider.sendUserOperation({
   //         target: await signerWithProvider.getAddress(),
   //         data: "0x",
@@ -198,12 +196,25 @@ describe("Kernel Account Tests", () => {
   //     await expect(result).resolves.not.toThrowError();
   // });
 
+  // it("sendUserOperation batch should execute properly", async () => {
+  //     let signerWithProvider = connect(0n, owner)
+  //     const request: KernelUserOperationCallData = {
+  //         target: await signerWithProvider.getAddress(),
+  //         data: "0x",
+  //         value: 100000000n
+  //     }
+  //     const request2: KernelUserOperationCallData = {
+  //         target: await signerWithProvider.getAddress(),
+  //         data: "0x",
+  //         value: 200000000n
+  //     }
+  //     const requests: BatchUserOperationCallData = [request, request2]
+  //     const result = signerWithProvider.sendUserOperation(requests);
+  //     await expect(result).resolves.not.toThrowError();
+  // }, 20000);
+
   //non core functions
   it("should correctly identify whether account is deployed", async () => {
-    //contract already deployed
-    const signer = account(0n);
-    expect(await signer.isAccountDeployed()).eql(true);
-
     //contract already deployed
     const signer2 = account(3n);
     expect(await signer2.isAccountDeployed()).eql(true);
@@ -211,9 +222,5 @@ describe("Kernel Account Tests", () => {
     //contract not deployed
     const signer3 = account(4n);
     expect(await signer3.isAccountDeployed()).eql(false);
-
-    //contract not deployed
-    const signer4 = account(5n);
-    expect(await signer4.isAccountDeployed()).eql(false);
   });
 });

@@ -18,6 +18,13 @@ import {
   BaseSmartContractAccount,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
+import { BatchUserOperationCallData } from "@alchemy/aa-core/src";
+import {
+  KernelBatchUserOperationCallData,
+
+} from "./types";
+import { MultiSendAbi } from "./abis/MultiSendAbi";
+import {encodeCall, transformToKernelBatch} from "./utils";
 
 export interface KernelSmartAccountParams<
   TTransport extends Transport | FallbackTransport = Transport
@@ -65,6 +72,22 @@ export class KernelSmartContractAccount<
     data: Hex
   ): Promise<Hex> {
     return this.encodeExecuteAction(target, value, data, 1);
+  }
+
+  override async encodeBatchExecute(
+    _txs: BatchUserOperationCallData
+  ): Promise<`0x${string}`> {
+    const _kerneltxs: KernelBatchUserOperationCallData =
+      transformToKernelBatch(_txs);
+    console.log(_kerneltxs);
+    const multiSendData =
+      "0x" + _kerneltxs.map((tx) => encodeCall(tx)).join("");
+    console.log(multiSendData);
+    return encodeFunctionData({
+      abi: MultiSendAbi,
+      functionName: "multiSend",
+      args: [multiSendData],
+    });
   }
 
   async signWithEip6492(msg: string | Uint8Array): Promise<Hex> {
