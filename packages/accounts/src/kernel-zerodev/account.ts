@@ -19,9 +19,8 @@ import {
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import { BatchUserOperationCallData } from "@alchemy/aa-core/src";
-import { KernelBatchUserOperationCallData } from "./types";
 import { MultiSendAbi } from "./abis/MultiSendAbi";
-import { encodeCall, transformToKernelBatch } from "./utils";
+import { encodeCall } from "./utils";
 
 export interface KernelSmartAccountParams<
   TTransport extends Transport | FallbackTransport = Transport
@@ -74,12 +73,7 @@ export class KernelSmartContractAccount<
   override async encodeBatchExecute(
     _txs: BatchUserOperationCallData
   ): Promise<`0x${string}`> {
-    const _kerneltxs: KernelBatchUserOperationCallData =
-      transformToKernelBatch(_txs);
-    console.log(_kerneltxs);
-    const multiSendData =
-      "0x" + _kerneltxs.map((tx) => encodeCall(tx)).join("");
-    console.log(multiSendData);
+    const multiSendData = "0x" + _txs.map((tx) => encodeCall(tx)).join("");
     return encodeFunctionData({
       abi: MultiSendAbi,
       functionName: "multiSend",

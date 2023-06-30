@@ -1,9 +1,5 @@
 import { encodePacked, toBytes } from "viem";
-import { BatchUserOperationCallData } from "@alchemy/aa-core";
-import {
-  KernelBatchUserOperationCallData,
-  KernelUserOperationCallData,
-} from "./types";
+import { KernelUserOperationCallData } from "./types";
 
 export const encodeCall = (call: KernelUserOperationCallData): string => {
   const data = toBytes(call.data);
@@ -12,22 +8,10 @@ export const encodeCall = (call: KernelUserOperationCallData): string => {
     [
       call.delegateCall ? 1 : 0,
       call.target,
-      call.value || 0,
+      call.value || BigInt(0),
       data.length,
       call.data,
     ]
   );
   return encoded.slice(2);
 };
-
-export function transformToKernelBatch(
-  data: BatchUserOperationCallData
-): KernelBatchUserOperationCallData {
-  return data.map((item) => {
-    if (!("delegateCall" in item)) {
-      return { ...item, delegateCall: false };
-    } else {
-      return item;
-    }
-  });
-}
