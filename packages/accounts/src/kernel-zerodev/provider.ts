@@ -6,7 +6,7 @@ export class KernelAccountProvider extends SmartAccountProvider<HttpTransport> {
     if (!this.account) {
       throw new Error("account not connected!");
     }
-    // @ts-ignore
+    // @ts-expect-error: signWith6492 exists only on kernel account which is expected
     return this.account.signWithEip6492(msg);
   };
 }
