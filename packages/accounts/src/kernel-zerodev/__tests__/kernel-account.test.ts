@@ -1,4 +1,7 @@
-import {type BatchUserOperationCallData, PrivateKeySigner} from "@alchemy/aa-core";
+import {
+  type BatchUserOperationCallData,
+  PrivateKeySigner,
+} from "@alchemy/aa-core";
 import {
   encodeAbiParameters,
   parseAbiParameters,
@@ -13,7 +16,7 @@ import {
 import { KernelAccountProvider } from "../provider";
 import { KernelBaseValidator, ValidatorMode } from "../validator/base";
 import { MockSigner } from "./mocks/mock-signer";
-import type {KernelUserOperationCallData} from "../types";
+import type { KernelUserOperationCallData } from "../types";
 
 describe("Kernel Account Tests", () => {
   //any wallet should work
@@ -167,45 +170,46 @@ describe("Kernel Account Tests", () => {
   });
 
   it("sendUserOperation should fail to execute if gas fee not present", async () => {
-      let signerWithProvider =  connect(1000n)
+    let signerWithProvider = connect(1000n);
 
+    const result = signerWithProvider.sendUserOperation({
+      target: await signerWithProvider.getAddress(),
+      data: "0x",
+    });
 
-      const result = signerWithProvider.sendUserOperation({
-          target: await signerWithProvider.getAddress(),
-          data: "0x",
-      });
-
-      await expect(result).rejects.toThrowError(/sender balance and deposit together is 0/);
+    await expect(result).rejects.toThrowError(
+      /sender balance and deposit together is 0/
+    );
   });
 
   // Only work if you have deposited some matic balance for counterfactual address at entrypoint
   it("sendUserOperation should execute properly", async () => {
-      //
-      let signerWithProvider =  connect(0n,owner)
+    //
+    let signerWithProvider = connect(0n, owner);
 
-      const result = signerWithProvider.sendUserOperation({
-          target: await signerWithProvider.getAddress(),
-          data: "0x",
-          value: 0n
-      });
-      await expect(result).resolves.not.toThrowError();
-  },10000);
+    const result = signerWithProvider.sendUserOperation({
+      target: await signerWithProvider.getAddress(),
+      data: "0x",
+      value: 0n,
+    });
+    await expect(result).resolves.not.toThrowError();
+  }, 10000);
 
   it("sendUserOperation batch should execute properly", async () => {
-      let signerWithProvider = connect(0n, owner)
-      const request: KernelUserOperationCallData = {
-          target: await signerWithProvider.getAddress(),
-          data: "0x",
-          value: 100000000n
-      }
-      const request2: KernelUserOperationCallData = {
-          target: await signerWithProvider.getAddress(),
-          data: "0x",
-          value: 200000000n
-      }
-      const requests: BatchUserOperationCallData = [request, request2]
-      const result = signerWithProvider.sendUserOperation(requests);
-      await expect(result).resolves.not.toThrowError();
+    let signerWithProvider = connect(0n, owner);
+    const request: KernelUserOperationCallData = {
+      target: await signerWithProvider.getAddress(),
+      data: "0x",
+      value: 100000000n,
+    };
+    const request2: KernelUserOperationCallData = {
+      target: await signerWithProvider.getAddress(),
+      data: "0x",
+      value: 200000000n,
+    };
+    const requests: BatchUserOperationCallData = [request, request2];
+    const result = signerWithProvider.sendUserOperation(requests);
+    await expect(result).resolves.not.toThrowError();
   }, 20000);
 
   //non core functions
