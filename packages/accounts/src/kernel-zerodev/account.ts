@@ -73,9 +73,9 @@ export class KernelSmartContractAccount<
   override async encodeBatchExecute(
     _txs: BatchUserOperationCallData
   ): Promise<`0x${string}`> {
-    // @ts-ignore
-    const multiSendData: `0x${string}` =
-      "0x" + _txs.map((tx) => encodeCall(tx)).join("");
+    const multiSendData: `0x${string}` = concatHex(
+      _txs.map((tx) => encodeCall(tx))
+    );
     return encodeFunctionData({
       abi: MultiSendAbi,
       functionName: "multiSend",

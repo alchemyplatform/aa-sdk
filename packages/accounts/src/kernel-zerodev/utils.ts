@@ -1,9 +1,9 @@
-import { encodePacked, toBytes } from "viem";
+import { encodePacked, Hex, toBytes } from "viem";
 import type { KernelUserOperationCallData } from "./types";
 
-export const encodeCall = (call: KernelUserOperationCallData): string => {
+export const encodeCall = (call: KernelUserOperationCallData): Hex => {
   const data = toBytes(call.data);
-  const encoded = encodePacked(
+  return encodePacked(
     ["uint8", "address", "uint256", "uint256", "bytes"],
     [
       call.delegateCall ? 1 : 0,
@@ -13,5 +13,4 @@ export const encodeCall = (call: KernelUserOperationCallData): string => {
       call.data,
     ]
   );
-  return encoded.slice(2);
 };
