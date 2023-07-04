@@ -1,4 +1,5 @@
-import { encodePacked, Hex, toBytes } from "viem";
+import { encodePacked, toBytes } from "viem";
+import type { Hex } from "viem";
 import type { KernelUserOperationCallData } from "./types";
 
 export const encodeCall = (call: KernelUserOperationCallData): Hex => {
