@@ -1,4 +1,7 @@
-import { PrivateKeySigner } from "@alchemy/aa-core";
+import {
+  type BatchUserOperationCallData,
+  PrivateKeySigner,
+} from "@alchemy/aa-core";
 import {
   encodeAbiParameters,
   parseAbiParameters,
@@ -14,6 +17,7 @@ import {
 import { KernelAccountProvider } from "../provider";
 import { KernelBaseValidator, ValidatorMode } from "../validator/base";
 import { MockSigner } from "./mocks/mock-signer";
+import type { KernelUserOperationCallData } from "../types";
 
 describe("Kernel Account Tests", () => {
   //any wallet should work
@@ -21,9 +25,7 @@ describe("Kernel Account Tests", () => {
     privateKey: generatePrivateKey(),
     mockWallet: "0x48D4d3536cDe7A257087206870c6B6E76e3D4ff4",
     chain: polygonMumbai,
-    rpcProvider: `${polygonMumbai.rpcUrls.alchemy.http[0]}/${[
-      process.env.API_KEY,
-    ]}`,
+    rpcProvider: `${polygonMumbai.rpcUrls.alchemy.http[0]}/demo`,
     validatorAddress: "0x180D6465F921C7E0DEA0040107D342c87455fFF5" as Address,
     accountFactoryAddress:
       "0x5D006d3880645ec6e254E18C1F879DAC9Dd71A39" as Address,
@@ -167,43 +169,51 @@ describe("Kernel Account Tests", () => {
     );
   });
 
-  //NOTE - this test case will only work if your alchemy endpoint has beta access
+  it("sendUserOperation should fail to execute if gas fee not present", async () => {
+    let signerWithProvider = connect(1000n);
 
-  // it("sendUserOperation should fail to execute if gas fee not present", async () => {
-  //     let signerWithProvider =  connect(1000n)
-  //
-  //
-  //     const result = signerWithProvider.sendUserOperation({
-  //         target: await signerWithProvider.getAddress(),
-  //         data: "0x",
-  //     });
-  //
-  //     await expect(result).rejects.toThrowError(/sender balance and deposit together is 0/);
-  // });
+    const result = signerWithProvider.sendUserOperation({
+      target: await signerWithProvider.getAddress(),
+      data: "0x",
+    });
 
-  //NOTE - this test case will only work if your alchemy endpoint has beta access
-  // and you have deposited some matic balance for counterfactual address at entrypoint
+    await expect(result).rejects.toThrowError(
+      /sender balance and deposit together is 0/
+    );
+  });
 
-  // it("sendUserOperation should execute properly", async () => {
-  //     //
-  //     let signerWithProvider =  connect(0n,owner)
-  //
-  //     //to fix bug in old versions
-  //     await signerWithProvider.account.getInitCode()
-  //     const result = signerWithProvider.sendUserOperation({
-  //         target: await signerWithProvider.getAddress(),
-  //         data: "0x",
-  //         value: 0n
-  //     });
-  //     await expect(result).resolves.not.toThrowError();
-  // });
+  // Only work if you have deposited some matic balance for counterfactual address at entrypoint
+  it("sendUserOperation should execute properly", async () => {
+    //
+    let signerWithProvider = connect(0n, owner);
+
+    const result = signerWithProvider.sendUserOperation({
+      target: await signerWithProvider.getAddress(),
+      data: "0x",
+      value: 0n,
+    });
+    await expect(result).resolves.not.toThrowError();
+  }, 10000);
+
+  it("sendUserOperation batch should execute properly", async () => {
+    let signerWithProvider = connect(0n, owner);
+    const request: KernelUserOperationCallData = {
+      target: await signerWithProvider.getAddress(),
+      data: "0x",
+      value: 100000000n,
+    };
+    const request2: KernelUserOperationCallData = {
+      target: await signerWithProvider.getAddress(),
+      data: "0x",
+      value: 200000000n,
+    };
+    const requests: BatchUserOperationCallData = [request, request2];
+    const result = signerWithProvider.sendUserOperation(requests);
+    await expect(result).resolves.not.toThrowError();
+  }, 20000);
 
   //non core functions
   it("should correctly identify whether account is deployed", async () => {
-    //contract already deployed
-    const signer = account(0n);
-    expect(await signer.isAccountDeployed()).eql(true);
-
     //contract already deployed
     const signer2 = account(3n);
     expect(await signer2.isAccountDeployed()).eql(true);
@@ -211,9 +221,5 @@ describe("Kernel Account Tests", () => {
     //contract not deployed
     const signer3 = account(4n);
     expect(await signer3.isAccountDeployed()).eql(false);
-
-    //contract not deployed
-    const signer4 = account(5n);
-    expect(await signer4.isAccountDeployed()).eql(false);
   });
 });

@@ -9,6 +9,10 @@ export {
   KernelBaseValidator,
 } from "./kernel-zerodev/validator/base";
 export type { KernelBaseValidatorParams } from "./kernel-zerodev/validator/base";
+export type {
+  KernelBatchUserOperationCallData,
+  KernelUserOperationCallData,
+} from "./kernel-zerodev/types";
 export type { KernelSmartAccountParams } from "./kernel-zerodev/account";
 export { KernelSmartContractAccount } from "./kernel-zerodev/account";
 export { KernelAccountProvider } from "./kernel-zerodev/provider";
