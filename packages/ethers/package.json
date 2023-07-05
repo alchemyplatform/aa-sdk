@@ -1,7 +1,7 @@
 {
   "name": "@alchemy/aa-ethers",
   "license": "MIT",
-  "version": "0.1.0-alpha.14",
+  "version": "0.1.0-alpha.15",
   "description": "Ethers.js wrapper for @alchemy/aa-core",
   "author": "Alchemy",
   "type": "module",
@@ -41,7 +41,7 @@
     "test:run": "vitest run"
   },
   "devDependencies": {
-    "@alchemy/aa-core": "^0.1.0-alpha.14",
+    "@alchemy/aa-core": "^0.1.0-alpha.15",
     "alchemy-sdk": "^2.8.3",
     "dotenv": "^16.0.3",
     "typescript": "^5.0.4",
