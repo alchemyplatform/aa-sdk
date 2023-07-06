@@ -2,17 +2,17 @@
 // Don't use wildcard exports, instead use named exports
 
 //kernel exports
-export { KernelFactoryAbi } from "./kernel-zerodev/abis/KernelFactoryAbi";
-export { KernelAccountAbi } from "./kernel-zerodev/abis/KernelAccountAbi";
-export {
-  ValidatorMode,
-  KernelBaseValidator,
-} from "./kernel-zerodev/validator/base";
-export type { KernelBaseValidatorParams } from "./kernel-zerodev/validator/base";
+export { KernelAccountAbi } from "./kernel-zerodev/abis/KernelAccountAbi.js";
+export { KernelFactoryAbi } from "./kernel-zerodev/abis/KernelFactoryAbi.js";
+export { KernelSmartContractAccount } from "./kernel-zerodev/account.js";
+export type { KernelSmartAccountParams } from "./kernel-zerodev/account.js";
+export { KernelAccountProvider } from "./kernel-zerodev/provider.js";
 export type {
   KernelBatchUserOperationCallData,
   KernelUserOperationCallData,
-} from "./kernel-zerodev/types";
-export type { KernelSmartAccountParams } from "./kernel-zerodev/account";
-export { KernelSmartContractAccount } from "./kernel-zerodev/account";
-export { KernelAccountProvider } from "./kernel-zerodev/provider";
+} from "./kernel-zerodev/types.js";
+export {
+  KernelBaseValidator,
+  ValidatorMode,
+} from "./kernel-zerodev/validator/base.js";
+export type { KernelBaseValidatorParams } from "./kernel-zerodev/validator/base.js";

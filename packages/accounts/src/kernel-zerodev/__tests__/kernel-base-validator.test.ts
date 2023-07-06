@@ -1,5 +1,5 @@
-import { KernelBaseValidator, ValidatorMode } from "../validator/base";
-import { MockSignerValidator } from "./mocks/mock-signer-validator";
+import { KernelBaseValidator, ValidatorMode } from "../validator/base.js";
+import { MockSignerValidator } from "./mocks/mock-signer-validator.js";
 
 describe("Base Validator Test", () => {
   const dummyAddress = "0xabcfC3DB1e0f5023F5a4f40c03D149f316E6A5cc";
