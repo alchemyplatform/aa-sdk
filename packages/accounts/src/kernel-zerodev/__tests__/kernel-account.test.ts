@@ -1,6 +1,6 @@
 import {
-  type BatchUserOperationCallData,
   PrivateKeySigner,
+  type BatchUserOperationCallData,
 } from "@alchemy/aa-core";
 import {
   encodeAbiParameters,
@@ -13,11 +13,11 @@ import { polygonMumbai } from "viem/chains";
 import {
   KernelSmartContractAccount,
   type KernelSmartAccountParams,
-} from "../account";
-import { KernelAccountProvider } from "../provider";
-import { KernelBaseValidator, ValidatorMode } from "../validator/base";
-import { MockSigner } from "./mocks/mock-signer";
-import type { KernelUserOperationCallData } from "../types";
+} from "../account.js";
+import { KernelAccountProvider } from "../provider.js";
+import type { KernelUserOperationCallData } from "../types.js";
+import { KernelBaseValidator, ValidatorMode } from "../validator/base.js";
+import { MockSigner } from "./mocks/mock-signer.js";
 
 describe("Kernel Account Tests", () => {
   //any wallet should work

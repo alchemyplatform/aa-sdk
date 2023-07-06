@@ -1,6 +1,6 @@
-import type { Hash, HttpTransport } from "viem";
 import { SmartAccountProvider } from "@alchemy/aa-core";
-import { KernelSmartContractAccount } from "./account";
+import type { Hash, HttpTransport } from "viem";
+import { KernelSmartContractAccount } from "./account.js";
 
 export class KernelAccountProvider extends SmartAccountProvider<HttpTransport> {
   signMessage = async (msg: string | Uint8Array): Promise<Hash> => {

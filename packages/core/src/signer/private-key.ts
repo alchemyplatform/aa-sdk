@@ -1,5 +1,5 @@
 import { type PrivateKeyAccount } from "viem";
-import { LocalAccountSigner } from "./local-account";
+import { LocalAccountSigner } from "./local-account.js";
 
 /**
  * @deprecated use LocalAccountSigner instead

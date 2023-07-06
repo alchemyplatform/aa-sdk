@@ -22,6 +22,7 @@
     "@commitlint/config-conventional": "^17.6.3",
     "eslint": "^8.39.0",
     "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin-import": "^2.27.5",
     "husky": "^8.0.0",
     "lerna": "^6.6.1",
     "lint-staged": "^13.2.2",
@@ -37,7 +38,20 @@
   "eslintConfig": {
     "extends": [
       "react-app"
-    ]
+    ],
+    "env": {
+      "es2021": true,
+      "node": true
+    },
+    "parserOptions": {
+      "sourceType": "module"
+    },
+    "rules": {
+      "import/extensions": [
+        "error",
+        "ignorePackages"
+      ]
+    }
   },
   "husky": {
     "hooks": {
