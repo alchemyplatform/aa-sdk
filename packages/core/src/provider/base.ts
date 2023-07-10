@@ -190,11 +190,12 @@ export class SmartAccountProvider<
 
   waitForUserOperationTransaction = async (hash: Hash): Promise<Hash> => {
     for (let i = 0; i < this.txMaxRetries; i++) {
+      const txRetryIntervalWithJitterMs =
+        this.txRetryIntervalMs * Math.pow(this.txRetryMulitplier, i) +
+        Math.random() * 100;
+
       await new Promise((resolve) =>
-        setTimeout(
-          resolve,
-          this.txRetryIntervalMs * Math.pow(this.txRetryMulitplier, i)
-        )
+        setTimeout(resolve, txRetryIntervalWithJitterMs)
       );
       const receipt = await this.getUserOperationReceipt(hash as `0x${string}`)
         // TODO: should maybe log the error?
