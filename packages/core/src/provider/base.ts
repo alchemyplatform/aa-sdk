@@ -5,6 +5,7 @@ import {
   type Hash,
   type RpcTransactionRequest,
   type Transport,
+  type Transaction,
 } from "viem";
 import { arbitrum, arbitrumGoerli } from "viem/chains";
 import { BaseSmartContractAccount } from "../account/base.js";
@@ -43,17 +44,22 @@ export const noOpMiddleware: AccountMiddlewareFn = async (
 ) => struct;
 export interface SmartAccountProviderOpts {
   /**
-   * The maximum number of times tot try fetching a transaction receipt before giving up
+   * The maximum number of times to try fetching a transaction receipt before giving up (default: 5)
    */
   txMaxRetries?: number;
 
   /**
-   * The interval in milliseconds to wait between retries while waiting for tx receipts
+   * The interval in milliseconds to wait between retries while waiting for tx receipts (default: 2_000n)
    */
   txRetryIntervalMs?: number;
 
   /**
-   * used when computing the fees for a user operation (default: 1000000000n)
+   * The mulitplier on interval length to wait between retries while waiting for tx receipts (default: 1.5)
+   */
+  txRetryMulitplier?: number;
+
+  /**
+   * used when computing the fees for a user operation (default: 100_000_000n)
    */
   minPriorityFeePerBid?: bigint;
 }
@@ -75,6 +81,8 @@ export class SmartAccountProvider<
 {
   private txMaxRetries: number;
   private txRetryIntervalMs: number;
+  private txRetryMulitplier: number;
+
   minPriorityFeePerBid: bigint;
   rpcClient: PublicErc4337Client<Transport>;
 
@@ -87,6 +95,8 @@ export class SmartAccountProvider<
   ) {
     this.txMaxRetries = opts?.txMaxRetries ?? 5;
     this.txRetryIntervalMs = opts?.txRetryIntervalMs ?? 2000;
+    this.txRetryMulitplier = opts?.txRetryMulitplier ?? 1.5;
+
     this.minPriorityFeePerBid =
       opts?.minPriorityFeePerBid ??
       minPriorityFeePerBidDefaults.get(chain.id) ??
@@ -180,17 +190,20 @@ export class SmartAccountProvider<
 
   waitForUserOperationTransaction = async (hash: Hash): Promise<Hash> => {
     for (let i = 0; i < this.txMaxRetries; i++) {
+      const txRetryIntervalWithJitterMs =
+        this.txRetryIntervalMs * Math.pow(this.txRetryMulitplier, i) +
+        Math.random() * 100;
+
       await new Promise((resolve) =>
-        setTimeout(resolve, this.txRetryIntervalMs)
+        setTimeout(resolve, txRetryIntervalWithJitterMs)
       );
-      const receipt = await this.rpcClient
-        .getUserOperationReceipt(hash as `0x${string}`)
+      const receipt = await this.getUserOperationReceipt(hash as `0x${string}`)
         // TODO: should maybe log the error?
         .catch(() => null);
       if (receipt) {
-        return this.rpcClient
-          .getTransaction({ hash: receipt.receipt.transactionHash })
-          .then((x) => x.hash);
+        return this.getTransaction(receipt.receipt.transactionHash).then(
+          (x) => x.hash
+        );
       }
     }
 
@@ -203,6 +216,10 @@ export class SmartAccountProvider<
 
   getUserOperationReceipt = (hash: Hash): Promise<UserOperationReceipt> => {
     return this.rpcClient.getUserOperationReceipt(hash);
+  };
+
+  getTransaction = (hash: Hash): Promise<Transaction> => {
+    return this.rpcClient.getTransaction({ hash: hash });
   };
 
   sendUserOperation = async (
