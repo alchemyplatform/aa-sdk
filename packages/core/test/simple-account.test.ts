@@ -4,10 +4,10 @@ import { polygonMumbai } from "viem/chains";
 import {
   SimpleSmartContractAccount,
   type SimpleSmartAccountOwner,
-} from "../account/simple.js";
-import { SmartAccountProvider } from "../provider/base.js";
-import { LocalAccountSigner } from "../signer/local-account.js";
-import type { BatchUserOperationCallData } from "../types.js";
+} from "../src/account/simple.js";
+import { SmartAccountProvider } from "../src/provider/base.js";
+import { LocalAccountSigner } from "../src/signer/local-account.js";
+import type { BatchUserOperationCallData } from "../src/types.js";
 
 const ENTRYPOINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
 const API_KEY = process.env.API_KEY!;

@@ -1,8 +1,8 @@
 import { getChain, SimpleSmartContractAccount } from "@alchemy/aa-core";
 import { Wallet } from "@ethersproject/wallet";
 import { Alchemy, Network } from "alchemy-sdk";
-import { EthersProviderAdapter } from "../provider-adapter.js";
-import { convertWalletToAccountSigner } from "../utils.js";
+import { EthersProviderAdapter } from "../src/provider-adapter.js";
+import { convertWalletToAccountSigner } from "../src/utils.js";
 
 const ENTRYPOINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
 const API_KEY = process.env.API_KEY!;
