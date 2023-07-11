@@ -8,8 +8,8 @@ import {
   vi,
   type SpyInstance,
 } from "vitest";
-import { SmartAccountProvider } from "../provider/base.js";
-import type { UserOperationReceipt } from "../types.js";
+import { SmartAccountProvider } from "../base.js";
+import type { UserOperationReceipt } from "../../types.js";
 
 describe("Base Tests", () => {
   let retryMsDelays: number[] = [];

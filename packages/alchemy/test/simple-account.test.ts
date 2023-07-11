@@ -6,7 +6,7 @@ import {
 import { toHex } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
-import { AlchemyProvider } from "../provider.js";
+import { AlchemyProvider } from "../src/provider.js";
 
 const ENTRYPOINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
 const API_KEY = process.env.API_KEY!;
