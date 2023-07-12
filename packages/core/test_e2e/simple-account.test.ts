@@ -1,35 +1,28 @@
+import { isAddress } from "viem";
+import { generatePrivateKey } from "viem/accounts";
+import { polygonMumbai } from "viem/chains";
 import {
   SimpleSmartContractAccount,
-  type BatchUserOperationCallData,
   type SimpleSmartAccountOwner,
-} from "@alchemy/aa-core";
-import { toHex } from "viem";
-import { mnemonicToAccount } from "viem/accounts";
-import { polygonMumbai } from "viem/chains";
-import { AlchemyProvider } from "../src/provider.js";
+} from "../src/account/simple.js";
+import { SmartAccountProvider } from "../src/provider/base.js";
+import { LocalAccountSigner } from "../src/signer/local-account.js";
+import type { BatchUserOperationCallData } from "../src/types.js";
+import { API_KEY, OWNER_MNEMONIC } from "./constants.js";
 
 const ENTRYPOINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
-const API_KEY = process.env.API_KEY!;
-const OWNER_MNEMONIC = process.env.OWNER_MNEMONIC!;
-const PAYMASTER_POLICY_ID = process.env.PAYMASTER_POLICY_ID!;
 const SIMPLE_ACCOUNT_FACTORY_ADDRESS =
   "0x9406Cc6185a346906296840746125a0E44976454";
 
 describe("Simple Account Tests", () => {
-  const ownerAccount = mnemonicToAccount(OWNER_MNEMONIC);
-  const owner: SimpleSmartAccountOwner = {
-    signMessage: async (msg) =>
-      ownerAccount.signMessage({
-        message: { raw: toHex(msg) },
-      }),
-    getAddress: async () => ownerAccount.address,
-  };
+  const owner: SimpleSmartAccountOwner =
+    LocalAccountSigner.mnemonicToAccountSigner(OWNER_MNEMONIC);
   const chain = polygonMumbai;
-  const signer = new AlchemyProvider({
-    apiKey: API_KEY,
-    chain,
-    entryPointAddress: ENTRYPOINT_ADDRESS,
-  }).connect(
+  const signer = new SmartAccountProvider(
+    `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
+    ENTRYPOINT_ADDRESS,
+    chain
+  ).connect(
     (provider) =>
       new SimpleSmartContractAccount({
         entryPointAddress: ENTRYPOINT_ADDRESS,
@@ -68,11 +61,11 @@ describe("Simple Account Tests", () => {
 
   it("should fail to execute if account address is not deployed and not correct", async () => {
     const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
-    const newSigner = new AlchemyProvider({
-      apiKey: API_KEY,
-      chain,
-      entryPointAddress: ENTRYPOINT_ADDRESS,
-    }).connect(
+    const newSigner = new SmartAccountProvider(
+      `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
+      ENTRYPOINT_ADDRESS,
+      chain
+    ).connect(
       (provider) =>
         new SimpleSmartContractAccount({
           entryPointAddress: ENTRYPOINT_ADDRESS,
@@ -92,25 +85,6 @@ describe("Simple Account Tests", () => {
     await expect(result).rejects.toThrowError();
   });
 
-  it("should successfully execute with alchemy paymaster info", async () => {
-    // TODO: this is super hacky right now
-    // we have to wait for the test above to run and be confirmed so that this one submits successfully using the correct nonce
-    // one way we could do this is by batching the two UOs together
-    await new Promise((resolve) => setTimeout(resolve, 7500));
-    const newSigner = signer.withAlchemyGasManager({
-      provider: signer.rpcClient,
-      policyId: PAYMASTER_POLICY_ID,
-      entryPoint: ENTRYPOINT_ADDRESS,
-    });
-
-    const result = newSigner.sendUserOperation({
-      target: await newSigner.getAddress(),
-      data: "0x",
-    });
-
-    await expect(result).resolves.not.toThrowError();
-  }, 10000);
-
   it("should correctly encode batch transaction data", async () => {
     const account = signer.account;
     const data = [
@@ -127,5 +101,29 @@ describe("Simple Account Tests", () => {
     expect(await account.encodeBatchExecute(data)).toMatchInlineSnapshot(
       '"0x18dfb3c7000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000002000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef0000000000000000000000008ba1f109551bd432803012645ac136ddd64dba720000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000004deadbeef000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004cafebabe00000000000000000000000000000000000000000000000000000000"'
     );
+  });
+
+  it("should get counterfactual for undeployed account", async () => {
+    const owner = LocalAccountSigner.privateKeyToAccountSigner(
+      generatePrivateKey()
+    );
+    const provider = new SmartAccountProvider(
+      `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
+      ENTRYPOINT_ADDRESS,
+      chain
+    ).connect(
+      (rpcClient) =>
+        new SimpleSmartContractAccount({
+          entryPointAddress: ENTRYPOINT_ADDRESS,
+          chain,
+          owner,
+          factoryAddress: SIMPLE_ACCOUNT_FACTORY_ADDRESS,
+          rpcClient,
+        })
+    );
+
+    const address = provider.getAddress();
+    await expect(address).resolves.not.toThrowError();
+    expect(isAddress(await address)).toBe(true);
   });
 });
