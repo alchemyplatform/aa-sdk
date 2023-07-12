@@ -1,6 +1,6 @@
-import { configDefaults, defineConfig } from "vitest/dist/config";
+import { configDefaults, defineProject } from "vitest/dist/config";
 
-export default defineConfig({
+export default defineProject({
   test: {
     singleThread: true,
     globals: true,
