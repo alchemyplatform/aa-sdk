@@ -1,8 +1,6 @@
 name: Run checks on Pull Requests
 on:
   pull_request:
-    # branches:
-    #   - main
 
 jobs:
   enforce_title:
