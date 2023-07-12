@@ -23,8 +23,8 @@ jobs:
       - name: Use commitlint to check PR title
         run: echo "${{ github.event.pull_request.title }}" | yarn commitlint
 
-  build_and_lint:
-    name: Lint and Build
+  build_and_lint_and_test:
+    name: Lint and Build and Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
