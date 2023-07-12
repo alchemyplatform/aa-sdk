@@ -38,8 +38,12 @@ jobs:
 
       # TODO: we still need to make the tests work in CI environments
       # will come back to this
-      # - name: Test
-      #   run: yarn test
+      - name: E2E Test
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+          OWNER_MNEMONIC: ${{ secrets.OWNER_MNEMONIC }}
+          PAYMASTER_POLICY_ID: ${{ secrets.PAYMASTER_POLICY_ID }}
+        run: yarn test:e2e
 
       # Lerna publish will, compute the new version, update files, run precommit hooks, tag, publish, and push change log
       - name: Publish using Lerna
