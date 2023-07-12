@@ -36,8 +36,6 @@ jobs:
       - name: Build
         run: yarn build
 
-      # TODO: we still need to make the tests work in CI environments
-      # will come back to this
       - name: E2E Test
         env:
           API_KEY: ${{ secrets.API_KEY }}
