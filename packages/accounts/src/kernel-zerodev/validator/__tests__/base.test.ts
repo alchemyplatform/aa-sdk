@@ -1,4 +1,4 @@
-import { KernelBaseValidator, ValidatorMode } from "../validator/base.js";
+import { KernelBaseValidator, ValidatorMode } from "../base.js";
 import { MockSignerValidator } from "./mocks/mock-signer-validator.js";
 
 describe("Base Validator Test", () => {

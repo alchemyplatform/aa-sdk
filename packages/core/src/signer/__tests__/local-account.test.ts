@@ -1,4 +1,4 @@
-import { LocalAccountSigner } from "./local-account.js";
+import { LocalAccountSigner } from "../local-account.js";
 
 describe("Local Account Signer Tests", () => {
   describe("Using HD Account", () => {
