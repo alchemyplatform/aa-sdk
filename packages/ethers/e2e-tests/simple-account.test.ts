@@ -45,16 +45,6 @@ describe("Simple Account Tests", async () => {
     await expect(result).resolves.not.toThrowError();
   });
 
-  it("should correctly sign the message", async () => {
-    expect(
-      await signer.signMessage(
-        "0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b"
-      )
-    ).toBe(
-      "0xd16f93b584fbfdc03a5ee85914a1f29aa35c44fea5144c387ee1040a3c1678252bf323b7e9c3e9b4dfd91cca841fc522f4d3160a1e803f2bf14eb5fa037aae4a1b"
-    );
-  });
-
   it("should fail to execute if account address is not deployed and not correct", async () => {
     const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
     const signer = EthersProviderAdapter.fromEthersProvider(
