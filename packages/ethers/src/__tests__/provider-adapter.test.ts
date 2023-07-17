@@ -1,8 +1,7 @@
 import { getChain, SimpleSmartContractAccount } from "@alchemy/aa-core";
-import { Wallet } from "@ethersproject/wallet";
 import { Alchemy, Network } from "alchemy-sdk";
 import { EthersProviderAdapter } from "../../src/provider-adapter.js";
-import { convertWalletToAccountSigner } from "../../src/utils.js";
+import { MockSigner } from "./mocks/mocks.js";
 
 describe("Simple Account Tests", async () => {
   const alchemy = new Alchemy({
@@ -10,9 +9,6 @@ describe("Simple Account Tests", async () => {
     network: Network.MATIC_MUMBAI,
   });
   const alchemyProvider = await alchemy.config.getProvider();
-  const dummyMnemonic =
-    "test test test test test test test test test test test test";
-  const owner = Wallet.fromMnemonic(dummyMnemonic);
   const signer = EthersProviderAdapter.fromEthersProvider(
     alchemyProvider,
     "0xENTRYPOINT_ADDRESS"
@@ -21,7 +17,7 @@ describe("Simple Account Tests", async () => {
       new SimpleSmartContractAccount({
         entryPointAddress: "0xENTRYPOINT_ADDRESS",
         chain: getChain(alchemyProvider.network.chainId),
-        owner: convertWalletToAccountSigner(owner),
+        owner: new MockSigner(),
         factoryAddress: "0xSIMPLE_ACCOUNT_FACTORY_ADDRESS",
         rpcClient,
       })
