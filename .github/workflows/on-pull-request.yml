@@ -43,4 +43,4 @@ jobs:
         run: yarn build
 
       - name: Unit Test
-        run: yarn test:unit
+        run: yarn test
