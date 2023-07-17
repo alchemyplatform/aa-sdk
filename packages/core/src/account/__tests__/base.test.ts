@@ -3,12 +3,12 @@ import { describe, it } from "vitest";
 import {
   SimpleSmartContractAccount,
   type SimpleSmartAccountOwner,
-} from "../../account/simple.js";
+} from "../simple.js";
 import { LocalAccountSigner } from "../../signer/local-account.js";
 import type { BatchUserOperationCallData } from "../../types.js";
 import { SmartAccountProvider } from "../../provider/base.js";
 
-describe("Base Provider Tests", () => {
+describe("Account Base Tests", () => {
   const dummyMnemonic =
     "test test test test test test test test test test test test";
   const owner: SimpleSmartAccountOwner =
