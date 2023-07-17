@@ -1,13 +1,18 @@
 import { getChain, SimpleSmartContractAccount } from "@alchemy/aa-core";
+import { Wallet } from "@ethersproject/wallet";
 import { Alchemy, Network } from "alchemy-sdk";
 import { EthersProviderAdapter } from "../../src/provider-adapter.js";
-import { MockSigner } from "./mocks/mock-signer.js";
+import { convertWalletToAccountSigner } from "../utils.js";
 
 describe("Simple Account Tests", async () => {
   const alchemy = new Alchemy({
     apiKey: "test",
     network: Network.MATIC_MUMBAI,
   });
+  // demo mnemonic from viem docs
+  const dummyMnemonic =
+    "legal winner thank year wave sausage worth useful legal winner thank yellow";
+  const owner = Wallet.fromMnemonic(dummyMnemonic);
   const alchemyProvider = await alchemy.config.getProvider();
   const signer = EthersProviderAdapter.fromEthersProvider(
     alchemyProvider,
@@ -17,7 +22,7 @@ describe("Simple Account Tests", async () => {
       new SimpleSmartContractAccount({
         entryPointAddress: "0xENTRYPOINT_ADDRESS",
         chain: getChain(alchemyProvider.network.chainId),
-        owner: new MockSigner(),
+        owner: convertWalletToAccountSigner(owner),
         factoryAddress: "0xSIMPLE_ACCOUNT_FACTORY_ADDRESS",
         rpcClient,
       })
@@ -29,7 +34,7 @@ describe("Simple Account Tests", async () => {
         "0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b"
       )
     ).toBe(
-      "0x4d61c5c27fb64b207cbf3bcf60d78e725659cff5f93db9a1316162117dff72aa631761619d93d4d97dfb761ba00b61f9274c6a4a76e494df644d968dd84ddcdb1c"
+      "0xbfe07c95623df55ae939ddf4757563286472ef8c0ebe4b84d5e774a653b7eb67735cb5b63d15bb18510d64a97e6e3001a5f9818f89f2f7f076e559248a7ccf7d1c"
     );
   });
 });
