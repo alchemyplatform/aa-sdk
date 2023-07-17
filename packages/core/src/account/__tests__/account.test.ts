@@ -1,30 +1,24 @@
+import { polygonMumbai } from "viem/chains";
+import { describe, it } from "vitest";
 import {
   SimpleSmartContractAccount,
-  type BatchUserOperationCallData,
   type SimpleSmartAccountOwner,
-} from "@alchemy/aa-core";
-import { toHex } from "viem";
-import { mnemonicToAccount } from "viem/accounts";
-import { polygonMumbai } from "viem/chains";
-import { AlchemyProvider } from "../provider.js";
+} from "../../account/simple.js";
+import { LocalAccountSigner } from "../../signer/local-account.js";
+import type { BatchUserOperationCallData } from "../../types.js";
+import { SmartAccountProvider } from "../../provider/base.js";
 
-describe("Simple Account Tests", () => {
+describe("Base Provider Tests", () => {
   const dummyMnemonic =
     "test test test test test test test test test test test test";
-  const ownerAccount = mnemonicToAccount(dummyMnemonic);
-  const owner: SimpleSmartAccountOwner = {
-    signMessage: async (msg) =>
-      ownerAccount.signMessage({
-        message: { raw: toHex(msg) },
-      }),
-    getAddress: async () => ownerAccount.address,
-  };
+  const owner: SimpleSmartAccountOwner =
+    LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
   const chain = polygonMumbai;
-  const signer = new AlchemyProvider({
-    apiKey: "test",
-    chain,
-    entryPointAddress: "0xENTRYPOINT_ADDRESS",
-  }).connect(
+  const signer = new SmartAccountProvider(
+    `${chain.rpcUrls.alchemy.http[0]}/${"test"}`,
+    "0xENTRYPOINT_ADDRESS",
+    chain
+  ).connect(
     (provider) =>
       new SimpleSmartContractAccount({
         entryPointAddress: "0xENTRYPOINT_ADDRESS",
