@@ -1,6 +1,6 @@
 {
   "name": "@alchemy/aa-alchemy",
-  "version": "0.1.0-alpha.16",
+  "version": "0.1.0-alpha.17",
   "description": "adapters for @alchemy/aa-core for interacting with alchemy services",
   "author": "Alchemy",
   "license": "MIT",
@@ -38,7 +38,7 @@
     "test:run": "vitest run"
   },
   "devDependencies": {
-    "@alchemy/aa-core": "^0.1.0-alpha.16",
+    "@alchemy/aa-core": "^0.1.0-alpha.17",
     "typescript": "^5.0.4",
     "typescript-template": "*",
     "viem": "^1.1.7",
