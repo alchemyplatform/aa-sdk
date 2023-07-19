@@ -9,6 +9,7 @@ import {
   type HttpTransport,
   type PublicClient,
   type Transport,
+  type HttpTransportConfig,
 } from "viem";
 import type {
   EIP1193RequestFn,
@@ -125,16 +126,20 @@ export const createPublicErc4337FromClient: <
 export const createPublicErc4337Client = ({
   chain,
   rpcUrl,
+  fetchOptions,
 }: {
   chain: Chain;
   rpcUrl: string;
+  fetchOptions?: HttpTransportConfig["fetchOptions"];
 }): PublicErc4337Client<HttpTransport> => {
   const client = createPublicErc4337FromClient(
     createPublicClient({
       chain,
       transport: http(rpcUrl, {
         fetchOptions: {
+          ...fetchOptions,
           headers: {
+            ...fetchOptions?.headers,
             "Alchemy-AA-Sdk-Version": VERSION,
           },
         },
