@@ -17,11 +17,15 @@ import { AccountSigner } from "./account-signer.js";
 /** Lightweight Adapter for SmartAccountProvider to enable Signer Creation */
 export class EthersProviderAdapter extends JsonRpcProvider {
   readonly accountProvider: SmartAccountProvider<HttpTransport>;
-  constructor(rpcUrl: string, entryPointAddress: Address, chainId: number) {
+  constructor(
+    rpcProvider: string | PublicErc4337Client<HttpTransport>,
+    entryPointAddress: Address,
+    chainId: number
+  ) {
     super();
     const chain = getChain(chainId);
     this.accountProvider = new SmartAccountProvider(
-      rpcUrl,
+      rpcProvider,
       entryPointAddress,
       chain
     );
