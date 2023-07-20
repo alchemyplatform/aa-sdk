@@ -2,7 +2,7 @@ import {
   SimpleSmartContractAccount,
   type SimpleSmartAccountOwner,
 } from "@alchemy/aa-core";
-import { toHex } from "viem";
+import { toHex, type Hash } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
 import { AlchemyProvider } from "../src/provider.js";
@@ -44,14 +44,14 @@ describe("Simple Account Tests", () => {
   });
 
   it("should execute successfully", async () => {
-    await new Promise((resolve) => setTimeout(resolve, 7500));
-    const result = signer.sendUserOperation({
+    const result = await signer.sendUserOperation({
       target: await signer.getAddress(),
       data: "0x",
     });
+    const txnHash = signer.waitForUserOperationTransaction(result.hash as Hash);
 
-    await expect(result).resolves.not.toThrowError();
-  }, 10000);
+    await expect(txnHash).resolves.not.toThrowError();
+  }, 50000);
 
   it("should fail to execute if account address is not deployed and not correct", async () => {
     const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
@@ -80,21 +80,18 @@ describe("Simple Account Tests", () => {
   });
 
   it("should successfully execute with alchemy paymaster info", async () => {
-    // TODO: this is super hacky right now
-    // we have to wait for the test above to run and be confirmed so that this one submits successfully using the correct nonce
-    // one way we could do this is by batching the two UOs together
-    await new Promise((resolve) => setTimeout(resolve, 10000));
     const newSigner = signer.withAlchemyGasManager({
       provider: signer.rpcClient,
       policyId: PAYMASTER_POLICY_ID,
       entryPoint: ENTRYPOINT_ADDRESS,
     });
 
-    const result = newSigner.sendUserOperation({
+    const result = await newSigner.sendUserOperation({
       target: await newSigner.getAddress(),
       data: "0x",
     });
+    const txnHash = signer.waitForUserOperationTransaction(result.hash as Hash);
 
-    await expect(result).resolves.not.toThrowError();
-  }, 20000);
+    await expect(txnHash).resolves.not.toThrowError();
+  }, 50000);
 });

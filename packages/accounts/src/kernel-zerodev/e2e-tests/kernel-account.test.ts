@@ -8,6 +8,7 @@ import {
   toHex,
   type Address,
   type Hex,
+  type Hash,
 } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
@@ -152,16 +153,19 @@ describe("Kernel Account Tests", () => {
   it("sendUserOperation should execute properly", async () => {
     let signerWithProvider = connect(0n, owner);
 
-    const result = signerWithProvider.sendUserOperation({
+    const result = await signerWithProvider.sendUserOperation({
       target: await signerWithProvider.getAddress(),
       data: "0x",
       value: 0n,
     });
-    await expect(result).resolves.not.toThrowError();
-  }, 10000);
+    const txnHash = signerWithProvider.waitForUserOperationTransaction(
+      result.hash as Hash
+    );
+
+    await expect(txnHash).resolves.not.toThrowError();
+  }, 50000);
 
   it("sendUserOperation batch should execute properly", async () => {
-    await new Promise((resolve) => setTimeout(resolve, 10000));
     let signerWithProvider = connect(0n, owner);
     const request: KernelUserOperationCallData = {
       target: await signerWithProvider.getAddress(),
@@ -174,9 +178,13 @@ describe("Kernel Account Tests", () => {
       value: 200000000n,
     };
     const requests: BatchUserOperationCallData = [request, request2];
-    const result = signerWithProvider.sendUserOperation(requests);
-    await expect(result).resolves.not.toThrowError();
-  }, 20000);
+    const result = await signerWithProvider.sendUserOperation(requests);
+    const txnHash = signerWithProvider.waitForUserOperationTransaction(
+      result.hash as Hash
+    );
+
+    await expect(txnHash).resolves.not.toThrowError();
+  }, 50000);
 
   //non core functions
   it("should correctly identify whether account is deployed", async () => {

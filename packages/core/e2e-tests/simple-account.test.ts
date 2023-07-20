@@ -1,4 +1,4 @@
-import { isAddress } from "viem";
+import { isAddress, type Hash } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
 import {
@@ -39,14 +39,14 @@ describe("Simple Account Tests", () => {
   });
 
   it("should execute successfully", async () => {
-    await new Promise((resolve) => setTimeout(resolve, 7500));
-    const result = signer.sendUserOperation({
+    const result = await signer.sendUserOperation({
       target: await signer.getAddress(),
       data: "0x",
     });
+    const txnHash = signer.waitForUserOperationTransaction(result.hash as Hash);
 
-    await expect(result).resolves.not.toThrowError();
-  }, 20000);
+    await expect(txnHash).resolves.not.toThrowError();
+  }, 50000);
 
   it("should fail to execute if account address is not deployed and not correct", async () => {
     const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
