@@ -1,13 +1,14 @@
 name: Publish new Package
 
 # workflow dispatch requires a maintainer to go to the Actions tab and manually trigger the workflow
-on: workflow_dispatch
-  inputs:
-    publish:
-      description: 'Flag to publish new package'
-      required: true
-      default: false
-      type: boolean
+on: 
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Flag to publish new package'
+        required: true
+        default: false
+        type: boolean
 
 # If we ever migrate this to not be manual, we HAVE to check that the commit
 # it is running against DOES NOT contain [skip-ci] in the commit message
