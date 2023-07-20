@@ -39,13 +39,14 @@ describe("Simple Account Tests", () => {
   });
 
   it("should execute successfully", async () => {
+    await new Promise((resolve) => setTimeout(resolve, 7500));
     const result = signer.sendUserOperation({
       target: await signer.getAddress(),
       data: "0x",
     });
 
     await expect(result).resolves.not.toThrowError();
-  });
+  }, 20000);
 
   it("should fail to execute if account address is not deployed and not correct", async () => {
     const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";

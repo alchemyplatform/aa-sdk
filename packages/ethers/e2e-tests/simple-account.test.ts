@@ -37,15 +37,17 @@ describe("Simple Account Tests", async () => {
   });
 
   it("should execute successfully", async () => {
+    await new Promise((resolve) => setTimeout(resolve, 7500));
     const result = signer.sendUserOperation({
       target: (await signer.getAddress()) as `0x${string}`,
       data: "0x",
     });
 
     await expect(result).resolves.not.toThrowError();
-  });
+  }, 20000);
 
   it("should fail to execute if account address is not deployed and not correct", async () => {
+    await new Promise((resolve) => setTimeout(resolve, 7500));
     const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
     const signer = EthersProviderAdapter.fromEthersProvider(
       alchemyProvider,
@@ -68,5 +70,5 @@ describe("Simple Account Tests", async () => {
     });
 
     await expect(result).rejects.toThrowError();
-  });
+  }, 20000);
 });
