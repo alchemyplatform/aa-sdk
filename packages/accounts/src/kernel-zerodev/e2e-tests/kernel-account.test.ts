@@ -27,7 +27,7 @@ describe("Kernel Account Tests", () => {
   const config = {
     chain: polygonMumbai,
     rpcProvider: `${polygonMumbai.rpcUrls.alchemy.http[0]}/${API_KEY}`,
-    validatorAddress: "0x180D6465F921C7E0DEA0040107D342c87455fFF5" as Address,
+    validatorAddress: "0x280D6465F921C7E0DEA0040107D342c87455fFF5" as Address,
     accountFactoryAddress:
       "0x5D006d3880645ec6e254E18C1F879DAC9Dd71A39" as Address,
     entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789" as Address,

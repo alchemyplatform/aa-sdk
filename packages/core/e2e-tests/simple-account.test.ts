@@ -49,7 +49,7 @@ describe("Simple Account Tests", () => {
   }, 50000);
 
   it("should fail to execute if account address is not deployed and not correct", async () => {
-    const accountAddress = "0xb33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
+    const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
     const newSigner = new SmartAccountProvider(
       `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
       ENTRYPOINT_ADDRESS,
