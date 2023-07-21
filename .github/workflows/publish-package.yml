@@ -55,7 +55,7 @@ jobs:
 
       - name: Artifact of E2E tests
         id: artifact
-        if: steps.e2e.outcome == 'success'
+        if: steps.e2e.outcome == "success"
         run: echo "e2e=true" >> "$GITHUB_OUTPUT"
 
   # Lerna publish will, compute the new version, update files, run precommit hooks, tag, publish, and push change log
