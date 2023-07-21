@@ -73,9 +73,7 @@ export class AccountSigner extends Signer {
       this.provider.accountProvider.sendUserOperation.bind(
         this.provider.accountProvider
       );
-    this.getTransaction = this.provider.accountProvider.getTransaction.bind(
-      this.provider.accountProvider
-    );
+    this.getTransaction = this.provider.getTransaction.bind(this.provider);
     this.getUserOperationByHash =
       this.provider.accountProvider.getUserOperationByHash.bind(
         this.provider.accountProvider
@@ -167,7 +165,7 @@ export class AccountSigner extends Signer {
         .catch(() => null);
       if (receipt) {
         return this.getTransaction(receipt.receipt.transactionHash).then(
-          (x) => x.hash
+          (x) => x.hash as `0x${string}`
         );
       }
     }
