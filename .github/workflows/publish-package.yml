@@ -1,11 +1,11 @@
 name: Publish new Package
 
 # workflow dispatch requires a maintainer to go to the Actions tab and manually trigger the workflow
-on: 
+on:
   workflow_dispatch:
     inputs:
       publish:
-        description: 'Flag to publish new package'
+        description: "Flag to publish new package"
         required: true
         default: false
         type: boolean
