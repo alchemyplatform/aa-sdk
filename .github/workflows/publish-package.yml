@@ -55,15 +55,15 @@ jobs:
 
       - name: Artifact of E2E tests
         id: artifact
-        if: steps.e2e.outcome == "success"
-        run: echo "e2e=true" >> "$GITHUB_OUTPUT"
+        if: steps.e2e.outcome == 'success'
+        run: echo 'e2e=true' >> "$GITHUB_OUTPUT"
 
   # Lerna publish will, compute the new version, update files, run precommit hooks, tag, publish, and push change log
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
     needs: build_and_test
-    if: inputs.publish && (needs.build_and_test.outputs.artifact == "true")
+    if: inputs.publish && (needs.build_and_test.outputs.artifact == 'true')
     steps:
       - name: Publish using Lerna
         # run: yarn lerna publish --no-private --yes --no-verify-access
