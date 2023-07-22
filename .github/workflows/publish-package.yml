@@ -13,8 +13,8 @@ on:
 # If we ever migrate this to not be manual, we HAVE to check that the commit
 # it is running against DOES NOT contain [skip-ci] in the commit message
 jobs:
-  build_and_test_and_deploy:
-    name: Build and Test and Deploy
+  build_test_and_deploy:
+    name: Build, Test, and Deploy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
