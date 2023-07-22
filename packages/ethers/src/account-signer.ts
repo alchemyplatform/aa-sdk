@@ -24,62 +24,22 @@ const hexlifyOptional = (value: any): `0x${string}` | undefined => {
   return hexlify(value) as `0x${string}`;
 };
 
-export interface SmartAccountProviderOpts {
-  /**
-   * The maximum number of times to try fetching a transaction receipt before giving up (default: 5)
-   */
-  txMaxRetries?: number;
-
-  /**
-   * The interval in milliseconds to wait between retries while waiting for tx receipts (default: 2_000n)
-   */
-  txRetryIntervalMs?: number;
-
-  /**
-   * The mulitplier on interval length to wait between retries while waiting for tx receipts (default: 1.5)
-   */
-  txRetryMulitplier?: number;
-
-  /**
-   * used when computing the fees for a user operation (default: 100_000_000n)
-   */
-  minPriorityFeePerBid?: bigint;
-}
-
 export class AccountSigner extends Signer {
   private account?: BaseSmartContractAccount;
 
-  private txMaxRetries: number;
-  private txRetryIntervalMs: number;
-  private txRetryMulitplier: number;
-
   sendUserOperation;
-  getTransaction;
-  getUserOperationByHash;
-  getUserOperationReceipt;
+  waitForUserOperationTransaction;
 
-  constructor(
-    readonly provider: EthersProviderAdapter,
-    opts?: SmartAccountProviderOpts
-  ) {
+  constructor(readonly provider: EthersProviderAdapter) {
     super();
     this.account = this.provider.accountProvider.account;
-
-    this.txMaxRetries = opts?.txMaxRetries ?? 5;
-    this.txRetryIntervalMs = opts?.txRetryIntervalMs ?? 2000;
-    this.txRetryMulitplier = opts?.txRetryMulitplier ?? 1.5;
 
     this.sendUserOperation =
       this.provider.accountProvider.sendUserOperation.bind(
         this.provider.accountProvider
       );
-    this.getTransaction = this.provider.getTransaction.bind(this.provider);
-    this.getUserOperationByHash =
-      this.provider.accountProvider.getUserOperationByHash.bind(
-        this.provider.accountProvider
-      );
-    this.getUserOperationReceipt =
-      this.provider.accountProvider.getUserOperationReceipt.bind(
+    this.waitForUserOperationTransaction =
+      this.provider.accountProvider.waitForUserOperationTransaction.bind(
         this.provider.accountProvider
       );
   }
@@ -148,30 +108,6 @@ export class AccountSigner extends Signer {
       "Transaction signing is not supported, use sendUserOperation instead"
     );
   }
-
-  waitForUserOperationTransaction = async (
-    hash: `0x${string}`
-  ): Promise<`0x${string}`> => {
-    for (let i = 0; i < this.txMaxRetries; i++) {
-      const txRetryIntervalWithJitterMs =
-        this.txRetryIntervalMs * Math.pow(this.txRetryMulitplier, i) +
-        Math.random() * 100;
-
-      await new Promise((resolve) =>
-        setTimeout(resolve, txRetryIntervalWithJitterMs)
-      );
-      const receipt = await this.getUserOperationReceipt(hash as `0x${string}`)
-        // TODO: should maybe log the error?
-        .catch(() => null);
-      if (receipt) {
-        return this.getTransaction(receipt.receipt.transactionHash).then(
-          (x) => x.hash as `0x${string}`
-        );
-      }
-    }
-
-    throw new Error("Failed to find transaction for User Operation");
-  };
 
   getPublicErc4337Client(): PublicErc4337Client {
     return this.provider.getPublicErc4337Client();
