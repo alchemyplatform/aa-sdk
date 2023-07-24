@@ -1,7 +1,14 @@
 name: Publish new Package
 
 # workflow dispatch requires a maintainer to go to the Actions tab and manually trigger the workflow
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Flag to publish new package"
+        required: true
+        default: false
+        type: boolean
 
 # If we ever migrate this to not be manual, we HAVE to check that the commit
 # it is running against DOES NOT contain [skip-ci] in the commit message
@@ -36,11 +43,14 @@ jobs:
       - name: Build
         run: yarn build
 
-      # TODO: we still need to make the tests work in CI environments
-      # will come back to this
-      # - name: Test
-      #   run: yarn test
+      - name: E2E tests
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+          OWNER_MNEMONIC: ${{ secrets.OWNER_MNEMONIC }}
+          PAYMASTER_POLICY_ID: ${{ secrets.PAYMASTER_POLICY_ID }}
+        run: yarn test:e2e
 
       # Lerna publish will, compute the new version, update files, run precommit hooks, tag, publish, and push change log
       - name: Publish using Lerna
+        if: inputs.publish
         run: yarn lerna publish --no-private --yes --no-verify-access
