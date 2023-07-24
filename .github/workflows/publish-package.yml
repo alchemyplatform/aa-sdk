@@ -44,7 +44,6 @@ jobs:
         run: yarn build
 
       - name: E2E tests
-        id: e2e
         env:
           API_KEY: ${{ secrets.API_KEY }}
           OWNER_MNEMONIC: ${{ secrets.OWNER_MNEMONIC }}
@@ -53,5 +52,5 @@ jobs:
 
       # Lerna publish will, compute the new version, update files, run precommit hooks, tag, publish, and push change log
       - name: Publish using Lerna
-        if: inputs.publish && steps.e2e.outcome == 'success'
+        if: inputs.publish
         run: yarn lerna publish --no-private --yes --no-verify-access
