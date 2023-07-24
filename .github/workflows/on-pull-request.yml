@@ -1,8 +1,6 @@
 name: Run checks on Pull Requests
 on:
   pull_request:
-    branches:
-      - main
 
 jobs:
   enforce_title:
@@ -23,8 +21,8 @@ jobs:
       - name: Use commitlint to check PR title
         run: echo "${{ github.event.pull_request.title }}" | yarn commitlint
 
-  build_and_lint:
-    name: Lint and Build
+  build_and_lint_and_test:
+    name: Lint and Build and Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -43,3 +41,6 @@ jobs:
 
       - name: Build
         run: yarn build
+
+      - name: Unit Test
+        run: yarn test
