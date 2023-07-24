@@ -1,14 +1,16 @@
 import {
-  PrivateKeySigner,
   type BatchUserOperationCallData,
+  type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import {
   encodeAbiParameters,
   parseAbiParameters,
+  toHex,
   type Address,
   type Hex,
+  type Hash,
 } from "viem";
-import { generatePrivateKey } from "viem/accounts";
+import { mnemonicToAccount } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
 import {
   KernelSmartContractAccount,
@@ -17,22 +19,28 @@ import {
 import { KernelAccountProvider } from "../provider.js";
 import type { KernelUserOperationCallData } from "../types.js";
 import { KernelBaseValidator, ValidatorMode } from "../validator/base.js";
+import { API_KEY, OWNER_MNEMONIC } from "./constants.js";
 import { MockSigner } from "./mocks/mock-signer.js";
 
 describe("Kernel Account Tests", () => {
   //any wallet should work
   const config = {
-    privateKey: generatePrivateKey(),
-    mockWallet: "0x48D4d3536cDe7A257087206870c6B6E76e3D4ff4",
     chain: polygonMumbai,
-    rpcProvider: `${polygonMumbai.rpcUrls.alchemy.http[0]}/demo`,
+    rpcProvider: `${polygonMumbai.rpcUrls.alchemy.http[0]}/${API_KEY}`,
     validatorAddress: "0x180D6465F921C7E0DEA0040107D342c87455fFF5" as Address,
     accountFactoryAddress:
       "0x5D006d3880645ec6e254E18C1F879DAC9Dd71A39" as Address,
     entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789" as Address,
   };
 
-  const owner = PrivateKeySigner.privateKeyToAccountSigner(config.privateKey);
+  const ownerAccount = mnemonicToAccount(OWNER_MNEMONIC);
+  const owner: SmartAccountSigner = {
+    signMessage: async (msg) =>
+      ownerAccount.signMessage({
+        message: { raw: toHex(msg) },
+      }),
+    getAddress: async () => ownerAccount.address,
+  };
   const mockOwner = new MockSigner();
 
   const validator: KernelBaseValidator = new KernelBaseValidator({
@@ -143,16 +151,19 @@ describe("Kernel Account Tests", () => {
 
   // Only work if you have deposited some matic balance for counterfactual address at entrypoint
   it("sendUserOperation should execute properly", async () => {
-    //
     let signerWithProvider = connect(0n, owner);
 
-    const result = signerWithProvider.sendUserOperation({
+    const result = await signerWithProvider.sendUserOperation({
       target: await signerWithProvider.getAddress(),
       data: "0x",
       value: 0n,
     });
-    await expect(result).resolves.not.toThrowError();
-  }, 10000);
+    const txnHash = signerWithProvider.waitForUserOperationTransaction(
+      result.hash as Hash
+    );
+
+    await expect(txnHash).resolves.not.toThrowError();
+  }, 50000);
 
   it("sendUserOperation batch should execute properly", async () => {
     let signerWithProvider = connect(0n, owner);
@@ -167,9 +178,13 @@ describe("Kernel Account Tests", () => {
       value: 200000000n,
     };
     const requests: BatchUserOperationCallData = [request, request2];
-    const result = signerWithProvider.sendUserOperation(requests);
-    await expect(result).resolves.not.toThrowError();
-  }, 20000);
+    const result = await signerWithProvider.sendUserOperation(requests);
+    const txnHash = signerWithProvider.waitForUserOperationTransaction(
+      result.hash as Hash
+    );
+
+    await expect(txnHash).resolves.not.toThrowError();
+  }, 50000);
 
   //non core functions
   it("should correctly identify whether account is deployed", async () => {
