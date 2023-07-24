@@ -37,13 +37,16 @@ describe("Simple Account Tests", async () => {
   });
 
   it("should execute successfully", async () => {
-    const result = signer.sendUserOperation({
+    const result = await signer.sendUserOperation({
       target: (await signer.getAddress()) as `0x${string}`,
       data: "0x",
     });
+    const txnHash = signer.waitForUserOperationTransaction(
+      result.hash as `0x${string}`
+    );
 
-    await expect(result).resolves.not.toThrowError();
-  });
+    await expect(txnHash).resolves.not.toThrowError();
+  }, 50000);
 
   it("should fail to execute if account address is not deployed and not correct", async () => {
     const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
@@ -68,5 +71,5 @@ describe("Simple Account Tests", async () => {
     });
 
     await expect(result).rejects.toThrowError();
-  });
+  }, 20000);
 });

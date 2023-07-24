@@ -26,13 +26,20 @@ const hexlifyOptional = (value: any): `0x${string}` | undefined => {
 
 export class AccountSigner extends Signer {
   private account?: BaseSmartContractAccount;
+
   sendUserOperation;
+  waitForUserOperationTransaction;
 
   constructor(readonly provider: EthersProviderAdapter) {
     super();
     this.account = this.provider.accountProvider.account;
+
     this.sendUserOperation =
       this.provider.accountProvider.sendUserOperation.bind(
+        this.provider.accountProvider
+      );
+    this.waitForUserOperationTransaction =
+      this.provider.accountProvider.waitForUserOperationTransaction.bind(
         this.provider.accountProvider
       );
   }
