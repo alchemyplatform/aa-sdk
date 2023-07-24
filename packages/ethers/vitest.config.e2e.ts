@@ -5,7 +5,7 @@ export default defineProject({
     singleThread: true,
     globals: true,
     setupFiles: ["../../.vitest/setupTests.ts"],
-    exclude: [...configDefaults.exclude, "**/e2e-tests/**/*.test.ts"],
+    exclude: [...configDefaults.exclude, "**/__tests__/**/*.test.ts"],
     name: "ethers",
   },
 });
