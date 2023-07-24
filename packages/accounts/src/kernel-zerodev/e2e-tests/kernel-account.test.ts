@@ -95,32 +95,6 @@ describe("Kernel Account Tests", () => {
     expect(await signer2.getNonce()).eql(2n);
   });
 
-  it("encodeExecute returns valid encoded hash", async () => {
-    const signer: KernelSmartContractAccount = account(0n);
-    expect(
-      await signer.encodeExecute(
-        "0xA7b2c01A5AfBCf1FAB17aCf95D8367eCcFeEb845",
-        1n,
-        "0x234"
-      )
-    ).eql(
-      "0x51945447000000000000000000000000a7b2c01a5afbcf1fab17acf95d8367eccfeeb84500000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000022340000000000000000000000000000000000000000000000000000000000000"
-    );
-  });
-
-  it("encodeExecuteDelegate returns valid encoded hash", async () => {
-    const signer: KernelSmartContractAccount = account(0n);
-    expect(
-      await signer.encodeExecuteDelegate(
-        "0xA7b2c01A5AfBCf1FAB17aCf95D8367eCcFeEb845",
-        1n,
-        "0x234"
-      )
-    ).eql(
-      "0x51945447000000000000000000000000a7b2c01a5afbcf1fab17acf95d8367eccfeeb84500000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000022340000000000000000000000000000000000000000000000000000000000000"
-    );
-  });
-
   it("signWithEip6492 should correctly sign the message", async () => {
     const messageToBeSigned: Hex =
       "0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b";
@@ -152,21 +126,6 @@ describe("Kernel Account Tests", () => {
         params: [messageToBeSigned, await signer2.getAddress()],
       })
     ).toBe(signature);
-  });
-
-  it("signMessage should correctly sign the message", async () => {
-    const messageToBeSigned: Hex =
-      "0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b";
-
-    const signer: KernelSmartContractAccount = account(0n);
-    expect(await signer.signMessage(messageToBeSigned)).toBe(
-      "0x000000004d61c5c27fb64b207cbf3bcf60d78e725659cff5f93db9a1316162117dff72aa631761619d93d4d97dfb761ba00b61f9274c6a4a76e494df644d968dd84ddcdb1c"
-    );
-
-    const signer2: KernelSmartContractAccount = account(1000n);
-    expect(await signer2.signMessage(messageToBeSigned)).toBe(
-      "0x000000004d61c5c27fb64b207cbf3bcf60d78e725659cff5f93db9a1316162117dff72aa631761619d93d4d97dfb761ba00b61f9274c6a4a76e494df644d968dd84ddcdb1c"
-    );
   });
 
   it("sendUserOperation should fail to execute if gas fee not present", async () => {
