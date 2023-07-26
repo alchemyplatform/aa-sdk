@@ -4,8 +4,8 @@ import {
   type Chain,
   type Hash,
   type RpcTransactionRequest,
-  type Transport,
   type Transaction,
+  type Transport,
 } from "viem";
 import { arbitrum, arbitrumGoerli } from "viem/chains";
 import { BaseSmartContractAccount } from "../account/base.js";
@@ -18,6 +18,7 @@ import {
   isValidRequest,
   type BatchUserOperationCallData,
   type UserOperationCallData,
+  type UserOperationOverrides,
   type UserOperationReceipt,
   type UserOperationResponse,
   type UserOperationStruct,
@@ -150,12 +151,17 @@ export class SmartAccountProvider<
       throw new Error("transaction is missing to address");
     }
 
-    // TODO: need to add support for overriding gas prices
-    const { hash } = await this.sendUserOperation({
-      target: request.to,
-      data: request.data ?? "0x",
-      value: request.value ? fromHex(request.value, "bigint") : 0n,
-    });
+    const { hash } = await this.sendUserOperation(
+      {
+        target: request.to,
+        data: request.data ?? "0x",
+        value: request.value ? fromHex(request.value, "bigint") : 0n,
+      },
+      {
+        maxFeePerGas: request.maxFeePerGas,
+        maxPriorityFeePerGas: request.maxPriorityFeePerGas,
+      }
+    );
 
     return await this.waitForUserOperationTransaction(hash as Hash);
   };
@@ -175,7 +181,6 @@ export class SmartAccountProvider<
         );
       }
 
-      // TODO: need to add support for overriding gas prices
       return {
         target: request.to,
         data: request.data ?? "0x",
@@ -183,7 +188,30 @@ export class SmartAccountProvider<
       };
     });
 
-    const { hash } = await this.sendUserOperation(batch);
+    const bigIntMax = (...args: bigint[]) => {
+      if (!args.length) {
+        return undefined;
+      }
+
+      return args.reduce((m, c) => (m > c ? m : c));
+    };
+
+    const maxFeePerGas = bigIntMax(
+      ...requests
+        .filter((x) => x.maxFeePerGas != null)
+        .map((x) => fromHex(x.maxFeePerGas!, "bigint"))
+    );
+
+    const maxPriorityFeePerGas = bigIntMax(
+      ...requests
+        .filter((x) => x.maxPriorityFeePerGas != null)
+        .map((x) => fromHex(x.maxPriorityFeePerGas!, "bigint"))
+    );
+
+    const { hash } = await this.sendUserOperation(batch, {
+      maxFeePerGas,
+      maxPriorityFeePerGas,
+    });
 
     return await this.waitForUserOperationTransaction(hash as Hash);
   };
@@ -223,7 +251,8 @@ export class SmartAccountProvider<
   };
 
   sendUserOperation = async (
-    data: UserOperationCallData | BatchUserOperationCallData
+    data: UserOperationCallData | BatchUserOperationCallData,
+    overrides?: UserOperationOverrides
   ): Promise<SendUserOperationResult> => {
     if (!this.account) {
       throw new Error("account not connected!");
@@ -235,7 +264,9 @@ export class SmartAccountProvider<
       this.gasEstimator,
       this.feeDataGetter,
       this.paymasterDataMiddleware,
-      this.customMiddleware ?? noOpMiddleware
+      this.customMiddleware ?? noOpMiddleware,
+      // This applies the overrides if they've been passed in
+      async (struct) => ({ ...struct, ...overrides })
     )({
       initCode,
       sender: this.getAddress(),
