@@ -17,11 +17,7 @@ yarn install
 ```
 
 ## Getting Started
-<<<<<<< HEAD
 1. Update the .env file with your Alchemy API key(s):
-=======
-1. Update the .env file with your Alchemy API key:
->>>>>>> d83de5f (chore: add readme)
 ```bash
 MUMBAI_ALCHEMY_API_URL=https://polygon-mumbai.g.alchemy.com/v2/<YOUR_API_KEY>
 ```
@@ -32,10 +28,6 @@ export const alchemyApiKey = "<your-api-key>";
 ```
 
 3. Update the configs/clientConfigs.ts file with your contract addresses and policy ids:
-<<<<<<< HEAD
-=======
-
->>>>>>> d83de5f (chore: add readme)
 ```typescript
 export const serverConfigs: Record<number, ServerConfiguration> = {
   [polygonMumbai.id]: {
@@ -47,12 +39,8 @@ export const serverConfigs: Record<number, ServerConfiguration> = {
   // Repeat for other chains as needed
 };
 ```
-<<<<<<< HEAD
 
 4. Update the serverConfigs.ts file with your alchemy API keys:
-=======
-3. Update the serverConfigs.ts file with your alchemy api keys:
->>>>>>> d83de5f (chore: add readme)
 ```typescript
 const API_URLs: Record<number, string> = {
   [polygonMumbai.id]: env.MUMBAI_ALCHEMY_API_URL,
@@ -66,23 +54,16 @@ yarn dev
 ```
 
 ## How This Works
-<<<<<<< HEAD
 The [`onboarding-controller.ts`](https://github.com/alchemyplatform/aa-sdk/blob/master/examples/alchemy-daapp/src/surfaces/onboarding/OnboardingController.ts) file contains the onboarding controller, which handles the onboarding process for new users. The controller uses the Alchemy SDK to create a new account and mint an NFT.
 
 In the [`clientConfigs.ts`](https://github.com/alchemyplatform/aa-sdk/blob/main/examples/alchemy-daapp/src/configs/clientConfigs.ts) file, you will find the configuration for the DAApp, including the nft contract address, simple account factory address, gas manager policy id, rpc url, and chain. You'll also find an example NFT contract in [`examples/contracts/DAAppNFT`](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/contracts/DAAppNFT)
 
 You can replace the default values with your contract addresses and policy ids and add or remove chains as needed.
-=======
-The `onboarding-controller.ts` file contains the onboarding controller, which handles the onboarding process for new users. The controller uses the Alchemy SDK to create a new account and mint an NFT to it.
-
-In the clientConfigs.ts file, you will find the configuration for the DAApp, including the nft contract address, simple account factory address, gas manager policy id, rpc url, and chain. You'll also find an example NFT contract in `examples/contracts/DAAppNFT`
-
-You can replace the default values with your own contract addresses and policy ids, and add or remove chains as needed.
->>>>>>> d83de5f (chore: add readme)
 
 ## Contributing
 We welcome contributions to the examples/alchemy-daapp repo! If you would like to contribute, please follow these steps:
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 1. Clone the repository
 2. Create a new branch for your changes
@@ -95,6 +76,9 @@ Please ensure that your code follows our coding standards and that you have adde
 **This repository follows an MIT license**
 =======
 1. Fork the repository
+=======
+1. Clone the repository
+>>>>>>> 4391b4a (temp)
 2. Create a new branch for your changes
 3. Make your changes and commit them
 4. Push your changes to your forked repository

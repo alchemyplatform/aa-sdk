@@ -12,6 +12,8 @@ export const env = createEnv({
     SEPOLIA_ALCHEMY_API_URL: z.string().url(),
     POLYGON_ALCHEMY_API_URL: z.string().url(),
     ARB_ALCHEMY_API_URL: z.string().url(),
+    OPT_ALCHEMY_API_URL: z.string().url(),
+    OPT_GOERLI_ALCHEMY_API_URL: z.string().url(),
   },
 
   /**
@@ -31,5 +33,7 @@ export const env = createEnv({
     ARB_ALCHEMY_API_URL: process.env.ARB_ALCHEMY_API_URL,
     MUMBAI_ALCHEMY_API_URL: process.env.MUMBAI_ALCHEMY_API_URL,
     SEPOLIA_ALCHEMY_API_URL: process.env.SEPOLIA_ALCHEMY_API_URL,
+    OPT_ALCHEMY_API_URL: process.env.OPT_ALCHEMY_API_URL,
+    OPT_GOERLI_ALCHEMY_API_URL: process.env.OPT_GOERLI_ALCHEMY_API_URL,
   },
 });

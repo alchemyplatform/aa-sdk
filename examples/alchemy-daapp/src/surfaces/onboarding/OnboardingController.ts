@@ -22,6 +22,19 @@ import {
   metaForStepIdentifier,
 } from "./OnboardingDataModels";
 import { localSmartContractStore } from "~/clients/localStorage";
+import { withAlchemyGasManager } from "@alchemy/aa-alchemy";
+
+export enum GasFeeStrategy {
+  DEFAULT = "DEFAULT",
+  FIXED = "FIXED",
+  BASE_FEE_PERCENTAGE = "BASE_FEE_PERCENTAGE",
+  PRIORITY_FEE_PERCENTAGE = "PRIORITY_FEE_PERCENTAGE",
+}
+
+export interface GasFeeMode {
+  strategy: GasFeeStrategy;
+  value: bigint;
+}
 
 async function pollForLambdaForComplete(
   lambda: () => Promise<boolean>,
@@ -97,7 +110,7 @@ const onboardingStepHandlers: Record<
       throw new Error("No entrypoint address was found");
     }
     const entryPointAddress = context.entrypointAddress;
-    const baseSigner = new SmartAccountProvider(
+    let baseSigner = new SmartAccountProvider(
       appConfig.rpcUrl,
       context.entrypointAddress!,
       context.chain!
@@ -113,15 +126,61 @@ const onboardingStepHandlers: Record<
         rpcClient: provider,
       });
     });
+    // baseSigner = baseSigner.withFeeDataGetter(async (struct) => {
+    //   const block = await baseSigner.rpcClient.getBlock({ blockTag: "latest" });
+    //   const baseFeePerGas = block.baseFeePerGas;
+    //   if (baseFeePerGas == null) {
+    //     throw new Error("baseFeePerGas is null");
+    //   }
+    //   // add a buffer here to account for potential spikes in priority fee
+    //   const maxPriorityFeePerGas =
+    //     (BigInt(await baseSigner.rpcClient.getMaxPriorityFeePerGas()) *
+    //       (100n + maxPriorityFeeBufferPercent)) /
+    //     100n;
+    //   // add 25% overhead to ensure mine
+    //   const baseFeeScaled = (baseFeePerGas * 5n) / 4n;
+  
+    //   const prioFee = ((): bigint => {
+    //     switch (feeMode.strategy) {
+    //       case GasFeeStrategy.FIXED:
+    //         return maxPriorityFeePerGas + feeMode.value;
+    //       case GasFeeStrategy.BASE_FEE_PERCENTAGE:
+    //         return (baseFeeScaled * feeMode.value) / 100n;
+    //       case GasFeeStrategy.PRIORITY_FEE_PERCENTAGE:
+    //         // add 10% to required priority fee to ensure mine
+    //         return (maxPriorityFeePerGas * (100n + feeMode.value)) / 100n;
+    //       default:
+    //         throw new Error("fee mode not supported");
+    //     }
+    //   })();
+  
+    //   return {
+    //     maxPriorityFeePerGas: prioFee,
+    //     maxFeePerGas: baseFeeScaled + prioFee,
+    //   };
+    // });
+
+    // baseSigner = withAlchemyGasFeeEstimator(baseSigner as any, {
+    //   strategy: GasFeeStrategy.BASE_FEE_PERCENTAGE,
+    //   value: BigInt(0),
+    // }, BigInt(5)) as any;
+
+    
     const smartAccountAddress = await baseSigner.getAddress();
     if (context.useGasManager) {
-      const smartAccountSigner = await baseSigner.withPaymasterMiddleware(
-        alchemyPaymasterAndDataMiddleware({
-          provider: baseSigner.rpcClient,
-          policyId: appConfig.gasManagerPolicyId,
-          entryPoint: entryPointAddress,
-        })
-      );
+      const smartAccountSigner = withAlchemyGasManager(baseSigner, {
+        provider: baseSigner.rpcClient,
+        policyId: appConfig.gasManagerPolicyId,
+        entryPoint: entryPointAddress,
+      });
+  
+      // const smartAccountSigner = await baseSigner.withPaymasterMiddleware(
+      //   alchemyPaymasterAndDataMiddleware({
+      //     provider: baseSigner.rpcClient,
+      //     policyId: appConfig.gasManagerPolicyId,
+      //     entryPoint: entryPointAddress,
+      //   })
+      // );
       return {
         nextStep: OnboardingStepIdentifier.MINT_NFT,
         addedContext: {

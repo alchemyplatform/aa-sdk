@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@alchemy/aa-alchemy": "^0.1.0-alpha.17",
     "@alchemy/aa-core": "file:../../packages/core",
     "@chakra-ui/react": "^2.6.1",
     "@emotion/react": "^11.11.0",

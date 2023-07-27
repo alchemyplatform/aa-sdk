@@ -1,4 +1,12 @@
-import { Chain, polygon, polygonMumbai, sepolia, arbitrum } from "viem/chains";
+import {
+  Chain,
+  polygon,
+  polygonMumbai,
+  sepolia,
+  arbitrum,
+  optimism,
+  optimismGoerli,
+} from "viem/chains";
 
 export interface DAAppConfiguration {
   nftContractAddress: `0x${string}`;
@@ -37,5 +45,19 @@ export const daappConfigurations: Record<number, DAAppConfiguration> = {
     gasManagerPolicyId: "04a10add-f2d6-4f53-93ef-50feec3d7309",
     rpcUrl: `/api/rpc/proxy?chainId=${arbitrum.id}`,
     chain: arbitrum,
+  },
+  [optimism.id]: {
+    nftContractAddress: "0x835629117Abb8cfe20a2e8717C691905A4725b7c",
+    simpleAccountFactoryAddress: "0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232",
+    gasManagerPolicyId: "6d1bb5b4-d94e-4c8b-9763-6e9c5d5dbbe6",
+    rpcUrl: `/api/rpc/proxy?chainId=${optimism.id}`,
+    chain: optimism,
+  },
+  [optimismGoerli.id]: {
+    nftContractAddress: "0x835629117Abb8cfe20a2e8717C691905A4725b7c",
+    simpleAccountFactoryAddress: "0x9406cc6185a346906296840746125a0e44976454",
+    gasManagerPolicyId: "c588e90e-f079-4f89-a2ac-fd01a46f5d14",
+    rpcUrl: `/api/rpc/proxy?chainId=${optimismGoerli.id}`,
+    chain: optimismGoerli,
   },
 };
