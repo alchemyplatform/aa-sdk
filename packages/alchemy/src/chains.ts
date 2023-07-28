@@ -37,22 +37,42 @@ export const ChainFeeStrategies: Map<number, GasFeeMode> = new Map<
   GasFeeMode
 >([
   // testnets
-  defineChainStrategy(goerli.id, GasFeeStrategy.FIXED, 0n),
-  defineChainStrategy(sepolia.id, GasFeeStrategy.FIXED, 0n),
-  defineChainStrategy(polygonMumbai.id, GasFeeStrategy.FIXED, 0n),
+  defineChainStrategy(
+    goerli.id,
+    GasFeeStrategy.PRIORITY_FEE_INCREASE_PERCENT,
+    0n
+  ),
+  defineChainStrategy(
+    sepolia.id,
+    GasFeeStrategy.PRIORITY_FEE_INCREASE_PERCENT,
+    0n
+  ),
+  defineChainStrategy(
+    polygonMumbai.id,
+    GasFeeStrategy.PRIORITY_FEE_INCREASE_PERCENT,
+    0n
+  ),
   defineChainStrategy(
     optimismGoerli.id,
-    GasFeeStrategy.BASE_FEE_PERCENTAGE,
+    GasFeeStrategy.PERCENT_OF_BASE_FEE,
     0n
   ),
   defineChainStrategy(
     arbitrumGoerli.id,
-    GasFeeStrategy.BASE_FEE_PERCENTAGE,
+    GasFeeStrategy.PERCENT_OF_BASE_FEE,
     0n
   ),
   // mainnets
-  defineChainStrategy(mainnet.id, GasFeeStrategy.PRIORITY_FEE_PERCENTAGE, 57n),
-  defineChainStrategy(polygon.id, GasFeeStrategy.PRIORITY_FEE_PERCENTAGE, 25n),
-  defineChainStrategy(optimism.id, GasFeeStrategy.BASE_FEE_PERCENTAGE, 5n),
-  defineChainStrategy(arbitrum.id, GasFeeStrategy.BASE_FEE_PERCENTAGE, 5n),
+  defineChainStrategy(
+    mainnet.id,
+    GasFeeStrategy.PRIORITY_FEE_INCREASE_PERCENT,
+    57n
+  ),
+  defineChainStrategy(
+    polygon.id,
+    GasFeeStrategy.PRIORITY_FEE_INCREASE_PERCENT,
+    25n
+  ),
+  defineChainStrategy(optimism.id, GasFeeStrategy.PERCENT_OF_BASE_FEE, 5n),
+  defineChainStrategy(arbitrum.id, GasFeeStrategy.PERCENT_OF_BASE_FEE, 5n),
 ]);
