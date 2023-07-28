@@ -2,9 +2,8 @@ import type { AlchemyProvider } from "../provider.js";
 
 export enum GasFeeStrategy {
   DEFAULT = "DEFAULT",
-  FIXED = "FIXED",
-  BASE_FEE_PERCENTAGE = "BASE_FEE_PERCENTAGE",
-  PRIORITY_FEE_PERCENTAGE = "PRIORITY_FEE_PERCENTAGE",
+  PERCENT_OF_BASE_FEE = "PERCENT_OF_BASE_FEE",
+  PRIORITY_FEE_INCREASE_PERCENT = "PRIORITY_FEE_INCREASE_PERCENT",
 }
 
 export interface GasFeeMode {
@@ -37,11 +36,9 @@ export const withAlchemyGasFeeEstimator = (
 
     const prioFee = ((): bigint => {
       switch (feeMode.strategy) {
-        case GasFeeStrategy.FIXED:
-          return maxPriorityFeePerGas + feeMode.value;
-        case GasFeeStrategy.BASE_FEE_PERCENTAGE:
+        case GasFeeStrategy.PERCENT_OF_BASE_FEE:
           return (baseFeeScaled * feeMode.value) / 100n;
-        case GasFeeStrategy.PRIORITY_FEE_PERCENTAGE:
+        case GasFeeStrategy.PRIORITY_FEE_INCREASE_PERCENT:
           // add 10% to required priority fee to ensure mine
           return (maxPriorityFeePerGas * (100n + feeMode.value)) / 100n;
         default:
