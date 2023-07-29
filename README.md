@@ -48,6 +48,8 @@ npm i -s @alchemy/aa-ethers
 
 ## Example Usage to Interact with [Simple Accounts](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol)
 
+**Note 🗒️:** We've also included an [E2E example here](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/alchemy-daapp). This example DApp creates a simple account wallet and mints an NFT in one flow.
+
 ### via `aa-core`
 
 ```ts

@@ -34,11 +34,15 @@ export const serverConfigs: Record<number, ServerConfiguration> = {
     nftContractAddress: "<your-nft-contract-address>",
     simpleAccountFactoryAddress: "<your-simple-account-factory-address>",
     gasManagerPolicyId: "<your-gas-manager-policy-id>",
-    chain: polygon,
+    chain: polygonMumbai,
   },
   // Repeat for other chains as needed
 };
 ```
+### **🗒️ Notes:** for `nftContractAddress` and `simpleAccountFactoryAddress` 
+- There are already contract addresses deployed for them across [various chains here](https://github.com/alchemyplatform/aa-sdk/blob/main/examples/alchemy-daapp/src/configs/clientConfigs.ts).
+- We used eth-infinitism's [simpleAccountFactory here](https://github.com/eth-infinitism/account-abstraction/blob/main/contracts/samples/SimpleAccountFactory.sol).
+- Finally, the contracts sibling package has the copy of the [NFT contract](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/contracts/DAAppNFT/src) along instructions on [how to deploy it](https://github.com/alchemyplatform/aa-sdk/blob/main/examples/contracts/README.md).
 
 4. Update the serverConfigs.ts file with your alchemy API keys:
 ```typescript
