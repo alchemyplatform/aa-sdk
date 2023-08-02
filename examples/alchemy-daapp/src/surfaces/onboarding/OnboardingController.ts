@@ -1,13 +1,14 @@
+import { withAlchemyGasManager } from "@alchemy/aa-alchemy";
+import {
+  SimpleSmartContractAccount,
+  SmartAccountProvider,
+  createPublicErc4337Client,
+  type SimpleSmartAccountOwner
+} from "@alchemy/aa-core";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { encodeFunctionData } from "viem";
-import {
-  createPublicErc4337Client,
-  SimpleSmartContractAccount,
-  type SimpleSmartAccountOwner,
-  SmartAccountProvider,
-  alchemyPaymasterAndDataMiddleware,
-} from "@alchemy/aa-core";
 import { useAccount, useNetwork } from "wagmi";
+import { localSmartContractStore } from "~/clients/localStorage";
 import { NFTContractABI } from "../../clients/nftContract";
 import {
   DAAppConfiguration,
@@ -21,7 +22,18 @@ import {
   initialStep,
   metaForStepIdentifier,
 } from "./OnboardingDataModels";
-import { localSmartContractStore } from "~/clients/localStorage";
+
+export enum GasFeeStrategy {
+  DEFAULT = "DEFAULT",
+  FIXED = "FIXED",
+  BASE_FEE_PERCENTAGE = "BASE_FEE_PERCENTAGE",
+  PRIORITY_FEE_PERCENTAGE = "PRIORITY_FEE_PERCENTAGE",
+}
+
+export interface GasFeeMode {
+  strategy: GasFeeStrategy;
+  value: bigint;
+}
 
 async function pollForLambdaForComplete(
   lambda: () => Promise<boolean>,
@@ -97,7 +109,7 @@ const onboardingStepHandlers: Record<
       throw new Error("No entrypoint address was found");
     }
     const entryPointAddress = context.entrypointAddress;
-    const baseSigner = new SmartAccountProvider(
+    let baseSigner = new SmartAccountProvider(
       appConfig.rpcUrl,
       context.entrypointAddress!,
       context.chain!
@@ -113,15 +125,16 @@ const onboardingStepHandlers: Record<
         rpcClient: provider,
       });
     });
+
+    
     const smartAccountAddress = await baseSigner.getAddress();
     if (context.useGasManager) {
-      const smartAccountSigner = await baseSigner.withPaymasterMiddleware(
-        alchemyPaymasterAndDataMiddleware({
-          provider: baseSigner.rpcClient,
-          policyId: appConfig.gasManagerPolicyId,
-          entryPoint: entryPointAddress,
-        })
-      );
+      const smartAccountSigner = withAlchemyGasManager(baseSigner, {
+        provider: baseSigner.rpcClient,
+        policyId: appConfig.gasManagerPolicyId,
+        entryPoint: entryPointAddress,
+      });
+  
       return {
         nextStep: OnboardingStepIdentifier.MINT_NFT,
         addedContext: {

@@ -8,7 +8,7 @@
   integrity sha512-iowxq3U30sghZotgl4s/oJRci6WPBfNO5YYgk2cIOMCHr3LeGPcsZjCEr+33Q4N+oV3OABDAtA+pyvWjbvBifQ==
 
 "@alchemy/aa-core@file:packages/core":
-  version "0.1.0-alpha.14"
+  version "0.1.0-alpha.17"
   dependencies:
     abitype "^0.8.3"
 
