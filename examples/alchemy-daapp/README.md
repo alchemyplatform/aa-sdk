@@ -63,26 +63,12 @@ You can replace the default values with your contract addresses and policy ids a
 ## Contributing
 We welcome contributions to the examples/alchemy-daapp repo! If you would like to contribute, please follow these steps:
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-1. Clone the repository
-2. Create a new branch for your changes
-3. Make your changes and commit them
-4. Push your changes to the repository
-5. Submit a pull request to the examples/aa-SDK repo
-
-Please ensure that your code follows our coding standards and that you have added appropriate tests for your changes. We appreciate your contributions and look forward to working with you.
-
 **This repository follows an MIT license**
-=======
-1. Fork the repository
-=======
+
 1. Clone the repository
->>>>>>> 4391b4a (temp)
 2. Create a new branch for your changes
 3. Make your changes and commit them
 4. Push your changes to your forked repository
 5. Submit a pull request to the examples/aa-sdk repo
 
 Please ensure that your code follows our coding standards and that you have added appropriate tests for your changes. We appreciate your contributions and look forward to working with you.
->>>>>>> d83de5f (chore: add readme)

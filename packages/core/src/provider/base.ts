@@ -360,8 +360,6 @@ export class SmartAccountProvider<
     struct.maxFeePerGas = maxFeePerGasBid;
     struct.maxPriorityFeePerGas = maxPriorityFeePerGasBid;
 
-    // hack to make it work on optimism goerli
-    struct.maxPriorityFeePerGas = BigInt(0);
     return struct;
   };
 
