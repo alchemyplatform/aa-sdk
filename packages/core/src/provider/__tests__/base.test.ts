@@ -1,4 +1,4 @@
-import type { Transaction } from "viem";
+import { type Transaction } from "viem";
 import { polygonMumbai } from "viem/chains";
 import {
   afterEach,
@@ -8,8 +8,8 @@ import {
   vi,
   type SpyInstance,
 } from "vitest";
-import { SmartAccountProvider } from "../base.js";
 import type { UserOperationReceipt } from "../../types.js";
+import { SmartAccountProvider } from "../base.js";
 
 describe("Base Tests", () => {
   let retryMsDelays: number[] = [];
@@ -94,5 +94,53 @@ describe("Base Tests", () => {
       3,
       getUserOperationReceiptMock
     );
+  });
+
+  it("should emit connected event on connected", async () => {
+    const spy = vi.spyOn(providerMock, "emit");
+    const account = {
+      chain: polygonMumbai,
+      entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
+      rpcClient: providerMock.rpcClient,
+      getAddress: async () => "0xMOCK_ADDRESS",
+    } as any;
+
+    // This says the await is not important... it is. the method is not marked sync because we don't need it to be,
+    // but the address is emited from an async method so we want to await that
+    await providerMock.connect(() => account);
+
+    expect(spy.mock.calls).toMatchInlineSnapshot(`
+      [
+        [
+          "connect",
+          {
+            "chainId": "0x13881",
+          },
+        ],
+        [
+          "accountsChanged",
+          [
+            "0xMOCK_ADDRESS",
+          ],
+        ],
+      ]
+    `);
+  });
+
+  it("should emit disconnected event on disconnect", async () => {
+    const spy = vi.spyOn(providerMock, "emit");
+    providerMock.disconnect();
+
+    expect(spy.mock.calls).toMatchInlineSnapshot(`
+      [
+        [
+          "disconnect",
+        ],
+        [
+          "accountsChanged",
+          [],
+        ],
+      ]
+    `);
   });
 });

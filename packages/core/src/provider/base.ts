@@ -1,5 +1,7 @@
+import { default as EventEmitter } from "eventemitter3";
 import {
   fromHex,
+  toHex,
   type Address,
   type Chain,
   type Hash,
@@ -37,6 +39,7 @@ import type {
   GasEstimatorMiddleware,
   ISmartAccountProvider,
   PaymasterAndDataMiddleware,
+  ProviderEvents,
   SendUserOperationResult,
 } from "./types.js";
 
@@ -77,8 +80,10 @@ export type ConnectedSmartAccountProvider<
 };
 
 export class SmartAccountProvider<
-  TTransport extends SupportedTransports = Transport
-> implements ISmartAccountProvider<TTransport>
+    TTransport extends SupportedTransports = Transport
+  >
+  extends EventEmitter<ProviderEvents>
+  implements ISmartAccountProvider<TTransport>
 {
   private txMaxRetries: number;
   private txRetryIntervalMs: number;
@@ -94,6 +99,8 @@ export class SmartAccountProvider<
     readonly account?: BaseSmartContractAccount<TTransport>,
     opts?: SmartAccountProviderOpts
   ) {
+    super();
+
     this.txMaxRetries = opts?.txMaxRetries ?? 5;
     this.txRetryIntervalMs = opts?.txRetryIntervalMs ?? 2000;
     this.txRetryMulitplier = opts?.txRetryMulitplier ?? 1.5;
@@ -411,7 +418,27 @@ export class SmartAccountProvider<
   ): this & { account: BaseSmartContractAccount } {
     const account = fn(this.rpcClient);
     defineReadOnly(this, "account", account);
+
+    this.emit("connect", {
+      chainId: toHex(this.chain.id),
+    });
+
+    account
+      .getAddress()
+      .then((address) => this.emit("accountsChanged", [address]));
+
     return this as this & { account: typeof account };
+  }
+
+  disconnect(): this & { account: undefined } {
+    if (this.account) {
+      this.emit("disconnect");
+      this.emit("accountsChanged", []);
+    }
+
+    defineReadOnly(this, "account", undefined);
+
+    return this as this & { account: undefined };
   }
 
   isConnected(): this is ConnectedSmartAccountProvider<TTransport> {

@@ -24,16 +24,21 @@ describe("Alchemy Provider Tests", () => {
     apiKey: "test",
     chain,
     entryPointAddress: "0xENTRYPOINT_ADDRESS",
-  }).connect(
-    (provider) =>
-      new SimpleSmartContractAccount({
-        entryPointAddress: "0xENTRYPOINT_ADDRESS",
-        chain,
-        owner,
-        factoryAddress: "0xSIMPLE_ACCOUNT_FACTORY_ADDRESS",
-        rpcClient: provider,
-      })
-  );
+  }).connect((provider) => {
+    const account = new SimpleSmartContractAccount({
+      entryPointAddress: "0xENTRYPOINT_ADDRESS",
+      chain,
+      owner,
+      factoryAddress: "0xSIMPLE_ACCOUNT_FACTORY_ADDRESS",
+      rpcClient: provider,
+    });
+
+    account.getAddress = vi.fn(
+      async () => "0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4"
+    );
+
+    return account;
+  });
 
   it("should correctly sign the message", async () => {
     expect(

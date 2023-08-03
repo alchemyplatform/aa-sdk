@@ -1,5 +1,5 @@
 import type { Address } from "abitype";
-import type { Hash, RpcTransactionRequest, Transport } from "viem";
+import type { Hash, Hex, RpcTransactionRequest, Transport } from "viem";
 import type { BaseSmartContractAccount } from "../account/base.js";
 import type {
   PublicErc4337Client,
@@ -16,6 +16,19 @@ import type {
 
 type WithRequired<T, K extends keyof T> = Required<Pick<T, K>>;
 type WithOptional<T, K extends keyof T> = Pick<Partial<T>, K>;
+
+export type ConnectorData = {
+  chainId?: Hex;
+};
+
+export interface ProviderEvents {
+  chainChanged(chainId: Hex): void;
+  accountsChanged(accounts: Address[]): void;
+  connect(data: ConnectorData): void;
+  message({ type, data }: { type: string; data?: unknown }): void;
+  disconnect(): void;
+  error(error: Error): void;
+}
 
 export type SendUserOperationResult = {
   hash: string;
@@ -204,4 +217,11 @@ export interface ISmartAccountProvider<
   connect(
     fn: (provider: PublicErc4337Client<TTransport>) => BaseSmartContractAccount
   ): this & { account: BaseSmartContractAccount };
+
+  /**
+   * Allows for disconnecting the account from the provider so you can connect the provider to another account instance
+   *
+   * @returns the provider with the account disconnected
+   */
+  disconnect(): this & { account: undefined };
 }
