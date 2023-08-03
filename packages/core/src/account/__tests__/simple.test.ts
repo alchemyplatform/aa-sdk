@@ -1,12 +1,12 @@
 import { polygonMumbai } from "viem/chains";
 import { describe, it } from "vitest";
+import { SmartAccountProvider } from "../../provider/base.js";
+import { LocalAccountSigner } from "../../signer/local-account.js";
+import type { BatchUserOperationCallData } from "../../types.js";
 import {
   SimpleSmartContractAccount,
   type SimpleSmartAccountOwner,
 } from "../simple.js";
-import { LocalAccountSigner } from "../../signer/local-account.js";
-import type { BatchUserOperationCallData } from "../../types.js";
-import { SmartAccountProvider } from "../../provider/base.js";
 
 describe("Account Simple Tests", () => {
   const dummyMnemonic =
@@ -16,18 +16,23 @@ describe("Account Simple Tests", () => {
   const chain = polygonMumbai;
   const signer = new SmartAccountProvider(
     `${chain.rpcUrls.alchemy.http[0]}/${"test"}`,
-    "0xENTRYPOINT_ADDRESS",
+    "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
     chain
-  ).connect(
-    (provider) =>
-      new SimpleSmartContractAccount({
-        entryPointAddress: "0xENTRYPOINT_ADDRESS",
-        chain,
-        owner,
-        factoryAddress: "0xSIMPLE_ACCOUNT_FACTORY_ADDRESS",
-        rpcClient: provider,
-      })
-  );
+  ).connect((provider) => {
+    const account = new SimpleSmartContractAccount({
+      entryPointAddress: "0xENTRYPOINT_ADDRESS",
+      chain,
+      owner,
+      factoryAddress: "0xSIMPLE_ACCOUNT_FACTORY_ADDRESS",
+      rpcClient: provider,
+    });
+
+    account.getAddress = vi.fn(
+      async () => "0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4"
+    );
+
+    return account;
+  });
 
   it("should correctly sign the message", async () => {
     expect(
@@ -41,7 +46,6 @@ describe("Account Simple Tests", () => {
   });
 
   it("should correctly encode batch transaction data", async () => {
-    const account = signer.account;
     const data = [
       {
         target: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
@@ -53,7 +57,7 @@ describe("Account Simple Tests", () => {
       },
     ] satisfies BatchUserOperationCallData;
 
-    expect(await account.encodeBatchExecute(data)).toMatchInlineSnapshot(
+    expect(await signer.account.encodeBatchExecute(data)).toMatchInlineSnapshot(
       '"0x18dfb3c7000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000002000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef0000000000000000000000008ba1f109551bd432803012645ac136ddd64dba720000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000004deadbeef000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004cafebabe00000000000000000000000000000000000000000000000000000000"'
     );
   });

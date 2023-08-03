@@ -51,7 +51,8 @@
     "vitest": "^0.31.0"
   },
   "dependencies": {
-    "abitype": "^0.8.3"
+    "abitype": "^0.8.3",
+    "eventemitter3": "^5.0.1"
   },
   "peerDependencies": {
     "viem": "^1.1.7"
