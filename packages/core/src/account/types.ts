@@ -3,6 +3,8 @@ import type { Hash, Hex } from "viem";
 import type { SignTypedDataParameters } from "viem/accounts";
 import type { BatchUserOperationCallData } from "../types";
 
+export type SignTypedDataParams = Omit<SignTypedDataParameters, "privateKey">;
+
 export interface ISmartContractAccount {
   /**
    * @returns the init code for the account
@@ -50,10 +52,26 @@ export interface ISmartContractAccount {
   /**
    * Signs a typed data object as per ERC-712
    *
-   * @param params - {@link SignTypedDataParameters}
+   * @param params - {@link SignTypedDataParams}
    * @returns the signed hash for the message passed
    */
-  signTypedData(params: SignTypedDataParameters): Promise<Hash>;
+  signTypedData(params: SignTypedDataParams): Promise<Hash>;
+
+  /**
+   * If the account is not deployed, it will sign the message and then wrap it in 6492 format
+   *
+   * @param msg - the message to sign
+   * @returns ths signature wrapped in 6492 format
+   */
+  signMessageWith6492(msg: string | Uint8Array | Hex): Promise<Hex>;
+
+  /**
+   * If the account is not deployed, it will sign the typed data blob and then wrap it in 6492 format
+   *
+   * @param params - {@link SignTypedDataParams}
+   * @returns the signed hash for the params passed in wrapped in 6492 format
+   */
+  signTypedDataWith6492(params: SignTypedDataParams): Promise<Hash>;
 
   /**
    * @returns the address of the account

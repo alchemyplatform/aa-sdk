@@ -8,7 +8,6 @@ import {
   type Hex,
   type Transport,
 } from "viem";
-import { type SignTypedDataParameters } from "viem/accounts";
 import { SimpleAccountAbi } from "../abis/SimpleAccountAbi.js";
 import { SimpleAccountFactoryAbi } from "../abis/SimpleAccountFactoryAbi.js";
 import type { BatchUserOperationCallData } from "../types.js";
@@ -16,13 +15,12 @@ import {
   BaseSmartContractAccount,
   type BaseSmartAccountParams,
 } from "./base.js";
+import type { SignTypedDataParams } from "./types.js";
 
 export interface SimpleSmartAccountOwner {
   signMessage: (msg: Uint8Array) => Promise<Hash>;
   getAddress: () => Promise<Address>;
-  signTypedData: (
-    params: Omit<SignTypedDataParameters, "privateKey">
-  ) => Promise<Hash>;
+  signTypedData: (params: SignTypedDataParams) => Promise<Hash>;
 }
 
 export interface SimpleSmartAccountParams<
@@ -36,9 +34,9 @@ export interface SimpleSmartAccountParams<
 export class SimpleSmartContractAccount<
   TTransport extends Transport | FallbackTransport = Transport
 > extends BaseSmartContractAccount<TTransport> {
-  private owner: SimpleSmartAccountOwner;
-  private factoryAddress: Address;
-  private index: bigint;
+  protected owner: SimpleSmartAccountOwner;
+  protected factoryAddress: Address;
+  protected index: bigint;
 
   constructor(params: SimpleSmartAccountParams) {
     super(params);
@@ -92,12 +90,6 @@ export class SimpleSmartContractAccount<
     }
 
     return this.owner.signMessage(msg);
-  }
-
-  signTypedData(
-    params: Omit<SignTypedDataParameters, "privateKey">
-  ): Promise<Hash> {
-    return this.owner.signTypedData(params);
   }
 
   protected async getAccountInitCode(): Promise<`0x${string}`> {

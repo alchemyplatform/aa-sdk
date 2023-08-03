@@ -8,7 +8,6 @@ import {
   type PublicClient,
   type Transport,
 } from "viem";
-import type { SignTypedDataParameters } from "viem/accounts";
 import { EntryPointAbi } from "../abis/EntryPointAbi.js";
 import { createPublicErc4337Client } from "../client/create-client.js";
 import type {
@@ -17,7 +16,7 @@ import type {
 } from "../client/types.js";
 import { Logger } from "../logger.js";
 import type { BatchUserOperationCallData } from "../types.js";
-import type { ISmartContractAccount } from "./types.js";
+import type { ISmartContractAccount, SignTypedDataParams } from "./types.js";
 
 export enum DeploymentState {
   UNDEFINED = "0x0",
@@ -76,10 +75,22 @@ export abstract class BaseSmartContractAccount<
     data: string
   ): Promise<`0x${string}`>;
   abstract signMessage(msg: string | Uint8Array): Promise<`0x${string}`>;
-  abstract signTypedData(
-    params: Omit<SignTypedDataParameters, "privateKey">
-  ): Promise<`0x${string}`>;
+
   protected abstract getAccountInitCode(): Promise<`0x${string}`>;
+
+  async signMessageWith6492(_msg: string | Uint8Array): Promise<`0x${string}`> {
+    throw new Error("signMessageWith6492 not supported");
+  }
+
+  async signTypedData(_params: SignTypedDataParams): Promise<`0x${string}`> {
+    throw new Error("signTypedData not supported");
+  }
+
+  async signTypedDataWith6492(
+    _params: SignTypedDataParams
+  ): Promise<`0x${string}`> {
+    throw new Error("signTypedDataWith6492 not supported");
+  }
 
   async encodeBatchExecute(
     _txs: BatchUserOperationCallData
