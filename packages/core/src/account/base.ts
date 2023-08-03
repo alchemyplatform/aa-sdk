@@ -8,6 +8,7 @@ import {
   type PublicClient,
   type Transport,
 } from "viem";
+import type { SignTypedDataParameters } from "viem/accounts";
 import { EntryPointAbi } from "../abis/EntryPointAbi.js";
 import { createPublicErc4337Client } from "../client/create-client.js";
 import type {
@@ -75,6 +76,9 @@ export abstract class BaseSmartContractAccount<
     data: string
   ): Promise<`0x${string}`>;
   abstract signMessage(msg: string | Uint8Array): Promise<`0x${string}`>;
+  abstract signTypedData(
+    params: Omit<SignTypedDataParameters, "privateKey">
+  ): Promise<`0x${string}`>;
   protected abstract getAccountInitCode(): Promise<`0x${string}`>;
 
   async encodeBatchExecute(

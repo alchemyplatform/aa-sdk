@@ -1,5 +1,6 @@
 import type { Address } from "abitype";
 import type { Hash, Hex, RpcTransactionRequest, Transport } from "viem";
+import type { SignTypedDataParameters } from "viem/accounts";
 import type { BaseSmartContractAccount } from "../account/base.js";
 import type {
   PublicErc4337Client,
@@ -156,6 +157,14 @@ export interface ISmartAccountProvider<
    * @returns the signed hash for the message passed
    */
   signMessage: (msg: string | Uint8Array) => Promise<Hash>;
+
+  /**
+   * This method is used to sign typed data as per ERC-712
+   *
+   * @param params - {@link SignTypedDataParameters}
+   * @returns the signed hash for the message passed
+   */
+  signTypedData: (params: SignTypedDataParameters) => Promise<Hash>;
 
   // TODO: potentially add methods here for something like viem's walletActions?
   /**

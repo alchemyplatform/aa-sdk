@@ -4,9 +4,11 @@ import {
   encodeFunctionData,
   hexToBytes,
   type FallbackTransport,
+  type Hash,
   type Hex,
   type Transport,
 } from "viem";
+import { type SignTypedDataParameters } from "viem/accounts";
 import { SimpleAccountAbi } from "../abis/SimpleAccountAbi.js";
 import { SimpleAccountFactoryAbi } from "../abis/SimpleAccountFactoryAbi.js";
 import type { BatchUserOperationCallData } from "../types.js";
@@ -16,8 +18,11 @@ import {
 } from "./base.js";
 
 export interface SimpleSmartAccountOwner {
-  signMessage: (msg: Uint8Array) => Promise<Address>;
+  signMessage: (msg: Uint8Array) => Promise<Hash>;
   getAddress: () => Promise<Address>;
+  signTypedData: (
+    params: Omit<SignTypedDataParameters, "privateKey">
+  ) => Promise<Hash>;
 }
 
 export interface SimpleSmartAccountParams<
@@ -87,6 +92,12 @@ export class SimpleSmartContractAccount<
     }
 
     return this.owner.signMessage(msg);
+  }
+
+  signTypedData(
+    params: Omit<SignTypedDataParameters, "privateKey">
+  ): Promise<Hash> {
+    return this.owner.signTypedData(params);
   }
 
   protected async getAccountInitCode(): Promise<`0x${string}`> {

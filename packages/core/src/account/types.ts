@@ -1,5 +1,6 @@
 import type { Address } from "abitype";
-import type { Hex } from "viem";
+import type { Hash, Hex } from "viem";
+import type { SignTypedDataParameters } from "viem/accounts";
 import type { BatchUserOperationCallData } from "../types";
 
 export interface ISmartContractAccount {
@@ -45,6 +46,14 @@ export interface ISmartContractAccount {
    * @returns the signature of the message
    */
   signMessage(msg: string | Uint8Array | Hex): Promise<Hex>;
+
+  /**
+   * Signs a typed data object as per ERC-712
+   *
+   * @param params - {@link SignTypedDataParameters}
+   * @returns the signed hash for the message passed
+   */
+  signTypedData(params: SignTypedDataParameters): Promise<Hash>;
 
   /**
    * @returns the address of the account

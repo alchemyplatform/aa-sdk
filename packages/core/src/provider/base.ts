@@ -9,6 +9,7 @@ import {
   type Transaction,
   type Transport,
 } from "viem";
+import type { SignTypedDataParameters } from "viem/accounts";
 import { arbitrum, arbitrumGoerli } from "viem/chains";
 import { BaseSmartContractAccount } from "../account/base.js";
 import { createPublicErc4337Client } from "../client/create-client.js";
@@ -178,6 +179,16 @@ export class SmartAccountProvider<
       throw new Error("account not connected!");
     }
     return this.account.signMessage(msg);
+  };
+
+  signTypedData = async (
+    params: Omit<SignTypedDataParameters, "privateKey">
+  ): Promise<Hash> => {
+    if (!this.account) {
+      throw new Error("account not connected!");
+    }
+
+    return this.account.signTypedData(params);
   };
 
   sendTransactions = async (requests: RpcTransactionRequest[]) => {

@@ -1,4 +1,5 @@
 import type { Address, Hex, SmartAccountSigner } from "@alchemy/aa-core";
+import type { SignTypedDataParameters } from "viem/accounts";
 
 export class MockSigner implements SmartAccountSigner {
   getAddress(): Promise<Address> {
@@ -6,6 +7,14 @@ export class MockSigner implements SmartAccountSigner {
   }
 
   signMessage(_msg: Uint8Array | Hex | string): Promise<Hex> {
+    return Promise.resolve(
+      "0x4d61c5c27fb64b207cbf3bcf60d78e725659cff5f93db9a1316162117dff72aa631761619d93d4d97dfb761ba00b61f9274c6a4a76e494df644d968dd84ddcdb1c"
+    );
+  }
+
+  signTypedData(
+    _params: Omit<SignTypedDataParameters, "privateKey">
+  ): Promise<`0x${string}`> {
     return Promise.resolve(
       "0x4d61c5c27fb64b207cbf3bcf60d78e725659cff5f93db9a1316162117dff72aa631761619d93d4d97dfb761ba00b61f9274c6a4a76e494df644d968dd84ddcdb1c"
     );

@@ -36,13 +36,26 @@ describe("Account Simple Tests", () => {
 
   it("should correctly sign the message", async () => {
     expect(
-      // TODO: expose sign message on the provider too
-      await signer.account.signMessage(
+      await signer.signMessage(
         "0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b"
       )
     ).toBe(
       "0x33b1b0d34ba3252cd8abac8147dc08a6e14a6319462456a34468dd5713e38dda3a43988460011af94b30fa3efefcf9d0da7d7522e06b7bd8bff3b65be4aee5b31c"
     );
+  });
+
+  it("should correctly sign typed data", async () => {
+    expect(
+      await signer.signTypedData({
+        types: {
+          Test: [{ name: "field", type: "string" }],
+        },
+        primaryType: "Test",
+        message: {
+          field: "hello",
+        },
+      })
+    ).toMatchInlineSnapshot('"0x897523d411465887b14aa502a31b56f52c755f3a046586b57f866821123cbb27601819defb38c5b38fce53fbbd65b5a3e05fedc476167bd52c397af3db9dcd8c1b"');
   });
 
   it("should correctly encode batch transaction data", async () => {

@@ -16,6 +16,7 @@ import {
   type Hex,
   type Transport,
 } from "viem";
+import type { SignTypedDataParameters } from "viem/accounts";
 import { KernelAccountAbi } from "./abis/KernelAccountAbi.js";
 import { KernelFactoryAbi } from "./abis/KernelFactoryAbi.js";
 import { MultiSendAbi } from "./abis/MultiSendAbi.js";
@@ -108,6 +109,10 @@ export class KernelSmartContractAccount<
   signMessage(msg: Uint8Array | string): Promise<Hex> {
     const formattedMessage = typeof msg === "string" ? toBytes(msg) : msg;
     return this.validator.signMessageWithValidatorParams(formattedMessage);
+  }
+
+  signTypedData(_params: SignTypedDataParameters): Promise<`0x${string}`> {
+    throw new Error("Method not implemented.");
   }
 
   protected encodeExecuteAction(

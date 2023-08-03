@@ -1,5 +1,9 @@
 import { isHex, type HDAccount, type Hex, type PrivateKeyAccount } from "viem";
-import { mnemonicToAccount, privateKeyToAccount } from "viem/accounts";
+import {
+  mnemonicToAccount,
+  privateKeyToAccount,
+  type SignTypedDataParameters,
+} from "viem/accounts";
 import type { SmartAccountSigner } from "./types.js";
 
 export class LocalAccountSigner<T extends HDAccount | PrivateKeyAccount>
@@ -24,6 +28,12 @@ export class LocalAccountSigner<T extends HDAccount | PrivateKeyAccount>
         },
       });
     }
+  };
+
+  readonly signTypedData = (
+    params: Omit<SignTypedDataParameters, "privateKey">
+  ) => {
+    return this.owner.signTypedData(params);
   };
 
   readonly getAddress: () => Promise<`0x${string}`> = async () => {
