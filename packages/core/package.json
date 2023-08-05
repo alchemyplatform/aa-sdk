@@ -1,7 +1,7 @@
 {
   "name": "@alchemy/aa-core",
   "license": "MIT",
-  "version": "0.1.0-alpha.19",
+  "version": "0.1.0-alpha.20",
   "description": "viem based SDK that enables interactions with ERC-4337 Smart Accounts. ABIs are based off the definitions generated in @account-abstraction/contracts",
   "author": "Alchemy",
   "type": "module",
@@ -54,7 +54,6 @@
     "eventemitter3": "^5.0.1",
     "viem": "^1.5.3"
   },
-  "peerDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alchemyplatform/aa-sdk.git"
