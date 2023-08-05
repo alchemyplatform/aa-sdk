@@ -7,8 +7,8 @@ import {
   parseAbiParameters,
   toHex,
   type Address,
-  type Hex,
   type Hash,
+  type Hex,
 } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
@@ -40,6 +40,9 @@ describe("Kernel Account Tests", () => {
         message: { raw: toHex(msg) },
       }),
     getAddress: async () => ownerAccount.address,
+    signTypedData: async (params) => {
+      return ownerAccount.signTypedData(params);
+    },
   };
   const mockOwner = new MockSigner();
 

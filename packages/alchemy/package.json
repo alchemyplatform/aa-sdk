@@ -45,9 +45,11 @@
     "viem": "^1.1.7",
     "vitest": "^0.31.0"
   },
+  "dependencies": {
+    "viem": "^1.5.3"
+  },
   "peerDependencies": {
-    "@alchemy/aa-core": "^0.1.0-alpha.1",
-    "viem": "^1.1.7"
+    "@alchemy/aa-core": "^0.1.0-alpha.1"
   },
   "publishConfig": {
     "access": "public",

@@ -23,7 +23,7 @@ describe("Account Simple Tests", () => {
       entryPointAddress: "0xENTRYPOINT_ADDRESS",
       chain,
       owner,
-      factoryAddress: "0xSIMPLE_ACCOUNT_FACTORY_ADDRESS",
+      factoryAddress: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
       rpcClient: provider,
     });
 
@@ -36,8 +36,7 @@ describe("Account Simple Tests", () => {
 
   it("should correctly sign the message", async () => {
     expect(
-      // TODO: expose sign message on the provider too
-      await signer.account.signMessage(
+      await signer.signMessage(
         "0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b"
       )
     ).toBe(

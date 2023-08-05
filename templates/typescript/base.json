@@ -2,8 +2,8 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Default",
   "compilerOptions": {
-    "lib": ["ES2022"],
-    "target": "ES2021",
+    "lib": ["es2022"],
+    "target": "es2021",
     "types": ["vitest/globals"],
     "allowJs": false,
     "skipLibCheck": true,
