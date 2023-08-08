@@ -23,8 +23,14 @@ import {
   type AlchemyGasManagerConfig,
 } from "./middleware/gas-manager.js";
 
+type ConnectionConfig =
+  | {
+      apiKey: string;
+      rpcUrl: undefined;
+    }
+  | { rpcUrl: string; apiKey: undefined };
+
 export type AlchemyProviderConfig = {
-  apiKey: string;
   chain: Chain | number;
   entryPointAddress: Address;
   account?: BaseSmartContractAccount;
@@ -33,16 +39,16 @@ export type AlchemyProviderConfig = {
     /** this adds a percent buffer on top of the fee estimated (default 5%)*/
     maxPriorityFeeBufferPercent?: bigint;
   };
-};
+} & ConnectionConfig;
 
 export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
   constructor({
-    apiKey,
     chain,
     entryPointAddress,
     account,
     opts,
     feeOpts,
+    ...connectionConfig
   }: AlchemyProviderConfig) {
     const _chain =
       typeof chain === "number" ? SupportedChains.get(chain) : chain;
@@ -50,7 +56,11 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
       throw new Error(`AlchemyProvider: chain (${chain}) not supported`);
     }
 
-    const rpcUrl = `${_chain.rpcUrls.alchemy.http[0]}/${apiKey}`;
+    const rpcUrl =
+      connectionConfig.apiKey !== undefined
+        ? `${_chain.rpcUrls.alchemy.http[0]}/${connectionConfig.apiKey}`
+        : connectionConfig.rpcUrl;
+
     super(rpcUrl, entryPointAddress, _chain, account, opts);
 
     withAlchemyGasFeeEstimator(
