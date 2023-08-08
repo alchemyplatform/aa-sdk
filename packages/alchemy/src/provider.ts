@@ -26,9 +26,9 @@ import {
 type ConnectionConfig =
   | {
       apiKey: string;
-      rpcUrl: undefined;
+      rpcUrl?: undefined;
     }
-  | { rpcUrl: string; apiKey: undefined };
+  | { rpcUrl: string; apiKey?: undefined };
 
 export type AlchemyProviderConfig = {
   chain: Chain | number;
