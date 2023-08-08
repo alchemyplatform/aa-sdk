@@ -13,15 +13,12 @@ import {
   optimism,
   optimismGoerli,
 } from "viem/chains";
-import { ChainFeeStrategies, SupportedChains } from "./chains.js";
-import {
-  GasFeeStrategy,
-  withAlchemyGasFeeEstimator,
-} from "./middleware/gas-fees.js";
+import { SupportedChains } from "./chains.js";
 import {
   withAlchemyGasManager,
   type AlchemyGasManagerConfig,
 } from "./middleware/gas-manager.js";
+import { withAlchemyGasFeeEstimator } from "./middleware/gas-fees.js";
 
 type ConnectionConfig =
   | {
@@ -63,14 +60,7 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
 
     super(rpcUrl, entryPointAddress, _chain, account, opts);
 
-    withAlchemyGasFeeEstimator(
-      this,
-      ChainFeeStrategies.get(_chain.id) ?? {
-        strategy: GasFeeStrategy.DEFAULT,
-        value: 0n,
-      },
-      feeOpts?.maxPriorityFeeBufferPercent ?? 5n
-    );
+    withAlchemyGasFeeEstimator(this);
   }
 
   gasEstimator: AccountMiddlewareFn = async (struct) => {
