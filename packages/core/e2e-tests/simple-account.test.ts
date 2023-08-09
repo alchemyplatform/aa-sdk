@@ -7,7 +7,7 @@ import {
 } from "../src/account/simple.js";
 import { SmartAccountProvider } from "../src/provider/base.js";
 import { LocalAccountSigner } from "../src/signer/local-account.js";
-import { API_KEY, OWNER_MNEMONIC } from "./constants.js";
+import { RPC_URL, API_KEY, OWNER_MNEMONIC } from "./constants.js";
 
 const ENTRYPOINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
 const SIMPLE_ACCOUNT_FACTORY_ADDRESS =
@@ -18,7 +18,7 @@ describe("Simple Account Tests", () => {
     LocalAccountSigner.mnemonicToAccountSigner(OWNER_MNEMONIC);
   const chain = polygonMumbai;
   const signer = new SmartAccountProvider(
-    `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
+    RPC_URL != null ? RPC_URL : `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
     ENTRYPOINT_ADDRESS,
     chain
   ).connect(
@@ -51,7 +51,7 @@ describe("Simple Account Tests", () => {
   it("should fail to execute if account address is not deployed and not correct", async () => {
     const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
     const newSigner = new SmartAccountProvider(
-      `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
+      RPC_URL != null ? RPC_URL : `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
       ENTRYPOINT_ADDRESS,
       chain
     ).connect(
@@ -79,7 +79,7 @@ describe("Simple Account Tests", () => {
       generatePrivateKey()
     );
     const provider = new SmartAccountProvider(
-      `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
+      RPC_URL != null ? RPC_URL : `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
       ENTRYPOINT_ADDRESS,
       chain
     ).connect(
