@@ -23,18 +23,6 @@ import {
   metaForStepIdentifier,
 } from "./OnboardingDataModels";
 
-export enum GasFeeStrategy {
-  DEFAULT = "DEFAULT",
-  FIXED = "FIXED",
-  BASE_FEE_PERCENTAGE = "BASE_FEE_PERCENTAGE",
-  PRIORITY_FEE_PERCENTAGE = "PRIORITY_FEE_PERCENTAGE",
-}
-
-export interface GasFeeMode {
-  strategy: GasFeeStrategy;
-  value: bigint;
-}
-
 async function pollForLambdaForComplete(
   lambda: () => Promise<boolean>,
   txnMaxDurationSeconds: number = 20

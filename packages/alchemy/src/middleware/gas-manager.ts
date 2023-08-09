@@ -3,43 +3,9 @@ import {
   resolveProperties,
   type ConnectedSmartAccountProvider,
   type PublicErc4337Client,
-  type UserOperationRequest,
 } from "@alchemy/aa-core";
-import type { Address, Hex, Transport } from "viem";
-
-type ClientWithAlchemyMethods = PublicErc4337Client & {
-  request: PublicErc4337Client["request"] &
-    {
-      request(args: {
-        method: "alchemy_requestPaymasterAndData";
-        params: [
-          {
-            policyId: string;
-            entryPoint: Address;
-            userOperation: UserOperationRequest;
-          }
-        ];
-      }): Promise<{ paymasterAndData: Hex }>;
-      request(args: {
-        method: "alchemy_requestGasAndPaymasterAndData";
-        params: [
-          {
-            policyId: string;
-            entryPoint: Address;
-            userOperation: UserOperationRequest;
-            dummySignature: Hex;
-          }
-        ];
-      }): Promise<{
-        paymasterAndData: Hex;
-        callGasLimit: Hex;
-        verificationGasLimit: Hex;
-        preVerificationGas: Hex;
-        maxFeePerGas: Hex;
-        maxPriorityFeePerGas: Hex;
-      }>;
-    }["request"];
-};
+import type { Address, Transport } from "viem";
+import type { ClientWithAlchemyMethods } from "./client.js";
 
 export interface AlchemyGasManagerConfig {
   policyId: string;

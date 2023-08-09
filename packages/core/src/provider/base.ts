@@ -303,8 +303,8 @@ export class SmartAccountProvider<
     const initCode = await this.account.getInitCode();
     const uoStruct = await asyncPipe(
       this.dummyPaymasterDataMiddleware,
-      this.gasEstimator,
       this.feeDataGetter,
+      this.gasEstimator,
       this.paymasterDataMiddleware,
       this.customMiddleware ?? noOpMiddleware,
       // This applies the overrides if they've been passed in

@@ -13,15 +13,13 @@ import {
   optimism,
   optimismGoerli,
 } from "viem/chains";
-import { ChainFeeStrategies, SupportedChains } from "./chains.js";
-import {
-  GasFeeStrategy,
-  withAlchemyGasFeeEstimator,
-} from "./middleware/gas-fees.js";
+import { SupportedChains } from "./chains.js";
 import {
   withAlchemyGasManager,
   type AlchemyGasManagerConfig,
 } from "./middleware/gas-manager.js";
+import { withAlchemyGasFeeEstimator } from "./middleware/gas-fees.js";
+import type { ClientWithAlchemyMethods } from "./middleware/client.js";
 
 type ConnectionConfig =
   | {
@@ -36,12 +34,16 @@ export type AlchemyProviderConfig = {
   account?: BaseSmartContractAccount;
   opts?: SmartAccountProviderOpts;
   feeOpts?: {
-    /** this adds a percent buffer on top of the fee estimated (default 5%)*/
+    /** this adds a percent buffer on top of the base fee estimated (default 25%) */
+    baseFeeBufferPercent?: bigint;
+    /** this adds a percent buffer on top of the priority fee estimated (default 5%) */
     maxPriorityFeeBufferPercent?: bigint;
   };
 } & ConnectionConfig;
 
 export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
+  alchemyClient: ClientWithAlchemyMethods;
+
   constructor({
     chain,
     entryPointAddress,
@@ -63,12 +65,10 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
 
     super(rpcUrl, entryPointAddress, _chain, account, opts);
 
+    this.alchemyClient = this.rpcClient as ClientWithAlchemyMethods;
     withAlchemyGasFeeEstimator(
       this,
-      ChainFeeStrategies.get(_chain.id) ?? {
-        strategy: GasFeeStrategy.DEFAULT,
-        value: 0n,
-      },
+      feeOpts?.baseFeeBufferPercent ?? 25n,
       feeOpts?.maxPriorityFeeBufferPercent ?? 5n
     );
   }

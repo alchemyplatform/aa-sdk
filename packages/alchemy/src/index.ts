@@ -1,8 +1,4 @@
-export {
-  GasFeeStrategy,
-  withAlchemyGasFeeEstimator,
-} from "./middleware/gas-fees.js";
-export type { GasFeeMode } from "./middleware/gas-fees.js";
+export { withAlchemyGasFeeEstimator } from "./middleware/gas-fees.js";
 
 export {
   withAlchemyGasManager,
