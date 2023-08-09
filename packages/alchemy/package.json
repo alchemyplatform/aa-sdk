@@ -42,7 +42,6 @@
     "@alchemy/aa-core": "^0.1.0-alpha.21",
     "typescript": "^5.0.4",
     "typescript-template": "*",
-    "viem": "^1.1.7",
     "vitest": "^0.31.0"
   },
   "dependencies": {
