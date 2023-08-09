@@ -3,7 +3,7 @@ import { Wallet } from "@ethersproject/wallet";
 import { Alchemy, Network } from "alchemy-sdk";
 import { EthersProviderAdapter } from "../src/provider-adapter.js";
 import { convertWalletToAccountSigner } from "../src/utils.js";
-import { API_KEY, OWNER_MNEMONIC } from "./constants.js";
+import { RPC_URL, API_KEY, OWNER_MNEMONIC } from "./constants.js";
 
 const ENTRYPOINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
 const SIMPLE_ACCOUNT_FACTORY_ADDRESS =
@@ -12,6 +12,7 @@ const SIMPLE_ACCOUNT_FACTORY_ADDRESS =
 describe("Simple Account Tests", async () => {
   const alchemy = new Alchemy({
     apiKey: API_KEY,
+    url: RPC_URL,
     network: Network.MATIC_MUMBAI,
   });
   const alchemyProvider = await alchemy.config.getProvider();

@@ -6,7 +6,7 @@ import { toHex, type Hash } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
 import { AlchemyProvider } from "../src/provider.js";
-import { API_KEY, OWNER_MNEMONIC, PAYMASTER_POLICY_ID } from "./constants.js";
+import { RPC_URL, API_KEY, OWNER_MNEMONIC, PAYMASTER_POLICY_ID } from "./constants.js";
 
 const ENTRYPOINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
 const SIMPLE_ACCOUNT_FACTORY_ADDRESS =
@@ -24,6 +24,7 @@ describe("Simple Account Tests", () => {
   const chain = polygonMumbai;
   const signer = new AlchemyProvider({
     apiKey: API_KEY,
+    rpcUrl: RPC_URL,
     chain,
     entryPointAddress: ENTRYPOINT_ADDRESS,
   }).connect(
@@ -57,6 +58,7 @@ describe("Simple Account Tests", () => {
     const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
     const newSigner = new AlchemyProvider({
       apiKey: API_KEY,
+      rpcUrl: RPC_URL,
       chain,
       entryPointAddress: ENTRYPOINT_ADDRESS,
     }).connect(
