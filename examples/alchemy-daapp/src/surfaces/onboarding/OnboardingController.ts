@@ -100,7 +100,11 @@ const onboardingStepHandlers: Record<
     let baseSigner = new SmartAccountProvider(
       appConfig.rpcUrl,
       context.entrypointAddress!,
-      context.chain!
+      context.chain!,
+      undefined,
+      {
+        txMaxRetries: 60,
+      }
     ).connect((provider: any) => {
       if (!context.owner) {
         throw new Error("No owner for account was found");

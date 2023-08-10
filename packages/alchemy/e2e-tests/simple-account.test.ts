@@ -88,10 +88,66 @@ describe("Simple Account Tests", () => {
 
   it("should successfully execute with alchemy paymaster info", async () => {
     const newSigner = signer.withAlchemyGasManager({
-      provider: signer.rpcClient,
       policyId: PAYMASTER_POLICY_ID,
       entryPoint: ENTRYPOINT_ADDRESS,
     });
+
+    const result = await newSigner.sendUserOperation({
+      target: await newSigner.getAddress(),
+      data: "0x",
+    });
+    const txnHash = signer.waitForUserOperationTransaction(result.hash as Hash);
+
+    await expect(txnHash).resolves.not.toThrowError();
+  }, 50000);
+
+  it("should successfully override fees in alchemy paymaster", async () => {
+    const newSigner = signer
+      .withAlchemyGasManager({
+        policyId: PAYMASTER_POLICY_ID,
+        entryPoint: ENTRYPOINT_ADDRESS,
+      })
+      .withFeeDataGetter(async () => ({
+        maxFeePerGas: 1n,
+        maxPriorityFeePerGas: 1n,
+      }));
+
+    // this should fail since we set super low fees
+    await expect(
+      async () =>
+        await newSigner.sendUserOperation({
+          target: await newSigner.getAddress(),
+          data: "0x",
+        })
+    ).rejects.toThrow();
+  }, 50000);
+
+  it("should successfully use paymaster with fee opts", async () => {
+    const newSigner = new AlchemyProvider({
+      apiKey: API_KEY,
+      rpcUrl: RPC_URL,
+      chain,
+      entryPointAddress: ENTRYPOINT_ADDRESS,
+      feeOpts: {
+        baseFeeBufferPercent: 50n,
+        maxPriorityFeeBufferPercent: 50n,
+        preVerificationGasBufferPercent: 50n,
+      },
+    })
+      .connect(
+        (provider) =>
+          new SimpleSmartContractAccount({
+            entryPointAddress: ENTRYPOINT_ADDRESS,
+            chain,
+            owner,
+            factoryAddress: SIMPLE_ACCOUNT_FACTORY_ADDRESS,
+            rpcClient: provider,
+          })
+      )
+      .withAlchemyGasManager({
+        policyId: PAYMASTER_POLICY_ID,
+        entryPoint: ENTRYPOINT_ADDRESS,
+      });
 
     const result = await newSigner.sendUserOperation({
       target: await newSigner.getAddress(),
