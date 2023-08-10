@@ -35,7 +35,7 @@ export const daappConfigurations: Record<number, DAAppConfiguration> = {
   },
   [sepolia.id]: {
     nftContractAddress: "0x5679b0de84bba361d31b2e7152ab20f0f8565245",
-    simpleAccountFactoryAddress: "0xc8c5736988F4Ea76B9f620dc678c23d5cBf3C83c",
+    simpleAccountFactoryAddress: "0x9406cc6185a346906296840746125a0e44976454",
     gasManagerPolicyId: env.NEXT_PUBLIC_SEPOLIA_POLICY_ID,
     rpcUrl: `/api/rpc/proxy?chainId=${sepolia.id}`,
     chain: sepolia,

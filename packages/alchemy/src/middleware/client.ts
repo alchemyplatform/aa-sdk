@@ -26,6 +26,10 @@ export type ClientWithAlchemyMethods = PublicErc4337Client & {
             entryPoint: Address;
             userOperation: UserOperationRequest;
             dummySignature: Hex;
+            feeOverride?: {
+              maxFeePerGas: Hex;
+              maxPriorityFeePerGas: Hex;
+            };
           }
         ];
       }): Promise<{
