@@ -159,16 +159,21 @@ export class SmartAccountProvider<
       throw new Error("transaction is missing to address");
     }
 
+    const overrides: UserOperationOverrides = {};
+    if (request.maxFeePerGas) {
+      overrides.maxFeePerGas = request.maxFeePerGas;
+    }
+    if (request.maxPriorityFeePerGas) {
+      overrides.maxPriorityFeePerGas = request.maxPriorityFeePerGas;
+    }
+
     const { hash } = await this.sendUserOperation(
       {
         target: request.to,
         data: request.data ?? "0x",
         value: request.value ? fromHex(request.value, "bigint") : 0n,
       },
-      {
-        maxFeePerGas: request.maxFeePerGas,
-        maxPriorityFeePerGas: request.maxPriorityFeePerGas,
-      }
+      overrides
     );
 
     return await this.waitForUserOperationTransaction(hash as Hash);
@@ -239,11 +244,16 @@ export class SmartAccountProvider<
         .filter((x) => x.maxPriorityFeePerGas != null)
         .map((x) => fromHex(x.maxPriorityFeePerGas!, "bigint"))
     );
+    const overrides: UserOperationOverrides = {};
+    if (maxFeePerGas != null) {
+      overrides.maxFeePerGas = maxFeePerGas;
+    }
 
-    const { hash } = await this.sendUserOperation(batch, {
-      maxFeePerGas,
-      maxPriorityFeePerGas,
-    });
+    if (maxPriorityFeePerGas != null) {
+      overrides.maxPriorityFeePerGas = maxPriorityFeePerGas;
+    }
+
+    const { hash } = await this.sendUserOperation(batch, overrides);
 
     return await this.waitForUserOperationTransaction(hash as Hash);
   };
