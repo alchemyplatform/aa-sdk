@@ -35,7 +35,7 @@ export type AlchemyProviderConfig = {
   account?: BaseSmartContractAccount;
   opts?: SmartAccountProviderOpts;
   feeOpts?: {
-    /** this adds a percent buffer on top of the base fee estimated (default 25%)
+    /** this adds a percent buffer on top of the base fee estimated (default 50%)
      * NOTE: this is only applied if the default fee estimator is used.
      */
     baseFeeBufferPercent?: bigint;
@@ -45,7 +45,7 @@ export type AlchemyProviderConfig = {
     maxPriorityFeeBufferPercent?: bigint;
     /** this adds a percent buffer on top of the preVerificationGasEstimated
      *
-     * Default 10% on Arbitrum and Optimism, 0% elsewhere
+     * Defaults 5% on Arbitrum and Optimism, 0% elsewhere
      *
      * This is only useful on Arbitrum and Optimism, where the preVerificationGas is
      * dependent on the gas fee during the time of estimation. To improve chances of
@@ -87,7 +87,7 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
     this.alchemyClient = this.rpcClient as ClientWithAlchemyMethods;
     withAlchemyGasFeeEstimator(
       this,
-      feeOpts?.baseFeeBufferPercent ?? 25n,
+      feeOpts?.baseFeeBufferPercent ?? 50n,
       feeOpts?.maxPriorityFeeBufferPercent ?? 5n
     );
 
@@ -101,7 +101,7 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
         optimismGoerli.id,
       ]).has(this.chain.id)
     ) {
-      this.pvgBuffer = 10n;
+      this.pvgBuffer = 5n;
     } else {
       this.pvgBuffer = 0n;
     }
