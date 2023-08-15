@@ -18,13 +18,19 @@ export { HdAccountSigner } from "./signer/hd-account.js";
 export { LocalAccountSigner } from "./signer/local-account.js";
 export { PrivateKeySigner } from "./signer/private-key.js";
 export type { SmartAccountSigner } from "./signer/types.js";
-export { wrapWith6492 } from "./signer/utils.js";
+export { verifyEIP6492Signature, wrapWith6492 } from "./signer/utils.js";
 
 export {
   createPublicErc4337Client,
   createPublicErc4337FromClient,
 } from "./client/create-client.js";
 export type * from "./client/types.js";
+
+export {
+  convertChainIdToCoinType,
+  convertCoinTypeToChain,
+  convertCoinTypeToChainId,
+} from "./ens/utils.js";
 
 export { SmartAccountProvider, noOpMiddleware } from "./provider/base.js";
 export type {
