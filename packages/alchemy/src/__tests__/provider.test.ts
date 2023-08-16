@@ -53,7 +53,7 @@ describe("Alchemy Provider Tests", () => {
     expect(spy.mock.calls[0][0].fetchOptions).toMatchInlineSnapshot(`
       {
         "headers": {
-          "Authorization": "bearer test",
+          "Authorization": "Bearer test",
         },
       }
     `);
