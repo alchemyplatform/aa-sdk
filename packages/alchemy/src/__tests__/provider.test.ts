@@ -23,7 +23,7 @@ describe("Alchemy Provider Tests", () => {
   const chain = polygonMumbai;
   const signer = new AlchemyProvider({
     rpcUrl: "https://eth-mainnet.g.alchemy.com/v2",
-    jwtToken: "test",
+    jwt: "test",
     chain,
     entryPointAddress: "0xENTRYPOINT_ADDRESS",
   }).connect((provider) => {
@@ -46,7 +46,7 @@ describe("Alchemy Provider Tests", () => {
     const spy = vi.spyOn(AACoreModule, "createPublicErc4337Client");
     new AlchemyProvider({
       rpcUrl: "https://eth-mainnet.g.alchemy.com/v2",
-      jwtToken: "test",
+      jwt: "test",
       chain,
       entryPointAddress: "0xENTRYPOINT_ADDRESS",
     });

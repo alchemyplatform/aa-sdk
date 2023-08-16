@@ -29,7 +29,7 @@ type ConnectionConfig =
       rpcUrl?: undefined;
     }
   | { rpcUrl: string; apiKey?: undefined }
-  | { rpcUrl: string; apiKey?: undefined; jwtToken: string };
+  | { rpcUrl: string; apiKey?: undefined; jwt: string };
 
 export type AlchemyProviderConfig = {
   chain: Chain | number;
@@ -87,10 +87,10 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
     const client = createPublicErc4337Client({
       chain: _chain,
       rpcUrl,
-      ...("jwtToken" in connectionConfig && {
+      ...("jwt" in connectionConfig && {
         fetchOptions: {
           headers: {
-            Authorization: `Bearer ${connectionConfig.jwtToken}`,
+            Authorization: `Bearer ${connectionConfig.jwt}`,
           },
         },
       }),
