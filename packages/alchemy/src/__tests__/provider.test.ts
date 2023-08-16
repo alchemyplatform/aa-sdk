@@ -1,3 +1,4 @@
+import * as AACoreModule from "@alchemy/aa-core";
 import {
   SimpleSmartContractAccount,
   type BatchUserOperationCallData,
@@ -21,7 +22,8 @@ describe("Alchemy Provider Tests", () => {
   };
   const chain = polygonMumbai;
   const signer = new AlchemyProvider({
-    apiKey: "test",
+    rpcUrl: "https://eth-mainnet.g.alchemy.com/v2",
+    jwtToken: "test",
     chain,
     entryPointAddress: "0xENTRYPOINT_ADDRESS",
   }).connect((provider) => {
@@ -38,6 +40,23 @@ describe("Alchemy Provider Tests", () => {
     );
 
     return account;
+  });
+
+  it("should have a JWT propety", async () => {
+    const spy = vi.spyOn(AACoreModule, "createPublicErc4337Client");
+    new AlchemyProvider({
+      rpcUrl: "https://eth-mainnet.g.alchemy.com/v2",
+      jwtToken: "test",
+      chain,
+      entryPointAddress: "0xENTRYPOINT_ADDRESS",
+    });
+    expect(spy.mock.calls[0][0].fetchOptions).toMatchInlineSnapshot(`
+      {
+        "headers": {
+          "Authorization": "bearer test",
+        },
+      }
+    `);
   });
 
   it("should correctly sign the message", async () => {

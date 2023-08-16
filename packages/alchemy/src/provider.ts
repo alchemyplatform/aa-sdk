@@ -1,12 +1,13 @@
 import {
   BaseSmartContractAccount,
   SmartAccountProvider,
+  createPublicErc4337Client,
   deepHexlify,
   resolveProperties,
   type AccountMiddlewareFn,
   type SmartAccountProviderOpts,
 } from "@alchemy/aa-core";
-import type { Address, Chain, HttpTransport } from "viem";
+import { type Address, type Chain, type HttpTransport } from "viem";
 import {
   arbitrum,
   arbitrumGoerli,
@@ -14,20 +15,21 @@ import {
   optimismGoerli,
 } from "viem/chains";
 import { SupportedChains } from "./chains.js";
+import type { ClientWithAlchemyMethods } from "./middleware/client.js";
+import { withAlchemyGasFeeEstimator } from "./middleware/gas-fees.js";
 import {
+  alchemyPaymasterAndDataMiddleware,
   withAlchemyGasManager,
   type AlchemyGasManagerConfig,
-  alchemyPaymasterAndDataMiddleware,
 } from "./middleware/gas-manager.js";
-import { withAlchemyGasFeeEstimator } from "./middleware/gas-fees.js";
-import type { ClientWithAlchemyMethods } from "./middleware/client.js";
 
 type ConnectionConfig =
   | {
       apiKey: string;
       rpcUrl?: undefined;
     }
-  | { rpcUrl: string; apiKey?: undefined };
+  | { rpcUrl: string; apiKey?: undefined }
+  | { rpcUrl: string; apiKey?: undefined; jwtToken: string };
 
 export type AlchemyProviderConfig = {
   chain: Chain | number;
@@ -82,7 +84,19 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
         ? `${_chain.rpcUrls.alchemy.http[0]}/${connectionConfig.apiKey}`
         : connectionConfig.rpcUrl;
 
-    super(rpcUrl, entryPointAddress, _chain, account, opts);
+    const client = createPublicErc4337Client({
+      chain: _chain,
+      rpcUrl,
+      ...("jwtToken" in connectionConfig && {
+        fetchOptions: {
+          headers: {
+            Authorization: `bearer ${connectionConfig.jwtToken}`,
+          },
+        },
+      }),
+    });
+
+    super(client, entryPointAddress, _chain, account, opts);
 
     this.alchemyClient = this.rpcClient as ClientWithAlchemyMethods;
     withAlchemyGasFeeEstimator(
