@@ -90,7 +90,7 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
       ...("jwtToken" in connectionConfig && {
         fetchOptions: {
           headers: {
-            Authorization: `bearer ${connectionConfig.jwtToken}`,
+            Authorization: `Bearer ${connectionConfig.jwtToken}`,
           },
         },
       }),
