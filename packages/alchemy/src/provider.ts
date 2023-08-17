@@ -26,10 +26,10 @@ import {
 type ConnectionConfig =
   | {
       apiKey: string;
-      rpcUrl?: undefined;
+      rpcUrl?: never;
     }
-  | { rpcUrl: string; apiKey?: undefined }
-  | { rpcUrl: string; apiKey?: undefined; jwt: string };
+  | { rpcUrl: string; apiKey?: never }
+  | { rpcUrl: string; apiKey?: never; jwt: string };
 
 export type AlchemyProviderConfig = {
   chain: Chain | number;
