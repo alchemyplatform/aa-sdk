@@ -23,12 +23,9 @@ import {
   type AlchemyGasManagerConfig,
 } from "./middleware/gas-manager.js";
 
-type ConnectionConfig =
-  | {
-      apiKey: string;
-      rpcUrl?: never;
-    }
-  | { rpcUrl: string; apiKey?: never }
+export type ConnectionConfig =
+  | { rpcUrl?: never; apiKey: string; jwt?: never }
+  | { rpcUrl: string; apiKey?: never; jwt?: never }
   | { rpcUrl: string; apiKey?: never; jwt: string };
 
 export type AlchemyProviderConfig = {
@@ -87,7 +84,7 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
     const client = createPublicErc4337Client({
       chain: _chain,
       rpcUrl,
-      ...("jwt" in connectionConfig && {
+      ...(connectionConfig.jwt != null && {
         fetchOptions: {
           headers: {
             Authorization: `Bearer ${connectionConfig.jwt}`,

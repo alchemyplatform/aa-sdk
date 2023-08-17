@@ -7,4 +7,4 @@ export {
 
 export { SupportedChains } from "./chains.js";
 export { AlchemyProvider } from "./provider.js";
-export type { AlchemyProviderConfig } from "./provider.js";
+export type { AlchemyProviderConfig, ConnectionConfig } from "./provider.js";
