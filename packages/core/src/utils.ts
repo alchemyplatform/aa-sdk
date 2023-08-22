@@ -36,9 +36,10 @@ export const asyncPipe =
   };
 
 // based on @ethersproject/properties, but pulled in here to minize the dependency on ethers
-type Deferrable<T> = {
+export type Deferrable<T> = {
   [K in keyof T]: PromiseOrValue<T[K]>;
 };
+
 /**
  * Await all of the properties of a {@link Deferrable} object
  *

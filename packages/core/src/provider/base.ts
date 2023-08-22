@@ -32,6 +32,7 @@ import {
   defineReadOnly,
   getUserOperationHash,
   resolveProperties,
+  type Deferrable,
 } from "../utils.js";
 import type {
   AccountMiddlewareFn,
@@ -45,8 +46,9 @@ import type {
 } from "./types.js";
 
 export const noOpMiddleware: AccountMiddlewareFn = async (
-  struct: UserOperationStruct
+  struct: Deferrable<UserOperationStruct>
 ) => struct;
+
 export interface SmartAccountProviderOpts {
   /**
    * The maximum number of times to try fetching a transaction receipt before giving up (default: 5)
@@ -165,31 +167,6 @@ export class SmartAccountProvider<
     return this.account.getAddress();
   };
 
-  sendTransaction = async (request: RpcTransactionRequest): Promise<Hash> => {
-    if (!request.to) {
-      throw new Error("transaction is missing to address");
-    }
-
-    const overrides: UserOperationOverrides = {};
-    if (request.maxFeePerGas) {
-      overrides.maxFeePerGas = request.maxFeePerGas;
-    }
-    if (request.maxPriorityFeePerGas) {
-      overrides.maxPriorityFeePerGas = request.maxPriorityFeePerGas;
-    }
-
-    const { hash } = await this.sendUserOperation(
-      {
-        target: request.to,
-        data: request.data ?? "0x",
-        value: request.value ? fromHex(request.value, "bigint") : 0n,
-      },
-      overrides
-    );
-
-    return await this.waitForUserOperationTransaction(hash as Hash);
-  };
-
   signMessage = async (msg: string | Uint8Array): Promise<Hash> => {
     if (!this.account) {
       throw new Error("account not connected!");
@@ -220,6 +197,36 @@ export class SmartAccountProvider<
 
     return this.account.signTypedDataWith6492(params);
   }
+
+  sendTransaction = async (request: RpcTransactionRequest): Promise<Hash> => {
+    const uoStruct = await this.buildUserOperationFromTx(request);
+
+    const { hash } = await this._sendUserOperation(uoStruct);
+
+    return await this.waitForUserOperationTransaction(hash as Hash);
+  };
+
+  buildUserOperationFromTx = async (
+    request: RpcTransactionRequest
+  ): Promise<UserOperationStruct> => {
+    if (!request.to) {
+      throw new Error("transaction is missing to address");
+    }
+
+    const overrides: UserOperationOverrides = {};
+    if (request.maxFeePerGas) {
+      overrides.maxFeePerGas = request.maxFeePerGas;
+    }
+    if (request.maxPriorityFeePerGas) {
+      overrides.maxPriorityFeePerGas = request.maxPriorityFeePerGas;
+    }
+
+    return this.buildUserOperation({
+      target: request.to,
+      data: request.data ?? "0x",
+      value: request.value ? fromHex(request.value, "bigint") : 0n,
+    });
+  };
 
   sendTransactions = async (requests: RpcTransactionRequest[]) => {
     const batch = requests.map((request) => {
@@ -303,10 +310,10 @@ export class SmartAccountProvider<
     return this.rpcClient.getTransaction({ hash: hash });
   };
 
-  sendUserOperation = async (
+  buildUserOperation = async (
     data: UserOperationCallData | BatchUserOperationCallData,
     overrides?: UserOperationOverrides
-  ): Promise<SendUserOperationResult> => {
+  ) => {
     if (!this.account) {
       throw new Error("account not connected!");
     }
@@ -328,9 +335,29 @@ export class SmartAccountProvider<
         ? this.account.encodeBatchExecute(data)
         : this.account.encodeExecute(data.target, data.value ?? 0n, data.data),
       signature: this.account.getDummySignature(),
-    } as UserOperationStruct);
+    } as Deferrable<UserOperationStruct>);
 
-    const request = deepHexlify(await resolveProperties(uoStruct));
+    return resolveProperties(uoStruct);
+  };
+
+  sendUserOperation = async (
+    data: UserOperationCallData | BatchUserOperationCallData,
+    overrides?: UserOperationOverrides
+  ): Promise<SendUserOperationResult> => {
+    if (!this.account) {
+      throw new Error("account not connected");
+    }
+
+    const uoStruct = await this.buildUserOperation(data, overrides);
+    return this._sendUserOperation(uoStruct);
+  };
+
+  private _sendUserOperation = async (uoStruct: UserOperationStruct) => {
+    if (!this.account) {
+      throw new Error("account not connected");
+    }
+
+    const request = deepHexlify(uoStruct);
     if (!isValidRequest(request)) {
       // this pretty prints the uo
       throw new Error(
@@ -363,15 +390,13 @@ export class SmartAccountProvider<
   // You should implement your own middleware to override these
   // or extend this class and provider your own implemenation
   readonly dummyPaymasterDataMiddleware: AccountMiddlewareFn = async (
-    struct: UserOperationStruct
-  ): Promise<UserOperationStruct> => {
+    struct
+  ) => {
     struct.paymasterAndData = "0x";
     return struct;
   };
 
-  readonly paymasterDataMiddleware: AccountMiddlewareFn = async (
-    struct: UserOperationStruct
-  ): Promise<UserOperationStruct> => {
+  readonly paymasterDataMiddleware: AccountMiddlewareFn = async (struct) => {
     struct.paymasterAndData = "0x";
     return struct;
   };
@@ -494,7 +519,7 @@ export class SmartAccountProvider<
   private overrideMiddlewareFunction = (
     override: AccountMiddlewareOverrideFn
   ): AccountMiddlewareFn => {
-    return async (struct: UserOperationStruct) => {
+    return async (struct) => {
       return {
         ...struct,
         ...(await override(struct)),

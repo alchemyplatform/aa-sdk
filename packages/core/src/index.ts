@@ -40,6 +40,7 @@ export type {
 export type * from "./provider/types.js";
 
 export type * from "./types.js";
+export type * from "./utils.js";
 export {
   asyncPipe,
   deepHexlify,
