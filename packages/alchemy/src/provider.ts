@@ -25,6 +25,7 @@ import {
 
 export type ConnectionConfig =
   | { rpcUrl?: never; apiKey: string; jwt?: never }
+  | { rpcUrl?: never; apiKey?: never; jwt: string }
   | { rpcUrl: string; apiKey?: never; jwt?: never }
   | { rpcUrl: string; apiKey?: never; jwt: string };
 
@@ -77,8 +78,8 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
     }
 
     const rpcUrl =
-      connectionConfig.apiKey !== undefined
-        ? `${_chain.rpcUrls.alchemy.http[0]}/${connectionConfig.apiKey}`
+      connectionConfig.rpcUrl == null
+        ? `${_chain.rpcUrls.alchemy.http[0]}/${connectionConfig.apiKey ?? ""}`
         : connectionConfig.rpcUrl;
 
     const client = createPublicErc4337Client({
