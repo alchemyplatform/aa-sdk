@@ -152,27 +152,27 @@ export interface UserOperationReceiptLog {
 // this is used for building requests
 export interface UserOperationStruct {
   /* the origin of the request */
-  sender: PromiseOrValue<string>;
+  sender: string;
   /* nonce of the transaction, returned from the entrypoint for this Address */
-  nonce: PromiseOrValue<BigNumberish>;
+  nonce: BigNumberish;
   /* the initCode for creating the sender if it does not exist yet, otherwise "0x" */
-  initCode: PromiseOrValue<BytesLike | "0x">;
+  initCode: BytesLike | "0x";
   /* the callData passed to the target */
-  callData: PromiseOrValue<BytesLike>;
+  callData: BytesLike;
   /* Value used by inner account execution */
-  callGasLimit?: PromiseOrValue<BigNumberish>;
+  callGasLimit?: BigNumberish;
   /* Actual gas used by the validation of this UserOperation */
-  verificationGasLimit?: PromiseOrValue<BigNumberish>;
+  verificationGasLimit?: BigNumberish;
   /* Gas overhead of this UserOperation */
-  preVerificationGas?: PromiseOrValue<BigNumberish>;
+  preVerificationGas?: BigNumberish;
   /* Maximum fee per gas (similar to EIP-1559 max_fee_per_gas) */
-  maxFeePerGas?: PromiseOrValue<BigNumberish>;
+  maxFeePerGas?: BigNumberish;
   /* Maximum priority fee per gas (similar to EIP-1559 max_priority_fee_per_gas) */
-  maxPriorityFeePerGas?: PromiseOrValue<BigNumberish>;
+  maxPriorityFeePerGas?: BigNumberish;
   /* Address of paymaster sponsoring the transaction, followed by extra data to send to the paymaster ("0x" for self-sponsored transaction) */
-  paymasterAndData: PromiseOrValue<BytesLike | "0x">;
+  paymasterAndData: BytesLike | "0x";
   /* Data passed into the account along with the nonce during the verification step */
-  signature: PromiseOrValue<BytesLike>;
+  signature: BytesLike;
 }
 
 /**

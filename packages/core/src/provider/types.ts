@@ -15,6 +15,7 @@ import type {
   UserOperationResponse,
   UserOperationStruct,
 } from "../types.js";
+import type { Deferrable } from "../utils.js";
 
 type WithRequired<T, K extends keyof T> = Required<Pick<T, K>>;
 type WithOptional<T, K extends keyof T> = Pick<Partial<T>, K>;
@@ -38,14 +39,14 @@ export type SendUserOperationResult = {
 };
 
 export type AccountMiddlewareFn = (
-  struct: UserOperationStruct
-) => Promise<UserOperationStruct>;
+  struct: Deferrable<UserOperationStruct>
+) => Promise<Deferrable<UserOperationStruct>>;
 
 export type AccountMiddlewareOverrideFn<
   Req extends keyof UserOperationStruct = never,
   Opt extends keyof UserOperationStruct = never
 > = (
-  struct: UserOperationStruct
+  struct: Deferrable<UserOperationStruct>
 ) => Promise<
   WithRequired<UserOperationStruct, Req> &
     WithOptional<UserOperationStruct, Opt>
@@ -95,6 +96,27 @@ export interface ISmartAccountProvider<
   sendUserOperation: (
     data: UserOperationCallData | BatchUserOperationCallData
   ) => Promise<SendUserOperationResult>;
+
+  /**
+   * Allows you to get the unsigned UserOperation struct with all of the middleware run on it
+   *
+   * @param data - either {@link UserOperationCallData} or {@link BatchUserOperationCallData}
+   * @returns - {@link UserOperationStruct} resulting from the middleware pipeline
+   */
+  buildUserOperation: (
+    data: UserOperationCallData | BatchUserOperationCallData
+  ) => Promise<UserOperationStruct>;
+
+  /**
+   * Allows you to get the unsigned UserOperation struct with all of the middleware run on it
+   * converted from a traditional ethereum transaction
+   *
+   * @param data - {@link RpcTransactionRequest} the tx to convert to a UserOperation
+   * @returns - {@link UserOperationStruct} resulting from the middleware pipeline
+   */
+  buildUserOperationFromTx: (
+    tx: RpcTransactionRequest
+  ) => Promise<UserOperationStruct>;
 
   /**
    * This will wait for the user operation to be included in a transaction that's been mined.
