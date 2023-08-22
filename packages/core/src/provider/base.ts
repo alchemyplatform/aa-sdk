@@ -128,9 +128,8 @@ export class SmartAccountProvider<
       case "eth_sendTransaction":
         const [tx] = params as [RpcTransactionRequest];
         return this.sendTransaction(tx);
-      // TODO: will probably need to handle typed message signing too?
       case "eth_sign":
-      case "personal_sign":
+      case "personal_sign": {
         const [data, address] = params!;
         if (address !== (await this.getAddress())) {
           throw new Error(
@@ -138,6 +137,18 @@ export class SmartAccountProvider<
           );
         }
         return this.signMessage(data);
+      }
+      case "eth_signTypedData_v4": {
+        const [address, dataParams] = params!;
+        if (address !== (await this.getAddress())) {
+          throw new Error(
+            "cannot sign for address that is not the current account"
+          );
+        }
+        return this.signTypedData(dataParams);
+      }
+      case "eth_chainId":
+        return this.chain.id;
       default:
         // TODO: there's probably a number of methods we just don't support, will need to test most of them out
         // first let's get something working though
