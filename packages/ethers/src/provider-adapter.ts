@@ -14,21 +14,29 @@ import { defineReadOnly } from "@ethersproject/properties";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { AccountSigner } from "./account-signer.js";
 
+export type EthersProviderAdapterOpts =
+  | {
+      rpcProvider: string | PublicErc4337Client<HttpTransport>;
+      entryPointAddress: Address;
+      chainId: number;
+    }
+  | { accountProvider: SmartAccountProvider<HttpTransport> };
+
 /** Lightweight Adapter for SmartAccountProvider to enable Signer Creation */
 export class EthersProviderAdapter extends JsonRpcProvider {
   readonly accountProvider: SmartAccountProvider<HttpTransport>;
-  constructor(
-    rpcProvider: string | PublicErc4337Client<HttpTransport>,
-    entryPointAddress: Address,
-    chainId: number
-  ) {
+  constructor(opts: EthersProviderAdapterOpts) {
     super();
-    const chain = getChain(chainId);
-    this.accountProvider = new SmartAccountProvider(
-      rpcProvider,
-      entryPointAddress,
-      chain
-    );
+    if ("accountProvider" in opts) {
+      this.accountProvider = opts.accountProvider;
+    } else {
+      const chain = getChain(opts.chainId);
+      this.accountProvider = new SmartAccountProvider(
+        opts.rpcProvider,
+        opts.entryPointAddress,
+        chain
+      );
+    }
   }
 
   /**
@@ -99,10 +107,10 @@ export class EthersProviderAdapter extends JsonRpcProvider {
     provider: JsonRpcProvider,
     entryPointAddress: Address
   ): EthersProviderAdapter {
-    return new EthersProviderAdapter(
-      provider.connection.url,
+    return new EthersProviderAdapter({
+      rpcProvider: provider.connection.url,
       entryPointAddress,
-      provider.network.chainId
-    );
+      chainId: provider.network.chainId,
+    });
   }
 }
