@@ -19,9 +19,11 @@ export interface UserOperationCallData {
 
 export type BatchUserOperationCallData = UserOperationCallData[];
 
-export type UserOperationOverrides = Pick<
-  UserOperationStruct,
-  "maxFeePerGas" | "maxPriorityFeePerGas"
+export type UserOperationOverrides = Partial<
+  Pick<
+    UserOperationStruct,
+    "maxFeePerGas" | "maxPriorityFeePerGas" | "paymasterAndData"
+  >
 >;
 
 // represents the request as it needs to be formatted for RPC requests

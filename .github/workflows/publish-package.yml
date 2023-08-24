@@ -9,6 +9,11 @@ on:
         required: true
         default: false
         type: boolean
+      skip-e2e:
+        description: "Flag to skip E2E tests"
+        required: true
+        default: false
+        type: boolean
 
 # If we ever migrate this to not be manual, we HAVE to check that the commit
 # it is running against DOES NOT contain [skip-ci] in the commit message
@@ -44,6 +49,7 @@ jobs:
         run: yarn build
 
       - name: E2E tests
+        if: !inputs.skip-e2e
         env:
           API_KEY: ${{ secrets.API_KEY }}
           OWNER_MNEMONIC: ${{ secrets.OWNER_MNEMONIC }}
