@@ -49,7 +49,7 @@ jobs:
         run: yarn build
 
       - name: E2E tests
-        if: !inputs.skip-e2e
+        if: inputs.skip-e2e == false
         env:
           API_KEY: ${{ secrets.API_KEY }}
           OWNER_MNEMONIC: ${{ secrets.OWNER_MNEMONIC }}
