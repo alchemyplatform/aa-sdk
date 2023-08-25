@@ -221,11 +221,14 @@ export class SmartAccountProvider<
       overrides.maxPriorityFeePerGas = request.maxPriorityFeePerGas;
     }
 
-    return this.buildUserOperation({
-      target: request.to,
-      data: request.data ?? "0x",
-      value: request.value ? fromHex(request.value, "bigint") : 0n,
-    });
+    return this.buildUserOperation(
+      {
+        target: request.to,
+        data: request.data ?? "0x",
+        value: request.value ? fromHex(request.value, "bigint") : 0n,
+      },
+      overrides
+    );
   };
 
   sendTransactions = async (requests: RpcTransactionRequest[]) => {
