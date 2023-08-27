@@ -14,6 +14,7 @@ export type {
   SimpleSmartAccountParams,
 } from "./account/simple.js";
 export type * from "./account/types.js";
+export { JsonRpcAccountSigner } from "./signer/json-rpc-account.js";
 export { HdAccountSigner } from "./signer/hd-account.js";
 export { LocalAccountSigner } from "./signer/local-account.js";
 export { PrivateKeySigner } from "./signer/private-key.js";
