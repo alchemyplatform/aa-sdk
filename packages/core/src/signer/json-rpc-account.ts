@@ -17,7 +17,7 @@ export class JsonRpcAccountSigner implements SmartAccountSigner {
   readonly signMessage: (
     message: string | Hex | ByteArray
   ) => Promise<`0x${string}`> = async (message) => {
-    if (typeof message === "string") {
+    if (typeof message === "string" && !message.startsWith("0x")) {
       return this.client.signMessage({
         account: await this.getAddress(),
         message,
