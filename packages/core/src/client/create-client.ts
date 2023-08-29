@@ -62,14 +62,14 @@ export const createPublicErc4337FromClient: <
       });
     },
 
-    getUserOperationByHash(hash: Hash): Promise<UserOperationResponse> {
+    getUserOperationByHash(hash: Hash): Promise<UserOperationResponse | null> {
       return clientAdapter.request({
         method: "eth_getUserOperationByHash",
         params: [hash],
       });
     },
 
-    getUserOperationReceipt(hash: Hash): Promise<UserOperationReceipt> {
+    getUserOperationReceipt(hash: Hash): Promise<UserOperationReceipt | null> {
       return clientAdapter.request({
         method: "eth_getUserOperationReceipt",
         params: [hash],
