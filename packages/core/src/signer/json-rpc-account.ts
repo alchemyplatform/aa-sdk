@@ -2,7 +2,7 @@ import { getAddress, type ByteArray, type Hex, type WalletClient } from "viem";
 import type { SmartAccountSigner } from "./types";
 import type { SignTypedDataParams } from "../account/types";
 
-export class JsonRpcAccountSigner implements SmartAccountSigner {
+export class WalletClientSigner implements SmartAccountSigner {
   private client: WalletClient;
 
   constructor(client: WalletClient) {
