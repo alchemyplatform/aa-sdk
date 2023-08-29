@@ -36,12 +36,12 @@ export type Erc337RpcSchema = [
   {
     Method: "eth_getUserOperationReceipt";
     Parameters: [Hash];
-    ReturnType: UserOperationReceipt;
+    ReturnType: UserOperationReceipt | null;
   },
   {
     Method: "eth_getUserOperationByHash";
     Parameters: [Hash];
-    ReturnType: UserOperationResponse;
+    ReturnType: UserOperationResponse | null;
   },
   {
     Method: "eth_supportedEntryPoints";
@@ -86,7 +86,7 @@ export interface Erc4337Actions {
    * @param hash - the hash of the UserOperation to get the receipt for
    * @returns - {@link UserOperationResponse}
    */
-  getUserOperationByHash(hash: Hash): Promise<UserOperationResponse>;
+  getUserOperationByHash(hash: Hash): Promise<UserOperationResponse | null>;
 
   /**
    * calls `eth_getUserOperationReceipt` and returns the {@link UserOperationReceipt}
@@ -94,7 +94,7 @@ export interface Erc4337Actions {
    * @param hash - the hash of the UserOperation to get the receipt for
    * @returns - {@link UserOperationResponse}
    */
-  getUserOperationReceipt(hash: Hash): Promise<UserOperationReceipt>;
+  getUserOperationReceipt(hash: Hash): Promise<UserOperationReceipt | null>;
 
   /**
    * calls `eth_supportedEntryPoints` and returns the entrypoints the RPC

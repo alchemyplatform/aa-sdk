@@ -301,11 +301,15 @@ export class SmartAccountProvider<
     throw new Error("Failed to find transaction for User Operation");
   };
 
-  getUserOperationByHash = (hash: Hash): Promise<UserOperationResponse> => {
+  getUserOperationByHash = (
+    hash: Hash
+  ): Promise<UserOperationResponse | null> => {
     return this.rpcClient.getUserOperationByHash(hash);
   };
 
-  getUserOperationReceipt = (hash: Hash): Promise<UserOperationReceipt> => {
+  getUserOperationReceipt = (
+    hash: Hash
+  ): Promise<UserOperationReceipt | null> => {
     return this.rpcClient.getUserOperationReceipt(hash);
   };
 
