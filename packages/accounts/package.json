@@ -1,6 +1,6 @@
 {
   "name": "@alchemy/aa-accounts",
-  "version": "0.1.0-alpha.28",
+  "version": "0.1.0-alpha.29",
   "description": "A collection of ERC-4337 compliant smart contract account interfaces",
   "author": "Alchemy",
   "license": "MIT",
@@ -39,7 +39,7 @@
     "test:run-e2e": "vitest run --config vitest.config.e2e.ts"
   },
   "devDependencies": {
-    "@alchemy/aa-core": "^0.1.0-alpha.28",
+    "@alchemy/aa-core": "^0.1.0-alpha.29",
     "typescript": "^5.0.4",
     "typescript-template": "*",
     "vitest": "^0.31.0"
