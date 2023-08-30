@@ -139,7 +139,7 @@ let provider = new AlchemyProvider({
 );
 
 // [OPTIONAL] Use Alchemy Gas Manager
-prpvider = provider.withAlchemyGasManager({
+provider = provider.withAlchemyGasManager({
   provider: provider.rpcClient,
   policyId: PAYMASTER_POLICY_ID,
   entryPoint: ENTRYPOINT_ADDRESS,
