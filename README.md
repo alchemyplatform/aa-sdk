@@ -238,7 +238,7 @@ We provide two utility methods in `@alchemy/aa-alchemy` for interacting with the
 1. `alchemyPaymasterAndDataMiddleware` which is used in conjunction with `withPaymasterMiddleware` to add the `alchemy_requestPaymasterAndData` RPC method to the middleware stack.
 2. `withAlchemyGasManager` which wraps a connected `SmartAccountProvider` with the middleware overrides to use `alchemy_requestGasAndPaymasterAndData` RPC method.
 
-## Contributing 
+## Contributing
 
 1. clone the repo
 2. run `yarn`
