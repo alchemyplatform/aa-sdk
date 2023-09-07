@@ -1,4 +1,10 @@
-import { getAddress, type ByteArray, type Hex, type WalletClient } from "viem";
+import {
+  getAddress,
+  type ByteArray,
+  type Hex,
+  type WalletClient,
+  isHex,
+} from "viem";
 import type { SmartAccountSigner } from "./types";
 import type { SignTypedDataParams } from "../account/types";
 
