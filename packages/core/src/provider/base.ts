@@ -131,6 +131,13 @@ export class SmartAccountProvider<
         const [tx] = params as [RpcTransactionRequest];
         return this.sendTransaction(tx);
       case "eth_sign":
+        const [address, data] = params!;
+        if (address !== (await this.getAddress())) {
+          throw new Error(
+            "cannot sign for address that is not the current account"
+          );
+        }
+        return this.signMessage(data);
       case "personal_sign": {
         const [data, address] = params!;
         if (address !== (await this.getAddress())) {
