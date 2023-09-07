@@ -133,7 +133,7 @@ export interface ISmartAccountProvider<
    * @param hash - the hash of the UserOperation to get the receipt for
    * @returns - {@link UserOperationResponse}
    */
-  getUserOperationByHash: (hash: Hash) => Promise<UserOperationResponse>;
+  getUserOperationByHash: (hash: Hash) => Promise<UserOperationResponse | null>;
 
   /**
    * calls `eth_getUserOperationReceipt` and returns the {@link UserOperationReceipt}
@@ -141,7 +141,7 @@ export interface ISmartAccountProvider<
    * @param hash - the hash of the UserOperation to get the receipt for
    * @returns - {@link UserOperationResponse}
    */
-  getUserOperationReceipt: (hash: Hash) => Promise<UserOperationReceipt>;
+  getUserOperationReceipt: (hash: Hash) => Promise<UserOperationReceipt | null>;
 
   /**
    * This takes an ethereum transaction and converts it into a UserOperation, sends the UserOperation, and waits
