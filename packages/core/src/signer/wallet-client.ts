@@ -17,7 +17,7 @@ export class WalletClientSigner implements SmartAccountSigner {
   readonly signMessage: (
     message: string | Hex | ByteArray
   ) => Promise<`0x${string}`> = async (message) => {
-    if (typeof message === "string" && !message.startsWith("0x")) {
+    if (typeof message === "string" && !isHex(message)) {
       return this.client.signMessage({
         account: await this.getAddress(),
         message,
