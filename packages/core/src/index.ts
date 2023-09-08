@@ -9,10 +9,7 @@ export { SimpleAccountFactoryAbi } from "./abis/SimpleAccountFactoryAbi.js";
 export { BaseSmartContractAccount } from "./account/base.js";
 export type { BaseSmartAccountParams } from "./account/base.js";
 export { SimpleSmartContractAccount } from "./account/simple.js";
-export type {
-  SimpleSmartAccountOwner,
-  SimpleSmartAccountParams,
-} from "./account/simple.js";
+export type { SimpleSmartAccountParams } from "./account/simple.js";
 export type * from "./account/types.js";
 export { HdAccountSigner } from "./signer/hd-account.js";
 export { LocalAccountSigner } from "./signer/local-account.js";

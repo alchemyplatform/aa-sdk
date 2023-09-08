@@ -4,7 +4,6 @@ import {
   encodeFunctionData,
   hexToBytes,
   type FallbackTransport,
-  type Hash,
   type Hex,
   type Transport,
 } from "viem";
@@ -15,18 +14,12 @@ import {
   BaseSmartContractAccount,
   type BaseSmartAccountParams,
 } from "./base.js";
-import type { SignTypedDataParams } from "./types.js";
-
-export interface SimpleSmartAccountOwner {
-  signMessage: (msg: Uint8Array) => Promise<Hash>;
-  getAddress: () => Promise<Address>;
-  signTypedData: (params: SignTypedDataParams) => Promise<Hash>;
-}
+import type { SmartAccountSigner } from "../signer/types.js";
 
 export interface SimpleSmartAccountParams<
   TTransport extends Transport | FallbackTransport = Transport
 > extends BaseSmartAccountParams<TTransport> {
-  owner: SimpleSmartAccountOwner;
+  owner: SmartAccountSigner;
   factoryAddress: Address;
   index?: bigint;
 }
@@ -34,7 +27,7 @@ export interface SimpleSmartAccountParams<
 export class SimpleSmartContractAccount<
   TTransport extends Transport | FallbackTransport = Transport
 > extends BaseSmartContractAccount<TTransport> {
-  protected owner: SimpleSmartAccountOwner;
+  protected owner: SmartAccountSigner;
   protected factoryAddress: Address;
   protected index: bigint;
 
