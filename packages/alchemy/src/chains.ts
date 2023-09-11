@@ -9,6 +9,8 @@ import {
   polygon,
   polygonMumbai,
   sepolia,
+  base,
+  baseGoerli,
 } from "viem/chains";
 
 export const SupportedChains = new Map<number, Chain>([
@@ -21,4 +23,6 @@ export const SupportedChains = new Map<number, Chain>([
   [arbitrum.id, arbitrum],
   [optimism.id, optimism],
   [optimismGoerli.id, optimismGoerli],
+  [base.id, base],
+  [base.id, baseGoerli],
 ]);
