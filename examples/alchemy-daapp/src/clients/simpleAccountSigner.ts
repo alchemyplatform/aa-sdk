@@ -32,7 +32,7 @@ export function useSimpleAccountSigner(): SimpleSmartAccountSignerResult {
       walletClientQuery.data!.request({
         // ignore the type error here, it's a bug in the viem typing
         // @ts-ignore
-        method: "signTypedData_v4",
+        method: "eth_signTypedData_v4",
         // @ts-ignore
         params: [toHex(data), walletClientQuery.data.account.address],
       }),
