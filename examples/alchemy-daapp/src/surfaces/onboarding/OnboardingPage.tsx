@@ -21,7 +21,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { memo, useState } from "react";
 import { useAccount } from "wagmi";
-import { useSimpleAccountSigner } from "~/clients/simpleAccountOwner";
+import { useSimpleAccountSigner } from "~/clients/simpleAccountSigner";
 import { LoadingScreen } from "~/surfaces/shared/LoadingScreen";
 import { queryClient } from "../../clients/query";
 import { useOnboardingOrchestrator } from "./OnboardingController";
