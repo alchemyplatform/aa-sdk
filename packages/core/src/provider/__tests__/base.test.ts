@@ -41,7 +41,7 @@ describe("Base Tests", () => {
     expectedMockCalls: number,
     getUserOperationReceiptMock: SpyInstance<
       [hash: `0x${string}`],
-      Promise<UserOperationReceipt>
+      Promise<UserOperationReceipt | null>
     >
   ) => {
     expect(retryMsDelays).toEqual(expectedRetryMsDelays);

@@ -3,15 +3,13 @@ import { describe, it } from "vitest";
 import { SmartAccountProvider } from "../../provider/base.js";
 import { LocalAccountSigner } from "../../signer/local-account.js";
 import type { BatchUserOperationCallData } from "../../types.js";
-import {
-  SimpleSmartContractAccount,
-  type SimpleSmartAccountOwner,
-} from "../simple.js";
+import { SimpleSmartContractAccount } from "../simple.js";
+import { type SmartAccountSigner } from "../../signer/types.js";
 
 describe("Account Simple Tests", () => {
   const dummyMnemonic =
     "test test test test test test test test test test test test";
-  const owner: SimpleSmartAccountOwner =
+  const owner: SmartAccountSigner =
     LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
   const chain = polygonMumbai;
   const signer = new SmartAccountProvider(

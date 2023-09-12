@@ -3,11 +3,11 @@ import {
   SimpleSmartContractAccount,
   SmartAccountProvider,
   createPublicErc4337Client,
-  type SimpleSmartAccountOwner
+  type SmartAccountSigner
 } from "@alchemy/aa-core";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { encodeFunctionData } from "viem";
-import { useAccount, useNetwork } from "wagmi";
+import { useAccount, useNetwork, type Chain } from "wagmi";
 import { localSmartContractStore } from "~/clients/localStorage";
 import { NFTContractABI } from "../../clients/nftContract";
 import {
@@ -96,11 +96,13 @@ const onboardingStepHandlers: Record<
     if (!context.entrypointAddress) {
       throw new Error("No entrypoint address was found");
     }
+
+    const chain: Chain = context.chain!;
     const entryPointAddress = context.entrypointAddress;
     let baseSigner = new SmartAccountProvider(
       appConfig.rpcUrl,
-      context.entrypointAddress!,
-      context.chain!,
+      entryPointAddress,
+      chain,
       undefined,
       {
         txMaxRetries: 60,
@@ -111,7 +113,7 @@ const onboardingStepHandlers: Record<
       }
       return new SimpleSmartContractAccount({
         entryPointAddress,
-        chain: context.chain!,
+        chain,
         owner: context.owner,
         factoryAddress: appConfig.simpleAccountFactoryAddress,
         rpcClient: provider,
@@ -122,7 +124,6 @@ const onboardingStepHandlers: Record<
     const smartAccountAddress = await baseSigner.getAddress();
     if (context.useGasManager) {
       const smartAccountSigner = withAlchemyGasManager(baseSigner, {
-        provider: baseSigner.rpcClient,
         policyId: appConfig.gasManagerPolicyId,
         entryPoint: entryPointAddress,
       });
@@ -243,7 +244,7 @@ const onboardingStepHandlers: Record<
 
 export function useOnboardingOrchestrator(
   useGasManager: boolean,
-  owner: SimpleSmartAccountOwner
+  owner: SmartAccountSigner
 ) {
   // Setup initial data and state
   const { address: ownerAddress } = useAccount();

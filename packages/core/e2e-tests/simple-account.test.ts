@@ -1,20 +1,18 @@
 import { isAddress, type Hash } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
-import {
-  SimpleSmartContractAccount,
-  type SimpleSmartAccountOwner,
-} from "../src/account/simple.js";
+import { SimpleSmartContractAccount } from "../src/account/simple.js";
+import { type SmartAccountSigner } from "../src/index.js";
 import { SmartAccountProvider } from "../src/provider/base.js";
 import { LocalAccountSigner } from "../src/signer/local-account.js";
-import { RPC_URL, API_KEY, OWNER_MNEMONIC } from "./constants.js";
+import { API_KEY, OWNER_MNEMONIC, RPC_URL } from "./constants.js";
 
 const ENTRYPOINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
 const SIMPLE_ACCOUNT_FACTORY_ADDRESS =
   "0x9406Cc6185a346906296840746125a0E44976454";
 
 describe("Simple Account Tests", () => {
-  const owner: SimpleSmartAccountOwner =
+  const owner: SmartAccountSigner =
     LocalAccountSigner.mnemonicToAccountSigner(OWNER_MNEMONIC);
   const chain = polygonMumbai;
   const signer = new SmartAccountProvider(

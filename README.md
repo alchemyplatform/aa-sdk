@@ -56,7 +56,7 @@ npm i -s @alchemy/aa-ethers
 import {
   SimpleSmartContractAccount,
   SmartAccountProvider,
-  type SimpleSmartAccountOwner,
+  type SmartAccountSigner,
   LocalAccountSigner,
 } from "@alchemy/aa-core";
 import { mnemonicToAccount } from "viem/accounts";
@@ -69,7 +69,7 @@ const SIMPLE_ACCOUNT_FACTORY_ADDRESS =
 // 1. define the EOA owner of the Smart Account
 // this uses a utility method for creating an account signer using mnemonic
 // we also have a utility for creating an account signer from a private key
-const owner: SimpleSmartAccountOwner =
+const owner: SmartAccountSigner =
   LocalAccountSigner.mnemonicToAccountSigner(MNEMONIC);
 
 // 2. initialize the provider and connect it to the account
@@ -105,7 +105,7 @@ const { hash } = await provider.sendUserOperation({
 ```ts
 import {
   SimpleSmartContractAccount,
-  type SimpleSmartAccountOwner,
+  type SmartAccountSigner,
   LocalAccountSigner,
 } from "@alchemy/aa-core";
 import { toHex } from "viem";
@@ -119,7 +119,7 @@ const SIMPLE_ACCOUNT_FACTORY_ADDRESS =
 // 1. define the EOA owner of the Smart Account
 // this uses a utility method for creating an account signer using mnemonic
 // we also have a utility for creating an account signer from a private key
-const owner: SimpleSmartAccountOwner =
+const owner: SmartAccountSigner =
   LocalAccountSigner.mnemonicToAccountSigner(MNEMONIC);
 
 // 2. initialize the provider and connect it to the account
