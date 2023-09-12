@@ -1,3 +1,4 @@
+import { SmartAccountSigner } from "@alchemy/aa-core";
 import {
   Box,
   Button,
@@ -18,18 +19,17 @@ import {
 } from "@chakra-ui/react";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { useOnboardingOrchestrator } from "./OnboardingController";
-import { queryClient } from "../../clients/query";
 import { memo, useState } from "react";
 import { useAccount } from "wagmi";
+import { useSimpleAccountSigner } from "~/clients/simpleAccountOwner";
 import { LoadingScreen } from "~/surfaces/shared/LoadingScreen";
+import { queryClient } from "../../clients/query";
+import { useOnboardingOrchestrator } from "./OnboardingController";
 import { OnboardingStepIdentifier } from "./OnboardingDataModels";
-import { useSimpleAccountOwner } from "~/clients/simpleAccountOwner";
-import { SimpleSmartAccountOwner } from "@alchemy/aa-core";
 
 export function OnboardingPage() {
   const { isConnected } = useAccount();
-  const ownerResult = useSimpleAccountOwner();
+  const ownerResult = useSimpleAccountSigner();
   if (isConnected && !ownerResult.isLoading) {
     return <Onboarding owner={ownerResult.owner} />;
   } else {
@@ -37,7 +37,7 @@ export function OnboardingPage() {
   }
 }
 
-function UnmemoOnboarding({ owner }: { owner: SimpleSmartAccountOwner }) {
+function UnmemoOnboarding({ owner }: { owner: SmartAccountSigner }) {
   const router = useRouter();
   const [gasManagerChecked, setGasManagerChecked] = useState(false);
   const { go, reset, currentStep } = useOnboardingOrchestrator(

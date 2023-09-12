@@ -1,6 +1,6 @@
 import {
   PublicErc4337Client,
-  SimpleSmartAccountOwner,
+  SmartAccountSigner,
   SmartAccountProvider,
 } from "@alchemy/aa-core";
 import { Chain } from "viem";
@@ -15,8 +15,8 @@ export interface OnboardingContext {
   useGasManager: boolean;
   client: PublicErc4337Client;
   ownerAddress: `0x${string}`;
-  ownerQuery: UseQueryResult<SimpleSmartAccountOwner>;
-  owner: SimpleSmartAccountOwner;
+  ownerQuery: UseQueryResult<SmartAccountSigner>;
+  owner: SmartAccountSigner;
   smartAccountAddress: `0x${string}`;
   smartAccountSigner: SmartAccountProvider;
   chain: Chain;
@@ -44,7 +44,7 @@ export enum OnboardingStepIdentifier {
 }
 
 export function initialStep(
-  owner: SimpleSmartAccountOwner,
+  owner: SmartAccountSigner,
   ownerAddress: `0x${string}`,
   client: PublicErc4337Client,
   chain: Chain,

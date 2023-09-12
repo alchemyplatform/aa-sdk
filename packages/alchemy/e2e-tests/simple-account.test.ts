@@ -1,17 +1,12 @@
 import {
   SimpleSmartContractAccount,
-  type SimpleSmartAccountOwner,
+  type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import { toHex, type Hash } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
 import { AlchemyProvider } from "../src/provider.js";
-import {
-  RPC_URL,
-  API_KEY,
-  OWNER_MNEMONIC,
-  PAYMASTER_POLICY_ID,
-} from "./constants.js";
+import { API_KEY, OWNER_MNEMONIC, PAYMASTER_POLICY_ID } from "./constants.js";
 
 const ENTRYPOINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
 const SIMPLE_ACCOUNT_FACTORY_ADDRESS =
@@ -19,17 +14,17 @@ const SIMPLE_ACCOUNT_FACTORY_ADDRESS =
 
 describe("Simple Account Tests", () => {
   const ownerAccount = mnemonicToAccount(OWNER_MNEMONIC);
-  const owner: SimpleSmartAccountOwner = {
+  const owner: SmartAccountSigner = {
     signMessage: async (msg) =>
       ownerAccount.signMessage({
         message: { raw: toHex(msg) },
       }),
+    signTypedData: async () => "0xHash",
     getAddress: async () => ownerAccount.address,
   };
   const chain = polygonMumbai;
   const signer = new AlchemyProvider({
-    apiKey: API_KEY,
-    rpcUrl: RPC_URL,
+    apiKey: API_KEY!,
     chain,
     entryPointAddress: ENTRYPOINT_ADDRESS,
   }).connect(
@@ -62,8 +57,7 @@ describe("Simple Account Tests", () => {
   it("should fail to execute if account address is not deployed and not correct", async () => {
     const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
     const newSigner = new AlchemyProvider({
-      apiKey: API_KEY,
-      rpcUrl: RPC_URL,
+      apiKey: API_KEY!,
       chain,
       entryPointAddress: ENTRYPOINT_ADDRESS,
     }).connect(
@@ -124,8 +118,7 @@ describe("Simple Account Tests", () => {
 
   it("should successfully use paymaster with fee opts", async () => {
     const newSigner = new AlchemyProvider({
-      apiKey: API_KEY,
-      rpcUrl: RPC_URL,
+      apiKey: API_KEY!,
       chain,
       entryPointAddress: ENTRYPOINT_ADDRESS,
       feeOpts: {

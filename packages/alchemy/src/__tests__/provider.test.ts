@@ -2,7 +2,7 @@ import * as AACoreModule from "@alchemy/aa-core";
 import {
   SimpleSmartContractAccount,
   type BatchUserOperationCallData,
-  type SimpleSmartAccountOwner,
+  type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import { toHex } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
@@ -13,11 +13,12 @@ describe("Alchemy Provider Tests", () => {
   const dummyMnemonic =
     "test test test test test test test test test test test test";
   const ownerAccount = mnemonicToAccount(dummyMnemonic);
-  const owner: SimpleSmartAccountOwner = {
+  const owner: SmartAccountSigner = {
     signMessage: async (msg) =>
       ownerAccount.signMessage({
         message: { raw: toHex(msg) },
       }),
+    signTypedData: async () => "0xHash",
     getAddress: async () => ownerAccount.address,
   };
   const chain = polygonMumbai;
