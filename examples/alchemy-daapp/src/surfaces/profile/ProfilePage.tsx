@@ -9,7 +9,8 @@ import {
 import { memo, useCallback } from "react";
 import NftSection from "./NftSection";
 import { useAppState } from "../../clients/appState";
-import { useChainId } from "wagmi";
+import { useNetwork } from "wagmi";
+import { base, baseGoerli } from "viem/chains";
 
 const ProfileAttribute = ({
   label,
@@ -56,7 +57,8 @@ const ProfileDetailCard = ({
 
 function UnMemoProfilePage() {
   const { state, eoaAddress, scwAddresses } = useAppState();
-  const chainId = useChainId();
+  const {chain} = useNetwork();
+  const isBase = chain?.id === baseGoerli.id || chain?.id === base.id;
   const copyAddressTextToClipboard = useCallback((address: string) => {
     return async () => {
       if ("clipboard" in navigator && address) {
@@ -106,12 +108,20 @@ function UnMemoProfilePage() {
           <Heading size="sm" margin={0} fontWeight="semibold" color="gray.500">
             <b>EOA:</b> {eoaAddress.slice(0, 9)}... NFTs
           </Heading>
+          {isBase ? <Heading
+              size="md"
+              fontWeight="semibold"
+              color="gray.500"
+            >
+              NFT APIs aren't available on Base (yet). Check out owned assets <a target="_blank" href={`${chain.blockExplorers?.default.url}/search?q=${eoaAddress}`}>here.</a>
+            </Heading>
+          : 
           <NftSection
             maxH="225px"
             overflowY="auto"
             address={eoaAddress}
-            chainId={chainId}
-          />
+            chainId={chain!.id}
+          />}
         </ProfileDetailCard>
         {scwAddresses.map((address) => (
           <ProfileDetailCard key={address}>
@@ -123,12 +133,20 @@ function UnMemoProfilePage() {
             >
               <b>SCW:</b> {address.slice(0, 9)}... NFTs
             </Heading>
-            <NftSection
-              maxH="225px"
-              overflowY="auto"
-              address={address}
-              chainId={chainId}
-            />
+            {isBase ? <Heading
+              size="md"
+              fontWeight="semibold"
+              color="gray.500"
+            >
+              NFT APIs aren't available on Base (yet). Check out owned assets <a target="_blank" href={`${chain.blockExplorers?.default.url}/search?q=${address}`}>here.</a>
+            </Heading>
+          : 
+          <NftSection
+            maxH="225px"
+            overflowY="auto"
+            address={address}
+            chainId={chain!.id}
+          />}
           </ProfileDetailCard>
         ))}
       </VStack>

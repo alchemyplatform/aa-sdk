@@ -1,5 +1,7 @@
 import {
   arbitrum,
+  base,
+  baseGoerli,
   optimism,
   optimismGoerli,
   polygon,
@@ -16,6 +18,8 @@ const API_URLs: Record<number, string> = {
   [arbitrum.id]: env.ARB_ALCHEMY_API_URL,
   [optimism.id]: env.OPT_ALCHEMY_API_URL,
   [optimismGoerli.id]: env.OPT_GOERLI_ALCHEMY_API_URL,
+  [base.id]: env.BASE_ALCHEMY_API_URL,
+  [baseGoerli.id]: env.BASE_GOERLI_ALCHEMY_API_URL,
 };
 
 export function getApiUrl(chainId: number | string) {
