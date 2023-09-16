@@ -24,5 +24,5 @@ export const SupportedChains = new Map<number, Chain>([
   [optimism.id, optimism],
   [optimismGoerli.id, optimismGoerli],
   [base.id, base],
-  [base.id, baseGoerli],
+  [baseGoerli.id, baseGoerli],
 ]);
