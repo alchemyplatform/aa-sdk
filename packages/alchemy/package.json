@@ -1,6 +1,6 @@
 {
   "name": "@alchemy/aa-alchemy",
-  "version": "0.1.0-alpha.31",
+  "version": "0.1.0-alpha.32",
   "description": "adapters for @alchemy/aa-core for interacting with alchemy services",
   "author": "Alchemy",
   "license": "MIT",
@@ -39,7 +39,7 @@
     "test:run-e2e": "vitest run --config vitest.config.e2e.ts"
   },
   "devDependencies": {
-    "@alchemy/aa-core": "^0.1.0-alpha.31",
+    "@alchemy/aa-core": "^0.1.0-alpha.32",
     "typescript": "^5.0.4",
     "typescript-template": "*",
     "vitest": "^0.31.0"
