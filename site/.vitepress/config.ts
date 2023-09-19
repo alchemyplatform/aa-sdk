@@ -13,16 +13,51 @@ export default defineConfig({
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: "Home", link: "/" },
-      { text: "Examples", link: "/markdown-examples" },
+      { text: "Docs", link: "/getting-started" },
+      {
+        text: "Examples",
+        link: "https://github.com/alchemyplatform/aa-sdk/tree/main/examples",
+      },
     ],
 
     sidebar: [
+      { text: "Introduction", link: "/introduction" },
+      { text: "Getting Started", link: "/getting-started" },
       {
-        text: "Examples",
+        text: "Using Smart Accounts",
+        base: "/smart-accounts",
         items: [
-          { text: "Markdown Examples", link: "/markdown-examples" },
-          { text: "Runtime API Examples", link: "/api-examples" },
+          { text: "Overview", link: "/overview" },
+          {
+            text: "Choosing a Smart Account",
+            base: "/smart-accounts/accounts",
+            link: "/light-account",
+            items: [
+              { text: "Light Account", link: "/light-account" },
+              { text: "Simple Account", link: "/simple-account" },
+            ],
+          },
+          {
+            text: "Choosing a Signer",
+            base: "/smart-accounts/signers",
+            items: [
+              { text: "Magic.Link", link: "/magic-link" },
+              { text: "Web3Auth", link: "/web3auth" },
+              { text: "Externally Owned Account", link: "/eoa" },
+            ],
+          },
+          { text: "Sponsoring Gas", items: [] },
+        ],
+      },
+      {
+        text: "Packages",
+        collapsed: false,
+        base: "/packages",
+        items: [
+          { text: "aa-core", link: "/aa-core" },
+          { text: "aa-alchemy", link: "/aa-alchemy" },
+          { text: "aa-accounts", link: "/aa-accounts" },
+          { text: "aa-ethers", link: "/aa-ethers" },
         ],
       },
     ],

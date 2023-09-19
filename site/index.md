@@ -13,11 +13,11 @@ hero:
   tagline: Everything you need to build 4337 accounts for your users
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: Get Started
+      link: /getting-started
     - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: Why Account Kit?
+      link: /introduction
 
 features:
   - title: Feature A
