@@ -41,6 +41,10 @@ describe("Simple Account Tests", () => {
     );
   });
 
+  /**
+   * Need to add test eth to the counterfactual address for this test to pass.
+   * For current balance, @see: https://sepolia.etherscan.io/address/0xA95D127D68194A2f8BA5140A14234e7B34241E4a
+   */
   it("should execute successfully", async () => {
     const result = await signer.sendUserOperation({
       target: await signer.getAddress(),
@@ -114,6 +118,9 @@ describe("Simple Account Tests", () => {
 
     await expect(txnHash).resolves.not.toThrowError();
 
-    expect(await signer.account.getOwner()).toBe(newOwner);
+    //todo(ajay): add new mnemonic for new owner test
+    expect(await signer.account.getOwner().getAddress()).toBe(
+      await newOwner.getAddress()
+    );
   }, 50000);
 });
