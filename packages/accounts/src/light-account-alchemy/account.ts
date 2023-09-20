@@ -70,13 +70,17 @@ export default class LightSmartContractAccount<
       factoryAddress: this._factoryAddress,
       initCode: encodeFunctionData({
         abi: LightAccountFactoryAbi,
-        functionName: "createAccount", // todo(ajay): check if this is correct after adding abi
+        functionName: "createAccount",
         args: [await this.owner.getAddress(), this.index],
       }),
     });
   }
 
-  setOwner(owner: SmartAccountSigner): void {
+  getOwner(): SmartAccountSigner {
+    return this.owner;
+  }
+
+  private _setOwner(owner: SmartAccountSigner): void {
     this.owner = owner;
   }
 
@@ -105,7 +109,7 @@ export default class LightSmartContractAccount<
       data,
     });
 
-    provider.account.setOwner(newOwner);
+    provider.account._setOwner(newOwner);
 
     return txn.hash;
   }
