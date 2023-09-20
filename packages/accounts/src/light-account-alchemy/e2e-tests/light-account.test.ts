@@ -40,7 +40,7 @@ describe("Simple Account Tests", () => {
     );
   });
 
-  it.skip("should sign 6492 typed data successfully", async () => {
+  it("should sign 6492 typed data successfully", async () => {
     expect(
       await signer.signTypedData({
         types: {
@@ -56,7 +56,7 @@ describe("Simple Account Tests", () => {
     );
   });
 
-  it.skip("should sign 6492 message successfully", async () => {
+  it("should sign 6492 message successfully", async () => {
     expect(await signer.signMessageWith6492("test")).toMatchInlineSnapshot(
       '"0x84826495659cf5d1293472d9dbd3e72e1e48a9bee7ab8ea7c416cd6e1171a9857544ef779d2e70199791a9362ebefc30f88889c7ace073489865ee5889d8a5281b"'
     );
@@ -66,7 +66,7 @@ describe("Simple Account Tests", () => {
    * Need to add test eth to the counterfactual address for this test to pass.
    * For current balance, @see: https://sepolia.etherscan.io/address/0x7eDdc16B15259E5541aCfdebC46929873839B872
    */
-  it.skip("should execute successfully", async () => {
+  it("should execute successfully", async () => {
     const result = await signer.sendUserOperation({
       target: await signer.getAddress(),
       data: "0x",
@@ -76,7 +76,7 @@ describe("Simple Account Tests", () => {
     await expect(txnHash).resolves.not.toThrowError();
   }, 50000);
 
-  it.skip("should fail to execute if account address is not deployed and not correct", async () => {
+  it("should fail to execute if account address is not deployed and not correct", async () => {
     const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
     const newSigner = new SmartAccountProvider(
       RPC_URL != null ? RPC_URL : `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
@@ -102,7 +102,7 @@ describe("Simple Account Tests", () => {
     await expect(result).rejects.toThrowError();
   });
 
-  it.skip("should get counterfactual for undeployed account", async () => {
+  it("should get counterfactual for undeployed account", async () => {
     const owner = LocalAccountSigner.privateKeyToAccountSigner(
       generatePrivateKey()
     );
