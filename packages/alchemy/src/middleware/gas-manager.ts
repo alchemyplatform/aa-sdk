@@ -1,4 +1,5 @@
 import {
+  BaseSmartContractAccount,
   deepHexlify,
   resolveProperties,
   type ConnectedSmartAccountProvider,
@@ -21,8 +22,9 @@ export interface AlchemyGasManagerConfig {
  * @returns the provider augmented to use the alchemy paymaster
  */
 export const withAlchemyGasManager = <
+  TAccount extends BaseSmartContractAccount<T>,
   T extends Transport,
-  Provider extends ConnectedSmartAccountProvider<T>
+  Provider extends ConnectedSmartAccountProvider<TAccount, T>
 >(
   provider: Provider,
   config: AlchemyGasManagerConfig
@@ -85,13 +87,14 @@ export const withAlchemyGasManager = <
  * @returns middleware overrides for paymaster middlewares
  */
 export const alchemyPaymasterAndDataMiddleware = <
+  TAccount extends BaseSmartContractAccount<T>,
   T extends Transport,
-  Provider extends ConnectedSmartAccountProvider<T>
+  Provider extends ConnectedSmartAccountProvider<TAccount, T>
 >(
   provider: Provider,
   config: AlchemyGasManagerConfig
 ): Parameters<
-  ConnectedSmartAccountProvider["withPaymasterMiddleware"]
+  ConnectedSmartAccountProvider<TAccount, T>["withPaymasterMiddleware"]
 >["0"] => ({
   dummyPaymasterDataMiddleware: async (_struct) => {
     switch (provider.rpcClient.chain.id) {

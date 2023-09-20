@@ -29,10 +29,12 @@ export type ConnectionConfig =
   | { rpcUrl: string; apiKey?: never; jwt?: never }
   | { rpcUrl: string; apiKey?: never; jwt: string };
 
-export type AlchemyProviderConfig = {
+export type AlchemyProviderConfig<
+  TAccount extends BaseSmartContractAccount<HttpTransport>
+> = {
   chain: Chain | number;
   entryPointAddress: Address;
-  account?: BaseSmartContractAccount;
+  account?: TAccount;
   opts?: SmartAccountProviderOpts;
   feeOpts?: {
     /** this adds a percent buffer on top of the base fee estimated (default 50%)
@@ -58,7 +60,9 @@ export type AlchemyProviderConfig = {
   };
 } & ConnectionConfig;
 
-export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
+export class AlchemyProvider<
+  TAccount extends BaseSmartContractAccount<HttpTransport>
+> extends SmartAccountProvider<TAccount, HttpTransport> {
   alchemyClient: ClientWithAlchemyMethods;
   private pvgBuffer: bigint;
   private feeOptsSet: boolean;
@@ -70,7 +74,7 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
     opts,
     feeOpts,
     ...connectionConfig
-  }: AlchemyProviderConfig) {
+  }: AlchemyProviderConfig<TAccount>) {
     const _chain =
       typeof chain === "number" ? SupportedChains.get(chain) : chain;
     if (!_chain || !_chain.rpcUrls["alchemy"]) {
@@ -145,10 +149,18 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
 
     if (this.feeOptsSet) {
       return this.withPaymasterMiddleware(
-        alchemyPaymasterAndDataMiddleware(this, config)
+        alchemyPaymasterAndDataMiddleware<
+          TAccount,
+          HttpTransport,
+          SmartAccountProvider<TAccount, HttpTransport> & { account: TAccount }
+        >(this, config)
       );
     } else {
-      return withAlchemyGasManager(this, config);
+      return withAlchemyGasManager<
+        TAccount,
+        HttpTransport,
+        SmartAccountProvider<TAccount, HttpTransport> & { account: TAccount }
+      >(this, config);
     }
   }
 }

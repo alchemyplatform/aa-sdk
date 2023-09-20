@@ -77,12 +77,14 @@ const minPriorityFeePerBidDefaults = new Map<number, bigint>([
 ]);
 
 export type ConnectedSmartAccountProvider<
+  TAccount extends BaseSmartContractAccount<TTransport>,
   TTransport extends SupportedTransports = Transport
-> = SmartAccountProvider<TTransport> & {
-  account: BaseSmartContractAccount<TTransport>;
+> = SmartAccountProvider<TAccount, TTransport> & {
+  account: TAccount;
 };
 
 export class SmartAccountProvider<
+    TAccount extends BaseSmartContractAccount<TTransport>,
     TTransport extends SupportedTransports = Transport
   >
   extends EventEmitter<ProviderEvents>
@@ -99,7 +101,7 @@ export class SmartAccountProvider<
     rpcProvider: string | PublicErc4337Client<TTransport>,
     protected entryPointAddress: Address,
     protected chain: Chain,
-    readonly account?: BaseSmartContractAccount<TTransport>,
+    readonly account?: TAccount,
     opts?: SmartAccountProviderOpts
   ) {
     super();
@@ -499,8 +501,8 @@ export class SmartAccountProvider<
   };
 
   connect(
-    fn: (provider: PublicErc4337Client<TTransport>) => BaseSmartContractAccount
-  ): this & { account: BaseSmartContractAccount } {
+    fn: (provider: PublicErc4337Client<TTransport>) => TAccount
+  ): this & { account: TAccount } {
     const account = fn(this.rpcClient);
     defineReadOnly(this, "account", account);
 
@@ -526,7 +528,7 @@ export class SmartAccountProvider<
     return this as this & { account: undefined };
   }
 
-  isConnected(): this is ConnectedSmartAccountProvider<TTransport> {
+  isConnected(): this is ConnectedSmartAccountProvider<TAccount, TTransport> {
     return this.account !== undefined;
   }
 

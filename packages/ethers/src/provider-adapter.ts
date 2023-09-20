@@ -14,18 +14,24 @@ import { defineReadOnly } from "@ethersproject/properties";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { AccountSigner } from "./account-signer.js";
 
-export type EthersProviderAdapterOpts =
+export type EthersProviderAdapterOpts<
+  TAccount extends BaseSmartContractAccount<HttpTransport>
+> =
   | {
       rpcProvider: string | PublicErc4337Client<HttpTransport>;
       entryPointAddress: Address;
       chainId: number;
     }
-  | { accountProvider: SmartAccountProvider<HttpTransport> };
+  | {
+      accountProvider: SmartAccountProvider<TAccount, HttpTransport>;
+    };
 
 /** Lightweight Adapter for SmartAccountProvider to enable Signer Creation */
-export class EthersProviderAdapter extends JsonRpcProvider {
-  readonly accountProvider: SmartAccountProvider<HttpTransport>;
-  constructor(opts: EthersProviderAdapterOpts) {
+export class EthersProviderAdapter<
+  TAccount extends BaseSmartContractAccount<HttpTransport>
+> extends JsonRpcProvider {
+  readonly accountProvider: SmartAccountProvider<TAccount, HttpTransport>;
+  constructor(opts: EthersProviderAdapterOpts<TAccount>) {
     super();
     if ("accountProvider" in opts) {
       this.accountProvider = opts.accountProvider;
@@ -58,8 +64,8 @@ export class EthersProviderAdapter extends JsonRpcProvider {
    * @returns an {@link AccountSigner} that can be used to sign and send user operations
    */
   connectToAccount(
-    fn: (rpcClient: PublicErc4337Client) => BaseSmartContractAccount
-  ): AccountSigner {
+    fn: (rpcClient: PublicErc4337Client) => TAccount
+  ): AccountSigner<TAccount> {
     defineReadOnly(this, "accountProvider", this.accountProvider.connect(fn));
     return this.getAccountSigner();
   }
@@ -67,7 +73,7 @@ export class EthersProviderAdapter extends JsonRpcProvider {
   /**
    * @returns an {@link AccountSigner} using this as the underlying provider
    */
-  getAccountSigner(): AccountSigner {
+  getAccountSigner(): AccountSigner<TAccount> {
     return new AccountSigner(this);
   }
 
@@ -103,10 +109,10 @@ export class EthersProviderAdapter extends JsonRpcProvider {
    * @param entryPointAddress - the entrypoint address that will be used for UserOperations
    * @returns an instance of {@link EthersProviderAdapter}
    */
-  static fromEthersProvider(
+  static fromEthersProvider<TAccount extends BaseSmartContractAccount>(
     provider: JsonRpcProvider,
     entryPointAddress: Address
-  ): EthersProviderAdapter {
+  ): EthersProviderAdapter<TAccount> {
     return new EthersProviderAdapter({
       rpcProvider: provider.connection.url,
       entryPointAddress,

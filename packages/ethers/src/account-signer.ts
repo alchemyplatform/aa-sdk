@@ -4,6 +4,7 @@ import {
   type AccountMiddlewareFn,
   type FeeDataMiddleware,
   type GasEstimatorMiddleware,
+  type HttpTransport,
   type PaymasterAndDataMiddleware,
   type PublicErc4337Client,
 } from "@alchemy/aa-core";
@@ -24,13 +25,15 @@ const hexlifyOptional = (value: any): `0x${string}` | undefined => {
   return hexlify(value) as `0x${string}`;
 };
 
-export class AccountSigner extends Signer {
-  private account?: BaseSmartContractAccount;
+export class AccountSigner<
+  TAccount extends BaseSmartContractAccount<HttpTransport>
+> extends Signer {
+  private account?: TAccount;
 
   sendUserOperation;
   waitForUserOperationTransaction;
 
-  constructor(readonly provider: EthersProviderAdapter) {
+  constructor(readonly provider: EthersProviderAdapter<TAccount>) {
     super();
     this.account = this.provider.accountProvider.account;
 
@@ -113,7 +116,7 @@ export class AccountSigner extends Signer {
     return this.provider.getPublicErc4337Client();
   }
 
-  connect(provider: EthersProviderAdapter): AccountSigner {
+  connect(provider: EthersProviderAdapter<TAccount>): AccountSigner<TAccount> {
     return new AccountSigner(provider);
   }
 }
