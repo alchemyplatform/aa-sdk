@@ -148,7 +148,7 @@ export class AlchemyProvider<
   withAlchemyGasManager<
     TAccount extends BaseSmartContractAccount<HttpTransport>
   >(config: AlchemyGasManagerConfig) {
-    if (!this.isConnected()) {
+    if (!this.isConnected<TAccount>()) {
       throw new Error(
         "AlchemyProvider: account is not set, did you call `connect` first?"
       );
@@ -160,26 +160,14 @@ export class AlchemyProvider<
           TAccount,
           HttpTransport,
           ConnectedSmartAccountProvider<TAccount, HttpTransport>
-        >(
-          this as unknown as ConnectedSmartAccountProvider<
-            TAccount,
-            HttpTransport
-          >,
-          config
-        )
+        >(this, config)
       );
     } else {
       return withAlchemyGasManager<
         TAccount,
         HttpTransport,
         ConnectedSmartAccountProvider<TAccount, HttpTransport>
-      >(
-        this as unknown as ConnectedSmartAccountProvider<
-          TAccount,
-          HttpTransport
-        >,
-        config
-      );
+      >(this, config);
     }
   }
 }

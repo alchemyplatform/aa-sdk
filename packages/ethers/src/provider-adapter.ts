@@ -84,7 +84,7 @@ export class EthersProviderAdapter<
   getAccountSigner<
     TAccount extends BaseSmartContractAccount<HttpTransport>
   >(): AccountSigner<TAccount> {
-    if (!this.accountProvider.isConnected()) {
+    if (!this.accountProvider.isConnected<TAccount>()) {
       throw new Error("Account not connected");
     }
 
