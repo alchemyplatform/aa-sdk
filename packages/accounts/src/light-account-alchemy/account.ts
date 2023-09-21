@@ -3,7 +3,6 @@ import {
   wrapWith6492,
   type ConnectedSmartAccountProvider,
   type SignTypedDataParams,
-  type SimpleSmartAccountParams,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import {
@@ -17,21 +16,12 @@ import {
 import { LightAccountAbi } from "./abis/LightAccountAbi.js";
 import { LightAccountFactoryAbi } from "./abis/LightAccountFactoryAbi.js";
 
-export type LightSmartAccountParams<
-  TTransport extends Transport | FallbackTransport = Transport
-> = SimpleSmartAccountParams<TTransport>;
-
 export default class LightSmartContractAccount<
   TTransport extends Transport | FallbackTransport = Transport
 > extends SimpleSmartContractAccount<TTransport> {
-  private _factoryAddress: Address;
-
-  constructor(params: LightSmartAccountParams<TTransport>) {
-    super(params);
-    this._factoryAddress = params.factoryAddress;
-  }
-
-  async signMessageWith6492(msg: string | Uint8Array): Promise<`0x${string}`> {
+  override async signMessageWith6492(
+    msg: string | Uint8Array
+  ): Promise<`0x${string}`> {
     const [isDeployed, signature] = await Promise.all([
       this.isAccountDeployed(),
       this.signMessage(msg),
@@ -40,15 +30,13 @@ export default class LightSmartContractAccount<
     return this.create6492Signature(isDeployed, signature);
   }
 
-  override async signTypedData(
-    _params: SignTypedDataParams
-  ): Promise<`0x${string}`> {
-    return this.owner.signTypedData(_params);
+  override async signTypedData(params: SignTypedDataParams): Promise<Hash> {
+    return this.owner.signTypedData(params);
   }
 
-  async signTypedDataWith6492(
+  override async signTypedDataWith6492(
     params: SignTypedDataParams
-  ): Promise<`0x${string}`> {
+  ): Promise<Hash> {
     const [isDeployed, signature] = await Promise.all([
       this.isAccountDeployed(),
       this.signTypedData(params),
@@ -67,7 +55,7 @@ export default class LightSmartContractAccount<
 
     return wrapWith6492({
       signature,
-      factoryAddress: this._factoryAddress,
+      factoryAddress: this.factoryAddress,
       initCode: encodeFunctionData({
         abi: LightAccountFactoryAbi,
         functionName: "createAccount",
@@ -76,6 +64,11 @@ export default class LightSmartContractAccount<
     });
   }
 
+  /**
+   * Returns the owner of the account.
+   *
+   * @returns the owner of the account
+   */
   getOwner(): SmartAccountSigner {
     return this.owner;
   }
@@ -84,7 +77,13 @@ export default class LightSmartContractAccount<
     this.owner = owner;
   }
 
-  static async encodeTransferOwnership(newOwner: Address): Promise<Hex> {
+  /**
+   * Encodes the transferOwnership function call using the LightAccount ABI.
+   *
+   * @param newOwner - the new owner of the account
+   * @returns the encoded function call
+   */
+  static encodeTransferOwnership(newOwner: Address): Hex {
     return encodeFunctionData({
       abi: LightAccountAbi,
       functionName: "transferOwnership",
@@ -92,6 +91,15 @@ export default class LightSmartContractAccount<
     });
   }
 
+  /**
+   * Transfers ownership of the account to the newOwner on-chain and also updates the owner of the account.
+   * Optionally waits for the transaction to be mined.
+   *
+   * @param provider - the provider to use to send the transaction
+   * @param newOwner - the new owner of the account
+   * @param waitForTxn - whether or not to wait for the transaction to be mined
+   * @returns
+   */
   static async transferOwnership<
     TTransport extends Transport | FallbackTransport = Transport
   >(
@@ -99,18 +107,21 @@ export default class LightSmartContractAccount<
       LightSmartContractAccount,
       TTransport
     >,
-    newOwner: SmartAccountSigner
+    newOwner: SmartAccountSigner,
+    waitForTxn: boolean = false
   ): Promise<Hash> {
-    const data = await this.encodeTransferOwnership(
-      await newOwner.getAddress()
-    );
-    const txn = await provider.sendUserOperation({
+    const data = this.encodeTransferOwnership(await newOwner.getAddress());
+    const result = await provider.sendUserOperation({
       target: await provider.getAddress(),
       data,
     });
 
     provider.account._setOwner(newOwner);
 
-    return txn.hash;
+    if (waitForTxn) {
+      return await provider.waitForUserOperationTransaction(result.hash);
+    }
+
+    return result.hash;
   }
 }
