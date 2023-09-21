@@ -54,9 +54,15 @@ export default defineConfig({
         collapsed: false,
         base: "/packages",
         items: [
+          { text: "Overview", link: "/overview" },
           { text: "aa-core", link: "/aa-core" },
           { text: "aa-alchemy", link: "/aa-alchemy" },
-          { text: "aa-accounts", link: "/aa-accounts" },
+          {
+            text: "aa-accounts",
+            link: "/",
+            base: "/packages/aa-accounts",
+            items: [{ text: "Contributing", link: "/contributing" }],
+          },
           { text: "aa-ethers", link: "/aa-ethers" },
         ],
       },
