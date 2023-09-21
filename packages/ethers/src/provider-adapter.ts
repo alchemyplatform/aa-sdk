@@ -15,7 +15,9 @@ import { JsonRpcProvider } from "@ethersproject/providers";
 import { AccountSigner } from "./account-signer.js";
 
 export type EthersProviderAdapterOpts<
-  TAccount extends BaseSmartContractAccount<HttpTransport>
+  TAccount extends
+    | BaseSmartContractAccount<HttpTransport>
+    | undefined = undefined
 > =
   | {
       rpcProvider: string | PublicErc4337Client<HttpTransport>;
@@ -28,7 +30,9 @@ export type EthersProviderAdapterOpts<
 
 /** Lightweight Adapter for SmartAccountProvider to enable Signer Creation */
 export class EthersProviderAdapter<
-  TAccount extends BaseSmartContractAccount<HttpTransport>
+  TAccount extends
+    | BaseSmartContractAccount<HttpTransport>
+    | undefined = undefined
 > extends JsonRpcProvider {
   readonly accountProvider: SmartAccountProvider<TAccount, HttpTransport>;
   constructor(opts: EthersProviderAdapterOpts<TAccount>) {
@@ -63,18 +67,30 @@ export class EthersProviderAdapter<
    * @param fn - a function that takes the account provider's rpcClient and returns a BaseSmartContractAccount
    * @returns an {@link AccountSigner} that can be used to sign and send user operations
    */
-  connectToAccount(
+  connectToAccount<TAccount extends BaseSmartContractAccount<HttpTransport>>(
     fn: (rpcClient: PublicErc4337Client) => TAccount
   ): AccountSigner<TAccount> {
-    defineReadOnly(this, "accountProvider", this.accountProvider.connect(fn));
-    return this.getAccountSigner();
+    defineReadOnly(
+      this as unknown as EthersProviderAdapter<TAccount>,
+      "accountProvider",
+      this.accountProvider.connect(fn)
+    );
+    return this.getAccountSigner<TAccount>();
   }
 
   /**
    * @returns an {@link AccountSigner} using this as the underlying provider
    */
-  getAccountSigner(): AccountSigner<TAccount> {
-    return new AccountSigner(this);
+  getAccountSigner<
+    TAccount extends BaseSmartContractAccount<HttpTransport>
+  >(): AccountSigner<TAccount> {
+    if (!this.accountProvider.isConnected()) {
+      throw new Error("Account not connected");
+    }
+
+    return new AccountSigner(
+      this as unknown as EthersProviderAdapter<TAccount>
+    );
   }
 
   withPaymasterMiddleware = (overrides: {
@@ -109,10 +125,10 @@ export class EthersProviderAdapter<
    * @param entryPointAddress - the entrypoint address that will be used for UserOperations
    * @returns an instance of {@link EthersProviderAdapter}
    */
-  static fromEthersProvider<TAccount extends BaseSmartContractAccount>(
+  static fromEthersProvider(
     provider: JsonRpcProvider,
     entryPointAddress: Address
-  ): EthersProviderAdapter<TAccount> {
+  ): EthersProviderAdapter {
     return new EthersProviderAdapter({
       rpcProvider: provider.connection.url,
       entryPointAddress,

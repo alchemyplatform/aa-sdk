@@ -262,9 +262,9 @@ export interface ISmartAccountProvider<
    *
    * @param fn - a function that given public rpc client, returns a smart contract account
    */
-  connect(
-    fn: (provider: PublicErc4337Client<TTransport>) => BaseSmartContractAccount
-  ): this & { account: BaseSmartContractAccount };
+  connect<TAccount extends BaseSmartContractAccount<TTransport>>(
+    fn: (provider: PublicErc4337Client<TTransport>) => TAccount
+  ): ISmartAccountProvider<TTransport>;
 
   /**
    * Allows for disconnecting the account from the provider so you can connect the provider to another account instance

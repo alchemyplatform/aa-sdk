@@ -2,7 +2,9 @@ import type { BaseSmartContractAccount, HttpTransport } from "@alchemy/aa-core";
 import type { AlchemyProvider } from "../provider.js";
 
 export const withAlchemyGasFeeEstimator = <
-  TAccount extends BaseSmartContractAccount<HttpTransport>
+  TAccount extends
+    | BaseSmartContractAccount<HttpTransport>
+    | undefined = undefined
 >(
   provider: AlchemyProvider<TAccount>,
   baseFeeBufferPercent: bigint,

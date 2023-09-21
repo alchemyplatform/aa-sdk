@@ -84,7 +84,9 @@ export type ConnectedSmartAccountProvider<
 };
 
 export class SmartAccountProvider<
-    TAccount extends BaseSmartContractAccount<TTransport>,
+    TAccount extends
+      | BaseSmartContractAccount<TTransport>
+      | undefined = undefined,
     TTransport extends SupportedTransports = Transport
   >
   extends EventEmitter<ProviderEvents>
@@ -500,11 +502,15 @@ export class SmartAccountProvider<
     return this;
   };
 
-  connect(
+  connect<TAccount extends BaseSmartContractAccount<TTransport>>(
     fn: (provider: PublicErc4337Client<TTransport>) => TAccount
-  ): this & { account: TAccount } {
+  ): ConnectedSmartAccountProvider<TAccount, TTransport> {
     const account = fn(this.rpcClient);
-    defineReadOnly(this, "account", account);
+    defineReadOnly(
+      this as unknown as ConnectedSmartAccountProvider<TAccount, TTransport>,
+      "account",
+      account
+    );
 
     this.emit("connect", {
       chainId: toHex(this.chain.id),
@@ -514,7 +520,10 @@ export class SmartAccountProvider<
       .getAddress()
       .then((address) => this.emit("accountsChanged", [address]));
 
-    return this as this & { account: typeof account };
+    return this as unknown as ConnectedSmartAccountProvider<
+      TAccount,
+      TTransport
+    >;
   }
 
   disconnect(): this & { account: undefined } {
@@ -528,7 +537,9 @@ export class SmartAccountProvider<
     return this as this & { account: undefined };
   }
 
-  isConnected(): this is ConnectedSmartAccountProvider<TAccount, TTransport> {
+  isConnected<
+    TAccount extends BaseSmartContractAccount<TTransport>
+  >(): this is ConnectedSmartAccountProvider<TAccount, TTransport> {
     return this.account !== undefined;
   }
 
