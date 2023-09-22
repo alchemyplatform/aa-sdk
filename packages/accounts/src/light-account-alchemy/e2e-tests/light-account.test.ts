@@ -19,7 +19,7 @@ describe("Simple Account Tests", () => {
     LIGHT_ACCOUNT_OWNER_MNEMONIC
   );
   const chain = sepolia;
-  const signer = new SmartAccountProvider<LightSmartContractAccount>(
+  const signer = new SmartAccountProvider(
     RPC_URL != null ? RPC_URL : `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
     ENTRYPOINT_ADDRESS,
     chain
@@ -138,7 +138,7 @@ describe("Simple Account Tests", () => {
     const throwawayOwner = LocalAccountSigner.privateKeyToAccountSigner(
       generatePrivateKey()
     );
-    const provider = new SmartAccountProvider<LightSmartContractAccount>(
+    const provider = new SmartAccountProvider(
       RPC_URL != null ? RPC_URL : `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
       ENTRYPOINT_ADDRESS,
       chain
