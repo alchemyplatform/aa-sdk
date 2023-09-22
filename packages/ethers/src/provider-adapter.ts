@@ -7,6 +7,7 @@ import {
   type FeeDataMiddleware,
   type GasEstimatorMiddleware,
   type HttpTransport,
+  type ISmartContractAccount,
   type PaymasterAndDataMiddleware,
   type PublicErc4337Client,
 } from "@alchemy/aa-core";
@@ -14,11 +15,7 @@ import { defineReadOnly } from "@ethersproject/properties";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { AccountSigner } from "./account-signer.js";
 
-export type EthersProviderAdapterOpts<
-  TAccount extends
-    | BaseSmartContractAccount<HttpTransport>
-    | undefined = undefined
-> =
+export type EthersProviderAdapterOpts<TAccount extends ISmartContractAccount> =
   | {
       rpcProvider: string | PublicErc4337Client<HttpTransport>;
       entryPointAddress: Address;
@@ -30,9 +27,7 @@ export type EthersProviderAdapterOpts<
 
 /** Lightweight Adapter for SmartAccountProvider to enable Signer Creation */
 export class EthersProviderAdapter<
-  TAccount extends
-    | BaseSmartContractAccount<HttpTransport>
-    | undefined = undefined
+  TAccount extends ISmartContractAccount
 > extends JsonRpcProvider {
   readonly accountProvider: SmartAccountProvider<TAccount, HttpTransport>;
   constructor(opts: EthersProviderAdapterOpts<TAccount>) {
@@ -125,10 +120,10 @@ export class EthersProviderAdapter<
    * @param entryPointAddress - the entrypoint address that will be used for UserOperations
    * @returns an instance of {@link EthersProviderAdapter}
    */
-  static fromEthersProvider(
+  static fromEthersProvider<TAccount extends ISmartContractAccount>(
     provider: JsonRpcProvider,
     entryPointAddress: Address
-  ): EthersProviderAdapter {
+  ): EthersProviderAdapter<TAccount> {
     return new EthersProviderAdapter({
       rpcProvider: provider.connection.url,
       entryPointAddress,

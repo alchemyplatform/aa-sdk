@@ -5,7 +5,7 @@ import {
   deepHexlify,
   resolveProperties,
   type AccountMiddlewareFn,
-  type ConnectedSmartAccountProvider,
+  type ISmartContractAccount,
   type SmartAccountProviderOpts,
 } from "@alchemy/aa-core";
 import { type Address, type Chain, type HttpTransport } from "viem";
@@ -30,11 +30,7 @@ export type ConnectionConfig =
   | { rpcUrl: string; apiKey?: never; jwt?: never }
   | { rpcUrl: string; apiKey?: never; jwt: string };
 
-export type AlchemyProviderConfig<
-  TAccount extends
-    | BaseSmartContractAccount<HttpTransport>
-    | undefined = undefined
-> = {
+export type AlchemyProviderConfig<TAccount extends ISmartContractAccount> = {
   chain: Chain | number;
   entryPointAddress: Address;
   account?: TAccount;
@@ -64,9 +60,7 @@ export type AlchemyProviderConfig<
 } & ConnectionConfig;
 
 export class AlchemyProvider<
-  TAccount extends
-    | BaseSmartContractAccount<HttpTransport>
-    | undefined = undefined
+  TAccount extends ISmartContractAccount
 > extends SmartAccountProvider<TAccount, HttpTransport> {
   alchemyClient: ClientWithAlchemyMethods;
   private pvgBuffer: bigint;
@@ -75,7 +69,6 @@ export class AlchemyProvider<
   constructor({
     chain,
     entryPointAddress,
-    account,
     opts,
     feeOpts,
     ...connectionConfig
@@ -103,11 +96,11 @@ export class AlchemyProvider<
       }),
     });
 
-    super(client, entryPointAddress, _chain, account, opts);
+    super(client, entryPointAddress, _chain, opts);
 
     this.alchemyClient = this.rpcClient as ClientWithAlchemyMethods;
     withAlchemyGasFeeEstimator(
-      this as unknown as AlchemyProvider<TAccount>,
+      this,
       feeOpts?.baseFeeBufferPercent ?? 50n,
       feeOpts?.maxPriorityFeeBufferPercent ?? 5n
     );
@@ -156,18 +149,10 @@ export class AlchemyProvider<
 
     if (this.feeOptsSet) {
       return this.withPaymasterMiddleware(
-        alchemyPaymasterAndDataMiddleware<
-          TAccount,
-          HttpTransport,
-          ConnectedSmartAccountProvider<TAccount, HttpTransport>
-        >(this, config)
+        alchemyPaymasterAndDataMiddleware<TAccount, HttpTransport>(this, config)
       );
     } else {
-      return withAlchemyGasManager<
-        TAccount,
-        HttpTransport,
-        ConnectedSmartAccountProvider<TAccount, HttpTransport>
-      >(this, config);
+      return withAlchemyGasManager<TAccount, HttpTransport>(this, config);
     }
   }
 }

@@ -2,10 +2,10 @@ import {
   BaseSmartContractAccount,
   deepHexlify,
   resolveProperties,
-  type ConnectedSmartAccountProvider,
   type UserOperationRequest,
 } from "@alchemy/aa-core";
 import type { Address, Transport } from "viem";
+import type { AlchemyProvider } from "../provider.js";
 import type { ClientWithAlchemyMethods } from "./client.js";
 
 export interface AlchemyGasManagerConfig {
@@ -23,12 +23,11 @@ export interface AlchemyGasManagerConfig {
  */
 export const withAlchemyGasManager = <
   TAccount extends BaseSmartContractAccount<T>,
-  T extends Transport,
-  Provider extends ConnectedSmartAccountProvider<TAccount, T>
+  T extends Transport
 >(
-  provider: Provider,
+  provider: AlchemyProvider<TAccount>,
   config: AlchemyGasManagerConfig
-): Provider => {
+): AlchemyProvider<TAccount> => {
   return (
     provider
       // no-op gas estimator
@@ -66,7 +65,7 @@ export const withAlchemyGasManager = <
                 policyId: config.policyId,
                 entryPoint: config.entryPoint,
                 userOperation: userOperation,
-                dummySignature: provider.account.getDummySignature(),
+                dummySignature: userOperation.signature,
                 feeOverride: feeOverride,
               },
             ],
@@ -88,14 +87,11 @@ export const withAlchemyGasManager = <
  */
 export const alchemyPaymasterAndDataMiddleware = <
   TAccount extends BaseSmartContractAccount<T>,
-  T extends Transport,
-  Provider extends ConnectedSmartAccountProvider<TAccount, T>
+  T extends Transport
 >(
-  provider: Provider,
+  provider: AlchemyProvider<TAccount>,
   config: AlchemyGasManagerConfig
-): Parameters<
-  ConnectedSmartAccountProvider<TAccount, T>["withPaymasterMiddleware"]
->["0"] => ({
+): Parameters<AlchemyProvider<TAccount>["withPaymasterMiddleware"]>["0"] => ({
   dummyPaymasterDataMiddleware: async (_struct) => {
     switch (provider.rpcClient.chain.id) {
       case 1:

@@ -10,8 +10,10 @@ import {
   type Transport,
 } from "viem";
 import { arbitrum, arbitrumGoerli } from "viem/chains";
-import { BaseSmartContractAccount } from "../account/base.js";
-import type { SignTypedDataParams } from "../account/types.js";
+import type {
+  ISmartContractAccount,
+  SignTypedDataParams,
+} from "../account/types.js";
 import { createPublicErc4337Client } from "../client/create-client.js";
 import type {
   PublicErc4337Client,
@@ -77,16 +79,14 @@ const minPriorityFeePerBidDefaults = new Map<number, bigint>([
 ]);
 
 export type ConnectedSmartAccountProvider<
-  TAccount extends BaseSmartContractAccount<TTransport>,
+  TAccount extends ISmartContractAccount,
   TTransport extends SupportedTransports = Transport
 > = SmartAccountProvider<TAccount, TTransport> & {
   account: TAccount;
 };
 
 export class SmartAccountProvider<
-    TAccount extends
-      | BaseSmartContractAccount<TTransport>
-      | undefined = undefined,
+    TAccount extends ISmartContractAccount,
     TTransport extends SupportedTransports = Transport
   >
   extends EventEmitter<ProviderEvents>
@@ -95,6 +95,7 @@ export class SmartAccountProvider<
   private txMaxRetries: number;
   private txRetryIntervalMs: number;
   private txRetryMulitplier: number;
+  readonly account?: TAccount;
 
   minPriorityFeePerBid: bigint;
   rpcClient: PublicErc4337Client<Transport>;
@@ -103,7 +104,6 @@ export class SmartAccountProvider<
     rpcProvider: string | PublicErc4337Client<TTransport>,
     protected entryPointAddress: Address,
     protected chain: Chain,
-    readonly account?: TAccount,
     opts?: SmartAccountProviderOpts
   ) {
     super();
@@ -502,7 +502,7 @@ export class SmartAccountProvider<
     return this;
   };
 
-  connect<TAccount extends BaseSmartContractAccount<TTransport>>(
+  connect<TAccount extends ISmartContractAccount>(
     fn: (provider: PublicErc4337Client<TTransport>) => TAccount
   ): ConnectedSmartAccountProvider<TAccount, TTransport> {
     const account = fn(this.rpcClient);
@@ -538,7 +538,7 @@ export class SmartAccountProvider<
   }
 
   isConnected<
-    TAccount extends BaseSmartContractAccount<TTransport>
+    TAccount extends ISmartContractAccount
   >(): this is ConnectedSmartAccountProvider<TAccount, TTransport> {
     return this.account !== undefined;
   }
