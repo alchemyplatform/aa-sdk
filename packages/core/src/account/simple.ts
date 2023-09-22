@@ -9,12 +9,12 @@ import {
 } from "viem";
 import { SimpleAccountAbi } from "../abis/SimpleAccountAbi.js";
 import { SimpleAccountFactoryAbi } from "../abis/SimpleAccountFactoryAbi.js";
+import type { SmartAccountSigner } from "../signer/types.js";
 import type { BatchUserOperationCallData } from "../types.js";
 import {
   BaseSmartContractAccount,
   type BaseSmartAccountParams,
 } from "./base.js";
-import type { SmartAccountSigner } from "../signer/types.js";
 
 export interface SimpleSmartAccountParams<
   TTransport extends Transport | FallbackTransport = Transport
