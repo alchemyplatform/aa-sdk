@@ -6,7 +6,7 @@ import {
 import { isAddress, type Hash } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import { sepolia } from "viem/chains";
-import LightSmartContractAccount from "../account.js";
+import { LightSmartContractAccount } from "../account.js";
 import { API_KEY, LIGHT_ACCOUNT_OWNER_MNEMONIC, RPC_URL } from "./constants.js";
 
 const ENTRYPOINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";

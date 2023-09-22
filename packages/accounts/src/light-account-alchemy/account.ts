@@ -17,7 +17,7 @@ import {
 import { LightAccountAbi } from "./abis/LightAccountAbi.js";
 import { LightAccountFactoryAbi } from "./abis/LightAccountFactoryAbi.js";
 
-export default class LightSmartContractAccount<
+export class LightSmartContractAccount<
   TTransport extends Transport | FallbackTransport = Transport
 > extends SimpleSmartContractAccount<TTransport> {
   override async signMessageWith6492(
