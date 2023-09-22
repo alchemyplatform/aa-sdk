@@ -3,6 +3,7 @@ import {
   getContract,
   type Chain,
   type GetContractReturnType,
+  type Hash,
   type Hex,
   type HttpTransport,
   type PublicClient,
@@ -68,35 +69,94 @@ export abstract class BaseSmartContractAccount<
     });
   }
 
-  abstract getDummySignature(): `0x${string}`;
+  // #region abstract-methods
+
+  /**
+   * This method should return a signature that will not `revert` during validation.
+   * It does not have to pass validation, just not cause the contract to revert.
+   * This is required for gas estimation so that the gas estimate are accurate.
+   *
+   */
+  abstract getDummySignature(): Hash;
+
+  /**
+   * this method should return the abi encoded function data for a call to your contract's `execute` method
+   *
+   * @param target -- equivalent to `to` in a normal transaction
+   * @param value -- equivalent to `value` in a normal transaction
+   * @param data -- equivalent to `data` in a normal transaction
+   * @returns abi encoded function data for a call to your contract's `execute` method
+   */
   abstract encodeExecute(
     target: string,
     value: bigint,
     data: string
-  ): Promise<`0x${string}`>;
-  abstract signMessage(msg: string | Uint8Array): Promise<`0x${string}`>;
+  ): Promise<Hash>;
 
-  protected abstract getAccountInitCode(): Promise<`0x${string}`>;
+  /**
+   * this should return an ERC-191 compliant message and is used to sign UO Hashes
+   *
+   * @param msg -- the message to sign
+   */
+  abstract signMessage(msg: string | Uint8Array): Promise<Hash>;
 
+  /**
+   * this should return the init code that will be used to create an account if one does not exist.
+   * Usually this is the concatenation of the account's factory address and the abi encoded function data of the account factory's `createAccount` method.
+   */
+  protected abstract getAccountInitCode(): Promise<Hash>;
+
+  // #endregion abstract-methods
+
+  // #region optional-methods
+
+  /**
+   * This method should wrap the result of `signMessage` as per
+   * [EIP-6492](https://eips.ethereum.org/EIPS/eip-6492)
+   *
+   * @param _msg -- the message to sign
+   */
   async signMessageWith6492(_msg: string | Uint8Array): Promise<`0x${string}`> {
     throw new Error("signMessageWith6492 not supported");
   }
 
+  /**
+   * If your contract supports signing and verifying typed data,
+   * you should implement this method.
+   *
+   * @param _params -- Typed Data params to sign
+   */
   async signTypedData(_params: SignTypedDataParams): Promise<`0x${string}`> {
     throw new Error("signTypedData not supported");
   }
 
+  /**
+   * Similar to the signMessageWith6492 method above,
+   * this method should wrap the result of `signTypedData` as per
+   * [EIP-6492](https://eips.ethereum.org/EIPS/eip-6492)
+   *
+   * @param _params -- Typed Data params to sign
+   */
   async signTypedDataWith6492(
     _params: SignTypedDataParams
   ): Promise<`0x${string}`> {
     throw new Error("signTypedDataWith6492 not supported");
   }
 
+  /**
+   * Not all contracts support batch execution.
+   * If your contract does, this method should encode a list of
+   * transactions into the call data that will be passed to your
+   * contract's batch execution method.
+   *
+   * @param _txs -- the transactions to batch execute
+   */
   async encodeBatchExecute(
     _txs: BatchUserOperationCallData
   ): Promise<`0x${string}`> {
     throw new Error("encodeBatchExecute not supported");
   }
+  // #endregion optional-methods
 
   async getNonce(): Promise<bigint> {
     if (!(await this.isAccountDeployed())) {

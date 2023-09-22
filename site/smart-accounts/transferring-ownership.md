@@ -65,27 +65,7 @@ const { hash: userOperationHash } = provider.sendUserOperation({
 });
 ```
 
-```ts [provider.ts]
-import { LocalAccountSigner } from "@alchemy/aa-core";
-
-const owner: SmartAccountSigner =
-  LocalAccountSigner.mnemonicToAccountSigner(MNEMONIC);
-
-export const provider = new SmartAccountProvider(
-  "https://polygon-mumbai.g.alchemy.com/v2/demo", // rpcUrl
-  "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789", // entryPointAddress
-  polygonMumbai // chain
-).connect(
-  (rpcClient) =>
-    new LightSmartContractAccount({
-      entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
-      chain: polygonMumbai,
-      factoryAddress: "0xfactoryAddress",
-      rpcClient,
-      owner,
-    })
-);
-```
+<<< @/snippets/provider.ts
 
 :::
 
@@ -106,27 +86,7 @@ const newOwner = "0x..."; // the address of the new owner
 const hash = LightSmartContractAccount.transferOwnership(provider, newOwner); // [!code focus:99]
 ```
 
-```ts [provider.ts]
-import { LocalAccountSigner } from "@alchemy/aa-core";
-
-const owner: SmartAccountSigner =
-  LocalAccountSigner.mnemonicToAccountSigner(MNEMONIC);
-
-export const provider = new SmartAccountProvider(
-  "https://polygon-mumbai.g.alchemy.com/v2/demo", // rpcUrl
-  "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789", // entryPointAddress
-  polygonMumbai // chain
-).connect(
-  (rpcClient) =>
-    new LightSmartContractAccount({
-      entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
-      chain: polygonMumbai,
-      factoryAddress: "0xfactoryAddress",
-      rpcClient,
-      owner,
-    })
-);
-```
+<<< @/snippets/provider.ts
 
 :::
 

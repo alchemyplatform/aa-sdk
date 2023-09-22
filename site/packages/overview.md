@@ -36,7 +36,7 @@ For more details on all the utilities exported by `aa-alchemy` see the [aa-alche
 
 ## [`aa-accounts`](/packages/aa-accounts/)
 
-This packages provides various implementations of `BaseSmartContractAccount` for interacting with different Smart Accounts. This package is not required to use `aa-core` or `aa-alchemy`. If you want to use your own Smart Account implementation, you can do so by following the guide "Using Your Own Account"(TODO: create this guide!).
+This packages provides various implementations of `BaseSmartContractAccount` for interacting with different Smart Accounts. This package is not required to use `aa-core` or `aa-alchemy`. If you want to use your own Smart Account implementation, you can do so by following the guide ["Using Your Own Account"](/smart-accounts/accounts/using-your-own).
 
 If you'd like to use a Smart Account that is not supported by this package, you can implement `BaseSmartContractAccount` yourself and use it with `aa-core` or `aa-alchemy`
 
