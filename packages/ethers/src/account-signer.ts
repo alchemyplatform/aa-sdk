@@ -1,10 +1,9 @@
 import {
-  BaseSmartContractAccount,
   resolveProperties,
   type AccountMiddlewareFn,
   type FeeDataMiddleware,
   type GasEstimatorMiddleware,
-  type HttpTransport,
+  type ISmartContractAccount,
   type PaymasterAndDataMiddleware,
   type PublicErc4337Client,
 } from "@alchemy/aa-core";
@@ -26,7 +25,7 @@ const hexlifyOptional = (value: any): `0x${string}` | undefined => {
 };
 
 export class AccountSigner<
-  TAccount extends BaseSmartContractAccount<HttpTransport>
+  TAccount extends ISmartContractAccount
 > extends Signer {
   private account?: TAccount;
 

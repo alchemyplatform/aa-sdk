@@ -1,10 +1,10 @@
 import {
-  BaseSmartContractAccount,
   deepHexlify,
   resolveProperties,
+  type ISmartContractAccount,
   type UserOperationRequest,
 } from "@alchemy/aa-core";
-import type { Address, Transport } from "viem";
+import type { Address } from "viem";
 import type { AlchemyProvider } from "../provider.js";
 import type { ClientWithAlchemyMethods } from "./client.js";
 
@@ -21,10 +21,7 @@ export interface AlchemyGasManagerConfig {
  * @param config - the alchemy paymaster configuration
  * @returns the provider augmented to use the alchemy paymaster
  */
-export const withAlchemyGasManager = <
-  TAccount extends BaseSmartContractAccount<T>,
-  T extends Transport
->(
+export const withAlchemyGasManager = <TAccount extends ISmartContractAccount>(
   provider: AlchemyProvider<TAccount>,
   config: AlchemyGasManagerConfig
 ): AlchemyProvider<TAccount> => {
@@ -86,8 +83,7 @@ export const withAlchemyGasManager = <
  * @returns middleware overrides for paymaster middlewares
  */
 export const alchemyPaymasterAndDataMiddleware = <
-  TAccount extends BaseSmartContractAccount<T>,
-  T extends Transport
+  TAccount extends ISmartContractAccount
 >(
   provider: AlchemyProvider<TAccount>,
   config: AlchemyGasManagerConfig

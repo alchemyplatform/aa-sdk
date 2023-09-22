@@ -1,5 +1,4 @@
 import {
-  BaseSmartContractAccount,
   SmartAccountProvider,
   createPublicErc4337Client,
   deepHexlify,
@@ -138,9 +137,7 @@ export class AlchemyProvider<
     };
   };
 
-  withAlchemyGasManager<
-    TAccount extends BaseSmartContractAccount<HttpTransport>
-  >(config: AlchemyGasManagerConfig) {
+  withAlchemyGasManager(config: AlchemyGasManagerConfig) {
     if (!this.isConnected<TAccount>()) {
       throw new Error(
         "AlchemyProvider: account is not set, did you call `connect` first?"
@@ -149,10 +146,10 @@ export class AlchemyProvider<
 
     if (this.feeOptsSet) {
       return this.withPaymasterMiddleware(
-        alchemyPaymasterAndDataMiddleware<TAccount, HttpTransport>(this, config)
+        alchemyPaymasterAndDataMiddleware<TAccount>(this, config)
       );
     } else {
-      return withAlchemyGasManager<TAccount, HttpTransport>(this, config);
+      return withAlchemyGasManager<TAccount>(this, config);
     }
   }
 }
