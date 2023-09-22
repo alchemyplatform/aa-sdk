@@ -21,7 +21,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { memo, useState } from "react";
 import { useAccount } from "wagmi";
-import { useSimpleAccountSigner } from "~/clients/simpleAccountSigner";
+import { useLightAccountSigner } from "~/clients/lightAccountSigner";
 import { LoadingScreen } from "~/surfaces/shared/LoadingScreen";
 import { queryClient } from "../../clients/query";
 import { useOnboardingOrchestrator } from "./OnboardingController";
@@ -29,7 +29,7 @@ import { OnboardingStepIdentifier } from "./OnboardingDataModels";
 
 export function OnboardingPage() {
   const { isConnected } = useAccount();
-  const ownerResult = useSimpleAccountSigner();
+  const ownerResult = useLightAccountSigner();
   if (isConnected && !ownerResult.isLoading) {
     return <Onboarding owner={ownerResult.owner} />;
   } else {
