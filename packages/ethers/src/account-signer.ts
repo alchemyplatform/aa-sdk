@@ -32,8 +32,14 @@ export class AccountSigner<
   sendUserOperation;
   waitForUserOperationTransaction;
 
-  constructor(readonly provider: EthersProviderAdapter<TAccount>) {
+  constructor(readonly provider: EthersProviderAdapter) {
     super();
+    if (!this.provider.accountProvider.isConnected<TAccount>()) {
+      throw new Error(
+        "provider must be connected to an acccount to create a Signer"
+      );
+    }
+
     this.account = this.provider.accountProvider.account;
 
     this.sendUserOperation =
@@ -115,7 +121,7 @@ export class AccountSigner<
     return this.provider.getPublicErc4337Client();
   }
 
-  connect(provider: EthersProviderAdapter<TAccount>): AccountSigner<TAccount> {
+  connect(provider: EthersProviderAdapter): AccountSigner<TAccount> {
     return new AccountSigner(provider);
   }
 }

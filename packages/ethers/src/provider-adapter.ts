@@ -14,22 +14,20 @@ import { defineReadOnly } from "@ethersproject/properties";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { AccountSigner } from "./account-signer.js";
 
-export type EthersProviderAdapterOpts<TAccount extends ISmartContractAccount> =
+export type EthersProviderAdapterOpts =
   | {
       rpcProvider: string | PublicErc4337Client<HttpTransport>;
       entryPointAddress: Address;
       chainId: number;
     }
   | {
-      accountProvider: SmartAccountProvider<TAccount, HttpTransport>;
+      accountProvider: SmartAccountProvider<HttpTransport>;
     };
 
 /** Lightweight Adapter for SmartAccountProvider to enable Signer Creation */
-export class EthersProviderAdapter<
-  TAccount extends ISmartContractAccount
-> extends JsonRpcProvider {
-  readonly accountProvider: SmartAccountProvider<TAccount, HttpTransport>;
-  constructor(opts: EthersProviderAdapterOpts<TAccount>) {
+export class EthersProviderAdapter extends JsonRpcProvider {
+  readonly accountProvider: SmartAccountProvider<HttpTransport>;
+  constructor(opts: EthersProviderAdapterOpts) {
     super();
     if ("accountProvider" in opts) {
       this.accountProvider = opts.accountProvider;
@@ -69,14 +67,12 @@ export class EthersProviderAdapter<
     }
 
     defineReadOnly(
-      this as unknown as EthersProviderAdapter<TAccount>,
+      this,
       "accountProvider",
       this.accountProvider.connect<TAccount>(fn)
     );
 
-    return new AccountSigner(
-      this as unknown as EthersProviderAdapter<TAccount>
-    );
+    return new AccountSigner(this);
   }
 
   withPaymasterMiddleware = (overrides: {
@@ -111,10 +107,10 @@ export class EthersProviderAdapter<
    * @param entryPointAddress - the entrypoint address that will be used for UserOperations
    * @returns an instance of {@link EthersProviderAdapter}
    */
-  static fromEthersProvider<TAccount extends ISmartContractAccount>(
+  static fromEthersProvider(
     provider: JsonRpcProvider,
     entryPointAddress: Address
-  ): EthersProviderAdapter<TAccount> {
+  ): EthersProviderAdapter {
     return new EthersProviderAdapter({
       rpcProvider: provider.connection.url,
       entryPointAddress,

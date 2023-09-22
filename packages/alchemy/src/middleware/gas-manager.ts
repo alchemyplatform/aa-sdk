@@ -1,7 +1,6 @@
 import {
   deepHexlify,
   resolveProperties,
-  type ISmartContractAccount,
   type UserOperationRequest,
 } from "@alchemy/aa-core";
 import type { Address } from "viem";
@@ -21,10 +20,10 @@ export interface AlchemyGasManagerConfig {
  * @param config - the alchemy paymaster configuration
  * @returns the provider augmented to use the alchemy paymaster
  */
-export const withAlchemyGasManager = <TAccount extends ISmartContractAccount>(
-  provider: AlchemyProvider<TAccount>,
+export const withAlchemyGasManager = (
+  provider: AlchemyProvider,
   config: AlchemyGasManagerConfig
-): AlchemyProvider<TAccount> => {
+): AlchemyProvider => {
   return (
     provider
       // no-op gas estimator
@@ -82,12 +81,10 @@ export const withAlchemyGasManager = <TAccount extends ISmartContractAccount>(
  * @param config {@link AlchemyPaymasterConfig}
  * @returns middleware overrides for paymaster middlewares
  */
-export const alchemyPaymasterAndDataMiddleware = <
-  TAccount extends ISmartContractAccount
->(
-  provider: AlchemyProvider<TAccount>,
+export const alchemyPaymasterAndDataMiddleware = (
+  provider: AlchemyProvider,
   config: AlchemyGasManagerConfig
-): Parameters<AlchemyProvider<TAccount>["withPaymasterMiddleware"]>["0"] => ({
+): Parameters<AlchemyProvider["withPaymasterMiddleware"]>["0"] => ({
   dummyPaymasterDataMiddleware: async (_struct) => {
     switch (provider.rpcClient.chain.id) {
       case 1:

@@ -4,7 +4,6 @@ import {
   deepHexlify,
   resolveProperties,
   type AccountMiddlewareFn,
-  type ISmartContractAccount,
   type SmartAccountProviderOpts,
 } from "@alchemy/aa-core";
 import { type Address, type Chain, type HttpTransport } from "viem";
@@ -29,10 +28,9 @@ export type ConnectionConfig =
   | { rpcUrl: string; apiKey?: never; jwt?: never }
   | { rpcUrl: string; apiKey?: never; jwt: string };
 
-export type AlchemyProviderConfig<TAccount extends ISmartContractAccount> = {
+export type AlchemyProviderConfig = {
   chain: Chain | number;
   entryPointAddress: Address;
-  account?: TAccount;
   opts?: SmartAccountProviderOpts;
   feeOpts?: {
     /** this adds a percent buffer on top of the base fee estimated (default 50%)
@@ -58,9 +56,7 @@ export type AlchemyProviderConfig<TAccount extends ISmartContractAccount> = {
   };
 } & ConnectionConfig;
 
-export class AlchemyProvider<
-  TAccount extends ISmartContractAccount
-> extends SmartAccountProvider<TAccount, HttpTransport> {
+export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
   alchemyClient: ClientWithAlchemyMethods;
   private pvgBuffer: bigint;
   private feeOptsSet: boolean;
@@ -71,7 +67,7 @@ export class AlchemyProvider<
     opts,
     feeOpts,
     ...connectionConfig
-  }: AlchemyProviderConfig<TAccount>) {
+  }: AlchemyProviderConfig) {
     const _chain =
       typeof chain === "number" ? SupportedChains.get(chain) : chain;
     if (!_chain || !_chain.rpcUrls["alchemy"]) {
@@ -138,7 +134,7 @@ export class AlchemyProvider<
   };
 
   withAlchemyGasManager(config: AlchemyGasManagerConfig) {
-    if (!this.isConnected<TAccount>()) {
+    if (!this.isConnected()) {
       throw new Error(
         "AlchemyProvider: account is not set, did you call `connect` first?"
       );
@@ -146,10 +142,10 @@ export class AlchemyProvider<
 
     if (this.feeOptsSet) {
       return this.withPaymasterMiddleware(
-        alchemyPaymasterAndDataMiddleware<TAccount>(this, config)
+        alchemyPaymasterAndDataMiddleware(this, config)
       );
     } else {
-      return withAlchemyGasManager<TAccount>(this, config);
+      return withAlchemyGasManager(this, config);
     }
   }
 }

@@ -19,7 +19,7 @@ import {
 import { KernelAccountProvider } from "../provider.js";
 import type { KernelUserOperationCallData } from "../types.js";
 import { KernelBaseValidator, ValidatorMode } from "../validator/base.js";
-import { RPC_URL, API_KEY, OWNER_MNEMONIC } from "./constants.js";
+import { API_KEY, OWNER_MNEMONIC, RPC_URL } from "./constants.js";
 import { MockSigner } from "./mocks/mock-signer.js";
 
 describe("Kernel Account Tests", () => {

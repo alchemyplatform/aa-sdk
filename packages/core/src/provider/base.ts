@@ -81,12 +81,11 @@ const minPriorityFeePerBidDefaults = new Map<number, bigint>([
 export type ConnectedSmartAccountProvider<
   TAccount extends ISmartContractAccount,
   TTransport extends SupportedTransports = Transport
-> = SmartAccountProvider<TAccount, TTransport> & {
+> = SmartAccountProvider<TTransport> & {
   account: TAccount;
 };
 
 export class SmartAccountProvider<
-    TAccount extends ISmartContractAccount,
     TTransport extends SupportedTransports = Transport
   >
   extends EventEmitter<ProviderEvents>
@@ -95,7 +94,7 @@ export class SmartAccountProvider<
   private txMaxRetries: number;
   private txRetryIntervalMs: number;
   private txRetryMulitplier: number;
-  readonly account?: TAccount;
+  readonly account?: ISmartContractAccount;
 
   minPriorityFeePerBid: bigint;
   rpcClient: PublicErc4337Client<Transport>;
@@ -506,11 +505,7 @@ export class SmartAccountProvider<
     fn: (provider: PublicErc4337Client<TTransport>) => TAccount
   ): ConnectedSmartAccountProvider<TAccount, TTransport> {
     const account = fn(this.rpcClient);
-    defineReadOnly(
-      this as unknown as ConnectedSmartAccountProvider<TAccount, TTransport>,
-      "account",
-      account
-    );
+    defineReadOnly(this, "account", account);
 
     this.emit("connect", {
       chainId: toHex(this.chain.id),

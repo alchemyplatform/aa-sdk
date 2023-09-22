@@ -1,13 +1,10 @@
-import type { ISmartContractAccount } from "@alchemy/aa-core";
 import type { AlchemyProvider } from "../provider.js";
 
-export const withAlchemyGasFeeEstimator = <
-  TAccount extends ISmartContractAccount
->(
-  provider: AlchemyProvider<TAccount>,
+export const withAlchemyGasFeeEstimator = (
+  provider: AlchemyProvider,
   baseFeeBufferPercent: bigint,
   maxPriorityFeeBufferPercent: bigint
-): AlchemyProvider<TAccount> => {
+): AlchemyProvider => {
   provider.withFeeDataGetter(async () => {
     const block = await provider.rpcClient.getBlock({ blockTag: "latest" });
     const baseFeePerGas = block.baseFeePerGas;
