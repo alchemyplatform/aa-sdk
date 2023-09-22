@@ -6,7 +6,7 @@ import {
 } from "@alchemy/aa-core";
 import { polygonMumbai } from "viem/chains";
 import { describe, it } from "vitest";
-import LightSmartContractAccount from "../account.js";
+import { LightSmartContractAccount } from "../account.js";
 
 describe("Account Simple Tests", () => {
   const dummyMnemonic =
@@ -14,7 +14,7 @@ describe("Account Simple Tests", () => {
   const owner: SmartAccountSigner =
     LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
   const chain = polygonMumbai;
-  const signer = new SmartAccountProvider<LightSmartContractAccount>(
+  const signer = new SmartAccountProvider(
     `${chain.rpcUrls.alchemy.http[0]}/${"test"}`,
     "0xENTRYPOINT_ADDRESS",
     chain
