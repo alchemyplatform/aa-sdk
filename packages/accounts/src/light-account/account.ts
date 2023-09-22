@@ -72,8 +72,7 @@ export class LightSmartContractAccount<
    */
   async getOwner(): Promise<Address> {
     const callResult = await this.rpcProvider.call({
-      account: this.accountAddress,
-      to: this.accountAddress,
+      to: await this.getAddress(),
       data: encodeFunctionData({
         abi: LightAccountAbi,
         functionName: "owner",
@@ -138,7 +137,7 @@ export class LightSmartContractAccount<
     provider.account.owner = newOwner;
 
     if (waitForTxn) {
-      return await provider.waitForUserOperationTransaction(result.hash);
+      return provider.waitForUserOperationTransaction(result.hash);
     }
 
     return result.hash;

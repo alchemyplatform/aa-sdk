@@ -18,4 +18,4 @@ export {
 export type { KernelBaseValidatorParams } from "./kernel-zerodev/validator/base.js";
 
 //light-account exports
-export { LightSmartContractAccount } from "./light-account-alchemy/account.js";
+export { LightSmartContractAccount } from "./light-account/account.js";

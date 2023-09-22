@@ -3,23 +3,24 @@ import {
   SmartAccountProvider,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
-import { isAddress, type Hash } from "viem";
+import { isAddress, type Chain, type Hash } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import { sepolia } from "viem/chains";
 import { LightSmartContractAccount } from "../account.js";
-import { API_KEY, LIGHT_ACCOUNT_OWNER_MNEMONIC, RPC_URL } from "./constants.js";
+import {
+  API_KEY,
+  LIGHT_ACCOUNT_OWNER_MNEMONIC,
+  RPC_URL,
+  UNDEPLOYED_OWNER_MNEMONIC,
+} from "./constants.js";
 
 const ENTRYPOINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
 const LIGHT_ACCOUNT_FACTORY_ADDRESS =
   "0xDC31c846DA74400C732edb0fE888A2e4ADfBb8b1";
 // todo(ajay): replace with official factory address when live
 
-describe("Simple Account Tests", () => {
-  const owner: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
-    LIGHT_ACCOUNT_OWNER_MNEMONIC
-  );
-  const chain = sepolia;
-  const signer = new SmartAccountProvider(
+const givenConnectedProvider = (owner: SmartAccountSigner, chain: Chain) =>
+  new SmartAccountProvider(
     RPC_URL != null ? RPC_URL : `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
     ENTRYPOINT_ADDRESS,
     chain
@@ -34,31 +35,68 @@ describe("Simple Account Tests", () => {
       })
   );
 
+describe("Light Account Tests", () => {
+  const chain = sepolia;
+
+  const owner: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
+    LIGHT_ACCOUNT_OWNER_MNEMONIC
+  );
+  const signer = givenConnectedProvider(owner, chain);
+
+  const undeployedOwner = LocalAccountSigner.mnemonicToAccountSigner(
+    UNDEPLOYED_OWNER_MNEMONIC
+  );
+  const undeployedSigner = givenConnectedProvider(undeployedOwner, chain);
+
   it("should succesfully get counterfactual address", async () => {
     expect(await signer.getAddress()).toMatchInlineSnapshot(
       '"0x7eDdc16B15259E5541aCfdebC46929873839B872"'
     );
   });
 
-  it("should sign 6492 typed data successfully", async () => {
-    expect(
-      await signer.signTypedData({
-        types: {
-          Request: [{ name: "hello", type: "string" }],
-        },
-        primaryType: "Request",
-        message: {
-          hello: "world",
-        },
-      })
-    ).toMatchInlineSnapshot(
-      '"0x80b33699de390d928c023db8897b3a3820d8a388aaf951ef54b2605fb6559b231a0c4b07f9d665cd878b76bc81c8185b2cd13b3fcc258009f2db15d37a2f9ade1b"'
+  it("should sign typed data successfully", async () => {
+    const typedData = {
+      types: {
+        Request: [{ name: "hello", type: "string" }],
+      },
+      primaryType: "Request",
+      message: {
+        hello: "world",
+      },
+    };
+    expect(await signer.signTypedData(typedData)).toBe(
+      await owner.signTypedData(typedData)
     );
   });
 
-  it("should sign 6492 message successfully", async () => {
-    expect(await signer.signMessageWith6492("test")).toMatchInlineSnapshot(
-      '"0x84826495659cf5d1293472d9dbd3e72e1e48a9bee7ab8ea7c416cd6e1171a9857544ef779d2e70199791a9362ebefc30f88889c7ace073489865ee5889d8a5281b"'
+  it("should sign message successfully", async () => {
+    expect(await signer.signMessage("test")).toBe(
+      await owner.signMessage("test")
+    );
+  });
+
+  it("should sign typed data with 6492 successfully for undeployed account", async () => {
+    const typedData = {
+      types: {
+        Request: [{ name: "hello", type: "string" }],
+      },
+      primaryType: "Request",
+      message: {
+        hello: "world",
+      },
+    };
+    expect(
+      await undeployedSigner.signTypedDataWith6492(typedData)
+    ).toMatchInlineSnapshot(
+      '"0x000000000000000000000000dc31c846da74400c732edb0fe888a2e4adfbb8b1000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000000445fbfb9cf000000000000000000000000ef9d7530d16df66481adf291dc9a12b44c7f7df00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000041591a9422219a5f2bc87ee24a82a6d5ef9674bf7408a2a289984de258466d148e75efb65b487ffbfcb061b268b1b667d8d7d4eac2c3d9d2d0a52d49c891be567c1c000000000000000000000000000000000000000000000000000000000000006492649264926492649264926492649264926492649264926492649264926492"'
+    );
+  });
+
+  it("should sign message with 6492 successfully for undeployed account", async () => {
+    expect(
+      await undeployedSigner.signMessageWith6492("test")
+    ).toMatchInlineSnapshot(
+      '"0x000000000000000000000000dc31c846da74400c732edb0fe888a2e4adfbb8b1000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000000445fbfb9cf000000000000000000000000ef9d7530d16df66481adf291dc9a12b44c7f7df00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000041be34ecce63c5248d5cda407e7da319be3c861e6e2c5d30c9630cd35dcb55e56205c482503552883923f79e751ea3671cbb84d65b18af33cd3034aeb7d529da9a1b000000000000000000000000000000000000000000000000000000000000006492649264926492649264926492649264926492649264926492649264926492"'
     );
   });
 
@@ -106,20 +144,7 @@ describe("Simple Account Tests", () => {
     const owner = LocalAccountSigner.privateKeyToAccountSigner(
       generatePrivateKey()
     );
-    const provider = new SmartAccountProvider(
-      RPC_URL != null ? RPC_URL : `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
-      ENTRYPOINT_ADDRESS,
-      chain
-    ).connect(
-      (rpcClient) =>
-        new LightSmartContractAccount({
-          entryPointAddress: ENTRYPOINT_ADDRESS,
-          chain,
-          owner,
-          factoryAddress: LIGHT_ACCOUNT_FACTORY_ADDRESS,
-          rpcClient,
-        })
-    );
+    const provider = givenConnectedProvider(owner, chain);
 
     const address = provider.getAddress();
     await expect(address).resolves.not.toThrowError();
@@ -138,20 +163,7 @@ describe("Simple Account Tests", () => {
     const throwawayOwner = LocalAccountSigner.privateKeyToAccountSigner(
       generatePrivateKey()
     );
-    const provider = new SmartAccountProvider(
-      RPC_URL != null ? RPC_URL : `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
-      ENTRYPOINT_ADDRESS,
-      chain
-    ).connect(
-      (provider) =>
-        new LightSmartContractAccount({
-          entryPointAddress: ENTRYPOINT_ADDRESS,
-          chain,
-          owner: throwawayOwner,
-          factoryAddress: LIGHT_ACCOUNT_FACTORY_ADDRESS,
-          rpcClient: provider,
-        })
-    );
+    const provider = givenConnectedProvider(throwawayOwner, chain);
 
     // fund the throwaway address
     const fundThrowawayResult = await signer.sendUserOperation({

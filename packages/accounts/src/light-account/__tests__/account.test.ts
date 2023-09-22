@@ -8,7 +8,7 @@ import { polygonMumbai } from "viem/chains";
 import { describe, it } from "vitest";
 import { LightSmartContractAccount } from "../account.js";
 
-describe("Account Simple Tests", () => {
+describe("Light Account Tests", () => {
   const dummyMnemonic =
     "test test test test test test test test test test test test";
   const owner: SmartAccountSigner =
@@ -62,7 +62,7 @@ describe("Account Simple Tests", () => {
 
   it("should correctly encode transferOwnership data", async () => {
     expect(
-      await LightSmartContractAccount.encodeTransferOwnership(
+      LightSmartContractAccount.encodeTransferOwnership(
         "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
       )
     ).toBe(
