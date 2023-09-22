@@ -47,6 +47,8 @@ export default defineConfig({
             ],
           },
           { text: "Sponsoring Gas", items: [] },
+          { text: "Batching Transactions", items: [] },
+          { text: "Transferring Ownership", link: "/transferring-ownership" },
         ],
       },
       {
@@ -61,7 +63,13 @@ export default defineConfig({
             text: "aa-accounts",
             link: "/",
             base: "/packages/aa-accounts",
-            items: [{ text: "Contributing", link: "/contributing" }],
+            items: [
+              { text: "Contributing", link: "/contributing" },
+              {
+                text: "LightSmartContractAccount",
+                link: "/light-account",
+              },
+            ],
           },
           { text: "aa-ethers", link: "/aa-ethers" },
         ],
