@@ -62,10 +62,6 @@ export class EthersProviderAdapter extends JsonRpcProvider {
   connectToAccount<TAccount extends ISmartContractAccount>(
     fn: (rpcClient: PublicErc4337Client) => TAccount
   ): AccountSigner<TAccount> {
-    if (this.accountProvider.isConnected<TAccount>()) {
-      throw new Error("Account already connected");
-    }
-
     defineReadOnly(
       this,
       "accountProvider",

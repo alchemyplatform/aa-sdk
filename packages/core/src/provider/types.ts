@@ -36,7 +36,7 @@ export interface ProviderEvents {
 }
 
 export type SendUserOperationResult = {
-  hash: string;
+  hash: Hash;
   request: UserOperationRequest;
 };
 
@@ -266,7 +266,7 @@ export interface ISmartAccountProvider<
    */
   connect<TAccount extends ISmartContractAccount>(
     fn: (provider: PublicErc4337Client<TTransport>) => TAccount
-  ): ISmartAccountProvider<TTransport>;
+  ): this & { account: TAccount };
 
   /**
    * Allows for disconnecting the account from the provider so you can connect the provider to another account instance
