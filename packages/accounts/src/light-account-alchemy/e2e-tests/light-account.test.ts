@@ -126,6 +126,13 @@ describe("Simple Account Tests", () => {
     expect(isAddress(await address)).toBe(true);
   });
 
+  it("should get owner successfully", async () => {
+    expect(await signer.account.getOwner()).toMatchInlineSnapshot(
+      '"0x65eaA2AfDF6c97295bA44C458abb00FebFB3a5FA"'
+    );
+    expect(await signer.account.getOwner()).toBe(await owner.getAddress());
+  });
+
   it("should transfer ownership successfully", async () => {
     // create a throwaway address
     const throwawayOwner = LocalAccountSigner.privateKeyToAccountSigner(
@@ -168,10 +175,10 @@ describe("Simple Account Tests", () => {
     const txnHash = provider.waitForUserOperationTransaction(result);
     await expect(txnHash).resolves.not.toThrowError();
 
-    expect(await provider.account.getOwner().getAddress()).not.toBe(
+    expect(await provider.account.getOwner()).not.toBe(
       await throwawayOwner.getAddress()
     );
-    expect(await provider.account.getOwner().getAddress()).toBe(
+    expect(await provider.account.getOwner()).toBe(
       await newThrowawayOwner.getAddress()
     );
   }, 100000);

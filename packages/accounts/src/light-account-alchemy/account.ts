@@ -6,6 +6,7 @@ import {
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import {
+  decodeFunctionResult,
   encodeFunctionData,
   type Address,
   type FallbackTransport,
@@ -65,23 +66,42 @@ export default class LightSmartContractAccount<
   }
 
   /**
-   * Returns the owner of the account.
+   * Returns the on-chain EOA owner of the account.
    *
-   * @returns the owner of the account
+   * @returns {Address} the on-chain EOA owner of the account
    */
-  getOwner(): SmartAccountSigner {
-    return this.owner;
-  }
+  async getOwner(): Promise<Address> {
+    const callResult = await this.rpcProvider.call({
+      account: this.accountAddress,
+      to: this.accountAddress,
+      data: encodeFunctionData({
+        abi: LightAccountAbi,
+        functionName: "owner",
+      }),
+    });
 
-  private _setOwner(owner: SmartAccountSigner): void {
-    this.owner = owner;
+    if (callResult.data == null) {
+      throw new Error("could not get on-chain owner");
+    }
+
+    const decodedCallResult = decodeFunctionResult({
+      abi: LightAccountAbi,
+      functionName: "owner",
+      data: callResult.data,
+    });
+
+    if (decodedCallResult !== (await this.owner.getAddress())) {
+      throw new Error("on-chain owner does not match account owner");
+    }
+
+    return decodedCallResult;
   }
 
   /**
    * Encodes the transferOwnership function call using the LightAccount ABI.
    *
    * @param newOwner - the new owner of the account
-   * @returns the encoded function call
+   * @returns {Hex} the encoded function call
    */
   static encodeTransferOwnership(newOwner: Address): Hex {
     return encodeFunctionData({
@@ -98,7 +118,7 @@ export default class LightSmartContractAccount<
    * @param provider - the provider to use to send the transaction
    * @param newOwner - the new owner of the account
    * @param waitForTxn - whether or not to wait for the transaction to be mined
-   * @returns
+   * @returns {Hash} the userOperation hash, or transaction hash if `waitForTxn` is true
    */
   static async transferOwnership<
     TTransport extends Transport | FallbackTransport = Transport
@@ -116,7 +136,7 @@ export default class LightSmartContractAccount<
       data,
     });
 
-    provider.account._setOwner(newOwner);
+    provider.account.owner = newOwner;
 
     if (waitForTxn) {
       return await provider.waitForUserOperationTransaction(result.hash);
