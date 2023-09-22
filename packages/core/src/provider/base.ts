@@ -78,13 +78,6 @@ const minPriorityFeePerBidDefaults = new Map<number, bigint>([
   [arbitrumGoerli.id, 10_000_000n],
 ]);
 
-export type ConnectedSmartAccountProvider<
-  TAccount extends ISmartContractAccount,
-  TTransport extends SupportedTransports = Transport
-> = SmartAccountProvider<TTransport> & {
-  account: TAccount;
-};
-
 export class SmartAccountProvider<
     TTransport extends SupportedTransports = Transport
   >
@@ -503,7 +496,7 @@ export class SmartAccountProvider<
 
   connect<TAccount extends ISmartContractAccount>(
     fn: (provider: PublicErc4337Client<TTransport>) => TAccount
-  ): ConnectedSmartAccountProvider<TAccount, TTransport> {
+  ): this & { account: TAccount } {
     const account = fn(this.rpcClient);
     defineReadOnly(this, "account", account);
 
@@ -515,10 +508,7 @@ export class SmartAccountProvider<
       .getAddress()
       .then((address) => this.emit("accountsChanged", [address]));
 
-    return this as unknown as ConnectedSmartAccountProvider<
-      TAccount,
-      TTransport
-    >;
+    return this as unknown as this & { account: TAccount };
   }
 
   disconnect(): this & { account: undefined } {
@@ -532,9 +522,9 @@ export class SmartAccountProvider<
     return this as this & { account: undefined };
   }
 
-  isConnected<
-    TAccount extends ISmartContractAccount
-  >(): this is ConnectedSmartAccountProvider<TAccount, TTransport> {
+  isConnected<TAccount extends ISmartContractAccount>(): this is this & {
+    account: TAccount;
+  } {
     return this.account !== undefined;
   }
 
