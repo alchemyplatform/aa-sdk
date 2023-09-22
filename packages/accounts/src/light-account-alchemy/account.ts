@@ -1,7 +1,7 @@
 import {
   SimpleSmartContractAccount,
+  SmartAccountProvider,
   wrapWith6492,
-  type ConnectedSmartAccountProvider,
   type SignTypedDataParams,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
@@ -123,10 +123,9 @@ export default class LightSmartContractAccount<
   static async transferOwnership<
     TTransport extends Transport | FallbackTransport = Transport
   >(
-    provider: ConnectedSmartAccountProvider<
-      LightSmartContractAccount,
-      TTransport
-    >,
+    provider: SmartAccountProvider<TTransport> & {
+      account: LightSmartContractAccount<TTransport>;
+    },
     newOwner: SmartAccountSigner,
     waitForTxn: boolean = false
   ): Promise<Hash> {
