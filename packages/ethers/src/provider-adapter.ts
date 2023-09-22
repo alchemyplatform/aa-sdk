@@ -1,5 +1,4 @@
 import {
-  BaseSmartContractAccount,
   SmartAccountProvider,
   getChain,
   type AccountMiddlewareFn,
@@ -59,29 +58,21 @@ export class EthersProviderAdapter<
   /**
    * Connects the Provider to an Account and returns a Signer
    *
-   * @param fn - a function that takes the account provider's rpcClient and returns a BaseSmartContractAccount
+   * @param fn - a function that takes the account provider's rpcClient and returns an ISmartContractAccount
    * @returns an {@link AccountSigner} that can be used to sign and send user operations
    */
-  connectToAccount<TAccount extends BaseSmartContractAccount<HttpTransport>>(
+  connectToAccount<TAccount extends ISmartContractAccount>(
     fn: (rpcClient: PublicErc4337Client) => TAccount
   ): AccountSigner<TAccount> {
+    if (this.accountProvider.isConnected<TAccount>()) {
+      throw new Error("Account already connected");
+    }
+
     defineReadOnly(
       this as unknown as EthersProviderAdapter<TAccount>,
       "accountProvider",
-      this.accountProvider.connect(fn)
+      this.accountProvider.connect<TAccount>(fn)
     );
-    return this.getAccountSigner<TAccount>();
-  }
-
-  /**
-   * @returns an {@link AccountSigner} using this as the underlying provider
-   */
-  getAccountSigner<
-    TAccount extends BaseSmartContractAccount<HttpTransport>
-  >(): AccountSigner<TAccount> {
-    if (!this.accountProvider.isConnected<TAccount>()) {
-      throw new Error("Account not connected");
-    }
 
     return new AccountSigner(
       this as unknown as EthersProviderAdapter<TAccount>
