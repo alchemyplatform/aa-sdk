@@ -47,7 +47,7 @@ export default defineConfig({
             ],
           },
           { text: "Sponsoring Gas", items: [] },
-          { text: "Batching Transactions", items: [] },
+          { text: "Batching Transactions", link: "/batching-transactions" },
           { text: "Transferring Ownership", link: "/transferring-ownership" },
         ],
       },

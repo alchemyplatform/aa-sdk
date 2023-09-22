@@ -30,15 +30,17 @@ There a number of ways you can call this method using the Account Kit.
 
 Assuming you have connected the `provider` to a `LightAccount` using `provider.connect`, you can call `sendUserOperation` on the provider and encoding the transferOwnership call data:
 
-```ts
-import { encodeFunctionData } from "viem";
+::: code-group
 
-const provider = // connect your provider to light account as outlined previously in the guide
+```ts [example.ts]
+import { encodeFunctionData } from "viem";
+import { provider } from "./provider";
 
 // this will return the address of the account you want to transfer ownerhip of
 const accountAddress = await provider.getAddress();
 const newOwner = "0x..."; // the address of the new owner
 
+// [!code focus:99]
 const { hash: userOperationHash } = provider.sendUserOperation({
   to: accountAddress,
   data: encodeFunctionData({
@@ -58,25 +60,74 @@ const { hash: userOperationHash } = provider.sendUserOperation({
       },
     ],
     functionName: "transferOwnership",
-    args: [newOwner]
+    args: [newOwner],
   }),
 });
 ```
 
-This pretty verbose and requires you to clog up your code with the ABI. Luckily `@alchemy/aa-accounts` exports a LightAccount class that makes this much easier.
+```ts [provider.ts]
+import { LocalAccountSigner } from "@alchemy/aa-core";
+
+const owner: SmartAccountSigner =
+  LocalAccountSigner.mnemonicToAccountSigner(MNEMONIC);
+
+export const provider = new SmartAccountProvider(
+  "https://polygon-mumbai.g.alchemy.com/v2/demo", // rpcUrl
+  "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789", // entryPointAddress
+  polygonMumbai // chain
+).connect(
+  (rpcClient) =>
+    new LightSmartContractAccount({
+      entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
+      chain: polygonMumbai,
+      factoryAddress: "0xfactoryAddress",
+      rpcClient,
+      owner,
+    })
+);
+```
+
+:::
+
+This is pretty verbose and requires you to clog up your code with the ABI. Luckily `@alchemy/aa-accounts` exports a LightAccount class that makes this much easier.
 
 ### 2. Using `LightSmartContractAccount`
 
-```ts
-import { LightSmartContractAccount } from "@alchemy/aa-accounts";
+::: code-group
 
-const provider = // connect your provider to light account as outlined previously in the guide
+```ts [example.ts]
+import { LightSmartContractAccount } from "@alchemy/aa-accounts";
+import { provider } from "./provider";
 
 // this will return the address of the account you want to transfer ownerhip of
 const accountAddress = await provider.getAddress();
 const newOwner = "0x..."; // the address of the new owner
 
-const hash = LightSmartContractAccount.transferOwnership(provider, newOwner);
+const hash = LightSmartContractAccount.transferOwnership(provider, newOwner); // [!code focus:99]
 ```
+
+```ts [provider.ts]
+import { LocalAccountSigner } from "@alchemy/aa-core";
+
+const owner: SmartAccountSigner =
+  LocalAccountSigner.mnemonicToAccountSigner(MNEMONIC);
+
+export const provider = new SmartAccountProvider(
+  "https://polygon-mumbai.g.alchemy.com/v2/demo", // rpcUrl
+  "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789", // entryPointAddress
+  polygonMumbai // chain
+).connect(
+  (rpcClient) =>
+    new LightSmartContractAccount({
+      entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
+      chain: polygonMumbai,
+      factoryAddress: "0xfactoryAddress",
+      rpcClient,
+      owner,
+    })
+);
+```
+
+:::
 
 see the [`LightSmartContractAccount`](/packages/aa-accounts/light-account) docs for more details about this class.
