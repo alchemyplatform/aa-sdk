@@ -49,6 +49,8 @@ export default defineConfig({
               { text: "Magic.Link", link: "/magic-link" },
               { text: "Web3Auth", link: "/web3auth" },
               { text: "Externally Owned Account", link: "/eoa" },
+              { text: "Using Your Own", link: "/using-your-own" },
+              { text: "Contributing", link: "/contributing" },
             ],
           },
           { text: "Sponsoring Gas", items: [] },
