@@ -10,8 +10,10 @@ import {
   type Transport,
 } from "viem";
 import { arbitrum, arbitrumGoerli } from "viem/chains";
-import { BaseSmartContractAccount } from "../account/base.js";
-import type { SignTypedDataParams } from "../account/types.js";
+import type {
+  ISmartContractAccount,
+  SignTypedDataParams,
+} from "../account/types.js";
 import { createPublicErc4337Client } from "../client/create-client.js";
 import type {
   PublicErc4337Client,
@@ -76,12 +78,6 @@ const minPriorityFeePerBidDefaults = new Map<number, bigint>([
   [arbitrumGoerli.id, 10_000_000n],
 ]);
 
-export type ConnectedSmartAccountProvider<
-  TTransport extends SupportedTransports = Transport
-> = SmartAccountProvider<TTransport> & {
-  account: BaseSmartContractAccount<TTransport>;
-};
-
 export class SmartAccountProvider<
     TTransport extends SupportedTransports = Transport
   >
@@ -91,6 +87,7 @@ export class SmartAccountProvider<
   private txMaxRetries: number;
   private txRetryIntervalMs: number;
   private txRetryMulitplier: number;
+  readonly account?: ISmartContractAccount;
 
   minPriorityFeePerBid: bigint;
   rpcClient: PublicErc4337Client<Transport>;
@@ -99,7 +96,6 @@ export class SmartAccountProvider<
     rpcProvider: string | PublicErc4337Client<TTransport>,
     protected entryPointAddress: Address,
     protected chain: Chain,
-    readonly account?: BaseSmartContractAccount<TTransport>,
     opts?: SmartAccountProviderOpts
   ) {
     super();
@@ -498,9 +494,9 @@ export class SmartAccountProvider<
     return this;
   };
 
-  connect(
-    fn: (provider: PublicErc4337Client<TTransport>) => BaseSmartContractAccount
-  ): this & { account: BaseSmartContractAccount } {
+  connect<TAccount extends ISmartContractAccount>(
+    fn: (provider: PublicErc4337Client<TTransport>) => TAccount
+  ): this & { account: TAccount } {
     const account = fn(this.rpcClient);
     defineReadOnly(this, "account", account);
 
@@ -512,7 +508,7 @@ export class SmartAccountProvider<
       .getAddress()
       .then((address) => this.emit("accountsChanged", [address]));
 
-    return this as this & { account: typeof account };
+    return this as unknown as this & { account: TAccount };
   }
 
   disconnect(): this & { account: undefined } {
@@ -526,7 +522,9 @@ export class SmartAccountProvider<
     return this as this & { account: undefined };
   }
 
-  isConnected(): this is ConnectedSmartAccountProvider<TTransport> {
+  isConnected<TAccount extends ISmartContractAccount>(): this is this & {
+    account: TAccount;
+  } {
     return this.account !== undefined;
   }
 

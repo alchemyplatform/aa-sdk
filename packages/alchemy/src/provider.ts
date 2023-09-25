@@ -1,5 +1,4 @@
 import {
-  BaseSmartContractAccount,
   SmartAccountProvider,
   createPublicErc4337Client,
   deepHexlify,
@@ -32,7 +31,6 @@ export type ConnectionConfig =
 export type AlchemyProviderConfig = {
   chain: Chain | number;
   entryPointAddress: Address;
-  account?: BaseSmartContractAccount;
   opts?: SmartAccountProviderOpts;
   feeOpts?: {
     /** this adds a percent buffer on top of the base fee estimated (default 50%)
@@ -66,7 +64,6 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
   constructor({
     chain,
     entryPointAddress,
-    account,
     opts,
     feeOpts,
     ...connectionConfig
@@ -94,7 +91,7 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
       }),
     });
 
-    super(client, entryPointAddress, _chain, account, opts);
+    super(client, entryPointAddress, _chain, opts);
 
     this.alchemyClient = this.rpcClient as ClientWithAlchemyMethods;
     withAlchemyGasFeeEstimator(

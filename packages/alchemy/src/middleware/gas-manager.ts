@@ -1,10 +1,10 @@
 import {
   deepHexlify,
   resolveProperties,
-  type ConnectedSmartAccountProvider,
   type UserOperationRequest,
 } from "@alchemy/aa-core";
-import type { Address, Transport } from "viem";
+import type { Address } from "viem";
+import type { AlchemyProvider } from "../provider.js";
 import type { ClientWithAlchemyMethods } from "./client.js";
 
 export interface AlchemyGasManagerConfig {
@@ -20,13 +20,10 @@ export interface AlchemyGasManagerConfig {
  * @param config - the alchemy paymaster configuration
  * @returns the provider augmented to use the alchemy paymaster
  */
-export const withAlchemyGasManager = <
-  T extends Transport,
-  Provider extends ConnectedSmartAccountProvider<T>
->(
-  provider: Provider,
+export const withAlchemyGasManager = (
+  provider: AlchemyProvider,
   config: AlchemyGasManagerConfig
-): Provider => {
+): AlchemyProvider => {
   return (
     provider
       // no-op gas estimator
@@ -64,7 +61,7 @@ export const withAlchemyGasManager = <
                 policyId: config.policyId,
                 entryPoint: config.entryPoint,
                 userOperation: userOperation,
-                dummySignature: provider.account.getDummySignature(),
+                dummySignature: userOperation.signature,
                 feeOverride: feeOverride,
               },
             ],
@@ -84,15 +81,10 @@ export const withAlchemyGasManager = <
  * @param config {@link AlchemyPaymasterConfig}
  * @returns middleware overrides for paymaster middlewares
  */
-export const alchemyPaymasterAndDataMiddleware = <
-  T extends Transport,
-  Provider extends ConnectedSmartAccountProvider<T>
->(
-  provider: Provider,
+export const alchemyPaymasterAndDataMiddleware = (
+  provider: AlchemyProvider,
   config: AlchemyGasManagerConfig
-): Parameters<
-  ConnectedSmartAccountProvider["withPaymasterMiddleware"]
->["0"] => ({
+): Parameters<AlchemyProvider["withPaymasterMiddleware"]>["0"] => ({
   dummyPaymasterDataMiddleware: async (_struct) => {
     switch (provider.rpcClient.chain.id) {
       case 1:

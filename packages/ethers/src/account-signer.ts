@@ -1,9 +1,9 @@
 import {
-  BaseSmartContractAccount,
   resolveProperties,
   type AccountMiddlewareFn,
   type FeeDataMiddleware,
   type GasEstimatorMiddleware,
+  type ISmartContractAccount,
   type PaymasterAndDataMiddleware,
   type PublicErc4337Client,
 } from "@alchemy/aa-core";
@@ -24,14 +24,22 @@ const hexlifyOptional = (value: any): `0x${string}` | undefined => {
   return hexlify(value) as `0x${string}`;
 };
 
-export class AccountSigner extends Signer {
-  private account?: BaseSmartContractAccount;
+export class AccountSigner<
+  TAccount extends ISmartContractAccount
+> extends Signer {
+  private account?: TAccount;
 
   sendUserOperation;
   waitForUserOperationTransaction;
 
   constructor(readonly provider: EthersProviderAdapter) {
     super();
+    if (!this.provider.accountProvider.isConnected<TAccount>()) {
+      throw new Error(
+        "provider must be connected to an acccount to create a Signer"
+      );
+    }
+
     this.account = this.provider.accountProvider.account;
 
     this.sendUserOperation =
@@ -113,7 +121,7 @@ export class AccountSigner extends Signer {
     return this.provider.getPublicErc4337Client();
   }
 
-  connect(provider: EthersProviderAdapter): AccountSigner {
+  connect(provider: EthersProviderAdapter): AccountSigner<TAccount> {
     return new AccountSigner(provider);
   }
 }

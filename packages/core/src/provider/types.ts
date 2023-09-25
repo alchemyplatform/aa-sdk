@@ -1,8 +1,10 @@
 import type { Address } from "abitype";
 import type { Hash, Hex, RpcTransactionRequest, Transport } from "viem";
 import type { SignTypedDataParameters } from "viem/accounts";
-import type { BaseSmartContractAccount } from "../account/base.js";
-import type { SignTypedDataParams } from "../account/types.js";
+import type {
+  ISmartContractAccount,
+  SignTypedDataParams,
+} from "../account/types.js";
 import type {
   PublicErc4337Client,
   SupportedTransports,
@@ -34,7 +36,7 @@ export interface ProviderEvents {
 }
 
 export type SendUserOperationResult = {
-  hash: string;
+  hash: Hash;
   request: UserOperationRequest;
 };
 
@@ -79,7 +81,7 @@ export interface ISmartAccountProvider<
   readonly feeDataGetter: AccountMiddlewareFn;
   readonly customMiddleware?: AccountMiddlewareFn;
 
-  readonly account?: BaseSmartContractAccount;
+  readonly account?: ISmartContractAccount;
 
   /**
    * Sends a user operation using the connected account.
@@ -263,9 +265,9 @@ export interface ISmartAccountProvider<
    *
    * @param fn - a function that given public rpc client, returns a smart contract account
    */
-  connect(
-    fn: (provider: PublicErc4337Client<TTransport>) => BaseSmartContractAccount
-  ): this & { account: BaseSmartContractAccount };
+  connect<TAccount extends ISmartContractAccount>(
+    fn: (provider: PublicErc4337Client<TTransport>) => TAccount
+  ): this & { account: TAccount };
 
   /**
    * Allows for disconnecting the account from the provider so you can connect the provider to another account instance

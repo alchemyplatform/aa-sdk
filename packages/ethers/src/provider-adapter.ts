@@ -1,5 +1,4 @@
 import {
-  BaseSmartContractAccount,
   SmartAccountProvider,
   getChain,
   type AccountMiddlewareFn,
@@ -7,6 +6,7 @@ import {
   type FeeDataMiddleware,
   type GasEstimatorMiddleware,
   type HttpTransport,
+  type ISmartContractAccount,
   type PaymasterAndDataMiddleware,
   type PublicErc4337Client,
 } from "@alchemy/aa-core";
@@ -20,7 +20,9 @@ export type EthersProviderAdapterOpts =
       entryPointAddress: Address;
       chainId: number;
     }
-  | { accountProvider: SmartAccountProvider<HttpTransport> };
+  | {
+      accountProvider: SmartAccountProvider<HttpTransport>;
+    };
 
 /** Lightweight Adapter for SmartAccountProvider to enable Signer Creation */
 export class EthersProviderAdapter extends JsonRpcProvider {
@@ -54,20 +56,18 @@ export class EthersProviderAdapter extends JsonRpcProvider {
   /**
    * Connects the Provider to an Account and returns a Signer
    *
-   * @param fn - a function that takes the account provider's rpcClient and returns a BaseSmartContractAccount
+   * @param fn - a function that takes the account provider's rpcClient and returns an ISmartContractAccount
    * @returns an {@link AccountSigner} that can be used to sign and send user operations
    */
-  connectToAccount(
-    fn: (rpcClient: PublicErc4337Client) => BaseSmartContractAccount
-  ): AccountSigner {
-    defineReadOnly(this, "accountProvider", this.accountProvider.connect(fn));
-    return this.getAccountSigner();
-  }
+  connectToAccount<TAccount extends ISmartContractAccount>(
+    fn: (rpcClient: PublicErc4337Client) => TAccount
+  ): AccountSigner<TAccount> {
+    defineReadOnly(
+      this,
+      "accountProvider",
+      this.accountProvider.connect<TAccount>(fn)
+    );
 
-  /**
-   * @returns an {@link AccountSigner} using this as the underlying provider
-   */
-  getAccountSigner(): AccountSigner {
     return new AccountSigner(this);
   }
 
