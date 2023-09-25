@@ -13,7 +13,7 @@ import { env } from "~/env.mjs";
 
 export interface DAAppConfiguration {
   nftContractAddress: `0x${string}`;
-  simpleAccountFactoryAddress: `0x${string}`;
+  lightAccountFactoryAddress: `0x${string}`;
   gasManagerPolicyId: string;
   rpcUrl: string;
   chain: Chain;
@@ -23,56 +23,56 @@ export interface DAAppConfiguration {
 export const daappConfigurations: Record<number, DAAppConfiguration> = {
   [polygon.id]: {
     nftContractAddress: "0xb7b9424ef3d1b9086b7e53276c4aad68a1dd971c",
-    simpleAccountFactoryAddress: "0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232",
+    lightAccountFactoryAddress: "0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232", // todo(ajay): update to light account factory address when deployed
     gasManagerPolicyId: env.NEXT_PUBLIC_POLYGON_POLICY_ID,
     rpcUrl: `/api/rpc/proxy?chainId=${polygon.id}`,
     chain: polygon,
   },
   [polygonMumbai.id]: {
     nftContractAddress: "0x5679b0de84bba361d31b2e7152ab20f0f8565245",
-    simpleAccountFactoryAddress: "0x9406Cc6185a346906296840746125a0E44976454",
+    lightAccountFactoryAddress: "0x9406Cc6185a346906296840746125a0E44976454", // todo(ajay): update to light account factory address when deployed
     gasManagerPolicyId: env.NEXT_PUBLIC_MUMBAI_POLICY_ID,
     rpcUrl: `/api/rpc/proxy?chainId=${polygonMumbai.id}`,
     chain: polygonMumbai,
   },
   [sepolia.id]: {
     nftContractAddress: "0x5679b0de84bba361d31b2e7152ab20f0f8565245",
-    simpleAccountFactoryAddress: "0x9406cc6185a346906296840746125a0e44976454",
+    lightAccountFactoryAddress: "0xDC31c846DA74400C732edb0fE888A2e4ADfBb8b1", // todo(ajay): replace with official factory address when live
     gasManagerPolicyId: env.NEXT_PUBLIC_SEPOLIA_POLICY_ID,
     rpcUrl: `/api/rpc/proxy?chainId=${sepolia.id}`,
     chain: sepolia,
   },
   [arbitrum.id]: {
     nftContractAddress: "0xb7b9424ef3d1b9086b7e53276c4aad68a1dd971c",
-    simpleAccountFactoryAddress: "0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232",
+    lightAccountFactoryAddress: "0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232", // todo(ajay): update to light account factory address when deployed
     gasManagerPolicyId: env.NEXT_PUBLIC_ARB_POLICY_ID,
     rpcUrl: `/api/rpc/proxy?chainId=${arbitrum.id}`,
     chain: arbitrum,
   },
   [optimism.id]: {
     nftContractAddress: "0x835629117Abb8cfe20a2e8717C691905A4725b7c",
-    simpleAccountFactoryAddress: "0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232",
+    lightAccountFactoryAddress: "0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232", // todo(ajay): update to light account factory address when deployed
     gasManagerPolicyId: env.NEXT_PUBLIC_OPT_POLICY_ID,
     rpcUrl: `/api/rpc/proxy?chainId=${optimism.id}`,
     chain: optimism,
   },
   [optimismGoerli.id]: {
     nftContractAddress: "0x835629117Abb8cfe20a2e8717C691905A4725b7c",
-    simpleAccountFactoryAddress: "0x9406cc6185a346906296840746125a0e44976454",
+    lightAccountFactoryAddress: "0x9406cc6185a346906296840746125a0e44976454", // todo(ajay): update to light account factory address when deployed
     gasManagerPolicyId: env.NEXT_PUBLIC_OPT_GOERLI_POLICY_ID,
     rpcUrl: `/api/rpc/proxy?chainId=${optimismGoerli.id}`,
     chain: optimismGoerli,
   },
   [base.id]: {
     nftContractAddress: "0x835629117Abb8cfe20a2e8717C691905A4725b7c",
-    simpleAccountFactoryAddress: "0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232",
+    lightAccountFactoryAddress: "0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232", // todo(ajay): update to light account factory address when deployed
     gasManagerPolicyId: env.NEXT_PUBLIC_BASE_POLICY_ID,
     rpcUrl: `/api/rpc/proxy?chainId=${base.id}`,
     chain: base,
   },
   [baseGoerli.id]: {
     nftContractAddress: "0x835629117Abb8cfe20a2e8717C691905A4725b7c",
-    simpleAccountFactoryAddress: "0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232",
+    lightAccountFactoryAddress: "0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232", // todo(ajay): update to light account factory address when deployed
     gasManagerPolicyId: env.NEXT_PUBLIC_BASE_GOERLI_POLICY_ID,
     rpcUrl: `/api/rpc/proxy?chainId=${baseGoerli.id}`,
     chain: baseGoerli,
