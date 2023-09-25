@@ -54,6 +54,8 @@ jobs:
           API_KEY: ${{ secrets.API_KEY }}
           OWNER_MNEMONIC: ${{ secrets.OWNER_MNEMONIC }}
           PAYMASTER_POLICY_ID: ${{ secrets.PAYMASTER_POLICY_ID }}
+          UNDEPLOYED_OWNER_MNEMONIC: ${{ secrets.UNDEPLOYED_OWNER_MNEMONIC }}
+          LIGHT_ACCOUNT_OWNER_MNEMONIC: ${{ secrets.LIGHT_ACCOUNT_OWNER_MNEMONIC }}
         run: yarn test:e2e
 
       # Lerna publish will, compute the new version, update files, run precommit hooks, tag, publish, and push change log
