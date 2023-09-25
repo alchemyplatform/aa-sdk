@@ -86,9 +86,10 @@ export interface ISmartAccountProvider<
    * Before executing, sendUserOperation will run the user operation through the middleware pipeline.
    * The order of the middlewares is:
    * 1. dummyPaymasterDataMiddleware -- populates a dummy paymaster data to use in estimation (default: "0x")
-   * 2. gasEstimator -- calls eth_estimateUserOperationGas
-   * 3. feeDataGetter -- sets maxfeePerGas and maxPriorityFeePerGas
+   * 2. feeDataGetter -- sets maxfeePerGas and maxPriorityFeePerGas
+   * 3. gasEstimator -- calls eth_estimateUserOperationGas
    * 4. paymasterMiddleware -- used to set paymasterAndData. (default: "0x")
+   * 5. customMiddleware -- allows you to override any of the results returned by previous middlewares
    *
    * @param data - either {@link UserOperationCallData} or {@link BatchUserOperationCallData}
    * @returns - {@link SendUserOperationResult} containing the hash and request

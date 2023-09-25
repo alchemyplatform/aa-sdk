@@ -24,6 +24,10 @@ export default defineConfig({
       { text: "Introduction", link: "/introduction" },
       { text: "Getting Started", link: "/getting-started" },
       {
+        text: "Packages Overview",
+        link: "/packages/overview",
+      },
+      {
         text: "Using Smart Accounts",
         base: "/smart-accounts",
         items: [
@@ -52,28 +56,51 @@ export default defineConfig({
           { text: "Transferring Ownership", link: "/transferring-ownership" },
         ],
       },
+      // Per Package docs
       {
-        text: "Packages",
-        collapsed: false,
-        base: "/packages",
+        text: "aa-core",
+        base: "/packages/aa-core",
+        link: "/",
+        collapsed: true,
         items: [
-          { text: "Overview", link: "/overview" },
-          { text: "aa-core", link: "/aa-core" },
-          { text: "aa-alchemy", link: "/aa-alchemy" },
           {
-            text: "aa-accounts",
-            link: "/",
-            base: "/packages/aa-accounts",
-            items: [
-              { text: "Contributing", link: "/contributing" },
-              {
-                text: "LightSmartContractAccount",
-                link: "/light-account",
-              },
-            ],
+            text: "Provider",
+            link: "/introduction",
+            base: "/packages/aa-core/provider",
+            items: [{ text: "sendUserOperation", link: "/sendUserOperation" }],
           },
-          { text: "aa-ethers", link: "/aa-ethers" },
+          { text: "Accounts" },
+          { text: "Signers" },
+          { text: "Public Client" },
+          { text: "Utilities" },
         ],
+      },
+      {
+        text: "aa-alchemy",
+        base: "/packages/aa-alchemy",
+        link: "/",
+        collapsed: true,
+        items: [],
+      },
+      {
+        text: "aa-accounts",
+        collapsed: true,
+        link: "/",
+        base: "/packages/aa-accounts",
+        items: [
+          { text: "Contributing", link: "/contributing" },
+          {
+            text: "LightSmartContractAccount",
+            link: "/light-account",
+          },
+        ],
+      },
+      {
+        text: "aa-ethers",
+        base: "/packages/aa-ethers",
+        link: "/",
+        collapsed: true,
+        items: [],
       },
     ],
 
