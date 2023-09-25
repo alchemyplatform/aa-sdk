@@ -3,7 +3,7 @@ import {
   SmartAccountProvider,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
-import { isAddress, type Chain, type Hash } from "viem";
+import { isAddress, type Address, type Chain, type Hash } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import { sepolia } from "viem/chains";
 import { LightSmartContractAccount } from "../account.js";
@@ -19,42 +19,24 @@ const LIGHT_ACCOUNT_FACTORY_ADDRESS =
   "0xDC31c846DA74400C732edb0fE888A2e4ADfBb8b1";
 // todo(ajay): replace with official factory address when live
 
-const givenConnectedProvider = (owner: SmartAccountSigner, chain: Chain) =>
-  new SmartAccountProvider(
-    RPC_URL != null ? RPC_URL : `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
-    ENTRYPOINT_ADDRESS,
-    chain
-  ).connect(
-    (provider) =>
-      new LightSmartContractAccount({
-        entryPointAddress: ENTRYPOINT_ADDRESS,
-        chain,
-        owner,
-        factoryAddress: LIGHT_ACCOUNT_FACTORY_ADDRESS,
-        rpcClient: provider,
-      })
-  );
-
 describe("Light Account Tests", () => {
   const chain = sepolia;
-
   const owner: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
     LIGHT_ACCOUNT_OWNER_MNEMONIC
   );
-  const signer = givenConnectedProvider(owner, chain);
-
   const undeployedOwner = LocalAccountSigner.mnemonicToAccountSigner(
     UNDEPLOYED_OWNER_MNEMONIC
   );
-  const undeployedSigner = givenConnectedProvider(undeployedOwner, chain);
 
   it("should succesfully get counterfactual address", async () => {
+    const signer = givenConnectedProvider(owner, chain);
     expect(await signer.getAddress()).toMatchInlineSnapshot(
       '"0x7eDdc16B15259E5541aCfdebC46929873839B872"'
     );
   });
 
   it("should sign typed data successfully", async () => {
+    const signer = givenConnectedProvider(owner, chain);
     const typedData = {
       types: {
         Request: [{ name: "hello", type: "string" }],
@@ -70,12 +52,14 @@ describe("Light Account Tests", () => {
   });
 
   it("should sign message successfully", async () => {
+    const signer = givenConnectedProvider(owner, chain);
     expect(await signer.signMessage("test")).toBe(
       await owner.signMessage("test")
     );
   });
 
   it("should sign typed data with 6492 successfully for undeployed account", async () => {
+    const undeployedSigner = givenConnectedProvider(undeployedOwner, chain);
     const typedData = {
       types: {
         Request: [{ name: "hello", type: "string" }],
@@ -93,6 +77,7 @@ describe("Light Account Tests", () => {
   });
 
   it("should sign message with 6492 successfully for undeployed account", async () => {
+    const undeployedSigner = givenConnectedProvider(undeployedOwner, chain);
     expect(
       await undeployedSigner.signMessageWith6492("test")
     ).toMatchInlineSnapshot(
@@ -105,6 +90,7 @@ describe("Light Account Tests", () => {
    * For current balance, @see: https://sepolia.etherscan.io/address/0x7eDdc16B15259E5541aCfdebC46929873839B872
    */
   it("should execute successfully", async () => {
+    const signer = givenConnectedProvider(owner, chain);
     const result = await signer.sendUserOperation({
       target: await signer.getAddress(),
       data: "0x",
@@ -116,21 +102,7 @@ describe("Light Account Tests", () => {
 
   it("should fail to execute if account address is not deployed and not correct", async () => {
     const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
-    const newSigner = new SmartAccountProvider(
-      RPC_URL != null ? RPC_URL : `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
-      ENTRYPOINT_ADDRESS,
-      chain
-    ).connect(
-      (provider) =>
-        new LightSmartContractAccount({
-          entryPointAddress: ENTRYPOINT_ADDRESS,
-          chain,
-          owner,
-          factoryAddress: LIGHT_ACCOUNT_FACTORY_ADDRESS,
-          rpcClient: provider,
-          accountAddress,
-        })
-    );
+    const newSigner = givenConnectedProvider(owner, chain, accountAddress);
 
     const result = newSigner.sendUserOperation({
       target: await newSigner.getAddress(),
@@ -152,6 +124,7 @@ describe("Light Account Tests", () => {
   });
 
   it("should get owner successfully", async () => {
+    const signer = givenConnectedProvider(owner, chain);
     expect(await signer.account.getOwner()).toMatchInlineSnapshot(
       '"0x65eaA2AfDF6c97295bA44C458abb00FebFB3a5FA"'
     );
@@ -159,6 +132,7 @@ describe("Light Account Tests", () => {
   });
 
   it("should transfer ownership successfully", async () => {
+    const signer = givenConnectedProvider(owner, chain);
     // create a throwaway address
     const throwawayOwner = LocalAccountSigner.privateKeyToAccountSigner(
       generatePrivateKey()
@@ -195,3 +169,24 @@ describe("Light Account Tests", () => {
     );
   }, 100000);
 });
+
+const givenConnectedProvider = (
+  owner: SmartAccountSigner,
+  chain: Chain,
+  accountAddress?: Address
+) =>
+  new SmartAccountProvider(
+    RPC_URL != null ? RPC_URL : `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
+    ENTRYPOINT_ADDRESS,
+    chain
+  ).connect(
+    (provider) =>
+      new LightSmartContractAccount({
+        entryPointAddress: ENTRYPOINT_ADDRESS,
+        chain,
+        owner,
+        factoryAddress: LIGHT_ACCOUNT_FACTORY_ADDRESS,
+        rpcClient: provider,
+        accountAddress,
+      })
+  );
