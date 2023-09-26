@@ -166,7 +166,35 @@ export default defineConfig({
         base: "/packages/aa-alchemy",
         link: "/",
         collapsed: true,
-        items: [],
+        items: [
+          {
+            text: "AlchemyProvider",
+            link: "/introduction",
+            base: "/packages/aa-alchemy/provider",
+            items: [
+              { text: "gasEstimator", link: "/gasEstimator" },
+              { text: "withAlchemyGasManager", link: "/withAlchemyGasManager" },
+            ],
+          },
+          {
+            text: "Middleware",
+            link: "/introduction",
+            base: "/packages/aa-alchemy/middleware",
+            items: [
+              {
+                text: "withAlchemyGasFeeEstimator",
+                link: "/withAlchemyGasFeeEstimator",
+              },
+              { text: "withAlchemyGasManager", link: "/withAlchemyGasManager" },
+            ],
+          },
+          {
+            text: "Utils",
+            link: "/utils",
+            base: "/packages/aa-alchemy/utils",
+            items: [{ text: "SupportedChains", link: "/supportedChains" }],
+          },
+        ],
       },
       {
         text: "aa-accounts",
