@@ -69,3 +69,8 @@ A Promise containing the signature of the typed data.
 ## Parameters
 
 ### `params: SignTypedDataParams` -- the typed data to sign
+
+- `domain: TypedDataDomain` -- The typed data domain
+- `types: Object` -- the type definitions for the typed data
+- `primaryType: inferred String` -- the primary type to extract from types and use in value
+- `message: inferred from types & primaryType` -- the message, inferred from
