@@ -39,7 +39,3 @@ A Promise containing the signature of the message, additionally wrapped in EIP-6
 ## Parameters
 
 ### `msg: string | Uint8Array)` -- the message to sign
-
-- `target: Address` -- the target of the call (equivalent to `to` in a transaction)
-- `data: Hex` -- can be either `0x` or a call data string
-- `value?: bigint` -- optionally, set the value in wei you want to send to the target
