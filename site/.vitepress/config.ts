@@ -45,6 +45,7 @@ export default defineConfig({
           {
             text: "Choosing a Signer",
             base: "/smart-accounts/signers",
+            link: "/overview",
             items: [
               { text: "Magic.Link", link: "/magic-link" },
               { text: "Web3Auth", link: "/web3auth" },
@@ -53,7 +54,7 @@ export default defineConfig({
               { text: "Contributing", link: "/contributing" },
             ],
           },
-          { text: "Sponsoring Gas", items: [] },
+          { text: "Sponsoring Gas", link: "/sponsoring-gas" },
           { text: "Batching Transactions", link: "/batching-transactions" },
           { text: "Transferring Ownership", link: "/transferring-ownership" },
         ],
