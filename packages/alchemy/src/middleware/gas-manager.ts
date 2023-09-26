@@ -16,7 +16,7 @@ export interface AlchemyGasManagerConfig {
  * This middleware wraps the Alchemy gas manager APIs to provide more flexible user operation gas sponsorship.
  *
  * If feeOptsSet is true, it will use `alchemy_requestPaymasterAndData` to get only paymaster data, allowing you
- * to customize the fee estimation middleware. @see: {@link withAlchemyPaymasterAndDataMiddleware}
+ * to customize the gas and fee estimation middleware. @see: {@link withAlchemyPaymasterAndDataMiddleware}
  *
  * Otherwise, it will use `alchemy_requestGasAndPaymasterAndData` to get all of the gas estimates + paymaster data
  * in one RPC call. @see: {@link withAlchemyGasAndPaymasterAndDataMiddleware}
