@@ -24,7 +24,37 @@ head:
 import { provider } from "./provider";
 
 // sign typed data (works for undeployed and deployed accounts)
-const signedTypedDataWith6492 = provider.signMessageWith6492("test");
+const signedTypedDataWith6492 = provider.signTypedDataWith6492({
+  domain: {
+    name: "Ether Mail",
+    version: "1",
+    chainId: 1,
+    verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
+  },
+  types: {
+    Person: [
+      { name: "name", type: "string" },
+      { name: "wallet", type: "address" },
+    ],
+    Mail: [
+      { name: "from", type: "Person" },
+      { name: "to", type: "Person" },
+      { name: "contents", type: "string" },
+    ],
+  },
+  primaryType: "Mail",
+  message: {
+    from: {
+      name: "Cow",
+      wallet: "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826",
+    },
+    to: {
+      name: "Bob",
+      wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+    },
+    contents: "Hello, Bob!",
+  },
+});
 ```
 
 <<< @/snippets/provider.ts
@@ -40,6 +70,7 @@ A Promise containing the signature of the typed data, additionally wrapped in EI
 
 ### `params: SignTypedDataParams` -- the typed data to sign
 
-- `provider: SmartAccountProvider & { account: LightSmartContractAccount }` -- the provider to use to send the transaction
-- `newOwner: Address` -- the new owner of the account
-- `waitForTxn?: boolean` -- optionally, wait for the transaction to be mined with the UO
+- `domain: TypedDataDomain` -- The typed data domain
+- `types: Object` -- the type definitions for the typed data
+- `primaryType: inferred String` -- the primary type to extract from types and use in value
+- `message: inferred from types & primaryType` -- the message, inferred from
