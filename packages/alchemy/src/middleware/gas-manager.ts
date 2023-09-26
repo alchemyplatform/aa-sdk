@@ -13,9 +13,13 @@ export interface AlchemyGasManagerConfig {
 }
 
 /**
- * This middleware sets the alchemy RPC method: `alchemy_requestGasAndPaymasterAndData` to get all of the gas estimates + paymaster data
- * in one RPC call. It will no-op the gas estimator and fee data getter middleware and set a custom middleware that makes the RPC call
- * If feeOptsSet is true, it will use the default gas estimator and fee data getter middleware, and override the fee data getter.
+ * This middleware wraps the Alchemy gas manager APIs to provide more flexible user operation gas sponsorship.
+ *
+ * If feeOptsSet is true, it will use `alchemy_requestPaymasterAndData` to get only paymaster data, allowing you
+ * to customize the fee estimation middleware. @see: {@link withAlchemyPaymasterAndDataMiddleware}
+ *
+ * Otherwise, it will use `alchemy_requestGasAndPaymasterAndData` to get all of the gas estimates + paymaster data
+ * in one RPC call. @see: {@link withAlchemyGasAndPaymasterAndDataMiddleware}
  *
  * @param provider - the smart account provider to override to use the alchemy gas manager
  * @param config - the alchemy gas manager configuration
