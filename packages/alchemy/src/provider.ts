@@ -17,7 +17,6 @@ import { SupportedChains } from "./chains.js";
 import type { ClientWithAlchemyMethods } from "./middleware/client.js";
 import { withAlchemyGasFeeEstimator } from "./middleware/gas-fees.js";
 import {
-  alchemyPaymasterAndDataMiddleware,
   withAlchemyGasManager,
   type AlchemyGasManagerConfig,
 } from "./middleware/gas-manager.js";
@@ -140,12 +139,6 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
       );
     }
 
-    if (this.feeOptsSet) {
-      return this.withPaymasterMiddleware(
-        alchemyPaymasterAndDataMiddleware(this, config)
-      );
-    } else {
-      return withAlchemyGasManager(this, config);
-    }
+    return withAlchemyGasManager(this, config, this.feeOptsSet);
   }
 }
