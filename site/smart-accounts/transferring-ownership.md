@@ -90,4 +90,4 @@ const hash = LightSmartContractAccount.transferOwnership(provider, newOwner); //
 
 :::
 
-see the [`LightSmartContractAccount`](/packages/aa-accounts/light-account) docs for more details about this class.
+see the [`LightSmartContractAccount`](/packages/aa-accounts/light-account/introduction) docs for more details about this class.

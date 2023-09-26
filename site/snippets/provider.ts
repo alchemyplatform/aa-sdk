@@ -1,4 +1,4 @@
-import { LightSmartContractAccount } from "@alchemy/aa-alchemy";
+import { LightSmartContractAccount } from "@alchemy/aa-accounts";
 import {
   LocalAccountSigner,
   SmartAccountProvider,
@@ -7,7 +7,7 @@ import {
 import { polygonMumbai } from "viem/chains";
 
 const owner: SmartAccountSigner =
-  LocalAccountSigner.mnemonicToAccountSigner(MNEMONIC);
+  LocalAccountSigner.mnemonicToAccountSigner(YOUR_OWNER_MNEMONIC);
 
 export const provider = new SmartAccountProvider(
   "https://polygon-mumbai.g.alchemy.com/v2/demo", // rpcUrl

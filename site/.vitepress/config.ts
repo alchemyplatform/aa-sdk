@@ -90,11 +90,23 @@ export default defineConfig({
         link: "/",
         base: "/packages/aa-accounts",
         items: [
-          { text: "Contributing", link: "/contributing" },
           {
             text: "LightSmartContractAccount",
-            link: "/light-account",
+            link: "/introduction",
+            base: "/packages/aa-accounts/light-account",
+            items: [
+              { text: "signMessageWith6492", link: "/signMessageWith6492" },
+              { text: "signTypedData", link: "/signTypedData" },
+              { text: "signTypedDataWith6492", link: "/signTypedDataWith6492" },
+              { text: "getOwner", link: "/getOwner" },
+              {
+                text: "encodeTransferOwnership",
+                link: "/encodeTransferOwnership",
+              },
+              { text: "transferOwnership", link: "/transferOwnership" },
+            ],
           },
+          { text: "Contributing", link: "/contributing" },
         ],
       },
       {
