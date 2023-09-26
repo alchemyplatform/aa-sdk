@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: LightSmartContractAccount
+      content: LightSmartContractAccount • signMessageWith6492
   - - meta
     - name: description
       content: Overview of the signMessageWith6492 method on LightSmartContractAccount

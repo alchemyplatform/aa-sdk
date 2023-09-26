@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: LightSmartContractAccount
+      content: LightSmartContractAccount • getOwner
   - - meta
     - name: description
       content: Overview of the getOwner method on LightSmartContractAccount

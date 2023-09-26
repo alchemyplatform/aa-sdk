@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: LightSmartContractAccount
+      content: LightSmartContractAccount • encodeTransferOwnership
   - - meta
     - name: description
       content: Overview of the encodeTransferOwnership method on LightSmartContractAccount

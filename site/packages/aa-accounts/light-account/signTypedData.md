@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: LightSmartContractAccount
+      content: LightSmartContractAccount • signTypedData
   - - meta
     - name: description
       content: Overview of the signTypedData method on LightSmartContractAccount
