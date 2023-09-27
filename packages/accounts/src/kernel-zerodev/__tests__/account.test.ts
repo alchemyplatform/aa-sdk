@@ -1,4 +1,4 @@
-import { PrivateKeySigner } from "@alchemy/aa-core";
+import { LocalAccountSigner } from "@alchemy/aa-core";
 import { type Address, type Hex } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
@@ -23,7 +23,7 @@ describe("Kernel Account Tests", () => {
     entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789" as Address,
   };
 
-  const owner = PrivateKeySigner.privateKeyToAccountSigner(config.privateKey);
+  const owner = LocalAccountSigner.privateKeyToAccountSigner(config.privateKey);
   const mockOwner = new MockSigner();
 
   const validator: KernelBaseValidator = new KernelBaseValidator({
