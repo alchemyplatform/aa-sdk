@@ -1,4 +1,4 @@
-import { polygonMumbai } from "viem/chains";
+import { polygonMumbai, type Chain } from "viem/chains";
 import { describe, it } from "vitest";
 import { SmartAccountProvider } from "../../provider/base.js";
 import { LocalAccountSigner } from "../../signer/local-account.js";
@@ -12,7 +12,45 @@ describe("Account Simple Tests", () => {
   const owner: SmartAccountSigner =
     LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
   const chain = polygonMumbai;
-  const signer = new SmartAccountProvider({
+
+  it("should correctly sign the message", async () => {
+    const signer = givenConnectedProvider({ owner, chain });
+    expect(
+      await signer.signMessage(
+        "0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b"
+      )
+    ).toBe(
+      "0x33b1b0d34ba3252cd8abac8147dc08a6e14a6319462456a34468dd5713e38dda3a43988460011af94b30fa3efefcf9d0da7d7522e06b7bd8bff3b65be4aee5b31c"
+    );
+  });
+
+  it("should correctly encode batch transaction data", async () => {
+    const signer = givenConnectedProvider({ owner, chain });
+    const data = [
+      {
+        target: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+        data: "0xdeadbeef",
+      },
+      {
+        target: "0x8ba1f109551bd432803012645ac136ddd64dba72",
+        data: "0xcafebabe",
+      },
+    ] satisfies BatchUserOperationCallData;
+
+    expect(await signer.account.encodeBatchExecute(data)).toMatchInlineSnapshot(
+      '"0x18dfb3c7000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000002000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef0000000000000000000000008ba1f109551bd432803012645ac136ddd64dba720000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000004deadbeef000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004cafebabe00000000000000000000000000000000000000000000000000000000"'
+    );
+  });
+});
+
+const givenConnectedProvider = ({
+  owner,
+  chain,
+}: {
+  owner: SmartAccountSigner;
+  chain: Chain;
+}) =>
+  new SmartAccountProvider({
     rpcProvider: `${chain.rpcUrls.alchemy.http[0]}/${"test"}`,
     entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
     chain,
@@ -31,31 +69,3 @@ describe("Account Simple Tests", () => {
 
     return account;
   });
-
-  it("should correctly sign the message", async () => {
-    expect(
-      await signer.signMessage(
-        "0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b"
-      )
-    ).toBe(
-      "0x33b1b0d34ba3252cd8abac8147dc08a6e14a6319462456a34468dd5713e38dda3a43988460011af94b30fa3efefcf9d0da7d7522e06b7bd8bff3b65be4aee5b31c"
-    );
-  });
-
-  it("should correctly encode batch transaction data", async () => {
-    const data = [
-      {
-        target: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
-        data: "0xdeadbeef",
-      },
-      {
-        target: "0x8ba1f109551bd432803012645ac136ddd64dba72",
-        data: "0xcafebabe",
-      },
-    ] satisfies BatchUserOperationCallData;
-
-    expect(await signer.account.encodeBatchExecute(data)).toMatchInlineSnapshot(
-      '"0x18dfb3c7000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000002000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef0000000000000000000000008ba1f109551bd432803012645ac136ddd64dba720000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000004deadbeef000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004cafebabe00000000000000000000000000000000000000000000000000000000"'
-    );
-  });
-});
