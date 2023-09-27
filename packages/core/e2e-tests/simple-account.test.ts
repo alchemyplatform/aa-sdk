@@ -15,11 +15,12 @@ describe("Simple Account Tests", () => {
   const owner: SmartAccountSigner =
     LocalAccountSigner.mnemonicToAccountSigner(OWNER_MNEMONIC);
   const chain = polygonMumbai;
-  const signer = new SmartAccountProvider(
-    RPC_URL != null ? RPC_URL : `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
-    ENTRYPOINT_ADDRESS,
-    chain
-  ).connect(
+  const signer = new SmartAccountProvider({
+    rpcProvider:
+      RPC_URL != null ? RPC_URL : `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
+    entryPointAddress: ENTRYPOINT_ADDRESS,
+    chain,
+  }).connect(
     (provider) =>
       new SimpleSmartContractAccount({
         entryPointAddress: ENTRYPOINT_ADDRESS,
@@ -48,11 +49,14 @@ describe("Simple Account Tests", () => {
 
   it("should fail to execute if account address is not deployed and not correct", async () => {
     const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
-    const newSigner = new SmartAccountProvider(
-      RPC_URL != null ? RPC_URL : `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
-      ENTRYPOINT_ADDRESS,
-      chain
-    ).connect(
+    const newSigner = new SmartAccountProvider({
+      rpcProvider:
+        RPC_URL != null
+          ? RPC_URL
+          : `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
+      entryPointAddress: ENTRYPOINT_ADDRESS,
+      chain,
+    }).connect(
       (provider) =>
         new SimpleSmartContractAccount({
           entryPointAddress: ENTRYPOINT_ADDRESS,
@@ -76,11 +80,14 @@ describe("Simple Account Tests", () => {
     const owner = LocalAccountSigner.privateKeyToAccountSigner(
       generatePrivateKey()
     );
-    const provider = new SmartAccountProvider(
-      RPC_URL != null ? RPC_URL : `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
-      ENTRYPOINT_ADDRESS,
-      chain
-    ).connect(
+    const provider = new SmartAccountProvider({
+      rpcProvider:
+        RPC_URL != null
+          ? RPC_URL
+          : `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
+      entryPointAddress: ENTRYPOINT_ADDRESS,
+      chain,
+    }).connect(
       (rpcClient) =>
         new SimpleSmartContractAccount({
           entryPointAddress: ENTRYPOINT_ADDRESS,

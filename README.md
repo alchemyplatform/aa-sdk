@@ -73,13 +73,13 @@ const owner: SmartAccountSigner =
   LocalAccountSigner.mnemonicToAccountSigner(MNEMONIC);
 
 // 2. initialize the provider and connect it to the account
-const provider = new SmartAccountProvider(
+const provider = new SmartAccountProvider({
   // the demo key below is public and rate-limited, it's better to create a new one
   // you can get started with a free account @ https://www.alchemy.com/
-  "https://polygon-mumbai.g.alchemy.com/v2/demo", // rpcUrl
-  "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789", // entryPointAddress
-  polygonMumbai // chain
-).connect(
+  rpcProvider: "https://polygon-mumbai.g.alchemy.com/v2/demo",
+  entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
+  chain: polygonMumbai,
+}).connect(
   (rpcClient) =>
     new SimpleSmartContractAccount({
       entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",

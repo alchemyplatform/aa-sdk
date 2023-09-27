@@ -2,9 +2,9 @@ import { polygonMumbai } from "viem/chains";
 import { describe, it } from "vitest";
 import { SmartAccountProvider } from "../../provider/base.js";
 import { LocalAccountSigner } from "../../signer/local-account.js";
+import { type SmartAccountSigner } from "../../signer/types.js";
 import type { BatchUserOperationCallData } from "../../types.js";
 import { SimpleSmartContractAccount } from "../simple.js";
-import { type SmartAccountSigner } from "../../signer/types.js";
 
 describe("Account Simple Tests", () => {
   const dummyMnemonic =
@@ -12,11 +12,11 @@ describe("Account Simple Tests", () => {
   const owner: SmartAccountSigner =
     LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
   const chain = polygonMumbai;
-  const signer = new SmartAccountProvider(
-    `${chain.rpcUrls.alchemy.http[0]}/${"test"}`,
-    "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
-    chain
-  ).connect((provider) => {
+  const signer = new SmartAccountProvider({
+    rpcProvider: `${chain.rpcUrls.alchemy.http[0]}/${"test"}`,
+    entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
+    chain,
+  }).connect((provider) => {
     const account = new SimpleSmartContractAccount({
       entryPointAddress: "0xENTRYPOINT_ADDRESS",
       chain,

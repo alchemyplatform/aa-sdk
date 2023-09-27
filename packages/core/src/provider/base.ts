@@ -78,6 +78,15 @@ const minPriorityFeePerBidDefaults = new Map<number, bigint>([
   [arbitrumGoerli.id, 10_000_000n],
 ]);
 
+export type SmartAccountProviderConfig<
+  TTransport extends SupportedTransports = Transport
+> = {
+  rpcProvider: string | PublicErc4337Client<TTransport>;
+  chain: Chain;
+  entryPointAddress: Address;
+  opts?: SmartAccountProviderOpts;
+};
+
 export class SmartAccountProvider<
     TTransport extends SupportedTransports = Transport
   >
@@ -88,17 +97,22 @@ export class SmartAccountProvider<
   private txRetryIntervalMs: number;
   private txRetryMulitplier: number;
   readonly account?: ISmartContractAccount;
+  protected entryPointAddress: Address;
+  protected chain: Chain;
 
   minPriorityFeePerBid: bigint;
   rpcClient: PublicErc4337Client<Transport>;
 
-  constructor(
-    rpcProvider: string | PublicErc4337Client<TTransport>,
-    protected entryPointAddress: Address,
-    protected chain: Chain,
-    opts?: SmartAccountProviderOpts
-  ) {
+  constructor({
+    rpcProvider,
+    entryPointAddress,
+    chain,
+    opts,
+  }: SmartAccountProviderConfig) {
     super();
+
+    this.entryPointAddress = entryPointAddress;
+    this.chain = chain;
 
     this.txMaxRetries = opts?.txMaxRetries ?? 5;
     this.txRetryIntervalMs = opts?.txRetryIntervalMs ?? 2000;

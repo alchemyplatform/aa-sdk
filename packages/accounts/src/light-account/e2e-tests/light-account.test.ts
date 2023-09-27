@@ -175,11 +175,12 @@ const givenConnectedProvider = (
   chain: Chain,
   accountAddress?: Address
 ) =>
-  new SmartAccountProvider(
-    RPC_URL != null ? RPC_URL : `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
-    ENTRYPOINT_ADDRESS,
-    chain
-  ).connect(
+  new SmartAccountProvider({
+    rpcProvider:
+      RPC_URL != null ? RPC_URL : `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
+    entryPointAddress: ENTRYPOINT_ADDRESS,
+    chain,
+  }).connect(
     (provider) =>
       new LightSmartContractAccount({
         entryPointAddress: ENTRYPOINT_ADDRESS,

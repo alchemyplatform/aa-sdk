@@ -38,11 +38,11 @@ describe("Kernel Account Tests", () => {
     owner: mockOwner,
   });
 
-  const provider = new KernelAccountProvider(
-    config.rpcProvider,
-    config.entryPointAddress,
-    config.chain
-  );
+  const provider = new KernelAccountProvider({
+    rpcProvider: config.rpcProvider,
+    entryPointAddress: config.entryPointAddress,
+    chain: config.chain,
+  });
 
   function account(index: bigint, owner = mockOwner) {
     const accountParams: KernelSmartAccountParams = {
