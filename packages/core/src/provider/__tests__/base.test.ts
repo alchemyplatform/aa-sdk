@@ -14,11 +14,11 @@ import { SmartAccountProvider } from "../base.js";
 describe("Base Tests", () => {
   let retryMsDelays: number[] = [];
 
-  const providerMock = new SmartAccountProvider(
-    "ALCHEMY_RPC_URL",
-    "0xENTRYPOINT_ADDRESS",
-    polygonMumbai
-  );
+  const providerMock = new SmartAccountProvider({
+    rpcProvider: "ALCHEMY_RPC_URL",
+    entryPointAddress: "0xENTRYPOINT_ADDRESS",
+    chain: polygonMumbai,
+  });
 
   const givenGetUserOperationFailsNTimes = (times: number) => {
     const mock = vi.spyOn(providerMock, "getUserOperationReceipt");
