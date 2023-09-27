@@ -45,7 +45,7 @@ provider.waitForUserOperationTransaction({
 
 ## Returns
 
-### `Promise<hash: Hash>`
+### `Promise<Hash>`
 
 A Promise containing the hash of the transaction the user operation was included in.
 
