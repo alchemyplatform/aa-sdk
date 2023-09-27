@@ -36,7 +36,7 @@ const userOperationResult = await provider.sendUserOperation({
 
 // [!code focus:99]
 provider.waitForUserOperationTransaction({
-    hash: result.hash as `0x${string}`
+    hash: result.hash
 });
 ```
 
