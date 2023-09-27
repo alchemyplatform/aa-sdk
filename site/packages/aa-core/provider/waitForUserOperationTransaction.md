@@ -16,11 +16,6 @@ head:
 
 Attempts to fetch for UserOperationReceipt `txMaxRetries` amount of times, at an interval of `txRetryIntervalMs` milliseconds (with a multiplier of `txRetryMulitplier`) using the connected account.
 
-The transaction hash that includes the user operation is returned once the user operation has been included in a block (if included before retrying `txMaxRetries` times).
-
-`txMaxRetries`, `txRetryIntervalMs`, and `txRetryMulitplier` can be configured in the smart account provider configuration  options.
-<!-- TODO: link to constructor -->
-
 ## Usage
 
 ::: code-group
@@ -57,7 +52,6 @@ If `txMaxRetries` is exceeded without the user operation included in a block yet
 
 - #### Type: `Hash`
 The hash of the user operation returned from [sendUserOperation](./sendUserOperation).
-<!-- TODO: link to hash type -->
 ::: code-group
 
 ```ts [example.ts]
