@@ -18,7 +18,7 @@ import {
   type ValidatorMode,
 } from "@alchemy/aa-accounts";
 import { mnemonicToAccount } from "viem/accounts";
-import { PrivateKeySigner } from "@alchemy/aa-core";
+import { LocalAccountSigner } from "@alchemy/aa-core";
 import { polygonMumbai } from "viem/chains";
 import { toHex } from "viem";
 
@@ -27,7 +27,7 @@ const KERNEL_ACCOUNT_FACTORY_ADDRESS =
 
 // 1. define the EOA owner of the Smart Account
 // This is just one exapmle of how to interact with EOAs, feel free to use any other interface
-const owner = PrivateKeySigner.privateKeyToAccountSigner(PRIVATE_KEY);
+const owner = LocalAccountSigner.privateKeyToAccountSigner(PRIVATE_KEY);
 
 const validator: KernelBaseValidator = new KernelBaseValidator({
   validatorAddress: "0x180D6465F921C7E0DEA0040107D342c87455fFF5",
