@@ -70,7 +70,13 @@ export default defineConfig({
             text: "Provider",
             link: "/introduction",
             base: "/packages/aa-core/provider",
-            items: [{ text: "sendUserOperation", link: "/sendUserOperation" }],
+            items: [
+              { text: "sendUserOperation", link: "/sendUserOperation" },
+              {
+                text: "waitForUserOperationTransaction",
+                link: "/waitForUserOperationTransaction",
+              },
+            ],
           },
           { text: "Accounts" },
           { text: "Signers" },
