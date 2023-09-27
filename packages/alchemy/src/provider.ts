@@ -4,9 +4,9 @@ import {
   deepHexlify,
   resolveProperties,
   type AccountMiddlewareFn,
-  type SmartAccountProviderOpts,
+  type SmartAccountProviderConfig,
 } from "@alchemy/aa-core";
-import { type Address, type Chain, type HttpTransport } from "viem";
+import { type HttpTransport } from "viem";
 import {
   arbitrum,
   arbitrumGoerli,
@@ -28,9 +28,6 @@ export type ConnectionConfig =
   | { rpcUrl: string; apiKey?: never; jwt: string };
 
 export type AlchemyProviderConfig = {
-  chain: Chain | number;
-  entryPointAddress: Address;
-  opts?: SmartAccountProviderOpts;
   feeOpts?: {
     /** this adds a percent buffer on top of the base fee estimated (default 50%)
      * NOTE: this is only applied if the default fee estimator is used.
@@ -53,7 +50,8 @@ export type AlchemyProviderConfig = {
      */
     preVerificationGasBufferPercent?: bigint;
   };
-} & ConnectionConfig;
+} & SmartAccountProviderConfig &
+  ConnectionConfig;
 
 export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
   alchemyClient: ClientWithAlchemyMethods;
