@@ -72,8 +72,11 @@ export default defineConfig({
             base: "/packages/aa-core/provider",
             items: [
               { text: "sendUserOperation", link: "/sendUserOperation" },
-              { text: "waitForUserOperationTransaction", link: "/waitForUserOperationTransaction" }, 
-          ],
+              {
+                text: "waitForUserOperationTransaction",
+                link: "/waitForUserOperationTransaction",
+              },
+            ],
           },
           { text: "Accounts" },
           { text: "Signers" },

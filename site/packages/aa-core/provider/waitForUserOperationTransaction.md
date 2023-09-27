@@ -31,7 +31,7 @@ const userOperationResult = await provider.sendUserOperation({
 
 // [!code focus:99]
 provider.waitForUserOperationTransaction({
-    hash: result.hash
+  hash: result.hash,
 });
 ```
 
@@ -51,8 +51,8 @@ If `txMaxRetries` is exceeded without the user operation included in a block yet
 ### `hash`
 
 - #### Type: `Hash`
-The hash of the user operation returned from [sendUserOperation](./sendUserOperation).
-::: code-group
+  The hash of the user operation returned from [sendUserOperation](./sendUserOperation).
+  ::: code-group
 
 ```ts [example.ts]
 import { provider } from "./provider";
@@ -61,4 +61,5 @@ provider.waitForUserOperationTransaction({
   hash: "0xUserOpResultHash", // [!code focus]
 });
 ```
+
 :::
