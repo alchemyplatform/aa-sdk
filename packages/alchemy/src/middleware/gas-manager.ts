@@ -15,26 +15,24 @@ export interface AlchemyGasManagerConfig {
 /**
  * This middleware wraps the Alchemy Gas Manager APIs to provide more flexible UserOperation gas sponsorship.
  *
- * If `feeOptsSet` is true, it will use `alchemy_requestPaymasterAndData` to get only paymaster data, allowing you
- * to customize the gas and fee estimation middleware. @see: {@link withAlchemyPaymasterAndDataMiddleware}
+ * If `estimateGas` is true, it will use `alchemy_requestGasAndPaymasterAndData` to get all of the gas estimates + paymaster data
+ * in one RPC call.
  *
- * Otherwise, it will use `alchemy_requestGasAndPaymasterAndData` to get all of the gas estimates + paymaster data
- * in one RPC call. @see: {@link withAlchemyGasAndPaymasterAndDataMiddleware}
+ * Otherwise, it will use `alchemy_requestPaymasterAndData` to get only paymaster data, allowing you
+ * to customize the gas and fee estimation middleware.
  *
  * @param provider - the smart account provider to override to use the alchemy gas manager
  * @param config - the alchemy gas manager configuration
+ * @param estimateGas - if true, this will use `alchemy_requestGasAndPaymasterAndData` else will use `alchemy_requestPaymasterAndData`
  * @returns the provider augmented to use the alchemy gas manager
  */
 export const withAlchemyGasManager = (
   provider: AlchemyProvider,
   config: AlchemyGasManagerConfig,
-  feeOptsSet?: boolean
+  estimateGas: boolean = true
 ): AlchemyProvider => {
-  return feeOptsSet
-    ? provider.withPaymasterMiddleware(
-        withAlchemyPaymasterAndDataMiddleware(provider, config)
-      )
-    : provider
+  return estimateGas
+    ? provider
         // no-op gas estimator
         .withGasEstimator(async () => ({
           callGasLimit: 0n,
@@ -49,7 +47,10 @@ export const withAlchemyGasManager = (
         }))
         .withPaymasterMiddleware(
           withAlchemyGasAndPaymasterAndDataMiddleware(provider, config)
-        );
+        )
+    : provider.withPaymasterMiddleware(
+        withAlchemyPaymasterAndDataMiddleware(provider, config)
+      );
 };
 
 /**
@@ -57,7 +58,7 @@ export const withAlchemyGasManager = (
  * this middleware if you want more customization over the gas and fee estimation middleware, including setting
  * non-default buffer values for the fee/gas estimation.
  *
- * @param config {@link AlchemyGasManagerConfig}
+ * @param config - the alchemy gas manager configuration
  * @returns middleware overrides for paymaster middlewares
  */
 const withAlchemyPaymasterAndDataMiddleware = (
@@ -102,7 +103,7 @@ const withAlchemyPaymasterAndDataMiddleware = (
  * This uses the alchemy RPC method: `alchemy_requestGasAndPaymasterAndData` to get all of the gas estimates + paymaster data
  * in one RPC call. It will no-op the gas estimator and fee data getter middleware and set a custom middleware that makes the RPC call.
  *
- * @param config {@link AlchemyGasManagerConfig}
+ * @param config - the alchemy gas manager configuration
  * @returns middleware overrides for paymaster middlewares
  */
 const withAlchemyGasAndPaymasterAndDataMiddleware = (
