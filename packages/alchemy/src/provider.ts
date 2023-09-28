@@ -50,7 +50,7 @@ export type AlchemyProviderConfig = {
      */
     preVerificationGasBufferPercent?: bigint;
   };
-} & SmartAccountProviderConfig &
+} & Omit<SmartAccountProviderConfig, "rpcProvider"> &
   ConnectionConfig;
 
 export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
