@@ -4,9 +4,9 @@ describe("Local Account Signer Tests", () => {
   describe("Using HD Account", () => {
     const dummyMnemonic =
       "test test test test test test test test test test test test";
-    const signer = LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
 
     it("should sign a hex message properly", async () => {
+      const signer = LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
       expect(
         await signer.signMessage("0xabcfC3DB1e0f5023F5a4f40c03D149f316E6A5cc")
       ).toMatchInlineSnapshot(
@@ -15,6 +15,7 @@ describe("Local Account Signer Tests", () => {
     });
 
     it("should sign a string message properly", async () => {
+      const signer = LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
       expect(
         await signer.signMessage("icanbreakthistestcase")
       ).toMatchInlineSnapshot(
@@ -29,6 +30,7 @@ describe("Local Account Signer Tests", () => {
     });
 
     it("should sign a byte array correctly", async () => {
+      const signer = LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
       expect(
         await signer.signMessage(new TextEncoder().encode("hello, I'm moldy"))
       ).toEqual(await signer.signMessage("hello, I'm moldy"));
@@ -38,10 +40,10 @@ describe("Local Account Signer Tests", () => {
   describe("Using Private Key Account", () => {
     const dummyPrivateKey =
       "0x022430a80f723d8789f0d4fb346bdd013b546e4b96fcacf8aceca2b1a65a19dc";
-    const signer =
-      LocalAccountSigner.privateKeyToAccountSigner(dummyPrivateKey);
 
     it("should sign a hex message properly", async () => {
+      const signer =
+        LocalAccountSigner.privateKeyToAccountSigner(dummyPrivateKey);
       expect(
         await signer.signMessage("0xabcfC3DB1e0f5023F5a4f40c03D149f316E6A5cc")
       ).toMatchInlineSnapshot(
@@ -50,6 +52,8 @@ describe("Local Account Signer Tests", () => {
     });
 
     it("should sign a string message properly", async () => {
+      const signer =
+        LocalAccountSigner.privateKeyToAccountSigner(dummyPrivateKey);
       expect(
         await signer.signMessage("icanbreakthistestcase")
       ).toMatchInlineSnapshot(
@@ -64,6 +68,8 @@ describe("Local Account Signer Tests", () => {
     });
 
     it("should sign a byte array correctly", async () => {
+      const signer =
+        LocalAccountSigner.privateKeyToAccountSigner(dummyPrivateKey);
       expect(
         await signer.signMessage(new TextEncoder().encode("hello, I'm moldy"))
       ).toEqual(await signer.signMessage("hello, I'm moldy"));
