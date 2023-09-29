@@ -83,7 +83,26 @@ export default defineConfig({
             ],
           },
           { text: "Accounts" },
-          { text: "Signers" },
+          {
+            text: "Signers",
+            base: "/packages/aa-core/signers",
+            items: [
+              { text: "WalletClientSigner", link: "/wallet-client" },
+              { text: "LocalAccountSigner", link: "/local-account" },
+              {
+                text: "Utils",
+                collapsed: true,
+                base: "/packages/aa-core/signers/utils",
+                items: [
+                  { text: "wrapWith6492", link: "/wrapWith6492" },
+                  {
+                    text: "verifyEIP6492Signature",
+                    link: "/verifyEIP6492Signature",
+                  },
+                ],
+              },
+            ],
+          },
           { text: "Public Client" },
           { text: "Utilities" },
         ],

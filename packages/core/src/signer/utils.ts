@@ -14,6 +14,13 @@ type SignWith6492Params = {
   signature: Hash;
 };
 
+type VerifyEIP6492SignatureParams = {
+  signer: Address;
+  hash: Hash;
+  signature: Hash;
+  client: PublicClient;
+};
+
 export const wrapWith6492 = ({
   factoryAddress,
   initCode,
@@ -38,12 +45,7 @@ export const verifyEIP6492Signature = async ({
   hash,
   signature,
   client,
-}: {
-  signer: Address;
-  hash: Hash;
-  signature: Hash;
-  client: PublicClient;
-}): Promise<boolean> => {
+}: VerifyEIP6492SignatureParams): Promise<boolean> => {
   const result = await client.call({
     data: concat([
       universalValidatorByteCode,
