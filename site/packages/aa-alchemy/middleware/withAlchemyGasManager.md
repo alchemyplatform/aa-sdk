@@ -35,5 +35,22 @@ const providerWithGasManager = withAlchemyGasManager(
 );
 ```
 
-<<< @/snippets/alchemy-provider.ts
+<<< @/snippets/provider.ts
 :::
+
+## Returns
+
+### `AlchemyProvider`
+
+A new instance of an `AlchemyProvider` with the same attributes as the input, now with middleware for accessing the Alchemy Gas Manager to sponsor UserOperations.
+
+## Parameters
+
+### `provider: AlchemyProvider` -- an `AlchemyProvider` instance
+
+### `AlchemyGasManagerConfig: AlchemyGasManagerConfig`
+
+- `policyId: string` -- the Alchemy Gas Manager policy ID
+- `entryPoint: Address` -- the entrypoint contract address
+
+### `estimateGas: boolean` -- a flag to additionally estimate gas as part of

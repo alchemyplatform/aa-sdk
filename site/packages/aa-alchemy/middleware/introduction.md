@@ -51,5 +51,5 @@ const providerWithGasManager = withAlchemyGasManager(
 );
 ```
 
-<<< @/snippets/alchemy-provider.ts
+<<< @/snippets/provider.ts
 :::

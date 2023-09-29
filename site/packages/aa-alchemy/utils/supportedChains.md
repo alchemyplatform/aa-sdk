@@ -31,3 +31,13 @@ const bsc = SupportedChains.get(56);
 ```
 
 :::
+
+## Returns
+
+### `Promise<Deferrable<UserOperationStruct>>`
+
+the resulting user operation struct after gas estimation, run as part of a middleware chain when building and sending UserOperations.
+
+## Parameters
+
+### `chainId: number` -- the struct containig UserOperation fields, where each field may be asychronously returned from the middleware used to generate its final value.

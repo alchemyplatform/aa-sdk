@@ -33,5 +33,19 @@ const providerWithGasFeeEstimator = withAlchemyGasFeeEstimator(
 );
 ```
 
-<<< @/snippets/alchemy-provider.ts
+<<< @/snippets/provider.ts
 :::
+
+## Returns
+
+### `AlchemyProvider`
+
+A new instance of an `AlchemyProvider` with the same attributes as the input, now with middleware for gas fee estimation.
+
+## Parameters
+
+### `provider: AlchemyProvider` -- an `AlchemyProvider` instance
+
+### `baseFeeBufferPercent: bigint` -- buffer percentage to adjust the `baseFee` of a UO request sent through the provider
+
+### `maxPriorityFeeBufferPercent: bigint` -- buffer percentage to adjust the `maxPriorityFee` of a UO request sent through the provider
