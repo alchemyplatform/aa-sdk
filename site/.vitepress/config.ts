@@ -76,6 +76,10 @@ export default defineConfig({
                 text: "waitForUserOperationTransaction",
                 link: "/waitForUserOperationTransaction",
               },
+              {
+                text: "getUserOperationByHash",
+                link: "/getUserOperationByHash",
+              },
             ],
           },
           { text: "Accounts" },
