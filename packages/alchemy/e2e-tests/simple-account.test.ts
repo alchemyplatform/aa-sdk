@@ -2,7 +2,7 @@ import {
   SimpleSmartContractAccount,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
-import { toHex, type Hash } from "viem";
+import { toHex, type Address, type Chain, type Hash } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
 import { AlchemyProvider } from "../src/provider.js";
@@ -23,28 +23,16 @@ describe("Simple Account Tests", () => {
     getAddress: async () => ownerAccount.address,
   };
   const chain = polygonMumbai;
-  const signer = new AlchemyProvider({
-    apiKey: API_KEY!,
-    chain,
-    entryPointAddress: ENTRYPOINT_ADDRESS,
-  }).connect(
-    (provider) =>
-      new SimpleSmartContractAccount({
-        entryPointAddress: ENTRYPOINT_ADDRESS,
-        chain,
-        owner,
-        factoryAddress: SIMPLE_ACCOUNT_FACTORY_ADDRESS,
-        rpcClient: provider,
-      })
-  );
 
   it("should succesfully get counterfactual address", async () => {
+    const signer = givenConnectedProvider({ owner, chain });
     expect(await signer.getAddress()).toMatchInlineSnapshot(
       `"0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4"`
     );
   });
 
   it("should execute successfully", async () => {
+    const signer = givenConnectedProvider({ owner, chain });
     const result = await signer.sendUserOperation({
       target: await signer.getAddress(),
       data: "0x",
@@ -56,24 +44,10 @@ describe("Simple Account Tests", () => {
 
   it("should fail to execute if account address is not deployed and not correct", async () => {
     const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
-    const newSigner = new AlchemyProvider({
-      apiKey: API_KEY!,
-      chain,
-      entryPointAddress: ENTRYPOINT_ADDRESS,
-    }).connect(
-      (provider) =>
-        new SimpleSmartContractAccount({
-          entryPointAddress: ENTRYPOINT_ADDRESS,
-          chain,
-          owner,
-          factoryAddress: SIMPLE_ACCOUNT_FACTORY_ADDRESS,
-          rpcClient: provider,
-          accountAddress,
-        })
-    );
+    const signer = givenConnectedProvider({ owner, chain, accountAddress });
 
-    const result = newSigner.sendUserOperation({
-      target: await newSigner.getAddress(),
+    const result = signer.sendUserOperation({
+      target: await signer.getAddress(),
       data: "0x",
     });
 
@@ -81,13 +55,16 @@ describe("Simple Account Tests", () => {
   });
 
   it("should successfully execute with alchemy paymaster info", async () => {
-    const newSigner = signer.withAlchemyGasManager({
+    const signer = givenConnectedProvider({
+      owner,
+      chain,
+    }).withAlchemyGasManager({
       policyId: PAYMASTER_POLICY_ID,
       entryPoint: ENTRYPOINT_ADDRESS,
     });
 
-    const result = await newSigner.sendUserOperation({
-      target: await newSigner.getAddress(),
+    const result = await signer.sendUserOperation({
+      target: await signer.getAddress(),
       data: "0x",
     });
     const txnHash = signer.waitForUserOperationTransaction(result.hash as Hash);
@@ -96,7 +73,7 @@ describe("Simple Account Tests", () => {
   }, 50000);
 
   it("should successfully override fees in alchemy paymaster", async () => {
-    const newSigner = signer
+    const signer = givenConnectedProvider({ owner, chain })
       .withAlchemyGasManager({
         policyId: PAYMASTER_POLICY_ID,
         entryPoint: ENTRYPOINT_ADDRESS,
@@ -109,41 +86,26 @@ describe("Simple Account Tests", () => {
     // this should fail since we set super low fees
     await expect(
       async () =>
-        await newSigner.sendUserOperation({
-          target: await newSigner.getAddress(),
+        await signer.sendUserOperation({
+          target: await signer.getAddress(),
           data: "0x",
         })
     ).rejects.toThrow();
   }, 50000);
 
   it("should successfully use paymaster with fee opts", async () => {
-    const newSigner = new AlchemyProvider({
-      apiKey: API_KEY!,
+    const signer = givenConnectedProvider({
+      owner,
       chain,
-      entryPointAddress: ENTRYPOINT_ADDRESS,
       feeOpts: {
         baseFeeBufferPercent: 50n,
         maxPriorityFeeBufferPercent: 50n,
         preVerificationGasBufferPercent: 50n,
       },
-    })
-      .connect(
-        (provider) =>
-          new SimpleSmartContractAccount({
-            entryPointAddress: ENTRYPOINT_ADDRESS,
-            chain,
-            owner,
-            factoryAddress: SIMPLE_ACCOUNT_FACTORY_ADDRESS,
-            rpcClient: provider,
-          })
-      )
-      .withAlchemyGasManager({
-        policyId: PAYMASTER_POLICY_ID,
-        entryPoint: ENTRYPOINT_ADDRESS,
-      });
+    });
 
-    const result = await newSigner.sendUserOperation({
-      target: await newSigner.getAddress(),
+    const result = await signer.sendUserOperation({
+      target: await signer.getAddress(),
       data: "0x",
     });
     const txnHash = signer.waitForUserOperationTransaction(result.hash as Hash);
@@ -151,3 +113,35 @@ describe("Simple Account Tests", () => {
     await expect(txnHash).resolves.not.toThrowError();
   }, 50000);
 });
+
+const givenConnectedProvider = ({
+  owner,
+  chain,
+  accountAddress,
+  feeOpts,
+}: {
+  owner: SmartAccountSigner;
+  chain: Chain;
+  accountAddress?: Address;
+  feeOpts?: {
+    baseFeeBufferPercent?: bigint;
+    maxPriorityFeeBufferPercent?: bigint;
+    preVerificationGasBufferPercent?: bigint;
+  };
+}) =>
+  new AlchemyProvider({
+    apiKey: API_KEY!,
+    chain,
+    entryPointAddress: ENTRYPOINT_ADDRESS,
+    feeOpts,
+  }).connect(
+    (provider) =>
+      new SimpleSmartContractAccount({
+        entryPointAddress: ENTRYPOINT_ADDRESS,
+        chain,
+        owner,
+        factoryAddress: SIMPLE_ACCOUNT_FACTORY_ADDRESS,
+        rpcClient: provider,
+        accountAddress,
+      })
+  );
