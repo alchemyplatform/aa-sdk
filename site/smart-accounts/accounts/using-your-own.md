@@ -18,7 +18,7 @@ You are not limited to the accounts defined in `@alchemy/aa-accounts`. The `Smar
 
 ## Implementing `ISmartContractAccount`
 
-Let's take a look at [`SimpleSmartContractAccount`](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/core/src/account/simple.ts) and walk through an example of implementing an interface to work with your own Smart Contract Account.
+Let's take a look at [`BaseSmartContractAccount`](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/core/src/account/base.ts) and walk through an example of implementing an interface to work with your own Smart Contract Account.
 
 ### 1. Extend `BaseSmartContractAccount`
 
@@ -42,17 +42,13 @@ The `BaseSmartContractAccount` class also exposes some additional implementation
 
 See ["Contributing to `aa-accounts`"](/packages/aa-accounts/contributing) for more information on how to contribute your own Smart Contract Account implementation to `aa-accounts`.
 
-## `SimpleSmartContractAccount` as an Example
+## `LightSmartContractAccount` as an Example
 
-::: tip TODO
-Show Light Account as an Example instead
-:::
+The team at Alchemy has built an extension of the eth-infinitism `SimpleAccount` called [LightAccount.sol](https://github.com/alchemyplatform/light-account/blob/main/src/LightAccount.sol). You can learn more about the Light Account in the [Light Account documentation](/smart-accounts/accounts/light-account).
 
-The eth-infinitism reference implementation for ERC-4337 provides a [SimpleAccount.sol](https://github.com/eth-infinitism/account-abstraction/blob/abff2aca61a8f0934e533d0d352978055fddbd96/contracts/samples/SimpleAccount.sol) Smart Contract Account implementation that can be used to play around with ERC-4337.
-
-We provide an implementation of `ISmartContractAccount` that works with `SimpleAccount.sol` to serve as an example of how to implement your own Smart Contract Account:
-::: details SimpleSmartContractAccount
-<<< @/../packages/core/src/account/simple.ts
+We provide an implementation of `ISmartContractAccount` that works with `LightAccount.sol` which can be used as an example of how to implement your own Smart Contract Account:
+::: details LightSmartContractAccount
+<<< @/../packages/accounts/src/light-account/account.ts
 :::
 
 ## The `ISmartContractAccount` Interface
