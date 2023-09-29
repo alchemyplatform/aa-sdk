@@ -14,52 +14,34 @@ head:
 
 # AlchemyProvider
 
-`AlchemyProvider` is an extension of the `SmartAccountProvider` implementation. It supports features such as owner transfers, [EIP-1271](https://eips.ethereum.org/EIPS/eip-1271) message signing, and batched transactions. We recommend using Light Account for most use cases.
+`AlchemyProvider` is an extension of the `SmartAccountProvider` implementation. It's a simpler interface you can use leverage the Alchemy stack - JSON-RPC requests via API Key or JSON Web Token (JWT), Alchemy Rundler (an [EIP-4337 Bundler](https://eips.ethereum.org/EIPS/eip-4337)), and Alchemy Gas Manager (an [EIP-4337 Paymaster](https://eips.ethereum.org/EIPS/eip-4337)).
 
-Notable differences between `LightSmartContrctAccount` and `SimpleSmartContractAccount` are implementations for:
+Notable differences between `AlchemyProvider` and `SmartAccountProvider` are implementations for:
 
-1.  [`gasEstimator`](/packages/aa-alchemy/provider/gasEstimator) -- calls `eth_estimateUserOperationGas` and returns the result.
-2.  [`signTypedData`](/packages/aa-alchemy/provider/withAlchemyGasManager) -- supports typed data signatures from the smart contract account's owner address.
+1.  [`gasEstimator`](/packages/aa-alchemy/provider/gasEstimator) -- overrides the `SmartAccountProvider` gas estimator.
+2.  [`withAlchemyGasManager`](/packages/aa-alchemy/provider/withAlchemyGasManager) -- adds the Alchemy Gas Manager middleware to the provider.
 
 ## Usage
 
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { provider } from "./alchemy-provider";
 
-// sign message (works for undeployed and deployed accounts)
-const signedMessageWith6492 = provider.signMessageWith6492("test");
-
-// sign typed data
-const signedTypedData = provider.signTypedData("test");
-
-// sign typed data (works for undeployed and deployed accounts), using
-const signedTypedDataWith6492 = provider.signTypedDataWith6492({
-  types: {
-    Request: [{ name: "hello", type: "string" }],
-  },
-  primaryType: "Request",
-  message: {
-    hello: "world",
-  },
+// building a UO struct will use the overrided `gasEstimator` middleware on AlchemyProvider
+const uoStruct = await provider.buildUserOperation({
+  target: TO_ADDRESS,
+  data: ENCODED_DATA,
+  value: VALUE, // optional
 });
+const uoHash = await provider.sendUserOperation(uoStruct);
 
-// get owner
-const owner = provider.account.getOwner();
-
-// encode transfer pownership
-const newOwner = LocalAccountSigner.mnemonicToAccountSigner(NEW_OWNER_MNEMONIC);
-const encodedTransferOwnershipData =
-  LightSmartContractAccount.transferOwnership(newOwner);
-
-// transfer ownership
-const result = await LightSmartContractAccount.transferOwnership(
-  provider,
-  newOwner
-  true, // wait for txn with UO to be mined
-);
+// use Alchemy Gas Manager to sponsorship transactions
+const providerWithGasManager = provider.withAlchemyGasManager({
+  policyId: PAYMASTER_POLICY_ID,
+  entryPoint: ENTRYPOINT_ADDRESS,
+});
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/alchemy-provider.ts
 :::

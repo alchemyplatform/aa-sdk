@@ -3,63 +3,31 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: AlchemyProvider
+      content: SupportedChains
   - - meta
     - name: description
-      content: Overview of the AlchemyProvider class in aa-alchemy
+      content: Overview of the SupportedChains util method in aa-alchemy
   - - meta
     - property: og:description
-      content: Overview of the AlchemyProvider class in aa-alchemy
+      content: Overview of the SupportedChains util method in aa-alchemy
 ---
 
-# AlchemyProvider
+# SupportedChains
 
-`AlchemyProvider` is an extension of the `SmartAccountProvider` implementation. It supports features such as owner transfers, [EIP-1271](https://eips.ethereum.org/EIPS/eip-1271) message signing, and batched transactions. We recommend using Light Account for most use cases.
-
-Notable differences between `LightSmartContrctAccount` and `SimpleSmartContractAccount` are implementations for:
-
-1.  [`gasEstimator`](/packages/aa-alchemy/provider/gasEstimator) -- calls `eth_estimateUserOperationGas` and returns the result.
-2.  [`signTypedData`](/packages/aa-alchemy/provider/withAlchemyGasManager) -- supports typed data signatures from the smart contract account's owner address.
+`SupportedChains` provides a mapping from chain ID to a viem `Chain` object for all chains supported by the Alchemy RPC. This util includes mappings for both supported mainnets and supported testnets.
 
 ## Usage
 
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { SupportedChains } from "@alchemy/aa-alchemy";
 
-// sign message (works for undeployed and deployed accounts)
-const signedMessageWith6492 = provider.signMessageWith6492("test");
+// eth mainnet
+const mainnet = SupportedChains.get(1);
 
-// sign typed data
-const signedTypedData = provider.signTypedData("test");
-
-// sign typed data (works for undeployed and deployed accounts), using
-const signedTypedDataWith6492 = provider.signTypedDataWith6492({
-  types: {
-    Request: [{ name: "hello", type: "string" }],
-  },
-  primaryType: "Request",
-  message: {
-    hello: "world",
-  },
-});
-
-// get owner
-const owner = provider.account.getOwner();
-
-// encode transfer pownership
-const newOwner = LocalAccountSigner.mnemonicToAccountSigner(NEW_OWNER_MNEMONIC);
-const encodedTransferOwnershipData =
-  LightSmartContractAccount.transferOwnership(newOwner);
-
-// transfer ownership
-const result = await LightSmartContractAccount.transferOwnership(
-  provider,
-  newOwner
-  true, // wait for txn with UO to be mined
-);
+// bsc mainnet is unsupported, so the variable will be undefined
+const bsc = SupportedChains.get(56);
 ```
 
-<<< @/snippets/provider.ts
 :::

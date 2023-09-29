@@ -16,7 +16,7 @@ head:
 
 `LightSmartContractAccount` is a simple, secure, and cost-effective smart account implementation which extends `SimpleSmartContractAccount` as an implementation of `BaseSmartContractAccount`. It supports features such as owner transfers, [EIP-1271](https://eips.ethereum.org/EIPS/eip-1271) message signing, and batched transactions. We recommend using Light Account for most use cases.
 
-Notable differences between `LightSmartContrctAccount` and `SimpleSmartContractAccount` are implementations for:
+Notable differences between `LightSmartContractAccount` and `SimpleSmartContractAccount` are implementations for:
 
 1.  [`signMessageWith6492`](/packages/aa-accounts/light-account/signMessageWith6492) -- supports message signatures for deployed smart contract accounts, as well as undeployed accounts (counterfactual addresses) using [EIP-6492](https://eips.ethereum.org/EIPS/eip-6492).
 2.  [`signTypedData`](/packages/aa-accounts/light-account/signTypedData) -- supports typed data signatures from the smart contract account's owner address.

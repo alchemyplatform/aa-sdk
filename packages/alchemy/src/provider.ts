@@ -115,7 +115,7 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
     this.feeOptsSet = !!feeOpts;
   }
 
-  gasEstimator: AccountMiddlewareFn = async (struct) => {
+  override gasEstimator: AccountMiddlewareFn = async (struct) => {
     const request = deepHexlify(await resolveProperties(struct));
     const estimates = await this.rpcClient.estimateUserOperationGas(
       request,
@@ -130,7 +130,13 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
     };
   };
 
-  withAlchemyGasManager(config: AlchemyGasManagerConfig) {
+  /**
+   * This methods adds the Alchemy Gas Manager middleware to the provider.
+   *
+   * @param config - the Alchemy Gas Manager configuration
+   * @returns {AlchemyProvider} - a new AlchemyProvider with the Gas Manager middleware
+   */
+  withAlchemyGasManager(config: AlchemyGasManagerConfig): AlchemyProvider {
     if (!this.isConnected()) {
       throw new Error(
         "AlchemyProvider: account is not set, did you call `connect` first?"

@@ -190,7 +190,7 @@ export default defineConfig({
           },
           {
             text: "Utils",
-            link: "/utils",
+            link: "/introduction",
             base: "/packages/aa-alchemy/utils",
             items: [{ text: "SupportedChains", link: "/supportedChains" }],
           },
