@@ -1,11 +1,9 @@
-import { createAccount } from "@turnkey/viem";
-import { TurnkeyClient } from "@turnkey/http";
+import { LocalAccountSigner, SmartAccountSigner } from "@alchemy/aa-core";
 import { ApiKeyStamper } from "@turnkey/api-key-stamper";
-import { createWalletClient, http } from "viem";
-import { sepolia } from "viem/chains";
-import { SmartAccountSigner, LocalAccountSigner } from "@alchemy/aa-core"
+import { TurnkeyClient } from "@turnkey/http";
+import { createAccount } from "@turnkey/viem";
 
-export async function newTurnkeySigner () {
+export async function newTurnkeySigner() {
   const turnkeyClient = new TurnkeyClient(
     {
       /* 
