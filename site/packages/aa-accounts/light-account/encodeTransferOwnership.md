@@ -26,7 +26,7 @@ import { provider } from "./provider";
 // encode transfer pownership
 const newOwner = LocalAccountSigner.mnemonicToAccountSigner(NEW_OWNER_MNEMONIC);
 const encodedTransferOwnershipData =
-  LightSmartContractAccount.transferOwnership(newOwner);
+  LightSmartContractAccount.encodeTransferOwnership(newOwner);
 ```
 
 <<< @/snippets/provider.ts

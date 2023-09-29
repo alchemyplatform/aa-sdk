@@ -22,7 +22,7 @@ import type {
 
 export type SupportedTransports = Transport | FallbackTransport | HttpTransport;
 
-export type Erc337RpcSchema = [
+export type Erc4337RpcSchema = [
   {
     Method: "eth_sendUserOperation";
     Parameters: [UserOperationRequest, Address];
@@ -107,7 +107,9 @@ export interface Erc4337Actions {
 export interface PublicErc4337Client<T extends SupportedTransports = Transport>
   extends PublicClient<T, Chain>,
     Erc4337Actions {
-  request: EIP1193RequestFn<[PublicRpcSchema[number], Erc337RpcSchema[number]]>;
+  request: EIP1193RequestFn<
+    [PublicRpcSchema[number], Erc4337RpcSchema[number]]
+  >;
 
   // below methods are not all erc4337 methods, but are the methods we need in the SmartContractAccountProvideer
   getMaxPriorityFeePerGas(): Promise<BigNumberish>;
