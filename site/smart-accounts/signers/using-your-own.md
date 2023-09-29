@@ -25,21 +25,7 @@ Viem allows you to create `WalletClient`s which can be used to wrap local or JSO
 
 We support a `SmartAccountSigner` implementation called `WalletClientSigner` that makes it really easy to use a viem `WalletClient` as an owner on your Smart Contract Account. If your signer is [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compliant, it's really easy to use with `WalletClient`. Let's take a look at a simple example:
 
-```ts
-import { createWalletClient, custom } from "viem";
-import { WalletClientSigner, type SmartAccountSigner } from "@alchemy/aa-core";
-
-const externalProvider = // EIP-1193 provider <-- supplied by you!
-
-const walletClient = createWalletClient({
-    chain: sepolia, // can provide a different chain here
-    transport: custom(externalProvider),
-});
-
-const signer: SmartAccountSigner = new WalletClientSigner(walletClient);
-
-// you're ready to use this signer with Account Kit!
-```
+<<< @/snippets/wallet-client-signer.ts
 
 ## Implementing `SmartAccountSigner`
 
