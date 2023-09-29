@@ -48,7 +48,7 @@ export default defineConfig({
             link: "/overview",
             items: [
               { text: "Magic.Link", link: "/magic-link" },
-              { text: "Turnkey", link: "/turnkey"},
+              { text: "Turnkey", link: "/turnkey" },
               { text: "Web3Auth", link: "/web3auth" },
               { text: "Externally Owned Account", link: "/eoa" },
               { text: "Using Your Own", link: "/using-your-own" },
@@ -86,7 +86,15 @@ export default defineConfig({
           { text: "Accounts" },
           { text: "Signers" },
           { text: "Public Client" },
-          { text: "Utilities" },
+          {
+            text: "Utilities",
+            base: "/packages/aa-core/utils",
+            items: [
+              { text: "asyncPipe", link: "/asyncPipe" },
+              { text: "deepHexlify", link: "/deepHexlify" },
+              { text: "defineReadOnly", link: "/defineReadOnly" },
+            ],
+          },
         ],
       },
       {
