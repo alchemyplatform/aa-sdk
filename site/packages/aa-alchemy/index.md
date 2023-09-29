@@ -35,3 +35,10 @@ pnpm i @alchemy/aa-alchemy
 ```
 
 :::
+
+Then, you can create a provider like so:
+::: code-group
+
+<<< @/snippets/provider.ts
+
+:::
