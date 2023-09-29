@@ -12,7 +12,7 @@ head:
       content: Overview of the defineReadOnly method in aa-core utils
 ---
 
-# defineReadOnly
+# `defineReadOnly<T, K extends keyof T>`
 
 Let's you overwrite a readonly property on a class.
 
