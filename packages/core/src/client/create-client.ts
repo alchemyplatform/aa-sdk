@@ -23,7 +23,7 @@ import type {
   UserOperationResponse,
 } from "../types.js";
 import { VERSION } from "../version.js";
-import type { Erc337RpcSchema, PublicErc4337Client } from "./types.js";
+import type { Erc4337RpcSchema, PublicErc4337Client } from "./types.js";
 
 export const createPublicErc4337FromClient: <
   T extends Transport | FallbackTransport = Transport
@@ -36,7 +36,7 @@ export const createPublicErc4337FromClient: <
 ): PublicErc4337Client<T> => {
   const clientAdapter = client as PublicClient<T, Chain> & {
     request: EIP1193RequestFn<
-      [Erc337RpcSchema[number], PublicRpcSchema[number]]
+      [Erc4337RpcSchema[number], PublicRpcSchema[number]]
     >;
   };
 
