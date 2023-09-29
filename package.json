@@ -2,6 +2,9 @@
   "name": "root",
   "type": "module",
   "private": true,
+  "engines": {
+    "node": "18.10"
+  },
   "workspaces": [
     "packages/*",
     "templates/*",
