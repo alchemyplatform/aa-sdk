@@ -14,7 +14,7 @@ head:
 
 # WithAlchemyGasManager
 
-The `WithAlchemyGasManager` package contains middleware to easily leverage the Alchemy Rundler (an [EIP-4337 Bundler](https://eips.ethereum.org/EIPS/eip-4337)), and Alchemy Gas Manager (an [EIP-4337 Paymaster](https://eips.ethereum.org/EIPS/eip-4337)).
+`withAlchemyGasManager` is a middleware method you can use to easily leverage the Alchemy Gas Manager (an [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) Paymaster) for sponsoring user operations.
 
 ## Usage
 

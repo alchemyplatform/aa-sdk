@@ -14,7 +14,7 @@ head:
 
 # AlchemyProvider
 
-`AlchemyProvider` is an extension of the `SmartAccountProvider` implementation. It's a simpler interface you can use leverage the Alchemy stack - JSON-RPC requests via API Key or JSON Web Token (JWT), Alchemy Rundler (an [EIP-4337 Bundler](https://eips.ethereum.org/EIPS/eip-4337)), and Alchemy Gas Manager (an [EIP-4337 Paymaster](https://eips.ethereum.org/EIPS/eip-4337)).
+`AlchemyProvider` is an extension of the `SmartAccountProvider` implementation. It's a simpler interface you can use to leverage the Alchemy stack - JSON-RPC requests via API Key or JSON Web Token (JWT), Alchemy Rundler (an [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) Bundler), and Alchemy Gas Manager (an [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) Paymaster).
 
 Notable differences between `AlchemyProvider` and `SmartAccountProvider` are implementations for:
 

@@ -14,7 +14,7 @@ head:
 
 # WithAlchemyGasFeeEstimator
 
-The `withAlchemyGasFeeEstimator` middleware method to easily leverage the Alchemy Rundler (an [EIP-4337 Bundler](https://eips.ethereum.org/EIPS/eip-4337)) for estimating gas fees.
+`withAlchemyGasFeeEstimator` is a middleware method you can use to easily leverage the Alchemy Rundler (an [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) Bundler) for estimating gas fees for user operations.
 
 ## Usage
 

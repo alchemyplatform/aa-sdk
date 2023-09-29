@@ -14,7 +14,7 @@ head:
 
 # Utils
 
-`aa-alchemy` offers util methods to speed up your development with AlchemyProvider.
+`aa-alchemy` offers util methods to speed up your development with `AlchemyProvider`.
 
 Notable util methods include:
 
