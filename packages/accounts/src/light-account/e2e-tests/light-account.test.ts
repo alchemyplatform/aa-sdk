@@ -29,14 +29,14 @@ describe("Light Account Tests", () => {
   );
 
   it("should succesfully get counterfactual address", async () => {
-    const signer = givenConnectedProvider(owner, chain);
+    const signer = givenConnectedProvider({ owner, chain });
     expect(await signer.getAddress()).toMatchInlineSnapshot(
       '"0x7eDdc16B15259E5541aCfdebC46929873839B872"'
     );
   });
 
   it("should sign typed data successfully", async () => {
-    const signer = givenConnectedProvider(owner, chain);
+    const signer = givenConnectedProvider({ owner, chain });
     const typedData = {
       types: {
         Request: [{ name: "hello", type: "string" }],
@@ -52,14 +52,17 @@ describe("Light Account Tests", () => {
   });
 
   it("should sign message successfully", async () => {
-    const signer = givenConnectedProvider(owner, chain);
+    const signer = givenConnectedProvider({ owner, chain });
     expect(await signer.signMessage("test")).toBe(
       await owner.signMessage("test")
     );
   });
 
   it("should sign typed data with 6492 successfully for undeployed account", async () => {
-    const undeployedSigner = givenConnectedProvider(undeployedOwner, chain);
+    const undeployedSigner = givenConnectedProvider({
+      owner: undeployedOwner,
+      chain,
+    });
     const typedData = {
       types: {
         Request: [{ name: "hello", type: "string" }],
@@ -77,7 +80,10 @@ describe("Light Account Tests", () => {
   });
 
   it("should sign message with 6492 successfully for undeployed account", async () => {
-    const undeployedSigner = givenConnectedProvider(undeployedOwner, chain);
+    const undeployedSigner = givenConnectedProvider({
+      owner: undeployedOwner,
+      chain,
+    });
     expect(
       await undeployedSigner.signMessageWith6492("test")
     ).toMatchInlineSnapshot(
@@ -90,7 +96,7 @@ describe("Light Account Tests", () => {
    * For current balance, @see: https://sepolia.etherscan.io/address/0x7eDdc16B15259E5541aCfdebC46929873839B872
    */
   it("should execute successfully", async () => {
-    const signer = givenConnectedProvider(owner, chain);
+    const signer = givenConnectedProvider({ owner, chain });
     const result = await signer.sendUserOperation({
       target: await signer.getAddress(),
       data: "0x",
@@ -102,7 +108,7 @@ describe("Light Account Tests", () => {
 
   it("should fail to execute if account address is not deployed and not correct", async () => {
     const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
-    const newSigner = givenConnectedProvider(owner, chain, accountAddress);
+    const newSigner = givenConnectedProvider({ owner, chain, accountAddress });
 
     const result = newSigner.sendUserOperation({
       target: await newSigner.getAddress(),
@@ -116,7 +122,7 @@ describe("Light Account Tests", () => {
     const owner = LocalAccountSigner.privateKeyToAccountSigner(
       generatePrivateKey()
     );
-    const provider = givenConnectedProvider(owner, chain);
+    const provider = givenConnectedProvider({ owner, chain });
 
     const address = provider.getAddress();
     await expect(address).resolves.not.toThrowError();
@@ -124,7 +130,7 @@ describe("Light Account Tests", () => {
   });
 
   it("should get owner successfully", async () => {
-    const signer = givenConnectedProvider(owner, chain);
+    const signer = givenConnectedProvider({ owner, chain });
     expect(await signer.account.getOwner()).toMatchInlineSnapshot(
       '"0x65eaA2AfDF6c97295bA44C458abb00FebFB3a5FA"'
     );
@@ -132,12 +138,12 @@ describe("Light Account Tests", () => {
   });
 
   it("should transfer ownership successfully", async () => {
-    const signer = givenConnectedProvider(owner, chain);
+    const signer = givenConnectedProvider({ owner, chain });
     // create a throwaway address
     const throwawayOwner = LocalAccountSigner.privateKeyToAccountSigner(
       generatePrivateKey()
     );
-    const provider = givenConnectedProvider(throwawayOwner, chain);
+    const provider = givenConnectedProvider({ owner: throwawayOwner, chain });
 
     // fund the throwaway address
     const fundThrowawayResult = await signer.sendUserOperation({
@@ -170,11 +176,15 @@ describe("Light Account Tests", () => {
   }, 100000);
 });
 
-const givenConnectedProvider = (
-  owner: SmartAccountSigner,
-  chain: Chain,
-  accountAddress?: Address
-) =>
+const givenConnectedProvider = ({
+  owner,
+  chain,
+  accountAddress,
+}: {
+  owner: SmartAccountSigner;
+  chain: Chain;
+  accountAddress?: Address;
+}) =>
   new SmartAccountProvider({
     rpcProvider:
       RPC_URL != null ? RPC_URL : `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,

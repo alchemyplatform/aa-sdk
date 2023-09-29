@@ -4,7 +4,7 @@ import {
   type BatchUserOperationCallData,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
-import { polygonMumbai } from "viem/chains";
+import { polygonMumbai, type Chain } from "viem/chains";
 import { describe, it } from "vitest";
 import { LightSmartContractAccount } from "../account.js";
 
@@ -14,27 +14,9 @@ describe("Light Account Tests", () => {
   const owner: SmartAccountSigner =
     LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
   const chain = polygonMumbai;
-  const signer = new SmartAccountProvider({
-    rpcProvider: `${chain.rpcUrls.alchemy.http[0]}/${"test"}`,
-    entryPointAddress: "0xENTRYPOINT_ADDRESS",
-    chain,
-  }).connect((provider) => {
-    const account = new LightSmartContractAccount({
-      entryPointAddress: "0xENTRYPOINT_ADDRESS",
-      chain,
-      owner,
-      factoryAddress: "0xLIGHT_ACCOUNT_FACTORY_ADDRESS",
-      rpcClient: provider,
-    });
-
-    account.getAddress = vi.fn(
-      async () => "0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4"
-    );
-
-    return account;
-  });
 
   it("should correctly sign the message", async () => {
+    const signer = givenConnectedProvider({ owner, chain });
     expect(
       await signer.signMessage(
         "0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b"
@@ -45,6 +27,7 @@ describe("Light Account Tests", () => {
   });
 
   it("should correctly sign typed data", async () => {
+    const signer = givenConnectedProvider({ owner, chain });
     expect(
       await signer.signTypedData({
         types: {
@@ -71,6 +54,7 @@ describe("Light Account Tests", () => {
   });
 
   it("should correctly encode batch transaction data", async () => {
+    const signer = givenConnectedProvider({ owner, chain });
     const data = [
       {
         target: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
@@ -87,3 +71,30 @@ describe("Light Account Tests", () => {
     );
   });
 });
+
+const givenConnectedProvider = ({
+  owner,
+  chain,
+}: {
+  owner: SmartAccountSigner;
+  chain: Chain;
+}) =>
+  new SmartAccountProvider({
+    rpcProvider: `${chain.rpcUrls.alchemy.http[0]}/${"test"}`,
+    entryPointAddress: "0xENTRYPOINT_ADDRESS",
+    chain,
+  }).connect((provider) => {
+    const account = new LightSmartContractAccount({
+      entryPointAddress: "0xENTRYPOINT_ADDRESS",
+      chain,
+      owner,
+      factoryAddress: "0xLIGHT_ACCOUNT_FACTORY_ADDRESS",
+      rpcClient: provider,
+    });
+
+    account.getAddress = vi.fn(
+      async () => "0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4"
+    );
+
+    return account;
+  });
