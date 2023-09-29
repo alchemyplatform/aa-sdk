@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: WithAlchemyGasManager
+      content: AlchemyProvider • withAlchemyGasManager
   - - meta
     - name: description
       content: Overview of the withAlchemyGasManager method on Alchemy Provider in aa-alchemy
@@ -12,7 +12,7 @@ head:
       content: Overview of the withAlchemyGasManager method on Alchemy Provider in aa-alchemy
 ---
 
-# WithAlchemyGasManager
+# withAlchemyGasManager
 
 `withAlchemyGasManager` is a method on `AlchemyProvider` that you can optionally call to create a new provider instance with added middleware leveraging the Alchemy Gas Manager (an [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) Paymaster). Under the hood, this will call the [`withAlchemyGasManager`](/packages/aa-alchemy/middleware/withAlchemyGasManager.ts).
 
@@ -21,7 +21,7 @@ head:
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./alchemy-provider";
+import { provider } from "./provider";
 
 // use Alchemy Gas Manager to sponsorship transactions
 const providerWithGasManager = provider.withAlchemyGasManager({

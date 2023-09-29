@@ -26,7 +26,7 @@ Notable differences between `AlchemyProvider` and `SmartAccountProvider` are imp
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./alchemy-provider";
+import { provider } from "./provider";
 
 // building a UO struct will use the overrided `gasEstimator` middleware on AlchemyProvider
 const uoStruct = await provider.buildUserOperation({

@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: WithAlchemyGasFeeEstimator
+      content: Middleware • withAlchemyGasFeeEstimator
   - - meta
     - name: description
       content: Overview of the withAlchemyGasFeeEstimator method in aa-alchemy
@@ -12,7 +12,7 @@ head:
       content: Overview of the withAlchemyGasFeeEstimator method in aa-alchemy
 ---
 
-# WithAlchemyGasFeeEstimator
+# withAlchemyGasFeeEstimator
 
 `withAlchemyGasFeeEstimator` is a middleware method you can use to easily leverage the Alchemy Rundler (an [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) Bundler) for estimating gas fees for user operations.
 
@@ -21,7 +21,7 @@ head:
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./alchemy-provider";
+import { provider } from "./provider";
 import { withAlchemyGasFeeEstimator } from "@alchemy/aa-alchemy";
 
 // use Alchemy Gas Fee Estimator to estimate gas fees according to the expectations of the Alchemy Rundler.

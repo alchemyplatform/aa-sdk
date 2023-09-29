@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: SupportedChains
+      content: Utils • SupportedChains
   - - meta
     - name: description
       content: Overview of the SupportedChains util method in aa-alchemy

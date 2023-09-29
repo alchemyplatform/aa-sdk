@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: WithAlchemyGasManager
+      content: Middleware • withAlchemyGasManager
   - - meta
     - name: description
       content: Overview of the withAlchemyGasManager method in aa-alchemy
@@ -12,7 +12,7 @@ head:
       content: Overview of the withAlchemyGasManager method in aa-alchemy
 ---
 
-# WithAlchemyGasManager
+# withAlchemyGasManager
 
 `withAlchemyGasManager` is a middleware method you can use to easily leverage the Alchemy Gas Manager (an [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) Paymaster) for sponsoring user operations.
 
@@ -21,7 +21,7 @@ head:
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./alchemy-provider";
+import { provider } from "./provider";
 import { withAlchemyGasManager } from "@alchemy/aa-alchemy";
 
 // use Alchemy Gas Manager to sponsorship transactions

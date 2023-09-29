@@ -26,7 +26,7 @@ Currently, `aa-alchemy` has implementations for:
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./alchemy-provider";
+import { provider } from "./provider";
 import {
   withAlchemyGasFeeEstimator,
   withAlchemyGasManager,

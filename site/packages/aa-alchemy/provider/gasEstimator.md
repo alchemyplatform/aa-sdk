@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: GasEstimator
+      content: AlchemyProvider • gasEstimator
   - - meta
     - name: description
       content: Overview of the gasEstimator method on Alchemy Provider in aa-alchemy
@@ -21,7 +21,7 @@ head:
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./alchemy-provider";
+import { provider } from "./provider";
 
 // building a UO struct will use the overrided `gasEstimator` middleware on AlchemyProvider
 const uoStruct = await provider.buildUserOperation({
