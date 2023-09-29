@@ -41,7 +41,7 @@ export class KernelSmartContractAccount<
   private defaultValidator: KernelBaseValidator;
   private validator: KernelBaseValidator;
 
-  constructor(params: KernelSmartAccountParams) {
+  constructor(params: KernelSmartAccountParams<TTransport>) {
     super(params);
     this.index = params.index ?? 0n;
     this.owner = params.owner;

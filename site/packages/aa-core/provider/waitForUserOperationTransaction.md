@@ -48,11 +48,11 @@ If `txMaxRetries` is exceeded without the user operation included in a block yet
 
 ## Parameters
 
-### `hash`
+### `hash: Hash`
 
-- #### Type: `Hash`
-  The hash of the user operation returned from [sendUserOperation](./sendUserOperation).
-  ::: code-group
+The hash of the user operation returned from [sendUserOperation](./sendUserOperation).
+
+::: code-group
 
 ```ts [example.ts]
 import { provider } from "./provider";

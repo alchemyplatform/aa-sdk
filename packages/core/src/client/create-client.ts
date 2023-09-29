@@ -3,18 +3,17 @@ import {
   createPublicClient,
   http,
   type Chain,
+  type Client,
   type FallbackTransport,
   type Hash,
   type Hex,
   type HttpTransport,
+  type HttpTransportConfig,
+  type PublicActions,
   type PublicClient,
   type Transport,
-  type HttpTransportConfig,
 } from "viem";
-import type {
-  EIP1193RequestFn,
-  PublicRpcSchema,
-} from "viem/dist/types/types/eip1193";
+import type { PublicRpcSchema } from "viem/dist/types/types/eip1193";
 import type {
   BigNumberish,
   UserOperationEstimateGasResponse,
@@ -25,23 +24,16 @@ import type {
 import { VERSION } from "../version.js";
 import type { Erc4337RpcSchema, PublicErc4337Client } from "./types.js";
 
-export const createPublicErc4337FromClient: <
-  T extends Transport | FallbackTransport = Transport
->(
-  client: PublicClient<T, Chain>
-) => PublicErc4337Client<T> = <
-  T extends Transport | FallbackTransport = Transport
->(
-  client: PublicClient<T, Chain>
-): PublicErc4337Client<T> => {
-  const clientAdapter = client as PublicClient<T, Chain> & {
-    request: EIP1193RequestFn<
-      [Erc4337RpcSchema[number], PublicRpcSchema[number]]
-    >;
-  };
+export const erc4337ClientActions = (client: Client) => {
+  const clientAdapter = client as Client<
+    Transport,
+    Chain,
+    undefined,
+    [...PublicRpcSchema, ...Erc4337RpcSchema],
+    PublicActions
+  >;
 
   return {
-    ...clientAdapter,
     estimateUserOperationGas(
       request: UserOperationRequest,
       entryPoint: string
@@ -82,14 +74,20 @@ export const createPublicErc4337FromClient: <
         params: [],
       });
     },
+  };
+};
 
-    getMaxPriorityFeePerGas(): Promise<BigNumberish> {
-      return clientAdapter.request({
-        method: "eth_maxPriorityFeePerGas",
-        params: [],
-      });
-    },
-
+export const createPublicErc4337FromClient: <
+  T extends Transport | FallbackTransport = Transport
+>(
+  client: PublicClient<T, Chain>
+) => PublicErc4337Client<T> = <
+  T extends Transport | FallbackTransport = Transport
+>(
+  client: PublicClient<T, Chain>
+): PublicErc4337Client<T> => {
+  return client.extend((clientAdapter) => ({
+    ...erc4337ClientActions(clientAdapter),
     async getFeeData(): Promise<{
       maxFeePerGas?: BigNumberish;
       maxPriorityFeePerGas?: BigNumberish;
@@ -113,14 +111,7 @@ export const createPublicErc4337FromClient: <
         maxPriorityFeePerGas: 0,
       };
     },
-
-    async getContractCode(address: string): Promise<Hex | `0x`> {
-      const code = await clientAdapter.getBytecode({
-        address: address as Address,
-      });
-      return code ?? "0x";
-    },
-  } as PublicErc4337Client<T>;
+  }));
 };
 
 export const createPublicErc4337Client = ({

@@ -69,6 +69,7 @@ export default defineConfig({
         items: [
           {
             text: "Provider",
+            collapsed: true,
             link: "/introduction",
             base: "/packages/aa-core/provider",
             items: [
@@ -87,6 +88,7 @@ export default defineConfig({
           {
             text: "Signers",
             base: "/packages/aa-core/signers",
+            collapsed: true,
             items: [
               { text: "WalletClientSigner", link: "/wallet-client" },
               { text: "LocalAccountSigner", link: "/local-account" },
@@ -104,10 +106,50 @@ export default defineConfig({
               },
             ],
           },
-          { text: "Public Client" },
+          {
+            text: "Public Client",
+            link: "/",
+            base: "/packages/aa-core/client",
+            collapsed: true,
+            items: [
+              {
+                text: "Actions",
+                collapsed: true,
+                base: "/packages/aa-core/client/actions",
+                items: [
+                  { text: "sendUserOperation", link: "/sendUserOperation" },
+                  {
+                    text: "estimateUserOperationGas",
+                    link: "/estimateUserOperationGas",
+                  },
+                  {
+                    text: "getUserOperationByHash",
+                    link: "/getUserOperationByHash",
+                  },
+                  {
+                    text: "getUserOperationReceipt",
+                    link: "/getUserOperationReceipt",
+                  },
+                  {
+                    text: "getSupportedEntryPoints",
+                    link: "/getSupportedEntryPoints",
+                  },
+                ],
+              },
+              {
+                text: "createPublicErc4337Client",
+                link: "/createPublicErc4337Client",
+              },
+              {
+                text: "createPublicErc4337FromClient",
+                link: "/createPublicErc4337FromClient",
+              },
+            ],
+          },
           {
             text: "Utilities",
             base: "/packages/aa-core/utils",
+            collapsed: true,
             items: [
               { text: "asyncPipe", link: "/asyncPipe" },
               { text: "deepHexlify", link: "/deepHexlify" },

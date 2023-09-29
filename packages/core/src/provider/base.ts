@@ -5,6 +5,7 @@ import {
   type Address,
   type Chain,
   type Hash,
+  type HttpTransport,
   type RpcTransactionRequest,
   type Transaction,
   type Transport,
@@ -101,14 +102,16 @@ export class SmartAccountProvider<
   protected chain: Chain;
 
   minPriorityFeePerBid: bigint;
-  rpcClient: PublicErc4337Client<Transport>;
+  rpcClient:
+    | PublicErc4337Client<TTransport>
+    | PublicErc4337Client<HttpTransport>;
 
   constructor({
     rpcProvider,
     entryPointAddress,
     chain,
     opts,
-  }: SmartAccountProviderConfig) {
+  }: SmartAccountProviderConfig<TTransport>) {
     super();
 
     this.entryPointAddress = entryPointAddress;
@@ -440,7 +443,8 @@ export class SmartAccountProvider<
   };
 
   readonly feeDataGetter: AccountMiddlewareFn = async (struct) => {
-    const maxPriorityFeePerGas = await this.rpcClient.getMaxPriorityFeePerGas();
+    const maxPriorityFeePerGas =
+      await this.rpcClient.estimateMaxPriorityFeePerGas();
     const feeData = await this.rpcClient.getFeeData();
     if (!feeData.maxFeePerGas || !feeData.maxPriorityFeePerGas) {
       throw new Error(
@@ -509,7 +513,11 @@ export class SmartAccountProvider<
   };
 
   connect<TAccount extends ISmartContractAccount>(
-    fn: (provider: PublicErc4337Client<TTransport>) => TAccount
+    fn: (
+      provider:
+        | PublicErc4337Client<TTransport>
+        | PublicErc4337Client<HttpTransport>
+    ) => TAccount
   ): this & { account: TAccount } {
     const account = fn(this.rpcClient);
     defineReadOnly(this, "account", account);

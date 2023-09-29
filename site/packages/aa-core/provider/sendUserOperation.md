@@ -68,6 +68,6 @@ A Promise containing the hash of the user operation and the request that was sen
 
 ### `UserOperationCallData | UserOperationCallData[]`
 
-- `target: Address` -- the target of the call (equivalent to `to` in a transaction)
-- `data: Hex` -- can be either `0x` or a call data string
-- `value?: bigint` -- optionally, set the value in wei you want to send to the target
+- `target: Address` - the target of the call (equivalent to `to` in a transaction)
+- `data: Hex` - can be either `0x` or a call data string
+- `value?: bigint` - optionally, set the value in wei you want to send to the target

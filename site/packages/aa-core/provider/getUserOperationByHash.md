@@ -27,6 +27,7 @@ provider.getUserOperationByHash("0xUserOpResultHash");
 ```
 
 <<< @/snippets/provider.ts
+
 :::
 
 ## Returns
@@ -37,7 +38,6 @@ A Promise containing the UserOperation if found on-chain or null if not found.
 
 ## Parameters
 
-### `hash`
+### `hash: Hash`
 
-- #### Type: `Hash`
-  The hash of the user operation returned from [sendUserOperation](./sendUserOperation).
+The hash of the user operation returned from [sendUserOperation](./sendUserOperation).

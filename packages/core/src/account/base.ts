@@ -46,7 +46,9 @@ export abstract class BaseSmartContractAccount<
     Chain
   >;
   protected entryPointAddress: Address;
-  protected rpcProvider: PublicErc4337Client<TTransport | HttpTransport>;
+  protected rpcProvider:
+    | PublicErc4337Client<TTransport>
+    | PublicErc4337Client<HttpTransport>;
 
   constructor(params: BaseSmartAccountParams<TTransport>) {
     this.entryPointAddress = params.entryPointAddress;
@@ -170,9 +172,9 @@ export abstract class BaseSmartContractAccount<
     if (this.deploymentState === DeploymentState.DEPLOYED) {
       return "0x";
     }
-    const contractCode = await this.rpcProvider.getContractCode(
-      await this.getAddress()
-    );
+    const contractCode = await this.rpcProvider.getBytecode({
+      address: await this.getAddress(),
+    });
 
     if ((contractCode?.length ?? 0) > 2) {
       this.deploymentState = DeploymentState.DEPLOYED;

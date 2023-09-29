@@ -19,6 +19,7 @@ export { WalletClientSigner } from "./signer/wallet-client.js";
 export {
   createPublicErc4337Client,
   createPublicErc4337FromClient,
+  erc4337ClientActions,
 } from "./client/create-client.js";
 export type * from "./client/types.js";
 
@@ -30,8 +31,8 @@ export {
 
 export { SmartAccountProvider, noOpMiddleware } from "./provider/base.js";
 export type {
-  SmartAccountProviderOpts,
   SmartAccountProviderConfig,
+  SmartAccountProviderOpts,
 } from "./provider/base.js";
 export type * from "./provider/types.js";
 

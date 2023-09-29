@@ -31,7 +31,7 @@ export class SimpleSmartContractAccount<
   protected factoryAddress: Address;
   protected index: bigint;
 
-  constructor(params: SimpleSmartAccountParams) {
+  constructor(params: SimpleSmartAccountParams<TTransport>) {
     super(params);
 
     this.index = params.index ?? 0n;

@@ -1,5 +1,11 @@
 import type { Address } from "abitype";
-import type { Hash, Hex, RpcTransactionRequest, Transport } from "viem";
+import type {
+  Hash,
+  Hex,
+  HttpTransport,
+  RpcTransactionRequest,
+  Transport,
+} from "viem";
 import type { SignTypedDataParameters } from "viem/accounts";
 import type {
   ISmartContractAccount,
@@ -74,7 +80,9 @@ export type FeeDataMiddleware = AccountMiddlewareOverrideFn<
 export interface ISmartAccountProvider<
   TTransport extends SupportedTransports = Transport
 > {
-  readonly rpcClient: PublicErc4337Client<TTransport>;
+  readonly rpcClient:
+    | PublicErc4337Client<TTransport>
+    | PublicErc4337Client<HttpTransport>;
   readonly dummyPaymasterDataMiddleware: AccountMiddlewareFn;
   readonly paymasterDataMiddleware: AccountMiddlewareFn;
   readonly gasEstimator: AccountMiddlewareFn;
@@ -266,7 +274,11 @@ export interface ISmartAccountProvider<
    * @param fn - a function that given public rpc client, returns a smart contract account
    */
   connect<TAccount extends ISmartContractAccount>(
-    fn: (provider: PublicErc4337Client<TTransport>) => TAccount
+    fn: (
+      provider:
+        | PublicErc4337Client<TTransport>
+        | PublicErc4337Client<HttpTransport>
+    ) => TAccount
   ): this & { account: TAccount };
 
   /**
