@@ -34,9 +34,9 @@ const bsc = SupportedChains.get(56);
 
 ## Returns
 
-### `Promise<Deferrable<UserOperationStruct>>`
+### `Chain`
 
-the resulting user operation struct after gas estimation, run as part of a middleware chain when building and sending UserOperations.
+the associated viem `Chain` object.
 
 ## Parameters
 
