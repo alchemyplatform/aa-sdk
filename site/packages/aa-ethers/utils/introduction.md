@@ -18,8 +18,8 @@ head:
 
 Notable util methods include:
 
-1.  [`convertWalletToAccountSigner`](/packages/aa-alchemy/utils/convert-wallet-to-account-signer) --
-2.  [`convertEthersSignerToAccountSigner`](/packages/aa-alchemy/utils/convert-wallet-to-account-signer) --
+1.  [`convertWalletToAccountSigner`](/packages/aa-ethers/utils/convert-wallet-to-account-signer) --
+2.  [`convertEthersSignerToAccountSigner`](/packages/aa-ethers/utils/convert-wallet-to-account-signer) --
 
 ## Usage
 

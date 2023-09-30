@@ -304,10 +304,6 @@ export default defineConfig({
                 link: "/sendTransaction",
               },
               {
-                text: "withCustomMiddleware",
-                link: "/withCustomMiddleware",
-              },
-              {
                 text: "getPublicErc4337Client",
                 link: "/getPublicErc4337Client",
               },
