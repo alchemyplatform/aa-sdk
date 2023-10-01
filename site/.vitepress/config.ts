@@ -144,6 +144,10 @@ export default defineConfig({
                 text: "createPublicErc4337FromClient",
                 link: "/createPublicErc4337FromClient",
               },
+              {
+                text: "erc4337ClientActions",
+                link: "/erc4337ClientActions",
+              },
             ],
           },
           {
