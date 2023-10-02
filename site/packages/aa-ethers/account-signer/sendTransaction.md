@@ -27,6 +27,9 @@ import { signer } from "./ethers-signer";
 const client = signer.getPublicErc4337Client();
 ```
 
+<<< @/snippets/ethers-signer.ts
+:::
+
 ## Returns
 
 ### `Promise<TransactionResponse>`

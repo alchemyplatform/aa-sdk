@@ -14,7 +14,7 @@ head:
 
 # getPublicErc4337Client
 
-`getPublicErc4337Client` is a method on `EthersProviderAdapter` that gets the underlying viem client which has [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) compatability.
+`getPublicErc4337Client` is a method on `EthersProviderAdapter` that gets the underlying viem client which has [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) capability.
 
 ## Usage
 

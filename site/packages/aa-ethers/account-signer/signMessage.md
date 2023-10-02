@@ -27,6 +27,9 @@ import { signer } from "./ethers-signer";
 const signedMessage = await signer.signMessage("test");
 ```
 
+<<< @/snippets/ethers-signer.ts
+:::
+
 ## Returns
 
 ### `Promise<string>`
