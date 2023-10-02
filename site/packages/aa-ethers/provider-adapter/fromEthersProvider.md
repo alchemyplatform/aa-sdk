@@ -12,7 +12,7 @@ head:
       content: Overview of the fromEthersProvider class on EthersProviderAdapter in aa-ethers
 ---
 
-# EthersProviderAdapter
+# fromEthersProvider
 
 `fromEthersProvider` is a static method on `EthersProviderAdapter` that converts an ethers.js `JsonRpcProvider` to an `EthersProviderAdapter`.
 
