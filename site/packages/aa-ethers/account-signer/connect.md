@@ -27,16 +27,16 @@ import { signer } from "./ethers-signer";
 // changing the provider for the signer
 const alchemy = new Alchemy({
   apiKey: process.env.API_KEY!,
-  network: Network.GOERLI,
+  network: Network.SEPOLIA, // new chain -> new provider
 });
 const alchemyProvider = await alchemy.config.getProvider();
-const provider = EthersProviderAdapter.fromEthersProvider(
+const newProvider = EthersProviderAdapter.fromEthersProvider(
   alchemyProvider,
   entryPointAddress
 );
 
 // connecting the signer
-const newSigner = signer.connect(provider);
+const newSigner = signer.connect(newProvider);
 ```
 
 <<< @/snippets/ethers-signer.ts
