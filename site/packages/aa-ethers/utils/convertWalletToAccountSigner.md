@@ -36,4 +36,6 @@ An instance of `SmartAccountSigner` with implementations derived from the inputt
 
 ## Parameters
 
-### `wallet: Wallet` -- an ethers.js `Wallet` object
+### `wallet: Wallet`
+
+An ethers.js `Wallet` object

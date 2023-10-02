@@ -14,7 +14,7 @@ head:
 
 # getAddress
 
-`getAddress` is a method on `AccountSigner` that gets the `AccountSigner`'s smart contract account address
+`getAddress` is a method on `AccountSigner` that gets the `AccountSigner`'s smart contract account address.
 
 ## Usage
 
@@ -32,6 +32,6 @@ const client = await signer.getAddress();
 
 ## Returns
 
-### `Address`
+### `Promise<Address>`
 
-The `Signer`'s smart contract account address
+A promise containing the `Signer`'s smart contract account address

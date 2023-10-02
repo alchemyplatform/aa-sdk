@@ -6,10 +6,10 @@ head:
       content: Utils
   - - meta
     - name: description
-      content: Overview of the Utils methods in aa-alchemy
+      content: Overview of the Utils methods in aa-ethers
   - - meta
     - property: og:description
-      content: Overview of the Utils methods in aa-alchemy
+      content: Overview of the Utils methods in aa-ethers
 ---
 
 # Utils

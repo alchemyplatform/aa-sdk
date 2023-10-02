@@ -31,6 +31,10 @@ An instance of `EthersProviderAdapter`
 
 ## Parameters
 
-### `provider: JsonRpcProvider` -- the ethers JSON RPC provider to convert
+### `provider: JsonRpcProvider`
 
-### `entryPointAddress: Address` -- the entrypoint address that will be used for UserOperations
+The ethers JSON RPC provider to convert
+
+### `entryPointAddress: Address`
+
+The entrypoint address that will be used for UserOperations

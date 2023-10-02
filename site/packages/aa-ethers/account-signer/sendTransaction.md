@@ -35,4 +35,6 @@ A Promise containing the ethers.js `TransactionResponse` object
 
 ## Parameters
 
-### `transaction: Deferrable<TransactionRequest>` -- the ethers.js `TransactionRequest` object, where each field may be a Promise or its value
+### `transaction: Deferrable<TransactionRequest>`
+
+The ethers.js `TransactionRequest` object, where each field may be a Promise or its value

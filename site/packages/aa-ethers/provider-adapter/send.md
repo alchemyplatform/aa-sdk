@@ -34,10 +34,14 @@ const chainId = await provider.send("eth_chainId", []);
 
 ### `Promise<any>`
 
-the result of the RPC call
+The result of the RPC call
 
 ## Parameters
 
-### `method: string` -- the RPC method to call
+### `method: string`
 
-### `params: any[]` -- the params required by the RPC method
+The RPC method to call
+
+### `params: any[]`
+
+The params required by the RPC method

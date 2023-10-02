@@ -35,4 +35,6 @@ A Promise containing the hex signture of the message
 
 ## Parameters
 
-### `msg: string | Uint8Arra` -- the message to sign
+### `msg: string | Uint8Arra`
+
+The message to sign

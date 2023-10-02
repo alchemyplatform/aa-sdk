@@ -15,7 +15,6 @@ head:
 # connect
 
 `connect` is a method on `AccountSigner` that you can call to connect an `EthersProviderAdapter` to this Signer. This enables the returned Signer to leverage the provider when signing messages, UserOperations, and transactions for a smart contract account using the owner account.
-Ø
 
 ## Usage
 
@@ -44,10 +43,12 @@ const newSigner = signer.connect(newProvider);
 
 ## Returns
 
-### `AccountSigner<TAccount extends ISmartContractAccount>`
+### `AccountSigner`
 
-A new instance of a connected `AccountSigner`for any implementation class of `ISmartContractAccount`.
+A new instance of a connected `AccountSigner`
 
 ## Parameters
 
-### `provider: EthersProviderAdapter` - the `EthersProviderAdapter` to connect with this `AccountSigner`
+### `provider: EthersProviderAdapter`
+
+the `EthersProviderAdapter` to connect with this `AccountSigner`
