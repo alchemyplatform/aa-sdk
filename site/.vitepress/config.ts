@@ -47,6 +47,7 @@ export default defineConfig({
             base: "/smart-accounts/signers",
             link: "/overview",
             items: [
+              { text: "Capsule", link: "/capsule" },
               { text: "Magic.Link", link: "/magic-link" },
               { text: "Turnkey", link: "/turnkey" },
               { text: "Web3Auth", link: "/web3auth" },
