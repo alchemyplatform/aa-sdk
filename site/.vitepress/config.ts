@@ -35,7 +35,7 @@ export default defineConfig({
           {
             text: "Choosing a Smart Account",
             base: "/smart-accounts/accounts",
-            link: "/light-account",
+            link: "/overview",
             items: [
               { text: "Light Account", link: "/light-account" },
               { text: "Modular Account", link: "/modular-account" },

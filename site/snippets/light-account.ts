@@ -14,14 +14,14 @@ const eoaSigner: SmartAccountSigner =
 const provider = new AlchemyProvider({
   apiKey: "ALCHEMY_API_KEY", // Replace with your Alchemy API key, you can get one at https://dashboard.alchemy.com/
   chain,
-  entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789", // EntryPoint address for Sepolia, replace if you're using a different entry point
+  entryPointAddress: "0x...",
 }).connect(
   (rpcClient) =>
     new LightSmartContractAccount({
-      entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
+      entryPointAddress: "0x...",
       chain: rpcClient.chain,
       owner: eoaSigner,
-      factoryAddress: "0xDC31c846DA74400C732edb0fE888A2e4ADfBb8b1", // Factory address for Light Account on Sepolia
+      factoryAddress: "0x...", // Factory address for Light Account on Sepolia
       rpcClient,
     })
 );
