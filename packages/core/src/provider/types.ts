@@ -150,7 +150,7 @@ export interface ISmartAccountProvider<
    * calls `eth_getUserOperationReceipt` and returns the {@link UserOperationReceipt}
    *
    * @param hash - the hash of the UserOperation to get the receipt for
-   * @returns - {@link UserOperationResponse}
+   * @returns - {@link UserOperationReceipt}
    */
   getUserOperationReceipt: (hash: Hash) => Promise<UserOperationReceipt | null>;
 

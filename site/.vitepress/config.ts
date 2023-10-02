@@ -83,6 +83,10 @@ export default defineConfig({
                 text: "getUserOperationByHash",
                 link: "/getUserOperationByHash",
               },
+              {
+                text: "getUserOperationReceipt",
+                link: "/getUserOperationReceipt",
+              },
             ],
           },
           { text: "Accounts" },
