@@ -50,4 +50,4 @@ A new instance of a connected `AccountSigner`for any implementation class of `IS
 
 ## Parameters
 
-### `provider: EthersProviderAdapter` - the `EthersProviderAdapter` to connect with this `Signer`
+### `provider: EthersProviderAdapter` - the `EthersProviderAdapter` to connect with this `AccountSigner`
