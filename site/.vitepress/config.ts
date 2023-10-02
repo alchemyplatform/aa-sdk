@@ -156,6 +156,18 @@ export default defineConfig({
             collapsed: true,
             items: [
               { text: "asyncPipe", link: "/asyncPipe" },
+              {
+                text: "convertChainIdToCoinType",
+                link: "/convertChainIdToCoinType",
+              },
+              {
+                text: "convertCoinTypeToChain",
+                link: "/convertCoinTypeToChain",
+              },
+              {
+                text: "convertCoinTypeToChainId",
+                link: "/convertCoinTypeToChainId",
+              },
               { text: "deepHexlify", link: "/deepHexlify" },
               { text: "defineReadOnly", link: "/defineReadOnly" },
               { text: "getChain", link: "/getChain" },
