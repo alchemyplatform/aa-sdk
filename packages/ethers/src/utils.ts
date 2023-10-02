@@ -1,8 +1,13 @@
 import type { Address, SmartAccountSigner } from "@alchemy/aa-core";
 import type { Signer } from "@ethersproject/abstract-signer";
 import { Wallet } from "@ethersproject/wallet";
-import type { SignTypedDataParameters } from "viem/accounts";
+import { type SignTypedDataParameters } from "viem/accounts";
 
+/**
+ * Converts a ethersjs Wallet to a SmartAccountSigner
+ * @param wallet - the Wallet to convert
+ * @returns {SmartAccountSigner} - a signer that can be used to sign and send user operations
+ */
 export const convertWalletToAccountSigner = (
   wallet: Wallet
 ): SmartAccountSigner => {
@@ -23,6 +28,11 @@ export const convertWalletToAccountSigner = (
   };
 };
 
+/**
+ * Converts a ethers.js Signer to a SmartAccountSigner
+ * @param signer - the Signer to convert
+ * @returns {SmartAccountSigner} - a signer that can be used to sign and send user operations
+ */
 export const convertEthersSignerToAccountSigner = (
   signer: Signer
 ): SmartAccountSigner => {

@@ -1,0 +1,53 @@
+---
+outline: deep
+head:
+  - - meta
+    - property: og:title
+      content: AccountSigner • connect
+  - - meta
+    - name: description
+      content: Overview of the connect method on AccountSigner in aa-ethers
+  - - meta
+    - property: og:description
+      content: Overview of the connect method on AccountSigner in aa-ethers
+---
+
+# connect
+
+`connect` is a method on `AccountSigner` that you can call to connect an `EthersProviderAdapter` to this Signer. This enables the returned Signer to leverage the provider when signing messages, UserOperations, and transactions for a smart contract account using the owner account.
+Ø
+
+## Usage
+
+::: code-group
+
+```ts [example.ts]
+import { signer } from "./ethers-signer";
+
+// changing the provider for the signer
+const alchemy = new Alchemy({
+  apiKey: process.env.API_KEY!,
+  network: Network.GOERLI,
+});
+const alchemyProvider = await alchemy.config.getProvider();
+const provider = EthersProviderAdapter.fromEthersProvider(
+  alchemyProvider,
+  entryPointAddress
+);
+
+// connecting the signer
+const newSigner = signer.connect(provider);
+```
+
+<<< @/snippets/ethers-signer.ts
+:::
+
+## Returns
+
+### `AccountSigner<TAccount extends ISmartContractAccount>`
+
+A new instance of a connected `AccountSigner`for any implementation class of `ISmartContractAccount`.
+
+## Parameters
+
+### `provider: EthersProviderAdapter` - the `EthersProviderAdapter` to connect with this `Signer`

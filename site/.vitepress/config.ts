@@ -245,22 +245,6 @@ export default defineConfig({
                 link: "/connectToAccount",
               },
               {
-                text: "withPaymasterMiddleware",
-                link: "/withPaymasterMiddleware",
-              },
-              {
-                text: "withGasEstimator",
-                link: "/withGasEstimator",
-              },
-              {
-                text: "withFeeDataGetter",
-                link: "/withFeeDataGetter",
-              },
-              {
-                text: "withCustomMiddleware",
-                link: "/withCustomMiddleware",
-              },
-              {
                 text: "getPublicErc4337Client",
                 link: "/getPublicErc4337Client",
               },
@@ -282,22 +266,6 @@ export default defineConfig({
               {
                 text: "signMessage",
                 link: "/signMessage",
-              },
-              {
-                text: "withPaymasterMiddleware",
-                link: "/withPaymasterMiddleware",
-              },
-              {
-                text: "withGasEstimator",
-                link: "/withGasEstimator",
-              },
-              {
-                text: "withFeeDataGetter",
-                link: "/withFeeDataGetter",
-              },
-              {
-                text: "withCustomMiddleware",
-                link: "/withCustomMiddleware",
               },
               {
                 text: "sendTransaction",

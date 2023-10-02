@@ -36,9 +36,10 @@ pnpm i @alchemy/aa-ethers
 
 :::
 
-Then, you can create a provider like so:
+You can create a provider and connect it to a signer account like so:
 ::: code-group
 
+<<< @/snippets/ethers-signer.ts
 <<< @/snippets/ethers-provider.ts
 
 :::
