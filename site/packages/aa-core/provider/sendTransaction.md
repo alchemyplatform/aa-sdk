@@ -41,7 +41,6 @@ const txHash = await provider.sendTransaction({
 <<< @/snippets/provider.ts
 
 :::
-s
 
 ## Returns
 
