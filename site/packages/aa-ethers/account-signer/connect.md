@@ -28,9 +28,9 @@ const alchemy = new Alchemy({
   apiKey: process.env.API_KEY!,
   network: Network.SEPOLIA, // new chain -> new provider
 });
-const alchemyProvider = await alchemy.config.getProvider();
+const ethersProvider = await alchemy.config.getProvider();
 const newProvider = EthersProviderAdapter.fromEthersProvider(
-  alchemyProvider,
+  ethersProvider,
   entryPointAddress
 );
 
