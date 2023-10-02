@@ -230,7 +230,73 @@ export default defineConfig({
         base: "/packages/aa-ethers",
         link: "/",
         collapsed: true,
-        items: [],
+        items: [
+          {
+            text: "EthersProviderAdapter",
+            link: "/introduction",
+            base: "/packages/aa-ethers/provider-adapter",
+            items: [
+              {
+                text: "send",
+                link: "/send",
+              },
+              {
+                text: "connectToAccount",
+                link: "/connectToAccount",
+              },
+              {
+                text: "getPublicErc4337Client",
+                link: "/getPublicErc4337Client",
+              },
+              {
+                text: "fromEthersProvider",
+                link: "/fromEthersProvider",
+              },
+            ],
+          },
+          {
+            text: "AccountSigner",
+            link: "/introduction",
+            base: "/packages/aa-ethers/account-signer",
+            items: [
+              {
+                text: "getAddress",
+                link: "/getAddress",
+              },
+              {
+                text: "signMessage",
+                link: "/signMessage",
+              },
+              {
+                text: "sendTransaction",
+                link: "/sendTransaction",
+              },
+              {
+                text: "getPublicErc4337Client",
+                link: "/getPublicErc4337Client",
+              },
+              {
+                text: "connect",
+                link: "/connect",
+              },
+            ],
+          },
+          {
+            text: "Utils",
+            link: "/introduction",
+            base: "/packages/aa-ethers/utils",
+            items: [
+              {
+                text: "convertWalletToAccountSigner",
+                link: "/convertWalletToAccountSigner",
+              },
+              {
+                text: "convertEthersSignerToAccountSigner",
+                link: "/convertEthersSignerToAccountSigner",
+              },
+            ],
+          },
+        ],
       },
     ],
 

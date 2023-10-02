@@ -99,6 +99,8 @@ export class EthersProviderAdapter extends JsonRpcProvider {
   }
 
   /**
+   * Creates an instance of EthersProviderAdapter from an ethers.js JsonRpcProvider.
+   *
    * @param provider - the ethers JSON RPC provider to convert
    * @param entryPointAddress - the entrypoint address that will be used for UserOperations
    * @returns an instance of {@link EthersProviderAdapter}
