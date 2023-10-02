@@ -1,7 +1,7 @@
 import type { Address, SmartAccountSigner } from "@alchemy/aa-core";
 import type { Signer } from "@ethersproject/abstract-signer";
 import { Wallet } from "@ethersproject/wallet";
-import { type SignTypedDataParameters } from "viem/accounts";
+import type { SignTypedDataParameters } from "viem/accounts";
 
 /**
  * Converts a ethersjs Wallet to a SmartAccountSigner
