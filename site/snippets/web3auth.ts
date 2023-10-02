@@ -10,7 +10,7 @@ await web3auth.initModal();
 
 await web3auth.connect();
 
-// a viem wallet client that wraps magic for utility methods
+// a viem wallet client that wraps web3auth for utility methods
 // NOTE: this isn't necessary since you can just use the `web3auth.rpcProvider`
 // directly, but this makes things much easier
 export const web3authClient = createWalletClient({
