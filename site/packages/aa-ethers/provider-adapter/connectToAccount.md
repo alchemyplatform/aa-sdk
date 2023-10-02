@@ -15,7 +15,6 @@ head:
 # connectToAccount
 
 `connectToAccount` is a method on `EthersProviderAdapter` that you can optionally call to connect the Provider to an Account and returns a Signer. This enables the returned `AccountSigner` to leverage the provider when signing messages, UserOperations, and transactions for a smart contract account using the owner account.
-Ø
 
 ## Usage
 

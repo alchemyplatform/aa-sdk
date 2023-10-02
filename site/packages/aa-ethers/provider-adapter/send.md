@@ -8,7 +8,7 @@ head:
     - name: description
       content: Overview of the connectToAccount method on EthersProviderAdapter in aa-ethers
   - - meta
-    - property: og:descriptionØ
+    - property: og:description
       content: Overview of the connectToAccount method on EthersProviderAdapter in aa-ethers
 ---
 
