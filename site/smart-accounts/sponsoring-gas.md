@@ -78,7 +78,7 @@ import { provider } from "./provider.ts";
 
 // Your Gas Manager policy id is available at: //
 //dashboard.alchemy.com/gas-manager/policy/create
-https: const GAS_MANAGER_POLICY_ID = "YourGasManagerPolicyId";
+const GAS_MANAGER_POLICY_ID = "YourGasManagerPolicyId";
 
 // Link the provider with the Gas Manager so the user operations
 // sent with this provider get sponsorship from the Gas Manager.
