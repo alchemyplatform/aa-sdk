@@ -1,0 +1,75 @@
+---
+outline: deep
+head:
+  - - meta
+    - property: og:title
+      content: sendTransactions
+  - - meta
+    - name: description
+      content: Overview of the sendTransactions method on ISmartAccountProvider
+  - - meta
+    - property: og:description
+      content: Overview of the sendTransactions method on ISmartAccountProvider
+---
+
+# sendTransactions
+
+This takes a set of ethereum transactions and converts them into one single UserOperation, sends the UserOperation, and waits on the receipt of that UserOperation (i.e. has it been mined). If you don't want to wait for the UserOperation to mine, it's recommended to user [sendUserOperation](./sendUserOperation) instead.
+
+**NOTE**: The account you're sending the transactions _to_ MUST support batch transactions.
+s
+
+## Usage
+
+::: code-group
+
+```ts [example.ts]
+import { provider } from "./provider";
+// [!code focus:99]
+const txHash = await provider.sendTransactions([
+  {
+    from,
+    to,
+    data: encodeFunctionData({
+      abi: ContractABI.abi,
+      functionName: "func",
+      args: [arg1, arg2, ...],
+    }),
+  },
+  {
+    from,
+    to,
+    data: encodeFunctionData({
+      abi: ContractABI.abi,
+      functionName: "func",
+      args: [arg1, arg2, ...],
+    }),
+  },
+  ...
+  {
+    from,
+    to,
+    data: encodeFunctionData({
+      abi: ContractABI.abi,
+      functionName: "func",
+      args: [arg1, arg2, ...],
+    }),
+  },
+]);
+```
+
+<<< @/snippets/provider.ts
+
+:::
+
+## Returns
+
+### `Promise<Hash | null>`
+
+A Promise containing the transaction hash
+
+## Parameters
+
+### `request: RpcTransactionRequest[]`
+
+a `RpcTransactionRequest` Array representing a traditional ethereum transaction

@@ -74,7 +74,18 @@ export default defineConfig({
             link: "/introduction",
             base: "/packages/aa-core/provider",
             items: [
-              { text: "sendUserOperation", link: "/sendUserOperation" },
+              {
+                text: "sendUserOperation",
+                link: "/sendUserOperation",
+              },
+              {
+                text: "buildUserOperation",
+                link: "/buildUserOperation",
+              },
+              {
+                text: "buildUserOperationFromTx",
+                link: "/buildUserOperationFromTx",
+              },
               {
                 text: "waitForUserOperationTransaction",
                 link: "/waitForUserOperationTransaction",
@@ -86,6 +97,86 @@ export default defineConfig({
               {
                 text: "getUserOperationReceipt",
                 link: "/getUserOperationReceipt",
+              },
+              {
+                text: "sendTransaction",
+                link: "/sendTransaction",
+              },
+              {
+                text: "sendTransactions",
+                link: "/sendTransactions",
+              },
+              {
+                text: "request",
+                link: "/request",
+              },
+              {
+                text: "signMessage",
+                link: "/signMessage",
+              },
+              {
+                text: "signTypedData",
+                link: "/signTypedData",
+              },
+              {
+                text: "signMessageWith6492",
+                link: "/signMessageWith6492",
+              },
+              {
+                text: "signTypedDataWith6492",
+                link: "/signTypedDataWith6492",
+              },
+              {
+                text: "getAddress",
+                link: "/getAddress",
+              },
+              {
+                text: "isConnected",
+                link: "/isConnected",
+              },
+              {
+                text: "withPaymasterMiddleware",
+                link: "/withPaymasterMiddleware",
+              },
+              {
+                text: "withGasEstimator",
+                link: "/withGasEstimator",
+              },
+              {
+                text: "withFeeDataGetter",
+                link: "/withFeeDataGetter",
+              },
+              {
+                text: "withCustomMiddleware",
+                link: "/withCustomMiddleware",
+              },
+              {
+                text: "connect",
+                link: "/connect",
+              },
+              {
+                text: "disconnect",
+                link: "/disconnect",
+              },
+              {
+                text: "dummyPaymasterDataMiddleware",
+                link: "/dummyPaymasterDataMiddleware",
+              },
+              {
+                text: "paymasterDataMiddleware",
+                link: "/paymasterDataMiddleware",
+              },
+              {
+                text: "gasEstimator",
+                link: "/gasEstimator",
+              },
+              {
+                text: "feeDataGetter",
+                link: "/feeDataGetter",
+              },
+              {
+                text: "customMiddleware",
+                link: "/customMiddleware",
               },
             ],
           },

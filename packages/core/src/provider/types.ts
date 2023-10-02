@@ -222,6 +222,11 @@ export interface ISmartAccountProvider<
    */
   getAddress: () => Promise<Address>;
 
+  /**
+   * @returns boolean flag indicating if the account is connected
+   */
+  isConnected: () => boolean;
+
   // Middelware Overriders
   /**
    * This method allows you to override the default dummy paymaster data middleware and get paymaster
