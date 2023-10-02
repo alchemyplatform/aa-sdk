@@ -14,7 +14,7 @@ head:
 
 # connect
 
-`connect` is a method on `AccountSigner` that you can call to connect an `EthersProviderAdapter` to this Signer. This enables the returned Signer to leverage the provider when signing messages, UserOperations, and transactions for a smart contract account using the owner account.
+`connect` is a method on `AccountSigner` that you can call to connect an `EthersProviderAdapter` to this signer. This lets the returned `AccountSigner` leverage the provider when signing messages, UserOperations, and transactions for a smart contract account using the owner account.
 
 ## Usage
 
