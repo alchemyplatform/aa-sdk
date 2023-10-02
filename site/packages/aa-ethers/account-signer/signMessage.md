@@ -3,18 +3,18 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: AccountSigner • sendTransaction
+      content: AccountSigner • signMessage
   - - meta
     - name: description
-      content: Overview of the sendTransaction method on AccountSigner in aa-ethers
+      content: Overview of the signMessage method on AccountSigner in aa-ethers
   - - meta
     - property: og:description
-      content: Overview of the sendTransaction method on AccountSigner in aa-ethers
+      content: Overview of the signMessage method on AccountSigner in aa-ethers
 ---
 
-# sendTransaction
+# signMessage
 
-`sendTransaction` is a method on `AccountSigner` that sends a transaction on behalf of the Signer's smart contract account, with request and response formatted as if you were using the ethers.js library.
+`signMessage` is a method on `AccountSigner` that signs messages with the `AccountSigner`'s owner address.
 
 ## Usage
 

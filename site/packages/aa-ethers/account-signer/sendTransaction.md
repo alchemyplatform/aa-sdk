@@ -14,7 +14,7 @@ head:
 
 # sendTransaction
 
-`sendTransaction` is a method on `AccountSigner` that signs messages with the `AccountSigner`'s owner address.
+`sendTransaction` is a method on `AccountSigner` that sends transaction on behalf of the `AccountSigner`'s smart contract account, with request and response formatted as if you were using the ethers.js library.
 
 ## Usage
 
