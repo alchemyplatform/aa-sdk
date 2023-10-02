@@ -10,6 +10,9 @@ head:
   - - meta
     - property: og:description
       content: Choosing a Smart Account Overview
+next:
+  text: Choosing a Signer
+  link: /smart-accounts/signers/overview
 ---
 
 # Choosing a Smart Account

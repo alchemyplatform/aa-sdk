@@ -175,6 +175,7 @@ export default defineConfig({
             text: "AlchemyProvider",
             link: "/introduction",
             base: "/packages/aa-alchemy/provider",
+            collapsed: true,
             items: [
               { text: "gasEstimator", link: "/gasEstimator" },
               { text: "withAlchemyGasManager", link: "/withAlchemyGasManager" },
@@ -184,6 +185,7 @@ export default defineConfig({
             text: "Middleware",
             link: "/introduction",
             base: "/packages/aa-alchemy/middleware",
+            collapsed: true,
             items: [
               {
                 text: "withAlchemyGasFeeEstimator",
@@ -194,6 +196,7 @@ export default defineConfig({
           },
           {
             text: "Utils",
+            collapsed: true,
             link: "/introduction",
             base: "/packages/aa-alchemy/utils",
             items: [{ text: "SupportedChains", link: "/supportedChains" }],
@@ -208,6 +211,7 @@ export default defineConfig({
         items: [
           {
             text: "LightSmartContractAccount",
+            collapsed: true,
             link: "/introduction",
             base: "/packages/aa-accounts/light-account",
             items: [
@@ -233,6 +237,7 @@ export default defineConfig({
         items: [
           {
             text: "EthersProviderAdapter",
+            collapsed: true,
             link: "/introduction",
             base: "/packages/aa-ethers/provider-adapter",
             items: [
@@ -256,6 +261,7 @@ export default defineConfig({
           },
           {
             text: "AccountSigner",
+            collapsed: true,
             link: "/introduction",
             base: "/packages/aa-ethers/account-signer",
             items: [
@@ -283,6 +289,7 @@ export default defineConfig({
           },
           {
             text: "Utils",
+            collapsed: true,
             link: "/introduction",
             base: "/packages/aa-ethers/utils",
             items: [
