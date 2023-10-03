@@ -14,9 +14,9 @@ head:
 
 # Batching Transactions
 
-One benefit of Smart Contract Accounts is that it's possible to batch transactions in one User Operation. Not all Smart Contract Accounts support batching, but, if the account you're using does, then implementations of `SmartAccountProvider` will allow you to make those calls.
+One benefit of Smart Contract Accounts is that it's possible to batch transactions in one User Operation. Not all Smart Contract Accounts support batching. But, if the account you're using does, then implementations of `SmartAccountProvider` will allow you to make those calls.
 
-There are two ways you can batch transacations:
+There are two ways you can batch transactions using `SmartAccountProvider`:
 
 1. via `sendUserOperation`
 2. via `sendTransactions`
@@ -50,7 +50,7 @@ const { hash } = await provider.sendUserOperation([
 
 ## `sendTransactions`
 
-The `SmartAccountProvider` supports sending UserOperations and waiting for them to be mined in a transaction via the `sendTransaction` and `sendTransactions` methods. The latter allows for batching in the same way `sendUserOperation`:
+The `SmartAccountProvider` supports sending `UserOperation`s and waiting for them to be mined in a transaction via the `sendTransaction` and `sendTransactions` methods. The latter allows for batching in the same way `sendUserOperation`:
 
 ::: code-group
 
