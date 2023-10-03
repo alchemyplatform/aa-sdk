@@ -2,6 +2,7 @@ import { WalletClientSigner, type SmartAccountSigner } from "@alchemy/aa-core";
 import { Web3Auth } from "@web3auth/modal";
 import { createWalletClient, custom } from "viem";
 
+// see https://web3auth.io/docs/quick-start for more info
 const web3auth = new Web3Auth({
   // web3auth config...
 });
