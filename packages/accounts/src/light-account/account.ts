@@ -6,6 +6,7 @@ import {
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import {
+  concatHex,
   decodeFunctionResult,
   encodeFunctionData,
   type Address,
@@ -141,5 +142,16 @@ export class LightSmartContractAccount<
     }
 
     return result.hash;
+  }
+
+  protected override async getAccountInitCode(): Promise<`0x${string}`> {
+    return concatHex([
+      this.factoryAddress,
+      encodeFunctionData({
+        abi: LightAccountFactoryAbi,
+        functionName: "createAccount",
+        args: [await this.owner.getAddress(), this.index],
+      }),
+    ]);
   }
 }
