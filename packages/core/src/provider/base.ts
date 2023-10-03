@@ -25,6 +25,7 @@ import {
   type UserOperationReceipt,
   type UserOperationResponse,
   type UserOperationStruct,
+  type UserOperationRequest,
 } from "../types.js";
 import {
   asyncPipe,
@@ -253,21 +254,13 @@ export class SmartAccountProvider<
       };
     });
 
-    const bigIntMax = (...args: bigint[]) => {
-      if (!args.length) {
-        return undefined;
-      }
-
-      return args.reduce((m, c) => (m > c ? m : c));
-    };
-
-    const maxFeePerGas = bigIntMax(
+    const maxFeePerGas = this.bigIntMax(
       ...requests
         .filter((x) => x.maxFeePerGas != null)
         .map((x) => fromHex(x.maxFeePerGas!, "bigint"))
     );
 
-    const maxPriorityFeePerGas = bigIntMax(
+    const maxPriorityFeePerGas = this.bigIntMax(
       ...requests
         .filter((x) => x.maxPriorityFeePerGas != null)
         .map((x) => fromHex(x.maxPriorityFeePerGas!, "bigint"))
@@ -398,6 +391,35 @@ export class SmartAccountProvider<
       ),
       request,
     };
+  };
+
+  dropAndReplaceUserOperation = async (
+    data: UserOperationRequest
+  ): Promise<SendUserOperationResult | UserOperationRequest> => {
+    const oldUO = data;
+
+    const newUo = await this._runMiddlewareStack(data);
+
+    if (newUo.maxFeePerGas)
+      newUo.maxFeePerGas = this.bigIntMax(
+        BigInt(newUo.maxFeePerGas),
+        (BigInt(oldUO.maxFeePerGas) * 110n) / 100n
+      );
+
+    if (newUo.maxPriorityFeePerGas)
+      newUo.maxPriorityFeePerGas = this.bigIntMax(
+        BigInt(newUo.maxPriorityFeePerGas),
+        (BigInt(oldUO.maxPriorityFeePerGas) * 110n) / 100n
+      );
+
+    // callGasLimit can change if some other UserOp or Transaction took place meanwhile.
+    if (newUo.callGasLimit)
+      newUo.callGasLimit = this.bigIntMax(
+        BigInt(newUo.callGasLimit),
+        BigInt(oldUO.callGasLimit)
+      );
+
+    return this._sendUserOperation(newUo);
   };
 
   // These are dependent on the specific paymaster being used
@@ -539,5 +561,34 @@ export class SmartAccountProvider<
         ...(await override(struct)),
       };
     };
+  };
+
+  private _runMiddlewareStack = async (
+    data: UserOperationRequest,
+    overrides?: UserOperationOverrides
+  ) => {
+    if (!this.account) {
+      throw new Error("account not connected!");
+    }
+
+    const uoStruct = await asyncPipe(
+      this.dummyPaymasterDataMiddleware,
+      this.feeDataGetter,
+      this.gasEstimator,
+      this.paymasterDataMiddleware,
+      this.customMiddleware ?? noOpMiddleware,
+      // This applies the overrides if they've been passed in
+      async (struct) => ({ ...struct, ...overrides })
+    )(data);
+
+    return resolveProperties(uoStruct);
+  };
+
+  private bigIntMax = (...args: bigint[]) => {
+    if (!args.length) {
+      return undefined;
+    }
+
+    return args.reduce((m, c) => (m > c ? m : c));
   };
 }
