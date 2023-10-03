@@ -10,7 +10,6 @@ import type {
 } from "viem";
 import type { PublicRpcSchema } from "viem/dist/types/types/eip1193";
 import type {
-  BigNumberish,
   UserOperationEstimateGasResponse,
   UserOperationReceipt,
   UserOperationRequest,
@@ -94,17 +93,6 @@ export type Erc4337Actions = {
    * @returns - {@link Address}[]
    */
   getSupportedEntryPoints(): Promise<Address[]>;
-
-  /**
-   * viem doesn't support getFeeData, so looking at ethers: https://github.com/ethers-io/ethers.js/blob/main/lib.esm/providers/abstract-provider.js#L472
-   * also keeping this implementation the same as ethers so that the middlewares work consistently
-   *
-   * @returns - maxFeePerGas and maxPriorityFeePerGas
-   */
-  getFeeData(): Promise<{
-    maxFeePerGas?: BigNumberish;
-    maxPriorityFeePerGas?: BigNumberish;
-  }>;
 };
 
 export type PublicErc4337Client<T extends SupportedTransports = Transport> =

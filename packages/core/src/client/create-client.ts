@@ -15,7 +15,6 @@ import {
 } from "viem";
 import type { PublicRpcSchema } from "viem/dist/types/types/eip1193";
 import type {
-  BigNumberish,
   UserOperationEstimateGasResponse,
   UserOperationReceipt,
   UserOperationRequest,
@@ -86,32 +85,7 @@ export const createPublicErc4337FromClient: <
 >(
   client: PublicClient<T, Chain>
 ): PublicErc4337Client<T> => {
-  return client.extend((clientAdapter) => ({
-    ...erc4337ClientActions(clientAdapter),
-    async getFeeData(): Promise<{
-      maxFeePerGas?: BigNumberish;
-      maxPriorityFeePerGas?: BigNumberish;
-    }> {
-      // viem doesn't support getFeeData, so looking at ethers: https://github.com/ethers-io/ethers.js/blob/main/lib.esm/providers/abstract-provider.js#L472
-      // also keeping this implementation the same as ethers so that the middlewares work consistently
-      const block = await clientAdapter.getBlock({
-        blockTag: "latest",
-      });
-
-      if (block && block.baseFeePerGas) {
-        const maxPriorityFeePerGas = BigInt(1500000000);
-        return {
-          maxPriorityFeePerGas,
-          maxFeePerGas: block.baseFeePerGas * BigInt(2) + maxPriorityFeePerGas,
-        };
-      }
-
-      return {
-        maxFeePerGas: 0,
-        maxPriorityFeePerGas: 0,
-      };
-    },
-  }));
+  return client.extend(erc4337ClientActions);
 };
 
 export const createPublicErc4337Client = ({

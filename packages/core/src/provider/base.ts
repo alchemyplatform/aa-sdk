@@ -445,7 +445,7 @@ export class SmartAccountProvider<
   readonly feeDataGetter: AccountMiddlewareFn = async (struct) => {
     const maxPriorityFeePerGas =
       await this.rpcClient.estimateMaxPriorityFeePerGas();
-    const feeData = await this.rpcClient.getFeeData();
+    const feeData = await this.rpcClient.estimateFeesPerGas();
     if (!feeData.maxFeePerGas || !feeData.maxPriorityFeePerGas) {
       throw new Error(
         "feeData is missing maxFeePerGas or maxPriorityFeePerGas"
