@@ -24,6 +24,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: Build
+    env:
+      NO_BASE_PATH: ${{ inputs.no_base_path }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
