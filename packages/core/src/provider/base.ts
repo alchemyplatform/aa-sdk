@@ -584,12 +584,4 @@ export class SmartAccountProvider<
 
     return resolveProperties(uoStruct);
   };
-
-  private bigIntMax = (...args: bigint[]) => {
-    if (!args.length) {
-      return undefined;
-    }
-
-    return args.reduce((m, c) => (m > c ? m : c));
-  };
 }
