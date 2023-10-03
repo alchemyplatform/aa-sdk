@@ -14,7 +14,7 @@ head:
 
 # Transferring Ownership
 
-Not all accounts support transfering the owner (eg. SimpleAccount). However, a number of the accounts in this guide and in the Account Kit do! Let's see a few different ways we can transfer ownership of an Account (using Light Account as an example).
+Not all Smart Contract Account implementations support transfering the owner (e.g. `SimpleAccount`). However, a number of the accounts in this guide and in the Account Kit do, including Alchemy's Light Account! Let's see a few different ways we can transfer ownership of an Account (using Light Account as an example).
 
 ## Light Account
 
@@ -26,9 +26,30 @@ function transferOwnership(address newOwner) public virtual onlyOwner
 
 There a number of ways you can call this method using the Account Kit.
 
-### 1. Using `sendUserOperation`
+### 1. Using `LightSmartContractAccount`
 
-Assuming you have connected the `provider` to a `LightAccount` using `provider.connect`, you can call `sendUserOperation` on the provider and encoding the transferOwnership call data:
+::: code-group
+
+```ts [example.ts]
+import { LightSmartContractAccount } from "@alchemy/aa-accounts";
+import { provider } from "./provider";
+
+// this will return the address of the smart contract account you want to transfer ownerhip of
+const accountAddress = await provider.getAddress();
+const newOwner = "0x..."; // the address of the new owner
+
+const hash = LightSmartContractAccount.transferOwnership(provider, newOwner); // [!code focus:99]
+```
+
+<<< @/snippets/provider.ts
+
+:::
+
+Since `@alchemy/aa-accounts` exports a `LightAccount` ABI, the above approach makes it easy to transfer ownership. That said, you can also directly call `sendUserOperation` to execute the ownership transfer. As you'll see below, however, it is a bit verbose:
+
+### 2. Using `sendUserOperation`
+
+Assuming you have connected the `provider` to a `LightAccount` using `provider.connect`, you can call `sendUserOperation` on the provider and encoding the `transferOwnership` call data:
 
 ::: code-group
 
@@ -36,7 +57,7 @@ Assuming you have connected the `provider` to a `LightAccount` using `provider.c
 import { encodeFunctionData } from "viem";
 import { provider } from "./provider";
 
-// this will return the address of the account you want to transfer ownerhip of
+// this will return the address of the smart contract account you want to transfer ownerhip of
 const accountAddress = await provider.getAddress();
 const newOwner = "0x..."; // the address of the new owner
 
@@ -69,25 +90,4 @@ const { hash: userOperationHash } = provider.sendUserOperation({
 
 :::
 
-This is pretty verbose and requires you to clog up your code with the ABI. Luckily `@alchemy/aa-accounts` exports a LightAccount class that makes this much easier.
-
-### 2. Using `LightSmartContractAccount`
-
-::: code-group
-
-```ts [example.ts]
-import { LightSmartContractAccount } from "@alchemy/aa-accounts";
-import { provider } from "./provider";
-
-// this will return the address of the account you want to transfer ownerhip of
-const accountAddress = await provider.getAddress();
-const newOwner = "0x..."; // the address of the new owner
-
-const hash = LightSmartContractAccount.transferOwnership(provider, newOwner); // [!code focus:99]
-```
-
-<<< @/snippets/provider.ts
-
-:::
-
-see the [`LightSmartContractAccount`](/packages/aa-accounts/light-account/introduction) docs for more details about this class.
+See the [`LightSmartContractAccount`](/packages/aa-accounts/light-account/introduction) docs for more details about the Alchemy Light Account implementation.
