@@ -22,7 +22,7 @@ head:
 
 ```ts [example.ts]
 import { provider } from "./provider";
-
+// [!code focus:99]
 // get owner
 const owner = provider.account.getOwner();
 ```

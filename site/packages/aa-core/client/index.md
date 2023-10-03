@@ -6,15 +6,15 @@ head:
       content: Public Client
   - - meta
     - name: description
-      content: Overview of the Public Client Exported by aa-core
+      content: Overview of the Public Client exported by aa-core
   - - meta
     - property: og:description
-      content: Overview of the Public Client Exported by aa-core
+      content: Overview of the Public Client exported by aa-core
 ---
 
 # Public ERC-4337 Client
 
-Viem exports a `PublicClient` and utilities for creating the `PublicClient`. We extend that functionality here to provide a `PublicClient` that is also typed to work with the RPC endpoints introduced in ERC-4337.
+Viem exports a `PublicClient` and utilities for creating the `PublicClient`. We extend that functionality here to provide a `PublicClient` that is also typed to work with the RPC endpoints introduced in [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337).
 
 The `PublicErc4337Client` also has a number of methods that wrap the RPC Methods below to make it easier to interact with the RPC provider.
 

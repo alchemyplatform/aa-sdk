@@ -196,7 +196,7 @@ export interface ISmartAccountProvider<
    * This method is used to sign typed data as per ERC-712
    *
    * @param params - {@link SignTypedDataParameters}
-   * @returns the signed hash for the message passed
+   * @returns the signed hash for the typed data passed
    */
   signTypedData: (params: SignTypedDataParameters) => Promise<Hash>;
 

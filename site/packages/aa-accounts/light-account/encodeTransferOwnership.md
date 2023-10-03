@@ -22,7 +22,7 @@ head:
 
 ```ts [example.ts]
 import { provider } from "./provider";
-
+// [!code focus:99]
 // encode transfer pownership
 const newOwner = LocalAccountSigner.mnemonicToAccountSigner(NEW_OWNER_MNEMONIC);
 const encodedTransferOwnershipData =

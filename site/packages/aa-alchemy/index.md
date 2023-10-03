@@ -14,7 +14,7 @@ head:
 
 # `@alchemy/aa-alchemy`
 
-This package contains `AlchemyProvider`, an implementation of `SmartAccountProvider` class defined in `aa-core`. It also contains middleware for accessing the Alchemy Gas Manager (an [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) Paymaster) and for doing Fee Estimates according to the expectations of the Alchemy Rundler (an [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) Bundler). You may also find the util methods helpful. This repo is community maintained and we welcome contributions!
+This package contains `AlchemyProvider`, an implementation of `SmartAccountProvider` class defined in `aa-core`. It also contains middleware for accessing the Alchemy Gas Manager (an [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) Paymaster) and for doing Fee Estimates according to the expectations of the Alchemy Rundler (an ERC-4337 Bundler). You may also find the util methods helpful. This repo is community maintained and we welcome contributions!
 
 ## Getting started
 

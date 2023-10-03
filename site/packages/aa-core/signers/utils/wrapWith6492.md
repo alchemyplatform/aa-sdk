@@ -14,7 +14,7 @@ head:
 
 # wrapWith6492
 
-Allows you to generate a signature in [EIP-6492](https://eips.ethereum.org/EIPS/eip-6492) format which is useful to verifying signatures of undeployed smart contract accounts.
+Allows you to generate a signature in [ERC-6492](https://eips.ethereum.org/EIPS/eip-6492) format which is useful to verifying signatures of undeployed smart contract accounts.
 
 ## Usage
 
@@ -36,7 +36,7 @@ const signature = await wrapWith6492({
 
 ### Hash
 
-The original signature wrapped in EIP-6492 format
+The original signature wrapped in ERC-6492 format
 
 ## Paramters
 

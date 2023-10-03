@@ -14,7 +14,7 @@ head:
 
 # signMessageWith6492
 
-`signMessageWith6492` supports signing messages for deployed smart contract accounts, as well as undeployed accounts (counterfactual addresses) using EIP-6492.
+`signMessageWith6492` supports signing messages for deployed smart contract accounts, as well as undeployed accounts (counterfactual addresses) using [ERC-6492](https://eips.ethereum.org/EIPS/eip-6492).
 
 ## Usage
 
@@ -22,7 +22,7 @@ head:
 
 ```ts [example.ts]
 import { provider } from "./provider";
-
+// [!code focus:99]
 // sign message (works for undeployed and deployed accounts)
 const signedMessageWith6492 = provider.signMessageWith6492("test");
 ```

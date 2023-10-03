@@ -52,4 +52,4 @@ A Promise containing the transaction hash
 
 ### `request: RpcTransactionRequest`
 
-The viem `RpcTransactionRequest` object representing a traditional ethereum transaction.
+The `RpcTransactionRequest` object representing a traditional ethereum transaction.

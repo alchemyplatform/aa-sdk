@@ -22,7 +22,7 @@ head:
 
 ```ts [example.ts]
 import { provider } from "./provider";
-
+// [!code focus:99]
 // sign typed data
 const signedTypedData = provider.signTypedData({
   domain: {

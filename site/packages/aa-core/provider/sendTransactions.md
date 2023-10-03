@@ -72,4 +72,4 @@ A Promise containing the transaction hash
 
 ### `request: RpcTransactionRequest[]`
 
-a `RpcTransactionRequest` Array representing a traditional ethereum transaction
+An `RpcTransactionRequest` array representing a traditional ethereum transaction

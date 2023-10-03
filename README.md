@@ -2,7 +2,7 @@
 
 ⚠️ This repo is actively being developed and certain features might not be fully implemented yet or are subject to change ⚠️
 
-Alchemy's Account Abstraction Kit is an SDK that enables easy interactions with ERC-4337 compliant smart accounts. It supports bringing your own Account Contracts or using any of the currently available accounts. The SDK is built on top of `viem` to enable a lighter-weight bundle and is published with ESM default exports though also supports CJS.
+Alchemy's Account Abstraction Kit is an SDK that enables easy interactions with [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) compliant smart accounts. It supports bringing your own Account Contracts or using any of the currently available accounts. The SDK is built on top of `viem` to enable a lighter-weight bundle and is published with ESM default exports though also supports CJS.
 
 ## Getting Started
 
@@ -208,7 +208,7 @@ const { hash } = await signer.sendUserOperation({
 
 The primary interfaces are the `SmartAccountProvider` and `BaseSmartContractAccount`.
 
-The `SmartAccountProvider` is an ERC-1193 compliant Provider that wraps JSON RPC methods and some Wallet Methods (signing, sendTransaction, etc). It also provides two utility methods for sending UserOperations:
+The `SmartAccountProvider` is an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compliant Provider that wraps JSON RPC methods and some Wallet Methods (signing, sendTransaction, etc). It also provides two utility methods for sending UserOperations:
 
 1. `sendUserOperation` -- this takes in `target`, `callData`, and an optional `value` which then constructs a UserOperation (UO), sends it, and returns the `hash` of the UO. It handles estimating gas, fetching fee data, (optionally) requesting paymasterAndData, and lastly signing. This is done via a middleware stack that runs in a specific order. The middleware order is `getDummyPaymasterData` => `estimateGas` => `getFeeData` => `getPaymasterAndData`. The paymaster fields are set to `0x` by default. They can be changed using `provider.withPaymasterMiddleware`.
 2. `sendTransaction` -- this takes in a traditional Transaction Request object which then gets converted into a UO. Currently, the only data being used from the Transaction Request object is `from`, `to`, `data` and `value`. Support for other fields is coming soon.
@@ -217,7 +217,7 @@ If you want to add support for your own `SmartAccounts` then you will need to pr
 
 1. `getDummySignature` -- this method should return a signature that will not `revert` during validation. It does not have to pass validation, just not cause the contract to revert. This is required for gas estimation so that the gas estimate are accurate.
 2. `encodeExecute` -- this method should return the abi encoded function data for a call to your contract's `execute` method
-3. `signMessage` -- this should return an ERC-191 compliant message and is used to sign UO Hashes
+3. `signMessage` -- this should return an [EIP-191](https://eips.ethereum.org/EIPS/eip-191) compliant message and is used to sign UO Hashes
 4. `getAccountInitCode` -- this should return the init code that will be used to create an account if one does not exist. Usually this is the concatenation of the account's factory address and the abi encoded function data of the account factory's `createAccount` method.
 
 ### Paymaster Middleware

@@ -3,18 +3,18 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: LightSmartContractAccount • signTypedDataWith6492
+      content: ISmartAccountProvider • signTypedData
   - - meta
     - name: description
-      content: Overview of the signTypedDataWith6492 method on LightSmartContractAccount
+      content: Overview of the signTypedData method on ISmartAccountProvider
   - - meta
     - property: og:description
-      content: Overview of the signTypedDataWith6492 method on LightSmartContractAccount
+      content: Overview of the signTypedData method on ISmartAccountProvider
 ---
 
-# signTypedDataWith6492
+# signTypedData
 
-`signTypedDataWith6492` supports signing typed data for deployed smart contract accounts, as well as undeployed accounts (counterfactual addresses) using [ERC-6492](https://eips.ethereum.org/EIPS/eip-6492).
+This method signs sign typed data using the connected account with [ERC-712](https://eips.ethereum.org/EIPS/eip-712).
 
 ## Usage
 
@@ -23,8 +23,8 @@ head:
 ```ts [example.ts]
 import { provider } from "./provider";
 // [!code focus:99]
-// sign typed data (works for undeployed and deployed accounts)
-const signedTypedDataWith6492 = provider.signTypedDataWith6492({
+// sign typed data
+const signedTypedData = provider.signTypedData({
   domain: {
     name: "Ether Mail",
     version: "1",
@@ -58,13 +58,14 @@ const signedTypedDataWith6492 = provider.signTypedDataWith6492({
 ```
 
 <<< @/snippets/provider.ts
+
 :::
 
 ## Returns
 
 ### `Promise<Hash>`
 
-A Promise containing the signature of the typed data, additionally wrapped in ERC-6492 format if the account is undeployed.
+A Promise containing the signature of the typed data
 
 ## Parameters
 

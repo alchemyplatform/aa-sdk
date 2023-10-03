@@ -14,10 +14,7 @@ head:
 
 # request
 
-EIP-1193 compliant request method. Executes various Ethereum-related JSON-RPC methods based on the provided 'method' (the Ethereum JSON-RPC method to be executed) and 'params' (optional array of parameters for the rpc method).
-
-Currently, `eth_sendTransaction` `eth_sign` `personal_sign` `eth_signTypedData_v4` `eth_chainId` have been tested, but other rpc methods have not been tested yet.
-Other than the tested methods above, the function delegates the request to the underlying RPC client.
+[EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compliant request method using the connected account. Executes various Ethereum-related JSON-RPC methods based on the provided 'method' (the Ethereum JSON-RPC method to be executed) and 'params' (optional array of parameters for the rpc method).
 
 ## Usage
 

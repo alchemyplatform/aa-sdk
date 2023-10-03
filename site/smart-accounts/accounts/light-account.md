@@ -14,7 +14,7 @@ head:
 
 # Light Account
 
-Light Account is a simple, secure, and cost-effective smart account implementation. It supports features such as owner transfers, EIP-1271 message signing and batched transactions. We recommend using Light Account for most use cases.
+Light Account is a simple, secure, and cost-effective smart account implementation. It supports features such as owner transfers, [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) message signing and batched transactions. We recommend using Light Account for most use cases.
 
 ## Using Light Account
 

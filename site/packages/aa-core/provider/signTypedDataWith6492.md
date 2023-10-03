@@ -3,18 +3,18 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: LightSmartContractAccount • signTypedDataWith6492
+      content: ISmartAccountProvider • signTypedDataWith6492
   - - meta
     - name: description
-      content: Overview of the signTypedDataWith6492 method on LightSmartContractAccount
+      content: Overview of the signTypedDataWith6492 method on ISmartAccountProvider
   - - meta
     - property: og:description
-      content: Overview of the signTypedDataWith6492 method on LightSmartContractAccount
+      content: Overview of the signTypedDataWith6492 method on ISmartAccountProvider
 ---
 
 # signTypedDataWith6492
 
-`signTypedDataWith6492` supports signing typed data for deployed smart contract accounts, as well as undeployed accounts (counterfactual addresses) using [ERC-6492](https://eips.ethereum.org/EIPS/eip-6492).
+This method supports signing typed data for deployed smart contract accounts, as well as undeployed accounts (counterfactual addresses) using [ERC-6492](https://eips.ethereum.org/EIPS/eip-6492).
 
 ## Usage
 
@@ -58,6 +58,7 @@ const signedTypedDataWith6492 = provider.signTypedDataWith6492({
 ```
 
 <<< @/snippets/provider.ts
+
 :::
 
 ## Returns
