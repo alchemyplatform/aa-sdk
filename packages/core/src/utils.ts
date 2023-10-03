@@ -155,3 +155,17 @@ export function defineReadOnly<T, K extends keyof T>(
     writable: false,
   });
 }
+
+/**
+ * Utility function to get the maximum bigint value
+ *
+ * @param args bigint values to compare
+ * @returns the maximum bigint value among the input values
+ */
+export function bigIntMax(...args: bigint[]) {
+  if (!args.length) {
+    return undefined;
+  }
+
+  return args.reduce((m, c) => (m > c ? m : c));
+}

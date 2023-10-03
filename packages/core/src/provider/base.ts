@@ -34,6 +34,7 @@ import {
   getUserOperationHash,
   resolveProperties,
   type Deferrable,
+  bigIntMax,
 } from "../utils.js";
 import type {
   AccountMiddlewareFn,
@@ -254,13 +255,13 @@ export class SmartAccountProvider<
       };
     });
 
-    const maxFeePerGas = this.bigIntMax(
+    const maxFeePerGas = bigIntMax(
       ...requests
         .filter((x) => x.maxFeePerGas != null)
         .map((x) => fromHex(x.maxFeePerGas!, "bigint"))
     );
 
-    const maxPriorityFeePerGas = this.bigIntMax(
+    const maxPriorityFeePerGas = bigIntMax(
       ...requests
         .filter((x) => x.maxPriorityFeePerGas != null)
         .map((x) => fromHex(x.maxPriorityFeePerGas!, "bigint"))
@@ -401,20 +402,20 @@ export class SmartAccountProvider<
     const newUo = await this._runMiddlewareStack(data);
 
     if (newUo.maxFeePerGas)
-      newUo.maxFeePerGas = this.bigIntMax(
+      newUo.maxFeePerGas = bigIntMax(
         BigInt(newUo.maxFeePerGas),
         (BigInt(oldUO.maxFeePerGas) * 110n) / 100n
       );
 
     if (newUo.maxPriorityFeePerGas)
-      newUo.maxPriorityFeePerGas = this.bigIntMax(
+      newUo.maxPriorityFeePerGas = bigIntMax(
         BigInt(newUo.maxPriorityFeePerGas),
         (BigInt(oldUO.maxPriorityFeePerGas) * 110n) / 100n
       );
 
     // callGasLimit can change if some other UserOp or Transaction took place meanwhile.
     if (newUo.callGasLimit)
-      newUo.callGasLimit = this.bigIntMax(
+      newUo.callGasLimit = bigIntMax(
         BigInt(newUo.callGasLimit),
         BigInt(oldUO.callGasLimit)
       );

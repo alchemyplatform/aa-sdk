@@ -46,6 +46,7 @@ export {
   getChain,
   getUserOperationHash,
   resolveProperties,
+  bigIntMax,
 } from "./utils.js";
 
 export { Logger } from "./logger.js";
