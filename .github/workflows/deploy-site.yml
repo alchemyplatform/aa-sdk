@@ -1,5 +1,11 @@
 name: Deploy VitePress site to Pages
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      no_base_path:
+        required: false
+        default: false
+        type: boolean
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -59,3 +65,5 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
+        env:
+          NO_BASE_PATH: ${{ inputs.no_base_path }}

@@ -5,11 +5,13 @@ import { defineConfig } from "vitepress";
 const getRepoRoute = $.sync`git rev-parse --show-toplevel`;
 const { stdout: basePath } = $.sync`basename ${getRepoRoute}`;
 
+const noBasePath = process.env.NO_BASE_PATH === "true";
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "Account Kit",
   description: "Account Abstraction Legos",
-  base: `/${basePath}`,
+  base: noBasePath ? undefined : `/${basePath}`,
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
