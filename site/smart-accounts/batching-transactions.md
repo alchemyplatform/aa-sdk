@@ -29,7 +29,6 @@ The `SmartAccountProvider` supports passing either a single `UserOperation` or a
 
 ```ts [example.ts]
 import { provider } from "./provider";
-
 // [!code focus:99]
 // the hash returned here is the hash of the User Operation
 const { hash } = await provider.sendUserOperation([
@@ -56,7 +55,6 @@ The `SmartAccountProvider` supports sending `UserOperation`s and waiting for the
 
 ```ts [example.ts]
 import { provider } from "./provider";
-
 // [!code focus:99]
 // the hash returned here is the hash of the mined Tx that includes the UserOperation
 const hash = await provider.sendTransactions([

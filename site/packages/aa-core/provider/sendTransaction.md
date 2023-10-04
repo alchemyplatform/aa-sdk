@@ -18,7 +18,7 @@ This takes an ethereum transaction and converts it into a UserOperation, sends t
 
 If you don't want to wait for the UserOperation to mine, it's recommended to user [sendUserOperation](./sendUserOperation) instead.
 
-Currently, the only data being used from the Transaction Request object is `from`, `to`, `data` and `value`. Support for other fields is coming soon.
+Note that `to` field of transaction is required, and among other fields of transaction, only `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas` fields are considered if given. Support for other fields is coming soon.
 
 ## Usage
 
@@ -28,7 +28,7 @@ Currently, the only data being used from the Transaction Request object is `from
 import { provider } from "./provider";
 // [!code focus:99]
 const txHash = await provider.sendTransaction({
-  from,
+  from, // ignored
   to,
   data: encodeFunctionData({
     abi: ContractABI.abi,
@@ -52,4 +52,4 @@ A Promise containing the transaction hash
 
 ### `request: RpcTransactionRequest`
 
-The `RpcTransactionRequest` object representing a traditional ethereum transaction.
+The `RpcTransactionRequest` object representing a traditional ethereum transaction

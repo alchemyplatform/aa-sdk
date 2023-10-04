@@ -31,7 +31,7 @@ Notable differences between `LightSmartContractAccount` and `SimpleSmartContract
 
 ```ts [example.ts]
 import { provider } from "./provider";
-
+// [!code focus:99]
 // sign message (works for undeployed and deployed accounts)
 const signedMessageWith6492 = provider.signMessageWith6492("test");
 

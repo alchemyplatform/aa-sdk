@@ -16,6 +16,8 @@ head:
 
 `sendTransaction` is a method on `AccountSigner` that sends transactions on behalf of the `AccountSigner`'s smart contract account, with request and response formatted as if you were using the ethers.js library.
 
+Note that `to` field of transaction is required, and among other fields of transaction, only `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas` fields are considered and optional. Support for other fields is coming soon.
+
 ## Usage
 
 ::: code-group
@@ -23,8 +25,15 @@ head:
 ```ts [example.ts]
 import { signer } from "./ethers-signer";
 
-// get the signer's underlying viem client with EIP-4337 capabilties
-const client = signer.getPublicErc4337Client();
+const txHash = await signer.sendTransaction({
+  from, // ignored
+  to,
+  data: encodeFunctionData({
+    abi: ContractABI.abi,
+    functionName: "func",
+    args: [arg1, arg2, ...],
+  }),
+});
 ```
 
 <<< @/snippets/ethers-signer.ts

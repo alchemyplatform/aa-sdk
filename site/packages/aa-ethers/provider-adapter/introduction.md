@@ -29,7 +29,7 @@ Notable differences between `EthersProviderAdapter` and `JsonRpcProvider` are im
 
 ```ts [example.ts]
 import { provider } from "./provider";
-
+// [!code focus:99]
 // EIP-1193 compliant requests
 const chainId = await provider.send("eth_chainId", []);
 

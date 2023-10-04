@@ -22,6 +22,7 @@ head:
 
 ```ts [example.ts]
 import { provider } from "./provider";
+// [!code focus:99]
 
 // use Alchemy Gas Manager to sponsorship transactions
 const providerWithGasManager = provider.withAlchemyGasManager({

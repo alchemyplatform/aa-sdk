@@ -22,7 +22,7 @@ Attempts to fetch for UserOperationReceipt `txMaxRetries` amount of times, at an
 
 ```ts [example.ts]
 import { provider } from "./provider";
-
+// [!code focus:99]
 const userOperationResult = await provider.sendUserOperation({
   data: "0xCalldata",
   target: "0xTarget",
@@ -56,7 +56,7 @@ The hash of the user operation returned from [sendUserOperation](./sendUserOpera
 
 ```ts [example.ts]
 import { provider } from "./provider";
-
+// [!code focus:99]
 provider.waitForUserOperationTransaction({
   hash: "0xUserOpResultHash", // [!code focus]
 });
