@@ -37,11 +37,11 @@ If the Light Account doesn't fit your specific needs, you can always use your ow
 
 ## Benchmarks
 
-Here are some benchmarks for the Light Account and other smart account implementations:
+Here are some benchmarks for the Light Account vs other smart account implementations:
 
 | Account              | Creation | Native transfer | ERC20 transfer | Total Gas |
 | -------------------- | -------- | --------------- | -------------- | --------- |
-| Alchemy LightAccount | 279746   | 100844          | 90345          | 470935    |
+| Alchemy LightAccount | 279710   | 100844          | 90345          | 470899    |
 | Kernel v2.1-lite     | 230968   | 101002          | 90321          | 422291    |
 | Kernel v2.1          | 265215   | 106460          | 96038          | 467713    |
 | Biconomy             | 270013   | 104408          | 93730          | 468151    |
