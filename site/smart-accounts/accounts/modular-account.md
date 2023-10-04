@@ -14,4 +14,4 @@ head:
 
 # Modular Account
 
-Support for Modular Accounts is coming soon. Modular Accounts are based on the `EIP-6900` spec and offer a lot more flexibility and extensibility. You can read more about EIP-6900 [here](/eip-6900)
+Support for Modular Accounts is coming soon. Modular Accounts are based on the `EIP-6900` spec and offer a lot more flexibility and extensibility. You can read more about EIP-6900 [here](/erc-6900)

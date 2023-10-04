@@ -63,6 +63,7 @@ export default defineConfig({
           { text: "Transferring Ownership", link: "/transferring-ownership" },
         ],
       },
+      { text: "ERC-6900", link: "/erc-6900" },
       // Per Package docs
       {
         text: "aa-core",
