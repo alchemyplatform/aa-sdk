@@ -67,3 +67,8 @@ const result = await LightSmartContractAccount.transferOwnership(
 
 <<< @/snippets/provider.ts
 :::
+
+## Developer Links
+
+[LightAccount Github Repo](https://github.com/alchemyplatform/light-account)
+[Quantstamp Audit Report](https://github.com/alchemyplatform/light-account/blob/main/Quantstamp-Audit.pdf)
