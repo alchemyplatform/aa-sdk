@@ -53,7 +53,10 @@ Let's see it in action with `aa-alchemy` and `LightSmartContractAccount` from `a
 
 ```ts [example.ts]
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
-import { LightSmartContractAccount } from "@alchemy/aa-accounts";
+import {
+  LightSmartContractAccount,
+  getDefaultLightAccountFactory,
+} from "@alchemy/aa-accounts";
 import { sepolia } from "viem/chains";
 import { newTurnkeySigner } from "./turnkey";
 
@@ -70,7 +73,7 @@ async function main() {
         entryPointAddress: "0x...",
         chain: rpcClient.chain,
         owner,
-        factoryAddress: "0x...",
+        factoryAddress: getDefaultLightAccountFactory(sepolia),
         rpcClient,
       })
   );

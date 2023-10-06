@@ -1,4 +1,7 @@
-import { LightSmartContractAccount } from "@alchemy/aa-accounts";
+import {
+  LightSmartContractAccount,
+  getDefaultLightAccountFactory,
+} from "@alchemy/aa-accounts";
 import { LocalAccountSigner, SmartAccountSigner } from "@alchemy/aa-core";
 import { polygonMumbai } from "viem/chains";
 import { entryPointAddress, provider } from "./ethers-provider.js";
@@ -12,7 +15,7 @@ export const signer = provider.connectToAccount(
     new LightSmartContractAccount({
       entryPointAddress: entryPointAddress,
       chain: polygonMumbai,
-      factoryAddress: "0xfactoryAddress",
+      factoryAddress: getDefaultLightAccountFactory(polygonMumbai),
       rpcClient,
       owner,
     })

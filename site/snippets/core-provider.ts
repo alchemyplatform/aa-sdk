@@ -1,4 +1,7 @@
-import { LightSmartContractAccount } from "@alchemy/aa-accounts";
+import {
+  LightSmartContractAccount,
+  getDefaultLightAccountFactory,
+} from "@alchemy/aa-accounts";
 import {
   LocalAccountSigner,
   SmartAccountProvider,
@@ -18,7 +21,7 @@ export const provider = new SmartAccountProvider({
     new LightSmartContractAccount({
       entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
       chain: polygonMumbai,
-      factoryAddress: "0xfactoryAddress",
+      factoryAddress: getDefaultLightAccountFactory(polygonMumbai),
       rpcClient,
       owner,
     })
