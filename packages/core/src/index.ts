@@ -13,7 +13,10 @@ export type { SimpleSmartAccountParams } from "./account/simple.js";
 export type * from "./account/types.js";
 export { LocalAccountSigner } from "./signer/local-account.js";
 export type { SmartAccountSigner } from "./signer/types.js";
-export { verifyEIP6492Signature, wrapWith6492 } from "./signer/utils.js";
+export {
+  verifyEIP6492Signature,
+  wrapSignatureWith6492,
+} from "./signer/utils.js";
 export { WalletClientSigner } from "./signer/wallet-client.js";
 
 export {

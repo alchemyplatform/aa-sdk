@@ -3,16 +3,16 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: wrapWith6492
+      content: wrapSignatureWith6492
   - - meta
     - name: description
-      content: Description of the wrapWith6492 utility method
+      content: Description of the wrapSignatureWith6492 utility method
   - - meta
     - property: og:description
-      content: Description of the wrapWith6492 utility method
+      content: Description of the wrapSignatureWith6492 utility method
 ---
 
-# wrapWith6492
+# wrapSignatureWith6492
 
 Allows you to generate a signature in [ERC-6492](https://eips.ethereum.org/EIPS/eip-6492) format which is useful to verifying signatures of undeployed smart contract accounts.
 
@@ -21,11 +21,11 @@ Allows you to generate a signature in [ERC-6492](https://eips.ethereum.org/EIPS/
 ::: code-group
 
 ```ts [example.ts]
-import { wrapWith6492 } from "@alchemy/aa-core";
+import { wrapSignatureWith6492 } from "@alchemy/aa-core";
 
-const signature = await wrapWith6492({
+const signature = await wrapSignatureWith6492({
   factoryAddress: "0xAccountFactoryAddress",
-  initCode: "0xinitCode",
+  factoryCallData: "0xfactoryCallData",
   signature: "0xSigntatureToWrapAndVerifyLater",
 });
 ```
@@ -46,7 +46,7 @@ The original signature wrapped in ERC-6492 format
 
   The factory address that will be used to deploy the smart contract account that you want to verify the signature of
 
-- #### `initCode: Hex`
+- #### `factoryCallData: Hex`
 
   The call data to the factory to create the undeployed account
 

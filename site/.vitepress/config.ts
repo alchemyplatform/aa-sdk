@@ -196,7 +196,10 @@ export default defineConfig({
                 collapsed: true,
                 base: "/packages/aa-core/signers/utils",
                 items: [
-                  { text: "wrapWith6492", link: "/wrapWith6492" },
+                  {
+                    text: "wrapSignatureWith6492",
+                    link: "/wrapSignatureWith6492",
+                  },
                   {
                     text: "verifyEIP6492Signature",
                     link: "/verifyEIP6492Signature",

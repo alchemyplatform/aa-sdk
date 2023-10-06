@@ -16,6 +16,7 @@ import type {
   SupportedTransports,
 } from "../client/types.js";
 import { Logger } from "../logger.js";
+import { wrapSignatureWith6492 } from "../signer/utils.js";
 import type { BatchUserOperationCallData } from "../types.js";
 import type { ISmartContractAccount, SignTypedDataParams } from "./types.js";
 
@@ -113,16 +114,6 @@ export abstract class BaseSmartContractAccount<
   // #region optional-methods
 
   /**
-   * This method should wrap the result of `signMessage` as per
-   * [EIP-6492](https://eips.ethereum.org/EIPS/eip-6492)
-   *
-   * @param _msg -- the message to sign
-   */
-  async signMessageWith6492(_msg: string | Uint8Array): Promise<`0x${string}`> {
-    throw new Error("signMessageWith6492 not supported");
-  }
-
-  /**
    * If your contract supports signing and verifying typed data,
    * you should implement this method.
    *
@@ -133,16 +124,64 @@ export abstract class BaseSmartContractAccount<
   }
 
   /**
+   * This method should wrap the result of `signMessage` as per
+   * [EIP-6492](https://eips.ethereum.org/EIPS/eip-6492)
+   *
+   * @param msg -- the message to sign
+   */
+  async signMessageWith6492(msg: string | Uint8Array): Promise<`0x${string}`> {
+    const [isDeployed, signature] = await Promise.all([
+      this.isAccountDeployed(),
+      this.signMessage(msg),
+    ]);
+
+    return this.create6492Signature(isDeployed, signature);
+  }
+
+  /**
    * Similar to the signMessageWith6492 method above,
    * this method should wrap the result of `signTypedData` as per
    * [EIP-6492](https://eips.ethereum.org/EIPS/eip-6492)
    *
-   * @param _params -- Typed Data params to sign
+   * @param params -- Typed Data params to sign
    */
   async signTypedDataWith6492(
-    _params: SignTypedDataParams
+    params: SignTypedDataParams
   ): Promise<`0x${string}`> {
-    throw new Error("signTypedDataWith6492 not supported");
+    const [isDeployed, signature] = await Promise.all([
+      this.isAccountDeployed(),
+      this.signTypedData(params),
+    ]);
+
+    return this.create6492Signature(isDeployed, signature);
+  }
+
+  private async create6492Signature(
+    isDeployed: boolean,
+    signature: Hash
+  ): Promise<Hash> {
+    if (isDeployed) {
+      return signature;
+    }
+
+    // https://eips.ethereum.org/EIPS/eip-4337#first-time-account-creation
+    // The initCode field (if non-zero length) is parsed as a 20-byte address,
+    // followed by calldata to pass to this address.
+    // The factory address is the first 40 char after the 0x, and the callData is the rest.
+    const initCode = await this.getAccountInitCode();
+    const factoryAddress = `0x${initCode.substring(2, 42)}` as Hex;
+    const factoryCalldata = `0x${initCode.substring(42)}` as Hex;
+
+    Logger.debug(
+      `[BaseSmartContractAccount](create6492Signature) initCode: ${initCode}, \
+        factoryAddress: ${factoryAddress}, factoryCalldata: ${factoryCalldata}`
+    );
+
+    return wrapSignatureWith6492({
+      factoryAddress,
+      factoryCalldata,
+      signature,
+    });
   }
 
   /**

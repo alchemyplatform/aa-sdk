@@ -56,9 +56,9 @@ export class SimpleSmartContractAccount<
   }
 
   override async encodeBatchExecute(
-    _txs: BatchUserOperationCallData
+    txs: BatchUserOperationCallData
   ): Promise<`0x${string}`> {
-    const [targets, datas] = _txs.reduce(
+    const [targets, datas] = txs.reduce(
       (accum, curr) => {
         accum[0].push(curr.target);
         accum[1].push(curr.data);
