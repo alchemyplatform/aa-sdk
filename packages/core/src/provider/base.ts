@@ -322,30 +322,19 @@ export class SmartAccountProvider<
     data: UserOperationCallData | BatchUserOperationCallData,
     overrides?: UserOperationOverrides
   ) => {
-    if (!this.account) {
-      throw new Error("account not connected!");
-    }
+    const uoStruct = await this.UserOperationCallDataToStruct(data);
 
-    const initCode = await this.account.getInitCode();
-    const uoStruct = await asyncPipe(
+    const uoStructAfterMiddlewares = await asyncPipe(
       this.dummyPaymasterDataMiddleware,
       this.feeDataGetter,
       this.gasEstimator,
-      this.paymasterDataMiddleware,
       this.customMiddleware ?? noOpMiddleware,
       // This applies the overrides if they've been passed in
-      async (struct) => ({ ...struct, ...overrides })
-    )({
-      initCode,
-      sender: this.getAddress(),
-      nonce: this.account.getNonce(),
-      callData: Array.isArray(data)
-        ? this.account.encodeBatchExecute(data)
-        : this.account.encodeExecute(data.target, data.value ?? 0n, data.data),
-      signature: this.account.getDummySignature(),
-    } as Deferrable<UserOperationStruct>);
+      async (struct) => ({ ...struct, ...overrides }),
+      this.paymasterDataMiddleware
+    )(uoStruct);
 
-    return resolveProperties(uoStruct);
+    return resolveProperties(uoStructAfterMiddlewares);
   };
 
   sendUserOperation = async (
@@ -583,5 +572,25 @@ export class SmartAccountProvider<
     )(data);
 
     return resolveProperties(uoStruct);
+  };
+
+  private UserOperationCallDataToStruct = async (
+    data: UserOperationCallData | BatchUserOperationCallData
+  ): Promise<Deferrable<UserOperationStruct>> => {
+    if (!this.account) {
+      throw new Error("account not connected!");
+    }
+
+    const initCode = await this.account.getInitCode();
+
+    return {
+      initCode,
+      sender: this.getAddress(),
+      nonce: this.account.getNonce(),
+      callData: Array.isArray(data)
+        ? this.account.encodeBatchExecute(data)
+        : this.account.encodeExecute(data.target, data.value ?? 0n, data.data),
+      signature: this.account.getDummySignature(),
+    } as Deferrable<UserOperationStruct>;
   };
 }
