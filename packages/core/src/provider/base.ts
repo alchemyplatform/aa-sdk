@@ -324,15 +324,10 @@ export class SmartAccountProvider<
   ) => {
     const uoStruct = await this.UserOperationCallDataToStruct(data);
 
-    const uoStructAfterMiddlewares = await asyncPipe(
-      this.dummyPaymasterDataMiddleware,
-      this.feeDataGetter,
-      this.gasEstimator,
-      this.customMiddleware ?? noOpMiddleware,
-      // This applies the overrides if they've been passed in
-      async (struct) => ({ ...struct, ...overrides }),
-      this.paymasterDataMiddleware
-    )(uoStruct);
+    const uoStructAfterMiddlewares = await this._runMiddlewareStack(
+      uoStruct,
+      overrides
+    );
 
     return resolveProperties(uoStructAfterMiddlewares);
   };
@@ -554,21 +549,17 @@ export class SmartAccountProvider<
   };
 
   private _runMiddlewareStack = async (
-    data: UserOperationRequest,
+    data: Deferrable<UserOperationStruct>,
     overrides?: UserOperationOverrides
   ) => {
-    if (!this.account) {
-      throw new Error("account not connected!");
-    }
-
     const uoStruct = await asyncPipe(
       this.dummyPaymasterDataMiddleware,
       this.feeDataGetter,
       this.gasEstimator,
-      this.paymasterDataMiddleware,
       this.customMiddleware ?? noOpMiddleware,
       // This applies the overrides if they've been passed in
-      async (struct) => ({ ...struct, ...overrides })
+      async (struct) => ({ ...struct, ...overrides }),
+      this.paymasterDataMiddleware
     )(data);
 
     return resolveProperties(uoStruct);
