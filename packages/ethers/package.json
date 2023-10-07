@@ -61,7 +61,7 @@
     "@ethersproject/keccak256": "^5.7.0",
     "@ethersproject/providers": "^5.7.2",
     "@ethersproject/wallet": "^5.7.0",
-    "viem": "^1.5.3"
+    "viem": "^1.10.9"
   },
   "repository": {
     "type": "git",

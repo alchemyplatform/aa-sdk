@@ -8,8 +8,10 @@ import {
   mainnet,
   optimism,
   optimismGoerli,
+  polygon,
+  polygonMumbai,
   sepolia,
-} from "viem/dist/types/chains";
+} from "viem/chains";
 
 /**
  * Utility method returning the light account factory address given a {@link chains.Chain} object
@@ -23,6 +25,8 @@ export const getDefaultLightAccountFactory = (chain: Chain): Address => {
     case mainnet.id:
     case sepolia.id:
     case goerli.id:
+    case polygon.id:
+    case polygonMumbai.id:
     case optimism.id:
     case optimismGoerli.id:
     case arbitrum.id:

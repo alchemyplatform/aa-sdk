@@ -12,24 +12,18 @@
   resolved "https://registry.yarnpkg.com/@adraffy/ens-normalize/-/ens-normalize-1.9.4.tgz#aae21cb858bbb0411949d5b7b3051f4209043f62"
   integrity sha512-UK0bHA7hh9cR39V+4gl2/NnBBjoXIxkuWAPCaY4X7fbH4L/azIi7ilWOCjMUYfpJgraLUAqkRi2BqrjME8Rynw==
 
-"@alchemy/aa-accounts@latest":
+"@alchemy/aa-accounts@file:packages/accounts":
   version "0.1.0-alpha.32"
-  resolved "https://registry.yarnpkg.com/@alchemy/aa-accounts/-/aa-accounts-0.1.0-alpha.32.tgz#848c7e64cecfbfe42d5643c9fba58b1974b13a95"
-  integrity sha512-aFVJrQnygXETE7U0knqPLKRxcNhfxV0cBRhlIAJc2AXMt/bC5bJv8O/kkS0BYP7A221lmafCDJXwozd9ssgoRA==
-  dependencies:
-    viem "^1.5.3"
-
-"@alchemy/aa-alchemy@latest":
-  version "0.1.0-alpha.30"
-  resolved "https://registry.yarnpkg.com/@alchemy/aa-alchemy/-/aa-alchemy-0.1.0-alpha.30.tgz#9808843879acda6188efa8c90bafab10da334529"
-  integrity sha512-q99kqHHXaZK673OLy0PW9IPr8k+siSNcX/H0ONp0+S7fKTBZhY1F79P4LcItseGwM6cQI+RAc4ugLlTukxDjbg==
   dependencies:
     viem "^1.10.9"
 
-"@alchemy/aa-core@latest":
-  version "0.1.0-alpha.30"
-  resolved "https://registry.yarnpkg.com/@alchemy/aa-core/-/aa-core-0.1.0-alpha.30.tgz#0aaab82aa7274c4832695777a73b35b507bbdbae"
-  integrity sha512-2cnt7bZ8c+PnLt3GP7FTGzkRNjbG2pjR2+lFHRC+wk3YU6xhdbcX8SQ2nv9Bj3uBA4XxHlCFUguvfLJ+Mdw4hg==
+"@alchemy/aa-alchemy@file:packages/alchemy":
+  version "0.1.0-alpha.32"
+  dependencies:
+    viem "^1.10.9"
+
+"@alchemy/aa-core@file:packages/core":
+  version "0.1.0-alpha.32"
   dependencies:
     abitype "^0.8.3"
     eventemitter3 "^5.0.1"
@@ -12083,7 +12077,7 @@ valtio@1.11.0:
     proxy-compare "2.5.1"
     use-sync-external-store "1.2.0"
 
-viem@^1.0.0, viem@^1.10.9, viem@^1.5.3:
+viem@^1.0.0, viem@^1.10.9:
   version "1.10.9"
   resolved "https://registry.yarnpkg.com/viem/-/viem-1.10.9.tgz#9b16ade429b234f7b33a79544badddbb5498b13c"
   integrity sha512-fhQxnMBFwGbyE/VOfcvcavxAPyqIHSgOB793gQcMPH1B9ahQvjMe3C3icqypC01ACaqpDPgYWGfvF/ExTeIPuA==

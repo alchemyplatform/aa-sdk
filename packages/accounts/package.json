@@ -61,6 +61,6 @@
   "homepage": "https://github.com/alchemyplatform/aa-sdk#readme",
   "gitHead": "ee46e8bb857de3b631044fa70714ea706d9e317d",
   "dependencies": {
-    "viem": "^1.5.3"
+    "viem": "^1.10.9"
   }
 }
