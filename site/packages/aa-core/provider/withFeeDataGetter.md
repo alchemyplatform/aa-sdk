@@ -49,10 +49,7 @@ const userOpData = {
 
 const resultingUO = await provider.buildUserOperation(userOpData);
 console.log("Modified maxFeePerGas:", resultingUO.maxFeePerGas);
-console.log(
-  "Modified maxPriorityFeePerGas:",
-  resultingUO.maxPriorityFeePerGas
-);
+console.log("Modified maxPriorityFeePerGas:", resultingUO.maxPriorityFeePerGas);
 ```
 
 <<< @/snippets/provider.ts
