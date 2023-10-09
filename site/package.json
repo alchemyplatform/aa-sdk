@@ -9,7 +9,9 @@
     "preview": "vitepress preview"
   },
   "devDependencies": {
+    "autoprefixer": "^10.4.16",
     "execa": "^8.0.1",
+    "tailwindcss": "^3.3.3",
     "vitepress": "^1.0.0-rc.14",
     "vue": "^3.2.45"
   }
