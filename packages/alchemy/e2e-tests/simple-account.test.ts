@@ -112,6 +112,45 @@ describe("Simple Account Tests", () => {
 
     await expect(txnHash).resolves.not.toThrowError();
   }, 50000);
+
+  it("should execute successfully via drop and replace", async () => {
+    const signer = givenConnectedProvider({
+      owner,
+      chain,
+    });
+
+    const result = await signer.sendUserOperation({
+      target: await signer.getAddress(),
+      data: "0x",
+    });
+    const replacedResult = await signer.dropAndReplaceUserOperation(
+      result.request
+    );
+
+    const txnHash = signer.waitForUserOperationTransaction(replacedResult.hash);
+    await expect(txnHash).resolves.not.toThrowError();
+  }, 50000);
+
+  it("should execute successfully via drop and replace when using paymaster", async () => {
+    const signer = givenConnectedProvider({
+      owner,
+      chain,
+    }).withAlchemyGasManager({
+      policyId: PAYMASTER_POLICY_ID,
+      entryPoint: ENTRYPOINT_ADDRESS,
+    });
+
+    const result = await signer.sendUserOperation({
+      target: await signer.getAddress(),
+      data: "0x",
+    });
+    const replacedResult = await signer.dropAndReplaceUserOperation(
+      result.request
+    );
+
+    const txnHash = signer.waitForUserOperationTransaction(replacedResult.hash);
+    await expect(txnHash).resolves.not.toThrowError();
+  }, 50000);
 });
 
 const givenConnectedProvider = ({

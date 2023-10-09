@@ -40,15 +40,17 @@ export type {
 export type * from "./provider/types.js";
 
 export type * from "./types.js";
-export type * from "./utils.js";
+export type * from "./utils/index.js";
 export {
   asyncPipe,
+  bigIntMax,
+  bigIntPercent,
   deepHexlify,
   defineReadOnly,
   getChain,
   getUserOperationHash,
   resolveProperties,
-} from "./utils.js";
+} from "./utils/index.js";
 
 export { Logger } from "./logger.js";
 export type { LogLevel } from "./logger.js";

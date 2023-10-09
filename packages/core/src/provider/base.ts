@@ -26,17 +26,20 @@ import {
   type UserOperationCallData,
   type UserOperationOverrides,
   type UserOperationReceipt,
+  type UserOperationRequest,
   type UserOperationResponse,
   type UserOperationStruct,
 } from "../types.js";
 import {
   asyncPipe,
+  bigIntMax,
+  bigIntPercent,
   deepHexlify,
   defineReadOnly,
   getUserOperationHash,
   resolveProperties,
   type Deferrable,
-} from "../utils.js";
+} from "../utils/index.js";
 import type {
   AccountMiddlewareFn,
   AccountMiddlewareOverrideFn,
@@ -266,14 +269,6 @@ export class SmartAccountProvider<
       };
     });
 
-    const bigIntMax = (...args: bigint[]) => {
-      if (!args.length) {
-        return undefined;
-      }
-
-      return args.reduce((m, c) => (m > c ? m : c));
-    };
-
     const maxFeePerGas = bigIntMax(
       ...requests
         .filter((x) => x.maxFeePerGas != null)
@@ -346,25 +341,22 @@ export class SmartAccountProvider<
     }
 
     const initCode = await this.account.getInitCode();
-    const uoStruct = await asyncPipe(
-      this.dummyPaymasterDataMiddleware,
-      this.feeDataGetter,
-      this.gasEstimator,
-      this.paymasterDataMiddleware,
-      this.customMiddleware ?? noOpMiddleware,
-      // This applies the overrides if they've been passed in
-      async (struct) => ({ ...struct, ...overrides })
-    )({
-      initCode,
-      sender: this.getAddress(),
-      nonce: this.account.getNonce(),
-      callData: Array.isArray(data)
-        ? this.account.encodeBatchExecute(data)
-        : this.account.encodeExecute(data.target, data.value ?? 0n, data.data),
-      signature: this.account.getDummySignature(),
-    } as Deferrable<UserOperationStruct>);
-
-    return resolveProperties(uoStruct);
+    return this._runMiddlewareStack(
+      {
+        initCode,
+        sender: this.getAddress(),
+        nonce: this.account.getNonce(),
+        callData: Array.isArray(data)
+          ? this.account.encodeBatchExecute(data)
+          : this.account.encodeExecute(
+              data.target,
+              data.value ?? 0n,
+              data.data
+            ),
+        signature: this.account.getDummySignature(),
+      } as Deferrable<UserOperationStruct>,
+      overrides
+    );
   };
 
   sendUserOperation = async (
@@ -377,6 +369,54 @@ export class SmartAccountProvider<
 
     const uoStruct = await this.buildUserOperation(data, overrides);
     return this._sendUserOperation(uoStruct);
+  };
+
+  dropAndReplaceUserOperation = async (
+    uoToDrop: UserOperationRequest
+  ): Promise<SendUserOperationResult> => {
+    const uoToSubmit = {
+      initCode: uoToDrop.initCode,
+      sender: uoToDrop.sender,
+      nonce: uoToDrop.nonce,
+      callData: uoToDrop.callData,
+      signature: uoToDrop.signature,
+    } as UserOperationStruct;
+
+    // Run once to get the fee estimates
+    // This can happen at any part of the middleware stack, so we want to run it all
+    const { maxFeePerGas, maxPriorityFeePerGas } =
+      await this._runMiddlewareStack(uoToSubmit);
+
+    const overrides: UserOperationOverrides = {
+      maxFeePerGas: bigIntMax(
+        BigInt(maxFeePerGas ?? 0n),
+        bigIntPercent(uoToDrop.maxFeePerGas, 110n)
+      ),
+      maxPriorityFeePerGas: bigIntMax(
+        BigInt(maxPriorityFeePerGas ?? 0n),
+        bigIntPercent(uoToDrop.maxPriorityFeePerGas, 110n)
+      ),
+    };
+
+    const uoToSend = await this._runMiddlewareStack(uoToSubmit, overrides);
+    return this._sendUserOperation(uoToSend);
+  };
+
+  private _runMiddlewareStack = async (
+    uo: Deferrable<UserOperationStruct>,
+    overrides?: UserOperationOverrides
+  ) => {
+    const result = await asyncPipe(
+      this.dummyPaymasterDataMiddleware,
+      this.feeDataGetter,
+      this.gasEstimator,
+      // run this before paymaster middleware
+      async (struct) => ({ ...struct, ...overrides }),
+      this.customMiddleware ?? noOpMiddleware,
+      this.paymasterDataMiddleware
+    )(uo);
+
+    return resolveProperties<UserOperationStruct>(result);
   };
 
   private _sendUserOperation = async (uoStruct: UserOperationStruct) => {

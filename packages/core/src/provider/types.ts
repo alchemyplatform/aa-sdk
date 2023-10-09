@@ -23,7 +23,7 @@ import type {
   UserOperationResponse,
   UserOperationStruct,
 } from "../types.js";
-import type { Deferrable } from "../utils.js";
+import type { Deferrable } from "../utils";
 
 type WithRequired<T, K extends keyof T> = Required<Pick<T, K>>;
 type WithOptional<T, K extends keyof T> = Pick<Partial<T>, K>;
@@ -106,6 +106,16 @@ export interface ISmartAccountProvider<
    */
   sendUserOperation: (
     data: UserOperationCallData | BatchUserOperationCallData
+  ) => Promise<SendUserOperationResult>;
+
+  /**
+   * Attempts to drop and replace an existing user operation by increasing fees
+   *
+   * @param data - an existing user operation request returned by `sendUserOperation`
+   * @returns - {@link SendUserOperationResult} containing the hash and request
+   */
+  dropAndReplaceUserOperation: (
+    data: UserOperationRequest
   ) => Promise<SendUserOperationResult>;
 
   /**

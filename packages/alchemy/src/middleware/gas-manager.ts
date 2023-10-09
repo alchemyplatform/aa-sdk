@@ -40,10 +40,9 @@ export const withAlchemyGasManager = (
           verificationGasLimit: 0n,
         }))
         // no-op fee because the alchemy api will do it
-        // can set this after the fact to do fee overrides.
-        .withFeeDataGetter(async () => ({
-          maxFeePerGas: 0n,
-          maxPriorityFeePerGas: 0n,
+        .withFeeDataGetter(async (struct) => ({
+          maxFeePerGas: (await struct.maxFeePerGas) ?? 0n,
+          maxPriorityFeePerGas: (await struct.maxPriorityFeePerGas) ?? 0n,
         }))
         .withPaymasterMiddleware(
           withAlchemyGasAndPaymasterAndDataMiddleware(provider, config)
@@ -116,7 +115,7 @@ const withAlchemyGasAndPaymasterAndDataMiddleware = (
     );
 
     let feeOverride = undefined;
-    if (BigInt(userOperation.maxFeePerGas) > 0n) {
+    if (userOperation.maxFeePerGas && BigInt(userOperation.maxFeePerGas) > 0n) {
       feeOverride = {
         maxFeePerGas: userOperation.maxFeePerGas,
         maxPriorityFeePerGas: userOperation.maxPriorityFeePerGas,

@@ -66,8 +66,8 @@ const givenConnectedProvider = ({
   owner: SmartAccountSigner;
   chain: Chain;
   accountAddress?: Address;
-}) =>
-  new SmartAccountProvider({
+}) => {
+  return new SmartAccountProvider({
     rpcProvider:
       RPC_URL != null ? RPC_URL : `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
     entryPointAddress: ENTRYPOINT_ADDRESS,
@@ -83,3 +83,4 @@ const givenConnectedProvider = ({
         accountAddress,
       })
   );
+};

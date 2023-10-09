@@ -39,7 +39,7 @@ const uoStruct = await provider.buildUserOperation({
   data: ENCODED_DATA,
   value: VALUE, // optional
 });
-const uoHash = await provider.sendUserOperation(uoStruct);
+const { hash: uoHash } = await provider.sendUserOperation(uoStruct);
 
 // build batch
 const batchedUoStruct = await provider.buildUserOperation([
@@ -53,7 +53,9 @@ const batchedUoStruct = await provider.buildUserOperation([
     value: 1000n, // in wei
   },
 ]);
-const batchedUoHash = await provider.sendUserOperation(batchedUoStruct);
+const { hash: batchedUoHash } = await provider.sendUserOperation(
+  batchedUoStruct
+);
 ```
 
 <<< @/snippets/provider.ts
