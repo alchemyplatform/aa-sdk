@@ -273,9 +273,9 @@ export interface ISmartAccountProvider<
   withFeeDataGetter: (override: FeeDataMiddleware) => this;
 
   /**
-   * This adds a final middleware step to the middleware stack that runs right before signature verification.
-   * This can be used if you have an RPC that does most of the functions of the other middlewares for you and
-   * you want to delegate that work to that RPC instead of chaining together multiple RPC calls via the default middlwares.
+   * Adds a function to the middleware call stack that runs before calling the paymaster middleware.
+   * It can be used to override or add additional functionality.
+   * Like modifying the user operation, making an additional RPC call, or logging data.
    *
    * @param override - the UO transform function to run
    * @returns
