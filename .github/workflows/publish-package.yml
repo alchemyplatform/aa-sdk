@@ -15,26 +15,28 @@ on:
         default: false
         type: boolean
 
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 # If we ever migrate this to not be manual, we HAVE to check that the commit
 # it is running against DOES NOT contain [skip-ci] in the commit message
 jobs:
-  build_test_and_deploy:
-    name: Build, Test, and Deploy
+  build_and_test:
+    name: Build and Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
           token: ${{ secrets.ALCHEMY_BOT_PAT }}
-
-      - name: Set Github User Details
-        run: |
-          git config --global user.name "Alchemy Bot"
-          git config --global user.email "alchemy-bot@alchemy.com"
-
-      - name: Set NPM Permissions
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
 
       - name: Set Node.js 16.x
         uses: actions/setup-node@v3
@@ -58,7 +60,38 @@ jobs:
           LIGHT_ACCOUNT_OWNER_MNEMONIC: ${{ secrets.LIGHT_ACCOUNT_OWNER_MNEMONIC }}
         run: yarn test:e2e
 
+  deploy:
+    name: Deploy
+    needs: build_and_test
+    runs-on: ubuntu-latest
+    if: inputs.publish
+    steps:
+      - name: Set Github User Details
+        run: |
+          git config --global user.name "Alchemy Bot"
+          git config --global user.email "alchemy-bot@alchemy.com"
+
+      - name: Set NPM Permissions
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
+
       # Lerna publish will, compute the new version, update files, run precommit hooks, tag, publish, and push change log
       - name: Publish using Lerna
-        if: inputs.publish
         run: yarn lerna publish --no-private --yes --no-verify-access
+
+  publish_site:
+    name: Publish Docs Site
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: deploy
+    runs-on: ubuntu-latest
+    if: inputs.publish
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
+        env:
+          # TODO(moldy): just remove this altogether once we're live
+          NO_BASE_PATH: true
