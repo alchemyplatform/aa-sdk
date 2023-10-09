@@ -24,7 +24,6 @@ Lit Protocol's pkp network is still in testnet. Backwards compatibility, and dat
 
 :::
 
-
 # Integration
 
 ### Install the pkp ethers package

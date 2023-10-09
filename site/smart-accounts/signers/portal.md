@@ -67,7 +67,7 @@ const provider = new AlchemyProvider({
       factoryAddress: FACTORY_CONTRACT_ADDRESS,
       rpcClient,
     })
-); 
+);
 ```
 
 <<< @/snippets/portal.ts
