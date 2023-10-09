@@ -57,6 +57,7 @@ export default defineConfig({
               { text: "Lit Protocol", link: "/lit" },
               { text: "Magic.Link", link: "/magic-link" },
               { text: "Portal", link: "/portal" },
+              { text: "Privy", link: "/privy" },
               { text: "Turnkey", link: "/turnkey" },
               { text: "Web3Auth", link: "/web3auth" },
               { text: "Externally Owned Account", link: "/eoa" },
