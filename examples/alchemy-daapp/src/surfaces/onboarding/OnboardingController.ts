@@ -1,6 +1,7 @@
-import { LightSmartContractAccount, getDefaultLightAccountFactory } from "@alchemy/aa-accounts";
-import { AlchemyProvider, withAlchemyGasManager } from "@alchemy/aa-alchemy";
+import { LightSmartContractAccount } from "@alchemy/aa-accounts";
+import { withAlchemyGasManager } from "@alchemy/aa-alchemy";
 import {
+  SmartAccountProvider,
   createPublicErc4337Client,
   type SmartAccountSigner
 } from "@alchemy/aa-core";
@@ -98,45 +99,47 @@ const onboardingStepHandlers: Record<
 
     const chain: Chain = context.chain!;
     const entryPointAddress = context.entrypointAddress;
-    const baseProvider = new AlchemyProvider({
-      rpcUrl: appConfig.rpcUrl,
-      chain,
+    let baseSigner = new SmartAccountProvider({
+      rpcProvider: appConfig.rpcUrl,
       entryPointAddress,
-    }).connect(
-      (rpcClient) => {
-        if (!context.owner) {
-          throw new Error("No owner for account was found");
-        }
-        return new LightSmartContractAccount({
-          entryPointAddress: entryPointAddress,
-          chain: rpcClient.chain,
-          owner: context.owner,
-          factoryAddress: getDefaultLightAccountFactory(rpcClient.chain),
-          rpcClient,
-        })
+      chain,
+      feeOpts: {
+        txMaxRetries: 60,
+      },
+    }).connect((provider: any) => {
+      if (!context.owner) {
+        throw new Error("No owner for account was found");
+      }
+      return new LightSmartContractAccount({
+        entryPointAddress,
+        chain,
+        owner: context.owner,
+        factoryAddress: appConfig.lightAccountFactoryAddress,
+        rpcClient: provider,
       });
+    });
+
     
+    const smartAccountAddress = await baseSigner.getAddress();
     if (context.useGasManager) {
-      const gasExtendedProvider = withAlchemyGasManager(baseProvider, {
+      const smartAccountSigner = withAlchemyGasManager(baseSigner, {
         policyId: appConfig.gasManagerPolicyId,
         entryPoint: entryPointAddress,
       });
-      const smartAccountAddress = await baseProvider.getAddress();
-
+  
       return {
         nextStep: OnboardingStepIdentifier.MINT_NFT,
         addedContext: {
           smartAccountAddress,
-          smartAccountSigner: gasExtendedProvider,
+          smartAccountSigner,
         },
       };
     } else {
-      const smartAccountAddress = await baseProvider.getAddress();
       return {
         nextStep: OnboardingStepIdentifier.FILL_SCWALLET,
         addedContext: {
           smartAccountAddress,
-          smartAccountSigner: baseProvider,
+          smartAccountSigner: baseSigner,
         },
       };
     }
@@ -252,7 +255,7 @@ export function useOnboardingOrchestrator(
     const appConfig = daappConfigurations[chain.id];
     if (!appConfig) {
       throw new Error(
-        `Couldn't find a configuration for chain ${chain.id}. Please connect to a valid chain first.`
+        "Couldn't find a configuration for ap chain. Please connect to a valid chain first."
       );
     }
     const client = createPublicErc4337Client({

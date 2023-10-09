@@ -15,19 +15,23 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       throw new Error("chainId is required");
     }
 
+    if (!address) {
+      throw new Error('address is required')
+    }
+
     const contractAddress =
       daappConfigurations[Number(chainId)]?.nftContractAddress;
     if (!contractAddress) {
       throw new Error("Unsupported chainID.");
     }
 
-    const repsonse = await callEndpoint(
+    const response = await callEndpoint(
       "GET",
       `${getApiUrl(
         chainId as string
       )}/getNFTs/?owner=${address}&contractAddresses[]=${contractAddress}`
     );
-    return res.send(repsonse);
+    return res.send(response);
   } catch (e) {
     console.error(e);
     return res.status(400).send((e as Error).message);

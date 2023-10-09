@@ -15,7 +15,7 @@ const NftSection: React.NamedExoticComponent<NFTsProps> = memo(
   function NftSection({ address, chainId, ...boxProps }: NFTsProps) {
     const ownedNFTsQuery = useNFTsQuery(address, chainId);
     if (!address) {
-      return <Text size="sm">No Address to Assoicate Achievements</Text>;
+      return <Text size="sm">No Address to Associate Achievements</Text>;
     }
 
     if (ownedNFTsQuery.isLoading) {
