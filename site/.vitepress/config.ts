@@ -54,6 +54,7 @@ export default defineConfig({
             link: "/overview",
             items: [
               { text: "Capsule", link: "/capsule" },
+              { text: "Lit Protocol", link: "/lit" },
               { text: "Magic.Link", link: "/magic-link" },
               { text: "Turnkey", link: "/turnkey" },
               { text: "Web3Auth", link: "/web3auth" },
