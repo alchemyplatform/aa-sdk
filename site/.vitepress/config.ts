@@ -28,6 +28,7 @@ export default defineConfig({
 
     sidebar: [
       { text: "Introduction", link: "/introduction" },
+      { text: "Why Account Kit", link: "/why-account-kit" },
       { text: "Getting Started", link: "/getting-started" },
       {
         text: "Packages Overview",
