@@ -14,7 +14,6 @@ import {
   optimismGoerli,
 } from "viem/chains";
 import { SupportedChains } from "./chains.js";
-import type { ClientWithAlchemyMethods } from "./middleware/client.js";
 import { withAlchemyGasFeeEstimator } from "./middleware/gas-fees.js";
 import {
   withAlchemyGasManager,
@@ -54,7 +53,6 @@ export type AlchemyProviderConfig = {
   ConnectionConfig;
 
 export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
-  alchemyClient: ClientWithAlchemyMethods;
   private pvgBuffer: bigint;
   private feeOptsSet: boolean;
 
@@ -90,7 +88,6 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
 
     super({ rpcProvider: client, entryPointAddress, chain: _chain, opts });
 
-    this.alchemyClient = this.rpcClient as ClientWithAlchemyMethods;
     withAlchemyGasFeeEstimator(
       this,
       feeOpts?.baseFeeBufferPercent ?? 50n,
