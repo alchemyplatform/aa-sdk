@@ -3,18 +3,20 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: ISmartAccountProvider • signTypedDataWith6492
+      content: signTypedDataWith6492
   - - meta
     - name: description
-      content: Overview of the signTypedDataWith6492 method on ISmartAccountProvider
+      content: Overview of the signTypedDataWith6492 method on BaseSmartContractAccount
   - - meta
     - property: og:description
-      content: Overview of the signTypedDataWith6492 method on ISmartAccountProvider
+      content: Overview of the signTypedDataWith6492 method on BaseSmartContractAccount
 ---
 
 # signTypedDataWith6492
 
-This method supports signing typed data for deployed smart contract accounts, as well as undeployed accounts (counterfactual addresses) using [ERC-6492](https://eips.ethereum.org/EIPS/eip-6492).
+Similar to the signMessageWith6492 method above, this method wraps the result of `signTypedData` as per [EIP-6492](https://eips.ethereum.org/EIPS/eip-6492) to support signing the typed data for deployed smart contract accounts, as well as undeployed accounts (counterfactual addresses).
+
+**Note**: This method is already implemented on `BaseSmartContractAccount`, so any class that extends and implements `BaseSmartContractAccount` may call this method.
 
 ## Usage
 
@@ -23,8 +25,7 @@ This method supports signing typed data for deployed smart contract accounts, as
 ```ts [example.ts]
 import { provider } from "./provider";
 // [!code focus:99]
-// sign typed data (works for undeployed and deployed accounts)
-const signedTypedDataWith6492 = provider.signTypedDataWith6492({
+const signedTypedDataWrappedWith6492 = provider.signTypedDataWith6492({
   domain: {
     name: "Ether Mail",
     version: "1",
@@ -63,9 +64,9 @@ const signedTypedDataWith6492 = provider.signTypedDataWith6492({
 
 ## Returns
 
-### `Promise<Hash>`
+### `Promise<Hex>`
 
-A Promise containing the signature of the typed data, additionally wrapped in ERC-6492 format if the account is undeployed.
+A promise containing the signature of the message, additionally wrapped in EIP-6492 format if the account is undeployed
 
 ## Parameters
 
@@ -74,6 +75,6 @@ A Promise containing the signature of the typed data, additionally wrapped in ER
 The typed data to sign
 
 - `domain: TypedDataDomain` -- The typed data domain
-- `types: Object` -- the type definitions for the typed data
-- `primaryType: inferred String` -- the primary type to extract from types and use in value
-- `message: inferred from types & primaryType` -- the message, inferred from
+- `types: Object` -- The type definitions for the typed data
+- `primaryType: inferred String` -- The primary type to extract from types and use in value
+- `message: inferred from types & primaryType` -- The typed message object

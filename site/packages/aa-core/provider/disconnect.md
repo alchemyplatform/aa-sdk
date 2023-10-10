@@ -28,6 +28,7 @@ import { provider } from "./provider";
 await provider.disconnect();
 ```
 
+<<< @/snippets/provider.ts
 :::
 
 ## Returns

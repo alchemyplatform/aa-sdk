@@ -191,7 +191,83 @@ export default defineConfig({
               },
             ],
           },
-          { text: "Accounts" },
+          {
+            text: "Accounts",
+            link: "/introduction",
+            base: "/packages/aa-core/accounts",
+            collapsed: true,
+            items: [
+              {
+                text: "Required Methods",
+                collapsed: true,
+                base: "/packages/aa-core/accounts/required",
+                items: [
+                  {
+                    text: "getDummySignature",
+                    link: "/getDummySignature",
+                  },
+                  {
+                    text: "getAccountInitCode",
+                    link: "/getAccountInitCode",
+                  },
+                  {
+                    text: "signMessage",
+                    link: "/signMessage",
+                  },
+                  {
+                    text: "encodeExecute",
+                    link: "/encodeExecute",
+                  },
+                ],
+              },
+              {
+                text: "Optional Methods",
+                collapsed: true,
+                base: "/packages/aa-core/accounts/optional",
+                items: [
+                  {
+                    text: "encodeBatchExecute",
+                    link: "/encodeBatchExecute",
+                  },
+                  {
+                    text: "signTypedData",
+                    link: "/signTypedData",
+                  },
+                  {
+                    text: "signMessageWith6492",
+                    link: "/signMessageWith6492",
+                  },
+                  {
+                    text: "signTypedDataWith6492",
+                    link: "/signTypedDataWith6492",
+                  },
+                ],
+              },
+              {
+                text: "Other Methods",
+                collapsed: true,
+                base: "/packages/aa-core/accounts/other",
+                items: [
+                  {
+                    text: "getAddress",
+                    link: "/getAddress",
+                  },
+                  {
+                    text: "getNonce",
+                    link: "/getNonce",
+                  },
+                  {
+                    text: "getDeplymentState",
+                    link: "/getDeplymentStates",
+                  },
+                  {
+                    text: "isAccountDeployed",
+                    link: "/isAccountDeployeds",
+                  },
+                ],
+              },
+            ],
+          },
           {
             text: "Signers",
             base: "/packages/aa-core/signers",

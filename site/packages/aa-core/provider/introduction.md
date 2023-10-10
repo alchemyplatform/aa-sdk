@@ -3,13 +3,13 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Introduction to SmartAccountProvider
+      content: SmartAccountProvider
   - - meta
     - name: description
-      content: Introduction to SmartAccountProvider
+      content: Introduction to SmartAccountProvider exported by aa-core provider
   - - meta
     - property: og:description
-      content: Introduction to SmartAccountProvider
+      content: Introduction to SmartAccountProvider exported by aa-core provider
 ---
 
 # Introduction to SmartAccountProvider
