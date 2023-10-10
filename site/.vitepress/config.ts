@@ -509,4 +509,13 @@ export default defineConfig({
       { icon: "github", link: "https://github.com/alchemyplatform/aa-sdk" },
     ],
   },
+  head: [
+    [
+      "script",
+      {
+        src: "https://static.alchemyapi.io/scripts/anayltics/alchemy-analytics.js",
+        defer: "defer",
+      },
+    ],
+  ],
 });
