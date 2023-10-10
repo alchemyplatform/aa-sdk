@@ -92,6 +92,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
-        env:
-          # TODO(moldy): just remove this altogether once we're live
-          NO_BASE_PATH: true
