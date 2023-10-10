@@ -2,7 +2,7 @@
 # https://vitepress.dev/reference/default-theme-home-page
 layout: home
 # HTML Metadata
-title: account-kit
+title: Account Kit
 titleTemplate: :title · TypeScript Interface for ERC-4337
 description: Everything you need to build 4337 accounts for your users
 # you can also add HTML or Markdown components below the --- line to add custom HTML or Markdown content (eg: https://github.com/wagmi-dev/viem/blob/main/site/index.md?plain=1)
