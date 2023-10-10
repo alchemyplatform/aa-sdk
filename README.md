@@ -10,19 +10,11 @@ The `aa-sdk` is modular at every layer of the stack and can be easily extended t
 
 ### Install the Packages
 
-::: code-group
-
-```bash [npm]
-npm install @alchemy/aa-alchemy @alchemy/aa-accounts @alchemy/aa-core viem
-```
-
 ```bash [yarn]
-yarn add @alchemy/aa-alchemy @alchemy/aa-accounts @alchemy/aa-core viem
+yarn add @alchemy/aa-accounts @alchemy/aa-core
 ```
 
-:::
-
-### [Light Account Example](/getting-started#a-simple-light-account-example)
+### [Light Account Example](https://accountkit.alchemy.com/getting-started#a-simple-light-account-example)
 
 ## Docs
 
