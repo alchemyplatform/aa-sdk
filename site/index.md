@@ -40,11 +40,7 @@ description: Everything you need to build 4337 accounts for your users
               Explore the docs
             </button>
           </a>
-<<<<<<< HEAD
           <a rel="noopener noreferrer" href="./package-overview.html">
-=======
-          <a rel="noopener noreferrer" href="./packages/overview.html">
->>>>>>> upstream/main
             <button
               class="flex items-center rounded-md px-[12px] py-[12px] text-[16px] font-semibold transition duration-300 ease-in-out hover:scale-105 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black"
             >
