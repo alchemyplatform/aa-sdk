@@ -1,8 +1,9 @@
-import { PKPEthersWallet } from "@lit-protocol/pkp-ethers";
-import { LitActionResource, LitAbility } from "@lit-protocol/auth-helpers";
-import { LitNodeClient } from "@lit-protocol/lit-node-client";
-import { AuthCallbackParams } from "@lit-protocol/types";
 import { WalletClientSigner, type SmartAccountSigner } from "@alchemy/aa-core";
+import { LitAbility, LitActionResource } from "@lit-protocol/auth-helpers";
+import { LitNodeClient } from "@lit-protocol/lit-node-client";
+import { PKPEthersWallet } from "@lit-protocol/pkp-ethers";
+import { AuthCallbackParams } from "@lit-protocol/types";
+import { createWalletClient, custom } from "viem";
 import { polygonMumbai } from "viem/chains";
 
 const API_KEY = "<YOUR API KEY>";
@@ -59,5 +60,5 @@ const pkpWallet = new PKPEthersWallet({
 
 // a smart account signer you can use as an owner on ISmartContractAccount
 export const litSigner: SmartAccountSigner = new WalletClientSigner(
-  pkpWallet.rpcProvider // JsonRpcProvider instance
+  createWalletClient({ transport: custom(pkpWallet.rpcProvider) }) // JsonRpcProvider instance
 );
