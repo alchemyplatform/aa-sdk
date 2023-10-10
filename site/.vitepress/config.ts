@@ -55,6 +55,7 @@ export default defineConfig({
             link: "/overview",
             items: [
               { text: "Capsule", link: "/capsule" },
+              { text: "Fireblocks", link: "/fireblocks" },
               { text: "Lit Protocol", link: "/lit" },
               { text: "Magic.Link", link: "/magic-link" },
               { text: "Portal", link: "/portal" },
