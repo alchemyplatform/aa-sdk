@@ -140,3 +140,7 @@
 .DocSearch {
   --docsearch-primary-color: var(--vp-c-brand-1) !important;
 }
+
+.VPHome {
+  padding-bottom: 0px !important;
+}
