@@ -1,7 +1,7 @@
 import { WalletClientSigner, type SmartAccountSigner } from "@alchemy/aa-core";
 import Capsule, {
-  createCapsuleViemClient,
   Environment,
+  createCapsuleViemClient,
 } from "@usecapsule/web-sdk";
 import { http } from "viem";
 import { sepolia } from "viem/chains";
@@ -26,5 +26,6 @@ const capsuleClient = createCapsuleViemClient(capsule, {
 
 // a smart account signer you can use as an owner on ISmartContractAccount
 export const capsuleSigner: SmartAccountSigner = new WalletClientSigner(
-  capsuleClient
+  capsuleClient,
+  "capsule" // signerType
 );

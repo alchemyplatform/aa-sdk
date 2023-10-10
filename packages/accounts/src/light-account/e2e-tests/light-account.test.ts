@@ -131,10 +131,12 @@ describe("Light Account Tests", () => {
 
   it("should get owner successfully", async () => {
     const signer = givenConnectedProvider({ owner, chain });
-    expect(await signer.account.getOwner()).toMatchInlineSnapshot(
+    expect(await signer.account.getOwnerAddress()).toMatchInlineSnapshot(
       '"0x65eaA2AfDF6c97295bA44C458abb00FebFB3a5FA"'
     );
-    expect(await signer.account.getOwner()).toBe(await owner.getAddress());
+    expect(await signer.account.getOwnerAddress()).toBe(
+      await owner.getAddress()
+    );
   });
 
   it("should transfer ownership successfully", async () => {
@@ -167,10 +169,10 @@ describe("Light Account Tests", () => {
     const txnHash = provider.waitForUserOperationTransaction(result);
     await expect(txnHash).resolves.not.toThrowError();
 
-    expect(await provider.account.getOwner()).not.toBe(
+    expect(await provider.account.getOwnerAddress()).not.toBe(
       await throwawayOwner.getAddress()
     );
-    expect(await provider.account.getOwner()).toBe(
+    expect(await provider.account.getOwnerAddress()).toBe(
       await newThrowawayOwner.getAddress()
     );
   }, 100000);

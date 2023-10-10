@@ -14,8 +14,11 @@ export class LocalAccountSigner<
 > implements SmartAccountSigner
 {
   private owner: T;
+  signerType: string;
+
   constructor(owner: T) {
     this.owner = owner;
+    this.signerType = owner.type; //  type: "local"
   }
 
   readonly signMessage: (msg: string | Uint8Array) => Promise<`0x${string}`> = (

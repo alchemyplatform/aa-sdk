@@ -15,6 +15,7 @@ type LightSmartAccountSignerResult =
 
 export function useLightAccountSigner(): LightSmartAccountSignerResult {
   const walletClientQuery = useWalletClient();
+  const signerType = "json-rpc"
   // We need this to by pass a viem bug https://github.com/wagmi-dev/viem/issues/606
   const signMessage = useCallback(
     (data: string | Uint8Array) =>
@@ -48,5 +49,5 @@ export function useLightAccountSigner(): LightSmartAccountSignerResult {
       owner: undefined,
     };
   }
-  return { isLoading: false, owner: { signMessage, signTypedData, getAddress } };
+  return { isLoading: false, owner: { signerType, signMessage, signTypedData, getAddress } };
 }

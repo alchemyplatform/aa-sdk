@@ -1,12 +1,12 @@
 /* via `aa-ethers`*/
 
 import { getChain, SimpleSmartContractAccount } from "@alchemy/aa-core";
-import { Alchemy, Network } from "alchemy-sdk";
-import { Wallet } from "@ethersproject/wallet";
 import {
-  EthersProviderAdapter,
   convertWalletToAccountSigner,
+  EthersProviderAdapter,
 } from "@alchemy/aa-ethers";
+import { Wallet } from "@ethersproject/wallet";
+import { Alchemy, Network } from "alchemy-sdk";
 
 const SIMPLE_ACCOUNT_FACTORY_ADDRESS =
   "0x9406Cc6185a346906296840746125a0E44976454";
@@ -36,6 +36,7 @@ const signer = EthersProviderAdapter.fromEthersProvider(
 );
 
 // 3. send a user op
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const { hash } = await signer.sendUserOperation({
   target: "0xTargetAddress",
   data: "0xcallData",

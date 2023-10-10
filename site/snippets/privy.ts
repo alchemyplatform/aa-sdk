@@ -32,7 +32,10 @@ const privyClient = createWalletClient({
 });
 
 // Create a smart account signer from the embedded wallet's viem client
-const privySigner: SmartAccountSigner = new WalletClientSigner(privyClient);
+const privySigner: SmartAccountSigner = new WalletClientSigner(
+  privyClient,
+  "privy" // signerType
+);
 
 // Create an Alchemy Provider with the smart account signer
 export const provider = new AlchemyProvider({

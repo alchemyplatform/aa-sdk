@@ -1,10 +1,10 @@
 /* via `aa-core`*/
 
 import {
+  LocalAccountSigner,
   SimpleSmartContractAccount,
   SmartAccountProvider,
   type SmartAccountSigner,
-  LocalAccountSigner,
 } from "@alchemy/aa-core";
 import { polygonMumbai } from "viem/chains";
 
@@ -38,6 +38,7 @@ const provider = new SmartAccountProvider({
 );
 
 // 3. send a UserOperation
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const { hash } = await provider.sendUserOperation({
   target: "0xTargetAddress",
   data: "0xcallData",

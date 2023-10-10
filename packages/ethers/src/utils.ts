@@ -12,6 +12,7 @@ export const convertWalletToAccountSigner = (
   wallet: Wallet
 ): SmartAccountSigner => {
   return {
+    signerType: "local",
     getAddress: async () => Promise.resolve(wallet.address as `0x${string}`),
     signMessage: async (msg: Uint8Array | string) =>
       (await wallet.signMessage(msg)) as `0x${string}`,
@@ -37,6 +38,7 @@ export const convertEthersSignerToAccountSigner = (
   signer: Signer
 ): SmartAccountSigner => {
   return {
+    signerType: "json-rpc",
     getAddress: async () => signer.getAddress() as Promise<Address>,
     signMessage: async (msg: Uint8Array | string) =>
       (await signer.signMessage(msg)) as `0x${string}`,

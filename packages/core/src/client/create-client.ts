@@ -11,9 +11,9 @@ import {
   type HttpTransportConfig,
   type PublicActions,
   type PublicClient,
+  type PublicRpcSchema,
   type Transport,
 } from "viem";
-import type { PublicRpcSchema } from "viem/dist/types/types/eip1193";
 import type {
   UserOperationEstimateGasResponse,
   UserOperationReceipt,

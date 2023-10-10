@@ -9,18 +9,17 @@ import {
 } from "viem";
 import { SimpleAccountAbi } from "../abis/SimpleAccountAbi.js";
 import { SimpleAccountFactoryAbi } from "../abis/SimpleAccountFactoryAbi.js";
-import type { SmartAccountSigner } from "../signer/types.js";
 import type { BatchUserOperationCallData } from "../types.js";
 import {
   BaseSmartContractAccount,
   type BaseSmartAccountParams,
 } from "./base.js";
+import type { SmartAccountSigner } from "../signer/types.js";
 
 export interface SimpleSmartAccountParams<
   TTransport extends Transport | FallbackTransport = Transport
 > extends BaseSmartAccountParams<TTransport> {
   owner: SmartAccountSigner;
-  factoryAddress: Address;
   index?: bigint;
 }
 
@@ -28,15 +27,12 @@ export class SimpleSmartContractAccount<
   TTransport extends Transport | FallbackTransport = Transport
 > extends BaseSmartContractAccount<TTransport> {
   protected owner: SmartAccountSigner;
-  protected factoryAddress: Address;
   protected index: bigint;
 
   constructor(params: SimpleSmartAccountParams<TTransport>) {
     super(params);
-
-    this.index = params.index ?? 0n;
     this.owner = params.owner;
-    this.factoryAddress = params.factoryAddress;
+    this.index = params.index ?? 0n;
   }
 
   getDummySignature(): `0x${string}` {

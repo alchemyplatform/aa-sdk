@@ -89,7 +89,7 @@ The `KernelAccountProvider` is an [EIP-1193](https://eips.ethereum.org/EIPS/eip-
 The `KernelBaseValidator` is a plugin that modify how transactions are validated. It allows for extension and implementation of arbitrary validation logic. It implements 3 methods:
 
 1. `getAddress` -- this returns the address of the validator
-2. `getOwner` -- this returns the eligible signer's address for the active smart wallet
+2. `getOwnerAddress` -- this returns the eligible signer's address for the active smart wallet
 3. `signMessageWithValidatorParams` -- this method signs the userop hash using signer object and then concats additional params based on validator mode.
 
 ## Contributing

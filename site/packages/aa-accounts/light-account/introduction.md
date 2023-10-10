@@ -21,7 +21,7 @@ Notable differences between `LightSmartContractAccount` and `SimpleSmartContract
 1.  [`signMessageWith6492`](/packages/aa-accounts/light-account/signMessageWith6492) -- supports message signatures for deployed smart contract accounts, as well as undeployed accounts (counterfactual addresses) using [ERC-6492](https://eips.ethereum.org/EIPS/eip-6492).
 2.  [`signTypedData`](/packages/aa-accounts/light-account/signTypedData) -- supports typed data signatures from the smart contract account's owner address.
 3.  [`signTypedDataWith6492`](/packages/aa-accounts/light-account/signTypedDataWith6492) -- supports typed data signatures for deployed smart contract accounts, as well as undeployed accounts (counterfactual addresses) using ERC-6492.
-4.  [`getOwner`](/packages/aa-accounts/light-account/getOwner) -- returns the on-chain owner of the account.
+4.  [`getOwnerAddress`](/packages/aa-accounts/light-account/getOwnerAddress) -- returns the on-chain owner address of the account.
 5.  [`encodeTransferOwnership`](/packages/aa-accounts/light-account/encodeTransferOwnership) -- encodes the transferOwnership function call using the LightAccount ABI.
 6.  [`transferOwnership`](/packages/aa-accounts/light-account/transferOwnership) -- transfers ownership of the account to a new owner, and returns either the UO hash or transaction hash.
 
@@ -49,13 +49,13 @@ const signedTypedDataWith6492 = provider.signTypedDataWith6492({
   },
 });
 
-// get owner
-const owner = provider.account.getOwner();
+// get owner address
+const owner = await provider.account.getOwnerAddress();
 
 // encode transfer pownership
 const newOwner = LocalAccountSigner.mnemonicToAccountSigner(NEW_OWNER_MNEMONIC);
 const encodedTransferOwnershipData =
-  LightSmartContractAccount.transferOwnership(newOwner);
+  LightSmartContractAccount.encodedTransferOwnership(newOwner);
 
 // transfer ownership
 const result = await LightSmartContractAccount.transferOwnership(

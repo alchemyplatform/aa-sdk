@@ -20,7 +20,7 @@ describe("Base Validator Test", () => {
   });
 
   it("should return proper owner address", async () => {
-    expect(await validator.getOwner()).eql(dummyAddress);
+    expect(await validator.getOwnerAddress()).eql(dummyAddress);
   });
 
   it("should sign hash properly", async () => {

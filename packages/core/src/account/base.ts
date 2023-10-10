@@ -16,6 +16,7 @@ import type {
   SupportedTransports,
 } from "../client/types.js";
 import { Logger } from "../logger.js";
+import type { SmartAccountSigner } from "../signer/types.js";
 import { wrapSignatureWith6492 } from "../signer/utils.js";
 import type { BatchUserOperationCallData } from "../types.js";
 import type { ISmartContractAccount, SignTypedDataParams } from "./types.js";
@@ -31,6 +32,8 @@ export interface BaseSmartAccountParams<
 > {
   rpcClient: string | PublicErc4337Client<TTransport>;
   entryPointAddress: Address;
+  factoryAddress: Address;
+  owner?: SmartAccountSigner | undefined;
   chain: Chain;
   accountAddress?: Address;
 }
@@ -39,8 +42,10 @@ export abstract class BaseSmartContractAccount<
   TTransport extends SupportedTransports = Transport
 > implements ISmartContractAccount
 {
+  protected factoryAddress: Address;
   protected deploymentState: DeploymentState = DeploymentState.UNDEFINED;
   protected accountAddress?: Address;
+  protected owner: SmartAccountSigner | undefined;
   protected entryPoint: GetContractReturnType<
     typeof EntryPointAbi,
     PublicClient,
@@ -53,15 +58,45 @@ export abstract class BaseSmartContractAccount<
 
   constructor(params: BaseSmartAccountParams<TTransport>) {
     this.entryPointAddress = params.entryPointAddress;
-    this.rpcProvider =
+
+    const rpcUrl =
       typeof params.rpcClient === "string"
-        ? createPublicErc4337Client({
-            chain: params.chain,
-            rpcUrl: params.rpcClient,
-          })
-        : params.rpcClient;
+        ? params.rpcClient
+        : params.rpcClient.transport.type === "http"
+        ? (
+            params.rpcClient.transport as ReturnType<HttpTransport>["config"] &
+              ReturnType<HttpTransport>["value"]
+          ).url || params.chain.rpcUrls.default.http[0]
+        : undefined;
+
+    const fetchOptions =
+      typeof params.rpcClient === "string"
+        ? undefined
+        : params.rpcClient.transport.type === "http"
+        ? (
+            params.rpcClient.transport as ReturnType<HttpTransport>["config"] &
+              ReturnType<HttpTransport>["value"]
+          ).fetchOptions
+        : undefined;
+
+    this.rpcProvider = rpcUrl
+      ? createPublicErc4337Client({
+          chain: params.chain,
+          rpcUrl,
+          fetchOptions: {
+            ...fetchOptions,
+            headers: {
+              ...fetchOptions?.headers,
+              "Alchemy-AA-SDK-Signer": params.owner?.signerType,
+              "Alchemy-AA-SDK-Factory-Address": params.factoryAddress,
+            },
+          },
+        })
+      : (params.rpcClient as PublicErc4337Client<TTransport>);
 
     this.accountAddress = params.accountAddress;
+    this.factoryAddress = params.factoryAddress;
+    this.owner = params.owner;
 
     this.entryPoint = getContract({
       address: params.entryPointAddress,
@@ -164,16 +199,11 @@ export abstract class BaseSmartContractAccount<
       return signature;
     }
 
-    // https://eips.ethereum.org/EIPS/eip-4337#first-time-account-creation
-    // The initCode field (if non-zero length) is parsed as a 20-byte address,
-    // followed by calldata to pass to this address.
-    // The factory address is the first 40 char after the 0x, and the callData is the rest.
-    const initCode = await this.getAccountInitCode();
-    const factoryAddress = `0x${initCode.substring(2, 42)}` as Address;
-    const factoryCalldata = `0x${initCode.substring(42)}` as Hex;
+    const [factoryAddress, factoryCalldata] =
+      await this.parseFactoryAddressFromAccountInitCode();
 
     Logger.debug(
-      `[BaseSmartContractAccount](create6492Signature) initCode: ${initCode}, \
+      `[BaseSmartContractAccount](create6492Signature)\
         factoryAddress: ${factoryAddress}, factoryCalldata: ${factoryCalldata}`
     );
 
@@ -251,6 +281,14 @@ export abstract class BaseSmartContractAccount<
     return this.accountAddress;
   }
 
+  getOwner(): SmartAccountSigner | undefined {
+    return this.owner;
+  }
+
+  getFactoryAddress(): Address {
+    return this.factoryAddress;
+  }
+
   // Extra implementations
   async isAccountDeployed(): Promise<boolean> {
     return (await this.getDeploymentState()) === DeploymentState.DEPLOYED;
@@ -265,5 +303,20 @@ export abstract class BaseSmartContractAccount<
     } else {
       return this.deploymentState;
     }
+  }
+
+  /**
+   * https://eips.ethereum.org/EIPS/eip-4337#first-time-account-creation
+   * The initCode field (if non-zero length) is parsed as a 20-byte address,
+   * followed by calldata to pass to this address.
+   * The factory address is the first 40 char after the 0x, and the callData is the rest.
+   */
+  protected async parseFactoryAddressFromAccountInitCode(): Promise<
+    [Address, Hex]
+  > {
+    const initCode = await this.getAccountInitCode();
+    const factoryAddress = `0x${initCode.substring(2, 42)}` as Address;
+    const factoryCalldata = `0x${initCode.substring(42)}` as Hex;
+    return [factoryAddress, factoryCalldata];
   }
 }

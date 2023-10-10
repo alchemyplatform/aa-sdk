@@ -4,7 +4,6 @@ import {
   type BatchUserOperationCallData,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
-import type { Address } from "abitype";
 import { parseAbiParameters } from "abitype";
 import {
   concatHex,
@@ -27,7 +26,6 @@ export interface KernelSmartAccountParams<
   TTransport extends Transport | FallbackTransport = Transport
 > extends BaseSmartAccountParams<TTransport> {
   owner: SmartAccountSigner;
-  factoryAddress: Address;
   index?: bigint;
   defaultValidator: KernelBaseValidator;
   validator?: KernelBaseValidator;
@@ -36,8 +34,7 @@ export interface KernelSmartAccountParams<
 export class KernelSmartContractAccount<
   TTransport extends Transport | FallbackTransport = Transport
 > extends BaseSmartContractAccount<TTransport> {
-  private owner: SmartAccountSigner;
-  private readonly factoryAddress: Address;
+  protected owner: SmartAccountSigner;
   private readonly index: bigint;
   private defaultValidator: KernelBaseValidator;
   private validator: KernelBaseValidator;
@@ -46,7 +43,6 @@ export class KernelSmartContractAccount<
     super(params);
     this.index = params.index ?? 0n;
     this.owner = params.owner;
-    this.factoryAddress = params.factoryAddress;
     this.defaultValidator = params.defaultValidator!;
     this.validator = params.validator ?? params.defaultValidator!;
   }
@@ -135,7 +131,7 @@ export class KernelSmartContractAccount<
         functionName: "createAccount",
         args: [
           this.defaultValidator.getAddress(),
-          await this.defaultValidator.getOwner(),
+          await this.defaultValidator.getOwnerAddress(),
           this.index,
         ],
       });

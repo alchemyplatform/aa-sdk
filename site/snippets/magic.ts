@@ -17,5 +17,6 @@ export const magicClient = createWalletClient({
 
 // a smart account signer you can use as an owner on ISmartContractAccount
 export const magicSigner: SmartAccountSigner = new WalletClientSigner(
-  magicClient
+  magicClient,
+  "magic" // signerType
 );

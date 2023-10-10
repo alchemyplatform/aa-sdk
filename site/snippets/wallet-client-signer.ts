@@ -9,4 +9,7 @@ const walletClient = createWalletClient({
   transport: custom(externalProvider),
 });
 
-export const signer: SmartAccountSigner = new WalletClientSigner(walletClient);
+export const signer: SmartAccountSigner = new WalletClientSigner(
+  walletClient,
+  "json-rpc" // signerType
+);

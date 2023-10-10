@@ -20,5 +20,6 @@ export const web3authClient = createWalletClient({
 
 // a smart account signer you can use as an owner on ISmartContractAccount
 export const web3authSigner: SmartAccountSigner = new WalletClientSigner(
-  web3authClient
+  web3authClient,
+  "web3auth" // signerType
 );

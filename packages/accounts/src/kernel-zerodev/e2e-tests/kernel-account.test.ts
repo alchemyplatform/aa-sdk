@@ -38,6 +38,7 @@ describe("Kernel Account Tests", () => {
 
   const ownerAccount = mnemonicToAccount(OWNER_MNEMONIC);
   const owner: SmartAccountSigner = {
+    signerType: "kernel-zerodev",
     signMessage: async (msg) =>
       ownerAccount.signMessage({
         message: { raw: toHex(msg) },

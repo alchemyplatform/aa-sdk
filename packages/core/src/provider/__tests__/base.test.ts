@@ -103,6 +103,8 @@ describe("Base Tests", () => {
       entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
       rpcClient: providerMock.rpcClient,
       getAddress: async () => "0xMOCK_ADDRESS",
+      getFactoryAddress: () => "0xMOCK_FACOTRY_ADDRESS",
+      getOwner: () => undefined,
     } as any;
 
     // This says the await is not important... it is. the method is not marked sync because we don't need it to be,

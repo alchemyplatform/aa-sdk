@@ -25,11 +25,11 @@ export class LightSmartContractAccount<
   }
 
   /**
-   * Returns the on-chain EOA owner of the account.
+   * Returns the on-chain EOA owner address of the account.
    *
    * @returns {Address} the on-chain EOA owner of the account
    */
-  async getOwner(): Promise<Address> {
+  async getOwnerAddress(): Promise<Address> {
     const callResult = await this.rpcProvider.call({
       to: await this.getAddress(),
       data: encodeFunctionData({

@@ -33,7 +33,7 @@ export class KernelBaseValidator {
     return this.validatorAddress;
   }
 
-  async getOwner(): Promise<Hex> {
+  async getOwnerAddress(): Promise<Hex> {
     return this.owner.getAddress();
   }
   async signMessageWithValidatorParams(

@@ -60,5 +60,6 @@ const pkpWallet = new PKPEthersWallet({
 
 // a smart account signer you can use as an owner on ISmartContractAccount
 export const litSigner: SmartAccountSigner = new WalletClientSigner(
-  createWalletClient({ transport: custom(pkpWallet.rpcProvider) }) // JsonRpcProvider instance
+  createWalletClient({ transport: custom(pkpWallet.rpcProvider) }), // JsonRpcProvider instance,
+  "lit" // signerType
 );

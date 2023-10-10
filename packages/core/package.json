@@ -52,7 +52,7 @@
   "dependencies": {
     "abitype": "^0.8.3",
     "eventemitter3": "^5.0.1",
-    "viem": "^1.10.9"
+    "viem": "^1.16.2"
   },
   "repository": {
     "type": "git",

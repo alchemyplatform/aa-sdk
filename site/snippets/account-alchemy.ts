@@ -1,12 +1,12 @@
 /* via `aa-alchemy` */
 
+import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import {
+  LocalAccountSigner,
   SimpleSmartContractAccount,
   type SmartAccountSigner,
-  LocalAccountSigner,
 } from "@alchemy/aa-core";
 import { polygonMumbai } from "viem/chains";
-import { AlchemyProvider } from "@alchemy/aa-alchemy";
 
 const SIMPLE_ACCOUNT_FACTORY_ADDRESS =
   "0x9406Cc6185a346906296840746125a0E44976454";
@@ -40,6 +40,7 @@ provider.withAlchemyGasManager({
 });
 
 // 3. send a UserOperation
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const { hash } = await provider.sendUserOperation({
   target: "0xTargetAddress",
   data: "0xcallData",

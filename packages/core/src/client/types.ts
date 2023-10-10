@@ -6,9 +6,9 @@ import type {
   Hash,
   HttpTransport,
   PublicActions,
+  PublicRpcSchema,
   Transport,
 } from "viem";
-import type { PublicRpcSchema } from "viem/dist/types/types/eip1193";
 import type {
   UserOperationEstimateGasResponse,
   UserOperationReceipt,

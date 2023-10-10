@@ -35,7 +35,10 @@ const client = createWalletClient({
 });
 
 // this can now be used as an owner for a Smart Contract Account
-export const eoaSigner = new WalletClientSigner(client);
+export const eoaSigner = new WalletClientSigner(
+  client,
+  "json-rpc" //signerType
+);
 ```
 
 ### Local Account
@@ -60,5 +63,8 @@ export const client = createWalletClient({
 });
 
 // this can now be used as an owner for a Smart Contract Account
-export const eoaSigner = new WalletClientSigner(client);
+export const eoaSigner = new WalletClientSigner(
+  client,
+  "local" // signerType
+);
 ```

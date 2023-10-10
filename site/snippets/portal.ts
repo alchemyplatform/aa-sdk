@@ -1,7 +1,7 @@
+import { WalletClientSigner, type SmartAccountSigner } from "@alchemy/aa-core";
 import Portal, { PortalOptions } from "@portal-hq/web";
 import { createWalletClient, custom } from "viem";
 import { polygonMumbai } from "viem/chains";
-import { WalletClientSigner, type SmartAccountSigner } from "@alchemy/aa-core";
 
 const portalOptions = {
   autoApprove: true,
@@ -16,5 +16,6 @@ const portalWalletClient = createWalletClient({
   transport: custom(portal.provider),
 });
 export const portalSigner: SmartAccountSigner = new WalletClientSigner(
-  portalWalletClient
+  portalWalletClient,
+  "portal" // signerType
 );

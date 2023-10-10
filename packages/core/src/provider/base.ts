@@ -562,6 +562,28 @@ export class SmartAccountProvider<
     const account = fn(this.rpcClient);
     defineReadOnly(this, "account", account);
 
+    if (this.rpcClient.transport.type === "http") {
+      const { url = this.chain.rpcUrls.default.http[0], fetchOptions } = this
+        .rpcClient.transport as ReturnType<HttpTransport>["config"] &
+        ReturnType<HttpTransport>["value"];
+
+      const signer = account.getOwner();
+      const factoryAddress = account.getFactoryAddress();
+
+      this.rpcClient = createPublicErc4337Client({
+        chain: this.chain,
+        rpcUrl: url,
+        fetchOptions: {
+          ...fetchOptions,
+          headers: {
+            ...fetchOptions?.headers,
+            "Alchemy-AA-SDK-Signer": signer?.signerType,
+            "Alchemy-AA-SDK-Factory-Address": factoryAddress,
+          },
+        },
+      });
+    }
+
     this.emit("connect", {
       chainId: toHex(this.chain.id),
     });

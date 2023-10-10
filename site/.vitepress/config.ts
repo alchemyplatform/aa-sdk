@@ -416,7 +416,7 @@ export default defineConfig({
               { text: "signMessageWith6492", link: "/signMessageWith6492" },
               { text: "signTypedData", link: "/signTypedData" },
               { text: "signTypedDataWith6492", link: "/signTypedDataWith6492" },
-              { text: "getOwner", link: "/getOwner" },
+              { text: "getOwnerAddress", link: "/getOwnerAddress" },
               {
                 text: "encodeTransferOwnership",
                 link: "/encodeTransferOwnership",
