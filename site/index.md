@@ -40,7 +40,7 @@ description: Everything you need to build 4337 accounts for your users
               Explore the docs
             </button>
           </a>
-          <a rel="noopener noreferrer" href="./packages/overview.html">
+          <a rel="noopener noreferrer" href="./package-overview.html">
             <button
               class="flex items-center rounded-md px-[12px] py-[12px] text-[16px] font-semibold transition duration-300 ease-in-out hover:scale-105 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black"
             >
@@ -86,7 +86,7 @@ const { hash } = await provider.sendUserOperation(uo);
         </div>
       </div>
     </a>
-    <a rel="noopener noreferrer" href="./packages/overview.html">
+    <a rel="noopener noreferrer" href="./package-overview.html">
       <div
         class="flex flex-col w-[370px] p-[24px] gap-[24px] rounded-md text-white overflow-auto bg-gradient-3 group hover:scale-105 hover:opacity-90 transition duration-300 ease-in-out"
       >

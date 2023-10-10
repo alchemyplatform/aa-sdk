@@ -28,7 +28,7 @@ The next step is to select the right smart account implementation for your appli
 - [Using your own account implementation](accounts/using-your-own)
 
 ::: tip Note
-The `LightAccount` implementation is not [ERC-6900](/erc-6900) compliant. The `ModularAccount` implementation is launching later this year and will be EIP-6900 compatible. However, `LightAccount` is forward-compatible with `ModularAccount` and can be upgraded to it in the future.
+The `LightAccount` implementation is not [ERC-6900](/smart-accounts/accounts/modular-account) compliant. The `ModularAccount` implementation is launching later this year and will be EIP-6900 compatible. However, `LightAccount` is forward-compatible with `ModularAccount` and can be upgraded to it in the future.
 :::
 
 ## 3. Choosing a Signer
