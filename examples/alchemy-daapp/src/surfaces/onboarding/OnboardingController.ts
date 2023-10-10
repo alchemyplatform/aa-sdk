@@ -28,18 +28,18 @@ async function pollForLambdaForComplete(
   txnMaxDurationSeconds: number = 20
 ) {
   let txnRetryCount = 0;
-  let reciept;
+  let receipt;
   do {
-    reciept = await lambda();
-    if (!reciept) {
+    receipt = await lambda();
+    if (!receipt) {
       // wait 1 second before trying again
       await new Promise((resolve) => setTimeout(resolve, 1000));
     }
-  } while (!reciept && txnRetryCount++ < txnMaxDurationSeconds);
-  if (!reciept) {
-    throw new Error("Timedout waiting for processs completion.");
+  } while (!receipt && txnRetryCount++ < txnMaxDurationSeconds);
+  if (!receipt) {
+    throw new Error("Timeout waiting for processes completion.");
   }
-  return reciept;
+  return receipt;
 }
 
 type OnboardingFunction = (
@@ -119,14 +119,14 @@ const onboardingStepHandlers: Record<
       });
     });
 
-    
+
     const smartAccountAddress = await baseSigner.getAddress();
     if (context.useGasManager) {
       const smartAccountSigner = withAlchemyGasManager(baseSigner, {
         policyId: appConfig.gasManagerPolicyId,
         entryPoint: entryPointAddress,
       });
-  
+
       return {
         nextStep: OnboardingStepIdentifier.MINT_NFT,
         addedContext: {
