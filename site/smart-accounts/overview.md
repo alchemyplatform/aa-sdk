@@ -35,6 +35,7 @@ The `LightAccount` implementation is not [ERC-6900](/smart-accounts/accounts/mod
 
 A signer is the entity that signs transactions (User Operations) on behalf of the smart account. It can be an EOA, a custodial service, or a multi-party computation (MPC) service. We explain the different types of signers in detail in the [overview](signers/overview) section on choosing a signer. We'll also cover the common signer examples in detail in the following sections:
 
+- [Dynamic](signers/dynamic)
 - [Magic Link](signers/magic-link)
 - [Web3Auth](signers/web3auth)
 - [Externally Owned Account](signers/eoa)
