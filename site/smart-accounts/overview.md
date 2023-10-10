@@ -20,7 +20,7 @@ In this guide we'll explain the end-to-end journey of integrating smart accounts
 
 Before diving into smart accounts, it's important to [set up your Alchemy account](https://auth.alchemy.com/signup). This will allow you to access the Alchemy API key which is required to initialize a provider and interact with the blockchain. Additionally, you'll get access to Alchemy's Gas Manager, which will enable you to sponsor gas for your users.
 
-## 2. Choosing a Smart Account
+## 2. Deploying a Smart Account
 
 The next step is to select the right smart account implementation for your application. We recommend using `LightAccount`, which is a simple, secure, and cost-effective solution for most use cases. It supports features such as owner transfers, [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) message signing, batched transactions and more. However, if you're looking for more advanced features, you can use your own account implementation. We'll cover both options in detail in the following sections:
 

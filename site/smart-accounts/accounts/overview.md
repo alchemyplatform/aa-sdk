@@ -3,19 +3,19 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Choosing a Smart Account
+      content: Deploying a Smart Account
   - - meta
     - name: description
-      content: Choosing a Smart Account Overview
+      content: Deploying a Smart Account Overview
   - - meta
     - property: og:description
-      content: Choosing a Smart Account Overview
+      content: Deploying a Smart Account Overview
 next:
-  text: Choosing a Signer
+  text: Integrating a Signer
   link: /smart-accounts/signers/overview
 ---
 
-# Choosing a Smart Account
+# Deploying a Smart Account
 
 ## What's a Smart Account?
 
