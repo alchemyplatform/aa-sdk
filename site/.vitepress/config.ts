@@ -1,17 +1,9 @@
-import { $ } from "execa";
 import { defineConfig } from "vitepress";
-
-// This makes sure that this works in forked repos as well
-const getRepoRoute = $.sync`git rev-parse --show-toplevel`;
-const { stdout: basePath } = $.sync`basename ${getRepoRoute}`;
-
-const noBasePath = process.env.NO_BASE_PATH === "true";
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "Account Kit",
   description: "Account Abstraction Legos",
-  base: noBasePath ? undefined : `/${basePath}`,
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
@@ -540,6 +532,6 @@ export default defineConfig({
         defer: "defer",
       },
     ],
-    ["link", { rel: "icon", href: "/public/favicon.ico" }],
+    ["link", { rel: "icon", href: "/favicon.ico" }],
   ],
 });

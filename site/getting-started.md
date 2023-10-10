@@ -64,11 +64,12 @@ Remember to:
 2. Set `"ALCHEMY_API_KEY"` with your unique Alchemy API key.
 3. Fund your smart account address with some SepoliaETH in order for the user operation to go through. This address is logged to the console when you run the script.
 4. Adjust the `target` and `data` fields in the `sendUserOperation` function to match your requirements.
-   :::
+
+:::
 
 ## Dive Deeper
 
-In this guide we initialized `provider` with the `aa-alchemy` package however we could have done the same with the other packages of Account Kit as well. To learn more about the different packages and their use cases, check out the ["Packages Overview"](/package-overview) page.
+In this guide we initialized `provider` with the `aa-alchemy` package however we could have done the same with the other packages of Account Kit as well. To learn more about the different packages and their use cases, check out the ["Packages Overview"](/packages/overview) page.
 
 ## Next Steps
 
