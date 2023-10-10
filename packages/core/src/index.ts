@@ -11,16 +11,18 @@ export type { BaseSmartAccountParams } from "./account/base.js";
 export { SimpleSmartContractAccount } from "./account/simple.js";
 export type { SimpleSmartAccountParams } from "./account/simple.js";
 export type * from "./account/types.js";
-export { WalletClientSigner } from "./signer/wallet-client.js";
-export { HdAccountSigner } from "./signer/hd-account.js";
 export { LocalAccountSigner } from "./signer/local-account.js";
-export { PrivateKeySigner } from "./signer/private-key.js";
 export type { SmartAccountSigner } from "./signer/types.js";
-export { verifyEIP6492Signature, wrapWith6492 } from "./signer/utils.js";
+export {
+  verifyEIP6492Signature,
+  wrapSignatureWith6492,
+} from "./signer/utils.js";
+export { WalletClientSigner } from "./signer/wallet-client.js";
 
 export {
   createPublicErc4337Client,
   createPublicErc4337FromClient,
+  erc4337ClientActions,
 } from "./client/create-client.js";
 export type * from "./client/types.js";
 
@@ -32,21 +34,23 @@ export {
 
 export { SmartAccountProvider, noOpMiddleware } from "./provider/base.js";
 export type {
-  ConnectedSmartAccountProvider,
+  SmartAccountProviderConfig,
   SmartAccountProviderOpts,
 } from "./provider/base.js";
 export type * from "./provider/types.js";
 
 export type * from "./types.js";
-export type * from "./utils.js";
+export type * from "./utils/index.js";
 export {
   asyncPipe,
+  bigIntMax,
+  bigIntPercent,
   deepHexlify,
   defineReadOnly,
   getChain,
   getUserOperationHash,
   resolveProperties,
-} from "./utils.js";
+} from "./utils/index.js";
 
 export { Logger } from "./logger.js";
 export type { LogLevel } from "./logger.js";

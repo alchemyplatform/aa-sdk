@@ -5,13 +5,16 @@ import {
   type Address,
   type Chain,
   type Hash,
+  type HttpTransport,
   type RpcTransactionRequest,
   type Transaction,
   type Transport,
 } from "viem";
 import { arbitrum, arbitrumGoerli } from "viem/chains";
-import { BaseSmartContractAccount } from "../account/base.js";
-import type { SignTypedDataParams } from "../account/types.js";
+import type {
+  ISmartContractAccount,
+  SignTypedDataParams,
+} from "../account/types.js";
 import { createPublicErc4337Client } from "../client/create-client.js";
 import type {
   PublicErc4337Client,
@@ -23,17 +26,20 @@ import {
   type UserOperationCallData,
   type UserOperationOverrides,
   type UserOperationReceipt,
+  type UserOperationRequest,
   type UserOperationResponse,
   type UserOperationStruct,
 } from "../types.js";
 import {
   asyncPipe,
+  bigIntMax,
+  bigIntPercent,
   deepHexlify,
   defineReadOnly,
   getUserOperationHash,
   resolveProperties,
   type Deferrable,
-} from "../utils.js";
+} from "../utils/index.js";
 import type {
   AccountMiddlewareFn,
   AccountMiddlewareOverrideFn,
@@ -76,10 +82,13 @@ const minPriorityFeePerBidDefaults = new Map<number, bigint>([
   [arbitrumGoerli.id, 10_000_000n],
 ]);
 
-export type ConnectedSmartAccountProvider<
+export type SmartAccountProviderConfig<
   TTransport extends SupportedTransports = Transport
-> = SmartAccountProvider<TTransport> & {
-  account: BaseSmartContractAccount<TTransport>;
+> = {
+  rpcProvider: string | PublicErc4337Client<TTransport>;
+  chain: Chain;
+  entryPointAddress: Address;
+  opts?: SmartAccountProviderOpts;
 };
 
 export class SmartAccountProvider<
@@ -91,18 +100,25 @@ export class SmartAccountProvider<
   private txMaxRetries: number;
   private txRetryIntervalMs: number;
   private txRetryMulitplier: number;
+  readonly account?: ISmartContractAccount;
+  protected entryPointAddress: Address;
+  protected chain: Chain;
 
   minPriorityFeePerBid: bigint;
-  rpcClient: PublicErc4337Client<Transport>;
+  rpcClient:
+    | PublicErc4337Client<TTransport>
+    | PublicErc4337Client<HttpTransport>;
 
-  constructor(
-    rpcProvider: string | PublicErc4337Client<TTransport>,
-    protected entryPointAddress: Address,
-    protected chain: Chain,
-    readonly account?: BaseSmartContractAccount<TTransport>,
-    opts?: SmartAccountProviderOpts
-  ) {
+  constructor({
+    rpcProvider,
+    entryPointAddress,
+    chain,
+    opts,
+  }: SmartAccountProviderConfig<TTransport>) {
     super();
+
+    this.entryPointAddress = entryPointAddress;
+    this.chain = chain;
 
     this.txMaxRetries = opts?.txMaxRetries ?? 5;
     this.txRetryIntervalMs = opts?.txRetryIntervalMs ?? 2000;
@@ -253,14 +269,6 @@ export class SmartAccountProvider<
       };
     });
 
-    const bigIntMax = (...args: bigint[]) => {
-      if (!args.length) {
-        return undefined;
-      }
-
-      return args.reduce((m, c) => (m > c ? m : c));
-    };
-
     const maxFeePerGas = bigIntMax(
       ...requests
         .filter((x) => x.maxFeePerGas != null)
@@ -333,25 +341,22 @@ export class SmartAccountProvider<
     }
 
     const initCode = await this.account.getInitCode();
-    const uoStruct = await asyncPipe(
-      this.dummyPaymasterDataMiddleware,
-      this.feeDataGetter,
-      this.gasEstimator,
-      this.paymasterDataMiddleware,
-      this.customMiddleware ?? noOpMiddleware,
-      // This applies the overrides if they've been passed in
-      async (struct) => ({ ...struct, ...overrides })
-    )({
-      initCode,
-      sender: this.getAddress(),
-      nonce: this.account.getNonce(),
-      callData: Array.isArray(data)
-        ? this.account.encodeBatchExecute(data)
-        : this.account.encodeExecute(data.target, data.value ?? 0n, data.data),
-      signature: this.account.getDummySignature(),
-    } as Deferrable<UserOperationStruct>);
-
-    return resolveProperties(uoStruct);
+    return this._runMiddlewareStack(
+      {
+        initCode,
+        sender: this.getAddress(),
+        nonce: this.account.getNonce(),
+        callData: Array.isArray(data)
+          ? this.account.encodeBatchExecute(data)
+          : this.account.encodeExecute(
+              data.target,
+              data.value ?? 0n,
+              data.data
+            ),
+        signature: this.account.getDummySignature(),
+      } as Deferrable<UserOperationStruct>,
+      overrides
+    );
   };
 
   sendUserOperation = async (
@@ -364,6 +369,54 @@ export class SmartAccountProvider<
 
     const uoStruct = await this.buildUserOperation(data, overrides);
     return this._sendUserOperation(uoStruct);
+  };
+
+  dropAndReplaceUserOperation = async (
+    uoToDrop: UserOperationRequest
+  ): Promise<SendUserOperationResult> => {
+    const uoToSubmit = {
+      initCode: uoToDrop.initCode,
+      sender: uoToDrop.sender,
+      nonce: uoToDrop.nonce,
+      callData: uoToDrop.callData,
+      signature: uoToDrop.signature,
+    } as UserOperationStruct;
+
+    // Run once to get the fee estimates
+    // This can happen at any part of the middleware stack, so we want to run it all
+    const { maxFeePerGas, maxPriorityFeePerGas } =
+      await this._runMiddlewareStack(uoToSubmit);
+
+    const overrides: UserOperationOverrides = {
+      maxFeePerGas: bigIntMax(
+        BigInt(maxFeePerGas ?? 0n),
+        bigIntPercent(uoToDrop.maxFeePerGas, 110n)
+      ),
+      maxPriorityFeePerGas: bigIntMax(
+        BigInt(maxPriorityFeePerGas ?? 0n),
+        bigIntPercent(uoToDrop.maxPriorityFeePerGas, 110n)
+      ),
+    };
+
+    const uoToSend = await this._runMiddlewareStack(uoToSubmit, overrides);
+    return this._sendUserOperation(uoToSend);
+  };
+
+  private _runMiddlewareStack = async (
+    uo: Deferrable<UserOperationStruct>,
+    overrides?: UserOperationOverrides
+  ) => {
+    const result = await asyncPipe(
+      this.dummyPaymasterDataMiddleware,
+      this.feeDataGetter,
+      this.gasEstimator,
+      // run this before paymaster middleware
+      async (struct) => ({ ...struct, ...overrides }),
+      this.customMiddleware ?? noOpMiddleware,
+      this.paymasterDataMiddleware
+    )(uo);
+
+    return resolveProperties<UserOperationStruct>(result);
   };
 
   private _sendUserOperation = async (uoStruct: UserOperationStruct) => {
@@ -430,8 +483,9 @@ export class SmartAccountProvider<
   };
 
   readonly feeDataGetter: AccountMiddlewareFn = async (struct) => {
-    const maxPriorityFeePerGas = await this.rpcClient.getMaxPriorityFeePerGas();
-    const feeData = await this.rpcClient.getFeeData();
+    const maxPriorityFeePerGas =
+      await this.rpcClient.estimateMaxPriorityFeePerGas();
+    const feeData = await this.rpcClient.estimateFeesPerGas();
     if (!feeData.maxFeePerGas || !feeData.maxPriorityFeePerGas) {
       throw new Error(
         "feeData is missing maxFeePerGas or maxPriorityFeePerGas"
@@ -498,11 +552,37 @@ export class SmartAccountProvider<
     return this;
   };
 
-  connect(
-    fn: (provider: PublicErc4337Client<TTransport>) => BaseSmartContractAccount
-  ): this & { account: BaseSmartContractAccount } {
+  connect<TAccount extends ISmartContractAccount>(
+    fn: (
+      provider:
+        | PublicErc4337Client<TTransport>
+        | PublicErc4337Client<HttpTransport>
+    ) => TAccount
+  ): this & { account: TAccount } {
     const account = fn(this.rpcClient);
     defineReadOnly(this, "account", account);
+
+    if (this.rpcClient.transport.type === "http") {
+      const { url = this.chain.rpcUrls.default.http[0], fetchOptions } = this
+        .rpcClient.transport as ReturnType<HttpTransport>["config"] &
+        ReturnType<HttpTransport>["value"];
+
+      const signer = account.getOwner();
+      const factoryAddress = account.getFactoryAddress();
+
+      this.rpcClient = createPublicErc4337Client({
+        chain: this.chain,
+        rpcUrl: url,
+        fetchOptions: {
+          ...fetchOptions,
+          headers: {
+            ...fetchOptions?.headers,
+            "Alchemy-AA-SDK-Signer": signer?.signerType,
+            "Alchemy-AA-SDK-Factory-Address": factoryAddress,
+          },
+        },
+      });
+    }
 
     this.emit("connect", {
       chainId: toHex(this.chain.id),
@@ -512,7 +592,7 @@ export class SmartAccountProvider<
       .getAddress()
       .then((address) => this.emit("accountsChanged", [address]));
 
-    return this as this & { account: typeof account };
+    return this as unknown as this & { account: TAccount };
   }
 
   disconnect(): this & { account: undefined } {
@@ -526,7 +606,9 @@ export class SmartAccountProvider<
     return this as this & { account: undefined };
   }
 
-  isConnected(): this is ConnectedSmartAccountProvider<TTransport> {
+  isConnected<TAccount extends ISmartContractAccount>(): this is this & {
+    account: TAccount;
+  } {
     return this.account !== undefined;
   }
 

@@ -16,3 +16,7 @@ export {
   ValidatorMode,
 } from "./kernel-zerodev/validator/base.js";
 export type { KernelBaseValidatorParams } from "./kernel-zerodev/validator/base.js";
+
+//light-account exports
+export { LightSmartContractAccount } from "./light-account/account.js";
+export { getDefaultLightAccountFactory } from "./light-account/utils.js";

@@ -20,7 +20,6 @@ export interface SimpleSmartAccountParams<
   TTransport extends Transport | FallbackTransport = Transport
 > extends BaseSmartAccountParams<TTransport> {
   owner: SmartAccountSigner;
-  factoryAddress: Address;
   index?: bigint;
 }
 
@@ -28,15 +27,12 @@ export class SimpleSmartContractAccount<
   TTransport extends Transport | FallbackTransport = Transport
 > extends BaseSmartContractAccount<TTransport> {
   protected owner: SmartAccountSigner;
-  protected factoryAddress: Address;
   protected index: bigint;
 
-  constructor(params: SimpleSmartAccountParams) {
+  constructor(params: SimpleSmartAccountParams<TTransport>) {
     super(params);
-
-    this.index = params.index ?? 0n;
     this.owner = params.owner;
-    this.factoryAddress = params.factoryAddress;
+    this.index = params.index ?? 0n;
   }
 
   getDummySignature(): `0x${string}` {
@@ -56,9 +52,9 @@ export class SimpleSmartContractAccount<
   }
 
   override async encodeBatchExecute(
-    _txs: BatchUserOperationCallData
+    txs: BatchUserOperationCallData
   ): Promise<`0x${string}`> {
-    const [targets, datas] = _txs.reduce(
+    const [targets, datas] = txs.reduce(
       (accum, curr) => {
         accum[0].push(curr.target);
         accum[1].push(curr.data);

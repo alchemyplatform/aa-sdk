@@ -3,7 +3,7 @@ import { useCallback } from "react";
 import { toHex } from "viem";
 import { useWalletClient } from "wagmi";
 
-type SimpleSmartAccountSignerResult =
+type LightSmartAccountSignerResult =
   | {
       isLoading: false;
       owner: SmartAccountSigner;
@@ -13,8 +13,9 @@ type SimpleSmartAccountSignerResult =
       owner: undefined;
     };
 
-export function useSimpleAccountSigner(): SimpleSmartAccountSignerResult {
+export function useLightAccountSigner(): LightSmartAccountSignerResult {
   const walletClientQuery = useWalletClient();
+  const signerType = "json-rpc"
   // We need this to by pass a viem bug https://github.com/wagmi-dev/viem/issues/606
   const signMessage = useCallback(
     (data: string | Uint8Array) =>
@@ -48,5 +49,5 @@ export function useSimpleAccountSigner(): SimpleSmartAccountSignerResult {
       owner: undefined,
     };
   }
-  return { isLoading: false, owner: { signMessage, signTypedData, getAddress } };
+  return { isLoading: false, owner: { signerType, signMessage, signTypedData, getAddress } };
 }

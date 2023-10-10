@@ -1,18 +1,23 @@
 import {
   getAddress,
+  isHex,
   type ByteArray,
   type Hex,
   type WalletClient,
-  isHex,
 } from "viem";
-import type { SmartAccountSigner } from "./types";
 import type { SignTypedDataParams } from "../account/types";
+import type { SmartAccountSigner } from "./types";
 
 export class WalletClientSigner implements SmartAccountSigner {
+  signerType: string;
   private client: WalletClient;
 
-  constructor(client: WalletClient) {
+  constructor(client: WalletClient, signerType: string) {
     this.client = client;
+    if (!signerType) {
+      throw new Error("Valid signerType param is required.");
+    }
+    this.signerType = signerType;
   }
 
   getAddress: () => Promise<`0x${string}`> = async () => {

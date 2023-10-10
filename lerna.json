@@ -5,7 +5,6 @@
   "useNx": true,
   "npmClient": "yarn",
   "conventionalCommits": true,
-  "conventionalPrerelease": true,
   "changelog": true,
   "command": {
     "version": {

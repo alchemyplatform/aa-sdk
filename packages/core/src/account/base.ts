@@ -3,6 +3,7 @@ import {
   getContract,
   type Chain,
   type GetContractReturnType,
+  type Hash,
   type Hex,
   type HttpTransport,
   type PublicClient,
@@ -15,6 +16,8 @@ import type {
   SupportedTransports,
 } from "../client/types.js";
 import { Logger } from "../logger.js";
+import type { SmartAccountSigner } from "../signer/types.js";
+import { wrapSignatureWith6492 } from "../signer/utils.js";
 import type { BatchUserOperationCallData } from "../types.js";
 import type { ISmartContractAccount, SignTypedDataParams } from "./types.js";
 
@@ -29,6 +32,8 @@ export interface BaseSmartAccountParams<
 > {
   rpcClient: string | PublicErc4337Client<TTransport>;
   entryPointAddress: Address;
+  factoryAddress: Address;
+  owner?: SmartAccountSigner | undefined;
   chain: Chain;
   accountAddress?: Address;
 }
@@ -37,27 +42,61 @@ export abstract class BaseSmartContractAccount<
   TTransport extends SupportedTransports = Transport
 > implements ISmartContractAccount
 {
+  protected factoryAddress: Address;
   protected deploymentState: DeploymentState = DeploymentState.UNDEFINED;
   protected accountAddress?: Address;
+  protected owner: SmartAccountSigner | undefined;
   protected entryPoint: GetContractReturnType<
     typeof EntryPointAbi,
     PublicClient,
     Chain
   >;
   protected entryPointAddress: Address;
-  protected rpcProvider: PublicErc4337Client<TTransport | HttpTransport>;
+  protected rpcProvider:
+    | PublicErc4337Client<TTransport>
+    | PublicErc4337Client<HttpTransport>;
 
   constructor(params: BaseSmartAccountParams<TTransport>) {
     this.entryPointAddress = params.entryPointAddress;
-    this.rpcProvider =
+
+    const rpcUrl =
       typeof params.rpcClient === "string"
-        ? createPublicErc4337Client({
-            chain: params.chain,
-            rpcUrl: params.rpcClient,
-          })
-        : params.rpcClient;
+        ? params.rpcClient
+        : params.rpcClient.transport.type === "http"
+        ? (
+            params.rpcClient.transport as ReturnType<HttpTransport>["config"] &
+              ReturnType<HttpTransport>["value"]
+          ).url || params.chain.rpcUrls.default.http[0]
+        : undefined;
+
+    const fetchOptions =
+      typeof params.rpcClient === "string"
+        ? undefined
+        : params.rpcClient.transport.type === "http"
+        ? (
+            params.rpcClient.transport as ReturnType<HttpTransport>["config"] &
+              ReturnType<HttpTransport>["value"]
+          ).fetchOptions
+        : undefined;
+
+    this.rpcProvider = rpcUrl
+      ? createPublicErc4337Client({
+          chain: params.chain,
+          rpcUrl,
+          fetchOptions: {
+            ...fetchOptions,
+            headers: {
+              ...fetchOptions?.headers,
+              "Alchemy-AA-SDK-Signer": params.owner?.signerType,
+              "Alchemy-AA-SDK-Factory-Address": params.factoryAddress,
+            },
+          },
+        })
+      : (params.rpcClient as PublicErc4337Client<TTransport>);
 
     this.accountAddress = params.accountAddress;
+    this.factoryAddress = params.factoryAddress;
+    this.owner = params.owner;
 
     this.entryPoint = getContract({
       address: params.entryPointAddress,
@@ -68,35 +107,127 @@ export abstract class BaseSmartContractAccount<
     });
   }
 
-  abstract getDummySignature(): `0x${string}`;
+  // #region abstract-methods
+
+  /**
+   * This method should return a signature that will not `revert` during validation.
+   * It does not have to pass validation, just not cause the contract to revert.
+   * This is required for gas estimation so that the gas estimate are accurate.
+   *
+   */
+  abstract getDummySignature(): Hash;
+
+  /**
+   * this method should return the abi encoded function data for a call to your contract's `execute` method
+   *
+   * @param target -- equivalent to `to` in a normal transaction
+   * @param value -- equivalent to `value` in a normal transaction
+   * @param data -- equivalent to `data` in a normal transaction
+   * @returns abi encoded function data for a call to your contract's `execute` method
+   */
   abstract encodeExecute(
     target: string,
     value: bigint,
     data: string
-  ): Promise<`0x${string}`>;
-  abstract signMessage(msg: string | Uint8Array): Promise<`0x${string}`>;
+  ): Promise<Hash>;
 
-  protected abstract getAccountInitCode(): Promise<`0x${string}`>;
+  /**
+   * this should return an ERC-191 compliant message and is used to sign UO Hashes
+   *
+   * @param msg -- the message to sign
+   */
+  abstract signMessage(msg: string | Uint8Array): Promise<Hash>;
 
-  async signMessageWith6492(_msg: string | Uint8Array): Promise<`0x${string}`> {
-    throw new Error("signMessageWith6492 not supported");
-  }
+  /**
+   * this should return the init code that will be used to create an account if one does not exist.
+   * Usually this is the concatenation of the account's factory address and the abi encoded function data of the account factory's `createAccount` method.
+   */
+  protected abstract getAccountInitCode(): Promise<Hash>;
 
+  // #endregion abstract-methods
+
+  // #region optional-methods
+
+  /**
+   * If your contract supports signing and verifying typed data,
+   * you should implement this method.
+   *
+   * @param _params -- Typed Data params to sign
+   */
   async signTypedData(_params: SignTypedDataParams): Promise<`0x${string}`> {
     throw new Error("signTypedData not supported");
   }
 
-  async signTypedDataWith6492(
-    _params: SignTypedDataParams
-  ): Promise<`0x${string}`> {
-    throw new Error("signTypedDataWith6492 not supported");
+  /**
+   * This method should wrap the result of `signMessage` as per
+   * [EIP-6492](https://eips.ethereum.org/EIPS/eip-6492)
+   *
+   * @param msg -- the message to sign
+   */
+  async signMessageWith6492(msg: string | Uint8Array): Promise<`0x${string}`> {
+    const [isDeployed, signature] = await Promise.all([
+      this.isAccountDeployed(),
+      this.signMessage(msg),
+    ]);
+
+    return this.create6492Signature(isDeployed, signature);
   }
 
+  /**
+   * Similar to the signMessageWith6492 method above,
+   * this method should wrap the result of `signTypedData` as per
+   * [EIP-6492](https://eips.ethereum.org/EIPS/eip-6492)
+   *
+   * @param params -- Typed Data params to sign
+   */
+  async signTypedDataWith6492(
+    params: SignTypedDataParams
+  ): Promise<`0x${string}`> {
+    const [isDeployed, signature] = await Promise.all([
+      this.isAccountDeployed(),
+      this.signTypedData(params),
+    ]);
+
+    return this.create6492Signature(isDeployed, signature);
+  }
+
+  private async create6492Signature(
+    isDeployed: boolean,
+    signature: Hash
+  ): Promise<Hash> {
+    if (isDeployed) {
+      return signature;
+    }
+
+    const [factoryAddress, factoryCalldata] =
+      await this.parseFactoryAddressFromAccountInitCode();
+
+    Logger.debug(
+      `[BaseSmartContractAccount](create6492Signature)\
+        factoryAddress: ${factoryAddress}, factoryCalldata: ${factoryCalldata}`
+    );
+
+    return wrapSignatureWith6492({
+      factoryAddress,
+      factoryCalldata,
+      signature,
+    });
+  }
+
+  /**
+   * Not all contracts support batch execution.
+   * If your contract does, this method should encode a list of
+   * transactions into the call data that will be passed to your
+   * contract's batch execution method.
+   *
+   * @param _txs -- the transactions to batch execute
+   */
   async encodeBatchExecute(
     _txs: BatchUserOperationCallData
   ): Promise<`0x${string}`> {
     throw new Error("encodeBatchExecute not supported");
   }
+  // #endregion optional-methods
 
   async getNonce(): Promise<bigint> {
     if (!(await this.isAccountDeployed())) {
@@ -110,9 +241,9 @@ export abstract class BaseSmartContractAccount<
     if (this.deploymentState === DeploymentState.DEPLOYED) {
       return "0x";
     }
-    const contractCode = await this.rpcProvider.getContractCode(
-      await this.getAddress()
-    );
+    const contractCode = await this.rpcProvider.getBytecode({
+      address: await this.getAddress(),
+    });
 
     if ((contractCode?.length ?? 0) > 2) {
       this.deploymentState = DeploymentState.DEPLOYED;
@@ -150,6 +281,14 @@ export abstract class BaseSmartContractAccount<
     return this.accountAddress;
   }
 
+  getOwner(): SmartAccountSigner | undefined {
+    return this.owner;
+  }
+
+  getFactoryAddress(): Address {
+    return this.factoryAddress;
+  }
+
   // Extra implementations
   async isAccountDeployed(): Promise<boolean> {
     return (await this.getDeploymentState()) === DeploymentState.DEPLOYED;
@@ -164,5 +303,20 @@ export abstract class BaseSmartContractAccount<
     } else {
       return this.deploymentState;
     }
+  }
+
+  /**
+   * https://eips.ethereum.org/EIPS/eip-4337#first-time-account-creation
+   * The initCode field (if non-zero length) is parsed as a 20-byte address,
+   * followed by calldata to pass to this address.
+   * The factory address is the first 40 char after the 0x, and the callData is the rest.
+   */
+  protected async parseFactoryAddressFromAccountInitCode(): Promise<
+    [Address, Hex]
+  > {
+    const initCode = await this.getAccountInitCode();
+    const factoryAddress = `0x${initCode.substring(2, 42)}` as Address;
+    const factoryCalldata = `0x${initCode.substring(42)}` as Hex;
+    return [factoryAddress, factoryCalldata];
   }
 }

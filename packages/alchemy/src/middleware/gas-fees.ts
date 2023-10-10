@@ -1,4 +1,5 @@
 import type { AlchemyProvider } from "../provider.js";
+import type { ClientWithAlchemyMethods } from "./client.js";
 
 export const withAlchemyGasFeeEstimator = (
   provider: AlchemyProvider,
@@ -12,7 +13,8 @@ export const withAlchemyGasFeeEstimator = (
       throw new Error("baseFeePerGas is null");
     }
     const priorityFeePerGas = BigInt(
-      await provider.alchemyClient.request({
+      // it's a fair assumption that if someone is using this Alchemy Middleware, then they are using Alchemy RPC
+      await (provider.rpcClient as ClientWithAlchemyMethods).request({
         method: "rundler_maxPriorityFeePerGas",
         params: [],
       })

@@ -19,7 +19,7 @@ import {
 import { KernelAccountProvider } from "../provider.js";
 import type { KernelUserOperationCallData } from "../types.js";
 import { KernelBaseValidator, ValidatorMode } from "../validator/base.js";
-import { RPC_URL, API_KEY, OWNER_MNEMONIC } from "./constants.js";
+import { API_KEY, OWNER_MNEMONIC, RPC_URL } from "./constants.js";
 import { MockSigner } from "./mocks/mock-signer.js";
 
 describe("Kernel Account Tests", () => {
@@ -38,6 +38,7 @@ describe("Kernel Account Tests", () => {
 
   const ownerAccount = mnemonicToAccount(OWNER_MNEMONIC);
   const owner: SmartAccountSigner = {
+    signerType: "kernel-zerodev",
     signMessage: async (msg) =>
       ownerAccount.signMessage({
         message: { raw: toHex(msg) },
@@ -61,11 +62,11 @@ describe("Kernel Account Tests", () => {
     owner: mockOwner,
   });
 
-  const provider = new KernelAccountProvider(
-    config.rpcProvider,
-    config.entryPointAddress,
-    config.chain
-  );
+  const provider = new KernelAccountProvider({
+    rpcProvider: config.rpcProvider,
+    entryPointAddress: config.entryPointAddress,
+    chain: config.chain,
+  });
 
   function connect(index: bigint, owner = mockOwner) {
     return provider.connect((_provider) => account(index, owner));

@@ -1,19 +1,15 @@
 import type { Address } from "abitype";
 import type {
   Chain,
+  Client,
   FallbackTransport,
   Hash,
-  Hex,
   HttpTransport,
-  PublicClient,
+  PublicActions,
+  PublicRpcSchema,
   Transport,
 } from "viem";
 import type {
-  EIP1193RequestFn,
-  PublicRpcSchema,
-} from "viem/dist/types/types/eip1193";
-import type {
-  BigNumberish,
   UserOperationEstimateGasResponse,
   UserOperationReceipt,
   UserOperationRequest,
@@ -22,7 +18,7 @@ import type {
 
 export type SupportedTransports = Transport | FallbackTransport | HttpTransport;
 
-export type Erc337RpcSchema = [
+export type Erc4337RpcSchema = [
   {
     Method: "eth_sendUserOperation";
     Parameters: [UserOperationRequest, Address];
@@ -47,15 +43,10 @@ export type Erc337RpcSchema = [
     Method: "eth_supportedEntryPoints";
     Parameters: [];
     ReturnType: Address[];
-  },
-  {
-    Method: "eth_maxPriorityFeePerGas";
-    Parameters: [];
-    ReturnType: BigNumberish;
   }
 ];
 
-export interface Erc4337Actions {
+export type Erc4337Actions = {
   /**
    * calls `eth_estimateUserOperationGas` and  returns the result
    *
@@ -65,7 +56,7 @@ export interface Erc4337Actions {
    */
   estimateUserOperationGas(
     request: UserOperationRequest,
-    entryPoint: string
+    entryPoint: Address
   ): Promise<UserOperationEstimateGasResponse>;
 
   /**
@@ -77,13 +68,13 @@ export interface Erc4337Actions {
    */
   sendUserOperation(
     request: UserOperationRequest,
-    entryPoint: string
-  ): Promise<Hex>;
+    entryPoint: Address
+  ): Promise<Hash>;
 
   /**
    * calls `eth_getUserOperationByHash` and returns the {@link UserOperationResponse}
    *
-   * @param hash - the hash of the UserOperation to get the receipt for
+   * @param hash - the hash of the UserOperation to fetch
    * @returns - {@link UserOperationResponse}
    */
   getUserOperationByHash(hash: Hash): Promise<UserOperationResponse | null>;
@@ -102,20 +93,13 @@ export interface Erc4337Actions {
    * @returns - {@link Address}[]
    */
   getSupportedEntryPoints(): Promise<Address[]>;
-}
+};
 
-export interface PublicErc4337Client<T extends SupportedTransports = Transport>
-  extends PublicClient<T, Chain>,
-    Erc4337Actions {
-  request: EIP1193RequestFn<[PublicRpcSchema[number], Erc337RpcSchema[number]]>;
-
-  // below methods are not all erc4337 methods, but are the methods we need in the SmartContractAccountProvideer
-  getMaxPriorityFeePerGas(): Promise<BigNumberish>;
-
-  getFeeData(): Promise<{
-    maxFeePerGas?: BigNumberish;
-    maxPriorityFeePerGas?: BigNumberish;
-  }>;
-
-  getContractCode(address: string): Promise<Hex | `0x`>;
-}
+export type PublicErc4337Client<T extends SupportedTransports = Transport> =
+  Client<
+    T,
+    Chain,
+    undefined,
+    [...PublicRpcSchema, ...Erc4337RpcSchema],
+    PublicActions<T, Chain> & Erc4337Actions
+  >;

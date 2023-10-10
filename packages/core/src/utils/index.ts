@@ -1,7 +1,7 @@
-import type { Address, Hex } from "viem";
+import type { Address, Hash, Hex } from "viem";
 import { encodeAbiParameters, hexToBigInt, keccak256, toHex } from "viem";
 import * as chains from "viem/chains";
-import type { PromiseOrValue, UserOperationRequest } from "./types.js";
+import type { PromiseOrValue, UserOperationRequest } from "../types.js";
 
 /**
  * Utility method for converting a chainId to a {@link chains.Chain} object
@@ -101,7 +101,7 @@ export function getUserOperationHash(
   request: UserOperationRequest,
   entryPointAddress: Address,
   chainId: bigint
-): string {
+): Hash {
   const encoded = encodeAbiParameters(
     [{ type: "bytes32" }, { type: "address" }, { type: "uint256" }],
     [keccak256(packUo(request)), entryPointAddress, chainId]
@@ -155,3 +155,5 @@ export function defineReadOnly<T, K extends keyof T>(
     writable: false,
   });
 }
+
+export * from "./bigint.js";

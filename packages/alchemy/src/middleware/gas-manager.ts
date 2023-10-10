@@ -1,10 +1,10 @@
 import {
   deepHexlify,
   resolveProperties,
-  type ConnectedSmartAccountProvider,
   type UserOperationRequest,
 } from "@alchemy/aa-core";
-import type { Address, Transport } from "viem";
+import type { Address } from "viem";
+import type { AlchemyProvider } from "../provider.js";
 import type { ClientWithAlchemyMethods } from "./client.js";
 
 export interface AlchemyGasManagerConfig {
@@ -13,86 +13,57 @@ export interface AlchemyGasManagerConfig {
 }
 
 /**
- * This uses the alchemy RPC method: `alchemy_requestGasAndPaymasterAndData` to get all of the gas estimates + paymaster data
- * in one RPC call. It will no-op the gas estimator and fee data getter middleware and set a custom middleware that makes the RPC call
+ * This middleware wraps the Alchemy Gas Manager APIs to provide more flexible UserOperation gas sponsorship.
  *
- * @param provider - the smart account provider to override to use the alchemy paymaster
- * @param config - the alchemy paymaster configuration
- * @returns the provider augmented to use the alchemy paymaster
+ * If `estimateGas` is true, it will use `alchemy_requestGasAndPaymasterAndData` to get all of the gas estimates + paymaster data
+ * in one RPC call.
+ *
+ * Otherwise, it will use `alchemy_requestPaymasterAndData` to get only paymaster data, allowing you
+ * to customize the gas and fee estimation middleware.
+ *
+ * @param provider - the smart account provider to override to use the alchemy gas manager
+ * @param config - the alchemy gas manager configuration
+ * @param estimateGas - if true, this will use `alchemy_requestGasAndPaymasterAndData` else will use `alchemy_requestPaymasterAndData`
+ * @returns the provider augmented to use the alchemy gas manager
  */
-export const withAlchemyGasManager = <
-  T extends Transport,
-  Provider extends ConnectedSmartAccountProvider<T>
->(
-  provider: Provider,
-  config: AlchemyGasManagerConfig
-): Provider => {
-  return (
-    provider
-      // no-op gas estimator
-      .withGasEstimator(async () => ({
-        callGasLimit: 0n,
-        preVerificationGas: 0n,
-        verificationGasLimit: 0n,
-      }))
-      // no-op fee because the alchemy api will do it
-      // can set this after the fact to do fee overrides.
-      .withFeeDataGetter(async () => ({
-        maxFeePerGas: 0n,
-        maxPriorityFeePerGas: 0n,
-      }))
-      .withPaymasterMiddleware({
-        paymasterDataMiddleware: async (struct) => {
-          const userOperation: UserOperationRequest = deepHexlify(
-            await resolveProperties(struct)
-          );
-
-          let feeOverride = undefined;
-          if (BigInt(userOperation.maxFeePerGas) > 0n) {
-            feeOverride = {
-              maxFeePerGas: userOperation.maxFeePerGas,
-              maxPriorityFeePerGas: userOperation.maxPriorityFeePerGas,
-            };
-          }
-
-          const result = await (
-            provider.rpcClient as ClientWithAlchemyMethods
-          ).request({
-            method: "alchemy_requestGasAndPaymasterAndData",
-            params: [
-              {
-                policyId: config.policyId,
-                entryPoint: config.entryPoint,
-                userOperation: userOperation,
-                dummySignature: provider.account.getDummySignature(),
-                feeOverride: feeOverride,
-              },
-            ],
-          });
-
-          return result;
-        },
-      })
-  );
+export const withAlchemyGasManager = (
+  provider: AlchemyProvider,
+  config: AlchemyGasManagerConfig,
+  estimateGas: boolean = true
+): AlchemyProvider => {
+  return estimateGas
+    ? provider
+        // no-op gas estimator
+        .withGasEstimator(async () => ({
+          callGasLimit: 0n,
+          preVerificationGas: 0n,
+          verificationGasLimit: 0n,
+        }))
+        // no-op fee because the alchemy api will do it
+        .withFeeDataGetter(async (struct) => ({
+          maxFeePerGas: (await struct.maxFeePerGas) ?? 0n,
+          maxPriorityFeePerGas: (await struct.maxPriorityFeePerGas) ?? 0n,
+        }))
+        .withPaymasterMiddleware(
+          withAlchemyGasAndPaymasterAndDataMiddleware(provider, config)
+        )
+    : provider.withPaymasterMiddleware(
+        withAlchemyPaymasterAndDataMiddleware(provider, config)
+      );
 };
 
 /**
- * This is the middleware for calling the alchemy paymaster API which does not estimate gas. It's recommend to use
+ * This uses the alchemy RPC method: `alchemy_requestPaymasterAndData`, which does not estimate gas. It's recommend to use
  * this middleware if you want more customization over the gas and fee estimation middleware, including setting
  * non-default buffer values for the fee/gas estimation.
  *
- * @param config {@link AlchemyPaymasterConfig}
+ * @param config - the alchemy gas manager configuration
  * @returns middleware overrides for paymaster middlewares
  */
-export const alchemyPaymasterAndDataMiddleware = <
-  T extends Transport,
-  Provider extends ConnectedSmartAccountProvider<T>
->(
-  provider: Provider,
+const withAlchemyPaymasterAndDataMiddleware = (
+  provider: AlchemyProvider,
   config: AlchemyGasManagerConfig
-): Parameters<
-  ConnectedSmartAccountProvider["withPaymasterMiddleware"]
->["0"] => ({
+): Parameters<AlchemyProvider["withPaymasterMiddleware"]>["0"] => ({
   dummyPaymasterDataMiddleware: async (_struct) => {
     switch (provider.rpcClient.chain.id) {
       case 1:
@@ -124,5 +95,48 @@ export const alchemyPaymasterAndDataMiddleware = <
       ],
     });
     return { paymasterAndData };
+  },
+});
+
+/**
+ * This uses the alchemy RPC method: `alchemy_requestGasAndPaymasterAndData` to get all of the gas estimates + paymaster data
+ * in one RPC call. It will no-op the gas estimator and fee data getter middleware and set a custom middleware that makes the RPC call.
+ *
+ * @param config - the alchemy gas manager configuration
+ * @returns middleware overrides for paymaster middlewares
+ */
+const withAlchemyGasAndPaymasterAndDataMiddleware = (
+  provider: AlchemyProvider,
+  config: AlchemyGasManagerConfig
+): Parameters<AlchemyProvider["withPaymasterMiddleware"]>["0"] => ({
+  paymasterDataMiddleware: async (struct) => {
+    const userOperation: UserOperationRequest = deepHexlify(
+      await resolveProperties(struct)
+    );
+
+    let feeOverride = undefined;
+    if (userOperation.maxFeePerGas && BigInt(userOperation.maxFeePerGas) > 0n) {
+      feeOverride = {
+        maxFeePerGas: userOperation.maxFeePerGas,
+        maxPriorityFeePerGas: userOperation.maxPriorityFeePerGas,
+      };
+    }
+
+    const result = await (
+      provider.rpcClient as ClientWithAlchemyMethods
+    ).request({
+      method: "alchemy_requestGasAndPaymasterAndData",
+      params: [
+        {
+          policyId: config.policyId,
+          entryPoint: config.entryPoint,
+          userOperation: userOperation,
+          dummySignature: userOperation.signature,
+          feeOverride: feeOverride,
+        },
+      ],
+    });
+
+    return result;
   },
 });

@@ -2,6 +2,7 @@ import type { Address } from "abitype";
 import type { Hash, Hex } from "viem";
 import type { SignTypedDataParameters } from "viem/accounts";
 import type { BatchUserOperationCallData } from "../types";
+import type { SmartAccountSigner } from "../signer/types";
 
 export type SignTypedDataParams = Omit<SignTypedDataParameters, "privateKey">;
 
@@ -77,4 +78,15 @@ export interface ISmartContractAccount {
    * @returns the address of the account
    */
   getAddress(): Promise<Address>;
+
+  /**
+   * @returns the smart contract account owner instance if it exists.
+   * It is optional for a smart contract account to have an owner account.
+   */
+  getOwner(): SmartAccountSigner | undefined;
+
+  /**
+   * @returns the address of the factory contract for the smart contract account
+   */
+  getFactoryAddress(): Address;
 }

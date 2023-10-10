@@ -4,25 +4,39 @@ import {
   parseAbiParameters,
   type Address,
   type Hash,
-  type Hex,
   type PublicClient,
+  type Hex,
 } from "viem";
 
-type SignWith6492Params = {
+export type SignWith6492Params = {
   factoryAddress: Address;
-  initCode: Hex;
+  factoryCalldata: Hex;
   signature: Hash;
 };
 
-export const wrapWith6492 = ({
+type VerifyEIP6492SignatureParams = {
+  signer: Address;
+  hash: Hash;
+  signature: Hash;
+  client: PublicClient;
+};
+
+export const wrapSignatureWith6492 = ({
   factoryAddress,
-  initCode,
+  factoryCalldata,
   signature,
 }: SignWith6492Params): Hash => {
+  // wrap the signature as follows: https://eips.ethereum.org/EIPS/eip-6492
+  // concat(
+  //  abi.encode(
+  //    (create2Factory, factoryCalldata, originalERC1271Signature),
+  //    (address, bytes, bytes)),
+  //    magicBytes
+  // )
   return concat([
     encodeAbiParameters(parseAbiParameters("address, bytes, bytes"), [
       factoryAddress,
-      initCode,
+      factoryCalldata,
       signature,
     ]),
     "0x6492649264926492649264926492649264926492649264926492649264926492",
@@ -38,12 +52,7 @@ export const verifyEIP6492Signature = async ({
   hash,
   signature,
   client,
-}: {
-  signer: Address;
-  hash: Hash;
-  signature: Hash;
-  client: PublicClient;
-}): Promise<boolean> => {
+}: VerifyEIP6492SignatureParams): Promise<boolean> => {
   const result = await client.call({
     data: concat([
       universalValidatorByteCode,

@@ -1,10 +1,10 @@
-import { polygonMumbai } from "viem/chains";
+import { polygonMumbai, type Chain } from "viem/chains";
 import { describe, it } from "vitest";
 import { SmartAccountProvider } from "../../provider/base.js";
 import { LocalAccountSigner } from "../../signer/local-account.js";
+import { type SmartAccountSigner } from "../../signer/types.js";
 import type { BatchUserOperationCallData } from "../../types.js";
 import { SimpleSmartContractAccount } from "../simple.js";
-import { type SmartAccountSigner } from "../../signer/types.js";
 
 describe("Account Simple Tests", () => {
   const dummyMnemonic =
@@ -12,27 +12,9 @@ describe("Account Simple Tests", () => {
   const owner: SmartAccountSigner =
     LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
   const chain = polygonMumbai;
-  const signer = new SmartAccountProvider(
-    `${chain.rpcUrls.alchemy.http[0]}/${"test"}`,
-    "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
-    chain
-  ).connect((provider) => {
-    const account = new SimpleSmartContractAccount({
-      entryPointAddress: "0xENTRYPOINT_ADDRESS",
-      chain,
-      owner,
-      factoryAddress: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
-      rpcClient: provider,
-    });
-
-    account.getAddress = vi.fn(
-      async () => "0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4"
-    );
-
-    return account;
-  });
 
   it("should correctly sign the message", async () => {
+    const signer = givenConnectedProvider({ owner, chain });
     expect(
       await signer.signMessage(
         "0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b"
@@ -43,6 +25,7 @@ describe("Account Simple Tests", () => {
   });
 
   it("should correctly encode batch transaction data", async () => {
+    const signer = givenConnectedProvider({ owner, chain });
     const data = [
       {
         target: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
@@ -59,3 +42,30 @@ describe("Account Simple Tests", () => {
     );
   });
 });
+
+const givenConnectedProvider = ({
+  owner,
+  chain,
+}: {
+  owner: SmartAccountSigner;
+  chain: Chain;
+}) =>
+  new SmartAccountProvider({
+    rpcProvider: `${chain.rpcUrls.alchemy.http[0]}/${"test"}`,
+    entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
+    chain,
+  }).connect((provider) => {
+    const account = new SimpleSmartContractAccount({
+      entryPointAddress: "0xENTRYPOINT_ADDRESS",
+      chain,
+      owner,
+      factoryAddress: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+      rpcClient: provider,
+    });
+
+    account.getAddress = vi.fn(
+      async () => "0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4"
+    );
+
+    return account;
+  });

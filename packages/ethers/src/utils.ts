@@ -3,10 +3,16 @@ import type { Signer } from "@ethersproject/abstract-signer";
 import { Wallet } from "@ethersproject/wallet";
 import type { SignTypedDataParameters } from "viem/accounts";
 
+/**
+ * Converts a ethersjs Wallet to a SmartAccountSigner
+ * @param wallet - the Wallet to convert
+ * @returns {SmartAccountSigner} - a signer that can be used to sign and send user operations
+ */
 export const convertWalletToAccountSigner = (
   wallet: Wallet
 ): SmartAccountSigner => {
   return {
+    signerType: "local",
     getAddress: async () => Promise.resolve(wallet.address as `0x${string}`),
     signMessage: async (msg: Uint8Array | string) =>
       (await wallet.signMessage(msg)) as `0x${string}`,
@@ -23,10 +29,16 @@ export const convertWalletToAccountSigner = (
   };
 };
 
+/**
+ * Converts a ethers.js Signer to a SmartAccountSigner
+ * @param signer - the Signer to convert
+ * @returns {SmartAccountSigner} - a signer that can be used to sign and send user operations
+ */
 export const convertEthersSignerToAccountSigner = (
   signer: Signer
 ): SmartAccountSigner => {
   return {
+    signerType: "json-rpc",
     getAddress: async () => signer.getAddress() as Promise<Address>,
     signMessage: async (msg: Uint8Array | string) =>
       (await signer.signMessage(msg)) as `0x${string}`,

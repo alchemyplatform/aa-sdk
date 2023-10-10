@@ -1,8 +1,16 @@
 import type { Address } from "abitype";
-import type { Hash, Hex, RpcTransactionRequest, Transport } from "viem";
+import type {
+  Hash,
+  Hex,
+  HttpTransport,
+  RpcTransactionRequest,
+  Transport,
+} from "viem";
 import type { SignTypedDataParameters } from "viem/accounts";
-import type { BaseSmartContractAccount } from "../account/base.js";
-import type { SignTypedDataParams } from "../account/types.js";
+import type {
+  ISmartContractAccount,
+  SignTypedDataParams,
+} from "../account/types.js";
 import type {
   PublicErc4337Client,
   SupportedTransports,
@@ -15,7 +23,7 @@ import type {
   UserOperationResponse,
   UserOperationStruct,
 } from "../types.js";
-import type { Deferrable } from "../utils.js";
+import type { Deferrable } from "../utils";
 
 type WithRequired<T, K extends keyof T> = Required<Pick<T, K>>;
 type WithOptional<T, K extends keyof T> = Pick<Partial<T>, K>;
@@ -34,7 +42,7 @@ export interface ProviderEvents {
 }
 
 export type SendUserOperationResult = {
-  hash: string;
+  hash: Hash;
   request: UserOperationRequest;
 };
 
@@ -72,14 +80,16 @@ export type FeeDataMiddleware = AccountMiddlewareOverrideFn<
 export interface ISmartAccountProvider<
   TTransport extends SupportedTransports = Transport
 > {
-  readonly rpcClient: PublicErc4337Client<TTransport>;
+  readonly rpcClient:
+    | PublicErc4337Client<TTransport>
+    | PublicErc4337Client<HttpTransport>;
   readonly dummyPaymasterDataMiddleware: AccountMiddlewareFn;
   readonly paymasterDataMiddleware: AccountMiddlewareFn;
   readonly gasEstimator: AccountMiddlewareFn;
   readonly feeDataGetter: AccountMiddlewareFn;
   readonly customMiddleware?: AccountMiddlewareFn;
 
-  readonly account?: BaseSmartContractAccount;
+  readonly account?: ISmartContractAccount;
 
   /**
    * Sends a user operation using the connected account.
@@ -89,12 +99,23 @@ export interface ISmartAccountProvider<
    * 2. feeDataGetter -- sets maxfeePerGas and maxPriorityFeePerGas
    * 3. gasEstimator -- calls eth_estimateUserOperationGas
    * 4. paymasterMiddleware -- used to set paymasterAndData. (default: "0x")
+   * 5. customMiddleware -- allows you to override any of the results returned by previous middlewares
    *
    * @param data - either {@link UserOperationCallData} or {@link BatchUserOperationCallData}
    * @returns - {@link SendUserOperationResult} containing the hash and request
    */
   sendUserOperation: (
     data: UserOperationCallData | BatchUserOperationCallData
+  ) => Promise<SendUserOperationResult>;
+
+  /**
+   * Attempts to drop and replace an existing user operation by increasing fees
+   *
+   * @param data - an existing user operation request returned by `sendUserOperation`
+   * @returns - {@link SendUserOperationResult} containing the hash and request
+   */
+  dropAndReplaceUserOperation: (
+    data: UserOperationRequest
   ) => Promise<SendUserOperationResult>;
 
   /**
@@ -139,7 +160,7 @@ export interface ISmartAccountProvider<
    * calls `eth_getUserOperationReceipt` and returns the {@link UserOperationReceipt}
    *
    * @param hash - the hash of the UserOperation to get the receipt for
-   * @returns - {@link UserOperationResponse}
+   * @returns - {@link UserOperationReceipt}
    */
   getUserOperationReceipt: (hash: Hash) => Promise<UserOperationReceipt | null>;
 
@@ -185,7 +206,7 @@ export interface ISmartAccountProvider<
    * This method is used to sign typed data as per ERC-712
    *
    * @param params - {@link SignTypedDataParameters}
-   * @returns the signed hash for the message passed
+   * @returns the signed hash for the typed data passed
    */
   signTypedData: (params: SignTypedDataParameters) => Promise<Hash>;
 
@@ -210,6 +231,11 @@ export interface ISmartAccountProvider<
    * @returns the address of the connected account
    */
   getAddress: () => Promise<Address>;
+
+  /**
+   * @returns boolean flag indicating if the account is connected
+   */
+  isConnected: () => boolean;
 
   // Middelware Overriders
   /**
@@ -247,9 +273,9 @@ export interface ISmartAccountProvider<
   withFeeDataGetter: (override: FeeDataMiddleware) => this;
 
   /**
-   * This adds a final middleware step to the middleware stack that runs right before signature verification.
-   * This can be used if you have an RPC that does most of the functions of the other middlewares for you and
-   * you want to delegate that work to that RPC instead of chaining together multiple RPC calls via the default middlwares.
+   * Adds a function to the middleware call stack that runs before calling the paymaster middleware.
+   * It can be used to override or add additional functionality.
+   * Like modifying the user operation, making an additional RPC call, or logging data.
    *
    * @param override - the UO transform function to run
    * @returns
@@ -262,9 +288,13 @@ export interface ISmartAccountProvider<
    *
    * @param fn - a function that given public rpc client, returns a smart contract account
    */
-  connect(
-    fn: (provider: PublicErc4337Client<TTransport>) => BaseSmartContractAccount
-  ): this & { account: BaseSmartContractAccount };
+  connect<TAccount extends ISmartContractAccount>(
+    fn: (
+      provider:
+        | PublicErc4337Client<TTransport>
+        | PublicErc4337Client<HttpTransport>
+    ) => TAccount
+  ): this & { account: TAccount };
 
   /**
    * Allows for disconnecting the account from the provider so you can connect the provider to another account instance

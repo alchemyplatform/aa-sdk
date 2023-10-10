@@ -4,7 +4,6 @@ import {
   type BatchUserOperationCallData,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
-import type { Address } from "abitype";
 import { parseAbiParameters } from "abitype";
 import {
   concatHex,
@@ -21,12 +20,12 @@ import { KernelFactoryAbi } from "./abis/KernelFactoryAbi.js";
 import { MultiSendAbi } from "./abis/MultiSendAbi.js";
 import { encodeCall } from "./utils.js";
 import { KernelBaseValidator, ValidatorMode } from "./validator/base.js";
+import type { KernelUserOperationCallData } from "./types.js";
 
 export interface KernelSmartAccountParams<
   TTransport extends Transport | FallbackTransport = Transport
 > extends BaseSmartAccountParams<TTransport> {
   owner: SmartAccountSigner;
-  factoryAddress: Address;
   index?: bigint;
   defaultValidator: KernelBaseValidator;
   validator?: KernelBaseValidator;
@@ -35,17 +34,15 @@ export interface KernelSmartAccountParams<
 export class KernelSmartContractAccount<
   TTransport extends Transport | FallbackTransport = Transport
 > extends BaseSmartContractAccount<TTransport> {
-  private owner: SmartAccountSigner;
-  private readonly factoryAddress: Address;
+  protected owner: SmartAccountSigner;
   private readonly index: bigint;
   private defaultValidator: KernelBaseValidator;
   private validator: KernelBaseValidator;
 
-  constructor(params: KernelSmartAccountParams) {
+  constructor(params: KernelSmartAccountParams<TTransport>) {
     super(params);
     this.index = params.index ?? 0n;
     this.owner = params.owner;
-    this.factoryAddress = params.factoryAddress;
     this.defaultValidator = params.defaultValidator!;
     this.validator = params.validator ?? params.defaultValidator!;
   }
@@ -62,25 +59,34 @@ export class KernelSmartContractAccount<
     }
   }
 
-  async encodeExecuteDelegate(
-    target: Hex,
-    value: bigint,
-    data: Hex
-  ): Promise<Hex> {
-    return this.encodeExecuteAction(target, value, data, 1);
-  }
-
   override async encodeBatchExecute(
-    _txs: BatchUserOperationCallData
+    txs: BatchUserOperationCallData
   ): Promise<`0x${string}`> {
     const multiSendData: `0x${string}` = concatHex(
-      _txs.map((tx) => encodeCall(tx))
+      txs.map((tx: KernelUserOperationCallData) => encodeCall(tx))
     );
     return encodeFunctionData({
       abi: MultiSendAbi,
       functionName: "multiSend",
       args: [multiSendData],
     });
+  }
+
+  signMessage(msg: Uint8Array | string): Promise<Hex> {
+    const formattedMessage = typeof msg === "string" ? toBytes(msg) : msg;
+    return this.validator.signMessageWithValidatorParams(formattedMessage);
+  }
+
+  protected async getAccountInitCode(): Promise<Hex> {
+    return concatHex([this.factoryAddress, await this.getFactoryInitCode()]);
+  }
+
+  async encodeExecuteDelegate(
+    target: Hex,
+    value: bigint,
+    data: Hex
+  ): Promise<Hex> {
+    return this.encodeExecuteAction(target, value, data, 1);
   }
 
   async signWithEip6492(msg: string | Uint8Array): Promise<Hex> {
@@ -105,11 +111,6 @@ export class KernelSmartContractAccount<
     }
   }
 
-  signMessage(msg: Uint8Array | string): Promise<Hex> {
-    const formattedMessage = typeof msg === "string" ? toBytes(msg) : msg;
-    return this.validator.signMessageWithValidatorParams(formattedMessage);
-  }
-
   protected encodeExecuteAction(
     target: Hex,
     value: bigint,
@@ -122,9 +123,6 @@ export class KernelSmartContractAccount<
       args: [target, value, data, code],
     });
   }
-  protected async getAccountInitCode(): Promise<Hex> {
-    return concatHex([this.factoryAddress, await this.getFactoryInitCode()]);
-  }
 
   protected async getFactoryInitCode(): Promise<Hex> {
     try {
@@ -133,7 +131,7 @@ export class KernelSmartContractAccount<
         functionName: "createAccount",
         args: [
           this.defaultValidator.getAddress(),
-          await this.defaultValidator.getOwner(),
+          await this.defaultValidator.getOwnerAddress(),
           this.index,
         ],
       });

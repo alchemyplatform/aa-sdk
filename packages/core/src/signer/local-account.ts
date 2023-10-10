@@ -1,14 +1,24 @@
-import { isHex, type HDAccount, type Hex, type PrivateKeyAccount } from "viem";
+import {
+  isHex,
+  type HDAccount,
+  type Hex,
+  type LocalAccount,
+  type PrivateKeyAccount,
+} from "viem";
 import { mnemonicToAccount, privateKeyToAccount } from "viem/accounts";
 import type { SignTypedDataParams } from "../account/types.js";
 import type { SmartAccountSigner } from "./types.js";
 
-export class LocalAccountSigner<T extends HDAccount | PrivateKeyAccount>
-  implements SmartAccountSigner
+export class LocalAccountSigner<
+  T extends HDAccount | PrivateKeyAccount | LocalAccount
+> implements SmartAccountSigner
 {
   private owner: T;
+  signerType: string;
+
   constructor(owner: T) {
     this.owner = owner;
+    this.signerType = owner.type; //  type: "local"
   }
 
   readonly signMessage: (msg: string | Uint8Array) => Promise<`0x${string}`> = (

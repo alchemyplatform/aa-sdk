@@ -1,6 +1,6 @@
+import { LightSmartContractAccount } from "@alchemy/aa-accounts";
 import { withAlchemyGasManager } from "@alchemy/aa-alchemy";
 import {
-  SimpleSmartContractAccount,
   SmartAccountProvider,
   createPublicErc4337Client,
   type SmartAccountSigner
@@ -99,23 +99,22 @@ const onboardingStepHandlers: Record<
 
     const chain: Chain = context.chain!;
     const entryPointAddress = context.entrypointAddress;
-    let baseSigner = new SmartAccountProvider(
-      appConfig.rpcUrl,
+    let baseSigner = new SmartAccountProvider({
+      rpcProvider: appConfig.rpcUrl,
       entryPointAddress,
       chain,
-      undefined,
-      {
+      feeOpts: {
         txMaxRetries: 60,
-      }
-    ).connect((provider: any) => {
+      },
+    }).connect((provider: any) => {
       if (!context.owner) {
         throw new Error("No owner for account was found");
       }
-      return new SimpleSmartContractAccount({
+      return new LightSmartContractAccount({
         entryPointAddress,
         chain,
         owner: context.owner,
-        factoryAddress: appConfig.simpleAccountFactoryAddress,
+        factoryAddress: appConfig.lightAccountFactoryAddress,
         rpcClient: provider,
       });
     });

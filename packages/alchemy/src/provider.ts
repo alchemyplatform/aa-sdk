@@ -1,13 +1,12 @@
 import {
-  BaseSmartContractAccount,
   SmartAccountProvider,
   createPublicErc4337Client,
   deepHexlify,
   resolveProperties,
   type AccountMiddlewareFn,
-  type SmartAccountProviderOpts,
+  type SmartAccountProviderConfig,
 } from "@alchemy/aa-core";
-import { type Address, type Chain, type HttpTransport } from "viem";
+import { type HttpTransport } from "viem";
 import {
   arbitrum,
   arbitrumGoerli,
@@ -15,10 +14,8 @@ import {
   optimismGoerli,
 } from "viem/chains";
 import { SupportedChains } from "./chains.js";
-import type { ClientWithAlchemyMethods } from "./middleware/client.js";
 import { withAlchemyGasFeeEstimator } from "./middleware/gas-fees.js";
 import {
-  alchemyPaymasterAndDataMiddleware,
   withAlchemyGasManager,
   type AlchemyGasManagerConfig,
 } from "./middleware/gas-manager.js";
@@ -30,10 +27,6 @@ export type ConnectionConfig =
   | { rpcUrl: string; apiKey?: never; jwt: string };
 
 export type AlchemyProviderConfig = {
-  chain: Chain | number;
-  entryPointAddress: Address;
-  account?: BaseSmartContractAccount;
-  opts?: SmartAccountProviderOpts;
   feeOpts?: {
     /** this adds a percent buffer on top of the base fee estimated (default 50%)
      * NOTE: this is only applied if the default fee estimator is used.
@@ -56,17 +49,16 @@ export type AlchemyProviderConfig = {
      */
     preVerificationGasBufferPercent?: bigint;
   };
-} & ConnectionConfig;
+} & Omit<SmartAccountProviderConfig, "rpcProvider"> &
+  ConnectionConfig;
 
 export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
-  alchemyClient: ClientWithAlchemyMethods;
   private pvgBuffer: bigint;
   private feeOptsSet: boolean;
 
   constructor({
     chain,
     entryPointAddress,
-    account,
     opts,
     feeOpts,
     ...connectionConfig
@@ -94,9 +86,8 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
       }),
     });
 
-    super(client, entryPointAddress, _chain, account, opts);
+    super({ rpcProvider: client, entryPointAddress, chain: _chain, opts });
 
-    this.alchemyClient = this.rpcClient as ClientWithAlchemyMethods;
     withAlchemyGasFeeEstimator(
       this,
       feeOpts?.baseFeeBufferPercent ?? 50n,
@@ -121,7 +112,7 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
     this.feeOptsSet = !!feeOpts;
   }
 
-  gasEstimator: AccountMiddlewareFn = async (struct) => {
+  override gasEstimator: AccountMiddlewareFn = async (struct) => {
     const request = deepHexlify(await resolveProperties(struct));
     const estimates = await this.rpcClient.estimateUserOperationGas(
       request,
@@ -136,19 +127,19 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
     };
   };
 
-  withAlchemyGasManager(config: AlchemyGasManagerConfig) {
+  /**
+   * This methods adds the Alchemy Gas Manager middleware to the provider.
+   *
+   * @param config - the Alchemy Gas Manager configuration
+   * @returns {AlchemyProvider} - a new AlchemyProvider with the Gas Manager middleware
+   */
+  withAlchemyGasManager(config: AlchemyGasManagerConfig): AlchemyProvider {
     if (!this.isConnected()) {
       throw new Error(
         "AlchemyProvider: account is not set, did you call `connect` first?"
       );
     }
 
-    if (this.feeOptsSet) {
-      return this.withPaymasterMiddleware(
-        alchemyPaymasterAndDataMiddleware(this, config)
-      );
-    } else {
-      return withAlchemyGasManager(this, config);
-    }
+    return withAlchemyGasManager(this, config, !this.feeOptsSet);
   }
 }

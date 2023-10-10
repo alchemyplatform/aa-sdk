@@ -2,10 +2,14 @@
   "name": "root",
   "type": "module",
   "private": true,
+  "engines": {
+    "node": "18.10"
+  },
   "workspaces": [
     "packages/*",
     "templates/*",
-    "examples/*"
+    "examples/*",
+    "site"
   ],
   "scripts": {
     "build": "lerna run build --ignore=alchemy-daapp",
