@@ -19,12 +19,18 @@ export default defineConfig({
     },
 
     sidebar: [
-      { text: "Introduction", link: "/introduction" },
-      { text: "Why Account Kit", link: "/why-account-kit" },
-      { text: "Getting Started", link: "/getting-started" },
       {
-        text: "Packages Overview",
-        link: "/packages/overview",
+        text: "Introduction",
+        base: "/",
+        items: [
+          { text: "Why Account Kit", link: "/why-account-kit" },
+          { text: "Overview", link: "/introduction" },
+          { text: "Getting Started", link: "/getting-started" },
+          {
+            text: "Package Overview",
+            link: "/package-overview",
+          },
+        ],
       },
       {
         text: "Using Smart Accounts",
@@ -32,21 +38,22 @@ export default defineConfig({
         items: [
           { text: "Overview", link: "/overview" },
           {
-            text: "Choosing a Smart Account",
+            text: "Deploying a Smart Account",
             base: "/smart-accounts/accounts",
             link: "/overview",
             items: [
-              { text: "Light Account", link: "/light-account" },
-              { text: "Modular Account", link: "/modular-account" },
+              { text: "Light", link: "/light-account" },
+              { text: "Modular", link: "/modular-account" },
               { text: "Using Your Own", link: "/using-your-own" },
             ],
           },
           {
-            text: "Choosing a Signer",
+            text: "Integrating a Signer",
             base: "/smart-accounts/signers",
             link: "/overview",
             items: [
               { text: "Capsule", link: "/capsule" },
+              { text: "Dynamic", link: "/dynamic" },
               { text: "Fireblocks", link: "/fireblocks" },
               { text: "Lit Protocol", link: "/lit" },
               { text: "Magic.Link", link: "/magic-link" },
@@ -64,8 +71,6 @@ export default defineConfig({
           { text: "Transferring Ownership", link: "/transferring-ownership" },
         ],
       },
-      { text: "ERC-6900", link: "/erc-6900" },
-      // Per Package docs
       {
         text: "aa-core",
         base: "/packages/aa-core",
@@ -296,7 +301,10 @@ export default defineConfig({
                 collapsed: true,
                 base: "/packages/aa-core/client/actions",
                 items: [
-                  { text: "sendUserOperation", link: "/sendUserOperation" },
+                  {
+                    text: "sendUserOperation",
+                    link: "/sendUserOperation",
+                  },
                   {
                     text: "estimateUserOperationGas",
                     link: "/estimateUserOperationGas",
@@ -350,7 +358,10 @@ export default defineConfig({
               { text: "deepHexlify", link: "/deepHexlify" },
               { text: "defineReadOnly", link: "/defineReadOnly" },
               { text: "getChain", link: "/getChain" },
-              { text: "getUserOperationHash", link: "/getUserOperationHash" },
+              {
+                text: "getUserOperationHash",
+                link: "/getUserOperationHash",
+              },
               { text: "resolveProperties", link: "/resolveProperties" },
             ],
           },
@@ -369,7 +380,10 @@ export default defineConfig({
             collapsed: true,
             items: [
               { text: "gasEstimator", link: "/gasEstimator" },
-              { text: "withAlchemyGasManager", link: "/withAlchemyGasManager" },
+              {
+                text: "withAlchemyGasManager",
+                link: "/withAlchemyGasManager",
+              },
             ],
           },
           {
@@ -382,7 +396,10 @@ export default defineConfig({
                 text: "withAlchemyGasFeeEstimator",
                 link: "/withAlchemyGasFeeEstimator",
               },
-              { text: "withAlchemyGasManager", link: "/withAlchemyGasManager" },
+              {
+                text: "withAlchemyGasManager",
+                link: "/withAlchemyGasManager",
+              },
             ],
           },
           {
@@ -406,9 +423,15 @@ export default defineConfig({
             link: "/introduction",
             base: "/packages/aa-accounts/light-account",
             items: [
-              { text: "signMessageWith6492", link: "/signMessageWith6492" },
+              {
+                text: "signMessageWith6492",
+                link: "/signMessageWith6492",
+              },
               { text: "signTypedData", link: "/signTypedData" },
-              { text: "signTypedDataWith6492", link: "/signTypedDataWith6492" },
+              {
+                text: "signTypedDataWith6492",
+                link: "/signTypedDataWith6492",
+              },
               { text: "getOwnerAddress", link: "/getOwnerAddress" },
               {
                 text: "encodeTransferOwnership",

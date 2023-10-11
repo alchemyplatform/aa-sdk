@@ -58,7 +58,6 @@ Using the SDK, we'll create a Light Account and send a User Operation from it. T
 This initializes a `provider` for your smart account which is then used to send user operations from it.
 
 ::: tip Note
-
 Remember to:
 
 1. Replace `"0xYourEOAPrivateKey"` with your actual EOA private key.
@@ -70,7 +69,7 @@ Remember to:
 
 ## Dive Deeper
 
-In this guide we initialized `provider` with the `aa-alchemy` package however we could have done the same with the other packages of Account Kit as well. To learn more about the different packages and their use cases, check out the ["Packages Overview"](/packages/overview) page.
+In this guide we initialized `provider` with the `aa-alchemy` package however we could have done the same with the other packages of Account Kit as well. To learn more about the different packages and their use cases, check out the ["Packages Overview"](/package-overview) page.
 
 ## Next Steps
 

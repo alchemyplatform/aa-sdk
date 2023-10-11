@@ -11,7 +11,7 @@ head:
     - property: og:description
       content: Guide to Sponsor Gas of an account
 prev:
-  text: Choosing a Signer
+  text: Integrating a Signer
   link: /smart-accounts/signers/overview
 ---
 

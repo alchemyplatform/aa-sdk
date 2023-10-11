@@ -10,6 +10,7 @@ Built using foundry + Alchemy
 ## Index
 
 1. `./DAAppNFT` - A simple NFT based off the tutorial: https://book.getfoundry.sh/tutorials/solmate-nft
+2. `./ERC20Token` - A simple ERC20 based off the tutorial: https://www.youtube.com/watch?v=fNMfMxGxeag
 
 ## Development
 

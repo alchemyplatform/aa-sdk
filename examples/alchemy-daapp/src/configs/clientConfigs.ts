@@ -1,5 +1,4 @@
 import {
-  Chain,
   arbitrum,
   base,
   baseGoerli,
@@ -8,6 +7,7 @@ import {
   polygon,
   polygonMumbai,
   sepolia,
+  type Chain,
 } from "viem/chains";
 import { env } from "~/env.mjs";
 
