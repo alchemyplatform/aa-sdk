@@ -12,6 +12,8 @@ module.exports = {
         "gradient-3":
           "linear-gradient(126deg, #ff37dc 26.26%, #733ff1 108.32%)",
         "gradient-4": "linear-gradient(123deg, #ff3a3a -4.89%, #fe8862 90.61%)",
+        "hero-dark": "url('/dark-bg.jpg')",
+        "hero-light": "url('/light-bg.jpg')",
       },
     },
   },
