@@ -1,6 +1,6 @@
-// https://vitepress.dev/guide/custom-theme
 import { h } from "vue";
 import Theme from "vitepress/theme";
+import VideoEmbed from "./components/VideoEmbed.vue"; // Importing the component
 import "./style.css";
 
 export default {
@@ -11,6 +11,7 @@ export default {
     });
   },
   enhanceApp({ app, router, siteData }) {
+    app.component("VideoEmbed", VideoEmbed); // Registering the component globally
     // ...
   },
 };

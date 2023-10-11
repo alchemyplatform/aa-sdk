@@ -29,7 +29,7 @@ The user leaves your app at every step! This style of web3 onboarding is too com
 
 Account Kit provides all the tools you need to onboard the next 1B users with a simple, familiar user experience.
 
-[ HERO GIF/VIDEO ]
+<VideoEmbed src="/assets/videos/accountkit-screenflow.mp4" />
 
 With Account Kit, you can create a **smart account** for every user. Smart accounts are smart contract wallets that leverage account abstraction to radically simplify every step of the onboarding experience. Now, a new user will:
 
