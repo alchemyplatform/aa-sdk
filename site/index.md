@@ -8,49 +8,50 @@ description: Everything you need to build 4337 accounts for your users
 # you can also add HTML or Markdown components below the --- line to add custom HTML or Markdown content (eg: https://github.com/wagmi-dev/viem/blob/main/site/index.md?plain=1)
 ---
 
-<div class="flex flex-col gap-[84px] h-screen max-xl:gap-[40px] bg-hero-light dark:bg-hero-dark">
-  <div class="flex grow max-w-[calc(var(--vp-layout-max-width))] self-center w-[100%] px-[32px]">
-    <div class="flex flex-col flex-auto min-w-[100%]">
-      <div
-        class="flex flex-col py-[96px] max-xl:py-[40px]"
-      >
+<div class="flex flex-col h-screen">
+  <div class="w-[100%] flex flex-grow h-[100%] justify-center  bg-hero-light dark:bg-hero-dark bg-cover pb-[48px]">
+    <div class="flex grow max-w-[calc(var(--vp-layout-max-width))] w-[100%] px-[32px]">
+      <div class="flex flex-col flex-auto min-w-[100%]">
         <div
-          class="flex flex-row justify-between items-center self-stretch md:max-xl:flex-col md:max-xl:gap-[40px]"
+          class="flex flex-col py-[96px] max-xl:py-[40px]"
         >
           <div
-            class="w-[579px] flex flex-col gap-[32px] justify-between max-md:items-center"
+            class="flex flex-row justify-between items-center self-stretch md:max-xl:flex-col md:max-xl:gap-[40px]"
           >
             <div
-              class="flex flex-row items-center justify-start gap-[16px] font-bold text-[24px]"
+              class="w-[579px] flex flex-col gap-[32px] justify-between max-md:items-center"
             >
-              <img src="/kit-logo.svg" alt="Account Kit Logo" />
-              <span>Account Kit</span>
+              <div
+                class="flex flex-row items-center justify-start gap-[16px] font-bold text-[24px]"
+              >
+                <img src="/kit-logo.svg" alt="Account Kit Logo" />
+                <span>Account Kit</span>
+              </div>
+              <div
+                class="gap-[28px] text-[64px] font-bold items-end color max-md:text-center max-md:text-[56px] leading-none"
+              >
+                <span class="bg-gradient-1 bg-clip-text transparent-text-fill">Account Abstraction</span>&nbsp;Legos
+              </div>
+              <div class="text-[22px] font-normal max-md:text-center">
+                Everything you need to build 4337 accounts.
+              </div>
+              <div class="flex flex-row gap-[8px] justify-start items-center">
+                <a rel="noopener noreferrer" href="./getting-started.html">
+                  <button
+                    class="flex items-center rounded-md px-[12px] py-[12px] text-[16px] font-semibold text-white transition duration-300 ease-in-out hover:scale-105 hover:opacity-90 bg-black dark:bg-white dark:text-black"
+                  >
+                    Explore the docs
+                  </button>
+                </a>
+                <a rel="noopener noreferrer" href="./package-overview.html">
+                  <button
+                    class="flex items-center rounded-md px-[12px] py-[12px] text-[16px] font-semibold transition duration-300 ease-in-out hover:scale-105 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black"
+                  >
+                    Why Account Kit?
+                  </button>
+                </a>
+              </div>
             </div>
-            <div
-              class="gap-[28px] text-[64px] font-bold items-end color max-md:text-center max-md:text-[56px] leading-none"
-            >
-              <span class="bg-gradient-1 bg-clip-text transparent-text-fill">Account Abstraction</span>&nbsp;Legos
-            </div>
-            <div class="text-[22px] font-normal max-md:text-center">
-              Everything you need to build 4337 accounts.
-            </div>
-            <div class="flex flex-row gap-[8px] justify-start items-center">
-              <a rel="noopener noreferrer" href="./getting-started.html">
-                <button
-                  class="flex items-center rounded-md px-[12px] py-[12px] text-[16px] font-semibold text-white transition duration-300 ease-in-out hover:scale-105 hover:opacity-90 bg-black dark:bg-white dark:text-black"
-                >
-                  Explore the docs
-                </button>
-              </a>
-              <a rel="noopener noreferrer" href="./package-overview.html">
-                <button
-                  class="flex items-center rounded-md px-[12px] py-[12px] text-[16px] font-semibold transition duration-300 ease-in-out hover:scale-105 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black"
-                >
-                  Why Account Kit?
-                </button>
-              </a>
-            </div>
-          </div>
 <!-- needs to be formatted differently to work in markdown -->
 <div class="vp-doc max-lg:hidden">
 
@@ -71,51 +72,52 @@ const { hash } = await provider.sendUserOperation(uo);
 :::
 
 </div>
+          </div>
         </div>
-      </div>
-      <div class="flex max-lg:flex-wrap justify-center gap-[32px]">
-        <a rel="noopener noreferrer" href="./introduction.html" class="flex-auto basis-1/3 max-lg:max-w-[370px] max-lg:min-w-[370px]">
-          <div
-            class="flex flex-col flex-auto p-[24px] gap-[24px] rounded-md text-white overflow-auto bg-gradient-2 group hover:scale-105 hover:opacity-90 transition duration-300 ease-in-out"
-          >
-            <div class="flex flex-col gap-[8px] items-start">
-              <div class="text-[24px] font-semibold">Why Account Kit?</div>
-            </div>
+        <div class="flex max-lg:flex-wrap justify-center gap-[32px]">
+          <a rel="noopener noreferrer" href="./introduction.html" class="flex-auto basis-1/3 max-lg:max-w-[370px] max-lg:min-w-[370px]">
             <div
-              class="flex h-[24px] justify-end items-baseline self-stretch transition duration-300 ease-in-out group-hover:translate-x-[5px]"
+              class="flex flex-col flex-auto p-[24px] gap-[24px] rounded-md text-white overflow-auto bg-gradient-2 group hover:scale-105 hover:opacity-90 transition duration-300 ease-in-out"
             >
-              <img src="/arrow-right.svg" alt="Click Here" />
+              <div class="flex flex-col gap-[8px] items-start">
+                <div class="text-[24px] font-semibold">Why Account Kit?</div>
+              </div>
+              <div
+                class="flex h-[24px] justify-end items-baseline self-stretch transition duration-300 ease-in-out group-hover:translate-x-[5px]"
+              >
+                <img src="/arrow-right.svg" alt="Click Here" />
+              </div>
             </div>
-          </div>
-        </a>
-        <a rel="noopener noreferrer" href="./package-overview.html" class="flex-auto basis-1/3 max-lg:max-w-[370px] max-lg:min-w-[370px]">
-          <div
-            class="flex flex-col flex-auto p-[24px] gap-[24px] rounded-md text-white overflow-auto bg-gradient-3 group hover:scale-105 hover:opacity-90 transition duration-300 ease-in-out"
-          >
-            <div class="flex flex-col gap-[8px] items-start">
-              <div class="text-[24px] font-semibold">Overview</div>
-            </div>
+          </a>
+          <a rel="noopener noreferrer" href="./package-overview.html" class="flex-auto basis-1/3 max-lg:max-w-[370px] max-lg:min-w-[370px]">
             <div
-              class="flex h-[24px] justify-end items-baseline self-stretch transition duration-300 ease-in-out group-hover:translate-x-[5px]"
+              class="flex flex-col flex-auto p-[24px] gap-[24px] rounded-md text-white overflow-auto bg-gradient-3 group hover:scale-105 hover:opacity-90 transition duration-300 ease-in-out"
             >
-              <img src="/arrow-right.svg" alt="Click Here" />
+              <div class="flex flex-col gap-[8px] items-start">
+                <div class="text-[24px] font-semibold">Overview</div>
+              </div>
+              <div
+                class="flex h-[24px] justify-end items-baseline self-stretch transition duration-300 ease-in-out group-hover:translate-x-[5px]"
+              >
+                <img src="/arrow-right.svg" alt="Click Here" />
+              </div>
             </div>
-          </div>
-        </a>
-        <a rel="noopener noreferrer" href="./getting-started.html" class="flex-auto basis-1/3 max-lg:max-w-[370px] max-lg:min-w-[370px]">
-          <div
-            class="flex flex-col flex-auto p-[24px] gap-[24px] rounded-md text-white overflow-auto bg-gradient-4 group hover:scale-105 hover:opacity-90 transition duration-300 ease-in-out"
-          >
-            <div class="flex flex-col gap-[8px] items-start">
-              <div class="text-[24px] font-semibold">Getting Started</div>
-            </div>
+          </a>
+          <a rel="noopener noreferrer" href="./getting-started.html" class="flex-auto basis-1/3 max-lg:max-w-[370px] max-lg:min-w-[370px]">
             <div
-              class="flex h-[24px] justify-end items-baseline self-stretch transition duration-300 ease-in-out group-hover:translate-x-[5px]"
+              class="flex flex-col flex-auto p-[24px] gap-[24px] rounded-md text-white overflow-auto bg-gradient-4 group hover:scale-105 hover:opacity-90 transition duration-300 ease-in-out"
             >
-              <img src="/arrow-right.svg" alt="Click Here" />
+              <div class="flex flex-col gap-[8px] items-start">
+                <div class="text-[24px] font-semibold">Getting Started</div>
+              </div>
+              <div
+                class="flex h-[24px] justify-end items-baseline self-stretch transition duration-300 ease-in-out group-hover:translate-x-[5px]"
+              >
+                <img src="/arrow-right.svg" alt="Click Here" />
+              </div>
             </div>
-          </div>
-        </a>
+          </a>
+        </div>
       </div>
     </div>
   </div>
