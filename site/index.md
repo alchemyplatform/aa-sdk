@@ -9,8 +9,8 @@ description: Everything you need to build 4337 accounts for your users
 ---
 
 <div class="flex flex-col h-screen">
-  <div class="w-[100%] flex flex-grow h-[100%] justify-center  bg-hero-light dark:bg-hero-dark bg-cover pb-[48px]">
-    <div class="flex grow max-w-[calc(var(--vp-layout-max-width))] w-[100%] px-[32px]">
+  <div class="flex flex-grow justify-center bg-hero-light dark:bg-hero-dark bg-cover pb-[48px]">
+    <div class="flex grow max-w-[var(--vp-layout-max-width)] w-[100%] px-[32px]">
       <div class="flex flex-col flex-auto min-w-[100%]">
         <div
           class="flex flex-col py-[96px] max-xl:py-[40px]"
@@ -19,7 +19,7 @@ description: Everything you need to build 4337 accounts for your users
             class="flex flex-row justify-between items-center self-stretch md:max-xl:flex-col md:max-xl:gap-[40px]"
           >
             <div
-              class="w-[579px] flex flex-col gap-[32px] justify-between max-md:items-center"
+              class="w-[579px] flex flex-col gap-[32px] justify-between max-lg:items-center"
             >
               <div
                 class="flex flex-row items-center justify-start gap-[16px] font-bold text-[24px]"
@@ -28,9 +28,9 @@ description: Everything you need to build 4337 accounts for your users
                 <span>Account Kit</span>
               </div>
               <div
-                class="gap-[28px] text-[64px] font-bold items-end color max-md:text-center max-md:text-[56px] leading-none"
+                class="gap-[28px] text-[64px] font-bold items-end color max-lg:text-center max-md:text-[56px] leading-none"
               >
-                <span class="bg-gradient-1 bg-clip-text transparent-text-fill">Account Abstraction</span>&nbsp;Legos
+                <span class="bg-gradient-1 bg-clip-text transparent-text-fill max-lg:flex max-lg:flex-wrap">Account Abstraction</span> Legos
               </div>
               <div class="text-[22px] font-normal max-md:text-center">
                 Everything you need to build 4337 accounts.
