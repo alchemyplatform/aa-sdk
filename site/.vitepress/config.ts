@@ -21,7 +21,6 @@ export default defineConfig({
     sidebar: [
       {
         text: "Introduction",
-        base: "/",
         items: [
           { text: "Why Account Kit", link: "/why-account-kit" },
           { text: "Overview", link: "/introduction" },
@@ -38,7 +37,7 @@ export default defineConfig({
         items: [
           { text: "Overview", link: "/overview" },
           {
-            text: "Deploying a Smart Account",
+            text: "Integrating a Smart Account",
             base: "/smart-accounts/accounts",
             link: "/overview",
             items: [
@@ -51,6 +50,7 @@ export default defineConfig({
             text: "Integrating a Signer",
             base: "/smart-accounts/signers",
             link: "/overview",
+            collapsed: true,
             items: [
               { text: "Capsule", link: "/capsule" },
               { text: "Dynamic", link: "/dynamic" },
@@ -62,8 +62,7 @@ export default defineConfig({
               { text: "Turnkey", link: "/turnkey" },
               { text: "Web3Auth", link: "/web3auth" },
               { text: "Externally Owned Account", link: "/eoa" },
-              { text: "Using Your Own", link: "/using-your-own" },
-              { text: "Contributing", link: "/contributing" },
+              { text: "Custom Signer", link: "/custom-signer" },
             ],
           },
           { text: "Sponsoring Gas", link: "/sponsoring-gas" },
