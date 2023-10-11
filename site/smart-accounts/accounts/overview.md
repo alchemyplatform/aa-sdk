@@ -37,32 +37,39 @@ If the Light Account doesn't fit your specific needs, you can always use your ow
 
 ## Deployed Contract Addresses
 
-The following table lists the deployed factory and account instance contract addresses for `LightAccount` and `SimpleAccount` on different chains:
+The following tables list the deployed factory and account implementation contract addresses for `LightAccount` and `SimpleAccount` on different chains:
 
-| Chain           | Account Type   | Factory Address                            | Account Instance                           |
-| --------------- | -------------- | ------------------------------------------ | ------------------------------------------ |
-| Eth Mainnet     | Light Account  | 0x000000893A26168158fbeaDD9335Be5bC96592E2 | 0xc1B2fC4197c9187853243E6e4eb5A4aF8879a1c0 |
-| Eth Sepolia     | Light Account  | 0x000000893A26168158fbeaDD9335Be5bC96592E2 | 0xc1B2fC4197c9187853243E6e4eb5A4aF8879a1c0 |
-| Eth Goerli      | Light Account  | 0x000000893A26168158fbeaDD9335Be5bC96592E2 | 0xc1B2fC4197c9187853243E6e4eb5A4aF8879a1c0 |
-| Polygon Mainnet | Light Account  | 0x000000893A26168158fbeaDD9335Be5bC96592E2 | 0xc1B2fC4197c9187853243E6e4eb5A4aF8879a1c0 |
-| Polygon Mumbai  | Light Account  | 0x000000893A26168158fbeaDD9335Be5bC96592E2 | 0xc1B2fC4197c9187853243E6e4eb5A4aF8879a1c0 |
-| Optimism        | Light Account  | 0x000000893A26168158fbeaDD9335Be5bC96592E2 | 0xc1B2fC4197c9187853243E6e4eb5A4aF8879a1c0 |
-| Optimism Goerli | Light Account  | 0x000000893A26168158fbeaDD9335Be5bC96592E2 | 0xc1B2fC4197c9187853243E6e4eb5A4aF8879a1c0 |
-| Base            | Light Account  | 0x000000893A26168158fbeaDD9335Be5bC96592E2 | 0xc1B2fC4197c9187853243E6e4eb5A4aF8879a1c0 |
-| Base Goerli     | Light Account  | 0x000000893A26168158fbeaDD9335Be5bC96592E2 | 0xc1B2fC4197c9187853243E6e4eb5A4aF8879a1c0 |
-| Arbitrum        | Light Account  | 0x000000893A26168158fbeaDD9335Be5bC96592E2 | 0xc1B2fC4197c9187853243E6e4eb5A4aF8879a1c0 |
-| Arbitrum Goerli | Light Account  | 0x000000893A26168158fbeaDD9335Be5bC96592E2 | 0xc1B2fC4197c9187853243E6e4eb5A4aF8879a1c0 |
-| Eth Mainnet     | Simple Account | 0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232 | --                                         |
-| Eth Sepolia     | Simple Account | 0x9406cc6185a346906296840746125a0e44976454 | --                                         |
-| Eth Goerli      | Simple Account | 0x9406cc6185a346906296840746125a0e44976454 | --                                         |
-| Polygon Mainnet | Simple Account | 0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232 | --                                         |
-| Polygon Mumbai  | Simple Account | 0x9406Cc6185a346906296840746125a0E44976454 | --                                         |
-| Optimism        | Simple Account | 0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232 | --                                         |
-| Optimism Goerli | Simple Account | 0x9406cc6185a346906296840746125a0e44976454 | --                                         |
-| Base            | Simple Account | 0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232 | --                                         |
-| Base Goerli     | Simple Account | 0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232 | --                                         |
-| Arbitrum        | Simple Account | 0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232 | --                                         |
-| Arbitrum Goerli | Simple Account | 0x9406cc6185a346906296840746125a0e44976454 | --                                         |
+### Light Account
+
+| Chain           | Factory Address                            | Account Implementation                     |
+| --------------- | ------------------------------------------ | ------------------------------------------ |
+| Eth Mainnet     | 0x000000893A26168158fbeaDD9335Be5bC96592E2 | 0xc1B2fC4197c9187853243E6e4eb5A4aF8879a1c0 |
+| Eth Sepolia     | 0x000000893A26168158fbeaDD9335Be5bC96592E2 | 0xc1B2fC4197c9187853243E6e4eb5A4aF8879a1c0 |
+| Eth Goerli      | 0x000000893A26168158fbeaDD9335Be5bC96592E2 | 0xc1B2fC4197c9187853243E6e4eb5A4aF8879a1c0 |
+| Polygon Mainnet | 0x000000893A26168158fbeaDD9335Be5bC96592E2 | 0xc1B2fC4197c9187853243E6e4eb5A4aF8879a1c0 |
+| Polygon Mumbai  | 0x000000893A26168158fbeaDD9335Be5bC96592E2 | 0xc1B2fC4197c9187853243E6e4eb5A4aF8879a1c0 |
+| Optimism        | 0x000000893A26168158fbeaDD9335Be5bC96592E2 | 0xc1B2fC4197c9187853243E6e4eb5A4aF8879a1c0 |
+| Optimism Goerli | 0x000000893A26168158fbeaDD9335Be5bC96592E2 | 0xc1B2fC4197c9187853243E6e4eb5A4aF8879a1c0 |
+| Base            | 0x000000893A26168158fbeaDD9335Be5bC96592E2 | 0xc1B2fC4197c9187853243E6e4eb5A4aF8879a1c0 |
+| Base Goerli     | 0x000000893A26168158fbeaDD9335Be5bC96592E2 | 0xc1B2fC4197c9187853243E6e4eb5A4aF8879a1c0 |
+| Arbitrum        | 0x000000893A26168158fbeaDD9335Be5bC96592E2 | 0xc1B2fC4197c9187853243E6e4eb5A4aF8879a1c0 |
+| Arbitrum Goerli | 0x000000893A26168158fbeaDD9335Be5bC96592E2 | 0xc1B2fC4197c9187853243E6e4eb5A4aF8879a1c0 |
+
+### Simple Account
+
+| Chain           | Factory Address                            |
+| --------------- | ------------------------------------------ |
+| Eth Mainnet     | 0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232 |
+| Eth Sepolia     | 0x9406cc6185a346906296840746125a0e44976454 |
+| Eth Goerli      | 0x9406cc6185a346906296840746125a0e44976454 |
+| Polygon Mainnet | 0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232 |
+| Polygon Mumbai  | 0x9406Cc6185a346906296840746125a0E44976454 |
+| Optimism        | 0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232 |
+| Optimism Goerli | 0x9406cc6185a346906296840746125a0e44976454 |
+| Base            | 0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232 |
+| Base Goerli     | 0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232 |
+| Arbitrum        | 0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232 |
+| Arbitrum Goerli | 0x9406cc6185a346906296840746125a0e44976454 |
 
 ## Benchmarks
 
