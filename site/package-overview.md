@@ -10,6 +10,9 @@ head:
   - - meta
     - property: og:description
       content: Overview of the packges available in the Account Kit SDK
+next:
+  text: Smart Accounts Overview
+  link: /smart-accounts/overview
 ---
 
 # Package Overview

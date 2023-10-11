@@ -1,16 +1,29 @@
 import { defineConfig } from "vitepress";
 
+const pkg = require("../../lerna.json");
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "Account Kit",
   description: "Account Abstraction Legos",
   themeConfig: {
+    logo: "/kit-logo.svg",
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: "Docs", link: "/getting-started" },
       {
         text: "Examples",
         link: "https://github.com/alchemyplatform/aa-sdk/tree/main/examples",
+      },
+      {
+        text: pkg.version,
+        items: [
+          {
+            text: "Changelog",
+            link: "https://github.com/alchemyplatform/aa-sdk/blob/main/CHANGELOG.md",
+          },
+          // TODO: add a Contributing link and Migration links when necessary
+        ],
       },
     ],
 
@@ -28,6 +41,19 @@ export default defineConfig({
           {
             text: "Package Overview",
             link: "/package-overview",
+          },
+          {
+            text: "Demos",
+            items: [
+              {
+                text: "Gas-less NFT Minting Demo",
+                link: "https://gasless-nft-minter.vercel.app/",
+              },
+              {
+                text: "Gas-less Token Minting Demo",
+                link: "https://aa-simple-dapp.vercel.app/",
+              },
+            ],
           },
         ],
       },
