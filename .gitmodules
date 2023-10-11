@@ -10,3 +10,6 @@
 [submodule "examples/contracts/DAAppNFT/lib/solmate"]
 	path = examples/contracts/DAAppNFT/lib/solmate
 	url = https://github.com/transmissions11/solmate
+[submodule "examples/contracts/AccountKitToken/lib/openzeppelin-contracts"]
+	path = examples/contracts/AccountKitToken/lib/openzeppelin-contracts
+	url = https://github.com/openzeppelin/openzeppelin-contracts
