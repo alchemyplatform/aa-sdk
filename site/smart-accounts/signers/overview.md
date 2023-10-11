@@ -54,7 +54,7 @@ Account Kit is compatible with any EIP-1193 provider. Many of the most popular s
 - Capsule
 - Self-custodial wallets like Metamask or Ledger
 
-If you want to use another signer, you can integrate any other signer by wrapping it in an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) provider or using [`SmartAccountSigner`](/smart-accounts/signers/using-your-own#implementing-smartaccountsigner) to adapt non-standard signers.
+If you want to use another signer, you can integrate any other signer by wrapping it in an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) provider or using [`SmartAccountSigner`](/smart-accounts/signers/custom-signer#implementing-smartaccountsigner) to adapt non-standard signers.
 
 ## Criteria to consider
 
