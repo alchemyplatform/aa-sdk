@@ -144,3 +144,12 @@
 .VPHome {
   padding-bottom: 0px !important;
 }
+
+.bg-clip-text {
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.transparent-text-fill {
+  -webkit-text-fill-color: transparent;
+}
