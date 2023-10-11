@@ -23,7 +23,7 @@ A smart account is a smart contract controlled by an account owner or other auth
 
 ## Kick Off with Light Account
 
-The Light Account offers a straightforward, secure, and cost-effective smart account implementation. It comes equipped with features like owner transfers, [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) message signing, and batched transactions. For most applications, we recommend using the Light Account.
+The Light Account offers a straightforward, secure, and cost-effective smart account implementation. It comes equipped with features like owner transfers, [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) message signing, and batched transactions. For most applications, we recommend using the Light Account. You can find the Light Account deployment addresses for different chains in the [Deployment Addresses](/smart-accounts/accounts/deployment-addresses) page.
 
 Here's a snippet that demonstrates how to work with the Light Account using Account Kit. This snippet sets up a Light Account and initiates a `UserOperation` from it:
 

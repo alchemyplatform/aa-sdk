@@ -44,6 +44,6 @@ Here are some benchmarks for the Light Account and other smart account implement
 
 ## Developer Links
 
-[LightAccount Github Repo](https://github.com/alchemyplatform/light-account)
-
-[Quantstamp Audit Report](https://github.com/alchemyplatform/light-account/blob/main/Quantstamp-Audit.pdf)
+- [LightAccount & Simple Account Deployment Addresses](/smart-accounts/accounts/deployment-addresses)
+- [LightAccount Github Repo](https://github.com/alchemyplatform/light-account)
+- [Quantstamp Audit Report](https://github.com/alchemyplatform/light-account/blob/main/Quantstamp-Audit.pdf)

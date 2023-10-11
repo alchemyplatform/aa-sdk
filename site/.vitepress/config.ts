@@ -44,6 +44,10 @@ export default defineConfig({
               { text: "Light", link: "/light-account" },
               { text: "Modular", link: "/modular-account" },
               { text: "Using Your Own", link: "/using-your-own" },
+              {
+                text: "Deployment Addresses",
+                link: "/deployment-addresses",
+              },
             ],
           },
           {
