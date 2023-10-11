@@ -128,7 +128,7 @@ const { hash } = await provider.sendUserOperation(uo);
       class="flex items-start gap-[8px] justify-between text-white max-md:items-center"
     >
       <div class="flex flex-col gap-[16px]">
-        <img src="/alchemy.svg" alt="Alchemy Logo" />
+        <img src="/alchemy.svg" alt="Alchemy Logo" class="max-lg:h-[40px] max-lg:w-[auto]"/>
         <text class="max-md:text-center">The web3 development platform</text>
       </div>
       <div class="flex flex-row gap-[16px] items-center max-sm:flex-col">
