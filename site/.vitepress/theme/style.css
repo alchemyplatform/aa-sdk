@@ -48,15 +48,30 @@
  * -------------------------------------------------------------------------- */
 
 :root {
+  --vp-c-white: #ffffff;
+  --vp-c-black: #020617;
+
+  --vp-c-neutral: var(--vp-c-black);
+  --vp-c-neutral-inverse: var(--vp-c-white);
+}
+
+.dark {
+  --vp-c-neutral: var(--vp-c-white);
+  --vp-c-neutral-inverse: var(--vp-c-black);
+}
+
+:root {
+  --vp-c-brand-1: #ce26a2;
+  --vp-c-brand-2: #f16f46;
+}
+
+:root {
   --vp-c-default-1: var(--vp-c-gray-1);
   --vp-c-default-2: var(--vp-c-gray-2);
   --vp-c-default-3: var(--vp-c-gray-3);
   --vp-c-default-soft: var(--vp-c-gray-soft);
 
-  --vp-c-brand-1: var(--vp-c-indigo-1);
-  --vp-c-brand-2: var(--vp-c-indigo-2);
-  --vp-c-brand-3: var(--vp-c-indigo-3);
-  --vp-c-brand-soft: var(--vp-c-indigo-soft);
+  --vp-c-brand-3: var(--vp-c-brand-1);
 
   --vp-c-tip-1: var(--vp-c-brand-1);
   --vp-c-tip-2: var(--vp-c-brand-2);
