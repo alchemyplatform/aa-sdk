@@ -73,7 +73,7 @@ export default defineConfig({
             link: "/overview",
             collapsed: true,
             items: [
-              { text: "Magic.Link", link: "/magic-link" },
+              { text: "Magic", link: "/magic" },
               { text: "Web3Auth", link: "/web3auth" },
               { text: "Turnkey", link: "/turnkey" },
               { text: "Privy", link: "/privy" },
