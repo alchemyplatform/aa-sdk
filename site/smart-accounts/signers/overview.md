@@ -44,7 +44,7 @@ The signer plays a crucial role in your app because it controls the user’s sma
 
 Account Kit is compatible with any EIP-1193 provider. Many of the most popular signers can be configured in minutes through our integration guides below:
 
-- [Magic.link](/smart-accounts/signers/magic-link)
+- [Magic](/smart-accounts/signers/magic)
 - [web3auth](/smart-accounts/signers/web3auth)
 - [Turnkey](/smart-accounts/signers/turnkey)
 - [Privy](/smart-accounts/signers/privy)

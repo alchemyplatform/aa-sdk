@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Magic Link
+      content: Magic
   - - meta
     - name: description
       content: Guide to use Magic.Link as a signer
@@ -12,7 +12,7 @@ head:
       content: Guide to use Magic.Link as a signer
 ---
 
-# Magic Link
+# Magic
 
 [Magic](https://magic.link) is an embedded wallet provider that allows users to generate wallets scoped to your application via Social Logins, Email OTP, or Webauthn. This is great for enabling a better experience for your users. But ultimately these wallets are not much different from EOA's, so you don't have the benefit of Account Abstraction (gas sponsorship, batching, etc).
 
