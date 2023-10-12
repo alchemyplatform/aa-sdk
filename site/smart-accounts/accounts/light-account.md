@@ -30,7 +30,7 @@ The code snippet below demonstrates the usage of Light Account with Account Kit.
 
 ## Benchmarks
 
-Here are some benchmarks for the Light Account and other smart account implementations you might consider:
+Here are some benchmarks for Light Account and other smart account implementations you might consider:
 
 | Account              | Creation | Native transfer | ERC20 transfer | Total Gas |
 | -------------------- | -------- | --------------- | -------------- | --------- |

@@ -3,26 +3,40 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Using Modular Account
+      content: Modular Account (coming soon)
   - - meta
     - name: description
-      content: Using Modular Account with Account Kit
+      content: Modular Account is coming soon to Account Kit
   - - meta
     - property: og:description
-      content: Using Modular Account with Account Kit
+      content: Modular Account is coming soon to Account Kit
 ---
 
-# Modular Account & ERC-6900
+# Modular Account (coming soon)
 
-Support for Modular Accounts is coming soon. Modular Accounts are based on the `ERC-6900` spec and offer a lot more flexibility and extensibility. You can read more about ERC-6900 down below.
+We are working towards the first stable version of [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) with [the community](https://ethereum-magicians.org/t/erc-6900-modular-smart-contract-accounts-and-plugins/13885).
 
-We’re currently collaborating with the community and plan to finalize the ERC soon. `LightAccount` is fully forward-compatible with `ERC-6900`. We’ll release an upgrade once the ERC is finalized.
+Soon after, we will release an ERC-6900 compatible Modular Account in Account Kit. It will support new use cases like session keys, account recovery, spending limits, and any ERC-6900 plugin you can imagine. The Light Account is forward-compatible with ERC-6900 so you can optionally upgrade it to the Modular Account once released.
 
-## ERC-6900
+If you're developing a plugin, we'd love to [chat](mailto:account-abstraction@alchemy.com)!
 
-[ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) proposes a set of standards for modular smart account developers. It reflects a modular vision of smart accounts that allow both users and developers to build account experiences that reflect their needs and objectives.
+Read on to learn more about ERC-6900 and modular accounts.
 
-By standardizing basic functions and interfaces, ERC-6900 seeks to foster a growing ecosystem of wallet and plugin (or module) developers by freeing them to focus on their projects rather than fragmenting their efforts across multiple ecosystem standards. Is also seeks to create a community-defined standard that avoids lock-in by any one platform, allowing users and developers to construct wallets that offer more flexibility and functionality than are possible with standard EOA accounts.
+# Motivation
+
+In the coming years, we expect most user accounts to be smart contract accounts that leverage the benefits of account abstraction. These accounts will generally share a similar set of core features such as signature validation and ownership transfer. To ensure this core feature set is secure and does not contain any vulnerabilities, it will be prudent for most developers to re-use battle-tested smart accounts rather than writing their own accounts.
+
+However, smart acounts are also programmable, enabling developers to build new and innovative features that hook into the validation and execution logic of a smart account. We hope and expect to see a diverse ecosystem of plugins flourish.
+
+In order to maximize interoperability and code re-use, these plugins will ideally share a standard interface that is compatible with every smart contract account.
+
+# ERC-6900: Modular Smart Contract Accounts and Plugins
+
+We authored [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) to propose a standard interface for modular smart contract accounts and plugins.
+
+By standardizing basic functions and interfaces, ERC-6900 seeks to foster a growing ecosystem of wallet and plugin developers. These developers should be able to write one plugin that works with all smart accounts, rather than fragmenting their efforts across multiple different account implementations.
+
+For users, this standard will make it easier to discover and enable plugins. Imagine a future where a user with an ERC-6900 compatible account can install any of a thousand plugins to their smart account.
 
 ### **Architecture**
 

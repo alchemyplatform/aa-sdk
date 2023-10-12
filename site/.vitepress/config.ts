@@ -67,9 +67,9 @@ export default defineConfig({
             base: "/smart-accounts/accounts",
             link: "/overview",
             items: [
-              { text: "Light", link: "/light-account" },
-              { text: "Modular", link: "/modular-account" },
-              { text: "Using Your Own", link: "/using-your-own" },
+              { text: "Light Account", link: "/light-account" },
+              { text: "Modular Account (soon)", link: "/modular-account" },
+              { text: "Use Your Own Account", link: "/using-your-own" },
               {
                 text: "Deployment Addresses",
                 link: "/deployment-addresses",
