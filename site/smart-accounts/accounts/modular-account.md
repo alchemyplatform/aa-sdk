@@ -28,7 +28,7 @@ By standardizing basic functions and interfaces, ERC-6900 seeks to foster a grow
 
 The standard focuses on the development of modules or plugins, and on the interactions between these plugins and modular smart contract accounts (or “MSCA”). Following [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337), it splits validation and execution functions in order to allow for greater customization within these components while also ensuring that they remain composable. It also adds pre- and post-execution hooks as a third functional component to plugins, enabling more finely grained functionality.
 
-![ERC-6900](/assets/images/erc-6900.png)
+![ERC-6900](/images/erc-6900.png)
 
 _[Source](https://eips.ethereum.org/EIPS/eip-6900)_
 

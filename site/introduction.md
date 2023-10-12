@@ -26,7 +26,7 @@ Account Kit is a complete solution for [account abstraction](https://www.alchemy
 - **Gas Manager API:** A programmable API to sponsor gas for UserOps that meet your criteria.
 - **Bundler API:** The most reliable ERC-4337 Bundler. Land your UserOps onchain, batch operations, and sponsor gas at massive scale.
 
-<img src="./assets/images/account-kit-overview.png" width="400" height="auto" alt="Account Kit Overview" style="display: block; margin: auto;">
+<img src="/images/account-kit-overview.png" width="400" height="auto" alt="Account Kit Overview" style="display: block; margin: auto;">
 
 Let’s dive into each component.
 

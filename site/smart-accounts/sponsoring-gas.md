@@ -48,7 +48,7 @@ Once you've decided on policy rules for your app, [create a policy](https://dash
 
 Next, you must link your gas policy to your provider. Find your Policy ID located at the top of the policy page in the Gas Manager dashboard.
 
-![Policy ID](../assets/images/policy-id.png)
+![Policy ID](/images/policy-id.png)
 
 Copy it and then replace the `GAS_MANAGER_POLICY_ID` in the snippet below.
 
