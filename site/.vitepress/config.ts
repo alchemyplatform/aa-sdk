@@ -187,10 +187,6 @@ export default defineConfig({
                 text: "disconnect",
                 link: "/disconnect",
               },
-              {
-                text: "customMiddleware",
-                link: "/customMiddleware",
-              },
             ],
           },
           {
@@ -259,12 +255,12 @@ export default defineConfig({
                     link: "/getNonce",
                   },
                   {
-                    text: "getDeplymentState",
-                    link: "/getDeplymentStates",
+                    text: "getDeploymentState",
+                    link: "/getDeploymentState",
                   },
                   {
                     text: "isAccountDeployed",
-                    link: "/isAccountDeployeds",
+                    link: "/isAccountDeployed",
                   },
                 ],
               },
