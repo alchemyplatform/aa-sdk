@@ -44,15 +44,16 @@ The signer plays a crucial role in your app because it controls the user’s sma
 
 Account Kit is compatible with any EIP-1193 provider. Many of the most popular signers can be configured in minutes through our integration guides below:
 
-- Magic
-- Web3Auth
-- Turnkey
-- Privy
-- Lit Protocol
-- Fireblocks
-- Portal
-- Capsule
-- Self-custodial wallets like Metamask or Ledger
+- [Magic.link](/smart-accounts/signers/magic-link)
+- [web3auth](/smart-accounts/signers/web3auth)
+- [Turnkey](/smart-accounts/signers/turnkey)
+- [Privy](/smart-accounts/signers/privy)
+- [Dynamic](/smart-accounts/signers/dynamic)
+- [Fireblocks](/smart-accounts/signers/fireblocks)
+- [Portal](/smart-accounts/signers/portal)
+- [Capsule](/smart-accounts/signers/capsule)
+- [Lit Protocol](/smart-accounts/signers/lit)
+- [Self-custodial wallets like Metamask or Ledger](/smart-accounts/signers/eoa)
 
 If you want to use another signer, you can integrate any other signer by wrapping it in an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) provider or using [`SmartAccountSigner`](/smart-accounts/signers/custom-signer#implementing-smartaccountsigner) to adapt non-standard signers.
 
