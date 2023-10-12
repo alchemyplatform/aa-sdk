@@ -187,26 +187,6 @@ export default defineConfig({
                 text: "disconnect",
                 link: "/disconnect",
               },
-              {
-                text: "dummyPaymasterDataMiddleware",
-                link: "/dummyPaymasterDataMiddleware",
-              },
-              {
-                text: "paymasterDataMiddleware",
-                link: "/paymasterDataMiddleware",
-              },
-              {
-                text: "gasEstimator",
-                link: "/gasEstimator",
-              },
-              {
-                text: "feeDataGetter",
-                link: "/feeDataGetter",
-              },
-              {
-                text: "customMiddleware",
-                link: "/customMiddleware",
-              },
             ],
           },
           {
@@ -275,12 +255,12 @@ export default defineConfig({
                     link: "/getNonce",
                   },
                   {
-                    text: "getDeplymentState",
-                    link: "/getDeplymentStates",
+                    text: "getDeploymentState",
+                    link: "/getDeploymentState",
                   },
                   {
                     text: "isAccountDeployed",
-                    link: "/isAccountDeployeds",
+                    link: "/isAccountDeployed",
                   },
                 ],
               },
