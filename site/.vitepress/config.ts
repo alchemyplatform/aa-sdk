@@ -188,22 +188,6 @@ export default defineConfig({
                 link: "/disconnect",
               },
               {
-                text: "dummyPaymasterDataMiddleware",
-                link: "/dummyPaymasterDataMiddleware",
-              },
-              {
-                text: "paymasterDataMiddleware",
-                link: "/paymasterDataMiddleware",
-              },
-              {
-                text: "gasEstimator",
-                link: "/gasEstimator",
-              },
-              {
-                text: "feeDataGetter",
-                link: "/feeDataGetter",
-              },
-              {
                 text: "customMiddleware",
                 link: "/customMiddleware",
               },
