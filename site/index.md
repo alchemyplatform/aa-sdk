@@ -103,7 +103,7 @@ const { hash } = await provider.sendUserOperation(uo);
               </div>
             </div>
           </a>
-          <a rel="noopener noreferrer" target="_blank" href="https://gasless-nft-minter.vercel.app/" class="flex-auto basis-1/3 max-lg:max-w-[370px] max-lg:min-w-[370px]">
+          <a rel="noopener noreferrer" target="_blank" href="https://aa-simple-dapp.vercel.app/" class="flex-auto basis-1/3 max-lg:max-w-[370px] max-lg:min-w-[370px]">
             <div
               class="flex flex-col flex-auto p-[24px] gap-[24px] rounded-md text-white overflow-auto bg-gradient-2 group hover:scale-105 hover:opacity-90 transition duration-300 ease-in-out"
             >
