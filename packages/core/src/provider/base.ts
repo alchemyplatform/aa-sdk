@@ -577,8 +577,8 @@ export class SmartAccountProvider<
           ...fetchOptions,
           headers: {
             ...fetchOptions?.headers,
-            "Alchemy-AA-SDK-Signer": signer?.signerType,
-            "Alchemy-AA-SDK-Factory-Address": factoryAddress,
+            "Alchemy-Aa-Sdk-Signer": signer?.signerType,
+            "Alchemy-Aa-Sdk-Factory-Address": factoryAddress,
           },
         },
       });
