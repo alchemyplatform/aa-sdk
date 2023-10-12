@@ -280,7 +280,7 @@ export default defineConfig({
                 items: [
                   {
                     text: "wrapSignatureWith6492",
-                    link: "/wrapWith6492",
+                    link: "/wrapSignatureWith6492",
                   },
                   {
                     text: "verifyEIP6492Signature",
