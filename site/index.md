@@ -75,20 +75,6 @@ const { hash } = await provider.sendUserOperation(uo);
           </div>
         </div>
         <div class="flex max-lg:flex-wrap justify-center gap-[32px]">
-          <a rel="noopener noreferrer" href="./introduction.html" class="flex-auto basis-1/3 max-lg:max-w-[370px] max-lg:min-w-[370px]">
-            <div
-              class="flex flex-col flex-auto p-[24px] gap-[24px] rounded-md text-white overflow-auto bg-gradient-2 group hover:scale-105 hover:opacity-90 transition duration-300 ease-in-out"
-            >
-              <div class="flex flex-col gap-[8px] items-start">
-                <div class="text-[24px] font-semibold">Why Account Kit?</div>
-              </div>
-              <div
-                class="flex h-[24px] justify-end items-baseline self-stretch transition duration-300 ease-in-out group-hover:translate-x-[5px]"
-              >
-                <img src="/arrow-right.svg" alt="Click Here" />
-              </div>
-            </div>
-          </a>
           <a rel="noopener noreferrer" href="./package-overview.html" class="flex-auto basis-1/3 max-lg:max-w-[370px] max-lg:min-w-[370px]">
             <div
               class="flex flex-col flex-auto p-[24px] gap-[24px] rounded-md text-white overflow-auto bg-gradient-3 group hover:scale-105 hover:opacity-90 transition duration-300 ease-in-out"
@@ -109,6 +95,20 @@ const { hash } = await provider.sendUserOperation(uo);
             >
               <div class="flex flex-col gap-[8px] items-start">
                 <div class="text-[24px] font-semibold">Getting Started</div>
+              </div>
+              <div
+                class="flex h-[24px] justify-end items-baseline self-stretch transition duration-300 ease-in-out group-hover:translate-x-[5px]"
+              >
+                <img src="/arrow-right.svg" alt="Click Here" />
+              </div>
+            </div>
+          </a>
+          <a rel="noopener noreferrer" target="_blank" href="https://gasless-nft-minter.vercel.app/" class="flex-auto basis-1/3 max-lg:max-w-[370px] max-lg:min-w-[370px]">
+            <div
+              class="flex flex-col flex-auto p-[24px] gap-[24px] rounded-md text-white overflow-auto bg-gradient-2 group hover:scale-105 hover:opacity-90 transition duration-300 ease-in-out"
+            >
+              <div class="flex flex-col gap-[8px] items-start">
+                <div class="text-[24px] font-semibold">Try it out!</div>
               </div>
               <div
                 class="flex h-[24px] justify-end items-baseline self-stretch transition duration-300 ease-in-out group-hover:translate-x-[5px]"
