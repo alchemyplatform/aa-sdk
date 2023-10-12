@@ -44,16 +44,7 @@ export default defineConfig({
           },
           {
             text: "Demos",
-            items: [
-              {
-                text: "Gas-less NFT Minting Demo",
-                link: "https://gasless-nft-minter.vercel.app/",
-              },
-              {
-                text: "Gas-less Token Minting Demo",
-                link: "https://aa-simple-dapp.vercel.app/",
-              },
-            ],
+            link: "/demos",
           },
         ],
       },
