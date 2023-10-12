@@ -563,5 +563,9 @@ export default defineConfig({
       },
     ],
     ["link", { rel: "icon", href: "/favicon.ico" }],
+    ["meta", { property: "og:image", content: "/images/og-image.jpg" }],
+    ["meta", { property: "og:image:type", content: "image/jpeg" }],
+    ["meta", { property: "og:image:width", content: "2400" }],
+    ["meta", { property: "og:image:height", content: "1260" }],
   ],
 });
