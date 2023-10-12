@@ -31,11 +31,11 @@ Lit Protocol's pkp network is still in testnet. Backwards compatibility, and dat
 ::: code-group
 
 ```bash [npm]
-npm i @lit-protocol/pkp-ethers
+npm i @lit-protocol/pkp-ethers@cayenne
 ```
 
 ```bash [yarn]
-yarn add @lit-protocol/pkp-ethers
+yarn add @lit-protocol/pkp-ethers@cayenne
 ```
 
 :::
@@ -45,11 +45,11 @@ yarn add @lit-protocol/pkp-ethers
 ::: code-group
 
 ```bash [npm]
-npm i @lit-protocol/lit-node-client
+npm i @lit-protocol/lit-node-client@cayenne
 ```
 
 ```bash [yarn]
-yarn add @lit-protocol/lit-node-client
+yarn add @lit-protocol/lit-node-client@cayenne
 ```
 
 :::

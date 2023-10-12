@@ -12,11 +12,13 @@
     "@alchemy/aa-accounts": "^0.1.0",
     "@alchemy/aa-alchemy": "^0.1.0",
     "@alchemy/aa-core": "^0.1.0",
+    "@t3-oss/env-core": "^0.7.0",
     "magic-sdk": "^20.1.1",
     "next": "13.5.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "viem": "^1.16.0"
+    "viem": "^1.16.0",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/node": "^18.15.5",
