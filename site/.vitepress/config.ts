@@ -45,7 +45,7 @@ export default defineConfig({
         items: [
           { text: "Why Account Kit", link: "/why-account-kit" },
           { text: "Introduction", link: "/introduction" },
-          { text: "Getting Started Guide", link: "/getting-started" },
+          { text: "Getting Started", link: "/getting-started" },
           {
             text: "Packages Overview",
             link: "/package-overview",
@@ -67,7 +67,7 @@ export default defineConfig({
         ],
       },
       {
-        text: "Choosing a Smart Account",
+        text: "Smart Accounts",
         base: "/smart-accounts",
         items: [
           { text: "Overview", link: "/overview" },
@@ -76,20 +76,17 @@ export default defineConfig({
             base: "/smart-accounts/accounts",
             collapsed: true,
             items: [
+              { text: "Introduction", link: "/choosing-a-smart-account" },
+              { text: "Light Account", link: "/light-account" },
               {
-                text: "Overview",
-                link: "/choosing-a-smart-account",
-              },
-              { text: "Light Account Smart Contract", link: "/light-account" },
-              {
-                text: "Modular Account Smart Contract",
+                text: "Modular Account",
                 link: "/modular-account",
               },
-              { text: "Using Your Own Smart Account", link: "/using-your-own" },
               {
-                text: "Deployment Addresses",
+                text: "Deployments",
                 link: "/deployment-addresses",
               },
+              { text: "Using Your Own", link: "/using-your-own" },
             ],
           },
           {
@@ -98,25 +95,25 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: "Overview",
+                text: "Introduction",
                 link: "/choosing-a-signer",
               },
-              { text: "Magic Link", link: "/magic" },
+              { text: "Magic", link: "/magic" },
               { text: "Web3Auth", link: "/web3auth" },
               { text: "Turnkey", link: "/turnkey" },
               { text: "Privy", link: "/privy" },
               { text: "Dynamic", link: "/dynamic" },
               { text: "Fireblocks", link: "/fireblocks" },
-              { text: "Portal Integration Guide", link: "/portal" },
-              { text: "Capsule Integration Guide", link: "/capsule" },
-              { text: "Lit Protocol Integration Guide", link: "/lit" },
+              { text: "Portal", link: "/portal" },
+              { text: "Capsule", link: "/capsule" },
+              { text: "Lit Protocol", link: "/lit" },
               {
-                text: "Particle Network Integration Guide",
+                text: "Particle Network",
                 link: "/particle-network",
               },
-              { text: "EOA Integration Guide", link: "/eoa" },
+              { text: "Externally Owned Account (EOA)", link: "/eoa" },
               {
-                text: "How to Use Your Own Account Signer",
+                text: "Using Your Own",
                 link: "/custom-signer",
               },
               { text: "Contributing Your Signer", link: "/contributing" },
@@ -131,22 +128,16 @@ export default defineConfig({
         text: "aa-core",
         base: "/packages/aa-core",
         collapsed: true,
+        link: "/",
         items: [
-          {
-            text: "Overview of aa-core",
-            link: "/",
-          },
           {
             text: "Provider",
             collapsed: true,
             base: "/packages/aa-core/provider",
+            link: "/introduction",
             items: [
               {
-                text: "Overview of SmartAccountProvider",
-                link: "/introduction",
-              },
-              {
-                text: "constructor for SmartAccountProvider",
+                text: "SmartAccountProvider",
                 link: "/constructor",
               },
               {
@@ -247,13 +238,10 @@ export default defineConfig({
             text: "Accounts",
             base: "/packages/aa-core/accounts",
             collapsed: true,
+            link: "/introduction",
             items: [
               {
-                text: "Overview of ISmartContractAccount",
-                link: "/introduction",
-              },
-              {
-                text: "constructor for SimpleSmartContractAccount",
+                text: "SmartContractAccount",
                 link: "/constructor",
               },
               {
@@ -367,11 +355,8 @@ export default defineConfig({
             text: "Public Client",
             base: "/packages/aa-core/client",
             collapsed: true,
+            link: "/",
             items: [
-              {
-                text: "Overview of Public Client",
-                link: "/",
-              },
               {
                 text: "Actions",
                 collapsed: true,
@@ -455,22 +440,16 @@ export default defineConfig({
         text: "aa-alchemy",
         base: "/packages/aa-alchemy",
         collapsed: true,
+        link: "/",
         items: [
           {
-            text: "Overview of aa-alchemy",
-            link: "/",
-          },
-          {
-            text: "AlchemyProvider",
+            text: "Provider",
             base: "/packages/aa-alchemy/provider",
             collapsed: true,
+            link: "/introduction",
             items: [
               {
-                text: "Overview of AlchemyProvider",
-                link: "/introduction",
-              },
-              {
-                text: "constructor for AlchemyProvider",
+                text: "AlchemyProvider",
                 link: "/constructor",
               },
               { text: "gasEstimator", link: "/gasEstimator" },
@@ -484,11 +463,8 @@ export default defineConfig({
             text: "Middleware",
             base: "/packages/aa-alchemy/middleware",
             collapsed: true,
+            link: "/introduction",
             items: [
-              {
-                text: "Overview of Middleware",
-                link: "/introduction",
-              },
               {
                 text: "withAlchemyGasFeeEstimator",
                 link: "/withAlchemyGasFeeEstimator",
@@ -503,13 +479,8 @@ export default defineConfig({
             text: "Utils",
             collapsed: true,
             base: "/packages/aa-alchemy/utils",
-            items: [
-              {
-                text: "Overview of Utils",
-                link: "/introduction",
-              },
-              { text: "SupportedChains", link: "/supportedChains" },
-            ],
+            link: "/introduction",
+            items: [{ text: "SupportedChains", link: "/supportedChains" }],
           },
         ],
       },
@@ -517,22 +488,16 @@ export default defineConfig({
         text: "aa-accounts",
         collapsed: true,
         base: "/packages/aa-accounts",
+        link: "/",
         items: [
           {
-            text: "Overview of aa-accounts",
-            link: "/",
-          },
-          {
-            text: "LightSmartContractAccount",
+            text: "Light Account",
             collapsed: true,
             base: "/packages/aa-accounts/light-account",
+            link: "/introduction",
             items: [
               {
-                text: "Overview of LightSmartContractAccount",
-                link: "/introduction",
-              },
-              {
-                text: "constructor for LightSmartContractAccount",
+                text: "LightSmartContractAccount",
                 link: "/constructor",
               },
               {
@@ -570,20 +535,14 @@ export default defineConfig({
         text: "aa-ethers",
         base: "/packages/aa-ethers",
         collapsed: true,
+        link: "/",
         items: [
-          {
-            text: "Overview of aa-ethers",
-            link: "/",
-          },
           {
             text: "EthersProviderAdapter",
             collapsed: true,
             base: "/packages/aa-ethers/provider-adapter",
+            link: "/introduction",
             items: [
-              {
-                text: "Overview of EthersProviderAdapter",
-                link: "/introduction",
-              },
               {
                 text: "constructor for EthersProviderAdapter",
                 link: "/constructor",
@@ -610,11 +569,8 @@ export default defineConfig({
             text: "AccountSigner",
             collapsed: true,
             base: "/packages/aa-ethers/account-signer",
+            link: "/introduction",
             items: [
-              {
-                text: "Overview of AccountSigner",
-                link: "/introduction",
-              },
               {
                 text: "getAddress",
                 link: "/getAddress",
@@ -641,11 +597,8 @@ export default defineConfig({
             text: "Utils",
             collapsed: true,
             base: "/packages/aa-ethers/utils",
+            link: "/introduction",
             items: [
-              {
-                text: "Overview of Utils",
-                link: "/introduction",
-              },
               {
                 text: "convertWalletToAccountSigner",
                 link: "/convertWalletToAccountSigner",
