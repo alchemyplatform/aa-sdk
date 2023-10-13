@@ -302,4 +302,28 @@ export interface ISmartAccountProvider<
    * @returns the provider with the account disconnected
    */
   disconnect(): this & { account: undefined };
+
+  /**
+   * Allows you to add additional functionality and utility methods to this provider
+   * via a decorator pattern.
+   *
+   * NOTE: this method does not allow you to override existing methods on the provider.
+   *
+   * @example
+   * ```ts
+   * const provider = new SmartAccountProvider(...).extend((provider) => ({
+   *  debugSendUserOperation: (...args) => {
+   *    console.log("debugging send useroperation");
+   *    return provider.sendUserOperation(...args);
+   *  }
+   * }));
+   *
+   * provider.debugSendUserOperation(...);
+   * ```
+   *
+   * @param extendFn -- this function gives you access to the created provider instance and returns an object
+   * with the extension methods
+   * @returns -- the provider with the extension methods added
+   */
+  extend: <R>(extendFn: (self: this) => R) => this & R;
 }

@@ -205,21 +205,23 @@ export class SmartAccountProvider<
     return this.account.signTypedData(params);
   };
 
-  signMessageWith6492(msg: string | Uint8Array): Promise<`0x${string}`> {
+  signMessageWith6492 = (msg: string | Uint8Array): Promise<`0x${string}`> => {
     if (!this.account) {
       throw new Error("account not connected!");
     }
 
     return this.account.signMessageWith6492(msg);
-  }
+  };
 
-  signTypedDataWith6492(params: SignTypedDataParams): Promise<`0x${string}`> {
+  signTypedDataWith6492 = (
+    params: SignTypedDataParams
+  ): Promise<`0x${string}`> => {
     if (!this.account) {
       throw new Error("account not connected!");
     }
 
     return this.account.signTypedDataWith6492(params);
-  }
+  };
 
   sendTransaction = async (request: RpcTransactionRequest): Promise<Hash> => {
     const uoStruct = await this.buildUserOperationFromTx(request);
@@ -552,13 +554,13 @@ export class SmartAccountProvider<
     return this;
   };
 
-  connect<TAccount extends ISmartContractAccount>(
+  connect = <TAccount extends ISmartContractAccount>(
     fn: (
       provider:
         | PublicErc4337Client<TTransport>
         | PublicErc4337Client<HttpTransport>
     ) => TAccount
-  ): this & { account: TAccount } {
+  ): this & { account: TAccount } => {
     const account = fn(this.rpcClient);
     defineReadOnly(this, "account", account);
 
@@ -593,9 +595,9 @@ export class SmartAccountProvider<
       .then((address) => this.emit("accountsChanged", [address]));
 
     return this as unknown as this & { account: TAccount };
-  }
+  };
 
-  disconnect(): this & { account: undefined } {
+  disconnect = (): this & { account: undefined } => {
     if (this.account) {
       this.emit("disconnect");
       this.emit("accountsChanged", []);
@@ -604,13 +606,23 @@ export class SmartAccountProvider<
     defineReadOnly(this, "account", undefined);
 
     return this as this & { account: undefined };
-  }
+  };
 
-  isConnected<TAccount extends ISmartContractAccount>(): this is this & {
+  isConnected = <TAccount extends ISmartContractAccount>(): this is this & {
     account: TAccount;
-  } {
+  } => {
     return this.account !== undefined;
-  }
+  };
+
+  extend = <R>(fn: (self: this) => R): this & R => {
+    const extended = fn(this) as any;
+    // this should make it so extensions can't overwrite the base methods
+    for (const key in this) {
+      delete extended[key];
+    }
+
+    return Object.assign(this, extended);
+  };
 
   private overrideMiddlewareFunction = (
     override: AccountMiddlewareOverrideFn
