@@ -38,14 +38,10 @@ Account Kit provides a default smart account called `LightAccount`.
 
 For most applications, we recommend using the Light Account. It is [deployed](/smart-accounts/accounts/deployment-addresses) on Ethereum, Optimism, Arbitrum, Polygon, Base, and the respective testnets.
 
-Here's a snippet that demonstrates how to work with the Light Account using Account Kit. This snippet sets up a Light Account and initiates a `UserOperation` from it:
-
-<!--@include: ../../getting-started.md{56,68}-->
-
 ## Modular Account (coming soon)
 
-We authoring a standard for modular smart accounts called [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900). Soon we will release an ERC-6900 compatible [Modular Account](/smart-accounts/accounts/modular-account). This will be an optional upgrade from Light Account to unlock an ecosystem of plugins for your smart account stack.
+We are authoring a standard for modular smart accounts called [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900). Soon we will release an ERC-6900 compatible [Modular Account](/smart-accounts/accounts/modular-account). This will be an optional upgrade from Light Account to unlock an ecosystem of plugins for your smart account stack.
 
 ## Use Your Own Account
 
-If Light Account doesn't fit your specific needs, you can always use your own smart account implementation with Account Kit. To learn how, see the guide on [Using Your Own Account Implementation](/smart-accounts/accounts/using-your-own).
+If Light Account doesn't fit your specific needs, you can always use your own smart account implementation with Account Kit. To learn how, see our guide in the [Using Your Own](/smart-accounts/accounts/using-your-own) section.

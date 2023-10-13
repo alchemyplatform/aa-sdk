@@ -142,6 +142,7 @@ export abstract class BaseSmartContractAccount<
   /**
    * this should return the init code that will be used to create an account if one does not exist.
    * This is the concatenation of the account's factory address and the abi encoded function data of the account factory's `createAccount` method.
+   * https://github.com/eth-infinitism/account-abstraction/blob/abff2aca61a8f0934e533d0d352978055fddbd96/contracts/core/SenderCreator.sol#L12
    */
   protected abstract getAccountInitCode(): Promise<Hash>;
 
