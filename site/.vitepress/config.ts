@@ -82,6 +82,7 @@ export default defineConfig({
               { text: "Portal", link: "/portal" },
               { text: "Capsule", link: "/capsule" },
               { text: "Lit Protocol", link: "/lit" },
+              { text: "Particle Network", link: "/particle-network" },
               { text: "Externally Owned Account", link: "/eoa" },
               { text: "Custom Signer", link: "/custom-signer" },
             ],
