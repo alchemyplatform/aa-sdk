@@ -187,6 +187,10 @@ export default defineConfig({
                 text: "disconnect",
                 link: "/disconnect",
               },
+              {
+                text: "extend",
+                link: "/extend",
+              },
             ],
           },
           {

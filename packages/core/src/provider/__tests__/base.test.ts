@@ -20,36 +20,6 @@ describe("Base Tests", () => {
     chain: polygonMumbai,
   });
 
-  const givenGetUserOperationFailsNTimes = (times: number) => {
-    const mock = vi.spyOn(providerMock, "getUserOperationReceipt");
-    for (let i = 0; i < times; i++) {
-      mock.mockImplementationOnce(() => {
-        if (i < times - 1) {
-          return Promise.reject("Failed request, must retry");
-        }
-
-        return Promise.resolve({
-          receipt: { transactionHash: "0xMOCK_USER_OP_RECEIPT" },
-        } as unknown as UserOperationReceipt);
-      });
-    }
-    return mock;
-  };
-
-  const thenExpectRetriesToBe = async (
-    expectedRetryMsDelays: number[],
-    expectedMockCalls: number,
-    getUserOperationReceiptMock: SpyInstance<
-      [hash: `0x${string}`],
-      Promise<UserOperationReceipt | null>
-    >
-  ) => {
-    expect(retryMsDelays).toEqual(expectedRetryMsDelays);
-    expect(getUserOperationReceiptMock).toHaveBeenCalledTimes(
-      expectedMockCalls
-    );
-  };
-
   beforeEach(() => {
     vi.useFakeTimers();
     vi.spyOn(global, "setTimeout").mockImplementation(
@@ -145,4 +115,93 @@ describe("Base Tests", () => {
       ]
     `);
   });
+
+  it("should correctly extend the provider", async () => {
+    const newProvider = providerMock.extend((provider) => ({
+      newMethod: () => provider.buildUserOperation,
+    }));
+
+    expect(newProvider.newMethod).toBeDefined();
+    expect(newProvider.newMethod()).toBe(providerMock.buildUserOperation);
+    expect(newProvider.buildUserOperation).toBe(
+      providerMock.buildUserOperation
+    );
+  });
+
+  it("should support chaining extends", async () => {
+    const newProvider = providerMock
+      .extend((provider) => ({
+        newMethod: () => provider.buildUserOperation,
+      }))
+      .extend((provider) => ({ newMethod2: () => provider.newMethod }));
+
+    expect(newProvider.newMethod).toBeDefined();
+    expect(newProvider.newMethod()).toEqual(providerMock.buildUserOperation);
+    expect(newProvider.newMethod2).toBeDefined();
+    expect(newProvider.newMethod2()).toEqual(newProvider.newMethod);
+  });
+
+  it("should not allow extending with methods already defined", async () => {
+    const newProvider = providerMock.extend((provider) => ({
+      sendUserOperation: provider.dropAndReplaceUserOperation,
+    }));
+
+    expect(newProvider.sendUserOperation).toEqual(
+      providerMock.sendUserOperation
+    );
+
+    expect(newProvider.sendUserOperation).not.toEqual(
+      providerMock.dropAndReplaceUserOperation
+    );
+  });
+
+  it("should preserve class functions", () => {
+    class TestProvider extends SmartAccountProvider {
+      testMethod() {
+        return "test";
+      }
+    }
+
+    const provider = new TestProvider({
+      rpcProvider: "ALCHEMY_RPC_URL",
+      entryPointAddress: "0xENTRYPOINT_ADDRESS",
+      chain: polygonMumbai,
+    });
+
+    const newProvider = provider.extend(() => ({
+      newMethod: () => 1,
+    }));
+
+    expect(newProvider.testMethod()).toEqual("test");
+  });
+
+  const givenGetUserOperationFailsNTimes = (times: number) => {
+    const mock = vi.spyOn(providerMock, "getUserOperationReceipt");
+    for (let i = 0; i < times; i++) {
+      mock.mockImplementationOnce(() => {
+        if (i < times - 1) {
+          return Promise.reject("Failed request, must retry");
+        }
+
+        return Promise.resolve({
+          receipt: { transactionHash: "0xMOCK_USER_OP_RECEIPT" },
+        } as unknown as UserOperationReceipt);
+      });
+    }
+    return mock;
+  };
+
+  const thenExpectRetriesToBe = async (
+    expectedRetryMsDelays: number[],
+    expectedMockCalls: number,
+    getUserOperationReceiptMock: SpyInstance<
+      [hash: `0x${string}`],
+      Promise<UserOperationReceipt | null>
+    >
+  ) => {
+    expect(retryMsDelays).toEqual(expectedRetryMsDelays);
+    expect(getUserOperationReceiptMock).toHaveBeenCalledTimes(
+      expectedMockCalls
+    );
+  };
 });
