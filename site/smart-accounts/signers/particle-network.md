@@ -63,14 +63,14 @@ const chain = polygonMumbai;
 const provider = new AlchemyProvider({
   apiKey: process.env.ALCHEMY_API_KEY,
   chain,
-  entryPointAddress: ENTRY_POINT_CONTRACT_ADDRESS,
+  entryPointAddress: ENTRY_POINT_CONTRACT_ADDRESS, // 0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789
 }).connect(
   (rpcClient) =>
     new LightSmartContractAccount({
       entryPointAddress: ENTRY_POINT_CONTRACT_ADDRESS,
       chain: rpcClient.chain,
       owner: particleSigner,
-      factoryAddress: FACTORY_CONTRACT_ADDRESS,
+      factoryAddress: FACTORY_CONTRACT_ADDRESS, // For LightAccount, 0x000000893A26168158fbeaDD9335Be5bC96592E2
       rpcClient,
     })
 );
