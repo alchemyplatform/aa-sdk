@@ -18,7 +18,7 @@ We are working towards the first stable version of [ERC-6900](https://eips.ether
 
 Soon after, we will release an ERC-6900 compatible Modular Account in Account Kit. It will support new use cases like session keys, account recovery, spending limits, and any ERC-6900 plugin you can imagine. The Light Account is forward-compatible with ERC-6900 so you can optionally upgrade it to the Modular Account once released.
 
-If you're developing a plugin, we'd love to [chat](mailto:account-abstraction@alchemy.com)!
+If you're developing a plugin or modular account, we'd love to chat! Join the Modular Accounts [Telegram group](https://t.me/+KfB9WuhKDgk5YzIx) or [say hello](mailto:account-abstraction@alchemy.com) to a team member at Alchemy.
 
 Read on to learn more about ERC-6900 and modular accounts.
 
