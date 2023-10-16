@@ -23,7 +23,7 @@ describe("Local Account Signer Tests", () => {
       );
 
       expect(
-        await signer.signMessage("i will definately break this test case")
+        await signer.signMessage("i will definitely break this test case")
       ).toMatchInlineSnapshot(
         '"0x1d9a20cfd63c179daab241d9e64a2549e1a47c1ca7c465df6f5b8c5720cee7266050b89b3874b384c88cd8325601572e79b3b626dc756a6aec5fff05d4ce5efc1b"'
       );
@@ -61,7 +61,7 @@ describe("Local Account Signer Tests", () => {
       );
 
       expect(
-        await signer.signMessage("i will definately break this test case")
+        await signer.signMessage("i will definitely break this test case")
       ).toMatchInlineSnapshot(
         '"0x907004e990bb1bca76d9fed6bf4a6b614a8d11b6430657cb99ae83fae55c9bc60571876d8c01832e4661dd4312fa08b799b6f59c9b9abddd67e181abc6aef17e1c"'
       );
