@@ -1,6 +1,6 @@
 # Alchemy dAApp
 
-This example dapp contains an account abstraction-enabled web3 application designed to onboard people onto the Alchemy Account Abstraction SDK. It provides a quick starter for developers to use these technologies, by creating a Smart Contract Wallet and minting it an NFT!
+This example dapp contains an account abstraction-enabled web3 application designed to onboard people onto the Alchemy Account Abstraction SDK. It provides a quick starter for developers to use these technologies, by creating a Smart Contract Wallet and minting an NFT!
 
 ## Installation
 1. Clone the repository:
