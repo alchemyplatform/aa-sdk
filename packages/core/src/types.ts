@@ -61,7 +61,9 @@ export interface UserOperationEstimateGasResponse {
   callGasLimit: BigNumberish;
 }
 
-export interface UserOperationResponse extends UserOperationRequest {
+export interface UserOperationResponse {
+  /* the User Operation */
+  userOperation: UserOperationRequest;
   /* the address of the entry point contract that executed the user operation */
   entryPoint: Address;
   /* the block number the user operation was included in */
