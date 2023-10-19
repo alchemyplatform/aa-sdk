@@ -31,7 +31,7 @@ concurrency:
 # it is running against DOES NOT contain [skip-ci] in the commit message
 jobs:
   build_and_test:
-    name: Build and Test
+    name: Build and Test and Deploy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -43,6 +43,16 @@ jobs:
         with:
           node-version: "18.10"
           cache: "yarn"
+
+      - name: Set Github User Details
+        run: |
+          git config --global user.name "Alchemy Bot"
+          git config --global user.email "alchemy-bot@alchemy.com"
+
+      - name: Set NPM Permissions
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
 
       - name: Install dependencies
         run: yarn
@@ -60,24 +70,9 @@ jobs:
           LIGHT_ACCOUNT_OWNER_MNEMONIC: ${{ secrets.LIGHT_ACCOUNT_OWNER_MNEMONIC }}
         run: yarn test:e2e
 
-  deploy:
-    name: Deploy
-    needs: build_and_test
-    runs-on: ubuntu-latest
-    if: inputs.publish
-    steps:
-      - name: Set Github User Details
-        run: |
-          git config --global user.name "Alchemy Bot"
-          git config --global user.email "alchemy-bot@alchemy.com"
-
-      - name: Set NPM Permissions
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
-
       # Lerna publish will, compute the new version, update files, run precommit hooks, tag, publish, and push change log
       - name: Publish using Lerna
+        if: inputs.publish
         run: yarn lerna publish --no-private --yes --no-verify-access
 
   publish_site:
