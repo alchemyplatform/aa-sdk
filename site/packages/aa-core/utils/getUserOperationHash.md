@@ -54,7 +54,3 @@ The entrypoint address to use for the UserOperation
 ### `chainId: bigint`
 
 The chainId that this UserOperation will be submitted to
-
-```
-
-```
