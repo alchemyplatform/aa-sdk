@@ -30,7 +30,7 @@ concurrency:
 # If we ever migrate this to not be manual, we HAVE to check that the commit
 # it is running against DOES NOT contain [skip-ci] in the commit message
 jobs:
-  build_and_test:
+  build_and_test_deploy:
     name: Build and Test and Deploy
     runs-on: ubuntu-latest
     steps:
@@ -80,7 +80,7 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    needs: deploy
+    build_and_test_deploy: deploy
     runs-on: ubuntu-latest
     if: inputs.publish
     steps:
