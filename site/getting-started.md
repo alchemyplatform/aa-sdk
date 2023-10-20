@@ -51,11 +51,11 @@ yarn add @alchemy/aa-alchemy @alchemy/aa-accounts @alchemy/aa-core viem
 
 ## A Simple Light Account Example
 
-Using the SDK, we'll create a Light Account and send a User Operation from it. The Light Account will be owned by an Externally Owned Account (EOA). Here's a demonstration:
+Using the SDK, we'll deploy a Light Account and send a User Operation from it. The Light Account will be owned by an Externally Owned Account (EOA). Here's a demonstration:
 
 <<< @/snippets/light-account.ts
 
-This initializes a `provider` for your smart account which is then used to send user operations from it.
+This initializes a `provider` for your smart account which is then used to send user operations from it. It also logs the address of the deployed smart account.
 
 ::: tip Note
 Remember to:
