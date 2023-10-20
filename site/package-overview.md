@@ -31,9 +31,9 @@ For more details on all the utilities exported by `aa-core` see the [aa-core doc
 
 ## [`aa-alchemy`](/packages/aa-alchemy/)
 
-This package builds on `aa-core` by exporting an `AlchemyProvider` which extends `SmartAccountProvider` and adds some additional utilities for interacting with Alchemy's RPCs and Alchemy's `rundler`. The Provider also exports utilities for leveraging Alchemy's Gas Manager.
+This package builds on `aa-core` by exporting an `AlchemyProvider` which extends `SmartAccountProvider` and adds some additional utilities for interacting with Alchemy APIs and Alchemy's `Rundler`. The Provider also exports utilities for leveraging Alchemy's Gas Manager.
 
-**If you are using Alchemy's RPCs you have to use this package.** This is due to the specifics around how Alchemy's bundler does gas estimation. Not using this package and it's provider can result in incorrect gas estimations and failed transactions.
+**If you are using the Alchemy Bundler (`Rundler`) and Gas Manager you have to use this package.** This is due to the specifics around how Alchemy's bundler does gas estimation. Not using this package and it's provider can result in incorrect gas estimations and failed transactions.
 
 For more details on all the utilities exported by `aa-alchemy` see the [aa-alchemy documentation](/packages/aa-alchemy/).
 
