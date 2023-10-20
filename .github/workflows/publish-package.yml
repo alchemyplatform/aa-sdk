@@ -60,6 +60,17 @@ jobs:
       - name: Build
         run: yarn build
 
+      - name: Build with VitePress
+        working-directory: site
+        run: |
+          yarn build
+          touch .vitepress/dist/.nojekyll
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: site/.vitepress/dist
+
       - name: E2E tests
         if: inputs.skip-e2e == false
         env:
