@@ -80,7 +80,7 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    build_and_test_deploy: deploy
+    needs: build_and_test_deploy
     runs-on: ubuntu-latest
     if: inputs.publish
     steps:
