@@ -98,6 +98,11 @@ export abstract class BaseSmartContractAccount<
     this.factoryAddress = params.factoryAddress;
     this.owner = params.owner;
 
+    console.log(
+      "+++++++++++++++ BaseSmartContractAccount +++++++++++++++",
+      JSON.stringify(EntryPointAbi, null, 2)
+    );
+
     this.entryPoint = getContract({
       address: params.entryPointAddress,
       abi: EntryPointAbi,
@@ -105,6 +110,11 @@ export abstract class BaseSmartContractAccount<
       // This is valid because our PublicClient is a subclass of PublicClient
       publicClient: this.rpcProvider as PublicClient,
     });
+
+    console.log(
+      "+++++++++++++++ BaseSmartContractAccount getContract +++++++++++++++",
+      this.entryPoint.abi
+    );
   }
 
   // #region abstract-methods

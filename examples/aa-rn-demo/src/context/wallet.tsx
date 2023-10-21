@@ -114,7 +114,9 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     if (!scaAddress) {
       console.log("new login, connecting provider to account");
       await connectProviderToAccount(signer);
-      setScaAddress(await provider.getAddress());
+      const _scaaAddress = await provider.getAddress();
+      console.log("_scaaAddress", _scaaAddress);
+      setScaAddress(_scaaAddress);
       // const address = await getAddressFromAccount(signer);
       // if (address) setScaAddress(address);
       return;

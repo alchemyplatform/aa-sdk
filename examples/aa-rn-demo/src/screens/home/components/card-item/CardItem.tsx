@@ -10,7 +10,7 @@ import { type ICardItem } from "@services/models";
 import { encodeFunctionData, parseEther, type Hex } from "viem";
 import createStyles from "./CardItem.style";
 
-import erc721Abi from "@abi/ERC721.json";
+import { ERC721Abi } from "@abi/ERC721";
 import { useAlertContext } from "@context/alert";
 import usePostTx from "@hooks/contract/usePostTx";
 import FormImage from "@shared-components/atom/FormImage";
@@ -46,9 +46,9 @@ const CardItem: React.FC<ICardItemProps> = ({ style, data, onPress }) => {
       const res = await postTx({
         target: contract as Hex,
         data: encodeFunctionData({
-          abi: erc721Abi,
+          abi: ERC721Abi,
           functionName: "mintTo",
-          args: [scaAddress],
+          args: [scaAddress as Hex],
         }),
         value: parseEther("0.08"),
       });

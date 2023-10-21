@@ -142,7 +142,7 @@ export const useAlchemyProvider = ({
 
       console.log(
         "[useAlchemyProvider] Alchemy Provider connected to account %s \
-          (Signer type %s, Gas Manager Policy ID %s, Entry Point Address %s, Factory Address %s)",
+        (Signer type %s, Gas Manager Policy ID %s, Entry Point Address %s, Factory Address %s)",
         connectedProvider.account,
         signer.signerType,
         gasManagerPolicyId,
