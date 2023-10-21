@@ -12,7 +12,7 @@
     "site"
   ],
   "scripts": {
-    "build": "lerna run build --ignore=alchemy-daapp --ignore=aa-simple-dapp",
+    "build": "lerna run build --ignore=alchemy-daapp --ignore=aa-simple-dapp --ignore=aa-rn-dapp",
     "build:examples": "lerna run build",
     "clean": "lerna run clean",
     "test": "lerna run test:run",

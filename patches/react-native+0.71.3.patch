@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-native/scripts/cocoapods/codegen_utils.rb b/node_modules/react-native/scripts/cocoapods/codegen_utils.rb
+index 3694e68..3fafa63 100644
+--- a/node_modules/react-native/scripts/cocoapods/codegen_utils.rb
++++ b/node_modules/react-native/scripts/cocoapods/codegen_utils.rb
+@@ -85,7 +85,7 @@ class CodegenUtils
+           'source' => { :git => '' },
+           'header_mappings_dir' => './',
+           'platforms' => {
+-            'ios' => '11.0',
++            'ios' => '12.0',
+           },
+           'source_files' => "**/*.{h,mm,cpp}",
+           'pod_target_xcconfig' => { "HEADER_SEARCH_PATHS" =>

@@ -18,5 +18,7 @@ export {
 export type { KernelBaseValidatorParams } from "./kernel-zerodev/validator/base.js";
 
 //light-account exports
+export { LightAccountAbi } from "./light-account/abis/LightAccountAbi.js";
+export { LightAccountFactoryAbi } from "./light-account/abis/LightAccountFactoryAbi.js";
 export { LightSmartContractAccount } from "./light-account/account.js";
 export { getDefaultLightAccountFactory } from "./light-account/utils.js";

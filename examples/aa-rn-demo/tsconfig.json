@@ -1,0 +1,45 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "esnext",
+    "lib": ["esnext"],
+    "allowJs": true,
+    "jsx": "react-native",
+    "noEmit": true,
+    "isolatedModules": true,
+    "strict": true,
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "incremental": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    // ? Babel Plugin Module Resolver
+    "baseUrl": "./src",
+    "paths": {
+      "@shared-components/*": ["./shared/components/*"],
+      "@shared-config/*": ["./shared/config/*"],
+      "@shared-constants": ["./shared/constants"],
+      "@shared-utils": ["./shared/utils"],
+      "@font-size": ["./shared/theme/font-size"],
+      "@abi/*": ["./abi/*"],
+      "@models": ["./services/models"],
+      "@fonts": ["./shared/theme/fonts"],
+      "@colors": ["./shared/theme/colors"],
+      "@theme/*": ["./shared/theme/*"],
+      "@services/*": ["./services/*"],
+      "@screens/*": ["./screens/*"],
+      "@assets/*": ["./assets/*"],
+      "@local-storage": ["./services/local-storage"],
+      "@hooks/*": ["./hooks/*"],
+      "@store/*": ["./store/*"],
+      "@context/*": ["./context/*"]
+    },
+    "types": ["react-native"]
+  },
+  "extends": [
+    "typescript-template/base.json",
+    "@tsconfig/react-native/tsconfig.json"
+  ],
+  "exclude": ["node_modules", "babel.config.js", "metro.config.js"]
+}

@@ -40,6 +40,14 @@
     "eslint-config-next": "^13.4.1",
     "typescript": "^5.0.2"
   },
+  "nohoist": [
+    "**/react",
+    "**/react/**",
+    "**/react-*",
+    "**/react-*/**",
+    "**/*next*",
+    "**/*next*/**"
+  ],
   "ct3aMetadata": {
     "initVersion": "7.13.0"
   }
