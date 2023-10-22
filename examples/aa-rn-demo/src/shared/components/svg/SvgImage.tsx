@@ -56,7 +56,6 @@ export type SvgImageImageProps = {
   source: ImageURISource;
   onLoadStart?: () => void;
   onLoadEnd?: () => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onError?: (error: any) => void;
   style?: StyleProp<ImageStyle>;
   containerStyle?: StyleProp<ViewStyle>;

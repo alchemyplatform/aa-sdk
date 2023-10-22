@@ -15,13 +15,11 @@ class ErrorBoundary extends React.Component<
   ErrorBoundaryProps,
   ErrorBoundaryState
 > {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   constructor(props: any) {
     super(props);
     this.state = { error: undefined };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static getDerivedStateFromError(error: any): Partial<ErrorBoundaryState> {
     // Update state so the next render will show the fallback UI.
     return { error };

@@ -31,7 +31,6 @@ type WalletContextProps = {
   walletClient: WalletClient;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const defaultUnset: any = null;
 const WalletContext = createContext<WalletContextProps>({
   // Default Values
@@ -112,20 +111,15 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
     if (!scaAddress) {
-      console.log("new login, connecting provider to account");
       await connectProviderToAccount(signer);
       const _scaAddress = await provider.getAddress();
-      console.log("_saaAddress", _scaAddress);
       setScaAddress(_scaAddress);
-      // const address = await getAddressFromAccount(signer);
-      // if (address) setScaAddress(address);
       return;
     }
   }, [auth.isLoggedIn]);
 
   const logout = useCallback(async () => {
     try {
-      console.log("logging out");
       disconnectProviderFromAccount();
     } catch (error) {
       console.error(error);

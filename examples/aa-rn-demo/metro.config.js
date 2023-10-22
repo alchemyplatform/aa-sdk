@@ -22,7 +22,6 @@ function getConfig(appDir, options = {}) {
     path.resolve(appDir, "..", "..", "node_modules"),
     ...workspaces.filter((workspaceDir) => workspaceDir.includes("packages")),
   ];
-  console.log("watchFolders", watchFolders);
 
   return {
     watchFolders,

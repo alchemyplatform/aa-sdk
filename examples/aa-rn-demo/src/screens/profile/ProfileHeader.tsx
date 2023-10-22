@@ -12,11 +12,7 @@ import * as NavigationService from "react-navigation-helpers";
 import { Routes } from "types/navigation";
 import ProfileWalletAddress from "./ProfileWalletAddress";
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export type ProfileHeaderProps = {};
-
-// eslint-disable-next-line react/display-name, no-empty-pattern
-const ProfileHeader = ({}: ProfileHeaderProps): ReactElement => {
+const ProfileHeader = (): ReactElement => {
   const { top } = useSafeAreaInsets();
   const { auth, scaAddress: address } = useWalletContext();
 

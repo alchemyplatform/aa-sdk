@@ -21,8 +21,6 @@ interface ProfileScreenProps {}
 
 const ProfileScreen: React.FC<ProfileScreenProps> = () => {
   const { scaAddress: address } = useWalletContext();
-  console.log("scaAddress", address);
-  // const address = "0xcCCAFb0d7f4a8606D7309584B70dcdfdaB8Ec9c9";
   const useCollectionsRet = useCollections({
     owner: address,
   });

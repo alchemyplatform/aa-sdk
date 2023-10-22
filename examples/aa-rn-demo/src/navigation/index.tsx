@@ -29,7 +29,6 @@ const Navigation = () => {
 
   const { auth } = useWalletContext();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   React.useEffect((): any => {
     return () => (isReadyRef.current = false);
   }, []);

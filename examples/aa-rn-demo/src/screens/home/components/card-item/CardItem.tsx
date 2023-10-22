@@ -41,7 +41,6 @@ const CardItem: React.FC<ICardItemProps> = ({ style, data, onPress }) => {
   const [minting, setMinting] = React.useState(false);
 
   const mint = async () => {
-    console.log("minting");
     setMinting(true);
     try {
       const res = await postTx({
@@ -54,7 +53,6 @@ const CardItem: React.FC<ICardItemProps> = ({ style, data, onPress }) => {
         value: parseEther("0.08"),
       });
       if (res.success) {
-        console.log("minted", res.receipt);
         dispatchAlert({
           type: "open",
           alertType: "success",
@@ -64,7 +62,6 @@ const CardItem: React.FC<ICardItemProps> = ({ style, data, onPress }) => {
         throw res.error;
       }
     } catch (error) {
-      console.error("mint failed", error);
       dispatchAlert({
         type: "open",
         alertType: "error",
