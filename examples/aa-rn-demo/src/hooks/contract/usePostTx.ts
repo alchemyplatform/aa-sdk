@@ -33,6 +33,7 @@ export const usePostTx = (): UsePostTxReturn => {
     if (scaAddress) {
       let uoHash;
       try {
+        console.log("postTx", { data, target, value });
         const { hash }: SendUserOperationResult =
           await provider.sendUserOperation({
             target,
@@ -78,6 +79,7 @@ export const usePostTx = (): UsePostTxReturn => {
         };
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
+        console.log("#################");
         const errMsg = error?.message ? error.message : JSON.stringify(error);
         if (uoHash) {
           setPostTxResult({
@@ -86,6 +88,12 @@ export const usePostTx = (): UsePostTxReturn => {
               status: PostTxStatus.ERROR,
               error: errMsg,
             },
+          });
+        } else {
+          dispatchAlert({
+            type: "open",
+            alertType: "error",
+            message: errMsg,
           });
         }
 

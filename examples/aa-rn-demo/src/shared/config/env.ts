@@ -2,9 +2,9 @@ import Config from "react-native-config";
 
 import { getDefaultLightAccountFactory } from "@alchemy/aa-accounts";
 import { type Hex } from "viem";
-import { goerli } from "viem/chains";
+import { sepolia } from "viem/chains";
 
-export const chain = goerli;
+export const chain = sepolia;
 export const entryPointAddress = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
 export const lightAccountFactoryAddress = getDefaultLightAccountFactory(chain);
 

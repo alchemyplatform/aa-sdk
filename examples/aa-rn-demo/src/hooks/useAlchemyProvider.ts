@@ -3,7 +3,11 @@ import {
   LightSmartContractAccount,
 } from "@alchemy/aa-accounts";
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
-import { EntryPointAbi, type SmartAccountSigner } from "@alchemy/aa-core";
+import {
+  EntryPointAbi,
+  type PublicErc4337Client,
+  type SmartAccountSigner,
+} from "@alchemy/aa-core";
 import { useCallback, useState } from "react";
 import {
   alchemyRpcUrl,
@@ -17,6 +21,7 @@ import {
   getContract,
   type Address,
   type Hex,
+  type HttpTransport,
   type PublicClient,
 } from "viem";
 
@@ -116,7 +121,7 @@ export const useAlchemyProvider = ({
   const connectProviderToAccount = useCallback(
     (signer: SmartAccountSigner, account?: Address) => {
       const connectedProvider = provider
-        .connect((rpcClient) => {
+        .connect((rpcClient: string | PublicErc4337Client<HttpTransport>) => {
           console.log("1111111");
           const acc = new LightSmartContractAccount({
             rpcClient,

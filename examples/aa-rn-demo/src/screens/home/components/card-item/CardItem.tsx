@@ -16,6 +16,7 @@ import usePostTx from "@hooks/contract/usePostTx";
 import FormImage from "@shared-components/atom/FormImage";
 import { TouchableButton } from "@shared-components/button/TouchableButton";
 import Text from "@shared-components/text-wrapper/TextWrapper";
+import _ from "lodash";
 
 type CustomStyleProp = StyleProp<ViewStyle> | Array<StyleProp<ViewStyle>>;
 
@@ -67,7 +68,7 @@ const CardItem: React.FC<ICardItemProps> = ({ style, data, onPress }) => {
       dispatchAlert({
         type: "open",
         alertType: "error",
-        message: `Mint failed: ${JSON.stringify(error)}`,
+        message: `Mint failed: ${_.truncate(JSON.stringify(error))}`,
       });
     } finally {
       setMinting(false);
