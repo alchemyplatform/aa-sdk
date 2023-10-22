@@ -5135,7 +5135,7 @@
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.200.tgz#435b6035c7eba9cdf1e039af8212c9e9281e7149"
   integrity sha512-YI/M/4HRImtNf3pJgbF+W6FrXovqj+T+/HpENLTooK9PnkacBsDpeP3IpHab40CClUfhNmdM2WTNP2sa2dni5Q==
 
-"@types/markdown-it@^13.0.2":
+"@types/markdown-it@^13.0.4":
   version "13.0.4"
   resolved "https://registry.yarnpkg.com/@types/markdown-it/-/markdown-it-13.0.4.tgz#33ede9fe0f23f62f39f83d7530ba69762b0bfd35"
   integrity sha512-FAIUdEXrCDnQmAAmJC+UeW/3p0eCI4QZ/+W0lX/h83VD3v78IgTFYftjnAeXS8H0g4PFQCgipc51cQDA8tjgLw==
@@ -18428,7 +18428,7 @@ vite-node@0.31.4:
     picocolors "^1.0.0"
     vite "^3.0.0 || ^4.0.0"
 
-"vite@^3.0.0 || ^4.0.0", vite@^4.4.11:
+"vite@^3.0.0 || ^4.0.0", vite@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/vite/-/vite-4.5.0.tgz#ec406295b4167ac3bc23e26f9c8ff559287cff26"
   integrity sha512-ulr8rNLA6rkyFAlVWw2q5YJ91v098AFQ2R0PRFwPzREXOUJQPtFUG0t+/ZikhaOCDqFoDhN6/v8Sq0o4araFAw==
@@ -18440,13 +18440,13 @@ vite-node@0.31.4:
     fsevents "~2.3.2"
 
 vitepress@^1.0.0-rc.14:
-  version "1.0.0-rc.22"
-  resolved "https://registry.yarnpkg.com/vitepress/-/vitepress-1.0.0-rc.22.tgz#9855edc0991a57cf88561e790b0b35ddc447fbf0"
-  integrity sha512-n7le5iikCFgWMuX7sKfzDGJGlrsYQ5trG3S97BghNz2alOTr4Xp+GrB6ShwogUTX9gNgeNmrACjokhW55LNeBA==
+  version "1.0.0-rc.23"
+  resolved "https://registry.yarnpkg.com/vitepress/-/vitepress-1.0.0-rc.23.tgz#eb477d89951b59738a86ac5884dd2fe891d35aac"
+  integrity sha512-0YoBt8aFgbRt2JtYaCeTqq4W21q5lbGso+g1ZwkYYS35ExJxORssRJunhFuUcby8QeN4BP/88QDgsVSIVLAfXQ==
   dependencies:
     "@docsearch/css" "^3.5.2"
     "@docsearch/js" "^3.5.2"
-    "@types/markdown-it" "^13.0.2"
+    "@types/markdown-it" "^13.0.4"
     "@vue/devtools-api" "^6.5.1"
     "@vueuse/core" "^10.5.0"
     "@vueuse/integrations" "^10.5.0"
@@ -18454,8 +18454,8 @@ vitepress@^1.0.0-rc.14:
     mark.js "8.11.1"
     minisearch "^6.1.0"
     shiki "^0.14.5"
-    vite "^4.4.11"
-    vue "^3.3.4"
+    vite "^4.5.0"
+    vue "^3.3.6"
 
 vitest@^0.31.0:
   version "0.31.4"
@@ -18513,7 +18513,7 @@ vue-demi@>=0.14.6:
   resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.14.6.tgz#dc706582851dc1cdc17a0054f4fec2eb6df74c92"
   integrity sha512-8QA7wrYSHKaYgUxDA5ZC24w+eHm3sYCbp0EzcDwKqN3p6HqtTCGR/GVsPyZW92unff4UlcSh++lmqDWN3ZIq4w==
 
-vue@^3.2.45, vue@^3.3.4:
+vue@^3.2.45, vue@^3.3.6:
   version "3.3.6"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.3.6.tgz#bc1b129a73705db16da90aa1edde539d7401ca9d"
   integrity sha512-jJIDETeWJnoY+gfn4ZtMPMS5KtbP4ax+CT4dcQFhTnWEk8xMupFyQ0JxL28nvT/M4+p4a0ptxaV2WY0LiIxvRg==

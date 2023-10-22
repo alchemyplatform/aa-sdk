@@ -14,5 +14,21 @@
     "tailwindcss": "^3.3.3",
     "vitepress": "^1.0.0-rc.14",
     "vue": "^3.2.45"
+  },
+  "workspaces": {
+    "nohoist": [
+      "**/vite*",
+      "**/vite*/**",
+      "**/vue*",
+      "**/vue*/**",
+      "**/css*",
+      "**/css*/**",
+      "**/*css*",
+      "**/*css*/**",
+      "**/autoprefixer",
+      "**/autoprefixer/**",
+      "**/execa",
+      "**/execa/**"
+    ]
   }
 }

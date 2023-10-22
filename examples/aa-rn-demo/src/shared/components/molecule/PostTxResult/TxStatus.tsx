@@ -1,22 +1,22 @@
 import FormButton from "@shared-components/atom/FormButton";
 import FormImage from "@shared-components/atom/FormImage";
+import FormText from "@shared-components/atom/FormText";
 import LinkExplorer from "@shared-components/atom/LinkExplorer";
+import Row from "@shared-components/atom/Row";
 import postTxStore from "@store/postTxStore";
 import _ from "lodash";
 import React, { type ReactElement } from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import Icon, { IconType } from "react-native-dynamic-vector-icons";
 import { useRecoilValue } from "recoil";
 import { PostTxStatus } from "types/postTx";
 
 const StatusText = ({ children }: { children: string }): ReactElement => {
-  return <Text>{children}</Text>;
+  return (
+    <FormText style={{ marginBottom: 6 }} size={16} font="B" color="white">
+      {children}
+    </FormText>
+  );
 };
 
 const TxStatus = ({
@@ -39,7 +39,7 @@ const TxStatus = ({
             setMinimized(true);
           }}
         >
-          <Icon type={IconType.FontAwesome5} name="ban" size={20} />
+          <Icon type={IconType.FontAwesome5} name="times" size={20} />
         </TouchableOpacity>
         <View>
           {txResult.status === PostTxStatus.POST && (
@@ -51,7 +51,7 @@ const TxStatus = ({
                 />
               </View>
               <View style={styles.status}>
-                <StatusText>Posting...</StatusText>
+                <StatusText>Posting transaction...</StatusText>
               </View>
             </>
           )}
@@ -61,32 +61,44 @@ const TxStatus = ({
               <View style={styles.iconBox}>
                 <FormImage
                   source={require("../../../../assets/images/loading.gif")}
-                  size={60}
+                  size={25}
                 />
               </View>
               <View style={styles.status}>
                 <StatusText>Pending transaction</StatusText>
-                <LinkExplorer type="tx" address={txResult.transactionHash} />
+                {txResult.transactionHash && (
+                  <LinkExplorer type="tx" address={txResult.transactionHash} />
+                )}
               </View>
             </>
           )}
           {txResult.status === PostTxStatus.DONE && (
             <>
-              <Icon
-                type={IconType.FontAwesome5}
-                name={"check"}
-                size={60}
-                color="green"
-              />
-              {txResult.value && (
-                <View style={styles.status}>
-                  <LinkExplorer
-                    type="tx"
-                    address={txResult.value.transactionHash}
-                  />
-                </View>
-              )}
-              <FormButton onPress={onPressClose}>Success</FormButton>
+              <Row style={{ flex: 1, paddingHorizontal: 10 }}>
+                <Icon
+                  style={{ marginRight: 20, marginTop: 10 }}
+                  type={IconType.FontAwesome5}
+                  name={"check"}
+                  size={25}
+                  color="green"
+                />
+                {txResult.value?.transactionHash && (
+                  <View style={styles.status}>
+                    <StatusText>Transaction confirmed</StatusText>
+                    <LinkExplorer
+                      type="tx"
+                      address={txResult.value.transactionHash}
+                    />
+                  </View>
+                )}
+              </Row>
+              <FormButton
+                figure="primary"
+                containerStyle={{ backgroundColor: "#4caf50", marginTop: 10 }}
+                onPress={onPressClose}
+              >
+                Success
+              </FormButton>
             </>
           )}
 
@@ -96,7 +108,7 @@ const TxStatus = ({
                 <Icon
                   type={IconType.FontAwesome5}
                   name={"exclamation-triangle"}
-                  size={60}
+                  size={25}
                   color="red"
                 />{" "}
               </View>
@@ -111,9 +123,15 @@ const TxStatus = ({
                   marginBottom: 10,
                 }}
               >
-                <Text>{_.toString(txResult.error)}</Text>
+                <FormText>{JSON.stringify(txResult.error)}</FormText>
               </ScrollView>
-              <FormButton onPress={onPressClose}>Close</FormButton>
+              <FormButton
+                figure="error"
+                containerStyle={{ marginTop: 10 }}
+                onPress={onPressClose}
+              >
+                Close
+              </FormButton>
             </>
           )}
         </View>
@@ -129,9 +147,8 @@ const styles = StyleSheet.create({
     cursor: "zoom-in",
     position: "absolute",
     width: "100%",
-    backgroundColor: "#00000099",
-    top: 0,
-    height: "100%",
+    backgroundColor: "#000000E0",
+    bottom: 0,
     right: 0,
     zIndex: 1,
   },
@@ -142,7 +159,7 @@ const styles = StyleSheet.create({
   closeBtn: {
     position: "absolute",
     right: 0,
-    padding: 10,
+    padding: 20,
     zIndex: 1,
   },
   card: {
@@ -151,9 +168,7 @@ const styles = StyleSheet.create({
     position: "relative",
     margin: "auto",
     marginBottom: 0,
-    paddingBottom: 50,
     padding: 24,
-    borderRadius: 15,
   },
   iconBox: {
     alignItems: "center",

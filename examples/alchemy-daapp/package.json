@@ -41,12 +41,26 @@
     "typescript": "^5.0.2"
   },
   "nohoist": [
-    "**/react",
-    "**/react/**",
-    "**/react-*",
-    "**/react-*/**",
+    "**/*react*",
+    "**/*react*/**",
     "**/*next*",
-    "**/*next*/**"
+    "**/*next*/**",
+    "**/@chakra-ui",
+    "**/@chakra-ui/**",
+    "**/zod",
+    "**/zod/**",
+    "**/wagmi",
+    "**/wagmi/**",
+    "**/framer-motion",
+    "**/framer-motion/**",
+    "**/@emotion",
+    "**/@emotion/**",
+    "**/@rainbow-me",
+    "**/@rainbow-me/**",
+    "**/@t3-oss/",
+    "**/@t3-oss/**",
+    "**/@tanstack/",
+    "**/@tanstack/**"
   ],
   "ct3aMetadata": {
     "initVersion": "7.13.0"

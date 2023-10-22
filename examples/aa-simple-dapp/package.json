@@ -33,13 +33,23 @@
     "typescript": "^5"
   },
   "nohoist": [
-    "**/react",
-    "**/react/**",
-    "**/react-*",
-    "**/react-*/**",
-    "**/*next*",
-    "**/*next*/**",
+    "**/react*",
+    "**/react*/**",
+    "**/next*",
+    "**/next*/**",
     "**/magic-sdk",
-    "**/magic-sdk/**"
+    "**/magic-sdk/**",
+    "**/zod",
+    "**/zod/**",
+    "**/css*",
+    "**/css*/**",
+    "**/*css*",
+    "**/*css*/**",
+    "**/autoprefixer",
+    "**/autoprefixer/**",
+    "**/daisyui",
+    "**/daisyui/**",
+    "**/@t3-oss/",
+    "**/@t3-oss/**"
   ]
 }
