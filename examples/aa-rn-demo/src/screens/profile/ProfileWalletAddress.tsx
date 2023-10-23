@@ -61,6 +61,6 @@ export default ProfileWalletAddress;
 
 const styles = StyleSheet.create({
   walletAddressBox: {
-    paddingTop: 6,
+    paddingTop: 4,
   },
 });

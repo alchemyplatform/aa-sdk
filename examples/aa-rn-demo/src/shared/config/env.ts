@@ -13,3 +13,5 @@ export const gasManagerPolicyId = Config.ALCHEMY_GAS_MANAGER_POLICY_ID!;
 export const alchemyRpcUrl = `${Config.ALCHEMY_RPC_URL}${Config.ALCHEMY_KEY}`;
 
 export const privateKey: Hex = Config.PRIVATE_KEY! as Hex;
+
+export const magicApiKey = Config.MAGIC_API_KEY!;

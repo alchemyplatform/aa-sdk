@@ -27,7 +27,7 @@ const Navigation = () => {
   const scheme = useColorScheme();
   const isDarkMode = scheme === "dark";
 
-  const { auth } = useWalletContext();
+  const { scaAddress } = useWalletContext();
 
   React.useEffect((): any => {
     return () => (isReadyRef.current = false);
@@ -125,7 +125,7 @@ const Navigation = () => {
       theme={isDarkMode ? DarkTheme : LightTheme}
     >
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {auth.isLoggedIn ? (
+        {scaAddress ? (
           <Stack.Screen name={Routes.Main} component={MainNavigation} />
         ) : (
           <Stack.Screen name={Routes.Auth} component={AuthNavigation} />

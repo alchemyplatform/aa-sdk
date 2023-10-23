@@ -31,6 +31,7 @@ export default () => {
     },
     contentContainer: {
       flex: 1,
+      paddingVertical: 16,
     },
     listContainer: {},
     profilePicImageStyle: {

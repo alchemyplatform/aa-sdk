@@ -8,6 +8,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
  */
 import { AlertProvider } from "@context/alert";
 import { Compose } from "@context/global";
+import { MagicProvider, magic } from "@context/magic";
 import { WalletProvider } from "@context/wallet";
 import { isAndroid } from "@freakycoder/react-native-helpers";
 import PostTxResult from "@shared-components/molecule/PostTxResult";
@@ -49,10 +50,12 @@ const App = () => {
               SafeAreaProvider,
               AlertProvider,
               ThemeProvider,
+              MagicProvider,
               WalletProvider,
               BottomSheetModalProvider,
             ]}
           >
+            <magic.Relayer />
             <Navigation />
             <Snackbar />
             <PostTxResult />

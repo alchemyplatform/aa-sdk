@@ -1,7 +1,7 @@
 export interface ICardItem {
-  name: string;
+  title: string;
   description: string;
   contract: string;
   metadata: string;
-  image: string;
+  media: { raw: string }[];
 }

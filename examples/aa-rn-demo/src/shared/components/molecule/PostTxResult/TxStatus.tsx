@@ -13,7 +13,7 @@ import { PostTxStatus } from "types/postTx";
 
 const StatusText = ({ children }: { children: string }): ReactElement => {
   return (
-    <FormText style={{ marginBottom: 6 }} size={16} font="B" color="white">
+    <FormText style={{ marginBottom: 6 }} size={16} color="white">
       {children}
     </FormText>
   );
@@ -81,7 +81,7 @@ const TxStatus = ({
               <View style={styles.iconBox}>
                 <FormImage
                   source={require("../../../../assets/images/loading.gif")}
-                  size={25}
+                  size={60}
                 />
               </View>
               <View style={styles.status}>
