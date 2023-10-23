@@ -5,7 +5,7 @@ import {
   type OAuthRedirectResult,
 } from "@magic-ext/react-native-bare-oauth";
 import { Magic } from "@magic-sdk/react-native-bare";
-import { chain, magicApiKey } from "@shared-config/env";
+import { alchemyRpcUrl, chain, magicApiKey } from "@shared-config/env";
 import _ from "lodash";
 import React, {
   createContext,
@@ -30,7 +30,10 @@ type MagicContextProps = {
 };
 
 export const magic = new Magic(magicApiKey, {
-  network: "goerli",
+  network: {
+    rpcUrl: alchemyRpcUrl,
+    chainId: 11155111,
+  },
   extensions: [new OAuthExtension()],
 });
 
