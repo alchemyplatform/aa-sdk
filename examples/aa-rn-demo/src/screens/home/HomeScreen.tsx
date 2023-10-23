@@ -1,6 +1,8 @@
 import React, { useMemo } from "react";
 import { FlatList, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import * as NavigationService from "react-navigation-helpers";
+
 /**
  * ? Local Imports
  */
@@ -10,15 +12,18 @@ import MockData from "./mock/MockData";
 /**
  * ? Shared Imports
  */
+import type { ICardItem } from "@models";
 import FormImage from "@shared-components/atom/FormImage";
+import type { OwnedNft } from "alchemy-sdk";
+import { Routes } from "types/navigation";
 
 interface HomeScreenProps {}
 
 const HomeScreen: React.FC<HomeScreenProps> = () => {
   const styles = useMemo(() => createStyles(), []);
 
-  const handleItemPress = () => {
-    // NavigationService.push(Rouites.Detail);
+  const handleItemPress = (item: OwnedNft | ICardItem) => {
+    NavigationService.push(Routes.Detail, { item });
   };
 
   /* -------------------------------------------------------------------------- */
@@ -51,7 +56,7 @@ const HomeScreen: React.FC<HomeScreenProps> = () => {
       <FlatList
         data={MockData}
         renderItem={({ item }) => (
-          <CardItem data={item} onPress={handleItemPress} />
+          <CardItem data={item} onPress={() => handleItemPress(item)} />
         )}
       />
     </View>

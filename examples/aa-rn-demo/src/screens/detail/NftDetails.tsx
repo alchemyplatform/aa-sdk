@@ -1,5 +1,6 @@
 import FormImage from "@shared-components/atom/FormImage";
 import FormText from "@shared-components/atom/FormText";
+import Row from "@shared-components/atom/Row";
 import ViewHorizontalDivider from "@shared-components/atom/ViewHorizontalDivider";
 import { convertTimestampToDate } from "@shared-utils";
 import { colors } from "@theme/color";
@@ -14,9 +15,17 @@ const NftDetails = ({ item }: { item: OwnedNft }): ReactElement => {
       <ScrollView>
         <View style={styles.body}>
           <View style={{ paddingBottom: 20, rowGap: 12 }}>
-            {item.title && (
-              <FormText size={18} font={"B"}>{`${item.title}`}</FormText>
-            )}
+            <Row style={{ columnGap: 6 }}>
+              {item.title && (
+                <FormText size={18} font={"B"}>{`${item.title}`}</FormText>
+              )}
+              {item.tokenId && (
+                <FormText size={16}>{`Token ID: ${item.tokenId}`}</FormText>
+              )}
+              {item.tokenType && (
+                <FormText size={16}>{`(${item.tokenType})`}</FormText>
+              )}
+            </Row>
             {item.acquiredAt?.blockTimestamp && (
               <FormText font={"R"} color={colors.black._700}>
                 {convertTimestampToDate(
@@ -29,12 +38,12 @@ const NftDetails = ({ item }: { item: OwnedNft }): ReactElement => {
 
           <View style={styles.imageBox}>
             <FormImage
-              source={{
-                uri:
-                  item.media.length > 0
-                    ? item.media[0].thumbnail ?? item.media[0].raw
-                    : undefined,
-              }}
+              size={350}
+              source={
+                item.media.length > 0
+                  ? { uri: item.media[0].thumbnail ?? item.media[0].raw }
+                  : require("../../assets/images/nft-placeholder.png")
+              }
             />
           </View>
           <View>

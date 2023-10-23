@@ -70,7 +70,7 @@ const SettingTextItem = (props: {
 };
 
 const SettingsScreen: React.FC<SettingsScreenProps> = () => {
-  const { auth, scaAddress, logout } = useWalletContext();
+  const { magicAuth, scaAddress, logout } = useWalletContext();
 
   const [visibleSignOutModal, setVisibleSignOutModal] =
     useState<boolean>(false);
@@ -89,18 +89,35 @@ const SettingsScreen: React.FC<SettingsScreenProps> = () => {
           containerStyle={{ backgroundColor: "transparent" }}
         />
         <View style={styles.itemGroup}>
-          <SettingTextItem name={"Chain"} text={chain.name} />
+          {magicAuth && <SettingTextItem name={"Chain"} text={chain.name} />}
           <ViewHorizontalDivider />
-          {auth.email && <SettingTextItem name={"Email"} text={auth.email} />}
-          <ViewHorizontalDivider />
-          {auth.phoneNumber && (
-            <SettingTextItem name={"Phone Number"} text={auth.phoneNumber} />
+          {magicAuth?.email && (
+            <SettingTextItem name={"Email"} text={magicAuth.email} />
           )}
           <ViewHorizontalDivider />
-          <SettingTextItem name={"Signer Type"} text={"local"} />
+          {magicAuth?.phoneNumber && (
+            <SettingTextItem
+              name={"Phone Number"}
+              text={magicAuth.phoneNumber}
+            />
+          )}
           <ViewHorizontalDivider />
+          {magicAuth && <SettingTextItem name={"Signer Type"} text={"magic"} />}
           <ViewHorizontalDivider />
-          <SettingTextItem name={"Owner"} text={auth.address} copiable={true} />
+          {magicAuth?.oAuthRedirectResult && (
+            <SettingTextItem
+              name={"Provider"}
+              text={magicAuth.oAuthRedirectResult.oauth.provider}
+            />
+          )}
+          <ViewHorizontalDivider />
+          {magicAuth?.address && (
+            <SettingTextItem
+              name={"Owner"}
+              text={magicAuth.address}
+              copiable={true}
+            />
+          )}
           <ViewHorizontalDivider />
           {scaAddress && (
             <SettingTextItem

@@ -13,8 +13,11 @@
     "@freakycoder/react-native-custom-text": "0.1.2",
     "@freakycoder/react-native-helpers": "2.0.0",
     "@gorhom/bottom-sheet": "^4.4.6",
+    "@magic-ext/react-native-bare-oauth": "^16.1.1",
+    "@magic-sdk/react-native-bare": "^22.1.1",
     "@react-native-async-storage/async-storage": "^1.19.3",
     "@react-native-clipboard/clipboard": "^1.12.1",
+    "@react-native-community/async-storage": "^1.12.1",
     "@react-native-community/blur": "^4.3.2",
     "@react-native-community/netinfo": "^9.4.1",
     "@react-native-masked-view/masked-view": "^0.2.7",
@@ -75,7 +78,7 @@
     "react-native-reanimated": "^3.5.4",
     "react-native-render-html": "^6.3.4",
     "react-native-restart": "^0.0.27",
-    "react-native-safe-area-context": "^4.7.2",
+    "react-native-safe-area-context": "^4.7.3",
     "react-native-screens": "^3.15.0",
     "react-native-svg": "^13.14.0",
     "react-native-toast-notifications": "^3.4.0",
@@ -159,7 +162,13 @@
       "**/@react-native*",
       "**/@react-native*/**",
       "**/*react-native*",
-      "**/*react-native*/**"
+      "**/*react-native*/**",
+      "**/magic-sdk",
+      "**/magic-sdk/**",
+      "**/@magic-sdk",
+      "**/@magic-sdk/**",
+      "**/lottie*",
+      "**/lottie*/**"
     ]
   },
   "scripts": {

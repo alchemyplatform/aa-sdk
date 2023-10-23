@@ -16,7 +16,6 @@ import usePostTx from "@hooks/contract/usePostTx";
 import FormImage from "@shared-components/atom/FormImage";
 import { TouchableButton } from "@shared-components/button/TouchableButton";
 import Text from "@shared-components/text-wrapper/TextWrapper";
-import _ from "lodash";
 
 type CustomStyleProp = StyleProp<ViewStyle> | Array<StyleProp<ViewStyle>>;
 
@@ -31,7 +30,12 @@ const CardItem: React.FC<ICardItemProps> = ({ style, data, onPress }) => {
   const { colors } = theme;
   const styles = useMemo(() => createStyles(), []);
 
-  const { name, description, contract, image } = data;
+  const {
+    title,
+    description,
+    contract,
+    media: [{ raw: image }],
+  } = data;
   const { scaAddress } = useWalletContext();
 
   const { postTx } = usePostTx();
@@ -59,15 +63,13 @@ const CardItem: React.FC<ICardItemProps> = ({ style, data, onPress }) => {
           message: `Mint succsess to address ${scaAddress}: tx ${res.receipt.transactionHash}`,
         });
       } else {
-        throw res.error;
+        throw res.message;
       }
     } catch (error) {
       dispatchAlert({
         type: "open",
         alertType: "error",
-        message: `Mint failed: ${_.truncate(JSON.stringify(error), {
-          length: 300,
-        })}`,
+        message: `Mint failed: ${error}`,
       });
     } finally {
       setMinting(false);
@@ -77,7 +79,7 @@ const CardItem: React.FC<ICardItemProps> = ({ style, data, onPress }) => {
   const Header = () => (
     <>
       <Text h4 bold color={colors.text}>
-        {name}
+        {title}
       </Text>
       <Text h5 color={colors.placeholder} style={styles.descriptionTextStyle}>
         {description}
@@ -89,7 +91,7 @@ const CardItem: React.FC<ICardItemProps> = ({ style, data, onPress }) => {
     <RNBounceable style={[styles.container, style]} onPress={onPress}>
       <Header />
       <View style={styles.contentContainer}>
-        <FormImage source={{ uri: image }} size={250} />
+        <FormImage source={{ uri: image }} size={350} />
       </View>
       <TouchableButton disabled={minting} handler={() => mint()} title="Mint" />
     </RNBounceable>

@@ -1,12 +1,10 @@
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
-import {
-  LocalAccountSigner,
-  type Address,
-  type SmartAccountSigner,
-} from "@alchemy/aa-core";
+import { type Address, type Hex } from "@alchemy/aa-core";
+import { magic, useMagicContext } from "@context/magic";
 import { useAlchemyProvider } from "@hooks/useAlchemyProvider";
 import { useAsyncEffect } from "@hooks/useAsyncEffect";
-import { chain, entryPointAddress, privateKey } from "@shared-config/env";
+import type { OAuthRedirectResult } from "@magic-ext/react-native-bare-oauth";
+import { entryPointAddress } from "@shared-config/env";
 import React, {
   createContext,
   useCallback,
@@ -15,21 +13,20 @@ import React, {
   type ReactNode,
 } from "react";
 import RNRestart from "react-native-restart";
-import { type Auth } from "types/auth";
-import { createWalletClient, http, type WalletClient } from "viem";
-import { privateKeyToAccount } from "viem/accounts";
+import type { MagicAuth, MagicAuthType } from "types/magic";
 import { useAlertContext } from "./alert";
 
 type WalletContextProps = {
+  loading: boolean;
+
   // Functions
-  login: (email?: string, phoneNumber?: string) => Promise<void>;
+  login: (type: MagicAuthType, ...params: any[]) => Promise<void>;
   logout: () => Promise<void>;
 
   // Properties
   provider: AlchemyProvider;
   scaAddress?: Address;
-  auth: Auth;
-  walletClient: WalletClient;
+  magicAuth?: MagicAuth;
 };
 
 const defaultUnset: any = null;
@@ -38,8 +35,7 @@ const WalletContext = createContext<WalletContextProps>({
   provider: defaultUnset,
   login: () => Promise.resolve(),
   logout: () => Promise.resolve(),
-  auth: defaultUnset,
-  walletClient: defaultUnset,
+  loading: false,
 });
 
 export const useWalletContext = () => useContext(WalletContext);
@@ -47,39 +43,34 @@ export const useWalletContext = () => useContext(WalletContext);
 export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const { dispatchAlert } = useAlertContext();
 
-  const account = privateKeyToAccount(privateKey);
-
-  const client = createWalletClient({
-    account,
-    chain,
-    transport: http(),
-  });
-
-  const [auth, setAuth] = useState<Auth>({
-    address: account.address,
-    isLoggedIn: false,
-  });
   const [scaAddress, setScaAddress] = useState<Address>();
-  const [signer, setSigner] = useState<SmartAccountSigner>();
+  const [loading, setLoading] = useState<boolean>(true);
 
+  const [magicAuth, setMagicAuth] = useState<MagicAuth>();
+  const { signer, login: magicLogin, logout: magicLogout } = useMagicContext();
   const { provider, connectProviderToAccount, disconnectProviderFromAccount } =
     useAlchemyProvider({
       entryPointAddress,
     });
 
   const login = useCallback(
-    async (email?: string, phoneNumber?: string) => {
-      const type = email ? "email" : "sms";
+    async (type: MagicAuthType, ...params: any[]) => {
       try {
-        setAuth({
-          address: account.address,
-          isLoggedIn: true,
-          email,
-          phoneNumber,
-        });
+        const res = await magicLogin(type, ...params);
+        const metaData = await magic.user.getInfo();
 
-        const _signer = new LocalAccountSigner(account);
-        setSigner(_signer);
+        setMagicAuth({
+          address: metaData.publicAddress,
+          isLoggedIn: true,
+          metaData,
+          did: type === "email" || type === "sms" ? String(res) : undefined,
+          email: metaData.email,
+          phoneNumber: metaData.phoneNumber,
+          oAuthRedirectResult:
+            type === "google" || type === "apple"
+              ? (res as OAuthRedirectResult)
+              : undefined,
+        });
 
         dispatchAlert({
           type: "open",
@@ -88,11 +79,11 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
         });
       } catch (error) {
         console.error(error);
-        setAuth({
-          address: account.address,
+        setMagicAuth({
+          address: null,
           isLoggedIn: false,
+          metaData: null,
         });
-        setSigner(undefined);
         dispatchAlert({
           type: "open",
           alertType: "error",
@@ -100,32 +91,34 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
         });
       }
     },
-    [account, dispatchAlert],
+    [magicLogin, dispatchAlert],
   );
 
   useAsyncEffect(async () => {
-    if (!auth.isLoggedIn || !signer) {
+    if (magicAuth === undefined || !magicAuth.isLoggedIn || !signer) {
       return;
     }
-    if (!scaAddress) {
+    if (!provider.isConnected()) {
       await connectProviderToAccount(signer);
       const _scaAddress = await provider.getAddress();
+      console.log("new login, connecting provider to account", _scaAddress);
       setScaAddress(_scaAddress);
       return;
     }
-  }, [auth.isLoggedIn]);
+  }, [magicAuth?.isLoggedIn]);
 
   const logout = useCallback(async () => {
     try {
-      disconnectProviderFromAccount();
+      await magicLogout();
     } catch (error) {
       console.error(error);
     } finally {
-      setAuth({
-        address: account.address,
+      setMagicAuth({
+        address: null,
         isLoggedIn: false,
+        metaData: null,
       });
-      setSigner(undefined);
+      disconnectProviderFromAccount();
       setScaAddress(undefined);
       dispatchAlert({
         type: "open",
@@ -134,15 +127,57 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       });
       RNRestart.restart();
     }
-  }, [disconnectProviderFromAccount, account.address, dispatchAlert]);
+  }, [magicLogout, disconnectProviderFromAccount, dispatchAlert]);
+
+  useAsyncEffect(async () => {
+    if (magicAuth || !signer) {
+      return;
+    }
+
+    const isLoggedIn = await magic.user.isLoggedIn();
+    if (!isLoggedIn) {
+      setLoading(false);
+      setMagicAuth({
+        address: null,
+        isLoggedIn: false,
+        metaData: null,
+      });
+      return;
+    }
+
+    const metaData = await magic.user.getInfo();
+    setMagicAuth({
+      address: metaData.publicAddress,
+      isLoggedIn: true,
+      metaData,
+      email: metaData.email,
+      phoneNumber: metaData.phoneNumber,
+    });
+
+    const _scaAddress: Hex = await provider.getAddress();
+    console.log(
+      "User already logged in",
+      metaData,
+      provider.isConnected(),
+      _scaAddress,
+    );
+    if (provider.isConnected()) {
+      setScaAddress(_scaAddress);
+    } else {
+      console.log("alread logged in, connecting provider to account");
+      await connectProviderToAccount(signer);
+      setScaAddress(_scaAddress);
+    }
+    setLoading(false);
+  }, []);
 
   return (
     <WalletContext.Provider
       value={{
+        loading,
         login,
         logout,
-        auth,
-        walletClient: client,
+        magicAuth,
         provider,
         scaAddress,
       }}

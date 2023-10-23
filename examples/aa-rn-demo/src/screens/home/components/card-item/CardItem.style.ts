@@ -12,21 +12,23 @@ interface Style {
 export default () => {
   return StyleSheet.create<Style>({
     container: {
-      padding: 16,
+      paddingVertical: 24,
+      paddingHorizontal: 32,
       marginTop: 16,
       borderWidth: 1,
-      borderRadius: 8,
+      borderRadius: 16,
       width: ScreenWidth * 0.9,
-      borderColor: colors.black._500,
+      borderColor: colors.primary._100,
     },
     descriptionTextStyle: {
       marginTop: 8,
     },
     contentContainer: {
-      margin: 16,
-      flexDirection: "row",
+      borderRadius: 18,
+      overflow: "hidden",
       alignItems: "center",
-      justifyContent: "center",
+      height: 300,
+      marginVertical: 16,
     },
     valueTextStyle: {
       marginLeft: 8,

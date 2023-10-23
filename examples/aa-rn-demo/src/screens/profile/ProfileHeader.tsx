@@ -14,7 +14,7 @@ import ProfileWalletAddress from "./ProfileWalletAddress";
 
 const ProfileHeader = (): ReactElement => {
   const { top } = useSafeAreaInsets();
-  const { auth, scaAddress: address } = useWalletContext();
+  const { magicAuth, scaAddress: address } = useWalletContext();
 
   return (
     <View style={styles.container}>
@@ -57,16 +57,18 @@ const ProfileHeader = (): ReactElement => {
           />
         </View>
 
-        <Row style={{ columnGap: 12 }}>
-          {auth.email && (
-            <View style={styles.section}>
-              <FormText size={20} font={"B"}>
-                {auth.email.split("@")[0] ?? "User"}
-              </FormText>
-            </View>
-          )}
-          <ProfileWalletAddress address={address} />
-        </Row>
+        {magicAuth && (
+          <Row style={{ columnGap: 12 }}>
+            {magicAuth.email && (
+              <View style={styles.section}>
+                <FormText size={20} font={"B"}>
+                  {magicAuth.email.split("@")[0] ?? "User"}
+                </FormText>
+              </View>
+            )}
+            <ProfileWalletAddress address={address} />
+          </Row>
+        )}
       </View>
     </View>
   );
