@@ -42,6 +42,20 @@ const TxStatus = ({
           <Icon type={IconType.FontAwesome5} name="times" size={20} />
         </TouchableOpacity>
         <View>
+          {txResult.status === PostTxStatus.UO && (
+            <>
+              <View style={styles.iconBox}>
+                <FormImage
+                  source={require("../../../../assets/images/loading.gif")}
+                  size={60}
+                />
+              </View>
+              <View style={styles.status}>
+                <StatusText>Sending user operation...</StatusText>
+              </View>
+            </>
+          )}
+
           {txResult.status === PostTxStatus.POST && (
             <>
               <View style={styles.iconBox}>
@@ -51,7 +65,13 @@ const TxStatus = ({
                 />
               </View>
               <View style={styles.status}>
-                <StatusText>Posting transaction...</StatusText>
+                <StatusText>Waiting for user op transaction ...</StatusText>
+                {txResult.value.userOpHash && (
+                  <LinkExplorer
+                    type="userOp"
+                    address={txResult.value.userOpHash}
+                  />
+                )}
               </View>
             </>
           )}
@@ -65,9 +85,12 @@ const TxStatus = ({
                 />
               </View>
               <View style={styles.status}>
-                <StatusText>Pending transaction</StatusText>
-                {txResult.transactionHash && (
-                  <LinkExplorer type="tx" address={txResult.transactionHash} />
+                <StatusText>Transaction in progress ...</StatusText>
+                {txResult.value.transactionHash && (
+                  <LinkExplorer
+                    type="tx"
+                    address={txResult.value.transactionHash}
+                  />
                 )}
               </View>
             </>
@@ -82,12 +105,14 @@ const TxStatus = ({
                   size={25}
                   color="green"
                 />
-                {txResult.value?.transactionHash && (
+                {txResult.value.transactionReceipt && (
                   <View style={styles.status}>
                     <StatusText>Transaction confirmed</StatusText>
                     <LinkExplorer
                       type="tx"
-                      address={txResult.value.transactionHash}
+                      address={
+                        txResult.value.transactionReceipt.transactionHash
+                      }
                     />
                   </View>
                 )}
@@ -110,20 +135,33 @@ const TxStatus = ({
                   name={"exclamation-triangle"}
                   size={25}
                   color="red"
-                />{" "}
+                />
               </View>
-              <View style={styles.status}>
-                <StatusText>Transaction failed</StatusText>
-              </View>
+              {(txResult.value?.uoHash || txResult.value?.txHash) && (
+                <View style={styles.status}>
+                  <StatusText>
+                    {`${
+                      txResult.value.uoHash ? "User op" : "Transaction"
+                    } failed`}
+                  </StatusText>
+                </View>
+              )}
               <ScrollView
                 style={{
-                  maxHeight: 300,
+                  maxHeight: 400,
                   backgroundColor: "#eeeeee",
                   padding: 10,
                   marginBottom: 10,
                 }}
               >
-                <FormText>{JSON.stringify(txResult.error)}</FormText>
+                <FormText>
+                  {_.truncate(
+                    typeof txResult.error === "string"
+                      ? txResult.error
+                      : JSON.stringify(txResult.error),
+                    { length: 300 },
+                  )}
+                </FormText>
               </ScrollView>
               <FormButton
                 figure="error"

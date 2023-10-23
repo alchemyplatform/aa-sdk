@@ -14,6 +14,7 @@ import React, {
   useState,
   type ReactNode,
 } from "react";
+import RNRestart from "react-native-restart";
 import { type Auth } from "types/auth";
 import { createWalletClient, http, type WalletClient } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
@@ -61,14 +62,10 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const [scaAddress, setScaAddress] = useState<Address>();
   const [signer, setSigner] = useState<SmartAccountSigner>();
 
-  const {
-    provider,
-    // getAddressFromAccount,
-    connectProviderToAccount,
-    disconnectProviderFromAccount,
-  } = useAlchemyProvider({
-    entryPointAddress,
-  });
+  const { provider, connectProviderToAccount, disconnectProviderFromAccount } =
+    useAlchemyProvider({
+      entryPointAddress,
+    });
 
   const login = useCallback(
     async (email?: string, phoneNumber?: string) => {
@@ -135,6 +132,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
         alertType: "info",
         message: "Logged out",
       });
+      RNRestart.restart();
     }
   }, [disconnectProviderFromAccount, account.address, dispatchAlert]);
 

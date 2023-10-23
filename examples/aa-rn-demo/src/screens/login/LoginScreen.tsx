@@ -89,7 +89,7 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
                         !loginWithEmail ? input : undefined,
                       )
                     }
-                    title="Login with SMS"
+                    title={`Login with ${loginWithEmail ? "Email" : "SMS"}`}
                   />
                 </View>
               </>

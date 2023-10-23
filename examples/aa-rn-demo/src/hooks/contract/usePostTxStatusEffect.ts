@@ -2,7 +2,6 @@ import postTxStore from "@store/postTxStore";
 import { useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import { PostTxStatus, type StreamResultType } from "types/postTx";
-import { type Hex } from "viem";
 
 export type EffectListType = {
   when: PostTxStatus[];
@@ -10,7 +9,7 @@ export type EffectListType = {
 }[];
 
 const usePostTxStatusEffect = (
-  hash: Hex | undefined,
+  postTxResultIds: string[],
   {
     effectList,
   }: {
@@ -20,19 +19,21 @@ const usePostTxStatusEffect = (
   const postTxResult = useRecoilValue(postTxStore.postTxResult);
 
   useEffect(() => {
-    if (!hash || !postTxResult[hash]) return;
+    if (postTxResultIds.length === 0) return;
 
-    if (postTxResult[hash].status) {
-      const actionList = effectList.filter((x) =>
-        x.when.includes(postTxResult[hash].status),
-      );
-      if (actionList.length > 0) {
-        actionList.forEach((x) => {
-          x.action(postTxResult[hash]);
-        });
+    postTxResultIds.forEach((id) => {
+      if (postTxResult[id].status) {
+        const actionList = effectList.filter((x) =>
+          x.when.includes(postTxResult[id].status),
+        );
+        if (actionList.length > 0) {
+          actionList.forEach((x) => {
+            x.action(postTxResult[id]);
+          });
+        }
       }
-    }
-  }, [effectList, hash, postTxResult]);
+    });
+  }, [effectList, postTxResultIds, postTxResult]);
 };
 
 export default usePostTxStatusEffect;

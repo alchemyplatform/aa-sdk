@@ -36,8 +36,9 @@ const TxStatusMini = ({
         setMinimized(false);
       }}
     >
-      {[PostTxStatus.POST, PostTxStatus.BROADCAST].includes(txResult.status) ===
-        false && (
+      {[PostTxStatus.UO, PostTxStatus.POST, PostTxStatus.BROADCAST].includes(
+        txResult.status,
+      ) === false && (
         <TouchableOpacity
           style={styles.closeBtn}
           onPress={(e): void => {
@@ -73,9 +74,9 @@ const TxStatusMini = ({
             </View>
             <View style={styles.status}>
               <FormText>Pending Tx...</FormText>
-              <LinkExplorer type="tx" address={txResult.transactionHash}>
+              <LinkExplorer type="tx" address={txResult.value.transactionHash}>
                 <FormText style={{ color: colors.primary._400 }}>
-                  {truncate(txResult.transactionHash, [4, 4])}
+                  {truncate(txResult.value.transactionHash, [4, 4])}
                 </FormText>
               </LinkExplorer>
             </View>
@@ -96,10 +97,13 @@ const TxStatusMini = ({
               <View style={styles.status}>
                 <LinkExplorer
                   type="tx"
-                  address={txResult.value.transactionHash}
+                  address={txResult.value.transactionReceipt.transactionHash}
                 >
                   <Text style={{ color: colors.primary._400 }}>
-                    {truncate(txResult.value.transactionHash, [4, 4])}
+                    {truncate(
+                      txResult.value.transactionReceipt.transactionHash,
+                      [4, 4],
+                    )}
                   </Text>
                 </LinkExplorer>
               </View>
@@ -120,7 +124,13 @@ const TxStatusMini = ({
               />
             </View>
             <View style={styles.status}>
-              <FormText>Tx Error</FormText>
+              <FormText>{`${
+                txResult.value?.uoHash
+                  ? "User op"
+                  : txResult.value?.txHash
+                  ? "Tx"
+                  : "Unknown"
+              } error`}</FormText>
             </View>
           </>
         )}

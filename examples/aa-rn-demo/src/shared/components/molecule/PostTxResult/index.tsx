@@ -5,9 +5,10 @@ import usePostTxStatusEffect from "@hooks/contract/usePostTxStatusEffect";
 import postTxStore from "@store/postTxStore";
 import { unset } from "lodash";
 import { PostTxStatus } from "types/postTx";
-import { type Hex } from "viem";
 import TxStatus from "./TxStatus";
 import TxStatusMini from "./TxStatusMini";
+
+const maxItemsToShow = 3;
 
 const PostTxResult = (): ReactElement => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,10 +17,9 @@ const PostTxResult = (): ReactElement => {
     postTxStore.postTxResult,
   );
 
-  const uoHash =
-    Object.keys(postTxResult).length > 0
-      ? (Object.keys(postTxResult)[0] as Hex)
-      : undefined;
+  const postTxResultIds = Object.keys(postTxResult)
+    .filter((x) => !!x)
+    .slice(0, maxItemsToShow);
 
   const onClickClose = (): void => {
     setIsOpen(false);
@@ -32,6 +32,7 @@ const PostTxResult = (): ReactElement => {
     () => [
       {
         when: [
+          PostTxStatus.UO,
           PostTxStatus.POST,
           PostTxStatus.BROADCAST,
           PostTxStatus.DONE,
@@ -42,21 +43,16 @@ const PostTxResult = (): ReactElement => {
     ],
     [],
   );
-  usePostTxStatusEffect(uoHash, { effectList });
+  usePostTxStatusEffect(postTxResultIds, { effectList });
 
-  return (
-    <>
-      {uoHash &&
-        isOpen &&
-        (minimized ? (
-          <TxStatusMini
-            onPressClose={onClickClose}
-            setMinimized={setMinimized}
-          />
-        ) : (
-          <TxStatus onPressClose={onClickClose} setMinimized={setMinimized} />
-        ))}
-    </>
+  return postTxResultIds.length > 0 && isOpen ? (
+    minimized ? (
+      <TxStatusMini onPressClose={onClickClose} setMinimized={setMinimized} />
+    ) : (
+      <TxStatus onPressClose={onClickClose} setMinimized={setMinimized} />
+    )
+  ) : (
+    <></>
   );
 };
 

@@ -2,8 +2,10 @@ import { type SendUserOperationResult } from "@alchemy/aa-core";
 import { useAlertContext } from "@context/alert";
 import { useWalletContext } from "@context/wallet";
 import postTxStore from "@store/postTxStore";
+import _ from "lodash";
 import { useRecoilState } from "recoil";
 import { PostTxStatus, type PostTxReturn } from "types/postTx";
+import { v4 as uuidv4 } from "uuid";
 import { type Address, type Hex, type TransactionReceipt } from "viem";
 
 type UsePostTxReturn = {
@@ -31,8 +33,15 @@ export const usePostTx = (): UsePostTxReturn => {
     value?: bigint;
   }): Promise<PostTxReturn> => {
     if (scaAddress) {
-      let uoHash;
+      let uoHash: Hex | null = null;
+      let txHash: Hex | null = null;
+      const uniqId = uuidv4();
       try {
+        setPostTxResult({
+          [uniqId]: {
+            status: PostTxStatus.UO,
+          },
+        });
         const { hash }: SendUserOperationResult =
           await provider.sendUserOperation({
             target,
@@ -41,14 +50,17 @@ export const usePostTx = (): UsePostTxReturn => {
           });
         uoHash = hash;
         setPostTxResult({
-          [uoHash]: {
+          [uniqId]: {
             status: PostTxStatus.POST,
+            value: {
+              userOpHash: uoHash,
+            },
           },
         });
-        const txHash = await provider.waitForUserOperationTransaction(uoHash);
+        txHash = await provider.waitForUserOperationTransaction(uoHash);
         setPostTxResult({
           ...postTxResult,
-          [uoHash as Hex]: {
+          [uniqId]: {
             status: PostTxStatus.BROADCAST,
             value: {
               transactionHash: txHash,
@@ -66,9 +78,11 @@ export const usePostTx = (): UsePostTxReturn => {
           });
         setPostTxResult({
           ...postTxResult,
-          [uoHash as Hex]: {
+          [uniqId]: {
             status: PostTxStatus.DONE,
-            value: receipt,
+            value: {
+              transactionReceipt: receipt,
+            },
           },
         });
 
@@ -77,23 +91,20 @@ export const usePostTx = (): UsePostTxReturn => {
           receipt,
         };
       } catch (error: any) {
-        const errMsg = error?.message ? error.message : JSON.stringify(error);
-        if (uoHash) {
-          setPostTxResult({
-            ...postTxResult,
-            [uoHash as Hex]: {
-              status: PostTxStatus.ERROR,
-              error: errMsg,
+        const errMsg = _.truncate(error?.message ?? JSON.stringify(error), {
+          length: 300,
+        });
+        setPostTxResult({
+          ...postTxResult,
+          [uniqId]: {
+            status: PostTxStatus.ERROR,
+            value: {
+              uoHash: uoHash || undefined,
+              txHash: txHash || undefined,
             },
-          });
-        } else {
-          dispatchAlert({
-            type: "open",
-            alertType: "error",
-            message: errMsg,
-          });
-        }
-
+            error: errMsg,
+          },
+        });
         return {
           success: false,
           message: errMsg,

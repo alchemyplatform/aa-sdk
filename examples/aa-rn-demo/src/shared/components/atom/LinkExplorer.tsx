@@ -13,7 +13,7 @@ const LinkExplorer = ({
 }: {
   address: string;
   tokenId?: string;
-  type: "tx" | "address" | "nft";
+  type: "tx" | "address" | "nft" | "userOp";
   children?: ReactNode;
 }): ReactElement => {
   const { getLink } = useExplorer();

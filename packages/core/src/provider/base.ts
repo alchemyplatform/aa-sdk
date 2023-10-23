@@ -561,10 +561,6 @@ export class SmartAccountProvider<
         | PublicErc4337Client<HttpTransport>
     ) => TAccount
   ): this & { account: TAccount } => {
-    console.log(
-      "+++++++++++++++++++++ SMART ACCOUNT PROVIDER connect +++++++++++++++++++++"
-    );
-
     const account = fn(this.rpcClient);
     defineReadOnly(this, "account", account);
 
@@ -594,13 +590,9 @@ export class SmartAccountProvider<
       chainId: toHex(this.chain.id),
     });
 
-    account.getAddress().then((address) => {
-      console.log(
-        "+++++++++++++++++++++ SMART ACCOUNT PROVIDER connect end +++++++++++++++++++++",
-        address
-      );
-      this.emit("accountsChanged", [address]);
-    });
+    account
+      .getAddress()
+      .then((address) => this.emit("accountsChanged", [address]));
 
     return this as unknown as this & { account: TAccount };
   };

@@ -586,7 +586,7 @@ DEPENDENCIES:
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - "react-native-image-resizer (from `../node_modules/@bam.tech/react-native-image-resizer`)"
   - react-native-keyboard-controller (from `../node_modules/react-native-keyboard-controller`)
-  - "react-native-netinfo (from `../../../node_modules/@react-native-community/netinfo`)"
+  - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-randombytes (from `../node_modules/react-native-randombytes`)
   - react-native-render-html (from `../node_modules/react-native-render-html`)
   - react-native-restart (from `../node_modules/react-native-restart`)
@@ -608,7 +608,7 @@ DEPENDENCIES:
   - ReactNativeAvoidSoftinput (from `../node_modules/react-native-avoid-softinput`)
   - ReactNativeLocalization (from `../node_modules/react-native-localization`)
   - RNBootSplash (from `../node_modules/react-native-bootsplash`)
-  - "RNCAsyncStorage (from `../../../node_modules/@react-native-async-storage/async-storage`)"
+  - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - "RNCMaskedView (from `../node_modules/@react-native-masked-view/masked-view`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
@@ -704,7 +704,7 @@ EXTERNAL SOURCES:
   react-native-keyboard-controller:
     :path: "../node_modules/react-native-keyboard-controller"
   react-native-netinfo:
-    :path: "../../../node_modules/@react-native-community/netinfo"
+    :path: "../node_modules/@react-native-community/netinfo"
   react-native-randombytes:
     :path: "../node_modules/react-native-randombytes"
   react-native-render-html:
@@ -748,7 +748,7 @@ EXTERNAL SOURCES:
   RNBootSplash:
     :path: "../node_modules/react-native-bootsplash"
   RNCAsyncStorage:
-    :path: "../../../node_modules/@react-native-async-storage/async-storage"
+    :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCClipboard:
     :path: "../node_modules/@react-native-clipboard/clipboard"
   RNCMaskedView:

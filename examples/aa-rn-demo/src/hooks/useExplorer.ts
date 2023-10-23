@@ -5,7 +5,7 @@ export type UseExplorerReturn = {
   getLink: (props: {
     address: string;
     tokenId?: string;
-    type: "tx" | "address" | "nft";
+    type: "tx" | "address" | "nft" | "userOp";
   }) => string;
 };
 
@@ -18,8 +18,12 @@ const useExplorer = (): UseExplorerReturn => {
     }: {
       address: string;
       tokenId?: string;
-      type: "tx" | "address" | "nft";
+      type: "tx" | "address" | "nft" | "userOp";
     }): string => {
+      if (type === "userOp") {
+        return `https://www.jiffyscan.xyz/userOpHash/${address}?network=${chain.network}`;
+      }
+
       if (type === "tx") {
         return `${chain.blockExplorers.default.url}/${type}/${address}`;
       }

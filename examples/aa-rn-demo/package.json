@@ -155,7 +155,11 @@
       "fastestsmallesttextencoderdecoder",
       "fastestsmallesttextencoderdecoder/**",
       "**/fastestsmallesttextencoderdecoder",
-      "**/fastestsmallesttextencoderdecoder/**"
+      "**/fastestsmallesttextencoderdecoder/**",
+      "**/@react-native*",
+      "**/@react-native*/**",
+      "**/*react-native*",
+      "**/*react-native*/**"
     ]
   },
   "scripts": {
