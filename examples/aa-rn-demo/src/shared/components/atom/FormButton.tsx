@@ -2,7 +2,6 @@ import React, { type ReactElement } from "react";
 import {
   StyleSheet,
   TouchableOpacity,
-  type ColorValue,
   type StyleProp,
   type TextStyle,
   type ViewStyle,
@@ -23,7 +22,7 @@ export type FormButtonProps = {
   textStyle?: StyleProp<TextStyle>;
   rightIcon?: string;
   rightIconSize?: number;
-  rightIconColor?: ColorValue;
+  rightIconColor?: string;
 };
 
 const FormButton = ({
