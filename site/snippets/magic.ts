@@ -9,10 +9,9 @@ const MAGIC_API_KEY = "pk_test_...";
 export const magic = new Magic(MAGIC_API_KEY);
 
 // a viem wallet client that wraps magic for utility methods
-// NOTE: this isn't necessary since you can just use the `magic.rpcProvider`
-// directly, but this makes things much easier
+// NOTE: because this is async, you will need to put this in a useEffect hook if using React
 export const magicClient = createWalletClient({
-  transport: custom(magic.rpcProvider),
+  transport: custom(await magic.wallet.getProvider()),
 });
 
 // a smart account signer you can use as an owner on ISmartContractAccount
@@ -20,3 +19,8 @@ export const magicSigner: SmartAccountSigner = new WalletClientSigner(
   magicClient,
   "magic" // signerType
 );
+
+// NOTE: before you can use the above signer as an owner, you need to authenticate the user first
+// for example:
+await magic.wallet.connectWithUI();
+// for more details see the docs: https://magic.link/docs/dedicated/overview
