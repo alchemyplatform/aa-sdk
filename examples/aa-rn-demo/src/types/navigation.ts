@@ -1,3 +1,4 @@
+import type { ICardItem } from "@models";
 import {
   StackActions,
   createNavigationContainerRef,
@@ -42,7 +43,7 @@ type MainRouteParamsUnion =
     }
   | {
       route: Routes.Detail;
-      params: { item: OwnedNft };
+      params: { item: OwnedNft | ICardItem };
     };
 
 export type RouteParamsUnion =

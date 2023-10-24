@@ -8,7 +8,7 @@ import {
   type ViewStyle,
 } from "react-native";
 
-import { useTheme } from "@react-navigation/native";
+import { colors } from "@theme/color";
 import Icon, { IconType } from "react-native-dynamic-vector-icons";
 import FormText from "./FormText";
 
@@ -39,9 +39,6 @@ const FormButton = ({
   rightIconSize,
   rightIconColor,
 }: FormButtonProps): ReactElement => {
-  const theme = useTheme();
-  const { colors } = theme;
-
   let mainColor = colors.primary._400;
   if (figure === "error") {
     mainColor = "#F84F4F";

@@ -1,3 +1,4 @@
+import type { ICardItem } from "@models";
 import FormImage from "@shared-components/atom/FormImage";
 import FormText from "@shared-components/atom/FormText";
 import Row from "@shared-components/atom/Row";
@@ -7,9 +8,10 @@ import { colors } from "@theme/color";
 import { BigNumber, type OwnedNft } from "alchemy-sdk";
 import React, { type ReactElement } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
+import { formatEther } from "viem";
 import NftAttributes, { type NftAttributesType } from "./NftAttributes";
 
-const NftDetails = ({ item }: { item: OwnedNft }): ReactElement => {
+const NftDetails = ({ item }: { item: OwnedNft | ICardItem }): ReactElement => {
   return (
     <View style={{ flex: 1 }}>
       <ScrollView>
@@ -17,7 +19,7 @@ const NftDetails = ({ item }: { item: OwnedNft }): ReactElement => {
           <View style={{ paddingBottom: 20, rowGap: 12 }}>
             <Row style={{ columnGap: 6 }}>
               {item.title && (
-                <FormText size={18} font={"B"}>{`${item.title}`}</FormText>
+                <FormText size={24} font={"B"}>{`${item.title}`}</FormText>
               )}
               {item.tokenId && (
                 <FormText size={16}>{`Token ID: ${item.tokenId}`}</FormText>
@@ -26,7 +28,7 @@ const NftDetails = ({ item }: { item: OwnedNft }): ReactElement => {
                 <FormText size={16}>{`(${item.tokenType})`}</FormText>
               )}
             </Row>
-            {item.acquiredAt?.blockTimestamp && (
+            {"acquiredAt" in item && item.acquiredAt?.blockTimestamp && (
               <FormText font={"R"} color={colors.black._700}>
                 {convertTimestampToDate(
                   BigNumber.from(item.acquiredAt.blockTimestamp),
@@ -34,6 +36,19 @@ const NftDetails = ({ item }: { item: OwnedNft }): ReactElement => {
               </FormText>
             )}
             <FormText font={"R"}>{item.description}</FormText>
+
+            {"price" in item && item.price !== undefined && (
+              <Row style={{ columnGap: 4 }}>
+                <FormText size={16} font={"B"}>
+                  Mint Price:
+                </FormText>
+                <FormText
+                  size={16}
+                  color={colors.primary._400}
+                  font={"B"}
+                >{`${formatEther(item.price)} ETH`}</FormText>
+              </Row>
+            )}
           </View>
 
           <View style={styles.imageBox}>
@@ -46,9 +61,10 @@ const NftDetails = ({ item }: { item: OwnedNft }): ReactElement => {
               }
             />
           </View>
+
           <View>
             <View style={styles.info}>
-              {item.rawMetadata?.external_url && (
+              {"rawMetadata" in item && item.rawMetadata?.external_url && (
                 <>
                   <FormText font={"B"} size={16}>
                     Token URI
@@ -60,7 +76,7 @@ const NftDetails = ({ item }: { item: OwnedNft }): ReactElement => {
                 </>
               )}
             </View>
-            {item.rawMetadata?.attributes && (
+            {"rawMetadata" in item && item.rawMetadata?.attributes && (
               <>
                 <View style={styles.info}>
                   <FormText font={"B"} size={16}>

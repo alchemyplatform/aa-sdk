@@ -37,9 +37,6 @@
     },
     "types": ["react-native"]
   },
-  "extends": [
-    "typescript-template/base.json",
-    "@tsconfig/react-native/tsconfig.json"
-  ],
+  "extends": "typescript-template/base.json",
   "exclude": ["node_modules", "babel.config.js", "metro.config.js"]
 }
