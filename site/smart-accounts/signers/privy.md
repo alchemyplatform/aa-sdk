@@ -3,16 +3,22 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Privy
+      content: Privy Integration Guide
   - - meta
     - name: description
-      content: Guide to use Privy as a signer
+      content: Follow this integration guide to use Privy as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Guide to use Privy as a signer
+      content: Follow this integration guide to use Privy as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+  - - meta
+    - name: twitter:title
+      content: Privy Integration Guide
+  - - meta
+    - name: twitter:description
+      content: Follow this integration guide to use Privy as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
-# Privy
+# Privy Integration Guide
 
 [Privy](https://privy.io) is an easy way for web3 developers to onboard users across mobile and desktop, regardless of whether they already have a wallet or not.
 

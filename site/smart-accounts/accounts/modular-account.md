@@ -3,16 +3,22 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Modular Account (coming soon)
+      content: Modular Account Smart Contract
   - - meta
     - name: description
-      content: Modular Account is coming soon to Account Kit
+      content: Coming soon! Follow this guide to use Modular Accounts with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Modular Account is coming soon to Account Kit
+      content: Coming soon! Follow this guide to use Modular Accounts with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+  - - meta
+    - name: twitter:title
+      content: Modular Account Smart Contract
+  - - meta
+    - name: twitter:description
+      content: Coming soon! Follow this guide to use Modular Accounts with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
-# Modular Account (coming soon)
+# Modular Account Smart Contract
 
 We are working towards the first stable version of [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) with [the community](https://ethereum-magicians.org/t/erc-6900-modular-smart-contract-accounts-and-plugins/13885).
 

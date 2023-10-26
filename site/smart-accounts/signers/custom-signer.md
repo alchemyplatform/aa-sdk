@@ -3,16 +3,22 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Using Your Own Signer
+      content: How to Use Your Own Account Signer
   - - meta
     - name: description
-      content: How to use any Signer with Account Kit
+      content: Follow this guide to use any signer you want with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: How to use any Signer with Account Kit
+      content: Follow this guide to use any signer you want with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+  - - meta
+    - name: twitter:title
+      content: How to Use Your Own Account Signer
+  - - meta
+    - name: twitter:description
+      content: Follow this guide to use any signer you want with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
-# Using A Custom Signer
+# How to Use Your Own Account Signer
 
 Account Kit is designed to be flexible and allow you to use any signer you want. You have two options. You can either:
 

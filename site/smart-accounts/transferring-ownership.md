@@ -6,10 +6,16 @@ head:
       content: Transferring Ownership
   - - meta
     - name: description
-      content: Guide to transferring ownership of an account
+      content: Follow this guide to transfer ownership of a smart account with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Guide to transferring ownership of an account
+      content: Follow this guide to transfer ownership of a smart account with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+  - - meta
+    - name: twitter:title
+      content: Transferring Ownership
+  - - meta
+    - name: twitter:description
+      content: Follow this guide to transfer ownership of a smart account with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
 # Transferring Ownership

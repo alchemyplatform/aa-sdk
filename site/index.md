@@ -1,10 +1,25 @@
 ---
+outline: deep
 # https://vitepress.dev/reference/default-theme-home-page
 layout: home
 # HTML Metadata
-title: Account Kit
-titleTemplate: :title · TypeScript Interface for ERC-4337
-description: Everything you need to build 4337 accounts for your users
+head:
+  - - meta
+    - property: og:title
+      content: Account Kit Documentation
+  - - meta
+    - name: description
+      content: Account Kit is a vertically integrated stack for building apps that support ERC-4337 smart accounts, signer integrations, sponsoring gas, bundlers, and an SDK.
+  - - meta
+    - property: og:description
+      content: Account Kit is a vertically integrated stack for building apps that support ERC-4337 smart accounts, signer integrations, sponsoring gas, bundlers, and an SDK.
+  - - meta
+    - name: twitter:title
+      content: Account Kit Documentation
+  - - meta
+    - name: twitter:description
+      content: Account Kit is a vertically integrated stack for building apps that support ERC-4337 smart accounts, signer integrations, sponsoring gas, bundlers, and an SDK.
+titleTemplate: :title Documentation
 # you can also add HTML or Markdown components below the --- line to add custom HTML or Markdown content (eg: https://github.com/wagmi-dev/viem/blob/main/site/index.md?plain=1)
 ---
 
@@ -30,10 +45,10 @@ description: Everything you need to build 4337 accounts for your users
               <div
                 class="gap-[28px] text-[64px] font-bold items-end color max-lg:text-center max-md:text-[56px] leading-none"
               >
-                <span class="bg-gradient-1 bg-clip-text transparent-text-fill max-lg:flex max-lg:flex-wrap">Account Abstraction</span> Legos
+                <span class="bg-gradient-1 bg-clip-text transparent-text-fill max-lg:flex max-lg:flex-wrap">Account Kit</span> Documentation
               </div>
               <div class="text-[22px] font-normal max-md:text-center">
-                Everything you need to build 4337 accounts.
+                Account Kit is a vertically integrated stack for building apps that support ERC-4337: smart accounts, signer integrations, sponsoring gas, bundlers, and an SDK.
               </div>
               <div class="flex flex-row gap-[8px] justify-start items-center">
                 <a rel="noopener noreferrer" href="./getting-started.html">

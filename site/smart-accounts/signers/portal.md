@@ -3,16 +3,22 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Portal
+      content: Portal Integration Guide
   - - meta
     - name: description
-      content: Guide to use Portal as a signer
+      content: Follow this integration guide to use Portal as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Guide to use Portal as a signer
+      content: Follow this integration guide to use Portal as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+  - - meta
+    - name: twitter:title
+      content: Portal Integration Guide
+  - - meta
+    - name: twitter:description
+      content: Follow this integration guide to use Portal as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
-# Portal
+# Portal Integration Guide
 
 [Portal](https://www.portalhq.io/) is an embedded blockchain infrastructure company that powers companies with an end to end platform for key management for self-custodial wallets (MPC and AA), security firewall, and web3 protocol connect kit.
 

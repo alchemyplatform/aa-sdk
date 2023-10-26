@@ -3,13 +3,19 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: What is Account Kit?
+      content: Introduction
   - - meta
     - name: description
-      content: Learn about Account Kit
+      content: Learn what Account Kit is, how it works, and how web3 application developers can use it to add support for smart accounts.
   - - meta
     - property: og:description
-      content: Learn about Account Kit
+      content: Learn what Account Kit is, how it works, and how web3 application developers can use it to add support for smart accounts.
+  - - meta
+    - name: twitter:title
+      content: Introduction
+  - - meta
+    - name: twitter:description
+      content: Learn what Account Kit is, how it works, and how web3 application developers can use it to add support for smart accounts.
 ---
 
 # What is Account Kit?
@@ -36,7 +42,7 @@ The `aa-sdk` is a type-safe and performant TypeScript library built on top of [v
 
 The SDK also implements an EIP-1193 provider interface to easily plug into any popular dapp or wallet connect libraries such as RainbowKit, Wagmi, and Web3Modal. It also includes ethers.js adapters to provide full support for ethers.js apps.
 
-The `aa-sdk` is modular at every layer of the stack and can be easily extended to fit your custom needs. You can plug in any [smart account](/smart-accounts/accounts/using-your-own) implementation, [Signer](/smart-accounts/signers/overview), gas manager API, RPC provider.
+The `aa-sdk` is modular at every layer of the stack and can be easily extended to fit your custom needs. You can plug in any [smart account](/smart-accounts/accounts/using-your-own) implementation, [Signer](/smart-accounts/signers/choosing-a-signer), gas manager API, RPC provider.
 
 Get started with `aa-sdk` in our [Getting Started guide](/getting-started) or checkout the [open source repo](https://github.com/alchemyplatform/aa-sdk).
 
@@ -46,7 +52,7 @@ Get started with `aa-sdk` in our [Getting Started guide](/getting-started) or ch
 
 We started with the Ethereum Foundation’s canonical [SimpleAccount](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol) and added key improvements for production app developers:
 
-- Significantly [reduced gas costs](/smart-accounts/accounts/overview#benchmarks)
+- Significantly [reduced gas costs](/smart-accounts/accounts/choosing-a-smart-account#benchmarks)
 - ERC-1271 signature support to ensure users can sign messages, such as on Opensea
 - Ownership transfer so that users won’t get locked into a single Signer
 
@@ -60,7 +66,7 @@ To learn how to deploy a `LightAccount`, see [LightAccount](/smart-accounts/acco
 
 A Signer is responsible for securely managing the private key and signing transaction requests on the smart account. Account Kit supports many popular wallet signers including [Magic](/smart-accounts/signers/magic), [web3auth](/smart-accounts/signers/web3auth), [Turnkey](/smart-accounts/signers/turnkey), [Privy](/smart-accounts/signers/privy), [Dynamic](/smart-accounts/signers/dynamic), [Fireblocks](/smart-accounts/signers/fireblocks), [Portal](/smart-accounts/signers/portal), [Capsule](/smart-accounts/signers/capsule) and [Lit Protocol](/smart-accounts/signers/lit). It also supports self-custodial wallets like Metamask or Ledger.
 
-To get started with a signer, read the doc: [How to Choose a Signer](/smart-accounts/signers/overview).
+To get started with a signer, read the doc: [How to Choose a Signer](/smart-accounts/signers/choosing-a-signer).
 
 ### Gas Manager API
 
