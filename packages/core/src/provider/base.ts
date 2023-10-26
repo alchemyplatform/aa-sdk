@@ -49,47 +49,18 @@ import type {
   PaymasterAndDataMiddleware,
   ProviderEvents,
   SendUserOperationResult,
+  SmartAccountProviderConfig,
 } from "./types.js";
+import { SmartAccountProviderConfigSchema } from "./validation.js";
 
 export const noOpMiddleware: AccountMiddlewareFn = async (
   struct: Deferrable<UserOperationStruct>
 ) => struct;
 
-export interface SmartAccountProviderOpts {
-  /**
-   * The maximum number of times to try fetching a transaction receipt before giving up (default: 5)
-   */
-  txMaxRetries?: number;
-
-  /**
-   * The interval in milliseconds to wait between retries while waiting for tx receipts (default: 2_000n)
-   */
-  txRetryIntervalMs?: number;
-
-  /**
-   * The mulitplier on interval length to wait between retries while waiting for tx receipts (default: 1.5)
-   */
-  txRetryMulitplier?: number;
-
-  /**
-   * used when computing the fees for a user operation (default: 100_000_000n)
-   */
-  minPriorityFeePerBid?: bigint;
-}
-
 const minPriorityFeePerBidDefaults = new Map<number, bigint>([
   [arbitrum.id, 10_000_000n],
   [arbitrumGoerli.id, 10_000_000n],
 ]);
-
-export type SmartAccountProviderConfig<
-  TTransport extends SupportedTransports = Transport
-> = {
-  rpcProvider: string | PublicErc4337Client<TTransport>;
-  chain: Chain;
-  entryPointAddress: Address;
-  opts?: SmartAccountProviderOpts;
-};
 
 export class SmartAccountProvider<
     TTransport extends SupportedTransports = Transport
@@ -109,12 +80,15 @@ export class SmartAccountProvider<
     | PublicErc4337Client<TTransport>
     | PublicErc4337Client<HttpTransport>;
 
-  constructor({
-    rpcProvider,
-    entryPointAddress,
-    chain,
-    opts,
-  }: SmartAccountProviderConfig<TTransport>) {
+  constructor(config: SmartAccountProviderConfig<TTransport>) {
+    try {
+      SmartAccountProviderConfigSchema.parse(config);
+    } catch (e) {
+      throw new Error("invalid parameters passed to SmartAccountProvider");
+    }
+
+    const { rpcProvider, entryPointAddress, chain, opts } = config;
+
     super();
 
     this.entryPointAddress = entryPointAddress;

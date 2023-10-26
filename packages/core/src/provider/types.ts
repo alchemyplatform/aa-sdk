@@ -1,5 +1,6 @@
 import type { Address } from "abitype";
 import type {
+  Chain,
   Hash,
   Hex,
   HttpTransport,
@@ -7,6 +8,7 @@ import type {
   Transport,
 } from "viem";
 import type { SignTypedDataParameters } from "viem/accounts";
+import type { z } from "zod";
 import type {
   ISmartContractAccount,
   SignTypedDataParams,
@@ -24,6 +26,7 @@ import type {
   UserOperationStruct,
 } from "../types.js";
 import type { Deferrable } from "../utils";
+import type { SmartAccountProviderOptsSchema } from "./validation.js";
 
 type WithRequired<T, K extends keyof T> = Required<Pick<T, K>>;
 type WithOptional<T, K extends keyof T> = Pick<Partial<T>, K>;
@@ -75,6 +78,22 @@ export type GasEstimatorMiddleware = AccountMiddlewareOverrideFn<
 export type FeeDataMiddleware = AccountMiddlewareOverrideFn<
   "maxFeePerGas" | "maxPriorityFeePerGas"
 >;
+
+export type SmartAccountProviderOpts = z.infer<
+  typeof SmartAccountProviderOptsSchema
+>;
+
+/**
+ * @see SmartAccountProviderConfigSchema for corresponding runtime validation
+ */
+export type SmartAccountProviderConfig<
+  TTransport extends SupportedTransports = Transport
+> = {
+  rpcProvider: string | PublicErc4337Client<TTransport>;
+  chain: Chain;
+  entryPointAddress: Address;
+  opts?: SmartAccountProviderOpts;
+};
 
 // TODO: this also will need to implement EventEmitteer
 export interface ISmartAccountProvider<

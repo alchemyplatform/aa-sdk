@@ -4,7 +4,7 @@ import {
   type BatchUserOperationCallData,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
-import { toHex, type Chain } from "viem";
+import { toHex, type Address, type Chain } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
 import { AlchemyProvider } from "../provider.js";
@@ -20,6 +20,7 @@ describe("Alchemy Provider Tests", () => {
       }),
     signTypedData: async () => "0xHash",
     getAddress: async () => ownerAccount.address,
+    signerType: "local",
   };
   const chain = polygonMumbai;
 
@@ -73,15 +74,18 @@ const givenConnectedProvider = ({
 }: {
   owner: SmartAccountSigner;
   chain: Chain;
-}) =>
-  new AlchemyProvider({
+}) => {
+  const dummyEntryPointAddress =
+    "0x1234567890123456789012345678901234567890" as Address;
+
+  return new AlchemyProvider({
     rpcUrl: "https://eth-mainnet.g.alchemy.com/v2",
     jwt: "test",
     chain,
-    entryPointAddress: "0xENTRYPOINT_ADDRESS",
+    entryPointAddress: dummyEntryPointAddress,
   }).connect((provider) => {
     const account = new SimpleSmartContractAccount({
-      entryPointAddress: "0xENTRYPOINT_ADDRESS",
+      entryPointAddress: dummyEntryPointAddress,
       chain,
       owner,
       factoryAddress: "0xSIMPLE_ACCOUNT_FACTORY_ADDRESS",
@@ -94,3 +98,4 @@ const givenConnectedProvider = ({
 
     return account;
   });
+};
