@@ -52,9 +52,11 @@ import {
   getDefaultLightAccountFactory,
 } from "@alchemy/aa-accounts";
 import { sepolia } from "viem/chains";
-import { magicSigner } from "./magic";
+import { createMagicSigner } from "./magic";
 
 const chain = sepolia;
+// NOTE: the below is async because it depends on creating a magic signer. You can choose to break that up how you want
+// eg. use a useEffect + useState to create the signer and then pass it down to the provider
 const provider = new AlchemyProvider({
   apiKey: "ALCHEMY_API_KEY",
   chain,
@@ -64,7 +66,7 @@ const provider = new AlchemyProvider({
     new LightSmartContractAccount({
       entryPointAddress: "0x...",
       chain: rpcClient.chain,
-      owner: magicSigner,
+      owner: await createMagicSigner(),
       factoryAddress: getDefaultLightAccountFactory(chain),
       rpcClient,
     })
