@@ -3,16 +3,22 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Lit Protocol
+      content: Lit Protocol Integration Guide
   - - meta
     - name: description
-      content: Guide to use a PKP Wallet as a signer
+      content: Follow this integration guide to use PKP Wallet as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Guide to use a PKP Wallet as a signer
+      content: Follow this integration guide to use PKP Wallet as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+  - - meta
+    - name: twitter:title
+      content: Lit Protocol Integration Guide
+  - - meta
+    - name: twitter:description
+      content: Follow this integration guide to use PKP Wallet as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
-# Lit Protocol
+# Lit Protocol Integration Guide
 
 [LitProtocol](https://litprotocol.com/) is distributed cryptography for signing, encryption, and compute. A generalizable key management network, Lit provides developers with a set of tools for managing sovereign identities on the open Web.
 

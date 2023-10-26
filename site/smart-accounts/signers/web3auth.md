@@ -3,16 +3,22 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Web3Auth
+      content: Web3Auth Integration Guide
   - - meta
     - name: description
-      content: Guide to use Web3Auth as a signer
+      content: Follow this integration guide to use an EOA as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Guide to use Web3Auth as a signer
+      content: Follow this integration guide to use an EOA as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+  - - meta
+    - name: twitter:title
+      content: Web3Auth Integration Guide
+  - - meta
+    - name: twitter:description
+      content: Follow this integration guide to use an EOA as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
-# Web3Auth
+# Web3Auth Integration Guide
 
 [Web3Auth](https://web3auth.io/) is an embedded wallet provider that allows users to generate wallets scoped to your application via Social Logins, Email OTP, or Custom Authentication Methods. This is great for enabling a better experience for your users. But ultimately these wallets are not much different from EOA's, so you don't have the benefit of Account Abstraction (gas sponsorship, batching, etc).
 

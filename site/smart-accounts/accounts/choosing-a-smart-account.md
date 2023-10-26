@@ -3,22 +3,28 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Integrating a Smart Account
+      content: Choosing a Smart Account
   - - meta
     - name: description
-      content: Integrating a Smart Account Overview
+      content: Learn how to choose a smart account implementation to use with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Integrating a Smart Account Overview
+      content: Learn how to choose a smart account implementation to use with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+  - - meta
+    - name: twitter:title
+      content: Choosing a Smart Account
+  - - meta
+    - name: twitter:description
+      content: Learn how to choose a smart account implementation to use with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 next:
   text: Integrating a Signer
-  link: /smart-accounts/signers/overview
+  link: /smart-accounts/signers/choosing-a-signer
 prev:
   text: Package Overview
   link: /package-overview
 ---
 
-# Integrating a Smart Account
+# Choosing a Smart Account
 
 ## What's a Smart Account?
 

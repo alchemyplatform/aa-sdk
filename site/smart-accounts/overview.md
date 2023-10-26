@@ -3,13 +3,19 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Using Smart Accounts
+      content: Choosing a Smart Account
   - - meta
     - name: description
-      content: The end-to-end process of integrating smart accounts in your applications with Account Kit.
+      content: Follow this guide to understand the end-to-end process of integrating smart accounts in your applications with Account Kit.
   - - meta
     - property: og:description
-      content: The end-to-end process of integrating smart accounts in your applications with Account Kit.
+      content: Follow this guide to understand the end-to-end process of integrating smart accounts in your applications with Account Kit.
+  - - meta
+    - name: twitter:title
+      content: Choosing a Smart Account
+  - - meta
+    - name: twitter:description
+      content: Follow this guide to understand the end-to-end process of integrating smart accounts in your applications with Account Kit.
 ---
 
 # Overview
@@ -33,7 +39,7 @@ The `LightAccount` implementation is not [ERC-6900](/smart-accounts/accounts/mod
 
 ## 3. Choosing a Signer
 
-A signer is the entity that signs transactions (User Operations) on behalf of the smart account. It can be an EOA, a custodial service, or a multi-party computation (MPC) service. We explain the different types of signers in detail in the [overview](signers/overview) section on choosing a signer. We'll also cover the common signer examples in detail in the following sections:
+A signer is the entity that signs transactions (User Operations) on behalf of the smart account. It can be an EOA, a custodial service, or a multi-party computation (MPC) service. We explain the different types of signers in detail in the [overview](signers/choosing-a-signer) section on choosing a signer. We'll also cover the common signer examples in detail in the following sections:
 
 - [Dynamic](signers/dynamic)
 - [Magic](signers/magic)

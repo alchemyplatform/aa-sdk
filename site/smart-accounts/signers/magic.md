@@ -3,16 +3,22 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Magic
+      content: Magic Link Integration Guide
   - - meta
     - name: description
-      content: Guide to use Magic.Link as a signer
+      content: Follow this integration guide to use Magic.Link as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Guide to use Magic.Link as a signer
+      content: Follow this integration guide to use Magic.Link as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+  - - meta
+    - name: twitter:title
+      content: Magic Link Integration Guide
+  - - meta
+    - name: twitter:description
+      content: Follow this integration guide to use Magic.Link as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
-# Magic
+# Magic Link Integration Guide
 
 [Magic](https://magic.link) is an embedded wallet provider that allows users to generate wallets scoped to your application via Social Logins, Email OTP, or Webauthn. This is great for enabling a better experience for your users. But ultimately these wallets are not much different from EOA's, so you don't have the benefit of Account Abstraction (gas sponsorship, batching, etc).
 

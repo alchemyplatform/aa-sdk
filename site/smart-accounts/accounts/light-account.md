@@ -3,16 +3,22 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Using Light Account
+      content: Light Account Smart Contract
   - - meta
     - name: description
-      content: Using Light Account with Account Kit
+      content: Follow this guide to use Light Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Using Light Account with Account Kit
+      content: Follow this guide to use Light Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+  - - meta
+    - name: twitter:title
+      content: Light Account Smart Contract
+  - - meta
+    - name: twitter:description
+      content: Follow this guide to use Light Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
-# Light Account
+# Light Account Smart Contract
 
 Light Account is a secure, gas-optimized, [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) smart account implementation.
 

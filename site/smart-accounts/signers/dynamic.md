@@ -3,13 +3,19 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Dynamic
+      content: Dynamic Integration Guide
   - - meta
     - name: description
-      content: Guide to use Dynamic as a signer
+      content: Follow this integration guide to use Dynamic as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Guide to use Dynamic as a signer
+      content: Follow this integration guide to use Dynamic as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+  - - meta
+    - name: twitter:title
+      content: Dynamic Integration Guide
+  - - meta
+    - name: twitter:description
+      content: Follow this integration guide to use Dynamic as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
 # Dynamic
