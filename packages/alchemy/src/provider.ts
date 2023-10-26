@@ -45,7 +45,7 @@ export type AlchemyProviderConfig = {
      * the UserOperation being mined, users can increase the preVerificationGas by
      * a buffer. This buffer will always be charged, regardless of price at time of mine.
      *
-     * NOTE: this is only applied if the defualt gas estimator is used.
+     * NOTE: this is only applied if the default gas estimator is used.
      */
     preVerificationGasBufferPercent?: bigint;
   };

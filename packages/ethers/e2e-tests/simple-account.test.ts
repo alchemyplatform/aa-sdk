@@ -22,7 +22,7 @@ describe("Simple Account Tests", async () => {
   const alchemyProvider = await alchemy.config.getProvider();
   const owner = Wallet.fromMnemonic(OWNER_MNEMONIC);
 
-  it("should succesfully get counterfactual address", async () => {
+  it("should successfully get counterfactual address", async () => {
     const signer = givenConnectedProvider({ alchemyProvider, owner });
     expect(await signer.getAddress()).toMatchInlineSnapshot(
       `"0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4"`

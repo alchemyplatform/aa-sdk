@@ -80,7 +80,7 @@ describe("Base Tests", () => {
     } as any;
 
     // This says the await is not important... it is. the method is not marked sync because we don't need it to be,
-    // but the address is emited from an async method so we want to await that
+    // but the address is emitted from an async method so we want to await that
     await providerMock.connect(() => account);
 
     expect(spy.mock.calls).toMatchInlineSnapshot(`

@@ -28,7 +28,7 @@ describe("Light Account Tests", () => {
     UNDEPLOYED_OWNER_MNEMONIC
   );
 
-  it("should succesfully get counterfactual address", async () => {
+  it("should successfully get counterfactual address", async () => {
     const signer = givenConnectedProvider({ owner, chain });
     expect(await signer.getAddress()).toMatchInlineSnapshot(
       '"0x7eDdc16B15259E5541aCfdebC46929873839B872"'
