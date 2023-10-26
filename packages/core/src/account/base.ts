@@ -87,7 +87,7 @@ export abstract class BaseSmartContractAccount<
             ...fetchOptions,
             headers: {
               ...fetchOptions?.headers,
-              "Alchemy-Aa-Sdk-Signer": params.owner?.signerType,
+              "Alchemy-Aa-Sdk-Signer": params.owner?.signerType || "unknown",
               "Alchemy-Aa-Sdk-Factory-Address": params.factoryAddress,
             },
           },
