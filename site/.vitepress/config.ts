@@ -22,7 +22,10 @@ export default defineConfig({
             text: "Changelog",
             link: "https://github.com/alchemyplatform/aa-sdk/blob/main/CHANGELOG.md",
           },
-          // TODO: add a Contributing link and Migration links when necessary
+          {
+            text: "Contributing",
+            link: "https://github.com/alchemyplatform/aa-sdk/blob/main/CONTRIBUTING.md",
+          },
         ],
       },
     ],
