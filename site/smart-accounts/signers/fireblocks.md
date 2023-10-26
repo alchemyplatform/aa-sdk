@@ -3,13 +3,19 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Fireblocks
+      content: Fireblocks Integration Guide
   - - meta
     - name: description
-      content: Guide for using Fireblocks as a signer
+      content: Follow this integration guide to use Fireblocks as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Guide for using Fireblocks as a signer
+      content: Follow this integration guide to use Fireblocks as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+  - - meta
+    - name: twitter:title
+      content: Fireblocks Integration Guide
+  - - meta
+    - name: twitter:description
+      content: Follow this integration guide to use Fireblocks as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
 # Fireblocks

@@ -6,13 +6,22 @@ head:
       content: Sponsoring Gas
   - - meta
     - name: description
-      content: Guide to Sponsor Gas of an account
+      content: Follow this guide to sponsor gas for User Operations from any ERC-4337 smart account. Account Kit is a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Guide to Sponsor Gas of an account
+      content: Follow this guide to sponsor gas for User Operations from any ERC-4337 smart account. Account Kit is a vertically integrated stack for building apps that support ERC-4337.
+  - - meta
+    - name: twitter:title
+      content: Sponsoring Gas
+  - - meta
+    - name: twitter:description
+      content: Follow this guide to sponsor gas for User Operations from any ERC-4337 smart account. Account Kit is a vertically integrated stack for building apps that support ERC-4337.
+  - - meta
+    - name: twitter:card
+      content: summary
 prev:
-  text: Integrating a Signer
-  link: /smart-accounts/signers/overview
+  text: Choosing a Signer
+  link: /smart-accounts/signers/choosing-a-signer
 ---
 
 # Sponsoring Gas

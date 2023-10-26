@@ -3,13 +3,19 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Package Overview
+      content: Packages Overview
   - - meta
     - name: description
-      content: Overview of the packges available in the Account Kit SDK
+      content: Explore the benefits and tradeoffs of four different packages that can be used with Account Kit namely aa-core, aa-alchemy, aa-accounts, and aa-ethers.
   - - meta
     - property: og:description
-      content: Overview of the packges available in the Account Kit SDK
+      content: Explore the benefits and tradeoffs of four different packages that can be used with Account Kit namely aa-core, aa-alchemy, aa-accounts, and aa-ethers.
+  - - meta
+    - name: twitter:title
+      content: Packages Overview
+  - - meta
+    - name: twitter:description
+      content: Explore the benefits and tradeoffs of four different packages that can be used with Account Kit namely aa-core, aa-alchemy, aa-accounts, and aa-ethers.
 next:
   text: Smart Accounts Overview
   link: /smart-accounts/overview

@@ -6,10 +6,16 @@ head:
       content: Why Account Kit
   - - meta
     - name: description
-      content: Learn why we decided to build Account Kit and how it can help you provide seamless UX to your users
+      content: Learn the motivations behind Account Kit, and discover how it can help you provide seamless UX to your users with smart accounts.
   - - meta
     - property: og:description
-      content: Learn why we decided to build Account Kit and how it can help you provide seamless UX to your users
+      content: Learn the motivations behind Account Kit, and discover how it can help you provide seamless UX to your users with smart accounts.
+  - - meta
+    - name: twitter:title
+      content: Why Account Kit
+  - - meta
+    - name: twitter:description
+      content: Learn the motivations behind Account Kit, and discover how it can help you provide seamless UX to your users with smart accounts.
 ---
 
 # Why Account Kit
@@ -61,7 +67,7 @@ Streamline your sign up flow with simple web2 login options supported by Account
 
 Account Kit integrates all the leading wallet Signers with bespoke integration guides for [Magic](/smart-accounts/signers/magic), [web3auth](/smart-accounts/signers/web3auth), [Turnkey](/smart-accounts/signers/turnkey), [Privy](/smart-accounts/signers/privy), [Dynamic](/smart-accounts/signers/dynamic), [Fireblocks](/smart-accounts/signers/fireblocks), [Portal](/smart-accounts/signers/portal), [Capsule](/smart-accounts/signers/capsule) and [Lit Protocol](/smart-accounts/signers/lit). Account Kit even supports self-custodial wallets like Metamask or Ledger. Users can even change their signer later via Account Kit’s [ownership transfer](/smart-accounts/transferring-ownership) functionality.
 
-Learn [how to choose the right signer for your use case in this doc](/smart-accounts/signers/overview).
+Learn [how to choose the right signer for your use case in this doc](/smart-accounts/signers/choosing-a-signer).
 
 ## Sponsor gas
 

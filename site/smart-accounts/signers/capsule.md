@@ -3,16 +3,22 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Capsule
+      content: Capsule Integration Guide
   - - meta
     - name: description
-      content: Guide to use Capsule as a signer
+      content: Follow this integration guide to use Capsule as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Guide to use Capsule as a signer
+      content: Follow this integration guide to use Capsule as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+  - - meta
+    - name: twitter:title
+      content: Capsule Integration Guide
+  - - meta
+    - name: twitter:description
+      content: Follow this integration guide to use Capsule as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
-# Capsule
+# Capsule Integration Guide
 
 [Capsule](https://usecapsule.com/) is a signing solution that you can use to create secure, embedded [MPC wallets](https://www.alchemy.com/overviews/mpc-wallet) with just an email or a social login. Capsule-enabled wallets are portable across applications, recoverable, and programmable, so your users do not need to create different signers or contract accounts for every application they use.
 

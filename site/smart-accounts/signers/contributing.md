@@ -3,16 +3,22 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Contributing to Signer Docs
+      content: Contributing Your Signer
   - - meta
     - name: description
-      content: How to contribute a signer to the docs
+      content: Follow this guide to contribute a new signer to the Account Kit documentation, and enable developers to sign ERC-4337 transactions with your signer.
   - - meta
     - property: og:description
-      content: How to contribute a signer to the docs
+      content: Follow this guide to contribute a new signer to the Account Kit documentation, and enable developers to sign ERC-4337 transactions with your signer.
+  - - meta
+    - name: twitter:title
+      content: Contributing Your Signer
+  - - meta
+    - name: twitter:description
+      content: Follow this guide to contribute a new signer to the Account Kit documentation, and enable developers to sign ERC-4337 transactions with your signer.
 ---
 
-# Adding Your Signer to This List
+# Contributing Your Signer
 
 If you'd like to add your signer to this list, we welcome PRs! Here's how to do it:
 

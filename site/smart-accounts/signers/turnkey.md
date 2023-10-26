@@ -3,16 +3,22 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Turnkey
+      content: Turnkey Integration Guide
   - - meta
     - name: description
-      content: Guide to use Turnkey as a signer
+      content: Follow this integration guide to use Turnkey as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Guide to use Turnkey as a signer
+      content: Follow this integration guide to use Turnkey as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+  - - meta
+    - name: twitter:title
+      content: Turnkey Integration Guide
+  - - meta
+    - name: twitter:description
+      content: Follow this integration guide to use Turnkey as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
-# Turnkey
+# Turnkey Integration Guide
 
 [Turnkey](https://turnkey.com) provides simple APIs to securely manage your private keys. With Turnkey, users are able to spin up thousands of wallets and sign millions of transactions, all without compromising on security.
 

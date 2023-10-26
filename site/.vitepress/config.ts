@@ -33,13 +33,13 @@ export default defineConfig({
 
     sidebar: [
       {
-        text: "Introduction",
+        text: "Overview",
         items: [
           { text: "Why Account Kit", link: "/why-account-kit" },
-          { text: "Overview", link: "/introduction" },
-          { text: "Getting Started", link: "/getting-started" },
+          { text: "Introduction", link: "/introduction" },
+          { text: "Getting Started Guide", link: "/getting-started" },
           {
-            text: "Package Overview",
+            text: "Packages Overview",
             link: "/package-overview",
           },
           {
@@ -49,18 +49,21 @@ export default defineConfig({
         ],
       },
       {
-        text: "Using Smart Accounts",
+        text: "Choosing a Smart Account",
         base: "/smart-accounts",
         items: [
           { text: "Overview", link: "/overview" },
           {
-            text: "Integrating a Smart Account",
+            text: "Choosing a Smart Account",
             base: "/smart-accounts/accounts",
-            link: "/overview",
+            link: "/choosing-a-smart-account",
             items: [
-              { text: "Light Account", link: "/light-account" },
-              { text: "Modular Account (soon)", link: "/modular-account" },
-              { text: "Use Your Own Account", link: "/using-your-own" },
+              { text: "Light Account Smart Contract", link: "/light-account" },
+              {
+                text: "Modular Account Smart Contract",
+                link: "/modular-account",
+              },
+              { text: "Using Your Own Smart Account", link: "/using-your-own" },
               {
                 text: "Deployment Addresses",
                 link: "/deployment-addresses",
@@ -68,22 +71,26 @@ export default defineConfig({
             ],
           },
           {
-            text: "Integrating a Signer",
+            text: "Choosing a Signer",
             base: "/smart-accounts/signers",
-            link: "/overview",
+            link: "/choosing-a-signer",
             collapsed: true,
             items: [
-              { text: "Magic", link: "/magic" },
-              { text: "Web3Auth", link: "/web3auth" },
-              { text: "Turnkey", link: "/turnkey" },
-              { text: "Privy", link: "/privy" },
+              { text: "Magic Link Integration Guide", link: "/magic" },
+              { text: "Web3Auth Integration Guide", link: "/web3auth" },
+              { text: "Turnkey Integration Guide", link: "/turnkey" },
+              { text: "Privy Integration Guide", link: "/privy" },
               { text: "Dynamic", link: "/dynamic" },
               { text: "Fireblocks", link: "/fireblocks" },
-              { text: "Portal", link: "/portal" },
-              { text: "Capsule", link: "/capsule" },
-              { text: "Lit Protocol", link: "/lit" },
-              { text: "Externally Owned Account", link: "/eoa" },
-              { text: "Custom Signer", link: "/custom-signer" },
+              { text: "Portal Integration Guide", link: "/portal" },
+              { text: "Capsule Integration Guide", link: "/capsule" },
+              { text: "Lit Protocol Integration Guide", link: "/lit" },
+              { text: "EOA Integration Guide", link: "/eoa" },
+              {
+                text: "How to Use Your Own Account Signer",
+                link: "/custom-signer",
+              },
+              { text: "Contributing Your Signer", link: "/contributing" },
             ],
           },
           { text: "Sponsoring Gas", link: "/sponsoring-gas" },
