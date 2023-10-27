@@ -50,7 +50,6 @@ const provider = new KernelAccountProvider(
     new KernelSmartContractAccount({
       owner,
       index: 0n,
-      entryPointAddress,
       chain,
       factoryAddress: KERNEL_ACCOUNT_FACTORY_ADDRESS,
       rpcClient,

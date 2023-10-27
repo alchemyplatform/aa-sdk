@@ -1,4 +1,8 @@
-import { SimpleSmartContractAccount, getChain } from "@alchemy/aa-core";
+import {
+  SimpleSmartContractAccount,
+  getChain,
+  getDefaultSimpleAccountFactoryAddress,
+} from "@alchemy/aa-core";
 import { Wallet } from "@ethersproject/wallet";
 import { Alchemy, Network, type AlchemyProvider } from "alchemy-sdk";
 import { EthersProviderAdapter } from "../../src/provider-adapter.js";
@@ -37,10 +41,11 @@ const givenConnectedProvider = ({
   EthersProviderAdapter.fromEthersProvider(alchemyProvider).connectToAccount(
     (rpcClient) => {
       const account = new SimpleSmartContractAccount({
-        entryPointAddress: "0xENTRYPOINT_ADDRESS",
         chain: getChain(alchemyProvider.network.chainId),
         owner: convertWalletToAccountSigner(owner),
-        factoryAddress: "0xSIMPLE_ACCOUNT_FACTORY_ADDRESS",
+        factoryAddress: getDefaultSimpleAccountFactoryAddress(
+          getChain(alchemyProvider.network.chainId)
+        ),
         rpcClient,
       });
 

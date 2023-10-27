@@ -19,6 +19,7 @@ import { Logger } from "../logger.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import { wrapSignatureWith6492 } from "../signer/utils.js";
 import type { BatchUserOperationCallData } from "../types.js";
+import { getDefaultEntryPointAddress } from "../utils/defaults.js";
 import type { ISmartContractAccount, SignTypedDataParams } from "./types.js";
 
 export enum DeploymentState {
@@ -31,10 +32,24 @@ export interface BaseSmartAccountParams<
   TTransport extends SupportedTransports = Transport
 > {
   rpcClient: string | PublicErc4337Client<TTransport>;
-  entryPointAddress: Address;
   factoryAddress: Address;
-  owner?: SmartAccountSigner | undefined;
   chain: Chain;
+
+  /**
+   * The address of the entry point contract.
+   * If not provided, the default entry point contract will be used.
+   * Check out https://docs.alchemy.com/reference/eth-supportedentrypoints for all the supported entrypoints
+   */
+  entryPointAddress?: Address;
+
+  /**
+   * Owner account signer for the account if there is one.
+   */
+  owner?: SmartAccountSigner | undefined;
+
+  /**
+   * The address of the account if it is already deployed.
+   */
   accountAddress?: Address;
 }
 
@@ -57,7 +72,8 @@ export abstract class BaseSmartContractAccount<
     | PublicErc4337Client<HttpTransport>;
 
   constructor(params: BaseSmartAccountParams<TTransport>) {
-    this.entryPointAddress = params.entryPointAddress;
+    this.entryPointAddress =
+      params.entryPointAddress ?? getDefaultEntryPointAddress(params.chain);
 
     const rpcUrl =
       typeof params.rpcClient === "string"
@@ -99,7 +115,7 @@ export abstract class BaseSmartContractAccount<
     this.owner = params.owner;
 
     this.entryPoint = getContract({
-      address: params.entryPointAddress,
+      address: this.entryPointAddress,
       abi: EntryPointAbi,
       // Need to cast this as PublicClient or else it breaks ABI typing.
       // This is valid because our PublicClient is a subclass of PublicClient

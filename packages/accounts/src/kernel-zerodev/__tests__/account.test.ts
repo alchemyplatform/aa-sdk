@@ -1,7 +1,4 @@
-import {
-  LocalAccountSigner,
-  getDefaultEntryPointAddress,
-} from "@alchemy/aa-core";
+import { LocalAccountSigner } from "@alchemy/aa-core";
 import { type Address, type Hex } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
@@ -14,8 +11,6 @@ import { KernelBaseValidator, ValidatorMode } from "../validator/base.js";
 import { MockSigner } from "./mocks/mock-signer.js";
 
 describe("Kernel Account Tests", () => {
-  const entryPointAddress = getDefaultEntryPointAddress(polygonMumbai);
-
   //any wallet should work
   const config = {
     privateKey: generatePrivateKey(),
@@ -25,7 +20,6 @@ describe("Kernel Account Tests", () => {
     validatorAddress: "0x180D6465F921C7E0DEA0040107D342c87455fFF5" as Address,
     accountFactoryAddress:
       "0x5D006d3880645ec6e254E18C1F879DAC9Dd71A39" as Address,
-    entryPointAddress,
   };
 
   const owner = LocalAccountSigner.privateKeyToAccountSigner(config.privateKey);
@@ -51,7 +45,6 @@ describe("Kernel Account Tests", () => {
   function account(index: bigint, owner = mockOwner) {
     const accountParams: KernelSmartAccountParams = {
       rpcClient: provider.rpcClient,
-      entryPointAddress: config.entryPointAddress,
       chain: config.chain,
       owner: owner,
       factoryAddress: config.accountFactoryAddress,

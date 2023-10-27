@@ -17,8 +17,6 @@ const entryPointAddress = getDefaultEntryPointAddress(chain);
 
 describe("Base Tests", () => {
   let retryMsDelays: number[] = [];
-  let dummyEntryPointAddress =
-    "0x1234567890123456789012345678901234567890" as Address;
 
   const providerMock = new SmartAccountProvider({
     rpcProvider: "ALCHEMY_RPC_URL",

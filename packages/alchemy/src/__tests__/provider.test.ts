@@ -87,7 +87,7 @@ const givenConnectedProvider = ({
       entryPointAddress: dummyEntryPointAddress,
       chain,
       owner,
-      factoryAddress: "0xSIMPLE_ACCOUNT_FACTORY_ADDRESS",
+      factoryAddress: AACoreModule.getDefaultSimpleAccountFactoryAddress(chain),
       rpcClient: provider,
     });
 

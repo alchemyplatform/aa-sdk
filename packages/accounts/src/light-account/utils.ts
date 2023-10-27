@@ -1,4 +1,3 @@
-import { chains } from "@alchemy/aa-core";
 import type { Address, Chain } from "viem";
 import {
   arbitrum,
@@ -15,10 +14,10 @@ import {
 } from "viem/chains";
 
 /**
- * Utility method returning the default light account factory address given a {@link chains.Chain} object
+ * Utility method returning the default light account factory address given a {@link Chain} object
  *
- * @param chain - a {@link chains.Chain} object
- * @returns a {@link abi.Address} for the given chain
+ * @param chain - a {@link Chain} object
+ * @returns a {@link Address} for the given chain
  * @throws if the chain doesn't have an address currently deployed
  */
 export const getDefaultLightAccountFactoryAddress = (chain: Chain): Address => {

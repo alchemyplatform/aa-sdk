@@ -4,7 +4,6 @@ import {
   LocalAccountSigner,
   SimpleSmartContractAccount,
   SmartAccountProvider,
-  getDefaultEntryPointAddress,
   getDefaultSimpleAccountFactoryAddress,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
@@ -17,21 +16,18 @@ const owner: SmartAccountSigner =
   LocalAccountSigner.mnemonicToAccountSigner(MNEMONIC);
 
 const chain = polygonMumbai;
-const entryPointAddress = getDefaultEntryPointAddress(chain);
-const factoryAddress = getDefaultSimpleAccountFactoryAddress(chain);
 
 // 2. initialize the provider and connect it to the account
 const provider = new SmartAccountProvider({
   // the demo key below is public and rate-limited, it's better to create a new one
   // you can get started with a free account @ https://www.alchemy.com/
   rpcProvider: "https://polygon-mumbai.g.alchemy.com/v2/demo",
-  chain: polygonMumbai,
+  chain,
 }).connect(
   (rpcClient) =>
     new SimpleSmartContractAccount({
-      entryPointAddress,
-      chain: polygonMumbai,
-      factoryAddress,
+      chain,
+      factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
       rpcClient,
       owner,
       // optionally if you already know the account's address
