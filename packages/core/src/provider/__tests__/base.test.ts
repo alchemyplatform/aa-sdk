@@ -185,7 +185,19 @@ describe("Base Tests", () => {
           entryPointAddress: 1 as unknown as Address,
           chain: polygonMumbai,
         })
-    ).toThrowError("invalid parameters passed to SmartAccountProvider");
+    ).toThrowErrorMatchingInlineSnapshot(`
+      "[
+        {
+          \\"code\\": \\"invalid_type\\",
+          \\"expected\\": \\"string\\",
+          \\"received\\": \\"number\\",
+          \\"path\\": [
+            \\"entryPointAddress\\"
+          ],
+          \\"message\\": \\"Expected string, received number\\"
+        }
+      ]"
+    `);
   });
 
   it("should correctly do runtime validation 2", () => {
@@ -193,10 +205,29 @@ describe("Base Tests", () => {
       () =>
         new SmartAccountProvider({
           rpcProvider: "ALCHEMY_RPC_URL",
-          entryPointAddress: dummyEntryPointAddress,
+          entryPointAddress: 1 as unknown as Address,
           chain: "0x1" as unknown as Chain,
         })
-    ).toThrowError("invalid parameters passed to SmartAccountProvider");
+    ).toThrowErrorMatchingInlineSnapshot(`
+      "[
+        {
+          \\"code\\": \\"custom\\",
+          \\"message\\": \\"Invalid input\\",
+          \\"path\\": [
+            \\"chain\\"
+          ]
+        },
+        {
+          \\"code\\": \\"invalid_type\\",
+          \\"expected\\": \\"string\\",
+          \\"received\\": \\"number\\",
+          \\"path\\": [
+            \\"entryPointAddress\\"
+          ],
+          \\"message\\": \\"Expected string, received number\\"
+        }
+      ]"
+    `);
   });
 
   const givenGetUserOperationFailsNTimes = (times: number) => {

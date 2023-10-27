@@ -47,7 +47,11 @@ export const SmartAccountProviderConfigSchema = <
         ),
     ]),
     chain: z.any().refine<Chain>((chain): chain is Chain => {
-      if (!("id" in chain) || typeof chain.id !== "number") {
+      if (
+        !(typeof chain === "object") ||
+        !("id" in chain) ||
+        typeof chain.id !== "number"
+      ) {
         return false;
       }
 

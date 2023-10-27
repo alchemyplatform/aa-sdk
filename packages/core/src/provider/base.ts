@@ -81,13 +81,7 @@ export class SmartAccountProvider<
     | PublicErc4337Client<HttpTransport>;
 
   constructor(config: SmartAccountProviderConfig<TTransport>) {
-    try {
-      SmartAccountProviderConfigSchema<TTransport | HttpTransport>().parse(
-        config
-      );
-    } catch (e) {
-      throw new Error("invalid parameters passed to SmartAccountProvider");
-    }
+    SmartAccountProviderConfigSchema<TTransport>().parse(config);
 
     const { rpcProvider, entryPointAddress, chain, opts } = config;
 
