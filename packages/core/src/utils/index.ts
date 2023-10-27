@@ -1,7 +1,12 @@
 import type { Address, Hash, Hex } from "viem";
 import { encodeAbiParameters, hexToBigInt, keccak256, toHex } from "viem";
 import * as chains from "viem/chains";
-import type { PromiseOrValue, UserOperationRequest } from "../types.js";
+import type {
+  DefaultAddressesMap,
+  PromiseOrValue,
+  UserOperationRequest,
+  UserOperationStruct,
+} from "../types.js";
 
 /**
  * Utility method for converting a chainId to a {@link chains.Chain} object
@@ -155,5 +160,100 @@ export function defineReadOnly<T, K extends keyof T>(
     writable: false,
   });
 }
+
+export async function fetchWithTimeout(
+  url: string,
+  timeout: number
+): Promise<Response> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+  try {
+    const response = await fetch(url, { signal: controller.signal });
+    clearTimeout(timeoutId);
+    return response;
+  } catch (error) {
+    clearTimeout(timeoutId);
+    throw error;
+  }
+}
+
+/**
+ * Utility method for asserting a {@link UserOperationStruct} is a {@link UserOperationRequest}
+ *
+ * @param request a {@link UserOperationStruct} to validate
+ * @returns a type guard that asserts the {@link UserOperationStruct} is a {@link UserOperationRequest}
+ */
+export function isValidRequest(
+  request: UserOperationStruct
+): request is UserOperationRequest {
+  // These are the only ones marked as optional in the interface above
+  return (
+    !!request.callGasLimit &&
+    !!request.maxFeePerGas &&
+    request.maxPriorityFeePerGas != null &&
+    !!request.preVerificationGas &&
+    !!request.verificationGasLimit
+  );
+}
+
+const ACCOUNTKIT_DEFAULT_ADDRESSES =
+  "https://raw.githubusercontent.com/alchemyplatform/accountkit-defaults/main/chain-addresses.json";
+
+/**
+ * Utility method returning the default deployed addresses of account kit related addresses
+ * such as simple & light account factory addresses, entrypoint singleton contract address
+ * given a {@link chains.Chain} object
+ *
+ * @param chain - a {@link chains.Chain} object
+ * @returns a {@link abi.Address} for the given chain
+ * @throws if the chain doesn't have an address currently deployed
+ */
+export const getDefaultAddressMap = async (): Promise<Record<
+  number,
+  DefaultAddressesMap
+> | null> => {
+  try {
+    const res = await fetchWithTimeout(ACCOUNTKIT_DEFAULT_ADDRESSES, 1000);
+    if (!res.ok) {
+      throw new Error("could not fetch default addresses");
+    }
+    return (await res.json()) as Record<number, DefaultAddressesMap>;
+  } catch (e) {
+    return null;
+  }
+};
+
+/**
+ * Utility method returning the entry point contrafct address given a {@link chains.Chain} object
+ *
+ * @param chain - a {@link chains.Chain} object
+ * @returns a {@link abi.Address} for the given chain
+ * @throws if the chain doesn't have an address currently deployed
+ */
+export const getDefaultEntryPointContract = async (
+  chain: chains.Chain
+): Promise<Address> => {
+  const defaultAddressMap = await getDefaultAddressMap();
+  if (defaultAddressMap?.[chain.id]?.entryPointContractAddress) {
+    return defaultAddressMap[chain.id].entryPointContractAddress as Address;
+  }
+
+  switch (chain.id) {
+    case chains.mainnet.id:
+    case chains.sepolia.id:
+    case chains.goerli.id:
+    case chains.polygon.id:
+    case chains.polygonMumbai.id:
+    case chains.optimism.id:
+    case chains.optimismGoerli.id:
+    case chains.arbitrum.id:
+    case chains.arbitrumGoerli.id:
+    case chains.base.id:
+    case chains.baseGoerli.id:
+      return "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
+  }
+  throw new Error("could not find entry point contract address");
+};
 
 export * from "./bigint.js";

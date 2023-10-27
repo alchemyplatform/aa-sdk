@@ -21,7 +21,6 @@ import type {
   SupportedTransports,
 } from "../client/types.js";
 import {
-  isValidRequest,
   type BatchUserOperationCallData,
   type UserOperationCallData,
   type UserOperationOverrides,
@@ -37,6 +36,7 @@ import {
   deepHexlify,
   defineReadOnly,
   getUserOperationHash,
+  isValidRequest,
   resolveProperties,
   type Deferrable,
 } from "../utils/index.js";
