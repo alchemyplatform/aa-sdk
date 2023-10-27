@@ -1,6 +1,5 @@
 import type { Address } from "abitype";
 import type {
-  Chain,
   Hash,
   Hex,
   HttpTransport,
@@ -26,7 +25,10 @@ import type {
   UserOperationStruct,
 } from "../types.js";
 import type { Deferrable } from "../utils";
-import type { SmartAccountProviderOptsSchema } from "./validation.js";
+import type {
+  SmartAccountProviderConfigSchema,
+  SmartAccountProviderOptsSchema,
+} from "./schema.js";
 
 type WithRequired<T, K extends keyof T> = Required<Pick<T, K>>;
 type WithOptional<T, K extends keyof T> = Pick<Partial<T>, K>;
@@ -83,17 +85,9 @@ export type SmartAccountProviderOpts = z.infer<
   typeof SmartAccountProviderOptsSchema
 >;
 
-/**
- * @see SmartAccountProviderConfigSchema for corresponding runtime validation
- */
 export type SmartAccountProviderConfig<
   TTransport extends SupportedTransports = Transport
-> = {
-  rpcProvider: string | PublicErc4337Client<TTransport>;
-  chain: Chain;
-  entryPointAddress: Address;
-  opts?: SmartAccountProviderOpts;
-};
+> = z.infer<ReturnType<typeof SmartAccountProviderConfigSchema<TTransport>>>;
 
 // TODO: this also will need to implement EventEmitteer
 export interface ISmartAccountProvider<

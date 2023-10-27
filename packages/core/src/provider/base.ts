@@ -40,6 +40,7 @@ import {
   resolveProperties,
   type Deferrable,
 } from "../utils/index.js";
+import { SmartAccountProviderConfigSchema } from "./schema.js";
 import type {
   AccountMiddlewareFn,
   AccountMiddlewareOverrideFn,
@@ -51,7 +52,6 @@ import type {
   SendUserOperationResult,
   SmartAccountProviderConfig,
 } from "./types.js";
-import { SmartAccountProviderConfigSchema } from "./validation.js";
 
 export const noOpMiddleware: AccountMiddlewareFn = async (
   struct: Deferrable<UserOperationStruct>
@@ -82,7 +82,9 @@ export class SmartAccountProvider<
 
   constructor(config: SmartAccountProviderConfig<TTransport>) {
     try {
-      SmartAccountProviderConfigSchema.parse(config);
+      SmartAccountProviderConfigSchema<TTransport | HttpTransport>().parse(
+        config
+      );
     } catch (e) {
       throw new Error("invalid parameters passed to SmartAccountProvider");
     }
