@@ -537,6 +537,16 @@ export class SmartAccountProvider<
     ) => TAccount
   ): this & { account: TAccount } => {
     const account = fn(this.rpcClient);
+
+    // sanity check
+    if (account.getEntryPointAddress() !== this.entryPointAddress) {
+      throw new Error(
+        `Account entryPoint address: ${account.getEntryPointAddress()} does not match the current provider's entryPoint address: ${
+          this.entryPointAddress
+        }`
+      );
+    }
+
     defineReadOnly(this, "account", account);
 
     if (this.rpcClient.transport.type === "http") {

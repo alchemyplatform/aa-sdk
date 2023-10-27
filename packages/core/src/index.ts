@@ -45,7 +45,7 @@ export {
   defineReadOnly,
   getChain,
   getDefaultEntryPointAddress,
-  getDefaultSimpleAccountFactoryAddressAddress as getDefaultSimpleAccountFactoryAddress,
+  getDefaultSimpleAccountFactoryAddressAddress,
   getUserOperationHash,
   resolveProperties,
 } from "./utils/index.js";

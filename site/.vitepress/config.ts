@@ -269,12 +269,24 @@ export default defineConfig({
                     link: "/getNonce",
                   },
                   {
+                    text: "getOwner",
+                    link: "/getOwner",
+                  },
+                  {
                     text: "getDeploymentState",
                     link: "/getDeploymentState",
                   },
                   {
                     text: "isAccountDeployed",
                     link: "/isAccountDeployed",
+                  },
+                  {
+                    text: "getFactoryAddress",
+                    link: "/getFactoryAddress",
+                  },
+                  {
+                    text: "getEntryPointAddress",
+                    link: "/getEntryPointAddress",
                   },
                 ],
               },

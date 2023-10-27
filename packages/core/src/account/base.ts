@@ -305,6 +305,10 @@ export abstract class BaseSmartContractAccount<
     return this.factoryAddress;
   }
 
+  getEntryPointAddress(): Address {
+    return this.entryPointAddress;
+  }
+
   // Extra implementations
   async isAccountDeployed(): Promise<boolean> {
     return (await this.getDeploymentState()) === DeploymentState.DEPLOYED;

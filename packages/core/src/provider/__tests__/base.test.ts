@@ -77,6 +77,7 @@ describe("Base Tests", () => {
       rpcClient: providerMock.rpcClient,
       getAddress: async () => "0xMOCK_ADDRESS",
       getFactoryAddress: () => "0xMOCK_FACOTRY_ADDRESS",
+      getEntryPointAddress: () => entryPointAddress,
       getOwner: () => undefined,
     } as any;
 
@@ -100,6 +101,20 @@ describe("Base Tests", () => {
         ],
       ]
     `);
+  });
+
+  it("should throw error if connected account has different entry point address than the provider", async () => {
+    const account = {
+      chain: polygonMumbai,
+      entryPointAddress: "0xOTHER_ENTRY_POINT_ADDRESS",
+      rpcClient: providerMock.rpcClient,
+      getAddress: async () => "0xMOCK_ADDRESS",
+      getFactoryAddress: () => "0xMOCK_FACOTRY_ADDRESS",
+      getEntryPointAddress: () => "0xOTHER_ENTRY_POINT_ADDRESS",
+      getOwner: () => undefined,
+    } as any;
+
+    expect(() => providerMock.connect(() => account)).toThrow();
   });
 
   it("should emit disconnected event on disconnect", async () => {

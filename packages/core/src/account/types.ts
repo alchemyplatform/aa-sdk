@@ -89,4 +89,9 @@ export interface ISmartContractAccount {
    * @returns the address of the factory contract for the smart contract account
    */
   getFactoryAddress(): Address;
+
+  /**
+   * @returns the address of the entry point contract for the smart contract account
+   */
+  getEntryPointAddress(): Address;
 }
