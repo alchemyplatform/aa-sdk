@@ -1,9 +1,11 @@
 import {
   SmartAccountProvider,
-  createPublicErc4337Client,
   deepHexlify,
+  getUserOperationHash,
+  isValidRequest,
   resolveProperties,
   type AccountMiddlewareFn,
+  type UserOperationCallData,
 } from "@alchemy/aa-core";
 import { Alchemy } from "alchemy-sdk";
 import { type HttpTransport } from "viem";
@@ -14,6 +16,9 @@ import {
   optimismGoerli,
 } from "viem/chains";
 import { SupportedChains } from "./chains.js";
+import { createAlchemyEnhanced4337Client } from "./client/factory.js";
+import type { SimulateExecutionResponse } from "./client/interfaces.js";
+import type { AlchemyEnhanced4337Client } from "./client/types.js";
 import { withAlchemyGasFeeEstimator } from "./middleware/gas-fees.js";
 import {
   withAlchemyGasManager,
@@ -29,6 +34,7 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
   private pvgBuffer: bigint;
   private feeOptsSet: boolean;
   private rpcUrl: string;
+  private client: AlchemyEnhanced4337Client<HttpTransport>;
 
   constructor(config: AlchemyProviderConfig) {
     AlchemyProviderConfigSchema.parse(config);
@@ -46,7 +52,7 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
         ? `${_chain.rpcUrls.alchemy.http[0]}/${connectionConfig.apiKey ?? ""}`
         : connectionConfig.rpcUrl;
 
-    const client = createPublicErc4337Client({
+    const client = createAlchemyEnhanced4337Client({
       chain: _chain,
       rpcUrl,
       ...(connectionConfig.jwt != null && {
@@ -88,6 +94,7 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
 
     this.feeOptsSet = !!feeOpts;
     this.rpcUrl = rpcUrl;
+    this.client = client;
   }
 
   override gasEstimator: AccountMiddlewareFn = async (struct) => {
@@ -103,6 +110,38 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
       ...struct,
       ...estimates,
     };
+  };
+
+  simulateUserOperationExecution = async (
+    uoCallData: UserOperationCallData
+  ): Promise<SimulateExecutionResponse | SimulateExecutionResponse[]> => {
+    const uoStruct = await this.buildUserOperation(uoCallData);
+
+    if (!this.account) {
+      throw new Error("account not connected");
+    }
+
+    const request = deepHexlify(uoStruct);
+    if (!isValidRequest(request)) {
+      // this pretty prints the uo
+      throw new Error(
+        `Request is missing parameters. All properties on UserOperationStruct must be set. uo: ${JSON.stringify(
+          request,
+          null,
+          2
+        )}`
+      );
+    }
+
+    request.signature = (await this.account.signMessage(
+      getUserOperationHash(
+        request,
+        this.entryPointAddress as `0x${string}`,
+        BigInt(this.chain.id)
+      )
+    )) as `0x${string}`;
+
+    return this.client.simulateUserOperationExecution(request);
   };
 
   /**

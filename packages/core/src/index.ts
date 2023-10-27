@@ -58,6 +58,7 @@ export {
   getDefaultEntryPointAddress,
   getDefaultSimpleAccountFactoryAddress,
   getUserOperationHash,
+  isValidRequest,
   resolveProperties,
 } from "./utils/index.js";
 

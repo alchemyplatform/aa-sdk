@@ -1,7 +1,7 @@
-import * as AACoreModule from "@alchemy/aa-core";
 import {
   SimpleSmartContractAccount,
   getDefaultEntryPointAddress,
+  getDefaultSimpleAccountFactoryAddress,
   type BatchUserOperationCallData,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
@@ -9,6 +9,7 @@ import { Alchemy, Network } from "alchemy-sdk";
 import { toHex, type Address, type Chain, type HDAccount } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
+import * as AlchemyClient from "../client/factory.js";
 import { AlchemyProvider } from "../provider.js";
 
 describe("Alchemy Provider Tests", () => {
@@ -28,7 +29,7 @@ describe("Alchemy Provider Tests", () => {
   const chain = polygonMumbai;
 
   it("should have a JWT property", async () => {
-    const spy = vi.spyOn(AACoreModule, "createPublicErc4337Client");
+    const spy = vi.spyOn(AlchemyClient, "createAlchemyEnhanced4337Client");
     givenConnectedProvider({ owner, chain });
     expect(spy.mock.calls[0][0].fetchOptions).toMatchInlineSnapshot(`
       {
@@ -153,7 +154,7 @@ const givenConnectedProvider = ({
       entryPointAddress: dummyEntryPointAddress,
       chain,
       owner,
-      factoryAddress: AACoreModule.getDefaultSimpleAccountFactoryAddress(chain),
+      factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
       rpcClient: provider,
     });
 
