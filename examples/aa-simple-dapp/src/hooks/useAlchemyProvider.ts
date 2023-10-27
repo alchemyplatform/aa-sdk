@@ -1,26 +1,21 @@
-import {
-  chain,
-  gasManagerPolicyId,
-  lightAccountFactoryAddress,
-} from "@/config/client";
+import { chain, gasManagerPolicyId } from "@/config/client";
 import { getRpcUrl } from "@/config/rpc";
-import { LightSmartContractAccount } from "@alchemy/aa-accounts";
+import {
+  LightSmartContractAccount,
+  getDefaultLightAccountFactory,
+} from "@alchemy/aa-accounts";
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
-import { SmartAccountSigner } from "@alchemy/aa-core";
+import {
+  SmartAccountSigner,
+  getDefaultEntryPointContract,
+} from "@alchemy/aa-core";
 import { useCallback, useState } from "react";
 import { Address } from "viem";
 
-type AlchemyProviderProps = {
-  entryPointAddress: Address;
-};
-
-export const useAlchemyProvider = ({
-  entryPointAddress,
-}: AlchemyProviderProps) => {
+export const useAlchemyProvider = () => {
   const [provider, setProvider] = useState<AlchemyProvider>(
     new AlchemyProvider({
       chain,
-      entryPointAddress,
       rpcUrl: getRpcUrl(),
     })
   );
@@ -33,20 +28,19 @@ export const useAlchemyProvider = ({
             rpcClient: provider,
             owner: signer,
             chain,
-            entryPointAddress,
-            factoryAddress: lightAccountFactoryAddress,
+            entryPointAddress: getDefaultEntryPointContract(chain),
+            factoryAddress: getDefaultLightAccountFactory(chain),
             accountAddress: account,
           });
         })
         .withAlchemyGasManager({
           policyId: gasManagerPolicyId,
-          entryPoint: entryPointAddress,
         });
 
       setProvider(connectedProvider);
       return connectedProvider;
     },
-    [entryPointAddress, provider]
+    [provider]
   );
 
   const disconnectProviderFromAccount = useCallback(() => {

@@ -2,7 +2,6 @@ import {
   SmartAccountProvider,
   getChain,
   type AccountMiddlewareFn,
-  type Address,
   type FeeDataMiddleware,
   type GasEstimatorMiddleware,
   type HttpTransport,
@@ -17,7 +16,6 @@ import { AccountSigner } from "./account-signer.js";
 export type EthersProviderAdapterOpts =
   | {
       rpcProvider: string | PublicErc4337Client<HttpTransport>;
-      entryPointAddress: Address;
       chainId: number;
     }
   | {
@@ -35,7 +33,6 @@ export class EthersProviderAdapter extends JsonRpcProvider {
       const chain = getChain(opts.chainId);
       this.accountProvider = new SmartAccountProvider({
         rpcProvider: opts.rpcProvider,
-        entryPointAddress: opts.entryPointAddress,
         chain,
       });
     }
@@ -102,16 +99,11 @@ export class EthersProviderAdapter extends JsonRpcProvider {
    * Creates an instance of EthersProviderAdapter from an ethers.js JsonRpcProvider.
    *
    * @param provider - the ethers JSON RPC provider to convert
-   * @param entryPointAddress - the entrypoint address that will be used for UserOperations
    * @returns an instance of {@link EthersProviderAdapter}
    */
-  static fromEthersProvider(
-    provider: JsonRpcProvider,
-    entryPointAddress: Address
-  ): EthersProviderAdapter {
+  static fromEthersProvider(provider: JsonRpcProvider): EthersProviderAdapter {
     return new EthersProviderAdapter({
       rpcProvider: provider.connection.url,
-      entryPointAddress,
       chainId: provider.network.chainId,
     });
   }

@@ -1,12 +1,14 @@
 import {
   LocalAccountSigner,
   SmartAccountProvider,
+  getDefaultEntryPointContract,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import { isAddress, type Address, type Chain, type Hash } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import { sepolia } from "viem/chains";
 import { LightSmartContractAccount } from "../account.js";
+import { getDefaultLightAccountFactory } from "../utils.js";
 import {
   API_KEY,
   LIGHT_ACCOUNT_OWNER_MNEMONIC,
@@ -14,13 +16,11 @@ import {
   UNDEPLOYED_OWNER_MNEMONIC,
 } from "./constants.js";
 
-const ENTRYPOINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
-const LIGHT_ACCOUNT_FACTORY_ADDRESS =
-  "0xDC31c846DA74400C732edb0fE888A2e4ADfBb8b1";
-// todo(ajay): replace with official factory address when live
+const chain = sepolia;
+const entryPointAddress = getDefaultEntryPointContract(chain);
+const factoryAddress = getDefaultLightAccountFactory(chain);
 
 describe("Light Account Tests", () => {
-  const chain = sepolia;
   const owner: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
     LIGHT_ACCOUNT_OWNER_MNEMONIC
   );
@@ -190,15 +190,14 @@ const givenConnectedProvider = ({
   new SmartAccountProvider({
     rpcProvider:
       RPC_URL != null ? RPC_URL : `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
-    entryPointAddress: ENTRYPOINT_ADDRESS,
     chain,
   }).connect(
     (provider) =>
       new LightSmartContractAccount({
-        entryPointAddress: ENTRYPOINT_ADDRESS,
+        entryPointAddress,
         chain,
         owner,
-        factoryAddress: LIGHT_ACCOUNT_FACTORY_ADDRESS,
+        factoryAddress,
         rpcClient: provider,
         accountAddress,
       })

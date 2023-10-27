@@ -1,15 +1,14 @@
 import {
   deepHexlify,
+  getDefaultEntryPointContract,
   resolveProperties,
   type UserOperationRequest,
 } from "@alchemy/aa-core";
-import type { Address } from "viem";
 import type { AlchemyProvider } from "../provider.js";
 import type { ClientWithAlchemyMethods } from "./client.js";
 
 export interface AlchemyGasManagerConfig {
   policyId: string;
-  entryPoint: Address;
 }
 
 /**
@@ -82,6 +81,9 @@ const withAlchemyPaymasterAndDataMiddleware = (
     }
   },
   paymasterDataMiddleware: async (struct) => {
+    const entryPoint =
+      provider.account?.entryPointAddress ??
+      getDefaultEntryPointContract(provider.rpcClient.chain);
     const { paymasterAndData } = await (
       provider.rpcClient as ClientWithAlchemyMethods
     ).request({
@@ -89,7 +91,7 @@ const withAlchemyPaymasterAndDataMiddleware = (
       params: [
         {
           policyId: config.policyId,
-          entryPoint: config.entryPoint,
+          entryPoint,
           userOperation: deepHexlify(await resolveProperties(struct)),
         },
       ],
@@ -122,6 +124,10 @@ const withAlchemyGasAndPaymasterAndDataMiddleware = (
       };
     }
 
+    const entryPoint =
+      provider.account?.entryPointAddress ??
+      getDefaultEntryPointContract(provider.rpcClient.chain);
+
     const result = await (
       provider.rpcClient as ClientWithAlchemyMethods
     ).request({
@@ -129,7 +135,7 @@ const withAlchemyGasAndPaymasterAndDataMiddleware = (
       params: [
         {
           policyId: config.policyId,
-          entryPoint: config.entryPoint,
+          entryPoint,
           userOperation: userOperation,
           dummySignature: userOperation.signature,
           feeOverride: feeOverride,

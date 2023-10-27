@@ -1,8 +1,13 @@
+import { sepolia } from "viem/chains";
 import type { UserOperationRequest } from "../types";
-import { getUserOperationHash } from "../utils/index.js";
+import {
+  getDefaultEntryPointContract,
+  getUserOperationHash,
+} from "../utils/index.js";
 
 describe("Utils Tests", () => {
-  const ENTRYPOINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
+  const chain = sepolia;
+  const entryPointAddress = getDefaultEntryPointContract(chain);
 
   it("getUserOperationHash should correctly hash a request", () => {
     expect(
@@ -22,7 +27,7 @@ describe("Utils Tests", () => {
             "0xd16f93b584fbfdc03a5ee85914a1f29aa35c44fea5144c387ee1040a3c1678252bf323b7e9c3e9b4dfd91cca841fc522f4d3160a1e803f2bf14eb5fa037aae4a1b",
           verificationGasLimit: "0x114c2",
         } as UserOperationRequest,
-        ENTRYPOINT_ADDRESS as `0x${string}`,
+        entryPointAddress,
         80001n
       )
     ).toMatchInlineSnapshot(

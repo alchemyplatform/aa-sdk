@@ -2,6 +2,7 @@ import {
   SmartAccountProvider,
   createPublicErc4337Client,
   deepHexlify,
+  getDefaultEntryPointContract,
   resolveProperties,
   type AccountMiddlewareFn,
   type SmartAccountProviderConfig,
@@ -58,7 +59,6 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
 
   constructor({
     chain,
-    entryPointAddress,
     opts,
     feeOpts,
     ...connectionConfig
@@ -86,7 +86,7 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
       }),
     });
 
-    super({ rpcProvider: client, entryPointAddress, chain: _chain, opts });
+    super({ rpcProvider: client, chain: _chain, opts });
 
     withAlchemyGasFeeEstimator(
       this,
@@ -113,10 +113,13 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
   }
 
   override gasEstimator: AccountMiddlewareFn = async (struct) => {
+    const entryPoint =
+      this.account?.entryPointAddress ??
+      getDefaultEntryPointContract(this.chain);
     const request = deepHexlify(await resolveProperties(struct));
     const estimates = await this.rpcClient.estimateUserOperationGas(
       request,
-      this.entryPointAddress
+      entryPoint
     );
     estimates.preVerificationGas =
       (BigInt(estimates.preVerificationGas) * (100n + this.pvgBuffer)) / 100n;

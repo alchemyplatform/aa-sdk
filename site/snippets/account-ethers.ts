@@ -1,15 +1,17 @@
 /* via `aa-ethers`*/
 
-import { getChain, SimpleSmartContractAccount } from "@alchemy/aa-core";
+import {
+  getChain,
+  getDefaultEntryPointContract,
+  getDefaultSimpleAccountFactory,
+  SimpleSmartContractAccount,
+} from "@alchemy/aa-core";
 import {
   convertWalletToAccountSigner,
   EthersProviderAdapter,
 } from "@alchemy/aa-ethers";
 import { Wallet } from "@ethersproject/wallet";
 import { Alchemy, Network } from "alchemy-sdk";
-
-const SIMPLE_ACCOUNT_FACTORY_ADDRESS =
-  "0x9406Cc6185a346906296840746125a0E44976454";
 
 // 1. connect to an RPC Provider and a Wallet
 const alchemy = new Alchemy({
@@ -22,15 +24,18 @@ const owner = Wallet.fromMnemonic(MNEMONIC);
 // 2. Create the SimpleAccount signer
 // signer is an ethers.js Signer
 const signer = EthersProviderAdapter.fromEthersProvider(
-  alchemyProvider,
-  ENTRYPOINT_ADDRESS
+  alchemyProvider
 ).connectToAccount(
   (rpcClient) =>
     new SimpleSmartContractAccount({
-      entryPointAddress: ENTRYPOINT_ADDRESS,
+      entryPointAddress: getDefaultEntryPointContract(
+        getChain(alchemyProvider.network.chainId)
+      ),
       chain: getChain(alchemyProvider.network.chainId),
       owner: convertWalletToAccountSigner(owner),
-      factoryAddress: SIMPLE_ACCOUNT_FACTORY_ADDRESS,
+      factoryAddress: getDefaultSimpleAccountFactory(
+        getChain(alchemyProvider.network.chainId)
+      ),
       rpcClient,
     })
 );
