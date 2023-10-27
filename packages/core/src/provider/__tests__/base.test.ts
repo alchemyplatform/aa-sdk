@@ -1,4 +1,4 @@
-import { type Address, type Transaction } from "viem";
+import { type Address, type Chain, type Transaction } from "viem";
 import { polygonMumbai } from "viem/chains";
 import {
   afterEach,
@@ -184,6 +184,17 @@ describe("Base Tests", () => {
           rpcProvider: "ALCHEMY_RPC_URL",
           entryPointAddress: 1 as unknown as Address,
           chain: polygonMumbai,
+        })
+    ).toThrowError("invalid parameters passed to SmartAccountProvider");
+  });
+
+  it("should correctly do runtime validation 2", () => {
+    expect(
+      () =>
+        new SmartAccountProvider({
+          rpcProvider: "ALCHEMY_RPC_URL",
+          entryPointAddress: dummyEntryPointAddress,
+          chain: "0x1" as unknown as Chain,
         })
     ).toThrowError("invalid parameters passed to SmartAccountProvider");
   });
