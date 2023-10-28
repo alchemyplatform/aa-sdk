@@ -172,7 +172,6 @@ const givenConnectedProvider = ({
   new AlchemyProvider({
     apiKey: API_KEY!,
     chain,
-    entryPointAddress: ENTRYPOINT_ADDRESS,
     feeOpts,
   }).connect(
     (provider) =>

@@ -58,7 +58,6 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
 
   constructor({
     chain,
-    entryPointAddress,
     opts,
     feeOpts,
     ...connectionConfig
@@ -86,7 +85,7 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
       }),
     });
 
-    super({ rpcProvider: client, entryPointAddress, chain: _chain, opts });
+    super({ rpcProvider: client, chain: _chain, opts });
 
     withAlchemyGasFeeEstimator(
       this,
@@ -116,7 +115,7 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
     const request = deepHexlify(await resolveProperties(struct));
     const estimates = await this.rpcClient.estimateUserOperationGas(
       request,
-      this.entryPointAddress
+      this.account!.entryPointAddress
     );
     estimates.preVerificationGas =
       (BigInt(estimates.preVerificationGas) * (100n + this.pvgBuffer)) / 100n;

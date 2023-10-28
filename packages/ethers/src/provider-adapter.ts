@@ -35,7 +35,6 @@ export class EthersProviderAdapter extends JsonRpcProvider {
       const chain = getChain(opts.chainId);
       this.accountProvider = new SmartAccountProvider({
         rpcProvider: opts.rpcProvider,
-        entryPointAddress: opts.entryPointAddress,
         chain,
       });
     }
