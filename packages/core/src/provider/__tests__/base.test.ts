@@ -177,7 +177,7 @@ describe("Base Tests", () => {
     expect(newProvider.testMethod()).toEqual("test");
   });
 
-  it("should correctly do runtime validation", () => {
+  it("should correctly do runtime validation when entrypoint is invalid", () => {
     expect(
       () =>
         new SmartAccountProvider({
@@ -200,7 +200,7 @@ describe("Base Tests", () => {
     `);
   });
 
-  it("should correctly do runtime validation 2", () => {
+  it("should correctly do runtime validation when multiple inputs are invalid", () => {
     expect(
       () =>
         new SmartAccountProvider({
