@@ -1,8 +1,8 @@
-import { LightSmartContractAccount } from "@alchemy/aa-accounts";
-import { withAlchemyGasManager } from "@alchemy/aa-alchemy";
+import { LightSmartContractAccount, getDefaultLightAccountFactory } from "@alchemy/aa-accounts";
+import { AlchemyProvider, withAlchemyGasManager } from "@alchemy/aa-alchemy";
 import {
-  SmartAccountProvider,
   createPublicErc4337Client,
+  getDefaultEntryPointContract,
   type SmartAccountSigner
 } from "@alchemy/aa-core";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -63,28 +63,8 @@ const onboardingStepHandlers: Record<
       throw new Error("No connected account or address");
     }
     return {
-      nextStep: OnboardingStepIdentifier.GET_ENTRYPOINT,
-      addedContext: {},
-    };
-  },
-  // This step gets the entrypoint for the smart account.
-  [OnboardingStepIdentifier.GET_ENTRYPOINT]: async (context) => {
-    if (!context.owner) {
-      throw new Error("No owner");
-    }
-    const entrypointAddress = await context
-      .client!.getSupportedEntryPoints()
-      .then((entrypoints) => {
-        if (entrypoints.length === 0) {
-          throw new Error("No entrypoints found");
-        }
-        return entrypoints[0];
-      });
-    return {
       nextStep: OnboardingStepIdentifier.CREATE_SCWALLET,
-      addedContext: {
-        entrypointAddress,
-      },
+      addedContext: {},
     };
   },
   /*
@@ -93,14 +73,11 @@ const onboardingStepHandlers: Record<
    * a paymaster middleware (if useGasManager is true).
    */
   [OnboardingStepIdentifier.CREATE_SCWALLET]: async (context, appConfig) => {
-    if (!context.entrypointAddress) {
-      throw new Error("No entrypoint address was found");
-    }
-
     const chain: Chain = context.chain!;
-    const entryPointAddress = context.entrypointAddress;
-    let baseSigner = new SmartAccountProvider({
-      rpcProvider: appConfig.rpcUrl,
+    const [entryPointAddress, factoryAddress] = await Promise.all([getDefaultEntryPointContract(chain), getDefaultLightAccountFactory(chain)])
+
+    let baseSigner = new AlchemyProvider({
+      rpcUrl: appConfig.rpcUrl,
       chain,
       opts: {
         txMaxRetries: 60,
@@ -113,7 +90,7 @@ const onboardingStepHandlers: Record<
         entryPointAddress,
         chain,
         owner: context.owner,
-        factoryAddress: appConfig.lightAccountFactoryAddress,
+        factoryAddress,
         rpcClient: provider,
       });
     });
@@ -122,8 +99,7 @@ const onboardingStepHandlers: Record<
     const smartAccountAddress = await baseSigner.getAddress();
     if (context.useGasManager) {
       const smartAccountSigner = withAlchemyGasManager(baseSigner, {
-        policyId: appConfig.gasManagerPolicyId,
-        entryPoint: entryPointAddress,
+        policyId: appConfig.gasManagerPolicyId
       });
 
       return {

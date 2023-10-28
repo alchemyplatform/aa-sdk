@@ -7,7 +7,7 @@ export const env = createEnv({
    * isn't built with invalid env vars.
    */
   server: {
-    APP_ENV: z.enum(["development", "test", "production"]),
+    NODE_ENV: z.enum(["development", "test", "production"]),
     MUMBAI_ALCHEMY_API_URL: z.string().url(),
     SEPOLIA_ALCHEMY_API_URL: z.string().url(),
     POLYGON_ALCHEMY_API_URL: z.string().url(),

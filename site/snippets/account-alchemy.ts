@@ -35,7 +35,6 @@ let provider = new AlchemyProvider({
 // [OPTIONAL] Use Alchemy Gas Manager
 provider.withAlchemyGasManager({
   policyId: PAYMASTER_POLICY_ID,
-  entryPoint: ENTRYPOINT_ADDRESS,
 });
 
 // 3. send a UserOperation
