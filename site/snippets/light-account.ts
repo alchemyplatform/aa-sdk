@@ -1,9 +1,9 @@
 // importing required dependencies
-import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import {
   LightSmartContractAccount,
   getDefaultLightAccountFactory,
 } from "@alchemy/aa-accounts";
+import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import { LocalAccountSigner, type SmartAccountSigner } from "@alchemy/aa-core";
 import { sepolia } from "viem/chains";
 
@@ -12,6 +12,9 @@ const PRIVATE_KEY = "0xYourEOAPrivateKey"; // Replace with the private key of yo
 
 const eoaSigner: SmartAccountSigner =
   LocalAccountSigner.privateKeyToAccountSigner(PRIVATE_KEY); // Create a signer for your EOA
+
+// Default address for Light Account on Sepolia, you can replace it with your own.
+const factoryAddress = await getDefaultLightAccountFactory(chain);
 
 // Create a provider with your EOA as the smart account owner, this provider is used to send user operations from your smart account and interact with the blockchain
 const provider = new AlchemyProvider({
@@ -25,7 +28,7 @@ const provider = new AlchemyProvider({
       entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
       chain: rpcClient.chain,
       owner: eoaSigner,
-      factoryAddress: getDefaultLightAccountFactory(rpcClient.chain), // Default address for Light Account on Sepolia, you can replace it with your own.
+      factoryAddress,
       rpcClient,
     })
 );

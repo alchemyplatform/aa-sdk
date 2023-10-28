@@ -74,6 +74,7 @@ import { sepolia } from "viem/chains";
 import { capsuleSigner } from "./capsule";
 
 const chain = sepolia;
+const factoryAddress = await getDefaultLightAccountFactory(chain)
 const provider = new AlchemyProvider({
   apiKey: "ALCHEMY_API_KEY",
   chain,
@@ -84,7 +85,7 @@ const provider = new AlchemyProvider({
       entryPointAddress: "0x...",
       chain: rpcClient.chain,
       owner: capsuleSigner,
-      factoryAddress: getDefaultLightAccountFactory(chain),
+      factoryAddress: ,
       rpcClient,
     })
 );

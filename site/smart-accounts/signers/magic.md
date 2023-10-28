@@ -55,6 +55,7 @@ import { sepolia } from "viem/chains";
 import { magicSigner } from "./magic";
 
 const chain = sepolia;
+const factoryAddress = await getDefaultLightAccountFactory(chain);
 const provider = new AlchemyProvider({
   apiKey: "ALCHEMY_API_KEY",
   chain,
@@ -65,7 +66,7 @@ const provider = new AlchemyProvider({
       entryPointAddress: "0x...",
       chain: rpcClient.chain,
       owner: magicSigner,
-      factoryAddress: getDefaultLightAccountFactory(chain),
+      factoryAddress,
       rpcClient,
     })
 );

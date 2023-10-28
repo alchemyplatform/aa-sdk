@@ -10,12 +10,14 @@ const owner: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
   process.env.YOUR_OWNER_MNEMONIC!
 );
 
+const factoryAddress = await getDefaultLightAccountFactory(polygonMumbai);
+
 export const signer = provider.connectToAccount(
   (rpcClient) =>
     new LightSmartContractAccount({
       entryPointAddress: entryPointAddress,
       chain: polygonMumbai,
-      factoryAddress: getDefaultLightAccountFactory(polygonMumbai),
+      factoryAddress,
       rpcClient,
       owner,
     })

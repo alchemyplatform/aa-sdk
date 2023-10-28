@@ -63,6 +63,7 @@ import { newTurnkeySigner } from "./turnkey";
 async function main() {
   const owner = await newTurnkeySigner();
   const chain = sepolia;
+  const factoryAddress = await getDefaultLightAccountFactory(chain);
   const provider = new AlchemyProvider({
     apiKey: "ALCHEMY_API_KEY",
     chain,
@@ -73,7 +74,7 @@ async function main() {
         entryPointAddress: "0x...",
         chain: rpcClient.chain,
         owner,
-        factoryAddress: getDefaultLightAccountFactory(sepolia),
+        factoryAddress,
         rpcClient,
       })
   );

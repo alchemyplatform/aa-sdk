@@ -28,7 +28,7 @@ Notable differences between `EthersProviderAdapter` and `JsonRpcProvider` are im
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { provider } from "./ethers-provider";
 // [!code focus:99]
 // EIP-1193 compliant requests
 const chainId = await provider.send("eth_chainId", []);
@@ -44,7 +44,7 @@ const signer = provider.connectToAccount(
   (rpcClient) =>
     new LightSmartContractAccount({
       entryPointAddress: entryPointAddress,
-      chain: polygonMumbai,
+      chain: sepolia,
       factoryAddress: "0xfactoryAddress",
       rpcClient,
       owner,

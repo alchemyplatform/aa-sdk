@@ -55,6 +55,7 @@ import { sepolia } from "viem/chains";
 import { web3authSigner } from "./web3auth";
 
 const chain = sepolia;
+const factoryAddress = await getDefaultLightAccountFactory(chain);
 const provider = new AlchemyProvider({
   apiKey: "ALCHEMY_API_KEY",
   chain,
@@ -65,7 +66,7 @@ const provider = new AlchemyProvider({
       entryPointAddress: "0x...",
       chain: rpcClient.chain,
       owner: web3authSigner,
-      factoryAddress: getDefaultLightAccountFactory(chain),
+      factoryAddress,
       rpcClient,
     })
 );

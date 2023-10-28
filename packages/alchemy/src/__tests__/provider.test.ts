@@ -20,6 +20,7 @@ describe("Alchemy Provider Tests", () => {
       }),
     signTypedData: async () => "0xHash",
     getAddress: async () => ownerAccount.address,
+    signerType: "e2e-test",
   };
   const chain = polygonMumbai;
 
