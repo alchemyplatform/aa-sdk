@@ -34,6 +34,7 @@ import {
   bigIntPercent,
   deepHexlify,
   defineReadOnly,
+  getDefaultEntryPointContract,
   getUserOperationHash,
   isValidRequest,
   resolveProperties,
@@ -466,10 +467,13 @@ export class SmartAccountProvider<
   };
 
   readonly gasEstimator: AccountMiddlewareFn = async (struct) => {
+    const entryPoint =
+      this.account?.entryPointAddress ??
+      (await getDefaultEntryPointContract(this.chain));
     const request = deepHexlify(await resolveProperties(struct));
     const estimates = await this.rpcClient.estimateUserOperationGas(
       request,
-      this.account!.entryPointAddress
+      entryPoint
     );
 
     struct.callGasLimit = estimates.callGasLimit;

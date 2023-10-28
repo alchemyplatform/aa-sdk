@@ -40,7 +40,6 @@ describe("Kernel Account Tests", () => {
 
   const provider = new KernelAccountProvider({
     rpcProvider: config.rpcProvider,
-    entryPointAddress: config.entryPointAddress,
     chain: config.chain,
   });
 

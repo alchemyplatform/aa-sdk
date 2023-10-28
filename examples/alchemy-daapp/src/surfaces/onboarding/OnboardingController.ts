@@ -101,9 +101,8 @@ const onboardingStepHandlers: Record<
     const entryPointAddress = context.entrypointAddress;
     let baseSigner = new SmartAccountProvider({
       rpcProvider: appConfig.rpcUrl,
-      entryPointAddress,
       chain,
-      feeOpts: {
+      opts: {
         txMaxRetries: 60,
       },
     }).connect((provider: any) => {

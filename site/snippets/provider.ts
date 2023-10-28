@@ -16,7 +16,6 @@ const factoryAddress = await getDefaultLightAccountFactory(chain);
 export const provider = new AlchemyProvider({
   apiKey: "ALCHEMY_API_KEY", // replace with your alchemy api key of the Alchemy app associated with the Gas Manager, get yours at https://dashboard.alchemy.com/
   chain,
-  entryPointAddress: entryPointAddress,
 }).connect(
   (rpcClient) =>
     new LightSmartContractAccount({

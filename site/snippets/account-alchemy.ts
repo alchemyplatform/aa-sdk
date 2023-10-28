@@ -21,7 +21,6 @@ const owner: SmartAccountSigner =
 let provider = new AlchemyProvider({
   apiKey: API_KEY,
   chain,
-  entryPointAddress: ENTRYPOINT_ADDRESS,
 }).connect(
   (rpcClient) =>
     new SimpleSmartContractAccount({

@@ -68,10 +68,7 @@ const givenConnectedProvider = ({
   owner: Wallet;
   accountAddress?: Address;
 }) =>
-  EthersProviderAdapter.fromEthersProvider(
-    alchemyProvider,
-    ENTRYPOINT_ADDRESS
-  ).connectToAccount(
+  EthersProviderAdapter.fromEthersProvider(alchemyProvider).connectToAccount(
     (rpcClient) =>
       new SimpleSmartContractAccount({
         entryPointAddress: ENTRYPOINT_ADDRESS,

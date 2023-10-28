@@ -79,7 +79,6 @@ const givenConnectedProvider = ({
     rpcUrl: "https://eth-mainnet.g.alchemy.com/v2",
     jwt: "test",
     chain,
-    entryPointAddress: "0xENTRYPOINT_ADDRESS",
   }).connect((provider) => {
     const account = new SimpleSmartContractAccount({
       entryPointAddress: "0xENTRYPOINT_ADDRESS",

@@ -16,7 +16,6 @@ describe("Base Tests", () => {
 
   const providerMock = new SmartAccountProvider({
     rpcProvider: "ALCHEMY_RPC_URL",
-    entryPointAddress: "0xENTRYPOINT_ADDRESS",
     chain: polygonMumbai,
   });
 
@@ -164,7 +163,6 @@ describe("Base Tests", () => {
 
     const provider = new TestProvider({
       rpcProvider: "ALCHEMY_RPC_URL",
-      entryPointAddress: "0xENTRYPOINT_ADDRESS",
       chain: polygonMumbai,
     });
 
