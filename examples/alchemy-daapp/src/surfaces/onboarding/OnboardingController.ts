@@ -74,15 +74,21 @@ const onboardingStepHandlers: Record<
    */
   [OnboardingStepIdentifier.CREATE_SCWALLET]: async (context, appConfig) => {
     const chain: Chain = context.chain!;
-    const [entryPointAddress, factoryAddress] = await Promise.all([getDefaultEntryPointContract(chain), getDefaultLightAccountFactory(chain)])
 
-    let baseSigner = new AlchemyProvider({
+    const provider = new AlchemyProvider({
       rpcUrl: appConfig.rpcUrl,
       chain,
       opts: {
         txMaxRetries: 60,
       },
-    }).connect((provider: any) => {
+    })
+
+    const [entryPointAddress, factoryAddress] = await Promise.all([
+      getDefaultEntryPointContract({rpcClient: provider.rpcClient}),
+      getDefaultLightAccountFactory(chain)
+    ])
+
+    let baseSigner = provider.connect((provider: any) => {
       if (!context.owner) {
         throw new Error("No owner for account was found");
       }

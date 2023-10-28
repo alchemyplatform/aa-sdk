@@ -115,7 +115,7 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
   override gasEstimator: AccountMiddlewareFn = async (struct) => {
     const entryPoint =
       this.account?.entryPointAddress ??
-      (await getDefaultEntryPointContract(this.chain));
+      (await getDefaultEntryPointContract({ chain: this.chain }));
     const request = deepHexlify(await resolveProperties(struct));
     const estimates = await this.rpcClient.estimateUserOperationGas(
       request,

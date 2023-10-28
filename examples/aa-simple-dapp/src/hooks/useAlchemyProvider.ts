@@ -17,25 +17,25 @@ export const useAlchemyProvider = () => {
     useState<Address>();
   const [entryPointAddress, setEntryPointAddress] = useState<Address>();
 
-  useEffect(() => {
-    (async () => {
-      const [lightAccountFactoryAddress, entryPointAddress] = await Promise.all(
-        [
-          getDefaultLightAccountFactory(chain),
-          getDefaultEntryPointContract(chain),
-        ]
-      );
-      setEntryPointAddress(entryPointAddress);
-      setLightAccountFactoryAddress(lightAccountFactoryAddress);
-    })();
-  }, []);
-
   const [provider, setProvider] = useState<AlchemyProvider>(
     new AlchemyProvider({
       chain,
       rpcUrl: getRpcUrl(),
     })
   );
+
+  useEffect(() => {
+    if (!provider || entryPointAddress) return;
+
+    (async () => {
+      const [factoryAddress, entryPoint] = await Promise.all([
+        getDefaultLightAccountFactory(chain),
+        getDefaultEntryPointContract({ chain }),
+      ]);
+      setEntryPointAddress(entryPoint);
+      setLightAccountFactoryAddress(factoryAddress);
+    })();
+  }, [entryPointAddress, provider]);
 
   const connectProviderToAccount = useCallback(
     (signer: SmartAccountSigner, account?: Address) => {

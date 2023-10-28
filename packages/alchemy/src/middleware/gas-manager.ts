@@ -83,7 +83,7 @@ const withAlchemyPaymasterAndDataMiddleware = (
   paymasterDataMiddleware: async (struct) => {
     const entryPoint =
       provider.account?.entryPointAddress ??
-      (await getDefaultEntryPointContract(provider.rpcClient.chain));
+      (await getDefaultEntryPointContract({ rpcClient: provider.rpcClient }));
     const { paymasterAndData } = await (
       provider.rpcClient as ClientWithAlchemyMethods
     ).request({
@@ -126,7 +126,7 @@ const withAlchemyGasAndPaymasterAndDataMiddleware = (
 
     const entryPoint =
       provider.account?.entryPointAddress ??
-      (await getDefaultEntryPointContract(provider.rpcClient.chain));
+      (await getDefaultEntryPointContract({ rpcClient: provider.rpcClient }));
 
     const result = await (
       provider.rpcClient as ClientWithAlchemyMethods
