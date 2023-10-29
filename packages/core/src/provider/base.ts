@@ -72,11 +72,14 @@ export class SmartAccountProvider<
   private txMaxRetries: number;
   private txRetryIntervalMs: number;
   private txRetryMulitplier: number;
-  private entryPointAddress: Address;
+
+  private minPriorityFeePerBid: bigint;
+
   readonly account?: ISmartContractAccount;
+  readonly entryPointAddress: Address;
+
   protected chain: Chain;
 
-  minPriorityFeePerBid: bigint;
   rpcClient:
     | PublicErc4337Client<TTransport>
     | PublicErc4337Client<HttpTransport>;
@@ -443,13 +446,10 @@ export class SmartAccountProvider<
   };
 
   readonly gasEstimator: AccountMiddlewareFn = async (struct) => {
-    const entryPoint =
-      this.account?.entryPointAddress ??
-      getDefaultEntryPointContract(this.chain);
     const request = deepHexlify(await resolveProperties(struct));
     const estimates = await this.rpcClient.estimateUserOperationGas(
       request,
-      entryPoint
+      this.entryPointAddress
     );
 
     struct.callGasLimit = estimates.callGasLimit;

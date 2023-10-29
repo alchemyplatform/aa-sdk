@@ -42,8 +42,6 @@ export abstract class BaseSmartContractAccount<
   TTransport extends SupportedTransports = Transport
 > implements ISmartContractAccount
 {
-  readonly entryPointAddress: Address;
-
   protected factoryAddress: Address;
   protected deploymentState: DeploymentState = DeploymentState.UNDEFINED;
   protected accountAddress?: Address;
@@ -53,6 +51,7 @@ export abstract class BaseSmartContractAccount<
     PublicClient,
     Chain
   >;
+  protected entryPointAddress: Address;
   protected rpcProvider:
     | PublicErc4337Client<TTransport>
     | PublicErc4337Client<HttpTransport>;

@@ -2,7 +2,6 @@ import {
   SmartAccountProvider,
   createPublicErc4337Client,
   deepHexlify,
-  getDefaultEntryPointContract,
   resolveProperties,
   type AccountMiddlewareFn,
   type SmartAccountProviderConfig,
@@ -113,13 +112,10 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
   }
 
   override gasEstimator: AccountMiddlewareFn = async (struct) => {
-    const entryPoint =
-      this.account?.entryPointAddress ??
-      getDefaultEntryPointContract(this.chain);
     const request = deepHexlify(await resolveProperties(struct));
     const estimates = await this.rpcClient.estimateUserOperationGas(
       request,
-      entryPoint
+      this.entryPointAddress
     );
     estimates.preVerificationGas =
       (BigInt(estimates.preVerificationGas) * (100n + this.pvgBuffer)) / 100n;

@@ -7,8 +7,6 @@ import type { BatchUserOperationCallData } from "../types";
 export type SignTypedDataParams = Omit<SignTypedDataParameters, "privateKey">;
 
 export interface ISmartContractAccount {
-  readonly entryPointAddress: Address;
-
   /**
    * @returns the init code for the account
    */

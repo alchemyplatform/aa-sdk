@@ -44,7 +44,7 @@ const signer = provider.connectToAccount(
   (rpcClient) =>
     new LightSmartContractAccount({
       entryPointAddress: entryPointAddress,
-      chain: sepolia,
+      chain: polygonMumbai,
       factoryAddress: "0xfactoryAddress",
       rpcClient,
       owner,

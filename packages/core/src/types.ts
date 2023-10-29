@@ -178,14 +178,3 @@ export interface UserOperationStruct {
   /* Data passed into the account along with the nonce during the verification step */
   signature: BytesLike;
 }
-
-export interface DefaultAddressesMap {
-  /* Actual gas used by the validation of this UserOperation */
-  simpleAccountFactoryAddress: string;
-  /* Actual gas used by the validation of this UserOperation */
-  lightAccountFactoryAddress: string;
-  /* Actual gas used by the validation of this UserOperation */
-  entryPointContractAddress: string;
-}
-
-export type DefaultChainAddresses = Record<number, DefaultAddressesMap>;
