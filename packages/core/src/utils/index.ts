@@ -1,6 +1,7 @@
 import type { Address, Hash, Hex } from "viem";
 import { encodeAbiParameters, hexToBigInt, keccak256, toHex } from "viem";
 import * as chains from "viem/chains";
+import type { PublicErc4337Client } from "../client/types.js";
 import type {
   DefaultAddressesMap,
   PromiseOrValue,
@@ -231,15 +232,32 @@ export const getDefaultAddressMap = async (): Promise<Record<
  * @returns a {@link abi.Address} for the given chain
  * @throws if the chain doesn't have an address currently deployed
  */
-export const getDefaultEntryPointContract = async (
-  chain: chains.Chain
-): Promise<Address> => {
-  const defaultAddressMap = await getDefaultAddressMap();
-  if (defaultAddressMap?.[chain.id]?.entryPointContractAddress) {
-    return defaultAddressMap[chain.id].entryPointContractAddress as Address;
+export const getDefaultEntryPointContract = async ({
+  chain,
+  rpcClient,
+}:
+  | {
+      chain: chains.Chain;
+      rpcClient?: never;
+    }
+  | {
+      chain?: never;
+      rpcClient: PublicErc4337Client;
+    }): Promise<Address> => {
+  if (rpcClient) {
+    const supportedEntryPoints = await rpcClient.getSupportedEntryPoints();
+    if (supportedEntryPoints.length > 0) {
+      return supportedEntryPoints[0];
+    }
   }
 
-  switch (chain.id) {
+  const _chain = rpcClient?.chain ?? chain!;
+  const defaultAddressMap = await getDefaultAddressMap();
+  if (defaultAddressMap?.[_chain.id]?.entryPointContractAddress) {
+    return defaultAddressMap[_chain.id].entryPointContractAddress as Address;
+  }
+
+  switch (_chain.id) {
     case chains.mainnet.id:
     case chains.sepolia.id:
     case chains.goerli.id:

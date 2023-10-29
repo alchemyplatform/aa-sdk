@@ -22,8 +22,7 @@ const owner = Wallet.fromMnemonic(MNEMONIC);
 // 2. Create the SimpleAccount signer
 // signer is an ethers.js Signer
 const signer = EthersProviderAdapter.fromEthersProvider(
-  alchemyProvider,
-  ENTRYPOINT_ADDRESS
+  alchemyProvider
 ).connectToAccount(
   (rpcClient) =>
     new SimpleSmartContractAccount({

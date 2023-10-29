@@ -45,7 +45,6 @@ const providerWithGasManager = withAlchemyGasManager(
   provider,
   {
     policyId: PAYMASTER_POLICY_ID,
-    entryPoint: ENTRYPOINT_ADDRESS,
   },
   true // if true, uses `alchemy_requestGasAndPaymasterAndData`, otherwise uses `alchemy_requestPaymasterAndData`
 );

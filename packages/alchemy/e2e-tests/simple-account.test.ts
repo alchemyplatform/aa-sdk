@@ -61,7 +61,6 @@ describe("Simple Account Tests", () => {
       chain,
     }).withAlchemyGasManager({
       policyId: PAYMASTER_POLICY_ID,
-      entryPoint: ENTRYPOINT_ADDRESS,
     });
 
     const result = await signer.sendUserOperation({
@@ -77,7 +76,6 @@ describe("Simple Account Tests", () => {
     const signer = givenConnectedProvider({ owner, chain })
       .withAlchemyGasManager({
         policyId: PAYMASTER_POLICY_ID,
-        entryPoint: ENTRYPOINT_ADDRESS,
       })
       .withFeeDataGetter(async () => ({
         maxFeePerGas: 1n,
@@ -138,7 +136,6 @@ describe("Simple Account Tests", () => {
       chain,
     }).withAlchemyGasManager({
       policyId: PAYMASTER_POLICY_ID,
-      entryPoint: ENTRYPOINT_ADDRESS,
     });
 
     const result = await signer.sendUserOperation({
@@ -172,7 +169,6 @@ const givenConnectedProvider = ({
   new AlchemyProvider({
     apiKey: API_KEY!,
     chain,
-    entryPointAddress: ENTRYPOINT_ADDRESS,
     feeOpts,
   }).connect(
     (provider) =>

@@ -57,7 +57,6 @@ const chain = polygonMumbai;
 const provider = new AlchemyProvider({
   apiKey: process.env.ALCHEMY_API_KEY,
   chain,
-  entryPointAddress: ENTRY_POINT_CONTRACT_ADDRESS,
 }).connect(
   (rpcClient) =>
     new LightSmartContractAccount({

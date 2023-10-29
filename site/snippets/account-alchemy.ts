@@ -21,7 +21,6 @@ const owner: SmartAccountSigner =
 let provider = new AlchemyProvider({
   apiKey: API_KEY,
   chain,
-  entryPointAddress: ENTRYPOINT_ADDRESS,
 }).connect(
   (rpcClient) =>
     new SimpleSmartContractAccount({
@@ -36,7 +35,6 @@ let provider = new AlchemyProvider({
 // [OPTIONAL] Use Alchemy Gas Manager
 provider.withAlchemyGasManager({
   policyId: PAYMASTER_POLICY_ID,
-  entryPoint: ENTRYPOINT_ADDRESS,
 });
 
 // 3. send a UserOperation

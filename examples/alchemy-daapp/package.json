@@ -9,9 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@alchemy/aa-accounts": "latest",
-    "@alchemy/aa-alchemy": "latest",
-    "@alchemy/aa-core": "latest",
+    "@alchemy/aa-accounts": "^0.1.1",
+    "@alchemy/aa-alchemy": "^0.1.1",
+    "@alchemy/aa-core": "^0.1.1",
     "@chakra-ui/react": "^2.6.1",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",

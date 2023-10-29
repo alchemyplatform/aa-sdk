@@ -78,7 +78,6 @@ const factoryAddress = await getDefaultLightAccountFactory(chain)
 const provider = new AlchemyProvider({
   apiKey: "ALCHEMY_API_KEY",
   chain,
-  entryPointAddress: "0x...",
 }).connect(
   (rpcClient) =>
     new LightSmartContractAccount({

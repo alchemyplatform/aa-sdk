@@ -29,10 +29,7 @@ const alchemy = new Alchemy({
   network: Network.SEPOLIA, // new chain -> new provider
 });
 const ethersProvider = await alchemy.config.getProvider();
-const newProvider = EthersProviderAdapter.fromEthersProvider(
-  ethersProvider,
-  entryPointAddress
-);
+const newProvider = EthersProviderAdapter.fromEthersProvider(ethersProvider);
 
 // connecting the signer
 const newSigner = signer.connect(newProvider);

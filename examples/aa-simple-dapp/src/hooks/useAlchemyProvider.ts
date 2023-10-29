@@ -1,32 +1,48 @@
-import {
-  chain,
-  gasManagerPolicyId,
-  lightAccountFactoryAddress,
-} from "@/config/client";
+import { chain, gasManagerPolicyId } from "@/config/client";
 import { getRpcUrl } from "@/config/rpc";
-import { LightSmartContractAccount } from "@alchemy/aa-accounts";
+import {
+  LightSmartContractAccount,
+  getDefaultLightAccountFactory,
+} from "@alchemy/aa-accounts";
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
-import { SmartAccountSigner } from "@alchemy/aa-core";
-import { useCallback, useState } from "react";
+import {
+  SmartAccountSigner,
+  getDefaultEntryPointContract,
+} from "@alchemy/aa-core";
+import { useCallback, useEffect, useState } from "react";
 import { Address } from "viem";
 
-type AlchemyProviderProps = {
-  entryPointAddress: Address;
-};
+export const useAlchemyProvider = () => {
+  const [lightAccountFactoryAddress, setLightAccountFactoryAddress] =
+    useState<Address>();
+  const [entryPointAddress, setEntryPointAddress] = useState<Address>();
 
-export const useAlchemyProvider = ({
-  entryPointAddress,
-}: AlchemyProviderProps) => {
   const [provider, setProvider] = useState<AlchemyProvider>(
     new AlchemyProvider({
       chain,
-      entryPointAddress,
       rpcUrl: getRpcUrl(),
     })
   );
 
+  useEffect(() => {
+    if (!provider || entryPointAddress) return;
+
+    (async () => {
+      const [factoryAddress, entryPoint] = await Promise.all([
+        getDefaultLightAccountFactory(chain),
+        getDefaultEntryPointContract({ chain }),
+      ]);
+      setEntryPointAddress(entryPoint);
+      setLightAccountFactoryAddress(factoryAddress);
+    })();
+  }, [entryPointAddress, provider]);
+
   const connectProviderToAccount = useCallback(
     (signer: SmartAccountSigner, account?: Address) => {
+      if (lightAccountFactoryAddress == null || entryPointAddress == null) {
+        return null;
+      }
+
       const connectedProvider = provider
         .connect((provider) => {
           return new LightSmartContractAccount({
@@ -40,13 +56,12 @@ export const useAlchemyProvider = ({
         })
         .withAlchemyGasManager({
           policyId: gasManagerPolicyId,
-          entryPoint: entryPointAddress,
         });
 
       setProvider(connectedProvider);
       return connectedProvider;
     },
-    [entryPointAddress, provider]
+    [entryPointAddress, lightAccountFactoryAddress, provider]
   );
 
   const disconnectProviderFromAccount = useCallback(() => {

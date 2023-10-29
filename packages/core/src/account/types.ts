@@ -1,12 +1,14 @@
 import type { Address } from "abitype";
 import type { Hash, Hex } from "viem";
 import type { SignTypedDataParameters } from "viem/accounts";
-import type { BatchUserOperationCallData } from "../types";
 import type { SmartAccountSigner } from "../signer/types";
+import type { BatchUserOperationCallData } from "../types";
 
 export type SignTypedDataParams = Omit<SignTypedDataParameters, "privateKey">;
 
 export interface ISmartContractAccount {
+  readonly entryPointAddress: Address;
+
   /**
    * @returns the init code for the account
    */

@@ -52,7 +52,6 @@ const givenConnectedProvider = ({
 }) =>
   new SmartAccountProvider({
     rpcProvider: `${chain.rpcUrls.alchemy.http[0]}/${"test"}`,
-    entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
     chain,
   }).connect((provider) => {
     const account = new SimpleSmartContractAccount({

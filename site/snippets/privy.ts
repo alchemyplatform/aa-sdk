@@ -41,7 +41,6 @@ const privySigner: SmartAccountSigner = new WalletClientSigner(
 export const provider = new AlchemyProvider({
   apiKey: "ALCHEMY_API_KEY",
   chain: sepolia,
-  entryPointAddress: "0x...",
 }).connect(
   (rpcClient) =>
     new LightSmartContractAccount({

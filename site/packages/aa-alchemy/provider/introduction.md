@@ -39,7 +39,6 @@ const uoHash = await provider.sendUserOperation(uoStruct);
 // use Alchemy Gas Manager to sponsorship transactions
 const providerWithGasManager = provider.withAlchemyGasManager({
   policyId: PAYMASTER_POLICY_ID,
-  entryPoint: ENTRYPOINT_ADDRESS,
 });
 ```
 

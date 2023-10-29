@@ -34,21 +34,20 @@ const givenConnectedProvider = ({
   alchemyProvider: AlchemyProvider;
   owner: Wallet;
 }) =>
-  EthersProviderAdapter.fromEthersProvider(
-    alchemyProvider,
-    "0xENTRYPOINT_ADDRESS"
-  ).connectToAccount((rpcClient) => {
-    const account = new SimpleSmartContractAccount({
-      entryPointAddress: "0xENTRYPOINT_ADDRESS",
-      chain: getChain(alchemyProvider.network.chainId),
-      owner: convertWalletToAccountSigner(owner),
-      factoryAddress: "0xSIMPLE_ACCOUNT_FACTORY_ADDRESS",
-      rpcClient,
-    });
+  EthersProviderAdapter.fromEthersProvider(alchemyProvider).connectToAccount(
+    (rpcClient) => {
+      const account = new SimpleSmartContractAccount({
+        entryPointAddress: "0xENTRYPOINT_ADDRESS",
+        chain: getChain(alchemyProvider.network.chainId),
+        owner: convertWalletToAccountSigner(owner),
+        factoryAddress: "0xSIMPLE_ACCOUNT_FACTORY_ADDRESS",
+        rpcClient,
+      });
 
-    account.getAddress = vi.fn(
-      async () => "0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4"
-    );
+      account.getAddress = vi.fn(
+        async () => "0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4"
+      );
 
-    return account;
-  });
+      return account;
+    }
+  );

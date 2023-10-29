@@ -65,7 +65,6 @@ const GAS_MANAGER_POLICY_ID = "YourGasManagerPolicyId";
 // sent with this provider get sponsorship from the Gas Manager.
 provider.withAlchemyGasManager({
   policyId: GAS_MANAGER_POLICY_ID,
-  entryPoint: entryPointAddress,
 });
 
 // Here's how to send a sponsored user operation from your smart account:
@@ -99,7 +98,6 @@ const GAS_MANAGER_POLICY_ID = "YourGasManagerPolicyId";
 // sent with this provider get sponsorship from the Gas Manager.
 provider.withAlchemyGasManager({
   policyId: GAS_MANAGER_POLICY_ID,
-  entryPoint: entryPointAddress,
 });
 
 // Send a sponsored user operation from your smart account like this: // [!code focus:6]

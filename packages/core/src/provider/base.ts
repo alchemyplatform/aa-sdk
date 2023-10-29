@@ -2,7 +2,6 @@ import { default as EventEmitter } from "eventemitter3";
 import {
   fromHex,
   toHex,
-  type Address,
   type Chain,
   type Hash,
   type HttpTransport,
@@ -35,6 +34,7 @@ import {
   bigIntPercent,
   deepHexlify,
   defineReadOnly,
+  getDefaultEntryPointContract,
   getUserOperationHash,
   isValidRequest,
   resolveProperties,
@@ -87,7 +87,6 @@ export type SmartAccountProviderConfig<
 > = {
   rpcProvider: string | PublicErc4337Client<TTransport>;
   chain: Chain;
-  entryPointAddress: Address;
   opts?: SmartAccountProviderOpts;
 };
 
@@ -101,7 +100,6 @@ export class SmartAccountProvider<
   private txRetryIntervalMs: number;
   private txRetryMulitplier: number;
   readonly account?: ISmartContractAccount;
-  protected entryPointAddress: Address;
   protected chain: Chain;
 
   minPriorityFeePerBid: bigint;
@@ -111,13 +109,11 @@ export class SmartAccountProvider<
 
   constructor({
     rpcProvider,
-    entryPointAddress,
     chain,
     opts,
   }: SmartAccountProviderConfig<TTransport>) {
     super();
 
-    this.entryPointAddress = entryPointAddress;
     this.chain = chain;
 
     this.txMaxRetries = opts?.txMaxRetries ?? 5;
@@ -441,7 +437,7 @@ export class SmartAccountProvider<
     request.signature = (await this.account.signMessage(
       getUserOperationHash(
         request,
-        this.entryPointAddress as `0x${string}`,
+        this.account.entryPointAddress,
         BigInt(this.chain.id)
       )
     )) as `0x${string}`;
@@ -449,7 +445,7 @@ export class SmartAccountProvider<
     return {
       hash: await this.rpcClient.sendUserOperation(
         request,
-        this.entryPointAddress
+        this.account.entryPointAddress
       ),
       request,
     };
@@ -471,10 +467,13 @@ export class SmartAccountProvider<
   };
 
   readonly gasEstimator: AccountMiddlewareFn = async (struct) => {
+    const entryPoint =
+      this.account?.entryPointAddress ??
+      (await getDefaultEntryPointContract({ chain: this.chain }));
     const request = deepHexlify(await resolveProperties(struct));
     const estimates = await this.rpcClient.estimateUserOperationGas(
       request,
-      this.entryPointAddress
+      entryPoint
     );
 
     struct.callGasLimit = estimates.callGasLimit;
