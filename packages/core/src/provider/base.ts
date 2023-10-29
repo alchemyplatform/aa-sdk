@@ -2,6 +2,7 @@ import { default as EventEmitter } from "eventemitter3";
 import {
   fromHex,
   toHex,
+  type Address,
   type Chain,
   type Hash,
   type HttpTransport,
@@ -71,6 +72,7 @@ export class SmartAccountProvider<
   private txMaxRetries: number;
   private txRetryIntervalMs: number;
   private txRetryMulitplier: number;
+  private entryPointAddress: Address;
   readonly account?: ISmartContractAccount;
   protected chain: Chain;
 
@@ -91,6 +93,8 @@ export class SmartAccountProvider<
     this.txMaxRetries = opts?.txMaxRetries ?? 5;
     this.txRetryIntervalMs = opts?.txRetryIntervalMs ?? 2000;
     this.txRetryMulitplier = opts?.txRetryMulitplier ?? 1.5;
+    this.entryPointAddress =
+      opts?.entryPointAddress ?? getDefaultEntryPointContract(chain);
 
     this.minPriorityFeePerBid =
       opts?.minPriorityFeePerBid ??
@@ -409,7 +413,7 @@ export class SmartAccountProvider<
     request.signature = (await this.account.signMessage(
       getUserOperationHash(
         request,
-        this.account.entryPointAddress,
+        this.entryPointAddress,
         BigInt(this.chain.id)
       )
     )) as `0x${string}`;
@@ -417,7 +421,7 @@ export class SmartAccountProvider<
     return {
       hash: await this.rpcClient.sendUserOperation(
         request,
-        this.account.entryPointAddress
+        this.entryPointAddress
       ),
       request,
     };
