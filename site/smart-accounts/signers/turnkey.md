@@ -69,7 +69,6 @@ import { newTurnkeySigner } from "./turnkey";
 async function main() {
   const owner = await newTurnkeySigner();
   const chain = sepolia;
-
   const provider = new AlchemyProvider({
     apiKey: "ALCHEMY_API_KEY",
     chain,
