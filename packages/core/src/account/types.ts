@@ -1,11 +1,17 @@
 import type { Address } from "abitype";
-import type { Hash, Hex } from "viem";
+import type { Hash, Hex, Transport } from "viem";
 import type { SignTypedDataParameters } from "viem/accounts";
+import type { z } from "zod";
+import type { SupportedTransports } from "../client/types";
 import type { SmartAccountSigner } from "../signer/types";
 import type { BatchUserOperationCallData } from "../types";
+import type { BaseSmartAccountParamsSchema } from "./schema";
 
 export type SignTypedDataParams = Omit<SignTypedDataParameters, "privateKey">;
 
+export type BaseSmartAccountParams<
+  TTransport extends SupportedTransports = Transport
+> = z.infer<ReturnType<typeof BaseSmartAccountParamsSchema<TTransport>>>;
 export interface ISmartContractAccount {
   /**
    * @returns the init code for the account

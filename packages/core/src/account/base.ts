@@ -20,37 +20,17 @@ import type { SmartAccountSigner } from "../signer/types.js";
 import { wrapSignatureWith6492 } from "../signer/utils.js";
 import type { BatchUserOperationCallData } from "../types.js";
 import { getDefaultEntryPointAddress } from "../utils/defaults.js";
-import type { ISmartContractAccount, SignTypedDataParams } from "./types.js";
+import { BaseSmartAccountParamsSchema } from "./schema.js";
+import type {
+  BaseSmartAccountParams,
+  ISmartContractAccount,
+  SignTypedDataParams,
+} from "./types.js";
 
 export enum DeploymentState {
   UNDEFINED = "0x0",
   NOT_DEPLOYED = "0x1",
   DEPLOYED = "0x2",
-}
-
-export interface BaseSmartAccountParams<
-  TTransport extends SupportedTransports = Transport
-> {
-  rpcClient: string | PublicErc4337Client<TTransport>;
-  factoryAddress: Address;
-  chain: Chain;
-
-  /**
-   * The address of the entry point contract.
-   * If not provided, the default entry point contract will be used.
-   * Check out https://docs.alchemy.com/reference/eth-supportedentrypoints for all the supported entrypoints
-   */
-  entryPointAddress?: Address;
-
-  /**
-   * Owner account signer for the account if there is one.
-   */
-  owner?: SmartAccountSigner | undefined;
-
-  /**
-   * The address of the account if it is already deployed.
-   */
-  accountAddress?: Address;
 }
 
 export abstract class BaseSmartContractAccount<
@@ -72,6 +52,8 @@ export abstract class BaseSmartContractAccount<
     | PublicErc4337Client<HttpTransport>;
 
   constructor(params: BaseSmartAccountParams<TTransport>) {
+    BaseSmartAccountParamsSchema<TTransport>().parse(params);
+
     this.entryPointAddress =
       params.entryPointAddress ?? getDefaultEntryPointAddress(params.chain);
 

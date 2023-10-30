@@ -1,3 +1,4 @@
+import type { Address } from "viem";
 import { polygonMumbai, type Chain } from "viem/chains";
 import { describe, it } from "vitest";
 import { getDefaultSimpleAccountFactoryAddress } from "../../index.js";
@@ -42,6 +43,63 @@ describe("Account Simple Tests", () => {
     expect(await signer.account.encodeBatchExecute(data)).toMatchInlineSnapshot(
       '"0x18dfb3c7000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000002000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef0000000000000000000000008ba1f109551bd432803012645ac136ddd64dba720000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000004deadbeef000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004cafebabe00000000000000000000000000000000000000000000000000000000"'
     );
+  });
+
+  it("should correctly do base runtime validation when entrypoint are invalid", () => {
+    expect(
+      () =>
+        new SimpleSmartContractAccount({
+          entryPointAddress: 1 as unknown as Address,
+          chain,
+          owner,
+          factoryAddress: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+          rpcClient: "ALCHEMY_RPC_URL",
+        })
+    ).toThrowErrorMatchingInlineSnapshot(`
+      "[
+        {
+          \\"code\\": \\"invalid_type\\",
+          \\"expected\\": \\"string\\",
+          \\"received\\": \\"number\\",
+          \\"path\\": [
+            \\"entryPointAddress\\"
+          ],
+          \\"message\\": \\"Expected string, received number\\"
+        }
+      ]"
+    `);
+  });
+
+  it("should correctly do base runtime validation when multiple inputs are invalid", () => {
+    expect(
+      () =>
+        new SimpleSmartContractAccount({
+          entryPointAddress: 1 as unknown as Address,
+          chain: "0x1" as unknown as Chain,
+          owner,
+          factoryAddress: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+          rpcClient: "ALCHEMY_RPC_URL",
+        })
+    ).toThrowErrorMatchingInlineSnapshot(`
+      "[
+        {
+          \\"code\\": \\"invalid_type\\",
+          \\"expected\\": \\"string\\",
+          \\"received\\": \\"number\\",
+          \\"path\\": [
+            \\"entryPointAddress\\"
+          ],
+          \\"message\\": \\"Expected string, received number\\"
+        },
+        {
+          \\"code\\": \\"custom\\",
+          \\"message\\": \\"Invalid input\\",
+          \\"path\\": [
+            \\"chain\\"
+          ]
+        }
+      ]"
+    `);
   });
 });
 
