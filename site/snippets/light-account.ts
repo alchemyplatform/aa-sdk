@@ -1,12 +1,12 @@
 // importing required dependencies
 import {
   LightSmartContractAccount,
-  getDefaultLightAccountFactory,
+  getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import {
   LocalAccountSigner,
-  getDefaultEntryPointContract,
+  getDefaultEntryPointAddress,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import { sepolia } from "viem/chains";
@@ -18,9 +18,9 @@ const eoaSigner: SmartAccountSigner =
   LocalAccountSigner.privateKeyToAccountSigner(PRIVATE_KEY); // Create a signer for your EOA
 
 // Entrypoint address. Check out https://docs.alchemy.com/reference/eth-supportedentrypoints for all the supported entrypoints
-const entryPointAddress = getDefaultEntryPointContract(chain);
+const entryPointAddress = getDefaultEntryPointAddress(chain);
 // Default address for Light Account on Sepolia, you can replace it with your own.
-const factoryAddress = getDefaultLightAccountFactory(chain);
+const factoryAddress = getDefaultLightAccountFactoryAddress(chain);
 
 // Create a provider with your EOA as the smart account owner, this provider is used to send user operations from your smart account and interact with the blockchain
 const provider = new AlchemyProvider({

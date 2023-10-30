@@ -4,8 +4,8 @@ import {
   LocalAccountSigner,
   SimpleSmartContractAccount,
   SmartAccountProvider,
-  getDefaultEntryPointContract,
-  getDefaultSimpleAccountFactory,
+  getDefaultEntryPointAddress,
+  getDefaultSimpleAccountFactoryAddress,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import { polygonMumbai } from "viem/chains";
@@ -17,8 +17,8 @@ const owner: SmartAccountSigner =
   LocalAccountSigner.mnemonicToAccountSigner(MNEMONIC);
 
 const chain = polygonMumbai;
-const entryPointAddress = getDefaultEntryPointContract(chain);
-const factoryAddress = getDefaultSimpleAccountFactory(chain);
+const entryPointAddress = getDefaultEntryPointAddress(chain);
+const factoryAddress = getDefaultSimpleAccountFactoryAddress(chain);
 
 // 2. initialize the provider and connect it to the account
 const provider = new SmartAccountProvider({

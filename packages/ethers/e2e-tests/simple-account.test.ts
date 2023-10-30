@@ -1,8 +1,8 @@
 import {
   SimpleSmartContractAccount,
   getChain,
-  getDefaultEntryPointContract,
-  getDefaultSimpleAccountFactory,
+  getDefaultEntryPointAddress,
+  getDefaultSimpleAccountFactoryAddress,
   type Address,
 } from "@alchemy/aa-core";
 import { Wallet } from "@ethersproject/wallet";
@@ -13,8 +13,8 @@ import { convertWalletToAccountSigner } from "../src/utils.js";
 import { API_KEY, OWNER_MNEMONIC, RPC_URL } from "./constants.js";
 
 const chain = polygonMumbai;
-const entryPointAddress = getDefaultEntryPointContract(chain);
-const factoryAddress = getDefaultSimpleAccountFactory(chain);
+const entryPointAddress = getDefaultEntryPointAddress(chain);
+const factoryAddress = getDefaultSimpleAccountFactoryAddress(chain);
 
 describe("Simple Account Tests", async () => {
   const alchemy = new Alchemy({

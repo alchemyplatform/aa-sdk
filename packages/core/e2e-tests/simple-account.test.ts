@@ -3,8 +3,8 @@ import { generatePrivateKey } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
 import { SimpleSmartContractAccount } from "../src/account/simple.js";
 import {
-  getDefaultEntryPointContract,
-  getDefaultSimpleAccountFactory,
+  getDefaultEntryPointAddress,
+  getDefaultSimpleAccountFactoryAddressAddress,
   type SmartAccountSigner,
 } from "../src/index.js";
 import { SmartAccountProvider } from "../src/provider/base.js";
@@ -12,8 +12,8 @@ import { LocalAccountSigner } from "../src/signer/local-account.js";
 import { API_KEY, OWNER_MNEMONIC, RPC_URL } from "./constants.js";
 
 const chain = polygonMumbai;
-const entryPointAddress = getDefaultEntryPointContract(chain);
-const factoryAddress = getDefaultSimpleAccountFactory(chain);
+const entryPointAddress = getDefaultEntryPointAddress(chain);
+const factoryAddress = getDefaultSimpleAccountFactoryAddressAddress(chain);
 
 describe("Simple Account Tests", () => {
   const owner: SmartAccountSigner =

@@ -9,11 +9,11 @@ import {
   type SpyInstance,
 } from "vitest";
 import type { UserOperationReceipt } from "../../types.js";
-import { getDefaultEntryPointContract } from "../../utils/index.js";
+import { getDefaultEntryPointAddress } from "../../utils/index.js";
 import { SmartAccountProvider } from "../base.js";
 
 const chain = polygonMumbai;
-const entryPointAddress = getDefaultEntryPointContract(chain);
+const entryPointAddress = getDefaultEntryPointAddress(chain);
 
 describe("Base Tests", () => {
   let retryMsDelays: number[] = [];

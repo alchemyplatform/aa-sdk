@@ -20,7 +20,7 @@ import {
  * @returns a {@link abi.Address} for the given chain
  * @throws if the chain doesn't have an address currently deployed
  */
-export const getDefaultEntryPointContract = (chain: Chain): Address => {
+export const getDefaultEntryPointAddress = (chain: Chain): Address => {
   switch (chain.id) {
     case mainnet.id:
     case sepolia.id:
@@ -35,7 +35,9 @@ export const getDefaultEntryPointContract = (chain: Chain): Address => {
     case baseGoerli.id:
       return "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
   }
-  throw new Error("could not find entry point contract address");
+  throw new Error(
+    `no default entrypoint contract address exists for ${chain.name}`
+  );
 };
 
 /**
@@ -45,7 +47,9 @@ export const getDefaultEntryPointContract = (chain: Chain): Address => {
  * @returns a {@link abi.Address} for the given chain
  * @throws if the chain doesn't have an address currently deployed
  */
-export const getDefaultSimpleAccountFactory = (chain: Chain): Address => {
+export const getDefaultSimpleAccountFactoryAddressAddress = (
+  chain: Chain
+): Address => {
   switch (chain.id) {
     case mainnet.id:
     case polygon.id:
@@ -62,5 +66,7 @@ export const getDefaultSimpleAccountFactory = (chain: Chain): Address => {
       return "0x9406Cc6185a346906296840746125a0E44976454";
   }
 
-  throw new Error("could not find light account factory address");
+  throw new Error(
+    `no default simple account factory contract exists for ${chain.name}`
+  );
 };

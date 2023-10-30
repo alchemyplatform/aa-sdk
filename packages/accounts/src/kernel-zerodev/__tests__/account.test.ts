@@ -1,6 +1,6 @@
 import {
   LocalAccountSigner,
-  getDefaultEntryPointContract,
+  getDefaultEntryPointAddress,
 } from "@alchemy/aa-core";
 import { type Address, type Hex } from "viem";
 import { generatePrivateKey } from "viem/accounts";
@@ -14,7 +14,7 @@ import { KernelBaseValidator, ValidatorMode } from "../validator/base.js";
 import { MockSigner } from "./mocks/mock-signer.js";
 
 describe("Kernel Account Tests", () => {
-  const entryPointAddress = getDefaultEntryPointContract(polygonMumbai);
+  const entryPointAddress = getDefaultEntryPointAddress(polygonMumbai);
 
   //any wallet should work
   const config = {

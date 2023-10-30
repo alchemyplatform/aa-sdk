@@ -3,16 +3,16 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: getDefaultEntryPointContract
+      content: getDefaultEntryPointAddress
   - - meta
     - name: description
-      content: Overview of the getDefaultEntryPointContract method in aa-core utils
+      content: Overview of the getDefaultEntryPointAddress method in aa-core utils
   - - meta
     - property: og:description
-      content: Overview of the getDefaultEntryPointContract method in aa-core utils
+      content: Overview of the getDefaultEntryPointAddress method in aa-core utils
 ---
 
-# getDefaultEntryPointContract
+# getDefaultEntryPointAddress
 
 Utility method that returns the default EntryPoint contract address for a given chain
 
@@ -22,10 +22,10 @@ Utility method that returns the default EntryPoint contract address for a given 
 
 ```ts [example.ts]
 import { sepolia } from "viem/chains";
-import { getDefaultEntryPointContract } from "@alchemy/aa-core";
+import { getDefaultEntryPointAddress } from "@alchemy/aa-core";
 
 const chain = sepolia;
-const entryPointAddress = getDefaultEntryPointContract(chain);
+const entryPointAddress = getDefaultEntryPointAddress(chain);
 ```
 
 :::

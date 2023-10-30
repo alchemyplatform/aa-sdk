@@ -37,7 +37,7 @@ const validator: KernelBaseValidator = new KernelBaseValidator({
   owner,
 });
 
-const entryPointAddress = getDefaultEntryPointContract(chain);
+const entryPointAddress = getDefaultEntryPointAddress(chain);
 
 // 2. initialize the provider and connect it to the account
 const provider = new KernelAccountProvider(

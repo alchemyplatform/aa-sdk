@@ -1,3 +1,4 @@
+import { chains } from "@alchemy/aa-core";
 import type { Address, Chain } from "viem";
 import {
   arbitrum,
@@ -20,7 +21,7 @@ import {
  * @returns a {@link abi.Address} for the given chain
  * @throws if the chain doesn't have an address currently deployed
  */
-export const getDefaultLightAccountFactory = (chain: Chain): Address => {
+export const getDefaultLightAccountFactoryAddress = (chain: Chain): Address => {
   switch (chain.id) {
     case mainnet.id:
     case sepolia.id:
@@ -35,5 +36,7 @@ export const getDefaultLightAccountFactory = (chain: Chain): Address => {
     case baseGoerli.id:
       return "0x000000893A26168158fbeaDD9335Be5bC96592E2";
   }
-  throw new Error("could not find light account factory address");
+  throw new Error(
+    `no default light account factory contract exists for ${chain.name}`
+  );
 };

@@ -1,7 +1,7 @@
 import {
   SimpleSmartContractAccount,
-  getDefaultEntryPointContract,
-  getDefaultSimpleAccountFactory,
+  getDefaultEntryPointAddress,
+  getDefaultSimpleAccountFactoryAddress,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import { toHex, type Address, type Chain, type Hash } from "viem";
@@ -11,8 +11,8 @@ import { AlchemyProvider } from "../src/provider.js";
 import { API_KEY, OWNER_MNEMONIC, PAYMASTER_POLICY_ID } from "./constants.js";
 
 const chain = polygonMumbai;
-const entryPointAddress = getDefaultEntryPointContract(chain);
-const factoryAddress = getDefaultSimpleAccountFactory(chain);
+const entryPointAddress = getDefaultEntryPointAddress(chain);
+const factoryAddress = getDefaultSimpleAccountFactoryAddress(chain);
 
 describe("Simple Account Tests", () => {
   const ownerAccount = mnemonicToAccount(OWNER_MNEMONIC);

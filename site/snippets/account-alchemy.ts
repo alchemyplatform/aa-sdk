@@ -4,8 +4,8 @@ import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import {
   LocalAccountSigner,
   SimpleSmartContractAccount,
-  getDefaultEntryPointContract,
-  getDefaultSimpleAccountFactory,
+  getDefaultEntryPointAddress,
+  getDefaultSimpleAccountFactoryAddress,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import { polygonMumbai } from "viem/chains";
@@ -25,10 +25,10 @@ let provider = new AlchemyProvider({
 }).connect(
   (rpcClient) =>
     new SimpleSmartContractAccount({
-      entryPointAddress: getDefaultEntryPointContract(chain),
+      entryPointAddress: getDefaultEntryPointAddress(chain),
       chain, // ether a viem Chain or chainId that supports account abstraction at Alchemy
       owner,
-      factoryAddress: getDefaultSimpleAccountFactory(chain),
+      factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
       rpcClient,
     })
 );

@@ -373,12 +373,12 @@ export default defineConfig({
               { text: "defineReadOnly", link: "/defineReadOnly" },
               { text: "getChain", link: "/getChain" },
               {
-                text: "getDefaultEntryPointContract",
-                link: "/getDefaultEntryPointContract",
+                text: "getDefaultEntryPointAddress",
+                link: "/getDefaultEntryPointAddress",
               },
               {
-                text: "getDefaultSimpleAccountFactory",
-                link: "/getDefaultSimpleAccountFactory",
+                text: "getDefaultSimpleAccountFactoryAddress",
+                link: "/getDefaultSimpleAccountFactoryAddress",
               },
               {
                 text: "getUserOperationHash",
@@ -468,8 +468,8 @@ export default defineConfig({
             base: "/packages/aa-accounts/utils",
             items: [
               {
-                text: "getDefaultLightAccountFactory",
-                link: "/getDefaultLightAccountFactory",
+                text: "getDefaultLightAccountFactoryAddress",
+                link: "/getDefaultLightAccountFactoryAddress",
               },
             ],
           },

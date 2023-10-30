@@ -35,7 +35,7 @@ import {
   bigIntPercent,
   deepHexlify,
   defineReadOnly,
-  getDefaultEntryPointContract,
+  getDefaultEntryPointAddress,
   getUserOperationHash,
   isValidRequest,
   resolveProperties,
@@ -97,7 +97,7 @@ export class SmartAccountProvider<
     this.txRetryIntervalMs = opts?.txRetryIntervalMs ?? 2000;
     this.txRetryMulitplier = opts?.txRetryMulitplier ?? 1.5;
     this.entryPointAddress =
-      opts?.entryPointAddress ?? getDefaultEntryPointContract(chain);
+      entryPointAddress ?? getDefaultEntryPointAddress(chain);
 
     this.minPriorityFeePerBid =
       opts?.minPriorityFeePerBid ??

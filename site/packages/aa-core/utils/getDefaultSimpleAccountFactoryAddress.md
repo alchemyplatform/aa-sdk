@@ -3,16 +3,16 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: getDefaultSimpleAccountFactory
+      content: getDefaultSimpleAccountFactoryAddress
   - - meta
     - name: description
-      content: Overview of the getDefaultSimpleAccountFactory method in aa-core utils
+      content: Overview of the getDefaultSimpleAccountFactoryAddress method in aa-core utils
   - - meta
     - property: og:description
-      content: Overview of the getDefaultSimpleAccountFactory method in aa-core utils
+      content: Overview of the getDefaultSimpleAccountFactoryAddress method in aa-core utils
 ---
 
-# getDefaultSimpleAccountFactory
+# getDefaultSimpleAccountFactoryAddress
 
 Utility method that returns the default Simple Account Factory contract address for a given chain
 
@@ -22,10 +22,10 @@ Utility method that returns the default Simple Account Factory contract address 
 
 ```ts [example.ts]
 import { sepolia } from "viem/chains";
-import { getDefaultSimpleAccountFactory } from "@alchemy/aa-core";
+import { getDefaultSimpleAccountFactoryAddress } from "@alchemy/aa-core";
 
 const chain = sepolia;
-const factoryAddress = getDefaultSimpleAccountFactory(chain);
+const factoryAddress = getDefaultSimpleAccountFactoryAddress(chain);
 ```
 
 :::

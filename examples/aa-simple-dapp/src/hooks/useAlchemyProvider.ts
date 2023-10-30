@@ -2,12 +2,12 @@ import { chain, gasManagerPolicyId } from "@/config/client";
 import { getRpcUrl } from "@/config/rpc";
 import {
   LightSmartContractAccount,
-  getDefaultLightAccountFactory,
+  getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import {
   SmartAccountSigner,
-  getDefaultEntryPointContract,
+  getDefaultEntryPointAddress,
 } from "@alchemy/aa-core";
 import { useCallback, useState } from "react";
 import { Address } from "viem";
@@ -28,8 +28,8 @@ export const useAlchemyProvider = () => {
             rpcClient: provider,
             owner: signer,
             chain,
-            entryPointAddress: getDefaultEntryPointContract(chain),
-            factoryAddress: getDefaultLightAccountFactory(chain),
+            entryPointAddress: getDefaultEntryPointAddress(chain),
+            factoryAddress: getDefaultLightAccountFactoryAddress(chain),
             accountAddress: account,
           });
         })

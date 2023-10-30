@@ -19,4 +19,4 @@ export type { KernelBaseValidatorParams } from "./kernel-zerodev/validator/base.
 
 //light-account exports
 export { LightSmartContractAccount } from "./light-account/account.js";
-export { getDefaultLightAccountFactory } from "./light-account/utils.js";
+export { getDefaultLightAccountFactoryAddress } from "./light-account/utils.js";

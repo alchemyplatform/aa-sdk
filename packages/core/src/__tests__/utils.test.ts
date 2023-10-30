@@ -1,13 +1,13 @@
 import { sepolia } from "viem/chains";
 import type { UserOperationRequest } from "../types";
 import {
-  getDefaultEntryPointContract,
+  getDefaultEntryPointAddress,
   getUserOperationHash,
 } from "../utils/index.js";
 
 describe("Utils Tests", () => {
   const chain = sepolia;
-  const entryPointAddress = getDefaultEntryPointContract(chain);
+  const entryPointAddress = getDefaultEntryPointAddress(chain);
 
   it("getUserOperationHash should correctly hash a request", () => {
     expect(

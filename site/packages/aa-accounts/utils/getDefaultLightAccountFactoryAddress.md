@@ -3,16 +3,16 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: getDefaultLightAccountFactory
+      content: getDefaultLightAccountFactoryAddress
   - - meta
     - name: description
-      content: Overview of the getDefaultLightAccountFactory method in aa-accounts utils
+      content: Overview of the getDefaultLightAccountFactoryAddress method in aa-accounts utils
   - - meta
     - property: og:description
-      content: Overview of the getDefaultLightAccountFactory method in aa-accounts utils
+      content: Overview of the getDefaultLightAccountFactoryAddress method in aa-accounts utils
 ---
 
-# getDefaultLightAccountFactory
+# getDefaultLightAccountFactoryAddress
 
 Utility method that returns the default Light Account Factory contrafct address for a given chain
 
@@ -22,10 +22,10 @@ Utility method that returns the default Light Account Factory contrafct address 
 
 ```ts [example.ts]
 import { sepolia } from "viem/chains";
-import { getDefaultLightAccountFactory } from "@alchemy/aa-accounts";
+import { getDefaultLightAccountFactoryAddress } from "@alchemy/aa-accounts";
 
 const chain = sepolia;
-const factoryAddress = getDefaultLightAccountFactory(chain);
+const factoryAddress = getDefaultLightAccountFactoryAddress(chain);
 ```
 
 :::

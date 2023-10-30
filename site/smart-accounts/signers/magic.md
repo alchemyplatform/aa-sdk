@@ -55,7 +55,7 @@ Let's see it in action with `aa-alchemy` and `LightSmartContractAccount` from `a
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import {
   LightSmartContractAccount,
-  getDefaultLightAccountFactory,
+  getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
 import { sepolia } from "viem/chains";
 import { createMagicSigner } from "./magic";

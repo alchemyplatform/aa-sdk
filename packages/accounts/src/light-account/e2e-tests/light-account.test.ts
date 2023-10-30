@@ -1,14 +1,14 @@
 import {
   LocalAccountSigner,
   SmartAccountProvider,
-  getDefaultEntryPointContract,
+  getDefaultEntryPointAddress,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import { isAddress, type Address, type Chain, type Hash } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import { sepolia } from "viem/chains";
 import { LightSmartContractAccount } from "../account.js";
-import { getDefaultLightAccountFactory } from "../utils.js";
+import { getDefaultLightAccountFactoryAddress } from "../utils.js";
 import {
   API_KEY,
   LIGHT_ACCOUNT_OWNER_MNEMONIC,
@@ -17,8 +17,8 @@ import {
 } from "./constants.js";
 
 const chain = sepolia;
-const entryPointAddress = getDefaultEntryPointContract(chain);
-const factoryAddress = getDefaultLightAccountFactory(chain);
+const entryPointAddress = getDefaultEntryPointAddress(chain);
+const factoryAddress = getDefaultLightAccountFactoryAddress(chain);
 
 describe("Light Account Tests", () => {
   const owner: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
