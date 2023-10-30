@@ -2,19 +2,22 @@ import { isAddress, type Address, type Chain, type Hash } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
 import { SimpleSmartContractAccount } from "../src/account/simple.js";
-import { type SmartAccountSigner } from "../src/index.js";
+import {
+  getDefaultEntryPointAddress,
+  getDefaultSimpleAccountFactoryAddressAddress,
+  type SmartAccountSigner,
+} from "../src/index.js";
 import { SmartAccountProvider } from "../src/provider/base.js";
 import { LocalAccountSigner } from "../src/signer/local-account.js";
 import { API_KEY, OWNER_MNEMONIC, RPC_URL } from "./constants.js";
 
-const ENTRYPOINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
-const SIMPLE_ACCOUNT_FACTORY_ADDRESS =
-  "0x9406Cc6185a346906296840746125a0E44976454";
+const chain = polygonMumbai;
+const entryPointAddress = getDefaultEntryPointAddress(chain);
+const factoryAddress = getDefaultSimpleAccountFactoryAddressAddress(chain);
 
 describe("Simple Account Tests", () => {
   const owner: SmartAccountSigner =
     LocalAccountSigner.mnemonicToAccountSigner(OWNER_MNEMONIC);
-  const chain = polygonMumbai;
 
   it("should successfully get counterfactual address", async () => {
     const signer = givenConnectedProvider({ owner, chain });
@@ -70,15 +73,14 @@ const givenConnectedProvider = ({
   return new SmartAccountProvider({
     rpcProvider:
       RPC_URL != null ? RPC_URL : `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
-    entryPointAddress: ENTRYPOINT_ADDRESS,
     chain,
   }).connect(
     (provider) =>
       new SimpleSmartContractAccount({
-        entryPointAddress: ENTRYPOINT_ADDRESS,
+        entryPointAddress,
         chain,
         owner,
-        factoryAddress: SIMPLE_ACCOUNT_FACTORY_ADDRESS,
+        factoryAddress,
         rpcClient: provider,
         accountAddress,
       })

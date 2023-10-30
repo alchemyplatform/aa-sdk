@@ -1,5 +1,4 @@
 "use client";
-import { entryPointAddress } from "@/config/client";
 import { useAlchemyProvider } from "@/hooks/useAlchemyProvider";
 import { useMagicSigner } from "@/hooks/useMagicSigner";
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
@@ -49,7 +48,7 @@ export const WalletContextProvider = ({
 
   const { magic, signer } = useMagicSigner();
   const { provider, connectProviderToAccount, disconnectProviderFromAccount } =
-    useAlchemyProvider({ entryPointAddress });
+    useAlchemyProvider();
 
   const login = useCallback(
     async (email: string) => {

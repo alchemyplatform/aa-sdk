@@ -1,5 +1,7 @@
 import {
   SimpleSmartContractAccount,
+  getDefaultEntryPointAddress,
+  getDefaultSimpleAccountFactoryAddress,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import { toHex, type Address, type Chain, type Hash } from "viem";
@@ -8,9 +10,9 @@ import { polygonMumbai } from "viem/chains";
 import { AlchemyProvider } from "../src/provider.js";
 import { API_KEY, OWNER_MNEMONIC, PAYMASTER_POLICY_ID } from "./constants.js";
 
-const ENTRYPOINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
-const SIMPLE_ACCOUNT_FACTORY_ADDRESS =
-  "0x9406Cc6185a346906296840746125a0E44976454";
+const chain = polygonMumbai;
+const entryPointAddress = getDefaultEntryPointAddress(chain);
+const factoryAddress = getDefaultSimpleAccountFactoryAddress(chain);
 
 describe("Simple Account Tests", () => {
   const ownerAccount = mnemonicToAccount(OWNER_MNEMONIC);
@@ -21,8 +23,8 @@ describe("Simple Account Tests", () => {
       }),
     signTypedData: async () => "0xHash",
     getAddress: async () => ownerAccount.address,
+    signerType: "e2e-test",
   };
-  const chain = polygonMumbai;
 
   it("should successfully get counterfactual address", async () => {
     const signer = givenConnectedProvider({ owner, chain });
@@ -60,7 +62,6 @@ describe("Simple Account Tests", () => {
       chain,
     }).withAlchemyGasManager({
       policyId: PAYMASTER_POLICY_ID,
-      entryPoint: ENTRYPOINT_ADDRESS,
     });
 
     const result = await signer.sendUserOperation({
@@ -76,7 +77,6 @@ describe("Simple Account Tests", () => {
     const signer = givenConnectedProvider({ owner, chain })
       .withAlchemyGasManager({
         policyId: PAYMASTER_POLICY_ID,
-        entryPoint: ENTRYPOINT_ADDRESS,
       })
       .withFeeDataGetter(async () => ({
         maxFeePerGas: 1n,
@@ -137,7 +137,6 @@ describe("Simple Account Tests", () => {
       chain,
     }).withAlchemyGasManager({
       policyId: PAYMASTER_POLICY_ID,
-      entryPoint: ENTRYPOINT_ADDRESS,
     });
 
     const result = await signer.sendUserOperation({
@@ -171,15 +170,14 @@ const givenConnectedProvider = ({
   new AlchemyProvider({
     apiKey: API_KEY!,
     chain,
-    entryPointAddress: ENTRYPOINT_ADDRESS,
     feeOpts,
   }).connect(
     (provider) =>
       new SimpleSmartContractAccount({
-        entryPointAddress: ENTRYPOINT_ADDRESS,
+        entryPointAddress,
         chain,
         owner,
-        factoryAddress: SIMPLE_ACCOUNT_FACTORY_ADDRESS,
+        factoryAddress,
         rpcClient: provider,
         accountAddress,
       })

@@ -42,12 +42,12 @@ An HTTP-based PublicErc4337Client that supports both traditional RPC methods and
 
 ### `chain: Chain`
 
-The chain to connect to.
+The chain to connect to
 
 ### `rpcUrl: string`
 
-The RPC URL to connect to.
+The RPC URL to connect to
 
 ### `fetchOptions?: HttpTransportConfig["fetchOptions"]`
 
-Optional set of params that let you override the default fetch options for the HTTP transport.
+Optional set of params that let you override the default fetch options for the HTTP transport

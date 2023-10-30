@@ -14,19 +14,20 @@ import { defineReadOnly } from "@ethersproject/properties";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { AccountSigner } from "./account-signer.js";
 
-export type EthersProviderAdapterOpts =
+export type EthersProviderAdapterOpts = { entryPointAddress?: Address } & (
   | {
       rpcProvider: string | PublicErc4337Client<HttpTransport>;
-      entryPointAddress: Address;
       chainId: number;
     }
   | {
       accountProvider: SmartAccountProvider<HttpTransport>;
-    };
+    }
+);
 
 /** Lightweight Adapter for SmartAccountProvider to enable Signer Creation */
 export class EthersProviderAdapter extends JsonRpcProvider {
   readonly accountProvider: SmartAccountProvider<HttpTransport>;
+
   constructor(opts: EthersProviderAdapterOpts) {
     super();
     if ("accountProvider" in opts) {
@@ -102,16 +103,11 @@ export class EthersProviderAdapter extends JsonRpcProvider {
    * Creates an instance of EthersProviderAdapter from an ethers.js JsonRpcProvider.
    *
    * @param provider - the ethers JSON RPC provider to convert
-   * @param entryPointAddress - the entrypoint address that will be used for UserOperations
    * @returns an instance of {@link EthersProviderAdapter}
    */
-  static fromEthersProvider(
-    provider: JsonRpcProvider,
-    entryPointAddress: Address
-  ): EthersProviderAdapter {
+  static fromEthersProvider(provider: JsonRpcProvider): EthersProviderAdapter {
     return new EthersProviderAdapter({
       rpcProvider: provider.connection.url,
-      entryPointAddress,
       chainId: provider.network.chainId,
     });
   }

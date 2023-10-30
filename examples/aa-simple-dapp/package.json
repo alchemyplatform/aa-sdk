@@ -9,9 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@alchemy/aa-accounts": "^0.1.0",
-    "@alchemy/aa-alchemy": "^0.1.0",
-    "@alchemy/aa-core": "^0.1.0",
+    "@alchemy/aa-accounts": "^0.1.1",
+    "@alchemy/aa-alchemy": "^0.1.1",
+    "@alchemy/aa-core": "^0.1.1",
     "@t3-oss/env-core": "^0.7.0",
     "magic-sdk": "^20.1.1",
     "next": "13.5.4",

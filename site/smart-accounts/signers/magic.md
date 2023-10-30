@@ -55,25 +55,27 @@ Let's see it in action with `aa-alchemy` and `LightSmartContractAccount` from `a
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import {
   LightSmartContractAccount,
-  getDefaultLightAccountFactory,
+  getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
 import { sepolia } from "viem/chains";
 import { createMagicSigner } from "./magic";
 
 const chain = sepolia;
+const entryPointAddress = getDefaultEntryPointContract(chain);
+const factoryAddress = getDefaultLightAccountFactory(chain);
+
 // NOTE: the below is async because it depends on creating a magic signer. You can choose to break that up how you want
 // eg. use a useEffect + useState to create the signer and then pass it down to the provider
 const provider = new AlchemyProvider({
   apiKey: "ALCHEMY_API_KEY",
   chain,
-  entryPointAddress: "0x...",
 }).connect(
   (rpcClient) =>
     new LightSmartContractAccount({
-      entryPointAddress: "0x...",
+      entryPointAddress,
       chain: rpcClient.chain,
       owner: await createMagicSigner(),
-      factoryAddress: getDefaultLightAccountFactory(chain),
+      factoryAddress,
       rpcClient,
     })
 );

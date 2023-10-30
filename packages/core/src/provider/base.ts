@@ -21,7 +21,6 @@ import type {
   SupportedTransports,
 } from "../client/types.js";
 import {
-  isValidRequest,
   type BatchUserOperationCallData,
   type UserOperationCallData,
   type UserOperationOverrides,
@@ -36,7 +35,9 @@ import {
   bigIntPercent,
   deepHexlify,
   defineReadOnly,
+  getDefaultEntryPointAddress,
   getUserOperationHash,
+  isValidRequest,
   resolveProperties,
   type Deferrable,
 } from "../utils/index.js";
@@ -71,11 +72,14 @@ export class SmartAccountProvider<
   private txMaxRetries: number;
   private txRetryIntervalMs: number;
   private txRetryMulitplier: number;
+
+  private minPriorityFeePerBid: bigint;
+
   readonly account?: ISmartContractAccount;
-  protected entryPointAddress: Address;
+  readonly entryPointAddress: Address;
+
   protected chain: Chain;
 
-  minPriorityFeePerBid: bigint;
   rpcClient:
     | PublicErc4337Client<TTransport>
     | PublicErc4337Client<HttpTransport>;
@@ -87,12 +91,13 @@ export class SmartAccountProvider<
 
     super();
 
-    this.entryPointAddress = entryPointAddress;
     this.chain = chain;
 
     this.txMaxRetries = opts?.txMaxRetries ?? 5;
     this.txRetryIntervalMs = opts?.txRetryIntervalMs ?? 2000;
     this.txRetryMulitplier = opts?.txRetryMulitplier ?? 1.5;
+    this.entryPointAddress =
+      entryPointAddress ?? getDefaultEntryPointAddress(chain);
 
     this.minPriorityFeePerBid =
       opts?.minPriorityFeePerBid ??
@@ -411,7 +416,7 @@ export class SmartAccountProvider<
     request.signature = (await this.account.signMessage(
       getUserOperationHash(
         request,
-        this.entryPointAddress as `0x${string}`,
+        this.entryPointAddress,
         BigInt(this.chain.id)
       )
     )) as `0x${string}`;

@@ -27,7 +27,6 @@ import { provider } from "./provider";
 // use Alchemy Gas Manager to sponsorship transactions
 const providerWithGasManager = provider.withAlchemyGasManager({
   policyId: PAYMASTER_POLICY_ID,
-  entryPoint: ENTRYPOINT_ADDRESS,
 });
 ```
 
@@ -45,4 +44,3 @@ A new instance of an `AlchemyProvider` with the same attributes as the input, no
 ### `config: AlchemyGasManagerConfig`
 
 - `policyId: string` -- the Alchemy Gas Manager policy ID
-- `entryPoint: Address` -- the entrypoint contract address for the chain the provider is used for

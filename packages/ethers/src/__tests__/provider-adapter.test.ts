@@ -1,8 +1,4 @@
-import {
-  SimpleSmartContractAccount,
-  getChain,
-  type Address,
-} from "@alchemy/aa-core";
+import { SimpleSmartContractAccount, getChain } from "@alchemy/aa-core";
 import { Wallet } from "@ethersproject/wallet";
 import { Alchemy, Network, type AlchemyProvider } from "alchemy-sdk";
 import { EthersProviderAdapter } from "../../src/provider-adapter.js";
@@ -37,26 +33,21 @@ const givenConnectedProvider = ({
 }: {
   alchemyProvider: AlchemyProvider;
   owner: Wallet;
-}) => {
-  const dummyEntryPointAddress =
-    "0x1234567890123456789012345678901234567890" as Address;
+}) =>
+  EthersProviderAdapter.fromEthersProvider(alchemyProvider).connectToAccount(
+    (rpcClient) => {
+      const account = new SimpleSmartContractAccount({
+        entryPointAddress: "0xENTRYPOINT_ADDRESS",
+        chain: getChain(alchemyProvider.network.chainId),
+        owner: convertWalletToAccountSigner(owner),
+        factoryAddress: "0xSIMPLE_ACCOUNT_FACTORY_ADDRESS",
+        rpcClient,
+      });
 
-  return EthersProviderAdapter.fromEthersProvider(
-    alchemyProvider,
-    dummyEntryPointAddress
-  ).connectToAccount((rpcClient) => {
-    const account = new SimpleSmartContractAccount({
-      entryPointAddress: dummyEntryPointAddress,
-      chain: getChain(alchemyProvider.network.chainId),
-      owner: convertWalletToAccountSigner(owner),
-      factoryAddress: "0xSIMPLE_ACCOUNT_FACTORY_ADDRESS",
-      rpcClient,
-    });
+      account.getAddress = vi.fn(
+        async () => "0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4"
+      );
 
-    account.getAddress = vi.fn(
-      async () => "0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4"
-    );
-
-    return account;
-  });
-};
+      return account;
+    }
+  );

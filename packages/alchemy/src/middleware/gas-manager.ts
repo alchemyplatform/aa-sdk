@@ -3,13 +3,11 @@ import {
   resolveProperties,
   type UserOperationRequest,
 } from "@alchemy/aa-core";
-import type { Address } from "viem";
 import type { AlchemyProvider } from "../provider.js";
 import type { ClientWithAlchemyMethods } from "./client.js";
 
 export interface AlchemyGasManagerConfig {
   policyId: string;
-  entryPoint: Address;
 }
 
 /**
@@ -89,7 +87,7 @@ const withAlchemyPaymasterAndDataMiddleware = (
       params: [
         {
           policyId: config.policyId,
-          entryPoint: config.entryPoint,
+          entryPoint: provider.entryPointAddress,
           userOperation: deepHexlify(await resolveProperties(struct)),
         },
       ],
@@ -129,7 +127,7 @@ const withAlchemyGasAndPaymasterAndDataMiddleware = (
       params: [
         {
           policyId: config.policyId,
-          entryPoint: config.entryPoint,
+          entryPoint: provider.entryPointAddress,
           userOperation: userOperation,
           dummySignature: userOperation.signature,
           feeOverride: feeOverride,

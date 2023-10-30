@@ -55,23 +55,24 @@ Let's see it in action with `aa-alchemy` and `LightSmartContractAccount` from `a
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import {
   LightSmartContractAccount,
-  getDefaultLightAccountFactory,
+  getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
 import { sepolia } from "viem/chains";
 import { web3authSigner } from "./web3auth";
 
 const chain = sepolia;
+const entryPointAddress = getDefaultEntryPointAddress(chain);
+const factoryAddress = getDefaultLightAccountFactoryAddress(chain);
 const provider = new AlchemyProvider({
   apiKey: "ALCHEMY_API_KEY",
   chain,
-  entryPointAddress: "0x...",
 }).connect(
   (rpcClient) =>
     new LightSmartContractAccount({
-      entryPointAddress: "0x...",
+      entryPointAddress,
       chain: rpcClient.chain,
       owner: web3authSigner,
-      factoryAddress: getDefaultLightAccountFactory(chain),
+      factoryAddress,
       rpcClient,
     })
 );

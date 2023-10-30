@@ -86,7 +86,12 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
       }),
     });
 
-    super({ rpcProvider: client, entryPointAddress, chain: _chain, opts });
+    super({
+      rpcProvider: client,
+      entryPointAddress,
+      chain: _chain,
+      opts,
+    });
 
     withAlchemyGasFeeEstimator(
       this,

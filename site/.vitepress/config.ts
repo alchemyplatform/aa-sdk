@@ -373,6 +373,14 @@ export default defineConfig({
               { text: "defineReadOnly", link: "/defineReadOnly" },
               { text: "getChain", link: "/getChain" },
               {
+                text: "getDefaultEntryPointAddress",
+                link: "/getDefaultEntryPointAddress",
+              },
+              {
+                text: "getDefaultSimpleAccountFactoryAddress",
+                link: "/getDefaultSimpleAccountFactoryAddress",
+              },
+              {
                 text: "getUserOperationHash",
                 link: "/getUserOperationHash",
               },
@@ -452,6 +460,17 @@ export default defineConfig({
                 link: "/encodeTransferOwnership",
               },
               { text: "transferOwnership", link: "/transferOwnership" },
+            ],
+          },
+          {
+            text: "Utilities",
+            collapsed: true,
+            base: "/packages/aa-accounts/utils",
+            items: [
+              {
+                text: "getDefaultLightAccountFactoryAddress",
+                link: "/getDefaultLightAccountFactoryAddress",
+              },
             ],
           },
           { text: "Contributing", link: "/contributing" },

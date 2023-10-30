@@ -1,10 +1,14 @@
 // importing required dependencies
-import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import {
   LightSmartContractAccount,
-  getDefaultLightAccountFactory,
+  getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
-import { LocalAccountSigner, type SmartAccountSigner } from "@alchemy/aa-core";
+import { AlchemyProvider } from "@alchemy/aa-alchemy";
+import {
+  LocalAccountSigner,
+  getDefaultEntryPointAddress,
+  type SmartAccountSigner,
+} from "@alchemy/aa-core";
 import { sepolia } from "viem/chains";
 
 const chain = sepolia;
@@ -13,19 +17,22 @@ const PRIVATE_KEY = "0xYourEOAPrivateKey"; // Replace with the private key of yo
 const eoaSigner: SmartAccountSigner =
   LocalAccountSigner.privateKeyToAccountSigner(PRIVATE_KEY); // Create a signer for your EOA
 
+// Entrypoint address. Check out https://docs.alchemy.com/reference/eth-supportedentrypoints for all the supported entrypoints
+const entryPointAddress = getDefaultEntryPointAddress(chain);
+// Default address for Light Account on Sepolia, you can replace it with your own.
+const factoryAddress = getDefaultLightAccountFactoryAddress(chain);
+
 // Create a provider with your EOA as the smart account owner, this provider is used to send user operations from your smart account and interact with the blockchain
 const provider = new AlchemyProvider({
   apiKey: "ALCHEMY_API_KEY", // Replace with your Alchemy API key, you can get one at https://dashboard.alchemy.com/
   chain,
-  // Entrypoint address, you can use a different entrypoint if needed, check out https://docs.alchemy.com/reference/eth-supportedentrypoints for all the supported entrypoints
-  entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
 }).connect(
   (rpcClient) =>
     new LightSmartContractAccount({
-      entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
-      chain: rpcClient.chain,
+      entryPointAddress,
+      chain,
       owner: eoaSigner,
-      factoryAddress: getDefaultLightAccountFactory(rpcClient.chain), // Default address for Light Account on Sepolia, you can replace it with your own.
+      factoryAddress,
       rpcClient,
     })
 );

@@ -61,7 +61,7 @@ Let's see it in action with `aa-alchemy` and `LightSmartContractAccount` from `a
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import {
   LightSmartContractAccount,
-  getDefaultLightAccountFactory,
+  getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
 import { sepolia } from "viem/chains";
 import { newTurnkeySigner } from "./turnkey";
@@ -69,17 +69,18 @@ import { newTurnkeySigner } from "./turnkey";
 async function main() {
   const owner = await newTurnkeySigner();
   const chain = sepolia;
+  const entryPointAddress = getDefaultEntryPointAddress(chain);
+  const factoryAddress = getDefaultLightAccountFactoryAddress(chain);
   const provider = new AlchemyProvider({
     apiKey: "ALCHEMY_API_KEY",
     chain,
-    entryPointAddress: "0x...",
   }).connect(
     (rpcClient) =>
       new LightSmartContractAccount({
-        entryPointAddress: "0x...",
+        entryPointAddress,
         chain: rpcClient.chain,
         owner,
-        factoryAddress: getDefaultLightAccountFactory(sepolia),
+        factoryAddress,
         rpcClient,
       })
   );

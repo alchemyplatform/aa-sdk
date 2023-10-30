@@ -28,8 +28,8 @@ export const SmartAccountProviderOptsSchema = z.object({
 
 export const SmartAccountProviderConfigSchema = <
   TTransport extends SupportedTransports = Transport
->() =>
-  z.object({
+>() => {
+  return z.object({
     rpcProvider: z.union([
       z.string(),
       z
@@ -46,6 +46,7 @@ export const SmartAccountProviderConfigSchema = <
           }
         ),
     ]),
+
     chain: z.any().refine<Chain>((chain): chain is Chain => {
       if (
         !(typeof chain === "object") ||
@@ -61,6 +62,15 @@ export const SmartAccountProviderConfigSchema = <
         return false;
       }
     }),
-    entryPointAddress: zAddress,
+
+    /**
+     * Optional entry point contract address for override if needed.
+     * If not provided, the default entry point contract for the chain will be used.
+     * Refer to https://docs.alchemy.com/reference/eth-supportedentrypoints for all the supported entrypoints
+     * when using Alchemy as your RPC provider.
+     */
+    entryPointAddress: zAddress.optional(),
+
     opts: SmartAccountProviderOptsSchema.optional(),
   });
+};

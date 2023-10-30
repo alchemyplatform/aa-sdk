@@ -44,6 +44,8 @@ export {
   deepHexlify,
   defineReadOnly,
   getChain,
+  getDefaultEntryPointAddress,
+  getDefaultSimpleAccountFactoryAddressAddress as getDefaultSimpleAccountFactoryAddress,
   getUserOperationHash,
   resolveProperties,
 } from "./utils/index.js";
