@@ -12,6 +12,7 @@ export type SignTypedDataParams = Omit<SignTypedDataParameters, "privateKey">;
 export type BaseSmartAccountParams<
   TTransport extends SupportedTransports = Transport
 > = z.infer<ReturnType<typeof BaseSmartAccountParamsSchema<TTransport>>>;
+
 export interface ISmartContractAccount {
   /**
    * @returns the init code for the account
