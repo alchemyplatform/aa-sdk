@@ -1,4 +1,4 @@
-import { type Transaction } from "viem";
+import { type Address, type Chain, type Transaction } from "viem";
 import { polygonMumbai } from "viem/chains";
 import {
   afterEach,
@@ -13,10 +13,12 @@ import { SmartAccountProvider } from "../base.js";
 
 describe("Base Tests", () => {
   let retryMsDelays: number[] = [];
+  let dummyEntryPointAddress =
+    "0x1234567890123456789012345678901234567890" as Address;
 
   const providerMock = new SmartAccountProvider({
     rpcProvider: "ALCHEMY_RPC_URL",
-    entryPointAddress: "0xENTRYPOINT_ADDRESS",
+    entryPointAddress: dummyEntryPointAddress,
     chain: polygonMumbai,
   });
 
@@ -164,7 +166,7 @@ describe("Base Tests", () => {
 
     const provider = new TestProvider({
       rpcProvider: "ALCHEMY_RPC_URL",
-      entryPointAddress: "0xENTRYPOINT_ADDRESS",
+      entryPointAddress: dummyEntryPointAddress,
       chain: polygonMumbai,
     });
 
@@ -173,6 +175,59 @@ describe("Base Tests", () => {
     }));
 
     expect(newProvider.testMethod()).toEqual("test");
+  });
+
+  it("should correctly do runtime validation when entrypoint is invalid", () => {
+    expect(
+      () =>
+        new SmartAccountProvider({
+          rpcProvider: "ALCHEMY_RPC_URL",
+          entryPointAddress: 1 as unknown as Address,
+          chain: polygonMumbai,
+        })
+    ).toThrowErrorMatchingInlineSnapshot(`
+      "[
+        {
+          \\"code\\": \\"invalid_type\\",
+          \\"expected\\": \\"string\\",
+          \\"received\\": \\"number\\",
+          \\"path\\": [
+            \\"entryPointAddress\\"
+          ],
+          \\"message\\": \\"Expected string, received number\\"
+        }
+      ]"
+    `);
+  });
+
+  it("should correctly do runtime validation when multiple inputs are invalid", () => {
+    expect(
+      () =>
+        new SmartAccountProvider({
+          rpcProvider: "ALCHEMY_RPC_URL",
+          entryPointAddress: 1 as unknown as Address,
+          chain: "0x1" as unknown as Chain,
+        })
+    ).toThrowErrorMatchingInlineSnapshot(`
+      "[
+        {
+          \\"code\\": \\"custom\\",
+          \\"message\\": \\"Invalid input\\",
+          \\"path\\": [
+            \\"chain\\"
+          ]
+        },
+        {
+          \\"code\\": \\"invalid_type\\",
+          \\"expected\\": \\"string\\",
+          \\"received\\": \\"number\\",
+          \\"path\\": [
+            \\"entryPointAddress\\"
+          ],
+          \\"message\\": \\"Expected string, received number\\"
+        }
+      ]"
+    `);
   });
 
   const givenGetUserOperationFailsNTimes = (times: number) => {

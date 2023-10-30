@@ -33,10 +33,6 @@ export {
 } from "./ens/utils.js";
 
 export { SmartAccountProvider, noOpMiddleware } from "./provider/base.js";
-export type {
-  SmartAccountProviderConfig,
-  SmartAccountProviderOpts,
-} from "./provider/base.js";
 export type * from "./provider/types.js";
 
 export type * from "./types.js";
