@@ -61,7 +61,6 @@ import { sepolia } from "viem/chains";
 import { web3authSigner } from "./web3auth";
 
 const chain = sepolia;
-
 const provider = new AlchemyProvider({
   apiKey: "ALCHEMY_API_KEY",
   chain,

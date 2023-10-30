@@ -1,7 +1,6 @@
 import {
   LocalAccountSigner,
   SmartAccountProvider,
-  type Address,
   type BatchUserOperationCallData,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
@@ -81,15 +80,11 @@ const givenConnectedProvider = ({
   owner: SmartAccountSigner;
   chain: Chain;
 }) => {
-  const dummyEntryPointAddress =
-    "0x1234567890123456789012345678901234567890" as Address;
-
   return new SmartAccountProvider({
     rpcProvider: `${chain.rpcUrls.alchemy.http[0]}/${"test"}`,
     chain,
   }).connect((provider) => {
     const account = new LightSmartContractAccount({
-      entryPointAddress: dummyEntryPointAddress,
       chain,
       owner,
       factoryAddress: getDefaultLightAccountFactoryAddress(chain),
