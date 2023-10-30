@@ -14,7 +14,7 @@ head:
 
 # getDefaultEntryPointContract
 
-Utility method that returns the default EntryPoint contrafct address for a given chain
+Utility method that returns the default EntryPoint contract address for a given chain
 
 ## Usage
 
