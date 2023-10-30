@@ -14,7 +14,7 @@ head:
 
 # getDefaultSimpleAccountFactory
 
-Utility method that returns the default Simple Account Factory contrafct address for a given chain
+Utility method that returns the default Simple Account Factory contract address for a given chain
 
 ## Usage
 
