@@ -80,7 +80,6 @@ import { sepolia } from "viem/chains";
 import { capsuleSigner } from "./capsule";
 
 const chain = sepolia;
-
 const provider = new AlchemyProvider({
   apiKey: "ALCHEMY_API_KEY",
   chain,
