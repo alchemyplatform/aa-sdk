@@ -23,7 +23,7 @@ Returns the address of the account.
 ```ts [example.ts]
 import { provider } from "./provider";
 // [!code focus:99]
-const address = await provider.getAddress();
+const address = await provider.account.getAddress();
 ```
 
 <<< @/snippets/provider.ts

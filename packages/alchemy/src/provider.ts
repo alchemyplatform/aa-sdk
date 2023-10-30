@@ -121,7 +121,7 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
     const request = deepHexlify(await resolveProperties(struct));
     const estimates = await this.rpcClient.estimateUserOperationGas(
       request,
-      this.entryPointAddress
+      this.getEntryPointAddress()
     );
     estimates.preVerificationGas =
       (BigInt(estimates.preVerificationGas) * (100n + this.pvgBuffer)) / 100n;

@@ -87,7 +87,7 @@ const withAlchemyPaymasterAndDataMiddleware = (
       params: [
         {
           policyId: config.policyId,
-          entryPoint: provider.entryPointAddress,
+          entryPoint: provider.getEntryPointAddress(),
           userOperation: deepHexlify(await resolveProperties(struct)),
         },
       ],
@@ -127,7 +127,7 @@ const withAlchemyGasAndPaymasterAndDataMiddleware = (
       params: [
         {
           policyId: config.policyId,
-          entryPoint: provider.entryPointAddress,
+          entryPoint: provider.getEntryPointAddress(),
           userOperation: userOperation,
           dummySignature: userOperation.signature,
           feeOverride: feeOverride,

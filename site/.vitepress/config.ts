@@ -170,6 +170,10 @@ export default defineConfig({
                 link: "/getAddress",
               },
               {
+                text: "getEntryPointAddress",
+                link: "/getEntryPointAddress",
+              },
+              {
                 text: "isConnected",
                 link: "/isConnected",
               },

@@ -23,7 +23,7 @@ Returns the `SmartAccountSigner` that represents the current owner for the accou
 ```ts [example.ts]
 import { provider } from "./provider";
 // [!code focus:99]
-const ownerSigner = await provider.getOwner();
+const ownerSigner = await provider.account.getOwner();
 ```
 
 <<< @/snippets/provider.ts

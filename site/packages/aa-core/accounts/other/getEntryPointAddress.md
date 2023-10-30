@@ -16,6 +16,8 @@ head:
 
 Returns the EntryPoint contract address for the account.
 
+Refer to https://docs.alchemy.com/reference/eth-supportedentrypoints for all the supported entrypoints when using Alchemy as your RPC provider.
+
 ## Usage
 
 ::: code-group
@@ -23,7 +25,7 @@ Returns the EntryPoint contract address for the account.
 ```ts [example.ts]
 import { provider } from "./provider";
 // [!code focus:99]
-const entryPointAddress = await provider.getEntryPointAddress();
+const entryPointAddress = await provider.account.getEntryPointAddress();
 ```
 
 <<< @/snippets/provider.ts

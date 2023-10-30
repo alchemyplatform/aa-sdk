@@ -103,7 +103,6 @@ export interface ISmartAccountProvider<
   readonly customMiddleware?: AccountMiddlewareFn;
 
   readonly account?: ISmartContractAccount;
-  readonly entryPointAddress: Address;
 
   /**
    * Sends a user operation using the connected account.

@@ -8,8 +8,14 @@ import {
   vi,
   type SpyInstance,
 } from "vitest";
+import { SimpleSmartContractAccount } from "../../account/simple.js";
+import { LocalAccountSigner } from "../../signer/local-account.js";
+import type { SmartAccountSigner } from "../../signer/types.js";
 import type { UserOperationReceipt } from "../../types.js";
-import { getDefaultEntryPointAddress } from "../../utils/index.js";
+import {
+  getDefaultEntryPointAddress,
+  getDefaultSimpleAccountFactoryAddress,
+} from "../../utils/index.js";
 import { SmartAccountProvider } from "../base.js";
 
 const chain = polygonMumbai;
@@ -21,6 +27,23 @@ describe("Base Tests", () => {
   const providerMock = new SmartAccountProvider({
     rpcProvider: "ALCHEMY_RPC_URL",
     chain,
+  });
+
+  const dummyMnemonic =
+    "test test test test test test test test test test test test";
+  const owner: SmartAccountSigner =
+    LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
+
+  const dummAccountAddress =
+    "0x1234567890123456789012345678901234567890" as Address;
+
+  const account = new SimpleSmartContractAccount({
+    entryPointAddress,
+    chain,
+    owner,
+    factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
+    rpcClient: providerMock.rpcClient,
+    accountAddress: dummAccountAddress,
   });
 
   beforeEach(() => {
@@ -71,15 +94,6 @@ describe("Base Tests", () => {
 
   it("should emit connected event on connected", async () => {
     const spy = vi.spyOn(providerMock, "emit");
-    const account = {
-      chain,
-      entryPointAddress,
-      rpcClient: providerMock.rpcClient,
-      getAddress: async () => "0xMOCK_ADDRESS",
-      getFactoryAddress: () => "0xMOCK_FACOTRY_ADDRESS",
-      getEntryPointAddress: () => entryPointAddress,
-      getOwner: () => undefined,
-    } as any;
 
     // This says the await is not important... it is. the method is not marked sync because we don't need it to be,
     // but the address is emitted from an async method so we want to await that
@@ -96,25 +110,24 @@ describe("Base Tests", () => {
         [
           "accountsChanged",
           [
-            "0xMOCK_ADDRESS",
+            "${dummAccountAddress}",
           ],
         ],
       ]
     `);
   });
 
-  it("should throw error if connected account has different entry point address than the provider", async () => {
-    const account = {
-      chain: polygonMumbai,
-      entryPointAddress: "0xOTHER_ENTRY_POINT_ADDRESS",
-      rpcClient: providerMock.rpcClient,
-      getAddress: async () => "0xMOCK_ADDRESS",
-      getFactoryAddress: () => "0xMOCK_FACOTRY_ADDRESS",
-      getEntryPointAddress: () => "0xOTHER_ENTRY_POINT_ADDRESS",
-      getOwner: () => undefined,
-    } as any;
+  it("should throw error if connected account has different entry point address than the provider that is initialized with entryPointAddress param", async () => {
+    const dummyEntryPointAddress =
+      "0x1234567890123456789012345678901234567890" as Address;
 
-    expect(() => providerMock.connect(() => account)).toThrow();
+    const providerMockWithEntryPoint = new SmartAccountProvider({
+      rpcProvider: "ALCHEMY_RPC_URL",
+      entryPointAddress: dummyEntryPointAddress,
+      chain,
+    });
+
+    expect(() => providerMockWithEntryPoint.connect(() => account)).toThrow();
   });
 
   it("should emit disconnected event on disconnect", async () => {

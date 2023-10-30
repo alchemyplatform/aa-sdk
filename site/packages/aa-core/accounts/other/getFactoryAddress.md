@@ -23,7 +23,7 @@ Returns the account factory address for the account.
 ```ts [example.ts]
 import { provider } from "./provider";
 // [!code focus:99]
-const factoryAddress = await provider.getFactoryAddress();
+const factoryAddress = await provider.account.getFactoryAddress();
 ```
 
 <<< @/snippets/provider.ts
