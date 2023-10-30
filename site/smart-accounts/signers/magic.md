@@ -61,6 +61,9 @@ import { sepolia } from "viem/chains";
 import { createMagicSigner } from "./magic";
 
 const chain = sepolia;
+const entryPointAddress = getDefaultEntryPointContract(chain);
+const factoryAddress = getDefaultLightAccountFactory(chain);
+
 // NOTE: the below is async because it depends on creating a magic signer. You can choose to break that up how you want
 // eg. use a useEffect + useState to create the signer and then pass it down to the provider
 const provider = new AlchemyProvider({
