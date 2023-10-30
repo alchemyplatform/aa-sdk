@@ -25,5 +25,6 @@ lerna-debug.log
 # example ignores
 examples/contracts/**/out
 
-docs/.vitepress/dist
-docs/.vitepress/cache
+site/.vitepress/dist
+site/.vitepress/cache
+site/**/*.js
