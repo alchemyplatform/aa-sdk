@@ -1,6 +1,7 @@
 import {
   LocalAccountSigner,
   SmartAccountProvider,
+  type Address,
   type BatchUserOperationCallData,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
