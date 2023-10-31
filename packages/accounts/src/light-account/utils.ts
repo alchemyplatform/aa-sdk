@@ -1,4 +1,3 @@
-import { chains } from "@alchemy/aa-core";
 import type { Address, Chain } from "viem";
 import {
   arbitrum,

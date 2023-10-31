@@ -108,7 +108,8 @@ export class LightSmartContractAccount<
       encodeFunctionData({
         abi: LightAccountFactoryAbi,
         functionName: "createAccount",
-        args: [await this.owner.getAddress(), this.index],
+        // light account does not support sub-accounts
+        args: [await this.owner.getAddress(), 0n],
       }),
     ]);
   }
