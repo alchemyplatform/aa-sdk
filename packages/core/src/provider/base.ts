@@ -537,7 +537,7 @@ export class SmartAccountProvider<
   ): this & { account: TAccount } => {
     const account = fn(this.rpcClient);
 
-    // sanity check. Note that this check is only performed iff the optional entryPointAddress is given upon initialization.
+    // sanity check. Note that this check is only performed if and only if the optional entryPointAddress is given upon initialization.
     if (
       this.entryPointAddress &&
       account.getEntryPointAddress() !== this.entryPointAddress
