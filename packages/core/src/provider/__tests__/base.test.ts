@@ -127,7 +127,11 @@ describe("Base Tests", () => {
       chain,
     });
 
-    expect(() => providerMockWithEntryPoint.connect(() => account)).toThrow();
+    expect(() =>
+      providerMockWithEntryPoint.connect(() => account)
+    ).toThrowErrorMatchingInlineSnapshot(
+      `"Account entryPoint address: ${entryPointAddress} does not match the current provider's entryPoint address: ${dummyEntryPointAddress}"`
+    );
   });
 
   it("should emit disconnected event on disconnect", async () => {
