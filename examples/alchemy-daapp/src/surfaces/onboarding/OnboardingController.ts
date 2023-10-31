@@ -11,16 +11,16 @@ import { useAccount, useNetwork, type Chain } from "wagmi";
 import { localSmartContractStore } from "~/clients/localStorage";
 import { NFTContractABI } from "../../clients/nftContract";
 import {
-    DAAppConfiguration,
-    daappConfigurations,
+  DAAppConfiguration,
+  daappConfigurations,
 } from "../../configs/clientConfigs";
 import {
-    MIN_ONBOARDING_WALLET_BALANCE,
-    OnboardingContext,
-    OnboardingStep,
-    OnboardingStepIdentifier,
-    initialStep,
-    metaForStepIdentifier,
+  MIN_ONBOARDING_WALLET_BALANCE,
+  OnboardingContext,
+  OnboardingStep,
+  OnboardingStepIdentifier,
+  initialStep,
+  metaForStepIdentifier,
 } from "./OnboardingDataModels";
 
 async function pollForLambdaForComplete(
