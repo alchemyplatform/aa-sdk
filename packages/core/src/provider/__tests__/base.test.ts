@@ -43,7 +43,7 @@ describe("Base Tests", () => {
     owner,
     factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
     rpcClient: providerMock.rpcClient,
-    accountAddress: dummAccountAddress,
+    accountAddress: dummyAccountAddress,
   });
 
   beforeEach(() => {
