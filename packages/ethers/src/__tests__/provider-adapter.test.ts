@@ -49,10 +49,6 @@ const givenConnectedProvider = ({
         rpcClient,
       });
 
-      account.getAddress = vi.fn(
-        async () => "0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4"
-      );
-
       return account;
     }
   );
