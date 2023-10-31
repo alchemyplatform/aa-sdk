@@ -606,8 +606,8 @@ export class SmartAccountProvider<
    */
   getEntryPointAddress = (): Address => {
     return (
-      this.account?.getEntryPointAddress() ??
       this.entryPointAddress ??
+      this.account?.getEntryPointAddress() ??
       getDefaultEntryPointAddress(this.chain)
     );
   };
