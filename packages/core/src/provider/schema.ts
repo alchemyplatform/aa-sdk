@@ -65,7 +65,9 @@ export const SmartAccountProviderConfigSchema = <
 
     /**
      * Optional entry point contract address for override if needed.
-     * If not provided, the default entry point contract for the chain will be used.
+     * If not provided, the entry point contract address for the provider is the connected account's entry point contract,
+     * or if not connected, falls back to the default entry point contract for the chain.
+     *
      * Refer to https://docs.alchemy.com/reference/eth-supportedentrypoints for all the supported entrypoints
      * when using Alchemy as your RPC provider.
      */

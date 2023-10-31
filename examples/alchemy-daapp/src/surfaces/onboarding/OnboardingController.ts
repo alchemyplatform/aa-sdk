@@ -1,9 +1,9 @@
 import { LightSmartContractAccount, getDefaultLightAccountFactoryAddress } from "@alchemy/aa-accounts";
 import { AlchemyProvider, withAlchemyGasManager } from "@alchemy/aa-alchemy";
 import {
-    createPublicErc4337Client,
-    getDefaultEntryPointAddress,
-    type SmartAccountSigner
+  createPublicErc4337Client,
+  getDefaultEntryPointAddress,
+  type SmartAccountSigner
 } from "@alchemy/aa-core";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { encodeFunctionData } from "viem";
@@ -11,16 +11,16 @@ import { useAccount, useNetwork, type Chain } from "wagmi";
 import { localSmartContractStore } from "~/clients/localStorage";
 import { NFTContractABI } from "../../clients/nftContract";
 import {
-    DAAppConfiguration,
-    daappConfigurations,
+  DAAppConfiguration,
+  daappConfigurations,
 } from "../../configs/clientConfigs";
 import {
-    MIN_ONBOARDING_WALLET_BALANCE,
-    OnboardingContext,
-    OnboardingStep,
-    OnboardingStepIdentifier,
-    initialStep,
-    metaForStepIdentifier,
+  MIN_ONBOARDING_WALLET_BALANCE,
+  OnboardingContext,
+  OnboardingStep,
+  OnboardingStepIdentifier,
+  initialStep,
+  metaForStepIdentifier,
 } from "./OnboardingDataModels";
 
 async function pollForLambdaForComplete(

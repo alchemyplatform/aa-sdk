@@ -170,6 +170,10 @@ export default defineConfig({
                 link: "/getAddress",
               },
               {
+                text: "getEntryPointAddress",
+                link: "/getEntryPointAddress",
+              },
+              {
                 text: "isConnected",
                 link: "/isConnected",
               },
@@ -269,12 +273,24 @@ export default defineConfig({
                     link: "/getNonce",
                   },
                   {
+                    text: "getOwner",
+                    link: "/getOwner",
+                  },
+                  {
                     text: "getDeploymentState",
                     link: "/getDeploymentState",
                   },
                   {
                     text: "isAccountDeployed",
                     link: "/isAccountDeployed",
+                  },
+                  {
+                    text: "getFactoryAddress",
+                    link: "/getFactoryAddress",
+                  },
+                  {
+                    text: "getEntryPointAddress",
+                    link: "/getEntryPointAddress",
                   },
                 ],
               },

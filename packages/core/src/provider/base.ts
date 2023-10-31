@@ -76,8 +76,8 @@ export class SmartAccountProvider<
   private minPriorityFeePerBid: bigint;
 
   readonly account?: ISmartContractAccount;
-  readonly entryPointAddress: Address;
 
+  protected entryPointAddress?: Address;
   protected chain: Chain;
 
   rpcClient:
@@ -96,8 +96,7 @@ export class SmartAccountProvider<
     this.txMaxRetries = opts?.txMaxRetries ?? 5;
     this.txRetryIntervalMs = opts?.txRetryIntervalMs ?? 2000;
     this.txRetryMulitplier = opts?.txRetryMulitplier ?? 1.5;
-    this.entryPointAddress =
-      entryPointAddress ?? getDefaultEntryPointAddress(chain);
+    this.entryPointAddress = entryPointAddress;
 
     this.minPriorityFeePerBid =
       opts?.minPriorityFeePerBid ??
@@ -416,7 +415,7 @@ export class SmartAccountProvider<
     request.signature = (await this.account.signMessage(
       getUserOperationHash(
         request,
-        this.entryPointAddress,
+        this.getEntryPointAddress(),
         BigInt(this.chain.id)
       )
     )) as `0x${string}`;
@@ -424,7 +423,7 @@ export class SmartAccountProvider<
     return {
       hash: await this.rpcClient.sendUserOperation(
         request,
-        this.entryPointAddress
+        this.getEntryPointAddress()
       ),
       request,
     };
@@ -449,7 +448,7 @@ export class SmartAccountProvider<
     const request = deepHexlify(await resolveProperties(struct));
     const estimates = await this.rpcClient.estimateUserOperationGas(
       request,
-      this.entryPointAddress
+      this.getEntryPointAddress()
     );
 
     struct.callGasLimit = estimates.callGasLimit;
@@ -537,6 +536,19 @@ export class SmartAccountProvider<
     ) => TAccount
   ): this & { account: TAccount } => {
     const account = fn(this.rpcClient);
+
+    // sanity check. Note that this check is only performed if and only if the optional entryPointAddress is given upon initialization.
+    if (
+      this.entryPointAddress &&
+      account.getEntryPointAddress() !== this.entryPointAddress
+    ) {
+      throw new Error(
+        `Account entryPoint address: ${account.getEntryPointAddress()} does not match the current provider's entryPoint address: ${
+          this.entryPointAddress
+        }`
+      );
+    }
+
     defineReadOnly(this, "account", account);
 
     if (this.rpcClient.transport.type === "http") {
@@ -587,6 +599,17 @@ export class SmartAccountProvider<
     account: TAccount;
   } => {
     return this.account !== undefined;
+  };
+
+  /*
+   * Note that the connected account's entryPointAddress always takes the precedence
+   */
+  getEntryPointAddress = (): Address => {
+    return (
+      this.entryPointAddress ??
+      this.account?.getEntryPointAddress() ??
+      getDefaultEntryPointAddress(this.chain)
+    );
   };
 
   extend = <R>(fn: (self: this) => R): this & R => {

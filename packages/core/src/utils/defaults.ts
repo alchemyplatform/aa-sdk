@@ -47,7 +47,7 @@ export const getDefaultEntryPointAddress = (chain: Chain): Address => {
  * @returns a {@link abi.Address} for the given chain
  * @throws if the chain doesn't have an address currently deployed
  */
-export const getDefaultSimpleAccountFactoryAddressAddress = (
+export const getDefaultSimpleAccountFactoryAddress = (
   chain: Chain
 ): Address => {
   switch (chain.id) {
