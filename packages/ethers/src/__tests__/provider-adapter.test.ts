@@ -6,6 +6,7 @@ import {
 } from "@alchemy/aa-core";
 import { Wallet } from "@ethersproject/wallet";
 import { Alchemy, Network, type AlchemyProvider } from "alchemy-sdk";
+import { type Chain } from "viem/chains";
 import { EthersProviderAdapter } from "../../src/provider-adapter.js";
 import { convertWalletToAccountSigner } from "../utils.js";
 
@@ -37,20 +38,17 @@ describe("Simple Account Tests", async () => {
         new EthersProviderAdapter({
           accountProvider: new SmartAccountProvider({
             rpcProvider: alchemyProvider.connection.url,
-            entryPointAddress: 1 as unknown as Address,
-            chain: getChain(alchemyProvider.network.chainId),
+            chain: 1 as unknown as Chain,
           }),
         })
     ).toThrowErrorMatchingInlineSnapshot(`
       "[
         {
-          \\"code\\": \\"invalid_type\\",
-          \\"expected\\": \\"string\\",
-          \\"received\\": \\"number\\",
+          \\"code\\": \\"custom\\",
+          \\"message\\": \\"Invalid input\\",
           \\"path\\": [
-            \\"entryPointAddress\\"
-          ],
-          \\"message\\": \\"Expected string, received number\\"
+            \\"chain\\"
+          ]
         }
       ]"
     `);
