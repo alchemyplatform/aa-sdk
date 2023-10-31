@@ -12,14 +12,8 @@ import { SimpleAccountFactoryAbi } from "../abis/SimpleAccountFactoryAbi.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import type { BatchUserOperationCallData } from "../types.js";
 import { BaseSmartContractAccount } from "./base.js";
-import type { BaseSmartAccountParams } from "./types.js";
-
-export interface SimpleSmartAccountParams<
-  TTransport extends Transport | FallbackTransport = Transport
-> extends BaseSmartAccountParams<TTransport> {
-  owner: SmartAccountSigner;
-  index?: bigint;
-}
+import { SimpleSmartAccountParamsSchema } from "./schema.js";
+import type { SimpleSmartAccountParams } from "./types.js";
 
 export class SimpleSmartContractAccount<
   TTransport extends Transport | FallbackTransport = Transport
@@ -28,6 +22,8 @@ export class SimpleSmartContractAccount<
   protected index: bigint;
 
   constructor(params: SimpleSmartAccountParams<TTransport>) {
+    SimpleSmartAccountParamsSchema<TTransport>().parse(params);
+
     super(params);
     this.owner = params.owner;
     this.index = params.index ?? 0n;

@@ -20,3 +20,11 @@ export const createBaseSmartAccountParamsSchema = <
     chain: ChainSchema,
     accountAddress: Address.optional(),
   });
+
+export const SimpleSmartAccountParamsSchema = <
+  TTransport extends SupportedTransports = Transport
+>() =>
+  createBaseSmartAccountParamsSchema<TTransport>().extend({
+    owner: SignerSchema,
+    index: z.bigint().optional(),
+  });

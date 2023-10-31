@@ -102,6 +102,32 @@ describe("Account Simple Tests", () => {
       ]"
     `);
   });
+
+  it("should correctly do simple runtime validation when index is invalid", () => {
+    expect(
+      () =>
+        new SimpleSmartContractAccount({
+          entryPointAddress: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+          chain,
+          owner,
+          factoryAddress: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+          rpcClient: "ALCHEMY_RPC_URL",
+          index: "" as unknown as bigint,
+        })
+    ).toThrowErrorMatchingInlineSnapshot(`
+      "[
+        {
+          \\"code\\": \\"invalid_type\\",
+          \\"expected\\": \\"bigint\\",
+          \\"received\\": \\"string\\",
+          \\"path\\": [
+            \\"index\\"
+          ],
+          \\"message\\": \\"Expected bigint, received string\\"
+        }
+      ]"
+    `);
+  });
 });
 
 const givenConnectedProvider = ({
