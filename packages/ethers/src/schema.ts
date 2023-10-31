@@ -1,6 +1,6 @@
-import type {
-  PublicErc4337Client,
+import {
   SmartAccountProvider,
+  type PublicErc4337Client,
 } from "@alchemy/aa-core";
 import { Address as zAddress } from "abitype/zod";
 import type { HttpTransport } from "viem";
@@ -33,23 +33,7 @@ export const EthersProviderAdapterOptsSchema = z
       })
       .or(
         z.object({
-          accountProvider: z
-            .any()
-            .refine<SmartAccountProvider<HttpTransport>>(
-              (provider): provider is SmartAccountProvider<HttpTransport> => {
-                return (
-                  typeof provider === "object" &&
-                  "send" in provider &&
-                  "connectToAccount" in provider &&
-                  "withPaymasterMiddleware" in provider &&
-                  "withGasEstimator" in provider &&
-                  "withFeeDataGetter" in provider &&
-                  "withCustomMiddleware" in provider &&
-                  "getPublicErc4337Client" in provider &&
-                  "fromEthersProvider" in provider
-                );
-              }
-            ),
+          accountProvider: z.instanceof(SmartAccountProvider<HttpTransport>),
         })
       )
   );
