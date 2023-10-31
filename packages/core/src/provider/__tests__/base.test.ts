@@ -110,7 +110,7 @@ describe("Base Tests", () => {
         [
           "accountsChanged",
           [
-            "${dummAccountAddress}",
+            "${dummyAccountAddress}",
           ],
         ],
       ]
