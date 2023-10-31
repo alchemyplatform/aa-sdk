@@ -2,7 +2,10 @@
  * This example assumes your app is wrapped with the `PrivyProvider` and
  * is configured to create embedded wallets for users upon login.
  */
-import { LightSmartContractAccount } from "@alchemy/aa-accounts";
+import {
+  LightSmartContractAccount,
+  getDefaultLightAccountFactoryAddress,
+} from "@alchemy/aa-accounts";
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import { WalletClientSigner, type SmartAccountSigner } from "@alchemy/aa-core";
 import { useWallets } from "@privy-io/react-auth";
@@ -44,10 +47,9 @@ export const provider = new AlchemyProvider({
 }).connect(
   (rpcClient) =>
     new LightSmartContractAccount({
-      entryPointAddress: "0x...",
       chain: rpcClient.chain,
       owner: privySigner,
-      factoryAddress: "0x...",
+      factoryAddress: getDefaultLightAccountFactoryAddress(rpcClient.chain),
       rpcClient,
     })
 );

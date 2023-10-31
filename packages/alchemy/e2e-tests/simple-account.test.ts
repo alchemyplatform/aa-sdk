@@ -1,6 +1,5 @@
 import {
   SimpleSmartContractAccount,
-  getDefaultEntryPointAddress,
   getDefaultSimpleAccountFactoryAddress,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
@@ -11,8 +10,6 @@ import { AlchemyProvider } from "../src/provider.js";
 import { API_KEY, OWNER_MNEMONIC, PAYMASTER_POLICY_ID } from "./constants.js";
 
 const chain = polygonMumbai;
-const entryPointAddress = getDefaultEntryPointAddress(chain);
-const factoryAddress = getDefaultSimpleAccountFactoryAddress(chain);
 
 describe("Simple Account Tests", () => {
   const ownerAccount = mnemonicToAccount(OWNER_MNEMONIC);
@@ -174,10 +171,9 @@ const givenConnectedProvider = ({
   }).connect(
     (provider) =>
       new SimpleSmartContractAccount({
-        entryPointAddress,
         chain,
         owner,
-        factoryAddress,
+        factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
         rpcClient: provider,
         accountAddress,
       })

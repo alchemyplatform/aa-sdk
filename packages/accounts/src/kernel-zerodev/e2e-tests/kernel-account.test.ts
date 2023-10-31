@@ -75,7 +75,6 @@ describe("Kernel Account Tests", () => {
   function account(index: bigint, owner = mockOwner) {
     const accountParams: KernelSmartAccountParams = {
       rpcClient: provider.rpcClient,
-      entryPointAddress: config.entryPointAddress,
       chain: config.chain,
       owner: owner,
       factoryAddress: config.accountFactoryAddress,

@@ -1,5 +1,6 @@
 import { polygonMumbai, type Chain } from "viem/chains";
 import { describe, it } from "vitest";
+import { getDefaultSimpleAccountFactoryAddress } from "../../index.js";
 import { SmartAccountProvider } from "../../provider/base.js";
 import { LocalAccountSigner } from "../../signer/local-account.js";
 import { type SmartAccountSigner } from "../../signer/types.js";
@@ -11,6 +12,7 @@ describe("Account Simple Tests", () => {
     "test test test test test test test test test test test test";
   const owner: SmartAccountSigner =
     LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
+
   const chain = polygonMumbai;
 
   it("should correctly sign the message", async () => {
@@ -55,10 +57,9 @@ const givenConnectedProvider = ({
     chain,
   }).connect((provider) => {
     const account = new SimpleSmartContractAccount({
-      entryPointAddress: "0xENTRYPOINT_ADDRESS",
       chain,
       owner,
-      factoryAddress: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+      factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
       rpcClient: provider,
     });
 

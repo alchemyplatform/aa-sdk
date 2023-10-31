@@ -1,7 +1,6 @@
 import {
   SimpleSmartContractAccount,
   getChain,
-  getDefaultEntryPointAddress,
   getDefaultSimpleAccountFactoryAddress,
   type Address,
 } from "@alchemy/aa-core";
@@ -13,8 +12,6 @@ import { convertWalletToAccountSigner } from "../src/utils.js";
 import { API_KEY, OWNER_MNEMONIC, RPC_URL } from "./constants.js";
 
 const chain = polygonMumbai;
-const entryPointAddress = getDefaultEntryPointAddress(chain);
-const factoryAddress = getDefaultSimpleAccountFactoryAddress(chain);
 
 describe("Simple Account Tests", async () => {
   const alchemy = new Alchemy({
@@ -74,10 +71,9 @@ const givenConnectedProvider = ({
   EthersProviderAdapter.fromEthersProvider(alchemyProvider).connectToAccount(
     (rpcClient) =>
       new SimpleSmartContractAccount({
-        entryPointAddress,
         chain: getChain(alchemyProvider.network.chainId),
         owner: convertWalletToAccountSigner(owner),
-        factoryAddress,
+        factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
         rpcClient,
         accountAddress,
       })

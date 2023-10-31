@@ -77,7 +77,10 @@ We can link our `SmartAccountSigner` to a `LightSmartContractAccount` from `aa-a
 
 ```ts [example.ts]
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
-import { LightSmartContractAccount } from "@alchemy/aa-accounts";
+import {
+  LightSmartContractAccount,
+  getDefaultLightAccountFactoryAddress,
+} from "@alchemy/aa-accounts";
 import { litSigner } from "./lit";
 
 const chain = sepolia;
@@ -87,10 +90,9 @@ const provider = new AlchemyProvider({
 }).connect(
   (rpcClient) =>
     new LightSmartContractAccount({
-      entryPointAddress: "0x...",
-      chain: rpcClient.chain,
+      chain,
       owner: litSigner,
-      factoryAddress: "0x...",
+      factoryAddress: getDefaultLightAccountFactoryAddress(chain),
       rpcClient,
     })
 );
