@@ -34,7 +34,7 @@ describe("Base Tests", () => {
   const owner: SmartAccountSigner =
     LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
 
-  const dummAccountAddress =
+  const dummyAccountAddress =
     "0x1234567890123456789012345678901234567890" as Address;
 
   const account = new SimpleSmartContractAccount({
