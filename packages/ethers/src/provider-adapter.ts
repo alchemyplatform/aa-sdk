@@ -1,8 +1,8 @@
 import {
   SmartAccountProvider,
   getChain,
+  getDefaultEntryPointAddress,
   type AccountMiddlewareFn,
-  type Address,
   type FeeDataMiddleware,
   type GasEstimatorMiddleware,
   type HttpTransport,
@@ -13,22 +13,16 @@ import {
 import { defineReadOnly } from "@ethersproject/properties";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { AccountSigner } from "./account-signer.js";
-
-export type EthersProviderAdapterOpts = { entryPointAddress?: Address } & (
-  | {
-      rpcProvider: string | PublicErc4337Client<HttpTransport>;
-      chainId: number;
-    }
-  | {
-      accountProvider: SmartAccountProvider<HttpTransport>;
-    }
-);
+import { EthersProviderAdapterOptsSchema } from "./schema.js";
+import type { EthersProviderAdapterOpts } from "./types.js";
 
 /** Lightweight Adapter for SmartAccountProvider to enable Signer Creation */
 export class EthersProviderAdapter extends JsonRpcProvider {
   readonly accountProvider: SmartAccountProvider<HttpTransport>;
 
   constructor(opts: EthersProviderAdapterOpts) {
+    EthersProviderAdapterOptsSchema.parse(opts);
+
     super();
     if ("accountProvider" in opts) {
       this.accountProvider = opts.accountProvider;
@@ -36,7 +30,8 @@ export class EthersProviderAdapter extends JsonRpcProvider {
       const chain = getChain(opts.chainId);
       this.accountProvider = new SmartAccountProvider({
         rpcProvider: opts.rpcProvider,
-        entryPointAddress: opts.entryPointAddress,
+        entryPointAddress:
+          opts.entryPointAddress ?? getDefaultEntryPointAddress(chain),
         chain,
       });
     }

@@ -1,5 +1,6 @@
 import {
   SimpleSmartContractAccount,
+  SmartAccountProvider,
   getChain,
   getDefaultSimpleAccountFactoryAddress,
 } from "@alchemy/aa-core";
@@ -28,6 +29,31 @@ describe("Simple Account Tests", async () => {
     ).toBe(
       "0xbfe07c95623df55ae939ddf4757563286472ef8c0ebe4b84d5e774a653b7eb67735cb5b63d15bb18510d64a97e6e3001a5f9818f89f2f7f076e559248a7ccf7d1c"
     );
+  });
+
+  it("should correctly do runtime validation when entryPoint is invalid", async () => {
+    expect(
+      () =>
+        new EthersProviderAdapter({
+          accountProvider: new SmartAccountProvider({
+            rpcProvider: alchemyProvider.connection.url,
+            entryPointAddress: 1 as unknown as Address,
+            chain: getChain(alchemyProvider.network.chainId),
+          }),
+        })
+    ).toThrowErrorMatchingInlineSnapshot(`
+      "[
+        {
+          \\"code\\": \\"invalid_type\\",
+          \\"expected\\": \\"string\\",
+          \\"received\\": \\"number\\",
+          \\"path\\": [
+            \\"entryPointAddress\\"
+          ],
+          \\"message\\": \\"Expected string, received number\\"
+        }
+      ]"
+    `);
   });
 });
 
