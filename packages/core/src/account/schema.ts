@@ -1,5 +1,5 @@
 import { Address } from "abitype/zod";
-import type { Transport } from "viem";
+import { isHex, type Transport } from "viem";
 import z from "zod";
 import { createPublicErc4337ClientSchema } from "../client/schema.js";
 import type { SupportedTransports } from "../client/types";
@@ -18,5 +18,12 @@ export const createBaseSmartAccountParamsSchema = <
     owner: SignerSchema.optional(),
     entryPointAddress: Address.optional(),
     chain: ChainSchema,
-    accountAddress: Address.optional(),
+    accountAddress: Address.optional().describe(
+      "Optional override for the account address."
+    ),
+    initCode: z
+      .string()
+      .refine(isHex, "initCode must be a valid hex.")
+      .optional()
+      .describe("Optional override for the account init code."),
   });
