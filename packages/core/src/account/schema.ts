@@ -1,4 +1,4 @@
-import { Address as zAddress } from "abitype/zod";
+import { Address } from "abitype/zod";
 import type { Transport } from "viem";
 import z from "zod";
 import { createPublicErc4337ClientSchema } from "../client/schema.js";
@@ -14,9 +14,9 @@ export const createBaseSmartAccountParamsSchema = <
       z.string(),
       createPublicErc4337ClientSchema<TTransport>(),
     ]),
-    factoryAddress: zAddress,
+    factoryAddress: Address,
     owner: SignerSchema.optional(),
-    entryPointAddress: zAddress.optional(),
+    entryPointAddress: Address.optional(),
     chain: ChainSchema,
-    accountAddress: zAddress.optional(),
+    accountAddress: Address.optional(),
   });

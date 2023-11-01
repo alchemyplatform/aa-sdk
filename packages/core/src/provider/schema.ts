@@ -1,4 +1,4 @@
-import { Address as zAddress } from "abitype/zod";
+import { Address } from "abitype/zod";
 import type { Transport } from "viem";
 import z from "zod";
 import { createPublicErc4337ClientSchema } from "../client/schema.js";
@@ -44,7 +44,7 @@ export const createSmartAccountProviderConfigSchema = <
      * Refer to https://docs.alchemy.com/reference/eth-supportedentrypoints for all the supported entrypoints
      * when using Alchemy as your RPC provider.
      */
-    entryPointAddress: zAddress.optional(),
+    entryPointAddress: Address.optional(),
     opts: SmartAccountProviderOptsSchema.optional(),
   });
 };
