@@ -1,8 +1,9 @@
 import { Address as zAddress } from "abitype/zod";
-import type { Chain, Transport } from "viem";
+import type { Transport } from "viem";
 import z from "zod";
-import type { PublicErc4337Client, SupportedTransports } from "../client/types";
-import { getChain } from "../utils/index.js";
+import { createPublicErc4337ClientSchema } from "../client/schema.js";
+import type { SupportedTransports } from "../client/types";
+import { ChainSchema } from "../utils/index.js";
 
 export const SmartAccountProviderOptsSchema = z.object({
   /**
@@ -26,43 +27,15 @@ export const SmartAccountProviderOptsSchema = z.object({
   minPriorityFeePerBid: z.bigint().optional().default(100_000_000n),
 });
 
-export const SmartAccountProviderConfigSchema = <
+export const createSmartAccountProviderConfigSchema = <
   TTransport extends SupportedTransports = Transport
 >() => {
   return z.object({
     rpcProvider: z.union([
       z.string(),
-      z
-        .any()
-        .refine<PublicErc4337Client<TTransport>>(
-          (provider): provider is PublicErc4337Client<TTransport> => {
-            return (
-              typeof provider === "object" &&
-              "request" in provider &&
-              "type" in provider &&
-              "key" in provider &&
-              "name" in provider
-            );
-          }
-        ),
+      createPublicErc4337ClientSchema<TTransport>(),
     ]),
-
-    chain: z.any().refine<Chain>((chain): chain is Chain => {
-      if (
-        !(typeof chain === "object") ||
-        !("id" in chain) ||
-        typeof chain.id !== "number"
-      ) {
-        return false;
-      }
-
-      try {
-        return getChain(chain.id) !== undefined;
-      } catch {
-        return false;
-      }
-    }),
-
+    chain: ChainSchema,
     /**
      * Optional entry point contract address for override if needed.
      * If not provided, the entry point contract address for the provider is the connected account's entry point contract,
@@ -72,7 +45,6 @@ export const SmartAccountProviderConfigSchema = <
      * when using Alchemy as your RPC provider.
      */
     entryPointAddress: zAddress.optional(),
-
     opts: SmartAccountProviderOptsSchema.optional(),
   });
 };

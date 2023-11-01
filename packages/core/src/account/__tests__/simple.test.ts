@@ -93,10 +93,11 @@ describe("Account Simple Tests", () => {
         },
         {
           \\"code\\": \\"custom\\",
-          \\"message\\": \\"Invalid input\\",
+          \\"fatal\\": true,
           \\"path\\": [
             \\"chain\\"
-          ]
+          ],
+          \\"message\\": \\"Invalid input\\"
         }
       ]"
     `);

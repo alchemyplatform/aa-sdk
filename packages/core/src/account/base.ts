@@ -20,7 +20,7 @@ import type { SmartAccountSigner } from "../signer/types.js";
 import { wrapSignatureWith6492 } from "../signer/utils.js";
 import type { BatchUserOperationCallData } from "../types.js";
 import { getDefaultEntryPointAddress } from "../utils/defaults.js";
-import { BaseSmartAccountParamsSchema } from "./schema.js";
+import { createBaseSmartAccountParamsSchema } from "./schema.js";
 import type {
   BaseSmartAccountParams,
   ISmartContractAccount,
@@ -52,7 +52,7 @@ export abstract class BaseSmartContractAccount<
     | PublicErc4337Client<HttpTransport>;
 
   constructor(params: BaseSmartAccountParams<TTransport>) {
-    BaseSmartAccountParamsSchema<TTransport>().parse(params);
+    createBaseSmartAccountParamsSchema<TTransport>().parse(params);
 
     this.entryPointAddress =
       params.entryPointAddress ?? getDefaultEntryPointAddress(params.chain);

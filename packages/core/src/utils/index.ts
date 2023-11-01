@@ -158,4 +158,5 @@ export function defineReadOnly<T, K extends keyof T>(
 
 export * from "./bigint.js";
 export * from "./defaults.js";
+export * from "./schema.js";
 export * from "./userop.js";
