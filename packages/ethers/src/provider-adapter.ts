@@ -1,7 +1,6 @@
 import {
   SmartAccountProvider,
   getChain,
-  getDefaultEntryPointAddress,
   type AccountMiddlewareFn,
   type FeeDataMiddleware,
   type GasEstimatorMiddleware,
@@ -30,8 +29,6 @@ export class EthersProviderAdapter extends JsonRpcProvider {
       const chain = getChain(opts.chainId);
       this.accountProvider = new SmartAccountProvider({
         rpcProvider: opts.rpcProvider,
-        entryPointAddress:
-          opts.entryPointAddress ?? getDefaultEntryPointAddress(chain),
         chain,
       });
     }

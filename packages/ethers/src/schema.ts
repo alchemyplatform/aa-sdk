@@ -1,6 +1,6 @@
 import {
   SmartAccountProvider,
-  type PublicErc4337Client,
+  createPublicErc4337ClientSchema,
 } from "@alchemy/aa-core";
 import { Address as zAddress } from "abitype/zod";
 import type { HttpTransport } from "viem";
@@ -15,19 +15,7 @@ export const EthersProviderAdapterOptsSchema = z
       .object({
         rpcProvider: z.union([
           z.string(),
-          z
-            .any()
-            .refine<PublicErc4337Client<HttpTransport>>(
-              (provider): provider is PublicErc4337Client<HttpTransport> => {
-                return (
-                  typeof provider === "object" &&
-                  "request" in provider &&
-                  "type" in provider &&
-                  "key" in provider &&
-                  "name" in provider
-                );
-              }
-            ),
+          createPublicErc4337ClientSchema<HttpTransport>(),
         ]),
         chainId: z.number(),
       })
