@@ -1,6 +1,7 @@
 import * as AACoreModule from "@alchemy/aa-core";
 import {
   SimpleSmartContractAccount,
+  getDefaultEntryPointAddress,
   type BatchUserOperationCallData,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
@@ -95,7 +96,7 @@ describe("Alchemy Provider Tests", () => {
       () =>
         new AlchemyProvider({
           rpcUrl: 1 as unknown as string,
-          entryPointAddress: AACoreModule.getDefaultEntryPointAddress(chain),
+          entryPointAddress: getDefaultEntryPointAddress(chain),
           chain: polygonMumbai,
         })
     ).toThrowErrorMatchingSnapshot();
