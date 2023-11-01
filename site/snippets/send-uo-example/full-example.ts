@@ -4,7 +4,10 @@ import {
 } from "@alchemy/aa-accounts";
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import { LocalAccountSigner, type SmartAccountSigner } from "@alchemy/aa-core";
+<<<<<<< HEAD
 import { encodeFunctionData } from "viem";
+=======
+>>>>>>> 6ec4edc (docs: add guide for how to send a user operation)
 import { sepolia } from "viem/chains";
 
 const provider = new AlchemyProvider({

@@ -26,7 +26,11 @@ This guide will show you how to send a User Operation with Account Kit by creati
 
 Using the SDK, we'll create an Alchemy Provider. As it is, the providers gives you methods to query information related to user operations and smart accounts. To create a provider, you'll need an Alchemy API Key or RPC URL, which you can access from the [Alchemy Dashboard](https://dashboard.alchemy.com).
 
+<<<<<<< HEAD
 See [Alchemy Provider](/packages/aa-alchemy/provider/introduction.md) for more details.
+=======
+See [Alchemy Provider](packages/aa-alchemy/provider/introduction.md) for more details.
+>>>>>>> 6ec4edc (docs: add guide for how to send a user operation)
 
 <<< @/snippets/send-uo-example/create-provider.ts
 
