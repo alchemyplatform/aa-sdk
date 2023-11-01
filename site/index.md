@@ -43,9 +43,13 @@ titleTemplate: :title Documentation
                 <span>Account Kit</span>
               </div>
               <div
-                class="gap-[28px] text-[64px] font-bold items-end color max-lg:text-center max-md:text-[56px] leading-none"
+                class="gap-[28px] text-[64px] font-bold items-end color max-md:text-center max-md:text-[56px] leading-none"
               >
-                <span class="bg-gradient-1 bg-clip-text transparent-text-fill max-lg:flex max-lg:flex-wrap">Account Kit</span> Documentation
+                <div class="flex flex-col max-lg:items-center">
+                  <text class="bg-gradient-1 bg-clip-text transparent-text-fill max-lg:flex max-lg:flex-wrap">Account Kit</text> 
+                  <text class="max-sm:hidden">Documentation</text>
+                  <text class="hidden max-sm:block">Docs</text>
+                </div>
               </div>
               <div class="text-[22px] font-normal max-md:text-center">
                 Account Kit is a vertically integrated stack for building apps that support ERC-4337: smart accounts, signer integrations, sponsoring gas, bundlers, and an SDK.
@@ -67,6 +71,7 @@ titleTemplate: :title Documentation
                 </a>
               </div>
             </div>
+
 <!-- needs to be formatted differently to work in markdown -->
 <div class="vp-doc max-lg:hidden">
 
