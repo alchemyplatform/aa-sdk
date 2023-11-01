@@ -31,7 +31,12 @@ export default defineConfig({
     ],
 
     search: {
-      provider: "local",
+      provider: "algolia",
+      options: {
+        appId: "IHLWJWIZ3J",
+        apiKey: "e27b06dcc3597664309c1ed9b8cb5470",
+        indexName: "aa-sdk-staging",
+      },
     },
 
     sidebar: [
