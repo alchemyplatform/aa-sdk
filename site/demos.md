@@ -26,3 +26,4 @@ This demo shows how to mint an ERC-20 token to a Light Account using Alchemy's G
 This demo shows how to mint an NFT (ERC-721 token) to a Light Account using Alchemy's Gas Manager to provide a gas-less minting experience.
 
 [Try it out!](https://gasless-nft-minter-v2.vercel.app/)
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/alchemyplatform/aa-sdk/tree/main/examples/aa-gasless-nft-minter?file=README.md)
