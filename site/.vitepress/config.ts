@@ -88,7 +88,10 @@ export default defineConfig({
               { text: "Portal Integration Guide", link: "/portal" },
               { text: "Capsule Integration Guide", link: "/capsule" },
               { text: "Lit Protocol Integration Guide", link: "/lit" },
-              { text: "Particle Network Integration Guide", link: "/particle-network" },
+              {
+                text: "Particle Network Integration Guide",
+                link: "/particle-network",
+              },
               { text: "EOA Integration Guide", link: "/eoa" },
               {
                 text: "How to Use Your Own Account Signer",
