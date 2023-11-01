@@ -45,10 +45,11 @@ describe("Simple Account Tests", async () => {
       "[
         {
           \\"code\\": \\"custom\\",
-          \\"message\\": \\"Invalid input\\",
+          \\"fatal\\": true,
           \\"path\\": [
             \\"chain\\"
-          ]
+          ],
+          \\"message\\": \\"Invalid input\\"
         }
       ]"
     `);
