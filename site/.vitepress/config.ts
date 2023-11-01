@@ -88,7 +88,7 @@ export default defineConfig({
               { text: "Portal", link: "/portal" },
               { text: "Capsule", link: "/capsule" },
               { text: "Lit Protocol", link: "/lit" },
-              { text: "EOA", link: "/eoa" },
+              { text: "Externally Owned Accounts", link: "/eoa" },
               {
                 text: "How to Use Your Own Account Signer",
                 link: "/custom-signer",
