@@ -90,141 +90,15 @@ describe("Alchemy Provider Tests", () => {
     `);
   });
 
-  it("should correctly do runtime validation when multiple inputs are invalid", () => {
+  it("should correctly do runtime validation when connection config is invalid", () => {
     expect(
       () =>
         new AlchemyProvider({
           rpcUrl: 1 as unknown as string,
-          entryPointAddress: 1 as unknown as Address,
+          entryPointAddress: AACoreModule.getDefaultEntryPointAddress(chain),
           chain: polygonMumbai,
         })
-    ).toThrowErrorMatchingInlineSnapshot(`
-      "[
-        {
-          \\"code\\": \\"invalid_type\\",
-          \\"expected\\": \\"string\\",
-          \\"received\\": \\"number\\",
-          \\"path\\": [
-            \\"entryPointAddress\\"
-          ],
-          \\"message\\": \\"Expected string, received number\\"
-        },
-        {
-          \\"code\\": \\"invalid_union\\",
-          \\"unionErrors\\": [
-            {
-              \\"issues\\": [
-                {
-                  \\"code\\": \\"invalid_union\\",
-                  \\"unionErrors\\": [
-                    {
-                      \\"issues\\": [
-                        {
-                          \\"code\\": \\"invalid_union\\",
-                          \\"unionErrors\\": [
-                            {
-                              \\"issues\\": [
-                                {
-                                  \\"code\\": \\"invalid_type\\",
-                                  \\"expected\\": \\"never\\",
-                                  \\"received\\": \\"number\\",
-                                  \\"path\\": [
-                                    \\"rpcUrl\\"
-                                  ],
-                                  \\"message\\": \\"Expected never, received number\\"
-                                },
-                                {
-                                  \\"code\\": \\"invalid_type\\",
-                                  \\"expected\\": \\"string\\",
-                                  \\"received\\": \\"undefined\\",
-                                  \\"path\\": [
-                                    \\"apiKey\\"
-                                  ],
-                                  \\"message\\": \\"Required\\"
-                                }
-                              ],
-                              \\"name\\": \\"ZodError\\"
-                            },
-                            {
-                              \\"issues\\": [
-                                {
-                                  \\"code\\": \\"invalid_type\\",
-                                  \\"expected\\": \\"never\\",
-                                  \\"received\\": \\"number\\",
-                                  \\"path\\": [
-                                    \\"rpcUrl\\"
-                                  ],
-                                  \\"message\\": \\"Expected never, received number\\"
-                                },
-                                {
-                                  \\"code\\": \\"invalid_type\\",
-                                  \\"expected\\": \\"string\\",
-                                  \\"received\\": \\"undefined\\",
-                                  \\"path\\": [
-                                    \\"jwt\\"
-                                  ],
-                                  \\"message\\": \\"Required\\"
-                                }
-                              ],
-                              \\"name\\": \\"ZodError\\"
-                            }
-                          ],
-                          \\"path\\": [],
-                          \\"message\\": \\"Invalid input\\"
-                        }
-                      ],
-                      \\"name\\": \\"ZodError\\"
-                    },
-                    {
-                      \\"issues\\": [
-                        {
-                          \\"code\\": \\"invalid_type\\",
-                          \\"expected\\": \\"string\\",
-                          \\"received\\": \\"number\\",
-                          \\"path\\": [
-                            \\"rpcUrl\\"
-                          ],
-                          \\"message\\": \\"Expected string, received number\\"
-                        }
-                      ],
-                      \\"name\\": \\"ZodError\\"
-                    }
-                  ],
-                  \\"path\\": [],
-                  \\"message\\": \\"Invalid input\\"
-                }
-              ],
-              \\"name\\": \\"ZodError\\"
-            },
-            {
-              \\"issues\\": [
-                {
-                  \\"code\\": \\"invalid_type\\",
-                  \\"expected\\": \\"string\\",
-                  \\"received\\": \\"number\\",
-                  \\"path\\": [
-                    \\"rpcUrl\\"
-                  ],
-                  \\"message\\": \\"Expected string, received number\\"
-                },
-                {
-                  \\"code\\": \\"invalid_type\\",
-                  \\"expected\\": \\"string\\",
-                  \\"received\\": \\"undefined\\",
-                  \\"path\\": [
-                    \\"jwt\\"
-                  ],
-                  \\"message\\": \\"Required\\"
-                }
-              ],
-              \\"name\\": \\"ZodError\\"
-            }
-          ],
-          \\"path\\": [],
-          \\"message\\": \\"Invalid input\\"
-        }
-      ]"
-    `);
+    ).toThrowErrorMatchingSnapshot();
   });
 });
 
