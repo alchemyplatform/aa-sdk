@@ -75,4 +75,4 @@ A new instance of an `LightSmartContractAccount`.
 
 - `accountAddress: Address | undefined` -- the owner EOA address responsible for signing user operations on behalf of the smart account.
 
-- `index: bigint | undefined` -- [optional] additional salt value used when creating the smart account. Allows for a one-to-many creation from one owner address to many smart account addresses.
+- `index: bigint | undefined` -- [optional] additional salt value used when creating the smart account.
