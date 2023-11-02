@@ -29,11 +29,11 @@ import { EthersProviderAdapter } from "@alchemy/aa-ethers";
 import { sepolia } from "viem/chains";
 
 export const provider = new EthersProviderAdapter({
-  rpcProvider: "ALCHEMY_RPC_URL", // replace with your Alchemy API Key
+  rpcProvider: "ALCHEMY_RPC_URL",
   chainId: 80001,
 });
 
-export const otherProvider = new EthersProviderAdapter({
+export const anotherProvider = new EthersProviderAdapter({
   accountProvider: new AlchemyProvider({
     apiKey: "ALCHEMY_API_KEY", // replace with your Alchemy API Key
     chain: sepolia,
