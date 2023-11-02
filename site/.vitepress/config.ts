@@ -146,6 +146,10 @@ export default defineConfig({
                 link: "/introduction",
               },
               {
+                text: "constructor for SmartAccountProvider",
+                link: "/constructor",
+              },
+              {
                 text: "sendUserOperation",
                 link: "/sendUserOperation",
               },
@@ -247,6 +251,10 @@ export default defineConfig({
               {
                 text: "Overview of ISmartContractAccount",
                 link: "/introduction",
+              },
+              {
+                text: "constructor for SimpleSmartContractAccount",
+                link: "/constructor",
               },
               {
                 text: "Required Methods",
@@ -461,6 +469,10 @@ export default defineConfig({
                 text: "Overview of AlchemyProvider",
                 link: "/introduction",
               },
+              {
+                text: "constructor for AlchemyProvider",
+                link: "/constructor",
+              },
               { text: "gasEstimator", link: "/gasEstimator" },
               {
                 text: "withAlchemyGasManager",
@@ -520,6 +532,10 @@ export default defineConfig({
                 link: "/introduction",
               },
               {
+                text: "constructor for LightSmartContractAccount",
+                link: "/constructor",
+              },
+              {
                 text: "signMessageWith6492",
                 link: "/signMessageWith6492",
               },
@@ -567,6 +583,10 @@ export default defineConfig({
               {
                 text: "Overview of EthersProviderAdapter",
                 link: "/introduction",
+              },
+              {
+                text: "constructor for EthersProviderAdapter",
+                link: "/constructor",
               },
               {
                 text: "send",

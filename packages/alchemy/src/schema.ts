@@ -28,12 +28,12 @@ export const FeeOptsSchema = z.object({
   /** this adds a percent buffer on top of the base fee estimated (default 50%)
    * NOTE: this is only applied if the default fee estimator is used.
    */
-  baseFeeBufferPercent: z.bigint().optional().default(50n),
+  baseFeeBufferPercent: z.bigint().optional(),
   /** this adds a percent buffer on top of the priority fee estimated (default 5%)'
    * * NOTE: this is only applied if the default fee estimator is used.
    */
-  maxPriorityFeeBufferPercent: z.bigint().optional().default(5n),
-  /** this adds a percent buffer on top of the preVerificationGasEstimated
+  maxPriorityFeeBufferPercent: z.bigint().optional(),
+  /** this adds a percent buffer on top of the preVerificationGas estimated
    *
    * Defaults 5% on Arbitrum and Optimism, 0% elsewhere
    *
