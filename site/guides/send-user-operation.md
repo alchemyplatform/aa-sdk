@@ -27,10 +27,14 @@ This guide will show you how to send a User Operation with Account Kit by creati
 Using the SDK, we'll create an Alchemy Provider. As it is, the providers gives you methods to query information related to user operations and smart accounts. To create a provider, you'll need an Alchemy API Key or RPC URL, which you can access from the [Alchemy Dashboard](https://dashboard.alchemy.com).
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 See [Alchemy Provider](/packages/aa-alchemy/provider/introduction.md) for more details.
 =======
 See [Alchemy Provider](packages/aa-alchemy/provider/introduction.md) for more details.
 >>>>>>> 6ec4edc (docs: add guide for how to send a user operation)
+=======
+See [Alchemy Provider](/packages/aa-alchemy/provider/introduction.md) for more details.
+>>>>>>> ff5a4c9 (docs: add guide for how to send a user operation)
 
 <<< @/snippets/send-uo-example/create-provider.ts
 
@@ -44,6 +48,7 @@ See [Light Account](/packages/aa-accounts/light-account/introduction.md) for mor
 
 ## 3. Construct The CallData
 
+<<<<<<< HEAD
 The best part of Account Kit is that it abstracts the differences between User Operation calldata and standard Transaction calldata, such that you can pass in typical calldata to [sendUserOperation](/packages/aa-core/provider/waitForUserOperationTransaction.md) as if it was a transaction sent from your smart account, and we'll wrap it as necessary to generate calldata as it would be as a User Operation.
 
 The second best part of Account Kit is it's build atop [viem](https://viem.sh/). This means we can leverage utility methods to easily generate calldata, with type safety, using a smart contract's ABI.
@@ -56,6 +61,10 @@ Some other helpful viem methods include: [encodeFunctionData](https://viem.sh/do
 
 Now we'll use the connected provider to send a user operation. We'll use the [sendUserOperation](/packages/aa-core/provider/waitForUserOperationTransaction.md) method on the provider.
 
+=======
+Now we'll use the connected provider to send a user operation. We'll use the [sendUserOperation](/packages/aa-core/provider/waitForUserOperationTransaction.md) method on the provider.
+
+>>>>>>> ff5a4c9 (docs: add guide for how to send a user operation)
 You can either send ETH to the smart account to pay for User Operation's gas, or you can connect your provider to an Alchemy Gas Manager using the [withAlchemyGasManager](/packages/aa-alchemy/provider/withAlchemyGasManager.md) method to sponsor the UO's gas. We'll use the latter approach below. You can go to the [Alchemy Dashboard](https://dashboard.alchemy.com/gas-manager) to get a Gas Manager policy ID.
 
 We'll also want to wait for the transaction which contains the User Operation, so that we know the User Operation executed on-chain. We can use the [waitForUserOperationTransaction](/packages/aa-core/provider/waitForUserOperationTransaction.md) method on provider to do so, as seen below.
