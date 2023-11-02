@@ -38,7 +38,17 @@ See [Light Account](/packages/aa-accounts/light-account/introduction.md) for mor
 
 <<< @/snippets/send-uo-example/connect-account.ts
 
-## 3. Send The User Operation
+## 3. Construct The CallData
+
+The best part of Account Kit is that it abstracts the differences between User Operation calldata and standard Transaction calldata, such that you can pass in typical calldata to [sendUserOperation](/packages/aa-core/provider/waitForUserOperationTransaction.md) as if it was a transaction sent from your smart account, and we'll wrap it as necessary to generate calldata as it would be as a User Operation.
+
+The second best part of Account Kit is it's build atop [viem](https://viem.sh/). This means we can leverage utility methods to easily generate calldata, with type safety, using a smart contract's ABI.
+
+<<< @/snippets/send-uo-example/calldata.ts
+
+Some other helpful viem methods include: [encodeFunctionData](https://viem.sh/docs/contract/encodeFunctionData.html), [decodeFunctionData](https://viem.sh/docs/contract/decodeFunctionData.html), and [decodeFunctionResult](https://viem.sh/docs/contract/decodeFunctionResult.html).
+
+## 4. Send The User Operation
 
 Now we'll use the connected provider to send a user operation. We'll use the [sendUserOperation](/packages/aa-core/provider/waitForUserOperationTransaction.md) method on the provider.
 

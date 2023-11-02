@@ -1,3 +1,4 @@
+import { uoCallData } from "./calldata.js";
 import { connectedProvider } from "./connect-account.js";
 
 connectedProvider.withAlchemyGasManager({
@@ -5,8 +6,8 @@ connectedProvider.withAlchemyGasManager({
 });
 
 const uo = await connectedProvider.sendUserOperation({
-  target: "0xTargetAddress",
-  data: "0xCallData",
+  target: "0xTARGET_ADDRESS",
+  data: uoCallData,
 });
 
 const txHash = await connectedProvider.waitForUserOperationTransaction(uo.hash);

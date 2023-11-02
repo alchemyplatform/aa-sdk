@@ -4,6 +4,7 @@ import {
 } from "@alchemy/aa-accounts";
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import { LocalAccountSigner, type SmartAccountSigner } from "@alchemy/aa-core";
+import { encodeFunctionData } from "viem";
 import { sepolia } from "viem/chains";
 
 const provider = new AlchemyProvider({
@@ -26,13 +27,30 @@ const connectedProvider = provider.connect(
     })
 );
 
+// this is an example ABI for a contract with a "mint" function
+const AlchemyTokenAbi = [
+  {
+    inputs: [{ internalType: "address", name: "recipient", type: "address" }],
+    name: "mint",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
+
+export const uoCallData = encodeFunctionData({
+  abi: AlchemyTokenAbi,
+  functionName: "mint",
+  args: [await connectedProvider.getAddress()],
+});
+
 connectedProvider.withAlchemyGasManager({
   policyId: "POLICY_ID", // replace with your policy id, get yours at https://dashboard.alchemy.com/
 });
 
 const uo = await connectedProvider.sendUserOperation({
   target: "0xTargetAddress",
-  data: "0xCallData",
+  data: uoCallData,
 });
 
 const txHash = await connectedProvider.waitForUserOperationTransaction(uo.hash);
