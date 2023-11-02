@@ -45,7 +45,7 @@ export const provider = new SmartAccountProvider({
 
 ### `SmartAccountProvider`
 
-A new instance of an `SmartAccountProvider`.
+A new instance of a `SmartAccountProvider`.
 
 ## Parameters
 

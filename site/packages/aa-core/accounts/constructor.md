@@ -54,7 +54,7 @@ export const account = new SimpleSmartContractAccount({
 
 ### `SimpleSmartContractAccount`
 
-A new instance of an `SimpleSmartContractAccount`.
+A new instance of a `SimpleSmartContractAccount`.
 
 ## Parameters
 

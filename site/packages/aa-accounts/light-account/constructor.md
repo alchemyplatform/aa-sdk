@@ -57,7 +57,7 @@ export const account = new LightSmartContractAccount({
 
 ### `LightSmartContractAccount`
 
-A new instance of an `LightSmartContractAccount`.
+A new instance of a `LightSmartContractAccount`.
 
 ## Parameters
 
