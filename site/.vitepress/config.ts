@@ -470,7 +470,7 @@ export default defineConfig({
                 link: "/introduction",
               },
               {
-                text: "constructor",
+                text: "constructor for AlchemyProvider",
                 link: "/constructor",
               },
               { text: "gasEstimator", link: "/gasEstimator" },
@@ -530,6 +530,10 @@ export default defineConfig({
               {
                 text: "Overview of LightSmartContractAccount",
                 link: "/introduction",
+              },
+              {
+                text: "constructor for LightSmartContractAccount",
+                link: "/constructor",
               },
               {
                 text: "signMessageWith6492",
