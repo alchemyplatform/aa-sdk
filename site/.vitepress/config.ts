@@ -146,7 +146,7 @@ export default defineConfig({
                 link: "/introduction",
               },
               {
-                text: "constructor for SimpleSmartContractAccount",
+                text: "constructor for SmartContractProvider",
                 link: "/constructor",
               },
               {

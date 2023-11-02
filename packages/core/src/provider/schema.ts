@@ -9,22 +9,22 @@ export const SmartAccountProviderOptsSchema = z.object({
   /**
    * The maximum number of times to try fetching a transaction receipt before giving up (default: 5)
    */
-  txMaxRetries: z.number().optional().default(5),
+  txMaxRetries: z.number().optional(),
 
   /**
    * The interval in milliseconds to wait between retries while waiting for tx receipts (default: 2_000)
    */
-  txRetryIntervalMs: z.number().optional().default(2_000),
+  txRetryIntervalMs: z.number().optional(),
 
   /**
    * The mulitplier on interval length to wait between retries while waiting for tx receipts (default: 1.5)
    */
-  txRetryMulitplier: z.number().optional().default(1.5),
+  txRetryMulitplier: z.number().optional(),
 
   /**
    * used when computing the fees for a user operation (default: 100_000_000n)
    */
-  minPriorityFeePerBid: z.bigint().optional().default(100_000_000n),
+  minPriorityFeePerBid: z.bigint().optional(),
 });
 
 export const createSmartAccountProviderConfigSchema = <
