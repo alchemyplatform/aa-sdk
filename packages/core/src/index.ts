@@ -38,14 +38,15 @@ export {
 
 export { SmartAccountProvider, noOpMiddleware } from "./provider/base.js";
 export {
-  createSmartAccountProviderConfigSchema,
   SmartAccountProviderOptsSchema,
+  createSmartAccountProviderConfigSchema,
 } from "./provider/schema.js";
 export type * from "./provider/types.js";
 
 export type * from "./types.js";
 export type * from "./utils/index.js";
 export {
+  ChainSchema,
   asyncPipe,
   bigIntMax,
   bigIntPercent,
@@ -56,7 +57,6 @@ export {
   getDefaultSimpleAccountFactoryAddress,
   getUserOperationHash,
   resolveProperties,
-  ChainSchema,
 } from "./utils/index.js";
 
 export { Logger } from "./logger.js";
