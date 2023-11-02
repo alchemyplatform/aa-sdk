@@ -25,6 +25,7 @@ import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import { getDefaultEntryPointAddress } from "@alchemy/aa-core";
 import { sepolia } from "viem/chains";
 
+// instantiates using every possible parameter, as a reference
 export const provider = new AlchemyProvider({
   apiKey: "ALCHEMY_API_KEY", // replace with your Alchemy API Key
   chain: sepolia,

@@ -39,6 +39,7 @@ const PRIVATE_KEY = "0xYourEOAPrivateKey";
 const eoaSigner: SmartAccountSigner =
   LocalAccountSigner.privateKeyToAccountSigner(`0x${PRIVATE_KEY}`);
 
+// instantiates using every possible parameter, as a reference
 export const account = new LightSmartContractAccount({
   rpcClient: "ALCHEMY_RPC_URL",
   chain: sepolia,

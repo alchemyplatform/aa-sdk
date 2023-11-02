@@ -9,7 +9,7 @@ head:
       content: Overview of the constructor method on SmartAccountProvider in aa-core
   - - meta
     - property: og:description
-      content: Overview of the constructor method on SmartAccountProvider in aa-alchemy
+      content: Overview of the constructor method on SmartAccountProvider in aa-core
 ---
 
 # constructor
@@ -25,6 +25,7 @@ import { SmartAccountProvider } from "@alchemy/aa-core";
 import { getDefaultEntryPointAddress } from "@alchemy/aa-core";
 import { sepolia } from "viem/chains";
 
+// instantiates using every possible parameter, as a reference
 export const provider = new SmartAccountProvider({
   rpcProvider: "ALCHEMY_RPC_URL",
   chain: sepolia,
