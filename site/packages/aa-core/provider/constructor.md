@@ -14,7 +14,7 @@ head:
 
 # constructor
 
-To initialize an `SmartAccountProvider`, you must provide a set of parameters detailed below.
+To initialize a `SmartAccountProvider`, you must provide a set of parameters detailed below.
 
 ## Usage
 

@@ -14,7 +14,7 @@ head:
 
 # constructor
 
-To initialize an `LightSmartContractAccount`, you must provide a set of parameters detailed below.
+To initialize a `LightSmartContractAccount`, you must provide a set of parameters detailed below.
 
 Note that there is no difference in constructor arguments used for `LightSmartContractAccount` when compared to `SimpleSmartContractAccount`.
 

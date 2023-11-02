@@ -14,7 +14,7 @@ head:
 
 # constructor
 
-To initialize an `SimpleSmartContractAccount`, you must provide a set of parameters detailed below.
+To initialize a `SimpleSmartContractAccount`, you must provide a set of parameters detailed below.
 
 Note that `BaseSmartContractAccount` is an abstract class, and so cannot be initialized even though it has a constructor.
 
