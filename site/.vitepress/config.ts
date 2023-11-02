@@ -57,6 +57,16 @@ export default defineConfig({
         ],
       },
       {
+        text: "Guides",
+        base: "/guides",
+        items: [
+          {
+            text: "How to Send a User Operation",
+            link: "/send-user-operation",
+          },
+        ],
+      },
+      {
         text: "Choosing a Smart Account",
         base: "/smart-accounts",
         items: [
