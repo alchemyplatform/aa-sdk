@@ -235,7 +235,7 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: "Overview of SmartContractAccount",
+                text: "Overview of ISmartContractAccount",
                 link: "/introduction",
               },
               {
