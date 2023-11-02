@@ -347,7 +347,6 @@ export default defineConfig({
           },
           {
             text: "Public Client",
-            link: "/",
             base: "/packages/aa-core/client",
             collapsed: true,
             items: [
