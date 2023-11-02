@@ -33,9 +33,9 @@ export default defineConfig({
     search: {
       provider: "algolia",
       options: {
-        appId: "IHLWJWIZ3J",
-        apiKey: "e27b06dcc3597664309c1ed9b8cb5470",
-        indexName: "aa-sdk-staging",
+        appId: "P2YIRI1HM5",
+        apiKey: "2532e837d6c22886172745e30e650cda",
+        indexName: "accountkit-alchemy",
       },
     },
 
