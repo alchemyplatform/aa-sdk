@@ -1,9 +1,5 @@
 import type { Address } from "viem";
-<<<<<<< HEAD
 import { polygonMumbai, sepolia, type Chain } from "viem/chains";
-=======
-import { polygonMumbai, type Chain } from "viem/chains";
->>>>>>> 1c5e368 (feat: add zod runtime validation for base account (#186))
 import { describe, it } from "vitest";
 import { getDefaultSimpleAccountFactoryAddress } from "../../index.js";
 import { SmartAccountProvider } from "../../provider/base.js";
