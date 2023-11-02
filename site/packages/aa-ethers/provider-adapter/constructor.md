@@ -28,11 +28,13 @@ import { getDefaultEntryPointAddress } from "@alchemy/aa-core";
 import { EthersProviderAdapter } from "@alchemy/aa-ethers";
 import { sepolia } from "viem/chains";
 
+// one way to initialize
 export const provider = new EthersProviderAdapter({
   rpcProvider: "ALCHEMY_RPC_URL",
   chainId: 80001,
 });
 
+// another way to initialize
 export const anotherProvider = new EthersProviderAdapter({
   accountProvider: new AlchemyProvider({
     apiKey: "ALCHEMY_API_KEY", // replace with your Alchemy API Key
