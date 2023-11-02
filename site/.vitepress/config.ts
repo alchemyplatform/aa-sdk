@@ -146,6 +146,10 @@ export default defineConfig({
                 link: "/introduction",
               },
               {
+                text: "constructor for SimpleSmartContractAccount",
+                link: "/constructor",
+              },
+              {
                 text: "sendUserOperation",
                 link: "/sendUserOperation",
               },
@@ -247,6 +251,10 @@ export default defineConfig({
               {
                 text: "Overview of ISmartContractAccount",
                 link: "/introduction",
+              },
+              {
+                text: "constructor for SimpleSmartContractAccount",
+                link: "/constructor",
               },
               {
                 text: "Required Methods",
@@ -460,6 +468,10 @@ export default defineConfig({
               {
                 text: "Overview of AlchemyProvider",
                 link: "/introduction",
+              },
+              {
+                text: "constructor",
+                link: "/constructor",
               },
               { text: "gasEstimator", link: "/gasEstimator" },
               {
