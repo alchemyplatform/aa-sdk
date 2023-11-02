@@ -24,24 +24,7 @@ This guide will help you get started with Account Kit by setting up your environ
 
 ## Install the Packages
 
-First, create an empty directory and initialize it:
-::: code-group
-
-```bash [npm]
-mkdir account-kit
-cd account-kit
-npm init -y
-```
-
-```bash [yarn]
-mkdir account-kit
-cd account-kit
-yarn init -y
-```
-
-:::
-
-Then you'll need to install the required packages:
+In your project directory, you'll need to install the required packages:
 
 ::: code-group
 
@@ -52,6 +35,8 @@ npm install @alchemy/aa-alchemy @alchemy/aa-accounts @alchemy/aa-core viem
 ```bash [yarn]
 yarn add @alchemy/aa-alchemy @alchemy/aa-accounts @alchemy/aa-core viem
 ```
+
+Note that we're installing [viem](https://viem.sh/) as well. Viem contains helpful abstractions and modules that may come in handy when using Account Kit. Additionally, many Account Kit modules leverage viem themselves.
 
 :::
 
