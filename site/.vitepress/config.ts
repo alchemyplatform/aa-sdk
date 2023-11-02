@@ -31,7 +31,12 @@ export default defineConfig({
     ],
 
     search: {
-      provider: "local",
+      provider: "algolia",
+      options: {
+        appId: "P2YIRI1HM5",
+        apiKey: "2532e837d6c22886172745e30e650cda",
+        indexName: "accountkit-alchemy",
+      },
     },
 
     sidebar: [
