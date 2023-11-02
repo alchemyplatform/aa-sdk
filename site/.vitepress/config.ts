@@ -132,7 +132,7 @@ export default defineConfig({
             base: "/packages/aa-core/provider",
             items: [
               {
-                text: "Overview of SmartContractProvider",
+                text: "Overview of SmartAccountProvider",
                 link: "/introduction",
               },
               {
