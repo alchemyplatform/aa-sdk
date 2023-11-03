@@ -1,10 +1,24 @@
 import type { Address } from "abitype";
-import type { Hash, Hex } from "viem";
+import type { Hash, Hex, Transport } from "viem";
 import type { SignTypedDataParameters } from "viem/accounts";
-import type { BatchUserOperationCallData } from "../types";
+import type { z } from "zod";
+import type { SupportedTransports } from "../client/types";
 import type { SmartAccountSigner } from "../signer/types";
+import type { BatchUserOperationCallData } from "../types";
+import type {
+  SimpleSmartAccountParamsSchema,
+  createBaseSmartAccountParamsSchema,
+} from "./schema";
 
 export type SignTypedDataParams = Omit<SignTypedDataParameters, "privateKey">;
+
+export type BaseSmartAccountParams<
+  TTransport extends SupportedTransports = Transport
+> = z.infer<ReturnType<typeof createBaseSmartAccountParamsSchema<TTransport>>>;
+
+export type SimpleSmartAccountParams<
+  TTransport extends SupportedTransports = Transport
+> = z.infer<ReturnType<typeof SimpleSmartAccountParamsSchema<TTransport>>>;
 
 export interface ISmartContractAccount {
   /**
@@ -89,4 +103,9 @@ export interface ISmartContractAccount {
    * @returns the address of the factory contract for the smart contract account
    */
   getFactoryAddress(): Address;
+
+  /**
+   * @returns the address of the entry point contract for the smart contract account
+   */
+  getEntryPointAddress(): Address;
 }

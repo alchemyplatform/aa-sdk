@@ -1,4 +1,4 @@
-import { type Transaction } from "viem";
+import { type Address, type Chain, type Transaction } from "viem";
 import { polygonMumbai } from "viem/chains";
 import {
   afterEach,
@@ -8,16 +8,42 @@ import {
   vi,
   type SpyInstance,
 } from "vitest";
+import { SimpleSmartContractAccount } from "../../account/simple.js";
+import { LocalAccountSigner } from "../../signer/local-account.js";
+import type { SmartAccountSigner } from "../../signer/types.js";
 import type { UserOperationReceipt } from "../../types.js";
+import {
+  getDefaultEntryPointAddress,
+  getDefaultSimpleAccountFactoryAddress,
+} from "../../utils/index.js";
 import { SmartAccountProvider } from "../base.js";
+
+const chain = polygonMumbai;
+const entryPointAddress = getDefaultEntryPointAddress(chain);
 
 describe("Base Tests", () => {
   let retryMsDelays: number[] = [];
 
   const providerMock = new SmartAccountProvider({
     rpcProvider: "ALCHEMY_RPC_URL",
-    entryPointAddress: "0xENTRYPOINT_ADDRESS",
-    chain: polygonMumbai,
+    chain,
+  });
+
+  const dummyMnemonic =
+    "test test test test test test test test test test test test";
+  const owner: SmartAccountSigner =
+    LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
+
+  const dummyAccountAddress =
+    "0x1234567890123456789012345678901234567890" as Address;
+
+  const account = new SimpleSmartContractAccount({
+    entryPointAddress,
+    chain,
+    owner,
+    factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
+    rpcClient: providerMock.rpcClient,
+    accountAddress: dummyAccountAddress,
   });
 
   beforeEach(() => {
@@ -68,14 +94,6 @@ describe("Base Tests", () => {
 
   it("should emit connected event on connected", async () => {
     const spy = vi.spyOn(providerMock, "emit");
-    const account = {
-      chain: polygonMumbai,
-      entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
-      rpcClient: providerMock.rpcClient,
-      getAddress: async () => "0xMOCK_ADDRESS",
-      getFactoryAddress: () => "0xMOCK_FACOTRY_ADDRESS",
-      getOwner: () => undefined,
-    } as any;
 
     // This says the await is not important... it is. the method is not marked sync because we don't need it to be,
     // but the address is emitted from an async method so we want to await that
@@ -92,11 +110,28 @@ describe("Base Tests", () => {
         [
           "accountsChanged",
           [
-            "0xMOCK_ADDRESS",
+            "${dummyAccountAddress}",
           ],
         ],
       ]
     `);
+  });
+
+  it("should throw error if connected account has different entry point address than the provider that is initialized with entryPointAddress param", async () => {
+    const dummyEntryPointAddress =
+      "0x1234567890123456789012345678901234567890" as Address;
+
+    const providerMockWithEntryPoint = new SmartAccountProvider({
+      rpcProvider: "ALCHEMY_RPC_URL",
+      entryPointAddress: dummyEntryPointAddress,
+      chain,
+    });
+
+    expect(() =>
+      providerMockWithEntryPoint.connect(() => account)
+    ).toThrowErrorMatchingInlineSnapshot(
+      `"Account entryPoint address: ${entryPointAddress} does not match the current provider's entryPoint address: ${dummyEntryPointAddress}"`
+    );
   });
 
   it("should emit disconnected event on disconnect", async () => {
@@ -164,8 +199,7 @@ describe("Base Tests", () => {
 
     const provider = new TestProvider({
       rpcProvider: "ALCHEMY_RPC_URL",
-      entryPointAddress: "0xENTRYPOINT_ADDRESS",
-      chain: polygonMumbai,
+      chain,
     });
 
     const newProvider = provider.extend(() => ({
@@ -173,6 +207,60 @@ describe("Base Tests", () => {
     }));
 
     expect(newProvider.testMethod()).toEqual("test");
+  });
+
+  it("should correctly do runtime validation when entrypoint is invalid", () => {
+    expect(
+      () =>
+        new SmartAccountProvider({
+          rpcProvider: "ALCHEMY_RPC_URL",
+          entryPointAddress: 1 as unknown as Address,
+          chain: polygonMumbai,
+        })
+    ).toThrowErrorMatchingInlineSnapshot(`
+      "[
+        {
+          \\"code\\": \\"invalid_type\\",
+          \\"expected\\": \\"string\\",
+          \\"received\\": \\"number\\",
+          \\"path\\": [
+            \\"entryPointAddress\\"
+          ],
+          \\"message\\": \\"Expected string, received number\\"
+        }
+      ]"
+    `);
+  });
+
+  it("should correctly do runtime validation when multiple inputs are invalid", () => {
+    expect(
+      () =>
+        new SmartAccountProvider({
+          rpcProvider: "ALCHEMY_RPC_URL",
+          entryPointAddress: 1 as unknown as Address,
+          chain: "0x1" as unknown as Chain,
+        })
+    ).toThrowErrorMatchingInlineSnapshot(`
+      "[
+        {
+          \\"code\\": \\"custom\\",
+          \\"fatal\\": true,
+          \\"path\\": [
+            \\"chain\\"
+          ],
+          \\"message\\": \\"Invalid input\\"
+        },
+        {
+          \\"code\\": \\"invalid_type\\",
+          \\"expected\\": \\"string\\",
+          \\"received\\": \\"number\\",
+          \\"path\\": [
+            \\"entryPointAddress\\"
+          ],
+          \\"message\\": \\"Expected string, received number\\"
+        }
+      ]"
+    `);
   });
 
   const givenGetUserOperationFailsNTimes = (times: number) => {

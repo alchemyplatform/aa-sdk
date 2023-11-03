@@ -28,7 +28,13 @@ Notable differences between `EthersProviderAdapter` and `JsonRpcProvider` are im
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { provider } from "./ethers-provider";
+import {
+  LightSmartContractAccount,
+  getDefaultLightAccountFactoryAddress,
+} from "@alchemy/aa-accounts";
+import { LocalAccountSigner, type SmartAccountSigner } from "@alchemy/aa-core";
+import { polygonMumbai } from "viem/chains";
 // [!code focus:99]
 // EIP-1193 compliant requests
 const chainId = await provider.send("eth_chainId", []);
@@ -43,9 +49,8 @@ const owner: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
 const signer = provider.connectToAccount(
   (rpcClient) =>
     new LightSmartContractAccount({
-      entryPointAddress: entryPointAddress,
       chain: polygonMumbai,
-      factoryAddress: "0xfactoryAddress",
+      factoryAddress: getDefaultLightAccountFactoryAddress(polygonMumbai),
       rpcClient,
       owner,
     })

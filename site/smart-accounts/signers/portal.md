@@ -55,7 +55,10 @@ Let's see it in action with `aa-alchemy` and `LightSmartContractAccount` from `a
 
 ```ts [example.ts]
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
-import { LightSmartContractAccount } from "@alchemy/aa-accounts";
+import {
+  LightSmartContractAccount,
+  getDefaultLightAccountFactoryAddress,
+} from "@alchemy/aa-accounts";
 import { polygonMumbai } from "viem/chains";
 import { portalSigner } from "./portalSigner";
 
@@ -63,14 +66,12 @@ const chain = polygonMumbai;
 const provider = new AlchemyProvider({
   apiKey: process.env.ALCHEMY_API_KEY,
   chain,
-  entryPointAddress: ENTRY_POINT_CONTRACT_ADDRESS,
 }).connect(
   (rpcClient) =>
     new LightSmartContractAccount({
-      entryPointAddress: ENTRY_POINT_CONTRACT_ADDRESS,
-      chain: rpcClient.chain,
+      chain,
       owner: portalSigner,
-      factoryAddress: FACTORY_CONTRACT_ADDRESS,
+      factoryAddress: getDefaultLightAccountFactoryAddress(chain),
       rpcClient,
     })
 );

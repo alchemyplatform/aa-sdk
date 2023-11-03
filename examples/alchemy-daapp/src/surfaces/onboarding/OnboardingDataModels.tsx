@@ -1,12 +1,12 @@
 import {
   PublicErc4337Client,
-  SmartAccountSigner,
   SmartAccountProvider,
+  SmartAccountSigner,
 } from "@alchemy/aa-core";
+import { Link, Text } from "@chakra-ui/react";
+import { UseQueryResult } from "@tanstack/react-query";
 import { Chain } from "viem";
 import { RequestFunds } from "./RequestFunds";
-import { UseQueryResult } from "@tanstack/react-query";
-import { Link, Text } from "@chakra-ui/react";
 
 // .01 in wei
 export const MIN_ONBOARDING_WALLET_BALANCE = BigInt("10000000000000000");
@@ -20,7 +20,6 @@ export interface OnboardingContext {
   smartAccountAddress: `0x${string}`;
   smartAccountSigner: SmartAccountProvider;
   chain: Chain;
-  entrypointAddress: `0x${string}`;
   mintDeployTxnHash: `0x${string}`;
 }
 
@@ -34,7 +33,6 @@ export interface OnboardingStep {
 
 export enum OnboardingStepIdentifier {
   INITIAL_STEP,
-  GET_ENTRYPOINT,
   CREATE_SCWALLET,
   FILL_SCWALLET,
   MINT_NFT,
@@ -80,12 +78,6 @@ export function metaForStepIdentifier(
         description:
           "Pulling together current information for account creation.",
         title: "Gathering Information",
-      };
-    case OnboardingStepIdentifier.GET_ENTRYPOINT:
-      return {
-        percent: 10,
-        description: "Fetching the entrypoint address for the account.",
-        title: "Fetching Entrypoint",
       };
     case OnboardingStepIdentifier.CREATE_SCWALLET:
       return {

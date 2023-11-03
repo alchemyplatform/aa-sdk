@@ -29,7 +29,6 @@ const providerWithGasManager = withAlchemyGasManager(
   provider,
   {
     policyId: PAYMASTER_POLICY_ID,
-    entryPoint: ENTRYPOINT_ADDRESS,
   },
   true // If true, uses `alchemy_requestGasAndPaymasterAndData`, otherwise uses `alchemy_requestPaymasterAndData`
 );
@@ -51,6 +50,5 @@ A new instance of an `AlchemyProvider` with the same attributes as the input, no
 ### `AlchemyGasManagerConfig: AlchemyGasManagerConfig`
 
 - `policyId: string` -- the Alchemy Gas Manager policy ID
-- `entryPoint: Address` -- the entrypoint contract address
 
 ### `estimateGas: boolean` -- a flag to additionally estimate gas as part of

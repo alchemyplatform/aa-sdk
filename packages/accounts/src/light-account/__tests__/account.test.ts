@@ -1,12 +1,14 @@
 import {
   LocalAccountSigner,
   SmartAccountProvider,
+  type Address,
   type BatchUserOperationCallData,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import { polygonMumbai, type Chain } from "viem/chains";
 import { describe, it } from "vitest";
 import { LightSmartContractAccount } from "../account.js";
+import { getDefaultLightAccountFactoryAddress } from "../utils.js";
 
 describe("Light Account Tests", () => {
   const dummyMnemonic =
@@ -78,17 +80,19 @@ const givenConnectedProvider = ({
 }: {
   owner: SmartAccountSigner;
   chain: Chain;
-}) =>
-  new SmartAccountProvider({
+}) => {
+  const dummyEntryPointAddress =
+    "0x1234567890123456789012345678901234567890" as Address;
+
+  return new SmartAccountProvider({
     rpcProvider: `${chain.rpcUrls.alchemy.http[0]}/${"test"}`,
-    entryPointAddress: "0xENTRYPOINT_ADDRESS",
     chain,
   }).connect((provider) => {
     const account = new LightSmartContractAccount({
-      entryPointAddress: "0xENTRYPOINT_ADDRESS",
+      entryPointAddress: dummyEntryPointAddress,
       chain,
       owner,
-      factoryAddress: "0xLIGHT_ACCOUNT_FACTORY_ADDRESS",
+      factoryAddress: getDefaultLightAccountFactoryAddress(chain),
       rpcClient: provider,
     });
 
@@ -98,3 +102,4 @@ const givenConnectedProvider = ({
 
     return account;
   });
+};

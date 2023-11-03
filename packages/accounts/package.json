@@ -39,7 +39,7 @@
     "test:run-e2e": "vitest run --config vitest.config.e2e.ts"
   },
   "devDependencies": {
-    "@alchemy/aa-core": "^0.1.0",
+    "@alchemy/aa-core": "^0.1.1",
     "typescript": "^5.0.4",
     "typescript-template": "*",
     "vitest": "^0.31.0"

@@ -20,7 +20,6 @@ describe("Kernel Account Tests", () => {
     validatorAddress: "0x180D6465F921C7E0DEA0040107D342c87455fFF5" as Address,
     accountFactoryAddress:
       "0x5D006d3880645ec6e254E18C1F879DAC9Dd71A39" as Address,
-    entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789" as Address,
   };
 
   const owner = LocalAccountSigner.privateKeyToAccountSigner(config.privateKey);
@@ -40,14 +39,12 @@ describe("Kernel Account Tests", () => {
 
   const provider = new KernelAccountProvider({
     rpcProvider: config.rpcProvider,
-    entryPointAddress: config.entryPointAddress,
     chain: config.chain,
   });
 
   function account(index: bigint, owner = mockOwner) {
     const accountParams: KernelSmartAccountParams = {
       rpcClient: provider.rpcClient,
-      entryPointAddress: config.entryPointAddress,
       chain: config.chain,
       owner: owner,
       factoryAddress: config.accountFactoryAddress,

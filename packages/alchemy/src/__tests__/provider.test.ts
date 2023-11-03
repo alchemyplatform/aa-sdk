@@ -1,10 +1,11 @@
 import * as AACoreModule from "@alchemy/aa-core";
 import {
   SimpleSmartContractAccount,
+  getDefaultEntryPointAddress,
   type BatchUserOperationCallData,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
-import { toHex, type Chain } from "viem";
+import { toHex, type Address, type Chain } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
 import { AlchemyProvider } from "../provider.js";
@@ -20,6 +21,7 @@ describe("Alchemy Provider Tests", () => {
       }),
     signTypedData: async () => "0xHash",
     getAddress: async () => ownerAccount.address,
+    signerType: "e2e-test",
   };
   const chain = polygonMumbai;
 
@@ -65,6 +67,40 @@ describe("Alchemy Provider Tests", () => {
       '"0x18dfb3c7000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000002000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef0000000000000000000000008ba1f109551bd432803012645ac136ddd64dba720000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000004deadbeef000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004cafebabe00000000000000000000000000000000000000000000000000000000"'
     );
   });
+
+  it("should correctly do runtime validation when entrypoint is invalid", () => {
+    expect(
+      () =>
+        new AlchemyProvider({
+          rpcUrl: "https://eth-mainnet.g.alchemy.com/v2/test",
+          entryPointAddress: 1 as unknown as Address,
+          chain: polygonMumbai,
+        })
+    ).toThrowErrorMatchingInlineSnapshot(`
+      "[
+        {
+          \\"code\\": \\"invalid_type\\",
+          \\"expected\\": \\"string\\",
+          \\"received\\": \\"number\\",
+          \\"path\\": [
+            \\"entryPointAddress\\"
+          ],
+          \\"message\\": \\"Expected string, received number\\"
+        }
+      ]"
+    `);
+  });
+
+  it("should correctly do runtime validation when connection config is invalid", () => {
+    expect(
+      () =>
+        new AlchemyProvider({
+          rpcUrl: 1 as unknown as string,
+          entryPointAddress: getDefaultEntryPointAddress(chain),
+          chain: polygonMumbai,
+        })
+    ).toThrowErrorMatchingSnapshot();
+  });
 });
 
 const givenConnectedProvider = ({
@@ -73,18 +109,20 @@ const givenConnectedProvider = ({
 }: {
   owner: SmartAccountSigner;
   chain: Chain;
-}) =>
-  new AlchemyProvider({
+}) => {
+  const dummyEntryPointAddress =
+    "0x1234567890123456789012345678901234567890" as Address;
+
+  return new AlchemyProvider({
     rpcUrl: "https://eth-mainnet.g.alchemy.com/v2",
     jwt: "test",
     chain,
-    entryPointAddress: "0xENTRYPOINT_ADDRESS",
   }).connect((provider) => {
     const account = new SimpleSmartContractAccount({
-      entryPointAddress: "0xENTRYPOINT_ADDRESS",
+      entryPointAddress: dummyEntryPointAddress,
       chain,
       owner,
-      factoryAddress: "0xSIMPLE_ACCOUNT_FACTORY_ADDRESS",
+      factoryAddress: AACoreModule.getDefaultSimpleAccountFactoryAddress(chain),
       rpcClient: provider,
     });
 
@@ -94,3 +132,4 @@ const givenConnectedProvider = ({
 
     return account;
   });
+};

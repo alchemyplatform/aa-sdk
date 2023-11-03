@@ -25,7 +25,7 @@ describe("Local Account Signer Tests", () => {
       expect(
         await signer.signMessage("i will definitely break this test case")
       ).toMatchInlineSnapshot(
-        '"0x1d9a20cfd63c179daab241d9e64a2549e1a47c1ca7c465df6f5b8c5720cee7266050b89b3874b384c88cd8325601572e79b3b626dc756a6aec5fff05d4ce5efc1b"'
+        '"0x6e9af75bfcb8ff5abbf8778dee0e0c5a02f150bf5bc13a4216b772f333b23be8419b761230d24309cac67e1497a44c5fdacec7cb22bfb1652d54845f69f80ba51b"'
       );
     });
 
@@ -63,7 +63,7 @@ describe("Local Account Signer Tests", () => {
       expect(
         await signer.signMessage("i will definitely break this test case")
       ).toMatchInlineSnapshot(
-        '"0x907004e990bb1bca76d9fed6bf4a6b614a8d11b6430657cb99ae83fae55c9bc60571876d8c01832e4661dd4312fa08b799b6f59c9b9abddd67e181abc6aef17e1c"'
+        '"0x02bf79312d59e4147aaf05eca4d232c32f378c9761366d931f24407464bb75281897963baea5301b0dbaffa8857a284f61a0e20a2444becf702b8ebe95e2b24b1b"'
       );
     });
 
