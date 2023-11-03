@@ -9,7 +9,6 @@ export { SimpleAccountFactoryAbi } from "./abis/SimpleAccountFactoryAbi.js";
 export { BaseSmartContractAccount } from "./account/base.js";
 export { createBaseSmartAccountParamsSchema } from "./account/schema.js";
 export { SimpleSmartContractAccount } from "./account/simple.js";
-export type { SimpleSmartAccountParams } from "./account/simple.js";
 export type * from "./account/types.js";
 export type { BaseSmartAccountParams } from "./account/types.js";
 
@@ -38,14 +37,15 @@ export {
 
 export { SmartAccountProvider, noOpMiddleware } from "./provider/base.js";
 export {
-  createSmartAccountProviderConfigSchema,
   SmartAccountProviderOptsSchema,
+  createSmartAccountProviderConfigSchema,
 } from "./provider/schema.js";
 export type * from "./provider/types.js";
 
 export type * from "./types.js";
 export type * from "./utils/index.js";
 export {
+  ChainSchema,
   asyncPipe,
   bigIntMax,
   bigIntPercent,
@@ -56,7 +56,6 @@ export {
   getDefaultSimpleAccountFactoryAddress,
   getUserOperationHash,
   resolveProperties,
-  ChainSchema,
 } from "./utils/index.js";
 
 export { Logger } from "./logger.js";

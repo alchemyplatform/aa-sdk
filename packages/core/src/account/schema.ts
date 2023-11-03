@@ -27,3 +27,11 @@ export const createBaseSmartAccountParamsSchema = <
       .optional()
       .describe("Optional override for the account init code."),
   });
+
+export const SimpleSmartAccountParamsSchema = <
+  TTransport extends SupportedTransports = Transport
+>() =>
+  createBaseSmartAccountParamsSchema<TTransport>().extend({
+    owner: SignerSchema,
+    index: z.bigint().optional(),
+  });

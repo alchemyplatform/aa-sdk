@@ -4,7 +4,6 @@ import {
   deepHexlify,
   resolveProperties,
   type AccountMiddlewareFn,
-  type SmartAccountProviderConfig,
 } from "@alchemy/aa-core";
 import { type HttpTransport } from "viem";
 import {
@@ -19,50 +18,18 @@ import {
   withAlchemyGasManager,
   type AlchemyGasManagerConfig,
 } from "./middleware/gas-manager.js";
-
-export type ConnectionConfig =
-  | { rpcUrl?: never; apiKey: string; jwt?: never }
-  | { rpcUrl?: never; apiKey?: never; jwt: string }
-  | { rpcUrl: string; apiKey?: never; jwt?: never }
-  | { rpcUrl: string; apiKey?: never; jwt: string };
-
-export type AlchemyProviderConfig = {
-  feeOpts?: {
-    /** this adds a percent buffer on top of the base fee estimated (default 50%)
-     * NOTE: this is only applied if the default fee estimator is used.
-     */
-    baseFeeBufferPercent?: bigint;
-    /** this adds a percent buffer on top of the priority fee estimated (default 5%)'
-     * * NOTE: this is only applied if the default fee estimator is used.
-     */
-    maxPriorityFeeBufferPercent?: bigint;
-    /** this adds a percent buffer on top of the preVerificationGasEstimated
-     *
-     * Defaults 5% on Arbitrum and Optimism, 0% elsewhere
-     *
-     * This is only useful on Arbitrum and Optimism, where the preVerificationGas is
-     * dependent on the gas fee during the time of estimation. To improve chances of
-     * the UserOperation being mined, users can increase the preVerificationGas by
-     * a buffer. This buffer will always be charged, regardless of price at time of mine.
-     *
-     * NOTE: this is only applied if the default gas estimator is used.
-     */
-    preVerificationGasBufferPercent?: bigint;
-  };
-} & Omit<SmartAccountProviderConfig, "rpcProvider"> &
-  ConnectionConfig;
+import { AlchemyProviderConfigSchema } from "./schema.js";
+import type { AlchemyProviderConfig } from "./type.js";
 
 export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
   private pvgBuffer: bigint;
   private feeOptsSet: boolean;
 
-  constructor({
-    chain,
-    entryPointAddress,
-    opts,
-    feeOpts,
-    ...connectionConfig
-  }: AlchemyProviderConfig) {
+  constructor(config: AlchemyProviderConfig) {
+    AlchemyProviderConfigSchema.parse(config);
+
+    const { chain, entryPointAddress, opts, feeOpts, ...connectionConfig } =
+      config;
     const _chain =
       typeof chain === "number" ? SupportedChains.get(chain) : chain;
     if (!_chain || !_chain.rpcUrls["alchemy"]) {
