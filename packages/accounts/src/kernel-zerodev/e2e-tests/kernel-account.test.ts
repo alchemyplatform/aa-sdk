@@ -2,8 +2,6 @@ import {
   getDefaultEntryPointAddress,
   type BatchUserOperationCallData,
   type SmartAccountSigner,
-  type UserOperationStruct,
-  type AccountMiddlewareOverrideFn,
 } from "@alchemy/aa-core";
 import {
   encodeAbiParameters,

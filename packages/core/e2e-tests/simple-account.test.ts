@@ -1,6 +1,6 @@
 import { isAddress, type Address, type Chain, type Hash } from "viem";
 import { generatePrivateKey } from "viem/accounts";
-import { polygonMumbai } from "viem/chains";
+import { sepolia } from "viem/chains";
 import { SimpleSmartContractAccount } from "../src/account/simple.js";
 import {
   getDefaultSimpleAccountFactoryAddress,
@@ -10,7 +10,7 @@ import { LocalAccountSigner } from "../src/signer/local-account.js";
 import { API_KEY, OWNER_MNEMONIC, PAYMASTER_POLICY_ID } from "./constants.js";
 import { AlchemyProvider } from "../../alchemy/src/provider.js";
 
-const chain = polygonMumbai;
+const chain = sepolia;
 
 describe("Simple Account Tests", () => {
   const owner: SmartAccountSigner =
