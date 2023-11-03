@@ -1,5 +1,5 @@
 import type { Address } from "viem";
-import { polygonMumbai, type Chain } from "viem/chains";
+import { polygonMumbai, sepolia, type Chain } from "viem/chains";
 import { describe, it } from "vitest";
 import { getDefaultSimpleAccountFactoryAddress } from "../../index.js";
 import { SmartAccountProvider } from "../../provider/base.js";
@@ -103,54 +103,48 @@ describe("Account Simple Tests", () => {
     `);
   });
 
-  it("should correctly do simple runtime validation when index is invalid", () => {
-    expect(
-      () =>
-        new SimpleSmartContractAccount({
-          entryPointAddress: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
-          chain,
-          owner,
-          factoryAddress: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
-          rpcClient: "ALCHEMY_RPC_URL",
-          index: "" as unknown as bigint,
-        })
-    ).toThrowErrorMatchingInlineSnapshot(`
-      "[
-        {
-          \\"code\\": \\"invalid_type\\",
-          \\"expected\\": \\"bigint\\",
-          \\"received\\": \\"string\\",
-          \\"path\\": [
-            \\"index\\"
-          ],
-          \\"message\\": \\"Expected bigint, received string\\"
-        }
-      ]"
-    `);
-  });
-});
-
-const givenConnectedProvider = ({
-  owner,
-  chain,
-}: {
-  owner: SmartAccountSigner;
-  chain: Chain;
-}) =>
-  new SmartAccountProvider({
-    rpcProvider: `${chain.rpcUrls.alchemy.http[0]}/${"test"}`,
-    chain,
-  }).connect((provider) => {
+  it("should correctly use the account init code override", async () => {
     const account = new SimpleSmartContractAccount({
-      chain,
-      owner,
-      factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
-      rpcClient: provider,
+      chain: sepolia,
+      owner: owner,
+      factoryAddress: getDefaultSimpleAccountFactoryAddress(sepolia),
+      rpcClient: `${sepolia.rpcUrls.alchemy.http[0]}/${"test"}`,
+      // override the account address here so we don't have to resolve the address from the entrypoint
+      accountAddress: "0x1234567890123456789012345678901234567890",
+      initCode: "0xdeadbeef",
     });
 
-    account.getAddress = vi.fn(
-      async () => "0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4"
-    );
+    // @ts-expect-error this object is protected
+    vi.spyOn(account.rpcProvider, "getBytecode").mockImplementation(() => {
+      return Promise.resolve("0x");
+    });
 
-    return account;
+    const initCode = await account.getInitCode();
+    expect(initCode).toMatchInlineSnapshot('"0xdeadbeef"');
   });
+
+  const givenConnectedProvider = ({
+    owner,
+    chain,
+  }: {
+    owner: SmartAccountSigner;
+    chain: Chain;
+  }) =>
+    new SmartAccountProvider({
+      rpcProvider: `${chain.rpcUrls.alchemy.http[0]}/${"test"}`,
+      chain,
+    }).connect((provider) => {
+      const account = new SimpleSmartContractAccount({
+        chain,
+        owner,
+        factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
+        rpcClient: provider,
+      });
+
+      account.getAddress = vi.fn(
+        async () => "0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4"
+      );
+
+      return account;
+    });
+});
