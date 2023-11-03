@@ -24,7 +24,27 @@ The `aa-sdk` is part of Alchemy's Account Kit. For more information, check out t
 
 1. clone the repo
 2. run `yarn`
-3. Make changes to packages
+3. verify tests pass
+   - be sure to use the node version specified in package.json, currently 18.10
+   - run `node -v`
+   - run `yarn build`
+   - run `yarn test`
+4. make changes to packages
+5. reverify that all tests pass
+6. format code changes
+   - run `yarn run lint:write`
+7. confirm code passes format checks
+   - run `yarn run lint:check`
+8. commit code with a standardized commit message
+   - format: `[subject-type]: [description starting with lowercase letters] (#[issue number])`
+   - example: `feat: add sanity check on provider connect for clearer error message (#181)`
+   - note: run `git log` to see more examples and acceptable subject-types
+9. push to your github fork
+10. create a pull request with the original Alchemy project
 
-To run tests:
-run `yarn test`
+- note: pull request title must pass the Enforce PR Title Format
+- format: `[subject-type]: [description starting with lowercase letters]`
+- run `echo "[YOUR_PR_TITLE_HERE] | yarn commitlint`
+- passing example: run `echo "docs: add build and test documentation update (#195)" | yarn commitlint`
+
+11. celebrate
