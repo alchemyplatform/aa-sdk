@@ -1,6 +1,6 @@
 import {
   LightSmartContractAccount,
-  getDefaultLightAccountFactory,
+  getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
 import { type SmartAccountSigner } from "@alchemy/aa-core";
 import { AlchemyProvider } from "./provider.js";
@@ -17,7 +17,7 @@ export const createAlchemyLightAccountProvider = (
         owner: opts.owner,
         chain: opts.chain,
         entryPointAddress: opts.entryPointAddress,
-        factoryAddress: getDefaultLightAccountFactory(opts.chain),
+        factoryAddress: getDefaultLightAccountFactoryAddress(opts.chain),
       })
   );
 };
