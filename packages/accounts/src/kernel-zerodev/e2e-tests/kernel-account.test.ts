@@ -2,6 +2,8 @@ import {
   getDefaultEntryPointAddress,
   type BatchUserOperationCallData,
   type SmartAccountSigner,
+  type UserOperationStruct,
+  type AccountMiddlewareOverrideFn,
 } from "@alchemy/aa-core";
 import {
   encodeAbiParameters,
@@ -67,6 +69,12 @@ describe("Kernel Account Tests", () => {
     rpcProvider: config.rpcProvider,
     chain: config.chain,
   });
+
+const feeDataGetter = async () => ({
+  maxFeePerGas: 5000000000n,
+  maxPriorityFeePerGas: 50000000000n
+});
+provider.withFeeDataGetter(feeDataGetter);
 
   function connect(index: bigint, owner = mockOwner) {
     return provider.connect((_provider) => account(index, owner));

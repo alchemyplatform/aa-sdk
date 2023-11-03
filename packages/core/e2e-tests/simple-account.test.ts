@@ -6,9 +6,9 @@ import {
   getDefaultSimpleAccountFactoryAddress,
   type SmartAccountSigner,
 } from "../src/index.js";
-import { SmartAccountProvider } from "../src/provider/base.js";
 import { LocalAccountSigner } from "../src/signer/local-account.js";
-import { API_KEY, OWNER_MNEMONIC, RPC_URL } from "./constants.js";
+import { API_KEY, OWNER_MNEMONIC, PAYMASTER_POLICY_ID } from "./constants.js";
+import { AlchemyProvider } from "../../alchemy/src/provider.js";
 
 const chain = polygonMumbai;
 
@@ -62,23 +62,35 @@ const givenConnectedProvider = ({
   owner,
   chain,
   accountAddress,
+  feeOpts,
 }: {
   owner: SmartAccountSigner;
   chain: Chain;
   accountAddress?: Address;
-}) => {
-  return new SmartAccountProvider({
-    rpcProvider:
-      RPC_URL != null ? RPC_URL : `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
+  feeOpts?: {
+    baseFeeBufferPercent?: bigint;
+    maxPriorityFeeBufferPercent?: bigint;
+    preVerificationGasBufferPercent?: bigint;
+  };
+}) => 
+{
+  const provider = new AlchemyProvider({
+    apiKey: API_KEY!,
     chain,
+    feeOpts,
   }).connect(
-    (provider) =>
-      new SimpleSmartContractAccount({
-        chain,
-        owner,
-        factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
-        rpcClient: provider,
-        accountAddress,
-      })
-  );
-};
+      (rpcClient) =>
+        new SimpleSmartContractAccount({
+          chain,
+          owner,
+          factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
+          rpcClient,
+          accountAddress,
+        })
+    )
+    provider.withAlchemyGasManager({
+      policyId: PAYMASTER_POLICY_ID,
+    });
+  return provider;
+}
+
