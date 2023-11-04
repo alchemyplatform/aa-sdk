@@ -1,18 +1,18 @@
-import {
-  LocalAccountSigner,
-  type SmartAccountSigner,
-} from "@alchemy/aa-core";
+import { AlchemyProvider } from "@alchemy/aa-alchemy";
+import { LocalAccountSigner, type SmartAccountSigner } from "@alchemy/aa-core";
 import { isAddress, type Address, type Chain, type Hash } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import { sepolia } from "viem/chains";
+import {
+  LightSmartContractAccount,
+  getDefaultLightAccountFactoryAddress,
+} from "../../index.js";
 import {
   API_KEY,
   LIGHT_ACCOUNT_OWNER_MNEMONIC,
   PAYMASTER_POLICY_ID,
   UNDEPLOYED_OWNER_MNEMONIC,
 } from "./constants.js";
-import { LightSmartContractAccount, getDefaultLightAccountFactoryAddress } from "../../index.js";
-import { AlchemyProvider } from "../../../../alchemy/src/provider.js";
 
 const chain = sepolia;
 
@@ -147,7 +147,7 @@ describe("Light Account Tests", () => {
     const fundThrowawayResult = await signer.sendUserOperation({
       target: await provider.getAddress(),
       data: "0x",
-      value: BigInt("0x10000000000000"),
+      value: 10000000000000n,
     });
     const fundThrowawayTxnHash = signer.waitForUserOperationTransaction(
       fundThrowawayResult.hash
@@ -188,24 +188,23 @@ const givenConnectedProvider = ({
     maxPriorityFeeBufferPercent?: bigint;
     preVerificationGasBufferPercent?: bigint;
   };
-}) => 
-{
+}) => {
   const provider = new AlchemyProvider({
     apiKey: API_KEY!,
     chain,
     feeOpts,
   }).connect(
-      (rpcClient) =>
-        new LightSmartContractAccount({
-          chain,
-          owner,
-          factoryAddress: getDefaultLightAccountFactoryAddress(chain),
-          rpcClient,
-          accountAddress,
-        })
-    )
-    provider.withAlchemyGasManager({
-      policyId: PAYMASTER_POLICY_ID,
-    });
-    return provider;
-}
+    (rpcClient) =>
+      new LightSmartContractAccount({
+        chain,
+        owner,
+        factoryAddress: getDefaultLightAccountFactoryAddress(chain),
+        rpcClient,
+        accountAddress,
+      })
+  );
+  provider.withAlchemyGasManager({
+    policyId: PAYMASTER_POLICY_ID,
+  });
+  return provider;
+};

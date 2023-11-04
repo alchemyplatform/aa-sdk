@@ -24,16 +24,16 @@ Overrides the default [`feeDataGetter`](#feedatagetter) middleware. This middlew
 import { provider } from "./provider";
 
 // Define the FeeDataMiddlewareOverrideFunction // [!code focus:99]
-const FeeDataMiddlewareOverrideFunction = async (uoStruct) => ({
+const FeeDataMiddlewareOverrideFunction = async () => ({
   // For demonstration purposes, we're setting hardcoded fee values.
   // In a real-world scenario, you might fetch these values from a service
   // Or make other determinations.
 
   // Setting the max fee per gas
-  maxFeePerGas: "0x500";
+  maxFeePerGas: 100_000_000_000n,
 
   // Setting the max priority fee per gas
-  maxPriorityFeePerGas: "0x50";
+  maxPriorityFeePerGas: 100_000_000_000n,
 });
 
 // Integrate the custom fee data middleware with the provider
