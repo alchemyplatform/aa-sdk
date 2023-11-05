@@ -405,7 +405,7 @@ export class SmartAccountProvider<
       // this pretty prints the uo
       throw new Error(
         `Request is missing parameters. All properties on UserOperationStruct must be set. uo: ${JSON.stringify(
-          request,
+          uoStruct,
           null,
           2
         )}`
@@ -459,20 +459,22 @@ export class SmartAccountProvider<
   };
 
   readonly feeDataGetter: AccountMiddlewareFn = async (struct) => {
-    const maxPriorityFeePerGas =
-      await this.rpcClient.estimateMaxPriorityFeePerGas();
-    const feeData = await this.rpcClient.estimateFeesPerGas();
+    const [maxPriorityFeePerGas, feeData] = await Promise.all([
+      this.rpcClient.estimateMaxPriorityFeePerGas(),
+      this.rpcClient.estimateFeesPerGas(),
+    ]);
     if (!feeData.maxFeePerGas || !feeData.maxPriorityFeePerGas) {
       throw new Error(
         "feeData is missing maxFeePerGas or maxPriorityFeePerGas"
       );
     }
 
-    // add 33% to the priorty fee to ensure the transaction is mined
-    let maxPriorityFeePerGasBid = (BigInt(maxPriorityFeePerGas) * 4n) / 3n;
-    if (maxPriorityFeePerGasBid < this.minPriorityFeePerBid) {
-      maxPriorityFeePerGasBid = this.minPriorityFeePerBid;
-    }
+    // set maxPriorityFeePerGasBid to the max between 33% added priority fee estimate and
+    // the min priority fee per gas set for the provider
+    let maxPriorityFeePerGasBid = bigIntMax(
+      bigIntPercent(maxPriorityFeePerGas, 133n),
+      this.minPriorityFeePerBid
+    );
 
     const maxFeePerGasBid =
       BigInt(feeData.maxFeePerGas) -
