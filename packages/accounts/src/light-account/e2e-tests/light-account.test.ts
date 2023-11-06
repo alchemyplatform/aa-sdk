@@ -136,7 +136,15 @@ describe("Light Account Tests", () => {
   });
 
   it("should transfer ownership successfully", async () => {
-    const signer = givenConnectedProvider({ owner, chain });
+    const signer = givenConnectedProvider({
+      owner,
+      chain,
+      feeOpts: {
+        baseFeeBufferPercent: 50n,
+        maxPriorityFeeBufferPercent: 50n,
+        preVerificationGasBufferPercent: 50n,
+      },
+    });
     // create a throwaway address
     const throwawayOwner = LocalAccountSigner.privateKeyToAccountSigner(
       generatePrivateKey()

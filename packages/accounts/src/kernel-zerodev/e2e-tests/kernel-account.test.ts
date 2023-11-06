@@ -66,7 +66,7 @@ describe("Kernel Account Tests", () => {
   });
   const feeDataGetter = async () => ({
     maxFeePerGas: 100_000_000_000n,
-    maxPriorityFeePerGas: 10_000_000_000n,
+    maxPriorityFeePerGas: 100_000_000_000n,
   });
   provider.withFeeDataGetter(feeDataGetter);
 

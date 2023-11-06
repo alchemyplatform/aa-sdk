@@ -39,7 +39,8 @@
     "build:types": "tsc --project tsconfig.build.json --module esnext --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
     "clean": "rm -rf ./dist",
     "test": "vitest",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "test:run-e2e": "vitest run --config vitest.config.e2e.ts"
   },
   "devDependencies": {
     "dotenv": "^16.0.3",
