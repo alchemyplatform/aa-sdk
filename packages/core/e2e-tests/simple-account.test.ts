@@ -8,7 +8,7 @@ import {
 } from "../src/index.js";
 import { SmartAccountProvider } from "../src/provider/base.js";
 import { LocalAccountSigner } from "../src/signer/local-account.js";
-import { API_KEY, OWNER_MNEMONIC, RPC_URL } from "./constants.js";
+import { MUMBAI_RPC_URL, OWNER_MNEMONIC } from "./constants.js";
 
 const chain = polygonMumbai;
 
@@ -32,7 +32,7 @@ describe("Simple Account Tests", () => {
     const txnHash = signer.waitForUserOperationTransaction(result.hash as Hash);
 
     await expect(txnHash).resolves.not.toThrowError();
-  }, 50000);
+  }, 60000);
 
   it("should fail to execute if account address is not deployed and not correct", async () => {
     const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
@@ -67,11 +67,16 @@ const givenConnectedProvider = ({
   chain: Chain;
   accountAddress?: Address;
 }) => {
-  return new SmartAccountProvider({
-    rpcProvider:
-      RPC_URL != null ? RPC_URL : `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
+  const provider = new SmartAccountProvider({
+    rpcProvider: MUMBAI_RPC_URL,
     chain,
-  }).connect(
+  });
+  const feeDataGetter = async () => ({
+    maxFeePerGas: 100_000_000_000n,
+    maxPriorityFeePerGas: 100_000_000_000n,
+  });
+  provider.withFeeDataGetter(feeDataGetter);
+  return provider.connect(
     (provider) =>
       new SimpleSmartContractAccount({
         chain,
