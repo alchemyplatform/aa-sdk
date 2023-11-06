@@ -2,6 +2,7 @@ import { type Address, type Chain } from "viem";
 import {
   arbitrum,
   arbitrumGoerli,
+  arbitrumSepolia,
   base,
   baseGoerli,
   goerli,
@@ -31,6 +32,7 @@ export const getDefaultEntryPointAddress = (chain: Chain): Address => {
     case optimismGoerli.id:
     case arbitrum.id:
     case arbitrumGoerli.id:
+    case arbitrumSepolia.id:
     case base.id:
     case baseGoerli.id:
       return "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
@@ -64,6 +66,8 @@ export const getDefaultSimpleAccountFactoryAddress = (
     case optimismGoerli.id:
     case arbitrumGoerli.id:
       return "0x9406Cc6185a346906296840746125a0E44976454";
+    case arbitrumSepolia.id:
+      return "0x8d4CCBaa194ED721AC3e231a1A3863966c2D7921";
   }
 
   throw new Error(
