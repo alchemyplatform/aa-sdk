@@ -67,6 +67,8 @@ export const getDefaultSimpleAccountFactoryAddress = (
     case optimismGoerli.id:
     case arbitrumGoerli.id:
       return "0x9406Cc6185a346906296840746125a0E44976454";
+    case arbitrumSepolia.id:
+      return "0x8d4CCBaa194ED721AC3e231a1A3863966c2D7921";
   }
 
   throw new Error(
