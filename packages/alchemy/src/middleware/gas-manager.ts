@@ -51,7 +51,7 @@ export const withAlchemyGasManager = (
 };
 
 /**
- * This uses the alchemy RPC method: `alchemy_requestPaymasterAndData`, which does not estimate gas. It's recommend to use
+ * This uses the alchemy RPC method: `alchemy_requestPaymasterAndData`, which does not estimate gas. It's recommended to use
  * this middleware if you want more customization over the gas and fee estimation middleware, including setting
  * non-default buffer values for the fee/gas estimation.
  *

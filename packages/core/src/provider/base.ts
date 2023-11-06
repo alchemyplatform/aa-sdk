@@ -471,7 +471,7 @@ export class SmartAccountProvider<
 
     // set maxPriorityFeePerGasBid to the max between 33% added priority fee estimate and
     // the min priority fee per gas set for the provider
-    let maxPriorityFeePerGasBid = bigIntMax(
+    const maxPriorityFeePerGasBid = bigIntMax(
       bigIntPercent(maxPriorityFeePerGas, 133n),
       this.minPriorityFeePerBid
     );

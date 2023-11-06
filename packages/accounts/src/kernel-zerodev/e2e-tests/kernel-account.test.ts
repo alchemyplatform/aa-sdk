@@ -20,17 +20,14 @@ import {
 import { KernelAccountProvider } from "../provider.js";
 import type { KernelUserOperationCallData } from "../types.js";
 import { KernelBaseValidator, ValidatorMode } from "../validator/base.js";
-import { API_KEY, OWNER_MNEMONIC, RPC_URL } from "./constants.js";
+import { MUMBAI_RPC_URL, OWNER_MNEMONIC } from "./constants.js";
 import { MockSigner } from "./mocks/mock-signer.js";
 
 describe("Kernel Account Tests", () => {
   //any wallet should work
   const config = {
     chain: polygonMumbai,
-    rpcProvider:
-      RPC_URL != null
-        ? RPC_URL
-        : `${polygonMumbai.rpcUrls.alchemy.http[0]}/${API_KEY}`,
+    rpcProvider: MUMBAI_RPC_URL!,
     validatorAddress: "0x180D6465F921C7E0DEA0040107D342c87455fFF5" as Address,
     accountFactoryAddress:
       "0x5D006d3880645ec6e254E18C1F879DAC9Dd71A39" as Address,
@@ -67,6 +64,11 @@ describe("Kernel Account Tests", () => {
     rpcProvider: config.rpcProvider,
     chain: config.chain,
   });
+  const feeDataGetter = async () => ({
+    maxFeePerGas: 100_000_000_000n,
+    maxPriorityFeePerGas: 100_000_000_000n,
+  });
+  provider.withFeeDataGetter(feeDataGetter);
 
   function connect(index: bigint, owner = mockOwner) {
     return provider.connect((_provider) => account(index, owner));
