@@ -10,7 +10,7 @@ import {
   type Transaction,
   type Transport,
 } from "viem";
-import { arbitrum, arbitrumGoerli } from "viem/chains";
+import { arbitrum, arbitrumGoerli, arbitrumSepolia } from "viem/chains";
 import type {
   ISmartContractAccount,
   SignTypedDataParams,
@@ -61,6 +61,7 @@ export const noOpMiddleware: AccountMiddlewareFn = async (
 const minPriorityFeePerBidDefaults = new Map<number, bigint>([
   [arbitrum.id, 10_000_000n],
   [arbitrumGoerli.id, 10_000_000n],
+  [arbitrumSepolia.id, 10_000_000n],
 ]);
 
 export class SmartAccountProvider<
