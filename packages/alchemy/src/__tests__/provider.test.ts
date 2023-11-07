@@ -21,7 +21,7 @@ describe("Alchemy Provider Tests", () => {
       }),
     signTypedData: async () => "0xHash",
     getAddress: async () => ownerAccount.address,
-    signerType: "e2e-test",
+    signerType: AACoreModule.AA_SDK_TESTS_SIGNER_TYPE,
   };
   const chain = polygonMumbai;
 

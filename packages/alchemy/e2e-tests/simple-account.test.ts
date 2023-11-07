@@ -2,6 +2,7 @@ import {
   SimpleSmartContractAccount,
   getDefaultSimpleAccountFactoryAddress,
   type SmartAccountSigner,
+  AA_SDK_TESTS_SIGNER_TYPE,
 } from "@alchemy/aa-core";
 import { toHex, type Address, type Chain, type Hash } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
@@ -20,7 +21,7 @@ describe("Simple Account Tests", () => {
       }),
     signTypedData: async () => "0xHash",
     getAddress: async () => ownerAccount.address,
-    signerType: "e2e-test",
+    signerType: AA_SDK_TESTS_SIGNER_TYPE,
   };
 
   it("should successfully get counterfactual address", async () => {
