@@ -45,7 +45,7 @@ export default defineConfig({
         items: [
           { text: "Why Account Kit", link: "/why-account-kit" },
           { text: "Introduction", link: "/introduction" },
-          { text: "Getting Started Guide", link: "/getting-started" },
+          { text: "Getting Started", link: "/getting-started" },
           {
             text: "Packages Overview",
             link: "/package-overview",
@@ -67,7 +67,7 @@ export default defineConfig({
         ],
       },
       {
-        text: "Choosing a Smart Account",
+        text: "Smart Accounts",
         base: "/smart-accounts",
         items: [
           { text: "Overview", link: "/overview" },
@@ -76,20 +76,17 @@ export default defineConfig({
             base: "/smart-accounts/accounts",
             collapsed: true,
             items: [
+              { text: "Introduction", link: "/choosing-a-smart-account" },
+              { text: "Light Account", link: "/light-account" },
               {
-                text: "Overview",
-                link: "/choosing-a-smart-account",
-              },
-              { text: "Light Account Smart Contract", link: "/light-account" },
-              {
-                text: "Modular Account Smart Contract",
+                text: "Modular Account",
                 link: "/modular-account",
               },
-              { text: "Using Your Own Smart Account", link: "/using-your-own" },
               {
-                text: "Deployment Addresses",
+                text: "Deployments",
                 link: "/deployment-addresses",
               },
+              { text: "Using Your Own", link: "/using-your-own" },
             ],
           },
           {
@@ -98,25 +95,25 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: "Overview",
+                text: "Introduction",
                 link: "/choosing-a-signer",
               },
-              { text: "Magic Link", link: "/magic" },
+              { text: "Magic", link: "/magic" },
               { text: "Web3Auth", link: "/web3auth" },
               { text: "Turnkey", link: "/turnkey" },
               { text: "Privy", link: "/privy" },
               { text: "Dynamic", link: "/dynamic" },
               { text: "Fireblocks", link: "/fireblocks" },
-              { text: "Portal Integration Guide", link: "/portal" },
-              { text: "Capsule Integration Guide", link: "/capsule" },
-              { text: "Lit Protocol Integration Guide", link: "/lit" },
+              { text: "Portal", link: "/portal" },
+              { text: "Capsule", link: "/capsule" },
+              { text: "Lit Protocol", link: "/lit" },
               {
-                text: "Particle Network Integration Guide",
+                text: "Particle Network",
                 link: "/particle-network",
               },
-              { text: "EOA Integration Guide", link: "/eoa" },
+              { text: "Externally Owned Account (EOA)", link: "/eoa" },
               {
-                text: "How to Use Your Own Account Signer",
+                text: "Using Your Own",
                 link: "/custom-signer",
               },
               { text: "Contributing Your Signer", link: "/contributing" },
@@ -133,7 +130,7 @@ export default defineConfig({
         collapsed: true,
         items: [
           {
-            text: "Overview of aa-core",
+            text: "Getting Started",
             link: "/",
           },
           {
@@ -142,11 +139,11 @@ export default defineConfig({
             base: "/packages/aa-core/provider",
             items: [
               {
-                text: "Overview of SmartAccountProvider",
+                text: "Introduction",
                 link: "/introduction",
               },
               {
-                text: "constructor for SmartAccountProvider",
+                text: "constructor",
                 link: "/constructor",
               },
               {
@@ -249,11 +246,11 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: "Overview of ISmartContractAccount",
+                text: "Introduction",
                 link: "/introduction",
               },
               {
-                text: "constructor for SimpleSmartContractAccount",
+                text: "constructor",
                 link: "/constructor",
               },
               {
@@ -369,7 +366,7 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: "Overview of Public Client",
+                text: "Introduction",
                 link: "/",
               },
               {
@@ -457,20 +454,20 @@ export default defineConfig({
         collapsed: true,
         items: [
           {
-            text: "Overview of aa-alchemy",
+            text: "Getting Started",
             link: "/",
           },
           {
-            text: "AlchemyProvider",
+            text: "Provider",
             base: "/packages/aa-alchemy/provider",
             collapsed: true,
             items: [
               {
-                text: "Overview of AlchemyProvider",
+                text: "Introduction",
                 link: "/introduction",
               },
               {
-                text: "constructor for AlchemyProvider",
+                text: "constructor",
                 link: "/constructor",
               },
               { text: "gasEstimator", link: "/gasEstimator" },
@@ -486,7 +483,7 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: "Overview of Middleware",
+                text: "Introduction",
                 link: "/introduction",
               },
               {
@@ -505,7 +502,7 @@ export default defineConfig({
             base: "/packages/aa-alchemy/utils",
             items: [
               {
-                text: "Overview of Utils",
+                text: "Introduction",
                 link: "/introduction",
               },
               { text: "SupportedChains", link: "/supportedChains" },
@@ -519,20 +516,20 @@ export default defineConfig({
         base: "/packages/aa-accounts",
         items: [
           {
-            text: "Overview of aa-accounts",
+            text: "Getting Started",
             link: "/",
           },
           {
-            text: "LightSmartContractAccount",
+            text: "Light Account",
             collapsed: true,
             base: "/packages/aa-accounts/light-account",
             items: [
               {
-                text: "Overview of LightSmartContractAccount",
+                text: "Introduction",
                 link: "/introduction",
               },
               {
-                text: "constructor for LightSmartContractAccount",
+                text: "constructor",
                 link: "/constructor",
               },
               {
@@ -572,7 +569,7 @@ export default defineConfig({
         collapsed: true,
         items: [
           {
-            text: "Overview of aa-ethers",
+            text: "Getting Started",
             link: "/",
           },
           {
@@ -581,11 +578,11 @@ export default defineConfig({
             base: "/packages/aa-ethers/provider-adapter",
             items: [
               {
-                text: "Overview of EthersProviderAdapter",
+                text: "Introduction",
                 link: "/introduction",
               },
               {
-                text: "constructor for EthersProviderAdapter",
+                text: "constructor",
                 link: "/constructor",
               },
               {
@@ -612,7 +609,7 @@ export default defineConfig({
             base: "/packages/aa-ethers/account-signer",
             items: [
               {
-                text: "Overview of AccountSigner",
+                text: "Introduction",
                 link: "/introduction",
               },
               {
@@ -643,7 +640,7 @@ export default defineConfig({
             base: "/packages/aa-ethers/utils",
             items: [
               {
-                text: "Overview of Utils",
+                text: "Introduction",
                 link: "/introduction",
               },
               {
