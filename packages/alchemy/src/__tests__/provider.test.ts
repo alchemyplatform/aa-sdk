@@ -5,9 +5,10 @@ import {
   type BatchUserOperationCallData,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
+import { Alchemy, Network } from "alchemy-sdk";
 import { toHex, type Address, type Chain } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
-import { polygonMumbai } from "viem/chains";
+import { polygonMumbai, sepolia } from "viem/chains";
 import { AlchemyProvider } from "../provider.js";
 
 describe("Alchemy Provider Tests", () => {
@@ -100,6 +101,35 @@ describe("Alchemy Provider Tests", () => {
           chain: polygonMumbai,
         })
     ).toThrowErrorMatchingSnapshot();
+  });
+
+  it("should have enhanced api properties extended from the Alchemy SDK", async () => {
+    const provider = new AlchemyProvider({
+      apiKey: "test",
+      chain: sepolia,
+    });
+    const spy = vi.spyOn(provider, "withAlchemyEnhancedApis");
+
+    const alchemy = new Alchemy({
+      network: Network.ETH_SEPOLIA,
+      apiKey: "test",
+    });
+    provider.withAlchemyEnhancedApis(alchemy);
+
+    expect(spy.mock.calls[0][0]).toMatchSnapshot();
+  });
+
+  it("should throw runtime error if chains don't match between provider and AlchemySDK client", async () => {
+    expect(() => {
+      const alchemy = new Alchemy({
+        network: Network.MATIC_MAINNET,
+        apiKey: "test",
+      });
+
+      givenConnectedProvider({ owner, chain }).withAlchemyEnhancedApis(alchemy);
+    }).toThrowErrorMatchingInlineSnapshot(
+      '"Alchemy SDK client JSON-RPC URL must match AlchemyProvider JSON-RPC URL"'
+    );
   });
 });
 

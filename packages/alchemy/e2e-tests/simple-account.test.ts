@@ -4,6 +4,7 @@ import {
   type SmartAccountSigner,
   AA_SDK_TESTS_SIGNER_TYPE,
 } from "@alchemy/aa-core";
+import { Alchemy, Network } from "alchemy-sdk";
 import { toHex, type Address, type Chain, type Hash } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
 import { sepolia } from "viem/chains";
@@ -11,6 +12,7 @@ import { AlchemyProvider } from "../src/provider.js";
 import { API_KEY, OWNER_MNEMONIC, PAYMASTER_POLICY_ID } from "./constants.js";
 
 const chain = sepolia;
+const network = Network.ETH_SEPOLIA;
 
 describe("Simple Account Tests", () => {
   const ownerAccount = mnemonicToAccount(OWNER_MNEMONIC);
@@ -147,6 +149,59 @@ describe("Simple Account Tests", () => {
 
     const txnHash = signer.waitForUserOperationTransaction(replacedResult.hash);
     await expect(txnHash).resolves.not.toThrowError();
+  }, 50000);
+
+  it("should get token balances for the smart account", async () => {
+    const alchemy = new Alchemy({
+      apiKey: API_KEY!,
+      network,
+    });
+    const provider = givenConnectedProvider({
+      owner,
+      chain,
+    })
+      .withAlchemyGasManager({
+        policyId: PAYMASTER_POLICY_ID,
+      })
+      .withAlchemyEnhancedApis(alchemy);
+
+    const address = await provider.getAddress();
+    const balances = await provider.core.getTokenBalances(address);
+    expect(balances.tokenBalances).toMatchInlineSnapshot(`
+      [
+        {
+          "contractAddress": "0x489c5cb7fd158b0a9e7975076d758268a756c025",
+          "tokenBalance": "0x000000000000000000000000000000000000000000000000000000000065b9aa",
+        },
+        {
+          "contractAddress": "0x54fa517f05e11ffa87f4b22ae87d91cec0c2d7e1",
+          "tokenBalance": "0x000000000000000000000000000000000000000000000000000000000065b9aa",
+        },
+        {
+          "contractAddress": "0xdcf5d3e08c5007dececdb34808c49331bd82a247",
+          "tokenBalance": "0x00000000000000000000000000000000000000000000000000000000000f423f",
+        },
+      ]
+    `);
+  }, 50000);
+
+  it("should get owned nfts for the smart account", async () => {
+    const alchemy = new Alchemy({
+      apiKey: API_KEY!,
+      network,
+    });
+    const provider = givenConnectedProvider({
+      owner,
+      chain,
+    })
+      .withAlchemyGasManager({
+        policyId: PAYMASTER_POLICY_ID,
+      })
+      .withAlchemyEnhancedApis(alchemy);
+
+    const address = await provider.getAddress();
+    const nfts = await provider.nft.getNftsForOwner(address);
+    expect(nfts.ownedNfts).toMatchInlineSnapshot("[]");
   }, 50000);
 });
 

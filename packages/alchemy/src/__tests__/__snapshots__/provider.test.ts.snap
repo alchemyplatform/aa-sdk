@@ -198,3 +198,163 @@ exports[`Alchemy Provider Tests > should correctly do runtime validation when mu
   }
 ]"
 `;
+
+exports[`Alchemy Provider Tests > should have called propety 1`] = `
+Alchemy {
+  "config": AlchemyConfig {
+    "apiKey": "test",
+    "authToken": undefined,
+    "batchRequests": false,
+    "maxRetries": 5,
+    "network": "eth-sepolia",
+    "requestTimeout": 0,
+    "url": undefined,
+  },
+  "core": CoreNamespace {
+    "config": AlchemyConfig {
+      "apiKey": "test",
+      "authToken": undefined,
+      "batchRequests": false,
+      "maxRetries": 5,
+      "network": "eth-sepolia",
+      "requestTimeout": 0,
+      "url": undefined,
+    },
+  },
+  "debug": DebugNamespace {
+    "config": AlchemyConfig {
+      "apiKey": "test",
+      "authToken": undefined,
+      "batchRequests": false,
+      "maxRetries": 5,
+      "network": "eth-sepolia",
+      "requestTimeout": 0,
+      "url": undefined,
+    },
+  },
+  "nft": NftNamespace {
+    "config": AlchemyConfig {
+      "apiKey": "test",
+      "authToken": undefined,
+      "batchRequests": false,
+      "maxRetries": 5,
+      "network": "eth-sepolia",
+      "requestTimeout": 0,
+      "url": undefined,
+    },
+  },
+  "notify": NotifyNamespace {
+    "config": AlchemyConfig {
+      "apiKey": "test",
+      "authToken": undefined,
+      "batchRequests": false,
+      "maxRetries": 5,
+      "network": "eth-sepolia",
+      "requestTimeout": 0,
+      "url": undefined,
+    },
+  },
+  "transact": TransactNamespace {
+    "config": AlchemyConfig {
+      "apiKey": "test",
+      "authToken": undefined,
+      "batchRequests": false,
+      "maxRetries": 5,
+      "network": "eth-sepolia",
+      "requestTimeout": 0,
+      "url": undefined,
+    },
+  },
+  "ws": WebSocketNamespace {
+    "config": AlchemyConfig {
+      "apiKey": "test",
+      "authToken": undefined,
+      "batchRequests": false,
+      "maxRetries": 5,
+      "network": "eth-sepolia",
+      "requestTimeout": 0,
+      "url": undefined,
+    },
+  },
+}
+`;
+
+exports[`Alchemy Provider Tests > should have enhanced api properties extended from the Alchemy SDK 1`] = `
+Alchemy {
+  "config": AlchemyConfig {
+    "apiKey": "test",
+    "authToken": undefined,
+    "batchRequests": false,
+    "maxRetries": 5,
+    "network": "eth-sepolia",
+    "requestTimeout": 0,
+    "url": undefined,
+  },
+  "core": CoreNamespace {
+    "config": AlchemyConfig {
+      "apiKey": "test",
+      "authToken": undefined,
+      "batchRequests": false,
+      "maxRetries": 5,
+      "network": "eth-sepolia",
+      "requestTimeout": 0,
+      "url": undefined,
+    },
+  },
+  "debug": DebugNamespace {
+    "config": AlchemyConfig {
+      "apiKey": "test",
+      "authToken": undefined,
+      "batchRequests": false,
+      "maxRetries": 5,
+      "network": "eth-sepolia",
+      "requestTimeout": 0,
+      "url": undefined,
+    },
+  },
+  "nft": NftNamespace {
+    "config": AlchemyConfig {
+      "apiKey": "test",
+      "authToken": undefined,
+      "batchRequests": false,
+      "maxRetries": 5,
+      "network": "eth-sepolia",
+      "requestTimeout": 0,
+      "url": undefined,
+    },
+  },
+  "notify": NotifyNamespace {
+    "config": AlchemyConfig {
+      "apiKey": "test",
+      "authToken": undefined,
+      "batchRequests": false,
+      "maxRetries": 5,
+      "network": "eth-sepolia",
+      "requestTimeout": 0,
+      "url": undefined,
+    },
+  },
+  "transact": TransactNamespace {
+    "config": AlchemyConfig {
+      "apiKey": "test",
+      "authToken": undefined,
+      "batchRequests": false,
+      "maxRetries": 5,
+      "network": "eth-sepolia",
+      "requestTimeout": 0,
+      "url": undefined,
+    },
+  },
+  "ws": WebSocketNamespace {
+    "config": AlchemyConfig {
+      "apiKey": "test",
+      "authToken": undefined,
+      "batchRequests": false,
+      "maxRetries": 5,
+      "network": "eth-sepolia",
+      "requestTimeout": 0,
+      "url": undefined,
+    },
+  },
+}
+`;
