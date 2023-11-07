@@ -126,6 +126,14 @@ export default defineConfig({
             text: "How to Transfer Ownership of a Smart Account",
             link: "/transferring-ownership",
           },
+          {
+            text: "How to Fetch a Smart Account's NFTs",
+            link: "/enhanced-apis-nft",
+          },
+          {
+            text: "How to Fetch a Smart Account's ERC-20 Tokens",
+            link: "/enhanced-apis-token",
+          },
         ],
       },
       {
