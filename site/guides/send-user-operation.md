@@ -6,16 +6,16 @@ head:
       content: How to Send a User Operation
   - - meta
     - name: description
-      content: Learn how to send a User Operation with Alchemy's Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to send a User Operation with Alchemy's Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Learn how to send a User Operation with Alchemy's Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to send a User Operation with Alchemy's Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - name: twitter:title
       content: How to Send a User Operation
   - - meta
     - name: twitter:description
-      content: Learn how to send a User Operation with Alchemy's Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to send a User Operation with Alchemy's Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
 # How to Send a User Operation

@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Batching Transactions
+      content: How to Submit Batch Transactions
   - - meta
     - name: description
       content: Follow this guide to submit transactions in batches with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
@@ -12,13 +12,13 @@ head:
       content: Follow this guide to submit transactions in batches with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - name: twitter:title
-      content: Batching Transactions
+      content: How to Submit Batch Transactions
   - - meta
     - name: twitter:description
       content: Follow this guide to submit transactions in batches with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
-# Batching Transactions
+# How to Submit Batch Transactions
 
 One benefit of Smart Contract Accounts is that it's possible to batch transactions in one User Operation. Not all Smart Contract Accounts support batching. But, if the account you're using does, then implementations of `SmartAccountProvider` will allow you to make those calls.
 

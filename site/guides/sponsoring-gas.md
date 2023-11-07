@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Sponsoring Gas
+      content: How to Sponsor Gas for a User Operation
   - - meta
     - name: description
       content: Follow this guide to sponsor gas for User Operations from any ERC-4337 smart account. Account Kit is a vertically integrated stack for building apps that support ERC-4337.
@@ -12,19 +12,13 @@ head:
       content: Follow this guide to sponsor gas for User Operations from any ERC-4337 smart account. Account Kit is a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - name: twitter:title
-      content: Sponsoring Gas
+      content: How to Sponsor Gas for a User Operation
   - - meta
     - name: twitter:description
       content: Follow this guide to sponsor gas for User Operations from any ERC-4337 smart account. Account Kit is a vertically integrated stack for building apps that support ERC-4337.
-  - - meta
-    - name: twitter:card
-      content: summary
-prev:
-  text: Choosing a Signer
-  link: /smart-accounts/signers/choosing-a-signer
 ---
 
-# Sponsoring Gas
+# How to Sponsor Gas for a User Operation
 
 Gas fees are a significant barrier to entry for new user of your app. With Account Kit you can remove this barrier by sponsoring gas fees for transactions via the [Gas Manager](https://docs.alchemy.com/docs/gas-manager-services). This guide explains how to sponsor gas by creating a gas policy, linking it to your provider, and sending sponsored user operations from a smart account.
 

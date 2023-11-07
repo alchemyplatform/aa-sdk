@@ -72,7 +72,7 @@ To get started with a signer, read the doc: [How to Choose a Signer](/smart-acco
 
 The Gas Manager is a programmable API to sponsor gas for UserOps. You can create programmable gas policies to specify exactly which transactions should be sponsored, set strict spending limits per wallet or globally, and allowlist/blocklist particular wallet addresses. This expressive programmability is available through a REST API and an intuitive dashboard interface.
 
-To learn how to sponsor gas with the Gas Manager API, see the [Sponsoring Gas](/smart-accounts/sponsoring-gas) tutorial.
+To learn how to sponsor gas with the Gas Manager API, see the [Sponsoring Gas](/guides/sponsoring-gas) tutorial.
 
 ### Bundler API
 

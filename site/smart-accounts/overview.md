@@ -46,16 +46,16 @@ A signer is the entity that signs transactions (User Operations) on behalf of th
 - [Web3Auth](signers/web3auth)
 - [Externally Owned Account](signers/eoa)
 
-At this point you should be able to integrate smart accounts in your application. However, there are a few advanced features that can help you improve the user experience and save on gas costs. Information about these can be found in the subsequent sections.
+At this point you should be able to integrate smart accounts in your application. However, there are a few advanced features that can help you improve the user experience and save on gas costs. Information about these can be found in the `Guides` section.
 
 ## 4. Sponsoring Gas
 
-Being able to sponsor gas for your users is one of the most powerful features enabled by smart accounts and can help you build a seamless user experience. We'll cover this in detail with code examples in the [Sponsoring Gas](sponsoring-gas) section.
+Being able to sponsor gas for your users is one of the most powerful features enabled by smart accounts and can help you build a seamless user experience. We'll cover this in detail with code examples in the [Sponsoring Gas](/guides/sponsoring-gas) section.
 
 ## 5. Batching Transactions
 
-Transaction batching allows you to bundle multiple transaction calls into a single User Operation and execute them in a single atomic transaction. This can help you save on gas costs and improve the user experience. We'll cover this in detail with code examples in the [Batching Transactions](batching-transactions) section.
+Transaction batching allows you to bundle multiple transaction calls into a single User Operation and execute them in a single atomic transaction. This can help you save on gas costs and improve the user experience. We'll cover this in detail with code examples in the [Batching Transactions](/guides/batching-transactions) section.
 
 ## 6. Transferring Ownership
 
-Ownership is an important aspect of smart accounts. The Light Account implementation allows you to transfer the ownership of a smart account to another entity. We'll cover this in detail with code examples in the [Transferring Ownership](transferring-ownership) section.
+Ownership is an important aspect of smart accounts. The Light Account implementation allows you to transfer the ownership of a smart account to another entity. We'll cover this in detail with code examples in the [Transferring Ownership](/guides/transferring-ownership) section.
