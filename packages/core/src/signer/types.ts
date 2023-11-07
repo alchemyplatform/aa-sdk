@@ -8,3 +8,5 @@ export interface SmartAccountSigner {
   signTypedData: (params: SignTypedDataParams) => Promise<Hash>;
   getAddress: () => Promise<Address>;
 }
+
+export const AA_SDK_TESTS_SIGNER_TYPE = "aa-sdk-tests";

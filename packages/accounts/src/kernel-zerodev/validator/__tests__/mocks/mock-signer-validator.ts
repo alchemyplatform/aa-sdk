@@ -1,12 +1,13 @@
-import type {
-  Address,
-  Hex,
-  SignTypedDataParams,
-  SmartAccountSigner,
+import {
+  AA_SDK_TESTS_SIGNER_TYPE,
+  type Address,
+  type Hex,
+  type SignTypedDataParams,
+  type SmartAccountSigner,
 } from "@alchemy/aa-core";
 
 export class MockSignerValidator implements SmartAccountSigner {
-  signerType = "mock-validator";
+  signerType = AA_SDK_TESTS_SIGNER_TYPE;
 
   signTypedData(params: SignTypedDataParams): Promise<`0x${string}`> {
     return Promise.resolve("0xMOCK_SIGN_TYPED_DATA");
