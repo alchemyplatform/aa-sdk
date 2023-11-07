@@ -6,18 +6,18 @@ import {
 } from "@alchemy/aa-core";
 import { Wallet } from "@ethersproject/wallet";
 import { Alchemy, Network, type AlchemyProvider } from "alchemy-sdk";
-import { polygonMumbai } from "viem/chains";
+import { sepolia } from "viem/chains";
 import { EthersProviderAdapter } from "../src/provider-adapter.js";
 import { convertWalletToAccountSigner } from "../src/utils.js";
 import { API_KEY, OWNER_MNEMONIC, RPC_URL } from "./constants.js";
 
-const chain = polygonMumbai;
+const chain = sepolia;
 
 describe("Simple Account Tests", async () => {
   const alchemy = new Alchemy({
     apiKey: API_KEY,
     url: RPC_URL,
-    network: Network.MATIC_MUMBAI,
+    network: Network.ETH_SEPOLIA,
   });
   const alchemyProvider = await alchemy.config.getProvider();
   const owner = Wallet.fromMnemonic(OWNER_MNEMONIC);

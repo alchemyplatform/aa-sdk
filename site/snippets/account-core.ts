@@ -37,7 +37,7 @@ const provider = new SmartAccountProvider({
 
 // 3. send a UserOperation
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const { hash } = await provider.sendUserOperation({
+export const { hash } = await provider.sendUserOperation({
   target: "0xTargetAddress",
   data: "0xcallData",
   value: 0n, // value: bigint or undefined

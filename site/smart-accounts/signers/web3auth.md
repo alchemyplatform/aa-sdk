@@ -24,7 +24,7 @@ head:
 
 Combining Web3Auth with Account Kit allows you to get the best of both worlds. You can use Web3Auth to generate a wallet scoped to your application, and then use Account Kit to create Smart Contract Accounts for your users!
 
-# Integrataion
+# Integration
 
 ### Install the SDK
 

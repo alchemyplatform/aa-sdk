@@ -11,6 +11,7 @@ import {
   sepolia,
   base,
   baseGoerli,
+  arbitrumSepolia,
 } from "viem/chains";
 
 export const SupportedChains = new Map<number, Chain>([
@@ -20,6 +21,7 @@ export const SupportedChains = new Map<number, Chain>([
   [sepolia.id, sepolia],
   [goerli.id, goerli],
   [arbitrumGoerli.id, arbitrumGoerli],
+  [arbitrumSepolia.id, arbitrumSepolia],
   [arbitrum.id, arbitrum],
   [optimism.id, optimism],
   [optimismGoerli.id, optimismGoerli],

@@ -1,6 +1,7 @@
 import * as AACoreModule from "@alchemy/aa-core";
 import {
   SimpleSmartContractAccount,
+  getDefaultEntryPointAddress,
   type BatchUserOperationCallData,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
@@ -65,6 +66,40 @@ describe("Alchemy Provider Tests", () => {
     expect(await account.encodeBatchExecute(data)).toMatchInlineSnapshot(
       '"0x18dfb3c7000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000002000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef0000000000000000000000008ba1f109551bd432803012645ac136ddd64dba720000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000004deadbeef000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004cafebabe00000000000000000000000000000000000000000000000000000000"'
     );
+  });
+
+  it("should correctly do runtime validation when entrypoint is invalid", () => {
+    expect(
+      () =>
+        new AlchemyProvider({
+          rpcUrl: "https://eth-mainnet.g.alchemy.com/v2/test",
+          entryPointAddress: 1 as unknown as Address,
+          chain: polygonMumbai,
+        })
+    ).toThrowErrorMatchingInlineSnapshot(`
+      "[
+        {
+          \\"code\\": \\"invalid_type\\",
+          \\"expected\\": \\"string\\",
+          \\"received\\": \\"number\\",
+          \\"path\\": [
+            \\"entryPointAddress\\"
+          ],
+          \\"message\\": \\"Expected string, received number\\"
+        }
+      ]"
+    `);
+  });
+
+  it("should correctly do runtime validation when connection config is invalid", () => {
+    expect(
+      () =>
+        new AlchemyProvider({
+          rpcUrl: 1 as unknown as string,
+          entryPointAddress: getDefaultEntryPointAddress(chain),
+          chain: polygonMumbai,
+        })
+    ).toThrowErrorMatchingSnapshot();
   });
 });
 

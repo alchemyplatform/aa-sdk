@@ -5,11 +5,11 @@ import {
 } from "@alchemy/aa-core";
 import { toHex, type Address, type Chain, type Hash } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
-import { polygonMumbai } from "viem/chains";
+import { sepolia } from "viem/chains";
 import { AlchemyProvider } from "../src/provider.js";
 import { API_KEY, OWNER_MNEMONIC, PAYMASTER_POLICY_ID } from "./constants.js";
 
-const chain = polygonMumbai;
+const chain = sepolia;
 
 describe("Simple Account Tests", () => {
   const ownerAccount = mnemonicToAccount(OWNER_MNEMONIC);

@@ -26,8 +26,8 @@ import type {
 } from "../types.js";
 import type { Deferrable } from "../utils";
 import type {
-  SmartAccountProviderConfigSchema,
   SmartAccountProviderOptsSchema,
+  createSmartAccountProviderConfigSchema,
 } from "./schema.js";
 
 type WithRequired<T, K extends keyof T> = Required<Pick<T, K>>;
@@ -87,7 +87,9 @@ export type SmartAccountProviderOpts = z.infer<
 
 export type SmartAccountProviderConfig<
   TTransport extends SupportedTransports = Transport
-> = z.infer<ReturnType<typeof SmartAccountProviderConfigSchema<TTransport>>>;
+> = z.infer<
+  ReturnType<typeof createSmartAccountProviderConfigSchema<TTransport>>
+>;
 
 // TODO: this also will need to implement EventEmitteer
 export interface ISmartAccountProvider<

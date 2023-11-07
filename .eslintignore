@@ -1,2 +1,3 @@
 **/dist/*
 examples/alchemy-daapp/*
+site/.vitepress/cache/**/*

@@ -16,6 +16,8 @@ head:
 
 Attempts to fetch for UserOperationReceipt `txMaxRetries` amount of times, at an interval of `txRetryIntervalMs` milliseconds (with a multiplier of `txRetryMulitplier`) using the connected account.
 
+Note: For more details on how to modify the retry configurations for this method, see the [constructor](/packages/aa-core/provider/constructor.md) parameters.
+
 ## Usage
 
 ::: code-group
@@ -30,8 +32,8 @@ const userOperationResult = await provider.sendUserOperation({
 });
 
 // [!code focus:99]
-provider.waitForUserOperationTransaction({
-  hash: result.hash,
+const txHash = await provider.waitForUserOperationTransaction({
+  hash: userOperationResult.hash,
 });
 ```
 
@@ -51,15 +53,3 @@ If `txMaxRetries` is exceeded without the user operation included in a block yet
 ### `hash: Hash`
 
 The hash of the user operation returned from [sendUserOperation](./sendUserOperation).
-
-::: code-group
-
-```ts [example.ts]
-import { provider } from "./provider";
-// [!code focus:99]
-provider.waitForUserOperationTransaction({
-  hash: "0xUserOpResultHash", // [!code focus]
-});
-```
-
-:::

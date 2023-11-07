@@ -244,10 +244,11 @@ describe("Base Tests", () => {
       "[
         {
           \\"code\\": \\"custom\\",
-          \\"message\\": \\"Invalid input\\",
+          \\"fatal\\": true,
           \\"path\\": [
             \\"chain\\"
-          ]
+          ],
+          \\"message\\": \\"Invalid input\\"
         },
         {
           \\"code\\": \\"invalid_type\\",

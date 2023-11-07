@@ -20,37 +20,17 @@ import type { SmartAccountSigner } from "../signer/types.js";
 import { wrapSignatureWith6492 } from "../signer/utils.js";
 import type { BatchUserOperationCallData } from "../types.js";
 import { getDefaultEntryPointAddress } from "../utils/defaults.js";
-import type { ISmartContractAccount, SignTypedDataParams } from "./types.js";
+import { createBaseSmartAccountParamsSchema } from "./schema.js";
+import type {
+  BaseSmartAccountParams,
+  ISmartContractAccount,
+  SignTypedDataParams,
+} from "./types.js";
 
 export enum DeploymentState {
   UNDEFINED = "0x0",
   NOT_DEPLOYED = "0x1",
   DEPLOYED = "0x2",
-}
-
-export interface BaseSmartAccountParams<
-  TTransport extends SupportedTransports = Transport
-> {
-  rpcClient: string | PublicErc4337Client<TTransport>;
-  factoryAddress: Address;
-  chain: Chain;
-
-  /**
-   * The address of the entry point contract.
-   * If not provided, the default entry point contract will be used.
-   * Check out https://docs.alchemy.com/reference/eth-supportedentrypoints for all the supported entrypoints
-   */
-  entryPointAddress?: Address;
-
-  /**
-   * Owner account signer for the account if there is one.
-   */
-  owner?: SmartAccountSigner | undefined;
-
-  /**
-   * The address of the account if it is already deployed.
-   */
-  accountAddress?: Address;
 }
 
 export abstract class BaseSmartContractAccount<
@@ -60,6 +40,7 @@ export abstract class BaseSmartContractAccount<
   protected factoryAddress: Address;
   protected deploymentState: DeploymentState = DeploymentState.UNDEFINED;
   protected accountAddress?: Address;
+  protected accountInitCode?: Hex;
   protected owner: SmartAccountSigner | undefined;
   protected entryPoint: GetContractReturnType<
     typeof EntryPointAbi,
@@ -71,7 +52,10 @@ export abstract class BaseSmartContractAccount<
     | PublicErc4337Client<TTransport>
     | PublicErc4337Client<HttpTransport>;
 
-  constructor(params: BaseSmartAccountParams<TTransport>) {
+  constructor(params_: BaseSmartAccountParams<TTransport>) {
+    const params =
+      createBaseSmartAccountParamsSchema<TTransport>().parse(params_);
+
     this.entryPointAddress =
       params.entryPointAddress ?? getDefaultEntryPointAddress(params.chain);
 
@@ -113,6 +97,7 @@ export abstract class BaseSmartContractAccount<
     this.accountAddress = params.accountAddress;
     this.factoryAddress = params.factoryAddress;
     this.owner = params.owner;
+    this.accountInitCode = params.initCode;
 
     this.entryPoint = getContract({
       address: this.entryPointAddress,
@@ -156,7 +141,7 @@ export abstract class BaseSmartContractAccount<
 
   /**
    * this should return the init code that will be used to create an account if one does not exist.
-   * Usually this is the concatenation of the account's factory address and the abi encoded function data of the account factory's `createAccount` method.
+   * This is the concatenation of the account's factory address and the abi encoded function data of the account factory's `createAccount` method.
    */
   protected abstract getAccountInitCode(): Promise<Hash>;
 
@@ -207,29 +192,6 @@ export abstract class BaseSmartContractAccount<
     return this.create6492Signature(isDeployed, signature);
   }
 
-  private async create6492Signature(
-    isDeployed: boolean,
-    signature: Hash
-  ): Promise<Hash> {
-    if (isDeployed) {
-      return signature;
-    }
-
-    const [factoryAddress, factoryCalldata] =
-      await this.parseFactoryAddressFromAccountInitCode();
-
-    Logger.debug(
-      `[BaseSmartContractAccount](create6492Signature)\
-        factoryAddress: ${factoryAddress}, factoryCalldata: ${factoryCalldata}`
-    );
-
-    return wrapSignatureWith6492({
-      factoryAddress,
-      factoryCalldata,
-      signature,
-    });
-  }
-
   /**
    * Not all contracts support batch execution.
    * If your contract does, this method should encode a list of
@@ -245,6 +207,7 @@ export abstract class BaseSmartContractAccount<
   }
   // #endregion optional-methods
 
+  // Extra implementations
   async getNonce(): Promise<bigint> {
     if (!(await this.isAccountDeployed())) {
       return 0n;
@@ -268,12 +231,12 @@ export abstract class BaseSmartContractAccount<
       this.deploymentState = DeploymentState.NOT_DEPLOYED;
     }
 
-    return this.getAccountInitCode();
+    return this._getAccountInitCode();
   }
 
   async getAddress(): Promise<Address> {
     if (!this.accountAddress) {
-      const initCode = await this.getAccountInitCode();
+      const initCode = await this._getAccountInitCode();
       Logger.debug(
         "[BaseSmartContractAccount](getAddress) initCode: ",
         initCode
@@ -309,7 +272,6 @@ export abstract class BaseSmartContractAccount<
     return this.entryPointAddress;
   }
 
-  // Extra implementations
   async isAccountDeployed(): Promise<boolean> {
     return (await this.getDeploymentState()) === DeploymentState.DEPLOYED;
   }
@@ -334,9 +296,36 @@ export abstract class BaseSmartContractAccount<
   protected async parseFactoryAddressFromAccountInitCode(): Promise<
     [Address, Hex]
   > {
-    const initCode = await this.getAccountInitCode();
+    const initCode = await this._getAccountInitCode();
     const factoryAddress = `0x${initCode.substring(2, 42)}` as Address;
     const factoryCalldata = `0x${initCode.substring(42)}` as Hex;
     return [factoryAddress, factoryCalldata];
+  }
+
+  private async _getAccountInitCode(): Promise<Hash> {
+    return this.accountInitCode ?? this.getAccountInitCode();
+  }
+
+  private async create6492Signature(
+    isDeployed: boolean,
+    signature: Hash
+  ): Promise<Hash> {
+    if (isDeployed) {
+      return signature;
+    }
+
+    const [factoryAddress, factoryCalldata] =
+      await this.parseFactoryAddressFromAccountInitCode();
+
+    Logger.debug(
+      `[BaseSmartContractAccount](create6492Signature)\
+        factoryAddress: ${factoryAddress}, factoryCalldata: ${factoryCalldata}`
+    );
+
+    return wrapSignatureWith6492({
+      factoryAddress,
+      factoryCalldata,
+      signature,
+    });
   }
 }

@@ -10,7 +10,7 @@ import {
   type Transaction,
   type Transport,
 } from "viem";
-import { arbitrum, arbitrumGoerli } from "viem/chains";
+import { arbitrum, arbitrumGoerli, arbitrumSepolia } from "viem/chains";
 import type {
   ISmartContractAccount,
   SignTypedDataParams,
@@ -41,7 +41,7 @@ import {
   resolveProperties,
   type Deferrable,
 } from "../utils/index.js";
-import { SmartAccountProviderConfigSchema } from "./schema.js";
+import { createSmartAccountProviderConfigSchema } from "./schema.js";
 import type {
   AccountMiddlewareFn,
   AccountMiddlewareOverrideFn,
@@ -61,6 +61,7 @@ export const noOpMiddleware: AccountMiddlewareFn = async (
 const minPriorityFeePerBidDefaults = new Map<number, bigint>([
   [arbitrum.id, 10_000_000n],
   [arbitrumGoerli.id, 10_000_000n],
+  [arbitrumSepolia.id, 10_000_000n],
 ]);
 
 export class SmartAccountProvider<
@@ -85,7 +86,7 @@ export class SmartAccountProvider<
     | PublicErc4337Client<HttpTransport>;
 
   constructor(config: SmartAccountProviderConfig<TTransport>) {
-    SmartAccountProviderConfigSchema<TTransport>().parse(config);
+    createSmartAccountProviderConfigSchema<TTransport>().parse(config);
 
     const { rpcProvider, entryPointAddress, chain, opts } = config;
 
@@ -405,7 +406,7 @@ export class SmartAccountProvider<
       // this pretty prints the uo
       throw new Error(
         `Request is missing parameters. All properties on UserOperationStruct must be set. uo: ${JSON.stringify(
-          request,
+          uoStruct,
           null,
           2
         )}`
@@ -459,20 +460,22 @@ export class SmartAccountProvider<
   };
 
   readonly feeDataGetter: AccountMiddlewareFn = async (struct) => {
-    const maxPriorityFeePerGas =
-      await this.rpcClient.estimateMaxPriorityFeePerGas();
-    const feeData = await this.rpcClient.estimateFeesPerGas();
+    const [maxPriorityFeePerGas, feeData] = await Promise.all([
+      this.rpcClient.estimateMaxPriorityFeePerGas(),
+      this.rpcClient.estimateFeesPerGas(),
+    ]);
     if (!feeData.maxFeePerGas || !feeData.maxPriorityFeePerGas) {
       throw new Error(
         "feeData is missing maxFeePerGas or maxPriorityFeePerGas"
       );
     }
 
-    // add 33% to the priorty fee to ensure the transaction is mined
-    let maxPriorityFeePerGasBid = (BigInt(maxPriorityFeePerGas) * 4n) / 3n;
-    if (maxPriorityFeePerGasBid < this.minPriorityFeePerBid) {
-      maxPriorityFeePerGasBid = this.minPriorityFeePerBid;
-    }
+    // set maxPriorityFeePerGasBid to the max between 33% added priority fee estimate and
+    // the min priority fee per gas set for the provider
+    const maxPriorityFeePerGasBid = bigIntMax(
+      bigIntPercent(maxPriorityFeePerGas, 133n),
+      this.minPriorityFeePerBid
+    );
 
     const maxFeePerGasBid =
       BigInt(feeData.maxFeePerGas) -
