@@ -29,7 +29,7 @@ import {
   type ModuleInfo,
   type SendUserOpParams,
 } from "@biconomy/modules";
-import { type UserOperation, type Transaction } from "@biconomy/core-types";
+import { type UserOperation, type Transaction } from "./utils/index.js";
 import {
   type IHybridPaymaster,
   type IPaymaster,
@@ -133,9 +133,9 @@ export class BiconomySmartAccountV2 extends BaseSmartContractAccount {
     // this.nodeClient = new NodeClient({ txServiceUrl: nodeClientUrl ?? NODE_CLIENT_URL });
   }
 
-  public static async create(
+  public static create(
     biconomySmartAccountConfig: BiconomySmartAccountV2Config
-  ): Promise<BiconomySmartAccountV2> {
+  ): BiconomySmartAccountV2 {
     const instance = new BiconomySmartAccountV2(biconomySmartAccountConfig);
     // Can do async init stuff here
     return instance;
@@ -857,10 +857,10 @@ export class BiconomySmartAccountV2 extends BaseSmartContractAccount {
     params?: ModuleInfo
   ): Promise<string> {
     this.isActiveValidationModuleDefined();
-    const moduleSig = await this.activeValidationModule.signUserOpHash(
+    const moduleSig = (await this.activeValidationModule.signUserOpHash(
       userOpHash,
       params
-    ) as Hex;
+    )) as Hex;
 
     const signatureWithModuleAddress = encodeAbiParameters(
       parseAbiParameters("bytes, address"),

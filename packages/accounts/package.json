@@ -61,7 +61,6 @@
     "@alchemy/aa-core": "^0.1.1",
     "@biconomy/bundler": "npm:@biconomy-devx/bundler@2.0.37",
     "@biconomy/common": "npm:@biconomy-devx/common@2.0.37",
-    "@biconomy/core-types": "npm:@biconomy-devx/core-types@2.0.37",
     "@biconomy/modules": "npm:@biconomy-devx/modules@2.0.37",
     "@biconomy/paymaster": "npm:@biconomy-devx/paymaster@2.0.37",
     "viem": "^1.16.2"

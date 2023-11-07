@@ -20,3 +20,7 @@ export type { KernelBaseValidatorParams } from "./kernel-zerodev/validator/base.
 //light-account exports
 export { LightSmartContractAccount } from "./light-account/account.js";
 export { getDefaultLightAccountFactoryAddress } from "./light-account/utils.js";
+
+// biconomy exports
+export { BiconomyAccountProvider } from "./biconomy/provider.js";
+export { BiconomySmartAccountV2 } from "./biconomy/account.js";

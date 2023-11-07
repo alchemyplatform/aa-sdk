@@ -1,4 +1,3 @@
-import { ChainId } from "@biconomy/core-types";
 import {
   type EntryPointAddresses,
   type BiconomyFactories,
@@ -51,7 +50,7 @@ export const BICONOMY_IMPLEMENTATION_ADDRESSES_BY_VERSION: BiconomyImplementatio
     Object.entries(BICONOMY_IMPLEMENTATION_ADDRESSES).map(([k, v]) => [v, k])
   );
 
-export const EIP1559_UNSUPPORTED_NETWORKS: Array<ChainId> = [
+export const EIP1559_UNSUPPORTED_NETWORKS: Array<number> = [
   97, 56, 1442, 1101,
 ];
 

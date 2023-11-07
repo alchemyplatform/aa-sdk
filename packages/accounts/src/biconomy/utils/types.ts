@@ -1,5 +1,4 @@
 import { Signer } from "ethers";
-import { ChainId } from "@biconomy/core-types";
 import { type BigNumberish } from "@alchemy/aa-core";
 import type { IBundler } from "@biconomy/bundler";
 import type {
@@ -9,11 +8,31 @@ import type {
 } from "@biconomy/paymaster";
 import { BaseValidationModule, type ModuleInfo } from "@biconomy/modules";
 import { Provider } from "@ethersproject/providers";
-import { type GasOverheads } from "./preverificaiton.js";
+import { type GasOverheads } from "./preverification.js";
 import { type Hex } from "viem";
 
 export type EntryPointAddresses = {
   [address: string]: string;
+};
+
+export type Transaction = {
+  to: string;
+  value?: BigNumberish;
+  data?: string;
+};
+export type EmptyHex = `0x`;
+export type UserOperation = {
+  sender: Hex;
+  nonce: Hex;
+  initCode: Hex | EmptyHex;
+  callData: Hex;
+  callGasLimit: Hex;
+  verificationGasLimit: Hex;
+  preVerificationGas: Hex;
+  maxFeePerGas: Hex;
+  maxPriorityFeePerGas: Hex;
+  paymasterAndData: Hex | EmptyHex;
+  signature: Hex;
 };
 
 export type BiconomyFactories = {
@@ -50,7 +69,7 @@ export interface BaseSmartAccountConfig {
   overheads?: Partial<GasOverheads>;
   paymaster?: IPaymaster; // PaymasterAPI
   bundler?: IBundler; // like HttpRpcClient
-  chainId: ChainId;
+  chainId: number;
 }
 
 export type BiconomyTokenPaymasterRequest = {
@@ -62,7 +81,7 @@ export type BiconomyTokenPaymasterRequest = {
 export type BiconomySmartAccountConfig = {
   signer: Signer;
   rpcUrl?: string;
-  chainId: ChainId;
+  chainId: number;
   entryPointAddress?: string;
   bundler?: IBundler;
   paymaster?: IPaymaster;

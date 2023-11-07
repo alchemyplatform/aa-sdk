@@ -1,7 +1,7 @@
-import type { UserOperation } from "@biconomy/core-types";
 import { type NotPromise, packUserOp } from "@biconomy/common"; // '@account-abstraction/utils'
 import { arrayify, hexlify } from "ethers/lib/utils";
 import { BigNumber } from "ethers";
+import type { UserOperation } from "./types.js";
 export interface GasOverheads {
   /**
    * fixed overhead for entire handleOp bundle.
