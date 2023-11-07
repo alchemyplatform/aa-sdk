@@ -14,7 +14,11 @@ head:
 
 # `@alchemy/aa-ethers`
 
-This package contains `EthersProviderAdapter` and `AccountSigner`, respective extensions of the `JsonRpcProvider` and `Signer` classes defined in `ethers.js` external library. If you currently rely `ethers.js` for web3 development, you can use these `ethers.js`-compatible `JsonRpcProvider` and `Signer` to integrate Account Abstraction into your dApp. You may also find the util methods helpful. This repo is community maintained and we welcome contributions!
+This package contains `EthersProviderAdapter` and `AccountSigner`, respective extensions of the `JsonRpcProvider` and `Signer` classes defined in `ethers.js` external library.
+
+If you currently rely `ethers.js` for web3 development, you can use these `ethers.js`-compatible `JsonRpcProvider` and `Signer` to integrate Account Abstraction into your dApp. You may also find the [`util`](./utils/introduction.md) methods helpful.
+
+This repo is community maintained and we welcome contributions!
 
 ## Getting started
 
