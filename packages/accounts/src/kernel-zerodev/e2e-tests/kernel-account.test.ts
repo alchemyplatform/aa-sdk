@@ -2,6 +2,7 @@ import {
   getDefaultEntryPointAddress,
   type BatchUserOperationCallData,
   type SmartAccountSigner,
+  AA_SDK_TESTS_SIGNER_TYPE,
 } from "@alchemy/aa-core";
 import {
   encodeAbiParameters,
@@ -36,7 +37,7 @@ describe("Kernel Account Tests", () => {
 
   const ownerAccount = mnemonicToAccount(OWNER_MNEMONIC);
   const owner: SmartAccountSigner = {
-    signerType: "kernel-zerodev",
+    signerType: AA_SDK_TESTS_SIGNER_TYPE,
     signMessage: async (msg) =>
       ownerAccount.signMessage({
         message: { raw: toHex(msg) },
