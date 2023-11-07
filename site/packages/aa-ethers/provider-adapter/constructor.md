@@ -14,9 +14,9 @@ head:
 
 # constructor
 
-To initialize an `EthersProviderAdapter`, you must provide a set of parameters detailed below.
+There are two ways to construct `EthersProviderAdapter`. You can provide either the `rpcProvider` and `chainId` to have the `EthersProviderAdapter` constructor, which will initialize the `SmartAccountProvider` using the input parameters internally.
 
-Note that we still recommend to use the [fromEthersProvider](/packages/aa-ethers/provider-adapter/fromEthersProvider.md) method to constructor an `EthersProviderAdapter`.
+Or you can also input a `SmartAccountProvider` instance already initialized (`AlchemyProvider` for instance) to the `EthersProviderAdapter` constructor.
 
 ## Usage
 
@@ -35,23 +35,24 @@ export const provider = new EthersProviderAdapter({
 });
 
 // another way to initialize
+const accountProvider = new AlchemyProvider({
+  apiKey: "ALCHEMY_API_KEY", // replace with your Alchemy API Key
+  chain: sepolia,
+  entryPointAddress: getDefaultEntryPointAddress(sepolia),
+  opts: {
+    txMaxRetries: 10,
+    txRetryIntervalMs: 2_000,
+    txRetryMulitplier: 1.5,
+    minPriorityFeePerBid: 100_000_000n,
+  },
+  feeOpts: {
+    baseFeeBufferPercent: 50n,
+    maxPriorityFeeBufferPercent: 5n,
+    preVerificationGasBufferPercent: 5n,
+  },
+});
 export const anotherProvider = new EthersProviderAdapter({
-  accountProvider: new AlchemyProvider({
-    apiKey: "ALCHEMY_API_KEY", // replace with your Alchemy API Key
-    chain: sepolia,
-    entryPointAddress: getDefaultEntryPointAddress(sepolia),
-    opts: {
-      txMaxRetries: 10,
-      txRetryIntervalMs: 2_000,
-      txRetryMulitplier: 1.5,
-      minPriorityFeePerBid: 100_000_000n,
-    },
-    feeOpts: {
-      baseFeeBufferPercent: 50n,
-      maxPriorityFeeBufferPercent: 5n,
-      preVerificationGasBufferPercent: 5n,
-    },
-  }),
+  accountProvider,
 });
 ```
 
