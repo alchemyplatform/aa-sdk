@@ -5,14 +5,13 @@ import {
 } from "@alchemy/aa-core";
 import { Magic, type MagicUserMetadata } from "magic-sdk";
 import { createWalletClient, custom, type Hash } from "viem";
-import { MagicUser } from "./user.js";
+import type { MagicAuthParams } from "./types.js";
 
 export class MagicSigner
-  implements AuthSmartAccountSigner<Magic, {login: () => any}, MagicUserMetadata>
+  implements AuthSmartAccountSigner<Magic, MagicAuthParams, MagicUserMetadata>
 {
   inner: Magic;
-  user: MagicUser | undefined;
-  signer: WalletClientSigner | undefined;
+  private signer: WalletClientSigner | undefined;
 
   constructor({ inner }: { inner: Magic }) {
     this.inner = inner;
@@ -23,9 +22,9 @@ export class MagicSigner
   }
 
   getAddress = async () => {
-    if (!this.user) throw new Error("No User authenticated");
+    if (!this.signer) throw new Error("No User authenticated");
 
-    const address = (await this.user.getDetails()).publicAddress;
+    const address = (await this.inner.user.getInfo()).publicAddress;
     if (address == null) throw new Error("No address found");
 
     return address as Hash;
@@ -43,9 +42,8 @@ export class MagicSigner
     return this.signer.signTypedData(params);
   };
 
-  authenticateUser = async (params) => {
-    // await this.inner.wallet.connectWithUI();
-    await params.login()
+  authenticate = async (params: MagicAuthParams) => {
+    await params.authenticate();
 
     this.signer = new WalletClientSigner(
       createWalletClient({
@@ -53,15 +51,13 @@ export class MagicSigner
       }),
       this.signerType
     );
-    this.user = new MagicUser(this.inner);
-    await this.user.initialize();
 
-    return this.user.getDetails();
+    return this.inner.user.getInfo();
   };
 
-  getUserDetails = async () => {
-    if (!this.user) throw new Error("No User authenticated");
+  getAuthDetails = async () => {
+    if (!this.signer) throw new Error("Not authenticated");
 
-    return this.user.getDetails();
+    return this.inner.user.getInfo();
   };
 }

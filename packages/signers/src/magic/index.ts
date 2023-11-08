@@ -1,2 +1,2 @@
 export { MagicSigner } from "./signer.js";
-export { MagicUser } from "./user.js";
+export type * from "./types.js";
