@@ -188,13 +188,13 @@ describe("Light Account Tests", () => {
   }, 100000);
 });
 
-const givenConnectedProvider = <SignerClient extends any = any>({
+const givenConnectedProvider = ({
   owner,
   chain,
   accountAddress,
   feeOpts,
 }: {
-  owner: SmartAccountSigner<SignerClient>;
+  owner: SmartAccountSigner;
   chain: Chain;
   accountAddress?: Address;
   feeOpts?: {
@@ -209,7 +209,7 @@ const givenConnectedProvider = <SignerClient extends any = any>({
     feeOpts,
   }).connect(
     (rpcClient) =>
-      new LightSmartContractAccount<Transport, SignerClient>({
+      new LightSmartContractAccount<Transport>({
         chain,
         owner,
         factoryAddress: getDefaultLightAccountFactoryAddress(chain),

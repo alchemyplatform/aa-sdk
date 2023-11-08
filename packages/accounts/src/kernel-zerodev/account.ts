@@ -23,20 +23,18 @@ import { encodeCall } from "./utils.js";
 import { KernelBaseValidator, ValidatorMode } from "./validator/base.js";
 
 export interface KernelSmartAccountParams<
-  TTransport extends Transport | FallbackTransport = Transport,
-  SignerClient extends any = any
+  TTransport extends Transport | FallbackTransport = Transport
 > extends BaseSmartAccountParams<TTransport> {
-  owner: SmartAccountSigner<SignerClient>;
+  owner: SmartAccountSigner;
   index?: bigint;
   defaultValidator: KernelBaseValidator;
   validator?: KernelBaseValidator;
 }
 
 export class KernelSmartContractAccount<
-  TTransport extends Transport | FallbackTransport = Transport,
-  SignerClient extends any = any
+  TTransport extends Transport | FallbackTransport = Transport
 > extends BaseSmartContractAccount<TTransport> {
-  protected owner: SmartAccountSigner<SignerClient>;
+  protected owner: SmartAccountSigner;
   private readonly index: bigint;
   private defaultValidator: KernelBaseValidator;
   private validator: KernelBaseValidator;

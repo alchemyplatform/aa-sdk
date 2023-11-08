@@ -134,11 +134,11 @@ describe("Alchemy Provider Tests", () => {
   });
 });
 
-const givenConnectedProvider = <SignerClient extends any = any>({
+const givenConnectedProvider = ({
   owner,
   chain,
 }: {
-  owner: SmartAccountSigner<SignerClient>;
+  owner: SmartAccountSigner;
   chain: Chain;
 }) => {
   const dummyEntryPointAddress =

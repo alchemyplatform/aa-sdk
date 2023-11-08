@@ -1,6 +1,6 @@
 import { z } from "zod";
-import type { createEthersProviderAdapterOptsSchema } from "./schema";
+import type { EthersProviderAdapterOptsSchema } from "./schema";
 
-export type EthersProviderAdapterOpts<SignerClient extends any = any> = z.infer<
-  ReturnType<typeof createEthersProviderAdapterOptsSchema<SignerClient>>
+export type EthersProviderAdapterOpts = z.infer<
+  typeof EthersProviderAdapterOptsSchema
 >;

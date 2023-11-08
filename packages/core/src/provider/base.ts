@@ -65,11 +65,10 @@ const minPriorityFeePerBidDefaults = new Map<number, bigint>([
 ]);
 
 export class SmartAccountProvider<
-    SignerClient extends any = any,
     TTransport extends SupportedTransports = Transport
   >
   extends EventEmitter<ProviderEvents>
-  implements ISmartAccountProvider<SignerClient, TTransport>
+  implements ISmartAccountProvider<TTransport>
 {
   private txMaxRetries: number;
   private txRetryIntervalMs: number;
@@ -77,7 +76,7 @@ export class SmartAccountProvider<
 
   private minPriorityFeePerBid: bigint;
 
-  readonly account?: ISmartContractAccount<SignerClient>;
+  readonly account?: ISmartContractAccount;
 
   protected entryPointAddress?: Address;
   protected chain: Chain;
@@ -532,7 +531,7 @@ export class SmartAccountProvider<
     return this;
   };
 
-  connect = <TAccount extends ISmartContractAccount<SignerClient>>(
+  connect = <TAccount extends ISmartContractAccount>(
     fn: (
       provider:
         | PublicErc4337Client<TTransport>
@@ -599,9 +598,7 @@ export class SmartAccountProvider<
     return this as this & { account: undefined };
   };
 
-  isConnected = <
-    TAccount extends ISmartContractAccount<SignerClient>
-  >(): this is this & {
+  isConnected = <TAccount extends ISmartContractAccount>(): this is this & {
     account: TAccount;
   } => {
     return this.account !== undefined;

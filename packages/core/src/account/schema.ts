@@ -3,12 +3,11 @@ import { isHex, type Transport } from "viem";
 import z from "zod";
 import { createPublicErc4337ClientSchema } from "../client/schema.js";
 import type { SupportedTransports } from "../client/types";
-import { createSignerSchema } from "../signer/schema.js";
+import { SignerSchema } from "../signer/schema.js";
 import { ChainSchema } from "../utils/index.js";
 
 export const createBaseSmartAccountParamsSchema = <
-  TTransport extends SupportedTransports = Transport,
-  SignerClient extends any = any
+  TTransport extends SupportedTransports = Transport
 >() =>
   z.object({
     rpcClient: z.union([
@@ -16,7 +15,7 @@ export const createBaseSmartAccountParamsSchema = <
       createPublicErc4337ClientSchema<TTransport>(),
     ]),
     factoryAddress: Address,
-    owner: createSignerSchema<SignerClient>().optional(),
+    owner: SignerSchema.optional(),
     entryPointAddress: Address.optional(),
     chain: ChainSchema,
     accountAddress: Address.optional().describe(
@@ -30,10 +29,9 @@ export const createBaseSmartAccountParamsSchema = <
   });
 
 export const SimpleSmartAccountParamsSchema = <
-  TTransport extends SupportedTransports = Transport,
-  SignerClient extends any = any
+  TTransport extends SupportedTransports = Transport
 >() =>
-  createBaseSmartAccountParamsSchema<TTransport, SignerClient>().extend({
-    owner: createSignerSchema<SignerClient>(),
+  createBaseSmartAccountParamsSchema<TTransport>().extend({
+    owner: SignerSchema,
     index: z.bigint().optional(),
   });

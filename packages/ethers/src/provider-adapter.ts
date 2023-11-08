@@ -12,17 +12,15 @@ import {
 import { defineReadOnly } from "@ethersproject/properties";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { AccountSigner } from "./account-signer.js";
-import { createEthersProviderAdapterOptsSchema } from "./schema.js";
+import { EthersProviderAdapterOptsSchema } from "./schema.js";
 import type { EthersProviderAdapterOpts } from "./types.js";
 
 /** Lightweight Adapter for SmartAccountProvider to enable Signer Creation */
-export class EthersProviderAdapter<
-  SignerClient extends any = any
-> extends JsonRpcProvider {
-  readonly accountProvider: SmartAccountProvider<SignerClient, HttpTransport>;
+export class EthersProviderAdapter extends JsonRpcProvider {
+  readonly accountProvider: SmartAccountProvider<HttpTransport>;
 
   constructor(opts: EthersProviderAdapterOpts) {
-    createEthersProviderAdapterOptsSchema<SignerClient>().parse(opts);
+    EthersProviderAdapterOptsSchema.parse(opts);
 
     super();
     if ("accountProvider" in opts) {

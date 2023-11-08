@@ -13,10 +13,10 @@ export type * from "./account/types.js";
 export type { BaseSmartAccountParams } from "./account/types.js";
 
 export { LocalAccountSigner } from "./signer/local-account.js";
-export { createSignerSchema } from "./signer/schema.js";
+export { SignerSchema } from "./signer/schema.js";
 export type {
   SmartAccountSigner,
-  AuthSmartAccountSigner,
+  SmartAccountAuthenticator,
 } from "./signer/types.js";
 export { AA_SDK_TESTS_SIGNER_TYPE } from "./signer/types.js";
 export {

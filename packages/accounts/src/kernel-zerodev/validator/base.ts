@@ -9,19 +9,19 @@ export enum ValidatorMode {
   // enable = '0x00000002',
 }
 
-export interface KernelBaseValidatorParams<SignerClient extends any = any> {
+export interface KernelBaseValidatorParams {
   validatorAddress: Hex;
   mode: ValidatorMode;
-  owner: SmartAccountSigner<SignerClient>;
+  owner: SmartAccountSigner;
 }
 
 //Kernel wallet implementation separates out validation and execution phase. It allows you to have
 // custom wrapper logic for the validation phase in addition to signature of choice. We start with base validator class
 // which implements only signing but can be extended to other methods later
-export class KernelBaseValidator<SignerClient extends any = any> {
+export class KernelBaseValidator {
   readonly validatorAddress: Hex;
   mode: ValidatorMode;
-  owner: SmartAccountSigner<SignerClient>;
+  owner: SmartAccountSigner;
 
   constructor(params: KernelBaseValidatorParams) {
     this.validatorAddress = params.validatorAddress;
