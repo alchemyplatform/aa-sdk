@@ -10,6 +10,8 @@ head:
   - - meta
     - property: og:description
       content: Overview of the encodeExecute abstract method on BaseSmartContractAccount
+next:
+  text: Optional Methods
 ---
 
 # encodeExecute

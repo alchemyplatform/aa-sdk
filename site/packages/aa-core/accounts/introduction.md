@@ -10,17 +10,27 @@ head:
   - - meta
     - property: og:description
       content: Overview of ISmartContractAccount class exported by aa-core accounts
+prev:
+  text: SmartAccountProvider
 ---
 
 # ISmartContractAccount
 
 `ISmartContractAccount` defines how you would interact with your Smart Contract Account.
 
+::: details ISmartContractAccount
+<<< @/../packages/core/src/account/types.ts
+:::
+
 ## BaseSmartContractAccount
 
 The `BaseSmartContractAccount` is an abstract class that provides the base implementation the `ISmartContractAccount` interface to provide the ease of creating your own Smart Contract Account. Any class that extends and implements `BaseSmartContractAccount` may also expose additional methods that support its connecting [SmartAccountProvider](/packages/aa-core/provider/introduction).
 
 `BaseSmartContractAccount` contains abstract methods that requires implementation from any class that extends the class.
+
+::: details BaseSmartContractAccount
+<<< @/../packages/core/src/account/base.ts
+:::
 
 ### Required Methods To Implement
 

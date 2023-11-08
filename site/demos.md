@@ -10,6 +10,8 @@ head:
   - - meta
     - property: og:description
       content: Demos using Alchemy's Account Kit
+next:
+  text: Smart Accounts
 ---
 
 # Demos

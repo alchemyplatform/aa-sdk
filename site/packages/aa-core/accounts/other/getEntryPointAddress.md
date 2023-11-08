@@ -10,6 +10,8 @@ head:
   - - meta
     - property: og:description
       content: Overview of the getEntryPointAddress method on BaseSmartContractAccount
+next:
+  text: SmartAccountSigner
 ---
 
 # getEntryPointAddress
