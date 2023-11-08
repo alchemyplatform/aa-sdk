@@ -6,7 +6,7 @@ import {
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import { Alchemy, Network } from "alchemy-sdk";
-import { toHex, type Address, type Chain } from "viem";
+import { toHex, type Address, type Chain, type HDAccount } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
 import { polygonMumbai, sepolia } from "viem/chains";
 import { AlchemyProvider } from "../provider.js";
@@ -15,7 +15,8 @@ describe("Alchemy Provider Tests", () => {
   const dummyMnemonic =
     "test test test test test test test test test test test test";
   const ownerAccount = mnemonicToAccount(dummyMnemonic);
-  const owner: SmartAccountSigner = {
+  const owner: SmartAccountSigner<HDAccount> = {
+    inner: ownerAccount,
     signMessage: async (msg) =>
       ownerAccount.signMessage({
         message: { raw: toHex(msg) },
@@ -26,7 +27,7 @@ describe("Alchemy Provider Tests", () => {
   };
   const chain = polygonMumbai;
 
-  it("should have a JWT propety", async () => {
+  it("should have a JWT property", async () => {
     const spy = vi.spyOn(AACoreModule, "createPublicErc4337Client");
     givenConnectedProvider({ owner, chain });
     expect(spy.mock.calls[0][0].fetchOptions).toMatchInlineSnapshot(`
@@ -133,11 +134,11 @@ describe("Alchemy Provider Tests", () => {
   });
 });
 
-const givenConnectedProvider = ({
+const givenConnectedProvider = <SignerClient extends any = any>({
   owner,
   chain,
 }: {
-  owner: SmartAccountSigner;
+  owner: SmartAccountSigner<SignerClient>;
   chain: Chain;
 }) => {
   const dummyEntryPointAddress =

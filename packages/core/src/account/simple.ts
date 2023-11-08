@@ -16,12 +16,13 @@ import { SimpleSmartAccountParamsSchema } from "./schema.js";
 import type { SimpleSmartAccountParams } from "./types.js";
 
 export class SimpleSmartContractAccount<
-  TTransport extends Transport | FallbackTransport = Transport
-> extends BaseSmartContractAccount<TTransport> {
-  protected owner: SmartAccountSigner;
+  TTransport extends Transport | FallbackTransport = Transport,
+  SignerClient extends any = any
+> extends BaseSmartContractAccount<TTransport, SignerClient> {
+  protected owner: SmartAccountSigner<SignerClient>;
   protected index: bigint;
 
-  constructor(params: SimpleSmartAccountParams<TTransport>) {
+  constructor(params: SimpleSmartAccountParams<TTransport, SignerClient>) {
     SimpleSmartAccountParamsSchema<TTransport>().parse(params);
 
     super(params);

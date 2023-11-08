@@ -8,12 +8,12 @@ import {
 import type { SignTypedDataParams } from "../account/types";
 import type { SmartAccountSigner } from "./types";
 
-export class WalletClientSigner implements SmartAccountSigner {
+export class WalletClientSigner implements SmartAccountSigner<WalletClient> {
   signerType: string;
-  private client: WalletClient;
+  inner: WalletClient;
 
   constructor(client: WalletClient, signerType: string) {
-    this.client = client;
+    this.inner = client;
     if (!signerType) {
       throw new Error("Valid signerType param is required.");
     }
@@ -21,7 +21,7 @@ export class WalletClientSigner implements SmartAccountSigner {
   }
 
   getAddress: () => Promise<`0x${string}`> = async () => {
-    let addresses = await this.client.getAddresses();
+    let addresses = await this.inner.getAddresses();
     return getAddress(addresses[0]);
   };
 
@@ -29,12 +29,12 @@ export class WalletClientSigner implements SmartAccountSigner {
     message: string | Hex | ByteArray
   ) => Promise<`0x${string}`> = async (message) => {
     if (typeof message === "string" && !isHex(message)) {
-      return this.client.signMessage({
+      return this.inner.signMessage({
         account: await this.getAddress(),
         message,
       });
     } else {
-      return this.client.signMessage({
+      return this.inner.signMessage({
         account: await this.getAddress(),
         message: { raw: message },
       });
@@ -43,7 +43,7 @@ export class WalletClientSigner implements SmartAccountSigner {
 
   signTypedData: (params: SignTypedDataParams) => Promise<`0x${string}`> =
     async (params) => {
-      return this.client.signTypedData({
+      return this.inner.signTypedData({
         account: await this.getAddress(),
         ...params,
       });

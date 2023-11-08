@@ -1,5 +1,10 @@
 import { LocalAccountSigner } from "@alchemy/aa-core";
-import { type Address, type Hex } from "viem";
+import {
+  type Address,
+  type Hex,
+  type LocalAccount,
+  type Transport,
+} from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
 import {
@@ -25,25 +30,26 @@ describe("Kernel Account Tests", () => {
   const owner = LocalAccountSigner.privateKeyToAccountSigner(config.privateKey);
   const mockOwner = new MockSigner();
 
-  const validator: KernelBaseValidator = new KernelBaseValidator({
+  const validator: KernelBaseValidator = new KernelBaseValidator<LocalAccount>({
     validatorAddress: config.validatorAddress,
     mode: ValidatorMode.sudo,
     owner,
   });
 
-  const mockValidator: KernelBaseValidator = new KernelBaseValidator({
-    validatorAddress: config.validatorAddress,
-    mode: ValidatorMode.sudo,
-    owner: mockOwner,
-  });
+  const mockValidator: KernelBaseValidator =
+    new KernelBaseValidator<LocalAccount>({
+      validatorAddress: config.validatorAddress,
+      mode: ValidatorMode.sudo,
+      owner: mockOwner,
+    });
 
-  const provider = new KernelAccountProvider({
+  const provider = new KernelAccountProvider<LocalAccount>({
     rpcProvider: config.rpcProvider,
     chain: config.chain,
   });
 
   function account(index: bigint, owner = mockOwner) {
-    const accountParams: KernelSmartAccountParams = {
+    const accountParams: KernelSmartAccountParams<Transport, LocalAccount> = {
       rpcClient: provider.rpcClient,
       chain: config.chain,
       owner: owner,

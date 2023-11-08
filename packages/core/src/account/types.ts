@@ -13,14 +13,22 @@ import type {
 export type SignTypedDataParams = Omit<SignTypedDataParameters, "privateKey">;
 
 export type BaseSmartAccountParams<
-  TTransport extends SupportedTransports = Transport
-> = z.infer<ReturnType<typeof createBaseSmartAccountParamsSchema<TTransport>>>;
+  TTransport extends SupportedTransports = Transport,
+  SignerClient extends any = any
+> = z.infer<
+  ReturnType<
+    typeof createBaseSmartAccountParamsSchema<TTransport, SignerClient>
+  >
+>;
 
 export type SimpleSmartAccountParams<
-  TTransport extends SupportedTransports = Transport
-> = z.infer<ReturnType<typeof SimpleSmartAccountParamsSchema<TTransport>>>;
+  TTransport extends SupportedTransports = Transport,
+  SignerClient extends any = any
+> = z.infer<
+  ReturnType<typeof SimpleSmartAccountParamsSchema<TTransport, SignerClient>>
+>;
 
-export interface ISmartContractAccount {
+export interface ISmartContractAccount<SignerClient extends any = any> {
   /**
    * @returns the init code for the account
    */
@@ -97,7 +105,7 @@ export interface ISmartContractAccount {
    * @returns the smart contract account owner instance if it exists.
    * It is optional for a smart contract account to have an owner account.
    */
-  getOwner(): SmartAccountSigner | undefined;
+  getOwner(): SmartAccountSigner<SignerClient> | undefined;
 
   /**
    * @returns the address of the factory contract for the smart contract account

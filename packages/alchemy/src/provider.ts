@@ -25,7 +25,9 @@ import {
 } from "./schema.js";
 import type { AlchemyProviderConfig } from "./type.js";
 
-export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
+export class AlchemyProvider<
+  SignerClient extends any = any
+> extends SmartAccountProvider<SignerClient, HttpTransport> {
   private pvgBuffer: bigint;
   private feeOptsSet: boolean;
   private rpcUrl: string;
@@ -111,7 +113,9 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
    * @param config - the Alchemy Gas Manager configuration
    * @returns {AlchemyProvider} - a new AlchemyProvider with the Gas Manager middleware
    */
-  withAlchemyGasManager(config: AlchemyGasManagerConfig): AlchemyProvider {
+  withAlchemyGasManager(
+    config: AlchemyGasManagerConfig
+  ): AlchemyProvider<SignerClient> {
     if (!this.isConnected()) {
       throw new Error(
         "AlchemyProvider: account is not set, did you call `connect` first?"

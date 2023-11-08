@@ -18,23 +18,25 @@ import {
 import { KernelAccountAbi } from "./abis/KernelAccountAbi.js";
 import { KernelFactoryAbi } from "./abis/KernelFactoryAbi.js";
 import { MultiSendAbi } from "./abis/MultiSendAbi.js";
+import type { KernelUserOperationCallData } from "./types.js";
 import { encodeCall } from "./utils.js";
 import { KernelBaseValidator, ValidatorMode } from "./validator/base.js";
-import type { KernelUserOperationCallData } from "./types.js";
 
 export interface KernelSmartAccountParams<
-  TTransport extends Transport | FallbackTransport = Transport
+  TTransport extends Transport | FallbackTransport = Transport,
+  SignerClient extends any = any
 > extends BaseSmartAccountParams<TTransport> {
-  owner: SmartAccountSigner;
+  owner: SmartAccountSigner<SignerClient>;
   index?: bigint;
   defaultValidator: KernelBaseValidator;
   validator?: KernelBaseValidator;
 }
 
 export class KernelSmartContractAccount<
-  TTransport extends Transport | FallbackTransport = Transport
+  TTransport extends Transport | FallbackTransport = Transport,
+  SignerClient extends any = any
 > extends BaseSmartContractAccount<TTransport> {
-  protected owner: SmartAccountSigner;
+  protected owner: SmartAccountSigner<SignerClient>;
   private readonly index: bigint;
   private defaultValidator: KernelBaseValidator;
   private validator: KernelBaseValidator;

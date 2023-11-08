@@ -18,8 +18,9 @@ import { LightAccountAbi } from "./abis/LightAccountAbi.js";
 import { LightAccountFactoryAbi } from "./abis/LightAccountFactoryAbi.js";
 
 export class LightSmartContractAccount<
-  TTransport extends Transport | FallbackTransport = Transport
-> extends SimpleSmartContractAccount<TTransport> {
+  TTransport extends Transport | FallbackTransport = Transport,
+  SignerClient extends any = any
+> extends SimpleSmartContractAccount<TTransport, SignerClient> {
   override async signTypedData(params: SignTypedDataParams): Promise<Hash> {
     return this.owner.signTypedData(params);
   }
@@ -79,12 +80,13 @@ export class LightSmartContractAccount<
    * @returns {Hash} the userOperation hash, or transaction hash if `waitForTxn` is true
    */
   static async transferOwnership<
-    TTransport extends Transport | FallbackTransport = Transport
+    TTransport extends Transport | FallbackTransport = Transport,
+    SignerClient extends any = any
   >(
     provider: SmartAccountProvider<TTransport> & {
       account: LightSmartContractAccount<TTransport>;
     },
-    newOwner: SmartAccountSigner,
+    newOwner: SmartAccountSigner<SignerClient>,
     waitForTxn: boolean = false
   ): Promise<Hash> {
     const data = this.encodeTransferOwnership(await newOwner.getAddress());

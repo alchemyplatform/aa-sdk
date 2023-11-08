@@ -5,8 +5,11 @@ import type {
   SmartAccountSigner,
 } from "@alchemy/aa-core";
 import { AA_SDK_TESTS_SIGNER_TYPE } from "@alchemy/aa-core";
+import type { LocalAccount } from "viem";
 
-export class MockSigner implements SmartAccountSigner {
+export class MockSigner implements SmartAccountSigner<LocalAccount> {
+  inner = 1 as unknown as LocalAccount;
+
   signerType = AA_SDK_TESTS_SIGNER_TYPE;
 
   getAddress(): Promise<Address> {

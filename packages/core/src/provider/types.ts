@@ -93,6 +93,7 @@ export type SmartAccountProviderConfig<
 
 // TODO: this also will need to implement EventEmitteer
 export interface ISmartAccountProvider<
+  SignerClient extends any = any,
   TTransport extends SupportedTransports = Transport
 > {
   readonly rpcClient:
@@ -104,7 +105,7 @@ export interface ISmartAccountProvider<
   readonly feeDataGetter: AccountMiddlewareFn;
   readonly customMiddleware?: AccountMiddlewareFn;
 
-  readonly account?: ISmartContractAccount;
+  readonly account?: ISmartContractAccount<SignerClient>;
 
   /**
    * Sends a user operation using the connected account.
@@ -303,7 +304,7 @@ export interface ISmartAccountProvider<
    *
    * @param fn - a function that given public rpc client, returns a smart contract account
    */
-  connect<TAccount extends ISmartContractAccount>(
+  connect<TAccount extends ISmartContractAccount<SignerClient>>(
     fn: (
       provider:
         | PublicErc4337Client<TTransport>

@@ -1,5 +1,5 @@
-import { concatHex, type Hex } from "viem";
 import type { SmartAccountSigner } from "@alchemy/aa-core";
+import { concatHex, type Hex } from "viem";
 
 export enum ValidatorMode {
   sudo = "0x00000000",
@@ -9,19 +9,19 @@ export enum ValidatorMode {
   // enable = '0x00000002',
 }
 
-export interface KernelBaseValidatorParams {
+export interface KernelBaseValidatorParams<SignerClient extends any = any> {
   validatorAddress: Hex;
   mode: ValidatorMode;
-  owner: SmartAccountSigner;
+  owner: SmartAccountSigner<SignerClient>;
 }
 
 //Kernel wallet implementation separates out validation and execution phase. It allows you to have
 // custom wrapper logic for the validation phase in addition to signature of choice. We start with base validator class
 // which implements only signing but can be extended to other methods later
-export class KernelBaseValidator {
+export class KernelBaseValidator<SignerClient extends any = any> {
   readonly validatorAddress: Hex;
   mode: ValidatorMode;
-  owner: SmartAccountSigner;
+  owner: SmartAccountSigner<SignerClient>;
 
   constructor(params: KernelBaseValidatorParams) {
     this.validatorAddress = params.validatorAddress;

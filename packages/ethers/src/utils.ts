@@ -10,8 +10,9 @@ import type { SignTypedDataParameters } from "viem/accounts";
  */
 export const convertWalletToAccountSigner = (
   wallet: Wallet
-): SmartAccountSigner => {
+): SmartAccountSigner<Wallet> => {
   return {
+    inner: wallet,
     signerType: "local",
     getAddress: async () => Promise.resolve(wallet.address as `0x${string}`),
     signMessage: async (msg: Uint8Array | string) =>
@@ -36,8 +37,9 @@ export const convertWalletToAccountSigner = (
  */
 export const convertEthersSignerToAccountSigner = (
   signer: Signer
-): SmartAccountSigner => {
+): SmartAccountSigner<Signer> => {
   return {
+    inner: signer,
     signerType: "json-rpc",
     getAddress: async () => signer.getAddress() as Promise<Address>,
     signMessage: async (msg: Uint8Array | string) =>

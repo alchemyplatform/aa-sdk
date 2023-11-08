@@ -1,12 +1,23 @@
 import type { Address } from "abitype";
-import type { Hash, Hex } from "viem";
+import type { Hex } from "viem";
 import type { SignTypedDataParams } from "../account/types.js";
 
-export interface SmartAccountSigner {
+export interface AuthSmartAccountSigner<Inner, AuthParams, AuthDetails>
+  extends SmartAccountSigner<Inner> {
+  authenticate: (params: AuthParams) => Promise<AuthDetails>;
+
+  getAuthDetails: () => Promise<AuthDetails>;
+}
+
+export interface SmartAccountSigner<Inner> {
   signerType: string;
-  signMessage: (msg: Uint8Array | Hex | string) => Promise<Hash>;
-  signTypedData: (params: SignTypedDataParams) => Promise<Hash>;
+  inner: Inner;
+
   getAddress: () => Promise<Address>;
+
+  signMessage: (msg: Uint8Array | Hex | string) => Promise<Hex>;
+
+  signTypedData: (params: SignTypedDataParams) => Promise<Hex>;
 }
 
 export const AA_SDK_TESTS_SIGNER_TYPE = "aa-sdk-tests";
