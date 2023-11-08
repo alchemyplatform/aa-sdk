@@ -1,14 +1,15 @@
 import {
   WalletClientSigner,
-  type AuthSmartAccountSigner,
   type SignTypedDataParams,
+  type SmartAccountAuthenticator,
 } from "@alchemy/aa-core";
 import { Magic, type MagicUserMetadata } from "magic-sdk";
 import { createWalletClient, custom, type Hash } from "viem";
 import type { MagicAuthParams } from "./types.js";
 
 export class MagicSigner
-  implements AuthSmartAccountSigner<Magic, MagicAuthParams, MagicUserMetadata>
+  implements
+    SmartAccountAuthenticator<MagicAuthParams, MagicUserMetadata, Magic>
 {
   inner: Magic;
   private signer: WalletClientSigner | undefined;
