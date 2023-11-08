@@ -1,4 +1,5 @@
 import { createSmartAccountProviderConfigSchema } from "@alchemy/aa-core";
+import { Alchemy } from "alchemy-sdk";
 import z from "zod";
 
 export const ConnectionConfigSchema = z.union([
@@ -53,3 +54,5 @@ export const AlchemyProviderConfigSchema = z
   })
   .and(createSmartAccountProviderConfigSchema().omit({ rpcProvider: true }))
   .and(ConnectionConfigSchema);
+
+export const AlchemySdkClientSchema = z.instanceof(Alchemy);
