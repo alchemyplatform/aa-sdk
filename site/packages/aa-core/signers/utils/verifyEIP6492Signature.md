@@ -10,6 +10,8 @@ head:
   - - meta
     - property: og:description
       content: Description of the verifyEIP6492Signature utility method
+next:
+  text: Public ERC-4337 Client
 ---
 
 # verifyEIP6492Signature

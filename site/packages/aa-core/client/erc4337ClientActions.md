@@ -6,10 +6,12 @@ head:
       content: erc4337ClientActions
   - - meta
     - name: description
-      content: Overview of the erc4337ClientActions method in aa-core utils
+      content: Overview of the erc4337ClientActions method in aa-core client
   - - meta
     - property: og:description
-      content: Overview of the erc4337ClientActions method in aa-core utils
+      content: Overview of the erc4337ClientActions method in aa-core client
+next:
+  text: Utils
 ---
 
 # erc4337ClientActions

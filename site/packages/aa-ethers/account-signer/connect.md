@@ -10,6 +10,8 @@ head:
   - - meta
     - property: og:description
       content: Overview of the connect method on AccountSigner in aa-ethers
+next:
+  text: Utils
 ---
 
 # connect

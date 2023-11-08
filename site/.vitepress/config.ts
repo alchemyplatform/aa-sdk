@@ -415,7 +415,7 @@ export default defineConfig({
             ],
           },
           {
-            text: "Utilities",
+            text: "Utils",
             base: "/packages/aa-core/utils",
             collapsed: true,
             items: [
@@ -554,7 +554,7 @@ export default defineConfig({
             ],
           },
           {
-            text: "Utilities",
+            text: "Utils",
             collapsed: true,
             base: "/packages/aa-accounts/utils",
             items: [

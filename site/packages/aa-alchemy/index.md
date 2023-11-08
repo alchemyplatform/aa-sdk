@@ -10,6 +10,11 @@ head:
   - - meta
     - property: og:description
       content: aa-alchemy landing page and getting started guide
+prev:
+  text: aa-core
+  link: /packages/aa-core/index
+next:
+  text: AlchemyProvider
 ---
 
 # `@alchemy/aa-alchemy`

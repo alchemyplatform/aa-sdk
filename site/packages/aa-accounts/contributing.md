@@ -10,6 +10,8 @@ head:
   - - meta
     - property: og:description
       content: How to add your own Account Implementation to aa-accounts
+next:
+  text: aa-ethers
 ---
 
 # Contributing to `aa-accounts`

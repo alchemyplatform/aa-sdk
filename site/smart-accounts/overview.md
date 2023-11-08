@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Choosing a Smart Account
+      content: Smart Accounts
   - - meta
     - name: description
       content: Follow this guide to understand the end-to-end process of integrating smart accounts in your applications with Account Kit.
@@ -12,10 +12,15 @@ head:
       content: Follow this guide to understand the end-to-end process of integrating smart accounts in your applications with Account Kit.
   - - meta
     - name: twitter:title
-      content: Choosing a Smart Account
+      content: Smart Accounts
   - - meta
     - name: twitter:description
       content: Follow this guide to understand the end-to-end process of integrating smart accounts in your applications with Account Kit.
+prev:
+  text: Packages Overview
+  link: /package-overview
+next:
+  text: Choosing a Smart Account
 ---
 
 # Overview

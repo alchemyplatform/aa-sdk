@@ -10,6 +10,8 @@ head:
   - - meta
     - property: og:description
       content: Overview of the SupportedChains util method in aa-alchemy
+next:
+  text: aa-accounts
 ---
 
 # SupportedChains

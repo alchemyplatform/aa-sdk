@@ -17,7 +17,7 @@ head:
     - name: twitter:description
       content: Explore the benefits and tradeoffs of four different packages that can be used with Account Kit namely aa-core, aa-alchemy, aa-accounts, and aa-ethers.
 next:
-  text: Smart Accounts Overview
+  text: Smart Accounts
   link: /smart-accounts/overview
 ---
 

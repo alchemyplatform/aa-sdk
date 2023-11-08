@@ -10,6 +10,8 @@ head:
   - - meta
     - property: og:description
       content: Overview of the withAlchemyGasManager method in aa-alchemy
+next:
+  text: Utils
 ---
 
 # withAlchemyGasManager

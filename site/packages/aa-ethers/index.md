@@ -10,6 +10,11 @@ head:
   - - meta
     - property: og:description
       content: aa-ethers landing page and getting started guide
+prev:
+  text: aa-accounts
+  link: /packages/aa-accounts/index
+next:
+  text: EthersProviderAdapter
 ---
 
 # `@alchemy/aa-ethers`
