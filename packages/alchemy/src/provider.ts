@@ -5,6 +5,7 @@ import {
   resolveProperties,
   type AccountMiddlewareFn,
 } from "@alchemy/aa-core";
+import { Alchemy } from "alchemy-sdk";
 import { type HttpTransport } from "viem";
 import {
   arbitrum,
@@ -18,12 +19,16 @@ import {
   withAlchemyGasManager,
   type AlchemyGasManagerConfig,
 } from "./middleware/gas-manager.js";
-import { AlchemyProviderConfigSchema } from "./schema.js";
+import {
+  AlchemyProviderConfigSchema,
+  AlchemySdkClientSchema,
+} from "./schema.js";
 import type { AlchemyProviderConfig } from "./type.js";
 
 export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
   private pvgBuffer: bigint;
   private feeOptsSet: boolean;
+  private rpcUrl: string;
 
   constructor(config: AlchemyProviderConfig) {
     AlchemyProviderConfigSchema.parse(config);
@@ -82,6 +87,7 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
     }
 
     this.feeOptsSet = !!feeOpts;
+    this.rpcUrl = rpcUrl;
   }
 
   override gasEstimator: AccountMiddlewareFn = async (struct) => {
@@ -113,5 +119,49 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
     }
 
     return withAlchemyGasManager(this, config, !this.feeOptsSet);
+  }
+
+  /**
+   * This methods adds Alchemy Enhanced APIs to the provider, via a peer dependency on `alchemy-sdk`.
+   * @see: https://github.com/alchemyplatform/alchemy-sdk-js
+   *
+   * The Alchemy SDK client must be configured with the same API key and network as the AlchemyProvider.
+   * This method validates such at runtime.
+   *
+   * Additionally, since the Alchemy SDK client does not support JWT authentication, AlchemyProviders initialized with JWTs cannot use this method.
+   * They must be initialized with an API key or RPC URL.
+   * There is an open issue on the Alchemy SDK repo to add JWT support in the meantime.
+   * @see: https://github.com/alchemyplatform/alchemy-sdk-js/issues/386
+   *
+   * @param alchemy - an initialized Alchemy SDK client
+   * @returns - a new AlchemyProvider extended with Alchemy SDK client methods
+   */
+  withAlchemyEnhancedApis(alchemy: Alchemy): this & Alchemy {
+    AlchemySdkClientSchema.parse(alchemy);
+
+    if (alchemy.config.url && alchemy.config.url !== this.rpcUrl) {
+      throw new Error(
+        "Alchemy SDK client JSON-RPC URL must match AlchemyProvider JSON-RPC URL"
+      );
+    }
+
+    const alchemyUrl = `https://${alchemy.config.network}.g.alchemy.com/v2/${alchemy.config.apiKey}`;
+    if (alchemyUrl !== this.rpcUrl) {
+      throw new Error(
+        "Alchemy SDK client JSON-RPC URL must match AlchemyProvider JSON-RPC URL"
+      );
+    }
+
+    return this.extend(() => {
+      return {
+        core: alchemy.core,
+        nft: alchemy.nft,
+        transact: alchemy.transact,
+        debug: alchemy.debug,
+        ws: alchemy.ws,
+        notify: alchemy.notify,
+        config: alchemy.config,
+      };
+    });
   }
 }
