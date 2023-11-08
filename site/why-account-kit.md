@@ -65,7 +65,7 @@ Streamline your sign up flow with simple web2 login options supported by Account
 - Self-custodial wallets like MetaMask or Ledger
 - and more
 
-Account Kit integrates all the leading wallet Signers with bespoke integration guides for [Magic](/smart-accounts/signers/magic), [web3auth](/smart-accounts/signers/web3auth), [Turnkey](/smart-accounts/signers/turnkey), [Privy](/smart-accounts/signers/privy), [Dynamic](/smart-accounts/signers/dynamic), [Fireblocks](/smart-accounts/signers/fireblocks), [Portal](/smart-accounts/signers/portal), [Capsule](/smart-accounts/signers/capsule) and [Lit Protocol](/smart-accounts/signers/lit). Account Kit even supports self-custodial wallets like Metamask or Ledger. Users can even change their signer later via Account Kit’s [ownership transfer](/smart-accounts/transferring-ownership) functionality.
+Account Kit integrates all the leading wallet Signers with bespoke integration guides for [Magic](/smart-accounts/signers/magic), [web3auth](/smart-accounts/signers/web3auth), [Turnkey](/smart-accounts/signers/turnkey), [Privy](/smart-accounts/signers/privy), [Dynamic](/smart-accounts/signers/dynamic), [Fireblocks](/smart-accounts/signers/fireblocks), [Portal](/smart-accounts/signers/portal), [Capsule](/smart-accounts/signers/capsule) and [Lit Protocol](/smart-accounts/signers/lit). Account Kit even supports self-custodial wallets like Metamask or Ledger. Users can even change their signer later via Account Kit’s [ownership transfer](/guides/transferring-ownership) functionality.
 
 Learn [how to choose the right signer for your use case in this doc](/smart-accounts/signers/choosing-a-signer).
 
@@ -75,15 +75,15 @@ Account Kit removes the greatest barrier to entry of all: gas fees.
 
 Many newcomers give up on web3 before submitting their first transaction. It's daunting to buy crypto for the first time, especially before trying the app! Gas fees -- even cheap ones on L2 -- discourage newcomers from trying your app.
 
-With Account Kit you can remove this barrier by [sponsoring gas fees](/smart-accounts/sponsoring-gas) for transactions — especially the first one! Get the user to your app’s magic moment as quickly, and help them fall in love with your product before asking them to deposit money.
+With Account Kit you can remove this barrier by [sponsoring gas fees](/guides/sponsoring-gas) for transactions — especially the first one! Get the user to your app’s magic moment as quickly, and help them fall in love with your product before asking them to deposit money.
 
-The [Gas Manager API](https://dashboard.alchemy.com/gas-manager) included in Account Kit is a powerful tool to [sponsor gas](/smart-accounts/sponsoring-gas). Sponsorship rules are programmable, giving you precise control over spending limits, allowlisted/blocklisted wallet addresses, and more through a REST API or an intuitive management dashboard.
+The [Gas Manager API](https://dashboard.alchemy.com/gas-manager) included in Account Kit is a powerful tool to [sponsor gas](/guides/sponsoring-gas). Sponsorship rules are programmable, giving you precise control over spending limits, allowlisted/blocklisted wallet addresses, and more through a REST API or an intuitive management dashboard.
 
 In the future, Account Kit will support paying gas in stablecoins like USDC and other ERC20s. If you’re interested those features, [contact us](mailto:account-abstraction@alchemy.com) to chat.
 
 ## Batch transactions
 
-Streamline multi-step actions into a single click. Using the Bundler API, you can effortlessly [batch multiple transactions](smart-accounts/batching-transactions) into a single operation. For example, imagine a normal user who wants to mint two NFTs as part of your giveaway. You can submit a single user operation that batches the following transactions together all with a single click and sponsored gas:
+Streamline multi-step actions into a single click. Using the Bundler API, you can effortlessly [batch multiple transactions](/guides/batching-transactions) into a single operation. For example, imagine a normal user who wants to mint two NFTs as part of your giveaway. You can submit a single user operation that batches the following transactions together all with a single click and sponsored gas:
 
 1. Deploy a smart account contract for the user
 2. Mint NFT #1
