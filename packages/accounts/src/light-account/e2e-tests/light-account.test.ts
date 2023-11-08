@@ -6,7 +6,6 @@ import {
   type Chain,
   type HDAccount,
   type Hash,
-  type Transport,
 } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import { sepolia } from "viem/chains";
@@ -209,7 +208,7 @@ const givenConnectedProvider = ({
     feeOpts,
   }).connect(
     (rpcClient) =>
-      new LightSmartContractAccount<Transport>({
+      new LightSmartContractAccount({
         chain,
         owner,
         factoryAddress: getDefaultLightAccountFactoryAddress(chain),
