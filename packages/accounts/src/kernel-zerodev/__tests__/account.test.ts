@@ -1,5 +1,5 @@
 import { LocalAccountSigner } from "@alchemy/aa-core";
-import { type Address, type Hex, type Transport } from "viem";
+import { type Address, type Hex } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
 import {
@@ -43,7 +43,7 @@ describe("Kernel Account Tests", () => {
   });
 
   function account(index: bigint, owner = mockOwner) {
-    const accountParams: KernelSmartAccountParams<Transport> = {
+    const accountParams: KernelSmartAccountParams = {
       rpcClient: provider.rpcClient,
       chain: config.chain,
       owner: owner,
