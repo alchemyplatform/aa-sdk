@@ -487,6 +487,10 @@ export default defineConfig({
                 text: "withAlchemyGasManager",
                 link: "/withAlchemyGasManager",
               },
+              {
+                text: "withAlchemyEnhancedApis",
+                link: "/withAlchemyEnhancedApis",
+              },
             ],
           },
           {
