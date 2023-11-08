@@ -10,6 +10,8 @@ head:
   - - meta
     - property: og:description
       content: Overview of the fromEthersProvider class on EthersProviderAdapter in aa-ethers
+next:
+  text: AccountSigner
 ---
 
 # fromEthersProvider

@@ -10,6 +10,8 @@ head:
   - - meta
     - property: og:description
       content: Overview of the sendUserOperation action available on the PublicErc4337Client
+prev:
+  text: Public ERC-4337 Client
 ---
 
 # sendUserOperation

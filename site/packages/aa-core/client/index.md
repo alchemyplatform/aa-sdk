@@ -10,6 +10,8 @@ head:
   - - meta
     - property: og:description
       content: Overview of the Public Client exported by aa-core
+next:
+  text: Actions
 ---
 
 # Public ERC-4337 Client

@@ -10,6 +10,8 @@ head:
   - - meta
     - property: og:description
       content: Overview of the resolveProperties method in aa-core utils
+next:
+  text: aa-alchemy
 ---
 
 # `resolveProperties<T>`

@@ -10,6 +10,8 @@ head:
   - - meta
     - property: og:description
       content: Overview of the constructor method on SimpleSmartContractAccount in aa-core
+next:
+  text: Required Methods
 ---
 
 # constructor

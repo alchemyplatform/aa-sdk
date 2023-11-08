@@ -10,6 +10,8 @@ head:
   - - meta
     - property: og:description
       content: Overview of the signTypedDataWith6492 method on BaseSmartContractAccount
+next:
+  text: Other Methods
 ---
 
 # signTypedDataWith6492

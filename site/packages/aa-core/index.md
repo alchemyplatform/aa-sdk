@@ -6,10 +6,12 @@ head:
       content: aa-core
   - - meta
     - name: description
-      content: Overview of the aa-core package
+      content: Introduction to the aa-core package
   - - meta
     - property: og:description
-      content: Overview of the aa-core package
+      content: Introduction to the aa-core package
+next:
+  text: SmartAccountProvider
 ---
 
 # `@alchemy/aa-core`

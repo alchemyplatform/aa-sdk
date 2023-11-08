@@ -6,10 +6,10 @@ head:
       content: createPublicErc4337Client
   - - meta
     - name: description
-      content: Overview of the createPublicErc4337Client method in aa-core utils
+      content: Overview of the createPublicErc4337Client method in aa-core client
   - - meta
     - property: og:description
-      content: Overview of the createPublicErc4337Client method in aa-core utils
+      content: Overview of the createPublicErc4337Client method in aa-core client
 ---
 
 # createPublicErc4337Client

@@ -10,6 +10,11 @@ head:
   - - meta
     - property: og:description
       content: aa-accounts landing page and getting started guide
+prev:
+  text: aa-alchemy
+  link: /packages/aa-alchemy/index
+next:
+  text: Light Account
 ---
 
 # `@alchemy/aa-accounts`

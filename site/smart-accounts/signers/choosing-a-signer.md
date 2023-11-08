@@ -17,11 +17,11 @@ head:
     - name: twitter:description
       content: Explore Account Kit integration guides for signers including Magic.Link, Privy, Web3Auth, EOAs, and many more!
 prev:
-  text: Deploying a Smart Account
+  text: Smart Accounts
   link: /smart-accounts/accounts/choosing-a-smart-account
 next:
-  text: Sponsoring Gas
-  link: /smart-accounts/sponsoring-gas
+  text: Guides
+  link: /guides/send-user-operation
 ---
 
 # What is a Signer?
