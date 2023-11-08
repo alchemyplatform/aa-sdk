@@ -395,6 +395,19 @@ export class SmartAccountProvider<
     return this._sendUserOperation(uoToSend);
   };
 
+  checkGasSponsorshipEligibility = async (
+    data: UserOperationCallData | BatchUserOperationCallData,
+    overrides?: UserOperationOverrides
+  ): Promise<boolean> => {
+    return this.buildUserOperation(data, overrides)
+      .then(
+        (userOperationStruct: UserOperationStruct) =>
+          userOperationStruct.paymasterAndData !== "0x" &&
+          userOperationStruct.paymasterAndData !== null
+      )
+      .catch(() => false);
+  };
+
   private _runMiddlewareStack = async (
     uo: Deferrable<UserOperationStruct>,
     overrides?: UserOperationOverrides

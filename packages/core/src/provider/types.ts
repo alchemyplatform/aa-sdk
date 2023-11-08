@@ -19,6 +19,7 @@ import type {
 import type {
   BatchUserOperationCallData,
   UserOperationCallData,
+  UserOperationOverrides,
   UserOperationReceipt,
   UserOperationRequest,
   UserOperationResponse,
@@ -117,41 +118,61 @@ export interface ISmartAccountProvider<
    * 5. customMiddleware -- allows you to override any of the results returned by previous middlewares
    *
    * @param data - either {@link UserOperationCallData} or {@link BatchUserOperationCallData}
+   * @param overrides - optional {@link UserOperationOverrides}
    * @returns - {@link SendUserOperationResult} containing the hash and request
    */
   sendUserOperation: (
-    data: UserOperationCallData | BatchUserOperationCallData
+    data: UserOperationCallData | BatchUserOperationCallData,
+    overrides?: UserOperationOverrides
   ) => Promise<SendUserOperationResult>;
 
   /**
    * Attempts to drop and replace an existing user operation by increasing fees
    *
    * @param data - an existing user operation request returned by `sendUserOperation`
+   * @param overrides - optional {@link UserOperationOverrides}
    * @returns - {@link SendUserOperationResult} containing the hash and request
    */
   dropAndReplaceUserOperation: (
-    data: UserOperationRequest
+    data: UserOperationRequest,
+    overrides?: UserOperationOverrides
   ) => Promise<SendUserOperationResult>;
 
   /**
    * Allows you to get the unsigned UserOperation struct with all of the middleware run on it
    *
    * @param data - either {@link UserOperationCallData} or {@link BatchUserOperationCallData}
+   * @param overrides - optional {@link UserOperationOverrides}
    * @returns - {@link UserOperationStruct} resulting from the middleware pipeline
    */
   buildUserOperation: (
-    data: UserOperationCallData | BatchUserOperationCallData
+    data: UserOperationCallData | BatchUserOperationCallData,
+    overrides?: UserOperationOverrides
   ) => Promise<UserOperationStruct>;
+
+  /**
+   * Allows you to check whether the UserOperation to be sent is eligible for gas sponsorship or not.
+   *
+   * @param data - either {@link UserOperationCallData} or {@link BatchUserOperationCallData}
+   * @param overrides - optional {@link UserOperationOverrides}
+   * @returns - {@link UserOperationStruct} resulting from the middleware pipeline
+   */
+  checkGasSponsorshipEligibility: (
+    data: UserOperationCallData | BatchUserOperationCallData,
+    overrides?: UserOperationOverrides
+  ) => Promise<boolean>;
 
   /**
    * Allows you to get the unsigned UserOperation struct with all of the middleware run on it
    * converted from a traditional ethereum transaction
    *
    * @param data - {@link RpcTransactionRequest} the tx to convert to a UserOperation
+   * @param overrides - optional {@link UserOperationOverrides}
    * @returns - {@link UserOperationStruct} resulting from the middleware pipeline
    */
   buildUserOperationFromTx: (
-    tx: RpcTransactionRequest
+    tx: RpcTransactionRequest,
+    overrides?: UserOperationOverrides
   ) => Promise<UserOperationStruct>;
 
   /**
@@ -185,9 +206,13 @@ export interface ISmartAccountProvider<
    * to mine, it's recommended to user {@link sendUserOperation} instead.
    *
    * @param request - a {@link RpcTransactionRequest} object representing a traditional ethereum transaction
+   * @param overrides - optional {@link UserOperationOverrides}\
    * @returns the transaction hash
    */
-  sendTransaction: (request: RpcTransactionRequest) => Promise<Hash>;
+  sendTransaction: (
+    request: RpcTransactionRequest,
+    overrides?: UserOperationOverrides
+  ) => Promise<Hash>;
 
   /**
    * This takes a set of  ethereum transactions and converts them into one UserOperation, sends the UserOperation, and waits
@@ -197,9 +222,13 @@ export interface ISmartAccountProvider<
    * NOTE: the account you're sending the transactions to MUST support batch transactions.
    *
    * @param request - a {@link RpcTransactionRequest} Array representing a traditional ethereum transaction
+   * @param overrides - optional {@link UserOperationOverrides}\
    * @returns the transaction hash
    */
-  sendTransactions: (request: RpcTransactionRequest[]) => Promise<Hash>;
+  sendTransactions: (
+    request: RpcTransactionRequest[],
+    overrides?: UserOperationOverrides
+  ) => Promise<Hash>;
 
   /**
    * EIP-1193 compliant request method
@@ -246,6 +275,20 @@ export interface ISmartAccountProvider<
    * @returns the address of the connected account
    */
   getAddress: () => Promise<Address>;
+
+  /**
+   * @returnsthe EntryPoint contract address being used for the provider.
+   *
+   * If the provider is connected with a `SmartContractAccount`, the EntryPoint contract of the connected account
+   * is used for the provider.
+   *
+   * If not connected, it fallbacks to the default entry point contract for the chain, unless the optional parameter
+   * `entryPointAddress` was given during the initialization as an override.
+   *
+   * Refer to https://docs.alchemy.com/reference/eth-supportedentrypoints for all the supported entrypoints
+   * when using Alchemy as your RPC provider.
+   */
+  getEntryPointAddress: () => Address;
 
   /**
    * @returns boolean flag indicating if the account is connected

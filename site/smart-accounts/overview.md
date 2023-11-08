@@ -55,7 +55,7 @@ At this point you should be able to integrate smart accounts in your application
 
 ## 4. Sponsoring Gas
 
-Being able to sponsor gas for your users is one of the most powerful features enabled by smart accounts and can help you build a seamless user experience. We'll cover this in detail with code examples in the [Sponsoring Gas](/guides/sponsoring-gas) section.
+Being able to sponsor gas for your users is one of the most powerful features enabled by smart accounts and can help you build a seamless user experience. We'll cover this in detail with code examples in the [Sponsoring Gas](/guides/sponsoring-gas/sponsoring-gas) section.
 
 ## 5. Batching Transactions
 
