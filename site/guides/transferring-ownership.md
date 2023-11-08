@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Transferring Ownership
+      content: How to Transfer Ownership of a Smart Account
   - - meta
     - name: description
       content: Follow this guide to transfer ownership of a smart account with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
@@ -12,13 +12,13 @@ head:
       content: Follow this guide to transfer ownership of a smart account with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - name: twitter:title
-      content: Transferring Ownership
+      content: How to Transfer Ownership of a Smart Account
   - - meta
     - name: twitter:description
       content: Follow this guide to transfer ownership of a smart account with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
-# Transferring Ownership
+# How to Transfer Ownership of a Smart Account
 
 Not all Smart Contract Account implementations support transfering the owner (e.g. `SimpleAccount`). However, a number of the accounts in this guide and in the Account Kit do, including Alchemy's Light Account! Let's see a few different ways we can transfer ownership of an Account (using Light Account as an example).
 

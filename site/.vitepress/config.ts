@@ -57,16 +57,6 @@ export default defineConfig({
         ],
       },
       {
-        text: "Guides",
-        base: "/guides",
-        items: [
-          {
-            text: "How to Send a User Operation",
-            link: "/send-user-operation",
-          },
-        ],
-      },
-      {
         text: "Smart Accounts",
         base: "/smart-accounts",
         items: [
@@ -74,7 +64,6 @@ export default defineConfig({
           {
             text: "Choosing a Smart Account",
             base: "/smart-accounts/accounts",
-            collapsed: true,
             items: [
               { text: "Introduction", link: "/choosing-a-smart-account" },
               { text: "Light Account", link: "/light-account" },
@@ -92,7 +81,6 @@ export default defineConfig({
           {
             text: "Choosing a Signer",
             base: "/smart-accounts/signers",
-            collapsed: true,
             items: [
               {
                 text: "Introduction",
@@ -119,9 +107,25 @@ export default defineConfig({
               { text: "Contributing Your Signer", link: "/contributing" },
             ],
           },
-          { text: "Sponsoring Gas", link: "/sponsoring-gas" },
-          { text: "Batching Transactions", link: "/batching-transactions" },
-          { text: "Transferring Ownership", link: "/transferring-ownership" },
+        ],
+      },
+      {
+        text: "Guides",
+        base: "/guides",
+        items: [
+          {
+            text: "How to Send a User Operation",
+            link: "/send-user-operation",
+          },
+          {
+            text: "How to Sponsor Gas for a User Operation",
+            link: "/sponsoring-gas",
+          },
+          { text: "How to Batch Transactions", link: "/batching-transactions" },
+          {
+            text: "How to Transfer Ownership of a Smart Account",
+            link: "/transferring-ownership",
+          },
         ],
       },
       {
