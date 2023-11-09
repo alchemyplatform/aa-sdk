@@ -2,6 +2,7 @@ import type { Address, Chain } from "viem";
 import {
   arbitrum,
   arbitrumGoerli,
+  arbitrumSepolia,
   base,
   baseGoerli,
   goerli,
@@ -31,6 +32,7 @@ export const getDefaultLightAccountFactoryAddress = (chain: Chain): Address => {
     case optimismGoerli.id:
     case arbitrum.id:
     case arbitrumGoerli.id:
+    case arbitrumSepolia.id:
     case base.id:
     case baseGoerli.id:
       return "0x00000055C0b4fA41dde26A74435ff03692292FBD";
