@@ -2,7 +2,6 @@ import {
   SimpleSmartContractAccount,
   getDefaultSimpleAccountFactoryAddress,
   type SmartAccountSigner,
-  AA_SDK_TESTS_SIGNER_TYPE,
 } from "@alchemy/aa-core";
 import { Alchemy, Network } from "alchemy-sdk";
 import { toHex, type Address, type Chain, type Hash } from "viem";
@@ -23,7 +22,7 @@ describe("Simple Account Tests", () => {
       }),
     signTypedData: async () => "0xHash",
     getAddress: async () => ownerAccount.address,
-    signerType: AA_SDK_TESTS_SIGNER_TYPE,
+    signerType: "aa-sdk-tests",
   };
 
   it("should successfully get counterfactual address", async () => {

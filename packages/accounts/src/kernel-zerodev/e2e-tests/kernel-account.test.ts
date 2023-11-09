@@ -1,5 +1,4 @@
 import {
-  AA_SDK_TESTS_SIGNER_TYPE,
   getDefaultEntryPointAddress,
   type BatchUserOperationCallData,
   type SmartAccountSigner,
@@ -39,7 +38,7 @@ describe("Kernel Account Tests", () => {
   const ownerAccount = mnemonicToAccount(OWNER_MNEMONIC);
   const owner: SmartAccountSigner<HDAccount> = {
     inner: ownerAccount,
-    signerType: AA_SDK_TESTS_SIGNER_TYPE,
+    signerType: "aa-sdk-tests",
     signMessage: async (msg) =>
       ownerAccount.signMessage({
         message: { raw: toHex(msg) },
