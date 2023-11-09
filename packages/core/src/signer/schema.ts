@@ -8,6 +8,7 @@ export const SignerSchema = z.custom<SmartAccountSigner>((signer) => {
     "signerType" in signer &&
     "signMessage" in signer &&
     "signTypedData" in signer &&
-    "getAddress" in signer
+    "getAddress" in signer &&
+    "inner" in signer
   );
 });

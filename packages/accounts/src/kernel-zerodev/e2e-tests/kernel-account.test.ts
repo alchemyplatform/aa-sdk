@@ -1,14 +1,15 @@
 import {
+  AA_SDK_TESTS_SIGNER_TYPE,
   getDefaultEntryPointAddress,
   type BatchUserOperationCallData,
   type SmartAccountSigner,
-  AA_SDK_TESTS_SIGNER_TYPE,
 } from "@alchemy/aa-core";
 import {
   encodeAbiParameters,
   parseAbiParameters,
   toHex,
   type Address,
+  type HDAccount,
   type Hash,
   type Hex,
 } from "viem";
@@ -36,7 +37,8 @@ describe("Kernel Account Tests", () => {
   };
 
   const ownerAccount = mnemonicToAccount(OWNER_MNEMONIC);
-  const owner: SmartAccountSigner = {
+  const owner: SmartAccountSigner<HDAccount> = {
+    inner: ownerAccount,
     signerType: AA_SDK_TESTS_SIGNER_TYPE,
     signMessage: async (msg) =>
       ownerAccount.signMessage({

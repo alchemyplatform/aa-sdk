@@ -18,9 +18,9 @@ import {
 import { KernelAccountAbi } from "./abis/KernelAccountAbi.js";
 import { KernelFactoryAbi } from "./abis/KernelFactoryAbi.js";
 import { MultiSendAbi } from "./abis/MultiSendAbi.js";
+import type { KernelUserOperationCallData } from "./types.js";
 import { encodeCall } from "./utils.js";
 import { KernelBaseValidator, ValidatorMode } from "./validator/base.js";
-import type { KernelUserOperationCallData } from "./types.js";
 
 export interface KernelSmartAccountParams<
   TTransport extends Transport | FallbackTransport = Transport

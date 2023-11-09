@@ -11,25 +11,25 @@ import type { SmartAccountSigner } from "./types.js";
 
 export class LocalAccountSigner<
   T extends HDAccount | PrivateKeyAccount | LocalAccount
-> implements SmartAccountSigner
+> implements SmartAccountSigner<T>
 {
-  private owner: T;
+  inner: T;
   signerType: string;
 
-  constructor(owner: T) {
-    this.owner = owner;
-    this.signerType = owner.type; //  type: "local"
+  constructor(inner: T) {
+    this.inner = inner;
+    this.signerType = inner.type; //  type: "local"
   }
 
   readonly signMessage: (msg: string | Uint8Array) => Promise<`0x${string}`> = (
     msg
   ) => {
     if (typeof msg === "string" && !isHex(msg)) {
-      return this.owner.signMessage({
+      return this.inner.signMessage({
         message: msg,
       });
     } else {
-      return this.owner.signMessage({
+      return this.inner.signMessage({
         message: {
           raw: msg,
         },
@@ -38,11 +38,11 @@ export class LocalAccountSigner<
   };
 
   readonly signTypedData = (params: SignTypedDataParams) => {
-    return this.owner.signTypedData(params);
+    return this.inner.signTypedData(params);
   };
 
   readonly getAddress: () => Promise<`0x${string}`> = async () => {
-    return this.owner.address;
+    return this.inner.address;
   };
 
   static mnemonicToAccountSigner(key: string): LocalAccountSigner<HDAccount> {

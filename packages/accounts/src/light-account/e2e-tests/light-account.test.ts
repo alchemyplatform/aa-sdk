@@ -1,6 +1,12 @@
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import { LocalAccountSigner, type SmartAccountSigner } from "@alchemy/aa-core";
-import { isAddress, type Address, type Chain, type Hash } from "viem";
+import {
+  isAddress,
+  type Address,
+  type Chain,
+  type HDAccount,
+  type Hash,
+} from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import { sepolia } from "viem/chains";
 import {
@@ -17,9 +23,8 @@ import {
 const chain = sepolia;
 
 describe("Light Account Tests", () => {
-  const owner: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
-    LIGHT_ACCOUNT_OWNER_MNEMONIC
-  );
+  const owner: SmartAccountSigner<HDAccount> =
+    LocalAccountSigner.mnemonicToAccountSigner(LIGHT_ACCOUNT_OWNER_MNEMONIC);
   const undeployedOwner = LocalAccountSigner.mnemonicToAccountSigner(
     UNDEPLOYED_OWNER_MNEMONIC
   );
