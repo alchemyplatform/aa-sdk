@@ -17,6 +17,7 @@ export type { BaseSmartAccountParams } from "./account/types.js";
 
 export { LocalAccountSigner } from "./signer/local-account.js";
 export { SignerSchema } from "./signer/schema.js";
+export { AA_SDK_TESTS_SIGNER_TYPE } from "./signer/types.js";
 export type {
   SmartAccountAuthenticator,
   SmartAccountSigner,
