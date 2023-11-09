@@ -198,6 +198,7 @@ const givenConnectedProvider = ({
 }) => {
   const provider = new AlchemyProvider({
     apiKey: API_KEY!,
+    owner,
     chain,
     opts: {
       txMaxRetries: 10,
@@ -220,5 +221,4 @@ const givenConnectedProvider = ({
   provider.withAlchemyGasManager({
     policyId: PAYMASTER_POLICY_ID,
   });
-  return provider;
 };

@@ -18,6 +18,7 @@ export const createLightAccountAlchemyProvider = (
         chain: config.chain,
         entryPointAddress: config.entryPointAddress,
         factoryAddress: getDefaultLightAccountFactoryAddress(config.chain),
+        accountAddress: config.accountAddress,
       })
   );
 };
@@ -33,6 +34,7 @@ export const createLightAccountProvider = (
         chain: config.chain,
         entryPointAddress: config.entryPointAddress,
         factoryAddress: getDefaultLightAccountFactoryAddress(config.chain),
+        accountAddress: config.accountAddress,
       })
   );
 };
