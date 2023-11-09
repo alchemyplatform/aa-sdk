@@ -33,7 +33,7 @@ export const getDefaultLightAccountFactoryAddress = (chain: Chain): Address => {
     case arbitrumGoerli.id:
     case base.id:
     case baseGoerli.id:
-      return "0x000000893A26168158fbeaDD9335Be5bC96592E2";
+      return "0x00000055C0b4fA41dde26A74435ff03692292FBD";
   }
   throw new Error(
     `no default light account factory contract exists for ${chain.name}`
