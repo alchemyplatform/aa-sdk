@@ -1,5 +1,4 @@
 import {
-  AA_SDK_TESTS_SIGNER_TYPE,
   type Address,
   type Hex,
   type SignTypedDataParams,
@@ -11,7 +10,7 @@ import { OWNER_MNEMONIC } from "../constants.js";
 export class MockSigner implements SmartAccountSigner<HDAccount> {
   inner = mnemonicToAccount(OWNER_MNEMONIC);
 
-  signerType = AA_SDK_TESTS_SIGNER_TYPE;
+  signerType = "aa-sdk-tests";
 
   getAddress(): Promise<Address> {
     return Promise.resolve("0x48D4d3536cDe7A257087206870c6B6E76e3D4ff4");
