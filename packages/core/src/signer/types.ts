@@ -41,5 +41,3 @@ export interface SmartAccountSigner<Inner = any> {
 
   signTypedData: (params: SignTypedDataParams) => Promise<Hex>;
 }
-
-export const AA_SDK_TESTS_SIGNER_TYPE = "aa-sdk-tests";
