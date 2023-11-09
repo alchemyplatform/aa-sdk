@@ -18,7 +18,6 @@ export type {
   SmartAccountSigner,
   SmartAccountAuthenticator,
 } from "./signer/types.js";
-export { AA_SDK_TESTS_SIGNER_TYPE } from "./signer/types.js";
 export {
   verifyEIP6492Signature,
   wrapSignatureWith6492,
