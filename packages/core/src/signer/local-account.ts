@@ -16,9 +16,9 @@ export class LocalAccountSigner<
   inner: T;
   signerType: string;
 
-  constructor(owner: T) {
-    this.inner = owner;
-    this.signerType = owner.type; //  type: "local"
+  constructor(inner: T) {
+    this.inner = inner;
+    this.signerType = inner.type; //  type: "local"
   }
 
   readonly signMessage: (msg: string | Uint8Array) => Promise<`0x${string}`> = (
