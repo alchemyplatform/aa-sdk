@@ -5,8 +5,12 @@ import {
   type SignTypedDataParams,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
+import { mnemonicToAccount, type HDAccount } from "viem/accounts";
+import { OWNER_MNEMONIC } from "../constants.js";
 
-export class MockSigner implements SmartAccountSigner {
+export class MockSigner implements SmartAccountSigner<HDAccount> {
+  inner = mnemonicToAccount(OWNER_MNEMONIC);
+
   signerType = AA_SDK_TESTS_SIGNER_TYPE;
 
   getAddress(): Promise<Address> {

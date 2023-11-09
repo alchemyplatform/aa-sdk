@@ -7,6 +7,8 @@ import type {
 import { AA_SDK_TESTS_SIGNER_TYPE } from "@alchemy/aa-core";
 
 export class MockSigner implements SmartAccountSigner {
+  inner: any;
+
   signerType = AA_SDK_TESTS_SIGNER_TYPE;
 
   getAddress(): Promise<Address> {

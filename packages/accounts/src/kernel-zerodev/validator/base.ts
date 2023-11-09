@@ -1,5 +1,5 @@
-import { concatHex, type Hex } from "viem";
 import type { SmartAccountSigner } from "@alchemy/aa-core";
+import { concatHex, type Hex } from "viem";
 
 export enum ValidatorMode {
   sudo = "0x00000000",

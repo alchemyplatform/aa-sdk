@@ -7,9 +7,11 @@ import {
 } from "@alchemy/aa-core";
 
 export class MockSignerValidator implements SmartAccountSigner {
+  inner: any;
+
   signerType = AA_SDK_TESTS_SIGNER_TYPE;
 
-  signTypedData(params: SignTypedDataParams): Promise<`0x${string}`> {
+  signTypedData(_params: SignTypedDataParams): Promise<`0x${string}`> {
     return Promise.resolve("0xMOCK_SIGN_TYPED_DATA");
   }
 
