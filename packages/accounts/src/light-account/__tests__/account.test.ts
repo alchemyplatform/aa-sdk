@@ -86,4 +86,5 @@ const givenConnectedProvider = ({
     owner,
     chain,
     rpcUrl: `${chain.rpcUrls.alchemy.http[0]}/${"test"}`,
+    accountAddress: "0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4",
   });
