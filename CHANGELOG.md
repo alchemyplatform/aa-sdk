@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/alchemyplatform/aa-sdk/compare/v0.3.0...v1.0.0) (2023-11-10)
+
+- feat!: publish breaking change ([f0c3497](https://github.com/alchemyplatform/aa-sdk/commit/f0c3497a0d9ceb2144cb20e64a8b04edaad2c4f5))
+
+### BREAKING CHANGES
+
+- forcing breaking change
+
 # 0.3.0 (2023-11-10)
 
 ### Features
