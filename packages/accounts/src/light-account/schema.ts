@@ -2,7 +2,7 @@ import {
   SignerSchema,
   createSmartAccountProviderConfigSchema,
 } from "@alchemy/aa-core";
-import { Address } from "AbiType/zod";
+import { Address } from "abitype/zod";
 import { isHex } from "viem";
 import { z } from "zod";
 
