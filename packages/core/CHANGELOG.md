@@ -3,15 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [1.0.0](https://github.com/alchemyplatform/aa-sdk/compare/v0.3.0...v1.0.0) (2023-11-10)
-
-**Note:** Version bump only for package @alchemy/aa-core
-
-# 0.3.0 (2023-11-10)
+# [1.0.0](https://github.com/alchemyplatform/aa-sdk/compare/v0.2.0...v1.0.0) (2023-11-10)
 
 ### Features
 
-- remove AA_SDK_TESTS_SIGNER_TYPE constant exported from aa-core ([#232](https://github.com/alchemyplatform/aa-sdk/issues/232)) ([5170a6b](https://github.com/alchemyplatform/aa-sdk/commit/5170a6b689c9834a9a2489f054b767e190fa38f7))
+- aa-sdk with native arb sepolia support ([#231](https://github.com/alchemyplatform/aa-sdk/issues/231)) ([7580608](https://github.com/alchemyplatform/aa-sdk/commit/7580608623961155290a3010fb784a14aecd82af))
+- add support for overriding the initCode for an account ([#197](https://github.com/alchemyplatform/aa-sdk/issues/197)) ([a886853](https://github.com/alchemyplatform/aa-sdk/commit/a886853ce5628f7e252750f52d8ad8c38eeef0c0))
+- add zod runtime validation for base account ([#186](https://github.com/alchemyplatform/aa-sdk/issues/186)) ([ea85c96](https://github.com/alchemyplatform/aa-sdk/commit/ea85c961ee0140bf12151984324e4b2e7ed86d6a))
+- add zod runtime validation for simple account ([#189](https://github.com/alchemyplatform/aa-sdk/issues/189)) ([f14016f](https://github.com/alchemyplatform/aa-sdk/commit/f14016f38777f1e629c1aaaaf16f81881ee5d7c9))
+- **arb-sepolia:** add arb sepolia to defaults ([#216](https://github.com/alchemyplatform/aa-sdk/issues/216)) ([9229fb5](https://github.com/alchemyplatform/aa-sdk/commit/9229fb529c479ca72d305da9452ad1456be2bc6e))
+- choosing your signer, light account, modular account doc update ([#215](https://github.com/alchemyplatform/aa-sdk/issues/215)) ([f05b92d](https://github.com/alchemyplatform/aa-sdk/commit/f05b92d1ecd7465a495c97bea692d38e11c6c1ae))
+- remove AA_SDK_TESTS_SIGNER_TYPE constant exported from aa-core ([#232](https://github.com/alchemyplatform/aa-sdk/issues/232)) ([883c489](https://github.com/alchemyplatform/aa-sdk/commit/883c489b077d587b6c5b50c44d92b2a00f10e5ac))
+- **sepolia:** add min priority per bid ([#214](https://github.com/alchemyplatform/aa-sdk/issues/214)) ([075503e](https://github.com/alchemyplatform/aa-sdk/commit/075503e2b861c84838c115a7edb8e60ad38aec09))
+- use alchemy provider, light account for e2e tests ([#209](https://github.com/alchemyplatform/aa-sdk/issues/209)) ([124be68](https://github.com/alchemyplatform/aa-sdk/commit/124be68c5137a3511ec612e814265739e6909e75))
 
 # 0.2.0 (2023-11-03)
 
