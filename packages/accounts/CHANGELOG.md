@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.3.0 (2023-11-10)
+
+### Features
+
+- remove AA_SDK_TESTS_SIGNER_TYPE constant exported from aa-core ([#232](https://github.com/alchemyplatform/aa-sdk/issues/232)) ([5170a6b](https://github.com/alchemyplatform/aa-sdk/commit/5170a6b689c9834a9a2489f054b767e190fa38f7))
+
 # 0.2.0 (2023-11-03)
 
 ### Features
