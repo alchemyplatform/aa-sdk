@@ -390,7 +390,9 @@ export class SmartAccountProvider<
       // run this before paymaster middleware
       async (struct) => ({ ...struct, ...overrides }),
       this.customMiddleware ?? noOpMiddleware,
-      this.paymasterDataMiddleware
+      overrides?.paymasterAndData
+        ? noOpMiddleware
+        : this.paymasterDataMiddleware
     )(uo);
 
     return resolveProperties<UserOperationStruct>(result);
