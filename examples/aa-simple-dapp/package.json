@@ -1,6 +1,6 @@
 {
   "name": "aa-simple-dapp",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,9 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@alchemy/aa-accounts": "^0.2.0",
-    "@alchemy/aa-alchemy": "^0.2.0",
-    "@alchemy/aa-core": "^0.2.0",
+    "@alchemy/aa-accounts": "^1.0.0",
+    "@alchemy/aa-alchemy": "^1.0.0",
+    "@alchemy/aa-core": "^1.0.0",
     "@t3-oss/env-core": "^0.7.1",
     "@t3-oss/env-nextjs": "^0.7.1",
     "magic-sdk": "^20.1.1",
