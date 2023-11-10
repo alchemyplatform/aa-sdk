@@ -49,11 +49,7 @@
     "vitest": "^0.31.0"
   },
   "dependencies": {
-<<<<<<< HEAD
     "@alchemy/aa-core": "^1.0.0",
-=======
-    "@alchemy/aa-core": "^0.3.0",
->>>>>>> 34243f6 (chore(release): publish v0.3.0 [skip-ci])
     "@ethersproject/abi": "^5.7.0",
     "@ethersproject/abstract-signer": "^5.7.0",
     "@ethersproject/bytes": "^5.7.0",
