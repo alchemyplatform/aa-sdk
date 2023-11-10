@@ -6,7 +6,7 @@ import {
 import { polygonMumbai, type Chain } from "viem/chains";
 import { describe, it } from "vitest";
 import { LightSmartContractAccount } from "../account.js";
-import { createLightAccountAlchemyProvider } from "../provider/factory.js";
+import { createLightAccountProvider } from "../provider.js";
 
 const chain = polygonMumbai;
 
@@ -82,9 +82,9 @@ const givenConnectedProvider = ({
   owner: SmartAccountSigner;
   chain: Chain;
 }) =>
-  createLightAccountAlchemyProvider({
+  createLightAccountProvider({
     owner,
     chain,
-    rpcUrl: `${chain.rpcUrls.alchemy.http[0]}/${"test"}`,
+    rpcProvider: `${chain.rpcUrls.alchemy.http[0]}/${"test"}`,
     accountAddress: "0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4",
   });

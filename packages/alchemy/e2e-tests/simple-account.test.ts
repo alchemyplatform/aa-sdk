@@ -8,16 +8,10 @@ import {
   type UserOperationFeeOptions,
 } from "@alchemy/aa-core";
 import { Alchemy, Network } from "alchemy-sdk";
-import {
-  toHex,
-  type Address,
-  type Chain,
-  type HDAccount,
-  type Hash,
-} from "viem";
+import { toHex, type Address, type Chain, type Hash } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
 import { sepolia } from "viem/chains";
-import { AlchemyProvider } from "../src/provider.js";
+import { AlchemyProvider } from "../src/provider/base.js";
 import { API_KEY, OWNER_MNEMONIC, PAYMASTER_POLICY_ID } from "./constants.js";
 
 const chain = sepolia;
@@ -27,7 +21,8 @@ Logger.setLogLevel(LogLevel.DEBUG);
 
 describe("Simple Account Tests", () => {
   const ownerAccount = mnemonicToAccount(OWNER_MNEMONIC);
-  const owner: SmartAccountSigner<HDAccount> = {
+  const owner: SmartAccountSigner = {
+    inner: ownerAccount,
     signMessage: async (msg) =>
       ownerAccount.signMessage({
         message: { raw: toHex(msg) },
@@ -35,7 +30,6 @@ describe("Simple Account Tests", () => {
     signTypedData: async () => "0xHash",
     getAddress: async () => ownerAccount.address,
     signerType: "aa-sdk-tests",
-    inner: ownerAccount,
   };
 
   it("should successfully get counterfactual address", async () => {

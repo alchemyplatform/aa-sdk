@@ -1,6 +1,5 @@
 import * as AACoreModule from "@alchemy/aa-core";
 import {
-  SimpleSmartContractAccount,
   getDefaultEntryPointAddress,
   type BatchUserOperationCallData,
   type SmartAccountSigner,
@@ -9,7 +8,8 @@ import { Alchemy, Network } from "alchemy-sdk";
 import { toHex, type Address, type Chain, type HDAccount } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
-import { AlchemyProvider } from "../provider.js";
+import { AlchemyProvider } from "../base.js";
+import { createLightAccountAlchemyProvider } from "../light-account.js";
 
 describe("Alchemy Provider Tests", () => {
   const dummyMnemonic =
@@ -140,27 +140,11 @@ const givenConnectedProvider = ({
 }: {
   owner: SmartAccountSigner;
   chain: Chain;
-}) => {
-  const dummyEntryPointAddress =
-    "0x1234567890123456789012345678901234567890" as Address;
-
-  return new AlchemyProvider({
+}) =>
+  createLightAccountAlchemyProvider({
     rpcUrl: chain.rpcUrls.alchemy.http[0],
     jwt: "test",
+    owner,
     chain,
-  }).connect((provider) => {
-    const account = new SimpleSmartContractAccount({
-      entryPointAddress: dummyEntryPointAddress,
-      chain,
-      owner,
-      factoryAddress: AACoreModule.getDefaultSimpleAccountFactoryAddress(chain),
-      rpcClient: provider,
-    });
-
-    account.getAddress = vi.fn(
-      async () => "0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4"
-    );
-
-    return account;
+    accountAddress: "0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4",
   });
-};

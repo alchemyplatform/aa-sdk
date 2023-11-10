@@ -1,4 +1,3 @@
-import { AlchemyProviderConfigSchema } from "@alchemy/aa-alchemy";
 import {
   SignerSchema,
   createSmartAccountProviderConfigSchema,
@@ -18,9 +17,6 @@ export const LightAccountFactoryConfigSchema = z.object({
     .optional()
     .describe("Optional override for the account init code."),
 });
-
-export const LightAccountAlchemyProviderConfigSchema =
-  AlchemyProviderConfigSchema.and(LightAccountFactoryConfigSchema);
 
 export const LightAccountProviderConfigSchema =
   createSmartAccountProviderConfigSchema().and(LightAccountFactoryConfigSchema);

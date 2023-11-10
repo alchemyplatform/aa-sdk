@@ -3,7 +3,7 @@ import {
   resolveProperties,
   type UserOperationStruct,
 } from "@alchemy/aa-core";
-import type { AlchemyProvider } from "../provider.js";
+import type { AlchemyProvider } from "../provider/base.js";
 import type { ClientWithAlchemyMethods } from "./client.js";
 
 export const withAlchemyUserOpSimulation = <P extends AlchemyProvider>(

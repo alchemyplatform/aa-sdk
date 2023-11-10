@@ -1,4 +1,3 @@
-import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import {
   LocalAccountSigner,
   Logger,
@@ -16,13 +15,12 @@ import {
 import { generatePrivateKey } from "viem/accounts";
 import { sepolia } from "viem/chains";
 import {
-  getDefaultLightAccountFactoryAddress,
+  createLightAccountProvider,
   LightSmartContractAccount,
 } from "../../index.js";
 import {
   API_KEY,
   LIGHT_ACCOUNT_OWNER_MNEMONIC,
-  PAYMASTER_POLICY_ID,
   UNDEPLOYED_OWNER_MNEMONIC,
 } from "./constants.js";
 
@@ -189,36 +187,18 @@ const givenConnectedProvider = ({
   owner,
   chain,
   accountAddress,
-  feeOptions,
 }: {
   owner: SmartAccountSigner;
   chain: Chain;
   accountAddress?: Address;
   feeOptions?: UserOperationFeeOptions;
 }) => {
-  const provider = new AlchemyProvider({
-    apiKey: API_KEY!,
-    owner,
+  const provider = createLightAccountProvider({
+    rpcProvider: `${chain.rpcUrls.alchemy.http[0]}/${API_KEY!}`,
     chain,
-    opts: {
-      txMaxRetries: 10,
-      feeOptions: {
-        maxFeePerGas: { percentage: 100 },
-        maxPriorityFeePerGas: { percentage: 100 },
-        ...feeOptions,
-      },
-    },
-  }).connect(
-    (rpcClient) =>
-      new LightSmartContractAccount({
-        chain,
-        owner,
-        factoryAddress: getDefaultLightAccountFactoryAddress(chain),
-        rpcClient,
-        accountAddress,
-      })
-  );
-  provider.withAlchemyGasManager({
-    policyId: PAYMASTER_POLICY_ID,
+    owner,
+    accountAddress,
   });
+
+  return provider;
 };

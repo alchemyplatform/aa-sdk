@@ -8,20 +8,20 @@ import {
 } from "@alchemy/aa-core";
 import { Alchemy } from "alchemy-sdk";
 import { type HttpTransport } from "viem";
-import { SupportedChains } from "./chains.js";
-import { getDefaultUserOperationFeeOptions } from "./defaults.js";
-import type { ClientWithAlchemyMethods } from "./middleware/client.js";
-import { withAlchemyGasFeeEstimator } from "./middleware/gas-fees.js";
+import { SupportedChains } from "../chains.js";
+import { getDefaultUserOperationFeeOptions } from "../defaults.js";
+import type { ClientWithAlchemyMethods } from "../middleware/client.js";
+import { withAlchemyGasFeeEstimator } from "../middleware/gas-fees.js";
 import {
   withAlchemyGasManager,
   type AlchemyGasManagerConfig,
-} from "./middleware/gas-manager.js";
-import { withAlchemyUserOpSimulation } from "./middleware/simulate-uo.js";
+} from "../middleware/gas-manager.js";
+import { withAlchemyUserOpSimulation } from "../middleware/simulate-uo.js";
 import {
   AlchemyProviderConfigSchema,
   AlchemySdkClientSchema,
-} from "./schema.js";
-import type { AlchemyProviderConfig } from "./type.js";
+} from "../schema.js";
+import type { AlchemyProviderConfig } from "../type.js";
 
 export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
   private rpcUrl: string;
