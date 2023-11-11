@@ -4,7 +4,13 @@ import {
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import { Alchemy, Network } from "alchemy-sdk";
-import { toHex, type Address, type Chain, type Hash } from "viem";
+import {
+  toHex,
+  type Address,
+  type Chain,
+  type Hash,
+  type HDAccount,
+} from "viem";
 import { mnemonicToAccount } from "viem/accounts";
 import { sepolia } from "viem/chains";
 import { AlchemyProvider } from "../src/provider.js";
@@ -15,7 +21,7 @@ const network = Network.ETH_SEPOLIA;
 
 describe("Simple Account Tests", () => {
   const ownerAccount = mnemonicToAccount(OWNER_MNEMONIC);
-  const owner: SmartAccountSigner = {
+  const owner: SmartAccountSigner<HDAccount> = {
     signMessage: async (msg) =>
       ownerAccount.signMessage({
         message: { raw: toHex(msg) },
@@ -23,6 +29,7 @@ describe("Simple Account Tests", () => {
     signTypedData: async () => "0xHash",
     getAddress: async () => ownerAccount.address,
     signerType: "aa-sdk-tests",
+    inner: ownerAccount,
   };
 
   it("should successfully get counterfactual address", async () => {
@@ -180,6 +187,10 @@ describe("Simple Account Tests", () => {
           "contractAddress": "0xdcf5d3e08c5007dececdb34808c49331bd82a247",
           "tokenBalance": "0x00000000000000000000000000000000000000000000000000000000000f423f",
         },
+        {
+          "contractAddress": "0xfff9976782d46cc05630d1f6ebab18b2324d6b14",
+          "tokenBalance": "0x0000000000000000000000000000000000000000000000000000000000000000",
+        },
       ]
     `);
   }, 50000);
@@ -223,6 +234,9 @@ const givenConnectedProvider = ({
     apiKey: API_KEY!,
     chain,
     feeOpts,
+    opts: {
+      txMaxRetries: 10,
+    },
   }).connect(
     (provider) =>
       new SimpleSmartContractAccount({
