@@ -32,7 +32,7 @@ yarn add @alchemy/aa-accounts
 ```
 
 ```bash [npm]
-npm i @alchemy/aa-accounts
+npm i -s @alchemy/aa-accounts
 ```
 
 ```bash [pnpm]
