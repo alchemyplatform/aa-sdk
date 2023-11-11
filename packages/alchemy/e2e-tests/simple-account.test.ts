@@ -4,7 +4,13 @@ import {
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import { Alchemy, Network } from "alchemy-sdk";
-import { toHex, type Address, type Chain, type Hash } from "viem";
+import {
+  toHex,
+  type Address,
+  type Chain,
+  type Hash,
+  type HDAccount,
+} from "viem";
 import { mnemonicToAccount } from "viem/accounts";
 import { sepolia } from "viem/chains";
 import { AlchemyProvider } from "../src/provider.js";
@@ -15,7 +21,7 @@ const network = Network.ETH_SEPOLIA;
 
 describe("Simple Account Tests", () => {
   const ownerAccount = mnemonicToAccount(OWNER_MNEMONIC);
-  const owner: SmartAccountSigner = {
+  const owner: SmartAccountSigner<HDAccount> = {
     signMessage: async (msg) =>
       ownerAccount.signMessage({
         message: { raw: toHex(msg) },
@@ -23,6 +29,7 @@ describe("Simple Account Tests", () => {
     signTypedData: async () => "0xHash",
     getAddress: async () => ownerAccount.address,
     signerType: "aa-sdk-tests",
+    inner: ownerAccount,
   };
 
   it("should successfully get counterfactual address", async () => {
@@ -90,6 +97,34 @@ describe("Simple Account Tests", () => {
           data: "0x",
         })
     ).rejects.toThrow();
+  }, 50000);
+
+  it("should support overrides for buildUserOperation", async () => {
+    const signer = givenConnectedProvider({
+      owner,
+      chain,
+    }).withAlchemyGasManager({
+      policyId: PAYMASTER_POLICY_ID,
+    });
+
+    const overrides = {
+      maxFeePerGas: 100000000n,
+      maxPriorityFeePerGas: 100000000n,
+      paymasterAndData: "0x",
+    };
+    const uoStruct = await signer.buildUserOperation(
+      {
+        target: await signer.getAddress(),
+        data: "0x",
+      },
+      overrides
+    );
+
+    expect(uoStruct.maxFeePerGas).toEqual(overrides.maxFeePerGas);
+    expect(uoStruct.maxPriorityFeePerGas).toEqual(
+      overrides.maxPriorityFeePerGas
+    );
+    expect(uoStruct.paymasterAndData).toEqual(overrides.paymasterAndData);
   }, 50000);
 
   it("should successfully use paymaster with fee opts", async () => {

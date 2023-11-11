@@ -53,3 +53,7 @@ A Promise containing the transaction hash
 ### `request: RpcTransactionRequest`
 
 The `RpcTransactionRequest` object representing a traditional ethereum transaction
+
+### `overrides?: UserOperationOverrides`
+
+Optional paramter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas` or `paymasterAndData` on the user operation request

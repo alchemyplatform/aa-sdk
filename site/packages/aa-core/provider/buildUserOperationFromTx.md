@@ -59,3 +59,7 @@ A Promise containing the _unsigned_ UserOperation struct converted from the inpu
 ### `tx: RpcTransactionRequest`
 
 The `RpcTransactionRequest` object representing a traditional ethereum transaction
+
+### `overrides?: UserOperationOverrides`
+
+Optional paramter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas` or `paymasterAndData` on the user operation request
