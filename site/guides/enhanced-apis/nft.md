@@ -116,4 +116,4 @@ Once you've configured the above, you can copy the following snippet to try it y
 
 <<< @/snippets/enhanced-apis-example/viem-client/nft/example.ts
 
-That's it! You can even extend the client above to use even more of Alchemy's [Enhanced APIs](https://www.alchemy.com/enhanced-apis) if you so choose. Check out [How to fetch a Smart Account's ERC-20 Tokens](/guides/enhanced-apis-token) for an example.
+That's it! You can even extend the client above to use even more of Alchemy's [Enhanced APIs](https://www.alchemy.com/enhanced-apis) if you so choose. Check out [How to fetch a Smart Account's ERC-20 Tokens](/guides/enhanced-apis/token) for an example.
