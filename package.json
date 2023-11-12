@@ -16,7 +16,7 @@
     "build:examples": "lerna run build",
     "clean": "lerna run clean",
     "test": "lerna run test:run",
-    "test:e2e": "lerna run test:run-e2e --concurrency=1 --scope=@alchemy/aa-accounts",
+    "test:e2e": "lerna run test:run-e2e --concurrency=1",
     "lint:write": "eslint . --fix && prettier --write --ignore-unknown .",
     "lint:check": "eslint . && prettier --check .",
     "prepare": "husky install",
