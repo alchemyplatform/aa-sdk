@@ -1,6 +1,6 @@
 {
   "name": "@alchemy/aa-signers",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "A collection of signers used to create ERC-4337 smart accounts",
   "author": "Alchemy",
   "license": "MIT",
@@ -58,7 +58,10 @@
   "homepage": "https://github.com/alchemyplatform/aa-sdk#readme",
   "gitHead": "ee46e8bb857de3b631044fa70714ea706d9e317d",
   "dependencies": {
-    "@alchemy/aa-core": "^0.2.0",
+    "@alchemy/aa-core": "^1.0.0",
     "viem": "^1.16.2"
+  },
+  "peerDependencies": {
+    "magic-sdk": "^21.2.0"
   }
 }
