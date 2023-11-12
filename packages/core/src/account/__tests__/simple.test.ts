@@ -17,9 +17,9 @@ describe("Account Simple Tests", () => {
   const chain = polygonMumbai;
 
   it("should correctly sign the message", async () => {
-    const signer = givenConnectedProvider({ owner, chain });
+    const provider = givenConnectedProvider({ owner, chain });
     expect(
-      await signer.signMessage(
+      await provider.signMessage(
         "0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b"
       )
     ).toBe(
@@ -28,7 +28,7 @@ describe("Account Simple Tests", () => {
   });
 
   it("should correctly encode batch transaction data", async () => {
-    const signer = givenConnectedProvider({ owner, chain });
+    const provider = givenConnectedProvider({ owner, chain });
     const data = [
       {
         target: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
@@ -40,7 +40,9 @@ describe("Account Simple Tests", () => {
       },
     ] satisfies BatchUserOperationCallData;
 
-    expect(await signer.account.encodeBatchExecute(data)).toMatchInlineSnapshot(
+    expect(
+      await provider.account.encodeBatchExecute(data)
+    ).toMatchInlineSnapshot(
       '"0x18dfb3c7000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000002000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef0000000000000000000000008ba1f109551bd432803012645ac136ddd64dba720000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000004deadbeef000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004cafebabe00000000000000000000000000000000000000000000000000000000"'
     );
   });

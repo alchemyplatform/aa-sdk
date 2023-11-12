@@ -23,19 +23,19 @@ describe("Simple Account Tests", async () => {
   const owner = Wallet.fromMnemonic(OWNER_MNEMONIC);
 
   it("should successfully get counterfactual address", async () => {
-    const signer = givenConnectedProvider({ alchemyProvider, owner });
-    expect(await signer.getAddress()).toMatchInlineSnapshot(
+    const provider = givenConnectedProvider({ alchemyProvider, owner });
+    expect(await provider.getAddress()).toMatchInlineSnapshot(
       `"0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4"`
     );
   });
 
   it("should execute successfully", async () => {
-    const signer = givenConnectedProvider({ alchemyProvider, owner });
-    const result = await signer.sendUserOperation({
-      target: (await signer.getAddress()) as `0x${string}`,
+    const provider = givenConnectedProvider({ alchemyProvider, owner });
+    const result = await provider.sendUserOperation({
+      target: (await provider.getAddress()) as `0x${string}`,
       data: "0x",
     });
-    const txnHash = signer.waitForUserOperationTransaction(
+    const txnHash = provider.waitForUserOperationTransaction(
       result.hash as `0x${string}`
     );
 
@@ -44,14 +44,14 @@ describe("Simple Account Tests", async () => {
 
   it("should fail to execute if account address is not deployed and not correct", async () => {
     const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
-    const signer = givenConnectedProvider({
+    const provider = givenConnectedProvider({
       alchemyProvider,
       owner,
       accountAddress,
     });
 
-    const result = signer.sendUserOperation({
-      target: (await signer.getAddress()) as `0x${string}`,
+    const result = provider.sendUserOperation({
+      target: (await provider.getAddress()) as `0x${string}`,
       data: "0x",
     });
 

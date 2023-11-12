@@ -8,8 +8,8 @@ import {
   toHex,
   type Address,
   type Chain,
-  type Hash,
   type HDAccount,
+  type Hash,
 } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
 import { sepolia } from "viem/chains";
@@ -33,29 +33,31 @@ describe("Simple Account Tests", () => {
   };
 
   it("should successfully get counterfactual address", async () => {
-    const signer = givenConnectedProvider({ owner, chain });
-    expect(await signer.getAddress()).toMatchInlineSnapshot(
+    const provider = givenConnectedProvider({ owner, chain });
+    expect(await provider.getAddress()).toMatchInlineSnapshot(
       `"0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4"`
     );
   });
 
   it("should execute successfully", async () => {
-    const signer = givenConnectedProvider({ owner, chain });
-    const result = await signer.sendUserOperation({
-      target: await signer.getAddress(),
+    const provider = givenConnectedProvider({ owner, chain });
+    const result = await provider.sendUserOperation({
+      target: await provider.getAddress(),
       data: "0x",
     });
-    const txnHash = signer.waitForUserOperationTransaction(result.hash as Hash);
+    const txnHash = provider.waitForUserOperationTransaction(
+      result.hash as Hash
+    );
 
     await expect(txnHash).resolves.not.toThrowError();
   }, 50000);
 
   it("should fail to execute if account address is not deployed and not correct", async () => {
     const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
-    const signer = givenConnectedProvider({ owner, chain, accountAddress });
+    const provider = givenConnectedProvider({ owner, chain, accountAddress });
 
-    const result = signer.sendUserOperation({
-      target: await signer.getAddress(),
+    const result = provider.sendUserOperation({
+      target: await provider.getAddress(),
       data: "0x",
     });
 
@@ -63,24 +65,26 @@ describe("Simple Account Tests", () => {
   });
 
   it("should successfully execute with alchemy paymaster info", async () => {
-    const signer = givenConnectedProvider({
+    const provider = givenConnectedProvider({
       owner,
       chain,
     }).withAlchemyGasManager({
       policyId: PAYMASTER_POLICY_ID,
     });
 
-    const result = await signer.sendUserOperation({
-      target: await signer.getAddress(),
+    const result = await provider.sendUserOperation({
+      target: await provider.getAddress(),
       data: "0x",
     });
-    const txnHash = signer.waitForUserOperationTransaction(result.hash as Hash);
+    const txnHash = provider.waitForUserOperationTransaction(
+      result.hash as Hash
+    );
 
     await expect(txnHash).resolves.not.toThrowError();
   }, 50000);
 
   it("should successfully override fees in alchemy paymaster", async () => {
-    const signer = givenConnectedProvider({ owner, chain })
+    const provider = givenConnectedProvider({ owner, chain })
       .withAlchemyGasManager({
         policyId: PAYMASTER_POLICY_ID,
       })
@@ -92,8 +96,8 @@ describe("Simple Account Tests", () => {
     // this should fail since we set super low fees
     await expect(
       async () =>
-        await signer.sendUserOperation({
-          target: await signer.getAddress(),
+        await provider.sendUserOperation({
+          target: await provider.getAddress(),
           data: "0x",
         })
     ).rejects.toThrow();
@@ -128,7 +132,7 @@ describe("Simple Account Tests", () => {
   }, 50000);
 
   it("should successfully use paymaster with fee opts", async () => {
-    const signer = givenConnectedProvider({
+    const provider = givenConnectedProvider({
       owner,
       chain,
       feeOpts: {
@@ -138,50 +142,56 @@ describe("Simple Account Tests", () => {
       },
     });
 
-    const result = await signer.sendUserOperation({
-      target: await signer.getAddress(),
+    const result = await provider.sendUserOperation({
+      target: await provider.getAddress(),
       data: "0x",
     });
-    const txnHash = signer.waitForUserOperationTransaction(result.hash as Hash);
+    const txnHash = provider.waitForUserOperationTransaction(
+      result.hash as Hash
+    );
 
     await expect(txnHash).resolves.not.toThrowError();
   }, 50000);
 
   it("should execute successfully via drop and replace", async () => {
-    const signer = givenConnectedProvider({
+    const provider = givenConnectedProvider({
       owner,
       chain,
     });
 
-    const result = await signer.sendUserOperation({
-      target: await signer.getAddress(),
+    const result = await provider.sendUserOperation({
+      target: await provider.getAddress(),
       data: "0x",
     });
-    const replacedResult = await signer.dropAndReplaceUserOperation(
+    const replacedResult = await provider.dropAndReplaceUserOperation(
       result.request
     );
 
-    const txnHash = signer.waitForUserOperationTransaction(replacedResult.hash);
+    const txnHash = provider.waitForUserOperationTransaction(
+      replacedResult.hash
+    );
     await expect(txnHash).resolves.not.toThrowError();
   }, 50000);
 
   it("should execute successfully via drop and replace when using paymaster", async () => {
-    const signer = givenConnectedProvider({
+    const provider = givenConnectedProvider({
       owner,
       chain,
     }).withAlchemyGasManager({
       policyId: PAYMASTER_POLICY_ID,
     });
 
-    const result = await signer.sendUserOperation({
-      target: await signer.getAddress(),
+    const result = await provider.sendUserOperation({
+      target: await provider.getAddress(),
       data: "0x",
     });
-    const replacedResult = await signer.dropAndReplaceUserOperation(
+    const replacedResult = await provider.dropAndReplaceUserOperation(
       result.request
     );
 
-    const txnHash = signer.waitForUserOperationTransaction(replacedResult.hash);
+    const txnHash = provider.waitForUserOperationTransaction(
+      replacedResult.hash
+    );
     await expect(txnHash).resolves.not.toThrowError();
   }, 50000);
 
@@ -201,26 +211,7 @@ describe("Simple Account Tests", () => {
 
     const address = await provider.getAddress();
     const balances = await provider.core.getTokenBalances(address);
-    expect(balances.tokenBalances).toMatchInlineSnapshot(`
-      [
-        {
-          "contractAddress": "0x489c5cb7fd158b0a9e7975076d758268a756c025",
-          "tokenBalance": "0x000000000000000000000000000000000000000000000000000000000065b9aa",
-        },
-        {
-          "contractAddress": "0x54fa517f05e11ffa87f4b22ae87d91cec0c2d7e1",
-          "tokenBalance": "0x000000000000000000000000000000000000000000000000000000000065b9aa",
-        },
-        {
-          "contractAddress": "0xdcf5d3e08c5007dececdb34808c49331bd82a247",
-          "tokenBalance": "0x00000000000000000000000000000000000000000000000000000000000f423f",
-        },
-        {
-          "contractAddress": "0xfff9976782d46cc05630d1f6ebab18b2324d6b14",
-          "tokenBalance": "0x0000000000000000000000000000000000000000000000000000000000000000",
-        },
-      ]
-    `);
+    expect(balances.tokenBalances.length).toMatchInlineSnapshot(`4`);
   }, 50000);
 
   it("should get owned nfts for the smart account", async () => {

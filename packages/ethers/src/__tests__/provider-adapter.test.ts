@@ -22,9 +22,9 @@ describe("Simple Account Tests", async () => {
   const alchemyProvider = await alchemy.config.getProvider();
 
   it("should correctly sign the message", async () => {
-    const signer = givenConnectedProvider({ alchemyProvider, owner });
+    const provider = givenConnectedProvider({ alchemyProvider, owner });
     expect(
-      await signer.signMessage(
+      await provider.signMessage(
         "0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b"
       )
     ).toBe(
