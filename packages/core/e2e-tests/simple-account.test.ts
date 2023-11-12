@@ -29,7 +29,9 @@ describe("Simple Account Tests", () => {
       target: await provider.getAddress(),
       data: "0x",
     });
-    const txnHash = provider.waitForUserOperationTransaction(result.hash as Hash);
+    const txnHash = provider.waitForUserOperationTransaction(
+      result.hash as Hash
+    );
 
     await expect(txnHash).resolves.not.toThrowError();
   }, 60000);
