@@ -127,12 +127,17 @@ export default defineConfig({
             link: "/transferring-ownership",
           },
           {
-            text: "How to Fetch a Smart Account's NFTs",
-            link: "/enhanced-apis-nft",
-          },
-          {
-            text: "How to Fetch a Smart Account's ERC-20 Tokens",
-            link: "/enhanced-apis-token",
+            text: "Smart Account Data",
+            items: [
+              {
+                text: "How to Fetch a Smart Account's NFTs",
+                link: "/enhanced-apis-nfts",
+              },
+              {
+                text: "How to Fetch a Smart Account's ERC-20 Tokens",
+                link: "/enhanced-apis-token",
+              },
+            ],
           },
         ],
       },

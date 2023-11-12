@@ -55,7 +55,7 @@ Then, all we need to do is create an `alchemy` client from the Alchemy SDK, crea
 :::tip Note
 Note that we must configure the Alchemy SDK client to have the same API Key and blockchain network as Alchemy Provider it is extending via `withAlchemyEnhancedApis`. This method explicitly checks this requirement and will throw an error at runtime if not satisfied.
 
-Additionally, since the Alchemy SDK client does not support JWT authentication, an `AlchemyProvider` initialized with JWTs cannot use this method. We must be initialize the provider with an API key or RPC URL.
+Additionally, since the Alchemy SDK client does not yet support JWT authentication, an `AlchemyProvider` initialized with JWTs cannot use this method. We must be initialize the provider with an API key or RPC URL.
 :::
 
 ## 2. Alchemy SDK
@@ -88,7 +88,7 @@ There are so many more Enhanced APIs the the Alchemy SDK exposes, and can be use
 
 ## 3. Custom Viem Client
 
-One of the best parts of Account Kit is that it's build atop [viem](https://viem.sh/). This means we can leverage utility methods to easily generate a JSON-RPC client, extend it with custom functionality to call Alchemy Enhanced APIs, and expose type-safe decorators to rapidly improve development.
+Since Account Kit is built atop [viem](https://viem.sh/), we can leverage utility methods to easily generate a JSON-RPC client, extend it with custom functionality to call Alchemy Enhanced APIs, and expose type-safe decorators to rapidly improve development.
 
 To see how we can create a custom viem client to access Alchemy Enhanced APIs, let's break down each of the following files:
 
