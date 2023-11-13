@@ -48,7 +48,7 @@ const givenSigner = async (auth = true) => {
   if (auth) {
     await signer.authenticate({
       authenticate: () => {
-        inner.auth.loginWithCredential()
+        inner.auth.loginWithCredential();
 
         return Promise.resolve();
       },
