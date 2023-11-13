@@ -28,7 +28,7 @@ There are two ways you can batch transactions using `SmartAccountProvider`:
 2. via `sendTransactions`
 
 :::tip Note 1: `SimpleSmartContractAccount` and `LightSmartContractAccount`
-Both `SimpleSmartContractAccount` and `LightSmartContractAccount` implements `encodeBatchExecute`, thus supports batching `UserOperations` out of the box.
+Both `SimpleSmartContractAccount` and `LightSmartContractAccount` implement `encodeBatchExecute`, thus supports batching `UserOperations` out of the box.
 :::
 
 :::tip Note 2: Transactions Batched as a Single User Operation
