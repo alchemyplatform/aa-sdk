@@ -34,17 +34,17 @@ describe("Web3Auth Signer Tests", () => {
     const address = await signer.getAuthDetails();
     expect(address).toMatchInlineSnapshot(`
       {
-        "aggregateVerifier": "test",
-        "dappShare": "test",
-        "email": "test",
-        "idToken": "test",
-        "name": "test",
-        "oAuthAccessToken": "test",
-        "oAuthIdToken": "test",
-        "profileImage": "test",
-        "typeOfLogin": "test",
-        "verifier": "test",
-        "verifierId": "test",
+        "aggregateVerifier": "aggregateVerifier",
+        "dappShare": "dappShare",
+        "email": "email",
+        "idToken": "idToken",
+        "name": "name",
+        "oAuthAccessToken": "oAuthAccessToken",
+        "oAuthIdToken": "oAuthIdToken",
+        "profileImage": "profileImage",
+        "typeOfLogin": "typeOfLogin",
+        "verifier": "verifier",
+        "verifierId": "verifierId",
       }
     `);
   });
