@@ -74,3 +74,7 @@ A Promise containing the _unsigned_ UserOperation struct resulting from the midd
 - `target: Address` - the target of the call (equivalent to `to` in a transaction)
 - `data: Hex` - can be either `0x` or a call data string
 - `value?: bigint` - optionally, set the value in wei you want to send to the target
+
+### `overrides?: UserOperationOverrides`
+
+Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas` or `paymasterAndData` on the user operation request

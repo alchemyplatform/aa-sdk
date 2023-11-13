@@ -99,6 +99,34 @@ describe("Simple Account Tests", () => {
     ).rejects.toThrow();
   }, 50000);
 
+  it("should support overrides for buildUserOperation", async () => {
+    const signer = givenConnectedProvider({
+      owner,
+      chain,
+    }).withAlchemyGasManager({
+      policyId: PAYMASTER_POLICY_ID,
+    });
+
+    const overrides = {
+      maxFeePerGas: 100000000n,
+      maxPriorityFeePerGas: 100000000n,
+      paymasterAndData: "0x",
+    };
+    const uoStruct = await signer.buildUserOperation(
+      {
+        target: await signer.getAddress(),
+        data: "0x",
+      },
+      overrides
+    );
+
+    expect(uoStruct.maxFeePerGas).toEqual(overrides.maxFeePerGas);
+    expect(uoStruct.maxPriorityFeePerGas).toEqual(
+      overrides.maxPriorityFeePerGas
+    );
+    expect(uoStruct.paymasterAndData).toEqual(overrides.paymasterAndData);
+  }, 50000);
+
   it("should successfully use paymaster with fee opts", async () => {
     const signer = givenConnectedProvider({
       owner,

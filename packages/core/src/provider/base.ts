@@ -202,8 +202,11 @@ export class SmartAccountProvider<
     return this.account.signTypedDataWith6492(params);
   };
 
-  sendTransaction = async (request: RpcTransactionRequest): Promise<Hash> => {
-    const uoStruct = await this.buildUserOperationFromTx(request);
+  sendTransaction = async (
+    request: RpcTransactionRequest,
+    overrides?: UserOperationOverrides
+  ): Promise<Hash> => {
+    const uoStruct = await this.buildUserOperationFromTx(request, overrides);
 
     const { hash } = await this._sendUserOperation(uoStruct);
 
@@ -211,19 +214,22 @@ export class SmartAccountProvider<
   };
 
   buildUserOperationFromTx = async (
-    request: RpcTransactionRequest
+    request: RpcTransactionRequest,
+    overrides?: UserOperationOverrides
   ): Promise<UserOperationStruct> => {
     if (!request.to) {
       throw new Error("transaction is missing to address");
     }
 
-    const overrides: UserOperationOverrides = {};
-    if (request.maxFeePerGas) {
-      overrides.maxFeePerGas = request.maxFeePerGas;
+    const _overrides: UserOperationOverrides = {};
+    if (overrides?.maxFeePerGas || request.maxFeePerGas) {
+      _overrides.maxFeePerGas = overrides?.maxFeePerGas ?? request.maxFeePerGas;
     }
-    if (request.maxPriorityFeePerGas) {
-      overrides.maxPriorityFeePerGas = request.maxPriorityFeePerGas;
+    if (overrides?.maxPriorityFeePerGas || request.maxPriorityFeePerGas) {
+      _overrides.maxPriorityFeePerGas =
+        overrides?.maxPriorityFeePerGas ?? request.maxPriorityFeePerGas;
     }
+    _overrides.paymasterAndData = overrides?.paymasterAndData;
 
     return this.buildUserOperation(
       {
@@ -231,11 +237,14 @@ export class SmartAccountProvider<
         data: request.data ?? "0x",
         value: request.value ? fromHex(request.value, "bigint") : 0n,
       },
-      overrides
+      _overrides
     );
   };
 
-  sendTransactions = async (requests: RpcTransactionRequest[]) => {
+  sendTransactions = async (
+    requests: RpcTransactionRequest[],
+    overrides?: UserOperationOverrides
+  ) => {
     const batch = requests.map((request) => {
       if (!request.to) {
         throw new Error(
@@ -261,16 +270,17 @@ export class SmartAccountProvider<
         .filter((x) => x.maxPriorityFeePerGas != null)
         .map((x) => fromHex(x.maxPriorityFeePerGas!, "bigint"))
     );
-    const overrides: UserOperationOverrides = {};
-    if (maxFeePerGas != null) {
-      overrides.maxFeePerGas = maxFeePerGas;
+    const _overrides: UserOperationOverrides = {};
+    if (overrides?.maxFeePerGas || maxFeePerGas != null) {
+      _overrides.maxFeePerGas = overrides?.maxFeePerGas ?? maxFeePerGas;
     }
 
-    if (maxPriorityFeePerGas != null) {
-      overrides.maxPriorityFeePerGas = maxPriorityFeePerGas;
+    if (overrides?.maxPriorityFeePerGas || maxPriorityFeePerGas != null) {
+      _overrides.maxPriorityFeePerGas =
+        overrides?.maxPriorityFeePerGas ?? maxPriorityFeePerGas;
     }
 
-    const { hash } = await this.sendUserOperation(batch, overrides);
+    const { hash } = await this.sendUserOperation(batch, _overrides);
 
     return await this.waitForUserOperationTransaction(hash as Hash);
   };
@@ -353,7 +363,8 @@ export class SmartAccountProvider<
   };
 
   dropAndReplaceUserOperation = async (
-    uoToDrop: UserOperationRequest
+    uoToDrop: UserOperationRequest,
+    overrides?: UserOperationOverrides
   ): Promise<SendUserOperationResult> => {
     const uoToSubmit = {
       initCode: uoToDrop.initCode,
@@ -366,9 +377,9 @@ export class SmartAccountProvider<
     // Run once to get the fee estimates
     // This can happen at any part of the middleware stack, so we want to run it all
     const { maxFeePerGas, maxPriorityFeePerGas } =
-      await this._runMiddlewareStack(uoToSubmit);
+      await this._runMiddlewareStack(uoToSubmit, overrides);
 
-    const overrides: UserOperationOverrides = {
+    const _overrides: UserOperationOverrides = {
       maxFeePerGas: bigIntMax(
         BigInt(maxFeePerGas ?? 0n),
         bigIntPercent(uoToDrop.maxFeePerGas, 110n)
@@ -377,9 +388,10 @@ export class SmartAccountProvider<
         BigInt(maxPriorityFeePerGas ?? 0n),
         bigIntPercent(uoToDrop.maxPriorityFeePerGas, 110n)
       ),
+      paymasterAndData: uoToDrop.paymasterAndData,
     };
 
-    const uoToSend = await this._runMiddlewareStack(uoToSubmit, overrides);
+    const uoToSend = await this._runMiddlewareStack(uoToSubmit, _overrides);
     return this._sendUserOperation(uoToSend);
   };
 
