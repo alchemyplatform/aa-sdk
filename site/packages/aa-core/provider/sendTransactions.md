@@ -77,4 +77,4 @@ An `RpcTransactionRequest` array representing a traditional ethereum transaction
 
 ### `overrides?: UserOperationOverrides`
 
-Optional paramter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas` or `paymasterAndData` on the user operation request
+Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas` or `paymasterAndData` on the user operation request
