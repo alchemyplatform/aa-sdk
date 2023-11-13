@@ -19,7 +19,7 @@ next:
 
 # `@alchemy/aa-ethers`
 
-This package contains `EthersProviderAdapter` and `AccountSigner`, respective extensions of the `JsonRpcProvider` and `Signer` classes defined in `ethers.js` external library.
+This package contains `EthersProviderAdapter` and `AccountSigner`, respective extensions of the [`JsonRpcProvider`](https://docs.ethers.org/v5/api/providers/jsonrpc-provider/) and [`Signer`](https://docs.ethers.org/v5/api/signer/#Signer-getaddress) classes defined in [`ethers.js`](https://docs.ethers.org/v5/) external library.
 
 If you currently rely `ethers.js` for web3 development, you can use these `ethers.js`-compatible `JsonRpcProvider` and `Signer` to integrate Account Abstraction into your dApp. You may also find the [`util`](./utils/introduction.md) methods helpful.
 
@@ -36,7 +36,7 @@ yarn add @alchemy/aa-ethers
 ```
 
 ```bash [npm]
-npm i @alchemy/aa-ethers
+npm i -s @alchemy/aa-ethers
 ```
 
 ```bash [pnpm]
