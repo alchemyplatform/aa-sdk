@@ -39,7 +39,6 @@ import { polygonMumbai } from "viem/chains";
 const chain = polygonMumbai;
 
 // 1. Create a provider using EthersProviderAdapter
-
 const alchemy = new Alchemy({
   apiKey: process.env.API_KEY!,
   network: Network.MATIC_MUMBAI,
