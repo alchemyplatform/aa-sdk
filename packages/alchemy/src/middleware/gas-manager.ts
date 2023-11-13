@@ -1,11 +1,18 @@
 import {
   deepHexlify,
+  filterUndefined,
+  isPercentage,
   resolveProperties,
   type AccountMiddlewareFn,
+  type Hex,
+  type Percentage,
+  type UserOperationFeeOptions,
   type UserOperationRequest,
 } from "@alchemy/aa-core";
+import { fromHex } from "viem";
 import type { AlchemyProvider } from "../provider.js";
 import type { ClientWithAlchemyMethods } from "./client.js";
+import type { RequestGasAndPaymasterAndDataOverrides } from "./types/index.js";
 
 export interface AlchemyGasManagerConfig {
   policyId: string;
@@ -47,7 +54,7 @@ export const withAlchemyGasManager = <P extends AlchemyProvider>(
         .withGasEstimator(async (struct, overrides) => {
           // but if user is bypassing paymaster to fallback to having the account to pay the gas (one-off override),
           // we cannot delegate gas estimation to the bundler because paymaster middleware will not be called
-          if (overrides?.paymasterAndData !== undefined) {
+          if (overrides?.paymasterAndData != null) {
             const result = await fallbackGasEstimator(struct, overrides);
             return {
               callGasLimit: (await result.callGasLimit) ?? 0n,
@@ -69,7 +76,7 @@ export const withAlchemyGasManager = <P extends AlchemyProvider>(
 
           // but if user is bypassing paymaster to fallback to having the account to pay the gas (one-off override),
           // we cannot delegate gas estimation to the bundler because paymaster middleware will not be called
-          if (overrides?.paymasterAndData !== undefined) {
+          if (overrides?.paymasterAndData != null) {
             const result = await fallbackFeeDataGetter(struct, overrides);
             maxFeePerGas = (await result.maxFeePerGas) ?? maxFeePerGas;
             maxPriorityFeePerGas =
@@ -145,19 +152,41 @@ const withAlchemyPaymasterAndDataMiddleware = <P extends AlchemyProvider>(
 const withAlchemyGasAndPaymasterAndDataMiddleware = <P extends AlchemyProvider>(
   provider: P,
   config: AlchemyGasManagerConfig
-): Parameters<P["withPaymasterMiddleware"]>["0"] => ({
-  paymasterDataMiddleware: async (struct) => {
+): Parameters<AlchemyProvider["withPaymasterMiddleware"]>["0"] => ({
+  paymasterDataMiddleware: async (struct, overrides) => {
     const userOperation: UserOperationRequest = deepHexlify(
       await resolveProperties(struct)
     );
 
-    let feeOverride = undefined;
-    if (userOperation.maxFeePerGas && BigInt(userOperation.maxFeePerGas) > 0n) {
-      feeOverride = {
-        maxFeePerGas: userOperation.maxFeePerGas,
-        maxPriorityFeePerGas: userOperation.maxPriorityFeePerGas,
-      };
-    }
+    const overrideField = (
+      field: keyof UserOperationFeeOptions
+    ): Hex | Percentage | undefined => {
+      // one-off absolute override
+      if (overrides?.[field] != null) {
+        return deepHexlify(overrides[field]);
+      }
+
+      // provider level fee options with percentage
+      if (isPercentage(provider.feeOptions?.[field])) {
+        return {
+          percentage: 100 + Number(provider.feeOptions?.[field]?.percentage),
+        };
+      }
+
+      if (fromHex(userOperation[field], "bigint") > 0n) {
+        return userOperation[field];
+      }
+
+      return undefined;
+    };
+
+    const _overrides: RequestGasAndPaymasterAndDataOverrides = filterUndefined({
+      maxFeePerGas: overrideField("maxFeePerGas"),
+      maxPriorityFeePerGas: overrideField("maxPriorityFeePerGas"),
+      callGasLimit: overrideField("callGasLimit"),
+      verificationGasLimit: overrideField("verificationGasLimit"),
+      preVerificationGas: overrideField("preVerificationGas"),
+    });
 
     const result = await (
       provider.rpcClient as ClientWithAlchemyMethods
@@ -169,7 +198,8 @@ const withAlchemyGasAndPaymasterAndDataMiddleware = <P extends AlchemyProvider>(
           entryPoint: provider.getEntryPointAddress(),
           userOperation: userOperation,
           dummySignature: userOperation.signature,
-          feeOverride: feeOverride,
+          overrides:
+            Object.keys(_overrides).length > 0 ? _overrides : undefined,
         },
       ],
     });

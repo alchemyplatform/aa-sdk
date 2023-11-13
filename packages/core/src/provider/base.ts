@@ -541,24 +541,40 @@ export class SmartAccountProvider<
       feeOptions
     );
 
-    const request = deepHexlify(await resolveProperties(struct));
-    const estimates = await this.rpcClient.estimateUserOperationGas(
-      request,
-      this.getEntryPointAddress()
-    );
+    let { callGasLimit, verificationGasLimit, preVerificationGas } =
+      overrides ?? {};
 
-    struct.callGasLimit = applyFeeOption(
-      estimates.callGasLimit,
-      feeOptions?.callGasLimit
-    );
-    struct.verificationGasLimit = applyFeeOption(
-      estimates.verificationGasLimit,
-      feeOptions?.verificationGasLimit
-    );
-    struct.preVerificationGas = applyFeeOption(
-      estimates.preVerificationGas,
-      feeOptions?.preVerificationGas
-    );
+    if (
+      callGasLimit === undefined ||
+      verificationGasLimit === undefined ||
+      preVerificationGas === undefined
+    ) {
+      const request = deepHexlify(await resolveProperties(struct));
+      const estimates = await this.rpcClient.estimateUserOperationGas(
+        request,
+        this.getEntryPointAddress()
+      );
+
+      callGasLimit =
+        callGasLimit ??
+        applyFeeOption(estimates.callGasLimit, feeOptions?.callGasLimit);
+      verificationGasLimit =
+        verificationGasLimit ??
+        applyFeeOption(
+          estimates.verificationGasLimit,
+          feeOptions?.verificationGasLimit
+        );
+      preVerificationGas =
+        preVerificationGas ??
+        applyFeeOption(
+          estimates.preVerificationGas,
+          feeOptions?.preVerificationGas
+        );
+    }
+
+    struct.callGasLimit = callGasLimit;
+    struct.verificationGasLimit = verificationGasLimit;
+    struct.preVerificationGas = preVerificationGas;
 
     return struct;
   };
