@@ -32,7 +32,7 @@ describe("Magic Signer Tests", () => {
     expect(spy.mock.calls).toMatchInlineSnapshot("[]");
   });
 
-  it.only("should correctly get address", async () => {
+  it("should correctly get address", async () => {
     const signer = await givenSigner();
 
     const address = await signer.getAddress();
