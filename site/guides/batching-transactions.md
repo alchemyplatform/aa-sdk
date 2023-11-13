@@ -36,7 +36,7 @@ When you batch transactions, the transaction actions (`target`s and `calldata`s)
 :::
 
 :::tip Note 3: Batched Transactions Ordering
-The batched `UserOperation` gets executed by the account calling `executeBatch` method on [`SimpleAccount`](https://github.com/eth-infinitism/account-abstraction/blob/ver0.6.0/contracts/samples/SimpleAccount.sol) or [`LightAccount`](https://github.com/alchemyplatform/light-account/blob/v1.0.2/src/LightAccount.sol) smart contracts. `executeBatch` processes the input array of transactions data linearly, guaranting the execution order of those transactions to be **sequential**.
+The batched `UserOperation` gets executed by the account calling the `executeBatch` method on the [`SimpleAccount`](https://github.com/eth-infinitism/account-abstraction/blob/ver0.6.0/contracts/samples/SimpleAccount.sol) or [`LightAccount`](https://github.com/alchemyplatform/light-account/blob/v1.0.2/src/LightAccount.sol) smart contracts. `executeBatch` processes the input array of transactions data linearly, guaranteeing the execution order of those transactions to be **sequential**.
 :::
 
 ## Batching using [`sendUserOperation`](/packages/aa-core/provider/sendUserOperation.md)
