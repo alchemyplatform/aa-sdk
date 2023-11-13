@@ -3090,6 +3090,11 @@
   resolved "https://registry.yarnpkg.com/@magic-sdk/commons/-/commons-16.1.1.tgz#fd9394552389b629f9d34bceca606d8f46fe3b15"
   integrity sha512-ZNknl69zTYIdo4rLO9I8yk4pTSTczZHDXMeZcnLKy992L7arcZ/yGgF9qCqMbp7cOubRRVImFH2jLMM/DeO85w==
 
+"@magic-sdk/commons@^17.2.0":
+  version "17.2.0"
+  resolved "https://registry.yarnpkg.com/@magic-sdk/commons/-/commons-17.2.0.tgz#b125d15e4d096ad9e94171635b6b6c408314105f"
+  integrity sha512-+NkPL9r1twzgaPp94+ykF0T3pU2GHVCJup4YjdOiGWMngqqJ50aLKi0dgaNjV77VA9svxWI5NnKgaiwWkNSUyQ==
+
 "@magic-sdk/provider@^20.1.1":
   version "20.1.1"
   resolved "https://registry.yarnpkg.com/@magic-sdk/provider/-/provider-20.1.1.tgz#325c8c73c57a1bc05457289e924b472abf791c2e"
@@ -3099,7 +3104,16 @@
     eventemitter3 "^4.0.4"
     web3-core "1.5.2"
 
-"@magic-sdk/types@^17.0.2":
+"@magic-sdk/provider@^21.2.0":
+  version "21.2.0"
+  resolved "https://registry.yarnpkg.com/@magic-sdk/provider/-/provider-21.2.0.tgz#29c8c828bab689f4cb2220cffc241a8b3d1e601b"
+  integrity sha512-zrQKYXra9eCfdRagA7hoXs99gYV/OmtdXm1PNy1dkq8iVY+Hltlk4zCkkFr2qMcroRrMId4Ajbtuar65xxb+GA==
+  dependencies:
+    "@magic-sdk/types" "^17.2.0"
+    eventemitter3 "^4.0.4"
+    web3-core "1.5.2"
+
+"@magic-sdk/types@^17.0.2", "@magic-sdk/types@^17.2.0":
   version "17.2.0"
   resolved "https://registry.yarnpkg.com/@magic-sdk/types/-/types-17.2.0.tgz#3e554748808e2f35ca5bb9ceda0cdf88d2ce6d35"
   integrity sha512-VJmGP+DwMnuIuMLb+IDHNAkYLcHH+XqPwHb6mcLNI9e30CDMXoFN60hmdhDRZLjI9JF/NPS3eEsd40Xz6Iih2A==
@@ -9615,6 +9629,16 @@ magic-sdk@^20.1.1:
     "@magic-sdk/commons" "^16.1.1"
     "@magic-sdk/provider" "^20.1.1"
     "@magic-sdk/types" "^17.0.2"
+    localforage "^1.7.4"
+
+magic-sdk@^21.2.0:
+  version "21.2.0"
+  resolved "https://registry.yarnpkg.com/magic-sdk/-/magic-sdk-21.2.0.tgz#7bd7749be7195c654ee1456da2b346f844005f6d"
+  integrity sha512-Sb9aj7CZAjJpUHMFGLGxq+0lAo+NydpQ68/8ZRUILzswKdg0Q0B/slo3F9WH2F1zakaIdjsUusCekg1LqiNALg==
+  dependencies:
+    "@magic-sdk/commons" "^17.2.0"
+    "@magic-sdk/provider" "^21.2.0"
+    "@magic-sdk/types" "^17.2.0"
     localforage "^1.7.4"
 
 magic-string@^0.30.0, magic-string@^0.30.5:
