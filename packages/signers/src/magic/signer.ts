@@ -45,7 +45,6 @@ export class MagicSigner
 
   authenticate = async (params: MagicAuthParams) => {
     await params.authenticate();
-    console.log(custom(await this.inner.wallet.getProvider()));
 
     this.signer = new WalletClientSigner(
       createWalletClient({

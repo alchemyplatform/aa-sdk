@@ -2,20 +2,6 @@ import * as AASignersModule from "@alchemy/aa-signers";
 import { Magic } from "magic-sdk";
 import { MagicSigner } from "../signer.js";
 
-vi.mock("viem", async () => {
-  const createWalletClient = vi.fn().mockResolvedValue({
-    bind: async () => Promise.resolve(),
-    signMessage: async () => Promise.resolve("0xtest"),
-    signTypedData: async () => Promise.resolve("0xtest"),
-  });
-
-  const actual = await vi.importActual("viem");
-  return {
-    ...(actual as any),
-    createWalletClient,
-  };
-});
-
 describe("Magic Signer Tests", () => {
   it("should correctly error when signing message if not authenticated", async () => {
     const signer = await givenSigner(false);
@@ -36,7 +22,7 @@ describe("Magic Signer Tests", () => {
     const signer = await givenSigner();
 
     const address = await signer.getAddress();
-    expect(address).toMatchInlineSnapshot('"test"');
+    expect(address).toMatchInlineSnapshot('"0x1234567890123456789012345678901234567890"');
   });
 
   it("should correctly get auth details", async () => {
@@ -49,20 +35,20 @@ describe("Magic Signer Tests", () => {
         "isMfaEnabled": false,
         "issuer": null,
         "phoneNumber": "1234567890",
-        "publicAddress": "test",
+        "publicAddress": "0x1234567890123456789012345678901234567890",
         "recoveryFactors": [],
       }
     `);
   });
 
-  it.skip("should correctly sign message if authenticated", async () => {
+  it("should correctly sign message if authenticated", async () => {
     const signer = await givenSigner();
 
     const signMessage = await signer.signMessage("test");
-    expect(signMessage).toMatchInlineSnapshot();
+    expect(signMessage).toMatchInlineSnapshot('"0xtest"');
   });
 
-  it.skip("should correctly sign typed data if authenticated", async () => {
+  it("should correctly sign typed data if authenticated", async () => {
     const signer = await givenSigner();
 
     const typedData = {
@@ -75,7 +61,7 @@ describe("Magic Signer Tests", () => {
       },
     };
     const signTypedData = await signer.signTypedData(typedData);
-    expect(signTypedData).toMatchInlineSnapshot();
+    expect(signTypedData).toMatchInlineSnapshot('"0xtest"');
   });
 });
 
@@ -83,7 +69,7 @@ const givenSigner = async (auth = true) => {
   const inner = new Magic("test");
 
   inner.user.getInfo = vi.fn().mockResolvedValue({
-    publicAddress: "test",
+    publicAddress: "0x1234567890123456789012345678901234567890",
     issuer: null,
     email: "test",
     phoneNumber: "1234567890",
@@ -91,15 +77,21 @@ const givenSigner = async (auth = true) => {
     recoveryFactors: [],
   });
 
-  // inner.wallet.getProvider = vi.fn().mockResolvedValue({
-  //   type: "local",
-  //   source: "custom",
-  //   publicKey: "0xtest",
-  //   address: "0xtest",
-  //   signMessage: () => Promise.resolve("0xtest"),
-  //   signTransaction: () => Promise.resolve("0xtest"),
-  //   signTypedData: () => Promise.resolve("0xtest"),
-  // } as LocalAccount);
+  inner.wallet.getProvider = vi.fn().mockResolvedValue({
+    request: ({ method }: { method: string; params: any[] }) => {
+      console.log("method: ", method);
+      if (method === "eth_accounts") {
+        return Promise.resolve(["0x1234567890123456789012345678901234567890"]);
+      }
+      if (method === "personal_sign") {
+        return Promise.resolve("0xtest");
+      } else if (method === "eth_signTypedData_v4") {
+        return Promise.resolve("0xtest");
+      }
+
+      return Promise.reject(new Error("Method not found"));
+    },
+  });
 
   const signer = new MagicSigner({ inner });
 
