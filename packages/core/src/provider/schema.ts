@@ -9,22 +9,28 @@ export const SmartAccountProviderOptsSchema = z.object({
   /**
    * The maximum number of times to try fetching a transaction receipt before giving up (default: 5)
    */
-  txMaxRetries: z.number().optional(),
+  txMaxRetries: z.number().min(0).optional(),
 
   /**
    * The interval in milliseconds to wait between retries while waiting for tx receipts (default: 2_000)
    */
-  txRetryIntervalMs: z.number().optional(),
+  txRetryIntervalMs: z.number().min(0).optional(),
 
   /**
    * The mulitplier on interval length to wait between retries while waiting for tx receipts (default: 1.5)
    */
-  txRetryMulitplier: z.number().optional(),
+  txRetryMulitplier: z.number().min(0).optional(),
 
   /**
-   * used when computing the fees for a user operation (default: 100_000_000n)
+   * Used when computing the fees for a user operation (default: 100_000_000n)
    */
-  minPriorityFeePerBid: z.bigint().optional(),
+  minPriorityFeePerBid: z.bigint().min(0n).optional(),
+
+  /**
+   * Percent value for maxPriorityFeePerGas estimate added buffer. maxPriorityFeePerGasBid is set to the max
+   * between the buffer "added" priority fee estimate and the minPriorityFeePerBid (default: 33)
+   */
+  maxPriorityFeePerGasEstimateBuffer: z.number().min(0).optional(),
 });
 
 export const createSmartAccountProviderConfigSchema = <

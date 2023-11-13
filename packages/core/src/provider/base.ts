@@ -75,6 +75,7 @@ export class SmartAccountProvider<
   private txRetryMulitplier: number;
 
   private minPriorityFeePerBid: bigint;
+  private maxPriorityFeePerGasEstimateBuffer: number;
 
   readonly account?: ISmartContractAccount;
 
@@ -103,6 +104,9 @@ export class SmartAccountProvider<
       opts?.minPriorityFeePerBid ??
       minPriorityFeePerBidDefaults.get(chain.id) ??
       100_000_000n;
+
+    this.maxPriorityFeePerGasEstimateBuffer =
+      opts?.maxPriorityFeePerGasEstimateBuffer ?? 33;
 
     this.rpcClient =
       typeof rpcProvider === "string"
@@ -475,7 +479,10 @@ export class SmartAccountProvider<
     // set maxPriorityFeePerGasBid to the max between 33% added priority fee estimate and
     // the min priority fee per gas set for the provider
     const maxPriorityFeePerGasBid = bigIntMax(
-      bigIntPercent(maxPriorityFeePerGas, 133n),
+      bigIntPercent(
+        maxPriorityFeePerGas,
+        BigInt(100 + this.maxPriorityFeePerGasEstimateBuffer)
+      ),
       this.minPriorityFeePerBid
     );
 
