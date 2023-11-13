@@ -39,6 +39,8 @@
     "test:run-e2e": "vitest run --config vitest.config.e2e.ts"
   },
   "devDependencies": {
+    "@web3auth/base": "^7.1.0",
+    "@web3auth/modal": "^7.1.1",
     "jsdom": "^22.1.0",
     "magic-sdk": "^21.3.0",
     "typescript": "^5.0.4",
