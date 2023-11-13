@@ -20,7 +20,7 @@ head:
 
 # How to Submit Batch Transactions
 
-One benefit of Smart Contract Accounts is that it's possible to batch transactions in one User Operation. Not all Smart Contract Accounts support batching. But, if the `SmartContractAccount` you're using does by implementing the [`encodeBatchExecute`](/packages/aa-core/accounts/optional/encodeBatchExecute.md) method, then implementations of `SmartAccountProvider` will allow you to make those calls.
+One benefit of Smart Contract Accounts is that it's possible to batch transactions in one User Operation. Not all Smart Contract Accounts support batching. But, if the `ISmartContractAccount` implementation you're using has the [`encodeBatchExecute`](/packages/aa-core/accounts/optional/encodeBatchExecute.md) method, then implementations of `SmartAccountProvider` will allow you to make those calls.
 
 There are two ways you can batch transactions using `SmartAccountProvider`:
 
