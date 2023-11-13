@@ -1,20 +1,6 @@
 import { Magic } from "magic-sdk";
 import { MagicSigner } from "../signer.js";
 
-vi.mock("viem", async () => {
-  const createWalletClient = vi.fn().mockResolvedValue({
-    bind: async () => Promise.resolve(),
-    signMessage: async () => Promise.resolve("0xtest"),
-    signTypedData: async () => Promise.resolve("0xtest"),
-  });
-
-  const actual = await vi.importActual("viem");
-  return {
-    ...(actual as any),
-    createWalletClient,
-  };
-});
-
 describe("Magic Signer Tests", () => {
   it("should correctly get address if authenticated", async () => {
     const signer = await givenSigner();
