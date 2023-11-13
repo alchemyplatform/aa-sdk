@@ -22,7 +22,9 @@ describe("Magic Signer Tests", () => {
     const signer = await givenSigner();
 
     const address = await signer.getAddress();
-    expect(address).toMatchInlineSnapshot('"0x1234567890123456789012345678901234567890"');
+    expect(address).toMatchInlineSnapshot(
+      '"0x1234567890123456789012345678901234567890"'
+    );
   });
 
   it("should correctly get auth details", async () => {
@@ -79,17 +81,18 @@ const givenSigner = async (auth = true) => {
 
   inner.wallet.getProvider = vi.fn().mockResolvedValue({
     request: ({ method }: { method: string; params: any[] }) => {
-      console.log("method: ", method);
-      if (method === "eth_accounts") {
-        return Promise.resolve(["0x1234567890123456789012345678901234567890"]);
+      switch (method) {
+        case "eth_accounts":
+          return Promise.resolve([
+            "0x1234567890123456789012345678901234567890",
+          ]);
+        case "personal_sign":
+          return Promise.resolve("0xtest");
+        case "eth_signTypedData_v4":
+          return Promise.resolve("0xtest");
+        default:
+          return Promise.reject(new Error("Method not found"));
       }
-      if (method === "personal_sign") {
-        return Promise.resolve("0xtest");
-      } else if (method === "eth_signTypedData_v4") {
-        return Promise.resolve("0xtest");
-      }
-
-      return Promise.reject(new Error("Method not found"));
     },
   });
 
