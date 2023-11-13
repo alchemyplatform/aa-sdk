@@ -13,7 +13,6 @@ const owner: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
 const chain = polygonMumbai;
 
 // 2. Connect the provider to the smart account signer
-
 export const signer = provider.connectToAccount(
   (rpcClient) =>
     new LightSmartContractAccount({
