@@ -268,7 +268,7 @@ describe("Simple Account Tests", () => {
     `);
   }, 50000);
 
-  it("should simulate as part of middleware stack", async () => {
+  it("should simulate as part of middleware stack when added to provider", async () => {
     const provider = givenConnectedProvider({
       owner,
       chain,
