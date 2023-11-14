@@ -1,1 +1,1 @@
-export type * from "./simulate-user-op/index.js";
+export type * from "./simulate-uo/index.js";
