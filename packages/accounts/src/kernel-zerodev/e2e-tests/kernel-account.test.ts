@@ -21,18 +21,20 @@ import {
 import { KernelAccountProvider } from "../provider.js";
 import type { KernelUserOperationCallData } from "../types.js";
 import { KernelBaseValidator, ValidatorMode } from "../validator/base.js";
-import { MUMBAI_RPC_URL, OWNER_MNEMONIC } from "./constants.js";
+import { API_KEY, OWNER_MNEMONIC } from "./constants.js";
 import { MockSigner } from "./mocks/mock-signer.js";
+
+const chain = polygonMumbai;
 
 describe("Kernel Account Tests", () => {
   //any wallet should work
   const config = {
-    chain: polygonMumbai,
-    rpcProvider: MUMBAI_RPC_URL!,
+    chain,
+    rpcProvider: `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`!,
     validatorAddress: "0x180D6465F921C7E0DEA0040107D342c87455fFF5" as Address,
     accountFactoryAddress:
       "0x5D006d3880645ec6e254E18C1F879DAC9Dd71A39" as Address,
-    entryPointAddress: getDefaultEntryPointAddress(polygonMumbai),
+    entryPointAddress: getDefaultEntryPointAddress(chain),
   };
 
   const ownerAccount = mnemonicToAccount(OWNER_MNEMONIC);
