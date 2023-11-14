@@ -11870,11 +11870,6 @@ simple-get@^2.7.0:
     once "^1.3.1"
     simple-concat "^1.0.0"
 
-sitka@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/sitka/-/sitka-1.1.1.tgz#3f93ccc84160e9c7a233d7afb3ec00630f92423c"
-  integrity sha512-GjvAdRLNH1eJZoTGtB2dHg1CGqZ3qoeBNbF5oWZL7tlWxMZ1WGnsPpJDmrcc302NA46qRUQZMXk0hiXW6HV+qA==
-
 slash@3.0.0, slash@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-3.0.0.tgz#6539be870c165adbd5240220dbe361f1bc4d4634"
@@ -12675,13 +12670,6 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==
-
-typescript-template@*:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/typescript-template/-/typescript-template-1.0.7.tgz#04d68ca33483bcbd89d5ed7ea2a3e3e1d2f6fb6c"
-  integrity sha512-h/RPRYJdzXoAKo6YDvh6v9Vr3JVcOb+DoXI4owCQttcHKEqevz67mWyIn2zXe7uDlo8VJEtzuk/QfRGB+Q6b8A==
-  dependencies:
-    sitka "^1.1.1"
 
 "typescript@^3 || ^4":
   version "4.9.5"
