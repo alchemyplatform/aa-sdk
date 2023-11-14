@@ -18,7 +18,7 @@ export const MultiOwnerMSCAFactoryAbi = [
       },
       {
         internalType: "bytes32",
-        name: "multiOwnerPluginManifestHash",
+        name: "manifestHash",
         type: "bytes32",
       },
       {
