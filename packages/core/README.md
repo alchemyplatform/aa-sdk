@@ -1,19 +1,3 @@
----
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: aa-core
-  - - meta
-    - name: description
-      content: Introduction to the aa-core package
-  - - meta
-    - property: og:description
-      content: Introduction to the aa-core package
-next:
-  text: SmartAccountProvider
----
-
 # `@alchemy/aa-core`
 
 This package contains the core interfaces and components for interacting with 4337 infrastructure. The primary interfaces that it exports are the `SmartAccountProvider` and `BaseSmartContractAccount`.
@@ -25,8 +9,6 @@ The `BaseSmartContractAccount` interface defines how you would interact with you
 ## Getting Started
 
 To get started, first install the package:
-
-::: code-group
 
 ```bash [yarn]
 yarn add @alchemy/aa-core
@@ -40,9 +22,36 @@ npm i -s @alchemy/aa-core
 pnpm i @alchemy/aa-core
 ```
 
-:::
+## Usage
 
-Then, you can create a provider like so:
-::: code-group
-<<< @/snippets/core-provider.ts
-:::
+You can create a provider like so:
+
+```typescript
+import {
+  LightSmartContractAccount,
+  getDefaultLightAccountFactoryAddress,
+} from "@alchemy/aa-accounts";
+import {
+  LocalAccountSigner,
+  SmartAccountProvider,
+  SmartAccountSigner,
+} from "@alchemy/aa-core";
+import { polygonMumbai } from "viem/chains";
+
+const chain = polygonMumbai;
+const owner: SmartAccountSigner =
+  LocalAccountSigner.mnemonicToAccountSigner(YOUR_OWNER_MNEMONIC);
+
+export const provider = new SmartAccountProvider({
+  rpcProvider: "https://polygon-mumbai.g.alchemy.com/v2/demo",
+  chain,
+}).connect(
+  (rpcClient) =>
+    new LightSmartContractAccount({
+      chain,
+      factoryAddress: getDefaultLightAccountFactoryAddress(chain),
+      rpcClient,
+      owner,
+    })
+);
+```

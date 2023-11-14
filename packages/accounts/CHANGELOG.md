@@ -13,7 +13,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - entry point address as optional to SmartAccountProvider ([#180](https://github.com/alchemyplatform/aa-sdk/issues/180)) ([f5c378b](https://github.com/alchemyplatform/aa-sdk/commit/f5c378ba1cb04bdc1e41c3e6dd0eba1cb6ee7f2c))
 - remove AA_SDK_TESTS_SIGNER_TYPE constant exported from aa-core ([#232](https://github.com/alchemyplatform/aa-sdk/issues/232)) ([883c489](https://github.com/alchemyplatform/aa-sdk/commit/883c489b077d587b6c5b50c44d92b2a00f10e5ac))
 - use alchemy provider, light account for e2e tests ([#209](https://github.com/alchemyplatform/aa-sdk/issues/209)) ([124be68](https://github.com/alchemyplatform/aa-sdk/commit/124be68c5137a3511ec612e814265739e6909e75))
-
 - remove AA_SDK_TESTS_SIGNER_TYPE constant exported from aa-core ([#232](https://github.com/alchemyplatform/aa-sdk/issues/232)) ([5170a6b](https://github.com/alchemyplatform/aa-sdk/commit/5170a6b689c9834a9a2489f054b767e190fa38f7))
 
 # 0.2.0 (2023-11-03)

@@ -15,8 +15,8 @@ export type { BaseSmartAccountParams } from "./account/types.js";
 export { LocalAccountSigner } from "./signer/local-account.js";
 export { SignerSchema } from "./signer/schema.js";
 export type {
-  SmartAccountSigner,
   SmartAccountAuthenticator,
+  SmartAccountSigner,
 } from "./signer/types.js";
 export {
   verifyEIP6492Signature,

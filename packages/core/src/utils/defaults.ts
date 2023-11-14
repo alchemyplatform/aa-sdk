@@ -5,10 +5,12 @@ import {
   arbitrumSepolia,
   base,
   baseGoerli,
+  baseSepolia,
   goerli,
   mainnet,
   optimism,
   optimismGoerli,
+  optimismSepolia,
   polygon,
   polygonMumbai,
   sepolia,
@@ -30,11 +32,13 @@ export const getDefaultEntryPointAddress = (chain: Chain): Address => {
     case polygonMumbai.id:
     case optimism.id:
     case optimismGoerli.id:
+    case optimismSepolia.id:
     case arbitrum.id:
     case arbitrumGoerli.id:
     case arbitrumSepolia.id:
     case base.id:
     case baseGoerli.id:
+    case baseSepolia.id:
       return "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
   }
   throw new Error(
@@ -56,9 +60,11 @@ export const getDefaultSimpleAccountFactoryAddress = (
     case mainnet.id:
     case polygon.id:
     case optimism.id:
+    case optimismSepolia.id:
     case arbitrum.id:
     case base.id:
     case baseGoerli.id:
+    case baseSepolia.id:
     case arbitrumSepolia.id:
       return "0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232";
     case sepolia.id:
