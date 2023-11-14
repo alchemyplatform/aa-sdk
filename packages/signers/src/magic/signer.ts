@@ -5,7 +5,7 @@ import {
 } from "@alchemy/aa-core";
 import { Magic, type MagicUserMetadata } from "magic-sdk";
 import { createWalletClient, custom, type Hash } from "viem";
-import type { MagicAuthParams } from "./types.js";
+import type { MagicAuthParams, MagicSDKParams } from "./types.js";
 
 export class MagicSigner
   implements
@@ -14,8 +14,13 @@ export class MagicSigner
   inner: Magic;
   private signer: WalletClientSigner | undefined;
 
-  constructor({ inner }: { inner: Magic }) {
-    this.inner = inner;
+  constructor(params: MagicSDKParams | { inner: Magic }) {
+    if ("inner" in params) {
+      this.inner = params.inner;
+      return;
+    }
+
+    this.inner = new Magic(params.apiKey, params.options);
   }
 
   get signerType() {
