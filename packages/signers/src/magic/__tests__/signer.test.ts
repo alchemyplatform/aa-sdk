@@ -1,24 +1,8 @@
-import * as AASignersModule from "@alchemy/aa-signers";
 import { Magic } from "magic-sdk";
 import { MagicSigner } from "../signer.js";
 
 describe("Magic Signer Tests", () => {
-  it("should correctly error when signing message if not authenticated", async () => {
-    const signer = await givenSigner(false);
-
-    const signMessage = signer.signMessage("test");
-    await expect(signMessage).rejects.toThrowErrorMatchingInlineSnapshot(
-      '"Not authenticated"'
-    );
-  });
-
-  it("should correctly authenticate", async () => {
-    const spy = vi.spyOn(AASignersModule, "MagicSigner");
-    givenSigner();
-    expect(spy.mock.calls).toMatchInlineSnapshot("[]");
-  });
-
-  it("should correctly get address", async () => {
+  it("should correctly get address if authenticated", async () => {
     const signer = await givenSigner();
 
     const address = await signer.getAddress();
@@ -27,11 +11,20 @@ describe("Magic Signer Tests", () => {
     );
   });
 
-  it("should correctly get auth details", async () => {
+  it("should correctly fail to get address if unauthenticated", async () => {
+    const signer = await givenSigner(false);
+
+    const address = signer.getAddress();
+    await expect(address).rejects.toThrowErrorMatchingInlineSnapshot(
+      '"Not authenticated"'
+    );
+  });
+
+  it("should correctly get auth details if authenticated", async () => {
     const signer = await givenSigner();
 
-    const address = await signer.getAuthDetails();
-    expect(address).toMatchInlineSnapshot(`
+    const details = await signer.getAuthDetails();
+    expect(details).toMatchInlineSnapshot(`
       {
         "email": "test",
         "isMfaEnabled": false,
@@ -43,11 +36,29 @@ describe("Magic Signer Tests", () => {
     `);
   });
 
+  it("should correctly fail to get auth details if unauthenticated", async () => {
+    const signer = await givenSigner(false);
+
+    const details = signer.getAuthDetails();
+    await expect(details).rejects.toThrowErrorMatchingInlineSnapshot(
+      '"Not authenticated"'
+    );
+  });
+
   it("should correctly sign message if authenticated", async () => {
     const signer = await givenSigner();
 
     const signMessage = await signer.signMessage("test");
     expect(signMessage).toMatchInlineSnapshot('"0xtest"');
+  });
+
+  it("should correctly fail to sign message if unauthenticated", async () => {
+    const signer = await givenSigner(false);
+
+    const signMessage = signer.signMessage("test");
+    await expect(signMessage).rejects.toThrowErrorMatchingInlineSnapshot(
+      '"Not authenticated"'
+    );
   });
 
   it("should correctly sign typed data if authenticated", async () => {
