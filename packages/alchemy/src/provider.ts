@@ -7,7 +7,6 @@ import {
   type BatchUserOperationCallData,
   type UserOperationCallData,
   type UserOperationOverrides,
-  type UserOperationStruct,
 } from "@alchemy/aa-core";
 import { Alchemy } from "alchemy-sdk";
 import { type HttpTransport } from "viem";
@@ -111,12 +110,6 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
     };
   };
 
-  _simulateUserOperationAssetChanges = async (uoStruct: UserOperationStruct) =>
-    (this.rpcClient as ClientWithAlchemyMethods).request({
-      method: "alchemy_simulateUserOperationAssetChanges",
-      params: [uoStruct, this.getEntryPointAddress()],
-    });
-
   simulateUserOperationAssetChanges = async (
     data: UserOperationCallData | BatchUserOperationCallData,
     overrides?: UserOperationOverrides
@@ -125,7 +118,10 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
       await this.buildUserOperation(data, overrides)
     );
 
-    return this._simulateUserOperationAssetChanges(uoStruct);
+    return (this.rpcClient as ClientWithAlchemyMethods).request({
+      method: "alchemy_simulateUserOperationAssetChanges",
+      params: [uoStruct, this.getEntryPointAddress()],
+    });
   };
 
   /**

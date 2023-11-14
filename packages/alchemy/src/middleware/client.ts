@@ -45,14 +45,16 @@ export type ClientWithAlchemyMethods = PublicErc4337Client & {
         maxPriorityFeePerGas: Hex;
       }>;
 
-      request(args: {
-        method: "alchemy_simulateUserOperationAssetChanges";
-        params: SimulateUserOperationAssetChangesRequest;
-      }): Promise<SimulateUserOperationAssetChangesResponse>;
+
 
       request(args: {
         method: "rundler_maxPriorityFeePerGas";
         params: [];
       }): Promise<Hex>;
+
+      request(args: {
+        method: "alchemy_simulateUserOperationAssetChanges";
+        params: SimulateUserOperationAssetChangesRequest;
+      }): Promise<SimulateUserOperationAssetChangesResponse>;
     }["request"];
 };

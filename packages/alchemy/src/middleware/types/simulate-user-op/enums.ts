@@ -4,7 +4,7 @@ export enum SimulateAssetType {
   ERC721 = "ERC721",
   ERC1155 = "ERC1155",
   /**
-   * Special contracts that don't follow ERC 721/1155.Currently limited to
+   * Special contracts that don't follow ERC 721/1155. Currently limited to
    * CryptoKitties and CryptoPunks.
    */
   SPECIAL_NFT = "SPECIAL_NFT",

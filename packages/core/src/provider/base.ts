@@ -443,7 +443,7 @@ export class SmartAccountProvider<
     return resolveProperties<UserOperationStruct>(result);
   };
 
-  protected _sendUserOperation = async (uoStruct: UserOperationStruct) => {
+  private _sendUserOperation = async (uoStruct: UserOperationStruct) => {
     if (!this.account) {
       throw new Error("account not connected");
     }
