@@ -41,7 +41,7 @@ export const serverConfigs: Record<number, ServerConfiguration> = {
 ```
 ### **🗒️ Notes:** for `nftContractAddress` and `lightAccountFactoryAddress` 
 - There are already contract addresses deployed for them across [various chains here](https://github.com/alchemyplatform/aa-sdk/blob/main/examples/alchemy-daapp/src/configs/clientConfigs.ts).
-- We used Alchemy's [lightAccountFactory here]. todo(ajay): post the repo when live
+- We used Alchemy's [lightAccountFactory here](https://github.com/alchemyplatform/light-account).
 - Finally, the contracts sibling package has the copy of the [NFT contract](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/contracts/DAAppNFT/src) along instructions on [how to deploy it](https://github.com/alchemyplatform/aa-sdk/blob/main/examples/contracts/README.md).
 
 4. Update the serverConfigs.ts file with your alchemy API keys:

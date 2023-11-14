@@ -8,7 +8,7 @@ import {
 import { Alchemy, Network } from "alchemy-sdk";
 import { toHex, type Address, type Chain, type HDAccount } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
-import { polygonMumbai, sepolia } from "viem/chains";
+import { polygonMumbai } from "viem/chains";
 import { AlchemyProvider } from "../provider.js";
 
 describe("Alchemy Provider Tests", () => {
@@ -40,10 +40,10 @@ describe("Alchemy Provider Tests", () => {
   });
 
   it("should correctly sign the message", async () => {
-    const signer = givenConnectedProvider({ owner, chain });
+    const provider = givenConnectedProvider({ owner, chain });
     expect(
       // TODO: expose sign message on the provider too
-      await signer.account.signMessage(
+      await provider.account.signMessage(
         "0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b"
       )
     ).toBe(
@@ -52,8 +52,8 @@ describe("Alchemy Provider Tests", () => {
   });
 
   it("should correctly encode batch transaction data", async () => {
-    const signer = givenConnectedProvider({ owner, chain });
-    const account = signer.account;
+    const provider = givenConnectedProvider({ owner, chain });
+    const account = provider.account;
     const data = [
       {
         target: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
@@ -74,9 +74,9 @@ describe("Alchemy Provider Tests", () => {
     expect(
       () =>
         new AlchemyProvider({
-          rpcUrl: "https://eth-mainnet.g.alchemy.com/v2/test",
+          rpcUrl: `${chain.rpcUrls.alchemy.http[0]}/test`,
           entryPointAddress: 1 as unknown as Address,
-          chain: polygonMumbai,
+          chain,
         })
     ).toThrowErrorMatchingInlineSnapshot(`
       "[
@@ -99,7 +99,7 @@ describe("Alchemy Provider Tests", () => {
         new AlchemyProvider({
           rpcUrl: 1 as unknown as string,
           entryPointAddress: getDefaultEntryPointAddress(chain),
-          chain: polygonMumbai,
+          chain,
         })
     ).toThrowErrorMatchingSnapshot();
   });
@@ -107,12 +107,12 @@ describe("Alchemy Provider Tests", () => {
   it("should have enhanced api properties extended from the Alchemy SDK", async () => {
     const provider = new AlchemyProvider({
       apiKey: "test",
-      chain: sepolia,
+      chain,
     });
     const spy = vi.spyOn(provider, "withAlchemyEnhancedApis");
 
     const alchemy = new Alchemy({
-      network: Network.ETH_SEPOLIA,
+      network: Network.MATIC_MUMBAI,
       apiKey: "test",
     });
     provider.withAlchemyEnhancedApis(alchemy);
@@ -145,7 +145,7 @@ const givenConnectedProvider = ({
     "0x1234567890123456789012345678901234567890" as Address;
 
   return new AlchemyProvider({
-    rpcUrl: "https://eth-mainnet.g.alchemy.com/v2",
+    rpcUrl: chain.rpcUrls.alchemy.http[0],
     jwt: "test",
     chain,
   }).connect((provider) => {
