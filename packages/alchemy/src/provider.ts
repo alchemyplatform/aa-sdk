@@ -23,7 +23,7 @@ import {
   withAlchemyGasManager,
   type AlchemyGasManagerConfig,
 } from "./middleware/gas-manager.js";
-import { withSimulateUOMiddleware } from "./middleware/simulate-uo.js";
+import { withAlchemyUserOpSimulation } from "./middleware/simulate-uo.js";
 import {
   AlchemyProviderConfigSchema,
   AlchemySdkClientSchema,
@@ -147,7 +147,7 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
       );
     }
 
-    return withSimulateUOMiddleware(this);
+    return withAlchemyUserOpSimulation(this);
   }
 
   /**

@@ -6,7 +6,7 @@ import {
 import type { AlchemyProvider } from "../provider.js";
 import type { ClientWithAlchemyMethods } from "./client.js";
 
-export const withSimulateUOMiddleware = <P extends AlchemyProvider>(
+export const withAlchemyUserOpSimulation = <P extends AlchemyProvider>(
   provider: P
 ): P => {
   provider.withSimulateUOMiddleware(async (uoStruct) => {
