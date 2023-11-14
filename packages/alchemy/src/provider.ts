@@ -4,6 +4,10 @@ import {
   deepHexlify,
   resolveProperties,
   type AccountMiddlewareFn,
+  type BatchUserOperationCallData,
+  type UserOperationCallData,
+  type UserOperationOverrides,
+  type UserOperationStruct,
 } from "@alchemy/aa-core";
 import { Alchemy } from "alchemy-sdk";
 import { type HttpTransport } from "viem";
@@ -14,6 +18,7 @@ import {
   optimismGoerli,
 } from "viem/chains";
 import { SupportedChains } from "./chains.js";
+import type { ClientWithAlchemyMethods } from "./middleware/client.js";
 import { withAlchemyGasFeeEstimator } from "./middleware/gas-fees.js";
 import {
   withAlchemyGasManager,
@@ -103,6 +108,44 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
       ...struct,
       ...estimates,
     };
+  };
+
+  private _simulateUserOperationAssetChanges = async (
+    uoStruct: UserOperationStruct
+  ) =>
+    (this.rpcClient as ClientWithAlchemyMethods).request({
+      method: "alchemy_simulateUserOperationAssetChanges",
+      params: [uoStruct, this.getEntryPointAddress()],
+    });
+
+  simulateUserOperationAssetChanges = async (
+    data: UserOperationCallData | BatchUserOperationCallData,
+    overrides?: UserOperationOverrides
+  ) => {
+    const uoStruct = deepHexlify(
+      await this.buildUserOperation(data, overrides)
+    );
+
+    return this._simulateUserOperationAssetChanges(uoStruct);
+  };
+
+  override sendUserOperation = async (
+    data: UserOperationCallData | BatchUserOperationCallData,
+    overrides?: UserOperationOverrides,
+    simulate?: boolean
+  ) => {
+    if (simulate) {
+      const uoSimResult = await this.simulateUserOperationAssetChanges(
+        data,
+        overrides
+      );
+
+      if (uoSimResult.error) {
+        throw new Error(uoSimResult.error.message);
+      }
+    }
+
+    return super.sendUserOperation(data, overrides);
   };
 
   /**

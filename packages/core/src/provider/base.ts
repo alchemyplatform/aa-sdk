@@ -241,7 +241,7 @@ export class SmartAccountProvider<
     );
   };
 
-  sendTransactions = async (
+  buildUserOperationFromTxs = (
     requests: RpcTransactionRequest[],
     overrides?: UserOperationOverrides
   ) => {
@@ -279,6 +279,21 @@ export class SmartAccountProvider<
       _overrides.maxPriorityFeePerGas =
         overrides?.maxPriorityFeePerGas ?? maxPriorityFeePerGas;
     }
+
+    return {
+      batch,
+      overrides,
+    };
+  };
+
+  sendTransactions = async (
+    requests: RpcTransactionRequest[],
+    overrides?: UserOperationOverrides
+  ) => {
+    const { batch, overrides: _overrides } = this.buildUserOperationFromTxs(
+      requests,
+      overrides
+    );
 
     const { hash } = await this.sendUserOperation(batch, _overrides);
 
@@ -427,7 +442,7 @@ export class SmartAccountProvider<
     return resolveProperties<UserOperationStruct>(result);
   };
 
-  private _sendUserOperation = async (uoStruct: UserOperationStruct) => {
+  protected _sendUserOperation = async (uoStruct: UserOperationStruct) => {
     if (!this.account) {
       throw new Error("account not connected");
     }
