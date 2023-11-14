@@ -10,13 +10,15 @@ import { KernelAccountProvider } from "../provider.js";
 import { KernelBaseValidator, ValidatorMode } from "../validator/base.js";
 import { MockSigner } from "./mocks/mock-signer.js";
 
+const chain = polygonMumbai;
+
 describe("Kernel Account Tests", () => {
   //any wallet should work
   const config = {
     privateKey: generatePrivateKey(),
     mockWallet: "0x48D4d3536cDe7A257087206870c6B6E76e3D4ff4",
-    chain: polygonMumbai,
-    rpcProvider: `${polygonMumbai.rpcUrls.alchemy.http[0]}/demo`,
+    chain,
+    rpcProvider: `${chain.rpcUrls.alchemy.http[0]}/demo`,
     validatorAddress: "0x180D6465F921C7E0DEA0040107D342c87455fFF5" as Address,
     accountFactoryAddress:
       "0x5D006d3880645ec6e254E18C1F879DAC9Dd71A39" as Address,
