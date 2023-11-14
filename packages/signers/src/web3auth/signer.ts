@@ -3,7 +3,7 @@ import {
   type SignTypedDataParams,
   type SmartAccountAuthenticator,
 } from "@alchemy/aa-core";
-import { Web3Auth } from "@web3auth/modal";
+import { Web3Auth, type Web3AuthOptions } from "@web3auth/modal";
 import { createWalletClient, custom, type Hash } from "viem";
 import type {
   Web3AuthAuthenticationParams,
@@ -21,8 +21,13 @@ export class Web3AuthSigner
   inner: Web3Auth;
   private signer: WalletClientSigner | undefined;
 
-  constructor({ inner }: { inner: Web3Auth }) {
-    this.inner = inner;
+  constructor(params: Web3AuthOptions | { inner: Web3Auth }) {
+    if ("inner" in params) {
+      this.inner = params.inner;
+      return;
+    }
+
+    this.inner = new Web3Auth(params);
   }
 
   get signerType() {
