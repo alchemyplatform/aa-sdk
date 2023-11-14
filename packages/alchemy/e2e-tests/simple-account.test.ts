@@ -233,7 +233,7 @@ describe("Simple Account Tests", () => {
     expect(nfts.ownedNfts).toMatchInlineSnapshot("[]");
   }, 50000);
 
-  it("should correctly simulate asset changes the user operation", async () => {
+  it("should correctly simulate asset changes for the user operation", async () => {
     const provider = givenConnectedProvider({
       owner,
       chain,
@@ -266,6 +266,23 @@ describe("Simple Account Tests", () => {
         ],
       }
     `);
+  }, 50000);
+
+  it("should simulate as part of middleware stack", async () => {
+    const provider = givenConnectedProvider({
+      owner,
+      chain,
+    }).withAlchemyUserOpSimulation();
+
+    const spy = vi.spyOn(provider, "simulateUOMiddleware");
+
+    await provider.buildUserOperation({
+      target: provider.getEntryPointAddress(),
+      data: "0x",
+      value: 1n,
+    });
+
+    expect(spy).toHaveBeenCalledOnce();
   }, 50000);
 });
 

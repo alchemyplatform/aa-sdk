@@ -24,6 +24,7 @@ import {
   withAlchemyGasManager,
   type AlchemyGasManagerConfig,
 } from "./middleware/gas-manager.js";
+import { withSimulateUOMiddleware } from "./middleware/simulate-uo.js";
 import {
   AlchemyProviderConfigSchema,
   AlchemySdkClientSchema,
@@ -110,9 +111,7 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
     };
   };
 
-  private _simulateUserOperationAssetChanges = async (
-    uoStruct: UserOperationStruct
-  ) =>
+  _simulateUserOperationAssetChanges = async (uoStruct: UserOperationStruct) =>
     (this.rpcClient as ClientWithAlchemyMethods).request({
       method: "alchemy_simulateUserOperationAssetChanges",
       params: [uoStruct, this.getEntryPointAddress()],
@@ -129,25 +128,6 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
     return this._simulateUserOperationAssetChanges(uoStruct);
   };
 
-  override sendUserOperation = async (
-    data: UserOperationCallData | BatchUserOperationCallData,
-    overrides?: UserOperationOverrides,
-    simulate?: boolean
-  ) => {
-    if (simulate) {
-      const uoSimResult = await this.simulateUserOperationAssetChanges(
-        data,
-        overrides
-      );
-
-      if (uoSimResult.error) {
-        throw new Error(uoSimResult.error.message);
-      }
-    }
-
-    return super.sendUserOperation(data, overrides);
-  };
-
   /**
    * This methods adds the Alchemy Gas Manager middleware to the provider.
    *
@@ -162,6 +142,16 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
     }
 
     return withAlchemyGasManager(this, config, !this.feeOptsSet);
+  }
+
+  withAlchemyUserOpSimulation(): this {
+    if (!this.isConnected()) {
+      throw new Error(
+        "AlchemyProvider: account is not set, did you call `connect` first?"
+      );
+    }
+
+    return withSimulateUOMiddleware(this);
   }
 
   /**
