@@ -277,7 +277,7 @@ export interface ISmartAccountProvider<
   getAddress: () => Promise<Address>;
 
   /**
-   * @returnsthe EntryPoint contract address being used for the provider.
+   * @returns the EntryPoint contract address being used for the provider.
    *
    * If the provider is connected with a `SmartContractAccount`, the EntryPoint contract of the connected account
    * is used for the provider.
