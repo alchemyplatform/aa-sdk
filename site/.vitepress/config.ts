@@ -118,8 +118,18 @@ export default defineConfig({
             link: "/send-user-operation",
           },
           {
-            text: "How to Sponsor Gas for a User Operation",
-            link: "/sponsoring-gas",
+            text: "Gas Sponsorship",
+            base: "/guides/sponsoring-gas",
+            items: [
+              {
+                text: "How to Sponsor Gas for User Operations",
+                link: "/sponsoring-gas",
+              },
+              {
+                text: "How to Handle User Operations that are Not Eligible for Gas Sponsorship",
+                link: "/gas-sponsorship-eligibility",
+              },
+            ],
           },
           { text: "How to Batch Transactions", link: "/batching-transactions" },
           {
@@ -171,6 +181,10 @@ export default defineConfig({
               {
                 text: "buildUserOperation",
                 link: "/buildUserOperation",
+              },
+              {
+                text: "checkGasSponsorshipEligibility",
+                link: "/checkGasSponsorshipEligibility",
               },
               {
                 text: "buildUserOperationFromTx",
