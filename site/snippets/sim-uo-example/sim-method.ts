@@ -1,8 +1,6 @@
 import { UserOperationCallData } from "@alchemy/aa-core";
 import { provider } from "../provider.js";
 
-provider.withAlchemyUserOpSimulation();
-
 const uoStruct: UserOperationCallData = {
   target: "0xTARGET_ADDRESS",
   data: "0xDATA",
