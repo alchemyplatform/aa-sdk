@@ -115,4 +115,4 @@ That's it! By using the above methods, you can provide the desired user experien
 2. Provide users with the choice to unblock themselves by sending the user operation without gas sponsorship.
 3. Still send the user operation by reverting to the default behavior of paying gas fees from the user's account balance by bypassing the paymster middleware for the ineligible user operations.
 
-AccountKit provides much flexibility for you to design optimal user experiences to handle different cases of gas sponsonship eligibility accordingly.
+Account Kit provides much flexibility for you to design optimal user experiences to handle different cases of gas sponsonship eligibility accordingly.

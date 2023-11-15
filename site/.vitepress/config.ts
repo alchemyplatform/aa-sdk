@@ -62,11 +62,11 @@ export default defineConfig({
         items: [
           { text: "Overview", link: "/overview" },
           {
-            text: "Choosing a Smart Account",
+            text: "Choosing a smart account",
             base: "/smart-accounts/accounts",
             items: [
               { text: "Introduction", link: "/choosing-a-smart-account" },
-              { text: "Light Account", link: "/light-account" },
+              { text: "LightAccount", link: "/light-account" },
               {
                 text: "Modular Account",
                 link: "/modular-account",
@@ -133,19 +133,19 @@ export default defineConfig({
           },
           { text: "How to Batch Transactions", link: "/batching-transactions" },
           {
-            text: "How to Transfer Ownership of a Smart Account",
+            text: "How to transfer ownership of a smart account",
             link: "/transferring-ownership",
           },
           {
-            text: "Smart Account Data",
+            text: "Smart account data",
             base: "/guides/enhanced-apis",
             items: [
               {
-                text: "How to Fetch a Smart Account's NFTs",
+                text: "How to fetch a smart account's NFTs",
                 link: "/nft",
               },
               {
-                text: "How to Fetch a Smart Account's ERC-20 Tokens",
+                text: "How to fetch a smart account's ERC-20 Tokens",
                 link: "/token",
               },
             ],
@@ -556,7 +556,7 @@ export default defineConfig({
             link: "/",
           },
           {
-            text: "Light Account",
+            text: "LightAccount",
             collapsed: true,
             base: "/packages/aa-accounts/light-account",
             items: [

@@ -6,16 +6,16 @@ head:
       content: Contributing Your Signer
   - - meta
     - name: description
-      content: Follow this guide to contribute a new signer to the Account Kit documentation, and enable developers to sign ERC-4337 transactions with your signer.
+      content: Follow this guide to contribute a new signer to Account Kit documentation, and enable developers to sign ERC-4337 transactions with your signer.
   - - meta
     - property: og:description
-      content: Follow this guide to contribute a new signer to the Account Kit documentation, and enable developers to sign ERC-4337 transactions with your signer.
+      content: Follow this guide to contribute a new signer to Account Kit documentation, and enable developers to sign ERC-4337 transactions with your signer.
   - - meta
     - name: twitter:title
       content: Contributing Your Signer
   - - meta
     - name: twitter:description
-      content: Follow this guide to contribute a new signer to the Account Kit documentation, and enable developers to sign ERC-4337 transactions with your signer.
+      content: Follow this guide to contribute a new signer to Account Kit documentation, and enable developers to sign ERC-4337 transactions with your signer.
 ---
 
 # Contributing Your Signer

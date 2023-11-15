@@ -14,7 +14,7 @@ head:
 
 # Particle Network
 
-[**Particle Network**](https://particle.network/) is the Intent-Centric, Modular Access Layer of Web3. With Particle's Wallet-as-a-Service, developers can curate unparalleled user experience through modular and customizable embedded wallet components. By utilizing MPC-TSS for key management, Particle can streamline onboarding via familiar Web2 accounts—such as Google accounts, email addresses, phone numbers, etc.
+[**Particle Network**](https://particle.network/) is the Intent-Centric, Modular Access Layer of Web3. With Particle's Wallet-as-a-Service, you can curate unparalleled user experience through modular and customizable embedded wallet components. By utilizing MPC-TSS for key management, Particle can streamline onboarding via familiar Web2 accounts—such as Google accounts, email addresses, phone numbers, etc.
 
 Leveraging both Particle and Account Kit enables a streamlined onboarding flow, with social logins and signer key management being handled by Particle while Account Kit takes this experience to the next level with account abstraction - facilitating powerful user experience.
 

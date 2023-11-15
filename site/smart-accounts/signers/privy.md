@@ -20,7 +20,7 @@ head:
 
 # Privy Integration Guide
 
-[Privy](https://privy.io) is an easy way for web3 developers to onboard users across mobile and desktop, regardless of whether they already have a wallet or not.
+[Privy](https://privy.io) is an easy way for you to onboard users across mobile and desktop, regardless of whether they already have a wallet or not.
 
 With Privy, you can easily provision **self-custodial embedded wallets** for your users when they login with email, SMS, or social logins, while also enabling web3-native users to use their existing wallets with your app, if they prefer.
 

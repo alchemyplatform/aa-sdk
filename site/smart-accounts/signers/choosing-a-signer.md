@@ -17,7 +17,7 @@ head:
     - name: twitter:description
       content: Explore Account Kit integration guides for signers including Magic.Link, Privy, Web3Auth, EOAs, and many more!
 prev:
-  text: Smart Accounts
+  text: smart accounts
   link: /smart-accounts/accounts/choosing-a-smart-account
 next:
   text: Guides
@@ -26,13 +26,13 @@ next:
 
 # What is a Signer?
 
-A **signer** is a service (e.g. Magic or Turnkey) or application (e.g. Metamask) that manages the private key and signs operations. Most web3 users today use an [Externally Owned Account (EOA)](https://ethereum.org/en/developers/docs/accounts/#externally-owned-accounts-and-key-pairs) with a self-custodial signer such as Metamask to manage the private key.
+A **signer** is a service (e.g. Magic or Turnkey) or application (e.g. MetaMask) that manages the private key and signs operations. Most web3 users today use an [Externally Owned Account (EOA)](https://ethereum.org/en/developers/docs/accounts/#externally-owned-accounts-and-key-pairs) with a self-custodial signer such as MetaMask to manage the private key.
 
 With Account Kit, you will deploy a **smart account** for each user instead of an EOA wallet. This smart account stores the user’s assets (e.g. tokens or NFTs). The default smart account in Account Kit is called [`LightAccount`](/smart-accounts/accounts/light-account) and it uses a typical single-owner architecture.
 
 The smart account is controlled by an **Owner** address. The smart account will only execute a transaction if it was signed by the owner’s private key.
 
-You can choose any signer service or application to manage the Owner private key for the user. Using services like Magic, Turnkey, or Web3auth, you can secure the user’s account with an email, social login, or passkeys. You can also use a self-custodial wallet like Metamask as the signer.
+You can choose any signer service or application to manage the Owner private key for the user. Using services like Magic, Turnkey, or Web3auth, you can secure the user’s account with an email, social login, or passkeys. You can also use a self-custodial wallet like MetaMask as the signer.
 
 This doc provides a basic introduction to signers and the criteria you should consider when choosing which signer to use with Account Kit in your application.
 
@@ -59,7 +59,7 @@ Account Kit is compatible with any EIP-1193 provider. Many of the most popular s
 - [Portal](/smart-accounts/signers/portal)
 - [Capsule](/smart-accounts/signers/capsule)
 - [Lit Protocol](/smart-accounts/signers/lit)
-- [Self-custodial wallets like Metamask or Ledger](/smart-accounts/signers/eoa)
+- [Self-custodial wallets like MetaMask or Ledger](/smart-accounts/signers/eoa)
 
 If you want to use another signer, you can integrate any other signer by wrapping it in an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) provider or using [`SmartAccountSigner`](/smart-accounts/signers/custom-signer#implementing-smartaccountsigner) to adapt non-standard signers.
 
@@ -76,7 +76,7 @@ Here are some important criteria to consider when choosing a signer.
   - Email + Password: sign up for a smart account with an email and password.
   - Social Logins: sign up for a smart account with Google, Facebook, or other social logins.
   - Passkeys: sign up for a smart account secured by a passkey (e.g. fingerprint or Face ID) stored on-device.
-  - Self Custodial Wallet: sign up for a smart account using a self-custodial wallet such as Metamask or Ledger.
+  - Self Custodial Wallet: sign up for a smart account using a self-custodial wallet such as MetaMask or Ledger.
 - **Availability:** If the signer service provider goes down, will users be able to sign transactions?
 - **Key Export:** Does the signer allow the end user to export their private key? Can the user initiate an export even if the service provider has gone down? This is an important factor to ensure the user retains control of their assets no matter what happens to the service provider.
 - **Key Recovery**: If the user forgets their password or loses their passkey, what recovery methods does the signer provide? If the provider stores a backup copy of the private key or MPC key shares, where are those backups stored and who has access to them?
@@ -124,7 +124,7 @@ Self-custodial wallets store the private key locally where only the end user can
 
 Self-custodial wallets require the user to maintain good security hygiene at all times. They also rely on the user to backup a copy of their private key in the event the wallet is lost or destroyed. If the user loses access to the device on which their private key is stored, they will have no way to recover the account unless they backed up the private key in another device or location.
 
-**Example**: Metamask, Ledger
+**Example**: MetaMask, Ledger
 
 ### Custodial Wallet
 

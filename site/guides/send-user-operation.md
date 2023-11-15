@@ -17,13 +17,13 @@ head:
     - name: twitter:description
       content: Follow this guide to send a User Operation with Alchemy's Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 prev:
-  text: Smart Accounts
+  text: smart accounts
   link: /smart-accounts/overview
 ---
 
 # How to Send a User Operation
 
-This guide will show you how to send a User Operation with Account Kit by creating an Alchemy Provider, connecting it to a Light Account (a type of smart account implementation), and sending a User Operation from that provider. By the end of this guide, you'll have a basic understanding of how to use the SDK.
+This guide will show you how to send a User Operation with Account Kit by creating an Alchemy Provider, connecting it to a LightAccount (a type of smart account implementation), and sending a User Operation from that provider. By the end of this guide, you'll have a basic understanding of how to use the SDK.
 
 ## 1. Create Your Provider
 
@@ -33,11 +33,11 @@ See [Alchemy Provider](/packages/aa-alchemy/provider/introduction.md) for more d
 
 <<< @/snippets/send-uo-example/create-provider.ts
 
-## 2. Connect Your Smart Account
+## 2. Connect Your smart account
 
-To send User Operations, we must connect the `provider` with a smart account. The Light Account is Alchemy's gas-optimized smart account implementation, which we'll use in this example.
+To send User Operations, we must connect the `provider` with a smart account. The LightAccount is Alchemy's gas-optimized smart account implementation, which we'll use in this example.
 
-See [Light Account](/packages/aa-accounts/light-account/introduction.md) for more details.
+See [LightAccount](/packages/aa-accounts/light-account/introduction.md) for more details.
 
 <<< @/snippets/send-uo-example/connect-account.ts
 

@@ -22,7 +22,7 @@ import {
 
 const chain = sepolia;
 
-describe("Light Account Tests", () => {
+describe("LightAccount Tests", () => {
   const owner: SmartAccountSigner<HDAccount> =
     LocalAccountSigner.mnemonicToAccountSigner(LIGHT_ACCOUNT_OWNER_MNEMONIC);
   const undeployedOwner = LocalAccountSigner.mnemonicToAccountSigner(

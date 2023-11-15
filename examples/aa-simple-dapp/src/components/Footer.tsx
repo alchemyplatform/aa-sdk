@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <div className="flex flex-row flex-wrap items-center justify-center gap-[16px]">
       <FooterCard
-        title={"AccountKit Docs"}
+        title={"Account Kit Docs"}
         subTitle="Check out Alchemy's Account Kit!"
         link={"https://accountkit.alchemy.com"}
       />

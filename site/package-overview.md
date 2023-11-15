@@ -17,13 +17,13 @@ head:
     - name: twitter:description
       content: Explore the benefits and tradeoffs of four different packages that can be used with Account Kit namely aa-core, aa-alchemy, aa-accounts, and aa-ethers.
 next:
-  text: Smart Accounts
+  text: smart accounts
   link: /smart-accounts/overview
 ---
 
 # Package Overview
 
-The Alchemy Account Kit SDK is comprised of a number of smaller packages that developers can leverage to interact with [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) infrastructure. For almost all cases, `aa-core` is sufficient with the subsequent packages offering various utilities for interacting with specific Account Abstraction Infrastructure or Smart Accounts.
+The Alchemy Account Kit SDK is comprised of a number of smaller packages that you can leverage to interact with [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) infrastructure. For almost all cases, `aa-core` is sufficient with the subsequent packages offering various utilities for interacting with specific Account Abstraction Infrastructure or smart accounts.
 
 ## [`aa-core`](/packages/aa-core/)
 
@@ -45,13 +45,13 @@ For more details on all the utilities exported by `aa-alchemy` see the [aa-alche
 
 ## [`aa-accounts`](/packages/aa-accounts/)
 
-This packages provides various implementations of `BaseSmartContractAccount` for interacting with different Smart Accounts. This package is not required to use `aa-core` or `aa-alchemy`. If you want to use your own Smart Account implementation, you can do so by following the guide ["Using Your Own Account"](/smart-accounts/accounts/using-your-own).
+This packages provides various implementations of `BaseSmartContractAccount` for interacting with different smart accounts. This package is not required to use `aa-core` or `aa-alchemy`. If you want to use your own smart account implementation, you can do so by following the guide ["Using Your Own Account"](/smart-accounts/accounts/using-your-own).
 
-If you'd like to use a Smart Account that is not supported by this package, you can implement `BaseSmartContractAccount` yourself and use it with `aa-core` or `aa-alchemy`
+If you'd like to use a smart account that is not supported by this package, you can implement `BaseSmartContractAccount` yourself and use it with `aa-core` or `aa-alchemy`
 
-For details on contributing your own Smart Account implementation, see the [aa-accounts contribution guide](/packages/aa-accounts/contributing).
+For details on contributing your own smart account implementation, see the [aa-accounts contribution guide](/packages/aa-accounts/contributing).
 
-To see all of the Smart Accounts that are supported by this package, see the [aa-accounts documentation](/packages/aa-accounts/).
+To see all of the smart accounts that are supported by this package, see the [aa-accounts documentation](/packages/aa-accounts/).
 
 ## [`aa-ethers`](/packages/aa-ethers/)
 

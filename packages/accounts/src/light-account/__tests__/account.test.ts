@@ -11,7 +11,7 @@ import { getDefaultLightAccountFactoryAddress } from "../utils.js";
 
 const chain = polygonMumbai;
 
-describe("Light Account Tests", () => {
+describe("LightAccount Tests", () => {
   const dummyMnemonic =
     "test test test test test test test test test test test test";
   const owner: SmartAccountSigner =
