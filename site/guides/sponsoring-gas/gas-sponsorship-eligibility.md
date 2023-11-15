@@ -26,7 +26,7 @@ But what happens when the user operation you are sending fails to satisfy the cr
 
 If you do send the user operation that is not eligible for the gas sponsorship under your Gas Manager policy, [`sendUserOperation`](/packages/aa-core/provider/sendUserOperation.md) or [`sendTransaction`](/packages/aa-core/provider/sendTransaction.md) will fail due to the error thrown during the [`PaymasterMiddleware`](/packages/aa-core/provider/withPaymasterMiddleware.md) failure. You can follow the guide below to check for gas sponsorship eligibility in advance.
 
-## 1. How to Check for Gas Sponsorship Eligibility for a User Operation
+## 1. How to Check if a User Operation is Eligible for Gas Sponsorship
 
 First, you can follow the same instructions from the previous guide on [How to Sponsor Gas for a User Operation](./sponsoring-gas.md) to set up your `SmartAccountProvider` and link your gas policy.
 
