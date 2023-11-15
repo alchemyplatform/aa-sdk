@@ -48,6 +48,20 @@ Using the SDK in the following example, we'll deploy a Smart Account and send a 
 
 <<< @/snippets/light-account.ts
 
+To run the example, check your project's `package.json` file for correct script command. For instance, if your `package.json` has a script called `start` which runs the example file in a `node` environment, you can do:
+
+::: code-group
+
+```bash [npm]
+npm start
+```
+
+```bash [yarn]
+yarn start
+```
+
+:::
+
 ::: tip Remember
 
 1. Get an `ALCHEMY_API_KEY` from the [Alchemy Dashboard](https://dashboard.alchemy.com/).
