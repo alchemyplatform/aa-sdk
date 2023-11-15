@@ -1,6 +1,6 @@
 # Alchemy Simple Account Abstraction Dapp
 
-This is a simple Next.js single page application that leverages account abstraction via the Alchemy aa-sdk, allowing users to mint an ERC-20 Token to an SCA without needing to have an EOA wallet or incur any gas fees.
+This is a simple Next.js single page application that leverages account abstraction via the aa-sdk, allowing users to mint an ERC-20 Token to an SCA without needing to have an EOA wallet or incur any gas fees.
 
 ## Run Locally @ [http://localhost:3000](http://localhost:3000)
 

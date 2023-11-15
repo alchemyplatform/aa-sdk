@@ -103,18 +103,18 @@ export interface ISmartContractAccount {
   getAddress(): Promise<Address>;
 
   /**
-   * @returns the smart contract account owner instance if it exists.
-   * It is optional for a smart contract account to have an owner account.
+   * @returns the smart account owner instance if it exists.
+   * It is optional for a smart account to have an owner account.
    */
   getOwner(): SmartAccountSigner | undefined;
 
   /**
-   * @returns the address of the factory contract for the smart contract account
+   * @returns the address of the factory contract for the smart account
    */
   getFactoryAddress(): Address;
 
   /**
-   * @returns the address of the entry point contract for the smart contract account
+   * @returns the address of the entry point contract for the smart account
    */
   getEntryPointAddress(): Address;
 }

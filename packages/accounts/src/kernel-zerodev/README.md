@@ -1,6 +1,6 @@
 # Zerodev Kernel Account API
 
-This module provides a Signer + Provider implementation of Zerodev's Kernel V2 on top of `@alchemy/aa-core`
+This module provides a signer + Provider implementation of Zerodev's Kernel V2 on top of `@alchemy/aa-core`
 
 [What is Kernel V2?](https://docs.zerodev.app/blog/kernel-v2-and-the-lessons-we-learned)
 [Documentation](https://docs.zerodev.app/use-wallets/overview)
@@ -74,7 +74,7 @@ const { hash } = provider.sendUserOperation({
 
 The primary interfaces are the `KernelAccountProvider`, `KernelSmartContractAccount` and `KernelBaseValidator`
 
-The `KernelAccountProvider` is an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compliant Provider built on top of Alchemy's `SmartAccountProvider`
+The `KernelAccountProvider` is an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compliant Provider built on top of `SmartAccountProvider`
 
 1. `sendUserOperation` -- this takes in `target`, `callData`, and an optional `value` which then constructs a UserOperation (UO), sends it, and returns the `hash` of the UO. It handles estimating gas, fetching fee data, (optionally) requesting paymasterAndData, and lastly signing. This is done via a middleware stack that runs in a specific order. The middleware order is `getDummyPaymasterData` => `estimateGas` => `getFeeData` => `getPaymasterAndData`. The paymaster fields are set to `0x` by default. They can be changed using `provider.withPaymasterMiddleware`.
 2. `sendTransaction` -- this takes in a traditional Transaction Request object which then gets converted into a UO. This takes in a traditional Transaction Request object which then gets converted into a UO. Note that `to` field of transaction is required, and among other fields of transaction, only `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas` fields are considered if given. Support for other fields is coming soon.

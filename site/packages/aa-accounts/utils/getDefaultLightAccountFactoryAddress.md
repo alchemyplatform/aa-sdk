@@ -34,10 +34,10 @@ const factoryAddress = getDefaultLightAccountFactoryAddress(chain);
 
 ### `Address`
 
-The Address of the default LightAccount Factory contrafct address for the input chain
+The Address of the default Light Account Factory contrafct address for the input chain
 
 ## Paramters
 
 ### `chain: Chain`
 
-The chain to get the default LightAccount Factory address for
+The chain to get the default Light Account Factory address for

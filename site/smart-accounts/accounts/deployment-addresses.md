@@ -6,17 +6,17 @@ head:
       content: Deployment Addresses
   - - meta
     - name: description
-      content: Deployment Addresses for LightAccount and SimpleAccount
+      content: Deployment Addresses for Light Account and SimpleAccount
   - - meta
     - property: og:description
-      content: Deployment Addresses for LightAccount and SimpleAccount
+      content: Deployment Addresses for Light Account and SimpleAccount
 ---
 
 # Deployment Addresses
 
 The following tables list the deployed factory and account implementation contract addresses for `LightAccount` and `SimpleAccount` on different chains:
 
-## [LightAccount](https://github.com/alchemyplatform/light-account/blob/v1.0.2/Deployments.md)
+## [Light Account](https://github.com/alchemyplatform/light-account/blob/v1.0.2/Deployments.md)
 
 | Chain            | Factory Address                            | Account Implementation                     |
 | ---------------- | ------------------------------------------ | ------------------------------------------ |

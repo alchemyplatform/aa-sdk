@@ -14,7 +14,7 @@ head:
 
 # sendTransaction
 
-`sendTransaction` is a method on `AccountSigner` that sends transactions on behalf of the `AccountSigner`'s smart contract account, with request and response formatted as if you were using the ethers.js library.
+`sendTransaction` is a method on `AccountSigner` that sends transactions on behalf of the `AccountSigner`'s smart account, with request and response formatted as if you were using the ethers.js library.
 
 Note that `to` field of transaction is required, and among other fields of transaction, only `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas` fields are considered and optional. Support for other fields is coming soon.
 

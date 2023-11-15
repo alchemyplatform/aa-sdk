@@ -67,7 +67,7 @@ export default defineConfig({
             base: "/smart-accounts/accounts",
             items: [
               { text: "Introduction", link: "/choosing-a-smart-account" },
-              { text: "LightAccount", link: "/light-account" },
+              { text: "Light Account", link: "/light-account" },
               {
                 text: "Modular Account",
                 link: "/modular-account",
@@ -577,7 +577,7 @@ export default defineConfig({
             link: "/",
           },
           {
-            text: "LightAccount",
+            text: "Light Account",
             collapsed: true,
             base: "/packages/aa-accounts/light-account",
             items: [

@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Contributing Your Signer
+      content: Contributing Your signer
   - - meta
     - name: description
       content: Follow this guide to contribute a new signer to Account Kit documentation, and enable developers to sign ERC-4337 transactions with your signer.
@@ -12,13 +12,13 @@ head:
       content: Follow this guide to contribute a new signer to Account Kit documentation, and enable developers to sign ERC-4337 transactions with your signer.
   - - meta
     - name: twitter:title
-      content: Contributing Your Signer
+      content: Contributing Your signer
   - - meta
     - name: twitter:description
       content: Follow this guide to contribute a new signer to Account Kit documentation, and enable developers to sign ERC-4337 transactions with your signer.
 ---
 
-# Contributing Your Signer
+# Contributing Your signer
 
 If you'd like to add your signer to this list, we welcome PRs! Here's how to do it:
 
@@ -30,11 +30,11 @@ If you'd like to add your signer to this list, we welcome PRs! Here's how to do 
   sidebar: [
     // ... other entries
     {
-      text: "Choosing a Signer",
+      text: "Choosing a signer",
       base: "/smart-accounts/signers",
       items: [
         // ... other entries
-        { text: "My New Signer", link: "/my-new-signer" },
+        { text: "My New signer", link: "/my-new-signer" },
         { text: "Externally Owned Account", link: "/eoa" },
         { text: "Using Your Own", link: "/using-your-own" },
         { text: "Contributing", link: "/contributing" },
@@ -47,4 +47,4 @@ If you'd like to add your signer to this list, we welcome PRs! Here's how to do 
 3. Add your document to [`site/smart-accounts/signers/`](https://github.com/alchemyplatform/aa-sdk/tree/main/site/smart-accounts/signers) and name it `your-signer-name.md` (the name should match the `link` property you added in the previous step)
 4. Open a PR!
 
-If your `Signer` or library exports an `EIP-1193` compliant provider, you can use the `WalletClientSigner` from `aa-core` to easily integrate with Account Kit. See the ["Using Your Own Signer"](/smart-accounts/signers/custom-signer) guide for more details.
+If your `signer` or library exports an `EIP-1193` compliant provider, you can use the `WalletClientSigner` from `aa-core` to easily integrate with Account Kit. See the ["Using Your Own signer"](/smart-accounts/signers/custom-signer) guide for more details.

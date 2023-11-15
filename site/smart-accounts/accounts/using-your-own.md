@@ -17,7 +17,7 @@ head:
     - name: twitter:description
       content: Follow this guide to use any smart account implementation you want with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 next:
-  text: Choosing a Signer
+  text: Choosing a signer
 ---
 
 # Using Your Own smart account
@@ -52,7 +52,7 @@ See ["Contributing to `aa-accounts`"](/packages/aa-accounts/contributing) for mo
 
 ## `LightSmartContractAccount` as an Example
 
-We have built an extension of the eth-infinitism `SimpleAccount` called [LightAccount.sol](https://github.com/alchemyplatform/light-account/blob/main/src/LightAccount.sol). You can learn more about LightAccount in the [LightAccount documentation](/smart-accounts/accounts/light-account).
+We have built an extension of the eth-infinitism `SimpleAccount` called [LightAccount.sol](https://github.com/alchemyplatform/light-account/blob/main/src/LightAccount.sol). You can learn more about Light Account in the [Light Account documentation](/smart-accounts/accounts/light-account).
 
 We provide an implementation of `ISmartContractAccount` that works with `LightAccount.sol` which can be used as an example of how to implement your own Smart Contract Account:
 ::: details LightSmartContractAccount

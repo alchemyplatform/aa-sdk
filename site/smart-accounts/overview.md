@@ -29,20 +29,20 @@ In this guide we'll explain the end-to-end journey of integrating smart accounts
 
 ## 1. Setting Up an Alchemy Account
 
-Before diving into smart accounts, it's important to [set up your Alchemy account](https://auth.alchemy.com/signup). This will allow you to access the Alchemy API key which is required to initialize a provider and interact with the blockchain. Additionally, you'll get access to Alchemy's Gas Manager, which will enable you to sponsor gas for your users.
+Before diving into smart accounts, it's important to [set up your Alchemy account](https://auth.alchemy.com/signup). This will allow you to access the Alchemy API key which is required to initialize a provider and interact with the blockchain. Additionally, you'll get access to our Gas Manager, which will enable you to sponsor gas for your users.
 
 ## 2. Deploying a smart account
 
 The next step is to select the right smart account implementation for your application. We recommend using `LightAccount`, which is a simple, secure, and cost-effective solution for most use cases. It supports features such as owner transfers, [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) message signing, batched transactions and more. However, if you're looking for more advanced features, you can use your own account implementation. We'll cover both options in detail in the following sections:
 
-- [Using LightAccount](accounts/light-account)
+- [Using Light Account](accounts/light-account)
 - [Using your own account implementation](accounts/using-your-own)
 
 ::: tip Note
 The `LightAccount` implementation is not [ERC-6900](/smart-accounts/accounts/modular-account) compliant. The `ModularAccount` implementation is launching later this year and will be EIP-6900 compatible. However, `LightAccount` is forward-compatible with `ModularAccount` and can be upgraded to it in the future.
 :::
 
-## 3. Choosing a Signer
+## 3. Choosing a signer
 
 A signer is the entity that signs transactions (User Operations) on behalf of the smart account. It can be an EOA, a custodial service, or a multi-party computation (MPC) service. We explain the different types of signers in detail in the [overview](signers/choosing-a-signer) section on choosing a signer. We'll also cover the common signer examples in detail in the following sections:
 

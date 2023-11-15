@@ -6,7 +6,7 @@ export default function Footer() {
     <div className="flex flex-row flex-wrap items-center justify-center gap-[16px]">
       <FooterCard
         title={"Account Kit Docs"}
-        subTitle="Check out Alchemy's Account Kit!"
+        subTitle="Check out Account Kit!"
         link={"https://accountkit.alchemy.com"}
       />
       <FooterCard
@@ -16,7 +16,7 @@ export default function Footer() {
       />
       <FooterCard
         title={"Alchemy.com"}
-        subTitle="Check out other Alchemy products!"
+        subTitle="Check out our other products!"
         link={"https://alchemy.com"}
       />
     </div>

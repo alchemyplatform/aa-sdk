@@ -52,7 +52,7 @@ Next, setup the Turnkey sdk and create a `SmartAccountSigner`:
 
 <<< @/snippets/turnkey.ts
 
-### Use it with LightAccount
+### Use it with Light Account
 
 Let's see it in action with `aa-alchemy` and `LightSmartContractAccount` from `aa-accounts`:
 ::: code-group

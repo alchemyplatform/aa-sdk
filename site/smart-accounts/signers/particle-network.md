@@ -48,7 +48,7 @@ From here, setting up a `SmartAccountSigner` involves the initialization of `Par
 
 <<< @/snippets/particle.ts
 
-### Use it with LightAccount
+### Use it with Light Account
 
 Let's see it in action with `aa-alchemy` and `LightSmartContractAccount` from `aa-accounts`:
 ::: code-group
