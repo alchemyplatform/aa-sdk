@@ -31,7 +31,7 @@ It’s way too hard for new users to start using web3 apps. Today, users have to
 
 The user leaves your app at every step! This style of web3 onboarding is too complex and intimidating — most new users drop off before they ever reach the magic moment with your app. We need to make wallets, seed phrases, and gas costs disappear in order to onboard the next billion users.
 
-## The Solution: Smart Accounts
+## The Solution: smart accounts
 
 Account Kit provides all the tools you need to onboard the next 1B users with a simple, familiar user experience.
 
@@ -48,7 +48,7 @@ Account Kit makes it possible to build a web3 app that feels like web2: simple a
 
 It’s enabled by [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337), a new account abstraction standard developed by Vitalik and the Ethereum Foundation. This is the beginning of a major [transition](https://vitalik.ca/general/2023/06/09/three_transitions.html) from traditional EOA wallets to smart accounts.
 
-Account Kit was designed to make it easy for every developer to leverage account abstraction. It includes everything you need to ship smart accounts in minutes!
+Account Kit was designed to make it easy for you to leverage account abstraction. It includes everything you need to ship smart accounts in minutes!
 
 ## Your app, your UX
 
@@ -65,7 +65,7 @@ Streamline your sign up flow with simple web2 login options supported by Account
 - Self-custodial wallets like MetaMask or Ledger
 - and more
 
-Account Kit integrates all the leading wallet Signers with bespoke integration guides for [Magic](/smart-accounts/signers/magic), [web3auth](/smart-accounts/signers/web3auth), [Turnkey](/smart-accounts/signers/turnkey), [Privy](/smart-accounts/signers/privy), [Dynamic](/smart-accounts/signers/dynamic), [Fireblocks](/smart-accounts/signers/fireblocks), [Portal](/smart-accounts/signers/portal), [Capsule](/smart-accounts/signers/capsule) and [Lit Protocol](/smart-accounts/signers/lit). Account Kit even supports self-custodial wallets like Metamask or Ledger. Users can even change their signer later via Account Kit’s [ownership transfer](/guides/transferring-ownership) functionality.
+Account Kit integrates all the leading wallet Signers with bespoke integration guides for [Magic](/smart-accounts/signers/magic), [web3auth](/smart-accounts/signers/web3auth), [Turnkey](/smart-accounts/signers/turnkey), [Privy](/smart-accounts/signers/privy), [Dynamic](/smart-accounts/signers/dynamic), [Fireblocks](/smart-accounts/signers/fireblocks), [Portal](/smart-accounts/signers/portal), [Capsule](/smart-accounts/signers/capsule) and [Lit Protocol](/smart-accounts/signers/lit). Account Kit even supports self-custodial wallets like MetaMask or Ledger. Users can even change their signer later via Account Kit’s [ownership transfer](/guides/transferring-ownership) functionality.
 
 Learn [how to choose the right signer for your use case in this doc](/smart-accounts/signers/choosing-a-signer).
 

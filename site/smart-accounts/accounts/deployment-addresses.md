@@ -16,7 +16,7 @@ head:
 
 The following tables list the deployed factory and account implementation contract addresses for `LightAccount` and `SimpleAccount` on different chains:
 
-## [Light Account](https://github.com/alchemyplatform/light-account/blob/v1.0.2/Deployments.md)
+## [LightAccount](https://github.com/alchemyplatform/light-account/blob/v1.0.2/Deployments.md)
 
 | Chain            | Factory Address                            | Account Implementation                     |
 | ---------------- | ------------------------------------------ | ------------------------------------------ |

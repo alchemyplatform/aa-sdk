@@ -11,14 +11,14 @@ head:
     - property: og:description
       content: Demos using Alchemy's Account Kit
 next:
-  text: Smart Accounts
+  text: smart accounts
 ---
 
 # Demos
 
 ## Gasless Token Minting Demo
 
-This demo shows how to mint an ERC-20 token to a Light Account using Alchemy's Gas Manager to provide a gas-less minting experience.
+This demo shows how to mint an ERC-20 token to a LightAccount using Alchemy's Gas Manager to provide a gasless minting experience.
 
 [Try it out!](https://aa-simple-dapp.vercel.app/)
 
@@ -28,6 +28,6 @@ This demo shows how to mint an ERC-20 token to a Light Account using Alchemy's G
 
 ## Gasless NFT Minting Demo
 
-This demo shows how to mint an NFT (ERC-721 token) to a Light Account using Alchemy's Gas Manager to provide a gas-less minting experience.
+This demo shows how to mint an NFT (ERC-721 token) to a LightAccount using Alchemy's Gas Manager to provide a gasless minting experience.
 
 [Try it out!](https://gasless-nft-minter-v2.vercel.app/)

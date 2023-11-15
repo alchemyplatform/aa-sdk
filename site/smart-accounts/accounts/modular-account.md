@@ -20,19 +20,19 @@ head:
 
 # Modular Account
 
-Soon after the first stable version of [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900), we will release an ERC-6900 compatible Modular Account in Account Kit. It will support new use cases like session keys, account recovery, spending limits, and any ERC-6900 plugin you can imagine. The Light Account is forward-compatible with ERC-6900 so you can optionally upgrade it to the Modular Account once released.
+Soon after the first stable version of [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900), we will release an ERC-6900 compatible Modular Account in Account Kit. It will support new use cases like session keys, account recovery, spending limits, and any ERC-6900 plugin you can imagine. The LightAccount is forward-compatible with ERC-6900 so you can optionally upgrade it to the Modular Account once released.
 
 Read on to learn more about ERC-6900 and modular accounts.
 
 :::tip Note
-We are working towards the first stable version of [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) with [the community](https://ethereum-magicians.org/t/erc-6900-modular-smart-contract-accounts-and-plugins/13885). If you're developing a plugin or modular account, we'd love to chat! Join the Modular Accounts [Telegram group](https://t.me/+KfB9WuhKDgk5YzIx) or [say hello](mailto:account-abstraction@alchemy.com) to a team member at Alchemy.
+We are working towards the first stable version of [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) with [the community](https://ethereum-magicians.org/t/erc-6900-modular-smart-contract-accounts-and-plugins/13885). If you're developing a plugin or modular account, we'd love to chat! Join the Modular Accounts [Telegram group](https://t.me/+KfB9WuhKDgk5YzIx) or [say hello](mailto:account-abstraction@alchemy.com) to us!
 :::
 
 ## Motivation
 
 In the coming years, we expect most user accounts to be smart contract accounts that leverage the benefits of account abstraction. These accounts will generally share a similar set of core features such as signature validation and ownership transfer. To ensure this core feature set is secure and does not contain any vulnerabilities, it will be prudent for most developers to re-use battle-tested smart accounts rather than writing their own accounts.
 
-However, smart acounts are also programmable, enabling developers to build new and innovative features that hook into the validation and execution logic of a smart account. We hope and expect to see a diverse ecosystem of plugins flourish.
+However, smart acounts are also programmable, enabling you to build new and innovative features that hook into the validation and execution logic of a smart account. We hope and expect to see a diverse ecosystem of plugins flourish.
 
 In order to maximize interoperability and code re-use, these plugins will ideally share a standard interface that is compatible with every smart contract account.
 
@@ -51,7 +51,7 @@ Taken together, these interactions enable a workflow that supports the seamless 
 1. Plugin developers and users set each plugin’s permissions and specifies validation and hooks during installation of the the plugin onto the account.
 2. Based on these permissions, plugins can then change account states or execute on behalf of the account.
 
-By standardizing basic functions and interfaces, ERC-6900 seeks to foster a growing ecosystem of wallet and plugin developers. These developers should be able to write one plugin that works with all smart accounts, rather than fragmenting their efforts across multiple different account implementations.
+By standardizing basic functions and interfaces, ERC-6900 seeks to foster a growing ecosystem of wallet and plugin developers. You should be able to write one plugin that works with all smart accounts, rather than fragmenting their efforts across multiple different account implementations.
 
 For users, this standard will make it easier to discover and enable plugins. Imagine a future where a user with an ERC-6900 compatible account can install any of a thousand plugins to their smart account.
 

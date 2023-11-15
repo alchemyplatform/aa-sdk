@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Using Your Own Smart Account
+      content: Using Your Own smart account
   - - meta
     - name: description
       content: Follow this guide to use any smart account implementation you want with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
@@ -12,7 +12,7 @@ head:
       content: Follow this guide to use any smart account implementation you want with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - name: twitter:title
-      content: Using Your Own Smart Account
+      content: Using Your Own smart account
   - - meta
     - name: twitter:description
       content: Follow this guide to use any smart account implementation you want with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
@@ -20,9 +20,9 @@ next:
   text: Choosing a Signer
 ---
 
-# Using Your Own Smart Account
+# Using Your Own smart account
 
-You are not limited to the accounts defined in `@alchemy/aa-accounts`. The `SmartAccountProvider` can be used with any Smart Contract Account because it only relies on the [`ISmartContractAccount`](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/core/src/account/types.ts#L8) interface. This means you can use your own Smart Contract Account implementation with the Account Kit.
+You are not limited to the accounts defined in `@alchemy/aa-accounts`. The `SmartAccountProvider` can be used with any Smart Contract Account because it only relies on the [`ISmartContractAccount`](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/core/src/account/types.ts#L8) interface. This means you can use your own Smart Contract Account implementation with Account Kit.
 
 ## Implementing `ISmartContractAccount`
 
@@ -52,7 +52,7 @@ See ["Contributing to `aa-accounts`"](/packages/aa-accounts/contributing) for mo
 
 ## `LightSmartContractAccount` as an Example
 
-The team at Alchemy has built an extension of the eth-infinitism `SimpleAccount` called [LightAccount.sol](https://github.com/alchemyplatform/light-account/blob/main/src/LightAccount.sol). You can learn more about the Light Account in the [Light Account documentation](/smart-accounts/accounts/light-account).
+We have built an extension of the eth-infinitism `SimpleAccount` called [LightAccount.sol](https://github.com/alchemyplatform/light-account/blob/main/src/LightAccount.sol). You can learn more about LightAccount in the [LightAccount documentation](/smart-accounts/accounts/light-account).
 
 We provide an implementation of `ISmartContractAccount` that works with `LightAccount.sol` which can be used as an example of how to implement your own Smart Contract Account:
 ::: details LightSmartContractAccount

@@ -23,7 +23,7 @@ next:
 
 # Package Overview
 
-The Alchemy Account Kit SDK consists of a number of smaller packages that developers can leverage to interact with [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) infrastructure.
+Account Kit is comprised of a number of smaller packages that developers can leverage to interact with [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) infrastructure.
 
 For almost all cases, `aa-core` is sufficient with the subsequent packages offering various utilities for interacting with specific Account Abstraction infrastructure or smart accounts. However, we offer additional packages to augment your developer experience with custom Alchemy infrastructure (`aa-alchemy`), custom smart account (`aa-accounts`) and signer solutions (`aa-signers`), and an ethers.js-compatible solution (`aa-ethers`).
 

@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: How to Transfer Ownership of a Smart Account
+      content: How to Transfer Ownership of a smart account
   - - meta
     - name: description
       content: Follow this guide to transfer ownership of a smart account with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
@@ -12,7 +12,7 @@ head:
       content: Follow this guide to transfer ownership of a smart account with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - name: twitter:title
-      content: How to Transfer Ownership of a Smart Account
+      content: How to Transfer Ownership of a smart account
   - - meta
     - name: twitter:description
       content: Follow this guide to transfer ownership of a smart account with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
@@ -20,19 +20,19 @@ next:
   text: Packages
 ---
 
-# How to Transfer Ownership of a Smart Account
+# How to Transfer Ownership of a smart account
 
-Not all Smart Contract Account implementations support transfering the owner (e.g. `SimpleAccount`). However, a number of the accounts in this guide and in the Account Kit do, including Alchemy's Light Account! Let's see a few different ways we can transfer ownership of an Account (using Light Account as an example).
+Not all Smart Contract Account implementations support transfering the owner (e.g. `SimpleAccount`). However, a number of the accounts in this guide and in Account Kit do, including Alchemy's LightAccount! Let's see a few different ways we can transfer ownership of an Account (using LightAccount as an example).
 
-## Light Account
+## LightAccount
 
-Light Account exposes the following method which allows the existing owner to transfer ownership to a new address:
+LightAccount exposes the following method which allows the existing owner to transfer ownership to a new address:
 
 ```solidity
 function transferOwnership(address newOwner) public virtual onlyOwner
 ```
 
-There a number of ways you can call this method using the Account Kit.
+There a number of ways you can call this method using Account Kit.
 
 ### 1. Using `LightSmartContractAccount`
 
@@ -98,4 +98,4 @@ const { hash: userOperationHash } = provider.sendUserOperation({
 
 :::
 
-See the [`LightSmartContractAccount`](/packages/aa-accounts/light-account/introduction) docs for more details about the Alchemy Light Account implementation.
+See the [`LightSmartContractAccount`](/packages/aa-accounts/light-account/introduction) docs for more details about the Alchemy LightAccount implementation.

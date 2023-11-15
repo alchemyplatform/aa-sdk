@@ -6,23 +6,23 @@ head:
       content: Introduction
   - - meta
     - name: description
-      content: Learn what Account Kit is, how it works, and how web3 application developers can use it to add support for smart accounts.
+      content: Learn what Account Kit is, how it works, and how you can use it to add support for smart accounts.
   - - meta
     - property: og:description
-      content: Learn what Account Kit is, how it works, and how web3 application developers can use it to add support for smart accounts.
+      content: Learn what Account Kit is, how it works, and how you can use it to add support for smart accounts.
   - - meta
     - name: twitter:title
       content: Introduction
   - - meta
     - name: twitter:description
-      content: Learn what Account Kit is, how it works, and how web3 application developers can use it to add support for smart accounts.
+      content: Learn what Account Kit is, how it works, and how you can use it to add support for smart accounts.
 ---
 
 # What is Account Kit?
 
 **Account Kit** is a framework to embed smart accounts in your web3 app, unlocking [powerful features](/overview/getting-started) like email/social login, gas sponsorship, batched transactions, and more. The `aa-sdk` makes it easy to integrate and deploy smart accounts, send user operations, and sponsor gas with just a few lines of code.
 
-## What is included in the Account Kit stack?
+## What is included in Account Kit stack?
 
 Account Kit is a complete solution for [account abstraction](https://www.alchemy.com/overviews/what-is-account-abstraction). It includes five components:
 
@@ -50,7 +50,7 @@ Get started with `aa-sdk` in our [Getting Started guide](/overview/getting-start
 
 `LightAccount` is a secure, gas-optimized, ERC-4337 smart contract account.
 
-We started with the Ethereum Foundation’s canonical [SimpleAccount](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol) and added key improvements for production app developers:
+We started with the Ethereum Foundation’s canonical [SimpleAccount](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol) and added key improvements for production app development:
 
 - Significantly [reduced gas costs](/smart-accounts/accounts/choosing-a-smart-account#benchmarks)
 - ERC-1271 signature support to ensure users can sign messages, such as on Opensea
@@ -64,7 +64,7 @@ To learn how to deploy a `LightAccount`, see [LightAccount](/smart-accounts/acco
 
 ### Signers
 
-A Signer is responsible for securely managing the private key and signing transaction requests on the smart account. Account Kit supports many popular wallet signers including [Magic](/smart-accounts/signers/magic), [web3auth](/smart-accounts/signers/web3auth), [Turnkey](/smart-accounts/signers/turnkey), [Privy](/smart-accounts/signers/privy), [Dynamic](/smart-accounts/signers/dynamic), [Fireblocks](/smart-accounts/signers/fireblocks), [Portal](/smart-accounts/signers/portal), [Capsule](/smart-accounts/signers/capsule) and [Lit Protocol](/smart-accounts/signers/lit). It also supports self-custodial wallets like Metamask or Ledger.
+A Signer is responsible for securely managing the private key and signing transaction requests on the smart account. Account Kit supports many popular wallet signers including [Magic](/smart-accounts/signers/magic), [web3auth](/smart-accounts/signers/web3auth), [Turnkey](/smart-accounts/signers/turnkey), [Privy](/smart-accounts/signers/privy), [Dynamic](/smart-accounts/signers/dynamic), [Fireblocks](/smart-accounts/signers/fireblocks), [Portal](/smart-accounts/signers/portal), [Capsule](/smart-accounts/signers/capsule) and [Lit Protocol](/smart-accounts/signers/lit). It also supports self-custodial wallets like MetaMask or Ledger.
 
 To get started with a signer, read the doc: [How to Choose a Signer](/smart-accounts/signers/choosing-a-signer).
 
@@ -76,7 +76,7 @@ To learn how to sponsor gas with the Gas Manager API, see the [Sponsoring Gas](/
 
 ### Bundler API
 
-The Bundler is a mission-critical piece of secondary infrastructure defined in the ERC-4337 spec that is responsible for submitting UserOps from a Smart Account onchain. If your Bundler API is unreliable, then User Operations are going to fail or get stuck.
+The Bundler is a mission-critical piece of secondary infrastructure defined in the ERC-4337 spec that is responsible for submitting UserOps from a smart account onchain. If your Bundler API is unreliable, then User Operations are going to fail or get stuck.
 
 We built our [Bundler in Rust](https://www.alchemy.com/blog/open-sourcing-rundler) to handle the highest loads at production scale. It’s able to handle massive scale because we operate it alongside our fleet of nodes powering the biggest dapps in web3 from Opensea to Circle.
 
