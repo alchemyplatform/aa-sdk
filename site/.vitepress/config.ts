@@ -512,6 +512,10 @@ export default defineConfig({
               },
               { text: "gasEstimator", link: "/gasEstimator" },
               {
+                text: "simulateUserOperationAssetChanges",
+                link: "/simulateUserOperationAssetChanges",
+              },
+              {
                 text: "withAlchemyGasManager",
                 link: "/withAlchemyGasManager",
               },
