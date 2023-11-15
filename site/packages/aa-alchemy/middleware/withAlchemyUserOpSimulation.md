@@ -16,7 +16,7 @@ next:
 
 # withAlchemyUserOpSimulation
 
-`withAlchemyUserOpSimulation` is a middleware method you can use to easily leverage the [`alchemy_simulateUserOperationAssetChanges`](https://docs.alchemy.com/reference/alchemy-simulateuseroperationassetchanges) API to simulate asset changes resulting from user operation. Having this as part of your middleware stack will ensure `UserOperations` that fail simulation do not get sent.
+`withAlchemyUserOpSimulation` is a middleware method you can use to easily leverage the [`alchemy_simulateUserOperationAssetChanges`](https://docs.alchemy.com/reference/alchemy-simulateuseroperationassetchanges) API to simulate asset changes resulting from user operation. Having this as part of your middleware stack will ensure `UserOperations` that fail simulation do not get sent unnecessarily.
 
 ## Usage
 

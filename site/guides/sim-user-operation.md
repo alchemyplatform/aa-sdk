@@ -23,46 +23,33 @@ prev:
 
 # How to Simulate a User Operation
 
-This guide will show you how to simulate a User Operation with Account Kit by creating an Alchemy Provider, connecting it to a Light Account (a type of smart account implementation), and sending a User Operation from that provider. By the end of this guide, you'll have a basic understanding of how to use the SDK.
+This guide will show you how to simulate a `UserOperation` with Account Kit by adding support for `UserOperation` simulation on an `AlchemyProvider` and sending a User Operation from that provider only if simulation passes. By the end of this guide, you'll have a basic understanding of how to safely send `UserOperation`s with the `aa-sdk`.
 
-## 1. Create Your Provider
+There are two ways that Account Kit supports `UserOperation` simulation on an `AlchemyProvider`:
 
-Using the SDK, we'll create an Alchemy Provider. As it is, the providers gives you methods to query information related to user operations and smart accounts. To create a provider, you'll need an Alchemy API Key or RPC URL, which you can access from the [Alchemy Dashboard](https://dashboard.alchemy.com).
+1. using the [`withAlchemyUserOpSimulation`](/packages/aa-alchemy/provider/withAlchemyUserOpSimulation) middleware
+2. using the [`simulateUserOperationAssetChanges`](/packages/aa-alchemy/provider/simulateUserOperationAssetChanges) method
 
-See [Alchemy Provider](/packages/aa-alchemy/provider/introduction.md) for more details.
+## 1. Using [`withAlchemyUserOpSimulation`](/packages/aa-alchemy/provider/withAlchemyUserOpSimulation)
 
-<<< @/snippets/send-uo-example/create-provider.ts
+To simulate User Operations, we must connect the `provider` with the middleware to simulate `UserOperations` before sending them. This can be done in a single line code, as show below!
 
-## 2. Connect Your Smart Account
+Then, whenever you call a method on the provider which generates the `UserOperation` to send (e.g. [`sendUserOperation`](/packages/aa-core/provider/sendUserOperation), [`sendTransaction`](/packages/aa-core/provider/sendTransaction), [`sendTransactions`](/packages/aa-core/provider/sendTransactions), [`buildUserOperation`](/packages/aa-core/provider/buildUserOperation), or [`buildUserOperationFromTx`](/packages/aa-core/provider/buildUserOperationFromTx)), the provider will also simulate which assets change as a result of the `UserOperation`, and if simulation fails, the provider will not send the `UserOperation` unnecessarily!
 
-To send User Operations, we must connect the `provider` with a smart account. The Light Account is Alchemy's gas-optimized smart account implementation, which we'll use in this example.
+::: code-group
 
-See [Light Account](/packages/aa-accounts/light-account/introduction.md) for more details.
+<<< @/snippets/sim-uo-example/sim-middleware.ts
+<<< @/snippets/provider.ts
 
-<<< @/snippets/send-uo-example/connect-account.ts
+:::
 
-## 3. Construct The CallData
+## 2. Using [`simulateUserOperationAssetChanges`](/packages/aa-alchemy/provider/simulateUserOperationAssetChanges)
 
-The best part of Account Kit is that it abstracts the differences between User Operation calldata and standard Transaction calldata, such that you can pass in typical calldata to [sendUserOperation](/packages/aa-core/provider/waitForUserOperationTransaction.md) as if it was a transaction sent from your smart account, and we'll wrap it as necessary to generate calldata as it would be as a User Operation.
+You can also selectively simulate `UserOperation`s by calling the [`simulateUserOperationAssetChanges`](/packages/aa-alchemy/provider/simulateUserOperationAssetChanges) method before sending a `UserOperation`. You'd be responsible for catching any errors like how it's done below, but this is a nice alternative to always running simulation.
 
-The second best part of Account Kit is it's build atop [viem](https://viem.sh/). This means we can leverage utility methods to easily generate calldata, with type safety, using a smart contract's ABI.
+::: code-group
 
-<<< @/snippets/send-uo-example/calldata.ts
+<<< @/snippets/sim-uo-example/sim-method.ts
+<<< @/snippets/provider.ts
 
-Some other helpful viem methods include: [encodeFunctionData](https://viem.sh/docs/contract/encodeFunctionData.html), [decodeFunctionData](https://viem.sh/docs/contract/decodeFunctionData.html), and [decodeFunctionResult](https://viem.sh/docs/contract/decodeFunctionResult.html).
-
-## 4. Send The User Operation
-
-Now we'll use the connected provider to send a user operation. We'll use the [sendUserOperation](/packages/aa-core/provider/waitForUserOperationTransaction.md) method on the provider.
-
-You can either send ETH to the smart account to pay for User Operation's gas, or you can connect your provider to an Alchemy Gas Manager using the [withAlchemyGasManager](/packages/aa-alchemy/provider/withAlchemyGasManager.md) method to sponsor the UO's gas. We'll use the latter approach below. You can go to the [Alchemy Dashboard](https://dashboard.alchemy.com/gas-manager) to get a Gas Manager policy ID.
-
-We'll also want to wait for the transaction which contains the User Operation, so that we know the User Operation executed on-chain. We can use the [waitForUserOperationTransaction](/packages/aa-core/provider/waitForUserOperationTransaction.md) method on provider to do so, as seen below.
-
-<<< @/snippets/send-uo-example/send-uo.ts
-
-## Try the Full Example!
-
-And that's it! Let's put it all together. You can copy the following snippet to try it yourself!
-
-<<< @/snippets/send-uo-example/full-example.ts
+:::

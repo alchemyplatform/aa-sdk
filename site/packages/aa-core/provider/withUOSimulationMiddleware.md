@@ -48,7 +48,7 @@ const resultingUO = await provider.buildUserOperation(userOpData);
 
 ### `ISmartAccountProvider`
 
-An updated instance of the provider, which now uses the custom middleware.
+An updated instance of the provider, which now uses the simulation middleware.
 
 ## Parameters
 

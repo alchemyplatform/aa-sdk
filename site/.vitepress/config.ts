@@ -137,6 +137,10 @@ export default defineConfig({
             link: "/transferring-ownership",
           },
           {
+            text: "How to Simulate a User Operation",
+            link: "/sim-user-operation",
+          },
+          {
             text: "Smart Account Data",
             base: "/guides/enhanced-apis",
             items: [
@@ -257,6 +261,10 @@ export default defineConfig({
               {
                 text: "withCustomMiddleware",
                 link: "/withCustomMiddleware",
+              },
+              {
+                text: "withUOSimulationMiddleware",
+                link: "/withUOSimulationMiddleware",
               },
               {
                 text: "connect",
@@ -508,6 +516,10 @@ export default defineConfig({
                 link: "/withAlchemyGasManager",
               },
               {
+                text: "withAlchemyUserOpSimulation",
+                link: "/withAlchemyUserOpSimulation",
+              },
+              {
                 text: "withAlchemyEnhancedApis",
                 link: "/withAlchemyEnhancedApis",
               },
@@ -529,6 +541,10 @@ export default defineConfig({
               {
                 text: "withAlchemyGasManager",
                 link: "/withAlchemyGasManager",
+              },
+              {
+                text: "withAlchemyUserOpSimulation",
+                link: "/withAlchemyUserOpSimulation",
               },
             ],
           },
