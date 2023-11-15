@@ -47,8 +47,8 @@ const uo = await provider.sendUserOperation(uoStruct);
 ### `Promise<SimulateUserOperationAssetChangesResponse>`
 
 - `changes: SimulateAssetChange[]`
-  - `assetType: SimulateAssetType`
-  - `changeType: string`
+  - `assetType: SimulateAssetType (NATIVE, ERC20, ERC721, ERC1155,  orSPECIAL_NFT)`
+  - `changeType: SimulateChangeType (APPROVE or TRANSFER)`
   - `from: Address`
   - `to: Address`
   - `rawAmount?: string`
