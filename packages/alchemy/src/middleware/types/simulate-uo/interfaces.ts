@@ -1,5 +1,5 @@
 import type { Address } from "viem";
-import type { SimulateAssetType } from "./enums.js";
+import type { SimulateAssetType, SimulateChangeType } from "./enums.js";
 
 export interface SimulateAssetChangesError extends Record<string, any> {
   message: string;
@@ -7,7 +7,7 @@ export interface SimulateAssetChangesError extends Record<string, any> {
 
 export interface SimulateAssetChange {
   assetType: SimulateAssetType;
-  changeType: string;
+  changeType: SimulateChangeType;
   from: Address;
   to: Address;
   rawAmount?: string;
