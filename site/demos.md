@@ -21,6 +21,9 @@ next:
 This demo shows how to mint an ERC-20 token to a Light Account using Alchemy's Gas Manager to provide a gas-less minting experience.
 
 [Try it out!](https://aa-simple-dapp.vercel.app/)
+
+[View on Github!](https://github.com/alchemyplatform/aa-sdk/tree/development/examples/aa-simple-dapp)
+
 [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/alchemyplatform/aa-sdk/tree/main/examples/aa-simple-dapp?file=README.md)
 
 ## Gasless NFT Minting Demo
