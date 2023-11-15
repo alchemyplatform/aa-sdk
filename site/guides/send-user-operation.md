@@ -43,7 +43,7 @@ See [Light Account](/packages/aa-accounts/light-account/introduction.md) for mor
 
 :::tip Note:
 
-You can combine steps 1. and 2. using our helpful factory method, as shown below. Notice that is :
+You can combine steps 1. and 2. using our helpful factory method, as shown below. Notice that there are far fewer inputs to consider by default:
 
 <<< @/snippets/provider.ts
 
