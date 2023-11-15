@@ -23,7 +23,7 @@ next:
 
 # Package Overview
 
-The Alchemy Account Kit SDK is comprised of a number of smaller packages that you can leverage to interact with [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) infrastructure. For almost all cases, `aa-core` is sufficient with the subsequent packages offering various utilities for interacting with specific Account Abstraction Infrastructure or smart accounts.
+Account Kit is comprised of a number of smaller packages that you can leverage to interact with [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) infrastructure. For almost all cases, `aa-core` is sufficient with the subsequent packages offering various utilities for interacting with specific Account Abstraction Infrastructure or smart accounts.
 
 ## [`aa-core`](/packages/aa-core/)
 
@@ -37,9 +37,9 @@ For more details on all the utilities exported by `aa-core` see the [aa-core doc
 
 ## [`aa-alchemy`](/packages/aa-alchemy/)
 
-This package builds on `aa-core` by exporting an `AlchemyProvider` which extends `SmartAccountProvider` and adds some additional utilities for interacting with Alchemy APIs and Alchemy's `Rundler`. The Provider also exports utilities for leveraging Alchemy's Gas Manager.
+This package builds on `aa-core` by exporting an `AlchemyProvider` which extends `SmartAccountProvider` and adds some additional utilities for interacting with our APIs and `Rundler`. The Provider also exports utilities for leveraging our Gas Manager.
 
-**If you are using the Alchemy Bundler (`Rundler`) and Gas Manager you have to use this package.** This is due to the specifics around how Alchemy's bundler does gas estimation. Not using this package and it's provider can result in incorrect gas estimations and failed transactions.
+**If you are using our Bundler (`Rundler`) and Gas Manager you have to use this package.** This is due to the specifics around how our bundler does gas estimation. Not using this package and it's provider can result in incorrect gas estimations and failed transactions.
 
 For more details on all the utilities exported by `aa-alchemy` see the [aa-alchemy documentation](/packages/aa-alchemy/).
 
@@ -55,6 +55,6 @@ To see all of the smart accounts that are supported by this package, see the [aa
 
 ## [`aa-ethers`](/packages/aa-ethers/)
 
-This package provides an adapter that allows you to convert a `SmartAccountProvider` or `AlchemyProvider` into an ethers `JsonRpcProvider` and `Signer`. These are primarily for convenience if your codebase expects a `JsonRpcProvider` or `Signer` in places and you want to use `aa-core` or `aa-alchemy` with minimal lift.
+This package provides an adapter that allows you to convert a `SmartAccountProvider` or `AlchemyProvider` into an ethers `JsonRpcProvider` and `signer`. These are primarily for convenience if your codebase expects a `JsonRpcProvider` or `signer` in places and you want to use `aa-core` or `aa-alchemy` with minimal lift.
 
-It is not required to use `aa-ethers` even if you are using `ethers` as your web3 library. Because the `SmartAccountProvider` is an EIP-1193 compliant provider, you can always wrap it in an ethers [`Web3Provider`](https://docs.ethers.org/v5/api/providers/other/#Web3Provider) and use it as a `Signer` or `JsonRpcProvider`.
+It is not required to use `aa-ethers` even if you are using `ethers` as your web3 library. Because the `SmartAccountProvider` is an EIP-1193 compliant provider, you can always wrap it in an ethers [`Web3Provider`](https://docs.ethers.org/v5/api/providers/other/#Web3Provider) and use it as a `signer` or `JsonRpcProvider`.

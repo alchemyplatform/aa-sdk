@@ -49,7 +49,7 @@ Returns whether or not the signature is valid for the given signer and message h
 
 - #### `signer: Address`
 
-  The address of the signer of the message (eg. the smart contract account address)
+  The address of the signer of the message (eg. the smart account address)
 
 - #### `hash: Hash`
 

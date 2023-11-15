@@ -99,9 +99,9 @@ Account Kit is instantly [compatible with your dapp](https://docs.alchemy.com/do
 
 We built Account Kit from the ground up to be reliable, scalable, and developer-friendly. When you use Account Kit, you’re tapping into a vertically integrated stack designed to work together seamlessly from bottom to top:
 
-- **AA-SDK**: A lightweight library to integrate, deploy, and use smart accounts. The `aa-sdk` orchestrates operations like gas estimation, UserOp submission, and counterfactual address generation under the hood. We handled all the details so you don’t have to.
-- **LightAccount:** Secure, gas-optimized, audited smart contract accounts. Purpose-built for [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) and forward compatible with [EIP-6900](https://eips.ethereum.org/EIPS/eip-6900).
-- **Signer:** Bespoke developer guides to integrate the most popular wallet providers. Secure your accounts with email, social login, passkeys, or a self-custodial wallet signer.
+- **aa-sdk**: A lightweight library to integrate, deploy, and use smart accounts. The `aa-sdk` orchestrates operations like gas estimation, UserOp submission, and counterfactual address generation under the hood. We handled all the details so you don’t have to.
+- **Light Account:** Secure, gas-optimized, audited smart accounts. Purpose-built for [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) and forward compatible with [EIP-6900](https://eips.ethereum.org/EIPS/eip-6900).
+- **signer:** Bespoke developer guides to integrate the most popular wallet providers. Secure your accounts with email, social login, passkeys, or a self-custodial wallet signer.
 - **Gas Manager API:** A programmable API to abstract away gas fees for UserOps that meet your criteria. We built [programmable policies](https://docs.alchemy.com/reference/gas-manager-admin-api-quickstart) to give you flexibility and control to decide which transactions should be sponsored. The Gas Manager works hand-in-hand with the Bundler.
 - **Bundler API:** The most reliable ERC-4337 Bundler. Land your UserOps onchain at massive scale. We wrote our Bundler from scratch, in Rust, to handle the highest loads at production scale. Check out the open source code in our affectionately named [Rundler github repo](https://github.com/alchemyplatform/rundler).
 

@@ -19,7 +19,7 @@ head:
 :::tip Note
 This method requires a peer dependency on the [`alchemy-sdk`](https://github.com/alchemyplatform/alchemy-sdk-js) package, as the input to this method is an Alchemy SDK client.
 
-The Alchemy SDK client must be configured with the same API key and network as the AlchemyProvider. This method validates such at runtime.
+The Alchemy SDK client must be configured with the same API key and network as the `AlchemyProvider`. This method validates such at runtime.
 
 Additionally, since the Alchemy SDK client does not yet support JWT authentication, an `AlchemyProvider` initialized with JWTs cannot use this method. They must be initialized with an API key or RPC URL.
 :::

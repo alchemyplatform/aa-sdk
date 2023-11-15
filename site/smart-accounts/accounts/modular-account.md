@@ -20,7 +20,7 @@ head:
 
 # Modular Account
 
-Soon after the first stable version of [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900), we will release an ERC-6900 compatible Modular Account in Account Kit. It will support new use cases like session keys, account recovery, spending limits, and any ERC-6900 plugin you can imagine. The LightAccount is forward-compatible with ERC-6900 so you can optionally upgrade it to the Modular Account once released.
+Soon after the first stable version of [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900), we will release an ERC-6900 compatible Modular Account in Account Kit. It will support new use cases like session keys, account recovery, spending limits, and any ERC-6900 plugin you can imagine. The Light Account is forward-compatible with ERC-6900 so you can optionally upgrade it to the Modular Account once released.
 
 Read on to learn more about ERC-6900 and modular accounts.
 
@@ -30,11 +30,11 @@ We are working towards the first stable version of [ERC-6900](https://eips.ether
 
 ## Motivation
 
-In the coming years, we expect most user accounts to be smart contract accounts that leverage the benefits of account abstraction. These accounts will generally share a similar set of core features such as signature validation and ownership transfer. To ensure this core feature set is secure and does not contain any vulnerabilities, it will be prudent for most developers to re-use battle-tested smart accounts rather than writing their own accounts.
+In the coming years, we expect most user accounts to be smart accounts that leverage the benefits of account abstraction. These accounts will generally share a similar set of core features such as signature validation and ownership transfer. To ensure this core feature set is secure and does not contain any vulnerabilities, it will be prudent for most developers to re-use battle-tested smart accounts rather than writing their own accounts.
 
 However, smart acounts are also programmable, enabling you to build new and innovative features that hook into the validation and execution logic of a smart account. We hope and expect to see a diverse ecosystem of plugins flourish.
 
-In order to maximize interoperability and code re-use, these plugins will ideally share a standard interface that is compatible with every smart contract account.
+In order to maximize interoperability and code re-use, these plugins will ideally share a standard interface that is compatible with every smart account.
 
 Refer to the Account Abstraction [series](https://www.alchemy.com/blog/account-abstraction) on our blog to learn more.
 
@@ -42,7 +42,7 @@ Refer to the Account Abstraction [series](https://www.alchemy.com/blog/account-a
 
 ### Introduction
 
-We authored [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) to propose a standard interface for modular smart contract accounts and plugins.
+We authored [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) to propose a standard interface for modular smart accounts and plugins.
 
 The standard builds on earlier work by the Android developer community to standardize the interface between smart accounts and plugins. Each compliant plugin will incorporate a manifest that establishes various functions and hooks that need to be added to the smart account on installation. It will also specify aspects of the plugin (metadata, dependencies and permissions) that are necessary to constrain the plugin’s ability to act on the smart account.
 
@@ -59,7 +59,7 @@ For more detailed specifications of transaction flows, see the [ERC-6900 spec](h
 
 ### Architecture
 
-The standard focuses on the development of modules or plugins, and on the interactions between these plugins and modular smart contract accounts (or “MSCA”). Following [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337), it splits validation and execution functions in order to allow for greater customization within these components while also ensuring that they remain composable. It also adds pre- and post-execution hooks as a third functional component to plugins, enabling more finely grained functionality.
+The standard focuses on the development of modules or plugins, and on the interactions between these plugins and modular smart accounts (or “MSCA”). Following [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337), it splits validation and execution functions in order to allow for greater customization within these components while also ensuring that they remain composable. It also adds pre- and post-execution hooks as a third functional component to plugins, enabling more finely grained functionality.
 
 ![ERC-6900](/images/erc-6900.png)
 
@@ -67,7 +67,7 @@ _[Source](https://eips.ethereum.org/EIPS/eip-6900)_
 
 The architecture described in the image above is designed to achieve two technical goals:
 
-- Provide standards for designing plugins for smart contract accounts.
+- Provide standards for designing plugins for smart accounts.
 - Provide standards for how compliant accounts should interact with plugins.
 
 ### Designing Plugins

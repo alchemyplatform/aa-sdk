@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Choosing a Signer
+      content: Choosing a signer
   - - meta
     - name: description
       content: Explore Account Kit integration guides for signers including Magic.Link, Privy, Web3Auth, EOAs, and many more!
@@ -12,7 +12,7 @@ head:
       content: Explore Account Kit integration guides for signers including Magic.Link, Privy, Web3Auth, EOAs, and many more!
   - - meta
     - name: twitter:title
-      content: Choosing a Signer
+      content: Choosing a signer
   - - meta
     - name: twitter:description
       content: Explore Account Kit integration guides for signers including Magic.Link, Privy, Web3Auth, EOAs, and many more!
@@ -24,7 +24,7 @@ next:
   link: /guides/send-user-operation
 ---
 
-# What is a Signer?
+# What is a signer?
 
 A **signer** is a service (e.g. Magic or Turnkey) or application (e.g. MetaMask) that manages the private key and signs operations. Most web3 users today use an [Externally Owned Account (EOA)](https://ethereum.org/en/developers/docs/accounts/#externally-owned-accounts-and-key-pairs) with a self-custodial signer such as MetaMask to manage the private key.
 
@@ -36,7 +36,7 @@ You can choose any signer service or application to manage the Owner private key
 
 This doc provides a basic introduction to signers and the criteria you should consider when choosing which signer to use with Account Kit in your application.
 
-## Role of a Signer
+## Role of a signer
 
 The signer plays a crucial role in your app because it controls the user’s smart account. The signer is responsible for:
 

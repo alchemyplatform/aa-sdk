@@ -14,7 +14,7 @@ prev:
   text: aa-alchemy
   link: /packages/aa-alchemy/index
 next:
-  text: LightAccount
+  text: Light Account
 ---
 
 # `@alchemy/aa-accounts`

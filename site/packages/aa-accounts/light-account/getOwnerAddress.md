@@ -34,4 +34,4 @@ const owner = await provider.account.getOwnerAddress();
 
 ### `Promise<Address>`
 
-A Promise containing the address of the smart contract account's owner address.
+A Promise containing the address of the smart account's owner address.

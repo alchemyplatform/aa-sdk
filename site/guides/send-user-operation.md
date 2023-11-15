@@ -6,16 +6,16 @@ head:
       content: How to Send a User Operation
   - - meta
     - name: description
-      content: Follow this guide to send a User Operation with Alchemy's Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to send a User Operation with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Follow this guide to send a User Operation with Alchemy's Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to send a User Operation with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - name: twitter:title
       content: How to Send a User Operation
   - - meta
     - name: twitter:description
-      content: Follow this guide to send a User Operation with Alchemy's Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to send a User Operation with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 prev:
   text: smart accounts
   link: /smart-accounts/overview
@@ -23,7 +23,7 @@ prev:
 
 # How to Send a User Operation
 
-This guide will show you how to send a User Operation with Account Kit by creating an Alchemy Provider, connecting it to a LightAccount (a type of smart account implementation), and sending a User Operation from that provider. By the end of this guide, you'll have a basic understanding of how to use the SDK.
+This guide will show you how to send a User Operation with Account Kit by creating an Alchemy Provider, connecting it to a Light Account (a type of smart account implementation), and sending a User Operation from that provider. By the end of this guide, you'll have a basic understanding of how to use the SDK.
 
 ## 1. Create Your Provider
 
@@ -35,9 +35,9 @@ See [Alchemy Provider](/packages/aa-alchemy/provider/introduction.md) for more d
 
 ## 2. Connect Your smart account
 
-To send User Operations, we must connect the `provider` with a smart account. The LightAccount is Alchemy's gas-optimized smart account implementation, which we'll use in this example.
+To send User Operations, we must connect the `provider` with a smart account. The Light Account is our gas-optimized smart account implementation, which we'll use in this example.
 
-See [LightAccount](/packages/aa-accounts/light-account/introduction.md) for more details.
+See [Light Account](/packages/aa-accounts/light-account/introduction.md) for more details.
 
 <<< @/snippets/send-uo-example/connect-account.ts
 
@@ -55,7 +55,7 @@ Some other helpful viem methods include: [encodeFunctionData](https://viem.sh/do
 
 Now we'll use the connected provider to send a user operation. We'll use the [sendUserOperation](/packages/aa-core/provider/waitForUserOperationTransaction.md) method on the provider.
 
-You can either send ETH to the smart account to pay for User Operation's gas, or you can connect your provider to an Alchemy Gas Manager using the [withAlchemyGasManager](/packages/aa-alchemy/provider/withAlchemyGasManager.md) method to sponsor the UO's gas. We'll use the latter approach below. You can go to the [Alchemy Dashboard](https://dashboard.alchemy.com/gas-manager) to get a Gas Manager policy ID.
+You can either send ETH to the smart account to pay for User Operation's gas, or you can connect your provider to our Gas Manager using the [withAlchemyGasManager](/packages/aa-alchemy/provider/withAlchemyGasManager.md) method to sponsor the UO's gas. We'll use the latter approach below. You can go to the [Alchemy Dashboard](https://dashboard.alchemy.com/gas-manager) to get a Gas Manager policy ID.
 
 We'll also want to wait for the transaction which contains the User Operation, so that we know the User Operation executed on-chain. We can use the [waitForUserOperationTransaction](/packages/aa-core/provider/waitForUserOperationTransaction.md) method on provider to do so, as seen below.
 

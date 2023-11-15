@@ -46,7 +46,7 @@ Next, setup the web3auth sdk and create a `SmartAccountSigner`
 
 <<< @/snippets/web3auth.ts
 
-### Use it with LightAccount
+### Use it with Light Account
 
 Let's see it in action with `aa-alchemy` and `LightSmartContractAccount` from `aa-accounts`:
 ::: code-group

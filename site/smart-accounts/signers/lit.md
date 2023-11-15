@@ -70,7 +70,7 @@ Next, setup the `LitNodeClient` and `PKPEthersWallet` to create a `SmartAccountS
 
 <<< @/snippets/lit.ts
 
-### Use it with LightAccount
+### Use it with Light Account
 
 We can link our `SmartAccountSigner` to a `LightSmartContractAccount` from `aa-accounts`:
 ::: code-group
