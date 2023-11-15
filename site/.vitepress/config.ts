@@ -126,6 +126,20 @@ export default defineConfig({
             text: "How to Transfer Ownership of a Smart Account",
             link: "/transferring-ownership",
           },
+          {
+            text: "Smart Account Data",
+            base: "/guides/enhanced-apis",
+            items: [
+              {
+                text: "How to Fetch a Smart Account's NFTs",
+                link: "/nft",
+              },
+              {
+                text: "How to Fetch a Smart Account's ERC-20 Tokens",
+                link: "/token",
+              },
+            ],
+          },
         ],
       },
       {
@@ -478,6 +492,10 @@ export default defineConfig({
               {
                 text: "withAlchemyGasManager",
                 link: "/withAlchemyGasManager",
+              },
+              {
+                text: "withAlchemyEnhancedApis",
+                link: "/withAlchemyEnhancedApis",
               },
             ],
           },
