@@ -128,7 +128,7 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
    * The Alchemy SDK client must be configured with the same API key and network as the AlchemyProvider.
    * This method validates such at runtime.
    *
-   * Additionally, since the Alchemy SDK client does not support JWT authentication, AlchemyProviders initialized with JWTs cannot use this method.
+   * Additionally, since the Alchemy SDK client does not yet support JWT authentication, AlchemyProviders initialized with JWTs cannot use this method.
    * They must be initialized with an API key or RPC URL.
    * There is an open issue on the Alchemy SDK repo to add JWT support in the meantime.
    * @see: https://github.com/alchemyplatform/alchemy-sdk-js/issues/386
