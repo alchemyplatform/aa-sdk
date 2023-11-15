@@ -128,11 +128,11 @@ export default defineConfig({
           },
           {
             text: "Smart Account Data",
-            base: "/enhanced-apis",
+            base: "/guides/enhanced-apis",
             items: [
               {
                 text: "How to Fetch a Smart Account's NFTs",
-                link: "/nfts",
+                link: "/nft",
               },
               {
                 text: "How to Fetch a Smart Account's ERC-20 Tokens",
