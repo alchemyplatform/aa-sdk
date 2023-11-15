@@ -18,7 +18,7 @@ head:
       content: Follow this guide to handle User Operations that are not eligible for gas sponsorship. Account Kit is a vertically integrated stack for building apps that support ERC-4337.
 ---
 
-# How to Handle User Operations Not Eligibile for Gas Sponsorship
+# How to Handle User Operations that are Not Eligible for Gas Sponsorship
 
 As mentioned from the previous guide on [How to Sponsor Gas for a User Operation](./sponsoring-gas.md), with Account Kit dponsor gas fees for transactions via the [Gas Manager](https://docs.alchemy.com/docs/gas-manager-services).
 
