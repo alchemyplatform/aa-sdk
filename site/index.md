@@ -78,13 +78,11 @@ titleTemplate: :title Documentation
 ::: code-group
 
 ```typescript [getStarted.ts]
-const provider = new AlchemyProvider(providerConfig).connect(
-  (rpcClient) =>
-    new LightSmartContractAccount({
-      ...accountConfig,
-      rpcClient,
-    })
-);
+export const provider = createLightAccountAlchemyProvider({
+  apiKey,
+  owner,
+  chain,
+});
 
 const { hash } = await provider.sendUserOperation(uo);
 ```

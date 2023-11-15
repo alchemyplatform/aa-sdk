@@ -20,7 +20,7 @@ head:
 
 # Getting Started
 
-This guide will help you get started with Account Kit by setting up your environment, creating a Light Account (a type of smart account implementation), and sending a User Operation from it. By the end of this guide, you'll have a basic understanding of how to use the SDK and where to look for more advanced use cases.
+This guide will help you get started with Account Kit by setting up your environment, creating a Smart Account, and sending a `UserOperation` on its behalf. By the end of this guide, you'll have a basic understanding of how to use the SDK and where to look for more advanced use cases.
 
 ## 1. Install the Packages
 
@@ -36,34 +36,35 @@ npm install @alchemy/aa-alchemy @alchemy/aa-accounts @alchemy/aa-core viem
 yarn add @alchemy/aa-alchemy @alchemy/aa-accounts @alchemy/aa-core viem
 ```
 
-Note that we're installing [viem](https://viem.sh/) as well. Viem contains helpful abstractions and modules that may come in handy when using Account Kit. Additionally, many Account Kit modules leverage viem themselves.
+::: tip Note
+
+We're installing [viem](https://viem.sh/) as well. Viem contains helpful abstractions and modules that will come in handy when using Account Kit. Additionally, many Account Kit modules use `viem` themselves.
 
 :::
 
-## 2. Use Account Kit
+## 2. Use Account Kit to Send a User Operation
 
-Using the SDK, we'll deploy a Light Account and send a User Operation from it. The Light Account will be owned by an Externally Owned Account (EOA). Here's a demonstration:
+Using the SDK in the following example, we'll deploy a Smart Account and send a User Operation on its behalf.
 
 <<< @/snippets/light-account.ts
 
-This initializes a `provider` for your smart account which is then used to send user operations from it. It also logs the address of the deployed smart account.
+::: tip Remember
 
-::: tip Note
-Remember to:
-
-1. Replace `"0xYourEOAPrivateKey"` with your actual EOA private key.
-2. Set `"ALCHEMY_API_KEY"` with your unique Alchemy API key.
-3. Fund your smart account address with some SepoliaETH in order for the user operation to go through. This address is logged to the console when you run the script.
-4. Adjust the `target` and `data` fields in the `sendUserOperation` function to match your requirements.
+1. Get an `ALCHEMY_API_KEY` from the [Alchemy Dashboard](https://dashboard.alchemy.com/).
+2. Use an actual EOA private key, or consider using a [Signer](/smart-accounts/signers/choosing-a-signer) to own the smart account.
+3. Fund your smart account with some ETH to send `UserOperation`s on its behalf. For testnets like Sepolia in this example, you can use the [Alchemy Faucet](https://sepoliafaucet.com/). Consider instead sponsoring `UserOperation`s with the [Alchemy Gas Manager](/guides/sponsoring-gas/sponsoring-gas).
+4. Adjust the `target` and `data` fields in the `sendUserOperation` function to match your requirements. Look at our [How to Send a User Operation](/guides/send-user-operation) guide for an example using NFT mints.
 
 :::
 
 ## 3. Dive Deeper
 
-In this guide we initialized `provider` with the `aa-alchemy` package however we could have done the same with the other packages of Account Kit as well. To learn more about the different packages and their use cases, check out the ["Packages Overview"](/overview/package-overview) page.
+In this guide we initialized an `AlchemyProvider` with the `aa-alchemy` package however we could have done the same with the other packages of Account Kit as well.
 
-You can also explore the many step-by-step guides for Account Kit, such as [How to Sponsor Gas for a User Operation](/guides/sponsoring-gas) or [How to Fetch Smart Account Data](/guides/enhanced-apis/nft).
+1. To learn more about the different packages and their use cases, check out the ["Packages Overview"](/overview/package-overview) page.
 
-## 4. Next Steps
+2. To learn about the end-to-end process of integrating smart accounts in your applications, check out the section on [Smart Accounts](/smart-accounts/overview).
 
-To learn about the end-to-end process of integrating smart accounts in your applications check out the section on [smart accounts overview](/smart-accounts/overview.html)
+3. To explore more ways to use Account Kit, check out the many step-by-step guides, such as [How to Sponsor Gas for a User Operation](/guides/sponsoring-gas/sponsoring-gas) or [How to Fetch Smart Account Data](/guides/enhanced-apis/nft).
+
+4. To see Account Kit in action, check out our [Demos](/overview/demos).
