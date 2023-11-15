@@ -5,9 +5,9 @@ import type { LightAccountProviderConfig } from "./types.js";
 import { getDefaultLightAccountFactoryAddress } from "./utils.js";
 
 export const createLightAccountProvider = (
-  config: LightAccountProviderConfig
+  config_: LightAccountProviderConfig
 ): SmartAccountProvider & { account: LightSmartContractAccount } => {
-  LightAccountProviderConfigSchema.parse(config);
+  const config = LightAccountProviderConfigSchema.parse(config_);
 
   return new SmartAccountProvider({
     rpcProvider: config.rpcProvider,
@@ -18,10 +18,13 @@ export const createLightAccountProvider = (
     (rpcClient) =>
       new LightSmartContractAccount({
         rpcClient,
+        initCode: config.initCode,
         owner: config.owner,
         chain: config.chain,
         entryPointAddress: config.entryPointAddress,
-        factoryAddress: getDefaultLightAccountFactoryAddress(config.chain),
+        factoryAddress:
+          config.factoryAddress ??
+          getDefaultLightAccountFactoryAddress(config.chain),
         accountAddress: config.accountAddress,
       })
   );

@@ -16,6 +16,9 @@ export const LightAccountFactoryConfigSchema = z.object({
     .refine(isHex, "initCode must be a valid hex.")
     .optional()
     .describe("Optional override for the account init code."),
+  factoryAddress: Address.optional().describe(
+    "Optional override for the factory address which deploys the smart account."
+  ),
 });
 
 export const LightAccountProviderConfigSchema =

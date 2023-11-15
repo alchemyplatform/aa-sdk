@@ -7,18 +7,21 @@ import type { LightAccountAlchemyProviderConfig } from "../type.js";
 import { AlchemyProvider } from "./base.js";
 
 export const createLightAccountAlchemyProvider = (
-  config: LightAccountAlchemyProviderConfig
+  config_: LightAccountAlchemyProviderConfig
 ): AlchemyProvider & { account: LightSmartContractAccount } => {
-  LightAccountAlchemyProviderConfigSchema.parse(config);
+  const config = LightAccountAlchemyProviderConfigSchema.parse(config_);
 
   return new AlchemyProvider(config).connect(
     (rpcClient) =>
       new LightSmartContractAccount({
         rpcClient,
+        initCode: config.initCode,
         owner: config.owner,
         chain: config.chain,
         entryPointAddress: config.entryPointAddress,
-        factoryAddress: getDefaultLightAccountFactoryAddress(config.chain),
+        factoryAddress:
+          config.factoryAddress ??
+          getDefaultLightAccountFactoryAddress(config.chain),
         accountAddress: config.accountAddress,
       })
   );

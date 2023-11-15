@@ -142,9 +142,7 @@ const givenConnectedProvider = ({
   chain: Chain;
 }) =>
   createLightAccountAlchemyProvider({
-    rpcUrl: chain.rpcUrls.alchemy.http[0],
     jwt: "test",
     owner,
     chain,
-    accountAddress: "0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4",
   });
