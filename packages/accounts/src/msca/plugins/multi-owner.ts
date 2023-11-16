@@ -102,7 +102,7 @@ export const MultiOwnerPluginExecutionFunctionAbi = [
     type: "function",
     inputs: [{ name: "account", internalType: "address", type: "address" }],
     name: "ownersOf",
-    outputs: [{ name: "owners", internalType: "address[]", type: "address[]" }],
+    outputs: [{ name: "", internalType: "address[]", type: "address[]" }],
   },
   {
     stateMutability: "view",

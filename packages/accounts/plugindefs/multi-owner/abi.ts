@@ -203,6 +203,25 @@ export const MultiOwnerPluginAbi = [
     inputs: [
       {
         internalType: "address",
+        name: "ownerToCheck",
+        type: "address",
+      },
+    ],
+    name: "isOwner",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
         name: "account",
         type: "address",
       },
@@ -354,6 +373,19 @@ export const MultiOwnerPluginAbi = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "owners",
+    outputs: [
+      {
+        internalType: "address[]",
+        name: "",
+        type: "address[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "address",
@@ -365,7 +397,7 @@ export const MultiOwnerPluginAbi = [
     outputs: [
       {
         internalType: "address[]",
-        name: "owners",
+        name: "",
         type: "address[]",
       },
     ],
@@ -400,7 +432,7 @@ export const MultiOwnerPluginAbi = [
           },
           {
             internalType: "bool",
-            name: "permitAnyExternalContract",
+            name: "permitAnyExternalAddress",
             type: "bool",
           },
           {

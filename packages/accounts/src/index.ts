@@ -22,7 +22,20 @@ export { LightSmartContractAccount } from "./light-account/account.js";
 export { getDefaultLightAccountFactoryAddress } from "./light-account/utils.js";
 
 // msca exports
-export { BaseModularSmartContractAccount } from "./msca/base.js";
+export {
+  MSCABuilder,
+  StandardExecutor,
+  type Executor,
+  type Factory,
+  type MSCA,
+  type SignerMethods,
+} from "./msca/builder.js";
+export {
+  createMultiOwnerMSCA,
+  createMultiOwnerMSCABuilder,
+  createMultiOwnerMSCASchema,
+  type MultiOwnerMSCAParams,
+} from "./msca/multi-owner-account.js";
 export {
   MultiOwnerPlugin,
   MultiOwnerPluginExecutionFunctionAbi,
