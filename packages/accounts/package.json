@@ -29,6 +29,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
+    "prebuild": "npx wagmi generate",
     "build": "yarn clean && yarn build:cjs && yarn build:esm && yarn build:types",
     "build:cjs": "tsc --project tsconfig.build.json --module commonjs --outDir ./dist/cjs --removeComments --verbatimModuleSyntax false && echo > ./dist/cjs/package.json '{\"type\":\"commonjs\"}'",
     "build:esm": "tsc --project tsconfig.build.json --module es2015 --outDir ./dist/esm --removeComments && echo > ./dist/esm/package.json '{\"type\":\"module\"}'",
@@ -41,6 +42,9 @@
   "devDependencies": {
     "@alchemy/aa-alchemy": "^1.0.0",
     "@alchemy/aa-core": "^1.0.0",
+    "@wagmi/cli": "^1.5.2",
+    "change-case": "^5.1.2",
+    "dedent": "^1.5.1",
     "typescript": "^5.0.4",
     "typescript-template": "*",
     "vitest": "^0.31.0"
