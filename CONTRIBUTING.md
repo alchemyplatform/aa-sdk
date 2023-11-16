@@ -4,7 +4,7 @@ We're excited to have you contribute to the `aa-sdk`. Here's a step-by-step guid
 
 ### Getting Started
 
-1. **Fork and Clone**: First, [fork aa-sdk repository](https://github.com/alchemyplatform/aa-sdk/fork). Then, clone your forked repo to your local machine.
+1. **Fork and Clone**: First, [fork the `aa-sdk` repository](https://github.com/alchemyplatform/aa-sdk/fork). Then, clone your forked repo to your local machine.
 
 2. **Install Dependencies**: Ensure you have `yarn` installed (we use version 1.x). Installation instructions are available [here](https://classic.yarnpkg.com/lang/en/docs/install). Run `yarn` in the project root to install all necessary dependencies.
 
