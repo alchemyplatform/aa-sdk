@@ -16,7 +16,7 @@ We're excited to have you contribute to the `aa-sdk`. Here's a step-by-step guid
 
 4. **Make Changes**: Now, you can start making changes to the packages or docs. When updating or adding new functionality, update or add a new doc in `site/packages/*` corresponding to the package you've worked on to document the changes.
 
-5. **Reverify Tests**: After making your changes, re-run `yarn test` to ensure all tests still pass.
+5. **Re-verify Tests**: After making your changes, re-run `yarn test` to ensure all tests still pass.
 
 6. **Code Formatting**:
 
