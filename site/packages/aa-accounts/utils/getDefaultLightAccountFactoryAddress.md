@@ -14,7 +14,7 @@ head:
 
 # getDefaultLightAccountFactoryAddress
 
-Utility method that returns the default Light Account Factory contrafct address for a given chain
+Utility method that returns the default Light Account Factory contract address for a given chain
 
 ## Usage
 
