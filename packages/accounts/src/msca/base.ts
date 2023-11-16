@@ -1,9 +1,6 @@
 import {
   BaseSmartContractAccount,
-  SignerSchema,
-  createBaseSmartAccountParamsSchema,
   type BatchUserOperationCallData,
-  type SupportedTransports,
 } from "@alchemy/aa-core";
 import {
   encodeFunctionData,
@@ -12,20 +9,8 @@ import {
   type Hex,
   type Transport,
 } from "viem";
-import { z } from "zod";
 import { IStandardExecutorAbi } from "./abis/IStandardExecutor.js";
 import type { Plugin } from "./plugins/types.js";
-
-export const createModularSmartContractAccountSchema = <
-  TTransport extends SupportedTransports = Transport
->() =>
-  createBaseSmartAccountParamsSchema<TTransport>().extend({
-    owner: SignerSchema,
-  });
-
-export type ModularSmartContractAccountParams = z.input<
-  ReturnType<typeof createModularSmartContractAccountSchema>
->;
 
 export abstract class BaseModularSmartContractAccount<
   TTransport extends Transport | FallbackTransport = Transport
