@@ -46,6 +46,7 @@
     "@wagmi/cli": "^1.5.2",
     "change-case": "^5.1.2",
     "dedent": "^1.5.1",
+    "dotenv": "^16.3.1",
     "typescript": "^5.0.4",
     "typescript-template": "*",
     "vitest": "^0.31.0"

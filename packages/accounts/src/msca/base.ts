@@ -14,6 +14,7 @@ import {
 } from "viem";
 import { z } from "zod";
 import { IStandardExecutorAbi } from "./abis/IStandardExecutor.js";
+import type { Plugin } from "./plugins/types.js";
 
 export const createModularSmartContractAccountSchema = <
   TTransport extends SupportedTransports = Transport
@@ -56,4 +57,9 @@ export abstract class BaseModularSmartContractAccount<
       ],
     });
   }
+
+  extendWithPluginMethods = <D>(plugin: Plugin<D>): this & D => {
+    const methods = plugin.decorators;
+    return Object.assign(this, methods);
+  };
 }

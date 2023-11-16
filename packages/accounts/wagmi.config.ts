@@ -1,15 +1,25 @@
 import { defineConfig } from "@wagmi/cli";
+import { kebabCase } from "change-case";
+import dotenv from "dotenv";
+import * as configs from "./plugindefs/index.js";
 import { plugingen } from "./scripts/plugingen.js";
-import { MultiOwnerPluginAbi } from "./src/msca/abis/MultiOwnerPlugin.js";
+dotenv.config();
 
-export default defineConfig({
-  out: "./src/msca/plugins/multi-owner.ts",
-  contracts: [
-    {
-      name: "MultiOwnerPlugin",
-      abi: MultiOwnerPluginAbi,
-      address: "0xc56d2f3da0c2039525c95f3a71676895d9a8cae8",
-    },
-  ],
-  plugins: [plugingen()],
-});
+const pluginConfigs = Object.values(configs);
+const pluginRegEx: RegExp = /[pP]lugin/g;
+
+export default defineConfig(
+  pluginConfigs.map((config) => ({
+    out: `./src/msca/plugins/${kebabCase(
+      config.name.replaceAll(pluginRegEx, "")
+    )}.ts`,
+    contracts: [
+      {
+        name: config.name,
+        abi: config.abi,
+        address: config.address,
+      },
+    ],
+    plugins: [plugingen({ chain: config.chain, rpcUrl: config.rpcUrl })],
+  }))
+);
