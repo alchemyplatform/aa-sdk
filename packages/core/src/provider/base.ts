@@ -444,7 +444,7 @@ export class SmartAccountProvider<
       );
     }
 
-    request.signature = (await this.account.signMessage(
+    request.signature = (await this.account.signUserOperationHash(
       getUserOperationHash(
         request,
         this.getEntryPointAddress(),
