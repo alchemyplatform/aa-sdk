@@ -104,7 +104,6 @@ export class ModularSmartContractAccount<
 
   extendWithPluginMethods = <D>(plugin: Plugin<D>): this & D => {
     const methods = plugin.decorators;
-
     return Object.assign(this, methods);
   };
 }
