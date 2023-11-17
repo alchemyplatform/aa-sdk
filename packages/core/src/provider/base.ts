@@ -241,7 +241,7 @@ export class SmartAccountProvider<
     );
   };
 
-  sendTransactions = async (
+  buildUserOperationFromTxs = (
     requests: RpcTransactionRequest[],
     overrides?: UserOperationOverrides
   ) => {
@@ -279,6 +279,21 @@ export class SmartAccountProvider<
       _overrides.maxPriorityFeePerGas =
         overrides?.maxPriorityFeePerGas ?? maxPriorityFeePerGas;
     }
+
+    return {
+      batch,
+      overrides,
+    };
+  };
+
+  sendTransactions = async (
+    requests: RpcTransactionRequest[],
+    overrides?: UserOperationOverrides
+  ) => {
+    const { batch, overrides: _overrides } = this.buildUserOperationFromTxs(
+      requests,
+      overrides
+    );
 
     const { hash } = await this.sendUserOperation(batch, _overrides);
 
@@ -418,10 +433,11 @@ export class SmartAccountProvider<
       this.gasEstimator,
       // run this before paymaster middleware
       async (struct) => ({ ...struct, ...overrides }),
-      this.customMiddleware ?? noOpMiddleware,
+      this.customMiddleware,
       overrides?.paymasterAndData
         ? noOpMiddleware
-        : this.paymasterDataMiddleware
+        : this.paymasterDataMiddleware,
+      this.simulateUOMiddleware
     )(uo);
 
     return resolveProperties<UserOperationStruct>(result);
@@ -522,7 +538,9 @@ export class SmartAccountProvider<
     return struct;
   };
 
-  readonly customMiddleware?: AccountMiddlewareFn | undefined = undefined;
+  readonly customMiddleware: AccountMiddlewareFn = noOpMiddleware;
+
+  readonly simulateUOMiddleware: AccountMiddlewareFn = noOpMiddleware;
 
   withPaymasterMiddleware = (overrides: {
     dummyPaymasterDataMiddleware?: PaymasterAndDataMiddleware;
@@ -561,6 +579,12 @@ export class SmartAccountProvider<
 
   withCustomMiddleware = (override: AccountMiddlewareFn): this => {
     defineReadOnly(this, "customMiddleware", override);
+
+    return this;
+  };
+
+  withSimulateUOMiddleware = (override: AccountMiddlewareFn): this => {
+    defineReadOnly(this, "simulateUOMiddleware", override);
 
     return this;
   };
