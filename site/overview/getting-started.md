@@ -24,7 +24,7 @@ This guide will help you get started with Account Kit by setting up your environ
 
 ## 1. Install the Packages
 
-In your project directory, you'll need to install the required packages:
+In your project directory, you'll need to run the following to install the required packages:
 
 ::: code-group
 
@@ -107,7 +107,7 @@ Lastly, create a file called `index.ts` in the project to write the code you'll 
 
 ## 2. Get Your Alchemy API Key
 
-To read or write any data to the Blockchain, you'll need an Alchemy API Key and RPC URL. Go to the [Alchemy Dashboard](https://dashboard.alchemy.com) and access your credentials from the button shown below.
+To read or write any data to a blockchain, you'll need an Alchemy API Key and RPC URL. Go to the [Alchemy Dashboard](https://dashboard.alchemy.com) and access your credentials from the button shown below.
 
 <img src="/images/alchemy-dashboard.png" width="auto" height="auto" alt="Account Kit Overview" style="display: block; margin: auto;">
 
@@ -133,7 +133,7 @@ Smart Account Address: 0xYOUR_SMART_ACCOUNT_ADDRESS
 
 To deploy the smart account and send `UserOperation`s on its behalf, you'll need to add native token to your smart account.
 
-At scale, you might consider using our Gas Manager to [sponsor UserOperations](/guides/sponsoring-gas/sponsoring-gas). But for the purpose of this example, and because we're using a testnet, let's fund the account using the [Alchemy Faucet](https://sepoliafaucet.com). Make sure to log in with Alchemy to receive your tokens.
+At scale, you might consider using our Gas Manager to [sponsor UserOperations](/guides/sponsoring-gas/sponsoring-gas) for smart accounts. But for the purpose of this example, and because we're using a testnet, let's fund the account using the [Alchemy Faucet](https://sepoliafaucet.com). Make sure to log in with Alchemy to receive your testnet tokens.
 
 <img src="/images/alchemy-faucet.png" width="auto" height="auto" alt="Account Kit Overview" style="display: block; margin: auto;">
 
@@ -158,9 +158,9 @@ Transaction Hash: 0xYOUR_TXN_HASH
 ```
 
 :::tip Note
-The `UserOperation` Hash is what our Bundler returns once it submits the `UserOperation` to the Blockchain on behalf of your smart account.
+The `UserOperation` Hash is what our [Bundler](https://github.com/alchemyplatform/rundler) returns once it submits the `UserOperation` to the Blockchain on behalf of your smart account.
 
-To know when the `UserOperation` is mined on the Blockchain in order query information about it, you'll want to use the `Transaction Hash`.
+To know when the `UserOperation` is mined on a blockchain in order query information about it, you'll want to use the `Transaction Hash`.
 :::
 
 :::tip Handling Errors
@@ -172,7 +172,7 @@ When running the above script, you might see the following errors:
 These are due to increase network activity at that time, and are fleeting issues. Running the script again will resolve them naturally.
 :::
 
-Since this "Getting Started" example is simple script, you'll need to consider how Account Kit can work in various applications. Check out our [Demos](/overview/demos) to see how.
+Since this "Getting Started" example is a simple script, you'll need to consider how Account Kit can work in various applications. Check out our [Demos](/overview/demos) to see how.
 
 ## 5. Dive Deeper
 
