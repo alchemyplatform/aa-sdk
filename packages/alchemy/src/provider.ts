@@ -140,6 +140,11 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
     return withAlchemyGasManager(this, config, !this.feeOptsSet);
   }
 
+  /**
+   * This methods adds the Alchemy UserOperation Simulation middleware to the provider.
+   *
+   * @returns {AlchemyProvider} - a new AlchemyProvider with the UserOperation Simulation middleware
+   */
   withAlchemyUserOpSimulation(): this {
     if (!this.isConnected()) {
       throw new Error(
