@@ -264,6 +264,7 @@ describe("Simple Account Tests", () => {
             "tokenId": null,
           },
         ],
+        "error": null,
       }
     `);
   }, 50000);
