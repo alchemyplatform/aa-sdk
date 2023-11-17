@@ -10,7 +10,7 @@ export default defineConfig({
     logo: "/kit-logo.svg",
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: "Docs", link: "/getting-started" },
+      { text: "Docs", link: "/overview/getting-started" },
       {
         text: "Examples",
         link: "https://github.com/alchemyplatform/aa-sdk/tree/main/examples",
@@ -42,6 +42,7 @@ export default defineConfig({
     sidebar: [
       {
         text: "Overview",
+        base: "/overview",
         items: [
           { text: "Why Account Kit", link: "/why-account-kit" },
           { text: "Introduction", link: "/introduction" },
