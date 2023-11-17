@@ -60,7 +60,7 @@ Remember to:
 
 ## Dive Deeper
 
-In this guide we initialized `provider` with the `aa-alchemy` package however we could have done the same with the other packages of Account Kit as well. To learn more about the different packages and their use cases, check out the ["Packages Overview"](/package-overview) page.
+In this guide we initialized `provider` with the `aa-alchemy` package however we could have done the same with the other packages of Account Kit as well. To learn more about the different packages and their use cases, check out the ["Packages Overview"](/overview/package-overview) page.
 
 ## Next Steps
 

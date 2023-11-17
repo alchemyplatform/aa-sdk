@@ -20,7 +20,7 @@ head:
 
 # What is Account Kit?
 
-**Account Kit** is a framework to embed smart accounts in your web3 app, unlocking [powerful features](/getting-started) like email/social login, gas sponsorship, batched transactions, and more. The `aa-sdk` makes it easy to integrate and deploy smart accounts, send user operations, and sponsor gas with just a few lines of code.
+**Account Kit** is a framework to embed smart accounts in your web3 app, unlocking [powerful features](/overview/getting-started) like email/social login, gas sponsorship, batched transactions, and more. The `aa-sdk` makes it easy to integrate and deploy smart accounts, send user operations, and sponsor gas with just a few lines of code.
 
 ## What is included in the Account Kit stack?
 
@@ -44,7 +44,7 @@ The SDK also implements an EIP-1193 provider interface to easily plug into any p
 
 The `aa-sdk` is modular at every layer of the stack and can be easily extended to fit your custom needs. You can plug in any [smart account](/smart-accounts/accounts/using-your-own) implementation, [Signer](/smart-accounts/signers/choosing-a-signer), gas manager API, RPC provider.
 
-Get started with `aa-sdk` in our [Getting Started guide](/getting-started) or checkout the [open source repo](https://github.com/alchemyplatform/aa-sdk).
+Get started with `aa-sdk` in our [Getting Started guide](/overview/getting-started) or checkout the [open source repo](https://github.com/alchemyplatform/aa-sdk).
 
 ### LightAccount
 
@@ -84,4 +84,4 @@ Check out the open source code in our affectionately named [Rundler github repo]
 
 ## Start building with Account Kit
 
-Account Kit was designed from the ground up to make account abstraction easy. It’s built on top of industry-leading infrastructure that powers applications at massive scale from Opensea to Shopify. Start integrating Account Kit today in the [Getting Started guide](/getting-started).
+Account Kit was designed from the ground up to make account abstraction easy. It’s built on top of industry-leading infrastructure that powers applications at massive scale from Opensea to Shopify. Start integrating Account Kit today in the [Getting Started guide](/overview/getting-started).
