@@ -13,6 +13,5 @@ export type SimulateUserOperationAssetChangesRequest = [
 
 export type SimulateUserOperationAssetChangesResponse = {
   changes: SimulateAssetChange[];
-  gasUsed?: string;
   error?: SimulateAssetChangesError;
 };
