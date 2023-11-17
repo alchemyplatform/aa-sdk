@@ -4,6 +4,9 @@ import {
   deepHexlify,
   resolveProperties,
   type AccountMiddlewareFn,
+  type BatchUserOperationCallData,
+  type UserOperationCallData,
+  type UserOperationOverrides,
 } from "@alchemy/aa-core";
 import { Alchemy } from "alchemy-sdk";
 import { type HttpTransport } from "viem";
@@ -14,11 +17,13 @@ import {
   optimismGoerli,
 } from "viem/chains";
 import { SupportedChains } from "./chains.js";
+import type { ClientWithAlchemyMethods } from "./middleware/client.js";
 import { withAlchemyGasFeeEstimator } from "./middleware/gas-fees.js";
 import {
   withAlchemyGasManager,
   type AlchemyGasManagerConfig,
 } from "./middleware/gas-manager.js";
+import { withAlchemyUserOpSimulation } from "./middleware/simulate-uo.js";
 import {
   AlchemyProviderConfigSchema,
   AlchemySdkClientSchema,
@@ -105,6 +110,20 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
     };
   };
 
+  simulateUserOperationAssetChanges = async (
+    data: UserOperationCallData | BatchUserOperationCallData,
+    overrides?: UserOperationOverrides
+  ) => {
+    const uoStruct = deepHexlify(
+      await this.buildUserOperation(data, overrides)
+    );
+
+    return (this.rpcClient as ClientWithAlchemyMethods).request({
+      method: "alchemy_simulateUserOperationAssetChanges",
+      params: [uoStruct, this.getEntryPointAddress()],
+    });
+  };
+
   /**
    * This methods adds the Alchemy Gas Manager middleware to the provider.
    *
@@ -119,6 +138,16 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
     }
 
     return withAlchemyGasManager(this, config, !this.feeOptsSet);
+  }
+
+  withAlchemyUserOpSimulation(): this {
+    if (!this.isConnected()) {
+      throw new Error(
+        "AlchemyProvider: account is not set, did you call `connect` first?"
+      );
+    }
+
+    return withAlchemyUserOpSimulation(this);
   }
 
   /**
