@@ -41,14 +41,6 @@ See [Light Account](/packages/aa-accounts/light-account/introduction.md) for mor
 
 <<< @/snippets/send-uo-example/connect-account.ts
 
-:::tip Note:
-
-You can combine steps 1. and 2. using our helpful factory method, as shown below. Notice that there are far fewer inputs to consider by default:
-
-<<< @/snippets/provider.ts
-
-:::
-
 ## 3. Construct The CallData
 
 The best part of Account Kit is that it abstracts the differences between User Operation calldata and standard Transaction calldata, such that you can pass in typical calldata to [sendUserOperation](/packages/aa-core/provider/waitForUserOperationTransaction.md) as if it was a transaction sent from your smart account, and we'll wrap it as necessary to generate calldata as it would be as a User Operation.

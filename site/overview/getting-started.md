@@ -20,7 +20,7 @@ head:
 
 # Getting Started
 
-This guide will help you get started with Account Kit by setting up your environment, creating a Smart Account, and sending a `UserOperation` on its behalf. By the end of this guide, you'll have a basic understanding of how to use the SDK and where to look for more advanced use cases.
+This guide will help you get started with Account Kit by setting up your environment, creating a smart account, and sending a `UserOperation` on its behalf. By the end of this guide, you'll have a basic understanding of how to use the SDK and where to look for more advanced use cases.
 
 ## 1. Install the Packages
 
