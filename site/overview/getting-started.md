@@ -29,7 +29,7 @@ In your project directory, you'll need to run the following to install the requi
 ::: code-group
 
 ```bash [npm]
-npm init -y
+npm init es6 -y
 npm install -save-dev typescript
 npm install @alchemy/aa-alchemy @alchemy/aa-accounts @alchemy/aa-core viem
 ```
@@ -46,9 +46,7 @@ We're installing [viem](https://viem.sh/) as well. Viem contains helpful abstrac
 
 :::
 
-Make sure your new `package.json` file and `tsconfig.json` files look like the following. Note that we added `"type": module` in `package.json` for this example:
-
-::: code-group
+Make sure your new `package.json` file looks something like the following. Note that we have `"type": module` in `package.json` for this example:
 
 ```json [package.json]
 {
@@ -69,22 +67,6 @@ Make sure your new `package.json` file and `tsconfig.json` files look like the f
   }
 }
 ```
-
-```json [tsconfig.json]
-{
-  "compilerOptions": {
-    "target": "ES2022",
-    "module": "ES2022",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "skipLibCheck": true
-  }
-}
-```
-
-:::
 
 You'll also want to make sure your `Node` version is _18.10.0_ using your version manager:
 

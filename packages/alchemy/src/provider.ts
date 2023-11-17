@@ -156,7 +156,7 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
   }
 
   /**
-   * This methods adds Alchemy Enhanced APIs to the provider, via a peer dependency on `alchemy-sdk`.
+   * This methods adds Alchemy Enhanced APIs to the provider, via an optional dependency on `alchemy-sdk`.
    * @see: https://github.com/alchemyplatform/alchemy-sdk-js
    *
    * The Alchemy SDK client must be configured with the same API key and network as the AlchemyProvider.
