@@ -232,6 +232,59 @@ describe("Simple Account Tests", () => {
     const nfts = await provider.nft.getNftsForOwner(address);
     expect(nfts.ownedNfts).toMatchInlineSnapshot("[]");
   }, 50000);
+
+  it("should correctly simulate asset changes for the user operation", async () => {
+    const provider = givenConnectedProvider({
+      owner,
+      chain,
+    });
+
+    const simulatedAssetChanges =
+      await provider.simulateUserOperationAssetChanges({
+        target: provider.getEntryPointAddress(),
+        data: "0x",
+        value: 1n,
+      });
+
+    expect(simulatedAssetChanges).toMatchInlineSnapshot(`
+      {
+        "changes": [
+          {
+            "amount": "0.000000000000000001",
+            "assetType": "NATIVE",
+            "changeType": "TRANSFER",
+            "contractAddress": null,
+            "decimals": 18,
+            "from": "0xb856dbd4fa1a79a46d426f537455e7d3e79ab7c4",
+            "logo": "https://static.alchemyapi.io/images/network-assets/eth.png",
+            "name": "Ethereum",
+            "rawAmount": "1",
+            "symbol": "ETH",
+            "to": "0x5ff137d4b0fdcd49dca30c7cf57e578a026d2789",
+            "tokenId": null,
+          },
+        ],
+        "error": null,
+      }
+    `);
+  }, 50000);
+
+  it("should simulate as part of middleware stack when added to provider", async () => {
+    const provider = givenConnectedProvider({
+      owner,
+      chain,
+    }).withAlchemyUserOpSimulation();
+
+    const spy = vi.spyOn(provider, "simulateUOMiddleware");
+
+    await provider.buildUserOperation({
+      target: provider.getEntryPointAddress(),
+      data: "0x",
+      value: 1n,
+    });
+
+    expect(spy).toHaveBeenCalledOnce();
+  }, 50000);
 });
 
 const givenConnectedProvider = ({
