@@ -46,7 +46,7 @@ We're installing [viem](https://viem.sh/) as well. Viem contains helpful abstrac
 
 :::
 
-Make sure your new `package.json` file look something like the following. Note that we have `"type": module` in `package.json` for this example:
+Make sure your new `package.json` file looks something like the following. Note that we have `"type": module` in `package.json` for this example:
 
 ```json [package.json]
 {
