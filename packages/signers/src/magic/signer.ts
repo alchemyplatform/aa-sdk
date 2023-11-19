@@ -23,9 +23,7 @@ export class MagicSigner
     this.inner = new Magic(params.apiKey, params.options);
   }
 
-  get signerType() {
-    return "magic";
-  }
+  readonly signerType = "magic";
 
   getAddress = async () => {
     if (!this.signer) throw new Error("Not authenticated");
