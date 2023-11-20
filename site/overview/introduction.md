@@ -28,7 +28,7 @@ Account Kit is a complete solution for [account abstraction](https://www.alchemy
 
 - **aa-sdk**: A simple, powerful interface to integrate, deploy, and use smart accounts. The `aa-sdk` orchestrates everything under the hood to make development easy.
 - **Light Account:** Secure, audited smart accounts. Easy to deploy, just when your users need them.
-- **signer:** Integrations with the most popular wallet providers. Secure your accounts with email, social login, passkeys, or a self-custodial wallet signer.
+- **Signer:** Integrations with the most popular wallet providers. Secure your accounts with email, social login, passkeys, or a self-custodial wallet Signer.
 - **Gas Manager API:** A programmable API to sponsor gas for UserOps that meet your criteria.
 - **Bundler API:** The most reliable ERC-4337 Bundler. Land your UserOps onchain, batch operations, and sponsor gas at massive scale.
 
@@ -42,7 +42,7 @@ The `aa-sdk` is a type-safe and performant TypeScript library built on top of [v
 
 The SDK also implements an EIP-1193 provider interface to easily plug into any popular dapp or wallet connect libraries such as RainbowKit, Wagmi, and Web3Modal. It also includes ethers.js adapters to provide full support for ethers.js apps.
 
-The `aa-sdk` is modular at every layer of the stack and can be easily extended to fit your custom needs. You can plug in any [smart account](/smart-accounts/accounts/using-your-own) implementation, [signer](/smart-accounts/signers/choosing-a-signer), Gas Manager API, RPC provider.
+The `aa-sdk` is modular at every layer of the stack and can be easily extended to fit your custom needs. You can plug in any [smart account](/smart-accounts/accounts/using-your-own) implementation, [Signer](/smart-accounts/signers/choosing-a-signer), Gas Manager API, RPC provider.
 
 Get started with `aa-sdk` in our [Getting Started guide](/overview/getting-started) or checkout the [open source repo](https://github.com/alchemyplatform/aa-sdk).
 
@@ -54,7 +54,7 @@ We started with the Ethereum Foundation’s canonical [SimpleAccount](https://gi
 
 - Significantly [reduced gas costs](/smart-accounts/accounts/choosing-a-smart-account#benchmarks)
 - ERC-1271 signature support to ensure users can sign messages, such as on Opensea
-- Ownership transfer so that users won’t get locked into a single signer
+- Ownership transfer so that users won’t get locked into a single Signer
 
 `LightAccount` was audited by Quantstamp ([report](https://github.com/alchemyplatform/light-account/blob/main/Quantstamp-Audit.pdf)).
 
@@ -64,9 +64,9 @@ To learn how to deploy a `LightAccount`, see [Light Account](/smart-accounts/acc
 
 ### Signers
 
-A signer is responsible for securely managing the private key and signing transaction requests on the smart account. Account Kit supports many popular wallet signers including [Magic](/smart-accounts/signers/magic), [web3auth](/smart-accounts/signers/web3auth), [Turnkey](/smart-accounts/signers/turnkey), [Privy](/smart-accounts/signers/privy), [Dynamic](/smart-accounts/signers/dynamic), [Fireblocks](/smart-accounts/signers/fireblocks), [Portal](/smart-accounts/signers/portal), [Capsule](/smart-accounts/signers/capsule) and [Lit Protocol](/smart-accounts/signers/lit). It also supports self-custodial wallets like MetaMask or Ledger.
+A Signer is responsible for securely managing the private key and signing transaction requests on the smart account. Account Kit supports many popular wallet signers including [Magic](/smart-accounts/signers/magic), [web3auth](/smart-accounts/signers/web3auth), [Turnkey](/smart-accounts/signers/turnkey), [Privy](/smart-accounts/signers/privy), [Dynamic](/smart-accounts/signers/dynamic), [Fireblocks](/smart-accounts/signers/fireblocks), [Portal](/smart-accounts/signers/portal), [Capsule](/smart-accounts/signers/capsule) and [Lit Protocol](/smart-accounts/signers/lit). It also supports self-custodial wallets like MetaMask or Ledger.
 
-To get started with a signer, read the doc: [How to choose a signer](/smart-accounts/signers/choosing-a-signer).
+To get started with a Signer, read the doc: [How to choose a Signer](/smart-accounts/signers/choosing-a-signer).
 
 ### Gas Manager API
 

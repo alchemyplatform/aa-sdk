@@ -6,16 +6,16 @@ head:
       content: Dynamic Integration Guide
   - - meta
     - name: description
-      content: Follow this integration guide to use Dynamic as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Dynamic as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Follow this integration guide to use Dynamic as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Dynamic as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - name: twitter:title
       content: Dynamic Integration Guide
   - - meta
     - name: twitter:description
-      content: Follow this integration guide to use Dynamic as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Dynamic as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
 # Dynamic

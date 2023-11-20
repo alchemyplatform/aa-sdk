@@ -16,7 +16,7 @@ export default function Footer() {
       />
       <FooterCard
         title={"Alchemy.com"}
-        subTitle="Check out our other products!"
+        subTitle="Check out other Alchemy products!"
         link={"https://alchemy.com"}
       />
     </div>

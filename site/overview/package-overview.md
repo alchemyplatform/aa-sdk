@@ -55,6 +55,6 @@ To see all of the smart accounts that are supported by this package, see the [aa
 
 ## [`aa-ethers`](/packages/aa-ethers/)
 
-This package provides an adapter that allows you to convert a `SmartAccountProvider` or `AlchemyProvider` into an ethers `JsonRpcProvider` and `signer`. These are primarily for convenience if your codebase expects a `JsonRpcProvider` or `signer` in places and you want to use `aa-core` or `aa-alchemy` with minimal lift.
+This package provides an adapter that allows you to convert a `SmartAccountProvider` or `AlchemyProvider` into an ethers `JsonRpcProvider` and `Signer`. These are primarily for convenience if your codebase expects a `JsonRpcProvider` or `Signer` in places and you want to use `aa-core` or `aa-alchemy` with minimal lift.
 
-It is not required to use `aa-ethers` even if you are using `ethers` as your web3 library. Because the `SmartAccountProvider` is an EIP-1193 compliant provider, you can always wrap it in an ethers [`Web3Provider`](https://docs.ethers.org/v5/api/providers/other/#Web3Provider) and use it as a `signer` or `JsonRpcProvider`.
+It is not required to use `aa-ethers` even if you are using `ethers` as your web3 library. Because the `SmartAccountProvider` is an EIP-1193 compliant provider, you can always wrap it in an ethers [`Web3Provider`](https://docs.ethers.org/v5/api/providers/other/#Web3Provider) and use it as a `Signer` or `JsonRpcProvider`.

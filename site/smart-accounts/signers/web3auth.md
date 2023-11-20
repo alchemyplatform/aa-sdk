@@ -6,16 +6,16 @@ head:
       content: Web3Auth Integration Guide
   - - meta
     - name: description
-      content: Follow this integration guide to use an EOA as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use an EOA as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Follow this integration guide to use an EOA as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use an EOA as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - name: twitter:title
       content: Web3Auth Integration Guide
   - - meta
     - name: twitter:description
-      content: Follow this integration guide to use an EOA as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use an EOA as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
 # Web3Auth Integration Guide

@@ -6,16 +6,16 @@ head:
       content: Lit Protocol Integration Guide
   - - meta
     - name: description
-      content: Follow this integration guide to use PKP Wallet as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use PKP Wallet as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Follow this integration guide to use PKP Wallet as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use PKP Wallet as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - name: twitter:title
       content: Lit Protocol Integration Guide
   - - meta
     - name: twitter:description
-      content: Follow this integration guide to use PKP Wallet as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use PKP Wallet as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
 # Lit Protocol Integration Guide

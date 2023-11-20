@@ -34,4 +34,4 @@ const client = await signer.getAddress();
 
 ### `Promise<Address>`
 
-A promise containing the `signer`'s smart account address
+A promise containing the `Signer`'s smart account address

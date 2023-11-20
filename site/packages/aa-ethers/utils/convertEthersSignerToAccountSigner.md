@@ -14,16 +14,16 @@ head:
 
 # Utils
 
-`convertEthersSignerToAccountSigner` converts your ethers.js `signer` object into an `SmartAccountSigner` by deriving implementations of its methods: `getAddress`, `signMessage`, and `signTypedData`.
+`convertEthersSignerToAccountSigner` converts your ethers.js `Signer` object into an `SmartAccountSigner` by deriving implementations of its methods: `getAddress`, `signMessage`, and `signTypedData`.
 
-Note that the `signTypedData` implementation is to throw an error since it is not supported by ethers.js `signer`. If you're looking for an implementation, consideration using [`convertWalletToAccountSigner`](/packages/aa-ethers/utils/convertWalletToAccountSigner).
+Note that the `signTypedData` implementation is to throw an error since it is not supported by ethers.js `Signer`. If you're looking for an implementation, consideration using [`convertWalletToAccountSigner`](/packages/aa-ethers/utils/convertWalletToAccountSigner).
 
 ## Usage
 
 ::: code-group
 
 ```ts [example.ts]
-// note that `signTypedData` is not supported by the signer class, and so this util method cannot derive an implementation of said method for LocalAccountSigner
+// note that `signTypedData` is not supported by the Signer class, and so this util method cannot derive an implementation of said method for LocalAccountSigner
 const accountSigner = convertEthersSignerToAccountSigner(wallet);
 ```
 
@@ -33,10 +33,10 @@ const accountSigner = convertEthersSignerToAccountSigner(wallet);
 
 ### `SmartAccountSigner`
 
-An instance of `SmartAccountSigner` with implementations derived from the inputted ethers.js `signer`
+An instance of `SmartAccountSigner` with implementations derived from the inputted ethers.js `Signer`
 
 ## Parameters
 
-### `signer: signer`
+### `Signer: Signer`
 
-An ethers.js `signer` object
+An ethers.js `Signer` object
