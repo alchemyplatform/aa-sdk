@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: How to Fetch a smart account's NFTs
+      content: How to Fetch a Smart Account's NFTs
   - - meta
     - name: description
       content: Follow this guide to fetch a smart account's NFTs with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
@@ -12,13 +12,13 @@ head:
       content: Follow this guide to fetch a smart account's NFTs with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - name: twitter:title
-      content: How to Get a smart account's NFTs
+      content: How to Get a Smart Account's NFTs
   - - meta
     - name: twitter:description
       content: Follow this guide to fetch a smart account's NFTs with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
-# How to Fetch a smart account's NFTs
+# How to Fetch a Smart Account's NFTs
 
 We provide several [Enhanced APIs](https://www.alchemy.com/enhanced-apis), which are especially useful for querying information about the smart accounts you create using Account Kit, such as the account's owned NFTs using the [NFT API](https://www.alchemy.com/nft-api).
 
@@ -56,4 +56,4 @@ Note that we must configure the Alchemy SDK client to have the same API Key and 
 Additionally, since the Alchemy SDK client does not yet support JWT authentication, an `AlchemyProvider` initialized with JWTs cannot use this method. We must be initialize the provider with an API key or RPC URL.
 :::
 
-That's it! There are so many more Enhanced APIs the the Alchemy SDK exposes, and can be useful for development with Account Abstraction. Try it out [here](https://github.com/alchemyplatform/alchemy-sdk-js), and check out [How to fetch a smart account's ERC-20 Tokens](/guides/enhanced-apis/token) for another example.
+That's it! There are so many more Enhanced APIs the the Alchemy SDK exposes, and can be useful for development with Account Abstraction. Try it out [here](https://github.com/alchemyplatform/alchemy-sdk-js), and check out [How to fetch a Smart Account's ERC-20 Tokens](/guides/enhanced-apis/token) for another example.

@@ -17,7 +17,7 @@ head:
     - name: twitter:description
       content: Follow this guide to send a User Operation with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 prev:
-  text: smart accounts
+  text: Smart Accounts
   link: /smart-accounts/overview
 ---
 
@@ -33,7 +33,7 @@ See [Alchemy Provider](/packages/aa-alchemy/provider/introduction.md) for more d
 
 <<< @/snippets/send-uo-example/create-provider.ts
 
-## 2. Connect Your smart account
+## 2. Connect Your Smart Account
 
 To send User Operations, we must connect the `provider` with a smart account. The Light Account is our gas-optimized smart account implementation, which we'll use in this example.
 

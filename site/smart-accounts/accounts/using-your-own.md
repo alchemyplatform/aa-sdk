@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Using Your Own smart account
+      content: Using Your Own Smart Account
   - - meta
     - name: description
       content: Follow this guide to use any smart account implementation you want with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
@@ -12,7 +12,7 @@ head:
       content: Follow this guide to use any smart account implementation you want with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - name: twitter:title
-      content: Using Your Own smart account
+      content: Using Your Own Smart Account
   - - meta
     - name: twitter:description
       content: Follow this guide to use any smart account implementation you want with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
@@ -20,7 +20,7 @@ next:
   text: Choosing a Signer
 ---
 
-# Using Your Own smart account
+# Using Your Own Smart Account
 
 You are not limited to the accounts defined in `@alchemy/aa-accounts`. The `SmartAccountProvider` can be used with any Smart Contract Account because it only relies on the [`ISmartContractAccount`](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/core/src/account/types.ts#L8) interface. This means you can use your own Smart Contract Account implementation with Account Kit.
 

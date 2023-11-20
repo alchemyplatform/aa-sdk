@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: smart accounts
+      content: Smart Accounts
   - - meta
     - name: description
       content: Follow this guide to understand the end-to-end process of integrating smart accounts in your applications with Account Kit.
@@ -12,7 +12,7 @@ head:
       content: Follow this guide to understand the end-to-end process of integrating smart accounts in your applications with Account Kit.
   - - meta
     - name: twitter:title
-      content: smart accounts
+      content: Smart Accounts
   - - meta
     - name: twitter:description
       content: Follow this guide to understand the end-to-end process of integrating smart accounts in your applications with Account Kit.
@@ -20,7 +20,7 @@ prev:
   text: Packages Overview
   link: /package-overview
 next:
-  text: Choosing a smart account
+  text: Choosing a Smart Account
 ---
 
 # Overview
@@ -31,7 +31,7 @@ In this guide we'll explain the end-to-end journey of integrating smart accounts
 
 Before diving into smart accounts, it's important to [set up your Alchemy account](https://auth.alchemy.com/signup). This will allow you to access the Alchemy API key which is required to initialize a provider and interact with the blockchain. Additionally, you'll get access to our Gas Manager, which will enable you to sponsor gas for your users.
 
-## 2. Deploying a smart account
+## 2. Deploying a Smart Account
 
 The next step is to select the right smart account implementation for your application. We recommend using `LightAccount`, which is a simple, secure, and cost-effective solution for most use cases. It supports features such as owner transfers, [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) message signing, batched transactions and more. However, if you're looking for more advanced features, you can use your own account implementation. We'll cover both options in detail in the following sections:
 
@@ -63,4 +63,4 @@ Transaction batching allows you to bundle multiple transaction calls into a sing
 
 ## 6. Transferring Ownership
 
-Ownership is an important aspect of smart accounts. The LightAccount implementation allows you to transfer the ownership of a smart account to another entity. We'll cover this in detail with code examples in the [Transferring Ownership](/guides/transferring-ownership) section.
+Ownership is an important aspect of smart accounts. The Light Account implementation allows you to transfer the ownership of a smart account to another entity. We'll cover this in detail with code examples in the [Transferring Ownership](/guides/transferring-ownership) section.

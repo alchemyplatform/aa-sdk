@@ -37,6 +37,6 @@ An instance of `SmartAccountSigner` with implementations derived from the inputt
 
 ## Parameters
 
-### `Signer: Signer`
+### `signer: Signer`
 
 An ethers.js `Signer` object
