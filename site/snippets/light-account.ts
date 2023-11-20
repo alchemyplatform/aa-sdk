@@ -1,43 +1,46 @@
-// importing required dependencies
 import {
   LightSmartContractAccount,
   getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
-import { LocalAccountSigner, type SmartAccountSigner } from "@alchemy/aa-core";
+import { LocalAccountSigner, type Hex } from "@alchemy/aa-core";
 import { sepolia } from "viem/chains";
 
 const chain = sepolia;
-const PRIVATE_KEY = "0xYourEOAPrivateKey"; // Replace with the private key of your EOA that will be the owner of Light Account
 
-const eoaSigner: SmartAccountSigner =
-  LocalAccountSigner.privateKeyToAccountSigner(PRIVATE_KEY); // Create a signer for your EOA
+// The private key of your EOA that will be the owner of Light Account
+const PRIVATE_KEY = "0xYourEOAPrivateKey" as Hex;
+const owner = LocalAccountSigner.privateKeyToAccountSigner(PRIVATE_KEY);
 
-// Default address for Light Account on Sepolia, you can replace it with your own.
-const factoryAddress = getDefaultLightAccountFactoryAddress(chain);
-
-// Create a provider with your EOA as the smart account owner, this provider is used to send user operations from your smart account and interact with the blockchain
+// Create a provider to send user operations from your smart account
 const provider = new AlchemyProvider({
-  apiKey: "ALCHEMY_API_KEY", // Replace with your Alchemy API key, you can get one at https://dashboard.alchemy.com/
+  // get your Alchemy API key at https://dashboard.alchemy.com
+  apiKey: "ALCHEMY_API_KEY",
   chain,
 }).connect(
   (rpcClient) =>
     new LightSmartContractAccount({
-      chain,
-      owner: eoaSigner,
-      factoryAddress,
       rpcClient,
+      owner,
+      chain,
+      factoryAddress: getDefaultLightAccountFactoryAddress(chain),
     })
 );
 
-// Logging the smart account address -- please fund this address with some SepoliaETH in order for the user operations to be executed successfully
-provider.getAddress().then((address: string) => console.log(address));
+// Fund your account address with ETH to send for the user operations
+// (e.g. Get Sepolia ETH at https://sepoliafaucet.com)
+console.log(await provider.getAddress()); // Log the smart account address
 
-// Send a user operation from your smart contract account
-const { hash } = await provider.sendUserOperation({
-  target: "0xTargetAddress", // Replace with the desired target address
-  data: "0xCallData", // Replace with the desired call data
-  value: 0n, // value: bigint or undefined
+// Send a user operation from your smart account
+const { hash: uoHash } = await provider.sendUserOperation({
+  target: "0xTargetAddress", // The desired target contract address
+  data: "0xCallData", // The desired call data
+  value: 0n, // (Optional) value to send the target contract address
 });
 
-console.log(hash); // Log the user operation hash
+console.log(uoHash); // Log the user operation hash
+
+// Wait for the user operation to be mined
+const txHash = await provider.waitForUserOperationTransaction(uoHash);
+
+console.log(txHash); // Log the transaction hash

@@ -10,7 +10,7 @@ export default defineConfig({
     logo: "/kit-logo.svg",
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: "Docs", link: "/getting-started" },
+      { text: "Docs", link: "/overview/getting-started" },
       {
         text: "Examples",
         link: "https://github.com/alchemyplatform/aa-sdk/tree/main/examples",
@@ -42,6 +42,7 @@ export default defineConfig({
     sidebar: [
       {
         text: "Overview",
+        base: "/overview",
         items: [
           { text: "Why Account Kit", link: "/why-account-kit" },
           { text: "Introduction", link: "/introduction" },
@@ -135,6 +136,10 @@ export default defineConfig({
           {
             text: "How to Transfer Ownership of a Smart Account",
             link: "/transferring-ownership",
+          },
+          {
+            text: "How to Simulate a User Operation",
+            link: "/sim-user-operation",
           },
           {
             text: "Smart Account Data",
@@ -257,6 +262,10 @@ export default defineConfig({
               {
                 text: "withCustomMiddleware",
                 link: "/withCustomMiddleware",
+              },
+              {
+                text: "withUOSimulationMiddleware",
+                link: "/withUOSimulationMiddleware",
               },
               {
                 text: "connect",
@@ -504,8 +513,16 @@ export default defineConfig({
               },
               { text: "gasEstimator", link: "/gasEstimator" },
               {
+                text: "simulateUserOperationAssetChanges",
+                link: "/simulateUserOperationAssetChanges",
+              },
+              {
                 text: "withAlchemyGasManager",
                 link: "/withAlchemyGasManager",
+              },
+              {
+                text: "withAlchemyUserOpSimulation",
+                link: "/withAlchemyUserOpSimulation",
               },
               {
                 text: "withAlchemyEnhancedApis",
@@ -529,6 +546,10 @@ export default defineConfig({
               {
                 text: "withAlchemyGasManager",
                 link: "/withAlchemyGasManager",
+              },
+              {
+                text: "withAlchemyUserOpSimulation",
+                link: "/withAlchemyUserOpSimulation",
               },
             ],
           },

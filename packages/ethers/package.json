@@ -1,7 +1,7 @@
 {
   "name": "@alchemy/aa-ethers",
   "license": "MIT",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Ethers.js wrapper for @alchemy/aa-core",
   "author": "Alchemy",
   "type": "module",
@@ -42,14 +42,14 @@
     "test:run-e2e": "vitest run --config vitest.config.e2e.ts"
   },
   "devDependencies": {
-    "alchemy-sdk": "^2.8.3",
+    "alchemy-sdk": "^3.0.0",
     "dotenv": "^16.0.3",
     "typescript": "^5.0.4",
     "typescript-template": "*",
     "vitest": "^0.31.0"
   },
   "dependencies": {
-    "@alchemy/aa-core": "^1.0.0",
+    "@alchemy/aa-core": "^1.2.0",
     "@ethersproject/abi": "^5.7.0",
     "@ethersproject/abstract-signer": "^5.7.0",
     "@ethersproject/bytes": "^5.7.0",
