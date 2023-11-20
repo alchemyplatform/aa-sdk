@@ -38,6 +38,7 @@ We're excited to have you contribute to the `aa-sdk`. Here's a step-by-step guid
        - Write documentation in the [second person voice](https://developers.google.com/style/person).
        - Use "aa-sdk" or "Account Kit" depending on context, not "Account Kit SDK".
        - Capitalize "Gas Manager API" and "Bundler API".
+       - Capitalize definitions for type primitives like `Provider`, `Signer`, `Account`.
 
 8. **Committing Changes**: Commit your changes using a standardized message format.
 
@@ -46,6 +47,7 @@ We're excited to have you contribute to the `aa-sdk`. Here's a step-by-step guid
    - Example: `feat: add sanity check on provider connect for clearer error message (#181)`.
    - Example: `docs: add new section on gasless transactions (#189)`.
    - Use `git log` to see more examples and acceptable subject-types.
+   - For more details on semantic PR titles, refer to [Flank's guide on PR titles](https://flank.github.io/flank/pr_titles/).
 
 9. **Creating a Pull Request**:
 
