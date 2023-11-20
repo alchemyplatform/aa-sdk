@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Choosing a smart account
+      content: Choosing a Smart Account
   - - meta
     - name: description
       content: Learn how to choose a smart account implementation to use with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
@@ -12,18 +12,18 @@ head:
       content: Learn how to choose a smart account implementation to use with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - name: twitter:title
-      content: Choosing a smart account
+      content: Choosing a Smart Account
   - - meta
     - name: twitter:description
       content: Learn how to choose a smart account implementation to use with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 prev:
-  text: smart accounts
+  text: Smart Accounts
   link: /smart-accounts/overview
 ---
 
-# Choosing a smart account
+# Choosing a Smart Account
 
-## What's a smart account?
+## What's a Smart Account?
 
 A smart account is an [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) smart account. You can use it to manage assets, execute transactions (known as `userOperations` or `userOps`), and more. There are many different implementations of a smart account, including our [Light Account](/smart-accounts/accounts/light-account).
 

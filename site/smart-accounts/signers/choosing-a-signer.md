@@ -17,7 +17,7 @@ head:
     - name: twitter:description
       content: Explore Account Kit integration guides for signers including Magic.Link, Privy, Web3Auth, EOAs, and many more!
 prev:
-  text: smart accounts
+  text: Smart Accounts
   link: /smart-accounts/accounts/choosing-a-smart-account
 next:
   text: Guides

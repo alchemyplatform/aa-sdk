@@ -11,7 +11,7 @@ head:
     - property: og:description
       content: Demos using Account Kit
 next:
-  text: smart accounts
+  text: Smart Accounts
 ---
 
 # Demos

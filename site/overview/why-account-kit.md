@@ -31,7 +31,7 @@ It’s way too hard for new users to start using web3 apps. Today, users have to
 
 The user leaves your app at every step! This style of web3 onboarding is too complex and intimidating — most new users drop off before they ever reach the magic moment with your app. We need to make wallets, seed phrases, and gas costs disappear in order to onboard the next billion users.
 
-## The Solution: smart accounts
+## The Solution: Smart Accounts
 
 Account Kit provides all the tools you need to onboard the next 1B users with a simple, familiar user experience.
 
