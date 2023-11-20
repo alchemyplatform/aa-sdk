@@ -151,6 +151,17 @@ export abstract class BaseSmartContractAccount<
   // #region optional-methods
 
   /**
+   * If your account handles 1271 signatures of personal_sign differently
+   * than it does UserOperations, you can implement two different approaches to signing
+   *
+   * @param uoHash -- The hash of the UserOperation to sign
+   * @returns the signature of the UserOperation
+   */
+  async signUserOperationHash(uoHash: Hash): Promise<Hash> {
+    return this.signMessage(uoHash);
+  }
+
+  /**
    * If your contract supports signing and verifying typed data,
    * you should implement this method.
    *

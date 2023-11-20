@@ -17,7 +17,7 @@ head:
 `withAlchemyEnhancedApis` is a method on `AlchemyProvider` that you can optionally call to create a new provider instance with added methods that access the Alchemy [Enhanced APIs](https://www.alchemy.com/enhanced-apis) via the [Alchemy SDK](https://github.com/alchemyplatform/alchemy-sdk-js).
 
 :::tip Note
-This method requires a peer dependency on the [`alchemy-sdk`](https://github.com/alchemyplatform/alchemy-sdk-js) package, as the input to this method is an Alchemy SDK client.
+This method requires an optional dependency on the [`alchemy-sdk`](https://github.com/alchemyplatform/alchemy-sdk-js) package, as the input to this method is an Alchemy SDK client.
 
 The Alchemy SDK client must be configured with the same API key and network as the `AlchemyProvider`. This method validates such at runtime.
 

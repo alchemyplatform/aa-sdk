@@ -27,7 +27,7 @@ This repo is community maintained and we welcome contributions!
 
 ## Getting started
 
-If you are already using the `@alchemy/aa-core` package, you can simply install this package and start using the `EthersProviderAdapter` and `AccountSigner`. If you are not using `@alchemy/aa-core`, you can install it and follow the instructions in the ["Getting Started"](/getting-started) docs to get started.
+If you are already using the `@alchemy/aa-core` package, you can simply install this package and start using the `EthersProviderAdapter` and `AccountSigner`. If you are not using `@alchemy/aa-core`, you can install it and follow the instructions in the ["Getting Started"](/overview/getting-started) docs to get started.
 
 ::: code-group
 

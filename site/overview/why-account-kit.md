@@ -107,4 +107,4 @@ We built Account Kit from the ground up to be reliable, scalable, and developer-
 
 We have years of experience as the leading web3 developer platform powering customers from Opensea to Shopify, and brought all that expertise to bear in Account Kit.
 
-Get started with Account Kit on the next page: [Getting Started](/getting-started).
+Get started with Account Kit on the next page: [Getting Started](/overview/getting-started).

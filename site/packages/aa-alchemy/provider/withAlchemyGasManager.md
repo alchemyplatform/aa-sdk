@@ -16,7 +16,7 @@ next:
 
 # withAlchemyGasManager
 
-`withAlchemyGasManager` is a method on `AlchemyProvider` that you can optionally call to create a new provider instance with added middleware leveraging the Alchemy Gas Manager (an [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) Paymaster). Under the hood, this will call the [`withAlchemyGasManager`](/packages/aa-alchemy/middleware/withAlchemyGasManager.ts).
+`withAlchemyGasManager` is a method on `AlchemyProvider` that you can optionally call to create a new provider instance with added middleware leveraging the Alchemy Gas Manager (an [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) Paymaster). Under the hood, this will call the [`withAlchemyGasManager`](/packages/aa-alchemy/middleware/withAlchemyGasManager) middleware.
 
 ## Usage
 

@@ -57,6 +57,15 @@ export interface ISmartContractAccount {
   getNonce(): Promise<bigint>;
 
   /**
+   * If your account handles 1271 signatures of personal_sign differently
+   * than it does UserOperations, you can implement two different approaches to signing
+   *
+   * @param uoHash -- The hash of the UserOperation to sign
+   * @returns the signature of the UserOperation
+   */
+  signUserOperationHash(uoHash: Hash): Promise<Hash>;
+
+  /**
    * Returns a signed and prefixed message.
    *
    * @param msg - the message to sign

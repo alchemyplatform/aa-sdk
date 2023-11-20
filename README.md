@@ -14,7 +14,7 @@ The `aa-sdk` is modular at every layer of the stack and can be easily extended t
 yarn add @alchemy/aa-accounts @alchemy/aa-core
 ```
 
-### [Light Account Example](https://accountkit.alchemy.com/getting-started#a-simple-light-account-example)
+### [Light Account Example](https://accountkit.alchemy.com/overview/getting-started#a-simple-light-account-example)
 
 ## Docs
 
