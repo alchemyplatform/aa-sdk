@@ -12,6 +12,7 @@
     "site"
   ],
   "scripts": {
+    "generate": "lerna run generate && yarn lint:write",
     "build": "lerna run build --ignore=alchemy-daapp --ignore=aa-simple-dapp",
     "build:examples": "lerna run build",
     "clean": "lerna run clean",

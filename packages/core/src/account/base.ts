@@ -48,7 +48,7 @@ export abstract class BaseSmartContractAccount<
     Chain
   >;
   protected entryPointAddress: Address;
-  protected rpcProvider:
+  readonly rpcProvider:
     | PublicErc4337Client<TTransport>
     | PublicErc4337Client<HttpTransport>;
 

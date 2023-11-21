@@ -26,3 +26,23 @@ export {
 } from "./light-account/schema.js";
 export type { LightAccountProviderConfig } from "./light-account/types.js";
 export { getDefaultLightAccountFactoryAddress } from "./light-account/utils.js";
+
+// msca exports
+export {
+  MSCABuilder,
+  StandardExecutor,
+  type Executor,
+  type Factory,
+  type MSCA,
+  type SignerMethods,
+} from "./msca/builder.js";
+export {
+  createMultiOwnerMSCA,
+  createMultiOwnerMSCABuilder,
+  createMultiOwnerMSCASchema,
+  type MultiOwnerMSCAParams,
+} from "./msca/multi-owner-account.js";
+export {
+  MultiOwnerPlugin,
+  MultiOwnerPluginExecutionFunctionAbi,
+} from "./msca/plugins/multi-owner.js";
