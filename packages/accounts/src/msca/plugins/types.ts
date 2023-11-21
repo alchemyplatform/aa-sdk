@@ -1,4 +1,6 @@
+import type { BaseSmartContractAccount } from "@alchemy/aa-core";
+
 export interface Plugin<D> {
   meta: { name: string; version: string };
-  decorators: D;
+  accountDecorators: (a: BaseSmartContractAccount) => D;
 }
