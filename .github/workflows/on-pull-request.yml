@@ -24,6 +24,8 @@ jobs:
   build_and_lint_and_test:
     name: Lint and Build and Test
     runs-on: ubuntu-latest
+    env:
+      API_KEY: ${{ secrets.API_KEY }}
     steps:
       - uses: actions/checkout@v2
 

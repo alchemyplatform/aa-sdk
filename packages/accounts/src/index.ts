@@ -36,3 +36,23 @@ export {
 } from "./nani-account/schema.js";
 export type { NaniAccountProviderConfig } from "./nani-account/types.js";
 export { getDefaultNaniAccountFactoryAddress } from "./nani-account/utils.js";
+
+// msca exports
+export {
+  MSCABuilder,
+  StandardExecutor,
+  type Executor,
+  type Factory,
+  type MSCA,
+  type SignerMethods,
+} from "./msca/builder.js";
+export {
+  createMultiOwnerMSCA,
+  createMultiOwnerMSCABuilder,
+  createMultiOwnerMSCASchema,
+  type MultiOwnerMSCAParams,
+} from "./msca/multi-owner-account.js";
+export {
+  MultiOwnerPlugin,
+  MultiOwnerPluginExecutionFunctionAbi,
+} from "./msca/plugins/multi-owner.js";
