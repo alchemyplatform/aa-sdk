@@ -133,7 +133,7 @@ export const IPluginAbi = [
           },
           {
             internalType: "bool",
-            name: "permitAnyExternalContract",
+            name: "permitAnyExternalAddress",
             type: "bool",
           },
           {

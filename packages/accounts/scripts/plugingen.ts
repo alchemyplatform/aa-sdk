@@ -78,20 +78,38 @@ export function plugingen({
         const executionAbiConst = `${contract.name}ExecutionFunctionAbi`;
 
         const encodeFunctions = executionAbi.map((n) => {
+          const methodContent = [];
           const argsParamString =
             n.inputs.length > 0
               ? `{ args }: GetFunctionArgs<typeof ${executionAbiConst}, "${n.name}">`
               : "";
           const argsEncodeString = n.inputs.length > 0 ? "args," : "";
-          return dedent`
-                encode${pascalCase(n.name)}Data: (${argsParamString}) => {
-                    return encodeFunctionData({
-                        abi: ${executionAbiConst},
-                        functionName: "${n.name}",
-                        ${argsEncodeString}
-                    })
-                }
-            `;
+          const isViewFunction = n.stateMutability === "view";
+
+          methodContent.push(dedent`
+            encode${pascalCase(n.name)}Data: (${argsParamString}) => {
+                return encodeFunctionData({
+                    abi: ${executionAbiConst},
+                    functionName: "${n.name}",
+                    ${argsEncodeString}
+                });
+            }
+          `);
+
+          if (isViewFunction) {
+            methodContent.push(dedent`
+              read${pascalCase(n.name)}: async (${argsParamString}) => {
+                return account.rpcProvider.readContract({
+                  address: await account.getAddress(),
+                  abi: ${executionAbiConst},
+                  functionName: "${n.name}",
+                  ${argsEncodeString}
+                });
+              }
+            `);
+          }
+
+          return methodContent.join(",\n\n");
         });
 
         content.push(dedent`
@@ -100,12 +118,14 @@ export function plugingen({
                     name: "${name}",
                     version: "${version}",
                 },
-                decorators: { ${encodeFunctions.join(",\n\n")} }
+                accountDecorators: (account: BaseSmartContractAccount) => ({ ${encodeFunctions.join(
+                  ",\n\n"
+                )} })
             }
 
-            export const ${contract.name}: Plugin<typeof ${
+            export const ${contract.name}: Plugin<ReturnType<typeof ${
           contract.name
-        }_["decorators"]> = ${contract.name}_;
+        }_["accountDecorators"]>> = ${contract.name}_;
         `);
 
         // add the abi at the end so it's easier to read the actual plugin code output
@@ -119,6 +139,7 @@ export function plugingen({
       const imports = dedent`
         import { type GetFunctionArgs, encodeFunctionData } from "viem";
         import type { Plugin } from "./types";
+        import type { BaseSmartContractAccount } from "@alchemy/aa-core";
       `;
 
       return {
