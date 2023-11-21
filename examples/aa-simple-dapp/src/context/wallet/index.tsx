@@ -1,8 +1,8 @@
 "use client";
-import { useAlchemyProvider } from "@/hooks/useAlchemyProvider";
+import { PluginType, useAlchemyProvider } from "@/hooks/useAlchemyProvider";
 import { createMagicSigner } from "@/signer/createMagicSigner";
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
-import { Address } from "@alchemy/aa-core";
+import { Address, LocalAccountSigner, SendUserOperationResult } from "@alchemy/aa-core";
 import { MagicSigner } from "@alchemy/aa-signers/magic";
 import {
   ReactNode,
@@ -12,6 +12,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { PrivateKeyAccount } from "viem";
 
 type WalletContextProps = {
   // Functions
@@ -24,6 +25,19 @@ type WalletContextProps = {
   scaAddress?: Address;
   username?: string;
   isLoggedIn: boolean;
+  sessionKeySigner?: LocalAccountSigner<PrivateKeyAccount>;
+  tokenReceiverEnabled: boolean;
+  sessionKeyEnabled: boolean;
+
+  pluginInstall: (
+    type: PluginType
+  ) => Promise<SendUserOperationResult | undefined>;
+  pluginUninstall: (
+    type: PluginType
+  ) => Promise<SendUserOperationResult | undefined>;
+  availablePlugins: Plugin<any, any>[];
+  installedPlugins: ReadonlyArray<Address>;
+  refetchInstalledPlugins: (scaAddress: Address) => Promise<void>;
 };
 
 const defaultUnset: any = null;
@@ -33,6 +47,16 @@ const WalletContext = createContext<WalletContextProps>({
   login: () => Promise.resolve(),
   logout: () => Promise.resolve(),
   isLoggedIn: defaultUnset,
+
+  sessionKeySigner: defaultUnset,
+  tokenReceiverEnabled: defaultUnset,
+  sessionKeyEnabled: defaultUnset,
+
+  pluginInstall: () => Promise.resolve(undefined),
+  pluginUninstall: () => Promise.resolve(undefined),
+  availablePlugins,
+  installedPlugins: [],
+  refetchInstalledPlugins: () => Promise.resolve(),
 });
 
 export const useWalletContext = () => useContext(WalletContext);
@@ -43,9 +67,8 @@ export const WalletContextProvider = ({
   children: ReactNode;
 }) => {
   const [ownerAddress, setOwnerAddress] = useState<Address>();
-  const [scaAddress, setScaAddress] = useState<Address>();
   const [username, setUsername] = useState<string>();
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
 
   const [magicSigner] = useState<Promise<MagicSigner | null>>(() =>
     createMagicSigner()
@@ -76,9 +99,13 @@ export const WalletContextProvider = ({
 
       setIsLoggedIn(true);
       connectProviderToAccount(signer);
+
+      const _scaAddress = await provider.getAddress();
+      console.log("scaAddress", _scaAddress);
+      setScaAddress(_scaAddress);
+
       setUsername(metadata.email);
       setOwnerAddress(metadata.publicAddress as Address);
-      setScaAddress(await provider.getAddress());
     },
     [connectProviderToAccount, magicSigner, provider]
   );
@@ -96,6 +123,7 @@ export const WalletContextProvider = ({
 
     setIsLoggedIn(false);
     disconnectProviderFromAccount();
+    setScaAddress(undefined);
     setUsername(undefined);
     setOwnerAddress(undefined);
     setScaAddress(undefined);
@@ -121,14 +149,22 @@ export const WalletContextProvider = ({
 
       const metadata = await signer.getAuthDetails();
       if (!metadata.publicAddress || !metadata.email) {
-        throw new Error("Magic login failed");
+        setIsLoggedIn(false);
+        return;
       }
 
-      setIsLoggedIn(isLoggedIn);
+      setIsLoggedIn(true);
       connectProviderToAccount(signer);
+
+      const _scaAddress = await provider.getAddress();
+      console.log("scaAddress", _scaAddress);
+      setScaAddress(_scaAddress);
+
       setUsername(metadata.email);
       setOwnerAddress(metadata.publicAddress as Address);
-      setScaAddress(await provider.getAddress());
+    } catch (e) {
+      setIsLoggedIn(false);
+      console.error(e);
     }
     fetchData();
   }, [connectProviderToAccount, magicSigner, provider]);
@@ -138,11 +174,19 @@ export const WalletContextProvider = ({
       value={{
         login,
         logout,
-        isLoggedIn,
+        isLoggedIn: !!isLoggedIn,
         provider,
         ownerAddress,
         scaAddress,
         username,
+        pluginInstall,
+        pluginUninstall,
+        availablePlugins,
+        installedPlugins,
+        refetchInstalledPlugins,
+        tokenReceiverEnabled,
+        sessionKeySigner,
+        sessionKeyEnabled,
       }}
     >
       {children}
