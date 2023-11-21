@@ -2,26 +2,19 @@ export const IStandardExecutorAbi = [
   {
     inputs: [
       {
-        components: [
-          {
-            internalType: "address",
-            name: "target",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "value",
-            type: "uint256",
-          },
-          {
-            internalType: "bytes",
-            name: "data",
-            type: "bytes",
-          },
-        ],
-        internalType: "struct Execution",
-        name: "execution",
-        type: "tuple",
+        internalType: "address",
+        name: "target",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "value",
+        type: "uint256",
+      },
+      {
+        internalType: "bytes",
+        name: "data",
+        type: "bytes",
       },
     ],
     name: "execute",
@@ -55,8 +48,8 @@ export const IStandardExecutorAbi = [
             type: "bytes",
           },
         ],
-        internalType: "struct Execution[]",
-        name: "executions",
+        internalType: "struct Call[]",
+        name: "calls",
         type: "tuple[]",
       },
     ],
