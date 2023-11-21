@@ -19,10 +19,7 @@ import {
 import { z } from "zod";
 import { MultiOwnerMSCAFactoryAbi } from "./abis/MultiOwnerMSCAFactory.js";
 import { MSCABuilder, StandardExecutor } from "./builder.js";
-import {
-  MultiOwnerPlugin,
-  MultiOwnerPluginExecutionFunctionAbi,
-} from "./plugins/multi-owner.js";
+import { MultiOwnerPlugin } from "./plugins/multi-owner.js";
 
 export const createMultiOwnerMSCASchema = <
   TTransport extends SupportedTransports = Transport
@@ -57,15 +54,13 @@ export const createMultiOwnerMSCABuilder = <
       ]);
     })
     .withExecutor(StandardExecutor)
-    .withSigner((acct, rpcProvider) => {
+    .withSigner((acct) => {
       const signWith1271Wrapper = async (msg: Hash): Promise<`0x${string}`> => {
-        // TODO: should expose these methods as well via the plugingen functions
+        const multiOwnerAugmented =
+          acct.extendWithPluginMethods(MultiOwnerPlugin);
+
         const [, name, version, chainId, verifyingContract, salt] =
-          await rpcProvider.readContract({
-            abi: MultiOwnerPluginExecutionFunctionAbi,
-            address: await acct.getAddress(),
-            functionName: "eip712Domain",
-          });
+          await multiOwnerAugmented.readEip712Domain();
 
         return params.owner.signTypedData({
           domain: {

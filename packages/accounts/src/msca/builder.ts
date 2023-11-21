@@ -3,7 +3,6 @@ import {
   type BaseSmartAccountParams,
   type BatchUserOperationCallData,
   type ISmartContractAccount,
-  type PublicErc4337Client,
   type SignTypedDataParams,
   type SupportedTransports,
 } from "@alchemy/aa-core";
@@ -11,7 +10,6 @@ import {
   encodeFunctionData,
   type Address,
   type Hex,
-  type HttpTransport,
   type Transport,
 } from "viem";
 import { z } from "zod";
@@ -23,13 +21,11 @@ export interface MSCA extends ISmartContractAccount {
 }
 
 export type Executor = <A extends MSCA>(
-  acct: A,
-  rpcClient: PublicErc4337Client<HttpTransport> | PublicErc4337Client<Transport>
+  acct: A
 ) => Pick<ISmartContractAccount, "encodeExecute" | "encodeBatchExecute">;
 
 export type SignerMethods = <A extends MSCA>(
-  acct: A,
-  rpcClient: PublicErc4337Client<HttpTransport> | PublicErc4337Client<Transport>
+  acct: A
 ) => Pick<
   ISmartContractAccount,
   | "signMessage"
@@ -38,10 +34,7 @@ export type SignerMethods = <A extends MSCA>(
   | "getDummySignature"
 >;
 
-export type Factory = <A extends MSCA>(
-  acct: A,
-  rpcClient: PublicErc4337Client<HttpTransport> | PublicErc4337Client<Transport>
-) => Promise<Hex>;
+export type Factory = <A extends MSCA>(acct: A) => Promise<Hex>;
 
 // TODO: this can be moved out into its own file
 export const StandardExecutor: Executor = () => ({
@@ -105,7 +98,7 @@ export class MSCABuilder {
 
     return new (class extends BaseSmartContractAccount<TTransport> {
       getDummySignature(): `0x${string}` {
-        return signer(this, this.rpcProvider).getDummySignature();
+        return signer(this).getDummySignature();
       }
 
       encodeExecute(
@@ -113,37 +106,33 @@ export class MSCABuilder {
         value: bigint,
         data: string
       ): Promise<`0x${string}`> {
-        return executor(this, this.rpcProvider).encodeExecute(
-          target,
-          value,
-          data
-        );
+        return executor(this).encodeExecute(target, value, data);
       }
 
       encodeBatchExecute(
         txs: BatchUserOperationCallData
       ): Promise<`0x${string}`> {
-        return executor(this, this.rpcProvider).encodeBatchExecute(txs);
+        return executor(this).encodeBatchExecute(txs);
       }
 
       signMessage(msg: string | Uint8Array): Promise<`0x${string}`> {
-        return signer(this, this.rpcProvider).signMessage(msg);
+        return signer(this).signMessage(msg);
       }
 
       signTypedData(params: SignTypedDataParams): Promise<`0x${string}`> {
-        return signer(this, this.rpcProvider).signTypedData(params);
+        return signer(this).signTypedData(params);
       }
 
       signUserOperationHash(uoHash: `0x${string}`): Promise<`0x${string}`> {
-        return signer(this, this.rpcProvider).signUserOperationHash(uoHash);
+        return signer(this).signUserOperationHash(uoHash);
       }
 
       protected getAccountInitCode(): Promise<`0x${string}`> {
-        return factory(this, this.rpcProvider);
+        return factory(this);
       }
 
       extendWithPluginMethods = <D>(plugin: Plugin<D>): this & D => {
-        const methods = plugin.decorators;
+        const methods = plugin.accountDecorators(this);
         return Object.assign(this, methods);
       };
     })(params);
