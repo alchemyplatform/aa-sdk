@@ -354,6 +354,8 @@ export class SmartAccountProvider<
         nonce: this.account.getNonce(),
         callData: Array.isArray(data)
           ? this.account.encodeBatchExecute(data)
+          : typeof data === "string"
+          ? data
           : this.account.encodeExecute(
               data.target,
               data.value ?? 0n,
