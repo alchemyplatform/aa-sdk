@@ -61,5 +61,8 @@
   "dependencies": {
     "@alchemy/aa-core": "^1.2.0",
     "viem": "^1.16.2"
+  },
+  "optionalDependencies": {
+    "magic-sdk": "^21.2.0"
   }
 }
