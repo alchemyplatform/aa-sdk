@@ -11,8 +11,8 @@ head:
     - property: og:description
       content: aa-ethers landing page and getting started guide
 prev:
-  text: aa-accounts
-  link: /packages/aa-accounts/index
+  text: aa-signers
+  link: /packages/aa-signers/index
 next:
   text: EthersProviderAdapter
 ---
