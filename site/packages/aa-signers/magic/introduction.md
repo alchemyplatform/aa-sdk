@@ -26,7 +26,7 @@ head:
 
 ## Install Dependencies
 
-`MagicSigner` requires installation of the [`magic-sdk`](https://github.com/magiclabs/magic-js) SDK. `aa-signers` lists it as optional dependency.
+`MagicSigner` requires installation of the [`magic-sdk`](https://github.com/magiclabs/magic-js) SDK. `aa-signers` lists it as an optional dependency.
 
 ::: code-group
 
