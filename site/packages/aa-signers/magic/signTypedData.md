@@ -16,7 +16,7 @@ head:
 
 `signTypedData` supports signing typed data from the `MagicSigner`.
 
-This method must be called after [`authenticate`](/packages/aa-signers/magic/authenticate). Otherwise, this method will throw an erro with the message `Not Authenticated`.
+This method must be called after [`authenticate`](/packages/aa-signers/magic/authenticate). Otherwise, this method will throw an error with the message `Not Authenticated`.
 
 ## Usage
 
