@@ -22,27 +22,29 @@ head:
 
 [Web3Auth](https://web3auth.io/) is an embedded wallet provider that allows users to generate wallets scoped to your application via Social Logins, Email OTP, or Custom Authentication Methods. This is great for enabling a better experience for your users. But ultimately these wallets are not much different from EOA's, so you don't have the benefit of Account Abstraction (gas sponsorship, batching, etc).
 
-Combining Web3Auth with Account Kit allows you to get the best of both worlds. You can use Web3Auth to generate a wallet scoped to your application, and then use Account Kit to create Smart Contract Accounts for your users!
+Combining Web3Auth with Account Kit allows you to get the best of both worlds. You can use Web3Auth via the [`aa-signers`](/packages/aa-signers/magic/introduction) package to generate a wallet scoped to your application, and then use Account Kit to create Smart Contract Accounts for your users!
 
 # Integration
 
-### Install the SDK
+### Install the SDKs
 
 ::: code-group
 
 ```bash [npm]
 npm i -s @web3auth/modal
+npm i -s @web3auth/base
 ```
 
 ```bash [yarn]
 yarn add @web3auth/modal
+yarn add @web3auth/base
 ```
 
 :::
 
-### Create a SmartAccountSigner
+### Create a Web3AuthSigner
 
-Next, setup the web3auth sdk and create a `SmartAccountSigner`
+Next, setup the web3auth SDKs and create an authenticated `Web3AuthSigner` using the `aa-signers` package:
 
 <<< @/snippets/web3auth.ts
 
