@@ -3,38 +3,41 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: LightSmartContractAccount • signMessageWith6492
+      content: Web3AuthSigner • signMessage
   - - meta
     - name: description
-      content: Overview of the signMessageWith6492 method on LightSmartContractAccount
+      content: Overview of the signMessage method on Web3AuthSigner
   - - meta
     - property: og:description
-      content: Overview of the signMessageWith6492 method on LightSmartContractAccount
+      content: Overview of the signMessage method on Web3AuthSigner
 ---
 
-# signMessageWith6492
+# signMessage
 
-`signMessageWith6492` supports signing messages for deployed smart contract accounts, as well as undeployed accounts (counterfactual addresses) using [ERC-6492](https://eips.ethereum.org/EIPS/eip-6492).
+`signMessage` supports signing messages from the `Web3AuthSigner`.
+
+This method must be called after [`authenticate`](/packages/aa-signers/web3auth/authenticate). Otherwise, this method will throw an erro with the message `Not Authenticated`.
 
 ## Usage
 
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { createWeb3AuthSigner } from "./web3auth";
 // [!code focus:99]
-// sign message (works for undeployed and deployed accounts)
-const signedMessageWith6492 = provider.signMessageWith6492("test");
+const web3AuthSigner = await createWeb3AuthSigner();
+
+const signedMessage = await web3AuthSigner.signMessage("test");
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/web3auth.ts
 :::
 
 ## Returns
 
-### `Promise<Hash>`
+### `Promise<Hex>`
 
-A Promise containing the signature of the message, additionally wrapped in EIP-6492 format if the account is undeployed.
+A Promise containing the signature of the message.
 
 ## Parameters
 

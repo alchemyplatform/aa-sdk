@@ -1,7 +1,7 @@
 import type { UserInfo } from "@web3auth/base";
 
 export interface Web3AuthAuthenticationParams {
-  initModal: () => Promise<void>;
+  init: () => Promise<void>;
   connect: () => Promise<void>;
 }
 

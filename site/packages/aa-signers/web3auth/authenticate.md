@@ -3,41 +3,74 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: LightSmartContractAccount • encodeTransferOwnership
+      content: Web3AuthSigner • authenticate
   - - meta
     - name: description
-      content: Overview of the encodeTransferOwnership method on LightSmartContractAccount
+      content: Overview of the authenticate method on Web3AuthSigner
   - - meta
     - property: og:description
-      content: Overview of the encodeTransferOwnership method on LightSmartContractAccount
+      content: Overview of the authenticate method on Web3AuthSigner
 ---
 
 # authenticate
 
-`encodeTransferOwnership` is a static class method on the `LightSmartContractAccount` which generates the call data necessary to send a userOperation calling `transferOwnership` on the connected smart contract account.
+`authenticate` is a method on the `Web3AuthSigner` which leverages the `web3auth` web modal SDK to authenticate a user.
+
+You must call this method before accessing the other methods available on the `Web3AuthSigner`, such as signing messages or typed data or accessing user details.
 
 ## Usage
 
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
 // [!code focus:99]
-// encode transfer pownership
-const newOwner = LocalAccountSigner.mnemonicToAccountSigner(NEW_OWNER_MNEMONIC);
-const encodedTransferOwnershipData =
-  LightSmartContractAccount.encodeTransferOwnership(newOwner);
+import { Web3AuthSigner } from "@alchemy/aa-signers";
+
+const web3AuthSigner = new Web3AuthSigner({
+  clientId: "test",
+  chainConfig: {
+    chainNamespace: "eip155",
+  },
+});
+
+await web3AuthSigner.authenticate({
+  init: async () => {
+    await web3AuthSigner.inner.initModal();
+  },
+  connect: async () => {
+    await web3AuthSigner.inner.connect();
+  },
+});
 ```
 
-<<< @/snippets/provider.ts
 :::
 
 ## Returns
 
-### `Promise<Hex>`
+### `Promise<Web3AuthUserInfo>`
 
-A Promise containing the encoded Hex of the`transferOwnership` function call with the given parameter
+A Promise containing the `Web3AuthUserInfo`, an object with the following fields:
+
+- `verifier: string` -- details of the verifier (verifier type, ie. torus, metamask, openlogin etc.).
+- `verifierId: string` -- id of the verifier.
+- `typeOfLogin: LOGIN_PROVIDER_TYPE` -- the type of login done by the user (like google, facebook, twitter, github, etc.).
+- `email: string` -- [optional] the decentralized ID of the user.
+- `name: string` -- [optional] the name of the authenticated user.
+- `profileImage: string` -- [optional] the profile image of the connected user
+- `aggregateVerifier: string` -- [optional] the details of the aggregate verifier.
+- `dappShare: string` -- [optional] if you are using a Custom Verifier, you can get a dapp share after successful login to replace device share.
+- `idToken: string` -- [optional] the id of the token issued by Web3Auth.
+- `oAuthIdToken: string` -- [optional] the id of the token issued by the OAuth provider.
+- `oAuthAccessToken: string` -- [optional] the access token issued by the OAuth provider.
+- `isMfaEnabled: boolean` -- [optional] whether or not multi-factor authentication is enabled for the user.
+- `touchIDPreference: string` -- [optional]
+- `isMfaEnabled: boolean` -- [optional] whether or not multi-factor authentication is enabled for the user.
 
 ## Parameters
 
-### `newOwner: <Address>` -- the new owner to transfer ownership to for the smart contract account
+### `authParams: <MagicAuthParams>`
+
+An object with the following fields:
+
+- `init: () => Promise<void>` -- a method you can define as necessary to leverage the `web3auth` SDK for authentication. For instance, in the example above, `authenticate` uses the [`initModal`](https://web3auth.io/docs/sdk/pnp/web/modal/initialize#initmodal) method.
+- `connect: () => Promise<void>` -- a method you can define as necessary to leverage the `web3auth` SDK for authentication. For instance, in the example above, `authenticate` uses the [`connect`](https://web3auth.io/docs/sdk/pnp/web/modal/usage) method.

@@ -127,7 +127,7 @@ const givenSigner = async (auth = true) => {
 
   if (auth) {
     await signer.authenticate({
-      initModal: () => Promise.resolve(),
+      init: () => Promise.resolve(),
       connect: () => Promise.resolve(),
     });
   }

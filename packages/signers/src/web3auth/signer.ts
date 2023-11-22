@@ -30,9 +30,7 @@ export class Web3AuthSigner
     this.inner = new Web3Auth(params);
   }
 
-  get signerType() {
-    return "web3auth";
-  }
+  readonly signerType = "web3auth";
 
   getAddress = async () => {
     if (!this.signer) throw new Error("Not authenticated");
@@ -56,7 +54,7 @@ export class Web3AuthSigner
   };
 
   authenticate = async (params: Web3AuthAuthenticationParams) => {
-    await params.initModal();
+    await params.init();
     await params.connect();
 
     if (this.inner.provider == null) throw new Error("No provider found");

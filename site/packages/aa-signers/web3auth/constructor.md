@@ -3,51 +3,53 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: MagicSigner • constructor
+      content: Web3AuthSigner • constructor
   - - meta
     - name: description
-      content: Overview of the constructor method on MagicSigner in aa-accounts
+      content: Overview of the constructor method on Web3AuthSigner in aa-signers
   - - meta
     - property: og:description
-      content: Overview of the constructor method on LightSmartContractAccount in aa-accounts
+      content: Overview of the constructor method on Web3AuthSigner in aa-signers
 ---
 
 # constructor
 
-To initialize a `LightSmartContractAccount`, you must provide a set of parameters detailed below.
-
-Note that there is no difference in constructor arguments used for `LightSmartContractAccount` when compared to `SimpleSmartContractAccount`.
+To initialize a `Web3AuthSigner`, you must provide a set of parameters detailed below.
 
 ## Usage
 
 ::: code-group
 
 ```ts [example.ts]
-import { AlchemyProvider } from "@alchemy/aa-alchemy";
-import {
-  LightSmartContractAccount,
-  getDefaultLightAccountFactoryAddress,
-} from "@alchemy/aa-accounts";
-import {
-  LocalAccountSigner,
-  getDefaultEntryPointAddress,
-  type SmartAccountSigner,
-} from "@alchemy/aa-core";
-import { sepolia } from "viem/chains";
-
-const PRIVATE_KEY = "0xYourEOAPrivateKey";
-const eoaSigner: SmartAccountSigner =
-  LocalAccountSigner.privateKeyToAccountSigner(`0x${PRIVATE_KEY}`);
+import { Web3AuthSigner } from "@alchemy/aa-signers";
 
 // instantiates using every possible parameter, as a reference
-export const account = new LightSmartContractAccount({
-  rpcClient: "ALCHEMY_RPC_URL",
-  chain: sepolia,
-  factoryAddress: getDefaultLightAccountFactoryAddress(sepolia),
-  owner: eoaSigner,
-  entryPointAddress: getDefaultEntryPointAddress(sepolia),
-  accountAddress: "0xYourSmartAccountAddress",
-  index: 0n,
+const web3AuthSigner = new Web3AuthSigner({
+  clientId: "test",
+  chainConfig: {
+    chainNamespace: "eip155",
+    chainId: "1",
+    rpcTarget: "RPC_URL",
+    wsTarget: "WS_RPC_URL",
+    displayName: "test",
+    blockExplorer: "BLOCK_EXPLORER_URL",
+    ticker: "ETH",
+    tickerName: "Ethereum",
+    decimals: 18,
+  },
+  web3AuthNetwork: "mainnet",
+  authMode: "DAPP",
+  uiConfig: {
+    loginMethodsOrder: ["google", "facebook", "email"],
+    modalZIndex: "999998",
+    displayErrorsOnModal: true,
+    loginGridCol: 3,
+    primaryButton: "socialLogin",
+  },
+  enableLogging: true,
+  storageKey: "local",
+  sessionTime: 86400,
+  useCoreKitKey: true,
 });
 ```
 
@@ -55,24 +57,32 @@ export const account = new LightSmartContractAccount({
 
 ## Returns
 
-### `LightSmartContractAccount`
+### `Web3AuthSigner`
 
-A new instance of a `LightSmartContractAccount`.
+A new instance of a `Web3AuthSigner`.
 
 ## Parameters
 
-### `params: SimpleSmartAccountParams`
+### `params: Web3AuthOptions | { inner: Web3Auth }`
 
-- `rpcClient: string | PublicErc4337Client` -- a JSON-RPC URL, or a viem Client that supports ERC-4337 methods and Viem public actions. See [createPublicErc4337Client](/packages/aa-core/client/createPublicErc4337Client.md).
+You can either pass in a constructed `Web3Auth` object, or directly pass into the `Web3AuthSigner` the `Web3AuthOptions` used to construct a `Web3Auth` object. These parameters are listed on the [web3auth docs](https://magic.link/docs/api/client-side-sdks/web#constructor-NaN) as well.
 
-- `chain: Chain` -- the chain on which to create the provider.
+`Web3AuthOptions` takes in the following parameters:
 
-- `factoryAddress: Address` -- the factory address for the smart account implementation, which is required for creating the account if not already deployed.
+- `clientId: string` -- a web3Auth client ID. You can get one at the [Web3Auth Developer Dashboard](https://dashboard.web3auth.io/).
 
-- `owner: SmartAccountSigner` -- the owner EOA address responsible for signing user operations on behalf of the smart account.
+- `chainConfig: Object` -- [optional]
 
-- `entryPointAddress: Address | undefined` -- [optional] entry point contract address. If not provided, the entry point contract address for the provider is the connected account's entry point contract, or if not connected, falls back to the default entry point contract for the chain. See [getDefaultEntryPointAddress](/packages/aa-core/utils/getDefaultEntryPointAddress.html#getdefaultentrypointaddress).
+  - `chainNamespace: string`--
 
-- `accountAddress: Address | undefined` -- the owner EOA address responsible for signing user operations on behalf of the smart account.
+  - `chainNamespace`--
 
-- `index: bigint | undefined` -- [optional] additional salt value used when creating the smart account.
+- `uiConfig: Object` -- [optional]
+
+  - `endpoint: string` -- [optional] a URL pointing to the Magic `<iframe` application.
+
+  - `locale: string` -- [optional] customize the language of Magic's modal, email and confirmation screen.
+
+  - `network: string` -- [optional] a representation of the connected Ethereum network (mainnet or goerli).
+
+  - `testMode: boolean` -- [optional] toggle the login behavior to not have to go through the auth flow.

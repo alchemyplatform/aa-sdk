@@ -3,28 +3,31 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: LightSmartContractAccount • signTypedData
+      content: Web3AuthSigner • signTypedData
   - - meta
     - name: description
-      content: Overview of the signTypedData method on LightSmartContractAccount
+      content: Overview of the signTypedData method on Web3AuthSigner
   - - meta
     - property: og:description
-      content: Overview of the signTypedData method on LightSmartContractAccount
+      content: Overview of the signTypedData method on Web3AuthSigner
 ---
 
 # signTypedData
 
-`signTypedData` supports signing typed data from the smart contract account's owner address.
+`signTypedData` supports signing typed data from the `Web3AuthSigner`.
+
+This method must be called after [`authenticate`](/packages/aa-signers/web3auth/authenticate). Otherwise, this method will throw an erro with the message `Not Authenticated`.
 
 ## Usage
 
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { createWeb3AuthSigner } from "./web3auth";
 // [!code focus:99]
-// sign typed data
-const signedTypedData = provider.signTypedData({
+const web3AuthSigner = await createWeb3AuthSigner();
+
+const signedTypedData = await web3AuthSigner.signTypedData({
   domain: {
     name: "Ether Mail",
     version: "1",
@@ -57,12 +60,12 @@ const signedTypedData = provider.signTypedData({
 });
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/web3auth.ts
 :::
 
 ## Returns
 
-### `Promise<Hash>`
+### `Promise<Hex>`
 
 A Promise containing the signature of the typed data.
 
