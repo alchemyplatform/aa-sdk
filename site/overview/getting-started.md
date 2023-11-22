@@ -68,18 +68,18 @@ Make sure your new `package.json` file looks something like the following. Note 
 }
 ```
 
-You'll also want to make sure your `Node` version is _18.10.0_ using your version manager:
+You'll also want to make sure your `Node` version is _18.16.0_ using your version manager:
 
 ::: code-group
 
 ```bash [nvm]
-nvm install 18.10.0
-nvm use 18.10.0
+nvm install 18.16.0
+nvm use 18.16.0
 ```
 
 ```bash [asdf]
-asdf install nodejs 18.10.0
-asdf global nodejs 18.10.0
+asdf install nodejs 18.16.0
+asdf global nodejs 18.16.0
 asdf reshim nodejs
 ```
 
