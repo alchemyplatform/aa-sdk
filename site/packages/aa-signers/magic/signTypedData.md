@@ -3,28 +3,31 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: LightSmartContractAccount • signTypedData
+      content: MagicSigner • signTypedData
   - - meta
     - name: description
-      content: Overview of the signTypedData method on LightSmartContractAccount
+      content: Overview of the signTypedData method on MagicSigner
   - - meta
     - property: og:description
-      content: Overview of the signTypedData method on LightSmartContractAccount
+      content: Overview of the signTypedData method on MagicSigner
 ---
 
 # signTypedData
 
-`signTypedData` supports signing typed data from the smart contract account's owner address.
+`signTypedData` supports signing typed data from the `MagicSigner`.
+
+This method must be called after [`authenticate`](/packages/aa-signers/magic/authenticate). Otherwise, this method will throw an erro with the message `Not Authenticated`.
 
 ## Usage
 
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { createMagicSigner } from "./magic";
 // [!code focus:99]
-// sign typed data
-const signedTypedData = provider.signTypedData({
+const magicSigner = await createMagicSigner();
+
+const signedTypedData = await magicSigner.signTypedData({
   domain: {
     name: "Ether Mail",
     version: "1",
@@ -57,12 +60,12 @@ const signedTypedData = provider.signTypedData({
 });
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/magic.ts
 :::
 
 ## Returns
 
-### `Promise<Hash>`
+### `Promise<Hex>`
 
 A Promise containing the signature of the typed data.
 

@@ -3,43 +3,50 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: LightSmartContractAccount
+      content: MagicSigner
   - - meta
     - name: description
-      content: Overview of the LightSmartContractAccount class in aa-accounts
+      content: Overview of the MagicSigner class in aa-signers
   - - meta
     - property: og:description
-      content: Overview of the LightSmartContractAccount class in aa-accounts
+      content: Overview of the MagicSigner class in aa-signers
 ---
 
-# Light Account
+# Magic Signer
 
-`LightSmartContractAccount` is a simple, secure, and cost-effective smart account implementation which extends `SimpleSmartContractAccount` as an implementation of `BaseSmartContractAccount`. It supports features such as owner transfers, [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) message signing, and batched transactions. We recommend using Light Account for most use cases.
+`MagicSigner` is a signer implementation which extends `SmartAccountAuthenticator` to leverage the [Magic web SDK](https://magic.link/docs/api/client-side-sdks/web). It supports features such as authentication, message and typed data signing, and authentication details retrieval.
 
-Notable differences between `LightSmartContractAccount` and `SimpleSmartContractAccount` are implementations for:
+`MagicSigner` provides implementations for all methods on `SmartAccountAuthenticator`:
 
-1.  [`signMessageWith6492`](/packages/aa-accounts/light-account/signMessageWith6492) -- supports message signatures for deployed smart contract accounts, as well as undeployed accounts (counterfactual addresses) using [ERC-6492](https://eips.ethereum.org/EIPS/eip-6492).
-2.  [`signTypedData`](/packages/aa-accounts/light-account/signTypedData) -- supports typed data signatures from the smart contract account's owner address.
-3.  [`signTypedDataWith6492`](/packages/aa-accounts/light-account/signTypedDataWith6492) -- supports typed data signatures for deployed smart contract accounts, as well as undeployed accounts (counterfactual addresses) using ERC-6492.
-4.  [`getOwnerAddress`](/packages/aa-accounts/light-account/getOwnerAddress) -- returns the on-chain owner address of the account.
-5.  [`encodeTransferOwnership`](/packages/aa-accounts/light-account/encodeTransferOwnership) -- encodes the transferOwnership function call using the LightAccount ABI.
-6.  [`transferOwnership`](/packages/aa-accounts/light-account/transferOwnership) -- transfers ownership of the account to a new owner, and returns either the UO hash or transaction hash.
+1.  [`authenticate`](/packages/aa-signers/magic/authenticate) -- supports user authentication.
+2.  [`getAddress`](/packages/aa-signers/magic/getAddress) -- supports typed data signatures from the smart contract account's owner address.
+3.  [`signMessage`](/packages/aa-signers/magic/signMessage) -- supports message signatures.
+4.  [`signTypedData`](/packages/aa-signers/magic/signTypedData) -- supports typed data signatures.
+5.  [`getDetails`](/packages/aa-signers/magic/getDetails) -- supports authentication details retrieval.
 
 ## Usage
 
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
-// [!code focus:99]
-// sign message (works for undeployed and deployed accounts)
-const signedMessageWith6492 = provider.signMessageWith6492("test");
+import { MagicSigner } from "@alchemy/aa-signers";
 
-// sign typed data
-const signedTypedData = provider.signTypedData("test");
+const magicSigner = new MagicSigner({ apiKey: "MAGIC_API_KEY" });
 
-// sign typed data (works for undeployed and deployed accounts), using
-const signedTypedDataWith6492 = provider.signTypedDataWith6492({
+const authParams = {
+  authenticate: async () => {
+    await magicSigner.inner.wallet.connectWithUI();
+  },
+};
+await magicSigner.authenticate(authParams);
+
+const address = await magicSigner.getAddress();
+
+const details = await magicSigner.getDetails();
+
+const signedMessage = await magicSigner.signMessage("test");
+
+const typedData = {
   types: {
     Request: [{ name: "hello", type: "string" }],
   },
@@ -47,29 +54,14 @@ const signedTypedDataWith6492 = provider.signTypedDataWith6492({
   message: {
     hello: "world",
   },
-});
-
-// get owner address
-const owner = await provider.account.getOwnerAddress();
-
-// encode transfer pownership
-const newOwner = LocalAccountSigner.mnemonicToAccountSigner(NEW_OWNER_MNEMONIC);
-const encodedTransferOwnershipData =
-  LightSmartContractAccount.encodedTransferOwnership(newOwner);
-
-// transfer ownership
-const result = await LightSmartContractAccount.transferOwnership(
-  provider,
-  newOwner
-  true, // wait for txn with UO to be mined
-);
+};
+const signTypedData = await signer.signTypedData(typedData);
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/magic.ts
 :::
 
 ## Developer Links
 
-- [LightAccount & Simple Account Deployment Addresses](/smart-accounts/accounts/deployment-addresses)
-- [LightAccount Github Repo](https://github.com/alchemyplatform/light-account)
-- [Quantstamp Audit Report](https://github.com/alchemyplatform/light-account/blob/main/Quantstamp-Audit.pdf)
+- [Magic web SDK](https://magic.link/docs/api/client-side-sdks/web)
+- [MagicSigner Tests](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/signers/src/magic/__tests__/signer.test.ts)
