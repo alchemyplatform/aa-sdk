@@ -34,17 +34,19 @@ Combining Web3Auth with Account Kit allows you to get the best of both worlds. Y
 
 ```bash [npm]
 npm i -s @web3auth/modal
+npm i -s @web3auth/base
 ```
 
 ```bash [yarn]
 yarn add @web3auth/modal
+yarn add @web3auth/base
 ```
 
 :::
 
 ### Create a SmartAccountSigner
 
-Next, setup the web3auth sdk and create a `SmartAccountSigner`
+Next, setup the web3auth sdk and create a `SmartAccountSigner` using the `aa-signers` package:
 
 <<< @/snippets/web3auth.ts
 
@@ -60,7 +62,7 @@ import {
   getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
 import { sepolia } from "viem/chains";
-import { web3authSigner } from "./web3auth";
+import { createWeb3AuthSigner } from "./web3auth";
 
 const chain = sepolia;
 
@@ -71,7 +73,7 @@ const provider = new AlchemyProvider({
   (rpcClient) =>
     new LightSmartContractAccount({
       chain,
-      owner: web3authSigner,
+      owner: new createWeb3AuthSigner(),
       factoryAddress: getDefaultLightAccountFactoryAddress(chain),
       rpcClient,
     })
