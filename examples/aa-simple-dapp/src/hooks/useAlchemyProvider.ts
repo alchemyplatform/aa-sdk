@@ -1,9 +1,6 @@
 import { chain, gasManagerPolicyId } from "@/config/client";
 import { getRpcUrl } from "@/config/rpc";
-import {
-  LightSmartContractAccount,
-  getDefaultLightAccountFactoryAddress,
-} from "@alchemy/aa-accounts";
+import { createMultiOwnerMSCA } from "@alchemy/aa-accounts";
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import {
   SmartAccountSigner,
@@ -24,12 +21,12 @@ export const useAlchemyProvider = () => {
     (signer: SmartAccountSigner, account?: Address) => {
       const connectedProvider = provider
         .connect((provider) => {
-          return new LightSmartContractAccount({
+          return createMultiOwnerMSCA({
             rpcClient: provider,
             owner: signer,
             chain,
             entryPointAddress: getDefaultEntryPointAddress(chain),
-            factoryAddress: getDefaultLightAccountFactoryAddress(chain),
+            factoryAddress: "0xFD14c78640d72f73CC88238E2f7Df3273Ee84043",
             accountAddress: account,
           });
         })
