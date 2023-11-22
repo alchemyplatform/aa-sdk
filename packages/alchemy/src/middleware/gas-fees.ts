@@ -1,11 +1,11 @@
 import type { AlchemyProvider } from "../provider.js";
 import type { ClientWithAlchemyMethods } from "./client.js";
 
-export const withAlchemyGasFeeEstimator = (
-  provider: AlchemyProvider,
+export const withAlchemyGasFeeEstimator = <P extends AlchemyProvider>(
+  provider: P,
   baseFeeBufferPercent: bigint,
   maxPriorityFeeBufferPercent: bigint
-): AlchemyProvider => {
+): P => {
   provider.withFeeDataGetter(async () => {
     const block = await provider.rpcClient.getBlock({ blockTag: "latest" });
     const baseFeePerGas = block.baseFeePerGas;

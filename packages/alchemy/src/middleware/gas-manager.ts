@@ -24,11 +24,11 @@ export interface AlchemyGasManagerConfig {
  * @param estimateGas - if true, this will use `alchemy_requestGasAndPaymasterAndData` else will use `alchemy_requestPaymasterAndData`
  * @returns the provider augmented to use the alchemy gas manager
  */
-export const withAlchemyGasManager = (
-  provider: AlchemyProvider,
+export const withAlchemyGasManager = <P extends AlchemyProvider>(
+  provider: P,
   config: AlchemyGasManagerConfig,
   estimateGas: boolean = true
-): AlchemyProvider => {
+): P => {
   return estimateGas
     ? provider
         // no-op gas estimator
@@ -58,10 +58,10 @@ export const withAlchemyGasManager = (
  * @param config - the alchemy gas manager configuration
  * @returns middleware overrides for paymaster middlewares
  */
-const withAlchemyPaymasterAndDataMiddleware = (
-  provider: AlchemyProvider,
+const withAlchemyPaymasterAndDataMiddleware = <P extends AlchemyProvider>(
+  provider: P,
   config: AlchemyGasManagerConfig
-): Parameters<AlchemyProvider["withPaymasterMiddleware"]>["0"] => ({
+): Parameters<P["withPaymasterMiddleware"]>["0"] => ({
   dummyPaymasterDataMiddleware: async (_struct) => {
     switch (provider.rpcClient.chain.id) {
       case 1:
@@ -103,10 +103,10 @@ const withAlchemyPaymasterAndDataMiddleware = (
  * @param config - the alchemy gas manager configuration
  * @returns middleware overrides for paymaster middlewares
  */
-const withAlchemyGasAndPaymasterAndDataMiddleware = (
-  provider: AlchemyProvider,
+const withAlchemyGasAndPaymasterAndDataMiddleware = <P extends AlchemyProvider>(
+  provider: P,
   config: AlchemyGasManagerConfig
-): Parameters<AlchemyProvider["withPaymasterMiddleware"]>["0"] => ({
+): Parameters<P["withPaymasterMiddleware"]>["0"] => ({
   paymasterDataMiddleware: async (struct) => {
     const userOperation: UserOperationRequest = deepHexlify(
       await resolveProperties(struct)
