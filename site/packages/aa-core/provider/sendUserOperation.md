@@ -65,7 +65,9 @@ A Promise containing the hash of the user operation and the request that was sen
 
 ## Parameters
 
-### `UserOperationCallData | UserOperationCallData[]`
+### `UserOperationCallData | UserOperationCallData[] | Hex`
+
+`UserOperationCallData` is an object with the following properties:
 
 - `target: Address` - the target of the call (equivalent to `to` in a transaction)
 - `data: Hex` - can be either `0x` or a call data string
