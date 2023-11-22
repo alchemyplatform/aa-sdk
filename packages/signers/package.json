@@ -1,6 +1,6 @@
 {
   "name": "@alchemy/aa-signers",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "A collection of signers used to create ERC-4337 smart accounts",
   "author": "Alchemy",
   "license": "MIT",
