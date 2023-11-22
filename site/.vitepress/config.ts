@@ -621,6 +621,18 @@ export default defineConfig({
         ],
       },
       {
+        text: "aa-signers",
+        collapsed: true,
+        base: "/packages/aa-signers",
+        items: [
+          {
+            text: "Getting Started",
+            link: "/",
+          },
+          { text: "Contributing", link: "/contributing" },
+        ],
+      },
+      {
         text: "aa-ethers",
         base: "/packages/aa-ethers",
         collapsed: true,

@@ -12,16 +12,6 @@
   resolved "https://registry.yarnpkg.com/@adraffy/ens-normalize/-/ens-normalize-1.9.4.tgz#aae21cb858bbb0411949d5b7b3051f4209043f62"
   integrity sha512-UK0bHA7hh9cR39V+4gl2/NnBBjoXIxkuWAPCaY4X7fbH4L/azIi7ilWOCjMUYfpJgraLUAqkRi2BqrjME8Rynw==
 
-"@alchemy/aa-core@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@alchemy/aa-core/-/aa-core-0.2.0.tgz#ede9d2b107fd6c55c71eca9f03d6c22e4530a300"
-  integrity sha512-qBkY3qFAbWGfqhghyv6kRw+wGsVOtlBjsoSOG24bW3fp/I5TiUZlQrOIKnJiZOj+QW2EuBCu6Kwj10OA/jzKig==
-  dependencies:
-    abitype "^0.8.3"
-    eventemitter3 "^5.0.1"
-    viem "^1.16.2"
-    zod "^3.22.4"
-
 "@algolia/autocomplete-core@1.9.3":
   version "1.9.3"
   resolved "https://registry.yarnpkg.com/@algolia/autocomplete-core/-/autocomplete-core-1.9.3.tgz#1d56482a768c33aae0868c8533049e02e8961be7"

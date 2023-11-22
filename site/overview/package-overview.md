@@ -6,16 +6,16 @@ head:
       content: Packages Overview
   - - meta
     - name: description
-      content: Explore the benefits and tradeoffs of four different packages that can be used with Account Kit namely aa-core, aa-alchemy, aa-accounts, and aa-ethers.
+      content: Explore the benefits and tradeoffs of four different packages that can be used with Account Kit namely aa-core, aa-alchemy, aa-accounts, aa-signers, and aa-ethers.
   - - meta
     - property: og:description
-      content: Explore the benefits and tradeoffs of four different packages that can be used with Account Kit namely aa-core, aa-alchemy, aa-accounts, and aa-ethers.
+      content: Explore the benefits and tradeoffs of four different packages that can be used with Account Kit namely aa-core, aa-alchemy, aa-accounts, aa-signers, and aa-ethers.
   - - meta
     - name: twitter:title
       content: Packages Overview
   - - meta
     - name: twitter:description
-      content: Explore the benefits and tradeoffs of four different packages that can be used with Account Kit namely aa-core, aa-alchemy, aa-accounts, and aa-ethers.
+      content: Explore the benefits and tradeoffs of four different packages that can be used with Account Kit namely aa-core, aa-alchemy, aa-accounts, aa-signers, and aa-ethers.
 next:
   text: Smart Accounts
   link: /smart-accounts/overview
@@ -23,7 +23,9 @@ next:
 
 # Package Overview
 
-The Alchemy Account Kit SDK is comprised of a number of smaller packages that developers can leverage to interact with [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) infrastructure. For almost all cases, `aa-core` is sufficient with the subsequent packages offering various utilities for interacting with specific Account Abstraction Infrastructure or Smart Accounts.
+The Alchemy Account Kit SDK consists of a number of smaller packages that developers can leverage to interact with [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) infrastructure.
+
+For almost all cases, `aa-core` is sufficient with the subsequent packages offering various utilities for interacting with specific Account Abstraction infrastructure or smart accounts. However, we offer additional packages to augment your developer experience with custom Alchemy infrastructure (`aa-alchemy`), custom smart account (`aa-accounts`) and signer solutions (`aa-signers`), and an ethers.js-compatible solution (`aa-ethers`).
 
 ## [`aa-core`](/packages/aa-core/)
 
@@ -52,6 +54,16 @@ If you'd like to use a Smart Account that is not supported by this package, you 
 For details on contributing your own Smart Account implementation, see the [aa-accounts contribution guide](/packages/aa-accounts/contributing).
 
 To see all of the Smart Accounts that are supported by this package, see the [aa-accounts documentation](/packages/aa-accounts/).
+
+## [`aa-signers`](/packages/aa-signers/)
+
+This packages provides various implementations of `SmartAccountSigner` and `SmartAccountAuthenticator` for integrating different Signers of your smart account. This package is not required to use `aa-core` or `aa-alchemy`. If you want to use your own Smart Account implementation, you can do so by following the guide ["Using Your Own Account"](/smart-accounts/accounts/using-your-own).
+
+If you'd like to use a signer that is not supported by this package, you can implement a `SmartAccountSigner` or `SmartAccountAuthenticator` yourself and use it with `aa-core` or `aa-alchemy`.
+
+For details on contributing your own Signer implementation, see the [aa-signers contribution guide](/packages/aa-signers/contributing).
+
+To see all of the Signers that are supported by this package, see the [aa-signers documentation](/packages/aa-signers/).
 
 ## [`aa-ethers`](/packages/aa-ethers/)
 
