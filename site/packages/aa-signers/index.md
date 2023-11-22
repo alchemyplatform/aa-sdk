@@ -11,8 +11,8 @@ head:
     - property: og:description
       content: aa-signers landing page and getting started guide
 prev:
-  text: aa-ethers
-  link: /packages/aa-ethers/index
+  text: aa-accounts
+  link: /packages/aa-accounts/index
 next:
   text: Magic
 ---
