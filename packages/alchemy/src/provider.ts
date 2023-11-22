@@ -130,7 +130,7 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
    * @param config - the Alchemy Gas Manager configuration
    * @returns {AlchemyProvider} - a new AlchemyProvider with the Gas Manager middleware
    */
-  withAlchemyGasManager(config: AlchemyGasManagerConfig): AlchemyProvider {
+  withAlchemyGasManager(config: AlchemyGasManagerConfig): this {
     if (!this.isConnected()) {
       throw new Error(
         "AlchemyProvider: account is not set, did you call `connect` first?"
