@@ -24,6 +24,22 @@ head:
 4.  [`signTypedData`](/packages/aa-signers/magic/signTypedData) -- supports typed data signatures.
 5.  [`getDetails`](/packages/aa-signers/magic/getDetails) -- supports authentication details retrieval.
 
+## Install Dependencies
+
+`MagicSigner` requires installation of the [`@web3auth/modal`](https://github.com/Web3Auth/web3auth-web/tree/master/packages/modal) and [`@web3auth/base`](https://github.com/Web3Auth/web3auth-web/tree/master/packages/base) SDKs. They are listed as optional dependencies on `aa-signers`.
+
+::: code-group
+
+```bash [npm]
+npm i -s @web3auth/modal
+npm i -s @web3auth/base
+```
+
+```bash [yarn]
+yarn add @web3auth/modal
+yarn add @web3auth/base
+```
+
 ## Usage
 
 ::: code-group

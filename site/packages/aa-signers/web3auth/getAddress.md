@@ -16,7 +16,7 @@ head:
 
 `getAddress` returns the EOA address of the Signer.
 
-This method must be called after [`authenticate`](/packages/aa-signers/web3autuh/authenticate). Otherwise, this method will throw an erro with the message `Not Authenticated`.
+This method must be called after [`authenticate`](/packages/aa-signers/web3auth/authenticate). Otherwise, this method will throw an erro with the message `Not Authenticated`.
 
 ## Usage
 
