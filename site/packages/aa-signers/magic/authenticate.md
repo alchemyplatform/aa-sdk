@@ -16,7 +16,7 @@ head:
 
 `authenticate` is a method on the `MagicSigner` which leverages the `Magic` web SDK to authenticate a user.
 
-This method must be called before accessing the other methods availbel on the `MagicSigner`, such as signing messages or typed data or accessing user details.
+This method must be called before accessing the other methods available on the `MagicSigner`, such as signing messages or typed data or accessing user details.
 
 ## Usage
 
