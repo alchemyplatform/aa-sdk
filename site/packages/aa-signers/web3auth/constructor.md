@@ -71,18 +71,44 @@ You can either pass in a constructed `Web3Auth` object, or directly pass into th
 
 - `clientId: string` -- a web3Auth client ID. You can get one at the [Web3Auth Developer Dashboard](https://dashboard.web3auth.io/).
 
-- `chainConfig: Object` -- [optional]
+- `chainConfig: Object` -- the custom chain configuration for chainNamespace.
 
-  - `chainNamespace: string`--
+  - `chainNamespace: "eip155" | "solana" | "other"`-- the type of chain.
 
-  - `chainNamespace`--
+  - `chainId: string`-- [optional] the id of the chain.
 
-- `uiConfig: Object` -- [optional]
+  - `rpcTarget: string`-- [optional] the RPC URL of the HTTP provider for the chain.
 
-  - `endpoint: string` -- [optional] a URL pointing to the Magic `<iframe` application.
+  - `wsTarget: string`-- [optional] the RPC URL of the websocket provider for the chain.
 
-  - `locale: string` -- [optional] customize the language of Magic's modal, email and confirmation screen.
+  - `blockExplorer: string`-- [optional] the url of the block explorer
 
-  - `network: string` -- [optional] a representation of the connected Ethereum network (mainnet or goerli).
+  - `ticker: string`-- [optional] the currency ticker of the network. Default to "ETH".
 
-  - `testMode: boolean` -- [optional] toggle the login behavior to not have to go through the auth flow.
+  - `tickerName: string`-- [optional] the name for currency ticker. Defaults to "Ethereum".
+
+  - `decimals: number`-- [optional] the number of decimals for the currency ticker. Defaults to 18.
+
+- `web3AuthNetwork: "mainnet" | "testnet" | "cyan" | "aqua" | "celeste" | "sapphire_devnet" | "sapphire_mainnet"` -- [optional] the web3auth network to use for the session & the issued idToken.
+
+- `authMode: "DAPP" | "WALLET"` -- [optional] flag to determine which adapter to use. Dapps should use "DAPP", and Wallets should use "WALLET".
+
+- `uiConfig: Object` -- [optional] the config for configuring modal ui display properties.
+
+  - `loginMethodsOrder: string[]` -- [optional] the order of how login methods are shown.
+
+  - `modalZIndex: string` -- [optional] the Z-index of the modal and iframe.
+
+  - `displayErrorsOnModal: boolean` -- [optional] toggle to show errors on Web3Auth modal or not.
+
+  - `loginGridCol: 2 | 3` -- [optional] the number of columns to display the Social Login buttons.
+
+  - `primaryButton: "externalLogin" | "socialLogin" | "emailLogin"` -- [optional] flag to decide which button will be displayed as primary button in modal.
+
+- `enableLogging: boolean` -- [optional] toggle to enable logs.
+
+- `storageKey: "session" | "local"` -- [optional] flag on whether to persist social login session across tabs. Defaults to "local".
+
+- `sessionTime: number` -- [optional] the time (in seconds) for idToken issued by Web3Auth for server side verification. Defaults to 86,400 seconds (1 day).
+
+- `useCoreKitKey: boolean` -- [optional] toggle to use core-kit key with web3auth provider. Defaults to false.
