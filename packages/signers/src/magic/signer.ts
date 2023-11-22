@@ -7,6 +7,12 @@ import { Magic, type MagicUserMetadata } from "magic-sdk";
 import { createWalletClient, custom, type Hash } from "viem";
 import type { MagicAuthParams, MagicSDKParams } from "./types.js";
 
+/**
+ * This class requires the `magic-sdk` dependency.
+ * `@alchemy/aa-signers` lists it as an optional dependency.
+ *
+ * @see: https://github.com/magiclabs/magic-js)
+ */
 export class MagicSigner
   implements
     SmartAccountAuthenticator<MagicAuthParams, MagicUserMetadata, Magic>

@@ -24,6 +24,20 @@ head:
 4.  [`signTypedData`](/packages/aa-signers/magic/signTypedData) -- supports typed data signatures.
 5.  [`getDetails`](/packages/aa-signers/magic/getDetails) -- supports authentication details retrieval.
 
+## Install Dependencies
+
+`MagicSigner` requires installation of the [`magic-sdk`](https://github.com/magiclabs/magic-js) SDK. `aa-signers` lists it as optional dependency.
+
+::: code-group
+
+```bash [npm]
+npm i -s magic-sdk
+```
+
+```bash [yarn]
+yarn add magic-sdk
+```
+
 ## Usage
 
 ::: code-group
