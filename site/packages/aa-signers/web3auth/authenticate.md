@@ -68,7 +68,7 @@ A Promise containing the `Web3AuthUserInfo`, an object with the following fields
 
 ## Parameters
 
-### `authParams: <MagicAuthParams>`
+### `authParams: <Web3AuthAuthenticationParams>`
 
 An object with the following fields:
 

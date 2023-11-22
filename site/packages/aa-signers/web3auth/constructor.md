@@ -65,7 +65,7 @@ A new instance of a `Web3AuthSigner`.
 
 ### `params: Web3AuthOptions | { inner: Web3Auth }`
 
-You can either pass in a constructed `Web3Auth` object, or directly pass into the `Web3AuthSigner` the `Web3AuthOptions` used to construct a `Web3Auth` object. These parameters are listed on the [web3auth docs](https://magic.link/docs/api/client-side-sdks/web#constructor-NaN) as well.
+You can either pass in a constructed `Web3Auth` object, or directly pass into the `Web3AuthSigner` the `Web3AuthOptions` used to construct a `Web3Auth` object. These parameters are listed on the [web3auth docs](https://web3auth.io/docs/sdk/pnp/web/modal/initialize#web3authoptions) as well.
 
 `Web3AuthOptions` takes in the following parameters:
 
