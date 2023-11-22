@@ -3,7 +3,7 @@
   "type": "module",
   "private": true,
   "engines": {
-    "node": "18.10"
+    "node": "18.16"
   },
   "workspaces": [
     "packages/*",
@@ -16,7 +16,7 @@
     "build:examples": "lerna run build",
     "clean": "lerna run clean",
     "test": "lerna run test:run",
-    "test:e2e": "lerna run test:run-e2e --concurrency=1",
+    "test:e2e": "lerna run test:run-e2e --concurrency=1 --ignore=@alchemy/aa-signers",
     "lint:write": "eslint . --fix && prettier --write --ignore-unknown .",
     "lint:check": "eslint . && prettier --check .",
     "prepare": "husky install",

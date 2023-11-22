@@ -25,7 +25,7 @@ The `aa-sdk` is part of Alchemy's Account Kit. For more information, check out t
 1. clone the repo
 2. run `yarn`
 3. verify tests pass
-   - be sure to use the node version specified in package.json, currently 18.10
+   - be sure to use the node version specified in package.json, currently 18.16
    - run `node -v`
    - run `yarn build`
    - run `yarn test`
