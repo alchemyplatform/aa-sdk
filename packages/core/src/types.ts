@@ -8,16 +8,18 @@ export type PromiseOrValue<T> = T | Promise<T>;
 export type BigNumberish = string | bigint | number;
 export type BytesLike = Uint8Array | string;
 
-export interface UserOperationCallData {
-  /* the target of the call */
-  target: Address;
-  /* the data passed to the target */
-  data: Hex;
-  /* the amount of native token to send to the target (default: 0) */
-  value?: bigint;
-}
+export type UserOperationCallData =
+  | {
+      /* the target of the call */
+      target: Address;
+      /* the data passed to the target */
+      data: Hex;
+      /* the amount of native token to send to the target (default: 0) */
+      value?: bigint;
+    }
+  | Hex;
 
-export type BatchUserOperationCallData = UserOperationCallData[];
+export type BatchUserOperationCallData = Exclude<UserOperationCallData, Hex>[];
 
 export type UserOperationOverrides = Partial<
   Pick<

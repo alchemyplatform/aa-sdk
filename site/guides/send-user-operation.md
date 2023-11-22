@@ -53,7 +53,7 @@ Some other helpful viem methods include: [encodeFunctionData](https://viem.sh/do
 
 ## 4. Send The User Operation
 
-Now we'll use the connected provider to send a user operation. We'll use the [sendUserOperation](/packages/aa-core/provider/waitForUserOperationTransaction.md) method on the provider.
+Now we'll use the connected provider to send a user operation. We'll use the [sendUserOperation](/packages/aa-core/provider/sendUserOperation.md) method on the provider.
 
 You can either send ETH to the smart account to pay for User Operation's gas, or you can connect your provider to an Alchemy Gas Manager using the [withAlchemyGasManager](/packages/aa-alchemy/provider/withAlchemyGasManager.md) method to sponsor the UO's gas. We'll use the latter approach below. You can go to the [Alchemy Dashboard](https://dashboard.alchemy.com/gas-manager) to get a Gas Manager policy ID.
 
