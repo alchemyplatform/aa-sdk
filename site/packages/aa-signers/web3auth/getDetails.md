@@ -16,7 +16,7 @@ head:
 
 `getDetails` returns the details about the authenticated user, in accordance with the `Web3AuthSigner` web SDK's [specifications](https://magic.link/docs/api/client-side-sdks/web#getinfo).
 
-This method must be called after [`authenticate`](/packages/aa-signers/web3auth/authenticate). Otherwise, this method will throw an erro with the message `Not Authenticated`.
+This method must be called after [`authenticate`](/packages/aa-signers/web3auth/authenticate). Otherwise, this method will throw an error with the message `Not Authenticated`.
 
 ## Usage
 

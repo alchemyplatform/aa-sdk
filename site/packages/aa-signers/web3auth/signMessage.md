@@ -16,7 +16,7 @@ head:
 
 `signMessage` supports signing messages from the `Web3AuthSigner`.
 
-This method must be called after [`authenticate`](/packages/aa-signers/web3auth/authenticate). Otherwise, this method will throw an erro with the message `Not Authenticated`.
+This method must be called after [`authenticate`](/packages/aa-signers/web3auth/authenticate). Otherwise, this method will throw an error with the message `Not Authenticated`.
 
 ## Usage
 
