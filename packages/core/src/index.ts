@@ -61,5 +61,4 @@ export {
   resolveProperties,
 } from "./utils/index.js";
 
-export { Logger } from "./logger.js";
-export type { LogLevel } from "./logger.js";
+export { LogLevel, Logger } from "./logger.js";
