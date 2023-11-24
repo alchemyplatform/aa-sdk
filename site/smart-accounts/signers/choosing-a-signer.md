@@ -59,6 +59,7 @@ Account Kit is compatible with any EIP-1193 provider. Many of the most popular s
 - [Portal](/smart-accounts/signers/portal)
 - [Capsule](/smart-accounts/signers/capsule)
 - [Lit Protocol](/smart-accounts/signers/lit)
+- [Arcana Auth](/smart-accounts/signers/arcana-auth)
 - [Self-custodial wallets like MetaMask or Ledger](/smart-accounts/signers/eoa)
 
 If you want to use another Signer, you can integrate any other Signer by wrapping it in an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) provider or using [`SmartAccountSigner`](/smart-accounts/signers/custom-signer#implementing-smartaccountsigner) to adapt non-standard Signer.
