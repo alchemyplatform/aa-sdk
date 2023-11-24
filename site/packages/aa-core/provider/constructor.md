@@ -57,7 +57,7 @@ A new instance of a `SmartAccountProvider`.
 
 - `entryPointAddress: Address | undefined` -- [optional] the entry point contract address. If not provided, the entry point contract address for the provider is the connected account's entry point contract, or if not connected, falls back to the default entry point contract for the chain. See [getDefaultEntryPointAddress](/packages/aa-core/utils/getDefaultEntryPointAddress.html#getdefaultentrypointaddress).
 
-- `opts: Object | undefined` -- [optional] overrides on provider config variables having to do with fetching transaction receipts and fee computation.
+- `opts: SmartAccountProviderOpts | undefined` -- [optional] overrides on provider config variables having to do with fetching transaction receipts and fee computation.
 
   - `txMaxRetries: string | undefined` -- [optional] the maximum number of times to try fetching a transaction receipt before giving up (default: 5).
 
@@ -65,4 +65,19 @@ A new instance of a `SmartAccountProvider`.
 
   - `txRetryMulitplier: string | undefined` -- [optional] the mulitplier on interval length to wait between retries while waiting for transaction receipts (default: 1.5).
 
-  - `minPriorityFeePerBid: string | undefined` --[optional] used when computing the fees for a user operation (default: 100_000_000).
+  - `feeOptions:` [`UserOperationFeeOptions`](/packages/aa-core/types/userOperationFeeOptions.md) `| undefined` --[optional] user operation fee options to be used for gas estimation, set at the global level on the provider.
+    If not set, default fee options for the chain are used. Available fields in `feeOptions` include `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` where each field is of type [`UserOperationFeeOptionsField`](/packages/aa-core/types/userOperationFeeOptionsField.md).
+
+    - `maxFeePerGas`: `UserOperationFeeOptionsField`
+    - `maxPriorityFeePerGas`: `UserOperationFeeOptionsField`
+    - `callGasLimit`: `UserOperationFeeOptionsField`
+    - `verificationGasLimit`: `UserOperationFeeOptionsField`
+    - `preVerificationGas`: `UserOperationFeeOptionsField`
+
+:::tip Note
+The fee options set upon the provider initialization are available from each middleware of the `SmartAccountProvider`. For example, the default middlewares such as [`gasEstimator`](/packages/aa-alchemy/provider/withGasEstimator.md) or [`feeDataGetter`](/packages/aa-alchemy/provider/withFeeDataGetter.md) apply the fee options to the estimated values if the fee options are set.
+:::
+
+:::tip Note
+Note that if you are using your own middleware, for example a custom `feeDataGetter` using [`withFeeDataGetter`](/packages/aa-alchemy/provider/withFeeDataGetter.md) method on the provider, then the default `feeDataGetter` middleware is overriden. As you are opting out of using the default middleware, you are also responsible for handling the fee options appropriately for the fee options set upon provider initialization.
+:::

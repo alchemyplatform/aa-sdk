@@ -452,6 +452,34 @@ export default defineConfig({
             ],
           },
           {
+            text: "Types",
+            base: "/packages/aa-core/types",
+            collapsed: true,
+            items: [
+              { text: "BigNumberish", link: "/bigNumberish" },
+              {
+                text: "BigNumberish",
+                link: "/bigNumberishRange",
+              },
+              {
+                text: "Percentage",
+                link: "/percentage",
+              },
+              {
+                text: "UserOperationFeeOptions",
+                link: "/UserOperationFeeOptions",
+              },
+              {
+                text: "UserOperationFeeOptionsField",
+                link: "/userOperationFeeOptionsField",
+              },
+              {
+                text: "UserOperationOverrides",
+                link: "/userOperationOverrides",
+              },
+            ],
+          },
+          {
             text: "Utils",
             base: "/packages/aa-core/utils",
             collapsed: true,
