@@ -256,12 +256,12 @@ export abstract class BaseSmartContractAccount<
       try {
         await this.entryPoint.simulate.getSenderAddress([initCode]);
       } catch (err: any) {
-        Logger.debug(
-          "[BaseSmartContractAccount](getAddress) entrypoint.getSenderAddress result: ",
-          err
-        );
         if (err.cause?.data?.errorName === "SenderAddressResult") {
           this.accountAddress = err.cause.data.args[0] as Address;
+          Logger.debug(
+            "[BaseSmartContractAccount](getAddress) entrypoint.getSenderAddress result:",
+            this.accountAddress
+          );
           return this.accountAddress;
         }
       }

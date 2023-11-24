@@ -19,6 +19,7 @@ import type {
 import type {
   BatchUserOperationCallData,
   UserOperationCallData,
+  UserOperationFeeOptions,
   UserOperationOverrides,
   UserOperationReceipt,
   UserOperationRequest,
@@ -53,14 +54,16 @@ export type SendUserOperationResult = {
 };
 
 export type AccountMiddlewareFn = (
-  struct: Deferrable<UserOperationStruct>
+  struct: Deferrable<UserOperationStruct>,
+  overrides?: UserOperationOverrides
 ) => Promise<Deferrable<UserOperationStruct>>;
 
 export type AccountMiddlewareOverrideFn<
   Req extends keyof UserOperationStruct = never,
   Opt extends keyof UserOperationStruct = never
 > = (
-  struct: Deferrable<UserOperationStruct>
+  struct: Deferrable<UserOperationStruct>,
+  overrides?: UserOperationOverrides
 ) => Promise<
   WithRequired<UserOperationStruct, Req> &
     WithOptional<UserOperationStruct, Opt>
@@ -78,8 +81,27 @@ export type PaymasterAndDataMiddleware = AccountMiddlewareOverrideFn<
 export type GasEstimatorMiddleware = AccountMiddlewareOverrideFn<
   "callGasLimit" | "preVerificationGas" | "verificationGasLimit"
 >;
+export type GasEstimatorFeeOptions = Partial<
+  Pick<
+    UserOperationFeeOptions,
+    "callGasLimit" | "preVerificationGas" | "verificationGasLimit"
+  >
+>;
+
 export type FeeDataMiddleware = AccountMiddlewareOverrideFn<
   "maxFeePerGas" | "maxPriorityFeePerGas"
+>;
+export type FeeDataFeeOptions = Partial<
+  Pick<UserOperationFeeOptions, "maxFeePerGas" | "maxPriorityFeePerGas">
+>;
+
+export type FeeOptionsMiddleware = AccountMiddlewareOverrideFn<
+  never,
+  | "callGasLimit"
+  | "preVerificationGas"
+  | "verificationGasLimit"
+  | "maxFeePerGas"
+  | "maxPriorityFeePerGas"
 >;
 
 export type SmartAccountProviderOpts = z.infer<
@@ -103,9 +125,11 @@ export interface ISmartAccountProvider<
   readonly paymasterDataMiddleware: AccountMiddlewareFn;
   readonly gasEstimator: AccountMiddlewareFn;
   readonly feeDataGetter: AccountMiddlewareFn;
+  readonly feeOptionsMiddleware: AccountMiddlewareFn;
   readonly customMiddleware?: AccountMiddlewareFn;
 
   readonly account?: ISmartContractAccount;
+  readonly feeOptions: UserOperationFeeOptions;
 
   /**
    * Sends a user operation using the connected account.
@@ -316,19 +340,44 @@ export interface ISmartAccountProvider<
    * Overrides the gasEstimator middleware which is used for setting the gasLimit fields on the UserOperation
    * prior to execution.
    *
+   * Note that when using your custom gas estimator with this override method, not only the default gasEstimator middleware,
+   * but also the gas estimator fee options set during initialization is overriden.
+   * Thus, when using your custom gas estimator, you need to set the fee options from this method instead.
+   *
    * @param override - a function for overriding the default gas estimator middleware
+   * @param feeOptions - optional GasEstimatorFeeOptions to set at the global level of the provider.
    * @returns
    */
-  withGasEstimator: (override: GasEstimatorMiddleware) => this;
+  withGasEstimator: (
+    override: GasEstimatorMiddleware,
+    feeOptions?: GasEstimatorFeeOptions
+  ) => this;
 
   /**
    * Overrides the feeDataGetter middleware which is used for setting the fee fields on the UserOperation
    * prior to execution.
    *
-   * @param override - a function for overriding the default feeDataGetter middleware
+   * Note that when using your custom fee data getter with this override method, not only the default feeDataGetter middleware,
+   * but also the fee data getter fee options set during initialization is overriden.
+   * Thus, when using your custom fee data getter, you need to set the fee options from this method instead.
+   *
+   * @param override   - a function for overriding the default feeDataGetter middleware
+   * @param feeOptions - optional FeeDataFeeOptions to set at the global level of the provider.
    * @returns
    */
-  withFeeDataGetter: (override: FeeDataMiddleware) => this;
+  withFeeDataGetter: (
+    override: FeeDataMiddleware,
+    feeOptions?: FeeDataFeeOptions
+  ) => this;
+
+  /**
+   * Overrides the feeOptions middleware which is used for applying the provider feeOptions
+   * on UserOperationFeeOptions fields on the UserOperation prior to execution.
+   *
+   * @param override - a function for overriding the default gas estimator middleware
+   * @returns
+   */
+  withFeeOptionsMiddleware: (override: FeeOptionsMiddleware) => this;
 
   /**
    * Adds a function to the middleware call stack that runs before calling the paymaster middleware.

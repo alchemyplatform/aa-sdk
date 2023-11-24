@@ -29,6 +29,6 @@ export const withAlchemyGasFeeEstimator = <P extends AlchemyProvider>(
       maxFeePerGas: baseFeeIncrease + prioFeeIncrease,
       maxPriorityFeePerGas: prioFeeIncrease,
     };
-  });
+  }, provider.feeOptions);
   return provider;
 };

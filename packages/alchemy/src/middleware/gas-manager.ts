@@ -13,7 +13,7 @@ export interface AlchemyGasManagerConfig {
 /**
  * This middleware wraps the Alchemy Gas Manager APIs to provide more flexible UserOperation gas sponsorship.
  *
- * If `estimateGas` is true, it will use `alchemy_requestGasAndPaymasterAndData` to get all of the gas estimates + paymaster data
+ * If `delegateGasEstimation` is true, it will use `alchemy_requestGasAndPaymasterAndData` to get all of the gas estimates + paymaster data
  * in one RPC call.
  *
  * Otherwise, it will use `alchemy_requestPaymasterAndData` to get only paymaster data, allowing you
@@ -21,27 +21,57 @@ export interface AlchemyGasManagerConfig {
  *
  * @param provider - the smart account provider to override to use the alchemy gas manager
  * @param config - the alchemy gas manager configuration
- * @param estimateGas - if true, this will use `alchemy_requestGasAndPaymasterAndData` else will use `alchemy_requestPaymasterAndData`
+ * @param delegateGasEstimation - if true, this will use `alchemy_requestGasAndPaymasterAndData` else will use `alchemy_requestPaymasterAndData`
  * @returns the provider augmented to use the alchemy gas manager
  */
 export const withAlchemyGasManager = <P extends AlchemyProvider>(
   provider: P,
   config: AlchemyGasManagerConfig,
-  estimateGas: boolean = true
+  delegateGasEstimation: boolean = true
 ): P => {
-  return estimateGas
+  const fallbackGasEstimator = provider.gasEstimator;
+  const fallbackFeeDataGetter = provider.feeDataGetter;
+
+  return delegateGasEstimation
     ? provider
         // no-op gas estimator
-        .withGasEstimator(async () => ({
-          callGasLimit: 0n,
-          preVerificationGas: 0n,
-          verificationGasLimit: 0n,
-        }))
+        .withGasEstimator(async (struct, overrides) => {
+          // but if user is bypassing paymaster to fallback to having the account to pay the gas (one-off override),
+          // we cannot delegate gas estimation to the bundler because paymaster middleware will not be called
+          if (overrides?.paymasterAndData !== undefined) {
+            const result = await fallbackGasEstimator(struct, overrides);
+            return {
+              callGasLimit: (await result.callGasLimit) ?? 0n,
+              preVerificationGas: (await result.preVerificationGas) ?? 0n,
+              verificationGasLimit: (await result.verificationGasLimit) ?? 0n,
+            };
+          } else {
+            return {
+              callGasLimit: 0n,
+              preVerificationGas: 0n,
+              verificationGasLimit: 0n,
+            };
+          }
+        })
         // no-op fee because the alchemy api will do it
-        .withFeeDataGetter(async (struct) => ({
-          maxFeePerGas: (await struct.maxFeePerGas) ?? 0n,
-          maxPriorityFeePerGas: (await struct.maxPriorityFeePerGas) ?? 0n,
-        }))
+        .withFeeDataGetter(async (struct, overrides) => {
+          let maxFeePerGas = (await struct.maxFeePerGas) ?? 0n;
+          let maxPriorityFeePerGas = (await struct.maxPriorityFeePerGas) ?? 0n;
+
+          // but if user is bypassing paymaster to fallback to having the account to pay the gas (one-off override),
+          // we cannot delegate gas estimation to the bundler because paymaster middleware will not be called
+          if (overrides?.paymasterAndData !== undefined) {
+            const result = await fallbackFeeDataGetter(struct, overrides);
+            maxFeePerGas = (await result.maxFeePerGas) ?? maxFeePerGas;
+            maxPriorityFeePerGas =
+              (await result.maxPriorityFeePerGas) ?? maxPriorityFeePerGas;
+          }
+
+          return {
+            maxFeePerGas,
+            maxPriorityFeePerGas,
+          };
+        })
         .withPaymasterMiddleware(
           withAlchemyGasAndPaymasterAndDataMiddleware(provider, config)
         )
