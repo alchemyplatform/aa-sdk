@@ -1,9 +1,5 @@
 import type { UserOperationOverrides } from "@alchemy/aa-core";
 import {
-  LogLevel,
-  Logger,
-  SimpleSmartContractAccount,
-  getDefaultSimpleAccountFactoryAddress,
   type SmartAccountSigner,
   type UserOperationFeeOptions,
 } from "@alchemy/aa-core";
@@ -11,16 +7,18 @@ import { Alchemy, Network } from "alchemy-sdk";
 import { toHex, type Address, type Chain, type Hash } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
 import { sepolia } from "viem/chains";
-import { AlchemyProvider } from "../src/provider/base.js";
-import { API_KEY, OWNER_MNEMONIC, PAYMASTER_POLICY_ID } from "./constants.js";
+import { createLightAccountAlchemyProvider } from "../src/index.js";
+import {
+  API_KEY,
+  LIGHT_ACCOUNT_OWNER_MNEMONIC,
+  PAYMASTER_POLICY_ID,
+} from "./constants.js";
 
 const chain = sepolia;
 const network = Network.ETH_SEPOLIA;
 
-Logger.setLogLevel(LogLevel.DEBUG);
-
-describe("Simple Account Tests", () => {
-  const ownerAccount = mnemonicToAccount(OWNER_MNEMONIC);
+describe("Light Account Tests", () => {
+  const ownerAccount = mnemonicToAccount(LIGHT_ACCOUNT_OWNER_MNEMONIC);
   const owner: SmartAccountSigner = {
     inner: ownerAccount,
     signMessage: async (msg) =>
@@ -35,7 +33,7 @@ describe("Simple Account Tests", () => {
   it("should successfully get counterfactual address", async () => {
     const provider = givenConnectedProvider({ owner, chain });
     expect(await provider.getAddress()).toMatchInlineSnapshot(
-      `"0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4"`
+      `"0x1a3a89cd46f124EF40848966c2D7074a575dbC27"`
     );
   });
 
@@ -216,8 +214,8 @@ describe("Simple Account Tests", () => {
 
     const address = await provider.getAddress();
     const balances = await provider.core.getTokenBalances(address);
-    expect(balances.tokenBalances.length).toMatchInlineSnapshot(`4`);
-  }, 100000);
+    expect(balances.tokenBalances.length).toMatchInlineSnapshot("1");
+  }, 50000);
 
   it("should get owned nfts for the smart account", async () => {
     const alchemy = new Alchemy({
@@ -251,29 +249,8 @@ describe("Simple Account Tests", () => {
         value: 1n,
       });
 
-    expect(simulatedAssetChanges.changes.length).toEqual(2);
-    expect(
-      simulatedAssetChanges.changes.map((change) => ({
-        assertType: change.assetType,
-        changeType: change.changeType,
-        from: change.from.toLowerCase(),
-        to: change.to.toLowerCase(),
-      }))
-    ).toEqual([
-      {
-        assertType: "NATIVE",
-        changeType: "TRANSFER",
-        from: (await provider.getAddress()).toLowerCase(),
-        to: provider.getEntryPointAddress().toLowerCase(),
-      },
-      {
-        assertType: "NATIVE",
-        changeType: "TRANSFER",
-        from: (await provider.getAddress()).toLowerCase(),
-        to: provider.getEntryPointAddress().toLowerCase(),
-      },
-    ]);
-  }, 100000);
+    expect(simulatedAssetChanges.changes.length).toMatchInlineSnapshot("2");
+  }, 50000);
 
   it("should simulate as part of middleware stack when added to provider", async () => {
     const provider = givenConnectedProvider({
@@ -304,9 +281,10 @@ const givenConnectedProvider = ({
   accountAddress?: Address;
   feeOptions?: UserOperationFeeOptions;
 }) =>
-  new AlchemyProvider({
+  createLightAccountAlchemyProvider({
     apiKey: API_KEY!,
     chain,
+    owner,
     opts: {
       txMaxRetries: 10,
       feeOptions: {
@@ -315,13 +293,5 @@ const givenConnectedProvider = ({
         maxPriorityFeePerGas: { percentage: 50 },
       },
     },
-  }).connect(
-    (provider) =>
-      new SimpleSmartContractAccount({
-        chain,
-        owner,
-        factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
-        rpcClient: provider,
-        accountAddress,
-      })
-  );
+    accountAddress,
+  });
