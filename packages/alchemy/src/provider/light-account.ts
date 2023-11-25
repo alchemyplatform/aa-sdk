@@ -7,8 +7,8 @@ import type { LightAccountAlchemyProviderConfig } from "../type.js";
 import { AlchemyProvider } from "./base.js";
 
 /**
- * This method improves the developer experience of connecting a Light Account to an AlchemyProvder
- * via an optional dependency on the `@alchemy/aa-accounts` package.
+ * This method improves the developer experience of connecting a Light Account to an
+ * AlchemyProvider via an optional dependency on the `@alchemy/aa-accounts` package.
  * @see: https://github.com/alchemyplatform/alchemy-sdk-js
  *
  * @param config_ - the AlchemyProvder configuration with additional pamaeters for Light Account
