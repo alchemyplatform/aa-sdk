@@ -34,11 +34,11 @@ export const getChain = (chainId: number): chains.Chain => {
  * @returns result of the pipe
  */
 export const asyncPipe =
-  <T, O>(...fns: ((x: T, o?: O) => Promise<T>)[]) =>
-  async (x: T, o?: O) => {
-    let result = x;
+  <S, O, F>(...fns: ((s: S, o?: O, f?: F) => Promise<S>)[]) =>
+  async (s: S, o?: O, f?: F) => {
+    let result = s;
     for (const fn of fns) {
-      result = await fn(result, o);
+      result = await fn(result, o, f);
     }
     return result;
   };

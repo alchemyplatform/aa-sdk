@@ -1,6 +1,7 @@
 import {
   deepHexlify,
   resolveProperties,
+  type AccountMiddlewareFn,
   type UserOperationRequest,
 } from "@alchemy/aa-core";
 import type { AlchemyProvider } from "../provider.js";
@@ -8,6 +9,12 @@ import type { ClientWithAlchemyMethods } from "./client.js";
 
 export interface AlchemyGasManagerConfig {
   policyId: string;
+}
+
+export interface AlchemyGasEstimationOptions {
+  estimateGas: boolean;
+  fallbackGasEstimator?: AccountMiddlewareFn;
+  fallbackFeeDataGetter?: AccountMiddlewareFn;
 }
 
 /**
@@ -27,12 +34,14 @@ export interface AlchemyGasManagerConfig {
 export const withAlchemyGasManager = <P extends AlchemyProvider>(
   provider: P,
   config: AlchemyGasManagerConfig,
-  delegateGasEstimation: boolean = true
+  gasEstimationOptions: AlchemyGasEstimationOptions = { estimateGas: true }
 ): P => {
-  const fallbackGasEstimator = provider.gasEstimator;
-  const fallbackFeeDataGetter = provider.feeDataGetter;
+  const fallbackGasEstimator =
+    gasEstimationOptions.fallbackGasEstimator ?? provider.gasEstimator;
+  const fallbackFeeDataGetter =
+    gasEstimationOptions.fallbackFeeDataGetter ?? provider.feeDataGetter;
 
-  return delegateGasEstimation
+  return gasEstimationOptions.estimateGas
     ? provider
         // no-op gas estimator
         .withGasEstimator(async (struct, overrides) => {

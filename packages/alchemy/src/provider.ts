@@ -137,7 +137,9 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
       );
     }
 
-    return withAlchemyGasManager(this, config, !this.feeOptsSet);
+    return withAlchemyGasManager(this, config, {
+      estimateGas: !this.feeOptsSet,
+    });
   }
 
   /**
