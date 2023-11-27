@@ -3,8 +3,25 @@ import type { Transport } from "viem";
 import z from "zod";
 import { createPublicErc4337ClientSchema } from "../client/schema.js";
 import type { SupportedTransports } from "../client/types";
-import { UserOperationFeeOptionsSchema } from "../schema.js";
-import { ChainSchema } from "../utils/index.js";
+import {
+  BigNumberishRangeSchema,
+  ChainSchema,
+  PercentageSchema,
+} from "../utils/index.js";
+
+export const UserOperationFeeOptionsFieldSchema =
+  BigNumberishRangeSchema.merge(PercentageSchema).partial();
+
+export const UserOperationFeeOptionsSchema = z
+  .object({
+    maxFeePerGas: UserOperationFeeOptionsFieldSchema,
+    maxPriorityFeePerGas: UserOperationFeeOptionsFieldSchema,
+    callGasLimit: UserOperationFeeOptionsFieldSchema,
+    verificationGasLimit: UserOperationFeeOptionsFieldSchema,
+    preVerificationGas: UserOperationFeeOptionsFieldSchema,
+  })
+  .partial()
+  .strict();
 
 export const SmartAccountProviderOptsSchema = z
   .object({

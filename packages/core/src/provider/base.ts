@@ -50,10 +50,7 @@ import { createSmartAccountProviderConfigSchema } from "./schema.js";
 import type {
   AccountMiddlewareFn,
   AccountMiddlewareOverrideFn,
-  FeeDataFeeOptions,
   FeeDataMiddleware,
-  FeeOptionsMiddleware,
-  GasEstimatorFeeOptions,
   GasEstimatorMiddleware,
   ISmartAccountProvider,
   PaymasterAndDataMiddleware,
@@ -64,7 +61,8 @@ import type {
 
 export const noOpMiddleware: AccountMiddlewareFn = async (
   struct: Deferrable<UserOperationStruct>,
-  _overrides?: UserOperationOverrides
+  _overrides?: UserOperationOverrides,
+  _feeOptions?: UserOperationFeeOptions
 ) => struct;
 
 export class SmartAccountProvider<
@@ -76,9 +74,9 @@ export class SmartAccountProvider<
   private txMaxRetries: number;
   private txRetryIntervalMs: number;
   private txRetryMulitplier: number;
+  private feeOptions: UserOperationFeeOptions;
 
   readonly account?: ISmartContractAccount;
-  readonly feeOptions: UserOperationFeeOptions;
 
   protected entryPointAddress?: Address;
   protected chain: Chain;
@@ -101,8 +99,10 @@ export class SmartAccountProvider<
     this.txRetryMulitplier = opts?.txRetryMulitplier ?? 1.5;
     this.entryPointAddress = entryPointAddress;
 
-    this.feeOptions =
-      opts?.feeOptions ?? getDefaultUserOperationFeeOptions(chain);
+    this.feeOptions = {
+      ...getDefaultUserOperationFeeOptions(chain),
+      ...opts?.feeOptions,
+    };
 
     this.rpcClient =
       typeof rpcProvider === "string"
@@ -438,12 +438,11 @@ export class SmartAccountProvider<
       this.feeDataGetter,
       this.gasEstimator,
       this.customMiddleware ?? noOpMiddleware,
-      this.feeOptionsMiddleware,
       overrides?.paymasterAndData != null
         ? this.overridePaymasterDataMiddleware
         : this.paymasterDataMiddleware,
       this.simulateUOMiddleware
-    )(uo, overrides);
+    )(uo, overrides, this.feeOptions);
 
     return resolveProperties<UserOperationStruct>(result);
   };
@@ -487,43 +486,100 @@ export class SmartAccountProvider<
   // or extend this class and provider your own implemenation
   readonly dummyPaymasterDataMiddleware: AccountMiddlewareFn = async (
     struct,
-    _overrides
+    overrides,
+    feeOptions
   ) => {
+    Logger.debug(
+      `[SmartAccountProvider] dummyPaymasterDataMiddleware`,
+      struct,
+      overrides,
+      feeOptions
+    );
     struct.paymasterAndData = "0x";
     return struct;
   };
 
   readonly overridePaymasterDataMiddleware: AccountMiddlewareFn = async (
     struct,
-    overrides
+    overrides,
+    feeOptions
   ) => {
+    Logger.debug(
+      `[SmartAccountProvider] overridePaymasterDataMiddleware`,
+      struct,
+      overrides,
+      feeOptions
+    );
     struct.paymasterAndData = overrides?.paymasterAndData ?? "0x";
     return struct;
   };
 
   readonly paymasterDataMiddleware: AccountMiddlewareFn = async (
     struct,
-    _overrides
+    overrides,
+    feeOptions
   ) => {
+    Logger.debug(
+      `[SmartAccountProvider] paymasterDataMiddleware`,
+      struct,
+      overrides,
+      feeOptions
+    );
     struct.paymasterAndData = "0x";
     return struct;
   };
 
-  readonly gasEstimator: AccountMiddlewareFn = async (struct, _overrides) => {
+  readonly gasEstimator: AccountMiddlewareFn = async (
+    struct,
+    overrides,
+    feeOptions
+  ) => {
+    Logger.debug(
+      `[SmartAccountProvider] gasEstimator`,
+      struct,
+      overrides,
+      feeOptions
+    );
+
     const request = deepHexlify(await resolveProperties(struct));
     const estimates = await this.rpcClient.estimateUserOperationGas(
       request,
       this.getEntryPointAddress()
     );
 
-    struct.callGasLimit = estimates.callGasLimit;
-    struct.verificationGasLimit = estimates.verificationGasLimit;
-    struct.preVerificationGas = estimates.preVerificationGas;
+    struct.callGasLimit = applyFeeOption(
+      estimates.callGasLimit,
+      feeOptions?.callGasLimit
+    );
+    struct.verificationGasLimit = applyFeeOption(
+      estimates.verificationGasLimit,
+      feeOptions?.verificationGasLimit
+    );
+    struct.preVerificationGas = applyFeeOption(
+      estimates.preVerificationGas,
+      feeOptions?.preVerificationGas
+    );
 
     return struct;
   };
 
-  readonly feeDataGetter: AccountMiddlewareFn = async (struct, overrides) => {
+  readonly feeDataGetter: AccountMiddlewareFn = async (
+    struct,
+    overrides,
+    feeOptions
+  ) => {
+    Logger.debug(
+      `[SmartAccountProvider] feeDataGetter`,
+      struct,
+      overrides,
+      feeOptions
+    );
+
+    const estimateMaxPriorityFeePerGas = async () => {
+      const estimate = await this.rpcClient.estimateMaxPriorityFeePerGas();
+      return applyFeeOption(estimate, feeOptions?.maxPriorityFeePerGas);
+    };
+
     // maxFeePerGas must be at least the sum of maxPriorityFeePerGas and baseFee
     // so we need to accommodate for the fee option applied maxPriorityFeePerGas for the maxFeePerGas
     //
@@ -539,50 +595,21 @@ export class SmartAccountProvider<
           "feeData is missing maxFeePerGas or maxPriorityFeePerGas"
         );
       }
-
-      return (
-        BigInt(feeData.maxFeePerGas) -
-        BigInt(feeData.maxPriorityFeePerGas) +
-        BigInt(maxPriorityFeePerGas)
+      const baseFee = applyFeeOption(
+        feeData.maxFeePerGas - feeData.maxPriorityFeePerGas,
+        feeOptions?.maxFeePerGas
       );
+
+      return BigInt(baseFee) + BigInt(maxPriorityFeePerGas);
     };
 
     struct.maxPriorityFeePerGas =
-      overrides?.maxPriorityFeePerGas ??
-      (await this.rpcClient.estimateMaxPriorityFeePerGas());
+      overrides?.maxPriorityFeePerGas ?? (await estimateMaxPriorityFeePerGas());
     struct.maxFeePerGas =
       overrides?.maxFeePerGas ??
       (await estimateMaxFeePerGas(struct.maxPriorityFeePerGas));
 
     return struct;
-  };
-
-  readonly feeOptionsMiddleware: AccountMiddlewareFn = async (
-    struct,
-    overrides
-  ) => {
-    const resolved = await resolveProperties<UserOperationStruct>(struct);
-
-    // max priority fee per gas to be added back after fee options applied
-    // maxFeePerGas fee option will be applied at the base fee level
-    resolved.maxFeePerGas =
-      BigInt(resolved.maxFeePerGas ?? 0n) -
-      BigInt(resolved.maxPriorityFeePerGas ?? 0n);
-
-    Object.keys(this.feeOptions ?? {}).forEach((field) => {
-      if (overrides?.[field as keyof UserOperationOverrides] !== undefined)
-        return;
-      resolved[field as keyof UserOperationFeeOptions] = applyFeeOption(
-        resolved[field as keyof UserOperationFeeOptions],
-        this.feeOptions[field as keyof UserOperationFeeOptions]
-      );
-    });
-
-    resolved.maxFeePerGas =
-      BigInt(resolved.maxFeePerGas ?? 0n) +
-      BigInt(resolved.maxPriorityFeePerGas ?? 0n);
-
-    return resolved;
   };
 
   readonly customMiddleware: AccountMiddlewareFn = noOpMiddleware;
@@ -606,16 +633,7 @@ export class SmartAccountProvider<
     return this;
   };
 
-  withGasEstimator = (
-    override: GasEstimatorMiddleware,
-    feeOptions?: GasEstimatorFeeOptions
-  ): this => {
-    // Note that this overrides the default gasEstimator middleware and
-    // also the gas estimator fee options set on the provider upon initialization
-    this.feeOptions.callGasLimit = feeOptions?.callGasLimit;
-    this.feeOptions.verificationGasLimit = feeOptions?.verificationGasLimit;
-    this.feeOptions.preVerificationGas = feeOptions?.preVerificationGas;
-
+  withGasEstimator = (override: GasEstimatorMiddleware): this => {
     defineReadOnly(
       this,
       "gasEstimator",
@@ -624,27 +642,10 @@ export class SmartAccountProvider<
     return this;
   };
 
-  withFeeDataGetter = (
-    override: FeeDataMiddleware,
-    feeOptions?: FeeDataFeeOptions
-  ): this => {
-    // Note that this overrides the default gasEstimator middleware and
-    // also the gas estimator fee options set on the provider upon initialization
-    this.feeOptions.maxFeePerGas = feeOptions?.maxFeePerGas;
-    this.feeOptions.maxPriorityFeePerGas = feeOptions?.maxPriorityFeePerGas;
-
+  withFeeDataGetter = (override: FeeDataMiddleware): this => {
     defineReadOnly(
       this,
       "feeDataGetter",
-      this.overrideMiddlewareFunction(override)
-    );
-    return this;
-  };
-
-  withFeeOptionsMiddleware = (override: FeeOptionsMiddleware): this => {
-    defineReadOnly(
-      this,
-      "feeOptionsMiddleware",
       this.overrideMiddlewareFunction(override)
     );
     return this;

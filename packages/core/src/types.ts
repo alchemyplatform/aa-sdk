@@ -3,7 +3,7 @@ import type { z } from "zod";
 import type {
   UserOperationFeeOptionsFieldSchema,
   UserOperationFeeOptionsSchema,
-} from "./schema";
+} from "./provider/schema";
 import type {
   BigNumberishRangeSchema,
   BigNumberishSchema,
