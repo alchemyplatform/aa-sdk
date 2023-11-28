@@ -14,7 +14,7 @@ head:
 
 # buildUserOperationFromTx
 
-Converts a traditional Ethereum transaction and builds an _unsigned_ UserOperation struct with the all of the middleware run on it through the middleware pipeline.
+Converts a traditional Ethereum transaction and builds an _unsigned_ `UserOperation` (UO) struct with the all of the middleware run on it through the middleware pipeline.
 
 The order of the middlewares is:
 
@@ -52,7 +52,7 @@ const uoHash = await provider.sendUserOperation(uoStruct);
 
 ### `Promise<UserOperationStruct>`
 
-A Promise containing the _unsigned_ UserOperation struct converted from the input transaction with all the middleware run on the resulting UserOperation
+A Promise containing the _unsigned_ UO struct converted from the input transaction with all the middleware run on the resulting UO
 
 ## Parameters
 

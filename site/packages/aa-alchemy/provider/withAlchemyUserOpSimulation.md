@@ -16,7 +16,7 @@ next:
 
 # withAlchemyUserOpSimulation
 
-`withAlchemyUserOpSimulation` is a method on `AlchemyProvider` that you can optionally call to create a new provider instance with added middleware leveraging the Alchemy `UserOperation` Simulation API. Under the hood, this will call the [`withAlchemyUserOpSimulation`](/packages/aa-alchemy/middleware/withAlchemyUserOpSimulation) middleware to simulate asset changes resulting from user operation.
+`withAlchemyUserOpSimulation` is a method on `AlchemyProvider` that you can optionally call to create a new provider instance with added middleware leveraging the Alchemy `UserOperation` (UO) Simulation API. Under the hood, this will call the [`withAlchemyUserOpSimulation`](/packages/aa-alchemy/middleware/withAlchemyUserOpSimulation) middleware to simulate asset changes resulting from user operation.
 
 ## Usage
 
@@ -37,4 +37,4 @@ const providerWithGasManager = provider.withAlchemyUserOpSimulation();
 
 ### `AlchemyProvider`
 
-A new instance of an `AlchemyProvider` with the same attributes as the input, now with middleware for accessing the Alchemy `UserOperation` Simulation API to simulate asset changes resulting from user operation.
+A new instance of an `AlchemyProvider` with the same attributes as the input, now with middleware for accessing the Alchemy UO Simulation API to simulate asset changes resulting from user operation.
