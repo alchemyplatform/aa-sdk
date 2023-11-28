@@ -1,8 +1,8 @@
-## Contributing
+# Contributing
 
 We're excited to have you contribute to the `aa-sdk`. Here's a step-by-step guide to help you get started.
 
-### Getting Started
+## Getting Started
 
 1. **Fork and Clone**: First, [fork the `aa-sdk` repository](https://github.com/alchemyplatform/aa-sdk/fork). Then, clone your forked repo to your local machine.
 
