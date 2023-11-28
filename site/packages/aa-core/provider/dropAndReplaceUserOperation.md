@@ -49,7 +49,7 @@ A Promise containing the hash of the user operation and the request that was sen
 
 ### `UserOperationRequest`
 
-A previously submitted UserOperation.
+A previously submitted `UserOperation`.
 
 ### `overrides?: UserOperationOverrides`
 

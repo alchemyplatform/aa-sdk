@@ -14,7 +14,7 @@ head:
 
 # withFeeDataGetter
 
-Overrides the default [`feeDataGetter`](#feedatagetter) middleware. This middleware is used for setting the `maxFeePerGas` and `maxPriorityFeePerGas` fields on the `UserOperation` prior to its execution.
+Overrides the default [`feeDataGetter`](#feedatagetter) middleware. This middleware is used for setting the `maxFeePerGas` and `maxPriorityFeePerGas` fields on the `UserOperation` (UO) prior to its execution.
 
 ## Usage
 
@@ -63,11 +63,11 @@ An updated instance of the provider, which now uses the overridden `feeDataGette
 
 ### `override: FeeDataMiddleware`
 
-A function for overriding the default `feeDataGetter` middleware. This middleware is specifically utilized to set the fee-related fields (`maxFeePerGas` and `maxPriorityFeePerGas`) on the `UserOperation` before it's executed.
+A function for overriding the default `feeDataGetter` middleware. This middleware is specifically utilized to set the fee-related fields (`maxFeePerGas` and `maxPriorityFeePerGas`) on the UO before it's executed.
 
 ## `feeDataGetter`
 
-The `feeDataGetter` is a readonly field on the `ISmartAccountProvider` interface that represents the default fee data getter middleware. It's used to set the fee-related fields on a `UserOperation` by making calls to the connected `rpcClient` to estimate the maximum priority fee per gas and retrieve fee data.
+The `feeDataGetter` is a readonly field on the `ISmartAccountProvider` interface that represents the default fee data getter middleware. It's used to set the fee-related fields on a UO by making calls to the connected `rpcClient` to estimate the maximum priority fee per gas and retrieve fee data.
 
 You can access the current fee data getter configuration for the provider via:
 

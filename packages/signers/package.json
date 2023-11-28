@@ -39,7 +39,10 @@
     "test:run-e2e": "vitest run --config vitest.config.e2e.ts"
   },
   "devDependencies": {
+    "@web3auth/base": "^7.1.0",
+    "@web3auth/modal": "^7.1.1",
     "jsdom": "^22.1.0",
+    "magic-sdk": "^21.3.0",
     "typescript": "^5.0.4",
     "typescript-template": "*",
     "vitest": "^0.31.0"
@@ -60,5 +63,10 @@
   "dependencies": {
     "@alchemy/aa-core": "^1.2.0",
     "viem": "^1.16.2"
+  },
+  "optionalDependencies": {
+    "@web3auth/base": "^7.1.0",
+    "@web3auth/modal": "^7.1.1",
+    "magic-sdk": "^21.3.0"
   }
 }

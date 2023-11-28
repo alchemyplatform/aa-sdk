@@ -16,7 +16,7 @@ prev:
 
 # sendUserOperation
 
-Calls `eth_sendUserOperation` and returns the hash of the sent UserOperation.
+Calls `eth_sendUserOperation` and returns the hash of the sent `UserOperation` (UO).
 
 ## Usage
 
@@ -40,7 +40,7 @@ const hash = await client.sendUserOperation(
 
 ### `Promise<Hash>`
 
-the hash of the sent UserOperation
+the hash of the sent UO
 
 ## Parameters
 

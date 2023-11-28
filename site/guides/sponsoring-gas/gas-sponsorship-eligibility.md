@@ -50,9 +50,9 @@ provider.withAlchemyGasManager({
 
 :::
 
-Then, before you call `sendUserOperation` on the provider, you can use [`checkGasSponsorshipEligibility`](/packages/aa-core/provider/checkGasSponsorshipEligibility.md) to verify the eligibility of the connected account for gas sponsorship concerning the upcoming `UserOperation` that is intended to be sent.
+Then, before you call `sendUserOperation` on the provider, you can use [`checkGasSponsorshipEligibility`](/packages/aa-core/provider/checkGasSponsorshipEligibility.md) to verify the eligibility of the connected account for gas sponsorship concerning the upcoming `UserOperation` (UO) that is intended to be sent.
 
-Internally, this method invokes [`buildUserOperation`](/packages/aa-core/provider/buildUserOperation.md), which navigates through the middleware pipeline, including the `PaymasterMiddleware`. Its purpose is to construct the `UserOperation` struct meant for transmission to the bundler. Following the construction of the `UserOperation` struct, this function verifies if the resulting structure contains a non-empty `paymasterAndData` field.
+Internally, this method invokes [`buildUserOperation`](/packages/aa-core/provider/buildUserOperation.md), which navigates through the middleware pipeline, including the `PaymasterMiddleware`. Its purpose is to construct the UO struct meant for transmission to the bundler. Following the construction of the UO struct, this function verifies if the resulting structure contains a non-empty `paymasterAndData` field.
 
 You can utilize this method before sending the user operation to confirm its eligibility for gas sponsorship. Depending on the outcome, it allows you to tailor the user experience accordingly, based on eligibility.
 
