@@ -10,7 +10,7 @@ We're excited to have you contribute to the `aa-sdk`. Here's a step-by-step guid
 
 3. **Testing Environment**: Before making changes, make sure to verify the testing environment.
 
-   - Use the Node version specified in `package.json` (currently 18.10). Run `node -v` to check your version.
+   - Use the Node version specified in `package.json` (currently 18.16.0). Run `node -v` to check your version.
    - Build the project with `yarn build`.
    - Run existing tests using `yarn test` to ensure everything is working correctly.
 
