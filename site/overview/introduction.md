@@ -22,7 +22,7 @@ head:
 
 **Account Kit** is a framework to embed smart accounts in your web3 app, unlocking [powerful features](/overview/getting-started) like email/social login, gas sponsorship, batched transactions, and more. The `aa-sdk` makes it easy to integrate and deploy smart accounts, send user operations, and sponsor gas with just a few lines of code.
 
-## What is included in Account Kit stack?
+## What is the Account Kit stack?
 
 Account Kit is a complete solution for [account abstraction](https://www.alchemy.com/overviews/what-is-account-abstraction). It includes five components:
 
