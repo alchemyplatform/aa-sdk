@@ -1,4 +1,4 @@
-## Contributing
+# Contributing
 
 We're excited to have you contribute to the `aa-sdk`. Here's a step-by-step guide to help you get started.
 
