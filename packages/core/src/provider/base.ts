@@ -219,15 +219,17 @@ export class SmartAccountProvider<
 
     const _overrides: UserOperationOverrides = {
       maxFeePerGas:
-        overrides?.maxFeePerGas ??
-        (request.maxFeePerGas
+        overrides?.maxFeePerGas != null
+          ? overrides?.maxFeePerGas
+          : request.maxFeePerGas
           ? fromHex(request.maxFeePerGas, "bigint")
-          : undefined),
+          : undefined,
       maxPriorityFeePerGas:
-        overrides?.maxPriorityFeePerGas ??
-        (request.maxPriorityFeePerGas
+        overrides?.maxPriorityFeePerGas != null
+          ? overrides?.maxPriorityFeePerGas
+          : request.maxPriorityFeePerGas
           ? fromHex(request.maxPriorityFeePerGas, "bigint")
-          : undefined),
+          : undefined,
     };
     filterUndefined(_overrides);
 
@@ -260,19 +262,21 @@ export class SmartAccountProvider<
     });
 
     const maxFeePerGas =
-      overrides?.maxFeePerGas ??
-      bigIntMax(
-        ...requests
-          .filter((x) => x.maxFeePerGas != null)
-          .map((x) => fromHex(x.maxFeePerGas!, "bigint"))
-      );
+      overrides?.maxFeePerGas != null
+        ? overrides?.maxFeePerGas
+        : bigIntMax(
+            ...requests
+              .filter((x) => x.maxFeePerGas != null)
+              .map((x) => fromHex(x.maxFeePerGas!, "bigint"))
+          );
     const maxPriorityFeePerGas =
-      overrides?.maxPriorityFeePerGas ??
-      bigIntMax(
-        ...requests
-          .filter((x) => x.maxPriorityFeePerGas != null)
-          .map((x) => fromHex(x.maxPriorityFeePerGas!, "bigint"))
-      );
+      overrides?.maxPriorityFeePerGas != null
+        ? overrides?.maxPriorityFeePerGas
+        : bigIntMax(
+            ...requests
+              .filter((x) => x.maxPriorityFeePerGas != null)
+              .map((x) => fromHex(x.maxPriorityFeePerGas!, "bigint"))
+          );
 
     const _overrides: UserOperationOverrides = {
       maxFeePerGas,
@@ -510,7 +514,8 @@ export class SmartAccountProvider<
       overrides,
       feeOptions
     );
-    struct.paymasterAndData = overrides?.paymasterAndData ?? "0x";
+    struct.paymasterAndData =
+      overrides?.paymasterAndData != null ? overrides?.paymasterAndData : "0x";
     return struct;
   };
 
@@ -620,10 +625,13 @@ export class SmartAccountProvider<
     };
 
     struct.maxPriorityFeePerGas =
-      overrides?.maxPriorityFeePerGas ?? (await estimateMaxPriorityFeePerGas());
+      overrides?.maxPriorityFeePerGas != null
+        ? overrides?.maxPriorityFeePerGas
+        : await estimateMaxPriorityFeePerGas();
     struct.maxFeePerGas =
-      overrides?.maxFeePerGas ??
-      (await estimateMaxFeePerGas(struct.maxPriorityFeePerGas));
+      overrides?.maxFeePerGas != null
+        ? overrides?.maxFeePerGas
+        : await estimateMaxFeePerGas(struct.maxPriorityFeePerGas);
 
     return struct;
   };

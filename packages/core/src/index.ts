@@ -45,7 +45,6 @@ export {
 } from "./provider/schema.js";
 export type * from "./provider/types.js";
 
-export { UserOperationFeeOptionsFieldSchema } from "./schema.js";
 export type * from "./types.js";
 export type * from "./utils/index.js";
 export {

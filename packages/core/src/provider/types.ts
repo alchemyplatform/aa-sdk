@@ -64,7 +64,8 @@ export type AccountMiddlewareOverrideFn<
   Opt extends keyof UserOperationStruct = never
 > = (
   struct: Deferrable<UserOperationStruct>,
-  overrides?: UserOperationOverrides
+  overrides?: UserOperationOverrides,
+  feeOptions?: UserOperationFeeOptions
 ) => Promise<
   WithRequired<UserOperationStruct, Req> &
     WithOptional<UserOperationStruct, Opt>
