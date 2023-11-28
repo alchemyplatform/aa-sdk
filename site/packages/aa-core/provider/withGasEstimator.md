@@ -16,7 +16,7 @@ head:
 
 Override the [`gasEstimator`](#gasEstimator) middleware.
 
-This middleware is used for setting the `callGasLimit`, `preVerificationGas`, and `verificationGasLimit` fields on the `UserOperation` prior to its execution. This middleware is between the `feeDataGetter` middleware and the `paymasterDataMiddleware`.
+This middleware is used for setting the `callGasLimit`, `preVerificationGas`, and `verificationGasLimit` fields on the `UserOperation` (UO) prior to its execution. This middleware is between the `feeDataGetter` middleware and the `paymasterDataMiddleware`.
 
 ## Usage
 
@@ -65,13 +65,13 @@ An updated instance of the provider, which now uses the overridden `gasEstimator
 
 ### `override: GasEstimatorMiddleware`
 
-A function for overriding the default gas estimator middleware. This middleware is specifically utilized to set the gas-related fields (`callGasLimit`, `preVerificationGas`, and `verificationGasLimit`) on the `UserOperation` before it's executed.
+A function for overriding the default gas estimator middleware. This middleware is specifically utilized to set the gas-related fields (`callGasLimit`, `preVerificationGas`, and `verificationGasLimit`) on the UO before it's executed.
 
 ## `gasEstimator`
 
 The `gasEstimator` is a readonly field on the `ISmartAccountProvider` interface that represents the default gas estimator middleware.
 
-It's used to set the gas-related fields on a `UserOperation` by making calls to the connected `rpcClient` to estimate the user operation gas limits.
+It's used to set the gas-related fields on a UO by making calls to the connected `rpcClient` to estimate the user operation gas limits.
 
 You can access the current fee data getter configuration for the provider via:
 

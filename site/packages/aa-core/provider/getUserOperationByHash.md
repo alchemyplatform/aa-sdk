@@ -14,7 +14,7 @@ head:
 
 # getUserOperationByHash
 
-Return a UserOperation based on a hash (userOpHash).
+Return a `UserOperation` (UO) based on a hash (userOpHash).
 
 ## Usage
 
@@ -34,7 +34,7 @@ provider.getUserOperationByHash("0xUserOpResultHash");
 
 ### `Promise<UserOperationResponse | null>`
 
-A Promise containing the UserOperation if found on-chain or null if not found.
+A Promise containing the UO if found on-chain or null if not found.
 
 ## Parameters
 
