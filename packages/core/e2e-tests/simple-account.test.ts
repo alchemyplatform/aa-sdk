@@ -1,10 +1,18 @@
-import { isAddress, type Address, type Chain, type Hash } from "viem";
+import {
+  fromHex,
+  isAddress,
+  type Address,
+  type Chain,
+  type Hash,
+  type Hex,
+} from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
 import { SimpleSmartContractAccount } from "../src/account/simple.js";
 import {
   getDefaultSimpleAccountFactoryAddress,
   type SmartAccountSigner,
+  type UserOperationFeeOptions,
 } from "../src/index.js";
 import { SmartAccountProvider } from "../src/provider/base.js";
 import { LocalAccountSigner } from "../src/signer/local-account.js";
@@ -58,20 +66,86 @@ describe("Simple Account Tests", () => {
     await expect(address).resolves.not.toThrowError();
     expect(isAddress(await address)).toBe(true);
   });
+
+  it("should correctly handle provider feeOptions set during init", async () => {
+    const signer = givenConnectedProvider({
+      owner,
+      chain,
+    });
+
+    const structPromise = signer.buildUserOperation({
+      target: await signer.getAddress(),
+      data: "0x",
+    });
+    await expect(structPromise).resolves.not.toThrowError();
+
+    const signerWithFeeOptions = givenConnectedProvider({
+      owner,
+      chain,
+      feeOptions: {
+        preVerificationGas: { percentage: 100 },
+      },
+    });
+
+    const structWithFeeOptionsPromise = signerWithFeeOptions.buildUserOperation(
+      {
+        target: await signer.getAddress(),
+        data: "0x",
+      }
+    );
+    await expect(structWithFeeOptionsPromise).resolves.not.toThrowError();
+
+    const [struct, structWithFeeOptions] = await Promise.all([
+      structPromise,
+      structWithFeeOptionsPromise,
+    ]);
+
+    const preVerificationGas =
+      typeof struct.preVerificationGas === "string"
+        ? fromHex(struct.preVerificationGas as Hex, "bigint")
+        : struct.preVerificationGas;
+    const preVerificationGasWithFeeOptions =
+      typeof structWithFeeOptions.preVerificationGas === "string"
+        ? fromHex(structWithFeeOptions.preVerificationGas as Hex, "bigint")
+        : structWithFeeOptions.preVerificationGas;
+
+    expect(preVerificationGasWithFeeOptions).toBeGreaterThan(
+      preVerificationGas!
+    );
+  }, 60000);
+
+  it("should correctly handle percentage overrides for sendUserOperation", async () => {
+    const signer = givenConnectedProvider({
+      owner,
+      chain,
+      feeOptions: {
+        preVerificationGas: { percentage: 100 },
+      },
+    });
+
+    const struct = signer.sendUserOperation({
+      target: await signer.getAddress(),
+      data: "0x",
+    });
+    await expect(struct).resolves.not.toThrowError();
+  }, 60000);
 });
 
 const givenConnectedProvider = ({
   owner,
   chain,
   accountAddress,
+  feeOptions,
 }: {
   owner: SmartAccountSigner;
   chain: Chain;
   accountAddress?: Address;
+  feeOptions?: UserOperationFeeOptions;
 }) => {
   const provider = new SmartAccountProvider({
     rpcProvider: `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
     chain,
+    opts: { feeOptions },
   });
   const feeDataGetter = async () => ({
     maxFeePerGas: 100_000_000_000n,

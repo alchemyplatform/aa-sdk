@@ -15,6 +15,7 @@ import {
   polygonMumbai,
   sepolia,
 } from "viem/chains";
+import type { UserOperationFeeOptions } from "../types";
 
 /**
  * Utility method returning the entry point contrafct address given a {@link Chain} object
@@ -78,4 +79,21 @@ export const getDefaultSimpleAccountFactoryAddress = (
   throw new Error(
     `no default simple account factory contract exists for ${chain.name}`
   );
+};
+
+export const minPriorityFeePerBidDefaults = new Map<number, bigint>([
+  [arbitrum.id, 10_000_000n],
+  [arbitrumGoerli.id, 10_000_000n],
+  [arbitrumSepolia.id, 10_000_000n],
+]);
+
+export const getDefaultUserOperationFeeOptions = (
+  chain: Chain
+): UserOperationFeeOptions => {
+  return {
+    maxPriorityFeePerGas: {
+      min: minPriorityFeePerBidDefaults.get(chain.id) ?? 100_000_000n,
+      percentage: 33,
+    },
+  };
 };
