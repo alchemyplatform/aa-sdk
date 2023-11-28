@@ -20,7 +20,7 @@ head:
 
 # Getting Started
 
-This guide will help you get started with Account Kit by setting up your environment, creating a smart account, and sending a `UserOperation` on its behalf. By the end of this guide, you'll have a basic understanding of how to use the SDK and where to look for more advanced use cases.
+This guide will help you get started with Account Kit by setting up your environment, creating a smart account, and sending a `UserOperation` (UO) on its behalf. By the end of this guide, you'll have a basic understanding of how to use the SDK and where to look for more advanced use cases.
 
 ## 1. Install the Packages
 
@@ -95,7 +95,7 @@ To read or write any data to a blockchain, you'll need an Alchemy API Key and RP
 
 ## 2. Query Your Smart Account Address
 
-Using the SDK in the following example, we'll use the Account Kit to generate the address of your smart account from which to eventually send a `UserOperation`.
+Using the SDK in the following example, we'll use the Account Kit to generate the address of your smart account from which to eventually send a UO.
 
 <<< @/snippets/getting-started/provider.ts
 
@@ -113,7 +113,7 @@ Smart Account Address: 0xYOUR_SMART_ACCOUNT_ADDRESS
 
 ## 3. Fund Your Smart Account
 
-To deploy the smart account and send `UserOperation`s on its behalf, you'll need to add native token to your smart account.
+To deploy the smart account and send UOs on its behalf, you'll need to add native token to your smart account.
 
 At scale, you might consider using our Gas Manager to [sponsor UserOperations](/guides/sponsoring-gas/sponsoring-gas) for smart accounts. But for the purpose of this example, and because we're using a testnet, let's fund the account using the [Alchemy Faucet](https://sepoliafaucet.com). Make sure to log in with Alchemy to receive your testnet tokens.
 
@@ -121,7 +121,7 @@ At scale, you might consider using our Gas Manager to [sponsor UserOperations](/
 
 ## 4. Send a User Operation Using Account Kit
 
-Finally, let's deploy the newly funded smart account and send a `UserOperation` on its behalf.
+Finally, let's deploy the newly funded smart account and send a UO on its behalf.
 
 <<< @/snippets/getting-started/send-user-operation.ts
 
@@ -140,9 +140,9 @@ Transaction Hash: 0xYOUR_TXN_HASH
 ```
 
 :::tip Note
-The `UserOperation` Hash is what our [Bundler](https://github.com/alchemyplatform/rundler) returns once it submits the `UserOperation` to the Blockchain on behalf of your smart account.
+The UO hash is what our [Bundler](https://github.com/alchemyplatform/rundler) returns once it submits the UO to the Blockchain on behalf of your smart account.
 
-To know when the `UserOperation` is mined on a blockchain in order query information about it, you'll want to use the `Transaction Hash`.
+To know when the UO is mined on a blockchain in order query information about it, you'll want to use the `Transaction Hash`.
 :::
 
 :::tip Handling Errors
@@ -158,7 +158,7 @@ Since this "Getting Started" example is a simple script, you'll need to consider
 
 ## 5. Dive Deeper
 
-In this guide, we initialized an `AlchemyProvider` with the `aa-alchemy` package to send a `UserOperation`. However, you can do a lot more with Account Kit and its many packages.
+In this guide, we initialized an `AlchemyProvider` with the `aa-alchemy` package to send a UO. However, you can do a lot more with Account Kit and its many packages.
 
 1. To learn more about the different packages and their use cases, check out the ["Packages Overview"](/overview/package-overview) page.
 

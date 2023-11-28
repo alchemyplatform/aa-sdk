@@ -14,7 +14,7 @@ head:
 
 # getUserOperationHash
 
-Generates a hash for a UserOperation valid from entrypoint version 0.6 onwards
+Generates a hash for a `UserOperation` (UO) valid from entrypoint version 0.6 onwards
 
 ## Usage
 
@@ -45,12 +45,12 @@ The hash of the user operation
 
 ### `request: UserOperationRequest`
 
-The UserOperation to hash
+The UO to hash
 
 ### `entrypointAddress: Address`
 
-The entrypoint address to use for the UserOperation
+The entrypoint address to use for the UO
 
 ### `chainId: bigint`
 
-The chainId that this UserOperation will be submitted to
+The chainId that this UO will be submitted to

@@ -85,7 +85,7 @@ An updated instance of the provider, which now uses the overridden `dummyPaymast
 
 ## `dummyPaymasterDataMiddleware`
 
-The `dummyPaymasterDataMiddleware` is a readonly field on the `ISmartAccountProvider` interface that represents the default dummy paymaster data middleware. It's used to set the `paymasterAndData` fields on a `UserOperation`.
+The `dummyPaymasterDataMiddleware` is a readonly field on the `ISmartAccountProvider` interface that represents the default dummy paymaster data middleware. It's used to set the `paymasterAndData` fields on a `UserOperation` (UO).
 
 You can access the current dummy paymaster data middleware configuration for the provider via:
 
@@ -96,7 +96,7 @@ const currentDummyPaymasterDataMiddleware =
 
 ## `paymasterDataMiddleware`
 
-The `paymasterDataMiddleware` is a readonly field on the `ISmartAccountProvider` interface that represents the default paymaster data middleware. It's used to set the `paymasterAndData` field on a `UserOperation`.
+The `paymasterDataMiddleware` is a readonly field on the `ISmartAccountProvider` interface that represents the default paymaster data middleware. It's used to set the `paymasterAndData` field on a UO.
 
 You can access the current paymaster data middleware configuration for the provider via:
 
