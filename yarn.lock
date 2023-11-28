@@ -3090,10 +3090,10 @@
   resolved "https://registry.yarnpkg.com/@magic-sdk/commons/-/commons-16.1.1.tgz#fd9394552389b629f9d34bceca606d8f46fe3b15"
   integrity sha512-ZNknl69zTYIdo4rLO9I8yk4pTSTczZHDXMeZcnLKy992L7arcZ/yGgF9qCqMbp7cOubRRVImFH2jLMM/DeO85w==
 
-"@magic-sdk/commons@^17.2.0":
-  version "17.2.0"
-  resolved "https://registry.yarnpkg.com/@magic-sdk/commons/-/commons-17.2.0.tgz#b125d15e4d096ad9e94171635b6b6c408314105f"
-  integrity sha512-+NkPL9r1twzgaPp94+ykF0T3pU2GHVCJup4YjdOiGWMngqqJ50aLKi0dgaNjV77VA9svxWI5NnKgaiwWkNSUyQ==
+"@magic-sdk/commons@^17.3.0":
+  version "17.3.0"
+  resolved "https://registry.yarnpkg.com/@magic-sdk/commons/-/commons-17.3.0.tgz#cd072091fa8987863a15d513f3dd7f0d37a322b8"
+  integrity sha512-pFn42BuevncBNHhKl5ehWL3yPkkQAzugj1uF5OxS6WoyLhWdWE6RTcIEA5fz6BB/C+mWSo6cHCXSmofznq5irw==
 
 "@magic-sdk/provider@^20.1.1":
   version "20.1.1"
@@ -3104,10 +3104,10 @@
     eventemitter3 "^4.0.4"
     web3-core "1.5.2"
 
-"@magic-sdk/provider@^21.2.0":
-  version "21.2.0"
-  resolved "https://registry.yarnpkg.com/@magic-sdk/provider/-/provider-21.2.0.tgz#29c8c828bab689f4cb2220cffc241a8b3d1e601b"
-  integrity sha512-zrQKYXra9eCfdRagA7hoXs99gYV/OmtdXm1PNy1dkq8iVY+Hltlk4zCkkFr2qMcroRrMId4Ajbtuar65xxb+GA==
+"@magic-sdk/provider@^21.3.0":
+  version "21.3.0"
+  resolved "https://registry.yarnpkg.com/@magic-sdk/provider/-/provider-21.3.0.tgz#df7416e037776b9df431487c600fe95ea985cd97"
+  integrity sha512-yUqMpPMLUlj9aDdYNc41QhLwhKHBOox81tADfngUDLcWYrnMGsVKimNiE76BlR+fXchqTk0V+aRfdaWGTnTy7Q==
   dependencies:
     "@magic-sdk/types" "^17.2.0"
     eventemitter3 "^4.0.4"
@@ -9631,13 +9631,13 @@ magic-sdk@^20.1.1:
     "@magic-sdk/types" "^17.0.2"
     localforage "^1.7.4"
 
-magic-sdk@^21.2.0:
-  version "21.2.0"
-  resolved "https://registry.yarnpkg.com/magic-sdk/-/magic-sdk-21.2.0.tgz#7bd7749be7195c654ee1456da2b346f844005f6d"
-  integrity sha512-Sb9aj7CZAjJpUHMFGLGxq+0lAo+NydpQ68/8ZRUILzswKdg0Q0B/slo3F9WH2F1zakaIdjsUusCekg1LqiNALg==
+magic-sdk@^21.3.0:
+  version "21.3.0"
+  resolved "https://registry.yarnpkg.com/magic-sdk/-/magic-sdk-21.3.0.tgz#5a3c5631e477ef6817c98484f09960c2ba0e21a9"
+  integrity sha512-Z17ASQyw+D+iLgy4uqWdcxcatC+npOsMYYQCLJeoEV5axLZJi5JUCVPljWwGjnNBSXni0zm8qwJvrY8g/H+Zog==
   dependencies:
-    "@magic-sdk/commons" "^17.2.0"
-    "@magic-sdk/provider" "^21.2.0"
+    "@magic-sdk/commons" "^17.3.0"
+    "@magic-sdk/provider" "^21.3.0"
     "@magic-sdk/types" "^17.2.0"
     localforage "^1.7.4"
 

@@ -3,18 +3,18 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: MagicSigner • getDetails
+      content: MagicSigner • getAuthDetails
   - - meta
     - name: description
-      content: Overview of the getDetails method on MagicSigner
+      content: Overview of the getAuthDetails method on MagicSigner
   - - meta
     - property: og:description
-      content: Overview of the getDetails method on MagicSigner
+      content: Overview of the getAuthDetails method on MagicSigner
 ---
 
-# getDetails
+# getAuthDetails
 
-`getDetails` returns the details about the authenticated user, in accordance with the `Magic` web SDK's [specifications](https://magic.link/docs/api/client-side-sdks/web#getinfo).
+`getAuthDetails` returns the details about the authenticated user, in accordance with the `Magic` web SDK's [specifications](https://magic.link/docs/api/client-side-sdks/web#getinfo).
 
 This method must be called after [`authenticate`](/packages/aa-signers/magic/authenticate). Otherwise, this method will throw an error with the message `Not Authenticated`.
 
@@ -27,7 +27,7 @@ import { createMagicSigner } from "./magic";
 // [!code focus:99]
 const magicSigner = await createMagicSigner();
 
-const details = await magicSigner.getDetails();
+const details = await magicSigner.getAuthDetails();
 ```
 
 <<< @/snippets/magic.ts

@@ -640,7 +640,7 @@ export default defineConfig({
               { text: "getAddress", link: "/getAddress" },
               { text: "signMessage", link: "/signMessage" },
               { text: "signTypedData", link: "/signTypedData" },
-              { text: "getDetails", link: "/getDetails" },
+              { text: "getAuthDetails", link: "/getAuthDetails" },
             ],
           },
           { text: "Contributing", link: "/contributing" },

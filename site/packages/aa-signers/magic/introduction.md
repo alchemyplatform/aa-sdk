@@ -22,7 +22,7 @@ head:
 2.  [`getAddress`](/packages/aa-signers/magic/getAddress) -- supports typed data signatures from the smart contract account's owner address.
 3.  [`signMessage`](/packages/aa-signers/magic/signMessage) -- supports message signatures.
 4.  [`signTypedData`](/packages/aa-signers/magic/signTypedData) -- supports typed data signatures.
-5.  [`getDetails`](/packages/aa-signers/magic/getDetails) -- supports authentication details retrieval.
+5.  [`getAuthDetails`](/packages/aa-signers/magic/getAuthDetails) -- supports authentication details retrieval.
 
 ## Install Dependencies
 
@@ -56,7 +56,7 @@ await magicSigner.authenticate(authParams);
 
 const address = await magicSigner.getAddress();
 
-const details = await magicSigner.getDetails();
+const details = await magicSigner.getAuthDetails();
 
 const signedMessage = await magicSigner.signMessage("test");
 
