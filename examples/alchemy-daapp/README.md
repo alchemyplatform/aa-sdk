@@ -73,6 +73,6 @@ We welcome contributions to the examples/alchemy-daapp repo! If you would like t
 2. Create a new branch for your changes
 3. Make your changes and commit them
 4. Push your changes to your forked repository
-5. Submit a pull request to the examples/aa-sdk repo
+5. Submit a pull request to the `examples/aa-sdk` repo
 
 Please ensure that your code follows our coding standards and that you have added appropriate tests for your changes. We appreciate your contributions and look forward to working with you.

@@ -63,7 +63,7 @@ export default defineConfig({
         items: [
           { text: "Overview", link: "/overview" },
           {
-            text: "Choosing a smart account",
+            text: "Choosing a Smart Account",
             base: "/smart-accounts/accounts",
             items: [
               { text: "Introduction", link: "/choosing-a-smart-account" },
@@ -134,7 +134,7 @@ export default defineConfig({
           },
           { text: "How to Batch Transactions", link: "/batching-transactions" },
           {
-            text: "How to transfer ownership of a smart account",
+            text: "How to Transfer Ownership of a Smart Account",
             link: "/transferring-ownership",
           },
           {
@@ -146,11 +146,11 @@ export default defineConfig({
             base: "/guides/enhanced-apis",
             items: [
               {
-                text: "How to fetch a smart account's NFTs",
+                text: "How to Fetch a Smart Account's NFTs",
                 link: "/nft",
               },
               {
-                text: "How to fetch a smart account's ERC-20 Tokens",
+                text: "How to Fetch a Smart Account's ERC-20 Tokens",
                 link: "/token",
               },
             ],
