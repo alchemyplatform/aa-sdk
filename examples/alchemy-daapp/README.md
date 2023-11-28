@@ -58,7 +58,7 @@ yarn dev
 ```
 
 ## How This Works
-The [`onboarding-controller.ts`](https://github.com/alchemyplatform/aa-sdk/blob/master/examples/alchemy-daapp/src/surfaces/onboarding/OnboardingController.ts) file contains the onboarding controller, which handles the onboarding process for new users. The controller uses aa-sdk to create a new account and mint an NFT.
+The [`onboarding-controller.ts`](https://github.com/alchemyplatform/aa-sdk/blob/master/examples/alchemy-daapp/src/surfaces/onboarding/OnboardingController.ts) file contains the onboarding controller, which handles the onboarding process for new users. The controller uses `aa-sdk` to create a new account and mint an NFT.
 
 In the [`clientConfigs.ts`](https://github.com/alchemyplatform/aa-sdk/blob/main/examples/alchemy-daapp/src/configs/clientConfigs.ts) file, you will find the configuration for the DAApp, including the nft contract address, light account factory address, gas manager policy id, rpc url, and chain. You'll also find an example NFT contract in [`examples/contracts/DAAppNFT`](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/contracts/DAAppNFT)
 
