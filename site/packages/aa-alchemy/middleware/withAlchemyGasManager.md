@@ -53,4 +53,4 @@ A new instance of an `AlchemyProvider` with the same attributes as the input, no
 
 - `policyId: string` -- the Gas Manager policy ID
 
-### `delegateGasEstimation: boolean` -- a flag to additionally estimate gas as part of
+### `delegateGasEstimation: boolean` -- a flag to additionally estimate gas as part of requesting paymaster and data
