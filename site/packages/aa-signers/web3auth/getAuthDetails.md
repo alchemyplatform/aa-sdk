@@ -3,18 +3,18 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Web3AuthSigner • getDetails
+      content: Web3AuthSigner • getAuthDetails
   - - meta
     - name: description
-      content: Overview of the getDetails method on Web3AuthSigner
+      content: Overview of the getAuthDetails method on Web3AuthSigner
   - - meta
     - property: og:description
-      content: Overview of the getDetails method on Web3AuthSigner
+      content: Overview of the getAuthDetails method on Web3AuthSigner
 ---
 
-# getDetails
+# getAuthDetails
 
-`getDetails` returns the details about the authenticated user, in accordance with the `Web3AuthSigner` web SDK's [specifications](https://web3auth.io/docs/sdk/pnp/web/modal/usage#getuserinfo).
+`getAuthDetails` returns the details about the authenticated user, in accordance with the `Web3AuthSigner` web SDK's [specifications](https://web3auth.io/docs/sdk/pnp/web/modal/usage#getuserinfo).
 
 This method must be called after [`authenticate`](/packages/aa-signers/web3auth/authenticate). Otherwise, this method will throw an error with the message `Not Authenticated`.
 
@@ -27,7 +27,7 @@ import { createWeb3AuthSigner } from "./web3auth";
 // [!code focus:99]
 const web3AuthSigner = await createWeb3AuthSigner();
 
-const details = await web3AuthSigner.getDetails();
+const details = await web3AuthSigner.getAuthDetails();
 ```
 
 <<< @/snippets/web3auth.ts
