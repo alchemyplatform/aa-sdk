@@ -38,23 +38,23 @@ export const bigIntMin = (...args: bigint[]) => {
  */
 export const bigIntClamp = (
   value: BigNumberish,
-  lower?: BigNumberish,
-  upper?: BigNumberish
+  lower: BigNumberish | null | undefined,
+  upper: BigNumberish | null | undefined
 ) => {
-  lower = lower ? BigInt(lower) : undefined;
-  upper = upper ? BigInt(upper) : undefined;
+  lower = lower != null ? BigInt(lower) : null;
+  upper = upper != null ? BigInt(upper) : null;
 
-  if (upper !== undefined && lower !== undefined && upper < lower) {
+  if (upper != null && lower != null && upper < lower) {
     throw new Error(
       `invalid range: upper bound ${upper} is less than lower bound ${lower}`
     );
   }
 
   let ret = BigInt(value);
-  if (lower !== undefined && lower > ret) {
+  if (lower != null && lower > ret) {
     ret = lower;
   }
-  if (upper !== undefined && upper < ret) {
+  if (upper != null && upper < ret) {
     ret = upper;
   }
   return ret;

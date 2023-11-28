@@ -46,7 +46,12 @@ export type UserOperationFeeOptions = z.infer<
 export type UserOperationOverrides = Partial<
   Pick<
     UserOperationStruct,
-    "maxFeePerGas" | "maxPriorityFeePerGas" | "paymasterAndData"
+    | "callGasLimit"
+    | "maxFeePerGas"
+    | "maxPriorityFeePerGas"
+    | "paymasterAndData"
+    | "preVerificationGas"
+    | "verificationGasLimit"
   >
 >;
 

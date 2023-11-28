@@ -13,6 +13,7 @@ import {
   getDefaultSimpleAccountFactoryAddress,
   type SmartAccountSigner,
   type UserOperationFeeOptions,
+  type UserOperationOverrides,
 } from "../src/index.js";
 import { SmartAccountProvider } from "../src/provider/base.js";
 import { LocalAccountSigner } from "../src/signer/local-account.js";
@@ -67,7 +68,7 @@ describe("Simple Account Tests", () => {
     expect(isAddress(await address)).toBe(true);
   });
 
-  it("should correctly handle provider feeOptions set during init", async () => {
+  it("should correctly handle percentage overrides for buildUserOperation", async () => {
     const signer = givenConnectedProvider({
       owner,
       chain,
@@ -112,6 +113,25 @@ describe("Simple Account Tests", () => {
     expect(preVerificationGasWithFeeOptions).toBeGreaterThan(
       preVerificationGas!
     );
+  }, 60000);
+
+  it("should correctly handle absolute overrides for sendUserOperation", async () => {
+    const signer = givenConnectedProvider({ owner, chain });
+
+    const overrides: UserOperationOverrides = {
+      preVerificationGas: 100_000_000n,
+    };
+    const promise = signer.buildUserOperation(
+      {
+        target: await signer.getAddress(),
+        data: "0x",
+      },
+      overrides
+    );
+    await expect(promise).resolves.not.toThrowError();
+
+    const struct = await promise;
+    expect(struct.preVerificationGas).toBe(100_000_000n);
   }, 60000);
 
   it("should correctly handle percentage overrides for sendUserOperation", async () => {

@@ -20,7 +20,7 @@ export const ChainSchema = z.custom<Chain>((chain) => {
 });
 
 export const HexSchema = z.custom<`0x${string}` | "0x">((val) => {
-  return isHex(val) || val === "0x";
+  return isHex(val);
 });
 
 export const BigNumberishSchema = z.union([HexSchema, z.number(), z.bigint()]);

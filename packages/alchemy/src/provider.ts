@@ -2,21 +2,14 @@ import {
   SmartAccountProvider,
   createPublicErc4337Client,
   deepHexlify,
-  resolveProperties,
-  type AccountMiddlewareFn,
   type BatchUserOperationCallData,
   type UserOperationCallData,
   type UserOperationOverrides,
 } from "@alchemy/aa-core";
 import { Alchemy } from "alchemy-sdk";
 import { type HttpTransport } from "viem";
-import {
-  arbitrum,
-  arbitrumGoerli,
-  optimism,
-  optimismGoerli,
-} from "viem/chains";
 import { SupportedChains } from "./chains.js";
+import { getDefaultUserOperationFeeOptions } from "./defaults.js";
 import type { ClientWithAlchemyMethods } from "./middleware/client.js";
 import { withAlchemyGasFeeEstimator } from "./middleware/gas-fees.js";
 import {
@@ -31,15 +24,12 @@ import {
 import type { AlchemyProviderConfig } from "./type.js";
 
 export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
-  private pvgBuffer: bigint;
-  private feeOptsSet: boolean;
   private rpcUrl: string;
 
   constructor(config: AlchemyProviderConfig) {
     AlchemyProviderConfigSchema.parse(config);
 
-    const { chain, entryPointAddress, opts, feeOpts, ...connectionConfig } =
-      config;
+    const { chain, entryPointAddress, opts, ...connectionConfig } = config;
     const _chain =
       typeof chain === "number" ? SupportedChains.get(chain) : chain;
     if (!_chain || !_chain.rpcUrls["alchemy"]) {
@@ -63,52 +53,20 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
       }),
     });
 
+    const feeOptions =
+      config.opts?.feeOptions ?? getDefaultUserOperationFeeOptions(_chain);
+
     super({
       rpcProvider: client,
       entryPointAddress,
       chain: _chain,
-      opts,
+      opts: { ...opts, feeOptions },
     });
 
-    withAlchemyGasFeeEstimator(
-      this,
-      feeOpts?.baseFeeBufferPercent ?? 50n,
-      feeOpts?.maxPriorityFeeBufferPercent ?? 5n
-    );
-
-    if (feeOpts?.preVerificationGasBufferPercent) {
-      this.pvgBuffer = feeOpts?.preVerificationGasBufferPercent;
-    } else if (
-      new Set<number>([
-        arbitrum.id,
-        arbitrumGoerli.id,
-        optimism.id,
-        optimismGoerli.id,
-      ]).has(this.chain.id)
-    ) {
-      this.pvgBuffer = 5n;
-    } else {
-      this.pvgBuffer = 0n;
-    }
-
-    this.feeOptsSet = !!feeOpts;
     this.rpcUrl = rpcUrl;
+
+    withAlchemyGasFeeEstimator(this);
   }
-
-  override gasEstimator: AccountMiddlewareFn = async (struct) => {
-    const request = deepHexlify(await resolveProperties(struct));
-    const estimates = await this.rpcClient.estimateUserOperationGas(
-      request,
-      this.getEntryPointAddress()
-    );
-    estimates.preVerificationGas =
-      (BigInt(estimates.preVerificationGas) * (100n + this.pvgBuffer)) / 100n;
-
-    return {
-      ...struct,
-      ...estimates,
-    };
-  };
 
   simulateUserOperationAssetChanges = async (
     data: UserOperationCallData | BatchUserOperationCallData,
@@ -128,9 +86,17 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
    * This methods adds the Alchemy Gas Manager middleware to the provider.
    *
    * @param config - the Alchemy Gas Manager configuration
+   * @param delegateGasEstimation - whether to delegate the gas estimation entirely to bundler
+   *
+   * Note that with delegateGasEstimation set to true, the gas estimation middleware will be no-op'd
+   * and fee options set upon provider init will be ignored.
+   *
    * @returns {AlchemyProvider} - a new AlchemyProvider with the Gas Manager middleware
    */
-  withAlchemyGasManager(config: AlchemyGasManagerConfig): this {
+  withAlchemyGasManager(
+    config: AlchemyGasManagerConfig,
+    delegateGasEstimation: boolean = true
+  ): AlchemyProvider {
     if (!this.isConnected()) {
       throw new Error(
         "AlchemyProvider: account is not set, did you call `connect` first?"
@@ -138,7 +104,7 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
     }
 
     return withAlchemyGasManager(this, config, {
-      estimateGas: !this.feeOptsSet,
+      estimateGas: delegateGasEstimation,
     });
   }
 

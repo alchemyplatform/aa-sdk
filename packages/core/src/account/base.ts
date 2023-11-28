@@ -232,6 +232,7 @@ export abstract class BaseSmartContractAccount<
     if (this.deploymentState === DeploymentState.DEPLOYED) {
       return "0x";
     }
+
     const contractCode = await this.rpcProvider.getBytecode({
       address: await this.getAddress(),
     });
