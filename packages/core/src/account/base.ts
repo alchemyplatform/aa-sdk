@@ -249,14 +249,14 @@ export abstract class BaseSmartContractAccount<
   async getAddress(): Promise<Address> {
     if (!this.accountAddress) {
       const initCode = await this._getAccountInitCode();
-      Logger.debug(
+      Logger.verbose(
         "[BaseSmartContractAccount](getAddress) initCode: ",
         initCode
       );
       try {
         await this.entryPoint.simulate.getSenderAddress([initCode]);
       } catch (err: any) {
-        Logger.debug(
+        Logger.verbose(
           "[BaseSmartContractAccount](getAddress) entrypoint.getSenderAddress result: ",
           err
         );
@@ -329,7 +329,7 @@ export abstract class BaseSmartContractAccount<
     const [factoryAddress, factoryCalldata] =
       await this.parseFactoryAddressFromAccountInitCode();
 
-    Logger.debug(
+    Logger.verbose(
       `[BaseSmartContractAccount](create6492Signature)\
         factoryAddress: ${factoryAddress}, factoryCalldata: ${factoryCalldata}`
     );

@@ -396,15 +396,19 @@ export class SmartAccountProvider<
     const { maxFeePerGas, maxPriorityFeePerGas } =
       await this._runMiddlewareStack(uoToSubmit, overrides);
 
+    const _maxPriorityFeePerGas = bigIntMax(
+      BigInt(maxPriorityFeePerGas ?? 0n),
+      bigIntPercent(uoToDrop.maxPriorityFeePerGas, 110n)
+    );
     const _overrides: UserOperationOverrides = {
       maxFeePerGas: bigIntMax(
         BigInt(maxFeePerGas ?? 0n),
-        bigIntPercent(uoToDrop.maxFeePerGas, 110n)
+        bigIntPercent(
+          BigInt(uoToDrop.maxFeePerGas) - _maxPriorityFeePerGas,
+          110n
+        ) + _maxPriorityFeePerGas
       ),
-      maxPriorityFeePerGas: bigIntMax(
-        BigInt(maxPriorityFeePerGas ?? 0n),
-        bigIntPercent(uoToDrop.maxPriorityFeePerGas, 110n)
-      ),
+      maxPriorityFeePerGas: _maxPriorityFeePerGas,
       paymasterAndData: uoToDrop.paymasterAndData,
     };
 
