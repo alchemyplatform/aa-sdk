@@ -97,6 +97,25 @@ export function deepHexlify(obj: any): any {
   );
 }
 
+export function applyUserOperationOverride(
+  value: BigNumberish | undefined,
+  override?: BigNumberish | Percentage
+): BigNumberish | undefined {
+  if (override == null) {
+    return value;
+  }
+
+  if (isBigNumberish(override)) {
+    return override;
+  }
+  // percentage override
+  else {
+    return value != null
+      ? bigIntPercent(value, BigInt(100 + override.percentage))
+      : value;
+  }
+}
+
 export function applyFeeOption(
   value: BigNumberish | undefined,
   feeOption?: UserOperationFeeOptionsField
@@ -104,7 +123,7 @@ export function applyFeeOption(
   if (feeOption == null) {
     return value ?? 0n;
   }
-  return value
+  return value != null
     ? bigIntClamp(
         feeOption.percentage
           ? bigIntPercent(value, BigInt(100 + feeOption.percentage))
@@ -183,11 +202,11 @@ export function defineReadOnly<T, K extends keyof T>(
 }
 
 export function isBigNumberish(x: any): x is BigNumberish {
-  return BigNumberishSchema.safeParse(x).success;
+  return x != null && BigNumberishSchema.safeParse(x).success;
 }
 
 export function isPercentage(x: any): x is Percentage {
-  return PercentageSchema.safeParse(x).success;
+  return x != null && PercentageSchema.safeParse(x).success;
 }
 
 export function filterUndefined(

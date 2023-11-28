@@ -50,6 +50,7 @@ export type * from "./utils/index.js";
 export {
   ChainSchema,
   applyFeeOption,
+  applyUserOperationOverride,
   asyncPipe,
   bigIntMax,
   bigIntPercent,
