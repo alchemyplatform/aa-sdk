@@ -73,7 +73,7 @@ const provider = new AlchemyProvider({
   (rpcClient) =>
     new LightSmartContractAccount({
       chain,
-      owner: new createWeb3AuthSigner(),
+      owner: await createWeb3AuthSigner(),
       factoryAddress: getDefaultLightAccountFactoryAddress(chain),
       rpcClient,
     })
