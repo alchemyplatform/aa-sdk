@@ -23,7 +23,7 @@ next:
 
 # Package Overview
 
-Account Kit is comprised of a number of smaller packages that you can leverage to interact with [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) infrastructure. For almost all cases, `aa-core` is sufficient with the subsequent packages offering various utilities for interacting with specific Account Abstraction Infrastructure or smart accounts.
+Account Kit is comprised of a number of SDK packages that you can leverage to interact with [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) infrastructure. For almost all cases, `aa-core` is sufficient with the subsequent packages offering various utilities for interacting with specific Account Abstraction Infrastructure or smart accounts.
 
 ## [`aa-core`](/packages/aa-core/)
 
