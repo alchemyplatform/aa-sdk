@@ -6,6 +6,8 @@ import {
   type UserOperationFeeOptions,
 } from "@alchemy/aa-core";
 import {
+  decodeFunctionResult,
+  encodeFunctionData,
   isAddress,
   toHex,
   type Address,
@@ -15,6 +17,8 @@ import {
 } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import { sepolia } from "viem/chains";
+import { MultiOwnerPluginAbi } from "../../../plugindefs/multi-owner/abi.js";
+import { MultiOwnerPluginAddress } from "../../../plugindefs/multi-owner/config.js";
 import {
   createLightAccountProvider,
   LightSmartContractAccount,
@@ -194,6 +198,56 @@ describe("Light Account Tests", () => {
 
     expect(newOwnerViaProvider).not.toBe(oldOwner);
     expect(newOwnerViaProvider).toBe(newOwner);
+  }, 100000);
+
+  it("should upgrade account to msca successfully", async () => {
+    // create a throwaway address
+    const throwawayOwner = LocalAccountSigner.privateKeyToAccountSigner(
+      generatePrivateKey()
+    );
+    const throwawayProvider = givenConnectedProvider({
+      owner: throwawayOwner,
+      chain,
+    });
+
+    const result = await throwawayProvider.sendUserOperation({
+      target: await throwawayProvider.getAddress(),
+      data: "0x",
+    });
+    await throwawayProvider.waitForUserOperationTransaction(result.hash);
+
+    const { provider } = await LightSmartContractAccount.upgrade(
+      throwawayProvider,
+      true
+    );
+
+    const { data } = await throwawayProvider.rpcClient.call({
+      account: await provider.getAddress(),
+      to: MultiOwnerPluginAddress,
+      data: encodeFunctionData({
+        abi: MultiOwnerPluginAbi,
+        functionName: "ownersOf",
+        args: [await provider.account.getAddress()],
+      }),
+    });
+
+    if (!data) {
+      throw new Error("Data is undefined");
+    }
+
+    const owners = decodeFunctionResult({
+      abi: MultiOwnerPluginAbi,
+      functionName: "ownersOf",
+      data,
+    });
+
+    console.log(owners);
+
+    expect(await throwawayProvider.getAddress()).toBe(
+      await provider.getAddress()
+    );
+
+    expect(owners).toContain(await throwawayOwner.getAddress());
   }, 100000);
 });
 

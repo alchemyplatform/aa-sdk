@@ -10,7 +10,7 @@ import {
   encodeAbiParameters,
   encodeFunctionData,
   keccak256,
-  slice,
+  trim,
   type Address,
   type FallbackTransport,
   type Hash,
@@ -20,7 +20,7 @@ import {
 import { MultiOwnerPluginAbi } from "../../plugindefs/multi-owner/abi.js";
 import { MultiOwnerPluginAddress } from "../../plugindefs/multi-owner/config.js";
 import { UpgradeableModularAccountAbi } from "../msca/abis/UpgradeableModularAccount.js";
-import type { MSCA } from "../msca/builder.js";
+import type { IMSCA } from "../msca/builder.js";
 import { createMultiOwnerMSCA } from "../msca/multi-owner-account.js";
 import { LightAccountAbi } from "./abis/LightAccountAbi.js";
 import { LightAccountFactoryAbi } from "./abis/LightAccountFactoryAbi.js";
@@ -30,7 +30,8 @@ export class LightSmartContractAccount<
 > extends SimpleSmartContractAccount<TTransport> {
   static readonly implementationAddress =
     "0x5467b1947f47d0646704eb801e075e72aeae8113";
-  static readonly storageSlot = "0x5467b1947f47d0646704eb801e075e72aeae8113";
+  static readonly storageSlot =
+    "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc";
 
   override async signTypedData(params: SignTypedDataParams): Promise<Hash> {
     return this.owner.signTypedData(params);
@@ -77,7 +78,7 @@ export class LightSmartContractAccount<
   ): Promise<{
     hash: Hash;
     provider: SmartAccountProvider<TTransport> & {
-      account: MSCA;
+      account: IMSCA;
     };
   }> {
     const accountAddress = await provider.getAddress();
@@ -89,10 +90,7 @@ export class LightSmartContractAccount<
 
     if (
       storage == null ||
-      !(
-        slice(storage, storage.length - 40) ===
-        LightSmartContractAccount.implementationAddress
-      )
+      !(trim(storage) === LightSmartContractAccount.implementationAddress)
     ) {
       throw new Error(
         "could not determine if smart account implementation is light account"
@@ -145,13 +143,18 @@ export class LightSmartContractAccount<
       hash = await provider.waitForUserOperationTransaction(result.hash);
     }
 
+    const owner = provider.account.getOwner();
+    if (owner == null) {
+      throw new Error("could not get owner");
+    }
+
     return {
       hash,
       provider: provider.connect((rpcClient) =>
         createMultiOwnerMSCA({
           rpcClient,
           factoryAddress: "0xFD14c78640d72f73CC88238E2f7Df3273Ee84043", // MSCA factory address
-          owner: provider.account.owner,
+          owner,
           index: 0n,
           chain: provider.chain,
         })
