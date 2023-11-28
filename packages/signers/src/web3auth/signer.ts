@@ -60,7 +60,16 @@ export class Web3AuthSigner
     return this.signer.signTypedData(params);
   };
 
-  authenticate = async (params: Web3AuthAuthenticationParams) => {
+  authenticate = async (
+    params: Web3AuthAuthenticationParams = {
+      init: async () => {
+        await this.inner.initModal();
+      },
+      connect: async () => {
+        await this.inner.connect();
+      },
+    }
+  ) => {
     await params.init();
     await params.connect();
 
