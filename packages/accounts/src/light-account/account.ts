@@ -7,19 +7,31 @@ import {
 import {
   concatHex,
   decodeFunctionResult,
+  encodeAbiParameters,
   encodeFunctionData,
+  keccak256,
+  slice,
   type Address,
   type FallbackTransport,
   type Hash,
   type Hex,
   type Transport,
 } from "viem";
+import { MultiOwnerPluginAbi } from "../../plugindefs/multi-owner/abi.js";
+import { MultiOwnerPluginAddress } from "../../plugindefs/multi-owner/config.js";
+import { UpgradeableModularAccountAbi } from "../msca/abis/UpgradeableModularAccount.js";
+import type { MSCA } from "../msca/builder.js";
+import { createMultiOwnerMSCA } from "../msca/multi-owner-account.js";
 import { LightAccountAbi } from "./abis/LightAccountAbi.js";
 import { LightAccountFactoryAbi } from "./abis/LightAccountFactoryAbi.js";
 
 export class LightSmartContractAccount<
   TTransport extends Transport | FallbackTransport = Transport
 > extends SimpleSmartContractAccount<TTransport> {
+  static readonly implementationAddress =
+    "0x5467b1947f47d0646704eb801e075e72aeae8113";
+  static readonly storageSlot = "0x5467b1947f47d0646704eb801e075e72aeae8113";
+
   override async signTypedData(params: SignTypedDataParams): Promise<Hash> {
     return this.owner.signTypedData(params);
   }
@@ -53,6 +65,98 @@ export class LightSmartContractAccount<
     }
 
     return decodedCallResult;
+  }
+
+  static async upgrade<
+    TTransport extends Transport | FallbackTransport = Transport
+  >(
+    provider: SmartAccountProvider<TTransport> & {
+      account: LightSmartContractAccount<TTransport>;
+    },
+    waitForTxn: boolean = false
+  ): Promise<{
+    hash: Hash;
+    provider: SmartAccountProvider<TTransport> & {
+      account: MSCA;
+    };
+  }> {
+    const accountAddress = await provider.getAddress();
+
+    const storage = await provider.rpcClient.getStorageAt({
+      address: accountAddress,
+      slot: LightSmartContractAccount.storageSlot,
+    });
+
+    if (
+      storage == null ||
+      !(
+        slice(storage, storage.length - 40) ===
+        LightSmartContractAccount.implementationAddress
+      )
+    ) {
+      throw new Error(
+        "could not determine if smart account implementation is light account"
+      );
+    }
+
+    const hashedMultiOwnerPluginManifest = keccak256(
+      encodeFunctionData({
+        abi: MultiOwnerPluginAbi,
+        functionName: "pluginManifest",
+      })
+    );
+
+    const ownerAddress = await provider.account.getOwnerAddress();
+    const encodedOwner = encodeAbiParameters(
+      [{ name: "owner", type: "address" }],
+      [ownerAddress]
+    );
+
+    const encodedPluginInitData = encodeAbiParameters(
+      [
+        { name: "manifestHashes", type: "bytes32[]" },
+        { name: "pluginInstallDatas", type: "bytes[]" },
+      ],
+      [[hashedMultiOwnerPluginManifest], [encodedOwner]]
+    );
+
+    const encodeMSCAInitializeData = encodeFunctionData({
+      abi: UpgradeableModularAccountAbi,
+      functionName: "initialize",
+      args: [[MultiOwnerPluginAddress], encodedPluginInitData],
+    });
+
+    const encodeUpgradeData = encodeFunctionData({
+      abi: LightAccountAbi,
+      functionName: "upgradeToAndCall",
+      args: [
+        LightSmartContractAccount.implementationAddress,
+        encodeMSCAInitializeData,
+      ],
+    });
+
+    const result = await provider.sendUserOperation({
+      target: accountAddress,
+      data: encodeUpgradeData,
+    });
+
+    let hash = result.hash;
+    if (waitForTxn) {
+      hash = await provider.waitForUserOperationTransaction(result.hash);
+    }
+
+    return {
+      hash,
+      provider: provider.connect((rpcClient) =>
+        createMultiOwnerMSCA({
+          rpcClient,
+          factoryAddress: "0xFD14c78640d72f73CC88238E2f7Df3273Ee84043", // MSCA factory address
+          owner: provider.account.owner,
+          index: 0n,
+          chain: provider.chain,
+        })
+      ),
+    };
   }
 
   /**

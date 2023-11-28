@@ -81,7 +81,7 @@ export class SmartAccountProvider<
   readonly account?: ISmartContractAccount;
 
   protected entryPointAddress?: Address;
-  protected chain: Chain;
+  readonly chain: Chain;
 
   rpcClient:
     | PublicErc4337Client<TTransport>
