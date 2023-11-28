@@ -399,30 +399,29 @@ export class SmartAccountProvider<
       signature: uoToDrop.signature,
     } as UserOperationStruct;
 
+    Logger.debug(
+      "[SmartAccountProvider] dropAndReplaceUserOperation uoToSubmit",
+      uoToSubmit
+    );
+
     // Run once to get the fee estimates
     // This can happen at any part of the middleware stack, so we want to run it all
     const { maxFeePerGas, maxPriorityFeePerGas } =
       await this._runMiddlewareStack(uoToSubmit, overrides);
 
-    const _maxPriorityFeePerGas =
-      bigIntMax(
-        BigInt(maxPriorityFeePerGas ?? 0n),
-        bigIntPercent(uoToDrop.maxPriorityFeePerGas, 110n)
-      ) ?? 0n;
     const _overrides: UserOperationOverrides = {
       maxFeePerGas: bigIntMax(
         BigInt(maxFeePerGas ?? 0n),
-        bigIntPercent(
-          BigInt(uoToDrop.maxFeePerGas) - _maxPriorityFeePerGas,
-          110n
-        ) + _maxPriorityFeePerGas
+        bigIntPercent(uoToDrop.maxFeePerGas, 110n)
       ),
-      maxPriorityFeePerGas: _maxPriorityFeePerGas,
+      maxPriorityFeePerGas: bigIntMax(
+        BigInt(maxPriorityFeePerGas ?? 0n),
+        bigIntPercent(uoToDrop.maxPriorityFeePerGas, 110n)
+      ),
       paymasterAndData: uoToDrop.paymasterAndData,
     };
 
     const uoToSend = await this._runMiddlewareStack(uoToSubmit, _overrides);
-
     return this._sendUserOperation(uoToSend);
   };
 
@@ -496,15 +495,9 @@ export class SmartAccountProvider<
   // or extend this class and provider your own implemenation
   readonly dummyPaymasterDataMiddleware: AccountMiddlewareFn = async (
     struct,
-    overrides,
-    feeOptions
+    _overrides,
+    _feeOptions
   ) => {
-    Logger.debug(
-      `[SmartAccountProvider] dummyPaymasterDataMiddleware`,
-      struct,
-      overrides,
-      feeOptions
-    );
     struct.paymasterAndData = "0x";
     return struct;
   };
@@ -512,14 +505,8 @@ export class SmartAccountProvider<
   readonly overridePaymasterDataMiddleware: AccountMiddlewareFn = async (
     struct,
     overrides,
-    feeOptions
+    _feeOptions
   ) => {
-    Logger.debug(
-      `[SmartAccountProvider] overridePaymasterDataMiddleware`,
-      struct,
-      overrides,
-      feeOptions
-    );
     struct.paymasterAndData =
       overrides?.paymasterAndData != null ? overrides?.paymasterAndData : "0x";
     return struct;
@@ -527,15 +514,9 @@ export class SmartAccountProvider<
 
   readonly paymasterDataMiddleware: AccountMiddlewareFn = async (
     struct,
-    overrides,
-    feeOptions
+    _overrides,
+    _feeOptions
   ) => {
-    Logger.debug(
-      `[SmartAccountProvider] paymasterDataMiddleware`,
-      struct,
-      overrides,
-      feeOptions
-    );
     struct.paymasterAndData = "0x";
     return struct;
   };
@@ -545,13 +526,6 @@ export class SmartAccountProvider<
     overrides,
     feeOptions
   ) => {
-    Logger.debug(
-      `[SmartAccountProvider] gasEstimator`,
-      struct,
-      overrides,
-      feeOptions
-    );
-
     let { callGasLimit, verificationGasLimit, preVerificationGas } =
       overrides ?? {};
 
@@ -595,13 +569,6 @@ export class SmartAccountProvider<
     overrides,
     feeOptions
   ) => {
-    Logger.debug(
-      `[SmartAccountProvider] feeDataGetter`,
-      struct,
-      overrides,
-      feeOptions
-    );
-
     const estimateMaxPriorityFeePerGas = async () => {
       const estimate = await this.rpcClient.estimateMaxPriorityFeePerGas();
       return applyFeeOption(estimate, feeOptions?.maxPriorityFeePerGas);

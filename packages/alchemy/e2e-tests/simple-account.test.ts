@@ -3,6 +3,8 @@ import type {
   UserOperationOverrides,
 } from "@alchemy/aa-core";
 import {
+  LogLevel,
+  Logger,
   SimpleSmartContractAccount,
   getDefaultSimpleAccountFactoryAddress,
   type SmartAccountSigner,
@@ -24,6 +26,8 @@ import { API_KEY, OWNER_MNEMONIC, PAYMASTER_POLICY_ID } from "./constants.js";
 
 const chain = sepolia;
 const network = Network.ETH_SEPOLIA;
+
+Logger.setLogLevel(LogLevel.DEBUG);
 
 describe("Simple Account Tests", () => {
   const ownerAccount = mnemonicToAccount(OWNER_MNEMONIC);
@@ -318,7 +322,7 @@ const givenConnectedProvider = ({
       feeOptions: {
         ...feeOptions,
         maxFeePerGas: { percentage: 50 },
-        maxPriorityFeePerGas: { percentage: 5 },
+        maxPriorityFeePerGas: { percentage: 50 },
       },
     },
   }).connect(

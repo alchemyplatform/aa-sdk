@@ -194,7 +194,7 @@ export function filterUndefined(
   obj: Record<string, unknown>
 ): Record<string, unknown> {
   Object.keys(obj).forEach((key) => {
-    if (obj[key] === undefined) {
+    if (obj[key] == null) {
       delete obj[key];
     }
   });
