@@ -68,6 +68,18 @@ export class LightSmartContractAccount<
     return decodedCallResult;
   }
 
+  /**
+   * Upgrades the account implementation from Light Account to a Modular Account.
+   * Optionally waits for the transaction to be mined.
+   *
+   * @param provider - the provider to use to send the transaction
+   * @param waitForTxn - whether or not to wait for the transaction to be mined
+   * @returns {
+   *  provider: SmartAccountProvider<TTransport> & { account: MSCA };
+   *  hash: Hash;
+   * } - the upgraded provider and corresponding userOperation hash,
+   * or transaction hash if `waitForTxn` is true
+   */
   static async upgrade<
     TTransport extends Transport | FallbackTransport = Transport
   >(
@@ -76,10 +88,10 @@ export class LightSmartContractAccount<
     },
     waitForTxn: boolean = false
   ): Promise<{
-    hash: Hash;
     provider: SmartAccountProvider<TTransport> & {
       account: IMSCA;
     };
+    hash: Hash;
   }> {
     const accountAddress = await provider.getAddress();
 
@@ -149,7 +161,6 @@ export class LightSmartContractAccount<
     }
 
     return {
-      hash,
       provider: provider.connect((rpcClient) =>
         createMultiOwnerMSCA({
           rpcClient,
@@ -159,6 +170,7 @@ export class LightSmartContractAccount<
           chain: provider.chain,
         })
       ),
+      hash,
     };
   }
 
