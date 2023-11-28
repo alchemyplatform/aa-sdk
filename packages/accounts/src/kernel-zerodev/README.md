@@ -1,6 +1,6 @@
 # Zerodev Kernel Account API
 
-This module provides a signer + Provider implementation of Zerodev's Kernel V2 on top of `@alchemy/aa-core`
+This module provides a Signer + Provider implementation of Zerodev's Kernel V2 on top of `@alchemy/aa-core`
 
 [What is Kernel V2?](https://docs.zerodev.app/blog/kernel-v2-and-the-lessons-we-learned)
 [Documentation](https://docs.zerodev.app/use-wallets/overview)
@@ -91,8 +91,8 @@ The `KernelAccountProvider` is an [EIP-1193](https://eips.ethereum.org/EIPS/eip-
 The `KernelBaseValidator` is a plugin that modify how transactions are validated. It allows for extension and implementation of arbitrary validation logic. It implements 3 methods:
 
 1. `getAddress` -- this returns the address of the validator
-2. `getOwnerAddress` -- this returns the eligible signer's address for the active smart wallet
-3. `signMessageWithValidatorParams` -- this method signs the userop hash using signer object and then concats additional params based on validator mode.
+2. `getOwnerAddress` -- this returns the eligible Signer's address for the active smart wallet
+3. `signMessageWithValidatorParams` -- this method signs the userop hash using Signer object and then concats additional params based on validator mode.
 
 ## Contributing
 

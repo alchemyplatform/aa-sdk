@@ -6,17 +6,17 @@ head:
       content: Particle Network
   - - meta
     - name: description
-      content: Guide to use Particle Network as a signer
+      content: Guide to use Particle Network as a Signer
   - - meta
     - property: og:description
-      content: Guide to use Particle Network as a signer
+      content: Guide to use Particle Network as a Signer
 ---
 
 # Particle Network
 
 [**Particle Network**](https://particle.network/) is the Intent-Centric, Modular Access Layer of Web3. With Particle's [Smart Wallet-as-a-Service](https://blog.particle.network/announcing-our-smart-wallet-as-a-service-modular-stack-upgrading-waas-with-erc-4337), developers can curate unparalleled user experience through modular and customizable embedded wallet components. By utilizing MPC-TSS for key management, Particle can streamline onboarding via familiar Web2 accounts—such as Google accounts, email addresses, phone numbers, etc.
 
-Leveraging both Particle and Account Kit enables a streamlined onboarding flow, with social logins and signer key management being handled by Particle while Account Kit takes this experience to the next level with account abstraction - facilitating powerful user experience.
+Leveraging both Particle and Account Kit enables a streamlined onboarding flow, with social logins and Signer key management being handled by Particle while Account Kit takes this experience to the next level with account abstraction - facilitating powerful user experience.
 
 ## Integration
 

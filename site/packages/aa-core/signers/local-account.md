@@ -16,7 +16,7 @@ next:
 
 # LocalAccountSigner
 
-The `LocalAccountSigner` allows you to use accounts for which you already have the private key available locally as signers on Smart Contracts. This signer is used with `HDAccount | PrivateKeyAccount | LocalAccount` types from `viem`.
+The `LocalAccountSigner` allows you to use accounts for which you already have the private key available locally as signers on Smart Contracts. This Signer is used with `HDAccount | PrivateKeyAccount | LocalAccount` types from `viem`.
 
 ## Usage
 

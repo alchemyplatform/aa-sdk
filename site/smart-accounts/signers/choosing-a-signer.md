@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Choosing a signer
+      content: Choosing a Signer
   - - meta
     - name: description
       content: Explore Account Kit integration guides for signers including Magic.Link, Privy, Web3Auth, EOAs, and many more!
@@ -12,7 +12,7 @@ head:
       content: Explore Account Kit integration guides for signers including Magic.Link, Privy, Web3Auth, EOAs, and many more!
   - - meta
     - name: twitter:title
-      content: Choosing a signer
+      content: Choosing a Signer
   - - meta
     - name: twitter:description
       content: Explore Account Kit integration guides for signers including Magic.Link, Privy, Web3Auth, EOAs, and many more!
@@ -24,21 +24,21 @@ next:
   link: /guides/send-user-operation
 ---
 
-# What is a signer?
+# What is a Signer?
 
-A **signer** is a service (e.g. Magic or Turnkey) or application (e.g. MetaMask) that manages the private key and signs operations. Most web3 users today use an [Externally Owned Account (EOA)](https://ethereum.org/en/developers/docs/accounts/#externally-owned-accounts-and-key-pairs) with a self-custodial signer such as MetaMask to manage the private key.
+A **Signer** is a service (e.g. Magic or Turnkey) or application (e.g. MetaMask) that manages the private key and signs operations. Most web3 users today use an [Externally Owned Account (EOA)](https://ethereum.org/en/developers/docs/accounts/#externally-owned-accounts-and-key-pairs) with a self-custodial Signer such as MetaMask to manage the private key.
 
 With Account Kit, you will deploy a **smart account** for each user instead of an EOA wallet. This smart account stores the user’s assets (e.g. tokens or NFTs). The default smart account in Account Kit is called [`LightAccount`](/smart-accounts/accounts/light-account) and it uses a typical single-owner architecture.
 
 The smart account is controlled by an **Owner** address. The smart account will only execute a transaction if it was signed by the owner’s private key.
 
-You can choose any signer service or application to manage the Owner private key for the user. Using services like Magic, Turnkey, or Web3auth, you can secure the user’s account with an email, social login, or passkeys. You can also use a self-custodial wallet like MetaMask as the signer.
+You can choose any Signer service or application to manage the Owner private key for the user. Using services like Magic, Turnkey, or Web3auth, you can secure the user’s account with an email, social login, or passkeys. You can also use a self-custodial wallet like MetaMask as the Signer.
 
-This doc provides a basic introduction to signers and the criteria you should consider when choosing which signer to use with Account Kit in your application.
+This doc provides a basic introduction to signers and the criteria you should consider when choosing which Signer to use with Account Kit in your application.
 
-## Role of a signer
+## Role of a Signer
 
-The signer plays a crucial role in your app because it controls the user’s smart account. The signer is responsible for:
+The Signer plays a crucial role in your app because it controls the user’s smart account. The Signer is responsible for:
 
 - Securely storing the user’s private key which controls the user’s assets
 - Authenticating the user
@@ -61,11 +61,11 @@ Account Kit is compatible with any EIP-1193 provider. Many of the most popular s
 - [Lit Protocol](/smart-accounts/signers/lit)
 - [Self-custodial wallets like MetaMask or Ledger](/smart-accounts/signers/eoa)
 
-If you want to use another signer, you can integrate any other signer by wrapping it in an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) provider or using [`SmartAccountSigner`](/smart-accounts/signers/custom-signer#implementing-smartaccountsigner) to adapt non-standard signers.
+If you want to use another Signer, you can integrate any other Signer by wrapping it in an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) provider or using [`SmartAccountSigner`](/smart-accounts/signers/custom-signer#implementing-smartaccountsigner) to adapt non-standard Signer.
 
 ## Criteria to consider
 
-Here are some important criteria to consider when choosing a signer.
+Here are some important criteria to consider when choosing a Signer.
 
 - **Custody model:** Who has access to the private key?
   - Self-Custodial: the end user controls the private key and manually approves signature requests
@@ -77,9 +77,9 @@ Here are some important criteria to consider when choosing a signer.
   - Social Logins: sign up for a smart account with Google, Facebook, or other social logins.
   - Passkeys: sign up for a smart account secured by a passkey (e.g. fingerprint or Face ID) stored on-device.
   - Self Custodial Wallet: sign up for a smart account using a self-custodial wallet such as MetaMask or Ledger.
-- **Availability:** If the signer service provider goes down, will users be able to sign transactions?
-- **Key Export:** Does the signer allow the end user to export their private key? Can the user initiate an export even if the service provider has gone down? This is an important factor to ensure the user retains control of their assets no matter what happens to the service provider.
-- **Key Recovery**: If the user forgets their password or loses their passkey, what recovery methods does the signer provide? If the provider stores a backup copy of the private key or MPC key shares, where are those backups stored and who has access to them?
+- **Availability:** If the Signer service provider goes down, will users be able to sign transactions?
+- **Key Export:** Does the Signer allow the end user to export their private key? Can the user initiate an export even if the service provider has gone down? This is an important factor to ensure the user retains control of their assets no matter what happens to the service provider.
+- **Key Recovery**: If the user forgets their password or loses their passkey, what recovery methods does the Signer provide? If the provider stores a backup copy of the private key or MPC key shares, where are those backups stored and who has access to them?
 
 ## Types of Signers
 
@@ -91,9 +91,9 @@ Non-custodial wallet providers store private keys such that they cannot access t
 
 ### MPC Wallets (non-custodial)
 
-Multi-Party Computation (MPC) signers split the Owner Account private key into key shares that are then distributed to a number of share holders. Share holders only know the value of their key share and transaction holders can sign transactions without revealing their key shares to other holders.
+Multi-Party Computation (MPC) Signers split the Owner Account private key into key shares that are then distributed to a number of share holders. Share holders only know the value of their key share and transaction holders can sign transactions without revealing their key shares to other holders.
 
-Valid signatures do not always require all shares to sign a transaction. MPC signers can set a threshold, requiring a certain number of shares for a signature to be valid. Common configurations are 2 of 2 shares or 2 of 3 shares. By requiring multiple shares, MPC models mitigate the risks associated with a single key being compromised.
+Valid signatures do not always require all shares to sign a transaction. MPC Signers can set a threshold, requiring a certain number of shares for a signature to be valid. Common configurations are 2 of 2 shares or 2 of 3 shares. By requiring multiple shares, MPC models mitigate the risks associated with a single key being compromised.
 
 Some MPC signers provide recovery services in which key share(s) are backed up in the service provider’s cloud, on the end user’s device, or in the end user’s cloud (e.g. iCloud or Google Drive). When evaluating an MPC provider, it’s important to under where each key share is stored.
 

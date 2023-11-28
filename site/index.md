@@ -9,16 +9,16 @@ head:
       content: Account Kit Documentation
   - - meta
     - name: description
-      content: Account Kit is a vertically integrated stack for building apps that support ERC-4337 smart accounts, signer integrations, sponsoring gas, bundlers, and an SDK.
+      content: Account Kit is a vertically integrated stack for building apps that support ERC-4337 smart accounts, Signer integrations, sponsoring gas, bundlers, and an SDK.
   - - meta
     - property: og:description
-      content: Account Kit is a vertically integrated stack for building apps that support ERC-4337 smart accounts, signer integrations, sponsoring gas, bundlers, and an SDK.
+      content: Account Kit is a vertically integrated stack for building apps that support ERC-4337 smart accounts, Signer integrations, sponsoring gas, bundlers, and an SDK.
   - - meta
     - name: twitter:title
       content: Account Kit Documentation
   - - meta
     - name: twitter:description
-      content: Account Kit is a vertically integrated stack for building apps that support ERC-4337 smart accounts, signer integrations, sponsoring gas, bundlers, and an SDK.
+      content: Account Kit is a vertically integrated stack for building apps that support ERC-4337 smart accounts, Signer integrations, sponsoring gas, bundlers, and an SDK.
 titleTemplate: :title Documentation
 # you can also add HTML or Markdown components below the --- line to add custom HTML or Markdown content (eg: https://github.com/wagmi-dev/viem/blob/main/site/index.md?plain=1)
 ---
@@ -52,7 +52,7 @@ titleTemplate: :title Documentation
                 </div>
               </div>
               <div class="text-[22px] font-normal max-md:text-center">
-                Account Kit is a vertically integrated stack for building apps that support ERC-4337: smart accounts, signer integrations, sponsoring gas, bundlers, and an SDK.
+                Account Kit is a vertically integrated stack for building apps that support ERC-4337: smart accounts, Signer integrations, sponsoring gas, bundlers, and an SDK.
               </div>
               <div class="flex flex-row gap-[8px] justify-start items-center">
                 <a rel="noopener noreferrer" href="./overview/getting-started.html">

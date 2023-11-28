@@ -6,16 +6,16 @@ head:
       content: Privy Integration Guide
   - - meta
     - name: description
-      content: Follow this integration guide to use Privy as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Privy as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Follow this integration guide to use Privy as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Privy as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - name: twitter:title
       content: Privy Integration Guide
   - - meta
     - name: twitter:description
-      content: Follow this integration guide to use Privy as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Privy as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
 # Privy Integration Guide
