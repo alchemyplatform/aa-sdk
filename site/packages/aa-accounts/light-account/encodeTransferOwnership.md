@@ -14,7 +14,7 @@ head:
 
 # encodeTransferOwnership
 
-`encodeTransferOwnership` is a static class method on the `LightSmartContractAccount` which generates the call data necessary to send a userOperation calling `transferOwnership` on the connected smart contract account.
+`encodeTransferOwnership` is a static class method on the `LightSmartContractAccount` which generates the call data necessary to send a `UserOperation` calling `transferOwnership` on the connected smart contract account.
 
 ## Usage
 
