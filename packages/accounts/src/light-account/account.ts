@@ -56,7 +56,7 @@ export class LightSmartContractAccount<
   }
 
   /**
-   * Encodes the transferOwnership function call using the LightAccount ABI.
+   * Encodes the transferOwnership function call using Light Account ABI.
    *
    * @param newOwner - the new owner of the account
    * @returns {Hex} the encoded function call

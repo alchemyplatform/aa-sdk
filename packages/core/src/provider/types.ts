@@ -344,7 +344,7 @@ export interface ISmartAccountProvider<
    * Sets the current account to the account returned by the given function. The function parameter
    * provides the public rpc client that is used by this provider so the account can make RPC calls.
    *
-   * @param fn - a function that given public rpc client, returns a smart contract account
+   * @param fn - a function that given public rpc client, returns a smart account
    */
   connect<TAccount extends ISmartContractAccount>(
     fn: (

@@ -14,7 +14,7 @@ head:
 
 # wrapSignatureWith6492
 
-Allows you to generate a signature in [ERC-6492](https://eips.ethereum.org/EIPS/eip-6492) format which is useful to verifying signatures of undeployed smart contract accounts.
+Allows you to generate a signature in [ERC-6492](https://eips.ethereum.org/EIPS/eip-6492) format which is useful to verifying signatures of undeployed smart accounts.
 
 ## Usage
 
@@ -44,7 +44,7 @@ The original signature wrapped in ERC-6492 format
 
 - #### `factoryAddress: Hash`
 
-  The factory address that will be used to deploy the smart contract account that you want to verify the signature of
+  The factory address that will be used to deploy the smart account that you want to verify the signature of
 
 - #### `factoryCallData: Hex`
 

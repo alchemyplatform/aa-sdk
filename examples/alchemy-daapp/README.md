@@ -1,6 +1,6 @@
 # Alchemy dAApp
 
-This example dapp contains an account abstraction-enabled web3 application designed to onboard people onto the Alchemy Account Abstraction SDK. It provides a quick starter for developers to use these technologies, by creating a Smart Contract Wallet and minting an NFT!
+This example dapp contains an account abstraction-enabled web3 application designed to onboard people onto `aa-sdk`. It provides a quick starter for you to use these technologies, by creating a Smart Contract Wallet and minting an NFT!
 
 ## Installation
 1. Clone the repository:
@@ -41,7 +41,7 @@ export const serverConfigs: Record<number, ServerConfiguration> = {
 ```
 ### **🗒️ Notes:** for `nftContractAddress` and `lightAccountFactoryAddress` 
 - There are already contract addresses deployed for them across [various chains here](https://github.com/alchemyplatform/aa-sdk/blob/main/examples/alchemy-daapp/src/configs/clientConfigs.ts).
-- We used Alchemy's [lightAccountFactory here](https://github.com/alchemyplatform/light-account).
+- We used the Alchemy [Light Account Factory here](https://github.com/alchemyplatform/light-account).
 - Finally, the contracts sibling package has the copy of the [NFT contract](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/contracts/DAAppNFT/src) along instructions on [how to deploy it](https://github.com/alchemyplatform/aa-sdk/blob/main/examples/contracts/README.md).
 
 4. Update the serverConfigs.ts file with your alchemy API keys:
@@ -58,7 +58,7 @@ yarn dev
 ```
 
 ## How This Works
-The [`onboarding-controller.ts`](https://github.com/alchemyplatform/aa-sdk/blob/master/examples/alchemy-daapp/src/surfaces/onboarding/OnboardingController.ts) file contains the onboarding controller, which handles the onboarding process for new users. The controller uses the Alchemy SDK to create a new account and mint an NFT.
+The [`onboarding-controller.ts`](https://github.com/alchemyplatform/aa-sdk/blob/master/examples/alchemy-daapp/src/surfaces/onboarding/OnboardingController.ts) file contains the onboarding controller, which handles the onboarding process for new users. The controller uses `aa-sdk` to create a new account and mint an NFT.
 
 In the [`clientConfigs.ts`](https://github.com/alchemyplatform/aa-sdk/blob/main/examples/alchemy-daapp/src/configs/clientConfigs.ts) file, you will find the configuration for the DAApp, including the nft contract address, light account factory address, gas manager policy id, rpc url, and chain. You'll also find an example NFT contract in [`examples/contracts/DAAppNFT`](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/contracts/DAAppNFT)
 
@@ -73,6 +73,6 @@ We welcome contributions to the examples/alchemy-daapp repo! If you would like t
 2. Create a new branch for your changes
 3. Make your changes and commit them
 4. Push your changes to your forked repository
-5. Submit a pull request to the examples/aa-sdk repo
+5. Submit a pull request to the `examples/aa-sdk` repo
 
 Please ensure that your code follows our coding standards and that you have added appropriate tests for your changes. We appreciate your contributions and look forward to working with you.

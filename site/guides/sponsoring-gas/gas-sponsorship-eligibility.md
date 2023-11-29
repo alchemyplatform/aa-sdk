@@ -20,7 +20,7 @@ head:
 
 # How to Handle User Operations that are Not Eligible for Gas Sponsorship
 
-As mentioned from the previous guide on [How to Sponsor Gas for a User Operation](./sponsoring-gas.md), with Account Kit can sponsor gas fees for transactions via the [Alchemy Gas Manager](https://docs.alchemy.com/docs/gas-manager-services).
+As mentioned from the previous guide on [How to Sponsor Gas for a User Operation](./sponsoring-gas.md), with Account Kit can sponsor gas fees for transactions via the [Gas Manager](https://docs.alchemy.com/docs/gas-manager-services).
 
 But what happens when the user operation you are sending fails to satisfy the criteria set in the gas manager policy? How do you check if the user operation is eligible for gas sponsorship before sending the user operation?
 
@@ -115,4 +115,4 @@ That's it! By using the above methods, you can provide the desired user experien
 2. Provide users with the choice to unblock themselves by sending the user operation without gas sponsorship.
 3. Still send the user operation by reverting to the default behavior of paying gas fees from the user's account balance by bypassing the paymster middleware for the ineligible user operations.
 
-AccountKit provides much flexibility for you to design optimal user experiences to handle different cases of gas sponsonship eligibility accordingly.
+Account Kit provides much flexibility for you to design optimal user experiences to handle different cases of gas sponsonship eligibility accordingly.

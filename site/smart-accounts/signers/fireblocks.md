@@ -6,16 +6,16 @@ head:
       content: Fireblocks Integration Guide
   - - meta
     - name: description
-      content: Follow this integration guide to use Fireblocks as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Fireblocks as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Follow this integration guide to use Fireblocks as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Fireblocks as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - name: twitter:title
       content: Fireblocks Integration Guide
   - - meta
     - name: twitter:description
-      content: Follow this integration guide to use Fireblocks as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Fireblocks as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
 # Fireblocks
@@ -24,7 +24,7 @@ head:
 
 Fireblocks' security structure provides a truly secure environment for storing, transferring, and issuing digital assets. This ensures that your assets are protected from cyberattacks, internal colluders, and human errors. As a result, Fireblocks serves as the foundation for thousands of digital asset businesses and has securely transferred over $3T in digital assets.
 
-Fireblocks' MPC wallets are EOA accounts, which in any account abstraction enabled wallet is the root of their security & trust model. Using Fireblocks MPC based EOA wallets in combination with the Alchemy Account Kit will give you the best of both worlds; Enterprise grade security for securing your off-chain key material, and the utmost flexibility of your on-chain Smart Accounts
+Fireblocks' MPC wallets are EOA accounts, which in any account abstraction enabled wallet is the root of their security & trust model. Using Fireblocks MPC based EOA wallets in combination with the Account Kit will give you the best of both worlds; Enterprise grade security for securing your off-chain key material, and the utmost flexibility of your on-chain smart accounts
 
 # Integration
 
@@ -48,7 +48,7 @@ Next, setup the Fireblocks Web3 Provider and create a `SmartAccountSigner`:
 
 <<< @/snippets/fireblocks.ts
 
-### Use it with LightAccount
+### Use it with Light Account
 
 Let's see it in action with `aa-alchemy` and `LightSmartContractAccount` from `aa-accounts`:
 ::: code-group

@@ -14,7 +14,7 @@ head:
 
 # getAddress
 
-`getAddress` is a method on `AccountSigner` that gets the `AccountSigner`'s smart contract account address.
+`getAddress` is a method on `AccountSigner` that gets the `AccountSigner`'s smart account address.
 
 ## Usage
 
@@ -23,7 +23,7 @@ head:
 ```ts [example.ts]
 import { signer } from "./ethers-signer";
 
-// get the signer's smart contract account address
+// get the signer's smart account address
 const client = await signer.getAddress();
 ```
 
@@ -34,4 +34,4 @@ const client = await signer.getAddress();
 
 ### `Promise<Address>`
 
-A promise containing the `Signer`'s smart contract account address
+A promise containing the `Signer`'s smart account address

@@ -16,7 +16,7 @@ next:
 
 # signTypedDataWith6492
 
-Similar to the signMessageWith6492 method above, this method wraps the result of `signTypedData` as per [EIP-6492](https://eips.ethereum.org/EIPS/eip-6492) to support signing the typed data for deployed smart contract accounts, as well as undeployed accounts (counterfactual addresses).
+Similar to the signMessageWith6492 method above, this method wraps the result of `signTypedData` as per [EIP-6492](https://eips.ethereum.org/EIPS/eip-6492) to support signing the typed data for deployed smart accounts, as well as undeployed accounts (counterfactual addresses).
 
 **Note**: This method is already implemented on `BaseSmartContractAccount`, so any class that extends and implements `BaseSmartContractAccount` may call this method.
 

@@ -6,23 +6,23 @@ head:
       content: Portal Integration Guide
   - - meta
     - name: description
-      content: Follow this integration guide to use Portal as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Portal as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Follow this integration guide to use Portal as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Portal as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - name: twitter:title
       content: Portal Integration Guide
   - - meta
     - name: twitter:description
-      content: Follow this integration guide to use Portal as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Portal as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
 # Portal Integration Guide
 
 [Portal](https://www.portalhq.io/) is an embedded blockchain infrastructure company that powers companies with an end to end platform for key management for self-custodial wallets (MPC and AA), security firewall, and web3 protocol connect kit.
 
-A combination of Portal and Alchemy's Account Kit allows you to have robust key management and security, while also exploring everything that web3 has to offer with smart contract accounts for your users.
+A combination of Portal and Account Kit allows you to have robust key management and security, while also exploring everything that web3 has to offer with smart accounts for your users.
 
 ## Integration
 
@@ -48,7 +48,7 @@ Next, setup the Portal SDK and create a `SmartAccountSigner`:
 
 <<< @/snippets/portal.ts
 
-### Use it with LightAccount
+### Use it with Light Account
 
 Let's see it in action with `aa-alchemy` and `LightSmartContractAccount` from `aa-accounts`:
 ::: code-group

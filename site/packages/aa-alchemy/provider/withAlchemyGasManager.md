@@ -26,7 +26,7 @@ next:
 import { provider } from "./provider";
 // [!code focus:99]
 
-// use Alchemy Gas Manager to sponsorship transactions
+// use Gas Manager to sponsorship transactions
 const providerWithGasManager = provider.withAlchemyGasManager({
   policyId: PAYMASTER_POLICY_ID,
 });
@@ -45,4 +45,4 @@ A new instance of an `AlchemyProvider` with the same attributes as the input, no
 
 ### `config: AlchemyGasManagerConfig`
 
-- `policyId: string` -- the Alchemy Gas Manager policy ID
+- `policyId: string` -- the Gas Manager policy ID

@@ -14,7 +14,7 @@ head:
 
 # signMessageWith6492
 
-This method supports signing messages for deployed smart contract accounts, as well as undeployed accounts (counterfactual addresses) using [ERC-6492](https://eips.ethereum.org/EIPS/eip-6492).
+This method supports signing messages for deployed smart accounts, as well as undeployed accounts (counterfactual addresses) using [ERC-6492](https://eips.ethereum.org/EIPS/eip-6492).
 
 ## Usage
 
