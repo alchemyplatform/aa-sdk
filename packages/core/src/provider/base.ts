@@ -316,7 +316,7 @@ export class SmartAccountProvider<
       const receipt = await this.getUserOperationReceipt(
         hash as `0x${string}`
       ).catch((e) => {
-        Logger.debug(
+        Logger.error(
           `[SmartAccountProvider] waitForUserOperationTransaction error fetching receipt for ${hash}: ${e}`
         );
       });
