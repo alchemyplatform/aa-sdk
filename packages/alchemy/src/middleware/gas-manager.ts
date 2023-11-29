@@ -54,7 +54,7 @@ export const withAlchemyGasManager = <P extends AlchemyProvider>(
         .withGasEstimator(async (struct, overrides, feeOptions) => {
           // but if user is bypassing paymaster to fallback to having the account to pay the gas (one-off override),
           // we cannot delegate gas estimation to the bundler because paymaster middleware will not be called
-          if (overrides?.paymasterAndData != null) {
+          if (overrides?.paymasterAndData === "0x") {
             const result = await fallbackGasEstimator(
               struct,
               overrides,
@@ -80,7 +80,7 @@ export const withAlchemyGasManager = <P extends AlchemyProvider>(
 
           // but if user is bypassing paymaster to fallback to having the account to pay the gas (one-off override),
           // we cannot delegate gas estimation to the bundler because paymaster middleware will not be called
-          if (overrides?.paymasterAndData != null) {
+          if (overrides?.paymasterAndData === "0x") {
             const result = await fallbackFeeDataGetter(
               struct,
               overrides,
@@ -160,7 +160,7 @@ const withAlchemyPaymasterAndDataMiddleware = <P extends AlchemyProvider>(
 const withAlchemyGasAndPaymasterAndDataMiddleware = <P extends AlchemyProvider>(
   provider: P,
   config: AlchemyGasManagerConfig
-): Parameters<AlchemyProvider["withPaymasterMiddleware"]>["0"] => ({
+): Parameters<P["withPaymasterMiddleware"]>["0"] => ({
   paymasterDataMiddleware: async (struct, overrides, feeOptions) => {
     const userOperation: UserOperationRequest = deepHexlify(
       await resolveProperties(struct)

@@ -399,11 +399,6 @@ export class SmartAccountProvider<
       signature: uoToDrop.signature,
     } as UserOperationStruct;
 
-    Logger.debug(
-      "[SmartAccountProvider] dropAndReplaceUserOperation uoToSubmit",
-      uoToSubmit
-    );
-
     // Run once to get the fee estimates
     // This can happen at any part of the middleware stack, so we want to run it all
     const { maxFeePerGas, maxPriorityFeePerGas } =
@@ -530,9 +525,9 @@ export class SmartAccountProvider<
       overrides ?? {};
 
     if (
-      callGasLimit === undefined ||
-      verificationGasLimit === undefined ||
-      preVerificationGas === undefined
+      callGasLimit == null ||
+      verificationGasLimit == null ||
+      preVerificationGas == null
     ) {
       const request = deepHexlify(await resolveProperties(struct));
       const estimates = await this.rpcClient.estimateUserOperationGas(

@@ -1,7 +1,4 @@
-import type {
-  PublicErc4337Client,
-  UserOperationOverrides,
-} from "@alchemy/aa-core";
+import type { UserOperationOverrides } from "@alchemy/aa-core";
 import {
   LogLevel,
   Logger,
@@ -20,7 +17,6 @@ import {
 } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
 import { sepolia } from "viem/chains";
-import type { SimulateUserOperationAssetChangesResponse } from "../src/middleware/types/index.js";
 import { AlchemyProvider } from "../src/provider.js";
 import { API_KEY, OWNER_MNEMONIC, PAYMASTER_POLICY_ID } from "./constants.js";
 
@@ -254,7 +250,7 @@ describe("Simple Account Tests", () => {
       chain,
     });
 
-    const simulatedAssetChanges: SimulateUserOperationAssetChangesResponse =
+    const simulatedAssetChanges =
       await provider.simulateUserOperationAssetChanges({
         target: provider.getEntryPointAddress(),
         data: "0x",
@@ -326,7 +322,7 @@ const givenConnectedProvider = ({
       },
     },
   }).connect(
-    (provider: PublicErc4337Client) =>
+    (provider) =>
       new SimpleSmartContractAccount({
         chain,
         owner,

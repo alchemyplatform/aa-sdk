@@ -329,7 +329,7 @@ export interface ISmartAccountProvider<
    * Overrides the feeDataGetter middleware which is used for setting the fee fields on the UserOperation
    * prior to execution.
    *
-   * @param override   - a function for overriding the default feeDataGetter middleware
+   * @param override - a function for overriding the default feeDataGetter middleware
    * @param feeOptions - optional FeeDataFeeOptions to set at the global level of the provider.
    * @returns
    */

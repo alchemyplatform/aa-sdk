@@ -6,9 +6,9 @@ import type { BigNumberish } from "../types";
  * @param args a list of bigints to get the max of
  * @returns the max bigint in the list
  */
-export const bigIntMax = (...args: bigint[]) => {
+export const bigIntMax = (...args: bigint[]): bigint => {
   if (!args.length) {
-    return undefined;
+    throw new Error("bigIntMax requires at least one argument");
   }
 
   return args.reduce((m, c) => (m > c ? m : c));
@@ -20,9 +20,9 @@ export const bigIntMax = (...args: bigint[]) => {
  * @param args a list of bigints to get the max of
  * @returns the min bigint in the list
  */
-export const bigIntMin = (...args: bigint[]) => {
+export const bigIntMin = (...args: bigint[]): bigint => {
   if (!args.length) {
-    return undefined;
+    throw new Error("bigIntMin requires at least one argument");
   }
 
   return args.reduce((m, c) => (m < c ? m : c));
