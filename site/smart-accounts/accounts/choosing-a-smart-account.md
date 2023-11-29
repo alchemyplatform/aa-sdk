@@ -25,7 +25,7 @@ prev:
 
 ## What's a Smart Account?
 
-A smart account is an [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) smart contract account. You can use it to manage assets, execute transactions (known as `userOperations` or `userOps`), and more. There are many different implementations of a smart account, including our [Light Account](/smart-accounts/accounts/light-account).
+A smart account is an [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) smart account. You can use it to manage assets, execute transactions (known as `userOperations` or `userOps`), and more. There are many different implementations of a smart account, including our [Light Account](/smart-accounts/accounts/light-account).
 
 ## Light Account
 
@@ -33,7 +33,7 @@ Account Kit provides a default smart account called `LightAccount`.
 
 [Light Account](/smart-accounts/accounts/light-account) is a secure, audited, gas-optimized, ERC-4337 compatible smart account implementation. It comes equipped with features like owner transfers, [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) message signing, and batched transactions. It's also [open source](https://github.com/alchemyplatform/light-account)!
 
-For most applications, we recommend using the Light Account. It is [deployed](/smart-accounts/accounts/deployment-addresses) on Ethereum, Optimism, Arbitrum, Polygon, Base, and the respective testnets.
+For most applications, we recommend using Light Account. It is [deployed](/smart-accounts/accounts/deployment-addresses) on Ethereum, Optimism, Arbitrum, Polygon, Base, and the respective testnets.
 
 ## Modular Account (coming soon)
 

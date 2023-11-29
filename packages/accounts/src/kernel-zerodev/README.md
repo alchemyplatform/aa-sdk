@@ -27,7 +27,7 @@ const chain = polygonMumbai;
 const KERNEL_ACCOUNT_FACTORY_ADDRESS =
   "0x5D006d3880645ec6e254E18C1F879DAC9Dd71A39";
 
-// 1. define the EOA owner of the Smart Account
+// 1. define the EOA owner of the smart account
 // This is just one exapmle of how to interact with EOAs, feel free to use any other interface
 const owner = LocalAccountSigner.privateKeyToAccountSigner(PRIVATE_KEY);
 
@@ -74,7 +74,7 @@ const { hash } = provider.sendUserOperation({
 
 The primary interfaces are the `KernelAccountProvider`, `KernelSmartContractAccount` and `KernelBaseValidator`
 
-The `KernelAccountProvider` is an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compliant Provider built on top of Alchemy's `SmartAccountProvider`
+The `KernelAccountProvider` is an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compliant Provider built on top of `SmartAccountProvider`
 
 1. `sendUserOperation` -- this takes in `target`, `callData`, and an optional `value` which then constructs a `UserOperation` (UO), sends it, and returns the `hash` of the UO. It handles estimating gas, fetching fee data, (optionally) requesting paymasterAndData, and lastly signing. This is done via a middleware stack that runs in a specific order. The middleware order is `getDummyPaymasterData` => `estimateGas` => `getFeeData` => `getPaymasterAndData`. The paymaster fields are set to `0x` by default. They can be changed using `provider.withPaymasterMiddleware`.
 2. `sendTransaction` -- this takes in a traditional Transaction Request object which then gets converted into a UO. This takes in a traditional Transaction Request object which then gets converted into a UO. Note that `to` field of transaction is required, and among other fields of transaction, only `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas` fields are considered if given. Support for other fields is coming soon.
@@ -91,8 +91,8 @@ The `KernelAccountProvider` is an [EIP-1193](https://eips.ethereum.org/EIPS/eip-
 The `KernelBaseValidator` is a plugin that modify how transactions are validated. It allows for extension and implementation of arbitrary validation logic. It implements 3 methods:
 
 1. `getAddress` -- this returns the address of the validator
-2. `getOwnerAddress` -- this returns the eligible signer's address for the active smart wallet
-3. `signMessageWithValidatorParams` -- this method signs the userop hash using signer object and then concats additional params based on validator mode.
+2. `getOwnerAddress` -- this returns the eligible Signer's address for the active smart wallet
+3. `signMessageWithValidatorParams` -- this method signs the userop hash using Signer object and then concats additional params based on validator mode.
 
 ## Contributing
 

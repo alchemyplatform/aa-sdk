@@ -14,7 +14,7 @@ head:
 
 # signMessageWith6492
 
-This method wraps the result of `signMessage` as per [EIP-6492](https://eips.ethereum.org/EIPS/eip-6492) for signing the message for deployed smart contract accounts, as well as undeployed accounts (counterfactual addresses).
+This method wraps the result of `signMessage` as per [EIP-6492](https://eips.ethereum.org/EIPS/eip-6492) for signing the message for deployed smart accounts, as well as undeployed accounts (counterfactual addresses).
 
 **Note**: This method is already implemented on `BaseSmartContractAccount`, so any class that extends and implements `BaseSmartContractAccount` may call this method.
 

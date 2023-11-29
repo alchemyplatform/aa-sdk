@@ -40,4 +40,4 @@ A Promise containing the encoded Hex of the`transferOwnership` function call wit
 
 ## Parameters
 
-### `newOwner: <Address>` -- the new owner to transfer ownership to for the smart contract account
+### `newOwner: <Address>` -- the new owner to transfer ownership to for the smart account

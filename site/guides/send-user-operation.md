@@ -6,16 +6,16 @@ head:
       content: How to Send a User Operation
   - - meta
     - name: description
-      content: Follow this guide to send a User Operation with Alchemy's Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to send a User Operation with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Follow this guide to send a User Operation with Alchemy's Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to send a User Operation with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - name: twitter:title
       content: How to Send a User Operation
   - - meta
     - name: twitter:description
-      content: Follow this guide to send a User Operation with Alchemy's Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to send a User Operation with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 prev:
   text: Smart Accounts
   link: /smart-accounts/overview
@@ -35,7 +35,7 @@ See [Alchemy Provider](/packages/aa-alchemy/provider/introduction.md) for more d
 
 ## 2. Connect Your Smart Account
 
-To send User Operations, we must connect the `provider` with a smart account. The Light Account is Alchemy's gas-optimized smart account implementation, which we'll use in this example.
+To send User Operations, we must connect the `provider` with a smart account. The Light Account is our gas-optimized smart account implementation, which we'll use in this example.
 
 See [Light Account](/packages/aa-accounts/light-account/introduction.md) for more details.
 
@@ -55,7 +55,7 @@ Some other helpful viem methods include: [encodeFunctionData](https://viem.sh/do
 
 Now we'll use the connected provider to send a user operation. We'll use the [sendUserOperation](/packages/aa-core/provider/sendUserOperation.md) method on the provider.
 
-You can either send ETH to the smart account to pay for User Operation's gas, or you can connect your provider to an Alchemy Gas Manager using the [withAlchemyGasManager](/packages/aa-alchemy/provider/withAlchemyGasManager.md) method to sponsor the UO's gas. We'll use the latter approach below. You can go to the [Alchemy Dashboard](https://dashboard.alchemy.com/gas-manager) to get a Gas Manager policy ID.
+You can either send ETH to the smart account to pay for User Operation's gas, or you can connect your provider to our Gas Manager using the [withAlchemyGasManager](/packages/aa-alchemy/provider/withAlchemyGasManager.md) method to sponsor the UO's gas. We'll use the latter approach below. You can go to the [Alchemy Dashboard](https://dashboard.alchemy.com/gas-manager) to get a Gas Manager policy ID.
 
 We'll also want to wait for the transaction which contains the User Operation, so that we know the User Operation executed on-chain. We can use the [waitForUserOperationTransaction](/packages/aa-core/provider/waitForUserOperationTransaction.md) method on provider to do so, as seen below.
 

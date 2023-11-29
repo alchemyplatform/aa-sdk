@@ -9,7 +9,7 @@ import {
 } from "@alchemy/aa-core";
 import { polygonMumbai } from "viem/chains";
 
-// 1. define the EOA owner of the Smart Account
+// 1. define the EOA owner of the smart account
 // this uses a utility method for creating an account signer using mnemonic
 // we also have a utility for creating an account signer from a private key
 const owner: SmartAccountSigner =

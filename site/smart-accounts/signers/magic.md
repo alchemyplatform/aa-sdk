@@ -6,16 +6,16 @@ head:
       content: Magic Link Integration Guide
   - - meta
     - name: description
-      content: Follow this integration guide to use Magic.Link as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Magic.Link as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Follow this integration guide to use Magic.Link as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Magic.Link as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - name: twitter:title
       content: Magic Link Integration Guide
   - - meta
     - name: twitter:description
-      content: Follow this integration guide to use Magic.Link as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Magic.Link as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
 # Magic Link Integration Guide
@@ -48,7 +48,7 @@ Next, setup the magic sdk and create an authenticated `MagicSigner` using the `a
 
 <<< @/snippets/magic.ts
 
-### Use it with LightAccount
+### Use it with Light Account
 
 Let's see it in action with `aa-alchemy` and `LightSmartContractAccount` from `aa-accounts`:
 ::: code-group
@@ -64,8 +64,8 @@ import { createMagicSigner } from "./magic";
 
 const chain = sepolia;
 
-// NOTE: the below is async because it depends on creating a magic signer. You can choose to break that up how you want
-// eg. use a useEffect + useState to create the signer and then pass it down to the provider
+// NOTE: the below is async because it depends on creating a magic Signer. You can choose to break that up how you want
+// eg. use a useEffect + useState to create the Signer and then pass it down to the provider
 const provider = new AlchemyProvider({
   apiKey: "ALCHEMY_API_KEY",
   chain,

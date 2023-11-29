@@ -6,23 +6,23 @@ head:
       content: Capsule Integration Guide
   - - meta
     - name: description
-      content: Follow this integration guide to use Capsule as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Capsule as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Follow this integration guide to use Capsule as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Capsule as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - name: twitter:title
       content: Capsule Integration Guide
   - - meta
     - name: twitter:description
-      content: Follow this integration guide to use Capsule as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Capsule as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
 # Capsule Integration Guide
 
 [Capsule](https://usecapsule.com/) is a signing solution that you can use to create secure, embedded [MPC wallets](https://www.alchemy.com/overviews/mpc-wallet) with just an email or a social login. Capsule-enabled wallets are portable across applications, recoverable, and programmable, so your users do not need to create different signers or contract accounts for every application they use.
 
-Combining Capsule with Account Kit allows you to get the best of both on and off-chain programmability. You can use Capsule as a signer to create a wallet that works across apps, and then connect it to Account Kit to create expressive smart accounts for your users!
+Combining Capsule with Account Kit allows you to get the best of both on and off-chain programmability. You can use Capsule as a Signer to create a wallet that works across apps, and then connect it to Account Kit to create expressive smart accounts for your users!
 
 ## Integration
 
@@ -65,7 +65,7 @@ Next, setup the Capsule SDK and create a `SmartAccountSigner`
 
 <<< @/snippets/capsule.ts
 
-### Use it with LightAccount
+### Use it with Light Account
 
 Let's see it in action with `aa-alchemy` and `LightSmartContractAccount` from `aa-accounts`:
 ::: code-group

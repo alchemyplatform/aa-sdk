@@ -48,7 +48,7 @@ Account Kit makes it possible to build a web3 app that feels like web2: simple a
 
 It’s enabled by [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337), a new account abstraction standard developed by Vitalik and the Ethereum Foundation. This is the beginning of a major [transition](https://vitalik.ca/general/2023/06/09/three_transitions.html) from traditional EOA wallets to smart accounts.
 
-Account Kit was designed to make it easy for every developer to leverage account abstraction. It includes everything you need to ship smart accounts in minutes!
+Account Kit was designed to make it easy for you to leverage account abstraction. It includes everything you need to ship smart accounts in minutes!
 
 ## Your app, your UX
 
@@ -65,9 +65,9 @@ Streamline your sign up flow with simple web2 login options supported by Account
 - Self-custodial wallets like MetaMask or Ledger
 - and more
 
-Account Kit integrates all the leading wallet Signers with bespoke integration guides for [Magic](/smart-accounts/signers/magic), [web3auth](/smart-accounts/signers/web3auth), [Turnkey](/smart-accounts/signers/turnkey), [Privy](/smart-accounts/signers/privy), [Dynamic](/smart-accounts/signers/dynamic), [Fireblocks](/smart-accounts/signers/fireblocks), [Portal](/smart-accounts/signers/portal), [Capsule](/smart-accounts/signers/capsule) and [Lit Protocol](/smart-accounts/signers/lit). Account Kit even supports self-custodial wallets like Metamask or Ledger. Users can even change their signer later via Account Kit’s [ownership transfer](/guides/transferring-ownership) functionality.
+Account Kit integrates all the leading wallet Signers with bespoke integration guides for [Magic](/smart-accounts/signers/magic), [web3auth](/smart-accounts/signers/web3auth), [Turnkey](/smart-accounts/signers/turnkey), [Privy](/smart-accounts/signers/privy), [Dynamic](/smart-accounts/signers/dynamic), [Fireblocks](/smart-accounts/signers/fireblocks), [Portal](/smart-accounts/signers/portal), [Capsule](/smart-accounts/signers/capsule) and [Lit Protocol](/smart-accounts/signers/lit). Account Kit even supports self-custodial wallets like MetaMask or Ledger. Users can even change their Signer later via Account Kit’s [ownership transfer](/guides/transferring-ownership) functionality.
 
-Learn [how to choose the right signer for your use case in this doc](/smart-accounts/signers/choosing-a-signer).
+Learn [how to choose the right Signer for your use case in this doc](/smart-accounts/signers/choosing-a-signer).
 
 ## Sponsor gas
 
@@ -99,9 +99,9 @@ Account Kit is instantly [compatible with your dapp](https://docs.alchemy.com/do
 
 We built Account Kit from the ground up to be reliable, scalable, and developer-friendly. When you use Account Kit, you’re tapping into a vertically integrated stack designed to work together seamlessly from bottom to top:
 
-- **AA-SDK**: A lightweight library to integrate, deploy, and use smart accounts. The `aa-sdk` orchestrates operations like gas estimation, UserOp submission, and counterfactual address generation under the hood. We handled all the details so you don’t have to.
-- **LightAccount:** Secure, gas-optimized, audited smart contract accounts. Purpose-built for [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) and forward compatible with [EIP-6900](https://eips.ethereum.org/EIPS/eip-6900).
-- **Signer:** Bespoke developer guides to integrate the most popular wallet providers. Secure your accounts with email, social login, passkeys, or a self-custodial wallet signer.
+- **aa-sdk**: A lightweight library to integrate, deploy, and use smart accounts. The `aa-sdk` orchestrates operations like gas estimation, UserOp submission, and counterfactual address generation under the hood. We handled all the details so you don’t have to.
+- **Light Account:** Secure, gas-optimized, audited smart accounts. Purpose-built for [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) and forward compatible with [EIP-6900](https://eips.ethereum.org/EIPS/eip-6900).
+- **Signer:** Bespoke developer guides to integrate the most popular wallet providers. Secure your accounts with email, social login, passkeys, or a self-custodial wallet Signer.
 - **Gas Manager API:** A programmable API to abstract away gas fees for UserOps that meet your criteria. We built [programmable policies](https://docs.alchemy.com/reference/gas-manager-admin-api-quickstart) to give you flexibility and control to decide which transactions should be sponsored. The Gas Manager works hand-in-hand with the Bundler.
 - **Bundler API:** The most reliable ERC-4337 Bundler. Land your UserOps onchain at massive scale. We wrote our Bundler from scratch, in Rust, to handle the highest loads at production scale. Check out the open source code in our affectionately named [Rundler github repo](https://github.com/alchemyplatform/rundler).
 

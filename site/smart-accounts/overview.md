@@ -25,11 +25,11 @@ next:
 
 # Overview
 
-In this guide we'll explain the end-to-end journey of integrating smart accounts in your applications with Account Kit. We'll cover the necessary steps such as creating an Alchemy account, selecting the right account and signer and sending a User Operation. Additionally, we'll touch upon advanced functionalities like sponsoring gas, batching transactions and transferring ownership.
+In this guide we'll explain the end-to-end journey of integrating smart accounts in your applications with Account Kit. We'll cover the necessary steps such as creating an Alchemy account, selecting the right account and Signer and sending a User Operation. Additionally, we'll touch upon advanced functionalities like sponsoring gas, batching transactions and transferring ownership.
 
 ## 1. Setting Up an Alchemy Account
 
-Before diving into smart accounts, it's important to [set up your Alchemy account](https://auth.alchemy.com/signup). This will allow you to access the Alchemy API key which is required to initialize a provider and interact with the blockchain. Additionally, you'll get access to Alchemy's Gas Manager, which will enable you to sponsor gas for your users.
+Before diving into smart accounts, it's important to [set up your Alchemy account](https://auth.alchemy.com/signup). This will allow you to access the Alchemy API key which is required to initialize a provider and interact with the blockchain. Additionally, you'll get access to our Gas Manager, which will enable you to sponsor gas for your users.
 
 ## 2. Deploying a Smart Account
 
@@ -44,7 +44,7 @@ The `LightAccount` implementation is not [ERC-6900](/smart-accounts/accounts/mod
 
 ## 3. Choosing a Signer
 
-A signer is the entity that signs transactions (User Operations) on behalf of the smart account. It can be an EOA, a custodial service, or a multi-party computation (MPC) service. We explain the different types of signers in detail in the [overview](signers/choosing-a-signer) section on choosing a signer. We'll also cover the common signer examples in detail in the following sections:
+A Signer is the entity that signs transactions (User Operations) on behalf of the smart account. It can be an EOA, a custodial service, or a multi-party computation (MPC) service. We explain the different types of signers in detail in the [overview](signers/choosing-a-signer) section on choosing a Signer. We'll also cover the common Signer examples in detail in the following sections:
 
 - [Dynamic](signers/dynamic)
 - [Magic](signers/magic)

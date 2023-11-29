@@ -14,7 +14,7 @@ head:
 
 # Middleware
 
-The `aa-alchemy` package contains middleware you can use to easily leverage the Alchemy Rundler (an [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) Bundler) and Alchemy Gas Manager (an [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) Paymaster).
+The `aa-alchemy` package contains middleware you can use to easily leverage our Bundler(Rundler) (an [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) Bundler) and our Gas Manager (an [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) Paymaster).
 
 Currently, `aa-alchemy` has implementations for:
 

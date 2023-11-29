@@ -14,7 +14,7 @@ head:
 
 # withAlchemyGasFeeEstimator
 
-`withAlchemyGasFeeEstimator` is a middleware method you can use to easily leverage the Alchemy Rundler (an [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) Bundler) for estimating gas fees for user operations.
+`withAlchemyGasFeeEstimator` is a middleware method you can use to easily leverage Rundler (an [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) Bundler) for estimating gas fees for user operations.
 
 ## Usage
 
@@ -24,7 +24,7 @@ head:
 import { provider } from "./provider";
 import { withAlchemyGasFeeEstimator } from "@alchemy/aa-alchemy";
 
-// use Alchemy Gas Fee Estimator to estimate gas fees according to the expectations of the Alchemy Rundler.
+// use Alchemy Gas Fee Estimator to estimate gas fees according to the expectations of Rundler.
 // this is already set on AlchemyProvider, but you can always use the middleware directly to create a new instance.
 const providerWithGasFeeEstimator = withAlchemyGasFeeEstimator(
   provider,

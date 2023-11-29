@@ -6,21 +6,21 @@ head:
       content: Lit Protocol Integration Guide
   - - meta
     - name: description
-      content: Follow this integration guide to use PKP Wallet as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use PKP Wallet as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Follow this integration guide to use PKP Wallet as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use PKP Wallet as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - name: twitter:title
       content: Lit Protocol Integration Guide
   - - meta
     - name: twitter:description
-      content: Follow this integration guide to use PKP Wallet as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use PKP Wallet as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
 # Lit Protocol Integration Guide
 
-[LitProtocol](https://litprotocol.com/) is distributed cryptography for signing, encryption, and compute. A generalizable key management network, Lit provides developers with a set of tools for managing sovereign identities on the open Web.
+[LitProtocol](https://litprotocol.com/) is distributed cryptography for signing, encryption, and compute. A generalizable key management network, Lit provides you with a set of tools for managing sovereign identities on the open Web.
 
 Combining Lit Protocol's [pkp wallet](https://www.npmjs.com/package/@lit-protocol/pkp-ethers) with Account Kit allows you to use your Programmable Key Pairs (PKPs) as a smart account for your users.
 
@@ -70,7 +70,7 @@ Next, setup the `LitNodeClient` and `PKPEthersWallet` to create a `SmartAccountS
 
 <<< @/snippets/lit.ts
 
-### Use it with LightAccount
+### Use it with Light Account
 
 We can link our `SmartAccountSigner` to a `LightSmartContractAccount` from `aa-accounts`:
 ::: code-group

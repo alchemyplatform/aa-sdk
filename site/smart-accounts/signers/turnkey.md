@@ -6,16 +6,16 @@ head:
       content: Turnkey Integration Guide
   - - meta
     - name: description
-      content: Follow this integration guide to use Turnkey as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Turnkey as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Follow this integration guide to use Turnkey as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Turnkey as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - name: twitter:title
       content: Turnkey Integration Guide
   - - meta
     - name: twitter:description
-      content: Follow this integration guide to use Turnkey as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Turnkey as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
 # Turnkey Integration Guide
@@ -52,7 +52,7 @@ Next, setup the Turnkey sdk and create a `SmartAccountSigner`:
 
 <<< @/snippets/turnkey.ts
 
-### Use it with LightAccount
+### Use it with Light Account
 
 Let's see it in action with `aa-alchemy` and `LightSmartContractAccount` from `aa-accounts`:
 ::: code-group

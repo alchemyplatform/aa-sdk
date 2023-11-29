@@ -6,27 +6,27 @@ head:
       content: How to Fetch a Smart Account's NFTs
   - - meta
     - name: description
-      content: Follow this guide to fetch a Smart Account's NFTs with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to fetch a smart account's NFTs with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Follow this guide to fetch a Smart Account's NFTs with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to fetch a smart account's NFTs with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - name: twitter:title
       content: How to Get a Smart Account's NFTs
   - - meta
     - name: twitter:description
-      content: Follow this guide to fetch a Smart Account's NFTs with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to fetch a smart account's NFTs with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
 # How to Fetch a Smart Account's NFTs
 
-Alchemy provides several [Enhanced APIs](https://www.alchemy.com/enhanced-apis), which are especially useful for querying information about the smart accounts you create using Account Kit, such as the account's owned NFTs using the [NFT API](https://www.alchemy.com/nft-api).
+We provide several [Enhanced APIs](https://www.alchemy.com/enhanced-apis), which are especially useful for querying information about the smart accounts you create using Account Kit, such as the account's owned NFTs using the [NFT API](https://www.alchemy.com/nft-api).
 
 For the purposes of our example, we'll use the NFT API to query our smart account's data by extending the Alchemy Provider [with Enhanced APIs](/packages/aa-alchemy/provider/withAlchemyEnhancedApis.md).
 
 ## 1. Install the [`alchemy-sdk`](https://github.com/alchemyplatform/alchemy-sdk-js)
 
-Alchemy has developed a Typescript SDK to make development with the Enhanced APIs simple. The SDK includes ways to leverage Alchemy's Simulation API, Token API, Transact API, NFT API, Webhooks and Websockets, and more across Alchemy's supported chains. Take a look at the code [here](https://github.com/alchemyplatform/alchemy-sdk-js).
+We have developed a Typescript SDK to make development with the Enhanced APIs simple. The SDK includes ways to leverage Alchemy's Simulation API, Token API, Transact API, NFT API, Webhooks and Websockets, and more across our supported chains. Take a look at the code [here](https://github.com/alchemyplatform/alchemy-sdk-js).
 
 We will use the Alchemy SDK Client to extend our Alchemy Provider using the provider's [`withAlchemyEnhancedApis`](/packages/aa-alchemy/provider/withAlchemyEnhancedApis.md) method. That way, our provider will have direct access to the Enhanced APIs.
 
