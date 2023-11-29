@@ -8,7 +8,7 @@ The `aa-sdk` is modular at every layer of the stack and can easily extend to fit
 
 ## Getting Started
 
-The `aa-sdk` is part of [Account Kit](https://accountkit.alchemy.com). Check out this [quickstart guide](https://accountkit.alchemy.com/getting-started.html) to get started.
+The `aa-sdk` is part of [Account Kit](https://accountkit.alchemy.com). Check out our [quickstart guide](https://accountkit.alchemy.com/getting-started.html) to get started.
 
 ## Contributing
 
