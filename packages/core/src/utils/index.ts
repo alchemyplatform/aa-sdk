@@ -99,9 +99,9 @@ export function deepHexlify(obj: any): any {
 
 export function applyFeeOption(
   value: BigNumberish | undefined,
-  feeOption: UserOperationFeeOptionsField | undefined
+  feeOption?: UserOperationFeeOptionsField
 ): BigNumberish {
-  if (feeOption === undefined) {
+  if (feeOption == null) {
     return value ?? 0n;
   }
   return value
