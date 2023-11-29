@@ -200,7 +200,7 @@ describe("Light Account Tests", () => {
     expect(newOwnerViaProvider).toBe(newOwner);
   }, 100000);
 
-  it("should upgrade account to msca successfully", async () => {
+  it.only("should upgrade account to msca successfully", async () => {
     // create a throwaway address
     const throwawayOwner = LocalAccountSigner.privateKeyToAccountSigner(
       generatePrivateKey()

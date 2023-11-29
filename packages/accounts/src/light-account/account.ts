@@ -9,6 +9,7 @@ import {
   decodeFunctionResult,
   encodeAbiParameters,
   encodeFunctionData,
+  encodeFunctionResult,
   keccak256,
   trim,
   type Address,
@@ -110,7 +111,7 @@ export class LightSmartContractAccount<
     }
 
     const hashedMultiOwnerPluginManifest = keccak256(
-      encodeFunctionData({
+      encodeFunctionResult({
         abi: MultiOwnerPluginAbi,
         functionName: "pluginManifest",
       })
@@ -140,15 +141,12 @@ export class LightSmartContractAccount<
       abi: LightAccountAbi,
       functionName: "upgradeToAndCall",
       args: [
-        LightSmartContractAccount.implementationAddress,
+        "0xb2b748c2557c552B8636862E41aB3649319dD045",
         encodeMSCAInitializeData,
       ],
     });
 
-    const result = await provider.sendUserOperation({
-      target: accountAddress,
-      data: encodeUpgradeData,
-    });
+    const result = await provider.sendUserOperation(encodeUpgradeData);
 
     let hash = result.hash;
     if (waitForTxn) {
