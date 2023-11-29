@@ -400,13 +400,13 @@ export class SmartAccountProvider<
       BigInt(maxPriorityFeePerGas ?? 0n),
       bigIntPercent(uoToDrop.maxPriorityFeePerGas, 110n)
     );
+    const baseFee =
+      BigInt(uoToDrop.maxFeePerGas) - BigInt(uoToDrop.maxPriorityFeePerGas);
+
     const _overrides: UserOperationOverrides = {
       maxFeePerGas: bigIntMax(
         BigInt(maxFeePerGas ?? 0n),
-        bigIntPercent(
-          BigInt(uoToDrop.maxFeePerGas) - _maxPriorityFeePerGas,
-          110n
-        ) + _maxPriorityFeePerGas
+        bigIntPercent(baseFee, 110n) + _maxPriorityFeePerGas
       ),
       maxPriorityFeePerGas: _maxPriorityFeePerGas,
       paymasterAndData: uoToDrop.paymasterAndData,
