@@ -110,10 +110,16 @@ export class LightSmartContractAccount<
       );
     }
 
+    const pluginManifest = await provider.rpcClient.readContract({
+      abi: MultiOwnerPluginAbi,
+      address: MultiOwnerPluginAddress,
+      functionName: "pluginManifest",
+    });
     const hashedMultiOwnerPluginManifest = keccak256(
       encodeFunctionResult({
         abi: MultiOwnerPluginAbi,
         functionName: "pluginManifest",
+        result: pluginManifest,
       })
     );
 
