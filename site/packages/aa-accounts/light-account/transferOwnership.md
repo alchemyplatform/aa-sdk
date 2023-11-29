@@ -41,7 +41,7 @@ const result = await LightSmartContractAccount.transferOwnership(
 
 ### `Promise<0x${string}>`
 
-A Promise containing the hash of either the UO or transaction containing the UO which transferred ownership of the smart contract account's owner.
+A Promise containing the hash of either the UO or transaction containing the UO which transferred ownership of the smart account's owner.
 
 ## Parameters
 

@@ -14,7 +14,7 @@ head:
 
 # signTypedData
 
-`signTypedData` supports signing typed data from the smart contract account's owner address.
+`signTypedData` supports signing typed data from the smart account's owner address.
 
 ## Usage
 

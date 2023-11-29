@@ -6,21 +6,21 @@ head:
       content: EOA Integration Guide
   - - meta
     - name: description
-      content: Follow this integration guide to use an EOA as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use an EOA as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Follow this integration guide to use an EOA as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use an EOA as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - name: twitter:title
       content: EOA Integration Guide
   - - meta
     - name: twitter:description
-      content: Follow this integration guide to use an EOA as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use an EOA as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
 # EOA Integration Guide
 
-An Externally Owned Account (EOA) is a regular Ethereum account that is controlled by a private key. This is the most common type of account, and is what you are used to when using MetaMask or other wallets. The Account Kit supports EOAs as signers and the process for connecting an EOA is simple, but can depend on how you are connecting to the EOA in your dApp.
+An Externally Owned Account (EOA) is a regular Ethereum account that is controlled by a private key. This is the most common type of account, and is what you are used to when using MetaMask or other wallets. The Account Kit supports EOAs as Signers and the process for connecting an EOA is simple, but can depend on how you are connecting to the EOA in your dApp.
 
 ## Integration
 
@@ -28,7 +28,7 @@ In this example we'll use `viem` in two ways. The first way allows you to connec
 
 ### JSON RPC
 
-A JSON RPC based account is one where the key material is not available locally, but on some external client (eg. Metamask extension or hardware wallet).
+A JSON RPC based account is one where the key material is not available locally, but on some external client (eg. MetaMask extension or hardware wallet).
 
 ```ts
 import { createWalletClient, custom } from "viem";

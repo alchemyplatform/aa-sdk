@@ -14,7 +14,7 @@ head:
 
 # connect
 
-Sets the current account to the smart contract account returned by the given function.
+Sets the current account to the smart account returned by the given function.
 
 The function parameter is called with the public rpc client that is used by this provider so the account can make RPC calls.
 
@@ -38,4 +38,4 @@ The provider with the account connected
 
 ### `fn: (provider: PublicErc4337Client) => BaseSmartContractAccount`
 
-The function that given public rpc client, returns a smart contract account
+The function that given public rpc client, returns a smart account

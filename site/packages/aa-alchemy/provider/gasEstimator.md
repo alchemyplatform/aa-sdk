@@ -14,7 +14,7 @@ head:
 
 # gasEstimator
 
-`gasEstimator` is an override of the same middleware on `SmartAccountProvider`. As part of the middleware stack that the `AlchemyProvider` would run on each UO built and sent, this middleware estimates gas using the Alchemy Rundler (an [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) Bundler), and updates `callGasLimit`, `verificationGasLimit`, and `preVerificationGas` in a UO request with appropriate buffers.
+`gasEstimator` is an override of the same middleware on `SmartAccountProvider`. As part of the middleware stack that the `AlchemyProvider` would run on each UO built and sent, this middleware estimates gas using the Rundler (an [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) Bundler), and updates `callGasLimit`, `verificationGasLimit`, and `preVerificationGas` in a UO request with appropriate buffers.
 
 ## Usage
 

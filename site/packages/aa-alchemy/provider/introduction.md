@@ -14,7 +14,7 @@ head:
 
 # AlchemyProvider
 
-`AlchemyProvider` is an extension of the [`SmartAccountProvider`](/packages/aa-core/provider/introduction) implementation. It's a simpler interface you can use to leverage the Alchemy stack - JSON-RPC requests via API Key or JSON Web Token (JWT), Alchemy Rundler (an [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) Bundler), and Alchemy Gas Manager (an [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) Paymaster).
+`AlchemyProvider` is an extension of the [`SmartAccountProvider`](/packages/aa-core/provider/introduction) implementation. It's a simpler interface you can use to leverage the Alchemy stack - JSON-RPC requests via API Key or JSON Web Token (JWT), Rundler (an [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) Bundler), and Gas Manager (an [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) Paymaster).
 
 Notable differences between `AlchemyProvider` and `SmartAccountProvider` are implementations for:
 
@@ -36,7 +36,7 @@ const uoStruct = await provider.buildUserOperation({
 });
 const uoHash = await provider.sendUserOperation(uoStruct);
 
-// use Alchemy Gas Manager to sponsorship transactions
+// use Gas Manager to sponsorship transactions
 const providerWithGasManager = provider.withAlchemyGasManager({
   policyId: PAYMASTER_POLICY_ID,
 });

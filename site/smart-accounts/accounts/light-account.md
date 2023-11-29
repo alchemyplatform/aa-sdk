@@ -24,7 +24,7 @@ head:
 
 ## Overview
 
-Light Account is an [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) smart account. We started with the Ethereum Foundation’s canonical [SimpleAccount](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol) and added key improvements. It's fully production-ready with a security [audit](https://github.com/alchemyplatform/light-account/blob/main/Quantstamp-Audit.pdf), gas optimizations, and [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) signature support. Additionally, Light Account supports ownership transfer to ensure you and your user don't get locked into a particular signer.
+Light Account is an [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) smart account. We started with the Ethereum Foundation’s canonical [SimpleAccount](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol) and added key improvements. It's fully production-ready with a security [audit](https://github.com/alchemyplatform/light-account/blob/main/Quantstamp-Audit.pdf), gas optimizations, and [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) signature support. Additionally, Light Account supports ownership transfer to ensure you and your user don't get locked into a particular Signer.
 
 ## Why Light Account
 
@@ -36,7 +36,7 @@ Light Account is engineered to minimize gas costs, as measured by the following 
 
 | Account                                                                                                                 | Native transfer | ERC20 transfer | Creation |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------- | -------------- | -------- |
-| Alchemy LightAccount                                                                                                    | 100844          | 90345          | 279746   |
+| Alchemy Light Account                                                                                                   | 100844          | 90345          | 279746   |
 | Kernel v2.1-lite                                                                                                        | 101002          | 90321          | 230968   |
 | [SimpleAccount](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol) | 101319          | 90907          | 383218   |
 | Etherspot                                                                                                               | 103719          | 93324          | 279219   |
@@ -60,6 +60,6 @@ The code snippet below demonstrates how to use Light Account with Account Kit. I
 
 ## Developer Links
 
-- [LightAccount & Simple Account Deployment Addresses](/smart-accounts/accounts/deployment-addresses)
-- [LightAccount Github Repo](https://github.com/alchemyplatform/light-account)
+- [Light Account & Simple Account Deployment Addresses](/smart-accounts/accounts/deployment-addresses)
+- [Light Account Github Repo](https://github.com/alchemyplatform/light-account)
 - [Quantstamp Audit Report](https://github.com/alchemyplatform/light-account/blob/main/Quantstamp-Audit.pdf)

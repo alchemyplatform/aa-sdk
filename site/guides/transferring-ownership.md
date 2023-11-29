@@ -22,7 +22,7 @@ next:
 
 # How to Transfer Ownership of a Smart Account
 
-Not all Smart Contract Account implementations support transfering the owner (e.g. `SimpleAccount`). However, a number of the accounts in this guide and in the Account Kit do, including Alchemy's Light Account! Let's see a few different ways we can transfer ownership of an Account (using Light Account as an example).
+Not all smart account implementations support transfering the owner (e.g. `SimpleAccount`). However, a number of the accounts in this guide and in Account Kit do, including our Light Account! Let's see a few different ways we can transfer ownership of an Account (using Light Account as an example).
 
 ## Light Account
 
@@ -32,7 +32,7 @@ Light Account exposes the following method which allows the existing owner to tr
 function transferOwnership(address newOwner) public virtual onlyOwner
 ```
 
-There a number of ways you can call this method using the Account Kit.
+There a number of ways you can call this method using Account Kit.
 
 ### 1. Using `LightSmartContractAccount`
 
@@ -42,7 +42,7 @@ There a number of ways you can call this method using the Account Kit.
 import { LightSmartContractAccount } from "@alchemy/aa-accounts";
 import { provider } from "./provider";
 
-// this will return the address of the smart contract account you want to transfer ownerhip of
+// this will return the address of the smart account you want to transfer ownerhip of
 const accountAddress = await provider.getAddress();
 const newOwner = "0x..."; // the address of the new owner
 
@@ -65,7 +65,7 @@ Assuming you have connected the `provider` to a `LightAccount` using `provider.c
 import { encodeFunctionData } from "viem";
 import { provider } from "./provider";
 
-// this will return the address of the smart contract account you want to transfer ownerhip of
+// this will return the address of the smart account you want to transfer ownerhip of
 const accountAddress = await provider.getAddress();
 const newOwner = "0x..."; // the address of the new owner
 
@@ -98,4 +98,4 @@ const { hash: userOperationHash } = provider.sendUserOperation({
 
 :::
 
-See the [`LightSmartContractAccount`](/packages/aa-accounts/light-account/introduction) docs for more details about the Alchemy Light Account implementation.
+See the [`LightSmartContractAccount`](/packages/aa-accounts/light-account/introduction) docs for more details about our Light Account implementation.

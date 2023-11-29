@@ -6,10 +6,10 @@ head:
       content: Deployment Addresses
   - - meta
     - name: description
-      content: Deployment Addresses for LightAccount and SimpleAccount
+      content: Deployment Addresses for Light Account and SimpleAccount
   - - meta
     - property: og:description
-      content: Deployment Addresses for LightAccount and SimpleAccount
+      content: Deployment Addresses for Light Account and SimpleAccount
 ---
 
 # Deployment Addresses
