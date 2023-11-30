@@ -125,8 +125,8 @@ export class LightSmartContractAccount<
     );
 
     const ownerAddress = await provider.account.getOwnerAddress();
-    const encodedOwner = encodeAbiParameters(parseAbiParameters("address"), [
-      ownerAddress,
+    const encodedOwner = encodeAbiParameters(parseAbiParameters("address[]"), [
+      [ownerAddress],
     ]);
 
     const encodedPluginInitData = encodeAbiParameters(
