@@ -232,6 +232,7 @@ export abstract class BaseSmartContractAccount<
     if (this.deploymentState === DeploymentState.DEPLOYED) {
       return "0x";
     }
+
     const contractCode = await this.rpcProvider.getBytecode({
       address: await this.getAddress(),
     });
@@ -249,19 +250,19 @@ export abstract class BaseSmartContractAccount<
   async getAddress(): Promise<Address> {
     if (!this.accountAddress) {
       const initCode = await this._getAccountInitCode();
-      Logger.debug(
+      Logger.verbose(
         "[BaseSmartContractAccount](getAddress) initCode: ",
         initCode
       );
       try {
         await this.entryPoint.simulate.getSenderAddress([initCode]);
       } catch (err: any) {
-        Logger.debug(
-          "[BaseSmartContractAccount](getAddress) entrypoint.getSenderAddress result: ",
-          err
-        );
         if (err.cause?.data?.errorName === "SenderAddressResult") {
           this.accountAddress = err.cause.data.args[0] as Address;
+          Logger.verbose(
+            "[BaseSmartContractAccount](getAddress) entrypoint.getSenderAddress result:",
+            this.accountAddress
+          );
           return this.accountAddress;
         }
       }
@@ -329,7 +330,7 @@ export abstract class BaseSmartContractAccount<
     const [factoryAddress, factoryCalldata] =
       await this.parseFactoryAddressFromAccountInitCode();
 
-    Logger.debug(
+    Logger.verbose(
       `[BaseSmartContractAccount](create6492Signature)\
         factoryAddress: ${factoryAddress}, factoryCalldata: ${factoryCalldata}`
     );
