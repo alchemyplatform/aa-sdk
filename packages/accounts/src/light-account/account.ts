@@ -134,7 +134,7 @@ export class LightSmartContractAccount<
       [[hashedMultiOwnerPluginManifest], [encodedOwner]]
     );
 
-    const encodeMSCAInitializeData = encodeFunctionData({
+    const encodedMSCAInitializeData = encodeFunctionData({
       abi: UpgradeableModularAccountAbi,
       functionName: "initialize",
       args: [[MultiOwnerPluginAddress], encodedPluginInitData],
@@ -145,11 +145,14 @@ export class LightSmartContractAccount<
       functionName: "upgradeToAndCall",
       args: [
         "0xb2b748c2557c552B8636862E41aB3649319dD045",
-        encodeMSCAInitializeData,
+        encodedMSCAInitializeData,
       ],
     });
 
-    const result = await provider.sendUserOperation(encodeUpgradeData);
+    const result = await provider.sendUserOperation({
+      target: accountAddress,
+      data: encodeUpgradeData,
+    });
 
     let hash = result.hash;
     if (waitForTxn) {
