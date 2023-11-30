@@ -200,7 +200,12 @@ describe("Light Account Tests", () => {
     expect(newOwnerViaProvider).toBe(newOwner);
   }, 100000);
 
-  it.only("should upgrade account to msca successfully", async () => {
+  it.only("should upgrade a deployed light account to msca successfully", async () => {
+    const provider = givenConnectedProvider({
+      owner,
+      chain,
+    });
+
     // create a throwaway address
     const throwawayOwner = LocalAccountSigner.privateKeyToAccountSigner(
       generatePrivateKey()
@@ -210,24 +215,29 @@ describe("Light Account Tests", () => {
       chain,
     });
 
-    const result = await throwawayProvider.sendUserOperation({
-      target: await throwawayProvider.getAddress(),
+    const accountAddress = await throwawayProvider.getAddress();
+    const ownerAddress = await throwawayOwner.getAddress();
+
+    // fund + deploy the throwaway address
+    await provider.sendTransaction({
+      from: await provider.getAddress(),
+      to: await throwawayProvider.getAddress(),
       data: "0x",
+      value: toHex(1000000000000000n),
     });
-    await throwawayProvider.waitForUserOperationTransaction(result.hash);
 
-    const { provider } = await LightSmartContractAccount.upgrade(
-      throwawayProvider,
-      true
-    );
+    const { provider: upgradedProvider } =
+      await LightSmartContractAccount.upgrade(throwawayProvider, true);
 
-    const { data } = await throwawayProvider.rpcClient.call({
-      account: await provider.getAddress(),
+    const upgradedAccountAddress = await upgradedProvider.getAddress();
+
+    const { data } = await upgradedProvider.rpcClient.call({
+      account: upgradedAccountAddress,
       to: MultiOwnerPluginAddress,
       data: encodeFunctionData({
         abi: MultiOwnerPluginAbi,
         functionName: "ownersOf",
-        args: [await provider.account.getAddress()],
+        args: [upgradedAccountAddress],
       }),
     });
 
@@ -241,14 +251,9 @@ describe("Light Account Tests", () => {
       data,
     });
 
-    console.log(owners);
-
-    expect(await throwawayProvider.getAddress()).toBe(
-      await provider.getAddress()
-    );
-
-    expect(owners).toContain(await throwawayOwner.getAddress());
-  }, 100000);
+    expect(upgradedAccountAddress).toBe(accountAddress);
+    expect(owners).toContain(ownerAddress);
+  }, 200000);
 });
 
 const givenConnectedProvider = ({

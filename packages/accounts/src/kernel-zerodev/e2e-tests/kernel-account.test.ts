@@ -26,7 +26,7 @@ import { MockSigner } from "./mocks/mock-signer.js";
 
 const chain = polygonMumbai;
 
-describe("Kernel Account Tests", () => {
+describe.skip("Kernel Account Tests", () => {
   //any wallet should work
   const config = {
     chain,

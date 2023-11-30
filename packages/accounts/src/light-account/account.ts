@@ -103,8 +103,8 @@ export class LightSmartContractAccount<
     });
 
     if (
-      storage == null ||
-      !(trim(storage) === LightSmartContractAccount.implementationAddress)
+      storage != null &&
+      trim(storage) !== LightSmartContractAccount.implementationAddress
     ) {
       throw new Error(
         "could not determine if smart account implementation is light account"
@@ -172,6 +172,7 @@ export class LightSmartContractAccount<
           owner,
           index: 0n,
           chain: provider.chain,
+          accountAddress,
         })
       ),
       hash,
