@@ -1,7 +1,15 @@
 import type { Address, Hash, Hex } from "viem";
 import { encodeAbiParameters, hexToBigInt, keccak256, toHex } from "viem";
 import * as chains from "viem/chains";
-import type { PromiseOrValue, UserOperationRequest } from "../types.js";
+import type {
+  BigNumberish,
+  Percentage,
+  PromiseOrValue,
+  UserOperationFeeOptionsField,
+  UserOperationRequest,
+} from "../types.js";
+import { bigIntClamp, bigIntPercent } from "./bigint.js";
+import { BigNumberishSchema, PercentageSchema } from "./schema.js";
 
 /**
  * Utility method for converting a chainId to a {@link chains.Chain} object
@@ -26,11 +34,11 @@ export const getChain = (chainId: number): chains.Chain => {
  * @returns result of the pipe
  */
 export const asyncPipe =
-  <T>(...fns: ((x: T) => Promise<T>)[]) =>
-  async (x: T) => {
-    let result = x;
+  <S, O, F>(...fns: ((s: S, o?: O, f?: F) => Promise<S>)[]) =>
+  async (s: S, o?: O, f?: F) => {
+    let result = s;
     for (const fn of fns) {
-      result = await fn(result);
+      result = await fn(result, o, f);
     }
     return result;
   };
@@ -87,6 +95,24 @@ export function deepHexlify(obj: any): any {
     }),
     {}
   );
+}
+
+export function applyFeeOption(
+  value: BigNumberish | undefined,
+  feeOption?: UserOperationFeeOptionsField
+): BigNumberish {
+  if (feeOption == null) {
+    return value ?? 0n;
+  }
+  return value
+    ? bigIntClamp(
+        feeOption.percentage
+          ? bigIntPercent(value, BigInt(100 + feeOption.percentage))
+          : value,
+        feeOption.min,
+        feeOption.max
+      )
+    : feeOption.min ?? 0n;
 }
 
 /**
@@ -154,6 +180,31 @@ export function defineReadOnly<T, K extends keyof T>(
     value: value,
     writable: false,
   });
+}
+
+export function isBigNumberish(x: any): x is BigNumberish {
+  return BigNumberishSchema.safeParse(x).success;
+}
+
+export function isPercentage(x: any): x is Percentage {
+  return PercentageSchema.safeParse(x).success;
+}
+
+export function filterUndefined(
+  obj: Record<string, unknown>
+): Record<string, unknown> {
+  Object.keys(obj).forEach((key) => {
+    if (obj[key] == null) {
+      delete obj[key];
+    }
+  });
+  return obj;
+}
+
+export function pick(obj: Record<string, unknown>, keys: string | string[]) {
+  return Object.keys(obj)
+    .filter((k) => keys.includes(k))
+    .reduce((res, k) => Object.assign(res, { [k]: obj[k] }), {});
 }
 
 export * from "./bigint.js";

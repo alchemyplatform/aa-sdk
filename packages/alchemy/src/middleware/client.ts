@@ -4,6 +4,7 @@ import {
 } from "@alchemy/aa-core";
 import type { Address, Hex } from "viem";
 import type {
+  RequestGasAndPaymasterAndDataOverrides,
   SimulateUserOperationAssetChangesRequest,
   SimulateUserOperationAssetChangesResponse,
 } from "./types/index.js";
@@ -30,10 +31,7 @@ export type ClientWithAlchemyMethods = PublicErc4337Client & {
             entryPoint: Address;
             userOperation: UserOperationRequest;
             dummySignature: Hex;
-            feeOverride?: {
-              maxFeePerGas: Hex;
-              maxPriorityFeePerGas: Hex;
-            };
+            overrides?: RequestGasAndPaymasterAndDataOverrides;
           }
         ];
       }): Promise<{
