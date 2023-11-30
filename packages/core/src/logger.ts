@@ -1,4 +1,5 @@
 export enum LogLevel {
+  VERBOSE = 5,
   DEBUG = 4,
   INFO = 3,
   WARN = 2,
@@ -7,7 +8,7 @@ export enum LogLevel {
 }
 
 export class Logger {
-  static logLevel: LogLevel = LogLevel.NONE;
+  static logLevel: LogLevel = LogLevel.INFO;
   static logFilter?: string;
 
   static setLogLevel(logLevel: LogLevel) {
@@ -40,6 +41,12 @@ export class Logger {
     if (!this.shouldLog(msg, LogLevel.INFO)) return;
 
     console.info(msg, ...args);
+  }
+
+  static verbose(msg: string, ...args: any[]) {
+    if (!this.shouldLog(msg, LogLevel.VERBOSE)) return;
+
+    console.log(msg, ...args);
   }
 
   private static shouldLog(msg: string, level: LogLevel) {

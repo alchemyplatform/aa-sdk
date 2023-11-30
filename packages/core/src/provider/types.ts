@@ -19,6 +19,7 @@ import type {
 import type {
   BatchUserOperationCallData,
   UserOperationCallData,
+  UserOperationFeeOptions,
   UserOperationOverrides,
   UserOperationReceipt,
   UserOperationRequest,
@@ -53,14 +54,18 @@ export type SendUserOperationResult = {
 };
 
 export type AccountMiddlewareFn = (
-  struct: Deferrable<UserOperationStruct>
+  struct: Deferrable<UserOperationStruct>,
+  overrides?: UserOperationOverrides,
+  feeOptions?: UserOperationFeeOptions
 ) => Promise<Deferrable<UserOperationStruct>>;
 
 export type AccountMiddlewareOverrideFn<
   Req extends keyof UserOperationStruct = never,
   Opt extends keyof UserOperationStruct = never
 > = (
-  struct: Deferrable<UserOperationStruct>
+  struct: Deferrable<UserOperationStruct>,
+  overrides?: UserOperationOverrides,
+  feeOptions?: UserOperationFeeOptions
 ) => Promise<
   WithRequired<UserOperationStruct, Req> &
     WithOptional<UserOperationStruct, Opt>
@@ -74,7 +79,6 @@ export type PaymasterAndDataMiddleware = AccountMiddlewareOverrideFn<
   | "maxFeePerGas"
   | "maxPriorityFeePerGas"
 >;
-
 export type GasEstimatorMiddleware = AccountMiddlewareOverrideFn<
   "callGasLimit" | "preVerificationGas" | "verificationGasLimit"
 >;
@@ -326,6 +330,7 @@ export interface ISmartAccountProvider<
    * prior to execution.
    *
    * @param override - a function for overriding the default feeDataGetter middleware
+   * @param feeOptions - optional FeeDataFeeOptions to set at the global level of the provider.
    * @returns
    */
   withFeeDataGetter: (override: FeeDataMiddleware) => this;

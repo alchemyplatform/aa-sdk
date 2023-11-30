@@ -1,17 +1,23 @@
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
-import { LocalAccountSigner, type SmartAccountSigner } from "@alchemy/aa-core";
+import {
+  LocalAccountSigner,
+  Logger,
+  LogLevel,
+  type SmartAccountSigner,
+  type UserOperationFeeOptions,
+} from "@alchemy/aa-core";
 import {
   isAddress,
   type Address,
   type Chain,
-  type HDAccount,
   type Hash,
+  type HDAccount,
 } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import { sepolia } from "viem/chains";
 import {
-  LightSmartContractAccount,
   getDefaultLightAccountFactoryAddress,
+  LightSmartContractAccount,
 } from "../../index.js";
 import {
   API_KEY,
@@ -21,6 +27,8 @@ import {
 } from "./constants.js";
 
 const chain = sepolia;
+
+Logger.setLogLevel(LogLevel.DEBUG);
 
 describe("Light Account Tests", () => {
   const owner: SmartAccountSigner<HDAccount> =
@@ -107,7 +115,7 @@ describe("Light Account Tests", () => {
     );
 
     await expect(txnHash).resolves.not.toThrowError();
-  }, 50000);
+  }, 100000);
 
   it("should fail to execute if account address is not deployed and not correct", async () => {
     const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
@@ -147,15 +155,6 @@ describe("Light Account Tests", () => {
   });
 
   it("should transfer ownership successfully", async () => {
-    const provider = givenConnectedProvider({
-      owner,
-      chain,
-      feeOpts: {
-        baseFeeBufferPercent: 50n,
-        maxPriorityFeeBufferPercent: 50n,
-        preVerificationGasBufferPercent: 50n,
-      },
-    });
     // create a throwaway address
     const throwawayOwner = LocalAccountSigner.privateKeyToAccountSigner(
       generatePrivateKey()
@@ -165,17 +164,6 @@ describe("Light Account Tests", () => {
       chain,
     });
 
-    // fund the throwaway address
-    const fundThrowawayResult = await provider.sendUserOperation({
-      target: await throwawayProvider.getAddress(),
-      data: "0x",
-      value: 10000000000000n,
-    });
-    const fundThrowawayTxnHash = provider.waitForUserOperationTransaction(
-      fundThrowawayResult.hash
-    );
-    await expect(fundThrowawayTxnHash).resolves.not.toThrowError();
-
     // create new owner and transfer ownership
     const newThrowawayOwner = LocalAccountSigner.privateKeyToAccountSigner(
       generatePrivateKey()
@@ -184,6 +172,7 @@ describe("Light Account Tests", () => {
       throwawayProvider,
       newThrowawayOwner
     );
+
     const txnHash = throwawayProvider.waitForUserOperationTransaction(result);
     await expect(txnHash).resolves.not.toThrowError();
 
@@ -200,21 +189,24 @@ const givenConnectedProvider = ({
   owner,
   chain,
   accountAddress,
-  feeOpts,
+  feeOptions,
 }: {
   owner: SmartAccountSigner;
   chain: Chain;
   accountAddress?: Address;
-  feeOpts?: {
-    baseFeeBufferPercent?: bigint;
-    maxPriorityFeeBufferPercent?: bigint;
-    preVerificationGasBufferPercent?: bigint;
-  };
+  feeOptions?: UserOperationFeeOptions;
 }) => {
   const provider = new AlchemyProvider({
     apiKey: API_KEY!,
     chain,
-    feeOpts,
+    opts: {
+      txMaxRetries: 10,
+      feeOptions: {
+        maxFeePerGas: { percentage: 100 },
+        maxPriorityFeePerGas: { percentage: 100 },
+        ...feeOptions,
+      },
+    },
   }).connect(
     (rpcClient) =>
       new LightSmartContractAccount({
