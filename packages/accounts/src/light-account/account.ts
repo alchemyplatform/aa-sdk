@@ -10,6 +10,7 @@ import {
   encodeAbiParameters,
   encodeFunctionData,
   encodeFunctionResult,
+  fromHex,
   keccak256,
   parseAbiParameters,
   trim,
@@ -102,8 +103,13 @@ export class LightSmartContractAccount<
       slot: LightSmartContractAccount.storageSlot,
     });
 
+    if (storage == null) {
+      throw new Error("could not get storage");
+    }
+
+    // only upgrade undeployed accounts (storage 0) or deployed light accounts, error otherwise
     if (
-      storage != null &&
+      fromHex(storage, "number") !== 0 &&
       trim(storage) !== LightSmartContractAccount.implementationAddress
     ) {
       throw new Error(
@@ -124,7 +130,8 @@ export class LightSmartContractAccount<
       })
     );
 
-    const ownerAddress = await provider.account.getOwnerAddress();
+    // owner is always defined for Light Account
+    const ownerAddress = await provider.account.getOwner()?.getAddress()!;
     const encodedOwner = encodeAbiParameters(parseAbiParameters("address[]"), [
       [ownerAddress],
     ]);

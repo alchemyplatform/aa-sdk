@@ -200,7 +200,7 @@ describe("Light Account Tests", () => {
     expect(newOwnerViaProvider).toBe(newOwner);
   }, 100000);
 
-  it.only("should upgrade a deployed light account to msca successfully", async () => {
+  it("should upgrade a deployed light account to msca successfully", async () => {
     const provider = givenConnectedProvider({
       owner,
       chain,
@@ -232,6 +232,50 @@ describe("Light Account Tests", () => {
     const upgradedAccountAddress = await upgradedProvider.getAddress();
 
     const { data } = await upgradedProvider.rpcClient.call({
+      account: upgradedAccountAddress,
+      to: MultiOwnerPluginAddress,
+      data: encodeFunctionData({
+        abi: MultiOwnerPluginAbi,
+        functionName: "ownersOf",
+        args: [upgradedAccountAddress],
+      }),
+    });
+
+    if (!data) {
+      throw new Error("Data is undefined");
+    }
+
+    const owners = decodeFunctionResult({
+      abi: MultiOwnerPluginAbi,
+      functionName: "ownersOf",
+      data,
+    });
+
+    expect(upgradedAccountAddress).toBe(accountAddress);
+    expect(owners).toContain(ownerAddress);
+  }, 200000);
+
+  it("should upgrade an undeployed light account to msca successfully", async () => {
+    // create a throwaway address to test upgrade
+    const throwawayOwner = LocalAccountSigner.privateKeyToAccountSigner(
+      generatePrivateKey()
+    );
+    const throwawayProvider = givenConnectedProvider({
+      owner: throwawayOwner,
+      chain,
+    });
+
+    const accountAddress = await throwawayProvider.getAddress();
+    const ownerAddress = await throwawayOwner.getAddress();
+
+    const { provider } = await LightSmartContractAccount.upgrade(
+      throwawayProvider,
+      true
+    );
+
+    const upgradedAccountAddress = await provider.getAddress();
+
+    const { data } = await provider.rpcClient.call({
       account: upgradedAccountAddress,
       to: MultiOwnerPluginAddress,
       data: encodeFunctionData({
