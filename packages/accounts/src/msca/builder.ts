@@ -15,7 +15,7 @@ import {
 } from "viem";
 import { z } from "zod";
 import { IStandardExecutorAbi } from "./abis/IStandardExecutor.js";
-import { pluginManagerDecorator } from "./plugins/manager/decorator.js";
+import { pluginManagerDecorator } from "./plugin-manager/decorator.js";
 import type { Plugin } from "./plugins/types";
 
 export interface MSCA<
