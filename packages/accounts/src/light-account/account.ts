@@ -11,6 +11,7 @@ import {
   encodeFunctionData,
   encodeFunctionResult,
   keccak256,
+  parseAbiParameters,
   trim,
   type Address,
   type FallbackTransport,
@@ -124,16 +125,12 @@ export class LightSmartContractAccount<
     );
 
     const ownerAddress = await provider.account.getOwnerAddress();
-    const encodedOwner = encodeAbiParameters(
-      [{ name: "owner", type: "address" }],
-      [ownerAddress]
-    );
+    const encodedOwner = encodeAbiParameters(parseAbiParameters("address"), [
+      ownerAddress,
+    ]);
 
     const encodedPluginInitData = encodeAbiParameters(
-      [
-        { name: "manifestHashes", type: "bytes32[]" },
-        { name: "pluginInstallDatas", type: "bytes[]" },
-      ],
+      parseAbiParameters("bytes32[], bytes[]"),
       [[hashedMultiOwnerPluginManifest], [encodedOwner]]
     );
 
