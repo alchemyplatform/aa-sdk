@@ -32,8 +32,7 @@ import {
   type UserOperationStruct,
 } from "../types.js";
 import {
-  applyFeeOption,
-  applyUserOperationOverride,
+  applyUserOpOverrideOrFeeOption,
   asyncPipe,
   bigIntMax,
   bigIntPercent,
@@ -528,29 +527,21 @@ export class SmartAccountProvider<
       this.getEntryPointAddress()
     );
 
-    const callGasLimit =
-      applyUserOperationOverride(
-        estimates.callGasLimit,
-        overrides?.callGasLimit
-      ) || applyFeeOption(estimates.callGasLimit, feeOptions?.callGasLimit);
-    const verificationGasLimit =
-      applyUserOperationOverride(
-        estimates.verificationGasLimit,
-        overrides?.verificationGasLimit
-      ) ||
-      applyFeeOption(
-        estimates.verificationGasLimit,
-        feeOptions?.verificationGasLimit
-      );
-    const preVerificationGas =
-      applyUserOperationOverride(
-        estimates.preVerificationGas,
-        overrides?.preVerificationGas
-      ) ||
-      applyFeeOption(
-        estimates.preVerificationGas,
-        feeOptions?.preVerificationGas
-      );
+    const callGasLimit = applyUserOpOverrideOrFeeOption(
+      estimates.callGasLimit,
+      overrides?.callGasLimit,
+      feeOptions?.callGasLimit
+    );
+    const verificationGasLimit = applyUserOpOverrideOrFeeOption(
+      estimates.verificationGasLimit,
+      overrides?.verificationGasLimit,
+      feeOptions?.verificationGasLimit
+    );
+    const preVerificationGas = applyUserOpOverrideOrFeeOption(
+      estimates.preVerificationGas,
+      overrides?.preVerificationGas,
+      feeOptions?.preVerificationGas
+    );
 
     struct.callGasLimit = callGasLimit;
     struct.verificationGasLimit = verificationGasLimit;
@@ -581,21 +572,22 @@ export class SmartAccountProvider<
 
     let maxPriorityFeePerGas: BigNumberish =
       await this.rpcClient.estimateMaxPriorityFeePerGas();
-    maxPriorityFeePerGas =
-      applyUserOperationOverride(
-        maxPriorityFeePerGas,
-        overrides?.maxPriorityFeePerGas
-      ) ||
-      applyFeeOption(maxPriorityFeePerGas, feeOptions?.maxPriorityFeePerGas);
+    maxPriorityFeePerGas = applyUserOpOverrideOrFeeOption(
+      maxPriorityFeePerGas,
+      overrides?.maxPriorityFeePerGas,
+      feeOptions?.maxPriorityFeePerGas
+    );
 
     let maxFeePerGas: BigNumberish =
       feeData.maxFeePerGas -
       feeData.maxPriorityFeePerGas +
       BigInt(maxPriorityFeePerGas);
 
-    maxFeePerGas =
-      applyUserOperationOverride(maxFeePerGas, overrides?.maxFeePerGas) ||
-      applyFeeOption(maxFeePerGas, feeOptions?.maxFeePerGas);
+    maxFeePerGas = applyUserOpOverrideOrFeeOption(
+      maxFeePerGas,
+      overrides?.maxFeePerGas,
+      feeOptions?.maxFeePerGas
+    );
 
     struct.maxFeePerGas = maxFeePerGas;
     struct.maxPriorityFeePerGas = maxPriorityFeePerGas;

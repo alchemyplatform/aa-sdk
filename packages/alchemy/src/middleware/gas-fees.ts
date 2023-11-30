@@ -1,4 +1,4 @@
-import { applyFeeOption, applyUserOperationOverride } from "@alchemy/aa-core";
+import { applyUserOpOverrideOrFeeOption } from "@alchemy/aa-core";
 import type { AlchemyProvider } from "../provider.js";
 import type { ClientWithAlchemyMethods } from "./client.js";
 
@@ -19,24 +19,16 @@ export const withAlchemyGasFeeEstimator = (
       throw new Error("baseFeePerGas is null");
     }
 
-    const maxPriorityFeePerGas =
-      applyUserOperationOverride(
-        maxPriorityFeePerGasEstimate,
-        overrides?.maxPriorityFeePerGas
-      ) ||
-      applyFeeOption(
-        maxPriorityFeePerGasEstimate,
-        feeOptions?.maxPriorityFeePerGas
-      );
-    const maxFeePerGas =
-      applyUserOperationOverride(
-        baseFeePerGas + BigInt(maxPriorityFeePerGas),
-        overrides?.maxPriorityFeePerGas
-      ) ||
-      applyFeeOption(
-        baseFeePerGas + BigInt(maxPriorityFeePerGas),
-        feeOptions?.maxPriorityFeePerGas
-      );
+    const maxPriorityFeePerGas = applyUserOpOverrideOrFeeOption(
+      maxPriorityFeePerGasEstimate,
+      overrides?.maxPriorityFeePerGas,
+      feeOptions?.maxPriorityFeePerGas
+    );
+    const maxFeePerGas = applyUserOpOverrideOrFeeOption(
+      baseFeePerGas + BigInt(maxPriorityFeePerGas),
+      overrides?.maxFeePerGas,
+      feeOptions?.maxFeePerGas
+    );
 
     return {
       ...struct,

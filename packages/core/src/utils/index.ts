@@ -5,10 +5,8 @@ import type {
   BigNumberish,
   Percentage,
   PromiseOrValue,
-  UserOperationFeeOptionsField,
   UserOperationRequest,
 } from "../types.js";
-import { bigIntClamp, bigIntPercent } from "./bigint.js";
 import { BigNumberishSchema, PercentageSchema } from "./schema.js";
 
 /**
@@ -95,43 +93,6 @@ export function deepHexlify(obj: any): any {
     }),
     {}
   );
-}
-
-export function applyUserOperationOverride(
-  value: BigNumberish | undefined,
-  override?: BigNumberish | Percentage
-): BigNumberish | undefined {
-  if (override == null) {
-    return value;
-  }
-
-  if (isBigNumberish(override)) {
-    return override;
-  }
-  // percentage override
-  else {
-    return value != null
-      ? bigIntPercent(value, BigInt(100 + override.percentage))
-      : value;
-  }
-}
-
-export function applyFeeOption(
-  value: BigNumberish | undefined,
-  feeOption?: UserOperationFeeOptionsField
-): BigNumberish {
-  if (feeOption == null) {
-    return value ?? 0n;
-  }
-  return value != null
-    ? bigIntClamp(
-        feeOption.percentage
-          ? bigIntPercent(value, BigInt(100 + feeOption.percentage))
-          : value,
-        feeOption.min,
-        feeOption.max
-      )
-    : feeOption.min ?? 0n;
 }
 
 /**
