@@ -51,6 +51,6 @@ A Promise containing the hash of the user operation and the request that was sen
 
 A previously submitted `UserOperation`.
 
-### `overrides?: UserOperationOverrides`
+### `overrides?:` [`UserOperationOverrides`](/packages/aa-core/types/userOperationOverrides.md)
 
-Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas` or `paymasterAndData` on the user operation request
+Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` or `paymasterAndData` on the user operation request

@@ -16,7 +16,7 @@ export type EmptyHex = `0x`;
 
 // based on @account-abstraction/common
 export type PromiseOrValue<T> = T | Promise<T>;
-export type BytesLike = Uint8Array | string;
+export type BytesLike = Uint8Array | Hex;
 export type Percentage = z.infer<typeof PercentageSchema>;
 
 export type BigNumberish = z.infer<typeof BigNumberishSchema>;
