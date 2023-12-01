@@ -1,0 +1,55 @@
+---
+outline: deep
+head:
+  - - meta
+    - property: og:title
+      content: TurnkeySigner • constructor
+  - - meta
+    - name: description
+      content: Overview of the constructor method on TurnkeySigner in aa-signers
+  - - meta
+    - property: og:description
+      content: Overview of the constructor method on TurnkeySigner in aa-signers
+---
+
+# constructor
+
+To initialize a `TurnkeySigner`, you must provide a set of parameters detailed below.
+
+## Usage
+
+::: code-group
+
+```ts [example.ts]
+import { TurnkeySigner } from "@alchemy/aa-signers";
+import { ApiKeyStamper } from "@turnkey/api-key-stamper";
+
+// instantiates using the API Key stamper
+const turnkeySigner = new TurnkeySigner({
+  apiUrl: "api.turnkey.com",
+  stamper: new ApiKeyStamper({
+    apiPublicKey: "TURNKEY_API_PUBLIC_KEY",
+    apiPrivateKey: "TURNKEY_API_PRIVATE_KEY",
+  }),
+});
+```
+
+:::
+
+## Returns
+
+### `TurnkeySigner`
+
+A new instance of a `TurnkeySigner`.
+
+## Parameters
+
+### `params: TurnkeyClientParams | { inner: TurnkeyClient }`
+
+You can either pass in a constructed `TurnkeyClient` object, or directly pass into the `TurnkeySigner` the `TurnkeyClientParams` used to construct a `TurnkeyClient` object.
+
+`TurnkeyClientParams` takes in the following parameters:
+
+- `apiUrl: string` -- a URL pointing to the Turnkey public API. You can use https://api.turnkey.com.
+
+- `stamper: TStamper` -- a Turnkey stamper to sign requests. Every request to Turnkey must be signed using a [stamper](https://docs.turnkey.com/category/api-design). Turnkey supports multiple stampers including [`@turnkey/api-key-stamper`](https://github.com/tkhq/sdk/tree/main/packages/api-key-stamper) to sign requests with API keys and [`@turnkey/webauthn-stamper`](https://github.com/tkhq/sdk/tree/main/packages/webauthn-stamper) to sign requests with Passkeys or WebAuthn devices.
