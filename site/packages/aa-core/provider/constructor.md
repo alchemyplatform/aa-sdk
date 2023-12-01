@@ -65,8 +65,8 @@ A new instance of a `SmartAccountProvider`.
 
   - `txRetryMulitplier: string | undefined` -- [optional] the mulitplier on interval length to wait between retries while waiting for transaction receipts (default: 1.5).
 
-  - `feeOptions:` [`UserOperationFeeOptions`](/packages/aa-core/types/userOperationFeeOptions.md) `| undefined` --[optional] user operation fee options to be used for gas estimation, set at the global level on the provider.
-    If not set, default fee options for the chain are used. Available fields in `feeOptions` include `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` where each field is of type [`UserOperationFeeOptionsField`](/packages/aa-core/types/userOperationFeeOptionsField.md).
+  - `feeOptions:` [`UserOperationFeeOptions`](/packages/aa-core/provider/types/UserOperationFeeOptions.md) `| undefined` --[optional] user operation fee options to be used for gas estimation, set at the global level on the provider.
+    If not set, default fee options for the chain are used. Available fields in `feeOptions` include `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` where each field is of type [`UserOperationFeeOptionsField`](/packages/aa-core/provider/types/UserOperationFeeOptionsField.md).
 
     - `maxFeePerGas`: `UserOperationFeeOptionsField`
     - `maxPriorityFeePerGas`: `UserOperationFeeOptionsField`
