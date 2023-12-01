@@ -10,8 +10,7 @@ head:
   - - meta
     - property: og:description
       content: Overview of the extend method on ISmartAccountProvider
-next:
-  text: SmartContractAccount
+next: Types
 ---
 
 # extend

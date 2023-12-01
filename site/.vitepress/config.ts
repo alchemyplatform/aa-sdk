@@ -357,6 +357,10 @@ export default defineConfig({
                     text: "signTypedDataWith6492",
                     link: "/signTypedDataWith6492",
                   },
+                  {
+                    text: "signUserOperationHash",
+                    link: "/signUserOperationHash",
+                  },
                 ],
               },
               {
@@ -681,7 +685,7 @@ export default defineConfig({
               { text: "getAddress", link: "/getAddress" },
               { text: "signMessage", link: "/signMessage" },
               { text: "signTypedData", link: "/signTypedData" },
-              { text: "getAuthDetails", link: "/getDgetAuthDetailsetails" },
+              { text: "getAuthDetails", link: "/getAuthDetails" },
             ],
           },
           { text: "Contributing", link: "/contributing" },

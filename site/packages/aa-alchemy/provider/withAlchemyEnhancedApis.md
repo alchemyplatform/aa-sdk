@@ -10,6 +10,8 @@ head:
   - - meta
     - property: og:description
       content: Overview of the withAlchemyEnhancedApis method on Alchemy Provider in aa-alchemy
+next:
+  text: Middleware
 ---
 
 # withAlchemyEnhancedApis

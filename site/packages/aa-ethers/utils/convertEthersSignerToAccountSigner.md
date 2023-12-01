@@ -10,6 +10,8 @@ head:
   - - meta
     - property: og:description
       content: Overview of the convertEthersSignerToAccountSigner method in aa-ethers
+next:
+  text: Glossary
 ---
 
 # Utils

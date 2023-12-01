@@ -11,7 +11,7 @@ head:
     - property: og:description
       content: How to add your own Account Implementation to aa-accounts
 next:
-  text: aa-ethers
+  text: aa-signers
 ---
 
 # Contributing to `aa-accounts`
