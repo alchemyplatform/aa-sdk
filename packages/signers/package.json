@@ -68,7 +68,6 @@
     "viem": "^1.16.2"
   },
   "optionalDependencies": {
-    "@turnkey/api-key-stamper": "^0.3.0",
     "@turnkey/http": "^2.4.2",
     "@turnkey/viem": "^0.4.2",
     "@web3auth/base": "^7.1.0",
