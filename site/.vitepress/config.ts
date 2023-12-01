@@ -452,6 +452,25 @@ export default defineConfig({
             ],
           },
           {
+            text: "Types",
+            base: "/packages/aa-core/types",
+            collapsed: true,
+            items: [
+              {
+                text: "UserOperationFeeOptions",
+                link: "/UserOperationFeeOptions",
+              },
+              {
+                text: "UserOperationFeeOptionsField",
+                link: "/userOperationFeeOptionsField",
+              },
+              {
+                text: "UserOperationOverrides",
+                link: "/userOperationOverrides",
+              },
+            ],
+          },
+          {
             text: "Utils",
             base: "/packages/aa-core/utils",
             collapsed: true,
@@ -747,6 +766,28 @@ export default defineConfig({
               {
                 text: "convertEthersSignerToAccountSigner",
                 link: "/convertEthersSignerToAccountSigner",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        text: "Glossary",
+        base: "/glossary",
+        items: [
+          {
+            text: "Types",
+            base: "/glossary/types",
+            collapsed: true,
+            items: [
+              { text: "BigNumberish", link: "/bigNumberish" },
+              {
+                text: "BigNumberishRange",
+                link: "/bigNumberishRange",
+              },
+              {
+                text: "Percentage",
+                link: "/percentage",
               },
             ],
           },
