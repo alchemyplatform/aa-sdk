@@ -1,4 +1,3 @@
-import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import {
   LocalAccountSigner,
   Logger,
@@ -8,6 +7,7 @@ import {
 } from "@alchemy/aa-core";
 import {
   isAddress,
+  toHex,
   type Address,
   type Chain,
   type Hash,
@@ -16,13 +16,12 @@ import {
 import { generatePrivateKey } from "viem/accounts";
 import { sepolia } from "viem/chains";
 import {
-  getDefaultLightAccountFactoryAddress,
+  createLightAccountProvider,
   LightSmartContractAccount,
 } from "../../index.js";
 import {
   API_KEY,
   LIGHT_ACCOUNT_OWNER_MNEMONIC,
-  PAYMASTER_POLICY_ID,
   UNDEPLOYED_OWNER_MNEMONIC,
 } from "./constants.js";
 
@@ -155,6 +154,11 @@ describe("Light Account Tests", () => {
   });
 
   it("should transfer ownership successfully", async () => {
+    const provider = givenConnectedProvider({
+      owner,
+      chain,
+    });
+
     // create a throwaway address
     const throwawayOwner = LocalAccountSigner.privateKeyToAccountSigner(
       generatePrivateKey()
@@ -164,24 +168,32 @@ describe("Light Account Tests", () => {
       chain,
     });
 
+    const oldOwner = await throwawayOwner.getAddress();
+
+    // fund the throwaway address
+    await provider.sendTransaction({
+      from: await provider.getAddress(),
+      to: await throwawayProvider.getAddress(),
+      data: "0x",
+      value: toHex(1000000000000000n),
+    });
+
     // create new owner and transfer ownership
     const newThrowawayOwner = LocalAccountSigner.privateKeyToAccountSigner(
       generatePrivateKey()
     );
-    const result = await LightSmartContractAccount.transferOwnership(
+    await LightSmartContractAccount.transferOwnership(
       throwawayProvider,
-      newThrowawayOwner
+      newThrowawayOwner,
+      true
     );
 
-    const txnHash = throwawayProvider.waitForUserOperationTransaction(result);
-    await expect(txnHash).resolves.not.toThrowError();
+    const newOwnerViaProvider =
+      await throwawayProvider.account.getOwnerAddress();
+    const newOwner = await newThrowawayOwner.getAddress();
 
-    expect(await throwawayProvider.account.getOwnerAddress()).not.toBe(
-      await throwawayOwner.getAddress()
-    );
-    expect(await throwawayProvider.account.getOwnerAddress()).toBe(
-      await newThrowawayOwner.getAddress()
-    );
+    expect(newOwnerViaProvider).not.toBe(oldOwner);
+    expect(newOwnerViaProvider).toBe(newOwner);
   }, 100000);
 });
 
@@ -196,29 +208,16 @@ const givenConnectedProvider = ({
   accountAddress?: Address;
   feeOptions?: UserOperationFeeOptions;
 }) => {
-  const provider = new AlchemyProvider({
-    apiKey: API_KEY!,
+  const provider = createLightAccountProvider({
+    rpcProvider: `${chain.rpcUrls.alchemy.http[0]}/${API_KEY!}`,
     chain,
+    owner,
+    accountAddress,
     opts: {
-      txMaxRetries: 10,
-      feeOptions: {
-        maxFeePerGas: { percentage: 100 },
-        maxPriorityFeePerGas: { percentage: 100 },
-        ...feeOptions,
-      },
+      feeOptions,
+      txMaxRetries: 100,
     },
-  }).connect(
-    (rpcClient) =>
-      new LightSmartContractAccount({
-        chain,
-        owner,
-        factoryAddress: getDefaultLightAccountFactoryAddress(chain),
-        rpcClient,
-        accountAddress,
-      })
-  );
-  provider.withAlchemyGasManager({
-    policyId: PAYMASTER_POLICY_ID,
   });
+
   return provider;
 };

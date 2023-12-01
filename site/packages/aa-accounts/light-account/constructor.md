@@ -73,6 +73,6 @@ A new instance of a `LightSmartContractAccount`.
 
 - `entryPointAddress: Address | undefined` -- [optional] entry point contract address. If not provided, the entry point contract address for the provider is the connected account's entry point contract, or if not connected, falls back to the default entry point contract for the chain. See [getDefaultEntryPointAddress](/packages/aa-core/utils/getDefaultEntryPointAddress.html#getdefaultentrypointaddress).
 
-- `accountAddress: Address | undefined` -- the owner EOA address responsible for signing user operations on behalf of the smart account.
+- `accountAddress: Address | undefined` -- [optional] a smart account address override that this object will manage instead of generating its own.
 
 - `index: bigint | undefined` -- [optional] additional salt value used when creating the smart account.

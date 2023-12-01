@@ -11,7 +11,7 @@ import {
   type UserOperationRequest,
 } from "@alchemy/aa-core";
 import { fromHex } from "viem";
-import type { AlchemyProvider } from "../provider.js";
+import type { AlchemyProvider } from "../provider/base.js";
 import type { ClientWithAlchemyMethods } from "./client.js";
 import type { RequestGasAndPaymasterAndDataOverrides } from "./types/index.js";
 

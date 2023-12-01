@@ -8,20 +8,20 @@ import {
 } from "@alchemy/aa-core";
 import { Alchemy } from "alchemy-sdk";
 import { type HttpTransport } from "viem";
-import { SupportedChains } from "./chains.js";
-import { getDefaultUserOperationFeeOptions } from "./defaults.js";
-import type { ClientWithAlchemyMethods } from "./middleware/client.js";
-import { withAlchemyGasFeeEstimator } from "./middleware/gas-fees.js";
+import { SupportedChains } from "../chains.js";
+import { getDefaultUserOperationFeeOptions } from "../defaults.js";
+import type { ClientWithAlchemyMethods } from "../middleware/client.js";
+import { withAlchemyGasFeeEstimator } from "../middleware/gas-fees.js";
 import {
   withAlchemyGasManager,
   type AlchemyGasManagerConfig,
-} from "./middleware/gas-manager.js";
-import { withAlchemyUserOpSimulation } from "./middleware/simulate-uo.js";
+} from "../middleware/gas-manager.js";
+import { withAlchemyUserOpSimulation } from "../middleware/simulate-uo.js";
 import {
   AlchemyProviderConfigSchema,
   AlchemySdkClientSchema,
-} from "./schema.js";
-import type { AlchemyProviderConfig } from "./type.js";
+} from "../schema.js";
+import type { AlchemyProviderConfig } from "../type.js";
 
 export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
   private rpcUrl: string;
@@ -109,9 +109,9 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
   }
 
   /**
-   * This methods adds the Alchemy UserOperation Simulation middleware to the provider.
+   * This method adds the Alchemy UserOperation Simulation middleware to the provider.
    *
-   * @returns {AlchemyProvider} - a new AlchemyProvider with the UserOperation Simulation middleware
+   * @returns {AlchemyProvider} - a new AlchemyProvider with UserOperation Simulation middleware
    */
   withAlchemyUserOpSimulation(): this {
     if (!this.isConnected()) {
@@ -124,14 +124,17 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
   }
 
   /**
-   * This methods adds Alchemy Enhanced APIs to the provider, via an optional dependency on `alchemy-sdk`.
+   * This method adds Alchemy Enhanced APIs to the provider, via an optional dependency on
+   * `alchemy-sdk`.
    * @see: https://github.com/alchemyplatform/alchemy-sdk-js
    *
-   * The Alchemy SDK client must be configured with the same API key and network as the AlchemyProvider.
-   * This method validates such at runtime.
+   * The Alchemy SDK client must be configured with the same API key and network as the
+   * AlchemyProvider. This method validates such at runtime.
    *
-   * Additionally, since the Alchemy SDK client does not yet support JWT authentication, AlchemyProviders initialized with JWTs cannot use this method.
-   * They must be initialized with an API key or RPC URL.
+   * Additionally, since the Alchemy SDK client does not yet support JWT authentication,
+   * AlchemyProvider initialized with JWTs cannot use this method. They must be initialized with an
+   * API key or RPC URL.
+   *
    * There is an open issue on the Alchemy SDK repo to add JWT support in the meantime.
    * @see: https://github.com/alchemyplatform/alchemy-sdk-js/issues/386
    *
