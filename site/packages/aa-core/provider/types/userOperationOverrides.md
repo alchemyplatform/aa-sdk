@@ -10,6 +10,8 @@ head:
   - - meta
     - property: og:description
       content: Overview of the UserOperationOverrides type in aa-core types
+next:
+  text: SmartContractAccount
 ---
 
 # UserOperationOverrides

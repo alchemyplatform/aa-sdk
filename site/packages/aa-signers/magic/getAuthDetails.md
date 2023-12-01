@@ -10,6 +10,8 @@ head:
   - - meta
     - property: og:description
       content: Overview of the getAuthDetails method on MagicSigner
+next:
+  text: Web3auth
 ---
 
 # getAuthDetails

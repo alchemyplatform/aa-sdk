@@ -279,6 +279,25 @@ export default defineConfig({
                 text: "extend",
                 link: "/extend",
               },
+              {
+                text: "Types",
+                base: "/packages/aa-core/provider/types",
+                collapsed: true,
+                items: [
+                  {
+                    text: "userOperationFeeOptions",
+                    link: "/userOperationFeeOptions",
+                  },
+                  {
+                    text: "UserOperationFeeOptionsField",
+                    link: "/userOperationFeeOptionsField",
+                  },
+                  {
+                    text: "UserOperationOverrides",
+                    link: "/userOperationOverrides",
+                  },
+                ],
+              },
             ],
           },
           {
@@ -337,6 +356,10 @@ export default defineConfig({
                   {
                     text: "signTypedDataWith6492",
                     link: "/signTypedDataWith6492",
+                  },
+                  {
+                    text: "signUserOperationHash",
+                    link: "/signUserOperationHash",
                   },
                 ],
               },
@@ -448,25 +471,6 @@ export default defineConfig({
               {
                 text: "erc4337ClientActions",
                 link: "/erc4337ClientActions",
-              },
-            ],
-          },
-          {
-            text: "Types",
-            base: "/packages/aa-core/types",
-            collapsed: true,
-            items: [
-              {
-                text: "UserOperationFeeOptions",
-                link: "/UserOperationFeeOptions",
-              },
-              {
-                text: "UserOperationFeeOptionsField",
-                link: "/userOperationFeeOptionsField",
-              },
-              {
-                text: "UserOperationOverrides",
-                link: "/userOperationOverrides",
               },
             ],
           },
@@ -681,7 +685,7 @@ export default defineConfig({
               { text: "getAddress", link: "/getAddress" },
               { text: "signMessage", link: "/signMessage" },
               { text: "signTypedData", link: "/signTypedData" },
-              { text: "getAuthDetails", link: "/getDgetAuthDetailsetails" },
+              { text: "getAuthDetails", link: "/getAuthDetails" },
             ],
           },
           { text: "Contributing", link: "/contributing" },

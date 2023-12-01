@@ -10,8 +10,6 @@ head:
   - - meta
     - property: og:description
       content: Overview of the withAlchemyUserOpSimulation method on Alchemy Provider in aa-alchemy
-next:
-  text: Middleware
 ---
 
 # withAlchemyUserOpSimulation

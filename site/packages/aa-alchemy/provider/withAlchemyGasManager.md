@@ -10,8 +10,6 @@ head:
   - - meta
     - property: og:description
       content: Overview of the withAlchemyGasManager method on Alchemy Provider in aa-alchemy
-next:
-  text: Middleware
 ---
 
 # withAlchemyGasManager
