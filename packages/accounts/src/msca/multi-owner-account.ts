@@ -120,5 +120,9 @@ export const createMultiOwnerMSCA = <
   const params = createMultiOwnerMSCASchema<TTransport>().parse(params_);
   const builder = createMultiOwnerMSCABuilder<TTransport>(params);
 
-  return builder.build(params).extendWithPluginMethods(MultiOwnerPlugin);
+  const account = builder
+    .build(params)
+    .extendWithPluginMethods(MultiOwnerPlugin);
+
+  return account;
 };

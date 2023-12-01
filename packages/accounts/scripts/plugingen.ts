@@ -1,5 +1,5 @@
 import { type Plugin } from "@wagmi/cli";
-import { pascalCase } from "change-case";
+import { camelCase, pascalCase } from "change-case";
 import dedent from "dedent";
 import {
   createPublicClient,
@@ -77,7 +77,7 @@ export function plugingen({
 
         const executionAbiConst = `${contract.name}ExecutionFunctionAbi`;
 
-        const encodeFunctions = executionAbi.map((n) => {
+        const accountFunctions = executionAbi.map((n) => {
           const methodContent = [];
           const argsParamString =
             n.inputs.length > 0
@@ -112,20 +112,50 @@ export function plugingen({
           return methodContent.join(",\n\n");
         });
 
+        const providerFunctions = executionAbi
+          .filter((n) => n.stateMutability !== "view")
+          .map((n) => {
+            const argsParamString =
+              n.inputs.length > 0
+                ? `{ args }: GetFunctionArgs<typeof ${executionAbiConst}, "${n.name}">`
+                : "";
+            const argsEncodeString = n.inputs.length > 0 ? "args," : "";
+
+            return dedent`
+            ${camelCase(n.name)}: (${argsParamString}) => {
+              const callData = encodeFunctionData({
+                abi: ${executionAbiConst},
+                functionName: "${n.name}",
+                ${argsEncodeString}
+              });
+
+              return provider.sendUserOperation(callData);
+            }
+          `;
+          });
+
         content.push(dedent`
             const ${contract.name}_ = {
                 meta: {
                     name: "${name}",
                     version: "${version}",
                 },
-                accountDecorators: (account: BaseSmartContractAccount) => ({ ${encodeFunctions.join(
+                accountDecorators: (account: ISmartContractAccount) => ({ ${accountFunctions.join(
                   ",\n\n"
-                )} })
+                )} }),
+                providerDecorators: <
+                  TTransport extends SupportedTransports,
+                  P extends ISmartAccountProvider<TTransport> & { account: MSCA<TTransport> }
+                >(
+                  provider: P
+                ) => ({ ${providerFunctions.join(",\n\n")} }),
             }
 
             export const ${contract.name}: Plugin<ReturnType<typeof ${
           contract.name
-        }_["accountDecorators"]>> = ${contract.name}_;
+        }_["accountDecorators"]>, ReturnType<typeof ${
+          contract.name
+        }_["providerDecorators"]>> = ${contract.name}_;
         `);
 
         // add the abi at the end so it's easier to read the actual plugin code output
@@ -139,7 +169,8 @@ export function plugingen({
       const imports = dedent`
         import { type GetFunctionArgs, encodeFunctionData } from "viem";
         import type { Plugin } from "./types";
-        import type { BaseSmartContractAccount } from "@alchemy/aa-core";
+        import type { MSCA } from "../builder";
+        import type { ISmartContractAccount, ISmartAccountProvider, SupportedTransports } from "@alchemy/aa-core";
       `;
 
       return {

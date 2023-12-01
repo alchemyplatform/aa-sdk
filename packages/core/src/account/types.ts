@@ -1,8 +1,9 @@
 import type { Address } from "abitype";
-import type { Hash, Hex, Transport } from "viem";
+import type { Hash, Hex, HttpTransport, Transport } from "viem";
 import type { SignTypedDataParameters } from "viem/accounts";
 import type { z } from "zod";
-import type { SupportedTransports } from "../client/types";
+import type { PublicErc4337Client, SupportedTransports } from "../client/types";
+import type { ISmartAccountProvider } from "../provider/types";
 import type { SmartAccountSigner } from "../signer/types";
 import type { BatchUserOperationCallData } from "../types";
 import type {
@@ -20,7 +21,25 @@ export type SimpleSmartAccountParams<
   TTransport extends SupportedTransports = Transport
 > = z.infer<ReturnType<typeof SimpleSmartAccountParamsSchema<TTransport>>>;
 
-export interface ISmartContractAccount {
+export interface ISmartContractAccount<
+  TTransport extends SupportedTransports = Transport
+> {
+  /**
+   * The RPC provider the account uses to make RPC calls
+   */
+  readonly rpcProvider:
+    | PublicErc4337Client<TTransport>
+    | PublicErc4337Client<HttpTransport>;
+
+  /**
+   * Optional property that will be used to augment the provider on connect with methods (leveraging the provider's extend method)
+   *
+   * @param provider - the provider being connected
+   * @returns an object with methods that will be added to the provider
+   */
+  providerDecorators?: <P extends ISmartAccountProvider<TTransport>>(
+    provider: P
+  ) => unknown;
   /**
    * @returns the init code for the account
    */
