@@ -153,7 +153,7 @@ describe("Light Account Tests", () => {
     );
   });
 
-  it.only("should transfer ownership successfully", async () => {
+  it("should transfer ownership successfully", async () => {
     const provider = givenConnectedProvider({
       owner,
       chain,
