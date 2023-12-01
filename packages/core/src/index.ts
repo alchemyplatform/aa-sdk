@@ -7,7 +7,10 @@ export { SimpleAccountAbi } from "./abis/SimpleAccountAbi.js";
 export { SimpleAccountFactoryAbi } from "./abis/SimpleAccountFactoryAbi.js";
 
 export { BaseSmartContractAccount } from "./account/base.js";
-export { createBaseSmartAccountParamsSchema } from "./account/schema.js";
+export {
+  SimpleSmartAccountParamsSchema,
+  createBaseSmartAccountParamsSchema,
+} from "./account/schema.js";
 export { SimpleSmartContractAccount } from "./account/simple.js";
 export type * from "./account/types.js";
 export type { BaseSmartAccountParams } from "./account/types.js";
