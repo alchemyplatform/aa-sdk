@@ -75,9 +75,9 @@ A new instance of a `SmartAccountProvider`.
     - `preVerificationGas`: `UserOperationFeeOptionsField`
 
 :::tip Note
-The fee options set upon the provider initialization are available from each middleware of the `SmartAccountProvider`. For example, the default middlewares such as [`gasEstimator`](/packages/aa-alchemy/provider/withGasEstimator.md) or [`feeDataGetter`](/packages/aa-alchemy/provider/withFeeDataGetter.md) apply the fee options to the estimated values if the fee options are set.
+The fee options set upon the provider initialization are available from each middleware of the `SmartAccountProvider`. For example, the default middlewares such as [`gasEstimator`](/packages/aa-core/provider/withGasEstimator.md) or [`feeDataGetter`](/packages/aa-core/provider/withFeeDataGetter.md) apply the fee options to the estimated values if the fee options are set.
 :::
 
 :::tip Note
-Note that if you are using your own middleware, for example a custom `feeDataGetter` using [`withFeeDataGetter`](/packages/aa-alchemy/provider/withFeeDataGetter.md) method on the provider, then the default `feeDataGetter` middleware is overriden. As you are opting out of using the default middleware, you are also responsible for handling the fee options appropriately for the fee options set upon provider initialization.
+Note that if you are using your own middleware, for example a custom `feeDataGetter` using [`withFeeDataGetter`](/packages/aa-core/provider/withFeeDataGetter.md) method on the provider, then the default `feeDataGetter` middleware is overriden. As you are opting out of using the default middleware, you are also responsible for handling the fee options appropriately for the fee options set upon provider initialization.
 :::

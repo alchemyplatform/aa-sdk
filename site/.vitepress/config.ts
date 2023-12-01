@@ -456,15 +456,6 @@ export default defineConfig({
             base: "/packages/aa-core/types",
             collapsed: true,
             items: [
-              { text: "BigNumberish", link: "/bigNumberish" },
-              {
-                text: "BigNumberish",
-                link: "/bigNumberishRange",
-              },
-              {
-                text: "Percentage",
-                link: "/percentage",
-              },
               {
                 text: "UserOperationFeeOptions",
                 link: "/UserOperationFeeOptions",
@@ -775,6 +766,28 @@ export default defineConfig({
               {
                 text: "convertEthersSignerToAccountSigner",
                 link: "/convertEthersSignerToAccountSigner",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        text: "Glossary",
+        base: "/glossary",
+        items: [
+          {
+            text: "Types",
+            base: "/glossary/types",
+            collapsed: true,
+            items: [
+              { text: "BigNumberish", link: "/bigNumberish" },
+              {
+                text: "BigNumberishRange",
+                link: "/bigNumberishRange",
+              },
+              {
+                text: "Percentage",
+                link: "/percentage",
               },
             ],
           },

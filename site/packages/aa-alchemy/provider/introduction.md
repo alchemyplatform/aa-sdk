@@ -18,7 +18,7 @@ head:
 
 Notable differences between `AlchemyProvider` and `SmartAccountProvider` are implementations for:
 
-1.  [`gasEstimator`](/packages/aa-alchemy/provider/withGasEstimator.md) -- overrides the base `SmartAccountProvider` gas estimator.
+1.  [`gasEstimator`](/packages/aa-core/provider/withGasEstimator.md) -- overrides the base `SmartAccountProvider` gas estimator.
 2.  [`withAlchemyGasManager`](/packages/aa-alchemy/provider/withAlchemyGasManager.md) -- adds the Alchemy Gas Manager middleware to the provider.
 
 ## Usage
