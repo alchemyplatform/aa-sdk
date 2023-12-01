@@ -24,6 +24,10 @@ import {
   LightSmartContractAccount,
 } from "../../index.js";
 import {
+  defaultMSCAImplementationAddress,
+  getMSCAInitializationData,
+} from "../../msca/utils.js";
+import {
   API_KEY,
   LIGHT_ACCOUNT_OWNER_MNEMONIC,
   UNDEPLOYED_OWNER_MNEMONIC,
@@ -227,7 +231,12 @@ describe("Light Account Tests", () => {
     });
 
     const { provider: upgradedProvider } =
-      await LightSmartContractAccount.upgrade(throwawayProvider, true);
+      await LightSmartContractAccount.upgrade(
+        throwawayProvider,
+        defaultMSCAImplementationAddress,
+        await getMSCAInitializationData(throwawayProvider),
+        true
+      );
 
     const upgradedAccountAddress = await upgradedProvider.getAddress();
 
@@ -270,6 +279,8 @@ describe("Light Account Tests", () => {
 
     const { provider } = await LightSmartContractAccount.upgrade(
       throwawayProvider,
+      defaultMSCAImplementationAddress,
+      await getMSCAInitializationData(throwawayProvider),
       true
     );
 

@@ -7,12 +7,8 @@ import {
 import {
   concatHex,
   decodeFunctionResult,
-  encodeAbiParameters,
   encodeFunctionData,
-  encodeFunctionResult,
   fromHex,
-  keccak256,
-  parseAbiParameters,
   trim,
   type Address,
   type FallbackTransport,
@@ -20,11 +16,9 @@ import {
   type Hex,
   type Transport,
 } from "viem";
-import { MultiOwnerPluginAbi } from "../../plugindefs/multi-owner/abi.js";
-import { MultiOwnerPluginAddress } from "../../plugindefs/multi-owner/config.js";
-import { UpgradeableModularAccountAbi } from "../msca/abis/UpgradeableModularAccount.js";
 import type { IMSCA } from "../msca/builder.js";
 import { createMultiOwnerMSCA } from "../msca/multi-owner-account.js";
+import { getDefaultMSCAFactoryAddress } from "../msca/utils.js";
 import { LightAccountAbi } from "./abis/LightAccountAbi.js";
 import { LightAccountFactoryAbi } from "./abis/LightAccountFactoryAbi.js";
 
@@ -72,10 +66,14 @@ export class LightSmartContractAccount<
   }
 
   /**
-   * Upgrades the account implementation from Light Account to a Modular Account.
+   * Upgrades the account implementation from Light Account to a new smart account implementation.
    * Optionally waits for the transaction to be mined.
    *
    * @param provider - the provider to use to send the transaction
+   * @param accountImplAddress - the address of the smart account implementation to
+   * upgrade to
+   * @param initializationData - the initialization data address to use when upgrading to the new
+   * smart account
    * @param waitForTxn - whether or not to wait for the transaction to be mined
    * @returns {
    *  provider: SmartAccountProvider<TTransport> & { account: MSCA };
@@ -89,6 +87,8 @@ export class LightSmartContractAccount<
     provider: SmartAccountProvider<TTransport> & {
       account: LightSmartContractAccount<TTransport>;
     },
+    accountImplAddress: Address,
+    initializationData: Hex,
     waitForTxn: boolean = false
   ): Promise<{
     provider: SmartAccountProvider<TTransport> & {
@@ -117,43 +117,10 @@ export class LightSmartContractAccount<
       );
     }
 
-    const pluginManifest = await provider.rpcClient.readContract({
-      abi: MultiOwnerPluginAbi,
-      address: MultiOwnerPluginAddress,
-      functionName: "pluginManifest",
-    });
-    const hashedMultiOwnerPluginManifest = keccak256(
-      encodeFunctionResult({
-        abi: MultiOwnerPluginAbi,
-        functionName: "pluginManifest",
-        result: pluginManifest,
-      })
-    );
-
-    // owner is always defined for Light Account
-    const ownerAddress = await provider.account.getOwner()?.getAddress()!;
-    const encodedOwner = encodeAbiParameters(parseAbiParameters("address[]"), [
-      [ownerAddress],
-    ]);
-
-    const encodedPluginInitData = encodeAbiParameters(
-      parseAbiParameters("bytes32[], bytes[]"),
-      [[hashedMultiOwnerPluginManifest], [encodedOwner]]
-    );
-
-    const encodedMSCAInitializeData = encodeFunctionData({
-      abi: UpgradeableModularAccountAbi,
-      functionName: "initialize",
-      args: [[MultiOwnerPluginAddress], encodedPluginInitData],
-    });
-
     const encodeUpgradeData = encodeFunctionData({
       abi: LightAccountAbi,
       functionName: "upgradeToAndCall",
-      args: [
-        "0xb2b748c2557c552B8636862E41aB3649319dD045",
-        encodedMSCAInitializeData,
-      ],
+      args: [accountImplAddress, initializationData],
     });
 
     const result = await provider.sendUserOperation({
@@ -175,7 +142,7 @@ export class LightSmartContractAccount<
       provider: provider.connect((rpcClient) =>
         createMultiOwnerMSCA({
           rpcClient,
-          factoryAddress: "0xFD14c78640d72f73CC88238E2f7Df3273Ee84043", // MSCA factory address
+          factoryAddress: getDefaultMSCAFactoryAddress(provider.chain),
           owner,
           index: 0n,
           chain: provider.chain,
