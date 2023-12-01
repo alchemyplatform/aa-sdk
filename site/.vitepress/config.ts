@@ -675,6 +675,20 @@ export default defineConfig({
             ],
           },
           {
+            text: "Turnkey Signer",
+            collapsed: true,
+            base: "/packages/aa-signers/turnkey",
+            items: [
+              { text: "Introduction", link: "/introduction" },
+              { text: "constructor", link: "/constructor" },
+              { text: "authenticate", link: "/authenticate" },
+              { text: "getAddress", link: "/getAddress" },
+              { text: "signMessage", link: "/signMessage" },
+              { text: "signTypedData", link: "/signTypedData" },
+              { text: "getAuthDetails", link: "/getAuthDetails" },
+            ],
+          },
+          {
             text: "Web3Auth Signer",
             collapsed: true,
             base: "/packages/aa-signers/web3auth",
