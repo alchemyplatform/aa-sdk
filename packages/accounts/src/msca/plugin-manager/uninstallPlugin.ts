@@ -1,7 +1,7 @@
 import type { ISmartAccountProvider } from "@alchemy/aa-core";
 import { encodeFunctionData, type Address, type Hash } from "viem";
 import { IPluginManagerAbi } from "../abis/IPluginManager.js";
-import type { MSCA } from "../builder.js";
+import type { IMSCA } from "../builder.js";
 
 export type UninstallPluginParams = {
   pluginAddress: Address;
@@ -11,7 +11,7 @@ export type UninstallPluginParams = {
 };
 
 export async function uninstallPlugin<
-  P extends ISmartAccountProvider & { account: MSCA }
+  P extends ISmartAccountProvider & { account: IMSCA }
 >(provider: P, params: UninstallPluginParams) {
   const callData = encodeFunctionData({
     abi: IPluginManagerAbi,

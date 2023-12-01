@@ -18,7 +18,7 @@ import { IStandardExecutorAbi } from "./abis/IStandardExecutor.js";
 import { pluginManagerDecorator } from "./plugin-manager/decorator.js";
 import type { Plugin } from "./plugins/types";
 
-export interface MSCA<
+export interface IMSCA<
   TTransport extends SupportedTransports = Transport,
   TProviderDecorators = {}
 > extends ISmartContractAccount {
@@ -28,21 +28,21 @@ export interface MSCA<
 
   extendWithPluginMethods: <AD, PD>(
     plugin: Plugin<AD, PD>
-  ) => MSCA<TTransport, TProviderDecorators & PD> & AD;
+  ) => IMSCA<TTransport, TProviderDecorators & PD> & AD;
 
   addProviderDecorator: <
     PD,
-    TProvider extends ISmartAccountProvider<TTransport> & { account: MSCA }
+    TProvider extends ISmartAccountProvider<TTransport> & { account: IMSCA }
   >(
     decorator: (p: TProvider) => PD
-  ) => MSCA<TTransport, TProviderDecorators & PD>;
+  ) => IMSCA<TTransport, TProviderDecorators & PD>;
 }
 
-export type Executor = <A extends MSCA<any, any>>(
+export type Executor = <A extends IMSCA<any, any>>(
   acct: A
 ) => Pick<ISmartContractAccount, "encodeExecute" | "encodeBatchExecute">;
 
-export type SignerMethods = <A extends MSCA<any, any>>(
+export type SignerMethods = <A extends IMSCA<any, any>>(
   acct: A
 ) => Pick<
   ISmartContractAccount,
@@ -52,7 +52,7 @@ export type SignerMethods = <A extends MSCA<any, any>>(
   | "getDummySignature"
 >;
 
-export type Factory = <A extends MSCA<any, any>>(acct: A) => Promise<Hex>;
+export type Factory = <A extends IMSCA<any, any>>(acct: A) => Promise<Hex>;
 
 // TODO: this can be moved out into its own file
 export const StandardExecutor: Executor = () => ({
@@ -110,7 +110,7 @@ export class MSCABuilder {
 
   build<TTransport extends SupportedTransports = Transport>(
     params: BaseSmartAccountParams
-  ): MSCA<TTransport, ReturnType<typeof pluginManagerDecorator>> {
+  ): IMSCA<TTransport, ReturnType<typeof pluginManagerDecorator>> {
     const builder = this;
     const { signer, executor, factory } = zCompleteBuilder.parse(builder);
 
@@ -118,7 +118,7 @@ export class MSCABuilder {
       TProviderDecorators = ReturnType<typeof pluginManagerDecorator>
     > extends BaseSmartContractAccount<TTransport> {
       providerDecorators_: (<
-        TProvider extends ISmartAccountProvider<TTransport> & { account: MSCA }
+        TProvider extends ISmartAccountProvider<TTransport> & { account: IMSCA }
       >(
         p: TProvider
       ) => any)[] = [pluginManagerDecorator];
@@ -136,7 +136,7 @@ export class MSCABuilder {
           (acc, decorator) => ({
             ...acc,
             ...decorator(
-              p as ISmartAccountProvider<TTransport> & { account: MSCA }
+              p as ISmartAccountProvider<TTransport> & { account: IMSCA }
             ),
           }),
           {} as TProviderDecorators
@@ -192,7 +192,7 @@ export class MSCABuilder {
 
       addProviderDecorator = <
         PD,
-        TProvider extends ISmartAccountProvider<TTransport> & { account: MSCA }
+        TProvider extends ISmartAccountProvider<TTransport> & { account: IMSCA }
       >(
         decorator: (p: TProvider) => PD
       ): DynamicMSCA<TProviderDecorators & PD> => {

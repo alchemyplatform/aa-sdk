@@ -3,14 +3,14 @@ import type {
   ISmartContractAccount,
   SupportedTransports,
 } from "@alchemy/aa-core";
-import type { MSCA } from "../builder";
+import type { IMSCA } from "../builder";
 
 export interface Plugin<AD, PD> {
   meta: { name: string; version: string };
   accountDecorators: (a: ISmartContractAccount) => AD;
   providerDecorators: <
     TTransport extends SupportedTransports,
-    P extends ISmartAccountProvider<TTransport> & { account: MSCA<TTransport> }
+    P extends ISmartAccountProvider<TTransport> & { account: IMSCA<TTransport> }
   >(
     p: P
   ) => PD;

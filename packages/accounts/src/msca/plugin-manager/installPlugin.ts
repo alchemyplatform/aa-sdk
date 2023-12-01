@@ -8,7 +8,7 @@ import {
 } from "viem";
 import { IPluginAbi } from "../abis/IPlugin.js";
 import { IPluginManagerAbi } from "../abis/IPluginManager.js";
-import type { MSCA } from "../builder.js";
+import type { IMSCA } from "../builder.js";
 import type { InjectedHook } from "./types";
 
 export type InstallPluginParams = {
@@ -20,7 +20,7 @@ export type InstallPluginParams = {
 };
 
 export async function installPlugin<
-  P extends ISmartAccountProvider & { account: MSCA }
+  P extends ISmartAccountProvider & { account: IMSCA }
 >(provider: P, params: InstallPluginParams) {
   const pluginManifest = await provider.rpcClient.readContract({
     abi: IPluginAbi,
