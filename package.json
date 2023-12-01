@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "generate": "lerna run generate",
-    "postgenerate": "lint:write",
+    "postgenerate": "yarn lint:write",
     "build": "lerna run build --ignore=alchemy-daapp --ignore=aa-simple-dapp",
     "postbuild": "yarn lint:write",
     "build:examples": "lerna run build",
