@@ -25,25 +25,35 @@ This method must be called before accessing the other methods available on the `
 ```ts [example.ts]
 // [!code focus:99]
 import { TurnkeySigner } from "@alchemy/aa-signers";
-import { ApiKeyStamper } from "@turnkey/api-key-stamper";
+import { WebauthnStamper } from "@turnkey/webauthn-stamper";
+import { http } from "viem";
 
-const turnkeySigner = new TurnkeySigner({
-  apiUrl: "api.turnkey.com",
-  stamper: new ApiKeyStamper({
-    apiPublicKey: "TURNKEY_API_PUBLIC_KEY",
-    apiPrivateKey: "TURNKEY_API_PRIVATE_KEY",
+// Create the Turnkey client
+const turnkeyClient = new TurnkeyClient(
+  {
+    baseUrl: "api.turnkey.com",
+  },
+  new WebauthnStamper({
+    rpId: "your.app.xyz",
   }),
-});
+);
 
+// If you need to retrieve your user's wallet ID from Turnkey
+const wallets = await turnkeyClient.getWallets({
+  organizationId: "TURNKEY_ORGANIZATION_ID",
+});
+if (wallets.length === 0) throw new Error("No wallets created!");
+const walletId = wallets[0].walletId;
+
+// Now create the TurnkeySigner and authenticate with the wallet
+const turnkeySigner = new TurnkeySigner({ inner: turnkeyClient });
 const authParams = {
   organizationId: "TURNKEY_ORGANIZATION_ID",
-  signWith: "TURNKEY_WALLET_ID",
+  signWith: walletId,
   transport: http("https://eth-sepolia.g.alchemy.com/v2/ALCHEMY_API_KEY");
 };
-
 await turnkeySigner.authenticate(authParams);
 ```
-
 :::
 
 ## Returns
