@@ -43,17 +43,18 @@ export type UserOperationFeeOptions = z.infer<
   typeof UserOperationFeeOptionsSchema
 >;
 
-export type UserOperationOverrides = Partial<
-  Pick<
-    UserOperationStruct,
-    | "callGasLimit"
-    | "maxFeePerGas"
-    | "maxPriorityFeePerGas"
-    | "paymasterAndData"
-    | "preVerificationGas"
-    | "verificationGasLimit"
-  >
->;
+export type UserOperationOverrides = Partial<{
+  callGasLimit: UserOperationStruct["callGasLimit"] | Percentage;
+  maxFeePerGas: UserOperationStruct["maxFeePerGas"] | Percentage;
+  maxPriorityFeePerGas:
+    | UserOperationStruct["maxPriorityFeePerGas"]
+    | Percentage;
+  preVerificationGas: UserOperationStruct["preVerificationGas"] | Percentage;
+  verificationGasLimit:
+    | UserOperationStruct["verificationGasLimit"]
+    | Percentage;
+  paymasterAndData: UserOperationStruct["paymasterAndData"];
+}>;
 
 // represents the request as it needs to be formatted for RPC requests
 export interface UserOperationRequest {

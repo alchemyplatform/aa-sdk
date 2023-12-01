@@ -32,7 +32,7 @@ import {
   type UserOperationStruct,
 } from "../types.js";
 import {
-  applyFeeOption,
+  applyUserOpOverrideOrFeeOption,
   asyncPipe,
   bigIntMax,
   bigIntPercent,
@@ -521,41 +521,31 @@ export class SmartAccountProvider<
     overrides,
     feeOptions
   ) => {
-    let { callGasLimit, verificationGasLimit, preVerificationGas } =
-      overrides ?? {};
+    const request = deepHexlify(await resolveProperties(struct));
+    const estimates = await this.rpcClient.estimateUserOperationGas(
+      request,
+      this.getEntryPointAddress()
+    );
 
-    if (
-      callGasLimit == null ||
-      verificationGasLimit == null ||
-      preVerificationGas == null
-    ) {
-      const request = deepHexlify(await resolveProperties(struct));
-      const estimates = await this.rpcClient.estimateUserOperationGas(
-        request,
-        this.getEntryPointAddress()
-      );
-
-      callGasLimit =
-        callGasLimit ??
-        applyFeeOption(estimates.callGasLimit, feeOptions?.callGasLimit);
-      verificationGasLimit =
-        verificationGasLimit ??
-        applyFeeOption(
-          estimates.verificationGasLimit,
-          feeOptions?.verificationGasLimit
-        );
-      preVerificationGas =
-        preVerificationGas ??
-        applyFeeOption(
-          estimates.preVerificationGas,
-          feeOptions?.preVerificationGas
-        );
-    }
+    const callGasLimit = applyUserOpOverrideOrFeeOption(
+      estimates.callGasLimit,
+      overrides?.callGasLimit,
+      feeOptions?.callGasLimit
+    );
+    const verificationGasLimit = applyUserOpOverrideOrFeeOption(
+      estimates.verificationGasLimit,
+      overrides?.verificationGasLimit,
+      feeOptions?.verificationGasLimit
+    );
+    const preVerificationGas = applyUserOpOverrideOrFeeOption(
+      estimates.preVerificationGas,
+      overrides?.preVerificationGas,
+      feeOptions?.preVerificationGas
+    );
 
     struct.callGasLimit = callGasLimit;
     struct.verificationGasLimit = verificationGasLimit;
     struct.preVerificationGas = preVerificationGas;
-
     return struct;
   };
 
@@ -564,11 +554,6 @@ export class SmartAccountProvider<
     overrides,
     feeOptions
   ) => {
-    const estimateMaxPriorityFeePerGas = async () => {
-      const estimate = await this.rpcClient.estimateMaxPriorityFeePerGas();
-      return applyFeeOption(estimate, feeOptions?.maxPriorityFeePerGas);
-    };
-
     // maxFeePerGas must be at least the sum of maxPriorityFeePerGas and baseFee
     // so we need to accommodate for the fee option applied maxPriorityFeePerGas for the maxFeePerGas
     //
@@ -577,30 +562,35 @@ export class SmartAccountProvider<
     //
     // Refer to https://docs.alchemy.com/docs/maxpriorityfeepergas-vs-maxfeepergas
     // for more information about maxFeePerGas and maxPriorityFeePerGas
-    const estimateMaxFeePerGas = async (maxPriorityFeePerGas: BigNumberish) => {
-      const feeData = await this.rpcClient.estimateFeesPerGas();
-      if (!feeData.maxFeePerGas || !feeData.maxPriorityFeePerGas) {
-        throw new Error(
-          "feeData is missing maxFeePerGas or maxPriorityFeePerGas"
-        );
-      }
-      const baseFee = applyFeeOption(
-        feeData.maxFeePerGas - feeData.maxPriorityFeePerGas,
-        feeOptions?.maxFeePerGas
+
+    const feeData = await this.rpcClient.estimateFeesPerGas();
+    if (!feeData.maxFeePerGas || !feeData.maxPriorityFeePerGas) {
+      throw new Error(
+        "feeData is missing maxFeePerGas or maxPriorityFeePerGas"
       );
+    }
 
-      return BigInt(baseFee) + BigInt(maxPriorityFeePerGas);
-    };
+    let maxPriorityFeePerGas: BigNumberish =
+      await this.rpcClient.estimateMaxPriorityFeePerGas();
+    maxPriorityFeePerGas = applyUserOpOverrideOrFeeOption(
+      maxPriorityFeePerGas,
+      overrides?.maxPriorityFeePerGas,
+      feeOptions?.maxPriorityFeePerGas
+    );
 
-    struct.maxPriorityFeePerGas =
-      overrides?.maxPriorityFeePerGas != null
-        ? overrides?.maxPriorityFeePerGas
-        : await estimateMaxPriorityFeePerGas();
-    struct.maxFeePerGas =
-      overrides?.maxFeePerGas != null
-        ? overrides?.maxFeePerGas
-        : await estimateMaxFeePerGas(struct.maxPriorityFeePerGas);
+    let maxFeePerGas: BigNumberish =
+      feeData.maxFeePerGas -
+      feeData.maxPriorityFeePerGas +
+      BigInt(maxPriorityFeePerGas);
 
+    maxFeePerGas = applyUserOpOverrideOrFeeOption(
+      maxFeePerGas,
+      overrides?.maxFeePerGas,
+      feeOptions?.maxFeePerGas
+    );
+
+    struct.maxFeePerGas = maxFeePerGas;
+    struct.maxPriorityFeePerGas = maxPriorityFeePerGas;
     return struct;
   };
 

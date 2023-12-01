@@ -1,6 +1,7 @@
 import {
   deepHexlify,
   filterUndefined,
+  isBigNumberish,
   isPercentage,
   resolveProperties,
   type AccountMiddlewareFn,
@@ -169,15 +170,25 @@ const withAlchemyGasAndPaymasterAndDataMiddleware = <P extends AlchemyProvider>(
     const overrideField = (
       field: keyof UserOperationFeeOptions
     ): Hex | Percentage | undefined => {
-      // one-off absolute override
       if (overrides?.[field] != null) {
-        return deepHexlify(overrides[field]);
+        // one-off absolute override
+        if (isBigNumberish(overrides[field])) {
+          return deepHexlify(overrides[field]);
+        }
+        // one-off percentage overrides
+        else {
+          return {
+            percentage:
+              100 + Number((overrides[field] as Percentage).percentage),
+          };
+        }
       }
 
       // provider level fee options with percentage
       if (isPercentage(feeOptions?.[field])) {
         return {
-          percentage: 100 + Number(feeOptions?.[field]?.percentage),
+          percentage:
+            100 + Number((feeOptions![field] as Percentage).percentage),
         };
       }
 
