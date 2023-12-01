@@ -54,6 +54,7 @@ const authParams = {
 };
 await turnkeySigner.authenticate(authParams);
 ```
+
 :::
 
 ## Returns

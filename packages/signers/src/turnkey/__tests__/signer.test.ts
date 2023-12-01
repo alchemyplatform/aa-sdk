@@ -85,7 +85,7 @@ const givenSigner = async (auth = true) => {
     },
     new WebauthnStamper({
       rpId: "your.app.xyz",
-    }),
+    })
   );
 
   inner.getWhoami = vi.fn().mockResolvedValue({
