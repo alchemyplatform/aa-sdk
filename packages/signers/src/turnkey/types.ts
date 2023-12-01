@@ -1,4 +1,4 @@
-import type { ApiKeyStamper } from "@turnkey/api-key-stamper";
+import type { TStamper } from "@turnkey/http/dist/base";
 import type { Transport } from "viem";
 
 export interface TurnkeyAuthParams {
@@ -16,5 +16,5 @@ export interface TurnkeyAuthMetadata {
 
 export type TurnkeyClientParams = {
   apiUrl: string;
-  apiKeyStamper: ApiKeyStamper;
+  stamper: TStamper;
 };

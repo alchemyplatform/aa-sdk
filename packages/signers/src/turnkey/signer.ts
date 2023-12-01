@@ -13,11 +13,9 @@ import type {
 } from "./types.js";
 
 /**
- * This class requires the `@turnkey/api-key-stamper`, `@turnkey/http`, and
- * `@turnkey/viem` dependencies.
+ * This class requires the `@turnkey/http` and `@turnkey/viem` dependencies.
  * `@alchemy/aa-signers` lists them as optional dependencies.
  *
- * @see: https://github.com/tkhq/sdk/tree/main/packages/api-key-stamper
  * @see: https://github.com/tkhq/sdk/tree/main/packages/http
  * @see: https://github.com/tkhq/sdk/tree/main/packages/viem
  */
@@ -39,10 +37,7 @@ export class TurnkeySigner
       return;
     }
 
-    this.inner = new TurnkeyClient(
-      { baseUrl: params.apiUrl },
-      params.apiKeyStamper
-    );
+    this.inner = new TurnkeyClient({ baseUrl: params.apiUrl }, params.stamper);
   }
 
   readonly signerType = "turnkey";
