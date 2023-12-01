@@ -530,6 +530,10 @@ export default defineConfig({
                 text: "constructor",
                 link: "/constructor",
               },
+              {
+                text: "factory",
+                link: "/light-account-factory",
+              },
               { text: "gasEstimator", link: "/gasEstimator" },
               {
                 text: "simulateUserOperationAssetChanges",
@@ -607,6 +611,10 @@ export default defineConfig({
               {
                 text: "constructor",
                 link: "/constructor",
+              },
+              {
+                text: "provider",
+                link: "/provider",
               },
               {
                 text: "signMessageWith6492",
