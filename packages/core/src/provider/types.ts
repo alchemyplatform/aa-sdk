@@ -330,7 +330,6 @@ export interface ISmartAccountProvider<
    * prior to execution.
    *
    * @param override - a function for overriding the default feeDataGetter middleware
-   * @param feeOptions - optional FeeDataFeeOptions to set at the global level of the provider.
    * @returns
    */
   withFeeDataGetter: (override: FeeDataMiddleware) => this;

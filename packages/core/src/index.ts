@@ -49,7 +49,9 @@ export type * from "./types.js";
 export type * from "./utils/index.js";
 export {
   ChainSchema,
-  applyFeeOption,
+  applyUserOpFeeOption,
+  applyUserOpOverride,
+  applyUserOpOverrideOrFeeOption,
   asyncPipe,
   bigIntMax,
   bigIntPercent,
