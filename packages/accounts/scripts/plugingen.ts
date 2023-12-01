@@ -145,7 +145,7 @@ export function plugingen({
                 )} }),
                 providerDecorators: <
                   TTransport extends SupportedTransports,
-                  P extends ISmartAccountProvider<TTransport> & { account: MSCA<TTransport> }
+                  P extends ISmartAccountProvider<TTransport> & { account: IMSCA<TTransport> }
                 >(
                   provider: P
                 ) => ({ ${providerFunctions.join(",\n\n")} }),
@@ -169,7 +169,7 @@ export function plugingen({
       const imports = dedent`
         import { type GetFunctionArgs, encodeFunctionData } from "viem";
         import type { Plugin } from "./types";
-        import type { MSCA } from "../builder";
+        import type { IMSCA } from "../builder";
         import type { ISmartContractAccount, ISmartAccountProvider, SupportedTransports } from "@alchemy/aa-core";
       `;
 
