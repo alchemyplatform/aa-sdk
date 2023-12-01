@@ -7,7 +7,7 @@ import { TurnkeyClient } from "@turnkey/http";
 import { createAccount } from "@turnkey/viem";
 import { createWalletClient } from "viem";
 import type {
-  TurnkeyAuthMetadata,
+  TurnkeyUserMetadata,
   TurnkeyAuthParams,
   TurnkeyClientParams,
 } from "./types.js";
@@ -23,7 +23,7 @@ export class TurnkeySigner
   implements
     SmartAccountAuthenticator<
       TurnkeyAuthParams,
-      TurnkeyAuthMetadata,
+      TurnkeyUserMetadata,
       TurnkeyClient
     >
 {
