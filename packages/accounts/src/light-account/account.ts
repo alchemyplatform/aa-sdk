@@ -66,7 +66,7 @@ export class LightSmartContractAccount<
   }
 
   /**
-   * Upgrades the account implementation from Light Account to a new smart account implementation.
+   * Upgrades the account implementation from Light Account to a Modular Account.
    * Optionally waits for the transaction to be mined.
    *
    * @param provider - the provider to use to send the transaction
