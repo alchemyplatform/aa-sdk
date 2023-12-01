@@ -35,7 +35,7 @@ export {
   StandardExecutor,
   type Executor,
   type Factory,
-  type MSCA,
+  type IMSCA as MSCA,
   type SignerMethods,
 } from "./msca/builder.js";
 export {

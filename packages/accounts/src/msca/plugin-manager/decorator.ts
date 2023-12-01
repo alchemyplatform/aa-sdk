@@ -1,5 +1,5 @@
 import type { ISmartAccountProvider } from "@alchemy/aa-core";
-import type { MSCA } from "../builder";
+import type { IMSCA } from "../builder";
 import { installPlugin, type InstallPluginParams } from "./installPlugin.js";
 import {
   uninstallPlugin,
@@ -7,7 +7,7 @@ import {
 } from "./uninstallPlugin.js";
 
 export const pluginManagerDecorator = <
-  P extends ISmartAccountProvider & { account: MSCA }
+  P extends ISmartAccountProvider & { account: IMSCA }
 >(
   provider: P
 ) => ({
