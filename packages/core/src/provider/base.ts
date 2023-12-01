@@ -45,6 +45,8 @@ import {
   isValidRequest,
   resolveProperties,
   type Deferrable,
+  type IsUndefined,
+  type NoUndefined,
 } from "../utils/index.js";
 import { createSmartAccountProviderConfigSchema } from "./schema.js";
 import type {
@@ -652,7 +654,11 @@ export class SmartAccountProvider<
         | PublicErc4337Client<TTransport>
         | PublicErc4337Client<HttpTransport>
     ) => TAccount
-  ): this & { account: TAccount } => {
+  ): IsUndefined<TAccount["providerDecorators"]> extends true
+    ? this & { account: TAccount }
+    : this & { account: TAccount } & ReturnType<
+          NoUndefined<TAccount["providerDecorators"]>
+        > => {
     const account = fn(this.rpcClient);
 
     // sanity check. Note that this check is only performed if and only if the optional entryPointAddress is given upon initialization.
@@ -699,7 +705,17 @@ export class SmartAccountProvider<
       .getAddress()
       .then((address) => this.emit("accountsChanged", [address]));
 
-    return this as unknown as this & { account: TAccount };
+    if (account.providerDecorators) {
+      this.extend(account.providerDecorators);
+    }
+
+    return this as unknown as IsUndefined<
+      TAccount["providerDecorators"]
+    > extends true
+      ? this & { account: TAccount }
+      : this & { account: TAccount } & ReturnType<
+            NoUndefined<TAccount["providerDecorators"]>
+          >;
   };
 
   disconnect = (): this & { account: undefined } => {

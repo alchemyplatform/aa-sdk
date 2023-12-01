@@ -26,7 +26,7 @@ import type {
   UserOperationResponse,
   UserOperationStruct,
 } from "../types.js";
-import type { Deferrable } from "../utils";
+import type { Deferrable, IsUndefined, NoUndefined } from "../utils";
 import type {
   SmartAccountProviderOptsSchema,
   createSmartAccountProviderConfigSchema,
@@ -356,7 +356,11 @@ export interface ISmartAccountProvider<
         | PublicErc4337Client<TTransport>
         | PublicErc4337Client<HttpTransport>
     ) => TAccount
-  ): this & { account: TAccount };
+  ): IsUndefined<TAccount["providerDecorators"]> extends true
+    ? this & { account: TAccount }
+    : this & { account: TAccount } & ReturnType<
+          NoUndefined<TAccount["providerDecorators"]>
+        >;
 
   /**
    * Allows for disconnecting the account from the provider so you can connect the provider to another account instance

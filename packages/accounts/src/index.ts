@@ -38,12 +38,14 @@ export type { NaniAccountProviderConfig } from "./nani-account/types.js";
 export { getDefaultNaniAccountFactoryAddress } from "./nani-account/utils.js";
 
 // msca exports
+export { BaseModularSmartContractAccount } from "./msca/base.js";
+export type { ModularSmartContractAccountParams } from "./msca/base.js";
 export {
   MSCABuilder,
   StandardExecutor,
   type Executor,
   type Factory,
-  type MSCA,
+  type IMSCA as MSCA,
   type SignerMethods,
 } from "./msca/builder.js";
 export {
@@ -52,6 +54,10 @@ export {
   createMultiOwnerMSCASchema,
   type MultiOwnerMSCAParams,
 } from "./msca/multi-owner-account.js";
+export { pluginManagerDecorator } from "./msca/plugin-manager/decorator.js";
+export type * from "./msca/plugin-manager/installPlugin.js";
+export type * from "./msca/plugin-manager/types.js";
+export type * from "./msca/plugin-manager/uninstallPlugin.js";
 export {
   MultiOwnerPlugin,
   MultiOwnerPluginExecutionFunctionAbi,

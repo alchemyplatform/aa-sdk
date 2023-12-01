@@ -35,7 +35,7 @@ export enum DeploymentState {
 
 export abstract class BaseSmartContractAccount<
   TTransport extends SupportedTransports = Transport
-> implements ISmartContractAccount
+> implements ISmartContractAccount<TTransport>
 {
   protected factoryAddress: Address;
   protected deploymentState: DeploymentState = DeploymentState.UNDEFINED;
