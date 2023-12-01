@@ -7,7 +7,7 @@ export interface TurnkeyAuthParams {
   transport: Transport;
 }
 
-export interface TurnkeyAuthMetadata {
+export interface TurnkeyUserMetadata {
   organizationId: string;
   organizationName: string;
   userId: string;
