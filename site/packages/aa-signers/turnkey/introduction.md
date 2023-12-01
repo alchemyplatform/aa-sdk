@@ -28,20 +28,20 @@ head:
 
 `TurnkeySigner` requires installation of the [`@turnkey/http`](https://github.com/tkhq/sdk/tree/main/packages/http) and [`@turnkey/viem`](https://github.com/tkhq/sdk/tree/main/packages/viem) dependencies. `aa-signers` lists them as optional dependencies.
 
-Every request to Turnkey must be signed using a [stamper](https://docs.turnkey.com/category/api-design). In this example, we use the API key stamper from [`@turnkey/api-key-stamper`](https://github.com/tkhq/sdk/tree/main/packages/api-key-stamper).
+Every request to Turnkey must be signed using a [stamper](https://docs.turnkey.com/category/api-design). In this example, we use the WebAuthn stamper from [`@turnkey/webauthn-stamper`](https://github.com/tkhq/sdk/tree/main/packages/webauthn-stamper).
 
 ::: code-group
 
 ```bash [npm]
-npm i -s @turnkey/api-key-stamper
 npm i -s @turnkey/http
 npm i -s @turnkey/viem
+npm i -s @turnkey/webauthn-stamper
 ```
 
 ```bash [yarn]
-yarn add @turnkey/api-key-stamper
 yarn add @turnkey/http
 yarn add @turnkey/viem
+yarn add @turnkey/webauthn-stamper
 ```
 
 ## Usage
@@ -50,19 +50,19 @@ yarn add @turnkey/viem
 
 ```ts [example.ts]
 import { TurnkeySigner } from "@alchemy/aa-signers";
-import { ApiKeyStamper } from "@turnkey/api-key-stamper";
+import { WebauthnStamper } from "@turnkey/webauthn-stamper";
+import { http } from "viem";
 
 const turnkeySigner = new TurnkeySigner({
   apiUrl: "api.turnkey.com",
-  stamper: new ApiKeyStamper({
-    apiPublicKey: "TURNKEY_API_PUBLIC_KEY",
-    apiPrivateKey: "TURNKEY_API_PRIVATE_KEY",
+  stamper: new WebauthnStamper({
+    rpId: "your.app.xyz",
   }),
 });
 
 const authParams = {
-  organizationId: "TURNKEY_ORGANIZATION_ID",
-  signWith: "TURNKEY_WALLET_ID",
+  organizationId: "12345678-1234-1234-1234-123456789abc",
+  signWith: "0x1234567890123456789012345678901234567890",
   transport: http("https://eth-sepolia.g.alchemy.com/v2/ALCHEMY_API_KEY");
 };
 

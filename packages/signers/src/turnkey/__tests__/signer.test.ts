@@ -1,4 +1,4 @@
-import { ApiKeyStamper } from "@turnkey/api-key-stamper";
+import { WebauthnStamper } from "@turnkey/webauthn-stamper";
 import { TurnkeyClient } from "@turnkey/http";
 import { TurnkeySigner } from "../signer.js";
 import { custom } from "viem";
@@ -83,10 +83,9 @@ const givenSigner = async (auth = true) => {
     {
       baseUrl: "test",
     },
-    new ApiKeyStamper({
-      apiPublicKey: "test",
-      apiPrivateKey: "test",
-    })
+    new WebauthnStamper({
+      rpId: "your.app.xyz",
+    }),
   );
 
   inner.getWhoami = vi.fn().mockResolvedValue({
