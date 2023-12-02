@@ -1,3 +1,4 @@
+import type { RequiredBy } from "@alchemy/aa-core";
 import { type Plugin } from "@wagmi/cli";
 import { camelCase, pascalCase } from "change-case";
 import dedent from "dedent";
@@ -10,11 +11,6 @@ import {
   type Chain,
 } from "viem";
 import { IPluginAbi } from "../src/msca/abis/IPlugin.js";
-
-type RequiredBy<TType, TKeys extends keyof TType> = Required<
-  Pick<TType, TKeys>
-> &
-  Omit<TType, TKeys>;
 
 export function plugingen({
   chain,

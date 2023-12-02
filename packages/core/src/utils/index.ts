@@ -186,27 +186,9 @@ export function pick(obj: Record<string, unknown>, keys: string | string[]) {
     .filter((k) => keys.includes(k))
     .reduce((res, k) => Object.assign(res, { [k]: obj[k] }), {});
 }
-// borrowed from viem
-/**
- * @description Constructs a type by excluding `undefined` from `T`.
- *
- * @example
- * NoUndefined<string | undefined>
- * => string
- */
-export type NoUndefined<T> = T extends undefined ? never : T;
-
-// borrowed from viem
-/**
- * @description Checks if {@link T} is `undefined`
- * @param T - Type to check
- * @example
- * type Result = IsUndefined<undefined>
- * //   ^? type Result = true
- */
-export type IsUndefined<T> = [undefined] extends [T] ? true : false;
 
 export * from "./bigint.js";
 export * from "./defaults.js";
 export * from "./schema.js";
+export type * from "./types.js";
 export * from "./userop.js";
