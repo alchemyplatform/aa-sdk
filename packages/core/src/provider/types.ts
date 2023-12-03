@@ -206,7 +206,7 @@ export interface ISmartAccountProvider<
 
   /**
    * This takes an ethereum transaction and converts it into a UserOperation, sends the UserOperation, and waits
-   * on the receipt of that UserOperation (ie. has it been mined). If you don't want to wait for the UserOperation
+   * on the receipt of that UserOperation (i.e. has it been mined). If you don't want to wait for the UserOperation
    * to mine, it's recommended to user {@link sendUserOperation} instead.
    *
    * @param request - a {@link RpcTransactionRequest} object representing a traditional ethereum transaction
@@ -220,7 +220,7 @@ export interface ISmartAccountProvider<
 
   /**
    * This takes a set of  ethereum transactions and converts them into one UserOperation, sends the UserOperation, and waits
-   * on the receipt of that UserOperation (ie. has it been mined). If you don't want to wait for the UserOperation
+   * on the receipt of that UserOperation (i.e. has it been mined). If you don't want to wait for the UserOperation
    * to mine, it's recommended to user {@link sendUserOperation} instead.
    *
    * NOTE: the account you're sending the transactions to MUST support batch transactions.

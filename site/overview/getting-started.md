@@ -115,7 +115,7 @@ Smart Account Address: 0xYOUR_SMART_ACCOUNT_ADDRESS
 
 To deploy the smart account and send UOs on its behalf, you'll need to add native token to your smart account.
 
-At scale, you might consider using our Gas Manager to [sponsor UserOperations](/guides/sponsoring-gas/sponsoring-gas) for smart accounts. But for the purpose of this example, and because we're using a testnet, let's fund the account using the [Alchemy Faucet](https://sepoliafaucet.com). Make sure to log in with Alchemy to receive your testnet tokens.
+At scale, you might consider using our Gas Manager to [sponsor UserOperations](/tutorials/sponsoring-gas/sponsoring-gas) for smart accounts. But for the purpose of this example, and because we're using a testnet, let's fund the account using the [Alchemy Faucet](https://sepoliafaucet.com). Make sure to log in with Alchemy to receive your testnet tokens.
 
 <img src="/images/alchemy-faucet.png" width="auto" height="auto" alt="Account Kit Overview" style="display: block; margin: auto;">
 
@@ -166,8 +166,8 @@ In this guide, we initialized an `AlchemyProvider` with the `aa-alchemy` package
 
 3. To learn about the `owner` field on your smart account, check out the section on [Choosing a Signer](/smart-accounts/signers/choosing-a-signer) to own the smart account.
 
-4. To learn more about different User Operations you can send with different `target` and `data` fields in the `sendUserOperation` function above, look at our [How to Send a User Operation](/guides/send-user-operation) guide for an example using NFT mints.
+4. To learn more about different User Operations you can send with different `target` and `data` fields in the `sendUserOperation` function above, look at our [How to Send a User Operation](/tutorials/send-user-operation) guide for an example using NFT mints.
 
-5. To explore more ways to use Account Kit, check out the many step-by-step guides, such as [How to Sponsor Gas for a User Operation](/guides/sponsoring-gas/sponsoring-gas) or [How to Fetch Smart Account Data](/guides/enhanced-apis/nft).
+5. To explore more ways to use Account Kit, check out the many step-by-step guides, such as [How to Sponsor Gas for a User Operation](/tutorials/sponsoring-gas/sponsoring-gas) or [How to Fetch Smart Account Data](/tutorials/enhanced-apis/nft).
 
 6. To see Account Kit in action, check out our [Demos](/overview/demos).

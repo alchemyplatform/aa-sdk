@@ -14,7 +14,7 @@ head:
 
 # dropAndReplaceUserOperation
 
-Attempts to drop and replace an existing user operation by increasing fees. The fee replacement logic sets the `maxPriorityFee` and `maxPriorityFeePerGas` to the `max(current_estimate, prev_uo * 1.1)` (ie. the current max fee or 110% of the previous fee).
+Attempts to drop and replace an existing user operation by increasing fees. The fee replacement logic sets the `maxPriorityFee` and `maxPriorityFeePerGas` to the `max(current_estimate, prev_uo * 1.1)` (i.e. the current max fee or 110% of the previous fee).
 
 ## Usage
 

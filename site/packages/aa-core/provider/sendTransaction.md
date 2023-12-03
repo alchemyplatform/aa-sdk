@@ -14,7 +14,7 @@ head:
 
 # sendTransaction
 
-This takes an ethereum transaction and converts it into a `UserOperation` (UO), sends the UO, and waits on the receipt of that UO (ie. has it been mined).
+This takes an ethereum transaction and converts it into a `UserOperation` (UO), sends the UO, and waits on the receipt of that UO (i.e. has it been mined).
 
 If you don't want to wait for the UO to mine, it's recommended to user [sendUserOperation](./sendUserOperation) instead.
 

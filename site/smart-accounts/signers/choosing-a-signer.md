@@ -21,14 +21,14 @@ prev:
   link: /smart-accounts/accounts/choosing-a-smart-account
 next:
   text: Guides
-  link: /guides/send-user-operation
+  link: /tutorials/send-user-operation
 ---
 
 # What is a Signer?
 
 A **Signer** is a service (e.g. Magic or Turnkey) or application (e.g. MetaMask) that manages the private key and signs operations. Most web3 users today use an [Externally Owned Account (EOA)](https://ethereum.org/en/developers/docs/accounts/#externally-owned-accounts-and-key-pairs) with a self-custodial Signer such as MetaMask to manage the private key.
 
-With Account Kit, you will deploy a **smart account** for each user instead of an EOA wallet. This smart account stores the user’s assets (e.g. tokens or NFTs). The default smart account in Account Kit is called [`LightAccount`](/smart-accounts/accounts/light-account) and it uses a typical single-owner architecture.
+With Account Kit, you will deploy a **smart account** for each user instead of an EOA wallet. This smart account stores the user’s assets (e.g. tokens or NFTs). The default smart account in Account Kit is called [`LightAccount`](/smart-accounts/accounts/guides/light-account) and it uses a typical single-owner architecture.
 
 The smart account is controlled by an **Owner** address. The smart account will only execute a transaction if it was signed by the owner’s private key.
 
@@ -50,18 +50,18 @@ The Signer plays a crucial role in your app because it controls the user’s sma
 
 Account Kit is compatible with any EIP-1193 provider. Many of the most popular signers can be configured in minutes through our integration guides below:
 
-- [Magic](/smart-accounts/signers/magic)
-- [web3auth](/smart-accounts/signers/web3auth)
-- [Turnkey](/smart-accounts/signers/turnkey)
-- [Privy](/smart-accounts/signers/privy)
-- [Dynamic](/smart-accounts/signers/dynamic)
-- [Fireblocks](/smart-accounts/signers/fireblocks)
-- [Portal](/smart-accounts/signers/portal)
-- [Capsule](/smart-accounts/signers/capsule)
-- [Lit Protocol](/smart-accounts/signers/lit)
-- [Self-custodial wallets like MetaMask or Ledger](/smart-accounts/signers/eoa)
+- [Magic](/smart-accounts/signers/guides/magic)
+- [web3auth](/smart-accounts/signers/guides/web3auth)
+- [Turnkey](/smart-accounts/signers/guides/turnkey)
+- [Privy](/smart-accounts/signers/guides/privy)
+- [Dynamic](/smart-accounts/signers/guides/dynamic)
+- [Fireblocks](/smart-accounts/signers/guides/fireblocks)
+- [Portal](/smart-accounts/signers/guides/portal)
+- [Capsule](/smart-accounts/signers/guides/capsule)
+- [Lit Protocol](/smart-accounts/signers/guides/lit)
+- [Self-custodial wallets like MetaMask or Ledger](/smart-accounts/signers/guides/eoa)
 
-If you want to use another Signer, you can integrate any other Signer by wrapping it in an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) provider or using [`SmartAccountSigner`](/smart-accounts/signers/custom-signer#implementing-smartaccountsigner) to adapt non-standard Signer.
+If you want to use another Signer, you can integrate any other Signer by wrapping it in an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) provider or using [`SmartAccountSigner`](/smart-accounts/signers/guides/custom-signer#implementing-smartaccountsigner) to adapt non-standard Signer.
 
 ## Criteria to consider
 

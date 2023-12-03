@@ -65,7 +65,7 @@ import { createMagicSigner } from "./magic";
 const chain = sepolia;
 
 // NOTE: the below is async because it depends on creating a magic Signer. You can choose to break that up how you want
-// eg. use a useEffect + useState to create the Signer and then pass it down to the provider
+// e.g. use a useEffect + useState to create the Signer and then pass it down to the provider
 const provider = new AlchemyProvider({
   apiKey: "ALCHEMY_API_KEY",
   chain,
