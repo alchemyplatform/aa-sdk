@@ -1,6 +1,6 @@
 import {
   SimpleSmartContractAccount,
-  SmartAccountProvider,
+  type ISmartAccountProvider,
   type SignTypedDataParams,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
@@ -8,15 +8,20 @@ import {
   concatHex,
   decodeFunctionResult,
   encodeFunctionData,
+  fromHex,
   hashMessage,
   hashTypedData,
   isBytes,
+  trim,
   type Address,
+  type Chain,
   type FallbackTransport,
   type Hash,
   type Hex,
   type Transport,
 } from "viem";
+import { createMultiOwnerMSCA } from "../msca/multi-owner-account.js";
+import { getDefaultMSCAFactoryAddress } from "../msca/utils.js";
 import { LightAccountAbi } from "./abis/LightAccountAbi.js";
 import { LightAccountFactoryAbi } from "./abis/LightAccountFactoryAbi.js";
 import {
@@ -151,6 +156,92 @@ export class LightSmartContractAccount<
   }
 
   /**
+   * Upgrades the account implementation from Light Account to a Modular Account.
+   * Optionally waits for the transaction to be mined.
+   *
+   * @param provider - the provider to use to send the transaction
+   * @param chain - the chain to upgrade the account on
+   * @param accountImplAddress - the address of the smart account implementation to
+   * upgrade to
+   * @param initializationData - the initialization data address to use when upgrading to the new
+   * smart account
+   * @param waitForTxn - whether or not to wait for the transaction to be mined
+   * @returns {
+   *  provider: SmartAccountProvider<TTransport> & { account: MSCA };
+   *  hash: Hash;
+   * } - the upgraded provider and corresponding userOperation hash,
+   * or transaction hash if `waitForTxn` is true
+   */
+  static async upgrade<
+    P extends ISmartAccountProvider,
+    TTransport extends Transport | FallbackTransport = Transport
+  >(
+    provider: P & {
+      account: LightSmartContractAccount<TTransport>;
+    },
+    chain: Chain,
+    accountImplAddress: Address,
+    initializationData: Hex,
+    waitForTxn: boolean = false
+  ) {
+    const accountAddress = await provider.getAddress();
+
+    const storage = await provider.rpcClient.getStorageAt({
+      address: accountAddress,
+      slot: LightSmartContractAccount.storageSlot,
+    });
+
+    if (storage == null) {
+      throw new Error("could not get storage");
+    }
+
+    // only upgrade undeployed accounts (storage 0) or deployed light accounts, error otherwise
+    if (
+      fromHex(storage, "number") !== 0 &&
+      trim(storage) !== LightSmartContractAccount.implementationAddress
+    ) {
+      throw new Error(
+        "could not determine if smart account implementation is light account"
+      );
+    }
+
+    const encodeUpgradeData = encodeFunctionData({
+      abi: LightAccountAbi,
+      functionName: "upgradeToAndCall",
+      args: [accountImplAddress, initializationData],
+    });
+
+    const result = await provider.sendUserOperation({
+      target: accountAddress,
+      data: encodeUpgradeData,
+    });
+
+    let hash = result.hash;
+    if (waitForTxn) {
+      hash = await provider.waitForUserOperationTransaction(result.hash);
+    }
+
+    const owner = provider.account.getOwner();
+    if (owner == null) {
+      throw new Error("could not get owner");
+    }
+
+    return {
+      provider: provider.connect((rpcClient) =>
+        createMultiOwnerMSCA({
+          rpcClient,
+          factoryAddress: getDefaultMSCAFactoryAddress(chain),
+          owner,
+          index: 0n,
+          chain: chain,
+          accountAddress,
+        })
+      ),
+      hash,
+    };
+  }
+
+  /**
    * Encodes the transferOwnership function call using Light Account ABI.
    *
    * @param newOwner - the new owner of the account
@@ -174,9 +265,10 @@ export class LightSmartContractAccount<
    * @returns {Hash} the userOperation hash, or transaction hash if `waitForTxn` is true
    */
   static async transferOwnership<
+    P extends ISmartAccountProvider,
     TTransport extends Transport | FallbackTransport = Transport
   >(
-    provider: SmartAccountProvider<TTransport> & {
+    provider: P & {
       account: LightSmartContractAccount<TTransport>;
     },
     newOwner: SmartAccountSigner,

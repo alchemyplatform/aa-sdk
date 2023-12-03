@@ -1,4 +1,15 @@
+import type {
+  ISmartAccountProvider,
+  ISmartContractAccount,
+} from "@alchemy/aa-core";
 import type { Address, Chain } from "viem";
+import {
+  encodeAbiParameters,
+  encodeFunctionData,
+  encodeFunctionResult,
+  keccak256,
+  parseAbiParameters,
+} from "viem";
 import {
   arbitrum,
   arbitrumGoerli,
@@ -15,6 +26,8 @@ import {
   polygonMumbai,
   sepolia,
 } from "viem/chains";
+import { IPluginAbi } from "./abis/IPlugin.js";
+import { UpgradeableModularAccountAbi } from "./abis/UpgradeableModularAccount.js";
 
 /**
  * Utility method returning the default multi owner msca factory address given a {@link Chain} object
@@ -49,4 +62,47 @@ export const getDefaultMultiOwnerMSCAFactoryAddress = (
   throw new Error(
     `no default multi owner msca factory contract exists for ${chain.name}`
   );
+};
+
+export const getMSCAInitializationData = async <
+  P extends ISmartAccountProvider & { account: ISmartContractAccount }
+>(
+  provider: P,
+  multiOwnerPluginAddress: Address
+) => {
+  const pluginManifest = await provider.rpcClient.readContract({
+    abi: IPluginAbi,
+    address: multiOwnerPluginAddress,
+    functionName: "pluginManifest",
+  });
+  const hashedMultiOwnerPluginManifest = keccak256(
+    encodeFunctionResult({
+      abi: IPluginAbi,
+      functionName: "pluginManifest",
+      result: pluginManifest,
+    })
+  );
+
+  const owner = provider.account.getOwner();
+  if (owner == null) {
+    throw new Error("could not get owner");
+  }
+
+  const ownerAddress = await owner.getAddress();
+  const encodedOwner = encodeAbiParameters(parseAbiParameters("address[]"), [
+    [ownerAddress],
+  ]);
+
+  const encodedPluginInitData = encodeAbiParameters(
+    parseAbiParameters("bytes32[], bytes[]"),
+    [[hashedMultiOwnerPluginManifest], [encodedOwner]]
+  );
+
+  const encodedMSCAInitializeData = encodeFunctionData({
+    abi: UpgradeableModularAccountAbi,
+    functionName: "initialize",
+    args: [[multiOwnerPluginAddress], encodedPluginInitData],
+  });
+
+  return encodedMSCAInitializeData;
 };
