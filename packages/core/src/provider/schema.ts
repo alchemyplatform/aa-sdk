@@ -65,6 +65,8 @@ export const createSmartAccountProviderConfigSchema = <
      * when using Alchemy as your RPC provider.
      */
     entryPointAddress: Address.optional(),
-    opts: SmartAccountProviderOptsSchema.optional(),
+    opts: SmartAccountProviderOptsSchema.optional().default(
+      SmartAccountProviderOptsSchema.parse({})
+    ),
   });
 };

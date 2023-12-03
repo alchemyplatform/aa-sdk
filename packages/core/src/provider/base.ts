@@ -46,10 +46,7 @@ import {
   resolveProperties,
   type Deferrable,
 } from "../utils/index.js";
-import {
-  SmartAccountProviderOptsSchema,
-  createSmartAccountProviderConfigSchema,
-} from "./schema.js";
+import { createSmartAccountProviderConfigSchema } from "./schema.js";
 import type {
   AccountMiddlewareFn,
   AccountMiddlewareOverrideFn,
@@ -92,9 +89,7 @@ export class SmartAccountProvider<
     const config =
       createSmartAccountProviderConfigSchema<TTransport>().parse(config_);
 
-    const { rpcProvider, entryPointAddress, chain, opts: opts_ } = config;
-
-    const opts = SmartAccountProviderOptsSchema.parse(opts_);
+    const { rpcProvider, entryPointAddress, chain, opts } = config;
 
     super();
 
