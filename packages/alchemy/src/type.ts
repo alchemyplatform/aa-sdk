@@ -5,10 +5,10 @@ import type {
   LightAccountAlchemyProviderConfigSchema,
 } from "./schema.js";
 
-export type ConnectionConfig = z.infer<typeof ConnectionConfigSchema>;
+export type ConnectionConfig = z.input<typeof ConnectionConfigSchema>;
 
-export type AlchemyProviderConfig = z.infer<typeof AlchemyProviderConfigSchema>;
+export type AlchemyProviderConfig = z.input<typeof AlchemyProviderConfigSchema>;
 
-export type LightAccountAlchemyProviderConfig = z.infer<
+export type LightAccountAlchemyProviderConfig = z.input<
   typeof LightAccountAlchemyProviderConfigSchema
 >;

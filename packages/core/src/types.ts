@@ -11,16 +11,16 @@ import type {
   PercentageSchema,
 } from "./utils";
 
-export type Hex = z.infer<typeof HexSchema>;
+export type Hex = z.input<typeof HexSchema>;
 export type EmptyHex = `0x`;
 
 // based on @account-abstraction/common
 export type PromiseOrValue<T> = T | Promise<T>;
 export type BytesLike = Uint8Array | Hex;
-export type Percentage = z.infer<typeof PercentageSchema>;
+export type Percentage = z.input<typeof PercentageSchema>;
 
-export type BigNumberish = z.infer<typeof BigNumberishSchema>;
-export type BigNumberishRange = z.infer<typeof BigNumberishRangeSchema>;
+export type BigNumberish = z.input<typeof BigNumberishSchema>;
+export type BigNumberishRange = z.input<typeof BigNumberishRangeSchema>;
 
 export type UserOperationCallData =
   | {
@@ -35,11 +35,11 @@ export type UserOperationCallData =
 
 export type BatchUserOperationCallData = Exclude<UserOperationCallData, Hex>[];
 
-export type UserOperationFeeOptionsField = z.infer<
+export type UserOperationFeeOptionsField = z.input<
   typeof UserOperationFeeOptionsFieldSchema
 >;
 
-export type UserOperationFeeOptions = z.infer<
+export type UserOperationFeeOptions = z.input<
   typeof UserOperationFeeOptionsSchema
 >;
 

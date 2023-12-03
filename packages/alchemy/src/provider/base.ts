@@ -26,8 +26,8 @@ import type { AlchemyProviderConfig } from "../type.js";
 export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
   private rpcUrl: string;
 
-  constructor(config: AlchemyProviderConfig) {
-    AlchemyProviderConfigSchema.parse(config);
+  constructor(config_: AlchemyProviderConfig) {
+    const config = AlchemyProviderConfigSchema.parse(config_);
 
     const { chain, entryPointAddress, opts, ...connectionConfig } = config;
     const _chain =
