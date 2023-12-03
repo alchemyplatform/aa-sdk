@@ -28,6 +28,10 @@ You are not limited to the accounts defined in `@alchemy/aa-accounts`. The `Smar
 
 Let's take a look at [`BaseSmartContractAccount`](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/core/src/account/base.ts) and walk through an example of implementing an interface to work with your own Smart Contract Account.
 
+:::tip Note
+If you want to add your smart account implementation to Account Kit's codebase, take a look at the [contibuting](/smart-accounts/accounts/contributing) docs. We welcome Pull Requests onto the Github repo for [`aa-sdk`](https://github.com/alchemyplatform/aa-sdk)!
+:::
+
 ### 1. Extend `BaseSmartContractAccount`
 
 In `aa-core`, we provide an abstract class that handles most of the `ISmartContractAccount` interface, making this very simple!
@@ -38,17 +42,13 @@ The `BaseSmartContractAccount` class leaves four methods as abstract for you to 
 <<< @/../packages/core/src/account/base.ts#abstract-methods
 :::
 
-### 2. [Optional] Implement Additional methods from `BaseSmartContractAccount`
+### 2. Implement Additional methods from `BaseSmartContractAccount`
 
-The `BaseSmartContractAccount` class also exposes some additional implementations that by defaul will throw an error if not implemented. You can override these methods to provide your own implementation:
+The `BaseSmartContractAccount` class also exposes some additional implementations that by default will throw an error if not implemented. You can override these methods to provide your own implementation:
 
 ::: details Click to expand
 <<< @/../packages/core/src/account/base.ts#optional-methods
 :::
-
-### 3. [Optional] Contribute to `aa-accounts`!
-
-See ["Contributing to `aa-accounts`"](/packages/aa-accounts/contributing) for more information on how to contribute your own Smart Contract Account implementation to `aa-accounts`.
 
 ## `LightSmartContractAccount` as an Example
 
