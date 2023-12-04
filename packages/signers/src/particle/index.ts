@@ -1,2 +1,2 @@
-export { FireblocksSigner } from "./signer.js";
+export { ParticleSigner } from "./signer.js";
 export type * from "./types.js";

@@ -4,41 +4,47 @@ import {
   type SmartAccountAuthenticator,
 } from "@alchemy/aa-core";
 import {
-  FireblocksWeb3Provider,
-  type FireblocksProviderConfig,
-} from "@fireblocks/fireblocks-web3-provider";
+  ParticleNetwork,
+  type Config,
+  type LoginOptions,
+} from "@particle-network/auth";
+import { ParticleProvider } from "@particle-network/provider";
 import { createWalletClient, custom, type Hash } from "viem";
-import type {
-  FireblocksAuthenticationParams,
-  FireblocksUserInfo,
-} from "./types.js";
+import type { ParticleAuthenticationParams, ParticleUserInfo } from "./types";
 
 /**
- * This class requires the `@fireblocks/fireblocks-web3-provider` dependency.
- * `@alchemy/aa-signers` lists it as an optional dependency.
+ * This class requires the `@particle-network/auth` and `@particle-network/provider` dependencies.
+ * `@alchemy/aa-signers` lists thems as an optional dependencies.
  *
- * @see: https://github.com/fireblocks/fireblocks-web3-provider
+ * @see: https://docs.particle.network/developers/auth-service/sdks/web
  */
-export class FireblocksSigner
+export class ParticleSigner
   implements
     SmartAccountAuthenticator<
-      FireblocksAuthenticationParams,
-      FireblocksUserInfo,
-      FireblocksWeb3Provider
+      ParticleAuthenticationParams,
+      ParticleUserInfo,
+      ParticleNetwork
     >
 {
-  inner: FireblocksWeb3Provider;
+  inner: ParticleNetwork;
+  private provider: ParticleProvider;
   private signer: WalletClientSigner | undefined;
 
   constructor(
-    params: FireblocksProviderConfig | { inner: FireblocksWeb3Provider }
+    params: Config | { inner: ParticleNetwork; provider?: ParticleProvider }
   ) {
     if ("inner" in params) {
       this.inner = params.inner;
+      this.provider =
+        params.provider != null
+          ? params.provider
+          : new ParticleProvider(this.inner.auth);
+
       return;
     }
 
-    this.inner = new FireblocksWeb3Provider(params);
+    this.inner = new ParticleNetwork(params);
+    this.provider = new ParticleProvider(this.inner.auth);
   }
 
   readonly signerType = "fireblocks";
@@ -64,22 +70,39 @@ export class FireblocksSigner
     return this.signer.signTypedData(params);
   };
 
-  authenticate = async () => {
+  authenticate = async (
+    params: ParticleAuthenticationParams = {
+      loginOptions: {},
+      login: async (loginOptions: LoginOptions) => {
+        this.inner.auth.login(loginOptions);
+      },
+    }
+  ) => {
     if (this.inner == null) throw new Error("No provider found");
+
+    await params.login(params.loginOptions);
 
     this.signer = new WalletClientSigner(
       createWalletClient({
-        transport: custom(this.inner),
+        transport: custom(this.provider),
       }),
       this.signerType
     );
 
-    return { addresses: await this.inner.request({ method: "eth_accounts" }) };
+    const userInfo = this.inner.auth.getUserInfo();
+
+    if (userInfo == null) throw new Error("No user info found");
+
+    return userInfo;
   };
 
   getAuthDetails = async () => {
     if (!this.signer) throw new Error("Not authenticated");
 
-    return { addresses: await this.inner.request({ method: "eth_accounts" }) };
+    const userInfo = this.inner.auth.getUserInfo();
+
+    if (userInfo == null) throw new Error("No user info found");
+
+    return userInfo;
   };
 }

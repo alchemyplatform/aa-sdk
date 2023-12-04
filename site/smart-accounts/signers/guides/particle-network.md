@@ -26,6 +26,8 @@ To configure Particle, you'll need to start by quickly signing up for a Particle
 
 ### Install the SDK
 
+`ParticleSigner` requires installation of the [`@particle-network/auth`](https://docs.particle.network/developers/auth-service/sdks/web) and [`@particle-network/provider`](https://docs.particle.network/developers/auth-service/sdks/web). `aa-signers` lists them as optional dependencies.
+
 ::: code-group
 
 ```bash [npm]
@@ -50,7 +52,8 @@ From here, setting up a `SmartAccountSigner` involves the initialization of `Par
 
 ### Use it with Light Account
 
-Let's see it in action with `aa-alchemy` and `LightSmartContractAccount` from `aa-accounts`:
+Next, setup the Particle SDK and create an authenticated `ParticleSigner` using the `aa-signers` package:
+
 ::: code-group
 
 ```ts [example.ts]
@@ -61,7 +64,7 @@ import {
 } from "@alchemy/aa-accounts";
 import { getDefaultEntryPointAddress } from "@alchemy/aa-core";
 import { polygonMumbai } from "viem/chains";
-import { particleSigner } from "./particleSigner";
+import { createParticleSigner } from "./particle";
 
 const chain = polygonMumbai;
 const provider = new AlchemyProvider({
@@ -72,7 +75,7 @@ const provider = new AlchemyProvider({
     new LightSmartContractAccount({
       entryPointAddress: getDefaultEntryPointAddress(chain),
       chain: rpcClient.chain,
-      owner: particleSigner,
+      owner: await createParticleSigner(),
       factoryAddress: getDefaultLightAccountFactoryAddress(chain),
       rpcClient,
     })

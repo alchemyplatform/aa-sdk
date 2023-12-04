@@ -3,45 +3,56 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: FireblocksSigner • constructor
+      content: ParticleSigner • constructor
   - - meta
     - name: description
-      content: Overview of the constructor method on FireblocksSigner in aa-signers
+      content: Overview of the constructor method on ParticleSigner in aa-signers
   - - meta
     - property: og:description
-      content: Overview of the constructor method on FireblocksSigner in aa-signers
+      content: Overview of the constructor method on ParticleSigner in aa-signers
 ---
 
 # constructor
 
-To initialize a `FireblocksSigner`, you must provide a set of parameters detailed below.
+To initialize a `ParticleSigner`, you must provide a set of parameters detailed below.
 
 ## Usage
 
 ::: code-group
 
 ```ts [example.ts]
-import { FireblocksSigner } from "@alchemy/aa-signers";
-import { ChainId } from "@fireblocks/fireblocks-web3-provider";
+import { ParticleSigner } from "@alchemy/aa-signers";
 
 // instantiates using every possible parameter, as a reference
-const fireblocksSigner = new FireblocksSigner({
-  apiKey: "API_KEY",
-  privateKey: "PATH_TO_FILE_WITH_PRIVATE_KEY",
-  chainId: ChainId.SEPOLIA,
-  rpcUrl: "ALCHEMY_RPC_URL",
-  vaultAccountIds: ["VAULT_ID"],
-  apiBaseUrl: "FIREBLOCKS_API_URL",
-  note: "note",
-  pollingInterval: 1000,
-  oneTimeAddressesEnabled: true,
-  externalTxId: "1",
-  userAgent: "test-header",
-  assetId: "1",
-  logTransactionStatusChanges: true,
-  logRequestsAndResponses: true,
-  enhancedErrorHandling: true,
-  gaslessGasTankVaultId: 1,
+const particle = new ParticleNetwork({
+  projectId: "PROJECT_ID",
+  clientKey: "CLIENT_KEY",
+  appId: "APP_ID",
+  chainName: "Ethereum",
+  chainId: 1,
+  securityAccount: {
+    promptSettingWhenSign: true,
+    promptMasterPasswordSettingWhenLogin: true,
+  },
+  preload: true,
+  wallet: {
+    displayWalletEntry: true,
+    preload: true,
+    supportChains: [{ id: 1, name: "Ethereum" }],
+    uiMode: "auto",
+    customStyle: {
+      supportAddToken: true,
+      supportChains: [{ id: 1, name: "Ethereum" }],
+      displayTokenAddresses: [],
+      displayNFTContractAddresses: [],
+      priorityTokenAddresses: [],
+      priorityNFTContractAddresses: [],
+      fiatCoin: "USD",
+      evmSupportWalletConnect: true,
+      supportUIModeSwitch: true,
+      supportLanguageSwitch: true,
+    },
+  },
 });
 ```
 
@@ -49,48 +60,46 @@ const fireblocksSigner = new FireblocksSigner({
 
 ## Returns
 
-### `FireblocksSigner`
+### `ParticleSigner`
 
-A new instance of a `FireblocksSigner`.
+A new instance of a `ParticleSigner`.
 
 ## Parameters
 
-### `params: FireblocksProviderConfig | { inner: FireblocksWeb3Provider }`
+### `params: Config | { inner: ParticleNetwork; provider?: ParticleProvider }`
 
-You can either pass in a constructed `FireblocksWeb3Provider` object, or directly pass into the `FireblocksSigner` the `FireblocksProviderConfig` used to construct a `FireblocksWeb3Provider` object. These parameters are listed on the [Fireblocks repo](https://github.com/fireblocks/fireblocks-web3-provider/blob/main/src/types.ts#L48) as well.
+You can either pass in a constructed `ParticleNetwork` object, or directly pass into the `ParticleSigner` the `Config` used to construct a `ParticleNetwork` object. These parameters are listed on the [ParticleNetwork docs](https://docs.particle.network/developers/auth-service/sdks/web) as well.
 
-`FireblocksProviderConfig` takes in the following parameters:
+`Config` takes in the following parameters:
 
-- `apiKey: string` -- a Fireblocks API Key. You can get one at the [Fireblocks Developer Dashboard](https://developers.fireblocks.com/docs/quickstart#api-user-creation).
+- `projectId: string` -- a Particle project ID. You can get one at the [Particle Developer Dashboard](https://dashboard.particle.network/#/login).
 
-- `privateKey: string`-- Fireblocks API private key for signing requests.
+- `clientKey: string`-- Particle client key.
 
-- `chainId: ChainId`-- Fireblocks API private key for signing requests. Required if `rpcUrl` is not provided.
+- `appId: string`-- ID of Particle app.
 
-- `rpcUrl: ChainId`-- Url to which to transport JSON-RPC requests. Required if `chainId` is not provided.
+- `chainName: string` -- [optional] name of chain on which to use the Particle Signer.
 
-- `vaultAccountIds: number | number[] | string | string[]` -- [optional] list of Fireblocks vaults to provide for the Signer. By default, the first 20 vault accounts are dynamically loaded from the Fireblocks API.
+- `chainId: number` -- [optional] ID of chain on which to use the Particle Signer.
 
-- `apiBaseUrl` -- [optional] base Url for querying the Fireblocks API. By default, it uses the Fireblocks API production endpoint.
+- `securityAccount: Object`-- [optional] object with the below flags
 
-- `fallbackFeeLevel: FeeLevel = "LOW" | "MEDIUM" | "HIGH"` -- [optional] fallback fee for requests. Default Medium.
+  - `promptSettingWhenSign: SettingOption | boolean` -- [optional] Flag to prompt settings to the user when signing using the Particle Signer. Modular to different levels of appearance frequency.
 
-- `note: string` -- [optional] By default, the note is set to "Created by Fireblocks Web3 Provider."
+  - `promptMasterPasswordSettingWhenLogin: SettingOption | boolean` -- [optional] Flag to prompt master password setting to the user when logging in using the Particle Signer. Modular to different levels of appearance frequency.
 
-- `pollingInterval: number` -- [optional] The interval in which the Fireblocks API is queried to check the status of transactions. Default is 1 second.
+- `preload: boolean` -- [optional] Flag to pre-load the Particle Signer.
 
-- `oneTimeAddressesEnabled: boolean` -- [optional] Flag to determine if one time addresses are enabled in your Fireblocks workspace. Default true.
+- `wallet: WalletEntryOption` -- [optional] object with the below fields
 
-- `externalTxId: (() => string) | string` -- [optional] External ID you can use to associate with transactions.
+  - `displayWalletEntry: boolean` -- [optional] Flag to display wallet entry.
 
-- `userAgent: string` -- [optional] Additional appended product string to the `User-Agent` header on requests.
+  - `preload: boolean` -- [optional] Flag to preload the wallet information.
 
-- `assetId: string` -- [optional] custom ID for a Fireblocks asset, used with custom or private EVM chains.
+  - `defaultWalletEntryPosition: WalletEntryPosition` -- [optional] - Enum Setting to determine position of wallet entry on screen.
 
-- `logTransactionStatusChanges: boolean` -- [optional] Flag to determine if every transaction status change will be logged to the console. Default false.
+  - `supportChains: Chain[]` -- [optional] List of supported chains
 
-- `logRequestsAndResponses: boolean` -- [optional] Flag to determine if every request and response processed by the provider will be logged to the console. Default false.
+  - `uiMode: 'dark' | 'light' | 'auto'` -- [optional] Mode of UI.
 
-- `enhancedErrorHandling: boolean` -- [optional] Flag to determine verbosity of failed transaction information. Default true.
-
-- `gaslessGasTankVaultId: number` -- [optional] If set, all transactions sent gaslessly, relayed via the provided vault ID. Default true.
+  - `customStyle: WalletCustomStyle` -- [optional] Object defining the custom styling for the wallet. Typing shown in Particle's [Github repo here](https://github.com/Particle-Network/particle-web-demo/blob/master/packages/web-demo/src/types/customStyle.ts#L4).

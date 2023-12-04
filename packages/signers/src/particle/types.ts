@@ -1,5 +1,8 @@
-import type { Address } from "viem";
+import { type LoginOptions, type UserInfo } from "@particle-network/auth";
 
-export interface FireblocksAuthenticationParams {}
+export interface ParticleAuthenticationParams {
+  loginOptions: LoginOptions;
+  login: (loginOptions: LoginOptions) => Promise<void>;
+}
 
-export type FireblocksUserInfo = { addresses: Address[] };
+export type ParticleUserInfo = UserInfo;

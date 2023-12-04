@@ -1,11 +1,8 @@
-import {
-  ChainId,
-  FireblocksWeb3Provider,
-  type RequestArguments,
-} from "@fireblocks/fireblocks-web3-provider";
-import { FireblocksSigner } from "../signer.js";
+import { ParticleNetwork, type JsonRpcRequest } from "@particle-network/auth";
+import { ParticleProvider } from "@particle-network/provider";
+import { ParticleSigner } from "../signer.js";
 
-describe("Fireblocks Signer Tests", () => {
+describe("Particle Signer Tests", () => {
   it("should correctly get address", async () => {
     const signer = await givenSigner();
 
@@ -30,10 +27,13 @@ describe("Fireblocks Signer Tests", () => {
     const details = await signer.getAuthDetails();
     expect(details).toMatchInlineSnapshot(`
       {
-        "addresses": [
-          "0x1234567890123456789012345678901234567890",
-          "0x0987654321098765432109876543210987654321",
-        ],
+        "avatar": "test.png",
+        "email": "test@gmail.com",
+        "name": "test",
+        "phone": "1234567890",
+        "token": "test",
+        "uuid": "test",
+        "wallets": [],
       }
     `);
   });
@@ -81,13 +81,27 @@ describe("Fireblocks Signer Tests", () => {
 });
 
 const givenSigner = async (auth = true) => {
-  const inner = new FireblocksWeb3Provider({
-    privateKey: "src/fireblocks/__tests__/mock-private-key.txt",
-    apiKey: "test",
-    chainId: ChainId.SEPOLIA,
+  const inner = new ParticleNetwork({
+    projectId: "test",
+    clientKey: "test",
+    appId: "test",
+    chainName: "polygon",
+    chainId: 80001,
   });
 
-  inner.request = vi.fn(async <T, R>(args: RequestArguments<T>) => {
+  inner.auth.getUserInfo = vi.fn().mockResolvedValue({
+    uuid: "test",
+    token: "test",
+    wallets: [],
+    name: "test",
+    avatar: "test.png",
+    phone: "1234567890",
+    email: "test@gmail.com",
+  });
+
+  const provider = new ParticleProvider(inner.auth);
+
+  provider.request = vi.fn(async <R>(args: Partial<JsonRpcRequest>) => {
     switch (args.method) {
       case "eth_accounts":
         return Promise.resolve([
@@ -103,10 +117,13 @@ const givenSigner = async (auth = true) => {
     }
   });
 
-  const signer = new FireblocksSigner({ inner });
+  const signer = new ParticleSigner({ inner, provider });
 
   if (auth) {
-    await signer.authenticate();
+    await signer.authenticate({
+      loginOptions: {},
+      login: () => Promise.resolve(),
+    });
   }
 
   return signer;

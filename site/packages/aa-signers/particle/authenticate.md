@@ -3,20 +3,20 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: FireblocksSigner • authenticate
+      content: ParticleSigner • authenticate
   - - meta
     - name: description
-      content: Overview of the authenticate method on FireblocksSigner
+      content: Overview of the authenticate method on ParticleSigner
   - - meta
     - property: og:description
-      content: Overview of the authenticate method on FireblocksSigner
+      content: Overview of the authenticate method on ParticleSigner
 ---
 
 # authenticate
 
-`authenticate` is a method on the `FireblocksSigner` which leverages the `Fireblocks` SDK to authenticate a user.
+`authenticate` is a method on the `ParticleSigner` which leverages the `Particle` SDK to authenticate a user.
 
-You must call this method before accessing the other methods available on the `FireblocksSigner`, such as signing messages or typed data or accessing user details.
+You must call this method before accessing the other methods available on the `ParticleSigner`, such as signing messages or typed data or accessing user details.
 
 ## Usage
 
@@ -24,23 +24,47 @@ You must call this method before accessing the other methods available on the `F
 
 ```ts [example.ts]
 // [!code focus:99]
-import { FireblocksSigner } from "@alchemy/aa-signers";
+import { ParticleSigner } from "@alchemy/aa-signers";
 
-const fireblocksSigner = new FireblocksSigner({
+const particleSigner = new ParticleSigner({
   privateKey: process.env.FIREBLOCKS_API_PRIVATE_KEY_PATH,
   apiKey: process.env.FIREBLOCKS_API_KEY,
   chainId: ChainId.SEPOLIA,
 });
 
-await fireblocksSigner.authenticate();
+await particleSigner.authenticate();
 ```
 
 :::
 
 ## Returns
 
-### `Promise<FireblocksUserInfo>`
+### `Promise<ParticleUserInfo>`
 
-A Promise containing the `FireblocksUserInfo`, an object with the following fields:
+A Promise containing the `ParticleUserInfo`, an object derived from Particle's [`UserInfo`](https://github.com/Particle-Network/particle-react-native/blob/main/particle-auth/src/Models/LoginInfo.ts#L83) interface.
 
-- `addresses: Address[]` -- all EOA addresses accessible via the Signer.
+## Parameters
+
+### `authParams: <ParticleAuthenticationParams>`
+
+An object with the following fields:
+
+- `loginOptions: LoginOptions` -- an object
+
+  - `preferredAuthType?: AuthType`-- [optional] Primary authentication type, from `email`, to `phone`, to social platforms, to `jwt`.
+
+  - `account?: string`-- [optional] Account ID to authenticate on Particle.
+
+  - `supportAuthTypes: string` -- [optional] Designates supported authentication types.
+
+  - `socialLoginPrompt?: PromptType` -- [optional] One of the following types prompts if Login is social-based: `none` | `consent` | `select_account`.
+
+  - `hideLoading: boolean` -- [optional] Flag to hide loading when authenticating.
+
+  - `authorization: Object` -- [optional] Object with below properties
+
+    - `message: string` -- [optional] Message to include with authorization.
+
+    - `uniq: boolean`-- [optional] Flag to determine if authorization is unique.
+
+- `login: (loginOptions: LoginOptions) => Promise<void>` -- a method you can define as necessary to leverage the `web3auth` SDK for authentication. For instance, in the example above, `authenticate` uses the [`initModal`](https://web3auth.io/docs/sdk/pnp/web/modal/initialize#initmodal) method.

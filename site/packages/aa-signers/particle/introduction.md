@@ -3,39 +3,41 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: FireblocksSigner
+      content: ParticleSigner
   - - meta
     - name: description
-      content: Overview of the FireblocksSigner class in aa-signers
+      content: Overview of the ParticleSigner class in aa-signers
   - - meta
     - property: og:description
-      content: Overview of the FireblocksSigner class in aa-signers
+      content: Overview of the ParticleSigner class in aa-signers
 ---
 
-# Fireblocks Signer
+# Particle Signer
 
-`FireblocksSigner` is a signer implementation which extends `SmartAccountAuthenticator` to leverage the [Fireblocks SDK](https://github.com/fireblocks/fireblocks-web3-provider). It supports features such as authentication, message and typed data signing, and authentication details retrieval.
+`ParticleSigner` is a signer implementation which extends `SmartAccountAuthenticator` to leverage the [Particle SDK](https://github.com/particle/particle-web3-provider). It supports features such as authentication, message and typed data signing, and authentication details retrieval.
 
-`FireblocksSigner` provides implementations for all methods on `SmartAccountAuthenticator`:
+`ParticleSigner` provides implementations for all methods on `SmartAccountAuthenticator`:
 
-1.  [`authenticate`](/packages/aa-signers/fireblocks/authenticate) -- supports user authentication.
-2.  [`getAddress`](/packages/aa-signers/fireblocks/getAddress) -- supports typed data signatures from the smart contract account's owner address.
-3.  [`signMessage`](/packages/aa-signers/fireblocks/signMessage) -- supports message signatures.
-4.  [`signTypedData`](/packages/aa-signers/fireblocks/signTypedData) -- supports typed data signatures.
-5.  [`getAuthDetails`](/packages/aa-signers/fireblocks/getAuthDetails) -- supports authentication details retrieval.
+1.  [`authenticate`](/packages/aa-signers/particle/authenticate) -- supports user authentication.
+2.  [`getAddress`](/packages/aa-signers/particle/getAddress) -- supports typed data signatures from the smart contract account's owner address.
+3.  [`signMessage`](/packages/aa-signers/particle/signMessage) -- supports message signatures.
+4.  [`signTypedData`](/packages/aa-signers/particle/signTypedData) -- supports typed data signatures.
+5.  [`getAuthDetails`](/packages/aa-signers/particle/getAuthDetails) -- supports authentication details retrieval.
 
 ## Install Dependencies
 
-`FireblocksSigner` requires installation of the [`@fireblocks/fireblocks-web3-provider`](https://github.com/fireblocks/fireblocks-web3-provider) SDK. `aa-signers` lists it as an optional dependency.
+`ParticleSigner` requires installation of the [`@particle-network/auth`](https://docs.particle.network/developers/auth-service/sdks/web) and [`@particle-network/provider`](https://docs.particle.network/developers/auth-service/sdks/web). `aa-signers` lists them as optional dependencies.
 
 ::: code-group
 
 ```bash [npm]
-npm i -s @fireblocks/fireblocks-web3-provider
+npm i -s @particle-network/auth
+npm i -s @particle-network/provider
 ```
 
 ```bash [yarn]
-yarn add @fireblocks/fireblocks-web3-provider
+yarn add @particle-network/auth
+yarn add @particle-network/provider
 ```
 
 ## Usage
@@ -43,15 +45,15 @@ yarn add @fireblocks/fireblocks-web3-provider
 ::: code-group
 
 ```ts [example.ts]
-import { createFireblocksSigner } from "./fireblocks";
+import { createParticleSigner } from "./particle";
 
-const fireblocksSigner = await createFireblocksSigner();
+const particleSigner = await createParticleSigner();
 
-const address = await fireblocksSigner.getAddress();
+const address = await particleSigner.getAddress();
 
-const details = await fireblocksSigner.getAuthDetails();
+const details = await particleSigner.getAuthDetails();
 
-const signedMessage = await fireblocksSigner.signMessage("test");
+const signedMessage = await particleSigner.signMessage("test");
 
 const typedData = {
   types: {
@@ -62,13 +64,13 @@ const typedData = {
     hello: "world",
   },
 };
-const signTypedData = await fireblocksSigner.signTypedData(typedData);
+const signTypedData = await particleSigner.signTypedData(typedData);
 ```
 
-<<< @/snippets/fireblocks.ts
+<<< @/snippets/particle.ts
 :::
 
 ## Developer Links
 
-- [Fireblocks SDK](https://github.com/fireblocks/fireblocks-web3-provider)
-- [FireblocksSigner Tests](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/signers/src/fireblocks/__tests__/signer.test.ts)
+- [Particle SDK](https://github.com/particle/particle-web3-provider)
+- [ParticleSigner Tests](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/signers/src/particle/__tests__/signer.test.ts)
