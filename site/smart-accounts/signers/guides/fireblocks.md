@@ -62,7 +62,7 @@ import {
   getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
 import { sepolia } from "viem/chains";
-import { fireblocksSigner } from "./fireblocks";
+import { createFireblocksSigner } from "./fireblocks";
 
 const chain = sepolia;
 const provider = new AlchemyProvider({
@@ -72,7 +72,7 @@ const provider = new AlchemyProvider({
   (rpcClient) =>
     new LightSmartContractAccount({
       chain: rpcClient.chain,
-      owner: fireblocksSigner,
+      owner: await createFireblocksSigner(),
       factoryAddress: getDefaultLightAccountFactoryAddress(chain),
       rpcClient,
     })
