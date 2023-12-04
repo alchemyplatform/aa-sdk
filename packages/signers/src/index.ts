@@ -4,14 +4,18 @@ export {
 } from "./fireblocks/index.js";
 export { MagicSigner, type MagicAuthParams } from "./magic/index.js";
 export {
+  ParticleSigner,
+  type ParticleAuthenticationParams,
+} from "./particle/index.js";
+export {
+  PortalSigner,
+  type PortalAuthenticationParams,
+} from "./portal/index.js";
+export {
   TurnkeySigner,
   TurnkeySubOrganization,
   type TurnkeyAuthParams,
 } from "./turnkey/index.js";
-export {
-  ParticleSigner,
-  type ParticleAuthenticationParams,
-} from "./particle/index.js";
 export {
   Web3AuthSigner,
   type Web3AuthAuthenticationParams,

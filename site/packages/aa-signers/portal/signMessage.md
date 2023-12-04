@@ -3,34 +3,34 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: FireblocksSigner • signMessage
+      content: PortalSigner • signMessage
   - - meta
     - name: description
-      content: Overview of the signMessage method on FireblocksSigner
+      content: Overview of the signMessage method on PortalSigner
   - - meta
     - property: og:description
-      content: Overview of the signMessage method on FireblocksSigner
+      content: Overview of the signMessage method on PortalSigner
 ---
 
 # signMessage
 
-`signMessage` supports signing messages from the `FireblocksSigner`.
+`signMessage` supports signing messages from the `PortalSigner`.
 
-This method must be called after [`authenticate`](/packages/aa-signers/fireblocks/authenticate). Otherwise, this method will throw an error with the message `Not Authenticated`.
+This method must be called after [`authenticate`](/packages/aa-signers/portal/authenticate). Otherwise, this method will throw an error with the message `Not Authenticated`.
 
 ## Usage
 
 ::: code-group
 
 ```ts [example.ts]
-import { createFireblocksSigner } from "./fireblocks";
+import { createPortalSigner } from "./portal";
 // [!code focus:99]
-const fireblocksSigner = await createFireblocksSigner();
+const portalSigner = await createPortalSigner();
 
-const signedMessage = await fireblocksSigner.signMessage("test");
+const signedMessage = await portalSigner.signMessage("test");
 ```
 
-<<< @/snippets/fireblocks.ts
+<<< @/snippets/portal.ts
 :::
 
 ## Returns

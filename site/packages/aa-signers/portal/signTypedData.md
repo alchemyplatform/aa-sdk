@@ -3,31 +3,31 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: FireblocksSigner • signTypedData
+      content: PortalSigner • signTypedData
   - - meta
     - name: description
-      content: Overview of the signTypedData method on FireblocksSigner
+      content: Overview of the signTypedData method on PortalSigner
   - - meta
     - property: og:description
-      content: Overview of the signTypedData method on FireblocksSigner
+      content: Overview of the signTypedData method on PortalSigner
 ---
 
 # signTypedData
 
-`signTypedData` supports signing typed data from the `FireblocksSigner`.
+`signTypedData` supports signing typed data from the `PortalSigner`.
 
-This method must be called after [`authenticate`](/packages/aa-signers/fireblocks/authenticate). Otherwise, this method will throw an error with the message `Not Authenticated`.
+This method must be called after [`authenticate`](/packages/aa-signers/portal/authenticate). Otherwise, this method will throw an error with the message `Not Authenticated`.
 
 ## Usage
 
 ::: code-group
 
 ```ts [example.ts]
-import { createFireblocksSigner } from "./fireblocks";
+import { createPortalSigner } from "./portal";
 // [!code focus:99]
-const fireblocksSigner = await createFireblocksSigner();
+const portalSigner = await createPortalSigner();
 
-const signedTypedData = await fireblocksSigner.signTypedData({
+const signedTypedData = await portalSigner.signTypedData({
   domain: {
     name: "Ether Mail",
     version: "1",
@@ -60,7 +60,7 @@ const signedTypedData = await fireblocksSigner.signTypedData({
 });
 ```
 
-<<< @/snippets/fireblocks.ts
+<<< @/snippets/portal.ts
 :::
 
 ## Returns

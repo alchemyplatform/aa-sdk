@@ -3,40 +3,48 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: FireblocksSigner • getAuthDetails
+      content: PortalSigner • getAuthDetails
   - - meta
     - name: description
-      content: Overview of the getAuthDetails method on FireblocksSigner
+      content: Overview of the getAuthDetails method on PortalSigner
   - - meta
     - property: og:description
-      content: Overview of the getAuthDetails method on FireblocksSigner
+      content: Overview of the getAuthDetails method on PortalSigner
 ---
 
 # getAuthDetails
 
-`getAuthDetails` returns the details about the authenticated user, specifically all EOA addresses tied to the user's Fireblocks vault.
+`getAuthDetails` returns the details about the authenticated user, specifically all EOA addresses tied to the user's Portal vault.
 
-This method must be called after [`authenticate`](/packages/aa-signers/fireblocks/authenticate). Otherwise, this method will throw an error with the message `Not Authenticated`.
+This method must be called after [`authenticate`](/packages/aa-signers/portal/authenticate). Otherwise, this method will throw an error with the message `Not Authenticated`.
 
 ## Usage
 
 ::: code-group
 
 ```ts [example.ts]
-import { createFireblocksSigner } from "./fireblocks";
+import { createPortalSigner } from "./portal";
 // [!code focus:99]
-const fireblocksSigner = await createFireblocksSigner();
+const portalSigner = await createPortalSigner();
 
-const details = await fireblocksSigner.getAuthDetails();
+const details = await portalSigner.getAuthDetails();
 ```
 
-<<< @/snippets/fireblocks.ts
+<<< @/snippets/portal.ts
 :::
 
 ## Returns
 
-### `Promise<FireblocksUserInfo>`
+### `Promise<PortalUserInfo>`
 
-A Promise containing the `FireblocksUserInfo`, an object with the following fields:
+A Promise containing the `PortalUserInfo`, an object with the following fields:
 
-- `addresses: Address[]` -- all EOA addresses accessible via the user's Fireblocks vault.
+- `id: string` -- ID of the Portal Signer.
+- `address: string` -- EOA address of the Portal Signer.
+- `backupStatus: string | null` -- [optional] status of wallet backup.
+- `custodian: Obect` -- [optional] EOA address of the Portal Signer.
+  - `id: string` -- ID of the Signer's custodian.
+  - `name: string` -- Name of the Signer's custodian.
+- `signingStatus: string | null` -- [optional] status of signing.
+
+This derives from the return type of a Portal provider's `getClient()` method.

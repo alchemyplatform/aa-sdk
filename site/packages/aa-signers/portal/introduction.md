@@ -3,39 +3,39 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: FireblocksSigner
+      content: PortalSigner
   - - meta
     - name: description
-      content: Overview of the FireblocksSigner class in aa-signers
+      content: Overview of the PortalSigner class in aa-signers
   - - meta
     - property: og:description
-      content: Overview of the FireblocksSigner class in aa-signers
+      content: Overview of the PortalSigner class in aa-signers
 ---
 
-# Fireblocks Signer
+# Portal Signer
 
-`FireblocksSigner` is a signer implementation which extends `SmartAccountAuthenticator` to leverage the [Fireblocks SDK](https://github.com/fireblocks/fireblocks-web3-provider). It supports features such as authentication, message and typed data signing, and authentication details retrieval.
+`PortalSigner` is a signer implementation which extends `SmartAccountAuthenticator` to leverage the [Portal SDK](https://docs.portalhq.io/sdk/web-beta). It supports features such as authentication, message and typed data signing, and authentication details retrieval.
 
-`FireblocksSigner` provides implementations for all methods on `SmartAccountAuthenticator`:
+`PortalSigner` provides implementations for all methods on `SmartAccountAuthenticator`:
 
-1.  [`authenticate`](/packages/aa-signers/fireblocks/authenticate) -- supports user authentication.
-2.  [`getAddress`](/packages/aa-signers/fireblocks/getAddress) -- supports typed data signatures from the smart contract account's owner address.
-3.  [`signMessage`](/packages/aa-signers/fireblocks/signMessage) -- supports message signatures.
-4.  [`signTypedData`](/packages/aa-signers/fireblocks/signTypedData) -- supports typed data signatures.
-5.  [`getAuthDetails`](/packages/aa-signers/fireblocks/getAuthDetails) -- supports authentication details retrieval.
+1.  [`authenticate`](/packages/aa-signers/portal/authenticate) -- supports user authentication.
+2.  [`getAddress`](/packages/aa-signers/portal/getAddress) -- supports typed data signatures from the smart contract account's owner address.
+3.  [`signMessage`](/packages/aa-signers/portal/signMessage) -- supports message signatures.
+4.  [`signTypedData`](/packages/aa-signers/portal/signTypedData) -- supports typed data signatures.
+5.  [`getAuthDetails`](/packages/aa-signers/portal/getAuthDetails) -- supports authentication details retrieval.
 
 ## Install Dependencies
 
-`FireblocksSigner` requires installation of the [`@fireblocks/fireblocks-web3-provider`](https://github.com/fireblocks/fireblocks-web3-provider) SDK. `aa-signers` lists it as an optional dependency.
+`PortalSigner` requires installation of the [`@portal-hq/web`](https://docs.portalhq.io/sdk/web-beta) SDK. `aa-signers` lists it as an optional dependency.
 
 ::: code-group
 
 ```bash [npm]
-npm i -s @fireblocks/fireblocks-web3-provider
+npm i -s @portal-hq/web
 ```
 
 ```bash [yarn]
-yarn add @fireblocks/fireblocks-web3-provider
+yarn add @portal-hq/web
 ```
 
 ## Usage
@@ -43,15 +43,15 @@ yarn add @fireblocks/fireblocks-web3-provider
 ::: code-group
 
 ```ts [example.ts]
-import { createFireblocksSigner } from "./fireblocks";
+import { createPortalSigner } from "./portal";
 
-const fireblocksSigner = await createFireblocksSigner();
+const portalSigner = await createPortalSigner();
 
-const address = await fireblocksSigner.getAddress();
+const address = await portalSigner.getAddress();
 
-const details = await fireblocksSigner.getAuthDetails();
+const details = await portalSigner.getAuthDetails();
 
-const signedMessage = await fireblocksSigner.signMessage("test");
+const signedMessage = await portalSigner.signMessage("test");
 
 const typedData = {
   types: {
@@ -62,13 +62,13 @@ const typedData = {
     hello: "world",
   },
 };
-const signTypedData = await fireblocksSigner.signTypedData(typedData);
+const signTypedData = await portalSigner.signTypedData(typedData);
 ```
 
-<<< @/snippets/fireblocks.ts
+<<< @/snippets/portal.ts
 :::
 
 ## Developer Links
 
-- [Fireblocks SDK](https://github.com/fireblocks/fireblocks-web3-provider)
-- [FireblocksSigner Tests](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/signers/src/fireblocks/__tests__/signer.test.ts)
+- [Portal SDK](https://docs.portalhq.io/sdk/web-beta)
+- [PortalSigner Tests](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/signers/src/portal/__tests__/signer.test.ts)
