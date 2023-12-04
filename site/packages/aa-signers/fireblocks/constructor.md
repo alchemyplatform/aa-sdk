@@ -61,7 +61,7 @@ You can either pass in a constructed `FireblocksWeb3Provider` object, or directl
 
 `FireblocksProviderConfig` takes in the following parameters:
 
-- `apiKey: string` -- a web3Auth client ID. You can get one at the [Fireblocks Developer Dashboard](https://developers.fireblocks.com/docs/quickstart#api-user-creation).
+- `apiKey: string` -- a Fireblocks API Key. You can get one at the [Fireblocks Developer Dashboard](https://developers.fireblocks.com/docs/quickstart#api-user-creation).
 
 - `privateKey: string`-- Fireblocks API private key for signing requests.
 

@@ -1,8 +1,8 @@
 import {
   ChainId,
   FireblocksWeb3Provider,
+  type RequestArguments,
 } from "@fireblocks/fireblocks-web3-provider";
-import type { RequestArguments } from "@web3auth/base";
 import { FireblocksSigner } from "../signer.js";
 
 describe("Fireblocks Signer Tests", () => {
