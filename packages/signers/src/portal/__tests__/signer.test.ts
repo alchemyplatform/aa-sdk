@@ -1,7 +1,12 @@
-import { type RequestArguments } from "@fireblocks/fireblocks-web3-provider";
 import Portal from "@portal-hq/web";
 import { sepolia } from "viem/chains";
 import { PortalSigner } from "../signer.js";
+
+// taken from Portal SDK since not exported
+interface RequestArguments {
+  method: string;
+  params?: unknown[];
+}
 
 describe("Portal Signer Tests", () => {
   it("should correctly get address", async () => {
@@ -100,7 +105,7 @@ const givenSigner = async (auth = true) => {
     signingStatus: null,
   });
 
-  inner.provider.request = vi.fn(async <T, R>(args: RequestArguments<T>) => {
+  inner.provider.request = vi.fn(async <R>(args: RequestArguments) => {
     switch (args.method) {
       case "eth_accounts":
         return Promise.resolve([
