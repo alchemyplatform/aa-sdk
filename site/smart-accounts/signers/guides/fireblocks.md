@@ -24,11 +24,13 @@ head:
 
 Fireblocks' security structure provides a truly secure environment for storing, transferring, and issuing digital assets. This ensures that your assets are protected from cyberattacks, internal colluders, and human errors. As a result, Fireblocks serves as the foundation for thousands of digital asset businesses and has securely transferred over $3T in digital assets.
 
-Fireblocks' MPC wallets are EOA accounts, which in any account abstraction enabled wallet is the root of their security & trust model. Using Fireblocks MPC based EOA wallets in combination with the Account Kit will give you the best of both worlds; Enterprise grade security for securing your off-chain key material, and the utmost flexibility of your on-chain smart accounts
+Fireblocks' MPC wallets are EOA accounts, which in any account abstraction enabled wallet is the root of their security & trust model. Using Fireblocks MPC based EOA wallets in combination with the Account Kit will give you the best of both worlds; Enterprise grade security for securing your off-chain key material, and the utmost flexibility of your on-chain smart accounts.
 
 # Integration
 
 ### Install the Fireblocks Web3 Provider
+
+Using `FireblocksSigner` in the `aa-signers` package requires installation of the [`@fireblocks/fireblocks-web3-provider`](https://github.com/fireblocks/fireblocks-web3-provider) SDK. `aa-signers` lists it as optional dependency.
 
 ::: code-group
 
@@ -44,7 +46,7 @@ yarn add @fireblocks/fireblocks-web3-provider
 
 ### Create a SmartAccountSigner
 
-Next, setup the Fireblocks Web3 Provider and create a `SmartAccountSigner`:
+Next, setup the Fireblocks SDK and create an authenticated `FireblocksSigner` using the `aa-signers` package:
 
 <<< @/snippets/fireblocks.ts
 
