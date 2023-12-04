@@ -3,45 +3,43 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: FireblocksSigner • constructor
+      content: PortalSigner • constructor
   - - meta
     - name: description
-      content: Overview of the constructor method on FireblocksSigner in aa-signers
+      content: Overview of the constructor method on PortalSigner in aa-signers
   - - meta
     - property: og:description
-      content: Overview of the constructor method on FireblocksSigner in aa-signers
+      content: Overview of the constructor method on PortalSigner in aa-signers
 ---
 
 # constructor
 
-To initialize a `FireblocksSigner`, you must provide a set of parameters detailed below.
+To initialize a `PortalSigner`, you must provide a set of parameters detailed below.
 
 ## Usage
 
 ::: code-group
 
 ```ts [example.ts]
-import { FireblocksSigner } from "@alchemy/aa-signers";
-import { ChainId } from "@fireblocks/fireblocks-web3-provider";
+import { PortalSigner } from "@alchemy/aa-signers";
+import { ChainId } from "@portal/portal-web3-provider";
 
 // instantiates using every possible parameter, as a reference
-const fireblocksSigner = new FireblocksSigner({
-  apiKey: "API_KEY",
-  privateKey: "PATH_TO_FILE_WITH_PRIVATE_KEY",
-  chainId: ChainId.SEPOLIA,
-  rpcUrl: "ALCHEMY_RPC_URL",
-  vaultAccountIds: ["VAULT_ID"],
-  apiBaseUrl: "FIREBLOCKS_API_URL",
-  note: "note",
-  pollingInterval: 1000,
-  oneTimeAddressesEnabled: true,
-  externalTxId: "1",
-  userAgent: "test-header",
-  assetId: "1",
-  logTransactionStatusChanges: true,
-  logRequestsAndResponses: true,
-  enhancedErrorHandling: true,
-  gaslessGasTankVaultId: 1,
+const portalSigner = new PortalSigner({
+  // Required options
+  gatewayConfig: GatewayLike
+
+  // Optional options
+  apiKey?: string
+  authToken?: string
+  authUrl?: string
+  autoApprove?: boolean
+  chainId?: number
+  gdrive?: GDriveConfig
+  host?: string
+  keychain?: KeychainAdapter
+  mpcVersion?: string
+  featureFlags?: FeatureFlags
 });
 ```
 
@@ -49,48 +47,36 @@ const fireblocksSigner = new FireblocksSigner({
 
 ## Returns
 
-### `FireblocksSigner`
+### `PortalSigner`
 
-A new instance of a `FireblocksSigner`.
+A new instance of a `PortalSigner`.
 
 ## Parameters
 
-### `params: FireblocksProviderConfig | { inner: FireblocksWeb3Provider }`
+### `params: PortalProviderConfig | { inner: PortalWeb3Provider }`
 
-You can either pass in a constructed `FireblocksWeb3Provider` object, or directly pass into the `FireblocksSigner` the `FireblocksProviderConfig` used to construct a `FireblocksWeb3Provider` object. These parameters are listed on the [Fireblocks repo](https://github.com/fireblocks/fireblocks-web3-provider/blob/main/src/types.ts#L48) as well.
+You can either pass in a constructed `PortalWeb3Provider` object, or directly pass into the `PortalSigner` the `PortalProviderConfig` used to construct a `PortalWeb3Provider` object. These parameters are listed on the [Portal repo](https://github.com/portal/portal-web3-provider/blob/main/src/types.ts#L48) as well.
 
-`FireblocksProviderConfig` takes in the following parameters:
+`PortalProviderConfig` takes in the following parameters:
 
-- `apiKey: string` -- a Fireblocks API Key. You can get one at the [Fireblocks Developer Dashboard](https://developers.fireblocks.com/docs/quickstart#api-user-creation).
+- `gatewayConfig: { [key: number]: string } | string` -- a Config for the Portal Signer, typically an Alchemy RPC URL.
 
-- `privateKey: string`-- Fireblocks API private key for signing requests.
+- `apiKey: string` -- [optional] A Portal API Key. You can get one at the [Portal Dashboard](https://docs.portalhq.io/).
 
-- `chainId: ChainId`-- Fireblocks API private key for signing requests. Required if `rpcUrl` is not provided.
+- `authToken: string` -- [optional] A Portal auth token.
 
-- `rpcUrl: ChainId`-- Url to which to transport JSON-RPC requests. Required if `chainId` is not provided.
+- `authUrl: string` -- [optional] A Portal auth URL.
 
-- `vaultAccountIds: number | number[] | string | string[]` -- [optional] list of Fireblocks vaults to provide for the Signer. By default, the first 20 vault accounts are dynamically loaded from the Fireblocks API.
+- `autoApprove: boolean` -- [optional] Flag to auto-approve signatures.
 
-- `apiBaseUrl` -- [optional] base Url for querying the Fireblocks API. By default, it uses the Fireblocks API production endpoint.
+- `chainId: number` -- [optional] A chain ID.
 
-- `fallbackFeeLevel: FeeLevel = "LOW" | "MEDIUM" | "HIGH"` -- [optional] fallback fee for requests. Default Medium.
+- `gdrive: { clientId: string }` -- [optional] An ID of a google drive config the Portal Signer can use.
 
-- `note: string` -- [optional] By default, the note is set to "Created by Fireblocks Web3 Provider."
+- `host: string` -- [optional] A host URL.
 
-- `pollingInterval: number` -- [optional] The interval in which the Fireblocks API is queried to check the status of transactions. Default is 1 second.
+- `keychain: KeychainAdapter` -- [optional] An object containing metadata for the Portal Signer's keychain.
 
-- `oneTimeAddressesEnabled: boolean` -- [optional] Flag to determine if one time addresses are enabled in your Fireblocks workspace. Default true.
+- `mpcVersion: string` -- [optional] The version of MPC the Portal Signer should use.
 
-- `externalTxId: (() => string) | string` -- [optional] External ID you can use to associate with transactions.
-
-- `userAgent: string` -- [optional] Additional appended product string to the `User-Agent` header on requests.
-
-- `assetId: string` -- [optional] custom ID for a Fireblocks asset, used with custom or private EVM chains.
-
-- `logTransactionStatusChanges: boolean` -- [optional] Flag to determine if every transaction status change will be logged to the console. Default false.
-
-- `logRequestsAndResponses: boolean` -- [optional] Flag to determine if every request and response processed by the provider will be logged to the console. Default false.
-
-- `enhancedErrorHandling: boolean` -- [optional] Flag to determine verbosity of failed transaction information. Default true.
-
-- `gaslessGasTankVaultId: number` -- [optional] If set, all transactions sent gaslessly, relayed via the provided vault ID. Default true.
+- `featureFlags: { optimized: boolean }` -- [optional] An object with feature flags on the Portal Signer. Defaults false for optimization (beta).
