@@ -27,9 +27,11 @@ You must call this method before accessing the other methods available on the `P
 import { ParticleSigner } from "@alchemy/aa-signers";
 
 const particleSigner = new ParticleSigner({
-  privateKey: process.env.FIREBLOCKS_API_PRIVATE_KEY_PATH,
-  apiKey: process.env.FIREBLOCKS_API_KEY,
-  chainId: ChainId.SEPOLIA,
+  projectId: process.env.REACT_APP_PROJECT_ID as string,
+  clientKey: process.env.REACT_APP_CLIENT_KEY as string,
+  appId: process.env.REACT_APP_APP_ID as string,
+  chainName: "polygon",
+  chainId: 80001,
 });
 
 await particleSigner.authenticate();

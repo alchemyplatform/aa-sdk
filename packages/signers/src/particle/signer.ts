@@ -47,7 +47,7 @@ export class ParticleSigner
     this.provider = new ParticleProvider(this.inner.auth);
   }
 
-  readonly signerType = "fireblocks";
+  readonly signerType = "particle";
 
   getAddress = async () => {
     if (!this.signer) throw new Error("Not authenticated");
