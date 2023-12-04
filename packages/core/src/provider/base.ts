@@ -85,8 +85,9 @@ export class SmartAccountProvider<
     | PublicErc4337Client<TTransport>
     | PublicErc4337Client<HttpTransport>;
 
-  constructor(config: SmartAccountProviderConfig<TTransport>) {
-    createSmartAccountProviderConfigSchema<TTransport>().parse(config);
+  constructor(config_: SmartAccountProviderConfig<TTransport>) {
+    const config =
+      createSmartAccountProviderConfigSchema<TTransport>().parse(config_);
 
     const { rpcProvider, entryPointAddress, chain, opts } = config;
 
@@ -94,14 +95,14 @@ export class SmartAccountProvider<
 
     this.chain = chain;
 
-    this.txMaxRetries = opts?.txMaxRetries ?? 5;
-    this.txRetryIntervalMs = opts?.txRetryIntervalMs ?? 2000;
-    this.txRetryMulitplier = opts?.txRetryMulitplier ?? 1.5;
+    this.txMaxRetries = opts.txMaxRetries;
+    this.txRetryIntervalMs = opts.txRetryIntervalMs;
+    this.txRetryMulitplier = opts.txRetryMulitplier;
     this.entryPointAddress = entryPointAddress;
 
     this.feeOptions = {
       ...getDefaultUserOperationFeeOptions(chain),
-      ...opts?.feeOptions,
+      ...opts.feeOptions,
     };
 
     this.rpcClient =

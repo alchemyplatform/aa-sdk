@@ -86,13 +86,13 @@ export type FeeDataMiddleware = AccountMiddlewareOverrideFn<
   "maxFeePerGas" | "maxPriorityFeePerGas"
 >;
 
-export type SmartAccountProviderOpts = z.infer<
+export type SmartAccountProviderOpts = z.input<
   typeof SmartAccountProviderOptsSchema
 >;
 
 export type SmartAccountProviderConfig<
   TTransport extends SupportedTransports = Transport
-> = z.infer<
+> = z.input<
   ReturnType<typeof createSmartAccountProviderConfigSchema<TTransport>>
 >;
 

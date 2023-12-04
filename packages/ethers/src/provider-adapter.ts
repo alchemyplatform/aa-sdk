@@ -19,8 +19,8 @@ import type { EthersProviderAdapterOpts } from "./types.js";
 export class EthersProviderAdapter extends JsonRpcProvider {
   readonly accountProvider: SmartAccountProvider<HttpTransport>;
 
-  constructor(opts: EthersProviderAdapterOpts) {
-    EthersProviderAdapterOptsSchema.parse(opts);
+  constructor(opts_: EthersProviderAdapterOpts) {
+    const opts = EthersProviderAdapterOptsSchema.parse(opts_);
 
     super();
     if ("accountProvider" in opts) {

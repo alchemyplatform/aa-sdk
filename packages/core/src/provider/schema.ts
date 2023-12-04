@@ -28,17 +28,17 @@ export const SmartAccountProviderOptsSchema = z
     /**
      * The maximum number of times to try fetching a transaction receipt before giving up (default: 5)
      */
-    txMaxRetries: z.number().min(0).optional(),
+    txMaxRetries: z.number().min(0).optional().default(5),
 
     /**
      * The interval in milliseconds to wait between retries while waiting for tx receipts (default: 2_000)
      */
-    txRetryIntervalMs: z.number().min(0).optional(),
+    txRetryIntervalMs: z.number().min(0).optional().default(2_000),
 
     /**
      * The mulitplier on interval length to wait between retries while waiting for tx receipts (default: 1.5)
      */
-    txRetryMulitplier: z.number().min(0).optional(),
+    txRetryMulitplier: z.number().min(0).optional().default(1.5),
 
     /**
      * Optional user operation fee options to be set globally at the provider level
@@ -65,6 +65,8 @@ export const createSmartAccountProviderConfigSchema = <
      * when using Alchemy as your RPC provider.
      */
     entryPointAddress: Address.optional(),
-    opts: SmartAccountProviderOptsSchema.optional(),
+    opts: SmartAccountProviderOptsSchema.optional().default(
+      SmartAccountProviderOptsSchema.parse({})
+    ),
   });
 };
