@@ -36,6 +36,8 @@ export interface IMSCA<
   >(
     decorator: (p: TProvider) => PD
   ) => IMSCA<TTransport, TProviderDecorators & PD>;
+
+  extend: <R>(extendFn: (self: this) => R) => this & R;
 }
 
 export type Executor = <A extends IMSCA<any, any>>(
@@ -200,6 +202,15 @@ export class MSCABuilder {
         this.providerDecorators_.push(decorator);
 
         return this as unknown as DynamicMSCA<TProviderDecorators & PD>;
+      };
+
+      extend = <R>(fn: (self: this) => R): this & R => {
+        const extended = fn(this) as any;
+        // this should make it so extensions can't overwrite the base methods
+        for (const key in this) {
+          delete extended[key];
+        }
+        return Object.assign(this, extended);
       };
     })(params);
   }
