@@ -49,6 +49,7 @@ A Signer is the entity that signs transactions (User Operations) on behalf of th
 - [Dynamic](signers/dynamic)
 - [Magic](signers/magic)
 - [Web3Auth](signers/web3auth)
+- [Arcana Auth](signers/arcana-auth)
 - [Externally Owned Account](signers/eoa)
 
 At this point you should be able to integrate smart accounts in your application. However, there are a few advanced features that can help you improve the user experience and save on gas costs. Information about these can be found in the `Guides` section.
