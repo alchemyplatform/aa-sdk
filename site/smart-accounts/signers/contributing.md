@@ -20,23 +20,64 @@ head:
 
 # Contributing Your Signer
 
-If you'd like to add your Signer to this list, we welcome PRs! Here's how to do it:
+If you'd like to add your Signer to Account Kit, we welcome PRs! You'll need to fork the [`aa-sdk` Github repo](https://github.com/alchemyplatform/aa-sdk) and then follow the below steps.
 
-1. Fork this [repo](https://github.com/alchemyplatform/aa-sdk)
-2. In [`site/.vitepress/config.ts`](https://github.com/alchemyplatform/aa-sdk/blob/main/site/.vitepress/config.ts), there is a `sidebar` property. Find the `Choosing a Signer` item and add a new entry in `items`. The `text` property of the entry is what will be visible in the sidebar and the `link` property should be `kebab-case`. This should match the file name in the next step. Place it above the `Externally Owned Account` guide. eg:
+## 1. Add Your Signer to [`aa-signers`](https://github.com/alchemyplatform/aa-sdk/tree/main/packages/signers)
 
-```ts{9}
+To ensure the best developer experience for anyone using Account Kit, we ask that you add your Signer implementation to our [`aa-signers`](https://github.com/alchemyplatform/aa-sdk/tree/main/packages/signers) SDK package.
+
+There, you'll be able to implement [`SmartAccountAuthenticator`](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/core/src/signer/types.ts#L15) interface from `aa-core` which offers a wrapper for any SDKs, `inner`, that you may use to call upon for implementation details. You may also wish to build your Signer implementation from scratch.
+
+In either case, if your `Signer` or library exports an `EIP-1193` compliant provider, you may find it helpful to use [`WalletClientSigner`](/packages/aa-core/signers/wallet-client) from `aa-core` to easily integrate your Signer in `aa-signers`. See the ["Using Your Own Signer"](/smart-accounts/signers/guides/custom-signer) guide for more details.
+
+Make sure to include unit tests along with your implementation! Take a look at these PRs from [Magic](https://github.com/alchemyplatform/aa-sdk/pull/229) and [Web3Auth](https://github.com/alchemyplatform/aa-sdk/pull/247) for reference.
+
+:::tip Note
+If you your Signer implementation requires adding SDKs as dependencies, you should list them as `optionalDependencies`. Additionaly, `aa-signers` expects those SDKs to be node.js Javascript SDKs to so that all developers can use Account Kit with your Signer.
+
+If your SDK is based on a frontend Javascript framework, such as React.js or Vue.js, you will just have to follow step 2 onwards to submit documentation with an example snippet clarifying that your Signer must be used in said framework.
+:::
+
+## 2. Adding Documentation about Your Signer
+
+You'll want to add documentation about your Signers so that developers can easily use your implementation in Account Kit. Below, we recommend adding documentation about your Signer's APIs, as well.
+
+To ensure these docs are visible on the Account Kit docs, you'll want to add links to them in the [`site/.vitepress/config.ts`](https://github.com/alchemyplatform/aa-sdk/blob/main/site/.vitepress/config.ts) file in the `aa-sdk` repo, where there is a `sidebar` property in the object.
+
+### 2.1 Adding API Documentation
+
+If your Signer implements the `SmartAccountAuthenticator` interface, you'll have at least 5 methods to document: `getAddress`, `authenticate`, `signMessage`, `signTypedData`, and `getAuthDetails`. You can also add additional methods to your implementation. Just make sure to add documentation!
+
+Find the `aa-signers` item in the `sidebar` and add a new entry in `items`. The `text` property of the entry is what will be visible in the sidebar and the `link` property should be `kebab-case`:
+
+```ts
 {
   sidebar: [
-    // ... other entries
+    // ... other packages
     {
-      text: "Choosing a Signer",
-      base: "/smart-accounts/signers",
+      text: "aa-signers",
+      collapsed: true,
+      base: "/packages/aa-signers",
       items: [
-        // ... other entries
-        { text: "My New Signer", link: "/my-new-signer" },
-        { text: "Externally Owned Account", link: "/eoa" },
-        { text: "Using Your Own", link: "/using-your-own" },
+        {
+          text: "Getting Started",
+          link: "/",
+        },
+        // ... other Signers
+        {
+          text: "Your Signer",
+          collapsed: true,
+          base: "/packages/aa-signers/your-signer-name",
+          items: [
+            { text: "Introduction", link: "/introduction" },
+            { text: "constructor", link: "/constructor" },
+            { text: "authenticate", link: "/authenticate" },
+            { text: "getAddress", link: "/getAddress" },
+            { text: "signMessage", link: "/signMessage" },
+            { text: "signTypedData", link: "/signTypedData" },
+            { text: "getAuthDetails", link: "/getAuthDetails" },
+          ],
+        },
         { text: "Contributing", link: "/contributing" },
       ],
     },
@@ -44,7 +85,45 @@ If you'd like to add your Signer to this list, we welcome PRs! Here's how to do 
 }
 ```
 
-3. Add your document to [`site/smart-accounts/signers/`](https://github.com/alchemyplatform/aa-sdk/tree/main/site/smart-accounts/signers) and name it `your-signer-name.md` (the name should match the `link` property you added in the previous step)
-4. Open a PR!
+In that section, add documentation introducing the value prop of your Signer, how to initialize the Signer object, and how to call each method. The example above shows the items you'll need to include if you chose to have your Signer implement the `SmartAccountAuthenticator` interface.
 
-If your `Signer` or library exports an `EIP-1193` compliant provider, you can use the `WalletClientSigner` from `aa-core` to easily integrate with Account Kit. See the ["Using Your Own Signer"](/smart-accounts/signers/custom-signer) guide for more details.
+### 2.2 Adding an integration guide
+
+You'll want to add an integration guide that walks through step-by-step how to use your Signer implementation in `aa-signers` with the other building blocks, namely smart accounts and provider clients.
+
+Find the `Choosing a Signer` item in the `sidebar` and add a new entry in `items`. The `text` property of the entry is what will be visible in the sidebar and the `link` property should be `kebab-case`. Place it above the `Externally Owned Account` guide:
+
+```ts
+{
+  sidebar: [
+    // ... other entries
+    {
+      text: "Choosing a Signer",
+      base: "/smart-accounts/signers",
+      items: [
+        { text: "Introduction", link: "/choosing-a-signer" },
+        {
+          text: "Signer Guides",
+          base: "/smart-accounts/signers/guides",
+          collapsed: true,
+          items: [
+            // ... other signers
+            { text: "Your Signer", link: "/your-signer-name" },
+            { text: "Externally Owned Account (EOA)", link: "/eoa" },
+            { text: "Using Your Own", link: "/custom-signer" },
+          ],
+        },
+        { text: "Contributing Your Signer", link: "/contributing" },
+      ],
+    },
+  ];
+}
+```
+
+In that linked file `your-signer-name` under Signer Guides, add your step-by-step integration. Try to include an example snippet when possible.
+
+Again, for reference, take a look at these PRs from [Magic](https://github.com/alchemyplatform/aa-sdk/pull/229) and [Web3Auth](https://github.com/alchemyplatform/aa-sdk/pull/247).
+
+## 3. Submit a Pull Request
+
+You can open a PR to merge the branch with your Signer implementation from your forked repo into the `main` branch of the `aa-sdk` repo. We'll make sure to review it promptly, provider feedback, and merge the PR when ready so that developers can use your Signer!

@@ -49,15 +49,15 @@ Returns whether or not the signature is valid for the given Signer and message h
 
 - #### `signer: Address`
 
-  The address of the Signer of the message (eg. the smart account address)
+  The address of the Signer of the message (e.g. the smart account address)
 
 - #### `hash: Hash`
 
-  The hash of the message being verified (eg. the result of `hashMessage("hello world")`)
+  The hash of the message being verified (e.g. the result of `hashMessage("hello world")`)
 
 - #### `signature: Hex`
 
-  The signature to verify (eg. the result of `signMessage("hello world")`)
+  The signature to verify (e.g. the result of `signMessage("hello world")`)
 
 - #### `client: Client`
 

@@ -42,7 +42,7 @@ The `aa-sdk` is a type-safe and performant TypeScript library built on top of [v
 
 The SDK also implements an EIP-1193 provider interface to easily plug into any popular dapp or wallet connect libraries such as RainbowKit, Wagmi, and Web3Modal. It also includes ethers.js adapters to provide full support for ethers.js apps.
 
-The `aa-sdk` is modular at every layer of the stack and can be easily extended to fit your custom needs. You can plug in any [smart account](/smart-accounts/accounts/using-your-own) implementation, [Signer](/smart-accounts/signers/choosing-a-signer), Gas Manager API, RPC provider.
+The `aa-sdk` is modular at every layer of the stack and can be easily extended to fit your custom needs. You can plug in any [smart account](/smart-accounts/accounts/guides/using-your-own) implementation, [Signer](/smart-accounts/signers/choosing-a-signer), Gas Manager API, RPC provider.
 
 Get started with `aa-sdk` in our [Getting Started guide](/overview/getting-started) or checkout the [open source repo](https://github.com/alchemyplatform/aa-sdk).
 
@@ -60,11 +60,11 @@ We started with the Ethereum Foundation’s canonical [SimpleAccount](https://gi
 
 `LightAccount` is forward-compatible with [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900), a new standard for **modular** smart accounts. Once we stabilize the ERC with the [community](https://ethereum-magicians.org/t/erc-6900-modular-smart-contract-accounts-and-plugins/13885/35) and publish a reference implementation, we will release an optional upgrade for `LightAccount` to upgrade to modular EIP-6900 compliant accounts. [Join the discussion](https://ethereum-magicians.org/t/erc-6900-modular-smart-contract-accounts-and-plugins/13885/35) on ERC-6900!
 
-To learn how to deploy a `LightAccount`, see [Light Account](/smart-accounts/accounts/light-account).
+To learn how to deploy a `LightAccount`, see [Light Account](/smart-accounts/accounts/guides/light-account).
 
 ### Signers
 
-A Signer is responsible for securely managing the private key and signing transaction requests on the smart account. Account Kit supports many popular wallet signers including [Magic](/smart-accounts/signers/magic), [web3auth](/smart-accounts/signers/web3auth), [Turnkey](/smart-accounts/signers/turnkey), [Privy](/smart-accounts/signers/privy), [Dynamic](/smart-accounts/signers/dynamic), [Fireblocks](/smart-accounts/signers/fireblocks), [Portal](/smart-accounts/signers/portal), [Capsule](/smart-accounts/signers/capsule) and [Lit Protocol](/smart-accounts/signers/lit). It also supports self-custodial wallets like MetaMask or Ledger.
+A Signer is responsible for securely managing the private key and signing transaction requests on the smart account. Account Kit supports many popular wallet signers including [Magic](/smart-accounts/signers/guides/magic), [web3auth](/smart-accounts/signers/guides/web3auth), [Turnkey](/smart-accounts/signers/guides/turnkey), [Privy](/smart-accounts/signers/guides/privy), [Dynamic](/smart-accounts/signers/guides/dynamic), [Fireblocks](/smart-accounts/signers/guides/fireblocks), [Portal](/smart-accounts/signers/guides/portal), [Capsule](/smart-accounts/signers/guides/capsule) and [Lit Protocol](/smart-accounts/signers/guides/lit). It also supports self-custodial wallets like MetaMask or Ledger.
 
 To get started with a Signer, read the doc: [How to Choose a Signer](/smart-accounts/signers/choosing-a-signer).
 
@@ -72,7 +72,7 @@ To get started with a Signer, read the doc: [How to Choose a Signer](/smart-acco
 
 The Gas Manager is a programmable API to sponsor gas for UserOps. You can create programmable gas policies to specify exactly which transactions should be sponsored, set strict spending limits per wallet or globally, and allowlist/blocklist particular wallet addresses. This expressive programmability is available through a REST API and an intuitive dashboard interface.
 
-To learn how to sponsor gas with the Gas Manager API, see the [Sponsoring Gas](/guides/sponsoring-gas/sponsoring-gas) tutorial.
+To learn how to sponsor gas with the Gas Manager API, see the [Sponsoring Gas](/tutorials/sponsoring-gas/sponsoring-gas) tutorial.
 
 ### Bundler API
 

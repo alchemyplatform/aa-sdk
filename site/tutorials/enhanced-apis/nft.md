@@ -56,4 +56,4 @@ Note that we must configure the Alchemy SDK client to have the same API Key and 
 Additionally, since the Alchemy SDK client does not yet support JWT authentication, an `AlchemyProvider` initialized with JWTs cannot use this method. We must be initialize the provider with an API key or RPC URL.
 :::
 
-That's it! There are so many more Enhanced APIs the the Alchemy SDK exposes, and can be useful for development with Account Abstraction. Try it out [here](https://github.com/alchemyplatform/alchemy-sdk-js), and check out [How to fetch a Smart Account's ERC-20 Tokens](/guides/enhanced-apis/token) for another example.
+That's it! There are so many more Enhanced APIs the the Alchemy SDK exposes, and can be useful for development with Account Abstraction. Try it out [here](https://github.com/alchemyplatform/alchemy-sdk-js), and check out [How to fetch a Smart Account's ERC-20 Tokens](/tutorials/enhanced-apis/token) for another example.

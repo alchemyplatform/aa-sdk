@@ -28,7 +28,7 @@ In this example we'll use `viem` in two ways. The first way allows you to connec
 
 ### JSON RPC
 
-A JSON RPC based account is one where the key material is not available locally, but on some external client (eg. MetaMask extension or hardware wallet).
+A JSON RPC based account is one where the key material is not available locally, but on some external client (e.g. MetaMask extension or hardware wallet).
 
 ```ts
 import { createWalletClient, custom } from "viem";

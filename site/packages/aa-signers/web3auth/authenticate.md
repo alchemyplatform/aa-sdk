@@ -51,7 +51,7 @@ await web3AuthSigner.authenticate({
 
 A Promise containing the `Web3AuthUserInfo`, an object with the following fields:
 
-- `verifier: string` -- details of the verifier (verifier type, ie. torus, metamask, openlogin etc.).
+- `verifier: string` -- details of the verifier (verifier type, i.e. torus, metamask, openlogin etc.).
 - `verifierId: string` -- id of the verifier.
 - `typeOfLogin: LOGIN_PROVIDER_TYPE` -- the type of login done by the user (like google, facebook, twitter, github, etc.).
 - `email: string` -- [optional] the decentralized ID of the user.

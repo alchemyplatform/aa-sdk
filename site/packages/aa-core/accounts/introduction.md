@@ -54,7 +54,7 @@ In addition, it provides other optional methods that need to be implemented by t
 
 [SimpleSmartContractAccount](packages/core/src/account/simple.ts) a minimal implementation version of `BaseSmartContractAccount`. It implements the required abstraction methods in `BaseSmartContractAccount`, and additionally implements the optional methods indicated above.
 
-**Note:** While `SimpleSmartContractAccount` fully implements the `ISmartContractAccount` interface for use as your basic smart account, we recommend using our [Light Account](/smart-accounts/accounts/light-account) as it is a simple, yet more secure, and cost-effective smart account implementation.
+**Note:** While `SimpleSmartContractAccount` fully implements the `ISmartContractAccount` interface for use as your basic smart account, we recommend using our [Light Account](/smart-accounts/accounts/guides/light-account) as it is a simple, yet more secure, and cost-effective smart account implementation.
 
 ## Usage
 
