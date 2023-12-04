@@ -273,6 +273,15 @@ export abstract class BaseSmartContractAccount<
     return this.accountAddress;
   }
 
+  extend = <R>(fn: (self: this) => R): this & R => {
+    const extended = fn(this) as any;
+    // this should make it so extensions can't overwrite the base methods
+    for (const key in this) {
+      delete extended[key];
+    }
+    return Object.assign(this, extended);
+  };
+
   getOwner(): SmartAccountSigner | undefined {
     return this.owner;
   }
