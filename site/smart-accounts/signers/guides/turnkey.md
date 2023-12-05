@@ -34,6 +34,8 @@ Create an account and API keys on [Turnkey's Dashboard](https://app.turnkey.com/
 
 Using `TurnkeySigner` in the `aa-signers` package requires installation of the [`@turnkey/http`](https://github.com/tkhq/sdk/tree/main/packages/http) and [`@turnkey/viem`](https://github.com/tkhq/sdk/tree/main/packages/viem) dependencies. `aa-signers` lists them as optional dependencies.
 
+Every request to Turnkey must be signed using a [stamper](https://docs.turnkey.com/category/api-design). Turnkey supports multiple stampers including [`@turnkey/webauthn-stamper`](https://github.com/tkhq/sdk/tree/main/packages/webauthn-stamper) to sign requests with Passkeys or WebAuthn devices, [`@turnkey/iframe-stamper`](https://github.com/tkhq/sdk/tree/main/packages/iframe-stamper) with Email, and [`@turnkey/api-key-stamper`](https://github.com/tkhq/sdk/tree/main/packages/api-key-stamper) with API keys.
+
 ::: code-group
 
 ```bash [npm]
@@ -78,7 +80,7 @@ const provider = new AlchemyProvider({
     new LightSmartContractAccount({
       entryPointAddress,
       chain: rpcClient.chain,
-      owner: await createTurnkeySigner();,
+      owner: await createTurnkeySigner(),
       factoryAddress: getDefaultLightAccountFactoryAddress(chain),
       rpcClient,
     })
