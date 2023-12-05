@@ -14,7 +14,7 @@ head:
 
 # authenticate
 
-`authenticate` is a method on the `ParticleSigner` which leverages the `Particle` SDK to authenticate a user.
+`authenticate` is a method on the `ParticleSigner` which leverages the `Particle` SDK to initiate login and authenticate a user.
 
 You must call this method before accessing the other methods available on the `ParticleSigner`, such as signing messages or typed data or accessing user details.
 
@@ -63,10 +63,10 @@ An object with the following fields:
 
   - `hideLoading: boolean` -- [optional] Flag to hide loading when authenticating.
 
-  - `authorization: Object` -- [optional] Object with below properties
+  - `authorization: Object` -- [optional] Object with below properties. This throws a signature upon login to be used for authorization.
 
     - `message: string` -- [optional] Message to include with authorization.
 
     - `uniq: boolean`-- [optional] Flag to determine if authorization is unique.
 
-- `login: (loginOptions: LoginOptions) => Promise<void>` -- a method you can define as necessary to leverage the `web3auth` SDK for authentication. For instance, in the example above, `authenticate` uses the [`initModal`](https://web3auth.io/docs/sdk/pnp/web/modal/initialize#initmodal) method.
+- `login: (loginOptions: LoginOptions) => Promise<void>` -- a method that `authenticate` uses to initiate login for a user. For instance, in the example above, `authenticate` uses Particle's auth object to [login](https://docs.particle.network/developers/auth-service/sdks/web#login).

@@ -14,7 +14,7 @@ head:
 
 # Particle Signer
 
-`ParticleSigner` is a signer implementation which extends `SmartAccountAuthenticator` to leverage the [Particle SDK](https://github.com/particle/particle-web3-provider). It supports features such as authentication, message and typed data signing, and authentication details retrieval.
+`ParticleSigner` is a signer implementation which extends `SmartAccountAuthenticator` to leverage the [Particle SDK](https://www.npmjs.com/package/@particle-network/auth). It supports features such as authentication, message and typed data signing, and authentication details retrieval.
 
 `ParticleSigner` provides implementations for all methods on `SmartAccountAuthenticator`:
 
@@ -72,5 +72,5 @@ const signTypedData = await particleSigner.signTypedData(typedData);
 
 ## Developer Links
 
-- [Particle SDK](https://github.com/particle/particle-web3-provider)
+- [Particle SDK](https://www.npmjs.com/package/@particle-network/auth)
 - [ParticleSigner Tests](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/signers/src/particle/__tests__/signer.test.ts)

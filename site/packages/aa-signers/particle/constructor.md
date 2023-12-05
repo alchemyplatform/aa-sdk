@@ -74,9 +74,9 @@ You can either pass in a constructed `ParticleNetwork` object, or directly pass 
 
 - `projectId: string` -- a Particle project ID. You can get one at the [Particle Developer Dashboard](https://dashboard.particle.network/#/login).
 
-- `clientKey: string`-- Particle client key.
+- `clientKey: string`-- Particle client key. You can get this at the [Particle Developer Dashboard](https://dashboard.particle.network/#/login).
 
-- `appId: string`-- ID of Particle app.
+- `appId: string`-- ID of Particle app. You can get this at the [Particle Developer Dashboard](https://dashboard.particle.network/#/login).
 
 - `chainName: string` -- [optional] name of chain on which to use the Particle Signer.
 
@@ -96,7 +96,7 @@ You can either pass in a constructed `ParticleNetwork` object, or directly pass 
 
   - `preload: boolean` -- [optional] Flag to preload the wallet information.
 
-  - `defaultWalletEntryPosition: WalletEntryPosition` -- [optional] - Enum Setting to determine position of wallet entry on screen.
+  - `defaultWalletEntryPosition: WalletEntryPosition` -- [optional] - Enum Setting to determine position of wallet entry on screen. Only applicable if `displayWalletEntry` is true.
 
   - `supportChains: Chain[]` -- [optional] List of supported chains
 

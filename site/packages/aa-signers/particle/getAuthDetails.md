@@ -14,7 +14,7 @@ head:
 
 # getAuthDetails
 
-`getAuthDetails` returns the details about the authenticated user, specifically all EOA addresses tied to the user's Particle vault.
+`getAuthDetails` returns the details about the authenticated user, specifically all EOA addresses tied to the user's Particle account.
 
 This method must be called after [`authenticate`](/packages/aa-signers/particle/authenticate). Otherwise, this method will throw an error with the message `Not Authenticated`.
 
