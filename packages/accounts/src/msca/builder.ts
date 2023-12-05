@@ -180,12 +180,12 @@ export class MSCABuilder {
       extendWithPluginMethods = <AD, PD>(
         plugin: Plugin<AD, PD>
       ): DynamicMSCA<TProviderDecorators & PD> & AD => {
-        const methods = plugin.accountDecorators(this);
+        const methods = plugin.accountMethods(this);
         const result = Object.assign(this, methods) as unknown as DynamicMSCA<
           TProviderDecorators & PD
         > &
           AD;
-        result.providerDecorators_.push(plugin.providerDecorators);
+        result.providerDecorators_.push(plugin.providerMethods);
 
         return result as unknown as DynamicMSCA<TProviderDecorators & PD> & AD;
       };

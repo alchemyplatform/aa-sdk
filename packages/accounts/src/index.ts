@@ -56,8 +56,10 @@ export {
 } from "./msca/multi-owner-account.js";
 export { pluginManagerDecorator } from "./msca/plugin-manager/decorator.js";
 export type * from "./msca/plugin-manager/installPlugin.js";
+export { installPlugin } from "./msca/plugin-manager/installPlugin.js";
 export type * from "./msca/plugin-manager/types.js";
 export type * from "./msca/plugin-manager/uninstallPlugin.js";
+export { uninstallPlugin } from "./msca/plugin-manager/uninstallPlugin.js";
 export {
   MultiOwnerPlugin,
   MultiOwnerPluginExecutionFunctionAbi,
