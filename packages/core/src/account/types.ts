@@ -146,9 +146,12 @@ export interface ISmartContractAccount<
    * @example
    * ```ts
    * const account = new BaseSmartCobntractAccount(...).extend((account) => ({
-   *  debugSendUserOperation: (...args) => {
-   *    console.log("debugging send useroperation");
-   *    return this.rpcProvider.sendUserOperation(...args);
+   *  readAccountState: async (...args) => {
+   *    return this.rpcProvider.readContract({
+   *        address: await this.getAddress(),
+   *        abi: ThisContractsAbi
+   *        args: args
+   *    });
    *  }
    * }));
    *
