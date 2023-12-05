@@ -4,7 +4,7 @@ import { IAccountLoupeAbi } from "../abis/IAccountLoupe.js";
 import type { FunctionReference, IAccountLoupe } from "./types.js";
 
 export const accountLoupeDecorators = (
-  account: ISmartContractAccount
+  account: IMSCA
 ): IAccountLoupe => ({
   getExecutionFunctionConfig: async (selector: FunctionReference) =>
     account.rpcProvider.readContract({
