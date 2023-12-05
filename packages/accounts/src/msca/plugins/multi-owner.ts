@@ -2,7 +2,6 @@ import { type GetFunctionArgs, encodeFunctionData } from "viem";
 import type { Plugin } from "./types";
 import type { IMSCA } from "../builder";
 import type {
-  ISmartContractAccount,
   ISmartAccountProvider,
   SupportedTransports,
 } from "@alchemy/aa-core";
@@ -16,7 +15,7 @@ const MultiOwnerPlugin_ = {
     name: "Multi Owner Plugin",
     version: "1.0.0",
   },
-  accountDecorators: (account: ISmartContractAccount) => ({
+  accountMethods: (account: IMSCA<any, any>) => ({
     encodeUpdateOwnersData: ({
       args,
     }: GetFunctionArgs<
@@ -114,7 +113,7 @@ const MultiOwnerPlugin_ = {
       });
     },
   }),
-  providerDecorators: <
+  providerMethods: <
     TTransport extends SupportedTransports,
     P extends ISmartAccountProvider<TTransport> & {
       account: IMSCA<TTransport>;
@@ -140,8 +139,8 @@ const MultiOwnerPlugin_ = {
 };
 
 export const MultiOwnerPlugin: Plugin<
-  ReturnType<(typeof MultiOwnerPlugin_)["accountDecorators"]>,
-  ReturnType<(typeof MultiOwnerPlugin_)["providerDecorators"]>
+  ReturnType<(typeof MultiOwnerPlugin_)["accountMethods"]>,
+  ReturnType<(typeof MultiOwnerPlugin_)["providerMethods"]>
 > = MultiOwnerPlugin_;
 
 export const MultiOwnerPluginExecutionFunctionAbi = [
