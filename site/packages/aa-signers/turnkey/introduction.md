@@ -49,7 +49,7 @@ yarn add @turnkey/webauthn-stamper
 ::: code-group
 
 ```ts [example.ts]
-import { TurnkeySigner } from "@alchemy/aa-signers";
+import { TurnkeySigner, TurnkeySubOrganization } from "@alchemy/aa-signers";
 import { WebauthnStamper } from "@turnkey/webauthn-stamper";
 import { http } from "viem";
 
@@ -61,8 +61,12 @@ const turnkeySigner = new TurnkeySigner({
 });
 
 const authParams = {
-  organizationId: "12345678-1234-1234-1234-123456789abc",
-  signWith: "0x1234567890123456789012345678901234567890",
+  resolveSubOrganization: async () => {
+    return new TurnkeySubOrganization({
+      subOrganizationId: "12345678-1234-1234-1234-123456789abc",
+      signWith: "0x1234567890123456789012345678901234567890",
+    })
+  },
   transport: http("https://eth-sepolia.g.alchemy.com/v2/ALCHEMY_API_KEY");
 };
 

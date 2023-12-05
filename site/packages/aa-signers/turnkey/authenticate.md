@@ -24,7 +24,8 @@ This method must be called before accessing the other methods available on the `
 
 ```ts [example.ts]
 // [!code focus:99]
-import { TurnkeySigner } from "@alchemy/aa-signers";
+import { TurnkeySigner, TurnkeySubOrganization } from "@alchemy/aa-signers";
+import { TurnkeyClient, createActivityPoller } from "@turnkey/http";
 import { WebauthnStamper } from "@turnkey/webauthn-stamper";
 import { http } from "viem";
 
@@ -35,22 +36,67 @@ const turnkeyClient = new TurnkeyClient(
   },
   new WebauthnStamper({
     rpId: "your.app.xyz",
-  }),
+  })
 );
 
-// If you need to retrieve your user's wallet ID from Turnkey
-const wallets = await turnkeyClient.getWallets({
-  organizationId: "TURNKEY_ORGANIZATION_ID",
-});
-if (wallets.length === 0) throw new Error("No wallets created!");
-const walletId = wallets[0].walletId;
+const resolveSubOrganization = async () => {
+  // Follow [Turnkey's Sub-Organization as Wallets guide](https://docs.turnkey.com/integration-guides/sub-organizations-as-wallets)
+  // to see all options.
+  const activityPoller = createActivityPoller({
+    client: turnkeyClient,
+    requestFn: turnkeyClient.createSubOrganization,
+  });
+
+  const activity = await activityPoller({
+    type: "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V4",
+    timestampMs: String(Date.now()),
+    organizationId: "TURNKEY_ORGANIZATION_ID",
+    parameters: {
+      subOrganizationName: "Sub-Org Name",
+      rootQuorumThreshold: 1,
+      rootUsers: [
+        {
+          userName: "User Name",
+          apiKeys: [],
+          authenticators: [
+            {
+              authenticatorName: "User Passkey",
+              challenge: "c29tZV9yYW5kb21fY2hhbG-bmdl",
+              attestation: {
+                credentialId: "Y3JlZGVudGlhbElEX2V4YW1wbGU=+",
+                clientDataJson: "eyJ0eXBlIjoiY3JlYXRlIiwiY2hhbGxlbmdlIjoiYzI",
+                attestationObject: "YXR0ZXN0YXRpb25PYmplY3RfZXhhbXBsZQ_F"
+                transports: ["AUTHENTICATOR_TRANSPORT_HYBRID"],
+              },
+            },
+          ],
+        },
+      ],
+      wallet: {
+        walletName: "User Wallet",
+        accounts: [
+          {
+            curve: "CURVE_SECP256K1",
+            pathFormat: "PATH_FORMAT_BIP32",
+            path: "m/44'/60'/0'/0/0",
+            addressFormat: "ADDRESS_FORMAT_ETHEREUM",
+          },
+        ],
+      },
+    },
+  });
+
+  return new TurnkeySubOrganization({
+    subOrganizationId: activity.result.createSubOrganizationResultV4!.subOrganizationId,
+    signWith: activity.result.createSubOrganizationResultV4!.wallet!.walletId,
+  });
+};
 
 // Now create the TurnkeySigner and authenticate with the wallet
 const turnkeySigner = new TurnkeySigner({ inner: turnkeyClient });
 const authParams = {
-  organizationId: "TURNKEY_ORGANIZATION_ID",
-  signWith: walletId,
-  transport: http("https://eth-sepolia.g.alchemy.com/v2/ALCHEMY_API_KEY");
+  transport: http("https://eth-sepolia.g.alchemy.com/v2/ALCHEMY_API_KEY"),
+  resolveSubOrganization,
 };
 await turnkeySigner.authenticate(authParams);
 ```
@@ -74,6 +120,5 @@ A Promise containing the `TurnkeyUserMetadata`, and object with the following fi
 
 An object with the following fields:
 
-- `organizationId` -- unique identifier for the user's organization that you can generate using the [Turnkey quickstart guide](https://docs.turnkey.com/getting-started/quickstart).
-- `signWith` -- an address or unique identifer for a user's wallet. A user can create a wallet using the [`create_wallet`](https://docs.turnkey.com/api#tag/Wallets/operation/CreateWallet) endpoint.
 - `transport` -- a `viem` [Transport](https://viem.sh/docs/clients/intro.html#transports) you can define to execute RPC requests.
+- `resolveSubOrganization: () => Promise<TurnkeySubOrganization>` -- a method you can define as necessary to leverage the `Turnkey` SDK for authenticating a wallet as a [sub-organization](https://docs.turnkey.com/integration-guides/sub-organizations-as-wallets). For instance, in the example above, `authenticate` uses the [`createSubOrganization`](https://docs.turnkey.com/api#tag/Organizations/operation/CreateSubOrganization) method.

@@ -2,6 +2,7 @@ import { WebauthnStamper } from "@turnkey/webauthn-stamper";
 import { TurnkeyClient } from "@turnkey/http";
 import { TurnkeySigner } from "../signer.js";
 import { custom } from "viem";
+import { TurnkeySubOrganization } from "../types.js";
 
 describe("Turnkey Signer Tests", () => {
   it("should correctly get address if authenticated", async () => {
@@ -116,9 +117,13 @@ const givenSigner = async (auth = true) => {
 
   if (auth) {
     await signer.authenticate({
-      organizationId: "12345678-1234-1234-1234-123456789abc",
-      signWith: "0x1234567890123456789012345678901234567890",
       transport: transport,
+      resolveSubOrganization: async () => {
+        return new TurnkeySubOrganization({
+          subOrganizationId: "12345678-1234-1234-1234-123456789abc",
+          signWith: "0x1234567890123456789012345678901234567890",
+        });
+      },
     });
   }
 
