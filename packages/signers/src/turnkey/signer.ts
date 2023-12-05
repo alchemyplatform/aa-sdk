@@ -10,6 +10,7 @@ import type {
   TurnkeyUserMetadata,
   TurnkeyAuthParams,
   TurnkeyClientParams,
+  TurnkeySubOrganization,
 } from "./types.js";
 
 /**
@@ -29,7 +30,7 @@ export class TurnkeySigner
 {
   inner: TurnkeyClient;
   private signer: WalletClientSigner | undefined;
-  private organizationId: string | undefined;
+  private subOrganization: TurnkeySubOrganization | undefined;
 
   constructor(params: TurnkeyClientParams | { inner: TurnkeyClient }) {
     if ("inner" in params) {
@@ -61,26 +62,30 @@ export class TurnkeySigner
   };
 
   authenticate = async (params: TurnkeyAuthParams) => {
-    this.organizationId = params.organizationId;
+    this.subOrganization = await params.resolveSubOrganization();
     this.signer = new WalletClientSigner(
       createWalletClient({
         account: await createAccount({
           client: this.inner,
-          organizationId: this.organizationId,
-          signWith: params.signWith,
+          organizationId: this.subOrganization.subOrganizationId,
+          signWith: this.subOrganization.signWith,
         }),
         transport: params.transport,
       }),
       this.signerType
     );
 
-    return this.inner.getWhoami({ organizationId: this.organizationId });
+    return this.inner.getWhoami({
+      organizationId: this.subOrganization.subOrganizationId,
+    });
   };
 
   getAuthDetails = async () => {
-    if (!this.signer || !this.organizationId)
+    if (!this.signer || !this.subOrganization)
       throw new Error("Not authenticated");
 
-    return this.inner.getWhoami({ organizationId: this.organizationId });
+    return this.inner.getWhoami({
+      organizationId: this.subOrganization.subOrganizationId,
+    });
   };
 }

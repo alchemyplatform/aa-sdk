@@ -2,9 +2,17 @@ import type { TStamper } from "@turnkey/http/dist/base";
 import type { Transport } from "viem";
 
 export interface TurnkeyAuthParams {
-  organizationId: string;
-  signWith: string;
   transport: Transport;
+  resolveSubOrganization: () => Promise<TurnkeySubOrganization>;
+}
+
+export class TurnkeySubOrganization {
+  subOrganizationId: string;
+  signWith: string;
+  constructor(params: { subOrganizationId: string; signWith: string }) {
+    this.subOrganizationId = params.subOrganizationId;
+    this.signWith = params.signWith;
+  }
 }
 
 export interface TurnkeyUserMetadata {
