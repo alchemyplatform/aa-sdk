@@ -5,6 +5,7 @@ import {
   type SmartAccountSigner,
   type BaseSmartAccountParams,
   type BatchUserOperationCallData,
+  type UserOperationCallData,
 } from "@alchemy/aa-core";
 import {
   concatHex,
@@ -79,6 +80,29 @@ export class NaniAccount<
     return decodedCallResult;
   }
 
+  async getAddress(): Promise<Address> {
+    const callResult = await this.rpcProvider.call({
+      to: this.factoryAddress,
+      data: encodeFunctionData({
+        abi: NaniAccountFactoryAbi,
+        functionName: "getAddress",
+        args: [await this.getSalt()],
+      }),
+    });
+
+    if (callResult.data == null) {
+      throw new Error("could not get deterministic address");
+    }
+
+    const decodedCallResult = decodeFunctionResult({
+      abi: NaniAccountFactoryAbi,
+      functionName: "getAddress",
+      data: callResult.data,
+    });
+
+    return decodedCallResult;
+  }
+
   getDummySignature(): Hex {
     return "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
   }
@@ -108,7 +132,7 @@ export class NaniAccount<
       abi: NaniAccountAbi,
       functionName: "executeBatch",
       args: [
-        calls.map((call) => ({
+        calls.map((call: Exclude<UserOperationCallData, Hex>) => ({
           ...call,
           value: call.value ?? 0n,
         })),
@@ -172,16 +196,38 @@ export class NaniAccount<
   }
 
   protected override async getAccountInitCode(): Promise<`0x${string}`> {
-    return concatHex([
+    const result = await concatHex([
       this.factoryAddress,
-      encodeFunctionData({
+      await this.getFactoryInitCode(),
+    ]);
+
+    return result;
+  }
+
+  protected async getSalt(): Promise<Hex> {
+    if (this.salt) {
+      if (this.salt.slice(0, 42) !== (await this.owner.getAddress())) {
+        throw new Error("Salt does not match owner");
+      } else {
+        return this.salt;
+      }
+    }
+
+    return concatHex([
+      await this.owner.getAddress(),
+      numberToHex(this.index, { size: 12 }),
+    ]);
+  }
+
+  protected async getFactoryInitCode(): Promise<Hex> {
+    try {
+      return encodeFunctionData({
         abi: NaniAccountFactoryAbi,
         functionName: "createAccount",
-        args: [
-          await this.owner.getAddress(),
-          this.salt ?? numberToHex(this.index, { size: 32 }),
-        ],
-      }),
-    ]);
+        args: [await this.owner.getAddress(), await this.getSalt()],
+      });
+    } catch (err: any) {
+      throw new Error("Factory Code generation failed");
+    }
   }
 }

@@ -26,6 +26,8 @@ export const createNaniAccountProvider = (
           config.factoryAddress ??
           getDefaultNaniAccountFactoryAddress(config.chain),
         accountAddress: config.accountAddress,
+        salt: config.salt,
+        index: config.index,
       })
   );
 };

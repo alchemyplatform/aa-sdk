@@ -19,6 +19,16 @@ export const NaniAccountFactoryConfigSchema = z.object({
   factoryAddress: Address.optional().describe(
     "Optional override for the factory address which deploys the smart account."
   ),
+  salt: z
+    .string()
+    .refine(isHex, "salt must be a valid hex")
+    .refine((s) => s.length === 66, "salt must be 32 bytes")
+    .optional()
+    .describe("Optional override for the account salt."),
+  index: z
+    .bigint()
+    .optional()
+    .describe("Optional override for the account index."),
 });
 
 export const NaniAccountProviderConfigSchema =

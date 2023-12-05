@@ -1,16 +1,18 @@
 import type { Address, Chain } from "viem";
 import {
   arbitrum,
+  arbitrumGoerli,
   arbitrumSepolia,
   base,
   baseGoerli,
-  goerli,
+  baseSepolia,
+  sepolia,
   mainnet,
   optimism,
   optimismGoerli,
+  optimismSepolia,
   polygon,
   polygonMumbai,
-  sepolia,
 } from "viem/chains";
 
 /**
@@ -24,15 +26,17 @@ export const getDefaultNaniAccountFactoryAddress = (chain: Chain): Address => {
   switch (chain.id) {
     case mainnet.id:
     case sepolia.id:
-    case goerli.id:
     case base.id:
     case baseGoerli.id:
-    case polygonMumbai.id:
+    case baseSepolia.id:
     case polygon.id:
+    case polygonMumbai.id:
     case arbitrum.id:
+    case arbitrumGoerli.id:
     case arbitrumSepolia.id:
     case optimism.id:
     case optimismGoerli.id:
+    case optimismSepolia.id:
       return "0x000000000000dD366cc2E4432bB998e41DFD47C7";
   }
   throw new Error(
