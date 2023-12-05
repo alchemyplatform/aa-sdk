@@ -14,7 +14,7 @@ head:
 
 # getAuthDetails
 
-`getAuthDetails` returns the details about the authenticated user, specifically all EOA addresses tied to the user's Capsule vault.
+`getAuthDetails` returns the details about the authenticated user, specifically all EOA addresses tied to the user's Capsule account.
 
 This method must be called after [`authenticate`](/packages/aa-signers/capsule/authenticate). Otherwise, this method will throw an error with the message `Not Authenticated`.
 
