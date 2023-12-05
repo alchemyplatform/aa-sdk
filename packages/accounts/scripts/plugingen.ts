@@ -140,10 +140,10 @@ export function plugingen({
                     name: "${name}",
                     version: "${version}",
                 },
-                accountDecorators: (account: ISmartContractAccount) => ({ ${accountFunctions.join(
+                accountMethods: (account: IMSCA<any, any>) => ({ ${accountFunctions.join(
                   ",\n\n"
                 )} }),
-                providerDecorators: <
+                providerMethods: <
                   TTransport extends SupportedTransports,
                   P extends ISmartAccountProvider<TTransport> & { account: IMSCA<TTransport> }
                 >(
@@ -153,9 +153,9 @@ export function plugingen({
 
             export const ${contract.name}: Plugin<ReturnType<typeof ${
           contract.name
-        }_["accountDecorators"]>, ReturnType<typeof ${
+        }_["accountMethods"]>, ReturnType<typeof ${
           contract.name
-        }_["providerDecorators"]>> = ${contract.name}_;
+        }_["providerMethods"]>> = ${contract.name}_;
         `);
 
         // add the abi at the end so it's easier to read the actual plugin code output
@@ -170,7 +170,7 @@ export function plugingen({
         import { type GetFunctionArgs, encodeFunctionData } from "viem";
         import type { Plugin } from "./types";
         import type { IMSCA } from "../builder";
-        import type { ISmartContractAccount, ISmartAccountProvider, SupportedTransports } from "@alchemy/aa-core";
+        import type { ISmartAccountProvider, SupportedTransports } from "@alchemy/aa-core";
       `;
 
       return {
