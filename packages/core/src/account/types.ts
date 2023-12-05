@@ -158,9 +158,9 @@ export interface ISmartContractAccount<
    * account.debugSendUserOperation(...);
    * ```
    *
-   * @param extendFn -- this function gives you access to the created provider instance and returns an object
+   * @param extendFn -- this function gives you access to the created account instance and returns an object
    * with the extension methods
-   * @returns -- the provider with the extension methods added
+   * @returns -- the account with the extension methods added
    */
   extend: <R>(extendFn: (self: this) => R) => this & R;
 }
