@@ -141,7 +141,7 @@ export interface ISmartContractAccount<
    * Allows you to add additional functionality and utility methods to this account
    * via a decorator pattern.
    *
-   * NOTE: this method does not allow you to override existing methods on the provider.
+   * NOTE: this method does not allow you to override existing methods on the account.
    *
    * @example
    * ```ts
