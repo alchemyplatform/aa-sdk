@@ -88,18 +88,27 @@ describe("Nani Account Tests", () => {
       '"0xb10cc728000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef00000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000004deadbeef00000000000000000000000000000000000000000000000000000000"'
     );
   });
+
+  it("should return the correct sender", async () => {
+    const provider = givenConnectedProvider({ owner, chain });
+    expect(await provider.getAddress()).toBe(
+      "0x903072d2112412406597eb5DCAA8CeDD71ea141c"
+    );
+  });
 });
 
 const givenConnectedProvider = ({
   owner,
   chain,
+  salt,
 }: {
   owner: SmartAccountSigner;
   chain: Chain;
+  salt?: Hex;
 }) =>
   createNaniAccountProvider({
     owner,
     chain,
-    rpcProvider: `${chain.rpcUrls.alchemy.http[0]}/${"test"}`,
-    accountAddress: "0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4",
+    rpcProvider: `${chain.rpcUrls.alchemy.http[0]}/tSJxomeQQY78eMApJ_g7ugm9bwSxWRsm`,
+    salt,
   });
