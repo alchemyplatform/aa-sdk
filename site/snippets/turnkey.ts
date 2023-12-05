@@ -1,47 +1,28 @@
-import { LocalAccountSigner, SmartAccountSigner } from "@alchemy/aa-core";
-import { ApiKeyStamper } from "@turnkey/api-key-stamper";
-import { TurnkeyClient } from "@turnkey/http";
-import { createAccount } from "@turnkey/viem";
+import { TurnkeySigner, TurnkeySubOrganization } from "@alchemy/aa-signers";
+import { WebauthnStamper } from "@turnkey/webauthn-stamper";
+import { http } from "viem";
 
-export async function newTurnkeySigner() {
-  const turnkeyClient = new TurnkeyClient(
-    {
-      /* 
-        Configurable, but you will likely use "https://api.turnkey.com".
-      */
-      baseUrl: process.env.TURNKEY_BASE_URL!,
-    },
-    new ApiKeyStamper({
-      /* 
-        You will generate these values as part of our quickstart guide: 
-        
-        https://docs.turnkey.com/getting-started/quickstart
-        
-        They are what the signer will use to authenticate requests to the Turnkey.com.
-      */
-      apiPublicKey: process.env.TURNKEY_API_PUBLIC_KEY!,
-      apiPrivateKey: process.env.TURNKEY_API_PRIVATE_KEY!,
-    })
-  );
+const TURNKEY_BASE_URL = "https://api.turnkey.com";
 
-  const turnkeyAccount = await createAccount({
-    client: turnkeyClient,
-    /* 
-        You can pull this from the top right widget in the Turnkey dashboard. 
-        The quickstart guide details how to do this.
-    */
-    organizationId: process.env.TURNKEY_ORGANIZATION_ID!,
-    /* 
-        This value should be the ID of the private key that you want to own
-        the light smart contract. Similarly pulled from the dashboard and
-        documented in the quickstart guide.
-    */
-    privateKeyId: process.env.TURNKEY_PRIVATE_KEY_ID!,
+export const createTurnkeySigner = async () => {
+  const turnkeySigner = new TurnkeySigner({
+    apiUrl: TURNKEY_BASE_URL,
+    // API Key, WebAuthn, or Email Auth [stampers](https://docs.turnkey.com/category/api-design)
+    // must sign all requests to Turnkey.
+    stamper: new WebauthnStamper({
+      rpId: "your.app.xyz",
+    }),
   });
 
-  const turnkeySigner: SmartAccountSigner = new LocalAccountSigner(
-    turnkeyAccount
-  );
+  await turnkeySigner.authenticate({
+    resolveSubOrganization: async () => {
+      return new TurnkeySubOrganization({
+        subOrganizationId: "12345678-1234-1234-1234-123456789abc",
+        signWith: "0x1234567890123456789012345678901234567890",
+      });
+    },
+    transport: http("https://eth-sepolia.g.alchemy.com/v2/ALCHEMY_API_KEY"),
+  });
 
   return turnkeySigner;
-}
+};

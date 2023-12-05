@@ -20,35 +20,39 @@ head:
 
 # Turnkey Integration Guide
 
-[Turnkey](https://turnkey.com) provides simple APIs to securely manage your private keys. With Turnkey, users are able to spin up thousands of wallets and sign millions of transactions, all without compromising on security.
+[Turnkey](https://turnkey.com) is secure, non-custodial wallet infrastructure that allows users to generate wallets scoped to your application via Email or WebAuthn. Turnkey leverages secure enclaves and a proprietary policy engine; this novel security architecture ensures that key material is only decrypted within an enclave and any signing is governed by your application's policies. This is great for enabling a secure, flexible experience for your users that can be powerfully enhanced by the benefits of Account Abstraction (gas sponsorship, batching, etc).
+
+Combining Turnkey with Account Kit allows you to create a magical UX for your users. Use Turnkey via the [`aa-signers`](/packages/aa-signers/turnkey/introduction) package to generate embedded wallets at scale, and then leverage [`aa-alchemy`](/packages/aa-alchemy/index) to create smart accounts for your users!
 
 ## Integration
 
-### Sign up for a Turnkey Account
+### Create a Turnkey Account
 
-Signing up for a Turnkey Account is quick and easy. You can follow our [quickstart guide](https://docs.turnkey.com/getting-started/quickstart) to create a your first organization, API key and private key in minutes.
+Create an account and API keys on [Turnkey's Dashboard](https://app.turnkey.com/).
 
 ### Install the SDK
+
+Using `TurnkeySigner` in the `aa-signers` package requires installation of the [`@turnkey/http`](https://github.com/tkhq/sdk/tree/main/packages/http) and [`@turnkey/viem`](https://github.com/tkhq/sdk/tree/main/packages/viem) dependencies. `aa-signers` lists them as optional dependencies.
+
+Every request to Turnkey must be signed using a [stamper](https://docs.turnkey.com/category/api-design). Turnkey supports multiple stampers including [`@turnkey/webauthn-stamper`](https://github.com/tkhq/sdk/tree/main/packages/webauthn-stamper) to sign requests with Passkeys or WebAuthn devices, [`@turnkey/iframe-stamper`](https://github.com/tkhq/sdk/tree/main/packages/iframe-stamper) with Email, and [`@turnkey/api-key-stamper`](https://github.com/tkhq/sdk/tree/main/packages/api-key-stamper) with API keys.
 
 ::: code-group
 
 ```bash [npm]
-npm i -s @turnkey/api-key-stamper
 npm i -s @turnkey/http
 npm i -s @turnkey/viem
 ```
 
 ```bash [yarn]
-yarn add @turnkey/api-key-stamper
 yarn add @turnkey/http
 yarn add @turnkey/viem
 ```
 
 :::
 
-### Create a SmartAccountSigner
+### Create a TurnkeySigner
 
-Next, setup the Turnkey sdk and create a `SmartAccountSigner`:
+Next, setup the Turnkey SDK and create an authenticated `TurnkeySigner` using the `aa-signers` package:
 
 <<< @/snippets/turnkey.ts
 
@@ -64,25 +68,23 @@ import {
   getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
 import { sepolia } from "viem/chains";
-import { newTurnkeySigner } from "./turnkey";
+import { createTurnkeySigner } from "./turnkey";
 
-async function main() {
-  const owner = await newTurnkeySigner();
-  const chain = sepolia;
+const chain = sepolia;
 
-  const provider = new AlchemyProvider({
-    apiKey: "ALCHEMY_API_KEY",
-    chain,
-  }).connect(
-    (rpcClient) =>
-      new LightSmartContractAccount({
-        chain,
-        owner,
-        factoryAddress: getDefaultLightAccountFactoryAddress(chain),
-        rpcClient,
-      })
-  );
-}
+const provider = new AlchemyProvider({
+  apiKey: "ALCHEMY_API_KEY",
+  chain,
+}).connect(
+  (rpcClient) =>
+    new LightSmartContractAccount({
+      entryPointAddress,
+      chain: rpcClient.chain,
+      owner: await createTurnkeySigner(),
+      factoryAddress: getDefaultLightAccountFactoryAddress(chain),
+      rpcClient,
+    })
+);
 ```
 
 <<< @/snippets/turnkey.ts
