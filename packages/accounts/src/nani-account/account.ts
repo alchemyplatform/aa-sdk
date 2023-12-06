@@ -20,7 +20,7 @@ import {
   hexToBytes,
 } from "viem";
 import { NaniAccountAbi } from "./abis/NaniAccountAbi.js";
-import { NaniAccountFactoryAbi } from "./abis/NaniAccountFactory.js";
+import { NaniAccountFactoryAbi } from "./abis/NaniAccountFactoryAbi.js";
 
 export interface NaniSmartAccountParams<
   TTransport extends Transport | FallbackTransport = Transport
@@ -140,7 +140,14 @@ export class NaniAccount<
     });
   }
 
-  async encodeExecuteDelegate(delegate: Address, data: Hex): Promise<Hex> {
+  /**
+   * Encodes the delegateExecute function call using Nani Account ABI.
+   *
+   * @param delegate - the delegate to execute the function call
+   * @param data - the data to be passed to the function call
+   * @returns {Hex} the encoded function call
+   */
+  static encodeExecuteDelegate(delegate: Address, data: Hex): Hex {
     return encodeFunctionData({
       abi: NaniAccountAbi,
       functionName: "delegateExecute",

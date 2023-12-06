@@ -78,9 +78,8 @@ describe("Nani Account Tests", () => {
   });
 
   it("should correctly encode delegate execute data", async () => {
-    const provider = givenConnectedProvider({ owner, chain });
     expect(
-      await provider.account.encodeExecuteDelegate(
+      NaniAccount.encodeExecuteDelegate(
         "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef" as Address,
         "0xdeadbeef" as Hex
       )
