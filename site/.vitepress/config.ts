@@ -680,6 +680,20 @@ export default defineConfig({
                 link: "/",
               },
               {
+                text: "Arcana Auth Signer",
+                collapsed: true,
+                base: "/packages/aa-signers/arcana-auth",
+                items: [
+                  { text: "Introduction", link: "/introduction" },
+                  { text: "constructor", link: "/constructor" },
+                  { text: "authenticate", link: "/authenticate" },
+                  { text: "getAddress", link: "/getAddress" },
+                  { text: "signMessage", link: "/signMessage" },
+                  { text: "signTypedData", link: "/signTypedData" },
+                  { text: "getAuthDetails", link: "/getAuthDetails" },
+                ],
+              },
+              {
                 text: "Magic Signer",
                 collapsed: true,
                 base: "/packages/aa-signers/magic",

@@ -61,6 +61,11 @@
       "import": "./dist/esm/lit-protocol/index.js",
       "default": "./dist/cjs/lit-protocol/index.js"
     },
+    "./arcana-auth": {
+      "types": "./dist/types/arcana-auth/index.d.ts",
+      "import": "./dist/esm/arcana-auth/index.js",
+      "default": "./dist/cjs/arcana-auth/index.js"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {
@@ -88,6 +93,7 @@
     "@lit-protocol/pkp-ethers": "3.0.24",
     "@lit-protocol/types": "3.0.24",
     "@lit-protocol/crypto": "3.0.24",
+    "@arcana/auth": "^1.0.8",
     "jsdom": "^22.1.0",
     "magic-sdk": "^21.3.0",
     "typescript": "^5.0.4",
@@ -125,6 +131,7 @@
     "@lit-protocol/lit-node-client": "3.0.24",
     "@lit-protocol/pkp-ethers": "3.0.24",
     "@lit-protocol/types": "3.0.24",
-    "@lit-protocol/crypto": "3.0.24"
+    "@lit-protocol/crypto": "3.0.24",
+    "@arcana/auth": "^1.0.8"
   }
 }
