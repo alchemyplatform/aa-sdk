@@ -18,6 +18,7 @@ import {
 } from "viem";
 import { z } from "zod";
 import { MultiOwnerMSCAFactoryAbi } from "./abis/MultiOwnerMSCAFactory.js";
+import { accountLoupeDecorators } from "./account-loupe/decorator.js";
 import { MSCABuilder, StandardExecutor } from "./builder.js";
 import { MultiOwnerPlugin } from "./plugins/multi-owner.js";
 
@@ -122,7 +123,8 @@ export const createMultiOwnerMSCA = <
 
   const account = builder
     .build(params)
-    .extendWithPluginMethods(MultiOwnerPlugin);
+    .extendWithPluginMethods(MultiOwnerPlugin)
+    .extend(accountLoupeDecorators);
 
   return account;
 };

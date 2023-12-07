@@ -136,4 +136,31 @@ export interface ISmartContractAccount<
    * @returns the address of the entry point contract for the smart account
    */
   getEntryPointAddress(): Address;
+
+  /**
+   * Allows you to add additional functionality and utility methods to this account
+   * via a decorator pattern.
+   *
+   * NOTE: this method does not allow you to override existing methods on the account.
+   *
+   * @example
+   * ```ts
+   * const account = new BaseSmartCobntractAccount(...).extend((account) => ({
+   *  readAccountState: async (...args) => {
+   *    return this.rpcProvider.readContract({
+   *        address: await this.getAddress(),
+   *        abi: ThisContractsAbi
+   *        args: args
+   *    });
+   *  }
+   * }));
+   *
+   * account.debugSendUserOperation(...);
+   * ```
+   *
+   * @param extendFn -- this function gives you access to the created account instance and returns an object
+   * with the extension methods
+   * @returns -- the account with the extension methods added
+   */
+  extend: <R>(extendFn: (self: this) => R) => this & R;
 }
