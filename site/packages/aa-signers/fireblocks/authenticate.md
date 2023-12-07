@@ -25,6 +25,7 @@ You must call this method before accessing the other methods available on the `F
 ```ts [example.ts]
 // [!code focus:99]
 import { FireblocksSigner } from "@alchemy/aa-signers";
+import { ChainId } from "@fireblocks/fireblocks-web3-provider";
 
 const fireblocksSigner = new FireblocksSigner({
   privateKey: process.env.FIREBLOCKS_API_PRIVATE_KEY_PATH,
