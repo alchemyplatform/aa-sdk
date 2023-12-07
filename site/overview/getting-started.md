@@ -60,9 +60,9 @@ Make sure your new `package.json` file looks something like the following. Note 
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@alchemy/aa-accounts": "^1.1.0",
-    "@alchemy/aa-alchemy": "^1.1.0",
-    "@alchemy/aa-core": "^1.1.0",
+    "@alchemy/aa-accounts": "^*", // latest version
+    "@alchemy/aa-alchemy": "^*", // latest version
+    "@alchemy/aa-core": "^*", // latest version
     "viem": "^1.19.3"
   }
 }
@@ -93,7 +93,7 @@ To read or write any data to a blockchain, you'll need an Alchemy API Key and RP
 
 <img src="/images/alchemy-dashboard.png" width="auto" height="auto" alt="Account Kit Overview" style="display: block; margin: auto;">
 
-## 2. Query Your Smart Account Address
+## 3. Query Your Smart Account Address
 
 Using the SDK in the following example, we'll use the Account Kit to generate the address of your smart account from which to eventually send a UO.
 
@@ -111,7 +111,7 @@ You'll get a response like this on your terminal:
 Smart Account Address: 0xYOUR_SMART_ACCOUNT_ADDRESS
 ```
 
-## 3. Fund Your Smart Account
+## 4. Fund Your Smart Account
 
 To deploy the smart account and send UOs on its behalf, you'll need to add native token to your smart account.
 
@@ -119,7 +119,7 @@ At scale, you might consider using our Gas Manager to [sponsor UserOperations](/
 
 <img src="/images/alchemy-faucet.png" width="auto" height="auto" alt="Account Kit Overview" style="display: block; margin: auto;">
 
-## 4. Send a User Operation Using Account Kit
+## 5. Send a User Operation Using Account Kit
 
 Finally, let's deploy the newly funded smart account and send a UO on its behalf.
 
@@ -156,7 +156,7 @@ These are due to increase network activity at that time, and are fleeting issues
 
 Since this "Getting Started" example is a simple script, you'll need to consider how Account Kit can work in various applications. Check out our [Demos](/overview/demos) to see how.
 
-## 5. Dive Deeper
+## 6. Dive Deeper
 
 In this guide, we initialized an `AlchemyProvider` with the `aa-alchemy` package to send a UO. However, you can do a lot more with Account Kit and its many packages.
 
