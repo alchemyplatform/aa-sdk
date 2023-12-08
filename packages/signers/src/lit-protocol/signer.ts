@@ -1,9 +1,6 @@
 import { PKPEthersWallet } from "@lit-protocol/pkp-ethers";
 import { LitAbility, LitActionResource } from "@lit-protocol/auth-helpers";
-import {
-  type AuthCallbackParams,
-  type SessionKeyPair,
-} from "@lit-protocol/types";
+import { type AuthCallbackParams } from "@lit-protocol/types";
 import { LitNodeClient } from "@lit-protocol/lit-node-client";
 import { generateSessionKeyPair } from "@lit-protocol/crypto";
 
@@ -12,33 +9,20 @@ import {
   type SmartAccountAuthenticator,
 } from "@alchemy/aa-core";
 import type { TypedDataDomain } from "viem";
-import { type AuthMethod, type SessionSigsMap } from "@lit-protocol/types";
 
-export type LitAuthMethod = AuthMethod;
-export type LitSessionSigsMap = SessionSigsMap;
-
-export interface LitAccountAuthenticatorParams {
-  pkpPublicKey: string;
-  rpcUrl: string;
-  network?: string;
-  debug?: boolean;
-}
-
-export interface LITAuthenticateProps<
-  C extends LitAuthMethod | LitSessionSigsMap
-> {
-  context: C;
-  expiration?: string;
-  sessionKeypair?: SessionKeyPair;
-  chain?: string;
-}
+import {
+  type LitAuthMethod,
+  type LitSessionSigsMap,
+  type LitAccountAuthenticatorParams,
+  type LITAuthenticateProps,
+} from "./types.js";
 
 const SIGNER_TYPE: string = "lit";
 export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
   implements
     SmartAccountAuthenticator<
       LITAuthenticateProps<C>,
-      SessionSigsMap,
+      LitSessionSigsMap,
       PKPEthersWallet | undefined
     >
 {
@@ -82,7 +66,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
         const response = await this._client.signSessionKey({
           sessionKey: sessionKeypair,
           statement: params.statement,
-          authMethods: [props.context as AuthMethod],
+          authMethods: [props.context as LitAuthMethod],
           pkpPublicKey: this._pkpPublicKey,
           expiration: params.expiration,
           resources: params.resources,
@@ -116,7 +100,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
       this._signer = new PKPEthersWallet({
         pkpPubKey: this._pkpPublicKey,
         rpc: this._rpcUrl,
-        controllerSessionSigs: this._authContext as SessionSigsMap,
+        controllerSessionSigs: this._authContext as LitSessionSigsMap,
       });
 
       await this._signer.connect();
@@ -138,7 +122,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
 
   getAuthDetails = async (): Promise<LitSessionSigsMap> => {
     this._checkInternals();
-    return this._authContext as SessionSigsMap;
+    return this._authContext as LitSessionSigsMap;
   };
 
   getAddress = async () => {
