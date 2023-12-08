@@ -97,11 +97,11 @@ export interface UserOperationResponse {
   /* the address of the entry point contract that executed the user operation */
   entryPoint: Address;
   /* the block number the user operation was included in */
-  blockNumber: BigNumberish;
+  blockNumber: BigNumberish | null;
   /* the hash of the block the user operation was included in */
-  blockHash: Hash;
+  blockHash: Hash | null;
   /* the hash of the transaction that included the user operation */
-  transactionHash: Hash;
+  transactionHash: Hash | null;
 }
 
 export interface UserOperationReceipt {
