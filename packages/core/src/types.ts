@@ -96,11 +96,11 @@ export interface UserOperationResponse {
   userOperation: UserOperationRequest;
   /* the address of the entry point contract that executed the user operation */
   entryPoint: Address;
-  /* the block number the user operation was included in */
+  /* the block number the user operation was included in, null if UO is pending */
   blockNumber: BigNumberish | null;
-  /* the hash of the block the user operation was included in */
+  /* the hash of the block the user operation was included in, null if UO is pending */
   blockHash: Hash | null;
-  /* the hash of the transaction that included the user operation */
+  /* the hash of the transaction that included the user operation, null if UO is pending */
   transactionHash: Hash | null;
 }
 
