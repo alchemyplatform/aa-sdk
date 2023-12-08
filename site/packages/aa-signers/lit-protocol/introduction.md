@@ -18,6 +18,8 @@ head:
 
 `LitSigner` provides implementations for all methods on `SmartAccountAuthenticator`
 
+for information on supported authentication see: [here](https://developer.litprotocol.com/v3/sdk/authentication/session-sigs/intro)
+
 ['authenticate'][/packages/aa-signers/lit-protocol/authenticate]
 ['getAddress'][/packages/aa-signers/lit-protocol/getAddress]
 ['signTypedData'][/packages/aa-signers/lit-protocol/signTypedData]

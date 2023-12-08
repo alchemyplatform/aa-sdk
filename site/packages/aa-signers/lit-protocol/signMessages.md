@@ -32,8 +32,6 @@ const PKP_PUBLIC_KEY = "<your pkp public key>";
 
 const AUTH_METHOD = "<your auth method>";
 
-// for info on obtaining an auth method and minting pkp's
-// see here:
 const litSigner = new LitSigner<LitAuthMethod>({
   pkpPublicKey: PKP_PUBLIC_KEY,
   rpcUrl: RPC_URL,

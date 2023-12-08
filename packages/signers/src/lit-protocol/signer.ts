@@ -18,6 +18,11 @@ import {
 } from "./types.js";
 
 const SIGNER_TYPE: string = "lit";
+
+
+/**
+ * This class requies `@lit-protocol/lit-node-client`
+ */
 export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
   implements
     SmartAccountAuthenticator<

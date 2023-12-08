@@ -32,8 +32,6 @@ const API_KEY = "<YOUR API KEY>";
 const POLYGON_MUMBAI_RPC_URL = `${polygonMumbai.rpcUrls.alchemy.http[0]}/${API_KEY}`;
 const PKP_PUBLIC_KEY = "<your pkp public key>";
 
-// for info on obtaining an auth method and minting pkp's
-// see here:
 const litSigner = new LitSigner<LitAuthMethod>({
   pkpPublicKey: PKP_PUBLIC_KEY,
   rpcUrl: RPC_URL,

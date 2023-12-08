@@ -23,9 +23,20 @@ This method must be called after [`authenticate`](/packages/aa-signers/lit/authe
 ::: code-group
 
 ```ts [example.ts]
-import { createLitSigner } from "./lit";
+
 // [!code focus:99]
-const litSigner = await createLitSigner();
+import { LitSigner, type LitAuthMethod } from "@alchemy/aa-signers";
+
+const API_KEY = "<YOUR API KEY>";
+const POLYGON_MUMBAI_RPC_URL = `${polygonMumbai.rpcUrls.alchemy.http[0]}/${API_KEY}`;
+const PKP_PUBLIC_KEY = "<your pkp public key>";
+
+const AUTH_METHOD = "<your auth method>";
+
+const litSigner = new LitSigner<LitAuthMethod>({
+  pkpPublicKey: PKP_PUBLIC_KEY,
+  rpcUrl: RPC_URL,
+});
 
 const signedTypedData = await litSigner.signTypedData({
   domain: {
@@ -59,8 +70,6 @@ const signedTypedData = await litSigner.signTypedData({
   },
 });
 ```
-
-<<< @/snippets/lit.ts
 :::
 
 ## Returns
