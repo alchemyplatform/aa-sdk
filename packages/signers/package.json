@@ -76,6 +76,10 @@
     "@turnkey/viem": "^0.4.2",
     "@web3auth/base": "^7.1.0",
     "@web3auth/modal": "^7.1.1",
-    "magic-sdk": "^21.3.0"
+    "magic-sdk": "^21.3.0",
+    "@lit-protocol/lit-node-client": "3.0.24",
+    "@lit-protocol/pkp-ethers": "3.0.24",
+    "@lit-protocol/types": "3.0.24",
+    "@lit-protocol/crypto": "3.0.24", 
   }
 }
