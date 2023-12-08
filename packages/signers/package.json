@@ -80,6 +80,6 @@
     "@lit-protocol/lit-node-client": "3.0.24",
     "@lit-protocol/pkp-ethers": "3.0.24",
     "@lit-protocol/types": "3.0.24",
-    "@lit-protocol/crypto": "3.0.24", 
+    "@lit-protocol/crypto": "3.0.24"
   }
 }
