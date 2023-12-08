@@ -23,11 +23,21 @@ This method must be called after [`authenticate`](/packages/aa-signers/magic/aut
 ::: code-group
 
 ```ts [example.ts]
-import { createMagicSigner } from "./lit";
+import { LitSigner, type LitAuthMethod } from "@alchemy/aa-signers";
 // [!code focus:99]
-const magicSigner = await createLitSigner();
 
-const signedMessage = await magicSigner.signMessage("test");
+const API_KEY = "<YOUR API KEY>";
+const POLYGON_MUMBAI_RPC_URL = `${polygonMumbai.rpcUrls.alchemy.http[0]}/${API_KEY}`;
+const PKP_PUBLIC_KEY = "<your pkp public key>";
+
+const AUTH_METHOD = "<your auth method>";
+
+// for info on obtaining an auth method and minting pkp's
+// see here:
+const litSigner = new LitSigner<LitAuthMethod>({
+  pkpPublicKey: PKP_PUBLIC_KEY,
+  rpcUrl: RPC_URL,
+});
 ```
 
 <<< @/snippets/lit.ts

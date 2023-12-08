@@ -14,6 +14,9 @@ import {
 import type { TypedDataDomain } from "viem";
 import { type AuthMethod, type SessionSigsMap } from "@lit-protocol/types";
 
+export type LitAuthMethod = AuthMethod;
+export type LitSessionSigsMap = SessionSigsMap;
+
 export interface LitAccountAuthenticatorParams {
   pkpPublicKey: string;
   rpcUrl: string;
@@ -21,7 +24,9 @@ export interface LitAccountAuthenticatorParams {
   debug?: boolean;
 }
 
-export interface LITAuthenticateProps<C extends AuthMethod | SessionSigsMap> {
+export interface LITAuthenticateProps<
+  C extends LitAuthMethod | LitSessionSigsMap
+> {
   context: C;
   expiration?: string;
   sessionKeypair?: SessionKeyPair;
@@ -29,7 +34,7 @@ export interface LITAuthenticateProps<C extends AuthMethod | SessionSigsMap> {
 }
 
 const SIGNER_TYPE: string = "lit";
-export class LitSigner<C extends AuthMethod | SessionSigsMap>
+export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
   implements
     SmartAccountAuthenticator<
       LITAuthenticateProps<C>,
@@ -59,7 +64,7 @@ export class LitSigner<C extends AuthMethod | SessionSigsMap>
 
   authenticate = async (
     props: LITAuthenticateProps<C>
-  ): Promise<SessionSigsMap> => {
+  ): Promise<LitSessionSigsMap> => {
     // check if the object is structed as an auth method
     // if so we sign the session key with the auth method
     // as the auth material. If a session signature
@@ -89,7 +94,7 @@ export class LitSigner<C extends AuthMethod | SessionSigsMap>
       if (!this._client.ready) {
         await this._client.connect();
       }
-      
+
       const sessionSigs = await this._client
         .getSessionSigs({
           chain,
@@ -122,16 +127,16 @@ export class LitSigner<C extends AuthMethod | SessionSigsMap>
       this._signer = new PKPEthersWallet({
         pkpPubKey: this._pkpPublicKey,
         rpc: this._rpcUrl,
-        controllerSessionSigs: props.context as SessionSigsMap,
+        controllerSessionSigs: props.context as LitSessionSigsMap,
       });
 
       await this._signer.connect();
 
-      return props.context as SessionSigsMap;
+      return props.context as LitSessionSigsMap;
     }
   };
 
-  getAuthDetails = async (): Promise<SessionSigsMap> => {
+  getAuthDetails = async (): Promise<LitSessionSigsMap> => {
     this._checkInternals();
     return this._authContext as SessionSigsMap;
   };
