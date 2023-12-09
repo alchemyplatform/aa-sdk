@@ -21,7 +21,10 @@ const SIGNER_TYPE: string = "lit";
 
 
 /**
- * This class requies `@lit-protocol/lit-node-client`
+ * Implementation of `SmartAccountAuthenticator` for lit protocol
+ * This class requies: 
+ * `@lit-protocol/lit-node-client`
+ * `@lit-protocol/pkp-ethers`
  */
 export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
   implements
@@ -45,15 +48,23 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
       debug: params.debug ?? false,
     });
     this._rpcUrl = params.rpcUrl;
-    this._client.connect().catch((err: any) => {
-      throw new Error(`Error while connecting Lit Node Client: ${err}`);
-    });
   }
   signerType: string = SIGNER_TYPE;
 
+  /**
+   * Authenticates the supplied authemtnication material if type `Auth Method`
+   * if type `SessionSigsMap` this implementation will respect the existing auth and use the session material
+   * @param props {LITAuthenticateProps} Authentication params, only `context` is required
+   * @returns {LitSessionSigsMap} Authenticated session material
+   */
   authenticate = async (
     props: LITAuthenticateProps<C>
   ): Promise<LitSessionSigsMap> => {
+
+    await this._client.connect().catch((err: any) => {
+      throw new Error(`Error while connecting Lit Node Client: ${err}`);
+    });
+
     // check if the object is structed as an auth method
     // if so we sign the session key with the auth method
     // as the auth material. If a session signature
