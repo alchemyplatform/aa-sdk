@@ -23,7 +23,6 @@ This method must be called after [`authenticate`](/packages/aa-signers/lit/authe
 ::: code-group
 
 ```ts [example.ts]
-
 // [!code focus:99]
 import { LitSigner, type LitAuthMethod } from "@alchemy/aa-signers";
 
@@ -70,6 +69,7 @@ const signedTypedData = await litSigner.signTypedData({
   },
 });
 ```
+
 :::
 
 ## Returns

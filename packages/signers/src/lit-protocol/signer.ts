@@ -19,10 +19,9 @@ import {
 
 const SIGNER_TYPE: string = "lit";
 
-
 /**
  * Implementation of `SmartAccountAuthenticator` for lit protocol
- * This class requies: 
+ * This class requies:
  * `@lit-protocol/lit-node-client`
  * `@lit-protocol/pkp-ethers`
  */
@@ -60,7 +59,6 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
   authenticate = async (
     props: LITAuthenticateProps<C>
   ): Promise<LitSessionSigsMap> => {
-
     await this._client.connect().catch((err: any) => {
       throw new Error(`Error while connecting Lit Node Client: ${err}`);
     });
