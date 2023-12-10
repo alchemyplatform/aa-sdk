@@ -16,7 +16,7 @@ head:
 
 `signTypedData` supports signing typed data from the `LitSigner`.
 
-This method must be called after [`authenticate`](/packages/aa-signers/lit/authenticate). Otherwise, this method will throw an error with the message `Not Authenticated`.
+This method must be called after [`authenticate`](/packages/aa-signers/lit-protocol/authenticate). Otherwise, this method will throw an error with the message `Not Authenticated`.
 
 ## Usage
 
