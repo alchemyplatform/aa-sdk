@@ -5,6 +5,7 @@ import { PKPEthersWallet } from "@lit-protocol/pkp-ethers";
 import { AuthCallbackParams } from "@lit-protocol/types";
 import { createWalletClient, custom } from "viem";
 import { polygonMumbai } from "viem/chains";
+import { generateSessionKeyPair } from "@lit-protocol/crypto";
 
 const API_KEY = "<YOUR API KEY>";
 const POLYGON_MUMBAI_RPC_URL = `${polygonMumbai.rpcUrls.alchemy.http[0]}/${API_KEY}`;
@@ -28,8 +29,9 @@ const resourceAbilities = [
  * https://developer.litprotocol.com/v2/pkp/minting
  */
 const authNeededCallback = async (params: AuthCallbackParams) => {
+  let sessionKeyPair = generateSessionKeyPair();
   const response = await litNodeClient.signSessionKey({
-    sessionKey: params.sessionKeyPair,
+    sessionKey: sessionKeyPair,
     statement: params.statement,
     authMethods: [],
     pkpPublicKey: PKP_PUBLIC_KEY,
