@@ -1,6 +1,10 @@
 import { PKPEthersWallet } from "@lit-protocol/pkp-ethers";
 import { LitAbility, LitActionResource } from "@lit-protocol/auth-helpers";
-import { type AuthCallbackParams } from "@lit-protocol/types";
+import {
+  type AuthCallbackParams,
+  type AuthSig,
+  type SessionSigsMap,
+} from "@lit-protocol/types";
 import { LitNodeClient } from "@lit-protocol/lit-node-client";
 import { generateSessionKeyPair } from "@lit-protocol/crypto";
 
@@ -39,6 +43,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
   private _pkpPublicKey: string;
   private _rpcUrl: string;
   private _authContext: C | undefined;
+  private _session: SessionSigsMap | undefined;
 
   constructor(params: LitAccountAuthenticatorParams) {
     this._pkpPublicKey = params.pkpPublicKey;
@@ -76,18 +81,34 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
       ];
       const sessionKeypair = props.sessionKeypair || generateSessionKeyPair();
       const chain = props.chain || "ethereum";
-      const authNeededCallback = async (params: AuthCallbackParams) => {
-        const response = await this._client.signSessionKey({
-          sessionKey: sessionKeypair,
-          statement: params.statement,
-          authMethods: [props.context as LitAuthMethod],
-          pkpPublicKey: this._pkpPublicKey,
-          expiration: params.expiration,
-          resources: params.resources,
-          chainId: 1,
-        });
-        return response.authSig;
-      };
+      let authNeededCallback: any;
+      if (props.context?.authMethodType === 1) {
+        authNeededCallback = async (params: AuthCallbackParams) => {
+          const response = await this._client.signSessionKey({
+            statement: params.statement,
+            authMethods: [props.context as LitAuthMethod],
+            authSig: JSON.parse(props.context.accessToken as string) as AuthSig,
+            pkpPublicKey: `0x${this._pkpPublicKey}`,
+            expiration: params.expiration,
+            resources: params.resources,
+            chainId: 1,
+          });
+          return response.authSig;
+        };
+      } else {
+        authNeededCallback = async (params: AuthCallbackParams) => {
+          const response = await this._client.signSessionKey({
+            statement: params.statement,
+            sessionKey: sessionKeypair,
+            authMethods: [props.context as LitAuthMethod],
+            pkpPublicKey: `0x${this._pkpPublicKey}`,
+            expiration: params.expiration,
+            resources: params.resources,
+            chainId: 1,
+          });
+          return response.authSig;
+        };
+      }
 
       if (!this._client.ready) {
         await this._client.connect();
@@ -111,6 +132,22 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
         });
 
       this._authContext = props.context;
+      this._session = sessionSigs;
+
+      this._signer = new PKPEthersWallet({
+        pkpPubKey: this._pkpPublicKey,
+        rpc: this._rpcUrl,
+        controllerSessionSigs: sessionSigs as LitSessionSigsMap,
+      });
+
+      await this._signer.init();
+      this.inner = this._signer;
+
+      this._authContext = sessionSigs as C;
+    } else {
+      this._authContext = props.context;
+      this._session = props.context as SessionSigsMap;
+
       this._signer = new PKPEthersWallet({
         pkpPubKey: this._pkpPublicKey,
         rpc: this._rpcUrl,
@@ -118,20 +155,10 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
       });
 
       await this._signer.connect();
-
-      this._authContext = sessionSigs as C;
-      return sessionSigs;
-    } else {
-      this._signer = new PKPEthersWallet({
-        pkpPubKey: this._pkpPublicKey,
-        rpc: this._rpcUrl,
-        controllerSessionSigs: props.context as LitSessionSigsMap,
-      });
-
-      await this._signer.connect();
-
-      return props.context as LitSessionSigsMap;
+      this.inner = this._signer;
     }
+
+    return this._session;
   };
 
   getAuthDetails = async (): Promise<LitSessionSigsMap> => {
