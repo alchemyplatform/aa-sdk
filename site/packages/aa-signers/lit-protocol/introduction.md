@@ -12,7 +12,7 @@ head:
       content: Overview of the LitSigner class in aa-signers
 ---
 
-# lit signer
+# Lit Signer
 
 `LitSigner` provides implementations for all methods on `SmartAccountAuthenticator` to leverage Lit-Protocol's `PkpEthersWallet` and `LitNodeClient` together for provisioning new `Wallet` Signer instances with the authentication steps scoped to `authenticate`.
 
