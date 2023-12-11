@@ -6,7 +6,7 @@ head:
       content: Dfns
   - - meta
     - name: description
-      content: Guide for using Dfns as a signer
+      content: Guide for using Dfns as a Signer
   - - meta
     - property: og:description
       content: Guide for using Dfns as a Signer
