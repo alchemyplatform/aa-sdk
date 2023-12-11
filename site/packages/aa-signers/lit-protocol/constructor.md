@@ -49,6 +49,6 @@ A new instance of `LitSigner`
 `LitAccountAuthenticatorParams` takes the following arguments:
 
 - `pkpPublicKey: string` -- PKP public key
-- `rpcUrl: string` -- rpc context for the chain you wish to connect to
+- `rpcUrl: string` -- RPC URL for the chain you wish to connect to
 - `network: string` -- [optional] The desired Lit Protocol network to connect to. Defaults to `cayenne` (pkps must be on the network specified)
 - `debug: boolean` -- [optional] Enable / disable debug logging. Defaults to `false`
