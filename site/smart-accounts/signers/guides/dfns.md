@@ -16,7 +16,7 @@ head:
 
 [Dfns](https://www.dfns.co) is an MPC/TSS Wallet-as-a-Service API/SDK provider. Dfns aims to optimize the balance of security and UX by deploying key shares into a decentralized network on the backend while enabling wallet access via biometric open standards on the frontend like Webauthn. Reach out [here](https://www.dfns.co/learn-more) to set up a sandbox environment to get started.
 
-Dfns seamlessly integrates with Account Abstraction by signing `UserOperation`s. See the examples below for initializing a DFNS signer and creating a provider with that signer. You can follow [this](http://localhost:5173/tutorials/send-user-operation.html) guide to send `UserOperation`s with the provider created.
+Dfns seamlessly integrates with Account Abstraction by signing `UserOperation`s. See the examples below for initializing a DFNS signer and creating a provider with that signer. You can follow [this](https://accountkit.alchemy.com/tutorials/sponsoring-gas/sponsoring-gas.html) guide to send and sponsor `UserOperation`s with the provider created.
 
 We've created a full example of a gas-less transaction via a paymaster [in our SDK](https://github.com/dfnsext/typescript-sdk/blob/m/examples/viem/alchemy-aa-gasless/README.md), adapted from Alchemy's [gas sponsorship example](https://accountkit.alchemy.com/guides/sponsoring-gas.html).
 
