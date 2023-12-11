@@ -20,6 +20,11 @@ export default defineConfig(
         address: config.address,
       },
     ],
-    plugins: [plugingen({ chain: config.chain, rpcUrl: config.rpcUrl })],
+    plugins: [
+      plugingen({
+        chain: config.chain,
+        connectionConfig: { rpcUrl: config.rpcUrl! },
+      }),
+    ],
   }))
 );
