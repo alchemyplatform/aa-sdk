@@ -57,8 +57,6 @@ export class PortalSigner
   };
 
   authenticate = async () => {
-    if (this.inner == null) throw new Error("No provider found");
-
     this.signer = new WalletClientSigner(
       createWalletClient({
         transport: custom(this.inner.provider),
