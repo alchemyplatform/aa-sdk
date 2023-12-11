@@ -1,23 +1,15 @@
-import { WalletClientSigner, type SmartAccountSigner } from "@alchemy/aa-core";
-import {
-  ChainId,
-  FireblocksWeb3Provider,
-} from "@fireblocks/fireblocks-web3-provider";
-import { createWalletClient, custom } from "viem";
-import { sepolia } from "viem/chains";
+import { FireblocksSigner } from "@alchemy/aa-signers";
+import { ChainId } from "@fireblocks/fireblocks-web3-provider";
 
-const externalProvider = new FireblocksWeb3Provider({
-  // apiBaseUrl: ApiBaseUrl.Sandbox // If using a sandbox workspace
-  privateKey: process.env.FIREBLOCKS_API_PRIVATE_KEY_PATH,
-  apiKey: process.env.FIREBLOCKS_API_KEY,
-  vaultAccountIds: process.env.FIREBLOCKS_VAULT_ACCOUNT_IDS,
-  chainId: ChainId.SEPOLIA,
-  logTransactionStatusChanges: true, // Verbose logging
-});
+export const createFireblocksSigner = async () => {
+  const fireblocksSigner = new FireblocksSigner({
+    privateKey: process.env.FIREBLOCKS_API_PRIVATE_KEY_PATH!,
+    apiKey: process.env.FIREBLOCKS_API_KEY!,
+    vaultAccountIds: process.env.FIREBLOCKS_VAULT_ACCOUNT_IDS,
+    chainId: ChainId.SEPOLIA,
+  });
 
-const walletClient = createWalletClient({
-  chain: sepolia, // can provide a different chain here
-  transport: custom(externalProvider),
-});
+  await fireblocksSigner.authenticate();
 
-export const signer: SmartAccountSigner = new WalletClientSigner(walletClient);
+  return fireblocksSigner;
+};
