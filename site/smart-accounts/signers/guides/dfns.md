@@ -98,7 +98,7 @@ const alchemyProvider = async (): Promise<AlchemyProvider> => {
 
 ```ts
 const main = async () => {
-  const provider = await alchemyProvider();
+  const provider = await createAlchemyProvider();
   const address = await provider.getAddress();
   console.log(`Smart account address: ${address}`);
 
