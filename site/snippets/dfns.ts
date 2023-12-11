@@ -34,7 +34,7 @@ const initDfnsWallet = (walletId: string) => {
   });
 };
 
-export const dfnsSigner = async (): Promise<SmartAccountSigner> => {
+export const createDfnsSigner = async (): Promise<SmartAccountSigner> => {
   const sepoliaWallet = await initDfnsWallet(SEPOLIA_WALLET_ID!);
   const account = toAccount(sepoliaWallet) as LocalAccount;
   const dfnsSigner = new LocalAccountSigner(account as any);
