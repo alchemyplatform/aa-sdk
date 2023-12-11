@@ -17,7 +17,7 @@ export interface LitConfig {
   debug?: boolean;
 }
 
-export interface LITAuthenticateProps<
+export interface LitAuthenticateProps<
   C extends LitAuthMethod | LitSessionSigsMap
 > {
   context: C;
@@ -29,7 +29,7 @@ export interface LITAuthenticateProps<
 export type LitSmartAccountAuthenticator<
   C extends LitAuthMethod | LitSessionSigsMap
 > = SmartAccountAuthenticator<
-  LITAuthenticateProps<C>,
+  LitAuthenticateProps<C>,
   LitUserMetadata,
   LitNodeClient | undefined
 >;

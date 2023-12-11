@@ -21,6 +21,11 @@ head:
 `LitSigner` allows for either an `AuthMethod` or `SessionSig` as context to authenticate, based on the LightSigner you create: `LitAuthMethod` or `LitSessionSigsMap` respectively.
 
 If using an `AuthMethod`, then the implementation will handle signing a session signature which will be used as authentication material. If using a `SessionSig`, then the implementation will use that as authentication material for the signer.
+For the LitSigner a generic type `C` is defined on the type
+
+Where an `AuthMethod` or a `Session Signatures` maybe be provided as `context` for the `authentication`.
+
+If a `Session Signature` is given then the session will be respected as long as it is valid for the given `pkpPublicKey` that was used to initialize the `LitSigner`.
 
 ### Auth Method
 
@@ -75,3 +80,15 @@ const authDetails = await litSigner.authenticate({
 ```
 
 :::
+
+## Returns
+
+### `Promise<LitUserMetadata>`
+
+A Promise containing the `LitUserMetadata`, a map of `string -> object` containing the following fields:
+
+- `sig: string` -- Signed authentication message of the given network node.
+- `deriviedVia: string` -- How the signature was generated.
+- `address: string` -- Ethereum address of the key.
+- `algo: string` -- Signing algorithim used.
+- `signedMessage: string` -- `SIWE ReCap` Authentication message in the format of `SIWE ReCap`.

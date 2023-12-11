@@ -14,7 +14,7 @@ import {
   type LitAuthMethod,
   type LitSessionSigsMap,
   type LitConfig,
-  type LITAuthenticateProps,
+  type LitAuthenticateProps,
   type LitSmartAccountAuthenticator,
   type LitUserMetadata,
 } from "./types.js";
@@ -26,6 +26,9 @@ const SIGNER_TYPE: string = "lit";
  * This class requies:
  * `@lit-protocol/lit-node-client`
  * `@lit-protocol/pkp-ethers`
+ * `@lit-protocol/crypto`
+ * `@lit-protocol/auth-helpers`
+ * `@lit-protocol/types`
  */
 export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
   implements LitSmartAccountAuthenticator<C>
@@ -56,7 +59,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
    * @returns {LitSessionSigsMap} Authenticated session material
    */
   authenticate = async (
-    props: LITAuthenticateProps<C>
+    props: LitAuthenticateProps<C>
   ): Promise<LitUserMetadata> => {
     await this.inner?.connect().catch((err: any) => {
       throw new Error(`Error while connecting Lit Node Client: ${err}`);
