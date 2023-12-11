@@ -108,7 +108,7 @@ const main = async () => {
     policyId: process.env.ALCHEMY_GAS_POLICY_ID!,
   });
 
-  const alchemyToken = "0x6F3c1baeF15F2Ac6eD52ef897f60cac0B10d90C3";
+  const nftContractAddress = "0x6F3c1baeF15F2Ac6eD52ef897f60cac0B10d90C3";
 
   // send a sponsored user operation to mint some tokens
   const { hash: uoHash } = await provider.sendUserOperation({
