@@ -16,7 +16,9 @@ head:
 
 [Dfns](https://www.dfns.co) is an MPC/TSS Wallet-as-a-Service API/SDK provider. Dfns aims to optimize the balance of security and UX by deploying key shares into a decentralized network on the backend while enabling wallet access via biometric open standards on the frontend like Webauthn. Reach out [here](https://www.dfns.co/learn-more) to set up a sandbox environment to get started.
 
-Dfns seamlessly integrates with Account Abstraction by signing `UserOperation`s. We've created a full example of a gas-less transaction via a paymaster [in our SDK](https://github.com/dfns/dfns-sdk-ts/tree/m/examples/viem/alchemy-aa-gasless), adapted from Alchemy's [gas sponsorship example](https://accountkit.alchemy.com/guides/sponsoring-gas.html). Clone the repo to get started and see the comments in the [Readme](https://github.com/dfns/dfns-sdk-ts/tree/m/examples/viem/alchemy-aa-gasless/README.md).
+Dfns seamlessly integrates with Account Abstraction by signing `UserOperation`s. See the examples below for initializing a DFNS signer and creating a provider with that signer. You can follow [this](http://localhost:5173/tutorials/send-user-operation.html) guide to send `UserOperation`s with the provider created.
+
+We've created a full example of a gas-less transaction via a paymaster [in our SDK](https://github.com/dfnsext/typescript-sdk/blob/m/examples/viem/alchemy-aa-gasless/README.md), adapted from Alchemy's [gas sponsorship example](https://accountkit.alchemy.com/guides/sponsoring-gas.html).
 
 ## Install Dfns SDK
 
@@ -32,98 +34,46 @@ yarn add @dfns/lib-viem @dfns/sdk @dfns/sdk-keysigner
 
 :::
 
-### Create a Dfns SmartAccountSigner
+### Create a SmartAccountSigner
 
-Setup the Dfns Web3 Provider and wrap it in an AlchemyProvider. See the Dfns example [Readme](https://github.com/dfnsext/typescript-sdk/blob/m/examples/viem/alchemy-aa-gasless/README.md) for details on populating the environment variables.
+Setup the Dfns Web3 Provider and wrap it in an AlchemyProvider.
 
-```ts
+<<< @/snippets/dfns.ts
+
+### Use it with Light Account
+
+::: code-group
+
+```ts [example.ts]
+import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import {
   LightSmartContractAccount,
   getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
-import { AlchemyProvider } from "@alchemy/aa-alchemy";
-import { LocalAccountSigner } from "@alchemy/aa-core";
-import { DfnsWallet } from "@dfns/lib-viem";
-import { DfnsApiClient } from "@dfns/sdk";
-import { AsymmetricKeySigner } from "@dfns/sdk-keysigner";
-import dotenv from "dotenv";
 import { encodeFunctionData, parseAbi } from "viem";
-import { toAccount } from "viem/accounts";
 import { sepolia } from "viem/chains";
+import { createDfnsSigner } from "./dfns";
 
-dotenv.config();
+// Remember to replace "ALCHEMY_API_KEY" with your own Alchemy API key, get one here: https://dashboard.alchemy.com/
+const ALCHEMY_API_KEY = null;
+const chain = sepolia;
 
-const initDfnsWallet = (walletId: string) => {
-  const signer = new AsymmetricKeySigner({
-    privateKey: process.env.DFNS_PRIVATE_KEY!,
-    credId: process.env.DFNS_CRED_ID!,
-    appOrigin: process.env.DFNS_APP_ORIGIN!,
-  });
-
-  const dfnsClient = new DfnsApiClient({
-    appId: process.env.DFNS_APP_ID!,
-    authToken: process.env.DFNS_AUTH_TOKEN!,
-    baseUrl: process.env.DFNS_API_URL!,
-    signer,
-  });
-
-  return DfnsWallet.init({
-    walletId,
-    dfnsClient,
-    maxRetries: 10,
-  });
-};
-
-const createAlchemyProvider = async (): Promise<AlchemyProvider> => {
-  const sepoliaWallet = await initDfnsWallet(process.env.SEPOLIA_WALLET_ID!);
-  const account = toAccount(sepoliaWallet);
-  const eoaSigner = new LocalAccountSigner(account);
-
+const createDfnsAlchemyProvider = async (): Promise<AlchemyProvider> => {
   return new AlchemyProvider({
-    apiKey: process.env.ALCHEMY_SEPOLIA_KEY!,
-    chain: sepolia,
+    apiKey: ALCHEMY_API_KEY,
+    chain,
   }).connect(
     (rpcClient) =>
       new LightSmartContractAccount({
-        chain: sepolia,
-        owner: eoaSigner,
-        factoryAddress: getDefaultLightAccountFactoryAddress(sepolia),
+        chain,
+        owner: await createDfnsSigner(),
+        factoryAddress: getDefaultLightAccountFactoryAddress(chain),
         rpcClient,
       })
   );
 };
 ```
 
-### Execute a Gasless Transaction
+<<< @/snippets/dfns.ts
 
-```ts
-const main = async () => {
-  const provider = await createAlchemyProvider();
-  const address = await provider.getAddress();
-  console.log(`Smart account address: ${address}`);
-
-  // link the provider with the Gas Manager. This ensures user operations
-  // sent with this provider get sponsorship from the Gas Manager.
-  provider.withAlchemyGasManager({
-    policyId: process.env.ALCHEMY_GAS_POLICY_ID!,
-  });
-
-  const nftContractAddress = "0x6F3c1baeF15F2Ac6eD52ef897f60cac0B10d90C3";
-
-  // send a sponsored user operation to mint some tokens
-  const { hash: uoHash } = await provider.sendUserOperation({
-    target: nftContractAddress,
-    data: encodeFunctionData({
-      abi: parseAbi(["function mint(address recipient)"]),
-      functionName: "mint",
-      args: [address],
-    }),
-  });
-  console.log(`User operation hash: ${uoHash}`);
-
-  const txHash = await provider.waitForUserOperationTransaction(uoHash);
-  console.log(`Transaction: https://sepolia.etherscan.io/tx/${txHash}`);
-};
-
-main();
-```
+:::
