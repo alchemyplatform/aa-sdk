@@ -18,7 +18,9 @@ head:
 
 ## Usage
 
-In this example we will be using the `Lit Auth Client` to get a `Auth Method` for use in the `LitSigner` instance as authentication material. The implementations allows for either a `SessionSig` or `AuthMethod` to be used. If using an `AuthMethod` then the implementation will handle signing a session signature which will be used at the `AuthDetials`. If a `SessionSig` is given then the implementation will use that as authetnication material for the signer.
+`LitSigner` allows for either an `AuthMethod` or `SessionSig`  as context to authenticate, based on the LightSigner you create:  `LitAuthMethod` or `LitSessionSigsMap` respectively. 
+
+If using an `AuthMethod`, then the implementation will handle signing a session signature which will be used as authentication material. If using a `SessionSig`, then the implementation will use that as authentication material for the signer.
 
 ### Auth Method
 
