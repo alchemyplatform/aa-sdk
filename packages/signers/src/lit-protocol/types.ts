@@ -8,7 +8,7 @@ import {
 
 export type LitAuthMethod = AuthMethod;
 export type LitSessionSigsMap = SessionSigsMap;
-
+export type LitUserMetadata = LitSessionSigsMap;
 export interface LitConfig {
   pkpPublicKey: string;
   rpcUrl: string;
@@ -30,6 +30,6 @@ export type LitSmartAccountAuthenticator<
   C extends LitAuthMethod | LitSessionSigsMap
 > = SmartAccountAuthenticator<
   LITAuthenticateProps<C>,
-  LitSessionSigsMap,
+  LitUserMetadata,
   LitNodeClient | undefined
 >;

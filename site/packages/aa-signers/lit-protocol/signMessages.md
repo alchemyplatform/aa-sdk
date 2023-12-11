@@ -36,6 +36,8 @@ const litSigner = new LitSigner<LitAuthMethod>({
   pkpPublicKey: PKP_PUBLIC_KEY,
   rpcUrl: RPC_URL,
 });
+
+const signedMessage = await litSigner.signMessage("Hello World!");
 ```
 
 :::

@@ -10,13 +10,13 @@ import { generateSessionKeyPair } from "@lit-protocol/crypto";
 
 import { type SignTypedDataParams } from "@alchemy/aa-core";
 import type { Address, TypedDataDomain } from "viem";
-
 import {
   type LitAuthMethod,
   type LitSessionSigsMap,
   type LitConfig,
   type LITAuthenticateProps,
   type LitSmartAccountAuthenticator,
+  type LitUserMetadata,
 } from "./types.js";
 
 const SIGNER_TYPE: string = "lit";
@@ -57,7 +57,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
    */
   authenticate = async (
     props: LITAuthenticateProps<C>
-  ): Promise<LitSessionSigsMap> => {
+  ): Promise<LitUserMetadata> => {
     await this.inner?.connect().catch((err: any) => {
       throw new Error(`Error while connecting Lit Node Client: ${err}`);
     });
@@ -153,7 +153,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
     return this._session;
   };
 
-  getAuthDetails = async (): Promise<LitSessionSigsMap> => {
+  getAuthDetails = async (): Promise<LitUserMetadata> => {
     this._checkInternals();
     return this._authContext as LitSessionSigsMap;
   };

@@ -18,7 +18,7 @@ head:
 
 ## Usage
 
-`LitSigner` allows for either an `AuthMethod` or `SessionSig`  as context to authenticate, based on the LightSigner you create:  `LitAuthMethod` or `LitSessionSigsMap` respectively. 
+`LitSigner` allows for either an `AuthMethod` or `SessionSig` as context to authenticate, based on the LightSigner you create: `LitAuthMethod` or `LitSessionSigsMap` respectively.
 
 If using an `AuthMethod`, then the implementation will handle signing a session signature which will be used as authentication material. If using a `SessionSig`, then the implementation will use that as authentication material for the signer.
 
@@ -42,11 +42,10 @@ const litSigner = new LitSigner<LitAuthMethod>({
   rpcUrl: RPC_URL,
 });
 
-await litSigner.authenticate({
+// returns a `LitSessionSigsMap` instance if the authentication was sucessfull
+const authDetails = await litSigner.authenticate({
   context: AUTH_METHOD,
 });
-
-let authDetails = await litSigner.getAuthDetails(); // returns a `SessionSigMap` regardless of using an auth sig or session signature
 ```
 
 :::
@@ -69,11 +68,10 @@ const litSigner = new LitSigner<LitSessionSigsMap>({
   rpcUrl: RPC_URL,
 });
 
-await litSigner.authenticate({
+// returns a `SessionSigMap` regardless of using an auth sig or session signature
+const authDetails = await litSigner.authenticate({
   context: SESSION_SIGS,
 });
-
-let authDetails = await litSigner.getAuthDetails(); // returns a `SessionSigMap` regardless of using an auth sig or session signature
 ```
 
 :::

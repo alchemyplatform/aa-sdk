@@ -16,10 +16,15 @@ head:
 
 ## Usage
 
+When initializing a new instance of `LitSigner` you can choose to use an `AuthMethod (LitAuthMethod)` or `Session Signature (LitSessionSigsMap)`.
+If providing an `LitAuthMethod`, the auth method will be authenticated, creating a `Session Signature`.
+
+A `Session Signature` can be provided and will be used as the active session, and will be returned from `Authenticate` and `AuthDetails`.
+
 ::: code-group
 
 ```ts [example.ts]
-new LitSigner<AuthMethod>({
+new LitSigner<LitAuthMethod>({
   pkpPublicKey: "PKP_PUBLIC_KEY",
   rpcUrl: "RPC_URL",
   network: "cayenne",
@@ -30,7 +35,7 @@ new LitSigner<AuthMethod>({
 or
 
 ```ts [example.ts]
-new LitSigner<SessionSigMap>({
+new LitSigner<LitSessionSigMap>({
   pkpPublicKey: "PKP_PUBLIC_KEY",
   rpcUrl: "RPC_URL",
   network: "cayenne",
@@ -46,7 +51,7 @@ A new instance of `LitSigner`
 
 ## Parameters
 
-`LitAccountAuthenticatorParams` takes the following arguments:
+`LitConfig` takes the following arguments:
 
 - `pkpPublicKey: string` -- PKP public key
 - `rpcUrl: string` -- RPC URL for the chain you wish to connect to

@@ -6,8 +6,9 @@ export {
 } from "./web3auth/index.js";
 export {
   LitSigner,
-  type LitAccountAuthenticatorParams,
+  type LitConfig,
   type LITAuthenticateProps,
   type LitAuthMethod,
   type LitSessionSigsMap,
+  type LitUserMetadata,
 } from "./lit-protocol/index.js";
