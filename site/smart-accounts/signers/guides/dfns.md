@@ -34,7 +34,7 @@ yarn add @dfns/lib-viem @dfns/sdk @dfns/sdk-keysigner
 
 ### Create a Dfns SmartAccountSigner
 
-Setup the Dfns Web3 Provider and wrap it in an AlchemyProvider. See the Dfns example [Readme](https://github.com/dfnsext/typescript-sdk/blob/m/examples/viem/alchemy-aa-gasless/README.md) for detail on populating the environment variables.
+Setup the Dfns Web3 Provider and wrap it in an AlchemyProvider. See the Dfns example [Readme](https://github.com/dfnsext/typescript-sdk/blob/m/examples/viem/alchemy-aa-gasless/README.md) for details on populating the environment variables.
 
 ```ts
 import {
