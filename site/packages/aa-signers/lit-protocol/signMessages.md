@@ -37,8 +37,6 @@ const litSigner = new LitSigner<LitAuthMethod>({
   rpcUrl: RPC_URL,
 });
 ```
-
-<<< @/snippets/lit.ts
 :::
 
 ## Returns
