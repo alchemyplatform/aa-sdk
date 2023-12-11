@@ -37,6 +37,7 @@ const litSigner = new LitSigner<LitAuthMethod>({
   rpcUrl: RPC_URL,
 });
 ```
+
 :::
 
 ## Returns
