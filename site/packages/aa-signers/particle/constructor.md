@@ -92,7 +92,7 @@ You can either pass in a constructed `ParticleNetwork` object, or directly pass 
 
 - `wallet: WalletEntryOption` -- [optional] object with the below fields
 
-  - `displayWalletEntry: boolean` -- [optional] Flag to display wallet entry.
+  - `displayWalletEntry: boolean` -- [optional] Flag to display whether or not the circular wallet modal will be included on the web page after logging in.
 
   - `preload: boolean` -- [optional] Flag to preload the wallet information.
 
