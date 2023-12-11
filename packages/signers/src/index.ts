@@ -19,7 +19,7 @@ export {
 export {
   LitSigner,
   type LitConfig,
-  type LITAuthenticateProps,
+  type LitAuthenticateProps,
   type LitAuthMethod,
   type LitSessionSigsMap,
   type LitUserMetadata,
