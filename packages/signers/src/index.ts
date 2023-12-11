@@ -4,7 +4,6 @@ export {
   Web3AuthSigner,
   type Web3AuthAuthenticationParams,
 } from "./web3auth/index.js";
-
 export {
   LitSigner,
   type LitAccountAuthenticatorParams,

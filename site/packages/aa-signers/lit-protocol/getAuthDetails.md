@@ -14,7 +14,7 @@ head:
 
 # getAuthDetails
 
-`getAuthDetails` returns the details about the authenticated user, which is a `sessionSigsMap` which is the authentication result when sucessful.
+`getAuthDetails` returns the details about the authenticated user, which is a `sessionSigsMap`: the authentication result when successful.
 
 This method must be called after [`authenticate`](/packages/aa-signers/lit-protocol/authenticate). Otherwise, this method will throw an error with the message `Not Authenticated`.
 
