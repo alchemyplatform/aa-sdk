@@ -3933,10 +3933,10 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.8.tgz#6b79032e760a0899cd4204710beede972a3a185f"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
-"@portal-hq/web@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@portal-hq/web/-/web-0.0.6.tgz#86b8092baa2489b3feb921a3ed4b447e1e17e649"
-  integrity sha512-vlq7IHLRXATYC7xwwgU79ExqmdNWMyXyGODNEVURQWiFM+GTGrwntwFoEM20NhrVUnvDfjdylDgsvjlUwfrddw==
+"@portal-hq/web@^0.0.8":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@portal-hq/web/-/web-0.0.8.tgz#bb85ae31df86fef0046409ddeddf4948fb4eddd1"
+  integrity sha512-7u+xFh2QqIShVcfNRLua6RqXw0RmSNNZMeSpVUXbV5Y9VIr4MzIr0K2X5VeQ4oxkfVpVFD7UkMCQFUEJTrv2bg==
 
 "@rainbow-me/rainbowkit@^1.0.10":
   version "1.1.3"
