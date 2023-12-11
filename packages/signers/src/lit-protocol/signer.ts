@@ -8,17 +8,15 @@ import {
 import { LitNodeClient } from "@lit-protocol/lit-node-client";
 import { generateSessionKeyPair } from "@lit-protocol/crypto";
 
-import {
-  type SignTypedDataParams,
-  type SmartAccountAuthenticator,
-} from "@alchemy/aa-core";
-import type { TypedDataDomain } from "viem";
+import { type SignTypedDataParams } from "@alchemy/aa-core";
+import type { Address, TypedDataDomain } from "viem";
 
 import {
   type LitAuthMethod,
   type LitSessionSigsMap,
-  type LitAccountAuthenticatorParams,
+  type LitConfig,
   type LITAuthenticateProps,
+  type LitSmartAccountAuthenticator,
 } from "./types.js";
 
 const SIGNER_TYPE: string = "lit";
@@ -30,27 +28,23 @@ const SIGNER_TYPE: string = "lit";
  * `@lit-protocol/pkp-ethers`
  */
 export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
-  implements
-    SmartAccountAuthenticator<
-      LITAuthenticateProps<C>,
-      LitSessionSigsMap,
-      PKPEthersWallet | undefined
-    >
+  implements LitSmartAccountAuthenticator<C>
 {
-  inner: PKPEthersWallet | undefined;
+  inner: LitNodeClient;
   private _signer: PKPEthersWallet | undefined;
-  private _client: LitNodeClient;
   private _pkpPublicKey: string;
   private _rpcUrl: string;
   private _authContext: C | undefined;
   private _session: SessionSigsMap | undefined;
 
-  constructor(params: LitAccountAuthenticatorParams) {
+  constructor(params: LitConfig) {
     this._pkpPublicKey = params.pkpPublicKey;
-    this._client = new LitNodeClient({
-      litNetwork: params.network ?? "cayenne",
-      debug: params.debug ?? false,
-    });
+    this.inner =
+      params.inner ??
+      new LitNodeClient({
+        litNetwork: params.network ?? "cayenne",
+        debug: params.debug ?? false,
+      });
     this._rpcUrl = params.rpcUrl;
   }
   signerType: string = SIGNER_TYPE;
@@ -64,7 +58,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
   authenticate = async (
     props: LITAuthenticateProps<C>
   ): Promise<LitSessionSigsMap> => {
-    await this._client.connect().catch((err: any) => {
+    await this.inner?.connect().catch((err: any) => {
       throw new Error(`Error while connecting Lit Node Client: ${err}`);
     });
 
@@ -84,7 +78,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
       let authNeededCallback: any;
       if (props.context?.authMethodType === 1) {
         authNeededCallback = async (params: AuthCallbackParams) => {
-          const response = await this._client.signSessionKey({
+          const response = await this.inner.signSessionKey({
             statement: params.statement,
             authMethods: [props.context as LitAuthMethod],
             authSig: JSON.parse(props.context.accessToken as string) as AuthSig,
@@ -97,7 +91,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
         };
       } else {
         authNeededCallback = async (params: AuthCallbackParams) => {
-          const response = await this._client.signSessionKey({
+          const response = await this.inner.signSessionKey({
             statement: params.statement,
             sessionKey: sessionKeypair,
             authMethods: [props.context as LitAuthMethod],
@@ -110,11 +104,11 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
         };
       }
 
-      if (!this._client.ready) {
-        await this._client.connect();
+      if (!this.inner.ready) {
+        await this.inner.connect();
       }
 
-      const sessionSigs = await this._client
+      const sessionSigs = await this.inner
         .getSessionSigs({
           chain,
           expiration:
@@ -141,7 +135,6 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
       });
 
       await this._signer.init();
-      this.inner = this._signer;
 
       this._authContext = sessionSigs as C;
     } else {
@@ -154,8 +147,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
         controllerSessionSigs: this._authContext as LitSessionSigsMap,
       });
 
-      await this._signer.connect();
-      this.inner = this._signer;
+      await this._signer.init();
     }
 
     return this._session;
@@ -168,7 +160,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
 
   getAddress = async () => {
     this._checkInternals();
-    const address = await this.inner?.getAddress();
+    const address = await this._signer?.getAddress();
 
     return address as `0x${string}`;
   };
@@ -176,23 +168,24 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
   signMessage = async (msg: Uint8Array | string) => {
     this._checkInternals();
 
-    return this.inner?.signMessage(msg) as Promise<`0x${string}`>;
+    return this._signer?.signMessage(msg) as Promise<Address>;
   };
 
   signTypedData = (params: SignTypedDataParams) => {
     this._checkInternals();
 
-    return this.inner?._signTypedData(
+    return this._signer?._signTypedData(
       params.domain as TypedDataDomain,
       params.types as any,
       params.message
-    ) as Promise<`0x${string}`>;
+    ) as Promise<Address>;
   };
 
   private _checkInternals() {
     if (!this._authContext) {
       throw new Error("Session not created, did you call authenticate?");
     }
+
     if (!this._signer) {
       throw new Error("Signer is not initalized, did you call authenticate?");
     }
