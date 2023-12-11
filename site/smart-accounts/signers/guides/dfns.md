@@ -58,7 +58,7 @@ import { createDfnsSigner } from "./dfns";
 const ALCHEMY_API_KEY = null;
 const chain = sepolia;
 
-const createDfnsAlchemyProvider = async (): Promise<AlchemyProvider> => {
+const createAlchemyProvider = async (): Promise<AlchemyProvider> => {
   return new AlchemyProvider({
     apiKey: ALCHEMY_API_KEY,
     chain,
