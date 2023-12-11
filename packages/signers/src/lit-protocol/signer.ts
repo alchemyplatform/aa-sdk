@@ -56,7 +56,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
   signerType: string = SIGNER_TYPE;
 
   /**
-   * Authenticates the supplied authemtnication material if type `Auth Method`
+   * if generic type is `LitAuthMethod`, authenticates the supplied authentication material.
    * if type `SessionSigsMap` this implementation will respect the existing auth and use the session material
    * @param props {LITAuthenticateProps} Authentication params, only `context` is required
    * @returns {LitSessionSigsMap} Authenticated session material
