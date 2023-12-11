@@ -9,7 +9,7 @@ head:
       content: Guide for using Dfns as a signer
   - - meta
     - property: og:description
-      content: Guide for using Dfns as a signer
+      content: Guide for using Dfns as a Signer
 ---
 
 # Dfns Integration Guide
