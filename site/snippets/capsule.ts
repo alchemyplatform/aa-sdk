@@ -13,9 +13,6 @@ export const createCapsuleSigner = async () => {
       // get your own Alchemy API key at: https://dashboard.alchemy.com/
       transport: http(`${sepolia.rpcUrls.alchemy.http[0]}/ALCHEMY_API_KEY`),
     },
-    viemClientOpts: {
-      noAccount: true,
-    },
   });
 
   await capsuleSigner.authenticate();
