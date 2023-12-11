@@ -74,7 +74,7 @@ const initDfnsWallet = (walletId: string) => {
   });
 };
 
-const alchemyProvider = async (): Promise<AlchemyProvider> => {
+const createAlchemyProvider = async (): Promise<AlchemyProvider> => {
   const sepoliaWallet = await initDfnsWallet(process.env.SEPOLIA_WALLET_ID!);
   const account = toAccount(sepoliaWallet);
   const eoaSigner = new LocalAccountSigner(account);
