@@ -16,7 +16,6 @@ head:
 
 `LitSigner` provides implementations for all methods on `SmartAccountAuthenticator` to leverage Lit-Protocol's `PkpEthersWallet` and `LitNodeClient` together for provisioning new `Wallet` Signer instances with the authentication steps scoped to `authenticate`.
 
-`LitSigner` provides implementations for all methods on `SmartAccountAuthenticator`
 
 for information on supported authentication see: [here](https://developer.litprotocol.com/v3/sdk/authentication/session-sigs/intro)
 
