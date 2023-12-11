@@ -92,4 +92,4 @@ You can either pass in a constructed `CapsuleWeb3Provider` object, or directly p
 
 - `viemClientOpts: ViemClientOpts` -- [optional] Object with the following properties:
 
-  - `noAccount: boolean` -- [optional] Flag to determine if the capsule Signer has an account.
+  - `noAccount: boolean` -- [optional] Flag to skip creating a viem `Account` on Capsule's WalletClient, and instead have the `Account` be created and passed in separately when calling other methods on the client. Default false and recommended not to use.

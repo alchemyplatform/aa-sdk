@@ -26,16 +26,16 @@ head:
 
 ## Install Dependencies
 
-`CapsuleSigner` requires installation of the [`@capsule/web-sdk`](https://capsule-org.github.io/web-sdk/) SDK. `aa-signers` lists it as an optional dependency.
+`CapsuleSigner` requires installation of the [`@usecapsule/web-sdk`](https://capsule-org.github.io/web-sdk/) SDK. `aa-signers` lists it as an optional dependency.
 
 ::: code-group
 
 ```bash [npm]
-npm i -s @capsule/web-sdk
+npm i -s @usecapsule/web-sdk
 ```
 
 ```bash [yarn]
-yarn add @capsule/web-sdk
+yarn add @usecapsule/web-sdk
 ```
 
 ## Usage
