@@ -112,7 +112,7 @@ const main = async () => {
 
   // send a sponsored user operation to mint some tokens
   const { hash: uoHash } = await provider.sendUserOperation({
-    target: alchemyToken,
+    target: nftContractAddress,
     data: encodeFunctionData({
       abi: parseAbi(["function mint(address recipient)"]),
       functionName: "mint",
