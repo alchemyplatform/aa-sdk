@@ -46,7 +46,7 @@ A new instance of `LitSigner`
 
 ## Parameters
 
-`LitAccountAuthenticatorParams` takes the following arguments
+`LitAccountAuthenticatorParams` takes the following arguments:
 
 - `pkpPublicKey: string` -- PKP public key
 - `rpcUrl: string` -- rpc context for the chain you wish to connect to
