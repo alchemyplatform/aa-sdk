@@ -55,7 +55,7 @@ import { sepolia } from "viem/chains";
 import { createDfnsSigner } from "./dfns";
 
 // Remember to replace "ALCHEMY_API_KEY" with your own Alchemy API key, get one here: https://dashboard.alchemy.com/
-const ALCHEMY_API_KEY = null;
+const ALCHEMY_API_KEY = "API_KEY";
 const chain = sepolia;
 
 const createAlchemyProvider = async (): Promise<AlchemyProvider> => {
