@@ -48,7 +48,7 @@ The Signer plays a crucial role in your app because it controls the user’s sma
 
 ## Supported Signers
 
-Account Kit is compatible with any EIP-1193 provider. Many of the most popular signers can be configured in minutes through our integration signer guides below.
+Account Kit is compatible with any EIP-1193 provider. Many of the most popular signers can be configured in minutes through our integration signer guides.
 
 If you want to use another Signer, you can integrate any other Signer by wrapping it in an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) provider or using [`SmartAccountSigner`](/smart-accounts/signers/guides/custom-signer#implementing-smartaccountsigner) to adapt non-standard Signer.
 
