@@ -56,8 +56,8 @@ export default defineConfig({
             link: "/demos",
           },
           {
-            text: "Give us Feedback",
-            link: "/feedback",
+            text: "Contact Us",
+            link: "/contact-us",
           },
         ],
       },
