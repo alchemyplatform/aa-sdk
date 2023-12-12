@@ -40,6 +40,8 @@ npm i -s magic-sdk
 yarn add magic-sdk
 ```
 
+::: warning Note
+To use `MagicSigner` in your app's client, you must ensure the `window` object is defined.
 :::
 
 ### Create a MagicSigner
