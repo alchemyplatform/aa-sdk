@@ -37,6 +37,9 @@ const capsuleSigner = new CapsuleSigner({
 });
 
 await capsuleSigner.authenticate();
+
+// after calling `authenticate`, a user must either be created or logged in to perform any signing operations using `capsuleSigner`
+// follow the documentation at https://docs.usecapsule.com/integration-guide/user-and-wallet-creation using `capsuleSigner.inner` to create or login a user
 ```
 
 :::
