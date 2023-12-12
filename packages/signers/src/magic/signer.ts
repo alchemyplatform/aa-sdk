@@ -5,6 +5,7 @@ import {
 } from "@alchemy/aa-core";
 import { Magic, type MagicUserMetadata } from "magic-sdk";
 import { createWalletClient, custom, type Hash } from "viem";
+import { signerTypePrefix } from "../constants.js";
 import type { MagicAuthParams, MagicSDKParams } from "./types.js";
 
 /**
@@ -29,7 +30,7 @@ export class MagicSigner
     this.inner = new Magic(params.apiKey, params.options);
   }
 
-  readonly signerType = "magic";
+  readonly signerType = `${signerTypePrefix}magic`;
 
   getAddress = async () => {
     if (!this.signer) throw new Error("Not authenticated");

@@ -6,11 +6,12 @@ import {
 import { TurnkeyClient } from "@turnkey/http";
 import { createAccount } from "@turnkey/viem";
 import { createWalletClient } from "viem";
+import { signerTypePrefix } from "../constants.js";
 import type {
-  TurnkeyUserMetadata,
   TurnkeyAuthParams,
   TurnkeyClientParams,
   TurnkeySubOrganization,
+  TurnkeyUserMetadata,
 } from "./types.js";
 
 /**
@@ -41,7 +42,7 @@ export class TurnkeySigner
     this.inner = new TurnkeyClient({ baseUrl: params.apiUrl }, params.stamper);
   }
 
-  readonly signerType = "turnkey";
+  readonly signerType = `${signerTypePrefix}turnkey`;
 
   getAddress = async () => {
     if (!this.signer) throw new Error("Not authenticated");

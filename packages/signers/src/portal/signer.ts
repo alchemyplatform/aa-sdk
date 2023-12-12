@@ -5,6 +5,7 @@ import {
 } from "@alchemy/aa-core";
 import Portal, { type PortalOptions } from "@portal-hq/web";
 import { createWalletClient, custom, type Hash } from "viem";
+import { signerTypePrefix } from "../constants.js";
 import type { PortalAuthenticationParams, PortalUserInfo } from "./types.js";
 
 /**
@@ -33,7 +34,7 @@ export class PortalSigner
     this.inner = new Portal(params);
   }
 
-  readonly signerType = "portal";
+  readonly signerType = `${signerTypePrefix}portal`;
 
   getAddress = async () => {
     if (!this.signer) throw new Error("Not authenticated");

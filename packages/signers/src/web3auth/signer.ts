@@ -5,6 +5,7 @@ import {
 } from "@alchemy/aa-core";
 import { Web3Auth, type Web3AuthOptions } from "@web3auth/modal";
 import { createWalletClient, custom, type Hash } from "viem";
+import { signerTypePrefix } from "../constants.js";
 import type {
   Web3AuthAuthenticationParams,
   Web3AuthUserInfo,
@@ -37,7 +38,7 @@ export class Web3AuthSigner
     this.inner = new Web3Auth(params);
   }
 
-  readonly signerType = "web3auth";
+  readonly signerType = `${signerTypePrefix}web3auth`;
 
   getAddress = async () => {
     if (!this.signer) throw new Error("Not authenticated");
