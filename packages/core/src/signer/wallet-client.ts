@@ -45,8 +45,10 @@ export class WalletClientSigner implements SmartAccountSigner<WalletClient> {
 
   signTypedData: (params: SignTypedDataParams) => Promise<`0x${string}`> =
     async (params) => {
+      const account = this.inner.account ?? (await this.getAddress());
+
       return this.inner.signTypedData({
-        account: await this.getAddress(),
+        account: account,
         ...params,
       });
     };
