@@ -4,14 +4,6 @@ import { custom } from "viem";
 import { TurnkeySigner } from "../signer.js";
 import { TurnkeySubOrganization } from "../types.js";
 
-vi.mock("@turnkey/viem", () => {
-  const createAccount = vi
-    .fn()
-    .mockResolvedValue("0x1234567890123456789012345678901234567890");
-
-  return { createAccount };
-});
-
 describe("Turnkey Signer Tests", () => {
   it("should correctly get address if authenticated", async () => {
     const signer = await givenSigner();
@@ -58,7 +50,9 @@ describe("Turnkey Signer Tests", () => {
     const signer = await givenSigner();
 
     const signMessage = await signer.signMessage("test");
-    expect(signMessage).toMatchInlineSnapshot('"0xtest"');
+    expect(signMessage).toMatchInlineSnapshot(
+      '"0x000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000021b"'
+    );
   });
 
   it("should correctly fail to sign message if unauthenticated", async () => {
@@ -83,7 +77,9 @@ describe("Turnkey Signer Tests", () => {
       },
     };
     const signTypedData = await signer.signTypedData(typedData);
-    expect(signTypedData).toMatchInlineSnapshot('"0xtest"');
+    expect(signTypedData).toMatchInlineSnapshot(
+      '"0x000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000021b"'
+    );
   });
 });
 
@@ -96,6 +92,19 @@ const givenSigner = async (auth = true) => {
       rpId: "your.app.xyz",
     })
   );
+
+  inner.signRawPayload = vi.fn().mockResolvedValue({
+    activity: {
+      status: "ACTIVITY_STATUS_COMPLETED",
+      result: {
+        signRawPayloadResult: {
+          r: "1",
+          s: "2",
+          v: "00",
+        },
+      },
+    },
+  });
 
   inner.getWhoami = vi.fn().mockResolvedValue({
     organizationId: "12345678-1234-1234-1234-1234567890ab",
@@ -111,10 +120,6 @@ const givenSigner = async (auth = true) => {
           return Promise.resolve([
             "0x1234567890123456789012345678901234567890",
           ]);
-        case "personal_sign":
-          return Promise.resolve("0xtest");
-        case "eth_signTypedData_v4":
-          return Promise.resolve("0xtest");
         default:
           return Promise.reject(new Error("Method not found"));
       }
