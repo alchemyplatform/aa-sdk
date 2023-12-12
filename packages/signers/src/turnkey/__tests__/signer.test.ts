@@ -1,8 +1,16 @@
-import { WebauthnStamper } from "@turnkey/webauthn-stamper";
 import { TurnkeyClient } from "@turnkey/http";
-import { TurnkeySigner } from "../signer.js";
+import { WebauthnStamper } from "@turnkey/webauthn-stamper";
 import { custom } from "viem";
+import { TurnkeySigner } from "../signer.js";
 import { TurnkeySubOrganization } from "../types.js";
+
+vi.mock("@turnkey/viem", () => {
+  const createAccount = vi
+    .fn()
+    .mockResolvedValue("0x1234567890123456789012345678901234567890");
+
+  return { createAccount };
+});
 
 describe("Turnkey Signer Tests", () => {
   it("should correctly get address if authenticated", async () => {
