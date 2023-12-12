@@ -46,6 +46,7 @@
     "@particle-network/auth": "^1.2.2",
     "@particle-network/provider": "^1.2.1",
     "@portal-hq/web": "^0.0.8",
+    "@usecapsule/web-sdk": "^0.29.4",
     "@web3auth/base": "^7.1.0",
     "@web3auth/modal": "^7.1.1",
     "jsdom": "^22.1.0",
@@ -78,6 +79,7 @@
     "@particle-network/auth": "^1.2.2",
     "@particle-network/provider": "^1.2.1",
     "@portal-hq/web": "^0.0.8",
+    "@usecapsule/web-sdk": "^0.29.4",
     "@web3auth/base": "^7.1.0",
     "@web3auth/modal": "^7.1.1",
     "magic-sdk": "^21.3.0"

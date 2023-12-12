@@ -731,6 +731,20 @@ export default defineConfig({
                 ],
               },
               {
+                text: "Capsule Signer",
+                collapsed: true,
+                base: "/packages/aa-signers/capsule",
+                items: [
+                  { text: "Introduction", link: "/introduction" },
+                  { text: "constructor", link: "/constructor" },
+                  { text: "authenticate", link: "/authenticate" },
+                  { text: "getAddress", link: "/getAddress" },
+                  { text: "signMessage", link: "/signMessage" },
+                  { text: "signTypedData", link: "/signTypedData" },
+                  { text: "getAuthDetails", link: "/getAuthDetails" },
+                ],
+              },
+              {
                 text: "Particle Signer",
                 collapsed: true,
                 base: "/packages/aa-signers/particle",

@@ -1,4 +1,8 @@
 export {
+  CapsuleSigner,
+  type CapsuleAuthenticationParams,
+} from "./capsule/index.js";
+export {
   FireblocksSigner,
   type FireblocksAuthenticationParams,
 } from "./fireblocks/index.js";
