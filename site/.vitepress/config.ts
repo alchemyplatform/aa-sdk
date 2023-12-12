@@ -731,7 +731,6 @@ export default defineConfig({
                 items: [
                   { text: "Introduction", link: "/introduction" },
                   { text: "constructor", link: "/constructor" },
-                  { text: "getAuthUrl", link: "/getAuthUrl" },
                   { text: "authenticate", link: "/authenticate" },
                   { text: "getAddress", link: "/getAddress" },
                   { text: "signMessage", link: "/signMessage" },

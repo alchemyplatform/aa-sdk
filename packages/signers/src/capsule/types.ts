@@ -48,12 +48,6 @@ export interface CapsuleConfig {
   viemClientOpts?: ViemClientOpts;
 }
 
-export type CapsuleGetAuthUrlParams = CapsuleAuthenticationParams & {
-  verificationCode?: string;
-};
-
-export type CapsuleAuthenticationParams = {
-  email: string;
-};
+export interface CapsuleAuthenticationParams {}
 
 export type CapsuleUserInfo = Record<string, Wallet>;

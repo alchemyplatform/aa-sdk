@@ -102,11 +102,6 @@ const givenSigner = async (auth = true) => {
     },
   });
 
-  inner.checkIfUserExists = vi.fn().mockResolvedValue(true);
-  inner.initiateUserLogin = vi.fn().mockResolvedValue("test");
-  inner.isSessionActive = vi.fn().mockResolvedValue(true);
-  inner.setupAfterLogin = vi.fn().mockResolvedValue({});
-
   const client = createCapsuleViemClient(inner, {
     chain: sepolia,
     transport: http(`${sepolia.rpcUrls.alchemy.http[0]}/test`) as any,
@@ -128,13 +123,7 @@ const givenSigner = async (auth = true) => {
   const signer = new CapsuleSigner({ inner, client });
 
   if (auth) {
-    await signer.getAuthUrl({
-      email: "test@gmail.com",
-      verificationCode: "test",
-    });
-    await signer.authenticate({
-      email: "test@gmail.com",
-    });
+    await signer.authenticate();
   }
 
   return signer;
