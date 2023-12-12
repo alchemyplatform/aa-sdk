@@ -12,35 +12,46 @@ const chain = polygonMumbai;
 
 describe("Light Account Tests", () => {
   const dummyMnemonic =
-    "test test test test test test test test test test test test";
+    "test test test test test test test test test test test junk";
   const owner: SmartAccountSigner =
     LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
 
   it("should correctly sign the message", async () => {
     const provider = givenConnectedProvider({ owner, chain });
-    expect(
-      await provider.signMessage(
-        "0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b"
-      )
-    ).toBe(
-      "0x33b1b0d34ba3252cd8abac8147dc08a6e14a6319462456a34468dd5713e38dda3a43988460011af94b30fa3efefcf9d0da7d7522e06b7bd8bff3b65be4aee5b31c"
+    // @ts-expect-error this is a private method on light account
+    vi.spyOn(provider.account, "getLightAccountVersion").mockReturnValue(
+      // @ts-ignore
+      "v1.1.0"
+    );
+    const signature = await provider.signMessage(
+      "0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b"
+    );
+
+    expect(signature).toMatchInlineSnapshot(
+      '"0x394dcd53572e316d1bf7a5f3be71a4189e1ab1269f57691699f7b18b209e340b63d27ae7b314445fd5a9db5a442278fadd3dc022a9e35a1b5ea20e891c22c8b21c"'
     );
   });
 
   it("should correctly sign typed data", async () => {
     const provider = givenConnectedProvider({ owner, chain });
-    expect(
-      await provider.signTypedData({
-        types: {
-          Request: [{ name: "hello", type: "string" }],
-        },
-        primaryType: "Request",
-        message: {
-          hello: "world",
-        },
-      })
-    ).toBe(
-      "0xda1aeed13916d5723579f26cb9116155945d3581d642c38d8e2bce9fc969014f3eb599fa375df3d6e8181c8f04db64819186ac44cf5fd2bdd90e9f8543c579461b"
+    // @ts-expect-error this is a private method on light account
+    vi.spyOn(provider.account, "getLightAccountVersion").mockReturnValue(
+      // @ts-ignore
+      "v1.1.0"
+    );
+
+    const signature = await provider.signTypedData({
+      types: {
+        Request: [{ name: "hello", type: "string" }],
+      },
+      primaryType: "Request",
+      message: {
+        hello: "world",
+      },
+    });
+
+    expect(signature).toMatchInlineSnapshot(
+      '"0xf1b620ac60e03d01ccc737ad02feffe8631c6f9947083d53ef4f5182eb150d187ec9f7be44bd015ca4e0efb235fdc6f130542ebf31aecb1a736e31ef736a67321b"'
     );
   });
 

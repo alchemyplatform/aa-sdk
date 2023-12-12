@@ -39,18 +39,6 @@ describe("Alchemy Provider Tests", () => {
     `);
   });
 
-  it("should correctly sign the message", async () => {
-    const provider = givenConnectedProvider({ owner, chain });
-    expect(
-      // TODO: expose sign message on the provider too
-      await provider.account.signMessage(
-        "0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b"
-      )
-    ).toBe(
-      "0x33b1b0d34ba3252cd8abac8147dc08a6e14a6319462456a34468dd5713e38dda3a43988460011af94b30fa3efefcf9d0da7d7522e06b7bd8bff3b65be4aee5b31c"
-    );
-  });
-
   it("should correctly encode batch transaction data", async () => {
     const provider = givenConnectedProvider({ owner, chain });
     const account = provider.account;

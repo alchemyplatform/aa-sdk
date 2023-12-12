@@ -25,8 +25,13 @@ export {
   LightAccountProviderConfigSchema,
 } from "./light-account/schema.js";
 export type { LightAccountProviderConfig } from "./light-account/types.js";
-export { getDefaultLightAccountFactoryAddress } from "./light-account/utils.js";
-export { getDefaultMultiOwnerMSCAFactoryAddress } from "./msca/utils.js";
+export {
+  LightAccountUnsupported1271Factories,
+  LightAccountUnsupported1271Impls,
+  LightAccountVersions,
+  getDefaultLightAccountFactoryAddress,
+  type LightAccountVersion,
+} from "./light-account/utils.js";
 
 //nani-account exports
 export { NaniAccount } from "./nani-account/account.js";
@@ -42,6 +47,7 @@ export { getDefaultNaniAccountFactoryAddress } from "./nani-account/utils.js";
 export { accountLoupeDecorators } from "./msca/account-loupe/decorator.js";
 export type * from "./msca/account-loupe/types.js";
 export * from "./msca/account-loupe/utils.js";
+export { getDefaultMultiOwnerMSCAFactoryAddress } from "./msca/utils.js";
 
 export { MSCABuilder } from "./msca/builder/index.js";
 export { StandardExecutor } from "./msca/builder/standard-executor.js";
