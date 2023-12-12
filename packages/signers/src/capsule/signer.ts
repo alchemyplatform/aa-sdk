@@ -8,6 +8,7 @@ import { createWalletClient, custom, type Hash, type WalletClient } from "viem";
 import type {
   CapsuleAuthenticationParams,
   CapsuleConfig,
+  CapsuleGetAuthUrlParams,
   CapsuleUserInfo,
 } from "./types.js";
 
@@ -69,8 +70,42 @@ export class CapsuleSigner
     return this.signer.signTypedData(params);
   };
 
-  authenticate = async () => {
-    if (this.inner == null) throw new Error("No provider found");
+  /**
+   * Returns a Capsule authentication URL for the user to visit.
+   * Must be called before `authenticate`.
+   *
+   * @param params - The authentication parameters: email and optional verification code
+   * @returns {CapsuleUserInfo} - A map of wallet IDs to wallet objects
+   */
+  getAuthUrl = async (params: CapsuleGetAuthUrlParams): Promise<string> => {
+    const { email, verificationCode } = params;
+    const isExistingUser = await this.inner.checkIfUserExists(email);
+
+    if (isExistingUser) {
+      return this.inner.initiateUserLogin(email);
+    } else {
+      this.inner.createUser(email);
+      return this.inner.verifyEmail(verificationCode!);
+    }
+  };
+
+  /**
+   * Authenticates the user, returning a map of wallet IDs to wallet objects.
+   * Must be called after `getAuthUrl`.
+   *
+   * @param params - The authentication parameters: email and optional verification code
+   * @returns {CapsuleUserInfo} - A map of wallet IDs to wallet objects
+   */
+  authenticate = async (
+    params: CapsuleAuthenticationParams
+  ): Promise<CapsuleUserInfo> => {
+    const { email } = params;
+    const isExistingUser = await this.inner.checkIfUserExists(email);
+    await this.inner.isSessionActive();
+
+    isExistingUser
+      ? await this.inner.setupAfterLogin()
+      : await this.inner.createWallet(false, () => {});
 
     this.signer = new WalletClientSigner(
       createWalletClient({

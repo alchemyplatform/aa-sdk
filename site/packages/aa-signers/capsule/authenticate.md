@@ -36,7 +36,7 @@ const capsuleSigner = new CapsuleSigner({
   },
 });
 
-await capsuleSigner.authenticate();
+await capsuleSigner.authenticate({ email: "test@gmail.com" });
 ```
 
 :::
@@ -56,3 +56,9 @@ A Promise containing the `CapsuleUserInfo`, an `Record<string, Wallet>` where Wa
 - `publicKey: string` -- [optional] Public Key of the Capusle Signer.
 
 - `scheme: WalletScheme` -- [optional] either `CGGMP` or `DKLS`.
+
+## Parameters
+
+### `params: CapsuleAuthenticationParams`
+
+- `email: string` -- the email to use for Capsule authentication.
