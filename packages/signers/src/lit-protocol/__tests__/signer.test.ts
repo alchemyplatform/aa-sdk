@@ -1,6 +1,8 @@
+import type { PKPEthersWallet } from "@lit-protocol/pkp-ethers";
 import { LitSigner } from "../signer.js";
 import type { LitAuthMethod } from "../types";
 import { MOCK_SESSION, TEST_CONTEXT, signedData } from "./data.js";
+import type { LitNodeClient } from "@lit-protocol/lit-node-client";
 
 describe("Lit Protocol Signer Tests", () => {
   let signer: LitSigner<LitAuthMethod> | undefined;
@@ -8,26 +10,19 @@ describe("Lit Protocol Signer Tests", () => {
     signer = await setup();
   });
   it("should correctly get address if authenticated", async () => {
-    let sessionSignatures = await signer?.authenticate({
-      context: {
-        authMethodType: 1,
-        accessToken: JSON.stringify(TEST_CONTEXT.CONTROLLER_AUTHSIG),
-      },
-    });
+    let sessionSignatures = await signer?.getAuthDetails();
     expect(sessionSignatures).toBeDefined();
     expect((await signer?.getAddress())?.toLowerCase()).toEqual(
       TEST_CONTEXT.PKP_INFO.ethAddress.toLowerCase()
     );
   });
 
-  it("should sign message if authenticated", async () => {
-    await signer?.authenticate({
-      context: {
-        authMethodType: 1,
-        accessToken: JSON.stringify(TEST_CONTEXT.CONTROLLER_AUTHSIG),
-      },
-    });
+  it("should return auth details if authenticated", async () => {
+    let sessionSignatures = await signer?.getAuthDetails();
+    expect(sessionSignatures).toBeDefined();
+  });
 
+  it("should sign message if authenticated", async () => {
     const typedData = {
       types: {
         Request: [{ name: "hello", type: "string" }],
@@ -38,7 +33,16 @@ describe("Lit Protocol Signer Tests", () => {
       },
     };
     const signTypedData = await signer?.signTypedData(typedData);
-    expect(signTypedData).toEqual(signedData);
+    expect(signTypedData).toMatchInlineSnapshot('"0xtest"');
+  });
+
+  it("should throw expection if not authenticated", async () => {
+    const signer = new LitSigner<LitAuthMethod>({
+      rpcUrl: "foo.bar",
+      pkpPublicKey: "041234534abcd",
+    });
+
+    expect(signer.getAddress()).rejects.toThrowError();
   });
 });
 
@@ -47,13 +51,24 @@ const setup = async () => {
     rpcUrl: "https://endpoints.omniatech.io/v1/matic/mumbai/public",
     pkpPublicKey: TEST_CONTEXT.PKP_INFO.publicKey,
   });
-  signer.getAddress = vi
+  await signer?.authenticate({
+    context: {
+      authMethodType: 1,
+      accessToken: JSON.stringify(TEST_CONTEXT.CONTROLLER_AUTHSIG),
+    },
+  });
+  (signer.signer as PKPEthersWallet).getAddress = vi
     .fn()
     .mockResolvedValue(TEST_CONTEXT.PKP_INFO.ethAddress);
 
-  signer.authenticate = vi.fn().mockResolvedValue(MOCK_SESSION);
+  (signer.inner as LitNodeClient).getSessionSigs = vi
+    .fn()
+    .mockResolvedValue(MOCK_SESSION);
 
-  signer.getAuthDetails = vi.fn().mockResolvedValue(MOCK_SESSION);
-  signer.signTypedData = vi.fn().mockResolvedValue(signedData);
+  (signer.signer as PKPEthersWallet)._signTypedData = vi
+    .fn()
+    .mockResolvedValue("0xtest");
+  return signer;
+
   return signer;
 };

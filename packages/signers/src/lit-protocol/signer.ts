@@ -24,17 +24,17 @@ const SIGNER_TYPE: string = "lit";
 /**
  * Implementation of `SmartAccountAuthenticator` for lit protocol
  * This class requies:
- * `@lit-protocol/lit-node-client`
- * `@lit-protocol/pkp-ethers`
- * `@lit-protocol/crypto`
- * `@lit-protocol/auth-helpers`
- * `@lit-protocol/types`
+ * `@lit-protocol/lit-node-client@cayenne`
+ * `@lit-protocol/pkp-ethers@cayenne`
+ * `@lit-protocol/crypto@cayenne`
+ * `@lit-protocol/auth-helpers@cayenne`
+ * `@lit-protocol/types@cayenne`
  */
 export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
   implements LitSmartAccountAuthenticator<C>
 {
   inner: LitNodeClient;
-  private _signer: PKPEthersWallet | undefined;
+  public signer: PKPEthersWallet | undefined;
   private _pkpPublicKey: string;
   private _rpcUrl: string;
   private _authContext: C | undefined;
@@ -131,26 +131,26 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
       this._authContext = props.context;
       this._session = sessionSigs;
 
-      this._signer = new PKPEthersWallet({
+      this.signer = new PKPEthersWallet({
         pkpPubKey: this._pkpPublicKey,
         rpc: this._rpcUrl,
         controllerSessionSigs: sessionSigs as LitSessionSigsMap,
       });
 
-      await this._signer.init();
+      await this.signer.init();
 
       this._authContext = sessionSigs as C;
     } else {
       this._authContext = props.context;
       this._session = props.context as SessionSigsMap;
 
-      this._signer = new PKPEthersWallet({
+      this.signer = new PKPEthersWallet({
         pkpPubKey: this._pkpPublicKey,
         rpc: this._rpcUrl,
         controllerSessionSigs: this._authContext as LitSessionSigsMap,
       });
 
-      await this._signer.init();
+      await this.signer.init();
     }
 
     return this._session;
@@ -163,7 +163,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
 
   getAddress = async () => {
     this._checkInternals();
-    const address = await this._signer?.getAddress();
+    const address = await this.signer?.getAddress();
 
     return address as `0x${string}`;
   };
@@ -171,13 +171,13 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
   signMessage = async (msg: Uint8Array | string) => {
     this._checkInternals();
 
-    return this._signer?.signMessage(msg) as Promise<Address>;
+    return this.signer?.signMessage(msg) as Promise<Address>;
   };
 
   signTypedData = (params: SignTypedDataParams) => {
     this._checkInternals();
 
-    return this._signer?._signTypedData(
+    return this.signer?._signTypedData(
       params.domain as TypedDataDomain,
       params.types as any,
       params.message
@@ -186,10 +186,10 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
 
   private _checkInternals() {
     if (!this._authContext) {
-      throw new Error("Session not created, did you call authenticate?");
+      throw new Error("Not Authenticated");
     }
 
-    if (!this._signer) {
+    if (!this.signer) {
       throw new Error("Signer is not initalized, did you call authenticate?");
     }
   }
