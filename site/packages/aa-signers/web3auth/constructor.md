@@ -21,7 +21,7 @@ To initialize a `Web3AuthSigner`, you must provide a set of parameters detailed 
 ::: code-group
 
 ```ts [example.ts]
-import { Web3AuthSigner } from "@alchemy/aa-signers";
+import { Web3AuthSigner } from "@alchemy/aa-signers/web3auth";
 
 // instantiates using every possible parameter, as a reference
 const web3AuthSigner = new Web3AuthSigner({

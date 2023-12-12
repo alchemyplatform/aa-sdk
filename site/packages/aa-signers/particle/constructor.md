@@ -21,7 +21,7 @@ To initialize a `ParticleSigner`, you must provide a set of parameters detailed 
 ::: code-group
 
 ```ts [example.ts]
-import { ParticleSigner } from "@alchemy/aa-signers";
+import { ParticleSigner } from "@alchemy/aa-signers/particle";
 
 // instantiates using every possible parameter, as a reference
 const particle = new ParticleNetwork({

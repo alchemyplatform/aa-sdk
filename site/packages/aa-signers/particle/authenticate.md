@@ -24,7 +24,7 @@ You must call this method before accessing the other methods available on the `P
 
 ```ts [example.ts]
 // [!code focus:99]
-import { ParticleSigner } from "@alchemy/aa-signers";
+import { ParticleSigner } from "@alchemy/aa-signers/particle";
 
 const particleSigner = new ParticleSigner({
   projectId: process.env.REACT_APP_PROJECT_ID as string,

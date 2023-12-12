@@ -1,4 +1,4 @@
-import { MagicSigner } from "@alchemy/aa-signers";
+import { MagicSigner } from "@alchemy/aa-signers/magic";
 
 // this is generated from the [Magic Dashboard](https://dashboard.magic.link/)
 const MAGIC_API_KEY = "pk_test_...";

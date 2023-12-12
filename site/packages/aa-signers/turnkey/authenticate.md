@@ -24,7 +24,7 @@ This method must be called before accessing the other methods available on the `
 
 ```ts [example.ts]
 // [!code focus:99]
-import { TurnkeySigner, TurnkeySubOrganization } from "@alchemy/aa-signers";
+import { TurnkeySigner, TurnkeySubOrganization } from "@alchemy/aa-signers/turnkey";
 import { TurnkeyClient, createActivityPoller } from "@turnkey/http";
 import { WebauthnStamper } from "@turnkey/webauthn-stamper";
 import { http } from "viem";
