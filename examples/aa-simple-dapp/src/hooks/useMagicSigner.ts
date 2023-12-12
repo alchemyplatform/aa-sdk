@@ -1,23 +1,12 @@
 import { magicApiKey } from "@/config/client";
-import { WalletClientSigner, type SmartAccountSigner } from "@alchemy/aa-core";
-import { Magic } from "magic-sdk";
-import { WalletClient, createWalletClient, custom } from "viem";
+import { MagicSigner } from "@alchemy/aa-signers";
 
 export const useMagicSigner = () => {
   if (typeof window === "undefined") {
-    return { magic: null, signer: null };
+    return { signer: null };
   }
 
-  const magic = new Magic(magicApiKey);
+  const magicSigner = new MagicSigner({ apiKey: magicApiKey });
 
-  const magicClient: WalletClient = createWalletClient({
-    transport: custom(magic.rpcProvider),
-  });
-
-  const magicSigner: SmartAccountSigner = new WalletClientSigner(
-    magicClient as any,
-    "magic"
-  );
-
-  return { magic, signer: magicSigner };
+  return { signer: magicSigner };
 };
