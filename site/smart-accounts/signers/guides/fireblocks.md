@@ -42,6 +42,8 @@ npm i -s @fireblocks/fireblocks-web3-provider
 yarn add @fireblocks/fireblocks-web3-provider
 ```
 
+::: warning Note
+Due to how Fireblocks parses a private key [in their SDK](https://github.com/fireblocks/fireblocks-web3-provider/blob/main/src/provider.ts#L106-L116), you must specific the private key in [PEM Format](https://docs.progress.com/bundle/datadirect-hybrid-data-pipeline-installation-46/page/PEM-file-format.html#:~:text=A%20PEM%20encoded%20file%20includes,%2D%2D%2D%2D%2D%22.) if you chose to use `FireblocksSigner` in your app's client. Otherwise, if you choose `FireblocksSigner` in your app's server, you can also specify a path to a file containing your private key.
 :::
 
 ### Create a SmartAccountSigner

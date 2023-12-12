@@ -1,4 +1,4 @@
-import { FireblocksSigner } from "@alchemy/aa-signers";
+import { FireblocksSigner } from "@alchemy/aa-signers/fireblocks";
 import { ChainId } from "@fireblocks/fireblocks-web3-provider";
 
 export const createFireblocksSigner = async () => {

@@ -1,4 +1,4 @@
-import { PortalSigner } from "@alchemy/aa-signers";
+import { PortalSigner } from "@alchemy/aa-signers/portal";
 import { sepolia } from "viem/chains";
 
 export const createPortalSigner = async () => {

@@ -1,4 +1,4 @@
-import { CapsuleSigner } from "@alchemy/aa-signers";
+import { CapsuleSigner } from "@alchemy/aa-signers/capsule";
 import { Environment } from "@usecapsule/web-sdk";
 import { http } from "viem";
 import { sepolia } from "viem/chains";

@@ -1,4 +1,4 @@
-import { Web3AuthSigner } from "@alchemy/aa-signers";
+import { Web3AuthSigner } from "@alchemy/aa-signers/web3auth";
 
 export const createWeb3AuthSigner = async () => {
   const web3AuthSigner = new Web3AuthSigner({

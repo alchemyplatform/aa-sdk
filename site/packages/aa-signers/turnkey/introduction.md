@@ -49,7 +49,7 @@ yarn add @turnkey/webauthn-stamper
 ::: code-group
 
 ```ts [example.ts]
-import { TurnkeySigner, TurnkeySubOrganization } from "@alchemy/aa-signers";
+import { TurnkeySigner, TurnkeySubOrganization } from "@alchemy/aa-signers/turnkey";
 import { WebauthnStamper } from "@turnkey/webauthn-stamper";
 import { http } from "viem";
 

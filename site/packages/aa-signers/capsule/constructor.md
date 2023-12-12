@@ -21,7 +21,7 @@ To initialize a `CapsuleSigner`, you must provide a set of parameters detailed b
 ::: code-group
 
 ```ts [example.ts]
-import { CapsuleSigner } from "@alchemy/aa-signers";
+import { CapsuleSigner } from "@alchemy/aa-signers/capsule";
 import { ChainId } from "@capsule/capsule-web3-provider";
 
 // instantiates using every possible parameter, as a reference

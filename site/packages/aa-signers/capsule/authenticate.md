@@ -24,7 +24,7 @@ You must call this method before accessing the other methods available on the `C
 
 ```ts [example.ts]
 // [!code focus:99]
-import { CapsuleSigner } from "@alchemy/aa-signers";
+import { CapsuleSigner } from "@alchemy/aa-signers/capsule";
 
 const capsuleSigner = new CapsuleSigner({
   env: Environment.DEVELOPMENT,

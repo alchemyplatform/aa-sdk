@@ -24,7 +24,7 @@ You must call this method before accessing the other methods available on the `F
 
 ```ts [example.ts]
 // [!code focus:99]
-import { FireblocksSigner } from "@alchemy/aa-signers";
+import { FireblocksSigner } from "@alchemy/aa-signers/fireblocks";
 import { ChainId } from "@fireblocks/fireblocks-web3-provider";
 
 const fireblocksSigner = new FireblocksSigner({

@@ -61,6 +61,10 @@ yarn add @usecapsule/react-native-sdk
 
 :::
 
+::: warning Note
+To use `CapsuleSigner` in your app's client, you must ensure the `window` object is defined.
+:::
+
 ### Create a SmartAccountSigner
 
 Next, setup the Capsule SDK and create an authenticated `CapsuleSigner` using the `aa-signers` package:

@@ -21,7 +21,7 @@ To initialize a `PortalSigner`, you must provide a set of parameters detailed be
 ::: code-group
 
 ```ts [example.ts]
-import { PortalSigner } from "@alchemy/aa-signers";
+import { PortalSigner } from "@alchemy/aa-signers/portal";
 import { ChainId } from "@portal/portal-web3-provider";
 
 // instantiates using every possible parameter, as a reference
