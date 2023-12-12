@@ -11,7 +11,6 @@ import {
   hashTypedData,
   hexToBytes,
   isBytes,
-  toBytes,
   type FallbackTransport,
   type Hash,
   type Transport,
@@ -75,9 +74,7 @@ export const createMultiOwnerMSCABuilder = <
             ERC6900Message: [{ name: "message", type: "bytes" }],
           },
           message: {
-            ERC6900Message: {
-              message: toBytes(msg),
-            },
+            message: msg,
           },
           primaryType: "ERC6900Message",
         });

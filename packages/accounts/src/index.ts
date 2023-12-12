@@ -38,8 +38,6 @@ export type { NaniAccountProviderConfig } from "./nani-account/types.js";
 export { getDefaultNaniAccountFactoryAddress } from "./nani-account/utils.js";
 
 // msca exports
-export { BaseModularSmartContractAccount } from "./msca/base.js";
-export type { ModularSmartContractAccountParams } from "./msca/base.js";
 export {
   MSCABuilder,
   StandardExecutor,
