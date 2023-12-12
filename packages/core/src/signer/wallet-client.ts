@@ -28,14 +28,16 @@ export class WalletClientSigner implements SmartAccountSigner<WalletClient> {
   readonly signMessage: (
     message: string | Hex | ByteArray
   ) => Promise<`0x${string}`> = async (message) => {
+    const account = this.inner.account ?? (await this.getAddress());
+    console.log(account)
     if (typeof message === "string" && !isHex(message)) {
       return this.inner.signMessage({
-        account: await this.getAddress(),
+        account: account,
         message,
       });
     } else {
       return this.inner.signMessage({
-        account: await this.getAddress(),
+        account: account,
         message: { raw: message },
       });
     }
