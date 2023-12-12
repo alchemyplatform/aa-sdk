@@ -29,15 +29,15 @@ For more information on Lit's supported authentication, see: [here](https://deve
 ::: code-group
 
 ```bash [npm]
-npm i -s @lit-protocol/lit-node-client
-npm i -s @lit-protocol/pkp-ethers
-npm i -s @lit-protocol/crypto
-npm i -s @lit-protocol/auth-helpers
+npm i -s @lit-protocol/lit-node-client@cayenne
+npm i -s @lit-protocol/pkp-ethers@cayenne
+npm i -s @lit-protocol/crypto@cayenne
+npm i -s @lit-protocol/auth-helpers@cayenne
 ```
 
 ```bash [yarn]
-yarn add @lit-protocol/lit-node-client
-yarn add @lit-protocol/pkp-ethers
-yarn add @lit-protocol/crypto
-yarn add @lit-protocol/auth-helpers
+yarn add @lit-protocol/lit-node-client@cayenne
+yarn add @lit-protocol/pkp-ethers@cayenne
+yarn add @lit-protocol/crypto@cayenne
+yarn add @lit-protocol/auth-helpers@cayenne
 ```
