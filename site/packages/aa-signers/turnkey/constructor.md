@@ -21,7 +21,7 @@ To initialize a `TurnkeySigner`, you must provide a set of parameters detailed b
 ::: code-group
 
 ```ts [example.ts]
-import { TurnkeySigner } from "@alchemy/aa-signers";
+import { TurnkeySigner } from "@alchemy/aa-signers/turnkey";
 import { WebauthnStamper } from "@turnkey/webauthn-stamper";
 
 // instantiates using the API Key stamper

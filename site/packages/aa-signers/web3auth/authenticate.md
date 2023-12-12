@@ -24,7 +24,7 @@ You must call this method before accessing the other methods available on the `W
 
 ```ts [example.ts]
 // [!code focus:99]
-import { Web3AuthSigner } from "@alchemy/aa-signers";
+import { Web3AuthSigner } from "@alchemy/aa-signers/web3auth";
 
 const web3AuthSigner = new Web3AuthSigner({
   clientId: "test",

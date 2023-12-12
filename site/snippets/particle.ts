@@ -1,4 +1,4 @@
-import { ParticleSigner } from "@alchemy/aa-signers";
+import { ParticleSigner } from "@alchemy/aa-signers/particle";
 import { ParticleNetwork } from "@particle-network/auth";
 import { ParticleProvider } from "@particle-network/provider";
 

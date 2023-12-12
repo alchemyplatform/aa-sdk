@@ -55,6 +55,10 @@ export default defineConfig({
             text: "Demos",
             link: "/demos",
           },
+          {
+            text: "Contact Us",
+            link: "/contact-us",
+          },
         ],
       },
       {
@@ -101,6 +105,8 @@ export default defineConfig({
                   { text: "Capsule", link: "/capsule" },
                   { text: "Lit Protocol", link: "/lit" },
                   { text: "Particle Network", link: "/particle-network" },
+                  { text: "Arcana Auth", link: "/arcana-auth" },
+                  { text: "Dfns", link: "/dfns" },
                   { text: "Externally Owned Account (EOA)", link: "/eoa" },
                   { text: "Using Your Own", link: "/custom-signer" },
                 ],
@@ -725,9 +731,37 @@ export default defineConfig({
                 ],
               },
               {
+                text: "Capsule Signer",
+                collapsed: true,
+                base: "/packages/aa-signers/capsule",
+                items: [
+                  { text: "Introduction", link: "/introduction" },
+                  { text: "constructor", link: "/constructor" },
+                  { text: "authenticate", link: "/authenticate" },
+                  { text: "getAddress", link: "/getAddress" },
+                  { text: "signMessage", link: "/signMessage" },
+                  { text: "signTypedData", link: "/signTypedData" },
+                  { text: "getAuthDetails", link: "/getAuthDetails" },
+                ],
+              },
+              {
                 text: "Particle Signer",
                 collapsed: true,
                 base: "/packages/aa-signers/particle",
+                items: [
+                  { text: "Introduction", link: "/introduction" },
+                  { text: "constructor", link: "/constructor" },
+                  { text: "authenticate", link: "/authenticate" },
+                  { text: "getAddress", link: "/getAddress" },
+                  { text: "signMessage", link: "/signMessage" },
+                  { text: "signTypedData", link: "/signTypedData" },
+                  { text: "getAuthDetails", link: "/getAuthDetails" },
+                ],
+              },
+              {
+                text: "Portal Signer",
+                collapsed: true,
+                base: "/packages/aa-signers/portal",
                 items: [
                   { text: "Introduction", link: "/introduction" },
                   { text: "constructor", link: "/constructor" },

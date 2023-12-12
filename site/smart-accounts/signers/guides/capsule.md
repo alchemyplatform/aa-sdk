@@ -33,6 +33,8 @@ Follow these steps to begin integrating Capsule:
 
 ### Install the SDK
 
+Using `CapsuleSigner` in the `aa-signers` package requires installation of the [`@usecapsule/web-sdk`](https://capsule-org.github.io/web-sdk/) SDK. `aa-signers` lists it as optional dependency.
+
 Web
 ::: code-group
 
@@ -59,9 +61,13 @@ yarn add @usecapsule/react-native-sdk
 
 :::
 
+::: warning Note
+To use `CapsuleSigner` in your app's client, you must ensure the `window` object is defined.
+:::
+
 ### Create a SmartAccountSigner
 
-Next, setup the Capsule SDK and create a `SmartAccountSigner`
+Next, setup the Capsule SDK and create an authenticated `CapsuleSigner` using the `aa-signers` package:
 
 <<< @/snippets/capsule.ts
 
@@ -77,7 +83,7 @@ import {
   getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
 import { sepolia } from "viem/chains";
-import { capsuleSigner } from "./capsule";
+import { createCapsuleSigner } from "./capsule";
 
 const chain = sepolia;
 
@@ -88,7 +94,7 @@ const provider = new AlchemyProvider({
   (rpcClient) =>
     new LightSmartContractAccount({
       chain,
-      owner: capsuleSigner,
+      owner: await createCapsuleSigner(),
       factoryAddress: getDefaultLightAccountFactoryAddress(chain),
       rpcClient,
     })

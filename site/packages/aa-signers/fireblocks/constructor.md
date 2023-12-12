@@ -21,7 +21,7 @@ To initialize a `FireblocksSigner`, you must provide a set of parameters detaile
 ::: code-group
 
 ```ts [example.ts]
-import { FireblocksSigner } from "@alchemy/aa-signers";
+import { FireblocksSigner } from "@alchemy/aa-signers/fireblocks";
 import { ChainId } from "@fireblocks/fireblocks-web3-provider";
 
 // instantiates using every possible parameter, as a reference
