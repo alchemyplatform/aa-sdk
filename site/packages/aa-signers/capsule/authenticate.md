@@ -36,6 +36,10 @@ const capsuleSigner = new CapsuleSigner({
   },
 });
 
+await capsuleSigner.getAuthUrl({
+  email: "test@gmail.com",
+  verificationCode: "test",
+});
 await capsuleSigner.authenticate({ email: "test@gmail.com" });
 ```
 
