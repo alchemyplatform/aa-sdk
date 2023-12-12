@@ -32,12 +32,12 @@ export class WalletClientSigner implements SmartAccountSigner<WalletClient> {
 
     if (typeof message === "string" && !isHex(message)) {
       return this.inner.signMessage({
-        account: account,
+        account,
         message,
       });
     } else {
       return this.inner.signMessage({
-        account: account,
+        account,
         message: { raw: message },
       });
     }
@@ -48,7 +48,7 @@ export class WalletClientSigner implements SmartAccountSigner<WalletClient> {
       const account = this.inner.account ?? (await this.getAddress());
 
       return this.inner.signTypedData({
-        account: account,
+        account,
         ...params,
       });
     };
