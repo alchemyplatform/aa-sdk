@@ -1,21 +1,14 @@
-import { WalletClientSigner, type SmartAccountSigner } from "@alchemy/aa-core";
-import Portal, { PortalOptions } from "@portal-hq/web";
-import { createWalletClient, custom } from "viem";
-import { polygonMumbai } from "viem/chains";
+import { PortalSigner } from "@alchemy/aa-signers";
+import { sepolia } from "viem/chains";
 
-const portalOptions = {
-  autoApprove: true,
-  gatewayConfig: `${polygonMumbai.rpcUrls.alchemy.http}/${process.env.ALCHEMY_API_KEY}`,
-  chainId: 80001,
-  host: process.env.PORTAL_WEB_HOST,
-} as PortalOptions;
+export const createPortalSigner = async () => {
+  const portalSigner = new PortalSigner({
+    autoApprove: true,
+    gatewayConfig: `${sepolia.rpcUrls.alchemy.http}/${process.env.ALCHEMY_API_KEY}`,
+    chainId: sepolia.id,
+  });
 
-const portal = new Portal(portalOptions);
+  await portalSigner.authenticate();
 
-const portalWalletClient = createWalletClient({
-  transport: custom(portal.provider),
-});
-export const portalSigner: SmartAccountSigner = new WalletClientSigner(
-  portalWalletClient,
-  "portal" // signerType
-);
+  return portalSigner;
+};

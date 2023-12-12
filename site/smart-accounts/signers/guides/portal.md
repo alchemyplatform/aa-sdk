@@ -30,6 +30,8 @@ Check out Portal's developer [docs](https://docs.portalhq.io/) to learn more abo
 
 ### Install the Portal SDK
 
+Using `PortalSigner` in the `aa-signers` package requires installation of the [`@portal-hq/web`](https://docs.portalhq.io/sdk/web-beta) SDK. `aa-signers` lists it as optional dependency.
+
 ::: code-group
 
 ```bash [npm]
@@ -44,7 +46,7 @@ yarn add @portal-hq/web
 
 ### Create a SmartAccountSigner
 
-Next, setup the Portal SDK and create a `SmartAccountSigner`:
+Next, setup the Portal SDK and create an authenticated `PortalSigner` using the `aa-signers` package:
 
 <<< @/snippets/portal.ts
 
@@ -60,7 +62,7 @@ import {
   getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
 import { polygonMumbai } from "viem/chains";
-import { portalSigner } from "./portalSigner";
+import { createPortalSigner } from "./portal";
 
 const chain = polygonMumbai;
 const provider = new AlchemyProvider({
@@ -70,7 +72,7 @@ const provider = new AlchemyProvider({
   (rpcClient) =>
     new LightSmartContractAccount({
       chain,
-      owner: portalSigner,
+      owner: await createPortalSigner(),
       factoryAddress: getDefaultLightAccountFactoryAddress(chain),
       rpcClient,
     })
