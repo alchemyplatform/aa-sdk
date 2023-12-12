@@ -1,6 +1,7 @@
 import type { Address } from "abitype";
 import {
   getContract,
+  trim,
   type Chain,
   type GetContractReturnType,
   type Hash,
@@ -257,6 +258,11 @@ export abstract class BaseSmartContractAccount<
       try {
         await this.entryPoint.simulate.getSenderAddress([initCode]);
       } catch (err: any) {
+        Logger.verbose(
+          "[BaseSmartContractAccount](getAddress) getSenderAddress err: ",
+          err
+        );
+
         if (err.cause?.data?.errorName === "SenderAddressResult") {
           this.accountAddress = err.cause.data.args[0] as Address;
           Logger.verbose(
@@ -326,6 +332,22 @@ export abstract class BaseSmartContractAccount<
     const factoryAddress = `0x${initCode.substring(2, 42)}` as Address;
     const factoryCalldata = `0x${initCode.substring(42)}` as Hex;
     return [factoryAddress, factoryCalldata];
+  }
+
+  protected async getImplementationAddress(): Promise<"0x0" | Address> {
+    const accountAddress = await this.getAddress();
+
+    const storage = await this.rpcProvider.getStorageAt({
+      address: accountAddress,
+      // This is the default slot for the implementation address for Proxies
+      slot: "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
+    });
+
+    if (storage == null) {
+      throw new Error("could not get storage");
+    }
+
+    return trim(storage);
   }
 
   private async _getAccountInitCode(): Promise<Hash> {

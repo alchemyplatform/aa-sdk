@@ -10,6 +10,19 @@ export const LightAccountAbi = [
     stateMutability: "nonpayable",
     type: "constructor",
   },
+  { inputs: [], name: "ArrayLengthMismatch", type: "error" },
+  { inputs: [], name: "InvalidInitialization", type: "error" },
+  {
+    inputs: [{ internalType: "address", name: "owner", type: "address" }],
+    name: "InvalidOwner",
+    type: "error",
+  },
+  {
+    inputs: [{ internalType: "address", name: "caller", type: "address" }],
+    name: "NotAuthorized",
+    type: "error",
+  },
+  { inputs: [], name: "NotInitializing", type: "error" },
   {
     anonymous: false,
     inputs: [
@@ -47,9 +60,9 @@ export const LightAccountAbi = [
     inputs: [
       {
         indexed: false,
-        internalType: "uint8",
+        internalType: "uint64",
         name: "version",
-        type: "uint8",
+        type: "uint64",
       },
     ],
     name: "Initialized",
@@ -115,34 +128,32 @@ export const LightAccountAbi = [
   },
   {
     inputs: [],
+    name: "domainSeparator",
+    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "bytes", name: "message", type: "bytes" }],
+    name: "encodeMessageData",
+    outputs: [{ internalType: "bytes", name: "", type: "bytes" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "entryPoint",
     outputs: [
-      {
-        internalType: "contract IEntryPoint",
-        name: "",
-        type: "address",
-      },
+      { internalType: "contract IEntryPoint", name: "", type: "address" },
     ],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [
-      {
-        internalType: "address",
-        name: "dest",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "value",
-        type: "uint256",
-      },
-      {
-        internalType: "bytes",
-        name: "func",
-        type: "bytes",
-      },
+      { internalType: "address", name: "dest", type: "address" },
+      { internalType: "uint256", name: "value", type: "uint256" },
+      { internalType: "bytes", name: "func", type: "bytes" },
     ],
     name: "execute",
     outputs: [],
@@ -151,16 +162,8 @@ export const LightAccountAbi = [
   },
   {
     inputs: [
-      {
-        internalType: "address[]",
-        name: "dest",
-        type: "address[]",
-      },
-      {
-        internalType: "bytes[]",
-        name: "func",
-        type: "bytes[]",
-      },
+      { internalType: "address[]", name: "dest", type: "address[]" },
+      { internalType: "bytes[]", name: "func", type: "bytes[]" },
     ],
     name: "executeBatch",
     outputs: [],
@@ -169,21 +172,9 @@ export const LightAccountAbi = [
   },
   {
     inputs: [
-      {
-        internalType: "address[]",
-        name: "dest",
-        type: "address[]",
-      },
-      {
-        internalType: "uint256[]",
-        name: "value",
-        type: "uint256[]",
-      },
-      {
-        internalType: "bytes[]",
-        name: "func",
-        type: "bytes[]",
-      },
+      { internalType: "address[]", name: "dest", type: "address[]" },
+      { internalType: "uint256[]", name: "value", type: "uint256[]" },
+      { internalType: "bytes[]", name: "func", type: "bytes[]" },
     ],
     name: "executeBatch",
     outputs: [],
@@ -193,37 +184,26 @@ export const LightAccountAbi = [
   {
     inputs: [],
     name: "getDeposit",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "bytes", name: "message", type: "bytes" }],
+    name: "getMessageHash",
+    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [],
     name: "getNonce",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "anOwner",
-        type: "address",
-      },
-    ],
+    inputs: [{ internalType: "address", name: "anOwner", type: "address" }],
     name: "initialize",
     outputs: [],
     stateMutability: "nonpayable",
@@ -231,217 +211,81 @@ export const LightAccountAbi = [
   },
   {
     inputs: [
-      {
-        internalType: "bytes32",
-        name: "digest",
-        type: "bytes32",
-      },
-      {
-        internalType: "bytes",
-        name: "signature",
-        type: "bytes",
-      },
+      { internalType: "bytes32", name: "digest", type: "bytes32" },
+      { internalType: "bytes", name: "signature", type: "bytes" },
     ],
     name: "isValidSignature",
-    outputs: [
-      {
-        internalType: "bytes4",
-        name: "",
-        type: "bytes4",
-      },
-    ],
+    outputs: [{ internalType: "bytes4", name: "", type: "bytes4" }],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-      {
-        internalType: "uint256[]",
-        name: "",
-        type: "uint256[]",
-      },
-      {
-        internalType: "uint256[]",
-        name: "",
-        type: "uint256[]",
-      },
-      {
-        internalType: "bytes",
-        name: "",
-        type: "bytes",
-      },
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "uint256[]", name: "", type: "uint256[]" },
+      { internalType: "uint256[]", name: "", type: "uint256[]" },
+      { internalType: "bytes", name: "", type: "bytes" },
     ],
     name: "onERC1155BatchReceived",
-    outputs: [
-      {
-        internalType: "bytes4",
-        name: "",
-        type: "bytes4",
-      },
-    ],
+    outputs: [{ internalType: "bytes4", name: "", type: "bytes4" }],
     stateMutability: "pure",
     type: "function",
   },
   {
     inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-      {
-        internalType: "bytes",
-        name: "",
-        type: "bytes",
-      },
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "uint256", name: "", type: "uint256" },
+      { internalType: "uint256", name: "", type: "uint256" },
+      { internalType: "bytes", name: "", type: "bytes" },
     ],
     name: "onERC1155Received",
-    outputs: [
-      {
-        internalType: "bytes4",
-        name: "",
-        type: "bytes4",
-      },
-    ],
+    outputs: [{ internalType: "bytes4", name: "", type: "bytes4" }],
     stateMutability: "pure",
     type: "function",
   },
   {
     inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-      {
-        internalType: "bytes",
-        name: "",
-        type: "bytes",
-      },
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "uint256", name: "", type: "uint256" },
+      { internalType: "bytes", name: "", type: "bytes" },
     ],
     name: "onERC721Received",
-    outputs: [
-      {
-        internalType: "bytes4",
-        name: "",
-        type: "bytes4",
-      },
-    ],
+    outputs: [{ internalType: "bytes4", name: "", type: "bytes4" }],
     stateMutability: "pure",
     type: "function",
   },
   {
     inputs: [],
     name: "owner",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
+    outputs: [{ internalType: "address", name: "", type: "address" }],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [],
     name: "proxiableUUID",
-    outputs: [
-      {
-        internalType: "bytes32",
-        name: "",
-        type: "bytes32",
-      },
-    ],
+    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
     stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "bytes4",
-        name: "interfaceId",
-        type: "bytes4",
-      },
-    ],
+    inputs: [{ internalType: "bytes4", name: "interfaceId", type: "bytes4" }],
     name: "supportsInterface",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-      {
-        internalType: "bytes",
-        name: "",
-        type: "bytes",
-      },
-      {
-        internalType: "bytes",
-        name: "",
-        type: "bytes",
-      },
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "uint256", name: "", type: "uint256" },
+      { internalType: "bytes", name: "", type: "bytes" },
+      { internalType: "bytes", name: "", type: "bytes" },
     ],
     name: "tokensReceived",
     outputs: [],
@@ -449,13 +293,7 @@ export const LightAccountAbi = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "newOwner",
-        type: "address",
-      },
-    ],
+    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
     name: "transferOwnership",
     outputs: [],
     stateMutability: "nonpayable",
@@ -463,11 +301,7 @@ export const LightAccountAbi = [
   },
   {
     inputs: [
-      {
-        internalType: "address",
-        name: "newImplementation",
-        type: "address",
-      },
+      { internalType: "address", name: "newImplementation", type: "address" },
     ],
     name: "upgradeTo",
     outputs: [],
@@ -476,16 +310,8 @@ export const LightAccountAbi = [
   },
   {
     inputs: [
-      {
-        internalType: "address",
-        name: "newImplementation",
-        type: "address",
-      },
-      {
-        internalType: "bytes",
-        name: "data",
-        type: "bytes",
-      },
+      { internalType: "address", name: "newImplementation", type: "address" },
+      { internalType: "bytes", name: "data", type: "bytes" },
     ],
     name: "upgradeToAndCall",
     outputs: [],
@@ -496,31 +322,11 @@ export const LightAccountAbi = [
     inputs: [
       {
         components: [
-          {
-            internalType: "address",
-            name: "sender",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "nonce",
-            type: "uint256",
-          },
-          {
-            internalType: "bytes",
-            name: "initCode",
-            type: "bytes",
-          },
-          {
-            internalType: "bytes",
-            name: "callData",
-            type: "bytes",
-          },
-          {
-            internalType: "uint256",
-            name: "callGasLimit",
-            type: "uint256",
-          },
+          { internalType: "address", name: "sender", type: "address" },
+          { internalType: "uint256", name: "nonce", type: "uint256" },
+          { internalType: "bytes", name: "initCode", type: "bytes" },
+          { internalType: "bytes", name: "callData", type: "bytes" },
+          { internalType: "uint256", name: "callGasLimit", type: "uint256" },
           {
             internalType: "uint256",
             name: "verificationGasLimit",
@@ -531,49 +337,25 @@ export const LightAccountAbi = [
             name: "preVerificationGas",
             type: "uint256",
           },
-          {
-            internalType: "uint256",
-            name: "maxFeePerGas",
-            type: "uint256",
-          },
+          { internalType: "uint256", name: "maxFeePerGas", type: "uint256" },
           {
             internalType: "uint256",
             name: "maxPriorityFeePerGas",
             type: "uint256",
           },
-          {
-            internalType: "bytes",
-            name: "paymasterAndData",
-            type: "bytes",
-          },
-          {
-            internalType: "bytes",
-            name: "signature",
-            type: "bytes",
-          },
+          { internalType: "bytes", name: "paymasterAndData", type: "bytes" },
+          { internalType: "bytes", name: "signature", type: "bytes" },
         ],
         internalType: "struct UserOperation",
         name: "userOp",
         type: "tuple",
       },
-      {
-        internalType: "bytes32",
-        name: "userOpHash",
-        type: "bytes32",
-      },
-      {
-        internalType: "uint256",
-        name: "missingAccountFunds",
-        type: "uint256",
-      },
+      { internalType: "bytes32", name: "userOpHash", type: "bytes32" },
+      { internalType: "uint256", name: "missingAccountFunds", type: "uint256" },
     ],
     name: "validateUserOp",
     outputs: [
-      {
-        internalType: "uint256",
-        name: "validationData",
-        type: "uint256",
-      },
+      { internalType: "uint256", name: "validationData", type: "uint256" },
     ],
     stateMutability: "nonpayable",
     type: "function",
@@ -585,19 +367,12 @@ export const LightAccountAbi = [
         name: "withdrawAddress",
         type: "address",
       },
-      {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
+      { internalType: "uint256", name: "amount", type: "uint256" },
     ],
     name: "withdrawDepositTo",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
-  {
-    stateMutability: "payable",
-    type: "receive",
-  },
+  { stateMutability: "payable", type: "receive" },
 ] as const;
