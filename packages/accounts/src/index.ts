@@ -26,3 +26,13 @@ export {
 } from "./light-account/schema.js";
 export type { LightAccountProviderConfig } from "./light-account/types.js";
 export { getDefaultLightAccountFactoryAddress } from "./light-account/utils.js";
+
+//nani-account exports
+export { NaniAccount } from "./nani-account/account.js";
+export { createNaniAccountProvider } from "./nani-account/provider.js";
+export {
+  NaniAccountFactoryConfigSchema,
+  NaniAccountProviderConfigSchema,
+} from "./nani-account/schema.js";
+export type { NaniAccountProviderConfig } from "./nani-account/types.js";
+export { getDefaultNaniAccountFactoryAddress } from "./nani-account/utils.js";
