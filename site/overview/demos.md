@@ -10,8 +10,6 @@ head:
   - - meta
     - property: og:description
       content: Demos using Account Kit
-next:
-  text: Smart Accounts
 ---
 
 # Demos
