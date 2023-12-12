@@ -51,6 +51,13 @@ const setup = async () => {
     rpcUrl: "https://endpoints.omniatech.io/v1/matic/mumbai/public",
     pkpPublicKey: TEST_CONTEXT.PKP_INFO.publicKey,
   });
+  signer.inner.connect = vi.fn().mockImplementation(() => {
+    return new Promise<void>((res, _) => res());
+  });
+  signer.inner.signSessionKey = vi.fn().mockImplementation(() => {
+    return TEST_CONTEXT.AUTH_NEEDED_CB_RES;
+  });
+  signer.inner.ready = true;
   await signer?.authenticate({
     context: {
       authMethodType: 1,

@@ -55,6 +55,17 @@ export const TEST_CONTEXT = {
       authMethodType: 1,
     },
   },
+  AUTH_NEEDED_CB_RES: {
+    authSig: {
+      sig: "0x07069c9d252a1fecdc56ab38bb2cda62d79b966f57a11c9136cd9c221e8563735199b53948fd8df61884d856919561b4b48beeabd2baad11bde2490f3b60e50d1b",
+      derivedVia: "web3.eth.personal.sign via Lit PKP",
+      signedMessage:
+        "localhost:3000 wants you to sign in with your Ethereum account:\n0xfB3b886A3579d2D82F6333E8D84A19F550891E13\n\nLit Protocol PKP session signature I further authorize the stated URI to perform the following actions on my behalf: (1) '*': '*' for 'lit-litaction://*'.\n\nURI: lit:session:ccad2c92e8d52c6221d4e15194a4d57bd442a75a8be27f9b09d4ef5f26d67c4f\nVersion: 1\nChain ID: 1\nNonce: pK9FZb51gdRUGGEyr\nIssued At: 2023-12-12T20:43:05.224Z\nExpiration Time: 2023-12-19T20:43:05.222Z\nResources:\n- urn:recap:eyJhdHQiOnsibGl0LWxpdGFjdGlvbjovLyoiOnsiKi8qIjpbe31dfX0sInByZiI6W119",
+      address: "0xfB3b886A3579d2D82F6333E8D84A19F550891E13",
+    },
+    pkpPublicKey:
+      "04f4cd980d2e41d80872b7465cdbfb7ef6dbe5a7354f583ebaf6333194dd2e31d257933cad9bf317ffd7519bab03ada9ede80987732bc889de5066033d57dc5399",
+  },
 };
 
 export const signedData =
