@@ -28,8 +28,6 @@ export type { LightAccountProviderConfig } from "./light-account/types.js";
 export { getDefaultLightAccountFactoryAddress } from "./light-account/utils.js";
 
 // msca exports
-export { BaseModularSmartContractAccount } from "./msca/base.js";
-export type { ModularSmartContractAccountParams } from "./msca/base.js";
 export {
   MSCABuilder,
   StandardExecutor,
