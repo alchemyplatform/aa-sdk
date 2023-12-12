@@ -1,8 +1,9 @@
 "use client";
 import { useAlchemyProvider } from "@/hooks/useAlchemyProvider";
-import { useMagicSigner } from "@/hooks/useMagicSigner";
+import { createMagicSigner } from "@/signer/createMagicSigner";
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import { Address } from "@alchemy/aa-core";
+import { MagicSigner } from "@alchemy/aa-signers/magic";
 import {
   ReactNode,
   createContext,
@@ -46,21 +47,30 @@ export const WalletContextProvider = ({
   const [username, setUsername] = useState<string>();
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
-  const { signer } = useMagicSigner();
+  const [magicSigner] = useState<Promise<MagicSigner | null>>(() =>
+    createMagicSigner()
+  );
   const { provider, connectProviderToAccount, disconnectProviderFromAccount } =
     useAlchemyProvider();
 
   const login = useCallback(
     async (email: string) => {
+      const signer = await magicSigner;
+
       if (signer == null) {
         throw new Error("Magic not initialized");
       }
 
-      const didToken = await signer.inner.auth.loginWithEmailOTP({
-        email,
+      await signer.authenticate({
+        authenticate: async () => {
+          await signer.inner.auth.loginWithEmailOTP({
+            email,
+          });
+        },
       });
-      const metadata = await signer.inner.user.getMetadata();
-      if (!didToken || !metadata.publicAddress || !metadata.email) {
+
+      const metadata = await signer.getAuthDetails();
+      if (!metadata.publicAddress || !metadata.email) {
         throw new Error("Magic login failed");
       }
 
@@ -70,10 +80,12 @@ export const WalletContextProvider = ({
       setOwnerAddress(metadata.publicAddress as Address);
       setScaAddress(await provider.getAddress());
     },
-    [connectProviderToAccount, signer, provider]
+    [connectProviderToAccount, magicSigner, provider]
   );
 
   const logout = useCallback(async () => {
+    const signer = await magicSigner;
+
     if (!signer) {
       throw new Error("Magic not initialized");
     }
@@ -87,10 +99,12 @@ export const WalletContextProvider = ({
     setUsername(undefined);
     setOwnerAddress(undefined);
     setScaAddress(undefined);
-  }, [signer, disconnectProviderFromAccount]);
+  }, [magicSigner, disconnectProviderFromAccount]);
 
   useEffect(() => {
     async function fetchData() {
+      const signer = await magicSigner;
+
       if (signer == null) {
         throw new Error("Magic not initialized");
       }
@@ -101,7 +115,11 @@ export const WalletContextProvider = ({
         return;
       }
 
-      const metadata = await signer.inner.user.getMetadata();
+      await signer.authenticate({
+        authenticate: async () => {},
+      });
+
+      const metadata = await signer.getAuthDetails();
       if (!metadata.publicAddress || !metadata.email) {
         throw new Error("Magic login failed");
       }
@@ -113,7 +131,7 @@ export const WalletContextProvider = ({
       setScaAddress(await provider.getAddress());
     }
     fetchData();
-  }, [connectProviderToAccount, signer, provider]);
+  }, [connectProviderToAccount, magicSigner, provider]);
 
   return (
     <WalletContext.Provider

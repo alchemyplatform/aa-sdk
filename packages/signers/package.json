@@ -21,10 +21,40 @@
     "!src/__tests__/**/*"
   ],
   "exports": {
-    ".": {
-      "types": "./dist/types/index.d.ts",
-      "import": "./dist/esm/index.js",
-      "default": "./dist/cjs/index.js"
+    "./magic": {
+      "types": "./dist/types/magic/index.d.ts",
+      "import": "./dist/esm/magic/index.js",
+      "default": "./dist/cjs/magic/index.js"
+    },
+    "./web3auth": {
+      "types": "./dist/types/web3auth/index.d.ts",
+      "import": "./dist/esm/maweb3authgic/index.js",
+      "default": "./dist/cjs/web3auth/index.js"
+    },
+    "./fireblocks": {
+      "types": "./dist/types/fireblocks/index.d.ts",
+      "import": "./dist/esm/fireblocks/index.js",
+      "default": "./dist/cjs/fireblocks/index.js"
+    },
+    "./turnkey": {
+      "types": "./dist/types/turnkey/index.d.ts",
+      "import": "./dist/esm/turnkey/index.js",
+      "default": "./dist/cjs/turnkey/index.js"
+    },
+    "./particle": {
+      "types": "./dist/types/particle/index.d.ts",
+      "import": "./dist/esm/particle/index.js",
+      "default": "./dist/cjs/particle/index.js"
+    },
+    "./portal": {
+      "types": "./dist/types/portal/index.d.ts",
+      "import": "./dist/esm/portal/index.js",
+      "default": "./dist/cjs/portal/index.js"
+    },
+    "./capsule": {
+      "types": "./dist/types/capsule/index.d.ts",
+      "import": "./dist/esm/capsule/index.js",
+      "default": "./dist/cjs/capsule/index.js"
     },
     "./package.json": "./package.json"
   },
