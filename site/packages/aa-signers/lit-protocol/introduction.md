@@ -21,7 +21,7 @@ For more information on Lit's supported authentication, see: [here](https://deve
 ['authenticate'][/packages/aa-signers/lit-protocol/authenticate]
 ['getAddress'][/packages/aa-signers/lit-protocol/getAddress]
 ['signTypedData'][/packages/aa-signers/lit-protocol/signTypedData]
-['signMessage'][/packages/aa-signers/lit-protocol/signMessages]
+['signMessage'][/packages/aa-signers/lit-protocol/signMessage]
 ['getAuthDetails'][/packages/aa-signers/lit-protocol/getAuthDetails]
 
 ## Install Dependencies
