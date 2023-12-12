@@ -149,7 +149,8 @@ To know when the UO is mined on a blockchain in order query information about it
 When running the above script, you might see the following errors:
 
 1. "precheck failed: maxFeePerGas is XXX but must be at least XXX, which is based on the current block base fee"
-2. "Failed to find transaction for User Operation"
+2. "precheck failed: sender balance and deposit together is XXX but must be at least XXX to pay for this operation"
+3. "Failed to find transaction for User Operation"
 
 These are due to increase network activity at that time, and are fleeting issues. Running the script again will resolve them naturally.
 :::
@@ -160,7 +161,7 @@ Since this "Getting Started" example is a simple script, you'll need to consider
 
 In this guide, we initialized an `AlchemyProvider` with the `aa-alchemy` package to send a UO. However, you can do a lot more with Account Kit and its many packages.
 
-1. To learn more about the different packages and their use cases, check out the ["Packages Overview"](/overview/package-overview) page.
+1. To learn more about the different packages and their use cases, check out the [Packages Overview](/overview/package-overview) page.
 
 2. To learn about the end-to-end process of integrating smart accounts in your applications, check out the section on [Smart Accounts](/smart-accounts/overview).
 
