@@ -55,6 +55,10 @@ export default defineConfig({
             text: "Demos",
             link: "/demos",
           },
+          {
+            text: "Contact Us",
+            link: "/contact-us",
+          },
         ],
       },
       {
@@ -102,6 +106,7 @@ export default defineConfig({
                   { text: "Lit Protocol", link: "/lit" },
                   { text: "Particle Network", link: "/particle-network" },
                   { text: "Arcana Auth", link: "/arcana-auth" },
+                  { text: "Dfns", link: "/dfns" },
                   { text: "Externally Owned Account (EOA)", link: "/eoa" },
                   { text: "Using Your Own", link: "/custom-signer" },
                 ],

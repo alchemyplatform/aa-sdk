@@ -4,11 +4,12 @@ import {
 } from "@alchemy/aa-accounts";
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import { LocalAccountSigner, type Hex } from "@alchemy/aa-core";
-import { polygonMumbai } from "viem/chains";
+import { sepolia } from "viem/chains";
 
-const chain = polygonMumbai;
+const chain = sepolia;
 
 // The private key of your EOA that will be the owner of Light Account
+// Our recommendation is to store the private key in an environment variable
 const PRIVATE_KEY = "0xYourEOAPrivateKey" as Hex;
 const owner = LocalAccountSigner.privateKeyToAccountSigner(PRIVATE_KEY);
 

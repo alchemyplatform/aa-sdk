@@ -64,7 +64,7 @@ To learn how to deploy a `LightAccount`, see [Light Account](/smart-accounts/acc
 
 ### Signers
 
-A Signer is responsible for securely managing the private key and signing transaction requests on the smart account. Account Kit supports many popular wallet signers including [Magic](/smart-accounts/signers/guides/magic), [web3auth](/smart-accounts/signers/guides/web3auth), [Turnkey](/smart-accounts/signers/guides/turnkey), [Privy](/smart-accounts/signers/guides/privy), [Dynamic](/smart-accounts/signers/guides/dynamic), [Fireblocks](/smart-accounts/signers/guides/fireblocks), [Portal](/smart-accounts/signers/guides/portal), [Capsule](/smart-accounts/signers/guides/capsule) and [Lit Protocol](/smart-accounts/signers/guides/lit). It also supports self-custodial wallets like MetaMask or Ledger.
+A Signer is responsible for securely managing the private key and signing transaction requests on the smart account. Account Kit supports many popular wallet signers. It also supports self-custodial wallets like MetaMask or Ledger.
 
 To get started with a Signer, read the doc: [How to Choose a Signer](/smart-accounts/signers/choosing-a-signer).
 
