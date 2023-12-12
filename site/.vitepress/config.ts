@@ -101,6 +101,7 @@ export default defineConfig({
                   { text: "Capsule", link: "/capsule" },
                   { text: "Lit Protocol", link: "/lit" },
                   { text: "Particle Network", link: "/particle-network" },
+                  { text: "Arcana Auth", link: "/arcana-auth" },
                   { text: "Externally Owned Account (EOA)", link: "/eoa" },
                   { text: "Using Your Own", link: "/custom-signer" },
                 ],
