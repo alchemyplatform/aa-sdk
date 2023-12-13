@@ -1,5 +1,5 @@
 import { PKPEthersWallet } from "@lit-protocol/pkp-ethers";
-import { LitAbility, LitActionResource } from "@lit-protocol/auth-helpers";
+import { LitAbility, LitPKPResource } from "@lit-protocol/auth-helpers";
 import {
   type AuthCallbackParams,
   type AuthSig,
@@ -38,7 +38,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
   private _pkpPublicKey: string;
   private _rpcUrl: string;
   private _authContext: C | undefined;
-  private _session: SessionSigsMap | undefined;
+  public session: SessionSigsMap | undefined;
 
   constructor(params: LitConfig) {
     this._pkpPublicKey = params.pkpPublicKey;
@@ -61,10 +61,55 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
   authenticate = async (
     props: LitAuthenticateProps<C>
   ): Promise<LitUserMetadata> => {
-    await this.inner?.connect().catch((err: any) => {
-      throw new Error(`Error while connecting Lit Node Client: ${err}`);
-    });
+    if (!this.session) {
+      await this._doAuthentication(props);
+    }
+    if (!this.session) {
+      throw new Error("Not Authenticated");
+    }
 
+    return this.session;
+  };
+
+  getAuthDetails = async (): Promise<LitUserMetadata> => {
+    this._checkInternals();
+    return this._authContext as LitSessionSigsMap;
+  };
+
+  getAddress = async () => {
+    this._checkInternals();
+    const address = await this.signer?.getAddress();
+
+    return address as `0x${string}`;
+  };
+
+  signMessage = async (msg: Uint8Array | string) => {
+    this._checkInternals();
+
+    return this.signer?.signMessage(msg) as Promise<Address>;
+  };
+
+  signTypedData = (params: SignTypedDataParams) => {
+    this._checkInternals();
+
+    return this.signer?._signTypedData(
+      params.domain as TypedDataDomain,
+      params.types as any,
+      params.message
+    ) as Promise<Address>;
+  };
+
+  private _checkInternals() {
+    if (!this._authContext) {
+      throw new Error("Not Authenticated");
+    }
+
+    if (!this.signer) {
+      throw new Error("Signer is not initalized, did you call authenticate?");
+    }
+  }
+
+  private async _doAuthentication(props: LitAuthenticateProps<C>) {
     // check if the object is structed as an auth method
     // if so we sign the session key with the auth method
     // as the auth material. If a session signature
@@ -72,7 +117,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
     if (Object.keys(props.context).indexOf("accessToken") > 0) {
       const resourceAbilities = [
         {
-          resource: new LitActionResource("*"),
+          resource: new LitPKPResource("*"),
           ability: LitAbility.PKPSigning,
         },
       ];
@@ -121,15 +166,11 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
           authNeededCallback,
         })
         .catch((err) => {
-          console.log(
-            "error while attempting to access session signatures: ",
-            err
-          );
           throw err;
         });
 
       this._authContext = props.context;
-      this._session = sessionSigs;
+      this.session = sessionSigs;
 
       this.signer = new PKPEthersWallet({
         pkpPubKey: this._pkpPublicKey,
@@ -142,7 +183,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
       this._authContext = sessionSigs as C;
     } else {
       this._authContext = props.context;
-      this._session = props.context as SessionSigsMap;
+      this.session = props.context as SessionSigsMap;
 
       this.signer = new PKPEthersWallet({
         pkpPubKey: this._pkpPublicKey,
@@ -151,46 +192,6 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
       });
 
       await this.signer.init();
-    }
-
-    return this._session;
-  };
-
-  getAuthDetails = async (): Promise<LitUserMetadata> => {
-    this._checkInternals();
-    return this._authContext as LitSessionSigsMap;
-  };
-
-  getAddress = async () => {
-    this._checkInternals();
-    const address = await this.signer?.getAddress();
-
-    return address as `0x${string}`;
-  };
-
-  signMessage = async (msg: Uint8Array | string) => {
-    this._checkInternals();
-
-    return this.signer?.signMessage(msg) as Promise<Address>;
-  };
-
-  signTypedData = (params: SignTypedDataParams) => {
-    this._checkInternals();
-
-    return this.signer?._signTypedData(
-      params.domain as TypedDataDomain,
-      params.types as any,
-      params.message
-    ) as Promise<Address>;
-  };
-
-  private _checkInternals() {
-    if (!this._authContext) {
-      throw new Error("Not Authenticated");
-    }
-
-    if (!this.signer) {
-      throw new Error("Signer is not initalized, did you call authenticate?");
     }
   }
 }
