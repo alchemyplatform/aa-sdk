@@ -522,6 +522,7 @@ export default defineConfig({
                     link: "/getUserOperationHash",
                   },
                   { text: "resolveProperties", link: "/resolveProperties" },
+                  { text: "stringToIndex", link: "/stringToIndex" },
                 ],
               },
             ],
