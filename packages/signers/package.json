@@ -28,7 +28,7 @@
     },
     "./web3auth": {
       "types": "./dist/types/web3auth/index.d.ts",
-      "import": "./dist/esm/maweb3authgic/index.js",
+      "import": "./dist/esm/web3auth/index.js",
       "default": "./dist/cjs/web3auth/index.js"
     },
     "./fireblocks": {
