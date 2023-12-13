@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.2.2 (2023-12-13)
+
+### Bug Fixes
+
+- fix the named export for web3auth ([#330](https://github.com/alchemyplatform/aa-sdk/issues/330)) ([b340f11](https://github.com/alchemyplatform/aa-sdk/commit/b340f115e96ab068f70f8b5ff8316f4724b3ab6d))
+
 ## 1.2.1 (2023-12-12)
 
 ### Features
