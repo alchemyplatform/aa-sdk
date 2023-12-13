@@ -1,67 +1,15 @@
-import { WalletClientSigner, type SmartAccountSigner } from "@alchemy/aa-core";
-import { LitAbility, LitActionResource } from "@lit-protocol/auth-helpers";
-import { LitNodeClient } from "@lit-protocol/lit-node-client";
-import { PKPEthersWallet } from "@lit-protocol/pkp-ethers";
-import { AuthCallbackParams } from "@lit-protocol/types";
-import { createWalletClient, custom } from "viem";
+import { LitSigner, LitAuthMethod } from "@alchemy/aa-signers/lit-protocol";
 import { polygonMumbai } from "viem/chains";
-import { generateSessionKeyPair } from "@lit-protocol/crypto";
 
 const API_KEY = "<YOUR API KEY>";
 const POLYGON_MUMBAI_RPC_URL = `${polygonMumbai.rpcUrls.alchemy.http[0]}/${API_KEY}`;
 const PKP_PUBLIC_KEY = "<YOUR PKP PUBLIC KEY>";
 
-const litNodeClient = new LitNodeClient({
-  litNetwork: "cayenne",
-  debug: false,
-});
-await litNodeClient.connect();
-
-const resourceAbilities = [
-  {
-    resource: new LitActionResource("*"),
-    ability: LitAbility.PKPSigning,
-  },
-];
-
-/**
- * For provisioning keys and setting up authentication methods see documentation below
- * https://developer.litprotocol.com/v2/pkp/minting
- */
-const authNeededCallback = async (params: AuthCallbackParams) => {
-  let sessionKeyPair = generateSessionKeyPair();
-  const response = await litNodeClient.signSessionKey({
-    sessionKey: sessionKeyPair,
-    statement: params.statement,
-    authMethods: [],
+export const createLitSignerWithAuthMethod = async (
+  authMethod: LitAuthMethod
+) => {
+  return new LitSigner<LitAuthMethod>({
     pkpPublicKey: PKP_PUBLIC_KEY,
-    expiration: params.expiration,
-    resources: params.resources,
-    chainId: 1,
+    rpcUrl: POLYGON_MUMBAI_RPC_URL,
   });
-  return response.authSig;
 };
-
-const sessionSigs = await litNodeClient
-  .getSessionSigs({
-    chain: "ethereum",
-    expiration: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7).toISOString(),
-    resourceAbilityRequests: resourceAbilities,
-    authNeededCallback,
-  })
-  .catch((err) => {
-    console.log("error while attempting to access session signatures: ", err);
-    throw err;
-  });
-
-const pkpWallet = new PKPEthersWallet({
-  pkpPubKey: PKP_PUBLIC_KEY,
-  rpc: POLYGON_MUMBAI_RPC_URL,
-  controllerSessionSigs: sessionSigs,
-});
-
-// a smart account signer you can use as an owner on ISmartContractAccount
-export const litSigner: SmartAccountSigner = new WalletClientSigner(
-  createWalletClient({ transport: custom(pkpWallet.rpcProvider) }), // JsonRpcProvider instance,
-  "lit" // signerType
-);

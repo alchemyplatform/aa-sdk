@@ -23,19 +23,10 @@ This method must be called after [`authenticate`](/packages/aa-signers/lit-proto
 ::: code-group
 
 ```ts [example.ts]
+import { createLitSignerWithAuthMethod } from "./lit";
 // [!code focus:99]
-import { LitSigner, type LitAuthMethod } from "@alchemy/aa-signers";
-
 const AUTH_METHOD = "<your auth method>";
-
-const API_KEY = "<YOUR API KEY>";
-const POLYGON_MUMBAI_RPC_URL = `${polygonMumbai.rpcUrls.alchemy.http[0]}/${API_KEY}`;
-const PKP_PUBLIC_KEY = "<your pkp public key>";
-
-const litSigner = new LitSigner<LitAuthMethod>({
-  pkpPublicKey: PKP_PUBLIC_KEY,
-  rpcUrl: RPC_URL,
-});
+const litSigner = new createLitSignerWithAuthMethod(AUTH_METHOD);
 
 await litSigner.authenticate({
   context: AUTH_METHOD,
@@ -45,6 +36,7 @@ await litSigner.authenticate({
 let authDetails = await litSigner.getAuthDetails();
 ```
 
+<<< @/snippets/lit.ts
 :::
 
 ## Returns
