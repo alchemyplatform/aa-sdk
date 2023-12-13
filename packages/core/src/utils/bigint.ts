@@ -1,3 +1,4 @@
+import { keccak256, toHex } from "viem";
 import type { BigNumberish } from "../types";
 
 /**
@@ -76,3 +77,22 @@ export const bigIntClamp = (
 export const bigIntPercent = (base: BigNumberish, percent: bigint) => {
   return (BigInt(base) * percent) / 100n;
 };
+
+/**
+ * Useful if you want to use a string, such as a user's email address, as salt to generate a unique SmartAccount per user.
+ *
+ * example:
+ * ```
+ * const salt = stringToIndex("alice@example.com");
+ *
+ * export const account = new SimpleSmartContractAccount({
+ *   index: salt,
+ *   // other args omitted...
+ * });
+ * ```
+ *
+ * @param phrase -- any string value.
+ * @returns the bigint value of the hashed string
+ */
+export const stringToIndex = (phrase: string): bigint =>
+  BigInt(keccak256(toHex(phrase)));
