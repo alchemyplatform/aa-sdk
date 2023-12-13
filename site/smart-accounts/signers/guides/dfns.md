@@ -18,7 +18,7 @@ head:
 
 Dfns seamlessly integrates with Account Abstraction by signing `UserOperation`s. See the examples below for initializing a DFNS signer and creating a provider with that signer. You can follow [this](https://accountkit.alchemy.com/tutorials/sponsoring-gas/sponsoring-gas.html) guide to send and sponsor `UserOperation`s with the provider created.
 
-Dfns created a full example of a gas-less transaction via a paymaster [in our SDK](https://github.com/dfnsext/typescript-sdk/blob/m/examples/viem/alchemy-aa-gasless/README.md), adapted from our [gas sponsorship example](https://accountkit.alchemy.com/guides/sponsoring-gas.html).
+Dfns created a full example of a gas-less transaction via a paymaster [in our SDK](https://github.com/dfns/dfns-sdk-ts/tree/m/examples/libs/viem/alchemy-aa-gasless), adapted from our [gas sponsorship example](https://accountkit.alchemy.com/guides/sponsoring-gas.html).
 
 ## Install Dfns SDK
 
