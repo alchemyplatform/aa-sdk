@@ -76,6 +76,4 @@ const setup = async () => {
     .fn()
     .mockResolvedValue("0xtest");
   return signer;
-
-  return signer;
 };
