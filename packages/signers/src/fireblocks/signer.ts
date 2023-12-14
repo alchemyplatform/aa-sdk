@@ -8,6 +8,7 @@ import {
   type FireblocksProviderConfig,
 } from "@fireblocks/fireblocks-web3-provider";
 import { createWalletClient, custom, type Hash } from "viem";
+import { signerTypePrefix } from "../constants.js";
 import type {
   FireblocksAuthenticationParams,
   FireblocksUserInfo,
@@ -41,7 +42,7 @@ export class FireblocksSigner
     this.inner = new FireblocksWeb3Provider(params);
   }
 
-  readonly signerType = "fireblocks";
+  readonly signerType = `${signerTypePrefix}fireblocks`;
 
   getAddress = async () => {
     if (!this.signer) throw new Error("Not authenticated");
