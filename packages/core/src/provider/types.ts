@@ -29,6 +29,7 @@ import type {
 import type { Deferrable } from "../utils";
 import type { IsUndefined, NoUndefined } from "../utils/types.js";
 import type {
+  ConnectionConfigSchema,
   SmartAccountProviderOptsSchema,
   createSmartAccountProviderConfigSchema,
 } from "./schema.js";
@@ -39,6 +40,8 @@ type WithOptional<T, K extends keyof T> = Pick<Partial<T>, K>;
 export type ConnectorData = {
   chainId?: Hex;
 };
+
+export type ConnectionConfig = z.input<typeof ConnectionConfigSchema>;
 
 export interface ProviderEvents {
   chainChanged(chainId: Hex): void;

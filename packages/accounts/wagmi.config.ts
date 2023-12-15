@@ -17,9 +17,16 @@ export default defineConfig(
       {
         name: config.name,
         abi: config.abi,
-        address: config.address,
+        address: config.addresses,
       },
     ],
-    plugins: [plugingen({ chain: config.chain, rpcUrl: config.rpcUrl })],
+    plugins: [
+      plugingen({
+        chain: config.chain,
+        connectionConfig: config.rpcUrl
+          ? { rpcUrl: config.rpcUrl }
+          : { apiKey: process.env.API_KEY! },
+      }),
+    ],
   }))
 );
