@@ -43,6 +43,7 @@ export {
 
 export { SmartAccountProvider, noOpMiddleware } from "./provider/base.js";
 export {
+  ConnectionConfigSchema,
   SmartAccountProviderOptsSchema,
   createSmartAccountProviderConfigSchema,
 } from "./provider/schema.js";

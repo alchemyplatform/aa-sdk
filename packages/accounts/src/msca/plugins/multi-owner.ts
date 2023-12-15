@@ -1,4 +1,4 @@
-import { type GetFunctionArgs, encodeFunctionData } from "viem";
+import { type Address, type GetFunctionArgs, encodeFunctionData } from "viem";
 import type { Plugin } from "./types";
 import type { IMSCA } from "../builder";
 import type {
@@ -14,6 +14,9 @@ const MultiOwnerPlugin_ = {
   meta: {
     name: "Multi Owner Plugin",
     version: "1.0.0",
+    addresses: {
+      11155111: "0x56bC629F342821FBe91C5273880792dFECBE7920" as Address,
+    },
   },
   accountMethods: (account: IMSCA<any, any>) => ({
     encodeUpdateOwnersData: ({
