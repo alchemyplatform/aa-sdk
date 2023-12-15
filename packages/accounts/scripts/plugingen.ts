@@ -92,6 +92,8 @@ export function plugingen({
         });
 
         const executionAbiConst = `${contract.name}ExecutionFunctionAbi`;
+        const hasViewFunction =
+          executionAbi.filter((n) => n.stateMutability === "view").length > 0;
 
         const accountFunctions = executionAbi.map((n) => {
           const methodContent = [];
@@ -161,9 +163,9 @@ export function plugingen({
                       ""
                     )}},
                 },
-                accountMethods: (account: IMSCA<any, any>) => ({ ${accountFunctions.join(
-                  ",\n\n"
-                )} }),
+                accountMethods: (${
+                  hasViewFunction ? "account" : "_account"
+                }: IMSCA<any, any>) => ({ ${accountFunctions.join(",\n\n")} }),
                 providerMethods: <
                   TTransport extends SupportedTransports,
                   P extends ISmartAccountProvider<TTransport> & { account: IMSCA<TTransport> }
