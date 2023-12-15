@@ -6,7 +6,7 @@ import type {
 import type { IMSCA } from "../builder";
 
 export interface Plugin<AD, PD> {
-  meta: { name: string; version: string; address: Record<number, Address> };
+  meta: { name: string; version: string; addresses: Record<number, Address> };
   /**
    * Decorator functions that can be used to read data from an MSCA contract instance
    * These methods can be used on their own or with the `account.extend` method to add them to the account instance

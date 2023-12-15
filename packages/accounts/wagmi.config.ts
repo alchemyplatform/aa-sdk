@@ -23,7 +23,9 @@ export default defineConfig(
     plugins: [
       plugingen({
         chain: config.chain,
-        connectionConfig: { rpcUrl: config.rpcUrl! },
+        connectionConfig: config.rpcUrl
+          ? { rpcUrl: config.rpcUrl }
+          : { apiKey: process.env.API_KEY },
       }),
     ],
   }))

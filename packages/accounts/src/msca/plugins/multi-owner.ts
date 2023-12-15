@@ -14,7 +14,7 @@ const MultiOwnerPlugin_ = {
   meta: {
     name: "Multi Owner Plugin",
     version: "1.0.0",
-    address: {
+    addresses: {
       11155111: "0x56bC629F342821FBe91C5273880792dFECBE7920" as Address,
     },
   },
