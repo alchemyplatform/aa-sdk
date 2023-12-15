@@ -17,7 +17,7 @@ export default defineConfig(
       {
         name: config.name,
         abi: config.abi,
-        address: config.address,
+        address: config.addresses,
       },
     ],
     plugins: [
@@ -25,7 +25,7 @@ export default defineConfig(
         chain: config.chain,
         connectionConfig: config.rpcUrl
           ? { rpcUrl: config.rpcUrl }
-          : { apiKey: process.env.API_KEY },
+          : { apiKey: process.env.API_KEY! },
       }),
     ],
   }))
