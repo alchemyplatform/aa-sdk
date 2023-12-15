@@ -26,6 +26,7 @@ export {
 } from "./light-account/schema.js";
 export type { LightAccountProviderConfig } from "./light-account/types.js";
 export { getDefaultLightAccountFactoryAddress } from "./light-account/utils.js";
+export { getDefaultMultiOwnerMSCAFactoryAddress } from "./msca/utils.js";
 
 //nani-account exports
 export { NaniAccount } from "./nani-account/account.js";
@@ -38,6 +39,10 @@ export type { NaniAccountProviderConfig } from "./nani-account/types.js";
 export { getDefaultNaniAccountFactoryAddress } from "./nani-account/utils.js";
 
 // msca exports
+export { accountLoupeDecorators } from "./msca/account-loupe/decorator.js";
+export type * from "./msca/account-loupe/types.js";
+export * from "./msca/account-loupe/utils.js";
+
 export {
   MSCABuilder,
   StandardExecutor,
@@ -46,19 +51,26 @@ export {
   type IMSCA as MSCA,
   type SignerMethods,
 } from "./msca/builder.js";
+
 export {
   createMultiOwnerMSCA,
   createMultiOwnerMSCABuilder,
   createMultiOwnerMSCASchema,
   type MultiOwnerMSCAParams,
 } from "./msca/multi-owner-account.js";
+
 export { pluginManagerDecorator } from "./msca/plugin-manager/decorator.js";
 export type * from "./msca/plugin-manager/installPlugin.js";
 export { installPlugin } from "./msca/plugin-manager/installPlugin.js";
 export type * from "./msca/plugin-manager/types.js";
 export type * from "./msca/plugin-manager/uninstallPlugin.js";
 export { uninstallPlugin } from "./msca/plugin-manager/uninstallPlugin.js";
+
 export {
   MultiOwnerPlugin,
   MultiOwnerPluginExecutionFunctionAbi,
 } from "./msca/plugins/multi-owner.js";
+export {
+  SessionKeyPlugin,
+  SessionKeyPluginExecutionFunctionAbi,
+} from "./msca/plugins/session-key.js";

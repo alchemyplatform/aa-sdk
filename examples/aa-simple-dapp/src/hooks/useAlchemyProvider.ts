@@ -1,8 +1,13 @@
 import { chain, gasManagerPolicyId } from "@/config/client";
 import { getRpcUrl } from "@/config/rpc";
 import {
+  MSCA,
+  MultiOwnerPlugin,
+  SessionKeyPlugin,
   createMultiOwnerMSCA,
-  getDefaultLightAccountFactoryAddress,
+  encodeFunctionReference,
+  getDefaultMultiOwnerMSCAFactoryAddress,
+  installPlugin,
 } from "@alchemy/aa-accounts";
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import {
@@ -10,7 +15,11 @@ import {
   getDefaultEntryPointAddress,
 } from "@alchemy/aa-core";
 import { useCallback, useState } from "react";
-import { Address } from "viem";
+import { Address, encodeAbiParameters, parseAbiParameters } from "viem";
+
+export enum PluginType {
+  SESSION_KEY,
+}
 
 export const useAlchemyProvider = () => {
   const [provider, setProvider] = useState<AlchemyProvider>(
@@ -29,7 +38,7 @@ export const useAlchemyProvider = () => {
             owner: signer,
             chain,
             entryPointAddress: getDefaultEntryPointAddress(chain),
-            factoryAddress: getDefaultLightAccountFactoryAddress(chain),
+            factoryAddress: getDefaultMultiOwnerMSCAFactoryAddress(chain),
             accountAddress: account,
           });
         })
@@ -50,5 +59,42 @@ export const useAlchemyProvider = () => {
     return disconnectedProvider;
   }, [provider]);
 
-  return { provider, connectProviderToAccount, disconnectProviderFromAccount };
+  const pluginInstall = useCallback(
+    async (type: PluginType) => {
+      if (!provider.isConnected<MSCA>()) {
+        return;
+      }
+
+      switch (type) {
+        case PluginType.SESSION_KEY:
+          return installPlugin(provider, {
+            pluginAddress: SessionKeyPlugin.meta.address[chain.id],
+            pluginInitData: encodeAbiParameters(
+              parseAbiParameters("address[]"),
+              [[]]
+            ),
+            dependencies: [
+              encodeFunctionReference(
+                MultiOwnerPlugin.meta.address[chain.id],
+                "0x0"
+              ),
+              encodeFunctionReference(
+                MultiOwnerPlugin.meta.address[chain.id],
+                "0x1"
+              ),
+            ],
+          });
+        default:
+          throw new Error("Unexpected plugin type", type);
+      }
+    },
+    [provider]
+  );
+
+  return {
+    provider,
+    connectProviderToAccount,
+    disconnectProviderFromAccount,
+    pluginInstall,
+  };
 };
