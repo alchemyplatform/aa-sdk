@@ -155,7 +155,7 @@ export function plugingen({
                 meta: {
                     name: "${name}",
                     version: "${version}",
-                    address: {${Object.entries(address).reduce(
+                    addresses: {${Object.entries(address).reduce(
                       (prev, [chainId, addr]) =>
                         (prev += `${chainId}: "${addr}" as Address, `),
                       ""
