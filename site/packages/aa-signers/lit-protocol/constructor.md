@@ -25,6 +25,8 @@ A `Session Signature` can be provided and will be used as the active session, an
 
 ```ts [example.ts]
 import { LitSigner, LitAuthMethod } from "@alchemy/aa-signers";
+// [!code focus:99]
+
 new LitSigner<LitAuthMethod>({
   pkpPublicKey: "PKP_PUBLIC_KEY",
   rpcUrl: "RPC_URL",

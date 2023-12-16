@@ -26,8 +26,7 @@ This method must be called after [`authenticate`](/packages/aa-signers/lit-proto
 import { createLitSignerWithAuthMethod } from "./lit";
 // [!code focus:99]
 
-const AUTH_METHOD = "<your auth method>";
-const litSigner = new createLitSignerWithAuthMethod(AUTH_METHOD);
+const litSigner = new createLitSignerWithAuthMethod();
 
 const signedTypedData = await litSigner.signTypedData({
   domain: {

@@ -33,6 +33,7 @@ If a `Session Signature` is given then the session will be respected as long as 
 
 ```ts [example.ts]
 import { LitSigner, type LitAuthMethod } from "@alchemy/aa-signers";
+// [!code focus:99]
 
 const API_KEY = "<YOUR API KEY>";
 const POLYGON_MUMBAI_RPC_URL = `${polygonMumbai.rpcUrls.alchemy.http[0]}/${API_KEY}`;
@@ -61,6 +62,7 @@ const authDetails = await litSigner.authenticate({
 
 ```ts [example.ts]
 import { LitSigner, type LitSessionSigsMap } from "@alchemy/aa-signers";
+// [!code focus:99]
 
 const PKP_PUBLIC_KEY = "<your pkp public key>";
 const SESSION_SIGS = "<your sessionSig>";
