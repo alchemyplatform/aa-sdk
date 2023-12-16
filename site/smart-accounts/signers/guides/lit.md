@@ -54,14 +54,12 @@ yarn add @lit-protocol/pkp-ethers@cayenne
 npm i @lit-protocol/lit-node-client@cayenne
 npm i @lit-protocol/crypto@cayenne
 npm i @lit-protocol/auth-helpers@cayenne
-npm i @lit-protocol/types@cayenne
 ```
 
 ```bash [yarn]
 yarn add @lit-protocol/lit-node-client@cayenne
 yarn add @lit-protocol/crypto@cayenne
 yarn add @lit-protocol/auth-helpers@cayenne
-yarn add @lit-protocol/types@cayenne
 ```
 
 :::
