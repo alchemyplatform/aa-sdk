@@ -9,7 +9,7 @@ import { LitNodeClient } from "@lit-protocol/lit-node-client";
 import { ALL_LIT_CHAINS } from "@lit-protocol/constants";
 import { generateSessionKeyPair } from "@lit-protocol/crypto";
 import { type SignTypedDataParams } from "@alchemy/aa-core";
-import type { Address, TypedDataDomain } from "viem";
+import type { Address, Hex, TypedDataDomain } from "viem";
 import {
   type LitAuthMethod,
   type LitSessionSigsMap,
