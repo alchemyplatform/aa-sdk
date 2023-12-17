@@ -1,13 +1,19 @@
 import type { PKPEthersWallet } from "@lit-protocol/pkp-ethers";
 import { LitSigner } from "../signer.js";
-import type { LitAuthMethod } from "../types";
-import { MOCK_SESSION, TEST_CONTEXT, signedData } from "./data.js";
+import type { LitAuthMethod } from "../index.js";
+import { MOCK_SESSION, TEST_CONTEXT } from "./data.js";
 import type { LitNodeClient } from "@lit-protocol/lit-node-client";
 
 describe("Lit Protocol Signer Tests", () => {
   let signer: LitSigner<LitAuthMethod> | undefined;
   beforeAll(async () => {
     signer = await setup();
+    await signer?.authenticate({
+      context: {
+        authMethodType: 1,
+        accessToken: JSON.stringify(TEST_CONTEXT.CONTROLLER_AUTHSIG),
+      },
+    });
   });
   it("should correctly get address if authenticated", async () => {
     let sessionSignatures = await signer?.getAuthDetails();

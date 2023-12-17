@@ -6,8 +6,8 @@ import {
   type SessionSigsMap,
 } from "@lit-protocol/types";
 import { LitNodeClient } from "@lit-protocol/lit-node-client";
+import { ALL_LIT_CHAINS } from "@lit-protocol/constants";
 import { generateSessionKeyPair } from "@lit-protocol/crypto";
-
 import { type SignTypedDataParams } from "@alchemy/aa-core";
 import type { Address, TypedDataDomain } from "viem";
 import {
@@ -18,8 +18,9 @@ import {
   type LitSmartAccountAuthenticator,
   type LitUserMetadata,
 } from "./types.js";
+import { signerTypePrefix } from "../constants.js";
 
-const SIGNER_TYPE: string = "lit";
+const SIGNER_TYPE: string = `${signerTypePrefix}lit`;
 
 /**
  * Implementation of `SmartAccountAuthenticator` for lit protocol
@@ -56,14 +57,18 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
    * if generic type is `LitAuthMethod`, authenticates the supplied authentication material.
    * if type `SessionSigsMap`, this implementation will respect the existing auth and use the session material.
    * @param props {LITAuthenticateProps} Authentication params, only `context` is required
-   * @returns {LitSessionSigsMap} Authenticated session material
+   * @returns {Promise<LitSessionSigsMap>} Authenticated session material
+   * @throws {Not Authenticated} if authentication operations fail this error is thrown
    */
   authenticate = async (
     props: LitAuthenticateProps<C>
   ): Promise<LitUserMetadata> => {
     if (!this.session) {
+      // runs authentication logic
       await this._doAuthentication(props);
     }
+
+    // check on internal state for authentication status
     if (!this.session) {
       throw new Error("Not Authenticated");
     }
@@ -109,11 +114,22 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
     }
   }
 
+  /**
+   * Runs the Lit Protocol authentication operations for a given piece of authentication material
+   * 
+   * AuthMethod -> authenticates the auth material and signs a session.
+   * 
+   * SessionSigsMap -> uses the session to create a signer instance. 
+   
+   * @param props {LitAuthenticationProps<C>} properties for configuring authentication operations  
+  */
   private async _doAuthentication(props: LitAuthenticateProps<C>) {
-    // check if the object is structed as an auth method
-    // if so we sign the session key with the auth method
-    // as the auth material. If a session signature
-    // is provided then we skip this step.
+    /**
+     * Check if the object is structed as an auth method
+     * if so we sign the session key with the auth method
+     * as the auth material. If a session signature
+     * is provided then we skip this step.
+     */
     if (Object.keys(props.context).indexOf("accessToken") > 0) {
       const resourceAbilities = [
         {
@@ -123,6 +139,9 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
       ];
       const sessionKeypair = props.sessionKeypair || generateSessionKeyPair();
       const chain = props.chain || "ethereum";
+      const chainInfo = ALL_LIT_CHAINS[chain];
+      // @ts-expect-error - chainId is not defined on the type
+      const chainId = chainInfo.chainId ?? 1;
       let authNeededCallback: any;
       if (props.context?.authMethodType === 1) {
         authNeededCallback = async (params: AuthCallbackParams) => {
@@ -161,7 +180,8 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
           chain,
           expiration:
             props.expiration ??
-            new Date(Date.now() + 1000 * 60 * 60 * 24 * 7).toISOString(),
+            // set default exp to 1 week if not provided
+            new Date(Date.now() + 60 * 60 * 24 * 7).toISOString(),
           resourceAbilityRequests: resourceAbilities,
           authNeededCallback,
         })
@@ -179,8 +199,6 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
       });
 
       await this.signer.init();
-
-      this._authContext = sessionSigs as C;
     } else {
       this._authContext = props.context;
       this.session = props.context as SessionSigsMap;
