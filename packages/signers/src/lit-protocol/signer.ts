@@ -114,16 +114,16 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
 
   /**
    * Runs the Lit Protocol authentication operations for a given piece of authentication material
-   * 
+   *
    * AuthMethod -> authenticates the auth material and signs a session.
-   * 
-   * SessionSigsMap -> uses the session to create a signer instance. 
-   * 
+   *
+   * SessionSigsMap -> uses the session to create a signer instance.
+   *
    * For more information on Lit Authentication see below:
-   * 
+   *
    * https://developer.litprotocol.com/v3/sdk/authentication/overview
-   * @param props {LitAuthenticationProps<C>} properties for configuring authentication operations  
-  */
+   * @param props {LitAuthenticationProps<C>} properties for configuring authentication operations
+   */
   private async _doAuthentication(props: LitAuthenticateProps<C>) {
     /**
      * Check if the object is structured as an auth method
