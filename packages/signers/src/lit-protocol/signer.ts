@@ -83,9 +83,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
 
   getAddress = async () => {
     this._checkInternals();
-    const address = await this.signer?.getAddress();
-
-    return address as `0x${string}`;
+    return this.signer?.getAddress() as Promise<Address>;
   };
 
   signMessage = async (msg: Uint8Array | string) => {
