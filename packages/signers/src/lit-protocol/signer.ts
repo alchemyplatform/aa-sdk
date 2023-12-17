@@ -99,7 +99,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
       params.domain as TypedDataDomain,
       params.types as any,
       params.message
-    ) as Promise<Address>;
+    ) as Promise<Hex>;
   };
 
   private _checkInternals() {
