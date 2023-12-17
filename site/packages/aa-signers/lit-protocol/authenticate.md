@@ -14,7 +14,7 @@ head:
 
 # authenticate
 
-`authenticate` is a method on the `LitSigner` which leverages the `Lit Protocol sdk` to authenticate a user. Before accessing other methods on the class, this method **MUST** be called, such as signing messages or typed data or accessing user details.
+`authenticate` is a method on the `LitSigner` which leverages the Lit Protocol SDK to authenticate a user. Before accessing other methods on the class, such as signing messages or typed data or accessing user details, this method **MUST** be called.
 
 ## Usage
 
