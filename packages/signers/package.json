@@ -59,7 +59,7 @@
     "./lit-protocol": {
       "types": "./dist/types/lit-protocol/index.d.ts",
       "import": "./dist/esm/lit-protocol/index.js",
-      "default": "./dist/cjs/lit-protocol/index.js" 
+      "default": "./dist/cjs/lit-protocol/index.js"
     },
     "./package.json": "./package.json"
   },
