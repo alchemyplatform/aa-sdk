@@ -91,7 +91,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
   signMessage = async (msg: Uint8Array | string) => {
     this._checkInternals();
 
-    return this.signer?.signMessage(msg) as Promise<Address>;
+    return this.signer?.signMessage(msg) as Promise<Hex>;
   };
 
   signTypedData = (params: SignTypedDataParams) => {
