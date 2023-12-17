@@ -5,6 +5,7 @@ import {
 } from "@alchemy/aa-core";
 import Capsule, { createCapsuleViemClient } from "@usecapsule/web-sdk";
 import { createWalletClient, custom, type Hash, type WalletClient } from "viem";
+import { signerTypePrefix } from "../constants.js";
 import type {
   CapsuleAuthenticationParams,
   CapsuleConfig,
@@ -46,7 +47,7 @@ export class CapsuleSigner
     ) as unknown as WalletClient; // TODO: Capsule team to address lint error
   }
 
-  readonly signerType = "capsule";
+  readonly signerType = `${signerTypePrefix}capsule`;
 
   getAddress = async () => {
     if (!this.signer) throw new Error("Not authenticated");

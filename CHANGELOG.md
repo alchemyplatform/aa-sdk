@@ -3,9 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.2.2 (2023-12-13)
+
+### Bug Fixes
+
+- fix the named export for web3auth ([#330](https://github.com/alchemyplatform/aa-sdk/issues/330)) ([b340f11](https://github.com/alchemyplatform/aa-sdk/commit/b340f115e96ab068f70f8b5ff8316f4724b3ab6d))
+
 ## 1.2.1 (2023-12-12)
 
-**Note:** Version bump only for package root
+### Features
+
+- allow passing raw call data to sendUserOperation ([#272](https://github.com/alchemyplatform/aa-sdk/issues/272) ([26b90b6](https://github.com/alchemyplatform/aa-sdk/commit/26b90b63a998b106130f3c671bb77f977becb45d)))
+- add aa-signers package ([#228](https://github.com/alchemyplatform/aa-sdk/issues/228)) ([5fcd322](https://github.com/alchemyplatform/aa-sdk/commit/5fcd3222133205e5b3f86b456309584d848b1fb5))
+- add aa-signer implementation for magic ([#229](https://github.com/alchemyplatform/aa-sdk/issues/229)) ([860d177](https://github.com/alchemyplatform/aa-sdk/commit/860d17778f6ffc6140d07f2fce147eb8993ee985))
+- add aa-signer implementation for web3auth ([#247](https://github.com/alchemyplatform/aa-sdk/issues/247)) ([7d0492b](https://github.com/alchemyplatform/aa-sdk/commit/7d0492b3829b07d18c1488b7d7e0b129e40f7b4c))
+- add aa-signer implementation for turnkey ([#307](https://github.com/alchemyplatform/aa-sdk/issues/307)) ([4fa05e4](https://github.com/alchemyplatform/aa-sdk/commit/4fa05e4ada8c6558e3ce0bd35b157110baba47c9))
+- add aa-signer implementation for fireblocks ([#301](https://github.com/alchemyplatform/aa-sdk/issues/301)) ([40289e6](https://github.com/alchemyplatform/aa-sdk/commit/40289e6c656344ab0cd6c60e6dbc7c11d392d27e))
+- add aa-signer implementation for particle ([#304](https://github.com/alchemyplatform/aa-sdk/issues/304)) ([e049c2c](https://github.com/alchemyplatform/aa-sdk/commit/e049c2caa562089f62614549ac4e7b2c741f93fd))
+- add aa-signer implementation for portal ([#303](https://github.com/alchemyplatform/aa-sdk/issues/303)) ([eb8a0c3](https://github.com/alchemyplatform/aa-sdk/commit/eb8a0c356ba89701d9cc34921cf7812c23791655))
+- add aa-signer implementation for capsule ([#305](https://github.com/alchemyplatform/aa-sdk/issues/305)) ([9d89e99](https://github.com/alchemyplatform/aa-sdk/commit/9d89e99aea12fc4c13f5b4a680167d5687829bfe))
+- add improvements on provider for override user operation fee and gas ([#277](https://github.com/alchemyplatform/aa-sdk/issues/277)) ([258d80e](https://github.com/alchemyplatform/aa-sdk/commit/258d80e64d7aaa7de26f72375b9d58221c95311e))
+- support one-off percentage overrides for user operations ([#289](https://github.com/alchemyplatform/aa-sdk/issues/289)) ([dc979ff](https://github.com/alchemyplatform/aa-sdk/commit/dc979ff111f0a490b08adce9a913466706399afb))
+- add a convenience method to make creating an alchemy provider easier ([#206](https://github.com/alchemyplatform/aa-sdk/issues/206)) ([211b7e0](https://github.com/alchemyplatform/aa-sdk/commit/211b7e0e715b961520dc5baaa4f0d49b647fbd79))
+- add nani smart account implementation ([#306](https://github.com/alchemyplatform/aa-sdk/issues/306)) ([bf7566f](https://github.com/alchemyplatform/aa-sdk/commit/bf7566f2d62ab7ca4ee7fcb4a9df68308fbe5622))
+- improve zod validation parsing ([#299](https://github.com/alchemyplatform/aa-sdk/issues/299)) ([0763a82](https://github.com/alchemyplatform/aa-sdk/commit/0763a82d47f491513bdcf75716c83043f3dbd2be))
+- docs site re-formatting ([#300](https://github.com/alchemyplatform/aa-sdk/issues/300)) ([a1376c4](https://github.com/alchemyplatform/aa-sdk/commit/a1376c4ad38a62517092ebdd8c87557712c4aecc))
+- docs for Dfns Signer ([#313](https://github.com/alchemyplatform/aa-sdk/issues/313)) ([33141b0](https://github.com/alchemyplatform/aa-sdk/commit/33141b08759b89e2c10f56d95a1316098f67fb9c))
+- docs for Arcana Signer ([#318](https://github.com/alchemyplatform/aa-sdk/issues/318)) ([81711d6](https://github.com/alchemyplatform/aa-sdk/commit/81711d6565a089a15eba95bc54c55972b13457e8))
 
 # 1.2.0 (2023-11-17)
 

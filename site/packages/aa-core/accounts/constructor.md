@@ -74,4 +74,4 @@ A new instance of a `SimpleSmartContractAccount`.
 
 - `accountAddress: Address | undefined` -- [optional] a smart account address override that this object will manage instead of generating its own.
 
-- `index: bigint | undefined` -- [optional] additional salt value used when creating the smart account. Allows for a one-to-many creation from one owner address to many smart account addresses.
+- `index: bigint | undefined` -- [optional] additional salt value used when creating the smart account. Allows for a one-to-many creation from one owner address to many smart account addresses. See [stringToIndex](/packages/aa-core/utils/stringToIndex.html) for an easy way to convert a string, such as an email in your database, to salt.

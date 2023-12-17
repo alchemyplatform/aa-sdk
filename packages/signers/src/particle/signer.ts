@@ -10,7 +10,11 @@ import {
 } from "@particle-network/auth";
 import { ParticleProvider } from "@particle-network/provider";
 import { createWalletClient, custom, type Hash } from "viem";
-import type { ParticleAuthenticationParams, ParticleUserInfo } from "./types";
+import { signerTypePrefix } from "../constants.js";
+import type {
+  ParticleAuthenticationParams,
+  ParticleUserInfo,
+} from "./types.js";
 
 /**
  * This class requires the `@particle-network/auth` and `@particle-network/provider` dependencies.
@@ -47,7 +51,7 @@ export class ParticleSigner
     this.provider = new ParticleProvider(this.inner.auth);
   }
 
-  readonly signerType = "particle";
+  readonly signerType = `${signerTypePrefix}particle`;
 
   getAddress = async () => {
     if (!this.signer) throw new Error("Not authenticated");

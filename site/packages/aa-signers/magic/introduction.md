@@ -43,7 +43,7 @@ yarn add magic-sdk
 ::: code-group
 
 ```ts [example.ts]
-import { MagicSigner } from "@alchemy/aa-signers/magic";
+import { createMagicSigner } from "./magic";
 
 const magicSigner = new MagicSigner({ apiKey: "MAGIC_API_KEY" });
 

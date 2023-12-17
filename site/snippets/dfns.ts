@@ -4,7 +4,7 @@ import { DfnsApiClient } from "@dfns/sdk";
 import { AsymmetricKeySigner } from "@dfns/sdk-keysigner";
 import { LocalAccount, toAccount } from "viem/accounts";
 
-// See the Dfns example https://github.com/dfnsext/typescript-sdk/blob/m/examples/viem/alchemy-aa-gasless/README.md for details on populating the environment variables.
+// See the Dfns example https://github.com/dfns/dfns-sdk-ts/tree/m/examples/libs/viem/alchemy-aa-gasless for details on populating the environment variables.
 const DFNS_PRIVATE_KEY = null;
 const DFNS_CRED_ID = null;
 const DFNS_APP_ORIGIN = null;

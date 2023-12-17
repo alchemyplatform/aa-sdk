@@ -3,6 +3,7 @@ import type { UserOperationRequest } from "../types";
 import {
   getDefaultEntryPointAddress,
   getUserOperationHash,
+  stringToIndex,
 } from "../utils/index.js";
 
 describe("Utils Tests", () => {
@@ -33,5 +34,15 @@ describe("Utils Tests", () => {
     ).toMatchInlineSnapshot(
       `"0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b"`
     );
+  });
+
+  describe("bigint utils", () => {
+    it("produces an index value from a string", () => {
+      const index = stringToIndex("alice@example.com");
+
+      expect(index).toEqual(
+        53219281434065493725260108619161294016101536485294536107629387514619165176826n
+      );
+    });
   });
 });
