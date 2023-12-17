@@ -126,10 +126,10 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
   */
   private async _doAuthentication(props: LitAuthenticateProps<C>) {
     /**
-     * Check if the object is structed as an auth method
-     * if so we sign the session key with the auth method
-     * as the auth material. If a session signature
-     * is provided then we skip this step.
+     * Check if the object is structured as an auth method
+     * if so, we sign the session key with the auth method
+     * as the auth material. Otherwise, if a session signature
+     * is provided, then we skip this step.
      */
     if (Object.keys(props.context).indexOf("accessToken") > 0) {
       const resourceAbilities = [
