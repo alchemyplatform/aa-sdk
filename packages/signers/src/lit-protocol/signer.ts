@@ -120,7 +120,10 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
    * AuthMethod -> authenticates the auth material and signs a session.
    * 
    * SessionSigsMap -> uses the session to create a signer instance. 
-   
+   * 
+   * For more information on Lit Authentication see below:
+   * 
+   * https://developer.litprotocol.com/v3/sdk/authentication/overview
    * @param props {LitAuthenticationProps<C>} properties for configuring authentication operations  
   */
   private async _doAuthentication(props: LitAuthenticateProps<C>) {
@@ -152,7 +155,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
             pkpPublicKey: `0x${this._pkpPublicKey}`,
             expiration: params.expiration,
             resources: params.resources,
-            chainId: 1,
+            chainId: chainId,
           });
           return response.authSig;
         };
@@ -165,7 +168,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
             pkpPublicKey: `0x${this._pkpPublicKey}`,
             expiration: params.expiration,
             resources: params.resources,
-            chainId: 1,
+            chainId: chainId,
           });
           return response.authSig;
         };
