@@ -21,7 +21,8 @@ head:
 `LitSigner` allows for either an `AuthMethod` or `SessionSig` as context to authenticate, based on the LightSigner you create: `LitAuthMethod` or `LitSessionSigsMap` respectively.
 
 If using an `AuthMethod`, then the implementation will handle signing a session signature which will be used as authentication material. If using a `SessionSig`, then the implementation will use that as authentication material for the signer.
-For the LitSigner a generic type `C` is defined on the type
+
+For the `LitSigner` a generic type `C` is defined on the type to be either `AuthMethod` or `SessionSig`.
 
 Where an `AuthMethod` or a `Session Signatures` maybe be provided as `context` for the `authentication`.
 
