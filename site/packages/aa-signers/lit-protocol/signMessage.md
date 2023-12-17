@@ -14,7 +14,7 @@ head:
 
 # signMessage
 
-`signMessage` supports signing messages from the `MagicSigner`.
+`signMessage` supports signing messages from the `LitSigner`.
 
 This method must be called after [`authenticate`](/packages/aa-signers/lit-protocol/authenticate). Otherwise, this method will throw an error with the message `Not Authenticated`.
 
