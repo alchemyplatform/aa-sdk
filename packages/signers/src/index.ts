@@ -28,7 +28,4 @@ export {
   LitSigner,
   type LitConfig,
   type LitAuthenticateProps,
-  type LitAuthMethod,
-  type LitSessionSigsMap,
-  type LitUserMetadata,
 } from "./lit-protocol/index.js";
