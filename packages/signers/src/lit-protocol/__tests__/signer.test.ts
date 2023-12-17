@@ -15,6 +15,7 @@ describe("Lit Protocol Signer Tests", () => {
       },
     });
   });
+  
   it("should correctly get address if authenticated", async () => {
     let sessionSignatures = await signer?.getAuthDetails();
     expect(sessionSignatures).toBeDefined();
