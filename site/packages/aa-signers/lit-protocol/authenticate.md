@@ -62,7 +62,7 @@ const authDetails = await litSigner.authenticate({
 ::: code-group
 
 ```ts [example.ts]
-import { LitSigner, type LitSessionSigsMap } from "@alchemy/aa-signers";
+import { LitSigner, type LitSessionSigsMap } from "@alchemy/aa-signers/lit-protocol";
 // [!code focus:99]
 
 const PKP_PUBLIC_KEY = "<your pkp public key>";
