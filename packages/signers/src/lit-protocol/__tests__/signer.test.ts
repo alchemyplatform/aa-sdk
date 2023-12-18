@@ -29,7 +29,7 @@ describe("Lit Protocol Signer Tests", () => {
     expect(sessionSignatures).toBeDefined();
   });
 
-  it("should sign message if authenticated", async () => {
+  it("should sign typed data if authenticated", async () => {
     const typedData = {
       types: {
         Request: [{ name: "hello", type: "string" }],
