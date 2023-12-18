@@ -3,6 +3,7 @@ import { LitAbility, LitPKPResource } from "@lit-protocol/auth-helpers";
 import {
   type AuthCallbackParams,
   type AuthSig,
+  type LITEVMChain,
   type SessionSigsMap,
 } from "@lit-protocol/types";
 import { LitNodeClient } from "@lit-protocol/lit-node-client";
@@ -141,8 +142,8 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
       const sessionKeypair = props.sessionKeypair || generateSessionKeyPair();
       const chain = props.chain || "ethereum";
       const chainInfo = ALL_LIT_CHAINS[chain];
-      // @ts-expect-error - chainId is not defined on the type
-      const chainId = chainInfo.chainId ?? 1;
+
+      const chainId = (chainInfo as LITEVMChain).chainId ?? 1;
       let authNeededCallback: any;
       if (props.context?.authMethodType === 1) {
         authNeededCallback = async (params: AuthCallbackParams) => {

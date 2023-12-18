@@ -17,6 +17,11 @@ export interface LitConfig {
   debug?: boolean;
 }
 
+/**
+ * Properties for configuring authentication operations
+ * see here for chain identifiers if none is passed `ethereum` will be used as the default.
+ * https://developer.litprotocol.com/v3/resources/supported-chains/
+ */
 export interface LitAuthenticateProps<
   C extends LitAuthMethod | LitSessionSigsMap
 > {
