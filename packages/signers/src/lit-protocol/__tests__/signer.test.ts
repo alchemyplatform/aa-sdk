@@ -43,6 +43,11 @@ describe("Lit Protocol Signer Tests", () => {
     expect(signTypedData).toMatchInlineSnapshot('"0xtest"');
   });
 
+  it("should sign message if authenticated", async () => {
+    const signTypedData = await signer?.signMessage("Hello Alchemy AA SDK");
+    expect(signTypedData).toMatchInlineSnapshot('"0xtest"');
+  });
+
   it("should throw expection if not authenticated", async () => {
     const signer = new LitSigner<LitAuthMethod>({
       rpcUrl: "foo.bar",
@@ -80,6 +85,10 @@ const setup = async () => {
     .mockResolvedValue(MOCK_SESSION);
 
   (signer.signer as PKPEthersWallet)._signTypedData = vi
+    .fn()
+    .mockResolvedValue("0xtest");
+
+  (signer.signer as PKPEthersWallet).signMessage = vi
     .fn()
     .mockResolvedValue("0xtest");
   return signer;
