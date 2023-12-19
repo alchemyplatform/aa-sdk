@@ -87,4 +87,4 @@ A software application to manage one or more accounts. It supports connecting to
 
 ## Wallet-as-a-Service (WaaS)
 
-Also called a key management service (KMS). WaaS is a software as a service provider that stores private key material. A WaaS provider will be classified under one of the [signer custody types](#signer).
+Also called a key management service (KMS). WaaS is a software as a service provider that stores private key material. A WaaS provider would be classified under one of the [signer custody types](#signer).
