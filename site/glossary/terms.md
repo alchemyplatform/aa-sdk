@@ -22,7 +22,7 @@ head:
 
 ## Account Kit
 
-Account Kit is a framework designed to embed smart accounts in web3 applications. It includes a set of tools such as [Signer integrations](https://accountkit.alchemy.com/smart-accounts/signers/choosing-a-signer.html), [Gas Manager](https://docs.alchemy.com/docs/gas-manager-services) and [Bundler](https://docs.alchemy.com/docs/bundler-services) utilities that unlock features such as [gas sponsorship](https://accountkit.alchemy.com/tutorials/sponsoring-gas/sponsoring-gas.html), [batched transactions](https://accountkit.alchemy.com/tutorials/batching-transactions.html) and email/social login. With its user-friendly suite of SDKs, known as [aa-sdk](https://github.com/alchemyplatform/aa-sdk), Account Kit makes it easy to deploy smart accounts, manage user operations, and handle gas sponsorship, streamlining the entire process with minimal coding effort.
+Account Kit is a framework designed to embed smart accounts in web3 applications. It includes a set of tools such as [Signer integrations](https://accountkit.alchemy.com/smart-accounts/signers/choosing-a-signer.html), [Gas Manager](https://docs.alchemy.com/docs/gas-manager-services) and [Bundler](https://docs.alchemy.com/docs/bundler-services) utilities that unlock features such as [gas sponsorship](https://accountkit.alchemy.com/tutorials/sponsoring-gas/sponsoring-gas.html), [batched transactions](https://accountkit.alchemy.com/tutorials/batching-transactions.html) and email/social login. With its user-friendly suite of SDKs, known as [aa-sdk](https://github.com/alchemyplatform/aa-sdk), Account Kit makes it easy to deploy smart accounts, manage `UserOperation`s, and handle gas sponsorship, streamlining the entire process with minimal coding effort.
 
 ## Bundler
 
