@@ -150,7 +150,7 @@ Our gas and fee estimations are just that, estimations, but we are always workin
 ### Total execution gas limit exceeded: `{ code: -3202, message: 'precheck failed: total execution gas is X but must be at most 10000000}`
 
 ::: details Answer
-Currently our bundler allows max 10M gas in aggregate between `preVerificationGas`, `verificationGasLimit`, and `callGasLimit`. To reduce the gas needed, try reducing the size of your call data and/or sending your call data in multiple User Operations rather than one.
+Currently our Bundler allows max 10M gas in aggregate between `preVerificationGas`, `verificationGasLimit`, and `callGasLimit`. To reduce the gas needed, try reducing the size of your call data and/or sending your call data in multiple `UserOperation`s rather than one.
 :::
 
 ### waitForUserOperationTransaction timeout
