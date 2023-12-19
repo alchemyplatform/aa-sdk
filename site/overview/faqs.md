@@ -33,6 +33,12 @@ There are two scenarios where you'd get a different contract address:
 2. If you upgrade the smart account (e.g. to a new version of Light Account). It is unlikely that we will make many updates to this contract so the address will not change frequently.
    :::
 
+### How does a smart account get deployed?
+
+::: details Answer
+Your smart account will be deployed when the first `UserOperation` (UO) is sent from the account. The first UO must be sent with a non-zero `initCode`. aa-sdk will handle generation of this `initCode` for you using [`getAccountInitCode`](/packages/aa-core/accounts/required/getAccountInitCode.html).
+:::
+
 ### How would Alchemy initiate an upgrade of a Light Account?
 
 ::: details Answer
