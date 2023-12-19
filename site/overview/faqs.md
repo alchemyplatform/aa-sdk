@@ -58,7 +58,9 @@ If the `UserOperation` (meta-transaction for 4337 accounts) is correctly priced 
 ::: details Answer
 This can happen when UserOperations become underpriced, frequently due to fee market movement between when gas and fees are estimations and when the user operation is actually submitted.
 
-You may experience this when calling the [`waitForUserOperationTransaction`](/packages/aa-core/provider/waitForUserOperationTransaction.html#waitForUserOperationTransaction) method. It may throw an error if it does not find the mined user operation within it’s retry limits. You can mitigate this by defining a more flexible retry period when constructing a [provider](/packages/aa-core/provider/constructor.html#constructor) (i.e. `txMaxRetries`, `txRetryIntervalMs`, `txRetryMultiplier` in `opts`). If your user operation continues to be delayed beyond a limit you are willing to wait, you can resubmit the user operation using [`dropAndReplaceUserOperation`](/packages/aa-core/provider/dropAndReplaceUserOperation.html#dropandreplaceuseroperation).
+You may experience this when calling the [`waitForUserOperationTransaction`](/packages/aa-core/provider/waitForUserOperationTransaction.html#waitForUserOperationTransaction) method. It may throw an error if it does not find the `UserOperation` (UO) in a mined Transaction within its retry limits. 
+
+You can mitigate this by defining a more flexible retry period when constructing a [provider](/packages/aa-core/provider/constructor.html#constructor) (i.e. `txMaxRetries`, `txRetryIntervalMs`, `txRetryMultiplier` in `opts`). If your UO continues to be delayed beyond a limit you are willing to wait, you can resubmit it using [`dropAndReplaceUserOperation`](/packages/aa-core/provider/dropAndReplaceUserOperation.html#dropandreplaceuseroperation).
 :::
 
 ### Are User Operations protected from MEV bots?
