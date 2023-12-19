@@ -51,7 +51,7 @@ It is unlikely we will frequently update the Light Account contract itself, howe
 Yes! The optional index value (salt) on Light Account enables the ability to have multiple accounts for the same owner address. This value defaults to 0. You can set it in the [constructor](/packages/aa-accounts/light-account/constructor.html#params-simplesmartaccountparams).
 :::
 
-## Submitting User Operations
+## Submitting `UserOperation`s
 
 ### How does the speed of `UserOperation`s compare to normal transactions?
 
