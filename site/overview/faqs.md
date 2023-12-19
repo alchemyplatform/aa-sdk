@@ -95,7 +95,7 @@ We recommend adding error handling when sending a `UserOperation` to handle pote
 Gas sponsorship is available on testnet for all tiers. For support on mainnet, you must be on a paying tier (i.e. Growth tier and above). Learn more about our different pricing tiers [here](https://docs.alchemy.com/reference/gas-manager-coverage-api-pricing#fee-logic).
 :::
 
-### How is gas sponsored? Do I need to fund the gas manager?
+### How is gas sponsored? Do I need to fund the Gas Manager?
 
 ::: details Answer
 We front the gas for your application and put the USD equivalent on your bill at the end of the month. No need to worry about pre-funding the gas manager or conversions, we’ve got you covered!
