@@ -50,7 +50,7 @@ Yes! The optional index value (salt) on LightAccount enables the ability to have
 ### How does the speed of `UserOperation`s compare to normal transactions?
 
 ::: details Answer
-If the User Operation (meta-transaction for 4337 accounts) is correctly priced and submitted a few hundred ms prior to a new block getting created, it will typically get placed in the next block. This is because the bundler needs time to create/propagate its transaction. You can think of it as 1 extra block time worth of latency, but we are working towards improving this latency.
+If the `UserOperation` (meta-transaction for 4337 accounts) is correctly priced and submitted a few hundred milliseconds (ms) prior to a new block getting created, it will typically get placed in the next block. This is because the bundler needs time to create/propagate its transaction. You can think of it as 1 extra block time worth of latency, but we are working towards improving this latency.
 :::
 
 ### Why am I seeing a delay in landing userOps on-chain?
