@@ -77,7 +77,7 @@ A service or application that manages the private key and signs `UserOperation`s
 
 A [smart account](https://accountkit.alchemy.com/smart-accounts/accounts/choosing-a-smart-account.html#what-s-a-smart-account) is an individual onchain account located at a public address where an ERC-4337 smart contract account is deployed. This address is controlled by one or more owners of the smart contract account. The [aa-sdk](https://github.com/alchemyplatform/aa-sdk) supports different smart account implementations such as [Light Account](https://accountkit.alchemy.com/smart-accounts/accounts/guides/light-account.html), [Simple Account](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol) and [Modular Account](https://accountkit.alchemy.com/smart-accounts/accounts/guides/modular-account.html) (coming soon). You can also [add add your own account implementation in aa-sdk](https://accountkit.alchemy.com/smart-accounts/accounts/contributing.html).
 
-## User Operation
+## `UserOperation`
 
 A pseudo-transaction object introduced by the ERC-4337 standard, used to execute actions via a smart account. It encapsulates the intended actions or transactions of the user, which are executed on-chain by a [Bundler](https://docs.alchemy.com/docs/bundler-services).
 
