@@ -124,7 +124,7 @@ In your gas manager policy, you can configure spending rules per address, per ap
 ### Invalid policy ID: `{ code: -32602, message: 'Invalid Policy ID' }`
 
 ::: details Answer
-Gas manager policies can only be tied to one app. Make sure you are using the app key id that is associated with the app the Gas Manager policy is configured for or create a new policy for the app you are using.
+Gas Manager policies can only be tied to one app. Make sure you are using the API Key that is associated with the app the Gas Manager policy is configured for, or create a new policy for the app you are using.
 :::
 
 ### Precheck failed: `{ code: -3200, message: 'precheck failed: ...' }`
