@@ -36,7 +36,7 @@ There are two scenarios where you'd get a different contract address:
 ### How would Alchemy initiate an upgrade of a LightAccount?
 
 ::: details Answer
-It is unlikely we will frequently update the LightAccount contract itself, however it is possible if needed. LightAccount has [`UUPSUpgradeable`](https://github.com/alchemyplatform/light-account/blob/main/src/LightAccount.sol#L50) which adds upgrade methods on the account itself. To upgrade an account you will need to send a UO using that method.
+It is unlikely we will frequently update the Light Account contract itself, however it is possible if needed. LightAccount has [`UUPSUpgradeable`](https://github.com/alchemyplatform/light-account/blob/main/src/LightAccount.sol#L50) which adds upgrade methods on the account itself. To upgrade an account you will need to send a `UserOperation` using that method.
 :::
 
 ### Can I have multiple accounts for the same owner address? / How do I set the value of the salt/index for LightAccount?
