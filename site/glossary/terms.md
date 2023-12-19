@@ -6,7 +6,7 @@ head:
       content: Terms
   - - meta
     - name: description
-      content: Glossary of terms realted to Account Kit
+      content: Glossary of terms related to Account Kit
   - - meta
     - property: og:description
       content: Glossary of terms realted to Account Kit
