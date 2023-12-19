@@ -52,21 +52,24 @@ yarn add @lit-protocol/pkp-ethers@cayenne
 
 ```bash [npm]
 npm i @lit-protocol/lit-node-client@cayenne
+npm i @lit-protocol/crypto@cayenne
+npm i @lit-protocol/auth-helpers@cayenne
 ```
 
 ```bash [yarn]
 yarn add @lit-protocol/lit-node-client@cayenne
+yarn add @lit-protocol/crypto@cayenne
+yarn add @lit-protocol/auth-helpers@cayenne
 ```
 
 :::
 
 ### Creating PKP
 
-See documentation [here](https://developer.litprotocol.com/v2/pkp/intro) for creating PKPs
+First we will need a pkp with an `AuthMethod`
+See documentation [here](https://developer.litprotocol.com/v3/sdk/wallets/minting) for creating PKPs
 
-### Create a SmartAccountSigner
-
-Next, setup the `LitNodeClient` and `PKPEthersWallet` to create a `SmartAccountSigner`:
+### Create A LitSigner
 
 <<< @/snippets/lit.ts
 
@@ -81,9 +84,9 @@ import {
   LightSmartContractAccount,
   getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
-import { litSigner } from "./lit";
-
+import { createLitSigner } from "./lit";
 const chain = sepolia;
+
 const provider = new AlchemyProvider({
   apiKey: "ALCHEMY_API_KEY",
   chain,
@@ -91,12 +94,11 @@ const provider = new AlchemyProvider({
   (rpcClient) =>
     new LightSmartContractAccount({
       chain,
-      owner: litSigner,
+      owner: await createLitSigner(AUTH_METHOD),
       factoryAddress: getDefaultLightAccountFactoryAddress(chain),
       rpcClient,
     })
 );
 ```
 
-<<< @/snippets/lit.ts
 :::

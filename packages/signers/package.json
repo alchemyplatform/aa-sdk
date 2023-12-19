@@ -56,6 +56,11 @@
       "import": "./dist/esm/capsule/index.js",
       "default": "./dist/cjs/capsule/index.js"
     },
+    "./lit-protocol": {
+      "types": "./dist/types/lit-protocol/index.d.ts",
+      "import": "./dist/esm/lit-protocol/index.js",
+      "default": "./dist/cjs/lit-protocol/index.js"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {
@@ -79,6 +84,10 @@
     "@usecapsule/web-sdk": "^0.29.4",
     "@web3auth/base": "^7.1.0",
     "@web3auth/modal": "^7.1.1",
+    "@lit-protocol/lit-node-client": "3.0.24",
+    "@lit-protocol/pkp-ethers": "3.0.24",
+    "@lit-protocol/types": "3.0.24",
+    "@lit-protocol/crypto": "3.0.24",
     "jsdom": "^22.1.0",
     "magic-sdk": "^21.3.0",
     "typescript": "^5.0.4",
@@ -112,6 +121,10 @@
     "@usecapsule/web-sdk": "^0.29.4",
     "@web3auth/base": "^7.1.0",
     "@web3auth/modal": "^7.1.1",
-    "magic-sdk": "^21.3.0"
+    "magic-sdk": "^21.3.0",
+    "@lit-protocol/lit-node-client": "3.0.24",
+    "@lit-protocol/pkp-ethers": "3.0.24",
+    "@lit-protocol/types": "3.0.24",
+    "@lit-protocol/crypto": "3.0.24"
   }
 }
