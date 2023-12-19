@@ -56,7 +56,7 @@ If the `UserOperation` (meta-transaction for 4337 accounts) is correctly priced 
 ### Why am I seeing a delay in landing userOps on-chain?
 
 ::: details Answer
-This can happen when UserOperations become underpriced, frequently due to fee market movement between when gas and fees are estimations and when the user operation is actually submitted.
+This can happen when `UserOperation`s become underpriced, frequently due to fee market movement between when gas and fees are estimations and when the user operation is actually submitted.
 
 You may experience this when calling the [`waitForUserOperationTransaction`](/packages/aa-core/provider/waitForUserOperationTransaction.html#waitForUserOperationTransaction) method. It may throw an error if it does not find the `UserOperation` (UO) in a mined Transaction within its retry limits. 
 
