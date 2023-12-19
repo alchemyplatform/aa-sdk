@@ -130,7 +130,7 @@ Gas manager policies can only be tied to one app. Make sure you are using the ap
 ### Precheck failed: `{ code: -3200, message: 'precheck failed: ...' }`
 
 ::: details Answer
-Precheck failed errors are often related to gas and/or fees. Our bundler follows standard [ERC 4337](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-4337.md#client-behavior-upon-receiving-a-useroperation) implementation for gas and fee checks in order to 1) ensure your user operations land on chain and to 2) protect the bundler from potential attacks in order to support scalability.
+Precheck failed errors are often related to gas and/or fees. Our bundler follows standard [ERC 4337](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-4337.md#client-behavior-upon-receiving-a-useroperation) implementation for gas and fee checks in order to 1) ensure your `UserOperation`s (UOs) land on chain and to 2) protect the bundler from potential attacks in order to support scalability.
 
 These errors are often related to market movement between the time gas and fees are estimated and the time when UOs are submitted to the bundler. This fluctuation in the market is especially variant on testnet. We currently reject upon sending if the user operation is underpriced compared to the network rate to ensure your UO is included in a block.
 
