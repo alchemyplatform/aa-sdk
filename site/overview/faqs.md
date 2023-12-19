@@ -104,7 +104,7 @@ We front the gas for your application and put the USD equivalent on your bill at
 ### What are my gas sponsorship limits?
 
 ::: details Answer
-You can find details of gas manager limits depending on your tier [here](https://docs.alchemy.com/reference/gas-manager-coverage-api-pricing#fee-logic).
+You can find details of Gas Manager limits depending on your tier [here](https://docs.alchemy.com/reference/gas-manager-coverage-api-pricing#fee-logic).
 :::
 
 ### Do you support ERC20 or stablecoin paymasters?
