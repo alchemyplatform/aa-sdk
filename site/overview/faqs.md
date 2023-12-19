@@ -148,7 +148,7 @@ Currently our bundler allows max 10M gas in aggregate between `preVerificationGa
 ### waitForUserOperationTransaction timeout
 
 ::: details Answer
-waitForUserOperationTransaction may throw this error if it does not find the mined user operation within it’s retry limits.
+[`waitForUserOperationTransaction`](/packages/aa-core/provider/waitForUserOperationTransaction) may throw this error if it does not find the mined user operation within its retry limits.
 
 You can mitigate this by defining a more flexible retry period when constructing a [provider](/packages/aa-core/provider/constructor.html#constructor) (i.e. `txMaxRetries`, `txRetryIntervalMs`, `txRetryMultiplier` in `opts`).
 
