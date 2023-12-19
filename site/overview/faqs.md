@@ -29,7 +29,7 @@ In almost all cases, yes, you will get the same address on all chains as long as
 
 There are two scenarios where you'd get a different contract address:
 
-1. If you deploy one account, then change the owner address, then deploy the second account
+1. If you deploy one smart account, then change the owner address, then deploy the second account.
 2. If you upgrade the smart account (e.g. to a new version of Light Account). It is unlikely that we will make many updates to this contract so the address will not change frequently.
    :::
 
