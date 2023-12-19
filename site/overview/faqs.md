@@ -152,5 +152,5 @@ Currently our bundler allows max 10M gas in aggregate between `preVerificationGa
 
 You can mitigate this by defining a more flexible retry period when constructing a [provider](/packages/aa-core/provider/constructor.html#constructor) (i.e. `txMaxRetries`, `txRetryIntervalMs`, `txRetryMultiplier` in `opts`).
 
-If your user operation continues to be delayed beyond a limit you are willing to wait, you can resubmit the user operation using [`dropAndReplaceUserOperation`](/packages/aa-core/provider/dropAndReplaceUserOperation.html#dropandreplaceuseroperation).
+If your `UserOperation` continues to be delayed beyond a limit you are willing to wait, you can resubmit the user operation using [`dropAndReplaceUserOperation`](/packages/aa-core/provider/dropAndReplaceUserOperation.html#dropandreplaceuseroperation).
 :::
