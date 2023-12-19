@@ -26,11 +26,11 @@ Account Kit is a framework designed to embed smart accounts in web3 applications
 
 ## Bundler
 
-A network participant that collects and submits user operations to the blockchain, handling the associated gas fees, in exchange for payment during user operation processing either directly from the user or from a [Paymaster](https://www.alchemy.com/overviews/what-is-a-paymaster). Alchemy’s implementation of a bundler is called [Rundler](https://github.com/alchemyplatform/rundler). It is written in Rust and designed to achieve high performance and reliability.
+A network participant in the [ERC-4337](#erc-4337) standard that collects and submits `UserOperations` (UOs) to the blockchain, handling the associated gas fees, in exchange for payment during UO processing either directly from the user or from a [Paymaster](https://www.alchemy.com/overviews/what-is-a-paymaster). Alchemy’s implementation of a bundler is called [Rundler](https://github.com/alchemyplatform/rundler). It is written in Rust and designed to achieve high performance and reliability.
 
 ## Entrypoint
 
-A standardized smart contract that acts as the primary gateway for processing `UserOperation`s on the blockchain. It receives bundled user operations from Bundlers and verifies and executes these operations according to predefined rules, ensuring security and adherence to user-specified conditions.
+A standardized smart contract that acts as the primary gateway for processing `UserOperations` (UOs) on the blockchain. It receives bundled UOs from Bundlers and verifies and executes these operations according to predefined rules, ensuring security and adherence to user-specified conditions.
 
 ## ERC-4337
 
@@ -62,7 +62,7 @@ A module for [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) smart accounts,
 
 ## Provider
 
-An intermediary or connector that enables interactions between applications and a blockchain network. Providers offer the necessary infrastructure and APIs to connect, query, and interact with the blockchain, enabling transactions, smart contract executions, and data retrieval. You can use `AlchemyProvider` within [aa-sdk](https://github.com/alchemyplatform/aa-sdk) to query blockchain data and send user operations.
+An intermediary or connector that enables interactions between applications and a blockchain network. Providers offer the necessary infrastructure and APIs to connect, query, and interact with the blockchain, enabling transactions, smart contract executions, and data retrieval. You can use `AlchemyProvider` within [aa-sdk](https://github.com/alchemyplatform/aa-sdk) to query blockchain data and send `UserOperations`.
 
 ## Signer
 
