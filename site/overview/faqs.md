@@ -64,7 +64,7 @@ You may experience this when calling the [`waitForUserOperationTransaction`](/pa
 ### Are User Operations protected from MEV bots?
 
 ::: details Answer
-Right now, user operations are sent to a private mempool for all networks other than Polygon, where there is no way to do this. We are actively involved in proposals for a peer-to-peer mempool standard.
+Right now, `UserOperation`s are sent to a private mempool for all networks other than Polygon, where there is no way to do this. We are actively involved in proposals for a peer-to-peer mempool standard.
 :::
 
 ### Can I simulate user operations the same way I simulate transactions?
