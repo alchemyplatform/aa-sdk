@@ -46,7 +46,6 @@ import {
   resolveProperties,
   type Deferrable,
 } from "../utils/index.js";
-import { type IsUndefined, type NoUndefined } from "../utils/types.js";
 import { createSmartAccountProviderConfigSchema } from "./schema.js";
 import type {
   AccountMiddlewareFn,
