@@ -39,7 +39,7 @@ There are two scenarios where you'd get a different contract address:
 It is unlikely we will frequently update the Light Account contract itself, however it is possible if needed. LightAccount has [`UUPSUpgradeable`](https://github.com/alchemyplatform/light-account/blob/main/src/LightAccount.sol#L50) which adds upgrade methods on the account itself. To upgrade an account you will need to send a `UserOperation` using that method.
 :::
 
-### Can I have multiple accounts for the same owner address? / How do I set the value of the salt/index for LightAccount?
+### Can I have multiple accounts for the same owner address? / How do I set the value of the salt/index for Light Account?
 
 ::: details Answer
 Yes! The optional index value (salt) on Light Account enables the ability to have multiple accounts for the same owner address. This value defaults to 0. You can set it in the [constructor](/packages/aa-accounts/light-account/constructor.html#params-simplesmartaccountparams).
