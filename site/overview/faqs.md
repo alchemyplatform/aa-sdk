@@ -69,7 +69,7 @@ You may experience this when calling the [`waitForUserOperationTransaction`](/pa
 You can mitigate this by defining a more flexible retry period when constructing a [`Provider`](/packages/aa-core/provider/constructor.html#constructor) (i.e. `txMaxRetries`, `txRetryIntervalMs`, `txRetryMultiplier` in `opts`). If your UO continues to be delayed beyond a limit you are willing to wait, you can resubmit it using [`dropAndReplaceUserOperation`](/packages/aa-core/provider/dropAndReplaceUserOperation.html#dropandreplaceuseroperation).
 :::
 
-### Are User Operations protected from MEV bots?
+### Are `UserOperation`s protected from MEV bots?
 
 ::: details Answer
 Right now, `UserOperation`s are sent to a private mempool for all networks other than Polygon, where there is no way to do this. We are actively involved in proposals for a peer-to-peer mempool standard.
