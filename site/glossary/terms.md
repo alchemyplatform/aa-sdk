@@ -30,7 +30,7 @@ A network participant that collects and submits user operations to the blockchai
 
 ## Entrypoint
 
-A standardized smart contract that acts as the primary gateway for processing user operations on the blockchain. It receives bundled user operations from Bundlers and verifies and executes these operations according to predefined rules, ensuring security and adherence to user-specified conditions.
+A standardized smart contract that acts as the primary gateway for processing `UserOperation`s on the blockchain. It receives bundled user operations from Bundlers and verifies and executes these operations according to predefined rules, ensuring security and adherence to user-specified conditions.
 
 ## ERC-4337
 
