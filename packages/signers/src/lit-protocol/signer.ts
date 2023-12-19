@@ -109,7 +109,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
     }
 
     if (!this.signer) {
-      throw new Error("Signer is not initalized, did you call authenticate?");
+      throw new Error("Signer is not initialized, did you call authenticate?");
     }
   }
 
