@@ -20,7 +20,7 @@ head:
 
 # Frequently Asked Questions
 
-## Smart Contract Accounts - LightAccount
+## Smart Accounts - Light Account
 
 ### Do accounts have the same address across all chains?
 
