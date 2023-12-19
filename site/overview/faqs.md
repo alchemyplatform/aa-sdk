@@ -25,7 +25,7 @@ head:
 ### Do accounts have the same address across all chains?
 
 ::: details Answer
-In almost all cases, yes, you will get the same address on all chains as long as the owner address is the same! The deployment address is a function of the owner address, the account implementation (e.g. latest version of LightAccount), and the salt (you can optionally specify this). If all three of those remain the same, then you deploy at the same contract address.
+In almost all cases, yes, you will get the same address on all chains as long as the owner address is the same! The deployment address is a function of the owner address, the account implementation (e.g. latest version of Light Account), and the salt (you can optionally specify this). If all three of those remain the same, then you deploy the smart account at the same contract address.
 
 There are two scenarios where you'd get a different contract address:
 
