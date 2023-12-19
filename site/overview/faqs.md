@@ -75,7 +75,7 @@ You can mitigate this by defining a more flexible retry period when constructing
 Right now, `UserOperation`s are sent to a private mempool for all networks other than Polygon, where there is no way to do this. We are actively involved in proposals for a peer-to-peer mempool standard.
 :::
 
-### Can I simulate User Operations the same way I simulate transactions?
+### Can I simulate `UserOperation`s the same way I simulate transactions?
 
 ::: details Answer
 Yes! Check out [this guide](/tutorials/sim-user-operation.html).
