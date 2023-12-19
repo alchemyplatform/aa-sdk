@@ -153,7 +153,7 @@ Our gas and fee estimations are just that, estimations, but we are always workin
 Currently our Bundler allows max 10M gas in aggregate between `preVerificationGas`, `verificationGasLimit`, and `callGasLimit`. To reduce the gas needed, try reducing the size of your call data and/or sending your call data in multiple `UserOperation`s rather than one.
 :::
 
-### waitForUserOperationTransaction timeout
+### `waitForUserOperationTransaction` timeout
 
 ::: details Answer
 [`waitForUserOperationTransaction`](/packages/aa-core/provider/waitForUserOperationTransaction) may throw this error if it does not find the mined User Operation within its retry limits.
