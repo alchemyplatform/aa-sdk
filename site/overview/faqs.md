@@ -78,7 +78,9 @@ Yes! Check out [this guide](/tutorials/sim-user-operation.html).
 ### How does gas estimation for 4337 smart contract accounts work?
 
 ::: details Answer
-Our bundler estimates gas and submits User Operations under the hood of the aa-sdk. Our gas estimations are just that, estimations that optimize for user operations landing on chain, and you may need to adjust gas limits based on your needs using [overrides](/packages/aa-core/provider/types/userOperationOverrides.html). Learn more about gas estimation and how it is implemented in our [bundler](https://www.alchemy.com/blog/erc-4337-gas-estimation).
+Our bundler estimates gas and submits `UserOperation`s under the hood of the aa-sdk. Our gas estimations are just that, estimations that optimize for user operations landing on chain, and you may need to adjust gas limits based on your needs using [overrides](/packages/aa-core/provider/types/userOperationOverrides.html).
+
+Learn more about gas estimation and how it is implemented in our [bundler](https://www.alchemy.com/blog/erc-4337-gas-estimation).
 
 There are many nuances and edge cases that our bundler considers especially for L2’s. Learn more [here](https://www.alchemy.com/blog/l2-gas-and-signature-aggregators).
 
