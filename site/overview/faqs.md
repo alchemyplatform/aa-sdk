@@ -115,7 +115,7 @@ We front the gas for your application and put the USD equivalent on your bill at
 You can find details of Gas Manager limits depending on your tier [here](https://docs.alchemy.com/reference/gas-manager-coverage-api-pricing#fee-logic).
 :::
 
-### Do you support ERC20 or stablecoin paymasters?
+### Do you support ERC-20 or stablecoin paymasters?
 
 ::: details Answer
 Currently, we don’t support this, but we are actively exploring. Please [reach out](/overview/contact-us) if you are interested as we would love your input in our spec.
