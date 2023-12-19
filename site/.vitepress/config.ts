@@ -875,6 +875,7 @@ export default defineConfig({
         base: "/glossary",
         collapsed: true,
         items: [
+          { text: "Terms", link: "/terms" },
           {
             text: "Types",
             base: "/glossary/types",
