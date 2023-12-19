@@ -116,7 +116,7 @@ Currently, we don’t support this, but we are actively exploring. Please [reach
 ### How is the gas manager protected from DDOS attacks?
 
 ::: details Answer
-In your gas manager policy, you can configure spending rules per address, per app, and/or policy wide limits. See how to set up these policies [here](/tutorials/sponsoring-gas/sponsoring-gas.html#_2-create-a-gas-manager-policy).
+In your Gas Manager policy, you can configure spending rules per address, per app, and/or policy wide limits. See how to set up these policies [here](/tutorials/sponsoring-gas/sponsoring-gas.html#_2-create-a-gas-manager-policy).
 :::
 
 ## Common Errors {#common-errors}
