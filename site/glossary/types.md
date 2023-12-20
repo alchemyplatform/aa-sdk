@@ -138,10 +138,16 @@ A type representing a partial set of override options for `UserOperation` (UO) r
 
 A type that can be a hexadecimal string prefixed with `0x`, a `bigint`, or a `number`. It is used to represent values that can be converted to or operate as big integers.
 
+[See Type ↗️](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/core/src/types.ts#L22)
+
 ## `BigNumberishRange`
 
 An object type that may contain optional `min` and `max` fields, each of which accepts a `BigNumberish` value. This type is used to specify a numerical range, including both the minimum and maximum bounds.
 
+[See Type ↗️](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/core/src/types.ts#L23)
+
 ## `Percentage`
 
 An object type with a required `percentage` field, which is a `number` that must be within the range of 1 to 1000.
+
+[See Type ↗️](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/core/src/types.ts#L20)
