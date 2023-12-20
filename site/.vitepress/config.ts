@@ -894,22 +894,7 @@ export default defineConfig({
         collapsed: true,
         items: [
           { text: "Terms", link: "/terms" },
-          {
-            text: "Types",
-            base: "/glossary/types",
-            collapsed: true,
-            items: [
-              { text: "BigNumberish", link: "/bigNumberish" },
-              {
-                text: "BigNumberishRange",
-                link: "/bigNumberishRange",
-              },
-              {
-                text: "Percentage",
-                link: "/percentage",
-              },
-            ],
-          },
+          { text: "Types", link: "/types" },
         ],
       },
     ],
