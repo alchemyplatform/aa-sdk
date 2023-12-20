@@ -133,3 +133,15 @@ An extension of the `SmartAccountSigner` interface, this interface includes addi
 A type representing a partial set of override options for `UserOperation` (UO) requests, specifically related to gas and paymaster data. It allows for optional customization of various gas-related parameters like `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, and `verificationGasLimit`. This type is particularly useful for dynamically adjusting gas settings in UO requests.
 
 [See Interface ↗️](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/alchemy/src/middleware/types/index.ts)
+
+## `BigNumberish`
+
+A type that can be a hexadecimal string prefixed with `0x`, a `bigint`, or a `number`. It is used to represent values that can be converted to or operate as big integers.
+
+## `BigNumberishRange`
+
+An object type that may contain optional `min` and `max` fields, each of which accepts a `BigNumberish` value. This type is used to specify a numerical range, including both the minimum and maximum bounds.
+
+## `Percentage`
+
+An object type with a required `percentage` field, which is a `number` that must be within the range of 1 to 1000.
