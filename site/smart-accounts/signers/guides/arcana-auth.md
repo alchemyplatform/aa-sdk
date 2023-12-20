@@ -63,22 +63,25 @@ import {
   getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
 import { sepolia } from "viem/chains";
-import { arcanaAuthSigner } from "./arcana-auth";
+import { createArcanaAuthSigner } from "./arcana-auth";
 
 const chain = sepolia;
 
-const provider = new AlchemyProvider({
-  apiKey: "ALCHEMY_API_KEY",
-  chain,
-}).connect(
-  (rpcClient) =>
-    new LightSmartContractAccount({
-      chain,
-      owner: arcanaAuthSigner,
-      factoryAddress: getDefaultLightAccountFactoryAddress(chain),
-      rpcClient,
-    })
-);
+export async function getProvider() {
+  const signer = await createArcanaAuthSigner();
+  return new AlchemyProvider({
+    apiKey: "ALCHEMY_API_KEY",
+    chain,
+  }).connect(
+    (rpcClient) =>
+      new LightSmartContractAccount({
+        chain,
+        owner: signer,
+        factoryAddress: getDefaultLightAccountFactoryAddress(chain),
+        rpcClient,
+      })
+  );
+}
 ```
 
 <<< @/snippets/arcana-auth.ts

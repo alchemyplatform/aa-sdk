@@ -29,3 +29,7 @@ export {
   type LitConfig,
   type LitAuthenticateProps,
 } from "./lit-protocol/index.js";
+export {
+  ArcanaAuthSigner,
+  type ArcanaAuthAuthenticationParams,
+} from "./arcana-auth/index.js";
