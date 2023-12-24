@@ -4,6 +4,7 @@ import type {
   UserOperationFeeOptionsFieldSchema,
   UserOperationFeeOptionsSchema,
 } from "./provider/schema";
+import type { SmartAccountSigner } from "./signer/types";
 import type {
   BigNumberishRangeSchema,
   BigNumberishSchema,
@@ -54,6 +55,7 @@ export type UserOperationOverrides = Partial<{
     | UserOperationStruct["verificationGasLimit"]
     | Percentage;
   paymasterAndData: UserOperationStruct["paymasterAndData"];
+  signer: SmartAccountSigner;
 }>;
 
 // represents the request as it needs to be formatted for RPC requests

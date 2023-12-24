@@ -206,7 +206,7 @@ export class SmartAccountProvider<
   ): Promise<Hash> => {
     const uoStruct = await this.buildUserOperationFromTx(request, overrides);
 
-    const { hash } = await this._sendUserOperation(uoStruct);
+    const { hash } = await this._sendUserOperation(uoStruct, overrides);
 
     return await this.waitForUserOperationTransaction(hash as Hash);
   };
@@ -386,7 +386,7 @@ export class SmartAccountProvider<
     }
 
     const uoStruct = await this.buildUserOperation(data, overrides);
-    return this._sendUserOperation(uoStruct);
+    return this._sendUserOperation(uoStruct, overrides);
   };
 
   dropAndReplaceUserOperation = async (
@@ -419,7 +419,7 @@ export class SmartAccountProvider<
     };
 
     const uoToSend = await this._runMiddlewareStack(uoToSubmit, _overrides);
-    return this._sendUserOperation(uoToSend);
+    return this._sendUserOperation(uoToSend, overrides);
   };
 
   checkGasSponsorshipEligibility = async (
@@ -453,7 +453,10 @@ export class SmartAccountProvider<
     return resolveProperties<UserOperationStruct>(result);
   };
 
-  private _sendUserOperation = async (uoStruct: UserOperationStruct) => {
+  private _sendUserOperation = async (
+    uoStruct: UserOperationStruct,
+    overrides?: UserOperationOverrides
+  ) => {
     if (!this.account) {
       throw new Error("account not connected");
     }
@@ -470,13 +473,18 @@ export class SmartAccountProvider<
       );
     }
 
-    request.signature = (await this.account.signUserOperationHash(
-      getUserOperationHash(
-        request,
-        this.getEntryPointAddress(),
-        BigInt(this.chain.id)
-      )
-    )) as `0x${string}`;
+    const userOpHash = getUserOperationHash(
+      request,
+      this.getEntryPointAddress(),
+      BigInt(this.chain.id)
+    );
+
+    request.signature =
+      overrides?.signer != null
+        ? await overrides.signer.signMessage(userOpHash)
+        : ((await this.account.signUserOperationHash(
+            userOpHash
+          )) as `0x${string}`);
 
     return {
       hash: await this.rpcClient.sendUserOperation(
