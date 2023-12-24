@@ -4,6 +4,7 @@ import type { IMSCA } from "../builder";
 import type {
   ISmartAccountProvider,
   SupportedTransports,
+  UserOperationOverrides,
 } from "@alchemy/aa-core";
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -124,19 +125,22 @@ const MultiOwnerPlugin_ = {
   >(
     provider: P
   ) => ({
-    updateOwners: ({
-      args,
-    }: GetFunctionArgs<
-      typeof MultiOwnerPluginExecutionFunctionAbi,
-      "updateOwners"
-    >) => {
+    updateOwners: (
+      {
+        args,
+      }: GetFunctionArgs<
+        typeof MultiOwnerPluginExecutionFunctionAbi,
+        "updateOwners"
+      >,
+      overrides?: UserOperationOverrides
+    ) => {
       const callData = encodeFunctionData({
         abi: MultiOwnerPluginExecutionFunctionAbi,
         functionName: "updateOwners",
         args,
       });
 
-      return provider.sendUserOperation(callData);
+      return provider.sendUserOperation(callData, overrides);
     },
   }),
 };

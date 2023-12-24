@@ -126,7 +126,6 @@ export const createMultiOwnerMSCA = <
   let account = builder
     .build(params)
     .extendWithPluginMethods(MultiOwnerPlugin)
-    .extendWithPluginMethods(TokenReceiverPlugin)
     .extend(accountLoupeDecorators);
 
   if (params.excludeDefaultTokenReceiverPlugin) {

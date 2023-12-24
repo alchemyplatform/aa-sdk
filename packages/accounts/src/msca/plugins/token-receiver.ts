@@ -4,6 +4,7 @@ import type { IMSCA } from "../builder";
 import type {
   ISmartAccountProvider,
   SupportedTransports,
+  UserOperationOverrides,
 } from "@alchemy/aa-core";
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,64 +80,76 @@ const TokenReceiverPlugin_ = {
   >(
     provider: P
   ) => ({
-    tokensReceived: ({
-      args,
-    }: GetFunctionArgs<
-      typeof TokenReceiverPluginExecutionFunctionAbi,
-      "tokensReceived"
-    >) => {
+    tokensReceived: (
+      {
+        args,
+      }: GetFunctionArgs<
+        typeof TokenReceiverPluginExecutionFunctionAbi,
+        "tokensReceived"
+      >,
+      overrides?: UserOperationOverrides
+    ) => {
       const callData = encodeFunctionData({
         abi: TokenReceiverPluginExecutionFunctionAbi,
         functionName: "tokensReceived",
         args,
       });
 
-      return provider.sendUserOperation(callData);
+      return provider.sendUserOperation(callData, overrides);
     },
 
-    onErc721Received: ({
-      args,
-    }: GetFunctionArgs<
-      typeof TokenReceiverPluginExecutionFunctionAbi,
-      "onERC721Received"
-    >) => {
+    onErc721Received: (
+      {
+        args,
+      }: GetFunctionArgs<
+        typeof TokenReceiverPluginExecutionFunctionAbi,
+        "onERC721Received"
+      >,
+      overrides?: UserOperationOverrides
+    ) => {
       const callData = encodeFunctionData({
         abi: TokenReceiverPluginExecutionFunctionAbi,
         functionName: "onERC721Received",
         args,
       });
 
-      return provider.sendUserOperation(callData);
+      return provider.sendUserOperation(callData, overrides);
     },
 
-    onErc1155Received: ({
-      args,
-    }: GetFunctionArgs<
-      typeof TokenReceiverPluginExecutionFunctionAbi,
-      "onERC1155Received"
-    >) => {
+    onErc1155Received: (
+      {
+        args,
+      }: GetFunctionArgs<
+        typeof TokenReceiverPluginExecutionFunctionAbi,
+        "onERC1155Received"
+      >,
+      overrides?: UserOperationOverrides
+    ) => {
       const callData = encodeFunctionData({
         abi: TokenReceiverPluginExecutionFunctionAbi,
         functionName: "onERC1155Received",
         args,
       });
 
-      return provider.sendUserOperation(callData);
+      return provider.sendUserOperation(callData, overrides);
     },
 
-    onErc1155BatchReceived: ({
-      args,
-    }: GetFunctionArgs<
-      typeof TokenReceiverPluginExecutionFunctionAbi,
-      "onERC1155BatchReceived"
-    >) => {
+    onErc1155BatchReceived: (
+      {
+        args,
+      }: GetFunctionArgs<
+        typeof TokenReceiverPluginExecutionFunctionAbi,
+        "onERC1155BatchReceived"
+      >,
+      overrides?: UserOperationOverrides
+    ) => {
       const callData = encodeFunctionData({
         abi: TokenReceiverPluginExecutionFunctionAbi,
         functionName: "onERC1155BatchReceived",
         args,
       });
 
-      return provider.sendUserOperation(callData);
+      return provider.sendUserOperation(callData, overrides);
     },
   }),
 };
