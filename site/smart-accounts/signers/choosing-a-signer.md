@@ -26,7 +26,7 @@ next:
 
 # What is a Signer?
 
-A **Signer** is a service (e.g. Magic or Turnkey) or application (e.g. MetaMask) that manages the private key and signs operations. Most web3 users today use an [Externally Owned Account (EOA)](https://ethereum.org/en/developers/docs/accounts/#externally-owned-accounts-and-key-pairs) with a self-custodial Signer such as MetaMask to manage the private key.
+A **Signer** is a service (e.g. Magic or Turnkey or Arcana Auth) or application (e.g. MetaMask) that manages the private key and signs operations. Most web3 users today use an [Externally Owned Account (EOA)](https://ethereum.org/en/developers/docs/accounts/#externally-owned-accounts-and-key-pairs) with a self-custodial Signer such as MetaMask to manage the private key.
 
 With Account Kit, you will deploy a **smart account** for each user instead of an EOA wallet. This smart account stores the user’s assets (e.g. tokens or NFTs). The default smart account in Account Kit is called [`LightAccount`](/smart-accounts/accounts/guides/light-account) and it uses a typical single-owner architecture.
 
@@ -86,7 +86,7 @@ Valid signatures do not always require all shares to sign a transaction. MPC Sig
 
 Some MPC signers provide recovery services in which key share(s) are backed up in the service provider’s cloud, on the end user’s device, or in the end user’s cloud (e.g. iCloud or Google Drive). When evaluating an MPC provider, it’s important to under where each key share is stored.
 
-**Example**: Privy, Fireblocks MPC, Portal, Capsule
+**Example**: Privy, Fireblocks MPC, Portal, Capsule, Arcana Wallet (Embedded)
 
 ::: details TSS vs SSSS
 
