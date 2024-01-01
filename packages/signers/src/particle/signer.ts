@@ -57,7 +57,7 @@ export class ParticleSigner
         }),
         this.signerType
       );
-    };
+    }
   }
 
   readonly signerType = `${signerTypePrefix}particle`;
