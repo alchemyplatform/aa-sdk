@@ -49,6 +49,15 @@ export class ParticleSigner
 
     this.inner = new ParticleNetwork(params);
     this.provider = new ParticleProvider(this.inner.auth);
+
+    if (this.inner.auth.isLogin()) {
+      this.signer = new WalletClientSigner(
+        createWalletClient({
+          transport: custom(this.provider),
+        }),
+        this.signerType
+      );
+    };
   }
 
   readonly signerType = `${signerTypePrefix}particle`;
