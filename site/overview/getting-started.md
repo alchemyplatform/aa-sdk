@@ -63,7 +63,7 @@ Make sure your new `package.json` file looks something like the following. Note 
     "@alchemy/aa-accounts": "^*", // latest version
     "@alchemy/aa-alchemy": "^*", // latest version
     "@alchemy/aa-core": "^*", // latest version
-    "viem": "^1.21.2" // latest version compatible with aa-sdk
+    "viem": "^1.21.4" // latest version compatible with aa-sdk
   }
 }
 ```
