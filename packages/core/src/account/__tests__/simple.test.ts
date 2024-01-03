@@ -145,7 +145,6 @@ describe("Account Simple Tests", () => {
       addresslessAccount.getAddress()
     ).rejects.toThrowErrorMatchingInlineSnapshot('"Invalid RPC URL."');
   });
-
   const givenConnectedProvider = ({
     owner,
     chain,
