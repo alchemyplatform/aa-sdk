@@ -105,7 +105,7 @@ const givenSigner = async (auth = true) => {
           return Promise.reject(new Error("Method not found"));
       }
     },
-  });
+  } as any);
 
   const signer = new ArcanaAuthSigner({ inner });
 
