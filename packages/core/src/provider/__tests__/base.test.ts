@@ -37,6 +37,14 @@ describe("Base Tests", () => {
   const dummyAccountAddress =
     "0x1234567890123456789012345678901234567890" as Address;
 
+  const addresslessAccount = new SimpleSmartContractAccount({
+    entryPointAddress,
+    chain,
+    owner,
+    factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
+    rpcClient: providerMock.rpcClient,
+  });
+
   const account = new SimpleSmartContractAccount({
     entryPointAddress,
     chain,
@@ -207,6 +215,12 @@ describe("Base Tests", () => {
     }));
 
     expect(newProvider.testMethod()).toEqual("test");
+  });
+
+  it("should correctly fail if rpc url is invalid", async () => {
+    await expect(() =>
+      addresslessAccount.getAddress()
+    ).rejects.toThrowErrorMatchingInlineSnapshot('"Invalid RPC URL."');
   });
 
   it("should correctly do runtime validation when entrypoint is invalid", () => {
