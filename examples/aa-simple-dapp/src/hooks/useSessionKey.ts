@@ -1,5 +1,5 @@
 import { createLocalAccount } from "@/shared/util";
-import { IAccountLoupe, MSCA } from "@alchemy/aa-accounts";
+import { IAccountLoupe, MSCA, SessionKeyPlugin } from "@alchemy/aa-accounts";
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import { LocalAccountSigner } from "@alchemy/aa-core";
 import { useCallback, useState } from "react";
@@ -31,7 +31,15 @@ export const useSessionKey = ({
       "msca-sessionkey-secret"
     ) as Hex;
 
-    const restoreSessionKey = storedSessionKey && storedSessionKeySecret;
+    const currentSessionKeys = await provider.account
+      .extend(SessionKeyPlugin.accountMethods)
+      .readGetSessionKeys();
+    console.log("current session keys", currentSessionKeys);
+
+    const restoreSessionKey =
+      storedSessionKey &&
+      storedSessionKeySecret &&
+      currentSessionKeys.includes(storedSessionKey);
 
     const signer = restoreSessionKey
       ? LocalAccountSigner.privateKeyToAccountSigner(storedSessionKeySecret)
@@ -65,19 +73,27 @@ export const useSessionKey = ({
       ) {
         return;
       }
-      // const sessionKeyEnabledProvider = provider.extend(
-      //   SessionKeyPlugin.providerMethods
-      // );
-      // const currentSessionKeys = await provider.account
-      //   .extend(SessionKeyPlugin.accountMethods)
-      //   .readGetSessionKeys();
-      // console.log("current session keys", currentSessionKeys);
-      // sessionKeyEnabledProvider.updateSessionKeys({
-      //   args: [
-      //     sessionKeys,
-      //     currentSessionKeys.map((key) => [key as Address, "0x" as Hex]),
-      //   ],
-      // });
+      const sessionKeyEnabledProvider = provider.extend(
+        SessionKeyPlugin.providerMethods
+      );
+      const currentSessionKeys = await provider.account
+        .extend(SessionKeyPlugin.accountMethods)
+        .readGetSessionKeys();
+      console.log(
+        "updateSessionKeys: current session keys removed",
+        currentSessionKeys
+      );
+
+      const findPredecessorPromises = sessionKeys.map((key) =>
+        SessionKeyPlugin.findPredecessor(scaAddress, key)
+      );
+
+      sessionKeyEnabledProvider.updateSessionKeys({
+        args: [
+          sessionKeys,
+          currentSessionKeys.map((key) => [key as Address, "0x" as Hex]),
+        ],
+      });
       return await (
         provider.account as MSCA & IAccountLoupe
       ).getInstalledPlugins();
