@@ -10,6 +10,8 @@ import { generatePrivateKey } from "viem/accounts";
 import { polygonMumbai } from "viem/chains";
 import { SimpleSmartContractAccount } from "../src/account/simple.js";
 import {
+  createPublicErc4337Client,
+  getDefaultEntryPointAddress,
   getDefaultSimpleAccountFactoryAddress,
   type SmartAccountSigner,
   type UserOperationFeeOptions,
@@ -66,6 +68,23 @@ describe("Simple Account Tests", () => {
     const address = provider.getAddress();
     await expect(address).resolves.not.toThrowError();
     expect(isAddress(await address)).toBe(true);
+  });
+
+  it("should correctly fail to get address if rpc url is invalid", async () => {
+    const addresslessAccount = new SimpleSmartContractAccount({
+      entryPointAddress: getDefaultEntryPointAddress(chain),
+      chain,
+      owner,
+      factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
+      rpcClient: createPublicErc4337Client({
+        chain,
+        rpcUrl: "ALCHEMY_RPC_URL",
+      }),
+    });
+
+    await expect(() =>
+      addresslessAccount.getAddress()
+    ).rejects.toThrowErrorMatchingInlineSnapshot('"Invalid RPC URL."');
   });
 
   it("should correctly handle percentage overrides for buildUserOperation", async () => {
