@@ -1,11 +1,15 @@
 import type { Address } from "viem";
 import { polygonMumbai, sepolia, type Chain } from "viem/chains";
 import { describe, it } from "vitest";
-import { getDefaultSimpleAccountFactoryAddress } from "../../index.js";
+import { createPublicErc4337Client } from "../../client/create-client.js";
 import { SmartAccountProvider } from "../../provider/base.js";
 import { LocalAccountSigner } from "../../signer/local-account.js";
 import { type SmartAccountSigner } from "../../signer/types.js";
 import type { BatchUserOperationCallData } from "../../types.js";
+import {
+  getDefaultEntryPointAddress,
+  getDefaultSimpleAccountFactoryAddress,
+} from "../../utils/index.js";
 import { SimpleSmartContractAccount } from "../simple.js";
 
 describe("Account Simple Tests", () => {
@@ -123,6 +127,23 @@ describe("Account Simple Tests", () => {
 
     const initCode = await account.getInitCode();
     expect(initCode).toMatchInlineSnapshot('"0xdeadbeef"');
+  });
+
+  it("should correctly fail if rpc url is invalid", async () => {
+    const addresslessAccount = new SimpleSmartContractAccount({
+      entryPointAddress: getDefaultEntryPointAddress(chain),
+      chain,
+      owner,
+      factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
+      rpcClient: createPublicErc4337Client({
+        chain,
+        rpcUrl: "ALCHEMY_RPC_URL",
+      }),
+    });
+
+    await expect(() =>
+      addresslessAccount.getAddress()
+    ).rejects.toThrowErrorMatchingInlineSnapshot('"Invalid RPC URL."');
   });
 
   const givenConnectedProvider = ({
