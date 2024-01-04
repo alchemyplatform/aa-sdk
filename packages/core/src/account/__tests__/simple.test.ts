@@ -1,11 +1,11 @@
 import type { Address } from "viem";
 import { polygonMumbai, sepolia, type Chain } from "viem/chains";
 import { describe, it } from "vitest";
-import { getDefaultSimpleAccountFactoryAddress } from "../../index.js";
 import { SmartAccountProvider } from "../../provider/base.js";
 import { LocalAccountSigner } from "../../signer/local-account.js";
 import { type SmartAccountSigner } from "../../signer/types.js";
 import type { BatchUserOperationCallData } from "../../types.js";
+import { getDefaultSimpleAccountFactoryAddress } from "../../utils/index.js";
 import { SimpleSmartContractAccount } from "../simple.js";
 
 describe("Account Simple Tests", () => {

@@ -265,6 +265,10 @@ export abstract class BaseSmartContractAccount<
           );
           return this.accountAddress;
         }
+
+        if (err.details === "Invalid URL") {
+          throw new Error("Invalid RPC URL.");
+        }
       }
 
       throw new Error("getCounterFactualAddress failed");
