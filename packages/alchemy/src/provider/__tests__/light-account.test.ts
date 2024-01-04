@@ -140,11 +140,11 @@ describe("Alchemy Provider Tests", () => {
       "[
         {
           \\"code\\": \\"custom\\",
+          \\"message\\": \\"chain is not supported by Alchemy\\",
           \\"fatal\\": true,
           \\"path\\": [
             \\"chain\\"
-          ],
-          \\"message\\": \\"Invalid input\\"
+          ]
         }
       ]"
     `);

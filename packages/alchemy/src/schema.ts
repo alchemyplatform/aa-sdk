@@ -24,7 +24,7 @@ export const AlchemyChainSchema = z.custom<Chain>((chain) => {
     SupportedChains.get(_chain.id) != null &&
     chainObject.rpcUrls.alchemy != null
   );
-});
+}, "chain is not supported by Alchemy");
 
 export const AlchemyProviderConfigSchema =
   createSmartAccountProviderConfigSchema()
