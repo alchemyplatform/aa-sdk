@@ -4,6 +4,7 @@ import type { IMSCA } from "../builder";
 import type {
   ISmartAccountProvider,
   SupportedTransports,
+  UserOperationOverrides,
 } from "@alchemy/aa-core";
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,34 +96,40 @@ const SessionKeyPlugin_ = {
   >(
     provider: P
   ) => ({
-    executeWithSessionKey: ({
-      args,
-    }: GetFunctionArgs<
-      typeof SessionKeyPluginExecutionFunctionAbi,
-      "executeWithSessionKey"
-    >) => {
+    executeWithSessionKey: (
+      {
+        args,
+      }: GetFunctionArgs<
+        typeof SessionKeyPluginExecutionFunctionAbi,
+        "executeWithSessionKey"
+      >,
+      overrides?: UserOperationOverrides
+    ) => {
       const callData = encodeFunctionData({
         abi: SessionKeyPluginExecutionFunctionAbi,
         functionName: "executeWithSessionKey",
         args,
       });
 
-      return provider.sendUserOperation(callData);
+      return provider.sendUserOperation(callData, overrides);
     },
 
-    updateSessionKeys: ({
-      args,
-    }: GetFunctionArgs<
-      typeof SessionKeyPluginExecutionFunctionAbi,
-      "updateSessionKeys"
-    >) => {
+    updateSessionKeys: (
+      {
+        args,
+      }: GetFunctionArgs<
+        typeof SessionKeyPluginExecutionFunctionAbi,
+        "updateSessionKeys"
+      >,
+      overrides?: UserOperationOverrides
+    ) => {
       const callData = encodeFunctionData({
         abi: SessionKeyPluginExecutionFunctionAbi,
         functionName: "updateSessionKeys",
         args,
       });
 
-      return provider.sendUserOperation(callData);
+      return provider.sendUserOperation(callData, overrides);
     },
   }),
 };

@@ -61,10 +61,17 @@ export {
 
 export { pluginManagerDecorator } from "./msca/plugin-manager/decorator.js";
 export type * from "./msca/plugin-manager/installPlugin.js";
-export { installPlugin } from "./msca/plugin-manager/installPlugin.js";
+export {
+  encodeInstallPluginUserOperation,
+  installPlugin,
+} from "./msca/plugin-manager/installPlugin.js";
 export type * from "./msca/plugin-manager/types.js";
 export type * from "./msca/plugin-manager/uninstallPlugin.js";
-export { uninstallPlugin } from "./msca/plugin-manager/uninstallPlugin.js";
+export {
+  encodeUninstallPluginUserOperation,
+  uninstallPlugin,
+} from "./msca/plugin-manager/uninstallPlugin.js";
+export { type Plugin } from "./msca/plugins/types.js";
 
 export {
   MultiOwnerPlugin,
@@ -74,3 +81,7 @@ export {
   SessionKeyPlugin,
   SessionKeyPluginExecutionFunctionAbi,
 } from "./msca/plugins/session-key.js";
+export {
+  TokenReceiverPlugin,
+  TokenReceiverPluginExecutionFunctionAbi,
+} from "./msca/plugins/token-receiver.js";

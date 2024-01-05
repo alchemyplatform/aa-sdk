@@ -1,4 +1,7 @@
-import type { ISmartAccountProvider } from "@alchemy/aa-core";
+import type {
+  ISmartAccountProvider,
+  UserOperationOverrides,
+} from "@alchemy/aa-core";
 import {
   encodeFunctionData,
   encodeFunctionResult,
@@ -22,6 +25,17 @@ export type InstallPluginParams = {
 
 export async function installPlugin<
   P extends ISmartAccountProvider & { account: IMSCA<any, any> }
+>(
+  provider: P,
+  params: InstallPluginParams,
+  overrides?: UserOperationOverrides
+) {
+  const callData = await encodeInstallPluginUserOperation(provider, params);
+  return provider.sendUserOperation(callData, overrides);
+}
+
+export async function encodeInstallPluginUserOperation<
+  P extends ISmartAccountProvider & { account: IMSCA<any, any> }
 >(provider: P, params: InstallPluginParams) {
   const pluginManifest = await provider.rpcClient.readContract({
     abi: IPluginAbi,
@@ -38,8 +52,7 @@ export async function installPlugin<
         result: pluginManifest,
       })
     );
-
-  const callData = encodeFunctionData({
+  return encodeFunctionData({
     abi: IPluginManagerAbi,
     functionName: "installPlugin",
     args: [
@@ -50,6 +63,4 @@ export async function installPlugin<
       params.injectedHooks ?? [],
     ],
   });
-
-  return provider.sendUserOperation(callData);
 }

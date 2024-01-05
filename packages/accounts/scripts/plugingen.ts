@@ -135,7 +135,7 @@ export function plugingen({
           .map((n) => {
             const argsParamString =
               n.inputs.length > 0
-                ? `{ args }: GetFunctionArgs<typeof ${executionAbiConst}, "${n.name}">`
+                ? `{ args }: GetFunctionArgs<typeof ${executionAbiConst}, "${n.name}">, overrides?: UserOperationOverrides`
                 : "";
             const argsEncodeString = n.inputs.length > 0 ? "args," : "";
 
@@ -147,7 +147,7 @@ export function plugingen({
                 ${argsEncodeString}
               });
 
-              return provider.sendUserOperation(callData);
+              return provider.sendUserOperation(callData, overrides);
             }
           `;
           });
@@ -193,7 +193,7 @@ export function plugingen({
         import { type Address, type GetFunctionArgs, encodeFunctionData } from "viem";
         import type { Plugin } from "./types";
         import type { IMSCA } from "../builder";
-        import type { ISmartAccountProvider, SupportedTransports } from "@alchemy/aa-core";
+        import type { ISmartAccountProvider, SupportedTransports, UserOperationOverrides } from "@alchemy/aa-core";
       `;
 
       return {
