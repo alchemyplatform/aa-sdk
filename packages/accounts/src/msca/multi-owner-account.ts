@@ -20,8 +20,8 @@ import { MultiOwnerMSCAFactoryAbi } from "./abis/MultiOwnerMSCAFactory.js";
 import { MultiOwnerTokenReceiverMSCAFactoryAbi } from "./abis/MultiOwnerTokenReceiverMSCAFactory.js";
 import { accountLoupeDecorators } from "./account-loupe/decorator.js";
 import { MSCABuilder, StandardExecutor } from "./builder.js";
-import { MultiOwnerPlugin } from "./plugins/multi-owner.js";
-import { TokenReceiverPlugin } from "./plugins/token-receiver.js";
+import { MultiOwnerPlugin } from "./plugins/multi-owner/plugin.js";
+import { TokenReceiverPlugin } from "./plugins/token-receiver/plugin.js";
 
 export const createMultiOwnerMSCASchema = <
   TTransport extends SupportedTransports = Transport
