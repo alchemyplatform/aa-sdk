@@ -12,7 +12,7 @@ export default defineConfig(
   pluginConfigs.map((config) => ({
     out: `./src/msca/plugins/${kebabCase(
       config.name.replaceAll(pluginRegEx, "")
-    )}.ts`,
+    )}/plugin.ts`,
     contracts: [
       {
         name: config.name,
