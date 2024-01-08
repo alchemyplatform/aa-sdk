@@ -58,6 +58,8 @@ jobs:
         run: yarn
 
       - name: Build
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
         run: yarn build
 
       - name: Build with VitePress
