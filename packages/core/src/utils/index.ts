@@ -1,4 +1,4 @@
-import type { Address, Hash, Hex } from "viem";
+import type { Address, Chain, Hash, Hex } from "viem";
 import { encodeAbiParameters, hexToBigInt, keccak256, toHex } from "viem";
 import * as chains from "viem/chains";
 import type {
@@ -10,13 +10,13 @@ import type {
 import { BigNumberishSchema, PercentageSchema } from "./schema.js";
 
 /**
- * Utility method for converting a chainId to a {@link chains.Chain} object
+ * Utility method for converting a chainId to a {@link Chain} object
  *
  * @param chainId
- * @returns a {@link chains.Chain} object for the given chainId
+ * @returns a {@link Chain} object for the given chainId
  * @throws if the chainId is not found
  */
-export const getChain = (chainId: number): chains.Chain => {
+export const getChain = (chainId: number): Chain => {
   for (const chain of Object.values(chains)) {
     if (chain.id === chainId) {
       return chain;

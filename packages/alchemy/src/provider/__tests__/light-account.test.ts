@@ -7,7 +7,7 @@ import {
 import { Alchemy, Network } from "alchemy-sdk";
 import { toHex, type Address, type Chain, type HDAccount } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
-import { polygonMumbai } from "viem/chains";
+import { avalanche, polygonMumbai } from "viem/chains";
 import { AlchemyProvider } from "../base.js";
 import { createLightAccountAlchemyProvider } from "../light-account.js";
 
@@ -131,6 +131,23 @@ describe("Alchemy Provider Tests", () => {
     }).toThrowErrorMatchingInlineSnapshot(
       '"Alchemy SDK client JSON-RPC URL must match AlchemyProvider JSON-RPC URL"'
     );
+  });
+
+  it("should correctly do runtime validation when chain is not supported by Alchemy", async () => {
+    expect(() => {
+      givenConnectedProvider({ owner, chain: avalanche });
+    }).toThrowErrorMatchingInlineSnapshot(`
+      "[
+        {
+          \\"code\\": \\"custom\\",
+          \\"message\\": \\"chain is not supported by Alchemy\\",
+          \\"fatal\\": true,
+          \\"path\\": [
+            \\"chain\\"
+          ]
+        }
+      ]"
+    `);
   });
 });
 
