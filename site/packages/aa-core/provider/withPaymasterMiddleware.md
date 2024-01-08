@@ -32,7 +32,7 @@ import { provider } from "./provider";
 // Define the DummyPaymasterDataMiddlewareOverrideFunction // [!code focus:99]
 const DummyPaymasterDataMiddlewareOverrideFunction = async (uoStruct) => {
   // Return an object like {paymasterAndData: "0x..."} where "0x..." is the valid paymasterAndData for your paymaster contract (used in gas estimation)
-  // You can even hardcode these dummy singatures
+  // You can even hardcode these dummy signatures
   // You can read up more on dummy signatures here: https://www.alchemy.com/blog/dummy-signatures-and-gas-token-transfers
   const paymasterAndData = await someFunctionToFetchDummyPaymasterAndData();
 

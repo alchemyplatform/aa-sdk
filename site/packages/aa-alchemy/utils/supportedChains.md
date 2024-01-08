@@ -42,4 +42,4 @@ the associated viem `Chain` object.
 
 ## Parameters
 
-### `chainId: number` -- the struct containig UserOperation fields, where each field may be asychronously returned from the middleware used to generate its final value.
+### `chainId: number` -- the struct containing UserOperation fields, where each field may be asychronously returned from the middleware used to generate its final value.

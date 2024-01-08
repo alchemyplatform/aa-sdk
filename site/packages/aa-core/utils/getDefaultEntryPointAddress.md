@@ -36,7 +36,7 @@ const entryPointAddress = getDefaultEntryPointAddress(chain);
 
 The Address of the default EntryPoint contrafct for the input chain
 
-## Paramters
+## Parameters
 
 ### `chain: Chain`
 
