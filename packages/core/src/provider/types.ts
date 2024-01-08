@@ -27,7 +27,9 @@ import type {
   UserOperationStruct,
 } from "../types.js";
 import type { Deferrable } from "../utils";
+import type { IsUndefined, NoUndefined } from "../utils/types.js";
 import type {
+  ConnectionConfigSchema,
   SmartAccountProviderOptsSchema,
   createSmartAccountProviderConfigSchema,
 } from "./schema.js";
@@ -38,6 +40,8 @@ type WithOptional<T, K extends keyof T> = Pick<Partial<T>, K>;
 export type ConnectorData = {
   chainId?: Hex;
 };
+
+export type ConnectionConfig = z.input<typeof ConnectionConfigSchema>;
 
 export interface ProviderEvents {
   chainChanged(chainId: Hex): void;
@@ -356,7 +360,11 @@ export interface ISmartAccountProvider<
         | PublicErc4337Client<TTransport>
         | PublicErc4337Client<HttpTransport>
     ) => TAccount
-  ): this & { account: TAccount };
+  ): IsUndefined<TAccount["providerDecorators"]> extends true
+    ? this & { account: TAccount }
+    : this & { account: TAccount } & ReturnType<
+          NoUndefined<TAccount["providerDecorators"]>
+        >;
 
   /**
    * Allows for disconnecting the account from the provider so you can connect the provider to another account instance

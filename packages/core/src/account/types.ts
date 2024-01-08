@@ -1,8 +1,9 @@
 import type { Address } from "abitype";
-import type { Hash, Hex, Transport } from "viem";
+import type { Hash, Hex, HttpTransport, Transport } from "viem";
 import type { SignTypedDataParameters } from "viem/accounts";
 import type { z } from "zod";
-import type { SupportedTransports } from "../client/types";
+import type { PublicErc4337Client, SupportedTransports } from "../client/types";
+import type { ISmartAccountProvider } from "../provider/types";
 import type { SmartAccountSigner } from "../signer/types";
 import type { BatchUserOperationCallData } from "../types";
 import type {
@@ -20,7 +21,25 @@ export type SimpleSmartAccountParams<
   TTransport extends SupportedTransports = Transport
 > = z.input<ReturnType<typeof SimpleSmartAccountParamsSchema<TTransport>>>;
 
-export interface ISmartContractAccount {
+export interface ISmartContractAccount<
+  TTransport extends SupportedTransports = Transport
+> {
+  /**
+   * The RPC provider the account uses to make RPC calls
+   */
+  readonly rpcProvider:
+    | PublicErc4337Client<TTransport>
+    | PublicErc4337Client<HttpTransport>;
+
+  /**
+   * Optional property that will be used to augment the provider on connect with methods (leveraging the provider's extend method)
+   *
+   * @param provider - the provider being connected
+   * @returns an object with methods that will be added to the provider
+   */
+  providerDecorators?: <P extends ISmartAccountProvider<TTransport>>(
+    provider: P
+  ) => unknown;
   /**
    * @returns the init code for the account
    */
@@ -117,4 +136,31 @@ export interface ISmartContractAccount {
    * @returns the address of the entry point contract for the smart account
    */
   getEntryPointAddress(): Address;
+
+  /**
+   * Allows you to add additional functionality and utility methods to this account
+   * via a decorator pattern.
+   *
+   * NOTE: this method does not allow you to override existing methods on the account.
+   *
+   * @example
+   * ```ts
+   * const account = new BaseSmartCobntractAccount(...).extend((account) => ({
+   *  readAccountState: async (...args) => {
+   *    return this.rpcProvider.readContract({
+   *        address: await this.getAddress(),
+   *        abi: ThisContractsAbi
+   *        args: args
+   *    });
+   *  }
+   * }));
+   *
+   * account.debugSendUserOperation(...);
+   * ```
+   *
+   * @param extendFn -- this function gives you access to the created account instance and returns an object
+   * with the extension methods
+   * @returns -- the account with the extension methods added
+   */
+  extend: <R>(extendFn: (self: this) => R) => this & R;
 }

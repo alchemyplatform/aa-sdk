@@ -9,11 +9,14 @@
   },
   "targetDefaults": {
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "generate"],
       "outputs": ["{projectRoot}/dist"]
     },
     "test": {
       "dependsOn": ["build"]
+    },
+    "generate": {
+      "outputs": ["{projectRoot}/src/plugins"]
     }
   }
 }

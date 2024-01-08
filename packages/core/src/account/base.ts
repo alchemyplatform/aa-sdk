@@ -35,7 +35,7 @@ export enum DeploymentState {
 
 export abstract class BaseSmartContractAccount<
   TTransport extends SupportedTransports = Transport
-> implements ISmartContractAccount
+> implements ISmartContractAccount<TTransport>
 {
   protected factoryAddress: Address;
   protected deploymentState: DeploymentState = DeploymentState.UNDEFINED;
@@ -48,7 +48,7 @@ export abstract class BaseSmartContractAccount<
     Chain
   >;
   protected entryPointAddress: Address;
-  protected rpcProvider:
+  readonly rpcProvider:
     | PublicErc4337Client<TTransport>
     | PublicErc4337Client<HttpTransport>;
 
@@ -276,6 +276,15 @@ export abstract class BaseSmartContractAccount<
 
     return this.accountAddress;
   }
+
+  extend = <R>(fn: (self: this) => R): this & R => {
+    const extended = fn(this) as any;
+    // this should make it so extensions can't overwrite the base methods
+    for (const key in this) {
+      delete extended[key];
+    }
+    return Object.assign(this, extended);
+  };
 
   getOwner(): SmartAccountSigner | undefined {
     return this.owner;

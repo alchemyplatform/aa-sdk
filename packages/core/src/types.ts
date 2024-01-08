@@ -1,4 +1,4 @@
-import type { Address, Hash } from "viem";
+import { type Address, type Hash } from "viem";
 import type { z } from "zod";
 import type {
   UserOperationFeeOptionsFieldSchema,
