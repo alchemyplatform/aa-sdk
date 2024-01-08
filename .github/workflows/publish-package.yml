@@ -37,12 +37,14 @@ jobs:
       - uses: actions/checkout@v3
         with:
           token: ${{ secrets.ALCHEMY_BOT_PAT }}
+          fetch-depth: "0"
 
       - name: Set Node.js 16.x
         uses: actions/setup-node@v3
         with:
           node-version: "18.16"
           cache: "yarn"
+          with:
 
       - name: Set Github User Details
         run: |
@@ -88,7 +90,7 @@ jobs:
         if: inputs.publish
         env:
           API_KEY: ${{ secrets.API_KEY }}
-        run: yarn lerna publish --no-private --yes --no-verify-access
+        run: yarn lerna publish --conventional-commits --no-private --yes --no-verify-access
 
   publish_site:
     name: Publish Docs Site
