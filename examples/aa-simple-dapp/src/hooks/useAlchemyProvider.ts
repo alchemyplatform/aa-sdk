@@ -35,7 +35,7 @@ export const useAlchemyProvider = () => {
         .connect((provider) => {
           return createMultiOwnerMSCA({
             rpcClient: provider,
-            owner: signer,
+            signer,
             chain,
             entryPointAddress: getDefaultEntryPointAddress(chain),
             factoryAddress: getDefaultMultiOwnerMSCAFactoryAddress(chain),
@@ -68,18 +68,18 @@ export const useAlchemyProvider = () => {
       switch (type) {
         case PluginType.SESSION_KEY:
           return installPlugin(provider, {
-            pluginAddress: SessionKeyPlugin.meta.address[chain.id],
+            pluginAddress: SessionKeyPlugin.meta.addresses[chain.id],
             pluginInitData: encodeAbiParameters(
               parseAbiParameters("address[]"),
               [[]]
             ),
             dependencies: [
               encodeFunctionReference(
-                MultiOwnerPlugin.meta.address[chain.id],
+                MultiOwnerPlugin.meta.addresses[chain.id],
                 "0x0"
               ),
               encodeFunctionReference(
-                MultiOwnerPlugin.meta.address[chain.id],
+                MultiOwnerPlugin.meta.addresses[chain.id],
                 "0x1"
               ),
             ],

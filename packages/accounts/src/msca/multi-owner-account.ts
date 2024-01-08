@@ -4,11 +4,13 @@ import {
   type SignTypedDataParams,
   type SupportedTransports,
 } from "@alchemy/aa-core";
+import { Address as zAddress } from "abitype/zod";
 import {
   concatHex,
   encodeFunctionData,
   hashMessage,
   hashTypedData,
+  hexToBigInt,
   hexToBytes,
   isBytes,
   type FallbackTransport,
@@ -26,11 +28,14 @@ import { TokenReceiverPlugin } from "./plugins/token-receiver/plugin.js";
 export const createMultiOwnerMSCASchema = <
   TTransport extends SupportedTransports = Transport
 >() =>
-  createBaseSmartAccountParamsSchema<TTransport>().extend({
-    owner: SignerSchema,
-    index: z.bigint().optional().default(0n),
-    excludeDefaultTokenReceiverPlugin: z.boolean().optional().default(false),
-  });
+  createBaseSmartAccountParamsSchema<TTransport>()
+    .omit({ owner: true })
+    .extend({
+      signer: SignerSchema,
+      owners: z.array(zAddress).default([]),
+      index: z.bigint().optional().default(0n),
+      excludeDefaultTokenReceiverPlugin: z.boolean().optional().default(false),
+    });
 
 export type MultiOwnerMSCAParams = z.input<
   ReturnType<typeof createMultiOwnerMSCASchema>
@@ -45,7 +50,16 @@ export const createMultiOwnerMSCABuilder = <
 
   const builder = new MSCABuilder()
     .withFactory(async (acct) => {
-      const ownerAddress = await params.owner.getAddress();
+      const ownerAddress = await params.signer.getAddress();
+      // owners need to be dedupe + ordered in ascending order and not == to zero address
+      const owners = Array.from(new Set([...params.owners, ownerAddress]))
+        .filter((x) => hexToBigInt(x) !== 0n)
+        .sort((a, b) => {
+          const bigintA = hexToBigInt(a);
+          const bigintB = hexToBigInt(b);
+
+          return bigintA < bigintB ? -1 : bigintA > bigintB ? 1 : 0;
+        });
       return concatHex([
         acct.getFactoryAddress(),
         encodeFunctionData({
@@ -53,8 +67,7 @@ export const createMultiOwnerMSCABuilder = <
             ? MultiOwnerMSCAFactoryAbi
             : MultiOwnerTokenReceiverMSCAFactoryAbi,
           functionName: "createAccount",
-          // TODO: this needs to support creating accounts with multiple owners
-          args: [params.index, [ownerAddress]],
+          args: [params.index, owners],
         }),
       ]);
     })
@@ -67,7 +80,7 @@ export const createMultiOwnerMSCABuilder = <
         const [, name, version, chainId, verifyingContract, salt] =
           await multiOwnerTokenReceiverAugmented.readEip712Domain();
 
-        return params.owner.signTypedData({
+        return params.signer.signTypedData({
           domain: {
             chainId: Number(chainId),
             name,
@@ -91,7 +104,7 @@ export const createMultiOwnerMSCABuilder = <
         },
 
         signUserOperationHash(uoHash: `0x${string}`): Promise<`0x${string}`> {
-          return params.owner.signMessage(hexToBytes(uoHash));
+          return params.signer.signMessage(hexToBytes(uoHash));
         },
 
         signMessage(msg: string | Uint8Array): Promise<`0x${string}`> {
