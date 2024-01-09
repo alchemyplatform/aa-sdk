@@ -21,7 +21,7 @@ import {
   type Transport,
 } from "viem";
 import { createMultiOwnerMSCA } from "../msca/multi-owner-account.js";
-import { getDefaultMSCAFactoryAddress } from "../msca/utils.js";
+import { getDefaultMultiOwnerMSCAFactoryAddress } from "../msca/utils.js";
 import { LightAccountAbi } from "./abis/LightAccountAbi.js";
 import { LightAccountFactoryAbi } from "./abis/LightAccountFactoryAbi.js";
 import {
@@ -230,7 +230,7 @@ export class LightSmartContractAccount<
       provider: provider.connect((rpcClient) =>
         createMultiOwnerMSCA({
           rpcClient,
-          factoryAddress: getDefaultMSCAFactoryAddress(chain),
+          factoryAddress: getDefaultMultiOwnerMSCAFactoryAddress(chain),
           owner,
           index: 0n,
           chain: chain,

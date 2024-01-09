@@ -29,6 +29,10 @@ import {
 import { IPluginAbi } from "./abis/IPlugin.js";
 import { UpgradeableModularAccountAbi } from "./abis/UpgradeableModularAccount.js";
 
+// afaik, we've deployed msca only on eth sepolia - will generalize when ready
+export const defaultMSCAImplementationAddress =
+  "0xb2b748c2557c552B8636862E41aB3649319dD045";
+
 /**
  * Utility method returning the default multi owner msca factory address given a {@link Chain} object
  *

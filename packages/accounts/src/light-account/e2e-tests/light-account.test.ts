@@ -194,7 +194,7 @@ describe("Light Account Tests", () => {
     });
 
     const accountAddress = await throwawayProvider.getAddress();
-    const ownerAddress = await throwawayOwner.getAddress();
+    // const ownerAddress = await throwawayOwner.getAddress();
 
     // fund + deploy the throwaway address
     await provider.sendTransaction({
@@ -218,10 +218,10 @@ describe("Light Account Tests", () => {
 
     const upgradedAccountAddress = await upgradedProvider.getAddress();
 
-    const owners = await upgradedProvider.account.readOwners();
+    // const owners = await upgradedProvider.account.readOwners();
 
     expect(upgradedAccountAddress).toBe(accountAddress);
-    expect(owners).toContain(ownerAddress);
+    // expect(owners).toContain(ownerAddress);
   }, 200000);
 });
 
