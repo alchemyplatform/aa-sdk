@@ -26,8 +26,7 @@ import type {
   UserOperationResponse,
   UserOperationStruct,
 } from "../types.js";
-import type { Deferrable } from "../utils";
-import type { IsUndefined, NoUndefined } from "../utils/types.js";
+import type { Deferrable, IsUndefined, NoUndefined } from "../utils";
 import type {
   ConnectionConfigSchema,
   SmartAccountProviderOptsSchema,
