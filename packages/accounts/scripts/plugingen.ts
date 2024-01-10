@@ -192,7 +192,7 @@ export function plugingen({
       const imports = dedent`
         import { type Address, type GetFunctionArgs, encodeFunctionData } from "viem";
         import type { Plugin } from "../types";
-        import type { IMSCA } from "../../builder";
+        import type { IMSCA } from "../../types";
         import type { ISmartAccountProvider, SupportedTransports, UserOperationOverrides } from "@alchemy/aa-core";
       `;
 

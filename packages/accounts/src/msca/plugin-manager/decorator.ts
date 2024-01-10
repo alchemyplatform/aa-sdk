@@ -1,5 +1,8 @@
-import type { ISmartAccountProvider } from "@alchemy/aa-core";
-import type { IMSCA } from "../builder";
+import type {
+  ISmartAccountProvider,
+  UserOperationOverrides,
+} from "@alchemy/aa-core";
+import type { IMSCA } from "../types.js";
 import { installPlugin, type InstallPluginParams } from "./installPlugin.js";
 import {
   uninstallPlugin,
@@ -11,8 +14,12 @@ export const pluginManagerDecorator = <
 >(
   provider: P
 ) => ({
-  installPlugin: (params: InstallPluginParams) =>
-    installPlugin<P>(provider, params),
-  uninstallPlugin: (params: UninstallPluginParams) =>
-    uninstallPlugin<P>(provider, params),
+  installPlugin: (
+    params: InstallPluginParams,
+    overrides?: UserOperationOverrides
+  ) => installPlugin<P>(provider, params, overrides),
+  uninstallPlugin: (
+    params: UninstallPluginParams,
+    overrides?: UserOperationOverrides
+  ) => uninstallPlugin<P>(provider, params, overrides),
 });

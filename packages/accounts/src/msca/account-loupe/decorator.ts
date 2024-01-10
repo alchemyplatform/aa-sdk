@@ -1,7 +1,7 @@
 import type { Address } from "@alchemy/aa-core";
 import type { Hash } from "viem";
 import { IAccountLoupeAbi } from "../abis/IAccountLoupe.js";
-import type { IMSCA } from "../builder.js";
+import type { IMSCA } from "../types.js";
 import type { FunctionReference, IAccountLoupe } from "./types.js";
 
 export const accountLoupeDecorators = (

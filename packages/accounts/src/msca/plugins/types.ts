@@ -3,7 +3,7 @@ import type {
   ISmartAccountProvider,
   SupportedTransports,
 } from "@alchemy/aa-core";
-import type { IMSCA } from "../builder";
+import type { IMSCA } from "../types";
 
 export interface Plugin<AD, PD> {
   meta: { name: string; version: string; addresses: Record<number, Address> };

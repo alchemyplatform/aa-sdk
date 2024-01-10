@@ -3,87 +3,15 @@ import {
   type BaseSmartAccountParams,
   type BatchUserOperationCallData,
   type ISmartAccountProvider,
-  type ISmartContractAccount,
   type SignTypedDataParams,
   type SupportedTransports,
 } from "@alchemy/aa-core";
-import {
-  encodeFunctionData,
-  type Address,
-  type Hex,
-  type Transport,
-} from "viem";
+import { type Transport } from "viem";
 import { z } from "zod";
-import { IStandardExecutorAbi } from "./abis/IStandardExecutor.js";
-import { pluginManagerDecorator } from "./plugin-manager/decorator.js";
-import type { Plugin } from "./plugins/types";
-
-export interface IMSCA<
-  TTransport extends SupportedTransports = Transport,
-  TProviderDecorators = {}
-> extends ISmartContractAccount {
-  providerDecorators: (
-    p: ISmartAccountProvider<TTransport>
-  ) => TProviderDecorators;
-
-  extendWithPluginMethods: <AD, PD>(
-    plugin: Plugin<AD, PD>
-  ) => IMSCA<TTransport, TProviderDecorators & PD> & AD;
-
-  addProviderDecorator: <
-    PD,
-    TProvider extends ISmartAccountProvider<TTransport> & { account: IMSCA }
-  >(
-    decorator: (p: TProvider) => PD
-  ) => IMSCA<TTransport, TProviderDecorators & PD>;
-}
-
-export type Executor = <A extends IMSCA<any, any>>(
-  acct: A
-) => Pick<ISmartContractAccount, "encodeExecute" | "encodeBatchExecute">;
-
-export type SignerMethods = <A extends IMSCA<any, any>>(
-  acct: A
-) => Pick<
-  ISmartContractAccount,
-  | "signMessage"
-  | "signTypedData"
-  | "signUserOperationHash"
-  | "getDummySignature"
->;
-
-export type Factory = <A extends IMSCA<any, any>>(acct: A) => Promise<Hex>;
-
-// TODO: this can be moved out into its own file
-export const StandardExecutor: Executor = () => ({
-  async encodeExecute(
-    target: Address,
-    value: bigint,
-    data: Hex
-  ): Promise<`0x${string}`> {
-    return encodeFunctionData({
-      abi: IStandardExecutorAbi,
-      functionName: "execute",
-      args: [target, value, data],
-    });
-  },
-
-  async encodeBatchExecute(
-    txs: BatchUserOperationCallData
-  ): Promise<`0x${string}`> {
-    return encodeFunctionData({
-      abi: IStandardExecutorAbi,
-      functionName: "executeBatch",
-      args: [
-        txs.map((tx) => ({
-          target: tx.target,
-          data: tx.data,
-          value: tx.value ?? 0n,
-        })),
-      ],
-    });
-  },
-});
+import { pluginManagerDecorator } from "../plugin-manager/decorator.js";
+import type { Plugin } from "../plugins/types";
+import type { IMSCA } from "../types.js";
+import type { Executor, Factory, SignerMethods } from "./types.js";
 
 const zCompleteBuilder = z.object({
   executor: z.custom<Executor>(),
