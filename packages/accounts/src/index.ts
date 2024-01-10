@@ -43,14 +43,13 @@ export { accountLoupeDecorators } from "./msca/account-loupe/decorator.js";
 export type * from "./msca/account-loupe/types.js";
 export * from "./msca/account-loupe/utils.js";
 
-export {
-  MSCABuilder,
-  StandardExecutor,
-  type Executor,
-  type Factory,
-  type IMSCA as MSCA,
-  type SignerMethods,
-} from "./msca/builder.js";
+export { MSCABuilder } from "./msca/builder/index.js";
+export { StandardExecutor } from "./msca/builder/standard-executor.js";
+export { WrapWith712SignerMethods } from "./msca/builder/wrapped-signer.js";
+
+export type * from "./msca/builder/types.js";
+
+export type * from "./msca/types.js";
 
 export {
   createMultiOwnerMSCA,

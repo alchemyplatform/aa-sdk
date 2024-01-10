@@ -1,6 +1,6 @@
 import { type Address, type GetFunctionArgs, encodeFunctionData } from "viem";
 import type { Plugin } from "../types";
-import type { IMSCA } from "../../builder";
+import type { IMSCA } from "../../types";
 import type {
   ISmartAccountProvider,
   SupportedTransports,

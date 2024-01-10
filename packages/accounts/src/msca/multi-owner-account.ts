@@ -1,27 +1,23 @@
 import {
   SignerSchema,
   createBaseSmartAccountParamsSchema,
-  type SignTypedDataParams,
   type SupportedTransports,
 } from "@alchemy/aa-core";
 import { Address as zAddress } from "abitype/zod";
 import {
   concatHex,
   encodeFunctionData,
-  hashMessage,
-  hashTypedData,
   hexToBigInt,
-  hexToBytes,
-  isBytes,
   type FallbackTransport,
-  type Hash,
   type Transport,
 } from "viem";
 import { z } from "zod";
+import { StandardExecutor } from "../index.js";
 import { MultiOwnerMSCAFactoryAbi } from "./abis/MultiOwnerMSCAFactory.js";
 import { MultiOwnerTokenReceiverMSCAFactoryAbi } from "./abis/MultiOwnerTokenReceiverMSCAFactory.js";
 import { accountLoupeDecorators } from "./account-loupe/decorator.js";
-import { MSCABuilder, StandardExecutor } from "./builder.js";
+import { MSCABuilder } from "./builder/index.js";
+import { WrapWith712SignerMethods } from "./builder/wrapped-signer.js";
 import { MultiOwnerPlugin } from "./plugins/multi-owner/plugin.js";
 import { TokenReceiverPlugin } from "./plugins/token-receiver/plugin.js";
 
@@ -72,58 +68,7 @@ export const createMultiOwnerMSCABuilder = <
       ]);
     })
     .withExecutor(StandardExecutor)
-    .withSigner((acct) => {
-      const signWith1271Wrapper = async (msg: Hash): Promise<`0x${string}`> => {
-        const multiOwnerTokenReceiverAugmented =
-          acct.extendWithPluginMethods(MultiOwnerPlugin);
-
-        const [, name, version, chainId, verifyingContract, salt] =
-          await multiOwnerTokenReceiverAugmented.readEip712Domain();
-
-        return params.signer.signTypedData({
-          domain: {
-            chainId: Number(chainId),
-            name,
-            salt,
-            verifyingContract,
-            version,
-          },
-          types: {
-            ERC6900Message: [{ name: "message", type: "bytes" }],
-          },
-          message: {
-            message: msg,
-          },
-          primaryType: "ERC6900Message",
-        });
-      };
-
-      return {
-        getDummySignature(): `0x${string}` {
-          return "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
-        },
-
-        signUserOperationHash(uoHash: `0x${string}`): Promise<`0x${string}`> {
-          return params.signer.signMessage(hexToBytes(uoHash));
-        },
-
-        signMessage(msg: string | Uint8Array): Promise<`0x${string}`> {
-          return signWith1271Wrapper(
-            hashMessage(
-              typeof msg === "string" && !isBytes(msg)
-                ? msg
-                : {
-                    raw: msg,
-                  }
-            )
-          );
-        },
-
-        signTypedData(params: SignTypedDataParams): Promise<`0x${string}`> {
-          return signWith1271Wrapper(hashTypedData(params));
-        },
-      };
-    });
+    .withSigner(WrapWith712SignerMethods);
 
   return builder;
 };

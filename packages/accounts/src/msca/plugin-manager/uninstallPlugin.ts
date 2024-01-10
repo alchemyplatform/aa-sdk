@@ -4,7 +4,7 @@ import type {
 } from "@alchemy/aa-core";
 import { encodeFunctionData, type Address, type Hash } from "viem";
 import { IPluginManagerAbi } from "../abis/IPluginManager.js";
-import type { IMSCA } from "../builder.js";
+import type { IMSCA } from "../types.js";
 
 export type UninstallPluginParams = {
   pluginAddress: Address;

@@ -12,7 +12,7 @@ import {
 import { IPluginAbi } from "../abis/IPlugin.js";
 import { IPluginManagerAbi } from "../abis/IPluginManager.js";
 import type { FunctionReference } from "../account-loupe/types.js";
-import type { IMSCA } from "../builder.js";
+import type { IMSCA } from "../types.js";
 import type { InjectedHook } from "./types";
 
 export type InstallPluginParams = {
