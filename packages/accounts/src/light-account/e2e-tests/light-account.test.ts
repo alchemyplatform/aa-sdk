@@ -19,10 +19,7 @@ import {
   createLightAccountProvider,
   LightSmartContractAccount,
 } from "../../index.js";
-import {
-  defaultMSCAImplementationAddress,
-  getMSCAInitializationData,
-} from "../../msca/utils.js";
+import { getMSCAUpgradeToData } from "../../msca/utils.js";
 import {
   API_KEY,
   LIGHT_ACCOUNT_OWNER_MNEMONIC,
@@ -30,7 +27,6 @@ import {
 } from "./constants.js";
 
 const chain = sepolia;
-const multiOwnerPluginAddress = "0x56bC629F342821FBe91C5273880792dFECBE7920";
 
 Logger.setLogLevel(LogLevel.DEBUG);
 
@@ -194,7 +190,7 @@ describe("Light Account Tests", () => {
     });
 
     const accountAddress = await throwawayProvider.getAddress();
-    // const ownerAddress = await throwawayOwner.getAddress();
+    const ownerAddress = await throwawayOwner.getAddress();
 
     // fund + deploy the throwaway address
     await provider.sendTransaction({
@@ -204,24 +200,20 @@ describe("Light Account Tests", () => {
       value: toHex(1000000000000000n),
     });
 
-    const { provider: upgradedProvider } =
-      await LightSmartContractAccount.upgrade(
-        throwawayProvider,
-        chain,
-        defaultMSCAImplementationAddress,
-        await getMSCAInitializationData(
-          throwawayProvider,
-          multiOwnerPluginAddress
-        ),
-        true
-      );
+    const { connectFn, ...upgradeToData } = await getMSCAUpgradeToData(
+      throwawayProvider
+    );
+
+    await throwawayProvider.upgradeAccount(upgradeToData, true);
+
+    const upgradedProvider = throwawayProvider.connect(connectFn);
 
     const upgradedAccountAddress = await upgradedProvider.getAddress();
 
-    // const owners = await upgradedProvider.account.readOwners();
+    const owners = await upgradedProvider.account.readOwners();
 
     expect(upgradedAccountAddress).toBe(accountAddress);
-    // expect(owners).toContain(ownerAddress);
+    expect(owners).toContain(ownerAddress);
   }, 200000);
 });
 

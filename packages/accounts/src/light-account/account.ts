@@ -14,14 +14,11 @@ import {
   isBytes,
   trim,
   type Address,
-  type Chain,
   type FallbackTransport,
   type Hash,
   type Hex,
   type Transport,
 } from "viem";
-import { createMultiOwnerMSCA } from "../msca/multi-owner-account.js";
-import { getDefaultMultiOwnerMSCAFactoryAddress } from "../msca/utils.js";
 import { LightAccountAbi } from "./abis/LightAccountAbi.js";
 import { LightAccountFactoryAbi } from "./abis/LightAccountFactoryAbi.js";
 import {
@@ -155,91 +152,43 @@ export class LightSmartContractAccount<
     return decodedCallResult;
   }
 
-  /**
-   * Upgrades the account implementation from Light Account to a Modular Account.
-   * Optionally waits for the transaction to be mined.
-   *
-   * @param provider - the provider to use to send the transaction
-   * @param chain - the chain to upgrade the account on
-   * @param accountImplAddress - the address of the smart account implementation to
-   * upgrade to
-   * @param initializationData - the initialization data address to use when upgrading to the new
-   * smart account
-   * @param waitForTxn - whether or not to wait for the transaction to be mined
-   * @returns {
-   *  provider: SmartAccountProvider<TTransport> & { account: MSCA };
-   *  hash: Hash;
-   * } - the upgraded provider and corresponding userOperation hash,
-   * or transaction hash if `waitForTxn` is true
-   */
-  static async upgrade<
-    P extends ISmartAccountProvider,
-    TTransport extends Transport | FallbackTransport = Transport
-  >(
-    provider: P & {
-      account: LightSmartContractAccount<TTransport>;
-    },
-    chain: Chain,
-    accountImplAddress: Address,
-    initializationData: Hex,
-    waitForTxn: boolean = false
-  ) {
-    const accountAddress = await provider.getAddress();
+  encodeUpgradeToAndCall = async (
+    upgradeToImplAddress: Address,
+    upgradeToInitData: Hex
+  ): Promise<Hex> => {
+    const provider = this.rpcProvider;
+    // Step 1: check if the account we're upgrading is in fact a LightAccount
+    const accountAddress = await this.getAddress();
 
-    const storage = await provider.rpcClient.getStorageAt({
+    const storage = await provider.getStorageAt({
       address: accountAddress,
-      slot: LightSmartContractAccount.storageSlot,
+      slot: "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
     });
 
     if (storage == null) {
       throw new Error("could not get storage");
     }
 
+    const implementationAddresses = Object.values(LightAccountVersions).map(
+      (x) => x.implAddress
+    );
+
     // only upgrade undeployed accounts (storage 0) or deployed light accounts, error otherwise
     if (
       fromHex(storage, "number") !== 0 &&
-      trim(storage) !== LightSmartContractAccount.implementationAddress
+      implementationAddresses.some((x) => x === trim(storage))
     ) {
       throw new Error(
         "could not determine if smart account implementation is light account"
       );
     }
 
-    const encodeUpgradeData = encodeFunctionData({
+    return encodeFunctionData({
       abi: LightAccountAbi,
       functionName: "upgradeToAndCall",
-      args: [accountImplAddress, initializationData],
+      args: [upgradeToImplAddress, upgradeToInitData],
     });
-
-    const result = await provider.sendUserOperation({
-      target: accountAddress,
-      data: encodeUpgradeData,
-    });
-
-    let hash = result.hash;
-    if (waitForTxn) {
-      hash = await provider.waitForUserOperationTransaction(result.hash);
-    }
-
-    const owner = provider.account.getOwner();
-    if (owner == null) {
-      throw new Error("could not get owner");
-    }
-
-    return {
-      provider: provider.connect((rpcClient) =>
-        createMultiOwnerMSCA({
-          rpcClient,
-          factoryAddress: getDefaultMultiOwnerMSCAFactoryAddress(chain),
-          owner,
-          index: 0n,
-          chain: chain,
-          accountAddress,
-        })
-      ),
-      hash,
-    };
-  }
+  };
 
   /**
    * Encodes the transferOwnership function call using Light Account ABI.
@@ -280,7 +229,21 @@ export class LightSmartContractAccount<
       data,
     });
 
-    provider.account.owner = newOwner;
+    const accountAddress = await provider.getAddress();
+    const initCode = await provider.account.getInitCode();
+    provider.connect(
+      (rpcClient) =>
+        new LightSmartContractAccount({
+          rpcClient,
+          chain: rpcClient.chain,
+          owner: newOwner,
+          entryPointAddress: provider.account.getEntryPointAddress(),
+          factoryAddress: provider.account.getFactoryAddress(),
+          index: provider.account.index,
+          initCode,
+          accountAddress,
+        })
+    );
 
     if (waitForTxn) {
       return provider.waitForUserOperationTransaction(result.hash);

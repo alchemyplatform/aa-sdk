@@ -218,6 +218,20 @@ export abstract class BaseSmartContractAccount<
   ): Promise<`0x${string}`> {
     throw new Error("encodeBatchExecute not supported");
   }
+
+  /**
+   * If your contract supports UUPS, you can implement this method which can be
+   * used to upgrade the implementation of the account.
+   *
+   * @param upgradeToImplAddress -- the implementation address of the contract you want to upgrade to
+   * @param upgradeToInitData -- the initialization data required by that account
+   */
+  encodeUpgradeToAndCall = async (
+    _upgradeToImplAddress: Address,
+    _upgradeToInitData: Hex
+  ): Promise<Hex> => {
+    throw new Error("encodeUpgradeToAndCall not supported");
+  };
   // #endregion optional-methods
 
   // Extra implementations
