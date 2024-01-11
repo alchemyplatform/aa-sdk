@@ -2,7 +2,7 @@ import { defineConfig } from "@wagmi/cli";
 import { kebabCase } from "change-case";
 import dotenv from "dotenv";
 import * as configs from "./plugindefs/index.js";
-import { plugingen } from "./scripts/plugingen.js";
+import { plugingen } from "./plugingen/index.js";
 dotenv.config();
 
 const pluginConfigs = Object.values(configs);
