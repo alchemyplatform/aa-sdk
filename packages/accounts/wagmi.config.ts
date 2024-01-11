@@ -26,6 +26,7 @@ export default defineConfig(
         connectionConfig: config.rpcUrl
           ? { rpcUrl: config.rpcUrl }
           : { apiKey: process.env.API_KEY! },
+        config,
       }),
     ],
   }))
