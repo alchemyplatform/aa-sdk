@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/alchemyplatform/aa-sdk/compare/v1.2.4...v2.0.0) (2024-01-12)
+
+### Bug Fixes
+
+- **msca:** support multiple owners during intialization ([#355](https://github.com/alchemyplatform/aa-sdk/issues/355)) ([f8bd650](https://github.com/alchemyplatform/aa-sdk/commit/f8bd65073c7bdec5c3b32ce9f1938b3bfd587ded))
+- **publish:** remove added stuff ([2be5f83](https://github.com/alchemyplatform/aa-sdk/commit/2be5f8325e9b58e83fd7e94148646c40aa77f65f))
+
+- feat!: update the LightAccount logic for 1271 signatures to match the on-chain impl ([bbe5060](https://github.com/alchemyplatform/aa-sdk/commit/bbe5060c01828e07d7f788485b14c04dacc6cb6f))
+
+### Features
+
+- add upgrade functionality for light account to msca ([#298](https://github.com/alchemyplatform/aa-sdk/issues/298)) ([18f51d9](https://github.com/alchemyplatform/aa-sdk/commit/18f51d9f626b48390a54d88b7ac28c1f162e04f8))
+- update zod to allow custom viem chains in core ([#348](https://github.com/alchemyplatform/aa-sdk/issues/348)) ([291f73f](https://github.com/alchemyplatform/aa-sdk/commit/291f73f50e2e6fa382d269b8568b6255bcad4b0c))
+
+### BREAKING CHANGES
+
+- default LightAccountFactory address has changed
+
 ## 1.2.4 (2024-01-08)
 
 **Note:** Version bump only for package root
