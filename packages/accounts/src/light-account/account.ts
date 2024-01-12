@@ -176,7 +176,7 @@ export class LightSmartContractAccount<
     // only upgrade undeployed accounts (storage 0) or deployed light accounts, error otherwise
     if (
       fromHex(storage, "number") !== 0 &&
-      implementationAddresses.some((x) => x === trim(storage))
+      !implementationAddresses.some((x) => x === trim(storage))
     ) {
       throw new Error(
         "could not determine if smart account implementation is light account"

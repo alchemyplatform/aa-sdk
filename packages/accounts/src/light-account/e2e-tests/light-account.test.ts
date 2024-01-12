@@ -223,7 +223,7 @@ describe("Light Account Tests", () => {
       from: await provider.getAddress(),
       to: accountAddress,
       data: "0x",
-      value: toHex(1000000000000000n),
+      value: toHex(200000000000000000n),
     });
 
     const { connectFn, ...upgradeToData } = await getMSCAUpgradeToData(
