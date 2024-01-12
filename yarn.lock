@@ -22,6 +22,59 @@
   resolved "https://registry.yarnpkg.com/@adraffy/ens-normalize/-/ens-normalize-1.9.2.tgz#60111a5d9db45b2e5cbb6231b0bb8d97e8659316"
   integrity sha512-0h+FrQDqe2Wn+IIGFkTCd4aAwTJ+7834Ek1COohCyV26AXhwQ7WQaz+4F/nLOeVl/3BtWHOHLPsq46V8YB46Eg==
 
+"@alchemy/aa-accounts@^1.2.4":
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/@alchemy/aa-accounts/-/aa-accounts-1.2.4.tgz#950ba46fa5823c2a786a37d3e06f5242ec040548"
+  integrity sha512-j0VIIBjmzH1B2yPR4To8GcLgkC8yhE5coUEBSJZEiTV5s1EvvllOxWI3tfHyq8t/i2TRsJ9QRvVSushJTQSWmw==
+  dependencies:
+    "@alchemy/aa-core" "^1.2.4"
+    viem "^1.21.4"
+
+"@alchemy/aa-alchemy@^1.2.4":
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/@alchemy/aa-alchemy/-/aa-alchemy-1.2.4.tgz#2ed627a7647f25079b444c374a9d0a031833c00e"
+  integrity sha512-c8JDScsEXGWstomBT8zCBgko0xUERZqfozN9A5QzF5Grd0H6/z4RAmC8rBdmgLpa9zeQyYpx4BGZf38HLX7mtQ==
+  dependencies:
+    "@alchemy/aa-core" "^1.2.4"
+    viem "^1.21.4"
+  optionalDependencies:
+    "@alchemy/aa-accounts" "^1.2.4"
+    alchemy-sdk "^3.0.0"
+
+"@alchemy/aa-core@^1.2.4":
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/@alchemy/aa-core/-/aa-core-1.2.4.tgz#a224b04d82a51c4a3ccd258caf4433dfc6079420"
+  integrity sha512-Qj9N1V+X3LvFWAgdMV1FoLV+ZNqy8v5j/pjbNecvloDVadNSm4R//3YPjmfYOvSARjvubWzw+BGVRtyUvunKDQ==
+  dependencies:
+    abitype "^0.8.3"
+    eventemitter3 "^5.0.1"
+    viem "^1.21.4"
+    zod "^3.22.4"
+
+"@alchemy/aa-signers@^1.2.4":
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/@alchemy/aa-signers/-/aa-signers-1.2.4.tgz#933439676fa8ff1d35bdfc8e4bfbe40ed3088fb8"
+  integrity sha512-E4B64lS9ZrrjbyRwSDydcxCJNqi20IjtphGI4hs6oItjy/uWBw9WJGl+LojZ4CwAzOpGc0AdS4AqIJ+eUbQP9Q==
+  dependencies:
+    "@alchemy/aa-core" "^1.2.4"
+    viem "^1.21.4"
+  optionalDependencies:
+    "@arcana/auth" "^1.0.8"
+    "@fireblocks/fireblocks-web3-provider" "^1.2.6"
+    "@lit-protocol/crypto" "3.0.24"
+    "@lit-protocol/lit-node-client" "3.0.24"
+    "@lit-protocol/pkp-ethers" "3.0.24"
+    "@lit-protocol/types" "3.0.24"
+    "@particle-network/auth" "^1.2.2"
+    "@particle-network/provider" "^1.2.1"
+    "@portal-hq/web" "^0.0.8"
+    "@turnkey/http" "^2.4.2"
+    "@turnkey/viem" "^0.4.2"
+    "@usecapsule/web-sdk" "^0.29.4"
+    "@web3auth/base" "^7.1.0"
+    "@web3auth/modal" "^7.1.1"
+    magic-sdk "^21.3.0"
+
 "@algolia/autocomplete-core@1.9.3":
   version "1.9.3"
   resolved "https://registry.yarnpkg.com/@algolia/autocomplete-core/-/autocomplete-core-1.9.3.tgz#1d56482a768c33aae0868c8533049e02e8961be7"
