@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/alchemyplatform/aa-sdk/compare/v2.0.1...v2.1.0) (2024-01-12)
+
+### Bug Fixes
+
+- **light-account:** encode upgrade had a bug in it when upgrading an existing account ([#364](https://github.com/alchemyplatform/aa-sdk/issues/364)) ([55d6c08](https://github.com/alchemyplatform/aa-sdk/commit/55d6c08fbd794f4d0d091c7bf2c1045952a83989))
+
+### Features
+
+- add the ability to generate install functions for plugins ([#361](https://github.com/alchemyplatform/aa-sdk/issues/361)) ([2bf6615](https://github.com/alchemyplatform/aa-sdk/commit/2bf66152f81a979c5a7405593bf3fbf41bc3e52d))
+
 ## [2.0.1](https://github.com/alchemyplatform/aa-sdk/compare/v2.0.0...v2.0.1) (2024-01-12)
 
 **Note:** Version bump only for package root
