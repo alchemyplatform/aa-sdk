@@ -163,4 +163,9 @@ export interface ISmartContractAccount<
    * @returns -- the account with the extension methods added
    */
   extend: <R>(extendFn: (self: this) => R) => this & R;
+
+  encodeUpgradeToAndCall: (
+    upgradeToImplAddress: Address,
+    upgradeToInitData: Hex
+  ) => Promise<Hex>;
 }

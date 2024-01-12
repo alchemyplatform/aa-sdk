@@ -26,8 +26,7 @@ import type {
   UserOperationResponse,
   UserOperationStruct,
 } from "../types.js";
-import type { Deferrable } from "../utils";
-import type { IsUndefined, NoUndefined } from "../utils/types.js";
+import type { Deferrable, IsUndefined, NoUndefined } from "../utils";
 import type {
   ConnectionConfigSchema,
   SmartAccountProviderOptsSchema,
@@ -99,6 +98,11 @@ export type SmartAccountProviderConfig<
 > = z.input<
   ReturnType<typeof createSmartAccountProviderConfigSchema<TTransport>>
 >;
+
+export type UpgradeToData = {
+  implAddress: Address;
+  initializationData: Hex;
+};
 
 // TODO: this also will need to implement EventEmitteer
 export interface ISmartAccountProvider<
@@ -396,4 +400,17 @@ export interface ISmartAccountProvider<
    * @returns -- the provider with the extension methods added
    */
   extend: <R>(extendFn: (self: this) => R) => this & R;
+
+  /**
+   * Submits a UO (and optionally waits for it to be mined) to upgrade the currently
+   * connected account to the specified implementation.
+   *
+   * @param upgradeTo -- the destination contract implementation
+   * @param waitForTxn -- whether or not to wait for the transaction to be mined
+   * @returns Either the TX Hash or the User Operation Hash, depending on whether or not `waitForTxn` is true
+   */
+  upgradeAccount: (
+    upgradeTo: UpgradeToData,
+    waitForTxn: boolean
+  ) => Promise<Hash>;
 }

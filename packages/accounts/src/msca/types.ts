@@ -16,12 +16,5 @@ export interface IMSCA<
 
   extendWithPluginMethods: <AD, PD>(
     plugin: Plugin<AD, PD>
-  ) => IMSCA<TTransport, TProviderDecorators & PD> & AD;
-
-  addProviderDecorator: <
-    PD,
-    TProvider extends ISmartAccountProvider<TTransport> & { account: IMSCA }
-  >(
-    decorator: (p: TProvider) => PD
-  ) => IMSCA<TTransport, TProviderDecorators & PD>;
+  ) => this & IMSCA<TTransport, TProviderDecorators & PD> & AD;
 }

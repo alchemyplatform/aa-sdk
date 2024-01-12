@@ -1,6 +1,6 @@
 import {
   SimpleSmartContractAccount,
-  SmartAccountProvider,
+  type ISmartAccountProvider,
   type SignTypedDataParams,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
@@ -8,9 +8,11 @@ import {
   concatHex,
   decodeFunctionResult,
   encodeFunctionData,
+  fromHex,
   hashMessage,
   hashTypedData,
   isBytes,
+  trim,
   type Address,
   type FallbackTransport,
   type Hash,
@@ -150,6 +152,44 @@ export class LightSmartContractAccount<
     return decodedCallResult;
   }
 
+  encodeUpgradeToAndCall = async (
+    upgradeToImplAddress: Address,
+    upgradeToInitData: Hex
+  ): Promise<Hex> => {
+    const provider = this.rpcProvider;
+    const accountAddress = await this.getAddress();
+
+    const storage = await provider.getStorageAt({
+      address: accountAddress,
+      // the slot at which impl addresses are stored by UUPS
+      slot: "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
+    });
+
+    if (storage == null) {
+      throw new Error("could not get storage");
+    }
+
+    const implementationAddresses = Object.values(LightAccountVersions).map(
+      (x) => x.implAddress
+    );
+
+    // only upgrade undeployed accounts (storage 0) or deployed light accounts, error otherwise
+    if (
+      fromHex(storage, "number") !== 0 &&
+      implementationAddresses.some((x) => x === trim(storage))
+    ) {
+      throw new Error(
+        "could not determine if smart account implementation is light account"
+      );
+    }
+
+    return encodeFunctionData({
+      abi: LightAccountAbi,
+      functionName: "upgradeToAndCall",
+      args: [upgradeToImplAddress, upgradeToInitData],
+    });
+  };
+
   /**
    * Encodes the transferOwnership function call using Light Account ABI.
    *
@@ -174,9 +214,10 @@ export class LightSmartContractAccount<
    * @returns {Hash} the userOperation hash, or transaction hash if `waitForTxn` is true
    */
   static async transferOwnership<
+    P extends ISmartAccountProvider,
     TTransport extends Transport | FallbackTransport = Transport
   >(
-    provider: SmartAccountProvider<TTransport> & {
+    provider: P & {
       account: LightSmartContractAccount<TTransport>;
     },
     newOwner: SmartAccountSigner,
@@ -188,7 +229,21 @@ export class LightSmartContractAccount<
       data,
     });
 
-    provider.account.owner = newOwner;
+    const accountAddress = await provider.getAddress();
+    const initCode = await provider.account.getInitCode();
+    provider.connect(
+      (rpcClient) =>
+        new LightSmartContractAccount({
+          rpcClient,
+          chain: rpcClient.chain,
+          owner: newOwner,
+          entryPointAddress: provider.account.getEntryPointAddress(),
+          factoryAddress: provider.account.getFactoryAddress(),
+          index: provider.account.index,
+          initCode,
+          accountAddress,
+        })
+    );
 
     if (waitForTxn) {
       return provider.waitForUserOperationTransaction(result.hash);

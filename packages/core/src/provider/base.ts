@@ -45,8 +45,9 @@ import {
   isValidRequest,
   resolveProperties,
   type Deferrable,
+  type IsUndefined,
+  type NoUndefined,
 } from "../utils/index.js";
-import { type IsUndefined, type NoUndefined } from "../utils/types.js";
 import { createSmartAccountProviderConfigSchema } from "./schema.js";
 import type {
   AccountMiddlewareFn,
@@ -58,6 +59,7 @@ import type {
   ProviderEvents,
   SendUserOperationResult,
   SmartAccountProviderConfig,
+  UpgradeToData,
 } from "./types.js";
 
 export const noOpMiddleware: AccountMiddlewareFn = async (
@@ -753,6 +755,43 @@ export class SmartAccountProvider<
     }
 
     return Object.assign(this, extended);
+  };
+
+  /**
+   * Submits a UO (and optionally waits for it to be mined) to upgrade the currently
+   * connected account to the specified implementation.
+   *
+   * @param upgradeTo -- the destination contract implementation
+   * @param waitForTxn -- whether or not to wait for the transaction to be mined
+   * @returns Either the TX Hash or the User Operation Hash, depending on whether or not `waitForTxn` is true
+   */
+  upgradeAccount = async (
+    upgradeTo: UpgradeToData,
+    waitForTxn = false
+  ): Promise<Hash> => {
+    if (!this.isConnected()) {
+      throw new Error("provider must be connected to an account");
+    }
+
+    const { implAddress: accountImplAddress, initializationData } = upgradeTo;
+
+    const accountAddress = await this.getAddress();
+    const encodeUpgradeData = await this.account.encodeUpgradeToAndCall(
+      accountImplAddress,
+      initializationData
+    );
+
+    const result = await this.sendUserOperation({
+      target: accountAddress,
+      data: encodeUpgradeData,
+    });
+
+    let hash = result.hash;
+    if (waitForTxn) {
+      hash = await this.waitForUserOperationTransaction(result.hash);
+    }
+
+    return hash;
   };
 
   private overrideMiddlewareFunction = (
