@@ -1,10 +1,16 @@
-import type { Abi, Address, Chain } from "viem";
+import type { Abi, Address, Chain, Hex, parseAbiParameters } from "viem";
 
 export type PluginGenConfig = {
   abi: Abi;
   addresses: Record<number, Address>;
   chain: Chain;
   name: string;
-  // TODO: need to make this configurable to run in CI without requiring this
   rpcUrl?: string;
+  installConfig?: {
+    initAbiParams: ReturnType<typeof parseAbiParameters> | [];
+    dependencies?: {
+      plugin: PluginGenConfig;
+      functionId: Hex;
+    }[];
+  };
 };

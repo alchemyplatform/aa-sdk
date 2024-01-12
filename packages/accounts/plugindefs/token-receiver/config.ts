@@ -9,4 +9,7 @@ export const TokenReceiverPluginGenConfig: PluginGenConfig = {
     [sepolia.id]: "0xa81C0AEaB22b21b4da8d8728063f6570384b48C9",
   },
   chain: sepolia,
+  installConfig: {
+    initAbiParams: [],
+  },
 };
