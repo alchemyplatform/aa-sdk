@@ -18,6 +18,7 @@ import { sepolia } from "viem/chains";
 import {
   createLightAccountProvider,
   LightSmartContractAccount,
+  type LightAccountVersion,
 } from "../../index.js";
 import { getMSCAUpgradeToData } from "../../msca/utils.js";
 import {
@@ -35,6 +36,31 @@ describe("Light Account Tests", () => {
     LocalAccountSigner.mnemonicToAccountSigner(LIGHT_ACCOUNT_OWNER_MNEMONIC);
   const undeployedOwner = LocalAccountSigner.mnemonicToAccountSigner(
     UNDEPLOYED_OWNER_MNEMONIC
+  );
+
+  it.each([
+    { version: "v1.0.1" as const, expected: true },
+    { version: "v1.0.2" as const, throws: true },
+    { version: "v1.1.0" as const, expected: true },
+  ])(
+    "LA version $version should correctly verify 1271 signatures",
+    async ({ version, expected, throws }) => {
+      const provider = givenConnectedProvider({ owner, chain, version });
+      const message = "test";
+
+      if (!throws) {
+        const signature = await provider.signMessage(message);
+        expect(
+          await provider.rpcClient.verifyMessage({
+            address: await provider.getAddress(),
+            message,
+            signature,
+          })
+        ).toBe(expected);
+      } else {
+        await expect(provider.signMessage(message)).rejects.toThrowError();
+      }
+    }
   );
 
   it("should successfully get counterfactual address", async () => {
@@ -222,11 +248,13 @@ const givenConnectedProvider = ({
   chain,
   accountAddress,
   feeOptions,
+  version = "v1.1.0",
 }: {
   owner: SmartAccountSigner;
   chain: Chain;
   accountAddress?: Address;
   feeOptions?: UserOperationFeeOptions;
+  version?: LightAccountVersion;
 }) => {
   const provider = createLightAccountProvider({
     rpcProvider: `${chain.rpcUrls.alchemy.http[0]}/${API_KEY!}`,
@@ -237,6 +265,7 @@ const givenConnectedProvider = ({
       feeOptions,
       txMaxRetries: 100,
     },
+    version,
   });
 
   return provider;

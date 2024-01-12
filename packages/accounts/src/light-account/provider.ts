@@ -24,7 +24,7 @@ export const createLightAccountProvider = (
         entryPointAddress: config.entryPointAddress,
         factoryAddress:
           config.factoryAddress ??
-          getDefaultLightAccountFactoryAddress(config.chain),
+          getDefaultLightAccountFactoryAddress(config.chain, config.version),
         accountAddress: config.accountAddress,
       })
   );

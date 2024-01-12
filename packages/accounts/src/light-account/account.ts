@@ -90,9 +90,9 @@ export class LightSmartContractAccount<
     );
 
     const version =
-      implAddress === "0x0"
-        ? factoryToVersion.get(this.factoryAddress)
-        : implToVersion.get(implAddress);
+      fromHex(implAddress, "bigint") === 0n
+        ? factoryToVersion.get(this.factoryAddress.toLowerCase() as Address)
+        : implToVersion.get(implAddress.toLowerCase() as Address);
 
     if (!version) {
       throw new Error("Could not determine LightAccount version");
@@ -253,7 +253,9 @@ export class LightSmartContractAccount<
   }
 
   protected override async getAccountInitCode(): Promise<`0x${string}`> {
-    const index = LightAccountUnsupported1271Factories.has(this.factoryAddress)
+    const index = LightAccountUnsupported1271Factories.has(
+      this.factoryAddress.toLowerCase() as Address
+    )
       ? 0n
       : this.index;
 

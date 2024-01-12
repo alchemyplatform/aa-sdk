@@ -31,16 +31,22 @@ export const LightAccountVersions: Record<
   }
 > = {
   "v1.0.1": {
-    factoryAddress: "0x000000893A26168158fbeaDD9335Be5bC96592E2",
-    implAddress: "0xc1b2fc4197c9187853243e6e4eb5a4af8879a1c0",
+    factoryAddress:
+      "0x000000893A26168158fbeaDD9335Be5bC96592E2".toLowerCase() as Address,
+    implAddress:
+      "0xc1b2fc4197c9187853243e6e4eb5a4af8879a1c0".toLowerCase() as Address,
   },
   "v1.0.2": {
-    factoryAddress: "0x00000055C0b4fA41dde26A74435ff03692292FBD",
-    implAddress: "0x5467b1947F47d0646704EB801E075e72aeAe8113",
+    factoryAddress:
+      "0x00000055C0b4fA41dde26A74435ff03692292FBD".toLowerCase() as Address,
+    implAddress:
+      "0x5467b1947F47d0646704EB801E075e72aeAe8113".toLowerCase() as Address,
   },
   "v1.1.0": {
-    factoryAddress: "0x00004EC70002a32400f8ae005A26081065620D20",
-    implAddress: "0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba",
+    factoryAddress:
+      "0x00004EC70002a32400f8ae005A26081065620D20".toLowerCase() as Address,
+    implAddress:
+      "0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba".toLowerCase() as Address,
   },
 };
 
