@@ -157,11 +157,11 @@ export class LightSmartContractAccount<
     upgradeToInitData: Hex
   ): Promise<Hex> => {
     const provider = this.rpcProvider;
-    // Step 1: check if the account we're upgrading is in fact a LightAccount
     const accountAddress = await this.getAddress();
 
     const storage = await provider.getStorageAt({
       address: accountAddress,
+      // the slot at which impl addresses are stored by UUPS
       slot: "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
     });
 

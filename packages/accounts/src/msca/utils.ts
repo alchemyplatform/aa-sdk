@@ -64,7 +64,6 @@ export const getDefaultMultiOwnerMSCAFactoryAddress = (
     case baseGoerli.id:
     case baseSepolia.id:
       throw new Error("not yet deployed");
-    // MultiOwnerTokenReceiverMSCAFactory
   }
   throw new Error(
     `no default multi owner msca factory contract exists for ${chain.name}`
