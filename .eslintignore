@@ -1,3 +1,5 @@
 **/dist/*
-examples/alchemy-daapp/*
+examples/**/*
 site/.vitepress/cache/**/*
+.nx/*
+.github/*

@@ -6,14 +6,16 @@
   "license": "MIT",
   "private": false,
   "type": "module",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/types/index.d.ts",
-  "typings": "./dist/types/index.d.ts",
+  "main": "./dist/cjs/src/index.js",
+  "module": "./dist/esm/src/index.js",
+  "types": "./dist/types/src/index.d.ts",
+  "typings": "./dist/types/src/index.d.ts",
   "sideEffects": false,
   "files": [
     "dist",
     "src/**/*.ts",
+    "plugingen/**/*.ts",
+    "plugindefs/**/*.ts",
     "!dist/**/*.tsbuildinfo",
     "!vitest.config.ts",
     "!.env",
@@ -22,9 +24,19 @@
   ],
   "exports": {
     ".": {
-      "types": "./dist/types/index.d.ts",
-      "import": "./dist/esm/index.js",
-      "default": "./dist/cjs/index.js"
+      "types": "./dist/types/src/index.d.ts",
+      "import": "./dist/esm/src/index.js",
+      "default": "./dist/cjs/src/index.js"
+    },
+    "./plugin-gen": {
+      "types": "./dist/types/plugingen/index.d.ts",
+      "import": "./dist/esm/plugingen/index.js",
+      "default": "./dist/cjs/plugingen/index.js"
+    },
+    "./plugin-defs": {
+      "types": "./dist/types/plugindefs/index.d.ts",
+      "import": "./dist/esm/plugindefs/index.js",
+      "default": "./dist/cjs/plugindefs/index.js"
     },
     "./package.json": "./package.json"
   },
