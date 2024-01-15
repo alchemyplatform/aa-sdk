@@ -8,12 +8,19 @@ import dedent from "dedent";
 import { createPublicClient, getContract, http, type Chain } from "viem";
 import type { PluginGenConfig } from "../plugindefs/types.js";
 import { IPluginAbi } from "../src/msca/abis/IPlugin.js";
+import { ContractAbiGenPhase } from "./phases/contract-abi-gen.js";
+import { ContractAddressesGenPhase } from "./phases/contract-addresses-gen.js";
 import { ExecutionAbiGenPhase } from "./phases/execution-abi-gen.js";
 import { PluginGeneratorPhase } from "./phases/plugin-generator/index.js";
 import type { Phase, PhaseInput } from "./types.js";
 
 // Add more phases here if needed
-const phases: Phase[] = [PluginGeneratorPhase, ExecutionAbiGenPhase];
+const phases: Phase[] = [
+  ContractAddressesGenPhase,
+  PluginGeneratorPhase,
+  ExecutionAbiGenPhase,
+  ContractAbiGenPhase,
+];
 
 export function plugingen({
   chain,

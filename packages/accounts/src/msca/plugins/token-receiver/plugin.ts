@@ -1,10 +1,12 @@
-import { type Plugin } from "../types.js";
 import {
+  getContract,
   encodeFunctionData,
   encodeAbiParameters,
   type Address,
+  type GetContractReturnType,
   type GetFunctionArgs,
 } from "viem";
+import { type Plugin } from "../types.js";
 import { type IMSCA } from "../../types.js";
 import {
   type UserOperationOverrides,
@@ -27,14 +29,30 @@ export type InstallTokenReceiverPluginParams = {
   dependencyOverrides?: FunctionReference[];
 };
 
+const addresses = {
+  11155111: "0xa81C0AEaB22b21b4da8d8728063f6570384b48C9" as Address,
+} as Record<number, Address>;
+
 const TokenReceiverPlugin_ = {
   meta: {
     name: "Token Receiver Plugin",
     version: "1.0.0",
-    addresses: {
-      11155111: "0xa81C0AEaB22b21b4da8d8728063f6570384b48C9" as Address,
-    } as Record<number, Address>,
+    addresses,
   },
+  getContract: (
+    provider: ISmartAccountProvider,
+    address?: Address
+  ): GetContractReturnType<
+    typeof TokenReceiverPluginAbi,
+    typeof provider.rpcClient,
+    undefined,
+    Address
+  > =>
+    getContract({
+      address: address || addresses[provider.rpcClient.chain.id],
+      abi: TokenReceiverPluginAbi,
+      publicClient: provider.rpcClient,
+    }),
   accountMethods: (_account: IMSCA<any, any>) => ({
     encodeTokensReceivedData: ({
       args,
@@ -199,7 +217,8 @@ const TokenReceiverPlugin_ = {
 
 export const TokenReceiverPlugin: Plugin<
   ReturnType<(typeof TokenReceiverPlugin_)["accountMethods"]>,
-  ReturnType<(typeof TokenReceiverPlugin_)["providerMethods"]>
+  ReturnType<(typeof TokenReceiverPlugin_)["providerMethods"]>,
+  typeof TokenReceiverPluginAbi
 > = TokenReceiverPlugin_;
 
 export const TokenReceiverPluginExecutionFunctionAbi = [
@@ -254,5 +273,570 @@ export const TokenReceiverPluginExecutionFunctionAbi = [
     ],
     name: "onERC1155BatchReceived",
     outputs: [{ name: "", internalType: "bytes4", type: "bytes4" }],
+  },
+] as const;
+
+export const TokenReceiverPluginAbi = [
+  { type: "error", inputs: [], name: "AlreadyInitialized" },
+  { type: "error", inputs: [], name: "InvalidAction" },
+  { type: "error", inputs: [], name: "NotContractCaller" },
+  { type: "error", inputs: [], name: "NotImplemented" },
+  { type: "error", inputs: [], name: "NotInitialized" },
+  {
+    stateMutability: "pure",
+    type: "function",
+    inputs: [
+      { name: "", internalType: "address", type: "address" },
+      { name: "", internalType: "address", type: "address" },
+      { name: "", internalType: "uint256[]", type: "uint256[]" },
+      { name: "", internalType: "uint256[]", type: "uint256[]" },
+      { name: "", internalType: "bytes", type: "bytes" },
+    ],
+    name: "onERC1155BatchReceived",
+    outputs: [{ name: "", internalType: "bytes4", type: "bytes4" }],
+  },
+  {
+    stateMutability: "pure",
+    type: "function",
+    inputs: [
+      { name: "", internalType: "address", type: "address" },
+      { name: "", internalType: "address", type: "address" },
+      { name: "", internalType: "uint256", type: "uint256" },
+      { name: "", internalType: "uint256", type: "uint256" },
+      { name: "", internalType: "bytes", type: "bytes" },
+    ],
+    name: "onERC1155Received",
+    outputs: [{ name: "", internalType: "bytes4", type: "bytes4" }],
+  },
+  {
+    stateMutability: "pure",
+    type: "function",
+    inputs: [
+      { name: "", internalType: "address", type: "address" },
+      { name: "", internalType: "address", type: "address" },
+      { name: "", internalType: "uint256", type: "uint256" },
+      { name: "", internalType: "bytes", type: "bytes" },
+    ],
+    name: "onERC721Received",
+    outputs: [{ name: "", internalType: "bytes4", type: "bytes4" }],
+  },
+  {
+    stateMutability: "nonpayable",
+    type: "function",
+    inputs: [
+      { name: "pluginAppliedOn", internalType: "address", type: "address" },
+      {
+        name: "injectedHooksInfo",
+        internalType: "struct IPluginManager.InjectedHooksInfo",
+        type: "tuple",
+        components: [
+          {
+            name: "preExecHookFunctionId",
+            internalType: "uint8",
+            type: "uint8",
+          },
+          { name: "isPostHookUsed", internalType: "bool", type: "bool" },
+          {
+            name: "postExecHookFunctionId",
+            internalType: "uint8",
+            type: "uint8",
+          },
+        ],
+      },
+      { name: "data", internalType: "bytes", type: "bytes" },
+    ],
+    name: "onHookApply",
+    outputs: [],
+  },
+  {
+    stateMutability: "nonpayable",
+    type: "function",
+    inputs: [
+      { name: "pluginAppliedOn", internalType: "address", type: "address" },
+      {
+        name: "injectedHooksInfo",
+        internalType: "struct IPluginManager.InjectedHooksInfo",
+        type: "tuple",
+        components: [
+          {
+            name: "preExecHookFunctionId",
+            internalType: "uint8",
+            type: "uint8",
+          },
+          { name: "isPostHookUsed", internalType: "bool", type: "bool" },
+          {
+            name: "postExecHookFunctionId",
+            internalType: "uint8",
+            type: "uint8",
+          },
+        ],
+      },
+      { name: "data", internalType: "bytes", type: "bytes" },
+    ],
+    name: "onHookUnapply",
+    outputs: [],
+  },
+  {
+    stateMutability: "pure",
+    type: "function",
+    inputs: [{ name: "", internalType: "bytes", type: "bytes" }],
+    name: "onInstall",
+    outputs: [],
+  },
+  {
+    stateMutability: "pure",
+    type: "function",
+    inputs: [{ name: "", internalType: "bytes", type: "bytes" }],
+    name: "onUninstall",
+    outputs: [],
+  },
+  {
+    stateMutability: "pure",
+    type: "function",
+    inputs: [],
+    name: "pluginManifest",
+    outputs: [
+      {
+        name: "",
+        internalType: "struct PluginManifest",
+        type: "tuple",
+        components: [
+          { name: "interfaceIds", internalType: "bytes4[]", type: "bytes4[]" },
+          {
+            name: "dependencyInterfaceIds",
+            internalType: "bytes4[]",
+            type: "bytes4[]",
+          },
+          {
+            name: "executionFunctions",
+            internalType: "bytes4[]",
+            type: "bytes4[]",
+          },
+          {
+            name: "permittedExecutionSelectors",
+            internalType: "bytes4[]",
+            type: "bytes4[]",
+          },
+          {
+            name: "permitAnyExternalAddress",
+            internalType: "bool",
+            type: "bool",
+          },
+          { name: "canSpendNativeToken", internalType: "bool", type: "bool" },
+          {
+            name: "permittedExternalCalls",
+            internalType: "struct ManifestExternalCallPermission[]",
+            type: "tuple[]",
+            components: [
+              {
+                name: "externalAddress",
+                internalType: "address",
+                type: "address",
+              },
+              { name: "permitAnySelector", internalType: "bool", type: "bool" },
+              { name: "selectors", internalType: "bytes4[]", type: "bytes4[]" },
+            ],
+          },
+          {
+            name: "userOpValidationFunctions",
+            internalType: "struct ManifestAssociatedFunction[]",
+            type: "tuple[]",
+            components: [
+              {
+                name: "executionSelector",
+                internalType: "bytes4",
+                type: "bytes4",
+              },
+              {
+                name: "associatedFunction",
+                internalType: "struct ManifestFunction",
+                type: "tuple",
+                components: [
+                  {
+                    name: "functionType",
+                    internalType: "enum ManifestAssociatedFunctionType",
+                    type: "uint8",
+                  },
+                  { name: "functionId", internalType: "uint8", type: "uint8" },
+                  {
+                    name: "dependencyIndex",
+                    internalType: "uint256",
+                    type: "uint256",
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            name: "runtimeValidationFunctions",
+            internalType: "struct ManifestAssociatedFunction[]",
+            type: "tuple[]",
+            components: [
+              {
+                name: "executionSelector",
+                internalType: "bytes4",
+                type: "bytes4",
+              },
+              {
+                name: "associatedFunction",
+                internalType: "struct ManifestFunction",
+                type: "tuple",
+                components: [
+                  {
+                    name: "functionType",
+                    internalType: "enum ManifestAssociatedFunctionType",
+                    type: "uint8",
+                  },
+                  { name: "functionId", internalType: "uint8", type: "uint8" },
+                  {
+                    name: "dependencyIndex",
+                    internalType: "uint256",
+                    type: "uint256",
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            name: "preUserOpValidationHooks",
+            internalType: "struct ManifestAssociatedFunction[]",
+            type: "tuple[]",
+            components: [
+              {
+                name: "executionSelector",
+                internalType: "bytes4",
+                type: "bytes4",
+              },
+              {
+                name: "associatedFunction",
+                internalType: "struct ManifestFunction",
+                type: "tuple",
+                components: [
+                  {
+                    name: "functionType",
+                    internalType: "enum ManifestAssociatedFunctionType",
+                    type: "uint8",
+                  },
+                  { name: "functionId", internalType: "uint8", type: "uint8" },
+                  {
+                    name: "dependencyIndex",
+                    internalType: "uint256",
+                    type: "uint256",
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            name: "preRuntimeValidationHooks",
+            internalType: "struct ManifestAssociatedFunction[]",
+            type: "tuple[]",
+            components: [
+              {
+                name: "executionSelector",
+                internalType: "bytes4",
+                type: "bytes4",
+              },
+              {
+                name: "associatedFunction",
+                internalType: "struct ManifestFunction",
+                type: "tuple",
+                components: [
+                  {
+                    name: "functionType",
+                    internalType: "enum ManifestAssociatedFunctionType",
+                    type: "uint8",
+                  },
+                  { name: "functionId", internalType: "uint8", type: "uint8" },
+                  {
+                    name: "dependencyIndex",
+                    internalType: "uint256",
+                    type: "uint256",
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            name: "executionHooks",
+            internalType: "struct ManifestExecutionHook[]",
+            type: "tuple[]",
+            components: [
+              {
+                name: "executionSelector",
+                internalType: "bytes4",
+                type: "bytes4",
+              },
+              {
+                name: "preExecHook",
+                internalType: "struct ManifestFunction",
+                type: "tuple",
+                components: [
+                  {
+                    name: "functionType",
+                    internalType: "enum ManifestAssociatedFunctionType",
+                    type: "uint8",
+                  },
+                  { name: "functionId", internalType: "uint8", type: "uint8" },
+                  {
+                    name: "dependencyIndex",
+                    internalType: "uint256",
+                    type: "uint256",
+                  },
+                ],
+              },
+              {
+                name: "postExecHook",
+                internalType: "struct ManifestFunction",
+                type: "tuple",
+                components: [
+                  {
+                    name: "functionType",
+                    internalType: "enum ManifestAssociatedFunctionType",
+                    type: "uint8",
+                  },
+                  { name: "functionId", internalType: "uint8", type: "uint8" },
+                  {
+                    name: "dependencyIndex",
+                    internalType: "uint256",
+                    type: "uint256",
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            name: "permittedCallHooks",
+            internalType: "struct ManifestExecutionHook[]",
+            type: "tuple[]",
+            components: [
+              {
+                name: "executionSelector",
+                internalType: "bytes4",
+                type: "bytes4",
+              },
+              {
+                name: "preExecHook",
+                internalType: "struct ManifestFunction",
+                type: "tuple",
+                components: [
+                  {
+                    name: "functionType",
+                    internalType: "enum ManifestAssociatedFunctionType",
+                    type: "uint8",
+                  },
+                  { name: "functionId", internalType: "uint8", type: "uint8" },
+                  {
+                    name: "dependencyIndex",
+                    internalType: "uint256",
+                    type: "uint256",
+                  },
+                ],
+              },
+              {
+                name: "postExecHook",
+                internalType: "struct ManifestFunction",
+                type: "tuple",
+                components: [
+                  {
+                    name: "functionType",
+                    internalType: "enum ManifestAssociatedFunctionType",
+                    type: "uint8",
+                  },
+                  { name: "functionId", internalType: "uint8", type: "uint8" },
+                  {
+                    name: "dependencyIndex",
+                    internalType: "uint256",
+                    type: "uint256",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    stateMutability: "pure",
+    type: "function",
+    inputs: [],
+    name: "pluginMetadata",
+    outputs: [
+      {
+        name: "",
+        internalType: "struct PluginMetadata",
+        type: "tuple",
+        components: [
+          { name: "name", internalType: "string", type: "string" },
+          { name: "version", internalType: "string", type: "string" },
+          { name: "author", internalType: "string", type: "string" },
+          {
+            name: "permissionDescriptors",
+            internalType: "struct SelectorPermission[]",
+            type: "tuple[]",
+            components: [
+              {
+                name: "functionSelector",
+                internalType: "bytes4",
+                type: "bytes4",
+              },
+              {
+                name: "permissionDescription",
+                internalType: "string",
+                type: "string",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    stateMutability: "nonpayable",
+    type: "function",
+    inputs: [
+      { name: "functionId", internalType: "uint8", type: "uint8" },
+      { name: "preExecHookData", internalType: "bytes", type: "bytes" },
+    ],
+    name: "postExecutionHook",
+    outputs: [],
+  },
+  {
+    stateMutability: "nonpayable",
+    type: "function",
+    inputs: [
+      { name: "functionId", internalType: "uint8", type: "uint8" },
+      { name: "sender", internalType: "address", type: "address" },
+      { name: "value", internalType: "uint256", type: "uint256" },
+      { name: "data", internalType: "bytes", type: "bytes" },
+    ],
+    name: "preExecutionHook",
+    outputs: [{ name: "", internalType: "bytes", type: "bytes" }],
+  },
+  {
+    stateMutability: "nonpayable",
+    type: "function",
+    inputs: [
+      { name: "functionId", internalType: "uint8", type: "uint8" },
+      { name: "sender", internalType: "address", type: "address" },
+      { name: "value", internalType: "uint256", type: "uint256" },
+      { name: "data", internalType: "bytes", type: "bytes" },
+    ],
+    name: "preRuntimeValidationHook",
+    outputs: [],
+  },
+  {
+    stateMutability: "nonpayable",
+    type: "function",
+    inputs: [
+      { name: "functionId", internalType: "uint8", type: "uint8" },
+      {
+        name: "userOp",
+        internalType: "struct UserOperation",
+        type: "tuple",
+        components: [
+          { name: "sender", internalType: "address", type: "address" },
+          { name: "nonce", internalType: "uint256", type: "uint256" },
+          { name: "initCode", internalType: "bytes", type: "bytes" },
+          { name: "callData", internalType: "bytes", type: "bytes" },
+          { name: "callGasLimit", internalType: "uint256", type: "uint256" },
+          {
+            name: "verificationGasLimit",
+            internalType: "uint256",
+            type: "uint256",
+          },
+          {
+            name: "preVerificationGas",
+            internalType: "uint256",
+            type: "uint256",
+          },
+          { name: "maxFeePerGas", internalType: "uint256", type: "uint256" },
+          {
+            name: "maxPriorityFeePerGas",
+            internalType: "uint256",
+            type: "uint256",
+          },
+          { name: "paymasterAndData", internalType: "bytes", type: "bytes" },
+          { name: "signature", internalType: "bytes", type: "bytes" },
+        ],
+      },
+      { name: "userOpHash", internalType: "bytes32", type: "bytes32" },
+    ],
+    name: "preUserOpValidationHook",
+    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
+  },
+  {
+    stateMutability: "nonpayable",
+    type: "function",
+    inputs: [
+      { name: "functionId", internalType: "uint8", type: "uint8" },
+      { name: "sender", internalType: "address", type: "address" },
+      { name: "value", internalType: "uint256", type: "uint256" },
+      { name: "data", internalType: "bytes", type: "bytes" },
+    ],
+    name: "runtimeValidationFunction",
+    outputs: [],
+  },
+  {
+    stateMutability: "view",
+    type: "function",
+    inputs: [{ name: "interfaceId", internalType: "bytes4", type: "bytes4" }],
+    name: "supportsInterface",
+    outputs: [{ name: "", internalType: "bool", type: "bool" }],
+  },
+  {
+    stateMutability: "pure",
+    type: "function",
+    inputs: [
+      { name: "", internalType: "address", type: "address" },
+      { name: "", internalType: "address", type: "address" },
+      { name: "", internalType: "address", type: "address" },
+      { name: "", internalType: "uint256", type: "uint256" },
+      { name: "", internalType: "bytes", type: "bytes" },
+      { name: "", internalType: "bytes", type: "bytes" },
+    ],
+    name: "tokensReceived",
+    outputs: [],
+  },
+  {
+    stateMutability: "nonpayable",
+    type: "function",
+    inputs: [
+      { name: "functionId", internalType: "uint8", type: "uint8" },
+      {
+        name: "userOp",
+        internalType: "struct UserOperation",
+        type: "tuple",
+        components: [
+          { name: "sender", internalType: "address", type: "address" },
+          { name: "nonce", internalType: "uint256", type: "uint256" },
+          { name: "initCode", internalType: "bytes", type: "bytes" },
+          { name: "callData", internalType: "bytes", type: "bytes" },
+          { name: "callGasLimit", internalType: "uint256", type: "uint256" },
+          {
+            name: "verificationGasLimit",
+            internalType: "uint256",
+            type: "uint256",
+          },
+          {
+            name: "preVerificationGas",
+            internalType: "uint256",
+            type: "uint256",
+          },
+          { name: "maxFeePerGas", internalType: "uint256", type: "uint256" },
+          {
+            name: "maxPriorityFeePerGas",
+            internalType: "uint256",
+            type: "uint256",
+          },
+          { name: "paymasterAndData", internalType: "bytes", type: "bytes" },
+          { name: "signature", internalType: "bytes", type: "bytes" },
+        ],
+      },
+      { name: "userOpHash", internalType: "bytes32", type: "bytes32" },
+    ],
+    name: "userOpValidationFunction",
+    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
   },
 ] as const;
