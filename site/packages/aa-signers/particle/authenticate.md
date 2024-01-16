@@ -16,7 +16,7 @@ head:
 
 `authenticate` is a method on the `ParticleSigner` which leverages the `Particle` SDK to initiate login and authenticate a user.
 
-You must call this method before accessing the other methods available on the `ParticleSigner`, such as signing messages or typed data or accessing user details.
+You must call this method before accessing the other methods available on the `ParticleSigner`, such as signing messages or typed data or accessing user details. Although, once a user has logged in through `authenticate`, this state will remain constant and `authenticate` will no longer need to be called for access to the other methods; unless the account state is disrupted, upon which `authenticate` will be required once again.
 
 ## Usage
 
