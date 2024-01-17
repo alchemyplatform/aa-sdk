@@ -3,7 +3,7 @@ import type {
   ISmartContractAccount,
   SupportedTransports,
 } from "@alchemy/aa-core";
-import type { Transport } from "viem";
+import type { Abi, Transport } from "viem";
 import type { Plugin } from "./plugins/types";
 
 export interface IMSCA<
@@ -14,7 +14,7 @@ export interface IMSCA<
     p: ISmartAccountProvider<TTransport>
   ) => TProviderDecorators;
 
-  extendWithPluginMethods: <AD, PD>(
-    plugin: Plugin<AD, PD>
+  extendWithPluginMethods: <AD, PD, TAbi extends Abi>(
+    plugin: Plugin<AD, PD, TAbi>
   ) => this & IMSCA<TTransport, TProviderDecorators & PD> & AD;
 }

@@ -80,13 +80,16 @@ export { type Plugin } from "./msca/plugins/types.js";
 
 export {
   MultiOwnerPlugin,
+  MultiOwnerPluginAbi,
   MultiOwnerPluginExecutionFunctionAbi,
 } from "./msca/plugins/multi-owner/plugin.js";
 export {
   SessionKeyPlugin,
+  SessionKeyPluginAbi,
   SessionKeyPluginExecutionFunctionAbi,
 } from "./msca/plugins/session-key/plugin.js";
 export {
   TokenReceiverPlugin,
+  TokenReceiverPluginAbi,
   TokenReceiverPluginExecutionFunctionAbi,
 } from "./msca/plugins/token-receiver/plugin.js";

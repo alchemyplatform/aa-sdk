@@ -6,7 +6,7 @@ import {
   type SignTypedDataParams,
   type SupportedTransports,
 } from "@alchemy/aa-core";
-import { type Transport } from "viem";
+import { type Abi, type Transport } from "viem";
 import { z } from "zod";
 import { pluginManagerDecorator } from "../plugin-manager/decorator.js";
 import type { Plugin } from "../plugins/types";
@@ -105,8 +105,8 @@ export class MSCABuilder {
         return factory(this);
       }
 
-      extendWithPluginMethods = <AD, PD>(
-        plugin: Plugin<AD, PD>
+      extendWithPluginMethods = <AD, PD, TAbi extends Abi>(
+        plugin: Plugin<AD, PD, TAbi>
       ): DynamicMSCA<TProviderDecorators & PD> & AD => {
         const methods = plugin.accountMethods(this);
         const result = Object.assign(this, methods) as unknown as DynamicMSCA<
