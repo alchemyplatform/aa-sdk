@@ -89,6 +89,7 @@ export {
   SessionKeyPluginAbi,
   SessionKeyPluginExecutionFunctionAbi,
 } from "./msca/plugins/session-key/plugin.js";
+export { SessionKeySigner } from "./msca/plugins/session-key/signer.js";
 export {
   TokenReceiverPlugin,
   TokenReceiverPluginAbi,
