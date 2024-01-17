@@ -61,6 +61,7 @@ export {
   createMultiOwnerMSCA,
   createMultiOwnerMSCABuilder,
   createMultiOwnerMSCASchema,
+  createMultiOwnerMSCAWithSessionKey,
   type MultiOwnerMSCAParams,
 } from "./msca/multi-owner-account.js";
 

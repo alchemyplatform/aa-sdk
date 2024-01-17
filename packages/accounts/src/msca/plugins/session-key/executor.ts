@@ -3,7 +3,7 @@ import { encodeFunctionData, type Hex } from "viem";
 import { IStandardExecutorAbi } from "../../abis/IStandardExecutor.js";
 import type { Executor } from "../../builder/types";
 import { SessionKeyPlugin, SessionKeyPluginAbi } from "./plugin.js";
-import { SessionKeySigner } from "./signer.js";
+import { SESSION_KEY_SIGNER_TYPE_PFX, SessionKeySigner } from "./signer.js";
 
 /**
  * Use this with the `SessionKeySigner` {@link SessionKeySigner} in order to
@@ -31,8 +31,8 @@ export const SessionKeyExecutor: Executor = (acct) => {
 
     return (
       // TODO: this is not a good way of doing this check, but we can come back to this later
-      owner.signerType !== "alchemy:session-key" ||
-      (owner.signerType === "alchemy:session-key" &&
+      !owner.signerType.startsWith(SESSION_KEY_SIGNER_TYPE_PFX) ||
+      (owner.signerType.startsWith(SESSION_KEY_SIGNER_TYPE_PFX) &&
         (owner as SessionKeySigner<any>).isKeyActive())
     );
   };

@@ -12,13 +12,19 @@ import {
   type Transport,
 } from "viem";
 import { z } from "zod";
-import { StandardExecutor } from "../index.js";
+import {
+  SessionKeyExecutor,
+  SessionKeyPlugin,
+  SessionKeySigner,
+  StandardExecutor,
+} from "../index.js";
 import { MultiOwnerMSCAFactoryAbi } from "./abis/MultiOwnerMSCAFactory.js";
 import { MultiOwnerTokenReceiverMSCAFactoryAbi } from "./abis/MultiOwnerTokenReceiverMSCAFactory.js";
 import { accountLoupeDecorators } from "./account-loupe/decorator.js";
 import { MSCABuilder } from "./builder/index.js";
 import { WrapWith712SignerMethods } from "./builder/wrapped-signer.js";
 import { MultiOwnerPlugin } from "./plugins/multi-owner/plugin.js";
+import type { SessionKeySignerConfig } from "./plugins/session-key/signer.js";
 import { TokenReceiverPlugin } from "./plugins/token-receiver/plugin.js";
 
 export const createMultiOwnerMSCASchema = <
@@ -82,6 +88,54 @@ export const createMultiOwnerMSCA = <
   let account = builder
     .build(params)
     .extendWithPluginMethods(MultiOwnerPlugin)
+    .extend(accountLoupeDecorators);
+
+  if (params.excludeDefaultTokenReceiverPlugin) {
+    return account;
+  }
+
+  return account.extendWithPluginMethods(TokenReceiverPlugin);
+};
+
+/**
+ * This method will create a new MSCA account leveraging a session key signer with fallback to your provided signer
+ * You can use this with a deployed or undeployed account. If the account is not deployed yet, it will deploy it for you
+ * on your first UO and sign the UO with your fallback signer. After that, you can install the session key plugin and add
+ * the session key to that account.
+ *
+ * @param params_ -- configuration params for creating a new MSCA account
+ * @param sessionKeyOverrides -- overrides for the session key signer config
+ * @returns a new MSCA account leveraging a session key signer with fallback to your provided signer
+ */
+export const createMultiOwnerMSCAWithSessionKey = async <
+  TTransport extends Transport | FallbackTransport = Transport
+>(
+  params_: MultiOwnerMSCAParams,
+  sessionKeyOverrides?: Pick<
+    SessionKeySignerConfig<MultiOwnerMSCAParams["owner"]>,
+    "storageKey" | "storageType"
+  > & { keyActive?: boolean }
+) => {
+  const params = createMultiOwnerMSCASchema<TTransport>().parse(params_);
+  const builder = createMultiOwnerMSCABuilder<TTransport>(params);
+  const sessionKeySigner = new SessionKeySigner({
+    fallbackSigner: params.owner,
+    ...sessionKeyOverrides,
+  });
+  sessionKeySigner.setKeyActive(sessionKeyOverrides?.keyActive ?? true);
+
+  // get the base account so we can get the init code and address of the account
+  // NOTE: if the user passed in an initCode or accountAddress, we will use those instead
+  // because the builder's params handles that logic
+  const baseAccount = builder.build(params);
+  const accountAddress = await baseAccount.getAddress();
+  const initCode = await baseAccount.getInitCode();
+
+  let account = builder
+    .withExecutor(SessionKeyExecutor)
+    .build({ ...params, owner: sessionKeySigner, initCode, accountAddress })
+    .extendWithPluginMethods(MultiOwnerPlugin)
+    .extendWithPluginMethods(SessionKeyPlugin)
     .extend(accountLoupeDecorators);
 
   if (params.excludeDefaultTokenReceiverPlugin) {
