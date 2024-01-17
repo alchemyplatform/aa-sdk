@@ -83,6 +83,7 @@ export {
   MultiOwnerPluginAbi,
   MultiOwnerPluginExecutionFunctionAbi,
 } from "./msca/plugins/multi-owner/plugin.js";
+export { SessionKeyExecutor } from "./msca/plugins/session-key/executor.js";
 export {
   SessionKeyPlugin,
   SessionKeyPluginAbi,
