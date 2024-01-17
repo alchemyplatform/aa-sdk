@@ -1,9 +1,11 @@
 import {
   BaseSmartContractAccount,
-  type BaseSmartAccountParams,
+  createBaseSmartAccountParamsSchema,
+  isSigner,
   type BatchUserOperationCallData,
   type ISmartAccountProvider,
   type SignTypedDataParams,
+  type SmartAccountSigner,
   type SupportedTransports,
 } from "@alchemy/aa-core";
 import { type Abi, type Transport } from "viem";
@@ -18,6 +20,22 @@ const zCompleteBuilder = z.object({
   signer: z.custom<SignerMethods>(),
   factory: z.custom<Factory>(),
 });
+
+export type ModularAccountBuilderParams<
+  TTransport extends SupportedTransports = Transport,
+  TOwner extends SmartAccountSigner = SmartAccountSigner
+> = z.input<
+  ReturnType<typeof ModularAccountBuilderParamsSchema<TTransport, TOwner>>
+>;
+
+export const ModularAccountBuilderParamsSchema = <
+  TTransport extends SupportedTransports = Transport,
+  TOwner extends SmartAccountSigner = SmartAccountSigner
+>() =>
+  createBaseSmartAccountParamsSchema<TTransport, TOwner>().extend({
+    owner: z.custom<TOwner>(isSigner),
+    index: z.bigint().optional(),
+  });
 
 export class MSCABuilder {
   executor?: Executor;
@@ -36,15 +54,18 @@ export class MSCABuilder {
     return Object.assign(this, { factory: initCode });
   }
 
-  build<TTransport extends SupportedTransports = Transport>(
-    params: BaseSmartAccountParams
-  ): IMSCA<TTransport, ReturnType<typeof pluginManagerDecorator>> {
+  build<
+    TTransport extends SupportedTransports = Transport,
+    TOwner extends SmartAccountSigner = SmartAccountSigner
+  >(
+    params: ModularAccountBuilderParams<TTransport, TOwner>
+  ): IMSCA<TTransport, TOwner, ReturnType<typeof pluginManagerDecorator>> {
     const builder = this;
     const { signer, executor, factory } = zCompleteBuilder.parse(builder);
 
     return new (class DynamicMSCA<
       TProviderDecorators = ReturnType<typeof pluginManagerDecorator>
-    > extends BaseSmartContractAccount<TTransport> {
+    > extends BaseSmartContractAccount<TTransport, (typeof params)["owner"]> {
       providerDecorators_: (<
         TProvider extends ISmartAccountProvider<TTransport> & { account: IMSCA }
       >(

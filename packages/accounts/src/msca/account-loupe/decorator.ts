@@ -5,7 +5,7 @@ import type { IMSCA } from "../types.js";
 import type { FunctionReference, IAccountLoupe } from "./types.js";
 
 export const accountLoupeDecorators = (
-  account: IMSCA<any, any>
+  account: IMSCA<any, any, any>
 ): IAccountLoupe => ({
   getExecutionFunctionConfig: async (selector: FunctionReference) =>
     account.rpcProvider.readContract({

@@ -53,7 +53,7 @@ const MultiOwnerPlugin_ = {
       abi: MultiOwnerPluginAbi,
       publicClient: provider.rpcClient,
     }),
-  accountMethods: (account: IMSCA<any, any>) => ({
+  accountMethods: (account: IMSCA<any, any, any>) => ({
     encodeUpdateOwnersData: ({
       args,
     }: GetFunctionArgs<

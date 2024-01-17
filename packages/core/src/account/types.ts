@@ -14,15 +14,22 @@ import type {
 export type SignTypedDataParams = Omit<SignTypedDataParameters, "privateKey">;
 
 export type BaseSmartAccountParams<
-  TTransport extends SupportedTransports = Transport
-> = z.input<ReturnType<typeof createBaseSmartAccountParamsSchema<TTransport>>>;
+  TTransport extends SupportedTransports = Transport,
+  TOwner extends SmartAccountSigner | undefined = SmartAccountSigner | undefined
+> = z.input<
+  ReturnType<typeof createBaseSmartAccountParamsSchema<TTransport, TOwner>>
+>;
 
 export type SimpleSmartAccountParams<
-  TTransport extends SupportedTransports = Transport
-> = z.input<ReturnType<typeof SimpleSmartAccountParamsSchema<TTransport>>>;
+  TTransport extends SupportedTransports = Transport,
+  TOwner extends SmartAccountSigner = SmartAccountSigner
+> = z.input<
+  ReturnType<typeof SimpleSmartAccountParamsSchema<TTransport, TOwner>>
+>;
 
 export interface ISmartContractAccount<
-  TTransport extends SupportedTransports = Transport
+  TTransport extends SupportedTransports = Transport,
+  TOwner extends SmartAccountSigner | undefined = SmartAccountSigner | undefined
 > {
   /**
    * The RPC provider the account uses to make RPC calls
@@ -125,7 +132,7 @@ export interface ISmartContractAccount<
    * @returns the smart account owner instance if it exists.
    * It is optional for a smart account to have an owner account.
    */
-  getOwner(): SmartAccountSigner | undefined;
+  getOwner(): TOwner;
 
   /**
    * @returns the address of the factory contract for the smart account
