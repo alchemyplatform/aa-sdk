@@ -70,7 +70,7 @@ A service or application that manages the private key and signs `UserOperation`s
 
 - **Custodial**: Managed by a third party, it holds and autonomously uses the private key for transactions, necessitating complete user trust.
 - **Non-custodial**: While a third party manages the private key, user involvement is required for signing transactions. Examples: Turnkey, Magic.
-- **MPC (Multi-Party Computation)**: Partial or complete key shares are managed by a third party, but user participation is needed for transaction signatures. Examples: Privy, Portal, Fireblocks NCW.
+- **MPC (Multi-Party Computation)**: Partial or complete key shares are managed by a third party, but user participation is needed for transaction signatures. Examples: Privy, Portal, Fireblocks NCW, WalletKit.
 - **Decentralized MPC**: Operated by a decentralized network, it manages key shares and requires node consensus for transaction signatures. Examples: Lit, Web3auth, 0xpass.
 
 ## Smart Account

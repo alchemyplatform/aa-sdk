@@ -9,6 +9,7 @@ coverage
 dist
 node_modules
 tsconfig*.tsbuildinfo
+.idea/
 
 # local env files
 .env

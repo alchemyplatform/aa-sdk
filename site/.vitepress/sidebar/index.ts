@@ -74,6 +74,7 @@ export const sidebar: DefaultTheme.Sidebar = [
           { text: "Particle Network", link: "/particle-network" },
           { text: "Arcana Auth", link: "/arcana-auth" },
           { text: "Dfns", link: "/dfns" },
+          { text: "WalletKit", link: "/walletkit" },
           { text: "Externally Owned Account (EOA)", link: "/eoa" },
         ],
       },
