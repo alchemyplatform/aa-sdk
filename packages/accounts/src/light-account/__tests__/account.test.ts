@@ -18,7 +18,6 @@ describe("Light Account Tests", () => {
 
   it("should correctly sign the message", async () => {
     const provider = givenConnectedProvider({ owner, chain });
-    // @ts-expect-error this is a private method on light account
     vi.spyOn(provider.account, "getLightAccountVersion").mockReturnValue(
       // @ts-ignore
       "v1.1.0"
@@ -34,7 +33,6 @@ describe("Light Account Tests", () => {
 
   it("should correctly sign typed data", async () => {
     const provider = givenConnectedProvider({ owner, chain });
-    // @ts-expect-error this is a private method on light account
     vi.spyOn(provider.account, "getLightAccountVersion").mockReturnValue(
       // @ts-ignore
       "v1.1.0"

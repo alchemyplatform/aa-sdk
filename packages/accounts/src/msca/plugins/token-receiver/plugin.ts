@@ -53,7 +53,7 @@ const TokenReceiverPlugin_ = {
       abi: TokenReceiverPluginAbi,
       publicClient: provider.rpcClient,
     }),
-  accountMethods: (_account: IMSCA<any, any>) => ({
+  accountMethods: (_account: IMSCA<any, any, any>) => ({
     encodeTokensReceivedData: ({
       args,
     }: GetFunctionArgs<

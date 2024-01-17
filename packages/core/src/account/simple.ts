@@ -17,8 +17,7 @@ import type { SimpleSmartAccountParams } from "./types.js";
 
 export class SimpleSmartContractAccount<
   TTransport extends Transport | FallbackTransport = Transport
-> extends BaseSmartContractAccount<TTransport> {
-  protected owner: SmartAccountSigner;
+> extends BaseSmartContractAccount<TTransport, SmartAccountSigner> {
   protected index: bigint;
 
   constructor(params: SimpleSmartAccountParams<TTransport>) {

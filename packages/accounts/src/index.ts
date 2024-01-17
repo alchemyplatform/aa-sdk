@@ -49,7 +49,11 @@ export type * from "./msca/account-loupe/types.js";
 export * from "./msca/account-loupe/utils.js";
 export { getDefaultMultiOwnerMSCAFactoryAddress } from "./msca/utils.js";
 
-export { MSCABuilder } from "./msca/builder/index.js";
+export {
+  MSCABuilder,
+  ModularAccountBuilderParamsSchema,
+  type ModularAccountBuilderParams,
+} from "./msca/builder/index.js";
 export { StandardExecutor } from "./msca/builder/standard-executor.js";
 export { WrapWith712SignerMethods } from "./msca/builder/wrapped-signer.js";
 

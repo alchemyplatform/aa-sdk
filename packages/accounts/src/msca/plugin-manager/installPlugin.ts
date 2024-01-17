@@ -24,7 +24,7 @@ export type InstallPluginParams = {
 };
 
 export async function installPlugin<
-  P extends ISmartAccountProvider & { account: IMSCA<any, any> }
+  P extends ISmartAccountProvider & { account: IMSCA<any, any, any> }
 >(
   provider: P,
   params: InstallPluginParams,
@@ -35,7 +35,7 @@ export async function installPlugin<
 }
 
 export async function encodeInstallPluginUserOperation<
-  P extends ISmartAccountProvider & { account: IMSCA<any, any> }
+  P extends ISmartAccountProvider & { account: IMSCA<any, any, any> }
 >(provider: P, params: InstallPluginParams) {
   const pluginManifest = await provider.rpcClient.readContract({
     abi: IPluginAbi,

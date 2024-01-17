@@ -1,8 +1,4 @@
-import {
-  SignerSchema,
-  createBaseSmartAccountParamsSchema,
-  type SupportedTransports,
-} from "@alchemy/aa-core";
+import { type SupportedTransports } from "@alchemy/aa-core";
 import { Address as zAddress } from "abitype/zod";
 import {
   concatHex,
@@ -21,7 +17,10 @@ import {
 import { MultiOwnerMSCAFactoryAbi } from "./abis/MultiOwnerMSCAFactory.js";
 import { MultiOwnerTokenReceiverMSCAFactoryAbi } from "./abis/MultiOwnerTokenReceiverMSCAFactory.js";
 import { accountLoupeDecorators } from "./account-loupe/decorator.js";
-import { MSCABuilder } from "./builder/index.js";
+import {
+  MSCABuilder,
+  ModularAccountBuilderParamsSchema,
+} from "./builder/index.js";
 import { WrapWith712SignerMethods } from "./builder/wrapped-signer.js";
 import { MultiOwnerPlugin } from "./plugins/multi-owner/plugin.js";
 import type { SessionKeySignerConfig } from "./plugins/session-key/signer.js";
@@ -30,8 +29,7 @@ import { TokenReceiverPlugin } from "./plugins/token-receiver/plugin.js";
 export const createMultiOwnerMSCASchema = <
   TTransport extends SupportedTransports = Transport
 >() =>
-  createBaseSmartAccountParamsSchema<TTransport>().extend({
-    owner: SignerSchema,
+  ModularAccountBuilderParamsSchema<TTransport>().extend({
     owners: z.array(zAddress).default([]),
     index: z.bigint().optional().default(0n),
     excludeDefaultTokenReceiverPlugin: z.boolean().optional().default(false),

@@ -55,7 +55,7 @@ const SessionKeyPlugin_ = {
       abi: SessionKeyPluginAbi,
       publicClient: provider.rpcClient,
     }),
-  accountMethods: (account: IMSCA<any, any>) => ({
+  accountMethods: (account: IMSCA<any, any, any>) => ({
     encodeExecuteWithSessionKeyData: ({
       args,
     }: GetFunctionArgs<

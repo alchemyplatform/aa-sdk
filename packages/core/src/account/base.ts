@@ -35,14 +35,15 @@ export enum DeploymentState {
 }
 
 export abstract class BaseSmartContractAccount<
-  TTransport extends SupportedTransports = Transport
-> implements ISmartContractAccount<TTransport>
+  TTransport extends SupportedTransports = Transport,
+  TOwner extends SmartAccountSigner | undefined = SmartAccountSigner | undefined
+> implements ISmartContractAccount<TTransport, TOwner>
 {
   protected factoryAddress: Address;
   protected deploymentState: DeploymentState = DeploymentState.UNDEFINED;
   protected accountAddress?: Address;
   protected accountInitCode?: Hex;
-  protected owner: SmartAccountSigner | undefined;
+  protected owner: TOwner;
   protected entryPoint: GetContractReturnType<
     typeof EntryPointAbi,
     PublicClient,
@@ -54,8 +55,10 @@ export abstract class BaseSmartContractAccount<
     | PublicErc4337Client<HttpTransport>;
 
   constructor(params_: BaseSmartAccountParams<TTransport>) {
-    const params =
-      createBaseSmartAccountParamsSchema<TTransport>().parse(params_);
+    const params = createBaseSmartAccountParamsSchema<
+      TTransport,
+      TOwner
+    >().parse(params_);
 
     this.entryPointAddress =
       params.entryPointAddress ?? getDefaultEntryPointAddress(params.chain);
@@ -97,7 +100,7 @@ export abstract class BaseSmartContractAccount<
 
     this.accountAddress = params.accountAddress;
     this.factoryAddress = params.factoryAddress;
-    this.owner = params.owner;
+    this.owner = params.owner as TOwner;
     this.accountInitCode = params.initCode;
 
     this.entryPoint = getContract({
@@ -306,7 +309,7 @@ export abstract class BaseSmartContractAccount<
     return Object.assign(this, extended);
   };
 
-  getOwner(): SmartAccountSigner | undefined {
+  getOwner(): TOwner {
     return this.owner;
   }
 

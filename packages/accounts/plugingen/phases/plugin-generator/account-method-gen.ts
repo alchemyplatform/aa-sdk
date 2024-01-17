@@ -53,7 +53,7 @@ export const AccountMethodGenPhase: Phase = async (input) => {
   input.content.push(dedent`
     accountMethods: (${
       hasViewFunction ? "account" : "_account"
-    }: IMSCA<any, any>) => ({ ${accountFunctions.join(",\n\n")} })
+    }: IMSCA<any, any, any>) => ({ ${accountFunctions.join(",\n\n")} })
   `);
 
   return input;
