@@ -13,6 +13,7 @@ import {
 } from "@alchemy/aa-core";
 import { useCallback, useState } from "react";
 import { Address } from "viem";
+import { usePlugin } from "./usePlugin";
 
 export enum PluginType {
   SESSION_KEY,
@@ -56,6 +57,8 @@ export const useAlchemyProvider = () => {
     return disconnectedProvider;
   }, [provider]);
 
+  const sessionKeyPlugin = usePlugin(provider, SessionKeyPlugin);
+
   const pluginInstall = useCallback(
     async (type: PluginType) => {
       if (!provider.isConnected<IMSCA>()) {
@@ -64,11 +67,9 @@ export const useAlchemyProvider = () => {
 
       switch (type) {
         case PluginType.SESSION_KEY:
-          return provider
-            .extend(SessionKeyPlugin.providerMethods)
-            .installSessionKeyPlugin({
-              args: [[]],
-            });
+          return sessionKeyPlugin?.installSessionKeyPlugin({
+            args: [[]],
+          });
 
         default:
           throw new Error("Unexpected plugin type", type);
