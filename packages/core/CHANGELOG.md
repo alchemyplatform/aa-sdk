@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/alchemyplatform/aa-sdk/compare/v2.1.0...v2.2.0) (2024-01-22)
+
+### Features
+
+- add usePluginHook to demo app ([#357](https://github.com/alchemyplatform/aa-sdk/issues/357)) ([036b13b](https://github.com/alchemyplatform/aa-sdk/commit/036b13b250b1b3465dee000a6d5036ca060c2bb4))
+
 # [2.0.0](https://github.com/alchemyplatform/aa-sdk/compare/v1.2.4...v2.0.0) (2024-01-12)
 
 - feat!: update the LightAccount logic for 1271 signatures to match the on-chain impl ([bbe5060](https://github.com/alchemyplatform/aa-sdk/commit/bbe5060c01828e07d7f788485b14c04dacc6cb6f))

@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/alchemyplatform/aa-sdk/compare/v2.1.0...v2.2.0) (2024-01-22)
+
+### Features
+
+- add a factory method for session key accounts ([#369](https://github.com/alchemyplatform/aa-sdk/issues/369)) ([58658ee](https://github.com/alchemyplatform/aa-sdk/commit/58658ee043e767927aa7f031aa2483d4048b964c))
+- add a session key signer to use with executor ([#368](https://github.com/alchemyplatform/aa-sdk/issues/368)) ([e35ed3b](https://github.com/alchemyplatform/aa-sdk/commit/e35ed3b6e0965bf46ab2c6d44e9709f5253715c0))
+- add session key executor ([#367](https://github.com/alchemyplatform/aa-sdk/issues/367)) ([0da4c76](https://github.com/alchemyplatform/aa-sdk/commit/0da4c76a0ef4ebcb7cab4893b6446be3df79c35e))
+- add session key permissions builder for session key plugin ([#366](https://github.com/alchemyplatform/aa-sdk/issues/366)) ([2d7f118](https://github.com/alchemyplatform/aa-sdk/commit/2d7f1182f9f1a36666a2cb06d4a271bab31b1656))
+- add usePluginHook to demo app ([#357](https://github.com/alchemyplatform/aa-sdk/issues/357)) ([036b13b](https://github.com/alchemyplatform/aa-sdk/commit/036b13b250b1b3465dee000a6d5036ca060c2bb4))
+- extended session key plugin implementation ([#372](https://github.com/alchemyplatform/aa-sdk/issues/372)) ([aca0b03](https://github.com/alchemyplatform/aa-sdk/commit/aca0b0363aae802aa3965568b4f8b8d292ce0cf1))
+- implement persistent account state capabilities ([#346](https://github.com/alchemyplatform/aa-sdk/issues/346)) ([710f532](https://github.com/alchemyplatform/aa-sdk/commit/710f532fe6e1b230f4b9e695bb70304e97281d47))
+- plugingen to generate plugin contract abi and get contract helper method ([#358](https://github.com/alchemyplatform/aa-sdk/issues/358)) ([87eea72](https://github.com/alchemyplatform/aa-sdk/commit/87eea723901ba0abedbbd1a832a2934a612a9b79))
+
 # [2.1.0](https://github.com/alchemyplatform/aa-sdk/compare/v2.0.1...v2.1.0) (2024-01-12)
 
 ### Bug Fixes
