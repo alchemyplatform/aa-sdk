@@ -52,7 +52,6 @@
     "test:run-e2e": "vitest run --config vitest.config.e2e.ts"
   },
   "devDependencies": {
-    "@alchemy/aa-core": "^2.1.0",
     "@wagmi/cli": "^1.5.2",
     "change-case": "^5.1.2",
     "dedent": "^1.5.1",
