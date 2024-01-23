@@ -6,7 +6,7 @@ export const TokenReceiverPluginGenConfig: PluginGenConfig = {
   name: "TokenReceiverPlugin",
   abi: TokenReceiverPluginAbi,
   addresses: {
-    [sepolia.id]: "0xa81C0AEaB22b21b4da8d8728063f6570384b48C9",
+    [sepolia.id]: "0x4FCDe5A446208a20A1539FC425832334bc8360Fb",
   },
   chain: sepolia,
   installConfig: {

@@ -10,7 +10,6 @@ export type UninstallPluginParams = {
   pluginAddress: Address;
   config?: Hash;
   pluginUninstallData?: Hash;
-  hookUnapplyData?: Hash[];
 };
 
 export async function uninstallPlugin<
@@ -34,7 +33,6 @@ export async function encodeUninstallPluginUserOperation(
       params.pluginAddress,
       params.config ?? "0x",
       params.pluginUninstallData ?? "0x",
-      params.hookUnapplyData ?? [],
     ],
   });
 }

@@ -14,7 +14,6 @@ import {
   type ISmartAccountProvider,
 } from "@alchemy/aa-core";
 import { installPlugin as installPlugin_ } from "../../plugin-manager/installPlugin.js";
-import { type InjectedHook } from "../../plugin-manager/types.js";
 import { type FunctionReference } from "../../account-loupe/types.js";
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,12 +24,11 @@ type InstallArgs = [{ type: "address[]" }];
 export type InstallMultiOwnerPluginParams = {
   args: Parameters<typeof encodeAbiParameters<InstallArgs>>[1];
   pluginAddress?: Address;
-  injectedHooks?: InjectedHook[];
   dependencyOverrides?: FunctionReference[];
 };
 
 const addresses = {
-  11155111: "0x56bC629F342821FBe91C5273880792dFECBE7920" as Address,
+  11155111: "0x90d4f511c9Ca2B1694eA2A1629130B430853aBeB" as Address,
 } as Record<number, Address>;
 
 const MultiOwnerPlugin_ = {
@@ -63,48 +61,6 @@ const MultiOwnerPlugin_ = {
       return encodeFunctionData({
         abi: MultiOwnerPluginExecutionFunctionAbi,
         functionName: "updateOwners",
-        args,
-      });
-    },
-
-    encodeOwnersData: () => {
-      return encodeFunctionData({
-        abi: MultiOwnerPluginExecutionFunctionAbi,
-        functionName: "owners",
-      });
-    },
-
-    readOwners: async () => {
-      return account.rpcProvider.readContract({
-        address: await account.getAddress(),
-        abi: MultiOwnerPluginExecutionFunctionAbi,
-        functionName: "owners",
-      });
-    },
-
-    encodeIsOwnerData: ({
-      args,
-    }: GetFunctionArgs<
-      typeof MultiOwnerPluginExecutionFunctionAbi,
-      "isOwner"
-    >) => {
-      return encodeFunctionData({
-        abi: MultiOwnerPluginExecutionFunctionAbi,
-        functionName: "isOwner",
-        args,
-      });
-    },
-
-    readIsOwner: async ({
-      args,
-    }: GetFunctionArgs<
-      typeof MultiOwnerPluginExecutionFunctionAbi,
-      "isOwner"
-    >) => {
-      return account.rpcProvider.readContract({
-        address: await account.getAddress(),
-        abi: MultiOwnerPluginExecutionFunctionAbi,
-        functionName: "isOwner",
         args,
       });
     },
@@ -230,22 +186,6 @@ export const MultiOwnerPluginExecutionFunctionAbi = [
     stateMutability: "view",
     type: "function",
     inputs: [],
-    name: "owners",
-    outputs: [{ name: "", internalType: "address[]", type: "address[]" }],
-  },
-  {
-    stateMutability: "view",
-    type: "function",
-    inputs: [
-      { name: "ownerToCheck", internalType: "address", type: "address" },
-    ],
-    name: "isOwner",
-    outputs: [{ name: "", internalType: "bool", type: "bool" }],
-  },
-  {
-    stateMutability: "view",
-    type: "function",
-    inputs: [],
     name: "eip712Domain",
     outputs: [
       { name: "fields", internalType: "bytes1", type: "bytes1" },
@@ -270,56 +210,6 @@ export const MultiOwnerPluginExecutionFunctionAbi = [
 ] as const;
 
 export const MultiOwnerPluginAbi = [
-  { stateMutability: "nonpayable", type: "constructor", inputs: [] },
-  { type: "error", inputs: [], name: "AlreadyInitialized" },
-  { type: "error", inputs: [], name: "EmptyOwnersNotAllowed" },
-  { type: "error", inputs: [], name: "InvalidAction" },
-  { type: "error", inputs: [], name: "InvalidShortString" },
-  { type: "error", inputs: [], name: "NotAuthorized" },
-  { type: "error", inputs: [], name: "NotContractCaller" },
-  { type: "error", inputs: [], name: "NotImplemented" },
-  { type: "error", inputs: [], name: "NotInitialized" },
-  {
-    type: "error",
-    inputs: [{ name: "owner", internalType: "address", type: "address" }],
-    name: "OwnerAlreadyExists",
-  },
-  {
-    type: "error",
-    inputs: [{ name: "owner", internalType: "address", type: "address" }],
-    name: "OwnerDoesNotExist",
-  },
-  {
-    type: "error",
-    inputs: [{ name: "str", internalType: "string", type: "string" }],
-    name: "StringTooLong",
-  },
-  { type: "event", anonymous: false, inputs: [], name: "EIP712DomainChanged" },
-  {
-    type: "event",
-    anonymous: false,
-    inputs: [
-      {
-        name: "account",
-        internalType: "address",
-        type: "address",
-        indexed: true,
-      },
-      {
-        name: "addedOwners",
-        internalType: "address[]",
-        type: "address[]",
-        indexed: false,
-      },
-      {
-        name: "removedOwners",
-        internalType: "address[]",
-        type: "address[]",
-        indexed: false,
-      },
-    ],
-    name: "OwnerUpdated",
-  },
   {
     stateMutability: "view",
     type: "function",
@@ -359,15 +249,6 @@ export const MultiOwnerPluginAbi = [
     stateMutability: "view",
     type: "function",
     inputs: [
-      { name: "ownerToCheck", internalType: "address", type: "address" },
-    ],
-    name: "isOwner",
-    outputs: [{ name: "", internalType: "bool", type: "bool" }],
-  },
-  {
-    stateMutability: "view",
-    type: "function",
-    inputs: [
       { name: "account", internalType: "address", type: "address" },
       { name: "ownerToCheck", internalType: "address", type: "address" },
     ],
@@ -387,62 +268,6 @@ export const MultiOwnerPluginAbi = [
   {
     stateMutability: "nonpayable",
     type: "function",
-    inputs: [
-      { name: "pluginAppliedOn", internalType: "address", type: "address" },
-      {
-        name: "injectedHooksInfo",
-        internalType: "struct IPluginManager.InjectedHooksInfo",
-        type: "tuple",
-        components: [
-          {
-            name: "preExecHookFunctionId",
-            internalType: "uint8",
-            type: "uint8",
-          },
-          { name: "isPostHookUsed", internalType: "bool", type: "bool" },
-          {
-            name: "postExecHookFunctionId",
-            internalType: "uint8",
-            type: "uint8",
-          },
-        ],
-      },
-      { name: "data", internalType: "bytes", type: "bytes" },
-    ],
-    name: "onHookApply",
-    outputs: [],
-  },
-  {
-    stateMutability: "nonpayable",
-    type: "function",
-    inputs: [
-      { name: "pluginAppliedOn", internalType: "address", type: "address" },
-      {
-        name: "injectedHooksInfo",
-        internalType: "struct IPluginManager.InjectedHooksInfo",
-        type: "tuple",
-        components: [
-          {
-            name: "preExecHookFunctionId",
-            internalType: "uint8",
-            type: "uint8",
-          },
-          { name: "isPostHookUsed", internalType: "bool", type: "bool" },
-          {
-            name: "postExecHookFunctionId",
-            internalType: "uint8",
-            type: "uint8",
-          },
-        ],
-      },
-      { name: "data", internalType: "bytes", type: "bytes" },
-    ],
-    name: "onHookUnapply",
-    outputs: [],
-  },
-  {
-    stateMutability: "nonpayable",
-    type: "function",
     inputs: [{ name: "data", internalType: "bytes", type: "bytes" }],
     name: "onInstall",
     outputs: [],
@@ -453,13 +278,6 @@ export const MultiOwnerPluginAbi = [
     inputs: [{ name: "", internalType: "bytes", type: "bytes" }],
     name: "onUninstall",
     outputs: [],
-  },
-  {
-    stateMutability: "view",
-    type: "function",
-    inputs: [],
-    name: "owners",
-    outputs: [{ name: "", internalType: "address[]", type: "address[]" }],
   },
   {
     stateMutability: "view",
@@ -637,54 +455,6 @@ export const MultiOwnerPluginAbi = [
           },
           {
             name: "executionHooks",
-            internalType: "struct ManifestExecutionHook[]",
-            type: "tuple[]",
-            components: [
-              {
-                name: "executionSelector",
-                internalType: "bytes4",
-                type: "bytes4",
-              },
-              {
-                name: "preExecHook",
-                internalType: "struct ManifestFunction",
-                type: "tuple",
-                components: [
-                  {
-                    name: "functionType",
-                    internalType: "enum ManifestAssociatedFunctionType",
-                    type: "uint8",
-                  },
-                  { name: "functionId", internalType: "uint8", type: "uint8" },
-                  {
-                    name: "dependencyIndex",
-                    internalType: "uint256",
-                    type: "uint256",
-                  },
-                ],
-              },
-              {
-                name: "postExecHook",
-                internalType: "struct ManifestFunction",
-                type: "tuple",
-                components: [
-                  {
-                    name: "functionType",
-                    internalType: "enum ManifestAssociatedFunctionType",
-                    type: "uint8",
-                  },
-                  { name: "functionId", internalType: "uint8", type: "uint8" },
-                  {
-                    name: "dependencyIndex",
-                    internalType: "uint256",
-                    type: "uint256",
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            name: "permittedCallHooks",
             internalType: "struct ManifestExecutionHook[]",
             type: "tuple[]",
             components: [
@@ -912,5 +682,47 @@ export const MultiOwnerPluginAbi = [
     ],
     name: "userOpValidationFunction",
     outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "account",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "addedOwners",
+        internalType: "address[]",
+        type: "address[]",
+        indexed: false,
+      },
+      {
+        name: "removedOwners",
+        internalType: "address[]",
+        type: "address[]",
+        indexed: false,
+      },
+    ],
+    name: "OwnerUpdated",
+  },
+  { type: "error", inputs: [], name: "AlreadyInitialized" },
+  { type: "error", inputs: [], name: "EmptyOwnersNotAllowed" },
+  { type: "error", inputs: [], name: "InvalidAction" },
+  {
+    type: "error",
+    inputs: [{ name: "owner", internalType: "address", type: "address" }],
+    name: "InvalidOwner",
+  },
+  { type: "error", inputs: [], name: "NotAuthorized" },
+  { type: "error", inputs: [], name: "NotContractCaller" },
+  { type: "error", inputs: [], name: "NotImplemented" },
+  { type: "error", inputs: [], name: "NotInitialized" },
+  {
+    type: "error",
+    inputs: [{ name: "owner", internalType: "address", type: "address" }],
+    name: "OwnerDoesNotExist",
   },
 ] as const;

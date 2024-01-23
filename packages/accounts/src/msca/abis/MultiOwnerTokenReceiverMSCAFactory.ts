@@ -1,260 +1,190 @@
 export const MultiOwnerTokenReceiverMSCAFactoryAbi = [
   {
+    type: "constructor",
     inputs: [
+      { name: "owner", type: "address", internalType: "address" },
+      { name: "multiOwnerPlugin", type: "address", internalType: "address" },
+      { name: "tokenReceiverPlugin", type: "address", internalType: "address" },
+      { name: "implementation", type: "address", internalType: "address" },
       {
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "multiOwnerPlugin",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "tokenReceiverPlugin",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "implementation",
-        type: "address",
-      },
-      {
-        internalType: "bytes32",
         name: "multiOwnerPluginManifestHash",
         type: "bytes32",
+        internalType: "bytes32",
       },
       {
-        internalType: "bytes32",
         name: "tokenReceiverPluginManifestHash",
         type: "bytes32",
+        internalType: "bytes32",
       },
       {
-        internalType: "contract IEntryPoint",
         name: "entryPoint",
         type: "address",
+        internalType: "contract IEntryPoint",
       },
     ],
     stateMutability: "nonpayable",
-    type: "constructor",
+  },
+  { type: "receive", stateMutability: "payable" },
+  {
+    type: "function",
+    name: "ENTRYPOINT",
+    inputs: [],
+    outputs: [
+      { name: "", type: "address", internalType: "contract IEntryPoint" },
+    ],
+    stateMutability: "view",
   },
   {
-    anonymous: false,
+    type: "function",
+    name: "IMPL",
+    inputs: [],
+    outputs: [{ name: "", type: "address", internalType: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "MULTI_OWNER_PLUGIN",
+    inputs: [],
+    outputs: [{ name: "", type: "address", internalType: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "TOKEN_RECEIVER_PLUGIN",
+    inputs: [],
+    outputs: [{ name: "", type: "address", internalType: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "acceptOwnership",
+    inputs: [],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "addStake",
+    inputs: [
+      { name: "unstakeDelay", type: "uint32", internalType: "uint32" },
+      { name: "amount", type: "uint256", internalType: "uint256" },
+    ],
+    outputs: [],
+    stateMutability: "payable",
+  },
+  {
+    type: "function",
+    name: "createAccount",
+    inputs: [
+      { name: "salt", type: "uint256", internalType: "uint256" },
+      { name: "owners", type: "address[]", internalType: "address[]" },
+    ],
+    outputs: [{ name: "addr", type: "address", internalType: "address" }],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "getAddress",
+    inputs: [
+      { name: "salt", type: "uint256", internalType: "uint256" },
+      { name: "owners", type: "address[]", internalType: "address[]" },
+    ],
+    outputs: [{ name: "", type: "address", internalType: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "owner",
+    inputs: [],
+    outputs: [{ name: "", type: "address", internalType: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "pendingOwner",
+    inputs: [],
+    outputs: [{ name: "", type: "address", internalType: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "renounceOwnership",
+    inputs: [],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "transferOwnership",
+    inputs: [{ name: "newOwner", type: "address", internalType: "address" }],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "unlockStake",
+    inputs: [],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "withdraw",
+    inputs: [
+      { name: "to", type: "address", internalType: "address payable" },
+      { name: "token", type: "address", internalType: "address" },
+      { name: "amount", type: "uint256", internalType: "uint256" },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "withdrawStake",
+    inputs: [{ name: "to", type: "address", internalType: "address payable" }],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "event",
+    name: "OwnershipTransferStarted",
     inputs: [
       {
-        indexed: true,
-        internalType: "address",
         name: "previousOwner",
         type: "address",
-      },
-      {
         indexed: true,
         internalType: "address",
+      },
+      {
         name: "newOwner",
         type: "address",
+        indexed: true,
+        internalType: "address",
       },
     ],
-    name: "OwnershipTransferred",
+    anonymous: false,
+  },
+  {
     type: "event",
-  },
-  {
-    inputs: [],
-    name: "ENTRYPOINT",
-    outputs: [
-      {
-        internalType: "contract IEntryPoint",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "IMPL",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "MULTI_OWNER_PLUGIN",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "TOKEN_RECEIVER_PLUGIN",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
+    name: "OwnershipTransferred",
     inputs: [
       {
-        internalType: "uint32",
-        name: "unstakeDelay",
-        type: "uint32",
-      },
-      {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
-    ],
-    name: "addStake",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "salt",
-        type: "uint256",
-      },
-      {
-        internalType: "address[]",
-        name: "owners",
-        type: "address[]",
-      },
-    ],
-    name: "createAccount",
-    outputs: [
-      {
-        internalType: "address",
-        name: "addr",
+        name: "previousOwner",
         type: "address",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "salt",
-        type: "uint256",
-      },
-      {
-        internalType: "address[]",
-        name: "owners",
-        type: "address[]",
-      },
-    ],
-    name: "getAddress",
-    outputs: [
-      {
+        indexed: true,
         internalType: "address",
-        name: "",
-        type: "address",
       },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "owner",
-    outputs: [
       {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "renounceOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
         name: "newOwner",
         type: "address",
-      },
-    ],
-    name: "transferOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "unlockStake",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address payable",
-        name: "to",
-        type: "address",
-      },
-      {
+        indexed: true,
         internalType: "address",
-        name: "token",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
       },
     ],
-    name: "withdraw",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    anonymous: false,
   },
-  {
-    inputs: [
-      {
-        internalType: "address payable",
-        name: "to",
-        type: "address",
-      },
-    ],
-    name: "withdrawStake",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    stateMutability: "payable",
-    type: "receive",
-  },
+  { type: "error", name: "InvalidOwner", inputs: [] },
+  { type: "error", name: "OwnersArrayEmpty", inputs: [] },
+  { type: "error", name: "OwnersLimitExceeded", inputs: [] },
+  { type: "error", name: "TransferFailed", inputs: [] },
 ] as const;

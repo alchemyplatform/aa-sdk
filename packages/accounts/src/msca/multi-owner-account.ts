@@ -22,7 +22,7 @@ import {
   ModularAccountBuilderParamsSchema,
 } from "./builder/index.js";
 import { WrapWith712SignerMethods } from "./builder/wrapped-signer.js";
-import { MultiOwnerPlugin } from "./plugins/multi-owner/plugin.js";
+import { MultiOwnerPlugin } from "./plugins/multi-owner/index.js";
 import type { SessionKeySignerConfig } from "./plugins/session-key/signer.js";
 import { TokenReceiverPlugin } from "./plugins/token-receiver/plugin.js";
 

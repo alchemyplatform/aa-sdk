@@ -1,1207 +1,574 @@
 export const UpgradeableModularAccountAbi = [
   {
+    type: "constructor",
     inputs: [
       {
-        internalType: "contract IEntryPoint",
         name: "anEntryPoint",
         type: "address",
+        internalType: "contract IEntryPoint",
       },
     ],
     stateMutability: "nonpayable",
-    type: "constructor",
   },
+  { type: "fallback", stateMutability: "payable" },
+  { type: "receive", stateMutability: "payable" },
   {
-    inputs: [],
-    name: "AlreadyInitialized",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "AlreadyInitializing",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "AlwaysDenyRule",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "ArrayLengthMismatch",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes",
-        name: "revertReason",
-        type: "bytes",
-      },
-    ],
-    name: "AuthorizeUpgradeReverted",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes4",
-        name: "selector",
-        type: "bytes4",
-      },
-      {
-        internalType: "FunctionReference",
-        name: "hook",
-        type: "bytes21",
-      },
-    ],
-    name: "DuplicateHookLimitExceeded",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes4",
-        name: "selector",
-        type: "bytes4",
-      },
-      {
-        internalType: "FunctionReference",
-        name: "hook",
-        type: "bytes21",
-      },
-    ],
-    name: "DuplicatePreRuntimeValidationHookLimitExceeded",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes4",
-        name: "selector",
-        type: "bytes4",
-      },
-      {
-        internalType: "FunctionReference",
-        name: "hook",
-        type: "bytes21",
-      },
-    ],
-    name: "DuplicatePreUserOpValidationHookLimitExceeded",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes4",
-        name: "selector",
-        type: "bytes4",
-      },
-    ],
-    name: "Erc4337FunctionNotAllowed",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "plugin",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "target",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "value",
-        type: "uint256",
-      },
-      {
-        internalType: "bytes",
-        name: "data",
-        type: "bytes",
-      },
-    ],
-    name: "ExecFromPluginExternalNotPermitted",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "plugin",
-        type: "address",
-      },
-      {
-        internalType: "bytes4",
-        name: "selector",
-        type: "bytes4",
-      },
-    ],
-    name: "ExecFromPluginNotPermitted",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes4",
-        name: "selector",
-        type: "bytes4",
-      },
-    ],
-    name: "ExecutionFunctionAlreadySet",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes4",
-        name: "selector",
-        type: "bytes4",
-      },
-    ],
-    name: "ExecutionFunctionNotSet",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "InvalidDependenciesProvided",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "InvalidPluginManifest",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "dependency",
-        type: "address",
-      },
-    ],
-    name: "MissingPluginDependency",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes4",
-        name: "selector",
-        type: "bytes4",
-      },
-    ],
-    name: "NativeFunctionNotAllowed",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "plugin",
-        type: "address",
-      },
-    ],
-    name: "NativeTokenSpendingNotPermitted",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "NullFunctionReference",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "plugin",
-        type: "address",
-      },
-    ],
-    name: "PluginAlreadyInstalled",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "providingPlugin",
-        type: "address",
-      },
-      {
-        internalType: "bytes",
-        name: "revertReason",
-        type: "bytes",
-      },
-    ],
-    name: "PluginApplyHookCallbackFailed",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "plugin",
-        type: "address",
-      },
-    ],
-    name: "PluginCallDenied",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "plugin",
-        type: "address",
-      },
-    ],
-    name: "PluginDependencyViolation",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "providingPlugin",
-        type: "address",
-      },
-      {
-        internalType: "bytes",
-        name: "revertReason",
-        type: "bytes",
-      },
-    ],
-    name: "PluginHookUnapplyCallbackFailed",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "plugin",
-        type: "address",
-      },
-      {
-        internalType: "bytes",
-        name: "revertReason",
-        type: "bytes",
-      },
-    ],
-    name: "PluginInstallCallbackFailed",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "plugin",
-        type: "address",
-      },
-    ],
-    name: "PluginInterfaceNotSupported",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "plugin",
-        type: "address",
-      },
-    ],
-    name: "PluginNotInstalled",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "plugin",
-        type: "address",
-      },
-      {
-        internalType: "bytes",
-        name: "revertReason",
-        type: "bytes",
-      },
-    ],
-    name: "PluginUninstallCallbackFailed",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "plugin",
-        type: "address",
-      },
-      {
-        internalType: "uint8",
-        name: "functionId",
-        type: "uint8",
-      },
-      {
-        internalType: "bytes",
-        name: "revertReason",
-        type: "bytes",
-      },
-    ],
-    name: "PostExecHookReverted",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "plugin",
-        type: "address",
-      },
-      {
-        internalType: "uint8",
-        name: "functionId",
-        type: "uint8",
-      },
-      {
-        internalType: "bytes",
-        name: "revertReason",
-        type: "bytes",
-      },
-    ],
-    name: "PreExecHookReverted",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "plugin",
-        type: "address",
-      },
-      {
-        internalType: "uint8",
-        name: "functionId",
-        type: "uint8",
-      },
-      {
-        internalType: "bytes",
-        name: "revertReason",
-        type: "bytes",
-      },
-    ],
-    name: "PreRuntimeValidationHookFailed",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes4",
-        name: "selector",
-        type: "bytes4",
-      },
-      {
-        internalType: "FunctionReference",
-        name: "validationFunction",
-        type: "bytes21",
-      },
-    ],
-    name: "RuntimeValidationFunctionAlreadySet",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes4",
-        name: "selector",
-        type: "bytes4",
-      },
-    ],
-    name: "RuntimeValidationFunctionMissing",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "plugin",
-        type: "address",
-      },
-      {
-        internalType: "uint8",
-        name: "functionId",
-        type: "uint8",
-      },
-      {
-        internalType: "bytes",
-        name: "revertReason",
-        type: "bytes",
-      },
-    ],
-    name: "RuntimeValidationFunctionReverted",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "UnauthorizedCallContext",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "plugin",
-        type: "address",
-      },
-      {
-        internalType: "uint8",
-        name: "functionId",
-        type: "uint8",
-      },
-      {
-        internalType: "address",
-        name: "aggregator",
-        type: "address",
-      },
-    ],
-    name: "UnexpectedAggregator",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes4",
-        name: "selector",
-        type: "bytes4",
-      },
-    ],
-    name: "UnrecognizedFunction",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "UpgradeFailed",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "UserOpNotFromEntryPoint",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes4",
-        name: "selector",
-        type: "bytes4",
-      },
-      {
-        internalType: "FunctionReference",
-        name: "validationFunction",
-        type: "bytes21",
-      },
-    ],
-    name: "UserOpValidationFunctionAlreadySet",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes4",
-        name: "selector",
-        type: "bytes4",
-      },
-    ],
-    name: "UserOpValidationFunctionMissing",
-    type: "error",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "contract IEntryPoint",
-        name: "entryPoint",
-        type: "address",
-      },
-    ],
-    name: "ModularAccountInitialized",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "plugin",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "providingPlugin",
-        type: "address",
-      },
-    ],
-    name: "PluginIgnoredHookUnapplyCallbackFailure",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "plugin",
-        type: "address",
-      },
-    ],
-    name: "PluginIgnoredUninstallCallbackFailure",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "plugin",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "bytes32",
-        name: "manifestHash",
-        type: "bytes32",
-      },
-      {
-        indexed: false,
-        internalType: "FunctionReference[]",
-        name: "dependencies",
-        type: "bytes21[]",
-      },
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "providingPlugin",
-            type: "address",
-          },
-          {
-            internalType: "bytes4",
-            name: "selector",
-            type: "bytes4",
-          },
-          {
-            components: [
-              {
-                internalType: "uint8",
-                name: "preExecHookFunctionId",
-                type: "uint8",
-              },
-              {
-                internalType: "bool",
-                name: "isPostHookUsed",
-                type: "bool",
-              },
-              {
-                internalType: "uint8",
-                name: "postExecHookFunctionId",
-                type: "uint8",
-              },
-            ],
-            internalType: "struct IPluginManager.InjectedHooksInfo",
-            name: "injectedHooksInfo",
-            type: "tuple",
-          },
-          {
-            internalType: "bytes",
-            name: "hookApplyData",
-            type: "bytes",
-          },
-        ],
-        indexed: false,
-        internalType: "struct IPluginManager.InjectedHook[]",
-        name: "injectedHooks",
-        type: "tuple[]",
-      },
-    ],
-    name: "PluginInstalled",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "plugin",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "bool",
-        name: "callbacksSucceeded",
-        type: "bool",
-      },
-    ],
-    name: "PluginUninstalled",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "implementation",
-        type: "address",
-      },
-    ],
-    name: "Upgraded",
-    type: "event",
-  },
-  {
-    stateMutability: "payable",
-    type: "fallback",
-  },
-  {
-    inputs: [],
+    type: "function",
     name: "entryPoint",
+    inputs: [],
     outputs: [
-      {
-        internalType: "contract IEntryPoint",
-        name: "",
-        type: "address",
-      },
+      { name: "", type: "address", internalType: "contract IEntryPoint" },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "target",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "value",
-        type: "uint256",
-      },
-      {
-        internalType: "bytes",
-        name: "data",
-        type: "bytes",
-      },
-    ],
+    type: "function",
     name: "execute",
-    outputs: [
-      {
-        internalType: "bytes",
-        name: "result",
-        type: "bytes",
-      },
+    inputs: [
+      { name: "target", type: "address", internalType: "address" },
+      { name: "value", type: "uint256", internalType: "uint256" },
+      { name: "data", type: "bytes", internalType: "bytes" },
     ],
+    outputs: [{ name: "result", type: "bytes", internalType: "bytes" }],
     stateMutability: "payable",
-    type: "function",
   },
   {
+    type: "function",
+    name: "executeBatch",
     inputs: [
       {
-        components: [
-          {
-            internalType: "address",
-            name: "target",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "value",
-            type: "uint256",
-          },
-          {
-            internalType: "bytes",
-            name: "data",
-            type: "bytes",
-          },
-        ],
-        internalType: "struct Call[]",
         name: "calls",
         type: "tuple[]",
-      },
-    ],
-    name: "executeBatch",
-    outputs: [
-      {
-        internalType: "bytes[]",
-        name: "results",
-        type: "bytes[]",
-      },
-    ],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes",
-        name: "data",
-        type: "bytes",
-      },
-    ],
-    name: "executeFromPlugin",
-    outputs: [
-      {
-        internalType: "bytes",
-        name: "returnData",
-        type: "bytes",
-      },
-    ],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "target",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "value",
-        type: "uint256",
-      },
-      {
-        internalType: "bytes",
-        name: "data",
-        type: "bytes",
-      },
-    ],
-    name: "executeFromPluginExternal",
-    outputs: [
-      {
-        internalType: "bytes",
-        name: "",
-        type: "bytes",
-      },
-    ],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes4",
-        name: "selector",
-        type: "bytes4",
-      },
-    ],
-    name: "getExecutionFunctionConfig",
-    outputs: [
-      {
+        internalType: "struct Call[]",
         components: [
+          { name: "target", type: "address", internalType: "address" },
+          { name: "value", type: "uint256", internalType: "uint256" },
+          { name: "data", type: "bytes", internalType: "bytes" },
+        ],
+      },
+    ],
+    outputs: [{ name: "results", type: "bytes[]", internalType: "bytes[]" }],
+    stateMutability: "payable",
+  },
+  {
+    type: "function",
+    name: "executeFromPlugin",
+    inputs: [{ name: "data", type: "bytes", internalType: "bytes" }],
+    outputs: [{ name: "returnData", type: "bytes", internalType: "bytes" }],
+    stateMutability: "payable",
+  },
+  {
+    type: "function",
+    name: "executeFromPluginExternal",
+    inputs: [
+      { name: "target", type: "address", internalType: "address" },
+      { name: "value", type: "uint256", internalType: "uint256" },
+      { name: "data", type: "bytes", internalType: "bytes" },
+    ],
+    outputs: [{ name: "", type: "bytes", internalType: "bytes" }],
+    stateMutability: "payable",
+  },
+  {
+    type: "function",
+    name: "getExecutionFunctionConfig",
+    inputs: [{ name: "selector", type: "bytes4", internalType: "bytes4" }],
+    outputs: [
+      {
+        name: "config",
+        type: "tuple",
+        internalType: "struct IAccountLoupe.ExecutionFunctionConfig",
+        components: [
+          { name: "plugin", type: "address", internalType: "address" },
           {
-            internalType: "address",
-            name: "plugin",
-            type: "address",
-          },
-          {
-            internalType: "FunctionReference",
             name: "userOpValidationFunction",
             type: "bytes21",
+            internalType: "FunctionReference",
           },
           {
-            internalType: "FunctionReference",
             name: "runtimeValidationFunction",
             type: "bytes21",
+            internalType: "FunctionReference",
           },
         ],
-        internalType: "struct IAccountLoupe.ExecutionFunctionConfig",
-        name: "config",
-        type: "tuple",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "bytes4",
-        name: "selector",
-        type: "bytes4",
-      },
-    ],
+    type: "function",
     name: "getExecutionHooks",
+    inputs: [{ name: "selector", type: "bytes4", internalType: "bytes4" }],
     outputs: [
       {
-        components: [
-          {
-            internalType: "FunctionReference",
-            name: "preExecHook",
-            type: "bytes21",
-          },
-          {
-            internalType: "FunctionReference",
-            name: "postExecHook",
-            type: "bytes21",
-          },
-        ],
-        internalType: "struct IAccountLoupe.ExecutionHooks[]",
         name: "execHooks",
         type: "tuple[]",
+        internalType: "struct IAccountLoupe.ExecutionHooks[]",
+        components: [
+          {
+            name: "preExecHook",
+            type: "bytes21",
+            internalType: "FunctionReference",
+          },
+          {
+            name: "postExecHook",
+            type: "bytes21",
+            internalType: "FunctionReference",
+          },
+        ],
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [],
+    type: "function",
     name: "getInstalledPlugins",
-    outputs: [
-      {
-        internalType: "address[]",
-        name: "pluginAddresses",
-        type: "address[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [],
+    outputs: [
+      { name: "pluginAddresses", type: "address[]", internalType: "address[]" },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     name: "getNonce",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
+    inputs: [],
+    outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "callingPlugin",
-        type: "address",
-      },
-      {
-        internalType: "bytes4",
-        name: "selector",
-        type: "bytes4",
-      },
-    ],
-    name: "getPermittedCallHooks",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "FunctionReference",
-            name: "preExecHook",
-            type: "bytes21",
-          },
-          {
-            internalType: "FunctionReference",
-            name: "postExecHook",
-            type: "bytes21",
-          },
-        ],
-        internalType: "struct IAccountLoupe.ExecutionHooks[]",
-        name: "execHooks",
-        type: "tuple[]",
-      },
-    ],
-    stateMutability: "view",
     type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes4",
-        name: "selector",
-        type: "bytes4",
-      },
-    ],
     name: "getPreValidationHooks",
+    inputs: [{ name: "selector", type: "bytes4", internalType: "bytes4" }],
     outputs: [
       {
-        internalType: "FunctionReference[]",
         name: "preUserOpValidationHooks",
         type: "bytes21[]",
+        internalType: "FunctionReference[]",
       },
       {
-        internalType: "FunctionReference[]",
         name: "preRuntimeValidationHooks",
         type: "bytes21[]",
+        internalType: "FunctionReference[]",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address[]",
-        name: "plugins",
-        type: "address[]",
-      },
-      {
-        internalType: "bytes",
-        name: "pluginInitData",
-        type: "bytes",
-      },
-    ],
+    type: "function",
     name: "initialize",
+    inputs: [
+      { name: "plugins", type: "address[]", internalType: "address[]" },
+      { name: "pluginInitData", type: "bytes", internalType: "bytes" },
+    ],
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
+    type: "function",
+    name: "installPlugin",
     inputs: [
+      { name: "plugin", type: "address", internalType: "address" },
+      { name: "manifestHash", type: "bytes32", internalType: "bytes32" },
+      { name: "pluginInitData", type: "bytes", internalType: "bytes" },
       {
-        internalType: "address",
-        name: "plugin",
-        type: "address",
-      },
-      {
-        internalType: "bytes32",
-        name: "manifestHash",
-        type: "bytes32",
-      },
-      {
-        internalType: "bytes",
-        name: "pluginInitData",
-        type: "bytes",
-      },
-      {
-        internalType: "FunctionReference[]",
         name: "dependencies",
         type: "bytes21[]",
-      },
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "providingPlugin",
-            type: "address",
-          },
-          {
-            internalType: "bytes4",
-            name: "selector",
-            type: "bytes4",
-          },
-          {
-            components: [
-              {
-                internalType: "uint8",
-                name: "preExecHookFunctionId",
-                type: "uint8",
-              },
-              {
-                internalType: "bool",
-                name: "isPostHookUsed",
-                type: "bool",
-              },
-              {
-                internalType: "uint8",
-                name: "postExecHookFunctionId",
-                type: "uint8",
-              },
-            ],
-            internalType: "struct IPluginManager.InjectedHooksInfo",
-            name: "injectedHooksInfo",
-            type: "tuple",
-          },
-          {
-            internalType: "bytes",
-            name: "hookApplyData",
-            type: "bytes",
-          },
-        ],
-        internalType: "struct IPluginManager.InjectedHook[]",
-        name: "injectedHooks",
-        type: "tuple[]",
+        internalType: "FunctionReference[]",
       },
     ],
-    name: "installPlugin",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
-    inputs: [],
+    type: "function",
     name: "proxiableUUID",
-    outputs: [
-      {
-        internalType: "bytes32",
-        name: "",
-        type: "bytes32",
-      },
-    ],
+    inputs: [],
+    outputs: [{ name: "", type: "bytes32", internalType: "bytes32" }],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "bytes4",
-        name: "interfaceId",
-        type: "bytes4",
-      },
-    ],
+    type: "function",
     name: "supportsInterface",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
+    inputs: [{ name: "interfaceId", type: "bytes4", internalType: "bytes4" }],
+    outputs: [{ name: "", type: "bool", internalType: "bool" }],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "plugin",
-        type: "address",
-      },
-      {
-        internalType: "bytes",
-        name: "config",
-        type: "bytes",
-      },
-      {
-        internalType: "bytes",
-        name: "pluginUninstallData",
-        type: "bytes",
-      },
-      {
-        internalType: "bytes[]",
-        name: "hookUnapplyData",
-        type: "bytes[]",
-      },
-    ],
+    type: "function",
     name: "uninstallPlugin",
+    inputs: [
+      { name: "plugin", type: "address", internalType: "address" },
+      { name: "config", type: "bytes", internalType: "bytes" },
+      { name: "pluginUninstallData", type: "bytes", internalType: "bytes" },
+    ],
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "newImplementation",
-        type: "address",
-      },
-      {
-        internalType: "bytes",
-        name: "data",
-        type: "bytes",
-      },
-    ],
+    type: "function",
     name: "upgradeToAndCall",
+    inputs: [
+      { name: "newImplementation", type: "address", internalType: "address" },
+      { name: "data", type: "bytes", internalType: "bytes" },
+    ],
     outputs: [],
     stateMutability: "payable",
-    type: "function",
   },
   {
+    type: "function",
+    name: "validateUserOp",
     inputs: [
       {
-        components: [
-          {
-            internalType: "address",
-            name: "sender",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "nonce",
-            type: "uint256",
-          },
-          {
-            internalType: "bytes",
-            name: "initCode",
-            type: "bytes",
-          },
-          {
-            internalType: "bytes",
-            name: "callData",
-            type: "bytes",
-          },
-          {
-            internalType: "uint256",
-            name: "callGasLimit",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "verificationGasLimit",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "preVerificationGas",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "maxFeePerGas",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "maxPriorityFeePerGas",
-            type: "uint256",
-          },
-          {
-            internalType: "bytes",
-            name: "paymasterAndData",
-            type: "bytes",
-          },
-          {
-            internalType: "bytes",
-            name: "signature",
-            type: "bytes",
-          },
-        ],
-        internalType: "struct UserOperation",
         name: "userOp",
         type: "tuple",
+        internalType: "struct UserOperation",
+        components: [
+          { name: "sender", type: "address", internalType: "address" },
+          { name: "nonce", type: "uint256", internalType: "uint256" },
+          { name: "initCode", type: "bytes", internalType: "bytes" },
+          { name: "callData", type: "bytes", internalType: "bytes" },
+          { name: "callGasLimit", type: "uint256", internalType: "uint256" },
+          {
+            name: "verificationGasLimit",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "preVerificationGas",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          { name: "maxFeePerGas", type: "uint256", internalType: "uint256" },
+          {
+            name: "maxPriorityFeePerGas",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          { name: "paymasterAndData", type: "bytes", internalType: "bytes" },
+          { name: "signature", type: "bytes", internalType: "bytes" },
+        ],
       },
-      {
-        internalType: "bytes32",
-        name: "userOpHash",
-        type: "bytes32",
-      },
-      {
-        internalType: "uint256",
-        name: "missingAccountFunds",
-        type: "uint256",
-      },
+      { name: "userOpHash", type: "bytes32", internalType: "bytes32" },
+      { name: "missingAccountFunds", type: "uint256", internalType: "uint256" },
     ],
-    name: "validateUserOp",
     outputs: [
-      {
-        internalType: "uint256",
-        name: "validationData",
-        type: "uint256",
-      },
+      { name: "validationData", type: "uint256", internalType: "uint256" },
     ],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
-    stateMutability: "payable",
-    type: "receive",
+    type: "event",
+    name: "ModularAccountInitialized",
+    inputs: [
+      {
+        name: "entryPoint",
+        type: "address",
+        indexed: true,
+        internalType: "contract IEntryPoint",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "PluginIgnoredHookUnapplyCallbackFailure",
+    inputs: [
+      {
+        name: "plugin",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "providingPlugin",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "PluginIgnoredUninstallCallbackFailure",
+    inputs: [
+      {
+        name: "plugin",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "PluginInstalled",
+    inputs: [
+      {
+        name: "plugin",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "manifestHash",
+        type: "bytes32",
+        indexed: false,
+        internalType: "bytes32",
+      },
+      {
+        name: "dependencies",
+        type: "bytes21[]",
+        indexed: false,
+        internalType: "FunctionReference[]",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "PluginUninstalled",
+    inputs: [
+      {
+        name: "plugin",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "callbacksSucceeded",
+        type: "bool",
+        indexed: true,
+        internalType: "bool",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "Upgraded",
+    inputs: [
+      {
+        name: "implementation",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  { type: "error", name: "AlreadyInitialized", inputs: [] },
+  { type: "error", name: "AlreadyInitializing", inputs: [] },
+  { type: "error", name: "AlwaysDenyRule", inputs: [] },
+  { type: "error", name: "ArrayLengthMismatch", inputs: [] },
+  {
+    type: "error",
+    name: "AuthorizeUpgradeReverted",
+    inputs: [{ name: "revertReason", type: "bytes", internalType: "bytes" }],
+  },
+  {
+    type: "error",
+    name: "DuplicateHookLimitExceeded",
+    inputs: [
+      { name: "selector", type: "bytes4", internalType: "bytes4" },
+      { name: "hook", type: "bytes21", internalType: "FunctionReference" },
+    ],
+  },
+  {
+    type: "error",
+    name: "DuplicatePreRuntimeValidationHookLimitExceeded",
+    inputs: [
+      { name: "selector", type: "bytes4", internalType: "bytes4" },
+      { name: "hook", type: "bytes21", internalType: "FunctionReference" },
+    ],
+  },
+  {
+    type: "error",
+    name: "DuplicatePreUserOpValidationHookLimitExceeded",
+    inputs: [
+      { name: "selector", type: "bytes4", internalType: "bytes4" },
+      { name: "hook", type: "bytes21", internalType: "FunctionReference" },
+    ],
+  },
+  {
+    type: "error",
+    name: "Erc4337FunctionNotAllowed",
+    inputs: [{ name: "selector", type: "bytes4", internalType: "bytes4" }],
+  },
+  {
+    type: "error",
+    name: "ExecFromPluginExternalNotPermitted",
+    inputs: [
+      { name: "plugin", type: "address", internalType: "address" },
+      { name: "target", type: "address", internalType: "address" },
+      { name: "value", type: "uint256", internalType: "uint256" },
+      { name: "data", type: "bytes", internalType: "bytes" },
+    ],
+  },
+  {
+    type: "error",
+    name: "ExecFromPluginNotPermitted",
+    inputs: [
+      { name: "plugin", type: "address", internalType: "address" },
+      { name: "selector", type: "bytes4", internalType: "bytes4" },
+    ],
+  },
+  {
+    type: "error",
+    name: "ExecutionFunctionAlreadySet",
+    inputs: [{ name: "selector", type: "bytes4", internalType: "bytes4" }],
+  },
+  {
+    type: "error",
+    name: "IPluginFunctionNotAllowed",
+    inputs: [{ name: "selector", type: "bytes4", internalType: "bytes4" }],
+  },
+  { type: "error", name: "IPluginInterfaceNotAllowed", inputs: [] },
+  { type: "error", name: "InvalidDependenciesProvided", inputs: [] },
+  { type: "error", name: "InvalidPluginManifest", inputs: [] },
+  {
+    type: "error",
+    name: "MissingPluginDependency",
+    inputs: [{ name: "dependency", type: "address", internalType: "address" }],
+  },
+  {
+    type: "error",
+    name: "NativeFunctionNotAllowed",
+    inputs: [{ name: "selector", type: "bytes4", internalType: "bytes4" }],
+  },
+  {
+    type: "error",
+    name: "NativeTokenSpendingNotPermitted",
+    inputs: [{ name: "plugin", type: "address", internalType: "address" }],
+  },
+  { type: "error", name: "NullFunctionReference", inputs: [] },
+  {
+    type: "error",
+    name: "PluginAlreadyInstalled",
+    inputs: [{ name: "plugin", type: "address", internalType: "address" }],
+  },
+  {
+    type: "error",
+    name: "PluginCallDenied",
+    inputs: [{ name: "plugin", type: "address", internalType: "address" }],
+  },
+  {
+    type: "error",
+    name: "PluginDependencyViolation",
+    inputs: [{ name: "plugin", type: "address", internalType: "address" }],
+  },
+  {
+    type: "error",
+    name: "PluginInstallCallbackFailed",
+    inputs: [
+      { name: "plugin", type: "address", internalType: "address" },
+      { name: "revertReason", type: "bytes", internalType: "bytes" },
+    ],
+  },
+  {
+    type: "error",
+    name: "PluginInterfaceNotSupported",
+    inputs: [{ name: "plugin", type: "address", internalType: "address" }],
+  },
+  {
+    type: "error",
+    name: "PluginNotInstalled",
+    inputs: [{ name: "plugin", type: "address", internalType: "address" }],
+  },
+  {
+    type: "error",
+    name: "PluginUninstallCallbackFailed",
+    inputs: [
+      { name: "plugin", type: "address", internalType: "address" },
+      { name: "revertReason", type: "bytes", internalType: "bytes" },
+    ],
+  },
+  {
+    type: "error",
+    name: "PostExecHookReverted",
+    inputs: [
+      { name: "plugin", type: "address", internalType: "address" },
+      { name: "functionId", type: "uint8", internalType: "uint8" },
+      { name: "revertReason", type: "bytes", internalType: "bytes" },
+    ],
+  },
+  {
+    type: "error",
+    name: "PreExecHookReverted",
+    inputs: [
+      { name: "plugin", type: "address", internalType: "address" },
+      { name: "functionId", type: "uint8", internalType: "uint8" },
+      { name: "revertReason", type: "bytes", internalType: "bytes" },
+    ],
+  },
+  {
+    type: "error",
+    name: "PreRuntimeValidationHookFailed",
+    inputs: [
+      { name: "plugin", type: "address", internalType: "address" },
+      { name: "functionId", type: "uint8", internalType: "uint8" },
+      { name: "revertReason", type: "bytes", internalType: "bytes" },
+    ],
+  },
+  {
+    type: "error",
+    name: "RuntimeValidationFunctionAlreadySet",
+    inputs: [
+      { name: "selector", type: "bytes4", internalType: "bytes4" },
+      {
+        name: "validationFunction",
+        type: "bytes21",
+        internalType: "FunctionReference",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "RuntimeValidationFunctionMissing",
+    inputs: [{ name: "selector", type: "bytes4", internalType: "bytes4" }],
+  },
+  {
+    type: "error",
+    name: "RuntimeValidationFunctionReverted",
+    inputs: [
+      { name: "plugin", type: "address", internalType: "address" },
+      { name: "functionId", type: "uint8", internalType: "uint8" },
+      { name: "revertReason", type: "bytes", internalType: "bytes" },
+    ],
+  },
+  { type: "error", name: "UnauthorizedCallContext", inputs: [] },
+  {
+    type: "error",
+    name: "UnexpectedAggregator",
+    inputs: [
+      { name: "plugin", type: "address", internalType: "address" },
+      { name: "functionId", type: "uint8", internalType: "uint8" },
+      { name: "aggregator", type: "address", internalType: "address" },
+    ],
+  },
+  {
+    type: "error",
+    name: "UnrecognizedFunction",
+    inputs: [{ name: "selector", type: "bytes4", internalType: "bytes4" }],
+  },
+  { type: "error", name: "UpgradeFailed", inputs: [] },
+  { type: "error", name: "UserOpNotFromEntryPoint", inputs: [] },
+  {
+    type: "error",
+    name: "UserOpValidationFunctionAlreadySet",
+    inputs: [
+      { name: "selector", type: "bytes4", internalType: "bytes4" },
+      {
+        name: "validationFunction",
+        type: "bytes21",
+        internalType: "FunctionReference",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "UserOpValidationFunctionMissing",
+    inputs: [{ name: "selector", type: "bytes4", internalType: "bytes4" }],
   },
 ] as const;

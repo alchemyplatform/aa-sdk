@@ -31,12 +31,12 @@ export const WrapWith712SignerMethods: SignerMethods = (acct) => {
         version,
       },
       types: {
-        ERC6900Message: [{ name: "message", type: "bytes" }],
+        AlchemyModularAccountMessage: [{ name: "message", type: "bytes" }],
       },
       message: {
         message: msg,
       },
-      primaryType: "ERC6900Message",
+      primaryType: "AlchemyModularAccountMessage",
     });
   };
 

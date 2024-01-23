@@ -75,7 +75,6 @@ export {
   encodeInstallPluginUserOperation,
   installPlugin,
 } from "./msca/plugin-manager/installPlugin.js";
-export type * from "./msca/plugin-manager/types.js";
 export type * from "./msca/plugin-manager/uninstallPlugin.js";
 export {
   encodeUninstallPluginUserOperation,
@@ -87,7 +86,7 @@ export {
   MultiOwnerPlugin,
   MultiOwnerPluginAbi,
   MultiOwnerPluginExecutionFunctionAbi,
-} from "./msca/plugins/multi-owner/plugin.js";
+} from "./msca/plugins/multi-owner/index.js";
 export { SessionKeyExecutor } from "./msca/plugins/session-key/executor.js";
 export { ExtendedSessionKeyPlugin as SessionKeyPlugin } from "./msca/plugins/session-key/extension.js";
 export { SessionKeyPermissionsBuilder } from "./msca/plugins/session-key/permissions.js";

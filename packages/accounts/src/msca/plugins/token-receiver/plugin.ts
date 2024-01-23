@@ -14,7 +14,6 @@ import {
   type ISmartAccountProvider,
 } from "@alchemy/aa-core";
 import { installPlugin as installPlugin_ } from "../../plugin-manager/installPlugin.js";
-import { type InjectedHook } from "../../plugin-manager/types.js";
 import { type FunctionReference } from "../../account-loupe/types.js";
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,12 +24,11 @@ type InstallArgs = [];
 export type InstallTokenReceiverPluginParams = {
   args: Parameters<typeof encodeAbiParameters<InstallArgs>>[1];
   pluginAddress?: Address;
-  injectedHooks?: InjectedHook[];
   dependencyOverrides?: FunctionReference[];
 };
 
 const addresses = {
-  11155111: "0xa81C0AEaB22b21b4da8d8728063f6570384b48C9" as Address,
+  11155111: "0x4FCDe5A446208a20A1539FC425832334bc8360Fb" as Address,
 } as Record<number, Address>;
 
 const TokenReceiverPlugin_ = {
@@ -277,11 +275,6 @@ export const TokenReceiverPluginExecutionFunctionAbi = [
 ] as const;
 
 export const TokenReceiverPluginAbi = [
-  { type: "error", inputs: [], name: "AlreadyInitialized" },
-  { type: "error", inputs: [], name: "InvalidAction" },
-  { type: "error", inputs: [], name: "NotContractCaller" },
-  { type: "error", inputs: [], name: "NotImplemented" },
-  { type: "error", inputs: [], name: "NotInitialized" },
   {
     stateMutability: "pure",
     type: "function",
@@ -319,62 +312,6 @@ export const TokenReceiverPluginAbi = [
     ],
     name: "onERC721Received",
     outputs: [{ name: "", internalType: "bytes4", type: "bytes4" }],
-  },
-  {
-    stateMutability: "nonpayable",
-    type: "function",
-    inputs: [
-      { name: "pluginAppliedOn", internalType: "address", type: "address" },
-      {
-        name: "injectedHooksInfo",
-        internalType: "struct IPluginManager.InjectedHooksInfo",
-        type: "tuple",
-        components: [
-          {
-            name: "preExecHookFunctionId",
-            internalType: "uint8",
-            type: "uint8",
-          },
-          { name: "isPostHookUsed", internalType: "bool", type: "bool" },
-          {
-            name: "postExecHookFunctionId",
-            internalType: "uint8",
-            type: "uint8",
-          },
-        ],
-      },
-      { name: "data", internalType: "bytes", type: "bytes" },
-    ],
-    name: "onHookApply",
-    outputs: [],
-  },
-  {
-    stateMutability: "nonpayable",
-    type: "function",
-    inputs: [
-      { name: "pluginAppliedOn", internalType: "address", type: "address" },
-      {
-        name: "injectedHooksInfo",
-        internalType: "struct IPluginManager.InjectedHooksInfo",
-        type: "tuple",
-        components: [
-          {
-            name: "preExecHookFunctionId",
-            internalType: "uint8",
-            type: "uint8",
-          },
-          { name: "isPostHookUsed", internalType: "bool", type: "bool" },
-          {
-            name: "postExecHookFunctionId",
-            internalType: "uint8",
-            type: "uint8",
-          },
-        ],
-      },
-      { name: "data", internalType: "bytes", type: "bytes" },
-    ],
-    name: "onHookUnapply",
-    outputs: [],
   },
   {
     stateMutability: "pure",
@@ -559,54 +496,6 @@ export const TokenReceiverPluginAbi = [
           },
           {
             name: "executionHooks",
-            internalType: "struct ManifestExecutionHook[]",
-            type: "tuple[]",
-            components: [
-              {
-                name: "executionSelector",
-                internalType: "bytes4",
-                type: "bytes4",
-              },
-              {
-                name: "preExecHook",
-                internalType: "struct ManifestFunction",
-                type: "tuple",
-                components: [
-                  {
-                    name: "functionType",
-                    internalType: "enum ManifestAssociatedFunctionType",
-                    type: "uint8",
-                  },
-                  { name: "functionId", internalType: "uint8", type: "uint8" },
-                  {
-                    name: "dependencyIndex",
-                    internalType: "uint256",
-                    type: "uint256",
-                  },
-                ],
-              },
-              {
-                name: "postExecHook",
-                internalType: "struct ManifestFunction",
-                type: "tuple",
-                components: [
-                  {
-                    name: "functionType",
-                    internalType: "enum ManifestAssociatedFunctionType",
-                    type: "uint8",
-                  },
-                  { name: "functionId", internalType: "uint8", type: "uint8" },
-                  {
-                    name: "dependencyIndex",
-                    internalType: "uint256",
-                    type: "uint256",
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            name: "permittedCallHooks",
             internalType: "struct ManifestExecutionHook[]",
             type: "tuple[]",
             components: [
@@ -839,4 +728,9 @@ export const TokenReceiverPluginAbi = [
     name: "userOpValidationFunction",
     outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
   },
+  { type: "error", inputs: [], name: "AlreadyInitialized" },
+  { type: "error", inputs: [], name: "InvalidAction" },
+  { type: "error", inputs: [], name: "NotContractCaller" },
+  { type: "error", inputs: [], name: "NotImplemented" },
+  { type: "error", inputs: [], name: "NotInitialized" },
 ] as const;

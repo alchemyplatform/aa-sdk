@@ -1,67 +1,31 @@
 export const IStandardExecutorAbi = [
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "target",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "value",
-        type: "uint256",
-      },
-      {
-        internalType: "bytes",
-        name: "data",
-        type: "bytes",
-      },
-    ],
-    name: "execute",
-    outputs: [
-      {
-        internalType: "bytes",
-        name: "",
-        type: "bytes",
-      },
-    ],
-    stateMutability: "payable",
     type: "function",
+    name: "execute",
+    inputs: [
+      { name: "target", type: "address", internalType: "address" },
+      { name: "value", type: "uint256", internalType: "uint256" },
+      { name: "data", type: "bytes", internalType: "bytes" },
+    ],
+    outputs: [{ name: "", type: "bytes", internalType: "bytes" }],
+    stateMutability: "payable",
   },
   {
+    type: "function",
+    name: "executeBatch",
     inputs: [
       {
-        components: [
-          {
-            internalType: "address",
-            name: "target",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "value",
-            type: "uint256",
-          },
-          {
-            internalType: "bytes",
-            name: "data",
-            type: "bytes",
-          },
-        ],
-        internalType: "struct Call[]",
         name: "calls",
         type: "tuple[]",
+        internalType: "struct Call[]",
+        components: [
+          { name: "target", type: "address", internalType: "address" },
+          { name: "value", type: "uint256", internalType: "uint256" },
+          { name: "data", type: "bytes", internalType: "bytes" },
+        ],
       },
     ],
-    name: "executeBatch",
-    outputs: [
-      {
-        internalType: "bytes[]",
-        name: "",
-        type: "bytes[]",
-      },
-    ],
+    outputs: [{ name: "", type: "bytes[]", internalType: "bytes[]" }],
     stateMutability: "payable",
-    type: "function",
   },
 ] as const;
