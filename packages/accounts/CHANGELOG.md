@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.1](https://github.com/alchemyplatform/aa-sdk/compare/v2.2.0...v2.2.1) (2024-01-23)
+
+### Bug Fixes
+
+- fix a couple of the package.jsons ([#374](https://github.com/alchemyplatform/aa-sdk/issues/374)) ([7abbd93](https://github.com/alchemyplatform/aa-sdk/commit/7abbd9366b9ba12377349e475025aa5edfd73255))
+
 # [2.2.0](https://github.com/alchemyplatform/aa-sdk/compare/v2.1.0...v2.2.0) (2024-01-22)
 
 ### Features

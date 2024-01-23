@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.1](https://github.com/alchemyplatform/aa-sdk/compare/v2.2.0...v2.2.1) (2024-01-23)
+
+### Bug Fixes
+
+- **base-provider:** address drop and replace rounding down errors ([#376](https://github.com/alchemyplatform/aa-sdk/issues/376)) ([33b7435](https://github.com/alchemyplatform/aa-sdk/commit/33b74359dedc68ed324697dc32f4f06def1fac59))
+
 # [2.2.0](https://github.com/alchemyplatform/aa-sdk/compare/v2.1.0...v2.2.0) (2024-01-22)
 
 ### Features
