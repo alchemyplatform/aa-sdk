@@ -265,22 +265,27 @@ export class SmartAccountProvider<
       };
     });
 
+    const mfpgOverridesInTx = () =>
+      requests
+        .filter((x) => x.maxFeePerGas != null)
+        .map((x) => fromHex(x.maxFeePerGas!, "bigint"));
     const maxFeePerGas =
       overrides?.maxFeePerGas != null
         ? overrides?.maxFeePerGas
-        : bigIntMax(
-            ...requests
-              .filter((x) => x.maxFeePerGas != null)
-              .map((x) => fromHex(x.maxFeePerGas!, "bigint"))
-          );
+        : mfpgOverridesInTx().length > 0
+        ? bigIntMax(...mfpgOverridesInTx())
+        : undefined;
+
+    const mpfpgOverridesInTx = () =>
+      requests
+        .filter((x) => x.maxPriorityFeePerGas != null)
+        .map((x) => fromHex(x.maxPriorityFeePerGas!, "bigint"));
     const maxPriorityFeePerGas =
       overrides?.maxPriorityFeePerGas != null
         ? overrides?.maxPriorityFeePerGas
-        : bigIntMax(
-            ...requests
-              .filter((x) => x.maxPriorityFeePerGas != null)
-              .map((x) => fromHex(x.maxPriorityFeePerGas!, "bigint"))
-          );
+        : mpfpgOverridesInTx().length > 0
+        ? bigIntMax(...mpfpgOverridesInTx())
+        : undefined;
 
     const _overrides: UserOperationOverrides = {
       maxFeePerGas,
