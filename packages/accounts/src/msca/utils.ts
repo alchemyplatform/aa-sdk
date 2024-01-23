@@ -31,7 +31,7 @@ import { IPluginAbi } from "./abis/IPlugin.js";
 import { MultiOwnerTokenReceiverMSCAFactoryAbi } from "./abis/MultiOwnerTokenReceiverMSCAFactory.js";
 import { UpgradeableModularAccountAbi } from "./abis/UpgradeableModularAccount.js";
 import { createMultiOwnerMSCA } from "./multi-owner-account.js";
-import { MultiOwnerPlugin } from "./plugins/multi-owner/plugin.js";
+import { MultiOwnerPlugin } from "./plugins/multi-owner/index.js";
 import { TokenReceiverPlugin } from "./plugins/token-receiver/plugin.js";
 
 /**

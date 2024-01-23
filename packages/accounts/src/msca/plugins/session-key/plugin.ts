@@ -16,7 +16,6 @@ import {
 } from "@alchemy/aa-core";
 import { MultiOwnerPlugin } from "../multi-owner/plugin.js";
 import { installPlugin as installPlugin_ } from "../../plugin-manager/installPlugin.js";
-import { type InjectedHook } from "../../plugin-manager/types.js";
 import { type FunctionReference } from "../../account-loupe/types.js";
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -27,7 +26,6 @@ type InstallArgs = [{ type: "address[]"; name: "initialPublicKeys" }];
 export type InstallSessionKeyPluginParams = {
   args: Parameters<typeof encodeAbiParameters<InstallArgs>>[1];
   pluginAddress?: Address;
-  injectedHooks?: InjectedHook[];
   dependencyOverrides?: FunctionReference[];
 };
 

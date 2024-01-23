@@ -37,15 +37,6 @@ export interface IAccountLoupe {
     selector: FunctionReference
   ): Promise<ReadonlyArray<ExecutionHooks>>;
 
-  /// @notice Gets the pre and post permitted call hooks applied for a plugin calling this selector
-  /// @param callingPlugin The plugin that is calling the selector
-  /// @param selector The selector the plugin is calling
-  /// @return The pre and post permitted call hooks for this selector
-  getPermittedCallHooks(
-    callingPlugin: Address,
-    selector: Hash
-  ): Promise<ReadonlyArray<ExecutionHooks>>;
-
   /// @notice Gets the pre user op and runtime validation hooks associated with a selector
   /// @param selector The selector to get the hooks for
   /// @return preUserOpValidationHooks The pre user op validation hooks for this selector

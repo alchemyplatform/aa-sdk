@@ -19,7 +19,6 @@ export const InstallMethodGenPhase: Phase = async (input) => {
       dedent`{
         args: Parameters<typeof encodeAbiParameters<InstallArgs>>[1];
         pluginAddress?: Address;
-        injectedHooks?: InjectedHook[];
         dependencyOverrides?: FunctionReference[];
     }`,
       true
@@ -92,10 +91,6 @@ const addImports = (
   addImport("viem", { name: "encodeAbiParameters" });
   addImport("../../plugin-manager/installPlugin.js", {
     name: "installPlugin as installPlugin_",
-  });
-  addImport("../../plugin-manager/types.js", {
-    name: "InjectedHook",
-    isType: true,
   });
   addImport("../../account-loupe/types.js", {
     name: "FunctionReference",

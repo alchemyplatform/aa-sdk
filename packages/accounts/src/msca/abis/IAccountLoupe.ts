@@ -1,142 +1,78 @@
 export const IAccountLoupeAbi = [
   {
-    inputs: [
-      {
-        internalType: "bytes4",
-        name: "selector",
-        type: "bytes4",
-      },
-    ],
+    type: "function",
     name: "getExecutionFunctionConfig",
+    inputs: [{ name: "selector", type: "bytes4", internalType: "bytes4" }],
     outputs: [
       {
-        components: [
-          {
-            internalType: "address",
-            name: "plugin",
-            type: "address",
-          },
-          {
-            internalType: "FunctionReference",
-            name: "userOpValidationFunction",
-            type: "bytes21",
-          },
-          {
-            internalType: "FunctionReference",
-            name: "runtimeValidationFunction",
-            type: "bytes21",
-          },
-        ],
-        internalType: "struct IAccountLoupe.ExecutionFunctionConfig",
         name: "",
         type: "tuple",
+        internalType: "struct IAccountLoupe.ExecutionFunctionConfig",
+        components: [
+          { name: "plugin", type: "address", internalType: "address" },
+          {
+            name: "userOpValidationFunction",
+            type: "bytes21",
+            internalType: "FunctionReference",
+          },
+          {
+            name: "runtimeValidationFunction",
+            type: "bytes21",
+            internalType: "FunctionReference",
+          },
+        ],
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "bytes4",
-        name: "selector",
-        type: "bytes4",
-      },
-    ],
+    type: "function",
     name: "getExecutionHooks",
+    inputs: [{ name: "selector", type: "bytes4", internalType: "bytes4" }],
     outputs: [
       {
-        components: [
-          {
-            internalType: "FunctionReference",
-            name: "preExecHook",
-            type: "bytes21",
-          },
-          {
-            internalType: "FunctionReference",
-            name: "postExecHook",
-            type: "bytes21",
-          },
-        ],
-        internalType: "struct IAccountLoupe.ExecutionHooks[]",
         name: "",
         type: "tuple[]",
+        internalType: "struct IAccountLoupe.ExecutionHooks[]",
+        components: [
+          {
+            name: "preExecHook",
+            type: "bytes21",
+            internalType: "FunctionReference",
+          },
+          {
+            name: "postExecHook",
+            type: "bytes21",
+            internalType: "FunctionReference",
+          },
+        ],
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [],
+    type: "function",
     name: "getInstalledPlugins",
-    outputs: [
-      {
-        internalType: "address[]",
-        name: "",
-        type: "address[]",
-      },
-    ],
+    inputs: [],
+    outputs: [{ name: "", type: "address[]", internalType: "address[]" }],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "callingPlugin",
-        type: "address",
-      },
-      {
-        internalType: "bytes4",
-        name: "selector",
-        type: "bytes4",
-      },
-    ],
-    name: "getPermittedCallHooks",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "FunctionReference",
-            name: "preExecHook",
-            type: "bytes21",
-          },
-          {
-            internalType: "FunctionReference",
-            name: "postExecHook",
-            type: "bytes21",
-          },
-        ],
-        internalType: "struct IAccountLoupe.ExecutionHooks[]",
-        name: "",
-        type: "tuple[]",
-      },
-    ],
-    stateMutability: "view",
     type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes4",
-        name: "selector",
-        type: "bytes4",
-      },
-    ],
     name: "getPreValidationHooks",
+    inputs: [{ name: "selector", type: "bytes4", internalType: "bytes4" }],
     outputs: [
       {
-        internalType: "FunctionReference[]",
         name: "preUserOpValidationHooks",
         type: "bytes21[]",
+        internalType: "FunctionReference[]",
       },
       {
-        internalType: "FunctionReference[]",
         name: "preRuntimeValidationHooks",
         type: "bytes21[]",
+        internalType: "FunctionReference[]",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
 ] as const;
