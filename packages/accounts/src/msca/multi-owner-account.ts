@@ -13,6 +13,7 @@ import {
   SessionKeyPlugin,
   SessionKeySigner,
   StandardExecutor,
+  getDefaultMultiOwnerMSCAFactoryAddress,
 } from "../index.js";
 import { MultiOwnerMSCAFactoryAbi } from "./abis/MultiOwnerMSCAFactory.js";
 import { MultiOwnerTokenReceiverMSCAFactoryAbi } from "./abis/MultiOwnerTokenReceiverMSCAFactory.js";
@@ -29,11 +30,26 @@ import { TokenReceiverPlugin } from "./plugins/token-receiver/plugin.js";
 export const createMultiOwnerMSCASchema = <
   TTransport extends SupportedTransports = Transport
 >() =>
-  ModularAccountBuilderParamsSchema<TTransport>().extend({
-    owners: z.array(zAddress).default([]),
-    index: z.bigint().optional().default(0n),
-    excludeDefaultTokenReceiverPlugin: z.boolean().optional().default(false),
-  });
+  ModularAccountBuilderParamsSchema<TTransport>()
+    .extend({
+      owners: z.array(zAddress).default([]),
+      index: z.bigint().optional().default(0n),
+      excludeDefaultTokenReceiverPlugin: z.boolean().optional().default(false),
+      factoryAddress: zAddress.optional(),
+    })
+    .transform((params) => {
+      const factoryAddress =
+        params.factoryAddress ??
+        getDefaultMultiOwnerMSCAFactoryAddress(
+          params.chain,
+          params.excludeDefaultTokenReceiverPlugin
+        );
+
+      return {
+        ...params,
+        factoryAddress,
+      };
+    });
 
 export type MultiOwnerMSCAParams = z.input<
   ReturnType<typeof createMultiOwnerMSCASchema>
