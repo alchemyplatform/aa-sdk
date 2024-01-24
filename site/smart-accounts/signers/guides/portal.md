@@ -26,7 +26,7 @@ A combination of Portal and Account Kit allows you to have robust key management
 
 ## Integration
 
-Check out Portal's developer [docs](https://docs.portalhq.io/) to learn more about Portal. If you want to get quick access to their SDKs, please reach out via [this](https://5g2cefp2j92.typeform.com/portal-labs?typeform-source=www.portalhq.io) form.
+Check out Portal's developer [docs](https://docs.portalhq.io/) to learn more about Portal. If you want to get quick access to their SDKs, please reach out via [this](https://form.typeform.com/to/AfPtKjj7?utm_source=AlchemyDocs&utm_medium=xxxxx&utm_campaign=xxxxx) form.
 
 ### Install the Portal SDK
 
