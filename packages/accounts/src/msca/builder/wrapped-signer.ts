@@ -6,7 +6,10 @@ import {
   isBytes,
   type Hash,
 } from "viem";
-import { MultiOwnerPlugin } from "../plugins/multi-owner/plugin.js";
+import {
+  MultiOwnerPlugin,
+  MultiOwnerPluginAbi,
+} from "../plugins/multi-owner/plugin.js";
 import type { SignerMethods } from "./types";
 
 export const WrapWith712SignerMethods: SignerMethods = (acct) => {
@@ -17,26 +20,32 @@ export const WrapWith712SignerMethods: SignerMethods = (acct) => {
   }
 
   const signWith712Wrapper = async (msg: Hash): Promise<`0x${string}`> => {
-    const { readEip712Domain } = MultiOwnerPlugin.accountMethods(acct);
-
-    const [, name, version, chainId, verifyingContract, salt] =
-      await readEip712Domain();
+    // TODO: right now this is hard coded to one Plugin address, but we should make this configurable somehow
+    const [, name, version, chainId, , salt] =
+      await acct.rpcProvider.readContract({
+        abi: MultiOwnerPluginAbi,
+        address: MultiOwnerPlugin.meta.addresses[acct.rpcProvider.chain.id],
+        functionName: "eip712Domain",
+        account: await acct.getAddress(),
+      });
 
     return owner.signTypedData({
       domain: {
         chainId: Number(chainId),
         name,
         salt,
-        verifyingContract,
+        verifyingContract: await acct.getAddress(),
         version,
       },
       types: {
-        AlchemyModularAccountMessage: [{ name: "message", type: "bytes" }],
+        // TODO: we need to change this once the latest versions are
+        // deployed
+        ERC6900Message: [{ name: "message", type: "bytes" }],
       },
       message: {
         message: msg,
       },
-      primaryType: "AlchemyModularAccountMessage",
+      primaryType: "ERC6900Message",
     });
   };
 
