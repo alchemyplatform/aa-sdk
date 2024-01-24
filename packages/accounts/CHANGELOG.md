@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.3.0](https://github.com/alchemyplatform/aa-sdk/compare/v2.2.1...v2.3.0) (2024-01-24)
+
+### Bug Fixes
+
+- use the latest multi-owner abis ([#375](https://github.com/alchemyplatform/aa-sdk/issues/375)) ([020f024](https://github.com/alchemyplatform/aa-sdk/commit/020f024bb5f393ea17b8ec3b11abce9fb825f758))
+
+### Features
+
+- make the factory address optional when building MA ([#377](https://github.com/alchemyplatform/aa-sdk/issues/377)) ([05a10b2](https://github.com/alchemyplatform/aa-sdk/commit/05a10b246b28030463ece2a12fc6ed38bdbdd567))
+
 ## [2.2.1](https://github.com/alchemyplatform/aa-sdk/compare/v2.2.0...v2.2.1) (2024-01-23)
 
 ### Bug Fixes

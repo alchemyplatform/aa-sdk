@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.3.0](https://github.com/alchemyplatform/aa-sdk/compare/v2.2.1...v2.3.0) (2024-01-24)
+
+### Bug Fixes
+
+- **buildUserOperationFromTx:** handle the case where no TX has fee fields set ([#378](https://github.com/alchemyplatform/aa-sdk/issues/378)) ([e9eaad1](https://github.com/alchemyplatform/aa-sdk/commit/e9eaad175f9ec14d45b62b2c5bcabb75ca47e74f))
+
 ## [2.2.1](https://github.com/alchemyplatform/aa-sdk/compare/v2.2.0...v2.2.1) (2024-01-23)
 
 ### Bug Fixes
