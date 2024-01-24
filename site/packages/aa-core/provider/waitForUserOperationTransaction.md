@@ -14,7 +14,7 @@ head:
 
 # waitForUserOperationTransaction
 
-Attempts to fetch for UserOperationReceipt `txMaxRetries` amount of times, at an interval of `txRetryIntervalMs` milliseconds (with a multiplier of `txRetryMulitplier`) using the connected account.
+Attempts to fetch for UserOperationReceipt `txMaxRetries` amount of times, at an interval of `txRetryIntervalMs` milliseconds (with a multiplier of `txRetryMultiplier`) using the connected account.
 
 Note: For more details on how to modify the retry configurations for this method, see the [constructor](/packages/aa-core/provider/constructor.md) parameters.
 

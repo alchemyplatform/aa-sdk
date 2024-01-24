@@ -33,7 +33,7 @@ export const provider = new AlchemyProvider({
   opts: {
     txMaxRetries: 10,
     txRetryIntervalMs: 2_000,
-    txRetryMulitplier: 1.5,
+    txRetryMultiplier: 1.5,
     minPriorityFeePerBid: 100_000_000n,
   },
   feeOpts: {
@@ -72,7 +72,7 @@ A new instance of an `AlchemyProvider`.
 
   - `txRetryIntervalMs: string | undefined` -- [optional] the interval in milliseconds to wait between retries while waiting for transaction receipts (default: 2_000).
 
-  - `txRetryMulitplier: string | undefined` -- [optional] the mulitplier on interval length to wait between retries while waiting for transaction receipts (default: 1.5).
+  - `txRetryMultiplier: string | undefined` -- [optional] the multiplier on interval length to wait between retries while waiting for transaction receipts (default: 1.5).
 
   - `feeOptions:` [`UserOperationFeeOptions`](/packages/aa-core/provider/types/userOperationFeeOptions.md) `| undefined` --[optional] user operation fee options to be used for gas estimation, set at the global level on the provider.
     If not set, default fee options for the chain are used. Available fields in `feeOptions` include `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` where each field is of type [`UserOperationFeeOptionsField`](/packages/aa-core/provider/types/userOperationFeeOptionsField.md).

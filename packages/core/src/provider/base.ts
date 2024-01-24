@@ -76,7 +76,7 @@ export class SmartAccountProvider<
 {
   private txMaxRetries: number;
   private txRetryIntervalMs: number;
-  private txRetryMulitplier: number;
+  private txRetryMultiplier: number;
   private feeOptions: UserOperationFeeOptions;
 
   readonly account?: ISmartContractAccount;
@@ -100,7 +100,7 @@ export class SmartAccountProvider<
 
     this.txMaxRetries = opts.txMaxRetries;
     this.txRetryIntervalMs = opts.txRetryIntervalMs;
-    this.txRetryMulitplier = opts.txRetryMulitplier;
+    this.txRetryMultiplier = opts.txRetryMultiplier;
     this.entryPointAddress = entryPointAddress;
 
     this.feeOptions = {
@@ -311,7 +311,7 @@ export class SmartAccountProvider<
   waitForUserOperationTransaction = async (hash: Hash): Promise<Hash> => {
     for (let i = 0; i < this.txMaxRetries; i++) {
       const txRetryIntervalWithJitterMs =
-        this.txRetryIntervalMs * Math.pow(this.txRetryMulitplier, i) +
+        this.txRetryIntervalMs * Math.pow(this.txRetryMultiplier, i) +
         Math.random() * 100;
 
       await new Promise((resolve) =>

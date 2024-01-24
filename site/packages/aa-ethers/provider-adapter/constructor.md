@@ -42,7 +42,7 @@ const accountProvider = new AlchemyProvider({
   opts: {
     txMaxRetries: 10,
     txRetryIntervalMs: 2_000,
-    txRetryMulitplier: 1.5,
+    txRetryMultiplier: 1.5,
     minPriorityFeePerBid: 100_000_000n,
   },
   feeOpts: {
