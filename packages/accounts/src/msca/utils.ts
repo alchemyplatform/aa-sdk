@@ -48,8 +48,8 @@ export const getDefaultMultiOwnerMSCAFactoryAddress = (
   switch (chain.id) {
     case sepolia.id:
       return excludeDefaultTokenReceiverPlugin
-        ? "0x00bdE30160d664cB3126e7a48c5394A312eF8c2A" // MultiOwnerMSCAFactory
-        : "0xEDe056c28731870875d74BBa6482722AA4284EF9";
+        ? "0xC69731F267760466663470256A7ba28F79eDC4d6" // MultiOwnerMSCAFactory
+        : "0x852B3a676684031Cb77b69B50D8d7879f4c4807d";
     case mainnet.id:
     case goerli.id:
     case polygon.id:

@@ -38,14 +38,12 @@ export const WrapWith712SignerMethods: SignerMethods = (acct) => {
         version,
       },
       types: {
-        // TODO: we need to change this once the latest versions are
-        // deployed
-        ERC6900Message: [{ name: "message", type: "bytes" }],
+        AlchemyModularAccountMessage: [{ name: "message", type: "bytes" }],
       },
       message: {
         message: msg,
       },
-      primaryType: "ERC6900Message",
+      primaryType: "AlchemyModularAccountMessage",
     });
   };
 
