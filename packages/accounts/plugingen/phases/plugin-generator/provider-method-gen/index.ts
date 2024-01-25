@@ -54,7 +54,7 @@ export const ProviderMethodGenPhase: Phase = async (input) => {
         P extends ISmartAccountProvider<TTransport> & { account: IMSCA<TTransport> }
     >(
         provider: P
-    ) => ({ ${providerFunctions.join(",\n\n")} }),
+    ) => ({ ${providerFunctions.join(",\n\n")} })
     `);
   return input;
 };

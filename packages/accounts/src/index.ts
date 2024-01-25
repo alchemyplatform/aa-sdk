@@ -68,6 +68,12 @@ export {
   createMultiOwnerMSCAWithSessionKey,
   type MultiOwnerMSCAParams,
 } from "./msca/multi-owner-account.js";
+export type * from "./msca/viem/account-loupe/decorator.js";
+export { accountLoupeActions } from "./msca/viem/account-loupe/decorator.js";
+export type * from "./msca/viem/msca.js";
+export { createMultiOwnerModularAccount as createViemMultiOwnerModularAccount } from "./msca/viem/msca.js";
+export type * from "./msca/viem/plugin-manager/decorator.js";
+export { pluginManagerActions } from "./msca/viem/plugin-manager/decorator.js";
 
 export { pluginManagerDecorator } from "./msca/plugin-manager/decorator.js";
 export type * from "./msca/plugin-manager/installPlugin.js";

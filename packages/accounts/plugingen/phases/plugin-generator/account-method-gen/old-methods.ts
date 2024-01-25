@@ -1,15 +1,13 @@
 import { pascalCase } from "change-case";
 import dedent from "dedent";
-import type { Phase } from "../../types";
-import { extractExecutionAbi } from "../../utils.js";
+import type { Phase } from "../../../types";
+import { extractExecutionAbi } from "../../../utils.js";
 
-export const AccountMethodGenPhase: Phase = async (input) => {
+export const OldAccountMethodPhase: Phase = async (input) => {
   const { plugin, contract, addImport } = input;
   const { executionFunctions } = await plugin.read.pluginManifest();
   const executionAbiConst = `${contract.name}ExecutionFunctionAbi`;
   const executionAbi = extractExecutionAbi(executionFunctions, contract.abi);
-  const hasViewFunction =
-    executionAbi.filter((n) => n.stateMutability === "view").length > 0;
 
   addImport("viem", { name: "GetFunctionArgs", isType: true });
   addImport("viem", { name: "encodeFunctionData" });
@@ -50,11 +48,7 @@ export const AccountMethodGenPhase: Phase = async (input) => {
     return methodContent.join(",\n\n");
   });
 
-  input.content.push(dedent`
-    accountMethods: (${
-      hasViewFunction ? "account" : "_account"
-    }: IMSCA<any, any, any>) => ({ ${accountFunctions.join(",\n\n")} })
-  `);
+  input.content.push(...accountFunctions);
 
   return input;
 };

@@ -26,7 +26,7 @@ import type { Erc4337RpcSchema, PublicErc4337Client } from "./types.js";
 export const erc4337ClientActions = (client: Client) => {
   const clientAdapter = client as Client<
     Transport,
-    Chain,
+    Chain | undefined,
     undefined,
     [...PublicRpcSchema, ...Erc4337RpcSchema],
     PublicActions
@@ -43,7 +43,7 @@ export const erc4337ClientActions = (client: Client) => {
       });
     },
 
-    sendUserOperation(
+    sendRawUserOperation(
       request: UserOperationRequest,
       entryPoint: string
     ): Promise<Hex> {

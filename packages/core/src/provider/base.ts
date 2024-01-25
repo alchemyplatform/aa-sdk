@@ -486,7 +486,7 @@ export class SmartAccountProvider<
     )) as `0x${string}`;
 
     return {
-      hash: await this.rpcClient.sendUserOperation(
+      hash: await this.rpcClient.sendRawUserOperation(
         request,
         this.getEntryPointAddress()
       ),
