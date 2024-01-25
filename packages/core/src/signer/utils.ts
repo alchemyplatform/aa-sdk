@@ -4,8 +4,8 @@ import {
   parseAbiParameters,
   type Address,
   type Hash,
-  type PublicClient,
   type Hex,
+  type PublicClient,
 } from "viem";
 
 export type SignWith6492Params = {

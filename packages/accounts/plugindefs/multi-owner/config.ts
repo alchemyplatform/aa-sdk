@@ -7,7 +7,7 @@ export const MultiOwnerPluginGenConfig: PluginGenConfig = {
   name: "MultiOwnerPlugin",
   abi: MultiOwnerPluginAbi,
   addresses: {
-    [sepolia.id]: "0x90d4f511c9Ca2B1694eA2A1629130B430853aBeB",
+    [sepolia.id]: "0xB76734F322b9f2C8F1dA934252dED3bC3C25b109",
   },
   chain: sepolia,
   installConfig: {
