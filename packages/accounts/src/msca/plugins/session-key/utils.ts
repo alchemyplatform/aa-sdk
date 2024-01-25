@@ -13,7 +13,7 @@ export const buildSessionKeysToRemoveStruct = async <
   provider: P,
   keys: ReadonlyArray<Address>
 ) => {
-  const contract = SessionKeyPlugin.getContract(provider);
+  const contract = SessionKeyPlugin.getContract(provider.rpcClient);
   return (
     await Promise.all(
       keys.map(async (key) => {

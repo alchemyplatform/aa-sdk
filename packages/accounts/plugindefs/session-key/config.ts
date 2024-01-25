@@ -8,11 +8,13 @@ export const SessionKeyPluginGenConfig: PluginGenConfig = {
   name: "SessionKeyPlugin",
   abi: SessionKeyPluginAbi,
   addresses: {
-    [sepolia.id]: "0x60ae6D5887a67E18afDfA5786A8598464C123A07",
+    [sepolia.id]: "0x70a64501Fd1398b0A236b69006936009d31C1520",
   },
   chain: sepolia,
   installConfig: {
-    initAbiParams: parseAbiParameters("address[] initialPublicKeys"),
+    initAbiParams: parseAbiParameters(
+      "address[] initialKeys, bytes32[] tags, bytes[][] initialPermissions"
+    ),
     dependencies: [
       {
         plugin: MultiOwnerPluginGenConfig,

@@ -1,152 +1,111 @@
 export const SessionKeyPermissionsUpdatesAbi = [
   {
+    type: "function",
+    name: "setAccessListType",
     inputs: [
       {
-        internalType:
-          "enum ISessionKeyPermissionsPlugin.ContractAccessControlType",
         name: "contractAccessControlType",
         type: "uint8",
+        internalType: "enum ISessionKeyPlugin.ContractAccessControlType",
       },
     ],
-    name: "setAccessListType",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "token",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "spendLimit",
-        type: "uint256",
-      },
-      {
-        internalType: "uint48",
-        name: "refreshInterval",
-        type: "uint48",
-      },
-    ],
+    type: "function",
     name: "setERC20SpendLimit",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     inputs: [
+      { name: "token", type: "address", internalType: "address" },
+      { name: "spendLimit", type: "uint256", internalType: "uint256" },
       {
-        internalType: "uint256",
-        name: "spendLimit",
-        type: "uint256",
-      },
-      {
-        internalType: "uint48",
         name: "refreshInterval",
         type: "uint48",
+        internalType: "uint48",
       },
     ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     name: "setGasSpendLimit",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     inputs: [
+      { name: "spendLimit", type: "uint256", internalType: "uint256" },
       {
-        internalType: "uint256",
-        name: "spendLimit",
-        type: "uint256",
-      },
-      {
-        internalType: "uint48",
         name: "refreshInterval",
         type: "uint48",
+        internalType: "uint48",
       },
     ],
-    name: "setNativeTokenSpendLimit",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
+    type: "function",
+    name: "setNativeTokenSpendLimit",
+    inputs: [
+      { name: "spendLimit", type: "uint256", internalType: "uint256" },
+      {
+        name: "refreshInterval",
+        type: "uint48",
+        internalType: "uint48",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "setRequiredPaymaster",
     inputs: [
       {
-        internalType: "address",
         name: "requiredPaymaster",
         type: "address",
+        internalType: "address",
       },
     ],
-    name: "setRequiredPaymaster",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "contractAddress",
-        type: "address",
-      },
-      {
-        internalType: "bool",
-        name: "isOnList",
-        type: "bool",
-      },
-      {
-        internalType: "bool",
-        name: "checkSelectors",
-        type: "bool",
-      },
-    ],
+    type: "function",
     name: "updateAccessListAddressEntry",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     inputs: [
       {
-        internalType: "address",
         name: "contractAddress",
         type: "address",
+        internalType: "address",
       },
-      {
-        internalType: "bytes4",
-        name: "selector",
-        type: "bytes4",
-      },
-      {
-        internalType: "bool",
-        name: "isOnList",
-        type: "bool",
-      },
+      { name: "isOnList", type: "bool", internalType: "bool" },
+      { name: "checkSelectors", type: "bool", internalType: "bool" },
     ],
-    name: "updateAccessListFunctionEntry",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
+    type: "function",
+    name: "updateAccessListFunctionEntry",
     inputs: [
       {
-        internalType: "uint48",
-        name: "validAfter",
-        type: "uint48",
+        name: "contractAddress",
+        type: "address",
+        internalType: "address",
       },
-      {
-        internalType: "uint48",
-        name: "validUntil",
-        type: "uint48",
-      },
+      { name: "selector", type: "bytes4", internalType: "bytes4" },
+      { name: "isOnList", type: "bool", internalType: "bool" },
     ],
-    name: "updateTimeRange",
     outputs: [],
     stateMutability: "nonpayable",
+  },
+  {
     type: "function",
+    name: "updateTimeRange",
+    inputs: [
+      { name: "validAfter", type: "uint48", internalType: "uint48" },
+      { name: "validUntil", type: "uint48", internalType: "uint48" },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
   },
 ] as const;

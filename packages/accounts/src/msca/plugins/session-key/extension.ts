@@ -1,8 +1,9 @@
 import type {
-  Address,
   ISmartAccountProvider,
   SupportedTransports,
+  UserOperationOverrides,
 } from "@alchemy/aa-core";
+import type { Address } from "viem";
 import type { IMSCA } from "../../types.js";
 import { type Plugin } from "../types.js";
 import { SessionKeyPlugin, SessionKeyPluginAbi } from "./plugin.js";
@@ -10,6 +11,38 @@ import { buildSessionKeysToRemoveStruct } from "./utils.js";
 
 const ExtendedSessionKeyPlugin_ = {
   ...SessionKeyPlugin,
+  accountMethods: (account: IMSCA<any, any, any>) => ({
+    isAccountSessionKey: async ({
+      key,
+      pluginAddress,
+    }: {
+      key: Address;
+      pluginAddress?: Address;
+    }) => {
+      const contract = SessionKeyPlugin.getContract(
+        account.rpcProvider,
+        pluginAddress
+      );
+
+      return await contract.read.isSessionKeyOf([
+        await account.getAddress(),
+        key,
+      ]);
+    },
+
+    getAccountSessionKeys: async ({
+      pluginAddress,
+    }: {
+      pluginAddress?: Address;
+    }) => {
+      const contract = SessionKeyPlugin.getContract(
+        account.rpcProvider,
+        pluginAddress
+      );
+
+      return await contract.read.sessionKeysOf([await account.getAddress()]);
+    },
+  }),
   providerMethods: <
     TTransport extends SupportedTransports,
     P extends ISmartAccountProvider<TTransport> & {
@@ -22,52 +55,18 @@ const ExtendedSessionKeyPlugin_ = {
     return {
       ...generated,
 
-      updateAccountSessionKeys: async ({
-        keysToAdd,
-        keysToRemoves,
-      }: {
-        keysToAdd?: Address[];
-        keysToRemoves?: Address[];
-      }) => {
-        const sessionKeysToRemove =
-          keysToRemoves === undefined
-            ? []
-            : await buildSessionKeysToRemoveStruct(provider, keysToRemoves);
-        return generated.updateSessionKeys({
-          args: [keysToAdd ?? [], sessionKeysToRemove],
-        });
-      },
-
-      addAccountSessionKeys: ({ keys }: { keys: Address[] }) => {
-        return generated.updateSessionKeys({ args: [keys, []] });
-      },
-
-      removeAccountSessionKeys: async ({ keys }: { keys: Address[] }) => {
+      removeAccountSessionKey: async (
+        { key }: { key: Address },
+        overrides?: UserOperationOverrides
+      ) => {
         const sessionKeysToRemove = await buildSessionKeysToRemoveStruct(
           provider,
-          keys
+          [key]
         );
-        return generated.updateSessionKeys({ args: [[], sessionKeysToRemove] });
-      },
-
-      clearAccountSessionKeys: async () => {
-        const contract = SessionKeyPlugin.getContract(provider);
-        const sessionKeys = await contract.read.getSessionKeys({
-          account: await provider.account.getAddress(),
-        });
-        const sessionKeysToRemove = await buildSessionKeysToRemoveStruct(
-          provider,
-          sessionKeys
+        return generated.removeSessionKey(
+          { args: [key, sessionKeysToRemove[0].predecessor] },
+          overrides
         );
-        return generated.updateSessionKeys({ args: [[], sessionKeysToRemove] });
-      },
-
-      isAccountSessionKey: async ({ key }: { key: Address }) => {
-        const contract = SessionKeyPlugin.getContract(provider);
-        const isSessionKey = await contract.read.isSessionKey([key], {
-          account: await provider.account.getAddress(),
-        });
-        return isSessionKey;
       },
     };
   },

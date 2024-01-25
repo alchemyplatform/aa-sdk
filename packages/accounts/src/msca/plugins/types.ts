@@ -2,9 +2,10 @@ import type {
   Abi,
   Address,
   ISmartAccountProvider,
+  PublicErc4337Client,
   SupportedTransports,
 } from "@alchemy/aa-core";
-import type { GetContractReturnType } from "viem";
+import type { GetContractReturnType, HttpTransport, Transport } from "viem";
 import type { IMSCA } from "../types";
 
 export interface Plugin<AD, PD, TAbi extends Abi> {
@@ -16,14 +17,11 @@ export interface Plugin<AD, PD, TAbi extends Abi> {
    * @returns the plugin contract instance
    */
   getContract: (
-    provider: ISmartAccountProvider,
+    rpcClient:
+      | PublicErc4337Client<HttpTransport>
+      | PublicErc4337Client<Transport>,
     address?: Address
-  ) => GetContractReturnType<
-    TAbi,
-    typeof provider.rpcClient,
-    undefined,
-    Address
-  >;
+  ) => GetContractReturnType<TAbi, typeof rpcClient, undefined, Address>;
   /**
    * Decorator functions that can be used to read data from an MSCA contract instance
    * These methods can be used on their own or with the `account.extend` method to add them to the account instance

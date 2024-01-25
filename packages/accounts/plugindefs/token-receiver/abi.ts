@@ -61,7 +61,11 @@ export const TokenReceiverPluginAbi = [
         type: "tuple",
         internalType: "struct PluginManifest",
         components: [
-          { name: "interfaceIds", type: "bytes4[]", internalType: "bytes4[]" },
+          {
+            name: "interfaceIds",
+            type: "bytes4[]",
+            internalType: "bytes4[]",
+          },
           {
             name: "dependencyInterfaceIds",
             type: "bytes4[]",
@@ -82,7 +86,11 @@ export const TokenReceiverPluginAbi = [
             type: "bool",
             internalType: "bool",
           },
-          { name: "canSpendNativeToken", type: "bool", internalType: "bool" },
+          {
+            name: "canSpendNativeToken",
+            type: "bool",
+            internalType: "bool",
+          },
           {
             name: "permittedExternalCalls",
             type: "tuple[]",
@@ -93,8 +101,16 @@ export const TokenReceiverPluginAbi = [
                 type: "address",
                 internalType: "address",
               },
-              { name: "permitAnySelector", type: "bool", internalType: "bool" },
-              { name: "selectors", type: "bytes4[]", internalType: "bytes4[]" },
+              {
+                name: "permitAnySelector",
+                type: "bool",
+                internalType: "bool",
+              },
+              {
+                name: "selectors",
+                type: "bytes4[]",
+                internalType: "bytes4[]",
+              },
             ],
           },
           {
@@ -117,7 +133,11 @@ export const TokenReceiverPluginAbi = [
                     type: "uint8",
                     internalType: "enum ManifestAssociatedFunctionType",
                   },
-                  { name: "functionId", type: "uint8", internalType: "uint8" },
+                  {
+                    name: "functionId",
+                    type: "uint8",
+                    internalType: "uint8",
+                  },
                   {
                     name: "dependencyIndex",
                     type: "uint256",
@@ -147,7 +167,11 @@ export const TokenReceiverPluginAbi = [
                     type: "uint8",
                     internalType: "enum ManifestAssociatedFunctionType",
                   },
-                  { name: "functionId", type: "uint8", internalType: "uint8" },
+                  {
+                    name: "functionId",
+                    type: "uint8",
+                    internalType: "uint8",
+                  },
                   {
                     name: "dependencyIndex",
                     type: "uint256",
@@ -177,7 +201,11 @@ export const TokenReceiverPluginAbi = [
                     type: "uint8",
                     internalType: "enum ManifestAssociatedFunctionType",
                   },
-                  { name: "functionId", type: "uint8", internalType: "uint8" },
+                  {
+                    name: "functionId",
+                    type: "uint8",
+                    internalType: "uint8",
+                  },
                   {
                     name: "dependencyIndex",
                     type: "uint256",
@@ -207,7 +235,11 @@ export const TokenReceiverPluginAbi = [
                     type: "uint8",
                     internalType: "enum ManifestAssociatedFunctionType",
                   },
-                  { name: "functionId", type: "uint8", internalType: "uint8" },
+                  {
+                    name: "functionId",
+                    type: "uint8",
+                    internalType: "uint8",
+                  },
                   {
                     name: "dependencyIndex",
                     type: "uint256",
@@ -237,7 +269,11 @@ export const TokenReceiverPluginAbi = [
                     type: "uint8",
                     internalType: "enum ManifestAssociatedFunctionType",
                   },
-                  { name: "functionId", type: "uint8", internalType: "uint8" },
+                  {
+                    name: "functionId",
+                    type: "uint8",
+                    internalType: "uint8",
+                  },
                   {
                     name: "dependencyIndex",
                     type: "uint256",
@@ -255,7 +291,11 @@ export const TokenReceiverPluginAbi = [
                     type: "uint8",
                     internalType: "enum ManifestAssociatedFunctionType",
                   },
-                  { name: "functionId", type: "uint8", internalType: "uint8" },
+                  {
+                    name: "functionId",
+                    type: "uint8",
+                    internalType: "uint8",
+                  },
                   {
                     name: "dependencyIndex",
                     type: "uint256",
@@ -353,7 +393,11 @@ export const TokenReceiverPluginAbi = [
           { name: "nonce", type: "uint256", internalType: "uint256" },
           { name: "initCode", type: "bytes", internalType: "bytes" },
           { name: "callData", type: "bytes", internalType: "bytes" },
-          { name: "callGasLimit", type: "uint256", internalType: "uint256" },
+          {
+            name: "callGasLimit",
+            type: "uint256",
+            internalType: "uint256",
+          },
           {
             name: "verificationGasLimit",
             type: "uint256",
@@ -364,13 +408,21 @@ export const TokenReceiverPluginAbi = [
             type: "uint256",
             internalType: "uint256",
           },
-          { name: "maxFeePerGas", type: "uint256", internalType: "uint256" },
+          {
+            name: "maxFeePerGas",
+            type: "uint256",
+            internalType: "uint256",
+          },
           {
             name: "maxPriorityFeePerGas",
             type: "uint256",
             internalType: "uint256",
           },
-          { name: "paymasterAndData", type: "bytes", internalType: "bytes" },
+          {
+            name: "paymasterAndData",
+            type: "bytes",
+            internalType: "bytes",
+          },
           { name: "signature", type: "bytes", internalType: "bytes" },
         ],
       },
@@ -426,7 +478,11 @@ export const TokenReceiverPluginAbi = [
           { name: "nonce", type: "uint256", internalType: "uint256" },
           { name: "initCode", type: "bytes", internalType: "bytes" },
           { name: "callData", type: "bytes", internalType: "bytes" },
-          { name: "callGasLimit", type: "uint256", internalType: "uint256" },
+          {
+            name: "callGasLimit",
+            type: "uint256",
+            internalType: "uint256",
+          },
           {
             name: "verificationGasLimit",
             type: "uint256",
@@ -437,13 +493,21 @@ export const TokenReceiverPluginAbi = [
             type: "uint256",
             internalType: "uint256",
           },
-          { name: "maxFeePerGas", type: "uint256", internalType: "uint256" },
+          {
+            name: "maxFeePerGas",
+            type: "uint256",
+            internalType: "uint256",
+          },
           {
             name: "maxPriorityFeePerGas",
             type: "uint256",
             internalType: "uint256",
           },
-          { name: "paymasterAndData", type: "bytes", internalType: "bytes" },
+          {
+            name: "paymasterAndData",
+            type: "bytes",
+            internalType: "bytes",
+          },
           { name: "signature", type: "bytes", internalType: "bytes" },
         ],
       },
@@ -454,7 +518,18 @@ export const TokenReceiverPluginAbi = [
   },
   { type: "error", name: "AlreadyInitialized", inputs: [] },
   { type: "error", name: "InvalidAction", inputs: [] },
-  { type: "error", name: "NotContractCaller", inputs: [] },
-  { type: "error", name: "NotImplemented", inputs: [] },
+  {
+    type: "error",
+    name: "NotContractCaller",
+    inputs: [{ name: "caller", type: "address", internalType: "address" }],
+  },
+  {
+    type: "error",
+    name: "NotImplemented",
+    inputs: [
+      { name: "selector", type: "bytes4", internalType: "bytes4" },
+      { name: "functionId", type: "uint8", internalType: "uint8" },
+    ],
+  },
   { type: "error", name: "NotInitialized", inputs: [] },
 ] as const;
