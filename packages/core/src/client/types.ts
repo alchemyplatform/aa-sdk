@@ -66,7 +66,7 @@ export type Erc4337Actions = {
    * @param entryPoint - the entrypoint address the op will be sent to
    * @returns the hash of the sent UserOperation
    */
-  sendUserOperation(
+  sendRawUserOperation(
     request: UserOperationRequest,
     entryPoint: Address
   ): Promise<Hash>;

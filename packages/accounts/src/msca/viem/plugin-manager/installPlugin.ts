@@ -1,0 +1,88 @@
+import type { UserOperationOverrides } from "@alchemy/aa-core";
+import type {
+  GetAccountParameter,
+  SmartAccountClient,
+  SmartContractAccount,
+} from "@alchemy/aa-core/viem";
+import {
+  encodeFunctionData,
+  encodeFunctionResult,
+  keccak256,
+  type Address,
+  type Chain,
+  type Hash,
+  type Transport,
+} from "viem";
+import { IPluginAbi } from "../../abis/IPlugin.js";
+import { IPluginManagerAbi } from "../../abis/IPluginManager.js";
+import type { FunctionReference } from "../../account-loupe/types.js";
+
+export type InstallPluginParams<
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
+    | undefined
+> = {
+  pluginAddress: Address;
+  manifestHash?: Hash;
+  pluginInitData?: Hash;
+  dependencies?: FunctionReference[];
+} & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>;
+
+export async function installPlugin<
+  TTransport extends Transport = Transport,
+  TChain extends Chain = Chain,
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
+    | undefined
+>(
+  client: SmartAccountClient<TTransport, TChain, TAccount>,
+  {
+    overrides,
+    account = client.account,
+    ...params
+  }: InstallPluginParams<TAccount>
+) {
+  if (!account) {
+    throw new Error("Account is required");
+  }
+
+  const callData = await encodeInstallPluginUserOperation(client, params);
+  return client.sendUserOperation({ data: callData, overrides, account });
+}
+
+export async function encodeInstallPluginUserOperation<
+  TTransport extends Transport = Transport,
+  TChain extends Chain = Chain,
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
+    | undefined
+>(
+  client: SmartAccountClient<TTransport, TChain, TAccount>,
+  params: Omit<InstallPluginParams, "overrides" | "account">
+) {
+  const pluginManifest = await client.readContract({
+    abi: IPluginAbi,
+    address: params.pluginAddress,
+    functionName: "pluginManifest",
+  });
+  // use the manifest hash passed in or get it from the plugin
+  const manifestHash: Hash =
+    params.manifestHash ??
+    keccak256(
+      encodeFunctionResult({
+        abi: IPluginAbi,
+        functionName: "pluginManifest",
+        result: pluginManifest,
+      })
+    );
+  return encodeFunctionData({
+    abi: IPluginManagerAbi,
+    functionName: "installPlugin",
+    args: [
+      params.pluginAddress,
+      manifestHash,
+      params.pluginInitData ?? "0x",
+      params.dependencies ?? [],
+    ],
+  });
+}

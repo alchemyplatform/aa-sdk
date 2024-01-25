@@ -35,6 +35,9 @@ export interface Plugin<AD, PD, TAbi extends Abi> {
    * @returns the various read methods this plugin provides for this MSCA contract instance
    */
   accountMethods: (a: IMSCA<any, any, any>) => AD;
+
+  // viemAccountMethods: (a: SmartContractAccount) => VAD;
+
   /**
    *  Decorator functions that can be used to write data to an MSCA contract instance
    *
