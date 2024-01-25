@@ -28,7 +28,7 @@ export type InstallTokenReceiverPluginParams = {
 };
 
 const addresses = {
-  11155111: "0x4FCDe5A446208a20A1539FC425832334bc8360Fb" as Address,
+  11155111: "0x360b59D3D922fe6b015257390b35E7dBA8632A50" as Address,
 } as Record<number, Address>;
 
 const TokenReceiverPlugin_ = {

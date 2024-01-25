@@ -28,7 +28,7 @@ export type InstallMultiOwnerPluginParams = {
 };
 
 const addresses = {
-  11155111: "0x90d4f511c9Ca2B1694eA2A1629130B430853aBeB" as Address,
+  11155111: "0xB76734F322b9f2C8F1dA934252dED3bC3C25b109" as Address,
 } as Record<number, Address>;
 
 const MultiOwnerPlugin_ = {
