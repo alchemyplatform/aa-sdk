@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.1](https://github.com/alchemyplatform/aa-sdk/compare/v2.3.0...v2.3.1) (2024-01-25)
+
+### Bug Fixes
+
+- fix the wrapped signer to work with undeployed accounts ([#381](https://github.com/alchemyplatform/aa-sdk/issues/381)) ([55a3a54](https://github.com/alchemyplatform/aa-sdk/commit/55a3a54b928b7f1f4996f331c6f1c9454a9ac3c8))
+
 # [2.3.0](https://github.com/alchemyplatform/aa-sdk/compare/v2.2.1...v2.3.0) (2024-01-24)
 
 ### Bug Fixes
