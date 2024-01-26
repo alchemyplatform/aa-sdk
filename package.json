@@ -3,7 +3,7 @@
   "type": "module",
   "private": true,
   "engines": {
-    "node": "18.16"
+    "node": ">=18.16"
   },
   "workspaces": [
     "packages/*",
@@ -12,7 +12,10 @@
     "site"
   ],
   "scripts": {
+    "generate": "lerna run generate",
+    "postgenerate": "yarn lint:write",
     "build": "lerna run build --ignore=alchemy-daapp --ignore=aa-simple-dapp",
+    "postbuild": "yarn lint:write",
     "build:examples": "lerna run build",
     "clean": "lerna run clean",
     "test": "lerna run test:run",
