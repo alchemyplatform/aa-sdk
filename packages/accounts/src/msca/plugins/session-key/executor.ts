@@ -18,12 +18,25 @@ export const SessionKeyExecutor: Executor = (acct) => {
     throw new Error("Account must be connected to an owner");
   }
 
-  const isSessionKeyActive = async () => {
-    const { readIsSessionKey } = SessionKeyPlugin.accountMethods(acct);
-    const sessionKey = await owner.getAddress();
+  const isSessionKeyActive = async (pluginAddress?: Address) => {
+    // TODO: check if the account actually has the plugin installed
+    // either via account loupe or checking if the supports interface call passes on the account
+    const contract = SessionKeyPlugin.getContract(
+      acct.rpcProvider,
+      pluginAddress
+    );
+
+    const [accountAddress, sessionKey] = await Promise.all([
+      acct.getAddress(),
+      owner.getAddress(),
+    ]);
 
     // if this throws, then session key or the plugin is not installed
-    if (await readIsSessionKey({ args: [sessionKey] }).catch(() => false)) {
+    if (
+      await contract.read
+        .isSessionKeyOf([accountAddress, sessionKey])
+        .catch(() => false)
+    ) {
       // TODO: Technically the key could be over its usage limit, but we'll come back to that later because
       // that requires the provider trying to validate a UO first
       return true;

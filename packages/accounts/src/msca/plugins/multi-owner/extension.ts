@@ -1,4 +1,4 @@
-import { getContract, type Address } from "viem";
+import { type Address } from "viem";
 import type { IMSCA } from "../../types.js";
 import type { Plugin } from "../types.js";
 import { MultiOwnerPlugin, MultiOwnerPluginAbi } from "./plugin.js";
@@ -12,14 +12,10 @@ const ExtendedMultiOwnerPlugin_ = {
       readOwners: async (pluginAddress?: Address) => {
         // TODO: check if the account actually has the plugin installed
         // either via account loupe or checking if the supports interface call passes on the account
-        const contract = getContract({
-          address:
-            pluginAddress ??
-            MultiOwnerPlugin.meta.addresses[account.rpcProvider.chain.id],
-          abi: MultiOwnerPluginAbi,
-          publicClient: account.rpcProvider,
-        });
-
+        const contract = MultiOwnerPlugin.getContract(
+          account.rpcProvider,
+          pluginAddress
+        );
         return contract.read.ownersOf([await account.getAddress()]);
       },
     };

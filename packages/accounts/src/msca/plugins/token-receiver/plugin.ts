@@ -4,15 +4,18 @@ import {
   encodeAbiParameters,
   type Address,
   type GetContractReturnType,
+  type HttpTransport,
+  type Transport,
   type GetFunctionArgs,
 } from "viem";
 import { type Plugin } from "../types.js";
-import { type IMSCA } from "../../types.js";
 import {
+  type PublicErc4337Client,
   type UserOperationOverrides,
   type SupportedTransports,
   type ISmartAccountProvider,
 } from "@alchemy/aa-core";
+import { type IMSCA } from "../../types.js";
 import { installPlugin as installPlugin_ } from "../../plugin-manager/installPlugin.js";
 import { type FunctionReference } from "../../account-loupe/types.js";
 
@@ -38,18 +41,20 @@ const TokenReceiverPlugin_ = {
     addresses,
   },
   getContract: (
-    provider: ISmartAccountProvider,
+    rpcClient:
+      | PublicErc4337Client<HttpTransport>
+      | PublicErc4337Client<Transport>,
     address?: Address
   ): GetContractReturnType<
     typeof TokenReceiverPluginAbi,
-    typeof provider.rpcClient,
+    typeof rpcClient,
     undefined,
     Address
   > =>
     getContract({
-      address: address || addresses[provider.rpcClient.chain.id],
+      address: address || addresses[rpcClient.chain.id],
       abi: TokenReceiverPluginAbi,
-      publicClient: provider.rpcClient,
+      publicClient: rpcClient,
     }),
   accountMethods: (_account: IMSCA<any, any, any>) => ({
     encodeTokensReceivedData: ({
@@ -730,7 +735,18 @@ export const TokenReceiverPluginAbi = [
   },
   { type: "error", inputs: [], name: "AlreadyInitialized" },
   { type: "error", inputs: [], name: "InvalidAction" },
-  { type: "error", inputs: [], name: "NotContractCaller" },
-  { type: "error", inputs: [], name: "NotImplemented" },
+  {
+    type: "error",
+    inputs: [{ name: "caller", internalType: "address", type: "address" }],
+    name: "NotContractCaller",
+  },
+  {
+    type: "error",
+    inputs: [
+      { name: "selector", internalType: "bytes4", type: "bytes4" },
+      { name: "functionId", internalType: "uint8", type: "uint8" },
+    ],
+    name: "NotImplemented",
+  },
   { type: "error", inputs: [], name: "NotInitialized" },
 ] as const;
