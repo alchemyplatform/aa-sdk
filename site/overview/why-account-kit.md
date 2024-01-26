@@ -77,7 +77,7 @@ Many newcomers give up on web3 before submitting their first transaction. It's d
 
 With Account Kit you can remove this barrier by [sponsoring gas fees](/tutorials/sponsoring-gas/sponsoring-gas) for transactions — especially the first one! Get the user to your app’s magic moment as quickly, and help them fall in love with your product before asking them to deposit money.
 
-The [Gas Manager API](https://dashboard.alchemy.com/gas-manager) included in Account Kit is a powerful tool to [sponsor gas](/tutorials/sponsoring-gas/sponsoring-gas). Sponsorship rules are programmable, giving you precise control over spending limits, allowlisted/blocklisted wallet addresses, and more through a REST API or an intuitive management dashboard.
+The [Gas Manager API](https://dashboard.alchemy.com/gas-manager/?a=ak-docs) included in Account Kit is a powerful tool to [sponsor gas](/tutorials/sponsoring-gas/sponsoring-gas). Sponsorship rules are programmable, giving you precise control over spending limits, allowlisted/blocklisted wallet addresses, and more through a REST API or an intuitive management dashboard.
 
 In the future, Account Kit will support paying gas in stablecoins like USDC and other ERC20s. If you’re interested those features, [contact us](mailto:account-abstraction@alchemy.com) to chat.
 
@@ -93,7 +93,7 @@ Here’s another great example: on DEXes you can batch the `Approve` transaction
 
 ## Instant compatibility
 
-Account Kit is instantly [compatible with your dapp](https://docs.alchemy.com/docs/how-to-make-your-dapp-compatible-with-smart-contract-wallets) because it supports the EIP-1193 standard. Almost all dapps use this canonical interface to communicate with wallets and send requests. This means that Account Kit will plug into all the wallet connect libraries you know and love including RainbowKit, Wagmi, and Web3Modal to name a few. Account Kit is also built on viem with support for ethers.js, enabling engineers to get started in minutes!
+Account Kit is instantly [compatible with your dapp](https://docs.alchemy.com/docs/how-to-make-your-dapp-compatible-with-smart-contract-wallets/?a=ak-docs) because it supports the EIP-1193 standard. Almost all dapps use this canonical interface to communicate with wallets and send requests. This means that Account Kit will plug into all the wallet connect libraries you know and love including RainbowKit, Wagmi, and Web3Modal to name a few. Account Kit is also built on viem with support for ethers.js, enabling engineers to get started in minutes!
 
 ## The complete stack for account abstraction
 
@@ -102,7 +102,7 @@ We built Account Kit from the ground up to be reliable, scalable, and developer-
 - **aa-sdk**: A lightweight library to integrate, deploy, and use smart accounts. The `aa-sdk` orchestrates operations like gas estimation, UserOp submission, and counterfactual address generation under the hood. We handled all the details so you don’t have to.
 - **Light Account:** Secure, gas-optimized, audited smart accounts. Purpose-built for [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) and forward compatible with [EIP-6900](https://eips.ethereum.org/EIPS/eip-6900).
 - **Signer:** Bespoke developer guides to integrate the most popular wallet providers. Secure your accounts with email, social login, passkeys, or a self-custodial wallet Signer.
-- **Gas Manager API:** A programmable API to abstract away gas fees for UserOps that meet your criteria. We built [programmable policies](https://docs.alchemy.com/reference/gas-manager-admin-api-quickstart) to give you flexibility and control to decide which transactions should be sponsored. The Gas Manager works hand-in-hand with the Bundler.
+- **Gas Manager API:** A programmable API to abstract away gas fees for UserOps that meet your criteria. We built [programmable policies](https://docs.alchemy.com/reference/gas-manager-admin-api-quickstart/?a=ak-docs) to give you flexibility and control to decide which transactions should be sponsored. The Gas Manager works hand-in-hand with the Bundler.
 - **Bundler API:** The most reliable ERC-4337 Bundler. Land your UserOps onchain at massive scale. We wrote our Bundler from scratch, in Rust, to handle the highest loads at production scale. Check out the open source code in our affectionately named [Rundler github repo](https://github.com/alchemyplatform/rundler).
 
 We have years of experience as the leading web3 developer platform powering customers from Opensea to Shopify, and brought all that expertise to bear in Account Kit.

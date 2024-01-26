@@ -14,7 +14,7 @@ head:
 
 # simulateUserOperationAssetChanges
 
-`simulateUserOperationAssetChanges` is a method you can use to easily leverage the [`alchemy_simulateUserOperationAssetChanges`](https://docs.alchemy.com/reference/alchemy-simulateuseroperationassetchanges) API to simulate asset changes resulting from user operation.
+`simulateUserOperationAssetChanges` is a method you can use to easily leverage the [`alchemy_simulateUserOperationAssetChanges`](https://docs.alchemy.com/reference/alchemy-simulateuseroperationassetchanges/?a=ak-docs) API to simulate asset changes resulting from user operation.
 
 ## Usage
 

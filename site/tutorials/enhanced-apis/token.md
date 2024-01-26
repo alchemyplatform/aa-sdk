@@ -20,7 +20,7 @@ head:
 
 # How to Fetch a Smart Account's ERC-20 Tokens
 
-Alchemy provides several [Enhanced APIs](https://www.alchemy.com/enhanced-apis), which are especially useful for querying information about the smart accounts you create using Account Kit, such as the account's ERC-20 Token balances using the [Token API](https://www.alchemy.com/token-api).
+Alchemy provides several [Enhanced APIs](https://www.alchemy.com/enhanced-apis/?a=ak-docs), which are especially useful for querying information about the smart accounts you create using Account Kit, such as the account's ERC-20 Token balances using the [Token API](https://www.alchemy.com/token-api/?a=ak-docs).
 
 For the purposes of our example, we'll use the Token API to query our smart account's data by extending the Alchemy Provider [with Enhanced APIs](/packages/aa-alchemy/provider/withAlchemyEnhancedApis.md).
 

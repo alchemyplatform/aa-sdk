@@ -20,7 +20,7 @@ Please note that the dummy signature is specific to the account implementation a
 
 **Reference:**
 
-- [Our Bundler API docs](https://docs.alchemy.com/reference/eth-estimateuseroperationgas#dummy-signature-for-simpleaccount)
+- [Our Bundler API docs](https://docs.alchemy.com/reference/eth-estimateuseroperationgas#dummy-signature-for-simpleaccount/?a=ak-docs)
 - [EIP-4337: `eth_estimateUserOperationGas`](https://eips.ethereum.org/EIPS/eip-4337#-eth_estimateuseroperationgas)
 
 ## Example Implementation

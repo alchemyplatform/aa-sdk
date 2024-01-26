@@ -27,7 +27,7 @@ This guide will show you how to send a User Operation with Account Kit by creati
 
 ## 1. Create Your Provider
 
-Using the SDK, we'll create an Alchemy Provider. As it is, the providers gives you methods to query information related to user operations and smart accounts. To create a provider, you'll need an Alchemy API Key or RPC URL, which you can access from the [Alchemy Dashboard](https://dashboard.alchemy.com).
+Using the SDK, we'll create an Alchemy Provider. As it is, the providers gives you methods to query information related to user operations and smart accounts. To create a provider, you'll need an Alchemy API Key or RPC URL, which you can access from the [Alchemy Dashboard](https://dashboard.alchemy.com/signup/?a=aa-docs).
 
 See [Alchemy Provider](/packages/aa-alchemy/provider/introduction.md) for more details.
 
@@ -55,7 +55,7 @@ Some other helpful viem methods include: [encodeFunctionData](https://viem.sh/do
 
 Now we'll use the connected provider to send a user operation. We'll use the [sendUserOperation](/packages/aa-core/provider/sendUserOperation.md) method on the provider.
 
-You can either send ETH to the smart account to pay for User Operation's gas, or you can connect your provider to our Gas Manager using the [withAlchemyGasManager](/packages/aa-alchemy/provider/withAlchemyGasManager.md) method to sponsor the UO's gas. We'll use the latter approach below. You can go to the [Alchemy Dashboard](https://dashboard.alchemy.com/gas-manager) to get a Gas Manager policy ID.
+You can either send ETH to the smart account to pay for User Operation's gas, or you can connect your provider to our Gas Manager using the [withAlchemyGasManager](/packages/aa-alchemy/provider/withAlchemyGasManager.md) method to sponsor the UO's gas. We'll use the latter approach below. You can go to the [Alchemy Dashboard](https://dashboard.alchemy.com/gas-manager/?a=ak-docs) to get a Gas Manager policy ID.
 
 We'll also want to wait for the transaction which contains the User Operation, so that we know the User Operation executed on-chain. We can use the [waitForUserOperationTransaction](/packages/aa-core/provider/waitForUserOperationTransaction.md) method on provider to do so, as seen below.
 
