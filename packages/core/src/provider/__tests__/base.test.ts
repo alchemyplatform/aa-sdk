@@ -232,6 +232,28 @@ describe("Base Tests", () => {
     `);
   });
 
+  it("should correctly allow custom viem chains", () => {
+    // https://chainlist.org/chain/957 - for testing
+    const lyra = {
+      id: 957,
+      name: "Lyra Chain",
+      network: "mainnet",
+      nativeCurrency: { name: "Ethereum", symbol: "ETH", decimals: 18 },
+      rpcUrls: {
+        default: { http: ["https://rpc.lyra.finance"] },
+        public: { http: ["https://rpc.lyra.finance"] },
+      },
+    };
+
+    expect(
+      () =>
+        new SmartAccountProvider({
+          rpcProvider: lyra.rpcUrls.default.http[0],
+          chain: lyra,
+        })
+    ).not.toThrowError();
+  });
+
   it("should correctly do runtime validation when multiple inputs are invalid", () => {
     expect(
       () =>

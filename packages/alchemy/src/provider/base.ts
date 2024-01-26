@@ -8,7 +8,6 @@ import {
 } from "@alchemy/aa-core";
 import { Alchemy } from "alchemy-sdk";
 import { type HttpTransport } from "viem";
-import { SupportedChains } from "../chains.js";
 import { getDefaultUserOperationFeeOptions } from "../defaults.js";
 import type { ClientWithAlchemyMethods } from "../middleware/client.js";
 import { withAlchemyGasFeeEstimator } from "../middleware/gas-fees.js";
@@ -30,19 +29,14 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
     const config = AlchemyProviderConfigSchema.parse(config_);
 
     const { chain, entryPointAddress, opts, ...connectionConfig } = config;
-    const _chain =
-      typeof chain === "number" ? SupportedChains.get(chain) : chain;
-    if (!_chain || !_chain.rpcUrls["alchemy"]) {
-      throw new Error(`AlchemyProvider: chain (${chain}) not supported`);
-    }
 
     const rpcUrl =
       connectionConfig.rpcUrl == null
-        ? `${_chain.rpcUrls.alchemy.http[0]}/${connectionConfig.apiKey ?? ""}`
+        ? `${chain.rpcUrls.alchemy.http[0]}/${connectionConfig.apiKey ?? ""}`
         : connectionConfig.rpcUrl;
 
     const client = createPublicErc4337Client({
-      chain: _chain,
+      chain: chain,
       rpcUrl,
       ...(connectionConfig.jwt != null && {
         fetchOptions: {
@@ -54,12 +48,12 @@ export class AlchemyProvider extends SmartAccountProvider<HttpTransport> {
     });
 
     const feeOptions =
-      config.opts?.feeOptions ?? getDefaultUserOperationFeeOptions(_chain);
+      config.opts?.feeOptions ?? getDefaultUserOperationFeeOptions(chain);
 
     super({
       rpcProvider: client,
       entryPointAddress,
-      chain: _chain,
+      chain,
       opts: { ...opts, feeOptions },
     });
 

@@ -37,6 +37,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           token: ${{ secrets.ALCHEMY_BOT_PAT }}
+          fetch-depth: "0"
 
       - name: Set Node.js 16.x
         uses: actions/setup-node@v3
@@ -58,6 +59,8 @@ jobs:
         run: yarn
 
       - name: Build
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
         run: yarn build
 
       - name: Build with VitePress
@@ -84,7 +87,9 @@ jobs:
       # Lerna publish will, compute the new version, update files, run precommit hooks, tag, publish, and push change log
       - name: Publish using Lerna
         if: inputs.publish
-        run: yarn lerna publish --no-private --yes --no-verify-access
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+        run: yarn lerna publish --conventional-commits --no-private --yes --no-verify-access
 
   publish_site:
     name: Publish Docs Site

@@ -38,6 +38,23 @@ describe("Particle Signer Tests", () => {
     `);
   });
 
+  it("should correctly get auth details if unauthenticated but has active account state", async () => {
+    const signer = await givenSigner(false, true);
+
+    const details = await signer.getAuthDetails();
+    expect(details).toMatchInlineSnapshot(`
+      {
+        "avatar": "test.png",
+        "email": "test@gmail.com",
+        "name": "test",
+        "phone": "1234567890",
+        "token": "test",
+        "uuid": "test",
+        "wallets": [],
+      }
+    `);
+  });
+
   it("should correctly fail to get auth details if unauthenticated", async () => {
     const signer = await givenSigner(false);
 
@@ -80,7 +97,7 @@ describe("Particle Signer Tests", () => {
   });
 });
 
-const givenSigner = async (auth = true) => {
+const givenSigner = async (auth = true, isLogin = false) => {
   const inner = new ParticleNetwork({
     projectId: "test",
     clientKey: "test",
@@ -88,6 +105,8 @@ const givenSigner = async (auth = true) => {
     chainName: "polygon",
     chainId: 80001,
   });
+
+  inner.auth.isLogin = () => isLogin;
 
   inner.auth.getUserInfo = vi.fn().mockResolvedValue({
     uuid: "test",

@@ -1,6 +1,7 @@
 import type { Address } from "abitype";
 import {
   getContract,
+  trim,
   type Chain,
   type GetContractReturnType,
   type Hash,
@@ -34,27 +35,30 @@ export enum DeploymentState {
 }
 
 export abstract class BaseSmartContractAccount<
-  TTransport extends SupportedTransports = Transport
-> implements ISmartContractAccount
+  TTransport extends SupportedTransports = Transport,
+  TOwner extends SmartAccountSigner | undefined = SmartAccountSigner | undefined
+> implements ISmartContractAccount<TTransport, TOwner>
 {
   protected factoryAddress: Address;
   protected deploymentState: DeploymentState = DeploymentState.UNDEFINED;
   protected accountAddress?: Address;
   protected accountInitCode?: Hex;
-  protected owner: SmartAccountSigner | undefined;
+  protected owner: TOwner;
   protected entryPoint: GetContractReturnType<
     typeof EntryPointAbi,
     PublicClient,
     Chain
   >;
   protected entryPointAddress: Address;
-  protected rpcProvider:
+  readonly rpcProvider:
     | PublicErc4337Client<TTransport>
     | PublicErc4337Client<HttpTransport>;
 
   constructor(params_: BaseSmartAccountParams<TTransport>) {
-    const params =
-      createBaseSmartAccountParamsSchema<TTransport>().parse(params_);
+    const params = createBaseSmartAccountParamsSchema<
+      TTransport,
+      TOwner
+    >().parse(params_);
 
     this.entryPointAddress =
       params.entryPointAddress ?? getDefaultEntryPointAddress(params.chain);
@@ -96,7 +100,7 @@ export abstract class BaseSmartContractAccount<
 
     this.accountAddress = params.accountAddress;
     this.factoryAddress = params.factoryAddress;
-    this.owner = params.owner;
+    this.owner = params.owner as TOwner;
     this.accountInitCode = params.initCode;
 
     this.entryPoint = getContract({
@@ -217,6 +221,20 @@ export abstract class BaseSmartContractAccount<
   ): Promise<`0x${string}`> {
     throw new Error("encodeBatchExecute not supported");
   }
+
+  /**
+   * If your contract supports UUPS, you can implement this method which can be
+   * used to upgrade the implementation of the account.
+   *
+   * @param upgradeToImplAddress -- the implementation address of the contract you want to upgrade to
+   * @param upgradeToInitData -- the initialization data required by that account
+   */
+  encodeUpgradeToAndCall = async (
+    _upgradeToImplAddress: Address,
+    _upgradeToInitData: Hex
+  ): Promise<Hex> => {
+    throw new Error("encodeUpgradeToAndCall not supported");
+  };
   // #endregion optional-methods
 
   // Extra implementations
@@ -257,6 +275,11 @@ export abstract class BaseSmartContractAccount<
       try {
         await this.entryPoint.simulate.getSenderAddress([initCode]);
       } catch (err: any) {
+        Logger.verbose(
+          "[BaseSmartContractAccount](getAddress) getSenderAddress err: ",
+          err
+        );
+
         if (err.cause?.data?.errorName === "SenderAddressResult") {
           this.accountAddress = err.cause.data.args[0] as Address;
           Logger.verbose(
@@ -264,6 +287,10 @@ export abstract class BaseSmartContractAccount<
             this.accountAddress
           );
           return this.accountAddress;
+        }
+
+        if (err.details === "Invalid URL") {
+          throw new Error("Invalid RPC URL.");
         }
       }
 
@@ -273,7 +300,16 @@ export abstract class BaseSmartContractAccount<
     return this.accountAddress;
   }
 
-  getOwner(): SmartAccountSigner | undefined {
+  extend = <R>(fn: (self: this) => R): this & R => {
+    const extended = fn(this) as any;
+    // this should make it so extensions can't overwrite the base methods
+    for (const key in this) {
+      delete extended[key];
+    }
+    return Object.assign(this, extended);
+  };
+
+  getOwner(): TOwner {
     return this.owner;
   }
 
@@ -313,6 +349,22 @@ export abstract class BaseSmartContractAccount<
     const factoryAddress = `0x${initCode.substring(2, 42)}` as Address;
     const factoryCalldata = `0x${initCode.substring(42)}` as Hex;
     return [factoryAddress, factoryCalldata];
+  }
+
+  protected async getImplementationAddress(): Promise<"0x0" | Address> {
+    const accountAddress = await this.getAddress();
+
+    const storage = await this.rpcProvider.getStorageAt({
+      address: accountAddress,
+      // This is the default slot for the implementation address for Proxies
+      slot: "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
+    });
+
+    if (storage == null) {
+      throw new Error("could not get storage");
+    }
+
+    return trim(storage);
   }
 
   private async _getAccountInitCode(): Promise<Hash> {

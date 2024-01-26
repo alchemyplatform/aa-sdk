@@ -61,6 +61,11 @@ export const bigIntClamp = (
   return ret;
 };
 
+export enum RoundingMode {
+  ROUND_DOWN = 0,
+  ROUND_UP = 1,
+}
+
 /**
  * Useful if you want to increment a bigint by N% or decrement by N%
  *
@@ -72,9 +77,18 @@ export const bigIntClamp = (
  *
  * @param base -- the base bigint that we want to apply a percent to
  * @param percent -- the percent to apply to the base
+ * @param roundingMode -- the rounding mode to use when calculating the percent. defaults to ROUND_UP
  * @returns the base multiplied by the percent and divided by 100
  */
-export const bigIntPercent = (base: BigNumberish, percent: bigint) => {
+export const bigIntPercent = (
+  base: BigNumberish,
+  percent: bigint,
+  roundingMode: RoundingMode = RoundingMode.ROUND_UP
+) => {
+  if (roundingMode === RoundingMode.ROUND_UP) {
+    return (BigInt(base) * percent + 99n) / 100n;
+  }
+
   return (BigInt(base) * percent) / 100n;
 };
 

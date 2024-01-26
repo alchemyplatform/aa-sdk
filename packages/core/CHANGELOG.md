@@ -3,6 +3,59 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.1](https://github.com/alchemyplatform/aa-sdk/compare/v2.3.0...v2.3.1) (2024-01-25)
+
+### Bug Fixes
+
+- fix the wrapped signer to work with undeployed accounts ([#381](https://github.com/alchemyplatform/aa-sdk/issues/381)) ([55a3a54](https://github.com/alchemyplatform/aa-sdk/commit/55a3a54b928b7f1f4996f331c6f1c9454a9ac3c8))
+
+# [2.3.0](https://github.com/alchemyplatform/aa-sdk/compare/v2.2.1...v2.3.0) (2024-01-24)
+
+### Bug Fixes
+
+- **buildUserOperationFromTx:** handle the case where no TX has fee fields set ([#378](https://github.com/alchemyplatform/aa-sdk/issues/378)) ([e9eaad1](https://github.com/alchemyplatform/aa-sdk/commit/e9eaad175f9ec14d45b62b2c5bcabb75ca47e74f))
+
+## [2.2.1](https://github.com/alchemyplatform/aa-sdk/compare/v2.2.0...v2.2.1) (2024-01-23)
+
+### Bug Fixes
+
+- **base-provider:** address drop and replace rounding down errors ([#376](https://github.com/alchemyplatform/aa-sdk/issues/376)) ([33b7435](https://github.com/alchemyplatform/aa-sdk/commit/33b74359dedc68ed324697dc32f4f06def1fac59))
+
+# [2.2.0](https://github.com/alchemyplatform/aa-sdk/compare/v2.1.0...v2.2.0) (2024-01-22)
+
+### Features
+
+- add usePluginHook to demo app ([#357](https://github.com/alchemyplatform/aa-sdk/issues/357)) ([036b13b](https://github.com/alchemyplatform/aa-sdk/commit/036b13b250b1b3465dee000a6d5036ca060c2bb4))
+
+# [2.0.0](https://github.com/alchemyplatform/aa-sdk/compare/v1.2.4...v2.0.0) (2024-01-12)
+
+- feat!: update the LightAccount logic for 1271 signatures to match the on-chain impl ([bbe5060](https://github.com/alchemyplatform/aa-sdk/commit/bbe5060c01828e07d7f788485b14c04dacc6cb6f))
+
+### Features
+
+- add upgrade functionality for light account to msca ([#298](https://github.com/alchemyplatform/aa-sdk/issues/298)) ([18f51d9](https://github.com/alchemyplatform/aa-sdk/commit/18f51d9f626b48390a54d88b7ac28c1f162e04f8))
+- update zod to allow custom viem chains in core ([#348](https://github.com/alchemyplatform/aa-sdk/issues/348)) ([291f73f](https://github.com/alchemyplatform/aa-sdk/commit/291f73f50e2e6fa382d269b8568b6255bcad4b0c))
+
+### BREAKING CHANGES
+
+- default LightAccountFactory address has changed
+
+## 1.2.4 (2024-01-08)
+
+**Note:** Version bump only for package @alchemy/aa-core
+
+## 1.2.3 (2023-12-22)
+
+### Features
+
+- add stringToIndex util function for SmartAccount salt ([#329](https://github.com/alchemyplatform/aa-sdk/issues/329)) ([b34ef9a](https://github.com/alchemyplatform/aa-sdk/commit/b34ef9aa6727986e89a1461dec45955cac9d4365))
+- add prefix for aa-signers signer type ([#325](https://github.com/alchemyplatform/aa-sdk/issues/325)) ([f3b8cc1](https://github.com/alchemyplatform/aa-sdk/commit/f3b8cc1f0553bad51e4f95c3fd80f6aa0199cff2))
+- add terms page to glossary ([#336](https://github.com/alchemyplatform/aa-sdk/issues/336)) ([63b24ec](https://github.com/alchemyplatform/aa-sdk/commit/63b24ecdb3e5e656c173a1523a3e09478d4c074d))
+- add faq page to docs ([#335](https://github.com/alchemyplatform/aa-sdk/issues/335)) ([63092ce](https://github.com/alchemyplatform/aa-sdk/commit/63092ceb45341d422bd3f8c13ebcc539d9cc5001))
+- add aa-signer implementation for lit protocol ([#312](https://github.com/alchemyplatform/aa-sdk/issues/312)) ([b0f8dd5](https://github.com/alchemyplatform/aa-sdk/commit/b0f8dd538728f8a7dd4447da8c88a50179d61f95))
+- add aa-signer implementation for arcana auth ([#319](https://github.com/alchemyplatform/aa-sdk/issues/319)) ([c82dbf7](https://github.com/alchemyplatform/aa-sdk/commit/c82dbf7ad76791e81525740dfe8820bd234c2863))
+- add types to glossary ([#338](https://github.com/alchemyplatform/aa-sdk/issues/338)) ([28ad2b0](https://github.com/alchemyplatform/aa-sdk/commit/28ad2b015e5d0191f77cbdeeb3c071b7ec813fde))
+
 ## 1.2.2 (2023-12-13)
 
 ### Bug Fixes

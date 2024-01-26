@@ -45,6 +45,8 @@ import {
   isValidRequest,
   resolveProperties,
   type Deferrable,
+  type IsUndefined,
+  type NoUndefined,
 } from "../utils/index.js";
 import { createSmartAccountProviderConfigSchema } from "./schema.js";
 import type {
@@ -57,6 +59,7 @@ import type {
   ProviderEvents,
   SendUserOperationResult,
   SmartAccountProviderConfig,
+  UpgradeToData,
 } from "./types.js";
 
 export const noOpMiddleware: AccountMiddlewareFn = async (
@@ -262,22 +265,27 @@ export class SmartAccountProvider<
       };
     });
 
+    const mfpgOverridesInTx = () =>
+      requests
+        .filter((x) => x.maxFeePerGas != null)
+        .map((x) => fromHex(x.maxFeePerGas!, "bigint"));
     const maxFeePerGas =
       overrides?.maxFeePerGas != null
         ? overrides?.maxFeePerGas
-        : bigIntMax(
-            ...requests
-              .filter((x) => x.maxFeePerGas != null)
-              .map((x) => fromHex(x.maxFeePerGas!, "bigint"))
-          );
+        : mfpgOverridesInTx().length > 0
+        ? bigIntMax(...mfpgOverridesInTx())
+        : undefined;
+
+    const mpfpgOverridesInTx = () =>
+      requests
+        .filter((x) => x.maxPriorityFeePerGas != null)
+        .map((x) => fromHex(x.maxPriorityFeePerGas!, "bigint"));
     const maxPriorityFeePerGas =
       overrides?.maxPriorityFeePerGas != null
         ? overrides?.maxPriorityFeePerGas
-        : bigIntMax(
-            ...requests
-              .filter((x) => x.maxPriorityFeePerGas != null)
-              .map((x) => fromHex(x.maxPriorityFeePerGas!, "bigint"))
-          );
+        : mpfpgOverridesInTx().length > 0
+        ? bigIntMax(...mpfpgOverridesInTx())
+        : undefined;
 
     const _overrides: UserOperationOverrides = {
       maxFeePerGas,
@@ -652,7 +660,11 @@ export class SmartAccountProvider<
         | PublicErc4337Client<TTransport>
         | PublicErc4337Client<HttpTransport>
     ) => TAccount
-  ): this & { account: TAccount } => {
+  ): IsUndefined<TAccount["providerDecorators"]> extends true
+    ? this & { account: TAccount }
+    : this & { account: TAccount } & ReturnType<
+          NoUndefined<TAccount["providerDecorators"]>
+        > => {
     const account = fn(this.rpcClient);
 
     // sanity check. Note that this check is only performed if and only if the optional entryPointAddress is given upon initialization.
@@ -699,7 +711,17 @@ export class SmartAccountProvider<
       .getAddress()
       .then((address) => this.emit("accountsChanged", [address]));
 
-    return this as unknown as this & { account: TAccount };
+    if (account.providerDecorators) {
+      this.extend(account.providerDecorators);
+    }
+
+    return this as unknown as IsUndefined<
+      TAccount["providerDecorators"]
+    > extends true
+      ? this & { account: TAccount }
+      : this & { account: TAccount } & ReturnType<
+            NoUndefined<TAccount["providerDecorators"]>
+          >;
   };
 
   disconnect = (): this & { account: undefined } => {
@@ -738,6 +760,43 @@ export class SmartAccountProvider<
     }
 
     return Object.assign(this, extended);
+  };
+
+  /**
+   * Submits a UO (and optionally waits for it to be mined) to upgrade the currently
+   * connected account to the specified implementation.
+   *
+   * @param upgradeTo -- the destination contract implementation
+   * @param waitForTxn -- whether or not to wait for the transaction to be mined
+   * @returns Either the TX Hash or the User Operation Hash, depending on whether or not `waitForTxn` is true
+   */
+  upgradeAccount = async (
+    upgradeTo: UpgradeToData,
+    waitForTxn = false
+  ): Promise<Hash> => {
+    if (!this.isConnected()) {
+      throw new Error("provider must be connected to an account");
+    }
+
+    const { implAddress: accountImplAddress, initializationData } = upgradeTo;
+
+    const accountAddress = await this.getAddress();
+    const encodeUpgradeData = await this.account.encodeUpgradeToAndCall(
+      accountImplAddress,
+      initializationData
+    );
+
+    const result = await this.sendUserOperation({
+      target: accountAddress,
+      data: encodeUpgradeData,
+    });
+
+    let hash = result.hash;
+    if (waitForTxn) {
+      hash = await this.waitForUserOperationTransaction(result.hash);
+    }
+
+    return hash;
   };
 
   private overrideMiddlewareFunction = (

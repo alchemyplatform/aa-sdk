@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { SmartAccountSigner } from "./types";
 
-export const SignerSchema = z.custom<SmartAccountSigner>((signer) => {
+export const isSigner = (signer: any): signer is SmartAccountSigner => {
   return (
     signer != null &&
     typeof signer === "object" &&
@@ -11,4 +11,6 @@ export const SignerSchema = z.custom<SmartAccountSigner>((signer) => {
     "getAddress" in signer &&
     "inner" in signer
   );
-});
+};
+
+export const SignerSchema = z.custom<SmartAccountSigner>(isSigner);

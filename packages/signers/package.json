@@ -1,6 +1,6 @@
 {
   "name": "@alchemy/aa-signers",
-  "version": "1.2.2",
+  "version": "2.3.1",
   "description": "A collection of signers used to create ERC-4337 smart accounts",
   "author": "Alchemy",
   "license": "MIT",
@@ -56,6 +56,16 @@
       "import": "./dist/esm/capsule/index.js",
       "default": "./dist/cjs/capsule/index.js"
     },
+    "./lit-protocol": {
+      "types": "./dist/types/lit-protocol/index.d.ts",
+      "import": "./dist/esm/lit-protocol/index.js",
+      "default": "./dist/cjs/lit-protocol/index.js"
+    },
+    "./arcana-auth": {
+      "types": "./dist/types/arcana-auth/index.d.ts",
+      "import": "./dist/esm/arcana-auth/index.js",
+      "default": "./dist/cjs/arcana-auth/index.js"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {
@@ -69,7 +79,12 @@
     "test:run-e2e": "vitest run --config vitest.config.e2e.ts"
   },
   "devDependencies": {
+    "@arcana/auth": "^1.0.8",
     "@fireblocks/fireblocks-web3-provider": "^1.2.6",
+    "@lit-protocol/crypto": "3.0.24",
+    "@lit-protocol/lit-node-client": "3.0.24",
+    "@lit-protocol/pkp-ethers": "3.0.24",
+    "@lit-protocol/types": "3.0.24",
     "@particle-network/auth": "^1.2.2",
     "@particle-network/provider": "^1.2.1",
     "@portal-hq/web": "^0.0.8",
@@ -99,11 +114,16 @@
   "homepage": "https://github.com/alchemyplatform/aa-sdk#readme",
   "gitHead": "ee46e8bb857de3b631044fa70714ea706d9e317d",
   "dependencies": {
-    "@alchemy/aa-core": "^1.2.2",
-    "viem": "^1.16.2"
+    "@alchemy/aa-core": "^2.3.1",
+    "viem": "^1.21.4"
   },
   "optionalDependencies": {
+    "@arcana/auth": "^1.0.8",
     "@fireblocks/fireblocks-web3-provider": "^1.2.6",
+    "@lit-protocol/crypto": "3.0.24",
+    "@lit-protocol/lit-node-client": "3.0.24",
+    "@lit-protocol/pkp-ethers": "3.0.24",
+    "@lit-protocol/types": "3.0.24",
     "@particle-network/auth": "^1.2.2",
     "@particle-network/provider": "^1.2.1",
     "@portal-hq/web": "^0.0.8",

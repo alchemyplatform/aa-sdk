@@ -39,6 +39,7 @@ We're excited to have you contribute to the `aa-sdk`. Here's a step-by-step guid
        - Use "aa-sdk" or "Account Kit" depending on context, not "Account Kit SDK".
        - Capitalize "Gas Manager API" and "Bundler API".
        - Capitalize definitions for type primitives like `Provider`, `Signer`, `Account`.
+       - `UserOperation` instead of UserOperation during first occurrence of it in a doc, then UO for subsequent occurrences.
 
 8. **Committing Changes**: Commit your changes using a standardized message format.
 

@@ -9,6 +9,29 @@ import {
   PercentageSchema,
 } from "../utils/index.js";
 
+export const ConnectionConfigSchema = z.union([
+  z.object({
+    rpcUrl: z.never().optional(),
+    apiKey: z.string(),
+    jwt: z.never().optional(),
+  }),
+  z.object({
+    rpcUrl: z.never().optional(),
+    apiKey: z.never().optional(),
+    jwt: z.string(),
+  }),
+  z.object({
+    rpcUrl: z.string(),
+    apiKey: z.never().optional(),
+    jwt: z.never().optional(),
+  }),
+  z.object({
+    rpcUrl: z.string(),
+    apiKey: z.never().optional(),
+    jwt: z.string(),
+  }),
+]);
+
 export const UserOperationFeeOptionsFieldSchema =
   BigNumberishRangeSchema.merge(PercentageSchema).partial();
 

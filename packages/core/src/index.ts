@@ -16,7 +16,7 @@ export type * from "./account/types.js";
 export type { BaseSmartAccountParams } from "./account/types.js";
 
 export { LocalAccountSigner } from "./signer/local-account.js";
-export { SignerSchema } from "./signer/schema.js";
+export { SignerSchema, isSigner } from "./signer/schema.js";
 export type {
   SmartAccountAuthenticator,
   SmartAccountSigner,
@@ -43,6 +43,7 @@ export {
 
 export { SmartAccountProvider, noOpMiddleware } from "./provider/base.js";
 export {
+  ConnectionConfigSchema,
   SmartAccountProviderOptsSchema,
   createSmartAccountProviderConfigSchema,
 } from "./provider/schema.js";

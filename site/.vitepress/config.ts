@@ -56,6 +56,10 @@ export default defineConfig({
             link: "/demos",
           },
           {
+            text: "FAQs",
+            link: "/faqs",
+          },
+          {
             text: "Contact Us",
             link: "/contact-us",
           },
@@ -773,6 +777,34 @@ export default defineConfig({
                   { text: "getAuthDetails", link: "/getAuthDetails" },
                 ],
               },
+              {
+                text: "Arcana Auth Signer",
+                collapsed: true,
+                base: "/packages/aa-signers/arcana-auth",
+                items: [
+                  { text: "Introduction", link: "/introduction" },
+                  { text: "constructor", link: "/constructor" },
+                  { text: "authenticate", link: "/authenticate" },
+                  { text: "getAddress", link: "/getAddress" },
+                  { text: "signMessage", link: "/signMessage" },
+                  { text: "signTypedData", link: "/signTypedData" },
+                  { text: "getAuthDetails", link: "/getAuthDetails" },
+                ],
+              },
+              {
+                text: "Lit Signer",
+                collapsed: true,
+                base: "/packages/aa-signers/lit-protocol",
+                items: [
+                  { text: "Introduction", link: "/introduction" },
+                  { text: "constructor", link: "/constructor" },
+                  { text: "authenticate", link: "/authenticate" },
+                  { text: "getAddress", link: "/getAddress" },
+                  { text: "signMessage", link: "/signMessage" },
+                  { text: "signTypedData", link: "/signTypedData" },
+                  { text: "getAuthDetails", link: "/getAuthDetails" },
+                ],
+              },
               { text: "Contributing", link: "/contributing" },
             ],
           },
@@ -875,22 +907,8 @@ export default defineConfig({
         base: "/glossary",
         collapsed: true,
         items: [
-          {
-            text: "Types",
-            base: "/glossary/types",
-            collapsed: true,
-            items: [
-              { text: "BigNumberish", link: "/bigNumberish" },
-              {
-                text: "BigNumberishRange",
-                link: "/bigNumberishRange",
-              },
-              {
-                text: "Percentage",
-                link: "/percentage",
-              },
-            ],
-          },
+          { text: "Terms", link: "/terms" },
+          { text: "Types", link: "/types" },
         ],
       },
     ],

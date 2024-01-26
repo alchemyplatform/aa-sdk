@@ -9,17 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@alchemy/aa-accounts": "^1.2.1",
-    "@alchemy/aa-alchemy": "^1.2.1",
-    "@alchemy/aa-core": "^1.2.1",
-    "@alchemy/aa-signers": "^1.2.1",
+    "@alchemy/aa-accounts": "^2.1.0",
+    "@alchemy/aa-alchemy": "^2.1.0",
+    "@alchemy/aa-core": "^2.0.0",
+    "@alchemy/aa-signers": "^2.0.0",
     "@t3-oss/env-core": "^0.7.1",
     "@t3-oss/env-nextjs": "^0.7.1",
     "magic-sdk": "^21.3.1",
     "next": "13.5.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "viem": "^1.16.2",
+    "viem": "^1.21.4",
     "zod": "^3.22.4"
   },
   "devDependencies": {

@@ -18,7 +18,9 @@ import { sepolia } from "viem/chains";
 import {
   createLightAccountProvider,
   LightSmartContractAccount,
+  type LightAccountVersion,
 } from "../../index.js";
+import { getMSCAUpgradeToData } from "../../msca/utils.js";
 import {
   API_KEY,
   LIGHT_ACCOUNT_OWNER_MNEMONIC,
@@ -36,33 +38,35 @@ describe("Light Account Tests", () => {
     UNDEPLOYED_OWNER_MNEMONIC
   );
 
+  it.each([
+    { version: "v1.0.1" as const, expected: true },
+    { version: "v1.0.2" as const, throws: true },
+    { version: "v1.1.0" as const, expected: true },
+  ])(
+    "LA version $version should correctly verify 1271 signatures",
+    async ({ version, expected, throws }) => {
+      const provider = givenConnectedProvider({ owner, chain, version });
+      const message = "test";
+
+      if (!throws) {
+        const signature = await provider.signMessage(message);
+        expect(
+          await provider.rpcClient.verifyMessage({
+            address: await provider.getAddress(),
+            message,
+            signature,
+          })
+        ).toBe(expected);
+      } else {
+        await expect(provider.signMessage(message)).rejects.toThrowError();
+      }
+    }
+  );
+
   it("should successfully get counterfactual address", async () => {
     const provider = givenConnectedProvider({ owner, chain });
     expect(await provider.getAddress()).toMatchInlineSnapshot(
-      '"0x1a3a89cd46f124EF40848966c2D7074a575dbC27"'
-    );
-  });
-
-  it("should sign typed data successfully", async () => {
-    const provider = givenConnectedProvider({ owner, chain });
-    const typedData = {
-      types: {
-        Request: [{ name: "hello", type: "string" }],
-      },
-      primaryType: "Request",
-      message: {
-        hello: "world",
-      },
-    };
-    expect(await provider.signTypedData(typedData)).toBe(
-      await owner.signTypedData(typedData)
-    );
-  });
-
-  it("should sign message successfully", async () => {
-    const provider = givenConnectedProvider({ owner, chain });
-    expect(await provider.signMessage("test")).toBe(
-      await owner.signMessage("test")
+      '"0x86f3B0211764971Ad0Fc8C8898d31f5d792faD84"'
     );
   });
 
@@ -83,7 +87,7 @@ describe("Light Account Tests", () => {
     expect(
       await undeployedProvider.signTypedDataWith6492(typedData)
     ).toMatchInlineSnapshot(
-      '"0x00000000000000000000000000000055c0b4fa41dde26a74435ff03692292fbd000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000000445fbfb9cf000000000000000000000000ef9d7530d16df66481adf291dc9a12b44c7f7df00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000041591a9422219a5f2bc87ee24a82a6d5ef9674bf7408a2a289984de258466d148e75efb65b487ffbfcb061b268b1b667d8d7d4eac2c3d9d2d0a52d49c891be567c1c000000000000000000000000000000000000000000000000000000000000006492649264926492649264926492649264926492649264926492649264926492"'
+      '"0x00000000000000000000000000004ec70002a32400f8ae005a26081065620d20000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000000445fbfb9cf000000000000000000000000ef9d7530d16df66481adf291dc9a12b44c7f7df00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000041ac03c38ea7f6308cf37067659115b9c982cd29354db4e90044cce8a113fd66890588245cf7076f5364de6010e5e5aff42efec5c719b5de3f555d389766518a2b1b000000000000000000000000000000000000000000000000000000000000006492649264926492649264926492649264926492649264926492649264926492"'
     );
   });
 
@@ -95,7 +99,7 @@ describe("Light Account Tests", () => {
     expect(
       await undeployedProvider.signMessageWith6492("test")
     ).toMatchInlineSnapshot(
-      '"0x00000000000000000000000000000055c0b4fa41dde26a74435ff03692292fbd000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000000445fbfb9cf000000000000000000000000ef9d7530d16df66481adf291dc9a12b44c7f7df00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000041be34ecce63c5248d5cda407e7da319be3c861e6e2c5d30c9630cd35dcb55e56205c482503552883923f79e751ea3671cbb84d65b18af33cd3034aeb7d529da9a1b000000000000000000000000000000000000000000000000000000000000006492649264926492649264926492649264926492649264926492649264926492"'
+      '"0x00000000000000000000000000004ec70002a32400f8ae005a26081065620d20000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000000445fbfb9cf000000000000000000000000ef9d7530d16df66481adf291dc9a12b44c7f7df0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004181c6c4855d1cb16616c78e4b99bdde42eeda6bc8fbec920434e196445b64dede539eb9d934092f8e472766ded3f06d1a5f8ed2c209a5aaac7b13f9a8795757381b000000000000000000000000000000000000000000000000000000000000006492649264926492649264926492649264926492649264926492649264926492"'
     );
   });
 
@@ -195,6 +199,48 @@ describe("Light Account Tests", () => {
     expect(newOwnerViaProvider).not.toBe(oldOwner);
     expect(newOwnerViaProvider).toBe(newOwner);
   }, 100000);
+
+  it("should upgrade a deployed light account to msca successfully", async () => {
+    const provider = givenConnectedProvider({
+      owner,
+      chain,
+    });
+
+    // create a throwaway address
+    const throwawayOwner = LocalAccountSigner.privateKeyToAccountSigner(
+      generatePrivateKey()
+    );
+    const throwawayProvider = givenConnectedProvider({
+      owner: throwawayOwner,
+      chain,
+    });
+
+    const accountAddress = await throwawayProvider.getAddress();
+    const ownerAddress = await throwawayOwner.getAddress();
+
+    // fund + deploy the throwaway address
+    await provider.sendTransaction({
+      from: await provider.getAddress(),
+      to: accountAddress,
+      data: "0x",
+      value: toHex(200000000000000000n),
+    });
+
+    const { connectFn, ...upgradeToData } = await getMSCAUpgradeToData(
+      throwawayProvider
+    );
+
+    await throwawayProvider.upgradeAccount(upgradeToData, true);
+
+    const upgradedProvider = throwawayProvider.connect(connectFn);
+
+    const upgradedAccountAddress = await upgradedProvider.getAddress();
+
+    const owners = await upgradedProvider.account.readOwners();
+
+    expect(upgradedAccountAddress).toBe(accountAddress);
+    expect(owners).toContain(ownerAddress);
+  }, 200000);
 });
 
 const givenConnectedProvider = ({
@@ -202,11 +248,13 @@ const givenConnectedProvider = ({
   chain,
   accountAddress,
   feeOptions,
+  version = "v1.1.0",
 }: {
   owner: SmartAccountSigner;
   chain: Chain;
   accountAddress?: Address;
   feeOptions?: UserOperationFeeOptions;
+  version?: LightAccountVersion;
 }) => {
   const provider = createLightAccountProvider({
     rpcProvider: `${chain.rpcUrls.alchemy.http[0]}/${API_KEY!}`,
@@ -217,6 +265,7 @@ const givenConnectedProvider = ({
       feeOptions,
       txMaxRetries: 100,
     },
+    version,
   });
 
   return provider;

@@ -1,20 +1,19 @@
-import { WalletClientSigner, type SmartAccountSigner } from "@alchemy/aa-core";
-import { AuthProvider } from "@arcana/auth";
-import { createWalletClient, custom } from "viem";
+import { ArcanaAuthSigner } from "@alchemy/aa-signers/arcana-auth";
 
 // See https://docs.arcana.network/quick-start/vue-quick-start#step-3-integrate-app for details.
-const provider = new AuthProvider("xar_test_...");
+const clientId = "xar_test_...";
 
-await provider.init();
-await provider.connect();
+export const createArcanaAuthSigner = async () => {
+  const arcanaAuthSigner = new ArcanaAuthSigner({ clientId, params: {} });
 
-// The Viem wallet client 'arcanaAuthClient' wraps the Auth SDK EIP-1193 provider
-export const arcanaAuthClient = createWalletClient({
-  transport: custom(provider.provider),
-});
+  await arcanaAuthSigner.authenticate({
+    async init() {
+      await arcanaAuthSigner.inner.init();
+    },
+    async connect() {
+      await arcanaAuthSigner.inner.connect();
+    },
+  });
 
-// A smart account signer you can use as an owner on ISmartContractAccount
-export const arcanaAuthSigner: SmartAccountSigner = new WalletClientSigner(
-  arcanaAuthClient,
-  "arcana-auth" // signerType
-);
+  return arcanaAuthSigner;
+};

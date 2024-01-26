@@ -20,7 +20,7 @@ prev:
   text: Smart Accounts
   link: /smart-accounts/accounts/choosing-a-smart-account
 next:
-  text: Guides
+  text: How to Send a User Operation
   link: /tutorials/send-user-operation
 ---
 

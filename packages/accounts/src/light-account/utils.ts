@@ -16,6 +16,40 @@ import {
   sepolia,
 } from "viem/chains";
 
+export type LightAccountVersion =
+  /** @deprecated This version does not support 1271 signature validation */
+  | "v1.0.1"
+  /** @deprecated This version has a known issue with 1271 validation, it's recommended to use v1.1.0 */
+  | "v1.0.2"
+  | "v1.1.0";
+
+export const LightAccountVersions: Record<
+  LightAccountVersion,
+  {
+    factoryAddress: Address;
+    implAddress: Address;
+  }
+> = {
+  "v1.0.1": {
+    factoryAddress:
+      "0x000000893A26168158fbeaDD9335Be5bC96592E2".toLowerCase() as Address,
+    implAddress:
+      "0xc1b2fc4197c9187853243e6e4eb5a4af8879a1c0".toLowerCase() as Address,
+  },
+  "v1.0.2": {
+    factoryAddress:
+      "0x00000055C0b4fA41dde26A74435ff03692292FBD".toLowerCase() as Address,
+    implAddress:
+      "0x5467b1947F47d0646704EB801E075e72aeAe8113".toLowerCase() as Address,
+  },
+  "v1.1.0": {
+    factoryAddress:
+      "0x00004EC70002a32400f8ae005A26081065620D20".toLowerCase() as Address,
+    implAddress:
+      "0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba".toLowerCase() as Address,
+  },
+};
+
 /**
  * Utility method returning the default light account factory address given a {@link Chain} object
  *
@@ -23,7 +57,10 @@ import {
  * @returns a {@link Address} for the given chain
  * @throws if the chain doesn't have an address currently deployed
  */
-export const getDefaultLightAccountFactoryAddress = (chain: Chain): Address => {
+export const getDefaultLightAccountFactoryAddress = (
+  chain: Chain,
+  version: LightAccountVersion = "v1.1.0"
+): Address => {
   switch (chain.id) {
     case mainnet.id:
     case sepolia.id:
@@ -39,9 +76,19 @@ export const getDefaultLightAccountFactoryAddress = (chain: Chain): Address => {
     case base.id:
     case baseGoerli.id:
     case baseSepolia.id:
-      return "0x00000055C0b4fA41dde26A74435ff03692292FBD";
+      return LightAccountVersions[version].factoryAddress;
   }
+
   throw new Error(
     `no default light account factory contract exists for ${chain.name}`
   );
 };
+
+export const LightAccountUnsupported1271Impls = [
+  LightAccountVersions["v1.0.1"],
+  LightAccountVersions["v1.0.2"],
+];
+
+export const LightAccountUnsupported1271Factories = new Set(
+  LightAccountUnsupported1271Impls.map((x) => x.factoryAddress)
+);

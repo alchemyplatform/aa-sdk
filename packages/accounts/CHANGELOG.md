@@ -3,6 +3,87 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.1](https://github.com/alchemyplatform/aa-sdk/compare/v2.3.0...v2.3.1) (2024-01-25)
+
+### Bug Fixes
+
+- fix the wrapped signer to work with undeployed accounts ([#381](https://github.com/alchemyplatform/aa-sdk/issues/381)) ([55a3a54](https://github.com/alchemyplatform/aa-sdk/commit/55a3a54b928b7f1f4996f331c6f1c9454a9ac3c8))
+- include generated code for new plugin addresses ([e26143e](https://github.com/alchemyplatform/aa-sdk/commit/e26143e217a84bd36c1a7828665fd81d91b73c9f))
+
+# [2.3.0](https://github.com/alchemyplatform/aa-sdk/compare/v2.2.1...v2.3.0) (2024-01-24)
+
+### Bug Fixes
+
+- use the latest multi-owner abis ([#375](https://github.com/alchemyplatform/aa-sdk/issues/375)) ([020f024](https://github.com/alchemyplatform/aa-sdk/commit/020f024bb5f393ea17b8ec3b11abce9fb825f758))
+
+### Features
+
+- make the factory address optional when building MA ([#377](https://github.com/alchemyplatform/aa-sdk/issues/377)) ([05a10b2](https://github.com/alchemyplatform/aa-sdk/commit/05a10b246b28030463ece2a12fc6ed38bdbdd567))
+
+## [2.2.1](https://github.com/alchemyplatform/aa-sdk/compare/v2.2.0...v2.2.1) (2024-01-23)
+
+### Bug Fixes
+
+- fix a couple of the package.jsons ([#374](https://github.com/alchemyplatform/aa-sdk/issues/374)) ([7abbd93](https://github.com/alchemyplatform/aa-sdk/commit/7abbd9366b9ba12377349e475025aa5edfd73255))
+
+# [2.2.0](https://github.com/alchemyplatform/aa-sdk/compare/v2.1.0...v2.2.0) (2024-01-22)
+
+### Features
+
+- add a factory method for session key accounts ([#369](https://github.com/alchemyplatform/aa-sdk/issues/369)) ([58658ee](https://github.com/alchemyplatform/aa-sdk/commit/58658ee043e767927aa7f031aa2483d4048b964c))
+- add a session key signer to use with executor ([#368](https://github.com/alchemyplatform/aa-sdk/issues/368)) ([e35ed3b](https://github.com/alchemyplatform/aa-sdk/commit/e35ed3b6e0965bf46ab2c6d44e9709f5253715c0))
+- add session key executor ([#367](https://github.com/alchemyplatform/aa-sdk/issues/367)) ([0da4c76](https://github.com/alchemyplatform/aa-sdk/commit/0da4c76a0ef4ebcb7cab4893b6446be3df79c35e))
+- add session key permissions builder for session key plugin ([#366](https://github.com/alchemyplatform/aa-sdk/issues/366)) ([2d7f118](https://github.com/alchemyplatform/aa-sdk/commit/2d7f1182f9f1a36666a2cb06d4a271bab31b1656))
+- add usePluginHook to demo app ([#357](https://github.com/alchemyplatform/aa-sdk/issues/357)) ([036b13b](https://github.com/alchemyplatform/aa-sdk/commit/036b13b250b1b3465dee000a6d5036ca060c2bb4))
+- extended session key plugin implementation ([#372](https://github.com/alchemyplatform/aa-sdk/issues/372)) ([aca0b03](https://github.com/alchemyplatform/aa-sdk/commit/aca0b0363aae802aa3965568b4f8b8d292ce0cf1))
+- plugingen to generate plugin contract abi and get contract helper method ([#358](https://github.com/alchemyplatform/aa-sdk/issues/358)) ([87eea72](https://github.com/alchemyplatform/aa-sdk/commit/87eea723901ba0abedbbd1a832a2934a612a9b79))
+
+# [2.1.0](https://github.com/alchemyplatform/aa-sdk/compare/v2.0.1...v2.1.0) (2024-01-12)
+
+### Bug Fixes
+
+- **light-account:** encode upgrade had a bug in it when upgrading an existing account ([#364](https://github.com/alchemyplatform/aa-sdk/issues/364)) ([55d6c08](https://github.com/alchemyplatform/aa-sdk/commit/55d6c08fbd794f4d0d091c7bf2c1045952a83989))
+
+### Features
+
+- add the ability to generate install functions for plugins ([#361](https://github.com/alchemyplatform/aa-sdk/issues/361)) ([2bf6615](https://github.com/alchemyplatform/aa-sdk/commit/2bf66152f81a979c5a7405593bf3fbf41bc3e52d))
+
+## [2.0.1](https://github.com/alchemyplatform/aa-sdk/compare/v2.0.0...v2.0.1) (2024-01-12)
+
+**Note:** Version bump only for package @alchemy/aa-accounts
+
+# [2.0.0](https://github.com/alchemyplatform/aa-sdk/compare/v1.2.4...v2.0.0) (2024-01-12)
+
+### Bug Fixes
+
+- **msca:** support multiple owners during intialization ([#355](https://github.com/alchemyplatform/aa-sdk/issues/355)) ([f8bd650](https://github.com/alchemyplatform/aa-sdk/commit/f8bd65073c7bdec5c3b32ce9f1938b3bfd587ded))
+
+- feat!: update the LightAccount logic for 1271 signatures to match the on-chain impl ([bbe5060](https://github.com/alchemyplatform/aa-sdk/commit/bbe5060c01828e07d7f788485b14c04dacc6cb6f))
+
+### Features
+
+- add upgrade functionality for light account to msca ([#298](https://github.com/alchemyplatform/aa-sdk/issues/298)) ([18f51d9](https://github.com/alchemyplatform/aa-sdk/commit/18f51d9f626b48390a54d88b7ac28c1f162e04f8))
+
+### BREAKING CHANGES
+
+- default LightAccountFactory address has changed
+
+## 1.2.4 (2024-01-08)
+
+**Note:** Version bump only for package @alchemy/aa-accounts
+
+## 1.2.3 (2023-12-22)
+
+### Features
+
+- add stringToIndex util function for SmartAccount salt ([#329](https://github.com/alchemyplatform/aa-sdk/issues/329)) ([b34ef9a](https://github.com/alchemyplatform/aa-sdk/commit/b34ef9aa6727986e89a1461dec45955cac9d4365))
+- add prefix for aa-signers signer type ([#325](https://github.com/alchemyplatform/aa-sdk/issues/325)) ([f3b8cc1](https://github.com/alchemyplatform/aa-sdk/commit/f3b8cc1f0553bad51e4f95c3fd80f6aa0199cff2))
+- add terms page to glossary ([#336](https://github.com/alchemyplatform/aa-sdk/issues/336)) ([63b24ec](https://github.com/alchemyplatform/aa-sdk/commit/63b24ecdb3e5e656c173a1523a3e09478d4c074d))
+- add faq page to docs ([#335](https://github.com/alchemyplatform/aa-sdk/issues/335)) ([63092ce](https://github.com/alchemyplatform/aa-sdk/commit/63092ceb45341d422bd3f8c13ebcc539d9cc5001))
+- add aa-signer implementation for lit protocol ([#312](https://github.com/alchemyplatform/aa-sdk/issues/312)) ([b0f8dd5](https://github.com/alchemyplatform/aa-sdk/commit/b0f8dd538728f8a7dd4447da8c88a50179d61f95))
+- add aa-signer implementation for arcana auth ([#319](https://github.com/alchemyplatform/aa-sdk/issues/319)) ([c82dbf7](https://github.com/alchemyplatform/aa-sdk/commit/c82dbf7ad76791e81525740dfe8820bd234c2863))
+- add types to glossary ([#338](https://github.com/alchemyplatform/aa-sdk/issues/338)) ([28ad2b0](https://github.com/alchemyplatform/aa-sdk/commit/28ad2b015e5d0191f77cbdeeb3c071b7ec813fde))
+
 ## 1.2.2 (2023-12-13)
 
 ### Bug Fixes
