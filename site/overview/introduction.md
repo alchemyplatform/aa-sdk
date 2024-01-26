@@ -24,7 +24,7 @@ head:
 
 ## What is the Account Kit stack?
 
-Account Kit is a complete solution for [account abstraction](https://www.alchemy.com/overviews/what-is-account-abstraction). It includes five components:
+Account Kit is a complete solution for [account abstraction](https://www.alchemy.com/overviews/what-is-account-abstraction/?a=ak-docs). It includes five components:
 
 - **aa-sdk**: A simple, powerful interface to integrate, deploy, and use smart accounts. The `aa-sdk` orchestrates everything under the hood to make development easy.
 - **Light Account:** Secure, audited smart accounts. Easy to deploy, just when your users need them.
@@ -78,7 +78,7 @@ To learn how to sponsor gas with the Gas Manager API, see the [Sponsoring Gas](/
 
 The Bundler is a mission-critical piece of secondary infrastructure defined in the ERC-4337 spec that is responsible for submitting UserOps from a smart account onchain. If your Bundler API is unreliable, then User Operations are going to fail or get stuck.
 
-We built our [Bundler in Rust](https://www.alchemy.com/blog/open-sourcing-rundler) to handle the highest loads at production scale. It’s able to handle massive scale because we operate it alongside our fleet of nodes powering the biggest dapps in web3 from Opensea to Circle.
+We built our [Bundler in Rust](https://www.alchemy.com/blog/open-sourcing-rundler/?a=ak-docs) to handle the highest loads at production scale. It’s able to handle massive scale because we operate it alongside our fleet of nodes powering the biggest dapps in web3 from Opensea to Circle.
 
 Check out the open source code in our affectionately named [Rundler github repo](https://github.com/alchemyplatform/rundler).
 

@@ -40,7 +40,7 @@ However, smart acounts are also programmable, enabling you to build new and inno
 
 In order to maximize interoperability and code re-use, these plugins will ideally share a standard interface that is compatible with every smart account.
 
-Refer to the Account Abstraction [series](https://www.alchemy.com/blog/account-abstraction) on our blog to learn more.
+Refer to the Account Abstraction [series](https://www.alchemy.com/blog/account-abstraction/?a=ak-docs) on our blog to learn more.
 
 ## ERC-6900: Modular Smart Contract Accounts and Plugins
 

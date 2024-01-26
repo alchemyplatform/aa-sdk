@@ -18,7 +18,7 @@ next:
 
 Returns the EntryPoint contract address for the account.
 
-Refer to https://docs.alchemy.com/reference/eth-supportedentrypoints for all the supported entrypoints when using Alchemy as your RPC provider.
+Refer to [the reference docs](https://docs.alchemy.com/reference/eth-supportedentrypoints/?a=ak-docs) for all the supported entrypoints when using Alchemy as your RPC provider.
 
 ## Usage
 

@@ -89,7 +89,7 @@ Lastly, create a file called `index.ts` in the project to write the code you'll 
 
 ## 2. Get Your Alchemy API Key
 
-To read or write any data to a blockchain, you'll need an Alchemy API Key and RPC URL. Go to the [Alchemy Dashboard](https://dashboard.alchemy.com) and access your credentials from the button shown below.
+To read or write any data to a blockchain, you'll need an Alchemy API Key and RPC URL. Go to the [Alchemy Dashboard](https://dashboard.alchemy.com/signup/?a=aa-docs) and access your credentials from the button shown below.
 
 <img src="/images/alchemy-dashboard.png" width="auto" height="auto" alt="Account Kit Overview" style="display: block; margin: auto;">
 

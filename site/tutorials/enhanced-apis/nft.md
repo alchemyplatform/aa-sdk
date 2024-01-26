@@ -20,7 +20,7 @@ head:
 
 # How to Fetch a Smart Account's NFTs
 
-We provide several [Enhanced APIs](https://www.alchemy.com/enhanced-apis), which are especially useful for querying information about the smart accounts you create using Account Kit, such as the account's owned NFTs using the [NFT API](https://www.alchemy.com/nft-api).
+We provide several [Enhanced APIs](https://www.alchemy.com/enhanced-apis/?a=ak-docs), which are especially useful for querying information about the smart accounts you create using Account Kit, such as the account's owned NFTs using the [NFT API](https://www.alchemy.com/nft-api/?a=ak-docs).
 
 For the purposes of our example, we'll use the NFT API to query our smart account's data by extending the Alchemy Provider [with Enhanced APIs](/packages/aa-alchemy/provider/withAlchemyEnhancedApis.md).
 

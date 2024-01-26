@@ -48,7 +48,7 @@ Light Account has been audited by Quantstamp. You can find the audit report [her
 
 ### Modular 6900 Accounts (Coming Soon)
 
-We're pioneering the future of modular smart accounts with [EIP-6900](https://www.alchemy.com/blog/account-abstraction-erc-6900). We're developing a [Modular Account](./modular-account.md) to support EIP-6900 coming soon. Light Account is designed with that future in mind. It is forward-compatible with EIP-6900 so you can upgrade it to 6900-compatible account once the Modular Account is ready.
+We're pioneering the future of modular smart accounts with [EIP-6900](https://www.alchemy.com/blog/account-abstraction-erc-6900/?a=ak-docs). We're developing a [Modular Account](./modular-account.md) to support EIP-6900 coming soon. Light Account is designed with that future in mind. It is forward-compatible with EIP-6900 so you can upgrade it to 6900-compatible account once the Modular Account is ready.
 
 ## Using Light Account
 

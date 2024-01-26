@@ -20,7 +20,7 @@ head:
 
 # How to Handle User Operations that are Not Eligible for Gas Sponsorship
 
-As mentioned from the previous guide on [How to Sponsor Gas for a User Operation](./sponsoring-gas.md), with Account Kit can sponsor gas fees for transactions via the [Gas Manager](https://docs.alchemy.com/docs/gas-manager-services).
+As mentioned from the previous guide on [How to Sponsor Gas for a User Operation](./sponsoring-gas.md), with Account Kit can sponsor gas fees for transactions via the [Gas Manager](https://docs.alchemy.com/docs/gas-manager-services/?a=ak-docs).
 
 But what happens when the user operation you are sending fails to satisfy the criteria set in the gas manager policy? How do you check if the user operation is eligible for gas sponsorship before sending the user operation?
 
