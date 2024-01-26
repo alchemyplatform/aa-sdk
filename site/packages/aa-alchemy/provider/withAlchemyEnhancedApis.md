@@ -16,7 +16,7 @@ next:
 
 # withAlchemyEnhancedApis
 
-`withAlchemyEnhancedApis` is a method on `AlchemyProvider` that you can optionally call to create a new provider instance with added methods that access the Alchemy [Enhanced APIs](https://www.alchemy.com/enhanced-apis) via the [Alchemy SDK](https://github.com/alchemyplatform/alchemy-sdk-js).
+`withAlchemyEnhancedApis` is a method on `AlchemyProvider` that you can optionally call to create a new provider instance with added methods that access the Alchemy [Enhanced APIs](https://www.alchemy.com/enhanced-apis/?a=ak-docs) via the [Alchemy SDK](https://github.com/alchemyplatform/alchemy-sdk-js).
 
 :::tip Note
 This method requires an optional dependency on the [`alchemy-sdk`](https://github.com/alchemyplatform/alchemy-sdk-js) package, as the input to this method is an Alchemy SDK client.

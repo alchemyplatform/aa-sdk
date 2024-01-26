@@ -29,7 +29,7 @@ In this guide we'll explain the end-to-end journey of integrating smart accounts
 
 ## 1. Setting Up an Alchemy Account
 
-Before diving into smart accounts, it's important to [set up your Alchemy account](https://auth.alchemy.com/signup). This will allow you to access the Alchemy API key which is required to initialize a provider and interact with the blockchain. Additionally, you'll get access to our Gas Manager, which will enable you to sponsor gas for your users.
+Before diving into smart accounts, it's important to [set up your Alchemy account](https://dashboard.alchemy.com/signup/?a=aa-docs). This will allow you to access the Alchemy API key which is required to initialize a provider and interact with the blockchain. Additionally, you'll get access to our Gas Manager, which will enable you to sponsor gas for your users.
 
 ## 2. Deploying a Smart Account
 

@@ -20,7 +20,7 @@ If the provider is connected with a `SmartContractAccount`, the EntryPoint contr
 
 If not connected, it fallbacks to the default entry point contract for the chain, unless the optional parameter `entryPointAddress` was given during the initialization as an override.
 
-Refer to https://docs.alchemy.com/reference/eth-supportedentrypoints for all the supported entrypoints when using Alchemy as your RPC provider.
+Refer to [the reference docs](https://docs.alchemy.com/reference/eth-supportedentrypoints/?a=ak-docs) for all the supported entrypoints when using Alchemy as your RPC provider.
 
 ## Usage
 

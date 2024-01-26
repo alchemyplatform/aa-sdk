@@ -22,7 +22,7 @@ If there's anything we can do to improve your experience with Account Kit, pleas
 
 1. If you have any questions on how to get started, email us at [account-abstraction@alchemy.com](mailto:account-abstraction@alchemy.com) or [support@alchemy.com](mailto:support@alchemy.com).
 
-2. If you're interested in an enterprise plan with Alchemy to scale your application, connect with us at [https://www.alchemy.com](https://www.alchemy.com/contact-sales).
+2. If you're interested in an enterprise plan with Alchemy to scale your application, connect with us at [https://www.alchemy.com](https://www.alchemy.com/contact-sales/?a=ak-docs).
 
 ## Contributing
 

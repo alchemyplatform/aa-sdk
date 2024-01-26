@@ -20,7 +20,7 @@ head:
 
 # How to Sponsor Gas for a UserOperation
 
-Gas fees are a significant barrier to entry for new user of your app. With Account Kit you can remove this barrier by sponsoring gas fees for transactions via the [Gas Manager](https://docs.alchemy.com/docs/gas-manager-services). This guide explains how to sponsor gas by creating a gas policy, linking it to your provider, and sending sponsored `UserOperations` (UOs) from a smart account.
+Gas fees are a significant barrier to entry for new user of your app. With Account Kit you can remove this barrier by sponsoring gas fees for transactions via the [Gas Manager](https://docs.alchemy.com/docs/gas-manager-services/?a=ak-docs). This guide explains how to sponsor gas by creating a gas policy, linking it to your provider, and sending sponsored `UserOperations` (UOs) from a smart account.
 
 ## How to Sponsor Gas
 
@@ -32,7 +32,7 @@ First, create an `AlchemyProvider`. You'll use this to send UOs and interact wit
 
 <<< @/snippets/provider.ts
 
-Remember to replace `ALCHEMY_API_KEY` with your Alchemy API key. If you don't have one yet, you can create an API key on the [Alchemy dashboard](https://dashboard.alchemy.com/).
+Remember to replace `ALCHEMY_API_KEY` with your Alchemy API key. If you don't have one yet, you can create an API key on the [Alchemy dashboard](https://dashboard.alchemy.com/signup/?a=aa-docs).
 
 ### 2. Create a Gas Manager Policy
 
@@ -43,9 +43,9 @@ A gas manager policy is a set of rules that define which UOs are eligible for ga
 - **Blocklist**: ban certain addresses from receiving sponsorship under this policy
 - **Policy duration**: define the duration of your policy and the sponsorship expiry period. This is the period for which the Gas Manager signature (paymaster data) will remain valid once it is generated.
 
-To learn more about policy configuration, refer to the guide on [setting up a gas manager policy](https://docs.alchemy.com/docs/setup-a-gas-manager-policy).
+To learn more about policy configuration, refer to the guide on [setting up a gas manager policy](https://docs.alchemy.com/docs/setup-a-gas-manager-policy/?a=ak-docs).
 
-Once you've decided on policy rules for your app, [create a policy](https://dashboard.alchemy.com/gas-manager/policy/create) in the Gas Manager dashboard.
+Once you've decided on policy rules for your app, [create a policy](https://dashboard.alchemy.com/gas-manager/policy/create/?a=ak-docs) in the Gas Manager dashboard.
 
 ### 3. Link the Policy to your Provider
 

@@ -180,7 +180,7 @@ const { hash } = await provider.sendUserOperation(uo);
       class="flex justify-end items-center gap-[32px] text-white max-md:justify-center"
     >
       <text>2023 Alchemy Insights, Inc.</text>
-      <a target="_blank" href="https://www.alchemy.com">
+      <a target="_blank" href="https://www.alchemy.com/?a=ak-docs">
         <button
           class="h-[38px] flex justify-center items-center gap-[8px] text-black px-[10px] py-[14px] rounded-md bg-white font-bold max-md:hidden hover:scale-105 transition duration-300 ease-in-out"
         >
