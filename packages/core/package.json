@@ -25,11 +25,6 @@
       "import": "./dist/esm/index.js",
       "default": "./dist/cjs/index.js"
     },
-    "./viem": {
-      "types": "./dist/types/viem/index.d.ts",
-      "import": "./dist/esm/viem/index.js",
-      "default": "./dist/cjs/viem/index.js"
-    },
     "./package.json": "./package.json"
   },
   "typesVersions": {

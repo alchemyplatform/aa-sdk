@@ -2,8 +2,7 @@ import type { Address } from "abitype";
 import type { Hash, Hex, HttpTransport, Transport } from "viem";
 import type { SignTypedDataParameters } from "viem/accounts";
 import type { z } from "zod";
-import type { PublicErc4337Client, SupportedTransports } from "../client/types";
-import type { ISmartAccountProvider } from "../provider/types";
+import type { PublicErc4337Client } from "../client/publicErc4337Client";
 import type { SmartAccountSigner } from "../signer/types";
 import type { BatchUserOperationCallData } from "../types";
 import type {
@@ -14,21 +13,24 @@ import type {
 export type SignTypedDataParams = Omit<SignTypedDataParameters, "privateKey">;
 
 export type BaseSmartAccountParams<
-  TTransport extends SupportedTransports = Transport,
+  TTransport extends Transport = Transport,
   TOwner extends SmartAccountSigner | undefined = SmartAccountSigner | undefined
 > = z.input<
   ReturnType<typeof createBaseSmartAccountParamsSchema<TTransport, TOwner>>
 >;
 
 export type SimpleSmartAccountParams<
-  TTransport extends SupportedTransports = Transport,
+  TTransport extends Transport = Transport,
   TOwner extends SmartAccountSigner = SmartAccountSigner
 > = z.input<
   ReturnType<typeof SimpleSmartAccountParamsSchema<TTransport, TOwner>>
 >;
 
+/**
+ * @deprecated use `toSmartContractAccount` instead for creating instances of smart accounts
+ */
 export interface ISmartContractAccount<
-  TTransport extends SupportedTransports = Transport,
+  TTransport extends Transport = Transport,
   TOwner extends SmartAccountSigner | undefined = SmartAccountSigner | undefined
 > {
   /**
@@ -38,15 +40,6 @@ export interface ISmartContractAccount<
     | PublicErc4337Client<TTransport>
     | PublicErc4337Client<HttpTransport>;
 
-  /**
-   * Optional property that will be used to augment the provider on connect with methods (leveraging the provider's extend method)
-   *
-   * @param provider - the provider being connected
-   * @returns an object with methods that will be added to the provider
-   */
-  providerDecorators?: <P extends ISmartAccountProvider<TTransport>>(
-    provider: P
-  ) => unknown;
   /**
    * @returns the init code for the account
    */
