@@ -24,6 +24,7 @@ export { WalletClientSigner } from "./signer/wallet-client.js";
 
 export type * from "./client/decorators/publicErc4337Client.js";
 export { erc4337ClientActions } from "./client/decorators/publicErc4337Client.js";
+export type * from "./client/publicErc4337Client.js";
 export {
   createPublicErc4337Client,
   createPublicErc4337FromClient,
