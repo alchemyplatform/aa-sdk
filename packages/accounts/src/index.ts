@@ -32,6 +32,7 @@ export {
   getDefaultLightAccountFactoryAddress,
   type LightAccountVersion,
 } from "./light-account/utils.js";
+export { createLightAccount } from "./light-account/viem/account.js";
 
 //nani-account exports
 export { NaniAccount } from "./nani-account/account.js";

@@ -1,17 +1,27 @@
-import { createPublicErc4337Client, type Prettify } from "@alchemy/aa-core";
 import {
   createSmartAccountClientFromExisting,
+  type Prettify,
   type SmartAccountClient,
+  type SmartAccountClientActions,
+  type SmartAccountClientRpcSchema,
   type SmartContractAccount,
-} from "@alchemy/aa-core/viem";
+} from "@alchemy/aa-core";
 import { type Chain, type Transport } from "viem";
 import { getDefaultUserOperationFeeOptions } from "../defaults.js";
-import type { AlchemyGasManagerConfig } from "../middleware/gas-manager.js";
+import { alchemyFeeEstimator } from "../middleware/feeEstimator.js";
+import {
+  alchemyGasManagerMiddleware,
+  type AlchemyGasManagerConfig,
+} from "../middleware/gasManager.js";
+import { alchemyUserOperationSimulator } from "../middleware/userOperationSimulator.js";
 import { AlchemyProviderConfigSchema } from "../schema.js";
-import type { AlchemyProviderConfig } from "../type";
-import { alchemyFeeEstimator } from "./middleware/feeEstimator.js";
-import { alchemyGasManagerMiddleware } from "./middleware/gasManager.js";
-import { alchemyUserOperationSimulator } from "./middleware/userOperationSimulator.js";
+import type { AlchemyProviderConfig } from "../type.js";
+import {
+  alchemyActions,
+  type AlchemySmartAccountClientActions,
+} from "./decorators/smartAccount.js";
+import { createAlchemyPublicRpcClient } from "./rpc.js";
+import type { AlchemyRpcSchema } from "./types.js";
 
 export type AlchemySmartAccountClientConfig<
   account extends SmartContractAccount | undefined =
@@ -24,13 +34,41 @@ export type AlchemySmartAccountClientConfig<
   gasManagerConfig?: AlchemyGasManagerConfig;
 } & AlchemyProviderConfig;
 
+export type AlchemySmartAccountClient_Base<
+  transport extends Transport = Transport,
+  chain extends Chain | undefined = Chain | undefined,
+  account extends SmartContractAccount | undefined =
+    | SmartContractAccount
+    | undefined,
+  actions extends SmartAccountClientActions<
+    chain,
+    account
+  > = SmartAccountClientActions<chain, account>
+> = Prettify<
+  SmartAccountClient<
+    transport,
+    chain,
+    account,
+    actions,
+    [...SmartAccountClientRpcSchema, ...AlchemyRpcSchema]
+  >
+>;
+
 export type AlchemySmartAccountClient<
   transport extends Transport = Transport,
-  chain extends Chain = Chain,
+  chain extends Chain | undefined = Chain | undefined,
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined
-> = Prettify<SmartAccountClient<transport, chain, account>>;
+> = Prettify<
+  AlchemySmartAccountClient_Base<
+    transport,
+    chain,
+    account,
+    AlchemySmartAccountClientActions<account> &
+      SmartAccountClientActions<chain, account>
+  >
+>;
 
 export function createAlchemySmartAccountClient<
   TTransport extends Transport = Transport,
@@ -67,21 +105,9 @@ export function createAlchemySmartAccountClient<
   const config = AlchemyProviderConfigSchema.parse(config_);
   const { chain, opts, ...connectionConfig } = config;
 
-  const rpcUrl =
-    connectionConfig.rpcUrl == null
-      ? `${chain.rpcUrls.alchemy.http[0]}/${connectionConfig.apiKey ?? ""}`
-      : connectionConfig.rpcUrl;
-
-  const client = createPublicErc4337Client({
-    chain: chain,
-    rpcUrl,
-    ...(connectionConfig.jwt != null && {
-      fetchOptions: {
-        headers: {
-          Authorization: `Bearer ${connectionConfig.jwt}`,
-        },
-      },
-    }),
+  const client = createAlchemyPublicRpcClient({
+    chain,
+    connectionConfig,
   });
 
   const feeOptions =
@@ -101,5 +127,5 @@ export function createAlchemySmartAccountClient<
     ...(gasManagerConfig
       ? alchemyGasManagerMiddleware(client, gasManagerConfig)
       : {}),
-  });
+  }).extend(alchemyActions);
 }
