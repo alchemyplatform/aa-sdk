@@ -1,6 +1,6 @@
 import { createPublicErc4337Client, type Prettify } from "@alchemy/aa-core";
 import {
-  createSmartAccountClient,
+  createSmartAccountClientFromExisting,
   type SmartAccountClient,
   type SmartContractAccount,
 } from "@alchemy/aa-core/viem";
@@ -72,7 +72,7 @@ export function createAlchemySmartAccountClient<
       ? `${chain.rpcUrls.alchemy.http[0]}/${connectionConfig.apiKey ?? ""}`
       : connectionConfig.rpcUrl;
 
-  const transport = createPublicErc4337Client({
+  const client = createPublicErc4337Client({
     chain: chain,
     rpcUrl,
     ...(connectionConfig.jwt != null && {
@@ -87,19 +87,19 @@ export function createAlchemySmartAccountClient<
   const feeOptions =
     config.opts?.feeOptions ?? getDefaultUserOperationFeeOptions(chain);
 
-  return createSmartAccountClient({
+  return createSmartAccountClientFromExisting({
     account,
-    client: transport,
+    client,
     opts: {
       ...opts,
       feeOptions,
     },
-    feeEstimator: alchemyFeeEstimator(transport),
+    feeEstimator: alchemyFeeEstimator(client),
     userOperationSimulator: useSimulation
-      ? alchemyUserOperationSimulator(transport)
+      ? alchemyUserOperationSimulator(client)
       : undefined,
     ...(gasManagerConfig
-      ? alchemyGasManagerMiddleware(transport, gasManagerConfig)
+      ? alchemyGasManagerMiddleware(client, gasManagerConfig)
       : {}),
   });
 }

@@ -34,19 +34,18 @@ export type SmartAccountClientConfig<
   chain extends Chain | undefined = Chain | undefined,
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
-  client extends PublicErc4337Client<transport> | undefined = undefined
+    | undefined
+  // client extends PublicErc4337Client<transport> | undefined =
+  //   | PublicErc4337Client<transport>
+  //   | undefined
 > = Prettify<
   Pick<
     ClientConfig<transport, chain, account>,
-    "cacheTime" | "chain" | "key" | "name" | "pollingInterval"
+    "cacheTime" | "chain" | "key" | "name" | "pollingInterval" | "transport"
   > & {
     account?: account;
     opts?: z.input<typeof SmartAccountProviderOptsSchema>;
-  } & Partial<ClientMiddleware> &
-    ([client] extends [undefined]
-      ? { transport: transport; client?: never }
-      : { transport?: never; client: client })
+  } & Partial<ClientMiddleware>
 >;
 
 export type SmartAccountClientRpcSchema = [
@@ -104,17 +103,6 @@ export function createSmartAccountClient<
   config: SmartAccountClientConfig<TTransport, TChain, TAccount>
 ): SmartAccountClient<TTransport, TChain, TAccount>;
 
-export function createSmartAccountClient<
-  TTransport extends Transport = Transport,
-  TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
-    | undefined,
-  TClient extends PublicErc4337Client<TTransport> = PublicErc4337Client<TTransport>
->(
-  config: SmartAccountClientConfig<TTransport, TChain, TAccount, TClient>
-): SmartAccountClient<CustomTransport, TChain, TAccount>;
-
 export function createSmartAccountClient(
   config: SmartAccountClientConfig
 ): SmartAccountClient {
@@ -132,7 +120,7 @@ export function createSmartAccountClient(
     type: "SmartAccountProvider",
     // TODO: our OG provider also has handlers for some various RPC methods
     // we should support those here as well
-    transport: config.client ? custom(config.client) : transport,
+    transport,
   });
 
   return client
@@ -143,4 +131,28 @@ export function createSmartAccountClient(
     .extend(erc4337ClientActions)
     .extend(middlewareActions(config))
     .extend((client) => smartAccountClientDecorator(client));
+}
+
+export function createSmartAccountClientFromExisting<
+  TChain extends Chain | undefined = Chain | undefined,
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
+    | undefined,
+  TClient extends PublicErc4337Client = PublicErc4337Client
+>(
+  config: Omit<
+    SmartAccountClientConfig<Transport, TChain, TAccount>,
+    "transport"
+  > & { client: TClient }
+): SmartAccountClient<CustomTransport, TChain, TAccount>;
+
+export function createSmartAccountClientFromExisting(
+  config: Omit<SmartAccountClientConfig, "transport"> & {
+    client: PublicErc4337Client;
+  }
+): SmartAccountClient {
+  return createSmartAccountClient({
+    ...config,
+    transport: custom(config.client),
+  });
 }

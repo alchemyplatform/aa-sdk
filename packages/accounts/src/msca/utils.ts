@@ -30,8 +30,7 @@ import {
 import { IPluginAbi } from "./abis/IPlugin.js";
 import { MultiOwnerTokenReceiverMSCAFactoryAbi } from "./abis/MultiOwnerTokenReceiverMSCAFactory.js";
 import { UpgradeableModularAccountAbi } from "./abis/UpgradeableModularAccount.js";
-import { createMultiOwnerMSCA } from "./multi-owner-account.js";
-import { MultiOwnerPlugin } from "./plugins/multi-owner/index.js";
+import { MultiOwnerPlugin } from "./plugins/multi-owner/plugin.js";
 import { TokenReceiverPlugin } from "./plugins/token-receiver/plugin.js";
 
 /**
@@ -76,17 +75,10 @@ export const getMSCAUpgradeToData = async <
   provider: P,
   multiOwnerPluginAddress?: Address,
   tokenReceiverPluginAddress?: Address
-): Promise<
-  UpgradeToData & {
-    connectFn: (
-      rpcClient: P["rpcClient"]
-    ) => ReturnType<typeof createMultiOwnerMSCA>;
-  }
-> => {
+): Promise<UpgradeToData> => {
   const factoryAddress = getDefaultMultiOwnerMSCAFactoryAddress(
     provider.rpcClient.chain
   );
-  const accountAddress = await provider.getAddress();
 
   const implAddress = await provider.rpcClient.readContract({
     abi: MultiOwnerTokenReceiverMSCAFactoryAbi,
@@ -165,14 +157,5 @@ export const getMSCAUpgradeToData = async <
   return {
     implAddress,
     initializationData: encodedMSCAInitializeData,
-    connectFn: (rpcClient: P["rpcClient"]) =>
-      createMultiOwnerMSCA({
-        rpcClient,
-        owner,
-        entryPointAddress: provider.account.getEntryPointAddress(),
-        factoryAddress,
-        chain: rpcClient.chain,
-        accountAddress,
-      }),
   };
 };
