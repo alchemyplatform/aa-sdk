@@ -2,13 +2,12 @@ import { Address } from "abitype/zod";
 import { isHex, type Transport } from "viem";
 import z from "zod";
 import { createPublicErc4337ClientSchema } from "../client/schema.js";
-import type { SupportedTransports } from "../client/types";
 import { isSigner } from "../signer/schema.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import { ChainSchema } from "../utils/index.js";
 
 export const createBaseSmartAccountParamsSchema = <
-  TTransport extends SupportedTransports = Transport,
+  TTransport extends Transport = Transport,
   TOwner extends SmartAccountSigner | undefined = SmartAccountSigner | undefined
 >() =>
   z.object({
@@ -33,7 +32,7 @@ export const createBaseSmartAccountParamsSchema = <
   });
 
 export const SimpleSmartAccountParamsSchema = <
-  TTransport extends SupportedTransports = Transport,
+  TTransport extends Transport = Transport,
   TOwner extends SmartAccountSigner = SmartAccountSigner
 >() =>
   createBaseSmartAccountParamsSchema<TTransport, TOwner>().extend({

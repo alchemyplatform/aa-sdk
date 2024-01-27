@@ -34,3 +34,6 @@ export type RequiredBy<TType, TKeys extends keyof TType> = Required<
 export type Prettify<T> = {
   [K in keyof T]: T[K];
 } & {};
+
+export type WithRequired<T, K extends keyof T> = Required<Pick<T, K>>;
+export type WithOptional<T, K extends keyof T> = Pick<Partial<T>, K>;
