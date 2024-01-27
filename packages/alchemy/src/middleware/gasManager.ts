@@ -1,3 +1,4 @@
+import type { ClientMiddleware, ClientMiddlewareFn } from "@alchemy/aa-core";
 import {
   deepHexlify,
   filterUndefined,
@@ -6,20 +7,31 @@ import {
   resolveProperties,
   type Hex,
   type Percentage,
-  type PublicErc4337Client,
   type UserOperationFeeOptions,
   type UserOperationRequest,
 } from "@alchemy/aa-core";
-import type {
-  ClientMiddleware,
-  ClientMiddlewareFn,
-} from "@alchemy/aa-core/viem";
 import { fromHex } from "viem";
-import type { ClientWithAlchemyMethods } from "../../middleware/client";
-import type { AlchemyGasManagerConfig } from "../../middleware/gas-manager";
-import type { RequestGasAndPaymasterAndDataOverrides } from "../../middleware/types";
+import type { ClientWithAlchemyMethods } from "../client/types";
 
-export const alchemyGasManagerMiddleware = <C extends PublicErc4337Client>(
+export type RequestGasAndPaymasterAndDataOverrides = Partial<{
+  maxFeePerGas: UserOperationRequest["maxFeePerGas"] | Percentage;
+  maxPriorityFeePerGas: UserOperationRequest["maxFeePerGas"] | Percentage;
+  callGasLimit: UserOperationRequest["maxFeePerGas"] | Percentage;
+  preVerificationGas: UserOperationRequest["maxFeePerGas"] | Percentage;
+  verificationGasLimit: UserOperationRequest["maxFeePerGas"] | Percentage;
+}>;
+
+export interface AlchemyGasManagerConfig {
+  policyId: string;
+}
+
+export interface AlchemyGasEstimationOptions {
+  estimateGas: boolean;
+  fallbackGasEstimator?: ClientMiddlewareFn;
+  fallbackFeeDataGetter?: ClientMiddlewareFn;
+}
+
+export const alchemyGasManagerMiddleware = <C extends ClientWithAlchemyMethods>(
   client: C,
   config: AlchemyGasManagerConfig
 ): Pick<
@@ -61,7 +73,7 @@ export const alchemyGasManagerMiddleware = <C extends PublicErc4337Client>(
   paymasterAndData: requestGasAndPaymasterData(client, config),
 });
 
-const requestGasAndPaymasterData: <C extends PublicErc4337Client>(
+const requestGasAndPaymasterData: <C extends ClientWithAlchemyMethods>(
   client: C,
   config: AlchemyGasManagerConfig
 ) => ClientMiddlewareFn =
@@ -111,7 +123,7 @@ const requestGasAndPaymasterData: <C extends PublicErc4337Client>(
       preVerificationGas: overrideField("preVerificationGas"),
     });
 
-    const result = await (client as ClientWithAlchemyMethods).request({
+    const result = await client.request({
       method: "alchemy_requestGasAndPaymasterAndData",
       params: [
         {
