@@ -1,5 +1,6 @@
 import {
   getContract,
+  trim,
   type Address,
   type CustomSource,
   type Hex,
@@ -14,6 +15,7 @@ import { toAccount } from "viem/accounts";
 import { EntryPointAbi } from "../abis/EntryPointAbi.js";
 import { DeploymentState } from "../account/base.js";
 import type { PublicErc4337Client } from "../client/types.js";
+import type { SmartAccountSigner } from "../signer/types.js";
 import { wrapSignatureWith6492 } from "../signer/utils.js";
 import type { IsUndefined } from "../utils/types.js";
 
@@ -36,6 +38,11 @@ export type UpgradeToAndCallParams = {
   upgradeToInitData: Hex;
 };
 
+export type OwnedSmartContractAccount<
+  Name extends string = string,
+  TOwner extends SmartAccountSigner = SmartAccountSigner
+> = SmartContractAccount<Name> & { owner: TOwner };
+
 export type SmartContractAccount<Name extends string = string> =
   LocalAccount<Name> & {
     source: Name;
@@ -56,6 +63,7 @@ export type SmartContractAccount<Name extends string = string> =
     isAccountDeployed: () => Promise<boolean>;
     getFactoryAddress: () => Address;
     getEntrypoint: () => Address;
+    getImplementationAddress: () => Promise<"0x0" | Address>;
   };
 
 export type ToSmartContractAccountParams<
@@ -254,6 +262,20 @@ export const toSmartContractAccount = async <
     return create6492Signature(isDeployed, signature);
   };
 
+  const getImplementationAddress = async (): Promise<"0x0" | Address> => {
+    const storage = await client.getStorageAt({
+      address: account.address,
+      // This is the default slot for the implementation address for Proxies
+      slot: "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
+    });
+
+    if (storage == null) {
+      throw new Error("could not get storage");
+    }
+
+    return trim(storage);
+  };
+
   return {
     ...account,
     source,
@@ -272,5 +294,6 @@ export const toSmartContractAccount = async <
     getNonce,
     signMessageWith6492,
     signTypedDataWith6492,
+    getImplementationAddress,
   };
 };

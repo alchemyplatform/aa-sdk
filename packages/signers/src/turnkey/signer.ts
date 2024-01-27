@@ -1,11 +1,14 @@
 import {
   WalletClientSigner,
-  type SignTypedDataParams,
   type SmartAccountAuthenticator,
 } from "@alchemy/aa-core";
 import { TurnkeyClient } from "@turnkey/http";
 import { createAccount } from "@turnkey/viem";
-import { createWalletClient } from "viem";
+import {
+  createWalletClient,
+  type TypedData,
+  type TypedDataDefinition,
+} from "viem";
 import { signerTypePrefix } from "../constants.js";
 import type {
   TurnkeyAuthParams,
@@ -56,7 +59,12 @@ export class TurnkeySigner
     return this.signer.signMessage(msg);
   };
 
-  signTypedData = (params: SignTypedDataParams) => {
+  signTypedData = async <
+    const TTypedData extends TypedData | { [key: string]: unknown },
+    TPrimaryType extends string = string
+  >(
+    params: TypedDataDefinition<TTypedData, TPrimaryType>
+  ) => {
     if (!this.signer) throw new Error("Not authenticated");
 
     return this.signer.signTypedData(params);

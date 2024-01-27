@@ -1,9 +1,9 @@
 import {
   type Address,
   type Hex,
-  type SignTypedDataParams,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
+import type { TypedData, TypedDataDefinition } from "viem";
 import { mnemonicToAccount, type HDAccount } from "viem/accounts";
 import { OWNER_MNEMONIC } from "../constants.js";
 
@@ -22,7 +22,10 @@ export class MockSigner implements SmartAccountSigner<HDAccount> {
     );
   }
 
-  signTypedData(_params: SignTypedDataParams): Promise<`0x${string}`> {
+  signTypedData<
+    const TTypedData extends TypedData | { [key: string]: unknown },
+    TPrimaryType extends string = string
+  >(_params: TypedDataDefinition<TTypedData, TPrimaryType>): Promise<Hex> {
     return Promise.resolve(
       "0x4d61c5c27fb64b207cbf3bcf60d78e725659cff5f93db9a1316162117dff72aa631761619d93d4d97dfb761ba00b61f9274c6a4a76e494df644d968dd84ddcdb1c"
     );

@@ -1,10 +1,14 @@
 import {
   LocalAccountSigner,
   SignerSchema,
-  type SignTypedDataParams,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
-import type { Hex, PrivateKeyAccount } from "viem";
+import type {
+  Hex,
+  PrivateKeyAccount,
+  TypedData,
+  TypedDataDefinition,
+} from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import { z } from "zod";
 
@@ -87,14 +91,18 @@ export class SessionKeySigner<TFallback extends SmartAccountSigner>
     return this.inner.signMessage(msg);
   };
 
-  signTypedData: (params: SignTypedDataParams) => Promise<`0x${string}`> =
-    async (params) => {
-      if (!this.keyActive) {
-        return this.fallback.signTypedData(params);
-      }
+  signTypedData = async <
+    const TTypedData extends TypedData | { [key: string]: unknown },
+    TPrimaryType extends string = string
+  >(
+    params: TypedDataDefinition<TTypedData, TPrimaryType>
+  ) => {
+    if (!this.keyActive) {
+      return this.fallback.signTypedData(params);
+    }
 
-      return this.inner.signTypedData(params);
-    };
+    return this.inner.signTypedData(params);
+  };
 
   /**
    * Allows you to check if the session key is active or not.

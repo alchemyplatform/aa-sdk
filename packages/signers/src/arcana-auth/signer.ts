@@ -1,6 +1,5 @@
 import {
   WalletClientSigner,
-  type SignTypedDataParams,
   type SmartAccountAuthenticator,
 } from "@alchemy/aa-core";
 import {
@@ -8,7 +7,13 @@ import {
   type ConstructorParams,
   type UserInfo,
 } from "@arcana/auth";
-import { createWalletClient, custom, type Hash } from "viem";
+import {
+  createWalletClient,
+  custom,
+  type Hash,
+  type TypedData,
+  type TypedDataDefinition,
+} from "viem";
 import type { ArcanaAuthAuthenticationParams } from "./types";
 
 /**
@@ -58,7 +63,12 @@ export class ArcanaAuthSigner
     return this.signer.signMessage(msg);
   };
 
-  signTypedData = (params: SignTypedDataParams) => {
+  signTypedData = async <
+    const TTypedData extends TypedData | { [key: string]: unknown },
+    TPrimaryType extends string = string
+  >(
+    params: TypedDataDefinition<TTypedData, TPrimaryType>
+  ) => {
     if (!this.signer) throw new Error("Not authenticated");
 
     return this.signer.signTypedData(params);
