@@ -11,6 +11,7 @@ import { IPluginAbi } from "../src/msca/abis/IPlugin.js";
 import { ContractAbiGenPhase } from "./phases/contract-abi-gen.js";
 import { ContractAddressesGenPhase } from "./phases/contract-addresses-gen.js";
 import { ExecutionAbiGenPhase } from "./phases/execution-abi-gen.js";
+import { PluginActionsGenPhase } from "./phases/plugin-actions/index.js";
 import { PluginGeneratorPhase } from "./phases/plugin-generator/index.js";
 import type { Phase, PhaseInput } from "./types.js";
 
@@ -18,6 +19,7 @@ import type { Phase, PhaseInput } from "./types.js";
 const phases: Phase[] = [
   ContractAddressesGenPhase,
   PluginGeneratorPhase,
+  PluginActionsGenPhase,
   ExecutionAbiGenPhase,
   ContractAbiGenPhase,
 ];
@@ -137,7 +139,7 @@ export function plugingen({
                 type.definition
               };`
           )
-          .join("\n")}
+          .join("\n\n")}
 
         ${result.content.join("\n\n")}
       `;
