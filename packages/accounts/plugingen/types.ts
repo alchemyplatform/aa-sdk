@@ -14,6 +14,7 @@ export type PhaseInput = {
   config: PluginGenConfig;
   contract: Parameters<NoUndefined<Plugin["run"]>>[0]["contracts"][number];
   plugin: GetContractReturnType<typeof IPluginAbi, PublicClient>;
+  hasReadMethods?: boolean;
 };
 
 export type Phase = (input: PhaseInput) => Promise<PhaseInput>;

@@ -1,10 +1,10 @@
 import { kebabCase } from "change-case";
 import dedent from "dedent";
-import type { PluginGenConfig } from "../../../../plugindefs/types";
-import type { Phase, PhaseInput } from "../../../types";
+import type { PluginGenConfig } from "../../../plugindefs/types";
+import type { Phase, PhaseInput } from "../../types";
 
-export const InstallMethodGenPhase: Phase = async (input) => {
-  const { addImport, config, addType, contract } = input;
+export const ManagementActionsGenPhase: Phase = async (input) => {
+  const { addImport, config, contract, addType } = input;
   if (config.installConfig != null) {
     addImports(
       addImport,
@@ -22,6 +22,12 @@ export const InstallMethodGenPhase: Phase = async (input) => {
         dependencyOverrides?: FunctionReference[];
     }`,
       true
+    );
+    addType(
+      "ManagementActions<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined>",
+      dedent`{
+      install${contract.name}: (args: {overrides?: UserOperationOverrides} & Install${contract.name}Params & GetAccountParameter<TAccount>) => Promise<SendUserOperationResult>
+    }`
     );
 
     const dependencies = (config.installConfig.dependencies ?? []).map(
@@ -41,16 +47,22 @@ export const InstallMethodGenPhase: Phase = async (input) => {
     );
 
     input.content.push(dedent`
-    install${contract.name}: (params: Install${
-      contract.name
-    }Params, overrides?: UserOperationOverrides) => {
-      const chain = provider.rpcClient.chain;
+    install${contract.name}({account = client.account, overrides, ...params}) {
+      if (!account) {
+        throw new Error("Account is required");
+      }
+
+      const chain = client.chain;
+      if (!chain) {
+        throw new Error("Chain is required");
+      }
+
       const dependencies = params.dependencyOverrides ?? [${dependencies.join(
         ",\n\n"
       )}];
       const pluginAddress = params.pluginAddress ?? ${
         contract.name
-      }_.meta.addresses[chain.id] as Address | undefined;
+      }.meta.addresses[chain.id] as Address | undefined;
 
       if (!pluginAddress) {
         throw new Error("missing ${
@@ -58,13 +70,15 @@ export const InstallMethodGenPhase: Phase = async (input) => {
         } address for chain " + chain.name);
       }
       
-      return installPlugin_(provider, {
+      return installPlugin_(client, {
         pluginAddress,
         pluginInitData: encodeAbiParameters(${JSON.stringify(
           initArgs
         )}, params.args),
         dependencies,
-      }, overrides);
+        overrides,
+        account,
+      });
     }
   `);
   }
@@ -91,6 +105,10 @@ const addImports = (
   addImport("viem", { name: "encodeAbiParameters" });
   addImport("../../plugin-manager/installPlugin.js", {
     name: "installPlugin as installPlugin_",
+  });
+  addImport("@alchemy/aa-core/viem", {
+    name: "GetAccountParameter",
+    isType: true,
   });
   addImport("../../account-loupe/types.js", {
     name: "FunctionReference",
