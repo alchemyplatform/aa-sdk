@@ -1,18 +1,19 @@
 import {
   deepHexlify,
   resolveProperties,
-  type PublicErc4337Client,
+  type ClientMiddlewareFn,
   type UserOperationStruct,
 } from "@alchemy/aa-core";
-import type { ClientMiddlewareFn } from "@alchemy/aa-core/viem";
-import type { ClientWithAlchemyMethods } from "../../middleware/client";
+import type { ClientWithAlchemyMethods } from "../client/types";
 
-export const alchemyUserOperationSimulator: <C extends PublicErc4337Client>(
+export const alchemyUserOperationSimulator: <
+  C extends ClientWithAlchemyMethods
+>(
   client: C
 ) => ClientMiddlewareFn =
   (client) =>
   async (struct, { account }) => {
-    const uoSimResult = await (client as ClientWithAlchemyMethods).request({
+    const uoSimResult = await client.request({
       method: "alchemy_simulateUserOperationAssetChanges",
       params: [
         deepHexlify(await resolveProperties(struct)) as UserOperationStruct,

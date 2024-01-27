@@ -8,6 +8,7 @@ import {
   type CustomTransport,
   type PublicActions,
   type PublicRpcSchema,
+  type RpcSchema,
   type Transport,
 } from "viem";
 import { z } from "zod";
@@ -69,7 +70,7 @@ export type SmartAccountClient<
     chain,
     account
   > = SmartAccountClientActions<chain, account>,
-  rpcSchema extends SmartAccountClientRpcSchema = SmartAccountClientRpcSchema
+  rpcSchema extends RpcSchema = SmartAccountClientRpcSchema
 > = Prettify<Client<transport, chain, account, rpcSchema, actions>>;
 
 export type BaseSmartAccountClient<
@@ -136,13 +137,18 @@ export function createSmartAccountClientFromExisting<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TClient extends PublicErc4337Client<TTransport> = PublicErc4337Client<TTransport>
+  TClient extends PublicErc4337Client<TTransport> = PublicErc4337Client<TTransport>,
+  TActions extends SmartAccountClientActions<
+    TChain,
+    TAccount
+  > = SmartAccountClientActions<TChain, TAccount>,
+  TRpcSchema extends SmartAccountClientRpcSchema = SmartAccountClientRpcSchema
 >(
   config: Omit<
     SmartAccountClientConfig<Transport, TChain, TAccount>,
     "transport"
   > & { client: TClient }
-): SmartAccountClient<CustomTransport, TChain, TAccount>;
+): SmartAccountClient<CustomTransport, TChain, TAccount, TActions, TRpcSchema>;
 
 export function createSmartAccountClientFromExisting(
   config: Omit<SmartAccountClientConfig, "transport"> & {
