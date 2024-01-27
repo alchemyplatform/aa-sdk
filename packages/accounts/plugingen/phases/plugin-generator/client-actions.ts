@@ -1,12 +1,12 @@
 import { camelCase } from "change-case";
 import dedent from "dedent";
-import type { Phase } from "../../../types";
-import { extractExecutionAbi } from "../../../utils.js";
-import { ViemAccountDecoratorPhase } from "./account-decorator.js";
-import { ViemInstallMethodGenPhase } from "./install-method-gen.js";
+import type { Phase } from "../../types";
+import { extractExecutionAbi } from "../../utils.js";
+import { ManagementActionsGenPhase } from "../plugin-actions/management-actions.js";
+import { AccountReadActionsGenPhase } from "../plugin-actions/read-actions.js";
 
-export const ViemClientMethodGenPhase: Phase = async (input) => {
-  const { plugin, contract, addImport } = input;
+export const ClientDecoratorGenPhase: Phase = async (input) => {
+  const { plugin, contract, addImport, addType } = input;
   const { executionFunctions } = await plugin.read.pluginManifest();
   const executionAbiConst = `${contract.name}ExecutionFunctionAbi`;
   const executionAbi = extractExecutionAbi(executionFunctions, contract.abi);
@@ -30,7 +30,12 @@ export const ViemClientMethodGenPhase: Phase = async (input) => {
     name: "GetAccountParameter",
     isType: true,
   });
+  addImport("@alchemy/aa-core", {
+    name: "SendUserOperationResult",
+    isType: true,
+  });
 
+  const providerFunctionDefs: string[] = [];
   const providerFunctions = executionAbi
     .filter((n) => n.stateMutability !== "view")
     .map((n) => {
@@ -44,6 +49,13 @@ export const ViemClientMethodGenPhase: Phase = async (input) => {
           : "";
       const argsEncodeString = n.inputs.length > 0 ? "args," : "";
 
+      providerFunctionDefs.push(dedent`
+        ${camelCase(
+          n.name
+        )}: (args: GetFunctionArgs<typeof ${executionAbiConst}, "${
+        n.name
+      }"> & { overrides?: UserOperationOverrides; } & GetAccountParameter<TAccount>) => Promise<SendUserOperationResult>
+      `);
       return dedent`
             ${camelCase(n.name)}: (${argsParamString}) => {
               if (!account) {
@@ -61,27 +73,36 @@ export const ViemClientMethodGenPhase: Phase = async (input) => {
           `;
     });
 
+  addType(
+    "ExecutionActions<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined>",
+    dedent`{
+      ${providerFunctionDefs.join(";\n\n")}
+    }`
+  );
+
   // TODO: async pipe this
-  await ViemInstallMethodGenPhase({
+  await ManagementActionsGenPhase({
     ...input,
     content: providerFunctions,
   });
 
-  await ViemAccountDecoratorPhase({
+  await AccountReadActionsGenPhase({
     ...input,
     content: providerFunctions,
   });
 
   input.content.push(dedent`
-    export function ${contract.name}ClientDecorator<
+    actions<
         TTransport extends Transport = Transport,
-        TChain extends Chain = Chain,
+        TChain extends Chain | undefined = Chain | undefined,
         TAccount extends SmartContractAccount | undefined =
         | SmartContractAccount
         | undefined
     >(
         client: SmartAccountClient<TTransport, TChain, TAccount>
-    ) { return { ${providerFunctions.join(",\n\n")} }; }
+    ): ${contract.name}Actions<TAccount> { return { ${providerFunctions.join(
+    ",\n\n"
+  )} }; }
     `);
 
   return input;

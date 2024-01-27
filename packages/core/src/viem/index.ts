@@ -17,7 +17,10 @@ export type * from "./actions/types.js";
 export { waitForUserOperationTransaction } from "./actions/waitForUserOperationTransacation.js";
 
 export type * from "./client.js";
-export { createSmartAccountClient } from "./client.js";
+export {
+  createSmartAccountClient,
+  createSmartAccountClientFromExisting,
+} from "./client.js";
 
 export type * from "./decorator.js";
 export { smartAccountClientDecorator } from "./decorator.js";

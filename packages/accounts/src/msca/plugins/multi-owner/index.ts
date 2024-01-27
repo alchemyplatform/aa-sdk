@@ -1,4 +1,4 @@
-export { ExtendedMultiOwnerPlugin as MultiOwnerPlugin } from "./extension.js";
+export { multiOwnerPluginActions } from "./extension.js";
 export {
   MultiOwnerPluginAbi,
   MultiOwnerPluginExecutionFunctionAbi,
