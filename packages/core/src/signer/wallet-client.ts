@@ -3,9 +3,10 @@ import {
   isHex,
   type ByteArray,
   type Hex,
+  type TypedData,
+  type TypedDataDefinition,
   type WalletClient,
 } from "viem";
-import type { SignTypedDataParams } from "../account/types";
 import type { SmartAccountSigner } from "./types";
 
 export class WalletClientSigner implements SmartAccountSigner<WalletClient> {
@@ -43,13 +44,17 @@ export class WalletClientSigner implements SmartAccountSigner<WalletClient> {
     }
   };
 
-  signTypedData: (params: SignTypedDataParams) => Promise<`0x${string}`> =
-    async (params) => {
-      const account = this.inner.account ?? (await this.getAddress());
+  signTypedData = async <
+    const TTypedData extends TypedData | { [key: string]: unknown },
+    TPrimaryType extends string = string
+  >(
+    typedData: TypedDataDefinition<TTypedData, TPrimaryType>
+  ): Promise<Hex> => {
+    const account = this.inner.account ?? (await this.getAddress());
 
-      return this.inner.signTypedData({
-        account,
-        ...params,
-      });
-    };
+    return this.inner.signTypedData({
+      account,
+      ...typedData,
+    });
+  };
 }

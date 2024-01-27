@@ -1,13 +1,18 @@
 import {
   WalletClientSigner,
-  type SignTypedDataParams,
   type SmartAccountAuthenticator,
 } from "@alchemy/aa-core";
 import {
   FireblocksWeb3Provider,
   type FireblocksProviderConfig,
 } from "@fireblocks/fireblocks-web3-provider";
-import { createWalletClient, custom, type Hash } from "viem";
+import {
+  createWalletClient,
+  custom,
+  type Hash,
+  type TypedData,
+  type TypedDataDefinition,
+} from "viem";
 import { signerTypePrefix } from "../constants.js";
 import type {
   FireblocksAuthenticationParams,
@@ -59,7 +64,12 @@ export class FireblocksSigner
     return this.signer.signMessage(msg);
   };
 
-  signTypedData = (params: SignTypedDataParams) => {
+  signTypedData = async <
+    const TTypedData extends TypedData | { [key: string]: unknown },
+    TPrimaryType extends string = string
+  >(
+    params: TypedDataDefinition<TTypedData, TPrimaryType>
+  ) => {
     if (!this.signer) throw new Error("Not authenticated");
 
     return this.signer.signTypedData(params);

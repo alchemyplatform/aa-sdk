@@ -7,7 +7,7 @@ import {
 import {
   getAccountAddress,
   toSmartContractAccount,
-  type SmartContractAccount,
+  type OwnedSmartContractAccount,
 } from "@alchemy/aa-core/viem";
 import {
   concatHex,
@@ -24,7 +24,10 @@ import { getDefaultMultiOwnerMSCAFactoryAddress } from "../utils.js";
 
 export type MultiOwnerModularAccount<
   TOwner extends SmartAccountSigner = SmartAccountSigner
-> = SmartContractAccount<string> & { owner: TOwner };
+> = OwnedSmartContractAccount<
+  "ModularAccountWithTokenReceiver" | "ModularAccountWithoutTokenReceiver",
+  TOwner
+>;
 
 export type CreateMultiOwnerModularAccountParams<
   TTransport extends Transport = Transport,
