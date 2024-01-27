@@ -1,9 +1,11 @@
 import type { Transport } from "viem";
 import { z } from "zod";
-import type { PublicErc4337Client, SupportedTransports } from "./types";
+
+import { BigNumberishRangeSchema, PercentageSchema } from "../utils/index.js";
+import type { PublicErc4337Client } from "./publicErc4337Client.js";
 
 export const createPublicErc4337ClientSchema = <
-  TTransport extends SupportedTransports = Transport
+  TTransport extends Transport = Transport
 >() =>
   z.custom<PublicErc4337Client<TTransport>>((provider) => {
     return (
@@ -15,3 +17,64 @@ export const createPublicErc4337ClientSchema = <
       "name" in provider
     );
   });
+
+export const ConnectionConfigSchema = z.union([
+  z.object({
+    rpcUrl: z.never().optional(),
+    apiKey: z.string(),
+    jwt: z.never().optional(),
+  }),
+  z.object({
+    rpcUrl: z.never().optional(),
+    apiKey: z.never().optional(),
+    jwt: z.string(),
+  }),
+  z.object({
+    rpcUrl: z.string(),
+    apiKey: z.never().optional(),
+    jwt: z.never().optional(),
+  }),
+  z.object({
+    rpcUrl: z.string(),
+    apiKey: z.never().optional(),
+    jwt: z.string(),
+  }),
+]);
+
+export const UserOperationFeeOptionsFieldSchema =
+  BigNumberishRangeSchema.merge(PercentageSchema).partial();
+
+export const UserOperationFeeOptionsSchema = z
+  .object({
+    maxFeePerGas: UserOperationFeeOptionsFieldSchema,
+    maxPriorityFeePerGas: UserOperationFeeOptionsFieldSchema,
+    callGasLimit: UserOperationFeeOptionsFieldSchema,
+    verificationGasLimit: UserOperationFeeOptionsFieldSchema,
+    preVerificationGas: UserOperationFeeOptionsFieldSchema,
+  })
+  .partial()
+  .strict();
+
+export const SmartAccountClientOptsSchema = z
+  .object({
+    /**
+     * The maximum number of times to try fetching a transaction receipt before giving up (default: 5)
+     */
+    txMaxRetries: z.number().min(0).optional().default(5),
+
+    /**
+     * The interval in milliseconds to wait between retries while waiting for tx receipts (default: 2_000)
+     */
+    txRetryIntervalMs: z.number().min(0).optional().default(2_000),
+
+    /**
+     * The mulitplier on interval length to wait between retries while waiting for tx receipts (default: 1.5)
+     */
+    txRetryMulitplier: z.number().min(0).optional().default(1.5),
+
+    /**
+     * Optional user operation fee options to be set globally at the provider level
+     */
+    feeOptions: UserOperationFeeOptionsSchema.optional(),
+  })
+  .strict();
