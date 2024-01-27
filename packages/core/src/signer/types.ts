@@ -1,6 +1,5 @@
 import type { Address } from "abitype";
-import type { Hex } from "viem";
-import type { SignTypedDataParams } from "../account/types.js";
+import type { Hex, TypedData, TypedDataDefinition } from "viem";
 
 /**
  * Extends the @interface SmartAccountSigner interface with authentication.
@@ -39,5 +38,10 @@ export interface SmartAccountSigner<Inner = any> {
 
   signMessage: (msg: Uint8Array | Hex | string) => Promise<Hex>;
 
-  signTypedData: (params: SignTypedDataParams) => Promise<Hex>;
+  signTypedData: <
+    const TTypedData extends TypedData | { [key: string]: unknown },
+    TPrimaryType extends string = string
+  >(
+    params: TypedDataDefinition<TTypedData, TPrimaryType>
+  ) => Promise<Hex>;
 }

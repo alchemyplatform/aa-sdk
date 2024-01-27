@@ -4,9 +4,10 @@ import {
   type Hex,
   type LocalAccount,
   type PrivateKeyAccount,
+  type TypedData,
+  type TypedDataDefinition,
 } from "viem";
 import { mnemonicToAccount, privateKeyToAccount } from "viem/accounts";
-import type { SignTypedDataParams } from "../account/types.js";
 import type { SmartAccountSigner } from "./types.js";
 
 export class LocalAccountSigner<
@@ -37,7 +38,12 @@ export class LocalAccountSigner<
     }
   };
 
-  readonly signTypedData = (params: SignTypedDataParams) => {
+  readonly signTypedData = async <
+    const TTypedData extends TypedData | { [key: string]: unknown },
+    TPrimaryType extends string = string
+  >(
+    params: TypedDataDefinition<TTypedData, TPrimaryType>
+  ): Promise<Hex> => {
     return this.inner.signTypedData(params);
   };
 
