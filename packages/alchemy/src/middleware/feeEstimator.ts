@@ -1,19 +1,21 @@
+import type { ClientMiddlewareFn } from "@alchemy/aa-core";
 import { applyUserOpOverrideOrFeeOption } from "@alchemy/aa-core";
-import type { AlchemyProvider } from "../provider/base.js";
-import type { ClientWithAlchemyMethods } from "./client.js";
+import type { ClientWithAlchemyMethods } from "../client/types";
 
-export const withAlchemyGasFeeEstimator = (
-  provider: AlchemyProvider
-): AlchemyProvider => {
-  provider.withFeeDataGetter(async (struct, overrides, feeOptions) => {
+export const alchemyFeeEstimator: <C extends ClientWithAlchemyMethods>(
+  client: C
+) => ClientMiddlewareFn =
+  (client) =>
+  async (struct, { overrides, feeOptions }) => {
     let [block, maxPriorityFeePerGasEstimate] = await Promise.all([
-      provider.rpcClient.getBlock({ blockTag: "latest" }),
+      client.getBlock({ blockTag: "latest" }),
       // it's a fair assumption that if someone is using this Alchemy Middleware, then they are using Alchemy RPC
-      (provider.rpcClient as ClientWithAlchemyMethods).request({
+      client.request({
         method: "rundler_maxPriorityFeePerGas",
         params: [],
       }),
     ]);
+
     const baseFeePerGas = block.baseFeePerGas;
     if (baseFeePerGas == null) {
       throw new Error("baseFeePerGas is null");
@@ -35,6 +37,4 @@ export const withAlchemyGasFeeEstimator = (
       maxPriorityFeePerGas,
       maxFeePerGas,
     };
-  });
-  return provider;
-};
+  };
