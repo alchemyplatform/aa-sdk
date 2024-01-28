@@ -2,7 +2,7 @@ import type {
   GetAccountParameter,
   SmartAccountClient,
   SmartContractAccount,
-} from "@alchemy/aa-core/viem";
+} from "@alchemy/aa-core";
 import { type Address, type Chain, type Transport } from "viem";
 import {
   MultiOwnerPlugin,

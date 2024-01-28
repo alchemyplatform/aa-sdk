@@ -40,7 +40,7 @@ export const buildUserOperationFromTx: <
   filterUndefined(_overrides);
 
   return buildUserOperation(client, {
-    data: {
+    uo: {
       target: request.to,
       data: request.data ?? "0x",
       value: request.value ? request.value : 0n,
