@@ -106,7 +106,7 @@ const addImports = (
   addImport("../../plugin-manager/installPlugin.js", {
     name: "installPlugin as installPlugin_",
   });
-  addImport("@alchemy/aa-core/viem", {
+  addImport("@alchemy/aa-core", {
     name: "GetAccountParameter",
     isType: true,
   });

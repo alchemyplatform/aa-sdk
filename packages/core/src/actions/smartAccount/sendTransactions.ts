@@ -31,7 +31,7 @@ export const sendTransactions: <
   );
 
   const { hash } = await sendUserOperation(client, {
-    data: batch,
+    uo: batch,
     overrides: _overrides,
     account,
   });

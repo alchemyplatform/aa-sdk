@@ -1,9 +1,9 @@
-import type { UserOperationOverrides } from "@alchemy/aa-core";
 import type {
   GetAccountParameter,
   SmartAccountClient,
   SmartContractAccount,
-} from "@alchemy/aa-core/viem";
+  UserOperationOverrides,
+} from "@alchemy/aa-core";
 import {
   encodeFunctionData,
   encodeFunctionResult,
@@ -47,7 +47,7 @@ export async function installPlugin<
   }
 
   const callData = await encodeInstallPluginUserOperation(client, params);
-  return client.sendUserOperation({ data: callData, overrides, account });
+  return client.sendUserOperation({ uo: callData, overrides, account });
 }
 
 export async function encodeInstallPluginUserOperation<

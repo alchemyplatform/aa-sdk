@@ -1,14 +1,12 @@
 import {
+  getAccountAddress,
   getDefaultEntryPointAddress,
+  toSmartContractAccount,
   type Address,
+  type OwnedSmartContractAccount,
   type PublicErc4337Client,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
-import {
-  getAccountAddress,
-  toSmartContractAccount,
-  type OwnedSmartContractAccount,
-} from "@alchemy/aa-core/viem";
 import {
   concatHex,
   encodeFunctionData,

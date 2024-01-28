@@ -14,7 +14,7 @@ export const ClientDecoratorGenPhase: Phase = async (input) => {
   addImport("viem", { name: "GetFunctionArgs", isType: true });
   addImport("viem", { name: "Transport", isType: true });
   addImport("viem", { name: "Chain", isType: true });
-  addImport("@alchemy/aa-core/viem", {
+  addImport("@alchemy/aa-core", {
     name: "SmartContractAccount",
     isType: true,
   });
@@ -22,11 +22,11 @@ export const ClientDecoratorGenPhase: Phase = async (input) => {
     name: "UserOperationOverrides",
     isType: true,
   });
-  addImport("@alchemy/aa-core/viem", {
+  addImport("@alchemy/aa-core", {
     name: "SmartAccountClient",
     isType: true,
   });
-  addImport("@alchemy/aa-core/viem", {
+  addImport("@alchemy/aa-core", {
     name: "GetAccountParameter",
     isType: true,
   });
