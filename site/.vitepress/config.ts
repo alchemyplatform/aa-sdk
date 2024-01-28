@@ -19,6 +19,10 @@ export default defineConfig({
         text: pkg.version,
         items: [
           {
+            text: "Migrating to 3.x.x",
+            link: "/migration-guide",
+          },
+          {
             text: "Changelog",
             link: "https://github.com/alchemyplatform/aa-sdk/blob/main/CHANGELOG.md",
           },
