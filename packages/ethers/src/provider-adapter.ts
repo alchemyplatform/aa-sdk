@@ -1,37 +1,39 @@
 import {
-  SmartAccountProvider,
+  createPublicErc4337FromClient,
+  createSmartAccountClient,
   getChain,
-  type AccountMiddlewareFn,
-  type FeeDataMiddleware,
-  type GasEstimatorMiddleware,
-  type HttpTransport,
-  type ISmartContractAccount,
-  type PaymasterAndDataMiddleware,
   type PublicErc4337Client,
+  type SmartAccountClient,
+  type SmartContractAccount,
 } from "@alchemy/aa-core";
-import { defineReadOnly } from "@ethersproject/properties";
 import { JsonRpcProvider } from "@ethersproject/providers";
+import { createPublicClient, custom, http } from "viem";
 import { AccountSigner } from "./account-signer.js";
-import { EthersProviderAdapterOptsSchema } from "./schema.js";
 import type { EthersProviderAdapterOpts } from "./types.js";
 
 /** Lightweight Adapter for SmartAccountProvider to enable Signer Creation */
 export class EthersProviderAdapter extends JsonRpcProvider {
-  readonly accountProvider: SmartAccountProvider<HttpTransport>;
+  readonly accountProvider: SmartAccountClient;
 
-  constructor(opts_: EthersProviderAdapterOpts) {
-    const opts = EthersProviderAdapterOptsSchema.parse(opts_);
-
+  constructor(opts: EthersProviderAdapterOpts) {
     super();
     if ("accountProvider" in opts) {
       this.accountProvider = opts.accountProvider;
     } else {
       const chain = getChain(opts.chainId);
-      this.accountProvider = new SmartAccountProvider({
-        rpcProvider: opts.rpcProvider,
-        entryPointAddress: opts.entryPointAddress,
-        chain,
-      });
+      if (typeof opts.rpcProvider === "string") {
+        this.accountProvider = createSmartAccountClient({
+          transport: http(opts.rpcProvider),
+          chain,
+          account: opts.account,
+        });
+      } else {
+        this.accountProvider = createSmartAccountClient({
+          transport: custom(opts.rpcProvider.transport),
+          chain,
+          account: opts.account,
+        });
+      }
     }
   }
 
@@ -43,7 +45,8 @@ export class EthersProviderAdapter extends JsonRpcProvider {
    * @param params - the params required by the RPC method
    * @returns the result of the RPC call
    */
-  send(method: string, params: any[]): Promise<any> {
+  send(method: any, params: any[]): Promise<any> {
+    // @ts-expect-error - viem is strongly typed on the request methods, but ethers is not
     return this.accountProvider.request({ method, params });
   }
 
@@ -53,43 +56,19 @@ export class EthersProviderAdapter extends JsonRpcProvider {
    * @param fn - a function that takes the account provider's rpcClient and returns an ISmartContractAccount
    * @returns an {@link AccountSigner} that can be used to sign and send user operations
    */
-  connectToAccount<TAccount extends ISmartContractAccount>(
-    fn: (rpcClient: PublicErc4337Client) => TAccount
-  ): AccountSigner<TAccount> {
-    defineReadOnly(
-      this,
-      "accountProvider",
-      this.accountProvider.connect<TAccount>(fn)
-    );
-
-    return new AccountSigner(this);
+  connectToAccount<TAccount extends SmartContractAccount>(
+    account: TAccount
+  ): AccountSigner {
+    return new AccountSigner<TAccount>(this, account);
   }
 
-  withPaymasterMiddleware = (overrides: {
-    dummyPaymasterDataMiddleware?: PaymasterAndDataMiddleware;
-    paymasterDataMiddleware?: PaymasterAndDataMiddleware;
-  }): this => {
-    this.accountProvider.withPaymasterMiddleware(overrides);
-    return this;
-  };
-
-  withGasEstimator = (override: GasEstimatorMiddleware): this => {
-    this.accountProvider.withGasEstimator(override);
-    return this;
-  };
-
-  withFeeDataGetter = (override: FeeDataMiddleware): this => {
-    this.accountProvider.withFeeDataGetter(override);
-    return this;
-  };
-
-  withCustomMiddleware = (override: AccountMiddlewareFn): this => {
-    this.accountProvider.withCustomMiddleware(override);
-    return this;
-  };
-
   getPublicErc4337Client(): PublicErc4337Client {
-    return this.accountProvider.rpcClient;
+    return createPublicErc4337FromClient(
+      createPublicClient({
+        transport: custom(this.accountProvider.transport),
+        chain: this.accountProvider.chain!,
+      })
+    );
   }
 
   /**
