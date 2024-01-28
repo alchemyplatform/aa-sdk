@@ -1,12 +1,10 @@
 import type {
-  SendUserOperationResult,
-  UserOperationOverrides,
-} from "@alchemy/aa-core";
-import type {
   GetAccountParameter,
+  SendUserOperationResult,
   SmartAccountClient,
   SmartContractAccount,
-} from "@alchemy/aa-core/viem";
+  UserOperationOverrides,
+} from "@alchemy/aa-core";
 import type { Address, Chain, Transport } from "viem";
 import {
   SessionKeyPlugin,

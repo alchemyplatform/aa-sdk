@@ -1,6 +1,6 @@
-import type { SmartContractAccount } from "@alchemy/aa-core/viem";
+import type { SmartContractAccount } from "@alchemy/aa-core";
 import { fromHex, type Address } from "viem";
-import { LightAccountVersions, type LightAccountVersion } from "../utils.js";
+import { LightAccountVersions, type LightAccountVersion } from "./utils.js";
 
 export const getLightAccountVersion = async <A extends SmartContractAccount>(
   account: A

@@ -2,7 +2,7 @@ import type {
   GetAccountParameter,
   SmartAccountClient,
   SmartContractAccount,
-} from "@alchemy/aa-core/viem";
+} from "@alchemy/aa-core";
 import type { Address, Chain, Hash, Transport } from "viem";
 import { IAccountLoupeAbi } from "../abis/IAccountLoupe.js";
 import type {

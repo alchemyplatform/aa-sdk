@@ -10,8 +10,12 @@ import type {
   createBaseSmartAccountParamsSchema,
 } from "./schema";
 
+/** @deprecated */
 export type SignTypedDataParams = Omit<SignTypedDataParameters, "privateKey">;
 
+/**
+ * @deprecated don't use base smart account anymore, migrate to using toSmartContractAccount instead
+ */
 export type BaseSmartAccountParams<
   TTransport extends Transport = Transport,
   TOwner extends SmartAccountSigner | undefined = SmartAccountSigner | undefined
