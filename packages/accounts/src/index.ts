@@ -4,8 +4,10 @@
 //light-account exports
 export type * from "./light-account/account.js";
 export { createLightAccount } from "./light-account/account.js";
+export { transferOwnership as transferLightAccountOwnership } from "./light-account/actions/transferOwnership.js";
 export { getLightAccountVersion } from "./light-account/getLightAccountVersion.js";
-export { transferOwnership as transferLightAccountOwnership } from "./light-account/transferLightAccountOwnership.js";
+export type * from "./light-account/lightAccountClientDecorator.js";
+export { lightAccountClientActions } from "./light-account/lightAccountClientDecorator.js";
 export {
   LightAccountUnsupported1271Factories,
   LightAccountUnsupported1271Impls,

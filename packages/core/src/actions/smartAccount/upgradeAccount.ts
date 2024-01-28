@@ -1,6 +1,7 @@
 import type { Chain, Hash, Transport } from "viem";
 import type { SmartContractAccount } from "../../account/smartContractAccount.js";
 import type { BaseSmartAccountClient } from "../../client/smartAccountClient.js";
+import { AccountNotFoundError } from "../../errors/account.js";
 import { sendUserOperation } from "./sendUserOperation.js";
 import type { UpgradeAccountParams } from "./types.js";
 import { waitForUserOperationTransaction } from "./waitForUserOperationTransacation.js";
@@ -18,7 +19,7 @@ export const upgradeAccount: <
   const { account = client.account, upgradeTo, overrides, waitForTx } = args;
 
   if (!account) {
-    throw new Error("No account set on client");
+    throw new AccountNotFoundError();
   }
 
   const { implAddress: accountImplAddress, initializationData } = upgradeTo;

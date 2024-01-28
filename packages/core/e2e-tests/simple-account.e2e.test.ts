@@ -22,7 +22,7 @@ describe("Simple Account Tests", () => {
 
   it("should successfully get counterfactual address", async () => {
     const provider = await givenConnectedProvider({ owner, chain });
-    expect(provider.account.address).toMatchInlineSnapshot(
+    expect(provider.getAddress()).toMatchInlineSnapshot(
       `"0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4"`
     );
   });
@@ -31,7 +31,7 @@ describe("Simple Account Tests", () => {
     const provider = await givenConnectedProvider({ owner, chain });
     const result = await provider.sendUserOperation({
       uo: {
-        target: provider.account.address,
+        target: provider.getAddress(),
         data: "0x",
       },
     });
@@ -51,7 +51,7 @@ describe("Simple Account Tests", () => {
 
     const result = provider.sendUserOperation({
       uo: {
-        target: provider.account.address,
+        target: provider.getAddress(),
         data: "0x",
       },
     });
@@ -65,7 +65,7 @@ describe("Simple Account Tests", () => {
     );
     const provider = await givenConnectedProvider({ owner, chain });
 
-    const address = provider.account.address;
+    const address = provider.getAddress();
     expect(isAddress(address)).toBe(true);
   });
 
@@ -92,7 +92,7 @@ describe("Simple Account Tests", () => {
 
     const structPromise = signer.buildUserOperation({
       uo: {
-        target: signer.account.address,
+        target: signer.getAddress(),
         data: "0x",
       },
     });
@@ -110,7 +110,7 @@ describe("Simple Account Tests", () => {
     const structWithFeeOptionsPromise = signerWithFeeOptions.buildUserOperation(
       {
         uo: {
-          target: signer.account.address,
+          target: signer.getAddress(),
           data: "0x",
         },
       }
@@ -144,7 +144,7 @@ describe("Simple Account Tests", () => {
     };
     const promise = signer.buildUserOperation({
       uo: {
-        target: signer.account.address,
+        target: signer.getAddress(),
         data: "0x",
       },
       overrides,
@@ -166,7 +166,7 @@ describe("Simple Account Tests", () => {
 
     const struct = signer.sendUserOperation({
       uo: {
-        target: signer.account.address,
+        target: signer.getAddress(),
         data: "0x",
       },
     });

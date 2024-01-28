@@ -1,8 +1,9 @@
-import type {
-  GetAccountParameter,
-  IsUndefined,
-  SmartAccountClient,
-  SmartContractAccount,
+import {
+  AccountNotFoundError,
+  type GetAccountParameter,
+  type IsUndefined,
+  type SmartAccountClient,
+  type SmartContractAccount,
 } from "@alchemy/aa-core";
 import { type Address, type Chain, type Transport } from "viem";
 import {
@@ -50,7 +51,7 @@ export const multiOwnerPluginActions: <
   ) {
     const account = args?.account ?? client.account;
     if (!account) {
-      throw new Error("Account is required");
+      throw new AccountNotFoundError();
     }
     // TODO: check if the account actually has the plugin installed
     // either via account loupe or checking if the supports interface call passes on the account

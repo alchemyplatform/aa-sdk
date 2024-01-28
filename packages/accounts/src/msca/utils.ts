@@ -1,8 +1,10 @@
 import {
+  AccountNotFoundError,
   createPublicErc4337FromClient,
   type GetAccountParameter,
   type OwnedSmartContractAccount,
   type SmartAccountClient,
+  type SmartAccountSigner,
   type UpgradeToData,
 } from "@alchemy/aa-core";
 import type { Address, Chain, Transport } from "viem";
@@ -77,37 +79,37 @@ export const getDefaultMultiOwnerMSCAFactoryAddress = (
   );
 };
 
-export const getMSCAUpgradeToData: <
+export async function getMSCAUpgradeToData<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends OwnedSmartContractAccount | undefined =
-    | OwnedSmartContractAccount
+  TOwner extends SmartAccountSigner = SmartAccountSigner,
+  TAccount extends OwnedSmartContractAccount<string, TOwner> | undefined =
+    | OwnedSmartContractAccount<string, TOwner>
     | undefined
 >(
   client: SmartAccountClient<TTransport, TChain, TAccount>,
-  args: {
-    multiOwnerPluginAddress?: Address;
-    tokenReceiverPluginAddress?: Address;
-  } & GetAccountParameter<TAccount>
-) => Promise<
-  UpgradeToData & { createMAAccount: () => Promise<MultiOwnerModularAccount> }
-> = async (
-  client,
   {
     multiOwnerPluginAddress,
     tokenReceiverPluginAddress,
     account: account_ = client.account,
+  }: {
+    multiOwnerPluginAddress?: Address;
+    tokenReceiverPluginAddress?: Address;
+  } & GetAccountParameter<TAccount>
+): Promise<
+  UpgradeToData & {
+    createMAAccount: () => Promise<MultiOwnerModularAccount<TOwner>>;
   }
-) => {
+> {
   if (!account_) {
-    throw new Error("Account must be provided");
+    throw new AccountNotFoundError();
   }
 
   if (!client.chain) {
     throw new Error("client must have a chain");
   }
   const chain = client.chain;
-  const account = account_ as OwnedSmartContractAccount;
+  const account = account_ as OwnedSmartContractAccount<string, TOwner>;
 
   const factoryAddress = getDefaultMultiOwnerMSCAFactoryAddress(client.chain);
 
@@ -195,4 +197,4 @@ export const getMSCAUpgradeToData: <
         accountAddress: account.address,
       }),
   };
-};
+}
