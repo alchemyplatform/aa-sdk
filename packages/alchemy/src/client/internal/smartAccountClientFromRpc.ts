@@ -66,8 +66,21 @@ export function createAlchemySmartAccountClientFromRpcClient<
     paymasterAndData,
     dummyPaymasterAndData,
     gasEstimator,
-    ...(gasManagerConfig
-      ? alchemyGasManagerMiddleware(client, gasManagerConfig)
-      : {}),
+    ...(gasManagerConfig &&
+      alchemyGasManagerMiddleware(client, {
+        ...gasManagerConfig,
+        gasEstimationOptions: {
+          ...gasManagerConfig.gasEstimationOptions,
+          disableGasEstimation:
+            gasManagerConfig.gasEstimationOptions?.disableGasEstimation ??
+            false,
+          fallbackFeeDataGetter:
+            gasManagerConfig.gasEstimationOptions?.fallbackFeeDataGetter ??
+            feeEstimator,
+          fallbackGasEstimator:
+            gasManagerConfig.gasEstimationOptions?.fallbackGasEstimator ??
+            gasEstimator,
+        },
+      })),
   }).extend(alchemyActions);
 }

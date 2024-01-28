@@ -1,5 +1,6 @@
 import type {
   GetAccountParameter,
+  IsUndefined,
   SmartAccountClient,
   SmartContractAccount,
 } from "@alchemy/aa-core";
@@ -18,7 +19,13 @@ export type MultiOwnerPluginActions<
   readOwners: (
     params: { pluginAddress?: Address } & GetAccountParameter<TAccount>
   ) => Promise<ReadonlyArray<Address>>;
-};
+} & (IsUndefined<TAccount> extends false
+    ? {
+        readOwners: (
+          params?: { pluginAddress?: Address } & GetAccountParameter<TAccount>
+        ) => Promise<ReadonlyArray<Address>>;
+      }
+    : {});
 
 export const multiOwnerPluginActions: <
   TTransport extends Transport = Transport,
@@ -38,13 +45,16 @@ export const multiOwnerPluginActions: <
   client: SmartAccountClient<TTransport, TChain, TAccount>
 ) => ({
   ...multiOwnerPluginActions_(client),
-  async readOwners({ pluginAddress, account = client.account }) {
+  async readOwners(
+    args: { pluginAddress?: Address } & GetAccountParameter<TAccount>
+  ) {
+    const account = args?.account ?? client.account;
     if (!account) {
       throw new Error("Account is required");
     }
     // TODO: check if the account actually has the plugin installed
     // either via account loupe or checking if the supports interface call passes on the account
-    const contract = MultiOwnerPlugin.getContract(client, pluginAddress);
+    const contract = MultiOwnerPlugin.getContract(client, args?.pluginAddress);
     return contract.read.ownersOf([account.address]);
   },
 });

@@ -1,9 +1,9 @@
 import {
+  LocalAccountSigner,
+  LogLevel,
+  Logger,
   createPublicErc4337Client,
   createSmartAccountClientFromExisting,
-  LocalAccountSigner,
-  Logger,
-  LogLevel,
   type SmartAccountSigner,
   type UserOperationFeeOptions,
 } from "@alchemy/aa-core";
@@ -204,7 +204,6 @@ describe("Light Account Tests", () => {
     expect(newOwnerViaProvider).toBe(newOwner);
   }, 100000);
 
-  // TODO: come back to this !!!!
   it("should upgrade a deployed light account to msca successfully", async () => {
     const provider = await givenConnectedProvider({
       owner,
@@ -250,7 +249,7 @@ describe("Light Account Tests", () => {
 
     const upgradedAccountAddress = upgradedProvider.account.address;
 
-    const owners = await upgradedProvider.readOwners({});
+    const owners = await upgradedProvider.readOwners();
 
     expect(upgradedAccountAddress).toBe(accountAddress);
     expect(owners).toContain(ownerAddress);

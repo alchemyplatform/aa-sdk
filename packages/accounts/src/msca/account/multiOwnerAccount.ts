@@ -14,11 +14,11 @@ import {
   type Hex,
   type Transport,
 } from "viem";
-import { IStandardExecutorAbi } from "../abis/IStandardExecutor.js";
 import { MultiOwnerMSCAFactoryAbi } from "../abis/MultiOwnerMSCAFactory.js";
 import { MultiOwnerTokenReceiverMSCAFactoryAbi } from "../abis/MultiOwnerTokenReceiverMSCAFactory.js";
 import { multiOwnerMessageSigner } from "../plugins/multi-owner/signer.js";
 import { getDefaultMultiOwnerMSCAFactoryAddress } from "../utils.js";
+import { standardExecutor } from "./standardExecutor.js";
 
 export type MultiOwnerModularAccount<
   TOwner extends SmartAccountSigner = SmartAccountSigner
@@ -103,26 +103,7 @@ export async function createMultiOwnerModularAccount({
       excludeDefaultTokenReceiverPlugin ? "Without" : "With"
     }TokenReceiver`,
     getAccountInitCode,
-    encodeExecute: async ({ target, data, value }) => {
-      return encodeFunctionData({
-        abi: IStandardExecutorAbi,
-        functionName: "execute",
-        args: [target, value ?? 0n, data],
-      });
-    },
-    encodeBatchExecute: async (txs) => {
-      return encodeFunctionData({
-        abi: IStandardExecutorAbi,
-        functionName: "executeBatch",
-        args: [
-          txs.map((tx) => ({
-            target: tx.target,
-            data: tx.data,
-            value: tx.value ?? 0n,
-          })),
-        ],
-      });
-    },
+    ...standardExecutor,
     ...multiOwnerMessageSigner(client, accountAddress, owner),
   });
 
