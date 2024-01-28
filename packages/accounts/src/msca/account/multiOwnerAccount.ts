@@ -51,7 +51,7 @@ export async function createMultiOwnerModularAccount<
 
 export async function createMultiOwnerModularAccount({
   client,
-  owner,
+  owner: owner_,
   accountAddress,
   initCode,
   entrypointAddress = getDefaultEntryPointAddress(client.chain),
@@ -60,6 +60,7 @@ export async function createMultiOwnerModularAccount({
   owners = [],
   index = 0n,
 }: CreateMultiOwnerModularAccountParams): Promise<MultiOwnerModularAccount> {
+  let owner = owner_;
   const getAccountInitCode = async () => {
     if (initCode) {
       return initCode;
@@ -104,12 +105,15 @@ export async function createMultiOwnerModularAccount({
     }TokenReceiver`,
     getAccountInitCode,
     ...standardExecutor,
-    ...multiOwnerMessageSigner(client, accountAddress, owner),
+    ...multiOwnerMessageSigner(client, accountAddress, () => owner),
   });
 
   return {
     ...baseAccount,
     publicKey: await owner.getAddress(),
-    owner,
+    getOwner: () => owner,
+    setOwner: (newOwner) => {
+      owner = newOwner;
+    },
   };
 }

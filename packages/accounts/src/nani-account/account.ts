@@ -203,6 +203,10 @@ class NaniAccount_<
     ]);
   }
 
+  setOwner(owner: SmartAccountSigner) {
+    this.owner = owner;
+  }
+
   protected async getFactoryInitCode(): Promise<Hex> {
     try {
       return encodeFunctionData({
@@ -246,7 +250,8 @@ export const createNaniAccount = async <TTransport extends Transport>(
 
   return {
     ...base,
-    owner: params.owner,
+    getOwner: () => naniAccount.getOwner() as SmartAccountSigner,
+    setOwner: (owner) => naniAccount.setOwner.bind(naniAccount)(owner),
     encodeExecuteDelegate: NaniAccount_.encodeExecuteDelegate,
     encodeTransferOwnership: NaniAccount_.encodeTransferOwnership,
   };

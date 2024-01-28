@@ -21,15 +21,16 @@ import {
 import type { SimpleSmartAccountParams } from "./types.js";
 
 class SimpleSmartContractAccount<
-  TTransport extends Transport | FallbackTransport = Transport
-> extends BaseSmartContractAccount<TTransport, SmartAccountSigner> {
+  TTransport extends Transport | FallbackTransport = Transport,
+  TOwner extends SmartAccountSigner = SmartAccountSigner
+> extends BaseSmartContractAccount<TTransport, TOwner> {
   protected index: bigint;
 
-  constructor(params: SimpleSmartAccountParams<TTransport>) {
+  constructor(params: SimpleSmartAccountParams<TTransport, TOwner>) {
     SimpleSmartAccountParamsSchema<TTransport>().parse(params);
 
     super(params);
-    this.owner = params.owner;
+    this.owner = params.owner as TOwner;
     this.index = params.index ?? 0n;
   }
 
@@ -77,6 +78,10 @@ class SimpleSmartContractAccount<
     }
 
     return this.owner.signMessage(msg);
+  }
+
+  setOwner(owner: TOwner): void {
+    this.owner = owner;
   }
 
   public async getAccountInitCode(): Promise<`0x${string}`> {
@@ -136,6 +141,8 @@ export const createSimpleSmartAccount = async <
 
   return {
     ...base,
-    owner: parsedParams.owner as TOwner,
+    getOwner: () => simpleAccount.getOwner() as TOwner,
+    setOwner: (owner: TOwner) =>
+      simpleAccount.setOwner.bind(simpleAccount)(owner),
   };
 };
