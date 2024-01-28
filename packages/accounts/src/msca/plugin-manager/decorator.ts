@@ -1,8 +1,8 @@
-import type { SendUserOperationResult } from "@alchemy/aa-core";
 import type {
+  SendUserOperationResult,
   SmartAccountClient,
   SmartContractAccount,
-} from "@alchemy/aa-core/viem";
+} from "@alchemy/aa-core";
 import type { Chain, Transport } from "viem";
 import { installPlugin, type InstallPluginParams } from "./installPlugin.js";
 import {

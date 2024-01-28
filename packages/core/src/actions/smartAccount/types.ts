@@ -13,7 +13,7 @@ import type {
 export type SendUserOperationParameters<
   TAccount extends SmartContractAccount | undefined
 > = {
-  data: UserOperationCallData | BatchUserOperationCallData;
+  uo: UserOperationCallData | BatchUserOperationCallData;
   overrides?: UserOperationOverrides;
 } & GetAccountParameter<TAccount>;
 

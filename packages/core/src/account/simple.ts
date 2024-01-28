@@ -114,7 +114,11 @@ export const createSimpleSmartAccount = async <
     client: simpleAccount.rpcProvider as PublicErc4337Client<TTransport>,
     encodeBatchExecute: simpleAccount.encodeBatchExecute.bind(simpleAccount),
     encodeExecute: (tx) =>
-      simpleAccount.encodeExecute(tx.target, tx.value ?? 0n, tx.data),
+      simpleAccount.encodeExecute.bind(simpleAccount)(
+        tx.target,
+        tx.value ?? 0n,
+        tx.data
+      ),
     entrypointAddress: simpleAccount.getEntryPointAddress(),
     getAccountInitCode: async () => {
       if (parsedParams.initCode) return parsedParams.initCode;
@@ -126,7 +130,7 @@ export const createSimpleSmartAccount = async <
         typeof message === "string" ? message : message.raw
       ),
     // @ts-expect-error these types still represent the same thing, but they're just a little off in there definitions
-    signTypedData: (typedData) => simpleAccount.signTypedData(typedData),
+    signTypedData: simpleAccount.signTypedData.bind(simpleAccount),
     accountAddress: parsedParams.accountAddress,
   });
 

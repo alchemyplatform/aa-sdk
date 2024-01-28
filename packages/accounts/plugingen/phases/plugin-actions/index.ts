@@ -15,7 +15,7 @@ export const PluginActionsGenPhase: Phase = async (input) => {
   addImport("viem", { name: "GetFunctionArgs", isType: true });
   addImport("viem", { name: "Transport", isType: true });
   addImport("viem", { name: "Chain", isType: true });
-  addImport("@alchemy/aa-core/viem", {
+  addImport("@alchemy/aa-core", {
     name: "SmartContractAccount",
     isType: true,
   });
@@ -23,11 +23,11 @@ export const PluginActionsGenPhase: Phase = async (input) => {
     name: "UserOperationOverrides",
     isType: true,
   });
-  addImport("@alchemy/aa-core/viem", {
+  addImport("@alchemy/aa-core", {
     name: "SmartAccountClient",
     isType: true,
   });
-  addImport("@alchemy/aa-core/viem", {
+  addImport("@alchemy/aa-core", {
     name: "GetAccountParameter",
     isType: true,
   });
@@ -63,13 +63,13 @@ export const PluginActionsGenPhase: Phase = async (input) => {
                   throw new Error("account is required");
                 }  
   
-                const data = encodeFunctionData({
+                const uo = encodeFunctionData({
                   abi: ${executionAbiConst},
                   functionName: "${n.name}",
                   ${argsEncodeString}
                 });
   
-                return client.sendUserOperation({ data, overrides, account });
+                return client.sendUserOperation({ uo, overrides, account });
               }
             `;
     });
