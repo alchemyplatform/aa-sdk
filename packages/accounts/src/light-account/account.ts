@@ -34,6 +34,9 @@ export type LightAccount<
   getLightAccountVersion: () => Promise<LightAccountVersion>;
   encodeTransferOwnership: (newOwner: Address) => Hex;
   getOwnerAddress: () => Promise<Address>;
+  setOwner: <TOwner extends SmartAccountSigner = SmartAccountSigner>(
+    newOwner: TOwner
+  ) => void;
 };
 
 export type CreateLightAccountParams<
@@ -59,7 +62,7 @@ export async function createLightAccount<
 
 export async function createLightAccount({
   client,
-  owner,
+  owner: owner_,
   accountAddress,
   initCode,
   version = "v1.1.0",
@@ -67,6 +70,7 @@ export async function createLightAccount({
   factoryAddress = getDefaultLightAccountFactoryAddress(client.chain, version),
   index: index_ = 0n,
 }: CreateLightAccountParams): Promise<LightAccount> {
+  let owner = owner_;
   const getAccountInitCode = async () => {
     if (initCode) return initCode;
 
@@ -193,7 +197,6 @@ export async function createLightAccount({
             `Version ${version} of LightAccount doesn't support 1271`
           );
         default:
-          console.log(message);
           return signWith1271Wrapper(hashMessage(message));
       }
     },
@@ -244,6 +247,11 @@ export async function createLightAccount({
       }
 
       return callResult;
+    },
+    setOwner: <TOwner extends SmartAccountSigner = SmartAccountSigner>(
+      newOwner: TOwner
+    ) => {
+      owner = newOwner;
     },
   };
 }

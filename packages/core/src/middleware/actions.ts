@@ -42,7 +42,7 @@ export const middlewareActions =
     client: MiddlewareClient<TTransport, TChain, TAccount>
   ): { middleware: ClientMiddleware } => ({
     middleware: {
-      custom: overrides.custom ?? noopMiddleware,
+      customMiddleware: overrides.customMiddleware ?? noopMiddleware,
       dummyPaymasterAndData:
         overrides.dummyPaymasterAndData ?? defaultPaymasterAndData,
       feeEstimator: overrides.feeEstimator ?? defaultFeeEstimator(client),

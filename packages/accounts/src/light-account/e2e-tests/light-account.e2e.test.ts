@@ -1,28 +1,22 @@
 import {
-  createPublicErc4337FromClient,
-  createSmartAccountClient,
+  createPublicErc4337Client,
+  createSmartAccountClientFromExisting,
   LocalAccountSigner,
   Logger,
   LogLevel,
   type SmartAccountSigner,
   type UserOperationFeeOptions,
 } from "@alchemy/aa-core";
-import {
-  createPublicClient,
-  custom,
-  http,
-  isAddress,
-  type Address,
-  type Chain,
-  type HDAccount,
-} from "viem";
+import { isAddress, type Address, type Chain, type HDAccount } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import { sepolia } from "viem/chains";
 import {
-  createLightAccount,
+  multiOwnerPluginActions,
   transferLightAccountOwnership,
   type LightAccountVersion,
 } from "../../index.js";
+import { getMSCAUpgradeToData } from "../../msca/utils.js";
+import { createLightAccountClient } from "../createLightAccountClient.js";
 import {
   API_KEY,
   LIGHT_ACCOUNT_OWNER_MNEMONIC,
@@ -211,47 +205,56 @@ describe("Light Account Tests", () => {
   }, 100000);
 
   // TODO: come back to this !!!!
-  // it("should upgrade a deployed light account to msca successfully", async () => {
-  //   const provider = givenConnectedProvider({
-  //     owner,
-  //     chain,
-  //   });
+  it("should upgrade a deployed light account to msca successfully", async () => {
+    const provider = await givenConnectedProvider({
+      owner,
+      chain,
+    });
 
-  //   // create a throwaway address
-  //   const throwawayOwner = LocalAccountSigner.privateKeyToAccountSigner(
-  //     generatePrivateKey()
-  //   );
-  //   const throwawayProvider = givenConnectedProvider({
-  //     owner: throwawayOwner,
-  //     chain,
-  //   });
+    // create a throwaway address
+    const throwawayOwner = LocalAccountSigner.privateKeyToAccountSigner(
+      generatePrivateKey()
+    );
+    const throwawayProvider = await givenConnectedProvider({
+      owner: throwawayOwner,
+      chain,
+    });
 
-  //   const accountAddress = await throwawayProvider.getAddress();
-  //   const ownerAddress = await throwawayOwner.getAddress();
+    const accountAddress = throwawayProvider.account.address;
+    const ownerAddress = await throwawayOwner.getAddress();
 
-  //   // fund + deploy the throwaway address
-  //   await provider.sendTransaction({
-  //     from: await provider.getAddress(),
-  //     to: accountAddress,
-  //     data: "0x",
-  //     value: toHex(200000000000000000n),
-  //   });
+    // fund + deploy the throwaway address
+    await provider.sendTransaction({
+      to: accountAddress,
+      data: "0x",
+      value: 200000000000000000n,
+    });
 
-  //   const { connectFn, ...upgradeToData } = await getMSCAUpgradeToData(
-  //     throwawayProvider
-  //   );
+    const { createMAAccount, ...upgradeToData } = await getMSCAUpgradeToData(
+      throwawayProvider,
+      {}
+    );
 
-  //   await throwawayProvider.upgradeAccount(upgradeToData, true);
+    await throwawayProvider.upgradeAccount({
+      upgradeTo: upgradeToData,
+      waitForTx: true,
+    });
 
-  //   const upgradedProvider = throwawayProvider.connect(connectFn);
+    const upgradedProvider = createSmartAccountClientFromExisting({
+      client: createPublicErc4337Client({
+        chain,
+        rpcUrl: `${chain.rpcUrls.alchemy.http[0]}/${API_KEY!}`,
+      }),
+      account: await createMAAccount(),
+    }).extend(multiOwnerPluginActions);
 
-  //   const upgradedAccountAddress = await upgradedProvider.getAddress();
+    const upgradedAccountAddress = upgradedProvider.account.address;
 
-  //   const owners = await upgradedProvider.account.readOwners();
+    const owners = await upgradedProvider.readOwners({});
 
-  //   expect(upgradedAccountAddress).toBe(accountAddress);
-  //   expect(owners).toContain(ownerAddress);
-  // }, 200000);
+    expect(upgradedAccountAddress).toBe(accountAddress);
+    expect(owners).toContain(ownerAddress);
+  }, 200000);
 });
 
 const givenConnectedProvider = async ({
@@ -267,27 +270,25 @@ const givenConnectedProvider = async ({
   feeOptions?: UserOperationFeeOptions;
   version?: LightAccountVersion;
 }) => {
-  const publicClient = createPublicErc4337FromClient(
-    createPublicClient({
-      chain,
-      transport: http(`${chain.rpcUrls.alchemy.http[0]}/${API_KEY!}`),
-    })
-  );
-
-  const client = createSmartAccountClient({
-    transport: custom(publicClient),
-    chain: publicClient.chain,
-    opts: {
-      feeOptions,
-      txMaxRetries: 100,
-    },
-    account: await createLightAccount({
-      owner,
-      client: publicClient,
-      accountAddress,
-      version,
-    }),
+  const publicClient = createPublicErc4337Client({
+    chain,
+    rpcUrl: `${chain.rpcUrls.alchemy.http[0]}/${API_KEY!}`,
   });
 
-  return client;
+  return createLightAccountClient({
+    client: publicClient,
+    account: {
+      owner,
+      accountAddress,
+      version,
+    },
+    opts: {
+      feeOptions: {
+        ...feeOptions,
+        maxFeePerGas: { percentage: 50 },
+        maxPriorityFeePerGas: { percentage: 50 },
+      },
+      txMaxRetries: 100,
+    },
+  });
 };

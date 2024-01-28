@@ -2,12 +2,12 @@ export type * from "./actions/simulateUserOperationChanges.js";
 export { simulateUserOperationChanges } from "./actions/simulateUserOperationChanges.js";
 export type * from "./actions/types.js";
 
-export type * from "./client/lightAccount.js";
-export { createLightAccountClient } from "./client/lightAccount.js";
-export type * from "./client/rpc.js";
-export { createAlchemyPublicRpcClient } from "./client/rpc.js";
-export type * from "./client/smartAccount.js";
-export { createAlchemySmartAccountClient } from "./client/smartAccount.js";
+export type * from "./client/lightAccountClient.js";
+export { createLightAccountAlchemyClient } from "./client/lightAccountClient.js";
+export type * from "./client/rpcClient.js";
+export { createAlchemyPublicRpcClient } from "./client/rpcClient.js";
+export type * from "./client/smartAccountClient.js";
+export { createAlchemySmartAccountClient } from "./client/smartAccountClient.js";
 export type * from "./client/types.js";
 
 export type * from "./client/decorators/smartAccount.js";

@@ -2,6 +2,7 @@
 // Don't use wildcard exports, instead use named exports
 
 //light-account exports
+export type * from "./light-account/account.js";
 export { createLightAccount } from "./light-account/account.js";
 export { getLightAccountVersion } from "./light-account/getLightAccountVersion.js";
 export { transferOwnership as transferLightAccountOwnership } from "./light-account/transferLightAccountOwnership.js";
