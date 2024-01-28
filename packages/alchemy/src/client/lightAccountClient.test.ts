@@ -4,7 +4,9 @@ import {
   type BatchUserOperationCallData,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
+import { Alchemy, Network } from "alchemy-sdk";
 import { avalanche, polygonMumbai, type Chain } from "viem/chains";
+import { alchemyEnhancedApiActions } from "./decorators/alchemyEnhancedApis.js";
 import { createLightAccountAlchemyClient } from "./lightAccountClient.js";
 import { createAlchemySmartAccountClient } from "./smartAccountClient.js";
 
@@ -83,6 +85,22 @@ describe("Light Account Client Tests", () => {
         }
       ]"
     `);
+  });
+
+  it("should hanve enhanced api properties on the provider", async () => {
+    const alchemy = new Alchemy({
+      network: Network.MATIC_MUMBAI,
+      apiKey: "test",
+    });
+
+    const provider = (await givenConnectedProvider({ owner, chain })).extend(
+      alchemyEnhancedApiActions(alchemy)
+    );
+
+    expect(provider.account).toBeDefined();
+    expect(provider.waitForUserOperationTransaction).toBeDefined();
+    expect(provider.sendUserOperation).toBeDefined();
+    expect(provider.core).toBeDefined();
   });
 
   const givenConnectedProvider = async ({
