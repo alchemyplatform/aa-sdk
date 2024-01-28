@@ -19,7 +19,7 @@ export type ClientMiddleware = {
   dummyPaymasterAndData: ClientMiddlewareFn;
   feeEstimator: ClientMiddlewareFn;
   gasEstimator: ClientMiddlewareFn;
-  custom: ClientMiddlewareFn;
+  customMiddleware: ClientMiddlewareFn;
   paymasterAndData: ClientMiddlewareFn;
   userOperationSimulator: ClientMiddlewareFn;
 };

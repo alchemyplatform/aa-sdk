@@ -1,10 +1,14 @@
-import type {
-  GetAccountParameter,
-  SmartAccountClient,
-  UpgradeToData,
+import {
+  createPublicErc4337FromClient,
+  type GetAccountParameter,
+  type OwnedSmartContractAccount,
+  type SmartAccountClient,
+  type UpgradeToData,
 } from "@alchemy/aa-core";
 import type { Address, Chain, Transport } from "viem";
 import {
+  createPublicClient,
+  custom,
   encodeAbiParameters,
   encodeFunctionData,
   encodeFunctionResult,
@@ -30,7 +34,10 @@ import {
 import { IPluginAbi } from "./abis/IPlugin.js";
 import { MultiOwnerTokenReceiverMSCAFactoryAbi } from "./abis/MultiOwnerTokenReceiverMSCAFactory.js";
 import { UpgradeableModularAccountAbi } from "./abis/UpgradeableModularAccount.js";
-import type { MultiOwnerModularAccount } from "./account/base.js";
+import {
+  createMultiOwnerModularAccount,
+  type MultiOwnerModularAccount,
+} from "./account/base.js";
 import { MultiOwnerPlugin } from "./plugins/multi-owner/plugin.js";
 import { TokenReceiverPlugin } from "./plugins/token-receiver/plugin.js";
 
@@ -73,8 +80,8 @@ export const getDefaultMultiOwnerMSCAFactoryAddress = (
 export const getMSCAUpgradeToData: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends MultiOwnerModularAccount | undefined =
-    | MultiOwnerModularAccount
+  TAccount extends OwnedSmartContractAccount | undefined =
+    | OwnedSmartContractAccount
     | undefined
 >(
   client: SmartAccountClient<TTransport, TChain, TAccount>,
@@ -82,14 +89,16 @@ export const getMSCAUpgradeToData: <
     multiOwnerPluginAddress?: Address;
     tokenReceiverPluginAddress?: Address;
   } & GetAccountParameter<TAccount>
-) => Promise<UpgradeToData> = async (
+) => Promise<
+  UpgradeToData & { createMAAccount: () => Promise<MultiOwnerModularAccount> }
+> = async (
   client,
   {
     multiOwnerPluginAddress,
     tokenReceiverPluginAddress,
     account: account_ = client.account,
   }
-): Promise<UpgradeToData> => {
+) => {
   if (!account_) {
     throw new Error("Account must be provided");
   }
@@ -97,7 +106,8 @@ export const getMSCAUpgradeToData: <
   if (!client.chain) {
     throw new Error("client must have a chain");
   }
-  const account = account_ as MultiOwnerModularAccount;
+  const chain = client.chain;
+  const account = account_ as OwnedSmartContractAccount;
 
   const factoryAddress = getDefaultMultiOwnerMSCAFactoryAddress(client.chain);
 
@@ -172,5 +182,17 @@ export const getMSCAUpgradeToData: <
   return {
     implAddress,
     initializationData: encodedMSCAInitializeData,
+    createMAAccount: async () =>
+      createMultiOwnerModularAccount({
+        client: createPublicErc4337FromClient(
+          createPublicClient({
+            chain: chain as Chain,
+            transport: custom(client.transport),
+          })
+        ),
+        owner: account.owner,
+        factoryAddress,
+        accountAddress: account.address,
+      }),
   };
 };

@@ -3,12 +3,21 @@ import type {
   GetAccountParameter,
   SmartContractAccount,
 } from "../../account/smartContractAccount";
+import type { UpgradeToData } from "../../client/types";
 import type {
   BatchUserOperationCallData,
   UserOperationCallData,
   UserOperationOverrides,
   UserOperationRequest,
 } from "../../types";
+
+export type UpgradeAccountParams<
+  TAccount extends SmartContractAccount | undefined
+> = {
+  upgradeTo: UpgradeToData;
+  overrides?: UserOperationOverrides;
+  waitForTx?: boolean;
+} & GetAccountParameter<TAccount>;
 
 export type SendUserOperationParameters<
   TAccount extends SmartContractAccount | undefined
