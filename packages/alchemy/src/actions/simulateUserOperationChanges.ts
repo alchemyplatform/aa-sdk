@@ -1,4 +1,5 @@
 import {
+  AccountNotFoundError,
   deepHexlify,
   type SendUserOperationParameters,
   type SmartContractAccount,
@@ -20,7 +21,7 @@ export const simulateUserOperationChanges: <
   { account = client.account, ...params }
 ) => {
   if (!account) {
-    throw new Error("No account set on client");
+    throw new AccountNotFoundError();
   }
 
   const uoStruct = deepHexlify(

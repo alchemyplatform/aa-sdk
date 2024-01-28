@@ -2,6 +2,7 @@ import type { Chain, Transport } from "viem";
 import type { SmartContractAccount } from "../../account/smartContractAccount";
 import type { BaseSmartAccountClient } from "../../client/smartAccountClient";
 import type { SendUserOperationResult } from "../../client/types";
+import { AccountNotFoundError } from "../../errors/account.js";
 import type { UserOperationOverrides, UserOperationStruct } from "../../types";
 import { bigIntMax, bigIntPercent } from "../../utils/index.js";
 import { _runMiddlewareStack } from "./internal/runMiddlewareStack.js";
@@ -20,7 +21,7 @@ export const dropAndReplaceUserOperation: <
 ) => Promise<SendUserOperationResult> = async (client, args) => {
   const { account = client.account, uoToDrop, overrides } = args;
   if (!account) {
-    throw new Error("No account set on client");
+    throw new AccountNotFoundError();
   }
 
   const uoToSubmit = {

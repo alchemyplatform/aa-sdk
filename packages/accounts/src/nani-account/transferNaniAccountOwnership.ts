@@ -1,7 +1,8 @@
-import type {
-  GetAccountParameter,
-  SmartAccountClient,
-  SmartAccountSigner,
+import {
+  AccountNotFoundError,
+  type GetAccountParameter,
+  type SmartAccountClient,
+  type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import type { Chain, Hex, Transport } from "viem";
 import type { NaniAccount } from "./account";
@@ -31,7 +32,7 @@ export const transferOwnership: <
   { newOwner, waitForTxn = false, account: account_ = client.account }
 ): Promise<Hex> => {
   if (!account_) {
-    throw new Error("Account is not defined");
+    throw new AccountNotFoundError();
   }
 
   const account = account_ as NaniAccount;

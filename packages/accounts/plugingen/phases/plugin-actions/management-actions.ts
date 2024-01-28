@@ -49,7 +49,7 @@ export const ManagementActionsGenPhase: Phase = async (input) => {
     input.content.push(dedent`
     install${contract.name}({account = client.account, overrides, ...params}) {
       if (!account) {
-        throw new Error("Account is required");
+        throw new AccountNotFoundError();
       }
 
       const chain = client.chain;

@@ -35,6 +35,7 @@ export const PluginActionsGenPhase: Phase = async (input) => {
     name: "SendUserOperationResult",
     isType: true,
   });
+  addImport("@alchemy/aa-core", { name: "AccountNotFoundError" });
 
   const providerFunctionDefs: string[] = [];
   const providerFunctions = executionAbi
@@ -60,7 +61,7 @@ export const PluginActionsGenPhase: Phase = async (input) => {
       return dedent`
               ${camelCase(n.name)}(${argsParamString}) {
                 if (!account) {
-                  throw new Error("account is required");
+                  throw new AccountNotFoundError();
                 }  
   
                 const uo = encodeFunctionData({

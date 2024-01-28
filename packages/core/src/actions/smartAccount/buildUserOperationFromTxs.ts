@@ -1,6 +1,7 @@
 import { fromHex, type Chain, type Transport } from "viem";
 import type { SmartContractAccount } from "../../account/smartContractAccount";
 import type { BaseSmartAccountClient } from "../../client/smartAccountClient";
+import { AccountNotFoundError } from "../../errors/account.js";
 import type { UserOperationOverrides } from "../../types";
 import { bigIntMax, filterUndefined } from "../../utils/index.js";
 import type {
@@ -23,7 +24,7 @@ export const buildUserOperationFromTxs: <
 ) => {
   const { account = client.account, requests, overrides } = args;
   if (!account) {
-    throw new Error("No account set on client");
+    throw new AccountNotFoundError();
   }
 
   const batch = requests.map((request) => {

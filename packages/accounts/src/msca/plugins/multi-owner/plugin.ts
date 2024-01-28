@@ -13,6 +13,7 @@ import {
   type ReadContractReturnType,
 } from "viem";
 import {
+  AccountNotFoundError,
   type SmartAccountClient,
   type SmartContractAccount,
   type UserOperationOverrides,
@@ -166,7 +167,7 @@ export const multiOwnerPluginActions: <
 ) => ({
   updateOwners({ args, overrides, account = client.account }) {
     if (!account) {
-      throw new Error("account is required");
+      throw new AccountNotFoundError();
     }
 
     const uo = encodeFunctionData({
@@ -179,7 +180,7 @@ export const multiOwnerPluginActions: <
   },
   installMultiOwnerPlugin({ account = client.account, overrides, ...params }) {
     if (!account) {
-      throw new Error("Account is required");
+      throw new AccountNotFoundError();
     }
 
     const chain = client.chain;
@@ -222,7 +223,7 @@ export const multiOwnerPluginActions: <
 
   async readEip712Domain({ account = client.account }) {
     if (!account) {
-      throw new Error("account is required");
+      throw new AccountNotFoundError();
     }
 
     return client.readContract({
@@ -241,7 +242,7 @@ export const multiOwnerPluginActions: <
 
   async readIsValidSignature({ args, account = client.account }) {
     if (!account) {
-      throw new Error("account is required");
+      throw new AccountNotFoundError();
     }
 
     return client.readContract({

@@ -107,3 +107,5 @@ export { overridePaymasterDataMiddleware } from "./middleware/defaults/overrideP
 export { defaultPaymasterAndData } from "./middleware/defaults/paymasterAndData.js";
 export { noopMiddleware } from "./middleware/noopMiddleware.js";
 export type * from "./middleware/types.js";
+
+export { AccountNotFoundError } from "./errors/account.js";

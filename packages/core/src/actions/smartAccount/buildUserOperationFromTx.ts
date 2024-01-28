@@ -5,6 +5,7 @@ import {
 } from "viem";
 import type { SmartContractAccount } from "../../account/smartContractAccount.js";
 import type { BaseSmartAccountClient } from "../../client/smartAccountClient.js";
+import { AccountNotFoundError } from "../../errors/account.js";
 import type {
   UserOperationOverrides,
   UserOperationStruct,
@@ -24,7 +25,7 @@ export const buildUserOperationFromTx: <
 ) => Promise<UserOperationStruct> = async (client, args) => {
   const { account = client.account, ...request } = args;
   if (!account || typeof account === "string") {
-    throw new Error("No account set on client");
+    throw new AccountNotFoundError();
   }
 
   if (!request.to) {

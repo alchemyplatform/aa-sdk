@@ -26,13 +26,17 @@ export type CreateAlchemySmartAccountClientFromRpcClient<
 /**
  * Helper method meant to be used internally to create an alchemy smart account client
  * from an existing Alchemy Rpc Client
- * @returns
  */
 export function createAlchemySmartAccountClientFromRpcClient<
+  TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined
->({
+>(
+  args: CreateAlchemySmartAccountClientFromRpcClient<TAccount>
+): AlchemySmartAccountClient<CustomTransport, TChain, TAccount>;
+
+export function createAlchemySmartAccountClientFromRpcClient({
   opts,
   account,
   useSimulation,
@@ -43,11 +47,7 @@ export function createAlchemySmartAccountClientFromRpcClient<
   dummyPaymasterAndData,
   customMiddleware,
   client,
-}: CreateAlchemySmartAccountClientFromRpcClient<TAccount>): AlchemySmartAccountClient<
-  CustomTransport,
-  Chain | undefined,
-  TAccount
-> {
+}: CreateAlchemySmartAccountClientFromRpcClient): AlchemySmartAccountClient {
   const feeOptions =
     opts?.feeOptions ?? getDefaultUserOperationFeeOptions(client.chain);
 
