@@ -18,16 +18,14 @@ export const transferOwnership: <
   args: {
     newOwner: TOwner;
     waitForTxn?: boolean;
-  } & GetAccountParameter<TAccount>
+  } & GetAccountParameter<TAccount, LightAccount>
 ) => Promise<Hex> = async (
   client,
-  { newOwner, waitForTxn = false, account: account_ = client.account }
+  { newOwner, waitForTxn = false, account = client.account }
 ): Promise<Hex> => {
-  if (!account_) {
+  if (!account) {
     throw new Error("Account is not defined");
   }
-
-  const account = account_ as LightAccount;
 
   const data = account.encodeTransferOwnership(await newOwner.getAddress());
   const result = await client.sendUserOperation({
