@@ -12,6 +12,7 @@ import {
   type Hex,
 } from "viem";
 import {
+  AccountNotFoundError,
   type SmartAccountClient,
   type SmartContractAccount,
   type UserOperationOverrides,
@@ -167,7 +168,7 @@ export const tokenReceiverPluginActions: <
 ) => ({
   tokensReceived({ args, overrides, account = client.account }) {
     if (!account) {
-      throw new Error("account is required");
+      throw new AccountNotFoundError();
     }
 
     const uo = encodeFunctionData({
@@ -180,7 +181,7 @@ export const tokenReceiverPluginActions: <
   },
   onErc721Received({ args, overrides, account = client.account }) {
     if (!account) {
-      throw new Error("account is required");
+      throw new AccountNotFoundError();
     }
 
     const uo = encodeFunctionData({
@@ -193,7 +194,7 @@ export const tokenReceiverPluginActions: <
   },
   onErc1155Received({ args, overrides, account = client.account }) {
     if (!account) {
-      throw new Error("account is required");
+      throw new AccountNotFoundError();
     }
 
     const uo = encodeFunctionData({
@@ -206,7 +207,7 @@ export const tokenReceiverPluginActions: <
   },
   onErc1155BatchReceived({ args, overrides, account = client.account }) {
     if (!account) {
-      throw new Error("account is required");
+      throw new AccountNotFoundError();
     }
 
     const uo = encodeFunctionData({
@@ -223,7 +224,7 @@ export const tokenReceiverPluginActions: <
     ...params
   }) {
     if (!account) {
-      throw new Error("Account is required");
+      throw new AccountNotFoundError();
     }
 
     const chain = client.chain;

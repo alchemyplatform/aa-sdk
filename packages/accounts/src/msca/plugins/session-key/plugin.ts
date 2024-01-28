@@ -13,6 +13,7 @@ import {
   type Hex,
 } from "viem";
 import {
+  AccountNotFoundError,
   type SmartAccountClient,
   type SmartContractAccount,
   type UserOperationOverrides,
@@ -187,7 +188,7 @@ export const sessionKeyPluginActions: <
 ) => ({
   executeWithSessionKey({ args, overrides, account = client.account }) {
     if (!account) {
-      throw new Error("account is required");
+      throw new AccountNotFoundError();
     }
 
     const uo = encodeFunctionData({
@@ -200,7 +201,7 @@ export const sessionKeyPluginActions: <
   },
   addSessionKey({ args, overrides, account = client.account }) {
     if (!account) {
-      throw new Error("account is required");
+      throw new AccountNotFoundError();
     }
 
     const uo = encodeFunctionData({
@@ -213,7 +214,7 @@ export const sessionKeyPluginActions: <
   },
   removeSessionKey({ args, overrides, account = client.account }) {
     if (!account) {
-      throw new Error("account is required");
+      throw new AccountNotFoundError();
     }
 
     const uo = encodeFunctionData({
@@ -226,7 +227,7 @@ export const sessionKeyPluginActions: <
   },
   rotateSessionKey({ args, overrides, account = client.account }) {
     if (!account) {
-      throw new Error("account is required");
+      throw new AccountNotFoundError();
     }
 
     const uo = encodeFunctionData({
@@ -239,7 +240,7 @@ export const sessionKeyPluginActions: <
   },
   updateKeyPermissions({ args, overrides, account = client.account }) {
     if (!account) {
-      throw new Error("account is required");
+      throw new AccountNotFoundError();
     }
 
     const uo = encodeFunctionData({
@@ -252,7 +253,7 @@ export const sessionKeyPluginActions: <
   },
   installSessionKeyPlugin({ account = client.account, overrides, ...params }) {
     if (!account) {
-      throw new Error("Account is required");
+      throw new AccountNotFoundError();
     }
 
     const chain = client.chain;

@@ -12,7 +12,6 @@ import { generatePrivateKey } from "viem/accounts";
 import { sepolia } from "viem/chains";
 import {
   multiOwnerPluginActions,
-  transferLightAccountOwnership,
   type LightAccountVersion,
 } from "../../index.js";
 import { getMSCAUpgradeToData } from "../../msca/utils.js";
@@ -48,7 +47,7 @@ describe("Light Account Tests", () => {
         const signature = await provider.account.signMessage({ message });
         expect(
           await provider.verifyMessage({
-            address: provider.account.address,
+            address: provider.getAddress(),
             message,
             signature,
           })
@@ -112,7 +111,7 @@ describe("Light Account Tests", () => {
 
     const result = await provider.sendUserOperation({
       uo: {
-        target: provider.account.address,
+        target: provider.getAddress(),
         data: "0x",
       },
     });
@@ -133,7 +132,7 @@ describe("Light Account Tests", () => {
 
     const result = newProvider.sendUserOperation({
       uo: {
-        target: newProvider.account.address,
+        target: newProvider.getAddress(),
         data: "0x",
       },
     });
@@ -181,9 +180,9 @@ describe("Light Account Tests", () => {
 
     // fund the throwaway address
     await provider.sendTransaction({
-      to: throwawayProvider.account.address,
+      to: throwawayProvider.getAddress(),
       data: "0x",
-      value: 1000000000000000n,
+      value: 200000000000000000n,
     });
 
     // create new owner and transfer ownership
@@ -191,7 +190,7 @@ describe("Light Account Tests", () => {
       generatePrivateKey()
     );
 
-    await transferLightAccountOwnership(throwawayProvider, {
+    await throwawayProvider.transferOwnership({
       newOwner: newThrowawayOwner,
       waitForTxn: true,
     });
@@ -219,7 +218,7 @@ describe("Light Account Tests", () => {
       chain,
     });
 
-    const accountAddress = throwawayProvider.account.address;
+    const accountAddress = throwawayProvider.getAddress();
     const ownerAddress = await throwawayOwner.getAddress();
 
     // fund + deploy the throwaway address
@@ -231,7 +230,7 @@ describe("Light Account Tests", () => {
 
     const { createMAAccount, ...upgradeToData } = await getMSCAUpgradeToData(
       throwawayProvider,
-      {}
+      { account: throwawayProvider.account }
     );
 
     await throwawayProvider.upgradeAccount({
@@ -247,9 +246,11 @@ describe("Light Account Tests", () => {
       account: await createMAAccount(),
     }).extend(multiOwnerPluginActions);
 
-    const upgradedAccountAddress = upgradedProvider.account.address;
+    const upgradedAccountAddress = upgradedProvider.getAddress();
 
-    const owners = await upgradedProvider.readOwners();
+    const owners = await upgradedProvider.readOwners({
+      account: upgradedProvider.account,
+    });
 
     expect(upgradedAccountAddress).toBe(accountAddress);
     expect(owners).toContain(ownerAddress);

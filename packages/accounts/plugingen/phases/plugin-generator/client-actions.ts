@@ -59,7 +59,7 @@ export const ClientDecoratorGenPhase: Phase = async (input) => {
       return dedent`
             ${camelCase(n.name)}: (${argsParamString}) => {
               if (!account) {
-                throw new Error("account is required");
+                throw new AccountNotFoundError();
               }  
 
               const data = encodeFunctionData({

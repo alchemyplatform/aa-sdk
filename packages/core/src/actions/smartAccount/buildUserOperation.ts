@@ -1,6 +1,7 @@
 import type { Chain, Transport } from "viem";
 import type { SmartContractAccount } from "../../account/smartContractAccount.js";
 import type { BaseSmartAccountClient } from "../../client/smartAccountClient.js";
+import { AccountNotFoundError } from "../../errors/account.js";
 import type { UserOperationStruct } from "../../types.js";
 import type { Deferrable } from "../../utils/index.js";
 import { _runMiddlewareStack } from "./internal/runMiddlewareStack.js";
@@ -18,7 +19,7 @@ export const buildUserOperation: <
 ) => Promise<UserOperationStruct> = async (client, args) => {
   const { account = client.account, overrides, uo } = args;
   if (!account) {
-    throw new Error("No account set on client");
+    throw new AccountNotFoundError();
   }
 
   return _runMiddlewareStack(client, {
