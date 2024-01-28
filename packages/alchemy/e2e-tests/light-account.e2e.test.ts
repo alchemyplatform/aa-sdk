@@ -1,6 +1,8 @@
-import type { UserOperationOverrides } from "@alchemy/aa-core";
 import { LocalAccountSigner } from "@alchemy/aa-core";
+import { Alchemy, Network } from "alchemy-sdk";
 import { sepolia } from "viem/chains";
+import * as simulateUoActions from "../src/actions/simulateUserOperationChanges.js";
+import { alchemyEnhancedApiActions } from "../src/client/decorators/alchemyEnhancedApis.js";
 import {
   createLightAccountAlchemyClient,
   type AlchemyLightAccountClientConfig,
@@ -11,7 +13,13 @@ import {
   PAYMASTER_POLICY_ID,
 } from "./constants.js";
 
+const simulateUoChangesSpy = vi.spyOn(
+  simulateUoActions,
+  "simulateUserOperationChanges"
+);
+
 const chain = sepolia;
+const network = Network.ETH_SEPOLIA;
 
 describe("Light Account Tests", () => {
   const owner = LocalAccountSigner.mnemonicToAccountSigner(
@@ -78,65 +86,54 @@ describe("Light Account Tests", () => {
     await expect(txnHash).resolves.not.toThrowError();
   }, 100000);
 
-  it("should successfully override fees in alchemy paymaster", async () => {
+  it("should successfully override fees and gas when using paymaster", async () => {
     const provider = await givenConnectedProvider({
       owner,
       chain,
-      opts: {
-        feeOptions: {
-          maxFeePerGas: undefined,
-          maxPriorityFeePerGas: undefined,
-        },
-      },
       gasManagerConfig: {
         policyId: PAYMASTER_POLICY_ID,
       },
-      feeEstimator: async (struct) => ({
-        ...struct,
-        maxFeePerGas: 1n,
-        maxPriorityFeePerGas: 1n,
-      }),
     });
 
-    // this should fail since we set super low fees
     await expect(
-      provider.sendUserOperation({
-        uo: {
-          target: provider.account.address,
-          data: "0x",
-        },
-      })
-    ).rejects.toThrow();
-  }, 100000);
-
-  it("should support overrides for buildUserOperation", async () => {
-    const signer = await givenConnectedProvider({
-      owner,
-      chain,
-      gasManagerConfig: {
-        policyId: PAYMASTER_POLICY_ID,
-      },
-    });
-
-    const overrides: UserOperationOverrides = {
-      maxFeePerGas: 100000000n,
-      maxPriorityFeePerGas: 100000000n,
-      paymasterAndData: "0x",
-    };
-
-    const uoStruct = await signer.buildUserOperation({
-      uo: {
-        target: signer.account.address,
-        data: "0x",
-      },
-      overrides,
-    });
-
-    expect(uoStruct.maxFeePerGas).toEqual(overrides.maxFeePerGas);
-    expect(uoStruct.maxPriorityFeePerGas).toEqual(
-      overrides.maxPriorityFeePerGas
-    );
-    expect(uoStruct.paymasterAndData).toEqual(overrides.paymasterAndData);
+      provider
+        .buildUserOperation({
+          uo: {
+            target: provider.account.address,
+            data: "0x",
+          },
+          overrides: {
+            maxFeePerGas: 1n,
+            maxPriorityFeePerGas: 1n,
+            callGasLimit: 1n,
+            verificationGasLimit: 1n,
+            preVerificationGas: 1n,
+          },
+        })
+        .then(
+          ({
+            maxFeePerGas,
+            maxPriorityFeePerGas,
+            callGasLimit,
+            verificationGasLimit,
+            preVerificationGas,
+          }) => ({
+            maxFeePerGas,
+            maxPriorityFeePerGas,
+            callGasLimit,
+            verificationGasLimit,
+            preVerificationGas,
+          })
+        )
+    ).resolves.toMatchInlineSnapshot(`
+      {
+        "callGasLimit": "0x1",
+        "maxFeePerGas": "0x1",
+        "maxPriorityFeePerGas": "0x1",
+        "preVerificationGas": "0x1",
+        "verificationGasLimit": "0x1",
+      }
+    `);
   }, 100000);
 
   it("should successfully use paymaster with fee opts", async () => {
@@ -201,6 +198,7 @@ describe("Light Account Tests", () => {
         data: "0x",
       },
     });
+
     const replacedResult = await provider.dropAndReplaceUserOperation({
       uoToDrop: result.request,
     });
@@ -209,44 +207,43 @@ describe("Light Account Tests", () => {
     await expect(txnHash).resolves.not.toThrowError();
   }, 100000);
 
-  // TODO: come back to this!!!
-  // it("should get token balances for the smart account", async () => {
-  //   const alchemy = new Alchemy({
-  //     apiKey: API_KEY!,
-  //     network,
-  //   });
+  it("should get token balances for the smart account", async () => {
+    const alchemy = new Alchemy({
+      apiKey: API_KEY!,
+      network,
+    });
 
-  //   const provider = await givenConnectedProvider({
-  //     owner,
-  //     chain,
-  //     gasManagerConfig: {
-  //       policyId: PAYMASTER_POLICY_ID,
-  //     },
-  //   }).withAlchemyEnhancedApis(alchemy);
+    const provider = await givenConnectedProvider({
+      owner,
+      chain,
+      gasManagerConfig: {
+        policyId: PAYMASTER_POLICY_ID,
+      },
+    }).then((x) => x.extend(alchemyEnhancedApiActions(alchemy)));
 
-  //   const address = provider.account.address;
-  //   const balances = await provider.core.getTokenBalances(address);
-  //   expect(balances.tokenBalances.length).toMatchInlineSnapshot("1");
-  // }, 50000);
+    const address = provider.account.address;
+    const balances = await provider.core.getTokenBalances(address);
+    expect(balances.tokenBalances.length).toMatchInlineSnapshot("1");
+  }, 50000);
 
-  // TODO: come back to this!!!
-  // it("should get owned nfts for the smart account", async () => {
-  //   const alchemy = new Alchemy({
-  //     apiKey: API_KEY!,
-  //     network,
-  //   });
-  //   const provider = await givenConnectedProvider({
-  //     owner,
-  //     chain,
-  //     gasManagerConfig: {
-  //       policyId: PAYMASTER_POLICY_ID,
-  //     },
-  //   }).withAlchemyEnhancedApis(alchemy);
+  it("should get owned nfts for the smart account", async () => {
+    const alchemy = new Alchemy({
+      apiKey: API_KEY!,
+      network,
+    });
 
-  //   const address = provider.account.address;
-  //   const nfts = await provider.nft.getNftsForOwner(address);
-  //   expect(nfts.ownedNfts).toMatchInlineSnapshot("[]");
-  // }, 100000);
+    const provider = await givenConnectedProvider({
+      owner,
+      chain,
+      gasManagerConfig: {
+        policyId: PAYMASTER_POLICY_ID,
+      },
+    }).then((x) => x.extend(alchemyEnhancedApiActions(alchemy)));
+
+    const address = provider.account.address;
+    const nfts = await provider.nft.getNftsForOwner(address);
+    expect(nfts.ownedNfts).toMatchInlineSnapshot("[]");
+  }, 100000);
 
   it("should correctly simulate asset changes for the user operation", async () => {
     const provider = await givenConnectedProvider({
@@ -256,13 +253,34 @@ describe("Light Account Tests", () => {
 
     const simulatedAssetChanges = await provider.simulateUserOperation({
       uo: {
-        target: provider.account.getEntrypoint(),
+        target: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
         data: "0x",
         value: 1n,
       },
     });
 
-    expect(simulatedAssetChanges.changes.length).toMatchInlineSnapshot("2");
+    expect(
+      simulatedAssetChanges.changes.filter(
+        (x) => x.to === "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
+      )
+    ).toMatchInlineSnapshot(`
+      [
+        {
+          "amount": "0.000000000000000001",
+          "assetType": "NATIVE",
+          "changeType": "TRANSFER",
+          "contractAddress": null,
+          "decimals": 18,
+          "from": "0x86f3b0211764971ad0fc8c8898d31f5d792fad84",
+          "logo": "https://static.alchemyapi.io/images/network-assets/eth.png",
+          "name": "Ethereum",
+          "rawAmount": "1",
+          "symbol": "ETH",
+          "to": "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+          "tokenId": null,
+        },
+      ]
+    `);
   }, 50000);
 
   it("should simulate as part of middleware stack when added to provider", async () => {
@@ -272,8 +290,6 @@ describe("Light Account Tests", () => {
       useSimulation: true,
     });
 
-    const spy = vi.spyOn(provider, "simulateUserOperation");
-
     await provider.buildUserOperation({
       uo: {
         target: provider.account.getEntrypoint(),
@@ -282,7 +298,7 @@ describe("Light Account Tests", () => {
       },
     });
 
-    expect(spy).toHaveBeenCalledOnce();
+    expect(simulateUoChangesSpy).toHaveBeenCalledOnce();
   }, 100000);
 });
 
@@ -302,12 +318,12 @@ const givenConnectedProvider = async ({
     gasManagerConfig,
     useSimulation,
     opts: {
-      ...opts,
       txMaxRetries: 10,
+      ...opts,
       feeOptions: {
-        ...opts?.feeOptions,
         maxFeePerGas: { percentage: 50 },
         maxPriorityFeePerGas: { percentage: 50 },
+        ...opts?.feeOptions,
       },
     },
   });

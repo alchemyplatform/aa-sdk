@@ -51,7 +51,6 @@ export const dropAndReplaceUserOperation: <
       BigInt(maxPriorityFeePerGas ?? 0n),
       bigIntPercent(uoToDrop.maxPriorityFeePerGas, 110n)
     ),
-    paymasterAndData: uoToDrop.paymasterAndData,
   };
 
   const uoToSend = await _runMiddlewareStack(client, {

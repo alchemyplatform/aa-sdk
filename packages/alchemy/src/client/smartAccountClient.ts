@@ -95,11 +95,6 @@ export function createAlchemySmartAccountClient<
   TAccount
 >): AlchemySmartAccountClient<TTransport, TChain, TAccount>;
 
-// TODO: this is missing the additional logic for the gas manager fallback stuff
-// TODO: this is missing the simulation action
-// TODO: this is missing the extend with alchemy sdk stuff
-// TODO: we should consider allowing this client to be created with a PublicErc4337Client that way one public client can be shared between
-// the account and this one. We could probably export an AlchemyRpcClient from this package which extends PublicErc4337Client
 export function createAlchemySmartAccountClient({
   account,
   gasManagerConfig,

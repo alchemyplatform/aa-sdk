@@ -31,18 +31,9 @@ export const createLightAccountAlchemyClient: <
     Chain | undefined,
     LightAccount<TOwner>
   >
-> = async ({
-  gasManagerConfig,
-  useSimulation,
-  dummyPaymasterAndData,
-  feeEstimator,
-  customMiddleware,
-  gasEstimator,
-  paymasterAndData,
-  ...config_
-}) => {
+> = async (config) => {
   const { chain, opts, ...connectionConfig } =
-    AlchemyProviderConfigSchema.parse(config_);
+    AlchemyProviderConfigSchema.parse(config);
 
   const client = createAlchemyPublicRpcClient({
     chain,
@@ -51,13 +42,13 @@ export const createLightAccountAlchemyClient: <
 
   const account = await createLightAccount({
     client,
-    ...config_,
+    ...config,
   });
 
   return createAlchemySmartAccountClientFromRpcClient({
+    ...config,
     client,
     account,
     opts,
-    ...config_,
   });
 };
