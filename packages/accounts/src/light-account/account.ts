@@ -222,7 +222,6 @@ export async function createLightAccount({
   return {
     ...account,
     source: "LightAccount",
-    owner,
     getLightAccountVersion: async () => getLightAccountVersion(account),
     encodeTransferOwnership: (newOwner: Address) => {
       return encodeFunctionData({
@@ -248,6 +247,7 @@ export async function createLightAccount({
 
       return callResult;
     },
+    getOwner: () => owner,
     setOwner: <TOwner extends SmartAccountSigner = SmartAccountSigner>(
       newOwner: TOwner
     ) => {

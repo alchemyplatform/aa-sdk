@@ -160,7 +160,7 @@ export const getMSCAUpgradeToData: <
     })
   );
 
-  const ownerAddress = await account.owner.getAddress();
+  const ownerAddress = await account.getOwner().getAddress();
   const encodedOwner = encodeAbiParameters(parseAbiParameters("address[]"), [
     [ownerAddress],
   ]);
@@ -190,7 +190,7 @@ export const getMSCAUpgradeToData: <
             transport: custom(client.transport),
           })
         ),
-        owner: account.owner,
+        owner: account.getOwner(),
         factoryAddress,
         accountAddress: account.address,
       }),

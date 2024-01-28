@@ -38,7 +38,7 @@ export async function createMultiOwnerModularAccountWithSessionKey({
   const account = await createMultiOwnerModularAccount(config);
 
   const sessionKeySigner = new SessionKeySigner({
-    fallbackSigner: account.owner,
+    fallbackSigner: account.getOwner(),
     storageKey,
     storageType,
   });
@@ -64,15 +64,19 @@ export async function createMultiOwnerModularAccountWithSessionKey({
     return sessionKeySigner.isKeyActive();
   };
 
-  return {
-    ...account,
-    source: "SessionKeyModularAccount",
+  const withSessionKey = await createMultiOwnerModularAccount({
+    ...config,
     owner: sessionKeySigner,
+  });
+
+  return {
+    ...withSessionKey,
+    source: "SessionKeyModularAccount",
     isSessionKeyActive,
     ...multiOwnerMessageSigner(
       config.client,
       account.address,
-      sessionKeySigner
+      withSessionKey.getOwner
     ),
   };
 }
