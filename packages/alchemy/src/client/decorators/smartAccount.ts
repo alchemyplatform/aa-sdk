@@ -5,7 +5,7 @@ import type {
 import type { Chain, Transport } from "viem";
 import { simulateUserOperationChanges } from "../../actions/simulateUserOperationChanges.js";
 import type { SimulateUserOperationAssetChangesResponse } from "../../actions/types.js";
-import type { AlchemySmartAccountClient_Base } from "../smartAccount.js";
+import type { AlchemySmartAccountClient_Base } from "../smartAccountClient.js";
 
 export type AlchemySmartAccountClientActions<
   TAccount extends SmartContractAccount | undefined =

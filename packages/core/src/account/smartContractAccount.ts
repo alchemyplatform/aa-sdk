@@ -1,5 +1,6 @@
 import {
   getContract,
+  hexToBytes,
   trim,
   type Address,
   type CustomSource,
@@ -187,7 +188,7 @@ export const toSmartContractAccount = async <
   const signUserOperationHash_ =
     signUserOperationHash ??
     (async (uoHash: Hex) => {
-      return signMessage({ message: { raw: uoHash } });
+      return signMessage({ message: { raw: hexToBytes(uoHash) } });
     });
 
   const [factoryAddress] = parseFactoryAddressFromAccountInitCode(

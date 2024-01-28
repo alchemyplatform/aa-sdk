@@ -18,11 +18,7 @@ export type CreateLightAccountClientParams<
 > = {
   client: CreateLightAccountParams<TTransport, TOwner>["client"];
   account: Omit<CreateLightAccountParams<TTransport, TOwner>, "client">;
-  clientConfig?: Omit<
-    SmartAccountClientConfig<TTransport, TChain>,
-    "transport" | "account"
-  >;
-};
+} & Omit<SmartAccountClientConfig<TTransport, TChain>, "transport" | "account">;
 
 export const createLightAccountClient: <
   TChain extends Chain = Chain,
@@ -31,7 +27,7 @@ export const createLightAccountClient: <
   args: CreateLightAccountClientParams<Transport, TChain, TOwner>
 ) => Promise<
   SmartAccountClient<CustomTransport, TChain, LightAccount<TOwner>>
-> = async ({ account, client, clientConfig }) => {
+> = async ({ account, client, ...clientConfig }) => {
   const lightAccount = await createLightAccount({
     client,
     ...account,

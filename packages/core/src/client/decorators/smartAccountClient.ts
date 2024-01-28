@@ -19,7 +19,9 @@ import type {
   DropAndReplaceUserOperationParameters,
   SendTransactionsParameters,
   SendUserOperationParameters,
+  UpgradeAccountParams,
 } from "../../actions/smartAccount/types";
+import { upgradeAccount } from "../../actions/smartAccount/upgradeAccount.js";
 import { waitForUserOperationTransaction } from "../../actions/smartAccount/waitForUserOperationTransacation.js";
 import type { UserOperationStruct } from "../../types";
 import type { BaseSmartAccountClient } from "../smartAccountClient";
@@ -58,6 +60,7 @@ export type BaseSmartAccountClientActions<
   waitForUserOperationTransaction: (
     args: WaitForTransactionReceiptParameters
   ) => Promise<Hex>;
+  upgradeAccount: (args: UpgradeAccountParams<TAccount>) => Promise<Hex>;
 };
 
 export const smartAccountClientDecorator: <
@@ -81,4 +84,5 @@ export const smartAccountClientDecorator: <
   sendUserOperation: (args) => sendUserOperation(client, args),
   waitForUserOperationTransaction: (args) =>
     waitForUserOperationTransaction.bind(client)(client, args),
+  upgradeAccount: (args) => upgradeAccount(client, args),
 });
