@@ -64,7 +64,7 @@ export const AccountReadActionsGenPhase: Phase = async (input) => {
       methodContent.push(dedent`
         async read${pascalCase(n.name)} (${readArgsParamString}) {
           if (!account) {
-            throw new Error("account is required");
+            throw new AccountNotFoundError();
           }
 
           return client.readContract({

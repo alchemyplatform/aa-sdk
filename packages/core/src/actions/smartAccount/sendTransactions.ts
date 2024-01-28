@@ -1,6 +1,7 @@
 import type { Chain, Hex, Transport } from "viem";
 import type { SmartContractAccount } from "../../account/smartContractAccount.js";
 import type { BaseSmartAccountClient } from "../../client/smartAccountClient.js";
+import { AccountNotFoundError } from "../../errors/account.js";
 import { buildUserOperationFromTxs } from "./buildUserOperationFromTxs.js";
 import { sendUserOperation } from "./sendUserOperation.js";
 import type { SendTransactionsParameters } from "./types";
@@ -18,7 +19,7 @@ export const sendTransactions: <
 ) => Promise<Hex> = async (client, args) => {
   const { requests, overrides, account = client.account } = args;
   if (!account) {
-    throw new Error("No account set on client");
+    throw new AccountNotFoundError();
   }
 
   const { batch, overrides: _overrides } = await buildUserOperationFromTxs(

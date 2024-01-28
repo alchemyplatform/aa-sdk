@@ -28,7 +28,7 @@ describe("Light Account Tests", () => {
 
   it("should successfully get counterfactual address", async () => {
     const provider = await givenConnectedProvider({ owner, chain });
-    expect(provider.account.address).toMatchInlineSnapshot(
+    expect(provider.getAddress()).toMatchInlineSnapshot(
       '"0x86f3B0211764971Ad0Fc8C8898d31f5d792faD84"'
     );
   });
@@ -38,7 +38,7 @@ describe("Light Account Tests", () => {
 
     const result = await provider.sendUserOperation({
       uo: {
-        target: provider.account.address,
+        target: provider.getAddress(),
         data: "0x",
       },
     });
@@ -58,7 +58,7 @@ describe("Light Account Tests", () => {
 
     const result = provider.sendUserOperation({
       uo: {
-        target: provider.account.address,
+        target: provider.getAddress(),
         data: "0x",
       },
     });
@@ -77,7 +77,7 @@ describe("Light Account Tests", () => {
 
     const result = await provider.sendUserOperation({
       uo: {
-        target: provider.account.address,
+        target: provider.getAddress(),
         data: "0x",
       },
     });
@@ -99,7 +99,7 @@ describe("Light Account Tests", () => {
       provider
         .buildUserOperation({
           uo: {
-            target: provider.account.address,
+            target: provider.getAddress(),
             data: "0x",
           },
           overrides: {
@@ -154,7 +154,7 @@ describe("Light Account Tests", () => {
 
     const result = await provider.sendUserOperation({
       uo: {
-        target: provider.account.address,
+        target: provider.getAddress(),
         data: "0x",
       },
     });
@@ -171,7 +171,7 @@ describe("Light Account Tests", () => {
 
     const result = await provider.sendUserOperation({
       uo: {
-        target: provider.account.address,
+        target: provider.getAddress(),
         data: "0x",
       },
     });
@@ -194,7 +194,7 @@ describe("Light Account Tests", () => {
 
     const result = await provider.sendUserOperation({
       uo: {
-        target: provider.account.address,
+        target: provider.getAddress(),
         data: "0x",
       },
     });
@@ -221,7 +221,7 @@ describe("Light Account Tests", () => {
       },
     }).then((x) => x.extend(alchemyEnhancedApiActions(alchemy)));
 
-    const address = provider.account.address;
+    const address = provider.getAddress();
     const balances = await provider.core.getTokenBalances(address);
     expect(balances.tokenBalances.length).toMatchInlineSnapshot("1");
   }, 50000);
@@ -240,7 +240,7 @@ describe("Light Account Tests", () => {
       },
     }).then((x) => x.extend(alchemyEnhancedApiActions(alchemy)));
 
-    const address = provider.account.address;
+    const address = provider.getAddress();
     const nfts = await provider.nft.getNftsForOwner(address);
     expect(nfts.ownedNfts).toMatchInlineSnapshot("[]");
   }, 100000);

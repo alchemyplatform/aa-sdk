@@ -1,10 +1,22 @@
-import type {
-  GetAccountParameter,
-  SmartAccountClient,
-  SmartAccountSigner,
+import {
+  AccountNotFoundError,
+  type GetAccountParameter,
+  type Hex,
+  type SmartAccountClient,
+  type SmartAccountSigner,
 } from "@alchemy/aa-core";
-import type { Chain, Hex, Transport } from "viem";
-import type { LightAccount } from "./account";
+import type { Chain, Transport } from "viem";
+import type { LightAccount } from "../account";
+
+export type TransferLightAccountOwnershipParams<
+  TOwner extends SmartAccountSigner = SmartAccountSigner,
+  TAccount extends LightAccount<TOwner> | undefined =
+    | LightAccount<TOwner>
+    | undefined
+> = {
+  newOwner: TOwner;
+  waitForTxn?: boolean;
+} & GetAccountParameter<TAccount, LightAccount>;
 
 export const transferOwnership: <
   TTransport extends Transport = Transport,
@@ -15,16 +27,13 @@ export const transferOwnership: <
     | undefined
 >(
   client: SmartAccountClient<TTransport, TChain, TAccount>,
-  args: {
-    newOwner: TOwner;
-    waitForTxn?: boolean;
-  } & GetAccountParameter<TAccount, LightAccount>
+  args: TransferLightAccountOwnershipParams<TOwner, TAccount>
 ) => Promise<Hex> = async (
   client,
-  { newOwner, waitForTxn = false, account = client.account }
-): Promise<Hex> => {
+  { newOwner, waitForTxn, account = client.account }
+) => {
   if (!account) {
-    throw new Error("Account is not defined");
+    throw new AccountNotFoundError();
   }
 
   const data = account.encodeTransferOwnership(await newOwner.getAddress());

@@ -1,8 +1,9 @@
-import type {
-  GetAccountParameter,
-  SmartAccountClient,
-  SmartContractAccount,
-  UserOperationOverrides,
+import {
+  AccountNotFoundError,
+  type GetAccountParameter,
+  type SmartAccountClient,
+  type SmartContractAccount,
+  type UserOperationOverrides,
 } from "@alchemy/aa-core";
 import {
   encodeFunctionData,
@@ -38,7 +39,7 @@ export async function uninstallPlugin<
   }: UninstallPluginParams<TAccount>
 ) {
   if (!account) {
-    throw new Error("Account is required");
+    throw new AccountNotFoundError();
   }
 
   const callData = await encodeUninstallPluginUserOperation(params);

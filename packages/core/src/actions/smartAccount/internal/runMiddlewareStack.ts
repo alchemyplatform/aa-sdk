@@ -4,6 +4,7 @@ import type {
   SmartContractAccount,
 } from "../../../account/smartContractAccount";
 import type { BaseSmartAccountClient } from "../../../client/smartAccountClient";
+import { AccountNotFoundError } from "../../../errors/account.js";
 import { overridePaymasterDataMiddleware } from "../../../middleware/defaults/overridePaymasterData.js";
 import type {
   UserOperationOverrides,
@@ -36,7 +37,7 @@ export const _runMiddlewareStack: <
 ) => Promise<UserOperationStruct> = async (client, args) => {
   const { uo, overrides, account = client.account } = args;
   if (!account) {
-    throw new Error("No account set on client");
+    throw new AccountNotFoundError();
   }
 
   const result = await asyncPipe(
