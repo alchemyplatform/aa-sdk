@@ -1,11 +1,10 @@
 import {
   resolveProperties,
-  type AccountMiddlewareFn,
-  type FeeDataMiddleware,
-  type GasEstimatorMiddleware,
-  type ISmartContractAccount,
-  type PaymasterAndDataMiddleware,
+  type BatchUserOperationCallData,
   type PublicErc4337Client,
+  type SmartContractAccount,
+  type UserOperationCallData,
+  type UserOperationOverrides,
 } from "@alchemy/aa-core";
 import { Signer } from "@ethersproject/abstract-signer";
 import { hexlify } from "@ethersproject/bytes";
@@ -14,6 +13,7 @@ import {
   type TransactionRequest,
   type TransactionResponse,
 } from "@ethersproject/providers";
+import { isHex } from "viem";
 import { EthersProviderAdapter } from "./provider-adapter.js";
 
 const hexlifyOptional = (value: any): `0x${string}` | undefined => {
@@ -25,41 +25,41 @@ const hexlifyOptional = (value: any): `0x${string}` | undefined => {
 };
 
 export class AccountSigner<
-  TAccount extends ISmartContractAccount
+  TAccount extends SmartContractAccount = SmartContractAccount
 > extends Signer {
-  private account?: TAccount;
+  readonly account: TAccount;
 
   sendUserOperation;
   waitForUserOperationTransaction;
 
-  constructor(readonly provider: EthersProviderAdapter) {
+  constructor(public provider: EthersProviderAdapter, account: TAccount) {
     super();
-    if (!this.provider.accountProvider.isConnected<TAccount>()) {
-      throw new Error(
-        "provider must be connected to an acccount to create a Signer"
-      );
-    }
+    this.account = account;
 
-    this.account = this.provider.accountProvider.account;
+    this.sendUserOperation = (
+      args: UserOperationCallData | BatchUserOperationCallData,
+      overrides?: UserOperationOverrides
+    ) =>
+      this.provider.accountProvider.sendUserOperation({
+        uo: args,
+        account,
+        overrides,
+      });
 
-    this.sendUserOperation =
-      this.provider.accountProvider.sendUserOperation.bind(
-        this.provider.accountProvider
-      );
     this.waitForUserOperationTransaction =
       this.provider.accountProvider.waitForUserOperationTransaction.bind(
         this.provider.accountProvider
       );
   }
 
-  getAddress(): Promise<string> {
+  async getAddress(): Promise<string> {
     if (!this.account) {
       throw new Error(
         "connect the signer to a provider that has a connected account"
       );
     }
 
-    return this.account.getAddress();
+    return this.account.address;
   }
 
   signMessage(message: string | Uint8Array): Promise<string> {
@@ -69,41 +69,29 @@ export class AccountSigner<
       );
     }
 
-    return this.account.signMessage(message);
+    return this.account.signMessage({
+      message:
+        typeof message === "string" && !isHex(message)
+          ? message
+          : { raw: message },
+    });
   }
-
-  withPaymasterMiddleware = (overrides: {
-    dummyPaymasterDataMiddleware?: PaymasterAndDataMiddleware;
-    paymasterDataMiddleware?: PaymasterAndDataMiddleware;
-  }): this => {
-    this.provider.withPaymasterMiddleware(overrides);
-    return this;
-  };
-
-  withGasEstimator = (override: GasEstimatorMiddleware): this => {
-    this.provider.withGasEstimator(override);
-    return this;
-  };
-
-  withFeeDataGetter = (override: FeeDataMiddleware): this => {
-    this.provider.withFeeDataGetter(override);
-    return this;
-  };
-
-  withCustomMiddleware = (override: AccountMiddlewareFn): this => {
-    this.provider.withCustomMiddleware(override);
-    return this;
-  };
 
   async sendTransaction(
     transaction: Deferrable<TransactionRequest>
   ): Promise<TransactionResponse> {
+    if (!this.provider.accountProvider.account || !this.account) {
+      throw new Error(
+        "connect the signer to a provider that has a connected account"
+      );
+    }
+
     const resolved = await resolveProperties(transaction);
     const txHash = await this.provider.accountProvider.sendTransaction({
-      // TODO: need to support gas fields as well
-      from: (await this.getAddress()) as `0x${string}`,
       to: resolved.to as `0x${string}` | undefined,
       data: hexlifyOptional(resolved.data),
+      chain: this.provider.accountProvider.chain,
+      account: this.account,
     });
 
     return this.provider.getTransaction(txHash);
@@ -122,6 +110,8 @@ export class AccountSigner<
   }
 
   connect(provider: EthersProviderAdapter): AccountSigner<TAccount> {
-    return new AccountSigner(provider);
+    this.provider = provider;
+
+    return this;
   }
 }

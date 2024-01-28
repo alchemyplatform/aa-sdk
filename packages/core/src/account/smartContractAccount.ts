@@ -15,6 +15,7 @@ import {
 import { toAccount } from "viem/accounts";
 import { EntryPointAbi } from "../abis/EntryPointAbi.js";
 import type { PublicErc4337Client } from "../client/publicErc4337Client.js";
+import { Logger } from "../logger.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import { wrapSignatureWith6492 } from "../signer/utils.js";
 import type { IsUndefined } from "../utils/types.js";
@@ -115,10 +116,21 @@ export const getAccountAddress = async ({
   });
 
   const initCode = await getAccountInitCode();
+  Logger.verbose("[BaseSmartContractAccount](getAddress) initCode: ", initCode);
+
   try {
     await entrypoint.simulate.getSenderAddress([initCode]);
   } catch (err: any) {
+    Logger.verbose(
+      "[BaseSmartContractAccount](getAddress) getSenderAddress err: ",
+      err
+    );
     if (err.cause?.data?.errorName === "SenderAddressResult") {
+      Logger.verbose(
+        "[BaseSmartContractAccount](getAddress) entrypoint.getSenderAddress result:",
+        err.cause.data.args[0]
+      );
+
       return err.cause.data.args[0] as Address;
     }
 
