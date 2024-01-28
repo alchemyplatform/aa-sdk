@@ -43,13 +43,13 @@ export const _sendUserOperation: <
     );
   }
 
-  request.signature = (await account.signUserOperationHash(
+  request.signature = await account.signUserOperationHash(
     getUserOperationHash(
       request,
       account.getEntrypoint(),
       BigInt(client.chain.id)
     )
-  )) as `0x${string}`;
+  );
 
   return {
     hash: await client.sendRawUserOperation(request, account.getEntrypoint()),

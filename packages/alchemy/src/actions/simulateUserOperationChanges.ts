@@ -4,7 +4,7 @@ import {
   type SmartContractAccount,
 } from "@alchemy/aa-core";
 import type { Chain, Transport } from "viem";
-import type { AlchemySmartAccountClient_Base } from "../client/smartAccount";
+import type { AlchemySmartAccountClient_Base } from "../client/smartAccountClient";
 import type { SimulateUserOperationAssetChangesResponse } from "./types";
 
 export const simulateUserOperationChanges: <

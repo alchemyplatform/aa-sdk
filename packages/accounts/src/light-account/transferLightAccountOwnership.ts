@@ -39,6 +39,8 @@ export const transferOwnership: <
     account,
   });
 
+  account.setOwner(newOwner);
+
   if (waitForTxn) {
     return client.waitForUserOperationTransaction(result);
   }

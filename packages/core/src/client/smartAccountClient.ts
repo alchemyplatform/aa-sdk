@@ -157,6 +157,7 @@ export function createSmartAccountClientFromExisting(
 ): SmartAccountClient {
   return createSmartAccountClient({
     ...config,
+    chain: config.client.chain,
     transport: custom(config.client),
   });
 }
