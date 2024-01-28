@@ -7,7 +7,7 @@ import {
   createMultiOwnerModularAccount,
   type CreateMultiOwnerModularAccountParams,
   type MultiOwnerModularAccount,
-} from "./base.js";
+} from "./multiOwnerAccount.js";
 
 export type MultiOwnerSessionKeyAccount<TOwner extends SmartAccountSigner> =
   Omit<MultiOwnerModularAccount<SessionKeySigner<TOwner>>, "source"> & {
