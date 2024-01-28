@@ -1,9 +1,10 @@
-import type {
-  GetAccountParameter,
-  SendUserOperationResult,
-  SmartAccountClient,
-  SmartContractAccount,
-  UserOperationOverrides,
+import {
+  AccountNotFoundError,
+  type GetAccountParameter,
+  type SendUserOperationResult,
+  type SmartAccountClient,
+  type SmartContractAccount,
+  type UserOperationOverrides,
 } from "@alchemy/aa-core";
 import type { Address, Chain, Transport } from "viem";
 import {
@@ -65,7 +66,7 @@ export const sessionKeyPluginActions: <
       pluginAddress,
       account = client.account,
     }) => {
-      if (!account) throw new Error("Account is required");
+      if (!account) throw new AccountNotFoundError();
 
       const contract = SessionKeyPlugin.getContract(client, pluginAddress);
 
@@ -76,7 +77,7 @@ export const sessionKeyPluginActions: <
       pluginAddress,
       account = client.account,
     }) => {
-      if (!account) throw new Error("Account is required");
+      if (!account) throw new AccountNotFoundError();
 
       const contract = SessionKeyPlugin.getContract(client, pluginAddress);
 
@@ -84,7 +85,7 @@ export const sessionKeyPluginActions: <
     },
 
     removeSessionKey: async ({ key, overrides, account = client.account }) => {
-      if (!account) throw new Error("Account is required");
+      if (!account) throw new AccountNotFoundError();
 
       const sessionKeysToRemove = await buildSessionKeysToRemoveStruct(client, {
         keys: [key],

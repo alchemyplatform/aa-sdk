@@ -1,19 +1,35 @@
 import type {
+  Address,
   Chain,
   Hex,
   SendTransactionParameters,
   Transport,
+  TypedData,
   WaitForTransactionReceiptParameters,
 } from "viem";
-import type { SmartContractAccount } from "../../account/smartContractAccount";
+import type {
+  GetAccountParameter,
+  SmartContractAccount,
+} from "../../account/smartContractAccount";
 import { buildUserOperation } from "../../actions/smartAccount/buildUserOperation.js";
 import { buildUserOperationFromTx } from "../../actions/smartAccount/buildUserOperationFromTx.js";
 import { buildUserOperationFromTxs } from "../../actions/smartAccount/buildUserOperationFromTxs.js";
 import { checkGasSponsorshipEligibility } from "../../actions/smartAccount/checkGasSponsorshipEligibility.js";
 import { dropAndReplaceUserOperation } from "../../actions/smartAccount/dropAndReplaceUserOperation.js";
+import { getAddress } from "../../actions/smartAccount/getAddress.js";
 import { sendTransaction } from "../../actions/smartAccount/sendTransaction.js";
 import { sendTransactions } from "../../actions/smartAccount/sendTransactions.js";
 import { sendUserOperation } from "../../actions/smartAccount/sendUserOperation.js";
+import {
+  signMessage,
+  type SignMessageParameters,
+} from "../../actions/smartAccount/signMessage.js";
+import { signMessageWith6492 } from "../../actions/smartAccount/signMessageWith6492.js";
+import {
+  signTypedData,
+  type SignTypedDataParameters,
+} from "../../actions/smartAccount/signTypedData.js";
+import { signTypedDataWith6492 } from "../../actions/smartAccount/signTypedDataWith6492.js";
 import type {
   BuildUserOperationFromTransactionsResult,
   DropAndReplaceUserOperationParameters,
@@ -24,6 +40,7 @@ import type {
 import { upgradeAccount } from "../../actions/smartAccount/upgradeAccount.js";
 import { waitForUserOperationTransaction } from "../../actions/smartAccount/waitForUserOperationTransacation.js";
 import type { UserOperationStruct } from "../../types";
+import type { IsUndefined } from "../../utils";
 import type { BaseSmartAccountClient } from "../smartAccountClient";
 import type { SendUserOperationResult } from "../types";
 
@@ -48,7 +65,7 @@ export type BaseSmartAccountClientActions<
   dropAndReplaceUserOperation: (
     args: DropAndReplaceUserOperationParameters<TAccount>
   ) => Promise<SendUserOperationResult>;
-  sendTransaction: <TChainOverride extends Chain | undefined>(
+  sendTransaction: <TChainOverride extends Chain | undefined = undefined>(
     args: SendTransactionParameters<TChain, TAccount, TChainOverride>
   ) => Promise<Hex>;
   sendTransactions: (
@@ -61,7 +78,27 @@ export type BaseSmartAccountClientActions<
     args: WaitForTransactionReceiptParameters
   ) => Promise<Hex>;
   upgradeAccount: (args: UpgradeAccountParams<TAccount>) => Promise<Hex>;
-};
+  signMessage: (args: SignMessageParameters<TAccount>) => Promise<Hex>;
+  signTypedData: <
+    const TTypedData extends TypedData | { [key: string]: unknown },
+    TPrimaryType extends string = string
+  >(
+    args: SignTypedDataParameters<TTypedData, TPrimaryType, TAccount>
+  ) => Promise<Hex>;
+  signMessageWith6492: (args: SignMessageParameters<TAccount>) => Promise<Hex>;
+  signTypedDataWith6492: <
+    const TTypedData extends TypedData | { [key: string]: unknown },
+    TPrimaryType extends string = string
+  >(
+    args: SignTypedDataParameters<TTypedData, TPrimaryType, TAccount>
+  ) => Promise<Hex>;
+} & (IsUndefined<TAccount> extends false
+  ? {
+      getAddress: () => Address;
+    }
+  : {
+      getAddress: (args: GetAccountParameter<TAccount>) => Address;
+    });
 
 export const smartAccountClientDecorator: <
   TTransport extends Transport = Transport,
@@ -85,4 +122,9 @@ export const smartAccountClientDecorator: <
   waitForUserOperationTransaction: (args) =>
     waitForUserOperationTransaction.bind(client)(client, args),
   upgradeAccount: (args) => upgradeAccount(client, args),
+  getAddress: (args) => getAddress(client, args),
+  signMessage: (args) => signMessage(client, args),
+  signTypedData: (args) => signTypedData(client, args),
+  signMessageWith6492: (args) => signMessageWith6492(client, args),
+  signTypedDataWith6492: (args) => signTypedDataWith6492(client, args),
 });

@@ -5,6 +5,7 @@ import type {
 } from "../../../account/smartContractAccount";
 import type { BaseSmartAccountClient } from "../../../client/smartAccountClient";
 import type { SendUserOperationResult } from "../../../client/types";
+import { AccountNotFoundError } from "../../../errors/account.js";
 import type { UserOperationStruct } from "../../../types";
 import {
   deepHexlify,
@@ -24,7 +25,7 @@ export const _sendUserOperation: <
 ) => Promise<SendUserOperationResult> = async (client, args) => {
   const { account = client.account } = args;
   if (!account) {
-    throw new Error("No account set on client");
+    throw new AccountNotFoundError();
   }
 
   if (!client.chain) {

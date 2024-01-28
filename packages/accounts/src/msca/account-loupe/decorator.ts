@@ -1,7 +1,8 @@
-import type {
-  GetAccountParameter,
-  SmartAccountClient,
-  SmartContractAccount,
+import {
+  AccountNotFoundError,
+  type GetAccountParameter,
+  type SmartAccountClient,
+  type SmartContractAccount,
 } from "@alchemy/aa-core";
 import type { Address, Chain, Hash, Transport } from "viem";
 import { IAccountLoupeAbi } from "../abis/IAccountLoupe.js";
@@ -63,7 +64,7 @@ export const accountLoupeActions: <
     account = client.account,
   }) => {
     if (!account) {
-      throw new Error("Account is required");
+      throw new AccountNotFoundError();
     }
 
     return client.readContract({
@@ -76,7 +77,7 @@ export const accountLoupeActions: <
 
   getExecutionHooks: async ({ selector, account = client.account }) => {
     if (!account) {
-      throw new Error("Account is required");
+      throw new AccountNotFoundError();
     }
 
     return client.readContract({
@@ -89,7 +90,7 @@ export const accountLoupeActions: <
 
   getPreValidationHooks: async ({ selector, account = client.account }) => {
     if (!account) {
-      throw new Error("Account is required");
+      throw new AccountNotFoundError();
     }
     return client.readContract({
       address: account.address,
@@ -101,7 +102,7 @@ export const accountLoupeActions: <
 
   getInstalledPlugins: async ({ account = client.account }) => {
     if (!account) {
-      throw new Error("Account is required");
+      throw new AccountNotFoundError();
     }
 
     return client.readContract({

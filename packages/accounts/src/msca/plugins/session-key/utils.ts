@@ -3,7 +3,7 @@ import type {
   SmartAccountClient,
   SmartContractAccount,
 } from "@alchemy/aa-core";
-import { type Address } from "@alchemy/aa-core";
+import { AccountNotFoundError, type Address } from "@alchemy/aa-core";
 import type { Chain, PublicClient, Transport } from "viem";
 import { SessionKeyPlugin } from "./plugin.js";
 
@@ -22,7 +22,7 @@ export const buildSessionKeysToRemoveStruct: <
   client,
   { keys, account = client.account }
 ) => {
-  if (!account) throw new Error("Account is required");
+  if (!account) throw new AccountNotFoundError();
 
   const contract = SessionKeyPlugin.getContract(client as PublicClient);
   return (

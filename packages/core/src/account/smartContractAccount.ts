@@ -14,7 +14,6 @@ import {
 } from "viem";
 import { toAccount } from "viem/accounts";
 import { EntryPointAbi } from "../abis/EntryPointAbi.js";
-import type { PublicErc4337Client } from "../client/publicErc4337Client.js";
 import { Logger } from "../logger.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import { wrapSignatureWith6492 } from "../signer/utils.js";
@@ -75,7 +74,7 @@ export type SmartContractAccount<Name extends string = string> =
 export type ToSmartContractAccountParams<
   Name extends string = string,
   TTransport extends Transport = Transport,
-  client extends PublicErc4337Client<TTransport> = PublicErc4337Client<TTransport>
+  client extends PublicClient<TTransport> = PublicClient<TTransport>
 > = {
   source: Name;
   client: client;
@@ -146,7 +145,7 @@ export const getAccountAddress = async ({
   throw new Error("getCounterFactualAddress failed");
 };
 
-export const toSmartContractAccount = async <
+export async function toSmartContractAccount<
   Name extends string = string,
   TTransport extends Transport = Transport
 >({
@@ -164,7 +163,7 @@ export const toSmartContractAccount = async <
   encodeUpgradeToAndCall,
 }: ToSmartContractAccountParams<Name, TTransport>): Promise<
   SmartContractAccount<Name>
-> => {
+> {
   const entrypoint = getContract({
     address: entrypointAddress,
     abi: EntryPointAbi,
@@ -313,4 +312,4 @@ export const toSmartContractAccount = async <
     signTypedDataWith6492,
     getImplementationAddress,
   };
-};
+}
