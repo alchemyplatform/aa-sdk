@@ -1,8 +1,8 @@
-import type { SmartAccountSigner } from "@alchemy/aa-core";
 import type {
   GetAccountParameter,
   SmartAccountClient,
-} from "@alchemy/aa-core/viem";
+  SmartAccountSigner,
+} from "@alchemy/aa-core";
 import type { Chain, Hex, Transport } from "viem";
 import type { LightAccount } from "./account";
 
@@ -31,8 +31,11 @@ export const transferOwnership: <
 
   const data = account.encodeTransferOwnership(await newOwner.getAddress());
   const result = await client.sendUserOperation({
-    target: account.address,
-    data,
+    uo: {
+      target: account.address,
+      data,
+      account,
+    },
     account,
   });
 

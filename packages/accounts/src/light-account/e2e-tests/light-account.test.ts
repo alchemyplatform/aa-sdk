@@ -1,4 +1,6 @@
 import {
+  createPublicErc4337FromClient,
+  createSmartAccountClient,
   LocalAccountSigner,
   Logger,
   LogLevel,
@@ -6,18 +8,19 @@ import {
   type UserOperationFeeOptions,
 } from "@alchemy/aa-core";
 import {
+  createPublicClient,
+  custom,
+  http,
   isAddress,
-  toHex,
   type Address,
   type Chain,
-  type Hash,
   type HDAccount,
 } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import { sepolia } from "viem/chains";
 import {
-  createLightAccountProvider,
-  LightSmartContractAccount,
+  createLightAccount,
+  transferLightAccountOwnership,
   type LightAccountVersion,
 } from "../../index.js";
 import {
@@ -44,59 +47,63 @@ describe("Light Account Tests", () => {
   ])(
     "LA version $version should correctly verify 1271 signatures",
     async ({ version, expected, throws }) => {
-      const provider = givenConnectedProvider({ owner, chain, version });
+      const provider = await givenConnectedProvider({ owner, chain, version });
       const message = "test";
 
       if (!throws) {
-        const signature = await provider.signMessage(message);
+        const signature = await provider.account.signMessage({ message });
         expect(
-          await provider.rpcClient.verifyMessage({
-            address: await provider.getAddress(),
+          await provider.verifyMessage({
+            address: provider.account.address,
             message,
             signature,
           })
         ).toBe(expected);
       } else {
-        await expect(provider.signMessage(message)).rejects.toThrowError();
+        await expect(
+          provider.account.signMessage({ message })
+        ).rejects.toThrowError();
       }
     }
   );
 
   it("should successfully get counterfactual address", async () => {
-    const provider = givenConnectedProvider({ owner, chain });
-    expect(await provider.getAddress()).toMatchInlineSnapshot(
+    const {
+      account: { address },
+    } = await givenConnectedProvider({ owner, chain });
+    expect(address).toMatchInlineSnapshot(
       '"0x86f3B0211764971Ad0Fc8C8898d31f5d792faD84"'
     );
   });
 
   it("should sign typed data with 6492 successfully for undeployed account", async () => {
-    const undeployedProvider = givenConnectedProvider({
+    const { account } = await givenConnectedProvider({
       owner: undeployedOwner,
       chain,
     });
-    const typedData = {
-      types: {
-        Request: [{ name: "hello", type: "string" }],
-      },
-      primaryType: "Request",
-      message: {
-        hello: "world",
-      },
-    };
+
     expect(
-      await undeployedProvider.signTypedDataWith6492(typedData)
+      await account.signTypedDataWith6492({
+        types: {
+          Request: [{ name: "hello", type: "string" }],
+        },
+        primaryType: "Request",
+        message: {
+          hello: "world",
+        },
+      })
     ).toMatchInlineSnapshot(
       '"0x00000000000000000000000000004ec70002a32400f8ae005a26081065620d20000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000000445fbfb9cf000000000000000000000000ef9d7530d16df66481adf291dc9a12b44c7f7df00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000041ac03c38ea7f6308cf37067659115b9c982cd29354db4e90044cce8a113fd66890588245cf7076f5364de6010e5e5aff42efec5c719b5de3f555d389766518a2b1b000000000000000000000000000000000000000000000000000000000000006492649264926492649264926492649264926492649264926492649264926492"'
     );
   });
 
   it("should sign message with 6492 successfully for undeployed account", async () => {
-    const undeployedProvider = givenConnectedProvider({
+    const { account } = await givenConnectedProvider({
       owner: undeployedOwner,
       chain,
     });
     expect(
-      await undeployedProvider.signMessageWith6492("test")
+      await account.signMessageWith6492({ message: "test" })
     ).toMatchInlineSnapshot(
       '"0x00000000000000000000000000004ec70002a32400f8ae005a26081065620d20000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000000445fbfb9cf000000000000000000000000ef9d7530d16df66481adf291dc9a12b44c7f7df0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004181c6c4855d1cb16616c78e4b99bdde42eeda6bc8fbec920434e196445b64dede539eb9d934092f8e472766ded3f06d1a5f8ed2c209a5aaac7b13f9a8795757381b000000000000000000000000000000000000000000000000000000000000006492649264926492649264926492649264926492649264926492649264926492"'
     );
@@ -107,29 +114,34 @@ describe("Light Account Tests", () => {
    * For current balance, @see: https://sepolia.etherscan.io/address/0x7eDdc16B15259E5541aCfdebC46929873839B872
    */
   it("should execute successfully", async () => {
-    const provider = givenConnectedProvider({ owner, chain });
+    const provider = await givenConnectedProvider({ owner, chain });
+
     const result = await provider.sendUserOperation({
-      target: await provider.getAddress(),
-      data: "0x",
+      uo: {
+        target: provider.account.address,
+        data: "0x",
+      },
     });
-    const txnHash = provider.waitForUserOperationTransaction(
-      result.hash as Hash
-    );
+    const txnHash = provider.waitForUserOperationTransaction({
+      hash: result.hash,
+    });
 
     await expect(txnHash).resolves.not.toThrowError();
   }, 100000);
 
   it("should fail to execute if account address is not deployed and not correct", async () => {
     const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
-    const newProvider = givenConnectedProvider({
+    const newProvider = await givenConnectedProvider({
       owner,
       chain,
       accountAddress,
     });
 
     const result = newProvider.sendUserOperation({
-      target: await newProvider.getAddress(),
-      data: "0x",
+      uo: {
+        target: newProvider.account.address,
+        data: "0x",
+      },
     });
 
     await expect(result).rejects.toThrowError();
@@ -139,15 +151,15 @@ describe("Light Account Tests", () => {
     const owner = LocalAccountSigner.privateKeyToAccountSigner(
       generatePrivateKey()
     );
-    const provider = givenConnectedProvider({ owner, chain });
+    const {
+      account: { address },
+    } = await givenConnectedProvider({ owner, chain });
 
-    const address = provider.getAddress();
-    await expect(address).resolves.not.toThrowError();
-    expect(isAddress(await address)).toBe(true);
+    expect(isAddress(address)).toBe(true);
   });
 
   it("should get owner successfully", async () => {
-    const provider = givenConnectedProvider({ owner, chain });
+    const provider = await givenConnectedProvider({ owner, chain });
     expect(await provider.account.getOwnerAddress()).toMatchInlineSnapshot(
       '"0x65eaA2AfDF6c97295bA44C458abb00FebFB3a5FA"'
     );
@@ -157,7 +169,7 @@ describe("Light Account Tests", () => {
   });
 
   it("should transfer ownership successfully", async () => {
-    const provider = givenConnectedProvider({
+    const provider = await givenConnectedProvider({
       owner,
       chain,
     });
@@ -166,7 +178,7 @@ describe("Light Account Tests", () => {
     const throwawayOwner = LocalAccountSigner.privateKeyToAccountSigner(
       generatePrivateKey()
     );
-    const throwawayProvider = givenConnectedProvider({
+    const throwawayProvider = await givenConnectedProvider({
       owner: throwawayOwner,
       chain,
     });
@@ -175,21 +187,20 @@ describe("Light Account Tests", () => {
 
     // fund the throwaway address
     await provider.sendTransaction({
-      from: await provider.getAddress(),
-      to: await throwawayProvider.getAddress(),
+      to: throwawayProvider.account.address,
       data: "0x",
-      value: toHex(1000000000000000n),
+      value: 1000000000000000n,
     });
 
     // create new owner and transfer ownership
     const newThrowawayOwner = LocalAccountSigner.privateKeyToAccountSigner(
       generatePrivateKey()
     );
-    await LightSmartContractAccount.transferOwnership(
-      throwawayProvider,
-      newThrowawayOwner,
-      true
-    );
+
+    await transferLightAccountOwnership(throwawayProvider, {
+      newOwner: newThrowawayOwner,
+      waitForTxn: true,
+    });
 
     const newOwnerViaProvider =
       await throwawayProvider.account.getOwnerAddress();
@@ -243,7 +254,7 @@ describe("Light Account Tests", () => {
   // }, 200000);
 });
 
-const givenConnectedProvider = ({
+const givenConnectedProvider = async ({
   owner,
   chain,
   accountAddress,
@@ -256,17 +267,27 @@ const givenConnectedProvider = ({
   feeOptions?: UserOperationFeeOptions;
   version?: LightAccountVersion;
 }) => {
-  const provider = createLightAccountProvider({
-    rpcProvider: `${chain.rpcUrls.alchemy.http[0]}/${API_KEY!}`,
-    chain,
-    owner,
-    accountAddress,
+  const publicClient = createPublicErc4337FromClient(
+    createPublicClient({
+      chain,
+      transport: http(`${chain.rpcUrls.alchemy.http[0]}/${API_KEY!}`),
+    })
+  );
+
+  const client = createSmartAccountClient({
+    transport: custom(publicClient),
+    chain: publicClient.chain,
     opts: {
       feeOptions,
       txMaxRetries: 100,
     },
-    version,
+    account: await createLightAccount({
+      owner,
+      client: publicClient,
+      accountAddress,
+      version,
+    }),
   });
 
-  return provider;
+  return client;
 };

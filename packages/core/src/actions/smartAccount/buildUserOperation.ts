@@ -16,7 +16,7 @@ export const buildUserOperation: <
   client: BaseSmartAccountClient<TTransport, TChain, TAccount>,
   args: SendUserOperationParameters<TAccount>
 ) => Promise<UserOperationStruct> = async (client, args) => {
-  const { account = client.account, overrides, data } = args;
+  const { account = client.account, overrides, uo } = args;
   if (!account) {
     throw new Error("No account set on client");
   }
@@ -26,11 +26,11 @@ export const buildUserOperation: <
       initCode: account.getInitCode(),
       sender: account.address,
       nonce: account.getNonce(),
-      callData: Array.isArray(data)
-        ? account.encodeBatchExecute(data)
-        : typeof data === "string"
-        ? data
-        : account.encodeExecute(data),
+      callData: Array.isArray(uo)
+        ? account.encodeBatchExecute(uo)
+        : typeof uo === "string"
+        ? uo
+        : account.encodeExecute(uo),
       signature: account.getDummySignature(),
     } as Deferrable<UserOperationStruct>,
     overrides,

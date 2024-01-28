@@ -1,9 +1,9 @@
-import { type Address } from "@alchemy/aa-core";
 import type {
   GetAccountParameter,
   SmartAccountClient,
   SmartContractAccount,
-} from "@alchemy/aa-core/viem";
+} from "@alchemy/aa-core";
+import { type Address } from "@alchemy/aa-core";
 import type { Chain, PublicClient, Transport } from "viem";
 import { SessionKeyPlugin } from "./plugin.js";
 

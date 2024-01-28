@@ -1,16 +1,14 @@
 import {
+  getAccountAddress,
   getDefaultEntryPointAddress,
+  toSmartContractAccount,
   type Address,
   type Hex,
+  type OwnedSmartContractAccount,
   type PublicErc4337Client,
   type SmartAccountSigner,
-} from "@alchemy/aa-core";
-import {
-  getAccountAddress,
-  toSmartContractAccount,
-  type OwnedSmartContractAccount,
   type UpgradeToAndCallParams,
-} from "@alchemy/aa-core/viem";
+} from "@alchemy/aa-core";
 import {
   concatHex,
   encodeFunctionData,
@@ -20,15 +18,15 @@ import {
   trim,
   type Transport,
 } from "viem";
-import { LightAccountAbi } from "../abis/LightAccountAbi.js";
-import { LightAccountFactoryAbi } from "../abis/LightAccountFactoryAbi.js";
+import { LightAccountAbi } from "./abis/LightAccountAbi.js";
+import { LightAccountFactoryAbi } from "./abis/LightAccountFactoryAbi.js";
+import { getLightAccountVersion } from "./getLightAccountVersion.js";
 import {
   LightAccountUnsupported1271Factories,
   LightAccountVersions,
   getDefaultLightAccountFactoryAddress,
   type LightAccountVersion,
-} from "../utils.js";
-import { getLightAccountVersion } from "./getLightAccountVersion.js";
+} from "./utils.js";
 
 export type LightAccount<
   TOwner extends SmartAccountSigner = SmartAccountSigner
@@ -49,6 +47,7 @@ export type CreateLightAccountParams<
   entrypointAddress?: Address;
   accountAddress?: Address;
   initCode?: Hex;
+  version?: LightAccountVersion;
 };
 
 export async function createLightAccount<
@@ -63,8 +62,9 @@ export async function createLightAccount({
   owner,
   accountAddress,
   initCode,
+  version = "v1.1.0",
   entrypointAddress = getDefaultEntryPointAddress(client.chain),
-  factoryAddress = getDefaultLightAccountFactoryAddress(client.chain),
+  factoryAddress = getDefaultLightAccountFactoryAddress(client.chain, version),
   index: index_ = 0n,
 }: CreateLightAccountParams): Promise<LightAccount> {
   const getAccountInitCode = async () => {
@@ -193,6 +193,7 @@ export async function createLightAccount({
             `Version ${version} of LightAccount doesn't support 1271`
           );
         default:
+          console.log(message);
           return signWith1271Wrapper(hashMessage(message));
       }
     },

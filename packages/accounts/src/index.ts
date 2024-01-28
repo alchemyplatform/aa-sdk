@@ -1,30 +1,10 @@
 // Add you exports here, make sure to export types separately from impls and use the `type` keyword when exporting them
 // Don't use wildcard exports, instead use named exports
 
-//kernel exports
-export { KernelAccountAbi } from "./kernel-zerodev/abis/KernelAccountAbi.js";
-export { KernelFactoryAbi } from "./kernel-zerodev/abis/KernelFactoryAbi.js";
-export { KernelSmartContractAccount } from "./kernel-zerodev/account.js";
-export type { KernelSmartAccountParams } from "./kernel-zerodev/account.js";
-export { KernelAccountProvider } from "./kernel-zerodev/provider.js";
-export type {
-  KernelBatchUserOperationCallData,
-  KernelUserOperationCallData,
-} from "./kernel-zerodev/types.js";
-export {
-  KernelBaseValidator,
-  ValidatorMode,
-} from "./kernel-zerodev/validator/base.js";
-export type { KernelBaseValidatorParams } from "./kernel-zerodev/validator/base.js";
-
 //light-account exports
-export { LightSmartContractAccount } from "./light-account/account.js";
-export { createLightAccountProvider } from "./light-account/provider.js";
-export {
-  LightAccountFactoryConfigSchema,
-  LightAccountProviderConfigSchema,
-} from "./light-account/schema.js";
-export type { LightAccountProviderConfig } from "./light-account/types.js";
+export { createLightAccount } from "./light-account/account.js";
+export { getLightAccountVersion } from "./light-account/getLightAccountVersion.js";
+export { transferOwnership as transferLightAccountOwnership } from "./light-account/transferLightAccountOwnership.js";
 export {
   LightAccountUnsupported1271Factories,
   LightAccountUnsupported1271Impls,
@@ -32,16 +12,11 @@ export {
   getDefaultLightAccountFactoryAddress,
   type LightAccountVersion,
 } from "./light-account/utils.js";
-export { createLightAccount } from "./light-account/viem/account.js";
 
 //nani-account exports
-export { NaniAccount } from "./nani-account/account.js";
-export { createNaniAccountProvider } from "./nani-account/provider.js";
-export {
-  NaniAccountFactoryConfigSchema,
-  NaniAccountProviderConfigSchema,
-} from "./nani-account/schema.js";
-export type { NaniAccountProviderConfig } from "./nani-account/types.js";
+export { createNaniAccount } from "./nani-account/account.js";
+export type { NaniAccount } from "./nani-account/account.js";
+export { transferOwnership as transferNaniAccountOwnership } from "./nani-account/transferNaniAccountOwnership.js";
 export { getDefaultNaniAccountFactoryAddress } from "./nani-account/utils.js";
 
 // msca exports

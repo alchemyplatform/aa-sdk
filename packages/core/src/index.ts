@@ -6,8 +6,13 @@ export { EntryPointAbi } from "./abis/EntryPointAbi.js";
 export { SimpleAccountAbi } from "./abis/SimpleAccountAbi.js";
 export { SimpleAccountFactoryAbi } from "./abis/SimpleAccountFactoryAbi.js";
 
+export { BaseSmartContractAccount } from "./account/base.js";
 export { createSimpleSmartAccount } from "./account/simple.js";
 export type { SimpleSmartAccount } from "./account/simple.js";
+export type {
+  BaseSmartAccountParams,
+  SignTypedDataParams,
+} from "./account/types.js";
 
 export { LocalAccountSigner } from "./signer/local-account.js";
 export { SignerSchema, isSigner } from "./signer/schema.js";
