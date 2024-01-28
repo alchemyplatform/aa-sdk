@@ -30,10 +30,11 @@ type Tx = {
 export type GetAccountParameter<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TAccountOverride extends SmartContractAccount = SmartContractAccount
 > = IsUndefined<TAccount> extends true
-  ? { account: SmartContractAccount }
-  : { account?: SmartContractAccount };
+  ? { account: TAccountOverride }
+  : { account?: TAccountOverride };
 
 export type UpgradeToAndCallParams = {
   upgradeToAddress: Address;
