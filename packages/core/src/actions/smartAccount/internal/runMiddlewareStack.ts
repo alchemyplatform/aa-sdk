@@ -12,11 +12,8 @@ import type {
   UserOperationOverridesParameter,
   UserOperationStruct,
 } from "../../../types";
-import {
-  bypassPaymasterAndData,
-  resolveProperties,
-  type Deferrable,
-} from "../../../utils/index.js";
+import { resolveProperties, type Deferrable } from "../../../utils/index.js";
+import { bypassPaymasterAndData } from "../../../utils/userop.js";
 import type { UserOperationContext } from "../types";
 
 /**

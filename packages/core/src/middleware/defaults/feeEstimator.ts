@@ -1,5 +1,5 @@
 import type { BigNumberish } from "../../types";
-import { applyUserOpOverrideOrFeeOption } from "../../utils/index.js";
+import { applyUserOpOverrideOrFeeOption } from "../../utils/userop.js";
 import type { MiddlewareClient } from "../actions";
 import type { ClientMiddlewareFn } from "../types";
 

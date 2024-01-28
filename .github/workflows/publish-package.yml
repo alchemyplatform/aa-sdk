@@ -40,13 +40,13 @@ jobs:
       packages: write
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           token: ${{ secrets.ALCHEMY_BOT_PAT }}
           fetch-depth: "0"
 
       - name: Set Node.js 18.x
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: "yarn"

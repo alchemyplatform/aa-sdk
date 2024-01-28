@@ -1,11 +1,8 @@
 import { AccountNotFoundError } from "../../errors/account.js";
 import { ChainNotFoundError } from "../../errors/client.js";
 import { InvalidUserOperationError } from "../../errors/useroperation.js";
-import {
-  deepHexlify,
-  isValidRequest,
-  resolveProperties,
-} from "../../utils/index.js";
+import { deepHexlify, resolveProperties } from "../../utils/index.js";
+import { isValidRequest } from "../../utils/userop.js";
 import type { ClientMiddlewareFn } from "../types";
 
 export const defaultUserOpSigner: ClientMiddlewareFn = async (

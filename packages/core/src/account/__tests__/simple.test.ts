@@ -1,40 +1,80 @@
+import { createRundler, type Rundler } from "@alchemy/rundler-js";
 import {
   createPublicClient,
   custom,
   http,
-  type Address,
+  testActions,
   type Chain,
 } from "viem";
 import { describe, it } from "vitest";
 import { sepolia } from "../../chains/index.js";
 import { createBundlerClientFromExisting } from "../../client/bundlerClient.js";
-import { createSmartAccountClient } from "../../client/smartAccountClient.js";
+import { createSmartAccountClientFromExisting } from "../../client/smartAccountClient.js";
 import { LocalAccountSigner } from "../../signer/local-account.js";
 import { type SmartAccountSigner } from "../../signer/types.js";
 import type { BatchUserOperationCallData } from "../../types.js";
 import { getDefaultSimpleAccountFactoryAddress } from "../../utils/index.js";
 import { createSimpleSmartAccount } from "../simple.js";
+import { split } from "../../transport/split.js";
 
 describe("Account Simple Tests", async () => {
+  const chain = sepolia;
   const dummyMnemonic =
     "test test test test test test test test test test test test";
   const signer: SmartAccountSigner =
     LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
+  let rundler: Rundler;
+  const publicClientGenerator = () =>
+    createBundlerClientFromExisting(
+      createPublicClient({
+        chain,
+        transport: split({
+          overrides: [
+            {
+              methods: [
+                "eth_sendUserOperation",
+                "eth_estimateUserOperationGas",
+                "eth_getUserOperationReceipt",
+                "eth_getUserOperationByHash",
+                "eth_supportedEntryPoints",
+              ],
+              transport: http(`http://${rundler.host}:${rundler.port}`),
+            },
+          ],
+          fallback: http(`http://${rundler.anvil.host}:${rundler.anvil.port}`),
+        }),
+      })
+    ).extend(testActions({ mode: "anvil" }));
 
-  const chain = sepolia;
-  const publicClient = createBundlerClientFromExisting(
-    createPublicClient({
-      chain,
-      transport: custom({
-        request: async ({ method }) => {
-          if (method === "eth_getCode") {
-            return "0x" as Address;
-          }
-          return;
-        },
-      }),
-    })
-  );
+  let publicClient: ReturnType<typeof publicClientGenerator>;
+
+  beforeAll(async () => {
+    rundler = await createRundler({
+      anvilOptions: {
+        forkUrl: "https://ethereum-sepolia.publicnode.com",
+        chainId: chain.id,
+        startTimeout: 20_000,
+      },
+      rundlerOptions: {},
+    });
+
+    publicClient = publicClientGenerator();
+    publicClient.setAutomine(true);
+
+    await rundler.start();
+  }, 30000);
+
+  afterEach(async (context) => {
+    context.onTestFailed(async () => {
+      // Only print the 20 most recent log messages.
+      console.log(...rundler.anvil.logs.slice(-20));
+      console.log(...rundler.logs.slice(-20));
+    });
+  });
+
+  afterAll(async () => {
+    await rundler.stop();
+  });
 
   it("should correctly sign the message", async () => {
     const provider = await givenConnectedProvider({ signer, chain });
@@ -47,7 +87,7 @@ describe("Account Simple Tests", async () => {
     ).toBe(
       "0x33b1b0d34ba3252cd8abac8147dc08a6e14a6319462456a34468dd5713e38dda3a43988460011af94b30fa3efefcf9d0da7d7522e06b7bd8bff3b65be4aee5b31c"
     );
-  });
+  }, 30000);
 
   it("should correctly encode batch transaction data", async () => {
     const provider = await givenConnectedProvider({ signer, chain });
@@ -69,6 +109,24 @@ describe("Account Simple Tests", async () => {
     );
   });
 
+  it("should execute successfully", async () => {
+    const provider = await givenConnectedProvider({ signer, chain });
+    await publicClient.setBalance({
+      address: provider.account.address,
+      value: 100000000000000000000n,
+    });
+
+    await expect(
+      provider.sendUserOperation({
+        uo: {
+          target: provider.account.address,
+          data: "0x",
+          value: 0n,
+        },
+      })
+    ).resolves.not.toThrowError();
+  }, 10000);
+
   it("should correctly use the account init code override", async () => {
     const account = await createSimpleSmartAccount({
       chain: sepolia,
@@ -78,10 +136,6 @@ describe("Account Simple Tests", async () => {
       // override the account address here so we don't have to resolve the address from the entry point
       accountAddress: "0x1234567890123456789012345678901234567890",
       initCode: "0xdeadbeef",
-    });
-
-    vi.spyOn(publicClient, "getBytecode").mockImplementation(() => {
-      return Promise.resolve("0x" as Address);
     });
 
     const initCode = await account.getInitCode();
@@ -95,15 +149,19 @@ describe("Account Simple Tests", async () => {
     signer: SmartAccountSigner;
     chain: Chain;
   }) =>
-    createSmartAccountClient({
-      transport: http(`${chain.rpcUrls.alchemy.http[0]}/${"test"}`),
-      chain: chain,
+    createSmartAccountClientFromExisting({
+      client: publicClient,
       account: await createSimpleSmartAccount({
         chain,
         signer,
-        accountAddress: "0x1234567890123456789012345678901234567890",
         factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
-        transport: http(`${chain.rpcUrls.alchemy.http[0]}/${"test"}`),
+        transport: custom(publicClient),
       }),
+      opts: {
+        feeOptions: {
+          maxFeePerGas: { multiplier: 4 },
+          maxPriorityFeePerGas: { multiplier: 4 },
+        },
+      },
     });
 });
