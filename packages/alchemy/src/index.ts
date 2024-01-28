@@ -10,6 +10,8 @@ export type * from "./client/smartAccountClient.js";
 export { createAlchemySmartAccountClient } from "./client/smartAccountClient.js";
 export type * from "./client/types.js";
 
+export type * from "./client/decorators/alchemyEnhancedApis.js";
+export { alchemyEnhancedApiActions } from "./client/decorators/alchemyEnhancedApis.js";
 export type * from "./client/decorators/smartAccount.js";
 export { alchemyActions } from "./client/decorators/smartAccount.js";
 

@@ -37,7 +37,7 @@ import { UpgradeableModularAccountAbi } from "./abis/UpgradeableModularAccount.j
 import {
   createMultiOwnerModularAccount,
   type MultiOwnerModularAccount,
-} from "./account/base.js";
+} from "./account/multiOwnerAccount.js";
 import { MultiOwnerPlugin } from "./plugins/multi-owner/plugin.js";
 import { TokenReceiverPlugin } from "./plugins/token-receiver/plugin.js";
 
