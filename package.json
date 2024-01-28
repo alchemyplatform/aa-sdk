@@ -9,7 +9,8 @@
     "packages/*",
     "templates/*",
     "examples/*",
-    "site"
+    "site",
+    "rundlerjs"
   ],
   "scripts": {
     "generate": "lerna run generate",
@@ -18,7 +19,7 @@
     "build:ci": "yarn build && yarn lint:write",
     "build:examples": "lerna run build",
     "clean": "lerna run clean",
-    "test": "lerna run --verbose test:run",
+    "test": "RUST_LOG=verbose lerna run --verbose test:run",
     "test:e2e": "lerna run --verbose test:run-e2e --concurrency=1 --ignore=@alchemy/aa-signers",
     "lint:write": "eslint . --fix && prettier --write --ignore-unknown .",
     "lint:check": "eslint . && prettier --check .",
@@ -28,6 +29,7 @@
   "devDependencies": {
     "@commitlint/cli": "^17.6.3",
     "@commitlint/config-conventional": "^17.6.3",
+    "@viem/anvil": "^0.0.7",
     "eslint": "^8.39.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-import": "^2.27.5",

@@ -1,14 +1,16 @@
-import { polygonMumbai, sepolia } from "@alchemy/aa-core";
+import { createRundler } from "@alch/rundler-js";
 import {
   createPublicClient,
   custom,
   http,
+  testActions,
   type Address,
   type Chain,
 } from "viem";
 import { describe, it } from "vitest";
+import { sepolia } from "../../chains/index.js";
 import { createBundlerClientFromExisting } from "../../client/bundlerClient.js";
-import { createSmartAccountClient } from "../../client/smartAccountClient.js";
+import { createSmartAccountClientFromExisting } from "../../client/smartAccountClient.js";
 import { LocalAccountSigner } from "../../signer/local-account.js";
 import { type SmartAccountSigner } from "../../signer/types.js";
 import type { BatchUserOperationCallData } from "../../types.js";
@@ -16,25 +18,66 @@ import { getDefaultSimpleAccountFactoryAddress } from "../../utils/index.js";
 import { createSimpleSmartAccount } from "../simple.js";
 
 describe("Account Simple Tests", async () => {
+  const chain = sepolia;
   const dummyMnemonic =
     "test test test test test test test test test test test test";
   const owner: SmartAccountSigner =
     LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
+  const rundler = createRundler({
+    anvilOptions: {
+      forkUrl: "https://ethereum-sepolia.publicnode.com",
+      chainId: chain.id,
+      startTimeout: 20_000,
+    },
+    rundlerOptions: {
+      chain_id: chain.id,
+    },
+  });
+  beforeAll(async () => {
+    await rundler.start();
+  }, 30000);
 
-  const chain = polygonMumbai;
+  afterEach(async (context) => {
+    context.onTestFailed(async () => {
+      // Only print the 20 most recent log messages.
+      console.log(...rundler.anvil.logs.slice(-20));
+      console.log(...rundler.logs.slice(-20));
+    });
+  });
+
+  afterAll(async () => {
+    await rundler.stop();
+  });
+
   const publicClient = createBundlerClientFromExisting(
     createPublicClient({
       chain,
-      transport: custom({
-        request: async ({ method }) => {
-          if (method === "eth_getCode") {
-            return "0x" as Address;
-          }
-          return;
-        },
-      }),
+      transport: (opts) => {
+        const bundlerRpc = http(`http://${rundler.host}:${rundler.port}`)(opts);
+        const publicRpc = http(
+          `http://${rundler.anvil.host}:${rundler.anvil.port}`
+        )(opts);
+
+        return custom({
+          request: async (args) => {
+            const bundlerMethods = new Set([
+              "eth_sendUserOperation",
+              "eth_estimateUserOperationGas",
+              "eth_getUserOperationReceipt",
+              "eth_getUserOperationByHash",
+              "eth_supportedEntryPoints",
+            ]);
+
+            if (bundlerMethods.has(args.method)) {
+              return bundlerRpc.request(args);
+            } else {
+              return publicRpc.request(args);
+            }
+          },
+        })(opts);
+      },
     })
-  );
+  ).extend(testActions({ mode: "anvil" }));
 
   it("should correctly sign the message", async () => {
     const provider = await givenConnectedProvider({ owner, chain });
@@ -47,7 +90,7 @@ describe("Account Simple Tests", async () => {
     ).toBe(
       "0x33b1b0d34ba3252cd8abac8147dc08a6e14a6319462456a34468dd5713e38dda3a43988460011af94b30fa3efefcf9d0da7d7522e06b7bd8bff3b65be4aee5b31c"
     );
-  });
+  }, 30000);
 
   it("should correctly encode batch transaction data", async () => {
     const provider = await givenConnectedProvider({ owner, chain });
@@ -68,6 +111,25 @@ describe("Account Simple Tests", async () => {
       '"0x18dfb3c7000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000002000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef0000000000000000000000008ba1f109551bd432803012645ac136ddd64dba720000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000004deadbeef000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004cafebabe00000000000000000000000000000000000000000000000000000000"'
     );
   });
+
+  // spoilers... it does not
+  it("should execute successfully", async () => {
+    const provider = await givenConnectedProvider({ owner, chain });
+    await publicClient.setBalance({
+      address: provider.account.address,
+      value: 100000000000000000000n,
+    });
+
+    await expect(
+      await provider.sendUserOperation({
+        uo: {
+          target: provider.account.address,
+          data: "0x",
+          value: 0n,
+        },
+      })
+    ).resolves.toMatchInlineSnapshot();
+  }, 60000);
 
   it("should correctly do base runtime validation when entryPoint are invalid", async () => {
     await expect(
@@ -151,15 +213,13 @@ describe("Account Simple Tests", async () => {
     owner: SmartAccountSigner;
     chain: Chain;
   }) =>
-    createSmartAccountClient({
-      transport: http(`${chain.rpcUrls.alchemy.http[0]}/${"test"}`),
-      chain: chain,
+    createSmartAccountClientFromExisting({
+      client: publicClient,
       account: await createSimpleSmartAccount({
         chain,
         owner,
-        accountAddress: "0x1234567890123456789012345678901234567890",
         factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
-        transport: http(`${chain.rpcUrls.alchemy.http[0]}/${"test"}`),
+        transport: custom(publicClient),
       }),
     });
 });

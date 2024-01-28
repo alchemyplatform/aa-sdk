@@ -43,6 +43,7 @@
     "test:run-e2e": "vitest run --config vitest.config.e2e.ts"
   },
   "devDependencies": {
+    "@alch/rundler-js": "^0.0.0",
     "dotenv": "^16.0.3",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4",

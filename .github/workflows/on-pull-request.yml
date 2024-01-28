@@ -7,10 +7,10 @@ jobs:
     name: Enforce PR Title Format
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "18.16"
           cache: "yarn"
@@ -27,13 +27,21 @@ jobs:
     env:
       API_KEY: ${{ secrets.API_KEY }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "18.16"
           cache: "yarn"
+          
+      - name: Set up foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly-293fad73670b7b59ca901c7f2105bf7a29165a90
+          
+      - name: Get anvil version
+        run: anvil --version
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile

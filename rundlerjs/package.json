@@ -1,0 +1,44 @@
+{
+  "name": "@alch/rundler-js",
+  "version": "0.0.0",
+  "description": "testing library that facilitates running a bundler and anvil instances from JS",
+  "private": "false",
+  "files": [
+    "dist/**",
+    "!dist/**/*.tsbuildinfo",
+    "src/**/*.ts",
+    "!src/**/*.test.ts"
+  ],
+  "sideEffects": false,
+  "type": "module",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "typings": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "default": "./dist/cjs/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "yarn clean && yarn build:esm && yarn build:types",
+    "build:esm": "tsc --project tsconfig.build.json --module es2020 --outDir ./dist/esm --removeComments && echo > ./dist/esm/package.json '{\"type\":\"module\"}'",
+    "build:types": "tsc --project tsconfig.build.json --module esnext --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
+    "postbuild": "cp ./bin/* ./dist/",
+    "clean": "rm -rf ./dist",
+    "dev": "yarn build && node ./test.mjs"
+  },
+  "dependencies": {
+    "@viem/anvil": "^0.0.7",
+    "execa": "^8.0.1",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "execa": "^8.0.1",
+    "is-ci": "^3.0.1",
+    "typescript": "^5.3.3"
+  }
+}
