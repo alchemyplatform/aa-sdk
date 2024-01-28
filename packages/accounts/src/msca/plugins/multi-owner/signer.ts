@@ -22,7 +22,7 @@ export const multiOwnerMessageSigner = <
 >(
   client: PublicErc4337Client<TTransport>,
   accountAddress: Address,
-  owner: TSigner,
+  owner: () => TSigner,
   pluginAddress: Address = MultiOwnerPlugin.meta.addresses[client.chain.id]
 ) => {
   const signWith712Wrapper = async (msg: Hash): Promise<`0x${string}`> => {
@@ -35,7 +35,7 @@ export const multiOwnerMessageSigner = <
         account: accountAddress,
       });
 
-    return owner.signTypedData({
+    return owner().signTypedData({
       domain: {
         chainId: Number(chainId),
         name,
@@ -59,7 +59,7 @@ export const multiOwnerMessageSigner = <
     },
 
     signUserOperationHash: (uoHash: `0x${string}`): Promise<`0x${string}`> => {
-      return owner.signMessage(hexToBytes(uoHash));
+      return owner().signMessage(hexToBytes(uoHash));
     },
 
     signMessage({

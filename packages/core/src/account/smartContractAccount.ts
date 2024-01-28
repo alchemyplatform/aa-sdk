@@ -43,7 +43,10 @@ export type UpgradeToAndCallParams = {
 export type OwnedSmartContractAccount<
   Name extends string = string,
   TOwner extends SmartAccountSigner = SmartAccountSigner
-> = SmartContractAccount<Name> & { owner: TOwner };
+> = SmartContractAccount<Name> & {
+  getOwner: () => TOwner;
+  setOwner: (owner: TOwner) => void;
+};
 
 export type SmartContractAccount<Name extends string = string> =
   LocalAccount<Name> & {
