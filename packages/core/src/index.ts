@@ -65,6 +65,7 @@ export {
   getChain,
   getDefaultEntryPointAddress,
   getDefaultSimpleAccountFactoryAddress,
+  getDefaultUserOperationFeeOptions,
   getUserOperationHash,
   isBigNumberish,
   isPercentage,

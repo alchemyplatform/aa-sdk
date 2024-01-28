@@ -4,6 +4,7 @@ import type {
   SmartContractAccount,
 } from "../../../account/smartContractAccount";
 import type { BaseSmartAccountClient } from "../../../client/smartAccountClient";
+import { overridePaymasterDataMiddleware } from "../../../middleware/defaults/overridePaymasterData.js";
 import type {
   UserOperationOverrides,
   UserOperationStruct,
@@ -42,9 +43,10 @@ export const _runMiddlewareStack: <
     client.middleware.dummyPaymasterAndData,
     client.middleware.feeEstimator,
     client.middleware.gasEstimator,
-    client.middleware.custom,
-    // TODO: need to handle the paymaster and data override here
-    client.middleware.paymasterAndData,
+    client.middleware.customMiddleware,
+    overrides?.paymasterAndData
+      ? overridePaymasterDataMiddleware
+      : client.middleware.paymasterAndData,
     client.middleware.userOperationSimulator
   )(uo, { overrides, feeOptions: client.feeOptions, account });
 
