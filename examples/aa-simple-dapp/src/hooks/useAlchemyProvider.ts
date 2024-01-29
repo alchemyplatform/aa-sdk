@@ -1,8 +1,6 @@
 import { chain, gasManagerPolicyId } from "@/config/client";
 import { getRpcUrl } from "@/config/rpc";
 import {
-  IMSCA,
-  SessionKeyPlugin,
   createMultiOwnerMSCA,
   getDefaultMultiOwnerMSCAFactoryAddress,
 } from "@alchemy/aa-accounts";
@@ -13,11 +11,6 @@ import {
 } from "@alchemy/aa-core";
 import { useCallback, useState } from "react";
 import { Address } from "viem";
-import { usePlugin } from "./usePlugin";
-
-export enum PluginType {
-  SESSION_KEY,
-}
 
 export const useAlchemyProvider = () => {
   const [provider, setProvider] = useState<AlchemyProvider>(
@@ -28,7 +21,7 @@ export const useAlchemyProvider = () => {
   );
 
   const connectProviderToAccount = useCallback(
-    (signer: SmartAccountSigner, account?: Address) => {
+    async (signer: SmartAccountSigner, account?: Address) => {
       const connectedProvider = provider
         .connect((provider) => {
           return createMultiOwnerMSCA({
@@ -43,7 +36,6 @@ export const useAlchemyProvider = () => {
         .withAlchemyGasManager({
           policyId: gasManagerPolicyId,
         });
-
       setProvider(connectedProvider);
       return connectedProvider;
     },
@@ -52,36 +44,13 @@ export const useAlchemyProvider = () => {
 
   const disconnectProviderFromAccount = useCallback(() => {
     const disconnectedProvider = provider.disconnect();
-
     setProvider(disconnectedProvider);
     return disconnectedProvider;
   }, [provider]);
-
-  const sessionKeyPlugin = usePlugin(provider, SessionKeyPlugin);
-
-  const pluginInstall = useCallback(
-    async (type: PluginType) => {
-      if (!provider.isConnected<IMSCA>()) {
-        return;
-      }
-
-      switch (type) {
-        case PluginType.SESSION_KEY:
-          return sessionKeyPlugin?.installSessionKeyPlugin({
-            args: [[]],
-          });
-
-        default:
-          throw new Error("Unexpected plugin type", type);
-      }
-    },
-    [provider]
-  );
 
   return {
     provider,
     connectProviderToAccount,
     disconnectProviderFromAccount,
-    pluginInstall,
   };
 };

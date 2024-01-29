@@ -57,7 +57,7 @@ export const InstallMethodGenPhase: Phase = async (input) => {
           contract.name
         } address for chain " + chain.name);
       }
-      
+
       return installPlugin_(provider, {
         pluginAddress,
         pluginInitData: encodeAbiParameters(${JSON.stringify(

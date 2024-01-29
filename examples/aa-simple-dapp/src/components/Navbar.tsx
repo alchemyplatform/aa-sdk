@@ -7,7 +7,7 @@ export default function Navbar() {
   const [isLoggingOut, setIsLoggingOut] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
 
-  const { isLoggedIn, login, logout, username, scaAddress } =
+  const { isLoggedIn, provider, login, logout, username, scaAddress } =
     useWalletContext();
 
   const openModal = useCallback(() => {
@@ -44,7 +44,7 @@ export default function Navbar() {
       <div className="flex flex-row items-center gap-[12px] max-md:flex-col max-md:text-center">
         {isLoggedIn ? (
           <a
-            href={`https://sepolia.etherscan.io/address/${scaAddress}`}
+            href={`${provider?.rpcClient.chain.blockExplorers?.default.url}/address/${scaAddress}`}
             target="_blank"
             className="btn text-white bg-gradient-1 disabled:text-white transition ease-in-out duration-500 transform hover:scale-110 max-md:w-full"
           >
@@ -52,6 +52,7 @@ export default function Navbar() {
           </a>
         ) : (
           <button
+            id="button-login-with-email"
             disabled={isLoggingIn}
             onClick={openModal}
             className="btn text-white bg-gradient-1 disabled:opacity-25 disabled:text-white transition ease-in-out duration-500 transform hover:scale-110 max-md:w-full"
@@ -80,12 +81,14 @@ export default function Navbar() {
         <div className="modal-box flex flex-col gap-[12px]">
           <h3 className="font-bold text-lg">Enter your email!</h3>
           <input
+            id="input-login-email"
             placeholder="email"
             onChange={onEmailChange}
             className="input border border-solid border-white"
           />
           <div className="flex flex-row justify-end max-md:flex-col flex-wrap gap-[12px]">
             <button
+              id="button-login"
               onClick={handleLogin}
               className="btn bg-gradient-1 text-white transition ease-in-out duration-500 transform hover:scale-110"
             >

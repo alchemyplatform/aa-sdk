@@ -1,4 +1,4 @@
-export const tokenContractAddress =
+export const alchTokenContractAddress =
   "0x6F3c1baeF15F2Ac6eD52ef897f60cac0B10d90C3";
 
 export const AlchemyTokenAbi = [
