@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-alpha.0](https://github.com/alchemyplatform/aa-sdk/compare/v2.3.1...v3.0.0-alpha.0) (2024-01-30)
+
+### Code Refactoring
+
+- **aa-ethers:** refactor aa-ethers to use the viem client and accounts ([6cc2051](https://github.com/alchemyplatform/aa-sdk/commit/6cc20518bf90788f83ac3c9e579b0f4f4de518b1))
+
+### Features
+
+- hoist account signing methods ([5bcfac8](https://github.com/alchemyplatform/aa-sdk/commit/5bcfac8ddaca6b712d473cbad2cbbd0228827af5))
+
+### BREAKING CHANGES
+
+- **aa-ethers:** aa-ethers has had some functionality removed and apis changed
+
+* inputs to the ProviderAdapter now require a SmartAccountClient
+* with\* methods have been removed, middleware config now exists
+  on the SmartAccountClient
+* the Account Signer has been updated to take a SmartContractAccount
+  as input
+
 ## [2.3.1](https://github.com/alchemyplatform/aa-sdk/compare/v2.3.0...v2.3.1) (2024-01-25)
 
 **Note:** Version bump only for package @alchemy/aa-ethers
