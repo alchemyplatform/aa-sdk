@@ -2,7 +2,6 @@ import type { Address } from "abitype";
 import {
   getContract,
   trim,
-  type Chain,
   type GetContractReturnType,
   type Hash,
   type Hex,
@@ -48,8 +47,7 @@ export abstract class BaseSmartContractAccount<
   protected owner: TOwner;
   protected entryPoint: GetContractReturnType<
     typeof EntryPointAbi,
-    PublicClient,
-    Chain
+    PublicClient
   >;
   protected entryPointAddress: Address;
   readonly rpcProvider:
@@ -108,9 +106,7 @@ export abstract class BaseSmartContractAccount<
     this.entryPoint = getContract({
       address: this.entryPointAddress,
       abi: EntryPointAbi,
-      // Need to cast this as PublicClient or else it breaks ABI typing.
-      // This is valid because our PublicClient is a subclass of PublicClient
-      publicClient: this.rpcProvider as PublicClient,
+      client: this.rpcProvider as PublicClient,
     });
   }
 

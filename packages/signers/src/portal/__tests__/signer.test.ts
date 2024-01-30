@@ -1,5 +1,5 @@
+import { sepolia } from "@alchemy/aa-core";
 import Portal from "@portal-hq/web";
-import { sepolia } from "viem/chains";
 import { PortalSigner } from "../signer.js";
 
 // taken from Portal SDK since not exported

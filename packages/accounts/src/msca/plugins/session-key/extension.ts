@@ -59,6 +59,7 @@ export const sessionKeyPluginActions: <
   client: SmartAccountClient<TTransport, TChain, TAccount>
 ) => {
   const { removeSessionKey, ...og } = sessionKeyPluginActions_(client);
+
   return {
     ...og,
     isAccountSessionKey: async ({

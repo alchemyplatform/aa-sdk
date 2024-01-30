@@ -1,6 +1,5 @@
-import { LocalAccountSigner } from "@alchemy/aa-core";
+import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
 import { Alchemy, Network } from "alchemy-sdk";
-import { sepolia } from "viem/chains";
 import * as simulateUoActions from "../src/actions/simulateUserOperationChanges.js";
 import { alchemyEnhancedApiActions } from "../src/client/decorators/alchemyEnhancedApis.js";
 import {

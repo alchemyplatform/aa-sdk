@@ -118,7 +118,7 @@ export function plugingen({
       const plugin = getContract({
         address: address[chain.id],
         abi: IPluginAbi,
-        publicClient: client,
+        client,
       });
 
       const result = await asyncPipe(...phases)({

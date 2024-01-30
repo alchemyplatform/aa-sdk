@@ -32,7 +32,7 @@ import {
   getDefaultSimpleAccountFactoryAddress,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
-import { sepolia } from "viem/chains";
+import { sepolia } from "@alchemy/aa-core";
 
 const PRIVATE_KEY = "0xYourEOAPrivateKey";
 const eoaSigner: SmartAccountSigner =

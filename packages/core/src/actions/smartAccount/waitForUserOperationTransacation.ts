@@ -1,18 +1,14 @@
 import type { Chain, Hex, Transport } from "viem";
-import { getTransaction } from "viem/public";
-import type { SmartContractAccount } from "../../account/smartContractAccount.js";
+import { getTransaction } from "viem/actions";
 import type { BaseSmartAccountClient } from "../../client/smartAccountClient.js";
 import { Logger } from "../../logger.js";
 import type { WaitForUserOperationTxParameters } from "./types.js";
 
 export const waitForUserOperationTransaction: <
   TTransport extends Transport = Transport,
-  TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
-    | undefined
+  TChain extends Chain | undefined = Chain | undefined
 >(
-  client: BaseSmartAccountClient<TTransport, TChain, TAccount>,
+  client: BaseSmartAccountClient<TTransport, TChain>,
   args: WaitForUserOperationTxParameters
 ) => Promise<Hex> = async (client, args) => {
   const { hash } = args;

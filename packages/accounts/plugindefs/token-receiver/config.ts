@@ -1,4 +1,4 @@
-import { sepolia } from "viem/chains";
+import { sepolia } from "@alchemy/aa-core";
 import type { PluginGenConfig } from "../types";
 import { TokenReceiverPluginAbi } from "./abi.js";
 

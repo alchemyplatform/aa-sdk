@@ -8,7 +8,7 @@ import {
   type Transport,
   type PublicClient,
   type Client,
-  type GetFunctionArgs,
+  type EncodeFunctionDataParameters,
   type Chain,
   type Hex,
 } from "viem";
@@ -35,37 +35,52 @@ type ExecutionActions<
     | undefined
 > = {
   executeWithSessionKey: (
-    args: GetFunctionArgs<
-      typeof SessionKeyPluginExecutionFunctionAbi,
-      "executeWithSessionKey"
+    args: Pick<
+      EncodeFunctionDataParameters<
+        typeof SessionKeyPluginExecutionFunctionAbi,
+        "executeWithSessionKey"
+      >,
+      "args"
     > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
   ) => Promise<SendUserOperationResult>;
 
   addSessionKey: (
-    args: GetFunctionArgs<
-      typeof SessionKeyPluginExecutionFunctionAbi,
-      "addSessionKey"
+    args: Pick<
+      EncodeFunctionDataParameters<
+        typeof SessionKeyPluginExecutionFunctionAbi,
+        "addSessionKey"
+      >,
+      "args"
     > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
   ) => Promise<SendUserOperationResult>;
 
   removeSessionKey: (
-    args: GetFunctionArgs<
-      typeof SessionKeyPluginExecutionFunctionAbi,
-      "removeSessionKey"
+    args: Pick<
+      EncodeFunctionDataParameters<
+        typeof SessionKeyPluginExecutionFunctionAbi,
+        "removeSessionKey"
+      >,
+      "args"
     > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
   ) => Promise<SendUserOperationResult>;
 
   rotateSessionKey: (
-    args: GetFunctionArgs<
-      typeof SessionKeyPluginExecutionFunctionAbi,
-      "rotateSessionKey"
+    args: Pick<
+      EncodeFunctionDataParameters<
+        typeof SessionKeyPluginExecutionFunctionAbi,
+        "rotateSessionKey"
+      >,
+      "args"
     > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
   ) => Promise<SendUserOperationResult>;
 
   updateKeyPermissions: (
-    args: GetFunctionArgs<
-      typeof SessionKeyPluginExecutionFunctionAbi,
-      "updateKeyPermissions"
+    args: Pick<
+      EncodeFunctionDataParameters<
+        typeof SessionKeyPluginExecutionFunctionAbi,
+        "updateKeyPermissions"
+      >,
+      "args"
     > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
   ) => Promise<SendUserOperationResult>;
 };
@@ -97,37 +112,52 @@ type ManagementActions<
 
 type ReadAndEncodeActions = {
   encodeExecuteWithSessionKey: (
-    args: GetFunctionArgs<
-      typeof SessionKeyPluginExecutionFunctionAbi,
-      "executeWithSessionKey"
+    args: Pick<
+      EncodeFunctionDataParameters<
+        typeof SessionKeyPluginExecutionFunctionAbi,
+        "executeWithSessionKey"
+      >,
+      "args"
     >
   ) => Hex;
 
   encodeAddSessionKey: (
-    args: GetFunctionArgs<
-      typeof SessionKeyPluginExecutionFunctionAbi,
-      "addSessionKey"
+    args: Pick<
+      EncodeFunctionDataParameters<
+        typeof SessionKeyPluginExecutionFunctionAbi,
+        "addSessionKey"
+      >,
+      "args"
     >
   ) => Hex;
 
   encodeRemoveSessionKey: (
-    args: GetFunctionArgs<
-      typeof SessionKeyPluginExecutionFunctionAbi,
-      "removeSessionKey"
+    args: Pick<
+      EncodeFunctionDataParameters<
+        typeof SessionKeyPluginExecutionFunctionAbi,
+        "removeSessionKey"
+      >,
+      "args"
     >
   ) => Hex;
 
   encodeRotateSessionKey: (
-    args: GetFunctionArgs<
-      typeof SessionKeyPluginExecutionFunctionAbi,
-      "rotateSessionKey"
+    args: Pick<
+      EncodeFunctionDataParameters<
+        typeof SessionKeyPluginExecutionFunctionAbi,
+        "rotateSessionKey"
+      >,
+      "args"
     >
   ) => Hex;
 
   encodeUpdateKeyPermissions: (
-    args: GetFunctionArgs<
-      typeof SessionKeyPluginExecutionFunctionAbi,
-      "updateKeyPermissions"
+    args: Pick<
+      EncodeFunctionDataParameters<
+        typeof SessionKeyPluginExecutionFunctionAbi,
+        "updateKeyPermissions"
+      >,
+      "args"
     >
   ) => Hex;
 };
@@ -156,7 +186,6 @@ export const SessionKeyPlugin: Plugin<typeof SessionKeyPluginAbi> = {
   ): GetContractReturnType<
     typeof SessionKeyPluginAbi,
     PublicClient,
-    undefined,
     Address
   > => {
     if (!client.chain) throw new Error("Missing chain on client");
@@ -164,7 +193,7 @@ export const SessionKeyPlugin: Plugin<typeof SessionKeyPluginAbi> = {
     return getContract({
       address: address || addresses[client.chain.id],
       abi: SessionKeyPluginAbi,
-      publicClient: client,
+      client: client,
     });
   },
 };

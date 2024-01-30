@@ -1,5 +1,5 @@
+import { sepolia } from "@alchemy/aa-core";
 import { parseAbiParameters } from "viem";
-import { sepolia } from "viem/chains";
 import type { PluginGenConfig } from "../types";
 import { MultiOwnerPluginAbi } from "./abi.js";
 

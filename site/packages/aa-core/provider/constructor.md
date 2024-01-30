@@ -23,7 +23,7 @@ To initialize a `SmartAccountProvider`, you must provide a set of parameters det
 ```ts [example.ts]
 import { SmartAccountProvider } from "@alchemy/aa-core";
 import { getDefaultEntryPointAddress } from "@alchemy/aa-core";
-import { sepolia } from "viem/chains";
+import { sepolia } from "@alchemy/aa-core";
 
 // instantiates using every possible parameter, as a reference
 export const provider = new SmartAccountProvider({

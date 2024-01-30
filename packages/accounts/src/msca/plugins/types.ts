@@ -15,5 +15,5 @@ export type Plugin<TAbi extends Abi = Abi> = {
   getContract: <C extends Client>(
     client: C,
     address?: Address
-  ) => GetContractReturnType<TAbi, PublicClient, undefined, Address>;
+  ) => GetContractReturnType<TAbi, PublicClient, Address>;
 };

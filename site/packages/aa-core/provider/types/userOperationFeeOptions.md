@@ -33,7 +33,7 @@ type UserOperationFeeOptions {
 ::: code-group
 
 ```ts [example.ts]
-import { sepolia } from "viem/chains";
+import { sepolia } from "@alchemy/aa-core";
 import { type Chain } from "viem";
 
 import {

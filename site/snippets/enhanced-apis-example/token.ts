@@ -1,6 +1,6 @@
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
+import { sepolia } from "@alchemy/aa-core";
 import { Alchemy, Network } from "alchemy-sdk";
-import { sepolia } from "viem/chains";
 
 const alchemy = new Alchemy({
   network: Network.ETH_SEPOLIA,

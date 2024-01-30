@@ -109,3 +109,20 @@ export { noopMiddleware } from "./middleware/noopMiddleware.js";
 export type * from "./middleware/types.js";
 
 export { AccountNotFoundError } from "./errors/account.js";
+
+export {
+  arbitrum,
+  arbitrumGoerli,
+  arbitrumSepolia,
+  base,
+  baseGoerli,
+  baseSepolia,
+  goerli,
+  mainnet,
+  optimism,
+  optimismGoerli,
+  optimismSepolia,
+  polygon,
+  polygonMumbai,
+  sepolia,
+} from "./chain/index.js";

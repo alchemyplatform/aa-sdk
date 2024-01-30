@@ -62,7 +62,7 @@ import {
   LightSmartContractAccount,
   getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
-import { sepolia } from "viem/chains";
+import { sepolia } from "@alchemy/aa-core";
 import { createArcanaAuthSigner } from "./arcana-auth";
 
 const chain = sepolia;

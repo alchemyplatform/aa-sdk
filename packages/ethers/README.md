@@ -34,7 +34,7 @@ import {
 import { EthersProviderAdapter } from "@alchemy/aa-ethers";
 import { LocalAccountSigner, SmartAccountSigner } from "@alchemy/aa-core";
 import { Alchemy, Network } from "alchemy-sdk";
-import { polygonMumbai } from "viem/chains";
+import { polygonMumbai } from "@alchemy/aa-core";
 
 const chain = polygonMumbai;
 

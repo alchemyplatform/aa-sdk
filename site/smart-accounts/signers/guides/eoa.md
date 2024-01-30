@@ -32,7 +32,7 @@ A JSON RPC based account is one where the key material is not available locally,
 
 ```ts
 import { createWalletClient, custom } from "viem";
-import { mainnet } from "viem/chains";
+import { mainnet } from "@alchemy/aa-core";
 import { WalletClientSigner } from "@alchemy/core";
 
 const client = createWalletClient({
@@ -55,7 +55,7 @@ In this example we assume you have access to the private key locally.
 import { createWalletClient, http } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 // import { mnemonicToAccount } from "viem/accounts";
-import { mainnet } from "viem/chains";
+import { mainnet } from "@alchemy/aa-core";
 import { WalletClientSigner } from "@alchemy/core";
 
 // if you have a mnemonic, viem also exports a mnemonicToAccount function (see above import)

@@ -63,7 +63,7 @@ import {
   LightSmartContractAccount,
   getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
-import { sepolia } from "viem/chains";
+import { sepolia } from "@alchemy/aa-core";
 import { createFireblocksSigner } from "./fireblocks";
 
 const chain = sepolia;

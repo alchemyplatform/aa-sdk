@@ -36,7 +36,7 @@ import {
   SmartAccountProvider,
   SmartAccountSigner,
 } from "@alchemy/aa-core";
-import { polygonMumbai } from "viem/chains";
+import { polygonMumbai } from "@alchemy/aa-core";
 
 const chain = polygonMumbai;
 const owner: SmartAccountSigner =

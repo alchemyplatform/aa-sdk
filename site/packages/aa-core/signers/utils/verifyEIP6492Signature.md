@@ -25,7 +25,7 @@ Uses a the universal validator defined [here](https://github.com/AmbireTech/sign
 ```ts [example.ts]
 import { verifyEIP6492Signature } from "@alchemy/aa-core";
 import { http } from "viem";
-import { mainnet } from "viem/chains";
+import { mainnet } from "@alchemy/aa-core";
 
 const signature = await verifyEIP6492Signature({
   signer: "0xAccountAddress",

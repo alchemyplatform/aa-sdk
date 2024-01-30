@@ -3,8 +3,12 @@ import {
   getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
-import { Address, LocalAccountSigner, type Hex } from "@alchemy/aa-core";
-import { polygonMumbai } from "viem/chains";
+import {
+  Address,
+  LocalAccountSigner,
+  polygonMumbai,
+  type Hex,
+} from "@alchemy/aa-core";
 
 const chain = polygonMumbai;
 

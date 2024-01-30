@@ -1,4 +1,3 @@
-import type { Address, Chain } from "viem";
 import {
   arbitrum,
   arbitrumGoerli,
@@ -14,7 +13,8 @@ import {
   polygon,
   polygonMumbai,
   sepolia,
-} from "viem/chains";
+} from "@alchemy/aa-core";
+import type { Address, Chain } from "viem";
 
 export type LightAccountVersion =
   /** @deprecated This version does not support 1271 signature validation */

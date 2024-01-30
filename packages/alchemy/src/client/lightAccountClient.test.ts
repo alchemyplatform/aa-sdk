@@ -1,11 +1,12 @@
 import * as AACoreModule from "@alchemy/aa-core";
 import {
   LocalAccountSigner,
+  polygonMumbai,
   type BatchUserOperationCallData,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import { Alchemy, Network } from "alchemy-sdk";
-import { avalanche, polygonMumbai, type Chain } from "viem/chains";
+import { avalanche, type Chain } from "viem/chains";
 import { alchemyEnhancedApiActions } from "./decorators/alchemyEnhancedApis.js";
 import { createLightAccountAlchemyClient } from "./lightAccountClient.js";
 import { createAlchemySmartAccountClient } from "./smartAccountClient.js";

@@ -1,4 +1,3 @@
-import type { Address, Chain } from "viem";
 import {
   arbitrum,
   arbitrumGoerli,
@@ -6,14 +5,15 @@ import {
   base,
   baseGoerli,
   baseSepolia,
-  sepolia,
   mainnet,
   optimism,
   optimismGoerli,
   optimismSepolia,
   polygon,
   polygonMumbai,
-} from "viem/chains";
+  sepolia,
+} from "@alchemy/aa-core";
+import type { Address, Chain } from "viem";
 
 /**
  * Utility method returning the default nani account factory address given a {@link Chain} object

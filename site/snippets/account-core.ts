@@ -5,9 +5,9 @@ import {
   SimpleSmartContractAccount,
   SmartAccountProvider,
   getDefaultSimpleAccountFactoryAddress,
+  polygonMumbai,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
-import { polygonMumbai } from "viem/chains";
 
 // 1. define the EOA owner of the smart account
 // this uses a utility method for creating an account signer using mnemonic

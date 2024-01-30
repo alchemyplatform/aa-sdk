@@ -71,12 +71,12 @@ export const multiOwnerMessageSigner = <
     },
 
     signTypedData: <
-      const TTypedData extends TypedData | { [key: string]: unknown },
-      TPrimaryType extends string = string
+      const typedData extends TypedData | Record<string, unknown>,
+      primaryType extends keyof typedData | "EIP712Domain" = keyof typedData
     >(
-      typedData: TypedDataDefinition<TTypedData, TPrimaryType>
+      typedDataDefinition: TypedDataDefinition<typedData, primaryType>
     ): Promise<Hex> => {
-      return signWith712Wrapper(hashTypedData(typedData));
+      return signWith712Wrapper(hashTypedData(typedDataDefinition));
     },
   };
 };

@@ -61,7 +61,7 @@ import {
   LightSmartContractAccount,
   getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
-import { sepolia } from "viem/chains";
+import { sepolia } from "@alchemy/aa-core";
 import { createWeb3AuthSigner } from "./web3auth";
 
 const chain = sepolia;

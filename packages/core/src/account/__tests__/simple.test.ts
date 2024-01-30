@@ -1,5 +1,5 @@
+import { polygonMumbai, sepolia, type Chain } from "@alchemy/aa-core";
 import { createPublicClient, custom, http, type Address } from "viem";
-import { polygonMumbai, sepolia, type Chain } from "viem/chains";
 import { describe, it } from "vitest";
 import { createPublicErc4337FromClient } from "../../client/publicErc4337Client.js";
 import { createSmartAccountClient } from "../../client/smartAccountClient.js";

@@ -57,10 +57,10 @@ export type SmartContractAccount<Name extends string = string> =
     signUserOperationHash: (uoHash: Hex) => Promise<Hex>;
     signMessageWith6492: (params: { message: SignableMessage }) => Promise<Hex>;
     signTypedDataWith6492: <
-      const TTypedData extends TypedData | { [key: string]: unknown },
-      TPrimaryType extends string = string
+      const typedData extends TypedData | Record<string, unknown>,
+      primaryType extends keyof typedData | "EIP712Domain" = keyof typedData
     >(
-      typedData: TypedDataDefinition<TTypedData, TPrimaryType>
+      typedDataDefinition: TypedDataDefinition<typedData, primaryType>
     ) => Promise<Hex>;
     encodeUpgradeToAndCall: (params: UpgradeToAndCallParams) => Promise<Hex>;
     getNonce(): Promise<bigint>;
@@ -115,7 +115,7 @@ export const getAccountAddress = async ({
     abi: EntryPointAbi,
     // Need to cast this as PublicClient or else it breaks ABI typing.
     // This is valid because our PublicClient is a subclass of PublicClient
-    publicClient: client as PublicClient,
+    client: client as PublicClient,
   });
 
   const initCode = await getAccountInitCode();
@@ -169,7 +169,7 @@ export async function toSmartContractAccount<
     abi: EntryPointAbi,
     // Need to cast this as PublicClient or else it breaks ABI typing.
     // This is valid because our PublicClient is a subclass of PublicClient
-    publicClient: client as PublicClient,
+    client: client as PublicClient,
   });
 
   const accountAddress_ = await getAccountAddress({
@@ -265,14 +265,14 @@ export async function toSmartContractAccount<
   };
 
   const signTypedDataWith6492 = async <
-    const TTypedData extends TypedData | { [key: string]: unknown },
-    TPrimaryType extends string = string
+    const typedData extends TypedData | Record<string, unknown>,
+    primaryType extends keyof typedData | "EIP712Domain" = keyof typedData
   >(
-    typedData: TypedDataDefinition<TTypedData, TPrimaryType>
+    typedDataDefinition: TypedDataDefinition<typedData, primaryType>
   ): Promise<Hex> => {
     const [isDeployed, signature] = await Promise.all([
       isAccountDeployed(),
-      account.signTypedData(typedData),
+      account.signTypedData(typedDataDefinition),
     ]);
 
     return create6492Signature(isDeployed, signature);

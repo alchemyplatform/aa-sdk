@@ -1,6 +1,6 @@
+import { polygonMumbai } from "@alchemy/aa-core";
 import { fromHex, isAddress, type Address, type Chain, type Hex } from "viem";
 import { generatePrivateKey } from "viem/accounts";
-import { polygonMumbai } from "viem/chains";
 import {
   createPublicErc4337Client,
   createSimpleSmartAccount,
