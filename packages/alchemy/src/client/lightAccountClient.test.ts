@@ -78,7 +78,7 @@ describe("Light Account Client Tests", () => {
       "[
         {
           \\"code\\": \\"custom\\",
-          \\"message\\": \\"chain is not supported by Alchemy\\",
+          \\"message\\": \\"chain must include an alchemy rpc url. See \`createAlchemyChain\` or use the \`AlchemyChainMap\` exported from \`@alchemy/aa-core\`\\",
           \\"fatal\\": true,
           \\"path\\": [
             \\"chain\\"

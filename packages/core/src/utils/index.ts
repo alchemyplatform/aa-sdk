@@ -1,7 +1,7 @@
 import type { Address, Chain, Hash, Hex } from "viem";
 import { encodeAbiParameters, hexToBigInt, keccak256, toHex } from "viem";
 import * as chains from "viem/chains";
-import * as alchemyChains from "../chain/index.js";
+import * as alchemyChains from "../chains/index.js";
 import type {
   BigNumberish,
   Percentage,
@@ -10,7 +10,7 @@ import type {
 } from "../types.js";
 import { BigNumberishSchema, PercentageSchema } from "./schema.js";
 
-const AlchemyChainMap = new Map<number, Chain>(
+export const AlchemyChainMap = new Map<number, Chain>(
   Object.values(alchemyChains).map((c) => [c.id, c])
 );
 

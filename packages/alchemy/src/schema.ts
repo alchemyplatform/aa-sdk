@@ -7,7 +7,6 @@ import {
 import { Alchemy } from "alchemy-sdk";
 import type { Chain } from "viem";
 import z from "zod";
-import { SupportedChains } from "./chains.js";
 
 export const AlchemyChainSchema = z.custom<Chain>((chain) => {
   const _chain = ChainSchema.parse(chain);
@@ -19,11 +18,8 @@ export const AlchemyChainSchema = z.custom<Chain>((chain) => {
     return false;
   }
 
-  return (
-    SupportedChains.get(_chain.id) != null &&
-    chainObject.rpcUrls.alchemy != null
-  );
-}, "chain is not supported by Alchemy");
+  return chainObject.rpcUrls.alchemy != null;
+}, "chain must include an alchemy rpc url. See `createAlchemyChain` or use the `AlchemyChainMap` exported from `@alchemy/aa-core`");
 
 export const AlchemyProviderConfigSchema = ConnectionConfigSchema.and(
   z.object({

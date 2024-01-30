@@ -20,7 +20,6 @@ export type * from "./middleware/gasManager.js";
 export { alchemyGasManagerMiddleware } from "./middleware/gasManager.js";
 export { alchemyUserOperationSimulator } from "./middleware/userOperationSimulator.js";
 
-export { SupportedChains } from "./chains.js";
 export { getDefaultUserOperationFeeOptions } from "./defaults.js";
 export type * from "./schema.js";
 export { AlchemyProviderConfigSchema } from "./schema.js";

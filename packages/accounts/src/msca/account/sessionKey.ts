@@ -73,6 +73,7 @@ export async function createMultiOwnerModularAccountWithSessionKey({
     ...withSessionKey,
     source: "SessionKeyModularAccount",
     isSessionKeyActive,
+    // TODO: this is missing the correct encode* methods
     ...multiOwnerMessageSigner(
       config.client,
       account.address,
