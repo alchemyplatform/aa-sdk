@@ -7,9 +7,9 @@ import type {
 } from "viem";
 import type { SmartContractAccount } from "../account/smartContractAccount.js";
 import type {
-  Erc4337Actions,
-  Erc4337RpcSchema,
-} from "../client/decorators/publicErc4337Client.js";
+  BundlerActions,
+  BundlerRpcSchema,
+} from "../client/decorators/bundlerClient.js";
 import { defaultFeeEstimator } from "./defaults/feeEstimator.js";
 import { defaultGasEstimator } from "./defaults/gasEstimator.js";
 import { defaultPaymasterAndData } from "./defaults/paymasterAndData.js";
@@ -26,8 +26,8 @@ export type MiddlewareClient<
   TTransport,
   TChain,
   TAccount,
-  [...Erc4337RpcSchema, ...PublicRpcSchema],
-  PublicActions & Erc4337Actions
+  [...BundlerRpcSchema, ...PublicRpcSchema],
+  PublicActions & BundlerActions
 >;
 
 export const middlewareActions =

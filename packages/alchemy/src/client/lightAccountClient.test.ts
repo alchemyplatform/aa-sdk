@@ -18,13 +18,24 @@ describe("Light Account Client Tests", () => {
   const chain = polygonMumbai;
 
   it("should have a JWT property", async () => {
-    const spy = vi.spyOn(AACoreModule, "createPublicErc4337Client");
+    const spy = vi.spyOn(AACoreModule, "createBundlerClient");
     await givenConnectedProvider({ owner, chain });
-    expect(spy.mock.calls[0][0].fetchOptions).toMatchInlineSnapshot(`
+    expect(spy.mock.results[0].value.transport).toMatchInlineSnapshot(`
       {
-        "headers": {
-          "Authorization": "Bearer test",
+        "fetchOptions": {
+          "headers": {
+            "Alchemy-AA-Sdk-Version": "3.0.0-alpha.0",
+            "Authorization": "Bearer test",
+          },
         },
+        "key": "http",
+        "name": "HTTP JSON-RPC",
+        "request": [Function],
+        "retryCount": 3,
+        "retryDelay": 150,
+        "timeout": 10000,
+        "type": "http",
+        "url": "https://polygon-mumbai.g.alchemy.com/v2/",
       }
     `);
   });

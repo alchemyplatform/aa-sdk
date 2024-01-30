@@ -1,7 +1,13 @@
-import { type SmartAccountSigner } from "@alchemy/aa-core";
-import { type Address, type Transport } from "viem";
-import { multiOwnerMessageSigner } from "../plugins/multi-owner/signer.js";
-import { SessionKeyPlugin } from "../plugins/session-key/plugin.js";
+import {
+  createBundlerClient,
+  type SmartAccountSigner,
+  type SmartContractAccount,
+} from "@alchemy/aa-core";
+import { encodeFunctionData, type Address, type Transport } from "viem";
+import {
+  SessionKeyPlugin,
+  SessionKeyPluginExecutionFunctionAbi,
+} from "../plugins/session-key/plugin.js";
 import { SessionKeySigner } from "../plugins/session-key/signer.js";
 import {
   createMultiOwnerModularAccount,
@@ -46,7 +52,11 @@ export async function createMultiOwnerModularAccountWithSessionKey({
   const isSessionKeyActive = async (pluginAddress?: Address) => {
     // TODO: check if the account actually has the plugin installed
     // either via account loupe or checking if the supports interface call passes on the account
-    const contract = SessionKeyPlugin.getContract(config.client, pluginAddress);
+    const client = createBundlerClient({
+      transport: config.transport,
+      chain: config.chain,
+    });
+    const contract = SessionKeyPlugin.getContract(client, pluginAddress);
 
     const sessionKey = await sessionKeySigner.getAddress();
 
@@ -69,15 +79,43 @@ export async function createMultiOwnerModularAccountWithSessionKey({
     owner: sessionKeySigner,
   });
 
+  const encodeExecuteWithFallback: SmartContractAccount["encodeExecute"] =
+    async ({ target, data, value }) => {
+      if (!isSessionKeyActive()) {
+        return withSessionKey.encodeExecute({ target, data, value });
+      }
+
+      return encodeFunctionData({
+        abi: SessionKeyPluginExecutionFunctionAbi,
+        functionName: "executeWithSessionKey",
+        args: [
+          [{ target, data, value: value ?? 0n }],
+          await sessionKeySigner.getAddress(),
+        ],
+      });
+    };
+
+  const encodeBatchExecuteWithFallback: SmartContractAccount["encodeBatchExecute"] =
+    async (txs) => {
+      if (!isSessionKeyActive()) {
+        return withSessionKey.encodeBatchExecute(txs);
+      }
+
+      return encodeFunctionData({
+        abi: SessionKeyPluginExecutionFunctionAbi,
+        functionName: "executeWithSessionKey",
+        args: [
+          txs.map((x) => ({ ...x, value: x.value ?? 0n })),
+          await sessionKeySigner.getAddress(),
+        ],
+      });
+    };
+
   return {
     ...withSessionKey,
     source: "SessionKeyModularAccount",
     isSessionKeyActive,
-    // TODO: this is missing the correct encode* methods
-    ...multiOwnerMessageSigner(
-      config.client,
-      account.address,
-      withSessionKey.getOwner
-    ),
+    encodeExecute: encodeExecuteWithFallback,
+    encodeBatchExecute: encodeBatchExecuteWithFallback,
   };
 }

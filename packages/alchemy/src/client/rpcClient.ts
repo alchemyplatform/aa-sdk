@@ -1,8 +1,5 @@
-import {
-  createPublicErc4337Client,
-  type ConnectionConfig,
-} from "@alchemy/aa-core";
-import type { Chain } from "viem";
+import { createBundlerClient, type ConnectionConfig } from "@alchemy/aa-core";
+import { http, type Chain } from "viem";
 import { AlchemyChainSchema } from "../schema.js";
 import type { ClientWithAlchemyMethods } from "./types.js";
 
@@ -20,15 +17,16 @@ export const createAlchemyPublicRpcClient = ({
       ? `${chain.rpcUrls.alchemy.http[0]}/${connectionConfig.apiKey ?? ""}`
       : connectionConfig.rpcUrl;
 
-  return createPublicErc4337Client({
+  return createBundlerClient({
     chain: chain,
-    rpcUrl,
-    ...(connectionConfig.jwt != null && {
-      fetchOptions: {
-        headers: {
-          Authorization: `Bearer ${connectionConfig.jwt}`,
+    transport: http(rpcUrl, {
+      ...(connectionConfig.jwt != null && {
+        fetchOptions: {
+          headers: {
+            Authorization: `Bearer ${connectionConfig.jwt}`,
+          },
         },
-      },
+      }),
     }),
   });
 };

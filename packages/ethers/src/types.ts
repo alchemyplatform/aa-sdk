@@ -1,6 +1,6 @@
 import {
   type Address,
-  type PublicErc4337Client,
+  type BundlerClient,
   type SmartAccountClient,
   type SmartContractAccount,
 } from "@alchemy/aa-core";
@@ -16,6 +16,6 @@ export type EthersProviderAdapterOpts<
   entryPointAddress?: Address;
   account?: TAccount;
 } & (
-  | { rpcProvider: string | PublicErc4337Client; chainId: number }
+  | { rpcProvider: string | BundlerClient; chainId: number }
   | { accountProvider: SmartAccountClient<TTransport, TChain, TAccount> }
 );

@@ -1,8 +1,8 @@
 import {
-  createPublicErc4337FromClient,
+  createBundlerClientFromExisting,
   createSmartAccountClient,
   getChain,
-  type PublicErc4337Client,
+  type BundlerClient,
   type SmartAccountClient,
   type SmartContractAccount,
 } from "@alchemy/aa-core";
@@ -62,8 +62,8 @@ export class EthersProviderAdapter extends JsonRpcProvider {
     return new AccountSigner<TAccount>(this, account);
   }
 
-  getPublicErc4337Client(): PublicErc4337Client {
-    return createPublicErc4337FromClient(
+  getBundlerClient(): BundlerClient {
+    return createBundlerClientFromExisting(
       createPublicClient({
         transport: custom(this.accountProvider.transport),
         chain: this.accountProvider.chain!,

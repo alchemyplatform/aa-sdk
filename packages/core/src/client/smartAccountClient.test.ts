@@ -1,7 +1,7 @@
 import { polygonMumbai } from "@alchemy/aa-core";
 import { custom, type Transaction } from "viem";
 import type { SpyInstance } from "vitest";
-import * as receiptActions from "../actions/publicErc4337/getUserOperationReceipt.js";
+import * as receiptActions from "../actions/bundler/getUserOperationReceipt.js";
 import type { UserOperationReceipt } from "../types.js";
 import { getDefaultEntryPointAddress } from "../utils/index.js";
 import {

@@ -16,16 +16,16 @@ import type { SmartContractAccount } from "../account/smartContractAccount.js";
 import { middlewareActions } from "../middleware/actions.js";
 import type { ClientMiddleware } from "../middleware/types.js";
 import type { Prettify } from "../utils/index.js";
+import type { BundlerClient } from "./bundlerClient.js";
 import {
-  erc4337ClientActions,
-  type Erc4337Actions,
-  type Erc4337RpcSchema,
-} from "./decorators/publicErc4337Client.js";
+  bundlerActions,
+  type BundlerActions,
+  type BundlerRpcSchema,
+} from "./decorators/bundlerClient.js";
 import {
-  smartAccountClientDecorator,
+  smartAccountClientActions,
   type BaseSmartAccountClientActions,
 } from "./decorators/smartAccountClient.js";
-import type { PublicErc4337Client } from "./publicErc4337Client.js";
 import { SmartAccountClientOptsSchema } from "./schema.js";
 
 type SmartAccountClientOpts = z.output<typeof SmartAccountClientOptsSchema>;
@@ -47,7 +47,7 @@ export type SmartAccountClientConfig<
 >;
 
 export type SmartAccountClientRpcSchema = [
-  ...Erc4337RpcSchema,
+  ...BundlerRpcSchema,
   ...PublicRpcSchema
 ];
 
@@ -57,7 +57,7 @@ export type SmartAccountClientActions<
     | SmartContractAccount
     | undefined
 > = BaseSmartAccountClientActions<chain, account> &
-  Erc4337Actions &
+  BundlerActions &
   PublicActions;
 
 export type SmartAccountClient<
@@ -84,9 +84,9 @@ export type BaseSmartAccountClient<
     transport,
     chain,
     account,
-    [...Erc4337RpcSchema, ...PublicRpcSchema],
+    [...BundlerRpcSchema, ...PublicRpcSchema],
     { middleware: ClientMiddleware } & SmartAccountClientOpts &
-      Erc4337Actions &
+      BundlerActions &
       PublicActions
   >
 >;
@@ -126,9 +126,9 @@ export function createSmartAccountClient(
       ...SmartAccountClientOptsSchema.parse(config.opts ?? {}),
     }))
     .extend(publicActions)
-    .extend(erc4337ClientActions)
+    .extend(bundlerActions)
     .extend(middlewareActions(config))
-    .extend((client) => smartAccountClientDecorator(client));
+    .extend(smartAccountClientActions);
 }
 
 export function createSmartAccountClientFromExisting<
@@ -137,7 +137,7 @@ export function createSmartAccountClientFromExisting<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TClient extends PublicErc4337Client<TTransport> = PublicErc4337Client<TTransport>,
+  TClient extends BundlerClient<TTransport> = BundlerClient<TTransport>,
   TActions extends SmartAccountClientActions<
     TChain,
     TAccount
@@ -152,7 +152,7 @@ export function createSmartAccountClientFromExisting<
 
 export function createSmartAccountClientFromExisting(
   config: Omit<SmartAccountClientConfig, "transport"> & {
-    client: PublicErc4337Client;
+    client: BundlerClient;
   }
 ): SmartAccountClient {
   return createSmartAccountClient({

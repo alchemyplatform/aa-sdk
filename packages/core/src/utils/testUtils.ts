@@ -4,13 +4,11 @@ import {
   type SmartContractAccount,
 } from "../account/smartContractAccount.js";
 import {
-  createPublicErc4337FromClient,
-  type PublicErc4337Client,
-} from "../client/publicErc4337Client.js";
+  createBundlerClientFromExisting,
+  type BundlerClient,
+} from "../client/bundlerClient.js";
 
-export const createDummySmartContractAccount = async <
-  C extends PublicErc4337Client
->(
+export const createDummySmartContractAccount = async <C extends BundlerClient>(
   client: C,
   entrypoint: Address
 ): Promise<SmartContractAccount> => {
@@ -18,7 +16,8 @@ export const createDummySmartContractAccount = async <
     source: "dummy",
     accountAddress: "0x1234567890123456789012345678901234567890",
     entrypointAddress: entrypoint,
-    client: client,
+    chain: client.chain,
+    transport: custom(client),
     signMessage: async () => "0xdeadbeef",
     signTypedData: async () => "0xdeadbeef",
     getAccountInitCode: async () =>
@@ -31,7 +30,7 @@ export const createDummySmartContractAccount = async <
 };
 
 export const createTestClient = (chain: Chain) => {
-  return createPublicErc4337FromClient(
+  return createBundlerClientFromExisting(
     createPublicClient({
       chain,
       transport: custom({

@@ -1,8 +1,8 @@
 import type { Address, Chain, Client, Transport } from "viem";
-import type { Erc4337RpcSchema } from "../../client/decorators/publicErc4337Client";
+import type { BundlerRpcSchema } from "../../client/decorators/bundlerClient";
 
 export const getSupportedEntryPoints = async <
-  TClient extends Client<Transport, Chain | undefined, any, Erc4337RpcSchema>
+  TClient extends Client<Transport, Chain | undefined, any, BundlerRpcSchema>
 >(
   client: TClient
 ): Promise<Address[]> => {
