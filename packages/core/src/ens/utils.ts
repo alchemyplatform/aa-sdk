@@ -1,6 +1,6 @@
 import type { Chain } from "viem/chains";
 import * as chains from "viem/chains";
-import { mainnet } from "../chain/index.js";
+import { mainnet } from "../chains/index.js";
 
 export const ChainsById: Map<number, chains.Chain> = new Map(
   Object.values(chains).map((x) => [x.id, x])

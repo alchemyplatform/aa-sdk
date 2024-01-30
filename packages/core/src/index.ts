@@ -52,6 +52,7 @@ export type * from "./client/types.js";
 export type * from "./types.js";
 export type * from "./utils/index.js";
 export {
+  AlchemyChainMap,
   ChainSchema,
   applyUserOpFeeOption,
   applyUserOpOverride,
@@ -125,4 +126,4 @@ export {
   polygon,
   polygonMumbai,
   sepolia,
-} from "./chain/index.js";
+} from "./chains/index.js";

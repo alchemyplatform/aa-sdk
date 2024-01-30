@@ -44,7 +44,7 @@ jobs:
       - name: Build
         env:
           API_KEY: ${{ secrets.API_KEY }}
-        run: yarn build
+        run: yarn build:ci
 
       - name: Unit Test
         run: yarn test
