@@ -1,6 +1,5 @@
 import { createLightAccountAlchemyProvider } from "@alchemy/aa-alchemy";
-import { LocalAccountSigner } from "@alchemy/aa-core";
-import { sepolia } from "viem/chains";
+import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
 
 export const provider = createLightAccountAlchemyProvider({
   apiKey: "YOUR_API_KEY",

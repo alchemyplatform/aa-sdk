@@ -2,7 +2,6 @@ import type { Address } from "abitype";
 import {
   getContract,
   trim,
-  type Chain,
   type GetContractReturnType,
   type Hash,
   type Hex,
@@ -11,11 +10,10 @@ import {
   type Transport,
 } from "viem";
 import { EntryPointAbi } from "../abis/EntryPointAbi.js";
-import { createPublicErc4337Client } from "../client/create-client.js";
-import type {
-  PublicErc4337Client,
-  SupportedTransports,
-} from "../client/types.js";
+import {
+  createPublicErc4337Client,
+  type PublicErc4337Client,
+} from "../client/publicErc4337Client.js";
 import { Logger } from "../logger.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import { wrapSignatureWith6492 } from "../signer/utils.js";
@@ -34,8 +32,11 @@ export enum DeploymentState {
   DEPLOYED = "0x2",
 }
 
+/**
+ * @deprecated use `toSmartContractAccount` instead for creating SmartAccountInstances
+ */
 export abstract class BaseSmartContractAccount<
-  TTransport extends SupportedTransports = Transport,
+  TTransport extends Transport = Transport,
   TOwner extends SmartAccountSigner | undefined = SmartAccountSigner | undefined
 > implements ISmartContractAccount<TTransport, TOwner>
 {
@@ -46,8 +47,7 @@ export abstract class BaseSmartContractAccount<
   protected owner: TOwner;
   protected entryPoint: GetContractReturnType<
     typeof EntryPointAbi,
-    PublicClient,
-    Chain
+    PublicClient
   >;
   protected entryPointAddress: Address;
   readonly rpcProvider:
@@ -106,9 +106,7 @@ export abstract class BaseSmartContractAccount<
     this.entryPoint = getContract({
       address: this.entryPointAddress,
       abi: EntryPointAbi,
-      // Need to cast this as PublicClient or else it breaks ABI typing.
-      // This is valid because our PublicClient is a subclass of PublicClient
-      publicClient: this.rpcProvider as PublicClient,
+      client: this.rpcProvider as PublicClient,
     });
   }
 

@@ -67,7 +67,7 @@ import {
   LightSmartContractAccount,
   getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
-import { sepolia } from "viem/chains";
+import { sepolia } from "@alchemy/aa-core";
 import { createTurnkeySigner } from "./turnkey";
 
 const chain = sepolia;

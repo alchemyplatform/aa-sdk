@@ -1,7 +1,7 @@
+import { polygonMumbai } from "@alchemy/aa-core";
 import { createWalletClient, http } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
 import { WalletClientSigner } from "../wallet-client.js";
-import { polygonMumbai } from "viem/chains";
 
 describe("Wallet Client Signer Tests", () => {
   it("should successfully sign", async () => {

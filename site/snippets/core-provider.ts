@@ -6,8 +6,8 @@ import {
   LocalAccountSigner,
   SmartAccountProvider,
   SmartAccountSigner,
+  polygonMumbai,
 } from "@alchemy/aa-core";
-import { polygonMumbai } from "viem/chains";
 
 const chain = polygonMumbai;
 const owner: SmartAccountSigner =

@@ -7,10 +7,13 @@ import {
   getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
-import { WalletClientSigner, type SmartAccountSigner } from "@alchemy/aa-core";
+import {
+  WalletClientSigner,
+  sepolia,
+  type SmartAccountSigner,
+} from "@alchemy/aa-core";
 import { useWallets } from "@privy-io/react-auth";
 import { createWalletClient, custom } from "viem";
-import { sepolia } from "viem/chains";
 
 // The code below makes use of Privy's React hooks. You must paste
 // or use it within a React Component or Context.

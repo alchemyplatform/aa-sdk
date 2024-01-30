@@ -63,7 +63,7 @@ import {
   getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
 import { getDefaultEntryPointAddress } from "@alchemy/aa-core";
-import { polygonMumbai } from "viem/chains";
+import { polygonMumbai } from "@alchemy/aa-core";
 import { createParticleSigner } from "./particle";
 
 const chain = polygonMumbai;

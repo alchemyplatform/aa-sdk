@@ -61,7 +61,7 @@ import {
   LightSmartContractAccount,
   getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
-import { sepolia } from "viem/chains";
+import { sepolia } from "@alchemy/aa-core";
 import { createMagicSigner } from "./magic";
 
 const chain = sepolia;

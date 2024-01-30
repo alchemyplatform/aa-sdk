@@ -1,13 +1,13 @@
 import {
   LocalAccountSigner,
+  createPublicErc4337Client,
+  polygonMumbai,
   type Address,
-  type SmartAccountSigner,
   type Hex,
+  type SmartAccountSigner,
 } from "@alchemy/aa-core";
-import { polygonMumbai, type Chain } from "viem/chains";
-import { describe, it } from "vitest";
-import { NaniAccount } from "../account.js";
-import { createNaniAccountProvider } from "../provider.js";
+import { createNaniAccount } from "../account.js";
+import { getDefaultNaniAccountFactoryAddress } from "../utils.js";
 
 const chain = polygonMumbai;
 
@@ -18,20 +18,23 @@ describe("Nani Account Tests", () => {
     LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
 
   it("should correctly sign the message", async () => {
-    const provider = givenConnectedProvider({ owner, chain });
+    const account = await givenAccount();
+
     expect(
-      await provider.signMessage(
-        "0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b"
-      )
+      await account.signMessage({
+        message: {
+          raw: "0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b",
+        },
+      })
     ).toBe(
       "0x33b1b0d34ba3252cd8abac8147dc08a6e14a6319462456a34468dd5713e38dda3a43988460011af94b30fa3efefcf9d0da7d7522e06b7bd8bff3b65be4aee5b31c"
     );
   });
 
   it("should correctly sign typed data", async () => {
-    const provider = givenConnectedProvider({ owner, chain });
+    const account = await givenAccount();
     expect(
-      await provider.signTypedData({
+      await account.signTypedData({
         types: {
           Request: [{ name: "hello", type: "string" }],
         },
@@ -46,8 +49,9 @@ describe("Nani Account Tests", () => {
   });
 
   it("should correctly encode transferOwnership data", async () => {
+    const account = await givenAccount();
     expect(
-      NaniAccount.encodeTransferOwnership(
+      account.encodeTransferOwnership(
         "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
       )
     ).toBe(
@@ -56,7 +60,7 @@ describe("Nani Account Tests", () => {
   });
 
   it("should correctly encode batch transaction data", async () => {
-    const provider = givenConnectedProvider({ owner, chain });
+    const account = await givenAccount();
     const calls = [
       {
         target: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef" as Address,
@@ -70,16 +74,15 @@ describe("Nani Account Tests", () => {
       },
     ];
 
-    expect(
-      await provider.account.encodeBatchExecute(calls)
-    ).toMatchInlineSnapshot(
+    expect(await account.encodeBatchExecute(calls)).toMatchInlineSnapshot(
       '"0x34fcd5be00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000e0000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000004deadbeef000000000000000000000000000000000000000000000000000000000000000000000000000000008ba1f109551bd432803012645ac136ddd64dba72000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000004cafebabe00000000000000000000000000000000000000000000000000000000"'
     );
   });
 
   it("should correctly encode delegate execute data", async () => {
+    const account = await givenAccount();
     expect(
-      NaniAccount.encodeExecuteDelegate(
+      account.encodeExecuteDelegate(
         "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef" as Address,
         "0xdeadbeef" as Hex
       )
@@ -89,25 +92,20 @@ describe("Nani Account Tests", () => {
   });
 
   it("should return the correct sender", async () => {
-    const provider = givenConnectedProvider({ owner, chain });
-    expect(await provider.getAddress()).toBe(
-      "0x903072d2112412406597eb5DCAA8CeDD71ea141c"
-    );
+    const account = await givenAccount();
+    expect(account.address).toBe("0x903072d2112412406597eb5DCAA8CeDD71ea141c");
   });
-});
 
-const givenConnectedProvider = ({
-  owner,
-  chain,
-  salt,
-}: {
-  owner: SmartAccountSigner;
-  chain: Chain;
-  salt?: Hex;
-}) =>
-  createNaniAccountProvider({
-    owner,
-    chain,
-    rpcProvider: `${chain.rpcUrls.alchemy.http[0]}/tSJxomeQQY78eMApJ_g7ugm9bwSxWRsm`,
-    salt,
-  });
+  const givenAccount = async () => {
+    return createNaniAccount({
+      owner,
+      chain,
+      accountAddress: "0x903072d2112412406597eb5DCAA8CeDD71ea141c",
+      factoryAddress: getDefaultNaniAccountFactoryAddress(chain),
+      rpcClient: createPublicErc4337Client({
+        chain,
+        rpcUrl: `${chain.rpcUrls.alchemy.http[0]}/test`,
+      }),
+    });
+  };
+});

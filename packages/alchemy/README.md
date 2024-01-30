@@ -29,7 +29,7 @@ import {
 } from "@alchemy/aa-accounts";
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import { LocalAccountSigner, type SmartAccountSigner } from "@alchemy/aa-core";
-import { sepolia } from "viem/chains";
+import { sepolia } from "@alchemy/aa-core";
 
 const chain = sepolia;
 const PRIVATE_KEY = "0xYourEOAPrivateKey";

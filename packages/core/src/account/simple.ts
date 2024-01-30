@@ -9,22 +9,28 @@ import {
 } from "viem";
 import { SimpleAccountAbi } from "../abis/SimpleAccountAbi.js";
 import { SimpleAccountFactoryAbi } from "../abis/SimpleAccountFactoryAbi.js";
+import type { PublicErc4337Client } from "../client/publicErc4337Client.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import type { BatchUserOperationCallData } from "../types.js";
 import { BaseSmartContractAccount } from "./base.js";
 import { SimpleSmartAccountParamsSchema } from "./schema.js";
+import {
+  toSmartContractAccount,
+  type OwnedSmartContractAccount,
+} from "./smartContractAccount.js";
 import type { SimpleSmartAccountParams } from "./types.js";
 
-export class SimpleSmartContractAccount<
-  TTransport extends Transport | FallbackTransport = Transport
-> extends BaseSmartContractAccount<TTransport, SmartAccountSigner> {
+class SimpleSmartContractAccount<
+  TTransport extends Transport | FallbackTransport = Transport,
+  TOwner extends SmartAccountSigner = SmartAccountSigner
+> extends BaseSmartContractAccount<TTransport, TOwner> {
   protected index: bigint;
 
-  constructor(params: SimpleSmartAccountParams<TTransport>) {
+  constructor(params: SimpleSmartAccountParams<TTransport, TOwner>) {
     SimpleSmartAccountParamsSchema<TTransport>().parse(params);
 
     super(params);
-    this.owner = params.owner;
+    this.owner = params.owner as TOwner;
     this.index = params.index ?? 0n;
   }
 
@@ -74,7 +80,11 @@ export class SimpleSmartContractAccount<
     return this.owner.signMessage(msg);
   }
 
-  protected async getAccountInitCode(): Promise<`0x${string}`> {
+  setOwner(owner: TOwner): void {
+    this.owner = owner;
+  }
+
+  public async getAccountInitCode(): Promise<`0x${string}`> {
     return concatHex([
       this.factoryAddress,
       encodeFunctionData({
@@ -85,3 +95,54 @@ export class SimpleSmartContractAccount<
     ]);
   }
 }
+
+export type SimpleSmartAccount<TOwner extends SmartAccountSigner> =
+  OwnedSmartContractAccount<"SimpleAccount", TOwner>;
+
+export const createSimpleSmartAccount = async <
+  TTransport extends Transport = Transport,
+  TOwner extends SmartAccountSigner = SmartAccountSigner
+>(
+  params: SimpleSmartAccountParams<TTransport, TOwner>
+): Promise<SimpleSmartAccount<TOwner>> => {
+  if (!params.owner) throw new Error("Owner must be provided.");
+
+  // @ts-expect-error base account allows for optional owners, but simple account requires it
+  const simpleAccount = new SimpleSmartContractAccount<TTransport>(params);
+  const parsedParams = SimpleSmartAccountParamsSchema<
+    TTransport,
+    TOwner
+  >().parse(params);
+
+  const base = await toSmartContractAccount({
+    source: "SimpleAccount",
+    client: simpleAccount.rpcProvider as PublicErc4337Client<TTransport>,
+    encodeBatchExecute: simpleAccount.encodeBatchExecute.bind(simpleAccount),
+    encodeExecute: (tx) =>
+      simpleAccount.encodeExecute.bind(simpleAccount)(
+        tx.target,
+        tx.value ?? 0n,
+        tx.data
+      ),
+    entrypointAddress: simpleAccount.getEntryPointAddress(),
+    getAccountInitCode: async () => {
+      if (parsedParams.initCode) return parsedParams.initCode;
+      return simpleAccount.getAccountInitCode();
+    },
+    getDummySignature: simpleAccount.getDummySignature.bind(simpleAccount),
+    signMessage: ({ message }) =>
+      simpleAccount.signMessage(
+        typeof message === "string" ? message : message.raw
+      ),
+    // @ts-expect-error these types still represent the same thing, but they're just a little off in there definitions
+    signTypedData: simpleAccount.signTypedData.bind(simpleAccount),
+    accountAddress: parsedParams.accountAddress,
+  });
+
+  return {
+    ...base,
+    getOwner: () => simpleAccount.getOwner() as TOwner,
+    setOwner: (owner: TOwner) =>
+      simpleAccount.setOwner.bind(simpleAccount)(owner),
+  };
+};

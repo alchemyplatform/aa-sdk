@@ -1,23 +1,12 @@
-import type {
-  ISmartAccountProvider,
-  ISmartContractAccount,
-  UpgradeToData,
-} from "@alchemy/aa-core";
-import type { Address, Chain } from "viem";
 import {
-  encodeAbiParameters,
-  encodeFunctionData,
-  encodeFunctionResult,
-  keccak256,
-  parseAbiParameters,
-} from "viem";
-import {
+  AccountNotFoundError,
   arbitrum,
   arbitrumGoerli,
   arbitrumSepolia,
   base,
   baseGoerli,
   baseSepolia,
+  createPublicErc4337FromClient,
   goerli,
   mainnet,
   optimism,
@@ -26,12 +15,30 @@ import {
   polygon,
   polygonMumbai,
   sepolia,
-} from "viem/chains";
+  type GetAccountParameter,
+  type OwnedSmartContractAccount,
+  type SmartAccountClient,
+  type SmartAccountSigner,
+  type UpgradeToData,
+} from "@alchemy/aa-core";
+import type { Address, Chain, Transport } from "viem";
+import {
+  createPublicClient,
+  custom,
+  encodeAbiParameters,
+  encodeFunctionData,
+  encodeFunctionResult,
+  keccak256,
+  parseAbiParameters,
+} from "viem";
 import { IPluginAbi } from "./abis/IPlugin.js";
 import { MultiOwnerTokenReceiverMSCAFactoryAbi } from "./abis/MultiOwnerTokenReceiverMSCAFactory.js";
 import { UpgradeableModularAccountAbi } from "./abis/UpgradeableModularAccount.js";
-import { createMultiOwnerMSCA } from "./multi-owner-account.js";
-import { MultiOwnerPlugin } from "./plugins/multi-owner/index.js";
+import {
+  createMultiOwnerModularAccount,
+  type MultiOwnerModularAccount,
+} from "./account/multiOwnerAccount.js";
+import { MultiOwnerPlugin } from "./plugins/multi-owner/plugin.js";
 import { TokenReceiverPlugin } from "./plugins/token-receiver/plugin.js";
 
 /**
@@ -70,37 +77,52 @@ export const getDefaultMultiOwnerMSCAFactoryAddress = (
   );
 };
 
-export const getMSCAUpgradeToData = async <
-  P extends ISmartAccountProvider & { account: ISmartContractAccount }
+export async function getMSCAUpgradeToData<
+  TTransport extends Transport = Transport,
+  TChain extends Chain | undefined = Chain | undefined,
+  TOwner extends SmartAccountSigner = SmartAccountSigner,
+  TAccount extends OwnedSmartContractAccount<string, TOwner> | undefined =
+    | OwnedSmartContractAccount<string, TOwner>
+    | undefined
 >(
-  provider: P,
-  multiOwnerPluginAddress?: Address,
-  tokenReceiverPluginAddress?: Address
+  client: SmartAccountClient<TTransport, TChain, TAccount>,
+  {
+    multiOwnerPluginAddress,
+    tokenReceiverPluginAddress,
+    account: account_ = client.account,
+  }: {
+    multiOwnerPluginAddress?: Address;
+    tokenReceiverPluginAddress?: Address;
+  } & GetAccountParameter<TAccount>
 ): Promise<
   UpgradeToData & {
-    connectFn: (
-      rpcClient: P["rpcClient"]
-    ) => ReturnType<typeof createMultiOwnerMSCA>;
+    createMAAccount: () => Promise<MultiOwnerModularAccount<TOwner>>;
   }
-> => {
-  const factoryAddress = getDefaultMultiOwnerMSCAFactoryAddress(
-    provider.rpcClient.chain
-  );
-  const accountAddress = await provider.getAddress();
+> {
+  if (!account_) {
+    throw new AccountNotFoundError();
+  }
 
-  const implAddress = await provider.rpcClient.readContract({
+  if (!client.chain) {
+    throw new Error("client must have a chain");
+  }
+  const chain = client.chain;
+  const account = account_ as OwnedSmartContractAccount<string, TOwner>;
+
+  const factoryAddress = getDefaultMultiOwnerMSCAFactoryAddress(client.chain);
+
+  const implAddress = await client.readContract({
     abi: MultiOwnerTokenReceiverMSCAFactoryAbi,
     address: factoryAddress,
     functionName: "IMPL",
   });
 
   const multiOwnerAddress =
-    multiOwnerPluginAddress ??
-    MultiOwnerPlugin.meta.addresses[provider.rpcClient.chain.id];
+    multiOwnerPluginAddress ?? MultiOwnerPlugin.meta.addresses[client.chain.id];
 
   const tokenReceiverAddress =
     tokenReceiverPluginAddress ??
-    TokenReceiverPlugin.meta.addresses[provider.rpcClient.chain.id];
+    TokenReceiverPlugin.meta.addresses[client.chain.id];
 
   if (!multiOwnerAddress) {
     throw new Error("could not get multi owner plugin address");
@@ -110,7 +132,7 @@ export const getMSCAUpgradeToData = async <
     throw new Error("could not get token receiver plugin address");
   }
 
-  const moPluginManifest = await provider.rpcClient.readContract({
+  const moPluginManifest = await client.readContract({
     abi: IPluginAbi,
     address: multiOwnerAddress,
     functionName: "pluginManifest",
@@ -124,7 +146,7 @@ export const getMSCAUpgradeToData = async <
     })
   );
 
-  const trPluginManifest = await provider.rpcClient.readContract({
+  const trPluginManifest = await client.readContract({
     abi: IPluginAbi,
     address: tokenReceiverAddress,
     functionName: "pluginManifest",
@@ -138,12 +160,7 @@ export const getMSCAUpgradeToData = async <
     })
   );
 
-  const owner = provider.account.getOwner();
-  if (owner == null) {
-    throw new Error("could not get owner");
-  }
-
-  const ownerAddress = await owner.getAddress();
+  const ownerAddress = await account.getOwner().getAddress();
   const encodedOwner = encodeAbiParameters(parseAbiParameters("address[]"), [
     [ownerAddress],
   ]);
@@ -165,14 +182,17 @@ export const getMSCAUpgradeToData = async <
   return {
     implAddress,
     initializationData: encodedMSCAInitializeData,
-    connectFn: (rpcClient: P["rpcClient"]) =>
-      createMultiOwnerMSCA({
-        rpcClient,
-        owner,
-        entryPointAddress: provider.account.getEntryPointAddress(),
+    createMAAccount: async () =>
+      createMultiOwnerModularAccount({
+        client: createPublicErc4337FromClient(
+          createPublicClient({
+            chain: chain as Chain,
+            transport: custom(client.transport),
+          })
+        ),
+        owner: account.getOwner(),
         factoryAddress,
-        chain: rpcClient.chain,
-        accountAddress,
+        accountAddress: account.address,
       }),
   };
-};
+}

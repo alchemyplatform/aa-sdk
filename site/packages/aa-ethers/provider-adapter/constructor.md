@@ -26,7 +26,7 @@ Or you can also input a `SmartAccountProvider` instance already initialized (`Al
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import { getDefaultEntryPointAddress } from "@alchemy/aa-core";
 import { EthersProviderAdapter } from "@alchemy/aa-ethers";
-import { sepolia } from "viem/chains";
+import { sepolia } from "@alchemy/aa-core";
 
 // one way to initialize
 export const provider = new EthersProviderAdapter({

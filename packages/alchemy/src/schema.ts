@@ -1,8 +1,7 @@
-import { LightAccountFactoryConfigSchema } from "@alchemy/aa-accounts";
 import {
   ChainSchema,
   ConnectionConfigSchema,
-  createSmartAccountProviderConfigSchema,
+  SmartAccountProviderOptsSchema,
   getChain,
 } from "@alchemy/aa-core";
 import { Alchemy } from "alchemy-sdk";
@@ -26,13 +25,13 @@ export const AlchemyChainSchema = z.custom<Chain>((chain) => {
   );
 }, "chain is not supported by Alchemy");
 
-export const AlchemyProviderConfigSchema =
-  createSmartAccountProviderConfigSchema()
-    .omit({ rpcProvider: true, chain: true })
-    .and(ConnectionConfigSchema)
-    .and(z.object({ chain: AlchemyChainSchema }));
+export const AlchemyProviderConfigSchema = ConnectionConfigSchema.and(
+  z.object({
+    chain: AlchemyChainSchema,
+    opts: SmartAccountProviderOptsSchema.optional().default(
+      SmartAccountProviderOptsSchema.parse({})
+    ),
+  })
+);
 
 export const AlchemySdkClientSchema = z.instanceof(Alchemy);
-
-export const LightAccountAlchemyProviderConfigSchema =
-  AlchemyProviderConfigSchema.and(LightAccountFactoryConfigSchema);

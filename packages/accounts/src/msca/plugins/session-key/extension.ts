@@ -1,79 +1,103 @@
-import type {
-  ISmartAccountProvider,
-  SupportedTransports,
-  UserOperationOverrides,
+import {
+  AccountNotFoundError,
+  type GetAccountParameter,
+  type SendUserOperationResult,
+  type SmartAccountClient,
+  type SmartContractAccount,
+  type UserOperationOverrides,
 } from "@alchemy/aa-core";
-import type { Address } from "viem";
-import type { IMSCA } from "../../types.js";
-import { type Plugin } from "../types.js";
-import { SessionKeyPlugin, SessionKeyPluginAbi } from "./plugin.js";
+import type { Address, Chain, Transport } from "viem";
+import {
+  SessionKeyPlugin,
+  sessionKeyPluginActions as sessionKeyPluginActions_,
+  type SessionKeyPluginActions as SessionKeyPluginActions_,
+} from "./plugin.js";
 import { buildSessionKeysToRemoveStruct } from "./utils.js";
 
-const ExtendedSessionKeyPlugin_ = {
-  ...SessionKeyPlugin,
-  accountMethods: (account: IMSCA<any, any, any>) => ({
+export type SessionKeyPluginActions<
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
+    | undefined
+> = Omit<SessionKeyPluginActions_<TAccount>, "removeSessionKey"> & {
+  isAccountSessionKey: (
+    args: {
+      key: Address;
+      pluginAddress?: Address;
+    } & GetAccountParameter<TAccount>
+  ) => Promise<boolean>;
+
+  getAccountSessionKeys: (
+    args: {
+      pluginAddress?: Address;
+    } & GetAccountParameter<TAccount>
+  ) => Promise<ReadonlyArray<Address>>;
+
+  removeSessionKey: (
+    args: {
+      key: Address;
+      pluginAddress?: Address;
+      overrides: UserOperationOverrides;
+    } & GetAccountParameter<TAccount>
+  ) => Promise<SendUserOperationResult>;
+};
+
+export const sessionKeyPluginActions: <
+  TTransport extends Transport = Transport,
+  TChain extends Chain | undefined = Chain | undefined,
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
+    | undefined
+>(
+  client: SmartAccountClient<TTransport, TChain, TAccount>
+) => SessionKeyPluginActions<TAccount> = <
+  TTransport extends Transport = Transport,
+  TChain extends Chain | undefined = Chain | undefined,
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
+    | undefined
+>(
+  client: SmartAccountClient<TTransport, TChain, TAccount>
+) => {
+  const { removeSessionKey, ...og } = sessionKeyPluginActions_(client);
+
+  return {
+    ...og,
     isAccountSessionKey: async ({
       key,
       pluginAddress,
-    }: {
-      key: Address;
-      pluginAddress?: Address;
+      account = client.account,
     }) => {
-      const contract = SessionKeyPlugin.getContract(
-        account.rpcProvider,
-        pluginAddress
-      );
+      if (!account) throw new AccountNotFoundError();
 
-      return await contract.read.isSessionKeyOf([
-        await account.getAddress(),
-        key,
-      ]);
+      const contract = SessionKeyPlugin.getContract(client, pluginAddress);
+
+      return await contract.read.isSessionKeyOf([account.address, key]);
     },
 
     getAccountSessionKeys: async ({
       pluginAddress,
-    }: {
-      pluginAddress?: Address;
+      account = client.account,
     }) => {
-      const contract = SessionKeyPlugin.getContract(
-        account.rpcProvider,
-        pluginAddress
-      );
+      if (!account) throw new AccountNotFoundError();
 
-      return await contract.read.sessionKeysOf([await account.getAddress()]);
+      const contract = SessionKeyPlugin.getContract(client, pluginAddress);
+
+      return await contract.read.sessionKeysOf([account.address]);
     },
-  }),
-  providerMethods: <
-    TTransport extends SupportedTransports,
-    P extends ISmartAccountProvider<TTransport> & {
-      account: IMSCA<TTransport>;
-    }
-  >(
-    provider: P
-  ) => {
-    const generated = SessionKeyPlugin.providerMethods(provider);
-    return {
-      ...generated,
 
-      removeAccountSessionKey: async (
-        { key }: { key: Address },
-        overrides?: UserOperationOverrides
-      ) => {
-        const sessionKeysToRemove = await buildSessionKeysToRemoveStruct(
-          provider,
-          [key]
-        );
-        return generated.removeSessionKey(
-          { args: [key, sessionKeysToRemove[0].predecessor] },
-          overrides
-        );
-      },
-    };
-  },
+    removeSessionKey: async ({ key, overrides, account = client.account }) => {
+      if (!account) throw new AccountNotFoundError();
+
+      const sessionKeysToRemove = await buildSessionKeysToRemoveStruct(client, {
+        keys: [key],
+        account,
+      });
+
+      return removeSessionKey({
+        args: [key, sessionKeysToRemove[0].predecessor],
+        overrides,
+        account,
+      });
+    },
+  };
 };
-
-export const ExtendedSessionKeyPlugin: Plugin<
-  ReturnType<(typeof ExtendedSessionKeyPlugin_)["accountMethods"]>,
-  ReturnType<(typeof ExtendedSessionKeyPlugin_)["providerMethods"]>,
-  typeof SessionKeyPluginAbi
-> = ExtendedSessionKeyPlugin_;

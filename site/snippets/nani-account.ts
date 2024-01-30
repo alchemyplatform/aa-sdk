@@ -1,10 +1,6 @@
-import {
-  NaniAccount,
-  getDefaultNaniAccountFactoryAddress,
-} from "@alchemy/aa-accounts";
+import { getDefaultNaniAccountFactoryAddress } from "@alchemy/aa-accounts";
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
-import { LocalAccountSigner, type Hex } from "@alchemy/aa-core";
-import { sepolia } from "viem/chains";
+import { LocalAccountSigner, sepolia, type Hex } from "@alchemy/aa-core";
 
 const chain = sepolia;
 

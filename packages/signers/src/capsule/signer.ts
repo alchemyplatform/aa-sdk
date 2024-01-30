@@ -1,10 +1,16 @@
 import {
   WalletClientSigner,
-  type SignTypedDataParams,
   type SmartAccountAuthenticator,
 } from "@alchemy/aa-core";
 import Capsule, { createCapsuleViemClient } from "@usecapsule/web-sdk";
-import { createWalletClient, custom, type Hash, type WalletClient } from "viem";
+import {
+  createWalletClient,
+  custom,
+  type Hash,
+  type TypedData,
+  type TypedDataDefinition,
+  type WalletClient,
+} from "viem";
 import { signerTypePrefix } from "../constants.js";
 import type {
   CapsuleAuthenticationParams,
@@ -64,7 +70,12 @@ export class CapsuleSigner
     return this.signer.signMessage(msg);
   };
 
-  signTypedData = (params: SignTypedDataParams) => {
+  signTypedData = async <
+    const TTypedData extends TypedData | { [key: string]: unknown },
+    TPrimaryType extends string = string
+  >(
+    params: TypedDataDefinition<TTypedData, TPrimaryType>
+  ) => {
     if (!this.signer) throw new Error("Not authenticated");
 
     return this.signer.signTypedData(params);

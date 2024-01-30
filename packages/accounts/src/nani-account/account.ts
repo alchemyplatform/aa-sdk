@@ -1,23 +1,25 @@
 import {
   BaseSmartContractAccount,
-  SmartAccountProvider,
-  type SignTypedDataParams,
-  type SmartAccountSigner,
+  toSmartContractAccount,
   type BaseSmartAccountParams,
   type BatchUserOperationCallData,
+  type OwnedSmartContractAccount,
+  type PublicErc4337Client,
+  type SignTypedDataParams,
+  type SmartAccountSigner,
   type UserOperationCallData,
 } from "@alchemy/aa-core";
 import {
   concatHex,
   decodeFunctionResult,
   encodeFunctionData,
+  hexToBytes,
+  numberToHex,
   type Address,
   type FallbackTransport,
   type Hash,
   type Hex,
   type Transport,
-  numberToHex,
-  hexToBytes,
 } from "viem";
 import { NaniAccountAbi } from "./abis/NaniAccountAbi.js";
 import { NaniAccountFactoryAbi } from "./abis/NaniAccountFactoryAbi.js";
@@ -30,7 +32,15 @@ export interface NaniSmartAccountParams<
   salt?: Hex;
 }
 
-export class NaniAccount<
+export type NaniAccount = OwnedSmartContractAccount<
+  "NaniAccount",
+  SmartAccountSigner
+> & {
+  encodeExecuteDelegate: (delegate: Address, data: Hex) => Hex;
+  encodeTransferOwnership: (newOwner: Address) => Hex;
+};
+
+class NaniAccount_<
   TTransport extends Transport | FallbackTransport = Transport
 > extends BaseSmartContractAccount<TTransport> {
   protected owner: SmartAccountSigner;
@@ -169,41 +179,8 @@ export class NaniAccount<
     });
   }
 
-  /**
-   * Transfers ownership of the account to the newOwner on-chain and also updates the owner of the account.
-   * Optionally waits for the transaction to be mined.
-   *
-   * @param provider - the provider to use to send the transaction
-   * @param newOwner - the new owner of the account
-   * @param waitForTxn - whether or not to wait for the transaction to be mined
-   * @returns {Hash} the userOperation hash, or transaction hash if `waitForTxn` is true
-   */
-  static async transferOwnership<
-    TTransport extends Transport | FallbackTransport = Transport
-  >(
-    provider: SmartAccountProvider<TTransport> & {
-      account: NaniAccount<TTransport>;
-    },
-    newOwner: SmartAccountSigner,
-    waitForTxn: boolean = false
-  ): Promise<Hash> {
-    const data = this.encodeTransferOwnership(await newOwner.getAddress());
-    const result = await provider.sendUserOperation({
-      target: await provider.getAddress(),
-      data,
-    });
-
-    provider.account.owner = newOwner;
-
-    if (waitForTxn) {
-      return provider.waitForUserOperationTransaction(result.hash);
-    }
-
-    return result.hash;
-  }
-
-  protected override async getAccountInitCode(): Promise<`0x${string}`> {
-    const result = await concatHex([
+  override async getAccountInitCode(): Promise<`0x${string}`> {
+    const result = concatHex([
       this.factoryAddress,
       await this.getFactoryInitCode(),
     ]);
@@ -226,6 +203,10 @@ export class NaniAccount<
     ]);
   }
 
+  setOwner(owner: SmartAccountSigner) {
+    this.owner = owner;
+  }
+
   protected async getFactoryInitCode(): Promise<Hex> {
     try {
       return encodeFunctionData({
@@ -238,3 +219,40 @@ export class NaniAccount<
     }
   }
 }
+
+export const createNaniAccount = async <TTransport extends Transport>(
+  params: NaniSmartAccountParams<TTransport>
+): Promise<NaniAccount> => {
+  if (!params.owner) throw new Error("Owner must be provided.");
+
+  const naniAccount = new NaniAccount_(params);
+
+  const base = await toSmartContractAccount({
+    source: "NaniAccount",
+    client: naniAccount.rpcProvider as PublicErc4337Client<TTransport>,
+    accountAddress: params.accountAddress as Address | undefined,
+    entrypointAddress: naniAccount.getEntryPointAddress(),
+    encodeBatchExecute: naniAccount.encodeBatchExecute.bind(naniAccount),
+    encodeExecute: (tx) =>
+      naniAccount.encodeExecute(tx.target, tx.value ?? 0n, tx.data),
+    getAccountInitCode: async () => {
+      if (params.initCode) return params.initCode as Hex;
+      return naniAccount.getAccountInitCode();
+    },
+    getDummySignature: naniAccount.getDummySignature.bind(naniAccount),
+    signMessage: ({ message }) =>
+      naniAccount.signMessage(
+        typeof message === "string" ? message : message.raw
+      ),
+    // @ts-expect-error these types still represent the same thing, but they're just a little off in there definitions
+    signTypedData: (params) => naniAccount.signTypedData(params),
+  });
+
+  return {
+    ...base,
+    getOwner: () => naniAccount.getOwner() as SmartAccountSigner,
+    setOwner: (owner) => naniAccount.setOwner.bind(naniAccount)(owner),
+    encodeExecuteDelegate: NaniAccount_.encodeExecuteDelegate,
+    encodeTransferOwnership: NaniAccount_.encodeTransferOwnership,
+  };
+};

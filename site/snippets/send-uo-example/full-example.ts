@@ -3,9 +3,12 @@ import {
   getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
-import { LocalAccountSigner, type SmartAccountSigner } from "@alchemy/aa-core";
+import {
+  LocalAccountSigner,
+  sepolia,
+  type SmartAccountSigner,
+} from "@alchemy/aa-core";
 import { encodeFunctionData } from "viem";
-import { sepolia } from "viem/chains";
 
 const provider = new AlchemyProvider({
   apiKey: "ALCHEMY_API_KEY", // replace with your Alchemy API Key

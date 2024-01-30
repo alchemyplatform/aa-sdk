@@ -23,7 +23,7 @@ To initialize an `AlchemyProvider`, you must provide a set of parameters detaile
 ```ts [example.ts]
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import { getDefaultEntryPointAddress } from "@alchemy/aa-core";
-import { sepolia } from "viem/chains";
+import { sepolia } from "@alchemy/aa-core";
 
 // instantiates using every possible parameter, as a reference
 export const provider = new AlchemyProvider({

@@ -1,25 +1,30 @@
-import { PKPEthersWallet } from "@lit-protocol/pkp-ethers";
 import { LitAbility, LitPKPResource } from "@lit-protocol/auth-helpers";
+import { ALL_LIT_CHAINS } from "@lit-protocol/constants";
+import { generateSessionKeyPair } from "@lit-protocol/crypto";
+import { LitNodeClient } from "@lit-protocol/lit-node-client";
+import { PKPEthersWallet } from "@lit-protocol/pkp-ethers";
 import {
   type AuthCallbackParams,
   type AuthSig,
   type LITEVMChain,
   type SessionSigsMap,
 } from "@lit-protocol/types";
-import { LitNodeClient } from "@lit-protocol/lit-node-client";
-import { ALL_LIT_CHAINS } from "@lit-protocol/constants";
-import { generateSessionKeyPair } from "@lit-protocol/crypto";
-import { type SignTypedDataParams } from "@alchemy/aa-core";
-import type { Address, Hex, TypedDataDomain } from "viem";
+import type {
+  Address,
+  Hex,
+  TypedData,
+  TypedDataDefinition,
+  TypedDataDomain,
+} from "viem";
+import { signerTypePrefix } from "../constants.js";
 import {
   type LitAuthMethod,
-  type LitSessionSigsMap,
-  type LitConfig,
   type LitAuthenticateProps,
+  type LitConfig,
+  type LitSessionSigsMap,
   type LitSmartAccountAuthenticator,
   type LitUserMetadata,
 } from "./types.js";
-import { signerTypePrefix } from "../constants.js";
 
 const SIGNER_TYPE: string = `${signerTypePrefix}lit`;
 
@@ -93,13 +98,18 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
     return this.signer?.signMessage(msg) as Promise<Hex>;
   };
 
-  signTypedData = (params: SignTypedDataParams) => {
+  signTypedData = async <
+    const TTypedData extends TypedData | { [key: string]: unknown },
+    TPrimaryType extends string = string
+  >(
+    params: TypedDataDefinition<TTypedData, TPrimaryType>
+  ) => {
     this._checkInternals();
 
     return this.signer?._signTypedData(
       params.domain as TypedDataDomain,
       params.types as any,
-      params.message
+      params.message as Record<string, any>
     ) as Promise<Hex>;
   };
 

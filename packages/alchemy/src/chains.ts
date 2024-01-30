@@ -1,8 +1,10 @@
-import type { Chain } from "viem";
 import {
   arbitrum,
   arbitrumGoerli,
   arbitrumSepolia,
+  base,
+  baseGoerli,
+  baseSepolia,
   goerli,
   mainnet,
   optimism,
@@ -11,10 +13,8 @@ import {
   polygon,
   polygonMumbai,
   sepolia,
-  base,
-  baseGoerli,
-  baseSepolia,
-} from "viem/chains";
+} from "@alchemy/aa-core";
+import type { Chain } from "viem";
 
 export const SupportedChains = new Map<number, Chain>([
   [polygonMumbai.id, polygonMumbai],

@@ -1,4 +1,4 @@
-import { sepolia } from "viem/chains";
+import { sepolia } from "@alchemy/aa-core";
 import type { UserOperationRequest } from "../types";
 import {
   getDefaultEntryPointAddress,

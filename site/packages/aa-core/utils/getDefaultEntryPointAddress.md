@@ -21,7 +21,7 @@ Utility method that returns the default EntryPoint contract address for a given 
 ::: code-group
 
 ```ts [example.ts]
-import { sepolia } from "viem/chains";
+import { sepolia } from "@alchemy/aa-core";
 import { getDefaultEntryPointAddress } from "@alchemy/aa-core";
 
 const chain = sepolia;

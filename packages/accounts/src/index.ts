@@ -1,30 +1,13 @@
 // Add you exports here, make sure to export types separately from impls and use the `type` keyword when exporting them
 // Don't use wildcard exports, instead use named exports
 
-//kernel exports
-export { KernelAccountAbi } from "./kernel-zerodev/abis/KernelAccountAbi.js";
-export { KernelFactoryAbi } from "./kernel-zerodev/abis/KernelFactoryAbi.js";
-export { KernelSmartContractAccount } from "./kernel-zerodev/account.js";
-export type { KernelSmartAccountParams } from "./kernel-zerodev/account.js";
-export { KernelAccountProvider } from "./kernel-zerodev/provider.js";
-export type {
-  KernelBatchUserOperationCallData,
-  KernelUserOperationCallData,
-} from "./kernel-zerodev/types.js";
-export {
-  KernelBaseValidator,
-  ValidatorMode,
-} from "./kernel-zerodev/validator/base.js";
-export type { KernelBaseValidatorParams } from "./kernel-zerodev/validator/base.js";
-
 //light-account exports
-export { LightSmartContractAccount } from "./light-account/account.js";
-export { createLightAccountProvider } from "./light-account/provider.js";
-export {
-  LightAccountFactoryConfigSchema,
-  LightAccountProviderConfigSchema,
-} from "./light-account/schema.js";
-export type { LightAccountProviderConfig } from "./light-account/types.js";
+export type * from "./light-account/account.js";
+export { createLightAccount } from "./light-account/account.js";
+export { transferOwnership as transferLightAccountOwnership } from "./light-account/actions/transferOwnership.js";
+export { getLightAccountVersion } from "./light-account/getLightAccountVersion.js";
+export type * from "./light-account/lightAccountClientDecorator.js";
+export { lightAccountClientActions } from "./light-account/lightAccountClientDecorator.js";
 export {
   LightAccountUnsupported1271Factories,
   LightAccountUnsupported1271Impls,
@@ -34,71 +17,37 @@ export {
 } from "./light-account/utils.js";
 
 //nani-account exports
-export { NaniAccount } from "./nani-account/account.js";
-export { createNaniAccountProvider } from "./nani-account/provider.js";
-export {
-  NaniAccountFactoryConfigSchema,
-  NaniAccountProviderConfigSchema,
-} from "./nani-account/schema.js";
-export type { NaniAccountProviderConfig } from "./nani-account/types.js";
+export { createNaniAccount } from "./nani-account/account.js";
+export type { NaniAccount } from "./nani-account/account.js";
+export { transferOwnership as transferNaniAccountOwnership } from "./nani-account/transferNaniAccountOwnership.js";
 export { getDefaultNaniAccountFactoryAddress } from "./nani-account/utils.js";
 
 // msca exports
-export { accountLoupeDecorators } from "./msca/account-loupe/decorator.js";
-export type * from "./msca/account-loupe/types.js";
-export * from "./msca/account-loupe/utils.js";
-export { getDefaultMultiOwnerMSCAFactoryAddress } from "./msca/utils.js";
-
-export {
-  MSCABuilder,
-  ModularAccountBuilderParamsSchema,
-  type ModularAccountBuilderParams,
-} from "./msca/builder/index.js";
-export { StandardExecutor } from "./msca/builder/standard-executor.js";
-export { WrapWith712SignerMethods } from "./msca/builder/wrapped-signer.js";
-
-export type * from "./msca/builder/types.js";
-
-export type * from "./msca/types.js";
-
-export {
-  createMultiOwnerMSCA,
-  createMultiOwnerMSCABuilder,
-  createMultiOwnerMSCASchema,
-  createMultiOwnerMSCAWithSessionKey,
-  type MultiOwnerMSCAParams,
-} from "./msca/multi-owner-account.js";
-
-export { pluginManagerDecorator } from "./msca/plugin-manager/decorator.js";
-export type * from "./msca/plugin-manager/installPlugin.js";
-export {
-  encodeInstallPluginUserOperation,
-  installPlugin,
-} from "./msca/plugin-manager/installPlugin.js";
-export type * from "./msca/plugin-manager/uninstallPlugin.js";
-export {
-  encodeUninstallPluginUserOperation,
-  uninstallPlugin,
-} from "./msca/plugin-manager/uninstallPlugin.js";
-export { type Plugin } from "./msca/plugins/types.js";
-
+export type * from "./msca/account-loupe/decorator.js";
+export { accountLoupeActions } from "./msca/account-loupe/decorator.js";
+export type * from "./msca/account/multiOwnerAccount.js";
+export { createMultiOwnerModularAccount } from "./msca/account/multiOwnerAccount.js";
+export { standardExecutor } from "./msca/account/standardExecutor.js";
+export type * from "./msca/plugin-manager/decorator.js";
+export { pluginManagerActions } from "./msca/plugin-manager/decorator.js";
+export { multiOwnerPluginActions } from "./msca/plugins/multi-owner/index.js";
 export {
   MultiOwnerPlugin,
   MultiOwnerPluginAbi,
   MultiOwnerPluginExecutionFunctionAbi,
-} from "./msca/plugins/multi-owner/index.js";
-export { SessionKeyExecutor } from "./msca/plugins/session-key/executor.js";
-export { ExtendedSessionKeyPlugin as SessionKeyPlugin } from "./msca/plugins/session-key/extension.js";
+} from "./msca/plugins/multi-owner/plugin.js";
+export { sessionKeyPluginActions } from "./msca/plugins/session-key/index.js";
 export { SessionKeyPermissionsBuilder } from "./msca/plugins/session-key/permissions.js";
-export { buildSessionKeysToRemoveStruct } from "./msca/plugins/session-key/utils.js";
-
 export {
   SessionKeyPluginAbi,
   SessionKeyPluginExecutionFunctionAbi,
 } from "./msca/plugins/session-key/plugin.js";
 export { SessionKeySigner } from "./msca/plugins/session-key/signer.js";
+export { buildSessionKeysToRemoveStruct } from "./msca/plugins/session-key/utils.js";
 export {
   TokenReceiverPlugin,
   TokenReceiverPluginAbi,
   TokenReceiverPluginExecutionFunctionAbi,
+  tokenReceiverPluginActions,
 } from "./msca/plugins/token-receiver/plugin.js";
+export { getDefaultMultiOwnerMSCAFactoryAddress } from "./msca/utils.js";

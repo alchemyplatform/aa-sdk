@@ -15,7 +15,6 @@
     "generate": "lerna run generate",
     "postgenerate": "yarn lint:write",
     "build": "lerna run build --ignore=alchemy-daapp --ignore=aa-simple-dapp",
-    "postbuild": "yarn lint:write",
     "build:examples": "lerna run build",
     "clean": "lerna run clean",
     "test": "lerna run test:run",
@@ -68,9 +67,8 @@
     }
   },
   "lint-staged": {
-    "**/src/*.{tsx,jsx,ts,js}": [
-      "eslint --fix",
-      "prettier --write --ignore-unknown"
+    "**/src/**/*.{tsx,jsx,ts,js}": [
+      "yarn lint:write"
     ]
   }
 }

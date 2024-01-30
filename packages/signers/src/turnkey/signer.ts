@@ -1,11 +1,15 @@
 import {
   WalletClientSigner,
-  type SignTypedDataParams,
   type SmartAccountAuthenticator,
 } from "@alchemy/aa-core";
 import { TurnkeyClient } from "@turnkey/http";
 import { createAccount } from "@turnkey/viem";
-import { createWalletClient } from "viem";
+import {
+  createWalletClient,
+  type LocalAccount,
+  type TypedData,
+  type TypedDataDefinition,
+} from "viem";
 import { signerTypePrefix } from "../constants.js";
 import type {
   TurnkeyAuthParams,
@@ -56,7 +60,12 @@ export class TurnkeySigner
     return this.signer.signMessage(msg);
   };
 
-  signTypedData = (params: SignTypedDataParams) => {
+  signTypedData = async <
+    const TTypedData extends TypedData | { [key: string]: unknown },
+    TPrimaryType extends string = string
+  >(
+    params: TypedDataDefinition<TTypedData, TPrimaryType>
+  ) => {
     if (!this.signer) throw new Error("Not authenticated");
 
     return this.signer.signTypedData(params);
@@ -66,11 +75,11 @@ export class TurnkeySigner
     this.subOrganization = await params.resolveSubOrganization();
     this.signer = new WalletClientSigner(
       createWalletClient({
-        account: await createAccount({
+        account: (await createAccount({
           client: this.inner,
           organizationId: this.subOrganization.subOrganizationId,
           signWith: this.subOrganization.signWith,
-        }),
+        })) as LocalAccount,
         transport: params.transport,
       }),
       this.signerType

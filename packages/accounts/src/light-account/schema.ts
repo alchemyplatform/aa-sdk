@@ -1,7 +1,4 @@
-import {
-  SignerSchema,
-  createSmartAccountProviderConfigSchema,
-} from "@alchemy/aa-core";
+import { SignerSchema } from "@alchemy/aa-core";
 import { Address } from "abitype/zod";
 import { isHex } from "viem";
 import { z } from "zod";
@@ -36,6 +33,3 @@ export const LightAccountFactoryConfigSchema = z.object({
     )
     .optional(),
 });
-
-export const LightAccountProviderConfigSchema =
-  createSmartAccountProviderConfigSchema().and(LightAccountFactoryConfigSchema);

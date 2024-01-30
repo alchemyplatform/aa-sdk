@@ -1,6 +1,7 @@
 import type { Address, Chain, Hash, Hex } from "viem";
 import { encodeAbiParameters, hexToBigInt, keccak256, toHex } from "viem";
 import * as chains from "viem/chains";
+import * as alchemyChains from "../chain/index.js";
 import type {
   BigNumberish,
   Percentage,
@@ -8,6 +9,10 @@ import type {
   UserOperationRequest,
 } from "../types.js";
 import { BigNumberishSchema, PercentageSchema } from "./schema.js";
+
+const AlchemyChainMap = new Map<number, Chain>(
+  Object.values(alchemyChains).map((c) => [c.id, c])
+);
 
 /**
  * Utility method for converting a chainId to a {@link Chain} object
@@ -19,7 +24,7 @@ import { BigNumberishSchema, PercentageSchema } from "./schema.js";
 export const getChain = (chainId: number): Chain => {
   for (const chain of Object.values(chains)) {
     if (chain.id === chainId) {
-      return chain;
+      return AlchemyChainMap.get(chain.id) ?? chain;
     }
   }
   throw new Error("could not find chain");

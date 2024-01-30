@@ -1,34 +1,50 @@
-import type { Address } from "viem";
-import { polygonMumbai, sepolia, type Chain } from "viem/chains";
+import { polygonMumbai, sepolia, type Chain } from "@alchemy/aa-core";
+import { createPublicClient, custom, http, type Address } from "viem";
 import { describe, it } from "vitest";
-import { SmartAccountProvider } from "../../provider/base.js";
+import { createPublicErc4337FromClient } from "../../client/publicErc4337Client.js";
+import { createSmartAccountClient } from "../../client/smartAccountClient.js";
 import { LocalAccountSigner } from "../../signer/local-account.js";
 import { type SmartAccountSigner } from "../../signer/types.js";
 import type { BatchUserOperationCallData } from "../../types.js";
 import { getDefaultSimpleAccountFactoryAddress } from "../../utils/index.js";
-import { SimpleSmartContractAccount } from "../simple.js";
+import { createSimpleSmartAccount } from "../simple.js";
 
-describe("Account Simple Tests", () => {
+describe("Account Simple Tests", async () => {
   const dummyMnemonic =
     "test test test test test test test test test test test test";
   const owner: SmartAccountSigner =
     LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
 
   const chain = polygonMumbai;
+  const publicClient = createPublicErc4337FromClient(
+    createPublicClient({
+      chain,
+      transport: custom({
+        request: async ({ method }) => {
+          if (method === "eth_getCode") {
+            return "0x" as Address;
+          }
+          return;
+        },
+      }),
+    })
+  );
 
   it("should correctly sign the message", async () => {
-    const provider = givenConnectedProvider({ owner, chain });
+    const provider = await givenConnectedProvider({ owner, chain });
     expect(
-      await provider.signMessage(
-        "0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b"
-      )
+      await provider.account.signMessage({
+        message: {
+          raw: "0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b",
+        },
+      })
     ).toBe(
       "0x33b1b0d34ba3252cd8abac8147dc08a6e14a6319462456a34468dd5713e38dda3a43988460011af94b30fa3efefcf9d0da7d7522e06b7bd8bff3b65be4aee5b31c"
     );
   });
 
   it("should correctly encode batch transaction data", async () => {
-    const provider = givenConnectedProvider({ owner, chain });
+    const provider = await givenConnectedProvider({ owner, chain });
     const data = [
       {
         target: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
@@ -47,17 +63,16 @@ describe("Account Simple Tests", () => {
     );
   });
 
-  it("should correctly do base runtime validation when entrypoint are invalid", () => {
-    expect(
-      () =>
-        new SimpleSmartContractAccount({
-          entryPointAddress: 1 as unknown as Address,
-          chain,
-          owner,
-          factoryAddress: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
-          rpcClient: "ALCHEMY_RPC_URL",
-        })
-    ).toThrowErrorMatchingInlineSnapshot(`
+  it("should correctly do base runtime validation when entrypoint are invalid", async () => {
+    await expect(
+      createSimpleSmartAccount({
+        entryPointAddress: 1 as unknown as Address,
+        chain,
+        owner,
+        factoryAddress: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+        rpcClient: "ALCHEMY_RPC_URL",
+      })
+    ).rejects.toThrowErrorMatchingInlineSnapshot(`
       "[
         {
           \\"code\\": \\"invalid_type\\",
@@ -72,17 +87,16 @@ describe("Account Simple Tests", () => {
     `);
   });
 
-  it("should correctly do base runtime validation when multiple inputs are invalid", () => {
-    expect(
-      () =>
-        new SimpleSmartContractAccount({
-          entryPointAddress: 1 as unknown as Address,
-          chain: "0x1" as unknown as Chain,
-          owner,
-          factoryAddress: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
-          rpcClient: "ALCHEMY_RPC_URL",
-        })
-    ).toThrowErrorMatchingInlineSnapshot(`
+  it("should correctly do base runtime validation when multiple inputs are invalid", async () => {
+    await expect(
+      createSimpleSmartAccount({
+        entryPointAddress: 1 as unknown as Address,
+        chain: "0x1" as unknown as Chain,
+        owner,
+        factoryAddress: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+        rpcClient: "ALCHEMY_RPC_URL",
+      })
+    ).rejects.toThrowErrorMatchingInlineSnapshot(`
       "[
         {
           \\"code\\": \\"invalid_type\\",
@@ -106,47 +120,40 @@ describe("Account Simple Tests", () => {
   });
 
   it("should correctly use the account init code override", async () => {
-    const account = new SimpleSmartContractAccount({
+    const account = await createSimpleSmartAccount({
       chain: sepolia,
       owner: owner,
       factoryAddress: getDefaultSimpleAccountFactoryAddress(sepolia),
-      rpcClient: `${sepolia.rpcUrls.alchemy.http[0]}/${"test"}`,
+      rpcClient: publicClient,
       // override the account address here so we don't have to resolve the address from the entrypoint
       accountAddress: "0x1234567890123456789012345678901234567890",
       initCode: "0xdeadbeef",
     });
 
-    // @ts-expect-error this object is protected
-    vi.spyOn(account.rpcProvider, "getBytecode").mockImplementation(() => {
-      return Promise.resolve("0x");
+    vi.spyOn(publicClient, "getBytecode").mockImplementation(() => {
+      return Promise.resolve("0x" as Address);
     });
 
     const initCode = await account.getInitCode();
     expect(initCode).toMatchInlineSnapshot('"0xdeadbeef"');
   });
 
-  const givenConnectedProvider = ({
+  const givenConnectedProvider = async ({
     owner,
     chain,
   }: {
     owner: SmartAccountSigner;
     chain: Chain;
   }) =>
-    new SmartAccountProvider({
-      rpcProvider: `${chain.rpcUrls.alchemy.http[0]}/${"test"}`,
-      chain,
-    }).connect((provider) => {
-      const account = new SimpleSmartContractAccount({
+    createSmartAccountClient({
+      transport: http(`${chain.rpcUrls.alchemy.http[0]}/${"test"}`),
+      chain: chain,
+      account: await createSimpleSmartAccount({
         chain,
         owner,
+        accountAddress: "0x1234567890123456789012345678901234567890",
         factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
-        rpcClient: provider,
-      });
-
-      account.getAddress = vi.fn(
-        async () => "0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4"
-      );
-
-      return account;
+        rpcClient: publicClient,
+      }),
     });
 });
