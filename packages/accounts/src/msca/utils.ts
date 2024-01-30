@@ -6,7 +6,6 @@ import {
   base,
   baseGoerli,
   baseSepolia,
-  createPublicErc4337FromClient,
   goerli,
   mainnet,
   optimism,
@@ -23,7 +22,6 @@ import {
 } from "@alchemy/aa-core";
 import type { Address, Chain, Transport } from "viem";
 import {
-  createPublicClient,
   custom,
   encodeAbiParameters,
   encodeFunctionData,
@@ -184,12 +182,8 @@ export async function getMSCAUpgradeToData<
     initializationData: encodedMSCAInitializeData,
     createMAAccount: async () =>
       createMultiOwnerModularAccount({
-        client: createPublicErc4337FromClient(
-          createPublicClient({
-            chain: chain as Chain,
-            transport: custom(client.transport),
-          })
-        ),
+        transport: custom(client.transport),
+        chain: chain as Chain,
         owner: account.getOwner(),
         factoryAddress,
         accountAddress: account.address,

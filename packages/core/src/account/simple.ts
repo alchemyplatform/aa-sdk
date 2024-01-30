@@ -9,7 +9,7 @@ import {
 } from "viem";
 import { SimpleAccountAbi } from "../abis/SimpleAccountAbi.js";
 import { SimpleAccountFactoryAbi } from "../abis/SimpleAccountFactoryAbi.js";
-import type { PublicErc4337Client } from "../client/publicErc4337Client.js";
+import { createBundlerClient } from "../client/bundlerClient.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import type { BatchUserOperationCallData } from "../types.js";
 import { BaseSmartContractAccount } from "./base.js";
@@ -17,6 +17,7 @@ import { SimpleSmartAccountParamsSchema } from "./schema.js";
 import {
   toSmartContractAccount,
   type OwnedSmartContractAccount,
+  type ToSmartContractAccountParams,
 } from "./smartContractAccount.js";
 import type { SimpleSmartAccountParams } from "./types.js";
 
@@ -29,7 +30,12 @@ class SimpleSmartContractAccount<
   constructor(params: SimpleSmartAccountParams<TTransport, TOwner>) {
     SimpleSmartAccountParamsSchema<TTransport>().parse(params);
 
-    super(params);
+    // This is a hack for now, we should kill the SimpleSmart Account when we kill Base Account
+    const client = createBundlerClient({
+      transport: params.transport as TTransport,
+      chain: params.chain,
+    });
+    super({ ...params, rpcClient: client });
     this.owner = params.owner as TOwner;
     this.index = params.index ?? 0n;
   }
@@ -103,7 +109,11 @@ export const createSimpleSmartAccount = async <
   TTransport extends Transport = Transport,
   TOwner extends SmartAccountSigner = SmartAccountSigner
 >(
-  params: SimpleSmartAccountParams<TTransport, TOwner>
+  params: Omit<
+    SimpleSmartAccountParams<TTransport, TOwner>,
+    "rpcClient" | "chain"
+  > &
+    Pick<ToSmartContractAccountParams, "chain" | "transport">
 ): Promise<SimpleSmartAccount<TOwner>> => {
   if (!params.owner) throw new Error("Owner must be provided.");
 
@@ -116,7 +126,8 @@ export const createSimpleSmartAccount = async <
 
   const base = await toSmartContractAccount({
     source: "SimpleAccount",
-    client: simpleAccount.rpcProvider as PublicErc4337Client<TTransport>,
+    transport: params.transport,
+    chain: params.chain,
     encodeBatchExecute: simpleAccount.encodeBatchExecute.bind(simpleAccount),
     encodeExecute: (tx) =>
       simpleAccount.encodeExecute.bind(simpleAccount)(

@@ -2,13 +2,19 @@ import {
   LocalAccountSigner,
   LogLevel,
   Logger,
-  createPublicErc4337Client,
+  createBundlerClient,
   createSmartAccountClientFromExisting,
   sepolia,
   type SmartAccountSigner,
   type UserOperationFeeOptions,
 } from "@alchemy/aa-core";
-import { isAddress, type Address, type Chain, type HDAccount } from "viem";
+import {
+  http,
+  isAddress,
+  type Address,
+  type Chain,
+  type HDAccount,
+} from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import {
   multiOwnerPluginActions,
@@ -239,9 +245,9 @@ describe("Light Account Tests", () => {
     });
 
     const upgradedProvider = createSmartAccountClientFromExisting({
-      client: createPublicErc4337Client({
+      client: createBundlerClient({
         chain,
-        rpcUrl: `${chain.rpcUrls.alchemy.http[0]}/${API_KEY!}`,
+        transport: http(`${chain.rpcUrls.alchemy.http[0]}/${API_KEY!}`),
       }),
       account: await createMAAccount(),
     }).extend(multiOwnerPluginActions);
@@ -270,13 +276,9 @@ const givenConnectedProvider = async ({
   feeOptions?: UserOperationFeeOptions;
   version?: LightAccountVersion;
 }) => {
-  const publicClient = createPublicErc4337Client({
-    chain,
-    rpcUrl: `${chain.rpcUrls.alchemy.http[0]}/${API_KEY!}`,
-  });
-
   return createLightAccountClient({
-    client: publicClient,
+    transport: http(`${chain.rpcUrls.alchemy.http[0]}/${API_KEY!}`),
+    chain: chain,
     account: {
       owner,
       accountAddress,

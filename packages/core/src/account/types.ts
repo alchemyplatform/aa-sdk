@@ -2,7 +2,7 @@ import type { Address } from "abitype";
 import type { Hash, Hex, HttpTransport, Transport } from "viem";
 import type { SignTypedDataParameters } from "viem/accounts";
 import type { z } from "zod";
-import type { PublicErc4337Client } from "../client/publicErc4337Client";
+import type { BundlerClient } from "../client/bundlerClient";
 import type { SmartAccountSigner } from "../signer/types";
 import type { BatchUserOperationCallData } from "../types";
 import type {
@@ -41,8 +41,8 @@ export interface ISmartContractAccount<
    * The RPC provider the account uses to make RPC calls
    */
   readonly rpcProvider:
-    | PublicErc4337Client<TTransport>
-    | PublicErc4337Client<HttpTransport>;
+    | BundlerClient<TTransport>
+    | BundlerClient<HttpTransport>;
 
   /**
    * @returns the init code for the account

@@ -1,12 +1,13 @@
 import {
+  createBundlerClient,
   getAccountAddress,
   getDefaultEntryPointAddress,
   toSmartContractAccount,
   type Address,
   type Hex,
   type OwnedSmartContractAccount,
-  type PublicErc4337Client,
   type SmartAccountSigner,
+  type ToSmartContractAccountParams,
   type UpgradeToAndCallParams,
 } from "@alchemy/aa-core";
 import {
@@ -43,8 +44,10 @@ export type LightAccount<
 export type CreateLightAccountParams<
   TTransport extends Transport = Transport,
   TOwner extends SmartAccountSigner = SmartAccountSigner
-> = {
-  client: PublicErc4337Client<TTransport>;
+> = Pick<
+  ToSmartContractAccountParams<"LightAccount", TTransport>,
+  "transport" | "chain"
+> & {
   owner: TOwner;
   index?: bigint;
   factoryAddress?: Address;
@@ -62,16 +65,22 @@ export async function createLightAccount<
 ): Promise<LightAccount<TOwner>>;
 
 export async function createLightAccount({
-  client,
+  transport,
+  chain,
   owner: owner_,
   accountAddress,
   initCode,
   version = "v1.1.0",
-  entrypointAddress = getDefaultEntryPointAddress(client.chain),
-  factoryAddress = getDefaultLightAccountFactoryAddress(client.chain, version),
+  entrypointAddress = getDefaultEntryPointAddress(chain),
+  factoryAddress = getDefaultLightAccountFactoryAddress(chain, version),
   index: index_ = 0n,
 }: CreateLightAccountParams): Promise<LightAccount> {
   let owner = owner_;
+  const client = createBundlerClient({
+    transport,
+    chain,
+  });
+
   const getAccountInitCode = async () => {
     if (initCode) return initCode;
 
@@ -154,7 +163,8 @@ export async function createLightAccount({
   };
 
   const account = await toSmartContractAccount({
-    client,
+    transport,
+    chain,
     entrypointAddress,
     accountAddress: address,
     source: "LightAccount",

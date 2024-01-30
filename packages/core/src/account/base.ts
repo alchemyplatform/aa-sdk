@@ -1,6 +1,7 @@
 import type { Address } from "abitype";
 import {
   getContract,
+  http,
   trim,
   type GetContractReturnType,
   type Hash,
@@ -11,9 +12,9 @@ import {
 } from "viem";
 import { EntryPointAbi } from "../abis/EntryPointAbi.js";
 import {
-  createPublicErc4337Client,
-  type PublicErc4337Client,
-} from "../client/publicErc4337Client.js";
+  createBundlerClient,
+  type BundlerClient,
+} from "../client/bundlerClient.js";
 import { Logger } from "../logger.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import { wrapSignatureWith6492 } from "../signer/utils.js";
@@ -51,8 +52,8 @@ export abstract class BaseSmartContractAccount<
   >;
   protected entryPointAddress: Address;
   readonly rpcProvider:
-    | PublicErc4337Client<TTransport>
-    | PublicErc4337Client<HttpTransport>;
+    | BundlerClient<TTransport>
+    | BundlerClient<HttpTransport>;
 
   constructor(params_: BaseSmartAccountParams<TTransport>) {
     const params = createBaseSmartAccountParamsSchema<
@@ -84,19 +85,20 @@ export abstract class BaseSmartContractAccount<
         : undefined;
 
     this.rpcProvider = rpcUrl
-      ? createPublicErc4337Client({
+      ? createBundlerClient({
           chain: params.chain,
-          rpcUrl,
-          fetchOptions: {
-            ...fetchOptions,
-            headers: {
-              ...fetchOptions?.headers,
-              "Alchemy-Aa-Sdk-Signer": params.owner?.signerType || "unknown",
-              "Alchemy-Aa-Sdk-Factory-Address": params.factoryAddress,
+          transport: http(rpcUrl, {
+            fetchOptions: {
+              ...fetchOptions,
+              headers: {
+                ...fetchOptions?.headers,
+                "Alchemy-Aa-Sdk-Signer": params.owner?.signerType || "unknown",
+                "Alchemy-Aa-Sdk-Factory-Address": params.factoryAddress,
+              },
             },
-          },
+          }),
         })
-      : (params.rpcClient as PublicErc4337Client<TTransport>);
+      : (params.rpcClient as BundlerClient<TTransport>);
 
     this.accountAddress = params.accountAddress;
     this.factoryAddress = params.factoryAddress;

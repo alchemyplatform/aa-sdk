@@ -233,6 +233,10 @@ type toSmartContractAccount = <
 >;
 ```
 
+### Account: SimpleAccount and NaniAccount initialization params
+
+`chain` and `transport` have been added to the constructor and `rpcClient` has been removed.
+
 ### Signer: `signTypedData` signature change
 
 The `signTypedData` method found on `SmartAccountSigner` has been updated to match the signature found on `SmartContractAccount` and viem's `Account`.
@@ -247,3 +251,16 @@ signTypedData: <
   params: TypedDataDefinition<TTypedData, TPrimaryType>
 ) => Promise<Hex>;
 ```
+
+### Ethers: Removed methods
+
+The `with*` methods have been removed from the Provider and Signer classes.
+The `connect` methods has been removed in favor of immutable properties on the Provider and Signer classes. See updated AccountSigner constructor below.
+
+### Ethers: `getPublicErc4337Client` → `getBundlerClient`
+
+The `getPublicErc4337Client` method has been renamed to `getBundlerClient` to match the naming found in `aa-core`.
+
+### Ethers: Updated Signer Adapter constructor
+
+The `AccountSigner` now takes in a `SmartContractAccount` as a param in its constructor.

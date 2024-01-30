@@ -14618,7 +14618,7 @@ nwsapi@^2.2.4:
   resolved "https://registry.yarnpkg.com/nwsapi/-/nwsapi-2.2.7.tgz#738e0707d3128cb750dddcfe90e4610482df0f30"
   integrity sha512-ub5E4+FBPKwAZx0UwIQOjYWGHTEq5sPqHQNRN8Z9e4A7u3Tj1weLJsL59yH9vmvqEtBHaOmT6cYQKIZOxp35FQ==
 
-nx@17.3.0, "nx@>=17.1.2 < 18":
+nx@17.3.0, "nx@>=17.1.2 < 18", nx@^17.3.0:
   version "17.3.0"
   resolved "https://registry.yarnpkg.com/nx/-/nx-17.3.0.tgz#1e77f29a0e904d88d61dcdfff80ae90c6d964e3d"
   integrity sha512-CoY0qUrO8xErbA/v/bbfDGs+KaD9MCO7PReqmIeyrtDNwFl6vnb+U2MpBxCsRP+YH2Oa8hI8Lu+kcnPktx2v6A==

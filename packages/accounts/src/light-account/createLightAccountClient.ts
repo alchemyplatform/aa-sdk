@@ -1,5 +1,5 @@
 import {
-  createSmartAccountClientFromExisting,
+  createSmartAccountClient,
   type SmartAccountClient,
   type SmartAccountClientActions,
   type SmartAccountClientConfig,
@@ -22,9 +22,16 @@ export type CreateLightAccountClientParams<
   TChain extends Chain | undefined = Chain | undefined,
   TOwner extends SmartAccountSigner = SmartAccountSigner
 > = {
-  client: CreateLightAccountParams<TTransport, TOwner>["client"];
-  account: Omit<CreateLightAccountParams<TTransport, TOwner>, "client">;
-} & Omit<SmartAccountClientConfig<TTransport, TChain>, "transport" | "account">;
+  transport: CreateLightAccountParams<TTransport, TOwner>["transport"];
+  chain: CreateLightAccountParams<TTransport, TOwner>["chain"];
+  account: Omit<
+    CreateLightAccountParams<TTransport, TOwner>,
+    "transport" | "chain"
+  >;
+} & Omit<
+  SmartAccountClientConfig<TTransport, TChain>,
+  "transport" | "account" | "chain"
+>;
 
 export function createLightAccountClient<
   TChain extends Chain | undefined = Chain | undefined,
@@ -43,18 +50,20 @@ export function createLightAccountClient<
 
 export async function createLightAccountClient({
   account,
-  client,
+  transport,
+  chain,
   ...clientConfig
 }: CreateLightAccountClientParams): Promise<SmartAccountClient> {
   const lightAccount = await createLightAccount({
-    client,
     ...account,
+    transport,
+    chain,
   });
 
-  return createSmartAccountClientFromExisting({
+  return createSmartAccountClient({
     ...clientConfig,
-    client,
-    chain: client.chain,
+    transport,
+    chain: chain,
     account: lightAccount,
   }).extend(lightAccountClientActions);
 }

@@ -27,13 +27,13 @@ export {
 } from "./signer/utils.js";
 export { WalletClientSigner } from "./signer/wallet-client.js";
 
-export type * from "./client/decorators/publicErc4337Client.js";
-export { erc4337ClientActions } from "./client/decorators/publicErc4337Client.js";
-export type * from "./client/publicErc4337Client.js";
+export type * from "./client/bundlerClient.js";
 export {
-  createPublicErc4337Client,
-  createPublicErc4337FromClient,
-} from "./client/publicErc4337Client.js";
+  createBundlerClient,
+  createBundlerClientFromExisting,
+} from "./client/bundlerClient.js";
+export type * from "./client/decorators/bundlerClient.js";
+export { bundlerActions } from "./client/decorators/bundlerClient.js";
 export { createPublicErc4337ClientSchema } from "./client/schema.js";
 export type * from "./client/types.js";
 
@@ -94,7 +94,7 @@ export type * from "./actions/smartAccount/types.js";
 export { waitForUserOperationTransaction } from "./actions/smartAccount/waitForUserOperationTransacation.js";
 
 export type * from "./client/decorators/smartAccountClient.js";
-export { smartAccountClientDecorator } from "./client/decorators/smartAccountClient.js";
+export { smartAccountClientActions as smartAccountClientDecorator } from "./client/decorators/smartAccountClient.js";
 export type * from "./client/smartAccountClient.js";
 export {
   createSmartAccountClient,

@@ -1,5 +1,5 @@
 import {
-  type PublicErc4337Client,
+  type BundlerClient,
   type UserOperationRequest,
 } from "@alchemy/aa-core";
 import type { Address, Hex, HttpTransport } from "viem";
@@ -53,8 +53,8 @@ export type AlchemyRpcSchema = [
   }
 ];
 
-export type ClientWithAlchemyMethods = PublicErc4337Client<HttpTransport> & {
-  request: PublicErc4337Client["request"] &
+export type ClientWithAlchemyMethods = BundlerClient<HttpTransport> & {
+  request: BundlerClient["request"] &
     {
       request(args: {
         method: "alchemy_requestPaymasterAndData";

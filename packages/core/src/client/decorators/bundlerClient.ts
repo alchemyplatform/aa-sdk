@@ -6,19 +6,19 @@ import type {
   PublicRpcSchema,
   Transport,
 } from "viem";
-import { estimateUserOperationGas } from "../../actions/publicErc4337/estimateUserOperationGas.js";
-import { getSupportedEntryPoints } from "../../actions/publicErc4337/getSupportedEntrypoints.js";
-import { getUserOperationByHash } from "../../actions/publicErc4337/getUserOperationByHash.js";
-import { getUserOperationReceipt } from "../../actions/publicErc4337/getUserOperationReceipt.js";
-import { sendRawUserOperation } from "../../actions/publicErc4337/sendRawUserOperation.js";
+import { estimateUserOperationGas } from "../../actions/bundler/estimateUserOperationGas.js";
+import { getSupportedEntryPoints } from "../../actions/bundler/getSupportedEntrypoints.js";
+import { getUserOperationByHash } from "../../actions/bundler/getUserOperationByHash.js";
+import { getUserOperationReceipt } from "../../actions/bundler/getUserOperationReceipt.js";
+import { sendRawUserOperation } from "../../actions/bundler/sendRawUserOperation.js";
 import type {
   UserOperationEstimateGasResponse,
   UserOperationReceipt,
   UserOperationRequest,
   UserOperationResponse,
-} from "../../types";
+} from "../../types.js";
 
-export type Erc4337RpcSchema = [
+export type BundlerRpcSchema = [
   {
     Method: "eth_sendUserOperation";
     Parameters: [UserOperationRequest, Address];
@@ -46,7 +46,7 @@ export type Erc4337RpcSchema = [
   }
 ];
 
-export type Erc4337Actions = {
+export type BundlerActions = {
   /**
    * calls `eth_estimateUserOperationGas` and  returns the result
    *
@@ -95,16 +95,16 @@ export type Erc4337Actions = {
   getSupportedEntryPoints(): Promise<Address[]>;
 };
 
-export const erc4337ClientActions: <
+export const bundlerActions: <
   TClient extends Client<
     Transport,
     Chain | undefined,
     any,
-    [...PublicRpcSchema, ...Erc4337RpcSchema]
+    [...PublicRpcSchema, ...BundlerRpcSchema]
   >
 >(
   client: TClient
-) => Erc4337Actions = (client) => ({
+) => BundlerActions = (client) => ({
   estimateUserOperationGas: async (request, entryPoint) =>
     estimateUserOperationGas(client, { request, entryPoint }),
   sendRawUserOperation: async (request, entryPoint) =>
@@ -115,56 +115,3 @@ export const erc4337ClientActions: <
   getUserOperationReceipt: async (hash) =>
     getUserOperationReceipt(client, { hash }),
 });
-
-// export const erc4337ClientActions = (client: Client) => {
-//   const clientAdapter = client as Client<
-//     Transport,
-//     Chain | undefined,
-//     undefined,
-//     [...PublicRpcSchema, ...Erc4337RpcSchema],
-//     PublicActions
-//   >;
-
-//   return {
-//     estimateUserOperationGas(
-//       request: UserOperationRequest,
-//       entryPoint: string
-//     ): Promise<UserOperationEstimateGasResponse> {
-//       return clientAdapter.request({
-//         method: "eth_estimateUserOperationGas",
-//         params: [request, entryPoint as Address],
-//       });
-//     },
-
-//     sendRawUserOperation(
-//       request: UserOperationRequest,
-//       entryPoint: string
-//     ): Promise<Hex> {
-//       return clientAdapter.request({
-//         method: "eth_sendUserOperation",
-//         params: [request, entryPoint as Address],
-//       });
-//     },
-
-//     getUserOperationByHash(hash: Hash): Promise<UserOperationResponse | null> {
-//       return clientAdapter.request({
-//         method: "eth_getUserOperationByHash",
-//         params: [hash],
-//       });
-//     },
-
-//     getUserOperationReceipt(hash: Hash): Promise<UserOperationReceipt | null> {
-//       return clientAdapter.request({
-//         method: "eth_getUserOperationReceipt",
-//         params: [hash],
-//       });
-//     },
-
-//     getSupportedEntryPoints(): Promise<Address[]> {
-//       return clientAdapter.request({
-//         method: "eth_supportedEntryPoints",
-//         params: [],
-//       });
-//     },
-//   };
-// };

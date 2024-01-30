@@ -1,11 +1,18 @@
 import { polygonMumbai } from "@alchemy/aa-core";
-import { fromHex, isAddress, type Address, type Chain, type Hex } from "viem";
+import {
+  custom,
+  fromHex,
+  http,
+  isAddress,
+  type Address,
+  type Chain,
+  type Hex,
+} from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import {
-  createPublicErc4337Client,
+  createBundlerClient,
   createSimpleSmartAccount,
   createSmartAccountClientFromExisting,
-  getDefaultEntryPointAddress,
   getDefaultSimpleAccountFactoryAddress,
   type SmartAccountSigner,
   type UserOperationFeeOptions,
@@ -67,21 +74,6 @@ describe("Simple Account Tests", () => {
 
     const address = provider.getAddress();
     expect(isAddress(address)).toBe(true);
-  });
-
-  it("should correctly fail to get address if rpc url is invalid", async () => {
-    await expect(
-      createSimpleSmartAccount({
-        entryPointAddress: getDefaultEntryPointAddress(chain),
-        chain,
-        owner,
-        factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
-        rpcClient: createPublicErc4337Client({
-          chain,
-          rpcUrl: "ALCHEMY_RPC_URL",
-        }),
-      })
-    ).rejects.toThrowErrorMatchingInlineSnapshot('"Invalid RPC URL."');
   });
 
   it("should correctly handle percentage overrides for buildUserOperation", async () => {
@@ -185,9 +177,9 @@ const givenConnectedProvider = async ({
   accountAddress?: Address;
   feeOptions?: UserOperationFeeOptions;
 }) => {
-  const client = createPublicErc4337Client({
+  const client = createBundlerClient({
     chain,
-    rpcUrl: `${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`,
+    transport: http(`${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`),
   });
   return createSmartAccountClientFromExisting({
     client,
@@ -195,7 +187,7 @@ const givenConnectedProvider = async ({
       chain,
       owner,
       factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
-      rpcClient: client,
+      transport: custom(client),
       accountAddress,
     }),
     feeEstimator: async (struct) => ({

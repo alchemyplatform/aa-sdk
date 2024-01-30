@@ -3,6 +3,7 @@ import {
   hexToBytes,
   trim,
   type Address,
+  type Chain,
   type CustomSource,
   type Hex,
   type LocalAccount,
@@ -14,6 +15,7 @@ import {
 } from "viem";
 import { toAccount } from "viem/accounts";
 import { EntryPointAbi } from "../abis/EntryPointAbi.js";
+import { createBundlerClient } from "../client/bundlerClient.js";
 import { Logger } from "../logger.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import { wrapSignatureWith6492 } from "../signer/utils.js";
@@ -74,10 +76,11 @@ export type SmartContractAccount<Name extends string = string> =
 export type ToSmartContractAccountParams<
   Name extends string = string,
   TTransport extends Transport = Transport,
-  client extends PublicClient<TTransport> = PublicClient<TTransport>
+  TChain extends Chain = Chain
 > = {
   source: Name;
-  client: client;
+  transport: TTransport;
+  chain: TChain;
   // TODO: we may want to revisit this so that it's an object
   // which includes the EP version and its UO hashing algo
   entrypointAddress: Address;
@@ -147,9 +150,11 @@ export const getAccountAddress = async ({
 
 export async function toSmartContractAccount<
   Name extends string = string,
-  TTransport extends Transport = Transport
+  TTransport extends Transport = Transport,
+  TChain extends Chain = Chain
 >({
-  client,
+  transport,
+  chain,
   source,
   entrypointAddress,
   accountAddress,
@@ -161,9 +166,13 @@ export async function toSmartContractAccount<
   getDummySignature,
   signUserOperationHash,
   encodeUpgradeToAndCall,
-}: ToSmartContractAccountParams<Name, TTransport>): Promise<
+}: ToSmartContractAccountParams<Name, TTransport, TChain>): Promise<
   SmartContractAccount<Name>
 > {
+  const client = createBundlerClient({
+    transport,
+    chain,
+  });
   const entrypoint = getContract({
     address: entrypointAddress,
     abi: EntryPointAbi,
