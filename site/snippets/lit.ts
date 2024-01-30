@@ -1,5 +1,5 @@
-import { LitSigner, LitAuthMethod } from "@alchemy/aa-signers/lit-protocol";
-import { polygonMumbai } from "viem/chains";
+import { polygonMumbai } from "@alchemy/aa-core";
+import { LitAuthMethod, LitSigner } from "@alchemy/aa-signers/lit-protocol";
 
 const API_KEY = "<YOUR API KEY>";
 const POLYGON_MUMBAI_RPC_URL = `${polygonMumbai.rpcUrls.alchemy.http[0]}/${API_KEY}`;

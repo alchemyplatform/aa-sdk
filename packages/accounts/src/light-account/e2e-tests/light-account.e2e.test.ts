@@ -4,12 +4,12 @@ import {
   Logger,
   createPublicErc4337Client,
   createSmartAccountClientFromExisting,
+  sepolia,
   type SmartAccountSigner,
   type UserOperationFeeOptions,
 } from "@alchemy/aa-core";
 import { isAddress, type Address, type Chain, type HDAccount } from "viem";
 import { generatePrivateKey } from "viem/accounts";
-import { sepolia } from "viem/chains";
 import {
   multiOwnerPluginActions,
   type LightAccountVersion,

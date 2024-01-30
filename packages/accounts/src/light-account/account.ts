@@ -16,6 +16,7 @@ import {
   hashMessage,
   hashTypedData,
   trim,
+  type SignTypedDataParameters,
   type Transport,
 } from "viem";
 import { LightAccountAbi } from "./abis/LightAccountAbi.js";
@@ -203,8 +204,11 @@ export async function createLightAccount({
     async signTypedData(params) {
       const version = await getLightAccountVersion(account);
       switch (version) {
-        case "v1.0.1":
-          return owner.signTypedData(params);
+        case "v1.0.1": {
+          return owner.signTypedData(
+            params as unknown as SignTypedDataParameters
+          );
+        }
         case "v1.0.2":
           throw new Error(
             `Version ${version} of LightAccount doesn't support 1271`

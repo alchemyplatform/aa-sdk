@@ -5,11 +5,7 @@ import { GetContractGenPhase } from "./get-contract-gen.js";
 import { MetaGenPhase } from "./meta-gen.js";
 
 export const PluginGeneratorPhase: Phase = async (input) => {
-  const pluginPhases: Phase[] = [
-    MetaGenPhase,
-    GetContractGenPhase,
-    // ClientDecoratorGenPhase,
-  ];
+  const pluginPhases: Phase[] = [MetaGenPhase, GetContractGenPhase];
   const { contract, addImport } = input;
 
   const result = await asyncPipe(...pluginPhases)({

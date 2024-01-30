@@ -2,8 +2,11 @@ import {
   LightSmartContractAccount,
   getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
-import { LocalAccountSigner, type SmartAccountSigner } from "@alchemy/aa-core";
-import { sepolia } from "viem/chains";
+import {
+  LocalAccountSigner,
+  sepolia,
+  type SmartAccountSigner,
+} from "@alchemy/aa-core";
 import { provider } from "./create-provider.js";
 
 const chain = sepolia;

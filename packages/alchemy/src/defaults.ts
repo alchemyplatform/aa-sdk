@@ -1,5 +1,4 @@
 import type { UserOperationFeeOptions } from "@alchemy/aa-core";
-import type { Chain } from "viem";
 import {
   arbitrum,
   arbitrumGoerli,
@@ -7,7 +6,8 @@ import {
   optimism,
   optimismGoerli,
   optimismSepolia,
-} from "viem/chains";
+} from "@alchemy/aa-core";
+import type { Chain } from "viem";
 
 export const getDefaultUserOperationFeeOptions = (
   chain: Chain

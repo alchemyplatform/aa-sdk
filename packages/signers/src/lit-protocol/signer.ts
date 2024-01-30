@@ -109,7 +109,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
     return this.signer?._signTypedData(
       params.domain as TypedDataDomain,
       params.types as any,
-      params.message
+      params.message as Record<string, any>
     ) as Promise<Hex>;
   };
 

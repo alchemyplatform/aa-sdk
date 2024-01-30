@@ -28,6 +28,10 @@ This version update brings a lot of breaking changes. As we began to support Mod
 that the previous version of the SDK was not as flexible as it could have been to handle the modularity of the new account interfaces.
 To address this, version 3.x.x of the SDK switches to an approach more idiomatic to `viem`.
 
+### Viem Version
+
+We have updated our dependency to viem v2.x.x. This means you will need to update your project to use >= v2.5.0 of viem.
+
 ### Client: `SmartAccountProvider` → `SmartAccountClient`
 
 The biggest change is that the `SmartAccountProvider` class has been removed and replaced with a `SmartAccountClient` type that extends
@@ -37,7 +41,7 @@ The biggest change is that the `SmartAccountProvider` class has been removed and
 import { SmartAccountProvider } from "@alchemy/aa-core"; // [!code --]
 import { getDefaultEntryPointAddress } from "@alchemy/aa-core"; // [!code --]
 import { http } from "viem"; // [!code ++]
-import { sepolia } from "viem/chains";
+import { sepolia } from "@alchemy/aa-core";
 
 const provider = new SmartAccountProvider({ // [!code --]
 const client = createSmartAccountClient({ // [!code ++]
@@ -57,7 +61,7 @@ The concept of the middlewares is still present in this version, but their confi
 import { SmartAccountProvider } from "@alchemy/aa-core"; // [!code --]
 import { getDefaultEntryPointAddress } from "@alchemy/aa-core"; // [!code --]
 import { http } from "viem"; // [!code ++]
-import { sepolia } from "viem/chains";
+import { sepolia } from "@alchemy/aa-core";
 
 const provider = new SmartAccountProvider({ // [!code --]
 const client = createSmartAccountClient({ // [!code ++]
@@ -94,7 +98,7 @@ import {
   LocalAccountSigner,
   type Hex,
 } from "@alchemy/aa-core";
-import { sepolia } from "viem/chains";
+import { sepolia } from "@alchemy/aa-core";
 
 const chain = sepolia;
 
@@ -129,7 +133,7 @@ import {
   LocalAccountSigner,
   type Hex,
 } from "@alchemy/aa-core";
-import { sepolia } from "viem/chains";
+import { sepolia } from "@alchemy/aa-core";
 
 const chain = sepolia;
 
@@ -172,7 +176,7 @@ import {
   LocalAccountSigner,
   type Hex,
 } from "@alchemy/aa-core";
-import { sepolia } from "viem/chains";
+import { sepolia } from "@alchemy/aa-core";
 
 const chain = sepolia;
 

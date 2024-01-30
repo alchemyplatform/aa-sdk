@@ -14,7 +14,7 @@ import {
   polygon,
   polygonMumbai,
   sepolia,
-} from "viem/chains";
+} from "../chain/index.js";
 import type { UserOperationFeeOptions } from "../types";
 
 /**

@@ -5,6 +5,7 @@ import {
 } from "@alchemy/aa-core";
 import type { Chain } from "viem";
 import { SupportedChains } from "../chains.js";
+import { InvalidRpcUrlError } from "../errors/rpcUrl.js";
 import type { ClientWithAlchemyMethods } from "./types.js";
 
 export const createAlchemyPublicRpcClient = ({
@@ -24,6 +25,10 @@ export const createAlchemyPublicRpcClient = ({
     connectionConfig.rpcUrl == null
       ? `${chain.rpcUrls.alchemy.http[0]}/${connectionConfig.apiKey ?? ""}`
       : connectionConfig.rpcUrl;
+
+  if (!rpcUrl) {
+    throw new InvalidRpcUrlError({ chain, connectionConfig });
+  }
 
   return createPublicErc4337Client({
     chain: chain,

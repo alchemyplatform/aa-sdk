@@ -7,7 +7,7 @@ import {
   type Transport,
   type PublicClient,
   type Client,
-  type GetFunctionArgs,
+  type EncodeFunctionDataParameters,
   type Chain,
   type Hex,
   type ReadContractReturnType,
@@ -34,9 +34,12 @@ type ExecutionActions<
     | undefined
 > = {
   updateOwners: (
-    args: GetFunctionArgs<
-      typeof MultiOwnerPluginExecutionFunctionAbi,
-      "updateOwners"
+    args: Pick<
+      EncodeFunctionDataParameters<
+        typeof MultiOwnerPluginExecutionFunctionAbi,
+        "updateOwners"
+      >,
+      "args"
     > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
   ) => Promise<SendUserOperationResult>;
 };
@@ -68,16 +71,22 @@ type ReadAndEncodeActions<
     | undefined
 > = {
   encodeUpdateOwners: (
-    args: GetFunctionArgs<
-      typeof MultiOwnerPluginExecutionFunctionAbi,
-      "updateOwners"
+    args: Pick<
+      EncodeFunctionDataParameters<
+        typeof MultiOwnerPluginExecutionFunctionAbi,
+        "updateOwners"
+      >,
+      "args"
     >
   ) => Hex;
 
   encodeEip712Domain: (
-    args: GetFunctionArgs<
-      typeof MultiOwnerPluginExecutionFunctionAbi,
-      "eip712Domain"
+    args: Pick<
+      EncodeFunctionDataParameters<
+        typeof MultiOwnerPluginExecutionFunctionAbi,
+        "eip712Domain"
+      >,
+      "args"
     >
   ) => Hex;
 
@@ -91,16 +100,22 @@ type ReadAndEncodeActions<
   >;
 
   encodeIsValidSignature: (
-    args: GetFunctionArgs<
-      typeof MultiOwnerPluginExecutionFunctionAbi,
-      "isValidSignature"
+    args: Pick<
+      EncodeFunctionDataParameters<
+        typeof MultiOwnerPluginExecutionFunctionAbi,
+        "isValidSignature"
+      >,
+      "args"
     >
   ) => Hex;
 
   readIsValidSignature: (
-    args: GetFunctionArgs<
-      typeof MultiOwnerPluginExecutionFunctionAbi,
-      "isValidSignature"
+    args: Pick<
+      EncodeFunctionDataParameters<
+        typeof MultiOwnerPluginExecutionFunctionAbi,
+        "isValidSignature"
+      >,
+      "args"
     > &
       GetAccountParameter<TAccount>
   ) => Promise<
@@ -135,7 +150,6 @@ export const MultiOwnerPlugin: Plugin<typeof MultiOwnerPluginAbi> = {
   ): GetContractReturnType<
     typeof MultiOwnerPluginAbi,
     PublicClient,
-    undefined,
     Address
   > => {
     if (!client.chain) throw new Error("Missing chain on client");
@@ -143,7 +157,7 @@ export const MultiOwnerPlugin: Plugin<typeof MultiOwnerPluginAbi> = {
     return getContract({
       address: address || addresses[client.chain.id],
       abi: MultiOwnerPluginAbi,
-      publicClient: client,
+      client: client,
     });
   },
 };

@@ -1,6 +1,20 @@
 import {
   AccountNotFoundError,
+  arbitrum,
+  arbitrumGoerli,
+  arbitrumSepolia,
+  base,
+  baseGoerli,
+  baseSepolia,
   createPublicErc4337FromClient,
+  goerli,
+  mainnet,
+  optimism,
+  optimismGoerli,
+  optimismSepolia,
+  polygon,
+  polygonMumbai,
+  sepolia,
   type GetAccountParameter,
   type OwnedSmartContractAccount,
   type SmartAccountClient,
@@ -17,22 +31,6 @@ import {
   keccak256,
   parseAbiParameters,
 } from "viem";
-import {
-  arbitrum,
-  arbitrumGoerli,
-  arbitrumSepolia,
-  base,
-  baseGoerli,
-  baseSepolia,
-  goerli,
-  mainnet,
-  optimism,
-  optimismGoerli,
-  optimismSepolia,
-  polygon,
-  polygonMumbai,
-  sepolia,
-} from "viem/chains";
 import { IPluginAbi } from "./abis/IPlugin.js";
 import { MultiOwnerTokenReceiverMSCAFactoryAbi } from "./abis/MultiOwnerTokenReceiverMSCAFactory.js";
 import { UpgradeableModularAccountAbi } from "./abis/UpgradeableModularAccount.js";

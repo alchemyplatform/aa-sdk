@@ -59,7 +59,7 @@
   "dependencies": {
     "abitype": "^0.8.3",
     "eventemitter3": "^5.0.1",
-    "viem": "^1.21.4",
+    "viem": "^2.5.0",
     "zod": "^3.22.4"
   },
   "repository": {

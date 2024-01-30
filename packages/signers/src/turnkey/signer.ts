@@ -6,6 +6,7 @@ import { TurnkeyClient } from "@turnkey/http";
 import { createAccount } from "@turnkey/viem";
 import {
   createWalletClient,
+  type LocalAccount,
   type TypedData,
   type TypedDataDefinition,
 } from "viem";
@@ -74,11 +75,11 @@ export class TurnkeySigner
     this.subOrganization = await params.resolveSubOrganization();
     this.signer = new WalletClientSigner(
       createWalletClient({
-        account: await createAccount({
+        account: (await createAccount({
           client: this.inner,
           organizationId: this.subOrganization.subOrganizationId,
           signWith: this.subOrganization.signWith,
-        }),
+        })) as LocalAccount,
         transport: params.transport,
       }),
       this.signerType

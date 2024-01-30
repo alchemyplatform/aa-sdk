@@ -6,9 +6,9 @@ import {
   SimpleSmartContractAccount,
   getDefaultEntryPointAddress,
   getDefaultSimpleAccountFactoryAddress,
+  polygonMumbai,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
-import { polygonMumbai } from "viem/chains";
 
 const chain = polygonMumbai;
 

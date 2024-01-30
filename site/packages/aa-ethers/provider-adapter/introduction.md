@@ -34,7 +34,7 @@ import {
   getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
 import { LocalAccountSigner, type SmartAccountSigner } from "@alchemy/aa-core";
-import { polygonMumbai } from "viem/chains";
+import { polygonMumbai } from "@alchemy/aa-core";
 // [!code focus:99]
 // EIP-1193 compliant requests
 const chainId = await provider.send("eth_chainId", []);

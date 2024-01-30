@@ -1,11 +1,11 @@
 import {
   LocalAccountSigner,
   createPublicErc4337FromClient,
+  polygonMumbai,
   type BatchUserOperationCallData,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
-import { createPublicClient, custom } from "viem";
-import { polygonMumbai, type Chain } from "viem/chains";
+import { createPublicClient, custom, type Chain } from "viem";
 import { createLightAccountClient } from "./createLightAccountClient.js";
 
 const chain = polygonMumbai;

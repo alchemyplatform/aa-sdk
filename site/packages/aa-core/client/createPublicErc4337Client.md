@@ -22,7 +22,7 @@ Allows you to create an HTTP-based PublicErc4337Client with a given RPC provider
 
 ```ts [example.ts]
 import { createPublicErc4337Client } from "@alchemy/aa-core";
-import { mainnet } from "viem/chains";
+import { mainnet } from "@alchemy/aa-core";
 
 const client = createPublicErc4337Client({
   chain: mainnet,

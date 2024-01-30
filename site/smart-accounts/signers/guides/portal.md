@@ -61,7 +61,7 @@ import {
   LightSmartContractAccount,
   getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
-import { polygonMumbai } from "viem/chains";
+import { polygonMumbai } from "@alchemy/aa-core";
 import { createPortalSigner } from "./portal";
 
 const chain = polygonMumbai;

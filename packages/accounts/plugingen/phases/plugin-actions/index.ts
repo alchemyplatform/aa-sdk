@@ -12,7 +12,7 @@ export const PluginActionsGenPhase: Phase = async (input) => {
   const executionAbiConst = `${contract.name}ExecutionFunctionAbi`;
   const executionAbi = extractExecutionAbi(executionFunctions, contract.abi);
 
-  addImport("viem", { name: "GetFunctionArgs", isType: true });
+  addImport("viem", { name: "EncodeFunctionDataParameters", isType: true });
   addImport("viem", { name: "Transport", isType: true });
   addImport("viem", { name: "Chain", isType: true });
   addImport("@alchemy/aa-core", {
@@ -54,9 +54,9 @@ export const PluginActionsGenPhase: Phase = async (input) => {
       providerFunctionDefs.push(dedent`
           ${camelCase(
             n.name
-          )}: (args: GetFunctionArgs<typeof ${executionAbiConst}, "${
+          )}: (args: Pick<EncodeFunctionDataParameters<typeof ${executionAbiConst}, "${
         n.name
-      }"> & { overrides?: UserOperationOverrides; } & GetAccountParameter<TAccount>) => Promise<SendUserOperationResult>
+      }">, "args"> & { overrides?: UserOperationOverrides; } & GetAccountParameter<TAccount>) => Promise<SendUserOperationResult>
         `);
       return dedent`
               ${camelCase(n.name)}(${argsParamString}) {

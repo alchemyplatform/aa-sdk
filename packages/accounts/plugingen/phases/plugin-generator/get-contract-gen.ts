@@ -19,13 +19,13 @@ export const GetContractGenPhase: Phase = async (input) => {
   getContract: <C extends Client>(
     client: C,
     address?: Address
-  ): GetContractReturnType<typeof ${contract.name}Abi, PublicClient, undefined, Address> => {
+  ): GetContractReturnType<typeof ${contract.name}Abi, PublicClient, Address> => {
       if (!client.chain) throw new Error("Missing chain on client");
 
       return getContract({
         address: address || addresses[client.chain.id],
         abi: ${contract.name}Abi,
-        publicClient: client,
+        client: client,
       });
   }`);
 

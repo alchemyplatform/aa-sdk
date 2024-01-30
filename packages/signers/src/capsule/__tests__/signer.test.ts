@@ -1,3 +1,4 @@
+import { sepolia } from "@alchemy/aa-core";
 import Capsule, {
   Environment,
   createCapsuleViemClient,
@@ -8,7 +9,6 @@ import {
   type EIP1474Methods,
   type WalletClient,
 } from "viem";
-import { sepolia } from "viem/chains";
 import { CapsuleSigner } from "../signer.js";
 
 describe("Capsule Signer Tests", () => {

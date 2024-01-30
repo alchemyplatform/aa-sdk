@@ -7,7 +7,7 @@ import {
   type Transport,
   type PublicClient,
   type Client,
-  type GetFunctionArgs,
+  type EncodeFunctionDataParameters,
   type Chain,
   type Hex,
 } from "viem";
@@ -33,30 +33,42 @@ type ExecutionActions<
     | undefined
 > = {
   tokensReceived: (
-    args: GetFunctionArgs<
-      typeof TokenReceiverPluginExecutionFunctionAbi,
-      "tokensReceived"
+    args: Pick<
+      EncodeFunctionDataParameters<
+        typeof TokenReceiverPluginExecutionFunctionAbi,
+        "tokensReceived"
+      >,
+      "args"
     > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
   ) => Promise<SendUserOperationResult>;
 
   onErc721Received: (
-    args: GetFunctionArgs<
-      typeof TokenReceiverPluginExecutionFunctionAbi,
-      "onERC721Received"
+    args: Pick<
+      EncodeFunctionDataParameters<
+        typeof TokenReceiverPluginExecutionFunctionAbi,
+        "onERC721Received"
+      >,
+      "args"
     > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
   ) => Promise<SendUserOperationResult>;
 
   onErc1155Received: (
-    args: GetFunctionArgs<
-      typeof TokenReceiverPluginExecutionFunctionAbi,
-      "onERC1155Received"
+    args: Pick<
+      EncodeFunctionDataParameters<
+        typeof TokenReceiverPluginExecutionFunctionAbi,
+        "onERC1155Received"
+      >,
+      "args"
     > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
   ) => Promise<SendUserOperationResult>;
 
   onErc1155BatchReceived: (
-    args: GetFunctionArgs<
-      typeof TokenReceiverPluginExecutionFunctionAbi,
-      "onERC1155BatchReceived"
+    args: Pick<
+      EncodeFunctionDataParameters<
+        typeof TokenReceiverPluginExecutionFunctionAbi,
+        "onERC1155BatchReceived"
+      >,
+      "args"
     > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
   ) => Promise<SendUserOperationResult>;
 };
@@ -84,30 +96,42 @@ type ManagementActions<
 
 type ReadAndEncodeActions = {
   encodeTokensReceived: (
-    args: GetFunctionArgs<
-      typeof TokenReceiverPluginExecutionFunctionAbi,
-      "tokensReceived"
+    args: Pick<
+      EncodeFunctionDataParameters<
+        typeof TokenReceiverPluginExecutionFunctionAbi,
+        "tokensReceived"
+      >,
+      "args"
     >
   ) => Hex;
 
   encodeOnErc721Received: (
-    args: GetFunctionArgs<
-      typeof TokenReceiverPluginExecutionFunctionAbi,
-      "onERC721Received"
+    args: Pick<
+      EncodeFunctionDataParameters<
+        typeof TokenReceiverPluginExecutionFunctionAbi,
+        "onERC721Received"
+      >,
+      "args"
     >
   ) => Hex;
 
   encodeOnErc1155Received: (
-    args: GetFunctionArgs<
-      typeof TokenReceiverPluginExecutionFunctionAbi,
-      "onERC1155Received"
+    args: Pick<
+      EncodeFunctionDataParameters<
+        typeof TokenReceiverPluginExecutionFunctionAbi,
+        "onERC1155Received"
+      >,
+      "args"
     >
   ) => Hex;
 
   encodeOnErc1155BatchReceived: (
-    args: GetFunctionArgs<
-      typeof TokenReceiverPluginExecutionFunctionAbi,
-      "onERC1155BatchReceived"
+    args: Pick<
+      EncodeFunctionDataParameters<
+        typeof TokenReceiverPluginExecutionFunctionAbi,
+        "onERC1155BatchReceived"
+      >,
+      "args"
     >
   ) => Hex;
 };
@@ -136,7 +160,6 @@ export const TokenReceiverPlugin: Plugin<typeof TokenReceiverPluginAbi> = {
   ): GetContractReturnType<
     typeof TokenReceiverPluginAbi,
     PublicClient,
-    undefined,
     Address
   > => {
     if (!client.chain) throw new Error("Missing chain on client");
@@ -144,7 +167,7 @@ export const TokenReceiverPlugin: Plugin<typeof TokenReceiverPluginAbi> = {
     return getContract({
       address: address || addresses[client.chain.id],
       abi: TokenReceiverPluginAbi,
-      publicClient: client,
+      client: client,
     });
   },
 };

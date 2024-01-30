@@ -2,8 +2,11 @@ import {
   LightSmartContractAccount,
   getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
-import { LocalAccountSigner, SmartAccountSigner } from "@alchemy/aa-core";
-import { polygonMumbai } from "viem/chains";
+import {
+  LocalAccountSigner,
+  SmartAccountSigner,
+  polygonMumbai,
+} from "@alchemy/aa-core";
 import { provider } from "./ethers-provider.js";
 
 const owner: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(

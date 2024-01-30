@@ -1,11 +1,11 @@
 import {
   LocalAccountSigner,
   createPublicErc4337Client,
+  polygonMumbai,
   type Address,
   type Hex,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
-import { polygonMumbai } from "viem/chains";
 import { createNaniAccount } from "../account.js";
 import { getDefaultNaniAccountFactoryAddress } from "../utils.js";
 

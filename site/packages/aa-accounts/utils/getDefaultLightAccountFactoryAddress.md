@@ -21,7 +21,7 @@ Utility method that returns the default Light Account Factory contract address f
 ::: code-group
 
 ```ts [example.ts]
-import { sepolia } from "viem/chains";
+import { sepolia } from "@alchemy/aa-core";
 import { getDefaultLightAccountFactoryAddress } from "@alchemy/aa-accounts";
 
 const chain = sepolia;

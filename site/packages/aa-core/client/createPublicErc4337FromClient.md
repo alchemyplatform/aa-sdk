@@ -22,7 +22,7 @@ Allows you to create an HTTP-based PublicErc4337Client from an already created P
 
 ```ts [example.ts]
 import { createPublicErc4337FromClient } from "@alchemy/aa-core";
-import { mainnet } from "viem/chains";
+import { mainnet } from "@alchemy/aa-core";
 import { createPublicClient, http } from "viem";
 
 const publicClient = createPublicClient({
