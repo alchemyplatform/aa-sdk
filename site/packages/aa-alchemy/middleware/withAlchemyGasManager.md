@@ -34,7 +34,7 @@ const providerWithGasManager = withAlchemyGasManager(
 );
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 :::
 
 ## Returns

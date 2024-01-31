@@ -42,12 +42,12 @@ There are two ways that Account Kit supports UO simulation on an `AlchemyProvide
 
 To simulate User Operations, we must connect the `provider` with the middleware to simulate `UserOperations` before sending them. This can be done in a single line code, as show below!
 
-Then, whenever you call a method on the provider which generates the UO to send (e.g. [`sendUserOperation`](/packages/aa-core/smart-account-client/sendUserOperation), [`sendTransaction`](/packages/aa-core/smart-account-client/sendTransaction), [`sendTransactions`](/packages/aa-core/smart-account-client/sendTransactions), [`buildUserOperation`](/packages/aa-core/smart-account-client/buildUserOperation), or [`buildUserOperationFromTx`](/packages/aa-core/smart-account-client/buildUserOperationFromTx)), the provider will also simulate which assets change as a result of the UO, and if simulation fails, the provider will not send the UO unnecessarily!
+Then, whenever you call a method on the provider which generates the UO to send (e.g. [`sendUserOperation`](/packages/aa-core/smart-account-client/actions/sendUserOperation), [`sendTransaction`](/packages/aa-core/smart-account-client/actions/sendTransaction), [`sendTransactions`](/packages/aa-core/smart-account-client/actions/sendTransactions), [`buildUserOperation`](/packages/aa-core/smart-account-client/actions/buildUserOperation), or [`buildUserOperationFromTx`](/packages/aa-core/smart-account-client/actions/buildUserOperationFromTx)), the provider will also simulate which assets change as a result of the UO, and if simulation fails, the provider will not send the UO unnecessarily!
 
 ::: code-group
 
 <<< @/snippets/sim-uo-example/sim-middleware.ts
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 
 :::
 
@@ -58,6 +58,6 @@ You can also selectively simulate UOs by calling the [`simulateUserOperationAsse
 ::: code-group
 
 <<< @/snippets/sim-uo-example/sim-method.ts
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 
 :::

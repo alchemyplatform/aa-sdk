@@ -31,34 +31,40 @@ Note that `to` field of transaction is required, and among other fields of trans
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
 // build single
-const uoStruct = await provider.buildUserOperation({
-  target: TO_ADDRESS,
-  data: ENCODED_DATA,
-  value: VALUE, // optional
+const uoStruct = await smartAccountClient.buildUserOperation({
+  uo: {
+    target: TO_ADDRESS,
+    data: ENCODED_DATA,
+    value: VALUE, // optional
+  },
 });
-const { hash: uoHash } = await provider.sendUserOperation(uoStruct);
+const { hash: uoHash } = await smartAccountClient.sendUserOperation({
+  uo: uoStruct,
+});
 
 // build batch
-const batchedUoStruct = await provider.buildUserOperation([
-  {
-    data: "0xCalldata",
-    target: "0xTarget",
-  },
-  {
-    data: "0xCalldata2",
-    target: "0xTarget2",
-    value: 1000n, // in wei
-  },
-]);
-const { hash: batchedUoHash } = await provider.sendUserOperation(
-  batchedUoStruct
-);
+const batchedUoStruct = await smartAccountClient.buildUserOperation({
+  uo: [
+    {
+      data: "0xCalldata",
+      target: "0xTarget",
+    },
+    {
+      data: "0xCalldata2",
+      target: "0xTarget2",
+      value: 1000n, // in wei
+    },
+  ],
+});
+const { hash: batchedUoHash } = await smartAccountClient.sendUserOperation({
+  uo: batchedUoStruct,
+});
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 :::
 
 ## Returns
@@ -69,7 +75,7 @@ A Promise containing the _unsigned_ UO struct resulting from the middleware pipe
 
 ## Parameters
 
-### `UserOperationCallData | UserOperationCallData[]`
+### `uo: UserOperationCallData | UserOperationCallData[]`
 
 - `target: Address` - the target of the call (equivalent to `to` in a transaction)
 - `data: Hex` - can be either `0x` or a call data string
@@ -78,3 +84,7 @@ A Promise containing the _unsigned_ UO struct resulting from the middleware pipe
 ### `overrides?:` [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides.md)
 
 Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` or `paymasterAndData` on the user operation request
+
+### `account?: SmartContractAccount`
+
+If your client was not instantiated with an account, then you will have to pass the account in to this call.

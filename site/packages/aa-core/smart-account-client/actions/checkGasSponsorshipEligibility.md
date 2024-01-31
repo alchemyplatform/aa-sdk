@@ -27,9 +27,9 @@ For a deeper understanding of how to employ this method to provide varied user e
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
-const eligible = await provider.checkGasSponsorshipEligibility({
+const eligible = await smartAccountClient.checkGasSponsorshipEligibility({
   data: "0xCalldata",
   target: "0xTarget",
   value: 0n,
@@ -42,7 +42,7 @@ console.log(
 );
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 :::
 
 ## Returns
@@ -62,3 +62,7 @@ A Promise containing the boolean value indicating whether the UO to be sent is e
 ### `overrides?:` [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides.md)
 
 Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` or `paymasterAndData` on the user operation request
+
+### `account?: SmartContractAccount`
+
+If your client was not instantiated with an account, then you will have to pass the account in to this call.

@@ -27,7 +27,7 @@ import { provider } from "./provider";
 const owner = await provider.account.getOwnerAddress();
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 :::
 
 ## Returns

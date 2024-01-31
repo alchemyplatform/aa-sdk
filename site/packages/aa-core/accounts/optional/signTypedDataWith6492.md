@@ -23,7 +23,7 @@ Similar to the signMessageWith6492 method above, this method wraps the result of
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
 const signedTypedDataWrappedWith6492 = provider.signTypedDataWith6492({
   domain: {
@@ -58,7 +58,7 @@ const signedTypedDataWrappedWith6492 = provider.signTypedDataWith6492({
 });
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 
 :::
 

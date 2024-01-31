@@ -21,20 +21,21 @@ Attempts to drop and replace an existing user operation by increasing fees. The 
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 
-const { request } = await provider.sendUserOperation({
-  data: "0xCalldata",
-  target: "0xTarget",
-  value: 0n,
+const { request } = await smartAccountClient.sendUserOperation({
+  uo: {
+    data: "0xCalldata",
+    target: "0xTarget",
+    value: 0n,
+  },
 });
 
-const { hash: replacedHash } = await provider.dropAndReplaceUserOperation(
-  request
-);
+const { hash: replacedHash } =
+  await smartAccountClient.dropAndReplaceUserOperation(request);
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 :::
 
 ## Returns
@@ -54,3 +55,7 @@ A previously submitted `UserOperation`.
 ### `overrides?:` [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides.md)
 
 Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` or `paymasterAndData` on the user operation request
+
+### `account?: SmartContractAccount`
+
+If your client was not instantiated with an account, then you will have to pass the account in to this call.

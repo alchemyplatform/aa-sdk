@@ -23,12 +23,12 @@ This method wraps the result of `signMessage` as per [EIP-6492](https://eips.eth
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
 const signedMsgWrappedWith6492 = await provider.signMessageWith6492("msg");
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 
 :::
 

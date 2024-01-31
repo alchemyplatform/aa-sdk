@@ -43,7 +43,7 @@ See [Light Account](/packages/aa-accounts/light-account/introduction.md) for mor
 
 ## 3. Construct The CallData
 
-The best part of Account Kit is that it abstracts the differences between User Operation calldata and standard Transaction calldata, such that you can pass in typical calldata to [sendUserOperation](/packages/aa-core/smart-account-client/waitForUserOperationTransaction.md) as if it was a transaction sent from your smart account, and we'll wrap it as necessary to generate calldata as it would be as a User Operation.
+The best part of Account Kit is that it abstracts the differences between User Operation calldata and standard Transaction calldata, such that you can pass in typical calldata to [sendUserOperation](/packages/aa-core/smart-account-client/actions/waitForUserOperationTransaction.md) as if it was a transaction sent from your smart account, and we'll wrap it as necessary to generate calldata as it would be as a User Operation.
 
 The second best part of Account Kit is it's build atop [viem](https://viem.sh/). This means we can leverage utility methods to easily generate calldata, with type safety, using a smart contract's ABI.
 
@@ -53,11 +53,11 @@ Some other helpful viem methods include: [encodeFunctionData](https://viem.sh/do
 
 ## 4. Send The User Operation
 
-Now we'll use the connected provider to send a user operation. We'll use the [sendUserOperation](/packages/aa-core/smart-account-client/sendUserOperation.md) method on the provider.
+Now we'll use the connected provider to send a user operation. We'll use the [sendUserOperation](/packages/aa-core/smart-account-client/actions/sendUserOperation.md) method on the provider.
 
 You can either send ETH to the smart account to pay for User Operation's gas, or you can connect your provider to our Gas Manager using the [withAlchemyGasManager](/packages/aa-alchemy/provider/withAlchemyGasManager.md) method to sponsor the UO's gas. We'll use the latter approach below. You can go to the [Alchemy Dashboard](https://dashboard.alchemy.com/gas-manager/?a=ak-docs) to get a Gas Manager policy ID.
 
-We'll also want to wait for the transaction which contains the User Operation, so that we know the User Operation executed on-chain. We can use the [waitForUserOperationTransaction](/packages/aa-core/smart-account-client/waitForUserOperationTransaction.md) method on provider to do so, as seen below.
+We'll also want to wait for the transaction which contains the User Operation, so that we know the User Operation executed on-chain. We can use the [waitForUserOperationTransaction](/packages/aa-core/smart-account-client/actions/waitForUserOperationTransaction.md) method on provider to do so, as seen below.
 
 <<< @/snippets/send-uo-example/send-uo.ts
 

@@ -57,7 +57,7 @@ const signedTypedDataWith6492 = provider.signTypedDataWith6492({
 });
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 :::
 
 ## Returns

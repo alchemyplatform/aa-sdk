@@ -27,7 +27,7 @@ import { provider } from "./provider";
 const signedMessageWith6492 = provider.signMessageWith6492("test");
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 :::
 
 ## Returns

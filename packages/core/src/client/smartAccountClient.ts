@@ -1,7 +1,5 @@
 import {
-  createClient,
   custom,
-  publicActions,
   type Chain,
   type Client,
   type ClientConfig,
@@ -16,9 +14,8 @@ import type { SmartContractAccount } from "../account/smartContractAccount.js";
 import { middlewareActions } from "../middleware/actions.js";
 import type { ClientMiddleware } from "../middleware/types.js";
 import type { Prettify } from "../utils/index.js";
-import type { BundlerClient } from "./bundlerClient.js";
+import { createBundlerClient, type BundlerClient } from "./bundlerClient.js";
 import {
-  bundlerActions,
   type BundlerActions,
   type BundlerRpcSchema,
 } from "./decorators/bundlerClient.js";
@@ -111,7 +108,7 @@ export function createSmartAccountClient(
     ...params
   } = config;
 
-  const client = createClient({
+  const client = createBundlerClient({
     ...params,
     key,
     name,
@@ -125,8 +122,6 @@ export function createSmartAccountClient(
     .extend(() => ({
       ...SmartAccountClientOptsSchema.parse(config.opts ?? {}),
     }))
-    .extend(publicActions)
-    .extend(bundlerActions)
     .extend(middlewareActions(config))
     .extend(smartAccountClientActions);
 }

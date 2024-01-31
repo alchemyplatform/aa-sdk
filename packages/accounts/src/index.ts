@@ -5,6 +5,7 @@
 export type * from "./light-account/account.js";
 export { createLightAccount } from "./light-account/account.js";
 export { transferOwnership as transferLightAccountOwnership } from "./light-account/actions/transferOwnership.js";
+export { createLightAccountClient } from "./light-account/createLightAccountClient.js";
 export { getLightAccountVersion } from "./light-account/getLightAccountVersion.js";
 export type * from "./light-account/lightAccountClientDecorator.js";
 export { lightAccountClientActions } from "./light-account/lightAccountClientDecorator.js";

@@ -30,7 +30,7 @@ After [installing `aa-sdk`](/overview/getting-started#install-the-packages) in y
 
 First, create an `AlchemyProvider`. You'll use this to send UOs and interact with the blockchain.
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 
 Remember to replace `ALCHEMY_API_KEY` with your Alchemy API key. If you don't have one yet, you can create an API key on the [Alchemy dashboard](https://dashboard.alchemy.com/signup/?a=aa-docs).
 
@@ -78,7 +78,7 @@ const { hash } = await provider.sendUserOperation({
 });
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 
 :::
 
@@ -111,7 +111,7 @@ const { hash } = await provider.sendUserOperation({
 });
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 
 :::
 

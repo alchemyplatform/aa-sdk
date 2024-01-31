@@ -1,4 +1,4 @@
-import { provider } from "../provider.js";
+import { provider } from "../smartAccountClient.js";
 
 const providerWithSimulation = provider.withAlchemyUserOpSimulation();
 
