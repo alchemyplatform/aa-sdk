@@ -106,8 +106,8 @@ export const aaCoreSidebar: DefaultTheme.SidebarItem = {
     },
     {
       text: "Bundler Client",
-      base: "/packages/aa-core/bundler-client/index",
-      link: "/index",
+      base: "/packages/aa-core/bundler-client",
+      link: "/",
     },
     {
       text: "Bundler Actions",
@@ -143,102 +143,7 @@ export const aaCoreSidebar: DefaultTheme.SidebarItem = {
     {
       text: "Accounts",
       base: "/packages/aa-core/accounts",
-      collapsed: true,
-      items: [
-        {
-          text: "Introduction",
-          link: "/introduction",
-        },
-        {
-          text: "constructor",
-          link: "/constructor",
-        },
-        {
-          text: "Required Methods",
-          collapsed: true,
-          base: "/packages/aa-core/accounts/required",
-          items: [
-            {
-              text: "getDummySignature",
-              link: "/getDummySignature",
-            },
-            {
-              text: "getAccountInitCode",
-              link: "/getAccountInitCode",
-            },
-            {
-              text: "signMessage",
-              link: "/signMessage",
-            },
-            {
-              text: "encodeExecute",
-              link: "/encodeExecute",
-            },
-          ],
-        },
-        {
-          text: "Optional Methods",
-          collapsed: true,
-          base: "/packages/aa-core/accounts/optional",
-          items: [
-            {
-              text: "encodeBatchExecute",
-              link: "/encodeBatchExecute",
-            },
-            {
-              text: "signTypedData",
-              link: "/signTypedData",
-            },
-            {
-              text: "signMessageWith6492",
-              link: "/signMessageWith6492",
-            },
-            {
-              text: "signTypedDataWith6492",
-              link: "/signTypedDataWith6492",
-            },
-            {
-              text: "signUserOperationHash",
-              link: "/signUserOperationHash",
-            },
-          ],
-        },
-        {
-          text: "Other Methods",
-          collapsed: true,
-          base: "/packages/aa-core/accounts/other",
-          items: [
-            {
-              text: "getAddress",
-              link: "/getAddress",
-            },
-            {
-              text: "getNonce",
-              link: "/getNonce",
-            },
-            {
-              text: "getOwner",
-              link: "/getOwner",
-            },
-            {
-              text: "getDeploymentState",
-              link: "/getDeploymentState",
-            },
-            {
-              text: "isAccountDeployed",
-              link: "/isAccountDeployed",
-            },
-            {
-              text: "getFactoryAddress",
-              link: "/getFactoryAddress",
-            },
-            {
-              text: "getEntryPointAddress",
-              link: "/getEntryPointAddress",
-            },
-          ],
-        },
-      ],
+      link: "/",
     },
     {
       text: "Signers",

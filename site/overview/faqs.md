@@ -36,7 +36,7 @@ There are two scenarios where you'd get a different contract address:
 ### How does a smart account get deployed?
 
 ::: details Answer
-Your smart account will be deployed when the first `UserOperation` (UO) is sent from the account. The first UO must be sent with a non-zero `initCode`. aa-sdk will handle generation of this `initCode` for you using [`getAccountInitCode`](/packages/aa-core/accounts/required/getAccountInitCode.html).
+Your smart account will be deployed when the first `UserOperation` (UO) is sent from the account. The first UO must be sent with a non-zero `initCode`. aa-sdk will handle generation of this `initCode` for you using [`getAccountInitCode`](/packages/aa-core/accounts/).
 :::
 
 ### How would Alchemy initiate an upgrade of a Light Account?
@@ -48,7 +48,7 @@ It is unlikely we will frequently update the Light Account contract itself, howe
 ### Can I have multiple accounts for the same owner address? / How do I set the value of the salt/index for Light Account?
 
 ::: details Answer
-Yes! The optional index value (salt) on Light Account enables the ability to have multiple accounts for the same owner address. This value defaults to 0. You can set it in the [constructor](/packages/aa-accounts/light-account/constructor.html#params-simplesmartaccountparams).
+Yes! The optional index value (salt) on Light Account enables the ability to have multiple accounts for the same owner address. This value defaults to 0. You can set it when you create [light account](/packages/aa-accounts/light-account/).
 :::
 
 ## Submitting `UserOperation`s

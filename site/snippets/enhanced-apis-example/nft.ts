@@ -1,5 +1,8 @@
-import { AlchemyProvider } from "@alchemy/aa-alchemy";
-import { sepolia } from "@alchemy/aa-core";
+import {
+  alchemyEnhancedApiActions,
+  createLightAccountAlchemyClient,
+} from "@alchemy/aa-alchemy";
+import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
 import { Alchemy, Network } from "alchemy-sdk";
 
 const alchemy = new Alchemy({
@@ -7,12 +10,15 @@ const alchemy = new Alchemy({
   apiKey: "YOUR_API_KEY",
 });
 
-const provider = new AlchemyProvider({
-  chain: sepolia,
-  apiKey: "YOUR_API_KEY",
-}).withAlchemyEnhancedApis(alchemy);
+const provider = (
+  await createLightAccountAlchemyClient({
+    chain: sepolia,
+    apiKey: "YOUR_API_KEY",
+    owner: LocalAccountSigner.mnemonicToAccountSigner("OWNER_MNEMONIC"),
+  })
+).extend(alchemyEnhancedApiActions(alchemy));
 
-const address = await provider.getAddress();
+const address = provider.getAddress();
 
 // get all NFTs owned by the smart account
 export const nfts = provider.nft.getNftsForOwner(address);

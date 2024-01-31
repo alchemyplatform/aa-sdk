@@ -1,8 +1,4 @@
-import {
-  LightSmartContractAccount,
-  getDefaultLightAccountFactoryAddress,
-} from "@alchemy/aa-accounts";
-import { AlchemyProvider } from "@alchemy/aa-alchemy";
+import { createLightAccountAlchemyClient } from "@alchemy/aa-alchemy";
 import {
   LocalAccountSigner,
   sepolia,
@@ -10,25 +6,18 @@ import {
 } from "@alchemy/aa-core";
 import { encodeFunctionData } from "viem";
 
-const provider = new AlchemyProvider({
-  apiKey: "ALCHEMY_API_KEY", // replace with your Alchemy API Key
-  chain: sepolia,
-});
-
-const chain = sepolia;
 const PRIVATE_KEY = "0xYourEOAPrivateKey";
 const eoaSigner: SmartAccountSigner =
   LocalAccountSigner.privateKeyToAccountSigner(`0x${PRIVATE_KEY}`);
 
-const connectedProvider = provider.connect(
-  (rpcClient) =>
-    new LightSmartContractAccount({
-      chain,
-      owner: eoaSigner,
-      factoryAddress: getDefaultLightAccountFactoryAddress(chain),
-      rpcClient,
-    })
-);
+const client = await createLightAccountAlchemyClient({
+  apiKey: "ALCHEMY_API_KEY", // replace with your Alchemy API Key
+  chain: sepolia,
+  owner: eoaSigner,
+  gasManagerConfig: {
+    policyId: "POLICY_ID", // replace with your policy id, get yours at https://dashboard.alchemy.com/
+  },
+});
 
 // this is an example ABI for a contract with a "mint" function
 const AlchemyTokenAbi = [
@@ -44,18 +33,16 @@ const AlchemyTokenAbi = [
 export const uoCallData = encodeFunctionData({
   abi: AlchemyTokenAbi,
   functionName: "mint",
-  args: [await connectedProvider.getAddress()],
+  args: [client.getAddress()],
 });
 
-connectedProvider.withAlchemyGasManager({
-  policyId: "POLICY_ID", // replace with your policy id, get yours at https://dashboard.alchemy.com/
+const uo = await client.sendUserOperation({
+  uo: {
+    target: "0xTargetAddress",
+    data: uoCallData,
+  },
 });
 
-const uo = await connectedProvider.sendUserOperation({
-  target: "0xTargetAddress",
-  data: uoCallData,
-});
-
-const txHash = await connectedProvider.waitForUserOperationTransaction(uo.hash);
+const txHash = await client.waitForUserOperationTransaction(uo);
 
 console.log(txHash);

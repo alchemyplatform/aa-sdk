@@ -10,40 +10,27 @@ export const aaAlchemySidebar: DefaultTheme.SidebarItem = {
       link: "/",
     },
     {
-      text: "Provider",
-      base: "/packages/aa-alchemy/provider",
+      text: "Smart Account Client",
+      link: "/smart-account-client/",
+    },
+    {
+      text: "Smart Account Actions",
+      base: "/packages/aa-alchemy/smart-account-client/actions",
       collapsed: true,
       items: [
         {
-          text: "Introduction",
-          link: "/introduction",
+          text: "simulateUserOperation",
+          link: "/simulateUserOperation",
         },
         {
-          text: "constructor",
-          link: "/constructor",
-        },
-        {
-          text: "factory",
-          link: "/light-account-factory",
-        },
-        { text: "gasEstimator", link: "/gasEstimator" },
-        {
-          text: "simulateUserOperationAssetChanges",
-          link: "/simulateUserOperationAssetChanges",
-        },
-        {
-          text: "withAlchemyGasManager",
-          link: "/withAlchemyGasManager",
-        },
-        {
-          text: "withAlchemyUserOpSimulation",
-          link: "/withAlchemyUserOpSimulation",
-        },
-        {
-          text: "withAlchemyEnhancedApis",
-          link: "/withAlchemyEnhancedApis",
+          text: "alchemyEnhancedApiActions",
+          link: "/alchemyEnhancedApiActions",
         },
       ],
+    },
+    {
+      text: "Light Account Client",
+      link: "/light-account-client/",
     },
     {
       text: "Middleware",
@@ -51,20 +38,16 @@ export const aaAlchemySidebar: DefaultTheme.SidebarItem = {
       collapsed: true,
       items: [
         {
-          text: "Introduction",
-          link: "/introduction",
+          text: "alchemyFeeEstimator",
+          link: "/alchemyFeeEstimator",
         },
         {
-          text: "withAlchemyGasFeeEstimator",
-          link: "/withAlchemyGasFeeEstimator",
+          text: "alchemyGasManagerMiddleware",
+          link: "/alchemyGasManagerMiddleware",
         },
         {
-          text: "withAlchemyGasManager",
-          link: "/withAlchemyGasManager",
-        },
-        {
-          text: "withAlchemyUserOpSimulation",
-          link: "/withAlchemyUserOpSimulation",
+          text: "alchemyUserOperationSimulator",
+          link: "/alchemyUserOperationSimulator",
         },
       ],
     },
@@ -72,13 +55,7 @@ export const aaAlchemySidebar: DefaultTheme.SidebarItem = {
       text: "Utils",
       collapsed: true,
       base: "/packages/aa-alchemy/utils",
-      items: [
-        {
-          text: "Introduction",
-          link: "/introduction",
-        },
-        { text: "SupportedChains", link: "/supportedChains" },
-      ],
+      items: [{ text: "Define Alchemy Chain", link: "/defineAlchemyChain" }],
     },
   ],
 };

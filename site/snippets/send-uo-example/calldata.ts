@@ -1,5 +1,5 @@
+import { smartAccountClient } from "snippets/light-account-alchemy-client";
 import { encodeFunctionData } from "viem";
-import { connectedProvider } from "./connect-account.js";
 
 // this is an example ABI for a contract with a "mint" function
 const AlchemyTokenAbi = [
@@ -15,5 +15,5 @@ const AlchemyTokenAbi = [
 export const uoCallData = encodeFunctionData({
   abi: AlchemyTokenAbi,
   functionName: "mint",
-  args: [await connectedProvider.getAddress()],
+  args: [smartAccountClient.getAddress()],
 });

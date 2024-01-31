@@ -88,7 +88,7 @@ export type ToSmartContractAccountParams<
   getAccountInitCode: () => Promise<Hex>;
   getDummySignature: () => Hex;
   encodeExecute: (tx: Tx) => Promise<Hex>;
-  encodeBatchExecute: (txs: Tx[]) => Promise<Hex>;
+  encodeBatchExecute?: (txs: Tx[]) => Promise<Hex>;
   // if not provided, will default to just using signMessage over the Hex
   signUserOperationHash?: (uoHash: Hex) => Promise<Hex>;
   encodeUpgradeToAndCall?: (params: UpgradeToAndCallParams) => Promise<Hex>;
@@ -308,7 +308,11 @@ export async function toSmartContractAccount<
     // and allow for generating the UO hash based on the EP version
     signUserOperationHash: signUserOperationHash_,
     getFactoryAddress,
-    encodeBatchExecute,
+    encodeBatchExecute:
+      encodeBatchExecute ??
+      (() => {
+        throw new Error("Account does not support batch execution");
+      }),
     encodeExecute,
     getDummySignature,
     getInitCode,
