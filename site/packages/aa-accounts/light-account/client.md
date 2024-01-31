@@ -3,41 +3,37 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: AlchemyProvider • createLightAccountAlchemyProvider
+      content: LightSmartContractAccount • createLightAccountClient
   - - meta
     - name: description
-      content: Overview of the createLightAccountAlchemyProvider factory in aa-alchemy
+      content: Overview of the createLightAccountClient factory in aa-accounts
   - - meta
     - property: og:description
-      content: Overview of the createLightAccountAlchemyProvider factory in aa-alchemy
+      content: Overview of the createLightAccountClient factory in aa-accounts
 ---
 
-# createLightAccountAlchemyProvider
+# createLightAccountClient
 
-`createLightAccountAlchemyProvider` is a factory that improves the developer experience of connecting a Light Account to an `AlchemyProvider` via an optional dependency on the [`@alchemy/aa-accounts`](https://github.com/alchemyplatform/aa-sdk/tree/development/packages/accounts) package. You can use this to directly instantiate an `AlchemyProvider` already connected to a Light Account in one line of code.
+`createLightAccountClient` is a factory that improves the developer experience of connecting a Light Account to a `SmartAccountClient`. You can use this to directly instantiate a `SmartAccountClient` already connected to a Light Account in one line of code.
 
 ## Usage
 
 ::: code-group
 
-<<< @/snippets/light-account-alchemy-provider.ts
+<<< @/snippets/smartAccountClient.ts
 :::
 
 ## Returns
 
-### `Promise<AlchemyProvider & { account: LightSmartContractAccount }>`
+### `Promise<SmartAccountClient>`
 
-A Promise containing a new `AlchemyProvider` connected to a Light Account.
+A Promise containing a new `SmartAccountClient` connected to a Light Account.
 
 ## Parameters
 
-### `config: AlchemyProviderConfig`
+### `config: CreateLightAccountClientParams`
 
-- `rpcUrl: string | undefined | never` -- a JSON-RPC URL. This is required if there is no `apiKey`.
-
-- `apiKey: string | undefined | never` -- an Alchemy API Key. This is required if there is no `rpcUrl` or `jwt`.
-
-- `jwt: string | undefined | never` -- an Alchemy JWT (JSON web token). This is required if there is no `apiKey`.
+- `transport: Transport` -- a Viem transport for interacting with JSON RPC methods.
 
 - `chain: Chain` -- the chain on which to create the provider.
 
@@ -66,4 +62,6 @@ A Promise containing a new `AlchemyProvider` connected to a Light Account.
 
 - `initCode: Hex | undefined` -- [optional] the initCode for deploying the smart account with which the provider will connect.
 
-- `accountAddress: Address | undefined` -- [optional] [optional] a smart account address override that this object will manage instead of generating its own.
+- `accountAddress: Address | undefined` -- [optional] a smart account address override that this object will manage instead of generating its own.
+
+- `...clientParams` -- [optional] additional parameters to pass to the [`SmartAccountClient`](/packages/aa-core/smart-account-client/) constructor.

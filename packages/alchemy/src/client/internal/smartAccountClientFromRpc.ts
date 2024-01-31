@@ -43,8 +43,6 @@ export function createAlchemySmartAccountClientFromRpcClient({
   gasManagerConfig,
   feeEstimator,
   gasEstimator,
-  paymasterAndData,
-  dummyPaymasterAndData,
   customMiddleware,
   client,
 }: CreateAlchemySmartAccountClientFromRpcClient): AlchemySmartAccountClient {
@@ -63,8 +61,6 @@ export function createAlchemySmartAccountClientFromRpcClient({
     userOperationSimulator: useSimulation
       ? alchemyUserOperationSimulator(client)
       : undefined,
-    paymasterAndData,
-    dummyPaymasterAndData,
     gasEstimator,
     ...(gasManagerConfig &&
       alchemyGasManagerMiddleware(client, {

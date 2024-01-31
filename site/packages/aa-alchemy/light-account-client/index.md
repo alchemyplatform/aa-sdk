@@ -3,37 +3,41 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: LightSmartContractAccount • createLightAccountProvider
+      content: createLightAccountAlchemyClient
   - - meta
     - name: description
-      content: Overview of the createLightAccountProvider factory in aa-accounts
+      content: Overview of the createLightAccountAlchemyClient factory in aa-alchemy
   - - meta
     - property: og:description
-      content: Overview of the createLightAccountProvider factory in aa-accounts
+      content: Overview of the createLightAccountAlchemyClient factory in aa-alchemy
 ---
 
-# createLightAccountProvider
+# createLightAccountAlchemyClient
 
-`createLightAccountProvider` is a factory that improves the developer experience of connecting a Light Account to a `SmartAccountProvider`. You can use this to directly instantiate a `SmartAccountProvider` already connected to a Light Account in one line of code.
+`createLightAccountAlchemyClient` is a factory that improves the developer experience of connecting a Light Account to an `AlchemyProvider` via an optional dependency on the [`@alchemy/aa-accounts`](https://github.com/alchemyplatform/aa-sdk/tree/development/packages/accounts) package. You can use this to directly instantiate an `AlchemySmartAccountClient` already connected to a Light Account in one line of code.
 
 ## Usage
 
 ::: code-group
 
-<<< @/snippets/light-account-provider.ts
+<<< @/snippets/light-account-alchemy-client.ts
 :::
 
 ## Returns
 
-### `Promise<SmartAccountProvider & { account: LightSmartContractAccount }>`
+### `Promise<AlchemySmartAccountClient>`
 
-A Promise containing a new `SmartAccountProvider` connected to a Light Account.
+A Promise containing a new `AlchemySmartAccountClient` connected to a Light Account.
 
 ## Parameters
 
-### `config: LightAccountProviderConfig`
+### `config: AlchemyProviderConfig`
 
-- `rpcProvider: string | BundlerClient<TTransport extends SupportedTransports = Transport>` -- a JSON-RPC URL, or a viem Client that supports ERC-4337 methods and Viem public actions. See [createBundlerClient](/packages/aa-core/bundler-client/index.md).
+- `rpcUrl: string | undefined | never` -- a JSON-RPC URL. This is required if there is no `apiKey`.
+
+- `apiKey: string | undefined | never` -- an Alchemy API Key. This is required if there is no `rpcUrl` or `jwt`.
+
+- `jwt: string | undefined | never` -- an Alchemy JWT (JSON web token). This is required if there is no `apiKey`.
 
 - `chain: Chain` -- the chain on which to create the provider.
 
@@ -62,4 +66,4 @@ A Promise containing a new `SmartAccountProvider` connected to a Light Account.
 
 - `initCode: Hex | undefined` -- [optional] the initCode for deploying the smart account with which the provider will connect.
 
-- `accountAddress: Address | undefined` -- [optional] a smart account address override that this object will manage instead of generating its own.
+- `accountAddress: Address | undefined` -- [optional] [optional] a smart account address override that this object will manage instead of generating its own.

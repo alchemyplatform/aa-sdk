@@ -21,10 +21,10 @@ head:
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
 // sign typed data
-const signedTypedData = provider.signTypedData({
+const signedTypedData = smartAccountClient.signTypedData({
   domain: {
     name: "Ether Mail",
     version: "1",
