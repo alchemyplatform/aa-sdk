@@ -98,4 +98,4 @@ const { hash: userOperationHash } = provider.sendUserOperation({
 
 :::
 
-See the [`LightSmartContractAccount`](/packages/aa-accounts/light-account/introduction) docs for more details about our Light Account implementation.
+See the [`LightAccount`](/packages/aa-accounts/light-account/) docs for more details about our Light Account implementation.

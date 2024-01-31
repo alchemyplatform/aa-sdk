@@ -11,37 +11,22 @@ export const aaAccountsSidebar: DefaultTheme.SidebarItem = {
     },
     {
       text: "Light Account",
+      link: "/light-account/",
+    },
+    {
+      text: "Light Account Actions",
       collapsed: true,
-      base: "/packages/aa-accounts/light-account",
+      base: "/packages/aa-accounts/light-account/actions",
       items: [
         {
-          text: "Introduction",
-          link: "/introduction",
+          text: "transferOwnership",
+          link: "/transferOwnership",
         },
-        {
-          text: "constructor",
-          link: "/constructor",
-        },
-        {
-          text: "provider",
-          link: "/provider",
-        },
-        {
-          text: "signMessageWith6492",
-          link: "/signMessageWith6492",
-        },
-        { text: "signTypedData", link: "/signTypedData" },
-        {
-          text: "signTypedDataWith6492",
-          link: "/signTypedDataWith6492",
-        },
-        { text: "getOwnerAddress", link: "/getOwnerAddress" },
-        {
-          text: "encodeTransferOwnership",
-          link: "/encodeTransferOwnership",
-        },
-        { text: "transferOwnership", link: "/transferOwnership" },
       ],
+    },
+    {
+      text: "Light Account Client",
+      link: "/light-account/client",
     },
     {
       text: "Utils",
