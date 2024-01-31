@@ -26,7 +26,7 @@ import { createSmartAccountClient } from "@alchemy/aa-core";
 
 ## Usage
 
-Initialize a `SmartAcountClient` with your desired Chain and Transport using `createSmartAccountClient`, or use `createSmartAccountClientFromExisting` if you already have a [`BundlerClient`](/packages/aa-core/bundler-client) available
+Initialize a `SmartAcountClient` with your desired Chain and Transport using `createSmartAccountClient`, or use `createSmartAccountClientFromExisting` if you already have a [`BundlerClient`](/packages/aa-core/bundler-client/index) available
 ::: code-group
 
 ```ts [createSmartAccountClient.ts]
@@ -96,7 +96,7 @@ A new instance of a `SmartAccountClient`.
 
 #### If using `createSmartAccountClientFromExisting`:
 
-- `client: BundlerClient` -- a [bundler client](/packages/aa-core/bundler-client) instance that will be used to communicate with an RPC provider that supports Ethereum RPC methods.
+- `client: BundlerClient` -- a [bundler client](/packages/aa-core/bundler-client/index) instance that will be used to communicate with an RPC provider that supports Ethereum RPC methods.
 
 #### Common to both:
 

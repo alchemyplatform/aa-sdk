@@ -31,8 +31,8 @@ export const aaEthersSidebar: DefaultTheme.SidebarItem = {
           link: "/connectToAccount",
         },
         {
-          text: "getPublicErc4337Client",
-          link: "/getPublicErc4337Client",
+          text: "getBundlerClient",
+          link: "/getBundlerClient",
         },
         {
           text: "fromEthersProvider",
@@ -62,8 +62,8 @@ export const aaEthersSidebar: DefaultTheme.SidebarItem = {
           link: "/sendTransaction",
         },
         {
-          text: "getPublicErc4337Client",
-          link: "/getPublicErc4337Client",
+          text: "getBundlerClient",
+          link: "/getBundlerClient",
         },
         {
           text: "connect",

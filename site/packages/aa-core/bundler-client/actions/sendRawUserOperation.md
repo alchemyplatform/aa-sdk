@@ -3,18 +3,18 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: sendUserOperation
+      content: sendRawUserOperation
   - - meta
     - name: description
-      content: Overview of the sendUserOperation action available on the PublicErc4337Client
+      content: Overview of the sendRawUserOperation action available on the BundlerClient
   - - meta
     - property: og:description
-      content: Overview of the sendUserOperation action available on the PublicErc4337Client
+      content: Overview of the sendRawUserOperation action available on the BundlerClient
 prev:
   text: Public ERC-4337 Client
 ---
 
-# sendUserOperation
+# sendRawUserOperation
 
 Calls `eth_sendUserOperation` and returns the hash of the sent `UserOperation` (UO).
 
@@ -25,7 +25,7 @@ Calls `eth_sendUserOperation` and returns the hash of the sent `UserOperation` (
 ```ts [example.ts]
 import { client } from "./client";
 
-const hash = await client.sendUserOperation(
+const hash = await client.sendRawUserOperation(
   {
     // ... user operation
   },
@@ -33,7 +33,7 @@ const hash = await client.sendUserOperation(
 );
 ```
 
-<<< @/snippets/client.ts
+<<< @/snippets/bundlerClient.ts
 :::
 
 ## Returns

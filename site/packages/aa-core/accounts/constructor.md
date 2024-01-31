@@ -62,7 +62,7 @@ A new instance of a `SimpleSmartContractAccount`.
 
 ### `params: SimpleSmartAccountParams`
 
-- `rpcClient: string | PublicErc4337Client` -- a JSON-RPC URL, or a viem Client that supports ERC-4337 methods and Viem public actions. See [createPublicErc4337Client](/packages/aa-core/client/createPublicErc4337Client.md).
+- `rpcClient: string | BundlerClient` -- a JSON-RPC URL, or a viem Client that supports ERC-4337 methods and Viem public actions. See [createBundlerClient](/packages/aa-core/bundler-client/index.md).
 
 - `chain: Chain` -- the chain on which to create the provider.
 

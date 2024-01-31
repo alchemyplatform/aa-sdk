@@ -33,7 +33,7 @@ A Promise containing a new `SmartAccountProvider` connected to a Light Account.
 
 ### `config: LightAccountProviderConfig`
 
-- `rpcProvider: string | PublicErc4337Client<TTransport extends SupportedTransports = Transport>` -- a JSON-RPC URL, or a viem Client that supports ERC-4337 methods and Viem public actions. See [createPublicErc4337Client](/packages/aa-core/client/createPublicErc4337Client.md).
+- `rpcProvider: string | BundlerClient<TTransport extends SupportedTransports = Transport>` -- a JSON-RPC URL, or a viem Client that supports ERC-4337 methods and Viem public actions. See [createBundlerClient](/packages/aa-core/bundler-client/index.md).
 
 - `chain: Chain` -- the chain on which to create the provider.
 
