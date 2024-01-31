@@ -35,6 +35,8 @@ import {
 } from "@alchemy/aa-accounts";
 import { LocalAccountSigner, type SmartAccountSigner } from "@alchemy/aa-core";
 import { polygonMumbai } from "@alchemy/aa-core";
+import { http } from "viem";
+
 // [!code focus:99]
 // EIP-1193 compliant requests
 const chainId = await provider.send("eth_chainId", []);
@@ -47,13 +49,11 @@ const owner: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
   process.env.YOUR_OWNER_MNEMONIC!
 );
 const signer = provider.connectToAccount(
-  (rpcClient) =>
-    new LightSmartContractAccount({
-      chain: polygonMumbai,
-      factoryAddress: getDefaultLightAccountFactoryAddress(polygonMumbai),
-      rpcClient,
-      owner,
-    })
+  await createLightAccount({
+    chain,
+    transport: http("RPC_URL"),
+    owner,
+  })
 );
 ```
 

@@ -26,12 +26,12 @@ head:
 
 ## Returns
 
-### `AccountSigner<TAccount extends ISmartContractAccount>`
+### `AccountSigner<TAccount extends SmartContractAccount>`
 
-A new instance of a connected `AccountSigner`for any implementation class of `ISmartContractAccount`
+A new instance of a connected `AccountSigner`for any implementation class of `SmartContractAccount`
 
 ## Parameters
 
-### `fn: (rpcClient: BundlerClient) => TAccount extends ISmartContractAccount`
+### `account: TAccount extends SmartContractAccount`
 
 A function that takes in the provider's rpcClient and returns an AccountSigner

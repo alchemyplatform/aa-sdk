@@ -21,12 +21,12 @@ head:
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
 // encode transfer pownership
 const newOwner = LocalAccountSigner.mnemonicToAccountSigner(NEW_OWNER_MNEMONIC);
 const encodedTransferOwnershipData =
-  LightSmartContractAccount.encodeTransferOwnership(newOwner);
+  smartAccountClient.account.encodeTransferOwnership({ newOwner });
 ```
 
 <<< @/snippets/smartAccountClient.ts
