@@ -1,9 +1,8 @@
 import type {
   SendUserOperationResult,
-  SmartAccountClient,
   SmartContractAccount,
 } from "@alchemy/aa-core";
-import type { Chain, Transport } from "viem";
+import type { Chain, Client, Transport } from "viem";
 import { installPlugin, type InstallPluginParams } from "./installPlugin.js";
 import {
   uninstallPlugin,
@@ -30,7 +29,7 @@ export const pluginManagerActions: <
     | SmartContractAccount
     | undefined
 >(
-  client: SmartAccountClient<TTransport, TChain, TAccount>
+  client: Client<TTransport, TChain, TAccount>
 ) => PluginManagerActions<TAccount> = (client) => ({
   installPlugin: async (params) => installPlugin(client, params),
   uninstallPlugin: async (params) => uninstallPlugin(client, params),

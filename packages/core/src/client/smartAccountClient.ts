@@ -115,7 +115,7 @@ export function createSmartAccountClient(
     ...params,
     key,
     name,
-    type: "SmartAccountProvider",
+    type: "SmartAccountClient",
     // TODO: our OG provider also has handlers for some various RPC methods
     // we should support those here as well
     transport,

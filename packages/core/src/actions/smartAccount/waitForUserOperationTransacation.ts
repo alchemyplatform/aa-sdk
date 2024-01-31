@@ -1,6 +1,7 @@
-import type { Chain, Hex, Transport } from "viem";
+import type { Chain, Client, Hex, Transport } from "viem";
 import { getTransaction } from "viem/actions";
-import type { BaseSmartAccountClient } from "../../client/smartAccountClient.js";
+import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
+import { IncompatibleClientError } from "../../errors/client.js";
 import { Logger } from "../../logger.js";
 import type { WaitForUserOperationTxParameters } from "./types.js";
 
@@ -8,10 +9,17 @@ export const waitForUserOperationTransaction: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined
 >(
-  client: BaseSmartAccountClient<TTransport, TChain>,
+  client: Client<TTransport, TChain, any>,
   args: WaitForUserOperationTxParameters
 ) => Promise<Hex> = async (client, args) => {
   const { hash } = args;
+
+  if (!isBaseSmartAccountClient(client)) {
+    throw new IncompatibleClientError(
+      "BaseSmartAccountClient",
+      "upgradeAccount"
+    );
+  }
 
   for (let i = 0; i < client.txMaxRetries; i++) {
     const txRetryIntervalWithJitterMs =

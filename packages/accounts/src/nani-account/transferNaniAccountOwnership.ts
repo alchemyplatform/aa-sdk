@@ -1,10 +1,11 @@
 import {
   AccountNotFoundError,
+  IncompatibleClientError,
+  isSmartAccountClient,
   type GetAccountParameter,
-  type SmartAccountClient,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
-import type { Chain, Hex, Transport } from "viem";
+import type { Chain, Client, Hex, Transport } from "viem";
 import type { NaniAccount } from "./account";
 
 /**
@@ -22,7 +23,7 @@ export const transferOwnership: <
   TOwner extends SmartAccountSigner = SmartAccountSigner,
   TAccount extends NaniAccount | undefined = NaniAccount | undefined
 >(
-  client: SmartAccountClient<TTransport, TChain, TAccount>,
+  client: Client<TTransport, TChain, TAccount>,
   args: {
     newOwner: TOwner;
     waitForTxn?: boolean;
@@ -33,6 +34,13 @@ export const transferOwnership: <
 ): Promise<Hex> => {
   if (!account_) {
     throw new AccountNotFoundError();
+  }
+
+  if (!isSmartAccountClient(client)) {
+    throw new IncompatibleClientError(
+      "SmartAccountClient",
+      "transferOwnership"
+    );
   }
 
   const account = account_ as NaniAccount;

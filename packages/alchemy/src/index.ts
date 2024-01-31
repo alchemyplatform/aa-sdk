@@ -2,6 +2,7 @@ export type * from "./actions/simulateUserOperationChanges.js";
 export { simulateUserOperationChanges } from "./actions/simulateUserOperationChanges.js";
 export type * from "./actions/types.js";
 
+export { isAlchemySmartAccountClient } from "./client/isAlchemySmartAccountClient.js";
 export type * from "./client/lightAccountClient.js";
 export { createLightAccountAlchemyClient } from "./client/lightAccountClient.js";
 export type * from "./client/rpcClient.js";

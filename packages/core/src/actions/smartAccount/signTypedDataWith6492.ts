@@ -1,6 +1,5 @@
-import type { Chain, Hex, Transport, TypedData } from "viem";
+import type { Chain, Client, Hex, Transport, TypedData } from "viem";
 import type { SmartContractAccount } from "../../account/smartContractAccount";
-import type { BaseSmartAccountClient } from "../../client/smartAccountClient";
 import { AccountNotFoundError } from "../../errors/account.js";
 import type { SignTypedDataParameters } from "./signTypedData";
 
@@ -13,7 +12,7 @@ export const signTypedDataWith6492: <
     | undefined,
   TPrimaryType extends string = string
 >(
-  client: BaseSmartAccountClient<TTransport, TChain, TAccount>,
+  client: Client<TTransport, TChain, TAccount>,
   args: SignTypedDataParameters<TTypedData, TPrimaryType, TAccount>
 ) => Promise<Hex> = async (client, { account = client.account, typedData }) => {
   if (!account) {

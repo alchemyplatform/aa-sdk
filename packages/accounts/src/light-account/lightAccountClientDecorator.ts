@@ -1,10 +1,9 @@
 import type {
   GetAccountParameter,
   Hex,
-  SmartAccountClient,
   SmartAccountSigner,
 } from "@alchemy/aa-core";
-import type { Chain, Transport } from "viem";
+import type { Chain, Client, Transport } from "viem";
 import type { LightAccount } from "./account";
 import { transferOwnership } from "./actions/transferOwnership.js";
 
@@ -30,7 +29,7 @@ export const lightAccountClientActions: <
     | LightAccount<TOwner>
     | undefined
 >(
-  client: SmartAccountClient<TTransport, TChain, TAccount>
+  client: Client<TTransport, TChain, TAccount>
 ) => LightAccountClientActions<TOwner, TAccount> = (client) => ({
   transferOwnership: async (args) => transferOwnership(client, args),
 });

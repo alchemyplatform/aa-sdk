@@ -12,15 +12,16 @@ import {
   type Hex,
   type ReadContractReturnType,
 } from "viem";
+import { type Plugin } from "../types.js";
 import {
   AccountNotFoundError,
-  type SmartAccountClient,
+  isSmartAccountClient,
+  IncompatibleClientError,
   type SmartContractAccount,
   type UserOperationOverrides,
   type GetAccountParameter,
   type SendUserOperationResult,
 } from "@alchemy/aa-core";
-import { type Plugin } from "../types.js";
 import { installPlugin as installPlugin_ } from "../../plugin-manager/installPlugin.js";
 import { type FunctionReference } from "../../account-loupe/types.js";
 
@@ -169,19 +170,14 @@ export const multiOwnerPluginActions: <
     | SmartContractAccount
     | undefined
 >(
-  client: SmartAccountClient<TTransport, TChain, TAccount>
-) => MultiOwnerPluginActions<TAccount> = <
-  TTransport extends Transport = Transport,
-  TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
-    | undefined
->(
-  client: SmartAccountClient<TTransport, TChain, TAccount>
-) => ({
+  client: Client<TTransport, TChain, TAccount>
+) => MultiOwnerPluginActions<TAccount> = (client) => ({
   updateOwners({ args, overrides, account = client.account }) {
     if (!account) {
       throw new AccountNotFoundError();
+    }
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError("SmartAccountClient", "updateOwners");
     }
 
     const uo = encodeFunctionData({
@@ -195,6 +191,13 @@ export const multiOwnerPluginActions: <
   installMultiOwnerPlugin({ account = client.account, overrides, ...params }) {
     if (!account) {
       throw new AccountNotFoundError();
+    }
+
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "installMultiOwnerPlugin"
+      );
     }
 
     const chain = client.chain;
@@ -240,6 +243,13 @@ export const multiOwnerPluginActions: <
       throw new AccountNotFoundError();
     }
 
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "readEip712Domain"
+      );
+    }
+
     return client.readContract({
       address: account.address,
       abi: MultiOwnerPluginExecutionFunctionAbi,
@@ -257,6 +267,13 @@ export const multiOwnerPluginActions: <
   async readIsValidSignature({ args, account = client.account }) {
     if (!account) {
       throw new AccountNotFoundError();
+    }
+
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "readIsValidSignature"
+      );
     }
 
     return client.readContract({

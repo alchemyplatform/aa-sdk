@@ -1,10 +1,11 @@
 import {
   AccountNotFoundError,
+  IncompatibleClientError,
+  isSmartAccountClient,
   type GetAccountParameter,
-  type SmartAccountClient,
   type SmartContractAccount,
 } from "@alchemy/aa-core";
-import type { Address, Chain, Hash, Transport } from "viem";
+import type { Address, Chain, Client, Hash, Transport } from "viem";
 import { IAccountLoupeAbi } from "../abis/IAccountLoupe.js";
 import type {
   ExecutionFunctionConfig,
@@ -57,7 +58,7 @@ export const accountLoupeActions: <
     | SmartContractAccount
     | undefined
 >(
-  client: SmartAccountClient<TTransport, TChain, TAccount>
+  client: Client<TTransport, TChain, TAccount>
 ) => AccountLoupeActions<TAccount> = (client) => ({
   getExecutionFunctionConfig: async ({
     selector,
@@ -65,6 +66,13 @@ export const accountLoupeActions: <
   }) => {
     if (!account) {
       throw new AccountNotFoundError();
+    }
+
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "getExecutionFunctionConfig"
+      );
     }
 
     return client.readContract({
@@ -80,6 +88,13 @@ export const accountLoupeActions: <
       throw new AccountNotFoundError();
     }
 
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "getExecutionHooks"
+      );
+    }
+
     return client.readContract({
       address: account.address,
       abi: IAccountLoupeAbi,
@@ -92,6 +107,14 @@ export const accountLoupeActions: <
     if (!account) {
       throw new AccountNotFoundError();
     }
+
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "getPreValidationHooks"
+      );
+    }
+
     return client.readContract({
       address: account.address,
       abi: IAccountLoupeAbi,
@@ -103,6 +126,13 @@ export const accountLoupeActions: <
   getInstalledPlugins: async ({ account = client.account }) => {
     if (!account) {
       throw new AccountNotFoundError();
+    }
+
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "getInstalledPlugins"
+      );
     }
 
     return client.readContract({

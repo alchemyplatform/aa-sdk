@@ -21,15 +21,12 @@ export const AccountReadActionsGenPhase: Phase = async (input) => {
     const argsEncodeString = n.inputs.length > 0 ? "args," : "";
     const isViewFunction = n.stateMutability === "view";
 
+    const encodeMethodName = `encode${pascalCase(n.name)}`;
     accountFunctionActionDefs.push(
-      dedent`encode${pascalCase(
-        n.name
-      )}: (args: Pick<EncodeFunctionDataParameters<typeof ${executionAbiConst}, "${
-        n.name
-      }">, "args">) => Hex`
+      dedent`${encodeMethodName}: (args: Pick<EncodeFunctionDataParameters<typeof ${executionAbiConst}, "${n.name}">, "args">) => Hex`
     );
     methodContent.push(dedent`
-      encode${pascalCase(n.name)}(${argsParamString}) {
+      ${encodeMethodName}(${argsParamString}) {
           return encodeFunctionData({
               abi: ${executionAbiConst},
               functionName: "${n.name}",
@@ -45,26 +42,21 @@ export const AccountReadActionsGenPhase: Phase = async (input) => {
     if (isViewFunction) {
       addImport("viem", { name: "ReadContractReturnType", isType: true });
       input.hasReadMethods = true;
+      const readMethodName = `read${pascalCase(n.name)}`;
       accountFunctionActionDefs.push(
         n.inputs.length > 0
-          ? dedent`read${pascalCase(
-              n.name
-            )}: (args: Pick<EncodeFunctionDataParameters<typeof ${executionAbiConst}, "${
-              n.name
-            }">, "args"> & GetAccountParameter<TAccount>) => Promise<ReadContractReturnType<typeof ${executionAbiConst}, "${
-              n.name
-            }">>`
-          : dedent`read${pascalCase(
-              n.name
-            )}: (args: GetAccountParameter<TAccount>) => Promise<ReadContractReturnType<typeof ${executionAbiConst}, "${
-              n.name
-            }">>`
+          ? dedent`${readMethodName}: (args: Pick<EncodeFunctionDataParameters<typeof ${executionAbiConst}, "${n.name}">, "args"> & GetAccountParameter<TAccount>) => Promise<ReadContractReturnType<typeof ${executionAbiConst}, "${n.name}">>`
+          : dedent`${readMethodName}: (args: GetAccountParameter<TAccount>) => Promise<ReadContractReturnType<typeof ${executionAbiConst}, "${n.name}">>`
       );
 
       methodContent.push(dedent`
-        async read${pascalCase(n.name)} (${readArgsParamString}) {
+        async ${readMethodName} (${readArgsParamString}) {
           if (!account) {
             throw new AccountNotFoundError();
+          }
+
+          if (!isSmartAccountClient(client)) {
+            throw new IncompatibleClientError("SmartAccountClient", "${readMethodName}");
           }
 
           return client.readContract({
