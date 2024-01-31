@@ -32,6 +32,6 @@ A new instance of a connected `AccountSigner`for any implementation class of `IS
 
 ## Parameters
 
-### `fn: (rpcClient: PublicErc4337Client) => TAccount extends ISmartContractAccount`
+### `fn: (rpcClient: BundlerClient) => TAccount extends ISmartContractAccount`
 
 A function that takes in the provider's rpcClient and returns an AccountSigner

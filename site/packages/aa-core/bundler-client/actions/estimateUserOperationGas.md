@@ -6,10 +6,10 @@ head:
       content: estimateUserOperationGas
   - - meta
     - name: description
-      content: Overview of the estimateUserOperationGas action available on the PublicErc4337Client
+      content: Overview of the estimateUserOperationGas action available on the BundlerClient
   - - meta
     - property: og:description
-      content: Overview of the estimateUserOperationGas action available on the PublicErc4337Client
+      content: Overview of the estimateUserOperationGas action available on the BundlerClient
 ---
 
 # estimateUserOperationGas
@@ -31,7 +31,7 @@ const estimates = await client.estimateUserOperationGas(
 );
 ```
 
-<<< @/snippets/client.ts
+<<< @/snippets/bundlerClient.ts
 :::
 
 ## Returns

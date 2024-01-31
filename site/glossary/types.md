@@ -92,9 +92,9 @@ Type representing the various transport protocols supported by the package. This
 
 [See Type ↗️](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/core/src/client/types.ts#L19)
 
-## `PublicErc4337Client`
+## `BundlerClient`
 
-A client type that extends from the [`Viem` client](https://viem.sh/docs/clients/public.html). It integrates custom actions specific to [ERC-4337](https://accountkit.alchemy.com/glossary/terms.html#erc-4337). The `PublicErc4337Client` is used within the [Alchemy Provider](https://github.com/alchemyplatform/aa-sdk/blob/b0f8dd538728f8a7dd4447da8c88a50179d61f95/packages/alchemy/src/provider/base.ts#L26) as a JSON-RPC transport, supporting standard EVM RPC methods as well as facilitating communication and operations specific to ERC-4337, such as sending `UserOperations` (UOs), estimating gas, and fetching operation receipts and responses.
+A client type that extends from the [`Viem` client](https://viem.sh/docs/clients/public.html). It integrates custom actions specific to [ERC-4337](https://accountkit.alchemy.com/glossary/terms.html#erc-4337). The `BundlerClient` is used within the [Alchemy Provider](https://github.com/alchemyplatform/aa-sdk/blob/b0f8dd538728f8a7dd4447da8c88a50179d61f95/packages/alchemy/src/provider/base.ts#L26) as a JSON-RPC transport, supporting standard EVM RPC methods as well as facilitating communication and operations specific to ERC-4337, such as sending `UserOperations` (UOs), estimating gas, and fetching operation receipts and responses.
 
 [See Type ↗️](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/core/src/client/types.ts#L98)
 

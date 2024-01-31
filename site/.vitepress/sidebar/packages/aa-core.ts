@@ -105,6 +105,42 @@ export const aaCoreSidebar: DefaultTheme.SidebarItem = {
       ],
     },
     {
+      text: "Bundler Client",
+      base: "/packages/aa-core/bundler-client/index",
+      link: "/index",
+    },
+    {
+      text: "Bundler Actions",
+      collapsed: true,
+      base: "/packages/aa-core/bundler-client/index/actions",
+      items: [
+        {
+          text: "sendRawUserOperation",
+          link: "/sendRawUserOperation",
+        },
+        {
+          text: "estimateUserOperationGas",
+          link: "/estimateUserOperationGas",
+        },
+        {
+          text: "getUserOperationByHash",
+          link: "/getUserOperationByHash",
+        },
+        {
+          text: "getUserOperationReceipt",
+          link: "/getUserOperationReceipt",
+        },
+        {
+          text: "getSupportedEntryPoints",
+          link: "/getSupportedEntryPoints",
+        },
+        {
+          text: "bundlerActions",
+          link: "/bundlerActions",
+        },
+      ],
+    },
+    {
       text: "Accounts",
       base: "/packages/aa-core/accounts",
       collapsed: true,
@@ -225,56 +261,6 @@ export const aaCoreSidebar: DefaultTheme.SidebarItem = {
               link: "/verifyEIP6492Signature",
             },
           ],
-        },
-      ],
-    },
-    {
-      text: "Public Client",
-      base: "/packages/aa-core/client",
-      collapsed: true,
-      items: [
-        {
-          text: "Introduction",
-          link: "/",
-        },
-        {
-          text: "Actions",
-          collapsed: true,
-          base: "/packages/aa-core/client/actions",
-          items: [
-            {
-              text: "sendUserOperation",
-              link: "/sendUserOperation",
-            },
-            {
-              text: "estimateUserOperationGas",
-              link: "/estimateUserOperationGas",
-            },
-            {
-              text: "getUserOperationByHash",
-              link: "/getUserOperationByHash",
-            },
-            {
-              text: "getUserOperationReceipt",
-              link: "/getUserOperationReceipt",
-            },
-            {
-              text: "getSupportedEntryPoints",
-              link: "/getSupportedEntryPoints",
-            },
-          ],
-        },
-        {
-          text: "createPublicErc4337Client",
-          link: "/createPublicErc4337Client",
-        },
-        {
-          text: "createPublicErc4337FromClient",
-          link: "/createPublicErc4337FromClient",
-        },
-        {
-          text: "erc4337ClientActions",
-          link: "/erc4337ClientActions",
         },
       ],
     },

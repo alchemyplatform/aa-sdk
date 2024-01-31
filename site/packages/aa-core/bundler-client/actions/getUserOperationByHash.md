@@ -6,10 +6,10 @@ head:
       content: getUserOperationByHash
   - - meta
     - name: description
-      content: Overview of the getUserOperationByHash action available on the PublicErc4337Client
+      content: Overview of the getUserOperationByHash action available on the BundlerClient
   - - meta
     - property: og:description
-      content: Overview of the getUserOperationByHash action available on the PublicErc4337Client
+      content: Overview of the getUserOperationByHash action available on the BundlerClient
 ---
 
 # getUserOperationByHash
@@ -26,7 +26,7 @@ import { client } from "./client";
 const uo = await client.getUserOperationByHash("0xUserOperationHash");
 ```
 
-<<< @/snippets/client.ts
+<<< @/snippets/bundlerClient.ts
 :::
 
 ## Returns
