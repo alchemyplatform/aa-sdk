@@ -4,7 +4,7 @@ import {
   type LightAccount,
 } from "@alchemy/aa-accounts";
 import type { HttpTransport, SmartAccountSigner } from "@alchemy/aa-core";
-import type { Chain, CustomTransport, Transport } from "viem";
+import { custom, type Chain, type CustomTransport, type Transport } from "viem";
 import { AlchemyProviderConfigSchema } from "../schema.js";
 import { createAlchemySmartAccountClientFromRpcClient } from "./internal/smartAccountClientFromRpc.js";
 import { createAlchemyPublicRpcClient } from "./rpcClient.js";
@@ -15,7 +15,10 @@ import {
 
 export type AlchemyLightAccountClientConfig<
   TOwner extends SmartAccountSigner = SmartAccountSigner
-> = Omit<CreateLightAccountParams<HttpTransport, TOwner>, "client"> &
+> = Omit<
+  CreateLightAccountParams<HttpTransport, TOwner>,
+  "transport" | "chain"
+> &
   Omit<
     AlchemySmartAccountClientConfig<Transport, Chain, LightAccount<TOwner>>,
     "account"
@@ -41,7 +44,7 @@ export const createLightAccountAlchemyClient: <
   });
 
   const account = await createLightAccount({
-    client,
+    transport: custom(client),
     ...config,
   });
 

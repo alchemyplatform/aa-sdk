@@ -2,12 +2,12 @@ import type { Transport } from "viem";
 import { z } from "zod";
 
 import { BigNumberishRangeSchema, PercentageSchema } from "../utils/index.js";
-import type { PublicErc4337Client } from "./publicErc4337Client.js";
+import type { BundlerClient } from "./bundlerClient.js";
 
 export const createPublicErc4337ClientSchema = <
   TTransport extends Transport = Transport
 >() =>
-  z.custom<PublicErc4337Client<TTransport>>((provider) => {
+  z.custom<BundlerClient<TTransport>>((provider) => {
     return (
       provider != null &&
       typeof provider === "object" &&

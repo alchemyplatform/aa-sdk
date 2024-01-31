@@ -1,11 +1,11 @@
 import {
   LocalAccountSigner,
-  createPublicErc4337Client,
   polygonMumbai,
   type Address,
   type Hex,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
+import { http } from "viem";
 import { createNaniAccount } from "../account.js";
 import { getDefaultNaniAccountFactoryAddress } from "../utils.js";
 
@@ -101,11 +101,8 @@ describe("Nani Account Tests", () => {
       owner,
       chain,
       accountAddress: "0x903072d2112412406597eb5DCAA8CeDD71ea141c",
+      transport: http(`${chain.rpcUrls.alchemy.http[0]}/test`),
       factoryAddress: getDefaultNaniAccountFactoryAddress(chain),
-      rpcClient: createPublicErc4337Client({
-        chain,
-        rpcUrl: `${chain.rpcUrls.alchemy.http[0]}/test`,
-      }),
     });
   };
 });

@@ -1,11 +1,10 @@
 import {
   LocalAccountSigner,
-  createPublicErc4337FromClient,
   polygonMumbai,
   type BatchUserOperationCallData,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
-import { createPublicClient, custom, type Chain } from "viem";
+import { custom, type Chain } from "viem";
 import { createLightAccountClient } from "./createLightAccountClient.js";
 
 const chain = polygonMumbai;
@@ -89,17 +88,13 @@ const givenConnectedProvider = ({
       owner,
       accountAddress: "0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4",
     },
-    client: createPublicErc4337FromClient(
-      createPublicClient({
-        transport: custom({
-          request: async ({ method }) => {
-            if (method === "eth_getStorageAt") {
-              return "0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba"; // v1.1.0 address
-            }
-            return;
-          },
-        }),
-        chain,
-      })
-    ),
+    transport: custom({
+      request: async ({ method }) => {
+        if (method === "eth_getStorageAt") {
+          return "0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba"; // v1.1.0 address
+        }
+        return;
+      },
+    }),
+    chain,
   });

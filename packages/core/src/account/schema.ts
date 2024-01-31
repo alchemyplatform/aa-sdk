@@ -35,7 +35,12 @@ export const SimpleSmartAccountParamsSchema = <
   TTransport extends Transport = Transport,
   TOwner extends SmartAccountSigner = SmartAccountSigner
 >() =>
-  createBaseSmartAccountParamsSchema<TTransport, TOwner>().extend({
-    owner: z.custom<TOwner>(isSigner),
-    index: z.bigint().optional(),
-  });
+  createBaseSmartAccountParamsSchema<TTransport, TOwner>()
+    .omit({
+      rpcClient: true,
+    })
+    .extend({
+      transport: z.custom<TTransport>(),
+      owner: z.custom<TOwner>(isSigner),
+      index: z.bigint().optional(),
+    });

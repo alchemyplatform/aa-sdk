@@ -1,9 +1,9 @@
 import type { Chain, Client, Hex, Transport } from "viem";
-import type { Erc4337RpcSchema } from "../../client/decorators/publicErc4337Client";
+import type { BundlerRpcSchema } from "../../client/decorators/bundlerClient";
 import type { UserOperationReceipt } from "../../types";
 
 export const getUserOperationReceipt = async <
-  TClient extends Client<Transport, Chain | undefined, any, Erc4337RpcSchema>
+  TClient extends Client<Transport, Chain | undefined, any, BundlerRpcSchema>
 >(
   client: TClient,
   args: {

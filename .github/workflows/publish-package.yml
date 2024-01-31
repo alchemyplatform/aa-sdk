@@ -61,10 +61,7 @@ jobs:
       - name: Build
         env:
           API_KEY: ${{ secrets.API_KEY }}
-        run: yarn build
-
-      - name: Lint Write
-        run: yarn lint:write
+        run: yarn build:ci
 
       - name: Build with VitePress
         working-directory: site

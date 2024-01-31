@@ -1,12 +1,13 @@
 import {
   BaseSmartContractAccount,
+  createBundlerClient,
   toSmartContractAccount,
   type BaseSmartAccountParams,
   type BatchUserOperationCallData,
   type OwnedSmartContractAccount,
-  type PublicErc4337Client,
   type SignTypedDataParams,
   type SmartAccountSigner,
+  type ToSmartContractAccountParams,
   type UserOperationCallData,
 } from "@alchemy/aa-core";
 import {
@@ -16,6 +17,7 @@ import {
   hexToBytes,
   numberToHex,
   type Address,
+  type Chain,
   type FallbackTransport,
   type Hash,
   type Hex,
@@ -24,13 +26,15 @@ import {
 import { NaniAccountAbi } from "./abis/NaniAccountAbi.js";
 import { NaniAccountFactoryAbi } from "./abis/NaniAccountFactoryAbi.js";
 
-export interface NaniSmartAccountParams<
+export type NaniSmartAccountParams<
   TTransport extends Transport | FallbackTransport = Transport
-> extends BaseSmartAccountParams<TTransport> {
+> = Omit<BaseSmartAccountParams<TTransport>, "rpcClient"> & {
   owner: SmartAccountSigner;
   index?: bigint;
   salt?: Hex;
-}
+  transport: TTransport;
+  chain: Chain;
+};
 
 export type NaniAccount = OwnedSmartContractAccount<
   "NaniAccount",
@@ -48,7 +52,12 @@ class NaniAccount_<
   protected salt?: Hex;
 
   constructor(params: NaniSmartAccountParams<TTransport>) {
-    super(params);
+    // This is a hack for now, we should kill the SimpleSmart Account when we kill Base Account
+    const client = createBundlerClient({
+      transport: params.transport as TTransport,
+      chain: params.chain,
+    });
+    super({ ...params, rpcClient: client });
 
     this.index = params.index ?? 0n;
     this.owner = params.owner;
@@ -221,7 +230,8 @@ class NaniAccount_<
 }
 
 export const createNaniAccount = async <TTransport extends Transport>(
-  params: NaniSmartAccountParams<TTransport>
+  params: Omit<NaniSmartAccountParams<TTransport>, "rpcClient" | "chain"> &
+    Pick<ToSmartContractAccountParams, "chain" | "transport">
 ): Promise<NaniAccount> => {
   if (!params.owner) throw new Error("Owner must be provided.");
 
@@ -229,7 +239,8 @@ export const createNaniAccount = async <TTransport extends Transport>(
 
   const base = await toSmartContractAccount({
     source: "NaniAccount",
-    client: naniAccount.rpcProvider as PublicErc4337Client<TTransport>,
+    transport: params.transport,
+    chain: params.chain,
     accountAddress: params.accountAddress as Address | undefined,
     entrypointAddress: naniAccount.getEntryPointAddress(),
     encodeBatchExecute: naniAccount.encodeBatchExecute.bind(naniAccount),

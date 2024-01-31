@@ -1,7 +1,7 @@
 import {
   resolveProperties,
   type BatchUserOperationCallData,
-  type PublicErc4337Client,
+  type BundlerClient,
   type SmartContractAccount,
   type UserOperationCallData,
   type UserOperationOverrides,
@@ -105,8 +105,8 @@ export class AccountSigner<
     );
   }
 
-  getPublicErc4337Client(): PublicErc4337Client {
-    return this.provider.getPublicErc4337Client();
+  getPublicErc4337Client(): BundlerClient {
+    return this.provider.getBundlerClient();
   }
 
   connect(provider: EthersProviderAdapter): AccountSigner<TAccount> {

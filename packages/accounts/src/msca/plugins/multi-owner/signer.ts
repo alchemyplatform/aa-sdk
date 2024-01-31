@@ -1,6 +1,6 @@
 import type {
   Address,
-  PublicErc4337Client,
+  BundlerClient,
   SmartAccountSigner,
 } from "@alchemy/aa-core";
 import {
@@ -20,7 +20,7 @@ export const multiOwnerMessageSigner = <
   TTransport extends Transport,
   TSigner extends SmartAccountSigner
 >(
-  client: PublicErc4337Client<TTransport>,
+  client: BundlerClient<TTransport>,
   accountAddress: Address,
   owner: () => TSigner,
   pluginAddress: Address = MultiOwnerPlugin.meta.addresses[client.chain.id]

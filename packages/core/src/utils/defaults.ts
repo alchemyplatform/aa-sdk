@@ -14,7 +14,7 @@ import {
   polygon,
   polygonMumbai,
   sepolia,
-} from "../chain/index.js";
+} from "../chains/index.js";
 import type { UserOperationFeeOptions } from "../types";
 
 /**

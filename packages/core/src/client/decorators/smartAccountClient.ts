@@ -100,7 +100,7 @@ export type BaseSmartAccountClientActions<
       getAddress: (args: GetAccountParameter<TAccount>) => Address;
     });
 
-export const smartAccountClientDecorator: <
+export const smartAccountClientActions: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =

@@ -1,16 +1,17 @@
 import {
+  createBundlerClient,
   getAccountAddress,
   getDefaultEntryPointAddress,
   toSmartContractAccount,
   type Address,
   type OwnedSmartContractAccount,
-  type PublicErc4337Client,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import {
   concatHex,
   encodeFunctionData,
   hexToBigInt,
+  type Chain,
   type Hex,
   type Transport,
 } from "viem";
@@ -31,7 +32,8 @@ export type CreateMultiOwnerModularAccountParams<
   TTransport extends Transport = Transport,
   TOwner extends SmartAccountSigner = SmartAccountSigner
 > = {
-  client: PublicErc4337Client<TTransport>;
+  transport: TTransport;
+  chain: Chain;
   owner: TOwner;
   index?: bigint;
   factoryAddress?: Address;
@@ -50,17 +52,22 @@ export async function createMultiOwnerModularAccount<
 ): Promise<MultiOwnerModularAccount<TOwner>>;
 
 export async function createMultiOwnerModularAccount({
-  client,
+  transport,
+  chain,
   owner: owner_,
   accountAddress,
   initCode,
-  entrypointAddress = getDefaultEntryPointAddress(client.chain),
+  entrypointAddress = getDefaultEntryPointAddress(chain),
   excludeDefaultTokenReceiverPlugin = false,
-  factoryAddress = getDefaultMultiOwnerMSCAFactoryAddress(client.chain),
+  factoryAddress = getDefaultMultiOwnerMSCAFactoryAddress(chain),
   owners = [],
   index = 0n,
 }: CreateMultiOwnerModularAccountParams): Promise<MultiOwnerModularAccount> {
   let owner = owner_;
+  const client = createBundlerClient({
+    transport,
+    chain,
+  });
   const getAccountInitCode = async () => {
     if (initCode) {
       return initCode;
@@ -97,7 +104,8 @@ export async function createMultiOwnerModularAccount({
   });
 
   const baseAccount = await toSmartContractAccount({
-    client,
+    transport,
+    chain,
     entrypointAddress,
     accountAddress,
     source: `ModularAccount${
