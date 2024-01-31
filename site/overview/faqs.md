@@ -48,7 +48,7 @@ It is unlikely we will frequently update the Light Account contract itself, howe
 ### Can I have multiple accounts for the same owner address? / How do I set the value of the salt/index for Light Account?
 
 ::: details Answer
-Yes! The optional index value (salt) on Light Account enables the ability to have multiple accounts for the same owner address. This value defaults to 0. You can set it in the [constructor](/packages/aa-accounts/light-account/constructor.html#params-simplesmartaccountparams).
+Yes! The optional index value (salt) on Light Account enables the ability to have multiple accounts for the same owner address. This value defaults to 0. You can set it when you create [light account](/packages/aa-accounts/light-account/).
 :::
 
 ## Submitting `UserOperation`s

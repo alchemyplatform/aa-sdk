@@ -21,10 +21,10 @@ head:
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
 // get owner
-const owner = await provider.account.getOwnerAddress();
+const owner = await smartAccountClient.account.getOwnerAddress();
 ```
 
 <<< @/snippets/smartAccountClient.ts
