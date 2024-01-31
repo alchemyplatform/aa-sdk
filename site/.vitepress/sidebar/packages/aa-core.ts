@@ -10,18 +10,15 @@ export const aaCoreSidebar: DefaultTheme.SidebarItem = {
       link: "/",
     },
     {
-      text: "Provider",
+      text: "Smart Account Client",
+      base: "/packages/aa-core/smart-account-client",
+      link: "/index",
+    },
+    {
+      text: "Smart Account Actions",
       collapsed: true,
-      base: "/packages/aa-core/provider",
+      base: "/packages/aa-core/smart-account-client/actions",
       items: [
-        {
-          text: "Introduction",
-          link: "/introduction",
-        },
-        {
-          text: "constructor",
-          link: "/constructor",
-        },
         {
           text: "sendUserOperation",
           link: "/sendUserOperation",
@@ -87,48 +84,8 @@ export const aaCoreSidebar: DefaultTheme.SidebarItem = {
           link: "/getAddress",
         },
         {
-          text: "getEntryPointAddress",
-          link: "/getEntryPointAddress",
-        },
-        {
-          text: "isConnected",
-          link: "/isConnected",
-        },
-        {
-          text: "withPaymasterMiddleware",
-          link: "/withPaymasterMiddleware",
-        },
-        {
-          text: "withGasEstimator",
-          link: "/withGasEstimator",
-        },
-        {
-          text: "withFeeDataGetter",
-          link: "/withFeeDataGetter",
-        },
-        {
-          text: "withCustomMiddleware",
-          link: "/withCustomMiddleware",
-        },
-        {
-          text: "withUOSimulationMiddleware",
-          link: "/withUOSimulationMiddleware",
-        },
-        {
-          text: "connect",
-          link: "/connect",
-        },
-        {
-          text: "disconnect",
-          link: "/disconnect",
-        },
-        {
-          text: "extend",
-          link: "/extend",
-        },
-        {
           text: "Types",
-          base: "/packages/aa-core/provider/types",
+          base: "/packages/aa-core/smart-account-client/types",
           collapsed: true,
           items: [
             {

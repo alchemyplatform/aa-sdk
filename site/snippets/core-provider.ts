@@ -1,27 +1,24 @@
-import {
-  LightSmartContractAccount,
-  getDefaultLightAccountFactoryAddress,
-} from "@alchemy/aa-accounts";
+import { createLightAccount } from "@alchemy/aa-accounts";
 import {
   LocalAccountSigner,
-  SmartAccountProvider,
   SmartAccountSigner,
+  createSmartAccountClient,
   polygonMumbai,
 } from "@alchemy/aa-core";
+import { http } from "viem";
 
 const chain = polygonMumbai;
-const owner: SmartAccountSigner =
-  LocalAccountSigner.mnemonicToAccountSigner(YOUR_OWNER_MNEMONIC);
-
-export const provider = new SmartAccountProvider({
-  rpcProvider: "https://polygon-mumbai.g.alchemy.com/v2/demo",
-  chain,
-}).connect(
-  (rpcClient) =>
-    new LightSmartContractAccount({
-      chain,
-      factoryAddress: getDefaultLightAccountFactoryAddress(chain),
-      rpcClient,
-      owner,
-    })
+const owner: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
+  "YOUR_OWNER_MNEMONIC"
 );
+const rpcTransport = http("https://polygon-mumbai.g.alchemy.com/v2/demo");
+
+export const provider = createSmartAccountClient({
+  transport: rpcTransport,
+  chain,
+  account: await createLightAccount({
+    transport: rpcTransport,
+    chain,
+    owner,
+  }),
+});

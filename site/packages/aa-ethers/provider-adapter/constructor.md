@@ -76,4 +76,4 @@ Either:
 
 Or:
 
-- `accountProvider: SmartAccountProvider` -- See [SmartAccountProvider](/packages/aa-core/provider/constructor.md).
+- `accountProvider: SmartAccountProvider` -- See [SmartAccountProvider](/packages/aa-core/smart-account-client/createSmartAccountClient.md).

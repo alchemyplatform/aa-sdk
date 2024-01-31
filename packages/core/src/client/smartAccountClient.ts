@@ -146,12 +146,12 @@ export function createSmartAccountClientFromExisting<
 >(
   config: Omit<
     SmartAccountClientConfig<Transport, TChain, TAccount>,
-    "transport"
+    "transport" | "chain"
   > & { client: TClient }
 ): SmartAccountClient<CustomTransport, TChain, TAccount, TActions, TRpcSchema>;
 
 export function createSmartAccountClientFromExisting(
-  config: Omit<SmartAccountClientConfig, "transport"> & {
+  config: Omit<SmartAccountClientConfig, "transport" | "chain"> & {
     client: BundlerClient;
   }
 ): SmartAccountClient {

@@ -39,7 +39,7 @@ When you batch transactions, the transaction actions (`target`s and `calldata`s)
 The batched UO gets executed by the account calling the `executeBatch` method on the [`SimpleAccount`](https://github.com/eth-infinitism/account-abstraction/blob/ver0.6.0/contracts/samples/SimpleAccount.sol) or [`LightAccount`](https://github.com/alchemyplatform/light-account/blob/v1.0.2/src/LightAccount.sol) smart contracts. `executeBatch` processes the input array of transactions data linearly, guaranteeing the execution order of those transactions to be **sequential**.
 :::
 
-## Batching using [`sendUserOperation`](/packages/aa-core/provider/sendUserOperation.md)
+## Batching using [`sendUserOperation`](/packages/aa-core/smart-account-client/sendUserOperation.md)
 
 The `SmartAccountProvider` supports passing either a single UO or an array of UOs to `sendUserOperation`. If you pass an array, the provider will batch the transactions into a single User Operation and submit it to the bundler. Let's see an example:
 
@@ -65,7 +65,7 @@ const { hash } = await provider.sendUserOperation([
 
 :::
 
-## Batching using [`sendTransactions`](/packages/aa-core/provider/sendTransactions.md)
+## Batching using [`sendTransactions`](/packages/aa-core/smart-account-client/sendTransactions.md)
 
 The `SmartAccountProvider` supports sending UOs and waiting for them to be mined in a transaction via the `sendTransaction` and `sendTransactions` methods. The latter allows for batching in the same way `sendUserOperation`:
 

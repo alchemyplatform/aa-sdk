@@ -14,11 +14,11 @@ head:
 
 # AlchemyProvider
 
-`AlchemyProvider` is an extension of the [`SmartAccountProvider`](/packages/aa-core/provider/introduction) implementation. It's a simpler interface you can use to leverage the Alchemy stack - JSON-RPC requests via API Key or JSON Web Token (JWT), Rundler (an [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) Bundler), and Gas Manager (an [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) Paymaster).
+`AlchemyProvider` is an extension of the [`SmartAccountProvider`](/packages/aa-core/smart-account-client/introduction) implementation. It's a simpler interface you can use to leverage the Alchemy stack - JSON-RPC requests via API Key or JSON Web Token (JWT), Rundler (an [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) Bundler), and Gas Manager (an [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) Paymaster).
 
 Notable differences between `AlchemyProvider` and `SmartAccountProvider` are implementations for:
 
-1.  [`gasEstimator`](/packages/aa-core/provider/withGasEstimator.md) -- overrides the base `SmartAccountProvider` gas estimator.
+1.  [`gasEstimator`](/packages/aa-core/smart-account-client/withGasEstimator.md) -- overrides the base `SmartAccountProvider` gas estimator.
 2.  [`withAlchemyGasManager`](/packages/aa-alchemy/provider/withAlchemyGasManager.md) -- adds the Alchemy Gas Manager middleware to the provider.
 
 ## Usage
