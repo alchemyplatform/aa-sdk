@@ -3,25 +3,25 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: AlchemyProvider • simulateUserOperationAssetChanges
+      content: AlchemyProvider • simulateUserOperation
   - - meta
     - name: description
-      content: Overview of the simulateUserOperationAssetChanges method on Alchemy Provider in aa-alchemy
+      content: Overview of the simulateUserOperation method on Alchemy Smart Account Client in aa-alchemy
   - - meta
     - property: og:description
-      content: Overview of the simulateUserOperationAssetChanges method on Alchemy Provider in aa-alchemy
+      content: Overview of the simulateUserOperation method on Alchemy Smart Account Client in aa-alchemy
 ---
 
-# simulateUserOperationAssetChanges
+# simulateUserOperation
 
-`simulateUserOperationAssetChanges` is a method you can use to easily leverage the [`alchemy_simulateUserOperationAssetChanges`](https://docs.alchemy.com/reference/alchemy-simulateuseroperationassetchanges/?a=ak-docs) API to simulate asset changes resulting from user operation.
+`simulateUserOperation` is a method you can use to easily leverage the [`alchemy_simulateUserOperationAssetChanges`](https://docs.alchemy.com/reference/alchemy-simulateuseroperationassetchanges/?a=ak-docs) API to simulate asset changes resulting from user operation.
 
 ## Usage
 
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./alchemy-smartAccountClient";
 // [!code focus:99]
 
 const uoStruct: UserOperationCallData = {
@@ -30,16 +30,18 @@ const uoStruct: UserOperationCallData = {
   value: 1n,
 };
 
-const uoSimResult = await provider.simulateUserOperationAssetChanges(uoStruct);
+const uoSimResult = await smartAccountClient.simulateUserOperationAssetChanges({
+  uo: uoStruct,
+});
 
 if (uoSimResult.error) {
   console.error(uoSimResult.error.message);
 }
 
-const uo = await provider.sendUserOperation(uoStruct);
+const uo = await smartAccountClient.sendUserOperation({ uo: uoStruct });
 ```
 
-<<< @/snippets/smartAccountClient.ts
+<<< @/snippets/light-account-alchemy-client.ts
 :::
 
 ## Returns

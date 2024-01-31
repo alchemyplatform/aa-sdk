@@ -3,31 +3,31 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: AlchemyProvider • createLightAccountAlchemyProvider
+      content: createLightAccountAlchemyClient
   - - meta
     - name: description
-      content: Overview of the createLightAccountAlchemyProvider factory in aa-alchemy
+      content: Overview of the createLightAccountAlchemyClient factory in aa-alchemy
   - - meta
     - property: og:description
-      content: Overview of the createLightAccountAlchemyProvider factory in aa-alchemy
+      content: Overview of the createLightAccountAlchemyClient factory in aa-alchemy
 ---
 
-# createLightAccountAlchemyProvider
+# createLightAccountAlchemyClient
 
-`createLightAccountAlchemyProvider` is a factory that improves the developer experience of connecting a Light Account to an `AlchemyProvider` via an optional dependency on the [`@alchemy/aa-accounts`](https://github.com/alchemyplatform/aa-sdk/tree/development/packages/accounts) package. You can use this to directly instantiate an `AlchemyProvider` already connected to a Light Account in one line of code.
+`createLightAccountAlchemyClient` is a factory that improves the developer experience of connecting a Light Account to an `AlchemyProvider` via an optional dependency on the [`@alchemy/aa-accounts`](https://github.com/alchemyplatform/aa-sdk/tree/development/packages/accounts) package. You can use this to directly instantiate an `AlchemySmartAccountClient` already connected to a Light Account in one line of code.
 
 ## Usage
 
 ::: code-group
 
-<<< @/snippets/light-account-alchemy-provider.ts
+<<< @/snippets/light-account-alchemy-client.ts
 :::
 
 ## Returns
 
-### `Promise<AlchemyProvider & { account: LightSmartContractAccount }>`
+### `Promise<AlchemySmartAccountClient>`
 
-A Promise containing a new `AlchemyProvider` connected to a Light Account.
+A Promise containing a new `AlchemySmartAccountClient` connected to a Light Account.
 
 ## Parameters
 

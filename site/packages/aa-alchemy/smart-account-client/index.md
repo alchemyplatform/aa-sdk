@@ -3,18 +3,18 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: AlchemyProvider • constructor
+      content: Alchemy Smart Account Client
   - - meta
     - name: description
-      content: Overview of the constructor method on AlchemyProvider in aa-alchemy
+      content: Overview of the Alchemy Smart Account Client in aa-alchemy
   - - meta
     - property: og:description
-      content: Overview of the constructor method on AlchemyProvider in aa-alchemy
+      content: Overview of the Alchemy Smart Account Client in aa-alchemy
 ---
 
-# constructor
+# Alchemy Smart Account Client
 
-To initialize an `AlchemyProvider`, you must provide a set of parameters detailed below.
+To create an `AlchemySmartAccountClient`, you must provide a set of parameters detailed below.
 
 ## Usage
 
@@ -26,20 +26,27 @@ import { getDefaultEntryPointAddress } from "@alchemy/aa-core";
 import { sepolia } from "@alchemy/aa-core";
 
 // instantiates using every possible parameter, as a reference
-export const provider = new AlchemyProvider({
+export const provider = createAlchemySmartAccountClient({
+  /// REQUIRED ///
   apiKey: "ALCHEMY_API_KEY", // replace with your Alchemy API Key
   chain: sepolia,
-  entryPointAddress: getDefaultEntryPointAddress(sepolia),
+  /// OPTIONAL ///
   opts: {
     txMaxRetries: 10,
     txRetryIntervalMs: 2_000,
     txRetryMulitplier: 1.5,
     minPriorityFeePerBid: 100_000_000n,
+    feeOpts: {
+      baseFeeBufferPercent: 50n,
+      maxPriorityFeeBufferPercent: 5n,
+      preVerificationGasBufferPercent: 5n,
+    },
   },
-  feeOpts: {
-    baseFeeBufferPercent: 50n,
-    maxPriorityFeeBufferPercent: 5n,
-    preVerificationGasBufferPercent: 5n,
+  // will simulate user operations before sending them to ensure they don't revert
+  useSimulation: true,
+  // if you want to use alchemy's gas manager
+  gasManagerConfig: {
+    policyId: "policy-id",
   },
 });
 ```
@@ -48,9 +55,9 @@ export const provider = new AlchemyProvider({
 
 ## Returns
 
-### `AlchemyProvider`
+### `AlchemySmartAccountClient`
 
-A new instance of an `AlchemyProvider`.
+A new instance of an `AlchemySmartAccountClient`.
 
 ## Parameters
 
@@ -64,7 +71,11 @@ A new instance of an `AlchemyProvider`.
 
 - `chain: Chain` -- the chain on which to create the provider.
 
-- `entryPointAddress: Address | undefined` -- [optional] the entry point contract address. If not provided, the entry point contract address for the provider is the connected account's entry point contract, or if not connected, falls back to the default entry point contract for the chain. See [getDefaultEntryPointAddress](/packages/aa-core/utils/getDefaultEntryPointAddress.html#getdefaultentrypointaddress).
+- `useSimulation?: boolean` -- whether or not to simulate user operations before sending them to ensure they don't revert.
+
+- `gasManagerConfig?: GasManagerConfig` -- if you want to use alchemy's gas manager.
+
+  - `policyId: string` -- the policy id of the gas manager you want to use.
 
 - `opts: SmartAccountProviderOpts | undefined` -- [optional] overrides on provider config variables having to do with fetching transaction receipts and fee computation.
 

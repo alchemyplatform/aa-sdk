@@ -29,11 +29,7 @@ export type AlchemySmartAccountClientConfig<
 } & AlchemyProviderConfig &
   Pick<
     SmartAccountClientConfig<transport, chain, account>,
-    | "customMiddleware"
-    | "dummyPaymasterAndData"
-    | "paymasterAndData"
-    | "feeEstimator"
-    | "gasEstimator"
+    "customMiddleware" | "feeEstimator" | "gasEstimator"
   >;
 
 export type AlchemySmartAccountClient_Base<
@@ -74,11 +70,9 @@ export function createAlchemySmartAccountClient<
   account,
   gasManagerConfig,
   useSimulation,
-  dummyPaymasterAndData,
   feeEstimator,
   customMiddleware,
   gasEstimator,
-  paymasterAndData,
   ...config_
 }: AlchemySmartAccountClientConfig<
   TTransport,
@@ -90,11 +84,9 @@ export function createAlchemySmartAccountClient({
   account,
   gasManagerConfig,
   useSimulation,
-  dummyPaymasterAndData,
   feeEstimator,
   customMiddleware,
   gasEstimator,
-  paymasterAndData,
   ...config_
 }: AlchemySmartAccountClientConfig): AlchemySmartAccountClient {
   const config = AlchemyProviderConfigSchema.parse(config_);
@@ -115,10 +107,9 @@ export function createAlchemySmartAccountClient({
       ...opts,
       feeOptions,
     },
-    dummyPaymasterAndData,
     feeEstimator,
     customMiddleware,
     gasEstimator,
-    paymasterAndData,
+    useSimulation,
   });
 }

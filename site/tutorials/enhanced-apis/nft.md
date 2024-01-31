@@ -22,13 +22,13 @@ head:
 
 We provide several [Enhanced APIs](https://www.alchemy.com/enhanced-apis/?a=ak-docs), which are especially useful for querying information about the smart accounts you create using Account Kit, such as the account's owned NFTs using the [NFT API](https://www.alchemy.com/nft-api/?a=ak-docs).
 
-For the purposes of our example, we'll use the NFT API to query our smart account's data by extending the Alchemy Provider [with Enhanced APIs](/packages/aa-alchemy/provider/withAlchemyEnhancedApis.md).
+For the purposes of our example, we'll use the NFT API to query our smart account's data by extending the Alchemy Smart Account Client [with Enhanced APIs](/packages/aa-alchemy/smart-account-client/actions/alchemyEnhancedApiActions.md).
 
 ## 1. Install the [`alchemy-sdk`](https://github.com/alchemyplatform/alchemy-sdk-js)
 
 We have developed a Typescript SDK to make development with the Enhanced APIs simple. The SDK includes ways to leverage Alchemy's Simulation API, Token API, Transact API, NFT API, Webhooks and Websockets, and more across our supported chains. Take a look at the code [here](https://github.com/alchemyplatform/alchemy-sdk-js).
 
-We will use the Alchemy SDK Client to extend our Alchemy Provider using the provider's [`withAlchemyEnhancedApis`](/packages/aa-alchemy/provider/withAlchemyEnhancedApis.md) method. That way, our provider will have direct access to the Enhanced APIs.
+We will use the Alchemy SDK Client to extend our Alchemy Smart Account Client using the provider's [`alchemyEnhancedApiActions`](/packages/aa-alchemy/smart-account-client/actions/alchemyEnhancedApiActions.md) method. That way, our provider will have direct access to the Enhanced APIs.
 
 To use the Alchemy SDK in our project directory, we'll need to install the required package:
 
@@ -44,16 +44,16 @@ yarn add alchemy-sdk
 
 :::
 
-## 2. Extend the Alchemy Provider with Enhanced APIs
+## 2. Extend the Alchemy Smart Account Client with Enhanced APIs
 
-Then, all we need to do is create an `alchemy` client from the Alchemy SDK, create an `AlchemyProvider` from Account Kit, and then extend the provider with functionality from the SDK client using `withAlchemyEnhancedApis`. We can get the smart account's address from the `AlchemyProvider` in order to fetch the smart account's NFT in just 1 line of code!
+Then, all we need to do is create an `alchemy` client from the Alchemy SDK, create an `AlchemySmartAccountClient` from Account Kit, and then extend the provider with functionality from the SDK client using `alchemyEnhancedApiActions`. We can get the smart account's address from the `AlchemySmartAccountClient` in order to fetch the smart account's NFT in just 1 line of code!
 
 <<< @/snippets/enhanced-apis-example/nft.ts
 
 :::tip Note
-Note that we must configure the Alchemy SDK client to have the same API Key and blockchain network as Alchemy Provider it is extending via `withAlchemyEnhancedApis`. This method explicitly checks this requirement and will throw an error at runtime if not satisfied.
+Note that we must configure the Alchemy SDK client to have the same API Key and blockchain network as Alchemy Smart Account Client it is extending via `alchemyEnhancedApiActions`. This method explicitly checks this requirement and will throw an error at runtime if not satisfied.
 
-Additionally, since the Alchemy SDK client does not yet support JWT authentication, an `AlchemyProvider` initialized with JWTs cannot use this method. We must be initialize the provider with an API key or RPC URL.
+Additionally, since the Alchemy SDK client does not yet support JWT authentication, an `AlchemySmartAccountClient` initialized with JWTs cannot use this method. We must be initialize the provider with an API key or RPC URL.
 :::
 
 That's it! There are so many more Enhanced APIs the the Alchemy SDK exposes, and can be useful for development with Account Abstraction. Try it out [here](https://github.com/alchemyplatform/alchemy-sdk-js), and check out [How to fetch a Smart Account's ERC-20 Tokens](/tutorials/enhanced-apis/token) for another example.

@@ -43,7 +43,7 @@ const privySigner: SmartAccountSigner = new WalletClientSigner(
   "privy" // signerType
 );
 
-// Create an Alchemy Provider with the smart account signer
+// Create an Alchemy Smart Account Client with the smart account signer
 export const provider = new AlchemyProvider({
   apiKey: "ALCHEMY_API_KEY",
   chain: sepolia,

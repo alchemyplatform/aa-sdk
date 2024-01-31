@@ -20,7 +20,7 @@ head:
 
 ::: code-group
 
-<<< @/snippets/light-account-provider.ts
+<<< @/snippets/light-account-client.ts
 :::
 
 ## Returns
