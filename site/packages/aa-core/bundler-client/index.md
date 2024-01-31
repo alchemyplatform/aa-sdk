@@ -3,22 +3,59 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Public Client
+      content: BundlerClient
   - - meta
     - name: description
-      content: Overview of the Public Client exported by aa-core
+      content: Introduction to BundlerClient exported by aa-core
   - - meta
     - property: og:description
-      content: Overview of the Public Client exported by aa-core
-next:
-  text: Actions
+      content: Introduction to BundlerClient exported by aa-core
 ---
 
-# Public ERC-4337 Client
+# Bundler Client
 
-Viem exports a `PublicClient` and utilities for creating the `PublicClient`. We extend that functionality here to provide a `PublicClient` that is also typed to work with the RPC endpoints introduced in [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337).
+The `BundlerClient` is an extension of viem's [`PublicClient`](https://viem.sh/docs/clients/public) that adds methods for interacting with Bundler RPC methods.
 
-The `PublicErc4337Client` also has a number of methods that wrap the RPC Methods below to make it easier to interact with the RPC provider.
+## Import
+
+```ts
+import { createSmartAccountClient } from "@alchemy/aa-core";
+```
+
+## Usage
+
+Initialize a `BundlerClient` in the same way you would initalize a [`PublicClient`](https://viem.sh/docs/clients/public#parameters)
+
+```ts
+import { createBundlerClient } from "@alchemy/aa-core";
+import { http } from "viem";
+import { sepolia } from "@alchemy/aa-core";
+
+export const smartAccountClient = createBundlerClient({
+  transport: http("ALCHEMY_RPC_URL"),
+  chain: sepolia,
+});
+```
+
+If you already have a [`PublicClient`](https://viem.sh/docs/clients/public) instance, you can use `createBundlerClientFromExisting` to create a `BundlerClient` from it.
+
+```ts
+import { createBundlerClientFromExisting } from "@alchemy/aa-core";
+import { http } from "viem";
+import { sepolia } from "@alchemy/aa-core";
+
+export const smartAccountClient = createBundlerClientFromExisting(publicClient);
+```
+
+## Returns
+
+### `BundlerClient`
+
+A new instance of a `BundlerClient`.
+
+## Parameters
+
+Same parameters outlined in [viem's docs](https://viem.sh/docs/clients/public#parameters)
 
 ## RPC Methods
 

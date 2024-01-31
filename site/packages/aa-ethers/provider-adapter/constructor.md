@@ -70,7 +70,7 @@ A new instance of an `EthersProviderAdapter`.
 
 Either:
 
-- `rpcProvider: string | PublicErc4337Client` -- a JSON-RPC URL, or a viem Client that supports ERC-4337 methods and Viem public actions. See [createPublicErc4337Client](/packages/aa-core/client/createPublicErc4337Client.md).
+- `rpcProvider: string | BundlerClient` -- a JSON-RPC URL, or a viem Client that supports ERC-4337 methods and Viem public actions. See [createBundlerClient](/packages/aa-core/bundler-client/index.md).
 
 - `chainId: number` -- the ID of thechain on which to create the provider.
 

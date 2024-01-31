@@ -3,18 +3,18 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: AccountSigner • getPublicErc4337Client
+      content: AccountSigner • getBundlerClient
   - - meta
     - name: description
-      content: Overview of the getPublicErc4337Client method on AccountSigner in aa-ethers
+      content: Overview of the getBundlerClient method on AccountSigner in aa-ethers
   - - meta
     - property: og:description
-      content: Overview of the getPublicErc4337Client method on AccountSigner in aa-ethers
+      content: Overview of the getBundlerClient method on AccountSigner in aa-ethers
 ---
 
-# getPublicErc4337Client
+# getBundlerClient
 
-`getPublicErc4337Client` is a method on `AccountSigner` that gets the underlying viem client which has [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) capability.
+`getBundlerClient` is a method on `AccountSigner` that gets the underlying viem client which has [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) capability.
 
 ## Usage
 
@@ -24,7 +24,7 @@ head:
 import { signer } from "./ethers-signer";
 
 // get the signer's underlying viem client with EIP-4337 capabilties
-const client = signer.getPublicErc4337Client();
+const client = signer.getBundlerClient();
 ```
 
 <<< @/snippets/ethers-signer.ts
@@ -32,6 +32,6 @@ const client = signer.getPublicErc4337Client();
 
 ## Returns
 
-### `PublicErc4337Client`
+### `BundlerClient`
 
-The provider's underlying `PublicErc4337Client`
+The provider's underlying `BundlerClient`
