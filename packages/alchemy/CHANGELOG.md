@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-alpha.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.0...v3.0.0-alpha.1) (2024-01-31)
+
+### Bug Fixes
+
+- decorators should now correctly respect account hoisting ([86d884e](https://github.com/alchemyplatform/aa-sdk/commit/86d884ed6209d89c688dc4281400f7304b210caa))
+
 # [3.0.0-alpha.0](https://github.com/alchemyplatform/aa-sdk/compare/v2.3.1...v3.0.0-alpha.0) (2024-01-30)
 
 ### Bug Fixes
