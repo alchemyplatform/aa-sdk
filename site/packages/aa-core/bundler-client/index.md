@@ -19,7 +19,9 @@ The `BundlerClient` is an extension of viem's [`PublicClient`](https://viem.sh/d
 ## Import
 
 ```ts
-import { createSmartAccountClient } from "@alchemy/aa-core";
+import { createBundlerClient } from "@alchemy/aa-core";
+// OR
+import { createBundlerClientFromExisting } from "@alchemy/aa-core";
 ```
 
 ## Usage

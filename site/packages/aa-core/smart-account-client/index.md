@@ -22,6 +22,8 @@ The `SmartAccountClient` is also an extension of the `viem` [`Client`](https://v
 
 ```ts
 import { createSmartAccountClient } from "@alchemy/aa-core";
+// OR
+import { createSmartAccountClientFromExisting } from "@alchemy/aa-core";
 ```
 
 ## Usage
