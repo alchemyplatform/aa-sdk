@@ -64,9 +64,9 @@ If the `UserOperation` (meta-transaction for 4337 accounts) is correctly priced 
 ::: details Answer
 This can happen when `UserOperation`s (UOs) become underpriced, frequently due to fee market movement between when gas and fees are estimations and when the UO is actually submitted.
 
-You may experience this when calling the [`waitForUserOperationTransaction`](/packages/aa-core/smart-account-client/waitForUserOperationTransaction.html#waitForUserOperationTransaction) method. It may throw an error if it does not find the UO in a mined Transaction within its retry limits.
+You may experience this when calling the [`waitForUserOperationTransaction`](/packages/aa-core/smart-account-client/actions/waitForUserOperationTransaction.html#waitForUserOperationTransaction) method. It may throw an error if it does not find the UO in a mined Transaction within its retry limits.
 
-You can mitigate this by defining a more flexible retry period when constructing a [`Provider`](/packages/aa-core/smart-account-client/createSmartAccountClient.html#constructor) (i.e. `txMaxRetries`, `txRetryIntervalMs`, `txRetryMultiplier` in `opts`). If your UO continues to be delayed beyond a limit you are willing to wait, you can resubmit it using [`dropAndReplaceUserOperation`](/packages/aa-core/smart-account-client/dropAndReplaceUserOperation.html#dropandreplaceuseroperation).
+You can mitigate this by defining a more flexible retry period when constructing a [`Client`](/packages/aa-core/smart-account-client/index.html#usage) (i.e. `txMaxRetries`, `txRetryIntervalMs`, `txRetryMultiplier` in `opts`). If your UO continues to be delayed beyond a limit you are willing to wait, you can resubmit it using [`dropAndReplaceUserOperation`](/packages/aa-core/smart-account-client/actions/dropAndReplaceUserOperation.html#dropandreplaceuseroperation).
 :::
 
 ### Are `UserOperation`s protected from MEV bots?
@@ -156,9 +156,9 @@ Currently our Bundler allows max 10M gas in aggregate between `preVerificationGa
 ### `waitForUserOperationTransaction` timeout
 
 ::: details Answer
-[`waitForUserOperationTransaction`](/packages/aa-core/smart-account-client/waitForUserOperationTransaction) may throw this error if it does not find the mined User Operation within its retry limits.
+[`waitForUserOperationTransaction`](/packages/aa-core/smart-account-client/actions/waitForUserOperationTransaction) may throw this error if it does not find the mined User Operation within its retry limits.
 
-You can mitigate this by defining a more flexible retry period when constructing a [`Client`](/packages/aa-core/smart-account-client/createSmartAccountClient.html#usage) (i.e. `txMaxRetries`, `txRetryIntervalMs`, `txRetryMultiplier` in `opts`).
+You can mitigate this by defining a more flexible retry period when constructing a [`Client`](/packages/aa-core/smart-account-client/index.html#usage) (i.e. `txMaxRetries`, `txRetryIntervalMs`, `txRetryMultiplier` in `opts`).
 
-If your `UserOperation` continues to be delayed beyond a limit you are willing to wait, you can resubmit the user operation using [`dropAndReplaceUserOperation`](/packages/aa-core/smart-account-client/dropAndReplaceUserOperation.html#dropandreplaceuseroperation).
+If your `UserOperation` continues to be delayed beyond a limit you are willing to wait, you can resubmit the user operation using [`dropAndReplaceUserOperation`](/packages/aa-core/smart-account-client/actions/dropAndReplaceUserOperation.html#usage).
 :::

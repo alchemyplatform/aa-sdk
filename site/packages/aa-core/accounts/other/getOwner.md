@@ -21,12 +21,12 @@ Returns the `SmartAccountSigner` that represents the current owner for the accou
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
 const ownerSigner = await provider.account.getOwner();
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 
 :::
 

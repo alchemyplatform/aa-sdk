@@ -49,7 +49,7 @@ const newOwner = "0x..."; // the address of the new owner
 const hash = LightSmartContractAccount.transferOwnership(provider, newOwner); // [!code focus:99]
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 
 :::
 
@@ -94,7 +94,7 @@ const { hash: userOperationHash } = provider.sendUserOperation({
 });
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 
 :::
 

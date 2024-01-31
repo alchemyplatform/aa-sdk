@@ -21,12 +21,12 @@ Returns a boolean flag indicating whether the account has been deployed or not.
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
 const isAccountDeployed = await provider.account.isAccountDeployed();
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 
 :::
 

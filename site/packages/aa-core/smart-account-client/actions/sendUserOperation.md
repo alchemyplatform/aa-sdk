@@ -29,30 +29,34 @@ Before executing, sendUserOperation will run the user operation through the midd
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
 // send single
-provider.sendUserOperation({
-  data: "0xCalldata",
-  target: "0xTarget",
-  value: 0n,
+smartAccountClient.sendUserOperation({
+  uo: {
+    data: "0xCalldata",
+    target: "0xTarget",
+    value: 0n,
+  },
 });
 
 // send batch
-provider.sendUserOperation([
-  {
-    data: "0xCalldata",
-    target: "0xTarget",
-  },
-  {
-    data: "0xCalldata2",
-    target: "0xTarget2",
-    value: 1000n, // in wei
-  },
-]);
+smartAccountClient.sendUserOperation({
+  uo: [
+    {
+      data: "0xCalldata",
+      target: "0xTarget",
+    },
+    {
+      data: "0xCalldata2",
+      target: "0xTarget2",
+      value: 1000n, // in wei
+    },
+  ],
+});
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 :::
 
 ## Returns
@@ -76,3 +80,7 @@ A Promise containing the hash of the user operation and the request that was sen
 ### `overrides?:` [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides.md)
 
 Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` or `paymasterAndData` on the user operation request
+
+### `account?: SmartContractAccount`
+
+If your client was not instantiated with an account, then you will have to pass the account in to this call.

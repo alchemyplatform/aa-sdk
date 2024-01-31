@@ -40,7 +40,7 @@ const alchemy = new Alchemy();
 const providerWithEnhancedApis = provider.withAlchemyEnhancedApis(alchemy);
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 :::
 
 ## Returns

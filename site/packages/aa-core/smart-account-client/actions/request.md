@@ -21,25 +21,25 @@ head:
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
-const result = await provider.request({
+const result = await smartAccountClient.request({
   method: "eth_sendTransaction",
   params: [tx],
 });
 
-const result = await provider.request({
+const result = await smartAccountClient.request({
   method: "eth_sign",
   params: [address, data],
 });
 
-const result = await provider.request({
+const result = await smartAccountClient.request({
   method: "eth_signTypedData_v4",
   params: [address, dataParams],
 });
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 
 :::
 

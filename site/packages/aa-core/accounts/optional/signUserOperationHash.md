@@ -25,14 +25,14 @@ If your account handles [ERC-1271 signatures](https://eips.ethereum.org/EIPS/eip
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
 const signature = await provider.account.signUserOperationHash(
   `<SOME_UO_HASH>`
 );
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 
 :::
 

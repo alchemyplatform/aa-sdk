@@ -21,10 +21,10 @@ This method supports signing typed data for deployed smart accounts, as well as 
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
 // sign typed data (works for undeployed and deployed accounts)
-const signedTypedDataWith6492 = provider.signTypedDataWith6492({
+const signedTypedDataWith6492 = smartAccountClient.signTypedDataWith6492({
   domain: {
     name: "Ether Mail",
     version: "1",
@@ -57,7 +57,7 @@ const signedTypedDataWith6492 = provider.signTypedDataWith6492({
 });
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 
 :::
 
@@ -77,3 +77,7 @@ The typed data to sign
 - `types: Object` -- the type definitions for the typed data
 - `primaryType: inferred String` -- the primary type to extract from types and use in value
 - `message: inferred from types & primaryType` -- the message, inferred from
+
+### `account?: SmartContractAccount`
+
+If your client was not instantiated with an account, then you will have to pass the account in to this call.

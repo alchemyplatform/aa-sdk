@@ -21,10 +21,10 @@ This method signs sign typed data using the connected account with [ERC-712](htt
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
 // sign typed data
-const signedTypedData = provider.signTypedData({
+const signedTypedData = smartAccountClient.signTypedData({
   domain: {
     name: "Ether Mail",
     version: "1",
@@ -57,7 +57,7 @@ const signedTypedData = provider.signTypedData({
 });
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 
 :::
 
@@ -75,3 +75,7 @@ A Promise containing the signature of the typed data
 - `types: Object` -- the type definitions for the typed data
 - `primaryType: inferred String` -- the primary type to extract from types and use in value
 - `message: inferred from types & primaryType` -- the message, inferred from
+
+### `account?: SmartContractAccount`
+
+If your client was not instantiated with an account, then you will have to pass the account in to this call.

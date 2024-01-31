@@ -21,7 +21,7 @@ If your contract supports signing and verifying typed data, you should implement
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
 // sign typed data
 const signedTypedData = provider.signTypedData({
@@ -57,7 +57,7 @@ const signedTypedData = provider.signTypedData({
 });
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 
 :::
 

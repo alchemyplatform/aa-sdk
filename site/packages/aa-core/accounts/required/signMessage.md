@@ -21,12 +21,12 @@ This method should return an [ERC-191](https://eips.ethereum.org/EIPS/eip-191) c
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
 const signedMessage = await provider.signMessage("msg");
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 
 :::
 

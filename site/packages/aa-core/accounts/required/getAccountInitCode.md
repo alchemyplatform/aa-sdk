@@ -48,14 +48,14 @@ async getAccountInitCode(): Promise<`0x${string}`> {
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
 const initCode = await provider.getAccountInitCode();
 const factoryAddress = `0x${initCode.substring(2, 42)}` as Address;
 const factoryCalldata = `0x${initCode.substring(42)}` as Hex;
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 
 :::
 

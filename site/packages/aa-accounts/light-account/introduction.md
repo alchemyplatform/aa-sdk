@@ -65,7 +65,7 @@ const result = await LightSmartContractAccount.transferOwnership(
 );
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 :::
 
 ## Developer Links
