@@ -24,7 +24,7 @@ prev:
 
 ## BaseSmartContractAccount
 
-The `BaseSmartContractAccount` is an abstract class that provides the base implementation the `ISmartContractAccount` interface to provide the ease of creating your own Smart Contract Account. Any class that extends and implements `BaseSmartContractAccount` may also expose additional methods that support its connecting [SmartAccountProvider](/packages/aa-core/provider/introduction).
+The `BaseSmartContractAccount` is an abstract class that provides the base implementation the `ISmartContractAccount` interface to provide the ease of creating your own Smart Contract Account. Any class that extends and implements `BaseSmartContractAccount` may also expose additional methods that support its connecting [SmartAccountProvider](/packages/aa-core/smart-account-client/introduction).
 
 `BaseSmartContractAccount` contains abstract methods that requires implementation from any class that extends the class.
 

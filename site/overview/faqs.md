@@ -64,9 +64,9 @@ If the `UserOperation` (meta-transaction for 4337 accounts) is correctly priced 
 ::: details Answer
 This can happen when `UserOperation`s (UOs) become underpriced, frequently due to fee market movement between when gas and fees are estimations and when the UO is actually submitted.
 
-You may experience this when calling the [`waitForUserOperationTransaction`](/packages/aa-core/provider/waitForUserOperationTransaction.html#waitForUserOperationTransaction) method. It may throw an error if it does not find the UO in a mined Transaction within its retry limits.
+You may experience this when calling the [`waitForUserOperationTransaction`](/packages/aa-core/smart-account-client/waitForUserOperationTransaction.html#waitForUserOperationTransaction) method. It may throw an error if it does not find the UO in a mined Transaction within its retry limits.
 
-You can mitigate this by defining a more flexible retry period when constructing a [`Provider`](/packages/aa-core/provider/constructor.html#constructor) (i.e. `txMaxRetries`, `txRetryIntervalMs`, `txRetryMultiplier` in `opts`). If your UO continues to be delayed beyond a limit you are willing to wait, you can resubmit it using [`dropAndReplaceUserOperation`](/packages/aa-core/provider/dropAndReplaceUserOperation.html#dropandreplaceuseroperation).
+You can mitigate this by defining a more flexible retry period when constructing a [`Provider`](/packages/aa-core/smart-account-client/createSmartAccountClient.html#constructor) (i.e. `txMaxRetries`, `txRetryIntervalMs`, `txRetryMultiplier` in `opts`). If your UO continues to be delayed beyond a limit you are willing to wait, you can resubmit it using [`dropAndReplaceUserOperation`](/packages/aa-core/smart-account-client/dropAndReplaceUserOperation.html#dropandreplaceuseroperation).
 :::
 
 ### Are `UserOperation`s protected from MEV bots?
@@ -86,7 +86,7 @@ Yes! Check out [this guide](/tutorials/sim-user-operation.html).
 ### How does gas estimation for 4337 smart contract accounts work?
 
 ::: details Answer
-Our bundler estimates gas and submits `UserOperation`s (UOs) under the hood of the aa-sdk. Our gas estimations are just that, estimations that optimize for UOs landing on chain, and you may need to adjust gas limits based on your needs using [overrides](/packages/aa-core/provider/types/userOperationOverrides.html).
+Our bundler estimates gas and submits `UserOperation`s (UOs) under the hood of the aa-sdk. Our gas estimations are just that, estimations that optimize for UOs landing on chain, and you may need to adjust gas limits based on your needs using [overrides](/packages/aa-core/smart-account-client/types/userOperationOverrides.html).
 
 Learn more about gas estimation and how it is implemented in our [Bundler](https://www.alchemy.com/blog/erc-4337-gas-estimation).
 
@@ -142,7 +142,7 @@ Precheck failed errors are often related to gas and/or fees. Our Bundler follows
 
 These errors are often related to market movement between the time when gas and fees are estimated and the time when UOs are submitted to the bundler. This fluctuation in the market is especially variant on testnet. To ensure your UO is included in a block, we currently reject sending any UOs that are underpriced compared to the network rate .
 
-To handle these errors, we recommend you use our [override fields](/packages/aa-core/provider/types/userOperationOverrides) to increase buffers on top of our estimates and implement retry mechanisms as needed.
+To handle these errors, we recommend you use our [override fields](/packages/aa-core/smart-account-client/types/userOperationOverrides) to increase buffers on top of our estimates and implement retry mechanisms as needed.
 
 Our gas and fee estimations are just that, estimations, but we are always working to improve these estimates!
 :::
@@ -156,9 +156,9 @@ Currently our Bundler allows max 10M gas in aggregate between `preVerificationGa
 ### `waitForUserOperationTransaction` timeout
 
 ::: details Answer
-[`waitForUserOperationTransaction`](/packages/aa-core/provider/waitForUserOperationTransaction) may throw this error if it does not find the mined User Operation within its retry limits.
+[`waitForUserOperationTransaction`](/packages/aa-core/smart-account-client/waitForUserOperationTransaction) may throw this error if it does not find the mined User Operation within its retry limits.
 
-You can mitigate this by defining a more flexible retry period when constructing a [`Provider`](/packages/aa-core/provider/constructor.html#constructor) (i.e. `txMaxRetries`, `txRetryIntervalMs`, `txRetryMultiplier` in `opts`).
+You can mitigate this by defining a more flexible retry period when constructing a [`Client`](/packages/aa-core/smart-account-client/createSmartAccountClient.html#usage) (i.e. `txMaxRetries`, `txRetryIntervalMs`, `txRetryMultiplier` in `opts`).
 
-If your `UserOperation` continues to be delayed beyond a limit you are willing to wait, you can resubmit the user operation using [`dropAndReplaceUserOperation`](/packages/aa-core/provider/dropAndReplaceUserOperation.html#dropandreplaceuseroperation).
+If your `UserOperation` continues to be delayed beyond a limit you are willing to wait, you can resubmit the user operation using [`dropAndReplaceUserOperation`](/packages/aa-core/smart-account-client/dropAndReplaceUserOperation.html#dropandreplaceuseroperation).
 :::

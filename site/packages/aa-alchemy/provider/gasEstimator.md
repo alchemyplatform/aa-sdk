@@ -45,4 +45,4 @@ the resulting user operation struct after gas estimation, run as part of a middl
 
 ### `struct: Deferrable<UserOperationStruct>` -- the struct containing UserOperation fields, where each field may be asychronously returned from the middleware used to generate its final value.
 
-Note: You typically will call this method as part of a middleware chain when building and sending UserOperations, so the parameters of `UserOperationStruct` should be generated for you, as long as you pass in the initial parameters needed for [sendUserOperation](/packages/aa-core/provider/sendUserOperation).
+Note: You typically will call this method as part of a middleware chain when building and sending UserOperations, so the parameters of `UserOperationStruct` should be generated for you, as long as you pass in the initial parameters needed for [sendUserOperation](/packages/aa-core/smart-account-client/sendUserOperation).

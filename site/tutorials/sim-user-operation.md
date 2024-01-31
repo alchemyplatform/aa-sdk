@@ -42,7 +42,7 @@ There are two ways that Account Kit supports UO simulation on an `AlchemyProvide
 
 To simulate User Operations, we must connect the `provider` with the middleware to simulate `UserOperations` before sending them. This can be done in a single line code, as show below!
 
-Then, whenever you call a method on the provider which generates the UO to send (e.g. [`sendUserOperation`](/packages/aa-core/provider/sendUserOperation), [`sendTransaction`](/packages/aa-core/provider/sendTransaction), [`sendTransactions`](/packages/aa-core/provider/sendTransactions), [`buildUserOperation`](/packages/aa-core/provider/buildUserOperation), or [`buildUserOperationFromTx`](/packages/aa-core/provider/buildUserOperationFromTx)), the provider will also simulate which assets change as a result of the UO, and if simulation fails, the provider will not send the UO unnecessarily!
+Then, whenever you call a method on the provider which generates the UO to send (e.g. [`sendUserOperation`](/packages/aa-core/smart-account-client/sendUserOperation), [`sendTransaction`](/packages/aa-core/smart-account-client/sendTransaction), [`sendTransactions`](/packages/aa-core/smart-account-client/sendTransactions), [`buildUserOperation`](/packages/aa-core/smart-account-client/buildUserOperation), or [`buildUserOperationFromTx`](/packages/aa-core/smart-account-client/buildUserOperationFromTx)), the provider will also simulate which assets change as a result of the UO, and if simulation fails, the provider will not send the UO unnecessarily!
 
 ::: code-group
 

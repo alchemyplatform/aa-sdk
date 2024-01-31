@@ -3,26 +3,28 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: sendUserOperation
+      content: buildUserOperation
   - - meta
     - name: description
-      content: Overview of the sendUserOperation method on ISmartAccountProvider
+      content: Overview of the buildUserOperation method on ISmartAccountProvider
   - - meta
     - property: og:description
-      content: Overview of the sendUserOperation method on ISmartAccountProvider
+      content: Overview of the buildUserOperation method on ISmartAccountProvider
 ---
 
-# sendUserOperation
+# buildUserOperation
 
-Sends a user operation or batch of user operations using the connected account.
+Builds an _unsigned_ `UserOperation` (UO) struct with the all of the middleware run on it through the middleware pipeline.
 
-Before executing, sendUserOperation will run the user operation through the middleware pipeline. The order of the middlewares is:
+The order of the middlewares is:
 
 1.  `dummyPaymasterDataMiddleware` -- populates a dummy paymaster data to use in estimation (default: "0x")
 2.  `feeDataGetter` -- sets maxfeePerGas and maxPriorityFeePerGas
 3.  `gasEstimator` -- calls eth_estimateUserOperationGas
 4.  `paymasterMiddleware` -- used to set paymasterAndData. (default: "0x")
 5.  `customMiddleware` -- allows you to override any of the results returned by previous middlewares
+
+Note that `to` field of transaction is required, and among other fields of transaction, only `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas` fields are considered and optional.
 
 ## Usage
 
@@ -31,15 +33,16 @@ Before executing, sendUserOperation will run the user operation through the midd
 ```ts [example.ts]
 import { provider } from "./provider";
 // [!code focus:99]
-// send single
-provider.sendUserOperation({
-  data: "0xCalldata",
-  target: "0xTarget",
-  value: 0n,
+// build single
+const uoStruct = await provider.buildUserOperation({
+  target: TO_ADDRESS,
+  data: ENCODED_DATA,
+  value: VALUE, // optional
 });
+const { hash: uoHash } = await provider.sendUserOperation(uoStruct);
 
-// send batch
-provider.sendUserOperation([
+// build batch
+const batchedUoStruct = await provider.buildUserOperation([
   {
     data: "0xCalldata",
     target: "0xTarget",
@@ -50,6 +53,9 @@ provider.sendUserOperation([
     value: 1000n, // in wei
   },
 ]);
+const { hash: batchedUoHash } = await provider.sendUserOperation(
+  batchedUoStruct
+);
 ```
 
 <<< @/snippets/provider.ts
@@ -57,22 +63,18 @@ provider.sendUserOperation([
 
 ## Returns
 
-### `Promise<{ hash: Hash, request: UserOperationRequest }>`
+### `Promise<UserOperationStruct>`
 
-A Promise containing the hash of the user operation and the request that was sent.
-
-**Note**: The hash is not the User Operation Receipt. The user operation still needs to be bundled and included in a block. The user operation result is more of a proof of submission than a receipt.
+A Promise containing the _unsigned_ UO struct resulting from the middleware pipeline
 
 ## Parameters
 
-### `UserOperationCallData | UserOperationCallData[] | Hex`
-
-`UserOperationCallData` is an object with the following properties:
+### `UserOperationCallData | UserOperationCallData[]`
 
 - `target: Address` - the target of the call (equivalent to `to` in a transaction)
 - `data: Hex` - can be either `0x` or a call data string
 - `value?: bigint` - optionally, set the value in wei you want to send to the target
 
-### `overrides?:` [`UserOperationOverrides`](/packages/aa-core/provider/types/userOperationOverrides.md)
+### `overrides?:` [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides.md)
 
 Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` or `paymasterAndData` on the user operation request

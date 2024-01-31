@@ -74,19 +74,11 @@ A new instance of an `AlchemyProvider`.
 
   - `txRetryMulitplier: string | undefined` -- [optional] the mulitplier on interval length to wait between retries while waiting for transaction receipts (default: 1.5).
 
-  - `feeOptions:` [`UserOperationFeeOptions`](/packages/aa-core/provider/types/userOperationFeeOptions.md) `| undefined` --[optional] user operation fee options to be used for gas estimation, set at the global level on the provider.
-    If not set, default fee options for the chain are used. Available fields in `feeOptions` include `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` where each field is of type [`UserOperationFeeOptionsField`](/packages/aa-core/provider/types/userOperationFeeOptionsField.md).
+  - `feeOptions:` [`UserOperationFeeOptions`](/packages/aa-core/smart-account-client/types/userOperationFeeOptions.md) `| undefined` --[optional] user operation fee options to be used for gas estimation, set at the global level on the provider.
+    If not set, default fee options for the chain are used. Available fields in `feeOptions` include `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` where each field is of type [`UserOperationFeeOptionsField`](/packages/aa-core/smart-account-client/types/userOperationFeeOptionsField.md).
 
     - `maxFeePerGas`: `UserOperationFeeOptionsField`
     - `maxPriorityFeePerGas`: `UserOperationFeeOptionsField`
     - `callGasLimit`: `UserOperationFeeOptionsField`
     - `verificationGasLimit`: `UserOperationFeeOptionsField`
     - `preVerificationGas`: `UserOperationFeeOptionsField`
-
-:::tip Note
-The fee options set upon the provider initialization are available from each middleware of the `SmartAccountProvider`. For example, the default middlewares such as [`gasEstimator`](/packages/aa-core/provider/withGasEstimator.md) or [`feeDataGetter`](/packages/aa-core/provider/withFeeDataGetter.md) apply the fee options to the estimated values if the fee options are set.
-:::
-
-:::tip Note
-If you are using your own middleware, for example a custom `feeDataGetter` using [`withFeeDataGetter`](/packages/aa-core/provider/withFeeDataGetter.md) method on the provider, then the default `feeDataGetter` middleware is overriden. As you are opting out of using the default middleware, you are also responsible for handling the fee options appropriately for the fee options set upon provider initialization.
-:::

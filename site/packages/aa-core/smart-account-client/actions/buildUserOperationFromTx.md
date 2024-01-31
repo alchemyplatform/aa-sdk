@@ -60,6 +60,6 @@ A Promise containing the _unsigned_ UO struct converted from the input transacti
 
 The `RpcTransactionRequest` object representing a traditional ethereum transaction
 
-### `overrides?:` [`UserOperationOverrides`](/packages/aa-core/provider/types/userOperationOverrides.md)
+### `overrides?:` [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides.md)
 
 Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` or `paymasterAndData` on the user operation request
