@@ -39,10 +39,10 @@ There are two scenarios where you'd get a different contract address:
 Your smart account will be deployed when the first `UserOperation` (UO) is sent from the account. The first UO must be sent with a non-zero `initCode`. aa-sdk will handle generation of this `initCode` for you using [`getAccountInitCode`](/packages/aa-core/accounts/).
 :::
 
-### How would Alchemy initiate an upgrade of a Light Account?
+### How can I upgrade a Light Account?
 
 ::: details Answer
-It is unlikely we will frequently update the Light Account contract itself, however it is possible if needed. Light Account has [`UUPSUpgradeable`](https://github.com/alchemyplatform/light-account/blob/main/src/LightAccount.sol#L50) which adds upgrade methods on the account itself. To upgrade an account you will need to send a `UserOperation` using that method.
+It is unlikely you will need to frequently update the Light Account contract itself, however it is possible if needed. Light Account has [`UUPSUpgradeable`](https://github.com/alchemyplatform/light-account/blob/main/src/LightAccount.sol#L50) which adds upgrade methods on the account itself. To upgrade an account you will need to send a `UserOperation` using the method `upgradeTo` or `upgradeToAndCall`, depending on whether or not you need to initialize the new implementation.
 :::
 
 ### Can I have multiple accounts for the same owner address? / How do I set the value of the salt/index for Light Account?
@@ -56,7 +56,7 @@ Yes! The optional index value (salt) on Light Account enables the ability to hav
 ### How does the speed of `UserOperation`s compare to normal transactions?
 
 ::: details Answer
-If the `UserOperation` (meta-transaction for 4337 accounts) is correctly priced and submitted a few hundred milliseconds (ms) prior to a new block getting created, it will typically get placed in the next block. This is because the Bundler needs time to create/propagate its transaction. You can think of it as 1 extra block time worth of latency, but we are working towards improving this latency.
+If the `UserOperation` (meta-transaction for 4337 accounts) is correctly priced and submitted a few hundred milliseconds prior to a new block getting created, it will typically get placed in the next block. This is because the Bundler needs time to create/propagate its transaction. You can think of it as 1 extra block time worth of latency, but we are working towards improving this latency.
 :::
 
 ### Why am I seeing a delay in landing `UserOperation`s on-chain?
