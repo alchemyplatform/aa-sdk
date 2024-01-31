@@ -21,12 +21,12 @@ Returns the address of the connected account. Throws error if there is no connec
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
-const address = await provider.getAddress();
+const address = await smartAccountClient.getAddress();
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 
 :::
 
@@ -35,3 +35,9 @@ const address = await provider.getAddress();
 ### `Promise<Address>`
 
 A Promise that resolves to the address of the connected account
+
+## Parameters
+
+### `account?: SmartContractAccount`
+
+If your client was not instantiated with an account, then you will have to pass the account in to this call.

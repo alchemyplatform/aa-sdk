@@ -33,7 +33,7 @@ const providerWithGasFeeEstimator = withAlchemyGasFeeEstimator(
 );
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 :::
 
 ## Returns

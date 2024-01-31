@@ -1,5 +1,5 @@
 import { UserOperationCallData } from "@alchemy/aa-core";
-import { provider } from "../provider.js";
+import { provider } from "../smartAccountClient.js";
 
 const uoStruct: UserOperationCallData = {
   target: "0xTARGET_ADDRESS",

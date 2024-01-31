@@ -14,9 +14,9 @@ head:
 
 # UserOperationFeeOptionsField
 
-Merged type of [`BigNumberishRange`](/glossary/types.md#bignumberishrange) with [`Percentage`](/glossary/types.md#percentage) type that can be used as [`UserOperationFeeOptions`](./userOperationFeeOptions.md) fields for the [`SmartAccountProvider`](/packages/aa-core/smart-account-client/createSmartAccountClient.md) to use during the gas fee calculation middlewares when constructing the user operation to send.
+Merged type of [`BigNumberishRange`](/glossary/types.md#bignumberishrange) with [`Percentage`](/glossary/types.md#percentage) type that can be used as [`UserOperationFeeOptions`](./userOperationFeeOptions.md) fields for the [`SmartAccountProvider`](/packages/aa-core/smart-account-client/index.md) to use during the gas fee calculation middlewares when constructing the user operation to send.
 
-For example, if the below example `UserOperationFeeOptionsField` is set as the fee option for the `maxPriorityFeePerGas` field of [`UserOperationFeeOptions`](./userOperationFeeOptions.md), then the [`SmartAccountProvider`](/packages/aa-core/smart-account-client/createSmartAccountClient.md) will apply 50% buffer to the estimated `maxPriorityFeePerGas`, then set the `maxPriorityFeePerGas` on the user operation as the larger value between the buffered `maxPriorityFeePerGas` fee and the min `maxPriorityFeePerGas` which is `100_000_000n` here.
+For example, if the below example `UserOperationFeeOptionsField` is set as the fee option for the `maxPriorityFeePerGas` field of [`UserOperationFeeOptions`](./userOperationFeeOptions.md), then the [`SmartAccountProvider`](/packages/aa-core/smart-account-client/index.md) will apply 50% buffer to the estimated `maxPriorityFeePerGas`, then set the `maxPriorityFeePerGas` on the user operation as the larger value between the buffered `maxPriorityFeePerGas` fee and the min `maxPriorityFeePerGas` which is `100_000_000n` here.
 
 ```ts
 /*

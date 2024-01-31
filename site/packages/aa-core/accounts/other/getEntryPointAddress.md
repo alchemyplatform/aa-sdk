@@ -25,12 +25,12 @@ Refer to [the reference docs](https://docs.alchemy.com/reference/eth-supporteden
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
 const entryPointAddress = await provider.account.getEntryPointAddress();
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 
 :::
 

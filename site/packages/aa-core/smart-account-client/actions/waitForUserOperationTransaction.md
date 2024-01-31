@@ -16,28 +16,30 @@ head:
 
 Attempts to fetch for UserOperationReceipt `txMaxRetries` amount of times, at an interval of `txRetryIntervalMs` milliseconds (with a multiplier of `txRetryMulitplier`) using the connected account.
 
-Note: For more details on how to modify the retry configurations for this method, see the [constructor](/packages/aa-core/smart-account-client/createSmartAccountClient.md) parameters.
+Note: For more details on how to modify the retry configurations for this method, see the [constructor](/packages/aa-core/smart-account-client/index.md) parameters.
 
 ## Usage
 
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./provider";
 // [!code focus:99]
-const userOperationResult = await provider.sendUserOperation({
-  data: "0xCalldata",
-  target: "0xTarget",
-  value: 0n,
+const userOperationResult = await smartAccountClient.sendUserOperation({
+  uo: {
+    data: "0xCalldata",
+    target: "0xTarget",
+    value: 0n,
+  },
 });
 
 // [!code focus:99]
-const txHash = await provider.waitForUserOperationTransaction({
+const txHash = await smartAccountClient.waitForUserOperationTransaction({
   hash: userOperationResult.hash,
 });
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 :::
 
 ## Returns

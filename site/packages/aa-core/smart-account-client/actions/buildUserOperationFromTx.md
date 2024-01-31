@@ -31,9 +31,9 @@ Note that `to` field of transaction is required, and among other fields of trans
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
-const uoStruct = await provider.buildUserOperationFromTx({
+const uoStruct = await smartAccountClient.buildUserOperationFromTx({
   from, // ignored
   to,
   data: encodeFunctionData({
@@ -42,10 +42,10 @@ const uoStruct = await provider.buildUserOperationFromTx({
     args: [arg1, arg2, ...],
   }),
 });
-const uoHash = await provider.sendUserOperation(uoStruct);
+const uoHash = await smartAccountClient.sendUserOperation(uoStruct);
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 :::
 
 ## Returns
@@ -63,3 +63,7 @@ The `RpcTransactionRequest` object representing a traditional ethereum transacti
 ### `overrides?:` [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides.md)
 
 Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` or `paymasterAndData` on the user operation request
+
+### `account?: SmartContractAccount`
+
+If your client was not instantiated with an account, then you will have to pass the account in to this call.

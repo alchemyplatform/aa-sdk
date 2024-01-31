@@ -39,7 +39,7 @@ if (uoSimResult.error) {
 const uo = await provider.sendUserOperation(uoStruct);
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 :::
 
 ## Returns

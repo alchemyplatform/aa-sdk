@@ -29,7 +29,7 @@ const encodedTransferOwnershipData =
   LightSmartContractAccount.encodeTransferOwnership(newOwner);
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 :::
 
 ## Returns

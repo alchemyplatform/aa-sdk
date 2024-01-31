@@ -21,12 +21,12 @@ Return a UserOperationReceipt based on a hash (userOpHash).
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
-provider.getUserOperationReceipt("0xUserOpResultHash");
+smartAccountClient.getUserOperationReceipt({ hash: "0xUserOpResultHash" });
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 
 :::
 

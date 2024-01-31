@@ -28,7 +28,7 @@ import { provider } from "./provider";
 const providerWithGasManager = provider.withAlchemyUserOpSimulation();
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 :::
 
 ## Returns

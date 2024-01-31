@@ -21,13 +21,15 @@ This method supports signing messages for deployed smart accounts, as well as un
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
 // sign message (works for undeployed and deployed accounts)
-const signedMessageWith6492 = provider.signMessageWith6492("test");
+const signedMessageWith6492 = smartAccountClient.signMessageWith6492({
+  message: "test",
+});
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 
 :::
 
@@ -42,3 +44,7 @@ A Promise containing the signature of the message, additionally wrapped in EIP-6
 ### `msg: string | Uint8Array`
 
 The message to sign
+
+### `account?: SmartContractAccount`
+
+If your client was not instantiated with an account, then you will have to pass the account in to this call.

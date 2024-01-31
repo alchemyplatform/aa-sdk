@@ -30,7 +30,7 @@ import { withAlchemyUserOpSimulation } from "@alchemy/aa-alchemy";
 const providerWithUserOpSimulation = withAlchemyUserOpSimulation(provider);
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/smartAccountClient.ts
 :::
 
 ## Returns
