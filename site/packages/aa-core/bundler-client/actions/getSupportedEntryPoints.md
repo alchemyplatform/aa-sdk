@@ -6,10 +6,10 @@ head:
       content: getSupportedEntryPoints
   - - meta
     - name: description
-      content: Overview of the getSupportedEntryPoints action available on the PublicErc4337Client
+      content: Overview of the getSupportedEntryPoints action available on the BundlerClient
   - - meta
     - property: og:description
-      content: Overview of the getSupportedEntryPoints action available on the PublicErc4337Client
+      content: Overview of the getSupportedEntryPoints action available on the BundlerClient
 ---
 
 # getSupportedEntryPoints
@@ -26,7 +26,7 @@ import { client } from "./client";
 const entryPoints = await client.getSupportedEntryPoints();
 ```
 
-<<< @/snippets/client.ts
+<<< @/snippets/bundlerClient.ts
 :::
 
 ## Returns

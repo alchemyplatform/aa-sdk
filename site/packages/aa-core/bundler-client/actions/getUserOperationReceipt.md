@@ -6,10 +6,10 @@ head:
       content: getUserOperationReceipt
   - - meta
     - name: description
-      content: Overview of the getUserOperationReceipt action available on the PublicErc4337Client
+      content: Overview of the getUserOperationReceipt action available on the BundlerClient
   - - meta
     - property: og:description
-      content: Overview of the getUserOperationReceipt action available on the PublicErc4337Client
+      content: Overview of the getUserOperationReceipt action available on the BundlerClient
 ---
 
 # getUserOperationReceipt
@@ -26,7 +26,7 @@ import { client } from "./client";
 const receipt = await client.getUserOperationReceipt("0xUserOperationHash");
 ```
 
-<<< @/snippets/client.ts
+<<< @/snippets/bundlerClient.ts
 :::
 
 ## Returns
