@@ -1,7 +1,8 @@
-import type { Chain, Transport } from "viem";
+import type { Chain, Client, Transport } from "viem";
 import type { SmartContractAccount } from "../../account/smartContractAccount.js";
-import type { BaseSmartAccountClient } from "../../client/smartAccountClient.js";
+import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
 import { AccountNotFoundError } from "../../errors/account.js";
+import { IncompatibleClientError } from "../../errors/client.js";
 import type { UserOperationStruct } from "../../types.js";
 import type { Deferrable } from "../../utils/index.js";
 import { _runMiddlewareStack } from "./internal/runMiddlewareStack.js";
@@ -14,12 +15,19 @@ export const buildUserOperation: <
     | SmartContractAccount
     | undefined
 >(
-  client: BaseSmartAccountClient<TTransport, TChain, TAccount>,
+  client: Client<TTransport, TChain, TAccount>,
   args: SendUserOperationParameters<TAccount>
 ) => Promise<UserOperationStruct> = async (client, args) => {
   const { account = client.account, overrides, uo } = args;
   if (!account) {
     throw new AccountNotFoundError();
+  }
+
+  if (!isBaseSmartAccountClient(client)) {
+    throw new IncompatibleClientError(
+      "BaseSmartAccountClient",
+      "buildUserOperation"
+    );
   }
 
   return _runMiddlewareStack(client, {

@@ -11,15 +11,16 @@ import {
   type Chain,
   type Hex,
 } from "viem";
+import { type Plugin } from "../types.js";
 import {
   AccountNotFoundError,
-  type SmartAccountClient,
+  isSmartAccountClient,
+  IncompatibleClientError,
   type SmartContractAccount,
   type UserOperationOverrides,
   type GetAccountParameter,
   type SendUserOperationResult,
 } from "@alchemy/aa-core";
-import { type Plugin } from "../types.js";
 import { installPlugin as installPlugin_ } from "../../plugin-manager/installPlugin.js";
 import { type FunctionReference } from "../../account-loupe/types.js";
 
@@ -179,19 +180,14 @@ export const tokenReceiverPluginActions: <
     | SmartContractAccount
     | undefined
 >(
-  client: SmartAccountClient<TTransport, TChain, TAccount>
-) => TokenReceiverPluginActions<TAccount> = <
-  TTransport extends Transport = Transport,
-  TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
-    | undefined
->(
-  client: SmartAccountClient<TTransport, TChain, TAccount>
-) => ({
+  client: Client<TTransport, TChain, TAccount>
+) => TokenReceiverPluginActions<TAccount> = (client) => ({
   tokensReceived({ args, overrides, account = client.account }) {
     if (!account) {
       throw new AccountNotFoundError();
+    }
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError("SmartAccountClient", "tokensReceived");
     }
 
     const uo = encodeFunctionData({
@@ -206,6 +202,12 @@ export const tokenReceiverPluginActions: <
     if (!account) {
       throw new AccountNotFoundError();
     }
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "onErc721Received"
+      );
+    }
 
     const uo = encodeFunctionData({
       abi: TokenReceiverPluginExecutionFunctionAbi,
@@ -219,6 +221,12 @@ export const tokenReceiverPluginActions: <
     if (!account) {
       throw new AccountNotFoundError();
     }
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "onErc1155Received"
+      );
+    }
 
     const uo = encodeFunctionData({
       abi: TokenReceiverPluginExecutionFunctionAbi,
@@ -231,6 +239,12 @@ export const tokenReceiverPluginActions: <
   onErc1155BatchReceived({ args, overrides, account = client.account }) {
     if (!account) {
       throw new AccountNotFoundError();
+    }
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "onErc1155BatchReceived"
+      );
     }
 
     const uo = encodeFunctionData({
@@ -248,6 +262,13 @@ export const tokenReceiverPluginActions: <
   }) {
     if (!account) {
       throw new AccountNotFoundError();
+    }
+
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "installTokenReceiverPlugin"
+      );
     }
 
     const chain = client.chain;

@@ -1,11 +1,13 @@
 import {
   type Chain,
+  type Client,
   type SendTransactionParameters,
   type Transport,
 } from "viem";
 import type { SmartContractAccount } from "../../account/smartContractAccount.js";
-import type { BaseSmartAccountClient } from "../../client/smartAccountClient.js";
+import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
 import { AccountNotFoundError } from "../../errors/account.js";
+import { IncompatibleClientError } from "../../errors/client.js";
 import type {
   UserOperationOverrides,
   UserOperationStruct,
@@ -20,7 +22,7 @@ export const buildUserOperationFromTx: <
     | undefined,
   TChainOverride extends Chain | undefined = Chain | undefined
 >(
-  client: BaseSmartAccountClient<Transport, TChain, TAccount>,
+  client: Client<Transport, TChain, TAccount>,
   args: SendTransactionParameters<TChain, TAccount, TChainOverride>
 ) => Promise<UserOperationStruct> = async (client, args) => {
   const { account = client.account, ...request } = args;
@@ -30,6 +32,13 @@ export const buildUserOperationFromTx: <
 
   if (!request.to) {
     throw new Error("Transaction is missing `to` address set on request");
+  }
+
+  if (!isBaseSmartAccountClient(client)) {
+    throw new IncompatibleClientError(
+      "BaseSmartAccountClient",
+      "buildUserOperationFromTx"
+    );
   }
 
   const _overrides: UserOperationOverrides = {

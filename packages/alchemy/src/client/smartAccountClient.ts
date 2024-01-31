@@ -11,7 +11,6 @@ import { getDefaultUserOperationFeeOptions } from "../defaults.js";
 import { type AlchemyGasManagerConfig } from "../middleware/gasManager.js";
 import { AlchemyProviderConfigSchema } from "../schema.js";
 import type { AlchemyProviderConfig } from "../type.js";
-import { type AlchemySmartAccountClientActions } from "./decorators/smartAccount.js";
 import { createAlchemySmartAccountClientFromRpcClient } from "./internal/smartAccountClientFromRpc.js";
 import { createAlchemyPublicRpcClient } from "./rpcClient.js";
 import type { AlchemyRpcSchema } from "./types.js";
@@ -63,15 +62,7 @@ export type AlchemySmartAccountClient<
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined
-> = Prettify<
-  AlchemySmartAccountClient_Base<
-    transport,
-    chain,
-    account,
-    AlchemySmartAccountClientActions<account> &
-      SmartAccountClientActions<chain, account>
-  >
->;
+> = Prettify<AlchemySmartAccountClient_Base<transport, chain, account>>;
 
 export function createAlchemySmartAccountClient<
   TTransport extends Transport = Transport,

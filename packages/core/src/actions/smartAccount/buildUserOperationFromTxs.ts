@@ -1,7 +1,8 @@
-import { fromHex, type Chain, type Transport } from "viem";
+import { fromHex, type Chain, type Client, type Transport } from "viem";
 import type { SmartContractAccount } from "../../account/smartContractAccount";
-import type { BaseSmartAccountClient } from "../../client/smartAccountClient";
+import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
 import { AccountNotFoundError } from "../../errors/account.js";
+import { IncompatibleClientError } from "../../errors/client.js";
 import type { UserOperationOverrides } from "../../types";
 import { bigIntMax, filterUndefined } from "../../utils/index.js";
 import type {
@@ -16,7 +17,7 @@ export const buildUserOperationFromTxs: <
     | SmartContractAccount
     | undefined
 >(
-  client: BaseSmartAccountClient<TTransport, TChain, TAccount>,
+  client: Client<TTransport, TChain, TAccount>,
   args: SendTransactionsParameters<TAccount>
 ) => Promise<BuildUserOperationFromTransactionsResult> = async (
   client,
@@ -25,6 +26,13 @@ export const buildUserOperationFromTxs: <
   const { account = client.account, requests, overrides } = args;
   if (!account) {
     throw new AccountNotFoundError();
+  }
+
+  if (!isBaseSmartAccountClient(client)) {
+    throw new IncompatibleClientError(
+      "BaseSmartAccountClient",
+      "buildUserOperationFromTxs"
+    );
   }
 
   const batch = requests.map((request) => {

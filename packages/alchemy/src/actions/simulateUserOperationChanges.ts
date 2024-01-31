@@ -1,11 +1,13 @@
 import {
   AccountNotFoundError,
+  IncompatibleClientError,
   deepHexlify,
   type SendUserOperationParameters,
   type SmartContractAccount,
 } from "@alchemy/aa-core";
-import type { Chain, Transport } from "viem";
-import type { AlchemySmartAccountClient_Base } from "../client/smartAccountClient";
+import type { Chain, Client, Transport } from "viem";
+import { isAlchemySmartAccountClient } from "../client/isAlchemySmartAccountClient.js";
+import type { AlchemyRpcSchema } from "../client/types";
 import type { SimulateUserOperationAssetChangesResponse } from "./types";
 
 export const simulateUserOperationChanges: <
@@ -14,7 +16,7 @@ export const simulateUserOperationChanges: <
     | SmartContractAccount
     | undefined
 >(
-  client: AlchemySmartAccountClient_Base<Transport, TChain, TAccount>,
+  client: Client<Transport, TChain, TAccount, AlchemyRpcSchema>,
   args: SendUserOperationParameters<TAccount>
 ) => Promise<SimulateUserOperationAssetChangesResponse> = async (
   client,
@@ -22,6 +24,13 @@ export const simulateUserOperationChanges: <
 ) => {
   if (!account) {
     throw new AccountNotFoundError();
+  }
+
+  if (!isAlchemySmartAccountClient(client)) {
+    throw new IncompatibleClientError(
+      "SmartAccountClient",
+      "transferOwnership"
+    );
   }
 
   const uoStruct = deepHexlify(

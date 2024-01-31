@@ -15,16 +15,13 @@ export const PluginActionsGenPhase: Phase = async (input) => {
   addImport("viem", { name: "EncodeFunctionDataParameters", isType: true });
   addImport("viem", { name: "Transport", isType: true });
   addImport("viem", { name: "Chain", isType: true });
+  addImport("viem", { name: "Client", isType: true });
   addImport("@alchemy/aa-core", {
     name: "SmartContractAccount",
     isType: true,
   });
   addImport("@alchemy/aa-core", {
     name: "UserOperationOverrides",
-    isType: true,
-  });
-  addImport("@alchemy/aa-core", {
-    name: "SmartAccountClient",
     isType: true,
   });
   addImport("@alchemy/aa-core", {
@@ -36,6 +33,8 @@ export const PluginActionsGenPhase: Phase = async (input) => {
     isType: true,
   });
   addImport("@alchemy/aa-core", { name: "AccountNotFoundError" });
+  addImport("@alchemy/aa-core", { name: "isSmartAccountClient" });
+  addImport("@alchemy/aa-core", { name: "IncompatibleClientError" });
 
   const providerFunctionDefs: string[] = [];
   const providerFunctions = executionAbi
@@ -58,11 +57,15 @@ export const PluginActionsGenPhase: Phase = async (input) => {
         n.name
       }">, "args"> & { overrides?: UserOperationOverrides; } & GetAccountParameter<TAccount>) => Promise<SendUserOperationResult>
         `);
+      const methodName = camelCase(n.name);
       return dedent`
-              ${camelCase(n.name)}(${argsParamString}) {
+              ${methodName}(${argsParamString}) {
                 if (!account) {
                   throw new AccountNotFoundError();
-                }  
+                } 
+                if (!isSmartAccountClient(client)) {
+                  throw new IncompatibleClientError("SmartAccountClient", "${methodName}");
+                }
   
                 const uo = encodeFunctionData({
                   abi: ${executionAbiConst},
@@ -110,16 +113,10 @@ export const PluginActionsGenPhase: Phase = async (input) => {
             | SmartContractAccount
             | undefined
     >(
-        client: SmartAccountClient<TTransport, TChain, TAccount>
-    ) => ${contract.name}Actions<TAccount> = <
-        TTransport extends Transport = Transport,
-        TChain extends Chain | undefined = Chain | undefined,
-        TAccount extends SmartContractAccount | undefined =
-            | SmartContractAccount
-            | undefined
-    >(
-        client: SmartAccountClient<TTransport, TChain, TAccount>
-    ) => ({ ${providerFunctions.join(",\n")} });
+        client: Client<TTransport, TChain, TAccount>
+    ) => ${
+      contract.name
+    }Actions<TAccount> = (client) => ({ ${providerFunctions.join(",\n")} });
   `);
 
   return input;

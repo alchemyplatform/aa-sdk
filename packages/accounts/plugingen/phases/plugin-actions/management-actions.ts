@@ -46,10 +46,16 @@ export const ManagementActionsGenPhase: Phase = async (input) => {
       `
     );
 
+    const installMethodName = `install${contract.name}`;
+
     input.content.push(dedent`
-    install${contract.name}({account = client.account, overrides, ...params}) {
+    ${installMethodName}({account = client.account, overrides, ...params}) {
       if (!account) {
         throw new AccountNotFoundError();
+      }
+
+      if (!isSmartAccountClient(client)) {
+        throw new IncompatibleClientError("SmartAccountClient", "${installMethodName}");
       }
 
       const chain = client.chain;

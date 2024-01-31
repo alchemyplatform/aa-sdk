@@ -12,15 +12,16 @@ import {
   type Chain,
   type Hex,
 } from "viem";
+import { type Plugin } from "../types.js";
 import {
   AccountNotFoundError,
-  type SmartAccountClient,
+  isSmartAccountClient,
+  IncompatibleClientError,
   type SmartContractAccount,
   type UserOperationOverrides,
   type GetAccountParameter,
   type SendUserOperationResult,
 } from "@alchemy/aa-core";
-import { type Plugin } from "../types.js";
 import { MultiOwnerPlugin } from "../multi-owner/plugin.js";
 import { installPlugin as installPlugin_ } from "../../plugin-manager/installPlugin.js";
 import { type FunctionReference } from "../../account-loupe/types.js";
@@ -205,19 +206,17 @@ export const sessionKeyPluginActions: <
     | SmartContractAccount
     | undefined
 >(
-  client: SmartAccountClient<TTransport, TChain, TAccount>
-) => SessionKeyPluginActions<TAccount> = <
-  TTransport extends Transport = Transport,
-  TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
-    | undefined
->(
-  client: SmartAccountClient<TTransport, TChain, TAccount>
-) => ({
+  client: Client<TTransport, TChain, TAccount>
+) => SessionKeyPluginActions<TAccount> = (client) => ({
   executeWithSessionKey({ args, overrides, account = client.account }) {
     if (!account) {
       throw new AccountNotFoundError();
+    }
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "executeWithSessionKey"
+      );
     }
 
     const uo = encodeFunctionData({
@@ -232,6 +231,9 @@ export const sessionKeyPluginActions: <
     if (!account) {
       throw new AccountNotFoundError();
     }
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError("SmartAccountClient", "addSessionKey");
+    }
 
     const uo = encodeFunctionData({
       abi: SessionKeyPluginExecutionFunctionAbi,
@@ -244,6 +246,12 @@ export const sessionKeyPluginActions: <
   removeSessionKey({ args, overrides, account = client.account }) {
     if (!account) {
       throw new AccountNotFoundError();
+    }
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "removeSessionKey"
+      );
     }
 
     const uo = encodeFunctionData({
@@ -258,6 +266,12 @@ export const sessionKeyPluginActions: <
     if (!account) {
       throw new AccountNotFoundError();
     }
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "rotateSessionKey"
+      );
+    }
 
     const uo = encodeFunctionData({
       abi: SessionKeyPluginExecutionFunctionAbi,
@@ -271,6 +285,12 @@ export const sessionKeyPluginActions: <
     if (!account) {
       throw new AccountNotFoundError();
     }
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "updateKeyPermissions"
+      );
+    }
 
     const uo = encodeFunctionData({
       abi: SessionKeyPluginExecutionFunctionAbi,
@@ -283,6 +303,13 @@ export const sessionKeyPluginActions: <
   installSessionKeyPlugin({ account = client.account, overrides, ...params }) {
     if (!account) {
       throw new AccountNotFoundError();
+    }
+
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "installSessionKeyPlugin"
+      );
     }
 
     const chain = client.chain;

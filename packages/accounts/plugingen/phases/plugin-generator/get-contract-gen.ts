@@ -4,10 +4,6 @@ import type { Phase } from "../../types";
 export const GetContractGenPhase: Phase = async (input) => {
   const { content, contract, addImport } = input;
 
-  addImport("@alchemy/aa-core", {
-    name: "SmartAccountClient",
-    isType: true,
-  });
   addImport("viem", { name: "getContract", isType: false });
   addImport("viem", { name: "GetContractReturnType", isType: true });
   addImport("viem", { name: "Address", isType: true });

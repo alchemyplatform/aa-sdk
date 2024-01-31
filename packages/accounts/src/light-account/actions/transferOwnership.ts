@@ -1,11 +1,12 @@
 import {
   AccountNotFoundError,
+  IncompatibleClientError,
+  isSmartAccountClient,
   type GetAccountParameter,
   type Hex,
-  type SmartAccountClient,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
-import type { Chain, Transport } from "viem";
+import type { Chain, Client, Transport } from "viem";
 import type { LightAccount } from "../account";
 
 export type TransferLightAccountOwnershipParams<
@@ -26,7 +27,7 @@ export const transferOwnership: <
     | LightAccount<TOwner>
     | undefined
 >(
-  client: SmartAccountClient<TTransport, TChain, TAccount>,
+  client: Client<TTransport, TChain, TAccount>,
   args: TransferLightAccountOwnershipParams<TOwner, TAccount>
 ) => Promise<Hex> = async (
   client,
@@ -34,6 +35,13 @@ export const transferOwnership: <
 ) => {
   if (!account) {
     throw new AccountNotFoundError();
+  }
+
+  if (!isSmartAccountClient(client)) {
+    throw new IncompatibleClientError(
+      "SmartAccountClient",
+      "transferOwnership"
+    );
   }
 
   const data = account.encodeTransferOwnership(await newOwner.getAddress());

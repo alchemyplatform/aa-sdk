@@ -1,8 +1,9 @@
-import type { Chain, Transport } from "viem";
+import type { Chain, Client, Transport } from "viem";
 import type { SmartContractAccount } from "../../account/smartContractAccount.js";
-import type { BaseSmartAccountClient } from "../../client/smartAccountClient.js";
+import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
 import type { SendUserOperationResult } from "../../client/types.js";
 import { AccountNotFoundError } from "../../errors/account.js";
+import { IncompatibleClientError } from "../../errors/client.js";
 import { buildUserOperation } from "./buildUserOperation.js";
 import { _sendUserOperation } from "./internal/sendUserOperation.js";
 import type { SendUserOperationParameters } from "./types.js";
@@ -14,13 +15,20 @@ export const sendUserOperation: <
     | SmartContractAccount
     | undefined
 >(
-  client: BaseSmartAccountClient<TTransport, TChain, TAccount>,
+  client: Client<TTransport, TChain, TAccount>,
   args: SendUserOperationParameters<TAccount>
 ) => Promise<SendUserOperationResult> = async (client, args) => {
   const { account = client.account } = args;
 
   if (!account) {
     throw new AccountNotFoundError();
+  }
+
+  if (!isBaseSmartAccountClient(client)) {
+    throw new IncompatibleClientError(
+      "BaseSmartAccountClient",
+      "sendUserOperation"
+    );
   }
 
   const uoStruct = await buildUserOperation(client, args);

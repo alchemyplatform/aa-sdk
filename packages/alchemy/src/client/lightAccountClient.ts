@@ -1,5 +1,6 @@
 import {
   createLightAccount,
+  lightAccountClientActions,
   type CreateLightAccountParams,
   type LightAccount,
 } from "@alchemy/aa-accounts";
@@ -53,5 +54,5 @@ export const createLightAccountAlchemyClient: <
     client,
     account,
     opts,
-  });
+  }).extend(lightAccountClientActions);
 };
