@@ -65,9 +65,9 @@ Streamline your sign up flow with simple web2 login options supported by Account
 - Self-custodial wallets like MetaMask or Ledger
 - and more
 
-Account Kit integrates all the leading wallet Signers with integration guides that you can find [here](/smart-accounts/signers/choosing-a-signer). Account Kit even supports self-custodial wallets like MetaMask or Ledger. Users can even change their Signer later via Account Kit’s [ownership transfer](/using-smart-accounts/transfer-ownership/light-account) functionality.
+Account Kit integrates all the leading wallet Signers with integration guides that you can find [here](/signers/choosing-a-signer). Account Kit even supports self-custodial wallets like MetaMask or Ledger. Users can even change their Signer later via Account Kit’s [ownership transfer](/using-smart-accounts/transfer-ownership/light-account) functionality.
 
-Learn [how to choose and integrate the right Signer for your use case in this doc](/smart-accounts/signers/choosing-a-signer).
+Learn [how to choose and integrate the right Signer for your use case in this doc](/signers/choosing-a-signer).
 
 ## Sponsor gas
 

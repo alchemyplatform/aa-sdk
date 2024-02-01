@@ -58,12 +58,12 @@ export const newSidebar: DefaultTheme.Sidebar = [
   },
   {
     text: "Choosing a Signer",
-    base: "/smart-accounts/signers",
+    base: "/signers",
     items: [
       { text: "Introduction", link: "/choosing-a-signer" },
       {
         text: "Signer Guides",
-        base: "/smart-accounts/signers/guides",
+        base: "/signers/guides",
         collapsed: true,
         items: [
           { text: "Magic", link: "/magic" },

@@ -25,7 +25,6 @@ export type AlchemySmartAccountClientConfig<
 > = {
   account?: account;
   useSimulation?: boolean;
-  // TODO: this is missing the current gas manager fallback stuff
   gasManagerConfig?: AlchemyGasManagerConfig;
 } & AlchemyProviderConfig &
   Pick<

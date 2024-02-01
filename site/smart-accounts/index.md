@@ -21,7 +21,7 @@ prev:
   link: /smart-accounts/overview
 next:
   text: Choosing a Signer
-  link: /smart-accounts/signers/choosing-a-signer
+  link: /signers/choosing-a-signer
 ---
 
 # Choosing a Smart Account

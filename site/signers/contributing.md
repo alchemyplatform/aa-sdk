@@ -28,7 +28,7 @@ To ensure the best developer experience for anyone using Account Kit, we ask tha
 
 There, you'll be able to implement [`SmartAccountAuthenticator`](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/core/src/signer/types.ts#L15) interface from `aa-core` which offers a wrapper for any SDKs, `inner`, that you may use to call upon for implementation details. You may also wish to build your Signer implementation from scratch.
 
-In either case, if your `Signer` or library exports an `EIP-1193` compliant provider, you may find it helpful to use [`WalletClientSigner`](/packages/aa-core/signers/wallet-client) from `aa-core` to easily integrate your Signer in `aa-signers`. See the ["Using Your Own Signer"](/smart-accounts/signers/guides/custom-signer) guide for more details.
+In either case, if your `Signer` or library exports an `EIP-1193` compliant provider, you may find it helpful to use [`WalletClientSigner`](/packages/aa-core/signers/wallet-client) from `aa-core` to easily integrate your Signer in `aa-signers`. See the ["Using Your Own Signer"](/signers/guides/custom-signer) guide for more details.
 
 Make sure to include unit tests along with your implementation! Take a look at these PRs from [Magic](https://github.com/alchemyplatform/aa-sdk/pull/229) and [Web3Auth](https://github.com/alchemyplatform/aa-sdk/pull/247) for reference.
 
@@ -99,12 +99,12 @@ Find the `Choosing a Signer` item in the `sidebar` and add a new entry in `items
     // ... other entries
     {
       text: "Choosing a Signer",
-      base: "/smart-accounts/signers",
+      base: "/signers",
       items: [
         { text: "Introduction", link: "/choosing-a-signer" },
         {
           text: "Signer Guides",
-          base: "/smart-accounts/signers/guides",
+          base: "/signers/guides",
           collapsed: true,
           items: [
             // ... other signers
