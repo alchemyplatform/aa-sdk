@@ -39,7 +39,6 @@ There a number of ways you can call this method using Account Kit.
 ::: code-group
 
 ```ts [example.ts]
-import { transferLightAccountOwnership } from "@alchemy/aa-accounts";
 import { smartAccountClient } from "./smartAccountClient";
 
 // this will return the address of the smart account you want to transfer ownerhip of
@@ -47,13 +46,13 @@ const accountAddress = await provider.getAddress();
 const newOwner = "0x..."; // the address of the new owner
 
 // [!code focus:99]
-const hash = transferLightAccountOwnership(smartAccountClient, {
+const hash = smartAccountClient.transferOwnership({
   newOwner,
   waitForTxn: true,
 });
 ```
 
-<<< @/snippets/aa-core/smartAccountClient.ts
+<<< @/snippets/aa-alchemy/light-account-client.ts [smartAccountClient.ts]
 
 :::
 
