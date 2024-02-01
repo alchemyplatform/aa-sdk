@@ -55,7 +55,7 @@ titleTemplate: :title Documentation
                 Account Kit is a vertically integrated stack for building apps that support ERC-4337: smart accounts, Signer integrations, sponsoring gas, bundlers, and an SDK.
               </div>
               <div class="flex flex-row gap-[8px] justify-start items-center">
-                <a rel="noopener noreferrer" href="./overview/getting-started.html">
+                <a rel="noopener noreferrer" href="./getting-started/deploy-an-account.html">
                   <button
                     class="flex items-center rounded-md px-[12px] py-[12px] text-[16px] font-semibold text-white transition duration-300 ease-in-out hover:scale-105 hover:opacity-90 bg-black dark:bg-white dark:text-black"
                   >
@@ -109,7 +109,7 @@ const { hash } = await provider.sendUserOperation(uo);
               </div>
             </div>
           </a>
-          <a rel="noopener noreferrer" href="./overview/getting-started.html" class="flex-auto basis-1/3 max-lg:max-w-[370px] max-lg:min-w-[370px]">
+          <a rel="noopener noreferrer" href="./getting-started/setup.html" class="flex-auto basis-1/3 max-lg:max-w-[370px] max-lg:min-w-[370px]">
             <div
               class="flex flex-col flex-auto p-[24px] gap-[24px] rounded-md text-white overflow-auto bg-gradient-4 group hover:scale-105 hover:opacity-90 transition duration-300 ease-in-out"
             >
