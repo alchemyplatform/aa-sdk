@@ -11,7 +11,7 @@ export default defineConfig({
     logo: "/kit-logo.svg",
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: "Docs", link: "/overview/getting-started" },
+      { text: "Docs", link: "/getting-started/setup" },
       {
         text: "Examples",
         link: "https://github.com/alchemyplatform/aa-sdk/tree/main/examples",

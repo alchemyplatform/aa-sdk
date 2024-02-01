@@ -163,7 +163,7 @@ In this guide, we initialized an `AlchemyProvider` with the `aa-alchemy` package
 
 1. To learn more about the different packages and their use cases, check out the [Packages Overview](/overview/package-overview) page.
 
-2. To learn about the end-to-end process of integrating smart accounts in your applications, check out the section on [Smart Accounts](/smart-accounts/overview).
+2. To learn about the end-to-end process of integrating smart accounts in your applications, check out the section on [Smart Accounts](/smart-accounts/).
 
 3. To learn about the `owner` field on your smart account, check out the section on [Choosing a Signer](/smart-accounts/signers/choosing-a-signer) to own the smart account.
 

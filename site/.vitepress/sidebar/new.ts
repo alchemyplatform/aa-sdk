@@ -5,8 +5,25 @@ export const newSidebar: DefaultTheme.Sidebar = [
   {
     text: "Getting Started",
     items: [
-      { text: "Setup your project", link: "/overview/getting-started" },
-      { text: "Deploy your first account", link: "/smart-accounts/overview" },
+      { text: "Setup your project", link: "/getting-started/setup" },
+      {
+        text: "Deploy your first account",
+        link: "/getting-started/deploy-an-account",
+      },
+      // I'm leaving these here for now because I'm not sure if we still want them
+      // There's good content in here so we may want to keep it somewhere
+      {
+        text: "What is Account Kit?",
+        link: "/overview/introduction",
+      },
+      {
+        text: "Why Account Kit?",
+        link: "/overview/why-account-kit",
+      },
+      {
+        text: "FAQs",
+        link: "/faqs",
+      },
     ],
   },
   {
