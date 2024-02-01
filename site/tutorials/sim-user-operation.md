@@ -32,6 +32,8 @@ This could lead to different outcomes than predicted. For instance, if a UO's ef
 
 Please be aware of this potential variance and consider it while using UO simulations.
 
+:::
+
 ## 1. Using [`alchemyUserOperationSimulator` middleware](/packages/aa-alchemy/middleware/alchemyUserOperationSimulator)
 
 To simulate User Operations, we must create an Alchemy Client and pass in the `useSimulation` flag to true.
