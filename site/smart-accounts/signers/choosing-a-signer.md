@@ -21,7 +21,7 @@ prev:
   link: /smart-accounts/
 next:
   text: How to Send a User Operation
-  link: /tutorials/send-user-operation
+  link: /using-smart-accounts/send-user-operations
 ---
 
 # What is a Signer?

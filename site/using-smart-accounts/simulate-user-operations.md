@@ -16,9 +16,6 @@ head:
   - - meta
     - name: twitter:description
       content: Follow this guide to simulate a User Operation with Alchemy's Account Kit, a vertically integrated stack for building apps that support ERC-4337.
-prev:
-  text: Smart Accounts
-  link: /smart-accounts/overview
 ---
 
 # How to Simulate a User Operation

@@ -42,13 +42,7 @@ export const newSidebar: DefaultTheme.Sidebar = [
       },
       {
         text: "Light Account",
-        collapsed: true,
-        base: "/smart-accounts/light-account",
-        items: [
-          { text: "Introduction", link: "/" },
-          { text: "Getting started", link: "/getting-started" },
-          { text: "Deployments", link: "/deployments" },
-        ],
+        link: "/smart-accounts/light-account/",
       },
       {
         text: "Custom Accounts",
@@ -105,17 +99,42 @@ export const newSidebar: DefaultTheme.Sidebar = [
   },
   {
     text: "Using Smart Accounts",
+    base: "/using-smart-accounts",
     items: [
-      { text: "Send User Operations", link: "/" },
-      { text: "Batch User Operations", link: "/" },
-      { text: "Simulate User Operations", link: "/" },
+      { text: "Send User Operations", link: "/send-user-operations" },
+      { text: "Batch User Operations", link: "/batch-user-operations" },
+      {
+        text: "Sponsoring Gas",
+        collapsed: false,
+        base: "/using-smart-accounts/sponsoring-gas",
+        items: [
+          { text: "Alchemy Gas Manager", link: "/gas-manager" },
+          { text: "Check Eligibility", link: "/checking-eligibility" },
+        ],
+      },
+      { text: "Simulate User Operations", link: "/simulate-user-operations" },
       {
         text: "Transfer Ownership",
+        base: "/using-smart-accounts/transfer-ownership",
         collapsed: false,
-        items: [{ text: "Modular Account" }, { text: "Light Account" }],
+        items: [
+          { text: "Modular Account", link: "/modular-account" },
+          { text: "Light Account", link: "/light-account" },
+        ],
       },
-      { text: "Session Keys", link: "/" },
-      { text: "Alchemy Enhanced Apis", link: "/" },
+      { text: "Session Keys", link: "/session-keys" },
+      {
+        text: "Alchemy Enhanced Apis",
+        base: "/using-smart-accounts/enhanced-apis",
+        collapsed: true,
+        items: [
+          {
+            text: "Get Account's NFTs",
+            link: "/nft",
+          },
+          { text: "Get Account's Tokens", link: "/token" },
+        ],
+      },
     ],
   },
   {

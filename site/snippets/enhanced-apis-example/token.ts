@@ -10,7 +10,7 @@ const alchemy = new Alchemy({
   apiKey: "YOUR_API_KEY",
 });
 
-const provider = (
+const client = (
   await createModularAccountAlchemyClient({
     chain: sepolia,
     apiKey: "YOUR_API_KEY",
@@ -18,7 +18,7 @@ const provider = (
   })
 ).extend(alchemyEnhancedApiActions(alchemy));
 
-const address = provider.getAddress();
+const address = client.getAddress();
 
 // get all tokens owned by the smart account
-export const tokenBalances = provider.core.getTokenBalances(address);
+export const tokenBalances = client.core.getTokenBalances(address);

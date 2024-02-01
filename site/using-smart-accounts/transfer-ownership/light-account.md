@@ -3,28 +3,28 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: How to Transfer Ownership of a Smart Account
+      content: How to Transfer Ownership of a Light Account
   - - meta
     - name: description
-      content: Follow this guide to transfer ownership of a smart account with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to transfer ownership of a Light Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - property: og:description
-      content: Follow this guide to transfer ownership of a smart account with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to transfer ownership of a Light Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - name: twitter:title
-      content: How to Transfer Ownership of a Smart Account
+      content: How to Transfer Ownership of a Light Account
   - - meta
     - name: twitter:description
-      content: Follow this guide to transfer ownership of a smart account with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to transfer ownership of a Light Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 next:
   text: Packages
 ---
 
-# How to Transfer Ownership of a Smart Account
+# How to Transfer Ownership of a Light Account
 
 Not all smart account implementations support transfering the owner (e.g. `SimpleAccount`). However, a number of the accounts in this guide and in Account Kit do, including our Light Account! Let's see a few different ways we can transfer ownership of an Account (using Light Account as an example).
 
-## Light Account
+## Usage
 
 Light Account exposes the following method which allows the existing owner to transfer ownership to a new address:
 
@@ -39,14 +39,18 @@ There a number of ways you can call this method using Account Kit.
 ::: code-group
 
 ```ts [example.ts]
-import { LightSmartContractAccount } from "@alchemy/aa-accounts";
-import { provider } from "./provider";
+import { transferLightAccountOwnership } from "@alchemy/aa-accounts";
+import { smartAccountClient } from "./smartAccountClient";
 
 // this will return the address of the smart account you want to transfer ownerhip of
 const accountAddress = await provider.getAddress();
 const newOwner = "0x..."; // the address of the new owner
 
-const hash = LightSmartContractAccount.transferOwnership(provider, newOwner); // [!code focus:99]
+// [!code focus:99]
+const hash = transferLightAccountOwnership(smartAccountClient, {
+  newOwner,
+  waitForTxn: true,
+});
 ```
 
 <<< @/snippets/aa-core/smartAccountClient.ts
@@ -63,7 +67,7 @@ Assuming you have connected the `provider` to a `LightAccount` using `provider.c
 
 ```ts [example.ts]
 import { encodeFunctionData } from "viem";
-import { provider } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 
 // this will return the address of the smart account you want to transfer ownerhip of
 const accountAddress = await provider.getAddress();
