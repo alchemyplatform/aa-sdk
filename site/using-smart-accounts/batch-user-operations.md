@@ -27,8 +27,8 @@ There are two ways you can batch transactions using `SmartAccountProvider`:
 1. via `sendUserOperation`
 2. via `sendTransactions`
 
-:::tip Note 1: `SimpleSmartContractAccount` and `LightSmartContractAccount`
-Both `SimpleSmartContractAccount` and `LightSmartContractAccount` implement `encodeBatchExecute`, thus supports batching `UserOperations` out of the box.
+:::tip Note 1: `LightSmartContractAccount`, and `MultiOwnerModularAccount`
+Both `LightSmartContractAccount` and `MultiOwnerModularAccount` implement `encodeBatchExecute`, thus supports batching `UserOperations` out of the box.
 :::
 
 :::tip Note 2: Transactions Batched as a Single User Operation
@@ -36,7 +36,7 @@ When you batch transactions, the transaction actions (`target`s and `calldata`s)
 :::
 
 :::tip Note 3: Batched Transactions Ordering
-The batched UO gets executed by the account calling the `executeBatch` method on the [`SimpleAccount`](https://github.com/eth-infinitism/account-abstraction/blob/ver0.6.0/contracts/samples/SimpleAccount.sol) or [`LightAccount`](https://github.com/alchemyplatform/light-account/blob/v1.0.2/src/LightAccount.sol) smart contracts. `executeBatch` processes the input array of transactions data linearly, guaranteeing the execution order of those transactions to be **sequential**.
+The batched UO gets executed by the account calling the `executeBatch` method on [`LightAccount`](https://github.com/alchemyplatform/light-account/blob/v1.0.2/src/LightAccount.sol) smart contracts. `executeBatch` processes the input array of transactions data linearly, guaranteeing the execution order of those transactions to be **sequential**.
 :::
 
 ## Batching using [`sendUserOperation`](/packages/aa-core/smart-account-client/actions/sendUserOperation.md)
@@ -46,22 +46,24 @@ The `SmartAccountProvider` supports passing either a single UO or an array of UO
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
 // the hash returned here is the hash of the User Operation
-const { hash } = await provider.sendUserOperation([
-  {
-    target: "0x...",
-    data: "0xcallDataTransacation1",
-  },
-  {
-    target: "0x...",
-    data: "0xcallDataTransacation2",
-  },
-]);
+const { hash } = await smartAccountClient.sendUserOperation({
+  uo: [
+    {
+      target: "0x...",
+      data: "0xcallDataTransacation1",
+    },
+    {
+      target: "0x...",
+      data: "0xcallDataTransacation2",
+    },
+  ],
+});
 ```
 
-<<< @/snippets/aa-core/smartAccountClient.ts
+<<< @/snippets/aa-alchemy/connected-client.ts [smartAccountClient.ts]
 
 :::
 
@@ -72,21 +74,23 @@ The `SmartAccountProvider` supports sending UOs and waiting for them to be mined
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
 // the hash returned here is the hash of the mined Tx that includes the UserOperation
-const hash = await provider.sendTransactions([
-  {
-    to: "0x...",
-    data: "0xcallDataTransacation1",
-  },
-  {
-    to: "0x...",
-    data: "0xcallDataTransacation2",
-  },
-]);
+const hash = await smartAccountClient.sendTransactions({
+  requests: [
+    {
+      to: "0x...",
+      data: "0xcallDataTransacation1",
+    },
+    {
+      to: "0x...",
+      data: "0xcallDataTransacation2",
+    },
+  ],
+});
 ```
 
-<<< @/snippets/aa-core/smartAccountClient.ts
+<<< @/snippets/aa-alchemy/connected-client.ts [smartAccountClient.ts]
 
 :::
