@@ -53,12 +53,13 @@ export const newSidebar: DefaultTheme.Sidebar = [
       {
         text: "Custom Accounts",
         collapsed: true,
+        base: "/smart-accounts/custom",
         items: [
-          { text: "Use your own", link: "/" },
-          { text: "Contribute your account", link: "/" },
+          { text: "Use your own", link: "/using-your-own" },
+          { text: "Contribute your account", link: "/contributing" },
         ],
       },
-      { text: "Gas Benchmarks", link: "/" },
+      { text: "Gas Benchmarks", link: "/smart-accounts/gas-benchmarks" },
     ],
   },
   {
