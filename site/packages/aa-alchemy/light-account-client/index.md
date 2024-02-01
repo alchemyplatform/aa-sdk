@@ -31,7 +31,7 @@ A Promise containing a new `AlchemySmartAccountClient` connected to a Light Acco
 
 ## Parameters
 
-### `config: AlchemyProviderConfig`
+### `config: AlchemySmartAccountClientConfig`
 
 - `rpcUrl: string | undefined | never` -- a JSON-RPC URL. This is required if there is no `apiKey`.
 

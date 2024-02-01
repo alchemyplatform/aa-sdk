@@ -37,7 +37,7 @@ export const alchemyEnhancedApiActions: (
       alchemy.config.url !== url
     ) {
       throw new Error(
-        "Alchemy SDK client JSON-RPC URL must match AlchemyProvider JSON-RPC URL"
+        "Alchemy SDK client JSON-RPC URL must match AlchemySmartAccountClient JSON-RPC URL"
       );
     }
   }

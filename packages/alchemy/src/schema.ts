@@ -21,7 +21,7 @@ export const AlchemyChainSchema = z.custom<Chain>((chain) => {
   return chainObject.rpcUrls.alchemy != null;
 }, "chain must include an alchemy rpc url. See `createAlchemyChain` or use the `AlchemyChainMap` exported from `@alchemy/aa-core`");
 
-export const AlchemyProviderConfigSchema = ConnectionConfigSchema.and(
+export const AlchemySmartAccountClientConfigSchema = ConnectionConfigSchema.and(
   z.object({
     chain: AlchemyChainSchema,
     opts: SmartAccountProviderOptsSchema.optional().default(

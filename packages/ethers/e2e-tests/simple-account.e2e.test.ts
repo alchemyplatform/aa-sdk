@@ -1,5 +1,4 @@
 import {
-  createPublicErc4337Client,
   createSimpleSmartAccount,
   getChain,
   getDefaultSimpleAccountFactoryAddress,
@@ -7,6 +6,7 @@ import {
 } from "@alchemy/aa-core";
 import { Wallet } from "@ethersproject/wallet";
 import { Alchemy, Network, type AlchemyProvider } from "alchemy-sdk";
+import { http } from "viem";
 import { EthersProviderAdapter } from "../src/provider-adapter.js";
 import { convertWalletToAccountSigner } from "../src/utils.js";
 import { API_KEY, OWNER_MNEMONIC, RPC_URL } from "./constants.js";
@@ -65,19 +65,17 @@ const givenConnectedProvider = async ({
   accountAddress?: Address;
 }) => {
   const chain = getChain(alchemyProvider.network.chainId);
-
   return EthersProviderAdapter.fromEthersProvider(
     alchemyProvider
   ).connectToAccount(
     await createSimpleSmartAccount({
-      accountAddress,
       chain,
       owner: convertWalletToAccountSigner(owner),
+      accountAddress,
       factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
-      rpcClient: createPublicErc4337Client({
-        chain,
-        rpcUrl: `${chain.rpcUrls.alchemy.http[0]}/${alchemyProvider.apiKey}`,
-      }),
+      transport: http(
+        `${chain.rpcUrls.alchemy.http[0]}/${alchemyProvider.apiKey}`
+      ),
     })
   );
 };

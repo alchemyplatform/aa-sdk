@@ -1,4 +1,6 @@
 import { z } from "zod";
-import type { AlchemyProviderConfigSchema } from "./schema.js";
+import type { AlchemySmartAccountClientConfigSchema } from "./schema.js";
 
-export type AlchemyProviderConfig = z.input<typeof AlchemyProviderConfigSchema>;
+export type AlchemySmartAccountClientConfig = z.input<
+  typeof AlchemySmartAccountClientConfigSchema
+>;

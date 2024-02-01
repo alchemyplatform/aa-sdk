@@ -9,8 +9,8 @@ import {
 import { type Chain, type Transport } from "viem";
 import { getDefaultUserOperationFeeOptions } from "../defaults.js";
 import { type AlchemyGasManagerConfig } from "../middleware/gasManager.js";
-import { AlchemyProviderConfigSchema } from "../schema.js";
-import type { AlchemyProviderConfig } from "../type.js";
+import { AlchemySmartAccountClientConfigSchema } from "../schema.js";
+import type { AlchemySmartAccountClientConfig } from "../type.js";
 import { createAlchemySmartAccountClientFromRpcClient } from "./internal/smartAccountClientFromRpc.js";
 import { createAlchemyPublicRpcClient } from "./rpcClient.js";
 import type { AlchemyRpcSchema } from "./types.js";
@@ -26,7 +26,7 @@ export type AlchemySmartAccountClientConfig<
   useSimulation?: boolean;
   // TODO: this is missing the current gas manager fallback stuff
   gasManagerConfig?: AlchemyGasManagerConfig;
-} & AlchemyProviderConfig &
+} & AlchemySmartAccountClientConfig &
   Pick<
     SmartAccountClientConfig<transport, chain, account>,
     "customMiddleware" | "feeEstimator" | "gasEstimator"
@@ -89,7 +89,7 @@ export function createAlchemySmartAccountClient({
   gasEstimator,
   ...config_
 }: AlchemySmartAccountClientConfig): AlchemySmartAccountClient {
-  const config = AlchemyProviderConfigSchema.parse(config_);
+  const config = AlchemySmartAccountClientConfigSchema.parse(config_);
   const { chain, opts, ...connectionConfig } = config;
 
   const client = createAlchemyPublicRpcClient({

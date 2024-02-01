@@ -6,7 +6,7 @@ import {
 } from "@alchemy/aa-accounts";
 import type { HttpTransport, SmartAccountSigner } from "@alchemy/aa-core";
 import { custom, type Chain, type CustomTransport, type Transport } from "viem";
-import { AlchemyProviderConfigSchema } from "../schema.js";
+import { AlchemySmartAccountClientConfigSchema } from "../schema.js";
 import { createAlchemySmartAccountClientFromRpcClient } from "./internal/smartAccountClientFromRpc.js";
 import { createAlchemyPublicRpcClient } from "./rpcClient.js";
 import {
@@ -37,7 +37,7 @@ export const createLightAccountAlchemyClient: <
   >
 > = async (config) => {
   const { chain, opts, ...connectionConfig } =
-    AlchemyProviderConfigSchema.parse(config);
+    AlchemySmartAccountClientConfigSchema.parse(config);
 
   const client = createAlchemyPublicRpcClient({
     chain,

@@ -20,5 +20,5 @@ export type * from "./middleware/gasManager.js";
 export { alchemyGasManagerMiddleware } from "./middleware/gasManager.js";
 export { alchemyUserOperationSimulator } from "./middleware/userOperationSimulator.js";
 export type * from "./schema.js";
-export { AlchemyProviderConfigSchema } from "./schema.js";
-export type { AlchemyProviderConfig } from "./type.js";
+export { AlchemySmartAccountClientConfigSchema } from "./schema.js";
+export type { AlchemySmartAccountClientConfig } from "./type.js";
