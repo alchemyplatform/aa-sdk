@@ -86,6 +86,6 @@ const txHash = await provider.waitForUserOperationTransaction({
 });
 ```
 
-<<< @/snippets/smartAccountClient.ts
+<<< @/snippets/aa-core/smartAccountClient.ts
 
 :::

@@ -20,8 +20,8 @@ head:
 
 ::: code-group
 
-<<< @/snippets/ethers-signer.ts
-<<< @/snippets/ethers-provider.ts
+<<< @/snippets/aa-ethers/ethers-signer.ts
+<<< @/snippets/aa-ethers/ethers-provider.ts
 :::
 
 ## Returns

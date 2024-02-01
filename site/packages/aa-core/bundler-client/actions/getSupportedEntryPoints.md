@@ -26,7 +26,7 @@ import { client } from "./client";
 const entryPoints = await client.getSupportedEntryPoints();
 ```
 
-<<< @/snippets/bundlerClient.ts
+<<< @/snippets/aa-core/bundlerClient.ts
 :::
 
 ## Returns

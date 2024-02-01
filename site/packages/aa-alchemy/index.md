@@ -44,6 +44,6 @@ pnpm i @alchemy/aa-alchemy
 Then, you can create a client like so:
 ::: code-group
 
-<<< @/snippets/alchemy-smartAccountClient.ts
+<<< @/snippets/aa-alchemy/base-client.ts
 
 :::

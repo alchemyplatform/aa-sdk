@@ -35,7 +35,7 @@ const { hash: replacedHash } =
   await smartAccountClient.dropAndReplaceUserOperation(request);
 ```
 
-<<< @/snippets/smartAccountClient.ts
+<<< @/snippets/aa-core/smartAccountClient.ts
 :::
 
 ## Returns

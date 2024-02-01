@@ -26,7 +26,7 @@ import { smartAccountClient } from "./smartAccountClient";
 smartAccountClient.getUserOperationReceipt({ hash: "0xUserOpResultHash" });
 ```
 
-<<< @/snippets/smartAccountClient.ts
+<<< @/snippets/aa-core/smartAccountClient.ts
 
 :::
 

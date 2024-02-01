@@ -61,7 +61,7 @@ const { hash } = await provider.sendUserOperation([
 ]);
 ```
 
-<<< @/snippets/smartAccountClient.ts
+<<< @/snippets/aa-core/smartAccountClient.ts
 
 :::
 
@@ -87,6 +87,6 @@ const hash = await provider.sendTransactions([
 ]);
 ```
 
-<<< @/snippets/smartAccountClient.ts
+<<< @/snippets/aa-core/smartAccountClient.ts
 
 :::

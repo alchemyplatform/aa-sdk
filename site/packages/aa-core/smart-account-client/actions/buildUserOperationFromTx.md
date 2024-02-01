@@ -45,7 +45,7 @@ const uoStruct = await smartAccountClient.buildUserOperationFromTx({
 const uoHash = await smartAccountClient.sendUserOperation(uoStruct);
 ```
 
-<<< @/snippets/smartAccountClient.ts
+<<< @/snippets/aa-core/smartAccountClient.ts
 :::
 
 ## Returns

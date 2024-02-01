@@ -1,4 +1,4 @@
-import { smartAccountClient } from "../light-account-alchemy-client.js";
+import { smartAccountClient } from "../connected-client.js";
 import { uoCallData } from "./calldata.js";
 
 const uo = await smartAccountClient.sendUserOperation({

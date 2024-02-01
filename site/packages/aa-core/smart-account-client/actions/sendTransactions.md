@@ -59,7 +59,7 @@ const txHash = await smartAccountClient.sendTransactions({requests: [
 ]});
 ```
 
-<<< @/snippets/smartAccountClient.ts
+<<< @/snippets/aa-core/smartAccountClient.ts
 
 :::
 

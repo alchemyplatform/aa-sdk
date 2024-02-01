@@ -46,7 +46,7 @@ provider.withAlchemyGasManager({
 });
 ```
 
-<<< @/snippets/smartAccountClient.ts
+<<< @/snippets/aa-core/smartAccountClient.ts
 
 :::
 

@@ -26,7 +26,7 @@ import { smartAccountClient } from "./smartAccountClient";
 const signedMessage = await smartAccountClient.signMessage({ message: "msg" });
 ```
 
-<<< @/snippets/smartAccountClient.ts
+<<< @/snippets/aa-core/smartAccountClient.ts
 
 :::
 

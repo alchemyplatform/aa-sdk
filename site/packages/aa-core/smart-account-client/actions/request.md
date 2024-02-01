@@ -39,7 +39,7 @@ const result = await smartAccountClient.request({
 });
 ```
 
-<<< @/snippets/smartAccountClient.ts
+<<< @/snippets/aa-core/smartAccountClient.ts
 
 :::
 

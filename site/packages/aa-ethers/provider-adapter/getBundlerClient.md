@@ -27,7 +27,7 @@ import { provider } from "./ethers-provider";
 const client = provider.getBundlerClient();
 ```
 
-<<< @/snippets/ethers-provider.ts
+<<< @/snippets/aa-ethers/ethers-provider.ts
 :::
 
 ## Returns

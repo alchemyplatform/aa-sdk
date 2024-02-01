@@ -1,6 +1,6 @@
 import {
   alchemyEnhancedApiActions,
-  createLightAccountAlchemyClient,
+  createModularAccountAlchemyClient,
 } from "@alchemy/aa-alchemy";
 import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
 import { Alchemy, Network } from "alchemy-sdk";
@@ -11,7 +11,7 @@ const alchemy = new Alchemy({
 });
 
 const provider = (
-  await createLightAccountAlchemyClient({
+  await createModularAccountAlchemyClient({
     chain: sepolia,
     apiKey: "YOUR_API_KEY",
     owner: LocalAccountSigner.mnemonicToAccountSigner("OWNER_MNEMONIC"),

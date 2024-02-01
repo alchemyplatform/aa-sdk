@@ -64,7 +64,7 @@ const { hash: batchedUoHash } = await smartAccountClient.sendUserOperation({
 });
 ```
 
-<<< @/snippets/smartAccountClient.ts
+<<< @/snippets/aa-core/smartAccountClient.ts
 :::
 
 ## Returns

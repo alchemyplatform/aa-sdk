@@ -31,7 +31,7 @@ const estimates = await client.estimateUserOperationGas(
 );
 ```
 
-<<< @/snippets/bundlerClient.ts
+<<< @/snippets/aa-core/bundlerClient.ts
 :::
 
 ## Returns

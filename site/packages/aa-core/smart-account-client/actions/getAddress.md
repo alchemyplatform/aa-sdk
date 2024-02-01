@@ -26,7 +26,7 @@ import { smartAccountClient } from "./smartAccountClient";
 const address = await smartAccountClient.getAddress();
 ```
 
-<<< @/snippets/smartAccountClient.ts
+<<< @/snippets/aa-core/smartAccountClient.ts
 
 :::
 

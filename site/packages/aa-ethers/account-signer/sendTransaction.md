@@ -36,7 +36,7 @@ const txHash = await signer.sendTransaction({
 });
 ```
 
-<<< @/snippets/ethers-signer.ts
+<<< @/snippets/aa-ethers/ethers-signer.ts
 :::
 
 ## Returns
