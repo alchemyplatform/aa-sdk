@@ -9,6 +9,7 @@ import type { SmartContractAccount } from "../../account/smartContractAccount.js
 import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
 import { AccountNotFoundError } from "../../errors/account.js";
 import { IncompatibleClientError } from "../../errors/client.js";
+import { TransactionMissingToParamError } from "../../errors/transaction.js";
 import { buildUserOperationFromTx } from "./buildUserOperationFromTx.js";
 import { _sendUserOperation } from "./internal/sendUserOperation.js";
 import { waitForUserOperationTransaction } from "./waitForUserOperationTransacation.js";
@@ -29,7 +30,7 @@ export const sendTransaction: <
   }
 
   if (!args.to) {
-    throw new Error("Transaction is missing `to` address set on request");
+    throw new TransactionMissingToParamError();
   }
 
   if (!isBaseSmartAccountClient(client)) {

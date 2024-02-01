@@ -2,6 +2,7 @@ import type { Chain, Client, Hex, Transport } from "viem";
 import { getTransaction } from "viem/actions";
 import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
 import { IncompatibleClientError } from "../../errors/client.js";
+import { FailedToFindTransactionError } from "../../errors/transaction.js";
 import { Logger } from "../../logger.js";
 import type { WaitForUserOperationTxParameters } from "./types.js";
 
@@ -45,5 +46,5 @@ export const waitForUserOperationTransaction: <
     }
   }
 
-  throw new Error("Failed to find transaction for User Operation");
+  throw new FailedToFindTransactionError(hash);
 };

@@ -69,8 +69,25 @@ export {
   convertCoinTypeToChain,
   convertCoinTypeToChainId,
 } from "./ens/utils.js";
-export { AccountNotFoundError } from "./errors/account.js";
-export { IncompatibleClientError } from "./errors/client.js";
+export {
+  AccountNotFoundError,
+  DefaultFactoryNotDefinedError,
+  FailedToGetStorageSlotError,
+  GetCounterFactualAddressError,
+} from "./errors/account.js";
+export { BaseError } from "./errors/base.js";
+export {
+  ChainNotFoundError,
+  IncompatibleClientError,
+  InvalidRpcUrlError,
+} from "./errors/client.js";
+export { EntrypointNotFoundError } from "./errors/entrypoint.js";
+export { InvalidSignerTypeError } from "./errors/signer.js";
+export {
+  FailedToFindTransactionError,
+  TransactionMissingToParamError,
+} from "./errors/transaction.js";
+export { InvalidUserOperationError } from "./errors/useroperation.js";
 export { LogLevel, Logger } from "./logger.js";
 export { middlewareActions } from "./middleware/actions.js";
 export { defaultFeeEstimator } from "./middleware/defaults/feeEstimator.js";

@@ -15,6 +15,8 @@ import {
   polygonMumbai,
   sepolia,
 } from "../chains/index.js";
+import { DefaultFactoryNotDefinedError } from "../errors/account.js";
+import { EntrypointNotFoundError } from "../errors/entrypoint.js";
 import type { UserOperationFeeOptions } from "../types";
 
 /**
@@ -42,9 +44,7 @@ export const getDefaultEntryPointAddress = (chain: Chain): Address => {
     case baseSepolia.id:
       return "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
   }
-  throw new Error(
-    `no default entrypoint contract address exists for ${chain.name}`
-  );
+  throw new EntrypointNotFoundError(chain);
 };
 
 /**
@@ -76,9 +76,7 @@ export const getDefaultSimpleAccountFactoryAddress = (
       return "0x9406Cc6185a346906296840746125a0E44976454";
   }
 
-  throw new Error(
-    `no default simple account factory contract exists for ${chain.name}`
-  );
+  throw new DefaultFactoryNotDefinedError("SimpleAccount", chain);
 };
 
 export const minPriorityFeePerBidDefaults = new Map<number, bigint>([

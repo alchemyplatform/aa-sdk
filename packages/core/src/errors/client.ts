@@ -11,3 +11,17 @@ export class IncompatibleClientError extends BaseError {
     );
   }
 }
+
+export class InvalidRpcUrlError extends BaseError {
+  override name = "InvalidRpcUrlError";
+  constructor(rpcUrl?: string) {
+    super(`Invalid RPC URL ${rpcUrl}`);
+  }
+}
+
+export class ChainNotFoundError extends BaseError {
+  override name = "ChainNotFoundError";
+  constructor() {
+    super("No chain supplied to the client");
+  }
+}

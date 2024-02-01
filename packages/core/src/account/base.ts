@@ -15,6 +15,13 @@ import {
   createBundlerClient,
   type BundlerClient,
 } from "../client/bundlerClient.js";
+import {
+  BatchExecutionNotSupportedError,
+  FailedToGetStorageSlotError,
+  GetCounterFactualAddressError,
+  UpgradeToAndCallNotSupportedError,
+} from "../errors/account.js";
+import { InvalidRpcUrlError } from "../errors/client.js";
 import { Logger } from "../logger.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import { wrapSignatureWith6492 } from "../signer/utils.js";
@@ -219,7 +226,7 @@ export abstract class BaseSmartContractAccount<
   async encodeBatchExecute(
     _txs: BatchUserOperationCallData
   ): Promise<`0x${string}`> {
-    throw new Error("encodeBatchExecute not supported");
+    throw new BatchExecutionNotSupportedError("BaseAccount");
   }
 
   /**
@@ -233,7 +240,7 @@ export abstract class BaseSmartContractAccount<
     _upgradeToImplAddress: Address,
     _upgradeToInitData: Hex
   ): Promise<Hex> => {
-    throw new Error("encodeUpgradeToAndCall not supported");
+    throw new UpgradeToAndCallNotSupportedError("BaseAccount");
   };
   // #endregion optional-methods
 
@@ -290,11 +297,11 @@ export abstract class BaseSmartContractAccount<
         }
 
         if (err.details === "Invalid URL") {
-          throw new Error("Invalid RPC URL.");
+          throw new InvalidRpcUrlError();
         }
       }
 
-      throw new Error("getCounterFactualAddress failed");
+      throw new GetCounterFactualAddressError();
     }
 
     return this.accountAddress;
@@ -361,7 +368,10 @@ export abstract class BaseSmartContractAccount<
     });
 
     if (storage == null) {
-      throw new Error("could not get storage");
+      throw new FailedToGetStorageSlotError(
+        "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
+        "Proxy Implementation Address"
+      );
     }
 
     return trim(storage);
