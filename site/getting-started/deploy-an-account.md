@@ -32,7 +32,7 @@ The next step is to select the right smart account implementation for your appli
 
 - [Using Modular Accounts](/smart-accounts/modular-account/)
 - [Using Light Account](/smart-accounts/light-account/)
-- [Using your own account implementation](/smart-accounts/accounts/guides/using-your-own)
+- [Using your own account implementation](/smart-accounts/custom/using-your-own)
 
 ::: tip Note
 The `LightAccount` implementation is not [ERC-6900](/smart-accounts/modular-account/) compliant. The `ModularAccount` implementation is launching later this year and will be EIP-6900 compatible. However, `LightAccount` is forward-compatible with `ModularAccount` and can be upgraded to it in the future.
