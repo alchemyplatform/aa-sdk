@@ -52,7 +52,7 @@ Get started with `aa-sdk` in our [Getting Started guide](/getting-started/setup)
 
 We started with the Ethereum Foundation’s canonical [SimpleAccount](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol) and added key improvements for production app development:
 
-- Significantly [reduced gas costs](/smart-accounts/accounts/choosing-a-smart-account#benchmarks)
+- Significantly [reduced gas costs](/smart-accounts/#benchmarks)
 - ERC-1271 signature support to ensure users can sign messages, such as on Opensea
 - Ownership transfer so that users won’t get locked into a single Signer
 
@@ -60,7 +60,7 @@ We started with the Ethereum Foundation’s canonical [SimpleAccount](https://gi
 
 `LightAccount` is forward-compatible with [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900), a new standard for **modular** smart accounts. Once we stabilize the ERC with the [community](https://ethereum-magicians.org/t/erc-6900-modular-smart-contract-accounts-and-plugins/13885/35) and publish a reference implementation, we will release an optional upgrade for `LightAccount` to upgrade to modular EIP-6900 compliant accounts. [Join the discussion](https://ethereum-magicians.org/t/erc-6900-modular-smart-contract-accounts-and-plugins/13885/35) on ERC-6900!
 
-To learn how to deploy a `LightAccount`, see [Light Account](/smart-accounts/accounts/guides/light-account).
+To learn how to deploy a `LightAccount`, see [Light Account](/smart-accounts/light-account/).
 
 ### Signers
 

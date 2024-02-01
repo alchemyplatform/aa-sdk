@@ -29,10 +29,11 @@ export const newSidebar: DefaultTheme.Sidebar = [
   {
     text: "Choosing a Smart Account",
     items: [
-      { text: "Introduction", link: "/" },
+      { text: "Introduction", link: "/smart-accounts/" },
       {
         text: "Modular Account",
         collapsed: false,
+        base: "/smart-accounts/modular-account",
         items: [
           { text: "Introduction", link: "/" },
           { text: "Getting started", link: "/" },
@@ -42,10 +43,11 @@ export const newSidebar: DefaultTheme.Sidebar = [
       {
         text: "Light Account",
         collapsed: true,
+        base: "/smart-accounts/light-account",
         items: [
           { text: "Introduction", link: "/" },
-          { text: "Getting started", link: "/" },
-          { text: "Deployments", link: "/" },
+          { text: "Getting started", link: "/getting-started" },
+          { text: "Deployments", link: "/deployments" },
         ],
       },
       {
