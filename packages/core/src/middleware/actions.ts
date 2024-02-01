@@ -10,6 +10,7 @@ import type {
   BundlerActions,
   BundlerRpcSchema,
 } from "../client/decorators/bundlerClient.js";
+import type { ClientMiddlewareConfig } from "../client/types.js";
 import { defaultFeeEstimator } from "./defaults/feeEstimator.js";
 import { defaultGasEstimator } from "./defaults/gasEstimator.js";
 import { defaultPaymasterAndData } from "./defaults/paymasterAndData.js";
@@ -31,7 +32,7 @@ export type MiddlewareClient<
 >;
 
 export const middlewareActions =
-  (overrides: Partial<ClientMiddleware>) =>
+  (overrides: ClientMiddlewareConfig) =>
   <
     TTransport extends Transport = Transport,
     TChain extends Chain | undefined = Chain | undefined,
@@ -43,11 +44,17 @@ export const middlewareActions =
   ): { middleware: ClientMiddleware } => ({
     middleware: {
       customMiddleware: overrides.customMiddleware ?? noopMiddleware,
-      dummyPaymasterAndData:
-        overrides.dummyPaymasterAndData ?? defaultPaymasterAndData,
+      dummyPaymasterAndData: overrides.paymasterAndData?.dummyPaymasterAndData
+        ? async (struct) => ({
+            ...struct,
+            paymasterAndData:
+              overrides.paymasterAndData!.dummyPaymasterAndData(),
+          })
+        : defaultPaymasterAndData,
       feeEstimator: overrides.feeEstimator ?? defaultFeeEstimator(client),
       gasEstimator: overrides.gasEstimator ?? defaultGasEstimator(client),
-      paymasterAndData: overrides.paymasterAndData ?? defaultPaymasterAndData,
+      paymasterAndData:
+        overrides.paymasterAndData?.paymasterAndData ?? defaultPaymasterAndData,
       userOperationSimulator:
         overrides.userOperationSimulator ?? noopMiddleware,
     },

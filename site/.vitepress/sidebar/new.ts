@@ -146,9 +146,10 @@ export const newSidebar: DefaultTheme.Sidebar = [
   },
   {
     text: "Third Party Integrations",
+    base: "/third-party",
     items: [
-      { text: "Bundlers", link: "/" },
-      { text: "Paymasters", link: "/" },
+      { text: "Bundlers", link: "/bundlers" },
+      { text: "Paymasters", link: "/paymasters" },
     ],
   },
   packagesSidebar,
