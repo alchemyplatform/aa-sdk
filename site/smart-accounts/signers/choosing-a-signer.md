@@ -18,7 +18,7 @@ head:
       content: Explore Account Kit integration guides for signers including Magic.Link, Privy, Web3Auth, EOAs, and many more!
 prev:
   text: Smart Accounts
-  link: /smart-accounts/accounts/choosing-a-smart-account
+  link: /smart-accounts/
 next:
   text: How to Send a User Operation
   link: /tutorials/send-user-operation
@@ -28,7 +28,7 @@ next:
 
 A **Signer** is a service (e.g. Magic or Turnkey) or application (e.g. MetaMask) that manages the private key and signs operations. Most web3 users today use an [Externally Owned Account (EOA)](https://ethereum.org/en/developers/docs/accounts/#externally-owned-accounts-and-key-pairs) with a self-custodial Signer such as MetaMask to manage the private key.
 
-With Account Kit, you will deploy a **smart account** for each user instead of an EOA wallet. This smart account stores the user’s assets (e.g. tokens or NFTs). The default smart account in Account Kit is called [`LightAccount`](/smart-accounts/accounts/guides/light-account) and it uses a typical single-owner architecture.
+With Account Kit, you will deploy a **smart account** for each user instead of an EOA wallet. This smart account stores the user’s assets (e.g. tokens or NFTs). The default smart account in Account Kit is called [`LightAccount`](/smart-accounts/light-account/) and it uses a typical single-owner architecture.
 
 The smart account is controlled by an **Owner** address. The smart account will only execute a transaction if it was signed by the owner’s private key.
 

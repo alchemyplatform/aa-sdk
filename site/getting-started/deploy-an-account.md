@@ -30,12 +30,12 @@ Before diving into smart accounts, it's important to [set up your Alchemy accoun
 
 The next step is to select the right smart account implementation for your application. We recommend using `ModularAccount`, [TODO: WILL HALP ME WITH YOUR WORDS]. We'll cover all the options in detail in the following sections:
 
-- [Using Modular Accounts](/smart-accounts/accounts/guides/modular-account)
-- [Using Light Account](/smart-accounts/accounts/guides/light-account)
+- [Using Modular Accounts](/smart-accounts/modular-account/)
+- [Using Light Account](/smart-accounts/light-account/)
 - [Using your own account implementation](/smart-accounts/accounts/guides/using-your-own)
 
 ::: tip Note
-The `LightAccount` implementation is not [ERC-6900](/smart-accounts/accounts/guides/modular-account) compliant. The `ModularAccount` implementation is launching later this year and will be EIP-6900 compatible. However, `LightAccount` is forward-compatible with `ModularAccount` and can be upgraded to it in the future.
+The `LightAccount` implementation is not [ERC-6900](/smart-accounts/modular-account/) compliant. The `ModularAccount` implementation is launching later this year and will be EIP-6900 compatible. However, `LightAccount` is forward-compatible with `ModularAccount` and can be upgraded to it in the future.
 :::
 
 ## 3. Choosing a Signer
