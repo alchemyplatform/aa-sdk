@@ -48,7 +48,7 @@ With `@particle-network/auth` and `@particle-network/provider` installed, you ca
 
 From here, setting up a `SmartAccountSigner` involves the initialization of `ParticleProvider` to be used in a viem wallet client, which then gets passed into our `SmartAccountSigner`.
 
-<<< @/snippets/particle.ts
+<<< @/snippets/signers/particle.ts
 
 ### Use it with Light Account
 
@@ -82,7 +82,7 @@ const provider = new AlchemyProvider({
 );
 ```
 
-<<< @/snippets/particle.ts
+<<< @/snippets/signers/particle.ts
 
 :::
 

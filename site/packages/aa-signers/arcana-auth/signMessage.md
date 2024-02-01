@@ -32,7 +32,7 @@ const signedMessage = await newArcanaAuthSigner.signMessage(
 );
 ```
 
-<<< @/snippets/arcana-auth.ts
+<<< @/snippets/signers/arcana-auth.ts
 :::
 
 ## Returns

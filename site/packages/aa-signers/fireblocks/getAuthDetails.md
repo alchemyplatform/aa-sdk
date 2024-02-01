@@ -30,7 +30,7 @@ const fireblocksSigner = await createFireblocksSigner();
 const details = await fireblocksSigner.getAuthDetails();
 ```
 
-<<< @/snippets/fireblocks.ts
+<<< @/snippets/signers/fireblocks.ts
 :::
 
 ## Returns

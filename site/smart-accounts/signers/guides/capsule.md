@@ -69,7 +69,7 @@ To use `CapsuleSigner` in your app's client, you must ensure the `window` object
 
 Next, setup the Capsule SDK and create an authenticated `CapsuleSigner` using the `aa-signers` package:
 
-<<< @/snippets/capsule.ts
+<<< @/snippets/signers/capsule.ts
 
 ### Use it with Light Account
 
@@ -101,6 +101,6 @@ const provider = new AlchemyProvider({
 );
 ```
 
-<<< @/snippets/capsule.ts
+<<< @/snippets/signers/capsule.ts
 
 :::

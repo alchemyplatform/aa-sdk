@@ -30,7 +30,7 @@ const newArcanaAuthSigner = await createArcanaAuthSigner();
 const details = await newArcanaAuthSigner.getAuthDetails();
 ```
 
-<<< @/snippets/arcana-auth.ts
+<<< @/snippets/signers/arcana-auth.ts
 :::
 
 ## Returns

@@ -60,7 +60,7 @@ const signedTypedData = await magicSigner.signTypedData({
 });
 ```
 
-<<< @/snippets/magic.ts
+<<< @/snippets/signers/magic.ts
 :::
 
 ## Returns

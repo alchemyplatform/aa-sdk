@@ -48,7 +48,7 @@ Use [Arcana Developer Dashboard](https://dashboard.arcana.network) to register y
 
 Use the **clientId** assigned to your app via the dashboard and integrate with the Arcana Auth SDK by creating a `SmartAccountSigner`.
 
-<<< @/snippets/arcana-auth.ts
+<<< @/snippets/signers/arcana-auth.ts
 
 ### Use it with LightAccount
 
@@ -84,6 +84,6 @@ export async function getProvider() {
 }
 ```
 
-<<< @/snippets/arcana-auth.ts
+<<< @/snippets/signers/arcana-auth.ts
 
 :::

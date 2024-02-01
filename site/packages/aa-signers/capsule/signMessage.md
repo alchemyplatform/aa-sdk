@@ -30,7 +30,7 @@ const capsuleSigner = await createCapsuleSigner();
 const signedMessage = await capsuleSigner.signMessage("test");
 ```
 
-<<< @/snippets/capsule.ts
+<<< @/snippets/signers/capsule.ts
 :::
 
 ## Returns

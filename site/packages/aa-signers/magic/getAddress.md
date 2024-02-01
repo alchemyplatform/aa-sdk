@@ -30,7 +30,7 @@ const magicSigner = await createMagicSigner();
 const address = await magicSigner.getAddress();
 ```
 
-<<< @/snippets/magic.ts
+<<< @/snippets/signers/magic.ts
 :::
 
 ## Returns
