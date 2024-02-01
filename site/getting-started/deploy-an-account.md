@@ -40,7 +40,7 @@ The `LightAccount` implementation is not [ERC-6900](/smart-accounts/modular-acco
 
 ## 3. Choosing a Signer
 
-A Signer is the entity that signs transactions (User Operations) on behalf of the smart account. It can be an EOA, a custodial service, or a multi-party computation (MPC) service. We explain the different types of signers in detail in the [overview](/smart-accounts/signers/choosing-a-signer) section on choosing a Signer and offer integration guides in these docs, many of which use our `aa-signers` SDK.
+A Signer is the entity that signs transactions (User Operations) on behalf of the smart account. It can be an EOA, a custodial service, or a multi-party computation (MPC) service. We explain the different types of signers in detail in the [overview](/signers/choosing-a-signer) section on choosing a Signer and offer integration guides in these docs, many of which use our `aa-signers` SDK.
 
 At this point you should be able to integrate smart accounts in your application. However, there are a few advanced features that can help you improve the user experience and save on gas costs. Information about these can be found in the `Guides` section.
 

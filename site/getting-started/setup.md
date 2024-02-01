@@ -165,7 +165,7 @@ In this guide, we initialized an `AlchemyProvider` with the `aa-alchemy` package
 
 2. To learn about the end-to-end process of integrating smart accounts in your applications, check out the section on [Smart Accounts](/smart-accounts/).
 
-3. To learn about the `owner` field on your smart account, check out the section on [Choosing a Signer](/smart-accounts/signers/choosing-a-signer) to own the smart account.
+3. To learn about the `owner` field on your smart account, check out the section on [Choosing a Signer](/signers/choosing-a-signer) to own the smart account.
 
 4. To learn more about different User Operations you can send with different `target` and `data` fields in the `sendUserOperation` function above, look at our [How to Send a User Operation](/using-smart-accounts/send-user-operations) guide for an example using NFT mints.
 

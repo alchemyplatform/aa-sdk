@@ -57,11 +57,7 @@ Let's see it in action with `aa-alchemy` and `LightSmartContractAccount` from `a
 ::: code-group
 
 ```ts [example.ts]
-import { AlchemyProvider } from "@alchemy/aa-alchemy";
-import {
-  LightSmartContractAccount,
-  getDefaultLightAccountFactoryAddress,
-} from "@alchemy/aa-accounts";
+import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";
 import { sepolia } from "@alchemy/aa-core";
 import { createArcanaAuthSigner } from "./arcana-auth";
 
@@ -69,18 +65,11 @@ const chain = sepolia;
 
 export async function getProvider() {
   const signer = await createArcanaAuthSigner();
-  return new AlchemyProvider({
+  return createModularAccountAlchemyClient({
     apiKey: "ALCHEMY_API_KEY",
     chain,
-  }).connect(
-    (rpcClient) =>
-      new LightSmartContractAccount({
-        chain,
-        owner: signer,
-        factoryAddress: getDefaultLightAccountFactoryAddress(chain),
-        rpcClient,
-      })
-  );
+    owner: signer,
+  });
 }
 ```
 
