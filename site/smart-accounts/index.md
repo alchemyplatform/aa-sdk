@@ -28,19 +28,19 @@ next:
 
 ## What's a Smart Account?
 
-A smart account is an [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) smart account. You can use it to manage assets, execute transactions (known as `userOperations` or `userOps`), and more. There are many different implementations of a smart account, including our [Light Account](/smart-accounts/accounts/guides/light-account).
+A smart account is an [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) smart account. You can use it to manage assets, execute transactions (known as `userOperations` or `userOps`), and more. There are many different implementations of a smart account, including our [Light Account](/smart-accounts/light-account/).
 
 ## Light Account
 
 Account Kit provides a default smart account called `LightAccount`.
 
-[Light Account](/smart-accounts/accounts/guides/light-account) is a secure, audited, gas-optimized, ERC-4337 compatible smart account implementation. It comes equipped with features like owner transfers, [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) message signing, and batched transactions. It's also [open source](https://github.com/alchemyplatform/light-account)!
+[Light Account](/smart-accounts/light-account/) is a secure, audited, gas-optimized, ERC-4337 compatible smart account implementation. It comes equipped with features like owner transfers, [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) message signing, and batched transactions. It's also [open source](https://github.com/alchemyplatform/light-account)!
 
 For most applications, we recommend using Light Account. It is [deployed](/smart-accounts/accounts/deployment-addresses) on Ethereum, Optimism, Arbitrum, Polygon, Base, and the respective testnets.
 
 ## Modular Account (coming soon)
 
-We are authoring a standard for modular smart accounts called [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900). Soon we will release an ERC-6900 compatible [Modular Account](/smart-accounts/accounts/guides/modular-account). This will be an optional upgrade from Light Account to unlock an ecosystem of plugins for your smart account stack.
+We are authoring a standard for modular smart accounts called [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900). Soon we will release an ERC-6900 compatible [Modular Account](/smart-accounts/modular-account/). This will be an optional upgrade from Light Account to unlock an ecosystem of plugins for your smart account stack.
 
 ## Use Your Own Account
 
