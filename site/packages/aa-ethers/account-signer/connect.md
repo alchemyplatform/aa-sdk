@@ -37,7 +37,7 @@ const newProvider = EthersProviderAdapter.fromEthersProvider(ethersProvider);
 const newSigner = signer.connect(newProvider);
 ```
 
-<<< @/snippets/ethers-signer.ts
+<<< @/snippets/aa-ethers/ethers-signer.ts
 :::
 
 ## Returns

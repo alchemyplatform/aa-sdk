@@ -31,7 +31,7 @@ Using the SDK, we'll create an Alchemy Smart Account Client. As it is, the provi
 
 See [Alchemy Smart Account Client](/packages/aa-alchemy/smart-account-client/) for more details.
 
-<<< @/snippets/light-account-alchemy-client.ts
+<<< @/snippets/aa-alchemy/connected-client.ts
 
 ## 2. Construct The CallData
 

@@ -57,5 +57,5 @@ const signer = provider.connectToAccount(
 );
 ```
 
-<<< @/snippets/ethers-provider.ts
+<<< @/snippets/aa-ethers/ethers-provider.ts
 :::

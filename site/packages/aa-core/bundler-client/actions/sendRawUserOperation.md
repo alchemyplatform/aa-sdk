@@ -33,7 +33,7 @@ const hash = await client.sendRawUserOperation(
 );
 ```
 
-<<< @/snippets/bundlerClient.ts
+<<< @/snippets/aa-core/bundlerClient.ts
 :::
 
 ## Returns

@@ -34,7 +34,7 @@ const smartAccountClient = await transferLightAccountOwnership(provider, {
 });
 ```
 
-<<< @/snippets/smartAccountClient.ts
+<<< @/snippets/aa-core/smartAccountClient.ts
 :::
 
 ## Returns

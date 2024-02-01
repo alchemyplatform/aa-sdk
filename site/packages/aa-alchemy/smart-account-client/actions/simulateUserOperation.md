@@ -21,7 +21,7 @@ head:
 ::: code-group
 
 ```ts [example.ts]
-import { smartAccountClient } from "./alchemy-smartAccountClient";
+import { smartAccountClient } from "./base-client.ts";
 // [!code focus:99]
 
 const uoStruct: UserOperationCallData = {
@@ -41,7 +41,7 @@ if (uoSimResult.error) {
 const uo = await smartAccountClient.sendUserOperation({ uo: uoStruct });
 ```
 
-<<< @/snippets/light-account-alchemy-client.ts
+<<< @/snippets/aa-alchemy/connected-client.ts
 :::
 
 ## Returns

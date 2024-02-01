@@ -54,7 +54,7 @@ We're pioneering the future of modular smart accounts with [EIP-6900](https://ww
 
 The code snippet below demonstrates how to use Light Account with Account Kit. It creates a Light Account and sends a `UserOperation` from it:
 
-<<< @/snippets/light-account.ts
+<<< @/snippets/aa-alchemy/light-account.ts
 
 ## Developer Links
 

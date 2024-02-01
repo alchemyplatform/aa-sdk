@@ -57,7 +57,7 @@ const signedTypedData = smartAccountClient.signTypedData({
 });
 ```
 
-<<< @/snippets/smartAccountClient.ts
+<<< @/snippets/aa-core/smartAccountClient.ts
 
 :::
 

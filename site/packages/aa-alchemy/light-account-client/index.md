@@ -20,7 +20,7 @@ head:
 
 ::: code-group
 
-<<< @/snippets/light-account-alchemy-client.ts
+<<< @/snippets/aa-alchemy/light-account-client.ts
 :::
 
 ## Returns

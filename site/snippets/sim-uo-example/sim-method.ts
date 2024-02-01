@@ -1,11 +1,11 @@
-import { createLightAccountAlchemyClient } from "@alchemy/aa-alchemy";
+import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";
 import {
   LocalAccountSigner,
   UserOperationCallData,
   sepolia,
 } from "@alchemy/aa-core";
 
-export const smartAccountClient = await createLightAccountAlchemyClient({
+export const smartAccountClient = await createModularAccountAlchemyClient({
   apiKey: "YOUR_API_KEY",
   chain: sepolia,
   owner: LocalAccountSigner.mnemonicToAccountSigner("OWNER_MNEMONIC"),

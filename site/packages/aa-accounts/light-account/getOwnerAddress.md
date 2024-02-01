@@ -27,7 +27,7 @@ import { smartAccountClient } from "./smartAccountClient";
 const owner = await smartAccountClient.account.getOwnerAddress();
 ```
 
-<<< @/snippets/smartAccountClient.ts
+<<< @/snippets/aa-core/smartAccountClient.ts
 :::
 
 ## Returns

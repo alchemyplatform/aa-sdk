@@ -26,7 +26,7 @@ import { client } from "./client";
 const receipt = await client.getUserOperationReceipt("0xUserOperationHash");
 ```
 
-<<< @/snippets/bundlerClient.ts
+<<< @/snippets/aa-core/bundlerClient.ts
 :::
 
 ## Returns
