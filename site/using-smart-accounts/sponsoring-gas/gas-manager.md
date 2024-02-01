@@ -26,15 +26,7 @@ Gas fees are a significant barrier to entry for new user of your app. With Accou
 
 After [installing `aa-sdk`](/getting-started/setup#install-the-packages) in your project, follow these steps to sponsor gas.
 
-### 1. Set Up the Provider
-
-First, create an `AlchemyProvider`. You'll use this to send UOs and interact with the blockchain.
-
-<<< @/snippets/aa-core/smartAccountClient.ts
-
-Remember to replace `ALCHEMY_API_KEY` with your Alchemy API key. If you don't have one yet, you can create an API key on the [Alchemy dashboard](https://dashboard.alchemy.com/signup/?a=aa-docs).
-
-### 2. Create a Gas Manager Policy
+### 1. Create a Gas Manager Policy
 
 A gas manager policy is a set of rules that define which UOs are eligible for gas sponsorship. You can control which operations are eligible for sponsorship by defining rules:
 
@@ -47,40 +39,15 @@ To learn more about policy configuration, refer to the guide on [setting up a ga
 
 Once you've decided on policy rules for your app, [create a policy](https://dashboard.alchemy.com/gas-manager/policy/create/?a=ak-docs) in the Gas Manager dashboard.
 
-### 3. Link the Policy to your Provider
+### 2. Create an `AlchemySmartAccountClient` that uses your policy
 
-Next, you must link your gas policy to your provider. Find your Policy ID located at the top of the policy page in the Gas Manager dashboard.
+Remember to replace `ALCHEMY_API_KEY` with your Alchemy API key. If you don't have one yet, you can create an API key on the [Alchemy dashboard](https://dashboard.alchemy.com/signup/?a=aa-docs).
 
 ![Policy ID](/images/policy-id.png)
 
 Copy it and then replace the `GAS_MANAGER_POLICY_ID` in the snippet below.
 
-::: code-group
-
-```ts [sponsor-gas.ts]
-import { provider } from "./provider.ts";
-
-// Find your Gas Manager policy id at: // [!code focus:10]
-//dashboard.alchemy.com/gas-manager/policy/create
-const GAS_MANAGER_POLICY_ID = "YourGasManagerPolicyId";
-
-// Link the provider with the Gas Manager. This ensures UOs
-// sent with this provider get sponsorship from the Gas Manager.
-provider.withAlchemyGasManager({
-  policyId: GAS_MANAGER_POLICY_ID,
-});
-
-// Here's how to send a sponsored UO from your smart account:
-const { hash } = await provider.sendUserOperation({
-  target: "0xTargetAddress",
-  data: "0xCallData",
-  value: 0n, // value in bigint or leave undefined
-});
-```
-
-<<< @/snippets/aa-core/smartAccountClient.ts
-
-:::
+<<< @/snippets/aa-alchemy/gas-manager-client.ts
 
 You've created a gas manager policy and linked it to the provider. This guarantees that UOs sent with this provider receive sponsorship if and only the UO satisfies the rules defined in your gas policy.
 
@@ -91,17 +58,7 @@ Now you're ready to send sponsored UOs! You can send a UO by calling `sendUserOp
 ::: code-group
 
 ```ts [sponsor-gas.ts]
-import { provider } from "./provider.ts";
-
-// Your Gas Manager policy id is available at: //
-//dashboard.alchemy.com/gas-manager/policy/create
-const GAS_MANAGER_POLICY_ID = "YourGasManagerPolicyId";
-
-// Link the provider with the Gas Manager so the UOs
-// sent with this provider get sponsorship from the Gas Manager.
-provider.withAlchemyGasManager({
-  policyId: GAS_MANAGER_POLICY_ID,
-});
+import { smartAccountClient } from "./smartAccountClient.ts";
 
 // Send a sponsored UO from your smart account like this: // [!code focus:6]
 const { hash } = await provider.sendUserOperation({
@@ -111,7 +68,7 @@ const { hash } = await provider.sendUserOperation({
 });
 ```
 
-<<< @/snippets/aa-core/smartAccountClient.ts
+<<< @/snippets/aa-alchemy/gas-manager-client.ts
 
 :::
 
