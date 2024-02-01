@@ -1,5 +1,7 @@
 import {
   AccountNotFoundError,
+  ChainNotFoundError,
+  DefaultFactoryNotDefinedError,
   arbitrum,
   arbitrumGoerli,
   arbitrumSepolia,
@@ -70,9 +72,7 @@ export const getDefaultMultiOwnerMSCAFactoryAddress = (
     case baseSepolia.id:
       throw new Error("not yet deployed");
   }
-  throw new Error(
-    `no default multi owner msca factory contract exists for ${chain.name}`
-  );
+  throw new DefaultFactoryNotDefinedError("MultiOwnerModularAccount", chain);
 };
 
 export async function getMSCAUpgradeToData<
@@ -102,7 +102,7 @@ export async function getMSCAUpgradeToData<
   }
 
   if (!client.chain) {
-    throw new Error("client must have a chain");
+    throw new ChainNotFoundError();
   }
   const chain = client.chain;
   const account = account_ as OwnedSmartContractAccount<string, TOwner>;

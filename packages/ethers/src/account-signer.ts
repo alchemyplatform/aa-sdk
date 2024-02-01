@@ -1,4 +1,5 @@
 import {
+  AccountNotFoundError,
   resolveProperties,
   type BatchUserOperationCallData,
   type BundlerClient,
@@ -54,9 +55,7 @@ export class AccountSigner<
 
   async getAddress(): Promise<string> {
     if (!this.account) {
-      throw new Error(
-        "connect the signer to a provider that has a connected account"
-      );
+      throw new AccountNotFoundError();
     }
 
     return this.account.address;
@@ -64,9 +63,7 @@ export class AccountSigner<
 
   signMessage(message: string | Uint8Array): Promise<string> {
     if (!this.account) {
-      throw new Error(
-        "connect the signer to a provider that has a connected account"
-      );
+      throw new AccountNotFoundError();
     }
 
     return this.account.signMessage({
@@ -81,9 +78,7 @@ export class AccountSigner<
     transaction: Deferrable<TransactionRequest>
   ): Promise<TransactionResponse> {
     if (!this.provider.accountProvider.account || !this.account) {
-      throw new Error(
-        "connect the signer to a provider that has a connected account"
-      );
+      throw new AccountNotFoundError();
     }
 
     const resolved = await resolveProperties(transaction);

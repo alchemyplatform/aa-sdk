@@ -8,6 +8,7 @@ import type { SmartContractAccount } from "../../account/smartContractAccount.js
 import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
 import { AccountNotFoundError } from "../../errors/account.js";
 import { IncompatibleClientError } from "../../errors/client.js";
+import { TransactionMissingToParamError } from "../../errors/transaction.js";
 import type {
   UserOperationOverrides,
   UserOperationStruct,
@@ -31,7 +32,7 @@ export const buildUserOperationFromTx: <
   }
 
   if (!request.to) {
-    throw new Error("Transaction is missing `to` address set on request");
+    throw new TransactionMissingToParamError();
   }
 
   if (!isBaseSmartAccountClient(client)) {

@@ -1,4 +1,5 @@
 import {
+  DefaultFactoryNotDefinedError,
   arbitrum,
   arbitrumGoerli,
   arbitrumSepolia,
@@ -79,9 +80,7 @@ export const getDefaultLightAccountFactoryAddress = (
       return LightAccountVersions[version].factoryAddress;
   }
 
-  throw new Error(
-    `no default light account factory contract exists for ${chain.name}`
-  );
+  throw new DefaultFactoryNotDefinedError("LightAccount", chain);
 };
 
 export const LightAccountUnsupported1271Impls = [

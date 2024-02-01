@@ -16,6 +16,14 @@ import {
 import { toAccount } from "viem/accounts";
 import { EntryPointAbi } from "../abis/EntryPointAbi.js";
 import { createBundlerClient } from "../client/bundlerClient.js";
+import {
+  BatchExecutionNotSupportedError,
+  FailedToGetStorageSlotError,
+  GetCounterFactualAddressError,
+  SignTransactionNotSupportedError,
+  UpgradesNotSupportedError,
+} from "../errors/account.js";
+import { InvalidRpcUrlError } from "../errors/client.js";
 import { Logger } from "../logger.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import { wrapSignatureWith6492 } from "../signer/utils.js";
@@ -141,11 +149,11 @@ export const getAccountAddress = async ({
     }
 
     if (err.details === "Invalid URL") {
-      throw new Error("Invalid RPC URL.");
+      throw new InvalidRpcUrlError();
     }
   }
 
-  throw new Error("getCounterFactualAddress failed");
+  throw new GetCounterFactualAddressError();
 };
 
 export async function toSmartContractAccount<
@@ -224,7 +232,7 @@ export async function toSmartContractAccount<
   const encodeUpgradeToAndCall_ =
     encodeUpgradeToAndCall ??
     (() => {
-      throw new Error("contract does not support upgrades");
+      throw new UpgradesNotSupportedError(source);
     });
 
   const isAccountDeployed = async () => {
@@ -245,7 +253,7 @@ export async function toSmartContractAccount<
     signMessage,
     signTypedData,
     signTransaction: () => {
-      throw new Error("Sign Transaction not supported for smart contracts");
+      throw new SignTransactionNotSupportedError();
     },
   });
 
@@ -295,7 +303,10 @@ export async function toSmartContractAccount<
     });
 
     if (storage == null) {
-      throw new Error("could not get storage");
+      throw new FailedToGetStorageSlotError(
+        "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
+        "Proxy Implementation Address"
+      );
     }
 
     return trim(storage);
@@ -311,7 +322,7 @@ export async function toSmartContractAccount<
     encodeBatchExecute:
       encodeBatchExecute ??
       (() => {
-        throw new Error("Account does not support batch execution");
+        throw new BatchExecutionNotSupportedError(source);
       }),
     encodeExecute,
     getDummySignature,

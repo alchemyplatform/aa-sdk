@@ -12,8 +12,8 @@ import {
   type Hex,
   type ReadContractReturnType,
 } from "viem";
-import { type Plugin } from "../types.js";
 import {
+  ChainNotFoundError,
   AccountNotFoundError,
   isSmartAccountClient,
   IncompatibleClientError,
@@ -22,6 +22,7 @@ import {
   type GetAccountParameter,
   type SendUserOperationResult,
 } from "@alchemy/aa-core";
+import { type Plugin } from "../types.js";
 import { installPlugin as installPlugin_ } from "../../plugin-manager/installPlugin.js";
 import { type FunctionReference } from "../../account-loupe/types.js";
 
@@ -153,7 +154,7 @@ export const MultiOwnerPlugin: Plugin<typeof MultiOwnerPluginAbi> = {
     PublicClient,
     Address
   > => {
-    if (!client.chain) throw new Error("Missing chain on client");
+    if (!client.chain) throw new ChainNotFoundError();
 
     return getContract({
       address: address || addresses[client.chain.id],
@@ -202,7 +203,7 @@ export const multiOwnerPluginActions: <
 
     const chain = client.chain;
     if (!chain) {
-      throw new Error("Chain is required");
+      throw new ChainNotFoundError();
     }
 
     const dependencies = params.dependencyOverrides ?? [];
