@@ -44,4 +44,4 @@ We are authoring a standard for modular smart accounts called [ERC-6900](https:/
 
 ## Use Your Own Account
 
-If Light Account doesn't fit your specific needs, you can always use your own smart account implementation with Account Kit. To learn how, see our guide in the [Using Your Own](/smart-accounts/accounts/guides/using-your-own) section.
+If Light Account doesn't fit your specific needs, you can always use your own smart account implementation with Account Kit. To learn how, see our guide in the [Using Your Own](/smart-accounts/custom/using-your-own) section.
