@@ -45,12 +45,7 @@ Setup the Dfns Web3 Provider and wrap it in an `AlchemyProvider`.
 ::: code-group
 
 ```ts [example.ts]
-import { AlchemyProvider } from "@alchemy/aa-alchemy";
-import {
-  LightSmartContractAccount,
-  getDefaultLightAccountFactoryAddress,
-} from "@alchemy/aa-accounts";
-import { encodeFunctionData, parseAbi } from "viem";
+import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";
 import { sepolia } from "@alchemy/aa-core";
 import { createDfnsSigner } from "./dfns";
 
@@ -58,19 +53,12 @@ import { createDfnsSigner } from "./dfns";
 const ALCHEMY_API_KEY = "API_KEY";
 const chain = sepolia;
 
-const createAlchemyProvider = async (): Promise<AlchemyProvider> => {
-  return new AlchemyProvider({
+const createAlchemyProvider = async () => {
+  return createModularAccountAlchemyClient({
     apiKey: ALCHEMY_API_KEY,
     chain,
-  }).connect(
-    (rpcClient) =>
-      new LightSmartContractAccount({
-        chain,
-        owner: await createDfnsSigner(),
-        factoryAddress: getDefaultLightAccountFactoryAddress(chain),
-        rpcClient,
-      })
-  );
+    owner: await createDfnsSigner(),
+  });
 };
 ```
 

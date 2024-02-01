@@ -57,29 +57,16 @@ Next, setup the Particle SDK and create an authenticated `ParticleSigner` using 
 ::: code-group
 
 ```ts [example.ts]
-import { AlchemyProvider } from "@alchemy/aa-alchemy";
-import {
-  LightSmartContractAccount,
-  getDefaultLightAccountFactoryAddress,
-} from "@alchemy/aa-accounts";
-import { getDefaultEntryPointAddress } from "@alchemy/aa-core";
-import { polygonMumbai } from "@alchemy/aa-core";
+import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";
+import { sepolia } from "@alchemy/aa-core";
 import { createParticleSigner } from "./particle";
 
 const chain = polygonMumbai;
-const provider = new AlchemyProvider({
+const provider = await createModularAccountAlchemyClient({
   apiKey: process.env.ALCHEMY_API_KEY,
   chain,
-}).connect(
-  (rpcClient) =>
-    new LightSmartContractAccount({
-      entryPointAddress: getDefaultEntryPointAddress(chain),
-      chain: rpcClient.chain,
-      owner: await createParticleSigner(),
-      factoryAddress: getDefaultLightAccountFactoryAddress(chain),
-      rpcClient,
-    })
-);
+  owner: await createParticleSigner(),
+});
 ```
 
 <<< @/snippets/signers/particle.ts

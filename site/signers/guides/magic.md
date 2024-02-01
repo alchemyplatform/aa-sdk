@@ -56,11 +56,7 @@ Let's see it in action with `aa-alchemy` and `LightSmartContractAccount` from `a
 ::: code-group
 
 ```ts [example.ts]
-import { AlchemyProvider } from "@alchemy/aa-alchemy";
-import {
-  LightSmartContractAccount,
-  getDefaultLightAccountFactoryAddress,
-} from "@alchemy/aa-accounts";
+import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";
 import { sepolia } from "@alchemy/aa-core";
 import { createMagicSigner } from "./magic";
 
@@ -68,19 +64,11 @@ const chain = sepolia;
 
 // NOTE: the below is async because it depends on creating a magic Signer. You can choose to break that up how you want
 // e.g. use a useEffect + useState to create the Signer and then pass it down to the provider
-const provider = new AlchemyProvider({
+const provider = await createModularAccountAlchemyClient({
   apiKey: "ALCHEMY_API_KEY",
   chain,
-}).connect(
-  (rpcClient) =>
-    new LightSmartContractAccount({
-      entryPointAddress,
-      chain: rpcClient.chain,
-      owner: await createMagicSigner(),
-      factoryAddress: getDefaultLightAccountFactoryAddress(chain),
-      rpcClient,
-    })
-);
+  owner: await createMagicSigner(),
+});
 ```
 
 <<< @/snippets/signers/magic.ts

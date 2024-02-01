@@ -58,33 +58,21 @@ Next, setup the Turnkey SDK and create an authenticated `TurnkeySigner` using th
 
 ### Use it with Light Account
 
-Let's see it in action with `aa-alchemy` and `LightSmartContractAccount` from `aa-accounts`:
+Let's see it in action with `aa-alchemy` and `ModularAccount` from `aa-accounts`:
 ::: code-group
 
 ```ts [example.ts]
-import { AlchemyProvider } from "@alchemy/aa-alchemy";
-import {
-  LightSmartContractAccount,
-  getDefaultLightAccountFactoryAddress,
-} from "@alchemy/aa-accounts";
+import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";
 import { sepolia } from "@alchemy/aa-core";
 import { createTurnkeySigner } from "./turnkey";
 
 const chain = sepolia;
 
-const provider = new AlchemyProvider({
+const provider = await createModularAccountAlchemyClient({
   apiKey: "ALCHEMY_API_KEY",
   chain,
-}).connect(
-  (rpcClient) =>
-    new LightSmartContractAccount({
-      entryPointAddress,
-      chain: rpcClient.chain,
-      owner: await createTurnkeySigner(),
-      factoryAddress: getDefaultLightAccountFactoryAddress(chain),
-      rpcClient,
-    })
-);
+  owner: await createTurnkeySigner(),
+});
 ```
 
 <<< @/snippets/signers/turnkey.ts

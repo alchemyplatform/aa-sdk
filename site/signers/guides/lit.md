@@ -79,26 +79,16 @@ We can link our `SmartAccountSigner` to a `LightSmartContractAccount` from `aa-a
 ::: code-group
 
 ```ts [example.ts]
-import { AlchemyProvider } from "@alchemy/aa-alchemy";
-import {
-  LightSmartContractAccount,
-  getDefaultLightAccountFactoryAddress,
-} from "@alchemy/aa-accounts";
+import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";
+import { sepolia } from "@alchemy/aa-core";
 import { createLitSigner } from "./lit";
 const chain = sepolia;
 
-const provider = new AlchemyProvider({
+const provider = await createModularAccountAlchemyClient({
   apiKey: "ALCHEMY_API_KEY",
   chain,
-}).connect(
-  (rpcClient) =>
-    new LightSmartContractAccount({
-      chain,
-      owner: await createLitSigner(AUTH_METHOD),
-      factoryAddress: getDefaultLightAccountFactoryAddress(chain),
-      rpcClient,
-    })
-);
+  owner: await createLitSigner(AUTH_METHOD),
+});
 ```
 
 :::

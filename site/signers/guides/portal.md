@@ -56,27 +56,17 @@ Let's see it in action with `aa-alchemy` and `LightSmartContractAccount` from `a
 ::: code-group
 
 ```ts [example.ts]
-import { AlchemyProvider } from "@alchemy/aa-alchemy";
-import {
-  LightSmartContractAccount,
-  getDefaultLightAccountFactoryAddress,
-} from "@alchemy/aa-accounts";
-import { polygonMumbai } from "@alchemy/aa-core";
+import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";
+import { sepolia } from "@alchemy/aa-core";
 import { createPortalSigner } from "./portal";
 
-const chain = polygonMumbai;
-const provider = new AlchemyProvider({
-  apiKey: process.env.ALCHEMY_API_KEY,
+const chain = sepolia;
+
+const provider = await createModularAccountAlchemyClient({
+  apiKey: "ALCHEMY_API_KEY",
   chain,
-}).connect(
-  (rpcClient) =>
-    new LightSmartContractAccount({
-      chain,
-      owner: await createPortalSigner(),
-      factoryAddress: getDefaultLightAccountFactoryAddress(chain),
-      rpcClient,
-    })
-);
+  owner: await createPortalSigner(),
+});
 ```
 
 <<< @/snippets/signers/portal.ts
