@@ -21,7 +21,7 @@ To create an `AlchemySmartAccountClient`, you must provide a set of parameters d
 ::: code-group
 
 ```ts [example.ts]
-import { AlchemyProvider } from "@alchemy/aa-alchemy";
+import { createAlchemySmartAccountClient } from "@alchemy/aa-alchemy";
 import { getDefaultEntryPointAddress } from "@alchemy/aa-core";
 import { sepolia } from "@alchemy/aa-core";
 
