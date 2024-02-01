@@ -48,7 +48,7 @@ yarn add @portal-hq/web
 
 Next, setup the Portal SDK and create an authenticated `PortalSigner` using the `aa-signers` package:
 
-<<< @/snippets/portal.ts
+<<< @/snippets/signers/portal.ts
 
 ### Use it with Light Account
 
@@ -79,6 +79,6 @@ const provider = new AlchemyProvider({
 );
 ```
 
-<<< @/snippets/portal.ts
+<<< @/snippets/signers/portal.ts
 
 :::

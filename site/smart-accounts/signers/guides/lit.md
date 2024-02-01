@@ -71,7 +71,7 @@ See documentation [here](https://developer.litprotocol.com/v3/sdk/wallets/mintin
 
 ### Create A LitSigner
 
-<<< @/snippets/lit.ts
+<<< @/snippets/signers/lit.ts
 
 ### Use it with Light Account
 

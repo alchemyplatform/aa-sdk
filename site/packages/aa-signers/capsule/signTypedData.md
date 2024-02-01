@@ -60,7 +60,7 @@ const signedTypedData = await capsuleSigner.signTypedData({
 });
 ```
 
-<<< @/snippets/capsule.ts
+<<< @/snippets/signers/capsule.ts
 :::
 
 ## Returns

@@ -60,7 +60,7 @@ const signedTypedData = await web3AuthSigner.signTypedData({
 });
 ```
 
-<<< @/snippets/web3auth.ts
+<<< @/snippets/signers/web3auth.ts
 :::
 
 ## Returns

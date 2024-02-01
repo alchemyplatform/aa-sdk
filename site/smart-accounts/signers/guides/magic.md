@@ -48,7 +48,7 @@ To use `MagicSigner` in your app's client, you must ensure the `window` object i
 
 Next, setup the magic sdk and create an authenticated `MagicSigner` using the `aa-signers` package:
 
-<<< @/snippets/magic.ts
+<<< @/snippets/signers/magic.ts
 
 ### Use it with Light Account
 
@@ -83,6 +83,6 @@ const provider = new AlchemyProvider({
 );
 ```
 
-<<< @/snippets/magic.ts
+<<< @/snippets/signers/magic.ts
 
 :::

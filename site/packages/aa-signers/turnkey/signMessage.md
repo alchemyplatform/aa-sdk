@@ -30,7 +30,7 @@ const turnkeySigner = await createTurnkeySigner();
 const signedMessage = await turnkeySigner.signMessage("test");
 ```
 
-<<< @/snippets/turnkey.ts
+<<< @/snippets/signers/turnkey.ts
 :::
 
 ## Returns

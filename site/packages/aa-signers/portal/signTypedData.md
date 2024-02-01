@@ -60,7 +60,7 @@ const signedTypedData = await portalSigner.signTypedData({
 });
 ```
 
-<<< @/snippets/portal.ts
+<<< @/snippets/signers/portal.ts
 :::
 
 ## Returns

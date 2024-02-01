@@ -50,7 +50,7 @@ Due to how Fireblocks parses a private key [in their SDK](https://github.com/fir
 
 Next, setup the Fireblocks SDK and create an authenticated `FireblocksSigner` using the `aa-signers` package:
 
-<<< @/snippets/fireblocks.ts
+<<< @/snippets/signers/fireblocks.ts
 
 ### Use it with Light Account
 
@@ -81,6 +81,6 @@ const provider = new AlchemyProvider({
 );
 ```
 
-<<< @/snippets/fireblocks.ts
+<<< @/snippets/signers/fireblocks.ts
 
 :::
