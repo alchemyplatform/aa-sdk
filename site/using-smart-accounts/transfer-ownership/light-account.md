@@ -97,7 +97,7 @@ const { hash: userOperationHash } = provider.sendUserOperation({
 });
 ```
 
-<<< @/snippets/aa-core/smartAccountClient.ts
+<<< @/snippets/aa-alchemy/light-account-client.ts [smartAccountClient.ts]
 
 :::
 
