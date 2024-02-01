@@ -16,16 +16,13 @@ head:
   - - meta
     - name: twitter:description
       content: Follow this guide to send a User Operation with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
-prev:
-  text: Smart Accounts
-  link: /smart-accounts/overview
 ---
 
 # How to Send a User Operation
 
 This guide will show you how to send a User Operation with Account Kit by creating an Alchemy Smart Account Client, connecting it to a Light Account (a type of smart account implementation), and sending a User Operation from that provider. By the end of this guide, you'll have a basic understanding of how to use the SDK.
 
-## 1. Create Your Provider
+## 1. Create Your Client
 
 Using the SDK, we'll create an Alchemy Smart Account Client. As it is, the providers gives you methods to query information related to user operations and smart accounts. To create a provider, you'll need an Alchemy API Key or RPC URL, which you can access from the [Alchemy Dashboard](https://dashboard.alchemy.com/signup/?a=aa-docs).
 

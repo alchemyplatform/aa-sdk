@@ -57,7 +57,6 @@ export { isSmartAccountClient } from "./client/isSmartAccountClient.js";
 export {
   ConnectionConfigSchema,
   SmartAccountClientOptsSchema as SmartAccountProviderOptsSchema,
-  createPublicErc4337ClientSchema,
 } from "./client/schema.js";
 export type * from "./client/smartAccountClient.js";
 export {

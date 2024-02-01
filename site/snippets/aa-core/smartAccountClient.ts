@@ -13,7 +13,7 @@ const owner: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
 );
 const rpcTransport = http("https://polygon-mumbai.g.alchemy.com/v2/demo");
 
-export const provider = createSmartAccountClient({
+export const smartAccountClient = createSmartAccountClient({
   transport: rpcTransport,
   chain,
   account: await createLightAccount({

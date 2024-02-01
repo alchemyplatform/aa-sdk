@@ -1,4 +1,4 @@
-import { createLightAccountAlchemyClient } from "@alchemy/aa-alchemy";
+import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";
 import {
   LocalAccountSigner,
   sepolia,
@@ -10,7 +10,7 @@ const PRIVATE_KEY = "0xYourEOAPrivateKey";
 const eoaSigner: SmartAccountSigner =
   LocalAccountSigner.privateKeyToAccountSigner(`0x${PRIVATE_KEY}`);
 
-const client = await createLightAccountAlchemyClient({
+const client = await createModularAccountAlchemyClient({
   apiKey: "ALCHEMY_API_KEY", // replace with your Alchemy API Key
   chain: sepolia,
   owner: eoaSigner,
