@@ -46,12 +46,12 @@ At this point you should be able to integrate smart accounts in your application
 
 ## 4. Sponsoring Gas
 
-Being able to sponsor gas for your users is one of the most powerful features enabled by smart accounts and can help you build a seamless user experience. We'll cover this in detail with code examples in the [Sponsoring Gas](/tutorials/sponsoring-gas/sponsoring-gas) section.
+Being able to sponsor gas for your users is one of the most powerful features enabled by smart accounts and can help you build a seamless user experience. We'll cover this in detail with code examples in the [Sponsoring Gas](/using-smart-accounts/sponsoring-gas/gas-manager) section.
 
 ## 5. Batching Transactions
 
-Transaction batching allows you to bundle multiple transaction calls into a single User Operation and execute them in a single atomic transaction. This can help you save on gas costs and improve the user experience. We'll cover this in detail with code examples in the [Batching Transactions](/tutorials/batching-transactions) section.
+Transaction batching allows you to bundle multiple transaction calls into a single User Operation and execute them in a single atomic transaction. This can help you save on gas costs and improve the user experience. We'll cover this in detail with code examples in the [Batching Transactions](/using-smart-accounts/batch-user-operations) section.
 
 ## 6. Transferring Ownership
 
-Ownership is an important aspect of smart accounts. The Light Account implementation allows you to transfer the ownership of a smart account to another entity. We'll cover this in detail with code examples in the [Transferring Ownership](/tutorials/transferring-ownership) section.
+Ownership is an important aspect of smart accounts. The Light Account implementation allows you to transfer the ownership of a smart account to another entity. We'll cover this in detail with code examples in the [Transferring Ownership](/using-smart-accounts/transfer-ownership/light-account) section.

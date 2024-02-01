@@ -78,7 +78,7 @@ Right now, `UserOperation`s are sent to a private mempool for all networks other
 ### Can I simulate `UserOperation`s the same way I simulate transactions?
 
 ::: details Answer
-Yes! Check out [this guide](/tutorials/sim-user-operation.html).
+Yes! Check out [this guide](/using-smart-accounts/simulate-user-operations.html).
 :::
 
 ## Gas Estimation
@@ -106,7 +106,7 @@ Gas sponsorship is available on testnet for all tiers. For support on mainnet, y
 ### How is gas sponsored? Do I need to fund the Gas Manager?
 
 ::: details Answer
-We front the gas for your application and put the USD equivalent on your bill at the end of the month. No need to worry about pre-funding the Gas Manager or conversions, we’ve got you covered! You can follow [this guide](/tutorials/sponsoring-gas/sponsoring-gas.html) for more details on how to sponsor `UserOperation`s.
+We front the gas for your application and put the USD equivalent on your bill at the end of the month. No need to worry about pre-funding the Gas Manager or conversions, we’ve got you covered! You can follow [this guide](/using-smart-accounts/sponsoring-gas/gas-manager.html) for more details on how to sponsor `UserOperation`s.
 :::
 
 ### What are my gas sponsorship limits?
@@ -124,7 +124,7 @@ Currently, we don’t support this, but we are actively exploring. Please [reach
 ### How is the Gas Manager protected from DDOS attacks?
 
 ::: details Answer
-In your Gas Manager policy, you can configure spending rules per address, per app, and/or policy wide limits. See how to set up these policies [here](/tutorials/sponsoring-gas/sponsoring-gas.html#_2-create-a-gas-manager-policy).
+In your Gas Manager policy, you can configure spending rules per address, per app, and/or policy wide limits. See how to set up these policies [here](/using-smart-accounts/sponsoring-gas/gas-manager.html#_2-create-a-gas-manager-policy).
 :::
 
 ## Common Errors {#common-errors}
