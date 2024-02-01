@@ -24,7 +24,7 @@ describe("Light Account Client Tests", () => {
       {
         "fetchOptions": {
           "headers": {
-            "Alchemy-AA-Sdk-Version": "3.0.0-alpha.0",
+            "Alchemy-AA-Sdk-Version": "3.0.0-alpha.1",
             "Authorization": "Bearer test",
           },
         },
