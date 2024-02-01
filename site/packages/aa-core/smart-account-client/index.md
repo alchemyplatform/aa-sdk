@@ -106,15 +106,16 @@ A new instance of a `SmartAccountClient`.
 
 - `entryPointAddress: Address | undefined` -- [optional] the entry point contract address. If not provided, the entry point contract address for the provider is the connected account's entry point contract, or if not connected, falls back to the default entry point contract for the chain. See [getDefaultEntryPointAddress](/packages/aa-core/utils/getDefaultEntryPointAddress.html#getdefaultentrypointaddress).
 
-- `dummyPaymasterAndData?: ClientMiddlewareFn` -- [optional] an override for the dummy paymaster and data middleware. This is useful if you want to use a paymaster. The `dummyPaymasterAndData` middleware function is run before all other middlewares and is used during gas and fee estimation. It should be a value that does not cause your paymaster to revert.
-
 - `feeEstimator?: ClientMiddlewareFn` -- [optional] an override for the fee estimator middleware. The `feeEstimator` middleware function calculates `maxFeePerGas` and `maxPriorityFeePerGas` for your User Operation.
 
 - `gasEstimator?: ClientMiddlewareFn` -- [optional] an override for the gas estimator middleware. The `gasEstimator` middleware function calculates the gas fields of your User Operation.
 
 - `customMiddleware?: ClientMiddlewareFn` -- [optional] if you would like to run a custom transformation on your User Operation after Gas and Fee estimation, but before your paymaster is called, you can provide a custom middleware function here.
 
-- `paymasterAndData?: ClientMiddlewareFn` -- [optional] if you owuld like to use a paymaster, then this middleware must be supplied in conjunction with the above `dummyPaymasterAndData` middleware. This middleware runs after gas and fee estimation and should generate the `paymasterAndData` field that will be used to sponsor your user operation.
+- `paymasterAndData?: ClientMiddlewareConfig["paymasterAndData"]` -- [optional] if you would like to use a paymaster, then this config must be supplied.
+
+  - `paymasterAndData: ClientMiddlewareFn` -- this middleware function calculates the paymaster and data fields of your User Operation after estimating gas and fees
+  - `dummyPaymasterAndData: () => Hex` -- this just returns a Hex string to be used during gas and fee estimation. This will depend on your paymaster provider and must be a value that accurately resembles the gas cost of using your paymaster and does not revert during validation.
 
 - `opts: SmartAccountProviderOpts | undefined` -- [optional] overrides on provider config variables having to do with fetching transaction receipts and fee computation.
 
