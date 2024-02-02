@@ -8,6 +8,9 @@
   "command": {
     "version": {
       "message": "chore(release): publish %s [skip-ci]"
+    },
+    "publish": {
+      "preDistTag": "next"
     }
   },
   "granularPathspec": false
