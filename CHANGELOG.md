@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-alpha.3](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.2...v3.0.0-alpha.3) (2024-02-02)
+
+### Features
+
+- **aa-alchemy:** add a modular account client function ([323f49e](https://github.com/alchemyplatform/aa-sdk/commit/323f49ecad4fb33991748f168f4ec8da2746ebce))
+
 # [3.0.0-alpha.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.1...v3.0.0-alpha.2) (2024-02-01)
 
 ### Bug Fixes
