@@ -34,7 +34,7 @@ export const provider = createAlchemySmartAccountClient({
   opts: {
     txMaxRetries: 10,
     txRetryIntervalMs: 2_000,
-    txRetryMulitplier: 1.5,
+    txRetryMultiplier: 1.5,
     minPriorityFeePerBid: 100_000_000n,
     feeOpts: {
       baseFeeBufferPercent: 50n,
@@ -87,13 +87,13 @@ A new instance of an `AlchemySmartAccountClient`.
 
 - `customMiddleware?: ClientMiddlewareFn` -- [optional] if you would like to run a custom transformation on your User Operation after Gas and Fee estimation, but before your paymaster is called, you can provide a custom middleware function here.
 
-- `opts: SmartAccountProviderOpts | undefined` -- [optional] overrides on provider config variables having to do with fetching transaction receipts and fee computation.
+- `opts: SmartAccountClientOpts | undefined` -- [optional] overrides on provider config variables having to do with fetching transaction receipts and fee computation.
 
   - `txMaxRetries: string | undefined` -- [optional] the maximum number of times to try fetching a transaction receipt before giving up (default: 5).
 
   - `txRetryIntervalMs: string | undefined` -- [optional] the interval in milliseconds to wait between retries while waiting for transaction receipts (default: 2_000).
 
-  - `txRetryMulitplier: string | undefined` -- [optional] the mulitplier on interval length to wait between retries while waiting for transaction receipts (default: 1.5).
+  - `txRetryMultiplier: string | undefined` -- [optional] the mulitplier on interval length to wait between retries while waiting for transaction receipts (default: 1.5).
 
   - `feeOptions:` [`UserOperationFeeOptions`](/packages/aa-core/smart-account-client/types/userOperationFeeOptions.md) `| undefined` --[optional] user operation fee options to be used for gas estimation, set at the global level on the provider.
     If not set, default fee options for the chain are used. Available fields in `feeOptions` include `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` where each field is of type [`UserOperationFeeOptionsField`](/packages/aa-core/smart-account-client/types/userOperationFeeOptionsField.md).

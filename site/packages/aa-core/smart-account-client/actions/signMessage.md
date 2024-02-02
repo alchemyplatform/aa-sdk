@@ -3,13 +3,13 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: ISmartAccountProvider • signMessage
+      content: ISmartAccountClient • signMessage
   - - meta
     - name: description
-      content: Overview of the signMessage method on ISmartAccountProvider
+      content: Overview of the signMessage method on ISmartAccountClient
   - - meta
     - property: og:description
-      content: Overview of the signMessage method on ISmartAccountProvider
+      content: Overview of the signMessage method on ISmartAccountClient
 ---
 
 # signMessage

@@ -6,10 +6,10 @@ head:
       content: dropAndReplaceUserOperation
   - - meta
     - name: description
-      content: Overview of the dropAndReplaceUserOperation method on ISmartAccountProvider
+      content: Overview of the dropAndReplaceUserOperation method on ISmartAccountClient
   - - meta
     - property: og:description
-      content: Overview of the dropAndReplaceUserOperation method on ISmartAccountProvider
+      content: Overview of the dropAndReplaceUserOperation method on ISmartAccountClient
 ---
 
 # dropAndReplaceUserOperation

@@ -6,10 +6,10 @@ head:
       content: getUserOperationByHash
   - - meta
     - name: description
-      content: Overview of the getUserOperationByHash method on ISmartAccountProvider
+      content: Overview of the getUserOperationByHash method on ISmartAccountClient
   - - meta
     - property: og:description
-      content: Overview of the getUserOperationByHash method on ISmartAccountProvider
+      content: Overview of the getUserOperationByHash method on ISmartAccountClient
 ---
 
 # getUserOperationByHash

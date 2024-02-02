@@ -11,7 +11,7 @@ head:
     - property: og:description
       content: Overview of SmartContractAccount interface exported by aa-core accounts
 prev:
-  text: SmartAccountProvider
+  text: SmartAccountClient
 ---
 
 # SmartContractAccount

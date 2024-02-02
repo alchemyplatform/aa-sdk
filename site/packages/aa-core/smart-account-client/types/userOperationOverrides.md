@@ -18,7 +18,7 @@ next:
 
 Contains override values to be applied on the user operation reqeust to be constructed or sent. Available fields include `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` or `paymasterAndData`.
 
-These override values are available from each middleware of the `SmartAccountProvider`. For example, the default middlewares such as `gasEstimator` or `feeEstimator` apply the overrides values to the estimated values if the override values are provided.
+These override values are available from each middleware of the `SmartAccountClient`. For example, the default middlewares such as `gasEstimator` or `feeEstimator` apply the overrides values to the estimated values if the override values are provided.
 
 Other than the `paymasterAndData` field, the override fields could be either the absolute value or the percentage value. In the default middlewares, if the override value is an absolute value, it simply overrides the estimated value. If the override value is a percentage value, the estimated value is _bumped_ with the indicated percentage value. For example, if the override value is `{ percentage: 10 }` for the `maxPriorityFeePerGas` field, then 10% bump is applied to the estimated `maxPriorityFeePerGas` of the user operation.
 
