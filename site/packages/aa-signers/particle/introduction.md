@@ -26,7 +26,7 @@ head:
 
 ## Install Dependencies
 
-`ParticleSigner` requires installation of the [`@particle-network/auth`](https://docs.particle.network/developers/auth-service/sdks/web) and [`@particle-network/provider`](https://docs.particle.network/developers/auth-service/sdks/web). `aa-signers` lists them as optional dependencies.
+`ParticleSigner` requires installation of the [`@particle-network/auth`](https://developers.particle.network/docs/building-with-particle-auth) and [`@particle-network/provider`](https://developers.particle.network/reference/auth-web). `aa-signers` lists them as optional dependencies.
 
 ::: code-group
 
@@ -74,3 +74,4 @@ const signTypedData = await particleSigner.signTypedData(typedData);
 
 - [Particle SDK](https://www.npmjs.com/package/@particle-network/auth)
 - [ParticleSigner Tests](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/signers/src/particle/__tests__/signer.test.ts)
+- [Account Kit Tutorial](https://developers.particle.network/docs/aa-signers-with-particle-network)
