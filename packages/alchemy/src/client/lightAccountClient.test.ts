@@ -20,11 +20,17 @@ describe("Light Account Client Tests", () => {
   it("should have a JWT property", async () => {
     const spy = vi.spyOn(AACoreModule, "createBundlerClient");
     await givenConnectedProvider({ owner, chain });
-    expect(spy.mock.results[0].value.transport).toMatchInlineSnapshot(`
+    expect(spy.mock.results[0].value.transport).toMatchInlineSnapshot(
+      {
+        fetchOptions: {
+          headers: { "Alchemy-AA-Sdk-Version": expect.any(String) },
+        },
+      },
+      `
       {
         "fetchOptions": {
           "headers": {
-            "Alchemy-AA-Sdk-Version": "3.0.0-alpha.1",
+            "Alchemy-AA-Sdk-Version": Any<String>,
             "Authorization": "Bearer test",
           },
         },
@@ -37,7 +43,8 @@ describe("Light Account Client Tests", () => {
         "type": "http",
         "url": "https://polygon-mumbai.g.alchemy.com/v2/",
       }
-    `);
+    `
+    );
   });
 
   it("should correctly encode batch transaction data", async () => {
