@@ -20,7 +20,7 @@ head:
 
 ::: code-group
 
-<<< @/snippets/aa-core/smartAccountClient.ts
+<<< @/snippets/aa-core/lightAccountClient.ts
 :::
 
 ## Returns

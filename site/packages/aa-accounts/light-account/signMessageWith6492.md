@@ -29,7 +29,7 @@ const signedMessageWith6492 = smartAccountClient.signMessageWith6492({
 });
 ```
 
-<<< @/snippets/aa-core/smartAccountClient.ts
+<<< @/snippets/aa-core/lightAccountClient.ts
 :::
 
 ## Returns

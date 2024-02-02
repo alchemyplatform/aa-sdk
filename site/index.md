@@ -77,16 +77,15 @@ titleTemplate: :title Documentation
 
 ::: code-group
 
-```typescript [getStarted.ts]
-const provider = new AlchemyProvider(providerConfig).connect(
-  (rpcClient) =>
-    new LightSmartContractAccount({
-      ...accountConfig,
-      rpcClient,
-    })
-);
+```ts [gettingStarted.ts]
+import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";
+import { sepolia } from "@alchemy/aa-core";
 
-const { hash } = await provider.sendUserOperation(uo);
+export const smartAccountClient = await createModularAccountAlchemyClient({
+  apiKey: "YOUR_API_KEY",
+  chain: sepolia,
+  owner,
+});
 ```
 
 :::
