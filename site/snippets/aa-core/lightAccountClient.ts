@@ -1,4 +1,7 @@
-import { createLightAccount } from "@alchemy/aa-accounts";
+import {
+  createLightAccount,
+  lightAccountClientActions,
+} from "@alchemy/aa-accounts";
 import {
   LocalAccountSigner,
   SmartAccountSigner,
@@ -21,4 +24,4 @@ export const smartAccountClient = createSmartAccountClient({
     chain,
     owner,
   }),
-});
+}).extend(lightAccountClientActions);

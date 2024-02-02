@@ -20,7 +20,7 @@ head:
 
 ::: code-group
 
-<<< @/snippets/aa-core/lightAccountClient.ts
+<<< @/snippets/aa-accounts/lightAccountClient.ts
 :::
 
 ## Returns
