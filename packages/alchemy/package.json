@@ -1,6 +1,6 @@
 {
   "name": "@alchemy/aa-alchemy",
-  "version": "3.0.0-alpha.3",
+  "version": "3.0.0-alpha.4",
   "description": "adapters for @alchemy/aa-core for interacting with alchemy services",
   "author": "Alchemy",
   "license": "MIT",
@@ -46,7 +46,7 @@
     "vitest": "^0.31.0"
   },
   "dependencies": {
-    "@alchemy/aa-core": "^3.0.0-alpha.3",
+    "@alchemy/aa-core": "^3.0.0-alpha.4",
     "viem": "^2.5.0"
   },
   "publishConfig": {
