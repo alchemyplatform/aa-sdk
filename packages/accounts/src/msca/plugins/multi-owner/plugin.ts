@@ -137,7 +137,9 @@ export type MultiOwnerPluginActions<
   ReadAndEncodeActions<TAccount>;
 
 const addresses = {
-  11155111: "0xB76734F322b9f2C8F1dA934252dED3bC3C25b109" as Address,
+  137: "0x000000E8F14A838A00505d861c6EF15cdfB05455" as Address,
+  84532: "0x000000E8F14A838A00505d861c6EF15cdfB05455" as Address,
+  11155111: "0x000000E8F14A838A00505d861c6EF15cdfB05455" as Address,
 } as Record<number, Address>;
 
 export const MultiOwnerPlugin: Plugin<typeof MultiOwnerPluginAbi> = {

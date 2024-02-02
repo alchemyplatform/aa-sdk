@@ -45,10 +45,4 @@ export {
 } from "./msca/plugins/session-key/plugin.js";
 export { SessionKeySigner } from "./msca/plugins/session-key/signer.js";
 export { buildSessionKeysToRemoveStruct } from "./msca/plugins/session-key/utils.js";
-export {
-  TokenReceiverPlugin,
-  TokenReceiverPluginAbi,
-  TokenReceiverPluginExecutionFunctionAbi,
-  tokenReceiverPluginActions,
-} from "./msca/plugins/token-receiver/plugin.js";
-export { getDefaultMultiOwnerMSCAFactoryAddress } from "./msca/utils.js";
+export { getDefaultMultiOwnerModularAccountFactoryAddress } from "./msca/utils.js";

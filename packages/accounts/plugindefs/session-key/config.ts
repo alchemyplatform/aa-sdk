@@ -1,4 +1,4 @@
-import { sepolia } from "@alchemy/aa-core";
+import { baseSepolia, polygon, sepolia } from "@alchemy/aa-core";
 import { parseAbiParameters } from "viem";
 import { MultiOwnerPluginGenConfig } from "../multi-owner/config.js";
 import type { PluginGenConfig } from "../types";
@@ -8,7 +8,9 @@ export const SessionKeyPluginGenConfig: PluginGenConfig = {
   name: "SessionKeyPlugin",
   abi: SessionKeyPluginAbi,
   addresses: {
-    [sepolia.id]: "0x70a64501Fd1398b0A236b69006936009d31C1520",
+    [sepolia.id]: "0x000000AAF83f4cbd58193D30643025ffD6C9e724",
+    [baseSepolia.id]: "0x000000AAF83f4cbd58193D30643025ffD6C9e724",
+    [polygon.id]: "0x000000AAF83f4cbd58193D30643025ffD6C9e724",
   },
   chain: sepolia,
   installConfig: {
