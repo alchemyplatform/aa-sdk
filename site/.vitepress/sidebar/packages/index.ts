@@ -9,6 +9,7 @@ export const packagesSidebar: DefaultTheme.SidebarItem = {
   text: "aa-sdk Packages",
   base: "/packages",
   items: [
+    { text: "Overview", link: "/" },
     aaCoreSidebar,
     aaAlchemySidebar,
     aaAccountsSidebar,

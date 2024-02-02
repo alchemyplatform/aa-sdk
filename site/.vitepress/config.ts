@@ -1,5 +1,5 @@
 import { defineConfig } from "vitepress";
-import { newSidebar } from "./sidebar/new";
+import { sidebar } from "./sidebar";
 
 const pkg = require("../../lerna.json");
 
@@ -44,7 +44,7 @@ export default defineConfig({
       },
     },
 
-    sidebar: newSidebar,
+    sidebar: sidebar,
 
     socialLinks: [
       { icon: "github", link: "https://github.com/alchemyplatform/aa-sdk" },
