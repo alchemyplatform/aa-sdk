@@ -75,4 +75,4 @@ const provider = await createModularAccountAlchemyClient({
 
 ### Video tutorial
 
-Particle Network has also produced a comprehensive step-by-step video tutorial detailing the above process (the utilization of Particle as a signer within Account Kit). This video can be found [here](https://twitter.com/TABASCOweb3/status/1715034613184147721).
+Particle Network has also produced a comprehensive step-by-step video tutorial detailing the above process (the utilization of Particle as a signer within Account Kit). This video can be found [here](https://twitter.com/TABASCOweb3/status/1715034613184147721), and the associated written walkthrough can be found [here](https://developers.particle.network/docs/aa-signers-with-particle-network).
