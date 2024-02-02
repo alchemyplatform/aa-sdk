@@ -1,7 +1,7 @@
 import { DefaultTheme } from "vitepress";
 import { packagesSidebar } from "./packages";
 
-export const newSidebar: DefaultTheme.Sidebar = [
+export const sidebar: DefaultTheme.Sidebar = [
   {
     text: "Getting Started",
     items: [
@@ -36,8 +36,8 @@ export const newSidebar: DefaultTheme.Sidebar = [
         base: "/smart-accounts/modular-account",
         items: [
           { text: "Introduction", link: "/" },
-          { text: "Getting started", link: "/" },
-          { text: "Deployments", link: "/" },
+          { text: "Getting started", link: "/getting-started" },
+          { text: "Deployments", link: "/deployments" },
         ],
       },
       {
