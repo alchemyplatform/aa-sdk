@@ -27,13 +27,6 @@
     },
     "./package.json": "./package.json"
   },
-  "typesVersions": {
-    "*": {
-      "viem": [
-        "./dist/types/viem/index.d.ts"
-      ]
-    }
-  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
