@@ -20,7 +20,7 @@ head:
 
 # Using Your Own Smart Account
 
-You are not limited to the accounts defined in `@alchemy/aa-accounts`. The `SmartAccountProvider` can be used with any smart account because it only relies on the [`ISmartContractAccount`](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/core/src/account/types.ts#L8) interface. This means you can use your own smart account implementation with Account Kit.
+You are not limited to the accounts defined in `@alchemy/aa-accounts`. The `SmartAccountClient` can be used with any smart account because it only relies on the [`ISmartContractAccount`](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/core/src/account/types.ts#L8) interface. This means you can use your own smart account implementation with Account Kit.
 
 <!--@include: ../../packages/aa-core/accounts/index.md{21,58}-->
 

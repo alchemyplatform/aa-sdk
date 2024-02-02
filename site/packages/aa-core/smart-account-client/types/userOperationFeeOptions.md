@@ -14,7 +14,7 @@ head:
 
 # UserOperationFeeOptions
 
-Fee options object type used by the [`SmartAccountProvider`](/packages/aa-core/smart-account-client/index.md) during the gas fee calculation middlewares when constructing the user operation to send.
+Fee options object type used by the [`SmartAccountClient`](/packages/aa-core/smart-account-client/index.md) during the gas fee calculation middlewares when constructing the user operation to send.
 
 For example, if the below example `UserOperationFeeOptions` is set on the provider upon initialization, the `maxPriorityFeePerGas` field on the user operation will be set as the max value between the 50% buffered `maxPriorityFeePerGas` estimate and the the min `maxPriorityFeePerGas` value specified here, `100_000_000n`.
 
@@ -38,7 +38,7 @@ import { type Chain } from "viem";
 
 import {
   type UserOperationFeeOptions,
-  type SmartAccountProvider,
+  type SmartAccountClient,
 } from "@alchemy/aa-core";
 
 import { API_KEY } from "./constants.js";
@@ -50,7 +50,7 @@ const userOperationFeeOptions: UserOperationFeeOptions = {
   },
 };
 
-const provider = const provider = new SmartAccountProvider({
+const provider = const provider = new SmartAccountClient({
   rpcProvider: `${sepolia.rpcUrls.alchemy.http[0]}/${API_KEY}`,
   chain: sepolia,
   opts: {

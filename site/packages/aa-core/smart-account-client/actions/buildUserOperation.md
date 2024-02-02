@@ -6,10 +6,10 @@ head:
       content: buildUserOperation
   - - meta
     - name: description
-      content: Overview of the buildUserOperation method on ISmartAccountProvider
+      content: Overview of the buildUserOperation method on ISmartAccountClient
   - - meta
     - property: og:description
-      content: Overview of the buildUserOperation method on ISmartAccountProvider
+      content: Overview of the buildUserOperation method on ISmartAccountClient
 ---
 
 # buildUserOperation

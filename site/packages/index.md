@@ -30,7 +30,7 @@ This package contains the core interfaces and components for interacting with 43
 
 The `SmartAccountClient` is an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compliant Provider that wraps JSON RPC methods. With this Provider, you can submit User Operations to RPC providers, estimate gas, configure a Paymaster and more. It is not opinionated about which RPC provider you are using and is configurable to work with any RPC provider. Because it implements EIP-1193, it can be used with any web3 library.
 
-The `SmartContractAccount` interface is used to define how you would interact with your Smart Contract Account. The methods exposed and implemented by a class the implements `BaseSmartContractAccount` allow the `SmartAccountProvider` to provide ergonic utilities for building and submitting User Operations.
+The `SmartContractAccount` interface is used to define how you would interact with your Smart Contract Account. The methods exposed and implemented by a class the implements `BaseSmartContractAccount` allow the `SmartAccountClient` to provide ergonomic utilities for building and submitting User Operations.
 
 For more details on all the utilities exported by `aa-core` see the [aa-core documentation](/packages/aa-core/).
 

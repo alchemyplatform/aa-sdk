@@ -24,7 +24,7 @@ export const waitForUserOperationTransaction: <
 
   for (let i = 0; i < client.txMaxRetries; i++) {
     const txRetryIntervalWithJitterMs =
-      client.txRetryIntervalMs * Math.pow(client.txRetryMulitplier, i) +
+      client.txRetryIntervalMs * Math.pow(client.txRetryMultiplier, i) +
       Math.random() * 100;
 
     await new Promise((resolve) =>

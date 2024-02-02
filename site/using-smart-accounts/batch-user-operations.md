@@ -20,9 +20,9 @@ head:
 
 # How to Submit Batch Transactions
 
-One benefit of Smart Contract Accounts is that it's possible to batch transactions in one `UserOperation` (UO). Not all Smart Contract Accounts support batching. But, if the `ISmartContractAccount` implementation you're using has the [`encodeBatchExecute`](/packages/aa-core/accounts/) method, then implementations of `SmartAccountProvider` will allow you to make those calls.
+One benefit of Smart Contract Accounts is that it's possible to batch transactions in one `UserOperation` (UO). Not all Smart Contract Accounts support batching. But, if the `ISmartContractAccount` implementation you're using has the [`encodeBatchExecute`](/packages/aa-core/accounts/) method, then implementations of `SmartAccountClient` will allow you to make those calls.
 
-There are two ways you can batch transactions using `SmartAccountProvider`:
+There are two ways you can batch transactions using `SmartAccountClient`:
 
 1. via `sendUserOperation`
 2. via `sendTransactions`
@@ -41,7 +41,7 @@ The batched UO gets executed by the account calling the `executeBatch` method on
 
 ## Batching using [`sendUserOperation`](/packages/aa-core/smart-account-client/actions/sendUserOperation.md)
 
-The `SmartAccountProvider` supports passing either a single UO or an array of UOs to `sendUserOperation`. If you pass an array, the provider will batch the transactions into a single User Operation and submit it to the bundler. Let's see an example:
+The `SmartAccountClient` supports passing either a single UO or an array of UOs to `sendUserOperation`. If you pass an array, the provider will batch the transactions into a single User Operation and submit it to the bundler. Let's see an example:
 
 ::: code-group
 
@@ -69,7 +69,7 @@ const { hash } = await smartAccountClient.sendUserOperation({
 
 ## Batching using [`sendTransactions`](/packages/aa-core/smart-account-client/actions/sendTransactions.md)
 
-The `SmartAccountProvider` supports sending UOs and waiting for them to be mined in a transaction via the `sendTransaction` and `sendTransactions` methods. The latter allows for batching in the same way `sendUserOperation`:
+The `SmartAccountClient` supports sending UOs and waiting for them to be mined in a transaction via the `sendTransaction` and `sendTransactions` methods. The latter allows for batching in the same way `sendUserOperation`:
 
 ::: code-group
 

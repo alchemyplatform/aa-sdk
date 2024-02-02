@@ -110,7 +110,7 @@ A specialized middleware function type that allows for more granular control ove
 
 [See Type ↗️](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/core/src/provider/types.ts#L62)
 
-## `ISmartAccountProvider`
+## `SmartAccountClient`
 
 An interface that defines a [provider](https://accountkit.alchemy.com/glossary/terms.html#provider) for smart accounts. It includes properties and methods for interacting with smart accounts and `UserOperations` (UOs), such as sending UOs, building UO structures, signing messages, and managing middleware.
 

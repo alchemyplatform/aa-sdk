@@ -14,9 +14,9 @@ head:
 
 # constructor
 
-There are two ways to construct `EthersProviderAdapter`. You can provide either the `rpcProvider` and `chainId` to have the `EthersProviderAdapter` constructor, which will initialize the `SmartAccountProvider` using the input parameters internally.
+There are two ways to construct `EthersProviderAdapter`. You can provide either the `rpcProvider` and `chainId` to have the `EthersProviderAdapter` constructor, which will initialize the `SmartAccountClient` using the input parameters internally.
 
-Or you can also input a `SmartAccountProvider` instance already initialized (`AlchemyProvider` for instance) to the `EthersProviderAdapter` constructor.
+Or you can also input a `SmartAccountClient` instance already initialized (`AlchemyProvider` for instance) to the `EthersProviderAdapter` constructor.
 
 ## Usage
 
@@ -42,7 +42,7 @@ const accountProvider = new AlchemyProvider({
   opts: {
     txMaxRetries: 10,
     txRetryIntervalMs: 2_000,
-    txRetryMulitplier: 1.5,
+    txRetryMultiplier: 1.5,
     minPriorityFeePerBid: 100_000_000n,
   },
   feeOpts: {
@@ -76,4 +76,4 @@ Either:
 
 Or:
 
-- `accountProvider: SmartAccountProvider` -- See [SmartAccountProvider](/packages/aa-core/smart-account-client/index.md).
+- `accountProvider: SmartAccountClient` -- See [SmartAccountClient](/packages/aa-core/smart-account-client/index.md).

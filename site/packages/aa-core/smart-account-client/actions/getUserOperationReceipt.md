@@ -3,13 +3,13 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: ISmartAccountProvider • getUserOperationReceipt
+      content: ISmartAccountClient • getUserOperationReceipt
   - - meta
     - name: description
-      content: Overview of the getUserOperationReceipt method on ISmartAccountProvider
+      content: Overview of the getUserOperationReceipt method on ISmartAccountClient
   - - meta
     - property: og:description
-      content: Overview of the getUserOperationReceipt method on ISmartAccountProvider
+      content: Overview of the getUserOperationReceipt method on ISmartAccountClient
 ---
 
 # getUserOperationReceipt

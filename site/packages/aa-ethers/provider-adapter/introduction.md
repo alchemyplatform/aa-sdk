@@ -14,7 +14,7 @@ head:
 
 # EthersProviderAdapter
 
-`EthersProviderAdapter` is an extension of the `ethers.js` `JsonRpcProvider` which includes a `SmartAccountProvider` field to integrate [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) smart accounts. The interface is similar to a standard `JsonRpcProvider`, with additional methods to leverage the Alchemy Account Abstraction stack.
+`EthersProviderAdapter` is an extension of the `ethers.js` `JsonRpcProvider` which includes a `SmartAccountClient` field to integrate [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) smart accounts. The interface is similar to a standard `JsonRpcProvider`, with additional methods to leverage the Alchemy Account Abstraction stack.
 
 Notable differences between `EthersProviderAdapter` and `JsonRpcProvider` are implementations for:
 

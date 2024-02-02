@@ -6,10 +6,10 @@ head:
       content: getAddress
   - - meta
     - name: description
-      content: Overview of the getAddress method on ISmartAccountProvider
+      content: Overview of the getAddress method on ISmartAccountClient
   - - meta
     - property: og:description
-      content: Overview of the getAddress method on ISmartAccountProvider
+      content: Overview of the getAddress method on ISmartAccountClient
 ---
 
 # getAddress
