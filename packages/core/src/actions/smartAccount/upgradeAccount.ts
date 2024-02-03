@@ -26,7 +26,8 @@ export const upgradeAccount: <
   if (!isBaseSmartAccountClient(client)) {
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
-      "upgradeAccount"
+      "upgradeAccount",
+      client
     );
   }
 

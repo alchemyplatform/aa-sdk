@@ -56,7 +56,7 @@ export const AccountReadActionsGenPhase: Phase = async (input) => {
           }
 
           if (!isSmartAccountClient(client)) {
-            throw new IncompatibleClientError("SmartAccountClient", "${readMethodName}");
+            throw new IncompatibleClientError("SmartAccountClient", "${readMethodName}", client);
           }
 
           return client.readContract({

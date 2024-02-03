@@ -218,7 +218,8 @@ export const sessionKeyPluginActions: <
     if (!isSmartAccountClient(client)) {
       throw new IncompatibleClientError(
         "SmartAccountClient",
-        "executeWithSessionKey"
+        "executeWithSessionKey",
+        client
       );
     }
 
@@ -235,7 +236,11 @@ export const sessionKeyPluginActions: <
       throw new AccountNotFoundError();
     }
     if (!isSmartAccountClient(client)) {
-      throw new IncompatibleClientError("SmartAccountClient", "addSessionKey");
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "addSessionKey",
+        client
+      );
     }
 
     const uo = encodeFunctionData({
@@ -253,7 +258,8 @@ export const sessionKeyPluginActions: <
     if (!isSmartAccountClient(client)) {
       throw new IncompatibleClientError(
         "SmartAccountClient",
-        "removeSessionKey"
+        "removeSessionKey",
+        client
       );
     }
 
@@ -272,7 +278,8 @@ export const sessionKeyPluginActions: <
     if (!isSmartAccountClient(client)) {
       throw new IncompatibleClientError(
         "SmartAccountClient",
-        "rotateSessionKey"
+        "rotateSessionKey",
+        client
       );
     }
 
@@ -291,7 +298,8 @@ export const sessionKeyPluginActions: <
     if (!isSmartAccountClient(client)) {
       throw new IncompatibleClientError(
         "SmartAccountClient",
-        "updateKeyPermissions"
+        "updateKeyPermissions",
+        client
       );
     }
 
@@ -311,7 +319,8 @@ export const sessionKeyPluginActions: <
     if (!isSmartAccountClient(client)) {
       throw new IncompatibleClientError(
         "SmartAccountClient",
-        "installSessionKeyPlugin"
+        "installSessionKeyPlugin",
+        client
       );
     }
 

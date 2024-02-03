@@ -26,7 +26,8 @@ export const sendTransactions: <
   if (!isBaseSmartAccountClient(client)) {
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
-      "sendTransactions"
+      "sendTransactions",
+      client
     );
   }
 
