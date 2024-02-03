@@ -1,18 +1,20 @@
-export const MultiOwnerTokenReceiverMSCAFactoryAbi = [
+export const MultiOwnerModularAccountFactoryAbi = [
   {
     type: "constructor",
     inputs: [
       { name: "owner", type: "address", internalType: "address" },
-      { name: "multiOwnerPlugin", type: "address", internalType: "address" },
-      { name: "tokenReceiverPlugin", type: "address", internalType: "address" },
-      { name: "implementation", type: "address", internalType: "address" },
       {
-        name: "multiOwnerPluginManifestHash",
-        type: "bytes32",
-        internalType: "bytes32",
+        name: "multiOwnerPlugin",
+        type: "address",
+        internalType: "address",
       },
       {
-        name: "tokenReceiverPluginManifestHash",
+        name: "implementation",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "multiOwnerPluginManifestHash",
         type: "bytes32",
         internalType: "bytes32",
       },
@@ -30,7 +32,11 @@ export const MultiOwnerTokenReceiverMSCAFactoryAbi = [
     name: "ENTRYPOINT",
     inputs: [],
     outputs: [
-      { name: "", type: "address", internalType: "contract IEntryPoint" },
+      {
+        name: "",
+        type: "address",
+        internalType: "contract IEntryPoint",
+      },
     ],
     stateMutability: "view",
   },
@@ -44,13 +50,6 @@ export const MultiOwnerTokenReceiverMSCAFactoryAbi = [
   {
     type: "function",
     name: "MULTI_OWNER_PLUGIN",
-    inputs: [],
-    outputs: [{ name: "", type: "address", internalType: "address" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "TOKEN_RECEIVER_PLUGIN",
     inputs: [],
     outputs: [{ name: "", type: "address", internalType: "address" }],
     stateMutability: "view",
@@ -111,7 +110,7 @@ export const MultiOwnerTokenReceiverMSCAFactoryAbi = [
     name: "renounceOwnership",
     inputs: [],
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "view",
   },
   {
     type: "function",
@@ -183,6 +182,7 @@ export const MultiOwnerTokenReceiverMSCAFactoryAbi = [
     ],
     anonymous: false,
   },
+  { type: "error", name: "InvalidAction", inputs: [] },
   { type: "error", name: "InvalidOwner", inputs: [] },
   { type: "error", name: "OwnersArrayEmpty", inputs: [] },
   { type: "error", name: "OwnersLimitExceeded", inputs: [] },

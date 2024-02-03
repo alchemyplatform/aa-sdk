@@ -4,7 +4,7 @@ import {
   IMSCA,
   SessionKeyPlugin,
   createMultiOwnerMSCA,
-  getDefaultMultiOwnerMSCAFactoryAddress,
+  getDefaultMultiOwnerModularAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
 import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import {
@@ -36,7 +36,7 @@ export const useAlchemyProvider = () => {
             owner: signer,
             chain,
             entryPointAddress: getDefaultEntryPointAddress(chain),
-            factoryAddress: getDefaultMultiOwnerMSCAFactoryAddress(chain),
+            factoryAddress: getDefaultMultiOwnerModularAccountFactoryAddress(chain),
             accountAddress: account,
           });
         })

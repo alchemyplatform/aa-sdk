@@ -15,18 +15,14 @@ import {
   type Hex,
   type Transport,
 } from "viem";
-import { MultiOwnerMSCAFactoryAbi } from "../abis/MultiOwnerMSCAFactory.js";
-import { MultiOwnerTokenReceiverMSCAFactoryAbi } from "../abis/MultiOwnerTokenReceiverMSCAFactory.js";
+import { MultiOwnerModularAccountFactoryAbi } from "../abis/MultiOwnerModularAccountFactory.js";
 import { multiOwnerMessageSigner } from "../plugins/multi-owner/signer.js";
-import { getDefaultMultiOwnerMSCAFactoryAddress } from "../utils.js";
+import { getDefaultMultiOwnerModularAccountFactoryAddress } from "../utils.js";
 import { standardExecutor } from "./standardExecutor.js";
 
 export type MultiOwnerModularAccount<
   TOwner extends SmartAccountSigner = SmartAccountSigner
-> = OwnedSmartContractAccount<
-  "ModularAccountWithTokenReceiver" | "ModularAccountWithoutTokenReceiver",
-  TOwner
->;
+> = OwnedSmartContractAccount<"MultiOwnerModularAccount", TOwner>;
 
 export type CreateMultiOwnerModularAccountParams<
   TTransport extends Transport = Transport,
@@ -38,7 +34,6 @@ export type CreateMultiOwnerModularAccountParams<
   index?: bigint;
   factoryAddress?: Address;
   owners?: Address[];
-  excludeDefaultTokenReceiverPlugin?: boolean;
   entrypointAddress?: Address;
   accountAddress?: Address;
   initCode?: Hex;
@@ -58,8 +53,7 @@ export async function createMultiOwnerModularAccount({
   accountAddress,
   initCode,
   entrypointAddress = getDefaultEntryPointAddress(chain),
-  excludeDefaultTokenReceiverPlugin = false,
-  factoryAddress = getDefaultMultiOwnerMSCAFactoryAddress(chain),
+  factoryAddress = getDefaultMultiOwnerModularAccountFactoryAddress(chain),
   owners = [],
   index = 0n,
 }: CreateMultiOwnerModularAccountParams): Promise<MultiOwnerModularAccount> {
@@ -87,9 +81,7 @@ export async function createMultiOwnerModularAccount({
     return concatHex([
       factoryAddress,
       encodeFunctionData({
-        abi: excludeDefaultTokenReceiverPlugin
-          ? MultiOwnerMSCAFactoryAbi
-          : MultiOwnerTokenReceiverMSCAFactoryAbi,
+        abi: MultiOwnerModularAccountFactoryAbi,
         functionName: "createAccount",
         args: [index, owners_],
       }),
@@ -108,9 +100,7 @@ export async function createMultiOwnerModularAccount({
     chain,
     entrypointAddress,
     accountAddress,
-    source: `ModularAccount${
-      excludeDefaultTokenReceiverPlugin ? "Without" : "With"
-    }TokenReceiver`,
+    source: `MultiOwnerModularAccount`,
     getAccountInitCode,
     ...standardExecutor,
     ...multiOwnerMessageSigner(client, accountAddress, () => owner),

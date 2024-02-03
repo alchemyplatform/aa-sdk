@@ -173,7 +173,9 @@ export type SessionKeyPluginActions<
   ReadAndEncodeActions;
 
 const addresses = {
-  11155111: "0x70a64501Fd1398b0A236b69006936009d31C1520" as Address,
+  137: "0x000000AAF83f4cbd58193D30643025ffD6C9e724" as Address,
+  84532: "0x000000AAF83f4cbd58193D30643025ffD6C9e724" as Address,
+  11155111: "0x000000AAF83f4cbd58193D30643025ffD6C9e724" as Address,
 } as Record<number, Address>;
 
 export const SessionKeyPlugin: Plugin<typeof SessionKeyPluginAbi> = {
