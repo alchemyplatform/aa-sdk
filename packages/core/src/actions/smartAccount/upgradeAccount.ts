@@ -1,7 +1,8 @@
-import type { Chain, Hash, Transport } from "viem";
+import type { Chain, Client, Hash, Transport } from "viem";
 import type { SmartContractAccount } from "../../account/smartContractAccount.js";
-import type { BaseSmartAccountClient } from "../../client/smartAccountClient.js";
+import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
 import { AccountNotFoundError } from "../../errors/account.js";
+import { IncompatibleClientError } from "../../errors/client.js";
 import { sendUserOperation } from "./sendUserOperation.js";
 import type { UpgradeAccountParams } from "./types.js";
 import { waitForUserOperationTransaction } from "./waitForUserOperationTransacation.js";
@@ -13,13 +14,20 @@ export const upgradeAccount: <
     | SmartContractAccount
     | undefined
 >(
-  client: BaseSmartAccountClient<TTransport, TChain, TAccount>,
+  client: Client<TTransport, TChain, TAccount>,
   args: UpgradeAccountParams<TAccount>
 ) => Promise<Hash> = async (client, args) => {
   const { account = client.account, upgradeTo, overrides, waitForTx } = args;
 
   if (!account) {
     throw new AccountNotFoundError();
+  }
+
+  if (!isBaseSmartAccountClient(client)) {
+    throw new IncompatibleClientError(
+      "BaseSmartAccountClient",
+      "upgradeAccount"
+    );
   }
 
   const { implAddress: accountImplAddress, initializationData } = upgradeTo;

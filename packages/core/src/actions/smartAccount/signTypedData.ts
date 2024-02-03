@@ -1,5 +1,6 @@
 import type {
   Chain,
+  Client,
   Hex,
   Transport,
   TypedData,
@@ -9,7 +10,6 @@ import type {
   GetAccountParameter,
   SmartContractAccount,
 } from "../../account/smartContractAccount";
-import type { BaseSmartAccountClient } from "../../client/smartAccountClient";
 import { AccountNotFoundError } from "../../errors/account.js";
 
 export type SignTypedDataParameters<
@@ -31,7 +31,7 @@ export const signTypedData: <
     | SmartContractAccount
     | undefined
 >(
-  client: BaseSmartAccountClient<TTransport, TChain, TAccount>,
+  client: Client<TTransport, TChain, TAccount>,
   args: SignTypedDataParameters<TTypedData, TPrimaryType, TAccount>
 ) => Promise<Hex> = async (client, { account = client.account, typedData }) => {
   if (!account) {

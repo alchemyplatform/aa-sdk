@@ -5,6 +5,7 @@
 export type * from "./light-account/account.js";
 export { createLightAccount } from "./light-account/account.js";
 export { transferOwnership as transferLightAccountOwnership } from "./light-account/actions/transferOwnership.js";
+export { createLightAccountClient } from "./light-account/createLightAccountClient.js";
 export { getLightAccountVersion } from "./light-account/getLightAccountVersion.js";
 export type * from "./light-account/lightAccountClientDecorator.js";
 export { lightAccountClientActions } from "./light-account/lightAccountClientDecorator.js";
@@ -44,10 +45,4 @@ export {
 } from "./msca/plugins/session-key/plugin.js";
 export { SessionKeySigner } from "./msca/plugins/session-key/signer.js";
 export { buildSessionKeysToRemoveStruct } from "./msca/plugins/session-key/utils.js";
-export {
-  TokenReceiverPlugin,
-  TokenReceiverPluginAbi,
-  TokenReceiverPluginExecutionFunctionAbi,
-  tokenReceiverPluginActions,
-} from "./msca/plugins/token-receiver/plugin.js";
-export { getDefaultMultiOwnerMSCAFactoryAddress } from "./msca/utils.js";
+export { getDefaultMultiOwnerModularAccountFactoryAddress } from "./msca/utils.js";

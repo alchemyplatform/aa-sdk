@@ -1,5 +1,8 @@
-import { AlchemyProvider } from "@alchemy/aa-alchemy";
-import { sepolia } from "@alchemy/aa-core";
+import {
+  alchemyEnhancedApiActions,
+  createModularAccountAlchemyClient,
+} from "@alchemy/aa-alchemy";
+import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
 import { Alchemy, Network } from "alchemy-sdk";
 
 const alchemy = new Alchemy({
@@ -7,12 +10,15 @@ const alchemy = new Alchemy({
   apiKey: "YOUR_API_KEY",
 });
 
-const provider = new AlchemyProvider({
-  chain: sepolia,
-  apiKey: "YOUR_API_KEY",
-}).withAlchemyEnhancedApis(alchemy);
+const client = (
+  await createModularAccountAlchemyClient({
+    chain: sepolia,
+    apiKey: "YOUR_API_KEY",
+    owner: LocalAccountSigner.mnemonicToAccountSigner("OWNER_MNEMONIC"),
+  })
+).extend(alchemyEnhancedApiActions(alchemy));
 
-const address = await provider.getAddress();
+const address = client.getAddress();
 
 // get all tokens owned by the smart account
-export const tokenBalances = provider.core.getTokenBalances(address);
+export const tokenBalances = client.core.getTokenBalances(address);

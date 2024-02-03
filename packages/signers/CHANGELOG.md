@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-alpha.4](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.3...v3.0.0-alpha.4) (2024-02-02)
+
+**Note:** Version bump only for package @alchemy/aa-signers
+
+# [3.0.0-alpha.3](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.2...v3.0.0-alpha.3) (2024-02-02)
+
+**Note:** Version bump only for package @alchemy/aa-signers
+
+# [3.0.0-alpha.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.0...v3.0.0-alpha.1) (2024-01-31)
+
+**Note:** Version bump only for package @alchemy/aa-signers
+
 # [3.0.0-alpha.0](https://github.com/alchemyplatform/aa-sdk/compare/v2.3.1...v3.0.0-alpha.0) (2024-01-30)
 
 - refactor(aa-accounts)!: migrate aa-accounts to viem approach ([37a5b48](https://github.com/alchemyplatform/aa-sdk/commit/37a5b489bdd2527dca311787d5585f1dc3a5f05b))

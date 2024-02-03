@@ -90,7 +90,7 @@ const typedData = {
 const signTypedData = await turnkeySigner.signTypedData(typedData);
 ```
 
-<<< @/snippets/turnkey.ts
+<<< @/snippets/signers/turnkey.ts
 :::
 
 ## Developer Links

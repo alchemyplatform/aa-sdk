@@ -1,4 +1,7 @@
-import type { ClientMiddleware, ClientMiddlewareFn } from "@alchemy/aa-core";
+import type {
+  ClientMiddlewareConfig,
+  ClientMiddlewareFn,
+} from "@alchemy/aa-core";
 import {
   deepHexlify,
   defaultGasEstimator,
@@ -34,12 +37,26 @@ export interface AlchemyGasEstimationOptions {
   fallbackFeeDataGetter?: ClientMiddlewareFn;
 }
 
+const dummyPaymasterAndData =
+  <C extends ClientWithAlchemyMethods>(client: C) =>
+  () => {
+    switch (client.chain.id) {
+      case 1:
+      case 10:
+      case 137:
+      case 42161:
+        return "0x4Fd9098af9ddcB41DA48A1d78F91F1398965addcfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
+      default:
+        return "0xc03aac639bb21233e0139381970328db8bceeb67fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
+    }
+  };
+
 export const alchemyGasManagerMiddleware = <C extends ClientWithAlchemyMethods>(
   client: C,
   config: AlchemyGasManagerConfig
 ): Pick<
-  ClientMiddleware,
-  "dummyPaymasterAndData" | "paymasterAndData" | "feeEstimator" | "gasEstimator"
+  ClientMiddlewareConfig,
+  "paymasterAndData" | "feeEstimator" | "gasEstimator"
 > => {
   const gasEstimationOptions = config.gasEstimationOptions;
   const disableGasEstimation =
@@ -103,25 +120,6 @@ export const alchemyGasManagerMiddleware = <C extends ClientWithAlchemyMethods>(
             maxPriorityFeePerGas,
           };
         },
-    dummyPaymasterAndData: async (struct) => {
-      switch (client.chain.id) {
-        case 1:
-        case 10:
-        case 137:
-        case 42161:
-          return {
-            ...struct,
-            paymasterAndData:
-              "0x4Fd9098af9ddcB41DA48A1d78F91F1398965addcfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c",
-          };
-        default:
-          return {
-            ...struct,
-            paymasterAndData:
-              "0xc03aac639bb21233e0139381970328db8bceeb67fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c",
-          };
-      }
-    },
     paymasterAndData: disableGasEstimation
       ? requestPaymasterAndData(client, config)
       : requestGasAndPaymasterData(client, config),
@@ -131,9 +129,9 @@ export const alchemyGasManagerMiddleware = <C extends ClientWithAlchemyMethods>(
 const requestGasAndPaymasterData: <C extends ClientWithAlchemyMethods>(
   client: C,
   config: AlchemyGasManagerConfig
-) => ClientMiddlewareFn =
-  (client, config) =>
-  async (struct, { overrides, feeOptions, account }) => {
+) => ClientMiddlewareConfig["paymasterAndData"] = (client, config) => ({
+  dummyPaymasterAndData: dummyPaymasterAndData(client),
+  paymasterAndData: async (struct, { overrides, feeOptions, account }) => {
     const userOperation: UserOperationRequest = deepHexlify(
       await resolveProperties(struct)
     );
@@ -196,14 +194,15 @@ const requestGasAndPaymasterData: <C extends ClientWithAlchemyMethods>(
       ...struct,
       ...result,
     };
-  };
+  },
+});
 
 const requestPaymasterAndData: <C extends ClientWithAlchemyMethods>(
   client: C,
   config: AlchemyGasManagerConfig
-) => ClientMiddlewareFn =
-  (client, config) =>
-  async (struct, { account }) => {
+) => ClientMiddlewareConfig["paymasterAndData"] = (client, config) => ({
+  dummyPaymasterAndData: dummyPaymasterAndData(client),
+  paymasterAndData: async (struct, { account }) => {
     const { paymasterAndData } = await client.request({
       method: "alchemy_requestPaymasterAndData",
       params: [
@@ -219,4 +218,5 @@ const requestPaymasterAndData: <C extends ClientWithAlchemyMethods>(
       ...struct,
       paymasterAndData,
     };
-  };
+  },
+});

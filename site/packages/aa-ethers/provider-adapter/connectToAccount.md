@@ -20,18 +20,18 @@ head:
 
 ::: code-group
 
-<<< @/snippets/ethers-signer.ts
-<<< @/snippets/ethers-provider.ts
+<<< @/snippets/aa-ethers/ethers-signer.ts
+<<< @/snippets/aa-ethers/ethers-provider.ts
 :::
 
 ## Returns
 
-### `AccountSigner<TAccount extends ISmartContractAccount>`
+### `AccountSigner<TAccount extends SmartContractAccount>`
 
-A new instance of a connected `AccountSigner`for any implementation class of `ISmartContractAccount`
+A new instance of a connected `AccountSigner`for any implementation class of `SmartContractAccount`
 
 ## Parameters
 
-### `fn: (rpcClient: PublicErc4337Client) => TAccount extends ISmartContractAccount`
+### `account: TAccount extends SmartContractAccount`
 
 A function that takes in the provider's rpcClient and returns an AccountSigner

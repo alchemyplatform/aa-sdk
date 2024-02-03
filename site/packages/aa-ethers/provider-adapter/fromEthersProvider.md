@@ -22,7 +22,7 @@ next:
 
 ::: code-group
 
-<<< @/snippets/ethers-provider.ts
+<<< @/snippets/aa-ethers/ethers-provider.ts
 :::
 
 ## Returns

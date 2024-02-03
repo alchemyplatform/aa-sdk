@@ -36,7 +36,7 @@ await litSigner.authenticate({
 let authDetails = await litSigner.getAuthDetails();
 ```
 
-<<< @/snippets/lit.ts
+<<< @/snippets/signers/lit.ts
 :::
 
 ## Returns

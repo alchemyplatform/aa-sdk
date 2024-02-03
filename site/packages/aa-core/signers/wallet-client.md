@@ -19,7 +19,7 @@ The `WalletClientSigner` is useful if you want to convert a `viem` `WalletClient
 ## Usage
 
 ::: code-group
-<<< @/snippets/wallet-client-signer.ts
+<<< @/snippets/signers/wallet-client-signer.ts
 :::
 
 ## Methods

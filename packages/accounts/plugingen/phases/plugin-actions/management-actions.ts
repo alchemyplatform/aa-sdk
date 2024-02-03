@@ -46,15 +46,21 @@ export const ManagementActionsGenPhase: Phase = async (input) => {
       `
     );
 
+    const installMethodName = `install${contract.name}`;
+
     input.content.push(dedent`
-    install${contract.name}({account = client.account, overrides, ...params}) {
+    ${installMethodName}({account = client.account, overrides, ...params}) {
       if (!account) {
         throw new AccountNotFoundError();
       }
 
+      if (!isSmartAccountClient(client)) {
+        throw new IncompatibleClientError("SmartAccountClient", "${installMethodName}");
+      }
+
       const chain = client.chain;
       if (!chain) {
-        throw new Error("Chain is required");
+        throw new ChainNotFoundError();
       }
 
       const dependencies = params.dependencyOverrides ?? [${dependencies.join(
@@ -102,6 +108,7 @@ const addImports = (
     });
   }
 
+  addImport("@alchemy/aa-core", { name: "ChainNotFoundError" });
   addImport("viem", { name: "encodeAbiParameters" });
   addImport("../../plugin-manager/installPlugin.js", {
     name: "installPlugin as installPlugin_",

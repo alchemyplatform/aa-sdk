@@ -1,7 +1,5 @@
 import {
-  createClient,
   custom,
-  publicActions,
   type Chain,
   type Client,
   type ClientConfig,
@@ -16,9 +14,8 @@ import type { SmartContractAccount } from "../account/smartContractAccount.js";
 import { middlewareActions } from "../middleware/actions.js";
 import type { ClientMiddleware } from "../middleware/types.js";
 import type { Prettify } from "../utils/index.js";
-import type { BundlerClient } from "./bundlerClient.js";
+import { createBundlerClient, type BundlerClient } from "./bundlerClient.js";
 import {
-  bundlerActions,
   type BundlerActions,
   type BundlerRpcSchema,
 } from "./decorators/bundlerClient.js";
@@ -27,6 +24,7 @@ import {
   type BaseSmartAccountClientActions,
 } from "./decorators/smartAccountClient.js";
 import { SmartAccountClientOptsSchema } from "./schema.js";
+import type { ClientMiddlewareConfig } from "./types.js";
 
 type SmartAccountClientOpts = z.output<typeof SmartAccountClientOptsSchema>;
 
@@ -43,7 +41,7 @@ export type SmartAccountClientConfig<
   > & {
     account?: account;
     opts?: z.input<typeof SmartAccountClientOptsSchema>;
-  } & Partial<ClientMiddleware>
+  } & ClientMiddlewareConfig
 >;
 
 export type SmartAccountClientRpcSchema = [
@@ -111,11 +109,11 @@ export function createSmartAccountClient(
     ...params
   } = config;
 
-  const client = createClient({
+  const client = createBundlerClient({
     ...params,
     key,
     name,
-    type: "SmartAccountProvider",
+    type: "SmartAccountClient",
     // TODO: our OG provider also has handlers for some various RPC methods
     // we should support those here as well
     transport,
@@ -125,8 +123,6 @@ export function createSmartAccountClient(
     .extend(() => ({
       ...SmartAccountClientOptsSchema.parse(config.opts ?? {}),
     }))
-    .extend(publicActions)
-    .extend(bundlerActions)
     .extend(middlewareActions(config))
     .extend(smartAccountClientActions);
 }
@@ -146,12 +142,12 @@ export function createSmartAccountClientFromExisting<
 >(
   config: Omit<
     SmartAccountClientConfig<Transport, TChain, TAccount>,
-    "transport"
+    "transport" | "chain"
   > & { client: TClient }
 ): SmartAccountClient<CustomTransport, TChain, TAccount, TActions, TRpcSchema>;
 
 export function createSmartAccountClientFromExisting(
-  config: Omit<SmartAccountClientConfig, "transport"> & {
+  config: Omit<SmartAccountClientConfig, "transport" | "chain"> & {
     client: BundlerClient;
   }
 ): SmartAccountClient {

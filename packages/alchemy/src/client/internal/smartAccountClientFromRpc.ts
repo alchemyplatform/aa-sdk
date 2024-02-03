@@ -43,15 +43,13 @@ export function createAlchemySmartAccountClientFromRpcClient({
   gasManagerConfig,
   feeEstimator,
   gasEstimator,
-  paymasterAndData,
-  dummyPaymasterAndData,
   customMiddleware,
   client,
 }: CreateAlchemySmartAccountClientFromRpcClient): AlchemySmartAccountClient {
   const feeOptions =
     opts?.feeOptions ?? getDefaultUserOperationFeeOptions(client.chain);
 
-  return createSmartAccountClientFromExisting({
+  const alchClient = createSmartAccountClientFromExisting({
     account,
     client,
     opts: {
@@ -63,8 +61,6 @@ export function createAlchemySmartAccountClientFromRpcClient({
     userOperationSimulator: useSimulation
       ? alchemyUserOperationSimulator(client)
       : undefined,
-    paymasterAndData,
-    dummyPaymasterAndData,
     gasEstimator,
     ...(gasManagerConfig &&
       alchemyGasManagerMiddleware(client, {
@@ -83,4 +79,9 @@ export function createAlchemySmartAccountClientFromRpcClient({
         },
       })),
   }).extend(alchemyActions);
+
+  return {
+    ...alchClient,
+    type: "AlchemySmartAccountClient",
+  };
 }

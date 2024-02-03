@@ -12,6 +12,7 @@ import {
   type PublicRpcSchema,
   type Transport,
 } from "viem";
+import { ChainNotFoundError } from "../errors/client.js";
 import { VERSION } from "../version.js";
 import {
   bundlerActions,
@@ -42,14 +43,20 @@ export const createBundlerClientFromExisting: <
  * @returns
  */
 export function createBundlerClient<TTransport extends Transport>(
-  args: PublicClientConfig<TTransport, Chain>
+  args: PublicClientConfig<TTransport, Chain> & { type?: string }
 ): BundlerClient<TTransport>;
 
-export function createBundlerClient(args: PublicClientConfig): BundlerClient {
+export function createBundlerClient(
+  args: PublicClientConfig & { type?: string }
+): BundlerClient {
   if (!args.chain) {
-    throw new Error("Chain must be provided");
+    throw new ChainNotFoundError();
   }
-  const { key = "bundler-public", name = "Public Bundler Client" } = args;
+  const {
+    key = "bundler-public",
+    name = "Public Bundler Client",
+    type = "bundlerClient",
+  } = args;
 
   const { transport, ...opts } = args;
   const resolvedTransport = transport({
@@ -61,7 +68,7 @@ export function createBundlerClient(args: PublicClientConfig): BundlerClient {
     ...args,
     key,
     name,
-    type: "bundlerClient",
+    type,
   };
 
   const client = (() => {

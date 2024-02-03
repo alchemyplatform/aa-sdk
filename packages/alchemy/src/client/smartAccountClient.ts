@@ -11,7 +11,7 @@ import { getDefaultUserOperationFeeOptions } from "../defaults.js";
 import { type AlchemyGasManagerConfig } from "../middleware/gasManager.js";
 import { AlchemyProviderConfigSchema } from "../schema.js";
 import type { AlchemyProviderConfig } from "../type.js";
-import { type AlchemySmartAccountClientActions } from "./decorators/smartAccount.js";
+import type { AlchemySmartAccountClientActions } from "./decorators/smartAccount.js";
 import { createAlchemySmartAccountClientFromRpcClient } from "./internal/smartAccountClientFromRpc.js";
 import { createAlchemyPublicRpcClient } from "./rpcClient.js";
 import type { AlchemyRpcSchema } from "./types.js";
@@ -25,16 +25,11 @@ export type AlchemySmartAccountClientConfig<
 > = {
   account?: account;
   useSimulation?: boolean;
-  // TODO: this is missing the current gas manager fallback stuff
   gasManagerConfig?: AlchemyGasManagerConfig;
 } & AlchemyProviderConfig &
   Pick<
     SmartAccountClientConfig<transport, chain, account>,
-    | "customMiddleware"
-    | "dummyPaymasterAndData"
-    | "paymasterAndData"
-    | "feeEstimator"
-    | "gasEstimator"
+    "customMiddleware" | "feeEstimator" | "gasEstimator"
   >;
 
 export type AlchemySmartAccountClient_Base<
@@ -46,7 +41,8 @@ export type AlchemySmartAccountClient_Base<
   actions extends SmartAccountClientActions<
     chain,
     account
-  > = SmartAccountClientActions<chain, account>
+  > = SmartAccountClientActions<chain, account> &
+    AlchemySmartAccountClientActions<account>
 > = Prettify<
   SmartAccountClient<
     transport,
@@ -63,15 +59,7 @@ export type AlchemySmartAccountClient<
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined
-> = Prettify<
-  AlchemySmartAccountClient_Base<
-    transport,
-    chain,
-    account,
-    AlchemySmartAccountClientActions<account> &
-      SmartAccountClientActions<chain, account>
-  >
->;
+> = Prettify<AlchemySmartAccountClient_Base<transport, chain, account>>;
 
 export function createAlchemySmartAccountClient<
   TTransport extends Transport = Transport,
@@ -83,11 +71,9 @@ export function createAlchemySmartAccountClient<
   account,
   gasManagerConfig,
   useSimulation,
-  dummyPaymasterAndData,
   feeEstimator,
   customMiddleware,
   gasEstimator,
-  paymasterAndData,
   ...config_
 }: AlchemySmartAccountClientConfig<
   TTransport,
@@ -99,11 +85,9 @@ export function createAlchemySmartAccountClient({
   account,
   gasManagerConfig,
   useSimulation,
-  dummyPaymasterAndData,
   feeEstimator,
   customMiddleware,
   gasEstimator,
-  paymasterAndData,
   ...config_
 }: AlchemySmartAccountClientConfig): AlchemySmartAccountClient {
   const config = AlchemyProviderConfigSchema.parse(config_);
@@ -124,10 +108,9 @@ export function createAlchemySmartAccountClient({
       ...opts,
       feeOptions,
     },
-    dummyPaymasterAndData,
     feeEstimator,
     customMiddleware,
     gasEstimator,
-    paymasterAndData,
+    useSimulation,
   });
 }

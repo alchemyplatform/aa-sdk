@@ -1,5 +1,7 @@
 import {
   AccountNotFoundError,
+  ChainNotFoundError,
+  DefaultFactoryNotDefinedError,
   arbitrum,
   arbitrumGoerli,
   arbitrumSepolia,
@@ -30,14 +32,13 @@ import {
   parseAbiParameters,
 } from "viem";
 import { IPluginAbi } from "./abis/IPlugin.js";
-import { MultiOwnerTokenReceiverMSCAFactoryAbi } from "./abis/MultiOwnerTokenReceiverMSCAFactory.js";
+import { MultiOwnerModularAccountFactoryAbi } from "./abis/MultiOwnerModularAccountFactory.js";
 import { UpgradeableModularAccountAbi } from "./abis/UpgradeableModularAccount.js";
 import {
   createMultiOwnerModularAccount,
   type MultiOwnerModularAccount,
 } from "./account/multiOwnerAccount.js";
 import { MultiOwnerPlugin } from "./plugins/multi-owner/plugin.js";
-import { TokenReceiverPlugin } from "./plugins/token-receiver/plugin.js";
 
 /**
  * Utility method returning the default multi owner msca factory address given a {@link Chain} object
@@ -46,18 +47,16 @@ import { TokenReceiverPlugin } from "./plugins/token-receiver/plugin.js";
  * @returns a {@link Address} for the given chain
  * @throws if the chain doesn't have an address currently deployed
  */
-export const getDefaultMultiOwnerMSCAFactoryAddress = (
-  chain: Chain,
-  excludeDefaultTokenReceiverPlugin: boolean = false
+export const getDefaultMultiOwnerModularAccountFactoryAddress = (
+  chain: Chain
 ): Address => {
   switch (chain.id) {
     case sepolia.id:
-      return excludeDefaultTokenReceiverPlugin
-        ? "0xC69731F267760466663470256A7ba28F79eDC4d6" // MultiOwnerMSCAFactory
-        : "0x852B3a676684031Cb77b69B50D8d7879f4c4807d";
+    case baseSepolia.id:
+    case polygon.id:
+      return "0x000000CC76Ff50cAE2D633E79cCB1Fa1E6978D5a";
     case mainnet.id:
     case goerli.id:
-    case polygon.id:
     case polygonMumbai.id:
     case optimism.id:
     case optimismGoerli.id:
@@ -67,12 +66,9 @@ export const getDefaultMultiOwnerMSCAFactoryAddress = (
     case arbitrumSepolia.id:
     case base.id:
     case baseGoerli.id:
-    case baseSepolia.id:
       throw new Error("not yet deployed");
   }
-  throw new Error(
-    `no default multi owner msca factory contract exists for ${chain.name}`
-  );
+  throw new DefaultFactoryNotDefinedError("MultiOwnerModularAccount", chain);
 };
 
 export async function getMSCAUpgradeToData<
@@ -86,11 +82,9 @@ export async function getMSCAUpgradeToData<
   client: SmartAccountClient<TTransport, TChain, TAccount>,
   {
     multiOwnerPluginAddress,
-    tokenReceiverPluginAddress,
     account: account_ = client.account,
   }: {
     multiOwnerPluginAddress?: Address;
-    tokenReceiverPluginAddress?: Address;
   } & GetAccountParameter<TAccount>
 ): Promise<
   UpgradeToData & {
@@ -102,15 +96,17 @@ export async function getMSCAUpgradeToData<
   }
 
   if (!client.chain) {
-    throw new Error("client must have a chain");
+    throw new ChainNotFoundError();
   }
   const chain = client.chain;
   const account = account_ as OwnedSmartContractAccount<string, TOwner>;
 
-  const factoryAddress = getDefaultMultiOwnerMSCAFactoryAddress(client.chain);
+  const factoryAddress = getDefaultMultiOwnerModularAccountFactoryAddress(
+    client.chain
+  );
 
   const implAddress = await client.readContract({
-    abi: MultiOwnerTokenReceiverMSCAFactoryAbi,
+    abi: MultiOwnerModularAccountFactoryAbi,
     address: factoryAddress,
     functionName: "IMPL",
   });
@@ -118,16 +114,8 @@ export async function getMSCAUpgradeToData<
   const multiOwnerAddress =
     multiOwnerPluginAddress ?? MultiOwnerPlugin.meta.addresses[client.chain.id];
 
-  const tokenReceiverAddress =
-    tokenReceiverPluginAddress ??
-    TokenReceiverPlugin.meta.addresses[client.chain.id];
-
   if (!multiOwnerAddress) {
     throw new Error("could not get multi owner plugin address");
-  }
-
-  if (!tokenReceiverAddress) {
-    throw new Error("could not get token receiver plugin address");
   }
 
   const moPluginManifest = await client.readContract({
@@ -144,20 +132,6 @@ export async function getMSCAUpgradeToData<
     })
   );
 
-  const trPluginManifest = await client.readContract({
-    abi: IPluginAbi,
-    address: tokenReceiverAddress,
-    functionName: "pluginManifest",
-  });
-
-  const hashedTrPluginManifest = keccak256(
-    encodeFunctionResult({
-      abi: IPluginAbi,
-      functionName: "pluginManifest",
-      result: trPluginManifest,
-    })
-  );
-
   const ownerAddress = await account.getOwner().getAddress();
   const encodedOwner = encodeAbiParameters(parseAbiParameters("address[]"), [
     [ownerAddress],
@@ -165,16 +139,13 @@ export async function getMSCAUpgradeToData<
 
   const encodedPluginInitData = encodeAbiParameters(
     parseAbiParameters("bytes32[], bytes[]"),
-    [
-      [hashedMultiOwnerPluginManifest, hashedTrPluginManifest],
-      [encodedOwner, "0x"],
-    ]
+    [[hashedMultiOwnerPluginManifest], [encodedOwner, "0x"]]
   );
 
   const encodedMSCAInitializeData = encodeFunctionData({
     abi: UpgradeableModularAccountAbi,
     functionName: "initialize",
-    args: [[multiOwnerAddress, tokenReceiverAddress], encodedPluginInitData],
+    args: [[multiOwnerAddress], encodedPluginInitData],
   });
 
   return {

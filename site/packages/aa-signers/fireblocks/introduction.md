@@ -65,7 +65,7 @@ const typedData = {
 const signTypedData = await fireblocksSigner.signTypedData(typedData);
 ```
 
-<<< @/snippets/fireblocks.ts
+<<< @/snippets/signers/fireblocks.ts
 :::
 
 ## Developer Links

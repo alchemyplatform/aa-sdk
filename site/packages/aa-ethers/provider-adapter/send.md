@@ -14,7 +14,7 @@ head:
 
 # send
 
-`send` is a method on `EthersProviderAdapter` that uses that adapter's `SmartAccountProvider`'s [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193)-compliant `request` method.
+`send` is a method on `EthersProviderAdapter` that uses that adapter's `SmartAccountClient`'s [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193)-compliant `request` method.
 
 ## Usage
 
@@ -27,7 +27,7 @@ import { provider } from "./ethers-provider";
 const chainId = await provider.send("eth_chainId", []);
 ```
 
-<<< @/snippets/ethers-provider.ts
+<<< @/snippets/aa-ethers/ethers-provider.ts
 :::
 
 ## Returns

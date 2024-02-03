@@ -175,7 +175,7 @@ export class SessionKeyPermissionsBuilder {
           }),
         this._requiredPaymaster
       ),
-    ].filter((x) => x === "0x");
+    ].filter((x) => x !== "0x");
   }
 
   private encodeIfDefined<T>(encode: (param: T) => Hex, param?: T): Hex {

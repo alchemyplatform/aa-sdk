@@ -1,7 +1,15 @@
-import type { Chain, Hex, SendTransactionParameters, Transport } from "viem";
+import type {
+  Chain,
+  Client,
+  Hex,
+  SendTransactionParameters,
+  Transport,
+} from "viem";
 import type { SmartContractAccount } from "../../account/smartContractAccount.js";
-import type { BaseSmartAccountClient } from "../../client/smartAccountClient.js";
+import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
 import { AccountNotFoundError } from "../../errors/account.js";
+import { IncompatibleClientError } from "../../errors/client.js";
+import { TransactionMissingToParamError } from "../../errors/transaction.js";
 import { buildUserOperationFromTx } from "./buildUserOperationFromTx.js";
 import { _sendUserOperation } from "./internal/sendUserOperation.js";
 import { waitForUserOperationTransaction } from "./waitForUserOperationTransacation.js";
@@ -13,7 +21,7 @@ export const sendTransaction: <
     | undefined,
   TChainOverride extends Chain | undefined = Chain | undefined
 >(
-  client: BaseSmartAccountClient<Transport, TChain, TAccount>,
+  client: Client<Transport, TChain, TAccount>,
   args: SendTransactionParameters<TChain, TAccount, TChainOverride>
 ) => Promise<Hex> = async (client, args) => {
   const { account = client.account } = args;
@@ -22,7 +30,14 @@ export const sendTransaction: <
   }
 
   if (!args.to) {
-    throw new Error("Transaction is missing `to` address set on request");
+    throw new TransactionMissingToParamError();
+  }
+
+  if (!isBaseSmartAccountClient(client)) {
+    throw new IncompatibleClientError(
+      "BaseSmartAccountClient",
+      "sendTransaction"
+    );
   }
 
   const uoStruct = await buildUserOperationFromTx(client, args);

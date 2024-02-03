@@ -17,7 +17,11 @@ export const UpgradeableModularAccountAbi = [
     name: "entryPoint",
     inputs: [],
     outputs: [
-      { name: "", type: "address", internalType: "contract IEntryPoint" },
+      {
+        name: "",
+        type: "address",
+        internalType: "contract IEntryPoint",
+      },
     ],
     stateMutability: "view",
   },
@@ -124,7 +128,11 @@ export const UpgradeableModularAccountAbi = [
     name: "getInstalledPlugins",
     inputs: [],
     outputs: [
-      { name: "pluginAddresses", type: "address[]", internalType: "address[]" },
+      {
+        name: "pluginAddresses",
+        type: "address[]",
+        internalType: "address[]",
+      },
     ],
     stateMutability: "view",
   },
@@ -168,8 +176,16 @@ export const UpgradeableModularAccountAbi = [
     name: "installPlugin",
     inputs: [
       { name: "plugin", type: "address", internalType: "address" },
-      { name: "manifestHash", type: "bytes32", internalType: "bytes32" },
-      { name: "pluginInitData", type: "bytes", internalType: "bytes" },
+      {
+        name: "manifestHash",
+        type: "bytes32",
+        internalType: "bytes32",
+      },
+      {
+        name: "pluginInstallData",
+        type: "bytes",
+        internalType: "bytes",
+      },
       {
         name: "dependencies",
         type: "bytes21[]",
@@ -177,6 +193,44 @@ export const UpgradeableModularAccountAbi = [
       },
     ],
     outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "onERC1155BatchReceived",
+    inputs: [
+      { name: "operator", type: "address", internalType: "address" },
+      { name: "from", type: "address", internalType: "address" },
+      { name: "ids", type: "uint256[]", internalType: "uint256[]" },
+      { name: "values", type: "uint256[]", internalType: "uint256[]" },
+      { name: "data", type: "bytes", internalType: "bytes" },
+    ],
+    outputs: [{ name: "selector", type: "bytes4", internalType: "bytes4" }],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "onERC1155Received",
+    inputs: [
+      { name: "operator", type: "address", internalType: "address" },
+      { name: "from", type: "address", internalType: "address" },
+      { name: "id", type: "uint256", internalType: "uint256" },
+      { name: "value", type: "uint256", internalType: "uint256" },
+      { name: "data", type: "bytes", internalType: "bytes" },
+    ],
+    outputs: [{ name: "selector", type: "bytes4", internalType: "bytes4" }],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "onERC721Received",
+    inputs: [
+      { name: "operator", type: "address", internalType: "address" },
+      { name: "from", type: "address", internalType: "address" },
+      { name: "tokenId", type: "uint256", internalType: "uint256" },
+      { name: "data", type: "bytes", internalType: "bytes" },
+    ],
+    outputs: [{ name: "selector", type: "bytes4", internalType: "bytes4" }],
     stateMutability: "nonpayable",
   },
   {
@@ -195,11 +249,29 @@ export const UpgradeableModularAccountAbi = [
   },
   {
     type: "function",
+    name: "tokensReceived",
+    inputs: [
+      { name: "operator", type: "address", internalType: "address" },
+      { name: "from", type: "address", internalType: "address" },
+      { name: "to", type: "address", internalType: "address" },
+      { name: "amount", type: "uint256", internalType: "uint256" },
+      { name: "userData", type: "bytes", internalType: "bytes" },
+      { name: "operatorData", type: "bytes", internalType: "bytes" },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     name: "uninstallPlugin",
     inputs: [
       { name: "plugin", type: "address", internalType: "address" },
       { name: "config", type: "bytes", internalType: "bytes" },
-      { name: "pluginUninstallData", type: "bytes", internalType: "bytes" },
+      {
+        name: "pluginUninstallData",
+        type: "bytes",
+        internalType: "bytes",
+      },
     ],
     outputs: [],
     stateMutability: "nonpayable",
@@ -208,7 +280,11 @@ export const UpgradeableModularAccountAbi = [
     type: "function",
     name: "upgradeToAndCall",
     inputs: [
-      { name: "newImplementation", type: "address", internalType: "address" },
+      {
+        name: "newImplementation",
+        type: "address",
+        internalType: "address",
+      },
       { name: "data", type: "bytes", internalType: "bytes" },
     ],
     outputs: [],
@@ -227,7 +303,11 @@ export const UpgradeableModularAccountAbi = [
           { name: "nonce", type: "uint256", internalType: "uint256" },
           { name: "initCode", type: "bytes", internalType: "bytes" },
           { name: "callData", type: "bytes", internalType: "bytes" },
-          { name: "callGasLimit", type: "uint256", internalType: "uint256" },
+          {
+            name: "callGasLimit",
+            type: "uint256",
+            internalType: "uint256",
+          },
           {
             name: "verificationGasLimit",
             type: "uint256",
@@ -238,21 +318,37 @@ export const UpgradeableModularAccountAbi = [
             type: "uint256",
             internalType: "uint256",
           },
-          { name: "maxFeePerGas", type: "uint256", internalType: "uint256" },
+          {
+            name: "maxFeePerGas",
+            type: "uint256",
+            internalType: "uint256",
+          },
           {
             name: "maxPriorityFeePerGas",
             type: "uint256",
             internalType: "uint256",
           },
-          { name: "paymasterAndData", type: "bytes", internalType: "bytes" },
+          {
+            name: "paymasterAndData",
+            type: "bytes",
+            internalType: "bytes",
+          },
           { name: "signature", type: "bytes", internalType: "bytes" },
         ],
       },
       { name: "userOpHash", type: "bytes32", internalType: "bytes32" },
-      { name: "missingAccountFunds", type: "uint256", internalType: "uint256" },
+      {
+        name: "missingAccountFunds",
+        type: "uint256",
+        internalType: "uint256",
+      },
     ],
     outputs: [
-      { name: "validationData", type: "uint256", internalType: "uint256" },
+      {
+        name: "validationData",
+        type: "uint256",
+        internalType: "uint256",
+      },
     ],
     stateMutability: "nonpayable",
   },
@@ -265,38 +361,6 @@ export const UpgradeableModularAccountAbi = [
         type: "address",
         indexed: true,
         internalType: "contract IEntryPoint",
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: "event",
-    name: "PluginIgnoredHookUnapplyCallbackFailure",
-    inputs: [
-      {
-        name: "plugin",
-        type: "address",
-        indexed: true,
-        internalType: "address",
-      },
-      {
-        name: "providingPlugin",
-        type: "address",
-        indexed: true,
-        internalType: "address",
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: "event",
-    name: "PluginIgnoredUninstallCallbackFailure",
-    inputs: [
-      {
-        name: "plugin",
-        type: "address",
-        indexed: true,
-        internalType: "address",
       },
     ],
     anonymous: false,
@@ -337,7 +401,7 @@ export const UpgradeableModularAccountAbi = [
         internalType: "address",
       },
       {
-        name: "callbacksSucceeded",
+        name: "onUninstallSucceeded",
         type: "bool",
         indexed: true,
         internalType: "bool",
@@ -364,15 +428,14 @@ export const UpgradeableModularAccountAbi = [
   { type: "error", name: "ArrayLengthMismatch", inputs: [] },
   {
     type: "error",
-    name: "AuthorizeUpgradeReverted",
-    inputs: [{ name: "revertReason", type: "bytes", internalType: "bytes" }],
-  },
-  {
-    type: "error",
     name: "DuplicateHookLimitExceeded",
     inputs: [
       { name: "selector", type: "bytes4", internalType: "bytes4" },
-      { name: "hook", type: "bytes21", internalType: "FunctionReference" },
+      {
+        name: "hook",
+        type: "bytes21",
+        internalType: "FunctionReference",
+      },
     ],
   },
   {
@@ -380,7 +443,11 @@ export const UpgradeableModularAccountAbi = [
     name: "DuplicatePreRuntimeValidationHookLimitExceeded",
     inputs: [
       { name: "selector", type: "bytes4", internalType: "bytes4" },
-      { name: "hook", type: "bytes21", internalType: "FunctionReference" },
+      {
+        name: "hook",
+        type: "bytes21",
+        internalType: "FunctionReference",
+      },
     ],
   },
   {
@@ -388,7 +455,11 @@ export const UpgradeableModularAccountAbi = [
     name: "DuplicatePreUserOpValidationHookLimitExceeded",
     inputs: [
       { name: "selector", type: "bytes4", internalType: "bytes4" },
-      { name: "hook", type: "bytes21", internalType: "FunctionReference" },
+      {
+        name: "hook",
+        type: "bytes21",
+        internalType: "FunctionReference",
+      },
     ],
   },
   {
@@ -424,7 +495,7 @@ export const UpgradeableModularAccountAbi = [
     name: "IPluginFunctionNotAllowed",
     inputs: [{ name: "selector", type: "bytes4", internalType: "bytes4" }],
   },
-  { type: "error", name: "IPluginInterfaceNotAllowed", inputs: [] },
+  { type: "error", name: "InterfaceNotAllowed", inputs: [] },
   { type: "error", name: "InvalidDependenciesProvided", inputs: [] },
   { type: "error", name: "InvalidPluginManifest", inputs: [] },
   {

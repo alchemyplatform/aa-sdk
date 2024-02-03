@@ -21,7 +21,7 @@ Notable differences between `EthersProviderAdapter` and `JsonRpcProvider` are im
 1.  [`getAddress`](/packages/aa-ethers/account-signer/getAddress) -- gets the `AccountSigner`'s smart account address.
 2.  [`signMessage`](/packages/aa-ethers/account-signer/signMessage) -- signs messages with the `AccountSigner`'s owner address.
 3.  [`sendTransaction`](/packages/aa-ethers/account-signer/sendTransaction) -- sends transactions on behalf of the `AccountSigner`'s smart account, with request and response formatted as if you were using the ethers.js library.
-4.  [`getPublicErc4337Client`](/packages/aa-ethers/account-signer/getPublicErc4337Client) -- gets the underlying viem cliemt with ERC-4337 compatability.
+4.  [`getBundlerClient`](/packages/aa-ethers/account-signer/getBundlerClient) -- gets the underlying viem cliemt with ERC-4337 compatability.
 5.  [`connect`](/packages/aa-ethers/account-signer/connect) -- connects the inputted provider to an account and returns an `AccountSigner`.
 
 ## Usage
@@ -44,8 +44,8 @@ const txn = await signer.sendTransaction({
 });
 
 // get the signer's underlying viem client with EIP-4337 capabilties
-const client = signer.getPublicErc4337Client();
+const client = signer.getBundlerClient();
 ```
 
-<<< @/snippets/ethers-signer.ts
+<<< @/snippets/aa-ethers/ethers-signer.ts
 :::

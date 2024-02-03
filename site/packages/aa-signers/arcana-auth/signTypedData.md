@@ -60,7 +60,7 @@ const signedTypedData = await newArcanaAuthSigner.signTypedData({
 });
 ```
 
-<<< @/snippets/arcana-auth.ts
+<<< @/snippets/signers/arcana-auth.ts
 :::
 
 ## Returns

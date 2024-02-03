@@ -13,8 +13,10 @@ import {
   type ReadContractReturnType,
 } from "viem";
 import {
+  ChainNotFoundError,
   AccountNotFoundError,
-  type SmartAccountClient,
+  isSmartAccountClient,
+  IncompatibleClientError,
   type SmartContractAccount,
   type UserOperationOverrides,
   type GetAccountParameter,
@@ -135,7 +137,9 @@ export type MultiOwnerPluginActions<
   ReadAndEncodeActions<TAccount>;
 
 const addresses = {
-  11155111: "0xB76734F322b9f2C8F1dA934252dED3bC3C25b109" as Address,
+  137: "0x000000E8F14A838A00505d861c6EF15cdfB05455" as Address,
+  84532: "0x000000E8F14A838A00505d861c6EF15cdfB05455" as Address,
+  11155111: "0x000000E8F14A838A00505d861c6EF15cdfB05455" as Address,
 } as Record<number, Address>;
 
 export const MultiOwnerPlugin: Plugin<typeof MultiOwnerPluginAbi> = {
@@ -152,7 +156,7 @@ export const MultiOwnerPlugin: Plugin<typeof MultiOwnerPluginAbi> = {
     PublicClient,
     Address
   > => {
-    if (!client.chain) throw new Error("Missing chain on client");
+    if (!client.chain) throw new ChainNotFoundError();
 
     return getContract({
       address: address || addresses[client.chain.id],
@@ -169,19 +173,14 @@ export const multiOwnerPluginActions: <
     | SmartContractAccount
     | undefined
 >(
-  client: SmartAccountClient<TTransport, TChain, TAccount>
-) => MultiOwnerPluginActions<TAccount> = <
-  TTransport extends Transport = Transport,
-  TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
-    | undefined
->(
-  client: SmartAccountClient<TTransport, TChain, TAccount>
-) => ({
+  client: Client<TTransport, TChain, TAccount>
+) => MultiOwnerPluginActions<TAccount> = (client) => ({
   updateOwners({ args, overrides, account = client.account }) {
     if (!account) {
       throw new AccountNotFoundError();
+    }
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError("SmartAccountClient", "updateOwners");
     }
 
     const uo = encodeFunctionData({
@@ -197,9 +196,16 @@ export const multiOwnerPluginActions: <
       throw new AccountNotFoundError();
     }
 
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "installMultiOwnerPlugin"
+      );
+    }
+
     const chain = client.chain;
     if (!chain) {
-      throw new Error("Chain is required");
+      throw new ChainNotFoundError();
     }
 
     const dependencies = params.dependencyOverrides ?? [];
@@ -240,6 +246,13 @@ export const multiOwnerPluginActions: <
       throw new AccountNotFoundError();
     }
 
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "readEip712Domain"
+      );
+    }
+
     return client.readContract({
       address: account.address,
       abi: MultiOwnerPluginExecutionFunctionAbi,
@@ -257,6 +270,13 @@ export const multiOwnerPluginActions: <
   async readIsValidSignature({ args, account = client.account }) {
     if (!account) {
       throw new AccountNotFoundError();
+    }
+
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "readIsValidSignature"
+      );
     }
 
     return client.readContract({

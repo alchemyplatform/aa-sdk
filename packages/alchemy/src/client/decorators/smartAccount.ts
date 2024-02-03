@@ -2,10 +2,9 @@ import type {
   SendUserOperationParameters,
   SmartContractAccount,
 } from "@alchemy/aa-core";
-import type { Chain, Transport } from "viem";
+import type { Chain, Client, Transport } from "viem";
 import { simulateUserOperationChanges } from "../../actions/simulateUserOperationChanges.js";
 import type { SimulateUserOperationAssetChangesResponse } from "../../actions/types.js";
-import type { AlchemySmartAccountClient_Base } from "../smartAccountClient.js";
 
 export type AlchemySmartAccountClientActions<
   TAccount extends SmartContractAccount | undefined =
@@ -24,7 +23,7 @@ export const alchemyActions: <
     | SmartContractAccount
     | undefined
 >(
-  client: AlchemySmartAccountClient_Base<TTransport, TChain, TAccount>
+  client: Client<TTransport, TChain, TAccount>
 ) => AlchemySmartAccountClientActions<TAccount> = (client) => ({
   simulateUserOperation: async (args) =>
     simulateUserOperationChanges(client, args),

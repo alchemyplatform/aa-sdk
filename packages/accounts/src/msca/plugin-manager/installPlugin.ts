@@ -1,5 +1,7 @@
 import {
   AccountNotFoundError,
+  IncompatibleClientError,
+  isSmartAccountClient,
   type GetAccountParameter,
   type SmartAccountClient,
   type SmartContractAccount,
@@ -11,6 +13,7 @@ import {
   keccak256,
   type Address,
   type Chain,
+  type Client,
   type Hash,
   type Transport,
 } from "viem";
@@ -36,7 +39,7 @@ export async function installPlugin<
     | SmartContractAccount
     | undefined
 >(
-  client: SmartAccountClient<TTransport, TChain, TAccount>,
+  client: Client<TTransport, TChain, TAccount>,
   {
     overrides,
     account = client.account,
@@ -45,6 +48,10 @@ export async function installPlugin<
 ) {
   if (!account) {
     throw new AccountNotFoundError();
+  }
+
+  if (!isSmartAccountClient(client)) {
+    throw new IncompatibleClientError("SmartAccountClient", "installPlugin");
   }
 
   const callData = await encodeInstallPluginUserOperation(client, params);

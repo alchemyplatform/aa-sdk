@@ -14,9 +14,9 @@ head:
 
 # constructor
 
-There are two ways to construct `EthersProviderAdapter`. You can provide either the `rpcProvider` and `chainId` to have the `EthersProviderAdapter` constructor, which will initialize the `SmartAccountProvider` using the input parameters internally.
+There are two ways to construct `EthersProviderAdapter`. You can provide either the `rpcProvider` and `chainId` to have the `EthersProviderAdapter` constructor, which will initialize the `SmartAccountClient` using the input parameters internally.
 
-Or you can also input a `SmartAccountProvider` instance already initialized (`AlchemyProvider` for instance) to the `EthersProviderAdapter` constructor.
+Or you can also input a `SmartAccountClient` instance already initialized (`AlchemyProvider` for instance) to the `EthersProviderAdapter` constructor.
 
 ## Usage
 
@@ -42,7 +42,7 @@ const accountProvider = new AlchemyProvider({
   opts: {
     txMaxRetries: 10,
     txRetryIntervalMs: 2_000,
-    txRetryMulitplier: 1.5,
+    txRetryMultiplier: 1.5,
     minPriorityFeePerBid: 100_000_000n,
   },
   feeOpts: {
@@ -70,10 +70,10 @@ A new instance of an `EthersProviderAdapter`.
 
 Either:
 
-- `rpcProvider: string | PublicErc4337Client` -- a JSON-RPC URL, or a viem Client that supports ERC-4337 methods and Viem public actions. See [createPublicErc4337Client](/packages/aa-core/client/createPublicErc4337Client.md).
+- `rpcProvider: string | BundlerClient` -- a JSON-RPC URL, or a viem Client that supports ERC-4337 methods and Viem public actions. See [createBundlerClient](/packages/aa-core/bundler-client/index.md).
 
 - `chainId: number` -- the ID of thechain on which to create the provider.
 
 Or:
 
-- `accountProvider: SmartAccountProvider` -- See [SmartAccountProvider](/packages/aa-core/provider/constructor.md).
+- `accountProvider: SmartAccountClient` -- See [SmartAccountClient](/packages/aa-core/smart-account-client/index.md).

@@ -1,8 +1,9 @@
-import type { Chain, Transport } from "viem";
+import type { Chain, Client, Transport } from "viem";
 import type { SmartContractAccount } from "../../account/smartContractAccount";
-import type { BaseSmartAccountClient } from "../../client/smartAccountClient";
+import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
 import type { SendUserOperationResult } from "../../client/types";
 import { AccountNotFoundError } from "../../errors/account.js";
+import { IncompatibleClientError } from "../../errors/client.js";
 import type { UserOperationOverrides, UserOperationStruct } from "../../types";
 import { bigIntMax, bigIntPercent } from "../../utils/index.js";
 import { _runMiddlewareStack } from "./internal/runMiddlewareStack.js";
@@ -16,12 +17,18 @@ export const dropAndReplaceUserOperation: <
     | SmartContractAccount
     | undefined
 >(
-  client: BaseSmartAccountClient<TTransport, TChain, TAccount>,
+  client: Client<TTransport, TChain, TAccount>,
   args: DropAndReplaceUserOperationParameters<TAccount>
 ) => Promise<SendUserOperationResult> = async (client, args) => {
   const { account = client.account, uoToDrop, overrides } = args;
   if (!account) {
     throw new AccountNotFoundError();
+  }
+  if (!isBaseSmartAccountClient(client)) {
+    throw new IncompatibleClientError(
+      "BaseSmartAccountClient",
+      "dropAndReplaceUserOperation"
+    );
   }
 
   const uoToSubmit = {

@@ -47,6 +47,7 @@ describe("SmartAccountClient Tests", async () => {
         return;
       },
     }),
+    chain,
     account,
   });
 

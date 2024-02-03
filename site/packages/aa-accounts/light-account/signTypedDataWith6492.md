@@ -21,10 +21,10 @@ head:
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
 // sign typed data (works for undeployed and deployed accounts)
-const signedTypedDataWith6492 = provider.signTypedDataWith6492({
+const signedTypedDataWith6492 = smartAccountClient.signTypedDataWith6492({
   domain: {
     name: "Ether Mail",
     version: "1",
@@ -57,7 +57,7 @@ const signedTypedDataWith6492 = provider.signTypedDataWith6492({
 });
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/aa-core/lightAccountClient.ts
 :::
 
 ## Returns

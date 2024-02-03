@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
-  "version": "3.0.0-alpha.0",
+  "version": "3.0.0-alpha.4",
   "npmClient": "yarn",
   "conventionalCommits": true,
   "conventionalPrerelease": true,
@@ -8,6 +8,9 @@
   "command": {
     "version": {
       "message": "chore(release): publish %s [skip-ci]"
+    },
+    "publish": {
+      "preDistTag": "next"
     }
   },
   "granularPathspec": false

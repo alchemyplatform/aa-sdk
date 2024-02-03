@@ -6,6 +6,8 @@ import type {
 import type { BaseSmartAccountClient } from "../../../client/smartAccountClient";
 import type { SendUserOperationResult } from "../../../client/types";
 import { AccountNotFoundError } from "../../../errors/account.js";
+import { ChainNotFoundError } from "../../../errors/client.js";
+import { InvalidUserOperationError } from "../../../errors/useroperation.js";
 import type { UserOperationStruct } from "../../../types";
 import {
   deepHexlify,
@@ -29,19 +31,12 @@ export const _sendUserOperation: <
   }
 
   if (!client.chain) {
-    throw new Error("cannot sendUserOperation without a chain");
+    throw new ChainNotFoundError();
   }
 
   const request = deepHexlify(args.uoStruct);
   if (!isValidRequest(request)) {
-    // this pretty prints the uo
-    throw new Error(
-      `Request is missing parameters. All properties on UserOperationStruct must be set. uo: ${JSON.stringify(
-        args.uoStruct,
-        null,
-        2
-      )}`
-    );
+    throw new InvalidUserOperationError(args.uoStruct);
   }
 
   request.signature = await account.signUserOperationHash(

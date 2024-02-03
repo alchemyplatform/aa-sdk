@@ -30,7 +30,7 @@ const portalSigner = await createPortalSigner();
 const signedMessage = await portalSigner.signMessage("test");
 ```
 
-<<< @/snippets/portal.ts
+<<< @/snippets/signers/portal.ts
 :::
 
 ## Returns

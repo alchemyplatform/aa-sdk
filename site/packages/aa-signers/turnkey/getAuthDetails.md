@@ -30,7 +30,7 @@ const turnkeySigner = await createTurnkeySigner();
 const details = await turnkeySigner.getAuthDetails();
 ```
 
-<<< @/snippets/turnkey.ts
+<<< @/snippets/signers/turnkey.ts
 :::
 
 ## Returns

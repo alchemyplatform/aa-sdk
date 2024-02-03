@@ -1,6 +1,7 @@
-import type { Chain, Transport } from "viem";
+import type { Chain, Client, Transport } from "viem";
 import type { SmartContractAccount } from "../../account/smartContractAccount.js";
-import type { BaseSmartAccountClient } from "../../client/smartAccountClient.js";
+import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
+import { IncompatibleClientError } from "../../errors/client.js";
 import type { UserOperationStruct } from "../../types.js";
 import { buildUserOperation } from "./buildUserOperation.js";
 import type { SendUserOperationParameters } from "./types";
@@ -12,9 +13,16 @@ export const checkGasSponsorshipEligibility: <
     | SmartContractAccount
     | undefined
 >(
-  client: BaseSmartAccountClient<TTransport, TChain, TAccount>,
+  client: Client<TTransport, TChain, TAccount>,
   args: SendUserOperationParameters<TAccount>
 ) => Promise<boolean> = async (client, args) => {
+  if (!isBaseSmartAccountClient(client)) {
+    throw new IncompatibleClientError(
+      "BaseSmartAccountClient",
+      "checkGasSponsorshipEligibility"
+    );
+  }
+
   return buildUserOperation(client, args)
     .then(
       (userOperationStruct: UserOperationStruct) =>

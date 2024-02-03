@@ -1,4 +1,5 @@
 import {
+  FailedToGetStorageSlotError,
   createBundlerClient,
   getAccountAddress,
   getDefaultEntryPointAddress,
@@ -118,7 +119,10 @@ export async function createLightAccount({
     });
 
     if (storage == null) {
-      throw new Error("could not get storage");
+      throw new FailedToGetStorageSlotError(
+        "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
+        "Proxy Implementation Address"
+      );
     }
 
     const implementationAddresses = Object.values(LightAccountVersions).map(

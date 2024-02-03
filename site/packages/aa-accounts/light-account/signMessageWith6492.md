@@ -21,13 +21,15 @@ head:
 ::: code-group
 
 ```ts [example.ts]
-import { provider } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
 // sign message (works for undeployed and deployed accounts)
-const signedMessageWith6492 = provider.signMessageWith6492("test");
+const signedMessageWith6492 = smartAccountClient.signMessageWith6492({
+  message: "test",
+});
 ```
 
-<<< @/snippets/provider.ts
+<<< @/snippets/aa-core/lightAccountClient.ts
 :::
 
 ## Returns

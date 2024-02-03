@@ -36,7 +36,7 @@ If you are looking to add a new account type, please follow the following struct
 export const MyContractAbi = [] as const; // the as const is important so we can get correct typing from viem
 ```
 
-4. If you need to extend the [`SmartAccountProvider`](https://accountkit.alchemy.com/packages/aa-core/provider/introduction.html) class, add a file called `provider.ts` and add your implementation for `SmartAccountProvider`.
+4. If you need to extend the [`SmartAccountProvider`](https://accountkit.alchemy.com/packages/aa-core/smart-account-client/introduction.html) class, add a file called `provider.ts` and add your implementation for `SmartAccountProvider`.
 
 - Ideally, your `Account` impl should _just_ work with the base provider provided by `aa-core`.
 - If not, consider generalizing the use case and updating SmartAccountProvider

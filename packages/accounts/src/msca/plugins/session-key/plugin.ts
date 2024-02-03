@@ -13,8 +13,10 @@ import {
   type Hex,
 } from "viem";
 import {
+  ChainNotFoundError,
   AccountNotFoundError,
-  type SmartAccountClient,
+  isSmartAccountClient,
+  IncompatibleClientError,
   type SmartContractAccount,
   type UserOperationOverrides,
   type GetAccountParameter,
@@ -171,7 +173,9 @@ export type SessionKeyPluginActions<
   ReadAndEncodeActions;
 
 const addresses = {
-  11155111: "0x70a64501Fd1398b0A236b69006936009d31C1520" as Address,
+  137: "0x000000AAF83f4cbd58193D30643025ffD6C9e724" as Address,
+  84532: "0x000000AAF83f4cbd58193D30643025ffD6C9e724" as Address,
+  11155111: "0x000000AAF83f4cbd58193D30643025ffD6C9e724" as Address,
 } as Record<number, Address>;
 
 export const SessionKeyPlugin: Plugin<typeof SessionKeyPluginAbi> = {
@@ -188,7 +192,7 @@ export const SessionKeyPlugin: Plugin<typeof SessionKeyPluginAbi> = {
     PublicClient,
     Address
   > => {
-    if (!client.chain) throw new Error("Missing chain on client");
+    if (!client.chain) throw new ChainNotFoundError();
 
     return getContract({
       address: address || addresses[client.chain.id],
@@ -205,19 +209,17 @@ export const sessionKeyPluginActions: <
     | SmartContractAccount
     | undefined
 >(
-  client: SmartAccountClient<TTransport, TChain, TAccount>
-) => SessionKeyPluginActions<TAccount> = <
-  TTransport extends Transport = Transport,
-  TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
-    | undefined
->(
-  client: SmartAccountClient<TTransport, TChain, TAccount>
-) => ({
+  client: Client<TTransport, TChain, TAccount>
+) => SessionKeyPluginActions<TAccount> = (client) => ({
   executeWithSessionKey({ args, overrides, account = client.account }) {
     if (!account) {
       throw new AccountNotFoundError();
+    }
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "executeWithSessionKey"
+      );
     }
 
     const uo = encodeFunctionData({
@@ -232,6 +234,9 @@ export const sessionKeyPluginActions: <
     if (!account) {
       throw new AccountNotFoundError();
     }
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError("SmartAccountClient", "addSessionKey");
+    }
 
     const uo = encodeFunctionData({
       abi: SessionKeyPluginExecutionFunctionAbi,
@@ -244,6 +249,12 @@ export const sessionKeyPluginActions: <
   removeSessionKey({ args, overrides, account = client.account }) {
     if (!account) {
       throw new AccountNotFoundError();
+    }
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "removeSessionKey"
+      );
     }
 
     const uo = encodeFunctionData({
@@ -258,6 +269,12 @@ export const sessionKeyPluginActions: <
     if (!account) {
       throw new AccountNotFoundError();
     }
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "rotateSessionKey"
+      );
+    }
 
     const uo = encodeFunctionData({
       abi: SessionKeyPluginExecutionFunctionAbi,
@@ -270,6 +287,12 @@ export const sessionKeyPluginActions: <
   updateKeyPermissions({ args, overrides, account = client.account }) {
     if (!account) {
       throw new AccountNotFoundError();
+    }
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "updateKeyPermissions"
+      );
     }
 
     const uo = encodeFunctionData({
@@ -285,9 +308,16 @@ export const sessionKeyPluginActions: <
       throw new AccountNotFoundError();
     }
 
+    if (!isSmartAccountClient(client)) {
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "installSessionKeyPlugin"
+      );
+    }
+
     const chain = client.chain;
     if (!chain) {
-      throw new Error("Chain is required");
+      throw new ChainNotFoundError();
     }
 
     const dependencies = params.dependencyOverrides ?? [

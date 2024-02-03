@@ -7,6 +7,7 @@ import {
   type TypedDataDefinition,
   type WalletClient,
 } from "viem";
+import { InvalidSignerTypeError } from "../errors/signer.js";
 import type { SmartAccountSigner } from "./types";
 
 export class WalletClientSigner implements SmartAccountSigner<WalletClient> {
@@ -16,7 +17,7 @@ export class WalletClientSigner implements SmartAccountSigner<WalletClient> {
   constructor(client: WalletClient, signerType: string) {
     this.inner = client;
     if (!signerType) {
-      throw new Error("Valid signerType param is required.");
+      throw new InvalidSignerTypeError(signerType);
     }
     this.signerType = signerType;
   }

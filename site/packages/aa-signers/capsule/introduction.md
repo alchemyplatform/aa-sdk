@@ -65,7 +65,7 @@ const typedData = {
 const signTypedData = await capsuleSigner.signTypedData(typedData);
 ```
 
-<<< @/snippets/capsule.ts
+<<< @/snippets/signers/capsule.ts
 :::
 
 ## Developer Links

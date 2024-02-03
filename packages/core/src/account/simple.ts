@@ -10,6 +10,7 @@ import {
 import { SimpleAccountAbi } from "../abis/SimpleAccountAbi.js";
 import { SimpleAccountFactoryAbi } from "../abis/SimpleAccountFactoryAbi.js";
 import { createBundlerClient } from "../client/bundlerClient.js";
+import { AccountRequiresOwnerError } from "../errors/account.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import type { BatchUserOperationCallData } from "../types.js";
 import { BaseSmartContractAccount } from "./base.js";
@@ -115,7 +116,7 @@ export const createSimpleSmartAccount = async <
   > &
     Pick<ToSmartContractAccountParams, "chain" | "transport">
 ): Promise<SimpleSmartAccount<TOwner>> => {
-  if (!params.owner) throw new Error("Owner must be provided.");
+  if (!params.owner) throw new AccountRequiresOwnerError("SimpleAccount");
 
   // @ts-expect-error base account allows for optional owners, but simple account requires it
   const simpleAccount = new SimpleSmartContractAccount<TTransport>(params);

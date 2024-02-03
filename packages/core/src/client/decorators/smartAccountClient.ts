@@ -1,6 +1,7 @@
 import type {
   Address,
   Chain,
+  Client,
   Hex,
   SendTransactionParameters,
   Transport,
@@ -41,7 +42,6 @@ import { upgradeAccount } from "../../actions/smartAccount/upgradeAccount.js";
 import { waitForUserOperationTransaction } from "../../actions/smartAccount/waitForUserOperationTransacation.js";
 import type { UserOperationStruct } from "../../types";
 import type { IsUndefined } from "../../utils";
-import type { BaseSmartAccountClient } from "../smartAccountClient";
 import type { SendUserOperationResult } from "../types";
 
 export type BaseSmartAccountClientActions<
@@ -107,7 +107,7 @@ export const smartAccountClientActions: <
     | SmartContractAccount
     | undefined
 >(
-  client: BaseSmartAccountClient<TTransport, TChain, TAccount>
+  client: Client<TTransport, TChain, TAccount>
 ) => BaseSmartAccountClientActions<TChain, TAccount> = (client) => ({
   buildUserOperation: (args) => buildUserOperation(client, args),
   buildUserOperationFromTx: (args) => buildUserOperationFromTx(client, args),
