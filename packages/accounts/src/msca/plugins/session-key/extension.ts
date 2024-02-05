@@ -2,11 +2,10 @@ import {
   AccountNotFoundError,
   type GetAccountParameter,
   type SendUserOperationResult,
-  type SmartAccountClient,
   type SmartContractAccount,
   type UserOperationOverrides,
 } from "@alchemy/aa-core";
-import type { Address, Chain, Transport } from "viem";
+import type { Address, Chain, Client, Transport } from "viem";
 import {
   SessionKeyPlugin,
   sessionKeyPluginActions as sessionKeyPluginActions_,
@@ -36,7 +35,7 @@ export type SessionKeyPluginActions<
     args: {
       key: Address;
       pluginAddress?: Address;
-      overrides: UserOperationOverrides;
+      overrides?: UserOperationOverrides;
     } & GetAccountParameter<TAccount>
   ) => Promise<SendUserOperationResult>;
 };
@@ -48,7 +47,7 @@ export const sessionKeyPluginActions: <
     | SmartContractAccount
     | undefined
 >(
-  client: SmartAccountClient<TTransport, TChain, TAccount>
+  client: Client<TTransport, TChain, TAccount>
 ) => SessionKeyPluginActions<TAccount> = <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
@@ -56,7 +55,7 @@ export const sessionKeyPluginActions: <
     | SmartContractAccount
     | undefined
 >(
-  client: SmartAccountClient<TTransport, TChain, TAccount>
+  client: Client<TTransport, TChain, TAccount>
 ) => {
   const { removeSessionKey, ...og } = sessionKeyPluginActions_(client);
 

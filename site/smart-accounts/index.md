@@ -16,12 +16,6 @@ head:
   - - meta
     - name: twitter:description
       content: Learn how to choose a smart account implementation to use with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
-prev:
-  text: Smart Accounts
-  link: /smart-accounts/overview
-next:
-  text: Choosing a Signer
-  link: /signers/choosing-a-signer
 ---
 
 # Choosing a Smart Account

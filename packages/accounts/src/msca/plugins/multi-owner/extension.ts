@@ -2,10 +2,9 @@ import {
   AccountNotFoundError,
   type GetAccountParameter,
   type IsUndefined,
-  type SmartAccountClient,
   type SmartContractAccount,
 } from "@alchemy/aa-core";
-import { type Address, type Chain, type Transport } from "viem";
+import { type Address, type Chain, type Client, type Transport } from "viem";
 import {
   MultiOwnerPlugin,
   multiOwnerPluginActions as multiOwnerPluginActions_,
@@ -35,7 +34,7 @@ export const multiOwnerPluginActions: <
     | SmartContractAccount
     | undefined
 >(
-  client: SmartAccountClient<TTransport, TChain, TAccount>
+  client: Client<TTransport, TChain, TAccount>
 ) => MultiOwnerPluginActions<TAccount> = <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
@@ -43,7 +42,7 @@ export const multiOwnerPluginActions: <
     | SmartContractAccount
     | undefined
 >(
-  client: SmartAccountClient<TTransport, TChain, TAccount>
+  client: Client<TTransport, TChain, TAccount>
 ) => ({
   ...multiOwnerPluginActions_(client),
   async readOwners(
