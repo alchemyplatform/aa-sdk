@@ -43,6 +43,6 @@ export const simulateUserOperationChanges: <
 
   return client.request({
     method: "alchemy_simulateUserOperationAssetChanges",
-    params: [uoStruct, account.getEntrypoint()],
+    params: [uoStruct, account.getEntryPoint().address],
   });
 };

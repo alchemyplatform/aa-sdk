@@ -1,6 +1,7 @@
 import {
   BaseSmartContractAccount,
   createBundlerClient,
+  getVersion060EntryPoint,
   toSmartContractAccount,
   type BaseSmartAccountParams,
   type BatchUserOperationCallData,
@@ -242,7 +243,10 @@ export const createNaniAccount = async <TTransport extends Transport>(
     transport: params.transport,
     chain: params.chain,
     accountAddress: params.accountAddress as Address | undefined,
-    entryPointAddress: naniAccount.getEntryPointAddress(),
+    entryPoint: getVersion060EntryPoint(
+      params.chain,
+      naniAccount.getEntryPointAddress()
+    ),
     encodeBatchExecute: naniAccount.encodeBatchExecute.bind(naniAccount),
     encodeExecute: (tx) =>
       naniAccount.encodeExecute(tx.target, tx.value ?? 0n, tx.data),

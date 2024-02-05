@@ -181,7 +181,7 @@ const requestGasAndPaymasterData: <C extends ClientWithAlchemyMethods>(
       params: [
         {
           policyId: config.policyId,
-          entryPoint: account.getEntrypoint(),
+          entryPoint: account.getEntryPoint().address,
           userOperation: userOperation,
           dummySignature: userOperation.signature,
           overrides:
@@ -208,7 +208,7 @@ const requestPaymasterAndData: <C extends ClientWithAlchemyMethods>(
       params: [
         {
           policyId: config.policyId,
-          entryPoint: account.getEntrypoint(),
+          entryPoint: account.getEntryPoint().address,
           userOperation: deepHexlify(await resolveProperties(struct)),
         },
       ],

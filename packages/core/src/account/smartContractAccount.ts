@@ -16,6 +16,7 @@ import {
 import { toAccount } from "viem/accounts";
 import { EntryPointAbi } from "../abis/EntryPointAbi.js";
 import { createBundlerClient } from "../client/bundlerClient.js";
+import type { EntryPointDef } from "../entrypoint/types.js";
 import {
   BatchExecutionNotSupportedError,
   FailedToGetStorageSlotError,
@@ -27,10 +28,11 @@ import { InvalidRpcUrlError } from "../errors/client.js";
 import { Logger } from "../logger.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import { wrapSignatureWith6492 } from "../signer/utils.js";
+import type { UserOperationRequest } from "../types.js";
 import type { IsUndefined } from "../utils/types.js";
 import { DeploymentState } from "./base.js";
 
-type Tx = {
+export type AccountOp = {
   target: Address;
   value?: bigint;
   data: Hex | "0x";
@@ -58,45 +60,46 @@ export type OwnedSmartContractAccount<
   setOwner: (owner: TOwner) => void;
 };
 
-export type SmartContractAccount<Name extends string = string> =
-  LocalAccount<Name> & {
-    source: Name;
-    getDummySignature: () => Hex;
-    encodeExecute: (tx: Tx) => Promise<Hex>;
-    encodeBatchExecute: (txs: Tx[]) => Promise<Hex>;
-    signUserOperationHash: (uoHash: Hex) => Promise<Hex>;
-    signMessageWith6492: (params: { message: SignableMessage }) => Promise<Hex>;
-    signTypedDataWith6492: <
-      const typedData extends TypedData | Record<string, unknown>,
-      primaryType extends keyof typedData | "EIP712Domain" = keyof typedData
-    >(
-      typedDataDefinition: TypedDataDefinition<typedData, primaryType>
-    ) => Promise<Hex>;
-    encodeUpgradeToAndCall: (params: UpgradeToAndCallParams) => Promise<Hex>;
-    getNonce(): Promise<bigint>;
-    getInitCode: () => Promise<Hex>;
-    isAccountDeployed: () => Promise<boolean>;
-    getFactoryAddress: () => Address;
-    getEntrypoint: () => Address;
-    getImplementationAddress: () => Promise<"0x0" | Address>;
-  };
+export type SmartContractAccount<
+  Name extends string = string,
+  TUO = UserOperationRequest
+> = LocalAccount<Name> & {
+  source: Name;
+  getDummySignature: () => Hex;
+  encodeExecute: (tx: AccountOp) => Promise<Hex>;
+  encodeBatchExecute: (txs: AccountOp[]) => Promise<Hex>;
+  signUserOperationHash: (uoHash: Hex) => Promise<Hex>;
+  signMessageWith6492: (params: { message: SignableMessage }) => Promise<Hex>;
+  signTypedDataWith6492: <
+    const typedData extends TypedData | Record<string, unknown>,
+    primaryType extends keyof typedData | "EIP712Domain" = keyof typedData
+  >(
+    typedDataDefinition: TypedDataDefinition<typedData, primaryType>
+  ) => Promise<Hex>;
+  encodeUpgradeToAndCall: (params: UpgradeToAndCallParams) => Promise<Hex>;
+  getNonce(): Promise<bigint>;
+  getInitCode: () => Promise<Hex>;
+  isAccountDeployed: () => Promise<boolean>;
+  getFactoryAddress: () => Address;
+  getEntryPoint: () => EntryPointDef<TUO>;
+  getImplementationAddress: () => Promise<"0x0" | Address>;
+};
 
 export type ToSmartContractAccountParams<
   Name extends string = string,
   TTransport extends Transport = Transport,
-  TChain extends Chain = Chain
+  TChain extends Chain = Chain,
+  TUserOperationRequest = UserOperationRequest
 > = {
   source: Name;
   transport: TTransport;
   chain: TChain;
-  // TODO: we may want to revisit this so that it's an object
-  // which includes the EP version and its UO hashing algo
-  entryPointAddress: Address;
+  entryPoint: EntryPointDef<TUserOperationRequest>;
   accountAddress?: Address;
   getAccountInitCode: () => Promise<Hex>;
   getDummySignature: () => Hex;
-  encodeExecute: (tx: Tx) => Promise<Hex>;
-  encodeBatchExecute?: (txs: Tx[]) => Promise<Hex>;
+  encodeExecute: (tx: AccountOp) => Promise<Hex>;
+  encodeBatchExecute?: (txs: AccountOp[]) => Promise<Hex>;
   // if not provided, will default to just using signMessage over the Hex
   signUserOperationHash?: (uoHash: Hex) => Promise<Hex>;
   encodeUpgradeToAndCall?: (params: UpgradeToAndCallParams) => Promise<Hex>;
@@ -164,7 +167,7 @@ export async function toSmartContractAccount<
   transport,
   chain,
   source,
-  entryPointAddress,
+  entryPoint,
   accountAddress,
   getAccountInitCode,
   signMessage,
@@ -181,8 +184,8 @@ export async function toSmartContractAccount<
     transport,
     chain,
   });
-  const entryPoint = getContract({
-    address: entryPointAddress,
+  const entryPointContract = getContract({
+    address: entryPoint.address,
     abi: EntryPointAbi,
     // Need to cast this as PublicClient or else it breaks ABI typing.
     // This is valid because our PublicClient is a subclass of PublicClient
@@ -191,7 +194,7 @@ export async function toSmartContractAccount<
 
   const accountAddress_ = await getAccountAddress({
     client,
-    entryPointAddress,
+    entryPointAddress: entryPoint.address,
     accountAddress,
     getAccountInitCode,
   });
@@ -245,7 +248,7 @@ export async function toSmartContractAccount<
       return 0n;
     }
 
-    return entryPoint.read.getNonce([accountAddress_, BigInt(0)]);
+    return entryPointContract.read.getNonce([accountAddress_, BigInt(0)]);
   };
 
   const account = toAccount({
@@ -328,8 +331,7 @@ export async function toSmartContractAccount<
     getDummySignature,
     getInitCode,
     encodeUpgradeToAndCall: encodeUpgradeToAndCall_,
-    // TODO: I think think in the future this needs to return an object
-    getEntrypoint: () => entryPointAddress,
+    getEntryPoint: () => entryPoint,
     isAccountDeployed,
     getNonce,
     signMessageWith6492,

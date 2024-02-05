@@ -121,7 +121,7 @@ export function getUserOperationHash(
   return keccak256(encoded);
 }
 
-function packUo(request: UserOperationRequest): Hex {
+export function packUo(request: UserOperationRequest): Hex {
   const hashedInitCode = keccak256(request.initCode);
   const hashedCallData = keccak256(request.callData);
   const hashedPaymasterAndData = keccak256(request.paymasterAndData);

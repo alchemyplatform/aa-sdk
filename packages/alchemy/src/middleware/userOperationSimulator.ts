@@ -17,7 +17,7 @@ export const alchemyUserOperationSimulator: <
       method: "alchemy_simulateUserOperationAssetChanges",
       params: [
         deepHexlify(await resolveProperties(struct)) as UserOperationStruct,
-        account.getEntrypoint(),
+        account.getEntryPoint().address,
       ],
     });
 
