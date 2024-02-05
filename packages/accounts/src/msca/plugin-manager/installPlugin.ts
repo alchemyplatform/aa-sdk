@@ -51,7 +51,11 @@ export async function installPlugin<
   }
 
   if (!isSmartAccountClient(client)) {
-    throw new IncompatibleClientError("SmartAccountClient", "installPlugin");
+    throw new IncompatibleClientError(
+      "SmartAccountClient",
+      "installPlugin",
+      client
+    );
   }
 
   const callData = await encodeInstallPluginUserOperation(client, params);

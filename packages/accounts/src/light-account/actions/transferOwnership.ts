@@ -40,7 +40,8 @@ export const transferOwnership: <
   if (!isSmartAccountClient(client)) {
     throw new IncompatibleClientError(
       "SmartAccountClient",
-      "transferOwnership"
+      "transferOwnership",
+      client
     );
   }
 

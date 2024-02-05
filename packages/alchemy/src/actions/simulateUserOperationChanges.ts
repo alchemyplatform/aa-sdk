@@ -28,8 +28,9 @@ export const simulateUserOperationChanges: <
 
   if (!isAlchemySmartAccountClient(client)) {
     throw new IncompatibleClientError(
-      "SmartAccountClient",
-      "transferOwnership"
+      "AlchemySmartAccountClient",
+      "SimulateUserOperationAssetChanges",
+      client
     );
   }
 

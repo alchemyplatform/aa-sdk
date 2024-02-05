@@ -71,7 +71,8 @@ export const accountLoupeActions: <
     if (!isSmartAccountClient(client)) {
       throw new IncompatibleClientError(
         "SmartAccountClient",
-        "getExecutionFunctionConfig"
+        "getExecutionFunctionConfig",
+        client
       );
     }
 
@@ -91,7 +92,8 @@ export const accountLoupeActions: <
     if (!isSmartAccountClient(client)) {
       throw new IncompatibleClientError(
         "SmartAccountClient",
-        "getExecutionHooks"
+        "getExecutionHooks",
+        client
       );
     }
 
@@ -111,7 +113,8 @@ export const accountLoupeActions: <
     if (!isSmartAccountClient(client)) {
       throw new IncompatibleClientError(
         "SmartAccountClient",
-        "getPreValidationHooks"
+        "getPreValidationHooks",
+        client
       );
     }
 
@@ -131,7 +134,8 @@ export const accountLoupeActions: <
     if (!isSmartAccountClient(client)) {
       throw new IncompatibleClientError(
         "SmartAccountClient",
-        "getInstalledPlugins"
+        "getInstalledPlugins",
+        client
       );
     }
 

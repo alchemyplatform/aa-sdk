@@ -128,3 +128,11 @@ export const smartAccountClientActions: <
   signMessageWith6492: (args) => signMessageWith6492(client, args),
   signTypedDataWith6492: (args) => signTypedDataWith6492(client, args),
 });
+
+export const smartAccountClientMethodKeys = Object.keys(
+  // @ts-expect-error we just want to get the keys
+  smartAccountClientActions(undefined)
+).reduce((accum, curr) => {
+  accum.add(curr);
+  return accum;
+}, new Set<string>());

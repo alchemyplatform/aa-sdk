@@ -27,7 +27,8 @@ export const dropAndReplaceUserOperation: <
   if (!isBaseSmartAccountClient(client)) {
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
-      "dropAndReplaceUserOperation"
+      "dropAndReplaceUserOperation",
+      client
     );
   }
 
