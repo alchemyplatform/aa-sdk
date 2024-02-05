@@ -3,6 +3,7 @@ import {
   createBundlerClient,
   getAccountAddress,
   getDefaultEntryPointAddress,
+  getVersion060EntryPoint,
   toSmartContractAccount,
   type Address,
   type Hex,
@@ -169,7 +170,7 @@ export async function createLightAccount({
   const account = await toSmartContractAccount({
     transport,
     chain,
-    entryPointAddress,
+    entryPoint: getVersion060EntryPoint(chain, entryPointAddress),
     accountAddress: address,
     source: "LightAccount",
     getAccountInitCode,

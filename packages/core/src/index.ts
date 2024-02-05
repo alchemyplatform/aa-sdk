@@ -69,6 +69,8 @@ export {
   convertCoinTypeToChain,
   convertCoinTypeToChainId,
 } from "./ens/utils.js";
+export { getVersion060EntryPoint } from "./entrypoint/0.6.js";
+export { type EntryPointDef } from "./entrypoint/types.js";
 export {
   AccountNotFoundError,
   DefaultFactoryNotDefinedError,

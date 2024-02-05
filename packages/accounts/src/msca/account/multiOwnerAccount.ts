@@ -1,11 +1,13 @@
+import type { EntryPointDef } from "@alchemy/aa-core";
 import {
   createBundlerClient,
   getAccountAddress,
-  getDefaultEntryPointAddress,
+  getVersion060EntryPoint,
   toSmartContractAccount,
   type Address,
   type OwnedSmartContractAccount,
   type SmartAccountSigner,
+  type UserOperationRequest,
 } from "@alchemy/aa-core";
 import {
   concatHex,
@@ -34,7 +36,7 @@ export type CreateMultiOwnerModularAccountParams<
   index?: bigint;
   factoryAddress?: Address;
   owners?: Address[];
-  entryPointAddress?: Address;
+  entryPoint?: EntryPointDef<UserOperationRequest>;
   accountAddress?: Address;
   initCode?: Hex;
 };
@@ -52,7 +54,7 @@ export async function createMultiOwnerModularAccount({
   owner: owner_,
   accountAddress,
   initCode,
-  entryPointAddress = getDefaultEntryPointAddress(chain),
+  entryPoint = getVersion060EntryPoint(chain),
   factoryAddress = getDefaultMultiOwnerModularAccountFactoryAddress(chain),
   owners = [],
   index = 0n,
@@ -90,7 +92,7 @@ export async function createMultiOwnerModularAccount({
 
   accountAddress = await getAccountAddress({
     client,
-    entryPointAddress,
+    entryPointAddress: entryPoint.address,
     accountAddress: accountAddress,
     getAccountInitCode,
   });
@@ -98,7 +100,7 @@ export async function createMultiOwnerModularAccount({
   const baseAccount = await toSmartContractAccount({
     transport,
     chain,
-    entryPointAddress,
+    entryPoint,
     accountAddress,
     source: `MultiOwnerModularAccount`,
     getAccountInitCode,
