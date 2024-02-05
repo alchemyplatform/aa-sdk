@@ -14,7 +14,7 @@ head:
 
 # getSupportedEntryPoints
 
-calls `eth_supportedEntryPoints` and returns the entrypoints the RPC supports
+calls `eth_supportedEntryPoints` and returns the entry points the RPC supports
 
 ## Usage
 

@@ -69,7 +69,7 @@ describe("Account Simple Tests", async () => {
     );
   });
 
-  it("should correctly do base runtime validation when entrypoint are invalid", async () => {
+  it("should correctly do base runtime validation when entryPoint are invalid", async () => {
     await expect(
       createSimpleSmartAccount({
         entryPointAddress: 1 as unknown as Address,
@@ -131,7 +131,7 @@ describe("Account Simple Tests", async () => {
       owner: owner,
       factoryAddress: getDefaultSimpleAccountFactoryAddress(sepolia),
       transport: custom(publicClient),
-      // override the account address here so we don't have to resolve the address from the entrypoint
+      // override the account address here so we don't have to resolve the address from the entry point
       accountAddress: "0x1234567890123456789012345678901234567890",
       initCode: "0xdeadbeef",
     });

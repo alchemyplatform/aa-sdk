@@ -34,7 +34,7 @@ export type CreateMultiOwnerModularAccountParams<
   index?: bigint;
   factoryAddress?: Address;
   owners?: Address[];
-  entrypointAddress?: Address;
+  entryPointAddress?: Address;
   accountAddress?: Address;
   initCode?: Hex;
 };
@@ -52,7 +52,7 @@ export async function createMultiOwnerModularAccount({
   owner: owner_,
   accountAddress,
   initCode,
-  entrypointAddress = getDefaultEntryPointAddress(chain),
+  entryPointAddress = getDefaultEntryPointAddress(chain),
   factoryAddress = getDefaultMultiOwnerModularAccountFactoryAddress(chain),
   owners = [],
   index = 0n,
@@ -90,7 +90,7 @@ export async function createMultiOwnerModularAccount({
 
   accountAddress = await getAccountAddress({
     client,
-    entrypointAddress,
+    entryPointAddress,
     accountAddress: accountAddress,
     getAccountInitCode,
   });
@@ -98,7 +98,7 @@ export async function createMultiOwnerModularAccount({
   const baseAccount = await toSmartContractAccount({
     transport,
     chain,
-    entrypointAddress,
+    entryPointAddress,
     accountAddress,
     source: `MultiOwnerModularAccount`,
     getAccountInitCode,
