@@ -122,7 +122,20 @@ export const sidebar: DefaultTheme.Sidebar = [
           { text: "Light Account", link: "/light-account" },
         ],
       },
-      { text: "Session Keys", link: "/session-keys" },
+      {
+        text: "Session Keys",
+        base: "/smart-accounts/session-keys",
+        items: [
+          {
+            text: "Overview",
+            link: "/",
+          },
+          {
+            text: "Getting Started",
+            link: "/getting-started",
+          },
+        ],
+      },
       {
         text: "Alchemy Enhanced Apis",
         base: "/using-smart-accounts/enhanced-apis",

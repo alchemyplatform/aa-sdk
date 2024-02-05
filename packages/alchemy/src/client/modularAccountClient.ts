@@ -3,9 +3,12 @@ import {
   createMultiOwnerModularAccount,
   multiOwnerPluginActions,
   pluginManagerActions,
+  type AccountLoupeActions,
   type CreateMultiOwnerModularAccountParams,
   type LightAccount,
   type MultiOwnerModularAccount,
+  type MultiOwnerPluginActions,
+  type PluginManagerActions,
 } from "@alchemy/aa-accounts";
 import type { SmartAccountSigner } from "@alchemy/aa-core";
 import {
@@ -21,6 +24,7 @@ import { createAlchemyPublicRpcClient } from "./rpcClient.js";
 import type {
   AlchemySmartAccountClient,
   AlchemySmartAccountClientConfig,
+  BaseAlchemyActions,
 } from "./smartAccountClient";
 
 export type AlchemyModularAccountClientConfig<
@@ -34,17 +38,25 @@ export type AlchemyModularAccountClientConfig<
     "account"
   >;
 
-export const createModularAccountAlchemyClient: <
+export function createModularAccountAlchemyClient<
   TOwner extends SmartAccountSigner = SmartAccountSigner
 >(
   params: AlchemyModularAccountClientConfig<TOwner>
-) => Promise<
+): Promise<
   AlchemySmartAccountClient<
     CustomTransport,
     Chain | undefined,
-    MultiOwnerModularAccount<TOwner>
+    MultiOwnerModularAccount<TOwner>,
+    BaseAlchemyActions<Chain | undefined, MultiOwnerModularAccount<TOwner>> &
+      MultiOwnerPluginActions<MultiOwnerModularAccount<TOwner>> &
+      PluginManagerActions<MultiOwnerModularAccount<TOwner>> &
+      AccountLoupeActions<MultiOwnerModularAccount<TOwner>>
   >
-> = async (config) => {
+>;
+
+export async function createModularAccountAlchemyClient(
+  config: AlchemyModularAccountClientConfig
+): Promise<AlchemySmartAccountClient> {
   const { chain, opts, ...connectionConfig } =
     AlchemyProviderConfigSchema.parse(config);
 
@@ -67,4 +79,4 @@ export const createModularAccountAlchemyClient: <
     .extend(multiOwnerPluginActions)
     .extend(pluginManagerActions)
     .extend(accountLoupeActions);
-};
+}

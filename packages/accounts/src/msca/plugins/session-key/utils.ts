@@ -1,10 +1,9 @@
 import type {
   GetAccountParameter,
-  SmartAccountClient,
   SmartContractAccount,
 } from "@alchemy/aa-core";
 import { AccountNotFoundError, type Address } from "@alchemy/aa-core";
-import type { Chain, PublicClient, Transport } from "viem";
+import type { Chain, Client, Transport } from "viem";
 import { SessionKeyPlugin } from "./plugin.js";
 
 // find predecessors for each keys and returned the struct `ISessionKeyPlugin.SessionKeyToRemove[]`
@@ -16,7 +15,7 @@ export const buildSessionKeysToRemoveStruct: <
     | SmartContractAccount
     | undefined
 >(
-  client: SmartAccountClient<TTransport, TChain, TAccount>,
+  client: Client<TTransport, TChain, TAccount>,
   args: { keys: ReadonlyArray<Address> } & GetAccountParameter<TAccount>
 ) => Promise<{ sessionKey: Address; predecessor: Address }[]> = async (
   client,
@@ -24,7 +23,7 @@ export const buildSessionKeysToRemoveStruct: <
 ) => {
   if (!account) throw new AccountNotFoundError();
 
-  const contract = SessionKeyPlugin.getContract(client as PublicClient);
+  const contract = SessionKeyPlugin.getContract(client);
   return (
     await Promise.all(
       keys.map(async (key) => {

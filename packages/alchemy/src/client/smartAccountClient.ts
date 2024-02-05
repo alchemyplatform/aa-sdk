@@ -32,17 +32,24 @@ export type AlchemySmartAccountClientConfig<
     "customMiddleware" | "feeEstimator" | "gasEstimator"
   >;
 
+export type BaseAlchemyActions<
+  chain extends Chain | undefined = Chain | undefined,
+  account extends SmartContractAccount | undefined =
+    | SmartContractAccount
+    | undefined
+> = SmartAccountClientActions<chain, account> &
+  AlchemySmartAccountClientActions<account>;
+
 export type AlchemySmartAccountClient_Base<
   transport extends Transport = Transport,
   chain extends Chain | undefined = Chain | undefined,
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  actions extends SmartAccountClientActions<
+  actions extends BaseAlchemyActions<chain, account> = BaseAlchemyActions<
     chain,
     account
-  > = SmartAccountClientActions<chain, account> &
-    AlchemySmartAccountClientActions<account>
+  >
 > = Prettify<
   SmartAccountClient<
     transport,
@@ -58,8 +65,14 @@ export type AlchemySmartAccountClient<
   chain extends Chain | undefined = Chain | undefined,
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
-> = Prettify<AlchemySmartAccountClient_Base<transport, chain, account>>;
+    | undefined,
+  actions extends BaseAlchemyActions<chain, account> = BaseAlchemyActions<
+    chain,
+    account
+  >
+> = Prettify<
+  AlchemySmartAccountClient_Base<transport, chain, account, actions>
+>;
 
 export function createAlchemySmartAccountClient<
   TTransport extends Transport = Transport,
