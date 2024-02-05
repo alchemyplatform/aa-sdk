@@ -10,12 +10,12 @@ import {
 
 export const createDummySmartContractAccount = async <C extends BundlerClient>(
   client: C,
-  entrypoint: Address
+  entryPoint: Address
 ): Promise<SmartContractAccount> => {
   return toSmartContractAccount({
     source: "dummy",
     accountAddress: "0x1234567890123456789012345678901234567890",
-    entrypointAddress: entrypoint,
+    entryPointAddress: entryPoint,
     chain: client.chain,
     transport: custom(client),
     signMessage: async () => "0xdeadbeef",

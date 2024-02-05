@@ -40,6 +40,7 @@ export {
 } from "./msca/plugins/multi-owner/plugin.js";
 export type * from "./msca/plugins/session-key/index.js";
 export { sessionKeyPluginActions } from "./msca/plugins/session-key/index.js";
+export type * from "./msca/plugins/session-key/permissions.js";
 export { SessionKeyPermissionsBuilder } from "./msca/plugins/session-key/permissions.js";
 export {
   SessionKeyPlugin,

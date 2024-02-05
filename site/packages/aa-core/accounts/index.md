@@ -33,8 +33,8 @@ const myAccount = await toSmartContractAccount({
   source: "MyAccount",
   transport: http("RPC_URL"),
   chain: sepolia,
-  // The entrypoint contract that your account is compatible with
-  entrypointAddress: "0x1234...",
+  // The entry point contract that your account is compatible with
+  entryPointAddress: "0x1234...",
   // This should return a concatenation of your `factoryAddress` and the `callData` for your factory's create account method
   getAccountInitCode: () => "0x{factoryAddress}{callData}",
   // an invalid signature that doesn't cause your account to revert during validation

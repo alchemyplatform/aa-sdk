@@ -5,11 +5,7 @@ export const sidebar: DefaultTheme.Sidebar = [
   {
     text: "Getting Started",
     items: [
-      { text: "Setup your project", link: "/getting-started/setup" },
-      {
-        text: "Deploy your first account",
-        link: "/getting-started/deploy-an-account",
-      },
+      { text: "Quick Start", link: "/getting-started/setup" },
       // I'm leaving these here for now because I'm not sure if we still want them
       // There's good content in here so we may want to keep it somewhere
       {
@@ -19,10 +15,6 @@ export const sidebar: DefaultTheme.Sidebar = [
       {
         text: "Why Account Kit?",
         link: "/overview/why-account-kit",
-      },
-      {
-        text: "FAQs",
-        link: "/faqs",
       },
     ],
   },
@@ -150,13 +142,14 @@ export const sidebar: DefaultTheme.Sidebar = [
       },
     ],
   },
-  {
-    text: "Extending Smart Accounts",
-    items: [
-      { text: "Installing Plugins", link: "/" },
-      { text: "Creating Plugins", link: "/" },
-    ],
-  },
+  // We'll be adding this later
+  // {
+  //   text: "Extending Smart Accounts",
+  //   items: [
+  //     { text: "Installing Plugins", link: "/" },
+  //     { text: "Creating Plugins", link: "/" },
+  //   ],
+  // },
   {
     text: "Third Party Integrations",
     base: "/third-party",
@@ -167,12 +160,13 @@ export const sidebar: DefaultTheme.Sidebar = [
   },
   packagesSidebar,
   {
-    text: "Glossary",
-    base: "/glossary",
-    collapsed: true,
+    text: "Resources",
+    base: "/resources",
     items: [
+      { text: "FAQs", link: "/faqs" },
       { text: "Terms", link: "/terms" },
       { text: "Types", link: "/types" },
+      { text: "Contact Us", link: "/contact-us" },
     ],
   },
 ];

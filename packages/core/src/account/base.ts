@@ -290,7 +290,7 @@ export abstract class BaseSmartContractAccount<
         if (err.cause?.data?.errorName === "SenderAddressResult") {
           this.accountAddress = err.cause.data.args[0] as Address;
           Logger.verbose(
-            "[BaseSmartContractAccount](getAddress) entrypoint.getSenderAddress result:",
+            "[BaseSmartContractAccount](getAddress) entryPoint.getSenderAddress result:",
             this.accountAddress
           );
           return this.accountAddress;
