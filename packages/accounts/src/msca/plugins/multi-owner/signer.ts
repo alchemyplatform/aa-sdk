@@ -26,7 +26,6 @@ export const multiOwnerMessageSigner = <
   pluginAddress: Address = MultiOwnerPlugin.meta.addresses[client.chain.id]
 ) => {
   const signWith712Wrapper = async (msg: Hash): Promise<`0x${string}`> => {
-    // TODO: right now this is hard coded to one Plugin address, but we should make this configurable somehow
     const [, name, version, chainId, verifyingContract, salt] =
       await client.readContract({
         abi: MultiOwnerPluginAbi,

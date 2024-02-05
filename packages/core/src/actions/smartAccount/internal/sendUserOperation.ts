@@ -40,11 +40,7 @@ export const _sendUserOperation: <
   }
 
   request.signature = await account.signUserOperationHash(
-    getUserOperationHash(
-      request,
-      account.getEntrypoint(),
-      BigInt(client.chain.id)
-    )
+    getUserOperationHash(request, account.getEntrypoint(), client.chain.id)
   );
 
   return {

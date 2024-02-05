@@ -101,7 +101,7 @@ export function deepHexlify(obj: any): any {
 }
 
 /**
- * Generates a hash for a UserOperation valid from entrypoint version 0.6 onwards
+ * Generates a hash for a UserOperation valid from entry point version 0.6 onwards
  *
  * @param request - the UserOperation to get the hash for
  * @param entryPointAddress - the entry point address that will be used to execute the UserOperation
@@ -111,11 +111,11 @@ export function deepHexlify(obj: any): any {
 export function getUserOperationHash(
   request: UserOperationRequest,
   entryPointAddress: Address,
-  chainId: bigint
+  chainId: number
 ): Hash {
   const encoded = encodeAbiParameters(
     [{ type: "bytes32" }, { type: "address" }, { type: "uint256" }],
-    [keccak256(packUo(request)), entryPointAddress, chainId]
+    [keccak256(packUo(request)), entryPointAddress, BigInt(chainId)]
   ) as `0x${string}`;
 
   return keccak256(encoded);

@@ -218,7 +218,7 @@ type toSmartContractAccount = <
 >({
   client,
   source,
-  entrypointAddress,
+  entryPointAddress,
   accountAddress,
   getAccountInitCode,
   signMessage,

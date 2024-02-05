@@ -136,7 +136,7 @@ export const createSimpleSmartAccount = async <
         tx.value ?? 0n,
         tx.data
       ),
-    entrypointAddress: simpleAccount.getEntryPointAddress(),
+    entryPointAddress: simpleAccount.getEntryPointAddress(),
     getAccountInitCode: async () => {
       if (parsedParams.initCode) return parsedParams.initCode;
       return simpleAccount.getAccountInitCode();

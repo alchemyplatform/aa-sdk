@@ -91,7 +91,7 @@ export type ToSmartContractAccountParams<
   chain: TChain;
   // TODO: we may want to revisit this so that it's an object
   // which includes the EP version and its UO hashing algo
-  entrypointAddress: Address;
+  entryPointAddress: Address;
   accountAddress?: Address;
   getAccountInitCode: () => Promise<Hex>;
   getDummySignature: () => Hex;
@@ -110,19 +110,19 @@ export const parseFactoryAddressFromAccountInitCode = (initCode: Hex) => {
 
 export const getAccountAddress = async ({
   client,
-  entrypointAddress,
+  entryPointAddress,
   accountAddress,
   getAccountInitCode,
 }: {
   client: PublicClient;
-  entrypointAddress: Address;
+  entryPointAddress: Address;
   accountAddress?: Address;
   getAccountInitCode: () => Promise<Hex>;
 }) => {
   if (accountAddress) return accountAddress;
 
-  const entrypoint = getContract({
-    address: entrypointAddress,
+  const entryPoint = getContract({
+    address: entryPointAddress,
     abi: EntryPointAbi,
     // Need to cast this as PublicClient or else it breaks ABI typing.
     // This is valid because our PublicClient is a subclass of PublicClient
@@ -133,7 +133,7 @@ export const getAccountAddress = async ({
   Logger.verbose("[BaseSmartContractAccount](getAddress) initCode: ", initCode);
 
   try {
-    await entrypoint.simulate.getSenderAddress([initCode]);
+    await entryPoint.simulate.getSenderAddress([initCode]);
   } catch (err: any) {
     Logger.verbose(
       "[BaseSmartContractAccount](getAddress) getSenderAddress err: ",
@@ -141,7 +141,7 @@ export const getAccountAddress = async ({
     );
     if (err.cause?.data?.errorName === "SenderAddressResult") {
       Logger.verbose(
-        "[BaseSmartContractAccount](getAddress) entrypoint.getSenderAddress result:",
+        "[BaseSmartContractAccount](getAddress) entryPoint.getSenderAddress result:",
         err.cause.data.args[0]
       );
 
@@ -164,7 +164,7 @@ export async function toSmartContractAccount<
   transport,
   chain,
   source,
-  entrypointAddress,
+  entryPointAddress,
   accountAddress,
   getAccountInitCode,
   signMessage,
@@ -181,8 +181,8 @@ export async function toSmartContractAccount<
     transport,
     chain,
   });
-  const entrypoint = getContract({
-    address: entrypointAddress,
+  const entryPoint = getContract({
+    address: entryPointAddress,
     abi: EntryPointAbi,
     // Need to cast this as PublicClient or else it breaks ABI typing.
     // This is valid because our PublicClient is a subclass of PublicClient
@@ -191,7 +191,7 @@ export async function toSmartContractAccount<
 
   const accountAddress_ = await getAccountAddress({
     client,
-    entrypointAddress,
+    entryPointAddress,
     accountAddress,
     getAccountInitCode,
   });
@@ -245,7 +245,7 @@ export async function toSmartContractAccount<
       return 0n;
     }
 
-    return entrypoint.read.getNonce([accountAddress_, BigInt(0)]);
+    return entryPoint.read.getNonce([accountAddress_, BigInt(0)]);
   };
 
   const account = toAccount({
@@ -329,7 +329,7 @@ export async function toSmartContractAccount<
     getInitCode,
     encodeUpgradeToAndCall: encodeUpgradeToAndCall_,
     // TODO: I think think in the future this needs to return an object
-    getEntrypoint: () => entrypointAddress,
+    getEntrypoint: () => entryPointAddress,
     isAccountDeployed,
     getNonce,
     signMessageWith6492,
