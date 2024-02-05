@@ -81,7 +81,7 @@ export {
   IncompatibleClientError,
   InvalidRpcUrlError,
 } from "./errors/client.js";
-export { EntrypointNotFoundError } from "./errors/entrypoint.js";
+export { EntryPointNotFoundError as EntrypointNotFoundError } from "./errors/entrypoint.js";
 export { InvalidSignerTypeError } from "./errors/signer.js";
 export {
   FailedToFindTransactionError,

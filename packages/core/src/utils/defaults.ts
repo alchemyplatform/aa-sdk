@@ -16,7 +16,7 @@ import {
   sepolia,
 } from "../chains/index.js";
 import { DefaultFactoryNotDefinedError } from "../errors/account.js";
-import { EntrypointNotFoundError } from "../errors/entrypoint.js";
+import { EntryPointNotFoundError } from "../errors/entrypoint.js";
 import type { UserOperationFeeOptions } from "../types";
 
 /**
@@ -44,7 +44,7 @@ export const getDefaultEntryPointAddress = (chain: Chain): Address => {
     case baseSepolia.id:
       return "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
   }
-  throw new EntrypointNotFoundError(chain);
+  throw new EntryPointNotFoundError(chain);
 };
 
 /**

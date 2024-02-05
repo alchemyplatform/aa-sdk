@@ -60,7 +60,7 @@ export type UserOperationOverrides = Partial<{
 export interface UserOperationRequest {
   /* the origin of the request */
   sender: Address;
-  /* nonce (as hex) of the transaction, returned from the entrypoint for this Address */
+  /* nonce (as hex) of the transaction, returned from the entry point for this Address */
   nonce: Hex;
   /* the initCode for creating the sender if it does not exist yet, otherwise "0x" */
   initCode: Hex | EmptyHex;
@@ -187,7 +187,7 @@ export interface UserOperationReceiptLog {
 export interface UserOperationStruct {
   /* the origin of the request */
   sender: string;
-  /* nonce of the transaction, returned from the entrypoint for this Address */
+  /* nonce of the transaction, returned from the entry point for this Address */
   nonce: BigNumberish;
   /* the initCode for creating the sender if it does not exist yet, otherwise "0x" */
   initCode: BytesLike | "0x";
