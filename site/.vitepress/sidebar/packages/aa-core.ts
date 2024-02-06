@@ -89,7 +89,7 @@ export const aaCoreSidebar: DefaultTheme.SidebarItem = {
           collapsed: true,
           items: [
             {
-              text: "userOperationFeeOptions",
+              text: "UserOperationFeeOptions",
               link: "/userOperationFeeOptions",
             },
             {
@@ -133,10 +133,6 @@ export const aaCoreSidebar: DefaultTheme.SidebarItem = {
         {
           text: "getSupportedEntryPoints",
           link: "/getSupportedEntryPoints",
-        },
-        {
-          text: "bundlerActions",
-          link: "/bundlerActions",
         },
       ],
     },
