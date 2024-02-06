@@ -24,7 +24,7 @@ head:
 4.  [`signTypedData`](/packages/aa-signers/turnkey/signTypedData) -- supports typed data signatures.
 5.  [`getAuthDetails`](/packages/aa-signers/turnkey/getAuthDetails) -- supports authentication details retrieval.
 
-## Install Dependencies
+## Install dependencies
 
 `TurnkeySigner` requires installation of the [`@turnkey/http`](https://github.com/tkhq/sdk/tree/main/packages/http) and [`@turnkey/viem`](https://github.com/tkhq/sdk/tree/main/packages/viem) dependencies. `aa-signers` lists them as optional dependencies.
 
@@ -93,7 +93,7 @@ const signTypedData = await turnkeySigner.signTypedData(typedData);
 <<< @/snippets/signers/turnkey.ts
 :::
 
-## Developer Links
+## Developer links
 
 - [Turnkey SDK](https://docs.turnkey.com/category/sdk)
 - [Turnkey Tests](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/signers/src/turnkey/__tests__/signer.test.ts)

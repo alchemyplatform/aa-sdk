@@ -18,11 +18,11 @@ head:
       content: Follow this guide to contribute a new Signer to Account Kit documentation, and enable developers to sign ERC-4337 transactions with your Signer.
 ---
 
-# Contributing Your Signer
+# Contribute your Signer
 
 If you'd like to add your Signer to Account Kit, we welcome PRs! You'll need to fork the [`aa-sdk` Github repo](https://github.com/alchemyplatform/aa-sdk) and then follow the below steps.
 
-## 1. Add Your Signer to [`aa-signers`](https://github.com/alchemyplatform/aa-sdk/tree/main/packages/signers)
+## 1. Add your signer to [`aa-signers`](https://github.com/alchemyplatform/aa-sdk/tree/main/packages/signers)
 
 To ensure the best developer experience for anyone using Account Kit, we ask that you add your Signer implementation to our [`aa-signers`](https://github.com/alchemyplatform/aa-sdk/tree/main/packages/signers) SDK package.
 
@@ -38,13 +38,13 @@ If you your Signer implementation requires adding SDKs as dependencies, you shou
 If your SDK is based on a frontend Javascript framework, such as React.js or Vue.js, you will just have to follow step 2 onwards to submit documentation with an example snippet clarifying that your Signer must be used in said framework.
 :::
 
-## 2. Adding Documentation about Your Signer
+## 2. Add documentation about your Signer
 
 You'll want to add documentation about your Signers so that developers can easily use your implementation in Account Kit. Below, we recommend adding documentation about your Signer's APIs, as well.
 
 To ensure these docs are visible on the Account Kit docs, you'll want to add links to them in the [`site/.vitepress/config.ts`](https://github.com/alchemyplatform/aa-sdk/blob/main/site/.vitepress/config.ts) file in the `aa-sdk` repo, where there is a `sidebar` property in the object.
 
-### 2.1 Adding API Documentation
+### 2.1 Add API documentation
 
 If your Signer implements the `SmartAccountAuthenticator` interface, you'll have at least 5 methods to document: `getAddress`, `authenticate`, `signMessage`, `signTypedData`, and `getAuthDetails`. You can also add additional methods to your implementation. Just make sure to add documentation!
 
@@ -87,7 +87,7 @@ Find the `aa-signers` item in the `sidebar` and add a new entry in `items`. The 
 
 In that section, add documentation introducing the value prop of your Signer, how to initialize the Signer object, and how to call each method. The example above shows the items you'll need to include if you chose to have your Signer implement the `SmartAccountAuthenticator` interface.
 
-### 2.2 Adding an integration guide
+### 2.2 Add an integration guide
 
 You'll want to add an integration guide that walks through step-by-step how to use your Signer implementation in `aa-signers` with the other building blocks, namely smart accounts and provider clients.
 

@@ -5,7 +5,7 @@ export const sidebar: DefaultTheme.Sidebar = [
   {
     text: "Getting Started",
     items: [
-      { text: "Quick Start", link: "/getting-started/setup" },
+      { text: "Quick start", link: "/getting-started/setup" },
       // I'm leaving these here for now because I'm not sure if we still want them
       // There's good content in here so we may want to keep it somewhere
       {
@@ -45,7 +45,7 @@ export const sidebar: DefaultTheme.Sidebar = [
           { text: "Contribute your account", link: "/contributing" },
         ],
       },
-      { text: "Gas Benchmarks", link: "/smart-accounts/gas-benchmarks" },
+      { text: "Gas benchmarks", link: "/smart-accounts/gas-benchmarks" },
     ],
   },
   {
@@ -54,7 +54,7 @@ export const sidebar: DefaultTheme.Sidebar = [
     items: [
       { text: "Introduction", link: "/choosing-a-signer" },
       {
-        text: "Signer Guides",
+        text: "Signer guides",
         base: "/signers/guides",
         collapsed: true,
         items: [
@@ -78,11 +78,11 @@ export const sidebar: DefaultTheme.Sidebar = [
         collapsed: true,
         items: [
           {
-            text: "Using Your Own",
+            text: "Use your own",
             link: "/guides/custom-signer",
           },
           {
-            text: "Contributing Your Signer",
+            text: "Contribute your Signer",
             link: "/contributing",
           },
         ],
@@ -93,18 +93,18 @@ export const sidebar: DefaultTheme.Sidebar = [
     text: "Using Smart Accounts",
     base: "/using-smart-accounts",
     items: [
-      { text: "Send User Operations", link: "/send-user-operations" },
-      { text: "Batch User Operations", link: "/batch-user-operations" },
+      { text: "Send user operations", link: "/send-user-operations" },
+      { text: "Batch user operations", link: "/batch-user-operations" },
       {
-        text: "Sponsoring Gas",
+        text: "Sponsor gas",
         collapsed: false,
         base: "/using-smart-accounts/sponsoring-gas",
         items: [
           { text: "Alchemy Gas Manager", link: "/gas-manager" },
-          { text: "Check Eligibility", link: "/checking-eligibility" },
+          { text: "Check eligibility", link: "/checking-eligibility" },
         ],
       },
-      { text: "Simulate User Operations", link: "/simulate-user-operations" },
+      { text: "Simulate user operations", link: "/simulate-user-operations" },
       {
         text: "Session Keys",
         base: "/smart-accounts/session-keys",
@@ -114,13 +114,13 @@ export const sidebar: DefaultTheme.Sidebar = [
             link: "/",
           },
           {
-            text: "Getting Started",
+            text: "Getting started",
             link: "/getting-started",
           },
         ],
       },
       {
-        text: "Transfer Ownership",
+        text: "Transfer ownership",
         base: "/using-smart-accounts/transfer-ownership",
         collapsed: false,
         items: [
@@ -151,7 +151,7 @@ export const sidebar: DefaultTheme.Sidebar = [
   //   ],
   // },
   {
-    text: "Third Party Integrations",
+    text: "Custom Infra",
     base: "/third-party",
     items: [
       { text: "Bundlers", link: "/bundlers" },
@@ -166,7 +166,7 @@ export const sidebar: DefaultTheme.Sidebar = [
       { text: "FAQs", link: "/faqs" },
       { text: "Terms", link: "/terms" },
       { text: "Types", link: "/types" },
-      { text: "Contact Us", link: "/contact-us" },
+      { text: "Contact us", link: "/contact-us" },
     ],
   },
 ];

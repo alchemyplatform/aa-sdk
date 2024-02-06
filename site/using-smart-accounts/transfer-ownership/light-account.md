@@ -20,7 +20,7 @@ next:
   text: Packages
 ---
 
-# How to Transfer Ownership of a Light Account
+# How to transfer ownership of a Light Account
 
 Not all smart account implementations support transfering the owner (e.g. `SimpleAccount`). However, a number of the accounts in this guide and in Account Kit do, including our Light Account! Let's see a few different ways we can transfer ownership of an Account (using Light Account as an example).
 

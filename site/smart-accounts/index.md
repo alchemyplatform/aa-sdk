@@ -36,6 +36,6 @@ For most applications, we recommend using Light Account. It is [deployed](/smart
 
 We are authoring a standard for modular smart accounts called [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900). Soon we will release an ERC-6900 compatible [Modular Account](/smart-accounts/modular-account/). This will be an optional upgrade from Light Account to unlock an ecosystem of plugins for your smart account stack.
 
-## Use Your Own Account
+## Use your own Account
 
 If Light Account doesn't fit your specific needs, you can always use your own smart account implementation with Account Kit. To learn how, see our guide in the [Using Your Own](/smart-accounts/custom/using-your-own) section.

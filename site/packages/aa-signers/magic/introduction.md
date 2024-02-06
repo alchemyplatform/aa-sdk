@@ -24,7 +24,7 @@ head:
 4.  [`signTypedData`](/packages/aa-signers/magic/signTypedData) -- supports typed data signatures.
 5.  [`getAuthDetails`](/packages/aa-signers/magic/getAuthDetails) -- supports authentication details retrieval.
 
-## Install Dependencies
+## Install dependencies
 
 `MagicSigner` requires installation of the [`magic-sdk`](https://github.com/magiclabs/magic-js) SDK. `aa-signers` lists it as an optional dependency.
 
@@ -75,7 +75,7 @@ const signTypedData = await signer.signTypedData(typedData);
 <<< @/snippets/signers/magic.ts
 :::
 
-## Developer Links
+## Developer links
 
 - [Magic web SDK](https://magic.link/docs/api/client-side-sdks/web)
 - [MagicSigner Tests](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/signers/src/magic/__tests__/signer.test.ts)

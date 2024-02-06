@@ -18,7 +18,7 @@ head:
       content: Explore the benefits and tradeoffs of four different packages that can be used with Account Kit namely aa-core, aa-alchemy, aa-accounts, aa-signers, and aa-ethers.
 ---
 
-# Package Overview
+# Package overview
 
 Account Kit consists of a number of SDK packages that you can leverage to interact with [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) infrastructure.
 

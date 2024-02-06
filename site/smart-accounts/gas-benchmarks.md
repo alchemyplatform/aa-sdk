@@ -12,7 +12,7 @@ head:
       content: Gas Benchmarks for Alchemy Accounts
 ---
 
-# Account Gas Benchmarks
+# Account gas benchmarks
 
 | Account                                                                                                                 | Native transfer | ERC20 transfer | Creation |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------- | -------------- | -------- |
