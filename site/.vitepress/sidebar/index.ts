@@ -151,7 +151,7 @@ export const sidebar: DefaultTheme.Sidebar = [
   //   ],
   // },
   {
-    text: "Custom Infra",
+    text: "Custom infra",
     base: "/third-party",
     items: [
       { text: "Bundlers", link: "/bundlers" },
