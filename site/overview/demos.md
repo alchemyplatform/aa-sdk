@@ -14,7 +14,7 @@ head:
 
 # Demos
 
-## Gasless Token minting demo
+## Gasless token minting demo
 
 This demo shows how to mint an ERC-20 token to a Light Account using our Gas Manager to provide a gasless minting experience.
 
