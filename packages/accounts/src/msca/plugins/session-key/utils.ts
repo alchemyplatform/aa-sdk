@@ -16,14 +16,17 @@ export const buildSessionKeysToRemoveStruct: <
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: { keys: ReadonlyArray<Address> } & GetAccountParameter<TAccount>
+  args: {
+    keys: ReadonlyArray<Address>;
+    pluginAddress?: Address;
+  } & GetAccountParameter<TAccount>
 ) => Promise<{ sessionKey: Address; predecessor: Address }[]> = async (
   client,
-  { keys, account = client.account }
+  { keys, pluginAddress, account = client.account }
 ) => {
   if (!account) throw new AccountNotFoundError();
 
-  const contract = SessionKeyPlugin.getContract(client);
+  const contract = SessionKeyPlugin.getContract(client, pluginAddress);
   return (
     await Promise.all(
       keys.map(async (key) => {
