@@ -14,7 +14,7 @@ next:
   text: Smart Accounts
 ---
 
-# Contact Us
+# Contact us
 
 If there's anything we can do to improve your experience with Account Kit, please tell us!
 

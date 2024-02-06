@@ -18,7 +18,7 @@ head:
       content: Follow this guide to fetch a smart account's NFTs with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
-# How to Fetch a Smart Account's NFTs
+# How to fetch a Smart Account's NFTs
 
 We provide several [Enhanced APIs](https://www.alchemy.com/enhanced-apis/?a=ak-docs), which are especially useful for querying information about the smart accounts you create using Account Kit, such as the account's owned NFTs using the [NFT API](https://www.alchemy.com/nft-api/?a=ak-docs).
 

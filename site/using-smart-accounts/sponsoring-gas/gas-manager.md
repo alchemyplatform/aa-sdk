@@ -51,7 +51,7 @@ Copy it and then replace the `GAS_MANAGER_POLICY_ID` in the snippet below.
 
 You've created a gas manager policy and linked it to the provider. This guarantees that UOs sent with this provider receive sponsorship if and only the UO satisfies the rules defined in your gas policy.
 
-### 4. Send the Sponsored UserOperation
+### 4. Send the sponsored UserOperation
 
 Now you're ready to send sponsored UOs! You can send a UO by calling `sendUserOperation` on the provider. The Gas Manager will check if this UO satisfies the policy rules defined above and sponsor the gas costs if the rules are met. If the UO does not meet the policy rules, an error will be thrown.
 

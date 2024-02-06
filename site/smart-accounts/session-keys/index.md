@@ -36,7 +36,7 @@ With the ability to delegate specific permissions to session keys, users can aut
 
 By using session keys, the exposure of the main private key is minimized. Even if a session key is compromised, the attacker would not gain access to the user's main account and funds. This layered approach to security helps in mitigating risks associated with key management and exposure.
 
-## Supported Permissions
+## Supported permissions
 
 The session key plugin supports the following types of permissions for each key:
 
