@@ -18,7 +18,7 @@ head:
       content: Frequently Asked Questions
 ---
 
-# Frequently Asked Questions
+# Frequently asked questions
 
 ## Smart Accounts - Light Account
 

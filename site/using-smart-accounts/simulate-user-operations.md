@@ -18,7 +18,7 @@ head:
       content: Follow this guide to simulate a User Operation with Alchemy's Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
-# How to Simulate a User Operation
+# How to simulate a User Operation
 
 This guide will show you how to simulate a `UserOperation` (UO) with Account Kit by adding support for UO simulation on an `AlchemyProvider` and sending a User Operation from that provider only if simulation passes. By the end of this guide, you'll have a basic understanding of how to safely send UOs with the `aa-sdk`.
 

@@ -18,17 +18,17 @@ head:
       content: Follow this guide to contribute a new smart account to Account Kit documentation.
 ---
 
-# Contributing Your Account
+# Contribute your account
 
 If you'd like to add your smart account to Account Kit, we welcome PRs! You'll need to fork the [`aa-sdk` Github repo](https://github.com/alchemyplatform/aa-sdk) and then follow the below steps.
 
-## 1. Add Your Smart Account to [`aa-accounts`](https://github.com/alchemyplatform/aa-sdk/tree/main/packages/accounts)
+## 1. Add your Smart Account to [`aa-accounts`](https://github.com/alchemyplatform/aa-sdk/tree/main/packages/accounts)
 
 To ensure the best developer experience for anyone using Account Kit, we ask that you add your smart account implementation to our [`aa-accounts`](https://github.com/alchemyplatform/aa-sdk/tree/main/packages/accounts) SDK package.
 
 There, you'll want to add an implementation of the [`SmartContractAccount`](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/core/src/account/smartContractAccount.ts) interface from `aa-core`. Simply export a function `createMySmartContractAccount` which calls `toSmartContractAccount` and any custom setup you need for your account. Make sure to include unit tests along with your implementation!
 
-## 2. Add Documentation about Your Smart Account
+## 2. Add documentation about your Smart Account
 
 You'll want to add documentation about your smart account so that developers can easily use your implementation in Account Kit. Below, we recommend adding documentation about your smart account's APIs, as well.
 

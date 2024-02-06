@@ -67,7 +67,7 @@ const result = await transferLightAccountOwnership(smartAccountClient, {
 <<< @/snippets/aa-core/lightAccountClient.ts
 :::
 
-## Developer Links
+## Developer links
 
 - [Light Account & Simple Account Deployment Addresses](/smart-accounts/accounts/deployment-addresses)
 - [Light Account Github Repo](https://github.com/alchemyplatform/light-account)

@@ -18,7 +18,7 @@ head:
       content: Follow this guide to use any Signer you want with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
-# How to Use Your Own Account Signer
+# How to use your own Account Signer
 
 Account Kit is designed to be flexible and allow you to use any Signer you want. If you don't want to use any Signer implementations in [`aa-signers`](/packages/aa-signers/index), you can either:
 
