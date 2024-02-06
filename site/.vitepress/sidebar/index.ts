@@ -106,15 +106,6 @@ export const sidebar: DefaultTheme.Sidebar = [
       },
       { text: "Simulate User Operations", link: "/simulate-user-operations" },
       {
-        text: "Transfer Ownership",
-        base: "/using-smart-accounts/transfer-ownership",
-        collapsed: false,
-        items: [
-          { text: "Modular Account", link: "/modular-account" },
-          { text: "Light Account", link: "/light-account" },
-        ],
-      },
-      {
         text: "Session Keys",
         base: "/smart-accounts/session-keys",
         items: [
@@ -126,6 +117,15 @@ export const sidebar: DefaultTheme.Sidebar = [
             text: "Getting Started",
             link: "/getting-started",
           },
+        ],
+      },
+      {
+        text: "Transfer Ownership",
+        base: "/using-smart-accounts/transfer-ownership",
+        collapsed: false,
+        items: [
+          { text: "Modular Account", link: "/modular-account" },
+          { text: "Light Account", link: "/light-account" },
         ],
       },
       {
