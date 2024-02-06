@@ -55,7 +55,7 @@ export const aaAlchemySidebar: DefaultTheme.SidebarItem = {
       text: "Utils",
       collapsed: true,
       base: "/packages/aa-alchemy/utils",
-      items: [{ text: "Define Alchemy Chain", link: "/defineAlchemyChain" }],
+      items: [{ text: "defineAlchemyChain", link: "/defineAlchemyChain" }],
     },
   ],
 };

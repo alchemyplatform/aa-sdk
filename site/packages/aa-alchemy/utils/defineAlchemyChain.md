@@ -16,7 +16,7 @@ next:
 
 # defineAlchemyChain
 
-`defineAlchemyChain` allows you to extend a `viem` chain if it is not configured with Alchemy's RPC Url. This is useful `@alchemy/aa-core` does not export a chain you can use with the Alchemy Clieny.
+`defineAlchemyChain` allows you to extend a `viem` chain if it is not configured with Alchemy's RPC Url. This is useful `@alchemy/aa-core` does not export a chain you can use with the Alchemy Client.
 
 ## Usage
 
