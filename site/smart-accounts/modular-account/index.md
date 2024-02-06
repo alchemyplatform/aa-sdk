@@ -86,4 +86,4 @@ The standard seeks to support open innovation in plugin development by standardi
 
 ERC-6900 seeks to balance the benefits of open composability in users’ and developers’ choices with the need to maintain fundamental characteristics of security and interoperability. At a high level, it does this by standardizing how accounts and plugins interact with each other, as well as the pre-installation requirements for plugins.
 
-ERC-6900 provides multiple possible types of interactions with plugins that vary with the nature of the account. For ERC-4437 compliant smart accounts, it follows that standard’s introduction of `Entrypoint` contract calls via UserOperations. The standard also supports calls from other account types, whether EOA or a different smart account standard.
+ERC-6900 provides multiple possible types of interactions with plugins that vary with the nature of the account. For ERC-4337 compliant smart accounts, it follows that standard’s introduction of `Entrypoint` contract calls via UserOperations. The standard also supports calls from other account types, whether EOA or a different smart account standard.
