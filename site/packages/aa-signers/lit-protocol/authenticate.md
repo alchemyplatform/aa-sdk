@@ -52,7 +52,7 @@ const litSigner = new LitSigner<LitAuthMethod>({
   rpcUrl: RPC_URL,
 });
 
-// returns a `LitSessionSigsMap` instance if the authentication was sucessfull
+// returns a `LitSessionSigsMap` instance if the authentication was successful
 const authDetails = await litSigner.authenticate({
   context: AUTH_METHOD,
 });
@@ -99,5 +99,5 @@ A Promise containing the `LitUserMetadata`, a map of `string -> object` containi
 - `sig: string` -- Signed authentication message of the given network node.
 - `derivedVia: string` -- How the signature was generated.
 - `address: string` -- Ethereum address of the key.
-- `algo: string` -- Signing algorithim used.
+- `algo: string` -- Signing algorithm used.
 - `signedMessage: string` -- `SIWE ReCap` Authentication message in the format of `SIWE ReCap`.

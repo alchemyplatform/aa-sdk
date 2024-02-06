@@ -33,7 +33,7 @@ In either case, if your `Signer` or library exports an `EIP-1193` compliant prov
 Make sure to include unit tests along with your implementation! Take a look at these PRs from [Magic](https://github.com/alchemyplatform/aa-sdk/pull/229) and [Web3Auth](https://github.com/alchemyplatform/aa-sdk/pull/247) for reference.
 
 :::tip Note
-If you your Signer implementation requires adding SDKs as dependencies, you should list them as `optionalDependencies`. Additionaly, `aa-signers` expects those SDKs to be node.js Javascript SDKs to so that all developers can use Account Kit with your Signer.
+If you your Signer implementation requires adding SDKs as dependencies, you should list them as `optionalDependencies`. Additionally, `aa-signers` expects those SDKs to be node.js Javascript SDKs to so that all developers can use Account Kit with your Signer.
 
 If your SDK is based on a frontend Javascript framework, such as React.js or Vue.js, you will just have to follow step 2 onwards to submit documentation with an example snippet clarifying that your Signer must be used in said framework.
 :::

@@ -36,7 +36,7 @@ Please join the waitlist [here](https://docs.google.com/forms/d/1Z3wFRiMoEKoo8FJ
 
 In the coming years, we expect most user accounts to be smart accounts that leverage the benefits of account abstraction. These accounts will generally share a similar set of core features such as signature validation and ownership transfer. To ensure this core feature set is secure and does not contain any vulnerabilities, it will be prudent for most developers to re-use battle-tested smart accounts rather than writing their own accounts.
 
-However, smart acounts are also programmable, enabling you to build new and innovative features that hook into the validation and execution logic of a smart account. We hope and expect to see a diverse ecosystem of plugins flourish.
+However, smart accounts are also programmable, enabling you to build new and innovative features that hook into the validation and execution logic of a smart account. We hope and expect to see a diverse ecosystem of plugins flourish.
 
 In order to maximize interoperability and code re-use, these plugins will ideally share a standard interface that is compatible with every smart account.
 

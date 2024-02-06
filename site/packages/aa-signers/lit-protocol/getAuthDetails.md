@@ -48,5 +48,5 @@ A Promise containing the `LitUserMetadata`, a map of `string -> object` containi
 - `sig: string` -- Signed authentication message of the given network node.
 - `deriviedVia: string` -- How the signature was generated.
 - `address: string` -- Ethereum address of the key.
-- `algo: string` -- Signing algorithim used.
+- `algo: string` -- Signing algorithm used.
 - `signedMessage: string` -- `SIWE ReCap` Authentication message in the format of `SIWE ReCap`.

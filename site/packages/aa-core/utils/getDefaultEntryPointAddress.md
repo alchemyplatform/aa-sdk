@@ -34,7 +34,7 @@ const entryPointAddress = getDefaultEntryPointAddress(chain);
 
 ### `Address`
 
-The Address of the default EntryPoint contrafct for the input chain
+The Address of the default EntryPoint contract for the input chain
 
 ## Paramters
 

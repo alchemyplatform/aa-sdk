@@ -26,7 +26,7 @@ Account Kit is designed to be flexible and allow you to use any Signer you want.
 2. If your Signer is an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compliant provider, you can leverage `viem`'s `WalletClient` and the [`WalletClientSigner`](/packages/aa-core/signers/wallet-client) (exported in `aa-core`).
 
 :::tip Note
-If you want to add your Signer implementation to Account Kit's codebase, take a look at the [contibuting](/signers/contributing) docs. We welcome Pull Requests onto the Github repo for [`aa-sdk`](https://github.com/alchemyplatform/aa-sdk)!
+If you want to add your Signer implementation to Account Kit's codebase, take a look at the [contributing](/signers/contributing) docs. We welcome Pull Requests onto the Github repo for [`aa-sdk`](https://github.com/alchemyplatform/aa-sdk)!
 :::
 
 ## 1. Implementing `SmartAccountAuthenticator` or `SmartAccountSigner`

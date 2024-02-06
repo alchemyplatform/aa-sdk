@@ -72,7 +72,7 @@ Either:
 
 - `rpcProvider: string | BundlerClient` -- a JSON-RPC URL, or a viem Client that supports ERC-4337 methods and Viem public actions. See [createBundlerClient](/packages/aa-core/bundler-client/index.md).
 
-- `chainId: number` -- the ID of thechain on which to create the provider.
+- `chainId: number` -- the ID of the chain on which to create the provider.
 
 Or:
 

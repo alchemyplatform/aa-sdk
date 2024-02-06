@@ -28,7 +28,7 @@ import { createSmartAccountClientFromExisting } from "@alchemy/aa-core";
 
 ## Usage
 
-Initialize a `SmartAcountClient` with your desired Chain and Transport using `createSmartAccountClient`, or use `createSmartAccountClientFromExisting` if you already have a [`BundlerClient`](/packages/aa-core/bundler-client/index) available
+Initialize a `SmartAccountClient` with your desired Chain and Transport using `createSmartAccountClient`, or use `createSmartAccountClientFromExisting` if you already have a [`BundlerClient`](/packages/aa-core/bundler-client/index) available
 ::: code-group
 
 ```ts [createSmartAccountClient.ts]
@@ -123,7 +123,7 @@ A new instance of a `SmartAccountClient`.
 
   - `txRetryIntervalMs: string | undefined` -- [optional] the interval in milliseconds to wait between retries while waiting for transaction receipts (default: 2_000).
 
-  - `txRetryMultiplier: string | undefined` -- [optional] the mulitplier on interval length to wait between retries while waiting for transaction receipts (default: 1.5).
+  - `txRetryMultiplier: string | undefined` -- [optional] the multiplier on interval length to wait between retries while waiting for transaction receipts (default: 1.5).
 
   - `feeOptions:` [`UserOperationFeeOptions`](/packages/aa-core/smart-account-client/types/userOperationFeeOptions.md) `| undefined` --[optional] user operation fee options to be used for gas estimation, set at the global level on the provider.
     If not set, default fee options for the chain are used. Available fields in `feeOptions` include `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` where each field is of type [`UserOperationFeeOptionsField`](/packages/aa-core/smart-account-client/types/userOperationFeeOptionsField.md).
