@@ -22,7 +22,7 @@ head:
 
 If you'd like to add your Signer to Account Kit, we welcome PRs! You'll need to fork the [`aa-sdk` Github repo](https://github.com/alchemyplatform/aa-sdk) and then follow the below steps.
 
-## 1. Add your signer to [`aa-signers`](https://github.com/alchemyplatform/aa-sdk/tree/main/packages/signers)
+## 1. Add your Signer to [`aa-signers`](https://github.com/alchemyplatform/aa-sdk/tree/main/packages/signers)
 
 To ensure the best developer experience for anyone using Account Kit, we ask that you add your Signer implementation to our [`aa-signers`](https://github.com/alchemyplatform/aa-sdk/tree/main/packages/signers) SDK package.
 
