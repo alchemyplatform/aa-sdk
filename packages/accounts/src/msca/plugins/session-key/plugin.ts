@@ -338,7 +338,7 @@ export const sessionKeyPluginActions: <
           );
         }
 
-        return encodePacked(["address", "uint8"], [pluginAddress, 0x0]);
+        return encodePacked(["address", "uint8"], [pluginAddress, 0x1]);
       })(),
 
       (() => {
@@ -349,7 +349,7 @@ export const sessionKeyPluginActions: <
           );
         }
 
-        return encodePacked(["address", "uint8"], [pluginAddress, 0x1]);
+        return encodePacked(["address", "uint8"], [pluginAddress, 0x0]);
       })(),
     ];
     const pluginAddress =

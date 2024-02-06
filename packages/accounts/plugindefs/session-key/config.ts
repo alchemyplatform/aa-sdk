@@ -20,11 +20,11 @@ export const SessionKeyPluginGenConfig: PluginGenConfig = {
     dependencies: [
       {
         plugin: MultiOwnerPluginGenConfig,
-        functionId: "0x0",
+        functionId: "0x1",
       },
       {
         plugin: MultiOwnerPluginGenConfig,
-        functionId: "0x1",
+        functionId: "0x0",
       },
     ],
   },
