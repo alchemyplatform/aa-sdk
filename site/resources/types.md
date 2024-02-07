@@ -132,7 +132,7 @@ An extension of the `SmartAccountSigner` interface, this interface includes addi
 
 A type representing a partial set of override options for `UserOperation` (UO) requests, specifically related to gas and paymaster data. It allows for optional customization of various gas-related parameters like `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, and `verificationGasLimit`. This type is particularly useful for dynamically adjusting gas settings in UO requests.
 
-[See Interface ↗️](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/alchemy/src/middleware/types/index.ts)
+[See Type ↗️](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/alchemy/src/middleware/gasManager.ts#L21)
 
 ## `BigNumberish`
 
