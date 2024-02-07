@@ -66,4 +66,4 @@ In that section, add documentation introducing the value prop of your smart acco
 
 ## 3. Submit a Pull Request
 
-You can open a PR to merge the branch with your smart account implementation from your forked repo into the `main` branch of the `aa-sdk` repo. We'll make sure to review it promptly, provider feedback, and merge the PR when ready so that developers can use your smart account!
+You can open a PR to merge the branch with your smart account implementation from your forked repo into the `main` branch of the `aa-sdk` repo. We'll make sure to review it promptly, provide feedback, and merge the PR when ready so that developers can use your smart account!

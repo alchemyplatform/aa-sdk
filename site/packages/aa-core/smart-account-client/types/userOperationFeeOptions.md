@@ -16,7 +16,7 @@ head:
 
 Fee options object type used by the [`SmartAccountClient`](/packages/aa-core/smart-account-client/index.md) during the gas fee calculation middlewares when constructing the user operation to send.
 
-For example, if the below example `UserOperationFeeOptions` is set on the provider upon initialization, the `maxPriorityFeePerGas` field on the user operation will be set as the max value between the 50% buffered `maxPriorityFeePerGas` estimate and the the min `maxPriorityFeePerGas` value specified here, `100_000_000n`.
+For example, if the below example `UserOperationFeeOptions` is set on the client upon initialization, the `maxPriorityFeePerGas` field on the user operation will be set as the max value between the 50% buffered `maxPriorityFeePerGas` estimate and the the min `maxPriorityFeePerGas` value specified here, `100_000_000n`.
 
 ```ts
 type UserOperationFeeOptions {
@@ -33,15 +33,11 @@ type UserOperationFeeOptions {
 ::: code-group
 
 ```ts [example.ts]
-import { sepolia } from "@alchemy/aa-core";
-import { type Chain } from "viem";
-
-import {
-  type UserOperationFeeOptions,
-  type SmartAccountClient,
-} from "@alchemy/aa-core";
-
-import { API_KEY } from "./constants.js";
+const chain = polygonMumbai;
+const owner: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
+  "YOUR_OWNER_MNEMONIC"
+);
+const rpcTransport = http("https://polygon-mumbai.g.alchemy.com/v2/demo");
 
 const userOperationFeeOptions: UserOperationFeeOptions = {
   maxPriorityFeePerGas: {
@@ -50,9 +46,14 @@ const userOperationFeeOptions: UserOperationFeeOptions = {
   },
 };
 
-const provider = const provider = new SmartAccountClient({
-  rpcProvider: `${sepolia.rpcUrls.alchemy.http[0]}/${API_KEY}`,
-  chain: sepolia,
+export const smartAccountClient = createSmartAccountClient({
+  transport: rpcTransport,
+  chain,
+  account: await createMultiOwnerModularAccount({
+    transport: rpcTransport,
+    chain,
+    owner,
+  }),
   opts: {
     feeOptions: userOperationFeeOptions,
   },

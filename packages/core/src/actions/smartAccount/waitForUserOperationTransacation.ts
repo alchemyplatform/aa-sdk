@@ -18,7 +18,7 @@ export const waitForUserOperationTransaction: <
   if (!isBaseSmartAccountClient(client)) {
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
-      "upgradeAccount",
+      "waitForUserOperationTransaction",
       client
     );
   }

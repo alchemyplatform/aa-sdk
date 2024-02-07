@@ -23,14 +23,13 @@ next:
 ::: code-group
 
 ```ts [example.ts]
-import { smartAccountClient } from "./provider";
-import { transferLightAccountOwnership } from "@alchemy/aa-accounts";
+import { smartAccountClient } from "./lightAccountClient";
 // [!code focus:99]
 // transfer ownership
 const newOwner = LocalAccountSigner.mnemonicToAccountSigner(NEW_OWNER_MNEMONIC);
-const smartAccountClient = await transferLightAccountOwnership(provider, {
+const hash = smartAccountClient.transferOwnership({
   newOwner,
-  waitForTxn: true, // wait for txn with UO to be mined
+  waitForTxn: true,
 });
 ```
 
@@ -45,8 +44,8 @@ A Promise containing the hash of either the UO or transaction containing the UO 
 
 ## Parameters
 
-- `client: SmartAccountClient` -- the provider to use to send the transaction
+- `client: SmartAccountClient` -- the client to use to send the transaction
 - `options: TransferLightAccountOwnershipParams` -- the options to use to transfer ownership
-  - `newOwner: Address` -- the new owner of the account
+  - `newOwner: TOwner extends SmartAccountSigner = SmartAccountSigner` -- the new owner of the account
   - `waitForTxn?: boolean` -- optionally, wait for the transaction to be mined with the UO
   - `account?: LightAccount` -- optionally, pass the account if your client is not connected to it

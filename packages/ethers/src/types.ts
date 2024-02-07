@@ -1,5 +1,4 @@
 import {
-  type Address,
   type BundlerClient,
   type SmartAccountClient,
   type SmartContractAccount,
@@ -13,7 +12,6 @@ export type EthersProviderAdapterOpts<
     | SmartContractAccount
     | undefined
 > = {
-  entryPointAddress?: Address;
   account?: TAccount;
 } & (
   | { rpcProvider: string | BundlerClient; chainId: number }

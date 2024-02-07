@@ -16,6 +16,7 @@ import {
 import { toAccount } from "viem/accounts";
 import { EntryPointAbi } from "../abis/EntryPointAbi.js";
 import { createBundlerClient } from "../client/bundlerClient.js";
+import { getVersion060EntryPoint } from "../entrypoint/0.6.js";
 import type { EntryPointDef } from "../entrypoint/types.js";
 import {
   BatchExecutionNotSupportedError,
@@ -94,7 +95,7 @@ export type ToSmartContractAccountParams<
   source: Name;
   transport: TTransport;
   chain: TChain;
-  entryPoint: EntryPointDef<TUserOperationRequest>;
+  entryPoint?: EntryPointDef<TUserOperationRequest>;
   accountAddress?: Address;
   getAccountInitCode: () => Promise<Hex>;
   getDummySignature: () => Hex;
@@ -167,7 +168,7 @@ export async function toSmartContractAccount<
   transport,
   chain,
   source,
-  entryPoint,
+  entryPoint = getVersion060EntryPoint(chain),
   accountAddress,
   getAccountInitCode,
   signMessage,

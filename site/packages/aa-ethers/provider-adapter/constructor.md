@@ -35,24 +35,24 @@ export const provider = new EthersProviderAdapter({
 });
 
 // another way to initialize
-const accountProvider = new AlchemyProvider({
+export const smartAccountClient = createAlchemySmartAccountClient({
   apiKey: "ALCHEMY_API_KEY", // replace with your Alchemy API Key
   chain: sepolia,
-  entryPointAddress: getDefaultEntryPointAddress(sepolia),
   opts: {
     txMaxRetries: 10,
     txRetryIntervalMs: 2_000,
     txRetryMultiplier: 1.5,
     minPriorityFeePerBid: 100_000_000n,
-  },
-  feeOpts: {
-    baseFeeBufferPercent: 50n,
-    maxPriorityFeeBufferPercent: 5n,
-    preVerificationGasBufferPercent: 5n,
+    feeOpts: {
+      baseFeeBufferPercent: 50n,
+      maxPriorityFeeBufferPercent: 5n,
+      preVerificationGasBufferPercent: 5n,
+    },
   },
 });
+
 export const anotherProvider = new EthersProviderAdapter({
-  accountProvider,
+  smartAccountClient,
 });
 ```
 

@@ -1,4 +1,4 @@
-import { polygonMumbai, sepolia } from "@alchemy/aa-core";
+import { sepolia } from "@alchemy/aa-core";
 import {
   createPublicClient,
   custom,
@@ -21,7 +21,7 @@ describe("Account Simple Tests", async () => {
   const owner: SmartAccountSigner =
     LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
 
-  const chain = polygonMumbai;
+  const chain = sepolia;
   const publicClient = createBundlerClientFromExisting(
     createPublicClient({
       chain,
@@ -67,62 +67,6 @@ describe("Account Simple Tests", async () => {
     ).toMatchInlineSnapshot(
       '"0x18dfb3c7000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000002000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef0000000000000000000000008ba1f109551bd432803012645ac136ddd64dba720000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000004deadbeef000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004cafebabe00000000000000000000000000000000000000000000000000000000"'
     );
-  });
-
-  it("should correctly do base runtime validation when entryPoint are invalid", async () => {
-    await expect(
-      createSimpleSmartAccount({
-        entryPointAddress: 1 as unknown as Address,
-        chain,
-        owner,
-        factoryAddress: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
-        transport: http("ALCHEMY_RPC_URL"),
-      })
-    ).rejects.toThrowErrorMatchingInlineSnapshot(`
-      "[
-        {
-          \\"code\\": \\"invalid_type\\",
-          \\"expected\\": \\"string\\",
-          \\"received\\": \\"number\\",
-          \\"path\\": [
-            \\"entryPointAddress\\"
-          ],
-          \\"message\\": \\"Expected string, received number\\"
-        }
-      ]"
-    `);
-  });
-
-  it("should correctly do base runtime validation when multiple inputs are invalid", async () => {
-    await expect(
-      createSimpleSmartAccount({
-        entryPointAddress: 1 as unknown as Address,
-        chain: "0x1" as unknown as Chain,
-        owner,
-        factoryAddress: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
-        transport: http("ALCHEMY_RPC_URL"),
-      })
-    ).rejects.toThrowErrorMatchingInlineSnapshot(`
-      "[
-        {
-          \\"code\\": \\"invalid_type\\",
-          \\"expected\\": \\"string\\",
-          \\"received\\": \\"number\\",
-          \\"path\\": [
-            \\"entryPointAddress\\"
-          ],
-          \\"message\\": \\"Expected string, received number\\"
-        },
-        {
-          \\"code\\": \\"custom\\",
-          \\"fatal\\": true,
-          \\"path\\": [
-            \\"chain\\"
-          ],
-          \\"message\\": \\"Invalid input\\"
-        }
-      ]"
-    `);
   });
 
   it("should correctly use the account init code override", async () => {

@@ -84,6 +84,10 @@ export const aaCoreSidebar: DefaultTheme.SidebarItem = {
           link: "/getAddress",
         },
         {
+          text: "upgradeAccount",
+          link: "/upgradeAccount",
+        },
+        {
           text: "Types",
           base: "/packages/aa-core/smart-account-client/types",
           collapsed: true,

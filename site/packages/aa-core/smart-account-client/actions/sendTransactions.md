@@ -6,10 +6,10 @@ head:
       content: sendTransactions
   - - meta
     - name: description
-      content: Overview of the sendTransactions method on ISmartAccountClient
+      content: Overview of the sendTransactions method on SmartAccountClient
   - - meta
     - property: og:description
-      content: Overview of the sendTransactions method on ISmartAccountClient
+      content: Overview of the sendTransactions method on SmartAccountClient
 ---
 
 # sendTransactions

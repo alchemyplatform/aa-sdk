@@ -97,7 +97,7 @@ To read or write any data to a blockchain, you'll need an Alchemy API Key and RP
 
 Using the SDK in the following example, we'll use the Account Kit to generate the address of your smart account from which to eventually send a UO.
 
-<<< @/snippets/getting-started/provider.ts
+<<< @/snippets/getting-started/client.ts
 
 Copy the above into `index.ts`. To run the script, do:
 
@@ -159,7 +159,7 @@ Since this "Getting Started" example is a simple script, you'll need to consider
 
 ## 6. Dive deeper
 
-In this guide, we initialized an `AlchemyProvider` with the `aa-alchemy` package to send a UO. However, you can do a lot more with Account Kit and its many packages.
+In this guide, we initialized an `AlchemySmartAccountClient` with the `aa-alchemy` package to send a UO. However, you can do a lot more with Account Kit and its many packages.
 
 1. To learn more about the different packages and their use cases, check out the [Packages Overview](/packages/) page.
 

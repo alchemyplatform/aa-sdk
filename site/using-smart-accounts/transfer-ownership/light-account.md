@@ -41,9 +41,8 @@ There a number of ways you can call this method using Account Kit.
 ```ts [example.ts]
 import { smartAccountClient as lightAccountClient } from "./smartAccountClient";
 
-// this will return the address of the smart account you want to transfer ownerhip of
-const accountAddress = await lightAccountClient.getAddress();
-const newOwner = "0x..."; // the address of the new owner
+// this will return the signer of the smart account you want to transfer ownerhip to
+const newOwner = LocalAccountSigner.mnemonicToAccountSigner(NEW_OWNER_MNEMONIC);
 
 // [!code focus:99]
 const hash = lightAccountClient.transferOwnership({
@@ -60,8 +59,6 @@ Since `@alchemy/aa-accounts` exports a `LightAccount` ABI, the above approach ma
 
 ### 2. Using `sendUserOperation`
 
-Assuming you have connected the `provider` to a `LightAccount` using `provider.connect`, you can call `sendUserOperation` on the provider and encoding the `transferOwnership` call data:
-
 ::: code-group
 
 ```ts [example.ts]
@@ -69,11 +66,11 @@ import { encodeFunctionData } from "viem";
 import { smartAccountClient } from "./smartAccountClient";
 
 // this will return the address of the smart account you want to transfer ownerhip of
-const accountAddress = await provider.getAddress();
+const accountAddress = await smartAccountClient.getAddress();
 const newOwner = "0x..."; // the address of the new owner
 
 // [!code focus:99]
-const { hash: userOperationHash } = provider.sendUserOperation({
+const { hash: userOperationHash } = smartAccountClient.sendUserOperation({
   to: accountAddress,
   data: encodeFunctionData({
     abi: [
