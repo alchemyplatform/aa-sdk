@@ -62,7 +62,7 @@ A module for [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) smart accounts,
 
 ## Provider
 
-An intermediary or connector that enables interactions between applications and a blockchain network. Providers offer the necessary infrastructure and APIs to connect, query, and interact with the blockchain, enabling transactions, smart contract executions, and data retrieval. You can use `AlchemyProvider` within [aa-sdk](https://github.com/alchemyplatform/aa-sdk) to query blockchain data and send `UserOperations`.
+An intermediary or connector that enables interactions between applications and a blockchain network. Providers offer the necessary infrastructure and APIs to connect, query, and interact with the blockchain, enabling transactions, smart contract executions, and data retrieval. You can use `AlchemySmartAccountClient` within [aa-sdk](https://github.com/alchemyplatform/aa-sdk) to query blockchain data and send `UserOperations`.
 
 ## Signer
 

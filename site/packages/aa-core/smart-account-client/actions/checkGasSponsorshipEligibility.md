@@ -6,10 +6,10 @@ head:
       content: checkGasSponsorshipEligibility
   - - meta
     - name: description
-      content: Overview of the checkGasSponsorshipEligibility method on ISmartAccountClient
+      content: Overview of the checkGasSponsorshipEligibility method on SmartAccountClient
   - - meta
     - property: og:description
-      content: Overview of the checkGasSponsorshipEligibility method on ISmartAccountClient
+      content: Overview of the checkGasSponsorshipEligibility method on SmartAccountClient
 ---
 
 # checkGasSponsorshipEligibility

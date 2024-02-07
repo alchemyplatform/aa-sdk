@@ -32,7 +32,7 @@ First, you can follow the same instructions from the previous guide on [How to S
 
 <<< @/snippets/aa-alchemy/gas-manager-client.ts
 
-Then, before you call `sendUserOperation` on the provider, you can use [`checkGasSponsorshipEligibility`](/packages/aa-core/smart-account-client/actions/checkGasSponsorshipEligibility.md) to verify the eligibility of the connected account for gas sponsorship concerning the upcoming `UserOperation` (UO) that is intended to be sent.
+Then, before you call `sendUserOperation` on the client, you can use [`checkGasSponsorshipEligibility`](/packages/aa-core/smart-account-client/actions/checkGasSponsorshipEligibility.md) to verify the eligibility of the connected account for gas sponsorship concerning the upcoming `UserOperation` (UO) that is intended to be sent.
 
 Internally, this method invokes [`buildUserOperation`](/packages/aa-core/smart-account-client/actions/buildUserOperation.md), which navigates through the middleware pipeline, including the `PaymasterMiddleware`. Its purpose is to construct the UO struct meant for transmission to the bundler. Following the construction of the UO struct, this function verifies if the resulting structure contains a non-empty `paymasterAndData` field.
 
@@ -61,7 +61,7 @@ console.log(
 
 ## 2. How to bypass the Paymaster Middleware for User Operations not eligible for Gas Sponsorship
 
-If you attempt to execute the `sendUserOperation` method for user operations ineligible for gas sponsorship through the configured provider with the gas manager policy, an error will be thrown. This error would prevent users from sending the user operation. In such cases, the desired user experience involves allowing these users, despite the lack of gas sponsorship eligibility, to still send the user operation by reverting to the default behavior of paying gas fees from the user's account balance. For instance, your application could inform users about their gas sponsorship eligibility status, surface the eligibility of the user operation, and provide users with the choice to unblock themselves by sending the user operation without gas sponsorship.
+If you attempt to execute the `sendUserOperation` method for user operations ineligible for gas sponsorship through the configured client with the gas manager policy, an error will be thrown. This error would prevent users from sending the user operation. In such cases, the desired user experience involves allowing these users, despite the lack of gas sponsorship eligibility, to still send the user operation by reverting to the default behavior of paying gas fees from the user's account balance. For instance, your application could inform users about their gas sponsorship eligibility status, surface the eligibility of the user operation, and provide users with the choice to unblock themselves by sending the user operation without gas sponsorship.
 
 This section of the guide elucidates how you can circumvent the `PaymasterMiddleware`, enabling the sending of user operations without gas sponsorship. This functionality permits the sending of user operations where users pay the gas fee themselves via their smart account.
 
@@ -74,7 +74,7 @@ import { smartAccountClient } from "./client";
 // If gas sponsorship ineligible, baypass paymaster middleware by passing in the paymasterAndData override
 
 // Empty paymasterAndData indicates that there will be no paymaster involved
-// and the user will be paying for the gas fee even when `withAlchemyGasManager` is configured on the provider
+// and the user will be paying for the gas fee even when `AlchemyGasManager` is configured on the client
 
 const elligibility = await smartAccountClient.checkGasSponsorshipEligibility({
   target: "0xTargetAddress",

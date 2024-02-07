@@ -28,7 +28,7 @@ For the purposes of our example, we'll use the Token API to query our smart acco
 
 Alchemy has developed a Typescript SDK to make development with the Enhanced APIs simple. The SDK includes ways to leverage Alchemy's Simulation API, Token API, Transact API, NFT API, Webhooks and Websockets, and more across Alchemy's supported chains. Take a look at the code [here](https://github.com/alchemyplatform/alchemy-sdk-js).
 
-We will use the Alchemy SDK Client to extend our Alchemy Smart Account Client using the provider's [`alchemyEnhancedApiActions`](/packages/aa-alchemy/smart-account-client/actions/alchemyEnhancedApiActions.md) method. That way, our provider will have direct access to the Enhanced APIs.
+We will use the Alchemy SDK Client to extend our Alchemy Smart Account Client using the client's [`alchemyEnhancedApiActions`](/packages/aa-alchemy/smart-account-client/actions/alchemyEnhancedApiActions.md) method. That way, our client will have direct access to the Enhanced APIs.
 
 To use the Alchemy SDK in our project directory, we'll need to install the required package:
 
@@ -46,14 +46,14 @@ yarn add alchemy-sdk
 
 ## 2. Extend the Alchemy Smart Account Client with Enhanced APIs
 
-Then, all we need to do is create an `alchemy` client from the Alchemy SDK, create an `AlchemySmartAccountClient` from Account Kit, and then extend the provider with functionality from the SDK client using `withAlchemyEnhancedApis`. We can get the smart account's address from the `AlchemySmartAccountClient` in order to fetch the smart account's ERC-20 Tokens in just 1 line of code!
+Then, all we need to do is create an `alchemy` client from the Alchemy SDK, create an `AlchemySmartAccountClient` from Account Kit, and then extend the client with functionality from the SDK client using `withAlchemyEnhancedApis`. We can get the smart account's address from the `AlchemySmartAccountClient` in order to fetch the smart account's ERC-20 Tokens in just 1 line of code!
 
 <<< @/snippets/enhanced-apis-example/token.ts
 
 :::tip Note
 Note that we must configure the Alchemy SDK client to have the same API Key and blockchain network as Alchemy Smart Account Client it is extending via `alchemyEnhancedApiActions`. This method explicitly checks this requirement and will throw an error at runtime if not satisfied.
 
-Additionally, since the Alchemy SDK client does not yet support JWT authentication, an `AlchemySmartAccountClient` initialized with JWTs cannot use this method. We must be initialize the provider with an API key or RPC URL.
+Additionally, since the Alchemy SDK client does not yet support JWT authentication, an `AlchemySmartAccountClient` initialized with JWTs cannot use this method. We must be initialize the client with an API key or RPC URL.
 :::
 
 That's it! There are so many more Enhanced APIs the the Alchemy SDK exposes, and can be useful for development with Account Abstraction. Try it out [here](https://github.com/alchemyplatform/alchemy-sdk-js), and check out [How to fetch a Smart Account's NFTs](/using-smart-accounts/enhanced-apis/nft) for another example.

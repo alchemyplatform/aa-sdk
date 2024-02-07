@@ -3,7 +3,6 @@ import { custom, type Transaction } from "viem";
 import type { SpyInstance } from "vitest";
 import * as receiptActions from "../actions/bundler/getUserOperationReceipt.js";
 import type { UserOperationReceipt } from "../types.js";
-import { getDefaultEntryPointAddress } from "../utils/index.js";
 import {
   createDummySmartContractAccount,
   createTestClient,
@@ -11,7 +10,6 @@ import {
 import { createSmartAccountClient } from "./smartAccountClient.js";
 
 const chain = polygonMumbai;
-const entryPointAddress = getDefaultEntryPointAddress(chain);
 const getUserOperationReceiptMock = vi.spyOn(
   receiptActions,
   "getUserOperationReceipt"
@@ -31,10 +29,7 @@ describe("SmartAccountClient Tests", async () => {
   let retryMsDelays: number[] = [];
   const publicClient = createTestClient(chain);
 
-  const account = await createDummySmartContractAccount(
-    publicClient,
-    entryPointAddress
-  );
+  const account = await createDummySmartContractAccount(publicClient);
 
   const accountClient = createSmartAccountClient({
     transport: custom({

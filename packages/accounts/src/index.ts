@@ -5,15 +5,15 @@
 export type * from "./light-account/account.js";
 export { createLightAccount } from "./light-account/account.js";
 export { transferOwnership as transferLightAccountOwnership } from "./light-account/actions/transferOwnership.js";
-export { createLightAccountClient } from "./light-account/createLightAccountClient.js";
-export { getLightAccountVersion } from "./light-account/getLightAccountVersion.js";
-export type * from "./light-account/lightAccountClientDecorator.js";
-export { lightAccountClientActions } from "./light-account/lightAccountClientDecorator.js";
+export { createLightAccountClient } from "./light-account/client.js";
+export type * from "./light-account/decorator.js";
+export { lightAccountClientActions } from "./light-account/decorator.js";
 export {
   LightAccountUnsupported1271Factories,
   LightAccountUnsupported1271Impls,
   LightAccountVersions,
   getDefaultLightAccountFactoryAddress,
+  getLightAccountVersion,
   type LightAccountVersion,
 } from "./light-account/utils.js";
 

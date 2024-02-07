@@ -3,13 +3,13 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: ISmartAccountClient • request
+      content: SmartAccountClient • request
   - - meta
     - name: description
-      content: Overview of the request method on ISmartAccountClient
+      content: Overview of the request method on SmartAccountClient
   - - meta
     - property: og:description
-      content: Overview of the request method on ISmartAccountClient
+      content: Overview of the request method on SmartAccountClient
 ---
 
 # request
