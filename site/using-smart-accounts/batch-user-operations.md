@@ -6,16 +6,16 @@ head:
       content: How to Submit Batch Transactions
   - - meta
     - name: description
-      content: Follow this guide to submit transactions in batches with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to submit transactions in batches with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - property: og:description
-      content: Follow this guide to submit transactions in batches with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to submit transactions in batches with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - name: twitter:title
       content: How to Submit Batch Transactions
   - - meta
     - name: twitter:description
-      content: Follow this guide to submit transactions in batches with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to submit transactions in batches with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
 # How to Submit Batch Transactions
