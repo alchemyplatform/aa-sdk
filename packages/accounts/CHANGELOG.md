@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-alpha.5](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.4...v3.0.0-alpha.5) (2024-02-07)
+
+### Bug Fixes
+
+- **aa-core:** add back eip-1193 method handling to the client ([#425](https://github.com/alchemyplatform/aa-sdk/issues/425)) ([48b5943](https://github.com/alchemyplatform/aa-sdk/commit/48b594375d64fe832cfb06f1fb3a539da3c7b965))
+
+### Features
+
+- add session key extensions for managing keys ([ac86a97](https://github.com/alchemyplatform/aa-sdk/commit/ac86a97cd22004f55fb76ecf13b808a222daf8ef))
+- update MSCA multi owner factory, msca, and plugins abis and addresses ([#424](https://github.com/alchemyplatform/aa-sdk/issues/424)) ([9a49ac5](https://github.com/alchemyplatform/aa-sdk/commit/9a49ac53f6a4f30ee36f0e430b033e3a21a7562d))
+
 # [3.0.0-alpha.4](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.3...v3.0.0-alpha.4) (2024-02-02)
 
 **Note:** Version bump only for package @alchemy/aa-accounts
