@@ -6,84 +6,59 @@ head:
       content: Modular Account Smart Contract
   - - meta
     - name: description
-      content: Coming soon! Follow this guide to use Modular Accounts with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to use Modular Accounts with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - property: og:description
-      content: Coming soon! Follow this guide to use Modular Accounts with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to use Modular Accounts with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - name: twitter:title
       content: Modular Account Smart Contract
   - - meta
     - name: twitter:description
-      content: Coming soon! Follow this guide to use Modular Accounts with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to use Modular Accounts with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
 # Modular Account
 
-## Introduction
+## Overview
 
-Soon after the first stable version of [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900), we will release an ERC-6900 compatible Modular Account in Account Kit. It will support new use cases like session keys, account recovery, spending limits, and any ERC-6900 plugin you can imagine. The Light Account is forward-compatible with ERC-6900 so you can optionally upgrade it to the Modular Account once released.
+Modular Account is an ERC-4337 smart account that supports customizable feature with ERC-6900 plugins. It’s fully production-ready with multiple security audits, two prebuilt plugins in `MultiOwnerPlugin` and `SessionKeyPlugin`, and the capability to support any custom account behavior you need.
 
-Read on to learn more about ERC-6900 and modular accounts.
+## Why Modular Account?
 
-:::tip Note
-We are working towards the first stable version of [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) with [the community](https://ethereum-magicians.org/t/erc-6900-modular-smart-contract-accounts-and-plugins/13885). If you're developing a plugin or modular account, we'd love to chat!
+### Make the most of Account Abstraction
 
-Please join the waitlist [here](https://docs.google.com/forms/d/1Z3wFRiMoEKoo8FJFrymVEOzrbKQXjSnYhm_hKKDnooE/edit). You can also join the modular accounts [Telegram group](https://t.me/+KfB9WuhKDgk5YzIx) or [email](mailto:account-abstraction@alchemy.com) us!
-:::
+Smart accounts unlocks lots of customizable ways to improve the wallet experience, but it requires writing this behavior into the smart contract for the account, which is difficult and security-critical. Modular Account uses the [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) framework to simplify creating powerful features for smart accounts. We’ve created two plugins to level up your smart accounts, and look forward to what new plugins you create!
 
-## Motivation
+### Multi Owner Plugin
 
-In the coming years, we expect most user accounts to be smart accounts that leverage the benefits of account abstraction. These accounts will generally share a similar set of core features such as signature validation and ownership transfer. To ensure this core feature set is secure and does not contain any vulnerabilities, it will be prudent for most developers to re-use battle-tested smart accounts rather than writing their own accounts.
+The Multi Owner plugin lets your smart accounts have one or more ECDSA or SCA owners. This lets you account integrate with multiple signers at once, and supports recovering your account if one signer is lost.
 
-However, smart accounts are also programmable, enabling you to build new and innovative features that hook into the validation and execution logic of a smart account. We hope and expect to see a diverse ecosystem of plugins flourish.
+Read more about Multi Owner Plugin and how to get started with Modular Account [here]()!
 
-In order to maximize interoperability and code re-use, these plugins will ideally share a standard interface that is compatible with every smart account.
+### Session Key Plugin
 
-Refer to the Account Abstraction [series](https://www.alchemy.com/blog/account-abstraction/?a=ak-docs) on our blog to learn more.
+The Session Key plugin lets your smart account add additional signers to your account with specific permissions.
+Session keys can be customized and configured to:
 
-## ERC-6900: Modular Smart Contract Accounts and Plugins
+- Contract Restrictions: restrict to only interact with specific contracts and/or a subset of their methods
+- Spending Limits: spend up to a set amount of ERC-20 tokens or native token amount
+- Time Period: expire after certain time periods
 
-### Introduction
+Session keys let you streamline interactions by reducing confirmation steps, or automate actions on behalf of the account. And these features are kept secure through the permission system, which protects the account from malicious use of the session key.
 
-We authored [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) to propose a standard interface for modular smart accounts and plugins.
+Read more about installing and using the Session Key plugin [here]()!
 
-The standard builds on earlier work by the Android developer community to standardize the interface between smart accounts and plugins. Each compliant plugin will incorporate a manifest that establishes various functions and hooks that need to be added to the smart account on installation. It will also specify aspects of the plugin (metadata, dependencies and permissions) that are necessary to constrain the plugin’s ability to act on the smart account.
+### Full Compatibility
 
-Taken together, these interactions enable a workflow that supports the seamless installation of plugins in a manner that ensures security and flexibility:
+Modular Account also supports the same baseline set of account abstraction features as Light Account: sponsoring gas, batching transactions, rotating owners, and checking ERC-1271 signatures.
 
-1. Plugin developers and users set each plugin’s permissions and specifies validation and hooks during installation of the the plugin onto the account.
-2. Based on these permissions, plugins can then change account states or execute on behalf of the account.
+### Build Your Own Plugin
 
-By standardizing basic functions and interfaces, ERC-6900 seeks to foster a growing ecosystem of wallet and plugin developers. You should be able to write one plugin that works with all smart accounts, rather than fragmenting their efforts across multiple different account implementations.
+Have an idea for more account features? Modular Account supports ERC-6900 for installing additional plugins to the account, letting you fully customize the account logic.
 
-For users, this standard will make it easier to discover and enable plugins. Imagine a future where a user with an ERC-6900 compatible account can install any of a thousand plugins to their smart account.
+Check out the plugin development guide [here]() if you’re interested!
 
-For more detailed specifications of transaction flows, see the [ERC-6900 spec](https://eips.ethereum.org/EIPS/eip-6900).
+### Secure, Audited, Open Source
 
-### Architecture
-
-The standard focuses on the development of modules or plugins, and on the interactions between these plugins and modular smart accounts (or “MSCA”). Following [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337), it splits validation and execution functions in order to allow for greater customization within these components while also ensuring that they remain composable. It also adds pre- and post-execution hooks as a third functional component to plugins, enabling more finely grained functionality.
-
-![ERC-6900](/images/erc-6900.png)
-
-_[Source](https://eips.ethereum.org/EIPS/eip-6900)_
-
-The architecture described in the image above is designed to achieve two technical goals:
-
-- Provide standards for designing plugins for smart accounts.
-- Provide standards for how compliant accounts should interact with plugins.
-
-### Designing Plugins
-
-The standard seeks to support open innovation in plugin development by standardizing the structures and interactions between three categories of functional components:
-
-- **Validation functions** ensure the validity of external calls to the smart account.
-- **Execution functions** are smart contracts that specify the execution logic for functions within a plugin.
-- **Hooks** specify more fine-grained actions and validations that can be designed to occur pre- or post-validation, and pre- or post-execution.
-
-### Interacting with plugins
-
-ERC-6900 seeks to balance the benefits of open composability in users’ and developers’ choices with the need to maintain fundamental characteristics of security and interoperability. At a high level, it does this by standardizing how accounts and plugins interact with each other, as well as the pre-installation requirements for plugins.
-
-ERC-6900 provides multiple possible types of interactions with plugins that vary with the nature of the account. For ERC-4437 compliant smart accounts, it follows that standard’s introduction of `Entrypoint` contract calls via UserOperations. The standard also supports calls from other account types, whether EOA or a different smart account standard.
+Modular Account has been audited by Spearbit and Quanstamp. You can find the audit reports [here](). Modular Account is fully open source so you can validate the [source code]().
