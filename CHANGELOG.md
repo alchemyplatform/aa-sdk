@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-alpha.6](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.5...v3.0.0-alpha.6) (2024-02-08)
+
+### Bug Fixes
+
+- fix broken link for RequestGasAndPaymasterAndDataOverrides ([ce7cb14](https://github.com/alchemyplatform/aa-sdk/commit/ce7cb141013f55cd99df28b660b68f269f26a0ea))
+- gasmanager config was being ignored when creating alchemy clients ([25c770f](https://github.com/alchemyplatform/aa-sdk/commit/25c770f5e3d45e9986235d7d7dcc43d8e3610580))
+- incorrect entrypoint call ([6e14338](https://github.com/alchemyplatform/aa-sdk/commit/6e143388f68019d5806065fb410927e256bb0259))
+
+### Features
+
+- export the create alchemy client from existing method ([d1c82f8](https://github.com/alchemyplatform/aa-sdk/commit/d1c82f8a1f529f3d098b00fa8b894164eddb665e))
+
 # [3.0.0-alpha.5](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.4...v3.0.0-alpha.5) (2024-02-07)
 
 ### Bug Fixes
