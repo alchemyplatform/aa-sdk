@@ -6,18 +6,18 @@ head:
       content: How to Transfer Ownership of a Light Account
   - - meta
     - name: description
-      content: Follow this guide to transfer ownership of a Light Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to transfer ownership of a Light Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - property: og:description
-      content: Follow this guide to transfer ownership of a Light Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to transfer ownership of a Light Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - name: twitter:title
       content: How to Transfer Ownership of a Light Account
   - - meta
     - name: twitter:description
-      content: Follow this guide to transfer ownership of a Light Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to transfer ownership of a Light Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 next:
-  text: Packages
+  text: Alchemy Enhanced Apis
 ---
 
 # How to transfer ownership of a Light Account
@@ -39,7 +39,7 @@ There a number of ways you can call this method using Account Kit.
 ::: code-group
 
 ```ts [example.ts]
-import { smartAccountClient } from "./smartAccountClient";
+import { smartAccountClient as lightAccountClient } from "./smartAccountClient";
 
 // this will return the address of the smart account you want to transfer ownerhip of
 const accountAddress = await provider.getAddress();

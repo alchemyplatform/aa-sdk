@@ -6,16 +6,16 @@ head:
       content: Choosing a Smart Account
   - - meta
     - name: description
-      content: Learn how to choose a smart account implementation to use with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Learn how to choose a smart account implementation to use with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - property: og:description
-      content: Learn how to choose a smart account implementation to use with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Learn how to choose a smart account implementation to use with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - name: twitter:title
       content: Choosing a Smart Account
   - - meta
     - name: twitter:description
-      content: Learn how to choose a smart account implementation to use with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Learn how to choose a smart account implementation to use with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
 # Choosing a Smart Account

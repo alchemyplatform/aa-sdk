@@ -30,6 +30,10 @@ export const sidebar: DefaultTheme.Sidebar = [
           { text: "Introduction", link: "/" },
           { text: "Getting started", link: "/getting-started" },
           { text: "Deployments", link: "/deployments" },
+          {
+            text: "Upgradingto a Modular Account",
+            link: "/upgrade-la-to-ma",
+          },
         ],
       },
       {

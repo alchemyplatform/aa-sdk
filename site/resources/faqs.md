@@ -6,7 +6,7 @@ head:
       content: Frequently Asked Questions
   - - meta
     - name: description
-      content: Learn how to get started with Alchemy's Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Learn how to get started with Alchemy's Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - property: og:description
       content: Frequently Asked Questions
