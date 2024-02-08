@@ -36,7 +36,7 @@ const factoryAddress = getDefaultLightAccountFactoryAddress(chain);
 
 The Address of the default Light Account Factory contrafct address for the input chain
 
-## Paramters
+## Paramaters
 
 ### `chain: Chain`
 

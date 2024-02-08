@@ -41,7 +41,7 @@ const result = getUserOperationHash(
 
 The hash of the user operation
 
-## Paramters
+## Paramaters
 
 ### `request: UserOperationRequest`
 
