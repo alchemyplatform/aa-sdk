@@ -121,9 +121,10 @@ export function createAlchemySmartAccountClient({
       ...opts,
       feeOptions,
     },
+    gasManagerConfig,
+    useSimulation,
     feeEstimator,
     customMiddleware,
     gasEstimator,
-    useSimulation,
   });
 }
