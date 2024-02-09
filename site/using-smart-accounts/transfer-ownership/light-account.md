@@ -34,7 +34,7 @@ function transferOwnership(address newOwner) public virtual onlyOwner
 
 There a number of ways you can call this method using Account Kit.
 
-### 1. Using `LightSmartContractAccount`
+### 1. Using `transferOwnership` client action
 
 ::: code-group
 
@@ -42,11 +42,11 @@ There a number of ways you can call this method using Account Kit.
 import { smartAccountClient as lightAccountClient } from "./smartAccountClient";
 
 // this will return the address of the smart account you want to transfer ownerhip of
-const accountAddress = await provider.getAddress();
+const accountAddress = await lightAccountClient.getAddress();
 const newOwner = "0x..."; // the address of the new owner
 
 // [!code focus:99]
-const hash = smartAccountClient.transferOwnership({
+const hash = lightAccountClient.transferOwnership({
   newOwner,
   waitForTxn: true,
 });
