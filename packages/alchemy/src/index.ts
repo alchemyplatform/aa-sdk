@@ -25,3 +25,6 @@ export { alchemyUserOperationSimulator } from "./middleware/userOperationSimulat
 export type * from "./schema.js";
 export { AlchemyProviderConfigSchema } from "./schema.js";
 export type { AlchemyProviderConfig } from "./type.js";
+
+export type * from "./signer/index.js";
+export { AlchemySigner, AlchemySignerClient } from "./signer/index.js";
