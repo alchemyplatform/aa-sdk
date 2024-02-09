@@ -5,17 +5,11 @@ export const sidebar: DefaultTheme.Sidebar = [
   {
     text: "Getting Started",
     items: [
+      {
+        text: "Overview",
+        link: "/getting-started/overview",
+      },
       { text: "Quick start", link: "/getting-started/setup" },
-      // I'm leaving these here for now because I'm not sure if we still want them
-      // There's good content in here so we may want to keep it somewhere
-      {
-        text: "What is Account Kit?",
-        link: "/overview/introduction",
-      },
-      {
-        text: "Why Account Kit?",
-        link: "/overview/why-account-kit",
-      },
     ],
   },
   {
