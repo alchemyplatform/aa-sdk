@@ -12,6 +12,7 @@ import { base64UrlEncode } from "../utils/base64UrlEncode.js";
 import { generateRandomBuffer } from "../utils/generateRandomBuffer.js";
 import type {
   CreateAccountParams,
+  CredentialCreationOptionOverrides,
   EmailAuthParams,
   SignerBody,
   SignerResponse,
@@ -466,7 +467,7 @@ export class AlchemySignerClient {
   };
 
   private getWebAuthnAttestation = async (
-    options?: CredentialCreationOptions,
+    options?: CredentialCreationOptionOverrides,
     userDetails: { username: string } = {
       username: this.user?.email ?? "anonymous",
     }
@@ -486,7 +487,8 @@ export class AlchemySignerClient {
         challenge,
         rp: {
           id: window.location.hostname,
-          name: options?.publicKey?.rp.name ?? window.location.hostname,
+          name: window.location.hostname,
+          ...options?.publicKey?.rp,
         },
         pubKeyCredParams: [
           {

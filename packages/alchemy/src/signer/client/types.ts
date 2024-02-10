@@ -1,6 +1,10 @@
 import type { Address, Hex } from "@alchemy/aa-core";
 import type { TSignedRequest, getWebAuthnAttestation } from "@turnkey/http";
 
+export type CredentialCreationOptionOverrides = {
+  publicKey?: Partial<CredentialCreationOptions["publicKey"]>;
+} & Pick<CredentialCreationOptions, "signal">;
+
 export type User = {
   email?: string;
   orgId: string;
@@ -18,7 +22,7 @@ export type CreateAccountParams =
   | {
       type: "passkey";
       username: string;
-      creationOpts?: CredentialCreationOptions;
+      creationOpts?: CredentialCreationOptionOverrides;
     };
 
 export type EmailAuthParams = {

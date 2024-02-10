@@ -13,7 +13,7 @@ import {
   AlchemySignerClient,
   AlchemySignerClientParamsSchema,
 } from "./client/index.js";
-import type { User } from "./client/types";
+import type { CredentialCreationOptionOverrides, User } from "./client/types";
 import {
   SessionManager,
   SessionManagerParamsSchema,
@@ -29,7 +29,7 @@ export type AuthParams =
       type: "passkey";
       createNew: true;
       username: string;
-      creationOpts?: CredentialCreationOptions;
+      creationOpts?: CredentialCreationOptionOverrides;
     };
 
 export const AlchemySignerParamsSchema = z
