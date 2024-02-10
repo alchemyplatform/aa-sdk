@@ -118,7 +118,7 @@ You can find details of Gas Manager limits depending on your tier [here](https:/
 ### Do you support ERC-20 or stablecoin paymasters?
 
 ::: details Answer
-Currently, we don’t support this, but we are actively exploring. Please [reach out](/overview/contact-us) if you are interested as we would love your input in our spec.
+Currently, we don’t support this, but we are actively exploring. Please [reach out](/resources/contact-us) if you are interested as we would love your input in our spec.
 :::
 
 ### How is the Gas Manager protected from DDOS attacks?
