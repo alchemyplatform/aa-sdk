@@ -3,6 +3,7 @@ import {
   createBundlerClient,
   getAccountAddress,
   getDefaultEntryPointAddress,
+  getVersion060EntryPoint,
   toSmartContractAccount,
   type Address,
   type Hex,
@@ -52,7 +53,7 @@ export type CreateLightAccountParams<
   owner: TOwner;
   index?: bigint;
   factoryAddress?: Address;
-  entrypointAddress?: Address;
+  entryPointAddress?: Address;
   accountAddress?: Address;
   initCode?: Hex;
   version?: LightAccountVersion;
@@ -72,7 +73,7 @@ export async function createLightAccount({
   accountAddress,
   initCode,
   version = "v1.1.0",
-  entrypointAddress = getDefaultEntryPointAddress(chain),
+  entryPointAddress = getDefaultEntryPointAddress(chain),
   factoryAddress = getDefaultLightAccountFactoryAddress(chain, version),
   index: index_ = 0n,
 }: CreateLightAccountParams): Promise<LightAccount> {
@@ -103,7 +104,7 @@ export async function createLightAccount({
 
   const address = await getAccountAddress({
     client,
-    entrypointAddress,
+    entryPointAddress,
     accountAddress,
     getAccountInitCode,
   });
@@ -169,7 +170,7 @@ export async function createLightAccount({
   const account = await toSmartContractAccount({
     transport,
     chain,
-    entrypointAddress,
+    entryPoint: getVersion060EntryPoint(chain, entryPointAddress),
     accountAddress: address,
     source: "LightAccount",
     getAccountInitCode,

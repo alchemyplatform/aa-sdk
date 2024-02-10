@@ -32,7 +32,8 @@ export const buildUserOperationFromTxs: <
   if (!isBaseSmartAccountClient(client)) {
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
-      "buildUserOperationFromTxs"
+      "buildUserOperationFromTxs",
+      client
     );
   }
 

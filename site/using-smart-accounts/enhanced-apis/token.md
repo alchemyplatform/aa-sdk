@@ -6,16 +6,16 @@ head:
       content: How to Fetch a Smart Account's ERC-20 Tokens
   - - meta
     - name: description
-      content: Follow this guide to fetch a smart account's ERC-20 Tokens with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to fetch a smart account's ERC-20 Tokens with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - property: og:description
-      content: Follow this guide to fetch a smart account's ERC-20 Tokens with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to fetch a smart account's ERC-20 Tokens with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - name: twitter:title
       content: How to Fetch a Smart Account's ERC-20 Tokens
   - - meta
     - name: twitter:description
-      content: Follow this guide to fetch a smart account's ERC-20 Tokens with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to fetch a smart account's ERC-20 Tokens with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
 # How to Fetch a Smart Account's ERC-20 Tokens

@@ -6,7 +6,7 @@ head:
       content: Frequently Asked Questions
   - - meta
     - name: description
-      content: Learn how to get started with Alchemy's Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Learn how to get started with Alchemy's Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - property: og:description
       content: Frequently Asked Questions
@@ -18,7 +18,7 @@ head:
       content: Frequently Asked Questions
 ---
 
-# Frequently Asked Questions
+# Frequently asked questions
 
 ## Smart Accounts - Light Account
 
@@ -118,7 +118,7 @@ You can find details of Gas Manager limits depending on your tier [here](https:/
 ### Do you support ERC-20 or stablecoin paymasters?
 
 ::: details Answer
-Currently, we don’t support this, but we are actively exploring. Please [reach out](/overview/contact-us) if you are interested as we would love your input in our spec.
+Currently, we don’t support this, but we are actively exploring. Please [reach out](/resources/contact-us) if you are interested as we would love your input in our spec.
 :::
 
 ### How is the Gas Manager protected from DDOS attacks?

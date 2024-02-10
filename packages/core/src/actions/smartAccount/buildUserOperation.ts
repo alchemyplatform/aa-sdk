@@ -26,7 +26,8 @@ export const buildUserOperation: <
   if (!isBaseSmartAccountClient(client)) {
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
-      "buildUserOperation"
+      "buildUserOperation",
+      client
     );
   }
 

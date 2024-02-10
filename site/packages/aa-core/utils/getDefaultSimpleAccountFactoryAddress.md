@@ -36,7 +36,7 @@ const factoryAddress = getDefaultSimpleAccountFactoryAddress(chain);
 
 The Address of the default Simple Account Factory contrafct address for the input chain
 
-## Paramters
+## Paramaters
 
 ### `chain: Chain`
 

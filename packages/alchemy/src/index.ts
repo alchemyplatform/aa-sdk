@@ -6,6 +6,7 @@ export type * from "./client/decorators/alchemyEnhancedApis.js";
 export { alchemyEnhancedApiActions } from "./client/decorators/alchemyEnhancedApis.js";
 export type * from "./client/decorators/smartAccount.js";
 export { alchemyActions } from "./client/decorators/smartAccount.js";
+export { createAlchemySmartAccountClientFromRpcClient as createAlchemySmartAccountClientFromExisting } from "./client/internal/smartAccountClientFromRpc.js";
 export { isAlchemySmartAccountClient } from "./client/isAlchemySmartAccountClient.js";
 export type * from "./client/lightAccountClient.js";
 export { createLightAccountAlchemyClient } from "./client/lightAccountClient.js";

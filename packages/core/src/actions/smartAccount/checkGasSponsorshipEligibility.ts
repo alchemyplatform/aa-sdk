@@ -19,7 +19,8 @@ export const checkGasSponsorshipEligibility: <
   if (!isBaseSmartAccountClient(client)) {
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
-      "checkGasSponsorshipEligibility"
+      "checkGasSponsorshipEligibility",
+      client
     );
   }
 

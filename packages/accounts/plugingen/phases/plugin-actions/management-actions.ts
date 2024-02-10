@@ -55,7 +55,7 @@ export const ManagementActionsGenPhase: Phase = async (input) => {
       }
 
       if (!isSmartAccountClient(client)) {
-        throw new IncompatibleClientError("SmartAccountClient", "${installMethodName}");
+        throw new IncompatibleClientError("SmartAccountClient", "${installMethodName}", client);
       }
 
       const chain = client.chain;

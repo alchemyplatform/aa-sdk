@@ -6,21 +6,21 @@ head:
       content: How to Transfer Ownership of a Light Account
   - - meta
     - name: description
-      content: Follow this guide to transfer ownership of a Light Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to transfer ownership of a Light Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - property: og:description
-      content: Follow this guide to transfer ownership of a Light Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to transfer ownership of a Light Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - name: twitter:title
       content: How to Transfer Ownership of a Light Account
   - - meta
     - name: twitter:description
-      content: Follow this guide to transfer ownership of a Light Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to transfer ownership of a Light Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 next:
-  text: Packages
+  text: Alchemy Enhanced Apis
 ---
 
-# How to Transfer Ownership of a Light Account
+# How to transfer ownership of a Light Account
 
 Not all smart account implementations support transfering the owner (e.g. `SimpleAccount`). However, a number of the accounts in this guide and in Account Kit do, including our Light Account! Let's see a few different ways we can transfer ownership of an Account (using Light Account as an example).
 
@@ -34,19 +34,19 @@ function transferOwnership(address newOwner) public virtual onlyOwner
 
 There a number of ways you can call this method using Account Kit.
 
-### 1. Using `LightSmartContractAccount`
+### 1. Using `transferOwnership` client action
 
 ::: code-group
 
 ```ts [example.ts]
-import { smartAccountClient } from "./smartAccountClient";
+import { smartAccountClient as lightAccountClient } from "./smartAccountClient";
 
 // this will return the address of the smart account you want to transfer ownerhip of
-const accountAddress = await provider.getAddress();
+const accountAddress = await lightAccountClient.getAddress();
 const newOwner = "0x..."; // the address of the new owner
 
 // [!code focus:99]
-const hash = smartAccountClient.transferOwnership({
+const hash = lightAccountClient.transferOwnership({
   newOwner,
   waitForTxn: true,
 });

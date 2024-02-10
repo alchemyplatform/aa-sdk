@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-alpha.6](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.5...v3.0.0-alpha.6) (2024-02-08)
+
+### Bug Fixes
+
+- fix broken link for RequestGasAndPaymasterAndDataOverrides ([ce7cb14](https://github.com/alchemyplatform/aa-sdk/commit/ce7cb141013f55cd99df28b660b68f269f26a0ea))
+- gasmanager config was being ignored when creating alchemy clients ([25c770f](https://github.com/alchemyplatform/aa-sdk/commit/25c770f5e3d45e9986235d7d7dcc43d8e3610580))
+- incorrect entrypoint call ([6e14338](https://github.com/alchemyplatform/aa-sdk/commit/6e143388f68019d5806065fb410927e256bb0259))
+
+### Features
+
+- export the create alchemy client from existing method ([d1c82f8](https://github.com/alchemyplatform/aa-sdk/commit/d1c82f8a1f529f3d098b00fa8b894164eddb665e))
+
+# [3.0.0-alpha.5](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.4...v3.0.0-alpha.5) (2024-02-07)
+
+### Bug Fixes
+
+- **aa-core:** add back eip-1193 method handling to the client ([#425](https://github.com/alchemyplatform/aa-sdk/issues/425)) ([48b5943](https://github.com/alchemyplatform/aa-sdk/commit/48b594375d64fe832cfb06f1fb3a539da3c7b965))
+
+### Features
+
+- add session key extensions for managing keys ([ac86a97](https://github.com/alchemyplatform/aa-sdk/commit/ac86a97cd22004f55fb76ecf13b808a222daf8ef))
+- update MSCA multi owner factory, msca, and plugins abis and addresses ([#424](https://github.com/alchemyplatform/aa-sdk/issues/424)) ([9a49ac5](https://github.com/alchemyplatform/aa-sdk/commit/9a49ac53f6a4f30ee36f0e430b033e3a21a7562d))
+
 # [3.0.0-alpha.4](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.3...v3.0.0-alpha.4) (2024-02-02)
 
 ### Bug Fixes

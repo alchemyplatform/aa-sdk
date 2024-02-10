@@ -45,7 +45,11 @@ export async function uninstallPlugin<
   }
 
   if (!isSmartAccountClient(client)) {
-    throw new IncompatibleClientError("SmartAccountClient", "uninstallPlugin");
+    throw new IncompatibleClientError(
+      "SmartAccountClient",
+      "uninstallPlugin",
+      client
+    );
   }
 
   const callData = await encodeUninstallPluginUserOperation(params);

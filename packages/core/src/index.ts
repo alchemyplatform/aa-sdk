@@ -69,6 +69,8 @@ export {
   convertCoinTypeToChain,
   convertCoinTypeToChainId,
 } from "./ens/utils.js";
+export { getVersion060EntryPoint } from "./entrypoint/0.6.js";
+export { type EntryPointDef } from "./entrypoint/types.js";
 export {
   AccountNotFoundError,
   DefaultFactoryNotDefinedError,
@@ -81,7 +83,7 @@ export {
   IncompatibleClientError,
   InvalidRpcUrlError,
 } from "./errors/client.js";
-export { EntrypointNotFoundError } from "./errors/entrypoint.js";
+export { EntryPointNotFoundError as EntrypointNotFoundError } from "./errors/entrypoint.js";
 export { InvalidSignerTypeError } from "./errors/signer.js";
 export {
   FailedToFindTransactionError,

@@ -49,9 +49,10 @@ export function createAlchemySmartAccountClientFromRpcClient({
   const feeOptions =
     opts?.feeOptions ?? getDefaultUserOperationFeeOptions(client.chain);
 
-  const alchClient = createSmartAccountClientFromExisting({
+  return createSmartAccountClientFromExisting({
     account,
     client,
+    type: "AlchemySmartAccountClient",
     opts: {
       ...opts,
       feeOptions,
@@ -79,9 +80,4 @@ export function createAlchemySmartAccountClientFromRpcClient({
         },
       })),
   }).extend(alchemyActions);
-
-  return {
-    ...alchClient,
-    type: "AlchemySmartAccountClient",
-  };
 }

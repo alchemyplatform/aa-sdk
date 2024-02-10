@@ -64,7 +64,7 @@ export const PluginActionsGenPhase: Phase = async (input) => {
                   throw new AccountNotFoundError();
                 } 
                 if (!isSmartAccountClient(client)) {
-                  throw new IncompatibleClientError("SmartAccountClient", "${methodName}");
+                  throw new IncompatibleClientError("SmartAccountClient", "${methodName}", client);
                 }
   
                 const uo = encodeFunctionData({

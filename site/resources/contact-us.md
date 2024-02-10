@@ -10,8 +10,6 @@ head:
   - - meta
     - property: og:description
       content: Contact Alchemy about Account Kit
-next:
-  text: Smart Accounts
 ---
 
 # Contact Us

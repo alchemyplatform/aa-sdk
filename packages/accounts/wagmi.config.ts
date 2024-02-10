@@ -23,9 +23,12 @@ export default defineConfig(
     plugins: [
       plugingen({
         chain: config.chain,
-        connectionConfig: config.rpcUrl
-          ? { rpcUrl: config.rpcUrl }
-          : { apiKey: process.env.API_KEY! },
+        connectionConfig: {
+          rpcUrl: "https://ethereum-sepolia.publicnode.com",
+        },
+        // connectionConfig: config.rpcUrl
+        //   ? { rpcUrl: config.rpcUrl }
+        //   : { apiKey: process.env.API_KEY! },
         config,
       }),
     ],

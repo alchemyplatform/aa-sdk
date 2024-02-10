@@ -180,7 +180,11 @@ export const multiOwnerPluginActions: <
       throw new AccountNotFoundError();
     }
     if (!isSmartAccountClient(client)) {
-      throw new IncompatibleClientError("SmartAccountClient", "updateOwners");
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "updateOwners",
+        client
+      );
     }
 
     const uo = encodeFunctionData({
@@ -199,7 +203,8 @@ export const multiOwnerPluginActions: <
     if (!isSmartAccountClient(client)) {
       throw new IncompatibleClientError(
         "SmartAccountClient",
-        "installMultiOwnerPlugin"
+        "installMultiOwnerPlugin",
+        client
       );
     }
 
@@ -249,7 +254,8 @@ export const multiOwnerPluginActions: <
     if (!isSmartAccountClient(client)) {
       throw new IncompatibleClientError(
         "SmartAccountClient",
-        "readEip712Domain"
+        "readEip712Domain",
+        client
       );
     }
 
@@ -275,7 +281,8 @@ export const multiOwnerPluginActions: <
     if (!isSmartAccountClient(client)) {
       throw new IncompatibleClientError(
         "SmartAccountClient",
-        "readIsValidSignature"
+        "readIsValidSignature",
+        client
       );
     }
 

@@ -291,7 +291,7 @@ describe("Light Account Tests", () => {
 
     await provider.buildUserOperation({
       uo: {
-        target: provider.account.getEntrypoint(),
+        target: provider.account.getEntryPoint().address,
         data: "0x",
         value: 1n,
       },

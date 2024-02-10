@@ -9,11 +9,7 @@ import { AccountNotFoundError } from "../../../errors/account.js";
 import { ChainNotFoundError } from "../../../errors/client.js";
 import { InvalidUserOperationError } from "../../../errors/useroperation.js";
 import type { UserOperationStruct } from "../../../types";
-import {
-  deepHexlify,
-  getUserOperationHash,
-  isValidRequest,
-} from "../../../utils/index.js";
+import { deepHexlify, isValidRequest } from "../../../utils/index.js";
 
 export const _sendUserOperation: <
   TTransport extends Transport = Transport,
@@ -40,15 +36,14 @@ export const _sendUserOperation: <
   }
 
   request.signature = await account.signUserOperationHash(
-    getUserOperationHash(
-      request,
-      account.getEntrypoint(),
-      BigInt(client.chain.id)
-    )
+    account.getEntryPoint().getUserOperationHash(request)
   );
 
   return {
-    hash: await client.sendRawUserOperation(request, account.getEntrypoint()),
+    hash: await client.sendRawUserOperation(
+      request,
+      account.getEntryPoint().address
+    ),
     request,
   };
 };

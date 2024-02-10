@@ -31,15 +31,19 @@ export { createMultiOwnerModularAccount } from "./msca/account/multiOwnerAccount
 export { standardExecutor } from "./msca/account/standardExecutor.js";
 export type * from "./msca/plugin-manager/decorator.js";
 export { pluginManagerActions } from "./msca/plugin-manager/decorator.js";
+export type * from "./msca/plugins/multi-owner/index.js";
 export { multiOwnerPluginActions } from "./msca/plugins/multi-owner/index.js";
 export {
   MultiOwnerPlugin,
   MultiOwnerPluginAbi,
   MultiOwnerPluginExecutionFunctionAbi,
 } from "./msca/plugins/multi-owner/plugin.js";
+export type * from "./msca/plugins/session-key/index.js";
 export { sessionKeyPluginActions } from "./msca/plugins/session-key/index.js";
+export type * from "./msca/plugins/session-key/permissions.js";
 export { SessionKeyPermissionsBuilder } from "./msca/plugins/session-key/permissions.js";
 export {
+  SessionKeyPlugin,
   SessionKeyPluginAbi,
   SessionKeyPluginExecutionFunctionAbi,
 } from "./msca/plugins/session-key/plugin.js";

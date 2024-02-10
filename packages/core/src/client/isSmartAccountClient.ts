@@ -1,5 +1,6 @@
 import type { Chain, Client, Transport } from "viem";
 import type { SmartContractAccount } from "../account/smartContractAccount";
+import { smartAccountClientMethodKeys } from "./decorators/smartAccountClient.js";
 import type {
   BaseSmartAccountClient,
   SmartAccountClient,
@@ -22,9 +23,13 @@ export function isSmartAccountClient<
 >(
   client: Client<TTransport, TChain, TAccount>
 ): client is SmartAccountClient<TTransport, TChain, TAccount> {
-  return (
-    client && "middleware" in client && client.type === "SmartAccountClient"
-  );
+  for (const key of smartAccountClientMethodKeys) {
+    if (!(key in client)) {
+      return false;
+    }
+  }
+
+  return client && "middleware" in client;
 }
 
 /**
@@ -44,7 +49,5 @@ export function isBaseSmartAccountClient<
 >(
   client: Client<TTransport, TChain, TAccount>
 ): client is BaseSmartAccountClient<TTransport, TChain, TAccount> {
-  return (
-    client && "middleware" in client && client.type === "SmartAccountClient"
-  );
+  return client && "middleware" in client;
 }

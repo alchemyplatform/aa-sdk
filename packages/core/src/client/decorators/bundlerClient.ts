@@ -51,7 +51,7 @@ export type BundlerActions = {
    * calls `eth_estimateUserOperationGas` and  returns the result
    *
    * @param request - the {@link UserOperationRequest} to estimate gas for
-   * @param entryPoint - the entrypoint address the op will be sent to
+   * @param entryPoint - the entry point address the op will be sent to
    * @returns the gas estimates for the given response (see: {@link UserOperationEstimateGasResponse})
    */
   estimateUserOperationGas(
@@ -63,7 +63,7 @@ export type BundlerActions = {
    * calls `eth_sendUserOperation` and returns the hash of the sent UserOperation
    *
    * @param request - the {@link UserOperationRequest} to send
-   * @param entryPoint - the entrypoint address the op will be sent to
+   * @param entryPoint - the entry point address the op will be sent to
    * @returns the hash of the sent UserOperation
    */
   sendRawUserOperation(
@@ -88,7 +88,7 @@ export type BundlerActions = {
   getUserOperationReceipt(hash: Hash): Promise<UserOperationReceipt | null>;
 
   /**
-   * calls `eth_supportedEntryPoints` and returns the entrypoints the RPC
+   * calls `eth_supportedEntryPoints` and returns the entry points the RPC
    * supports
    * @returns - {@link Address}[]
    */

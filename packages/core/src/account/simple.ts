@@ -10,6 +10,7 @@ import {
 import { SimpleAccountAbi } from "../abis/SimpleAccountAbi.js";
 import { SimpleAccountFactoryAbi } from "../abis/SimpleAccountFactoryAbi.js";
 import { createBundlerClient } from "../client/bundlerClient.js";
+import { getVersion060EntryPoint } from "../entrypoint/0.6.js";
 import { AccountRequiresOwnerError } from "../errors/account.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import type { BatchUserOperationCallData } from "../types.js";
@@ -136,7 +137,10 @@ export const createSimpleSmartAccount = async <
         tx.value ?? 0n,
         tx.data
       ),
-    entrypointAddress: simpleAccount.getEntryPointAddress(),
+    entryPoint: getVersion060EntryPoint(
+      params.chain,
+      simpleAccount.getEntryPointAddress()
+    ),
     getAccountInitCode: async () => {
       if (parsedParams.initCode) return parsedParams.initCode;
       return simpleAccount.getAccountInitCode();
