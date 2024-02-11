@@ -15,6 +15,11 @@ export const aaCoreSidebar: DefaultTheme.SidebarItem = {
       link: "/index",
     },
     {
+      text: "Client Middleware",
+      base: "/packages/aa-core/smart-account-client/middleware",
+      link: "/index",
+    },
+    {
       text: "Smart Account Actions",
       collapsed: true,
       base: "/packages/aa-core/smart-account-client/actions",
