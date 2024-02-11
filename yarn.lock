@@ -4976,7 +4976,7 @@
   dependencies:
     "@noble/hashes" "1.3.2"
 
-"@noble/curves@^1.2.0":
+"@noble/curves@^1.2.0", "@noble/curves@^1.3.0":
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/@noble/curves/-/curves-1.3.0.tgz#01be46da4fd195822dab821e72f71bf4aeec635e"
   integrity sha512-t01iSXPuN+Eqzb4eBX0S5oubSqXbK/xXa1Ne18Hj8f9pStxztHCE2gfboSp/dZRLSqfuLpRK2nDXDK+W9puocA==
@@ -6292,6 +6292,20 @@
   resolved "https://registry.yarnpkg.com/@turnkey/api-key-stamper/-/api-key-stamper-0.3.0.tgz#b562be7b9c4d7b9874077ba068ac641a7f9c22c0"
   integrity sha512-R3Iwt+y8pbpnDkKaIqURAKxtIG3ipeD42ravMtY6DnewMr+d/JhUwtl8IDHFrNw63bQjWwGwN8bhNqhRdH2VxA==
 
+"@turnkey/api-key-stamper@0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@turnkey/api-key-stamper/-/api-key-stamper-0.4.0.tgz#03844adb9d08f4d0463e8d6e8dc9167a662b68e9"
+  integrity sha512-LyIiAXRuSL5UBa/Y95gHuh7j4uHzVMkI2+sHWM4/UWZat3nCoveU66h6SFXwF1BThA0poGgsKjWjsKNCJ89NPg==
+  dependencies:
+    "@noble/curves" "^1.3.0"
+    "@turnkey/encoding" "0.1.0"
+    sha256-uint8array "^0.10.7"
+
+"@turnkey/encoding@0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@turnkey/encoding/-/encoding-0.1.0.tgz#85461c3aa11c70882cc2b0853f5db40f576c3ac9"
+  integrity sha512-aLmLrWtvV1k9UyGzuzMpBFdwleCH8VpzXIriusVMrFLiQp+4uHCS9cwrEG1glg3207ewWFDtvgj31qLoJS29pg==
+
 "@turnkey/http@2.5.0", "@turnkey/http@^2.4.2":
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/@turnkey/http/-/http-2.5.0.tgz#8b71d2a692696036d4f2035ba131d03d7886278c"
@@ -6300,6 +6314,21 @@
     "@turnkey/api-key-stamper" "0.3.0"
     "@turnkey/webauthn-stamper" "0.4.2"
     cross-fetch "^3.1.5"
+
+"@turnkey/http@2.7.1", "@turnkey/http@^2.6.2":
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/@turnkey/http/-/http-2.7.1.tgz#fec1ebb5b80379460c45f3b05d0af65843d0598b"
+  integrity sha512-yrmE5FcMYanrNqwnvSy0cLaZBHTe0TWK+DAvPXDF655Ki+AP/+nHzYrzGK7aneNfTJIMPP9AEYdxY2PkytKtBg==
+  dependencies:
+    "@turnkey/api-key-stamper" "0.4.0"
+    "@turnkey/encoding" "0.1.0"
+    "@turnkey/webauthn-stamper" "0.5.0"
+    cross-fetch "^3.1.5"
+
+"@turnkey/iframe-stamper@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@turnkey/iframe-stamper/-/iframe-stamper-1.0.0.tgz#8133ca88c089f6e4c791fd8089bbd19d2b5d1932"
+  integrity sha512-hdHrqNQMO2YtmyF06qNsFWB+CF/0SfmZb5P7e8F8YaSkQUYfGGuwl7ld8SIml6ZEAmw9xl2aypbUMRm1/juIpA==
 
 "@turnkey/viem@^0.4.2":
   version "0.4.3"
@@ -6311,10 +6340,35 @@
     cross-fetch "^4.0.0"
     typescript "^5.1"
 
+"@turnkey/viem@^0.4.8":
+  version "0.4.10"
+  resolved "https://registry.yarnpkg.com/@turnkey/viem/-/viem-0.4.10.tgz#8beabc9af7fbcc85f0b50d7d28a87ccf90ba42c0"
+  integrity sha512-x2k+8h7ic1hrFZ4zOFCD9CMI7ZhrQ/TeQ6k20rHZ3dbG0RyalIa29IulL0iJ7xjUX6v/3sucyGt6FtS6yjIWgg==
+  dependencies:
+    "@turnkey/api-key-stamper" "0.4.0"
+    "@turnkey/http" "2.7.1"
+    cross-fetch "^4.0.0"
+    typescript "^5.1"
+
 "@turnkey/webauthn-stamper@0.4.2", "@turnkey/webauthn-stamper@^0.4.2":
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/@turnkey/webauthn-stamper/-/webauthn-stamper-0.4.2.tgz#5e855042d7f14a9186d8231aef54d71892606eae"
   integrity sha512-rf8pl7VBR24ycNg6UzmNBI88zmMK+oAPui3aj8vTQJWqdsFi5wUdGHWqDwG3c8Iz+uIppRTkp21ftAOGVVqLAg==
+  dependencies:
+    "@noble/hashes" "^1.3.2"
+    buffer "^6.0.3"
+
+"@turnkey/webauthn-stamper@0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@turnkey/webauthn-stamper/-/webauthn-stamper-0.5.0.tgz#014b8c20b1732af49dacb04f396edf010d3b7f47"
+  integrity sha512-iUbTUwD4f4ibdLy5PWWb7ITEz4S4VAP9/mNjFhoRY3cKVVTDfmykrVTKjPOIHWzDgAmLtgrLvySIIC9ZBVENBw==
+  dependencies:
+    sha256-uint8array "^0.10.7"
+
+"@turnkey/webauthn-stamper@^0.4.3":
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/@turnkey/webauthn-stamper/-/webauthn-stamper-0.4.3.tgz#843499f0cf751c0421cb7630ea128b6f034a9446"
+  integrity sha512-hJuIpwny44TOrkFJiK8uA29RRO1A9xJK3KbN4PWqBxTLh1r7ntkl3zslc/qAkgnw6f+OREQbhQGoYkTdIX+7QA==
   dependencies:
     "@noble/hashes" "^1.3.2"
     buffer "^6.0.3"
@@ -16436,6 +16490,11 @@ sha.js@^2.4.0, sha.js@^2.4.11, sha.js@^2.4.8:
   dependencies:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
+
+sha256-uint8array@^0.10.7:
+  version "0.10.7"
+  resolved "https://registry.yarnpkg.com/sha256-uint8array/-/sha256-uint8array-0.10.7.tgz#c751fc914f4227b26d996980562065fa4eadcf99"
+  integrity sha512-1Q6JQU4tX9NqsDGodej6pkrUVQVNapLZnvkwIhddH/JqzBZF1fSaxSWNY6sziXBE8aEa2twtGkXUrwzGeZCMpQ==
 
 shallow-clone@^3.0.0:
   version "3.0.1"

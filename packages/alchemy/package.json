@@ -47,6 +47,10 @@
   },
   "dependencies": {
     "@alchemy/aa-core": "^3.0.0-alpha.5",
+    "@turnkey/http": "^2.6.2",
+    "@turnkey/iframe-stamper": "^1.0.0",
+    "@turnkey/viem": "^0.4.8",
+    "@turnkey/webauthn-stamper": "^0.4.3",
     "viem": "^2.5.0"
   },
   "publishConfig": {
