@@ -46,7 +46,7 @@ A Promise containing the `PortalUserInfo`, an object with the following fields:
 - `id: string` -- ID of the Portal Signer.
 - `address: string` -- EOA address of the Portal Signer.
 - `backupStatus: string | null` -- [optional] status of wallet backup.
-- `custodian: Obect` -- [optional] EOA address of the Portal Signer.
+- `custodian: Object` -- [optional] EOA address of the Portal Signer.
   - `id: string` -- ID of the Signer's custodian.
   - `name: string` -- Name of the Signer's custodian.
 - `signingStatus: string | null` -- [optional] status of signing.

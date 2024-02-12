@@ -68,7 +68,7 @@ export const SmartAccountClientOptsSchema = z
     txRetryIntervalMs: z.number().min(0).optional().default(2_000),
 
     /**
-     * The mulitplier on interval length to wait between retries while waiting for tx receipts (default: 1.5)
+     * The multiplier on interval length to wait between retries while waiting for tx receipts (default: 1.5)
      */
     txRetryMultiplier: z.number().min(0).optional().default(1.5),
 

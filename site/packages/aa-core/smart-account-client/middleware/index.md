@@ -59,7 +59,7 @@ If you are simulating a user operation using [`simulateUserOperation`](/packages
 
 ## Use custom middleware using `ClientMiddlewareConfig` in `SmartAccountClientConfig`
 
-For each middleware, there exists a default that `SmartAccountClient` uses, but these defaults can be overriden flexibly with your custom middleware function upon the creation of the client by using `ClientMiddlewareConfig` included in `SmartAccountClientConfig` used as `createSmartAccountClient()` method to create create the client. Below is an example of how you can use your own version of gas estimator if you choose to opt out of using the default gas estimator.
+For each middleware, there exists a default that `SmartAccountClient` uses, but these defaults can be overridden flexibly with your custom middleware function upon the creation of the client by using `ClientMiddlewareConfig` included in `SmartAccountClientConfig` used as `createSmartAccountClient()` method to create create the client. Below is an example of how you can use your own version of gas estimator if you choose to opt out of using the default gas estimator.
 
 ```ts
 export type ClientMiddlewareConfig = Omit<
