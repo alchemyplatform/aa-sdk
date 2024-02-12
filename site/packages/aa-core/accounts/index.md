@@ -6,10 +6,10 @@ head:
       content: SmartContractAccount
   - - meta
     - name: description
-      content: Overview of SmartContractAccount interface exported by aa-core accounts
+      content: Overview of SmartContractAccount exported by aa-core
   - - meta
     - property: og:description
-      content: Overview of SmartContractAccount interface exported by aa-core accounts
+      content: Overview of SmartContractAccount exported by aa-core
 prev:
   text: SmartAccountClient
 ---
