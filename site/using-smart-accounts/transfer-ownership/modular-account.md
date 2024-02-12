@@ -49,7 +49,7 @@ When you connect your Modular Account to `SmartAccountClient` you can extend the
 
 ### 1. Check if an address is one of the current owners of a Modular Account
 
-You should first extends the `SmartAcountClient` connected to a Modular Account, which already comes with `MultiOwnerPlugin` installed upon creation, with client to `multiOwnerPluginActions` for the client to include the `MultiOwnerPlugin` actions.
+You should first extends the `SmartAccountClient` connected to a Modular Account, which already comes with `MultiOwnerPlugin` installed upon creation, with client to `multiOwnerPluginActions` for the client to include the `MultiOwnerPlugin` actions.
 
 Then, you can use the `readOwners` method of the `multiOwnerPluginActions` extended smart account client to check if a given address is one of the current owners of a Modular Account.
 

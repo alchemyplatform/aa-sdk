@@ -24,7 +24,7 @@ Getting started with Modular Account is really simple, especially if you are usi
 
 ## With `@alchemy/aa-alchemy`
 
-When using `@alchemy/aa-alchemy` it is really is to get started simply do the following:
+When using `@alchemy/aa-alchemy` it is really easy to get started simply do the following:
 
 <<< @/snippets/aa-alchemy/connected-client.ts
 

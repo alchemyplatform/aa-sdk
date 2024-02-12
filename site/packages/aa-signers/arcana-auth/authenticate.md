@@ -62,4 +62,4 @@ See [Arcana Auth SDK Reference Guide](https://authsdk-ref-guide.netlify.app/inte
 
 or
 
-### `inner`: An AuthProvifer object. For field details, see [AuthProvider constructor](https://authsdk-ref-guide.netlify.app/classes/authprovider#constructor).
+### `inner`: An AuthProvider object. For field details, see [AuthProvider constructor](https://authsdk-ref-guide.netlify.app/classes/authprovider#constructor).
