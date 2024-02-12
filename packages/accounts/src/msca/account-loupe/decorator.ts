@@ -47,7 +47,7 @@ export type AccountLoupeActions<
   /// @notice Gets an array of all installed plugins
   /// @return The addresses of all installed plugins
   getInstalledPlugins(
-    args: GetAccountParameter<TAccount>
+    args?: GetAccountParameter<TAccount>
   ): Promise<ReadonlyArray<Address>>;
 };
 
@@ -126,7 +126,8 @@ export const accountLoupeActions: <
     });
   },
 
-  getInstalledPlugins: async ({ account = client.account }) => {
+  getInstalledPlugins: async (args) => {
+    const account = args?.account ?? client.account;
     if (!account) {
       throw new AccountNotFoundError();
     }
