@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Using Your Own Smart Account
+      content: Using your own Smart Account
   - - meta
     - name: description
       content: Follow this guide to use any smart account implementation you want with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
@@ -12,13 +12,13 @@ head:
       content: Follow this guide to use any smart account implementation you want with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - name: twitter:title
-      content: Using Your Own Smart Account
+      content: Using your own Smart Account
   - - meta
     - name: twitter:description
       content: Follow this guide to use any smart account implementation you want with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
-# Using Your Own Smart Account
+# Using your own Smart Account
 
 You are not limited to the accounts defined in `@alchemy/aa-accounts`. The `SmartAccountClient` can be used with any smart account because it only relies on the [`SmartContractAccount`](/packages/aa-core/accounts/index.md) interface. This means you can use your own smart account implementation with Account Kit.
 

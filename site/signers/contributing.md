@@ -124,6 +124,6 @@ In that linked file `your-signer-name` under Signer Guides, add your step-by-ste
 
 Again, for reference, take a look at these PRs from [Magic](https://github.com/alchemyplatform/aa-sdk/pull/229) and [Web3Auth](https://github.com/alchemyplatform/aa-sdk/pull/247).
 
-## 3. Submit a Pull Request
+## 3. Submit a pull request
 
 You can open a PR to merge the branch with your Signer implementation from your forked repo into the `main` branch of the `aa-sdk` repo. We'll make sure to review it promptly, provider feedback, and merge the PR when ready so that developers can use your Signer!

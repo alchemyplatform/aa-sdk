@@ -137,7 +137,7 @@ export const sidebar: DefaultTheme.Sidebar = [
             text: "Get Account's NFTs",
             link: "/nft",
           },
-          { text: "Get Account's Tokens", link: "/token" },
+          { text: "Get Account's tokens", link: "/token" },
         ],
       },
     ],

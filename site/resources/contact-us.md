@@ -12,7 +12,7 @@ head:
       content: Contact Alchemy about Account Kit
 ---
 
-# Contact Us
+# Contact us
 
 If there's anything we can do to improve your experience with Account Kit, please tell us!
 

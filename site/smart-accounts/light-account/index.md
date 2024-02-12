@@ -24,7 +24,7 @@ head:
 
 Light Account is an [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) smart account. We started with the Ethereum Foundation’s canonical [SimpleAccount](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol) and added key improvements. It's fully production-ready with a security [audit](https://github.com/alchemyplatform/light-account/blob/main/Quantstamp-Audit.pdf), gas optimizations, and [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) signature support. Additionally, Light Account supports ownership transfer to ensure you and your user don't get locked into a particular Signer.
 
-## Getting Started
+## Getting started
 
 The code snippet below demonstrates how to use Light Account with Account Kit. It creates a Light Account and sends a `UserOperation` from it:
 ::: code-group
@@ -35,7 +35,7 @@ The code snippet below demonstrates how to use Light Account with Account Kit. I
 
 ::: code-group
 
-## [Deployment Addresses](https://github.com/alchemyplatform/light-account/blob/v1.1.0/Deployments.md)
+## [Deployment addresses](https://github.com/alchemyplatform/light-account/blob/v1.1.0/Deployments.md)
 
 The following tables list the deployed factory and account implementation contract addresses for `LightAccount` on different chains:
 
@@ -54,8 +54,8 @@ The following tables list the deployed factory and account implementation contra
 | Arbitrum Goerli  | 0x00004EC70002a32400f8ae005A26081065620D20 | 0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba |
 | Arbitrum Sepolia | 0x00004EC70002a32400f8ae005A26081065620D20 | 0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba |
 
-## Developer Links
+## Developer links
 
-- [Light Account & Simple Account Deployment Addresses](/smart-accounts/accounts/deployment-addresses)
-- [Light Account Github Repo](https://github.com/alchemyplatform/light-account)
-- [Quantstamp Audit Report](https://github.com/alchemyplatform/light-account/blob/main/Quantstamp-Audit.pdf)
+- [Light Account & Simple Account deployment addresses](/smart-accounts/accounts/deployment-addresses)
+- [Light Account Github repo](https://github.com/alchemyplatform/light-account)
+- [Quantstamp audit report](https://github.com/alchemyplatform/light-account/blob/main/Quantstamp-Audit.pdf)

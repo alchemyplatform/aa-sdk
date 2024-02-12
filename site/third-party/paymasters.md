@@ -6,19 +6,19 @@ head:
       content: 3rd Paymasters
   - - meta
     - name: description
-      content: Learn how to use a 3rd Party Paymaster with Account Kit
+      content: Learn how to use a 3rd party Paymaster with Account Kit
   - - meta
     - property: og:description
-      content: Learn how to use a 3rd Party Paymaster with Account Kit
+      content: Learn how to use a 3rd party Paymaster with Account Kit
   - - meta
     - name: twitter:title
       content: 3rd Paymasters
   - - meta
     - name: twitter:description
-      content: Learn how to use a 3rd Party Paymaster with Account Kit
+      content: Learn how to use a 3rd party Paymaster with Account Kit
 ---
 
-# Using a 3rd Party Paymaster
+# Using a 3rd party Paymaster
 
 The `SmartAccountClient` within `@alchemy/aa-core` is unopinionated about which paymaster you use, so you can connect to any paymaster really simply. Configuration is done using the the `paymasterAndData` config option when you call `createSmartAccountClient`.
 

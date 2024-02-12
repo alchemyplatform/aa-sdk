@@ -18,7 +18,7 @@ head:
       content: Learn about Alchemy's ERC-6900 Compatible Session Key Plugin.
 ---
 
-# Session Key Plugin Overview
+# Session Key Plugin overview
 
 The Session Key plugin lets your smart account add additional signers to your Modular Account with specific permissions.
 
@@ -44,19 +44,19 @@ The session key plugin supports the following types of permissions for each key:
 
 Supports a start time and an end time for each key.
 
-### Access Control Lists
+### Access control lists
 
 Supports either an allowlist or a denylist for addresses. Optionally, access control lists may also specify specific functions on contracts to allow or deny.
 
-### ERC-20 Spending Limits
+### ERC-20 spending Limits
 
 Supports limiting how much of a specific ERC-20 token a key may spend. This may be a total for the key, or refreshing on an interval (e.g. 100 USDC per week).
 
-### Native Token Spending Limits
+### Native token spending limits
 
 Supports limiting how much of the native token, e.g. ETH or MATIC, a key may spend. This may be a total for the key, or refreshing on an interval (e.g. 1 ETH per week).
 
-### Gas Spending Limits
+### Gas spending limits
 
 Supports limiting how much a session key can spend native token amounts on gas. This may be a total for the key, or refreshing on an interval (e.g. 1 ETH per week).
 

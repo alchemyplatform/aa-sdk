@@ -50,7 +50,7 @@ We'll also want to wait for the transaction which contains the User Operation, s
 
 <<< @/snippets/send-uo-example/send-uo.ts
 
-## Try the Full Example!
+## Try the full example!
 
 And that's it! Let's put it all together. You can copy the following snippet to try it yourself!
 
