@@ -7,7 +7,6 @@ import { IframeStamper } from "@turnkey/iframe-stamper";
 import { WebauthnStamper } from "@turnkey/webauthn-stamper";
 import { type Hex } from "viem";
 import { z } from "zod";
-import { SessionManagerParamsSchema } from "../session/manager.js";
 import { base64UrlEncode } from "../utils/base64UrlEncode.js";
 import { generateRandomBuffer } from "../utils/generateRandomBuffer.js";
 import type {
@@ -26,7 +25,6 @@ export const AlchemySignerClientParamsSchema = z.object({
     iframeElementId: z.string().default("turnkey-iframe"),
     iframeContainerId: z.string(),
   }),
-  sessionConfig: SessionManagerParamsSchema.optional(),
 });
 
 export type AlchemySignerClientParams = z.input<
