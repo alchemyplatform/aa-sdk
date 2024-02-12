@@ -47,7 +47,7 @@ The hash of the user operation
 
 The UO to hash
 
-### `entryPointAddress: Address`
+### `entryPoint: Address`
 
 The entryPoint address to use for the UO
 

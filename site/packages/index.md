@@ -36,9 +36,9 @@ For more details on all the utilities exported by `aa-core` see the [aa-core doc
 
 ## [`aa-alchemy`](/packages/aa-alchemy/)
 
-This package builds on `aa-core` by exporting an `AlchemySmartAccountClient` which extends `SmartAccountClient` and adds some additional utilities for interacting with our APIs and `Rundler`. The Provider also exports utilities for leveraging our Gas Manager.
+This package builds on `aa-core` by exporting an `AlchemySmartAccountClient` which extends `SmartAccountClient` and adds some additional utilities for interacting with our APIs and `Rundler`. The Client also exports utilities for leveraging our Gas Manager.
 
-**If you are using our Bundler (`Rundler`) and Gas Manager you have to use this package.** This is due to the specifics around how our bundler does gas estimation. Not using this package and it's provider can result in incorrect gas estimations and failed transactions.
+**If you are using our Bundler (`Rundler`) and Gas Manager you have to use this package.** This is due to the specifics around how our bundler does gas estimation. Not using this package and it's client can result in incorrect gas estimations and failed transactions.
 
 For more details on all the utilities exported by `aa-alchemy` see the [aa-alchemy documentation](/packages/aa-alchemy/).
 

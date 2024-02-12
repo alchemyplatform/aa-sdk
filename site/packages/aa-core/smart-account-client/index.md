@@ -6,10 +6,10 @@ head:
       content: SmartAccountClient
   - - meta
     - name: description
-      content: Introduction to SmartAccountClient exported by aa-core provider
+      content: Introduction to SmartAccountClient exported by aa-core
   - - meta
     - property: og:description
-      content: Introduction to SmartAccountClient exported by aa-core provider
+      content: Introduction to SmartAccountClient exported by aa-core
 ---
 
 # Smart Account Client
@@ -94,7 +94,7 @@ A new instance of a `SmartAccountClient`.
 
 - `transport: Transport` -- a viem [Transport](https://viem.sh/docs/clients/intro#transports) that defines how you want to interact with a JSON-RPC provider.
 
-- `chain: Chain` -- the chain on which to create the provider.
+- `chain: Chain` -- the chain on which to create the client.
 
 #### If using `createSmartAccountClientFromExisting`:
 
@@ -104,7 +104,7 @@ A new instance of a `SmartAccountClient`.
 
 - `account?: SmartContractAccount` -- [optional] the smart account to use as context for all of your calls. If not provided, then the account can be provided to each individual call instead.
 
-- `entryPointAddress: Address | undefined` -- [optional] the entry point contract address. If not provided, the entry point contract address for the provider is the connected account's entry point contract, or if not connected, falls back to the default entry point contract for the chain. See [getDefaultEntryPointAddress](/packages/aa-core/utils/getDefaultEntryPointAddress.html#getdefaultentrypointaddress).
+- `entryPoint: EntryPointDef` -- [optional] the entry point contract address. If not provided, the entry point contract address for the client is the connected account's entry point contract, or if not connected, falls back to the default entry point contract for the chain. See [getDefaultEntryPointAddress](/packages/aa-core/utils/getDefaultEntryPointAddress.html#getdefaultentrypointaddress).
 
 - `feeEstimator?: ClientMiddlewareFn` -- [optional] an override for the fee estimator middleware. The `feeEstimator` middleware function calculates `maxFeePerGas` and `maxPriorityFeePerGas` for your User Operation.
 
@@ -117,7 +117,7 @@ A new instance of a `SmartAccountClient`.
   - `paymasterAndData: ClientMiddlewareFn` -- this middleware function calculates the paymaster and data fields of your User Operation after estimating gas and fees
   - `dummyPaymasterAndData: () => Hex` -- this just returns a Hex string to be used during gas and fee estimation. This will depend on your paymaster provider and must be a value that accurately resembles the gas cost of using your paymaster and does not revert during validation.
 
-- `opts: SmartAccountClientOpts | undefined` -- [optional] overrides on provider config variables having to do with fetching transaction receipts and fee computation.
+- `opts: SmartAccountClientOpts | undefined` -- [optional] overrides on client config variables having to do with fetching transaction receipts and fee computation.
 
   - `txMaxRetries: string | undefined` -- [optional] the maximum number of times to try fetching a transaction receipt before giving up (default: 5).
 
@@ -125,7 +125,7 @@ A new instance of a `SmartAccountClient`.
 
   - `txRetryMultiplier: string | undefined` -- [optional] the mulitplier on interval length to wait between retries while waiting for transaction receipts (default: 1.5).
 
-  - `feeOptions:` [`UserOperationFeeOptions`](/packages/aa-core/smart-account-client/types/userOperationFeeOptions.md) `| undefined` --[optional] user operation fee options to be used for gas estimation, set at the global level on the provider.
+  - `feeOptions:` [`UserOperationFeeOptions`](/packages/aa-core/smart-account-client/types/userOperationFeeOptions.md) `| undefined` --[optional] user operation fee options to be used for gas estimation, set at the global level on the client.
     If not set, default fee options for the chain are used. Available fields in `feeOptions` include `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` where each field is of type [`UserOperationFeeOptionsField`](/packages/aa-core/smart-account-client/types/userOperationFeeOptionsField.md).
 
     - `maxFeePerGas`: `UserOperationFeeOptionsField`

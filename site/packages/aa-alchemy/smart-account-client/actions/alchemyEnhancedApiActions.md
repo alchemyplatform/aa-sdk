@@ -38,7 +38,7 @@ import { alchemyEnhancedApiActions } from "@alchemy/aa-alchemy";
 const alchemy = new Alchemy();
 
 // use Alchemy Enhanced APIs
-const providerWithEnhancedApis = smartAccountClient.extend(
+const clientWithEnhancedApis = smartAccountClient.extend(
   alchemyEnhancedApiActions
 );
 ```

@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: AlchemyProvider • simulateUserOperation
+      content: AlchemySmartAccountClient • simulateUserOperation
   - - meta
     - name: description
       content: Overview of the simulateUserOperation method on Alchemy Smart Account Client in aa-alchemy

@@ -48,6 +48,6 @@ the hash of the sent UO
 
 The user operation to send
 
-### `entryPointAddress: Address`
+### `entryPoint: Address`
 
 The address of the entry point to send the user operation to

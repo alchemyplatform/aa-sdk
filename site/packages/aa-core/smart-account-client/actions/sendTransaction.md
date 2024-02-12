@@ -3,13 +3,13 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: ISmartAccountClient • sendTransaction
+      content: SmartAccountClient • sendTransaction
   - - meta
     - name: description
-      content: Overview of the sendTransaction method on ISmartAccountClient
+      content: Overview of the sendTransaction method on SmartAccountClient
   - - meta
     - property: og:description
-      content: Overview of the sendTransaction method on ISmartAccountClient
+      content: Overview of the sendTransaction method on SmartAccountClient
 ---
 
 # sendTransaction

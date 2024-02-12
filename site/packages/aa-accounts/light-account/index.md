@@ -54,11 +54,9 @@ const signedTypedDataWith6492 = smartAccountClient.signTypedDataWith6492({
 // get owner address
 const owner = await smartAccountClient.account.getOwnerAddress();
 
-// encode transfer pownership
-const newOwner = LocalAccountSigner.mnemonicToAccountSigner(NEW_OWNER_MNEMONIC);
-
 // transfer ownership
-const result = await transferLightAccountOwnership(smartAccountClient, {
+const newOwner = LocalAccountSigner.mnemonicToAccountSigner(NEW_OWNER_MNEMONIC);
+const hash = smartAccountClient.transferOwnership({
   newOwner,
   waitForTxn: true, // wait for txn with UO to be mined
 });
@@ -66,6 +64,40 @@ const result = await transferLightAccountOwnership(smartAccountClient, {
 
 <<< @/snippets/aa-core/lightAccountClient.ts
 :::
+
+# createLightAccount
+
+`createLightAccount` is a factory that improves the developer experience of creating Light Account. You can use this to directly instantiate a `LightAccount` in one line of code.
+
+## Usage
+
+<<< @/snippets/aa-core/lightAccountClient.ts
+
+## Returns
+
+### `Promise<LightAccount>`
+
+A Promise containing a new `LightAccount`.
+
+## Parameters
+
+### `param: CreateLightAccountParams`
+
+- `transport: Transport` -- a Viem [Transport](https://viem.sh/docs/glossary/types#transport) for interacting with JSON RPC methods.
+
+- `chain: Chain` -- the chain on which to create the client.
+
+- `owner: SmartAccountSigner` -- the owner EOA signer responsible for signing user operations on behalf of the smart account.
+
+- `entryPoint: EntryPointDef` -- [optional] the entry point contract address. If not provided, the entry point contract address for the client is the connected account's entry point contract, or if not connected, falls back to the default entry point contract for the chain. See [getDefaultEntryPointAddress](/packages/aa-core/utils/getDefaultEntryPointAddress.html#getdefaultentrypointaddress).
+
+- `factoryAddress: Address` -- [optional] the factory address for the smart account implementation, which is required for creating the account if not already deployed. Defaults to the [getDefaultLightAccountFactoryAddress](/packages/aa-accounts/utils/getDefaultLightAccountFactoryAddress.md)
+
+- `initCode: Hex` -- [optional] the initCode for deploying the smart account with which the client will connect.
+
+- `accountAddress: Address` -- [optional] a smart account address override that this object will manage instead of generating its own.
+
+- `version: LightAccountVersion` -- [optional] the LightAccount contract version. Default: [v1.1.0](https://github.com/alchemyplatform/light-account/releases/tag/v1.1.0)
 
 ## Developer links
 

@@ -27,31 +27,28 @@ pnpm i @alchemy/aa-core
 You can create a provider like so:
 
 ```typescript
-import {
-  LightSmartContractAccount,
-  getDefaultLightAccountFactoryAddress,
-} from "@alchemy/aa-accounts";
+import { createMultiOwnerModularAccount } from "@alchemy/aa-accounts";
 import {
   LocalAccountSigner,
-  SmartAccountProvider,
   SmartAccountSigner,
+  createSmartAccountClient,
+  polygonMumbai,
 } from "@alchemy/aa-core";
-import { polygonMumbai } from "@alchemy/aa-core";
+import { http } from "viem";
 
 const chain = polygonMumbai;
-const owner: SmartAccountSigner =
-  LocalAccountSigner.mnemonicToAccountSigner(YOUR_OWNER_MNEMONIC);
-
-export const provider = new SmartAccountProvider({
-  rpcProvider: "https://polygon-mumbai.g.alchemy.com/v2/demo",
-  chain,
-}).connect(
-  (rpcClient) =>
-    new LightSmartContractAccount({
-      chain,
-      factoryAddress: getDefaultLightAccountFactoryAddress(chain),
-      rpcClient,
-      owner,
-    })
+const owner: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
+  "YOUR_OWNER_MNEMONIC"
 );
+const rpcTransport = http("https://polygon-mumbai.g.alchemy.com/v2/demo");
+
+export const smartAccountClient = createSmartAccountClient({
+  transport: rpcTransport,
+  chain,
+  account: await createMultiOwnerModularAccount({
+    transport: rpcTransport,
+    chain,
+    owner,
+  }),
+});
 ```

@@ -51,17 +51,7 @@ export type UserOperationOverrides = Partial<{
 
 ```ts [user-operation-override.ts]
 import type { UserOperationOverrides } from "@alchemy/aa-core";
-import { provider } from "./provider.ts";
-
-// Find your Gas Manager policy id at:
-//dashboard.alchemy.com/gas-manager/policy/create
-const GAS_MANAGER_POLICY_ID = "YourGasManagerPolicyId";
-
-// Link the provider with the Gas Manager. This ensures user operations
-// sent with this provider get sponsorship from the Gas Manager.
-provider.withAlchemyGasManager({
-  policyId: GAS_MANAGER_POLICY_ID,
-});
+import { smartAccountClient } from "./smartAccountClient.ts";
 
 // [!code focus:16]
 // Use maxFeePerGas, maxPriorityFeePerGas, and paymasterAndData override
@@ -72,7 +62,7 @@ const overrides: UserOperationOverrides = {
   paymasterAndData: "0x",
 };
 
-const userOperationResult = await provider.sendUserOperation(
+const userOperationResult = await smartAccountClient.sendUserOperation(
   {
     target: "0xTargetAddress",
     data: "0xCallData",
@@ -81,11 +71,11 @@ const userOperationResult = await provider.sendUserOperation(
 );
 
 // Fallback to user paying the gas fee isntead of the paymaster
-const txHash = await provider.waitForUserOperationTransaction({
+const txHash = await smartAccountClient.waitForUserOperationTransaction({
   hash: userOperationResult.hash,
 });
 ```
 
-<<< @/snippets/aa-core/smartAccountClient.ts
+<<< @/snippets/aa-alchemy/gas-manager-client.ts [smartAccountClient.ts]
 
 :::

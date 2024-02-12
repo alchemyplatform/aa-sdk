@@ -13,8 +13,6 @@ head:
 prev:
   text: aa-core
   link: /packages/aa-core/index
-next:
-  text: AlchemyProvider
 ---
 
 # `@alchemy/aa-alchemy`
