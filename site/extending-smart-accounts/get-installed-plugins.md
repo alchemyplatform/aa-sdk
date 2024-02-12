@@ -16,8 +16,6 @@ head:
   - - meta
     - name: twitter:description
       content: Follow this guide to get installed plugins of a Modular Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-next:
-  text: Alchemy Enhanced Apis
 ---
 
 # How to get the installed plugins of a Modular Account
@@ -34,15 +32,20 @@ Account Kit provides a streamlined experience of interacting with Modular Accoun
 
 ### Get installed plugins of a Modular Account
 
-You should first extends the `SmartAcountClient` connected to a Modular Account, which has `AccountLoupe` implemented, with client to `accountLoupeActions` for the client to include the `AccountLoupe` actions.
+You should first extend the `SmartAcountClient` connected to a Modular Account, which has `AccountLoupe` implemented, with `accountLoupeActions` for the client to include the `AccountLoupe` actions.
 
 Then, you can use the `getInstalledPlugins` method of the `accountLoupeActions` extended smart account client to get the list of installed plugin addresses for the connected Modular Account.
+
+::: tip Note
+When using `createModularAccountAlchemyClient` in `@alchemy/aa-alchemy`, the `SmartAccountClient` comes automatically extended with `multiOwnerPluginActions`, `pluginManagerActions`, and `accountLoupeActions` decorators as defaults available for use.
+:::
 
 ::: code-group
 
 ```ts [example.ts]
 import { smartAccountClient as modularAccountClient } from "./smartAccountClient";
-import { accountLoupeActions } from "@alchemy/aa-accounts";
+import { type Address } from "viem";
+import { IPluginAbi, accountLoupeActions } from "@alchemy/aa-accounts";
 
 // [!code focus:99]
 // extend smart account client with accountLoupeActions to call AccountLoupe methods
@@ -51,7 +54,26 @@ const accountLoupeActionsExtendedClient =
 
 // returns addresses of all installed plugins
 const installedPlugins =
-  await accountLoupeActionsExtendedClient.getInstalledPlugins();
+  await accountLoupeActionsExtendedClient.getInstalledPlugins({});
+
+if (installedPlugins.length === 0) {
+  console.log("account has no plugins installed.");
+  return;
+}
+
+const pluginAddress: Address = installedPlugins[0] as Address;
+// read plugin metadata of a plugin
+const metadata = await accountLoupeActionsExtendedClient.readContract({
+  address: pluginAddress,
+  abi: IPluginAbi,
+  functionName: "pluginMetadata",
+});
+
+console.log(JSON.stringify(metadata, null, 2));
+// {
+//   name: 'MultiOwnerPlugin',
+//   version: '1.0.0',
+// }
 ```
 
 <<< @/snippets/aa-alchemy/connected-client.ts [smartAccountClient.ts]

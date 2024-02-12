@@ -26,15 +26,19 @@ Account Kit provides a streamlined experience of interacting with Modular Accoun
 
 In fact, there are two ways to install plugins. First method is to use the `pluginManagerActions`'s generic `installPlugin` method, but this method requires you to configure the correct plugin dependencies and function references for the plugin.
 
-Account Kit provides more robust, easier way to install plugins with `pluginActions`. Each plugin comes with the its own `pluginActions` that includes already configured install method, named `install<PluginName>`, for installing any plugin of interest. For example, `MultiOwnerPlugin` has `multiOwnerPluginActions` that includes `installMultiOwnerPlugin()` method, and `SessionKeyPlugin` has `sessionKeyPluginActions` that includes `installSessionKeyPlugin()` method, all exported on `@alchemy/aa-accounts` package.
+Account Kit provides more robust, easier way to install plugins with `pluginActions`. Each plugin comes with the its own `pluginActions` that includes already configured install method, named `install<PluginName>`, for installing any plugin of interest. For example, `MultiOwnerPlugin` has `multiOwnerPluginActions` that includes `installMultiOwnerPlugin()` method, and `SessionKeyPlugin` has `sessionKeyPluginActions` that includes `installSessionKeyPlugin()` method, all exported from the `@alchemy/aa-accounts` package.
 
 This guide will use the `SessionKeyPlugin` as an example to show how you can install `SessionKeyPlugin` easily using the `SmartAccountClient` extended with `sessionKeyPluginActions`.
 
 ### 1. Installing the Session Key Plugin
 
-You should first extends the `SmartAcountClient` connected to a Modular Account with client to `sessionKeyPluginActions` for the client.
+You should first extend the `SmartAcountClient` connected to a Modular Account with `sessionKeyPluginActions`.
 
 Then, you can use the `installSessionKeyPlugin()` method exposed on `sessionKeyPluginActions` extended smart account client to install the session key plugin for the connected account.
+
+::: tip Note
+When using `createModularAccountAlchemyClient` in `@alchemy/aa-alchemy`, the `SmartAccountClient` comes automatically extended with `multiOwnerPluginActions`, `pluginManagerActions`, and `accountLoupeActions` decorators as defaults available for use.
+:::
 
 ::: code-group
 
@@ -68,7 +72,7 @@ You can refer to the [Session Key](/using-smart-accounts/session-keys/index.md) 
 
 On the other hand, uninstalling plugin usually does not involve configuring contract depedencies or function references. You can use the `pluginManagerActions`'s generic `uninstallPlugin` method to uninstall a particular plugin of interest.
 
-You should first extends the `SmartAcountClient` connected to a Modular Account with client to `pluginManagerActions` for the client.
+You should first extend the `SmartAcountClient` connected to a Modular Account with `pluginManagerActions`.
 
 Then, you can use the `uninstallPlugin()` method exposed on `pluginManagerActions` extended smart account client to uninstall the session key plugin for the connected account.
 

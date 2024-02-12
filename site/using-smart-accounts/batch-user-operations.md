@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: How to Submit Batch Transactions
+      content: How to submit batch transactions
   - - meta
     - name: description
       content: Follow this guide to submit transactions in batches with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
@@ -12,13 +12,13 @@ head:
       content: Follow this guide to submit transactions in batches with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - name: twitter:title
-      content: How to Submit Batch Transactions
+      content: How to submit batch transactions
   - - meta
     - name: twitter:description
       content: Follow this guide to submit transactions in batches with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
-# How to Submit Batch Transactions
+# How to submit batch transactions
 
 One benefit of Smart Contract Accounts is that it's possible to batch transactions in one `UserOperation` (UO). Not all Smart Contract Accounts support batching. But, if the `SmartContractAccount` implementation you're using has the [`encodeBatchExecute`](/packages/aa-core/accounts/) method, then implementations of `SmartAccountClient` will allow you to make those calls.
 
