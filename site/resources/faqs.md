@@ -51,6 +51,23 @@ It is unlikely you will need to frequently update the Light Account contract its
 Yes! The optional index value (salt) on Light Account enables the ability to have multiple accounts for the same owner address. This value defaults to 0. You can set it when you create [light account](/packages/aa-accounts/light-account/).
 :::
 
+### How can I upgrade from Simple Account to Light Account?
+
+::: details Answer
+[Simple Account's](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol) support `upgradeToAndCall` implemented by openzeppelin’s [UUPSUpgradeable](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/UUPSUpgradeable.sol) contract. This allows you to upgrade from Simple Account to Light Account without changing the smart contract account address. Using `upgradeToAndCall` will update the underlying implementation contract on the account while the account address and assets will stay the same.
+
+You can call `upgradeToAndCall` on the Simple Account with these params:
+
+- `newImplementation`: Latest LightAccount implementation address (found [here](https://github.com/alchemyplatform/light-account/blob/main/Deployments.md#lightaccount) - make sure to use the implementation address, not the factory address)
+  - For example LightAccount v1.1.0 - 0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba
+- `data`: encoded version of the `initialize` function with `anOwner` parameter set to the owner/signer on the account, usually the same owner as what the account used as Simple Account.
+  - In solidity (foundry) you can use abi.encodeCall and in viem you can use [encodeFunctionData](https://github.com/alchemyplatform/light-account/blob/main/Deployments.md#lightaccount)
+
+It is very important that the `initialize` step is encoded correctly to ensure the account does not get in to a risky state where someone else could call initialize on it and reassign and a signer. You can call `owner()` on the account after upgrade to make sure it is assigned correctly.
+
+This can be called on the existing smart contract account by sending a user operation that calls `execute` (or `executeBatch`) and have that call `upgradeToAndCall` (the same way you would make the account send calls to other addresses).
+:::
+
 ## Submitting `UserOperation`s
 
 ### How does the speed of `UserOperation`s compare to normal transactions?
