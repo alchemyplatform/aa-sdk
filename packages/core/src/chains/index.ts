@@ -13,6 +13,7 @@ import {
   optimismSepolia as vops,
   polygon as vpg,
   polygonMumbai as vpgm,
+  polygonAmoy as vpga,
   sepolia as vsep,
 } from "viem/chains";
 
@@ -133,6 +134,16 @@ export const polygonMumbai: Chain = {
     ...vpgm.rpcUrls,
     alchemy: {
       http: ["https://polygon-mumbai.g.alchemy.com/v2"],
+    },
+  },
+};
+
+export const polygonAmoy: Chain = {
+  ...vpga,
+  rpcUrls: {
+    ...vpga.rpcUrls,
+    alchemy: {
+      http: ["https://polygon-amoy.g.alchemy.com/v2"],
     },
   },
 };
