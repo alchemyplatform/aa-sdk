@@ -6,7 +6,7 @@ export const aaAccountsSidebar: DefaultTheme.SidebarItem = {
   base: "/packages/aa-accounts",
   items: [
     {
-      text: "Getting Started",
+      text: "Getting started",
       link: "/",
     },
     {

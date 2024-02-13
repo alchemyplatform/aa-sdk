@@ -6,7 +6,7 @@ The `SmartAccountProvider` is an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1
 
 The `BaseSmartContractAccount` interface defines how you would interact with your Smart Contract Account. Any class that extends `BaseSmartContractAccount` may also expose additional methods that allow its connecting `SmartAccountProvider` to provide ergonomic utilities for building and submitting `User Operation`s.
 
-## Getting Started
+## Getting started
 
 To get started, first install the package:
 

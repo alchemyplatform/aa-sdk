@@ -69,7 +69,7 @@ A new instance of an `AlchemySmartAccountClient`.
 
 - `jwt: string | undefined | never` -- an Alchemy JWT (JSON web token). This is required if there is no `apiKey`.
 
-- `useSimulation: boolean` -- [optional] -- whether or not to simulate user operations before sending them to ensure they don't revert
+- `useSimulation: boolean` -- [optional] -- whether or not to simulate User Operations before sending them to ensure they don't revert
 
 - `gasManagerConfig: AlchemyGasManagerConfig` -- [optional] if you want to use Alchemy's gas manager to sponsor gas.
 

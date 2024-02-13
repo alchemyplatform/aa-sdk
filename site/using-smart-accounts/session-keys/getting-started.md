@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Getting Started with Session Keys
+      content: Getting started with Session Keys
   - - meta
     - name: description
       content: Learn how to use Alchemy's Session Key Plugin.
@@ -12,13 +12,13 @@ head:
       content: Learn how to use Alchemy's Session Key Plugin.
   - - meta
     - name: twitter:title
-      content: Getting Started with Session Keys
+      content: Getting started with Session Keys
   - - meta
     - name: twitter:description
       content: Learn how to use Alchemy's Session Key Plugin.
 ---
 
-# Getting Started with Session Keys
+# Getting started with Session Keys
 
 `@alchemy/aa-accounts` exports all of the definitions you need to use session keys with a Modular Account. We provide a simple `SessionKeySigner` class that generates session keys on the client and can be used as the `owner` for the Multi Owner Modular Account.
 We also export the necessary decorators which can be used to extend your `SmartAccountClient` to make interacting with session keys easy.
