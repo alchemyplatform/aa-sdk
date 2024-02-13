@@ -1,11 +1,11 @@
 import {
+  LocalAccountSigner,
   createSimpleSmartAccount,
   getChain,
   getDefaultSimpleAccountFactoryAddress,
 } from "@alchemy/aa-core";
 import { EthersProviderAdapter } from "@alchemy/aa-ethers";
 import { Alchemy, Network } from "alchemy-sdk";
-import { signer } from "snippets/aa-core/lightAccountClient";
 import { http } from "viem";
 
 // 1. Create alchemy instance
@@ -16,6 +16,8 @@ const alchemy = new Alchemy({
 const ethersProvider = await alchemy.config.getProvider();
 
 const chain = getChain(ethersProvider.network.chainId);
+
+const signer = LocalAccountSigner.mnemonicToAccountSigner("YOUR_MNEMONIC");
 
 // 2. smart account client from alchemy's ethers provider and connect with simple smart account
 export const provider = EthersProviderAdapter.fromEthersProvider(

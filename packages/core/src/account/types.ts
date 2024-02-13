@@ -75,7 +75,7 @@ export interface ISmartContractAccount<
   encodeBatchExecute(txs: BatchUserOperationCallData): Promise<Hex>;
 
   /**
-   * @returns the nonce of the account
+   * @returns the nonce of the account from entry point contract
    */
   getNonce(): Promise<bigint>;
 
@@ -121,7 +121,7 @@ export interface ISmartContractAccount<
   signTypedDataWith6492(params: SignTypedDataParams): Promise<Hash>;
 
   /**
-   * @returns the address of the account
+   * @returns the address of the on-chain contract account
    */
   getAddress(): Promise<Address>;
 
@@ -171,6 +171,13 @@ export interface ISmartContractAccount<
    */
   extend: <R>(extendFn: (self: this) => R) => this & R;
 
+  /**
+   * If your contract supports UUPS, you can implement this method which can be
+   * used to upgrade the implementation of the account.
+   *
+   * @param upgradeToImplAddress -- the implementation address of the contract you want to upgrade to
+   * @param upgradeToInitData -- the initialization data required by that account
+   */
   encodeUpgradeToAndCall: (
     upgradeToImplAddress: Address,
     upgradeToInitData: Hex

@@ -26,7 +26,7 @@ The `SmartAccountClient` within `@alchemy/aa-core` is unopinionated about which 
 
 If we look at the example for creating a `SmartAccountClient`:
 
-<<< @/snippets/aa-core/lightAccountClient.ts
+<<< @/snippets/aa-accounts/lightAccountClient.ts
 
 You can see that we set the `transport` to `http("https://polygon-mumbai.g.alchemy.com/v2/demo")`. You can swap out that the url in the `http` function to
 any other provider's URL.

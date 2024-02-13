@@ -48,7 +48,7 @@ It is unlikely you will need to frequently update the Light Account contract its
 ### Can I have multiple accounts for the same signer address? / How do I set the value of the salt for Light Account?
 
 ::: details Answer
-Yes! The optional salt value on Light Account enables the ability to have multiple accounts under a single signer. This value defaults to 0. You can set it when you create [light account](/packages/aa-accounts/light-account/).
+Yes! The optional salt value on Light Account enables the ability to have multiple accounts under a single signer. This value defaults to 0. You can set it when you create [light account](/packages/aa-accounts/accounts/light-account).
 :::
 
 ### How can I upgrade from Simple Account to Light Account?
