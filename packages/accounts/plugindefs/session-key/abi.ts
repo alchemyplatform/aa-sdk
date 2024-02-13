@@ -904,6 +904,7 @@ export const SessionKeyPluginAbi = [
     ],
   },
   { type: "error", name: "NotInitialized", inputs: [] },
+  { type: "error", name: "PermissionsCheckFailed", inputs: [] },
   {
     type: "error",
     name: "SessionKeyNotFound",
