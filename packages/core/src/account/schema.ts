@@ -42,5 +42,5 @@ export const SimpleSmartAccountParamsSchema = <
     .extend({
       transport: z.custom<TTransport>(),
       owner: z.custom<TOwner>(isSigner),
-      index: z.bigint().optional(),
+      salt: z.bigint().optional(),
     });

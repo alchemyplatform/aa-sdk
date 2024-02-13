@@ -237,6 +237,10 @@ type toSmartContractAccount = <
 
 `chain` and `transport` have been added to the constructor and `rpcClient` has been removed.
 
+### Account: SimpleAccount and LightAccount intialization params
+
+`index` is now called `salt`
+
 ### Signer: `signTypedData` signature change
 
 The `signTypedData` method found on `SmartAccountSigner` has been updated to match the signature found on `SmartContractAccount` and viem's `Account`.

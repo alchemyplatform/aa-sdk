@@ -50,7 +50,7 @@ export type CreateLightAccountParams<
   "transport" | "chain" | "entryPoint" | "accountAddress"
 > & {
   owner: TOwner;
-  index?: bigint;
+  salt?: bigint;
   factoryAddress?: Address;
   initCode?: Hex;
   version?: LightAccountVersion;
@@ -72,7 +72,7 @@ export async function createLightAccount({
   entryPoint = getVersion060EntryPoint(chain),
   accountAddress,
   factoryAddress = getDefaultLightAccountFactoryAddress(chain, version),
-  index: index_ = 0n,
+  salt: salt_ = 0n,
 }: CreateLightAccountParams): Promise<LightAccount> {
   let owner = owner_;
   const client = createBundlerClient({
@@ -83,18 +83,18 @@ export async function createLightAccount({
   const getAccountInitCode = async () => {
     if (initCode) return initCode;
 
-    const index = LightAccountUnsupported1271Factories.has(
+    const salt = LightAccountUnsupported1271Factories.has(
       factoryAddress.toLowerCase() as Address
     )
       ? 0n
-      : index_;
+      : salt_;
 
     return concatHex([
       factoryAddress,
       encodeFunctionData({
         abi: LightAccountFactoryAbi,
         functionName: "createAccount",
-        args: [await owner.getAddress(), index],
+        args: [await owner.getAddress(), salt],
       }),
     ]);
   };
