@@ -39,7 +39,7 @@ class SimpleSmartContractAccount<
     });
     super({ ...params, rpcClient: client });
     this.owner = params.owner as TOwner;
-    this.index = params.index ?? 0n;
+    this.index = params.salt ?? 0n;
   }
 
   getDummySignature(): `0x${string}` {
