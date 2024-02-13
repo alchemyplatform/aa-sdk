@@ -18028,10 +18028,10 @@ viem@^1.21.4:
     isows "1.0.3"
     ws "8.13.0"
 
-viem@^2.5.0:
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/viem/-/viem-2.5.0.tgz#1d7bd5333a6b9387d42c1c2d368d0b88c2961ee1"
-  integrity sha512-ytHXIWtlgPs4mcsGxXjJrQ25v+N4dE2hBzgCU8CVv4iXNh3PRFRgyYa7igZlmxiMVzkfSHHADOtivS980JhilA==
+viem@^2.7.8:
+  version "2.7.8"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-2.7.8.tgz#ca60552190cdc501cf4e1d1140d8da7625b1b1f4"
+  integrity sha512-5r5pkBDBmihCvMx4b3MqtP0FoZCRWE2ML1DssU80+vhJQur0PKd4yHdLbbvoiGGVD6bYiA394juhfdSvXIGgFA==
   dependencies:
     "@adraffy/ens-normalize" "1.10.0"
     "@noble/curves" "1.2.0"

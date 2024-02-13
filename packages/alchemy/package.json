@@ -51,7 +51,7 @@
     "@turnkey/iframe-stamper": "^1.0.0",
     "@turnkey/viem": "^0.4.8",
     "@turnkey/webauthn-stamper": "^0.4.3",
-    "viem": "^2.5.0"
+    "viem": "^2.7.8"
   },
   "publishConfig": {
     "access": "public",
