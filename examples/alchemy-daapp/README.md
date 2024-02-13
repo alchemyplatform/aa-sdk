@@ -16,7 +16,7 @@ cd aa-sdk/examples/alchemy-daapp
 yarn install
 ```
 
-## Getting Started
+## Getting started
 1. Update the .env file with your Alchemy API key(s):
 ```bash
 MUMBAI_ALCHEMY_API_URL=https://polygon-mumbai.g.alchemy.com/v2/<YOUR_API_KEY>

@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Getting Started Guide
+      content: Getting started guide
   - - meta
     - name: description
       content: Learn how to get started with Alchemy's Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
@@ -12,7 +12,7 @@ head:
       content: Learn how to get started with Alchemy's Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - name: twitter:title
-      content: Getting Started Guide
+      content: Getting started guide
   - - meta
     - name: twitter:description
       content: Learn how to get started with Alchemy's Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
@@ -155,7 +155,7 @@ When running the above script, you might see the following errors:
 These are due to increase network activity at that time, and are fleeting issues. Running the script again will resolve them naturally.
 :::
 
-Since this "Getting Started" example is a simple script, you'll need to consider how Account Kit can work in various applications. Check out our [Demos](/overview/demos) to see how.
+Since this "Getting started" example is a simple script, you'll need to consider how Account Kit can work in various applications. Check out our [Demos](/overview/demos) to see how.
 
 ## 6. Dive deeper
 

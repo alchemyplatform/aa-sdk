@@ -3,7 +3,7 @@ import { packagesSidebar } from "./packages";
 
 export const sidebar: DefaultTheme.Sidebar = [
   {
-    text: "Getting Started",
+    text: "Getting started",
     items: [
       {
         text: "Overview",
@@ -25,7 +25,7 @@ export const sidebar: DefaultTheme.Sidebar = [
           { text: "Getting started", link: "/getting-started" },
           { text: "Deployments", link: "/deployments" },
           {
-            text: "Upgradingto a Modular Account",
+            text: "Upgrading to a Modular Account",
             link: "/upgrade-la-to-ma",
           },
         ],
@@ -103,7 +103,7 @@ export const sidebar: DefaultTheme.Sidebar = [
           { text: "Check eligibility", link: "/checking-eligibility" },
         ],
       },
-      { text: "Simulate user operations", link: "/simulate-user-operations" },
+      { text: "Simulate User Operations", link: "/simulate-user-operations" },
       {
         text: "Session Keys",
         base: "/using-smart-accounts/session-keys",

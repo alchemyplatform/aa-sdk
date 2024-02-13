@@ -6,7 +6,7 @@ export const aaAlchemySidebar: DefaultTheme.SidebarItem = {
   collapsed: true,
   items: [
     {
-      text: "Getting Started",
+      text: "Getting started",
       link: "/",
     },
     {

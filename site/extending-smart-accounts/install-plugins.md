@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Extending Smart Accounts • Installing & Uninstalling Plugins on a Modular Account
+      content: Extending Smart Accounts • Installing & uninstalling plugins on a Modular Account
   - - meta
     - name: description
       content: Follow this guide to install and uninstall plugins on a Modular Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
@@ -12,7 +12,7 @@ head:
       content: Follow this guide to install and uninstall plugins on a Modular Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - name: twitter:title
-      content: How to Transfer Ownership of a Light Account
+      content: Extending Smart Accounts • Installing & uninstalling plugins on a Modular Account
   - - meta
     - name: twitter:description
       content: Follow this guide to install and uninstall plugins on a Modular Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
@@ -32,7 +32,7 @@ This guide will use the `SessionKeyPlugin` as an example to show how you can ins
 
 ### 1. Installing the Session Key Plugin
 
-You should first extend the `SmartAcountClient` connected to a Modular Account with `sessionKeyPluginActions`.
+You should first extend the `SmartAccountClient` connected to a Modular Account with `sessionKeyPluginActions`.
 
 Then, you can use the `installSessionKeyPlugin()` method exposed on `sessionKeyPluginActions` extended smart account client to install the session key plugin for the connected account.
 
@@ -72,7 +72,7 @@ You can refer to the [Session Key](/using-smart-accounts/session-keys/index.md) 
 
 On the other hand, uninstalling plugin usually does not involve configuring contract depedencies or function references. You can use the `pluginManagerActions`'s generic `uninstallPlugin` method to uninstall a particular plugin of interest.
 
-You should first extend the `SmartAcountClient` connected to a Modular Account with `pluginManagerActions`.
+You should first extend the `SmartAccountClient` connected to a Modular Account with `pluginManagerActions`.
 
 Then, you can use the `uninstallPlugin()` method exposed on `pluginManagerActions` extended smart account client to uninstall the session key plugin for the connected account.
 

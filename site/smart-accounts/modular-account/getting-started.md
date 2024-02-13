@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Modular Account • Getting Started
+      content: Modular Account • Getting started
   - - meta
     - name: description
       content: Getting started with the Modular Account in Account Kit
@@ -12,7 +12,7 @@ head:
       content: Getting started with the Modular Account in Account Kit
   - - meta
     - name: twitter:title
-      content: Modular Account • Getting Started
+      content: Modular Account • Getting started
   - - meta
     - name: twitter:description
       content: Getting started with the Modular Account in Account Kit

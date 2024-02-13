@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: How to Send a User Operation
+      content: How to send a User Operation
   - - meta
     - name: description
       content: Follow this guide to send a User Operation with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
@@ -12,7 +12,7 @@ head:
       content: Follow this guide to send a User Operation with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - name: twitter:title
-      content: How to Send a User Operation
+      content: How to send a User Operation
   - - meta
     - name: twitter:description
       content: Follow this guide to send a User Operation with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
