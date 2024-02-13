@@ -64,6 +64,6 @@ Find the `aa-accounts` item in the `sidebar` and add a new entry in `items`. The
 
 In that section, add documentation introducing the value prop of your smart account, how to initialize the smart account object, and how to call each method.
 
-## 3. Submit a Pull Request
+## 3. Submit a pull request
 
 You can open a PR to merge the branch with your smart account implementation from your forked repo into the `main` branch of the `aa-sdk` repo. We'll make sure to review it promptly, provide feedback, and merge the PR when ready so that developers can use your smart account!

@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: How to Sponsor Gas for a UserOperation
+      content: How to sponsor gas for a UserOperation
   - - meta
     - name: description
       content: Follow this guide to sponsor gas for UserOperations from any ERC-4337 smart account. Account Kit is a vertically integrated stack for building apps that support ERC-4337.
@@ -12,21 +12,21 @@ head:
       content: Follow this guide to sponsor gas for UserOperations from any ERC-4337 smart account. Account Kit is a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - name: twitter:title
-      content: How to Sponsor Gas for a UserOperation
+      content: How to sponsor gas for a UserOperation
   - - meta
     - name: twitter:description
       content: Follow this guide to sponsor gas for UserOperations from any ERC-4337 smart account. Account Kit is a vertically integrated stack for building apps that support ERC-4337.
 ---
 
-# How to Sponsor Gas for a UserOperation
+# How to sponsor gas for a UserOperation
 
 Gas fees are a significant barrier to entry for new user of your app. With Account Kit you can remove this barrier by sponsoring gas fees for transactions via the [Gas Manager](https://docs.alchemy.com/docs/gas-manager-services/?a=ak-docs). This guide explains how to sponsor gas by creating a gas policy, linking it to your client, and sending sponsored `UserOperations` (UOs) from a smart account.
 
-## How to Sponsor Gas
+## How to sponsor gas
 
 After [installing `aa-sdk`](/getting-started/setup#install-the-packages) in your project, follow these steps to sponsor gas.
 
-### 1. Create a Gas Manager Policy
+### 1. Create a Gas Manager policy
 
 A gas manager policy is a set of rules that define which UOs are eligible for gas sponsorship. You can control which operations are eligible for sponsorship by defining rules:
 

@@ -106,7 +106,8 @@ export const sidebar: DefaultTheme.Sidebar = [
       { text: "Simulate user operations", link: "/simulate-user-operations" },
       {
         text: "Session Keys",
-        base: "/smart-accounts/session-keys",
+        base: "/using-smart-accounts/session-keys",
+        collapsed: false,
         items: [
           {
             text: "Overview",
@@ -130,25 +131,31 @@ export const sidebar: DefaultTheme.Sidebar = [
       {
         text: "Alchemy Enhanced Apis",
         base: "/using-smart-accounts/enhanced-apis",
-        collapsed: true,
+        collapsed: false,
         items: [
           {
             text: "Get Account's NFTs",
             link: "/nft",
           },
-          { text: "Get Account's Tokens", link: "/token" },
+          { text: "Get Account's tokens", link: "/token" },
         ],
       },
     ],
   },
-  // We'll be adding this later
-  // {
-  //   text: "Extending Smart Accounts",
-  //   items: [
-  //     { text: "Installing Plugins", link: "/" },
-  //     { text: "Creating Plugins", link: "/" },
-  //   ],
-  // },
+  {
+    text: "Extending Smart Accounts",
+    base: "/extending-smart-accounts",
+    items: [
+      {
+        text: "Install plugins",
+        link: "/install-plugins",
+      },
+      {
+        text: "Get installed plugins",
+        link: "/get-installed-plugins",
+      },
+    ],
+  },
   {
     text: "Custom infra",
     base: "/third-party",

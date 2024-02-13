@@ -16,8 +16,6 @@ head:
   - - meta
     - name: twitter:description
       content: Follow this guide to transfer ownership of a Light Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-next:
-  text: Alchemy Enhanced Apis
 ---
 
 # How to transfer ownership of a Light Account

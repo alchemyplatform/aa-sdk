@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: How to Handle User Operations that are Not Eligible for Gas Sponsorship
+      content: How to handle User Operations that are not eligible for gas sponsorship
   - - meta
     - name: description
       content: Follow this guide to handle User Operations that are not eligible for gas sponsorship. Account Kit is a vertically integrated stack for building apps that support ERC-4337.
@@ -12,23 +12,23 @@ head:
       content: Follow this guide to handle User Operations that are not eligible for gas sponsorship. Account Kit is a vertically integrated stack for building apps that support ERC-4337.
   - - meta
     - name: twitter:title
-      content: How to Handle User Operations that are Not Eligible for Gas Sponsorship
+      content: How to handle User Operations that are not eligible for gas sponsorship
   - - meta
     - name: twitter:description
       content: Follow this guide to handle User Operations that are not eligible for gas sponsorship. Account Kit is a vertically integrated stack for building apps that support ERC-4337.
 ---
 
-# How to handle User Operations that are not eligible for Gas Sponsorship
+# How to handle User Operations that are not eligible for gas sponsorship
 
-As mentioned from the previous guide on [How to Sponsor Gas for a User Operation](./gas-manager.md), with Account Kit can sponsor gas fees for transactions via the [Gas Manager](https://docs.alchemy.com/docs/gas-manager-services/?a=ak-docs).
-
+As mentioned from the previous guide on [How to sponsor gas for a User Operation](./gas-manager.md), with Account Kit can sponsor gas fees for transactions via the [Gas Manager](https://docs.alchemy.com/docs/gas-manager-services/?a=ak-docs).
+d
 But what happens when the user operation you are sending fails to satisfy the criteria set in the gas manager policy? How do you check if the user operation is eligible for gas sponsorship before sending the user operation?
 
 If you do send the user operation that is not eligible for the gas sponsorship under your Gas Manager policy, [`sendUserOperation`](/packages/aa-core/smart-account-client/actions/sendUserOperation.md) or [`sendTransaction`](/packages/aa-core/smart-account-client/actions/sendTransaction.md) will fail due to the error thrown during the `PaymasterMiddleware` failure. You can follow the guide below to check for gas sponsorship eligibility in advance.
 
-## 1. How to check if a User Operation is eligible for Gas Sponsorship
+## 1. How to check if a User Operation is eligible for gas sponsorship
 
-First, you can follow the same instructions from the previous guide on [How to Sponsor Gas for a User Operation](./gas-manager.md) to set up your `AlchemySmartAccountClient` and link your gas policy.
+First, you can follow the same instructions from the previous guide on [How to sponsorgas for a User Operation](./gas-manager.md) to set up your `AlchemySmartAccountClient` and link your gas policy.
 
 <<< @/snippets/aa-alchemy/gas-manager-client.ts
 

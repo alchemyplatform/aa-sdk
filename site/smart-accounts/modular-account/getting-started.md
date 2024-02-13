@@ -45,8 +45,7 @@ Then you'll need to create a `SmartAccountClient`
 <<< @/snippets/aa-core/smartAccountClient.ts
 
 ::: tip Note
-Above, we provide an account to our client directly. This allows us to set the account context for all calls to the `SmartAccountClient`. You can choose to omit it if
-you want to share one `SmartAccountClient` with multiple accounts.
+Above, we provide an account to our client directly. This allows us to set the account context for all calls to the `SmartAccountClient`. You can choose to omit it if you want to share one `SmartAccountClient` with multiple accounts.
 :::
 
 ### Add decorators

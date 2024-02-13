@@ -49,16 +49,16 @@ Session keys let you streamline interactions by reducing confirmation steps, or 
 
 Read more about installing and using the Session Key plugin [here]()!
 
-### Full Compatibility
+### Full compatibility
 
 Modular Account also supports the same baseline set of account abstraction features as Light Account: sponsoring gas, batching transactions, rotating owners, and checking ERC-1271 signatures.
 
-### Build Your Own Plugin
+### Build your own Plugin
 
 Have an idea for more account features? Modular Account supports ERC-6900 for installing additional plugins to the account, letting you fully customize the account logic.
 
 Check out the plugin development guide [here]() if you’re interested!
 
-### Secure, Audited, Open Source
+### Secure, audited, open source
 
 Modular Account has been audited by Spearbit and Quanstamp. You can find the audit reports [here](). Modular Account is fully open source so you can validate the [source code]().

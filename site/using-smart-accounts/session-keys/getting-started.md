@@ -158,7 +158,7 @@ const result = await extendedClient.updateKeyPermissions({
 
 ## Creating, deleting, and editing session keys
 
-### Add a session Key
+### Add a Session Key
 
 Session keys can be added either during installation, or using the `addSessionKey` function.
 
@@ -170,7 +170,7 @@ Session keys can be removed using the `removeSessionKey` function.
 
 <<< @/snippets/session-keys/remove-session-key.ts
 
-### Update a Key's Permissions
+### Update a Key's permissions
 
 Session key permissions can be edited after creation using the `updateKeyPermissions` function. Note that you should configure initial permissions when the key is added, and not rely on a second user operation to set the permissions.
 
