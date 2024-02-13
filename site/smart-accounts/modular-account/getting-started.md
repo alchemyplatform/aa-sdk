@@ -20,13 +20,43 @@ head:
 
 # Getting started with Modular Account
 
-Getting started with Modular Account is really simple, especially if you are using `@alchemy/aa-alchemy`.
+It's easy to get started with Modular Account! We'll show you two different ways using `@alchemy/aa-alchemy` and `@alchemy/aa-core`.
+
+::: tip Choosing your package
+The [`aa-core`](/packages/aa-core/) package is not opinionated about your RPC provider and web3 library. As a result, creating a client requires more configuration. If you don't need this extra flexibility, [`aa-alchemy`](/packages/aa-alchemy/) is much easier to jump in with, as you'll see below.
+:::
 
 ## With `@alchemy/aa-alchemy`
 
-When using `@alchemy/aa-alchemy` it is really easy to get started simply do the following:
+### Install packages
+
+::: code-group
+
+```bash [npm]
+npm i @alchemy/aa-alchemy @alchemy/aa-core
+```
+
+```bash [yarn]
+yarn add @alchemy/aa-alchemy @alchemy/aa-core
+```
+
+:::
+
+### Create a client
+
+Then you can simply do the following:
 
 <<< @/snippets/aa-alchemy/connected-client.ts
+
+::: tip Address calculation
+For the Modular Account, the address of the smart account will be calculated as a combination of [several variables](https://github.com/alchemyplatform/modular-account/blob/74fe1bfa056bbd41c933990fca0598c8cc3e90e8/src/factory/MultiOwnerModularAccountFactory.sol#L66-L71). You will get the same smart account address each time you supply the same `owner` or `owners`. You can also optionally supply `salt` if you want a different address for the same owner(s) (the default salt is `0n`).
+
+If you already have an account, you can supply the `accountAddress`. In that case, the `owner` is not used for address calculation, but still used for signing the operation.
+:::
+
+That's it! You've configured your client.
+
+Next, if you want to replace that `owner` with a smart account signer, check out [choosing a signer](/signers/choosing-a-signer). Or, if you're ready to get onchain, go to [send user operations](/using-smart-accounts/send-user-operations).
 
 ## With `@alchemy/aa-core`
 
@@ -34,9 +64,17 @@ When using `@alchemy/aa-alchemy` it is really easy to get started simply do the 
 
 If you are using `@alchemy/aa-core` you'll want to also add `@alchemy/aa-accounts` to get the Smart Account factory for Modular Account.
 
-```bash
-yarn add @alchemy/aa-core @alchemy/aa-accounts
+::: code-group
+
+```bash [npm]
+npm i @alchemy/aa-core @alchemy/aa-accounts viem
 ```
+
+```bash [yarn]
+yarn add @alchemy/aa-core @alchemy/aa-accounts viem
+```
+
+:::
 
 ### Create a client
 
@@ -73,3 +111,5 @@ const decoratedClient = smartAccountClient
 
 <<< @/snippets/aa-core/smartAccountClient.ts
 :::
+
+Next, if you want to replace that `owner` with a smart account signer, check out [choosing a signer](/signers/choosing-a-signer). Or, if you're ready to get onchain, go to [send user operations](/using-smart-accounts/send-user-operations).

@@ -95,6 +95,8 @@ A Promise containing a new `LightAccount`.
 
 - `initCode: Hex` -- [optional] the initCode for deploying the smart account with which the client will connect.
 
+- `salt: bigint` -- [optional] a value that is added to the address calculation to allow for multiple accounts for the same owner. The default value supplied is `0n`. To see this calculation used in the smart contract, check out [the LightAccountFactory](https://github.com/alchemyplatform/light-account/blob/main/src/LightAccountFactory.sol#L30).
+
 - `accountAddress: Address` -- [optional] a smart account address override that this object will manage instead of generating its own.
 
 - `version: LightAccountVersion` -- [optional] the LightAccount contract version. Default: [v1.1.0](https://github.com/alchemyplatform/light-account/releases/tag/v1.1.0)

@@ -54,8 +54,8 @@ A Promise containing the `CapsuleUserInfo`, an `Record<string, Wallet>` where Wa
 
 - `signer: string` -- Capsule Signer information.
 
-- `address: string` -- [optional] EOA address of the Capusle Signer.
+- `address: string` -- [optional] EOA address of the Capsule Signer.
 
-- `publicKey: string` -- [optional] Public Key of the Capusle Signer.
+- `publicKey: string` -- [optional] Public Key of the Capsule Signer.
 
 - `scheme: WalletScheme` -- [optional] either `CGGMP` or `DKLS`.
