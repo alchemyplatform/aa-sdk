@@ -16,12 +16,6 @@ head:
   - - meta
     - name: twitter:description
       content: Explore Account Kit integration guides for signers including Magic.Link, Privy, Web3Auth, EOAs, and many more!
-prev:
-  text: Smart Accounts
-  link: /smart-accounts/
-next:
-  text: How to send a User Operation
-  link: /using-smart-accounts/send-user-operations
 ---
 
 # What is a Signer?
@@ -98,6 +92,7 @@ An improvement on SSSS is Threshold Signature Scheme (TSS). In this model, the k
 
 TSS is safer than SSSS because is possible to create the initial shares without ever constructing the original key on any one device. However, the tradeoff is that signing requires a Peer-to-Peer exchange which introduces latency.
 
+You can read more about the difference between TSS and SSSS [here](https://www.dynamic.xyz/blog/the-evolution-of-multi-signature-and-multi-party-computation).
 You can read more about the difference between TSS and SSSS [here](https://www.dynamic.xyz/blog/the-evolution-of-multi-signature-and-multi-party-computation).
 :::
 
