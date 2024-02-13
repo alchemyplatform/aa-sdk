@@ -3,15 +3,11 @@ import {
   ChainNotFoundError,
   DefaultFactoryNotDefinedError,
   arbitrum,
-  arbitrumGoerli,
   arbitrumSepolia,
   base,
-  baseGoerli,
   baseSepolia,
-  goerli,
   mainnet,
   optimism,
-  optimismGoerli,
   optimismSepolia,
   polygon,
   polygonMumbai,
@@ -51,22 +47,17 @@ export const getDefaultMultiOwnerModularAccountFactoryAddress = (
   chain: Chain
 ): Address => {
   switch (chain.id) {
-    case sepolia.id:
-    case baseSepolia.id:
-    case polygon.id:
-      return "0x000000CC76Ff50cAE2D633E79cCB1Fa1E6978D5a";
     case mainnet.id:
-    case goerli.id:
-    case polygonMumbai.id:
-    case optimism.id:
-    case optimismGoerli.id:
-    case optimismSepolia.id:
-    case arbitrum.id:
-    case arbitrumGoerli.id:
-    case arbitrumSepolia.id:
+    case sepolia.id:
     case base.id:
-    case baseGoerli.id:
-      throw new Error("not yet deployed");
+    case baseSepolia.id:
+    case optimism.id:
+    case optimismSepolia.id:
+    case polygon.id:
+    case polygonMumbai.id:
+    case arbitrum.id:
+    case arbitrumSepolia.id:
+      return "0x000000e92D78D90000007F0082006FDA09BD5f11";
   }
   throw new DefaultFactoryNotDefinedError("MultiOwnerModularAccount", chain);
 };

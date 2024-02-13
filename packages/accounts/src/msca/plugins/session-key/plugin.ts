@@ -173,9 +173,16 @@ export type SessionKeyPluginActions<
   ReadAndEncodeActions;
 
 const addresses = {
-  137: "0x000000AAF83f4cbd58193D30643025ffD6C9e724" as Address,
-  84532: "0x000000AAF83f4cbd58193D30643025ffD6C9e724" as Address,
-  11155111: "0x000000AAF83f4cbd58193D30643025ffD6C9e724" as Address,
+  1: "0x000000e30a00f600823700E975f1b1ac387f0017" as Address,
+  10: "0x000000e30a00f600823700E975f1b1ac387f0017" as Address,
+  137: "0x000000e30a00f600823700E975f1b1ac387f0017" as Address,
+  8453: "0x000000e30a00f600823700E975f1b1ac387f0017" as Address,
+  42161: "0x000000e30a00f600823700E975f1b1ac387f0017" as Address,
+  80001: "0x000000e30a00f600823700E975f1b1ac387f0017" as Address,
+  84532: "0x000000e30a00f600823700E975f1b1ac387f0017" as Address,
+  421614: "0x000000e30a00f600823700E975f1b1ac387f0017" as Address,
+  11155111: "0x000000e30a00f600823700E975f1b1ac387f0017" as Address,
+  11155420: "0x000000e30a00f600823700E975f1b1ac387f0017" as Address,
 } as Record<number, Address>;
 
 export const SessionKeyPlugin: Plugin<typeof SessionKeyPluginAbi> = {
@@ -1259,6 +1266,7 @@ export const SessionKeyPluginAbi = [
     name: "NotImplemented",
   },
   { type: "error", inputs: [], name: "NotInitialized" },
+  { type: "error", inputs: [], name: "PermissionsCheckFailed" },
   {
     type: "error",
     inputs: [{ name: "sessionKey", internalType: "address", type: "address" }],
