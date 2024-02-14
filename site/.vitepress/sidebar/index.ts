@@ -25,7 +25,7 @@ export const sidebar: DefaultTheme.Sidebar = [
           { text: "Getting started", link: "/getting-started" },
           { text: "Deployments", link: "/deployments" },
           {
-            text: "Upgrading to a Modular Account",
+            text: "Upgrading to Modular Account",
             link: "/upgrade-la-to-ma",
           },
         ],
