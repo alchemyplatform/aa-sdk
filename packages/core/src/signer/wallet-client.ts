@@ -1,8 +1,7 @@
 import {
   getAddress,
-  isHex,
-  type ByteArray,
   type Hex,
+  type SignableMessage,
   type TypedData,
   type TypedDataDefinition,
   type WalletClient,
@@ -27,23 +26,12 @@ export class WalletClientSigner implements SmartAccountSigner<WalletClient> {
     return getAddress(addresses[0]);
   };
 
-  readonly signMessage: (
-    message: string | Hex | ByteArray
-  ) => Promise<`0x${string}`> = async (message) => {
-    const account = this.inner.account ?? (await this.getAddress());
+  readonly signMessage: (message: SignableMessage) => Promise<`0x${string}`> =
+    async (message) => {
+      const account = this.inner.account ?? (await this.getAddress());
 
-    if (typeof message === "string" && !isHex(message)) {
-      return this.inner.signMessage({
-        account,
-        message,
-      });
-    } else {
-      return this.inner.signMessage({
-        account,
-        message: { raw: message },
-      });
-    }
-  };
+      return this.inner.signMessage({ message, account });
+    };
 
   signTypedData = async <
     const TTypedData extends TypedData | { [key: string]: unknown },

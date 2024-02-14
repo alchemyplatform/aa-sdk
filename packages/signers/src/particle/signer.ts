@@ -12,6 +12,7 @@ import {
   createWalletClient,
   custom,
   type Hash,
+  type SignableMessage,
   type TypedData,
   type TypedDataDefinition,
 } from "viem";
@@ -85,7 +86,7 @@ export class ParticleSigner
     return address as Hash;
   };
 
-  signMessage = async (msg: Uint8Array | string) => {
+  signMessage = async (msg: SignableMessage) => {
     if (!this.signer) throw new Error("Not authenticated");
 
     return this.signer.signMessage(msg);
