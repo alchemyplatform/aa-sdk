@@ -22,7 +22,21 @@ head:
 
 You are not limited to the accounts defined in `@alchemy/aa-accounts`. The `SmartAccountClient` can be used with any smart account because it only relies on the [`SmartContractAccount`](/packages/aa-core/accounts/index.md) interface. This means you can use your own smart account implementation with Account Kit.
 
-<!--@include: ../../packages/aa-core/accounts/index.md{21,58}-->
+<!--@include: ../../packages/aa-core/accounts/index.md{27,60}-->
+
+To use your account, you'll need to pass it into a `SmartAccountClient`.
+
+```ts
+import { createAlchemySmartAccountClient } from "@alchemy/aa-alchemy";
+import { sepolia } from "@alchemy/aa-core";
+
+const client = createAlchemySmartAccountClient({
+  // created above
+  account: myAccount,
+  chain: sepolia,
+  transport: http("RPC_URL"),
+});
+```
 
 ## `LightSmartContractAccount` as an Example
 
