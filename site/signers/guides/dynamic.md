@@ -76,9 +76,9 @@ Next, inside any component which is wrapped by the above DynamicContextProvider,
 
 <<< @/snippets/signers/dynamic.ts
 
-### Use it with Light Account
+### Use it with Modular Account
 
-Let's see it in action with `aa-alchemy` and `LightSmartContractAccount` from `aa-accounts`:
+Let's see it in action with `aa-alchemy`:
 ::: code-group
 
 ```ts [example.ts]

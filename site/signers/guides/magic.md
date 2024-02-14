@@ -50,9 +50,10 @@ Next, setup the magic sdk and create an authenticated `MagicSigner` using the `a
 
 <<< @/snippets/signers/magic.ts
 
-### Use it with Light Account
+### Use it with Modular Account
 
-Let's see it in action with `aa-alchemy` and `LightSmartContractAccount` from `aa-accounts`:
+Let's see it in action with `aa-alchemy`:
+
 ::: code-group
 
 ```ts [example.ts]
