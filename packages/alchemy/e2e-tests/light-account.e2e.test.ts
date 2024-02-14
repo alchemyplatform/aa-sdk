@@ -1,4 +1,4 @@
-import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
+import { LocalAccountSigner, arbitrumSepolia } from "@alchemy/aa-core";
 import { Alchemy, Network } from "alchemy-sdk";
 import * as simulateUoActions from "../src/actions/simulateUserOperationChanges.js";
 import { alchemyEnhancedApiActions } from "../src/client/decorators/alchemyEnhancedApis.js";
@@ -17,7 +17,7 @@ const simulateUoChangesSpy = vi.spyOn(
   "simulateUserOperationChanges"
 );
 
-const chain = sepolia;
+const chain = arbitrumSepolia;
 const network = Network.ETH_SEPOLIA;
 
 describe("Light Account Tests", () => {
@@ -195,6 +195,9 @@ describe("Light Account Tests", () => {
       uo: {
         target: provider.getAddress(),
         data: "0x",
+      },
+      overrides: {
+        callGasLimit: 0n,
       },
     });
 
