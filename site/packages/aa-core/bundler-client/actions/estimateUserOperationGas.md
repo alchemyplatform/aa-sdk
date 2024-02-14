@@ -46,6 +46,6 @@ The result of the estimate including the `callGasLimit`, `verificationGasLimit`,
 
 The user operation to send
 
-### `entryPointAddress: Address`
+### `entryPoint: Address`
 
 The address of the entry point to send the user operation to

@@ -6,10 +6,10 @@ head:
       content: waitForUserOperationTransaction
   - - meta
     - name: description
-      content: Overview of the waitForUserOperationTransaction method on ISmartAccountClient
+      content: Overview of the waitForUserOperationTransaction method on SmartAccountClient
   - - meta
     - property: og:description
-      content: Overview of the waitForUserOperationTransaction method on ISmartAccountClient
+      content: Overview of the waitForUserOperationTransaction method on SmartAccountClient
 ---
 
 # waitForUserOperationTransaction
@@ -23,7 +23,7 @@ Note: For more details on how to modify the retry configurations for this method
 ::: code-group
 
 ```ts [example.ts]
-import { smartAccountClient } from "./provider";
+import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
 const userOperationResult = await smartAccountClient.sendUserOperation({
   uo: {

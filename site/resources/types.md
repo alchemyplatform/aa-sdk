@@ -80,7 +80,7 @@ Interface for structuring a `UserOperation`, with fields similar to `UserOperati
 
 [See Interface ↗️](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/core/src/types.ts#L187)
 
-## `ISmartContractAccount`
+## `SmartContractAccount`
 
 Interface defining methods for managing and interacting with a smart account. It includes functionalities for obtaining the smart account’s initialization code, signing messages and operations, encoding transaction calls, retrieving account details like nonce and addresses, and handling ownership aspects of the smart account.
 

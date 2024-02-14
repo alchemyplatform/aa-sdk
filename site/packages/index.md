@@ -36,15 +36,15 @@ For more details on all the utilities exported by `aa-core` see the [aa-core doc
 
 ## [`aa-alchemy`](/packages/aa-alchemy/)
 
-This package builds on `aa-core` by exporting an `AlchemySmartAccountClient` which extends `SmartAccountClient` and adds some additional utilities for interacting with our APIs and `Rundler`. The Provider also exports utilities for leveraging our Gas Manager.
+This package builds on `aa-core` by exporting an `AlchemySmartAccountClient` which extends `SmartAccountClient` and adds some additional utilities for interacting with our APIs and `Rundler`. The Client also exports utilities for leveraging our Gas Manager.
 
-**If you are using our Bundler (`Rundler`) and Gas Manager you have to use this package.** This is due to the specifics around how our bundler does gas estimation. Not using this package and it's provider can result in incorrect gas estimations and failed transactions.
+**If you are using our Bundler (`Rundler`) and Gas Manager you have to use this package.** This is due to the specifics around how our bundler does gas estimation. Not using this package and it's client can result in incorrect gas estimations and failed transactions.
 
 For more details on all the utilities exported by `aa-alchemy` see the [aa-alchemy documentation](/packages/aa-alchemy/).
 
 ## [`aa-accounts`](/packages/aa-accounts/)
 
-This packages provides various implementations of `SmartContractAccount` for interacting with different smart accounts. This package is not required to use `aa-core` or `aa-alchemy`. If you want to use your own smart account implementation, you can do so by following the guide ["Using Your Own Account"](/smart-accounts/custom/using-your-own).
+This packages provides various implementations of `SmartContractAccount` for interacting with different smart accounts. This package is not required to use `aa-core` or `aa-alchemy`. If you want to use your own smart account implementation, you can do so by following the guide ["Using your own Account"](/smart-accounts/custom/using-your-own).
 
 If you'd like to use a smart account that is not supported by this package, you can implement `SmartContractAccount` yourself and use it with `aa-core` or `aa-alchemy`
 
@@ -54,7 +54,7 @@ To see all of the smart accounts that are supported by this package, see the [aa
 
 ## [`aa-signers`](/packages/aa-signers/)
 
-This packages provides various implementations of `SmartAccountSigner` and `SmartAccountAuthenticator` for integrating different Signers of your smart account. This package is not required to use `aa-core` or `aa-alchemy`. If you want to use your own Signer implementation, you can do so by following the guide ["Using Your Own Signer"](/signers/guides/custom-signer).
+This packages provides various implementations of `SmartAccountSigner` and `SmartAccountAuthenticator` for integrating different Signers of your smart account. This package is not required to use `aa-core` or `aa-alchemy`. If you want to use your own Signer implementation, you can do so by following the guide ["Using your own Signer"](/signers/guides/custom-signer).
 
 If you'd like to use a signer that is not supported by this package, you can implement a `SmartAccountSigner` or `SmartAccountAuthenticator` yourself and use it with `aa-core` or `aa-alchemy`.
 

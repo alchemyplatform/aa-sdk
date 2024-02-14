@@ -23,7 +23,7 @@ head:
 ```ts [example.ts]
 import { signer } from "./ethers-signer";
 
-// get the signer's underlying viem client with EIP-4337 capabilties
+// get the signer's underlying viem client with EIP-4337 capabilities
 const client = signer.getBundlerClient();
 ```
 

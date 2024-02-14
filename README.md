@@ -14,7 +14,7 @@ The core SDK also implements an EIP-1193 provider interface to easily plug into 
 
 The `aa-sdk` is modular at every layer of the stack and can be easily extended to fit your custom needs. You can plug in any [smart account](https://accountkit.alchemy.com/smart-accounts/custom/using-your-own) implementation, [Signer](https://accountkit.alchemy.com/signers/overview), [Gas Manager API](https://accountkit.alchemy.com/getting-started/overview.html#gas-manager-api) and RPC Provider.
 
-## Getting Started
+## Getting started
 
 The `aa-sdk` is part of [Account Kit](https://accountkit.alchemy.com). Check out this [quickstart guide](https://accountkit.alchemy.com/getting-started.html) to get started, or an [overview](https://accountkit.alchemy.com/overview/package-overview.html) of each of the SDKs in this repo.
 

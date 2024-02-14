@@ -6,12 +6,17 @@ export const aaCoreSidebar: DefaultTheme.SidebarItem = {
   collapsed: true,
   items: [
     {
-      text: "Getting Started",
+      text: "Getting started",
       link: "/",
     },
     {
       text: "Smart Account Client",
       base: "/packages/aa-core/smart-account-client",
+      link: "/index",
+    },
+    {
+      text: "Client Middleware",
+      base: "/packages/aa-core/smart-account-client/middleware",
       link: "/index",
     },
     {
@@ -82,6 +87,10 @@ export const aaCoreSidebar: DefaultTheme.SidebarItem = {
         {
           text: "getAddress",
           link: "/getAddress",
+        },
+        {
+          text: "upgradeAccount",
+          link: "/upgradeAccount",
         },
         {
           text: "Types",

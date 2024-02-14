@@ -56,7 +56,7 @@ The SDK also implements an EIP-1193 provider interface to easily plug into any p
 
 The `aa-sdk` is modular at every layer of the stack and can be easily extended to fit your custom needs. You can plug in any [smart account](/smart-accounts/custom/using-your-own) implementation, [Signer](/signers/choosing-a-signer), Gas Manager API, RPC provider.
 
-Get started with `aa-sdk` in our [Getting Started guide](/getting-started/setup) or checkout the [open source repo](https://github.com/alchemyplatform/aa-sdk).
+Get started with `aa-sdk` in our [Getting started](/getting-started/setup) guide or checkout the [open source repo](https://github.com/alchemyplatform/aa-sdk).
 
 ## Light Account
 
@@ -70,13 +70,13 @@ Get started with `aa-sdk` in our [Getting Started guide](/getting-started/setup)
 
 A Signer is responsible for securely managing the private key and signing transaction requests on the smart account. Account Kit supports many popular wallet signers. It also supports self-custodial wallets like MetaMask or Ledger.
 
-To get started with a Signer, read the doc: [How to Choose a Signer](/signers/choosing-a-signer).
+To get started with a Signer, read the doc: [Choosing a Smart Account](/signers/choosing-a-signer).
 
 ## Gas Manager API
 
 The Gas Manager is a programmable API to sponsor gas for UserOps. You can create programmable gas policies to specify exactly which transactions should be sponsored, set strict spending limits per wallet or globally, and allowlist/blocklist particular wallet addresses. This expressive programmability is available through a REST API and an intuitive dashboard interface.
 
-To learn how to sponsor gas with the Gas Manager API, see the [Sponsoring Gas](/using-smart-accounts/sponsoring-gas/gas-manager) tutorial.
+To learn how to sponsor gas with the Gas Manager API, see the [Sponsoring gas](/using-smart-accounts/sponsoring-gas/gas-manager) tutorial.
 
 ## Bundler API
 
@@ -90,4 +90,4 @@ Check out the open source code in our affectionately named [Rundler github repo]
 
 Account Kit was designed from the ground up to make account abstraction easy. It’s built on top of industry-leading infrastructure that powers applications at massive scale from Opensea to Shopify.
 
-Next, read the [Quick Start guide](/getting-started/setup) to get setup in minutes!
+Next, read the [Quick start](/getting-started/setup) guide to get setup in minutes!

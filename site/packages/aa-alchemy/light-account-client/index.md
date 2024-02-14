@@ -14,7 +14,7 @@ head:
 
 # createLightAccountAlchemyClient
 
-`createLightAccountAlchemyClient` is a factory that improves the developer experience of connecting a Light Account to an `AlchemyProvider` via an optional dependency on the [`@alchemy/aa-accounts`](https://github.com/alchemyplatform/aa-sdk/tree/development/packages/accounts) package. You can use this to directly instantiate an `AlchemySmartAccountClient` already connected to a Light Account in one line of code.
+`createLightAccountAlchemyClient` is a factory that improves the developer experience of connecting a Light Account to an `AlchemySmartAccountClient` via an optional dependency on the [`@alchemy/aa-accounts`](https://github.com/alchemyplatform/aa-sdk/tree/development/packages/accounts) package. You can use this to directly instantiate an `AlchemySmartAccountClient` already connected to a Light Account in one line of code.
 
 ## Usage
 
@@ -31,7 +31,7 @@ A Promise containing a new `AlchemySmartAccountClient` connected to a Light Acco
 
 ## Parameters
 
-### `config: AlchemyProviderConfig`
+### `config: AlchemyLightAccountClientConfig`
 
 - `rpcUrl: string | undefined | never` -- a JSON-RPC URL. This is required if there is no `apiKey`.
 
@@ -39,31 +39,13 @@ A Promise containing a new `AlchemySmartAccountClient` connected to a Light Acco
 
 - `jwt: string | undefined | never` -- an Alchemy JWT (JSON web token). This is required if there is no `apiKey`.
 
-- `chain: Chain` -- the chain on which to create the provider.
+- `useSimulation: boolean` -- [optional] -- whether or not to simulate User Operations before sending them to ensure they don't revert
 
-- `owner: SmartAccountSigner` -- the owner EOA address responsible for signing user operations on behalf of the smart account.
+- `gasManagerConfig: AlchemyGasManagerConfig` -- [optional] if you want to use Alchemy's gas manager to sponsor gas.
 
-- `entryPointAddress: Address | undefined` -- [optional] the entry point contract address. If not provided, the entry point contract address for the provider is the connected account's entry point contract, or if not connected, falls back to the default entry point contract for the chain. See [getDefaultEntryPointAddress](/packages/aa-core/utils/getDefaultEntryPointAddress.html#getdefaultentrypointaddress).
+  - `policyId: string` -- the policy id of the gas manager you want to use.
+  - `gasEstimationOptions: AlchemyGasEstimationOptions` -- [optional] optional option configurable for the gas estimation portion of the Alchemy gas manager
 
-- `opts: SmartAccountClientOpts | undefined` -- [optional] overrides on provider config variables having to do with fetching transaction receipts and fee computation.
+- `...accountParams`: CreateLightAccountParams -- additional parameters to pass to the [`createLightAccount`](/packages/aa-accounts/light-account/#createlightaccount).
 
-  - `txMaxRetries: string | undefined` -- [optional] the maximum number of times to try fetching a transaction receipt before giving up (default: 5).
-
-  - `txRetryIntervalMs: string | undefined` -- [optional] the interval in milliseconds to wait between retries while waiting for transaction receipts (default: 2_000).
-
-  - `txRetryMultiplier: string | undefined` -- [optional] the mulitplier on interval length to wait between retries while waiting for transaction receipts (default: 1.5).
-
-  - `feeOptions:` [`UserOperationFeeOptions`](/packages/aa-core/smart-account-client/types/userOperationFeeOptions.md) `| undefined` --[optional] user operation fee options to be used for gas estimation, set at the global level on the provider.
-    If not set, default fee options for the chain are used. Available fields in `feeOptions` include `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` where each field is of type [`UserOperationFeeOptionsField`](/packages/aa-core/smart-account-client/types/userOperationFeeOptionsField.md).
-
-    - `maxFeePerGas`: `UserOperationFeeOptionsField`
-    - `maxPriorityFeePerGas`: `UserOperationFeeOptionsField`
-    - `callGasLimit`: `UserOperationFeeOptionsField`
-    - `verificationGasLimit`: `UserOperationFeeOptionsField`
-    - `preVerificationGas`: `UserOperationFeeOptionsField`
-
-- `factoryAddress: Address | undefined` -- [optional] the factory address for the smart account implementation, which is required for creating the account if not already deployed. Defaults to the [getDefaultLightAccountFactoryAddress](/packages/aa-accounts/utils/getDefaultLightAccountFactoryAddress.md)
-
-- `initCode: Hex | undefined` -- [optional] the initCode for deploying the smart account with which the provider will connect.
-
-- `accountAddress: Address | undefined` -- [optional] [optional] a smart account address override that this object will manage instead of generating its own.
+- `...clientParams` -- [optional] additional parameters to pass to the [`SmartAccountClient`](/packages/aa-core/smart-account-client/) constructor.

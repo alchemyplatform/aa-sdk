@@ -34,10 +34,10 @@ const signedMessage = await signer.signMessage("test");
 
 ### `Promise<string>`
 
-A Promise containing the hex signture of the message
+A Promise containing the hex signature of the message
 
 ## Parameters
 
-### `msg: string | Uint8Arra`
+### `msg: string | Uint8Array`
 
 The message to sign

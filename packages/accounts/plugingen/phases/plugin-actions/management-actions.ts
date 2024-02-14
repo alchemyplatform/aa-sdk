@@ -75,7 +75,7 @@ export const ManagementActionsGenPhase: Phase = async (input) => {
           contract.name
         } address for chain " + chain.name);
       }
-      
+
       return installPlugin_(client, {
         pluginAddress,
         pluginInitData: encodeAbiParameters(${JSON.stringify(

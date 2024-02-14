@@ -6,7 +6,7 @@ The `SmartAccountProvider` is an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1
 
 The `BaseSmartContractAccount` interface defines how you would interact with your Smart Contract Account. Any class that extends `BaseSmartContractAccount` may also expose additional methods that allow its connecting `SmartAccountProvider` to provide ergonomic utilities for building and submitting `User Operation`s.
 
-## Getting Started
+## Getting started
 
 To get started, first install the package:
 
@@ -27,31 +27,28 @@ pnpm i @alchemy/aa-core
 You can create a provider like so:
 
 ```typescript
-import {
-  LightSmartContractAccount,
-  getDefaultLightAccountFactoryAddress,
-} from "@alchemy/aa-accounts";
+import { createMultiOwnerModularAccount } from "@alchemy/aa-accounts";
 import {
   LocalAccountSigner,
-  SmartAccountProvider,
   SmartAccountSigner,
+  createSmartAccountClient,
+  polygonMumbai,
 } from "@alchemy/aa-core";
-import { polygonMumbai } from "@alchemy/aa-core";
+import { http } from "viem";
 
 const chain = polygonMumbai;
-const owner: SmartAccountSigner =
-  LocalAccountSigner.mnemonicToAccountSigner(YOUR_OWNER_MNEMONIC);
-
-export const provider = new SmartAccountProvider({
-  rpcProvider: "https://polygon-mumbai.g.alchemy.com/v2/demo",
-  chain,
-}).connect(
-  (rpcClient) =>
-    new LightSmartContractAccount({
-      chain,
-      factoryAddress: getDefaultLightAccountFactoryAddress(chain),
-      rpcClient,
-      owner,
-    })
+const owner: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
+  "YOUR_OWNER_MNEMONIC"
 );
+const rpcTransport = http("https://polygon-mumbai.g.alchemy.com/v2/demo");
+
+export const smartAccountClient = createSmartAccountClient({
+  transport: rpcTransport,
+  chain,
+  account: await createMultiOwnerModularAccount({
+    transport: rpcTransport,
+    chain,
+    owner,
+  }),
+});
 ```

@@ -35,22 +35,22 @@ export const provider = new EthersProviderAdapter({
 });
 
 // another way to initialize
-const accountProvider = new AlchemyProvider({
+export const accountProvider = createAlchemySmartAccountClient({
   apiKey: "ALCHEMY_API_KEY", // replace with your Alchemy API Key
   chain: sepolia,
-  entryPointAddress: getDefaultEntryPointAddress(sepolia),
   opts: {
     txMaxRetries: 10,
     txRetryIntervalMs: 2_000,
     txRetryMultiplier: 1.5,
     minPriorityFeePerBid: 100_000_000n,
-  },
-  feeOpts: {
-    baseFeeBufferPercent: 50n,
-    maxPriorityFeeBufferPercent: 5n,
-    preVerificationGasBufferPercent: 5n,
+    feeOpts: {
+      baseFeeBufferPercent: 50n,
+      maxPriorityFeeBufferPercent: 5n,
+      preVerificationGasBufferPercent: 5n,
+    },
   },
 });
+
 export const anotherProvider = new EthersProviderAdapter({
   accountProvider,
 });
@@ -72,7 +72,7 @@ Either:
 
 - `rpcProvider: string | BundlerClient` -- a JSON-RPC URL, or a viem Client that supports ERC-4337 methods and Viem public actions. See [createBundlerClient](/packages/aa-core/bundler-client/index.md).
 
-- `chainId: number` -- the ID of thechain on which to create the provider.
+- `chainId: number` -- the ID of the chain on which to create the provider.
 
 Or:
 

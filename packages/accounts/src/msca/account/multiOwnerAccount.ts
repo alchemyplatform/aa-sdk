@@ -33,7 +33,7 @@ export type CreateMultiOwnerModularAccountParams<
   transport: TTransport;
   chain: Chain;
   owner: TOwner;
-  index?: bigint;
+  salt?: bigint;
   factoryAddress?: Address;
   owners?: Address[];
   entryPoint?: EntryPointDef<UserOperationRequest>;
@@ -57,7 +57,7 @@ export async function createMultiOwnerModularAccount({
   entryPoint = getVersion060EntryPoint(chain),
   factoryAddress = getDefaultMultiOwnerModularAccountFactoryAddress(chain),
   owners = [],
-  index = 0n,
+  salt = 0n,
 }: CreateMultiOwnerModularAccountParams): Promise<MultiOwnerModularAccount> {
   let owner = owner_;
   const client = createBundlerClient({
@@ -85,7 +85,7 @@ export async function createMultiOwnerModularAccount({
       encodeFunctionData({
         abi: MultiOwnerModularAccountFactoryAbi,
         functionName: "createAccount",
-        args: [index, owners_],
+        args: [salt, owners_],
       }),
     ]);
   };

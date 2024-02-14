@@ -6,10 +6,10 @@ head:
       content: buildUserOperationFromTx
   - - meta
     - name: description
-      content: Overview of the buildUserOperationFromTx method on ISmartAccountClient
+      content: Overview of the buildUserOperationFromTx method on SmartAccountClient
   - - meta
     - property: og:description
-      content: Overview of the buildUserOperationFromTx method on ISmartAccountClient
+      content: Overview of the buildUserOperationFromTx method on SmartAccountClient
 ---
 
 # buildUserOperationFromTx

@@ -6,10 +6,10 @@ head:
       content: SmartContractAccount
   - - meta
     - name: description
-      content: Overview of SmartContractAccount interface exported by aa-core accounts
+      content: Overview of SmartContractAccount exported by aa-core
   - - meta
     - property: og:description
-      content: Overview of SmartContractAccount interface exported by aa-core accounts
+      content: Overview of SmartContractAccount exported by aa-core
 prev:
   text: SmartAccountClient
 ---
@@ -25,7 +25,10 @@ If you have your own smart contract that you'd like to interact with, then you c
 ### Usage
 
 ```ts
-import { toSmartContractAccount } from "@alchemy/aa-core";
+import {
+  getVersion060EntryPoint,
+  toSmartContractAccount,
+} from "@alchemy/aa-core";
 import { sepolia } from "viem/chains";
 
 const myAccount = await toSmartContractAccount({
@@ -33,8 +36,8 @@ const myAccount = await toSmartContractAccount({
   source: "MyAccount",
   transport: http("RPC_URL"),
   chain: sepolia,
-  // The entry point contract that your account is compatible with
-  entryPointAddress: "0x1234...",
+  // The EntryPointDef that your account is compatible with
+  entryPoint: getVersion060EntryPoint(sepolia),
   // This should return a concatenation of your `factoryAddress` and the `callData` for your factory's create account method
   getAccountInitCode: () => "0x{factoryAddress}{callData}",
   // an invalid signature that doesn't cause your account to revert during validation

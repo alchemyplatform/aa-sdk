@@ -12,7 +12,7 @@ head:
       content: Upgrading to a Modular Account using Account Kit
   - - meta
     - name: twitter:title
-      content: Modular Account • Upgrading a Modular Account using Account Kit
+      content: Modular Account • Upgrading to a Modular Account using Account Kit
   - - meta
     - name: twitter:description
       content: Upgrading to a Modular Account using Account Kit

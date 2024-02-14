@@ -23,7 +23,7 @@ head:
 ```ts [example.ts]
 import { provider } from "./ethers-provider";
 
-// get the provider's underlying viem client with EIP-4337 capabilties
+// get the provider's underlying viem client with EIP-4337 capabilities
 const client = provider.getBundlerClient();
 ```
 

@@ -28,7 +28,7 @@ To ensure the best developer experience for anyone using Account Kit, we ask tha
 
 There, you'll be able to implement [`SmartAccountAuthenticator`](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/core/src/signer/types.ts#L15) interface from `aa-core` which offers a wrapper for any SDKs, `inner`, that you may use to call upon for implementation details. You may also wish to build your Signer implementation from scratch.
 
-In either case, if your `Signer` or library exports an `EIP-1193` compliant provider, you may find it helpful to use [`WalletClientSigner`](/packages/aa-core/signers/wallet-client) from `aa-core` to easily integrate your Signer in `aa-signers`. See the ["Using Your Own Signer"](/signers/guides/custom-signer) guide for more details.
+In either case, if your `Signer` or library exports an `EIP-1193` compliant provider, you may find it helpful to use [`WalletClientSigner`](/packages/aa-core/signers/wallet-client) from `aa-core` to easily integrate your Signer in `aa-signers`. See the ["Using your own Signer"](/signers/guides/custom-signer) guide for more details.
 
 Make sure to include unit tests along with your implementation! Take a look at these PRs from [Magic](https://github.com/alchemyplatform/aa-sdk/pull/229) and [Web3Auth](https://github.com/alchemyplatform/aa-sdk/pull/247) for reference.
 
@@ -60,7 +60,7 @@ Find the `aa-signers` item in the `sidebar` and add a new entry in `items`. The 
       base: "/packages/aa-signers",
       items: [
         {
-          text: "Getting Started",
+          text: "Getting started",
           link: "/",
         },
         // ... other Signers
@@ -110,7 +110,7 @@ Find the `Choosing a Signer` item in the `sidebar` and add a new entry in `items
             // ... other signers
             { text: "Your Signer", link: "/your-signer-name" },
             { text: "Externally Owned Account (EOA)", link: "/eoa" },
-            { text: "Using Your Own", link: "/custom-signer" },
+            { text: "Using your own", link: "/custom-signer" },
           ],
         },
         { text: "Contributing Your Signer", link: "/contributing" },
@@ -124,6 +124,6 @@ In that linked file `your-signer-name` under Signer Guides, add your step-by-ste
 
 Again, for reference, take a look at these PRs from [Magic](https://github.com/alchemyplatform/aa-sdk/pull/229) and [Web3Auth](https://github.com/alchemyplatform/aa-sdk/pull/247).
 
-## 3. Submit a Pull Request
+## 3. Submit a pull request
 
 You can open a PR to merge the branch with your Signer implementation from your forked repo into the `main` branch of the `aa-sdk` repo. We'll make sure to review it promptly, provider feedback, and merge the PR when ready so that developers can use your Signer!

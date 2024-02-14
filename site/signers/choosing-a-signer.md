@@ -16,12 +16,6 @@ head:
   - - meta
     - name: twitter:description
       content: Explore Account Kit integration guides for signers including Magic.Link, Privy, Web3Auth, EOAs, and many more!
-prev:
-  text: Smart Accounts
-  link: /smart-accounts/
-next:
-  text: How to Send a User Operation
-  link: /using-smart-accounts/send-user-operations
 ---
 
 # What is a Signer?
@@ -60,25 +54,25 @@ Here are some important criteria to consider when choosing a Signer.
   - Self-Custodial: the end user controls the private key and manually approves signature requests
   - Non-Custodial: a third-party service manages the private key or a subset of the key shares, but cannot sign transactions without the user’s involvement
   - Custodial: a third-party service manages the private key and can sign transactions without the user’s involvement
-- **Security Model**: Assess the security model of the provider. Where is the private key stored? (on a device? in the cloud? on what cloud provider?) Is the private key encrypted? What encryption algorithm is used? Who has access to the decryption keys? This is a non-exhaustive list and we recommend doing further research.
-- **Authentication Methods:** What authentication method delivers the right balance of security, self-sovereignty, and ease-of-use for your target users?
+- **Security model**: Assess the security model of the provider. Where is the private key stored? (on a device? in the cloud? on what cloud provider?) Is the private key encrypted? What encryption algorithm is used? Who has access to the decryption keys? This is a non-exhaustive list and we recommend doing further research.
+- **Authentication methods:** What authentication method delivers the right balance of security, self-sovereignty, and ease-of-use for your target users?
   - Email + Password: sign up for a smart account with an email and password.
-  - Social Logins: sign up for a smart account with Google, Facebook, or other social logins.
+  - Social logins: sign up for a smart account with Google, Facebook, or other social logins.
   - Passkeys: sign up for a smart account secured by a passkey (e.g. fingerprint or Face ID) stored on-device.
-  - Self Custodial Wallet: sign up for a smart account using a self-custodial wallet such as MetaMask or Ledger.
+  - Self custodial Wallet: sign up for a smart account using a self-custodial wallet such as MetaMask or Ledger.
 - **Availability:** If the Signer service provider goes down, will users be able to sign transactions?
-- **Key Export:** Does the Signer allow the end user to export their private key? Can the user initiate an export even if the service provider has gone down? This is an important factor to ensure the user retains control of their assets no matter what happens to the service provider.
-- **Key Recovery**: If the user forgets their password or loses their passkey, what recovery methods does the Signer provide? If the provider stores a backup copy of the private key or MPC key shares, where are those backups stored and who has access to them?
+- **Key export:** Does the Signer allow the end user to export their private key? Can the user initiate an export even if the service provider has gone down? This is an important factor to ensure the user retains control of their assets no matter what happens to the service provider.
+- **Key recovery**: If the user forgets their password or loses their passkey, what recovery methods does the Signer provide? If the provider stores a backup copy of the private key or MPC key shares, where are those backups stored and who has access to them?
 
 ## Types of Signers
 
-### Non-custodial Wallets
+### Non-custodial wallets
 
 Non-custodial wallet providers store private keys such that they cannot access the private key without the user’s involvement. For example, the user must provide a password or passkey that only they know in order to decrypt the private key stored by the provider. Users benefit from heightened security, while remaining in control of their private keys at all times. This is similar to a safety deposit box vault: the provider secures the bank vault but only the user has access to the individual safety deposit boxes (e.g. wallets).
 
 **Example**: Turnkey, Magic
 
-### MPC Wallets (non-custodial)
+### MPC wallets (non-custodial)
 
 Multi-Party Computation (MPC) Signers split the Owner Account private key into key shares that are then distributed to a number of share holders. Share holders only know the value of their key share and transaction holders can sign transactions without revealing their key shares to other holders.
 
@@ -99,6 +93,7 @@ An improvement on SSSS is Threshold Signature Scheme (TSS). In this model, the k
 TSS is safer than SSSS because is possible to create the initial shares without ever constructing the original key on any one device. However, the tradeoff is that signing requires a Peer-to-Peer exchange which introduces latency.
 
 You can read more about the difference between TSS and SSSS [here](https://www.dynamic.xyz/blog/the-evolution-of-multi-signature-and-multi-party-computation).
+You can read more about the difference between TSS and SSSS [here](https://www.dynamic.xyz/blog/the-evolution-of-multi-signature-and-multi-party-computation).
 :::
 
 ### Decentralized MPC network (non-custodial)
@@ -115,7 +110,7 @@ Self-custodial wallets require the user to maintain good security hygiene at all
 
 **Example**: MetaMask, Ledger
 
-### Custodial Wallet
+### Custodial wallet
 
 Custodial wallet providers have full control over the user’s private key and sign transactions on behalf of the user. These services typically implement security measures to ensure that only the authorized user(s) can request a signature. These providers are also typically regulated entities (e.g., qualified custodians). The user must trust this service provider to securely store the private key and sign transactions if and only if the user wishes.
 

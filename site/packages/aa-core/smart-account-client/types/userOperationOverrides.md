@@ -16,16 +16,16 @@ next:
 
 # UserOperationOverrides
 
-Contains override values to be applied on the user operation reqeust to be constructed or sent. Available fields include `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` or `paymasterAndData`.
+Contains override values to be applied on the user operation request to be constructed or sent. Available fields include `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` or `paymasterAndData`.
 
 These override values are available from each middleware of the `SmartAccountClient`. For example, the default middlewares such as `gasEstimator` or `feeEstimator` apply the overrides values to the estimated values if the override values are provided.
 
 Other than the `paymasterAndData` field, the override fields could be either the absolute value or the percentage value. In the default middlewares, if the override value is an absolute value, it simply overrides the estimated value. If the override value is a percentage value, the estimated value is _bumped_ with the indicated percentage value. For example, if the override value is `{ percentage: 10 }` for the `maxPriorityFeePerGas` field, then 10% bump is applied to the estimated `maxPriorityFeePerGas` of the user operation.
 
-The `paymasterAndData` only allows an absolute value override, and if the override value is provided, then the paymaster middleware is bypassed entirely. Refer to our guide [How to Handle User Operations that are Not Eligible for Gas Sponsorship](/using-smart-accounts/sponsoring-gas/checking-eligibility.md) on the example of using the `paymasterAndData` override to bypass the paymaster middleware to fallback to the user paying the gas fee instead of the gas being subsidized by the paymaster.
+The `paymasterAndData` only allows an absolute value override, and if the override value is provided, then the paymaster middleware is bypassed entirely. Refer to our guide [How to handle User Operations that are not eligible for gas sponsorship](/using-smart-accounts/sponsoring-gas/checking-eligibility.md) on the example of using the `paymasterAndData` override to bypass the paymaster middleware to fallback to the user paying the gas fee instead of the gas being subsidized by the paymaster.
 
 :::tip Note
-Note that if you are using your own middleware, for example a custom `feeEstimator` using config method on the client, then the default `feeEstimator` middleware is overriden. As you are opting out of using the default middleware, you are also responsible for handling the `UserOperationOverrides` appropriately.
+Note that if you are using your own middleware, for example a custom `feeEstimator` using config method on the client, then the default `feeEstimator` middleware is overridden. As you are opting out of using the default middleware, you are also responsible for handling the `UserOperationOverrides` appropriately.
 :::
 
 ```ts
@@ -51,17 +51,7 @@ export type UserOperationOverrides = Partial<{
 
 ```ts [user-operation-override.ts]
 import type { UserOperationOverrides } from "@alchemy/aa-core";
-import { provider } from "./provider.ts";
-
-// Find your Gas Manager policy id at:
-//dashboard.alchemy.com/gas-manager/policy/create
-const GAS_MANAGER_POLICY_ID = "YourGasManagerPolicyId";
-
-// Link the provider with the Gas Manager. This ensures user operations
-// sent with this provider get sponsorship from the Gas Manager.
-provider.withAlchemyGasManager({
-  policyId: GAS_MANAGER_POLICY_ID,
-});
+import { smartAccountClient } from "./smartAccountClient.ts";
 
 // [!code focus:16]
 // Use maxFeePerGas, maxPriorityFeePerGas, and paymasterAndData override
@@ -72,7 +62,7 @@ const overrides: UserOperationOverrides = {
   paymasterAndData: "0x",
 };
 
-const userOperationResult = await provider.sendUserOperation(
+const userOperationResult = await smartAccountClient.sendUserOperation(
   {
     target: "0xTargetAddress",
     data: "0xCallData",
@@ -80,12 +70,12 @@ const userOperationResult = await provider.sendUserOperation(
   overrides
 );
 
-// Fallback to user paying the gas fee isntead of the paymaster
-const txHash = await provider.waitForUserOperationTransaction({
+// Fallback to user paying the gas fee instead of the paymaster
+const txHash = await smartAccountClient.waitForUserOperationTransaction({
   hash: userOperationResult.hash,
 });
 ```
 
-<<< @/snippets/aa-core/smartAccountClient.ts
+<<< @/snippets/aa-alchemy/gas-manager-client.ts [smartAccountClient.ts]
 
 :::

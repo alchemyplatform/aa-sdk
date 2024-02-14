@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Getting Started Guide
+      content: Getting started guide
   - - meta
     - name: description
       content: Learn how to get started with Alchemy's Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
@@ -12,7 +12,7 @@ head:
       content: Learn how to get started with Alchemy's Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - name: twitter:title
-      content: Getting Started Guide
+      content: Getting started guide
   - - meta
     - name: twitter:description
       content: Learn how to get started with Alchemy's Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
@@ -31,13 +31,13 @@ In your project directory, you'll need to run the following to install the requi
 ```bash [npm]
 npm init es6 -y
 npm install -save-dev typescript
-npm install @alchemy/aa-alchemy @alchemy/aa-accounts @alchemy/aa-core viem
+npm install @alchemy/aa-alchemy @alchemy/aa-core @alchemy/aa-accounts @alchemy/aa-signers viem
 ```
 
 ```bash [yarn]
 yarn init -y
 yarn add -D typescript
-yarn add @alchemy/aa-alchemy @alchemy/aa-accounts @alchemy/aa-core viem
+yarn add @alchemy/aa-alchemy @alchemy/aa-core @alchemy/aa-accounts @alchemy/aa-signers viem
 ```
 
 ::: tip Note
@@ -97,7 +97,7 @@ To read or write any data to a blockchain, you'll need an Alchemy API Key and RP
 
 Using the SDK in the following example, we'll use the Account Kit to generate the address of your smart account from which to eventually send a UO.
 
-<<< @/snippets/getting-started/provider.ts
+<<< @/snippets/getting-started/client.ts
 
 Copy the above into `index.ts`. To run the script, do:
 
@@ -155,20 +155,20 @@ When running the above script, you might see the following errors:
 These are due to increase network activity at that time, and are fleeting issues. Running the script again will resolve them naturally.
 :::
 
-Since this "Getting Started" example is a simple script, you'll need to consider how Account Kit can work in various applications. Check out our [Demos](/overview/demos) to see how.
+Since this "Getting started" example is a simple script, you'll need to consider how Account Kit can work in various applications. Check out our [Demos](/overview/demos) to see how.
 
 ## 6. Dive deeper
 
-In this guide, we initialized an `AlchemyProvider` with the `aa-alchemy` package to send a UO. However, you can do a lot more with Account Kit and its many packages.
+In this guide, we initialized an `AlchemySmartAccountClient` with the `aa-alchemy` package to send a UO. However, you can do a lot more with Account Kit and its many packages.
 
-1. To learn more about the different packages and their use cases, check out the [Packages Overview](/packages/) page.
+1. To learn more about the different packages and their use cases, check out the [Packages overview](/packages/) page.
 
 2. To learn about the end-to-end process of integrating smart accounts in your applications, check out the section on [Smart Accounts](/smart-accounts/).
 
 3. To learn about the `owner` field on your smart account, check out the section on [Choosing a Signer](/signers/choosing-a-signer) to own the smart account.
 
-4. To learn more about different User Operations you can send with different `target` and `data` fields in the `sendUserOperation` function above, look at our [How to Send a User Operation](/using-smart-accounts/send-user-operations) guide for an example using NFT mints.
+4. To learn more about different User Operations you can send with different `target` and `data` fields in the `sendUserOperation` function above, look at our [How to send a User Operation](/using-smart-accounts/send-user-operations) guide for an example using NFT mints.
 
-5. To explore more ways to use Account Kit, check out the many step-by-step guides, such as [How to Sponsor Gas for a User Operation](/using-smart-accounts/sponsoring-gas/gas-manager) or [How to Fetch Smart Account Data](/using-smart-accounts/enhanced-apis/nft).
+5. To explore more ways to use Account Kit, check out the many step-by-step guides, such as [How to sponsor gas for a UserOperation](/using-smart-accounts/sponsoring-gas/gas-manager) or [How to fetch a Smart Account's NFTs](/using-smart-accounts/enhanced-apis/nft).
 
 6. To see Account Kit in action, check out our [Demos](/overview/demos).

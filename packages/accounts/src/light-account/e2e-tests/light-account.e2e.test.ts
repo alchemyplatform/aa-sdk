@@ -21,7 +21,7 @@ import {
   type LightAccountVersion,
 } from "../../index.js";
 import { getMSCAUpgradeToData } from "../../msca/utils.js";
-import { createLightAccountClient } from "../createLightAccountClient.js";
+import { createLightAccountClient } from "../client.js";
 import {
   API_KEY,
   LIGHT_ACCOUNT_OWNER_MNEMONIC,

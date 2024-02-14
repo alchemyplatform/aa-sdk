@@ -13,6 +13,7 @@ import {
   optimismSepolia,
   polygon,
   polygonMumbai,
+  polygonAmoy,
   sepolia,
 } from "../chains/index.js";
 import { DefaultFactoryNotDefinedError } from "../errors/account.js";
@@ -20,7 +21,7 @@ import { EntryPointNotFoundError } from "../errors/entrypoint.js";
 import type { UserOperationFeeOptions } from "../types";
 
 /**
- * Utility method returning the entry point contrafct address given a {@link Chain} object
+ * Utility method returning the entry point contract address given a {@link Chain} object
  *
  * @param chain - a {@link Chain} object
  * @returns a {@link abi.Address} for the given chain
@@ -33,6 +34,7 @@ export const getDefaultEntryPointAddress = (chain: Chain): Address => {
     case goerli.id:
     case polygon.id:
     case polygonMumbai.id:
+    case polygonAmoy.id:
     case optimism.id:
     case optimismGoerli.id:
     case optimismSepolia.id:
@@ -71,6 +73,7 @@ export const getDefaultSimpleAccountFactoryAddress = (
     case sepolia.id:
     case goerli.id:
     case polygonMumbai.id:
+    case polygonAmoy.id:
     case optimismGoerli.id:
     case arbitrumGoerli.id:
       return "0x9406Cc6185a346906296840746125a0E44976454";

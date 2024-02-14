@@ -1,6 +1,6 @@
 {
   "name": "@alchemy/aa-alchemy",
-  "version": "3.0.0-alpha.6",
+  "version": "3.0.0-alpha.9",
   "description": "adapters for @alchemy/aa-core for interacting with alchemy services",
   "author": "Alchemy",
   "license": "MIT",
@@ -46,8 +46,12 @@
     "vitest": "^0.31.0"
   },
   "dependencies": {
-    "@alchemy/aa-core": "^3.0.0-alpha.5",
-    "viem": "^2.5.0"
+    "@alchemy/aa-core": "^3.0.0-alpha.9",
+    "@turnkey/http": "^2.6.2",
+    "@turnkey/iframe-stamper": "^1.0.0",
+    "@turnkey/viem": "^0.4.8",
+    "@turnkey/webauthn-stamper": "^0.4.3",
+    "viem": "^2.7.8"
   },
   "publishConfig": {
     "access": "public",

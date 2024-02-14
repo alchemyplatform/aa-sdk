@@ -8,8 +8,8 @@ const chain = sepolia;
 const PRIVATE_KEY = "0xYourEOAPrivateKey" as Hex;
 const owner = LocalAccountSigner.privateKeyToAccountSigner(PRIVATE_KEY);
 
-// Create a provider to send user operations from your smart account
-const provider = await createModularAccountAlchemyClient({
+// Create a smart account client to send user operations from your smart account
+const client = await createModularAccountAlchemyClient({
   // get your Alchemy API key at https://dashboard.alchemy.com
   apiKey: "ALCHEMY_API_KEY",
   chain,
@@ -19,5 +19,5 @@ const provider = await createModularAccountAlchemyClient({
 (async () => {
   // Fund your account address with ETH to send for the user operations
   // (e.g. Get Sepolia ETH at https://sepoliafaucet.com)
-  console.log("Smart Account Address: ", provider.getAddress()); // Log the smart account address
+  console.log("Smart Account Address: ", client.getAddress()); // Log the smart account address
 })();

@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Getting Started with Session Keys
+      content: Getting started with Session Keys
   - - meta
     - name: description
       content: Learn how to use Alchemy's Session Key Plugin.
@@ -12,13 +12,13 @@ head:
       content: Learn how to use Alchemy's Session Key Plugin.
   - - meta
     - name: twitter:title
-      content: Getting Started with Session Keys
+      content: Getting started with Session Keys
   - - meta
     - name: twitter:description
       content: Learn how to use Alchemy's Session Key Plugin.
 ---
 
-# Getting Started with Session Keys
+# Getting started with Session Keys
 
 `@alchemy/aa-accounts` exports all of the definitions you need to use session keys with a Modular Account. We provide a simple `SessionKeySigner` class that generates session keys on the client and can be used as the `owner` for the Multi Owner Modular Account.
 We also export the necessary decorators which can be used to extend your `SmartAccountClient` to make interacting with session keys easy.
@@ -158,7 +158,7 @@ const result = await extendedClient.updateKeyPermissions({
 
 ## Creating, deleting, and editing session keys
 
-### Add a session Key
+### Add a Session Key
 
 Session keys can be added either during installation, or using the `addSessionKey` function.
 
@@ -170,7 +170,7 @@ Session keys can be removed using the `removeSessionKey` function.
 
 <<< @/snippets/session-keys/remove-session-key.ts
 
-### Update a Key's Permissions
+### Update a Key's permissions
 
 Session key permissions can be edited after creation using the `updateKeyPermissions` function. Note that you should configure initial permissions when the key is added, and not rely on a second user operation to set the permissions.
 

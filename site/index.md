@@ -113,7 +113,7 @@ export const smartAccountClient = await createModularAccountAlchemyClient({
               class="flex flex-col flex-auto p-[24px] gap-[24px] rounded-md text-white overflow-auto bg-gradient-4 group hover:scale-105 hover:opacity-90 transition duration-300 ease-in-out"
             >
               <div class="flex flex-col gap-[8px] items-start">
-                <div class="text-[24px] font-semibold">Getting Started</div>
+                <div class="text-[24px] font-semibold">Getting started</div>
               </div>
               <div
                 class="flex h-[24px] justify-end items-baseline self-stretch transition duration-300 ease-in-out group-hover:translate-x-[5px]"

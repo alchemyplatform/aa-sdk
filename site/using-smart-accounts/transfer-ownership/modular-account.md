@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title2
-      content: How to Manage Ownership of a Modular Account
+      content: How to manage ownership of a Modular Account
   - - meta
     - name: description
       content: Follow this guide to manage ownership of a Modular Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
@@ -12,12 +12,12 @@ head:
       content: Follow this guide to manage ownership of a Modular Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - name: twitter:title
-      content: How to Manage Ownership of a Modular Account
+      content: How to manage ownership of a Modular Account
   - - meta
     - name: twitter:description
       content: Follow this guide to manage ownership of a Modular Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 next:
-  text: How to Transfer Ownership of a Light Account
+  text: How to transfer ownership of a Light Account
 ---
 
 # How to manage ownership of a Modular Account
@@ -49,7 +49,11 @@ When you connect your Modular Account to `SmartAccountClient` you can extend the
 
 ### 1. Check if an address is one of the current owners of a Modular Account
 
-You should first extends the `SmartAcountClient` connected to a Modular Account, which already comes with `MultiOwnerPlugin` installed upon creation, with client to `multiOwnerPluginActions` for the client to include the `MultiOwnerPlugin` actions.
+You should first extend the `SmartAccountClient` connected to a Modular Account, which already comes with `MultiOwnerPlugin` installed upon creation, with client to `multiOwnerPluginActions` for the client to include the `MultiOwnerPlugin` actions.
+
+::: tip Note
+When using `createModularAccountAlchemyClient` in `@alchemy/aa-alchemy`, the `SmartAccountClient` comes automatically extended with `multiOwnerPluginActions`, `pluginManagerActions`, and `accountLoupeActions` decorators as defaults available for use.
+:::
 
 Then, you can use the `readOwners` method of the `multiOwnerPluginActions` extended smart account client to check if a given address is one of the current owners of a Modular Account.
 

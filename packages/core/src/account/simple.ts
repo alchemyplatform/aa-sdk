@@ -39,7 +39,7 @@ class SimpleSmartContractAccount<
     });
     super({ ...params, rpcClient: client });
     this.owner = params.owner as TOwner;
-    this.index = params.index ?? 0n;
+    this.index = params.salt ?? 0n;
   }
 
   getDummySignature(): `0x${string}` {
@@ -110,26 +110,35 @@ export type SimpleSmartAccount<TOwner extends SmartAccountSigner> =
 export const createSimpleSmartAccount = async <
   TTransport extends Transport = Transport,
   TOwner extends SmartAccountSigner = SmartAccountSigner
->(
-  params: Omit<
-    SimpleSmartAccountParams<TTransport, TOwner>,
-    "rpcClient" | "chain"
-  > &
-    Pick<ToSmartContractAccountParams, "chain" | "transport">
-): Promise<SimpleSmartAccount<TOwner>> => {
+>({
+  chain,
+  entryPoint = getVersion060EntryPoint(chain),
+  ...params
+}: Omit<
+  SimpleSmartAccountParams<TTransport, TOwner>,
+  "rpcClient" | "chain" | "accountAddress" | "entryPointAddress"
+> &
+  Pick<
+    ToSmartContractAccountParams,
+    "chain" | "transport" | "accountAddress" | "entryPoint"
+  >): Promise<SimpleSmartAccount<TOwner>> => {
   if (!params.owner) throw new AccountRequiresOwnerError("SimpleAccount");
 
   // @ts-expect-error base account allows for optional owners, but simple account requires it
-  const simpleAccount = new SimpleSmartContractAccount<TTransport>(params);
+  const simpleAccount = new SimpleSmartContractAccount<TTransport>({
+    chain,
+    entryPointAddress: entryPoint.address,
+    ...params,
+  });
   const parsedParams = SimpleSmartAccountParamsSchema<
     TTransport,
     TOwner
-  >().parse(params);
+  >().parse({ chain, entryPointAddress: entryPoint.address, ...params });
 
   const base = await toSmartContractAccount({
     source: "SimpleAccount",
     transport: params.transport,
-    chain: params.chain,
+    chain,
     encodeBatchExecute: simpleAccount.encodeBatchExecute.bind(simpleAccount),
     encodeExecute: (tx) =>
       simpleAccount.encodeExecute.bind(simpleAccount)(
@@ -137,10 +146,7 @@ export const createSimpleSmartAccount = async <
         tx.value ?? 0n,
         tx.data
       ),
-    entryPoint: getVersion060EntryPoint(
-      params.chain,
-      simpleAccount.getEntryPointAddress()
-    ),
+    entryPoint,
     getAccountInitCode: async () => {
       if (parsedParams.initCode) return parsedParams.initCode;
       return simpleAccount.getAccountInitCode();

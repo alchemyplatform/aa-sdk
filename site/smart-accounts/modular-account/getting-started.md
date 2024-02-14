@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Modular Account • Getting Started
+      content: Modular Account • Getting started
   - - meta
     - name: description
       content: Getting started with the Modular Account in Account Kit
@@ -12,7 +12,7 @@ head:
       content: Getting started with the Modular Account in Account Kit
   - - meta
     - name: twitter:title
-      content: Modular Account • Getting Started
+      content: Modular Account • Getting started
   - - meta
     - name: twitter:description
       content: Getting started with the Modular Account in Account Kit
@@ -24,7 +24,7 @@ Getting started with Modular Account is really simple, especially if you are usi
 
 ## With `@alchemy/aa-alchemy`
 
-When using `@alchemy/aa-alchemy` it is really is to get started simply do the following:
+When using `@alchemy/aa-alchemy` it is really easy to get started simply do the following:
 
 <<< @/snippets/aa-alchemy/connected-client.ts
 
@@ -45,8 +45,7 @@ Then you'll need to create a `SmartAccountClient`
 <<< @/snippets/aa-core/smartAccountClient.ts
 
 ::: tip Note
-Above, we provide an account to our client directly. This allows us to set the account context for all calls to the `SmartAccountClient`. You can choose to omit it if
-you want to share one `SmartAccountClient` with multiple accounts.
+Above, we provide an account to our client directly. This allows us to set the account context for all calls to the `SmartAccountClient`. You can choose to omit it if you want to share one `SmartAccountClient` with multiple accounts.
 :::
 
 ### Add decorators

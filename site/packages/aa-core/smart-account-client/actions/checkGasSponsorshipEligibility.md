@@ -6,10 +6,10 @@ head:
       content: checkGasSponsorshipEligibility
   - - meta
     - name: description
-      content: Overview of the checkGasSponsorshipEligibility method on ISmartAccountClient
+      content: Overview of the checkGasSponsorshipEligibility method on SmartAccountClient
   - - meta
     - property: og:description
-      content: Overview of the checkGasSponsorshipEligibility method on ISmartAccountClient
+      content: Overview of the checkGasSponsorshipEligibility method on SmartAccountClient
 ---
 
 # checkGasSponsorshipEligibility
@@ -20,7 +20,7 @@ Internally, this method invokes [`buildUserOperation`](./buildUserOperation.md),
 
 You can utilize this method before sending the user operation to confirm its eligibility for gas sponsorship. Depending on the outcome, it allows you to tailor the user experience accordingly, based on eligibility.
 
-For a deeper understanding of how to employ this method to provide varied user experiences contingent on gas sponsorship eligibility, please refer to the guide [How to Handle User Operations Not Eligibile for Gas Sponsorship](/using-smart-accounts/sponsoring-gas/checking-eligibility.md).
+For a deeper understanding of how to employ this method to provide varied user experiences contingent on gas sponsorship eligibility, please refer to the guide [How to handle User Operations not eligible for gas sponsorship](/using-smart-accounts/sponsoring-gas/checking-eligibility.md).
 
 ## Usage
 

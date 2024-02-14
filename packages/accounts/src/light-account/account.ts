@@ -2,7 +2,6 @@ import {
   FailedToGetStorageSlotError,
   createBundlerClient,
   getAccountAddress,
-  getDefaultEntryPointAddress,
   getVersion060EntryPoint,
   toSmartContractAccount,
   type Address,
@@ -24,11 +23,11 @@ import {
 } from "viem";
 import { LightAccountAbi } from "./abis/LightAccountAbi.js";
 import { LightAccountFactoryAbi } from "./abis/LightAccountFactoryAbi.js";
-import { getLightAccountVersion } from "./getLightAccountVersion.js";
 import {
   LightAccountUnsupported1271Factories,
   LightAccountVersions,
   getDefaultLightAccountFactoryAddress,
+  getLightAccountVersion,
   type LightAccountVersion,
 } from "./utils.js";
 
@@ -48,13 +47,11 @@ export type CreateLightAccountParams<
   TOwner extends SmartAccountSigner = SmartAccountSigner
 > = Pick<
   ToSmartContractAccountParams<"LightAccount", TTransport>,
-  "transport" | "chain"
+  "transport" | "chain" | "entryPoint" | "accountAddress"
 > & {
   owner: TOwner;
-  index?: bigint;
+  salt?: bigint;
   factoryAddress?: Address;
-  entryPointAddress?: Address;
-  accountAddress?: Address;
   initCode?: Hex;
   version?: LightAccountVersion;
 };
@@ -70,12 +67,12 @@ export async function createLightAccount({
   transport,
   chain,
   owner: owner_,
-  accountAddress,
   initCode,
   version = "v1.1.0",
-  entryPointAddress = getDefaultEntryPointAddress(chain),
+  entryPoint = getVersion060EntryPoint(chain),
+  accountAddress,
   factoryAddress = getDefaultLightAccountFactoryAddress(chain, version),
-  index: index_ = 0n,
+  salt: salt_ = 0n,
 }: CreateLightAccountParams): Promise<LightAccount> {
   let owner = owner_;
   const client = createBundlerClient({
@@ -86,25 +83,25 @@ export async function createLightAccount({
   const getAccountInitCode = async () => {
     if (initCode) return initCode;
 
-    const index = LightAccountUnsupported1271Factories.has(
+    const salt = LightAccountUnsupported1271Factories.has(
       factoryAddress.toLowerCase() as Address
     )
       ? 0n
-      : index_;
+      : salt_;
 
     return concatHex([
       factoryAddress,
       encodeFunctionData({
         abi: LightAccountFactoryAbi,
         functionName: "createAccount",
-        args: [await owner.getAddress(), index],
+        args: [await owner.getAddress(), salt],
       }),
     ]);
   };
 
   const address = await getAccountAddress({
     client,
-    entryPointAddress,
+    entryPointAddress: entryPoint.address,
     accountAddress,
     getAccountInitCode,
   });
@@ -170,7 +167,7 @@ export async function createLightAccount({
   const account = await toSmartContractAccount({
     transport,
     chain,
-    entryPoint: getVersion060EntryPoint(chain, entryPointAddress),
+    entryPoint,
     accountAddress: address,
     source: "LightAccount",
     getAccountInitCode,

@@ -6,10 +6,10 @@ head:
       content: Contributing to aa-accounts
   - - meta
     - name: description
-      content: How to add your own Account Implementation to aa-accounts
+      content: How to add your own Account implementation to aa-accounts
   - - meta
     - property: og:description
-      content: How to add your own Account Implementation to aa-accounts
+      content: How to add your own Account implementation to aa-accounts
 next:
   text: aa-signers
 ---

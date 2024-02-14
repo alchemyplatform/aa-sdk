@@ -22,7 +22,7 @@ The `SmartAccountClient` is an [EIP-1193](https://eips.ethereum.org/EIPS/eip-119
 
 The `SmartContractAccount` interface defines how you would interact with your Smart Contract Account. Any object that extends `SmartContractAccount` may also expose additional methods that allow its use with a `SmartAccountClient` to provide ergonomic utilities for building and submitting `User Operation`s.
 
-## Getting Started
+## Getting started
 
 To get started, first install the package:
 

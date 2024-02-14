@@ -34,7 +34,7 @@ const factoryAddress = getDefaultSimpleAccountFactoryAddress(chain);
 
 ### `Address`
 
-The Address of the default Simple Account Factory contrafct address for the input chain
+The Address of the default Simple Account Factory contract address for the input chain
 
 ## Paramaters
 
