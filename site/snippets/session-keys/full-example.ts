@@ -1,4 +1,5 @@
 import {
+  SessionKeyAccessListType,
   SessionKeyPermissionsBuilder,
   SessionKeyPlugin,
   SessionKeySigner,
@@ -32,6 +33,8 @@ if (!isPluginInstalled) {
     .setNativeTokenSpendLimit({
       spendLimit: 1000000n,
     })
+    // this will allow this plugin to interact with all addresses by default
+    .setContractAccessControlType(SessionKeyAccessListType.NONE)
     .setTimeRange({
       validFrom: Date.now() / 1000,
       // valid for 1 hour
