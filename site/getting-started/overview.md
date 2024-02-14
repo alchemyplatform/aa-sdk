@@ -20,7 +20,7 @@ head:
 
 # Why Account Kit?
 
-It’s way too hard for new users to start using web3 apps. They have to jump through hoops like downloading an extension, backing up a seed phrase, funding their wallet with ETH to pay gas, and signing a transaction.
+Onboarding to web3 should be as easy as a web2 app. Traditional wallets make you jump through hoops like downloading an extension, backing up a seed phrase, and funding a wallet with ETH.
 
 Each of these steps adds friction. As a result, most new users drop off before they ever reach the magic moment in your app! We need to make wallets, seed phrases, and gas costs disappear in order to onboard the next billion users.
 
@@ -34,7 +34,7 @@ Account Kit makes it easy onboard users with smart accounts -- account abstracti
 
 # What is Account Kit?
 
-**Account Kit** is a toolkit to embed smart accounts in your web3 app, unlocking powerful features like social login, gas sponsorship, and batched transactions. Integrate [account abstraction](https://www.alchemy.com/overviews/what-is-account-abstraction/?a=ak-docs) with just a few lines of code to deploy your first smart accounts and start sending user operations!
+**Account Kit** provides all the tools you need to build smart accounts in your web3 app, unlocking powerful features like social login, gas sponsorship, and batched transactions. Integrate [account abstraction](https://www.alchemy.com/overviews/what-is-account-abstraction/?a=ak-docs) with just a few lines of code to deploy your first smart accounts and start sending user operations!
 
 Account Kit includes five components:
 
@@ -58,7 +58,7 @@ The `aa-sdk` is modular at every layer of the stack and can be easily extended t
 
 Get started with `aa-sdk` in our [Getting started](/getting-started/setup) guide or checkout the [open source repo](https://github.com/alchemyplatform/aa-sdk).
 
-## Light Account
+## Modular Account
 
 `ModularAccount` is a secure, audited, and modular ERC-4337 smart account.
 
