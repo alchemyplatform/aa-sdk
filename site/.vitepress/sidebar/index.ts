@@ -51,7 +51,7 @@ export const sidebar: DefaultTheme.Sidebar = [
     base: "/signers",
     items: [
       { text: "Introduction", link: "/choosing-a-signer" },
-      { text: "Alchemy Signer", link: "/alchemy-signer" },
+      // { text: "Alchemy Signer", link: "/alchemy-signer" },
       {
         text: "Signer guides",
         base: "/signers/guides",
