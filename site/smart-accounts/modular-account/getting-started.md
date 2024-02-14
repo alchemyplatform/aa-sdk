@@ -23,7 +23,7 @@ head:
 It's easy to get started with Modular Account! We'll show you two different ways using `@alchemy/aa-alchemy` and `@alchemy/aa-core`.
 
 ::: tip Choosing your package
-The [`aa-core`](/packages/aa-core/) package is not opinionated about your RPC provider and web3 library. As a result, creating a client requires more configuration. If you don't need this extra flexibility, [`aa-alchemy`](/packages/aa-alchemy/) is much easier to jump in with, as you'll see below.
+The [`aa-core`](/packages/aa-core/) package is not opinionated about your RPC provider. As a result, creating a client requires more configuration. If you don't need this extra flexibility, [`aa-alchemy`](/packages/aa-alchemy/) is much easier to jump in with, as you'll see below.
 :::
 
 ## With `@alchemy/aa-alchemy`
