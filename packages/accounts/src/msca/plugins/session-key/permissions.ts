@@ -4,7 +4,7 @@ import { SessionKeyPermissionsUpdatesAbi } from "./SessionKeyPermissionsUpdatesA
 export enum SessionKeyAccessListType {
   ALLOWLIST = 0,
   DENYLIST = 1,
-  NONE = 2,
+  ALLOW_ALL_ACCESS = 2,
 }
 
 export type ContractAccessEntry = {
