@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-alpha.11](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.10...v3.0.0-alpha.11) (2024-02-14)
+
+### Bug Fixes
+
+- session key extension was missing plugin overrides ([#458](https://github.com/alchemyplatform/aa-sdk/issues/458)) ([dc5536c](https://github.com/alchemyplatform/aa-sdk/commit/dc5536c8565de216d0c1ca16d72ca4bfdefe7147))
+
 # [3.0.0-alpha.10](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.9...v3.0.0-alpha.10) (2024-02-14)
 
 **Note:** Version bump only for package @alchemy/aa-accounts
