@@ -8,7 +8,9 @@ describe("Local Account Signer Tests", () => {
     it("should sign a hex message properly", async () => {
       const signer = LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
       expect(
-        await signer.signMessage("0xabcfC3DB1e0f5023F5a4f40c03D149f316E6A5cc")
+        await signer.signMessage({
+          raw: "0xabcfC3DB1e0f5023F5a4f40c03D149f316E6A5cc",
+        })
       ).toMatchInlineSnapshot(
         '"0x35761512143ffd8da07c93c5a0136424fe935b48e77076f501a57745c16268bf0d9a5d6209b12d5f8b62f96f0991372e046092fd6b1e3bfa610eb51607a28f7e1b"'
       );
@@ -32,7 +34,9 @@ describe("Local Account Signer Tests", () => {
     it("should sign a byte array correctly", async () => {
       const signer = LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
       expect(
-        await signer.signMessage(new TextEncoder().encode("hello, I'm moldy"))
+        await signer.signMessage({
+          raw: new TextEncoder().encode("hello, I'm moldy"),
+        })
       ).toEqual(await signer.signMessage("hello, I'm moldy"));
     });
   });
@@ -45,7 +49,9 @@ describe("Local Account Signer Tests", () => {
       const signer =
         LocalAccountSigner.privateKeyToAccountSigner(dummyPrivateKey);
       expect(
-        await signer.signMessage("0xabcfC3DB1e0f5023F5a4f40c03D149f316E6A5cc")
+        await signer.signMessage({
+          raw: "0xabcfC3DB1e0f5023F5a4f40c03D149f316E6A5cc",
+        })
       ).toMatchInlineSnapshot(
         '"0x91b6680c8f442f46ca71fee15cdd8c9e25693baeb4006d1908a453fd145315ce21a5e7f2ce9760fc993d65e8450fa5225d8dee12972886bdacbb989ca0b09c6c1b"'
       );
@@ -71,7 +77,9 @@ describe("Local Account Signer Tests", () => {
       const signer =
         LocalAccountSigner.privateKeyToAccountSigner(dummyPrivateKey);
       expect(
-        await signer.signMessage(new TextEncoder().encode("hello, I'm moldy"))
+        await signer.signMessage({
+          raw: new TextEncoder().encode("hello, I'm moldy"),
+        })
       ).toEqual(await signer.signMessage("hello, I'm moldy"));
     });
   });

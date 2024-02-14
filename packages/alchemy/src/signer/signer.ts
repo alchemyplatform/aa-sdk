@@ -2,9 +2,8 @@ import type { SmartAccountAuthenticator } from "@alchemy/aa-core";
 import {
   hashMessage,
   hashTypedData,
-  isHex,
-  toHex,
   type Hex,
+  type SignableMessage,
   type TypedData,
   type TypedDataDefinition,
 } from "viem";
@@ -112,16 +111,10 @@ export class AlchemySigner
     return address;
   };
 
-  signMessage: (msg: string | Uint8Array) => Promise<`0x${string}`> = async (
+  signMessage: (msg: SignableMessage) => Promise<`0x${string}`> = async (
     msg
   ) => {
-    const messageHash = hashMessage(
-      typeof msg === "string" && !isHex(msg)
-        ? msg
-        : {
-            raw: isHex(msg) ? msg : toHex(msg),
-          }
-    );
+    const messageHash = hashMessage(msg);
 
     return this.inner.signRawMessage(messageHash);
   };

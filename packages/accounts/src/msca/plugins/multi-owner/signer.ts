@@ -6,7 +6,6 @@ import type {
 import {
   hashMessage,
   hashTypedData,
-  hexToBytes,
   type Hash,
   type Hex,
   type SignableMessage,
@@ -58,7 +57,7 @@ export const multiOwnerMessageSigner = <
     },
 
     signUserOperationHash: (uoHash: `0x${string}`): Promise<`0x${string}`> => {
-      return owner().signMessage(hexToBytes(uoHash));
+      return owner().signMessage({ raw: uoHash });
     },
 
     signMessage({

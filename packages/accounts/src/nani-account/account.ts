@@ -15,7 +15,7 @@ import {
   concatHex,
   decodeFunctionResult,
   encodeFunctionData,
-  hexToBytes,
+  isHex,
   numberToHex,
   type Address,
   type Chain,
@@ -128,13 +128,9 @@ class NaniAccount_<
   }
 
   signMessage(msg: Uint8Array | string): Promise<Hex> {
-    if (typeof msg === "string" && msg.startsWith("0x")) {
-      msg = hexToBytes(msg as Hex);
-    } else if (typeof msg === "string") {
-      msg = new TextEncoder().encode(msg);
-    }
-
-    return this.owner.signMessage(msg);
+    return this.owner.signMessage(
+      typeof msg === "string" && !isHex(msg) ? msg : { raw: msg }
+    );
   }
 
   async encodeExecute(target: Hex, value: bigint, data: Hex): Promise<Hex> {

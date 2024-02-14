@@ -9,12 +9,13 @@ import {
   type LITEVMChain,
   type SessionSigsMap,
 } from "@lit-protocol/types";
-import type {
-  Address,
-  Hex,
-  TypedData,
-  TypedDataDefinition,
-  TypedDataDomain,
+import {
+  type Address,
+  type Hex,
+  type SignableMessage,
+  type TypedData,
+  type TypedDataDefinition,
+  type TypedDataDomain,
 } from "viem";
 import { signerTypePrefix } from "../constants.js";
 import {
@@ -92,10 +93,12 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
     return this.signer?.getAddress() as Promise<Address>;
   };
 
-  signMessage = async (msg: Uint8Array | string) => {
+  signMessage = async (msg: SignableMessage) => {
     this._checkInternals();
 
-    return this.signer?.signMessage(msg) as Promise<Hex>;
+    return this.signer?.signMessage(
+      typeof msg === "string" ? msg : msg.raw
+    ) as Promise<Hex>;
   };
 
   signTypedData = async <
