@@ -18,13 +18,13 @@ head:
       content: Learn how to get started with Alchemy's Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
-# Quick Start
+# Quick start
 
-This guide will help you get started with Account Kit by setting up your environment, creating a smart account, and sending a `UserOperation` (UO) on its behalf. By the end of this guide, you'll have a basic understanding of how to use the SDK and where to look for more advanced use cases.
+This guide will help you get started with Account Kit by setting up your environment, creating a smart account, and sending a User Operation (UO). By the end of this guide, you'll have a basic understanding of how to use the SDK and where to look for more advanced use cases.
 
 ## 1. Install the packages
 
-In your project directory, you'll need to run the following to install the required packages:
+Run the following command in your project directory to install the required packages:
 
 ::: code-group
 
@@ -42,11 +42,11 @@ yarn add @alchemy/aa-alchemy @alchemy/aa-core @alchemy/aa-accounts @alchemy/aa-s
 
 ::: tip Note
 
-We're installing [viem](https://viem.sh/) as well. Viem contains helpful abstractions and modules that will come in handy when using Account Kit. Additionally, many Account Kit modules use `viem` themselves.
+Next, install [viem](https://viem.sh/) by running the below command. Viem contains helpful abstractions and modules that will come in handy when using Account Kit. Additionally, many Account Kit modules use `viem` themselves.
 
 :::
 
-Make sure your new `package.json` file looks something like the following. Note that we have `"type": module` in `package.json` for this example:
+Make sure your new `package.json` file looks similar to the below. Note that we have `"type": module` in `package.json` for this example:
 
 ```json [package.json]
 {
@@ -68,7 +68,7 @@ Make sure your new `package.json` file looks something like the following. Note 
 }
 ```
 
-You'll also want to make sure your `Node` version is _18.16.0_ using your version manager:
+Also make sure your `Node` version is _18.16.0_ using your version manager:
 
 ::: code-group
 
@@ -95,7 +95,7 @@ To read or write any data to a blockchain, you'll need an Alchemy API Key and RP
 
 ## 3. Query your Smart Account Address
 
-Using the SDK in the following example, we'll use the Account Kit to generate the address of your smart account from which to eventually send a UO.
+Using the SDK in the following example, we'll use Account Kit to generate the address of your smart account from which to eventually send a UO.
 
 <<< @/snippets/getting-started/client.ts
 
@@ -105,7 +105,7 @@ Copy the above into `index.ts`. To run the script, do:
 npx tsx index.ts
 ```
 
-You'll get a response like this on your terminal:
+You'll get a response like this in your terminal:
 
 ```
 Smart Account Address: 0xYOUR_SMART_ACCOUNT_ADDRESS
@@ -113,15 +113,15 @@ Smart Account Address: 0xYOUR_SMART_ACCOUNT_ADDRESS
 
 ## 4. Fund your Smart Account
 
-To deploy the smart account and send UOs on its behalf, you'll need to add native token to your smart account.
+At scale, you can use our Gas Manager to [sponsor User Operations](/using-smart-accounts/sponsoring-gas/gas-manager) for smart accounts so the user doesn't need to fund their account.
 
-At scale, you might consider using our Gas Manager to [sponsor UserOperations](/using-smart-accounts/sponsoring-gas/gas-manager) for smart accounts. But for the purpose of this example, and because we're using a testnet, let's fund the account using the [Alchemy Faucet](https://sepoliafaucet.com). Make sure to log in with Alchemy to receive your testnet tokens.
+But for this quickstart guide, and because we're developing on a testnet, let's fund the account using the [Alchemy Faucet](https://sepoliafaucet.com). Simply log in with Alchemy and claim your testnet tokens for free.
 
 <img src="/images/alchemy-faucet.png" width="auto" height="auto" alt="Account Kit Overview" style="display: block; margin: auto;">
 
 ## 5. Send a User Operation using Account Kit
 
-Finally, let's deploy the newly funded smart account and send a UO on its behalf.
+Finally, deploy the newly funded smart account and send a UO on its behalf.
 
 <<< @/snippets/getting-started/send-user-operation.ts
 

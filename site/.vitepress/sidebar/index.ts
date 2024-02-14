@@ -13,7 +13,7 @@ export const sidebar: DefaultTheme.Sidebar = [
     ],
   },
   {
-    text: "Choosing a Smart Account",
+    text: "Choosing a smart account",
     items: [
       { text: "Introduction", link: "/smart-accounts/" },
       {
@@ -35,7 +35,7 @@ export const sidebar: DefaultTheme.Sidebar = [
         link: "/smart-accounts/light-account/",
       },
       {
-        text: "Custom Accounts",
+        text: "Custom accounts",
         collapsed: true,
         base: "/smart-accounts/custom",
         items: [
@@ -47,13 +47,13 @@ export const sidebar: DefaultTheme.Sidebar = [
     ],
   },
   {
-    text: "Choosing a Signer",
+    text: "Choosing a signer",
     base: "/signers",
     items: [
       { text: "Introduction", link: "/choosing-a-signer" },
-      { text: "Alchemy Signer", link: "/alchemy-signer" },
+      { text: "Alchemy signer", link: "/alchemy-signer" },
       {
-        text: "Signer guides",
+        text: "Third-party signers",
         base: "/signers/guides",
         collapsed: true,
         items: [
@@ -70,11 +70,11 @@ export const sidebar: DefaultTheme.Sidebar = [
           { text: "Arcana Auth", link: "/arcana-auth" },
           { text: "Dfns", link: "/dfns" },
           { text: "WalletKit", link: "/walletkit" },
-          { text: "Externally Owned Account (EOA)", link: "/eoa" },
         ],
       },
+      { text: "EOA signer", link: "/eoa" },
       {
-        text: "Custom Signer",
+        text: "Custom signer",
         collapsed: true,
         items: [
           {
@@ -82,7 +82,7 @@ export const sidebar: DefaultTheme.Sidebar = [
             link: "/guides/custom-signer",
           },
           {
-            text: "Contribute your Signer",
+            text: "Contribute your signer",
             link: "/contributing",
           },
         ],
@@ -90,7 +90,7 @@ export const sidebar: DefaultTheme.Sidebar = [
     ],
   },
   {
-    text: "Using Smart Accounts",
+    text: "Using smart accounts",
     base: "/using-smart-accounts",
     items: [
       { text: "Send user operations", link: "/send-user-operations" },
@@ -100,13 +100,13 @@ export const sidebar: DefaultTheme.Sidebar = [
         collapsed: false,
         base: "/using-smart-accounts/sponsoring-gas",
         items: [
-          { text: "Alchemy Gas Manager", link: "/gas-manager" },
+          { text: "Use the Gas Manager", link: "/gas-manager" },
           { text: "Check eligibility", link: "/checking-eligibility" },
         ],
       },
-      { text: "Simulate User Operations", link: "/simulate-user-operations" },
+      { text: "Simulate user ops", link: "/simulate-user-operations" },
       {
-        text: "Session Keys",
+        text: "Session keys",
         base: "/using-smart-accounts/session-keys",
         collapsed: false,
         items: [
@@ -130,21 +130,21 @@ export const sidebar: DefaultTheme.Sidebar = [
         ],
       },
       {
-        text: "Alchemy Enhanced Apis",
+        text: "Alchemy enhanced APIs",
         base: "/using-smart-accounts/enhanced-apis",
         collapsed: false,
         items: [
           {
-            text: "Get Account's NFTs",
+            text: "Get account NFTs",
             link: "/nft",
           },
-          { text: "Get Account's tokens", link: "/token" },
+          { text: "Get account tokens", link: "/token" },
         ],
       },
     ],
   },
   {
-    text: "Extending Smart Accounts",
+    text: "Extending smart accounts",
     base: "/extending-smart-accounts",
     items: [
       {
@@ -161,8 +161,8 @@ export const sidebar: DefaultTheme.Sidebar = [
     text: "Custom infra",
     base: "/third-party",
     items: [
-      { text: "Bundlers", link: "/bundlers" },
-      { text: "Paymasters", link: "/paymasters" },
+      { text: "Use custom bundler", link: "/bundlers" },
+      { text: "Use custom paymaster", link: "/paymasters" },
     ],
   },
   packagesSidebar,
