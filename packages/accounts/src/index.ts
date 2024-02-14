@@ -42,7 +42,10 @@ export {
 export type * from "./msca/plugins/session-key/index.js";
 export { sessionKeyPluginActions } from "./msca/plugins/session-key/index.js";
 export type * from "./msca/plugins/session-key/permissions.js";
-export { SessionKeyPermissionsBuilder } from "./msca/plugins/session-key/permissions.js";
+export {
+  SessionKeyAccessListType,
+  SessionKeyPermissionsBuilder,
+} from "./msca/plugins/session-key/permissions.js";
 export {
   SessionKeyPlugin,
   SessionKeyPluginAbi,
