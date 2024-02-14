@@ -51,7 +51,7 @@ Then you can simply do the following:
 ::: tip Address calculation
 For the Modular Account, the address of the smart account will be calculated as a combination of [several variables](https://github.com/alchemyplatform/modular-account/blob/74fe1bfa056bbd41c933990fca0598c8cc3e90e8/src/factory/MultiOwnerModularAccountFactory.sol#L66-L71). You will get the same smart account address each time you supply the same `owner` or `owners`. You can also optionally supply `salt` if you want a different address for the same owner(s) (the default salt is `0n`).
 
-If you already have an account, you can supply the `accountAddress`. In that case, the `owner` is not used for address calculation, but still used for signing the operation.
+If you already have an account with a new or different owner (transferred ownership), you can supply the `accountAddress` to connect with your account with a new owner. In that case, the `owner` is not used for address calculation, but still used for signing the operation.
 :::
 
 That's it! You've configured your client.
