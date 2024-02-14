@@ -14,7 +14,7 @@ import {
   type TransactionRequest,
   type TransactionResponse,
 } from "@ethersproject/providers";
-import { isHex } from "viem";
+import { isHex, toBytes } from "viem";
 import { EthersProviderAdapter } from "./provider-adapter.js";
 
 const hexlifyOptional = (value: any): `0x${string}` | undefined => {
@@ -70,7 +70,7 @@ export class AccountSigner<
       message:
         typeof message === "string" && !isHex(message)
           ? message
-          : { raw: message },
+          : { raw: isHex(message) ? toBytes(message) : message },
     });
   }
 

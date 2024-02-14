@@ -2,6 +2,7 @@ import { LocalAccountSigner, type SmartAccountSigner } from "@alchemy/aa-core";
 import type {
   Hex,
   PrivateKeyAccount,
+  SignableMessage,
   TypedData,
   TypedDataDefinition,
 } from "viem";
@@ -61,7 +62,7 @@ export class SessionKeySigner
     return this.inner.getAddress();
   };
 
-  signMessage: (msg: string | Uint8Array) => Promise<`0x${string}`> = async (
+  signMessage: (msg: SignableMessage) => Promise<`0x${string}`> = async (
     msg
   ) => {
     return this.inner.signMessage(msg);

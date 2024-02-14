@@ -2,7 +2,7 @@ import type { Address } from "abitype";
 import {
   concatHex,
   encodeFunctionData,
-  hexToBytes,
+  isHex,
   type FallbackTransport,
   type Hex,
   type Transport,
@@ -79,13 +79,9 @@ class SimpleSmartContractAccount<
   }
 
   signMessage(msg: Uint8Array | string): Promise<`0x${string}`> {
-    if (typeof msg === "string" && msg.startsWith("0x")) {
-      msg = hexToBytes(msg as Hex);
-    } else if (typeof msg === "string") {
-      msg = new TextEncoder().encode(msg);
-    }
-
-    return this.owner.signMessage(msg);
+    return this.owner.signMessage(
+      typeof msg === "string" && !isHex(msg) ? msg : { raw: msg }
+    );
   }
 
   setOwner(owner: TOwner): void {

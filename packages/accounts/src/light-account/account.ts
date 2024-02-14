@@ -196,15 +196,13 @@ export async function createLightAccount({
       });
     },
     signUserOperationHash: async (uoHash: Hex) => {
-      return owner.signMessage(uoHash);
+      return owner.signMessage({ raw: uoHash });
     },
     async signMessage({ message }) {
       const version = await getLightAccountVersion(account);
       switch (version) {
         case "v1.0.1":
-          return owner.signMessage(
-            typeof message === "string" ? message : message.raw
-          );
+          return owner.signMessage(message);
         case "v1.0.2":
           throw new Error(
             `Version ${version} of LightAccount doesn't support 1271`
