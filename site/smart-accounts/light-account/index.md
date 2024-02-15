@@ -35,6 +35,12 @@ The code snippet below demonstrates how to use Light Account with Account Kit. I
 
 ::: code-group
 
+::: tip Address calculation
+For the Light Account, the address of the smart account will be calculated as a combination of [the owner and the salt](https://github.com/alchemyplatform/light-account/blob/main/src/LightAccountFactory.sol#L24-L33). You will get the same smart account address each time you supply the same `owner`. You can also optionally supply `salt` if you want a different address for the same owner (the default salt is `0n`).
+
+If you already have an account with a new or different owner (transferred ownership), you can supply the `accountAddress` to connect with your account with a new owner. In that case, the `owner` is not used for address calculation, but still used for signing the operation.
+:::
+
 ## [Deployment addresses](https://github.com/alchemyplatform/light-account/blob/v1.1.0/Deployments.md)
 
 The following tables list the deployed factory and account implementation contract addresses for `LightAccount` on different chains:
