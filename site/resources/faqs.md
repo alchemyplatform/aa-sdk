@@ -54,7 +54,7 @@ Yes! The optional index value (salt) on Light Account enables the ability to hav
 ### How can I upgrade from Simple Account to Light Account?
 
 ::: details Answer
-[Simple Account's](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol) support `upgradeToAndCall` implemented by openzeppelin’s [UUPSUpgradeable](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/UUPSUpgradeable.sol) contract. This allows you to upgrade from Simple Account to Light Account without changing the smart contract account address. Using `upgradeToAndCall` will update the underlying implementation contract on the account while the account address and assets will stay the same.
+[Simple Account's](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol) support [`upgradeToAndCall`](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/4e7e6e54daedf091d91f2f2df024cbb8f253e2ef/contracts/proxy/utils/UUPSUpgradeable.sol#L86) implemented by openzeppelin’s [UUPSUpgradeable](https://docs.openzeppelin.com/contracts/4.x/api/proxy#UUPSUpgradeable) contract. This allows you to upgrade from Simple Account to Light Account without changing the smart contract account address. Using `upgradeToAndCall` will update the underlying implementation contract on the account while the account address and assets will stay the same.
 
 You can call `upgradeToAndCall` on the Simple Account with these params:
 
