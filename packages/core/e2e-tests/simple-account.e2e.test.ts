@@ -76,7 +76,7 @@ describe("Simple Account Tests", () => {
     expect(isAddress(address)).toBe(true);
   });
 
-  it("should correctly handle percentage overrides for buildUserOperation", async () => {
+  it("should correctly handle multiplier overrides for buildUserOperation", async () => {
     const signer = await givenConnectedProvider({
       owner,
       chain,
@@ -95,7 +95,7 @@ describe("Simple Account Tests", () => {
       owner,
       chain,
       feeOptions: {
-        preVerificationGas: { percentage: 100 },
+        preVerificationGas: { multiplier: 2 },
       },
     });
 
@@ -147,12 +147,12 @@ describe("Simple Account Tests", () => {
     expect(struct.preVerificationGas).toBe(100_000_000n);
   }, 60000);
 
-  it("should correctly handle percentage overrides for sendUserOperation", async () => {
+  it("should correctly handle multiplier overrides for sendUserOperation", async () => {
     const signer = await givenConnectedProvider({
       owner,
       chain,
       feeOptions: {
-        preVerificationGas: { percentage: 100 },
+        preVerificationGas: { multiplier: 2 },
       },
     });
 

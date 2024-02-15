@@ -287,8 +287,8 @@ const givenConnectedProvider = async ({
     opts: {
       feeOptions: {
         ...feeOptions,
-        maxFeePerGas: { percentage: 50 },
-        maxPriorityFeePerGas: { percentage: 50 },
+        maxFeePerGas: { multiplier: 1.5 },
+        maxPriorityFeePerGas: { multiplier: 1.5 },
       },
       txMaxRetries: 100,
     },

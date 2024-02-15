@@ -268,3 +268,25 @@ The `getPublicErc4337Client` method has been renamed to `getBundlerClient` to ma
 ### Ethers: Updated Signer Adapter constructor
 
 The `AccountSigner` now takes in a `SmartContractAccount` as a param in its constructor.
+
+### Core: Transition from ~~`Percent`~~ to `Multiplier` api and types
+
+The `Percent` type and `PercentSchema` have been removed in favor of the `Multiplier` type and `MultiplierSchema`.
+
+Going forward when using the feeOptions, you can specify the `Multiplier` type instead of a `Percent`. The `Multiplier` type is a number that represents direct multipliaction of the estimation. For example, `0.1` is 10% of the estimated value and `1` is 100% of the estimated value.
+
+```ts
+createModularAccountAlchemyClient({
+    ...
+    opts: {
+      ...
+      // The maxFeePerGas and maxPriorityFeePerGas estimated values will now be multipled by 1.5
+      feeOptions: {
+        // This was previously { percent: 50n }
+        maxFeePerGas: { multiplier: 1.5 },
+        // This was previously { percent: 25n }
+        maxPriorityFeePerGas: { multiplier: 1.25 },
+      },
+    },
+  });
+```

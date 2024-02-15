@@ -37,9 +37,9 @@ export const client = createAlchemySmartAccountClient({
     txRetryMultiplier: 1.5,
     minPriorityFeePerBid: 100_000_000n,
     feeOpts: {
-      baseFeeBufferPercent: 50n,
-      maxPriorityFeeBufferPercent: 5n,
-      preVerificationGasBufferPercent: 5n,
+      baseFeeBufferMultiplier: 1.5n,
+      maxPriorityFeeBufferMultiplier: 1.05,
+      preVerificationGasBufferMultiplier: 1.05,
     },
   },
   // will simulate user operations before sending them to ensure they don't revert

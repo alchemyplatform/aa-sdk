@@ -5,7 +5,7 @@ import type { SendUserOperationResult } from "../../client/types";
 import { AccountNotFoundError } from "../../errors/account.js";
 import { IncompatibleClientError } from "../../errors/client.js";
 import type { UserOperationOverrides, UserOperationStruct } from "../../types";
-import { bigIntMax, bigIntPercent } from "../../utils/index.js";
+import { bigIntMax, bigIntMultiply } from "../../utils/index.js";
 import { _runMiddlewareStack } from "./internal/runMiddlewareStack.js";
 import { _sendUserOperation } from "./internal/sendUserOperation.js";
 import type { DropAndReplaceUserOperationParameters } from "./types";
@@ -54,11 +54,11 @@ export const dropAndReplaceUserOperation: <
   const _overrides: UserOperationOverrides = {
     maxFeePerGas: bigIntMax(
       BigInt(maxFeePerGas ?? 0n),
-      bigIntPercent(uoToDrop.maxFeePerGas, 110n)
+      bigIntMultiply(uoToDrop.maxFeePerGas, 1.1)
     ),
     maxPriorityFeePerGas: bigIntMax(
       BigInt(maxPriorityFeePerGas ?? 0n),
-      bigIntPercent(uoToDrop.maxPriorityFeePerGas, 110n)
+      bigIntMultiply(uoToDrop.maxPriorityFeePerGas, 1.1)
     ),
   };
 

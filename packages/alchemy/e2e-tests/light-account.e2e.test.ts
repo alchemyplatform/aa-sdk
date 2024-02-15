@@ -144,9 +144,9 @@ describe("Light Account Tests", () => {
       },
       opts: {
         feeOptions: {
-          maxFeePerGas: { percentage: 50 },
-          maxPriorityFeePerGas: { percentage: 50 },
-          preVerificationGas: { percentage: 50 },
+          maxFeePerGas: { multiplier: 1.5 },
+          maxPriorityFeePerGas: { multiplier: 1.5 },
+          preVerificationGas: { multiplier: 1.5 },
         },
       },
     });
@@ -320,8 +320,8 @@ const givenConnectedProvider = async ({
       txMaxRetries: 10,
       ...opts,
       feeOptions: {
-        maxFeePerGas: { percentage: 50 },
-        maxPriorityFeePerGas: { percentage: 50 },
+        maxFeePerGas: { multiplier: 1.5 },
+        maxPriorityFeePerGas: { multiplier: 1.5 },
         ...opts?.feeOptions,
       },
     },
