@@ -1,11 +1,11 @@
 import type {
   BigNumberish,
-  Percentage,
+  Multiplier,
   UserOperationFeeOptionsField,
   UserOperationRequest,
   UserOperationStruct,
 } from "../types";
-import { bigIntClamp, bigIntPercent } from "./bigint.js";
+import { bigIntClamp, bigIntMultiply } from "./bigint.js";
 import { isBigNumberish } from "./index.js";
 
 /**
@@ -29,7 +29,7 @@ export function isValidRequest(
 
 export function applyUserOpOverride(
   value: BigNumberish | undefined,
-  override?: BigNumberish | Percentage
+  override?: BigNumberish | Multiplier
 ): BigNumberish | undefined {
   if (override == null) {
     return value;
@@ -39,11 +39,9 @@ export function applyUserOpOverride(
     return override;
   }
 
-  // percentage override
+  // multiplier override
   else {
-    return value != null
-      ? bigIntPercent(value, BigInt(100 + override.percentage))
-      : value;
+    return value != null ? bigIntMultiply(value, override.multiplier) : value;
   }
 }
 
@@ -56,8 +54,8 @@ export function applyUserOpFeeOption(
   }
   return value != null
     ? bigIntClamp(
-        feeOption.percentage
-          ? bigIntPercent(value, BigInt(100 + feeOption.percentage))
+        feeOption.multiplier
+          ? bigIntMultiply(value, feeOption.multiplier)
           : value,
         feeOption.min,
         feeOption.max
@@ -67,7 +65,7 @@ export function applyUserOpFeeOption(
 
 export function applyUserOpOverrideOrFeeOption(
   value: BigNumberish | undefined,
-  override?: BigNumberish | Percentage,
+  override?: BigNumberish | Multiplier,
   feeOption?: UserOperationFeeOptionsField
 ): BigNumberish {
   return value != null && override != null

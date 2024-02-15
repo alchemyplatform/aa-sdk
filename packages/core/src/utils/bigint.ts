@@ -1,5 +1,6 @@
 import { keccak256, toHex } from "viem";
-import type { BigNumberish } from "../types";
+import type { BigNumberish, Multiplier } from "../types";
+import { isMultiplier } from "./schema.js";
 
 /**
  * Returns the max bigint in a list of bigints
@@ -67,29 +68,34 @@ export enum RoundingMode {
 }
 
 /**
- * Useful if you want to increment a bigint by N% or decrement by N%
+ * Given a bigint and a number (which can be a float), returns the bigint value.
+ * Note: this function has loss and will round down to the nearest integer.
  *
- * example:
- * ```
- * const tenPercentIncrease = bigIntPercent(100n, 110n);
- * const tenPercentDecrease = bigIntPercent(100n, 90n);
- * ```
- *
- * @param base -- the base bigint that we want to apply a percent to
- * @param percent -- the percent to apply to the base
+ * @param a -- the bigint value to multiply
+ * @param b -- the number to multiply by
  * @param roundingMode -- the rounding mode to use when calculating the percent. defaults to ROUND_UP
- * @returns the base multiplied by the percent and divided by 100
+ * @returns -- the bigint value of the multiplication with the number rounded by the rounding mode
  */
-export const bigIntPercent = (
+export const bigIntMultiply = (
   base: BigNumberish,
-  percent: bigint,
+  multiplier: Multiplier["multiplier"],
   roundingMode: RoundingMode = RoundingMode.ROUND_UP
 ) => {
-  if (roundingMode === RoundingMode.ROUND_UP) {
-    return (BigInt(base) * percent + 99n) / 100n;
+  if (!isMultiplier({ multiplier })) {
+    throw new Error(
+      "bigIntMultiply requires a multiplier validated number as the second argument"
+    );
   }
 
-  return (BigInt(base) * percent) / 100n;
+  // Get decimal places of b. Max decimal places is defined by the MultiplerSchema.
+  const decimalPlaces = multiplier.toString().split(".")[1]?.length ?? 0;
+  const val =
+    roundingMode === RoundingMode.ROUND_UP
+      ? BigInt(base) * BigInt(multiplier * 10 ** decimalPlaces) +
+        BigInt(10 ** decimalPlaces - 1)
+      : BigInt(base) * BigInt(multiplier * 10 ** decimalPlaces);
+
+  return val / BigInt(10 ** decimalPlaces);
 };
 
 /**

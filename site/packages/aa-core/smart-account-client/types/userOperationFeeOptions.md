@@ -42,7 +42,7 @@ const rpcTransport = http("https://polygon-mumbai.g.alchemy.com/v2/demo");
 const userOperationFeeOptions: UserOperationFeeOptions = {
   maxPriorityFeePerGas: {
     min: 100_000_000n,
-    percentage: 50,
+    multiplier: 1.5,
   },
 };
 

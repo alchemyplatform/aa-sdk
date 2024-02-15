@@ -7,10 +7,10 @@ import {
   defaultGasEstimator,
   filterUndefined,
   isBigNumberish,
-  isPercentage,
+  isMultiplier,
   resolveProperties,
   type Hex,
-  type Percentage,
+  type Multiplier,
   type UserOperationFeeOptions,
   type UserOperationRequest,
 } from "@alchemy/aa-core";
@@ -19,11 +19,11 @@ import type { ClientWithAlchemyMethods } from "../client/types";
 import { alchemyFeeEstimator } from "./feeEstimator.js";
 
 export type RequestGasAndPaymasterAndDataOverrides = Partial<{
-  maxFeePerGas: UserOperationRequest["maxFeePerGas"] | Percentage;
-  maxPriorityFeePerGas: UserOperationRequest["maxFeePerGas"] | Percentage;
-  callGasLimit: UserOperationRequest["maxFeePerGas"] | Percentage;
-  preVerificationGas: UserOperationRequest["maxFeePerGas"] | Percentage;
-  verificationGasLimit: UserOperationRequest["maxFeePerGas"] | Percentage;
+  maxFeePerGas: UserOperationRequest["maxFeePerGas"] | Multiplier;
+  maxPriorityFeePerGas: UserOperationRequest["maxFeePerGas"] | Multiplier;
+  callGasLimit: UserOperationRequest["maxFeePerGas"] | Multiplier;
+  preVerificationGas: UserOperationRequest["maxFeePerGas"] | Multiplier;
+  verificationGasLimit: UserOperationRequest["maxFeePerGas"] | Multiplier;
 }>;
 
 export interface AlchemyGasManagerConfig {
@@ -138,26 +138,24 @@ const requestGasAndPaymasterData: <C extends ClientWithAlchemyMethods>(
 
     const overrideField = (
       field: keyof UserOperationFeeOptions
-    ): Hex | Percentage | undefined => {
+    ): Hex | Multiplier | undefined => {
       if (overrides?.[field] != null) {
         // one-off absolute override
         if (isBigNumberish(overrides[field])) {
           return deepHexlify(overrides[field]);
         }
-        // one-off percentage overrides
+        // one-off multiplier overrides
         else {
           return {
-            percentage:
-              100 + Number((overrides[field] as Percentage).percentage),
+            multiplier: Number((overrides[field] as Multiplier).multiplier),
           };
         }
       }
 
-      // provider level fee options with percentage
-      if (isPercentage(feeOptions?.[field])) {
+      // provider level fee options with multiplier
+      if (isMultiplier(feeOptions?.[field])) {
         return {
-          percentage:
-            100 + Number((feeOptions![field] as Percentage).percentage),
+          multiplier: Number((feeOptions![field] as Multiplier).multiplier),
         };
       }
 

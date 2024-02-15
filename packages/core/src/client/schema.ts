@@ -1,7 +1,7 @@
 import type { Transport } from "viem";
 import { z } from "zod";
 
-import { BigNumberishRangeSchema, PercentageSchema } from "../utils/index.js";
+import { BigNumberishRangeSchema, MultiplierSchema } from "../utils/index.js";
 import type { BundlerClient } from "./bundlerClient.js";
 
 export const createPublicErc4337ClientSchema = <
@@ -42,7 +42,7 @@ export const ConnectionConfigSchema = z.union([
 ]);
 
 export const UserOperationFeeOptionsFieldSchema =
-  BigNumberishRangeSchema.merge(PercentageSchema).partial();
+  BigNumberishRangeSchema.merge(MultiplierSchema).partial();
 
 export const UserOperationFeeOptionsSchema = z
   .object({

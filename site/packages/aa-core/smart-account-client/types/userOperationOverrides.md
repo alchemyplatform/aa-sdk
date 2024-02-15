@@ -20,7 +20,7 @@ Contains override values to be applied on the user operation request to be const
 
 These override values are available from each middleware of the `SmartAccountClient`. For example, the default middlewares such as `gasEstimator` or `feeEstimator` apply the overrides values to the estimated values if the override values are provided.
 
-Other than the `paymasterAndData` field, the override fields could be either the absolute value or the percentage value. In the default middlewares, if the override value is an absolute value, it simply overrides the estimated value. If the override value is a percentage value, the estimated value is _bumped_ with the indicated percentage value. For example, if the override value is `{ percentage: 10 }` for the `maxPriorityFeePerGas` field, then 10% bump is applied to the estimated `maxPriorityFeePerGas` of the user operation.
+Other than the `paymasterAndData` field, the override fields could be either the absolute value or the multiplier value. In the default middlewares, if the override value is an absolute value, it simply overrides the estimated value. If the override value is a multiplier value, the estimated value is _bumped_ with the indicated multiplier value. For example, if the override value is `{ multiplier: 1.1 }` for the `maxPriorityFeePerGas` field, then a 1.1 multiplier, or a 10% increase, is applied to the estimated `maxPriorityFeePerGas` of the user operation.
 
 The `paymasterAndData` only allows an absolute value override, and if the override value is provided, then the paymaster middleware is bypassed entirely. Refer to our guide [How to handle User Operations that are not eligible for gas sponsorship](/using-smart-accounts/sponsoring-gas/checking-eligibility.md) on the example of using the `paymasterAndData` override to bypass the paymaster middleware to fallback to the user paying the gas fee instead of the gas being subsidized by the paymaster.
 
@@ -32,15 +32,15 @@ Note that if you are using your own middleware, for example a custom `feeEstimat
 type BytesLike = Uint8Array | Hex;
 
 export type UserOperationOverrides = Partial<{
-  callGasLimit: UserOperationStruct["callGasLimit"] | Percentage;
-  maxFeePerGas: UserOperationStruct["maxFeePerGas"] | Percentage;
+  callGasLimit: UserOperationStruct["callGasLimit"] | Multiplier;
+  maxFeePerGas: UserOperationStruct["maxFeePerGas"] | Multiplier;
   maxPriorityFeePerGas:
     | UserOperationStruct["maxPriorityFeePerGas"]
-    | Percentage;
-  preVerificationGas: UserOperationStruct["preVerificationGas"] | Percentage;
+    | Multiplier;
+  preVerificationGas: UserOperationStruct["preVerificationGas"] | Multiplier;
   verificationGasLimit:
     | UserOperationStruct["verificationGasLimit"]
-    | Percentage;
+    | Multiplier;
   paymasterAndData: UserOperationStruct["paymasterAndData"];
 }>;
 ```

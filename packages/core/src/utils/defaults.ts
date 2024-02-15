@@ -94,7 +94,7 @@ export const getDefaultUserOperationFeeOptions = (
   return {
     maxPriorityFeePerGas: {
       min: minPriorityFeePerBidDefaults.get(chain.id) ?? 100_000_000n,
-      percentage: 33,
+      multiplier: 1.33,
     },
   };
 };
