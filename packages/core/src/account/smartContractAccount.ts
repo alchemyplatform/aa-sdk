@@ -78,7 +78,7 @@ export type SmartContractAccount<
     typedDataDefinition: TypedDataDefinition<typedData, primaryType>
   ) => Promise<Hex>;
   encodeUpgradeToAndCall: (params: UpgradeToAndCallParams) => Promise<Hex>;
-  getNonce(): Promise<bigint>;
+  getNonce(nonceKey?: bigint): Promise<bigint>;
   getInitCode: () => Promise<Hex>;
   isAccountDeployed: () => Promise<boolean>;
   getFactoryAddress: () => Address;
@@ -244,12 +244,12 @@ export async function toSmartContractAccount<
     return initCode === "0x";
   };
 
-  const getNonce = async () => {
+  const getNonce = async (nonceKey = 0n) => {
     if (!(await isAccountDeployed())) {
       return 0n;
     }
 
-    return entryPointContract.read.getNonce([accountAddress_, BigInt(0)]);
+    return entryPointContract.read.getNonce([accountAddress_, nonceKey]);
   };
 
   const account = toAccount({
