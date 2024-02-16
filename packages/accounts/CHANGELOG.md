@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-alpha.13](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.12...v3.0.0-alpha.13) (2024-02-16)
+
+**Note:** Version bump only for package @alchemy/aa-accounts
+
 # [3.0.0-alpha.12](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.11...v3.0.0-alpha.12) (2024-02-14)
 
 ### Bug Fixes
