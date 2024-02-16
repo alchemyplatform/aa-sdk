@@ -12,6 +12,7 @@ export type * from "./account/smartContractAccount.js";
 export {
   getAccountAddress,
   parseFactoryAddressFromAccountInitCode,
+  sync_toSmartContractAccount,
   toSmartContractAccount,
 } from "./account/smartContractAccount.js";
 export type {

@@ -106,6 +106,19 @@ export type ToSmartContractAccountParams<
   encodeUpgradeToAndCall?: (params: UpgradeToAndCallParams) => Promise<Hex>;
 } & Omit<CustomSource, "signTransaction" | "address">;
 
+export type SyncToSmartContractAccountParams<
+  Name extends string = string,
+  TTransport extends Transport = Transport,
+  TChain extends Chain = Chain,
+  TUserOperationRequest = UserOperationRequest
+> = Omit<
+  ToSmartContractAccountParams<Name, TTransport, TChain, TUserOperationRequest>,
+  "getAccountInitCode" | "accountAddress"
+> & {
+  getAccountInitCode: () => Hex;
+  accountAddress: Address;
+};
+
 export const parseFactoryAddressFromAccountInitCode = (initCode: Hex) => {
   const factoryAddress = `0x${initCode.substring(2, 42)}` as Address;
   const factoryCalldata = `0x${initCode.substring(42)}` as Hex;
@@ -171,6 +184,46 @@ export async function toSmartContractAccount<
   entryPoint = getVersion060EntryPoint(chain),
   accountAddress,
   getAccountInitCode,
+  ...rest
+}: ToSmartContractAccountParams<Name, TTransport, TChain>): Promise<
+  SmartContractAccount<Name>
+> {
+  const client = createBundlerClient({
+    transport,
+    chain,
+  });
+
+  const accountAddress_ = await getAccountAddress({
+    client,
+    entryPointAddress: entryPoint.address,
+    accountAddress,
+    getAccountInitCode,
+  });
+
+  const initCode = await getAccountInitCode();
+
+  return sync_toSmartContractAccount({
+    transport,
+    chain,
+    source,
+    entryPoint,
+    accountAddress: accountAddress_,
+    getAccountInitCode: () => initCode,
+    ...rest,
+  });
+}
+
+export function sync_toSmartContractAccount<
+  Name extends string = string,
+  TTransport extends Transport = Transport,
+  TChain extends Chain = Chain
+>({
+  transport,
+  chain,
+  source,
+  entryPoint = getVersion060EntryPoint(chain),
+  accountAddress,
+  getAccountInitCode,
   signMessage,
   signTypedData,
   encodeBatchExecute,
@@ -178,9 +231,11 @@ export async function toSmartContractAccount<
   getDummySignature,
   signUserOperationHash,
   encodeUpgradeToAndCall,
-}: ToSmartContractAccountParams<Name, TTransport, TChain>): Promise<
-  SmartContractAccount<Name>
-> {
+}: SyncToSmartContractAccountParams<
+  Name,
+  TTransport,
+  TChain
+>): SmartContractAccount<Name> {
   const client = createBundlerClient({
     transport,
     chain,
@@ -193,13 +248,6 @@ export async function toSmartContractAccount<
     client: client as PublicClient,
   });
 
-  const accountAddress_ = await getAccountAddress({
-    client,
-    entryPointAddress: entryPoint.address,
-    accountAddress,
-    getAccountInitCode,
-  });
-
   let deploymentState = DeploymentState.UNDEFINED;
 
   const getInitCode = async () => {
@@ -208,7 +256,7 @@ export async function toSmartContractAccount<
     }
 
     const contractCode = await client.getBytecode({
-      address: accountAddress_,
+      address: accountAddress,
     });
 
     if ((contractCode?.length ?? 0) > 2) {
@@ -228,7 +276,7 @@ export async function toSmartContractAccount<
     });
 
   const [factoryAddress] = parseFactoryAddressFromAccountInitCode(
-    await getAccountInitCode()
+    getAccountInitCode()
   );
 
   const getFactoryAddress = () => factoryAddress;
@@ -249,11 +297,11 @@ export async function toSmartContractAccount<
       return 0n;
     }
 
-    return entryPointContract.read.getNonce([accountAddress_, BigInt(0)]);
+    return entryPointContract.read.getNonce([accountAddress, BigInt(0)]);
   };
 
   const account = toAccount({
-    address: accountAddress_,
+    address: accountAddress,
     signMessage,
     signTypedData,
     signTransaction: () => {
@@ -267,7 +315,7 @@ export async function toSmartContractAccount<
     }
 
     const [factoryAddress, factoryCalldata] =
-      parseFactoryAddressFromAccountInitCode(await getAccountInitCode());
+      parseFactoryAddressFromAccountInitCode(getAccountInitCode());
 
     return wrapSignatureWith6492({
       factoryAddress,

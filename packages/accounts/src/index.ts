@@ -3,7 +3,10 @@
 
 //light-account exports
 export type * from "./light-account/account.js";
-export { createLightAccount } from "./light-account/account.js";
+export {
+  createLightAccount,
+  sync_createLightAccount,
+} from "./light-account/account.js";
 export { transferOwnership as transferLightAccountOwnership } from "./light-account/actions/transferOwnership.js";
 export { createLightAccountClient } from "./light-account/client.js";
 export type * from "./light-account/decorator.js";
@@ -28,7 +31,10 @@ export { IPluginAbi } from "./msca/abis/IPlugin.js";
 export type * from "./msca/account-loupe/decorator.js";
 export { accountLoupeActions } from "./msca/account-loupe/decorator.js";
 export type * from "./msca/account/multiOwnerAccount.js";
-export { createMultiOwnerModularAccount } from "./msca/account/multiOwnerAccount.js";
+export {
+  createMultiOwnerModularAccount,
+  sync_createMultiOwnerModularAccount,
+} from "./msca/account/multiOwnerAccount.js";
 export { standardExecutor } from "./msca/account/standardExecutor.js";
 export type * from "./msca/plugin-manager/decorator.js";
 export { pluginManagerActions } from "./msca/plugin-manager/decorator.js";

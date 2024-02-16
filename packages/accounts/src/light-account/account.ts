@@ -3,7 +3,7 @@ import {
   createBundlerClient,
   getAccountAddress,
   getVersion060EntryPoint,
-  toSmartContractAccount,
+  sync_toSmartContractAccount,
   type Address,
   type Hex,
   type OwnedSmartContractAccount,
@@ -56,6 +56,17 @@ export type CreateLightAccountParams<
   version?: LightAccountVersion;
 };
 
+export type SyncCreateLightAccountParams<
+  TTransport extends Transport = Transport,
+  TOwner extends SmartAccountSigner = SmartAccountSigner
+> = Omit<
+  CreateLightAccountParams<TTransport, TOwner>,
+  "accountAddress" | "initCode" | "factoryAddress" | "version"
+> & {
+  accountAddress: Address;
+  initCode: Hex;
+};
+
 export async function createLightAccount<
   TTransport extends Transport = Transport,
   TOwner extends SmartAccountSigner = SmartAccountSigner
@@ -106,12 +117,43 @@ export async function createLightAccount({
     getAccountInitCode,
   });
 
+  return sync_createLightAccount({
+    accountAddress: address,
+    chain,
+    entryPoint,
+    initCode: await getAccountInitCode(),
+    transport,
+    owner,
+  });
+}
+
+export function sync_createLightAccount<
+  TTransport extends Transport = Transport,
+  TOwner extends SmartAccountSigner = SmartAccountSigner
+>(
+  config: SyncCreateLightAccountParams<TTransport, TOwner>
+): LightAccount<TOwner>;
+
+export function sync_createLightAccount({
+  transport,
+  chain,
+  owner: owner_,
+  initCode,
+  entryPoint = getVersion060EntryPoint(chain),
+  accountAddress,
+}: SyncCreateLightAccountParams): LightAccount {
+  let owner = owner_;
+  const client = createBundlerClient({
+    transport,
+    chain,
+  });
+
   const encodeUpgradeToAndCall = async ({
     upgradeToAddress,
     upgradeToInitData,
   }: UpgradeToAndCallParams): Promise<Hex> => {
     const storage = await client.getStorageAt({
-      address,
+      address: accountAddress,
       // the slot at which impl addresses are stored by UUPS
       slot: "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
     });
@@ -151,7 +193,7 @@ export async function createLightAccount({
       domain: {
         chainId: Number(client.chain.id),
         name: "LightAccount",
-        verifyingContract: address,
+        verifyingContract: accountAddress,
         version: "1",
       },
       types: {
@@ -164,13 +206,13 @@ export async function createLightAccount({
     });
   };
 
-  const account = await toSmartContractAccount({
+  const account = sync_toSmartContractAccount({
     transport,
     chain,
     entryPoint,
-    accountAddress: address,
+    accountAddress,
     source: "LightAccount",
-    getAccountInitCode,
+    getAccountInitCode: () => initCode,
     encodeExecute: async ({ target, data, value }) => {
       return encodeFunctionData({
         abi: LightAccountAbi,
@@ -246,7 +288,7 @@ export async function createLightAccount({
     },
     async getOwnerAddress(): Promise<Address> {
       const callResult = await client.readContract({
-        address,
+        address: accountAddress,
         abi: LightAccountAbi,
         functionName: "owner",
       });

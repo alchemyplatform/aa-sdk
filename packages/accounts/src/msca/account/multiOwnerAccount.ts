@@ -3,7 +3,7 @@ import {
   createBundlerClient,
   getAccountAddress,
   getVersion060EntryPoint,
-  toSmartContractAccount,
+  sync_toSmartContractAccount,
   type Address,
   type OwnedSmartContractAccount,
   type SmartAccountSigner,
@@ -41,6 +41,17 @@ export type CreateMultiOwnerModularAccountParams<
   initCode?: Hex;
 };
 
+export type SyncCreateMultiOwnerModularAccountParams<
+  TTransport extends Transport = Transport,
+  TOwner extends SmartAccountSigner = SmartAccountSigner
+> = Omit<
+  CreateMultiOwnerModularAccountParams<TTransport, TOwner>,
+  "initCode" | "accountAddress" | "factoryAddress" | "owners" | "salt"
+> & {
+  accountAddress: Address;
+  initCode: Hex;
+};
+
 export async function createMultiOwnerModularAccount<
   TTransport extends Transport = Transport,
   TOwner extends SmartAccountSigner = SmartAccountSigner
@@ -60,10 +71,12 @@ export async function createMultiOwnerModularAccount({
   salt = 0n,
 }: CreateMultiOwnerModularAccountParams): Promise<MultiOwnerModularAccount> {
   let owner = owner_;
+
   const client = createBundlerClient({
     transport,
     chain,
   });
+
   const getAccountInitCode = async () => {
     if (initCode) {
       return initCode;
@@ -97,7 +110,40 @@ export async function createMultiOwnerModularAccount({
     getAccountInitCode,
   });
 
-  const baseAccount = await toSmartContractAccount({
+  return sync_createMultiOwnerModularAccount({
+    transport,
+    chain,
+    owner,
+    accountAddress,
+    initCode: await getAccountInitCode(),
+    entryPoint,
+  });
+}
+
+export function sync_createMultiOwnerModularAccount<
+  TTransport extends Transport = Transport,
+  TOwner extends SmartAccountSigner = SmartAccountSigner
+>(
+  config: SyncCreateMultiOwnerModularAccountParams<TTransport, TOwner>
+): MultiOwnerModularAccount<TOwner>;
+
+export function sync_createMultiOwnerModularAccount({
+  transport,
+  chain,
+  owner: owner_,
+  accountAddress,
+  initCode,
+  entryPoint = getVersion060EntryPoint(chain),
+}: SyncCreateMultiOwnerModularAccountParams): MultiOwnerModularAccount {
+  let owner = owner_;
+  const client = createBundlerClient({
+    transport,
+    chain,
+  });
+
+  const getAccountInitCode = () => initCode;
+
+  const baseAccount = sync_toSmartContractAccount({
     transport,
     chain,
     entryPoint,
@@ -110,7 +156,6 @@ export async function createMultiOwnerModularAccount({
 
   return {
     ...baseAccount,
-    publicKey: await owner.getAddress(),
     getOwner: () => owner,
     setOwner: (newOwner) => {
       owner = newOwner;
