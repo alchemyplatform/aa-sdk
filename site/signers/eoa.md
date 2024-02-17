@@ -40,7 +40,7 @@ const client = createWalletClient({
   transport: custom(window.ethereum),
 });
 
-// this can now be used as an owner for a Smart Contract Account
+// this can now be used as an signer for a Smart Contract Account
 export const eoaSigner = new WalletClientSigner(
   client,
   "json-rpc" //signerType
@@ -68,7 +68,7 @@ export const client = createWalletClient({
   transport: http(),
 });
 
-// this can now be used as an owner for a Smart Contract Account
+// this can now be used as an signer for a Smart Contract Account
 export const eoaSigner = new WalletClientSigner(
   client,
   "local" // signerType

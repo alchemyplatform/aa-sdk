@@ -28,29 +28,29 @@ import type {
 } from "./smartAccountClient";
 
 export type AlchemyModularAccountClientConfig<
-  TOwner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = Omit<
-  CreateMultiOwnerModularAccountParams<HttpTransport, TOwner>,
+  CreateMultiOwnerModularAccountParams<HttpTransport, TSigner>,
   "transport" | "chain"
 > &
   Omit<
-    AlchemySmartAccountClientConfig<Transport, Chain, LightAccount<TOwner>>,
+    AlchemySmartAccountClientConfig<Transport, Chain, LightAccount<TSigner>>,
     "account"
   >;
 
 export function createModularAccountAlchemyClient<
-  TOwner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  params: AlchemyModularAccountClientConfig<TOwner>
+  params: AlchemyModularAccountClientConfig<TSigner>
 ): Promise<
   AlchemySmartAccountClient<
     CustomTransport,
     Chain | undefined,
-    MultiOwnerModularAccount<TOwner>,
-    BaseAlchemyActions<Chain | undefined, MultiOwnerModularAccount<TOwner>> &
-      MultiOwnerPluginActions<MultiOwnerModularAccount<TOwner>> &
-      PluginManagerActions<MultiOwnerModularAccount<TOwner>> &
-      AccountLoupeActions<MultiOwnerModularAccount<TOwner>>
+    MultiOwnerModularAccount<TSigner>,
+    BaseAlchemyActions<Chain | undefined, MultiOwnerModularAccount<TSigner>> &
+      MultiOwnerPluginActions<MultiOwnerModularAccount<TSigner>> &
+      PluginManagerActions<MultiOwnerModularAccount<TSigner>> &
+      AccountLoupeActions<MultiOwnerModularAccount<TSigner>>
   >
 >;
 

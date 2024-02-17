@@ -30,6 +30,7 @@ export { accountLoupeActions } from "./msca/account-loupe/decorator.js";
 export type * from "./msca/account/multiOwnerAccount.js";
 export { createMultiOwnerModularAccount } from "./msca/account/multiOwnerAccount.js";
 export { standardExecutor } from "./msca/account/standardExecutor.js";
+export { createMultiOwnerModularAccountClient } from "./msca/client.js";
 export type * from "./msca/plugin-manager/decorator.js";
 export { pluginManagerActions } from "./msca/plugin-manager/decorator.js";
 export type * from "./msca/plugins/multi-owner/index.js";

@@ -5,9 +5,9 @@ import {
   toSmartContractAccount,
   type BaseSmartAccountParams,
   type BatchUserOperationCallData,
-  type OwnedSmartContractAccount,
   type SignTypedDataParams,
   type SmartAccountSigner,
+  type SmartContractAccountWithSigner,
   type ToSmartContractAccountParams,
   type UserOperationCallData,
 } from "@alchemy/aa-core";
@@ -30,14 +30,14 @@ import { NaniAccountFactoryAbi } from "./abis/NaniAccountFactoryAbi.js";
 export type NaniSmartAccountParams<
   TTransport extends Transport | FallbackTransport = Transport
 > = Omit<BaseSmartAccountParams<TTransport>, "rpcClient"> & {
-  owner: SmartAccountSigner;
+  signer: SmartAccountSigner;
   index?: bigint;
   salt?: Hex;
   transport: TTransport;
   chain: Chain;
 };
 
-export type NaniAccount = OwnedSmartContractAccount<
+export type NaniAccount = SmartContractAccountWithSigner<
   "NaniAccount",
   SmartAccountSigner
 > & {
@@ -48,7 +48,7 @@ export type NaniAccount = OwnedSmartContractAccount<
 class NaniAccount_<
   TTransport extends Transport | FallbackTransport = Transport
 > extends BaseSmartContractAccount<TTransport> {
-  protected owner: SmartAccountSigner;
+  protected signer: SmartAccountSigner;
   private readonly index: bigint;
   protected salt?: Hex;
 
@@ -61,18 +61,18 @@ class NaniAccount_<
     super({ ...params, rpcClient: client });
 
     this.index = params.index ?? 0n;
-    this.owner = params.owner;
+    this.signer = params.signer;
     this.salt = params.salt;
   }
 
   override async signTypedData(params: SignTypedDataParams): Promise<Hash> {
-    return this.owner.signTypedData(params);
+    return this.signer.signTypedData(params);
   }
 
   /**
-   * Returns the on-chain EOA owner address of the account.
+   * Returns the on-chain owner address of the account.
    *
-   * @returns {Address} the on-chain EOA owner of the account
+   * @returns {Address} the on-chain owner of the account
    */
   async getOwnerAddress(): Promise<Address> {
     const callResult = await this.rpcProvider.call({
@@ -93,8 +93,10 @@ class NaniAccount_<
       data: callResult.data,
     });
 
-    if (decodedCallResult !== (await this.owner.getAddress())) {
-      throw new Error("on-chain owner does not match account owner");
+    if (decodedCallResult !== (await this.signer.getAddress())) {
+      throw new Error(
+        "current account signer does not match the on-chain owner"
+      );
     }
 
     return decodedCallResult;
@@ -128,7 +130,7 @@ class NaniAccount_<
   }
 
   signMessage(msg: Uint8Array | string): Promise<Hex> {
-    return this.owner.signMessage(
+    return this.signer.signMessage(
       typeof msg === "string" && !isHex(msg) ? msg : { raw: msg }
     );
   }
@@ -196,21 +198,17 @@ class NaniAccount_<
 
   protected async getSalt(): Promise<Hex> {
     if (this.salt) {
-      if (this.salt.slice(0, 42) !== (await this.owner.getAddress())) {
-        throw new Error("Salt does not match owner");
+      if (this.salt.slice(0, 42) !== (await this.signer.getAddress())) {
+        throw new Error("Salt does not match the current signer address");
       } else {
         return this.salt;
       }
     }
 
     return concatHex([
-      await this.owner.getAddress(),
+      await this.signer.getAddress(),
       numberToHex(this.index, { size: 12 }),
     ]);
-  }
-
-  setOwner(owner: SmartAccountSigner) {
-    this.owner = owner;
   }
 
   protected async getFactoryInitCode(): Promise<Hex> {
@@ -218,7 +216,7 @@ class NaniAccount_<
       return encodeFunctionData({
         abi: NaniAccountFactoryAbi,
         functionName: "createAccount",
-        args: [await this.owner.getAddress(), await this.getSalt()],
+        args: [await this.signer.getAddress(), await this.getSalt()],
       });
     } catch (err: any) {
       throw new Error("Factory Code generation failed");
@@ -230,7 +228,7 @@ export const createNaniAccount = async <TTransport extends Transport>(
   params: Omit<NaniSmartAccountParams<TTransport>, "rpcClient" | "chain"> &
     Pick<ToSmartContractAccountParams, "chain" | "transport">
 ): Promise<NaniAccount> => {
-  if (!params.owner) throw new Error("Owner must be provided.");
+  if (!params.signer) throw new Error("Owner must be provided.");
 
   const naniAccount = new NaniAccount_(params);
 
@@ -261,8 +259,7 @@ export const createNaniAccount = async <TTransport extends Transport>(
 
   return {
     ...base,
-    getOwner: () => naniAccount.getOwner() as SmartAccountSigner,
-    setOwner: (owner) => naniAccount.setOwner.bind(naniAccount)(owner),
+    getSigner: () => naniAccount.getSigner() as SmartAccountSigner,
     encodeExecuteDelegate: NaniAccount_.encodeExecuteDelegate,
     encodeTransferOwnership: NaniAccount_.encodeTransferOwnership,
   };

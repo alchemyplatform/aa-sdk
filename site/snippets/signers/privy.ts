@@ -51,7 +51,7 @@ export const provider = new AlchemyProvider({
   (rpcClient) =>
     new LightSmartContractAccount({
       chain: rpcClient.chain,
-      owner: privySigner,
+      signer: privySigner,
       factoryAddress: getDefaultLightAccountFactoryAddress(rpcClient.chain),
       rpcClient,
     })

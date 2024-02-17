@@ -84,7 +84,7 @@ import { sepolia } from "@alchemy/aa-core";
 export const smartAccountClient = await createModularAccountAlchemyClient({
   apiKey: "YOUR_API_KEY",
   chain: sepolia,
-  owner,
+  signer,
 });
 ```
 

@@ -27,9 +27,9 @@ The Multi Owner plugin lets your smart accounts have one or more ECDSA or SCA ow
 The Multi-Owner Plugin is able to:
 
 - Update (add or remove) owners for an MSCA.
-- Check if an address is an owner of an MSCA.
+- Check if an address is an owner address of an MSCA.
 - Show all owners of an MSCA.
-- Validate owner signatures of ERC-4337 enabled user operation transactions as well as regular transactions.
+- Validate signed signatures of ERC-4337 enabled user operations as well as regular transactions.
 
 All Modular Accounts have `MultiOwnerPlugin` pre-installed upon creation, exposing following methods for account owners to update (add or remove) and read the current owners of the account:
 

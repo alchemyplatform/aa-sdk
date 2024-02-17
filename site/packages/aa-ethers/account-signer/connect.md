@@ -16,16 +16,16 @@ next:
 
 # connect
 
-`connect` is a method on `AccountSigner` that you can call to connect an `EthersProviderAdapter` to this Signer. This lets the returned `AccountSigner` leverage the provider when signing messages, UserOperations, and transactions for a smart account using the owner account.
+`connect` is a method on `AccountSigner` that you can call to connect an `EthersProviderAdapter` to this Signer. This lets the returned `AccountSigner` leverage the provider when signing messages, sending user operations and transactions for the smart account using the signer.
 
 ## Usage
 
 ::: code-group
 
 ```ts [example.ts]
-import { signer } from "./ethers-signer";
+import { accountSigner } from "./ethers-signer";
 
-// changing the provider for the signer
+// changing the ethers provider for the account signer
 const alchemy = new Alchemy({
   apiKey: process.env.API_KEY!,
   network: Network.SEPOLIA, // new chain -> new provider
@@ -33,8 +33,8 @@ const alchemy = new Alchemy({
 const ethersProvider = await alchemy.config.getProvider();
 const newProvider = EthersProviderAdapter.fromEthersProvider(ethersProvider);
 
-// connecting the signer
-const newSigner = signer.connect(newProvider);
+// connecting the account signer to ethers
+const newAccountSigner = accountSigner.connect(newProvider);
 ```
 
 <<< @/snippets/aa-ethers/ethers-signer.ts

@@ -53,12 +53,11 @@ export type UpgradeToAndCallParams = {
   upgradeToInitData: Hex;
 };
 
-export type OwnedSmartContractAccount<
+export type SmartContractAccountWithSigner<
   Name extends string = string,
-  TOwner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = SmartContractAccount<Name> & {
-  getOwner: () => TOwner;
-  setOwner: (owner: TOwner) => void;
+  getSigner: () => TSigner;
 };
 
 export type SmartContractAccount<

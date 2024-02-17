@@ -20,12 +20,12 @@ import {
 export type CreateLightAccountClientParams<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TOwner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = {
-  transport: CreateLightAccountParams<TTransport, TOwner>["transport"];
-  chain: CreateLightAccountParams<TTransport, TOwner>["chain"];
+  transport: CreateLightAccountParams<TTransport, TSigner>["transport"];
+  chain: CreateLightAccountParams<TTransport, TSigner>["chain"];
   account: Omit<
-    CreateLightAccountParams<TTransport, TOwner>,
+    CreateLightAccountParams<TTransport, TSigner>,
     "transport" | "chain"
   >;
 } & Omit<
@@ -35,16 +35,16 @@ export type CreateLightAccountClientParams<
 
 export function createLightAccountClient<
   TChain extends Chain | undefined = Chain | undefined,
-  TOwner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  args: CreateLightAccountClientParams<Transport, TChain, TOwner>
+  args: CreateLightAccountClientParams<Transport, TChain, TSigner>
 ): Promise<
   SmartAccountClient<
     CustomTransport,
     Chain,
-    LightAccount<TOwner>,
+    LightAccount<TSigner>,
     SmartAccountClientActions<Chain, SmartContractAccount> &
-      LightAccountClientActions<TOwner, LightAccount<TOwner>>
+      LightAccountClientActions<TSigner, LightAccount<TSigner>>
   >
 >;
 

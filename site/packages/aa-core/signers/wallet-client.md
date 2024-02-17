@@ -14,7 +14,7 @@ head:
 
 # WalletClientSigner
 
-The `WalletClientSigner` is useful if you want to convert a `viem` `WalletClient` to a `SmartAccountSigner` which can be used as an owner on Smart Contract Accounts
+The `WalletClientSigner` is useful if you want to convert a `viem` `WalletClient` to a `SmartAccountSigner` which can be used as a signer to use to connect to Smart Contract Accounts
 
 ## Usage
 

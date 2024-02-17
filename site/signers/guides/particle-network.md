@@ -65,7 +65,7 @@ const chain = polygonMumbai;
 const provider = await createModularAccountAlchemyClient({
   apiKey: process.env.ALCHEMY_API_KEY,
   chain,
-  owner: await createParticleSigner(),
+  signer: await createParticleSigner(),
 });
 ```
 

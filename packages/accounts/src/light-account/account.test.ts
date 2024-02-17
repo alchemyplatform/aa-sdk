@@ -12,11 +12,11 @@ const chain = polygonMumbai;
 describe("Light Account Tests", () => {
   const dummyMnemonic =
     "test test test test test test test test test test test junk";
-  const owner: SmartAccountSigner =
+  const signer: SmartAccountSigner =
     LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
 
   it("should correctly sign the message", async () => {
-    const { account } = await givenConnectedProvider({ owner, chain });
+    const { account } = await givenConnectedProvider({ signer, chain });
     const signature = await account.signMessage({
       message:
         "0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b",
@@ -28,7 +28,7 @@ describe("Light Account Tests", () => {
   });
 
   it("should correctly sign typed data", async () => {
-    const provider = await givenConnectedProvider({ owner, chain });
+    const provider = await givenConnectedProvider({ signer, chain });
     const signature = await provider.account.signTypedData({
       types: {
         Request: [{ name: "hello", type: "string" }],
@@ -45,7 +45,7 @@ describe("Light Account Tests", () => {
   });
 
   it("should correctly encode transferOwnership data", async () => {
-    const { account } = await givenConnectedProvider({ owner, chain });
+    const { account } = await givenConnectedProvider({ signer, chain });
     expect(
       account.encodeTransferOwnership(
         "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
@@ -56,7 +56,7 @@ describe("Light Account Tests", () => {
   });
 
   it("should correctly encode batch transaction data", async () => {
-    const provider = await givenConnectedProvider({ owner, chain });
+    const provider = await givenConnectedProvider({ signer, chain });
     const data = [
       {
         target: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
@@ -77,15 +77,15 @@ describe("Light Account Tests", () => {
 });
 
 const givenConnectedProvider = ({
-  owner,
+  signer,
   chain,
 }: {
-  owner: SmartAccountSigner;
+  signer: SmartAccountSigner;
   chain: Chain;
 }) =>
   createLightAccountClient({
     account: {
-      owner,
+      signer,
       accountAddress: "0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4",
     },
     transport: custom({

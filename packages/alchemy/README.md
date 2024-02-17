@@ -43,7 +43,7 @@ export const provider = new AlchemyProvider({
   (rpcClient) =>
     new LightSmartContractAccount({
       chain,
-      owner: eoaSigner,
+      signer: eoaSigner,
       factoryAddress: getDefaultLightAccountFactoryAddress(chain),
       rpcClient,
     })

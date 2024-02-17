@@ -10,25 +10,25 @@ import type { Chain, Client, Transport } from "viem";
 import type { LightAccount } from "../account";
 
 export type TransferLightAccountOwnershipParams<
-  TOwner extends SmartAccountSigner = SmartAccountSigner,
-  TAccount extends LightAccount<TOwner> | undefined =
-    | LightAccount<TOwner>
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TAccount extends LightAccount<TSigner> | undefined =
+    | LightAccount<TSigner>
     | undefined
 > = {
-  newOwner: TOwner;
+  newOwner: TSigner;
   waitForTxn?: boolean;
 } & GetAccountParameter<TAccount, LightAccount>;
 
 export const transferOwnership: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TOwner extends SmartAccountSigner = SmartAccountSigner,
-  TAccount extends LightAccount<TOwner> | undefined =
-    | LightAccount<TOwner>
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TAccount extends LightAccount<TSigner> | undefined =
+    | LightAccount<TSigner>
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: TransferLightAccountOwnershipParams<TOwner, TAccount>
+  args: TransferLightAccountOwnershipParams<TSigner, TAccount>
 ) => Promise<Hex> = async (
   client,
   { newOwner, waitForTxn, account = client.account }
@@ -54,8 +54,6 @@ export const transferOwnership: <
     },
     account,
   });
-
-  account.setOwner(newOwner);
 
   if (waitForTxn) {
     return client.waitForUserOperationTransaction(result);

@@ -13,7 +13,7 @@ const isLightAccountVersion = (x: unknown): x is LightAccountVersion => {
 };
 
 export const LightAccountFactoryConfigSchema = z.object({
-  owner: SignerSchema,
+  signer: SignerSchema,
   accountAddress: Address.optional().describe(
     "Optional override for the account address."
   ),

@@ -14,12 +14,12 @@ import { createAlchemySmartAccountClient } from "./smartAccountClient.js";
 describe("Light Account Client Tests", () => {
   const dummyMnemonic =
     "test test test test test test test test test test test test";
-  const owner = LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
+  const signer = LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
   const chain = polygonMumbai;
 
   it("should have a JWT property", async () => {
     const spy = vi.spyOn(AACoreModule, "createBundlerClient");
-    await givenConnectedProvider({ owner, chain });
+    await givenConnectedProvider({ signer, chain });
     expect(spy.mock.results[0].value.transport).toMatchInlineSnapshot(
       {
         fetchOptions: {
@@ -48,7 +48,7 @@ describe("Light Account Client Tests", () => {
   });
 
   it("should correctly encode batch transaction data", async () => {
-    const provider = await givenConnectedProvider({ owner, chain });
+    const provider = await givenConnectedProvider({ signer, chain });
     const account = provider.account;
     const data = [
       {
@@ -91,7 +91,7 @@ describe("Light Account Client Tests", () => {
 
   it("should correctly do runtime validation when chain is not supported by Alchemy", async () => {
     await expect(() => {
-      return givenConnectedProvider({ owner, chain: avalanche });
+      return givenConnectedProvider({ signer, chain: avalanche });
     }).rejects.toThrowErrorMatchingInlineSnapshot(`
       "[
         {
@@ -112,7 +112,7 @@ describe("Light Account Client Tests", () => {
       apiKey: "test",
     });
 
-    const provider = (await givenConnectedProvider({ owner, chain })).extend(
+    const provider = (await givenConnectedProvider({ signer, chain })).extend(
       alchemyEnhancedApiActions(alchemy)
     );
 
@@ -123,15 +123,15 @@ describe("Light Account Client Tests", () => {
   });
 
   const givenConnectedProvider = async ({
-    owner,
+    signer,
     chain,
   }: {
-    owner: SmartAccountSigner;
+    signer: SmartAccountSigner;
     chain: Chain;
   }) =>
     createLightAccountAlchemyClient({
       jwt: "test",
-      owner,
+      signer,
       chain,
       accountAddress: "0x86f3B0211764971Ad0Fc8C8898d31f5d792faD84",
     });

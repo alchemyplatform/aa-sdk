@@ -7,5 +7,5 @@ export const smartAccountClient = await createModularAccountAlchemyClient({
   apiKey: "YOUR_API_KEY",
   chain,
   // you can swap this out for any SmartAccountSigner
-  owner: LocalAccountSigner.mnemonicToAccountSigner("OWNER_MNEMONIC"),
+  signer: LocalAccountSigner.mnemonicToAccountSigner("OWNER_MNEMONIC"),
 });
