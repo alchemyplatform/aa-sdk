@@ -68,7 +68,7 @@ A new instance of a `ParticleSigner`.
 
 ### `params: Config | { inner: ParticleNetwork; provider?: ParticleProvider }`
 
-You can either pass in a constructed `ParticleNetwork` object, or directly pass into the `ParticleSigner` the `Config` used to construct a `ParticleNetwork` object. These parameters are listed on the [ParticleNetwork docs](https://docs.particle.network/developers/auth-service/sdks/web) as well.
+You can either pass in a constructed `ParticleNetwork` object, or directly pass into the `ParticleSigner` the `Config` used to construct a `ParticleNetwork` object. These parameters are listed on the [ParticleNetwork docs](https://developers.particle.network/reference/auth-web) as well.
 
 `Config` takes in the following parameters:
 
