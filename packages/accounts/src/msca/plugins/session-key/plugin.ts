@@ -331,7 +331,8 @@ export const sessionKeyPluginActions: <
 
     const dependencies = params.dependencyOverrides ?? [
       (() => {
-        const pluginAddress = MultiOwnerPlugin.meta.addresses[chain.id];
+        const pluginAddress =
+          params.pluginAddress ?? MultiOwnerPlugin.meta.addresses[chain.id];
         if (!pluginAddress) {
           throw new Error(
             "missing MultiOwnerPlugin address for chain " + chain.name
@@ -342,7 +343,8 @@ export const sessionKeyPluginActions: <
       })(),
 
       (() => {
-        const pluginAddress = MultiOwnerPlugin.meta.addresses[chain.id];
+        const pluginAddress =
+          params.pluginAddress ?? MultiOwnerPlugin.meta.addresses[chain.id];
         if (!pluginAddress) {
           throw new Error(
             "missing MultiOwnerPlugin address for chain " + chain.name

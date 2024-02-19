@@ -26,14 +26,14 @@ export const ManagementActionsGenPhase: Phase = async (input) => {
     addType(
       "ManagementActions<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined>",
       dedent`{
-      install${contract.name}: (args: {overrides?: UserOperationOverrides} & Install${contract.name}Params & GetAccountParameter<TAccount>) => Promise<SendUserOperationResult>
+      install${contract.name}: (args: { overrides?: UserOperationOverrides } & Install${contract.name}Params & GetAccountParameter<TAccount>) => Promise<SendUserOperationResult>
     }`
     );
 
     const dependencies = (config.installConfig.dependencies ?? []).map(
       (x) => dedent`
         (() => {
-          const pluginAddress = ${x.plugin.name}.meta.addresses[chain.id];
+          const pluginAddress = params.pluginAddress ?? ${x.plugin.name}.meta.addresses[chain.id];
           if (!pluginAddress) {
             throw new Error("missing ${x.plugin.name} address for chain " + chain.name);
           }
