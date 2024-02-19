@@ -6,6 +6,8 @@ import {
   type PublicClient,
 } from "viem";
 
+export type GetPluginAddressParameter = { pluginAddress?: Address };
+
 export type Plugin<TAbi extends Abi = Abi> = {
   meta: {
     name: string;

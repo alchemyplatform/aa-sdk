@@ -5,6 +5,7 @@ import {
   type SmartContractAccount,
 } from "@alchemy/aa-core";
 import { type Address, type Chain, type Client, type Transport } from "viem";
+import type { GetPluginAddressParameter } from "../types.js";
 import {
   MultiOwnerPlugin,
   multiOwnerPluginActions as multiOwnerPluginActions_,
@@ -17,19 +18,17 @@ export type MultiOwnerPluginActions<
     | undefined
 > = MultiOwnerPluginActions_<TAccount> & {
   readOwners: (
-    params: { pluginAddress?: Address } & GetAccountParameter<TAccount>
+    params: GetPluginAddressParameter & GetAccountParameter<TAccount>
   ) => Promise<ReadonlyArray<Address>>;
 
   isOwnerOf: (
-    params: {
-      address: Address;
-      pluginAddress?: Address;
-    } & GetAccountParameter<TAccount>
+    params: { address: Address } & GetPluginAddressParameter &
+      GetAccountParameter<TAccount>
   ) => Promise<boolean>;
 } & (IsUndefined<TAccount> extends false
     ? {
         readOwners: (
-          params?: { pluginAddress?: Address } & GetAccountParameter<TAccount>
+          params?: GetPluginAddressParameter & GetAccountParameter<TAccount>
         ) => Promise<ReadonlyArray<Address>>;
       }
     : {});
@@ -53,7 +52,7 @@ export const multiOwnerPluginActions: <
 ) => ({
   ...multiOwnerPluginActions_(client),
   async readOwners(
-    args: { pluginAddress?: Address } & GetAccountParameter<TAccount>
+    args: GetPluginAddressParameter & GetAccountParameter<TAccount>
   ) {
     const account = args?.account ?? client.account;
     if (!account) {
@@ -66,18 +65,16 @@ export const multiOwnerPluginActions: <
   },
 
   async isOwnerOf(
-    args: {
-      address: Address;
-      pluginAddress?: Address;
-    } & GetAccountParameter<TAccount>
+    args: { address: Address } & GetPluginAddressParameter &
+      GetAccountParameter<TAccount>
   ) {
-    const account = args?.account ?? client.account;
+    const account = args.account ?? client.account;
     if (!account) {
       throw new AccountNotFoundError();
     }
     // TODO: check if the account actually has the plugin installed
     // either via account loupe or checking if the supports interface call passes on the account
-    const contract = MultiOwnerPlugin.getContract(client, args?.pluginAddress);
+    const contract = MultiOwnerPlugin.getContract(client, args.pluginAddress);
     return contract.read.isOwnerOf([account.address, args.address]);
   },
 });

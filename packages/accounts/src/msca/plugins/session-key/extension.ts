@@ -7,6 +7,7 @@ import {
   type UserOperationOverrides,
 } from "@alchemy/aa-core";
 import type { Address, Chain, Client, Hex, Transport } from "viem";
+import type { GetPluginAddressParameter } from "../types.js";
 import {
   SessionKeyPlugin,
   sessionKeyPluginActions as sessionKeyPluginActions_,
@@ -26,24 +27,19 @@ export type SessionKeyPluginActions<
   | "updateKeyPermissions"
 > & {
   isAccountSessionKey: (
-    args: {
-      key: Address;
-      pluginAddress?: Address;
-    } & GetAccountParameter<TAccount>
+    args: { key: Address } & GetPluginAddressParameter &
+      GetAccountParameter<TAccount>
   ) => Promise<boolean>;
 
   getAccountSessionKeys: (
-    args: {
-      pluginAddress?: Address;
-    } & GetAccountParameter<TAccount>
+    args: GetPluginAddressParameter & GetAccountParameter<TAccount>
   ) => Promise<ReadonlyArray<Address>>;
 
   removeSessionKey: (
-    args: {
-      key: Address;
-      pluginAddress?: Address;
-      overrides?: UserOperationOverrides;
-    } & GetAccountParameter<TAccount>
+    args: { key: Address } & GetPluginAddressParameter &
+      GetAccountParameter<TAccount> & {
+        overrides?: UserOperationOverrides;
+      }
   ) => Promise<SendUserOperationResult>;
 
   addSessionKey: (
@@ -51,34 +47,35 @@ export type SessionKeyPluginActions<
       key: Address;
       permissions: Hex[];
       tag: Hex;
-      pluginAddress?: Address;
-      overrides?: UserOperationOverrides;
-    } & GetAccountParameter<TAccount>
+    } & GetPluginAddressParameter &
+      GetAccountParameter<TAccount> & {
+        overrides?: UserOperationOverrides;
+      }
   ) => Promise<SendUserOperationResult>;
 
   rotateSessionKey: (
     args: {
       oldKey: Address;
       newKey: Address;
-      pluginAddress?: Address;
-      overrides?: UserOperationOverrides;
-    } & GetAccountParameter<TAccount>
+    } & GetPluginAddressParameter &
+      GetAccountParameter<TAccount> & {
+        overrides?: UserOperationOverrides;
+      }
   ) => Promise<SendUserOperationResult>;
 
   updateSessionKeyPermissions: (
     args: {
       key: Address;
       permissions: Hex[];
-      pluginAddress?: Address;
-      overrides?: UserOperationOverrides;
-    } & GetAccountParameter<TAccount>
+    } & GetPluginAddressParameter &
+      GetAccountParameter<TAccount> & {
+        overrides?: UserOperationOverrides;
+      }
   ) => Promise<SendUserOperationResult>;
 } & (IsUndefined<TAccount> extends false
     ? {
         getAccountSessionKeys: (
-          args?: {
-            pluginAddress?: Address;
-          } & GetAccountParameter<TAccount>
+          args?: GetPluginAddressParameter & GetAccountParameter<TAccount>
         ) => Promise<ReadonlyArray<Address>>;
       }
     : {});
@@ -123,7 +120,7 @@ export const sessionKeyPluginActions: <
     },
 
     getAccountSessionKeys: async (
-      args: { pluginAddress?: Address } & GetAccountParameter<TAccount>
+      args: GetPluginAddressParameter & GetAccountParameter<TAccount>
     ) => {
       const account = args?.account ?? client.account;
       if (!account) throw new AccountNotFoundError();
