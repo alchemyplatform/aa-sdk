@@ -54,6 +54,14 @@ export type UserOperationOverrides = Partial<{
     | UserOperationStruct["verificationGasLimit"]
     | Multiplier;
   paymasterAndData: UserOperationStruct["paymasterAndData"];
+  /**
+   * This can be used to override the key used when calling `entryPoint.getNonce`
+   * It is useful when you want to use parallel nonces for user operations
+   *
+   * NOTE: not all bundlers fully support this feature and it could be that your bundler will still only include
+   * one user operation for your account in a bundle
+   */
+  nonceKey: bigint;
 }>;
 
 // represents the request as it needs to be formatted for RPC requests
