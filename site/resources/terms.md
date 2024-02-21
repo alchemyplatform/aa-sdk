@@ -56,6 +56,8 @@ Alchemy’s implementation of a [Paymaster](https://www.alchemy.com/overviews/wh
 
 A type of smart account enabled by the [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) standard and characterized by its [modular structure](https://accountkit.alchemy.com/smart-accounts/modular-account/.html). This structure segments different functionalities of the account into distinct, independently upgradeable modules or plugins. Each plugin can have specific functions such as validation, execution, or hooks, enabling the smart account to extend its capabilities or modify its behavior without altering the core account logic. Modular Accounts enhance flexibility, upgradeability, and interoperability of [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) smart accounts. Modular Account contracts have been audited by both [Spearbit](https://github.com/alchemyplatform/modular-account/blob/develop/audits/2024-01-31_spearbit_0e3fd1e.pdf) and [Quantstamp](https://github.com/alchemyplatform/modular-account/blob/develop/audits/2024-02-20-quantstamp-8ae319e.pdf).
 
+<!--@include: ./bbp.md-->
+
 ## Plugin
 
 A module for [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) smart accounts, enabling specific functions like validation, execution, and hooks. These plugins ensure modularity, upgradeability, and adherence to standardized interfaces.

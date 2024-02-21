@@ -34,6 +34,8 @@ For most applications, we recommend using **Modular Account**. If you have alrea
 
 Modular Account has been audited by Spearbit and Quanstamp. You can find the audit reports [here](https://github.com/alchemyplatform/modular-account/tree/develop/audits). Modular Account is fully open source so you can validate the [source code](https://github.com/alchemyplatform/modular-account).
 
+<!--@include: ../resources/bbp.md-->
+
 ## Light Account
 
 Account Kit provides a default smart account called `LightAccount`.

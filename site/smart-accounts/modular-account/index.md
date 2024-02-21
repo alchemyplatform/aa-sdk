@@ -62,3 +62,5 @@ Check out the plugin development guide [here](https://www.notion.so/alchemotion/
 ### Secure, audited, open source
 
 Modular Account has been audited by Spearbit and Quanstamp. You can find the audit reports [here](https://github.com/alchemyplatform/modular-account/tree/develop/audits). Modular Account is fully open source so you can validate the [source code](https://github.com/alchemyplatform/modular-account).
+
+<!--@include: ../../resources/bbp.md-->
