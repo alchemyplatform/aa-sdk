@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.13...v3.0.0) (2024-02-21)
+
+### Bug Fixes
+
+- fix doc for light account deployment addresses ([#468](https://github.com/alchemyplatform/aa-sdk/issues/468)) ([41791c4](https://github.com/alchemyplatform/aa-sdk/commit/41791c49bf307136f9d9f6555b3d5b9ceda2d468))
+- ma upgrade data was wrong ([#470](https://github.com/alchemyplatform/aa-sdk/issues/470)) ([68d3ceb](https://github.com/alchemyplatform/aa-sdk/commit/68d3ceb9b04f39bb0c328ac3867f66e668555bfc))
+
+### Features
+
+- add a nonce key override to support parallel nonces ([#462](https://github.com/alchemyplatform/aa-sdk/issues/462)) ([d48c586](https://github.com/alchemyplatform/aa-sdk/commit/d48c586665858c61e0d1d66e9bd4503f32e47db9))
+
 # [3.0.0-alpha.13](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.12...v3.0.0-alpha.13) (2024-02-16)
 
 **Note:** Version bump only for package root
