@@ -46,6 +46,6 @@ A Promise containing a new `AlchemySmartAccountClient` connected to a Light Acco
   - `policyId: string` -- the policy id of the gas manager you want to use.
   - `gasEstimationOptions: AlchemyGasEstimationOptions` -- [optional] optional option configurable for the gas estimation portion of the Alchemy gas manager
 
-- `...accountParams`: CreateLightAccountParams -- additional parameters to pass to the [`createLightAccount`](/packages/aa-accounts/light-account/#createlightaccount).
+- `...accountParams`: CreateLightAccountParams -- additional parameters to pass to the [`createLightAccount`](/packages/aa-accounts/accounts/light-account#createlightaccount).
 
 - `...clientParams` -- [optional] additional parameters to pass to the [`SmartAccountClient`](/packages/aa-core/smart-account-client/) constructor.

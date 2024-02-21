@@ -3,27 +3,31 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: LightAccount
+      content: ModularAccount
   - - meta
     - name: description
-      content: Overview of the LightAccount class in aa-accounts
+      content: Overview of the ModularAccount class in aa-accounts
   - - meta
     - property: og:description
-      content: Overview of the LightAccount class in aa-accounts
+      content: Overview of the ModularAccount class in aa-accounts
 ---
 
-# Light Account
+# Modular Account
 
-`LightAccount` is a simple, secure, and cost-effective smart account implementation which extends `SmartContractAccount`. It supports features such as ownership transfers, [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) message signing, and batched transactions. We recommend using Light Account for most use cases.
+`Modular Account` is an [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) smart account that supports customizable feature with [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) plugins. It’s fully production-ready with multiple security audits, two prebuilt plugins in [`MultiOwnerPlugin`](../multi-owner/) and [`SessionKeyPlugin`](../session-key/), and the capability to support any custom account behavior you need.
 
-The additional methods supported by `LightAccount` are:
+The methods available on `ModularAccount` are:
 
-1.  [`signMessageWith6492`](/packages/aa-accounts/light-account/signMessageWith6492) -- supports message signatures for deployed smart accounts, as well as undeployed accounts (counterfactual addresses) using [ERC-6492](https://eips.ethereum.org/EIPS/eip-6492).
-2.  [`signTypedData`](/packages/aa-accounts/light-account/signTypedData) -- supports typed data signatures from the smart account's current signer address.
-3.  [`signTypedDataWith6492`](/packages/aa-accounts/light-account/signTypedDataWith6492) -- supports typed data signatures for deployed smart accounts, as well as undeployed accounts (counterfactual addresses) using ERC-6492.
-4.  [`getOwnerAddress`](/packages/aa-accounts/light-account/getOwnerAddress) -- returns the on-chain owner address of the account.
-5.  [`encodeTransferOwnership`](/packages/aa-accounts/light-account/encodeTransferOwnership) -- encodes the transferOwnership function call using Light Account ABI.
-6.  [`transferLightAccountOwnership`](/packages/aa-accounts/light-account/actions/transferOwnership) -- transfers ownership of the account to a new owner, and returns either the UO hash or transaction hash.
+### Base Smart Contract Account methods:
+
+1.  [`signMessageWith6492`](/packages/aa-accounts/accounts/light-account#signMessageWith6492) -- supports message signatures for deployed smart accounts, as well as undeployed accounts (counterfactual addresses) using [ERC-6492](https://eips.ethereum.org/EIPS/eip-6492).
+2.  [`signTypedData`](/packages/aa-accounts/accounts/light-account#signTypedData) -- supports typed data signatures from the smart account's owner address.
+3.  [`signTypedDataWith6492`](/packages/aa-accounts/accounts/light-account#signTypedDataWith6492) -- supports typed data signatures for deployed smart accounts, as well as undeployed accounts (counterfactual addresses) using ERC-6492.
+
+### Modular Account cotract methods:
+
+1.  [`getOwnerAddress`](/packages/aa-accounts/accounts/light-account#getOwnerAddress) -- returns the on-chain owner address of the account by calling [`owner`](https://github.com/alchemyplatform/light-account/blob/b2212114f8d4836835559dcfa6c51eb238415d53/src/LightAccount.sol#L220) method on `LightAccount` contract.
+2.  [`encodeTransferOwnership`](/packages/aa-accounts/accounts/light-account#encodeTransferOwnership) -- encodes the [`transferOwnership`](https://github.com/alchemyplatform/light-account/blob/b2212114f8d4836835559dcfa6c51eb238415d53/src/LightAccount.sol#L176) function call using Light Account ABI.
 
 ## Usage
 
@@ -62,16 +66,16 @@ const hash = smartAccountClient.transferOwnership({
 });
 ```
 
-<<< @/snippets/aa-core/lightAccountClient.ts
+<<< @/snippets/aa-accounts/lightAccountClient.ts
 :::
 
-# createLightAccount
+# createMultiOwnerModularAccount
 
-`createLightAccount` is a factory that improves the developer experience of creating Light Account. You can use this to directly instantiate a `LightAccount` in one line of code.
+`createMultiOwnerModularAccount` is a factory that improves the developer experience of creating Light Account. You can use this to directly instantiate a `LightAccount` in one line of code.
 
 ## Usage
 
-<<< @/snippets/aa-core/lightAccountClient.ts
+<<< @/snippets/aa-accounts/lightAccountClient.ts
 
 ## Returns
 

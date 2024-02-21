@@ -78,4 +78,4 @@ const { hash: userOperationHash } = await smartAccountClient.sendUserOperation({
 
 :::
 
-See the [`LightAccount`](/packages/aa-accounts/light-account/) docs for more details about our Light Account implementation.
+See the [`LightAccount`](/packages/aa-accounts/accounts/light-account) docs for more details about our Light Account implementation.
