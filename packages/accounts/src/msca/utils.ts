@@ -54,7 +54,6 @@ export const getDefaultMultiOwnerModularAccountFactoryAddress = (
     case sepolia.id:
     case baseSepolia.id:
     case polygon.id:
-      return "0x000000CC76Ff50cAE2D633E79cCB1Fa1E6978D5a";
     case mainnet.id:
     case goerli.id:
     case polygonMumbai.id:
@@ -66,7 +65,7 @@ export const getDefaultMultiOwnerModularAccountFactoryAddress = (
     case arbitrumSepolia.id:
     case base.id:
     case baseGoerli.id:
-      throw new Error("not yet deployed");
+      return "0x000000e92D78D90000007F0082006FDA09BD5f11";
   }
   throw new DefaultFactoryNotDefinedError("MultiOwnerModularAccount", chain);
 };
