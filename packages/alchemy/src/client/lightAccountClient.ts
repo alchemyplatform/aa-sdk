@@ -15,25 +15,25 @@ import {
 } from "./smartAccountClient.js";
 
 export type AlchemyLightAccountClientConfig<
-  TOwner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = Omit<
-  CreateLightAccountParams<HttpTransport, TOwner>,
+  CreateLightAccountParams<HttpTransport, TSigner>,
   "transport" | "chain"
 > &
   Omit<
-    AlchemySmartAccountClientConfig<Transport, Chain, LightAccount<TOwner>>,
+    AlchemySmartAccountClientConfig<Transport, Chain, LightAccount<TSigner>>,
     "account"
   >;
 
 export const createLightAccountAlchemyClient: <
-  TOwner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  params: AlchemyLightAccountClientConfig<TOwner>
+  params: AlchemyLightAccountClientConfig<TSigner>
 ) => Promise<
   AlchemySmartAccountClient<
     CustomTransport,
     Chain | undefined,
-    LightAccount<TOwner>
+    LightAccount<TSigner>
   >
 > = async (config) => {
   const { chain, opts, ...connectionConfig } =

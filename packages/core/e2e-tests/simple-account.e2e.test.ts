@@ -24,18 +24,18 @@ import { API_KEY, OWNER_MNEMONIC } from "./constants.js";
 const chain = polygonMumbai;
 
 describe("Simple Account Tests", () => {
-  const owner: SmartAccountSigner =
+  const signer: SmartAccountSigner =
     LocalAccountSigner.mnemonicToAccountSigner(OWNER_MNEMONIC);
 
   it("should successfully get counterfactual address", async () => {
-    const provider = await givenConnectedProvider({ owner, chain });
+    const provider = await givenConnectedProvider({ signer, chain });
     expect(provider.getAddress()).toMatchInlineSnapshot(
       `"0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4"`
     );
   });
 
   it("should execute successfully", async () => {
-    const provider = await givenConnectedProvider({ owner, chain });
+    const provider = await givenConnectedProvider({ signer, chain });
     const result = await provider.sendUserOperation({
       uo: {
         target: provider.getAddress(),
@@ -51,7 +51,7 @@ describe("Simple Account Tests", () => {
   it("should fail to execute if account address is not deployed and not correct", async () => {
     const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
     const provider = await givenConnectedProvider({
-      owner,
+      signer,
       chain,
       accountAddress,
     });
@@ -67,46 +67,45 @@ describe("Simple Account Tests", () => {
   });
 
   it("should get counterfactual for undeployed account", async () => {
-    const owner = LocalAccountSigner.privateKeyToAccountSigner(
+    const signer = LocalAccountSigner.privateKeyToAccountSigner(
       generatePrivateKey()
     );
-    const provider = await givenConnectedProvider({ owner, chain });
+    const provider = await givenConnectedProvider({ signer, chain });
 
     const address = provider.getAddress();
     expect(isAddress(address)).toBe(true);
   });
 
   it("should correctly handle multiplier overrides for buildUserOperation", async () => {
-    const signer = await givenConnectedProvider({
-      owner,
+    const provider = await givenConnectedProvider({
+      signer,
       chain,
     });
 
-    const structPromise = signer.buildUserOperation({
+    const structPromise = provider.buildUserOperation({
       uo: {
-        target: signer.getAddress(),
+        target: provider.getAddress(),
         data: "0x",
       },
     });
 
     await expect(structPromise).resolves.not.toThrowError();
 
-    const signerWithFeeOptions = await givenConnectedProvider({
-      owner,
+    const providerWithFeeOptions = await givenConnectedProvider({
+      signer,
       chain,
       feeOptions: {
         preVerificationGas: { multiplier: 2 },
       },
     });
 
-    const structWithFeeOptionsPromise = signerWithFeeOptions.buildUserOperation(
-      {
+    const structWithFeeOptionsPromise =
+      providerWithFeeOptions.buildUserOperation({
         uo: {
-          target: signer.getAddress(),
+          target: provider.getAddress(),
           data: "0x",
         },
-      }
-    );
+      });
     await expect(structWithFeeOptionsPromise).resolves.not.toThrowError();
 
     const [struct, structWithFeeOptions] = await Promise.all([
@@ -129,14 +128,14 @@ describe("Simple Account Tests", () => {
   }, 60000);
 
   it("should correctly handle absolute overrides for sendUserOperation", async () => {
-    const signer = await givenConnectedProvider({ owner, chain });
+    const provider = await givenConnectedProvider({ signer, chain });
 
     const overrides: UserOperationOverrides = {
       preVerificationGas: 100_000_000n,
     };
-    const promise = signer.buildUserOperation({
+    const promise = provider.buildUserOperation({
       uo: {
-        target: signer.getAddress(),
+        target: provider.getAddress(),
         data: "0x",
       },
       overrides,
@@ -148,17 +147,17 @@ describe("Simple Account Tests", () => {
   }, 60000);
 
   it("should correctly handle multiplier overrides for sendUserOperation", async () => {
-    const signer = await givenConnectedProvider({
-      owner,
+    const provider = await givenConnectedProvider({
+      signer,
       chain,
       feeOptions: {
         preVerificationGas: { multiplier: 2 },
       },
     });
 
-    const struct = signer.sendUserOperation({
+    const struct = provider.sendUserOperation({
       uo: {
-        target: signer.getAddress(),
+        target: provider.getAddress(),
         data: "0x",
       },
     });
@@ -167,12 +166,12 @@ describe("Simple Account Tests", () => {
 });
 
 const givenConnectedProvider = async ({
-  owner,
+  signer,
   chain,
   accountAddress,
   feeOptions,
 }: {
-  owner: SmartAccountSigner;
+  signer: SmartAccountSigner;
   chain: Chain;
   accountAddress?: Address;
   feeOptions?: UserOperationFeeOptions;
@@ -185,7 +184,7 @@ const givenConnectedProvider = async ({
     client,
     account: await createSimpleSmartAccount({
       chain,
-      owner,
+      signer,
       factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
       transport: custom(client),
       accountAddress,

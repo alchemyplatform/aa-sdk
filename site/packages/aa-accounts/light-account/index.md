@@ -14,12 +14,12 @@ head:
 
 # Light Account
 
-`LightAccount` is a simple, secure, and cost-effective smart account implementation which extends `SmartContractAccount`. It supports features such as owner transfers, [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) message signing, and batched transactions. We recommend using Light Account for most use cases.
+`LightAccount` is a simple, secure, and cost-effective smart account implementation which extends `SmartContractAccount`. It supports features such as ownership transfers, [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) message signing, and batched transactions. We recommend using Light Account for most use cases.
 
 The additional methods supported by `LightAccount` are:
 
 1.  [`signMessageWith6492`](/packages/aa-accounts/light-account/signMessageWith6492) -- supports message signatures for deployed smart accounts, as well as undeployed accounts (counterfactual addresses) using [ERC-6492](https://eips.ethereum.org/EIPS/eip-6492).
-2.  [`signTypedData`](/packages/aa-accounts/light-account/signTypedData) -- supports typed data signatures from the smart account's owner address.
+2.  [`signTypedData`](/packages/aa-accounts/light-account/signTypedData) -- supports typed data signatures from the smart account's current signer address.
 3.  [`signTypedDataWith6492`](/packages/aa-accounts/light-account/signTypedDataWith6492) -- supports typed data signatures for deployed smart accounts, as well as undeployed accounts (counterfactual addresses) using ERC-6492.
 4.  [`getOwnerAddress`](/packages/aa-accounts/light-account/getOwnerAddress) -- returns the on-chain owner address of the account.
 5.  [`encodeTransferOwnership`](/packages/aa-accounts/light-account/encodeTransferOwnership) -- encodes the transferOwnership function call using Light Account ABI.
@@ -51,8 +51,8 @@ const signedTypedDataWith6492 = smartAccountClient.signTypedDataWith6492({
   },
 });
 
-// get owner address
-const owner = await smartAccountClient.account.getOwnerAddress();
+// get on-chain account owner address
+const ownerAddress = await smartAccountClient.account.getOwnerAddress();
 
 // transfer ownership
 const newOwner = LocalAccountSigner.mnemonicToAccountSigner(NEW_OWNER_MNEMONIC);
@@ -87,7 +87,7 @@ A Promise containing a new `LightAccount`.
 
 - `chain: Chain` -- the chain on which to create the client.
 
-- `owner: SmartAccountSigner` -- the owner EOA signer responsible for signing user operations on behalf of the smart account.
+- `signer: SmartAccountSigner` -- the EOA signer to connect to the account with for signing user operations on behalf of the smart account.
 
 - `entryPoint: EntryPointDef` -- [optional] the entry point contract address. If not provided, the entry point contract address for the client is the connected account's entry point contract, or if not connected, falls back to the default entry point contract for the chain. See [getDefaultEntryPointAddress](/packages/aa-core/utils/getDefaultEntryPointAddress.html#getdefaultentrypointaddress).
 
@@ -95,7 +95,7 @@ A Promise containing a new `LightAccount`.
 
 - `initCode: Hex` -- [optional] the initCode for deploying the smart account with which the client will connect.
 
-- `salt: bigint` -- [optional] a value that is added to the address calculation to allow for multiple accounts for the same owner. The default value supplied is `0n`. To see this calculation used in the smart contract, check out [the LightAccountFactory](https://github.com/alchemyplatform/light-account/blob/main/src/LightAccountFactory.sol#L30).
+- `salt: bigint` -- [optional] a value that is added to the address calculation to allow for multiple accounts for the same signer (owner). The default value supplied is `0n`. To see this calculation used in the smart contract, check out [the LightAccountFactory](https://github.com/alchemyplatform/light-account/blob/main/src/LightAccountFactory.sol#L30).
 
 - `accountAddress: Address` -- [optional] a smart account address override that this object will manage instead of generating its own.
 

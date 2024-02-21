@@ -5,7 +5,7 @@ import {
 } from "@alchemy/aa-core";
 import { EthersProviderAdapter } from "@alchemy/aa-ethers";
 import { Alchemy, Network } from "alchemy-sdk";
-import { owner } from "snippets/aa-core/lightAccountClient";
+import { signer } from "snippets/aa-core/lightAccountClient";
 import { http } from "viem";
 
 // 1. Create alchemy instance
@@ -23,7 +23,7 @@ export const provider = EthersProviderAdapter.fromEthersProvider(
 ).connectToAccount(
   await createSimpleSmartAccount({
     chain,
-    owner,
+    signer,
     factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
     transport: http(
       `${chain.rpcUrls.alchemy.http[0]}/${ethersProvider.apiKey}`

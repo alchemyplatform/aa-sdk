@@ -11,7 +11,7 @@ import {
 import { http } from "viem";
 
 export const chain = polygonMumbai;
-export const owner: SmartAccountSigner =
+export const signer: SmartAccountSigner =
   LocalAccountSigner.mnemonicToAccountSigner("YOUR_OWNER_MNEMONIC");
 export const rpcTransport = http(
   "https://polygon-mumbai.g.alchemy.com/v2/demo"
@@ -23,6 +23,6 @@ export const smartAccountClient = createSmartAccountClient({
   account: await createLightAccount({
     transport: rpcTransport,
     chain,
-    owner,
+    signer,
   }),
 }).extend(lightAccountClientActions);

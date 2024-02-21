@@ -21,19 +21,19 @@ const chain = sepolia;
 const network = Network.ETH_SEPOLIA;
 
 describe("Light Account Tests", () => {
-  const owner = LocalAccountSigner.mnemonicToAccountSigner(
+  const signer = LocalAccountSigner.mnemonicToAccountSigner(
     LIGHT_ACCOUNT_OWNER_MNEMONIC
   );
 
   it("should successfully get counterfactual address", async () => {
-    const provider = await givenConnectedProvider({ owner, chain });
+    const provider = await givenConnectedProvider({ signer, chain });
     expect(provider.getAddress()).toMatchInlineSnapshot(
       '"0x86f3B0211764971Ad0Fc8C8898d31f5d792faD84"'
     );
   });
 
   it("should execute successfully", async () => {
-    const provider = await givenConnectedProvider({ owner, chain });
+    const provider = await givenConnectedProvider({ signer, chain });
 
     const result = await provider.sendUserOperation({
       uo: {
@@ -50,7 +50,7 @@ describe("Light Account Tests", () => {
   it("should fail to execute if account address is not deployed and not correct", async () => {
     const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
     const provider = await givenConnectedProvider({
-      owner,
+      signer,
       chain,
       accountAddress,
     });
@@ -67,7 +67,7 @@ describe("Light Account Tests", () => {
 
   it("should successfully execute with alchemy paymaster info", async () => {
     const provider = await givenConnectedProvider({
-      owner,
+      signer,
       chain,
       gasManagerConfig: {
         policyId: PAYMASTER_POLICY_ID,
@@ -87,7 +87,7 @@ describe("Light Account Tests", () => {
 
   it("should successfully override fees and gas when using paymaster", async () => {
     const provider = await givenConnectedProvider({
-      owner,
+      signer,
       chain,
       gasManagerConfig: {
         policyId: PAYMASTER_POLICY_ID,
@@ -137,7 +137,7 @@ describe("Light Account Tests", () => {
 
   it("should successfully use paymaster with fee opts", async () => {
     const provider = await givenConnectedProvider({
-      owner,
+      signer,
       chain,
       gasManagerConfig: {
         policyId: PAYMASTER_POLICY_ID,
@@ -164,7 +164,7 @@ describe("Light Account Tests", () => {
 
   it("should execute successfully via drop and replace", async () => {
     const provider = await givenConnectedProvider({
-      owner,
+      signer,
       chain,
     });
 
@@ -184,7 +184,7 @@ describe("Light Account Tests", () => {
 
   it("should execute successfully via drop and replace when using paymaster", async () => {
     const provider = await givenConnectedProvider({
-      owner,
+      signer,
       chain,
       gasManagerConfig: {
         policyId: PAYMASTER_POLICY_ID,
@@ -213,7 +213,7 @@ describe("Light Account Tests", () => {
     });
 
     const provider = await givenConnectedProvider({
-      owner,
+      signer,
       chain,
       gasManagerConfig: {
         policyId: PAYMASTER_POLICY_ID,
@@ -232,7 +232,7 @@ describe("Light Account Tests", () => {
     });
 
     const provider = await givenConnectedProvider({
-      owner,
+      signer,
       chain,
       gasManagerConfig: {
         policyId: PAYMASTER_POLICY_ID,
@@ -246,7 +246,7 @@ describe("Light Account Tests", () => {
 
   it("should correctly simulate asset changes for the user operation", async () => {
     const provider = await givenConnectedProvider({
-      owner,
+      signer,
       chain,
     });
 
@@ -284,7 +284,7 @@ describe("Light Account Tests", () => {
 
   it("should simulate as part of middleware stack when added to provider", async () => {
     const provider = await givenConnectedProvider({
-      owner,
+      signer,
       chain,
       useSimulation: true,
     });
@@ -302,7 +302,7 @@ describe("Light Account Tests", () => {
 });
 
 const givenConnectedProvider = async ({
-  owner,
+  signer,
   chain,
   accountAddress,
   opts,
@@ -311,7 +311,7 @@ const givenConnectedProvider = async ({
 }: AlchemyLightAccountClientConfig) =>
   createLightAccountAlchemyClient({
     chain,
-    owner,
+    signer,
     accountAddress,
     apiKey: API_KEY!,
     gasManagerConfig,

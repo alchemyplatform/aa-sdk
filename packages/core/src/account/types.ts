@@ -18,16 +18,16 @@ export type SignTypedDataParams = Omit<SignTypedDataParameters, "privateKey">;
  */
 export type BaseSmartAccountParams<
   TTransport extends Transport = Transport,
-  TOwner extends SmartAccountSigner | undefined = SmartAccountSigner | undefined
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = z.input<
-  ReturnType<typeof createBaseSmartAccountParamsSchema<TTransport, TOwner>>
+  ReturnType<typeof createBaseSmartAccountParamsSchema<TTransport, TSigner>>
 >;
 
 export type SimpleSmartAccountParams<
   TTransport extends Transport = Transport,
-  TOwner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = z.input<
-  ReturnType<typeof SimpleSmartAccountParamsSchema<TTransport, TOwner>>
+  ReturnType<typeof SimpleSmartAccountParamsSchema<TTransport, TSigner>>
 >;
 
 /**
@@ -35,7 +35,7 @@ export type SimpleSmartAccountParams<
  */
 export interface ISmartContractAccount<
   TTransport extends Transport = Transport,
-  TOwner extends SmartAccountSigner | undefined = SmartAccountSigner | undefined
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > {
   /**
    * The RPC provider the account uses to make RPC calls
@@ -126,10 +126,13 @@ export interface ISmartContractAccount<
   getAddress(): Promise<Address>;
 
   /**
-   * @returns the smart account owner instance if it exists.
-   * It is optional for a smart account to have an owner account.
+   * @returns the current account signer instance that the smart account client
+   * operations are being signed with.
+   *
+   * The signer is expected to be the owner or one of the owners of the account
+   * for the signatures to be valid for the acting account.
    */
-  getOwner(): TOwner;
+  getSigner(): TSigner;
 
   /**
    * @returns the address of the factory contract for the smart account

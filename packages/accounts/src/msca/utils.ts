@@ -17,9 +17,9 @@ import {
   polygonMumbai,
   sepolia,
   type GetAccountParameter,
-  type OwnedSmartContractAccount,
   type SmartAccountClient,
   type SmartAccountSigner,
+  type SmartContractAccountWithSigner,
   type UpgradeToData,
 } from "@alchemy/aa-core";
 import type { Address, Chain, Transport } from "viem";
@@ -74,10 +74,10 @@ export const getDefaultMultiOwnerModularAccountFactoryAddress = (
 export async function getMSCAUpgradeToData<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TOwner extends SmartAccountSigner = SmartAccountSigner,
-  TAccount extends OwnedSmartContractAccount<string, TOwner> | undefined =
-    | OwnedSmartContractAccount<string, TOwner>
-    | undefined
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TAccount extends
+    | SmartContractAccountWithSigner<string, TSigner>
+    | undefined = SmartContractAccountWithSigner<string, TSigner> | undefined
 >(
   client: SmartAccountClient<TTransport, TChain, TAccount>,
   {
@@ -88,7 +88,7 @@ export async function getMSCAUpgradeToData<
   } & GetAccountParameter<TAccount>
 ): Promise<
   UpgradeToData & {
-    createMAAccount: () => Promise<MultiOwnerModularAccount<TOwner>>;
+    createMAAccount: () => Promise<MultiOwnerModularAccount<TSigner>>;
   }
 > {
   if (!account_) {
@@ -99,7 +99,7 @@ export async function getMSCAUpgradeToData<
     throw new ChainNotFoundError();
   }
   const chain = client.chain;
-  const account = account_ as OwnedSmartContractAccount<string, TOwner>;
+  const account = account_ as SmartContractAccountWithSigner<string, TSigner>;
 
   const factoryAddress = getDefaultMultiOwnerModularAccountFactoryAddress(
     client.chain
@@ -132,9 +132,9 @@ export async function getMSCAUpgradeToData<
     })
   );
 
-  const ownerAddress = await account.getOwner().getAddress();
+  const signerAddress = await account.getSigner().getAddress();
   const encodedOwner = encodeAbiParameters(parseAbiParameters("address[]"), [
-    [ownerAddress],
+    [signerAddress],
   ]);
 
   const encodedPluginInitData = encodeAbiParameters(
@@ -155,7 +155,7 @@ export async function getMSCAUpgradeToData<
       createMultiOwnerModularAccount({
         transport: custom(client.transport),
         chain: chain as Chain,
-        owner: account.getOwner(),
+        signer: account.getSigner(),
         factoryAddress,
         accountAddress: account.address,
       }),

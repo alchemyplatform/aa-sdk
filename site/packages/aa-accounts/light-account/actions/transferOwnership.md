@@ -46,6 +46,6 @@ A Promise containing the hash of either the UO or transaction containing the UO 
 
 - `client: SmartAccountClient` -- the client to use to send the transaction
 - `options: TransferLightAccountOwnershipParams` -- the options to use to transfer ownership
-  - `newOwner: TOwner extends SmartAccountSigner = SmartAccountSigner` -- the new owner of the account
+  - `newOwner: TSigner extends SmartAccountSigner = SmartAccountSigner` -- the new on-chain owner of the account
   - `waitForTxn?: boolean` -- optionally, wait for the transaction to be mined with the UO
   - `account?: LightAccount` -- optionally, pass the account if your client is not connected to it

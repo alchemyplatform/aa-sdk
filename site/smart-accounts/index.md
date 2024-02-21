@@ -38,7 +38,7 @@ Modular Account has been audited by Spearbit and Quanstamp. You can find the aud
 
 Account Kit provides a default smart account called `LightAccount`.
 
-[Light Account](/smart-accounts/light-account/) is a secure, audited, gas-optimized, ERC-4337 compatible smart account implementation. It comes equipped with features like owner transfers, [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) message signing, and batched transactions. It's also [open source](https://github.com/alchemyplatform/light-account)!
+[Light Account](/smart-accounts/light-account/) is a secure, audited, gas-optimized, ERC-4337 compatible smart account implementation. It comes equipped with features like ownership transfers, [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) message signing, and batched transactions. It's also [open source](https://github.com/alchemyplatform/light-account)!
 
 It is [deployed](/smart-accounts/light-account/#deployment-addresses) on Ethereum, Optimism, Arbitrum, Polygon, Base, and the respective testnets.
 

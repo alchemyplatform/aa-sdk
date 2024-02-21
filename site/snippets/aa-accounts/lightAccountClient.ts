@@ -6,5 +6,5 @@ export const smartAccountClient = createLightAccountClient({
   transport: http("RPC_URL"),
   chain: sepolia,
   // or any other SmartAccountSigner
-  owner: LocalAccountSigner.mnemonicToAccountSigner("YOUR_MNEMONIC"),
+  signer: LocalAccountSigner.mnemonicToAccountSigner("YOUR_MNEMONIC"),
 });

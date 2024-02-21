@@ -68,7 +68,7 @@ export async function getProvider() {
   return createModularAccountAlchemyClient({
     apiKey: "ALCHEMY_API_KEY",
     chain,
-    owner: signer,
+    signer,
   });
 }
 ```

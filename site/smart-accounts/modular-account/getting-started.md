@@ -49,14 +49,14 @@ Then you can simply do the following:
 <<< @/snippets/aa-alchemy/connected-client.ts
 
 ::: tip Address calculation
-For the Modular Account, the address of the smart account will be calculated as a combination of [several variables](https://github.com/alchemyplatform/modular-account/blob/74fe1bfa056bbd41c933990fca0598c8cc3e90e8/src/factory/MultiOwnerModularAccountFactory.sol#L66-L71). You will get the same smart account address each time you supply the same `owner` or `owners`. You can also optionally supply `salt` if you want a different address for the same owner(s) (the default salt is `0n`).
+For the Light Account, the address of the smart account will be calculated as a combination of [the owner and the salt](https://github.com/alchemyplatform/light-account/blob/main/src/LightAccountFactory.sol#L24-L33). You will get the same smart account address each time you supply the same `owner`, the signer that was used to create the account for the first time. You can also optionally supply `salt` if you want a different address for the same `owner` param (the default salt is `0n`).
 
-If you already have an account with a new or different owner (transferred ownership), you can supply the `accountAddress` to connect with your account with a new owner. In that case, the `owner` is not used for address calculation, but still used for signing the operation.
+If you want to use a signer to connect to an account whose address does not map to the contract generated address, you can supply the `accountAddress` to connect with the account of interest. In that case, the `signer` address is not used for address calculation, but only used for signing the operation.
 :::
 
 That's it! You've configured your client.
 
-Next, if you want to replace that `owner` with a smart account signer, check out [choosing a signer](/signers/choosing-a-signer). Or, if you're ready to get onchain, go to [send user operations](/using-smart-accounts/send-user-operations).
+Next, if you want to replace that `signer` with a smart account signer, check out [choosing a signer](/signers/choosing-a-signer). Or, if you're ready to get onchain, go to [send user operations](/using-smart-accounts/send-user-operations).
 
 ## With `@alchemy/aa-core`
 
@@ -112,4 +112,4 @@ const decoratedClient = smartAccountClient
 <<< @/snippets/aa-core/smartAccountClient.ts
 :::
 
-Next, if you want to replace that `owner` with a smart account signer, check out [choosing a signer](/signers/choosing-a-signer). Or, if you're ready to get onchain, go to [send user operations](/using-smart-accounts/send-user-operations).
+Next, if you want to use a different `signer` with a smart account signer, check out [choosing a signer](/signers/choosing-a-signer). Or, if you're ready to get onchain, go to [send user operations](/using-smart-accounts/send-user-operations).

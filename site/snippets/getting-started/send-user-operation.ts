@@ -8,16 +8,16 @@ import {
 
 const chain = polygonMumbai;
 
-// The private key of your EOA that will be the owner of Light Account
+// The private key of your EOA that will be the signer to connect with the Modular Account
 const PRIVATE_KEY = "0xYourEOAPrivateKey" as Hex;
-const owner = LocalAccountSigner.privateKeyToAccountSigner(PRIVATE_KEY);
+const signer = LocalAccountSigner.privateKeyToAccountSigner(PRIVATE_KEY);
 
 // Create a provider to send user operations from your smart account
 const provider = await createModularAccountAlchemyClient({
   // get your Alchemy API key at https://dashboard.alchemy.com
   apiKey: "ALCHEMY_API_KEY",
   chain,
-  owner,
+  signer,
 });
 
 // [!code focus:22]

@@ -4,7 +4,7 @@ import { isHex } from "viem";
 import { z } from "zod";
 
 export const NaniAccountFactoryConfigSchema = z.object({
-  owner: SignerSchema,
+  signer: SignerSchema,
   accountAddress: Address.optional().describe(
     "Optional override for the account address."
   ),

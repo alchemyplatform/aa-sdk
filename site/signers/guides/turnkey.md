@@ -71,7 +71,7 @@ const chain = sepolia;
 const provider = await createModularAccountAlchemyClient({
   apiKey: "ALCHEMY_API_KEY",
   chain,
-  owner: await createTurnkeySigner(),
+  signer: await createTurnkeySigner(),
 });
 ```
 

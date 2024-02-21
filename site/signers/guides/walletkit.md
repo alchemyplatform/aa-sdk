@@ -100,9 +100,9 @@ const signer: SmartAccountSigner = new WalletClientSigner(
 );
 ```
 
-### Configure AlchemySmartContractClient
+### Configure ModularAccountAlchemyClient
 
-Finally, create `createModularAccountAlchemyClient` using the signer we just created as the owner of the smart contract wallet.
+Finally, create `createModularAccountAlchemyClient` using the signer we just created to control the modular smart contract wallet.
 
 ```ts
 import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";
@@ -111,6 +111,6 @@ import { sepolia } from "@alchemy/aa-core";
 const client = await createModularAccountAlchemyClient({
   apiKey: "<Alchemy-API-Key>",
   chain: sepolia,
-  owner: signer,
+  signer,
 });
 ```

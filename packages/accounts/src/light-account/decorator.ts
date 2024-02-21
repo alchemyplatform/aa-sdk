@@ -8,14 +8,14 @@ import type { LightAccount } from "./account";
 import { transferOwnership } from "./actions/transferOwnership.js";
 
 export type LightAccountClientActions<
-  TOwner extends SmartAccountSigner = SmartAccountSigner,
-  TAccount extends LightAccount<TOwner> | undefined =
-    | LightAccount<TOwner>
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TAccount extends LightAccount<TSigner> | undefined =
+    | LightAccount<TSigner>
     | undefined
 > = {
   transferOwnership: (
     args: {
-      newOwner: TOwner;
+      newOwner: TSigner;
       waitForTxn?: boolean;
     } & GetAccountParameter<TAccount, LightAccount>
   ) => Promise<Hex>;
@@ -24,12 +24,12 @@ export type LightAccountClientActions<
 export const lightAccountClientActions: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TOwner extends SmartAccountSigner = SmartAccountSigner,
-  TAccount extends LightAccount<TOwner> | undefined =
-    | LightAccount<TOwner>
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TAccount extends LightAccount<TSigner> | undefined =
+    | LightAccount<TSigner>
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>
-) => LightAccountClientActions<TOwner, TAccount> = (client) => ({
+) => LightAccountClientActions<TSigner, TAccount> = (client) => ({
   transferOwnership: async (args) => transferOwnership(client, args),
 });

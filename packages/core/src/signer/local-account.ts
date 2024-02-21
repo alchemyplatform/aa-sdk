@@ -42,14 +42,14 @@ export class LocalAccountSigner<
   };
 
   static mnemonicToAccountSigner(key: string): LocalAccountSigner<HDAccount> {
-    const owner = mnemonicToAccount(key);
-    return new LocalAccountSigner(owner);
+    const signer = mnemonicToAccount(key);
+    return new LocalAccountSigner(signer);
   }
 
   static privateKeyToAccountSigner(
     key: Hex
   ): LocalAccountSigner<PrivateKeyAccount> {
-    const owner = privateKeyToAccount(key);
-    return new LocalAccountSigner(owner);
+    const signer = privateKeyToAccount(key);
+    return new LocalAccountSigner(signer);
   }
 }

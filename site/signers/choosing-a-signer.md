@@ -24,7 +24,7 @@ A **Signer** is a service (e.g. Magic or Turnkey) or application (e.g. MetaMask)
 
 With Account Kit, you will deploy a **smart account** for each user instead of an EOA wallet. This smart account stores the user’s assets (e.g. tokens or NFTs). The default smart account in Account Kit is called [`LightAccount`](/smart-accounts/light-account/) and it uses a typical single-owner architecture.
 
-The smart account is controlled by an **Owner** address. The smart account will only execute a transaction if it was signed by the owner’s private key.
+The signer connected to the `SmartAccountClient` is used to sign messages, data including user operations and transactions. The signatures for the user operation will be only valid and execute if the signer is the owner or one of the owners of the account.
 
 You can choose any Signer service or application to manage the Owner private key for the user. Using services like Magic, Turnkey, or Web3auth, you can secure the user’s account with an email, social login, or passkeys. You can also use a self-custodial wallet like MetaMask as the Signer.
 

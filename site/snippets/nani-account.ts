@@ -4,9 +4,9 @@ import { LocalAccountSigner, sepolia, type Hex } from "@alchemy/aa-core";
 
 const chain = sepolia;
 
-// The private key of your EOA that will be the owner of Nani Account
+// The private key of your EOA that will be the signer of Nani Account
 const PRIVATE_KEY = "0xYourEOAPrivateKey" as Hex;
-const owner = LocalAccountSigner.privateKeyToAccountSigner(PRIVATE_KEY);
+const signer = LocalAccountSigner.privateKeyToAccountSigner(PRIVATE_KEY);
 
 // Create a provider to send user operations from your smart account
 const provider = new AlchemyProvider({
@@ -17,7 +17,7 @@ const provider = new AlchemyProvider({
   (rpcClient) =>
     new NaniAccount({
       rpcClient,
-      owner,
+      signer,
       chain,
       factoryAddress: getDefaultNaniAccountFactoryAddress(chain),
     })
