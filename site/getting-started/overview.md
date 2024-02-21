@@ -66,6 +66,8 @@ Get started with `aa-sdk` in our [Getting started](/getting-started/setup) guide
 - **Extensible:** modular account is the first [EIP-6900](https://eips.ethereum.org/EIPS/eip-6900) account, making it infinitely extensible with custom plugins. Plug and play from a selection of existing plugins including session keys and account recovery, or write your own to customize the account for your app.
 - **Secure:** modular account was developed by Alchemy and audited by both [Spearbit](https://github.com/alchemyplatform/modular-account/blob/develop/audits/2024-01-31_spearbit_0e3fd1e.pdf) and [Quantstamp](https://github.com/alchemyplatform/modular-account/blob/develop/audits/2024-02-20-quantstamp-8ae319e.pdf).
 
+<!--@include: ../resources/bbp.md-->
+
 ## Signers
 
 A Signer is responsible for securely managing the private key and signing transaction requests on the smart account. Account Kit supports many popular wallet signers. It also supports self-custodial wallets like MetaMask or Ledger.
