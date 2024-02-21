@@ -43,7 +43,7 @@ If you want to use a signer to connect to an account whose address does not map 
 
 ## [Deployment addresses](https://github.com/alchemyplatform/light-account/blob/v1.1.0/Deployments.md)
 
-The following tables list the deployed factory and account implementation contract addresses for `LightAccount` on different chains:
+The following table lists the deployed factory and account implementation contract addresses for `LightAccount` on different chains:
 
 | Chain            | Factory Address                            | Account Implementation                     |
 | ---------------- | ------------------------------------------ | ------------------------------------------ |
