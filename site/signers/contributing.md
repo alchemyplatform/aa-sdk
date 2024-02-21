@@ -42,47 +42,42 @@ If your SDK is based on a frontend Javascript framework, such as React.js or Vue
 
 You'll want to add documentation about your Signers so that developers can easily use your implementation in Account Kit. Below, we recommend adding documentation about your Signer's APIs, as well.
 
-To ensure these docs are visible on the Account Kit docs, you'll want to add links to them in the [`site/.vitepress/config.ts`](https://github.com/alchemyplatform/aa-sdk/blob/main/site/.vitepress/config.ts) file in the `aa-sdk` repo, where there is a `sidebar` property in the object.
+To ensure these docs are visible on the Account Kit docs, you'll want to add links to them in the [`site/.vitepress/sidebar/packages/aa-signers.ts`](https://github.com/alchemyplatform/aa-sdk/blob/main/site/.vitepress/sidebar/packages/aa-signers.ts) file in the `aa-sdk` repo, where there is a `aaSignersSidebar` configuration.
 
 ### 2.1 Add API documentation
 
 If your Signer implements the `SmartAccountAuthenticator` interface, you'll have at least 5 methods to document: `getAddress`, `authenticate`, `signMessage`, `signTypedData`, and `getAuthDetails`. You can also add additional methods to your implementation. Just make sure to add documentation!
 
-Find the `aa-signers` item in the `sidebar` and add a new entry in `items`. The `text` property of the entry is what will be visible in the sidebar and the `link` property should be `kebab-case`:
+Note that the `text` property of the entry is what will be visible in the sidebar and the `link` property should be `kebab-case`:
 
 ```ts
-{
-  sidebar: [
-    // ... other packages
+export const aaSignersSidebar: DefaultTheme.SidebarItem = {
+  text: "aa-signers",
+  collapsed: true,
+  base: "/packages/aa-signers",
+  items: [
     {
-      text: "aa-signers",
+      text: "Getting started",
+      link: "/",
+    },
+    // ... other signers
+    {
+      text: "Your Signer Name",
       collapsed: true,
-      base: "/packages/aa-signers",
+      base: "/packages/aa-signers/<your_signer>",
       items: [
-        {
-          text: "Getting started",
-          link: "/",
-        },
-        // ... other Signers
-        {
-          text: "Your Signer",
-          collapsed: true,
-          base: "/packages/aa-signers/your-signer-name",
-          items: [
-            { text: "Introduction", link: "/introduction" },
-            { text: "constructor", link: "/constructor" },
-            { text: "authenticate", link: "/authenticate" },
-            { text: "getAddress", link: "/getAddress" },
-            { text: "signMessage", link: "/signMessage" },
-            { text: "signTypedData", link: "/signTypedData" },
-            { text: "getAuthDetails", link: "/getAuthDetails" },
-          ],
-        },
-        { text: "Contributing", link: "/contributing" },
+        { text: "Introduction", link: "/introduction" },
+        { text: "constructor", link: "/constructor" },
+        { text: "authenticate", link: "/authenticate" },
+        { text: "getAddress", link: "/getAddress" },
+        { text: "signMessage", link: "/signMessage" },
+        { text: "signTypedData", link: "/signTypedData" },
+        { text: "getAuthDetails", link: "/getAuthDetails" },
       ],
     },
-  ];
-}
+    { text: "Contributing", link: "/contributing" },
+  ],
+};
 ```
 
 In that section, add documentation introducing the value prop of your Signer, how to initialize the Signer object, and how to call each method. The example above shows the items you'll need to include if you chose to have your Signer implement the `SmartAccountAuthenticator` interface.

@@ -31,8 +31,6 @@ The code snippet below demonstrates how to use Light Account with Account Kit. I
 
 <<< @/snippets/aa-alchemy/light-account.ts [aa-alchemy]
 
-<<< @/snippets/aa-core/lightAccountClient.ts [aa-core]
-
 ::: code-group
 
 ::: tip Address calculation
