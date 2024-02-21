@@ -23,7 +23,7 @@ The additional methods supported by `LightAccount` are:
 3.  [`signTypedDataWith6492`](/packages/aa-accounts/light-account/signTypedDataWith6492) -- supports typed data signatures for deployed smart accounts, as well as undeployed accounts (counterfactual addresses) using ERC-6492.
 4.  [`getOwnerAddress`](/packages/aa-accounts/light-account/getOwnerAddress) -- returns the on-chain owner address of the account.
 5.  [`encodeTransferOwnership`](/packages/aa-accounts/light-account/encodeTransferOwnership) -- encodes the transferOwnership function call using Light Account ABI.
-6.  [`transferLightAccountOwnership`](/packages/aa-accounts/light-account/actions/transferOwnership) -- transfers ownership of the account to a new owner, and returns either the UO hash or transaction hash.
+6.  [`transferOwnership`](/packages/aa-accounts/light-account/actions/transferOwnership) -- transfers ownership of the account to a new owner, and returns either the UO hash or transaction hash.
 
 ## Usage
 
@@ -31,17 +31,18 @@ The additional methods supported by `LightAccount` are:
 
 ```ts [example.ts]
 import { smartAccountClient } from "./smartAccountClient";
-import { transferLightAccountOwnership } from "@alchemy/aa-accounts";
 
 // [!code focus:99]
 // sign message (works for undeployed and deployed accounts)
-const signedMessageWith6492 = smartAccountClient.signMessageWith6492("test");
+const signedMessageWith6492 = await smartAccountClient.signMessageWith6492(
+  "test"
+);
 
 // sign typed data
-const signedTypedData = smartAccountClient.signTypedData("test");
+const signedTypedData = await smartAccountClient.signTypedData("test");
 
 // sign typed data (works for undeployed and deployed accounts), using
-const signedTypedDataWith6492 = smartAccountClient.signTypedDataWith6492({
+const signedTypedDataWith6492 = await smartAccountClient.signTypedDataWith6492({
   types: {
     Request: [{ name: "hello", type: "string" }],
   },
@@ -53,12 +54,22 @@ const signedTypedDataWith6492 = smartAccountClient.signTypedDataWith6492({
 
 // get on-chain account owner address
 const ownerAddress = await smartAccountClient.account.getOwnerAddress();
+const accountAddress = smartAccountClient.getAddress();
 
 // transfer ownership
 const newOwner = LocalAccountSigner.mnemonicToAccountSigner(NEW_OWNER_MNEMONIC);
-const hash = smartAccountClient.transferOwnership({
+const hash = await smartAccountClient.transferOwnership({
   newOwner,
   waitForTxn: true, // wait for txn with UO to be mined
+});
+
+// after transaction is mined on the network,
+// create a new light account client for the transferred Light Account
+const transferredClient = await createLightAccountClient({
+  transport: custom(smartAccountClient),
+  chain: smartAccountClient.chain,
+  signer: newOwner,
+  accountAddress, // NOTE: you MUST to specify the original smart account address to connect using the new owner/signer
 });
 ```
 

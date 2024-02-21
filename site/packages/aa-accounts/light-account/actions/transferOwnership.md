@@ -14,9 +14,9 @@ next:
   text: Utils
 ---
 
-# transferLightAccountOwnership
+# transferOwnership
 
-`transferLightAccountOwnership` is an action exported by `@alchemy/aa-accounts` which sends a UO that transfers ownership of the account to a new owner, and returns either the UO hash or transaction hash.
+`transferOwnership` is an action exported by `@alchemy/aa-accounts` which sends a UO that transfers ownership of the account to a new owner, and returns either the UO hash or transaction hash.
 
 ## Usage
 
@@ -25,11 +25,21 @@ next:
 ```ts [example.ts]
 import { smartAccountClient } from "./lightAccountClient";
 // [!code focus:99]
+const accountAddress = smartAccountClient.getAddress();
+
 // transfer ownership
 const newOwner = LocalAccountSigner.mnemonicToAccountSigner(NEW_OWNER_MNEMONIC);
-const hash = smartAccountClient.transferOwnership({
+const hash = await smartAccountClient.transferOwnership({
   newOwner,
   waitForTxn: true,
+});
+// after transaction is mined on the network,
+// create a new light account client for the transferred Light Account
+const transferredClient = await createLightAccountClient({
+  transport: custom(smartAccountClient),
+  chain: smartAccountClient.chain,
+  signer: newOwner,
+  accountAddress, // NOTE: you MUST to specify the original smart account address to connect using the new owner/signer
 });
 ```
 

@@ -23,7 +23,7 @@ Returns the address of the connected account. Throws error if there is no connec
 ```ts [example.ts]
 import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
-const address = await smartAccountClient.getAddress();
+const address = smartAccountClient.getAddress();
 ```
 
 <<< @/snippets/aa-core/smartAccountClient.ts

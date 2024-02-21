@@ -63,7 +63,7 @@ export async function createLightAccount<
 export async function createLightAccount({
   transport,
   chain,
-  signer: owner,
+  signer,
   initCode,
   version = "v1.1.0",
   entryPoint = getVersion060EntryPoint(chain),
@@ -71,7 +71,6 @@ export async function createLightAccount({
   factoryAddress = getDefaultLightAccountFactoryAddress(chain, version),
   salt: salt_ = 0n,
 }: CreateLightAccountParams): Promise<LightAccount> {
-  let signer = owner;
   const client = createBundlerClient({
     transport,
     chain,
