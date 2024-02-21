@@ -7,6 +7,7 @@ import { IframeStamper } from "@turnkey/iframe-stamper";
 import { WebauthnStamper } from "@turnkey/webauthn-stamper";
 import { type Hex } from "viem";
 import { z } from "zod";
+import { NotAuthenticatedError } from "../errors.js";
 import { base64UrlEncode } from "../utils/base64UrlEncode.js";
 import { generateRandomBuffer } from "../utils/generateRandomBuffer.js";
 import type {
@@ -198,7 +199,7 @@ export class AlchemySignerClient {
    */
   public signRawMessage = async (msg: Hex) => {
     if (!this.user) {
-      throw new Error("No user found. Did you complete auth?");
+      throw new NotAuthenticatedError();
     }
 
     const stampedRequest = await this.turnkeyClient.stampSignRawPayload({
@@ -241,9 +242,13 @@ export class AlchemySignerClient {
     return this.exportAsPrivateKey(exportWalletIframeStamper);
   };
 
+  public getUser(): User | null {
+    return this.user ?? null;
+  }
+
   private exportAsSeedPhrase = async (stamper: IframeStamper) => {
     if (!this.user) {
-      throw new Error("No user found. Did you complete auth?");
+      throw new NotAuthenticatedError();
     }
 
     const { wallets } = await this.turnkeyClient.getWallets({
@@ -296,7 +301,7 @@ export class AlchemySignerClient {
 
   private exportAsPrivateKey = async (stamper: IframeStamper) => {
     if (!this.user) {
-      throw new Error("No user found. Did you complete auth?");
+      throw new NotAuthenticatedError();
     }
 
     const { activity } = await this.turnkeyClient.exportWalletAccount({
@@ -326,7 +331,7 @@ export class AlchemySignerClient {
 
   public addPasskey = async (options: CredentialCreationOptions) => {
     if (!this.user) {
-      throw new Error("No user found. Did you complete auth?");
+      throw new NotAuthenticatedError();
     }
     const { attestation, challenge } = await this.getWebAuthnAttestation(
       options

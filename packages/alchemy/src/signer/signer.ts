@@ -2,17 +2,22 @@ import type { SmartAccountAuthenticator } from "@alchemy/aa-core";
 import {
   hashMessage,
   hashTypedData,
+  serializeTransaction,
+  type CustomSource,
   type Hex,
+  type LocalAccount,
   type SignableMessage,
   type TypedData,
   type TypedDataDefinition,
 } from "viem";
+import { toAccount } from "viem/accounts";
 import { z } from "zod";
 import {
   AlchemySignerClient,
   AlchemySignerClientParamsSchema,
 } from "./client/index.js";
 import type { CredentialCreationOptionOverrides, User } from "./client/types";
+import { NotAuthenticatedError } from "./errors.js";
 import {
   SessionManager,
   SessionManagerParamsSchema,
@@ -121,13 +126,20 @@ export class AlchemySigner
 
   signTypedData: <
     const TTypedData extends TypedData | { [key: string]: unknown },
-    TPrimaryType extends string = string
+    TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData
   >(
     params: TypedDataDefinition<TTypedData, TPrimaryType>
   ) => Promise<Hex> = async (params) => {
     const messageHash = hashTypedData(params);
 
     return this.inner.signRawMessage(messageHash);
+  };
+
+  signTransaction: CustomSource["signTransaction"] = (tx, args) => {
+    const serializeFn = args?.serializer ?? serializeTransaction;
+    const serializedTx = serializeFn(tx);
+
+    return this.inner.signRawMessage(serializedTx);
   };
 
   /**
@@ -196,6 +208,33 @@ export class AlchemySigner
     });
 
     return user;
+  };
+
+  /**
+   * This method lets you adapt your AlchemySigner to a viem LocalAccount, which
+   * will let you use the signer as an EOA directly.
+   *
+   * @throws if your signer is not authenticated
+   * @returns a LocalAccount object that can be used with viem's wallet client
+   */
+  toViemAccount: () => LocalAccount = () => {
+    // if we want this method to be synchronous, then we need to do this check here
+    // otherwise we can use the sessionManager to get the user
+    if (!this.inner.getUser()) {
+      throw new NotAuthenticatedError();
+    }
+
+    return toAccount({
+      address: this.inner.getUser()!.address,
+      signMessage: (msg) => this.signMessage(msg.message),
+      signTypedData: <
+        const typedData extends TypedData | Record<string, unknown>,
+        primaryType extends keyof typedData | "EIP712Domain" = keyof typedData
+      >(
+        typedDataDefinition: TypedDataDefinition<typedData, primaryType>
+      ) => this.signTypedData<typedData, primaryType>(typedDataDefinition),
+      signTransaction: this.signTransaction,
+    });
   };
 
   private authenticateWithPasskey = async (
