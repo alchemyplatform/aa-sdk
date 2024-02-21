@@ -105,8 +105,8 @@ const account = new LightSmartContractAccount({ // [!code --]
 const account = await createLightAccount({ // [!code ++]
     rpcClient: client, // [!code --]
     transport: http("RPC_URL"), // [!code ++]
-    owner,
-    chain, // [!code --]
+    signer,
+    chain,
     factoryAddress: getDefaultLightAccountFactoryAddress(chain), // [!code --]
   });
 ```
@@ -145,7 +145,8 @@ const smartAccountClient = createSmartAccountClientFromExisting({
 });
 
 const account = await createLightAccount({
-  owner,
+  signer,
+  chain,
   transport: custom(client),
 });
 
@@ -183,8 +184,9 @@ const client = createBundlerClient({
 
 // [!code focus:99]
 const account = await createLightAccount({
-  owner,
+  signer,
   transport: custom(client),
+  chain,
 });
 
 const smartAccountClient = createSmartAccountClientFromExisting({
