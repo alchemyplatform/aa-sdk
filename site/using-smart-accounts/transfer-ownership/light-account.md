@@ -41,11 +41,20 @@ import { smartAccountClient as lightAccountClient } from "./smartAccountClient";
 
 // this will return the signer of the smart account you want to transfer ownerhip to
 const newOwner = LocalAccountSigner.mnemonicToAccountSigner(NEW_OWNER_MNEMONIC);
+const accountAddress = lightAccountClient.getAddress();
 
 // [!code focus:99]
 const hash = lightAccountClient.transferOwnership({
   newOwner,
   waitForTxn: true,
+});
+// after transaction is mined on the network,
+// create a new light account client for the transferred Light Account
+const transferredClient = await createLightAccountClient({
+  transport: custom(smartAccountClient),
+  chain: smartAccountClient.chain,
+  signer: newOwner,
+  accountAddress, // NOTE: you MUST to specify the original smart account address to connect using the new owner/signer
 });
 ```
 
@@ -68,10 +77,12 @@ const accountAddress = smartAccountClient.getAddress();
 const newOwner = "0x..."; // the address of the new owner
 
 // [!code focus:99]
-const { hash: userOperationHash } = await smartAccountClient.sendUserOperation({
+const result = await smartAccountClient.sendUserOperation({
   to: accountAddress,
   data: smartAccountClient.encodeTransferOwnership(newOwner),
 });
+// wait for txn with UO to be mined
+await smartAccountClient.waitForUserOperationTransaction(result);
 ```
 
 <<< @/snippets/aa-alchemy/light-account-client.ts [smartAccountClient.ts]

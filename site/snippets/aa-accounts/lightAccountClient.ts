@@ -2,7 +2,7 @@ import { createLightAccountClient } from "@alchemy/aa-accounts";
 import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
 import { http } from "viem";
 
-export const smartAccountClient = createLightAccountClient({
+export const smartAccountClient = await createLightAccountClient({
   transport: http("RPC_URL"),
   chain: sepolia,
   // or any other SmartAccountSigner
