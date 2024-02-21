@@ -49,19 +49,17 @@ The following tables list the deployed factory and account implementation contra
 | ---------------- | ------------------------------------------ | ------------------------------------------ |
 | Eth Mainnet      | 0x00004EC70002a32400f8ae005A26081065620D20 | 0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba |
 | Eth Sepolia      | 0x00004EC70002a32400f8ae005A26081065620D20 | 0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba |
-| Eth Goerli       | 0x00004EC70002a32400f8ae005A26081065620D20 | 0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba |
 | Polygon Mainnet  | 0x00004EC70002a32400f8ae005A26081065620D20 | 0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba |
 | Polygon Mumbai   | 0x00004EC70002a32400f8ae005A26081065620D20 | 0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba |
 | Optimism         | 0x00004EC70002a32400f8ae005A26081065620D20 | 0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba |
-| Optimism Goerli  | 0x00004EC70002a32400f8ae005A26081065620D20 | 0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba |
-| Base             | 0x00004EC70002a32400f8ae005A26081065620D20 | 0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba |
-| Base Goerli      | 0x00004EC70002a32400f8ae005A26081065620D20 | 0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba |
+| Optimism Sepolia | 0x00004EC70002a32400f8ae005A26081065620D20 | 0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba |
 | Arbitrum         | 0x00004EC70002a32400f8ae005A26081065620D20 | 0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba |
-| Arbitrum Goerli  | 0x00004EC70002a32400f8ae005A26081065620D20 | 0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba |
 | Arbitrum Sepolia | 0x00004EC70002a32400f8ae005A26081065620D20 | 0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba |
+| Base             | 0x00004EC70002a32400f8ae005A26081065620D20 | 0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba |
+| Base Sepolia     | 0x00004EC70002a32400f8ae005A26081065620D20 | 0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba |
 
 ## Developer links
 
-- [Light Account & Simple Account deployment addresses](/smart-accounts/accounts/deployment-addresses)
+- [Light Account deployment addresses](/smart-accounts/light-account/#deployment-addresses)
 - [Light Account Github repo](https://github.com/alchemyplatform/light-account)
 - [Quantstamp audit report](https://github.com/alchemyplatform/light-account/blob/main/Quantstamp-Audit.pdf)
