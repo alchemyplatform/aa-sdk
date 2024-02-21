@@ -94,7 +94,6 @@ import {
   getDefaultLightAccountFactoryAddress, // [!code --]
 } from "@alchemy/aa-accounts";
 import {
-  createPublicErc4337Client,
   LocalAccountSigner,
   type Hex,
 } from "@alchemy/aa-core";
@@ -102,15 +101,10 @@ import { sepolia } from "@alchemy/aa-core";
 
 const chain = sepolia;
 
-const client = createPublicErc4337Client({
-  chain,
-  rpcUrl: "RPC_URL",
-});
-
 const account = new LightSmartContractAccount({ // [!code --]
 const account = await createLightAccount({ // [!code ++]
     rpcClient: client, // [!code --]
-    client, // [!code ++]
+    transport: http("RPC_URL"), // [!code ++]
     owner,
     chain, // [!code --]
     factoryAddress: getDefaultLightAccountFactoryAddress(chain), // [!code --]
@@ -128,18 +122,19 @@ so that you don't have to pass the account to every method.
 ```ts
 import { createLightAccount } from "@alchemy/aa-accounts";
 import {
-  createPublicErc4337Client,
+  createBundlerClient,
   createSmartAccountClientFromExisting
   LocalAccountSigner,
   type Hex,
 } from "@alchemy/aa-core";
 import { sepolia } from "@alchemy/aa-core";
+import { custom, http } from "viem";
 
 const chain = sepolia;
 
-const client = createPublicErc4337Client({
+const client = createBundlerClient({
   chain,
-  rpcUrl: "JSON_RPC_URL",
+  transport: http("JSON_RPC_URL"),
 });
 
 // [!code focus:99]
@@ -151,7 +146,7 @@ const smartAccountClient = createSmartAccountClientFromExisting({
 
 const account = await createLightAccount({
   owner,
-  client: publicClient,
+  transport: custom(client),
 });
 
 const { hash } = await smartAccountClient.sendUserOperation({
@@ -171,24 +166,25 @@ Hoisting the account is similar to using `.connect` in previous versions. You si
 ```ts
 import { createLightAccount } from "@alchemy/aa-accounts";
 import {
-  createPublicErc4337Client,
+  createBundlerClient,
   createSmartAccountClientFromExisting
   LocalAccountSigner,
   type Hex,
 } from "@alchemy/aa-core";
 import { sepolia } from "@alchemy/aa-core";
+import { http, custom } from "viem";
 
 const chain = sepolia;
 
-const client = createPublicErc4337Client({
+const client = createBundlerClient({
   chain,
-  rpcUrl: "JSON_RPC_URL",
+  transport: http("JSON_RPC_URL"),
 });
 
 // [!code focus:99]
 const account = await createLightAccount({
   owner,
-  client: publicClient,
+  transport: custom(client),
 });
 
 const smartAccountClient = createSmartAccountClientFromExisting({
@@ -216,7 +212,8 @@ type toSmartContractAccount = <
   Name extends string = string,
   TTransport extends Transport = Transport
 >({
-  client,
+  transport,
+  chain,
   source,
   entryPointAddress,
   accountAddress,
