@@ -103,6 +103,6 @@ A Promise containing a new `LightAccount`.
 
 ## Developer links
 
-- [Light Account & Simple Account Deployment Addresses](/smart-accounts/accounts/deployment-addresses)
+- [Light Account Deployment Addresses](/smart-accounts/light-account/#deployment-addresses)
 - [Light Account Github Repo](https://github.com/alchemyplatform/light-account)
 - [Quantstamp Audit Report](https://github.com/alchemyplatform/light-account/blob/main/Quantstamp-Audit.pdf)
