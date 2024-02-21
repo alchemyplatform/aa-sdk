@@ -104,7 +104,7 @@ export const sidebar: DefaultTheme.Sidebar = [
           { text: "Check eligibility", link: "/checking-eligibility" },
         ],
       },
-      { text: "Simulate user ops", link: "/simulate-user-operations" },
+      { text: "Simulate user operations", link: "/simulate-user-operations" },
       {
         text: "Session keys",
         base: "/using-smart-accounts/session-keys",

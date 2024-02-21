@@ -34,7 +34,7 @@ Smart accounts unlocks lots of customizable ways to improve the wallet experienc
 
 The Multi Owner plugin lets your smart accounts have one or more ECDSA or SCA owners. This lets you account integrate with multiple signers at once, and supports recovering your account if one signer is lost.
 
-Read more about Multi Owner Plugin and how to get started with Modular Account [here]()!
+Read more about Multi Owner Plugin and how to get started with Modular Account [here](/using-smart-accounts/transfer-ownership/modular-account)!
 
 ### Session Key Plugin
 
@@ -47,7 +47,7 @@ Session keys can be customized and configured to:
 
 Session keys let you streamline interactions by reducing confirmation steps, or automate actions on behalf of the account. And these features are kept secure through the permission system, which protects the account from malicious use of the session key.
 
-Read more about installing and using the Session Key plugin [here]()!
+Read more about installing and using the Session Key plugin [here](/using-smart-accounts/session-keys/)!
 
 ### Full compatibility
 
@@ -57,8 +57,8 @@ Modular Account also supports the same baseline set of account abstraction featu
 
 Have an idea for more account features? Modular Account supports ERC-6900 for installing additional plugins to the account, letting you fully customize the account logic.
 
-Check out the plugin development guide [here]() if you’re interested!
+Check out the plugin development guide [here](https://www.notion.so/alchemotion/How-to-write-an-ERC-6900-Plugin-8ef518630b1a43a1b301723925407ec5?utm_content=8ef51863-0b1a-43a1-b301-723925407ec5&utm_campaign=T06RY9YKG&n=slack&n=slack_link_unfurl&pvs=6) if you’re interested!
 
 ### Secure, audited, open source
 
-Modular Account has been audited by Spearbit and Quanstamp. You can find the audit reports [here](). Modular Account is fully open source so you can validate the [source code]().
+Modular Account has been audited by Spearbit and Quanstamp. You can find the audit reports [here](https://github.com/alchemyplatform/modular-account/tree/develop/audits). Modular Account is fully open source so you can validate the [source code](https://github.com/alchemyplatform/modular-account).
