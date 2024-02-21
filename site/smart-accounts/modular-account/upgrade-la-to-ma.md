@@ -22,7 +22,7 @@ head:
 
 Upgrading a `SmartContractAccount` can be done easily using Account Kit. It just involves a simple call to a single function on the `SmartAccountClient`, namely `upgradeAccount`, along with the necessary call data, `UpgradeToData`, for the account targeted for the upgrade. For upgrading to a Modular Account, you can use the utility function `getMSCAUpgradeToData` provided by the `@alchemy/aa-accounts` package to retrieve the call data for the upgrade. This process applies to any account account with upgrade capabilities.
 
-Using the Light Account as an example, here is an overview of how the upgrade can be executed using a Smart Account Client::
+Using the Light Account as an example, here is an overview of how the upgrade can be executed using a Smart Account Client:
 
 ::: code-group
 
