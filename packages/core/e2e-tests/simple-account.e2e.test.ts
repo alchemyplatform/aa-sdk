@@ -100,7 +100,7 @@ describe("Simple Account Tests", () => {
     });
 
     const structWithFeeOptionsPromise =
-      await providerWithFeeOptions.buildUserOperation({
+      providerWithFeeOptions.buildUserOperation({
         uo: {
           target: provider.getAddress(),
           data: "0x",
@@ -155,7 +155,7 @@ describe("Simple Account Tests", () => {
       },
     });
 
-    const struct = await provider.sendUserOperation({
+    const struct = provider.sendUserOperation({
       uo: {
         target: provider.getAddress(),
         data: "0x",

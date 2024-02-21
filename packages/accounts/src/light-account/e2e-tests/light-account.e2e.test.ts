@@ -200,11 +200,16 @@ describe("Light Account Tests", () => {
       waitForTxn: true,
     });
 
-    const newOwnerViaProvider =
-      await throwawayProvider.account.getOwnerAddress();
+    const newOwnerProvider = await givenConnectedProvider({
+      signer: newOwner,
+      chain,
+      accountAddress: throwawayProvider.getAddress(),
+    });
 
-    expect(newOwnerViaProvider).not.toBe(await throwawaySigner.getAddress());
-    expect(newOwnerViaProvider).toBe(await newOwner.getAddress());
+    const newOwnerAddress = await newOwnerProvider.account.getOwnerAddress();
+
+    expect(newOwnerAddress).not.toBe(await throwawaySigner.getAddress());
+    expect(newOwnerAddress).toBe(await newOwner.getAddress());
   }, 100000);
 
   it("should upgrade a deployed light account to msca successfully", async () => {

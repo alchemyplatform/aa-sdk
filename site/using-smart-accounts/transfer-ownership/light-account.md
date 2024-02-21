@@ -64,31 +64,13 @@ import { encodeFunctionData } from "viem";
 import { smartAccountClient } from "./smartAccountClient";
 
 // this will return the address of the smart account you want to transfer ownerhip of
-const accountAddress = await smartAccountClient.getAddress();
+const accountAddress = smartAccountClient.getAddress();
 const newOwner = "0x..."; // the address of the new owner
 
 // [!code focus:99]
-const { hash: userOperationHash } = smartAccountClient.sendUserOperation({
+const { hash: userOperationHash } = await smartAccountClient.sendUserOperation({
   to: accountAddress,
-  data: encodeFunctionData({
-    abi: [
-      {
-        inputs: [
-          {
-            internalType: "address",
-            name: "newOwner",
-            type: "address",
-          },
-        ],
-        name: "transferOwnership",
-        outputs: [],
-        stateMutability: "nonpayable",
-        type: "function",
-      },
-    ],
-    functionName: "transferOwnership",
-    args: [newOwner],
-  }),
+  data: smartAccountClient.encodeTransferOwnership(newOwner),
 });
 ```
 
