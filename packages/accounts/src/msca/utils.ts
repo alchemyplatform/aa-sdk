@@ -139,7 +139,7 @@ export async function getMSCAUpgradeToData<
 
   const encodedPluginInitData = encodeAbiParameters(
     parseAbiParameters("bytes32[], bytes[]"),
-    [[hashedMultiOwnerPluginManifest], [encodedOwner, "0x"]]
+    [[hashedMultiOwnerPluginManifest], [encodedOwner]]
   );
 
   const encodedMSCAInitializeData = encodeFunctionData({
