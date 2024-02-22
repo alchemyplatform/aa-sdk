@@ -22,7 +22,7 @@ head:
 
 Alchemy provides several [Enhanced APIs](https://www.alchemy.com/enhanced-apis/?a=ak-docs), which are especially useful for querying information about the smart accounts you create using Account Kit, such as the account's ERC-20 Token balances using the [Token API](https://www.alchemy.com/token-api/?a=ak-docs).
 
-For the purposes of our example, we'll use the Token API to query our smart account's data by extending the Alchemy Smart Account Client [with Enhanced APIs](/packages/aa-alchemy/smart-account-client/actions/alchemyEnhancedApiActions.md).
+For the purposes of our example, we will use the Token API to query our smart account's data by extending the Alchemy Smart Account Client [with Enhanced APIs](/packages/aa-alchemy/smart-account-client/actions/alchemyEnhancedApiActions.md).
 
 ## 1. Install the [`alchemy-sdk`](https://github.com/alchemyplatform/alchemy-sdk-js)
 
@@ -30,7 +30,7 @@ Alchemy has developed a Typescript SDK to make development with the Enhanced API
 
 We will use the Alchemy SDK Client to extend our Alchemy Smart Account Client using the client's [`alchemyEnhancedApiActions`](/packages/aa-alchemy/smart-account-client/actions/alchemyEnhancedApiActions.md) method. That way, our client will have direct access to the Enhanced APIs.
 
-To use the Alchemy SDK in our project directory, we'll need to install the required package:
+To use the Alchemy SDK in our project directory, we will need to install the required package:
 
 ::: code-group
 

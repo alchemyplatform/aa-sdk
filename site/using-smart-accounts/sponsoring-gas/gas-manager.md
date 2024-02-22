@@ -37,7 +37,7 @@ A gas manager policy is a set of rules that define which UOs are eligible for ga
 
 To learn more about policy configuration, refer to the guide on [setting up a gas manager policy](https://docs.alchemy.com/docs/setup-a-gas-manager-policy/?a=ak-docs).
 
-Once you've decided on policy rules for your app, [create a policy](https://dashboard.alchemy.com/gas-manager/policy/create/?a=ak-docs) in the Gas Manager dashboard.
+Once you have decided on policy rules for your app, [create a policy](https://dashboard.alchemy.com/gas-manager/policy/create/?a=ak-docs) in the Gas Manager dashboard.
 
 ### 2. Create an `AlchemySmartAccountClient` that uses your policy
 
@@ -49,11 +49,11 @@ Copy it and then replace the `GAS_MANAGER_POLICY_ID` in the snippet below.
 
 <<< @/snippets/aa-alchemy/gas-manager-client.ts
 
-You've created a gas manager policy and linked it to the client. This guarantees that UOs sent with this client receive sponsorship if and only the UO satisfies the rules defined in your gas policy.
+You have created a gas manager policy and linked it to the client. This guarantees that UOs sent with this client receive sponsorship if and only the UO satisfies the rules defined in your gas policy.
 
 ### 4. Send the sponsored UserOperation
 
-Now you're ready to send sponsored UOs! You can send a UO by calling `sendUserOperation` on the client. The Gas Manager will check if this UO satisfies the policy rules defined above and sponsor the gas costs if the rules are met. If the UO does not meet the policy rules, an error will be thrown.
+Now you are ready to send sponsored UOs! You can send a UO by calling `sendUserOperation` on the client. The Gas Manager will check if this UO satisfies the policy rules defined above and sponsor the gas costs if the rules are met. If the UO does not meet the policy rules, an error will be thrown.
 
 ::: code-group
 
@@ -72,4 +72,4 @@ const { hash } = await smartAccountClient.sendUserOperation({
 
 :::
 
-Congratulations! You've successfully sponsored gas for a UO by creating a Gas Manager Policy, defining policy rules, linking your policy to the client, and submitting a UO.
+Congratulations! You have successfully sponsored gas for a UO by creating a Gas Manager Policy, defining policy rules, linking your policy to the client, and submitting a UO.

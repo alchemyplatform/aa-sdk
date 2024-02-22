@@ -20,7 +20,7 @@ head:
 
 # How to simulate a User Operation
 
-This guide will show you how to simulate a `UserOperation` (UO) with Account Kit by adding support for UO simulation on an `AlchemySmartAccountClient` and sending a User Operation from that client only if simulation passes. By the end of this guide, you'll have a basic understanding of how to safely send UOs with the `aa-sdk`.
+This guide will show you how to simulate a `UserOperation` (UO) with Account Kit by adding support for UO simulation on an `AlchemySmartAccountClient` and sending a User Operation from that client only if simulation passes. By the end of this guide, you will have a basic understanding of how to safely send UOs with the `aa-sdk`.
 
 ::: warning NOTE
 Please note that the UO simulation results are based on the blockchain's state at the time of simulation. Changes in the blockchain state, such as updates to contract variables or balances, can occur between the time of simulation and when your UO actually gets executed.
@@ -45,7 +45,7 @@ Then, whenever you call a method on the client which generates the UO to send (e
 
 ## 2. Using [`simulateUserOperation`](/packages/aa-alchemy/smart-account-client/actions/simulateUserOperation)
 
-You can also selectively simulate UOs by calling the [`simulateUserOperation`](/packages/aa-alchemy/smart-account-client/actions/simulateUserOperation) method before sending a UO. You'd be responsible for catching any errors like how it's done below, but this is a nice alternative to always running simulation.
+You can also selectively simulate UOs by calling the [`simulateUserOperation`](/packages/aa-alchemy/smart-account-client/actions/simulateUserOperation) method before sending a UO. You would be responsible for catching any errors like how it is done below, but this is a nice alternative to always running simulation.
 
 ::: code-group
 

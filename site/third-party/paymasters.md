@@ -20,7 +20,7 @@ head:
 
 # Using a third-party paymaster
 
-The `SmartAccountClient` within `@alchemy/aa-core` is unopinionated about which paymaster you use, so you can connect to any paymaster really simply. Configuration is done using the the `paymasterAndData` config option when you call `createSmartAccountClient`.
+The `SmartAccountClient` within `@alchemy/aa-core` is unopinionated about which paymaster you use, so you can connect to any paymaster really simply. Configuration is done using the `paymasterAndData` config option when you call `createSmartAccountClient`.
 
 ## Usage
 

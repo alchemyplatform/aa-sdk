@@ -253,7 +253,7 @@ export const createNaniAccount = async <TTransport extends Transport>(
       naniAccount.signMessage(
         typeof message === "string" ? message : message.raw
       ),
-    // @ts-expect-error these types still represent the same thing, but they're just a little off in there definitions
+    // @ts-expect-error these types still represent the same thing, but they are just a little off in there definitions
     signTypedData: (params) => naniAccount.signTypedData(params),
   });
 

@@ -14,9 +14,9 @@ head:
 
 # Account [gas benchmarks](https://github.com/alchemyplatform/aa-benchmarks)
 
-Modular Account provides best in class end user costs on Ethereum Rollups, including Arbitrum, Base, and Optimism. As we continue to push for the [three core transitions](https://vitalik.eth.limo/general/2023/06/09/three_transitions.html) required to onboard mainstream users onchain, Modular Account aims to provide a fundamental primitive optimized for a rollup centric future.
+Modular Account provides best-in-class end-user costs on Ethereum Rollups, including Arbitrum, Base, and Optimism. As we continue to push for the [three core transitions](https://vitalik.eth.limo/general/2023/06/09/three_transitions.html) required to onboard mainstream users on-chain, Modular Account aims to provide a fundamental primitive optimized for a rollup-centric future.
 
-Specifically, it often _sacrifices call data usage for increased execution costs, as to provide end users cheaper experiences_. Additionally, as a durable user account, Modular Accounts contain guardrails for permissionless interoperable usage, extending beyond the per-app embedded account paradigm that is popular today to help drive forward an invisible and interoperable future. The account is heavily optimized for day to day usage, with certain security features adding some execution overhead at deploy time.
+Specifically, it often sacrifices call data usage for increased execution costs as to provide end users with cheaper experiences. Additionally, as a durable user account, Modular Accounts contain guardrails for permissionless interoperable usage, extending beyond the per-app embedded account paradigm that is popular today to help drive forward an invisible and interoperable future. The account is heavily optimized for day-to-day usage, with certain security features adding some execution overhead at deployment time.
 
 Alternatively, Light Account is an account that sacrifices modularity to save on execution costs, which may be appropriate in alternative environments.
 

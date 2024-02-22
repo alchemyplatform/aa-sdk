@@ -9,7 +9,7 @@ import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";
 import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
 
 const chain = sepolia;
-// this is the signer to connect with the account, later we'll create a new client using a session key signe
+// this is the signer to connect with the account, later we will create a new client using a session key signe
 const signer = LocalAccountSigner.mnemonicToAccountSigner("MNEMONIC");
 const sessionKeySigner = new SessionKeySigner();
 const client = (

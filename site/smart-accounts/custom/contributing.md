@@ -20,50 +20,28 @@ head:
 
 # Contribute your account
 
-If you'd like to add your smart account to Account Kit, we welcome PRs! You'll need to fork the [`aa-sdk` Github repo](https://github.com/alchemyplatform/aa-sdk) and then follow the below steps.
+If you would like to add your smart account to Account Kit, we welcome PRs! You will need to fork the [`aa-sdk`](https://github.com/alchemyplatform/aa-sdk) Github repo, and then follow the below steps.
 
 ## 1. Add your Smart Account to [`aa-accounts`](https://github.com/alchemyplatform/aa-sdk/tree/main/packages/accounts)
 
 To ensure the best developer experience for anyone using Account Kit, we ask that you add your smart account implementation to our [`aa-accounts`](https://github.com/alchemyplatform/aa-sdk/tree/main/packages/accounts) SDK package.
 
-There, you'll want to add an implemention of the [`SmartContractAccount`](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/core/src/account/smartContractAccount.ts) interface from `aa-core`. Simply export a function `createMySmartContractAccount` which calls `toSmartContractAccount` and any custom setup you need for your account. Make sure to include unit tests along with your implementation!
+If you are looking to add a new account type, please follow the following structure.
 
-## 2. Add documentation about your Smart Account
-
-You'll want to add documentation about your smart account so that developers can easily use your implementation in Account Kit. Below, we recommend adding documentation about your smart account's APIs, as well.
-
-To ensure these docs are visible on the Account Kit docs, you'll want to add links to them in the [`site/.vitepress/config.ts`](https://github.com/alchemyplatform/aa-sdk/blob/main/site/.vitepress/config.ts) file in the `aa-sdk` repo, where there is a `sidebar` property in the object.
-
-Find the `aa-accounts` item in the `sidebar` and add a new entry in `items`. The `text` property of the entry is what will be visible in the sidebar and the `link` property should be `kebab-case`:
+1. Create a new folder in `src` with the name of your account type in `kebab-case` (we are following kebab casing for files throughout the project).
+2. Create a new file in the folder you just created called `account.ts` and add a method that calls `toSmartContractAccount` to return an instance of your account.
+3. If needed, create a sub-folder in your account folder called `abis` and add your abis as `.ts` files. eg:
 
 ```ts
-{
-  sidebar: [
-    // ... other packages
-    {
-      text: "aa-accounts",
-      collapsed: true,
-      base: "/packages/aa-accounts",
-      items: [
-        // ... other entries
-        {
-          text: "Your Account",
-          collapsed: true,
-          base: "/packages/aa-accounts/your-account-name",
-          items: [
-            // ... all methods on the smart account implementation
-          ],
-        },
-        // ... other smart accounts and more
-        { text: "Contributing", link: "/contributing" },
-      ],
-    },
-  ];
-}
+export const MyContractAbi = [
+  // ...
+] as const; // the as const is important so we can get correct typing from viem
 ```
 
-In that section, add documentation introducing the value prop of your smart account, how to initialize the smart account object, and how to call each method.
+4. If you want, you can create a client creation method that returns a `SmartAccountClient` instance with your account attached to it
+5. Add some tests for your account and client (if created) by creating a subfolder in your `account/my-account` called `__tests__` and make sure your files end with the `.test.ts` suffix
+6. Export the classes and types you have defined in `src/index.ts`
 
-## 3. Submit a pull request
+## 2. Submit a pull request
 
-You can open a PR to merge the branch with your smart account implementation from your forked repo into the `main` branch of the `aa-sdk` repo. We'll make sure to review it promptly, provide feedback, and merge the PR when ready so that developers can use your smart account!
+You can open a PR to merge the branch with your smart account implementation from your forked repo into the `main` branch of the `aa-sdk` repo. We will review it promptly, provide feedback, and merge the PR when ready so developers can use your smart account!
