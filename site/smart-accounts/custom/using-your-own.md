@@ -20,11 +20,11 @@ head:
 
 # Using your own Smart Account
 
-You are not limited to the accounts defined in `@alchemy/aa-accounts`. The `SmartAccountClient` can be used with any smart account because it only relies on the [`SmartContractAccount`](/packages/aa-core/accounts/index.md) interface. This means you can use your own smart account implementation with Account Kit.
+you are not limited to the accounts defined in `@alchemy/aa-accounts`. The `SmartAccountClient` can be used with any smart account because it only relies on the [`SmartContractAccount`](/packages/aa-core/accounts/index.md) interface. This means you can use your own smart account implementation with Account Kit.
 
 <!--@include: ../../packages/aa-core/accounts/index.md{27,60}-->
 
-To use your account, you'll need to pass it into a `SmartAccountClient`.
+To use your account, you will need to pass it into a `SmartAccountClient`.
 
 ```ts
 import { createAlchemySmartAccountClient } from "@alchemy/aa-alchemy";
@@ -42,7 +42,7 @@ const client = createAlchemySmartAccountClient({
 
 We have built an extension of the eth-infinitism `SimpleAccount` called [LightAccount.sol](https://github.com/alchemyplatform/light-account/blob/main/src/LightAccount.sol). You can learn more about Light Account in the [Light Account documentation](/smart-accounts/light-account/).
 
-We provide an implementation of `SmartContractAccount` that works with `LightAccount.sol` which can be used as an example of how to implement your own Smart Contract Account:
+We provide an implementation of `SmartContractAccount` that works with `LightAccount.sol`, which can be used as an example of how to implement your own Smart Contract Account:
 ::: details LightSmartContractAccount
 <<< @/../packages/accounts/src/light-account/account.ts
 :::

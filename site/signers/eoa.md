@@ -24,7 +24,7 @@ An Externally Owned Account (EOA) is a regular Ethereum account that is controll
 
 ## Integration
 
-In this example we'll use `viem` in two ways. The first way allows you to connect to an EOA over JSON RPC and the second allows you to connect to so called "Local Accounts". A Local Account is an EOA for which you have access to the private key on the client.
+In this example we will use `viem` in two ways. The first way allows you to connect to an EOA over JSON RPC and the second allows you to connect to so called "Local Accounts". A Local Account is an EOA for which you have access to the private key on the client.
 
 ### JSON RPC
 

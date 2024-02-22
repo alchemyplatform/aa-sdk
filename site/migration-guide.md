@@ -85,7 +85,7 @@ To support [the various ways](/migration-guide#account-connecting-to-a-smart-acc
 
 ### Account: `BaseSmartContractAccount` → `SmartContractAccount`
 
-The next big change is the removal of the class-based `BaseSmartContractAccount` that all accounts extended from. This has been replaced with a `SmartContractAccount` type that extends `viem`'s [`Account`](https://viem.sh/docs/accounts/custom), and instantiation of an account is now an `async` action. To get started with the new accounts (using `LightAccount` as an example), you'll have to make the following changes:
+The next big change is the removal of the class-based `BaseSmartContractAccount` that all accounts extended from. This has been replaced with a `SmartContractAccount` type that extends `viem`'s [`Account`](https://viem.sh/docs/accounts/custom), and instantiation of an account is now an `async` action. To get started with the new accounts (using `LightAccount` as an example), you will have to make the following changes:
 
 ```ts
 import {

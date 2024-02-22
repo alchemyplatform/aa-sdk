@@ -22,7 +22,7 @@ Leveraging both Particle and Account Kit enables a streamlined onboarding flow, 
 
 ### Sign up for a Particle Account
 
-To configure Particle, you'll need to start by quickly signing up for a Particle account, creating a project, and then creating an application. You can learn more about this process within their [quickstart guide](https://docs.particle.network/getting-started/dashboard/manage-projects). Additionally, you can sign up through the [Particle dashboard](https://dashboard.particle.network/#/login).
+To configure Particle, you will need to start by quickly signing up for a Particle account, creating a project, and then creating an application. You can learn more about this process within their [quickstart guide](https://docs.particle.network/getting-started/dashboard/manage-projects). Additionally, you can sign up through the [Particle dashboard](https://dashboard.particle.network/#/login).
 
 ### Install the SDK
 
@@ -44,7 +44,7 @@ yarn add @particle-network/provider
 
 ### Create a SmartAccountSigner
 
-With `@particle-network/auth` and `@particle-network/provider` installed, you can move on to creating a `SmartAccountSigner`. To do this, you'll need to ensure you have your `projectId`, `clientKey`, and `appId` from the Particle dashboard to use in the configuration of `ParticleNetwork`.
+With `@particle-network/auth` and `@particle-network/provider` installed, you can move on to creating a `SmartAccountSigner`. To do this, you will need to ensure you have your `projectId`, `clientKey`, and `appId` from the Particle dashboard to use in the configuration of `ParticleNetwork`.
 
 From here, setting up a `SmartAccountSigner` involves the initialization of `ParticleProvider` to be used in a viem wallet client, which then gets passed into our `SmartAccountSigner`.
 

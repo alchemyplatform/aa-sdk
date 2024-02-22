@@ -20,7 +20,7 @@ The `SmartContractAccount` interface is an extension of viem's [`CustomAccount`]
 
 ## Custom Smart Contract Accounts
 
-If you have your own smart contract that you'd like to interact with, then you can use the `toSmartContractAccount` method to create a `SmartContractAccount` instance.
+If you have your own smart contract that you would like to interact with, then you can use the `toSmartContractAccount` method to create a `SmartContractAccount` instance.
 
 ### Usage
 

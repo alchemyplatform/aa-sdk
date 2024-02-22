@@ -27,7 +27,7 @@ head:
 ::: details Answer
 In almost all cases, yes, you will get the same address on all chains as long as the connecting signer address is the same! The deployment address is a function of the address of owner/signer address, the account implementation (e.g. latest version of Light Account), and the salt (you can optionally specify this). If all three of those remain the same, then you deploy the smart account at the same contract address.
 
-There are two scenarios where you'd get a different contract address:
+There are two scenarios where you would get a different contract address:
 
 1. If you deploy one smart account, then change the signer, then deploy the second account.
 2. If you upgrade the smart account (e.g. to a new version of Light Account). It is unlikely that we will make many updates to this contract so the address will not change frequently.

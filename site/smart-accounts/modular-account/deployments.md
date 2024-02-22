@@ -20,7 +20,7 @@ head:
 
 # Deployments
 
-The following tables list the deployed factory and account implementation contract addresses for `ModularAccount` as well as some compatible plugins on different chains. Deployments for prior versions can be found in the [modular-account](https://github.com/alchemyplatform/modular-account/tree/develop/deployments) repo.
+The following tables list the deployed factory and account implementation contract addresses for `ModularAccount` and some compatible plugins on different chains. Deployments for prior versions can be found in the [modular-account](https://github.com/alchemyplatform/modular-account/tree/develop/deployments) repo.
 
 ## Account
 

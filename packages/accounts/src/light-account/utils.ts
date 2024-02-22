@@ -21,7 +21,7 @@ import { fromHex, type Address, type Chain } from "viem";
 export type LightAccountVersion =
   /** @deprecated This version does not support 1271 signature validation */
   | "v1.0.1"
-  /** @deprecated This version has a known issue with 1271 validation, it's recommended to use v1.1.0 */
+  /** @deprecated This version has a known issue with 1271 validation, it is recommended to use v1.1.0 */
   | "v1.0.2"
   | "v1.1.0";
 

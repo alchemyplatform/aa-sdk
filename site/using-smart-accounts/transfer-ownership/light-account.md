@@ -62,7 +62,7 @@ const transferredClient = await createLightAccountClient({
 
 :::
 
-Since `@alchemy/aa-accounts` exports a `LightAccount` ABI, the above approach makes it easy to transfer ownership. That said, you can also directly call `sendUserOperation` to execute the ownership transfer. As you'll see below, however, it is a bit verbose:
+Since `@alchemy/aa-accounts` exports a `LightAccount` ABI, the above approach makes it easy to transfer ownership. That said, you can also directly call `sendUserOperation` to execute the ownership transfer. As you will see below, however, it is a bit verbose:
 
 ### 2. Using `sendUserOperation`
 

@@ -69,7 +69,7 @@ const transferredClient = await createLightAccountClient({
   transport: custom(smartAccountClient),
   chain: smartAccountClient.chain,
   signer: newOwner,
-  accountAddress, // NOTE: you MUST to specify the original smart account address to connect using the new owner/signer
+  accountAddress, // NOTE: You MUST to specify the original smart account address to connect using the new owner/signer
 });
 ```
 

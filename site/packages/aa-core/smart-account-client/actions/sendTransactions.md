@@ -14,9 +14,9 @@ head:
 
 # sendTransactions
 
-This takes a set of ethereum transactions and converts them into one single `UserOperation` (UO), sends the UO, and waits on the receipt of that UO (i.e. has it been mined). If you don't want to wait for the UO to mine, it's recommended to user [sendUserOperation](./sendUserOperation) instead.
+This takes a set of ethereum transactions and converts them into one single `UserOperation` (UO), sends the UO, and waits on the receipt of that UO (i.e. has it been mined). If you don't want to wait for the UO to mine, it is recommended to user [sendUserOperation](./sendUserOperation) instead.
 
-**NOTE**: The account you're sending the transactions _to_ MUST support batch transactions.
+**NOTE**: The account you are sending the transactions _to_ MUST support batch transactions.
 
 Also note that `to` field of transaction is required, and among other fields of transaction, only `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas` fields are considered and optional.
 

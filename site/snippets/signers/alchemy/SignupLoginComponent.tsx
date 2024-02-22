@@ -10,7 +10,7 @@ export const SignupLoginComponent = () => {
   const [email, setEmail] = useState<string>("");
   const [bundleInput, setBundleInput] = useState<string>("");
 
-  // It's recommended you wrap this in React Context or other state management
+  // It is recommended you wrap this in React Context or other state management
   const signer = new AlchemySigner({
     client: {
       connection: {
@@ -22,7 +22,7 @@ export const SignupLoginComponent = () => {
     },
   });
 
-  // we're using react-query to handle loading states more easily, but feel free to use w/e state management library you prefer
+  // we are using react-query to handle loading states more easily, but feel free to use w/e state management library you prefer
   const { mutate: loginOrSignup, isLoading } = useMutation({
     mutationFn: (email: string) =>
       signer.authenticate({ type: "email", email, bundle }),

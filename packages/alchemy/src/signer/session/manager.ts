@@ -100,7 +100,7 @@ export class SessionManager {
 
     /**
      * TODO: this isn't really good enough
-     * A user's session could be about to expire and we'd still return it
+     * A user's session could be about to expire and we would still return it
      *
      * Instead we should check if a session is about to expire and refresh it
      * We should revisit this later

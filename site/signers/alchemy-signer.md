@@ -28,7 +28,7 @@ The Alchemy Signer is currently still under development and is not yet available
 
 ## Usage
 
-Once you've been granted access to the Alchemy Signer, getting started is really simple. Install the `@alchemy/aa-alchemy` package and initialize your signer:
+Once you have been granted access to the Alchemy Signer, getting started is really simple. Install the `@alchemy/aa-alchemy` package and initialize your signer:
 
 <<< @/snippets/signers/alchemy/signer.ts
 
@@ -36,7 +36,7 @@ For other configuration options, see the [Alchemy Signer API Reference](/package
 
 ## Logging Users in
 
-Once you've initialized your signer, you can now enable your users to create an account or login to their existing account.
+Once you have initialized your signer, you can now enable your users to create an account or login to their existing account.
 
 ::: warning
 In the coming weeks, the OTP based email auth flow will be replaced with a magic link flow that will make this easier

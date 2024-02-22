@@ -149,7 +149,7 @@ export const createSimpleSmartAccount = async <
       simpleAccount.signMessage(
         typeof message === "string" ? message : message.raw
       ),
-    // @ts-expect-error these types still represent the same thing, but they're just a little off in there definitions
+    // @ts-expect-error these types still represent the same thing, but they are just a little off in there definitions
     signTypedData: simpleAccount.signTypedData.bind(simpleAccount),
     accountAddress: parsedParams.accountAddress,
   });
