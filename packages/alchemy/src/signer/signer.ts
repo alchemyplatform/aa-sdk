@@ -2,6 +2,7 @@ import type { SmartAccountAuthenticator } from "@alchemy/aa-core";
 import {
   hashMessage,
   hashTypedData,
+  keccak256,
   serializeTransaction,
   type CustomSource,
   type Hex,
@@ -139,7 +140,7 @@ export class AlchemySigner
     const serializeFn = args?.serializer ?? serializeTransaction;
     const serializedTx = serializeFn(tx);
 
-    return this.inner.signRawMessage(serializedTx);
+    return this.inner.signRawMessage(keccak256(serializedTx));
   };
 
   /**
