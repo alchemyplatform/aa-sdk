@@ -50,6 +50,7 @@ import type {
 import type { IsUndefined } from "../../utils";
 import type { SendUserOperationResult } from "../types";
 
+//#region SmartAccountClientActions
 export type BaseSmartAccountClientActions<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
@@ -110,6 +111,7 @@ export type BaseSmartAccountClientActions<
   : {
       getAddress: (args: GetAccountParameter<TAccount>) => Address;
     });
+//#endregion SmartAccountClientActions
 
 export const smartAccountClientActions: <
   TTransport extends Transport = Transport,

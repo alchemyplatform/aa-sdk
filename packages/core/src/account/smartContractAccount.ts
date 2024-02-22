@@ -60,6 +60,7 @@ export type SmartContractAccountWithSigner<
   getSigner: () => TSigner;
 };
 
+//#region SmartContractAccount
 export type SmartContractAccount<
   Name extends string = string,
   TUO = UserOperationRequest
@@ -84,6 +85,7 @@ export type SmartContractAccount<
   getEntryPoint: () => EntryPointDef<TUO>;
   getImplementationAddress: () => Promise<"0x0" | Address>;
 };
+//#endregion SmartContractAccount
 
 export type ToSmartContractAccountParams<
   Name extends string = string,

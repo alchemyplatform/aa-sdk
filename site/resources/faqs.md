@@ -54,7 +54,7 @@ Yes! The optional salt value on Light Account enables the ability to have multip
 ### How can I upgrade from Simple Account to Light Account?
 
 ::: details Answer
-[Simple Account's](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol) support [`upgradeToAndCall`](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/4e7e6e54daedf091d91f2f2df024cbb8f253e2ef/contracts/proxy/utils/UUPSUpgradeable.sol#L86) implemented by openzeppelin’s [UUPSUpgradeable](https://docs.openzeppelin.com/contracts/4.x/api/proxy#UUPSUpgradeable) contract. This allows you to upgrade from Simple Account to Light Account without changing the smart contract account address. Using `upgradeToAndCall` will update the underlying implementation contract on the account while the account address and assets will stay the same.
+[Simple Account's](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol) support [`upgradeToAndCall`](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/4e7e6e54daedf091d91f2f2df024cbb8f253e2ef/contracts/proxy/utils/UUPSUpgradeable.sol#L86) implemented by openzeppelin [UUPSUpgradeable](https://docs.openzeppelin.com/contracts/4.x/api/proxy#UUPSUpgradeable) contract. This allows you to upgrade from Simple Account to Light Account without changing the smart contract account address. Using `upgradeToAndCall` will update the underlying implementation contract on the account while the account address and assets will stay the same.
 
 You can call `upgradeToAndCall` on the Simple Account with these params:
 
@@ -63,9 +63,9 @@ You can call `upgradeToAndCall` on the Simple Account with these params:
 - `data`: encoded version of the `initialize` function with `anOwner` parameter set to the owner on the account, usually the same owner as what the account used as Simple Account.
   - In solidity (foundry) you can use abi.encodeCall and in viem you can use [encodeFunctionData](https://github.com/alchemyplatform/light-account/blob/main/Deployments.md#lightaccount)
 
-It is very important that the `initialize` step is encoded correctly to ensure the account does not get in to a risky state where someone else could call initialize on it and reassign and a signer. You can call `owner()` on the account after upgrade to make sure it is assigned correctly.
+It is very important that the `initialize` step is encoded correctly to ensure the account does not get into a risky state where someone else could call initialize on it with one's signer and take control of your account. You can call `owner()` on the account after the upgrade to ensure it is assigned correctly.
 
-This can be called on the existing smart contract account by sending a user operation that calls `execute` (or `executeBatch`) and have that call `upgradeToAndCall` (the same way you would make the account send calls to other addresses).
+This can be called on the existing smart contract account by sending a user operation that calls `execute` (or `executeBatch`) and has that call `upgradeToAndCall` (the same way you would make the account send calls to other addresses).
 :::
 
 ## Submitting `UserOperation`s

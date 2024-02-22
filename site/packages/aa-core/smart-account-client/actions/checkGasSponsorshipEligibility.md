@@ -30,9 +30,11 @@ For a deeper understanding of how to employ this method to provide varied user e
 import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
 const eligible = await smartAccountClient.checkGasSponsorshipEligibility({
-  data: "0xCalldata",
-  target: "0xTarget",
-  value: 0n,
+  uo: {
+    data: "0xCalldata",
+    target: "0xTarget",
+    value: 0n,
+  },
 });
 
 console.log(
@@ -55,20 +57,20 @@ A Promise containing the boolean value indicating whether the UO to be sent is e
 
 ### `SendUserOperationParameters<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined>`
 
-::: details SendUserOperationParameters
-<<< @/../packages/core/src/actions/smartAccount/types.ts#SendUserOperationParameters
-:::
+- `uo:` [`UserOperationCallData`](/resources/types#UserOperationCallData) | [`BatchUserOperationCallData`](/resources/types#BatchUserOperationCallData)
 
-- `uo: UserOperationCallData | UserOperationCallData[]`
+  ::: details UserOperationCallData
+  <<< @/../packages/core/src/types.ts#UserOperationCallData
+  :::
 
   - `target: Address` - the target of the call (equivalent to `to` in a transaction)
   - `data: Hex` - can be either `0x` or a call data string
   - `value?: bigint` - optionally, set the value in wei you want to send to the target
 
-- `overrides?:` [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides.md)
+- `overrides?:` [`UserOperationOverrides`](/resources/types#UserOperationOverrides)
 
-Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` or `paymasterAndData` on the user operation request
+Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit`, `paymasterAndData`, or `nonceKey` for the user operation request
 
-- `account?: TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined`
+- `account?: TAccount extends SmartContractAccount | undefined`
 
-If your client was not instantiated with an account, then you will have to pass the account into this call.
+When using this action, if the `SmartContractAccount` has not been connected to the `SmartAccountClient` (e.g. `SmartAccountClient` not instantiated with your `SmartContractAccount` during [`createSmartAccountClient`](/packages/aa-core/smart-account-client/)). You can check if the account is connected to the client by checking the `account` field of `SmartAccountClient`. If the account is not connected, you can specify the `SmartContractAccount` instance to use for the function call.

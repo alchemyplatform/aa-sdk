@@ -38,10 +38,6 @@ A Promise containing the signed result of the input `UserOperationStruct` using 
 
 The unsigned `UserOperationStruct` returned from `buildUserOperation`, `buildUserOperationFromTx`, or `buildUserOperationFromTxs` actions of the `SmartAccountClient` returned after running the client middleware pipeline to construct the user operation struct from the input user operation calldata
 
-- `overrides?:` [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides.md)
+- `account?: TAccount extends SmartContractAccount | undefined`
 
-Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` or `paymasterAndData` on the user operation request
-
-- `account?: TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined`
-
-If your client was not instantiated with an account, then you will have to pass the account into this call.
+When using this action, if the `SmartContractAccount` has not been connected to the `SmartAccountClient` (e.g. `SmartAccountClient` not instantiated with your `SmartContractAccount` during [`createSmartAccountClient`](/packages/aa-core/smart-account-client/)). You can check if the account is connected to the client by checking the `account` field of `SmartAccountClient`. If the account is not connected, you can specify the `SmartContractAccount` instance to use for the function call.

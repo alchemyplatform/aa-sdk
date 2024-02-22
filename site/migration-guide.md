@@ -195,12 +195,12 @@ const smartAccountClient = createSmartAccountClientFromExisting({
 });
 
 const { hash } = await smartAccountClient.sendUserOperation({
-    uo: {
-        target: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
-        data: "0x",
-        value: 10n,
-    },
-    account, // [!code --]
+  uo: {
+    target: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+    data: "0x",
+    value: 10n,
+  },
+  account, // [!code --]
 });
 ```
 
