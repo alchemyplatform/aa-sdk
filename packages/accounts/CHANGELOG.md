@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.1.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.1...v3.1.0) (2024-02-23)
+
+### Features
+
+- make it easier to upgrade to MA ([#482](https://github.com/alchemyplatform/aa-sdk/issues/482)) ([7f7710a](https://github.com/alchemyplatform/aa-sdk/commit/7f7710accfd088ffc9a5e6c54797d4dc5f038bac))
+
 ## [3.0.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0...v3.0.1) (2024-02-21)
 
 ### Bug Fixes
