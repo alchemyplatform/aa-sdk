@@ -99,8 +99,13 @@ export abstract class BaseSmartContractAccount<
               ...fetchOptions,
               headers: {
                 ...fetchOptions?.headers,
-                "Alchemy-Aa-Sdk-Signer": params.signer?.signerType || "unknown",
-                "Alchemy-Aa-Sdk-Factory-Address": params.factoryAddress,
+                ...(rpcUrl.toLowerCase().indexOf("alchemy") > -1
+                  ? {
+                      "Alchemy-Aa-Sdk-Signer":
+                        params.signer?.signerType || "unknown",
+                      "Alchemy-Aa-Sdk-Factory-Address": params.factoryAddress,
+                    }
+                  : undefined),
               },
             },
           }),
