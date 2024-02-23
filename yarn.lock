@@ -1351,6 +1351,44 @@
     "@babel/helper-validator-identifier" "^7.22.20"
     to-fast-properties "^2.0.0"
 
+"@biconomy/bundler@4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@biconomy/bundler/-/bundler-4.0.1.tgz#6baa7c76efd0196a30960055248727aab6c83e9d"
+  integrity sha512-LYOZ1k6h0468Ix8QyJhp/C4sS2MnhhbcEp8yJa5OpJGmXUr/NxaQzrEYv/06ujVeAvS6AwMBV40FMDjMf2egkg==
+  dependencies:
+    "@alchemy/aa-core" "^3.0.1"
+    "@biconomy/common" "^4.0.1"
+    viem "^2.7.12"
+
+"@biconomy/common@4.0.1", "@biconomy/common@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@biconomy/common/-/common-4.0.1.tgz#276182fefe1b545fd3ad27d55bf16b5e9a0fc5ad"
+  integrity sha512-Ka29+du8BtZO8S8eIhueRo+BGHLZR64itRv2ZPXbiUCil/DoWOA6Rmrnk17c5CPVchq2utGJUtFgB7prq9k6tA==
+  dependencies:
+    "@alchemy/aa-core" "^3.0.1"
+    "@ethersproject/abstract-signer" "^5.7.0"
+    viem "^2.7.12"
+
+"@biconomy/modules@4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@biconomy/modules/-/modules-4.0.1.tgz#84cecd2958d6354ae07e5f0be64ca43fe164843d"
+  integrity sha512-h4nthMe605cY3+H+VCISbFuQL97R/rq6bE3bXlhWpCvYJGQJi8fjWmxuKy8pWu3tkwvIi7aL0sFVLPsAppjaaA==
+  dependencies:
+    "@alchemy/aa-core" "^3.0.1"
+    "@biconomy/common" "^4.0.1"
+    "@ethersproject/abi" "^5.7.0"
+    merkletreejs "^0.3.11"
+    viem "^2.7.12"
+
+"@biconomy/paymaster@4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@biconomy/paymaster/-/paymaster-4.0.1.tgz#3994ad9340aac6a9889cf10635e9806ea05bee0a"
+  integrity sha512-3Ttt4FwdtSEuUnL3LcHjRqcsH9OuTeaFIYF+iYH4//MSDooaF44EbSz9mC3QgRZehSEMFauIAk5Ip1i9X9cF0g==
+  dependencies:
+    "@alchemy/aa-core" "^3.0.1"
+    "@biconomy/common" "^4.0.1"
+    viem "^2.7.12"
+
 "@celo/base@3.2.0":
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/@celo/base/-/base-3.2.0.tgz#19dcff6a822abb1f6b57af8f9db35a4c673aee62"
@@ -8530,7 +8568,7 @@ bigint-buffer@^1.1.5:
   dependencies:
     bindings "^1.3.0"
 
-bignumber.js@*, bignumber.js@^9.0.0, bignumber.js@^9.1.2:
+bignumber.js@*, bignumber.js@^9.0.0, bignumber.js@^9.0.1, bignumber.js@^9.1.2:
   version "9.1.2"
   resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-9.1.2.tgz#b7c4242259c008903b13707983b5f4bbd31eda0c"
   integrity sha512-2/mKyZH9K85bzOEfhXDBFZTGd1CTs+5IHpeFQo9luiBG7hghdC851Pj2WAhb6E3R6b9tZj/XKhbg4fum+Kepug==
@@ -8763,6 +8801,11 @@ buffer-from@^1.0.0:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/buffer-from/-/buffer-from-1.1.2.tgz#2b146a6fd72e80b4f55d255f35ed59a3a9a41bd5"
   integrity sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==
+
+buffer-reverse@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/buffer-reverse/-/buffer-reverse-1.0.1.tgz#49283c8efa6f901bc01fa3304d06027971ae2f60"
+  integrity sha512-M87YIUBsZ6N924W57vDwT/aOu8hw7ZgdByz6ijksLjmHJELBASmYTTlNHRgjE+pTsT9oJXGaDSgqqwfdHotDUg==
 
 buffer-to-arraybuffer@^0.0.5:
   version "0.0.5"
@@ -9605,7 +9648,7 @@ crypto-browserify@3.12.0:
     randombytes "^2.0.0"
     randomfill "^1.0.3"
 
-crypto-js@^4.1.1:
+crypto-js@^4.1.1, crypto-js@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-4.2.0.tgz#4d931639ecdfd12ff80e8186dba6af2c2e856631"
   integrity sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==
@@ -13902,6 +13945,17 @@ merge2@^1.3.0, merge2@^1.4.1:
   resolved "https://registry.yarnpkg.com/merge2/-/merge2-1.4.1.tgz#4368892f885e907455a6fd7dc55c0c9d404990ae"
   integrity sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==
 
+merkletreejs@^0.3.11:
+  version "0.3.11"
+  resolved "https://registry.yarnpkg.com/merkletreejs/-/merkletreejs-0.3.11.tgz#e0de05c3ca1fd368de05a12cb8efb954ef6fc04f"
+  integrity sha512-LJKTl4iVNTndhL+3Uz/tfkjD0klIWsHlUzgtuNnNrsf7bAlXR30m+xYB7lHr5Z/l6e/yAIsr26Dabx6Buo4VGQ==
+  dependencies:
+    bignumber.js "^9.0.1"
+    buffer-reverse "^1.0.1"
+    crypto-js "^4.2.0"
+    treeify "^1.1.0"
+    web3-utils "^1.3.4"
+
 micro-ftch@^0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/micro-ftch/-/micro-ftch-0.3.1.tgz#6cb83388de4c1f279a034fb0cf96dfc050853c5f"
@@ -17347,6 +17401,11 @@ tr46@~0.0.3:
   resolved "https://registry.yarnpkg.com/tr46/-/tr46-0.0.3.tgz#8184fd347dac9cdc185992f3a6622e14b9d9ab6a"
   integrity sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==
 
+treeify@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/treeify/-/treeify-1.1.0.tgz#4e31c6a463accd0943879f30667c4fdaff411bb8"
+  integrity sha512-1m4RA7xVAJrSGrrXGs0L3YTwyvBs2S8PbRHaLZAkFw7JR8oIFwYtysxlBZhYIa7xSyiYJKZ3iGrrk55cGA3i9A==
+
 trim-lines@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/trim-lines/-/trim-lines-3.0.1.tgz#d802e332a07df861c48802c04321017b1bd87338"
@@ -18028,6 +18087,20 @@ viem@^1.21.4:
     isows "1.0.3"
     ws "8.13.0"
 
+viem@^2.7.12:
+  version "2.7.13"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-2.7.13.tgz#bf3f8e973f532f9f9c86c97b645ac8add740e1bd"
+  integrity sha512-NGWLEocRp2UTqGidzI9bnL9u6WHlG2ik7IwqXNe6/QC2dL6jE3Z1mUnUUVcSx71h81nx74EflD9ahtleK3RQdA==
+  dependencies:
+    "@adraffy/ens-normalize" "1.10.0"
+    "@noble/curves" "1.2.0"
+    "@noble/hashes" "1.3.2"
+    "@scure/bip32" "1.3.2"
+    "@scure/bip39" "1.2.1"
+    abitype "1.0.0"
+    isows "1.0.3"
+    ws "8.13.0"
+
 viem@^2.7.8:
   version "2.7.8"
   resolved "https://registry.yarnpkg.com/viem/-/viem-2.7.8.tgz#ca60552190cdc501cf4e1d1140d8da7625b1b1f4"
@@ -18367,6 +18440,20 @@ web3-utils@1.8.0:
     bn.js "^5.2.1"
     ethereum-bloom-filters "^1.0.6"
     ethereumjs-util "^7.1.0"
+    ethjs-unit "0.1.6"
+    number-to-bn "1.7.0"
+    randombytes "^2.1.0"
+    utf8 "3.0.0"
+
+web3-utils@^1.3.4:
+  version "1.10.4"
+  resolved "https://registry.yarnpkg.com/web3-utils/-/web3-utils-1.10.4.tgz#0daee7d6841641655d8b3726baf33b08eda1cbec"
+  integrity sha512-tsu8FiKJLk2PzhDl9fXbGUWTkkVXYhtTA+SmEFkKft+9BgwLxfCRpU96sWv7ICC8zixBNd3JURVoiR3dUXgP8A==
+  dependencies:
+    "@ethereumjs/util" "^8.1.0"
+    bn.js "^5.2.1"
+    ethereum-bloom-filters "^1.0.6"
+    ethereum-cryptography "^2.1.2"
     ethjs-unit "0.1.6"
     number-to-bn "1.7.0"
     randombytes "^2.1.0"
