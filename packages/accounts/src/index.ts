@@ -24,7 +24,12 @@ export { transferOwnership as transferNaniAccountOwnership } from "./nani-accoun
 export { getDefaultNaniAccountFactoryAddress } from "./nani-account/utils.js";
 
 // msca exports
+export { IAccountLoupeAbi } from "./msca/abis/IAccountLoupe.js";
 export { IPluginAbi } from "./msca/abis/IPlugin.js";
+export { IPluginManagerAbi } from "./msca/abis/IPluginManager.js";
+export { IStandardExecutorAbi } from "./msca/abis/IStandardExecutor.js";
+export { MultiOwnerModularAccountFactoryAbi } from "./msca/abis/MultiOwnerModularAccountFactory.js";
+export { UpgradeableModularAccountAbi } from "./msca/abis/UpgradeableModularAccount.js";
 export type * from "./msca/account-loupe/decorator.js";
 export { accountLoupeActions } from "./msca/account-loupe/decorator.js";
 export type * from "./msca/account/multiOwnerAccount.js";
