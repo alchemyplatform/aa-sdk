@@ -93,12 +93,46 @@ export async function getMSCAUpgradeToData<
   if (!account_) {
     throw new AccountNotFoundError();
   }
+  const account = account_ as SmartContractAccountWithSigner<string, TSigner>;
 
+  const chain = client.chain;
+  if (!chain) {
+    throw new ChainNotFoundError();
+  }
+
+  const initData = await getMAInitializationData({
+    client,
+    multiOwnerPluginAddress,
+    signerAddress: await account.getSigner().getAddress(),
+  });
+
+  return {
+    ...initData,
+    createMAAccount: async () =>
+      createMultiOwnerModularAccount({
+        transport: custom(client.transport),
+        chain: chain as Chain,
+        signer: account.getSigner(),
+        accountAddress: account.address,
+      }),
+  };
+}
+
+export async function getMAInitializationData<
+  TTransport extends Transport = Transport,
+  TChain extends Chain | undefined = Chain | undefined
+>({
+  client,
+  multiOwnerPluginAddress,
+  signerAddress,
+}: {
+  multiOwnerPluginAddress?: Address;
+  client: SmartAccountClient<TTransport, TChain>;
+  signerAddress: Address;
+}): Promise<UpgradeToData> {
   if (!client.chain) {
     throw new ChainNotFoundError();
   }
-  const chain = client.chain;
-  const account = account_ as SmartContractAccountWithSigner<string, TSigner>;
 
   const factoryAddress = getDefaultMultiOwnerModularAccountFactoryAddress(
     client.chain
@@ -131,7 +165,6 @@ export async function getMSCAUpgradeToData<
     })
   );
 
-  const signerAddress = await account.getSigner().getAddress();
   const encodedOwner = encodeAbiParameters(parseAbiParameters("address[]"), [
     [signerAddress],
   ]);
@@ -150,13 +183,5 @@ export async function getMSCAUpgradeToData<
   return {
     implAddress,
     initializationData: encodedMSCAInitializeData,
-    createMAAccount: async () =>
-      createMultiOwnerModularAccount({
-        transport: custom(client.transport),
-        chain: chain as Chain,
-        signer: account.getSigner(),
-        factoryAddress,
-        accountAddress: account.address,
-      }),
   };
 }
