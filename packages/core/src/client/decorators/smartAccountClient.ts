@@ -31,16 +31,22 @@ import {
   type SignTypedDataParameters,
 } from "../../actions/smartAccount/signTypedData.js";
 import { signTypedDataWith6492 } from "../../actions/smartAccount/signTypedDataWith6492.js";
+import { signUserOperation } from "../../actions/smartAccount/signUserOperation.js";
 import type {
   BuildUserOperationFromTransactionsResult,
   DropAndReplaceUserOperationParameters,
   SendTransactionsParameters,
   SendUserOperationParameters,
+  SignUserOperationParameters,
   UpgradeAccountParams,
 } from "../../actions/smartAccount/types";
 import { upgradeAccount } from "../../actions/smartAccount/upgradeAccount.js";
 import { waitForUserOperationTransaction } from "../../actions/smartAccount/waitForUserOperationTransacation.js";
-import type { UserOperationStruct } from "../../types";
+import type {
+  UserOperationOverrides,
+  UserOperationRequest,
+  UserOperationStruct,
+} from "../../types";
 import type { IsUndefined } from "../../utils";
 import type { SendUserOperationResult } from "../types";
 
@@ -54,7 +60,8 @@ export type BaseSmartAccountClientActions<
     args: SendUserOperationParameters<TAccount>
   ) => Promise<UserOperationStruct>;
   buildUserOperationFromTx: (
-    args: SendTransactionParameters<TChain, TAccount>
+    args: SendTransactionParameters<TChain, TAccount>,
+    overrides?: UserOperationOverrides
   ) => Promise<UserOperationStruct>;
   buildUserOperationFromTxs: (
     args: SendTransactionsParameters<TAccount>
@@ -62,11 +69,15 @@ export type BaseSmartAccountClientActions<
   checkGasSponsorshipEligibility: (
     args: SendUserOperationParameters<TAccount>
   ) => Promise<boolean>;
+  signUserOperation: (
+    args: SignUserOperationParameters<TAccount>
+  ) => Promise<UserOperationRequest>;
   dropAndReplaceUserOperation: (
     args: DropAndReplaceUserOperationParameters<TAccount>
   ) => Promise<SendUserOperationResult>;
   sendTransaction: <TChainOverride extends Chain | undefined = undefined>(
-    args: SendTransactionParameters<TChain, TAccount, TChainOverride>
+    args: SendTransactionParameters<TChain, TAccount, TChainOverride>,
+    overrides?: UserOperationOverrides
   ) => Promise<Hex>;
   sendTransactions: (
     args: SendTransactionsParameters<TAccount>
@@ -110,13 +121,16 @@ export const smartAccountClientActions: <
   client: Client<TTransport, TChain, TAccount>
 ) => BaseSmartAccountClientActions<TChain, TAccount> = (client) => ({
   buildUserOperation: (args) => buildUserOperation(client, args),
-  buildUserOperationFromTx: (args) => buildUserOperationFromTx(client, args),
+  buildUserOperationFromTx: (args, overrides) =>
+    buildUserOperationFromTx(client, args, overrides),
   buildUserOperationFromTxs: (args) => buildUserOperationFromTxs(client, args),
   checkGasSponsorshipEligibility: (args) =>
     checkGasSponsorshipEligibility(client, args),
+  signUserOperation: (args) => signUserOperation(client, args),
   dropAndReplaceUserOperation: (args) =>
     dropAndReplaceUserOperation(client, args),
-  sendTransaction: (args) => sendTransaction(client, args),
+  sendTransaction: (args, overrides) =>
+    sendTransaction(client, args, overrides),
   sendTransactions: (args) => sendTransactions(client, args),
   sendUserOperation: (args) => sendUserOperation(client, args),
   waitForUserOperationTransaction: (args) =>

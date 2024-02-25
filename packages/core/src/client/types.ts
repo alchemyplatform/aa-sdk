@@ -14,15 +14,19 @@ export type ConnectorData = {
 
 export type ConnectionConfig = z.input<typeof ConnectionConfigSchema>;
 
+//#region SendUserOperationResult
 export type SendUserOperationResult = {
   hash: Hash;
   request: UserOperationRequest;
 };
+//#endregion SendUserOperationResult
 
+//#region UpgradeToData
 export type UpgradeToData = {
   implAddress: Address;
   initializationData: Hex;
 };
+//#endregion UpgradeToData
 
 export type ClientMiddlewareConfig = Omit<
   Partial<ClientMiddleware>,

@@ -75,19 +75,23 @@ export class AccountSigner<
   }
 
   async sendTransaction(
-    transaction: Deferrable<TransactionRequest>
+    transaction: Deferrable<TransactionRequest>,
+    overrides?: UserOperationOverrides
   ): Promise<TransactionResponse> {
     if (!this.provider.accountProvider.account || !this.account) {
       throw new AccountNotFoundError();
     }
 
     const resolved = await resolveProperties(transaction);
-    const txHash = await this.provider.accountProvider.sendTransaction({
-      to: resolved.to as `0x${string}` | undefined,
-      data: hexlifyOptional(resolved.data),
-      chain: this.provider.accountProvider.chain,
-      account: this.account,
-    });
+    const txHash = await this.provider.accountProvider.sendTransaction(
+      {
+        to: resolved.to as `0x${string}` | undefined,
+        data: hexlifyOptional(resolved.data),
+        chain: this.provider.accountProvider.chain,
+        account: this.account,
+      },
+      overrides
+    );
 
     return this.provider.getTransaction(txHash);
   }

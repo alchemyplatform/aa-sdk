@@ -6,6 +6,7 @@ import { IncompatibleClientError } from "../../errors/client.js";
 import { TransactionMissingToParamError } from "../../errors/transaction.js";
 import type { UserOperationOverrides } from "../../types";
 import { bigIntMax, filterUndefined } from "../../utils/index.js";
+import { buildUserOperation } from "./buildUserOperation.js";
 import type {
   BuildUserOperationFromTransactionsResult,
   SendTransactionsParameters,
@@ -77,7 +78,15 @@ export const buildUserOperationFromTxs: <
   };
   filterUndefined(_overrides);
 
+  const uoStruct = await buildUserOperation(client, {
+    uo: batch,
+    overrides: _overrides,
+    account: account as SmartContractAccount,
+  });
+
   return {
+    uoStruct,
+    // TODO: remove these as user operation is already built through the pipeline
     batch,
     overrides: _overrides,
   };
