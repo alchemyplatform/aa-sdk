@@ -513,6 +513,14 @@ export class AlchemySignerClient {
       signal: options?.signal,
     });
 
+    // on iOS sometimes this is returned as empty or null, so handling that here
+    if (attestation.transports == null || attestation.transports.length === 0) {
+      attestation.transports = [
+        "AUTHENTICATOR_TRANSPORT_INTERNAL",
+        "AUTHENTICATOR_TRANSPORT_HYBRID",
+      ];
+    }
+
     return { challenge, authenticatorUserId, attestation };
   };
 }
