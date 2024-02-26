@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.1.1...v3.1.2) (2024-02-26)
+
+### Bug Fixes
+
+- **alchemy-signer:** missing transports on iOS during passkey creation ([#488](https://github.com/alchemyplatform/aa-sdk/issues/488)) ([740946f](https://github.com/alchemyplatform/aa-sdk/commit/740946f14f5a67b986e136269c564f79811f5d23))
+- patch fixed incorrectly identifies some private IP addresses as public ([#487](https://github.com/alchemyplatform/aa-sdk/issues/487)) ([9835574](https://github.com/alchemyplatform/aa-sdk/commit/9835574f672cb5b5db4152256a9eed6c6a62d893))
+
 ## [3.1.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.1.0...v3.1.1) (2024-02-23)
 
 ### Bug Fixes
