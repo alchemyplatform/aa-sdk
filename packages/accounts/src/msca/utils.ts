@@ -128,7 +128,7 @@ export async function getMAInitializationData<
 }: {
   multiOwnerPluginAddress?: Address;
   client: SmartAccountClient<TTransport, TChain>;
-  signerAddress: Address;
+  signerAddress: Address | Address[];
 }): Promise<UpgradeToData> {
   if (!client.chain) {
     throw new ChainNotFoundError();
@@ -165,9 +165,10 @@ export async function getMAInitializationData<
     })
   );
 
-  const encodedOwner = encodeAbiParameters(parseAbiParameters("address[]"), [
-    [signerAddress],
-  ]);
+  const encodedOwner = encodeAbiParameters(
+    parseAbiParameters("address[]"),
+    Array.isArray(signerAddress) ? [signerAddress] : [[signerAddress]]
+  );
 
   const encodedPluginInitData = encodeAbiParameters(
     parseAbiParameters("bytes32[], bytes[]"),
