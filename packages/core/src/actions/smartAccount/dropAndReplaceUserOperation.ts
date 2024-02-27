@@ -52,6 +52,7 @@ export const dropAndReplaceUserOperation: <
   );
 
   const _overrides: UserOperationOverrides = {
+    ...overrides,
     maxFeePerGas: bigIntMax(
       BigInt(maxFeePerGas ?? 0n),
       bigIntMultiply(uoToDrop.maxFeePerGas, 1.1)
