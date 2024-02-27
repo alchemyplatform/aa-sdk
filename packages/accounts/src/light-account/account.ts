@@ -6,8 +6,8 @@ import {
   toSmartContractAccount,
   type Address,
   type Hex,
-  type OwnedSmartContractAccount,
   type SmartAccountSigner,
+  type SmartContractAccountWithSigner,
   type ToSmartContractAccountParams,
   type UpgradeToAndCallParams,
 } from "@alchemy/aa-core";
@@ -32,24 +32,21 @@ import {
 } from "./utils.js";
 
 export type LightAccount<
-  TOwner extends SmartAccountSigner = SmartAccountSigner
-> = OwnedSmartContractAccount<"LightAccount", TOwner> & {
+  TSigner extends SmartAccountSigner = SmartAccountSigner
+> = SmartContractAccountWithSigner<"LightAccount", TSigner> & {
   getLightAccountVersion: () => Promise<LightAccountVersion>;
   encodeTransferOwnership: (newOwner: Address) => Hex;
   getOwnerAddress: () => Promise<Address>;
-  setOwner: <TOwner extends SmartAccountSigner = SmartAccountSigner>(
-    newOwner: TOwner
-  ) => void;
 };
 
 export type CreateLightAccountParams<
   TTransport extends Transport = Transport,
-  TOwner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = Pick<
   ToSmartContractAccountParams<"LightAccount", TTransport>,
   "transport" | "chain" | "entryPoint" | "accountAddress"
 > & {
-  owner: TOwner;
+  signer: TSigner;
   salt?: bigint;
   factoryAddress?: Address;
   initCode?: Hex;
@@ -58,15 +55,15 @@ export type CreateLightAccountParams<
 
 export async function createLightAccount<
   TTransport extends Transport = Transport,
-  TOwner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  config: CreateLightAccountParams<TTransport, TOwner>
-): Promise<LightAccount<TOwner>>;
+  config: CreateLightAccountParams<TTransport, TSigner>
+): Promise<LightAccount<TSigner>>;
 
 export async function createLightAccount({
   transport,
   chain,
-  owner: owner_,
+  signer,
   initCode,
   version = "v1.1.0",
   entryPoint = getVersion060EntryPoint(chain),
@@ -74,7 +71,6 @@ export async function createLightAccount({
   factoryAddress = getDefaultLightAccountFactoryAddress(chain, version),
   salt: salt_ = 0n,
 }: CreateLightAccountParams): Promise<LightAccount> {
-  let owner = owner_;
   const client = createBundlerClient({
     transport,
     chain,
@@ -94,7 +90,7 @@ export async function createLightAccount({
       encodeFunctionData({
         abi: LightAccountFactoryAbi,
         functionName: "createAccount",
-        args: [await owner.getAddress(), salt],
+        args: [await signer.getAddress(), salt],
       }),
     ]);
   };
@@ -145,7 +141,7 @@ export async function createLightAccount({
   };
 
   const signWith1271Wrapper = async (msg: Hex): Promise<`0x${string}`> => {
-    return owner.signTypedData({
+    return signer.signTypedData({
       // EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)
       // https://github.com/alchemyplatform/light-account/blob/main/src/LightAccount.sol#L236
       domain: {
@@ -196,15 +192,13 @@ export async function createLightAccount({
       });
     },
     signUserOperationHash: async (uoHash: Hex) => {
-      return owner.signMessage(uoHash);
+      return signer.signMessage({ raw: uoHash });
     },
     async signMessage({ message }) {
       const version = await getLightAccountVersion(account);
       switch (version) {
         case "v1.0.1":
-          return owner.signMessage(
-            typeof message === "string" ? message : message.raw
-          );
+          return signer.signMessage(message);
         case "v1.0.2":
           throw new Error(
             `Version ${version} of LightAccount doesn't support 1271`
@@ -217,7 +211,7 @@ export async function createLightAccount({
       const version = await getLightAccountVersion(account);
       switch (version) {
         case "v1.0.1": {
-          return owner.signTypedData(
+          return signer.signTypedData(
             params as unknown as SignTypedDataParameters
           );
         }
@@ -257,17 +251,12 @@ export async function createLightAccount({
         throw new Error("could not get on-chain owner");
       }
 
-      if (callResult !== (await owner.getAddress())) {
+      if (callResult !== (await signer.getAddress())) {
         throw new Error("on-chain owner does not match account owner");
       }
 
       return callResult;
     },
-    getOwner: () => owner,
-    setOwner: <TOwner extends SmartAccountSigner = SmartAccountSigner>(
-      newOwner: TOwner
-    ) => {
-      owner = newOwner;
-    },
+    getSigner: () => signer,
   };
 }

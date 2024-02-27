@@ -25,11 +25,11 @@ head:
 ### Do accounts have the same address across all chains?
 
 ::: details Answer
-In almost all cases, yes, you will get the same address on all chains as long as the owner address is the same! The deployment address is a function of the owner address, the account implementation (e.g. latest version of Light Account), and the salt (you can optionally specify this). If all three of those remain the same, then you deploy the smart account at the same contract address.
+In almost all cases, yes, you will get the same address on all chains as long as the connecting signer address is the same! The deployment address is a function of the address of owner/signer address, the account implementation (e.g. latest version of Light Account), and the salt (you can optionally specify this). If all three of those remain the same, then you deploy the smart account at the same contract address.
 
-There are two scenarios where you'd get a different contract address:
+There are two scenarios where you would get a different contract address:
 
-1. If you deploy one smart account, then change the owner address, then deploy the second account.
+1. If you deploy one smart account, then change the signer, then deploy the second account.
 2. If you upgrade the smart account (e.g. to a new version of Light Account). It is unlikely that we will make many updates to this contract so the address will not change frequently.
    :::
 
@@ -45,10 +45,27 @@ Your smart account will be deployed when the first `UserOperation` (UO) is sent 
 It is unlikely you will need to frequently update the Light Account contract itself, however it is possible if needed. Light Account has [`UUPSUpgradeable`](https://github.com/alchemyplatform/light-account/blob/main/src/LightAccount.sol#L50) which adds upgrade methods on the account itself. To upgrade an account you will need to send a `UserOperation` using the method `upgradeTo` or `upgradeToAndCall`, depending on whether or not you need to initialize the new implementation.
 :::
 
-### Can I have multiple accounts for the same owner address? / How do I set the value of the salt/index for Light Account?
+### Can I have multiple accounts for the same signer address? / How do I set the value of the salt for Light Account?
 
 ::: details Answer
-Yes! The optional index value (salt) on Light Account enables the ability to have multiple accounts for the same owner address. This value defaults to 0. You can set it when you create [light account](/packages/aa-accounts/light-account/).
+Yes! The optional salt value on Light Account enables the ability to have multiple accounts under a single signer. This value defaults to 0. You can set it when you create [light account](/packages/aa-accounts/light-account/).
+:::
+
+### How can I upgrade from Simple Account to Light Account?
+
+::: details Answer
+[Simple Account's](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol) support [`upgradeToAndCall`](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/4e7e6e54daedf091d91f2f2df024cbb8f253e2ef/contracts/proxy/utils/UUPSUpgradeable.sol#L86) implemented by openzeppelin’s [UUPSUpgradeable](https://docs.openzeppelin.com/contracts/4.x/api/proxy#UUPSUpgradeable) contract. This allows you to upgrade from Simple Account to Light Account without changing the smart contract account address. Using `upgradeToAndCall` will update the underlying implementation contract on the account while the account address and assets will stay the same.
+
+You can call `upgradeToAndCall` on the Simple Account with these params:
+
+- `newImplementation`: Latest LightAccount implementation address (found [here](https://github.com/alchemyplatform/light-account/blob/main/Deployments.md#lightaccount) - make sure to use the implementation address, not the factory address)
+  - For example LightAccount v1.1.0 - 0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba
+- `data`: encoded version of the `initialize` function with `anOwner` parameter set to the owner on the account, usually the same owner as what the account used as Simple Account.
+  - In solidity (foundry) you can use abi.encodeCall and in viem you can use [encodeFunctionData](https://github.com/alchemyplatform/light-account/blob/main/Deployments.md#lightaccount)
+
+It is very important that the `initialize` step is encoded correctly to ensure the account does not get in to a risky state where someone else could call initialize on it and reassign and a signer. You can call `owner()` on the account after upgrade to make sure it is assigned correctly.
+
+This can be called on the existing smart contract account by sending a user operation that calls `execute` (or `executeBatch`) and have that call `upgradeToAndCall` (the same way you would make the account send calls to other addresses).
 :::
 
 ## Submitting `UserOperation`s

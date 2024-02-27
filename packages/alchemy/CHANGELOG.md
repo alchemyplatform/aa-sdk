@@ -3,6 +3,46 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.2.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.1.2...v3.2.0) (2024-02-26)
+
+**Note:** Version bump only for package @alchemy/aa-alchemy
+
+## [3.1.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.1.1...v3.1.2) (2024-02-26)
+
+### Bug Fixes
+
+- **alchemy-signer:** missing transports on iOS during passkey creation ([#488](https://github.com/alchemyplatform/aa-sdk/issues/488)) ([740946f](https://github.com/alchemyplatform/aa-sdk/commit/740946f14f5a67b986e136269c564f79811f5d23))
+
+## [3.1.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.1.0...v3.1.1) (2024-02-23)
+
+**Note:** Version bump only for package @alchemy/aa-alchemy
+
+# [3.1.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.1...v3.1.0) (2024-02-23)
+
+### Bug Fixes
+
+- tx signing needs to happen over hash of RLP ([#481](https://github.com/alchemyplatform/aa-sdk/issues/481)) ([e3d7371](https://github.com/alchemyplatform/aa-sdk/commit/e3d737175abab6f4ccb16e4e22e0ec4f58c4e736))
+
+### Features
+
+- support using AlchemySigner as EOA ([#467](https://github.com/alchemyplatform/aa-sdk/issues/467)) ([b620671](https://github.com/alchemyplatform/aa-sdk/commit/b6206717afb51267a406a6d2fd48af5593888fdf))
+
+## [3.0.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0...v3.0.1) (2024-02-21)
+
+**Note:** Version bump only for package @alchemy/aa-alchemy
+
+# [3.0.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.13...v3.0.0) (2024-02-21)
+
+**Note:** Version bump only for package @alchemy/aa-alchemy
+
+# [3.0.0-alpha.13](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.12...v3.0.0-alpha.13) (2024-02-16)
+
+**Note:** Version bump only for package @alchemy/aa-alchemy
+
+# [3.0.0-alpha.10](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.9...v3.0.0-alpha.10) (2024-02-14)
+
+**Note:** Version bump only for package @alchemy/aa-alchemy
+
 # [3.0.0-alpha.9](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.8...v3.0.0-alpha.9) (2024-02-13)
 
 ### Features

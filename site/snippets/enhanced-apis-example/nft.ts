@@ -14,7 +14,7 @@ const client = (
   await createModularAccountAlchemyClient({
     chain: sepolia,
     apiKey: "YOUR_API_KEY",
-    owner: LocalAccountSigner.mnemonicToAccountSigner("OWNER_MNEMONIC"),
+    signer: LocalAccountSigner.mnemonicToAccountSigner("OWNER_MNEMONIC"),
   })
 ).extend(alchemyEnhancedApiActions(alchemy));
 

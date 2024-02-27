@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.1.0...v3.1.1) (2024-02-23)
+
+### Bug Fixes
+
+- custom headers fix ([#484](https://github.com/alchemyplatform/aa-sdk/issues/484)) ([5baacad](https://github.com/alchemyplatform/aa-sdk/commit/5baacad5e806b111eed86174408c78612b856523))
+
+# [3.1.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.1...v3.1.0) (2024-02-23)
+
+**Note:** Version bump only for package @alchemy/aa-core
+
+## [3.0.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0...v3.0.1) (2024-02-21)
+
+### Bug Fixes
+
+- custom Alchemy-AA-Sdk-Version header fix ([#475](https://github.com/alchemyplatform/aa-sdk/issues/475)) ([bfb4361](https://github.com/alchemyplatform/aa-sdk/commit/bfb4361481a3b12e7d47096f558921a22aa214ee))
+
+# [3.0.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.13...v3.0.0) (2024-02-21)
+
+### Features
+
+- add a nonce key override to support parallel nonces ([#462](https://github.com/alchemyplatform/aa-sdk/issues/462)) ([d48c586](https://github.com/alchemyplatform/aa-sdk/commit/d48c586665858c61e0d1d66e9bd4503f32e47db9))
+
+# [3.0.0-alpha.13](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.12...v3.0.0-alpha.13) (2024-02-16)
+
+**Note:** Version bump only for package @alchemy/aa-core
+
+# [3.0.0-alpha.10](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.9...v3.0.0-alpha.10) (2024-02-14)
+
+**Note:** Version bump only for package @alchemy/aa-core
+
 # [3.0.0-alpha.9](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.8...v3.0.0-alpha.9) (2024-02-13)
 
 ### Features

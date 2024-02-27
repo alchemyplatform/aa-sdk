@@ -23,7 +23,7 @@ head:
 ```ts [example.ts]
 import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
-// encode transfer pownership
+// encode transfer ownership
 const newOwner = LocalAccountSigner.mnemonicToAccountSigner(NEW_OWNER_MNEMONIC);
 const encodedTransferOwnershipData =
   smartAccountClient.account.encodeTransferOwnership({ newOwner });

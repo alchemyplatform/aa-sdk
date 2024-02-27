@@ -45,4 +45,4 @@ Given that you already set your RPC and private key env variables during deploym
 cast call --rpc-url=$RPC_URL --private-key=$PRIVATE_KEY <contractAddress> "ownerOf(uint256)" <owner arg>
 ```
 
-5. If you'd like you can also run a node locally by using anvil. See more here: https://book.getfoundry.sh/reference/anvil/
+5. If you would like you can also run a node locally by using anvil. See more here: https://book.getfoundry.sh/reference/anvil/

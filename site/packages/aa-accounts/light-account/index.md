@@ -14,16 +14,16 @@ head:
 
 # Light Account
 
-`LightAccount` is a simple, secure, and cost-effective smart account implementation which extends `SmartContractAccount`. It supports features such as owner transfers, [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) message signing, and batched transactions. We recommend using Light Account for most use cases.
+`LightAccount` is a simple, secure, and cost-effective smart account implementation which extends `SmartContractAccount`. It supports features such as ownership transfers, [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) message signing, and batched transactions. We recommend using Light Account for most use cases.
 
 The additional methods supported by `LightAccount` are:
 
 1.  [`signMessageWith6492`](/packages/aa-accounts/light-account/signMessageWith6492) -- supports message signatures for deployed smart accounts, as well as undeployed accounts (counterfactual addresses) using [ERC-6492](https://eips.ethereum.org/EIPS/eip-6492).
-2.  [`signTypedData`](/packages/aa-accounts/light-account/signTypedData) -- supports typed data signatures from the smart account's owner address.
+2.  [`signTypedData`](/packages/aa-accounts/light-account/signTypedData) -- supports typed data signatures from the smart account's current signer address.
 3.  [`signTypedDataWith6492`](/packages/aa-accounts/light-account/signTypedDataWith6492) -- supports typed data signatures for deployed smart accounts, as well as undeployed accounts (counterfactual addresses) using ERC-6492.
 4.  [`getOwnerAddress`](/packages/aa-accounts/light-account/getOwnerAddress) -- returns the on-chain owner address of the account.
 5.  [`encodeTransferOwnership`](/packages/aa-accounts/light-account/encodeTransferOwnership) -- encodes the transferOwnership function call using Light Account ABI.
-6.  [`transferLightAccountOwnership`](/packages/aa-accounts/light-account/actions/transferOwnership) -- transfers ownership of the account to a new owner, and returns either the UO hash or transaction hash.
+6.  [`transferOwnership`](/packages/aa-accounts/light-account/actions/transferOwnership) -- transfers ownership of the account to a new owner, and returns either the UO hash or transaction hash.
 
 ## Usage
 
@@ -31,17 +31,18 @@ The additional methods supported by `LightAccount` are:
 
 ```ts [example.ts]
 import { smartAccountClient } from "./smartAccountClient";
-import { transferLightAccountOwnership } from "@alchemy/aa-accounts";
 
 // [!code focus:99]
 // sign message (works for undeployed and deployed accounts)
-const signedMessageWith6492 = smartAccountClient.signMessageWith6492("test");
+const signedMessageWith6492 = await smartAccountClient.signMessageWith6492(
+  "test"
+);
 
 // sign typed data
-const signedTypedData = smartAccountClient.signTypedData("test");
+const signedTypedData = await smartAccountClient.signTypedData("test");
 
 // sign typed data (works for undeployed and deployed accounts), using
-const signedTypedDataWith6492 = smartAccountClient.signTypedDataWith6492({
+const signedTypedDataWith6492 = await smartAccountClient.signTypedDataWith6492({
   types: {
     Request: [{ name: "hello", type: "string" }],
   },
@@ -51,14 +52,24 @@ const signedTypedDataWith6492 = smartAccountClient.signTypedDataWith6492({
   },
 });
 
-// get owner address
-const owner = await smartAccountClient.account.getOwnerAddress();
+// get on-chain account owner address
+const ownerAddress = await smartAccountClient.account.getOwnerAddress();
+const accountAddress = smartAccountClient.getAddress();
 
 // transfer ownership
 const newOwner = LocalAccountSigner.mnemonicToAccountSigner(NEW_OWNER_MNEMONIC);
-const hash = smartAccountClient.transferOwnership({
+const hash = await smartAccountClient.transferOwnership({
   newOwner,
   waitForTxn: true, // wait for txn with UO to be mined
+});
+
+// after transaction is mined on the network,
+// create a new light account client for the transferred Light Account
+const transferredClient = await createLightAccountClient({
+  transport: custom(smartAccountClient),
+  chain: smartAccountClient.chain,
+  signer: newOwner,
+  accountAddress, // NOTE: You MUST to specify the original smart account address to connect using the new owner/signer
 });
 ```
 
@@ -87,7 +98,7 @@ A Promise containing a new `LightAccount`.
 
 - `chain: Chain` -- the chain on which to create the client.
 
-- `owner: SmartAccountSigner` -- the owner EOA signer responsible for signing user operations on behalf of the smart account.
+- `signer: SmartAccountSigner` -- the signer to connect to the account with for signing user operations on behalf of the smart account.
 
 - `entryPoint: EntryPointDef` -- [optional] the entry point contract address. If not provided, the entry point contract address for the client is the connected account's entry point contract, or if not connected, falls back to the default entry point contract for the chain. See [getDefaultEntryPointAddress](/packages/aa-core/utils/getDefaultEntryPointAddress.html#getdefaultentrypointaddress).
 
@@ -95,12 +106,14 @@ A Promise containing a new `LightAccount`.
 
 - `initCode: Hex` -- [optional] the initCode for deploying the smart account with which the client will connect.
 
+- `salt: bigint` -- [optional] a value that is added to the address calculation to allow for multiple accounts for the same signer (owner). The default value supplied is `0n`. To see this calculation used in the smart contract, check out [the LightAccountFactory](https://github.com/alchemyplatform/light-account/blob/main/src/LightAccountFactory.sol#L30).
+
 - `accountAddress: Address` -- [optional] a smart account address override that this object will manage instead of generating its own.
 
 - `version: LightAccountVersion` -- [optional] the LightAccount contract version. Default: [v1.1.0](https://github.com/alchemyplatform/light-account/releases/tag/v1.1.0)
 
 ## Developer links
 
-- [Light Account & Simple Account Deployment Addresses](/smart-accounts/accounts/deployment-addresses)
+- [Light Account Deployment Addresses](/smart-accounts/light-account/#deployment-addresses)
 - [Light Account Github Repo](https://github.com/alchemyplatform/light-account)
 - [Quantstamp Audit Report](https://github.com/alchemyplatform/light-account/blob/main/Quantstamp-Audit.pdf)

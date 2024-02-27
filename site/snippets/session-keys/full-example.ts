@@ -1,4 +1,5 @@
 import {
+  SessionKeyAccessListType,
   SessionKeyPermissionsBuilder,
   SessionKeyPlugin,
   SessionKeySigner,
@@ -8,14 +9,14 @@ import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";
 import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
 
 const chain = sepolia;
-// this is the owner of the account, you can swap out for any signer, later we'll create a new client using a session key signe
-const owner = LocalAccountSigner.mnemonicToAccountSigner("MNEMONIC");
+// this is the signer to connect with the account, later we will create a new client using a session key signe
+const signer = LocalAccountSigner.mnemonicToAccountSigner("MNEMONIC");
 const sessionKeySigner = new SessionKeySigner();
 const client = (
   await createModularAccountAlchemyClient({
     chain,
     apiKey: "ALCHEMY_API_KEY",
-    owner,
+    signer,
   })
 ).extend(sessionKeyPluginActions);
 
@@ -32,6 +33,8 @@ if (!isPluginInstalled) {
     .setNativeTokenSpendLimit({
       spendLimit: 1000000n,
     })
+    // this will allow the session key plugin to interact with all addresses
+    .setContractAccessControlType(SessionKeyAccessListType.ALLOW_ALL_ACCESS)
     .setTimeRange({
       validFrom: Date.now() / 1000,
       // valid for 1 hour
@@ -56,7 +59,7 @@ if (!isPluginInstalled) {
 const sessionKeyClient = (
   await createModularAccountAlchemyClient({
     chain,
-    owner: sessionKeySigner,
+    signer: sessionKeySigner,
     apiKey: "ALCHEMY_API_KEY",
     // this is important because it tells the client to use our previously deployed account
     accountAddress: client.getAddress(),

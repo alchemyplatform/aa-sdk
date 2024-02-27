@@ -19,7 +19,7 @@ head:
 `TurnkeySigner` provides implementations for all methods on `SmartAccountAuthenticator`:
 
 1.  [`authenticate`](/packages/aa-signers/turnkey/authenticate) -- supports user authentication.
-2.  [`getAddress`](/packages/aa-signers/turnkey/getAddress) -- supports typed data signatures from the smart contract account's owner address.
+2.  [`getAddress`](/packages/aa-signers/turnkey/getAddress) -- gets the address of the the smart contract account's connected EOA signer account.
 3.  [`signMessage`](/packages/aa-signers/turnkey/signMessage) -- supports message signatures.
 4.  [`signTypedData`](/packages/aa-signers/turnkey/signTypedData) -- supports typed data signatures.
 5.  [`getAuthDetails`](/packages/aa-signers/turnkey/getAuthDetails) -- supports authentication details retrieval.

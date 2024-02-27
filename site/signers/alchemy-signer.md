@@ -28,7 +28,7 @@ The Alchemy Signer is currently still under development and is not yet available
 
 ## Usage
 
-Once you've been granted access to the Alchemy Signer, getting started is really simple. Install the `@alchemy/aa-alchemy` package and initialize your signer:
+Once you have been granted access to the Alchemy Signer, getting started is really simple. Install the `@alchemy/aa-alchemy` package and initialize your signer:
 
 <<< @/snippets/signers/alchemy/signer.ts
 
@@ -36,7 +36,7 @@ For other configuration options, see the [Alchemy Signer API Reference](/package
 
 ## Logging Users in
 
-Once you've initialized your signer, you can now enable your users to create an account or login to their existing account.
+Once you have initialized your signer, you can now enable your users to create an account or login to their existing account.
 
 ::: warning
 In the coming weeks, the OTP based email auth flow will be replaced with a magic link flow that will make this easier
@@ -70,3 +70,50 @@ const user = await signer.getAuthDetails().catch(() => null);
 :::
 
 If there is an existing session, then your signer is ready for use! If not, see the section above for logging users in.
+
+## Using the Signer with Smart Contract Accounts
+
+Once your signer is authenticated with a user, you can use it to sign User Operations by creating a `SmartContractAccount` and passing the signer to it. For example:
+
+::: code-group
+
+```ts
+import { signer } from "./signer";
+
+export const account = await createMultiOwnerModularAccount({
+  transport: rpcTransport,
+  chain,
+  signer,
+});
+```
+
+<<< @/snippets/signers/alchemy/signer.ts
+:::
+
+## Using the Signer as an EOA
+
+::: warning
+If you decide to use the Alchemy Signer as an EOA for your users, migrating to using Smart Contract Accounts will be much more difficult. Because there's no way to upgrade an EOA to a Smart Contract Account, the only option you will have is to have your users tranfer funds from their EOA to the the Smart Contract Account you create for them later.
+You will also not be able to leverage some of the other features available through Account Kit, such as sponsoring gas, batching transactions, rotating ownership, and more!
+:::
+
+Because the Alchemy Signer has its own `address` and supports signing messages as raw hashes, it is possible to use this signer as an EOA directly. To do so, you can adapt the AlchemySigner to your library of choice and leverage its `signMessage`, `signTypedData`, and `signTransaction` methods directly. The public address of the signer can be accessed via `getAddress`.
+
+If you are using viem, then you can use the `toViemAccount` method which will allow you to use the signer with a [`WalletClient`](https://viem.sh/docs/clients/wallet#local-accounts-private-key-mnemonic-etc).
+
+::: code-group
+
+```ts
+import { signer } from "./signer";
+import { createWalletClient, http } from "viem";
+import { sepolia } from "@alchemy/aa-core";
+
+export const walletClient = createWalletClient({
+  transport: http("alchemy_rpc_url"),
+  chain: sepolia,
+  account: signer.toViemAccount(),
+});
+```
+
+<<< @/snippets/signers/alchemy/signer.ts
+:::

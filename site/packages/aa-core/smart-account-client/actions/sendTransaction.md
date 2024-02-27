@@ -16,7 +16,7 @@ head:
 
 This takes an ethereum transaction and converts it into a `UserOperation` (UO), sends the UO, and waits on the receipt of that UO (i.e. has it been mined).
 
-If you don't want to wait for the UO to mine, it's recommended to user [sendUserOperation](./sendUserOperation) instead.
+If you don't want to wait for the UO to mine, it is recommended to user [sendUserOperation](./sendUserOperation) instead.
 
 Note that `to` field of transaction is required, and among other fields of transaction, only `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas` fields are considered if given. Support for other fields is coming soon.
 

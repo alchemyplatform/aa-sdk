@@ -60,7 +60,17 @@
         "error",
         "ignorePackages"
       ]
-    }
+    },
+    "overrides": [
+      {
+        "files": [
+          "site/snippets/**/*.ts"
+        ],
+        "rules": {
+          "@typescript-eslint/no-unused-vars": "off"
+        }
+      }
+    ]
   },
   "husky": {
     "hooks": {

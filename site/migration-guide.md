@@ -85,7 +85,7 @@ To support [the various ways](/migration-guide#account-connecting-to-a-smart-acc
 
 ### Account: `BaseSmartContractAccount` → `SmartContractAccount`
 
-The next big change is the removal of the class-based `BaseSmartContractAccount` that all accounts extended from. This has been replaced with a `SmartContractAccount` type that extends `viem`'s [`Account`](https://viem.sh/docs/accounts/custom), and instantiation of an account is now an `async` action. To get started with the new accounts (using `LightAccount` as an example), you'll have to make the following changes:
+The next big change is the removal of the class-based `BaseSmartContractAccount` that all accounts extended from. This has been replaced with a `SmartContractAccount` type that extends `viem`'s [`Account`](https://viem.sh/docs/accounts/custom), and instantiation of an account is now an `async` action. To get started with the new accounts (using `LightAccount` as an example), you will have to make the following changes:
 
 ```ts
 import {
@@ -94,7 +94,6 @@ import {
   getDefaultLightAccountFactoryAddress, // [!code --]
 } from "@alchemy/aa-accounts";
 import {
-  createPublicErc4337Client,
   LocalAccountSigner,
   type Hex,
 } from "@alchemy/aa-core";
@@ -102,17 +101,12 @@ import { sepolia } from "@alchemy/aa-core";
 
 const chain = sepolia;
 
-const client = createPublicErc4337Client({
-  chain,
-  rpcUrl: "RPC_URL",
-});
-
 const account = new LightSmartContractAccount({ // [!code --]
 const account = await createLightAccount({ // [!code ++]
     rpcClient: client, // [!code --]
-    client, // [!code ++]
-    owner,
-    chain, // [!code --]
+    transport: http("RPC_URL"), // [!code ++]
+    signer,
+    chain,
     factoryAddress: getDefaultLightAccountFactoryAddress(chain), // [!code --]
   });
 ```
@@ -128,18 +122,19 @@ so that you don't have to pass the account to every method.
 ```ts
 import { createLightAccount } from "@alchemy/aa-accounts";
 import {
-  createPublicErc4337Client,
+  createBundlerClient,
   createSmartAccountClientFromExisting
   LocalAccountSigner,
   type Hex,
 } from "@alchemy/aa-core";
 import { sepolia } from "@alchemy/aa-core";
+import { custom, http } from "viem";
 
 const chain = sepolia;
 
-const client = createPublicErc4337Client({
+const client = createBundlerClient({
   chain,
-  rpcUrl: "JSON_RPC_URL",
+  transport: http("JSON_RPC_URL"),
 });
 
 // [!code focus:99]
@@ -150,8 +145,9 @@ const smartAccountClient = createSmartAccountClientFromExisting({
 });
 
 const account = await createLightAccount({
-  owner,
-  client: publicClient,
+  signer,
+  chain,
+  transport: custom(client),
 });
 
 const { hash } = await smartAccountClient.sendUserOperation({
@@ -171,24 +167,26 @@ Hoisting the account is similar to using `.connect` in previous versions. You si
 ```ts
 import { createLightAccount } from "@alchemy/aa-accounts";
 import {
-  createPublicErc4337Client,
+  createBundlerClient,
   createSmartAccountClientFromExisting
   LocalAccountSigner,
   type Hex,
 } from "@alchemy/aa-core";
 import { sepolia } from "@alchemy/aa-core";
+import { http, custom } from "viem";
 
 const chain = sepolia;
 
-const client = createPublicErc4337Client({
+const client = createBundlerClient({
   chain,
-  rpcUrl: "JSON_RPC_URL",
+  transport: http("JSON_RPC_URL"),
 });
 
 // [!code focus:99]
 const account = await createLightAccount({
-  owner,
-  client: publicClient,
+  signer,
+  transport: custom(client),
+  chain,
 });
 
 const smartAccountClient = createSmartAccountClientFromExisting({
@@ -216,7 +214,8 @@ type toSmartContractAccount = <
   Name extends string = string,
   TTransport extends Transport = Transport
 >({
-  client,
+  transport,
+  chain,
   source,
   entryPointAddress,
   accountAddress,
@@ -268,3 +267,25 @@ The `getPublicErc4337Client` method has been renamed to `getBundlerClient` to ma
 ### Ethers: Updated Signer Adapter constructor
 
 The `AccountSigner` now takes in a `SmartContractAccount` as a param in its constructor.
+
+### Core: Transition from ~~`Percent`~~ to `Multiplier` api and types
+
+The `Percent` type and `PercentSchema` have been removed in favor of the `Multiplier` type and `MultiplierSchema`.
+
+Going forward when using the feeOptions, you can specify the `Multiplier` type instead of a `Percent`. The `Multiplier` type is a number that represents direct multipliaction of the estimation. For example, `0.1` is 10% of the estimated value and `1` is 100% of the estimated value.
+
+```ts
+createModularAccountAlchemyClient({
+    ...
+    opts: {
+      ...
+      // The maxFeePerGas and maxPriorityFeePerGas estimated values will now be multipled by 1.5
+      feeOptions: {
+        // This was previously { percent: 50n }
+        maxFeePerGas: { multiplier: 1.5 },
+        // This was previously { percent: 25n }
+        maxPriorityFeePerGas: { multiplier: 1.25 },
+      },
+    },
+  });
+```

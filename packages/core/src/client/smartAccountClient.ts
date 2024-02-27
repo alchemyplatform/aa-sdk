@@ -124,7 +124,7 @@ export function createSmartAccountClient(
     key,
     name,
     // we start out with this because the base methods for a SmartAccountClient
-    // require a smart account client, but once we've completed building everything
+    // require a smart account client, but once we have completed building everything
     // we want to override this value with the one passed in by the extender
     type: "SmartAccountClient",
     // TODO: this needs to be tested

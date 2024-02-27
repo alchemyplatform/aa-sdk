@@ -119,7 +119,7 @@ export {
   applyUserOpOverrideOrFeeOption,
   asyncPipe,
   bigIntMax,
-  bigIntPercent,
+  bigIntMultiply,
   deepHexlify,
   defineReadOnly,
   filterUndefined,
@@ -129,6 +129,6 @@ export {
   getDefaultUserOperationFeeOptions,
   getUserOperationHash,
   isBigNumberish,
-  isPercentage,
+  isMultiplier,
   resolveProperties,
 } from "./utils/index.js";

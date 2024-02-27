@@ -2,13 +2,7 @@ import type { Address, Chain, Hash, Hex } from "viem";
 import { encodeAbiParameters, hexToBigInt, keccak256, toHex } from "viem";
 import * as chains from "viem/chains";
 import * as alchemyChains from "../chains/index.js";
-import type {
-  BigNumberish,
-  Percentage,
-  PromiseOrValue,
-  UserOperationRequest,
-} from "../types.js";
-import { BigNumberishSchema, PercentageSchema } from "./schema.js";
+import type { PromiseOrValue, UserOperationRequest } from "../types.js";
 
 export const AlchemyChainMap = new Map<number, Chain>(
   Object.values(alchemyChains).map((c) => [c.id, c])
@@ -165,14 +159,6 @@ export function defineReadOnly<T, K extends keyof T>(
     value: value,
     writable: false,
   });
-}
-
-export function isBigNumberish(x: any): x is BigNumberish {
-  return x != null && BigNumberishSchema.safeParse(x).success;
-}
-
-export function isPercentage(x: any): x is Percentage {
-  return x != null && PercentageSchema.safeParse(x).success;
 }
 
 export function filterUndefined(

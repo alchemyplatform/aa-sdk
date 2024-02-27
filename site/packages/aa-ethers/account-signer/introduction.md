@@ -19,8 +19,8 @@ head:
 Notable differences between `EthersProviderAdapter` and `JsonRpcProvider` are implementations for:
 
 1.  [`getAddress`](/packages/aa-ethers/account-signer/getAddress) -- gets the `AccountSigner`'s smart account address.
-2.  [`signMessage`](/packages/aa-ethers/account-signer/signMessage) -- signs messages with the `AccountSigner`'s owner address.
-3.  [`sendTransaction`](/packages/aa-ethers/account-signer/sendTransaction) -- sends transactions on behalf of the `AccountSigner`'s smart account, with request and response formatted as if you were using the ethers.js library.
+2.  [`signMessage`](/packages/aa-ethers/account-signer/signMessage) -- signs messages with the `AccountSigner`'s EOA signer address.
+3.  [`sendTransaction`](/packages/aa-ethers/account-signer/sendTransaction) -- sends transactions on behalf of the `AccountSigner`'s connected signer, with request and response formatted as if you were using the ethers.js library.
 4.  [`getBundlerClient`](/packages/aa-ethers/account-signer/getBundlerClient) -- gets the underlying viem client with ERC-4337 compatibility.
 5.  [`connect`](/packages/aa-ethers/account-signer/connect) -- connects the inputted provider to an account and returns an `AccountSigner`.
 
@@ -29,22 +29,22 @@ Notable differences between `EthersProviderAdapter` and `JsonRpcProvider` are im
 ::: code-group
 
 ```ts [example.ts]
-import { signer } from "./ethers-signer";
+import { accountSigner } from "./ethers-signer";
 
-// get the signer's smart account address
-const address = await signer.getAddress();
+// get the account signer's account address
+const address = await accountSigner.getAddress();
 
-// sign message with the signer's owner address
-const signedMessage = await signer.signMessage("test");
+// sign message with the account signer's EOA signer address
+const signedMessage = await accountSigner.signMessage("test");
 
-// sends transaction on behalf of the smart account
-const txn = await signer.sendTransaction({
+// sends transaction on behalf of the smart account connected EOA signer
+const txn = await accountSigner.sendTransaction({
   to: "0xRECIPIENT_ADDRESS",
   data: "0xDATA",
 });
 
-// get the signer's underlying viem client with EIP-4337 capabilities
-const client = signer.getBundlerClient();
+// get the account signer's underlying viem client with EIP-4337 capabilities
+const client = accountSigner.getBundlerClient();
 ```
 
 <<< @/snippets/aa-ethers/ethers-signer.ts

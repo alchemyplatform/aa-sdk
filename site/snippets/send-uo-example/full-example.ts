@@ -13,7 +13,7 @@ const eoaSigner: SmartAccountSigner =
 const client = await createModularAccountAlchemyClient({
   apiKey: "ALCHEMY_API_KEY", // replace with your Alchemy API Key
   chain: sepolia,
-  owner: eoaSigner,
+  signer: eoaSigner,
   gasManagerConfig: {
     policyId: "POLICY_ID", // replace with your policy id, get yours at https://dashboard.alchemy.com/
   },

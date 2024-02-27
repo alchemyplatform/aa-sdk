@@ -18,7 +18,7 @@ import { createSimpleSmartAccount } from "../simple.js";
 describe("Account Simple Tests", async () => {
   const dummyMnemonic =
     "test test test test test test test test test test test test";
-  const owner: SmartAccountSigner =
+  const signer: SmartAccountSigner =
     LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
 
   const chain = sepolia;
@@ -37,7 +37,7 @@ describe("Account Simple Tests", async () => {
   );
 
   it("should correctly sign the message", async () => {
-    const provider = await givenConnectedProvider({ owner, chain });
+    const provider = await givenConnectedProvider({ signer, chain });
     expect(
       await provider.account.signMessage({
         message: {
@@ -50,7 +50,7 @@ describe("Account Simple Tests", async () => {
   });
 
   it("should correctly encode batch transaction data", async () => {
-    const provider = await givenConnectedProvider({ owner, chain });
+    const provider = await givenConnectedProvider({ signer, chain });
     const data = [
       {
         target: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
@@ -72,7 +72,7 @@ describe("Account Simple Tests", async () => {
   it("should correctly use the account init code override", async () => {
     const account = await createSimpleSmartAccount({
       chain: sepolia,
-      owner: owner,
+      signer,
       factoryAddress: getDefaultSimpleAccountFactoryAddress(sepolia),
       transport: custom(publicClient),
       // override the account address here so we don't have to resolve the address from the entry point
@@ -89,10 +89,10 @@ describe("Account Simple Tests", async () => {
   });
 
   const givenConnectedProvider = async ({
-    owner,
+    signer,
     chain,
   }: {
-    owner: SmartAccountSigner;
+    signer: SmartAccountSigner;
     chain: Chain;
   }) =>
     createSmartAccountClient({
@@ -100,7 +100,7 @@ describe("Account Simple Tests", async () => {
       chain: chain,
       account: await createSimpleSmartAccount({
         chain,
-        owner,
+        signer,
         accountAddress: "0x1234567890123456789012345678901234567890",
         factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
         transport: http(`${chain.rpcUrls.alchemy.http[0]}/${"test"}`),

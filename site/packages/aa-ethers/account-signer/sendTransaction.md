@@ -23,9 +23,9 @@ Note that `to` field of transaction is required, and among other fields of trans
 ::: code-group
 
 ```ts [example.ts]
-import { signer } from "./ethers-signer";
+import { accountSigner } from "./ethers-signer";
 
-const txHash = await signer.sendTransaction({
+const txHash = await accountSigner.sendTransaction({
   from, // ignored
   to,
   data: encodeFunctionData({

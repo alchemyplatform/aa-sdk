@@ -146,8 +146,8 @@ An object type that may contain optional `min` and `max` fields, each of which a
 
 [See Type ↗️](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/core/src/types.ts#L23)
 
-## `Percentage`
+## `Multiplier`
 
-An object type with a required `percentage` field, which is a `number` that must be within the range of 1 to 1000.
+An object type with a required `multipler` field, which is a `number` that must be within the range of 1 to 1000.
 
 [See Type ↗️](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/core/src/types.ts#L20)

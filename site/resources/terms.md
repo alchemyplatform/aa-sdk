@@ -54,7 +54,9 @@ Alchemy’s implementation of a [Paymaster](https://www.alchemy.com/overviews/wh
 
 ## Modular Account
 
-A type of smart account enabled by the [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) standard and characterized by its [modular structure](https://accountkit.alchemy.com/smart-accounts/modular-account/.html). This structure segments different functionalities of the account into distinct, independently upgradeable modules or plugins. Each plugin can have specific functions such as validation, execution, or hooks, enabling the smart account to extend its capabilities or modify its behavior without altering the core account logic. Modular accounts enhance flexibility, upgradeability, and interoperability of [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) smart accounts.
+A type of smart account enabled by the [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) standard and characterized by its [modular structure](https://accountkit.alchemy.com/smart-accounts/modular-account/.html). This structure segments different functionalities of the account into distinct, independently upgradeable modules or plugins. Each plugin can have specific functions such as validation, execution, or hooks, enabling the smart account to extend its capabilities or modify its behavior without altering the core account logic. Modular Accounts enhance flexibility, upgradeability, and interoperability of [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) smart accounts. Modular Account contracts have been audited by both [Spearbit](https://github.com/alchemyplatform/modular-account/blob/develop/audits/2024-01-31_spearbit_0e3fd1e.pdf) and [Quantstamp](https://github.com/alchemyplatform/modular-account/blob/develop/audits/2024-02-20-quantstamp-8ae319e.pdf).
+
+<!--@include: ./bbp.md-->
 
 ## Plugin
 
@@ -75,7 +77,7 @@ A service or application that manages the private key and signs `UserOperation`s
 
 ## Smart Account
 
-A [smart account](https://accountkit.alchemy.com/smart-accounts/.html#what-s-a-smart-account) is an individual on-chain account located at a public address where an ERC-4337 smart contract account is deployed. This address is controlled by one or more owners of the smart contract account. The [aa-sdk](https://github.com/alchemyplatform/aa-sdk) supports different smart account implementations such as [Light Account](https://accountkit.alchemy.com/smart-accounts/light-account/.html), [Simple Account](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol) and [Modular Account](https://accountkit.alchemy.com/smart-accounts/modular-account/.html) (coming soon). You can also [add add your own account implementation in aa-sdk](https://accountkit.alchemy.com/smart-accounts/accounts/contributing.html).
+A [smart account](https://accountkit.alchemy.com/smart-accounts/.html#what-s-a-smart-account) is an individual on-chain account located at a public address where an ERC-4337 smart contract account is deployed. This address is controlled by one or more owners of the smart contract account. The [aa-sdk](https://github.com/alchemyplatform/aa-sdk) supports different smart account implementations such as [Light Account](https://accountkit.alchemy.com/smart-accounts/light-account/.html), [Simple Account](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol) and [Modular Account](https://accountkit.alchemy.com/smart-accounts/modular-account/.html) (coming soon). You can also [add add your own account implementation in aa-sdk](https://accountkit.alchemy.com/smart-accounts/custom/contributing.html).
 
 ## `UserOperation`
 

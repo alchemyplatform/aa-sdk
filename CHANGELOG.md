@@ -3,6 +3,76 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.2.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.1.2...v3.2.0) (2024-02-26)
+
+### Features
+
+- allow multiple signer addresses to be passed to msca upgrade util ([#489](https://github.com/alchemyplatform/aa-sdk/issues/489)) ([f843302](https://github.com/alchemyplatform/aa-sdk/commit/f8433028aa4363a156e99f2d86729e1a24ac082c))
+
+## [3.1.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.1.1...v3.1.2) (2024-02-26)
+
+### Bug Fixes
+
+- **alchemy-signer:** missing transports on iOS during passkey creation ([#488](https://github.com/alchemyplatform/aa-sdk/issues/488)) ([740946f](https://github.com/alchemyplatform/aa-sdk/commit/740946f14f5a67b986e136269c564f79811f5d23))
+- patch fixed incorrectly identifies some private IP addresses as public ([#487](https://github.com/alchemyplatform/aa-sdk/issues/487)) ([9835574](https://github.com/alchemyplatform/aa-sdk/commit/9835574f672cb5b5db4152256a9eed6c6a62d893))
+
+## [3.1.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.1.0...v3.1.1) (2024-02-23)
+
+### Bug Fixes
+
+- custom headers fix ([#484](https://github.com/alchemyplatform/aa-sdk/issues/484)) ([5baacad](https://github.com/alchemyplatform/aa-sdk/commit/5baacad5e806b111eed86174408c78612b856523))
+
+# [3.1.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.1...v3.1.0) (2024-02-23)
+
+### Bug Fixes
+
+- tx signing needs to happen over hash of RLP ([#481](https://github.com/alchemyplatform/aa-sdk/issues/481)) ([e3d7371](https://github.com/alchemyplatform/aa-sdk/commit/e3d737175abab6f4ccb16e4e22e0ec4f58c4e736))
+
+### Features
+
+- make it easier to upgrade to MA ([#482](https://github.com/alchemyplatform/aa-sdk/issues/482)) ([7f7710a](https://github.com/alchemyplatform/aa-sdk/commit/7f7710accfd088ffc9a5e6c54797d4dc5f038bac))
+- support using AlchemySigner as EOA ([#467](https://github.com/alchemyplatform/aa-sdk/issues/467)) ([b620671](https://github.com/alchemyplatform/aa-sdk/commit/b6206717afb51267a406a6d2fd48af5593888fdf))
+
+## [3.0.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0...v3.0.1) (2024-02-21)
+
+### Bug Fixes
+
+- custom Alchemy-AA-Sdk-Version header fix ([#475](https://github.com/alchemyplatform/aa-sdk/issues/475)) ([bfb4361](https://github.com/alchemyplatform/aa-sdk/commit/bfb4361481a3b12e7d47096f558921a22aa214ee))
+- doc fixes for light account transfer ownership ([#471](https://github.com/alchemyplatform/aa-sdk/issues/471)) ([7b5a6cd](https://github.com/alchemyplatform/aa-sdk/commit/7b5a6cdc4c6909ecb07793aa3c4fa75196b0584a))
+
+# [3.0.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.13...v3.0.0) (2024-02-21)
+
+### Bug Fixes
+
+- fix doc for light account deployment addresses ([#468](https://github.com/alchemyplatform/aa-sdk/issues/468)) ([41791c4](https://github.com/alchemyplatform/aa-sdk/commit/41791c49bf307136f9d9f6555b3d5b9ceda2d468))
+- ma upgrade data was wrong ([#470](https://github.com/alchemyplatform/aa-sdk/issues/470)) ([68d3ceb](https://github.com/alchemyplatform/aa-sdk/commit/68d3ceb9b04f39bb0c328ac3867f66e668555bfc))
+
+### Features
+
+- add a nonce key override to support parallel nonces ([#462](https://github.com/alchemyplatform/aa-sdk/issues/462)) ([d48c586](https://github.com/alchemyplatform/aa-sdk/commit/d48c586665858c61e0d1d66e9bd4503f32e47db9))
+
+# [3.0.0-alpha.13](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.12...v3.0.0-alpha.13) (2024-02-16)
+
+**Note:** Version bump only for package root
+
+# [3.0.0-alpha.12](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.11...v3.0.0-alpha.12) (2024-02-14)
+
+### Bug Fixes
+
+- export the session key ACL type enum ([bd9d75e](https://github.com/alchemyplatform/aa-sdk/commit/bd9d75e0b0b93acdf8e0dce8f461157a0832500b))
+
+# [3.0.0-alpha.11](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.10...v3.0.0-alpha.11) (2024-02-14)
+
+### Bug Fixes
+
+- session key extension was missing plugin overrides ([#458](https://github.com/alchemyplatform/aa-sdk/issues/458)) ([dc5536c](https://github.com/alchemyplatform/aa-sdk/commit/dc5536c8565de216d0c1ca16d72ca4bfdefe7147))
+
+# [3.0.0-alpha.10](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.9...v3.0.0-alpha.10) (2024-02-14)
+
+### Bug Fixes
+
+- update the docs for using a custom account ([#456](https://github.com/alchemyplatform/aa-sdk/issues/456)) ([fb2a541](https://github.com/alchemyplatform/aa-sdk/commit/fb2a5417c19b4f9c335ed86438b7ba81fbb8472d))
+
 # [3.0.0-alpha.9](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.8...v3.0.0-alpha.9) (2024-02-13)
 
 ### Features

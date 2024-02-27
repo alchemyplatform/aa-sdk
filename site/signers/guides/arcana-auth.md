@@ -50,9 +50,9 @@ Use the **clientId** assigned to your app via the dashboard and integrate with t
 
 <<< @/snippets/signers/arcana-auth.ts
 
-### Use it with LightAccount
+### Use it with Modular Account
 
-Let's see it in action with `aa-alchemy` and `LightSmartContractAccount` from `aa-accounts`:
+Let's see it in action with `aa-alchemy`:
 
 ::: code-group
 
@@ -68,7 +68,7 @@ export async function getProvider() {
   return createModularAccountAlchemyClient({
     apiKey: "ALCHEMY_API_KEY",
     chain,
-    owner: signer,
+    signer,
   });
 }
 ```

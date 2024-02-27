@@ -1,5 +1,6 @@
 import { isHex, type Chain } from "viem";
 import { z } from "zod";
+import type { BigNumberish, Multiplier } from "../types";
 
 export const ChainSchema = z.custom<Chain>(
   (chain) =>
@@ -22,11 +23,24 @@ export const BigNumberishRangeSchema = z
   })
   .strict();
 
-export const PercentageSchema = z
+export const MultiplierSchema = z
   .object({
     /**
-     * Percent value between 1 and 1000 inclusive
+     * Multiplier value with max precision of 4 decmial places
      */
-    percentage: z.number().min(1).max(1000),
+    multiplier: z.number().refine(
+      (n) => {
+        return (n.toString().split(".")[1]?.length ?? 0) <= 4;
+      },
+      { message: "Max precision is 4 decimal places" }
+    ),
   })
   .strict();
+
+export function isBigNumberish(x: any): x is BigNumberish {
+  return x != null && BigNumberishSchema.safeParse(x).success;
+}
+
+export function isMultiplier(x: any): x is Multiplier {
+  return x != null && MultiplierSchema.safeParse(x).success;
+}

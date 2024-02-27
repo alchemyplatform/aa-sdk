@@ -34,7 +34,7 @@ type UserOperationFeeOptions {
 
 ```ts [example.ts]
 const chain = polygonMumbai;
-const owner: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
+const signer: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
   "YOUR_OWNER_MNEMONIC"
 );
 const rpcTransport = http("https://polygon-mumbai.g.alchemy.com/v2/demo");
@@ -42,7 +42,7 @@ const rpcTransport = http("https://polygon-mumbai.g.alchemy.com/v2/demo");
 const userOperationFeeOptions: UserOperationFeeOptions = {
   maxPriorityFeePerGas: {
     min: 100_000_000n,
-    percentage: 50,
+    multiplier: 1.5,
   },
 };
 
@@ -52,7 +52,7 @@ export const smartAccountClient = createSmartAccountClient({
   account: await createMultiOwnerModularAccount({
     transport: rpcTransport,
     chain,
-    owner,
+    signer,
   }),
   opts: {
     feeOptions: userOperationFeeOptions,

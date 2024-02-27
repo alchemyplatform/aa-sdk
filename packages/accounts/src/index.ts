@@ -24,12 +24,18 @@ export { transferOwnership as transferNaniAccountOwnership } from "./nani-accoun
 export { getDefaultNaniAccountFactoryAddress } from "./nani-account/utils.js";
 
 // msca exports
+export { IAccountLoupeAbi } from "./msca/abis/IAccountLoupe.js";
 export { IPluginAbi } from "./msca/abis/IPlugin.js";
+export { IPluginManagerAbi } from "./msca/abis/IPluginManager.js";
+export { IStandardExecutorAbi } from "./msca/abis/IStandardExecutor.js";
+export { MultiOwnerModularAccountFactoryAbi } from "./msca/abis/MultiOwnerModularAccountFactory.js";
+export { UpgradeableModularAccountAbi } from "./msca/abis/UpgradeableModularAccount.js";
 export type * from "./msca/account-loupe/decorator.js";
 export { accountLoupeActions } from "./msca/account-loupe/decorator.js";
 export type * from "./msca/account/multiOwnerAccount.js";
 export { createMultiOwnerModularAccount } from "./msca/account/multiOwnerAccount.js";
 export { standardExecutor } from "./msca/account/standardExecutor.js";
+export { createMultiOwnerModularAccountClient } from "./msca/client.js";
 export type * from "./msca/plugin-manager/decorator.js";
 export { pluginManagerActions } from "./msca/plugin-manager/decorator.js";
 export type * from "./msca/plugins/multi-owner/index.js";
@@ -42,7 +48,10 @@ export {
 export type * from "./msca/plugins/session-key/index.js";
 export { sessionKeyPluginActions } from "./msca/plugins/session-key/index.js";
 export type * from "./msca/plugins/session-key/permissions.js";
-export { SessionKeyPermissionsBuilder } from "./msca/plugins/session-key/permissions.js";
+export {
+  SessionKeyAccessListType,
+  SessionKeyPermissionsBuilder,
+} from "./msca/plugins/session-key/permissions.js";
 export {
   SessionKeyPlugin,
   SessionKeyPluginAbi,
@@ -50,4 +59,8 @@ export {
 } from "./msca/plugins/session-key/plugin.js";
 export { SessionKeySigner } from "./msca/plugins/session-key/signer.js";
 export { buildSessionKeysToRemoveStruct } from "./msca/plugins/session-key/utils.js";
-export { getDefaultMultiOwnerModularAccountFactoryAddress } from "./msca/utils.js";
+export {
+  getDefaultMultiOwnerModularAccountFactoryAddress,
+  getMAInitializationData,
+  getMSCAUpgradeToData,
+} from "./msca/utils.js";

@@ -5,7 +5,7 @@ import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
 export const client = (
   await createModularAccountAlchemyClient({
     chain: sepolia,
-    owner: LocalAccountSigner.mnemonicToAccountSigner("MNEMONIC"),
+    signer: LocalAccountSigner.mnemonicToAccountSigner("MNEMONIC"),
     apiKey: "ALCHEMY_API_KEY",
   })
 ).extend(sessionKeyPluginActions);

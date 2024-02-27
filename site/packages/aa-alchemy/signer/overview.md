@@ -28,7 +28,7 @@ The Alchemy Signer is currently still under development and is not yet available
 
 ## Usage
 
-Once you've been granted access to the Alchemy Signer, getting started is really simple. Install the `@alchemy/aa-alchemy` package and initialize your signer:
+Once you have been granted access to the Alchemy Signer, getting started is really simple. Install the `@alchemy/aa-alchemy` package and initialize your signer:
 
 <<< @/snippets/signers/alchemy/signer.ts
 

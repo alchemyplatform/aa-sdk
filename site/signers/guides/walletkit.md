@@ -22,10 +22,7 @@ head:
 
 ![WalletKit](/images/walletkit-overview.png)
 
-[WalletKit](https://walletkit.com) supports smart wallets, EOA wallets, and pre-built components for onboarding users
-with email and social logins. You can integrate WalletKit's pre-built components in under 15 minutes using their React
-SDK or the wagmi connector. Or, if you prefer, build your own unique experiences for your users using WalletKit's
-Wallets API.
+[WalletKit](https://walletkit.com) supports smart wallets, EOA wallets, and pre-built components for onboarding users with email and social logins. You can integrate WalletKit's pre-built components in under 15 minutes using their React SDK or the wagmi connector. Or, if you prefer, build your own unique experiences for your users using WalletKit's Wallets API.
 
 This guide shows you how to use WalletKit's EOA wallets and pre-built onboarding components with Account Kit.
 
@@ -70,7 +67,7 @@ export function App() {
 
 ::: tip
 
-If you'd like to integrate WalletKit with wagmi, check out
+If you would like to integrate WalletKit with wagmi, check out
 the [installation docs here](https://docs.walletkit.com/link/installation).
 
 :::
@@ -100,9 +97,9 @@ const signer: SmartAccountSigner = new WalletClientSigner(
 );
 ```
 
-### Configure AlchemySmartContractClient
+### Configure ModularAccountAlchemyClient
 
-Finally, create `createModularAccountAlchemyClient` using the signer we just created as the owner of the smart contract wallet.
+Finally, create `createModularAccountAlchemyClient` using the signer we just created to control the modular smart contract wallet.
 
 ```ts
 import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";
@@ -111,6 +108,6 @@ import { sepolia } from "@alchemy/aa-core";
 const client = await createModularAccountAlchemyClient({
   apiKey: "<Alchemy-API-Key>",
   chain: sepolia,
-  owner: signer,
+  signer,
 });
 ```

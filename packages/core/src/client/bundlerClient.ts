@@ -86,7 +86,9 @@ export function createBundlerClient(
             ...fetchOptions,
             headers: {
               ...fetchOptions?.headers,
-              "Alchemy-AA-Sdk-Version": VERSION,
+              ...(url.toLowerCase().indexOf("alchemy") > -1
+                ? { "Alchemy-AA-Sdk-Version": VERSION }
+                : undefined),
             },
           },
         }),

@@ -35,7 +35,7 @@ export const buildUserOperation: <
     uo: {
       initCode: account.getInitCode(),
       sender: account.address,
-      nonce: account.getNonce(),
+      nonce: account.getNonce(overrides?.nonceKey),
       callData: Array.isArray(uo)
         ? account.encodeBatchExecute(uo)
         : typeof uo === "string"

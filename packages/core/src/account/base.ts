@@ -45,14 +45,14 @@ export enum DeploymentState {
  */
 export abstract class BaseSmartContractAccount<
   TTransport extends Transport = Transport,
-  TOwner extends SmartAccountSigner | undefined = SmartAccountSigner | undefined
-> implements ISmartContractAccount<TTransport, TOwner>
+  TSigner extends SmartAccountSigner = SmartAccountSigner
+> implements ISmartContractAccount<TTransport, TSigner>
 {
   protected factoryAddress: Address;
   protected deploymentState: DeploymentState = DeploymentState.UNDEFINED;
   protected accountAddress?: Address;
   protected accountInitCode?: Hex;
-  protected owner: TOwner;
+  protected signer: TSigner;
   protected entryPoint: GetContractReturnType<
     typeof EntryPointAbi,
     PublicClient
@@ -65,7 +65,7 @@ export abstract class BaseSmartContractAccount<
   constructor(params_: BaseSmartAccountParams<TTransport>) {
     const params = createBaseSmartAccountParamsSchema<
       TTransport,
-      TOwner
+      TSigner
     >().parse(params_);
 
     this.entryPointAddress =
@@ -99,8 +99,13 @@ export abstract class BaseSmartContractAccount<
               ...fetchOptions,
               headers: {
                 ...fetchOptions?.headers,
-                "Alchemy-Aa-Sdk-Signer": params.owner?.signerType || "unknown",
-                "Alchemy-Aa-Sdk-Factory-Address": params.factoryAddress,
+                ...(rpcUrl.toLowerCase().indexOf("alchemy") > -1
+                  ? {
+                      "Alchemy-Aa-Sdk-Signer":
+                        params.signer?.signerType || "unknown",
+                      "Alchemy-Aa-Sdk-Factory-Address": params.factoryAddress,
+                    }
+                  : undefined),
               },
             },
           }),
@@ -109,7 +114,7 @@ export abstract class BaseSmartContractAccount<
 
     this.accountAddress = params.accountAddress;
     this.factoryAddress = params.factoryAddress;
-    this.owner = params.owner as TOwner;
+    this.signer = params.signer as TSigner;
     this.accountInitCode = params.initCode;
 
     this.entryPoint = getContract({
@@ -316,8 +321,8 @@ export abstract class BaseSmartContractAccount<
     return Object.assign(this, extended);
   };
 
-  getOwner(): TOwner {
-    return this.owner;
+  getSigner(): TSigner {
+    return this.signer;
   }
 
   getFactoryAddress(): Address {

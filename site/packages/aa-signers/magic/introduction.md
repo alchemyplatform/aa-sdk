@@ -19,7 +19,7 @@ head:
 `MagicSigner` provides implementations for all methods on `SmartAccountAuthenticator`:
 
 1.  [`authenticate`](/packages/aa-signers/magic/authenticate) -- supports user authentication.
-2.  [`getAddress`](/packages/aa-signers/magic/getAddress) -- supports typed data signatures from the smart contract account's owner address.
+2.  [`getAddress`](/packages/aa-signers/magic/getAddress) -- gets the address of the the smart contract account's connected EOA signer account.
 3.  [`signMessage`](/packages/aa-signers/magic/signMessage) -- supports message signatures.
 4.  [`signTypedData`](/packages/aa-signers/magic/signTypedData) -- supports typed data signatures.
 5.  [`getAuthDetails`](/packages/aa-signers/magic/getAuthDetails) -- supports authentication details retrieval.

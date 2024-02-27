@@ -17,9 +17,9 @@ import {
   polygonMumbai,
   sepolia,
   type GetAccountParameter,
-  type OwnedSmartContractAccount,
   type SmartAccountClient,
   type SmartAccountSigner,
+  type SmartContractAccountWithSigner,
   type UpgradeToData,
 } from "@alchemy/aa-core";
 import type { Address, Chain, Transport } from "viem";
@@ -54,7 +54,6 @@ export const getDefaultMultiOwnerModularAccountFactoryAddress = (
     case sepolia.id:
     case baseSepolia.id:
     case polygon.id:
-      return "0x000000CC76Ff50cAE2D633E79cCB1Fa1E6978D5a";
     case mainnet.id:
     case goerli.id:
     case polygonMumbai.id:
@@ -66,7 +65,7 @@ export const getDefaultMultiOwnerModularAccountFactoryAddress = (
     case arbitrumSepolia.id:
     case base.id:
     case baseGoerli.id:
-      throw new Error("not yet deployed");
+      return "0x000000e92D78D90000007F0082006FDA09BD5f11";
   }
   throw new DefaultFactoryNotDefinedError("MultiOwnerModularAccount", chain);
 };
@@ -74,10 +73,10 @@ export const getDefaultMultiOwnerModularAccountFactoryAddress = (
 export async function getMSCAUpgradeToData<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TOwner extends SmartAccountSigner = SmartAccountSigner,
-  TAccount extends OwnedSmartContractAccount<string, TOwner> | undefined =
-    | OwnedSmartContractAccount<string, TOwner>
-    | undefined
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TAccount extends
+    | SmartContractAccountWithSigner<string, TSigner>
+    | undefined = SmartContractAccountWithSigner<string, TSigner> | undefined
 >(
   client: SmartAccountClient<TTransport, TChain, TAccount>,
   {
@@ -88,18 +87,52 @@ export async function getMSCAUpgradeToData<
   } & GetAccountParameter<TAccount>
 ): Promise<
   UpgradeToData & {
-    createMAAccount: () => Promise<MultiOwnerModularAccount<TOwner>>;
+    createMAAccount: () => Promise<MultiOwnerModularAccount<TSigner>>;
   }
 > {
   if (!account_) {
     throw new AccountNotFoundError();
   }
+  const account = account_ as SmartContractAccountWithSigner<string, TSigner>;
 
+  const chain = client.chain;
+  if (!chain) {
+    throw new ChainNotFoundError();
+  }
+
+  const initData = await getMAInitializationData({
+    client,
+    multiOwnerPluginAddress,
+    signerAddress: await account.getSigner().getAddress(),
+  });
+
+  return {
+    ...initData,
+    createMAAccount: async () =>
+      createMultiOwnerModularAccount({
+        transport: custom(client.transport),
+        chain: chain as Chain,
+        signer: account.getSigner(),
+        accountAddress: account.address,
+      }),
+  };
+}
+
+export async function getMAInitializationData<
+  TTransport extends Transport = Transport,
+  TChain extends Chain | undefined = Chain | undefined
+>({
+  client,
+  multiOwnerPluginAddress,
+  signerAddress,
+}: {
+  multiOwnerPluginAddress?: Address;
+  client: SmartAccountClient<TTransport, TChain>;
+  signerAddress: Address | Address[];
+}): Promise<UpgradeToData> {
   if (!client.chain) {
     throw new ChainNotFoundError();
   }
-  const chain = client.chain;
-  const account = account_ as OwnedSmartContractAccount<string, TOwner>;
 
   const factoryAddress = getDefaultMultiOwnerModularAccountFactoryAddress(
     client.chain
@@ -132,14 +165,14 @@ export async function getMSCAUpgradeToData<
     })
   );
 
-  const ownerAddress = await account.getOwner().getAddress();
-  const encodedOwner = encodeAbiParameters(parseAbiParameters("address[]"), [
-    [ownerAddress],
-  ]);
+  const encodedOwner = encodeAbiParameters(
+    parseAbiParameters("address[]"),
+    Array.isArray(signerAddress) ? [signerAddress] : [[signerAddress]]
+  );
 
   const encodedPluginInitData = encodeAbiParameters(
     parseAbiParameters("bytes32[], bytes[]"),
-    [[hashedMultiOwnerPluginManifest], [encodedOwner, "0x"]]
+    [[hashedMultiOwnerPluginManifest], [encodedOwner]]
   );
 
   const encodedMSCAInitializeData = encodeFunctionData({
@@ -151,13 +184,5 @@ export async function getMSCAUpgradeToData<
   return {
     implAddress,
     initializationData: encodedMSCAInitializeData,
-    createMAAccount: async () =>
-      createMultiOwnerModularAccount({
-        transport: custom(client.transport),
-        chain: chain as Chain,
-        owner: account.getOwner(),
-        factoryAddress,
-        accountAddress: account.address,
-      }),
   };
 }

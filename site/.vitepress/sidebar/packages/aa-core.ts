@@ -121,7 +121,8 @@ export const aaCoreSidebar: DefaultTheme.SidebarItem = {
     {
       text: "Bundler Actions",
       collapsed: true,
-      base: "/packages/aa-core/bundler-client/index/actions",
+      link: "/packages/aa-core/bundler-client/actions/bundlerActions",
+      base: "/packages/aa-core/bundler-client/actions",
       items: [
         {
           text: "sendRawUserOperation",

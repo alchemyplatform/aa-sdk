@@ -20,7 +20,7 @@ head:
 
 # How to submit batch transactions
 
-One benefit of Smart Contract Accounts is that it's possible to batch transactions in one `UserOperation` (UO). Not all Smart Contract Accounts support batching. But, if the `SmartContractAccount` implementation you're using has the [`encodeBatchExecute`](/packages/aa-core/accounts/) method, then implementations of `SmartAccountClient` will allow you to make those calls.
+One benefit of Smart Contract Accounts is that it is possible to batch transactions in one `UserOperation` (UO). Not all Smart Contract Accounts support batching. But, if the `SmartContractAccount` implementation you are using has the [`encodeBatchExecute`](/packages/aa-core/accounts/) method, then implementations of `SmartAccountClient` will allow you to make those calls.
 
 There are two ways you can batch transactions using `SmartAccountClient`:
 
@@ -36,7 +36,7 @@ When you batch transactions, the transaction actions (`target`s and `calldata`s)
 :::
 
 :::tip Note 3: Batched Transactions Ordering
-The batched UO gets executed by the account calling the `executeBatch` method on [`LightAccount`](https://github.com/alchemyplatform/light-account/blob/v1.0.2/src/LightAccount.sol) smart contracts. `executeBatch` processes the input array of transactions data linearly, guaranteeing the execution order of those transactions to be **sequential**.
+The batched UO gets executed by the account calling the `executeBatch` method on [`LightAccount`](https://github.com/alchemyplatform/light-account/blob/v1.1.0/src/LightAccount.sol) or [Modular Account](https://github.com/alchemyplatform/modular-account/blob/develop/src/account/UpgradeableModularAccount.sol) smart contracts. `executeBatch` processes the input array of transactions data linearly, guaranteeing the execution order of those transactions to be **sequential**.
 :::
 
 ## Batching using [`sendUserOperation`](/packages/aa-core/smart-account-client/actions/sendUserOperation.md)

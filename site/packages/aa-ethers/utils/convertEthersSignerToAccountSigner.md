@@ -18,7 +18,7 @@ next:
 
 `convertEthersSignerToAccountSigner` converts your ethers.js `Signer` object into an `SmartAccountSigner` by deriving implementations of its methods: `getAddress`, `signMessage`, and `signTypedData`.
 
-Note that the `signTypedData` implementation is to throw an error since it is not supported by ethers.js `Signer`. If you're looking for an implementation, consideration using [`convertWalletToAccountSigner`](/packages/aa-ethers/utils/convertWalletToAccountSigner).
+Note that the `signTypedData` implementation is to throw an error since it is not supported by ethers.js `Signer`. If you are looking for an implementation, consideration using [`convertWalletToAccountSigner`](/packages/aa-ethers/utils/convertWalletToAccountSigner).
 
 ## Usage
 

@@ -57,7 +57,7 @@ const createAlchemyProvider = async () => {
   return createModularAccountAlchemyClient({
     apiKey: ALCHEMY_API_KEY,
     chain,
-    owner: await createDfnsSigner(),
+    signer: await createDfnsSigner(),
   });
 };
 ```

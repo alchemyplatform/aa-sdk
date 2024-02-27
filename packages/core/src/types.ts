@@ -8,7 +8,7 @@ import type {
   BigNumberishRangeSchema,
   BigNumberishSchema,
   HexSchema,
-  PercentageSchema,
+  MultiplierSchema,
 } from "./utils";
 
 export type Hex = z.input<typeof HexSchema>;
@@ -17,7 +17,7 @@ export type EmptyHex = `0x`;
 // based on @account-abstraction/common
 export type PromiseOrValue<T> = T | Promise<T>;
 export type BytesLike = Uint8Array | Hex;
-export type Percentage = z.input<typeof PercentageSchema>;
+export type Multiplier = z.input<typeof MultiplierSchema>;
 
 export type BigNumberish = z.input<typeof BigNumberishSchema>;
 export type BigNumberishRange = z.input<typeof BigNumberishRangeSchema>;
@@ -44,16 +44,24 @@ export type UserOperationFeeOptions = z.input<
 >;
 
 export type UserOperationOverrides = Partial<{
-  callGasLimit: UserOperationStruct["callGasLimit"] | Percentage;
-  maxFeePerGas: UserOperationStruct["maxFeePerGas"] | Percentage;
+  callGasLimit: UserOperationStruct["callGasLimit"] | Multiplier;
+  maxFeePerGas: UserOperationStruct["maxFeePerGas"] | Multiplier;
   maxPriorityFeePerGas:
     | UserOperationStruct["maxPriorityFeePerGas"]
-    | Percentage;
-  preVerificationGas: UserOperationStruct["preVerificationGas"] | Percentage;
+    | Multiplier;
+  preVerificationGas: UserOperationStruct["preVerificationGas"] | Multiplier;
   verificationGasLimit:
     | UserOperationStruct["verificationGasLimit"]
-    | Percentage;
+    | Multiplier;
   paymasterAndData: UserOperationStruct["paymasterAndData"];
+  /**
+   * This can be used to override the key used when calling `entryPoint.getNonce`
+   * It is useful when you want to use parallel nonces for user operations
+   *
+   * NOTE: not all bundlers fully support this feature and it could be that your bundler will still only include
+   * one user operation for your account in a bundle
+   */
+  nonceKey: bigint;
 }>;
 
 // represents the request as it needs to be formatted for RPC requests

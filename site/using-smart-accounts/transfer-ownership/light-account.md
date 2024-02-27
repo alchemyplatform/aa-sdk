@@ -20,11 +20,11 @@ head:
 
 # How to transfer ownership of a Light Account
 
-Not all smart account implementations support transfering the owner (e.g. `SimpleAccount`). However, a number of the accounts in this guide and in Account Kit do, including our Light Account! Let's see a few different ways we can transfer ownership of an Account (using Light Account as an example).
+Not all smart account implementations support transfering the ownership(e.g. `SimpleAccount`). However, a number of the accounts in this guide and in Account Kit do, including our Light Account! Let's see a few different ways we can transfer ownership of an Account (using Light Account as an example).
 
 ## Usage
 
-Light Account exposes the following method which allows the existing owner to transfer ownership to a new address:
+Light Account exposes the following method which allows the existing owner to transfer ownership to a new owner address:
 
 ```solidity
 function transferOwnership(address newOwner) public virtual onlyOwner
@@ -41,11 +41,20 @@ import { smartAccountClient as lightAccountClient } from "./smartAccountClient";
 
 // this will return the signer of the smart account you want to transfer ownerhip to
 const newOwner = LocalAccountSigner.mnemonicToAccountSigner(NEW_OWNER_MNEMONIC);
+const accountAddress = lightAccountClient.getAddress();
 
 // [!code focus:99]
 const hash = lightAccountClient.transferOwnership({
   newOwner,
   waitForTxn: true,
+});
+// after transaction is mined on the network,
+// create a new light account client for the transferred Light Account
+const transferredClient = await createLightAccountClient({
+  transport: custom(smartAccountClient),
+  chain: smartAccountClient.chain,
+  signer: newOwner,
+  accountAddress, // NOTE: you MUST to specify the original smart account address to connect using the new owner/signer
 });
 ```
 
@@ -53,7 +62,7 @@ const hash = lightAccountClient.transferOwnership({
 
 :::
 
-Since `@alchemy/aa-accounts` exports a `LightAccount` ABI, the above approach makes it easy to transfer ownership. That said, you can also directly call `sendUserOperation` to execute the ownership transfer. As you'll see below, however, it is a bit verbose:
+Since `@alchemy/aa-accounts` exports a `LightAccount` ABI, the above approach makes it easy to transfer ownership. That said, you can also directly call `sendUserOperation` to execute the ownership transfer. As you will see below, however, it is a bit verbose:
 
 ### 2. Using `sendUserOperation`
 
@@ -64,32 +73,16 @@ import { encodeFunctionData } from "viem";
 import { smartAccountClient } from "./smartAccountClient";
 
 // this will return the address of the smart account you want to transfer ownerhip of
-const accountAddress = await smartAccountClient.getAddress();
+const accountAddress = smartAccountClient.getAddress();
 const newOwner = "0x..."; // the address of the new owner
 
 // [!code focus:99]
-const { hash: userOperationHash } = smartAccountClient.sendUserOperation({
+const result = await smartAccountClient.sendUserOperation({
   to: accountAddress,
-  data: encodeFunctionData({
-    abi: [
-      {
-        inputs: [
-          {
-            internalType: "address",
-            name: "newOwner",
-            type: "address",
-          },
-        ],
-        name: "transferOwnership",
-        outputs: [],
-        stateMutability: "nonpayable",
-        type: "function",
-      },
-    ],
-    functionName: "transferOwnership",
-    args: [newOwner],
-  }),
+  data: smartAccountClient.encodeTransferOwnership(newOwner),
 });
+// wait for txn with UO to be mined
+await smartAccountClient.waitForUserOperationTransaction(result);
 ```
 
 <<< @/snippets/aa-alchemy/light-account-client.ts [smartAccountClient.ts]

@@ -8,7 +8,7 @@ import {
 export const smartAccountClient = await createModularAccountAlchemyClient({
   apiKey: "YOUR_API_KEY",
   chain: sepolia,
-  owner: LocalAccountSigner.mnemonicToAccountSigner("OWNER_MNEMONIC"),
+  signer: LocalAccountSigner.mnemonicToAccountSigner("OWNER_MNEMONIC"),
 });
 
 const uoStruct: UserOperationCallData = {

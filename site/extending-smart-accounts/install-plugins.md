@@ -22,11 +22,11 @@ head:
 
 [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) Modular Accounts implements Plugin manager interface [`IPluginManager.sol`](https://eips.ethereum.org/EIPS/eip-6900#ipluginmanagersol) to support installing and uninstalling plugins on a Modular Account. This contract interface defines the method `installPlugin()` and `uninstallPlugin()` that clients can use to install or uninstall plugins on a Modular Account.
 
-Account Kit provides a streamlined experience of interacting with Modular Account AccoutLoupe interface easily by providing `pluginManagerActions` defined in `@alchemy/aa-accounts` package. When you connect your Modular Account to `SmartAccountClient` you can extend the client with `pluginManagerActions`, which exposes a set of methods available to call the account `AccountLoupe` with the client connected to the account.
+Account Kit provides a streamlined experience of interacting with the Modular Account AccoutLoupe interface easily by providing `pluginManagerActions` defined in `@alchemy/aa-accounts` package. When you connect your Modular Account to `SmartAccountClient` you can extend the client with `pluginManagerActions`, which exposes a set of methods available to call the account `AccountLoupe` with the client connected to the account.
 
-In fact, there are two ways to install plugins. First method is to use the `pluginManagerActions`'s generic `installPlugin` method, but this method requires you to configure the correct plugin dependencies and function references for the plugin.
+There are two ways to install plugins. The first method is to use the `pluginManagerActions`'s generic `installPlugin` method, but this method requires the [`PluginGenConfig`](https://github.com/alchemyplatform/aa-sdk/blob/a9a11ec23b1084fa43edaa3cb933ff36318ca573/packages/accounts/plugindefs/types.ts) configure the correct plugin dependencies and function references for the plugin.
 
-Account Kit provides more robust, easier way to install plugins with `pluginActions`. Each plugin comes with the its own `pluginActions` that includes already configured install method, named `install<PluginName>`, for installing any plugin of interest. For example, `MultiOwnerPlugin` has `multiOwnerPluginActions` that includes `installMultiOwnerPlugin()` method, and `SessionKeyPlugin` has `sessionKeyPluginActions` that includes `installSessionKeyPlugin()` method, all exported from the `@alchemy/aa-accounts` package.
+Account Kit provides a more robust, easier way to install plugins with `pluginActions`. Each plugin comes with the its own `pluginActions` that includes already configured install method, named `install<PluginName>`, for installing any plugin of interest. For example, `MultiOwnerPlugin` has `multiOwnerPluginActions` that includes `installMultiOwnerPlugin()` method, and `SessionKeyPlugin` has `sessionKeyPluginActions` that includes `installSessionKeyPlugin()` method, all exported from the `@alchemy/aa-accounts` package.
 
 This guide will use the `SessionKeyPlugin` as an example to show how you can install `SessionKeyPlugin` easily using the `SmartAccountClient` extended with `sessionKeyPluginActions`.
 
@@ -66,13 +66,12 @@ await client.waitForUserOperationTransaction({ hash });
 
 :::
 
-You can refer to the [Session Key](/using-smart-accounts/session-keys/index.md) section to learn more about using the `SessionKeyPlugin`.
+Refer to the [Session Key](/using-smart-accounts/session-keys/index.md) section to learn more about using the `SessionKeyPlugin`.
 
 ### 2. Uninstalling the Session Key Plugin
 
-On the other hand, uninstalling plugin usually does not involve configuring contract depedencies or function references. You can use the `pluginManagerActions`'s generic `uninstallPlugin` method to uninstall a particular plugin of interest.
-
-You should first extend the `SmartAccountClient` connected to a Modular Account with `pluginManagerActions`.
+On the other hand, uninstalling plugins usually does not involve configuring contract dependencies or function references. You can use the `pluginManagerActions`'s generic `uninstallPlugin` method to uninstall a particular plugin of interest.
+First, extend the `SmartAccountClient` connected to a Modular Account with `pluginManagerActions`.
 
 Then, you can use the `uninstallPlugin()` method exposed on `pluginManagerActions` extended smart account client to uninstall the session key plugin for the connected account.
 

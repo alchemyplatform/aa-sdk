@@ -5,8 +5,8 @@ import {
   getVersion060EntryPoint,
   toSmartContractAccount,
   type Address,
-  type OwnedSmartContractAccount,
   type SmartAccountSigner,
+  type SmartContractAccountWithSigner,
   type UserOperationRequest,
 } from "@alchemy/aa-core";
 import {
@@ -23,16 +23,16 @@ import { getDefaultMultiOwnerModularAccountFactoryAddress } from "../utils.js";
 import { standardExecutor } from "./standardExecutor.js";
 
 export type MultiOwnerModularAccount<
-  TOwner extends SmartAccountSigner = SmartAccountSigner
-> = OwnedSmartContractAccount<"MultiOwnerModularAccount", TOwner>;
+  TSigner extends SmartAccountSigner = SmartAccountSigner
+> = SmartContractAccountWithSigner<"MultiOwnerModularAccount", TSigner>;
 
 export type CreateMultiOwnerModularAccountParams<
   TTransport extends Transport = Transport,
-  TOwner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = {
   transport: TTransport;
   chain: Chain;
-  owner: TOwner;
+  signer: TSigner;
   salt?: bigint;
   factoryAddress?: Address;
   owners?: Address[];
@@ -43,15 +43,15 @@ export type CreateMultiOwnerModularAccountParams<
 
 export async function createMultiOwnerModularAccount<
   TTransport extends Transport = Transport,
-  TOwner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  config: CreateMultiOwnerModularAccountParams<TTransport, TOwner>
-): Promise<MultiOwnerModularAccount<TOwner>>;
+  config: CreateMultiOwnerModularAccountParams<TTransport, TSigner>
+): Promise<MultiOwnerModularAccount<TSigner>>;
 
 export async function createMultiOwnerModularAccount({
   transport,
   chain,
-  owner: owner_,
+  signer,
   accountAddress,
   initCode,
   entryPoint = getVersion060EntryPoint(chain),
@@ -59,7 +59,6 @@ export async function createMultiOwnerModularAccount({
   owners = [],
   salt = 0n,
 }: CreateMultiOwnerModularAccountParams): Promise<MultiOwnerModularAccount> {
-  let owner = owner_;
   const client = createBundlerClient({
     transport,
     chain,
@@ -69,7 +68,8 @@ export async function createMultiOwnerModularAccount({
       return initCode;
     }
 
-    const ownerAddress = await owner.getAddress();
+    // NOTE: the current signer connected will be one of the owners as well
+    const ownerAddress = await signer.getAddress();
     // owners need to be dedupe + ordered in ascending order and not == to zero address
     const owners_ = Array.from(new Set([...owners, ownerAddress]))
       .filter((x) => hexToBigInt(x) !== 0n)
@@ -105,15 +105,12 @@ export async function createMultiOwnerModularAccount({
     source: `MultiOwnerModularAccount`,
     getAccountInitCode,
     ...standardExecutor,
-    ...multiOwnerMessageSigner(client, accountAddress, () => owner),
+    ...multiOwnerMessageSigner(client, accountAddress, () => signer),
   });
 
   return {
     ...baseAccount,
-    publicKey: await owner.getAddress(),
-    getOwner: () => owner,
-    setOwner: (newOwner) => {
-      owner = newOwner;
-    },
+    publicKey: await signer.getAddress(),
+    getSigner: () => signer,
   };
 }

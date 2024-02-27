@@ -1,9 +1,9 @@
 import {
-  isHex,
   type HDAccount,
   type Hex,
   type LocalAccount,
   type PrivateKeyAccount,
+  type SignableMessage,
   type TypedData,
   type TypedDataDefinition,
 } from "viem";
@@ -22,20 +22,10 @@ export class LocalAccountSigner<
     this.signerType = inner.type; //  type: "local"
   }
 
-  readonly signMessage: (msg: string | Uint8Array) => Promise<`0x${string}`> = (
-    msg
+  readonly signMessage: (message: SignableMessage) => Promise<`0x${string}`> = (
+    message
   ) => {
-    if (typeof msg === "string" && !isHex(msg)) {
-      return this.inner.signMessage({
-        message: msg,
-      });
-    } else {
-      return this.inner.signMessage({
-        message: {
-          raw: msg,
-        },
-      });
-    }
+    return this.inner.signMessage({ message });
   };
 
   readonly signTypedData = async <
@@ -52,14 +42,14 @@ export class LocalAccountSigner<
   };
 
   static mnemonicToAccountSigner(key: string): LocalAccountSigner<HDAccount> {
-    const owner = mnemonicToAccount(key);
-    return new LocalAccountSigner(owner);
+    const signer = mnemonicToAccount(key);
+    return new LocalAccountSigner(signer);
   }
 
   static privateKeyToAccountSigner(
     key: Hex
   ): LocalAccountSigner<PrivateKeyAccount> {
-    const owner = privateKeyToAccount(key);
-    return new LocalAccountSigner(owner);
+    const signer = privateKeyToAccount(key);
+    return new LocalAccountSigner(signer);
   }
 }
