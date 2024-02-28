@@ -139,13 +139,11 @@ export class AlchemySignerClient {
     return user;
   };
 
-  public whoami = async (orgId = this.user?.orgId): Promise<User> => {
+  public whoami = async (
+    orgId = this.user?.orgId ?? ROOT_ORG_ID
+  ): Promise<User> => {
     if (this.user) {
       return this.user;
-    }
-
-    if (!orgId) {
-      throw new Error("No orgId provided");
     }
 
     const stampedRequest = await this.turnkeyClient.stampGetWhoami({
