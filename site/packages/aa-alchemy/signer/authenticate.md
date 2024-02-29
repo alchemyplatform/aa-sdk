@@ -29,17 +29,18 @@ The `authenticate` method is used to authenticate a user with the Alchemy Signer
 ```ts
 import { signer } from "./signer";
 
-const bundlePromise = new Promise(async (resolve) => {
-  // up to you define how you collect the OTP from the user
-  const otpFromUser = await getOtpFromUser();
-  resolve(otpFromUser);
-});
-
+// init the email auth flow
+// NOTE: the signer will handle waiting for email auth to complete in another tab with this method
 const user = await signer.authenticate({
   type: "email",
   email: "user@email.com",
-  // the bundle is the OTP that the user will input from their email
-  bundle: bundlePromise,
+});
+
+// OR if you have the bundle the query params
+
+const user = await signer.authenticate({
+  type: "email",
+  bundle: new URLSearchParams(window.location.search).get("bundle"),
 });
 ```
 
@@ -57,7 +58,8 @@ const user = await signer.authenticate({
 
 ```ts
 export type AuthParams =
-  | { type: "email"; email: string; bundle: Promise<string> }
+  | { type: "email"; email: string }
+  | { type: "email"; bundle: string }
   | {
       type: "passkey";
       createNew: false;
