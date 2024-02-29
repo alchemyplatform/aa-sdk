@@ -22,9 +22,17 @@ head:
 
 The Alchemy Signer is a `SmartAccountSigner` that is powered by Alchemy's Signer Infrastructure. Using the Alchemy Signer, you can get started building embedded accounts with just an Alchemy API key!
 
+Learn how to set up your account config, create an `AlchemySigner`, log users in with email auth, and create a embedded account with our signer to enable email, passkeys (i.e. biometrics), and soon social auth flows!
+
+::: tip
+The Alchemy Signer requires the use of an `iframe`, so must be used in the context of an application. You'll need to build your own custom frontend.
+
+See an example of a full Alchemy Embedded Account [here](https://github.com/alchemyplatform/embedded-accounts-demo.git)!
+:::
+
 ## Create an account config
 
-To use the Alchemy Signer, you will need to create a new account config in your [Alchemy Accounts Manager Dashboard](https://dashboard.alchemy.com/accounts/) and connect this to your apps.
+To use the Alchemy Signer, you will need to create a new account config in your [Alchemy Accounts Manager Dashbord](https://dashboard.alchemy.com/accounts) and connect this to your apps.
 
 <img src="/images/alchemy-accounts-dashboard.png" width="auto" height="auto" alt="Create new embedded account config" style="display: block; margin: auto;">
 
@@ -53,14 +61,6 @@ Once you have initialized your signer, you can now enable your users to create a
 :::
 
 Once your signer is authenticated with a user, you can use it to sign User Operations by creating a `SmartContractAccount` and passing the signer to it.
-
-::: tip
-The Alchemy Signer requires the use of an `iframe`, so must be used in the context of an application. You'll need to build your own custom frontend unlike this quickstart guide which allows you to run a script.
-
-Learn how to set up your account config, create an `AlchemySigner`, log users in with email auth, and create a embedded account with our signer in [this guide](/signers/alchemy-signer). See an example of a full embedded account [here](https://github.com/alchemyplatform/embedded-accounts-demo.git)!
-
-See an example of a full Embedded Account using Alchemy Signer [here](https://github.com/alchemyplatform/embedded-accounts-demo.git)!
-:::
 
 ## Leveraging Persistent Sessions
 
