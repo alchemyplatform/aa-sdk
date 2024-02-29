@@ -41,6 +41,10 @@ smartAccountClient.sendUserOperation({
 });
 
 // send batch
+
+// NOTE: Not all Smart Contract Accounts support batching.
+// The `SmartContractAccount` implementation must have the `encodeBatchExecute` method
+// implemented for the `SmartAccountClient` to execute the batched user operation successfully.
 smartAccountClient.sendUserOperation({
   uo: [
     {
@@ -69,18 +73,26 @@ A Promise containing the hash of the user operation and the request that was sen
 
 ## Parameters
 
-### `UserOperationCallData | UserOperationCallData[] | Hex`
+### `SendUserOperationParameters<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined>`
 
-`UserOperationCallData` is an object with the following properties:
+::: details SendUserOperationParameters
+<<< @/../packages/core/src/actions/smartAccount/types.ts#SendUserOperationParameters
+:::
 
-- `target: Address` - the target of the call (equivalent to `to` in a transaction)
-- `data: Hex` - can be either `0x` or a call data string
-- `value?: bigint` - optionally, set the value in wei you want to send to the target
+- `uo: UserOperationCallData | UserOperationCallData[]`
 
-### `overrides?:` [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides.md)
+  ::: details UserOperationCallData
+  <<< @/../packages/core/src/types.ts#UserOperationCallData
+  :::
+
+  - `target: Address` - the target of the call (equivalent to `to` in a transaction)
+  - `data: Hex` - can be either `0x` or a call data string
+  - `value?: bigint` - optionally, set the value in wei you want to send to the target
+
+- `overrides?:` [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides.md)
 
 Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` or `paymasterAndData` on the user operation request
 
-### `account?: SmartContractAccount`
+- `account?: TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined`
 
-If your client was not instantiated with an account, then you will have to pass the account in to this call.
+If your client was not instantiated with an account, then you will have to pass the account into this call.

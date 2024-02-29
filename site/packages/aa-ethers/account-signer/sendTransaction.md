@@ -50,3 +50,7 @@ A Promise containing the ethers.js `TransactionResponse` object
 ### `transaction: Deferrable<TransactionRequest>`
 
 The ethers.js `TransactionRequest` object, where each field may be a Promise or its value
+
+### `overrides?:` [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides.md)
+
+Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` or `paymasterAndData` on the user operation request

@@ -4,7 +4,7 @@ import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
 import { AccountNotFoundError } from "../../errors/account.js";
 import { IncompatibleClientError } from "../../errors/client.js";
 import { buildUserOperationFromTxs } from "./buildUserOperationFromTxs.js";
-import { sendUserOperation } from "./sendUserOperation.js";
+import { _sendUserOperation } from "./internal/sendUserOperation.js";
 import type { SendTransactionsParameters } from "./types";
 import { waitForUserOperationTransaction } from "./waitForUserOperationTransacation.js";
 
@@ -31,19 +31,15 @@ export const sendTransactions: <
     );
   }
 
-  const { batch, overrides: _overrides } = await buildUserOperationFromTxs(
-    client,
-    {
-      requests,
-      overrides,
-      account,
-    }
-  );
-
-  const { hash } = await sendUserOperation(client, {
-    uo: batch,
-    overrides: _overrides,
+  const { uoStruct } = await buildUserOperationFromTxs(client, {
+    requests,
+    overrides,
     account,
+  });
+
+  const { hash } = await _sendUserOperation(client, {
+    account: account as SmartContractAccount,
+    uoStruct,
   });
 
   return waitForUserOperationTransaction(client, { hash });

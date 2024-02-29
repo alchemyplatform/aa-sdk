@@ -16,9 +16,9 @@ head:
 
 This takes an ethereum transaction and converts it into a `UserOperation` (UO), sends the UO, and waits on the receipt of that UO (i.e. has it been mined).
 
-If you don't want to wait for the UO to mine, it is recommended to user [sendUserOperation](./sendUserOperation) instead.
+If you don't want to wait for the UO to mine, it is recommended to use [sendUserOperation](./sendUserOperation) instead.
 
-Note that `to` field of transaction is required, and among other fields of transaction, only `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas` fields are considered if given. Support for other fields is coming soon.
+Note that `to`, `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas` fields of the transaction request type are considered and used to build the user operation from the transaction, while other fields are not used.
 
 ## Usage
 
@@ -27,7 +27,7 @@ Note that `to` field of transaction is required, and among other fields of trans
 ```ts [example.ts]
 import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
-const txHash = await smartAccountClient.sendTransaction({
+const tx: RpcTransactionRequest = {
   from, // ignored
   to,
   data: encodeFunctionData({
@@ -35,7 +35,8 @@ const txHash = await smartAccountClient.sendTransaction({
     functionName: "func",
     args: [arg1, arg2, ...],
   }),
-});
+};
+const txHash = await smartAccountClient.sendTransaction(tx);
 ```
 
 <<< @/snippets/aa-core/smartAccountClient.ts
@@ -50,14 +51,26 @@ A Promise containing the transaction hash
 
 ## Parameters
 
-### `...request: RpcTransactionRequest`
+### `args: SendTransactionParameters<TChain, TAccount, TChainOverride>`
 
-The `RpcTransactionRequest` object representing a traditional ethereum transaction
+::: details SendTransactionParameters
+
+```ts
+export type SendTransactionParameters<
+  TChain extends Chain | undefined = Chain | undefined,
+  TAccount extends Account | undefined = Account | undefined,
+  TChainOverride extends Chain | undefined = Chain | undefined,
+  ///
+  derivedChain extends Chain | undefined = DeriveChain<TChain, TChainOverride>
+> = UnionOmit<FormattedTransactionRequest<derivedChain>, "from"> &
+  GetAccountParameter<TAccount> &
+  GetChainParameter<TChain, TChainOverride>;
+```
+
+:::
+
+The [`SendTransactionParameters`](https://github.com/wevm/viem/blob/6ef4ac131a878bf1dc4b335f5dc127e62618dda0/src/types/transaction.ts#L209) used as the parameter to the `WalletAction` [`sendTransaction`](https://viem.sh/docs/actions/wallet/sendTransaction) method representing a traditional ethereum transaction request.
 
 ### `overrides?:` [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides.md)
 
 Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` or `paymasterAndData` on the user operation request
-
-### `account?: SmartContractAccount`
-
-If your client was not instantiated with an account, then you will have to pass the account in to this call.

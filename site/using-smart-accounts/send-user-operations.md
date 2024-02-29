@@ -36,19 +36,88 @@ The best part of Account Kit is that it abstracts the differences between User O
 
 The second best part of Account Kit is that it is build atop [viem](https://viem.sh/). This means we can leverage utility methods to easily generate calldata, with type safety, using a smart contract's ABI.
 
-<<< @/snippets/send-uo-example/calldata.ts
+::: code-group
+
+```ts{5-18} [example.ts]
+import { encodeFunctionData } from "viem";
+import { smartAccountClient } from "./smartAccountClient.ts";
+// [!code focus:16]
+// this is an example ABI for a contract with a "mint" function
+const AlchemyTokenAbi = [
+  {
+    inputs: [{ internalType: "address", name: "recipient", type: "address" }],
+    name: "mint",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
+const uoCallData = encodeFunctionData({
+  abi: AlchemyTokenAbi,
+  functionName: "mint",
+  args: [smartAccountClient.getAddress()],
+});
+
+const uo = await smartAccountClient.sendUserOperation({
+  uo: {
+    target: "0xTARGET_ADDRESS",
+    data: uoCallData,
+  },
+});
+const txHash = await smartAccountClient.waitForUserOperationTransaction(uo);
+console.log(txHash);
+```
+
+<<< @/snippets/aa-alchemy/connected-client.ts [smartAccountClient.ts]
+
+:::
 
 Some other helpful viem methods include: [encodeFunctionData](https://viem.sh/docs/contract/encodeFunctionData.html), [decodeFunctionData](https://viem.sh/docs/contract/decodeFunctionData.html), and [decodeFunctionResult](https://viem.sh/docs/contract/decodeFunctionResult.html).
 
 ## 3. Send the User Operation
 
-Now we will use the connected client to send a user operation. We will use the [sendUserOperation](/packages/aa-core/smart-account-client/actions/sendUserOperation.md) method on the client.
+Now, we will use the connected client to send a user operation. We will use the [sendUserOperation](/packages/aa-core/smart-account-client/actions/sendUserOperation.md) method on the client.
 
 You can either send ETH to the smart account to pay for User Operation's gas, or you can connect your client to our Gas Manager using the [withAlchemyGasManager](/packages/aa-alchemy/middleware/alchemyGasManagerMiddleware.md) method to sponsor the UO's gas. We will use the latter approach below. You can go to the [Alchemy Dashboard](https://dashboard.alchemy.com/gas-manager/?a=ak-docs) to get a Gas Manager policy ID.
 
-We will also want to wait for the transaction which contains the User Operation, so that we know the User Operation executed on-chain. We can use the [waitForUserOperationTransaction](/packages/aa-core/smart-account-client/actions/waitForUserOperationTransaction.md) method on client to do so, as seen below.
+We will also want to wait for the transaction that contains the User Operation so that we know the User Operation is executed on-chain. We can use the [waitForUserOperationTransaction](/packages/aa-core/smart-account-client/actions/waitForUserOperationTransaction.md) method on the client, as seen below.
 
-<<< @/snippets/send-uo-example/send-uo.ts
+::: code-group
+
+```ts{21-31} [example.ts]
+import { encodeFunctionData } from "viem";
+import { smartAccountClient } from "./smartAccountClient.ts";
+
+// this is an example ABI for a contract with a "mint" function
+const AlchemyTokenAbi = [
+  {
+    inputs: [{ internalType: "address", name: "recipient", type: "address" }],
+    name: "mint",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
+const uoCallData = encodeFunctionData({
+  abi: AlchemyTokenAbi,
+  functionName: "mint",
+  args: [smartAccountClient.getAddress()],
+});
+
+// [!code focus:10]
+const uo = await smartAccountClient.sendUserOperation({
+  uo: {
+    target: "0xTARGET_ADDRESS",
+    data: uoCallData,
+  },
+});
+const txHash = await smartAccountClient.waitForUserOperationTransaction(uo);
+console.log(txHash);
+```
+
+<<< @/snippets/aa-alchemy/connected-client.ts [smartAccountClient.ts]
+
+:::
 
 ## Try the full example!
 

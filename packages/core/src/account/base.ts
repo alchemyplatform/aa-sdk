@@ -124,7 +124,7 @@ export abstract class BaseSmartContractAccount<
     });
   }
 
-  // #region abstract-methods
+  //#region abstract-methods
 
   /**
    * This method should return a signature that will not `revert` during validation.
@@ -162,9 +162,9 @@ export abstract class BaseSmartContractAccount<
    */
   protected abstract getAccountInitCode(): Promise<Hash>;
 
-  // #endregion abstract-methods
+  //#endregion abstract-methods
 
-  // #region optional-methods
+  //#region optional-methods
 
   /**
    * If your account handles 1271 signatures of personal_sign differently
@@ -247,7 +247,7 @@ export abstract class BaseSmartContractAccount<
   ): Promise<Hex> => {
     throw new UpgradeToAndCallNotSupportedError("BaseAccount");
   };
-  // #endregion optional-methods
+  //#endregion optional-methods
 
   // Extra implementations
   async getNonce(): Promise<bigint> {
