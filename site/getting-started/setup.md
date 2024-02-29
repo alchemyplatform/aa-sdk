@@ -95,13 +95,11 @@ To read or write any data to a blockchain, you will need an Alchemy API Key and 
 
 ## 3. Query your Smart Account Address
 
-Using the SDK in the following example, we will use Account Kit to generate the address of your smart account from which to send a UO eventually.
-
 ::: tip
-For simplicity, we are using a Local Signer in this example. To build a full Alchemy Embedded Account with email, passkey (i.e. biometrics), and soon social auth flows, you should use the [Alchemy Signer](/signers/alchemy-signer)! The Alchemy Signer requires the use of an `iframe`, so must be used in the context of an application. You'll need to build your own custom frontend unlike this quickstart guide which allows you to run a script.
-
-Learn how to set up your account config, create an `AlchemySigner`, log users in with email auth, and create a embedded account with our signer in [this guide](/signers/alchemy-signer). See an example of a full embedded account [here](https://github.com/alchemyplatform/embedded-accounts-demo.git)!
+Don't use the example below with a hardcoded private key in production. Follow the [Alchemy Signer guide](/signers/alchemy-signer) to build a secure user friendly Embedded Account!
 :::
+
+Using the SDK in the following example, we will use Account Kit to generate the address of your smart account from which to send a UO eventually.
 
 <<< @/snippets/getting-started/client.ts
 
@@ -162,7 +160,11 @@ These are due to increased network activity at that time and are fleeting issues
 
 Since this "Getting started" example is a simple script, you must consider how Account Kit can work in various applications. Check out our [Demos](/overview/demos) to see how.
 
-## 6. Dive deeper
+## 6. Use Alchemy Signer
+
+In this example, we used a Local Signer. As the next step to a production ready app, follow this [Alchemy Signer guide](/signers/alchemy-signer) to build an Embedded Account with email, passkey (i.e. biometrics), and soon social auth flows!
+
+## Dive deeper
 
 In this guide, we initialized an `AlchemySmartAccountClient` with the `aa-alchemy` package to send a UO. However, you can do much more with Account Kit and its many packages.
 

@@ -55,6 +55,10 @@ Once you have initialized your signer, you can now enable your users to create a
 Once your signer is authenticated with a user, you can use it to sign User Operations by creating a `SmartContractAccount` and passing the signer to it.
 
 ::: tip
+The Alchemy Signer requires the use of an `iframe`, so must be used in the context of an application. You'll need to build your own custom frontend unlike this quickstart guide which allows you to run a script.
+
+Learn how to set up your account config, create an `AlchemySigner`, log users in with email auth, and create a embedded account with our signer in [this guide](/signers/alchemy-signer). See an example of a full embedded account [here](https://github.com/alchemyplatform/embedded-accounts-demo.git)!
+
 See an example of a full Embedded Account using Alchemy Signer [here](https://github.com/alchemyplatform/embedded-accounts-demo.git)!
 :::
 
