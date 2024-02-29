@@ -24,7 +24,7 @@ The Alchemy Signer is a `SmartAccountSigner` that is powered by Alchemy's Signer
 
 ## Create an account config
 
-To use the Alchemy Signer, you will need to create a new account config in your [Alchemy Accounts Manager Dashbord](https://dashboard.alchemy.com/accounts/) and connect this to your apps.
+To use the Alchemy Signer, you will need to create a new account config in your [Alchemy Accounts Manager Dashboard](https://dashboard.alchemy.com/accounts/) and connect this to your apps.
 
 <img src="/images/alchemy-accounts-dashboard.png" width="auto" height="auto" alt="Create new embedded account config" style="display: block; margin: auto;">
 
