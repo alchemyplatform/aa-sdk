@@ -3,8 +3,6 @@ import { useMutation } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 
 export const SignupLoginComponent = () => {
-  // The usePromise hook is a helpful utility that makes it easier to resolve user's input after
-  // a request has already been initiated
   const [email, setEmail] = useState<string>("");
 
   // It is recommended you wrap this in React Context or other state management
