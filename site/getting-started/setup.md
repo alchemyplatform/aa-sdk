@@ -96,7 +96,7 @@ To read or write any data to a blockchain, you will need an Alchemy API Key and 
 ## 3. Query your Smart Account Address
 
 ::: tip
-Don't use the example below with a hardcoded private key in production. Follow the [Alchemy Signer guide](/signers/alchemy-signer) to build a secure user friendly Embedded Account!
+Don't use hardcoded private keys in production, like the example below. Instead, follow the [Alchemy Signer guide](/signers/alchemy-signer) to build a secure user friendly Embedded Account!
 :::
 
 Using the SDK in the following example, we will use Account Kit to generate the address of your smart account from which to send a UO eventually.
