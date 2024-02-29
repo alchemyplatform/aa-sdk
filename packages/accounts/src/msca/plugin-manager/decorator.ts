@@ -9,6 +9,9 @@ import {
   type UninstallPluginParams,
 } from "./uninstallPlugin.js";
 
+export { type InstallPluginParams } from "./installPlugin.js";
+export { type UninstallPluginParams } from "./uninstallPlugin.js";
+
 export type PluginManagerActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
