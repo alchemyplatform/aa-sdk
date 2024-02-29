@@ -54,6 +54,10 @@ Once you have initialized your signer, you can now enable your users to create a
 
 Once your signer is authenticated with a user, you can use it to sign User Operations by creating a `SmartContractAccount` and passing the signer to it.
 
+::: tip
+See an example of a full Embedded Account using Alchemy Signer [here](https://github.com/alchemyplatform/embedded-accounts-demo.git)!
+:::
+
 ## Leveraging Persistent Sessions
 
 By default the `AlchemySigner` leverages `localStorage` to cache user sessions for 15 minutes. This can be configured by passing in a `sessionConfig` to your `AlchemySigner` constructor.

@@ -100,7 +100,7 @@ Using the SDK in the following example, we will use Account Kit to generate the 
 ::: tip
 For simplicity, we are using a Local Signer in this example. To build a full Alchemy Embedded Account with email, passkey (i.e. biometrics), and soon social auth flows, you should use the [Alchemy Signer](/signers/alchemy-signer)! The Alchemy Signer requires the use of an `iframe`, so must be used in the context of an application. You'll need to build your own custom frontend unlike this quickstart guide which allows you to run a script.
 
-Learn how to set up your account config, create an `AlchemySigner`, log users in with email auth, and create a embedded account with our signer in [this guide](/signers/alchemy-signer).
+Learn how to set up your account config, create an `AlchemySigner`, log users in with email auth, and create a embedded account with our signer in [this guide](/signers/alchemy-signer). See an example of a full embedded account [here](https://github.com/alchemyplatform/embedded-accounts-demo.git)!
 :::
 
 <<< @/snippets/getting-started/client.ts
