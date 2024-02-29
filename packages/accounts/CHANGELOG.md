@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.4.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.3.0...v3.4.0) (2024-02-29)
+
+### Features
+
+- export plugin install and uninstall param type from aa accounts package ([#494](https://github.com/alchemyplatform/aa-sdk/issues/494)) ([749180f](https://github.com/alchemyplatform/aa-sdk/commit/749180f176e7bcb85bbe49b098e04424c07791a9))
+
 # [3.3.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.2.1...v3.3.0) (2024-02-29)
 
 ### Features
