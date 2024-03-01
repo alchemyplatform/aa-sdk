@@ -6,22 +6,23 @@ import {
   type Hex,
 } from "@alchemy/aa-core";
 
+// select your chain from @alchemy/aa-core
 const chain = polygonMumbai;
 
 // The private key of your EOA that will be the signer to connect with the Modular Account
 const PRIVATE_KEY = "0xYourEOAPrivateKey" as Hex;
 const signer = LocalAccountSigner.privateKeyToAccountSigner(PRIVATE_KEY);
 
-// Create a provider to send user operations from your smart account
-const provider = await createModularAccountAlchemyClient({
-  // get your Alchemy API key at https://dashboard.alchemy.com
-  apiKey: "ALCHEMY_API_KEY",
-  chain,
-  signer,
-});
-
 // [!code focus:22]
 (async () => {
+  // Create a provider to send user operations from your smart account
+  const provider = await createModularAccountAlchemyClient({
+    // get your Alchemy API key at https://dashboard.alchemy.com
+    apiKey: "ALCHEMY_API_KEY",
+    chain,
+    signer,
+  });
+
   // Fund your account address with ETH to send for the user operations
   // (e.g. Get Sepolia ETH at https://sepoliafaucet.com)
   console.log("Smart Account Address: ", provider.getAddress()); // Log the smart account address
