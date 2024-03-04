@@ -63,7 +63,7 @@ Make sure your new `package.json` file looks similar to the one below. Note that
     "@alchemy/aa-accounts": "^*", // latest version
     "@alchemy/aa-alchemy": "^*", // latest version
     "@alchemy/aa-core": "^*", // latest version
-    "viem": "^1.21.4" // latest version compatible with aa-sdk
+    "viem": "^*" // latest version compatible with aa-sdk
   }
 }
 ```
@@ -94,6 +94,10 @@ To read or write any data to a blockchain, you will need an Alchemy API Key and 
 <img src="/images/alchemy-dashboard.png" width="auto" height="auto" alt="Account Kit Overview" style="display: block; margin: auto;">
 
 ## 3. Query your Smart Account Address
+
+::: tip
+Don't use hardcoded private keys in production, like the example below. Instead, follow the [Alchemy Signer guide](/signers/alchemy-signer) to build a secure user friendly Embedded Account!
+:::
 
 Using the SDK in the following example, we will use Account Kit to generate the address of your smart account from which to send a UO eventually.
 
@@ -156,7 +160,11 @@ These are due to increased network activity at that time and are fleeting issues
 
 Since this "Getting started" example is a simple script, you must consider how Account Kit can work in various applications. Check out our [Demos](/overview/demos) to see how.
 
-## 6. Dive deeper
+## 6. Use Alchemy Signer
+
+In this example, we used a Local Signer. As the next step to a production ready app, follow this [Alchemy Signer guide](/signers/alchemy-signer) to build an Embedded Account with email, passkey (i.e. biometrics), and soon social auth flows!
+
+## Dive deeper
 
 In this guide, we initialized an `AlchemySmartAccountClient` with the `aa-alchemy` package to send a UO. However, you can do much more with Account Kit and its many packages.
 

@@ -25,7 +25,8 @@ import {
 } from "./session/manager.js";
 
 export type AuthParams =
-  | { type: "email"; email: string; bundle: Promise<string> }
+  | { type: "email"; email: string }
+  | { type: "email"; bundle: string }
   | {
       type: "passkey";
       createNew: false;
@@ -183,32 +184,51 @@ export class AlchemySigner
   };
 
   private authenticateWithEmail = async (
-    params: Extract<AuthParams, { email: string }>
-  ) => {
-    const existingUser = await this.getUser(params.email);
-    const { orgId } = existingUser
-      ? await this.inner.initEmailAuth({
-          email: params.email,
-          expirationSeconds: this.sessionManager.expirationTimeMs,
-        })
-      : await this.inner.createAccount({
-          type: "email",
-          email: params.email,
-          expirationSeconds: this.sessionManager.expirationTimeMs,
+    params: Extract<AuthParams, { type: "email" }>
+  ): Promise<User> => {
+    if ("email" in params) {
+      const existingUser = await this.getUser(params.email);
+
+      const { orgId } = existingUser
+        ? await this.inner.initEmailAuth({
+            email: params.email,
+            expirationSeconds: this.sessionManager.expirationTimeMs,
+          })
+        : await this.inner.createAccount({
+            type: "email",
+            email: params.email,
+            expirationSeconds: this.sessionManager.expirationTimeMs,
+          });
+
+      this.sessionManager.setTemporarySession({ orgId });
+
+      // this will poll for the user to be commited to session storage in another tab
+      return new Promise<User>((resolve) => {
+        window.addEventListener("storage", (event) => {
+          if (event.key === this.sessionManager.sessionKey) {
+            resolve(this.sessionManager.getSessionUser().then((x) => x!));
+          }
         });
+      });
+    } else {
+      const temporarySession = this.sessionManager.getTemporarySession();
+      if (!temporarySession) {
+        throw new Error("Could not find email auth init session!");
+      }
 
-    // TODO: determine if this is the best way to do this.
-    // We have examples of doing this, but should we do it with events instead?
-    const bundle = await params.bundle;
-    const user = await this.inner.completeEmailAuth({ bundle, orgId });
+      const user = await this.inner.completeEmailAuth({
+        bundle: params.bundle,
+        orgId: temporarySession.orgId,
+      });
 
-    this.sessionManager.setSession({
-      type: "email",
-      bundle,
-      user,
-    });
+      this.sessionManager.setSession({
+        type: "email",
+        bundle: params.bundle,
+        user,
+      });
 
-    return user;
+      return user;
+    }
   };
 
   /**

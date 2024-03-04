@@ -53,16 +53,22 @@ A Promise containing the boolean value indicating whether the UO to be sent is e
 
 ## Parameters
 
-### `UserOperationCallData | UserOperationCallData[]`
+### `SendUserOperationParameters<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined>`
 
-- `target: Address` - the target of the call (equivalent to `to` in a transaction)
-- `data: Hex` - can be either `0x` or a call data string
-- `value?: bigint` - optionally, set the value in wei you want to send to the target
+::: details SendUserOperationParameters
+<<< @/../packages/core/src/actions/smartAccount/types.ts#SendUserOperationParameters
+:::
 
-### `overrides?:` [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides.md)
+- `uo: UserOperationCallData | UserOperationCallData[]`
+
+  - `target: Address` - the target of the call (equivalent to `to` in a transaction)
+  - `data: Hex` - can be either `0x` or a call data string
+  - `value?: bigint` - optionally, set the value in wei you want to send to the target
+
+- `overrides?:` [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides.md)
 
 Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` or `paymasterAndData` on the user operation request
 
-### `account?: SmartContractAccount`
+- `account?: TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined`
 
-If your client was not instantiated with an account, then you will have to pass the account in to this call.
+If your client was not instantiated with an account, then you will have to pass the account into this call.

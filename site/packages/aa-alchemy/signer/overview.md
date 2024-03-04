@@ -22,10 +22,6 @@ head:
 
 The Alchemy Signer is a `SmartAccountSigner` that is powered by Alchemy's Signer Infrastructure. Using the Alchemy Signer, you can get started building embedded accounts with just an Alchemy API key!
 
-::: warning
-The Alchemy Signer is currently still under development and is not yet available for public use. If you are interested in using the Alchemy Signer, please reach out to us at [account-abstraction@alchemy.com](mailto:account-abstraction@alchemy.com).
-:::
-
 ## Usage
 
 Once you have been granted access to the Alchemy Signer, getting started is really simple. Install the `@alchemy/aa-alchemy` package and initialize your signer:

@@ -24,8 +24,9 @@ export const buildUserOperationFromTx: <
   TChainOverride extends Chain | undefined = Chain | undefined
 >(
   client: Client<Transport, TChain, TAccount>,
-  args: SendTransactionParameters<TChain, TAccount, TChainOverride>
-) => Promise<UserOperationStruct> = async (client, args) => {
+  args: SendTransactionParameters<TChain, TAccount, TChainOverride>,
+  overrides?: UserOperationOverrides
+) => Promise<UserOperationStruct> = async (client, args, overrides) => {
   const { account = client.account, ...request } = args;
   if (!account || typeof account === "string") {
     throw new AccountNotFoundError();
@@ -44,6 +45,7 @@ export const buildUserOperationFromTx: <
   }
 
   const _overrides: UserOperationOverrides = {
+    ...overrides,
     maxFeePerGas: request.maxFeePerGas ? request.maxFeePerGas : undefined,
     maxPriorityFeePerGas: request.maxPriorityFeePerGas
       ? request.maxPriorityFeePerGas

@@ -22,6 +22,7 @@ export type Multiplier = z.input<typeof MultiplierSchema>;
 export type BigNumberish = z.input<typeof BigNumberishSchema>;
 export type BigNumberishRange = z.input<typeof BigNumberishRangeSchema>;
 
+//#region UserOperationCallData
 export type UserOperationCallData =
   | {
       /* the target of the call */
@@ -32,6 +33,7 @@ export type UserOperationCallData =
       value?: bigint;
     }
   | Hex;
+//#endregion UserOperationCallData
 
 export type BatchUserOperationCallData = Exclude<UserOperationCallData, Hex>[];
 

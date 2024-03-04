@@ -26,6 +26,7 @@ export const AlchemySignerClientParamsSchema = z.object({
     iframeElementId: z.string().default("turnkey-iframe"),
     iframeContainerId: z.string(),
   }),
+  rpId: z.string().optional(),
 });
 
 export type AlchemySignerClientParams = z.input<
@@ -57,7 +58,7 @@ export class AlchemySignerClient {
   iframeContainerId: string;
 
   constructor(params: AlchemySignerClientParams) {
-    const { connection, iframeConfig } =
+    const { connection, iframeConfig, rpId } =
       AlchemySignerClientParamsSchema.parse(params);
     this.connectionConfig = connection;
 
@@ -75,7 +76,7 @@ export class AlchemySignerClient {
     );
 
     this.webauthnStamper = new WebauthnStamper({
-      rpId: window.location.hostname,
+      rpId: rpId ?? window.location.hostname,
     });
   }
 

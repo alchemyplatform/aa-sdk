@@ -20,7 +20,7 @@ export const SessionManagerParamsSchema = z.object({
 export type SessionManagerParams = z.input<typeof SessionManagerParamsSchema>;
 
 export class SessionManager {
-  private sessionKey: string;
+  public sessionKey: string;
   private storage: Storage;
   private client: AlchemySignerClient;
   readonly expirationTimeMs: number;
@@ -87,6 +87,23 @@ export class SessionManager {
 
   public clearSession = () => {
     this.storage.removeItem(this.sessionKey);
+  };
+
+  public setTemporarySession = (session: { orgId: string }) => {
+    this.storage.setItem(
+      `${this.sessionKey}:temporary`,
+      JSON.stringify(session)
+    );
+  };
+
+  public getTemporarySession = (): { orgId: string } | null => {
+    const sessionStr = this.storage.getItem(`${this.sessionKey}:temporary`);
+
+    if (!sessionStr) {
+      return null;
+    }
+
+    return JSON.parse(sessionStr);
   };
 
   private getSession = (): Session | null => {

@@ -59,6 +59,7 @@ export {
 } from "./msca/plugins/session-key/plugin.js";
 export { SessionKeySigner } from "./msca/plugins/session-key/signer.js";
 export { buildSessionKeysToRemoveStruct } from "./msca/plugins/session-key/utils.js";
+export type * from "./msca/plugins/types.js";
 export {
   getDefaultMultiOwnerModularAccountFactoryAddress,
   getMAInitializationData,

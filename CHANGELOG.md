@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.4.0...v3.4.1) (2024-03-02)
+
+### Bug Fixes
+
+- allow rpid override in signer ([9dd7818](https://github.com/alchemyplatform/aa-sdk/commit/9dd781887f814a318f4ddabceedefd1298648918))
+
+# [3.4.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.3.0...v3.4.0) (2024-02-29)
+
+### Bug Fixes
+
+- **alchemy-signer:** undo a whoami change ([#495](https://github.com/alchemyplatform/aa-sdk/issues/495)) ([c88a965](https://github.com/alchemyplatform/aa-sdk/commit/c88a965e4a21816450b5baaa5820fa2389ed9199))
+
+### Features
+
+- export plugin install and uninstall param type from aa accounts package ([#494](https://github.com/alchemyplatform/aa-sdk/issues/494)) ([749180f](https://github.com/alchemyplatform/aa-sdk/commit/749180f176e7bcb85bbe49b098e04424c07791a9))
+- sign user op and send raw user op methods added to smart account client ([#486](https://github.com/alchemyplatform/aa-sdk/issues/486)) ([6518d12](https://github.com/alchemyplatform/aa-sdk/commit/6518d12190e9d48263e4776f288245b5a9940b36))
+
+# [3.3.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.2.1...v3.3.0) (2024-02-29)
+
+### Features
+
+- **alchemy-signer:** migrate the alchemy signer to use bundle from QP ([#492](https://github.com/alchemyplatform/aa-sdk/issues/492)) ([cd6f491](https://github.com/alchemyplatform/aa-sdk/commit/cd6f491ffb66de3924024420e76e5350f831497c))
+- export Plugin type from aa accounts package ([#493](https://github.com/alchemyplatform/aa-sdk/issues/493)) ([03543fb](https://github.com/alchemyplatform/aa-sdk/commit/03543fb3a5886110b3bad4d792efd5c01045d0a6))
+
+## [3.2.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.2.0...v3.2.1) (2024-02-27)
+
+### Bug Fixes
+
+- **actions:** drop and replace was not handling overrides ([#490](https://github.com/alchemyplatform/aa-sdk/issues/490)) ([83f5867](https://github.com/alchemyplatform/aa-sdk/commit/83f5867dd72e1daccba12cafd56d6aa070ef17f1))
+
 # [3.2.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.1.2...v3.2.0) (2024-02-26)
 
 ### Features

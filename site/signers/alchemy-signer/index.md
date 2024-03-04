@@ -22,13 +22,33 @@ head:
 
 The Alchemy Signer is a `SmartAccountSigner` that is powered by Alchemy's Signer Infrastructure. Using the Alchemy Signer, you can get started building embedded accounts with just an Alchemy API key!
 
-## Usage
+Learn how to set up your account config, create an `AlchemySigner`, log users in with email auth, and create a embedded account with our signer to enable email, passkeys (i.e. biometrics), and soon social auth flows!
+
+::: tip
+The Alchemy Signer requires the use of an `iframe`, so must be used in the context of an application. You'll need to build your own custom frontend.
+
+See an example of a full Alchemy Embedded Account [here](https://github.com/alchemyplatform/embedded-accounts-demo.git)!
+:::
+
+## Create an account config
+
+To use the Alchemy Signer, you will need to create a new account config in your [Alchemy Accounts Manager Dashbord](https://dashboard.alchemy.com/accounts) and connect this to your apps.
+
+<img src="/images/alchemy-accounts-dashboard.png" width="auto" height="auto" alt="Create new embedded account config" style="display: block; margin: auto;">
+
+The account config allows you to customize the signup and login authentication email that will be sent to users when logging in to your dapp. Apply the config to one or more apps.
+
+<img src="/images/create-account-config.png" width="auto" height="auto" alt="Account Kit Overview" style="display: block; margin: auto;">
+
+## Creating an Alchemy Signer
 
 Once you have been granted access to the Alchemy Signer, getting started is really simple. Install the `@alchemy/aa-alchemy` package and initialize your signer:
 
 <<< @/snippets/signers/alchemy/signer.ts
 
 For other configuration options, see the [Alchemy Signer API Reference](/packages/aa-alchemy/signer/overview).
+
+Ensure that the access key used corresponds to the apps connected to the account config created above.
 
 ## Logging Users in
 

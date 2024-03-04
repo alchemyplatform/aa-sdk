@@ -14,11 +14,11 @@ head:
 
 # sendTransactions
 
-This takes a set of ethereum transactions and converts them into one single `UserOperation` (UO), sends the UO, and waits on the receipt of that UO (i.e. has it been mined). If you don't want to wait for the UO to mine, it is recommended to user [sendUserOperation](./sendUserOperation) instead.
+This function takes a set of Ethereum transactions and batch converts to one single `UserOperation` (UO) struct, signs and sends that UO request, and waits on the receipt of that UO (i.e., has it been mined). If you don't want to wait for the UO to mine, it is recommended to use [sendUserOperation](./sendUserOperation) instead.
 
-**NOTE**: The account you are sending the transactions _to_ MUST support batch transactions.
+**NOTE**: Not all Smart Contract Accounts support batching. The `SmartContractAccount` implementation must implement the encodeBatchExecute method for the `SmartAccountClient` to execute the batched user operation successfully.
 
-Also note that `to` field of transaction is required, and among other fields of transaction, only `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas` fields are considered and optional.
+Note that `to`, `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas` fields of the transaction request type are considered and used to build the user operation from the transaction, while other fields are not used.
 
 ## Usage
 
@@ -27,7 +27,7 @@ Also note that `to` field of transaction is required, and among other fields of 
 ```ts [example.ts]
 import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
-const txHash = await smartAccountClient.sendTransactions({requests: [
+const requests: RpcTransactionRequest[] = [
   {
     from, // ignored
     to,
@@ -56,7 +56,8 @@ const txHash = await smartAccountClient.sendTransactions({requests: [
       args: [arg1, arg2, ...],
     }),
   },
-]});
+];
+const txHash = await smartAccountClient.sendTransactions({ requests });
 ```
 
 <<< @/snippets/aa-core/smartAccountClient.ts
@@ -67,18 +68,24 @@ const txHash = await smartAccountClient.sendTransactions({requests: [
 
 ### `Promise<Hash | null>`
 
-A Promise containing the transaction hash
+A Promise containing the transaction hash of the batched user operation of the input transactions
 
 ## Parameters
 
-### `requests: RpcTransactionRequest[]`
+### `SendTransactionsParameters<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined>`
 
-An `RpcTransactionRequest` array representing a traditional ethereum transaction
+::: details SendTransactionsParameters
+<<< @/../packages/core/src/actions/smartAccount/types.ts#SendTransactionsParameters
+:::
 
-### `overrides?:` [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides.md)
+- `requests: RpcTransactionRequest[]`
+
+The `RpcTransactionRequest` object representing a traditional ethereum transaction
+
+- `overrides?:` [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides.md)
 
 Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` or `paymasterAndData` on the user operation request
 
-### `account?: SmartContractAccount`
+- `account?: TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined`
 
-If your client was not instantiated with an account, then you will have to pass the account in to this call.
+If your client was not instantiated with an account, then you will have to pass the account into this call.
