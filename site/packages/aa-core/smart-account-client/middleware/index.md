@@ -14,9 +14,9 @@ head:
 
 # ClientMiddleware
 
-Middleware represents different operations involved in the [`SmartAccountClient`](/packages/aa-core/smart-account-client/) pipeline for constructing a user operation given the user inputs by populating the UO with other data including gas fee, paymaster data, etc.
+Middleware represents different operations involved in the [`SmartAccountClient`](/packages/aa-core/smart-account-client/) pipeline for constructing a user operation given the user inputs by populating the UO with other data, including gas fees, paymaster data, etc.
 
-Each middleware is a function that takes in a user operation object, performs its job to retrieve or compute the data, and populate different fields of user operation to pass onto the next middleware in the pipeline before being signed and sent to the network.
+Each middleware is a function that takes in a user operation object, performs its job to retrieve or compute the data, and populate different fields of the user operation to pass onto the next middleware in the pipeline before being signed and sent to the network.
 
 ```ts
 export type ClientMiddlewareFn = <TAccount extends SmartContractAccount>(
@@ -47,11 +47,11 @@ export type ClientMiddleware = {
 
 ### paymasterAndData
 
-`paymasterAndData` middleware is responsible for computing `paymasterAndData` fields of user operation after estimating gas and fees. `dummyPaymasterAndData` is a dummy middleware that just returns a Hex string to be used during gas and fee estimation. This will depend on your paymaster provider and must be a value that accurately resembles the gas cost of using your paymaster and does not revert during validation.
+`paymasterAndData` middleware is responsible for computing `paymasterAndData` fields of user operation after estimating gas and fees. `dummyPaymasterAndData` is a dummy middleware that returns a Hex string for gas and fee estimation. This will depend on your paymaster provider and must be a value that accurately resembles the gas cost of using your paymaster and does not revert during validation.
 
 ### customMiddleware
 
-By default, this is a no-op middleware, but available for you to include any custom step during the user operation construction pipeline.
+This is a no-op middleware, but you can include any custom step during the user operation construction pipeline.
 
 ### userOperationSimulator
 
@@ -59,7 +59,7 @@ If you are simulating a user operation using [`simulateUserOperation`](/packages
 
 ## Use custom middleware using `ClientMiddlewareConfig` in `SmartAccountClientConfig`
 
-For each middleware, there exists a default that `SmartAccountClient` uses, but these defaults can be overridden flexibly with your custom middleware function upon the creation of the client by using `ClientMiddlewareConfig` included in `SmartAccountClientConfig` used as `createSmartAccountClient()` method to create create the client. Below is an example of how you can use your own version of gas estimator if you choose to opt out of using the default gas estimator.
+For each middleware, a default exists that `SmartAccountClient` uses. Still, these defaults can be overridden flexibly with your custom middleware function upon the creation of the client by using `ClientMiddlewareConfig` included in `SmartAccountClientConfig` used as `createSmartAccountClient()` method to create the client. Below is an example of how you can use your version of the gas estimator if you opt out of using the default gas estimator.
 
 ```ts
 export type ClientMiddlewareConfig = Omit<

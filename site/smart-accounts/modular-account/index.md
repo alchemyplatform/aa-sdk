@@ -28,7 +28,7 @@ Modular Account is an ERC-4337 smart account that supports customizable features
 
 ### Make the most of Account Abstraction
 
-Smart accounts unlock lots of customizable ways to improve the wallet experience. Still, it requires writing this behavior into the smart contract for the account, which is difficult and security-critical. Modular Account uses the [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) framework to simplify the creation of powerful features for smart accounts. We have created two plugins to level up your smart accounts, and we look forward to what new plugins you create!
+Smart accounts unlock lots of customizable ways to improve the wallet experience. Still, it requires writing this behavior into the smart contract for the account, which is difficult and security-critical. Modular Account uses the [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) framework to simplify creating powerful features for smart accounts. We have created two plugins to level up your smart accounts, and we look forward to what new plugins you create!
 
 ### Multi Owner Plugin
 

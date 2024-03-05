@@ -6,6 +6,7 @@ import type {
   TypedDataDefinition,
 } from "viem";
 
+//#region SmartAccountAuthenticator
 /**
  * Extends the @interface SmartAccountSigner interface with authentication.
  *
@@ -22,7 +23,9 @@ export interface SmartAccountAuthenticator<AuthParams, AuthDetails, Inner = any>
 
   getAuthDetails: () => Promise<AuthDetails>;
 }
+//#endregion SmartAccountAuthenticator
 
+//#region SmartAccountSigner
 /**
  * A signer that can sign messages and typed data.
  *
@@ -50,3 +53,4 @@ export interface SmartAccountSigner<Inner = any> {
     params: TypedDataDefinition<TTypedData, TPrimaryType>
   ) => Promise<Hex>;
 }
+//#endregion SmartAccountSigner

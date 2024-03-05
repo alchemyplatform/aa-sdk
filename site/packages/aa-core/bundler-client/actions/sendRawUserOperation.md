@@ -27,7 +27,7 @@ import { client } from "./client";
 
 const hash = await client.sendRawUserOperation(
   {
-    // ... user operation
+    // ... signed raw user operation
   },
   "0xEntryPointAddress"
 );
