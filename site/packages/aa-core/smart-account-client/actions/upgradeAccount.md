@@ -66,10 +66,10 @@ The [`SmartContractClient`](/packages/aa-core/smart-account-client/) instance
 
   Encoded contract initiation data for the new implementation contract
 
-- `overrides?: `[UserOperationOverrides](/packages/aa-core/smart-account-client/types/userOperationOverrides.md)
+- `overrides?:` [`UserOperationOverrides`](/resources/types#UserOperationOverrides)
 
-  Optional overrides for the user operation
+Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit`, `paymasterAndData`, or `nonceKey` for the user operation request
 
 - `waitForTx?: boolean`
 
-  If true, the method would wait for the user operation transaction to be mined
+If true, the method would wait for the user operation transaction to be mined

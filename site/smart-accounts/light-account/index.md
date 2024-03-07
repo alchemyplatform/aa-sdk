@@ -34,9 +34,11 @@ The code snippet below demonstrates how to use Light Account with Account Kit. I
 ::: code-group
 
 ::: tip Address calculation
-For the Light Account, the address of the smart account will be calculated as a combination of [the owner and the salt](https://github.com/alchemyplatform/light-account/blob/main/src/LightAccountFactory.sol#L24-L33). You will get the same smart account address each time you supply the same `owner`, the signer used to create the account for the first time. You can also optionally supply `salt` if you want a different address for the same `owner` param (the default salt is `0n`).
+For the Light Account, the address of the smart account will be calculated as a combination of [the owner and the salt](https://github.com/alchemyplatform/light-account/blob/main/src/LightAccountFactory.sol#L24-L33). You will get the same smart account address each time you supply the same `owner`, the signer used to create the account for the first time. Alternatively, you can supply `salt` if you want a different address for the same `owner` param (the default salt is `0n`).
 
 If you want to use a signer to connect to an account whose address does not map to the contract-generated address, you can supply the `accountAddress` to connect with the account of interest. In that case, the `signer` address is not used for address calculation, but only used for signing the operation.
+
+Reference: https://eips.ethereum.org/EIPS/eip-4337#first-time-account-creation
 :::
 
 ## [Deployment addresses](https://github.com/alchemyplatform/light-account/blob/v1.1.0/Deployments.md)

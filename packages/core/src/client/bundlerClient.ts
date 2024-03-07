@@ -20,6 +20,7 @@ import {
   type BundlerRpcSchema,
 } from "./decorators/bundlerClient.js";
 
+//#region BundlerClient
 export type BundlerClient<T extends Transport = Transport> = Client<
   T,
   Chain,
@@ -37,6 +38,7 @@ export const createBundlerClientFromExisting: <
 ): BundlerClient<T> => {
   return client.extend(bundlerActions);
 };
+//#endregion BundlerClient
 
 /**
  * Creates a PublicClient with methods for calling Bundler RPC methods

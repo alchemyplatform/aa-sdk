@@ -54,10 +54,10 @@ A Promise containing the hash of the user operation request sent to the bundler 
 
 A previously submitted `UserOperationRequest` to be dropped and replaced by a new user operation with higher gas to be mined faster
 
-- `overrides?:` [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides.md)
+- `overrides?:` [`UserOperationOverrides`](/resources/types#UserOperationOverrides)
 
-Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` or `paymasterAndData` on the user operation request
+Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit`, `paymasterAndData`, or `nonceKey` for the user operation request
 
-- `account?: SmartContractAccount`
+- `account?: TAccount extends SmartContractAccount | undefined`
 
-If your client was not instantiated with an account, then you will have to pass the account in to this call.
+When using this action, if the `SmartContractAccount` has not been connected to the `SmartAccountClient` (e.g. `SmartAccountClient` not instantiated with your `SmartContractAccount` during [`createSmartAccountClient`](/packages/aa-core/smart-account-client/)). You can check if the account is connected to the client by checking the `account` field of `SmartAccountClient`. If the account is not connected, you can specify the `SmartContractAccount` instance to use for the function call.

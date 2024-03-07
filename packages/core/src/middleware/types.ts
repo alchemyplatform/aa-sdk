@@ -6,6 +6,7 @@ import type {
 } from "../types";
 import type { Deferrable } from "../utils";
 
+//#region ClientMiddlewareFn
 export type ClientMiddlewareFn = <TAccount extends SmartContractAccount>(
   struct: Deferrable<UserOperationStruct>,
   args: {
@@ -14,7 +15,9 @@ export type ClientMiddlewareFn = <TAccount extends SmartContractAccount>(
     account: TAccount;
   }
 ) => Promise<Deferrable<UserOperationStruct>>;
+//#endregion ClientMiddlewareFn
 
+//#region ClientMiddleware
 export type ClientMiddleware = {
   dummyPaymasterAndData: ClientMiddlewareFn;
   feeEstimator: ClientMiddlewareFn;
@@ -23,3 +26,4 @@ export type ClientMiddleware = {
   paymasterAndData: ClientMiddlewareFn;
   userOperationSimulator: ClientMiddlewareFn;
 };
+//#endregion ClientMiddleware

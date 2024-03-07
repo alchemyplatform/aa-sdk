@@ -18,6 +18,7 @@ import type {
   UserOperationResponse,
 } from "../../types.js";
 
+// Reference: https://eips.ethereum.org/EIPS/eip-4337#rpc-methods-eth-namespace
 export type BundlerRpcSchema = [
   {
     Method: "eth_sendUserOperation";
@@ -46,6 +47,7 @@ export type BundlerRpcSchema = [
   }
 ];
 
+//#region BundlerActions
 export type BundlerActions = {
   /**
    * calls `eth_estimateUserOperationGas` and  returns the result
@@ -94,6 +96,7 @@ export type BundlerActions = {
    */
   getSupportedEntryPoints(): Promise<Address[]>;
 };
+//#endregion BundlerActions
 
 export const bundlerActions: <
   TClient extends Client<

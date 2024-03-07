@@ -158,7 +158,7 @@ When running the above script, you might see the following errors:
 These are due to increased network activity at that time and are fleeting issues. Running the script again will resolve them naturally.
 :::
 
-Since this "Getting started" example is a simple script, you must consider how Account Kit can work in various applications. Check out our [Demos](/overview/demos) to see how.
+Since this "Getting started" example is a simple script, you must consider how Account Kit can work in various applications.
 
 ## 6. Use Alchemy Signer
 
@@ -168,14 +168,10 @@ In this example, we used a Local Signer. As the next step to a production ready 
 
 In this guide, we initialized an `AlchemySmartAccountClient` with the `aa-alchemy` package to send a UO. However, you can do much more with Account Kit and its many packages.
 
-1. To learn more about the different packages and their use cases, check out the [Packages overview](/packages/) page.
+1. To learn more about the different packages and their use cases, check out the [Packages overview](/packages/) section.
 
-2. To learn about the end-to-end process of integrating smart accounts in your applications, check out the section on [Smart Accounts](/smart-accounts/).
+2. To learn more about different smart account options available for your applications, check out the section [Choosing a smart account](/smart-accounts/).
 
-3. To learn about the `signer` field on your smart account, check out the section on [Choosing a Signer](/signers/choosing-a-signer) to own the smart account.
+3. To learn more about different `signer` options for your smart accounts, check out the section on [Choosing a signer](/signers/choosing-a-signer).
 
-4. To learn more about different User Operations, you can send with different `target` and `data` fields in the `sendUserOperation` function above, look at our [How to send a User Operation](/using-smart-accounts/send-user-operations) guide for an example using NFT mints.
-
-5. To explore more ways to use Account Kit, check out the step-by-step guides, such as [How to sponsor gas for a UserOperation](/using-smart-accounts/sponsoring-gas/gas-manager) or [How to fetch a Smart Account's NFTs](/using-smart-accounts/enhanced-apis/nft).
-
-6. To see Account Kit in action, check out our [Demos](/overview/demos).
+4. To learn more about how to use your smart accounts and what Account Kit offers to enhance users' web3 experience, check out a number of guides we have in the [Using smart accounts](/using-smart-accounts/send-user-operations.md) section, covering from basic to advanced usages.
