@@ -1,9 +1,10 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: ""
-labels: bug, needs-triage
-assignees: ""
+title: ''
+labels: bug
+assignees: ''
+
 ---
 
 Thanks for filling out this bug report. Please provide as much detail as possible.
