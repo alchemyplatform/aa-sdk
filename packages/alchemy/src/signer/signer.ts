@@ -42,7 +42,9 @@ export const AlchemySignerParamsSchema = z
   .object({
     client: z.custom<AlchemySignerClient>().or(AlchemySignerClientParamsSchema),
   })
-  .extend({ sessionConfig: SessionManagerParamsSchema.optional() });
+  .extend({
+    sessionConfig: SessionManagerParamsSchema.omit({ client: true }).optional(),
+  });
 
 export type AlchemySignerParams = z.input<typeof AlchemySignerParamsSchema>;
 
@@ -69,9 +71,10 @@ export class AlchemySigner
       this.inner = params.client;
     }
 
-    this.sessionManager = new SessionManager(
-      sessionConfig ?? { client: this.inner }
-    );
+    this.sessionManager = new SessionManager({
+      ...sessionConfig,
+      client: this.inner,
+    });
   }
 
   /**
