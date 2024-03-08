@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.4.1...v3.4.2) (2024-03-08)
+
+### Bug Fixes
+
+- **alchemy-signer:** persist temporary session state to localstorage always ([#500](https://github.com/alchemyplatform/aa-sdk/issues/500)) ([fe84685](https://github.com/alchemyplatform/aa-sdk/commit/fe846858da955fa2c316283aabff31aa0d2c2525))
+
 ## [3.4.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.4.0...v3.4.1) (2024-03-02)
 
 ### Bug Fixes
