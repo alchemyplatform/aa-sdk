@@ -25,7 +25,7 @@ import {
 } from "./session/manager.js";
 
 export type AuthParams =
-  | { type: "email"; email: string }
+  | { type: "email"; email: string; redirectParams?: URLSearchParams }
   | { type: "email"; bundle: string; orgId?: string }
   | {
       type: "passkey";
@@ -196,11 +196,13 @@ export class AlchemySigner
         ? await this.inner.initEmailAuth({
             email: params.email,
             expirationSeconds: this.sessionManager.expirationTimeMs,
+            redirectParams: params.redirectParams,
           })
         : await this.inner.createAccount({
             type: "email",
             email: params.email,
             expirationSeconds: this.sessionManager.expirationTimeMs,
+            redirectParams: params.redirectParams,
           });
 
       this.sessionManager.setTemporarySession({ orgId });

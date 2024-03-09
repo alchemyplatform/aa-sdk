@@ -89,6 +89,7 @@ export class AlchemySignerClient {
         email,
         targetPublicKey: publicKey,
         expirationSeconds,
+        redirectParams: params.redirectParams?.toString(),
       });
 
       return response;
@@ -117,6 +118,7 @@ export class AlchemySignerClient {
       email,
       targetPublicKey: publicKey,
       expirationSeconds,
+      redirectParams: params.redirectParams?.toString(),
     });
   };
 
