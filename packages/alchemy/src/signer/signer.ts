@@ -25,8 +25,8 @@ import {
 } from "./session/manager.js";
 
 export type AuthParams =
-  | { type: "email"; email: string }
-  | { type: "email"; bundle: string }
+  | { type: "email"; email: string; redirectParams?: URLSearchParams }
+  | { type: "email"; bundle: string; orgId?: string }
   | {
       type: "passkey";
       createNew: false;
@@ -196,11 +196,13 @@ export class AlchemySigner
         ? await this.inner.initEmailAuth({
             email: params.email,
             expirationSeconds: this.sessionManager.expirationTimeMs,
+            redirectParams: params.redirectParams,
           })
         : await this.inner.createAccount({
             type: "email",
             email: params.email,
             expirationSeconds: this.sessionManager.expirationTimeMs,
+            redirectParams: params.redirectParams,
           });
 
       this.sessionManager.setTemporarySession({ orgId });
@@ -214,7 +216,10 @@ export class AlchemySigner
         });
       });
     } else {
-      const temporarySession = this.sessionManager.getTemporarySession();
+      const temporarySession = params.orgId
+        ? { orgId: params.orgId }
+        : this.sessionManager.getTemporarySession();
+
       if (!temporarySession) {
         throw new Error("Could not find email auth init session!");
       }
