@@ -95,17 +95,26 @@ export class AlchemySignerClient {
       return response;
     }
 
+    // Passkey account creation flow
     const { attestation, challenge } = await this.getWebAuthnAttestation(
       params.creationOpts,
       { username: params.username }
     );
 
-    return this.request("/v1/signup", {
+    const result = await this.request("/v1/signup", {
       passkey: {
         challenge: base64UrlEncode(challenge),
         attestation,
       },
     });
+
+    this.user = {
+      orgId: result.orgId,
+      address: result.address!,
+      userId: result.userId!,
+    };
+
+    return result;
   };
 
   public initEmailAuth = async (
