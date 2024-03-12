@@ -57,7 +57,7 @@ export class EthersProviderAdapter extends JsonRpcProvider {
    * @returns an {@link AccountSigner} that can be used to sign and send user operations
    */
   connectToAccount<TAccount extends SmartContractAccount>(
-    account: TAccount
+    account: TAccount,
   ): AccountSigner {
     return new AccountSigner<TAccount>(this, account);
   }
@@ -67,7 +67,7 @@ export class EthersProviderAdapter extends JsonRpcProvider {
       createPublicClient({
         transport: custom(this.accountProvider.transport),
         chain: this.accountProvider.chain!,
-      })
+      }),
     );
   }
 

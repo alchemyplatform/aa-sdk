@@ -11,13 +11,13 @@ export type LightAccountClientActions<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
   TAccount extends LightAccount<TSigner> | undefined =
     | LightAccount<TSigner>
-    | undefined
+    | undefined,
 > = {
   transferOwnership: (
     args: {
       newOwner: TSigner;
       waitForTxn?: boolean;
-    } & GetAccountParameter<TAccount, LightAccount>
+    } & GetAccountParameter<TAccount, LightAccount>,
   ) => Promise<Hex>;
 };
 
@@ -27,9 +27,9 @@ export const lightAccountClientActions: <
   TSigner extends SmartAccountSigner = SmartAccountSigner,
   TAccount extends LightAccount<TSigner> | undefined =
     | LightAccount<TSigner>
-    | undefined
+    | undefined,
 >(
-  client: Client<TTransport, TChain, TAccount>
+  client: Client<TTransport, TChain, TAccount>,
 ) => LightAccountClientActions<TSigner, TAccount> = (client) => ({
   transferOwnership: async (args) => transferOwnership(client, args),
 });

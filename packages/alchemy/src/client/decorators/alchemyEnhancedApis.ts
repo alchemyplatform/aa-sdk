@@ -15,15 +15,15 @@ export type AlchemyEnhancedApis = {
 };
 
 export const alchemyEnhancedApiActions: (
-  alchemy: Alchemy
+  alchemy: Alchemy,
 ) => <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 >(
-  client: AlchemySmartAccountClient<TTransport, TChain, TAccount>
+  client: AlchemySmartAccountClient<TTransport, TChain, TAccount>,
 ) => AlchemyEnhancedApis = (alchemy) => (client) => {
   const alchemySdk = AlchemySdkClientSchema.parse(alchemy);
 
@@ -37,7 +37,7 @@ export const alchemyEnhancedApiActions: (
       alchemy.config.url !== url
     ) {
       throw new Error(
-        "Alchemy SDK client JSON-RPC URL must match AlchemyProvider JSON-RPC URL"
+        "Alchemy SDK client JSON-RPC URL must match AlchemyProvider JSON-RPC URL",
       );
     }
   }

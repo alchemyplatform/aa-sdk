@@ -28,7 +28,7 @@ import { createArcanaAuthSigner } from "./arcana-auth";
 const newArcanaAuthSigner = await createArcanaAuthSigner();
 
 const signedMessage = await newArcanaAuthSigner.signMessage(
-  "testMessage signing with ArcanaAuthSigner"
+  "testMessage signing with ArcanaAuthSigner",
 );
 ```
 

@@ -10,7 +10,7 @@ import {
 import { getVersion060EntryPoint } from "../entrypoint/0.6.js";
 
 export const createDummySmartContractAccount = async <C extends BundlerClient>(
-  client: C
+  client: C,
 ): Promise<SmartContractAccount> => {
   return toSmartContractAccount({
     source: "dummy",
@@ -36,6 +36,6 @@ export const createTestClient = (chain: Chain) => {
       transport: custom({
         request: async () => {},
       }),
-    })
+    }),
   );
 };

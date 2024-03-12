@@ -8,8 +8,8 @@ export class InvalidUserOperationError extends BaseError {
       `Request is missing parameters. All properties on UserOperationStruct must be set. uo: ${JSON.stringify(
         uo,
         null,
-        2
-      )}`
+        2,
+      )}`,
     );
   }
 }

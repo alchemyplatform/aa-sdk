@@ -4,7 +4,7 @@ import type { MiddlewareClient } from "../actions";
 import type { ClientMiddlewareFn } from "../types";
 
 export const defaultFeeEstimator: <C extends MiddlewareClient>(
-  client: C
+  client: C,
 ) => ClientMiddlewareFn =
   (client) =>
   async (struct, { overrides, feeOptions }) => {
@@ -20,7 +20,7 @@ export const defaultFeeEstimator: <C extends MiddlewareClient>(
     const feeData = await client.estimateFeesPerGas();
     if (!feeData.maxFeePerGas || !feeData.maxPriorityFeePerGas) {
       throw new Error(
-        "feeData is missing maxFeePerGas or maxPriorityFeePerGas"
+        "feeData is missing maxFeePerGas or maxPriorityFeePerGas",
       );
     }
 
@@ -30,7 +30,7 @@ export const defaultFeeEstimator: <C extends MiddlewareClient>(
     maxPriorityFeePerGas = applyUserOpOverrideOrFeeOption(
       maxPriorityFeePerGas,
       overrides?.maxPriorityFeePerGas,
-      feeOptions?.maxPriorityFeePerGas
+      feeOptions?.maxPriorityFeePerGas,
     );
 
     let maxFeePerGas: BigNumberish =
@@ -41,7 +41,7 @@ export const defaultFeeEstimator: <C extends MiddlewareClient>(
     maxFeePerGas = applyUserOpOverrideOrFeeOption(
       maxFeePerGas,
       overrides?.maxFeePerGas,
-      feeOptions?.maxFeePerGas
+      feeOptions?.maxFeePerGas,
     );
 
     struct.maxFeePerGas = maxFeePerGas;

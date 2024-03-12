@@ -37,7 +37,7 @@ export class ArcanaAuthSigner
   constructor(
     params:
       | { clientId: string; params: Partial<ConstructorParams> }
-      | { inner: AuthProvider }
+      | { inner: AuthProvider },
   ) {
     if ("inner" in params) {
       this.inner = params.inner;
@@ -66,9 +66,9 @@ export class ArcanaAuthSigner
 
   signTypedData = async <
     const TTypedData extends TypedData | { [key: string]: unknown },
-    TPrimaryType extends string = string
+    TPrimaryType extends string = string,
   >(
-    params: TypedDataDefinition<TTypedData, TPrimaryType>
+    params: TypedDataDefinition<TTypedData, TPrimaryType>,
   ) => {
     if (!this.signer) throw new Error("Not authenticated");
 
@@ -83,7 +83,7 @@ export class ArcanaAuthSigner
       connect: async () => {
         await this.inner.connect();
       },
-    }
+    },
   ) => {
     await params.init();
     await params.connect();
@@ -94,7 +94,7 @@ export class ArcanaAuthSigner
       createWalletClient({
         transport: custom(this.inner.provider),
       }),
-      this.signerType
+      this.signerType,
     );
 
     return this.inner.getUser();

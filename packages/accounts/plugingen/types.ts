@@ -8,7 +8,7 @@ export type PhaseInput = {
   content: string[];
   addImport: (
     moduleName: string,
-    member: { name: string; isType?: boolean }
+    member: { name: string; isType?: boolean },
   ) => void;
   addType: (typeName: string, typeDef: string, isPublic?: boolean) => void;
   config: PluginGenConfig;

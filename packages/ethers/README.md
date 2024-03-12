@@ -48,7 +48,7 @@ const ethersProvider = await alchemy.config.getProvider();
 const provider = EthersProviderAdapter.fromEthersProvider(ethersProvider);
 
 const signer: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
-  process.env.YOUR_OWNER_MNEMONIC!
+  process.env.YOUR_OWNER_MNEMONIC!,
 );
 
 // 2. Connect the provider to the smart account signer
@@ -59,6 +59,6 @@ export const signer = provider.connectToAccount(
       factoryAddress: getDefaultLightAccountFactoryAddress(chain),
       rpcClient,
       signer,
-    })
+    }),
 );
 ```

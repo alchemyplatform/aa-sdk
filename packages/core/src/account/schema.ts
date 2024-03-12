@@ -8,7 +8,7 @@ import { ChainSchema } from "../utils/index.js";
 
 export const createBaseSmartAccountParamsSchema = <
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 >() =>
   z.object({
     rpcClient: z.union([
@@ -20,7 +20,7 @@ export const createBaseSmartAccountParamsSchema = <
     entryPointAddress: Address.optional(),
     chain: ChainSchema,
     accountAddress: Address.optional().describe(
-      "Optional override for the account address."
+      "Optional override for the account address.",
     ),
     initCode: z
       .string()
@@ -31,7 +31,7 @@ export const createBaseSmartAccountParamsSchema = <
 
 export const SimpleSmartAccountParamsSchema = <
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 >() =>
   createBaseSmartAccountParamsSchema<TTransport, TSigner>()
     .omit({

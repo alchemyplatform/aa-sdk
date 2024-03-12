@@ -29,7 +29,7 @@ const hash = await client.sendRawUserOperation(
   {
     // ... signed raw user operation
   },
-  "0xEntryPointAddress"
+  "0xEntryPointAddress",
 );
 ```
 

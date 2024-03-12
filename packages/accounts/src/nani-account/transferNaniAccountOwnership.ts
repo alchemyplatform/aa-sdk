@@ -21,16 +21,16 @@ export const transferOwnership: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TAccount extends NaniAccount | undefined = NaniAccount | undefined
+  TAccount extends NaniAccount | undefined = NaniAccount | undefined,
 >(
   client: Client<TTransport, TChain, TAccount>,
   args: {
     newOwner: TSigner;
     waitForTxn?: boolean;
-  } & GetAccountParameter<TAccount>
+  } & GetAccountParameter<TAccount>,
 ) => Promise<Hex> = async (
   client,
-  { newOwner, waitForTxn = false, account: account_ = client.account }
+  { newOwner, waitForTxn = false, account: account_ = client.account },
 ): Promise<Hex> => {
   if (!account_) {
     throw new AccountNotFoundError();
@@ -40,7 +40,7 @@ export const transferOwnership: <
     throw new IncompatibleClientError(
       "SmartAccountClient",
       "transferOwnership",
-      client
+      client,
     );
   }
 

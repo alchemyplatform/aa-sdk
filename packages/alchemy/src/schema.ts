@@ -25,9 +25,9 @@ export const AlchemyProviderConfigSchema = ConnectionConfigSchema.and(
   z.object({
     chain: AlchemyChainSchema,
     opts: SmartAccountProviderOptsSchema.optional().default(
-      SmartAccountProviderOptsSchema.parse({})
+      SmartAccountProviderOptsSchema.parse({}),
     ),
-  })
+  }),
 );
 
 export const AlchemySdkClientSchema = z.instanceof(Alchemy);

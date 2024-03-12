@@ -13,16 +13,16 @@ export const buildSessionKeysToRemoveStruct: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 >(
   client: Client<TTransport, TChain, TAccount>,
   args: {
     keys: ReadonlyArray<Address>;
     pluginAddress?: Address;
-  } & GetAccountParameter<TAccount>
+  } & GetAccountParameter<TAccount>,
 ) => Promise<{ sessionKey: Address; predecessor: Address }[]> = async (
   client,
-  { keys, pluginAddress, account = client.account }
+  { keys, pluginAddress, account = client.account },
 ) => {
   if (!account) throw new AccountNotFoundError();
 
@@ -34,7 +34,7 @@ export const buildSessionKeysToRemoveStruct: <
           key,
           await contract.read.findPredecessor([account.address, key]),
         ];
-      })
+      }),
     )
   ).map(([key, predecessor]) => ({
     sessionKey: key,

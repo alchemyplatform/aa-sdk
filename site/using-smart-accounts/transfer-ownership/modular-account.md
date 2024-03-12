@@ -66,7 +66,7 @@ import { multiOwnerPluginActions } from "@alchemy/aa-accounts";
 // [!code focus:99]
 // extend smart account client with multiOwnerPluginActions to call MultiOwnerPlugin methods
 const pluginActionExtendedClient = modularAccountClient.extend(
-  multiOwnerPluginActions
+  multiOwnerPluginActions,
 );
 
 const ownerToCheck = "0x..."; // the address of the account to check the ownership of
@@ -94,7 +94,7 @@ import { multiOwnerPluginActions } from "@alchemy/aa-accounts";
 // [!code focus:99]
 // extend smart account client with multiOwnerPluginActions to call MultiOwnerPlugin methods
 const pluginActionExtendedClient = modularAccountClient.extend(
-  multiOwnerPluginActions
+  multiOwnerPluginActions,
 );
 
 // owners is an array of the addresses of the account owners
@@ -119,7 +119,7 @@ import { type Address } from "viem";
 // [!code focus:99]
 // extend smart account client with multiOwnerPluginActions to call MultiOwnerPlugin methods
 const pluginActionExtendedClient = modularAccountClient.extend(
-  multiOwnerPluginActions
+  multiOwnerPluginActions,
 );
 
 const ownersToAdd: Address[] = []; // the addresses of owners to be added
@@ -129,9 +129,8 @@ const result = await pluginActionExtendedClient.updateOwners({
   args: [ownersToAdd, ownersToRemove],
 });
 
-const txHash = await pluginActionExtendedClient.waitForUserOperationTransaction(
-  result
-);
+const txHash =
+  await pluginActionExtendedClient.waitForUserOperationTransaction(result);
 ```
 
 <<< @/snippets/aa-alchemy/connected-client.ts [smartAccountClient.ts]

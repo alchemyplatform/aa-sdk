@@ -70,7 +70,7 @@ const userOperationResult = await smartAccountClient.sendUserOperation(
     target: "0xTargetAddress",
     data: "0xCallData",
   },
-  overrides
+  overrides,
 );
 
 // Fallback to user paying the gas fee instead of the paymaster

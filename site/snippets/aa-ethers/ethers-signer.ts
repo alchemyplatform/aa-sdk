@@ -18,5 +18,5 @@ export const accountSigner = provider.connectToAccount(
     chain,
     transport: http("RPC_URL"),
     signer: eoaSigner,
-  })
+  }),
 );

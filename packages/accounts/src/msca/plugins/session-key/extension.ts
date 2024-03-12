@@ -18,7 +18,7 @@ import { buildSessionKeysToRemoveStruct } from "./utils.js";
 export type SessionKeyPluginActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 > = Omit<
   SessionKeyPluginActions_<TAccount>,
   | "removeSessionKey"
@@ -28,18 +28,18 @@ export type SessionKeyPluginActions<
 > & {
   isAccountSessionKey: (
     args: { key: Address } & GetPluginAddressParameter &
-      GetAccountParameter<TAccount>
+      GetAccountParameter<TAccount>,
   ) => Promise<boolean>;
 
   getAccountSessionKeys: (
-    args: GetPluginAddressParameter & GetAccountParameter<TAccount>
+    args: GetPluginAddressParameter & GetAccountParameter<TAccount>,
   ) => Promise<ReadonlyArray<Address>>;
 
   removeSessionKey: (
     args: { key: Address } & GetPluginAddressParameter &
       GetAccountParameter<TAccount> & {
         overrides?: UserOperationOverrides;
-      }
+      },
   ) => Promise<SendUserOperationResult>;
 
   addSessionKey: (
@@ -50,7 +50,7 @@ export type SessionKeyPluginActions<
     } & GetPluginAddressParameter &
       GetAccountParameter<TAccount> & {
         overrides?: UserOperationOverrides;
-      }
+      },
   ) => Promise<SendUserOperationResult>;
 
   rotateSessionKey: (
@@ -60,7 +60,7 @@ export type SessionKeyPluginActions<
     } & GetPluginAddressParameter &
       GetAccountParameter<TAccount> & {
         overrides?: UserOperationOverrides;
-      }
+      },
   ) => Promise<SendUserOperationResult>;
 
   updateSessionKeyPermissions: (
@@ -70,12 +70,12 @@ export type SessionKeyPluginActions<
     } & GetPluginAddressParameter &
       GetAccountParameter<TAccount> & {
         overrides?: UserOperationOverrides;
-      }
+      },
   ) => Promise<SendUserOperationResult>;
 } & (IsUndefined<TAccount> extends false
     ? {
         getAccountSessionKeys: (
-          args?: GetPluginAddressParameter & GetAccountParameter<TAccount>
+          args?: GetPluginAddressParameter & GetAccountParameter<TAccount>,
         ) => Promise<ReadonlyArray<Address>>;
       }
     : {});
@@ -85,17 +85,17 @@ export const sessionKeyPluginActions: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 >(
-  client: Client<TTransport, TChain, TAccount>
+  client: Client<TTransport, TChain, TAccount>,
 ) => SessionKeyPluginActions<TAccount> = <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 >(
-  client: Client<TTransport, TChain, TAccount>
+  client: Client<TTransport, TChain, TAccount>,
 ) => {
   const {
     removeSessionKey,
@@ -120,14 +120,14 @@ export const sessionKeyPluginActions: <
     },
 
     getAccountSessionKeys: async (
-      args: GetPluginAddressParameter & GetAccountParameter<TAccount>
+      args: GetPluginAddressParameter & GetAccountParameter<TAccount>,
     ) => {
       const account = args?.account ?? client.account;
       if (!account) throw new AccountNotFoundError();
 
       const contract = SessionKeyPlugin.getContract(
         client,
-        args?.pluginAddress
+        args?.pluginAddress,
       );
 
       return await contract.read.sessionKeysOf([account.address]);

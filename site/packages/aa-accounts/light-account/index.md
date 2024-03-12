@@ -34,9 +34,8 @@ import { smartAccountClient } from "./smartAccountClient";
 
 // [!code focus:99]
 // sign message (works for undeployed and deployed accounts)
-const signedMessageWith6492 = await smartAccountClient.signMessageWith6492(
-  "test"
-);
+const signedMessageWith6492 =
+  await smartAccountClient.signMessageWith6492("test");
 
 // sign typed data
 const signedTypedData = await smartAccountClient.signTypedData("test");

@@ -35,7 +35,7 @@ type UserOperationFeeOptions {
 ```ts [example.ts]
 const chain = polygonMumbai;
 const signer: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
-  "YOUR_OWNER_MNEMONIC"
+  "YOUR_OWNER_MNEMONIC",
 );
 const rpcTransport = http("https://polygon-mumbai.g.alchemy.com/v2/demo");
 

@@ -23,7 +23,7 @@ export interface LitConfig {
  * https://developer.litprotocol.com/v3/resources/supported-chains/
  */
 export interface LitAuthenticateProps<
-  C extends LitAuthMethod | LitSessionSigsMap
+  C extends LitAuthMethod | LitSessionSigsMap,
 > {
   context: C;
   expiration?: string;
@@ -32,7 +32,7 @@ export interface LitAuthenticateProps<
 }
 
 export type LitSmartAccountAuthenticator<
-  C extends LitAuthMethod | LitSessionSigsMap
+  C extends LitAuthMethod | LitSessionSigsMap,
 > = SmartAccountAuthenticator<
   LitAuthenticateProps<C>,
   LitUserMetadata,

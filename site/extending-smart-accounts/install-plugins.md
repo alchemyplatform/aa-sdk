@@ -49,7 +49,7 @@ import { sessionKeyPluginActions } from "@alchemy/aa-accounts";
 // [!code focus:99]
 // extend smart account client with sessionKeyPluginActions to call SessionKeyPlugin methods
 const sessionKeyExtendedClient = modularAccountClient.extend(
-  sessionKeyExtendedClient
+  sessionKeyExtendedClient,
 );
 
 const { hash } = await sessionKeyExtendedClient.installSessionKeyPlugin({

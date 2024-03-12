@@ -63,16 +63,16 @@ export class SessionKeySigner
   };
 
   signMessage: (msg: SignableMessage) => Promise<`0x${string}`> = async (
-    msg
+    msg,
   ) => {
     return this.inner.signMessage(msg);
   };
 
   signTypedData = async <
     const TTypedData extends TypedData | { [key: string]: unknown },
-    TPrimaryType extends string = string
+    TPrimaryType extends string = string,
   >(
-    params: TypedDataDefinition<TTypedData, TPrimaryType>
+    params: TypedDataDefinition<TTypedData, TPrimaryType>,
   ) => {
     return this.inner.signTypedData(params);
   };
