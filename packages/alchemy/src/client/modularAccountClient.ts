@@ -28,7 +28,7 @@ import type {
 } from "./smartAccountClient";
 
 export type AlchemyModularAccountClientConfig<
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 > = Omit<
   CreateMultiOwnerModularAccountParams<HttpTransport, TSigner>,
   "transport" | "chain"
@@ -39,9 +39,9 @@ export type AlchemyModularAccountClientConfig<
   >;
 
 export function createModularAccountAlchemyClient<
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 >(
-  params: AlchemyModularAccountClientConfig<TSigner>
+  params: AlchemyModularAccountClientConfig<TSigner>,
 ): Promise<
   AlchemySmartAccountClient<
     CustomTransport,
@@ -55,7 +55,7 @@ export function createModularAccountAlchemyClient<
 >;
 
 export async function createModularAccountAlchemyClient(
-  config: AlchemyModularAccountClientConfig
+  config: AlchemyModularAccountClientConfig,
 ): Promise<AlchemySmartAccountClient> {
   const { chain, opts, ...connectionConfig } =
     AlchemyProviderConfigSchema.parse(config);

@@ -11,16 +11,16 @@ export const checkGasSponsorshipEligibility: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: SendUserOperationParameters<TAccount>
+  args: SendUserOperationParameters<TAccount>,
 ) => Promise<boolean> = async (client, args) => {
   if (!isBaseSmartAccountClient(client)) {
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
       "checkGasSponsorshipEligibility",
-      client
+      client,
     );
   }
 
@@ -28,7 +28,7 @@ export const checkGasSponsorshipEligibility: <
     .then(
       (userOperationStruct: UserOperationStruct) =>
         userOperationStruct.paymasterAndData !== "0x" &&
-        userOperationStruct.paymasterAndData !== null
+        userOperationStruct.paymasterAndData !== null,
     )
     .catch(() => false);
 };

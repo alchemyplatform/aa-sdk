@@ -8,7 +8,7 @@ import { AccountNotFoundError } from "../../errors/account.js";
 export type SignMessageParameters<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 > = { message: SignableMessage } & GetAccountParameter<TAccount>;
 
 export const signMessage: <
@@ -16,10 +16,10 @@ export const signMessage: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: SignMessageParameters<TAccount>
+  args: SignMessageParameters<TAccount>,
 ) => Promise<Hex> = async (client, { account = client.account, message }) => {
   if (!account) {
     throw new AccountNotFoundError();

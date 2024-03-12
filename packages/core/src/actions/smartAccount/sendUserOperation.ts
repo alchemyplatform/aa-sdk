@@ -13,10 +13,10 @@ export const sendUserOperation: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: SendUserOperationParameters<TAccount>
+  args: SendUserOperationParameters<TAccount>,
 ) => Promise<SendUserOperationResult> = async (client, args) => {
   const { account = client.account } = args;
 
@@ -28,7 +28,7 @@ export const sendUserOperation: <
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
       "sendUserOperation",
-      client
+      client,
     );
   }
 

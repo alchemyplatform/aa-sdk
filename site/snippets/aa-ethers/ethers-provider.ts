@@ -19,14 +19,14 @@ const chain = getChain(ethersProvider.network.chainId);
 
 // 2. smart account client from alchemy's ethers provider and connect with simple smart account
 export const provider = EthersProviderAdapter.fromEthersProvider(
-  ethersProvider
+  ethersProvider,
 ).connectToAccount(
   await createSimpleSmartAccount({
     chain,
     signer,
     factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
     transport: http(
-      `${chain.rpcUrls.alchemy.http[0]}/${ethersProvider.apiKey}`
+      `${chain.rpcUrls.alchemy.http[0]}/${ethersProvider.apiKey}`,
     ),
-  })
+  }),
 );

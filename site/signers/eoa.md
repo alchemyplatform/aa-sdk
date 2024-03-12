@@ -43,7 +43,7 @@ const client = createWalletClient({
 // this can now be used as an signer for a Smart Contract Account
 export const eoaSigner = new WalletClientSigner(
   client,
-  "json-rpc" //signerType
+  "json-rpc", //signerType
 );
 ```
 
@@ -71,6 +71,6 @@ export const client = createWalletClient({
 // this can now be used as an signer for a Smart Contract Account
 export const eoaSigner = new WalletClientSigner(
   client,
-  "local" // signerType
+  "local", // signerType
 );
 ```

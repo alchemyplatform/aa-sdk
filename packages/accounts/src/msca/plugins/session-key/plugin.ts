@@ -34,7 +34,7 @@ import { type FunctionReference } from "../../account-loupe/types.js";
 type ExecutionActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 > = {
   executeWithSessionKey: (
     args: Pick<
@@ -43,7 +43,7 @@ type ExecutionActions<
         "executeWithSessionKey"
       >,
       "args"
-    > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
+    > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>,
   ) => Promise<SendUserOperationResult>;
 
   addSessionKey: (
@@ -53,7 +53,7 @@ type ExecutionActions<
         "addSessionKey"
       >,
       "args"
-    > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
+    > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>,
   ) => Promise<SendUserOperationResult>;
 
   removeSessionKey: (
@@ -63,7 +63,7 @@ type ExecutionActions<
         "removeSessionKey"
       >,
       "args"
-    > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
+    > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>,
   ) => Promise<SendUserOperationResult>;
 
   rotateSessionKey: (
@@ -73,7 +73,7 @@ type ExecutionActions<
         "rotateSessionKey"
       >,
       "args"
-    > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
+    > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>,
   ) => Promise<SendUserOperationResult>;
 
   updateKeyPermissions: (
@@ -83,14 +83,14 @@ type ExecutionActions<
         "updateKeyPermissions"
       >,
       "args"
-    > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
+    > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>,
   ) => Promise<SendUserOperationResult>;
 };
 
 type InstallArgs = [
   { type: "address[]"; name: "initialKeys" },
   { type: "bytes32[]"; name: "tags" },
-  { type: "bytes[][]"; name: "initialPermissions" }
+  { type: "bytes[][]"; name: "initialPermissions" },
 ];
 
 export type InstallSessionKeyPluginParams = {
@@ -102,13 +102,13 @@ export type InstallSessionKeyPluginParams = {
 type ManagementActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 > = {
   installSessionKeyPlugin: (
     args: {
       overrides?: UserOperationOverrides;
     } & InstallSessionKeyPluginParams &
-      GetAccountParameter<TAccount>
+      GetAccountParameter<TAccount>,
   ) => Promise<SendUserOperationResult>;
 };
 
@@ -120,7 +120,7 @@ type ReadAndEncodeActions = {
         "executeWithSessionKey"
       >,
       "args"
-    >
+    >,
   ) => Hex;
 
   encodeAddSessionKey: (
@@ -130,7 +130,7 @@ type ReadAndEncodeActions = {
         "addSessionKey"
       >,
       "args"
-    >
+    >,
   ) => Hex;
 
   encodeRemoveSessionKey: (
@@ -140,7 +140,7 @@ type ReadAndEncodeActions = {
         "removeSessionKey"
       >,
       "args"
-    >
+    >,
   ) => Hex;
 
   encodeRotateSessionKey: (
@@ -150,7 +150,7 @@ type ReadAndEncodeActions = {
         "rotateSessionKey"
       >,
       "args"
-    >
+    >,
   ) => Hex;
 
   encodeUpdateKeyPermissions: (
@@ -160,14 +160,14 @@ type ReadAndEncodeActions = {
         "updateKeyPermissions"
       >,
       "args"
-    >
+    >,
   ) => Hex;
 };
 
 export type SessionKeyPluginActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 > = ExecutionActions<TAccount> &
   ManagementActions<TAccount> &
   ReadAndEncodeActions;
@@ -192,7 +192,7 @@ export const SessionKeyPlugin: Plugin<typeof SessionKeyPluginAbi> = {
   },
   getContract: <C extends Client>(
     client: C,
-    address?: Address
+    address?: Address,
   ): GetContractReturnType<
     typeof SessionKeyPluginAbi,
     PublicClient,
@@ -213,9 +213,9 @@ export const sessionKeyPluginActions: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 >(
-  client: Client<TTransport, TChain, TAccount>
+  client: Client<TTransport, TChain, TAccount>,
 ) => SessionKeyPluginActions<TAccount> = (client) => ({
   executeWithSessionKey({ args, overrides, account = client.account }) {
     if (!account) {
@@ -225,7 +225,7 @@ export const sessionKeyPluginActions: <
       throw new IncompatibleClientError(
         "SmartAccountClient",
         "executeWithSessionKey",
-        client
+        client,
       );
     }
 
@@ -245,7 +245,7 @@ export const sessionKeyPluginActions: <
       throw new IncompatibleClientError(
         "SmartAccountClient",
         "addSessionKey",
-        client
+        client,
       );
     }
 
@@ -265,7 +265,7 @@ export const sessionKeyPluginActions: <
       throw new IncompatibleClientError(
         "SmartAccountClient",
         "removeSessionKey",
-        client
+        client,
       );
     }
 
@@ -285,7 +285,7 @@ export const sessionKeyPluginActions: <
       throw new IncompatibleClientError(
         "SmartAccountClient",
         "rotateSessionKey",
-        client
+        client,
       );
     }
 
@@ -305,7 +305,7 @@ export const sessionKeyPluginActions: <
       throw new IncompatibleClientError(
         "SmartAccountClient",
         "updateKeyPermissions",
-        client
+        client,
       );
     }
 
@@ -326,7 +326,7 @@ export const sessionKeyPluginActions: <
       throw new IncompatibleClientError(
         "SmartAccountClient",
         "installSessionKeyPlugin",
-        client
+        client,
       );
     }
 
@@ -340,7 +340,7 @@ export const sessionKeyPluginActions: <
         const pluginAddress = MultiOwnerPlugin.meta.addresses[chain.id];
         if (!pluginAddress) {
           throw new Error(
-            "missing MultiOwnerPlugin address for chain " + chain.name
+            "missing MultiOwnerPlugin address for chain " + chain.name,
           );
         }
 
@@ -351,7 +351,7 @@ export const sessionKeyPluginActions: <
         const pluginAddress = MultiOwnerPlugin.meta.addresses[chain.id];
         if (!pluginAddress) {
           throw new Error(
-            "missing MultiOwnerPlugin address for chain " + chain.name
+            "missing MultiOwnerPlugin address for chain " + chain.name,
           );
         }
 
@@ -364,7 +364,7 @@ export const sessionKeyPluginActions: <
 
     if (!pluginAddress) {
       throw new Error(
-        "missing SessionKeyPlugin address for chain " + chain.name
+        "missing SessionKeyPlugin address for chain " + chain.name,
       );
     }
 
@@ -376,7 +376,7 @@ export const sessionKeyPluginActions: <
           { type: "bytes32[]", name: "tags" },
           { type: "bytes[][]", name: "initialPermissions" },
         ],
-        params.args
+        params.args,
       ),
       dependencies,
       overrides,

@@ -46,14 +46,14 @@ const client = provider.getBundlerClient();
 
 // connect the provider to an AccountSigner
 const signer: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
-  process.env.YOUR_OWNER_MNEMONIC!
+  process.env.YOUR_OWNER_MNEMONIC!,
 );
 const accountSigner = provider.connectToAccount(
   await createLightAccount({
     chain,
     transport: http("RPC_URL"),
     signer,
-  })
+  }),
 );
 ```
 

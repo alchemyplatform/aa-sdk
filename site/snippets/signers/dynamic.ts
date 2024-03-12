@@ -9,5 +9,5 @@ const dynamicProvider = await primaryWallet?.connector?.getWalletClient();
 // a smart account signer you can use as an owner on ISmartContractAccount
 export const dynamicSigner: SmartAccountSigner = new WalletClientSigner(
   dynamicProvider,
-  "dynamic" // signer type
+  "dynamic", // signer type
 );

@@ -39,7 +39,7 @@ const alchemy = new Alchemy();
 
 // use Alchemy Enhanced APIs
 const clientWithEnhancedApis = smartAccountClient.extend(
-  alchemyEnhancedApiActions
+  alchemyEnhancedApiActions,
 );
 ```
 

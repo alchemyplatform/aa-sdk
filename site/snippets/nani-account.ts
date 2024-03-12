@@ -20,7 +20,7 @@ const provider = new AlchemyProvider({
       signer,
       chain,
       factoryAddress: getDefaultNaniAccountFactoryAddress(chain),
-    })
+    }),
 );
 
 // Fund your account address with ETH to send for the user operations

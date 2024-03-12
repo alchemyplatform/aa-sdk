@@ -14,7 +14,7 @@ import {
 
 const simulateUoChangesSpy = vi.spyOn(
   simulateUoActions,
-  "simulateUserOperationChanges"
+  "simulateUserOperationChanges",
 );
 
 const chain = sepolia;
@@ -22,13 +22,13 @@ const network = Network.ETH_SEPOLIA;
 
 describe("Light Account Tests", () => {
   const signer = LocalAccountSigner.mnemonicToAccountSigner(
-    LIGHT_ACCOUNT_OWNER_MNEMONIC
+    LIGHT_ACCOUNT_OWNER_MNEMONIC,
   );
 
   it("should successfully get counterfactual address", async () => {
     const provider = await givenConnectedProvider({ signer, chain });
     expect(provider.getAddress()).toMatchInlineSnapshot(
-      '"0x86f3B0211764971Ad0Fc8C8898d31f5d792faD84"'
+      '"0x86f3B0211764971Ad0Fc8C8898d31f5d792faD84"',
     );
   });
 
@@ -122,8 +122,8 @@ describe("Light Account Tests", () => {
             callGasLimit,
             verificationGasLimit,
             preVerificationGas,
-          })
-        )
+          }),
+        ),
     ).resolves.toMatchInlineSnapshot(`
       {
         "callGasLimit": "0x1",
@@ -260,8 +260,8 @@ describe("Light Account Tests", () => {
 
     expect(
       simulatedAssetChanges.changes.filter(
-        (x) => x.to === "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
-      )
+        (x) => x.to === "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+      ),
     ).toMatchInlineSnapshot(`
       [
         {

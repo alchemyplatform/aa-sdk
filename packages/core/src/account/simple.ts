@@ -25,7 +25,7 @@ import type { SimpleSmartAccountParams } from "./types.js";
 
 class SimpleSmartContractAccount<
   TTransport extends Transport | FallbackTransport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 > extends BaseSmartContractAccount<TTransport, TSigner> {
   protected index: bigint;
 
@@ -50,7 +50,7 @@ class SimpleSmartContractAccount<
   async encodeExecute(
     target: Hex,
     value: bigint,
-    data: Hex
+    data: Hex,
   ): Promise<`0x${string}`> {
     return encodeFunctionData({
       abi: SimpleAccountAbi,
@@ -60,7 +60,7 @@ class SimpleSmartContractAccount<
   }
 
   override async encodeBatchExecute(
-    txs: BatchUserOperationCallData
+    txs: BatchUserOperationCallData,
   ): Promise<`0x${string}`> {
     const [targets, datas] = txs.reduce(
       (accum, curr) => {
@@ -69,7 +69,7 @@ class SimpleSmartContractAccount<
 
         return accum;
       },
-      [[], []] as [Address[], Hex[]]
+      [[], []] as [Address[], Hex[]],
     );
 
     return encodeFunctionData({
@@ -81,7 +81,7 @@ class SimpleSmartContractAccount<
 
   signMessage(msg: Uint8Array | string): Promise<`0x${string}`> {
     return this.signer.signMessage(
-      typeof msg === "string" && !isHex(msg) ? msg : { raw: msg }
+      typeof msg === "string" && !isHex(msg) ? msg : { raw: msg },
     );
   }
 
@@ -102,7 +102,7 @@ export type SimpleSmartAccount<TSigner extends SmartAccountSigner> =
 
 export const createSimpleSmartAccount = async <
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 >({
   chain,
   entryPoint = getVersion060EntryPoint(chain),
@@ -137,7 +137,7 @@ export const createSimpleSmartAccount = async <
       simpleAccount.encodeExecute.bind(simpleAccount)(
         tx.target,
         tx.value ?? 0n,
-        tx.data
+        tx.data,
       ),
     entryPoint,
     getAccountInitCode: async () => {
@@ -147,7 +147,7 @@ export const createSimpleSmartAccount = async <
     getDummySignature: simpleAccount.getDummySignature.bind(simpleAccount),
     signMessage: ({ message }) =>
       simpleAccount.signMessage(
-        typeof message === "string" ? message : message.raw
+        typeof message === "string" ? message : message.raw,
       ),
     // @ts-expect-error these types still represent the same thing, but they are just a little off in there definitions
     signTypedData: simpleAccount.signTypedData.bind(simpleAccount),

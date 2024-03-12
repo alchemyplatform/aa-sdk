@@ -19,9 +19,9 @@ export function isSmartAccountClient<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 >(
-  client: Client<TTransport, TChain, TAccount>
+  client: Client<TTransport, TChain, TAccount>,
 ): client is SmartAccountClient<TTransport, TChain, TAccount> {
   for (const key of smartAccountClientMethodKeys) {
     if (!(key in client)) {
@@ -45,9 +45,9 @@ export function isBaseSmartAccountClient<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 >(
-  client: Client<TTransport, TChain, TAccount>
+  client: Client<TTransport, TChain, TAccount>,
 ): client is BaseSmartAccountClient<TTransport, TChain, TAccount> {
   return client && "middleware" in client;
 }

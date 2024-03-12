@@ -41,7 +41,7 @@ export class ParticleSigner
   private signer: WalletClientSigner | undefined;
 
   constructor(
-    params: Config | { inner: ParticleNetwork; provider?: ParticleProvider }
+    params: Config | { inner: ParticleNetwork; provider?: ParticleProvider },
   ) {
     if ("inner" in params) {
       this.inner = params.inner;
@@ -55,7 +55,7 @@ export class ParticleSigner
           createWalletClient({
             transport: custom(this.provider),
           }),
-          this.signerType
+          this.signerType,
         );
       }
 
@@ -70,7 +70,7 @@ export class ParticleSigner
         createWalletClient({
           transport: custom(this.provider),
         }),
-        this.signerType
+        this.signerType,
       );
     }
   }
@@ -94,9 +94,9 @@ export class ParticleSigner
 
   signTypedData = async <
     const TTypedData extends TypedData | { [key: string]: unknown },
-    TPrimaryType extends string = string
+    TPrimaryType extends string = string,
   >(
-    params: TypedDataDefinition<TTypedData, TPrimaryType>
+    params: TypedDataDefinition<TTypedData, TPrimaryType>,
   ) => {
     if (!this.signer) throw new Error("Not authenticated");
 
@@ -109,7 +109,7 @@ export class ParticleSigner
       login: async (loginOptions: LoginOptions) => {
         this.inner.auth.login(loginOptions);
       },
-    }
+    },
   ) => {
     if (this.inner == null) throw new Error("No provider found");
 
@@ -119,7 +119,7 @@ export class ParticleSigner
       createWalletClient({
         transport: custom(this.provider),
       }),
-      this.signerType
+      this.signerType,
     );
 
     const userInfo = this.inner.auth.getUserInfo();

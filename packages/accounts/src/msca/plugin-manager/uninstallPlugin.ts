@@ -19,7 +19,7 @@ import { IPluginManagerAbi } from "../abis/IPluginManager.js";
 export type UninstallPluginParams<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 > = {
   pluginAddress: Address;
   config?: Hash;
@@ -31,14 +31,14 @@ export async function uninstallPlugin<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 >(
   client: Client<TTransport, TChain, TAccount>,
   {
     overrides,
     account = client.account,
     ...params
-  }: UninstallPluginParams<TAccount>
+  }: UninstallPluginParams<TAccount>,
 ) {
   if (!account) {
     throw new AccountNotFoundError();
@@ -48,7 +48,7 @@ export async function uninstallPlugin<
     throw new IncompatibleClientError(
       "SmartAccountClient",
       "uninstallPlugin",
-      client
+      client,
     );
   }
 
@@ -57,7 +57,7 @@ export async function uninstallPlugin<
 }
 
 export async function encodeUninstallPluginUserOperation(
-  params: Omit<UninstallPluginParams, "account" | "overrides">
+  params: Omit<UninstallPluginParams, "account" | "overrides">,
 ) {
   return encodeFunctionData({
     abi: IPluginManagerAbi,

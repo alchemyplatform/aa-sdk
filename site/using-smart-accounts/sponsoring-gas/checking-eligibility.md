@@ -52,7 +52,7 @@ const elligibility = await smartAccountClient.checkGasSponsorshipEligibility({
 console.log(
   `User Operation is ${
     eligible ? "eligible" : "ineligible"
-  } for gas sponsorship`
+  } for gas sponsorship`,
 );
 ```
 

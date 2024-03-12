@@ -44,7 +44,7 @@ export type BundlerRpcSchema = [
     Method: "eth_supportedEntryPoints";
     Parameters: [];
     ReturnType: Address[];
-  }
+  },
 ];
 
 //#region BundlerActions
@@ -58,7 +58,7 @@ export type BundlerActions = {
    */
   estimateUserOperationGas(
     request: UserOperationRequest,
-    entryPoint: Address
+    entryPoint: Address,
   ): Promise<UserOperationEstimateGasResponse>;
 
   /**
@@ -70,7 +70,7 @@ export type BundlerActions = {
    */
   sendRawUserOperation(
     request: UserOperationRequest,
-    entryPoint: Address
+    entryPoint: Address,
   ): Promise<Hash>;
 
   /**
@@ -104,9 +104,9 @@ export const bundlerActions: <
     Chain | undefined,
     any,
     [...PublicRpcSchema, ...BundlerRpcSchema]
-  >
+  >,
 >(
-  client: TClient
+  client: TClient,
 ) => BundlerActions = (client) => ({
   estimateUserOperationGas: async (request, entryPoint) =>
     estimateUserOperationGas(client, { request, entryPoint }),

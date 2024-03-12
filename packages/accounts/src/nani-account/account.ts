@@ -28,7 +28,7 @@ import { NaniAccountAbi } from "./abis/NaniAccountAbi.js";
 import { NaniAccountFactoryAbi } from "./abis/NaniAccountFactoryAbi.js";
 
 export type NaniSmartAccountParams<
-  TTransport extends Transport | FallbackTransport = Transport
+  TTransport extends Transport | FallbackTransport = Transport,
 > = Omit<BaseSmartAccountParams<TTransport>, "rpcClient"> & {
   signer: SmartAccountSigner;
   index?: bigint;
@@ -46,7 +46,7 @@ export type NaniAccount = SmartContractAccountWithSigner<
 };
 
 class NaniAccount_<
-  TTransport extends Transport | FallbackTransport = Transport
+  TTransport extends Transport | FallbackTransport = Transport,
 > extends BaseSmartContractAccount<TTransport> {
   protected signer: SmartAccountSigner;
   private readonly index: bigint;
@@ -95,7 +95,7 @@ class NaniAccount_<
 
     if (decodedCallResult !== (await this.signer.getAddress())) {
       throw new Error(
-        "current account signer does not match the on-chain owner"
+        "current account signer does not match the on-chain owner",
       );
     }
 
@@ -131,7 +131,7 @@ class NaniAccount_<
 
   signMessage(msg: Uint8Array | string): Promise<Hex> {
     return this.signer.signMessage(
-      typeof msg === "string" && !isHex(msg) ? msg : { raw: msg }
+      typeof msg === "string" && !isHex(msg) ? msg : { raw: msg },
     );
   }
 
@@ -144,7 +144,7 @@ class NaniAccount_<
   }
 
   override async encodeBatchExecute(
-    calls: BatchUserOperationCallData
+    calls: BatchUserOperationCallData,
   ): Promise<Hex> {
     return encodeFunctionData({
       abi: NaniAccountAbi,
@@ -226,7 +226,7 @@ class NaniAccount_<
 
 export const createNaniAccount = async <TTransport extends Transport>(
   params: Omit<NaniSmartAccountParams<TTransport>, "rpcClient" | "chain"> &
-    Pick<ToSmartContractAccountParams, "chain" | "transport">
+    Pick<ToSmartContractAccountParams, "chain" | "transport">,
 ): Promise<NaniAccount> => {
   if (!params.signer) throw new Error("Owner must be provided.");
 
@@ -239,7 +239,7 @@ export const createNaniAccount = async <TTransport extends Transport>(
     accountAddress: params.accountAddress as Address | undefined,
     entryPoint: getVersion060EntryPoint(
       params.chain,
-      naniAccount.getEntryPointAddress()
+      naniAccount.getEntryPointAddress(),
     ),
     encodeBatchExecute: naniAccount.encodeBatchExecute.bind(naniAccount),
     encodeExecute: (tx) =>
@@ -251,7 +251,7 @@ export const createNaniAccount = async <TTransport extends Transport>(
     getDummySignature: naniAccount.getDummySignature.bind(naniAccount),
     signMessage: ({ message }) =>
       naniAccount.signMessage(
-        typeof message === "string" ? message : message.raw
+        typeof message === "string" ? message : message.raw,
       ),
     // @ts-expect-error these types still represent the same thing, but they are just a little off in there definitions
     signTypedData: (params) => naniAccount.signTypedData(params),

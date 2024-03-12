@@ -11,10 +11,10 @@ export const getAddress: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: GetAccountParameter<TAccount>
+  args: GetAccountParameter<TAccount>,
 ) => Address = (client, args) => {
   const { account } = args ?? { account: client.account };
   if (!account) {

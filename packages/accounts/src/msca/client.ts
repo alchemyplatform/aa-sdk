@@ -27,7 +27,7 @@ import {
 export type CreateMultiOwnerModularAccountClientParams<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 > = {
   account: Omit<
     CreateMultiOwnerModularAccountParams<TTransport, TSigner>,
@@ -40,9 +40,9 @@ export type CreateMultiOwnerModularAccountClientParams<
 
 export function createMultiOwnerModularAccountClient<
   TChain extends Chain | undefined = Chain | undefined,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 >(
-  args: CreateMultiOwnerModularAccountClientParams<Transport, TChain, TSigner>
+  args: CreateMultiOwnerModularAccountClientParams<Transport, TChain, TSigner>,
 ): Promise<
   SmartAccountClient<
     CustomTransport,

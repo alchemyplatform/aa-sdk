@@ -30,11 +30,11 @@ export type BundlerClient<T extends Transport = Transport> = Client<
 >;
 
 export const createBundlerClientFromExisting: <
-  T extends Transport | FallbackTransport = Transport
+  T extends Transport | FallbackTransport = Transport,
 >(
-  client: PublicClient<T, Chain>
+  client: PublicClient<T, Chain>,
 ) => BundlerClient<T> = <T extends Transport | FallbackTransport = Transport>(
-  client: PublicClient<T, Chain>
+  client: PublicClient<T, Chain>,
 ): BundlerClient<T> => {
   return client.extend(bundlerActions);
 };
@@ -45,11 +45,11 @@ export const createBundlerClientFromExisting: <
  * @returns
  */
 export function createBundlerClient<TTransport extends Transport>(
-  args: PublicClientConfig<TTransport, Chain> & { type?: string }
+  args: PublicClientConfig<TTransport, Chain> & { type?: string },
 ): BundlerClient<TTransport>;
 
 export function createBundlerClient(
-  args: PublicClientConfig & { type?: string }
+  args: PublicClientConfig & { type?: string },
 ): BundlerClient {
   if (!args.chain) {
     throw new ChainNotFoundError();

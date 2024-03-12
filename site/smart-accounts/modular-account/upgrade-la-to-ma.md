@@ -32,7 +32,7 @@ import { getMSCAUpgradeToData } from "@alchemy/aa-accounts";
 
 const { createMAAccount, ...upgradeToData } = await getMSCAUpgradeToData(
   lightAccountClient,
-  { account: lightAccountClient.account }
+  { account: lightAccountClient.account },
 );
 
 const hash = await lightAccountClient.upgradeAccount({

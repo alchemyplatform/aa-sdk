@@ -36,7 +36,7 @@ export type SmartAccountClientConfig<
   chain extends Chain | undefined = Chain | undefined,
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 > = Prettify<
   Pick<
     ClientConfig<transport, chain, account>,
@@ -55,7 +55,7 @@ export type SmartAccountClientConfig<
 
 export type SmartAccountClientRpcSchema = [
   ...BundlerRpcSchema,
-  ...PublicRpcSchema
+  ...PublicRpcSchema,
 ];
 
 //#region SmartAccountClientActions
@@ -63,7 +63,7 @@ export type SmartAccountClientActions<
   chain extends Chain | undefined = Chain | undefined,
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 > = BaseSmartAccountClientActions<chain, account> &
   BundlerActions &
   PublicActions;
@@ -80,7 +80,7 @@ export type SmartAccountClient<
     chain,
     account
   > = SmartAccountClientActions<chain, account>,
-  rpcSchema extends RpcSchema = SmartAccountClientRpcSchema
+  rpcSchema extends RpcSchema = SmartAccountClientRpcSchema,
 > = Prettify<Client<transport, chain, account, rpcSchema, actions>>;
 //#endregion SmartAccountClient
 
@@ -89,7 +89,7 @@ export type BaseSmartAccountClient<
   chain extends Chain | undefined = Chain | undefined,
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 > = Prettify<
   Client<
     transport,
@@ -107,13 +107,13 @@ export function createSmartAccountClient<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 >(
-  config: SmartAccountClientConfig<TTransport, TChain, TAccount>
+  config: SmartAccountClientConfig<TTransport, TChain, TAccount>,
 ): SmartAccountClient<TTransport, TChain, TAccount>;
 
 export function createSmartAccountClient(
-  config: SmartAccountClientConfig
+  config: SmartAccountClientConfig,
 ): SmartAccountClient {
   const {
     key = "account",
@@ -158,7 +158,7 @@ export function createSmartAccountClient(
               const [address, data] = params!;
               if (address !== client.account.address) {
                 throw new Error(
-                  "cannot sign for address that is not the current account"
+                  "cannot sign for address that is not the current account",
                 );
               }
               return client.signMessage(data);
@@ -169,7 +169,7 @@ export function createSmartAccountClient(
               const [data, address] = params!;
               if (address !== client.account.address) {
                 throw new Error(
-                  "cannot sign for address that is not the current account"
+                  "cannot sign for address that is not the current account",
                 );
               }
               return client.signMessage(data);
@@ -181,7 +181,7 @@ export function createSmartAccountClient(
               const [address, dataParams] = params!;
               if (address !== client.account.address) {
                 throw new Error(
-                  "cannot sign for address that is not the current account"
+                  "cannot sign for address that is not the current account",
                 );
               }
               return client.signTypedData(dataParams);
@@ -221,18 +221,18 @@ export function createSmartAccountClientFromExisting<
     TChain,
     TAccount
   > = SmartAccountClientActions<TChain, TAccount>,
-  TRpcSchema extends SmartAccountClientRpcSchema = SmartAccountClientRpcSchema
+  TRpcSchema extends SmartAccountClientRpcSchema = SmartAccountClientRpcSchema,
 >(
   config: Omit<
     SmartAccountClientConfig<Transport, TChain, TAccount>,
     "transport" | "chain"
-  > & { client: TClient }
+  > & { client: TClient },
 ): SmartAccountClient<CustomTransport, TChain, TAccount, TActions, TRpcSchema>;
 
 export function createSmartAccountClientFromExisting(
   config: Omit<SmartAccountClientConfig, "transport" | "chain"> & {
     client: BundlerClient;
-  }
+  },
 ): SmartAccountClient {
   return createSmartAccountClient({
     ...config,

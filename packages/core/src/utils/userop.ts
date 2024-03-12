@@ -15,7 +15,7 @@ import { isBigNumberish } from "./index.js";
  * @returns a type guard that asserts the {@link UserOperationStruct} is a {@link UserOperationRequest}
  */
 export function isValidRequest(
-  request: UserOperationStruct
+  request: UserOperationStruct,
 ): request is UserOperationRequest {
   // These are the only ones marked as optional in the interface above
   return (
@@ -29,7 +29,7 @@ export function isValidRequest(
 
 export function applyUserOpOverride(
   value: BigNumberish | undefined,
-  override?: BigNumberish | Multiplier
+  override?: BigNumberish | Multiplier,
 ): BigNumberish | undefined {
   if (override == null) {
     return value;
@@ -47,7 +47,7 @@ export function applyUserOpOverride(
 
 export function applyUserOpFeeOption(
   value: BigNumberish | undefined,
-  feeOption?: UserOperationFeeOptionsField
+  feeOption?: UserOperationFeeOptionsField,
 ): BigNumberish {
   if (feeOption == null) {
     return value ?? 0n;
@@ -58,7 +58,7 @@ export function applyUserOpFeeOption(
           ? bigIntMultiply(value, feeOption.multiplier)
           : value,
         feeOption.min,
-        feeOption.max
+        feeOption.max,
       )
     : feeOption.min ?? 0n;
 }
@@ -66,7 +66,7 @@ export function applyUserOpFeeOption(
 export function applyUserOpOverrideOrFeeOption(
   value: BigNumberish | undefined,
   override?: BigNumberish | Multiplier,
-  feeOption?: UserOperationFeeOptionsField
+  feeOption?: UserOperationFeeOptionsField,
 ): BigNumberish {
   return value != null && override != null
     ? applyUserOpOverride(value, override)!

@@ -53,7 +53,7 @@ const dummyPaymasterAndData =
 
 export const alchemyGasManagerMiddleware = <C extends ClientWithAlchemyMethods>(
   client: C,
-  config: AlchemyGasManagerConfig
+  config: AlchemyGasManagerConfig,
 ): Pick<
   ClientMiddlewareConfig,
   "paymasterAndData" | "feeEstimator" | "gasEstimator"
@@ -128,16 +128,16 @@ export const alchemyGasManagerMiddleware = <C extends ClientWithAlchemyMethods>(
 
 const requestGasAndPaymasterData: <C extends ClientWithAlchemyMethods>(
   client: C,
-  config: AlchemyGasManagerConfig
+  config: AlchemyGasManagerConfig,
 ) => ClientMiddlewareConfig["paymasterAndData"] = (client, config) => ({
   dummyPaymasterAndData: dummyPaymasterAndData(client),
   paymasterAndData: async (struct, { overrides, feeOptions, account }) => {
     const userOperation: UserOperationRequest = deepHexlify(
-      await resolveProperties(struct)
+      await resolveProperties(struct),
     );
 
     const overrideField = (
-      field: keyof UserOperationFeeOptions
+      field: keyof UserOperationFeeOptions,
     ): Hex | Multiplier | undefined => {
       if (overrides?.[field] != null) {
         // one-off absolute override
@@ -197,7 +197,7 @@ const requestGasAndPaymasterData: <C extends ClientWithAlchemyMethods>(
 
 const requestPaymasterAndData: <C extends ClientWithAlchemyMethods>(
   client: C,
-  config: AlchemyGasManagerConfig
+  config: AlchemyGasManagerConfig,
 ) => ClientMiddlewareConfig["paymasterAndData"] = (client, config) => ({
   dummyPaymasterAndData: dummyPaymasterAndData(client),
   paymasterAndData: async (struct, { account }) => {

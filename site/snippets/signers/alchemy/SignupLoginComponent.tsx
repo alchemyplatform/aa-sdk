@@ -18,7 +18,7 @@ export const SignupLoginComponent = () => {
           },
         },
       }),
-    []
+    [],
   );
 
   // we are using react-query to handle loading states more easily, but feel free to use w/e state management library you prefer

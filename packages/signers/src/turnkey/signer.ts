@@ -63,9 +63,9 @@ export class TurnkeySigner
 
   signTypedData = async <
     const TTypedData extends TypedData | { [key: string]: unknown },
-    TPrimaryType extends string = string
+    TPrimaryType extends string = string,
   >(
-    params: TypedDataDefinition<TTypedData, TPrimaryType>
+    params: TypedDataDefinition<TTypedData, TPrimaryType>,
   ) => {
     if (!this.signer) throw new Error("Not authenticated");
 
@@ -83,7 +83,7 @@ export class TurnkeySigner
         })) as LocalAccount,
         transport: params.transport,
       }),
-      this.signerType
+      this.signerType,
     );
 
     return this.inner.getWhoami({

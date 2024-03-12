@@ -212,7 +212,7 @@ In prior versions, using your own smart contract account implementations require
 ```ts
 type toSmartContractAccount = <
   Name extends string = string,
-  TTransport extends Transport = Transport
+  TTransport extends Transport = Transport,
 >({
   transport,
   chain,
@@ -249,9 +249,9 @@ signTypedData: (params: SignTypedDataParams) => Promise<Hex>; // [!code --]
 
 signTypedData: <
   const TTypedData extends TypedData | { [key: string]: unknown },
-  TPrimaryType extends string = string
+  TPrimaryType extends string = string,
 >(
-  params: TypedDataDefinition<TTypedData, TPrimaryType>
+  params: TypedDataDefinition<TTypedData, TPrimaryType>,
 ) => Promise<Hex>;
 ```
 

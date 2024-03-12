@@ -5,7 +5,7 @@ import * as alchemyChains from "../chains/index.js";
 import type { PromiseOrValue, UserOperationRequest } from "../types.js";
 
 export const AlchemyChainMap = new Map<number, Chain>(
-  Object.values(alchemyChains).map((c) => [c.id, c])
+  Object.values(alchemyChains).map((c) => [c.id, c]),
 );
 
 /**
@@ -90,7 +90,7 @@ export function deepHexlify(obj: any): any {
       ...set,
       [key]: deepHexlify(obj[key]),
     }),
-    {}
+    {},
   );
 }
 
@@ -105,11 +105,11 @@ export function deepHexlify(obj: any): any {
 export function getUserOperationHash(
   request: UserOperationRequest,
   entryPointAddress: Address,
-  chainId: number
+  chainId: number,
 ): Hash {
   const encoded = encodeAbiParameters(
     [{ type: "bytes32" }, { type: "address" }, { type: "uint256" }],
-    [keccak256(packUo(request)), entryPointAddress, BigInt(chainId)]
+    [keccak256(packUo(request)), entryPointAddress, BigInt(chainId)],
   ) as `0x${string}`;
 
   return keccak256(encoded);
@@ -144,7 +144,7 @@ export function packUo(request: UserOperationRequest): Hex {
       hexToBigInt(request.maxFeePerGas),
       hexToBigInt(request.maxPriorityFeePerGas),
       hashedPaymasterAndData,
-    ]
+    ],
   );
 }
 
@@ -152,7 +152,7 @@ export function packUo(request: UserOperationRequest): Hex {
 export function defineReadOnly<T, K extends keyof T>(
   object: T,
   key: K,
-  value: T[K]
+  value: T[K],
 ): void {
   Object.defineProperty(object, key, {
     enumerable: true,
@@ -162,7 +162,7 @@ export function defineReadOnly<T, K extends keyof T>(
 }
 
 export function filterUndefined(
-  obj: Record<string, unknown>
+  obj: Record<string, unknown>,
 ): Record<string, unknown> {
   Object.keys(obj).forEach((key) => {
     if (obj[key] == null) {

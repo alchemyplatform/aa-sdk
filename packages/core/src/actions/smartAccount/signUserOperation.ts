@@ -16,10 +16,10 @@ export const signUserOperation: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: SignUserOperationParameters<TAccount>
+  args: SignUserOperationParameters<TAccount>,
 ) => Promise<UserOperationRequest> = async (client, args) => {
   const { account = client.account } = args;
 
@@ -31,7 +31,7 @@ export const signUserOperation: <
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
       "signUserOperation",
-      client
+      client,
     );
   }
 
@@ -45,7 +45,7 @@ export const signUserOperation: <
   }
 
   request.signature = await account.signUserOperationHash(
-    account.getEntryPoint().getUserOperationHash(request)
+    account.getEntryPoint().getUserOperationHash(request),
   );
 
   return request;

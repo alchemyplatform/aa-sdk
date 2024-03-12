@@ -40,6 +40,6 @@ export const getDefaultNaniAccountFactoryAddress = (chain: Chain): Address => {
       return "0x000000000000dD366cc2E4432bB998e41DFD47C7";
   }
   throw new Error(
-    `no default nani account factory contract exists for ${chain.name}`
+    `no default nani account factory contract exists for ${chain.name}`,
   );
 };

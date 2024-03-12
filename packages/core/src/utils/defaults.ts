@@ -57,7 +57,7 @@ export const getDefaultEntryPointAddress = (chain: Chain): Address => {
  * @throws if the chain doesn't have an address currently deployed
  */
 export const getDefaultSimpleAccountFactoryAddress = (
-  chain: Chain
+  chain: Chain,
 ): Address => {
   switch (chain.id) {
     case mainnet.id:
@@ -89,7 +89,7 @@ export const minPriorityFeePerBidDefaults = new Map<number, bigint>([
 ]);
 
 export const getDefaultUserOperationFeeOptions = (
-  chain: Chain
+  chain: Chain,
 ): UserOperationFeeOptions => {
   return {
     maxPriorityFeePerGas: {

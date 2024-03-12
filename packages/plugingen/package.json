@@ -1,0 +1,63 @@
+{
+  "name": "@alchemy/6900-plugingen",
+  "version": "3.4.4",
+  "description": "A CLI tool that enables you to generate TS code for your ERC-6900 plugins",
+  "author": "Alchemy",
+  "license": "MIT",
+  "private": false,
+  "type": "module",
+  "main": "./dist/esm/exports/index.js",
+  "types": "./dist/types/exports/index.d.ts",
+  "typings": "./dist/types/exports/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "src/**/*.ts",
+    "!dist/**/*.tsbuildinfo",
+    "!vitest.config.ts",
+    "!.env",
+    "!src/**/*.test.ts",
+    "!src/__tests__/**/*"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/types/exports/index.d.ts",
+      "default": "./dist/esm/exports/index.js"
+    },
+    "./config": {
+      "types": "./dist/types/exports/config.d.ts",
+      "default": "./dist/esm/exports/config.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "typescript": "^5.0.4",
+    "typescript-template": "*",
+    "vitest": "^0.31.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alchemyplatform/aa-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alchemyplatform/aa-sdk/issues"
+  },
+  "homepage": "https://github.com/alchemyplatform/aa-sdk#readme",
+  "dependencies": {
+    "cac": "^6.7.14",
+    "dedent": "^1.5.1",
+    "find-up": "^7.0.0",
+    "fs-extra": "^11.2.0",
+    "ora": "^8.0.1",
+    "pathe": "^1.1.2",
+    "picocolors": "^1.0.0",
+    "prettier": "^3.2.5",
+    "viem": "^2.8.4",
+    "zod": "^3.22.4"
+  }
+}

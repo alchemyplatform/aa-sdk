@@ -6,7 +6,7 @@ import { z } from "zod";
 export const NaniAccountFactoryConfigSchema = z.object({
   signer: SignerSchema,
   accountAddress: Address.optional().describe(
-    "Optional override for the account address."
+    "Optional override for the account address.",
   ),
   initCode: z
     .string()
@@ -14,7 +14,7 @@ export const NaniAccountFactoryConfigSchema = z.object({
     .optional()
     .describe("Optional override for the account init code."),
   factoryAddress: Address.optional().describe(
-    "Optional override for the factory address which deploys the smart account."
+    "Optional override for the factory address which deploys the smart account.",
   ),
   salt: z
     .string()

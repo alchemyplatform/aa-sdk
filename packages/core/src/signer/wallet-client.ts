@@ -35,9 +35,9 @@ export class WalletClientSigner implements SmartAccountSigner<WalletClient> {
 
   signTypedData = async <
     const TTypedData extends TypedData | { [key: string]: unknown },
-    TPrimaryType extends string = string
+    TPrimaryType extends string = string,
   >(
-    typedData: TypedDataDefinition<TTypedData, TPrimaryType>
+    typedData: TypedDataDefinition<TTypedData, TPrimaryType>,
   ): Promise<Hex> => {
     const account = this.inner.account ?? (await this.getAddress());
 

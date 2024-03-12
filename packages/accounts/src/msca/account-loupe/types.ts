@@ -18,5 +18,5 @@ export type ExecutionHooks = {
 
 export type PreValidationHooks = [
   readonly FunctionReference[],
-  readonly FunctionReference[]
+  readonly FunctionReference[],
 ];

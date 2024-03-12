@@ -4,7 +4,7 @@ import type { MiddlewareClient } from "../actions.js";
 import type { ClientMiddlewareFn } from "../types.js";
 
 export const defaultGasEstimator: <C extends MiddlewareClient>(
-  client: C
+  client: C,
 ) => ClientMiddlewareFn =
   (client) =>
   async (struct, { account, overrides, feeOptions }) => {
@@ -12,23 +12,23 @@ export const defaultGasEstimator: <C extends MiddlewareClient>(
 
     const estimates = await client.estimateUserOperationGas(
       request,
-      account.getEntryPoint().address
+      account.getEntryPoint().address,
     );
 
     const callGasLimit = applyUserOpOverrideOrFeeOption(
       estimates.callGasLimit,
       overrides?.callGasLimit,
-      feeOptions?.callGasLimit
+      feeOptions?.callGasLimit,
     );
     const verificationGasLimit = applyUserOpOverrideOrFeeOption(
       estimates.verificationGasLimit,
       overrides?.verificationGasLimit,
-      feeOptions?.verificationGasLimit
+      feeOptions?.verificationGasLimit,
     );
     const preVerificationGas = applyUserOpOverrideOrFeeOption(
       estimates.preVerificationGas,
       overrides?.preVerificationGas,
-      feeOptions?.preVerificationGas
+      feeOptions?.preVerificationGas,
     );
 
     struct.callGasLimit = callGasLimit;

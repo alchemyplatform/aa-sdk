@@ -10,8 +10,8 @@ export const ExecutionAbiGenPhase: Phase = async (input) => {
 
   content.push(dedent`
     export const ${executionAbiConst(contract.name)} = ${JSON.stringify(
-    executionAbi
-  )} as const;
+      executionAbi,
+    )} as const;
   `);
   return input;
 };

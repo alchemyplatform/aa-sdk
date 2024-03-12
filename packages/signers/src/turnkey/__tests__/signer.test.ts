@@ -10,7 +10,7 @@ describe("Turnkey Signer Tests", () => {
 
     const address = await signer.getAddress();
     expect(address).toMatchInlineSnapshot(
-      '"0x1234567890123456789012345678901234567890"'
+      '"0x1234567890123456789012345678901234567890"',
     );
   });
 
@@ -19,7 +19,7 @@ describe("Turnkey Signer Tests", () => {
 
     const address = signer.getAddress();
     await expect(address).rejects.toThrowErrorMatchingInlineSnapshot(
-      '"Not authenticated"'
+      '"Not authenticated"',
     );
   });
 
@@ -42,7 +42,7 @@ describe("Turnkey Signer Tests", () => {
 
     const details = signer.getAuthDetails();
     await expect(details).rejects.toThrowErrorMatchingInlineSnapshot(
-      '"Not authenticated"'
+      '"Not authenticated"',
     );
   });
 
@@ -51,7 +51,7 @@ describe("Turnkey Signer Tests", () => {
 
     const signMessage = await signer.signMessage("test");
     expect(signMessage).toMatchInlineSnapshot(
-      '"0x000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000021b"'
+      '"0x000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000021b"',
     );
   });
 
@@ -60,7 +60,7 @@ describe("Turnkey Signer Tests", () => {
 
     const signMessage = signer.signMessage("test");
     await expect(signMessage).rejects.toThrowErrorMatchingInlineSnapshot(
-      '"Not authenticated"'
+      '"Not authenticated"',
     );
   });
 
@@ -78,7 +78,7 @@ describe("Turnkey Signer Tests", () => {
     };
     const signTypedData = await signer.signTypedData(typedData);
     expect(signTypedData).toMatchInlineSnapshot(
-      '"0x000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000021b"'
+      '"0x000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000021b"',
     );
   });
 });
@@ -90,7 +90,7 @@ const givenSigner = async (auth = true) => {
     },
     new WebauthnStamper({
       rpId: "your.app.xyz",
-    })
+    }),
   );
 
   inner.signRawPayload = vi.fn().mockResolvedValue({

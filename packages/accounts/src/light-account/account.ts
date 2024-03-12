@@ -32,7 +32,7 @@ import {
 } from "./utils.js";
 
 export type LightAccount<
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 > = SmartContractAccountWithSigner<"LightAccount", TSigner> & {
   getLightAccountVersion: () => Promise<LightAccountVersion>;
   encodeTransferOwnership: (newOwner: Address) => Hex;
@@ -41,7 +41,7 @@ export type LightAccount<
 
 export type CreateLightAccountParams<
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 > = Pick<
   ToSmartContractAccountParams<"LightAccount", TTransport>,
   "transport" | "chain" | "entryPoint" | "accountAddress"
@@ -55,9 +55,9 @@ export type CreateLightAccountParams<
 
 export async function createLightAccount<
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
 >(
-  config: CreateLightAccountParams<TTransport, TSigner>
+  config: CreateLightAccountParams<TTransport, TSigner>,
 ): Promise<LightAccount<TSigner>>;
 
 export async function createLightAccount({
@@ -80,7 +80,7 @@ export async function createLightAccount({
     if (initCode) return initCode;
 
     const salt = LightAccountUnsupported1271Factories.has(
-      factoryAddress.toLowerCase() as Address
+      factoryAddress.toLowerCase() as Address,
     )
       ? 0n
       : salt_;
@@ -115,12 +115,12 @@ export async function createLightAccount({
     if (storage == null) {
       throw new FailedToGetStorageSlotError(
         "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
-        "Proxy Implementation Address"
+        "Proxy Implementation Address",
       );
     }
 
     const implementationAddresses = Object.values(LightAccountVersions).map(
-      (x) => x.implAddress
+      (x) => x.implAddress,
     );
 
     // only upgrade undeployed accounts (storage 0) or deployed light accounts, error otherwise
@@ -129,7 +129,7 @@ export async function createLightAccount({
       !implementationAddresses.some((x) => x === trim(storage))
     ) {
       throw new Error(
-        "could not determine if smart account implementation is light account"
+        "could not determine if smart account implementation is light account",
       );
     }
 
@@ -183,7 +183,7 @@ export async function createLightAccount({
 
           return accum;
         },
-        [[], [], []] as [Address[], bigint[], Hex[]]
+        [[], [], []] as [Address[], bigint[], Hex[]],
       );
       return encodeFunctionData({
         abi: LightAccountAbi,
@@ -201,7 +201,7 @@ export async function createLightAccount({
           return signer.signMessage(message);
         case "v1.0.2":
           throw new Error(
-            `Version ${version} of LightAccount doesn't support 1271`
+            `Version ${version} of LightAccount doesn't support 1271`,
           );
         default:
           return signWith1271Wrapper(hashMessage(message));
@@ -212,12 +212,12 @@ export async function createLightAccount({
       switch (version) {
         case "v1.0.1": {
           return signer.signTypedData(
-            params as unknown as SignTypedDataParameters
+            params as unknown as SignTypedDataParameters,
           );
         }
         case "v1.0.2":
           throw new Error(
-            `Version ${version} of LightAccount doesn't support 1271`
+            `Version ${version} of LightAccount doesn't support 1271`,
           );
         default:
           return signWith1271Wrapper(hashTypedData(params));

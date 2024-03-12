@@ -8,7 +8,7 @@ export class IncompatibleClientError extends BaseError {
       [
         `Client of type (${client.type}) is not a ${expectedClient}.`,
         `Create one with \`createSmartAccountClient\` first before using \`${method}\``,
-      ].join("\n")
+      ].join("\n"),
     );
   }
 }
