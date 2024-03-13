@@ -32,6 +32,7 @@ export { MultiOwnerModularAccountFactoryAbi } from "./msca/abis/MultiOwnerModula
 export { UpgradeableModularAccountAbi } from "./msca/abis/UpgradeableModularAccount.js";
 export type * from "./msca/account-loupe/decorator.js";
 export { accountLoupeActions } from "./msca/account-loupe/decorator.js";
+export type * from "./msca/account-loupe/types.js";
 export type * from "./msca/account/multiOwnerAccount.js";
 export { createMultiOwnerModularAccount } from "./msca/account/multiOwnerAccount.js";
 export { standardExecutor } from "./msca/account/standardExecutor.js";

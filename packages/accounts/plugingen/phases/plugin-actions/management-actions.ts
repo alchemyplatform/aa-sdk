@@ -99,6 +99,8 @@ const addImports = (
   if (deps != null && deps.length > 0) {
     addImport("viem", { name: "encodePacked" });
     deps.forEach((x) => {
+      // TODO: after plugingen becomes its own cli tool package, this should be changed to
+      // `addImport("@alchemy/aa-accounts", { name: x.name });`
       addImport(
         `../${kebabCase(x.name.replaceAll(/[pP]lugin/g, ""))}/plugin.js`,
         {
@@ -110,6 +112,8 @@ const addImports = (
 
   addImport("@alchemy/aa-core", { name: "ChainNotFoundError" });
   addImport("viem", { name: "encodeAbiParameters" });
+  // TODO: after plugingen becomes its own cli tool package, this should be changed to
+  // `addImport("@alchemy/aa-accounts", { name: "installPlugin as installPlugin_" });`
   addImport("../../plugin-manager/installPlugin.js", {
     name: "installPlugin as installPlugin_",
   });
@@ -117,6 +121,8 @@ const addImports = (
     name: "GetAccountParameter",
     isType: true,
   });
+  // TODO: after plugingen becomes its own cli tool package, this should be changed to
+  // `addImport("@alchemy/aa-accounts", { name: "FunctionReference", isType: true });`
   addImport("../../account-loupe/types.js", {
     name: "FunctionReference",
     isType: true,
