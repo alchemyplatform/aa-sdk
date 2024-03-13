@@ -12,10 +12,10 @@ export const upgradeAccount: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: UpgradeAccountParams<TAccount>,
+  args: UpgradeAccountParams<TAccount>
 ) => Promise<Hash> = async (client, args) => {
   const { account = client.account, upgradeTo, overrides, waitForTx } = args;
 
@@ -27,7 +27,7 @@ export const upgradeAccount: <
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
       "upgradeAccount",
-      client,
+      client
     );
   }
 

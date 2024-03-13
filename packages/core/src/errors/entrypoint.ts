@@ -9,7 +9,7 @@ export class EntryPointNotFoundError extends BaseError {
       [
         `No default entry point exists for ${chain.name}.`,
         `Supply an override.`,
-      ].join("\n"),
+      ].join("\n")
     );
   }
 }

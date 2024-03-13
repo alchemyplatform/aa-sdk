@@ -32,7 +32,7 @@ export const SessionKeyPluginGenConfig: PluginGenConfig = {
   chain: sepolia,
   installConfig: {
     initAbiParams: parseAbiParameters(
-      "address[] initialKeys, bytes32[] tags, bytes[][] initialPermissions",
+      "address[] initialKeys, bytes32[] tags, bytes[][] initialPermissions"
     ),
     dependencies: [
       {

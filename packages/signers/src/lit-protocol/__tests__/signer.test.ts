@@ -20,7 +20,7 @@ describe("Lit Protocol Signer Tests", () => {
     let sessionSignatures = await signer?.getAuthDetails();
     expect(sessionSignatures).toBeDefined();
     expect((await signer?.getAddress())?.toLowerCase()).toEqual(
-      TEST_CONTEXT.PKP_INFO.ethAddress.toLowerCase(),
+      TEST_CONTEXT.PKP_INFO.ethAddress.toLowerCase()
     );
   });
 

@@ -27,7 +27,7 @@ const estimates = await client.estimateUserOperationGas(
   {
     // ... user operation
   },
-  "0xEntryPointAddress",
+  "0xEntryPointAddress"
 );
 ```
 

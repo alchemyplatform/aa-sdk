@@ -1,6 +1,6 @@
 ```ts
 export type SendUserOperationParameters<
-  TAccount extends SmartContractAccount | undefined,
+  TAccount extends SmartContractAccount | undefined
 > = {
   uo: UserOperationCallData | BatchUserOperationCallData;
   overrides?: UserOperationOverrides;

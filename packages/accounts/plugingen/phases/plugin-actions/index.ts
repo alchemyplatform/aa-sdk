@@ -52,10 +52,10 @@ export const PluginActionsGenPhase: Phase = async (input) => {
 
       providerFunctionDefs.push(dedent`
           ${camelCase(
-            n.name,
-          )}: (args: Pick<EncodeFunctionDataParameters<typeof ${executionAbiConst}, "${
             n.name
-          }">, "args"> & { overrides?: UserOperationOverrides; } & GetAccountParameter<TAccount>) => Promise<SendUserOperationResult>
+          )}: (args: Pick<EncodeFunctionDataParameters<typeof ${executionAbiConst}, "${
+        n.name
+      }">, "args"> & { overrides?: UserOperationOverrides; } & GetAccountParameter<TAccount>) => Promise<SendUserOperationResult>
         `);
       const methodName = camelCase(n.name);
       return dedent`
@@ -82,12 +82,12 @@ export const PluginActionsGenPhase: Phase = async (input) => {
     "ExecutionActions<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined>",
     dedent`{
         ${providerFunctionDefs.join(";\n\n")}
-      }`,
+      }`
   );
 
   const { hasReadMethods } = await asyncPipe(
     ManagementActionsGenPhase,
-    AccountReadActionsGenPhase,
+    AccountReadActionsGenPhase
   )({
     ...input,
     content: providerFunctions,
@@ -102,7 +102,7 @@ export const PluginActionsGenPhase: Phase = async (input) => {
     hasReadMethods ? "<TAccount>" : ""
   }
   `,
-    true,
+    true
   );
 
   input.content.push(dedent`

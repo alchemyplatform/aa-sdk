@@ -15,7 +15,7 @@ const isLightAccountVersion = (x: unknown): x is LightAccountVersion => {
 export const LightAccountFactoryConfigSchema = z.object({
   signer: SignerSchema,
   accountAddress: Address.optional().describe(
-    "Optional override for the account address.",
+    "Optional override for the account address."
   ),
   initCode: z
     .string()
@@ -23,13 +23,13 @@ export const LightAccountFactoryConfigSchema = z.object({
     .optional()
     .describe("Optional override for the account init code."),
   factoryAddress: Address.optional().describe(
-    "Optional override for the factory address which deploys the smart account.",
+    "Optional override for the factory address which deploys the smart account."
   ),
   version: z
     .string()
     .refine<LightAccountVersion>(
       isLightAccountVersion,
-      "Version must be a valid Light Account version.",
+      "Version must be a valid Light Account version."
     )
     .optional(),
 });

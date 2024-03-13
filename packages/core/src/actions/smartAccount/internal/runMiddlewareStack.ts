@@ -27,13 +27,13 @@ export const _runMiddlewareStack: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 >(
   client: BaseSmartAccountClient<TTransport, TChain, TAccount>,
   args: {
     uo: Deferrable<UserOperationStruct>;
     overrides?: UserOperationOverrides;
-  } & GetAccountParameter<TAccount>,
+  } & GetAccountParameter<TAccount>
 ) => Promise<UserOperationStruct> = async (client, args) => {
   const { uo, overrides, account = client.account } = args;
   if (!account) {
@@ -48,7 +48,7 @@ export const _runMiddlewareStack: <
     overrides?.paymasterAndData
       ? overridePaymasterDataMiddleware
       : client.middleware.paymasterAndData,
-    client.middleware.userOperationSimulator,
+    client.middleware.userOperationSimulator
   )(uo, { overrides, feeOptions: client.feeOptions, account });
 
   return resolveProperties<UserOperationStruct>(result);

@@ -28,7 +28,7 @@ const result = getUserOperationHash(
     // ... the UserOperationRequest
   },
   "0xAddress",
-  1n,
+  1n
 );
 // 0xUserOpHash
 ```

@@ -23,12 +23,12 @@ import { getDefaultMultiOwnerModularAccountFactoryAddress } from "../utils.js";
 import { standardExecutor } from "./standardExecutor.js";
 
 export type MultiOwnerModularAccount<
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = SmartContractAccountWithSigner<"MultiOwnerModularAccount", TSigner>;
 
 export type CreateMultiOwnerModularAccountParams<
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = {
   transport: TTransport;
   chain: Chain;
@@ -43,9 +43,9 @@ export type CreateMultiOwnerModularAccountParams<
 
 export async function createMultiOwnerModularAccount<
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  config: CreateMultiOwnerModularAccountParams<TTransport, TSigner>,
+  config: CreateMultiOwnerModularAccountParams<TTransport, TSigner>
 ): Promise<MultiOwnerModularAccount<TSigner>>;
 
 export async function createMultiOwnerModularAccount({

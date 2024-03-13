@@ -122,7 +122,7 @@ export class AlchemySigner
   };
 
   signMessage: (msg: SignableMessage) => Promise<`0x${string}`> = async (
-    msg,
+    msg
   ) => {
     const messageHash = hashMessage(msg);
 
@@ -131,9 +131,9 @@ export class AlchemySigner
 
   signTypedData: <
     const TTypedData extends TypedData | { [key: string]: unknown },
-    TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData,
+    TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData
   >(
-    params: TypedDataDefinition<TTypedData, TPrimaryType>,
+    params: TypedDataDefinition<TTypedData, TPrimaryType>
   ) => Promise<Hex> = async (params) => {
     const messageHash = hashTypedData(params);
 
@@ -154,7 +154,7 @@ export class AlchemySigner
    * @returns the organization id for the user if they exist
    */
   getUser: (email: string) => Promise<{ orgId: string } | null> = async (
-    email,
+    email
   ) => {
     const result = await this.inner.lookupUserByEmail(email);
 
@@ -181,13 +181,13 @@ export class AlchemySigner
    * If the user is authenticated with a Passkey, this will return a private key
    */
   exportWallet: (
-    params: Parameters<(typeof this.inner)["exportWallet"]>[0],
+    params: Parameters<(typeof this.inner)["exportWallet"]>[0]
   ) => Promise<boolean> = async (params) => {
     return this.inner.exportWallet(params);
   };
 
   private authenticateWithEmail = async (
-    params: Extract<AuthParams, { type: "email" }>,
+    params: Extract<AuthParams, { type: "email" }>
   ): Promise<User> => {
     if ("email" in params) {
       const existingUser = await this.getUser(params.email);
@@ -258,16 +258,16 @@ export class AlchemySigner
       signMessage: (msg) => this.signMessage(msg.message),
       signTypedData: <
         const typedData extends TypedData | Record<string, unknown>,
-        primaryType extends keyof typedData | "EIP712Domain" = keyof typedData,
+        primaryType extends keyof typedData | "EIP712Domain" = keyof typedData
       >(
-        typedDataDefinition: TypedDataDefinition<typedData, primaryType>,
+        typedDataDefinition: TypedDataDefinition<typedData, primaryType>
       ) => this.signTypedData<typedData, primaryType>(typedDataDefinition),
       signTransaction: this.signTransaction,
     });
   };
 
   private authenticateWithPasskey = async (
-    args: Extract<AuthParams, { type: "passkey" }>,
+    args: Extract<AuthParams, { type: "passkey" }>
   ) => {
     let user: User;
     if (args.createNew) {

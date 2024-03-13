@@ -22,7 +22,7 @@ import { createWalletClient, custom } from "viem";
 // eslint-disable-next-line react-hooks/rules-of-hooks
 const { wallets } = useWallets();
 const embeddedWallet = wallets.find(
-  (wallet) => wallet.walletClientType === "privy",
+  (wallet) => wallet.walletClientType === "privy"
 );
 if (!embeddedWallet) throw new Error("User does not have an embedded wallet");
 
@@ -40,7 +40,7 @@ const privyClient = createWalletClient({
 // Create a smart account signer from the embedded wallet's viem client
 const privySigner: SmartAccountSigner = new WalletClientSigner(
   privyClient,
-  "privy", // signerType
+  "privy" // signerType
 );
 
 // Create an Alchemy Smart Account Client with the smart account signer
@@ -54,5 +54,5 @@ export const provider = new AlchemyProvider({
       signer: privySigner,
       factoryAddress: getDefaultLightAccountFactoryAddress(rpcClient.chain),
       rpcClient,
-    }),
+    })
 );

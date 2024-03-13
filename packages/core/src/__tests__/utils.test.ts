@@ -29,10 +29,10 @@ describe("Utils Tests", () => {
           verificationGasLimit: "0x114c2",
         } as UserOperationRequest,
         entryPointAddress,
-        80001n,
-      ),
+        80001n
+      )
     ).toMatchInlineSnapshot(
-      `"0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b"`,
+      `"0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b"`
     );
   });
 
@@ -41,7 +41,7 @@ describe("Utils Tests", () => {
       const index = stringToIndex("alice@example.com");
 
       expect(index).toEqual(
-        53219281434065493725260108619161294016101536485294536107629387514619165176826n,
+        53219281434065493725260108619161294016101536485294536107629387514619165176826n
       );
     });
   });

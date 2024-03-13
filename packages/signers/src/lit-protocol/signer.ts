@@ -68,7 +68,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
    * @throws {Not Authenticated} if authentication operations fail this error is thrown
    */
   authenticate = async (
-    props: LitAuthenticateProps<C>,
+    props: LitAuthenticateProps<C>
   ): Promise<LitUserMetadata> => {
     if (!this.session) {
       // runs authentication logic
@@ -97,22 +97,22 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
     this._checkInternals();
 
     return this.signer?.signMessage(
-      typeof msg === "string" ? msg : msg.raw,
+      typeof msg === "string" ? msg : msg.raw
     ) as Promise<Hex>;
   };
 
   signTypedData = async <
     const TTypedData extends TypedData | { [key: string]: unknown },
-    TPrimaryType extends string = string,
+    TPrimaryType extends string = string
   >(
-    params: TypedDataDefinition<TTypedData, TPrimaryType>,
+    params: TypedDataDefinition<TTypedData, TPrimaryType>
   ) => {
     this._checkInternals();
 
     return this.signer?._signTypedData(
       params.domain as TypedDataDomain,
       params.types as any,
-      params.message as Record<string, any>,
+      params.message as Record<string, any>
     ) as Promise<Hex>;
   };
 

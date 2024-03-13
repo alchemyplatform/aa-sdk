@@ -61,7 +61,7 @@ export type SendTransactionParameters<
   TAccount extends Account | undefined = Account | undefined,
   TChainOverride extends Chain | undefined = Chain | undefined,
   ///
-  derivedChain extends Chain | undefined = DeriveChain<TChain, TChainOverride>,
+  derivedChain extends Chain | undefined = DeriveChain<TChain, TChainOverride>
 > = UnionOmit<FormattedTransactionRequest<derivedChain>, "from"> &
   GetAccountParameter<TAccount> &
   GetChainParameter<TChain, TChainOverride>;

@@ -9,10 +9,10 @@ import type { EntryPointDef } from "./types";
 
 export const getVersion060EntryPoint: (
   chain: Chain,
-  address?: Address,
+  address?: Address
 ) => EntryPointDef<UserOperationRequest> = (
   chain: Chain,
-  address = getDefaultEntryPointAddress(chain),
+  address = getDefaultEntryPointAddress(chain)
 ) => {
   return {
     version: "0.6.0",

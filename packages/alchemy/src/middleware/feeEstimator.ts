@@ -3,7 +3,7 @@ import { applyUserOpOverrideOrFeeOption } from "@alchemy/aa-core";
 import type { ClientWithAlchemyMethods } from "../client/types";
 
 export const alchemyFeeEstimator: <C extends ClientWithAlchemyMethods>(
-  client: C,
+  client: C
 ) => ClientMiddlewareFn =
   (client) =>
   async (struct, { overrides, feeOptions }) => {
@@ -24,12 +24,12 @@ export const alchemyFeeEstimator: <C extends ClientWithAlchemyMethods>(
     const maxPriorityFeePerGas = applyUserOpOverrideOrFeeOption(
       maxPriorityFeePerGasEstimate,
       overrides?.maxPriorityFeePerGas,
-      feeOptions?.maxPriorityFeePerGas,
+      feeOptions?.maxPriorityFeePerGas
     );
     const maxFeePerGas = applyUserOpOverrideOrFeeOption(
       baseFeePerGas + BigInt(maxPriorityFeePerGas),
       overrides?.maxFeePerGas,
-      feeOptions?.maxFeePerGas,
+      feeOptions?.maxFeePerGas
     );
 
     return {

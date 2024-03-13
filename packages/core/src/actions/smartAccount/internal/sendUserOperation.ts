@@ -16,10 +16,10 @@ export const _sendUserOperation: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 >(
   client: BaseSmartAccountClient<TTransport, TChain, TAccount>,
-  args: { uoStruct: UserOperationStruct } & GetAccountParameter<TAccount>,
+  args: { uoStruct: UserOperationStruct } & GetAccountParameter<TAccount>
 ) => Promise<SendUserOperationResult> = async (client, args) => {
   const { account = client.account } = args;
   if (!account) {
@@ -36,13 +36,13 @@ export const _sendUserOperation: <
   }
 
   request.signature = await account.signUserOperationHash(
-    account.getEntryPoint().getUserOperationHash(request),
+    account.getEntryPoint().getUserOperationHash(request)
   );
 
   return {
     hash: await client.sendRawUserOperation(
       request,
-      account.getEntryPoint().address,
+      account.getEntryPoint().address
     ),
     request,
   };

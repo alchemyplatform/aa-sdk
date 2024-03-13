@@ -26,23 +26,20 @@ const hexlifyOptional = (value: any): `0x${string}` | undefined => {
 };
 
 export class AccountSigner<
-  TAccount extends SmartContractAccount = SmartContractAccount,
+  TAccount extends SmartContractAccount = SmartContractAccount
 > extends Signer {
   readonly account: TAccount;
 
   sendUserOperation;
   waitForUserOperationTransaction;
 
-  constructor(
-    public provider: EthersProviderAdapter,
-    account: TAccount,
-  ) {
+  constructor(public provider: EthersProviderAdapter, account: TAccount) {
     super();
     this.account = account;
 
     this.sendUserOperation = (
       args: UserOperationCallData | BatchUserOperationCallData,
-      overrides?: UserOperationOverrides,
+      overrides?: UserOperationOverrides
     ) =>
       this.provider.accountProvider.sendUserOperation({
         uo: args,
@@ -52,7 +49,7 @@ export class AccountSigner<
 
     this.waitForUserOperationTransaction =
       this.provider.accountProvider.waitForUserOperationTransaction.bind(
-        this.provider.accountProvider,
+        this.provider.accountProvider
       );
   }
 
@@ -79,7 +76,7 @@ export class AccountSigner<
 
   async sendTransaction(
     transaction: Deferrable<TransactionRequest>,
-    overrides?: UserOperationOverrides,
+    overrides?: UserOperationOverrides
   ): Promise<TransactionResponse> {
     if (!this.provider.accountProvider.account || !this.account) {
       throw new AccountNotFoundError();
@@ -93,17 +90,17 @@ export class AccountSigner<
         chain: this.provider.accountProvider.chain,
         account: this.account,
       },
-      overrides,
+      overrides
     );
 
     return this.provider.getTransaction(txHash);
   }
 
   signTransaction(
-    _transaction: Deferrable<TransactionRequest>,
+    _transaction: Deferrable<TransactionRequest>
   ): Promise<string> {
     throw new Error(
-      "Transaction signing is not supported, use sendUserOperation instead",
+      "Transaction signing is not supported, use sendUserOperation instead"
     );
   }
 

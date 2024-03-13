@@ -46,6 +46,6 @@ export const provider = new AlchemyProvider({
       signer: eoaSigner,
       factoryAddress: getDefaultLightAccountFactoryAddress(chain),
       rpcClient,
-    }),
+    })
 );
 ```

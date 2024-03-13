@@ -21,7 +21,7 @@ export type AlchemySmartAccountClientConfig<
   chain extends Chain | undefined = Chain | undefined,
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 > = {
   account?: account;
   useSimulation?: boolean;
@@ -36,7 +36,7 @@ export type BaseAlchemyActions<
   chain extends Chain | undefined = Chain | undefined,
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 > = SmartAccountClientActions<chain, account> &
   AlchemySmartAccountClientActions<account>;
 
@@ -49,7 +49,7 @@ export type AlchemySmartAccountClient_Base<
   actions extends BaseAlchemyActions<chain, account> = BaseAlchemyActions<
     chain,
     account
-  >,
+  >
 > = Prettify<
   SmartAccountClient<
     transport,
@@ -69,7 +69,7 @@ export type AlchemySmartAccountClient<
   actions extends BaseAlchemyActions<chain, account> = BaseAlchemyActions<
     chain,
     account
-  >,
+  >
 > = Prettify<
   AlchemySmartAccountClient_Base<transport, chain, account, actions>
 >;
@@ -79,7 +79,7 @@ export function createAlchemySmartAccountClient<
   TChain extends Chain = Chain,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 >({
   account,
   gasManagerConfig,

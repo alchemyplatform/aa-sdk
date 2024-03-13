@@ -17,13 +17,13 @@ export const buildUserOperationFromTxs: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: SendTransactionsParameters<TAccount>,
+  args: SendTransactionsParameters<TAccount>
 ) => Promise<BuildUserOperationFromTransactionsResult> = async (
   client,
-  args,
+  args
 ) => {
   const { account = client.account, requests, overrides } = args;
   if (!account) {
@@ -34,7 +34,7 @@ export const buildUserOperationFromTxs: <
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
       "buildUserOperationFromTxs",
-      client,
+      client
     );
   }
 
@@ -58,8 +58,8 @@ export const buildUserOperationFromTxs: <
     overrides?.maxFeePerGas != null
       ? overrides?.maxFeePerGas
       : mfpgOverridesInTx().length > 0
-        ? bigIntMax(...mfpgOverridesInTx())
-        : undefined;
+      ? bigIntMax(...mfpgOverridesInTx())
+      : undefined;
 
   const mpfpgOverridesInTx = () =>
     requests
@@ -69,8 +69,8 @@ export const buildUserOperationFromTxs: <
     overrides?.maxPriorityFeePerGas != null
       ? overrides?.maxPriorityFeePerGas
       : mpfpgOverridesInTx().length > 0
-        ? bigIntMax(...mpfpgOverridesInTx())
-        : undefined;
+      ? bigIntMax(...mpfpgOverridesInTx())
+      : undefined;
 
   const _overrides: UserOperationOverrides = {
     maxFeePerGas,

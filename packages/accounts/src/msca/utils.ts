@@ -48,7 +48,7 @@ import { MultiOwnerPlugin } from "./plugins/multi-owner/plugin.js";
  * @throws if the chain doesn't have an address currently deployed
  */
 export const getDefaultMultiOwnerModularAccountFactoryAddress = (
-  chain: Chain,
+  chain: Chain
 ): Address => {
   switch (chain.id) {
     case sepolia.id:
@@ -76,7 +76,7 @@ export async function getMSCAUpgradeToData<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
   TAccount extends
     | SmartContractAccountWithSigner<string, TSigner>
-    | undefined = SmartContractAccountWithSigner<string, TSigner> | undefined,
+    | undefined = SmartContractAccountWithSigner<string, TSigner> | undefined
 >(
   client: SmartAccountClient<TTransport, TChain, TAccount>,
   {
@@ -84,7 +84,7 @@ export async function getMSCAUpgradeToData<
     account: account_ = client.account,
   }: {
     multiOwnerPluginAddress?: Address;
-  } & GetAccountParameter<TAccount>,
+  } & GetAccountParameter<TAccount>
 ): Promise<
   UpgradeToData & {
     createMAAccount: () => Promise<MultiOwnerModularAccount<TSigner>>;
@@ -120,7 +120,7 @@ export async function getMSCAUpgradeToData<
 
 export async function getMAInitializationData<
   TTransport extends Transport = Transport,
-  TChain extends Chain | undefined = Chain | undefined,
+  TChain extends Chain | undefined = Chain | undefined
 >({
   client,
   multiOwnerPluginAddress,
@@ -135,7 +135,7 @@ export async function getMAInitializationData<
   }
 
   const factoryAddress = getDefaultMultiOwnerModularAccountFactoryAddress(
-    client.chain,
+    client.chain
   );
 
   const implAddress = await client.readContract({
@@ -162,17 +162,17 @@ export async function getMAInitializationData<
       abi: IPluginAbi,
       functionName: "pluginManifest",
       result: moPluginManifest,
-    }),
+    })
   );
 
   const encodedOwner = encodeAbiParameters(
     parseAbiParameters("address[]"),
-    Array.isArray(signerAddress) ? [signerAddress] : [[signerAddress]],
+    Array.isArray(signerAddress) ? [signerAddress] : [[signerAddress]]
   );
 
   const encodedPluginInitData = encodeAbiParameters(
     parseAbiParameters("bytes32[], bytes[]"),
-    [[hashedMultiOwnerPluginManifest], [encodedOwner]],
+    [[hashedMultiOwnerPluginManifest], [encodedOwner]]
   );
 
   const encodedMSCAInitializeData = encodeFunctionData({

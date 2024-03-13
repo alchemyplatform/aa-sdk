@@ -8,7 +8,7 @@ export const ManagementActionsGenPhase: Phase = async (input) => {
   if (config.installConfig != null) {
     addImports(
       addImport,
-      config.installConfig.dependencies?.map((x) => x.plugin) ?? [],
+      config.installConfig.dependencies?.map((x) => x.plugin) ?? []
     );
 
     const initArgs = config.installConfig.initAbiParams ?? [];
@@ -21,13 +21,13 @@ export const ManagementActionsGenPhase: Phase = async (input) => {
         pluginAddress?: Address;
         dependencyOverrides?: FunctionReference[];
     }`,
-      true,
+      true
     );
     addType(
       "ManagementActions<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined>",
       dedent`{
       install${contract.name}: (args: {overrides?: UserOperationOverrides} & Install${contract.name}Params & GetAccountParameter<TAccount>) => Promise<SendUserOperationResult>
-    }`,
+    }`
     );
 
     const dependencies = (config.installConfig.dependencies ?? []).map(
@@ -43,7 +43,7 @@ export const ManagementActionsGenPhase: Phase = async (input) => {
             [pluginAddress, ${x.functionId}]
           );
         })()
-      `,
+      `
     );
 
     const installMethodName = `install${contract.name}`;
@@ -64,7 +64,7 @@ export const ManagementActionsGenPhase: Phase = async (input) => {
       }
 
       const dependencies = params.dependencyOverrides ?? [${dependencies.join(
-        ",\n\n",
+        ",\n\n"
       )}];
       const pluginAddress = params.pluginAddress ?? ${
         contract.name
@@ -79,7 +79,7 @@ export const ManagementActionsGenPhase: Phase = async (input) => {
       return installPlugin_(client, {
         pluginAddress,
         pluginInitData: encodeAbiParameters(${JSON.stringify(
-          initArgs,
+          initArgs
         )}, params.args),
         dependencies,
         overrides,
@@ -94,7 +94,7 @@ export const ManagementActionsGenPhase: Phase = async (input) => {
 
 const addImports = (
   addImport: PhaseInput["addImport"],
-  deps?: PluginGenConfig[],
+  deps?: PluginGenConfig[]
 ) => {
   if (deps != null && deps.length > 0) {
     addImport("viem", { name: "encodePacked" });
@@ -103,7 +103,7 @@ const addImports = (
         `../${kebabCase(x.name.replaceAll(/[pP]lugin/g, ""))}/plugin.js`,
         {
           name: x.name,
-        },
+        }
       );
     });
   }

@@ -17,7 +17,7 @@ describe("Capsule Signer Tests", () => {
 
     const address = await signer.getAddress();
     expect(address).toMatchInlineSnapshot(
-      '"0x1234567890123456789012345678901234567890"',
+      '"0x1234567890123456789012345678901234567890"'
     );
   });
 
@@ -26,7 +26,7 @@ describe("Capsule Signer Tests", () => {
 
     const address = signer.getAddress();
     await expect(address).rejects.toThrowErrorMatchingInlineSnapshot(
-      '"Not authenticated"',
+      '"Not authenticated"'
     );
   });
 
@@ -52,7 +52,7 @@ describe("Capsule Signer Tests", () => {
 
     const details = signer.getAuthDetails();
     await expect(details).rejects.toThrowErrorMatchingInlineSnapshot(
-      '"Not authenticated"',
+      '"Not authenticated"'
     );
   });
 
@@ -68,7 +68,7 @@ describe("Capsule Signer Tests", () => {
 
     const signMessage = signer.signMessage("test");
     await expect(signMessage).rejects.toThrowErrorMatchingInlineSnapshot(
-      '"Not authenticated"',
+      '"Not authenticated"'
     );
   });
 

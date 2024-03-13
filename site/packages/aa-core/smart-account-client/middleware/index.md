@@ -25,7 +25,7 @@ export type ClientMiddlewareFn = <TAccount extends SmartContractAccount>(
     overrides?: UserOperationOverrides;
     feeOptions?: UserOperationFeeOptions;
     account: TAccount;
-  },
+  }
 ) => Promise<Deferrable<UserOperationStruct>>;
 
 export type ClientMiddleware = {

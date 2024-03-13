@@ -21,7 +21,7 @@ export enum SimulateChangeType {
 export type SimulateUserOperationAssetChangesRequest = [
   UserOperationStruct,
   entryPoint: Address,
-  blockNumber?: Hash,
+  blockNumber?: Hash
 ];
 
 export type SimulateUserOperationAssetChangesResponse = {

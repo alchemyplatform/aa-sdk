@@ -18,14 +18,14 @@ export type SignTypedDataParams = Omit<SignTypedDataParameters, "privateKey">;
  */
 export type BaseSmartAccountParams<
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = z.input<
   ReturnType<typeof createBaseSmartAccountParamsSchema<TTransport, TSigner>>
 >;
 
 export type SimpleSmartAccountParams<
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = z.input<
   ReturnType<typeof SimpleSmartAccountParamsSchema<TTransport, TSigner>>
 >;
@@ -35,7 +35,7 @@ export type SimpleSmartAccountParams<
  */
 export interface ISmartContractAccount<
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > {
   /**
    * The RPC provider the account uses to make RPC calls
@@ -173,6 +173,6 @@ export interface ISmartContractAccount<
 
   encodeUpgradeToAndCall: (
     upgradeToImplAddress: Address,
-    upgradeToInitData: Hex,
+    upgradeToInitData: Hex
   ) => Promise<Hex>;
 }

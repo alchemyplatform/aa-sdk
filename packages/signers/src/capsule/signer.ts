@@ -38,7 +38,7 @@ export class CapsuleSigner
   private signer: WalletClientSigner | undefined;
 
   constructor(
-    params: CapsuleConfig | { inner: Capsule; client: WalletClient },
+    params: CapsuleConfig | { inner: Capsule; client: WalletClient }
   ) {
     if ("inner" in params) {
       this.inner = params.inner;
@@ -50,7 +50,7 @@ export class CapsuleSigner
     this.client = createCapsuleViemClient(
       this.inner,
       params.walletConfig as any, // TODO: Capsule team to address lint error
-      params.viemClientOpts,
+      params.viemClientOpts
     ) as unknown as WalletClient; // TODO: Capsule team to address lint error
   }
 
@@ -73,9 +73,9 @@ export class CapsuleSigner
 
   signTypedData = async <
     const TTypedData extends TypedData | { [key: string]: unknown },
-    TPrimaryType extends string = string,
+    TPrimaryType extends string = string
   >(
-    params: TypedDataDefinition<TTypedData, TPrimaryType>,
+    params: TypedDataDefinition<TTypedData, TPrimaryType>
   ) => {
     if (!this.signer) throw new Error("Not authenticated");
 
@@ -89,7 +89,7 @@ export class CapsuleSigner
       createWalletClient({
         transport: custom(this.client),
       }),
-      this.signerType,
+      this.signerType
     );
 
     return this.inner.getWallets();

@@ -38,7 +38,7 @@ export class FireblocksSigner
   private signer: WalletClientSigner | undefined;
 
   constructor(
-    params: FireblocksProviderConfig | { inner: FireblocksWeb3Provider },
+    params: FireblocksProviderConfig | { inner: FireblocksWeb3Provider }
   ) {
     if ("inner" in params) {
       this.inner = params.inner;
@@ -67,9 +67,9 @@ export class FireblocksSigner
 
   signTypedData = async <
     const TTypedData extends TypedData | { [key: string]: unknown },
-    TPrimaryType extends string = string,
+    TPrimaryType extends string = string
   >(
-    params: TypedDataDefinition<TTypedData, TPrimaryType>,
+    params: TypedDataDefinition<TTypedData, TPrimaryType>
   ) => {
     if (!this.signer) throw new Error("Not authenticated");
 
@@ -83,7 +83,7 @@ export class FireblocksSigner
       createWalletClient({
         transport: custom(this.inner),
       }),
-      this.signerType,
+      this.signerType
     );
 
     return { addresses: await this.inner.request({ method: "eth_accounts" }) };

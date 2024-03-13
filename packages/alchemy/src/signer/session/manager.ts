@@ -12,7 +12,7 @@ export const SessionManagerParamsSchema = z.object({
     .number()
     .default(DEFAULT_SESSION_MS)
     .describe(
-      "The time in milliseconds that a session should last before expiring [default: 15 minutes]",
+      "The time in milliseconds that a session should last before expiring [default: 15 minutes]"
     ),
   client: z.custom<AlchemySignerClient>(),
 });
@@ -74,14 +74,14 @@ export class SessionManager {
   public setSession = (
     session:
       | Omit<Extract<Session, { type: "email" }>, "expirationDateMs">
-      | Omit<Extract<Session, { type: "passkey" }>, "expirationDateMs">,
+      | Omit<Extract<Session, { type: "passkey" }>, "expirationDateMs">
   ) => {
     this.storage.setItem(
       this.sessionKey,
       JSON.stringify({
         ...session,
         expirationDateMs: Date.now() + this.expirationTimeMs,
-      }),
+      })
     );
   };
 
@@ -93,7 +93,7 @@ export class SessionManager {
     // temporary session must be placed in localStorage so that it can be accessed across tabs
     localStorage.setItem(
       `${this.sessionKey}:temporary`,
-      JSON.stringify(session),
+      JSON.stringify(session)
     );
   };
 

@@ -20,7 +20,7 @@ import {
 export type CreateLightAccountClientParams<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = {
   transport: CreateLightAccountParams<TTransport, TSigner>["transport"];
   chain: CreateLightAccountParams<TTransport, TSigner>["chain"];
@@ -35,9 +35,9 @@ export type CreateLightAccountClientParams<
 
 export function createLightAccountClient<
   TChain extends Chain | undefined = Chain | undefined,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  args: CreateLightAccountClientParams<Transport, TChain, TSigner>,
+  args: CreateLightAccountClientParams<Transport, TChain, TSigner>
 ): Promise<
   SmartAccountClient<
     CustomTransport,

@@ -23,7 +23,7 @@ export const AccountReadActionsGenPhase: Phase = async (input) => {
 
     const encodeMethodName = `encode${pascalCase(n.name)}`;
     accountFunctionActionDefs.push(
-      dedent`${encodeMethodName}: (args: Pick<EncodeFunctionDataParameters<typeof ${executionAbiConst}, "${n.name}">, "args">) => Hex`,
+      dedent`${encodeMethodName}: (args: Pick<EncodeFunctionDataParameters<typeof ${executionAbiConst}, "${n.name}">, "args">) => Hex`
     );
     methodContent.push(dedent`
       ${encodeMethodName}(${argsParamString}) {
@@ -46,7 +46,7 @@ export const AccountReadActionsGenPhase: Phase = async (input) => {
       accountFunctionActionDefs.push(
         n.inputs.length > 0
           ? dedent`${readMethodName}: (args: Pick<EncodeFunctionDataParameters<typeof ${executionAbiConst}, "${n.name}">, "args"> & GetAccountParameter<TAccount>) => Promise<ReadContractReturnType<typeof ${executionAbiConst}, "${n.name}">>`
-          : dedent`${readMethodName}: (args: GetAccountParameter<TAccount>) => Promise<ReadContractReturnType<typeof ${executionAbiConst}, "${n.name}">>`,
+          : dedent`${readMethodName}: (args: GetAccountParameter<TAccount>) => Promise<ReadContractReturnType<typeof ${executionAbiConst}, "${n.name}">>`
       );
 
       methodContent.push(dedent`
@@ -80,7 +80,7 @@ export const AccountReadActionsGenPhase: Phase = async (input) => {
     typeName,
     dedent`{
     ${accountFunctionActionDefs.join(";\n\n")}
-  }`,
+  }`
   );
   input.content.push(...accountFunctions);
 

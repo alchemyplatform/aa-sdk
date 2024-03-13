@@ -43,11 +43,10 @@ export type GetAccountParameter<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TAccountOverride extends SmartContractAccount = SmartContractAccount,
-> =
-  IsUndefined<TAccount> extends true
-    ? { account: TAccountOverride }
-    : { account?: TAccountOverride };
+  TAccountOverride extends SmartContractAccount = SmartContractAccount
+> = IsUndefined<TAccount> extends true
+  ? { account: TAccountOverride }
+  : { account?: TAccountOverride };
 
 export type UpgradeToAndCallParams = {
   upgradeToAddress: Address;
@@ -56,7 +55,7 @@ export type UpgradeToAndCallParams = {
 
 export type SmartContractAccountWithSigner<
   Name extends string = string,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = SmartContractAccount<Name> & {
   getSigner: () => TSigner;
 };
@@ -64,7 +63,7 @@ export type SmartContractAccountWithSigner<
 //#region SmartContractAccount
 export type SmartContractAccount<
   Name extends string = string,
-  TUO = UserOperationRequest,
+  TUO = UserOperationRequest
 > = LocalAccount<Name> & {
   source: Name;
   getDummySignature: () => Hex;
@@ -74,9 +73,9 @@ export type SmartContractAccount<
   signMessageWith6492: (params: { message: SignableMessage }) => Promise<Hex>;
   signTypedDataWith6492: <
     const typedData extends TypedData | Record<string, unknown>,
-    primaryType extends keyof typedData | "EIP712Domain" = keyof typedData,
+    primaryType extends keyof typedData | "EIP712Domain" = keyof typedData
   >(
-    typedDataDefinition: TypedDataDefinition<typedData, primaryType>,
+    typedDataDefinition: TypedDataDefinition<typedData, primaryType>
   ) => Promise<Hex>;
   encodeUpgradeToAndCall: (params: UpgradeToAndCallParams) => Promise<Hex>;
   getNonce(nonceKey?: bigint): Promise<bigint>;
@@ -92,7 +91,7 @@ export type ToSmartContractAccountParams<
   Name extends string = string,
   TTransport extends Transport = Transport,
   TChain extends Chain = Chain,
-  TUserOperationRequest = UserOperationRequest,
+  TUserOperationRequest = UserOperationRequest
 > = {
   source: Name;
   transport: TTransport;
@@ -143,12 +142,12 @@ export const getAccountAddress = async ({
   } catch (err: any) {
     Logger.verbose(
       "[BaseSmartContractAccount](getAddress) getSenderAddress err: ",
-      err,
+      err
     );
     if (err.cause?.data?.errorName === "SenderAddressResult") {
       Logger.verbose(
         "[BaseSmartContractAccount](getAddress) entryPoint.getSenderAddress result:",
-        err.cause.data.args[0],
+        err.cause.data.args[0]
       );
 
       return err.cause.data.args[0] as Address;
@@ -165,7 +164,7 @@ export const getAccountAddress = async ({
 export async function toSmartContractAccount<
   Name extends string = string,
   TTransport extends Transport = Transport,
-  TChain extends Chain = Chain,
+  TChain extends Chain = Chain
 >({
   transport,
   chain,
@@ -230,7 +229,7 @@ export async function toSmartContractAccount<
     });
 
   const [factoryAddress] = parseFactoryAddressFromAccountInitCode(
-    await getAccountInitCode(),
+    await getAccountInitCode()
   );
 
   const getFactoryAddress = () => factoryAddress;
@@ -289,9 +288,9 @@ export async function toSmartContractAccount<
 
   const signTypedDataWith6492 = async <
     const typedData extends TypedData | Record<string, unknown>,
-    primaryType extends keyof typedData | "EIP712Domain" = keyof typedData,
+    primaryType extends keyof typedData | "EIP712Domain" = keyof typedData
   >(
-    typedDataDefinition: TypedDataDefinition<typedData, primaryType>,
+    typedDataDefinition: TypedDataDefinition<typedData, primaryType>
   ): Promise<Hex> => {
     const [isDeployed, signature] = await Promise.all([
       isAccountDeployed(),
@@ -311,7 +310,7 @@ export async function toSmartContractAccount<
     if (storage == null) {
       throw new FailedToGetStorageSlotError(
         "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
-        "Proxy Implementation Address",
+        "Proxy Implementation Address"
       );
     }
 

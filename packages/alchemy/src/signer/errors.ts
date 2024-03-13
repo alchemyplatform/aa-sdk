@@ -9,7 +9,7 @@ export class NotAuthenticatedError extends BaseError {
       ].join("\n"),
       {
         docsPath: "/signers/alchemy-signer",
-      },
+      }
     );
   }
 }

@@ -23,7 +23,7 @@ describe("Simple Account Tests", async () => {
   it("should successfully get counterfactual address", async () => {
     const provider = await givenConnectedProvider({ alchemyProvider, signer });
     expect(await provider.getAddress()).toMatchInlineSnapshot(
-      `"0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4"`,
+      `"0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4"`
     );
   });
 
@@ -67,7 +67,7 @@ const givenConnectedProvider = async ({
   const chain = getChain(alchemyProvider.network.chainId);
 
   return EthersProviderAdapter.fromEthersProvider(
-    alchemyProvider,
+    alchemyProvider
   ).connectToAccount(
     await createSimpleSmartAccount({
       accountAddress,
@@ -78,6 +78,6 @@ const givenConnectedProvider = async ({
         chain,
         rpcUrl: `${chain.rpcUrls.alchemy.http[0]}/${alchemyProvider.apiKey}`,
       }),
-    }),
+    })
   );
 };

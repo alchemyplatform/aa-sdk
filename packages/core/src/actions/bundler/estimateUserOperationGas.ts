@@ -6,13 +6,13 @@ import type {
 } from "../../types";
 
 export const estimateUserOperationGas = async <
-  TClient extends Client<Transport, Chain | undefined, any, BundlerRpcSchema>,
+  TClient extends Client<Transport, Chain | undefined, any, BundlerRpcSchema>
 >(
   client: TClient,
   args: {
     request: UserOperationRequest;
     entryPoint: Address;
-  },
+  }
 ): Promise<UserOperationEstimateGasResponse> => {
   return client.request({
     method: "eth_estimateUserOperationGas",

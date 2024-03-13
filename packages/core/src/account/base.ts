@@ -45,7 +45,7 @@ export enum DeploymentState {
  */
 export abstract class BaseSmartContractAccount<
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > implements ISmartContractAccount<TTransport, TSigner>
 {
   protected factoryAddress: Address;
@@ -75,23 +75,21 @@ export abstract class BaseSmartContractAccount<
       typeof params.rpcClient === "string"
         ? params.rpcClient
         : params.rpcClient.transport.type === "http"
-          ? (
-              params.rpcClient
-                .transport as ReturnType<HttpTransport>["config"] &
-                ReturnType<HttpTransport>["value"]
-            ).url || params.chain.rpcUrls.default.http[0]
-          : undefined;
+        ? (
+            params.rpcClient.transport as ReturnType<HttpTransport>["config"] &
+              ReturnType<HttpTransport>["value"]
+          ).url || params.chain.rpcUrls.default.http[0]
+        : undefined;
 
     const fetchOptions =
       typeof params.rpcClient === "string"
         ? undefined
         : params.rpcClient.transport.type === "http"
-          ? (
-              params.rpcClient
-                .transport as ReturnType<HttpTransport>["config"] &
-                ReturnType<HttpTransport>["value"]
-            ).fetchOptions
-          : undefined;
+        ? (
+            params.rpcClient.transport as ReturnType<HttpTransport>["config"] &
+              ReturnType<HttpTransport>["value"]
+          ).fetchOptions
+        : undefined;
 
     this.rpcProvider = rpcUrl
       ? createBundlerClient({
@@ -147,7 +145,7 @@ export abstract class BaseSmartContractAccount<
   abstract encodeExecute(
     target: string,
     value: bigint,
-    data: string,
+    data: string
   ): Promise<Hash>;
 
   /**
@@ -212,7 +210,7 @@ export abstract class BaseSmartContractAccount<
    * @param params -- Typed Data params to sign
    */
   async signTypedDataWith6492(
-    params: SignTypedDataParams,
+    params: SignTypedDataParams
   ): Promise<`0x${string}`> {
     const [isDeployed, signature] = await Promise.all([
       this.isAccountDeployed(),
@@ -231,7 +229,7 @@ export abstract class BaseSmartContractAccount<
    * @param _txs -- the transactions to batch execute
    */
   async encodeBatchExecute(
-    _txs: BatchUserOperationCallData,
+    _txs: BatchUserOperationCallData
   ): Promise<`0x${string}`> {
     throw new BatchExecutionNotSupportedError("BaseAccount");
   }
@@ -245,7 +243,7 @@ export abstract class BaseSmartContractAccount<
    */
   encodeUpgradeToAndCall = async (
     _upgradeToImplAddress: Address,
-    _upgradeToInitData: Hex,
+    _upgradeToInitData: Hex
   ): Promise<Hex> => {
     throw new UpgradeToAndCallNotSupportedError("BaseAccount");
   };
@@ -284,21 +282,21 @@ export abstract class BaseSmartContractAccount<
       const initCode = await this._getAccountInitCode();
       Logger.verbose(
         "[BaseSmartContractAccount](getAddress) initCode: ",
-        initCode,
+        initCode
       );
       try {
         await this.entryPoint.simulate.getSenderAddress([initCode]);
       } catch (err: any) {
         Logger.verbose(
           "[BaseSmartContractAccount](getAddress) getSenderAddress err: ",
-          err,
+          err
         );
 
         if (err.cause?.data?.errorName === "SenderAddressResult") {
           this.accountAddress = err.cause.data.args[0] as Address;
           Logger.verbose(
             "[BaseSmartContractAccount](getAddress) entryPoint.getSenderAddress result:",
-            this.accountAddress,
+            this.accountAddress
           );
           return this.accountAddress;
         }
@@ -377,7 +375,7 @@ export abstract class BaseSmartContractAccount<
     if (storage == null) {
       throw new FailedToGetStorageSlotError(
         "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
-        "Proxy Implementation Address",
+        "Proxy Implementation Address"
       );
     }
 
@@ -390,7 +388,7 @@ export abstract class BaseSmartContractAccount<
 
   private async create6492Signature(
     isDeployed: boolean,
-    signature: Hash,
+    signature: Hash
   ): Promise<Hash> {
     if (isDeployed) {
       return signature;
@@ -401,7 +399,7 @@ export abstract class BaseSmartContractAccount<
 
     Logger.verbose(
       `[BaseSmartContractAccount](create6492Signature)\
-        factoryAddress: ${factoryAddress}, factoryCalldata: ${factoryCalldata}`,
+        factoryAddress: ${factoryAddress}, factoryCalldata: ${factoryCalldata}`
     );
 
     return wrapSignatureWith6492({

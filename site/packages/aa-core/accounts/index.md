@@ -74,9 +74,9 @@ export type SmartContractAccount<Name extends string = string> =
     signMessageWith6492: (params: { message: SignableMessage }) => Promise<Hex>;
     signTypedDataWith6492: <
       const typedData extends TypedData | Record<string, unknown>,
-      primaryType extends keyof typedData | "EIP712Domain" = keyof typedData,
+      primaryType extends keyof typedData | "EIP712Domain" = keyof typedData
     >(
-      typedDataDefinition: TypedDataDefinition<typedData, primaryType>,
+      typedDataDefinition: TypedDataDefinition<typedData, primaryType>
     ) => Promise<Hex>;
     encodeUpgradeToAndCall: (params: UpgradeToAndCallParams) => Promise<Hex>;
     getNonce(): Promise<bigint>;

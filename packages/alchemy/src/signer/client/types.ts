@@ -91,5 +91,5 @@ export type SignerEndpoints = [
     Response: {
       signature: Hex;
     };
-  },
+  }
 ];

@@ -48,9 +48,9 @@ export interface SmartAccountSigner<Inner = any> {
 
   signTypedData: <
     const TTypedData extends TypedData | { [key: string]: unknown },
-    TPrimaryType extends string = string,
+    TPrimaryType extends string = string
   >(
-    params: TypedDataDefinition<TTypedData, TPrimaryType>,
+    params: TypedDataDefinition<TTypedData, TPrimaryType>
   ) => Promise<Hex>;
 }
 //#endregion SmartAccountSigner

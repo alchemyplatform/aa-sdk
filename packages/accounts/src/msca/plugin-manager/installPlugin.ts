@@ -24,7 +24,7 @@ import type { FunctionReference } from "../account-loupe/types.js";
 export type InstallPluginParams<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 > = {
   pluginAddress: Address;
   manifestHash?: Hash;
@@ -37,14 +37,14 @@ export async function installPlugin<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
   {
     overrides,
     account = client.account,
     ...params
-  }: InstallPluginParams<TAccount>,
+  }: InstallPluginParams<TAccount>
 ) {
   if (!account) {
     throw new AccountNotFoundError();
@@ -54,7 +54,7 @@ export async function installPlugin<
     throw new IncompatibleClientError(
       "SmartAccountClient",
       "installPlugin",
-      client,
+      client
     );
   }
 
@@ -67,10 +67,10 @@ export async function encodeInstallPluginUserOperation<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 >(
   client: SmartAccountClient<TTransport, TChain, TAccount>,
-  params: Omit<InstallPluginParams, "overrides" | "account">,
+  params: Omit<InstallPluginParams, "overrides" | "account">
 ) {
   const pluginManifest = await client.readContract({
     abi: IPluginAbi,
@@ -85,7 +85,7 @@ export async function encodeInstallPluginUserOperation<
         abi: IPluginAbi,
         functionName: "pluginManifest",
         result: pluginManifest,
-      }),
+      })
     );
   return encodeFunctionData({
     abi: IPluginManagerAbi,

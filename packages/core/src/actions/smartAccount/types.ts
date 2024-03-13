@@ -14,7 +14,7 @@ import type {
 
 //#region UpgradeAccountParams
 export type UpgradeAccountParams<
-  TAccount extends SmartContractAccount | undefined,
+  TAccount extends SmartContractAccount | undefined
 > = {
   upgradeTo: UpgradeToData;
   overrides?: UserOperationOverrides;
@@ -24,7 +24,7 @@ export type UpgradeAccountParams<
 
 //#region SendUserOperationParameters
 export type SendUserOperationParameters<
-  TAccount extends SmartContractAccount | undefined,
+  TAccount extends SmartContractAccount | undefined
 > = {
   uo: UserOperationCallData | BatchUserOperationCallData;
   overrides?: UserOperationOverrides;
@@ -33,7 +33,7 @@ export type SendUserOperationParameters<
 
 //#region SignUserOperationParameters
 export type SignUserOperationParameters<
-  TAccount extends SmartContractAccount | undefined,
+  TAccount extends SmartContractAccount | undefined
 > = {
   uoStruct: UserOperationStruct;
 } & GetAccountParameter<TAccount>;
@@ -41,7 +41,7 @@ export type SignUserOperationParameters<
 
 //#region SendTransactionsParameters
 export type SendTransactionsParameters<
-  TAccount extends SmartContractAccount | undefined,
+  TAccount extends SmartContractAccount | undefined
 > = {
   requests: RpcTransactionRequest[];
   overrides?: UserOperationOverrides;
@@ -50,7 +50,7 @@ export type SendTransactionsParameters<
 
 //#region DropAndReplaceUserOperationParameters
 export type DropAndReplaceUserOperationParameters<
-  TAccount extends SmartContractAccount | undefined,
+  TAccount extends SmartContractAccount | undefined
 > = {
   uoToDrop: UserOperationRequest;
   overrides?: UserOperationOverrides;

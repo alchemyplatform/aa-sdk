@@ -36,7 +36,7 @@ describe("Light Account Tests", () => {
   const signer: SmartAccountSigner<HDAccount> =
     LocalAccountSigner.mnemonicToAccountSigner(LIGHT_ACCOUNT_OWNER_MNEMONIC);
   const undeployedAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
-    UNDEPLOYED_OWNER_MNEMONIC,
+    UNDEPLOYED_OWNER_MNEMONIC
   );
 
   it.each([
@@ -56,14 +56,14 @@ describe("Light Account Tests", () => {
             address: provider.getAddress(),
             message,
             signature,
-          }),
+          })
         ).toBe(expected);
       } else {
         await expect(
-          provider.account.signMessage({ message }),
+          provider.account.signMessage({ message })
         ).rejects.toThrowError();
       }
-    },
+    }
   );
 
   it("should successfully get counterfactual address", async () => {
@@ -71,7 +71,7 @@ describe("Light Account Tests", () => {
       account: { address },
     } = await givenConnectedProvider({ signer, chain });
     expect(address).toMatchInlineSnapshot(
-      '"0x86f3B0211764971Ad0Fc8C8898d31f5d792faD84"',
+      '"0x86f3B0211764971Ad0Fc8C8898d31f5d792faD84"'
     );
   });
 
@@ -90,9 +90,9 @@ describe("Light Account Tests", () => {
         message: {
           hello: "world",
         },
-      }),
+      })
     ).toMatchInlineSnapshot(
-      '"0x00000000000000000000000000004ec70002a32400f8ae005a26081065620d20000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000000445fbfb9cf000000000000000000000000ef9d7530d16df66481adf291dc9a12b44c7f7df00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000041ac03c38ea7f6308cf37067659115b9c982cd29354db4e90044cce8a113fd66890588245cf7076f5364de6010e5e5aff42efec5c719b5de3f555d389766518a2b1b000000000000000000000000000000000000000000000000000000000000006492649264926492649264926492649264926492649264926492649264926492"',
+      '"0x00000000000000000000000000004ec70002a32400f8ae005a26081065620d20000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000000445fbfb9cf000000000000000000000000ef9d7530d16df66481adf291dc9a12b44c7f7df00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000041ac03c38ea7f6308cf37067659115b9c982cd29354db4e90044cce8a113fd66890588245cf7076f5364de6010e5e5aff42efec5c719b5de3f555d389766518a2b1b000000000000000000000000000000000000000000000000000000000000006492649264926492649264926492649264926492649264926492649264926492"'
     );
   });
 
@@ -102,9 +102,9 @@ describe("Light Account Tests", () => {
       chain,
     });
     expect(
-      await account.signMessageWith6492({ message: "test" }),
+      await account.signMessageWith6492({ message: "test" })
     ).toMatchInlineSnapshot(
-      '"0x00000000000000000000000000004ec70002a32400f8ae005a26081065620d20000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000000445fbfb9cf000000000000000000000000ef9d7530d16df66481adf291dc9a12b44c7f7df0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004181c6c4855d1cb16616c78e4b99bdde42eeda6bc8fbec920434e196445b64dede539eb9d934092f8e472766ded3f06d1a5f8ed2c209a5aaac7b13f9a8795757381b000000000000000000000000000000000000000000000000000000000000006492649264926492649264926492649264926492649264926492649264926492"',
+      '"0x00000000000000000000000000004ec70002a32400f8ae005a26081065620d20000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000000445fbfb9cf000000000000000000000000ef9d7530d16df66481adf291dc9a12b44c7f7df0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004181c6c4855d1cb16616c78e4b99bdde42eeda6bc8fbec920434e196445b64dede539eb9d934092f8e472766ded3f06d1a5f8ed2c209a5aaac7b13f9a8795757381b000000000000000000000000000000000000000000000000000000000000006492649264926492649264926492649264926492649264926492649264926492"'
     );
   });
 
@@ -147,8 +147,9 @@ describe("Light Account Tests", () => {
   });
 
   it("should get counterfactual for undeployed account", async () => {
-    const newSigner =
-      LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
+    const newSigner = LocalAccountSigner.privateKeyToAccountSigner(
+      generatePrivateKey()
+    );
     const {
       account: { address },
     } = await givenConnectedProvider({ signer: newSigner, chain });
@@ -159,11 +160,11 @@ describe("Light Account Tests", () => {
   it("should get on-chain owner address successfully", async () => {
     const provider = await givenConnectedProvider({ signer, chain });
     expect(await provider.account.getOwnerAddress()).toMatchInlineSnapshot(
-      '"0x65eaA2AfDF6c97295bA44C458abb00FebFB3a5FA"',
+      '"0x65eaA2AfDF6c97295bA44C458abb00FebFB3a5FA"'
     );
     // match with current signer
     expect(await provider.account.getOwnerAddress()).toBe(
-      await signer.getAddress(),
+      await signer.getAddress()
     );
   });
 
@@ -174,8 +175,9 @@ describe("Light Account Tests", () => {
     });
 
     // create a throwaway address
-    const throwawaySigner =
-      LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
+    const throwawaySigner = LocalAccountSigner.privateKeyToAccountSigner(
+      generatePrivateKey()
+    );
     const throwawayProvider = await givenConnectedProvider({
       signer: throwawaySigner,
       chain,
@@ -189,8 +191,9 @@ describe("Light Account Tests", () => {
     });
 
     // create new signer and transfer ownership
-    const newOwner =
-      LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
+    const newOwner = LocalAccountSigner.privateKeyToAccountSigner(
+      generatePrivateKey()
+    );
 
     await throwawayProvider.transferOwnership({
       newOwner,
@@ -216,8 +219,9 @@ describe("Light Account Tests", () => {
     });
 
     // create a owner signer to create the account
-    const throwawaySigner =
-      LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
+    const throwawaySigner = LocalAccountSigner.privateKeyToAccountSigner(
+      generatePrivateKey()
+    );
     const throwawayProvider = await givenConnectedProvider({
       signer: throwawaySigner,
       chain,
@@ -235,7 +239,7 @@ describe("Light Account Tests", () => {
 
     const { createMAAccount, ...upgradeToData } = await getMSCAUpgradeToData(
       throwawayProvider,
-      { account: throwawayProvider.account },
+      { account: throwawayProvider.account }
     );
 
     await throwawayProvider.upgradeAccount({

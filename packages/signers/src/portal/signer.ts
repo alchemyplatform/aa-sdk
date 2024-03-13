@@ -59,9 +59,9 @@ export class PortalSigner
 
   signTypedData = async <
     const TTypedData extends TypedData | { [key: string]: unknown },
-    TPrimaryType extends string = string,
+    TPrimaryType extends string = string
   >(
-    params: TypedDataDefinition<TTypedData, TPrimaryType>,
+    params: TypedDataDefinition<TTypedData, TPrimaryType>
   ) => {
     if (!this.signer) throw new Error("Not authenticated");
 
@@ -73,7 +73,7 @@ export class PortalSigner
       createWalletClient({
         transport: custom(this.inner.provider),
       }),
-      this.signerType,
+      this.signerType
     );
 
     return this.inner.getClient() as Promise<PortalUserInfo>;

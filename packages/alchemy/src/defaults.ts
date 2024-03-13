@@ -10,7 +10,7 @@ import {
 import type { Chain } from "viem";
 
 export const getDefaultUserOperationFeeOptions = (
-  chain: Chain,
+  chain: Chain
 ): UserOperationFeeOptions => {
   const feeOptions: UserOperationFeeOptions = {
     maxFeePerGas: { multiplier: 1.5 },

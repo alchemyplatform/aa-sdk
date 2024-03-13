@@ -11,7 +11,7 @@ const pluginRegEx: RegExp = /[pP]lugin/g;
 export default defineConfig(
   pluginConfigs.map((config) => ({
     out: `./src/msca/plugins/${kebabCase(
-      config.name.replaceAll(pluginRegEx, ""),
+      config.name.replaceAll(pluginRegEx, "")
     )}/plugin.ts`,
     contracts: [
       {
@@ -32,5 +32,5 @@ export default defineConfig(
         config,
       }),
     ],
-  })),
+  }))
 );

@@ -13,10 +13,10 @@ export const buildUserOperation: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: SendUserOperationParameters<TAccount>,
+  args: SendUserOperationParameters<TAccount>
 ) => Promise<UserOperationStruct> = async (client, args) => {
   const { account = client.account, overrides, uo } = args;
   if (!account) {
@@ -27,7 +27,7 @@ export const buildUserOperation: <
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
       "buildUserOperation",
-      client,
+      client
     );
   }
 
@@ -39,8 +39,8 @@ export const buildUserOperation: <
       callData: Array.isArray(uo)
         ? account.encodeBatchExecute(uo)
         : typeof uo === "string"
-          ? uo
-          : account.encodeExecute(uo),
+        ? uo
+        : account.encodeExecute(uo),
       signature: account.getDummySignature(),
     } as Deferrable<UserOperationStruct>,
     overrides,

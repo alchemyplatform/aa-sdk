@@ -93,7 +93,7 @@ const signer: SmartAccountSigner = new WalletClientSigner(
     chain: sepolia,
     transport: custom(walletKit.ethereumProvider),
   }),
-  "walletKit",
+  "walletKit"
 );
 ```
 

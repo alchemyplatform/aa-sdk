@@ -72,7 +72,7 @@ export class AlchemySignerClient {
 
     this.turnkeyClient = new TurnkeyClient(
       { baseUrl: "https://api.turnkey.com" },
-      this.iframeStamper,
+      this.iframeStamper
     );
 
     this.webauthnStamper = new WebauthnStamper({
@@ -98,7 +98,7 @@ export class AlchemySignerClient {
     // Passkey account creation flow
     const { attestation, challenge } = await this.getWebAuthnAttestation(
       params.creationOpts,
-      { username: params.username },
+      { username: params.username }
     );
 
     const result = await this.request("/v1/signup", {
@@ -118,7 +118,7 @@ export class AlchemySignerClient {
   };
 
   public initEmailAuth = async (
-    params: Omit<EmailAuthParams, "targetPublicKey">,
+    params: Omit<EmailAuthParams, "targetPublicKey">
   ) => {
     const { email, expirationSeconds } = params;
     const publicKey = await this.initIframeStamper();
@@ -272,17 +272,17 @@ export class AlchemySignerClient {
         this.turnkeyClient.getWalletAccounts({
           organizationId: this.user!.orgId,
           walletId,
-        }),
-      ),
+        })
+      )
     ).then((x) => x.flatMap((x) => x.accounts));
 
     const walletAccount = walletAccounts.find(
-      (x) => x.address === this.user!.address,
+      (x) => x.address === this.user!.address
     );
 
     if (!walletAccount) {
       throw new Error(
-        `Could not find wallet associated with ${this.user.address}`,
+        `Could not find wallet associated with ${this.user.address}`
       );
     }
 
@@ -299,7 +299,7 @@ export class AlchemySignerClient {
     const { exportBundle } = await this.pollActivityCompletion(
       activity,
       this.user.orgId,
-      "exportWalletResult",
+      "exportWalletResult"
     );
 
     const result = await stamper.injectWalletExportBundle(exportBundle);
@@ -329,7 +329,7 @@ export class AlchemySignerClient {
     const { exportBundle } = await this.pollActivityCompletion(
       activity,
       this.user.orgId,
-      "exportWalletAccountResult",
+      "exportWalletAccountResult"
     );
 
     const result = await stamper.injectKeyExportBundle(exportBundle);
@@ -345,8 +345,9 @@ export class AlchemySignerClient {
     if (!this.user) {
       throw new NotAuthenticatedError();
     }
-    const { attestation, challenge } =
-      await this.getWebAuthnAttestation(options);
+    const { attestation, challenge } = await this.getWebAuthnAttestation(
+      options
+    );
 
     const { activity } = await this.turnkeyClient.createAuthenticators({
       type: "ACTIVITY_TYPE_CREATE_AUTHENTICATORS_V2",
@@ -367,7 +368,7 @@ export class AlchemySignerClient {
     const { authenticatorIds } = await this.pollActivityCompletion(
       activity,
       this.user.orgId,
-      "createAuthenticatorsResult",
+      "createAuthenticatorsResult"
     );
 
     return authenticatorIds;
@@ -375,7 +376,7 @@ export class AlchemySignerClient {
 
   public request = async <R extends SignerRoutes>(
     route: R,
-    body: SignerBody<R>,
+    body: SignerBody<R>
   ): Promise<SignerResponse<R>> => {
     const url = this.connectionConfig.rpcUrl ?? "https://api.g.alchemy.com";
     const basePath = "/signer";
@@ -411,13 +412,13 @@ export class AlchemySignerClient {
   private pollActivityCompletion = async <
     T extends keyof Awaited<
       ReturnType<(typeof this.turnkeyClient)["getActivity"]>
-    >["activity"]["result"],
+    >["activity"]["result"]
   >(
     activity: Awaited<
       ReturnType<(typeof this.turnkeyClient)["getActivity"]>
     >["activity"],
     organizationId: string,
-    resultKey: T,
+    resultKey: T
   ): Promise<
     NonNullable<
       Awaited<
@@ -446,7 +447,7 @@ export class AlchemySignerClient {
       status === "ACTIVITY_STATUS_CONSENSUS_NEEDED"
     ) {
       throw new Error(
-        `Failed to get activity with with id ${id} (status: ${status})`,
+        `Failed to get activity with with id ${id} (status: ${status})`
       );
     }
 
@@ -484,7 +485,7 @@ export class AlchemySignerClient {
     options?: CredentialCreationOptionOverrides,
     userDetails: { username: string } = {
       username: this.user?.email ?? "anonymous",
-    },
+    }
   ) => {
     const challenge = generateRandomBuffer();
     const authenticatorUserId = generateRandomBuffer();

@@ -30,7 +30,7 @@ describe("Simple Account Tests", () => {
   it("should successfully get counterfactual address", async () => {
     const provider = await givenConnectedProvider({ signer, chain });
     expect(provider.getAddress()).toMatchInlineSnapshot(
-      `"0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4"`,
+      `"0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4"`
     );
   });
 
@@ -67,8 +67,9 @@ describe("Simple Account Tests", () => {
   });
 
   it("should get counterfactual for undeployed account", async () => {
-    const signer =
-      LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
+    const signer = LocalAccountSigner.privateKeyToAccountSigner(
+      generatePrivateKey()
+    );
     const provider = await givenConnectedProvider({ signer, chain });
 
     const address = provider.getAddress();
@@ -122,7 +123,7 @@ describe("Simple Account Tests", () => {
         : structWithFeeOptions.preVerificationGas;
 
     expect(preVerificationGasWithFeeOptions).toBeGreaterThan(
-      preVerificationGas!,
+      preVerificationGas!
     );
   }, 60000);
 

@@ -55,54 +55,54 @@ export type BaseSmartAccountClientActions<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 > = {
   buildUserOperation: (
-    args: SendUserOperationParameters<TAccount>,
+    args: SendUserOperationParameters<TAccount>
   ) => Promise<UserOperationStruct>;
   buildUserOperationFromTx: (
     args: SendTransactionParameters<TChain, TAccount>,
-    overrides?: UserOperationOverrides,
+    overrides?: UserOperationOverrides
   ) => Promise<UserOperationStruct>;
   buildUserOperationFromTxs: (
-    args: SendTransactionsParameters<TAccount>,
+    args: SendTransactionsParameters<TAccount>
   ) => Promise<BuildUserOperationFromTransactionsResult>;
   checkGasSponsorshipEligibility: (
-    args: SendUserOperationParameters<TAccount>,
+    args: SendUserOperationParameters<TAccount>
   ) => Promise<boolean>;
   signUserOperation: (
-    args: SignUserOperationParameters<TAccount>,
+    args: SignUserOperationParameters<TAccount>
   ) => Promise<UserOperationRequest>;
   dropAndReplaceUserOperation: (
-    args: DropAndReplaceUserOperationParameters<TAccount>,
+    args: DropAndReplaceUserOperationParameters<TAccount>
   ) => Promise<SendUserOperationResult>;
   sendTransaction: <TChainOverride extends Chain | undefined = undefined>(
     args: SendTransactionParameters<TChain, TAccount, TChainOverride>,
-    overrides?: UserOperationOverrides,
+    overrides?: UserOperationOverrides
   ) => Promise<Hex>;
   sendTransactions: (
-    args: SendTransactionsParameters<TAccount>,
+    args: SendTransactionsParameters<TAccount>
   ) => Promise<Hex>;
   sendUserOperation: (
-    args: SendUserOperationParameters<TAccount>,
+    args: SendUserOperationParameters<TAccount>
   ) => Promise<SendUserOperationResult>;
   waitForUserOperationTransaction: (
-    args: WaitForTransactionReceiptParameters,
+    args: WaitForTransactionReceiptParameters
   ) => Promise<Hex>;
   upgradeAccount: (args: UpgradeAccountParams<TAccount>) => Promise<Hex>;
   signMessage: (args: SignMessageParameters<TAccount>) => Promise<Hex>;
   signTypedData: <
     const TTypedData extends TypedData | { [key: string]: unknown },
-    TPrimaryType extends string = string,
+    TPrimaryType extends string = string
   >(
-    args: SignTypedDataParameters<TTypedData, TPrimaryType, TAccount>,
+    args: SignTypedDataParameters<TTypedData, TPrimaryType, TAccount>
   ) => Promise<Hex>;
   signMessageWith6492: (args: SignMessageParameters<TAccount>) => Promise<Hex>;
   signTypedDataWith6492: <
     const TTypedData extends TypedData | { [key: string]: unknown },
-    TPrimaryType extends string = string,
+    TPrimaryType extends string = string
   >(
-    args: SignTypedDataParameters<TTypedData, TPrimaryType, TAccount>,
+    args: SignTypedDataParameters<TTypedData, TPrimaryType, TAccount>
   ) => Promise<Hex>;
 } & (IsUndefined<TAccount> extends false
   ? {
@@ -118,9 +118,9 @@ export const smartAccountClientActions: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 >(
-  client: Client<TTransport, TChain, TAccount>,
+  client: Client<TTransport, TChain, TAccount>
 ) => BaseSmartAccountClientActions<TChain, TAccount> = (client) => ({
   buildUserOperation: (args) => buildUserOperation(client, args),
   buildUserOperationFromTx: (args, overrides) =>
@@ -147,7 +147,7 @@ export const smartAccountClientActions: <
 
 export const smartAccountClientMethodKeys = Object.keys(
   // @ts-expect-error we just want to get the keys
-  smartAccountClientActions(undefined),
+  smartAccountClientActions(undefined)
 ).reduce((accum, curr) => {
   accum.add(curr);
   return accum;

@@ -75,7 +75,7 @@ export function plugingen({
 
       if (contracts.length !== 1) {
         throw new Error(
-          "plugingen should be used with only one Contract per plugin invocation",
+          "plugingen should be used with only one Contract per plugin invocation"
         );
       }
 
@@ -111,7 +111,7 @@ export function plugingen({
 
       if (!(chain.id in address)) {
         throw new Error(
-          `contract address missing for the reference chain ${chain.id}`,
+          `contract address missing for the reference chain ${chain.id}`
         );
       }
 
@@ -137,7 +137,7 @@ export function plugingen({
             ([name, type]) =>
               `${type.isPublic ? "export" : ""} type ${name} = ${
                 type.definition
-              };`,
+              };`
           )
           .join("\n\n")}
 
@@ -148,10 +148,10 @@ export function plugingen({
         .map(([moduleName, { members, types }]) => {
           return dedent`
             import { ${Array.from(members.values()).join(",")} ${
-              members.size > 0 ? "," : ""
-            } ${Array.from(types.values())
-              .map((x) => `type ${x}`)
-              .join(",")} } from "${moduleName}";
+            members.size > 0 ? "," : ""
+          } ${Array.from(types.values())
+            .map((x) => `type ${x}`)
+            .join(",")} } from "${moduleName}";
         `;
         })
         .join("\n");

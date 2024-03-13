@@ -17,7 +17,7 @@ export type AlchemyRpcSchema = [
         policyId: string;
         entryPoint: Address;
         userOperation: UserOperationRequest;
-      },
+      }
     ];
     ReturnType: { paymasterAndData: Hex };
   },
@@ -30,7 +30,7 @@ export type AlchemyRpcSchema = [
         userOperation: UserOperationRequest;
         dummySignature: Hex;
         overrides?: RequestGasAndPaymasterAndDataOverrides;
-      },
+      }
     ];
     ReturnType: {
       paymasterAndData: Hex;
@@ -50,7 +50,7 @@ export type AlchemyRpcSchema = [
     Method: "rundler_maxPriorityFeePerGas";
     Parameters: [];
     ReturnType: Hex;
-  },
+  }
 ];
 
 export type ClientWithAlchemyMethods = BundlerClient<HttpTransport> & {
@@ -63,7 +63,7 @@ export type ClientWithAlchemyMethods = BundlerClient<HttpTransport> & {
             policyId: string;
             entryPoint: Address;
             userOperation: UserOperationRequest;
-          },
+          }
         ];
       }): Promise<{ paymasterAndData: Hex }>;
 
@@ -76,7 +76,7 @@ export type ClientWithAlchemyMethods = BundlerClient<HttpTransport> & {
             userOperation: UserOperationRequest;
             dummySignature: Hex;
             overrides?: RequestGasAndPaymasterAndDataOverrides;
-          },
+          }
         ];
       }): Promise<{
         paymasterAndData: Hex;

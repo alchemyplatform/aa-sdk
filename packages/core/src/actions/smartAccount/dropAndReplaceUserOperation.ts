@@ -15,10 +15,10 @@ export const dropAndReplaceUserOperation: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: DropAndReplaceUserOperationParameters<TAccount>,
+  args: DropAndReplaceUserOperationParameters<TAccount>
 ) => Promise<SendUserOperationResult> = async (client, args) => {
   const { account = client.account, uoToDrop, overrides } = args;
   if (!account) {
@@ -28,7 +28,7 @@ export const dropAndReplaceUserOperation: <
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
       "dropAndReplaceUserOperation",
-      client,
+      client
     );
   }
 
@@ -48,18 +48,18 @@ export const dropAndReplaceUserOperation: <
       uo: uoToSubmit,
       overrides,
       account,
-    },
+    }
   );
 
   const _overrides: UserOperationOverrides = {
     ...overrides,
     maxFeePerGas: bigIntMax(
       BigInt(maxFeePerGas ?? 0n),
-      bigIntMultiply(uoToDrop.maxFeePerGas, 1.1),
+      bigIntMultiply(uoToDrop.maxFeePerGas, 1.1)
     ),
     maxPriorityFeePerGas: bigIntMax(
       BigInt(maxPriorityFeePerGas ?? 0n),
-      bigIntMultiply(uoToDrop.maxPriorityFeePerGas, 1.1),
+      bigIntMultiply(uoToDrop.maxPriorityFeePerGas, 1.1)
     ),
   };
 
