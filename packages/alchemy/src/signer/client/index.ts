@@ -37,10 +37,11 @@ export type AlchemySignerClientParams = z.input<
 // use this to override the parent org id for suborgs
 // used for whoami passkey requests to figure out the
 // suborg for a user
-const ROOT_ORG_ID =
-  process.env.ROOT_ORG_ID ??
-  process.env.NEXT_PUBLIC_ROOT_ORG_ID ??
-  "24c1acf5-810f-41e0-a503-d5d13fa8e830";
+const _ENV_ROOT_ORG_ID =
+  typeof process !== "undefined"
+    ? process.env.ROOT_ORG_ID ?? process.env.NEXT_PUBLIC_ROOT_ORG_ID
+    : null;
+const ROOT_ORG_ID = _ENV_ROOT_ORG_ID ?? "24c1acf5-810f-41e0-a503-d5d13fa8e830";
 
 /**
  * A lower level client used by the AlchemySigner used to communicate with
