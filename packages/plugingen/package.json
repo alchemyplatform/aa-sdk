@@ -74,7 +74,10 @@
     "pathe": "^1.1.2",
     "picocolors": "^1.0.0",
     "prettier": "^3.2.5",
-    "viem": "2.7.9",
+    "viem": "^2.8.6",
     "zod": "^3.22.4"
+  },
+  "peerDependencies": {
+    "viem": "^2.8.6"
   }
 }
