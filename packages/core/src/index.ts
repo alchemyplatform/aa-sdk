@@ -41,6 +41,7 @@ export {
   optimismGoerli,
   optimismSepolia,
   polygon,
+  polygonAmoy,
   polygonMumbai,
   sepolia,
 } from "./chains/index.js";

@@ -14,6 +14,7 @@ import {
   optimismGoerli,
   optimismSepolia,
   polygon,
+  polygonAmoy,
   polygonMumbai,
   sepolia,
   type GetAccountParameter,
@@ -56,6 +57,7 @@ export const getDefaultMultiOwnerModularAccountFactoryAddress = (
     case polygon.id:
     case mainnet.id:
     case goerli.id:
+    case polygonAmoy.id:
     case polygonMumbai.id:
     case optimism.id:
     case optimismGoerli.id:

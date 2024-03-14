@@ -12,6 +12,7 @@ import {
   optimismGoerli,
   optimismSepolia,
   polygon,
+  polygonAmoy,
   polygonMumbai,
   sepolia,
   type SmartContractAccount,
@@ -68,6 +69,7 @@ export const getDefaultLightAccountFactoryAddress = (
     case sepolia.id:
     case goerli.id:
     case polygon.id:
+    case polygonAmoy.id:
     case polygonMumbai.id:
     case optimism.id:
     case optimismGoerli.id:
