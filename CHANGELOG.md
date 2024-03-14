@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.5.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.4.4...v3.5.0) (2024-03-14)
+
+### Bug Fixes
+
+- **alchemy-signer:** check if process is defined before reading env vars ([#508](https://github.com/alchemyplatform/aa-sdk/issues/508)) ([bce8123](https://github.com/alchemyplatform/aa-sdk/commit/bce81239457c05bf1ee3560513bf6c140167ad04))
+- fix plugingen script for no input param provider function generation ([#509](https://github.com/alchemyplatform/aa-sdk/issues/509)) ([c5f2561](https://github.com/alchemyplatform/aa-sdk/commit/c5f2561755e59a5bb7b6ec1d8b9ec8840a07fb82))
+
+### Features
+
+- **plugins:** make plugingen a cli tool ([#507](https://github.com/alchemyplatform/aa-sdk/issues/507)) ([53ba81d](https://github.com/alchemyplatform/aa-sdk/commit/53ba81d33422bb3f18134c1dd75e68d64f5cc3f0))
+
 ## [3.4.4](https://github.com/alchemyplatform/aa-sdk/compare/v3.4.3...v3.4.4) (2024-03-12)
 
 ### Bug Fixes
