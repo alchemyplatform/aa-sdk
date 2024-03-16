@@ -2,6 +2,7 @@ import type { Address } from "abitype";
 import {
   getContract,
   http,
+  toHex,
   trim,
   type GetContractReturnType,
   type Hash,
@@ -10,11 +11,12 @@ import {
   type PublicClient,
   type Transport,
 } from "viem";
-import { EntryPointAbi } from "../abis/EntryPointAbi.js";
+import { EntryPointAbi_v6 as EntryPointAbi } from "../abis/EntryPointAbi_v6.js";
 import {
   createBundlerClient,
   type BundlerClient,
 } from "../client/bundlerClient.js";
+import { getEntryPoint } from "../entrypoint/index.js";
 import {
   BatchExecutionNotSupportedError,
   FailedToGetStorageSlotError,
@@ -25,8 +27,7 @@ import { InvalidRpcUrlError } from "../errors/client.js";
 import { Logger } from "../logger.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import { wrapSignatureWith6492 } from "../signer/utils.js";
-import type { BatchUserOperationCallData } from "../types.js";
-import { getDefaultEntryPointAddress } from "../utils/defaults.js";
+import type { BatchUserOperationCallData, NullAddress } from "../types.js";
 import { createBaseSmartAccountParamsSchema } from "./schema.js";
 import type {
   BaseSmartAccountParams,
@@ -62,14 +63,14 @@ export abstract class BaseSmartContractAccount<
     | BundlerClient<TTransport>
     | BundlerClient<HttpTransport>;
 
-  constructor(params_: BaseSmartAccountParams<TTransport>) {
+  constructor(params_: BaseSmartAccountParams<TTransport, TSigner>) {
     const params = createBaseSmartAccountParamsSchema<
       TTransport,
       TSigner
     >().parse(params_);
 
     this.entryPointAddress =
-      params.entryPointAddress ?? getDefaultEntryPointAddress(params.chain);
+      params.entryPointAddress ?? getEntryPoint(params.chain).address;
 
     const rpcUrl =
       typeof params.rpcClient === "string"
@@ -115,7 +116,7 @@ export abstract class BaseSmartContractAccount<
     this.accountAddress = params.accountAddress;
     this.factoryAddress = params.factoryAddress;
     this.signer = params.signer as TSigner;
-    this.accountInitCode = params.initCode;
+    this.accountInitCode = params.initCode as Hex;
 
     this.entryPoint = getContract({
       address: this.entryPointAddress,
@@ -363,7 +364,7 @@ export abstract class BaseSmartContractAccount<
     return [factoryAddress, factoryCalldata];
   }
 
-  protected async getImplementationAddress(): Promise<"0x0" | Address> {
+  protected async getImplementationAddress(): Promise<NullAddress | Address> {
     const accountAddress = await this.getAddress();
 
     const storage = await this.rpcProvider.getStorageAt({
@@ -379,7 +380,7 @@ export abstract class BaseSmartContractAccount<
       );
     }
 
-    return trim(storage);
+    return toHex(trim(storage));
   }
 
   private async _getAccountInitCode(): Promise<Hash> {

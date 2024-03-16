@@ -1,5 +1,6 @@
 import {
   type BundlerClient,
+  type EntryPointVersion,
   type UserOperationRequest,
 } from "@alchemy/aa-core";
 import type { Address, Hex, HttpTransport } from "viem";
@@ -9,14 +10,14 @@ import type {
 } from "../actions/types";
 import type { RequestGasAndPaymasterAndDataOverrides } from "../middleware/gasManager";
 
-export type AlchemyRpcSchema = [
+export type AlchemyRpcSchema<TEntryPointVersion extends EntryPointVersion> = [
   {
     Method: "alchemy_requestPaymasterAndData";
     Parameters: [
       {
         policyId: string;
         entryPoint: Address;
-        userOperation: UserOperationRequest;
+        userOperation: UserOperationRequest<TEntryPointVersion>;
       }
     ];
     ReturnType: { paymasterAndData: Hex };
@@ -27,9 +28,9 @@ export type AlchemyRpcSchema = [
       {
         policyId: string;
         entryPoint: Address;
-        userOperation: UserOperationRequest;
+        userOperation: UserOperationRequest<TEntryPointVersion>;
         dummySignature: Hex;
-        overrides?: RequestGasAndPaymasterAndDataOverrides;
+        overrides?: RequestGasAndPaymasterAndDataOverrides<TEntryPointVersion>;
       }
     ];
     ReturnType: {
@@ -43,7 +44,7 @@ export type AlchemyRpcSchema = [
   },
   {
     Method: "alchemy_simulateUserOperationAssetChanges";
-    Parameters: SimulateUserOperationAssetChangesRequest;
+    Parameters: SimulateUserOperationAssetChangesRequest<TEntryPointVersion>;
     ReturnType: SimulateUserOperationAssetChangesResponse;
   },
   {
@@ -54,7 +55,7 @@ export type AlchemyRpcSchema = [
 ];
 
 export type ClientWithAlchemyMethods = BundlerClient<HttpTransport> & {
-  request: BundlerClient["request"] &
+  request: BundlerClient<HttpTransport>["request"] &
     {
       request(args: {
         method: "alchemy_requestPaymasterAndData";
@@ -62,7 +63,7 @@ export type ClientWithAlchemyMethods = BundlerClient<HttpTransport> & {
           {
             policyId: string;
             entryPoint: Address;
-            userOperation: UserOperationRequest;
+            userOperation: UserOperationRequest<EntryPointVersion>;
           }
         ];
       }): Promise<{ paymasterAndData: Hex }>;
@@ -73,9 +74,9 @@ export type ClientWithAlchemyMethods = BundlerClient<HttpTransport> & {
           {
             policyId: string;
             entryPoint: Address;
-            userOperation: UserOperationRequest;
+            userOperation: UserOperationRequest<EntryPointVersion>;
             dummySignature: Hex;
-            overrides?: RequestGasAndPaymasterAndDataOverrides;
+            overrides?: RequestGasAndPaymasterAndDataOverrides<EntryPointVersion>;
           }
         ];
       }): Promise<{
@@ -89,7 +90,7 @@ export type ClientWithAlchemyMethods = BundlerClient<HttpTransport> & {
 
       request(args: {
         method: "alchemy_simulateUserOperationAssetChanges";
-        params: SimulateUserOperationAssetChangesRequest;
+        params: SimulateUserOperationAssetChangesRequest<EntryPointVersion>;
       }): Promise<SimulateUserOperationAssetChangesResponse>;
 
       request(args: {

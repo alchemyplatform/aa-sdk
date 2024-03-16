@@ -1,5 +1,8 @@
 import type { Chain, Client, Transport } from "viem";
-import type { SmartContractAccount } from "../../account/smartContractAccount.js";
+import type {
+  GetEntryPointFromAccount,
+  SmartContractAccount,
+} from "../../account/smartContractAccount.js";
 import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
 import type { SendUserOperationResult } from "../../client/types.js";
 import { AccountNotFoundError } from "../../errors/account.js";
@@ -16,11 +19,15 @@ export const sendUserOperation: <
     | undefined,
   TContext extends Record<string, any> | undefined =
     | Record<string, any>
-    | undefined
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
   client: Client<TTransport, TChain, TAccount>,
   args: SendUserOperationParameters<TAccount, TContext>
-) => Promise<SendUserOperationResult> = async (client, args) => {
+) => Promise<SendUserOperationResult<TEntryPointVersion>> = async (
+  client,
+  args
+) => {
   const { account = client.account } = args;
 
   if (!account) {
@@ -36,5 +43,8 @@ export const sendUserOperation: <
   }
 
   const uoStruct = await buildUserOperation(client, args);
-  return _sendUserOperation(client, { account, uoStruct });
+  return _sendUserOperation(client, {
+    account,
+    uoStruct,
+  });
 };

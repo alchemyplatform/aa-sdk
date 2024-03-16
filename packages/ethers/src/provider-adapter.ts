@@ -7,11 +7,12 @@ import {
   type SmartContractAccount,
 } from "@alchemy/aa-core";
 import { JsonRpcProvider } from "@ethersproject/providers";
-import { createPublicClient, custom, http } from "viem";
+import { createPublicClient, custom, http, type Transport } from "viem";
 import { AccountSigner } from "./account-signer.js";
 import type { EthersProviderAdapterOpts } from "./types.js";
 
 /** Lightweight Adapter for SmartAccountProvider to enable Signer Creation */
+// TODO: Add support for strong entry point version type
 export class EthersProviderAdapter extends JsonRpcProvider {
   readonly accountProvider: SmartAccountClient;
 
@@ -58,11 +59,11 @@ export class EthersProviderAdapter extends JsonRpcProvider {
    */
   connectToAccount<TAccount extends SmartContractAccount>(
     account: TAccount
-  ): AccountSigner {
+  ): AccountSigner<TAccount> {
     return new AccountSigner<TAccount>(this, account);
   }
 
-  getBundlerClient(): BundlerClient {
+  getBundlerClient(): BundlerClient<Transport> {
     return createBundlerClientFromExisting(
       createPublicClient({
         transport: custom(this.accountProvider.transport),

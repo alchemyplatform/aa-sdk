@@ -1,14 +1,14 @@
 import {
   createBundlerClient,
   getAccountAddress,
-  getVersion060EntryPoint,
+  getEntryPoint,
   toSmartContractAccount,
   type Address,
-  type EntryPointDef,
+  type EntryPointParameter,
   type SmartAccountSigner,
   type SmartContractAccount,
   type SmartContractAccountWithSigner,
-  type UserOperationRequest,
+  type ToSmartContractAccountParams,
 } from "@alchemy/aa-core";
 import {
   concatHex,
@@ -33,19 +33,25 @@ export type MultisigModularAccount<
 
 export type CreateMultisigModularAccountParams<
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
-> = {
-  transport: TTransport;
-  chain: Chain;
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TEntryPointVersion extends "0.6.0" = "0.6.0"
+> = Pick<
+  ToSmartContractAccountParams<
+    "MultisigModularAccount",
+    TTransport,
+    Chain,
+    TEntryPointVersion
+  >,
+  "transport" | "chain"
+> & {
   signer: TSigner;
   salt?: bigint;
   factoryAddress?: Address;
+  initCode?: Hex;
   threshold: bigint;
   owners?: Address[];
-  entryPoint?: EntryPointDef<UserOperationRequest>;
   accountAddress?: Address;
-  initCode?: Hex;
-};
+} & EntryPointParameter<TEntryPointVersion, Chain>;
 
 export async function createMultisigModularAccount<
   TTransport extends Transport = Transport,
@@ -60,7 +66,7 @@ export async function createMultisigModularAccount({
   signer,
   accountAddress,
   initCode,
-  entryPoint = getVersion060EntryPoint(chain),
+  entryPoint = getEntryPoint(chain, { version: "0.6.0" }),
   factoryAddress = getDefaultMultisigModularAccountFactoryAddress(chain),
   owners = [],
   salt = 0n,
@@ -100,7 +106,7 @@ export async function createMultisigModularAccount({
 
   accountAddress = await getAccountAddress({
     client,
-    entryPointAddress: entryPoint.address,
+    entryPoint,
     accountAddress: accountAddress,
     getAccountInitCode,
   });

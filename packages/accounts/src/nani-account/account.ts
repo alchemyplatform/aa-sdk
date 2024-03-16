@@ -1,10 +1,11 @@
 import {
   BaseSmartContractAccount,
   createBundlerClient,
-  getVersion060EntryPoint,
+  getEntryPoint,
   toSmartContractAccount,
   type BaseSmartAccountParams,
   type BatchUserOperationCallData,
+  type DefaultEntryPointVersion,
   type SignTypedDataParams,
   type SmartAccountSigner,
   type SmartContractAccountWithSigner,
@@ -39,7 +40,8 @@ export type NaniSmartAccountParams<
 
 export type NaniAccount = SmartContractAccountWithSigner<
   "NaniAccount",
-  SmartAccountSigner
+  SmartAccountSigner,
+  "0.6.0"
 > & {
   encodeExecuteDelegate: (delegate: Address, data: Hex) => Hex;
   encodeTransferOwnership: (newOwner: Address) => Hex;
@@ -226,7 +228,10 @@ class NaniAccount_<
 
 export const createNaniAccount = async <TTransport extends Transport>(
   params: Omit<NaniSmartAccountParams<TTransport>, "rpcClient" | "chain"> &
-    Pick<ToSmartContractAccountParams, "chain" | "transport">
+    Pick<
+      ToSmartContractAccountParams<DefaultEntryPointVersion>,
+      "chain" | "transport"
+    >
 ): Promise<NaniAccount> => {
   if (!params.signer) throw new Error("Owner must be provided.");
 
@@ -237,10 +242,9 @@ export const createNaniAccount = async <TTransport extends Transport>(
     transport: params.transport,
     chain: params.chain,
     accountAddress: params.accountAddress as Address | undefined,
-    entryPoint: getVersion060EntryPoint(
-      params.chain,
-      naniAccount.getEntryPointAddress()
-    ),
+    entryPoint: getEntryPoint(params.chain, {
+      addressOverride: naniAccount.getEntryPointAddress(),
+    }),
     encodeBatchExecute: naniAccount.encodeBatchExecute.bind(naniAccount),
     encodeExecute: (tx) =>
       naniAccount.encodeExecute(tx.target, tx.value ?? 0n, tx.data),

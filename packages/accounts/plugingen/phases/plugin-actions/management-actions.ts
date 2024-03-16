@@ -24,12 +24,16 @@ export const ManagementActionsGenPhase: Phase = async (input) => {
       true
     );
     addType(
-      "ManagementActions<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined, TContext extends Record<string, any> | undefined = Record<string,any> | undefined>",
+      `ManagementActions<
+        TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined,
+        TContext extends Record<string, any> | undefined = Record<string,any> | undefined,
+        TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+      >`,
       dedent`{
-      install${contract.name}: (args: { 
-        overrides?: UserOperationOverrides;
-      } & Install${contract.name}Params & GetAccountParameter<TAccount> & GetContextParameter<TContext>) => Promise<SendUserOperationResult>
-    }`
+        install${contract.name}: (args: UserOperationOverridesParameter<TEntryPointVersion> &
+          Install${contract.name}Params & GetAccountParameter<TAccount> & GetContextParameter<TContext>) =>
+            Promise<SendUserOperationResult<TEntryPointVersion>>
+      }`
     );
 
     const dependencies = (config.installConfig.dependencies ?? []).map(
@@ -122,6 +126,10 @@ const addImports = (
   });
   addImport("@alchemy/aa-core", {
     name: "GetAccountParameter",
+    isType: true,
+  });
+  addImport("@alchemy/aa-core", {
+    name: "GetEntryPointFromAccount",
     isType: true,
   });
   // TODO: after plugingen becomes its own cli tool package, this should be changed to

@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "@alchemy/aa-accounts": "*",
+    "@alchemy/aa-core": "*",
     "typescript": "^5.0.4",
     "typescript-template": "*",
     "vitest": "^0.31.0"

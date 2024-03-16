@@ -2,10 +2,9 @@ import {
   FailedToGetStorageSlotError,
   createBundlerClient,
   getAccountAddress,
-  getVersion060EntryPoint,
+  getEntryPoint,
   toSmartContractAccount,
-  type Address,
-  type Hex,
+  type EntryPointParameter,
   type SmartAccountSigner,
   type SmartContractAccountWithSigner,
   type ToSmartContractAccountParams,
@@ -18,6 +17,9 @@ import {
   hashMessage,
   hashTypedData,
   trim,
+  type Address,
+  type Chain,
+  type Hex,
   type SignTypedDataParameters,
   type Transport,
 } from "viem";
@@ -32,8 +34,13 @@ import {
 } from "./utils.js";
 
 export type LightAccount<
-  TSigner extends SmartAccountSigner = SmartAccountSigner
-> = SmartContractAccountWithSigner<"LightAccount", TSigner> & {
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TEntryPointVersion extends "0.6.0" = "0.6.0"
+> = SmartContractAccountWithSigner<
+  "LightAccount",
+  TSigner,
+  TEntryPointVersion
+> & {
   getLightAccountVersion: () => Promise<LightAccountVersion>;
   encodeTransferOwnership: (newOwner: Address) => Hex;
   getOwnerAddress: () => Promise<Address>;
@@ -41,24 +48,32 @@ export type LightAccount<
 
 export type CreateLightAccountParams<
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TEntryPointVersion extends "0.6.0" = "0.6.0"
 > = Pick<
-  ToSmartContractAccountParams<"LightAccount", TTransport>,
-  "transport" | "chain" | "entryPoint" | "accountAddress"
+  ToSmartContractAccountParams<
+    "LightAccount",
+    TTransport,
+    Chain,
+    TEntryPointVersion
+  >,
+  "transport" | "chain"
 > & {
   signer: TSigner;
   salt?: bigint;
+  accountAddress?: Address;
   factoryAddress?: Address;
   initCode?: Hex;
   version?: LightAccountVersion;
-};
+} & EntryPointParameter<TEntryPointVersion, Chain>;
 
 export async function createLightAccount<
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TEntryPointVersion extends "0.6.0" = "0.6.0"
 >(
-  config: CreateLightAccountParams<TTransport, TSigner>
-): Promise<LightAccount<TSigner>>;
+  config: CreateLightAccountParams<TTransport, TSigner, TEntryPointVersion>
+): Promise<LightAccount<TSigner, TEntryPointVersion>>;
 
 export async function createLightAccount({
   transport,
@@ -66,7 +81,7 @@ export async function createLightAccount({
   signer,
   initCode,
   version = "v1.1.0",
-  entryPoint = getVersion060EntryPoint(chain),
+  entryPoint = getEntryPoint(chain),
   accountAddress,
   factoryAddress = getDefaultLightAccountFactoryAddress(chain, version),
   salt: salt_ = 0n,
@@ -97,7 +112,7 @@ export async function createLightAccount({
 
   const address = await getAccountAddress({
     client,
-    entryPointAddress: entryPoint.address,
+    entryPoint,
     accountAddress,
     getAccountInitCode,
   });
@@ -195,7 +210,7 @@ export async function createLightAccount({
       return signer.signMessage({ raw: uoHash });
     },
     async signMessage({ message }) {
-      const version = await getLightAccountVersion(account);
+      const version = await getLightAccountVersion(account!);
       switch (version) {
         case "v1.0.1":
           return signer.signMessage(message);
@@ -208,7 +223,7 @@ export async function createLightAccount({
       }
     },
     async signTypedData(params) {
-      const version = await getLightAccountVersion(account);
+      const version = await getLightAccountVersion(account!);
       switch (version) {
         case "v1.0.1": {
           return signer.signTypedData(

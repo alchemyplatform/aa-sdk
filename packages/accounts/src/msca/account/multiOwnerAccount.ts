@@ -1,18 +1,20 @@
-import type { EntryPointDef } from "@alchemy/aa-core";
+import type {
+  EntryPointParameter,
+  SmartAccountSigner,
+  SmartContractAccountWithSigner,
+  ToSmartContractAccountParams,
+} from "@alchemy/aa-core";
 import {
   createBundlerClient,
   getAccountAddress,
-  getVersion060EntryPoint,
+  getEntryPoint,
   toSmartContractAccount,
-  type Address,
-  type SmartAccountSigner,
-  type SmartContractAccountWithSigner,
-  type UserOperationRequest,
 } from "@alchemy/aa-core";
 import {
   concatHex,
   encodeFunctionData,
   hexToBigInt,
+  type Address,
   type Chain,
   type Hex,
   type Transport,
@@ -24,22 +26,32 @@ import { standardExecutor } from "./standardExecutor.js";
 
 export type MultiOwnerModularAccount<
   TSigner extends SmartAccountSigner = SmartAccountSigner
-> = SmartContractAccountWithSigner<"MultiOwnerModularAccount", TSigner>;
+> = SmartContractAccountWithSigner<
+  "MultiOwnerModularAccount",
+  TSigner,
+  "0.6.0"
+>;
 
 export type CreateMultiOwnerModularAccountParams<
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
-> = {
-  transport: TTransport;
-  chain: Chain;
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TEntryPointVersion extends "0.6.0" = "0.6.0"
+> = Pick<
+  ToSmartContractAccountParams<
+    "MultiOwnerModularAccount",
+    TTransport,
+    Chain,
+    TEntryPointVersion
+  >,
+  "transport" | "chain"
+> & {
   signer: TSigner;
   salt?: bigint;
   factoryAddress?: Address;
-  owners?: Address[];
-  entryPoint?: EntryPointDef<UserOperationRequest>;
-  accountAddress?: Address;
   initCode?: Hex;
-};
+  owners?: Address[];
+  accountAddress?: Address;
+} & EntryPointParameter<TEntryPointVersion, Chain>;
 
 export async function createMultiOwnerModularAccount<
   TTransport extends Transport = Transport,
@@ -54,7 +66,7 @@ export async function createMultiOwnerModularAccount({
   signer,
   accountAddress,
   initCode,
-  entryPoint = getVersion060EntryPoint(chain),
+  entryPoint = getEntryPoint(chain, { version: "0.6.0" }),
   factoryAddress = getDefaultMultiOwnerModularAccountFactoryAddress(chain),
   owners = [],
   salt = 0n,
@@ -63,6 +75,7 @@ export async function createMultiOwnerModularAccount({
     transport,
     chain,
   });
+
   const getAccountInitCode = async () => {
     if (initCode) {
       return initCode;
@@ -90,10 +103,10 @@ export async function createMultiOwnerModularAccount({
     ]);
   };
 
-  accountAddress = await getAccountAddress({
+  const _accountAddress = await getAccountAddress({
     client,
-    entryPointAddress: entryPoint.address,
-    accountAddress: accountAddress,
+    entryPoint,
+    accountAddress,
     getAccountInitCode,
   });
 
@@ -101,11 +114,11 @@ export async function createMultiOwnerModularAccount({
     transport,
     chain,
     entryPoint,
-    accountAddress,
+    accountAddress: _accountAddress,
     source: `MultiOwnerModularAccount`,
     getAccountInitCode,
     ...standardExecutor,
-    ...multiOwnerMessageSigner(client, accountAddress, () => signer),
+    ...multiOwnerMessageSigner(client, _accountAddress, () => signer),
   });
 
   return {

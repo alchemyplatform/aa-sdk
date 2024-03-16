@@ -3,6 +3,7 @@ import {
   resolveProperties,
   type BatchUserOperationCallData,
   type BundlerClient,
+  type GetEntryPointFromAccount,
   type SmartContractAccount,
   type UserOperationCallData,
   type UserOperationOverrides,
@@ -14,7 +15,7 @@ import {
   type TransactionRequest,
   type TransactionResponse,
 } from "@ethersproject/providers";
-import { isHex, toBytes } from "viem";
+import { isHex, toBytes, type Transport } from "viem";
 import { EthersProviderAdapter } from "./provider-adapter.js";
 
 const hexlifyOptional = (value: any): `0x${string}` | undefined => {
@@ -26,7 +27,8 @@ const hexlifyOptional = (value: any): `0x${string}` | undefined => {
 };
 
 export class AccountSigner<
-  TAccount extends SmartContractAccount = SmartContractAccount
+  TAccount extends SmartContractAccount = SmartContractAccount,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > extends Signer {
   readonly account: TAccount;
 
@@ -39,7 +41,7 @@ export class AccountSigner<
 
     this.sendUserOperation = (
       args: UserOperationCallData | BatchUserOperationCallData,
-      overrides?: UserOperationOverrides
+      overrides?: UserOperationOverrides<TEntryPointVersion>
     ) =>
       this.provider.accountProvider.sendUserOperation({
         uo: args,
@@ -75,23 +77,19 @@ export class AccountSigner<
   }
 
   async sendTransaction(
-    transaction: Deferrable<TransactionRequest>,
-    overrides?: UserOperationOverrides
+    transaction: Deferrable<TransactionRequest>
   ): Promise<TransactionResponse> {
     if (!this.provider.accountProvider.account || !this.account) {
       throw new AccountNotFoundError();
     }
 
     const resolved = await resolveProperties(transaction);
-    const txHash = await this.provider.accountProvider.sendTransaction(
-      {
-        to: resolved.to as `0x${string}` | undefined,
-        data: hexlifyOptional(resolved.data),
-        chain: this.provider.accountProvider.chain,
-        account: this.account,
-      },
-      overrides
-    );
+    const txHash = await this.provider.accountProvider.sendTransaction({
+      to: resolved.to as `0x${string}` | undefined,
+      data: hexlifyOptional(resolved.data),
+      chain: this.provider.accountProvider.chain,
+      account: this.account,
+    });
 
     return this.provider.getTransaction(txHash);
   }
@@ -104,7 +102,7 @@ export class AccountSigner<
     );
   }
 
-  getPublicErc4337Client(): BundlerClient {
+  getPublicErc4337Client(): BundlerClient<Transport> {
     return this.provider.getBundlerClient();
   }
 

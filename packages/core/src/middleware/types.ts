@@ -1,4 +1,7 @@
-import type { SmartContractAccount } from "../account/smartContractAccount";
+import type {
+  GetEntryPointFromAccount,
+  SmartContractAccount,
+} from "../account/smartContractAccount";
 import type {
   UserOperationFeeOptions,
   UserOperationOverrides,
@@ -12,16 +15,20 @@ export type ClientMiddlewareFn<
   TContext extends Record<string, any> | undefined =
     | Record<string, any>
     | undefined
-> = <TAccount extends SmartContractAccount, C extends MiddlewareClient>(
-  struct: Deferrable<UserOperationStruct>,
+> = <
+  TAccount extends SmartContractAccount,
+  C extends MiddlewareClient,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+>(
+  struct: Deferrable<UserOperationStruct<TEntryPointVersion>>,
   args: {
-    overrides?: UserOperationOverrides;
+    overrides?: UserOperationOverrides<TEntryPointVersion>;
     context?: TContext;
     feeOptions?: UserOperationFeeOptions;
     account: TAccount;
     client: C;
   }
-) => Promise<Deferrable<UserOperationStruct>>;
+) => Promise<Deferrable<UserOperationStruct<TEntryPointVersion>>>;
 //#endregion ClientMiddlewareFn
 
 //#region ClientMiddleware
