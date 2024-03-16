@@ -1,4 +1,5 @@
 import type {
+  EntryPointVersion,
   GetAccountParameter,
   SmartContractAccount,
 } from "@alchemy/aa-core";
@@ -9,17 +10,18 @@ import { SessionKeyPlugin } from "./plugin.js";
 // find predecessors for each keys and returned the struct `ISessionKeyPlugin.SessionKeyToRemove[]`
 // where SessionKeyToRemove = { sessionKey: Address, predecessor: Hex }
 export const buildSessionKeysToRemoveStruct: <
+  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+    | SmartContractAccount<TEntryPointVersion>
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
   args: {
     keys: ReadonlyArray<Address>;
     pluginAddress?: Address;
-  } & GetAccountParameter<TAccount>
+  } & GetAccountParameter<TEntryPointVersion, TAccount>
 ) => Promise<{ sessionKey: Address; predecessor: Address }[]> = async (
   client,
   { keys, pluginAddress, account = client.account }

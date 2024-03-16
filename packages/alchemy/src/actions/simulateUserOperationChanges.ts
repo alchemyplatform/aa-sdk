@@ -2,6 +2,7 @@ import {
   AccountNotFoundError,
   IncompatibleClientError,
   deepHexlify,
+  type EntryPointVersion,
   type SendUserOperationParameters,
   type SmartContractAccount,
 } from "@alchemy/aa-core";
@@ -11,16 +12,22 @@ import type { AlchemyRpcSchema } from "../client/types";
 import type { SimulateUserOperationAssetChangesResponse } from "./types";
 
 export const simulateUserOperationChanges: <
+  TEntryPointVersion extends EntryPointVersion,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+    | SmartContractAccount<TEntryPointVersion>
     | undefined
 >(
-  client: Client<Transport, TChain, TAccount, AlchemyRpcSchema>,
-  args: SendUserOperationParameters<TAccount>
+  client: Client<
+    Transport,
+    TChain,
+    TAccount,
+    AlchemyRpcSchema<TEntryPointVersion>
+  >,
+  args: SendUserOperationParameters<TEntryPointVersion, TAccount>
 ) => Promise<SimulateUserOperationAssetChangesResponse> = async (
   client,
-  { account = client.account, ...params }
+  { account = client.account, overrides, ...params }
 ) => {
   if (!account) {
     throw new AccountNotFoundError();
@@ -38,6 +45,7 @@ export const simulateUserOperationChanges: <
     await client.buildUserOperation({
       ...params,
       account,
+      overrides,
     })
   );
 

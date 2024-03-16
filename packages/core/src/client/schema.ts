@@ -1,13 +1,15 @@
 import type { Transport } from "viem";
 import { z } from "zod";
 
+import type { EntryPointVersion } from "../entrypoint/types.js";
 import { BigNumberishRangeSchema, MultiplierSchema } from "../utils/index.js";
 import type { BundlerClient } from "./bundlerClient.js";
 
 export const createPublicErc4337ClientSchema = <
+  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport
 >() =>
-  z.custom<BundlerClient<TTransport>>((provider) => {
+  z.custom<BundlerClient<TEntryPointVersion, TTransport>>((provider) => {
     return (
       provider != null &&
       typeof provider === "object" &&

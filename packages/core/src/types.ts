@@ -1,6 +1,7 @@
 import {
   type Address,
   type Hash,
+  type Hex,
   type StateOverride,
   type TransactionReceipt,
 } from "viem";
@@ -9,15 +10,16 @@ import type {
   UserOperationFeeOptionsFieldSchema,
   UserOperationFeeOptionsSchema,
 } from "./client/schema";
+import type { EntryPointVersion } from "./entrypoint/types";
 import type {
   BigNumberishRangeSchema,
   BigNumberishSchema,
-  HexSchema,
+  Interface,
   MultiplierSchema,
 } from "./utils";
 
-export type Hex = z.input<typeof HexSchema>;
 export type EmptyHex = `0x`;
+export type NullAddress = `0x0`;
 
 // based on @account-abstraction/common
 export type PromiseOrValue<T> = T | Promise<T>;
@@ -52,34 +54,63 @@ export type UserOperationFeeOptions = z.input<
   typeof UserOperationFeeOptionsSchema
 >;
 
+export type UserOperationOverridesParameter<
+  TEntryPointVersion extends EntryPointVersion,
+  Required extends boolean = false
+> = Required extends true
+  ? { overrides: UserOperationOverrides<TEntryPointVersion> }
+  : { overrides?: UserOperationOverrides<TEntryPointVersion> };
+
 //#region UserOperationOverrides
-export type UserOperationOverrides = Partial<{
-  callGasLimit: UserOperationStruct["callGasLimit"] | Multiplier;
-  maxFeePerGas: UserOperationStruct["maxFeePerGas"] | Multiplier;
-  maxPriorityFeePerGas:
-    | UserOperationStruct["maxPriorityFeePerGas"]
-    | Multiplier;
-  preVerificationGas: UserOperationStruct["preVerificationGas"] | Multiplier;
-  verificationGasLimit:
-    | UserOperationStruct["verificationGasLimit"]
-    | Multiplier;
-  paymasterAndData: UserOperationStruct["paymasterAndData"];
-  /**
-   * This can be used to override the key used when calling `entryPoint.getNonce`
-   * It is useful when you want to use parallel nonces for user operations
-   *
-   * NOTE: not all bundlers fully support this feature and it could be that your bundler will still only include
-   * one user operation for your account in a bundle
-   */
-  nonceKey: bigint;
-  stateOverride: StateOverride;
-}>;
+// Note: entry point version is required for UserOperationOverrides
+export type UserOperationOverrides<
+  TEntryPointVersion extends EntryPointVersion
+> = Partial<
+  {
+    callGasLimit:
+      | UserOperationStruct<TEntryPointVersion>["callGasLimit"]
+      | Multiplier;
+    maxFeePerGas:
+      | UserOperationStruct<TEntryPointVersion>["maxFeePerGas"]
+      | Multiplier;
+    maxPriorityFeePerGas:
+      | UserOperationStruct<TEntryPointVersion>["maxPriorityFeePerGas"]
+      | Multiplier;
+    preVerificationGas:
+      | UserOperationStruct<TEntryPointVersion>["preVerificationGas"]
+      | Multiplier;
+    verificationGasLimit:
+      | UserOperationStruct<TEntryPointVersion>["verificationGasLimit"]
+      | Multiplier;
+    /**
+     * This can be used to override the key used when calling `entryPoint.getNonce`
+     * It is useful when you want to use parallel nonces for user operations
+     *
+     * NOTE: not all bundlers fully support this feature and it could be that your bundler will still only include
+     * one user operation for your account in a bundle
+     */
+    nonceKey: bigint;
+    stateOverride: StateOverride;
+  } & (TEntryPointVersion extends "0.6.0"
+    ? {
+        paymasterAndData: UserOperationStruct<"0.6.0">["paymasterAndData"];
+      }
+    : TEntryPointVersion extends "0.7.0"
+    ? {
+        paymaster: UserOperationStruct<"0.7.0">["paymaster"];
+        paymasterData: UserOperationStruct<"0.7.0">["paymasterData"];
+        paymasterPostOpGasLimit: UserOperationStruct<"0.7.0">["paymasterPostOpGasLimit"];
+        paymasterVerificationGasLimit: UserOperationStruct<"0.7.0">["paymasterVerificationGasLimit"];
+        paymasterGas: UserOperationStruct<"0.7.0">["paymasterPostOpGasLimit"];
+      }
+    : never)
+>;
 //#endregion UserOperationOverrides
 
-//#region UserOperationRequest
-// represents the request as it needs to be formatted for RPC requests
-// Reference: https://eips.ethereum.org/EIPS/eip-4337#definitions
-export interface UserOperationRequest {
+//#region UserOperationRequest_v6
+// represents the request as it needs to be formatted for v0.6 RPC requests
+// Reference: https://github.com/ethereum/ERCs/blob/8dd085d159cb123f545c272c0d871a5339550e79/ERCS/erc-4337.md#definitions
+export interface UserOperationRequest_v6 {
   /* the origin of the request */
   sender: Address;
   /* nonce (as hex) of the transaction, returned from the entry point for this Address */
@@ -103,6 +134,54 @@ export interface UserOperationRequest {
   /* Data passed into the account along with the nonce during the verification step */
   signature: Hex;
 }
+//#endregion UserOperationRequest_v6
+
+//#region UserOperationRequest_v7
+// represents the request as it needs to be formatted for v0.7 RPC requests
+// Reference: https://eips.ethereum.org/EIPS/eip-4337#definitions
+export interface UserOperationRequest_v7 {
+  /* the account making the operation */
+  sender: Address;
+  /* anti-replay parameter. nonce of the transaction, returned from the entry point for this address */
+  nonce: Hex;
+  /* account factory, only for new accounts */
+  factory: Address | NullAddress;
+  /* data for account factory (only if account factory exists) */
+  factoryData: Hex | EmptyHex;
+  /* the data to pass to the sender during the main execution call */
+  callData: Hex;
+  /* the amount of gas to allocate the main execution call */
+  callGasLimit: Hex;
+  /* the amount of gas to allocate for the verification step */
+  verificationGasLimit: Hex;
+  /* extra gas to pay the bunder */
+  preVerificationGas: Hex;
+  /* maximum fee per gas (similar to EIP-1559 max_fee_per_gas) */
+  maxFeePerGas: Hex;
+  /* maximum priority fee per gas (similar to EIP-1559 max_priority_fee_per_gas) */
+  maxPriorityFeePerGas: Hex;
+  /* address of paymaster contract, (or empty, if account pays for itself) */
+  paymaster: Address | NullAddress;
+  /* the amount of gas to allocate for the paymaster validation code */
+  paymasterVerificationGasLimit: Hex;
+  /* the amount of gas to allocate for the paymaster post-operation code */
+  paymasterPostOpGasLimit: Hex;
+  /* data for paymaster (only if paymaster exists) */
+  paymasterData: Hex | EmptyHex;
+  /* data passed into the account to verify authorization */
+  signature: Hex;
+}
+//#endregion UserOperationRequest_v7
+
+//#region UserOperationRequest
+// Reference: https://eips.ethereum.org/EIPS/eip-4337#definitions
+export type UserOperationRequest<TEntryPointVersion extends EntryPointVersion> =
+  TEntryPointVersion extends "0.6.0"
+    ? UserOperationRequest_v6
+    : TEntryPointVersion extends "0.7.0"
+    ? UserOperationRequest_v7
+    : never;
+
 //#endregion UserOperationRequest
 
 //#region UserOperationEstimateGasResponse
@@ -117,9 +196,11 @@ export interface UserOperationEstimateGasResponse {
 //#endregion UserOperationEstimateGasResponse
 
 //#region UserOperationResponse
-export interface UserOperationResponse {
+export interface UserOperationResponse<
+  TEntryPointVersion extends EntryPointVersion
+> {
   /* the User Operation */
-  userOperation: UserOperationRequest;
+  userOperation: UserOperationRequest<TEntryPointVersion>;
   /* the address of the entry point contract that executed the user operation */
   entryPoint: Address;
   /* the block number the user operation was included in */
@@ -214,13 +295,13 @@ export interface UserOperationReceiptLog {
   transactionHash: Hash;
 }
 
-//#region UserOperationStruct
-// based on @account-abstraction/common
-// this is used for building requests
-export interface UserOperationStruct {
+//#region UserOperationStruct_v6
+// https://github.com/eth-infinitism/account-abstraction/blob/releases/v0.6/test/UserOperation.ts
+// this is used for building requests for v0.6 entry point contract
+export interface UserOperationStruct_v6 {
   /* the origin of the request */
   sender: string;
-  /* nonce of the transaction, returned from the entry point for this Address */
+  /* nonce of the transaction, returned from the entry point for this address */
   nonce: BigNumberish;
   /* the initCode for creating the sender if it does not exist yet, otherwise "0x" */
   initCode: BytesLike | "0x";
@@ -241,4 +322,54 @@ export interface UserOperationStruct {
   /* Data passed into the account along with the nonce during the verification step */
   signature: BytesLike;
 }
+//#endregion UserOperationStruct_v6
+
+//#region UserOperationStruct_v7
+// based on https://github.com/eth-infinitism/account-abstraction/blob/releases/v0.7/test/UserOperation.ts
+// this is used for building requests for v0.7 entry point contract
+export interface UserOperationStruct_v7 {
+  /* the account making the operation */
+  sender: string;
+  /* anti-replay parameter. nonce of the transaction, returned from the entry point for this address */
+  nonce: BigNumberish;
+  /* account factory, only for new accounts */
+  factory: string | "0x";
+  /* data for account factory (only if account factory exists) */
+  factoryData: BytesLike | "0x";
+  /* the data to pass to the sender during the main execution call */
+  callData: BytesLike;
+  /* the amount of gas to allocate the main execution call */
+  callGasLimit?: BigNumberish;
+  /* the amount of gas to allocate for the verification step */
+  verificationGasLimit?: BigNumberish;
+  /* extra gas to pay the bunder */
+  preVerificationGas?: BigNumberish;
+  /* maximum fee per gas (similar to EIP-1559 max_fee_per_gas) */
+  maxFeePerGas?: BigNumberish;
+  /* maximum priority fee per gas (similar to EIP-1559 max_priority_fee_per_gas) */
+  maxPriorityFeePerGas?: BigNumberish;
+  /* address of paymaster contract, (or empty, if account pays for itself) */
+  paymaster: string | "0x";
+  /* the amount of gas to allocate for the paymaster validation code */
+  paymasterVerificationGasLimit?: BigNumberish;
+  /* the amount of gas to allocate for the paymaster post-operation code */
+  paymasterPostOpGasLimit?: BigNumberish;
+  /* data for paymaster (only if paymaster exists) */
+  paymasterData: BytesLike | "0x";
+  /* data passed into the account to verify authorization */
+  signature: BytesLike;
+}
+//#endregion UserOperationStruct_v7
+
+//#region UserOperationStruct
+export type UserOperationStruct<TEntryPointVersion extends EntryPointVersion> =
+  TEntryPointVersion extends "0.6.0"
+    ? UserOperationStruct_v6
+    : TEntryPointVersion extends "0.7.0"
+    ? UserOperationStruct_v7
+    : never;
 //#endregion UserOperationStruct
+
+export type UserOperationLike<
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+> = Interface<UserOperationOverrides<TEntryPointVersion>>;

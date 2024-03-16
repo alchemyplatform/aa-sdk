@@ -17,6 +17,10 @@ export const PluginActionsGenPhase: Phase = async (input) => {
   addImport("viem", { name: "Chain", isType: true });
   addImport("viem", { name: "Client", isType: true });
   addImport("@alchemy/aa-core", {
+    name: "EntryPointVersion",
+    isType: true,
+  });
+  addImport("@alchemy/aa-core", {
     name: "SmartContractAccount",
     isType: true,
   });
@@ -42,14 +46,14 @@ export const PluginActionsGenPhase: Phase = async (input) => {
     .map((n) => {
       const argsParamString =
         n.inputs.length > 0
-          ? dedent`{ 
-                  args, 
-                  overrides, 
-                  account = client.account 
+          ? dedent`{
+                  args,
+                  overrides,
+                  account = client.account
               }`
-          : dedent`{ 
-                  overrides, 
-                  account = client.account 
+          : dedent`{
+                  overrides,
+                  account = client.account
               }`;
       const argsEncodeString = n.inputs.length > 0 ? "args," : "";
 
@@ -58,31 +62,35 @@ export const PluginActionsGenPhase: Phase = async (input) => {
             n.name
           )}: (args: Pick<EncodeFunctionDataParameters<typeof ${executionAbiConst}, "${
         n.name
-      }">, "args"> & { overrides?: UserOperationOverrides; } & GetAccountParameter<TAccount>) => Promise<SendUserOperationResult>
-        `);
+      }">, "args"> & { overrides?: UserOperationOverrides<TEntryPointVersion>; } & GetAccountParameter<TEntryPointVersion, TAccount>) =>
+        Promise<SendUserOperationResult<TEntryPointVersion>>`);
       const methodName = camelCase(n.name);
       return dedent`
               ${methodName}(${argsParamString}) {
                 if (!account) {
                   throw new AccountNotFoundError();
-                } 
+                }
                 if (!isSmartAccountClient(client)) {
                   throw new IncompatibleClientError("SmartAccountClient", "${methodName}", client);
                 }
-  
+
                 const uo = encodeFunctionData({
                   abi: ${executionAbiConst},
                   functionName: "${n.name}",
                   ${argsEncodeString}
                 });
-  
+
                 return client.sendUserOperation({ uo, overrides, account });
               }
             `;
     });
 
   addType(
-    "ExecutionActions<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined>",
+    `ExecutionActions<
+      TEntryPointVersion extends EntryPointVersion,
+      TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+        SmartContractAccount<TEntryPointVersion> | undefined
+    >`,
     dedent`{
         ${providerFunctionDefs.join(";\n\n")}
       }`
@@ -97,12 +105,15 @@ export const PluginActionsGenPhase: Phase = async (input) => {
   });
 
   addType(
-    `${contract.name}Actions<TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
-    | undefined>`,
+    `${contract.name}Actions<
+      TEntryPointVersion extends EntryPointVersion,
+      TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+          | SmartContractAccount<TEntryPointVersion>
+          | undefined,
+    >`,
     dedent`
-  ExecutionActions<TAccount> & ManagementActions<TAccount> & ReadAndEncodeActions${
-    hasReadMethods ? "<TAccount>" : ""
+  ExecutionActions<TEntryPointVersion, TAccount> & ManagementActions<TEntryPointVersion, TAccount> & ReadAndEncodeActions${
+    hasReadMethods ? "<TEntryPointVersion, TAccount>" : ""
   }
   `,
     true
@@ -110,16 +121,19 @@ export const PluginActionsGenPhase: Phase = async (input) => {
 
   input.content.push(dedent`
     export const ${camelCase(contract.name)}Actions: <
+        TEntryPointVersion extends EntryPointVersion,
         TTransport extends Transport = Transport,
         TChain extends Chain | undefined = Chain | undefined,
-        TAccount extends SmartContractAccount | undefined =
-            | SmartContractAccount
-            | undefined
+        TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+            | SmartContractAccount<TEntryPointVersion>
+            | undefined,
     >(
         client: Client<TTransport, TChain, TAccount>
     ) => ${
       contract.name
-    }Actions<TAccount> = (client) => ({ ${providerFunctions.join(",\n")} });
+    }Actions<TEntryPointVersion, TAccount> = (client) => ({ ${providerFunctions.join(
+    ",\n"
+  )} });
   `);
 
   return input;

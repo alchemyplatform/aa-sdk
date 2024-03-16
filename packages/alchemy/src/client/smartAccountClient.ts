@@ -1,4 +1,5 @@
 import {
+  type EntryPointVersion,
   type Prettify,
   type SmartAccountClient,
   type SmartAccountClientActions,
@@ -17,10 +18,11 @@ import { createAlchemyPublicRpcClient } from "./rpcClient.js";
 import type { AlchemyRpcSchema } from "./types.js";
 
 export type AlchemySmartAccountClientConfig<
+  version extends EntryPointVersion,
   transport extends Transport = Transport,
   chain extends Chain | undefined = Chain | undefined,
-  account extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  account extends SmartContractAccount<version> | undefined =
+    | SmartContractAccount<version>
     | undefined
 > = {
   account?: account;
@@ -28,57 +30,64 @@ export type AlchemySmartAccountClientConfig<
   gasManagerConfig?: AlchemyGasManagerConfig;
 } & AlchemyProviderConfig &
   Pick<
-    SmartAccountClientConfig<transport, chain, account>,
+    SmartAccountClientConfig<version, transport, chain, account>,
     "customMiddleware" | "feeEstimator" | "gasEstimator"
   >;
 
 export type BaseAlchemyActions<
+  version extends EntryPointVersion,
   chain extends Chain | undefined = Chain | undefined,
-  account extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  account extends SmartContractAccount<version> | undefined =
+    | SmartContractAccount<version>
     | undefined
-> = SmartAccountClientActions<chain, account> &
-  AlchemySmartAccountClientActions<account>;
+> = SmartAccountClientActions<version, chain, account> &
+  AlchemySmartAccountClientActions<version, account>;
 
 export type AlchemySmartAccountClient_Base<
+  version extends EntryPointVersion,
   transport extends Transport = Transport,
   chain extends Chain | undefined = Chain | undefined,
-  account extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  account extends SmartContractAccount<version> | undefined =
+    | SmartContractAccount<version>
     | undefined,
-  actions extends BaseAlchemyActions<chain, account> = BaseAlchemyActions<
+  actions extends BaseAlchemyActions<
+    version,
     chain,
     account
-  >
+  > = BaseAlchemyActions<version, chain, account>
 > = Prettify<
   SmartAccountClient<
+    version,
     transport,
     chain,
     account,
     actions,
-    [...SmartAccountClientRpcSchema, ...AlchemyRpcSchema]
+    [...SmartAccountClientRpcSchema<version>, ...AlchemyRpcSchema<version>]
   >
 >;
 
 export type AlchemySmartAccountClient<
+  version extends EntryPointVersion,
   transport extends Transport = Transport,
   chain extends Chain | undefined = Chain | undefined,
-  account extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  account extends SmartContractAccount<version> | undefined =
+    | SmartContractAccount<version>
     | undefined,
-  actions extends BaseAlchemyActions<chain, account> = BaseAlchemyActions<
+  actions extends BaseAlchemyActions<
+    version,
     chain,
     account
-  >
+  > = BaseAlchemyActions<version, chain, account>
 > = Prettify<
-  AlchemySmartAccountClient_Base<transport, chain, account, actions>
+  AlchemySmartAccountClient_Base<version, transport, chain, account, actions>
 >;
 
 export function createAlchemySmartAccountClient<
+  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain = Chain,
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+    | SmartContractAccount<TEntryPointVersion>
     | undefined
 >({
   account,
@@ -89,20 +98,16 @@ export function createAlchemySmartAccountClient<
   gasEstimator,
   ...config_
 }: AlchemySmartAccountClientConfig<
+  TEntryPointVersion,
   TTransport,
   TChain,
   TAccount
->): AlchemySmartAccountClient<TTransport, TChain, TAccount>;
-
-export function createAlchemySmartAccountClient({
-  account,
-  gasManagerConfig,
-  useSimulation,
-  feeEstimator,
-  customMiddleware,
-  gasEstimator,
-  ...config_
-}: AlchemySmartAccountClientConfig): AlchemySmartAccountClient {
+>): AlchemySmartAccountClient<
+  TEntryPointVersion,
+  TTransport,
+  TChain,
+  TAccount
+> {
   const config = AlchemyProviderConfigSchema.parse(config_);
   const { chain, opts, ...connectionConfig } = config;
 
@@ -126,5 +131,10 @@ export function createAlchemySmartAccountClient({
     feeEstimator,
     customMiddleware,
     gasEstimator,
-  });
+  }) as AlchemySmartAccountClient<
+    TEntryPointVersion,
+    TTransport,
+    TChain,
+    TAccount
+  >;
 }

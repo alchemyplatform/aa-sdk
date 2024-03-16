@@ -3,17 +3,19 @@ import {
   createSmartAccountClient,
   getChain,
   type BundlerClient,
+  type EntryPointVersion,
   type SmartAccountClient,
   type SmartContractAccount,
 } from "@alchemy/aa-core";
 import { JsonRpcProvider } from "@ethersproject/providers";
-import { createPublicClient, custom, http } from "viem";
+import { createPublicClient, custom, http, type Transport } from "viem";
 import { AccountSigner } from "./account-signer.js";
 import type { EthersProviderAdapterOpts } from "./types.js";
 
 /** Lightweight Adapter for SmartAccountProvider to enable Signer Creation */
+// TODO: Add support for strong entry point version type
 export class EthersProviderAdapter extends JsonRpcProvider {
-  readonly accountProvider: SmartAccountClient;
+  readonly accountProvider: SmartAccountClient<EntryPointVersion>;
 
   constructor(opts: EthersProviderAdapterOpts) {
     super();
@@ -22,13 +24,13 @@ export class EthersProviderAdapter extends JsonRpcProvider {
     } else {
       const chain = getChain(opts.chainId);
       if (typeof opts.rpcProvider === "string") {
-        this.accountProvider = createSmartAccountClient({
+        this.accountProvider = createSmartAccountClient<EntryPointVersion>({
           transport: http(opts.rpcProvider),
           chain,
           account: opts.account,
         });
       } else {
-        this.accountProvider = createSmartAccountClient({
+        this.accountProvider = createSmartAccountClient<EntryPointVersion>({
           transport: custom(opts.rpcProvider.transport),
           chain,
           account: opts.account,
@@ -56,13 +58,14 @@ export class EthersProviderAdapter extends JsonRpcProvider {
    * @param fn - a function that takes the account provider's rpcClient and returns an ISmartContractAccount
    * @returns an {@link AccountSigner} that can be used to sign and send user operations
    */
-  connectToAccount<TAccount extends SmartContractAccount>(
-    account: TAccount
-  ): AccountSigner {
-    return new AccountSigner<TAccount>(this, account);
+  connectToAccount<
+    TEntryPointVersion extends EntryPointVersion,
+    TAccount extends SmartContractAccount<TEntryPointVersion>
+  >(account: TAccount): AccountSigner<TEntryPointVersion, TAccount> {
+    return new AccountSigner<TEntryPointVersion, TAccount>(this, account);
   }
 
-  getBundlerClient(): BundlerClient {
+  getBundlerClient(): BundlerClient<EntryPointVersion, Transport> {
     return createBundlerClientFromExisting(
       createPublicClient({
         transport: custom(this.accountProvider.transport),

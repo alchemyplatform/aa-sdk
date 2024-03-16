@@ -1,10 +1,11 @@
 import {
   BaseSmartContractAccount,
   createBundlerClient,
-  getVersion060EntryPoint,
+  getEntryPoint,
   toSmartContractAccount,
   type BaseSmartAccountParams,
   type BatchUserOperationCallData,
+  type DefaultEntryPointVersion,
   type SignTypedDataParams,
   type SmartAccountSigner,
   type SmartContractAccountWithSigner,
@@ -29,7 +30,10 @@ import { NaniAccountFactoryAbi } from "./abis/NaniAccountFactoryAbi.js";
 
 export type NaniSmartAccountParams<
   TTransport extends Transport | FallbackTransport = Transport
-> = Omit<BaseSmartAccountParams<TTransport>, "rpcClient"> & {
+> = Omit<
+  BaseSmartAccountParams<DefaultEntryPointVersion, TTransport>,
+  "rpcClient"
+> & {
   signer: SmartAccountSigner;
   index?: bigint;
   salt?: Hex;
@@ -38,6 +42,7 @@ export type NaniSmartAccountParams<
 };
 
 export type NaniAccount = SmartContractAccountWithSigner<
+  DefaultEntryPointVersion,
   "NaniAccount",
   SmartAccountSigner
 > & {
@@ -47,7 +52,7 @@ export type NaniAccount = SmartContractAccountWithSigner<
 
 class NaniAccount_<
   TTransport extends Transport | FallbackTransport = Transport
-> extends BaseSmartContractAccount<TTransport> {
+> extends BaseSmartContractAccount<DefaultEntryPointVersion, TTransport> {
   protected signer: SmartAccountSigner;
   private readonly index: bigint;
   protected salt?: Hex;
@@ -226,7 +231,10 @@ class NaniAccount_<
 
 export const createNaniAccount = async <TTransport extends Transport>(
   params: Omit<NaniSmartAccountParams<TTransport>, "rpcClient" | "chain"> &
-    Pick<ToSmartContractAccountParams, "chain" | "transport">
+    Pick<
+      ToSmartContractAccountParams<DefaultEntryPointVersion>,
+      "chain" | "transport"
+    >
 ): Promise<NaniAccount> => {
   if (!params.signer) throw new Error("Owner must be provided.");
 
@@ -237,10 +245,9 @@ export const createNaniAccount = async <TTransport extends Transport>(
     transport: params.transport,
     chain: params.chain,
     accountAddress: params.accountAddress as Address | undefined,
-    entryPoint: getVersion060EntryPoint(
-      params.chain,
-      naniAccount.getEntryPointAddress()
-    ),
+    entryPoint: getEntryPoint(params.chain, {
+      addressOverride: naniAccount.getEntryPointAddress(),
+    }),
     encodeBatchExecute: naniAccount.encodeBatchExecute.bind(naniAccount),
     encodeExecute: (tx) =>
       naniAccount.encodeExecute(tx.target, tx.value ?? 0n, tx.data),

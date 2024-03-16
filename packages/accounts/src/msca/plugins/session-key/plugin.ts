@@ -17,6 +17,7 @@ import {
   AccountNotFoundError,
   isSmartAccountClient,
   IncompatibleClientError,
+  type EntryPointVersion,
   type SmartContractAccount,
   type UserOperationOverrides,
   type GetAccountParameter,
@@ -32,8 +33,9 @@ import { type FunctionReference } from "../../account-loupe/types.js";
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 type ExecutionActions<
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  TEntryPointVersion extends EntryPointVersion,
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+    | SmartContractAccount<TEntryPointVersion>
     | undefined
 > = {
   executeWithSessionKey: (
@@ -43,8 +45,10 @@ type ExecutionActions<
         "executeWithSessionKey"
       >,
       "args"
-    > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
-  ) => Promise<SendUserOperationResult>;
+    > & {
+      overrides?: UserOperationOverrides<TEntryPointVersion>;
+    } & GetAccountParameter<TEntryPointVersion, TAccount>
+  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 
   addSessionKey: (
     args: Pick<
@@ -53,8 +57,10 @@ type ExecutionActions<
         "addSessionKey"
       >,
       "args"
-    > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
-  ) => Promise<SendUserOperationResult>;
+    > & {
+      overrides?: UserOperationOverrides<TEntryPointVersion>;
+    } & GetAccountParameter<TEntryPointVersion, TAccount>
+  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 
   removeSessionKey: (
     args: Pick<
@@ -63,8 +69,10 @@ type ExecutionActions<
         "removeSessionKey"
       >,
       "args"
-    > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
-  ) => Promise<SendUserOperationResult>;
+    > & {
+      overrides?: UserOperationOverrides<TEntryPointVersion>;
+    } & GetAccountParameter<TEntryPointVersion, TAccount>
+  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 
   rotateSessionKey: (
     args: Pick<
@@ -73,8 +81,10 @@ type ExecutionActions<
         "rotateSessionKey"
       >,
       "args"
-    > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
-  ) => Promise<SendUserOperationResult>;
+    > & {
+      overrides?: UserOperationOverrides<TEntryPointVersion>;
+    } & GetAccountParameter<TEntryPointVersion, TAccount>
+  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 
   updateKeyPermissions: (
     args: Pick<
@@ -83,8 +93,10 @@ type ExecutionActions<
         "updateKeyPermissions"
       >,
       "args"
-    > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
-  ) => Promise<SendUserOperationResult>;
+    > & {
+      overrides?: UserOperationOverrides<TEntryPointVersion>;
+    } & GetAccountParameter<TEntryPointVersion, TAccount>
+  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 };
 
 type InstallArgs = [
@@ -100,16 +112,17 @@ export type InstallSessionKeyPluginParams = {
 };
 
 type ManagementActions<
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  TEntryPointVersion extends EntryPointVersion,
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+    | SmartContractAccount<TEntryPointVersion>
     | undefined
 > = {
   installSessionKeyPlugin: (
     args: {
-      overrides?: UserOperationOverrides;
+      overrides?: UserOperationOverrides<TEntryPointVersion>;
     } & InstallSessionKeyPluginParams &
-      GetAccountParameter<TAccount>
-  ) => Promise<SendUserOperationResult>;
+      GetAccountParameter<TEntryPointVersion, TAccount>
+  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 };
 
 type ReadAndEncodeActions = {
@@ -165,11 +178,12 @@ type ReadAndEncodeActions = {
 };
 
 export type SessionKeyPluginActions<
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  TEntryPointVersion extends EntryPointVersion,
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+    | SmartContractAccount<TEntryPointVersion>
     | undefined
-> = ExecutionActions<TAccount> &
-  ManagementActions<TAccount> &
+> = ExecutionActions<TEntryPointVersion, TAccount> &
+  ManagementActions<TEntryPointVersion, TAccount> &
   ReadAndEncodeActions;
 
 const addresses = {
@@ -210,14 +224,15 @@ export const SessionKeyPlugin: Plugin<typeof SessionKeyPluginAbi> = {
 };
 
 export const sessionKeyPluginActions: <
+  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+    | SmartContractAccount<TEntryPointVersion>
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>
-) => SessionKeyPluginActions<TAccount> = (client) => ({
+) => SessionKeyPluginActions<TEntryPointVersion, TAccount> = (client) => ({
   executeWithSessionKey({ args, overrides, account = client.account }) {
     if (!account) {
       throw new AccountNotFoundError();

@@ -1,6 +1,7 @@
 import {
   getContract,
   hexToBytes,
+  toHex,
   trim,
   type Address,
   type Chain,
@@ -14,10 +15,15 @@ import {
   type TypedDataDefinition,
 } from "viem";
 import { toAccount } from "viem/accounts";
-import { EntryPointAbi } from "../abis/EntryPointAbi.js";
 import { createBundlerClient } from "../client/bundlerClient.js";
-import { getVersion060EntryPoint } from "../entrypoint/0.6.js";
-import type { EntryPointDef } from "../entrypoint/types.js";
+import { getEntryPoint } from "../entrypoint/index.js";
+import type {
+  EntryPointDef,
+  EntryPointDefRegistry,
+  EntryPointParameter,
+  EntryPointRegistryBase,
+  EntryPointVersion,
+} from "../entrypoint/types.js";
 import {
   BatchExecutionNotSupportedError,
   FailedToGetStorageSlotError,
@@ -26,10 +32,11 @@ import {
   UpgradesNotSupportedError,
 } from "../errors/account.js";
 import { InvalidRpcUrlError } from "../errors/client.js";
+import { InvalidEntryPointError } from "../errors/entrypoint.js";
 import { Logger } from "../logger.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import { wrapSignatureWith6492 } from "../signer/utils.js";
-import type { UserOperationRequest } from "../types.js";
+import type { NullAddress } from "../types.js";
 import type { IsUndefined } from "../utils/types.js";
 import { DeploymentState } from "./base.js";
 
@@ -40,10 +47,11 @@ export type AccountOp = {
 };
 
 export type GetAccountParameter<
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  TEntryPointVersion extends EntryPointVersion,
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+    | SmartContractAccount<TEntryPointVersion>
     | undefined,
-  TAccountOverride extends SmartContractAccount = SmartContractAccount
+  TAccountOverride extends SmartContractAccount<TEntryPointVersion> = SmartContractAccount<TEntryPointVersion>
 > = IsUndefined<TAccount> extends true
   ? { account: TAccountOverride }
   : { account?: TAccountOverride };
@@ -54,16 +62,17 @@ export type UpgradeToAndCallParams = {
 };
 
 export type SmartContractAccountWithSigner<
+  TEntryPointVersion extends EntryPointVersion,
   Name extends string = string,
   TSigner extends SmartAccountSigner = SmartAccountSigner
-> = SmartContractAccount<Name> & {
+> = SmartContractAccount<TEntryPointVersion, Name> & {
   getSigner: () => TSigner;
 };
 
 //#region SmartContractAccount
 export type SmartContractAccount<
-  Name extends string = string,
-  TUO = UserOperationRequest
+  TEntryPointVersion extends EntryPointVersion,
+  Name extends string = string
 > = LocalAccount<Name> & {
   source: Name;
   getDummySignature: () => Hex;
@@ -82,21 +91,28 @@ export type SmartContractAccount<
   getInitCode: () => Promise<Hex>;
   isAccountDeployed: () => Promise<boolean>;
   getFactoryAddress: () => Address;
-  getEntryPoint: () => EntryPointDef<TUO>;
-  getImplementationAddress: () => Promise<"0x0" | Address>;
+  getEntryPoint: () => EntryPointDefRegistry[TEntryPointVersion];
+  getImplementationAddress: () => Promise<NullAddress | Address>;
 };
 //#endregion SmartContractAccount
 
+export interface AccountEntryPointRegistry<Name extends string = string>
+  extends EntryPointRegistryBase<
+    SmartContractAccount<EntryPointVersion, Name>
+  > {
+  "0.6.0": SmartContractAccount<"0.6.0", Name>;
+  "0.7.0": SmartContractAccount<"0.7.0", Name>;
+}
+
 export type ToSmartContractAccountParams<
+  TEntryPointVersion extends EntryPointVersion,
   Name extends string = string,
   TTransport extends Transport = Transport,
-  TChain extends Chain = Chain,
-  TUserOperationRequest = UserOperationRequest
+  TChain extends Chain = Chain
 > = {
   source: Name;
   transport: TTransport;
   chain: TChain;
-  entryPoint?: EntryPointDef<TUserOperationRequest>;
   accountAddress?: Address;
   getAccountInitCode: () => Promise<Hex>;
   getDummySignature: () => Hex;
@@ -105,7 +121,8 @@ export type ToSmartContractAccountParams<
   // if not provided, will default to just using signMessage over the Hex
   signUserOperationHash?: (uoHash: Hex) => Promise<Hex>;
   encodeUpgradeToAndCall?: (params: UpgradeToAndCallParams) => Promise<Hex>;
-} & Omit<CustomSource, "signTransaction" | "address">;
+} & EntryPointParameter<TEntryPointVersion, TChain> &
+  Omit<CustomSource, "signTransaction" | "address">;
 
 export const parseFactoryAddressFromAccountInitCode = (initCode: Hex) => {
   const factoryAddress = `0x${initCode.substring(2, 42)}` as Address;
@@ -115,20 +132,20 @@ export const parseFactoryAddressFromAccountInitCode = (initCode: Hex) => {
 
 export const getAccountAddress = async ({
   client,
-  entryPointAddress,
+  entryPoint,
   accountAddress,
   getAccountInitCode,
 }: {
   client: PublicClient;
-  entryPointAddress: Address;
+  entryPoint: EntryPointDef<EntryPointVersion>;
   accountAddress?: Address;
   getAccountInitCode: () => Promise<Hex>;
 }) => {
   if (accountAddress) return accountAddress;
 
-  const entryPoint = getContract({
-    address: entryPointAddress,
-    abi: EntryPointAbi,
+  const entryPointContract = getContract({
+    address: entryPoint.address,
+    abi: entryPoint.abi,
     // Need to cast this as PublicClient or else it breaks ABI typing.
     // This is valid because our PublicClient is a subclass of PublicClient
     client: client as PublicClient,
@@ -138,7 +155,7 @@ export const getAccountAddress = async ({
   Logger.verbose("[BaseSmartContractAccount](getAddress) initCode: ", initCode);
 
   try {
-    await entryPoint.simulate.getSenderAddress([initCode]);
+    await entryPointContract.simulate.getSenderAddress([initCode]);
   } catch (err: any) {
     Logger.verbose(
       "[BaseSmartContractAccount](getAddress) getSenderAddress err: ",
@@ -162,14 +179,20 @@ export const getAccountAddress = async ({
 };
 
 export async function toSmartContractAccount<
+  TEntryPointDef extends EntryPointDefRegistry[TEntryPointVersion],
+  TEntryPointVersion extends EntryPointVersion = TEntryPointDef extends EntryPointDef<
+    infer U
+  >
+    ? U
+    : never,
   Name extends string = string,
   TTransport extends Transport = Transport,
   TChain extends Chain = Chain
 >({
   transport,
   chain,
+  entryPoint,
   source,
-  entryPoint = getVersion060EntryPoint(chain),
   accountAddress,
   getAccountInitCode,
   signMessage,
@@ -179,16 +202,53 @@ export async function toSmartContractAccount<
   getDummySignature,
   signUserOperationHash,
   encodeUpgradeToAndCall,
-}: ToSmartContractAccountParams<Name, TTransport, TChain>): Promise<
-  SmartContractAccount<Name>
-> {
-  const client = createBundlerClient({
+}: ToSmartContractAccountParams<
+  TEntryPointVersion,
+  Name,
+  TTransport,
+  TChain
+>): Promise<AccountEntryPointRegistry<Name>[TEntryPointVersion]>;
+
+export async function toSmartContractAccount<
+  TEntryPointDef extends EntryPointDefRegistry[TEntryPointVersion],
+  TEntryPointVersion extends EntryPointVersion = TEntryPointDef extends EntryPointDef<
+    infer U
+  >
+    ? U
+    : never,
+  Name extends string = string,
+  TTransport extends Transport = Transport,
+  TChain extends Chain = Chain
+>({
+  transport,
+  chain,
+  entryPoint,
+  source,
+  accountAddress,
+  getAccountInitCode,
+  signMessage,
+  signTypedData,
+  encodeBatchExecute,
+  encodeExecute,
+  getDummySignature,
+  signUserOperationHash,
+  encodeUpgradeToAndCall,
+}: ToSmartContractAccountParams<
+  TEntryPointVersion,
+  Name,
+  TTransport,
+  TChain
+>): Promise<AccountEntryPointRegistry<Name>[EntryPointVersion]> {
+  const _entryPoint: EntryPointDef<EntryPointVersion> =
+    entryPoint ?? getEntryPoint(chain);
+  const client = createBundlerClient<TEntryPointVersion, TTransport>({
     transport,
     chain,
   });
+
   const entryPointContract = getContract({
-    address: entryPoint.address,
-    abi: EntryPointAbi,
+    address: _entryPoint.address,
+    abi: _entryPoint.abi,
     // Need to cast this as PublicClient or else it breaks ABI typing.
     // This is valid because our PublicClient is a subclass of PublicClient
     client: client as PublicClient,
@@ -196,7 +256,7 @@ export async function toSmartContractAccount<
 
   const accountAddress_ = await getAccountAddress({
     client,
-    entryPointAddress: entryPoint.address,
+    entryPoint: _entryPoint,
     accountAddress,
     getAccountInitCode,
   });
@@ -245,12 +305,15 @@ export async function toSmartContractAccount<
     return initCode === "0x";
   };
 
-  const getNonce = async (nonceKey = 0n) => {
+  const getNonce = async (nonceKey = 0n): Promise<bigint> => {
     if (!(await isAccountDeployed())) {
       return 0n;
     }
 
-    return entryPointContract.read.getNonce([accountAddress_, nonceKey]);
+    return entryPointContract.read.getNonce([
+      accountAddress_,
+      nonceKey,
+    ]) as Promise<bigint>;
   };
 
   const account = toAccount({
@@ -300,7 +363,7 @@ export async function toSmartContractAccount<
     return create6492Signature(isDeployed, signature);
   };
 
-  const getImplementationAddress = async (): Promise<"0x0" | Address> => {
+  const getImplementationAddress = async (): Promise<NullAddress | Address> => {
     const storage = await client.getStorageAt({
       address: account.address,
       // This is the default slot for the implementation address for Proxies
@@ -314,30 +377,58 @@ export async function toSmartContractAccount<
       );
     }
 
-    return trim(storage);
+    return toHex(trim(storage));
   };
 
-  return {
-    ...account,
-    source,
-    // TODO: I think this should probably be signUserOperation instead
-    // and allow for generating the UO hash based on the EP version
-    signUserOperationHash: signUserOperationHash_,
-    getFactoryAddress,
-    encodeBatchExecute:
-      encodeBatchExecute ??
-      (() => {
-        throw new BatchExecutionNotSupportedError(source);
-      }),
-    encodeExecute,
-    getDummySignature,
-    getInitCode,
-    encodeUpgradeToAndCall: encodeUpgradeToAndCall_,
-    getEntryPoint: () => entryPoint,
-    isAccountDeployed,
-    getNonce,
-    signMessageWith6492,
-    signTypedDataWith6492,
-    getImplementationAddress,
-  };
+  if (_entryPoint.version !== "0.6.0" && _entryPoint.version !== "0.7.0") {
+    throw new InvalidEntryPointError(chain, _entryPoint.version);
+  }
+
+  return _entryPoint.version === "0.6.0"
+    ? ({
+        ...account,
+        source,
+        // TODO: I think this should probably be signUserOperation instead
+        // and allow for generating the UO hash based on the EP version
+        signUserOperationHash: signUserOperationHash_,
+        getFactoryAddress,
+        encodeBatchExecute:
+          encodeBatchExecute ??
+          (() => {
+            throw new BatchExecutionNotSupportedError(source);
+          }),
+        encodeExecute,
+        getDummySignature,
+        getInitCode,
+        encodeUpgradeToAndCall: encodeUpgradeToAndCall_,
+        getEntryPoint: () => _entryPoint as EntryPointDefRegistry["0.6.0"],
+        isAccountDeployed,
+        getNonce,
+        signMessageWith6492,
+        signTypedDataWith6492,
+        getImplementationAddress,
+      } as AccountEntryPointRegistry<Name>["0.6.0"])
+    : ({
+        ...account,
+        source,
+        // TODO: I think this should probably be signUserOperation instead
+        // and allow for generating the UO hash based on the EP version
+        signUserOperationHash: signUserOperationHash_,
+        getFactoryAddress,
+        encodeBatchExecute:
+          encodeBatchExecute ??
+          (() => {
+            throw new BatchExecutionNotSupportedError(source);
+          }),
+        encodeExecute,
+        getDummySignature,
+        getInitCode,
+        encodeUpgradeToAndCall: encodeUpgradeToAndCall_,
+        getEntryPoint: () => _entryPoint as EntryPointDefRegistry["0.7.0"],
+        isAccountDeployed,
+        getNonce,
+        signMessageWith6492,
+        signTypedDataWith6492,
+        getImplementationAddress,
+      } as AccountEntryPointRegistry<Name>["0.7.0"]);
 }

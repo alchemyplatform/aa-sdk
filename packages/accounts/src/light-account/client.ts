@@ -1,12 +1,13 @@
 import {
   createSmartAccountClient,
+  type EntryPointVersion,
   type SmartAccountClient,
   type SmartAccountClientActions,
   type SmartAccountClientConfig,
   type SmartAccountSigner,
   type SmartContractAccount,
 } from "@alchemy/aa-core";
-import { type Chain, type CustomTransport, type Transport } from "viem";
+import { type Chain, type Transport } from "viem";
 import {
   createLightAccount,
   type CreateLightAccountParams,
@@ -18,18 +19,26 @@ import {
 } from "./decorator.js";
 
 export type CreateLightAccountClientParams<
-  TTransport extends Transport = Transport,
+  TEntryPointVersion extends EntryPointVersion,
   TChain extends Chain | undefined = Chain | undefined,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 > = {
-  transport: CreateLightAccountParams<TTransport, TSigner>["transport"];
-  chain: CreateLightAccountParams<TTransport, TSigner>["chain"];
+  transport: CreateLightAccountParams<
+    TEntryPointVersion,
+    Transport,
+    TSigner
+  >["transport"];
+  chain: CreateLightAccountParams<
+    TEntryPointVersion,
+    Transport,
+    TSigner
+  >["chain"];
   account: Omit<
-    CreateLightAccountParams<TTransport, TSigner>,
+    CreateLightAccountParams<TEntryPointVersion, Transport, TSigner>,
     "transport" | "chain"
   >;
 } & Omit<
-  SmartAccountClientConfig<TTransport, TChain>,
+  SmartAccountClientConfig<TEntryPointVersion, Transport, TChain>,
   "transport" | "account" | "chain"
 >;
 
@@ -37,30 +46,54 @@ export function createLightAccountClient<
   TChain extends Chain | undefined = Chain | undefined,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  args: CreateLightAccountClientParams<Transport, TChain, TSigner>
+  args: CreateLightAccountClientParams<EntryPointVersion, TChain, TSigner>
 ): Promise<
   SmartAccountClient<
-    CustomTransport,
-    Chain,
-    LightAccount<TSigner>,
-    SmartAccountClientActions<Chain, SmartContractAccount> &
-      LightAccountClientActions<TSigner, LightAccount<TSigner>>
+    EntryPointVersion,
+    Transport,
+    TChain,
+    LightAccount<EntryPointVersion, TSigner>,
+    SmartAccountClientActions<
+      EntryPointVersion,
+      TChain,
+      SmartContractAccount<EntryPointVersion>
+    > &
+      LightAccountClientActions<
+        EntryPointVersion,
+        TSigner,
+        LightAccount<EntryPointVersion, TSigner>
+      >
   >
 >;
 
-export async function createLightAccountClient({
+export async function createLightAccountClient<
+  TChain extends Chain | undefined = Chain | undefined,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
+>({
   account,
   transport,
   chain,
   ...clientConfig
-}: CreateLightAccountClientParams): Promise<SmartAccountClient> {
+}: CreateLightAccountClientParams<EntryPointVersion, TChain, TSigner>): Promise<
+  SmartAccountClient<
+    EntryPointVersion,
+    Transport,
+    TChain,
+    LightAccount<EntryPointVersion>
+  >
+> {
   const lightAccount = await createLightAccount({
     ...account,
     transport,
     chain,
   });
 
-  return createSmartAccountClient({
+  return createSmartAccountClient<
+    EntryPointVersion,
+    Transport,
+    TChain,
+    LightAccount<EntryPointVersion>
+  >({
     ...clientConfig,
     transport,
     chain: chain,

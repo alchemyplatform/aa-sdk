@@ -24,9 +24,16 @@ export const ManagementActionsGenPhase: Phase = async (input) => {
       true
     );
     addType(
-      "ManagementActions<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined>",
+      `ManagementActions<
+        TEntryPointVersion extends EntryPointVersion,
+        TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+          | SmartContractAccount<TEntryPointVersion>
+          | undefined
+      >`,
       dedent`{
-      install${pluginConfig.name}: (args: {overrides?: UserOperationOverrides} & Install${pluginConfig.name}Params & GetAccountParameter<TAccount>) => Promise<SendUserOperationResult>
+      install${pluginConfig.name}: (args: UserOperationOverridesParameter<TEntryPointVersion> &
+        Install${pluginConfig.name}Params & GetAccountParameter<TEntryPointVersion, TAccount>) =>
+          Promise<SendUserOperationResult<TEntryPointVersion>>
     }`
     );
 

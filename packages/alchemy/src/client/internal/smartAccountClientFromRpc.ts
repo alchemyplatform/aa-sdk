@@ -1,6 +1,7 @@
 import {
   createSmartAccountClientFromExisting,
   getDefaultUserOperationFeeOptions,
+  type EntryPointVersion,
   type SmartContractAccount,
 } from "@alchemy/aa-core";
 import type { Chain, CustomTransport, Transport } from "viem";
@@ -15,28 +16,31 @@ import type {
 import type { ClientWithAlchemyMethods } from "../types";
 
 export type CreateAlchemySmartAccountClientFromRpcClient<
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  TEntryPointVersion extends EntryPointVersion,
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+    | SmartContractAccount<TEntryPointVersion>
     | undefined
 > = Omit<
-  AlchemySmartAccountClientConfig<Transport, Chain, TAccount>,
+  AlchemySmartAccountClientConfig<
+    TEntryPointVersion,
+    Transport,
+    Chain,
+    TAccount
+  >,
   "rpcUrl" | "chain" | "apiKey" | "jwt"
-> & { client: ClientWithAlchemyMethods };
+> & { client: ClientWithAlchemyMethods<TEntryPointVersion> };
 
 /**
  * Helper method meant to be used internally to create an alchemy smart account client
  * from an existing Alchemy Rpc Client
  */
 export function createAlchemySmartAccountClientFromRpcClient<
+  TEntryPointVersion extends EntryPointVersion,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+    | SmartContractAccount<TEntryPointVersion>
     | undefined
->(
-  args: CreateAlchemySmartAccountClientFromRpcClient<TAccount>
-): AlchemySmartAccountClient<CustomTransport, TChain, TAccount>;
-
-export function createAlchemySmartAccountClientFromRpcClient({
+>({
   opts,
   account,
   useSimulation,
@@ -45,7 +49,15 @@ export function createAlchemySmartAccountClientFromRpcClient({
   gasEstimator,
   customMiddleware,
   client,
-}: CreateAlchemySmartAccountClientFromRpcClient): AlchemySmartAccountClient {
+}: CreateAlchemySmartAccountClientFromRpcClient<
+  TEntryPointVersion,
+  TAccount
+>): AlchemySmartAccountClient<
+  TEntryPointVersion,
+  CustomTransport,
+  TChain,
+  TAccount
+> {
   const feeOptions =
     opts?.feeOptions ?? getDefaultUserOperationFeeOptions(client.chain);
 
@@ -79,5 +91,10 @@ export function createAlchemySmartAccountClientFromRpcClient({
             gasEstimator,
         },
       })),
-  }).extend(alchemyActions);
+  }).extend(alchemyActions) as AlchemySmartAccountClient<
+    TEntryPointVersion,
+    CustomTransport,
+    TChain,
+    TAccount
+  >;
 }
