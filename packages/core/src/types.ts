@@ -1,4 +1,9 @@
-import { type Address, type Hash, type TransactionReceipt } from "viem";
+import {
+  type Address,
+  type Hash,
+  type StateOverride,
+  type TransactionReceipt,
+} from "viem";
 import type { z } from "zod";
 import type {
   UserOperationFeeOptionsFieldSchema,
@@ -67,6 +72,7 @@ export type UserOperationOverrides = Partial<{
    * one user operation for your account in a bundle
    */
   nonceKey: bigint;
+  stateOverride: StateOverride;
 }>;
 //#endregion UserOperationOverrides
 
