@@ -12,6 +12,7 @@ import { getSupportedEntryPoints } from "../../actions/bundler/getSupportedEntry
 import { getUserOperationByHash } from "../../actions/bundler/getUserOperationByHash.js";
 import { getUserOperationReceipt } from "../../actions/bundler/getUserOperationReceipt.js";
 import { sendRawUserOperation } from "../../actions/bundler/sendRawUserOperation.js";
+import type { EntryPointVersion } from "../../entrypoint/types.js";
 import type {
   UserOperationEstimateGasResponse,
   UserOperationReceipt,
@@ -20,15 +21,23 @@ import type {
 } from "../../types.js";
 
 // Reference: https://eips.ethereum.org/EIPS/eip-4337#rpc-methods-eth-namespace
-export type BundlerRpcSchema = [
+export type BundlerRpcSchema<
+  TEntryPointVersion extends EntryPointVersion | undefined =
+    | EntryPointVersion
+    | undefined
+> = [
   {
     Method: "eth_sendUserOperation";
-    Parameters: [UserOperationRequest, Address];
+    Parameters: [UserOperationRequest<TEntryPointVersion>, Address];
     ReturnType: Hash;
   },
   {
     Method: "eth_estimateUserOperationGas";
-    Parameters: [UserOperationRequest, Address, StateOverride?];
+    Parameters: [
+      UserOperationRequest<TEntryPointVersion>,
+      Address,
+      StateOverride?
+    ];
     ReturnType: UserOperationEstimateGasResponse;
   },
   {
@@ -39,7 +48,7 @@ export type BundlerRpcSchema = [
   {
     Method: "eth_getUserOperationByHash";
     Parameters: [Hash];
-    ReturnType: UserOperationResponse | null;
+    ReturnType: UserOperationResponse<TEntryPointVersion> | null;
   },
   {
     Method: "eth_supportedEntryPoints";
@@ -49,17 +58,21 @@ export type BundlerRpcSchema = [
 ];
 
 //#region BundlerActions
-export type BundlerActions = {
+export type BundlerActions<
+  TEntryPointVersion extends EntryPointVersion | undefined =
+    | EntryPointVersion
+    | undefined
+> = {
   /**
    * calls `eth_estimateUserOperationGas` and  returns the result
    *
-   * @param request - the {@link UserOperationRequest} to estimate gas for
+   * @param request - the {@link UserOperationRequest<TEntryPointVersion>} to estimate gas for
    * @param entryPoint - the entry point address the op will be sent to
    * @params stateOverride - the state override to use for the estimation
    * @returns the gas estimates for the given response (see: {@link UserOperationEstimateGasResponse})
    */
   estimateUserOperationGas(
-    request: UserOperationRequest,
+    request: UserOperationRequest<TEntryPointVersion>,
     entryPoint: Address,
     stateOverride?: StateOverride
   ): Promise<UserOperationEstimateGasResponse>;
@@ -67,34 +80,35 @@ export type BundlerActions = {
   /**
    * calls `eth_sendUserOperation` and returns the hash of the sent UserOperation
    *
-   * @param request - the {@link UserOperationRequest} to send
+   * @param request - the {@link UserOperationRequest<TEntryPointVersion>} to send
    * @param entryPoint - the entry point address the op will be sent to
    * @returns the hash of the sent UserOperation
    */
   sendRawUserOperation(
-    request: UserOperationRequest,
+    request: UserOperationRequest<TEntryPointVersion>,
     entryPoint: Address
   ): Promise<Hash>;
 
   /**
-   * calls `eth_getUserOperationByHash` and returns the {@link UserOperationResponse}
+   * calls `eth_getUserOperationByHash` and returns the {@link UserOperationResponse<TEntryPointVersion>}
    *
    * @param hash - the hash of the UserOperation to fetch
-   * @returns - {@link UserOperationResponse}
+   * @returns - {@link UserOperationResponse<TEntryPointVersion>}
    */
-  getUserOperationByHash(hash: Hash): Promise<UserOperationResponse | null>;
+  getUserOperationByHash(
+    hash: Hash
+  ): Promise<UserOperationResponse<TEntryPointVersion> | null>;
 
   /**
    * calls `eth_getUserOperationReceipt` and returns the {@link UserOperationReceipt}
    *
    * @param hash - the hash of the UserOperation to get the receipt for
-   * @returns - {@link UserOperationResponse}
+   * @returns - {@link UserOperationReceipt}
    */
   getUserOperationReceipt(hash: Hash): Promise<UserOperationReceipt | null>;
 
   /**
-   * calls `eth_supportedEntryPoints` and returns the entry points the RPC
-   * supports
+   * calls `eth_supportedEntryPoints` and returns the entry points the RPC supports
    * @returns - {@link Address}[]
    */
   getSupportedEntryPoints(): Promise<Address[]>;
@@ -106,11 +120,14 @@ export const bundlerActions: <
     Transport,
     Chain | undefined,
     any,
-    [...PublicRpcSchema, ...BundlerRpcSchema]
-  >
+    [...PublicRpcSchema, ...BundlerRpcSchema<TEntryPointVersion>]
+  >,
+  TEntryPointVersion extends EntryPointVersion | undefined =
+    | EntryPointVersion
+    | undefined
 >(
   client: TClient
-) => BundlerActions = (client) => ({
+) => BundlerActions<TEntryPointVersion> = (client) => ({
   estimateUserOperationGas: async (request, entryPoint, stateOverride) =>
     estimateUserOperationGas(client, { request, entryPoint, stateOverride }),
   sendRawUserOperation: async (request, entryPoint) =>

@@ -2,6 +2,7 @@ import { Address } from "abitype/zod";
 import { isHex, type Transport } from "viem";
 import z from "zod";
 import { createPublicErc4337ClientSchema } from "../client/schema.js";
+import type { EntryPointVersion } from "../entrypoint/types.js";
 import { isSigner } from "../signer/schema.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import { ChainSchema } from "../utils/index.js";
@@ -17,6 +18,9 @@ export const createBaseSmartAccountParamsSchema = <
     ]),
     factoryAddress: Address,
     signer: z.custom<TSigner>(isSigner),
+    entryPointVersion: z
+      .custom<EntryPointVersion>((v) => v === "0.6.0" || v === "0.7.0")
+      .optional(),
     entryPointAddress: Address.optional(),
     chain: ChainSchema,
     accountAddress: Address.optional().describe(
@@ -24,7 +28,10 @@ export const createBaseSmartAccountParamsSchema = <
     ),
     initCode: z
       .string()
-      .refine(isHex, "initCode must be a valid hex.")
+      .refine(
+        (x) => isHex(x, { strict: true }),
+        "initCode must be a valid hex."
+      )
       .optional()
       .describe("Optional override for the account init code."),
   });

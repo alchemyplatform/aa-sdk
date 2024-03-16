@@ -3,6 +3,7 @@ import {
   concatHex,
   encodeFunctionData,
   isHex,
+  type Chain,
   type FallbackTransport,
   type Hex,
   type Transport,
@@ -10,7 +11,8 @@ import {
 import { SimpleAccountAbi } from "../abis/SimpleAccountAbi.js";
 import { SimpleAccountFactoryAbi } from "../abis/SimpleAccountFactoryAbi.js";
 import { createBundlerClient } from "../client/bundlerClient.js";
-import { getVersion060EntryPoint } from "../entrypoint/0.6.js";
+import { getEntryPoint } from "../entrypoint/index.js";
+import type { EntryPointVersion } from "../entrypoint/types.js";
 import { AccountRequiresOwnerError } from "../errors/account.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import type { BatchUserOperationCallData } from "../types.js";
@@ -97,29 +99,49 @@ class SimpleSmartContractAccount<
   }
 }
 
-export type SimpleSmartAccount<TSigner extends SmartAccountSigner> =
-  SmartContractAccountWithSigner<"SimpleAccount", TSigner>;
+export type SimpleSmartAccount<
+  TSigner extends SmartAccountSigner,
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+> = SmartContractAccountWithSigner<
+  "SimpleAccount",
+  TSigner,
+  TEntryPointVersion
+>;
 
 export const createSimpleSmartAccount = async <
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 >({
   chain,
-  entryPoint = getVersion060EntryPoint(chain),
+  entryPointVersion,
+  entryPoint: _entryPoint = entryPointVersion !== undefined
+    ? getEntryPoint<TEntryPointVersion>(chain, entryPointVersion)
+    : undefined,
   ...params
 }: Omit<
   SimpleSmartAccountParams<TTransport, TSigner>,
   "rpcClient" | "chain" | "accountAddress" | "entryPointAddress"
 > &
   Pick<
-    ToSmartContractAccountParams,
-    "chain" | "transport" | "accountAddress" | "entryPoint"
-  >): Promise<SimpleSmartAccount<TSigner>> => {
+    ToSmartContractAccountParams<
+      "SimpleAccount",
+      TTransport,
+      Chain,
+      TEntryPointVersion
+    >,
+    | "chain"
+    | "transport"
+    | "accountAddress"
+    | "entryPoint"
+    | "entryPointVersion"
+  >): Promise<SimpleSmartAccount<TSigner, TEntryPointVersion>> => {
   if (!params.signer) throw new AccountRequiresOwnerError("SimpleAccount");
-
+  const entryPoint = _entryPoint!;
   // @ts-expect-error zod custom type not recognized as required params for signers
   const simpleAccount = new SimpleSmartContractAccount<TTransport>({
     chain,
+    entryPointVersion: entryPoint.version,
     entryPointAddress: entryPoint.address,
     ...params,
   });
@@ -141,7 +163,7 @@ export const createSimpleSmartAccount = async <
       ),
     entryPoint,
     getAccountInitCode: async () => {
-      if (parsedParams.initCode) return parsedParams.initCode;
+      if (parsedParams.initCode) return parsedParams.initCode as Hex;
       return simpleAccount.getAccountInitCode();
     },
     getDummySignature: simpleAccount.getDummySignature.bind(simpleAccount),

@@ -14,10 +14,11 @@ import {
   type TypedDataDefinition,
 } from "viem";
 import { toAccount } from "viem/accounts";
-import { EntryPointAbi } from "../abis/EntryPointAbi.js";
+import { EntryPointAbi_v6 } from "../abis/EntryPointAbi_v6.js";
+import { EntryPointAbi_v7 } from "../abis/EntryPointAbi_v7.js";
 import { createBundlerClient } from "../client/bundlerClient.js";
-import { getVersion060EntryPoint } from "../entrypoint/0.6.js";
-import type { EntryPointDef } from "../entrypoint/types.js";
+import { getEntryPoint } from "../entrypoint/index.js";
+import type { EntryPointDef, EntryPointVersion } from "../entrypoint/types.js";
 import {
   BatchExecutionNotSupportedError,
   FailedToGetStorageSlotError,
@@ -29,7 +30,6 @@ import { InvalidRpcUrlError } from "../errors/client.js";
 import { Logger } from "../logger.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import { wrapSignatureWith6492 } from "../signer/utils.js";
-import type { UserOperationRequest } from "../types.js";
 import type { IsUndefined } from "../utils/types.js";
 import { DeploymentState } from "./base.js";
 
@@ -48,6 +48,14 @@ export type GetAccountParameter<
   ? { account: TAccountOverride }
   : { account?: TAccountOverride };
 
+// TODO if we need to support override entry point version, use this param type to do so
+export type EntryPointVersionParameter<
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
+  TEntryPointVersionOverride extends EntryPointVersion = EntryPointVersion
+> = IsUndefined<TEntryPointVersion> extends true
+  ? { entryPointVersion: "0.6.0" }
+  : { entryPointVersion: TEntryPointVersionOverride };
+
 export type UpgradeToAndCallParams = {
   upgradeToAddress: Address;
   upgradeToInitData: Hex;
@@ -55,15 +63,16 @@ export type UpgradeToAndCallParams = {
 
 export type SmartContractAccountWithSigner<
   Name extends string = string,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
-> = SmartContractAccount<Name> & {
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+> = SmartContractAccount<Name, TEntryPointVersion> & {
   getSigner: () => TSigner;
 };
 
 //#region SmartContractAccount
 export type SmartContractAccount<
   Name extends string = string,
-  TUO = UserOperationRequest
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = LocalAccount<Name> & {
   source: Name;
   getDummySignature: () => Hex;
@@ -82,7 +91,7 @@ export type SmartContractAccount<
   getInitCode: () => Promise<Hex>;
   isAccountDeployed: () => Promise<boolean>;
   getFactoryAddress: () => Address;
-  getEntryPoint: () => EntryPointDef<TUO>;
+  getEntryPoint: () => EntryPointDef<TEntryPointVersion>;
   getImplementationAddress: () => Promise<"0x0" | Address>;
 };
 //#endregion SmartContractAccount
@@ -91,12 +100,11 @@ export type ToSmartContractAccountParams<
   Name extends string = string,
   TTransport extends Transport = Transport,
   TChain extends Chain = Chain,
-  TUserOperationRequest = UserOperationRequest
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = {
   source: Name;
   transport: TTransport;
   chain: TChain;
-  entryPoint?: EntryPointDef<TUserOperationRequest>;
   accountAddress?: Address;
   getAccountInitCode: () => Promise<Hex>;
   getDummySignature: () => Hex;
@@ -105,7 +113,20 @@ export type ToSmartContractAccountParams<
   // if not provided, will default to just using signMessage over the Hex
   signUserOperationHash?: (uoHash: Hex) => Promise<Hex>;
   encodeUpgradeToAndCall?: (params: UpgradeToAndCallParams) => Promise<Hex>;
-} & Omit<CustomSource, "signTransaction" | "address">;
+} & Omit<CustomSource, "signTransaction" | "address"> &
+  // if entryPointVersion is provided, entryPoint param cannot be provided,
+  // and the default entry point for the entryPointVersion and chain will be used.
+  // On the other hand, when entryPoint param is provided, entryPointVersion
+  // cannot not be provided, and entryPointVersion will be inferred from the entryPoint param.
+  (| {
+        entryPoint: EntryPointDef<TEntryPointVersion>;
+        entryPointVersion?: never;
+      }
+    | {
+        entryPointVersion: TEntryPointVersion;
+        entryPoint?: never;
+      }
+  );
 
 export const parseFactoryAddressFromAccountInitCode = (initCode: Hex) => {
   const factoryAddress = `0x${initCode.substring(2, 42)}` as Address;
@@ -113,22 +134,24 @@ export const parseFactoryAddressFromAccountInitCode = (initCode: Hex) => {
   return [factoryAddress, factoryCalldata];
 };
 
-export const getAccountAddress = async ({
+export const getAccountAddress = async <
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+>({
   client,
-  entryPointAddress,
+  entryPoint,
   accountAddress,
   getAccountInitCode,
 }: {
   client: PublicClient;
-  entryPointAddress: Address;
+  entryPoint: EntryPointDef<TEntryPointVersion>;
   accountAddress?: Address;
   getAccountInitCode: () => Promise<Hex>;
 }) => {
   if (accountAddress) return accountAddress;
 
-  const entryPoint = getContract({
-    address: entryPointAddress,
-    abi: EntryPointAbi,
+  const entryPointContract = getContract({
+    address: entryPoint.address,
+    abi: entryPoint.version === "0.6.0" ? EntryPointAbi_v6 : EntryPointAbi_v7,
     // Need to cast this as PublicClient or else it breaks ABI typing.
     // This is valid because our PublicClient is a subclass of PublicClient
     client: client as PublicClient,
@@ -138,7 +161,7 @@ export const getAccountAddress = async ({
   Logger.verbose("[BaseSmartContractAccount](getAddress) initCode: ", initCode);
 
   try {
-    await entryPoint.simulate.getSenderAddress([initCode]);
+    await entryPointContract.simulate.getSenderAddress([initCode]);
   } catch (err: any) {
     Logger.verbose(
       "[BaseSmartContractAccount](getAddress) getSenderAddress err: ",
@@ -164,12 +187,16 @@ export const getAccountAddress = async ({
 export async function toSmartContractAccount<
   Name extends string = string,
   TTransport extends Transport = Transport,
-  TChain extends Chain = Chain
+  TChain extends Chain = Chain,
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 >({
   transport,
   chain,
+  entryPointVersion,
+  entryPoint: _entryPoint = entryPointVersion !== undefined
+    ? getEntryPoint<TEntryPointVersion>(chain, entryPointVersion)
+    : undefined,
   source,
-  entryPoint = getVersion060EntryPoint(chain),
   accountAddress,
   getAccountInitCode,
   signMessage,
@@ -179,16 +206,26 @@ export async function toSmartContractAccount<
   getDummySignature,
   signUserOperationHash,
   encodeUpgradeToAndCall,
-}: ToSmartContractAccountParams<Name, TTransport, TChain>): Promise<
-  SmartContractAccount<Name>
-> {
+}: ToSmartContractAccountParams<
+  Name,
+  TTransport,
+  TChain,
+  TEntryPointVersion
+>): Promise<SmartContractAccount<Name, TEntryPointVersion>> {
   const client = createBundlerClient({
     transport,
     chain,
   });
+
+  // if entryPointVersion is provided, we can assume entryPoint param is not provided,
+  // and entry point is initalized using entryPointVersion param
+  // Otherwise, entryPoint param is provided and entryPointVersion is not provided.
+  // For both cases, we can assume entryPoint is not undefined
+  const entryPoint = _entryPoint!;
+
   const entryPointContract = getContract({
     address: entryPoint.address,
-    abi: EntryPointAbi,
+    abi: entryPoint.abi as typeof EntryPointAbi_v6 | typeof EntryPointAbi_v7,
     // Need to cast this as PublicClient or else it breaks ABI typing.
     // This is valid because our PublicClient is a subclass of PublicClient
     client: client as PublicClient,
@@ -196,7 +233,7 @@ export async function toSmartContractAccount<
 
   const accountAddress_ = await getAccountAddress({
     client,
-    entryPointAddress: entryPoint.address,
+    entryPoint,
     accountAddress,
     getAccountInitCode,
   });

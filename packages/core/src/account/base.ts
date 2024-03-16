@@ -10,11 +10,12 @@ import {
   type PublicClient,
   type Transport,
 } from "viem";
-import { EntryPointAbi } from "../abis/EntryPointAbi.js";
+import { EntryPointAbi_v6 as EntryPointAbi } from "../abis/EntryPointAbi_v6.js";
 import {
   createBundlerClient,
   type BundlerClient,
 } from "../client/bundlerClient.js";
+import type { EntryPointVersion } from "../entrypoint/types.js";
 import {
   BatchExecutionNotSupportedError,
   FailedToGetStorageSlotError,
@@ -26,7 +27,10 @@ import { Logger } from "../logger.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import { wrapSignatureWith6492 } from "../signer/utils.js";
 import type { BatchUserOperationCallData } from "../types.js";
-import { getDefaultEntryPointAddress } from "../utils/defaults.js";
+import {
+  defaultEntryPointVersion,
+  getDefaultEntryPointAddress,
+} from "../utils/defaults.js";
 import { createBaseSmartAccountParamsSchema } from "./schema.js";
 import type {
   BaseSmartAccountParams,
@@ -58,6 +62,7 @@ export abstract class BaseSmartContractAccount<
     PublicClient
   >;
   protected entryPointAddress: Address;
+  protected entryPointVersion: EntryPointVersion;
   readonly rpcProvider:
     | BundlerClient<TTransport>
     | BundlerClient<HttpTransport>;
@@ -68,8 +73,14 @@ export abstract class BaseSmartContractAccount<
       TSigner
     >().parse(params_);
 
+    this.entryPointVersion =
+      params.entryPointVersion ?? defaultEntryPointVersion;
     this.entryPointAddress =
-      params.entryPointAddress ?? getDefaultEntryPointAddress(params.chain);
+      params.entryPointAddress ??
+      getDefaultEntryPointAddress(
+        params.chain,
+        params.entryPointVersion ?? defaultEntryPointVersion
+      );
 
     const rpcUrl =
       typeof params.rpcClient === "string"
@@ -115,7 +126,7 @@ export abstract class BaseSmartContractAccount<
     this.accountAddress = params.accountAddress;
     this.factoryAddress = params.factoryAddress;
     this.signer = params.signer as TSigner;
-    this.accountInitCode = params.initCode;
+    this.accountInitCode = params.initCode as Hex;
 
     this.entryPoint = getContract({
       address: this.entryPointAddress,

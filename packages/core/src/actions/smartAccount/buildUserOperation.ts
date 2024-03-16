@@ -1,6 +1,7 @@
 import type { Chain, Client, Transport } from "viem";
 import type { SmartContractAccount } from "../../account/smartContractAccount.js";
 import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
+import type { EntryPointVersion } from "../../entrypoint/types.js";
 import { AccountNotFoundError } from "../../errors/account.js";
 import { IncompatibleClientError } from "../../errors/client.js";
 import type { UserOperationStruct } from "../../types.js";
@@ -13,11 +14,15 @@ export const buildUserOperation: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: SendUserOperationParameters<TAccount>
-) => Promise<UserOperationStruct> = async (client, args) => {
+  args: SendUserOperationParameters<TAccount, TEntryPointVersion>
+) => Promise<UserOperationStruct<TEntryPointVersion>> = async (
+  client,
+  args
+) => {
   const { account = client.account, overrides, uo } = args;
   if (!account) {
     throw new AccountNotFoundError();
@@ -42,7 +47,7 @@ export const buildUserOperation: <
         ? uo
         : account.encodeExecute(uo),
       signature: account.getDummySignature(),
-    } as Deferrable<UserOperationStruct>,
+    } as Deferrable<UserOperationStruct<TEntryPointVersion>>,
     overrides,
     account,
   });

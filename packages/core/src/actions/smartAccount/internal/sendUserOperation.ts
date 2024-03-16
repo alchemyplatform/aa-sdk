@@ -5,6 +5,7 @@ import type {
 } from "../../../account/smartContractAccount";
 import type { BaseSmartAccountClient } from "../../../client/smartAccountClient";
 import type { SendUserOperationResult } from "../../../client/types";
+import type { EntryPointVersion } from "../../../entrypoint/types";
 import { AccountNotFoundError } from "../../../errors/account.js";
 import { ChainNotFoundError } from "../../../errors/client.js";
 import { InvalidUserOperationError } from "../../../errors/useroperation.js";
@@ -16,10 +17,18 @@ export const _sendUserOperation: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 >(
-  client: BaseSmartAccountClient<TTransport, TChain, TAccount>,
-  args: { uoStruct: UserOperationStruct } & GetAccountParameter<TAccount>
+  client: BaseSmartAccountClient<
+    TTransport,
+    TChain,
+    TAccount,
+    TEntryPointVersion
+  >,
+  args: {
+    uoStruct: UserOperationStruct<TEntryPointVersion>;
+  } & GetAccountParameter<TAccount>
 ) => Promise<SendUserOperationResult> = async (client, args) => {
   const { account = client.account } = args;
   if (!account) {
