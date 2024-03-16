@@ -2,10 +2,13 @@ import { SignerSchema } from "@alchemy/aa-core";
 import { Address } from "abitype/zod";
 import { isHex } from "viem";
 import { z } from "zod";
-import { LightAccountVersions, type LightAccountVersion } from "./utils.js";
+import { AccountVersionRegistry, type LightAccountVersion } from "./utils.js";
 
 const isLightAccountVersion = (x: unknown): x is LightAccountVersion => {
-  if (typeof x === "string" && x in LightAccountVersions) {
+  if (
+    typeof x === "string" &&
+    Object.keys(Object.values(AccountVersionRegistry).flat()).includes(x)
+  ) {
     return true;
   }
 

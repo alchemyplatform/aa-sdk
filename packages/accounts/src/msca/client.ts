@@ -6,7 +6,7 @@ import {
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import { type Chain, type CustomTransport, type Transport } from "viem";
-import type { CreateLightAccountClientParams } from "../light-account/client";
+import type { CreateLightAccountClientParams } from "../light-account/clients/lightAccount";
 import {
   accountLoupeActions,
   type AccountLoupeActions,

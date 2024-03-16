@@ -143,4 +143,5 @@ export {
   isValidRequest,
   resolveProperties,
   takeBytes,
+  toRecord,
 } from "./utils/index.js";

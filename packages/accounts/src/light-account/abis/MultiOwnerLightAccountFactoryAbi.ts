@@ -1,4 +1,4 @@
-export const LightAccountFactoryAbi = [
+export const MultiOwnerLightAccountFactoryAbi = [
   {
     type: "constructor",
     inputs: [
@@ -20,7 +20,7 @@ export const LightAccountFactoryAbi = [
       {
         name: "",
         type: "address",
-        internalType: "contract LightAccount",
+        internalType: "contract MultiOwnerLightAccount",
       },
     ],
     stateMutability: "view",
@@ -59,6 +59,22 @@ export const LightAccountFactoryAbi = [
     type: "function",
     name: "createAccount",
     inputs: [
+      { name: "owners", type: "address[]", internalType: "address[]" },
+      { name: "salt", type: "uint256", internalType: "uint256" },
+    ],
+    outputs: [
+      {
+        name: "account",
+        type: "address",
+        internalType: "contract MultiOwnerLightAccount",
+      },
+    ],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "createAccountSingle",
+    inputs: [
       { name: "owner", type: "address", internalType: "address" },
       { name: "salt", type: "uint256", internalType: "uint256" },
     ],
@@ -66,7 +82,7 @@ export const LightAccountFactoryAbi = [
       {
         name: "account",
         type: "address",
-        internalType: "contract LightAccount",
+        internalType: "contract MultiOwnerLightAccount",
       },
     ],
     stateMutability: "nonpayable",
@@ -75,7 +91,7 @@ export const LightAccountFactoryAbi = [
     type: "function",
     name: "getAddress",
     inputs: [
-      { name: "owner", type: "address", internalType: "address" },
+      { name: "owners", type: "address[]", internalType: "address[]" },
       { name: "salt", type: "uint256", internalType: "uint256" },
     ],
     outputs: [{ name: "", type: "address", internalType: "address" }],
@@ -189,6 +205,7 @@ export const LightAccountFactoryAbi = [
     name: "InvalidEntryPoint",
     inputs: [{ name: "entryPoint", type: "address", internalType: "address" }],
   },
+  { type: "error", name: "InvalidOwners", inputs: [] },
   {
     type: "error",
     name: "OwnableInvalidOwner",
@@ -199,6 +216,8 @@ export const LightAccountFactoryAbi = [
     name: "OwnableUnauthorizedAccount",
     inputs: [{ name: "account", type: "address", internalType: "address" }],
   },
+  { type: "error", name: "OwnersArrayEmpty", inputs: [] },
+  { type: "error", name: "OwnersLimitExceeded", inputs: [] },
   {
     type: "error",
     name: "SafeERC20FailedOperation",

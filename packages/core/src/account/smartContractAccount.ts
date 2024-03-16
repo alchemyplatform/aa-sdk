@@ -15,6 +15,7 @@ import {
 } from "viem";
 import { toAccount } from "viem/accounts";
 import { createBundlerClient } from "../client/bundlerClient.js";
+import { getEntryPoint } from "../entrypoint/index.js";
 import type {
   DefaultEntryPointVersion,
   EntryPointDef,
@@ -159,9 +160,7 @@ export const getAccountAddress = async ({
   const entryPointContract = getContract({
     address: entryPoint.address,
     abi: entryPoint.abi,
-    // Need to cast this as PublicClient or else it breaks ABI typing.
-    // This is valid because our PublicClient is a subclass of PublicClient
-    client: client as PublicClient,
+    client,
   });
 
   const initCode = await getAccountInitCode();
@@ -220,7 +219,7 @@ export async function toSmartContractAccount<
 export async function toSmartContractAccount({
   transport,
   chain,
-  entryPoint,
+  entryPoint = getEntryPoint(chain),
   source,
   accountAddress,
   getAccountInitCode,

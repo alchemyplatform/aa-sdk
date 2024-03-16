@@ -10,7 +10,7 @@ import type {
 } from "viem";
 import type { EntryPointAbi_v6 } from "../abis/EntryPointAbi_v6";
 import type { EntryPointAbi_v7 } from "../abis/EntryPointAbi_v7";
-import type { UserOperationOverrides, UserOperationRequest } from "../types";
+import type { UserOperationRequest } from "../types";
 import type { EQ, IsOneOf, OneOf } from "../utils";
 
 export interface EntryPointRegistryBase<T> {
@@ -73,7 +73,6 @@ export type EntryPointDef<
   version: TEntryPointVersion;
   address: Address;
   chain: TChain;
-  overrides: UserOperationOverrides<TEntryPointVersion> | undefined;
   abi: GetContractParameters<Transport, TChain, Account, TAbi>["abi"];
   getUserOperationHash: (
     request: UserOperationRequest<TEntryPointVersion>

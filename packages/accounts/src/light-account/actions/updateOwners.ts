@@ -7,34 +7,41 @@ import {
   type SmartAccountSigner,
   type UserOperationOverridesParameter,
 } from "@alchemy/aa-core";
-import type { Chain, Client, Hex, Transport } from "viem";
-import type { LightAccount } from "../accounts/account";
+import type { Address, Chain, Client, Hex, Transport } from "viem";
+import type { MultiOwnerLightAccount } from "../accounts/multiOwner";
 
-export type TransferLightAccountOwnershipParams<
+export type UpdateMultiOwnerLightAccountOwnersParams<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TAccount extends LightAccount<TSigner> | undefined =
-    | LightAccount<TSigner>
+  TAccount extends MultiOwnerLightAccount<TSigner> | undefined =
+    | MultiOwnerLightAccount<TSigner>
     | undefined,
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
-  newOwner: TSigner;
+  ownersToAdd: Address[];
+  ownersToRemove: Address[];
   waitForTxn?: boolean;
-} & GetAccountParameter<TAccount, LightAccount<TSigner>> &
+} & GetAccountParameter<TAccount, MultiOwnerLightAccount<TSigner>> &
   UserOperationOverridesParameter<TEntryPointVersion>;
 
-export const transferOwnership: <
+export const updateOwners: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TAccount extends LightAccount<TSigner> | undefined =
-    | LightAccount<TSigner>
+  TAccount extends MultiOwnerLightAccount<TSigner> | undefined =
+    | MultiOwnerLightAccount<TSigner>
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: TransferLightAccountOwnershipParams<TSigner, TAccount>
+  args: UpdateMultiOwnerLightAccountOwnersParams<TSigner, TAccount>
 ) => Promise<Hex> = async (
   client,
-  { newOwner, waitForTxn, overrides, account = client.account }
+  {
+    ownersToAdd,
+    ownersToRemove,
+    waitForTxn,
+    overrides,
+    account = client.account,
+  }
 ) => {
   if (!account) {
     throw new AccountNotFoundError();
@@ -43,12 +50,12 @@ export const transferOwnership: <
   if (!isSmartAccountClient(client)) {
     throw new IncompatibleClientError(
       "SmartAccountClient",
-      "transferOwnership",
+      "updateOwners",
       client
     );
   }
 
-  const data = account.encodeTransferOwnership(await newOwner.getAddress());
+  const data = account.encodeUpdateOwners(ownersToAdd, ownersToRemove);
 
   const result = await client.sendUserOperation({
     uo: {

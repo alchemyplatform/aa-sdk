@@ -3,8 +3,8 @@ import { Alchemy, Network } from "alchemy-sdk";
 import * as simulateUoActions from "../src/actions/simulateUserOperationChanges.js";
 import { alchemyEnhancedApiActions } from "../src/client/decorators/alchemyEnhancedApis.js";
 import {
-  createLightAccountAlchemyClient,
-  type AlchemyLightAccountClientConfig,
+  createMultiOwnerLightAccountAlchemyClient,
+  type AlchemyMultiOwnerLightAccountClientConfig,
 } from "../src/index.js";
 import {
   API_KEY,
@@ -20,7 +20,7 @@ const simulateUoChangesSpy = vi.spyOn(
 const chain = sepolia;
 const network = Network.ETH_SEPOLIA;
 
-describe("Light Account Client Tests", () => {
+describe("MultiOwnerMultiOwnerLightAccount Client Tests", () => {
   const signer = LocalAccountSigner.mnemonicToAccountSigner(
     LIGHT_ACCOUNT_OWNER_MNEMONIC
   );
@@ -308,8 +308,8 @@ const givenConnectedProvider = async ({
   opts,
   gasManagerConfig,
   useSimulation = false,
-}: AlchemyLightAccountClientConfig) =>
-  createLightAccountAlchemyClient({
+}: AlchemyMultiOwnerLightAccountClientConfig) =>
+  createMultiOwnerLightAccountAlchemyClient({
     chain,
     signer,
     accountAddress,

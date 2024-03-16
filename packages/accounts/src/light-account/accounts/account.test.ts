@@ -5,7 +5,8 @@ import {
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import { custom, type Chain } from "viem";
-import { createLightAccountClient } from "./client.js";
+import { createLightAccountClient } from "../clients/lightAccount.js";
+import type { LightAccount } from "./account.js";
 
 const chain = polygonMumbai;
 
@@ -47,9 +48,9 @@ describe("Light Account Tests", () => {
   it("should correctly encode transferOwnership data", async () => {
     const { account } = await givenConnectedProvider({ signer, chain });
     expect(
-      account.encodeTransferOwnership(
-        "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
-      )
+      (
+        account as LightAccount<SmartAccountSigner, "LightAccount">
+      ).encodeTransferOwnership("0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef")
     ).toBe(
       "0xf2fde38b000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
     );
@@ -86,6 +87,7 @@ const givenConnectedProvider = ({
   createLightAccountClient({
     account: {
       signer,
+      type: "LightAccount",
       accountAddress: "0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4",
     },
     transport: custom({

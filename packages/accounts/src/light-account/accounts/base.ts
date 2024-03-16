@@ -1,17 +1,15 @@
 import {
   FailedToGetStorageSlotError,
   createBundlerClient,
-  getAccountAddress,
-  getEntryPoint,
   toSmartContractAccount,
-  type EntryPointParameter,
+  type Abi,
+  type EntryPointDef,
   type SmartAccountSigner,
   type SmartContractAccountWithSigner,
   type ToSmartContractAccountParams,
   type UpgradeToAndCallParams,
 } from "@alchemy/aa-core";
 import {
-  concatHex,
   encodeFunctionData,
   fromHex,
   hashMessage,
@@ -23,106 +21,114 @@ import {
   type SignTypedDataParameters,
   type Transport,
 } from "viem";
-import { LightAccountAbi } from "./abis/LightAccountAbi.js";
-import { LightAccountFactoryAbi } from "./abis/LightAccountFactoryAbi.js";
 import {
-  LightAccountUnsupported1271Factories,
-  LightAccountVersions,
-  getDefaultLightAccountFactoryAddress,
-  getLightAccountVersion,
+  AccountVersionRegistry,
+  type AccountVersionDef,
+  type GetEntryPointForLightAccountVersion,
+  type LightAccountType,
   type LightAccountVersion,
-} from "./utils.js";
+  type LightAccountVersionDef,
+} from "../utils.js";
 
-export type LightAccount<
+export type LightAccountBase<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TEntryPointVersion extends "0.6.0" = "0.6.0"
+  TLightAccountType extends LightAccountType = LightAccountType,
+  TLightAccountVersion extends LightAccountVersion<TLightAccountType> = LightAccountVersion,
+  TEntryPointVersion extends GetEntryPointForLightAccountVersion<
+    TLightAccountType,
+    TLightAccountVersion
+  > = GetEntryPointForLightAccountVersion<
+    TLightAccountType,
+    TLightAccountVersion
+  >
 > = SmartContractAccountWithSigner<
-  "LightAccount",
+  LightAccountType,
   TSigner,
   TEntryPointVersion
 > & {
-  getLightAccountVersion: () => Promise<LightAccountVersion>;
-  encodeTransferOwnership: (newOwner: Address) => Hex;
-  getOwnerAddress: () => Promise<Address>;
+  getLightAccountVersion: () => TLightAccountVersion;
 };
 
-export type CreateLightAccountParams<
+export type CreateLightAccountBaseParams<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TEntryPointVersion extends "0.6.0" = "0.6.0"
+  TLightAccountType extends LightAccountType = LightAccountType,
+  TLightAccountVersion extends LightAccountVersion<TLightAccountType> = LightAccountVersion<TLightAccountType>,
+  TEntryPointVersion extends GetEntryPointForLightAccountVersion<
+    TLightAccountType,
+    TLightAccountVersion
+  > = GetEntryPointForLightAccountVersion<
+    TLightAccountType,
+    TLightAccountVersion
+  >
 > = Pick<
   ToSmartContractAccountParams<
-    "LightAccount",
+    TLightAccountType,
     TTransport,
     Chain,
     TEntryPointVersion
   >,
-  "transport" | "chain"
+  "transport" | "chain" | "getAccountInitCode"
 > & {
+  abi: Abi;
   signer: TSigner;
-  salt?: bigint;
-  accountAddress?: Address;
-  factoryAddress?: Address;
-  initCode?: Hex;
-  version?: LightAccountVersion;
-} & EntryPointParameter<TEntryPointVersion, Chain>;
+  accountAddress: Address;
+  version: LightAccountVersionDef<TLightAccountType, TLightAccountVersion>;
+  entryPoint: EntryPointDef<TEntryPointVersion, Chain>;
+};
 
-export async function createLightAccount<
+export async function createLightAccountBase<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TEntryPointVersion extends "0.6.0" = "0.6.0"
+  TLightAccountType extends LightAccountType = LightAccountType,
+  TLightAccountVersion extends LightAccountVersion<TLightAccountType> = LightAccountVersion<TLightAccountType>,
+  TEntryPointVersion extends GetEntryPointForLightAccountVersion<
+    TLightAccountType,
+    TLightAccountVersion
+  > = GetEntryPointForLightAccountVersion<
+    TLightAccountType,
+    TLightAccountVersion
+  >
 >(
-  config: CreateLightAccountParams<TTransport, TSigner, TEntryPointVersion>
-): Promise<LightAccount<TSigner, TEntryPointVersion>>;
+  config: CreateLightAccountBaseParams<
+    TTransport,
+    TSigner,
+    TLightAccountType,
+    TLightAccountVersion,
+    TEntryPointVersion
+  >
+): Promise<
+  LightAccountBase<
+    TSigner,
+    TLightAccountType,
+    TLightAccountVersion,
+    TEntryPointVersion
+  >
+>;
 
-export async function createLightAccount({
+export async function createLightAccountBase({
   transport,
   chain,
   signer,
-  initCode,
-  version = "v1.1.0",
-  entryPoint = getEntryPoint(chain),
+  abi,
+  version: _version,
+  entryPoint,
   accountAddress,
-  factoryAddress = getDefaultLightAccountFactoryAddress(chain, version),
-  salt: salt_ = 0n,
-}: CreateLightAccountParams): Promise<LightAccount> {
+  getAccountInitCode,
+}: CreateLightAccountBaseParams): Promise<LightAccountBase> {
   const client = createBundlerClient({
     transport,
     chain,
   });
 
-  const getAccountInitCode = async () => {
-    if (initCode) return initCode;
-
-    const salt = LightAccountUnsupported1271Factories.has(
-      factoryAddress.toLowerCase() as Address
-    )
-      ? 0n
-      : salt_;
-
-    return concatHex([
-      factoryAddress,
-      encodeFunctionData({
-        abi: LightAccountFactoryAbi,
-        functionName: "createAccount",
-        args: [await signer.getAddress(), salt],
-      }),
-    ]);
-  };
-
-  const address = await getAccountAddress({
-    client,
-    entryPoint,
-    accountAddress,
-    getAccountInitCode,
-  });
+  const { version, type } = _version;
 
   const encodeUpgradeToAndCall = async ({
     upgradeToAddress,
     upgradeToInitData,
   }: UpgradeToAndCallParams): Promise<Hex> => {
     const storage = await client.getStorageAt({
-      address,
+      address: accountAddress,
       // the slot at which impl addresses are stored by UUPS
       slot: "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
     });
@@ -134,9 +140,9 @@ export async function createLightAccount({
       );
     }
 
-    const implementationAddresses = Object.values(LightAccountVersions).map(
-      (x) => x.implAddress
-    );
+    const implementationAddresses = Object.values(
+      AccountVersionRegistry[type]
+    ).map((x: AccountVersionDef) => x.address[chain.id].impl);
 
     // only upgrade undeployed accounts (storage 0) or deployed light accounts, error otherwise
     if (
@@ -144,12 +150,12 @@ export async function createLightAccount({
       !implementationAddresses.some((x) => x === trim(storage))
     ) {
       throw new Error(
-        "could not determine if smart account implementation is light account"
+        `could not determine if smart account implementation is ${type} ${version}`
       );
     }
 
     return encodeFunctionData({
-      abi: LightAccountAbi,
+      abi,
       functionName: "upgradeToAndCall",
       args: [upgradeToAddress, upgradeToInitData],
     });
@@ -161,9 +167,9 @@ export async function createLightAccount({
       // https://github.com/alchemyplatform/light-account/blob/main/src/LightAccount.sol#L236
       domain: {
         chainId: Number(client.chain.id),
-        name: "LightAccount",
-        verifyingContract: address,
-        version: "1",
+        name: type,
+        verifyingContract: accountAddress,
+        version: version === "v2.0.0" ? "2" : "1",
       },
       types: {
         LightAccountMessage: [{ name: "message", type: "bytes" }],
@@ -179,12 +185,12 @@ export async function createLightAccount({
     transport,
     chain,
     entryPoint,
-    accountAddress: address,
-    source: "LightAccount",
+    accountAddress,
+    source: type,
     getAccountInitCode,
     encodeExecute: async ({ target, data, value }) => {
       return encodeFunctionData({
-        abi: LightAccountAbi,
+        abi,
         functionName: "execute",
         args: [target, value ?? 0n, data],
       });
@@ -201,7 +207,7 @@ export async function createLightAccount({
         [[], [], []] as [Address[], bigint[], Hex[]]
       );
       return encodeFunctionData({
-        abi: LightAccountAbi,
+        abi,
         functionName: "executeBatch",
         args: [targets, values, datas],
       });
@@ -210,32 +216,41 @@ export async function createLightAccount({
       return signer.signMessage({ raw: uoHash });
     },
     async signMessage({ message }) {
-      const version = await getLightAccountVersion(account!);
-      switch (version) {
+      switch (version as string) {
         case "v1.0.1":
           return signer.signMessage(message);
         case "v1.0.2":
+          throw new Error(`${type} ${version} doesn't support 1271`);
+        case "v1.1.0":
+          return signWith1271Wrapper(hashMessage(message));
+        case "v2.0.0":
+          // TODO: implement 1271 signing for v2.0.0
           throw new Error(
-            `Version ${version} of LightAccount doesn't support 1271`
+            `${type} ${version} 1271 signing not implemented yet`
           );
         default:
-          return signWith1271Wrapper(hashMessage(message));
+          throw new Error(`Unknown version ${type} of ${version}`);
       }
     },
     async signTypedData(params) {
-      const version = await getLightAccountVersion(account!);
-      switch (version) {
-        case "v1.0.1": {
+      switch (version as string) {
+        case "v1.0.1":
           return signer.signTypedData(
             params as unknown as SignTypedDataParameters
           );
-        }
         case "v1.0.2":
           throw new Error(
             `Version ${version} of LightAccount doesn't support 1271`
           );
-        default:
+        case "v1.1.0":
           return signWith1271Wrapper(hashTypedData(params));
+        case "v2.0.0":
+          // TODO: implement 1271 signing for v2.0.0
+          throw new Error(
+            `${type} ${version} 1271 signing not implemented yet`
+          );
+        default:
+          throw new Error(`Unknown version ${version} of LightAccount`);
       }
     },
     getDummySignature: (): Hex => {
@@ -246,32 +261,8 @@ export async function createLightAccount({
 
   return {
     ...account,
-    source: "LightAccount",
-    getLightAccountVersion: async () => getLightAccountVersion(account),
-    encodeTransferOwnership: (newOwner: Address) => {
-      return encodeFunctionData({
-        abi: LightAccountAbi,
-        functionName: "transferOwnership",
-        args: [newOwner],
-      });
-    },
-    async getOwnerAddress(): Promise<Address> {
-      const callResult = await client.readContract({
-        address,
-        abi: LightAccountAbi,
-        functionName: "owner",
-      });
-
-      if (callResult == null) {
-        throw new Error("could not get on-chain owner");
-      }
-
-      if (callResult !== (await signer.getAddress())) {
-        throw new Error("on-chain owner does not match account owner");
-      }
-
-      return callResult;
-    },
+    source: type,
+    getLightAccountVersion: () => version,
     getSigner: () => signer,
   };
 }

@@ -1,4 +1,4 @@
-export const LightAccountAbi = [
+export const MultiOwnerLightAccountAbi = [
   {
     type: "constructor",
     inputs: [
@@ -103,7 +103,7 @@ export const LightAccountAbi = [
   {
     type: "function",
     name: "initialize",
-    inputs: [{ name: "owner_", type: "address", internalType: "address" }],
+    inputs: [{ name: "owners_", type: "address[]", internalType: "address[]" }],
     outputs: [],
     stateMutability: "nonpayable",
   },
@@ -157,9 +157,9 @@ export const LightAccountAbi = [
   },
   {
     type: "function",
-    name: "owner",
+    name: "owners",
     inputs: [],
-    outputs: [{ name: "", type: "address", internalType: "address" }],
+    outputs: [{ name: "", type: "address[]", internalType: "address[]" }],
     stateMutability: "view",
   },
   {
@@ -178,8 +178,19 @@ export const LightAccountAbi = [
   },
   {
     type: "function",
-    name: "transferOwnership",
-    inputs: [{ name: "newOwner", type: "address", internalType: "address" }],
+    name: "updateOwners",
+    inputs: [
+      {
+        name: "ownersToAdd",
+        type: "address[]",
+        internalType: "address[]",
+      },
+      {
+        name: "ownersToRemove",
+        type: "address[]",
+        internalType: "address[]",
+      },
+    ],
     outputs: [],
     stateMutability: "nonpayable",
   },
@@ -283,29 +294,29 @@ export const LightAccountAbi = [
         internalType: "contract IEntryPoint",
       },
       {
-        name: "owner",
-        type: "address",
-        indexed: true,
-        internalType: "address",
+        name: "owners",
+        type: "address[]",
+        indexed: false,
+        internalType: "address[]",
       },
     ],
     anonymous: false,
   },
   {
     type: "event",
-    name: "OwnershipTransferred",
+    name: "OwnersUpdated",
     inputs: [
       {
-        name: "previousOwner",
-        type: "address",
-        indexed: true,
-        internalType: "address",
+        name: "addedOwners",
+        type: "address[]",
+        indexed: false,
+        internalType: "address[]",
       },
       {
-        name: "newOwner",
-        type: "address",
-        indexed: true,
-        internalType: "address",
+        name: "removedOwners",
+        type: "address[]",
+        indexed: false,
+        internalType: "address[]",
       },
     ],
     anonymous: false,
@@ -335,6 +346,7 @@ export const LightAccountAbi = [
     name: "ECDSAInvalidSignatureS",
     inputs: [{ name: "s", type: "bytes32", internalType: "bytes32" }],
   },
+  { type: "error", name: "EmptyOwnersNotAllowed", inputs: [] },
   { type: "error", name: "InvalidInitialization", inputs: [] },
   {
     type: "error",
@@ -348,6 +360,11 @@ export const LightAccountAbi = [
     inputs: [{ name: "caller", type: "address", internalType: "address" }],
   },
   { type: "error", name: "NotInitializing", inputs: [] },
+  {
+    type: "error",
+    name: "OwnerDoesNotExist",
+    inputs: [{ name: "owner", type: "address", internalType: "address" }],
+  },
   { type: "error", name: "UnauthorizedCallContext", inputs: [] },
   { type: "error", name: "UpgradeFailed", inputs: [] },
   { type: "error", name: "ZeroAddressNotAllowed", inputs: [] },

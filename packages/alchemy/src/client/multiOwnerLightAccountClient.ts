@@ -1,8 +1,8 @@
 import {
-  createLightAccount,
-  lightAccountClientActions,
-  type CreateLightAccountParams,
-  type LightAccount,
+  createMultiOwnerLightAccount,
+  multiOwnerLightAccountClientActions,
+  type CreateMultiOwnerLightAccountParams,
+  type MultiOwnerLightAccount,
 } from "@alchemy/aa-accounts";
 import type { HttpTransport, SmartAccountSigner } from "@alchemy/aa-core";
 import { custom, type Chain, type CustomTransport, type Transport } from "viem";
@@ -14,31 +14,35 @@ import {
   type AlchemySmartAccountClientConfig,
 } from "./smartAccountClient.js";
 
-export type AlchemyLightAccountClientConfig<
+export type AlchemyMultiOwnerLightAccountClientConfig<
   TSigner extends SmartAccountSigner = SmartAccountSigner
 > = Omit<
-  CreateLightAccountParams<HttpTransport, TSigner>,
+  CreateMultiOwnerLightAccountParams<HttpTransport, TSigner>,
   "transport" | "chain"
 > &
   Omit<
-    AlchemySmartAccountClientConfig<Transport, Chain, LightAccount<TSigner>>,
+    AlchemySmartAccountClientConfig<
+      Transport,
+      Chain,
+      MultiOwnerLightAccount<TSigner>
+    >,
     "account"
   >;
 
-export async function createLightAccountAlchemyClient<
+export async function createMultiOwnerLightAccountAlchemyClient<
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  params: AlchemyLightAccountClientConfig<TSigner>
+  params: AlchemyMultiOwnerLightAccountClientConfig<TSigner>
 ): Promise<
   AlchemySmartAccountClient<
     CustomTransport,
     Chain | undefined,
-    LightAccount<TSigner>
+    MultiOwnerLightAccount<TSigner>
   >
 >;
 
-export async function createLightAccountAlchemyClient(
-  config: AlchemyLightAccountClientConfig
+export async function createMultiOwnerLightAccountAlchemyClient(
+  config: AlchemyMultiOwnerLightAccountClientConfig
 ): Promise<AlchemySmartAccountClient> {
   const { chain, opts, ...connectionConfig } =
     AlchemyProviderConfigSchema.parse(config);
@@ -48,7 +52,7 @@ export async function createLightAccountAlchemyClient(
     connectionConfig,
   });
 
-  const account = await createLightAccount({
+  const account = await createMultiOwnerLightAccount({
     transport: custom(client),
     ...config,
   });
@@ -58,5 +62,5 @@ export async function createLightAccountAlchemyClient(
     client,
     account,
     opts,
-  }).extend(lightAccountClientActions);
+  }).extend(multiOwnerLightAccountClientActions);
 }
