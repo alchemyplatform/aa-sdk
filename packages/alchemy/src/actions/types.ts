@@ -1,4 +1,4 @@
-import type { UserOperationStruct } from "@alchemy/aa-core";
+import type { EntryPointVersion, UserOperationStruct } from "@alchemy/aa-core";
 import type { Address, Hash } from "viem";
 
 export enum SimulateAssetType {
@@ -18,8 +18,10 @@ export enum SimulateChangeType {
   TRANSFER = "TRANSFER",
 }
 
-export type SimulateUserOperationAssetChangesRequest = [
-  UserOperationStruct,
+export type SimulateUserOperationAssetChangesRequest<
+  TEntryPointVersion extends EntryPointVersion
+> = [
+  UserOperationStruct<TEntryPointVersion>,
   entryPoint: Address,
   blockNumber?: Hash
 ];

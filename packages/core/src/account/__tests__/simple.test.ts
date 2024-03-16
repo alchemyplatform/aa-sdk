@@ -1,4 +1,3 @@
-import { sepolia } from "@alchemy/aa-core";
 import {
   createPublicClient,
   custom,
@@ -7,6 +6,7 @@ import {
   type Chain,
 } from "viem";
 import { describe, it } from "vitest";
+import { sepolia } from "../../chains/index.js";
 import { createBundlerClientFromExisting } from "../../client/bundlerClient.js";
 import { createSmartAccountClient } from "../../client/smartAccountClient.js";
 import { LocalAccountSigner } from "../../signer/local-account.js";

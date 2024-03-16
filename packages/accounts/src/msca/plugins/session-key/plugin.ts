@@ -18,9 +18,10 @@ import {
   isSmartAccountClient,
   IncompatibleClientError,
   type SmartContractAccount,
-  type UserOperationOverrides,
   type GetAccountParameter,
   type SendUserOperationResult,
+  type GetEntryPointFromAccount,
+  type UserOperationOverridesParameter,
   type GetContextParameter,
 } from "@alchemy/aa-core";
 import { type Plugin } from "../types.js";
@@ -38,7 +39,8 @@ type ExecutionActions<
     | undefined,
   TContext extends Record<string, any> | undefined =
     | Record<string, any>
-    | undefined
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
   executeWithSessionKey: (
     args: Pick<
@@ -47,11 +49,11 @@ type ExecutionActions<
         "executeWithSessionKey"
       >,
       "args"
-    > & {
-      overrides?: UserOperationOverrides;
-    } & GetAccountParameter<TAccount> &
+    > &
+      UserOperationOverridesParameter<TEntryPointVersion> &
+      GetAccountParameter<TAccount> &
       GetContextParameter<TContext>
-  ) => Promise<SendUserOperationResult>;
+  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 
   addSessionKey: (
     args: Pick<
@@ -60,11 +62,11 @@ type ExecutionActions<
         "addSessionKey"
       >,
       "args"
-    > & {
-      overrides?: UserOperationOverrides;
-    } & GetAccountParameter<TAccount> &
+    > &
+      UserOperationOverridesParameter<TEntryPointVersion> &
+      GetAccountParameter<TAccount> &
       GetContextParameter<TContext>
-  ) => Promise<SendUserOperationResult>;
+  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 
   removeSessionKey: (
     args: Pick<
@@ -73,11 +75,11 @@ type ExecutionActions<
         "removeSessionKey"
       >,
       "args"
-    > & {
-      overrides?: UserOperationOverrides;
-    } & GetAccountParameter<TAccount> &
+    > &
+      UserOperationOverridesParameter<TEntryPointVersion> &
+      GetAccountParameter<TAccount> &
       GetContextParameter<TContext>
-  ) => Promise<SendUserOperationResult>;
+  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 
   rotateSessionKey: (
     args: Pick<
@@ -86,11 +88,11 @@ type ExecutionActions<
         "rotateSessionKey"
       >,
       "args"
-    > & {
-      overrides?: UserOperationOverrides;
-    } & GetAccountParameter<TAccount> &
+    > &
+      UserOperationOverridesParameter<TEntryPointVersion> &
+      GetAccountParameter<TAccount> &
       GetContextParameter<TContext>
-  ) => Promise<SendUserOperationResult>;
+  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 
   updateKeyPermissions: (
     args: Pick<
@@ -99,11 +101,11 @@ type ExecutionActions<
         "updateKeyPermissions"
       >,
       "args"
-    > & {
-      overrides?: UserOperationOverrides;
-    } & GetAccountParameter<TAccount> &
+    > &
+      UserOperationOverridesParameter<TEntryPointVersion> &
+      GetAccountParameter<TAccount> &
       GetContextParameter<TContext>
-  ) => Promise<SendUserOperationResult>;
+  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 };
 
 type InstallArgs = [
@@ -124,15 +126,15 @@ type ManagementActions<
     | undefined,
   TContext extends Record<string, any> | undefined =
     | Record<string, any>
-    | undefined
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
   installSessionKeyPlugin: (
-    args: {
-      overrides?: UserOperationOverrides;
-    } & InstallSessionKeyPluginParams &
+    args: UserOperationOverridesParameter<TEntryPointVersion> &
+      InstallSessionKeyPluginParams &
       GetAccountParameter<TAccount> &
       GetContextParameter<TContext>
-  ) => Promise<SendUserOperationResult>;
+  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 };
 
 type ReadAndEncodeActions = {

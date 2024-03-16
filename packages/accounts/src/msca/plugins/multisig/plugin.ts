@@ -18,9 +18,10 @@ import {
   isSmartAccountClient,
   IncompatibleClientError,
   type SmartContractAccount,
-  type UserOperationOverrides,
   type GetAccountParameter,
   type SendUserOperationResult,
+  type GetEntryPointFromAccount,
+  type UserOperationOverridesParameter,
   type GetContextParameter,
 } from "@alchemy/aa-core";
 import { type Plugin } from "../types.js";
@@ -37,7 +38,8 @@ type ExecutionActions<
     | undefined,
   TContext extends Record<string, any> | undefined =
     | Record<string, any>
-    | undefined
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
   updateOwnership: (
     args: Pick<
@@ -46,11 +48,11 @@ type ExecutionActions<
         "updateOwnership"
       >,
       "args"
-    > & {
-      overrides?: UserOperationOverrides;
-    } & GetAccountParameter<TAccount> &
+    > &
+      UserOperationOverridesParameter<TEntryPointVersion> &
+      GetAccountParameter<TAccount> &
       GetContextParameter<TContext>
-  ) => Promise<SendUserOperationResult>;
+  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 };
 
 type InstallArgs = [{ type: "address[]" }, { type: "uint256" }];
@@ -67,15 +69,15 @@ type ManagementActions<
     | undefined,
   TContext extends Record<string, any> | undefined =
     | Record<string, any>
-    | undefined
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
   installMultisigPlugin: (
-    args: {
-      overrides?: UserOperationOverrides;
-    } & InstallMultisigPluginParams &
+    args: UserOperationOverridesParameter<TEntryPointVersion> &
+      InstallMultisigPluginParams &
       GetAccountParameter<TAccount> &
       GetContextParameter<TContext>
-  ) => Promise<SendUserOperationResult>;
+  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 };
 
 type ReadAndEncodeActions<

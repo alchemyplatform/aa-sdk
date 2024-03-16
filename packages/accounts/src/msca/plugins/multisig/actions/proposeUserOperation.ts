@@ -4,19 +4,22 @@ import {
   isSmartAccountClient,
   isSmartAccountWithSigner,
   SmartAccountWithSignerRequiredError,
+  type GetEntryPointFromAccount,
   type SendUserOperationParameters,
   type SmartContractAccount,
+  type UserOperationOverrides,
 } from "@alchemy/aa-core";
 import { type Chain, type Client, type Transport } from "viem";
-import { type ProposeUserOperationResult, type Signature } from "../types.js";
 import { combineSignatures, getSignerType } from "../index.js";
+import { type ProposeUserOperationResult, type Signature } from "../types.js";
 
 export async function proposeUserOperation<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
   client: Client<TTransport, TChain, TAccount>,
   {
@@ -31,7 +34,7 @@ export async function proposeUserOperation<
     maxPriorityFeePerGas: { multiplier: 2 },
     preVerificationGas: { multiplier: 1000 },
     ...overrides_,
-  };
+  } as UserOperationOverrides<TEntryPointVersion>;
 
   if (!account) {
     throw new AccountNotFoundError();

@@ -1,5 +1,6 @@
-import type { Address, Hex } from "@alchemy/aa-core";
+import type { Address } from "@alchemy/aa-core";
 import type { TSignedRequest, getWebAuthnAttestation } from "@turnkey/http";
+import type { Hex } from "viem";
 
 export type CredentialCreationOptionOverrides = {
   publicKey?: Partial<CredentialCreationOptions["publicKey"]>;

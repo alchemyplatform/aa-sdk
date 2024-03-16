@@ -83,7 +83,7 @@ export const getDefaultLightAccountFactoryAddress = (
       return LightAccountVersions[version].factoryAddress;
   }
 
-  throw new DefaultFactoryNotDefinedError("LightAccount", chain);
+  throw new DefaultFactoryNotDefinedError("LightAccount", chain, "0.6.0");
 };
 
 export const LightAccountUnsupported1271Impls = [

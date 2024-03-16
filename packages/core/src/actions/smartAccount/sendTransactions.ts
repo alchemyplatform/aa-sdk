@@ -8,19 +8,17 @@ import { _sendUserOperation } from "./internal/sendUserOperation.js";
 import type { SendTransactionsParameters } from "./types";
 import { waitForUserOperationTransaction } from "./waitForUserOperationTransacation.js";
 
-export const sendTransactions: <
+export async function sendTransactions<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, any> | undefined =
-    | Record<string, any>
-    | undefined
+  TContext extends Record<string, any> | undefined = Record<string, any>
 >(
   client: Client<TTransport, TChain, TAccount>,
   args: SendTransactionsParameters<TAccount, TContext>
-) => Promise<Hex> = async (client, args) => {
+): Promise<Hex> {
   const { requests, overrides, account = client.account } = args;
   if (!account) {
     throw new AccountNotFoundError();
@@ -41,9 +39,9 @@ export const sendTransactions: <
   });
 
   const { hash } = await _sendUserOperation(client, {
-    account: account as SmartContractAccount,
+    account,
     uoStruct,
   });
 
   return waitForUserOperationTransaction(client, { hash });
-};
+}

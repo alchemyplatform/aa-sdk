@@ -1,8 +1,8 @@
-import type { Address, Chain, Hash, Hex } from "viem";
-import { encodeAbiParameters, hexToBigInt, keccak256, toHex } from "viem";
+import type { Chain } from "viem";
+import { toHex } from "viem";
 import * as chains from "viem/chains";
 import * as alchemyChains from "../chains/index.js";
-import type { PromiseOrValue, UserOperationRequest } from "../types.js";
+import type { PromiseOrValue } from "../types.js";
 
 export const AlchemyChainMap = new Map<number, Chain>(
   Object.values(alchemyChains).map((c) => [c.id, c])
@@ -94,60 +94,6 @@ export function deepHexlify(obj: any): any {
   );
 }
 
-/**
- * Generates a hash for a UserOperation valid from entry point version 0.6 onwards
- *
- * @param request - the UserOperation to get the hash for
- * @param entryPointAddress - the entry point address that will be used to execute the UserOperation
- * @param chainId - the chain on which this UserOperation will be executed
- * @returns the hash of the UserOperation
- */
-export function getUserOperationHash(
-  request: UserOperationRequest,
-  entryPointAddress: Address,
-  chainId: number
-): Hash {
-  const encoded = encodeAbiParameters(
-    [{ type: "bytes32" }, { type: "address" }, { type: "uint256" }],
-    [keccak256(packUo(request)), entryPointAddress, BigInt(chainId)]
-  ) as `0x${string}`;
-
-  return keccak256(encoded);
-}
-
-export function packUo(request: UserOperationRequest): Hex {
-  const hashedInitCode = keccak256(request.initCode);
-  const hashedCallData = keccak256(request.callData);
-  const hashedPaymasterAndData = keccak256(request.paymasterAndData);
-
-  return encodeAbiParameters(
-    [
-      { type: "address" },
-      { type: "uint256" },
-      { type: "bytes32" },
-      { type: "bytes32" },
-      { type: "uint256" },
-      { type: "uint256" },
-      { type: "uint256" },
-      { type: "uint256" },
-      { type: "uint256" },
-      { type: "bytes32" },
-    ],
-    [
-      request.sender as Address,
-      hexToBigInt(request.nonce),
-      hashedInitCode,
-      hashedCallData,
-      hexToBigInt(request.callGasLimit),
-      hexToBigInt(request.verificationGasLimit),
-      hexToBigInt(request.preVerificationGas),
-      hexToBigInt(request.maxFeePerGas),
-      hexToBigInt(request.maxPriorityFeePerGas),
-      hashedPaymasterAndData,
-    ]
-  );
-}
-
 // borrowed from ethers.js
 export function defineReadOnly<T, K extends keyof T>(
   object: T,
@@ -177,6 +123,20 @@ export function pick(obj: Record<string, unknown>, keys: string | string[]) {
     .filter((k) => keys.includes(k))
     .reduce((res, k) => Object.assign(res, { [k]: obj[k] }), {});
 }
+
+/**
+ * Utility method for checking if the passed in values are all equal (strictly)
+ *
+ * @param params - values to check
+ * @returns a boolean indicating if all values are the same
+ * @throws if no values are passed in
+ */
+export const allEqual = (...params: any[]): boolean => {
+  if (params.length === 0) {
+    throw new Error("no values passed in");
+  }
+  return params.every((v) => v === params[0]);
+};
 
 export * from "./bigint.js";
 export * from "./bytes.js";
