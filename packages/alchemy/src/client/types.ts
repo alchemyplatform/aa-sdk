@@ -10,17 +10,27 @@ import type {
 } from "../actions/types";
 import type { RequestGasAndPaymasterAndDataOverrides } from "../middleware/gasManager";
 
-export type AlchemyRpcSchema<TEntryPointVersion extends EntryPointVersion> = [
+export type AlchemyRpcSchema = [
   {
     Method: "alchemy_requestPaymasterAndData";
     Parameters: [
       {
         policyId: string;
         entryPoint: Address;
-        userOperation: UserOperationRequest<TEntryPointVersion>;
+        userOperation: UserOperationRequest<EntryPointVersion>;
       }
     ];
-    ReturnType: { paymasterAndData: Hex };
+    ReturnType:
+      | {
+          paymasterAndData: UserOperationRequest<"0.6.0">["paymasterAndData"];
+        }
+      | Pick<
+          UserOperationRequest<"0.7.0">,
+          | "paymaster"
+          | "paymasterData"
+          | "paymasterPostOpGasLimit"
+          | "paymasterVerificationGasLimit"
+        >;
   },
   {
     Method: "alchemy_requestGasAndPaymasterAndData";
@@ -28,29 +38,41 @@ export type AlchemyRpcSchema<TEntryPointVersion extends EntryPointVersion> = [
       {
         policyId: string;
         entryPoint: Address;
-        userOperation: UserOperationRequest<TEntryPointVersion>;
+        userOperation: UserOperationRequest<EntryPointVersion>;
         dummySignature: Hex;
-        overrides?: RequestGasAndPaymasterAndDataOverrides<TEntryPointVersion>;
+        overrides?: RequestGasAndPaymasterAndDataOverrides<EntryPointVersion>;
       }
     ];
-    ReturnType: {
-      paymasterAndData: Hex;
-      callGasLimit: Hex;
-      verificationGasLimit: Hex;
-      preVerificationGas: Hex;
-      maxFeePerGas: Hex;
-      maxPriorityFeePerGas: Hex;
-    };
+    ReturnType: Pick<
+      UserOperationRequest<EntryPointVersion>,
+      | "callGasLimit"
+      | "preVerificationGas"
+      | "verificationGasLimit"
+      | "maxFeePerGas"
+      | "maxPriorityFeePerGas"
+    > &
+      (
+        | {
+            paymasterAndData: UserOperationRequest<"0.6.0">["paymasterAndData"];
+          }
+        | Pick<
+            UserOperationRequest<"0.7.0">,
+            | "paymaster"
+            | "paymasterData"
+            | "paymasterPostOpGasLimit"
+            | "paymasterVerificationGasLimit"
+          >
+      );
   },
   {
     Method: "alchemy_simulateUserOperationAssetChanges";
-    Parameters: SimulateUserOperationAssetChangesRequest<TEntryPointVersion>;
+    Parameters: SimulateUserOperationAssetChangesRequest;
     ReturnType: SimulateUserOperationAssetChangesResponse;
   },
   {
     Method: "rundler_maxPriorityFeePerGas";
     Parameters: [];
-    ReturnType: Hex;
+    ReturnType: UserOperationRequest<EntryPointVersion>["maxPriorityFeePerGas"];
   }
 ];
 
@@ -66,7 +88,18 @@ export type ClientWithAlchemyMethods = BundlerClient<HttpTransport> & {
             userOperation: UserOperationRequest<EntryPointVersion>;
           }
         ];
-      }): Promise<{ paymasterAndData: Hex }>;
+      }): Promise<
+        | {
+            paymasterAndData: UserOperationRequest<"0.6.0">["paymasterAndData"];
+          }
+        | Pick<
+            UserOperationRequest<"0.7.0">,
+            | "paymaster"
+            | "paymasterData"
+            | "paymasterPostOpGasLimit"
+            | "paymasterVerificationGasLimit"
+          >
+      >;
 
       request(args: {
         method: "alchemy_requestGasAndPaymasterAndData";
@@ -79,24 +112,40 @@ export type ClientWithAlchemyMethods = BundlerClient<HttpTransport> & {
             overrides?: RequestGasAndPaymasterAndDataOverrides<EntryPointVersion>;
           }
         ];
-      }): Promise<{
-        paymasterAndData: Hex;
-        callGasLimit: Hex;
-        verificationGasLimit: Hex;
-        preVerificationGas: Hex;
-        maxFeePerGas: Hex;
-        maxPriorityFeePerGas: Hex;
-      }>;
+      }): Promise<
+        Pick<
+          UserOperationRequest<EntryPointVersion>,
+          | "callGasLimit"
+          | "preVerificationGas"
+          | "verificationGasLimit"
+          | "maxFeePerGas"
+          | "maxPriorityFeePerGas"
+        > &
+          (
+            | {
+                paymasterAndData: UserOperationRequest<"0.6.0">["paymasterAndData"];
+              }
+            | Pick<
+                UserOperationRequest<"0.7.0">,
+                | "paymaster"
+                | "paymasterData"
+                | "paymasterPostOpGasLimit"
+                | "paymasterVerificationGasLimit"
+              >
+          )
+      >;
 
       request(args: {
         method: "alchemy_simulateUserOperationAssetChanges";
-        params: SimulateUserOperationAssetChangesRequest<EntryPointVersion>;
+        params: SimulateUserOperationAssetChangesRequest;
       }): Promise<SimulateUserOperationAssetChangesResponse>;
 
       request(args: {
         method: "rundler_maxPriorityFeePerGas";
         params: [];
-      }): Promise<Hex>;
+      }): Promise<
+        UserOperationRequest<EntryPointVersion>["maxPriorityFeePerGas"]
+      >;
     }["request"];
 } & {
   updateHeaders: (headers: HeadersInit) => void;

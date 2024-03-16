@@ -2,7 +2,6 @@ import {
   AccountNotFoundError,
   IncompatibleClientError,
   deepHexlify,
-  type GetEntryPointFromAccount,
   type SendUserOperationParameters,
   type SmartContractAccount,
 } from "@alchemy/aa-core";
@@ -15,15 +14,9 @@ export const simulateUserOperationChanges: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
-  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+    | undefined
 >(
-  client: Client<
-    Transport,
-    TChain,
-    TAccount,
-    AlchemyRpcSchema<TEntryPointVersion>
-  >,
+  client: Client<Transport, TChain, TAccount, AlchemyRpcSchema>,
   args: SendUserOperationParameters<TAccount>
 ) => Promise<SimulateUserOperationAssetChangesResponse> = async (
   client,

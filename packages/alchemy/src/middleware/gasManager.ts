@@ -241,7 +241,7 @@ const requestPaymasterAndData: <C extends ClientWithAlchemyMethods>(
 ) => ClientMiddlewareConfig["paymasterAndData"] = (client, config) => ({
   dummyPaymasterAndData: dummyPaymasterAndData(client, config),
   paymasterAndData: async (struct, { account }) => {
-    const { paymasterAndData } = await client.request({
+    const result = await client.request({
       method: "alchemy_requestPaymasterAndData",
       params: [
         {
@@ -254,7 +254,7 @@ const requestPaymasterAndData: <C extends ClientWithAlchemyMethods>(
 
     return {
       ...struct,
-      paymasterAndData,
+      ...result,
     };
   },
 });

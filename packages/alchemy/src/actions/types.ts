@@ -18,10 +18,8 @@ export enum SimulateChangeType {
   TRANSFER = "TRANSFER",
 }
 
-export type SimulateUserOperationAssetChangesRequest<
-  TEntryPointVersion extends EntryPointVersion
-> = [
-  UserOperationStruct<TEntryPointVersion>,
+export type SimulateUserOperationAssetChangesRequest = [
+  UserOperationStruct<EntryPointVersion>,
   entryPoint: Address,
   blockNumber?: Hash
 ];

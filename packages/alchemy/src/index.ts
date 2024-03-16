@@ -20,6 +20,7 @@ export type * from "./client/smartAccountClient.js";
 export { createAlchemySmartAccountClient } from "./client/smartAccountClient.js";
 export type * from "./client/types.js";
 export { getDefaultUserOperationFeeOptions } from "./defaults.js";
+export { getAlchemyPaymasterAddress } from "./gas-manager.js";
 export { alchemyFeeEstimator } from "./middleware/feeEstimator.js";
 export type * from "./middleware/gasManager.js";
 export { alchemyGasManagerMiddleware } from "./middleware/gasManager.js";
@@ -27,7 +28,6 @@ export { alchemyUserOperationSimulator } from "./middleware/userOperationSimulat
 export type * from "./schema.js";
 export { AlchemyProviderConfigSchema } from "./schema.js";
 export type { AlchemyProviderConfig } from "./type.js";
-export { getAlchemyPaymasterAddress } from "./gas-manager.js";
 
 export type * from "./signer/index.js";
 export {

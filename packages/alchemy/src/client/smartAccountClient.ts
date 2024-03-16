@@ -1,5 +1,4 @@
 import {
-  type GetEntryPointFromAccount,
   type Prettify,
   type SmartAccountClient,
   type SmartAccountClientActions,
@@ -58,15 +57,14 @@ export type AlchemySmartAccountClient_Base<
   actions extends Record<string, unknown> = Record<string, unknown>,
   context extends Record<string, any> | undefined =
     | Record<string, any>
-    | undefined,
-  version extends GetEntryPointFromAccount<account> = GetEntryPointFromAccount<account>
+    | undefined
 > = Prettify<
   SmartAccountClient<
     transport,
     chain,
     account,
     actions & BaseAlchemyActions<chain, account, context>,
-    [...SmartAccountClientRpcSchema, ...AlchemyRpcSchema<version>],
+    [...SmartAccountClientRpcSchema, ...AlchemyRpcSchema],
     context
   >
 >;
