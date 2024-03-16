@@ -4,9 +4,10 @@ import {
   isSmartAccountClient,
   type GetAccountParameter,
   type GetContextParameter,
+  type GetEntryPointFromAccount,
   type SmartAccountClient,
   type SmartContractAccount,
-  type UserOperationOverrides,
+  type UserOperationOverridesParameter,
 } from "@alchemy/aa-core";
 import {
   encodeFunctionData,
@@ -28,15 +29,15 @@ export type InstallPluginParams<
     | undefined,
   TContext extends Record<string, unknown> | undefined =
     | Record<string, unknown>
-    | undefined
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
   pluginAddress: Address;
   manifestHash?: Hash;
   pluginInitData?: Hash;
   dependencies?: FunctionReference[];
-} & {
-  overrides?: UserOperationOverrides;
-} & GetAccountParameter<TAccount> &
+} & UserOperationOverridesParameter<TEntryPointVersion> &
+  GetAccountParameter<TAccount> &
   GetContextParameter<TContext>;
 
 export async function installPlugin<
@@ -70,7 +71,12 @@ export async function installPlugin<
   }
 
   const callData = await encodeInstallPluginUserOperation(client, params);
-  return client.sendUserOperation({ uo: callData, overrides, account });
+
+  return client.sendUserOperation({
+    uo: callData,
+    overrides,
+    account,
+  });
 }
 
 export async function encodeInstallPluginUserOperation<

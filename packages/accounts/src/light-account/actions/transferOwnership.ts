@@ -3,21 +3,24 @@ import {
   IncompatibleClientError,
   isSmartAccountClient,
   type GetAccountParameter,
-  type Hex,
+  type GetEntryPointFromAccount,
   type SmartAccountSigner,
+  type UserOperationOverridesParameter,
 } from "@alchemy/aa-core";
-import type { Chain, Client, Transport } from "viem";
+import type { Chain, Client, Hex, Transport } from "viem";
 import type { LightAccount } from "../account";
 
 export type TransferLightAccountOwnershipParams<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
   TAccount extends LightAccount<TSigner> | undefined =
     | LightAccount<TSigner>
-    | undefined
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
   newOwner: TSigner;
   waitForTxn?: boolean;
-} & GetAccountParameter<TAccount, LightAccount>;
+} & GetAccountParameter<TAccount, LightAccount<TSigner>> &
+  UserOperationOverridesParameter<TEntryPointVersion>;
 
 export const transferOwnership: <
   TTransport extends Transport = Transport,
@@ -31,7 +34,7 @@ export const transferOwnership: <
   args: TransferLightAccountOwnershipParams<TSigner, TAccount>
 ) => Promise<Hex> = async (
   client,
-  { newOwner, waitForTxn, account = client.account }
+  { newOwner, waitForTxn, overrides, account = client.account }
 ) => {
   if (!account) {
     throw new AccountNotFoundError();
@@ -46,13 +49,14 @@ export const transferOwnership: <
   }
 
   const data = account.encodeTransferOwnership(await newOwner.getAddress());
+
   const result = await client.sendUserOperation({
     uo: {
       target: account.address,
       data,
-      account,
     },
     account,
+    overrides,
   });
 
   if (waitForTxn) {

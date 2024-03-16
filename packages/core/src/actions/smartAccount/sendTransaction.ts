@@ -5,17 +5,23 @@ import type {
   SendTransactionParameters,
   Transport,
 } from "viem";
-import type { SmartContractAccount } from "../../account/smartContractAccount.js";
+import type {
+  GetEntryPointFromAccount,
+  SmartContractAccount,
+} from "../../account/smartContractAccount.js";
 import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
 import { AccountNotFoundError } from "../../errors/account.js";
 import { IncompatibleClientError } from "../../errors/client.js";
 import { TransactionMissingToParamError } from "../../errors/transaction.js";
-import type { UserOperationOverrides } from "../../types.js";
+import type {
+  UserOperationOverrides,
+  UserOperationStruct,
+} from "../../types.js";
 import { buildUserOperationFromTx } from "./buildUserOperationFromTx.js";
 import { _sendUserOperation } from "./internal/sendUserOperation.js";
 import { waitForUserOperationTransaction } from "./waitForUserOperationTransacation.js";
 
-export const sendTransaction: <
+export async function sendTransaction<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
@@ -23,13 +29,14 @@ export const sendTransaction: <
   TChainOverride extends Chain | undefined = Chain | undefined,
   TContext extends Record<string, any> | undefined =
     | Record<string, any>
-    | undefined
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
   client: Client<Transport, TChain, TAccount>,
   args: SendTransactionParameters<TChain, TAccount, TChainOverride>,
-  overrides?: UserOperationOverrides,
+  overrides?: UserOperationOverrides<TEntryPointVersion>,
   context?: TContext
-) => Promise<Hex> = async (client, args, overrides, context) => {
+): Promise<Hex> {
   const { account = client.account } = args;
   if (!account || typeof account === "string") {
     throw new AccountNotFoundError();
@@ -55,8 +62,8 @@ export const sendTransaction: <
   );
   const { hash } = await _sendUserOperation(client, {
     account: account as SmartContractAccount,
-    uoStruct,
+    uoStruct: uoStruct as UserOperationStruct<TEntryPointVersion>,
   });
 
   return waitForUserOperationTransaction(client, { hash });
-};
+}

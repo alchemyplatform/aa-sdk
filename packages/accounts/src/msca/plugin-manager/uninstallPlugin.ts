@@ -4,8 +4,9 @@ import {
   isSmartAccountClient,
   type GetAccountParameter,
   type GetContextParameter,
+  type GetEntryPointFromAccount,
   type SmartContractAccount,
-  type UserOperationOverrides,
+  type UserOperationOverridesParameter,
 } from "@alchemy/aa-core";
 import {
   encodeFunctionData,
@@ -23,12 +24,14 @@ export type UninstallPluginParams<
     | undefined,
   TContext extends Record<string, any> | undefined =
     | Record<string, any>
-    | undefined
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
   pluginAddress: Address;
   config?: Hash;
   pluginUninstallData?: Hash;
-} & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount> &
+} & UserOperationOverridesParameter<TEntryPointVersion> &
+  GetAccountParameter<TAccount> &
   GetContextParameter<TContext>;
 
 export async function uninstallPlugin<
@@ -61,7 +64,12 @@ export async function uninstallPlugin<
   }
 
   const callData = await encodeUninstallPluginUserOperation(params);
-  return client.sendUserOperation({ uo: callData, overrides, account });
+
+  return client.sendUserOperation({
+    uo: callData,
+    overrides: overrides,
+    account,
+  });
 }
 
 export async function encodeUninstallPluginUserOperation(

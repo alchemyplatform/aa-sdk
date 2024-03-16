@@ -1,3 +1,7 @@
+import type {
+  GetEntryPointFromAccount,
+  UserOperationOverridesParameter,
+} from "@alchemy/aa-core";
 import {
   AccountNotFoundError,
   type GetAccountParameter,
@@ -18,7 +22,8 @@ import { buildSessionKeysToRemoveStruct } from "./utils.js";
 export type SessionKeyPluginActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = Omit<
   SessionKeyPluginActions_<TAccount>,
   | "removeSessionKey"
@@ -37,10 +42,9 @@ export type SessionKeyPluginActions<
 
   removeSessionKey: (
     args: { key: Address } & GetPluginAddressParameter &
-      GetAccountParameter<TAccount> & {
-        overrides?: UserOperationOverrides;
-      }
-  ) => Promise<SendUserOperationResult>;
+      GetAccountParameter<TAccount> &
+      UserOperationOverridesParameter<TEntryPointVersion>
+  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 
   addSessionKey: (
     args: {
@@ -48,30 +52,27 @@ export type SessionKeyPluginActions<
       permissions: Hex[];
       tag: Hex;
     } & GetPluginAddressParameter &
-      GetAccountParameter<TAccount> & {
-        overrides?: UserOperationOverrides;
-      }
-  ) => Promise<SendUserOperationResult>;
+      GetAccountParameter<TAccount> &
+      UserOperationOverridesParameter<TEntryPointVersion>
+  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 
   rotateSessionKey: (
     args: {
       oldKey: Address;
       newKey: Address;
     } & GetPluginAddressParameter &
-      GetAccountParameter<TAccount> & {
-        overrides?: UserOperationOverrides;
-      }
-  ) => Promise<SendUserOperationResult>;
+      GetAccountParameter<TAccount> &
+      UserOperationOverridesParameter<TEntryPointVersion>
+  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 
   updateSessionKeyPermissions: (
     args: {
       key: Address;
       permissions: Hex[];
     } & GetPluginAddressParameter &
-      GetAccountParameter<TAccount> & {
-        overrides?: UserOperationOverrides;
-      }
-  ) => Promise<SendUserOperationResult>;
+      GetAccountParameter<TAccount> &
+      UserOperationOverridesParameter<TEntryPointVersion>
+  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 } & (IsUndefined<TAccount> extends false
     ? {
         getAccountSessionKeys: (
@@ -93,7 +94,8 @@ export const sessionKeyPluginActions: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
   client: Client<TTransport, TChain, TAccount>
 ) => {
@@ -103,7 +105,7 @@ export const sessionKeyPluginActions: <
     rotateSessionKey,
     updateKeyPermissions,
     ...og
-  } = sessionKeyPluginActions_(client);
+  } = sessionKeyPluginActions_<TTransport, TChain, TAccount>(client);
 
   return {
     ...og,
@@ -149,7 +151,7 @@ export const sessionKeyPluginActions: <
 
       return removeSessionKey({
         args: [key, sessionKeysToRemove[0].predecessor],
-        overrides,
+        overrides: overrides as UserOperationOverrides<TEntryPointVersion>,
         account,
       });
     },
@@ -166,7 +168,7 @@ export const sessionKeyPluginActions: <
 
       return addSessionKey({
         args: [key, tag, permissions],
-        overrides,
+        overrides: overrides as UserOperationOverrides<TEntryPointVersion>,
         account,
         pluginAddress,
       });
@@ -190,7 +192,7 @@ export const sessionKeyPluginActions: <
 
       return rotateSessionKey({
         args: [oldKey, predecessor, newKey],
-        overrides,
+        overrides: overrides as UserOperationOverrides<TEntryPointVersion>,
         account,
         pluginAddress,
       });
@@ -207,7 +209,9 @@ export const sessionKeyPluginActions: <
 
       return updateKeyPermissions({
         args: [key, permissions],
-        overrides,
+        overrides: overrides as UserOperationOverrides<
+          GetEntryPointFromAccount<TAccount>
+        >,
         account,
         pluginAddress,
       });

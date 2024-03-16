@@ -1,4 +1,5 @@
 import type {
+  GetEntryPointFromAccount,
   SendUserOperationResult,
   SmartContractAccount,
 } from "@alchemy/aa-core";
@@ -15,14 +16,15 @@ export { type UninstallPluginParams } from "./uninstallPlugin.js";
 export type PluginManagerActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
   installPlugin: (
     params: InstallPluginParams<TAccount>
-  ) => Promise<SendUserOperationResult>;
+  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
   uninstallPlugin: (
     params: UninstallPluginParams<TAccount>
-  ) => Promise<SendUserOperationResult>;
+  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 };
 
 export const pluginManagerActions: <

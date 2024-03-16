@@ -130,7 +130,7 @@ describe("Simple Account Tests", () => {
   it("should correctly handle absolute overrides for sendUserOperation", async () => {
     const provider = await givenConnectedProvider({ signer, chain });
 
-    const overrides: UserOperationOverrides = {
+    const overrides: UserOperationOverrides<"0.6.0"> = {
       preVerificationGas: 100_000_000n,
     };
     const promise = provider.buildUserOperation({

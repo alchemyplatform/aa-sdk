@@ -42,7 +42,7 @@ export type MultisigPluginActions<
 
   proposeUserOperation: (
     params: SendUserOperationParameters<TAccount, undefined>
-  ) => Promise<ProposeUserOperationResult>;
+  ) => Promise<ProposeUserOperationResult<TAccount>>;
 
   signMultisigUserOperation: (
     params: SignMultisigUserOperationParams<TAccount>
