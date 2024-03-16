@@ -1,9 +1,9 @@
-import type { SmartContractAccount } from "@alchemy/aa-core";
+import type { EntryPointVersion, SmartContractAccount } from "@alchemy/aa-core";
 import { encodeFunctionData } from "viem";
 import { IStandardExecutorAbi } from "../abis/IStandardExecutor.js";
 
 export const standardExecutor: Pick<
-  SmartContractAccount,
+  SmartContractAccount<EntryPointVersion>,
   "encodeExecute" | "encodeBatchExecute"
 > = {
   encodeExecute: async ({ target, data, value }) => {

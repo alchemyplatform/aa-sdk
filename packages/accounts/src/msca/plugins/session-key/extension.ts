@@ -1,3 +1,4 @@
+import type { EntryPointVersion } from "@alchemy/aa-core";
 import {
   AccountNotFoundError,
   type GetAccountParameter,
@@ -16,11 +17,12 @@ import {
 import { buildSessionKeysToRemoveStruct } from "./utils.js";
 
 export type SessionKeyPluginActions<
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  TEntryPointVersion extends EntryPointVersion,
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+    | SmartContractAccount<TEntryPointVersion>
     | undefined
 > = Omit<
-  SessionKeyPluginActions_<TAccount>,
+  SessionKeyPluginActions_<TEntryPointVersion, TAccount>,
   | "removeSessionKey"
   | "addSessionKey"
   | "rotateSessionKey"
@@ -28,19 +30,20 @@ export type SessionKeyPluginActions<
 > & {
   isAccountSessionKey: (
     args: { key: Address } & GetPluginAddressParameter &
-      GetAccountParameter<TAccount>
+      GetAccountParameter<TEntryPointVersion, TAccount>
   ) => Promise<boolean>;
 
   getAccountSessionKeys: (
-    args: GetPluginAddressParameter & GetAccountParameter<TAccount>
+    args: GetPluginAddressParameter &
+      GetAccountParameter<TEntryPointVersion, TAccount>
   ) => Promise<ReadonlyArray<Address>>;
 
   removeSessionKey: (
     args: { key: Address } & GetPluginAddressParameter &
-      GetAccountParameter<TAccount> & {
-        overrides?: UserOperationOverrides;
+      GetAccountParameter<TEntryPointVersion, TAccount> & {
+        overrides?: UserOperationOverrides<TEntryPointVersion>;
       }
-  ) => Promise<SendUserOperationResult>;
+  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 
   addSessionKey: (
     args: {
@@ -48,51 +51,54 @@ export type SessionKeyPluginActions<
       permissions: Hex[];
       tag: Hex;
     } & GetPluginAddressParameter &
-      GetAccountParameter<TAccount> & {
-        overrides?: UserOperationOverrides;
+      GetAccountParameter<TEntryPointVersion, TAccount> & {
+        overrides?: UserOperationOverrides<TEntryPointVersion>;
       }
-  ) => Promise<SendUserOperationResult>;
+  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 
   rotateSessionKey: (
     args: {
       oldKey: Address;
       newKey: Address;
     } & GetPluginAddressParameter &
-      GetAccountParameter<TAccount> & {
-        overrides?: UserOperationOverrides;
+      GetAccountParameter<TEntryPointVersion, TAccount> & {
+        overrides?: UserOperationOverrides<TEntryPointVersion>;
       }
-  ) => Promise<SendUserOperationResult>;
+  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 
   updateSessionKeyPermissions: (
     args: {
       key: Address;
       permissions: Hex[];
     } & GetPluginAddressParameter &
-      GetAccountParameter<TAccount> & {
-        overrides?: UserOperationOverrides;
+      GetAccountParameter<TEntryPointVersion, TAccount> & {
+        overrides?: UserOperationOverrides<TEntryPointVersion>;
       }
-  ) => Promise<SendUserOperationResult>;
+  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 } & (IsUndefined<TAccount> extends false
     ? {
         getAccountSessionKeys: (
-          args?: GetPluginAddressParameter & GetAccountParameter<TAccount>
+          args?: GetPluginAddressParameter &
+            GetAccountParameter<TEntryPointVersion, TAccount>
         ) => Promise<ReadonlyArray<Address>>;
       }
     : {});
 
 export const sessionKeyPluginActions: <
+  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+    | SmartContractAccount<TEntryPointVersion>
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>
-) => SessionKeyPluginActions<TAccount> = <
+) => SessionKeyPluginActions<TEntryPointVersion, TAccount> = <
+  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+    | SmartContractAccount<TEntryPointVersion>
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>
@@ -120,7 +126,8 @@ export const sessionKeyPluginActions: <
     },
 
     getAccountSessionKeys: async (
-      args: GetPluginAddressParameter & GetAccountParameter<TAccount>
+      args: GetPluginAddressParameter &
+        GetAccountParameter<TEntryPointVersion, TAccount>
     ) => {
       const account = args?.account ?? client.account;
       if (!account) throw new AccountNotFoundError();
@@ -143,7 +150,7 @@ export const sessionKeyPluginActions: <
 
       const sessionKeysToRemove = await buildSessionKeysToRemoveStruct(client, {
         keys: [key],
-        account,
+        account: account as SmartContractAccount<TEntryPointVersion>,
         pluginAddress,
       });
 

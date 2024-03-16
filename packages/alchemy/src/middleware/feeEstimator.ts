@@ -1,8 +1,11 @@
-import type { ClientMiddlewareFn } from "@alchemy/aa-core";
+import type { ClientMiddlewareFn, EntryPointVersion } from "@alchemy/aa-core";
 import { applyUserOpOverrideOrFeeOption } from "@alchemy/aa-core";
 import type { ClientWithAlchemyMethods } from "../client/types";
 
-export const alchemyFeeEstimator: <C extends ClientWithAlchemyMethods>(
+export const alchemyFeeEstimator: <
+  C extends ClientWithAlchemyMethods<TEntryPointVersion>,
+  TEntryPointVersion extends EntryPointVersion
+>(
   client: C
 ) => ClientMiddlewareFn =
   (client) =>

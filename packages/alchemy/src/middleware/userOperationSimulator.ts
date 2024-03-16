@@ -2,21 +2,22 @@ import {
   deepHexlify,
   resolveProperties,
   type ClientMiddlewareFn,
+  type EntryPointVersion,
   type UserOperationStruct,
 } from "@alchemy/aa-core";
 import type { ClientWithAlchemyMethods } from "../client/types";
 
-export const alchemyUserOperationSimulator: <
-  C extends ClientWithAlchemyMethods
->(
-  client: C
-) => ClientMiddlewareFn =
-  (client) =>
-  async (struct, { account }) => {
+export function alchemyUserOperationSimulator<
+  C extends ClientWithAlchemyMethods<TEntryPointVersion>,
+  TEntryPointVersion extends EntryPointVersion
+>(client: C): ClientMiddlewareFn {
+  return async (struct, { account }) => {
     const uoSimResult = await client.request({
       method: "alchemy_simulateUserOperationAssetChanges",
       params: [
-        deepHexlify(await resolveProperties(struct)) as UserOperationStruct,
+        deepHexlify(
+          await resolveProperties(struct)
+        ) as UserOperationStruct<TEntryPointVersion>,
         account.getEntryPoint().address,
       ],
     });
@@ -27,3 +28,4 @@ export const alchemyUserOperationSimulator: <
 
     return struct;
   };
+}

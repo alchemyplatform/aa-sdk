@@ -11,6 +11,7 @@ import type {
   BundlerRpcSchema,
 } from "../client/decorators/bundlerClient.js";
 import type { ClientMiddlewareConfig } from "../client/types.js";
+import type { EntryPointVersion } from "../entrypoint/types.js";
 import { defaultFeeEstimator } from "./defaults/feeEstimator.js";
 import { defaultGasEstimator } from "./defaults/gasEstimator.js";
 import { defaultPaymasterAndData } from "./defaults/paymasterAndData.js";
@@ -18,29 +19,31 @@ import { noopMiddleware } from "./noopMiddleware.js";
 import type { ClientMiddleware } from "./types.js";
 
 export type MiddlewareClient<
+  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+    | SmartContractAccount<TEntryPointVersion>
     | undefined
 > = Client<
   TTransport,
   TChain,
   TAccount,
-  [...BundlerRpcSchema, ...PublicRpcSchema],
-  PublicActions & BundlerActions
+  [...BundlerRpcSchema<TEntryPointVersion>, ...PublicRpcSchema],
+  PublicActions & BundlerActions<TEntryPointVersion>
 >;
 
 export const middlewareActions =
   (overrides: ClientMiddlewareConfig) =>
   <
+    TEntryPointVersion extends EntryPointVersion,
     TTransport extends Transport = Transport,
     TChain extends Chain | undefined = Chain | undefined,
-    TAccount extends SmartContractAccount | undefined =
-      | SmartContractAccount
+    TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+      | SmartContractAccount<TEntryPointVersion>
       | undefined
   >(
-    client: MiddlewareClient<TTransport, TChain, TAccount>
+    client: MiddlewareClient<TEntryPointVersion, TTransport, TChain, TAccount>
   ): { middleware: ClientMiddleware } => ({
     middleware: {
       customMiddleware: overrides.customMiddleware ?? noopMiddleware,

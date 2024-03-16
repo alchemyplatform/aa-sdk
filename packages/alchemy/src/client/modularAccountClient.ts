@@ -10,7 +10,7 @@ import {
   type MultiOwnerPluginActions,
   type PluginManagerActions,
 } from "@alchemy/aa-accounts";
-import type { SmartAccountSigner } from "@alchemy/aa-core";
+import type { EntryPointVersion, SmartAccountSigner } from "@alchemy/aa-core";
 import {
   custom,
   type Chain,
@@ -28,39 +28,66 @@ import type {
 } from "./smartAccountClient";
 
 export type AlchemyModularAccountClientConfig<
+  TEntryPointVersion extends EntryPointVersion,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 > = Omit<
-  CreateMultiOwnerModularAccountParams<HttpTransport, TSigner>,
+  CreateMultiOwnerModularAccountParams<
+    TEntryPointVersion,
+    HttpTransport,
+    TSigner
+  >,
   "transport" | "chain"
 > &
   Omit<
-    AlchemySmartAccountClientConfig<Transport, Chain, LightAccount<TSigner>>,
+    AlchemySmartAccountClientConfig<
+      TEntryPointVersion,
+      Transport,
+      Chain,
+      LightAccount<TEntryPointVersion, TSigner>
+    >,
     "account"
   >;
 
 export function createModularAccountAlchemyClient<
+  TEntryPointVersion extends EntryPointVersion,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  params: AlchemyModularAccountClientConfig<TSigner>
+  params: AlchemyModularAccountClientConfig<TEntryPointVersion, TSigner>
 ): Promise<
   AlchemySmartAccountClient<
+    TEntryPointVersion,
     CustomTransport,
     Chain | undefined,
-    MultiOwnerModularAccount<TSigner>,
-    BaseAlchemyActions<Chain | undefined, MultiOwnerModularAccount<TSigner>> &
-      MultiOwnerPluginActions<MultiOwnerModularAccount<TSigner>> &
-      PluginManagerActions<MultiOwnerModularAccount<TSigner>> &
-      AccountLoupeActions<MultiOwnerModularAccount<TSigner>>
+    MultiOwnerModularAccount<TEntryPointVersion, TSigner>,
+    BaseAlchemyActions<
+      TEntryPointVersion,
+      Chain | undefined,
+      MultiOwnerModularAccount<TEntryPointVersion, TSigner>
+    > &
+      MultiOwnerPluginActions<
+        TEntryPointVersion,
+        MultiOwnerModularAccount<TEntryPointVersion, TSigner>
+      > &
+      PluginManagerActions<
+        TEntryPointVersion,
+        MultiOwnerModularAccount<TEntryPointVersion, TSigner>
+      > &
+      AccountLoupeActions<
+        TEntryPointVersion,
+        MultiOwnerModularAccount<TEntryPointVersion, TSigner>
+      >
   >
 >;
 
-export async function createModularAccountAlchemyClient(
-  config: AlchemyModularAccountClientConfig
-): Promise<AlchemySmartAccountClient> {
+export async function createModularAccountAlchemyClient<
+  TEntryPointVersion extends EntryPointVersion
+>(
+  config: AlchemyModularAccountClientConfig<TEntryPointVersion>
+): Promise<AlchemySmartAccountClient<TEntryPointVersion>> {
   const { chain, opts, ...connectionConfig } =
     AlchemyProviderConfigSchema.parse(config);
 
-  const client = createAlchemyPublicRpcClient({
+  const client = createAlchemyPublicRpcClient<TEntryPointVersion>({
     chain,
     connectionConfig,
   });

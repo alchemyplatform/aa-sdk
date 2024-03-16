@@ -17,6 +17,7 @@ import {
   polygonAmoy,
   polygonMumbai,
   sepolia,
+  type EntryPointVersion,
   type GetAccountParameter,
   type SmartAccountClient,
   type SmartAccountSigner,
@@ -73,29 +74,37 @@ export const getDefaultMultiOwnerModularAccountFactoryAddress = (
 };
 
 export async function getMSCAUpgradeToData<
+  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
   TAccount extends
-    | SmartContractAccountWithSigner<string, TSigner>
-    | undefined = SmartContractAccountWithSigner<string, TSigner> | undefined
+    | SmartContractAccountWithSigner<TEntryPointVersion, string, TSigner>
+    | undefined =
+    | SmartContractAccountWithSigner<TEntryPointVersion, string, TSigner>
+    | undefined
 >(
-  client: SmartAccountClient<TTransport, TChain, TAccount>,
-  {
-    multiOwnerPluginAddress,
-    account: account_ = client.account,
-  }: {
+  client: SmartAccountClient<TEntryPointVersion, TTransport, TChain, TAccount>,
+  args: {
     multiOwnerPluginAddress?: Address;
-  } & GetAccountParameter<TAccount>
+  } & GetAccountParameter<TEntryPointVersion, TAccount>
 ): Promise<
   UpgradeToData & {
-    createMAAccount: () => Promise<MultiOwnerModularAccount<TSigner>>;
+    createMAAccount: () => Promise<
+      MultiOwnerModularAccount<TEntryPointVersion, TSigner>
+    >;
   }
 > {
+  const { account: account_ = client.account, multiOwnerPluginAddress } = args;
+
   if (!account_) {
     throw new AccountNotFoundError();
   }
-  const account = account_ as SmartContractAccountWithSigner<string, TSigner>;
+  const account = account_ as SmartContractAccountWithSigner<
+    TEntryPointVersion,
+    string,
+    TSigner
+  >;
 
   const chain = client.chain;
   if (!chain) {
@@ -121,6 +130,7 @@ export async function getMSCAUpgradeToData<
 }
 
 export async function getMAInitializationData<
+  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined
 >({
@@ -129,7 +139,7 @@ export async function getMAInitializationData<
   signerAddress,
 }: {
   multiOwnerPluginAddress?: Address;
-  client: SmartAccountClient<TTransport, TChain>;
+  client: SmartAccountClient<TEntryPointVersion, TTransport, TChain>;
   signerAddress: Address | Address[];
 }): Promise<UpgradeToData> {
   if (!client.chain) {

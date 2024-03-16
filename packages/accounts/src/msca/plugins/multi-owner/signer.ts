@@ -1,6 +1,7 @@
 import type {
   Address,
   BundlerClient,
+  EntryPointVersion,
   SmartAccountSigner,
 } from "@alchemy/aa-core";
 import {
@@ -16,10 +17,11 @@ import {
 import { MultiOwnerPlugin, MultiOwnerPluginAbi } from "./plugin.js";
 
 export const multiOwnerMessageSigner = <
+  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport,
   TSigner extends SmartAccountSigner
 >(
-  client: BundlerClient<TTransport>,
+  client: BundlerClient<TEntryPointVersion, TTransport>,
   accountAddress: Address,
   signer: () => TSigner,
   pluginAddress: Address = MultiOwnerPlugin.meta.addresses[client.chain.id]

@@ -12,6 +12,7 @@ import {
 } from "viem";
 import { z } from "zod";
 import type { SmartContractAccount } from "../account/smartContractAccount.js";
+import type { EntryPointVersion } from "../entrypoint/types.js";
 import { AccountNotFoundError } from "../errors/account.js";
 import { ChainNotFoundError } from "../errors/client.js";
 import { middlewareActions } from "../middleware/actions.js";
@@ -32,10 +33,11 @@ import type { ClientMiddlewareConfig } from "./types.js";
 type SmartAccountClientOpts = z.output<typeof SmartAccountClientOptsSchema>;
 
 export type SmartAccountClientConfig<
+  version extends EntryPointVersion,
   transport extends Transport = Transport,
   chain extends Chain | undefined = Chain | undefined,
-  account extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  account extends SmartContractAccount<version> | undefined =
+    | SmartContractAccount<version>
     | undefined
 > = Prettify<
   Pick<
@@ -53,77 +55,91 @@ export type SmartAccountClientConfig<
   } & ClientMiddlewareConfig
 >;
 
-export type SmartAccountClientRpcSchema = [
-  ...BundlerRpcSchema,
-  ...PublicRpcSchema
-];
+export type SmartAccountClientRpcSchema<
+  TEntryPointVersion extends EntryPointVersion
+> = [...BundlerRpcSchema<TEntryPointVersion>, ...PublicRpcSchema];
 
 //#region SmartAccountClientActions
 export type SmartAccountClientActions<
+  version extends EntryPointVersion,
   chain extends Chain | undefined = Chain | undefined,
-  account extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  account extends SmartContractAccount<version> | undefined =
+    | SmartContractAccount<version>
     | undefined
-> = BaseSmartAccountClientActions<chain, account> &
-  BundlerActions &
+> = BaseSmartAccountClientActions<version, chain, account> &
+  BundlerActions<version> &
   PublicActions;
 //#endregion SmartAccountClientActions
 
 //#region SmartAccountClient
 export type SmartAccountClient<
+  version extends EntryPointVersion,
   transport extends Transport = Transport,
   chain extends Chain | undefined = Chain | undefined,
-  account extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  account extends SmartContractAccount<version> | undefined =
+    | SmartContractAccount<version>
     | undefined,
   actions extends SmartAccountClientActions<
+    version,
     chain,
     account
-  > = SmartAccountClientActions<chain, account>,
-  rpcSchema extends RpcSchema = SmartAccountClientRpcSchema
+  > = SmartAccountClientActions<version, chain, account>,
+  rpcSchema extends RpcSchema = SmartAccountClientRpcSchema<version>
 > = Prettify<Client<transport, chain, account, rpcSchema, actions>>;
 //#endregion SmartAccountClient
 
 export type BaseSmartAccountClient<
+  version extends EntryPointVersion,
   transport extends Transport = Transport,
   chain extends Chain | undefined = Chain | undefined,
-  account extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  account extends SmartContractAccount<version> | undefined =
+    | SmartContractAccount<version>
     | undefined
 > = Prettify<
   Client<
     transport,
     chain,
     account,
-    [...BundlerRpcSchema, ...PublicRpcSchema],
+    [...BundlerRpcSchema<version>, ...PublicRpcSchema],
     { middleware: ClientMiddleware } & SmartAccountClientOpts &
-      BundlerActions &
+      BundlerActions<version> &
       PublicActions
   >
 >;
 
 export function createSmartAccountClient<
+  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+    | SmartContractAccount<TEntryPointVersion>
     | undefined
 >(
-  config: SmartAccountClientConfig<TTransport, TChain, TAccount>
-): SmartAccountClient<TTransport, TChain, TAccount>;
-
-export function createSmartAccountClient(
-  config: SmartAccountClientConfig
-): SmartAccountClient {
+  config: SmartAccountClientConfig<
+    TEntryPointVersion,
+    TTransport,
+    TChain,
+    TAccount
+  >
+): SmartAccountClient<TEntryPointVersion, TTransport, TChain, TAccount> {
   const {
     key = "account",
     name = "account provider",
     transport,
     type = "SmartAccountClient",
+    account,
     ...params
   } = config;
 
-  const client: SmartAccountClient = createBundlerClient({
+  const entryPoint = account?.getEntryPoint();
+  const _createBundlerClient =
+    entryPoint?.version === "0.6.0"
+      ? createBundlerClient<"0.6.0", Transport>
+      : entryPoint?.version === "0.7.0"
+      ? createBundlerClient<"0.7.0", Transport>
+      : createBundlerClient<TEntryPointVersion, Transport>;
+
+  const client: SmartAccountClient<TEntryPointVersion> = _createBundlerClient({
     ...params,
     key,
     name,
@@ -207,36 +223,59 @@ export function createSmartAccountClient(
     .extend(middlewareActions(config))
     .extend(smartAccountClientActions);
 
-  return { ...client, type };
+  return { ...client, type } as SmartAccountClient<
+    TEntryPointVersion,
+    TTransport,
+    TChain,
+    TAccount
+  >;
 }
 
 export function createSmartAccountClientFromExisting<
+  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+    | SmartContractAccount<TEntryPointVersion>
     | undefined,
-  TClient extends BundlerClient<TTransport> = BundlerClient<TTransport>,
+  TClient extends BundlerClient<TEntryPointVersion, TTransport> = BundlerClient<
+    TEntryPointVersion,
+    TTransport
+  >,
   TActions extends SmartAccountClientActions<
+    TEntryPointVersion,
     TChain,
     TAccount
-  > = SmartAccountClientActions<TChain, TAccount>,
-  TRpcSchema extends SmartAccountClientRpcSchema = SmartAccountClientRpcSchema
+  > = SmartAccountClientActions<TEntryPointVersion, TChain, TAccount>,
+  TRpcSchema extends SmartAccountClientRpcSchema<TEntryPointVersion> = SmartAccountClientRpcSchema<TEntryPointVersion>
 >(
   config: Omit<
-    SmartAccountClientConfig<Transport, TChain, TAccount>,
+    SmartAccountClientConfig<TEntryPointVersion, Transport, TChain, TAccount>,
     "transport" | "chain"
   > & { client: TClient }
-): SmartAccountClient<CustomTransport, TChain, TAccount, TActions, TRpcSchema>;
-
-export function createSmartAccountClientFromExisting(
-  config: Omit<SmartAccountClientConfig, "transport" | "chain"> & {
-    client: BundlerClient;
-  }
-): SmartAccountClient {
-  return createSmartAccountClient({
+): SmartAccountClient<
+  TEntryPointVersion,
+  CustomTransport,
+  TChain,
+  TAccount,
+  TActions,
+  TRpcSchema
+> {
+  return createSmartAccountClient<
+    TEntryPointVersion,
+    CustomTransport,
+    TChain,
+    TAccount
+  >({
     ...config,
     chain: config.client.chain,
     transport: custom(config.client),
-  });
+  }) as SmartAccountClient<
+    TEntryPointVersion,
+    CustomTransport,
+    TChain,
+    TAccount,
+    TActions,
+    TRpcSchema
+  >;
 }

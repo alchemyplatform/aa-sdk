@@ -4,57 +4,73 @@ import type {
   SmartContractAccount,
 } from "../../account/smartContractAccount";
 import type { UpgradeToData } from "../../client/types";
+import type { EntryPointVersion } from "../../entrypoint/types";
 import type {
   BatchUserOperationCallData,
   UserOperationCallData,
-  UserOperationOverrides,
+  UserOperationOverridesParameter,
   UserOperationRequest,
   UserOperationStruct,
 } from "../../types";
 
 //#region UpgradeAccountParams
 export type UpgradeAccountParams<
-  TAccount extends SmartContractAccount | undefined
+  TEntryPointVersion extends EntryPointVersion,
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+    | SmartContractAccount<TEntryPointVersion>
+    | undefined
 > = {
   upgradeTo: UpgradeToData;
-  overrides?: UserOperationOverrides;
   waitForTx?: boolean;
-} & GetAccountParameter<TAccount>;
+} & GetAccountParameter<TEntryPointVersion, TAccount> &
+  UserOperationOverridesParameter<TEntryPointVersion>;
 //#endregion UpgradeAccountParams
 
 //#region SendUserOperationParameters
 export type SendUserOperationParameters<
-  TAccount extends SmartContractAccount | undefined
+  TEntryPointVersion extends EntryPointVersion,
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+    | SmartContractAccount<TEntryPointVersion>
+    | undefined
 > = {
   uo: UserOperationCallData | BatchUserOperationCallData;
-  overrides?: UserOperationOverrides;
-} & GetAccountParameter<TAccount>;
+} & GetAccountParameter<TEntryPointVersion, TAccount> &
+  UserOperationOverridesParameter<TEntryPointVersion>;
 //#endregion SendUserOperationParameters
 
 //#region SignUserOperationParameters
 export type SignUserOperationParameters<
-  TAccount extends SmartContractAccount | undefined
+  TEntryPointVersion extends EntryPointVersion,
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+    | SmartContractAccount<TEntryPointVersion>
+    | undefined
 > = {
-  uoStruct: UserOperationStruct;
-} & GetAccountParameter<TAccount>;
+  uoStruct: UserOperationStruct<TEntryPointVersion>;
+} & GetAccountParameter<TEntryPointVersion, TAccount>;
 //#endregion SignUserOperationParameters
 
 //#region SendTransactionsParameters
 export type SendTransactionsParameters<
-  TAccount extends SmartContractAccount | undefined
+  TEntryPointVersion extends EntryPointVersion,
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+    | SmartContractAccount<TEntryPointVersion>
+    | undefined
 > = {
   requests: RpcTransactionRequest[];
-  overrides?: UserOperationOverrides;
-} & GetAccountParameter<TAccount>;
+} & GetAccountParameter<TEntryPointVersion, TAccount> &
+  UserOperationOverridesParameter<TEntryPointVersion>;
 //#endregion SendTransactionsParameters
 
 //#region DropAndReplaceUserOperationParameters
 export type DropAndReplaceUserOperationParameters<
-  TAccount extends SmartContractAccount | undefined
+  TEntryPointVersion extends EntryPointVersion,
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+    | SmartContractAccount<TEntryPointVersion>
+    | undefined
 > = {
-  uoToDrop: UserOperationRequest;
-  overrides?: UserOperationOverrides;
-} & GetAccountParameter<TAccount>;
+  uoToDrop: UserOperationRequest<TEntryPointVersion>;
+} & GetAccountParameter<TEntryPointVersion, TAccount> &
+  UserOperationOverridesParameter<TEntryPointVersion>;
 //#endregion DropAndReplaceUserOperationParameters
 
 //#region WaitForUserOperationTxParameters
@@ -64,9 +80,10 @@ export type WaitForUserOperationTxParameters = {
 //#endregion WaitForUserOperationTxParameters
 
 //#region BuildUserOperationFromTransactionsResult
-export type BuildUserOperationFromTransactionsResult = {
-  uoStruct: UserOperationStruct;
+export type BuildUserOperationFromTransactionsResult<
+  TEntryPointVersion extends EntryPointVersion
+> = {
+  uoStruct: UserOperationStruct<TEntryPointVersion>;
   batch: BatchUserOperationCallData;
-  overrides: UserOperationOverrides;
-};
+} & UserOperationOverridesParameter<TEntryPointVersion, true>;
 //#endregion BuildUserOperationFromTransactionsResult

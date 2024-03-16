@@ -1,6 +1,7 @@
 import { fromHex, type Chain, type Client, type Transport } from "viem";
 import type { SmartContractAccount } from "../../account/smartContractAccount";
 import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
+import type { EntryPointVersion } from "../../entrypoint/types";
 import { AccountNotFoundError } from "../../errors/account.js";
 import { IncompatibleClientError } from "../../errors/client.js";
 import { TransactionMissingToParamError } from "../../errors/transaction.js";
@@ -12,19 +13,17 @@ import type {
   SendTransactionsParameters,
 } from "./types";
 
-export const buildUserOperationFromTxs: <
+export async function buildUserOperationFromTxs<
+  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+    | SmartContractAccount<TEntryPointVersion>
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: SendTransactionsParameters<TAccount>
-) => Promise<BuildUserOperationFromTransactionsResult> = async (
-  client,
-  args
-) => {
+  args: SendTransactionsParameters<TEntryPointVersion, TAccount>
+): Promise<BuildUserOperationFromTransactionsResult<TEntryPointVersion>> {
   const { account = client.account, requests, overrides } = args;
   if (!account) {
     throw new AccountNotFoundError();
@@ -72,22 +71,22 @@ export const buildUserOperationFromTxs: <
       ? bigIntMax(...mpfpgOverridesInTx())
       : undefined;
 
-  const _overrides: UserOperationOverrides = {
+  const _overrides = {
     maxFeePerGas,
     maxPriorityFeePerGas,
-  };
+  } as UserOperationOverrides<TEntryPointVersion>;
   filterUndefined(_overrides);
 
   const uoStruct = await buildUserOperation(client, {
     uo: batch,
     overrides: _overrides,
-    account: account as SmartContractAccount,
+    account: account as SmartContractAccount<TEntryPointVersion>,
   });
 
   return {
     uoStruct,
-    // TODO: remove these as user operation is already built through the pipeline
+    // TODO: in v4 major version update, remove these as below parameters are not needed
     batch,
     overrides: _overrides,
   };
-};
+}

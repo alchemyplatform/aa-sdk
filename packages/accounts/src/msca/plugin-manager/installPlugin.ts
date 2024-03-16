@@ -2,10 +2,11 @@ import {
   AccountNotFoundError,
   IncompatibleClientError,
   isSmartAccountClient,
+  type EntryPointVersion,
   type GetAccountParameter,
   type SmartAccountClient,
   type SmartContractAccount,
-  type UserOperationOverrides,
+  type UserOperationOverridesParameter,
 } from "@alchemy/aa-core";
 import {
   encodeFunctionData,
@@ -22,30 +23,31 @@ import { IPluginManagerAbi } from "../abis/IPluginManager.js";
 import type { FunctionReference } from "../account-loupe/types.js";
 
 export type InstallPluginParams<
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  TEntryPointVersion extends EntryPointVersion,
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+    | SmartContractAccount<TEntryPointVersion>
     | undefined
 > = {
   pluginAddress: Address;
   manifestHash?: Hash;
   pluginInitData?: Hash;
   dependencies?: FunctionReference[];
-} & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>;
+} & UserOperationOverridesParameter<TEntryPointVersion> &
+  GetAccountParameter<TEntryPointVersion, TAccount>;
 
 export async function installPlugin<
+  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+    | SmartContractAccount<TEntryPointVersion>
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
-  {
-    overrides,
-    account = client.account,
-    ...params
-  }: InstallPluginParams<TAccount>
+  args: InstallPluginParams<TEntryPointVersion, TAccount>
 ) {
+  const { overrides, account = client.account, ...params } = args;
+
   if (!account) {
     throw new AccountNotFoundError();
   }
@@ -59,18 +61,24 @@ export async function installPlugin<
   }
 
   const callData = await encodeInstallPluginUserOperation(client, params);
-  return client.sendUserOperation({ uo: callData, overrides, account });
+
+  return client.sendUserOperation({
+    uo: callData,
+    overrides,
+    account,
+  });
 }
 
 export async function encodeInstallPluginUserOperation<
+  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+    | SmartContractAccount<TEntryPointVersion>
     | undefined
 >(
-  client: SmartAccountClient<TTransport, TChain, TAccount>,
-  params: Omit<InstallPluginParams, "overrides" | "account">
+  client: SmartAccountClient<TEntryPointVersion, TTransport, TChain, TAccount>,
+  params: Omit<InstallPluginParams<TEntryPointVersion>, "overrides" | "account">
 ) {
   const pluginManifest = await client.readContract({
     abi: IPluginAbi,

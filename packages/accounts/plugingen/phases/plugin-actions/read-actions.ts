@@ -45,8 +45,8 @@ export const AccountReadActionsGenPhase: Phase = async (input) => {
       const readMethodName = `read${pascalCase(n.name)}`;
       accountFunctionActionDefs.push(
         n.inputs.length > 0
-          ? dedent`${readMethodName}: (args: Pick<EncodeFunctionDataParameters<typeof ${executionAbiConst}, "${n.name}">, "args"> & GetAccountParameter<TAccount>) => Promise<ReadContractReturnType<typeof ${executionAbiConst}, "${n.name}">>`
-          : dedent`${readMethodName}: (args: GetAccountParameter<TAccount>) => Promise<ReadContractReturnType<typeof ${executionAbiConst}, "${n.name}">>`
+          ? dedent`${readMethodName}: (args: Pick<EncodeFunctionDataParameters<typeof ${executionAbiConst}, "${n.name}">, "args"> & GetAccountParameter<TEntryPointVersion, TAccount>) => Promise<ReadContractReturnType<typeof ${executionAbiConst}, "${n.name}">>`
+          : dedent`${readMethodName}: (args: GetAccountParameter<TEntryPointVersion, TAccount>) => Promise<ReadContractReturnType<typeof ${executionAbiConst}, "${n.name}">>`
       );
 
       methodContent.push(dedent`
@@ -73,7 +73,11 @@ export const AccountReadActionsGenPhase: Phase = async (input) => {
   });
 
   const typeName = input.hasReadMethods
-    ? "ReadAndEncodeActions<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined>"
+    ? `ReadAndEncodeActions<
+        TEntryPointVersion extends EntryPointVersion,
+        TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+          SmartContractAccount<TEntryPointVersion> | undefined
+      >`
     : "ReadAndEncodeActions";
 
   addType(

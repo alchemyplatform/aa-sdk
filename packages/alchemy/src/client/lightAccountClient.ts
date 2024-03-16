@@ -4,7 +4,11 @@ import {
   type CreateLightAccountParams,
   type LightAccount,
 } from "@alchemy/aa-accounts";
-import type { HttpTransport, SmartAccountSigner } from "@alchemy/aa-core";
+import type {
+  EntryPointVersion,
+  HttpTransport,
+  SmartAccountSigner,
+} from "@alchemy/aa-core";
 import { custom, type Chain, type CustomTransport, type Transport } from "viem";
 import { AlchemyProviderConfigSchema } from "../schema.js";
 import { createAlchemySmartAccountClientFromRpcClient } from "./internal/smartAccountClientFromRpc.js";
@@ -15,44 +19,52 @@ import {
 } from "./smartAccountClient.js";
 
 export type AlchemyLightAccountClientConfig<
+  TEntryPointVersion extends EntryPointVersion,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 > = Omit<
-  CreateLightAccountParams<HttpTransport, TSigner>,
+  CreateLightAccountParams<TEntryPointVersion, HttpTransport, TSigner>,
   "transport" | "chain"
 > &
   Omit<
-    AlchemySmartAccountClientConfig<Transport, Chain, LightAccount<TSigner>>,
+    AlchemySmartAccountClientConfig<
+      TEntryPointVersion,
+      Transport,
+      Chain,
+      LightAccount<TEntryPointVersion, TSigner>
+    >,
     "account"
   >;
 
-export const createLightAccountAlchemyClient: <
+export async function createLightAccountAlchemyClient<
+  TEntryPointVersion extends EntryPointVersion,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  params: AlchemyLightAccountClientConfig<TSigner>
-) => Promise<
+  params: AlchemyLightAccountClientConfig<TEntryPointVersion, TSigner>
+): Promise<
   AlchemySmartAccountClient<
+    TEntryPointVersion,
     CustomTransport,
     Chain | undefined,
-    LightAccount<TSigner>
+    LightAccount<TEntryPointVersion, TSigner>
   >
-> = async (config) => {
+> {
   const { chain, opts, ...connectionConfig } =
-    AlchemyProviderConfigSchema.parse(config);
+    AlchemyProviderConfigSchema.parse(params);
 
-  const client = createAlchemyPublicRpcClient({
+  const client = createAlchemyPublicRpcClient<TEntryPointVersion>({
     chain,
     connectionConfig,
   });
 
   const account = await createLightAccount({
     transport: custom(client),
-    ...config,
+    ...params,
   });
 
   return createAlchemySmartAccountClientFromRpcClient({
-    ...config,
+    ...params,
     client,
     account,
     opts,
   }).extend(lightAccountClientActions);
-};
+}

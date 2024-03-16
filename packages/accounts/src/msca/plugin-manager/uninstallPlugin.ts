@@ -2,9 +2,10 @@ import {
   AccountNotFoundError,
   IncompatibleClientError,
   isSmartAccountClient,
+  type EntryPointVersion,
   type GetAccountParameter,
   type SmartContractAccount,
-  type UserOperationOverrides,
+  type UserOperationOverridesParameter,
 } from "@alchemy/aa-core";
 import {
   encodeFunctionData,
@@ -17,29 +18,30 @@ import {
 import { IPluginManagerAbi } from "../abis/IPluginManager.js";
 
 export type UninstallPluginParams<
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  TEntryPointVersion extends EntryPointVersion,
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+    | SmartContractAccount<TEntryPointVersion>
     | undefined
 > = {
   pluginAddress: Address;
   config?: Hash;
   pluginUninstallData?: Hash;
-} & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>;
+} & UserOperationOverridesParameter<TEntryPointVersion> &
+  GetAccountParameter<TEntryPointVersion, TAccount>;
 
 export async function uninstallPlugin<
+  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
+    | SmartContractAccount<TEntryPointVersion>
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
-  {
-    overrides,
-    account = client.account,
-    ...params
-  }: UninstallPluginParams<TAccount>
+  args: UninstallPluginParams<TEntryPointVersion, TAccount>
 ) {
+  const { overrides, account = client.account, ...params } = args;
+
   if (!account) {
     throw new AccountNotFoundError();
   }
@@ -53,11 +55,21 @@ export async function uninstallPlugin<
   }
 
   const callData = await encodeUninstallPluginUserOperation(params);
-  return client.sendUserOperation({ uo: callData, overrides, account });
+
+  return client.sendUserOperation({
+    uo: callData,
+    overrides: overrides,
+    account,
+  });
 }
 
-export async function encodeUninstallPluginUserOperation(
-  params: Omit<UninstallPluginParams, "account" | "overrides">
+export async function encodeUninstallPluginUserOperation<
+  TEntryPointVersion extends EntryPointVersion
+>(
+  params: Omit<
+    UninstallPluginParams<TEntryPointVersion>,
+    "account" | "overrides"
+  >
 ) {
   return encodeFunctionData({
     abi: IPluginManagerAbi,

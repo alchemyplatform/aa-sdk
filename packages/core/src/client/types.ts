@@ -1,6 +1,7 @@
 import type { Address } from "abitype";
 import type { Hash, Hex } from "viem";
 import type { z } from "zod";
+import type { EntryPointVersion } from "../entrypoint/types.js";
 import type {
   ClientMiddleware,
   ClientMiddlewareFn,
@@ -15,9 +16,11 @@ export type ConnectorData = {
 export type ConnectionConfig = z.input<typeof ConnectionConfigSchema>;
 
 //#region SendUserOperationResult
-export type SendUserOperationResult = {
+export type SendUserOperationResult<
+  TEntryPointVersion extends EntryPointVersion
+> = {
   hash: Hash;
-  request: UserOperationRequest;
+  request: UserOperationRequest<TEntryPointVersion>;
 };
 //#endregion SendUserOperationResult
 

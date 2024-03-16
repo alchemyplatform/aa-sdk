@@ -2,7 +2,8 @@ export type { Abi } from "abitype";
 export type { Address, HttpTransport } from "viem";
 export * as chains from "viem/chains";
 
-export { EntryPointAbi } from "./abis/EntryPointAbi.js";
+export { EntryPointAbi_v6 } from "./abis/EntryPointAbi_v6.js";
+export { EntryPointAbi_v7 } from "./abis/EntryPointAbi_v7.js";
 export { SimpleAccountAbi } from "./abis/SimpleAccountAbi.js";
 export { SimpleAccountFactoryAbi } from "./abis/SimpleAccountFactoryAbi.js";
 export { BaseSmartContractAccount } from "./account/base.js";
@@ -70,8 +71,8 @@ export {
   convertCoinTypeToChain,
   convertCoinTypeToChainId,
 } from "./ens/utils.js";
-export { getVersion060EntryPoint } from "./entrypoint/0.6.js";
-export { type EntryPointDef } from "./entrypoint/types.js";
+export * from "./entrypoint/index.js";
+export type * from "./entrypoint/types.js";
 export {
   AccountNotFoundError,
   DefaultFactoryNotDefinedError,
@@ -84,7 +85,7 @@ export {
   IncompatibleClientError,
   InvalidRpcUrlError,
 } from "./errors/client.js";
-export { EntryPointNotFoundError as EntrypointNotFoundError } from "./errors/entrypoint.js";
+export * from "./errors/entrypoint.js";
 export { InvalidSignerTypeError } from "./errors/signer.js";
 export {
   FailedToFindTransactionError,
@@ -125,10 +126,9 @@ export {
   defineReadOnly,
   filterUndefined,
   getChain,
-  getDefaultEntryPointAddress,
   getDefaultSimpleAccountFactoryAddress,
   getDefaultUserOperationFeeOptions,
-  getUserOperationHash,
+  getEntryPointVersionFromUserOp,
   isBigNumberish,
   isMultiplier,
   resolveProperties,

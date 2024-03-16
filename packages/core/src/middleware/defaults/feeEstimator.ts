@@ -1,9 +1,13 @@
+import type { EntryPointVersion } from "../../entrypoint/types";
 import type { BigNumberish } from "../../types";
 import { applyUserOpOverrideOrFeeOption } from "../../utils/index.js";
 import type { MiddlewareClient } from "../actions";
 import type { ClientMiddlewareFn } from "../types";
 
-export const defaultFeeEstimator: <C extends MiddlewareClient>(
+export const defaultFeeEstimator: <
+  TEntryPointVersion extends EntryPointVersion,
+  C extends MiddlewareClient<TEntryPointVersion>
+>(
   client: C
 ) => ClientMiddlewareFn =
   (client) =>
