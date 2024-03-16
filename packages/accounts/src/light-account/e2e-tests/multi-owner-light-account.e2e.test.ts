@@ -2,9 +2,9 @@ import {
   LocalAccountSigner,
   LogLevel,
   Logger,
+  arbitrumSepolia,
   createBundlerClient,
   createSmartAccountClientFromExisting,
-  sepolia,
   type SmartAccountSigner,
   type UserOperationFeeOptions,
 } from "@alchemy/aa-core";
@@ -21,18 +21,18 @@ import {
   type LightAccountVersion,
 } from "../../index.js";
 import { getMSCAUpgradeToData } from "../../msca/utils.js";
-import { createLightAccountClient } from "../clients/lightAccount.js";
+import { createMultiOwnerLightAccountClient } from "../clients/multiOwnerLightAccount.js";
 import {
   API_KEY,
   LIGHT_ACCOUNT_OWNER_MNEMONIC,
   UNDEPLOYED_OWNER_MNEMONIC,
 } from "./constants.js";
 
-const chain = sepolia;
+const chain = arbitrumSepolia;
 
 Logger.setLogLevel(LogLevel.DEBUG);
 
-describe("Light Account v1 Tests", () => {
+describe("MultiOwnerLightAccount Tests", () => {
   const signer: SmartAccountSigner<HDAccount> =
     LocalAccountSigner.mnemonicToAccountSigner(LIGHT_ACCOUNT_OWNER_MNEMONIC);
   const undeployedAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
@@ -40,12 +40,12 @@ describe("Light Account v1 Tests", () => {
   );
 
   it.each([
-    { version: "v1.0.1" as const, expected: true },
-    { version: "v1.0.2" as const, throws: true },
-    { version: "v1.1.0" as const, expected: true },
+    // TODO 1271 signing support for v2.0.0
+    // { version: "v2.0.0" as const, expected: true },
+    { version: "v2.0.0" as const, throws: true },
   ])(
-    "LA version $version 1271 signing support",
-    async ({ version, expected, throws }) => {
+    "MultiOwnerLightAccount version $version should correctly verify 1271 signatures",
+    async ({ version, /*expected,*/ throws }) => {
       const client = await givenConnectedClient({ signer, chain, version });
       const message = "test";
 
@@ -57,7 +57,7 @@ describe("Light Account v1 Tests", () => {
             message,
             signature,
           })
-        ).toBe(expected);
+        ).toBe(/*expected*/ true);
       } else {
         await expect(
           client.account.signMessage({ message })
@@ -75,7 +75,7 @@ describe("Light Account v1 Tests", () => {
     );
   });
 
-  it("should sign typed data with 6492 successfully for undeployed account of LA v1", async () => {
+  it("should sign typed data with 6492 successfully for undeployed account", async () => {
     const { account } = await givenConnectedClient({
       signer: undeployedAccountSigner,
       chain,
@@ -157,18 +157,18 @@ describe("Light Account v1 Tests", () => {
     expect(isAddress(address)).toBe(true);
   });
 
-  it("should get on-chain owner address successfully", async () => {
+  it("should get on-chain owner addresses successfully", async () => {
     const client = await givenConnectedClient({ signer, chain });
-    expect(await client.account.getOwnerAddress()).toMatchInlineSnapshot(
-      '"0x65eaA2AfDF6c97295bA44C458abb00FebFB3a5FA"'
+    expect(await client.account.getOwnerAddresses()).toMatchInlineSnapshot(
+      '["0x65eaA2AfDF6c97295bA44C458abb00FebFB3a5FA"]'
     );
     // match with current signer
-    expect(await client.account.getOwnerAddress()).toBe(
+    expect(await client.account.getOwnerAddresses()).toContain(
       await signer.getAddress()
     );
   });
 
-  it("should transfer ownership successfully", async () => {
+  it("should update ownership successfully", async () => {
     const client = await givenConnectedClient({
       signer,
       chain,
@@ -195,8 +195,9 @@ describe("Light Account v1 Tests", () => {
       generatePrivateKey()
     );
 
-    await throwawayClient.transferOwnership({
-      newOwner,
+    await throwawayClient.updateOwners({
+      ownersToAdd: [await newOwner.getAddress()],
+      ownersToRemove: [await throwawaySigner.getAddress()],
       waitForTxn: true,
     });
 
@@ -206,13 +207,13 @@ describe("Light Account v1 Tests", () => {
       accountAddress: throwawayClient.getAddress(),
     });
 
-    const newOwnerAddress = await newOwnerClient.account.getOwnerAddress();
+    const newOwnerAddresses = await newOwnerClient.account.getOwnerAddresses();
 
-    expect(newOwnerAddress).not.toBe(await throwawaySigner.getAddress());
-    expect(newOwnerAddress).toBe(await newOwner.getAddress());
+    expect(newOwnerAddresses).not.toContain(await throwawaySigner.getAddress());
+    expect(newOwnerAddresses).toContain(await newOwner.getAddress());
   }, 100000);
 
-  it("should upgrade a deployed light account to msca successfully", async () => {
+  it("should upgrade a deployed multi owner light account to msca successfully", async () => {
     const client = await givenConnectedClient({
       signer,
       chain,
@@ -271,15 +272,15 @@ const givenConnectedClient = async ({
   chain,
   accountAddress,
   feeOptions,
-  version = "v1.1.0",
+  version = "v2.0.0",
 }: {
   signer: SmartAccountSigner;
   chain: Chain;
   accountAddress?: Address;
   feeOptions?: UserOperationFeeOptions;
-  version?: LightAccountVersion<"LightAccount">;
+  version?: LightAccountVersion<"MultiOwnerLightAccount">;
 }) => {
-  return createLightAccountClient({
+  return createMultiOwnerLightAccountClient({
     transport: http(`${chain.rpcUrls.alchemy.http[0]}/${API_KEY!}`),
     chain,
     account: {

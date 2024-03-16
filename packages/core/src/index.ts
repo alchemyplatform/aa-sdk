@@ -157,4 +157,5 @@ export {
   pick,
   resolveProperties,
   takeBytes,
+  toRecord,
 } from "./utils/index.js";

@@ -5,10 +5,7 @@ import type {
   SmartContractAccount,
 } from "../../account/smartContractAccount";
 import type { UpgradeToData } from "../../client/types";
-import type {
-  DefaultEntryPointVersion,
-  EntryPointVersion,
-} from "../../entrypoint/types";
+import type { EntryPointVersion } from "../../entrypoint/types";
 import type {
   BatchUserOperationCallData,
   UserOperationCallData,
@@ -94,7 +91,7 @@ export type WaitForUserOperationTxParameters = {
 
 //#region BuildUserOperationFromTransactionsResult
 export type BuildUserOperationFromTransactionsResult<
-  TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = {
   uoStruct: UserOperationStruct<TEntryPointVersion>;
   batch: BatchUserOperationCallData;

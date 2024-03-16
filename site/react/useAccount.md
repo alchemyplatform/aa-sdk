@@ -55,7 +55,7 @@ The underlying account type you want to use
 An optional param object based on the `type` property passed in above. It allows for overriding the default account parameters.
 
 ::: details CreateLightAccountParams
-<<< @/../packages/accounts/src/light-account/account.ts#CreateLightAccountParams
+<<< @/../packages/accounts/src/light-account/accounts/account.ts#CreateLightAccountParams
 :::
 
 ::: details CreateMultiOwnerModularAccountParams

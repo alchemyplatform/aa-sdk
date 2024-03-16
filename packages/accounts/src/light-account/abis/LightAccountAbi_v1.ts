@@ -1,4 +1,4 @@
-export const LightAccountAbi = [
+export const LightAccountAbi_v1 = [
   {
     inputs: [
       {

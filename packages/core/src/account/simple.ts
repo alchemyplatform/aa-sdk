@@ -40,7 +40,6 @@ class SimpleSmartContractAccount<
 > extends BaseSmartContractAccount<TTransport, TSigner> {
   protected index: bigint;
   protected entryPointVersion: EntryPointVersion;
-  protected factoryAddress: Address;
 
   constructor(params: SimpleSmartAccountParams<TTransport, TSigner>) {
     SimpleSmartAccountParamsSchema().parse(params);
@@ -57,7 +56,6 @@ class SimpleSmartContractAccount<
     this.index = params.salt ?? 0n;
     this.entryPointVersion =
       params.entryPointVersion ?? defaultEntryPointVersion;
-    this.factoryAddress = params.factoryAddress as Address;
   }
 
   getDummySignature(): `0x${string}` {

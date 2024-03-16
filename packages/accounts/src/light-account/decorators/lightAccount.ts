@@ -1,10 +1,10 @@
 import type { SmartAccountSigner } from "@alchemy/aa-core";
 import type { Chain, Client, Hex, Transport } from "viem";
-import type { LightAccount } from "./account";
+import type { LightAccount } from "../accounts/account";
 import {
   transferOwnership,
   type TransferLightAccountOwnershipParams,
-} from "./actions/transferOwnership.js";
+} from "../actions/transferOwnership.js";
 
 export type LightAccountClientActions<
   TSigner extends SmartAccountSigner = SmartAccountSigner,

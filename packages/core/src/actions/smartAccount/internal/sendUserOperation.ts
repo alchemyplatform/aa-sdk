@@ -43,8 +43,6 @@ export async function _sendUserOperation<
     throw new InvalidUserOperationError(args.uoStruct);
   }
 
-  console.log("request", client.chain.name, request);
-
   request.signature = await account.signUserOperationHash(
     entryPoint.getUserOperationHash(request)
   );

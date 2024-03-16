@@ -44,7 +44,7 @@ We have built an extension of the eth-infinitism `SimpleAccount` called [LightAc
 
 We provide an implementation of `SmartContractAccount` that works with `LightAccount.sol`, which can be used as an example of how to implement your own Smart Contract Account:
 ::: details LightSmartContractAccount
-<<< @/../packages/accounts/src/light-account/account.ts
+<<< @/../packages/accounts/src/light-account/accounts/account.ts
 :::
 
 ## The `toSmartContractAccount` Method

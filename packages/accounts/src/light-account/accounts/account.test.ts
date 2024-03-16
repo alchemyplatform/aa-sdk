@@ -5,7 +5,7 @@ import {
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import { custom, type Chain } from "viem";
-import { createLightAccountClient } from "./client.js";
+import { createLightAccountClient } from "../clients/lightAccount.js";
 
 const chain = polygonMumbai;
 

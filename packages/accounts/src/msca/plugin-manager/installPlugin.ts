@@ -76,6 +76,7 @@ export async function installPlugin<
     uo: callData,
     overrides,
     account,
+    context,
   });
 }
 

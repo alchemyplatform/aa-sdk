@@ -17,8 +17,6 @@ import type {
   UserOperationEstimateGasResponse,
   UserOperationReceipt,
   UserOperationRequest,
-  UserOperationRequest_v6,
-  UserOperationRequest_v7,
   UserOperationResponse,
 } from "../../types.js";
 
@@ -26,13 +24,13 @@ import type {
 export type BundlerRpcSchema = [
   {
     Method: "eth_sendUserOperation";
-    Parameters: [UserOperationRequest_v6 | UserOperationRequest_v7, Address];
+    Parameters: [UserOperationRequest<EntryPointVersion>, Address];
     ReturnType: Hash;
   },
   {
     Method: "eth_estimateUserOperationGas";
     Parameters: [
-      UserOperationRequest_v6 | UserOperationRequest_v7,
+      UserOperationRequest<EntryPointVersion>,
       Address,
       StateOverride?
     ];

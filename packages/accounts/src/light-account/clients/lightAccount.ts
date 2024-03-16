@@ -11,11 +11,11 @@ import {
   createLightAccount,
   type CreateLightAccountParams,
   type LightAccount,
-} from "./account.js";
+} from "../accounts/account.js";
 import {
   lightAccountClientActions,
   type LightAccountClientActions,
-} from "./decorator.js";
+} from "../decorators/lightAccount.js";
 
 export type CreateLightAccountClientParams<
   TTransport extends Transport = Transport,
