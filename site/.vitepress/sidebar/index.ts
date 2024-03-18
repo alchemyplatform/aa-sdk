@@ -10,6 +10,16 @@ export const sidebar: DefaultTheme.Sidebar = [
         link: "/getting-started/overview",
       },
       { text: "Quick start", link: "/getting-started/setup" },
+      {
+        text: "Custom Accounts",
+        collapsed: false,
+        base: "/getting-started/custom-accounts",
+        items: [
+          { text: "Setup", link: "/setup" },
+          { text: "Send a userop", link: "/send-a-userop" },
+          { text: "Integrate a signer", link: "/integrate-a-signer" },
+        ],
+      },
     ],
   },
   {
