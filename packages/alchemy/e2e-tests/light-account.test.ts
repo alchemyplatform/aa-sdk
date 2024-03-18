@@ -1,10 +1,12 @@
 import type { UserOperationOverrides } from "@alchemy/aa-core";
 import {
+  LocalAccountSigner,
+  deepHexlify,
   type SmartAccountSigner,
   type UserOperationFeeOptions,
 } from "@alchemy/aa-core";
 import { Alchemy, Network } from "alchemy-sdk";
-import { toHex, type Address, type Chain, type Hash } from "viem";
+import { toHex, zeroAddress, type Address, type Chain, type Hash } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
 import { sepolia } from "viem/chains";
 import { createLightAccountAlchemyProvider } from "../src/index.js";
@@ -268,6 +270,78 @@ describe("Light Account Tests", () => {
 
     expect(spy).toHaveBeenCalledOnce();
   }, 100000);
+
+  it("should succeed in using drop and replace", async () => {
+    const PRIVATE_KEY =
+      "0x0000000000000000000000000000000000000000000000000000000000000001";
+    const owner = LocalAccountSigner.privateKeyToAccountSigner(PRIVATE_KEY);
+    const provider = givenConnectedProvider({
+      owner,
+      chain,
+    }).withAlchemyGasManager({
+      policyId: PAYMASTER_POLICY_ID,
+    });
+
+    const firstSendResult = provider.sendUserOperation(
+      {
+        target: zeroAddress,
+        value: BigInt(0),
+        data: "0x",
+      },
+      {
+        maxFeePerGas: { percentage: 25 },
+        maxPriorityFeePerGas: { percentage: 25 },
+      }
+    );
+
+    expect(firstSendResult).resolves.not.toThrowError();
+
+    const result = provider.dropAndReplaceUserOperation(
+      deepHexlify((await firstSendResult).request),
+      {
+        maxFeePerGas: { percentage: 25 },
+        maxPriorityFeePerGas: { percentage: 25 },
+      }
+    );
+
+    expect(result).resolves.not.toThrowError();
+  });
+
+  it("should fail with replacement underpriced when using drop and replace with paymaster override", async () => {
+    const PRIVATE_KEY =
+      "0x0000000000000000000000000000000000000000000000000000000000000001";
+    const owner = LocalAccountSigner.privateKeyToAccountSigner(PRIVATE_KEY);
+    const provider = givenConnectedProvider({
+      owner,
+      chain,
+    }).withAlchemyGasManager({
+      policyId: PAYMASTER_POLICY_ID,
+    });
+
+    const firstSendResult = provider.sendUserOperation(
+      {
+        target: await provider.getAddress(),
+        data: "0x",
+      },
+      {
+        maxFeePerGas: { percentage: 25 },
+        maxPriorityFeePerGas: { percentage: 25 },
+      }
+    );
+
+    expect(firstSendResult).resolves.not.toThrowError();
+
+    const result = provider.dropAndReplaceUserOperation(
+      deepHexlify((await firstSendResult).request),
+      {
+        paymasterAndData: (await firstSendResult).request.paymasterAndData,
+        maxFeePerGas: { percentage: 25 },
+        maxPriorityFeePerGas: { percentage: 25 },
+      }
+    );
+
+    expect(result).rejects.toThrowError(/replacement underpriced/);
+  });
 });
 
 const givenConnectedProvider = ({

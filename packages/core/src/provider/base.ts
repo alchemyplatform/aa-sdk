@@ -414,6 +414,7 @@ export class SmartAccountProvider<
       await this._runMiddlewareStack(uoToSubmit, overrides);
 
     const _overrides: UserOperationOverrides = {
+      ...overrides,
       maxFeePerGas: bigIntMax(
         BigInt(maxFeePerGas ?? 0n),
         bigIntPercent(uoToDrop.maxFeePerGas, 110n)
@@ -422,7 +423,6 @@ export class SmartAccountProvider<
         BigInt(maxPriorityFeePerGas ?? 0n),
         bigIntPercent(uoToDrop.maxPriorityFeePerGas, 110n)
       ),
-      paymasterAndData: uoToDrop.paymasterAndData,
     };
 
     const uoToSend = await this._runMiddlewareStack(uoToSubmit, _overrides);
