@@ -142,7 +142,7 @@ An interface that defines the structure for the response received from the RPC m
 
 ## `UserOperationOverrides`
 
-Partial structure for overriding default values in a `UserOperationStruct`, such as gas limits and fees. Available fields include `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit`, `paymasterAndData`, or `nonceKey`. These override values are available from each [`ClientMiddleware`](#clientmiddleware) of the `SmartAccountClient`. Check out [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides) page to learn more.
+Partial structure for overriding default values in a `UserOperationStruct`, such as gas limits and fees. Available fields include `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit`, `paymasterAndData`, or `nonceKey`. You can also specify a `stateOverride` to be passed into `eth_estimateUserOperationGas` during fee estimation. These override values are available from each [`ClientMiddleware`](#clientmiddleware) of the `SmartAccountClient`. Check out [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides) page to learn more.
 
 ::: details UserOperationOverrides
 <<< @/../packages/core/src/types.ts#UserOperationOverrides

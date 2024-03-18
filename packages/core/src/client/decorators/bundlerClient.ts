@@ -4,6 +4,7 @@ import type {
   Client,
   Hash,
   PublicRpcSchema,
+  StateOverride,
   Transport,
 } from "viem";
 import { estimateUserOperationGas } from "../../actions/bundler/estimateUserOperationGas.js";
@@ -27,7 +28,7 @@ export type BundlerRpcSchema = [
   },
   {
     Method: "eth_estimateUserOperationGas";
-    Parameters: [UserOperationRequest, Address];
+    Parameters: [UserOperationRequest, Address, StateOverride?];
     ReturnType: UserOperationEstimateGasResponse;
   },
   {
@@ -54,11 +55,13 @@ export type BundlerActions = {
    *
    * @param request - the {@link UserOperationRequest} to estimate gas for
    * @param entryPoint - the entry point address the op will be sent to
+   * @params stateOverride - the state override to use for the estimation
    * @returns the gas estimates for the given response (see: {@link UserOperationEstimateGasResponse})
    */
   estimateUserOperationGas(
     request: UserOperationRequest,
-    entryPoint: Address
+    entryPoint: Address,
+    stateOverride?: StateOverride
   ): Promise<UserOperationEstimateGasResponse>;
 
   /**
@@ -108,8 +111,8 @@ export const bundlerActions: <
 >(
   client: TClient
 ) => BundlerActions = (client) => ({
-  estimateUserOperationGas: async (request, entryPoint) =>
-    estimateUserOperationGas(client, { request, entryPoint }),
+  estimateUserOperationGas: async (request, entryPoint, stateOverride) =>
+    estimateUserOperationGas(client, { request, entryPoint, stateOverride }),
   sendRawUserOperation: async (request, entryPoint) =>
     sendRawUserOperation(client, { request, entryPoint }),
   getUserOperationByHash: async (hash) =>
