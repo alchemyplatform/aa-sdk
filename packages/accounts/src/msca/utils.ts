@@ -48,6 +48,23 @@ import { MultiOwnerPlugin } from "./plugins/multi-owner/plugin.js";
  * @returns a {@link Address} for the given chain
  * @throws if the chain doesn't have an address currently deployed
  */
+export const getDefaultMultisigModularAccountFactoryAddress = (
+  chain: Chain
+): Address => {
+  switch (chain.id) {
+    case sepolia.id:
+      return "0x1FAa26138f710066F6bee390b5e910C8ED4AF089";
+  }
+  throw new DefaultFactoryNotDefinedError("MultisigModularAccount", chain);
+};
+
+/**
+ * Utility method returning the default multi owner msca factory address given a {@link Chain} object
+ *
+ * @param chain - a {@link Chain} object
+ * @returns a {@link Address} for the given chain
+ * @throws if the chain doesn't have an address currently deployed
+ */
 export const getDefaultMultiOwnerModularAccountFactoryAddress = (
   chain: Chain
 ): Address => {

@@ -24,7 +24,7 @@ export const createDummySmartContractAccount = async <C extends BundlerClient>(
       "0x1234567890123456789012345678901234567890deadbeef",
     encodeBatchExecute: async () => "0x",
     encodeExecute: async () => "0x",
-    getDummySignature: () =>
+    getDummySignature: async () =>
       "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c",
   });
 };
