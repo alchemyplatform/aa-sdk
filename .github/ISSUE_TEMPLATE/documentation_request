@@ -1,7 +1,7 @@
 ---
 name: Documentation Request
 about: Suggest improvements to project documentation
-title: "Docs: <My Documentation Request>"
+title: "docs: <My Documentation Request>"
 labels: documentation, needs-triage
 assignees: ""
 ---
