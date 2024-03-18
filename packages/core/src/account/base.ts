@@ -132,7 +132,7 @@ export abstract class BaseSmartContractAccount<
    * This is required for gas estimation so that the gas estimate are accurate.
    *
    */
-  abstract getDummySignature(): Hash;
+  abstract getDummySignature(): Promise<Hash>;
 
   /**
    * this method should return the abi encoded function data for a call to your contract's `execute` method

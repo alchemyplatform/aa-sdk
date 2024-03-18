@@ -66,7 +66,7 @@ export type SmartContractAccount<
   TUO = UserOperationRequest
 > = LocalAccount<Name> & {
   source: Name;
-  getDummySignature: () => Hex;
+  getDummySignature: () => Promise<Hex>;
   encodeExecute: (tx: AccountOp) => Promise<Hex>;
   encodeBatchExecute: (txs: AccountOp[]) => Promise<Hex>;
   signUserOperationHash: (uoHash: Hex) => Promise<Hex>;
@@ -99,7 +99,7 @@ export type ToSmartContractAccountParams<
   entryPoint?: EntryPointDef<TUserOperationRequest>;
   accountAddress?: Address;
   getAccountInitCode: () => Promise<Hex>;
-  getDummySignature: () => Hex;
+  getDummySignature: () => Promise<Hex>;
   encodeExecute: (tx: AccountOp) => Promise<Hex>;
   encodeBatchExecute?: (txs: AccountOp[]) => Promise<Hex>;
   // if not provided, will default to just using signMessage over the Hex
