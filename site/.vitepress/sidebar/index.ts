@@ -17,6 +17,7 @@ export const sidebar: DefaultTheme.Sidebar = [
         items: [
           { text: "Setup", link: "/setup" },
           { text: "Send a userop", link: "/send-a-userop" },
+          { text: "Choose a signer", link: "/choose-a-signer" },
           { text: "Integrate a signer", link: "/integrate-a-signer" },
         ],
       },
