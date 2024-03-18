@@ -1,4 +1,4 @@
-import type { Address, Chain, Client, Transport, StateOverride } from "viem";
+import type { Address, Chain, Client, StateOverride, Transport } from "viem";
 import type { BundlerRpcSchema } from "../../client/decorators/bundlerClient";
 import type {
   UserOperationEstimateGasResponse,
@@ -17,6 +17,9 @@ export const estimateUserOperationGas = async <
 ): Promise<UserOperationEstimateGasResponse> => {
   return client.request({
     method: "eth_estimateUserOperationGas",
-    params: [args.request, args.entryPoint, args.stateOverride],
+    params:
+      args.stateOverride != null
+        ? [args.request, args.entryPoint, args.stateOverride]
+        : [args.request, args.entryPoint],
   });
 };
