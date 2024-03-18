@@ -6,6 +6,7 @@ import {
   optimism,
   optimismSepolia,
   polygon,
+  polygonAmoy,
   polygonMumbai,
   sepolia,
 } from "@alchemy/aa-core";
@@ -21,6 +22,7 @@ export const SessionKeyPluginGenConfig: PluginGenConfig = {
     [sepolia.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
     [baseSepolia.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
     [polygon.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
+    [polygonAmoy.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
     [polygonMumbai.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
     [optimism.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
     [optimismSepolia.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
