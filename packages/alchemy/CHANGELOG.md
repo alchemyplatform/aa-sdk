@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.5.0](https://github.com/alchemyplatform/aa-sdk/compare/v2.3.1...v2.5.0) (2024-03-18)
+
+### Bug Fixes
+
+- **base-provider:** dont use paymaster override in drop and replace ([#516](https://github.com/alchemyplatform/aa-sdk/issues/516)) ([175a91c](https://github.com/alchemyplatform/aa-sdk/commit/175a91c002d8df9623180ca8b28fc07cb1838dd6))
+
 # [2.4.0](https://github.com/alchemyplatform/aa-sdk/compare/v2.3.1...v2.4.0) (2024-01-26)
 
 **Note:** Version bump only for package @alchemy/aa-alchemy

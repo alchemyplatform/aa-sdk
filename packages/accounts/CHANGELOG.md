@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.5.0](https://github.com/alchemyplatform/aa-sdk/compare/v2.3.1...v2.5.0) (2024-03-18)
+
+### Features
+
+- update session key plugindef abi and config ([#382](https://github.com/alchemyplatform/aa-sdk/issues/382)) ([a47978e](https://github.com/alchemyplatform/aa-sdk/commit/a47978e66c11504862aeeaa1d4aeb4be37f1f48d))
+
 # [2.4.0](https://github.com/alchemyplatform/aa-sdk/compare/v2.3.1...v2.4.0) (2024-01-26)
 
 ### Features
