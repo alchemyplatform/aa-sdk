@@ -116,7 +116,7 @@ export const formatSignatures = (signatures: Signature[]) => {
         let v = parseInt(sig.signature.slice(130, 132)) + addV;
         eoaSigs += sig.signature.slice(2, 130) + v.toString(16);
       }
-      if (sig.signerType === SignerType.Contract) {
+      else {
         const sigLen = BigInt(sig.signature.slice(2).length / 2);
         eoaSigs +=
           "0x" +
