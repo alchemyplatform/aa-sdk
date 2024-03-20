@@ -73,7 +73,7 @@ export async function createMultisigModularAccount({
 
     // NOTE: the current signer connected will be one of the sigs as well
     const sigAddress = await signer.getAddress();
-    // sigs need to be dedupe + ordered in ascending order and not == to zero address
+    // sigs need to be deduped + ordered in ascending order and !== to zero address
     const sigs_ = Array.from(new Set([...sigs, sigAddress]))
       .filter((x) => hexToBigInt(x) !== 0n)
       .sort((a, b) => {
