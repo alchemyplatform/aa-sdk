@@ -57,7 +57,7 @@ The SDK also implements an EIP-1193 provider interface to easily plug into popul
 
 The `aa-sdk` is modular at every layer of the stack and can be easily extended to fit your custom needs. You can plug in any [smart account](/smart-accounts/custom/using-your-own) implementation, [Signer](/signers/choosing-a-signer), Gas Manager API, RPC provider.
 
-Get started with `aa-sdk` in our [Getting started](/getting-started/setup) guide or checkout the [open-source repo](https://github.com/alchemyplatform/aa-sdk).
+Get started with `aa-sdk` in our [Getting started](/getting-started/embedded-accounts/setup) guide or checkout the [open-source repo](https://github.com/alchemyplatform/aa-sdk).
 
 ## Modular Account
 
@@ -93,4 +93,4 @@ Check out the open source code in our affectionately named [Rundler github repo]
 
 Account Kit was designed from the ground up to make account abstraction easy. It’s built on top of industry-leading infrastructure that powers applications at massive scale from Opensea to Shopify.
 
-Next, read the [Quick start](/getting-started/setup) guide to get setup in minutes!
+Next, read the [Quick start](/getting-started/embedded-accounts/setup) guide to get setup in minutes!

@@ -5,13 +5,13 @@ const chain = sepolia;
 
 // The private key of your EOA that will be the signer to connect with the Modular Account
 // Our recommendation is to store the private key in an environment variable
-const PRIVATE_KEY = "0xYourEOAPrivateKey" as Hex;
+const PRIVATE_KEY = process.env.PRIVATE_KEY as Hex;
 const signer = LocalAccountSigner.privateKeyToAccountSigner(PRIVATE_KEY);
 
 // Create a smart account client to send user operations from your smart account
 const client = await createModularAccountAlchemyClient({
   // get your Alchemy API key at https://dashboard.alchemy.com
-  apiKey: "ALCHEMY_API_KEY",
+  apiKey: process.env.ALCHEMY_API_KEY,
   chain,
   signer,
 });

@@ -9,7 +9,6 @@ export const sidebar: DefaultTheme.Sidebar = [
         text: "Overview",
         link: "/getting-started/overview",
       },
-      { text: "Quick start", link: "/getting-started/setup" },
       {
         text: "Custom Accounts",
         collapsed: false,

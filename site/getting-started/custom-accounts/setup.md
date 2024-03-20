@@ -98,8 +98,40 @@ Once the app is created, you'll be able to access your API key from the app's se
 
 Save this API key as you'll need it later!
 
-## 5. Create the index.ts file
+## 5. Create a .env file
+
+To make things easier, create a `.env` file in the root of your project and add the following to it:
+
+```env
+ALCHEMY_API_KEY=<your-key-from-above>
+# we'll use this key to generate an owner for our account later
+PRIVATE_KEY=<a-private-key-for-testing>
+```
+
+## 6. Create the index.ts file
 
 Finally, create a new file called `index.ts` in the root of your project. This is where you'll write the code for your custom account.
+
+::: details Using `dotenv` to load environment variables
+One way to leverage the `.env` file above is to use `dotenv` to load the environment variables into your project. Install
+::: code-group
+
+```bash [npm]
+npm install dotenv
+```
+
+```bash [yarn]
+yarn add dotenv
+```
+
+Then at the top of your `index.ts` file, add the following line:
+
+::: code-group
+
+```ts [index.ts]
+import "dotenv/config";
+```
+
+:::
 
 You're now ready to start building your custom account! 🚀
