@@ -1,10 +1,10 @@
-import type { EntryPointDef } from "@alchemy/aa-core";
 import {
   createBundlerClient,
   getAccountAddress,
   getVersion060EntryPoint,
   toSmartContractAccount,
   type Address,
+  type EntryPointDef,
   type SmartAccountSigner,
   type SmartContractAccountWithSigner,
   type UserOperationRequest,
