@@ -3,6 +3,53 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.6.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.6.0...v3.6.1) (2024-03-18)
+
+### Bug Fixes
+
+- **core:** fix stateoverrides passed to estimation userop gas ([#517](https://github.com/alchemyplatform/aa-sdk/issues/517)) ([2980a35](https://github.com/alchemyplatform/aa-sdk/commit/2980a35226b5e42e4f3aaa77fd53564a3486327b))
+
+# [3.6.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.5.1...v3.6.0) (2024-03-18)
+
+### Features
+
+- add optional stateOverride parameter to eth_estimateUserOperationGas ([#513](https://github.com/alchemyplatform/aa-sdk/issues/513)) ([3e0b88a](https://github.com/alchemyplatform/aa-sdk/commit/3e0b88a5e8adf322e5f5f2c659f57d94bc2cc95c))
+- add polygon amoy default addresses ([#506](https://github.com/alchemyplatform/aa-sdk/issues/506)) ([34f273e](https://github.com/alchemyplatform/aa-sdk/commit/34f273e8b6d89c7c80f9de57e0331090602e776a))
+- create documentation_request issue template ([#515](https://github.com/alchemyplatform/aa-sdk/issues/515)) ([aa5ad21](https://github.com/alchemyplatform/aa-sdk/commit/aa5ad21e659069923acd0939a17bf140cdf10638))
+
+## [3.5.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.5.0...v3.5.1) (2024-03-14)
+
+**Note:** Version bump only for package root
+
+# [3.5.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.4.4...v3.5.0) (2024-03-14)
+
+### Bug Fixes
+
+- **alchemy-signer:** check if process is defined before reading env vars ([#508](https://github.com/alchemyplatform/aa-sdk/issues/508)) ([bce8123](https://github.com/alchemyplatform/aa-sdk/commit/bce81239457c05bf1ee3560513bf6c140167ad04))
+- fix plugingen script for no input param provider function generation ([#509](https://github.com/alchemyplatform/aa-sdk/issues/509)) ([c5f2561](https://github.com/alchemyplatform/aa-sdk/commit/c5f2561755e59a5bb7b6ec1d8b9ec8840a07fb82))
+
+### Features
+
+- **plugins:** make plugingen a cli tool ([#507](https://github.com/alchemyplatform/aa-sdk/issues/507)) ([53ba81d](https://github.com/alchemyplatform/aa-sdk/commit/53ba81d33422bb3f18134c1dd75e68d64f5cc3f0))
+
+## [3.4.4](https://github.com/alchemyplatform/aa-sdk/compare/v3.4.3...v3.4.4) (2024-03-12)
+
+### Bug Fixes
+
+- **alchemy-signer:** set the user during passkey account creation ([#503](https://github.com/alchemyplatform/aa-sdk/issues/503)) ([a6669c6](https://github.com/alchemyplatform/aa-sdk/commit/a6669c6f35ba04fa1d2d33b79f74ab24af74804c))
+
+## [3.4.3](https://github.com/alchemyplatform/aa-sdk/compare/v3.4.2...v3.4.3) (2024-03-11)
+
+### Bug Fixes
+
+- **alchemy-signer:** allow for org id to be passed with bundle ([#501](https://github.com/alchemyplatform/aa-sdk/issues/501)) ([8c06f4f](https://github.com/alchemyplatform/aa-sdk/commit/8c06f4f42c312e2e14d9854f536b1badf787abe2))
+
+## [3.4.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.4.1...v3.4.2) (2024-03-08)
+
+### Bug Fixes
+
+- **alchemy-signer:** persist temporary session state to localstorage always ([#500](https://github.com/alchemyplatform/aa-sdk/issues/500)) ([fe84685](https://github.com/alchemyplatform/aa-sdk/commit/fe846858da955fa2c316283aabff31aa0d2c2525))
+
 ## [3.4.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.4.0...v3.4.1) (2024-03-02)
 
 ### Bug Fixes

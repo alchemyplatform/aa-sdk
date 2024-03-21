@@ -10,6 +10,7 @@ import {
   optimismGoerli,
   optimismSepolia,
   polygon,
+  polygonAmoy,
   polygonMumbai,
   sepolia,
 } from "@alchemy/aa-core";
@@ -30,6 +31,7 @@ export const getDefaultNaniAccountFactoryAddress = (chain: Chain): Address => {
     case baseGoerli.id:
     case baseSepolia.id:
     case polygon.id:
+    case polygonAmoy.id:
     case polygonMumbai.id:
     case arbitrum.id:
     case arbitrumGoerli.id:

@@ -18,6 +18,7 @@ export type CreateAccountParams =
       type: "email";
       email: string;
       expirationSeconds?: number;
+      redirectParams?: URLSearchParams;
     }
   | {
       type: "passkey";
@@ -29,6 +30,7 @@ export type EmailAuthParams = {
   email: string;
   expirationSeconds?: number;
   targetPublicKey: string;
+  redirectParams?: URLSearchParams;
 };
 
 export type SignerRoutes = SignerEndpoints[number]["Route"];
@@ -45,7 +47,7 @@ export type SignerEndpoints = [
   {
     Route: "/v1/signup";
     Body:
-      | EmailAuthParams
+      | (Omit<EmailAuthParams, "redirectParams"> & { redirectParams?: string })
       | {
           passkey: {
             challenge: string;
@@ -67,7 +69,7 @@ export type SignerEndpoints = [
   },
   {
     Route: "/v1/auth";
-    Body: EmailAuthParams;
+    Body: Omit<EmailAuthParams, "redirectParams"> & { redirectParams?: string };
     Response: {
       orgId: string;
     };

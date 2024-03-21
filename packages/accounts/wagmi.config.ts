@@ -24,11 +24,14 @@ export default defineConfig(
       plugingen({
         chain: config.chain,
         connectionConfig: {
-          rpcUrl: "https://ethereum-sepolia.publicnode.com",
+          rpcUrl:
+            config.rpcUrl ||
+            (config.chain.rpcUrls?.default?.http.length > 0
+              ? config.chain.rpcUrls.default.http[0]
+              : `https://${config.chain.name
+                  .toLowerCase()
+                  .replace("-testnet", "")}-rpc.publicnode.com`),
         },
-        // connectionConfig: config.rpcUrl
-        //   ? { rpcUrl: config.rpcUrl }
-        //   : { apiKey: process.env.API_KEY! },
         config,
       }),
     ],

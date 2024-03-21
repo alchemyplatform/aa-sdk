@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.6.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.6.0...v3.6.1) (2024-03-18)
+
+**Note:** Version bump only for package @alchemy/aa-accounts
+
+# [3.6.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.5.1...v3.6.0) (2024-03-18)
+
+### Features
+
+- add polygon amoy default addresses ([#506](https://github.com/alchemyplatform/aa-sdk/issues/506)) ([34f273e](https://github.com/alchemyplatform/aa-sdk/commit/34f273e8b6d89c7c80f9de57e0331090602e776a))
+
+## [3.5.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.5.0...v3.5.1) (2024-03-14)
+
+**Note:** Version bump only for package @alchemy/aa-accounts
+
+# [3.5.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.4.4...v3.5.0) (2024-03-14)
+
+### Bug Fixes
+
+- fix plugingen script for no input param provider function generation ([#509](https://github.com/alchemyplatform/aa-sdk/issues/509)) ([c5f2561](https://github.com/alchemyplatform/aa-sdk/commit/c5f2561755e59a5bb7b6ec1d8b9ec8840a07fb82))
+
+### Features
+
+- **plugins:** make plugingen a cli tool ([#507](https://github.com/alchemyplatform/aa-sdk/issues/507)) ([53ba81d](https://github.com/alchemyplatform/aa-sdk/commit/53ba81d33422bb3f18134c1dd75e68d64f5cc3f0))
+
+## [3.4.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.4.1...v3.4.2) (2024-03-08)
+
+**Note:** Version bump only for package @alchemy/aa-accounts
+
 # [3.4.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.3.0...v3.4.0) (2024-02-29)
 
 ### Features

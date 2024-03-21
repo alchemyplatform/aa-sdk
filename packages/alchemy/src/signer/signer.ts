@@ -25,8 +25,8 @@ import {
 } from "./session/manager.js";
 
 export type AuthParams =
-  | { type: "email"; email: string }
-  | { type: "email"; bundle: string }
+  | { type: "email"; email: string; redirectParams?: URLSearchParams }
+  | { type: "email"; bundle: string; orgId?: string }
   | {
       type: "passkey";
       createNew: false;
@@ -42,7 +42,9 @@ export const AlchemySignerParamsSchema = z
   .object({
     client: z.custom<AlchemySignerClient>().or(AlchemySignerClientParamsSchema),
   })
-  .extend({ sessionConfig: SessionManagerParamsSchema.optional() });
+  .extend({
+    sessionConfig: SessionManagerParamsSchema.omit({ client: true }).optional(),
+  });
 
 export type AlchemySignerParams = z.input<typeof AlchemySignerParamsSchema>;
 
@@ -69,9 +71,10 @@ export class AlchemySigner
       this.inner = params.client;
     }
 
-    this.sessionManager = new SessionManager(
-      sessionConfig ?? { client: this.inner }
-    );
+    this.sessionManager = new SessionManager({
+      ...sessionConfig,
+      client: this.inner,
+    });
   }
 
   /**
@@ -193,11 +196,13 @@ export class AlchemySigner
         ? await this.inner.initEmailAuth({
             email: params.email,
             expirationSeconds: this.sessionManager.expirationTimeMs,
+            redirectParams: params.redirectParams,
           })
         : await this.inner.createAccount({
             type: "email",
             email: params.email,
             expirationSeconds: this.sessionManager.expirationTimeMs,
+            redirectParams: params.redirectParams,
           });
 
       this.sessionManager.setTemporarySession({ orgId });
@@ -211,7 +216,10 @@ export class AlchemySigner
         });
       });
     } else {
-      const temporarySession = this.sessionManager.getTemporarySession();
+      const temporarySession = params.orgId
+        ? { orgId: params.orgId }
+        : this.sessionManager.getTemporarySession();
+
       if (!temporarySession) {
         throw new Error("Could not find email auth init session!");
       }

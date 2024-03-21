@@ -90,14 +90,16 @@ export class SessionManager {
   };
 
   public setTemporarySession = (session: { orgId: string }) => {
-    this.storage.setItem(
+    // temporary session must be placed in localStorage so that it can be accessed across tabs
+    localStorage.setItem(
       `${this.sessionKey}:temporary`,
       JSON.stringify(session)
     );
   };
 
   public getTemporarySession = (): { orgId: string } | null => {
-    const sessionStr = this.storage.getItem(`${this.sessionKey}:temporary`);
+    // temporary session must be placed in localStorage so that it can be accessed across tabs
+    const sessionStr = localStorage.getItem(`${this.sessionKey}:temporary`);
 
     if (!sessionStr) {
       return null;
