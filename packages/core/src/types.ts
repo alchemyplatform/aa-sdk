@@ -13,12 +13,11 @@ import type { EntryPointVersion } from "./entrypoint/types";
 import type {
   BigNumberishRangeSchema,
   BigNumberishSchema,
-  IsUndefined,
   MultiplierSchema,
 } from "./utils";
 
 export type EmptyHex = `0x`;
-export type NullAddress = `0x`;
+export type NullAddress = `0x0`;
 
 // based on @account-abstraction/common
 export type PromiseOrValue<T> = T | Promise<T>;
@@ -53,26 +52,27 @@ export type UserOperationFeeOptions = z.input<
   typeof UserOperationFeeOptionsSchema
 >;
 
+export type UserOperationOverridesParameter<
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
+  Required extends boolean = false
+> = Required extends true
+  ? { overrides: TEntryPointVersion }
+  : { overrides?: TEntryPointVersion };
+
 //#region UserOperationOverrides
 // Note: entry point version is required for UserOperationOverrides
 export type UserOperationOverrides<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = Partial<
   {
-    callGasLimit:
-      | UserOperationStruct<TEntryPointVersion>["callGasLimit"]
-      | Multiplier;
-    maxFeePerGas:
-      | UserOperationStruct<TEntryPointVersion>["maxFeePerGas"]
-      | Multiplier;
+    callGasLimit: UserOperationStruct["callGasLimit"] | Multiplier;
+    maxFeePerGas: UserOperationStruct["maxFeePerGas"] | Multiplier;
     maxPriorityFeePerGas:
-      | UserOperationStruct<TEntryPointVersion>["maxPriorityFeePerGas"]
+      | UserOperationStruct["maxPriorityFeePerGas"]
       | Multiplier;
-    preVerificationGas:
-      | UserOperationStruct<TEntryPointVersion>["preVerificationGas"]
-      | Multiplier;
+    preVerificationGas: UserOperationStruct["preVerificationGas"] | Multiplier;
     verificationGasLimit:
-      | UserOperationStruct<TEntryPointVersion>["verificationGasLimit"]
+      | UserOperationStruct["verificationGasLimit"]
       | Multiplier;
     /**
      * This can be used to override the key used when calling `entryPoint.getNonce`
@@ -166,15 +166,11 @@ export interface UserOperationRequest_v7 {
 //#region UserOperationRequest
 // Reference: https://eips.ethereum.org/EIPS/eip-4337#definitions
 export type UserOperationRequest<
-  TEntryPointVersion extends EntryPointVersion | undefined =
-    | EntryPointVersion
-    | undefined
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = TEntryPointVersion extends "0.6.0"
   ? UserOperationRequest_v6
   : TEntryPointVersion extends "0.7.0"
   ? UserOperationRequest_v7
-  : IsUndefined<TEntryPointVersion> extends true
-  ? UserOperationRequest_v6 | UserOperationRequest_v7
   : never;
 
 //#endregion UserOperationRequest
@@ -192,9 +188,7 @@ export interface UserOperationEstimateGasResponse {
 
 //#region UserOperationResponse
 export interface UserOperationResponse<
-  TEntryPointVersion extends EntryPointVersion | undefined =
-    | EntryPointVersion
-    | undefined
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > {
   /* the User Operation */
   userOperation: UserOperationRequest<TEntryPointVersion>;
@@ -359,15 +353,11 @@ export interface UserOperationStruct_v7 {
 //#endregion UserOperationStruct_v7
 
 //#region UserOperationStruct
-type UserOperationStruct<
-  TEntryPointVersion extends EntryPointVersion | undefined =
-    | EntryPointVersion
-    | undefined
+export type UserOperationStruct<
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = TEntryPointVersion extends "0.6.0"
   ? UserOperationStruct_v6
   : TEntryPointVersion extends "0.7.0"
   ? UserOperationStruct_v7
-  : IsUndefined<TEntryPointVersion> extends true
-  ? UserOperationStruct_v6 | UserOperationStruct_v7
   : never;
 //#endregion UserOperationStruct

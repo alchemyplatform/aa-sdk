@@ -16,55 +16,8 @@ import {
   polygonMumbai,
   sepolia,
 } from "../chains/index.js";
-import type {
-  DefaultEntryPointVersion,
-  EntryPointVersion,
-} from "../entrypoint/types.js";
 import { DefaultFactoryNotDefinedError } from "../errors/account.js";
-import { EntryPointNotFoundError } from "../errors/entrypoint.js";
 import type { UserOperationFeeOptions } from "../types";
-
-/**
- * Utility method returning the entry point contract address given a {@link Chain} object
- *
- * @param chain - a {@link Chain} object
- * @param version - a {@link EntryPointVersion} entry point contract version
- * @returns a {@link abi.Address} for the given chain
- * @throws if the chain doesn't have an address currently deployed
- */
-export const getDefaultEntryPointAddress = <
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
->(
-  chain: Chain,
-  version: TEntryPointVersion
-): Address => {
-  switch (chain.id) {
-    case mainnet.id:
-    case sepolia.id:
-    case goerli.id:
-    case polygon.id:
-    case polygonMumbai.id:
-    case polygonAmoy.id:
-    case optimism.id:
-    case optimismGoerli.id:
-    case optimismSepolia.id:
-    case arbitrum.id:
-    case arbitrumGoerli.id:
-    case arbitrumSepolia.id:
-    case base.id:
-    case baseGoerli.id:
-    case baseSepolia.id:
-      switch (version) {
-        case "0.7.0":
-          return "0x0000000071727De22E5E9d8BAf0edAc6f37da032";
-        case "0.6.0":
-          return "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
-        case defaultEntryPointVersion:
-          return "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
-      }
-  }
-  throw new EntryPointNotFoundError(chain, version);
-};
 
 /**
  * Utility method returning the default simple account factory address given a {@link Chain} object
@@ -98,8 +51,6 @@ export const getDefaultSimpleAccountFactoryAddress = (
 
   throw new DefaultFactoryNotDefinedError("SimpleAccount", chain);
 };
-
-export const defaultEntryPointVersion: DefaultEntryPointVersion = "0.6.0";
 
 export const minPriorityFeePerBidDefaults = new Map<number, bigint>([
   [arbitrum.id, 10_000_000n],

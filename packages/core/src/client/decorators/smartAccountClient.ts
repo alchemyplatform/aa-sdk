@@ -42,7 +42,6 @@ import type {
 } from "../../actions/smartAccount/types";
 import { upgradeAccount } from "../../actions/smartAccount/upgradeAccount.js";
 import { waitForUserOperationTransaction } from "../../actions/smartAccount/waitForUserOperationTransacation.js";
-import type { EntryPointVersion } from "../../entrypoint/types";
 import type {
   UserOperationOverrides,
   UserOperationRequest,
@@ -56,44 +55,41 @@ export type BaseSmartAccountClientActions<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+    | undefined
 > = {
   buildUserOperation: (
-    args: SendUserOperationParameters<TAccount, TEntryPointVersion>
-  ) => Promise<UserOperationStruct<TEntryPointVersion>>;
+    args: SendUserOperationParameters<TAccount>
+  ) => Promise<UserOperationStruct>;
   buildUserOperationFromTx: (
     args: SendTransactionParameters<TChain, TAccount>,
     overrides?: UserOperationOverrides
-  ) => Promise<UserOperationStruct<TEntryPointVersion>>;
+  ) => Promise<UserOperationStruct>;
   buildUserOperationFromTxs: (
-    args: SendTransactionsParameters<TAccount, TEntryPointVersion>
-  ) => Promise<BuildUserOperationFromTransactionsResult<TEntryPointVersion>>;
+    args: SendTransactionsParameters<TAccount>
+  ) => Promise<BuildUserOperationFromTransactionsResult>;
   checkGasSponsorshipEligibility: (
-    args: SendUserOperationParameters<TAccount, TEntryPointVersion>
+    args: SendUserOperationParameters<TAccount>
   ) => Promise<boolean>;
   signUserOperation: (
-    args: SignUserOperationParameters<TAccount, TEntryPointVersion>
-  ) => Promise<UserOperationRequest<TEntryPointVersion>>;
+    args: SignUserOperationParameters<TAccount>
+  ) => Promise<UserOperationRequest>;
   dropAndReplaceUserOperation: (
-    args: DropAndReplaceUserOperationParameters<TAccount, TEntryPointVersion>
-  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
+    args: DropAndReplaceUserOperationParameters<TAccount>
+  ) => Promise<SendUserOperationResult>;
   sendTransaction: <TChainOverride extends Chain | undefined = undefined>(
     args: SendTransactionParameters<TChain, TAccount, TChainOverride>,
-    overrides?: UserOperationOverrides<TEntryPointVersion>
+    overrides?: UserOperationOverrides
   ) => Promise<Hex>;
   sendTransactions: (
-    args: SendTransactionsParameters<TAccount, TEntryPointVersion>
+    args: SendTransactionsParameters<TAccount>
   ) => Promise<Hex>;
   sendUserOperation: (
-    args: SendUserOperationParameters<TAccount, TEntryPointVersion>
-  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
+    args: SendUserOperationParameters<TAccount>
+  ) => Promise<SendUserOperationResult>;
   waitForUserOperationTransaction: (
     args: WaitForTransactionReceiptParameters
   ) => Promise<Hex>;
-  upgradeAccount: (
-    args: UpgradeAccountParams<TAccount, TEntryPointVersion>
-  ) => Promise<Hex>;
+  upgradeAccount: (args: UpgradeAccountParams<TAccount>) => Promise<Hex>;
   signMessage: (args: SignMessageParameters<TAccount>) => Promise<Hex>;
   signTypedData: <
     const TTypedData extends TypedData | { [key: string]: unknown },
@@ -122,13 +118,10 @@ export const smartAccountClientActions: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+    | undefined
 >(
   client: Client<TTransport, TChain, TAccount>
-) => BaseSmartAccountClientActions<TChain, TAccount, TEntryPointVersion> = (
-  client
-) => ({
+) => BaseSmartAccountClientActions<TChain, TAccount> = (client) => ({
   buildUserOperation: (args) => buildUserOperation(client, args),
   buildUserOperationFromTx: (args, overrides) =>
     buildUserOperationFromTx(client, args, overrides),

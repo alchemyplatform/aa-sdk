@@ -2,6 +2,7 @@ import type { Address } from "abitype";
 import {
   getContract,
   http,
+  toHex,
   trim,
   type GetContractReturnType,
   type Hash,
@@ -15,7 +16,7 @@ import {
   createBundlerClient,
   type BundlerClient,
 } from "../client/bundlerClient.js";
-import type { EntryPointVersion } from "../entrypoint/types.js";
+import { getEntryPoint } from "../entrypoint/index.js";
 import {
   BatchExecutionNotSupportedError,
   FailedToGetStorageSlotError,
@@ -26,11 +27,7 @@ import { InvalidRpcUrlError } from "../errors/client.js";
 import { Logger } from "../logger.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import { wrapSignatureWith6492 } from "../signer/utils.js";
-import type { BatchUserOperationCallData } from "../types.js";
-import {
-  defaultEntryPointVersion,
-  getDefaultEntryPointAddress,
-} from "../utils/defaults.js";
+import type { BatchUserOperationCallData, NullAddress } from "../types.js";
 import { createBaseSmartAccountParamsSchema } from "./schema.js";
 import type {
   BaseSmartAccountParams,
@@ -62,7 +59,6 @@ export abstract class BaseSmartContractAccount<
     PublicClient
   >;
   protected entryPointAddress: Address;
-  protected entryPointVersion: EntryPointVersion;
   readonly rpcProvider:
     | BundlerClient<TTransport>
     | BundlerClient<HttpTransport>;
@@ -73,14 +69,8 @@ export abstract class BaseSmartContractAccount<
       TSigner
     >().parse(params_);
 
-    this.entryPointVersion =
-      params.entryPointVersion ?? defaultEntryPointVersion;
     this.entryPointAddress =
-      params.entryPointAddress ??
-      getDefaultEntryPointAddress(
-        params.chain,
-        params.entryPointVersion ?? defaultEntryPointVersion
-      );
+      params.entryPointAddress ?? getEntryPoint(params.chain).address;
 
     const rpcUrl =
       typeof params.rpcClient === "string"
@@ -374,7 +364,7 @@ export abstract class BaseSmartContractAccount<
     return [factoryAddress, factoryCalldata];
   }
 
-  protected async getImplementationAddress(): Promise<"0x0" | Address> {
+  protected async getImplementationAddress(): Promise<NullAddress | Address> {
     const accountAddress = await this.getAddress();
 
     const storage = await this.rpcProvider.getStorageAt({
@@ -390,7 +380,7 @@ export abstract class BaseSmartContractAccount<
       );
     }
 
-    return trim(storage);
+    return toHex(trim(storage));
   }
 
   private async _getAccountInitCode(): Promise<Hash> {

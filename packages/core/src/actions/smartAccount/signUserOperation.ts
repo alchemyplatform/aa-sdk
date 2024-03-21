@@ -1,7 +1,6 @@
 import type { Chain, Client, Transport } from "viem";
 import type { SmartContractAccount } from "../../account/smartContractAccount";
 import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
-import type { EntryPointVersion } from "../../entrypoint/types";
 import { AccountNotFoundError } from "../../errors/account.js";
 import {
   ChainNotFoundError,
@@ -17,15 +16,11 @@ export const signUserOperation: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+    | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: SignUserOperationParameters<TAccount, TEntryPointVersion>
-) => Promise<UserOperationRequest<EntryPointVersion>> = async (
-  client,
-  args
-) => {
+  args: SignUserOperationParameters<TAccount>
+) => Promise<UserOperationRequest> = async (client, args) => {
   const { account = client.account } = args;
 
   if (!account) {

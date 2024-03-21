@@ -8,8 +8,9 @@ import type { SendUserOperationResult } from "../../../client/types";
 import type { EntryPointVersion } from "../../../entrypoint/types";
 import { AccountNotFoundError } from "../../../errors/account.js";
 import { ChainNotFoundError } from "../../../errors/client.js";
+import { InvalidEntryPointError } from "../../../errors/entrypoint.js";
 import { InvalidUserOperationError } from "../../../errors/useroperation.js";
-import type { UserOperationStruct } from "../../../types";
+import type { UserOperationRequest, UserOperationStruct } from "../../../types";
 import { deepHexlify, isValidRequest } from "../../../utils/index.js";
 
 export const _sendUserOperation: <
@@ -17,17 +18,11 @@ export const _sendUserOperation: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+    | undefined
 >(
-  client: BaseSmartAccountClient<
-    TTransport,
-    TChain,
-    TAccount,
-    TEntryPointVersion
-  >,
+  client: BaseSmartAccountClient<TTransport, TChain, TAccount>,
   args: {
-    uoStruct: UserOperationStruct<TEntryPointVersion>;
+    uoStruct: UserOperationStruct<EntryPointVersion>;
   } & GetAccountParameter<TAccount>
 ) => Promise<SendUserOperationResult> = async (client, args) => {
   const { account = client.account } = args;
@@ -44,8 +39,22 @@ export const _sendUserOperation: <
     throw new InvalidUserOperationError(args.uoStruct);
   }
 
+  const request_ =
+    account.getEntryPoint().version === "0.6.0"
+      ? (request as UserOperationRequest<"0.6.0">)
+      : account.getEntryPoint().version === "0.7.0"
+      ? (request as UserOperationRequest<"0.7.0">)
+      : undefined;
+
+  if (!request_) {
+    throw new InvalidEntryPointError(
+      client.chain,
+      account.getEntryPoint().version
+    );
+  }
+
   request.signature = await account.signUserOperationHash(
-    account.getEntryPoint().getUserOperationHash(request)
+    account.getEntryPoint().getUserOperationHash(request_)
   );
 
   return {

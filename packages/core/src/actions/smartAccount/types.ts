@@ -8,7 +8,7 @@ import type { EntryPointVersion } from "../../entrypoint/types";
 import type {
   BatchUserOperationCallData,
   UserOperationCallData,
-  UserOperationOverrides,
+  UserOperationOverridesParameter,
   UserOperationRequest,
   UserOperationStruct,
 } from "../../types";
@@ -16,34 +16,28 @@ import type {
 //#region UpgradeAccountParams
 export type UpgradeAccountParams<
   TAccount extends SmartContractAccount | undefined,
-  TEntryPointVersion extends EntryPointVersion | undefined =
-    | EntryPointVersion
-    | undefined
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = {
   upgradeTo: UpgradeToData;
-  overrides?: UserOperationOverrides<TEntryPointVersion>;
   waitForTx?: boolean;
-} & GetAccountParameter<TAccount>;
+} & GetAccountParameter<TAccount> &
+  UserOperationOverridesParameter<TEntryPointVersion>;
 //#endregion UpgradeAccountParams
 
 //#region SendUserOperationParameters
 export type SendUserOperationParameters<
   TAccount extends SmartContractAccount | undefined,
-  TEntryPointVersion extends EntryPointVersion | undefined =
-    | EntryPointVersion
-    | undefined
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = {
   uo: UserOperationCallData | BatchUserOperationCallData;
-  overrides?: UserOperationOverrides<TEntryPointVersion>;
-} & GetAccountParameter<TAccount>;
+} & GetAccountParameter<TAccount> &
+  UserOperationOverridesParameter<TEntryPointVersion>;
 //#endregion SendUserOperationParameters
 
 //#region SignUserOperationParameters
 export type SignUserOperationParameters<
   TAccount extends SmartContractAccount | undefined,
-  TEntryPointVersion extends EntryPointVersion | undefined =
-    | EntryPointVersion
-    | undefined
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = {
   uoStruct: UserOperationStruct<TEntryPointVersion>;
 } & GetAccountParameter<TAccount>;
@@ -52,25 +46,21 @@ export type SignUserOperationParameters<
 //#region SendTransactionsParameters
 export type SendTransactionsParameters<
   TAccount extends SmartContractAccount | undefined,
-  TEntryPointVersion extends EntryPointVersion | undefined =
-    | EntryPointVersion
-    | undefined
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = {
   requests: RpcTransactionRequest[];
-  overrides?: UserOperationOverrides<TEntryPointVersion>;
-} & GetAccountParameter<TAccount>;
+} & GetAccountParameter<TAccount> &
+  UserOperationOverridesParameter<TEntryPointVersion>;
 //#endregion SendTransactionsParameters
 
 //#region DropAndReplaceUserOperationParameters
 export type DropAndReplaceUserOperationParameters<
   TAccount extends SmartContractAccount | undefined,
-  TEntryPointVersion extends EntryPointVersion | undefined =
-    | EntryPointVersion
-    | undefined
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = {
   uoToDrop: UserOperationRequest<TEntryPointVersion>;
-  overrides?: UserOperationOverrides<TEntryPointVersion>;
-} & GetAccountParameter<TAccount>;
+} & GetAccountParameter<TAccount> &
+  UserOperationOverridesParameter<TEntryPointVersion>;
 //#endregion DropAndReplaceUserOperationParameters
 
 //#region WaitForUserOperationTxParameters
@@ -81,12 +71,9 @@ export type WaitForUserOperationTxParameters = {
 
 //#region BuildUserOperationFromTransactionsResult
 export type BuildUserOperationFromTransactionsResult<
-  TEntryPointVersion extends EntryPointVersion | undefined =
-    | EntryPointVersion
-    | undefined
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = {
   uoStruct: UserOperationStruct<TEntryPointVersion>;
   batch: BatchUserOperationCallData;
-  overrides: UserOperationOverrides<TEntryPointVersion>;
-};
+} & UserOperationOverridesParameter<TEntryPointVersion, true>;
 //#endregion BuildUserOperationFromTransactionsResult

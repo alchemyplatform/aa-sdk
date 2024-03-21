@@ -12,7 +12,6 @@ import {
 } from "viem";
 import { z } from "zod";
 import type { SmartContractAccount } from "../account/smartContractAccount.js";
-import type { EntryPointVersion } from "../entrypoint/types.js";
 import { AccountNotFoundError } from "../errors/account.js";
 import { ChainNotFoundError } from "../errors/client.js";
 import { middlewareActions } from "../middleware/actions.js";
@@ -64,10 +63,9 @@ export type SmartAccountClientActions<
   chain extends Chain | undefined = Chain | undefined,
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
-  entryPointVersion extends EntryPointVersion = EntryPointVersion
-> = BaseSmartAccountClientActions<chain, account, entryPointVersion> &
-  BundlerActions<entryPointVersion> &
+    | undefined
+> = BaseSmartAccountClientActions<chain, account> &
+  BundlerActions &
   PublicActions;
 //#endregion SmartAccountClientActions
 
@@ -91,16 +89,15 @@ export type BaseSmartAccountClient<
   chain extends Chain | undefined = Chain | undefined,
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
-  entryPointVersion extends EntryPointVersion = EntryPointVersion
+    | undefined
 > = Prettify<
   Client<
     transport,
     chain,
     account,
-    [...BundlerRpcSchema<entryPointVersion>, ...PublicRpcSchema],
+    [...BundlerRpcSchema, ...PublicRpcSchema],
     { middleware: ClientMiddleware } & SmartAccountClientOpts &
-      BundlerActions<entryPointVersion> &
+      BundlerActions &
       PublicActions
   >
 >;

@@ -4,27 +4,101 @@ import type {
   Address,
   Chain,
   GetContractParameters,
+  Hash,
   Hex,
   Transport,
 } from "viem";
-import type { UserOperationRequest } from "../types";
+import type { EntryPointAbi_v6 } from "../abis/EntryPointAbi_v6";
+import type { EntryPointAbi_v7 } from "../abis/EntryPointAbi_v7";
+import type { UserOperationRequest, UserOperationStruct } from "../types";
+import type { EQ, OneOf } from "../utils";
 
-export type EntryPointDef<
+export interface EntryPointRegistryBase {
+  "0.6.0": any;
+  "0.7.0": any;
+}
+export type EntryPointVersion = keyof EntryPointRegistryBase;
+export type DefaultEntryPointVersion = OneOf<"0.6.0", EntryPointVersion>;
+
+export type SupportedEntryPoint<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
+  TChain extends Chain = Chain,
   TAbi extends Abi | readonly unknown[] = Abi
 > = {
   version: TEntryPointVersion;
-  address: Address;
-  abi: GetContractParameters<Transport, Chain, Account, TAbi>["abi"];
-  chain: Chain;
+  address: Record<TChain["id"], Address>;
+  abi: GetContractParameters<Transport, TChain, Account, TAbi>["abi"];
+
+  /**
+   * Generates a hash for a UserOperation valid from entry point version 0.6 onwards
+   *
+   * @param request - the UserOperation to get the hash for
+   * @param entryPointAddress - the entry point address that will be used to execute the UserOperation
+   * @param entryPointVersion - a {@link EntryPointVersion} entry point contract version
+   * @param chainId - the chain on which this UserOperation will be executed
+   * @returns the hash of the UserOperation
+   */
+  getUserOperationHash: (
+    request: UserOperationRequest<TEntryPointVersion>,
+    entryPointAddress: Address,
+    chainId: number
+  ) => Hash;
+
+  /**
+   * Pack the user operation data into bytes for hashing for entry point version 0.6 onwards
+   * Reference:
+   * vv6: https://github.com/eth-infinitism/account-abstraction/blob/releases/v0.6/test/UserOp.ts#L16-L61
+   * vv7: https://github.com/eth-infinitism/account-abstraction/blob/releases/v0.7/test/UserOp.ts#L28-L67
+   *
+   * @param request - the UserOperation to get the hash for
+   * @returns the hash of the UserOperation
+   */
   packUserOperation: (
     userOperation: UserOperationRequest<TEntryPointVersion>
   ) => Hex;
+
+  isUserOperationVersion: (
+    userOperation: UserOperationStruct | UserOperationRequest
+  ) => boolean;
+};
+
+export interface EntryPointRegistry<TChain extends Chain = Chain>
+  extends EntryPointRegistryBase {
+  "0.6.0": SupportedEntryPoint<"0.6.0", TChain, typeof EntryPointAbi_v6>;
+  "0.7.0": SupportedEntryPoint<"0.7.0", TChain, typeof EntryPointAbi_v7>;
+}
+
+export type EntryPointDef<
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
+  TChain extends Chain = Chain,
+  TAbi extends Abi | readonly unknown[] = Abi
+> = Omit<
+  SupportedEntryPoint<TEntryPointVersion, TChain, TAbi>,
+  "address" | "getUserOperationHash"
+> & {
+  address: Address;
+  chain: TChain;
   getUserOperationHash: (
     userOperation: UserOperationRequest<TEntryPointVersion>
   ) => Hex;
 };
 
-export type EntryPointVersion = "0.6.0" | "0.7.0" | DefaultEntryPointVersion;
+export interface EntryPointDefRegistry<TChain extends Chain = Chain>
+  extends EntryPointRegistryBase {
+  "0.6.0": EntryPointDef<"0.6.0", TChain, typeof EntryPointAbi_v6>;
+  "0.7.0": EntryPointDef<"0.7.0", TChain, typeof EntryPointAbi_v7>;
+}
 
-export type DefaultEntryPointVersion = "0.6.0";
+export type GetEntryPointOptions<
+  TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
+> = EQ<TEntryPointVersion, DefaultEntryPointVersion> extends true
+  ?
+      | {
+          addressOverride?: Address;
+          version?: OneOf<TEntryPointVersion, EntryPointVersion>;
+        }
+      | undefined
+  : {
+      addressOverride?: Address;
+      version: OneOf<TEntryPointVersion, EntryPointVersion>;
+    };
