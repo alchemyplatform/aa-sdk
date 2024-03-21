@@ -19,6 +19,9 @@ head:
   - - meta
     - name: twitter:description
       content: Account Kit is a vertically integrated stack for building apps that support ERC-4337 smart accounts, Signer integrations, sponsoring gas, bundlers, and an SDK.
+  - - meta
+    - name: google-site-verification
+      content: W4pmFb0Oe26_OndBLdy5uqNrsl_gfmKfTlHwlHPd4Co
 titleTemplate: :title Documentation
 # you can also add HTML or Markdown components below the --- line to add custom HTML or Markdown content (eg: https://github.com/wagmi-dev/viem/blob/main/site/index.md?plain=1)
 ---

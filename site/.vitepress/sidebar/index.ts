@@ -13,91 +13,6 @@ export const sidebar: DefaultTheme.Sidebar = [
     ],
   },
   {
-    text: "Choosing a smart account",
-    items: [
-      { text: "Introduction", link: "/smart-accounts/" },
-      {
-        text: "Modular Account",
-        collapsed: false,
-        base: "/smart-accounts/modular-account",
-        items: [
-          { text: "Introduction", link: "/" },
-          { text: "Getting started", link: "/getting-started" },
-          { text: "Deployments", link: "/deployments" },
-          {
-            text: "Upgrading to Modular Account",
-            link: "/upgrade-la-to-ma",
-          },
-        ],
-      },
-      {
-        text: "Light Account",
-        link: "/smart-accounts/light-account/",
-      },
-      {
-        text: "Custom accounts",
-        collapsed: true,
-        base: "/smart-accounts/custom",
-        items: [
-          { text: "Use your own", link: "/using-your-own" },
-          { text: "Contribute your account", link: "/contributing" },
-        ],
-      },
-      { text: "Gas benchmarks", link: "/smart-accounts/gas-benchmarks" },
-    ],
-  },
-  {
-    text: "Choosing a signer",
-    base: "/signers",
-    items: [
-      { text: "Introduction", link: "/choosing-a-signer" },
-      {
-        text: "Alchemy signer",
-        items: [
-          { text: "Overview", link: "/index" },
-          { text: "Export private key", link: "/export-private-key" },
-        ],
-        collapsed: false,
-        base: "/signers/alchemy-signer",
-      },
-      {
-        text: "Third-party signers",
-        base: "/signers/guides",
-        collapsed: true,
-        items: [
-          { text: "Magic", link: "/magic" },
-          { text: "Web3Auth", link: "/web3auth" },
-          { text: "Turnkey", link: "/turnkey" },
-          { text: "Privy", link: "/privy" },
-          { text: "Dynamic", link: "/dynamic" },
-          { text: "Fireblocks", link: "/fireblocks" },
-          { text: "Portal", link: "/portal" },
-          { text: "Capsule", link: "/capsule" },
-          { text: "Lit Protocol", link: "/lit" },
-          { text: "Particle Network", link: "/particle-network" },
-          { text: "Arcana Auth", link: "/arcana-auth" },
-          { text: "Dfns", link: "/dfns" },
-          { text: "WalletKit", link: "/walletkit" },
-        ],
-      },
-      { text: "EOA signer", link: "/eoa" },
-      {
-        text: "Custom signer",
-        collapsed: true,
-        items: [
-          {
-            text: "Use your own",
-            link: "/guides/custom-signer",
-          },
-          {
-            text: "Contribute your signer",
-            link: "/contributing",
-          },
-        ],
-      },
-    ],
-  },
-  {
     text: "Using smart accounts",
     base: "/using-smart-accounts",
     items: [
@@ -149,6 +64,14 @@ export const sidebar: DefaultTheme.Sidebar = [
           { text: "Get account tokens", link: "/token" },
         ],
       },
+      {
+        text: "Export private key",
+        link: "/export-private-key",
+      },
+      {
+        text: "Manage user sessions",
+        link: "/manage-user-sessions",
+      },
     ],
   },
   {
@@ -165,6 +88,77 @@ export const sidebar: DefaultTheme.Sidebar = [
       },
     ],
   },
+  {
+    text: "Choosing a smart account",
+    items: [
+      { text: "Introduction", link: "/smart-accounts/" },
+      {
+        text: "Modular Account",
+        collapsed: false,
+        base: "/smart-accounts/modular-account",
+        items: [
+          { text: "Introduction", link: "/" },
+          { text: "Getting started", link: "/getting-started" },
+          { text: "Deployments", link: "/deployments" },
+          {
+            text: "Upgrading to Modular Account",
+            link: "/upgrade-la-to-ma",
+          },
+        ],
+      },
+      {
+        text: "Light Account",
+        link: "/smart-accounts/light-account/",
+      },
+      {
+        text: "Custom accounts",
+        collapsed: true,
+        base: "/smart-accounts/custom",
+        items: [
+          { text: "Use your own", link: "/using-your-own" },
+          { text: "Contribute your account", link: "/contributing" },
+        ],
+      },
+      { text: "Gas benchmarks", link: "/smart-accounts/gas-benchmarks" },
+    ],
+  },
+  {
+    text: "Custom signers",
+    base: "/signers",
+    items: [
+      { text: "Introduction", link: "/choosing-a-signer" },
+      {
+        text: "Third-party signers",
+        base: "/signers/guides",
+        collapsed: true,
+        items: [
+          { text: "Magic", link: "/magic" },
+          { text: "Web3Auth", link: "/web3auth" },
+          { text: "Turnkey", link: "/turnkey" },
+          { text: "Privy", link: "/privy" },
+          { text: "Dynamic", link: "/dynamic" },
+          { text: "Fireblocks", link: "/fireblocks" },
+          { text: "Portal", link: "/portal" },
+          { text: "Capsule", link: "/capsule" },
+          { text: "Lit Protocol", link: "/lit" },
+          { text: "Particle Network", link: "/particle-network" },
+          { text: "Arcana Auth", link: "/arcana-auth" },
+          { text: "Dfns", link: "/dfns" },
+          { text: "WalletKit", link: "/walletkit" },
+        ],
+      },
+      { text: "EOA signer", link: "/eoa" },
+      {
+        text: "Build your own",
+        link: "/guides/custom-signer",
+      },
+      {
+        text: "Contribute your signer",
+        link: "/contributing",
+      },
+    ],
+  },
+
   {
     text: "Custom infra",
     base: "/third-party",
