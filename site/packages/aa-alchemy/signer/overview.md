@@ -50,10 +50,10 @@ export const account = await createMultiOwnerModularAccount({
 ### Using the Signer as an EOA
 
 ::: warning
-Note that EOA wallets will not have access to smart account features like gas sponsorship, batched transactions, multi-owner, or plugins. If you want to switch from EOA to smart accounts later, then each user will need to transfer their assets from the EOA account to a new smart account. It is not currently possible to "upgrade" and EOA to a smart contract account, although the community is discussing potential [EIPs](https://eips.ethereum.org/EIPS/eip-7377) to do that in the future.
+Note that EOA wallets will not have access to smart account features like gas sponsorship, batched transactions, multi-owner, or plugins. If you want to switch from EOA to smart accounts later, then each user will need to transfer their assets from the EOA account to a new smart account. It is not currently possible to "upgrade" an EOA to a smart contract account, although the community is discussing potential [EIPs](https://eips.ethereum.org/EIPS/eip-7377) to do that in the future.
 :::
 
-Because the Alchemy Signer has its own `address` and supports signing messages as raw hashes, it is possible to use this signer as an EOA directly. To do so, you can adapt the AlchemySigner to your library of choice and leverage its `signMessage`, `signTypedData`, and `signTransaction` methods directly. The public address of the signer can be accessed via `getAddress`.
+Because the Alchemy Signer has its own `address` and supports signing messages as raw hashes, it is possible to use this signer as an EOA directly. To do so, you can adapt the Alchemy Signer to your library of choice and leverage its `signMessage`, `signTypedData`, and `signTransaction` methods directly. The public address of the signer can be accessed via `getAddress`.
 
 If you are using viem, then you can use the `toViemAccount` method which will allow you to use the signer with a [`WalletClient`](https://viem.sh/docs/clients/wallet#local-accounts-private-key-mnemonic-etc).
 
