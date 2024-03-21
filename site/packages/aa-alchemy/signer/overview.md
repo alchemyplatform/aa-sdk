@@ -84,7 +84,9 @@ export const walletClient = createWalletClient({
 
 - `client: AlchemySignerClient | AlchemySignerClientParams` -- the underlying client to use for the signer. The `AlchemySignerClientParams` are defined as follows:
   - `connection: ConnectionConfig` -- the api config to use for calling Alchemy's APIs.
-  - `iframeConfig: IframeConfig` -- the config to use for the iframe that will be used to interact with the signer. - `iframeElementId?: string` -- the id of the iframe element that will be injected into the DOM [default: "turnkey-iframe"] - `iframeContainerId: string` -- the id of the iframe container that you have injected into your DOM
+  - `iframeConfig: IframeConfig` -- the config to use for the iframe that will be used to interact with the signer.
+    - `iframeElementId?: string` -- the id of the iframe element that will be injected into the DOM [default: "turnkey-iframe"]
+    - `iframeContainerId: string` -- the id of the iframe container that you have injected into your DOM
 - `sessionConfig?: SessionConfig` -- optional parameter used to configure user sessions
   - `sessionKey?: string` -- the key that the session will be stored to in your chosen storage [default: "alchemy-signer-session"]
   - `storage?: "localStorage" | "sessionStorage"` -- the storage to use for the session [default: "localStorage"]
