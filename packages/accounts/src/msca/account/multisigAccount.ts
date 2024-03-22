@@ -36,7 +36,7 @@ export type CreateMultisigModularAccountParams<
   salt?: bigint;
   factoryAddress?: Address;
   threshold: bigint;
-  sigs?: Address[];
+  owners?: Address[];
   entryPoint?: EntryPointDef<UserOperationRequest>;
   accountAddress?: Address;
   initCode?: Hex;
@@ -57,7 +57,7 @@ export async function createMultisigModularAccount({
   initCode,
   entryPoint = getVersion060EntryPoint(chain),
   factoryAddress = getDefaultMultisigModularAccountFactoryAddress(chain),
-  sigs = [],
+  owners = [],
   salt = 0n,
   threshold,
 }: CreateMultisigModularAccountParams): Promise<MultisigModularAccount> {
@@ -74,7 +74,7 @@ export async function createMultisigModularAccount({
     // NOTE: the current signer connected will be one of the sigs as well
     const sigAddress = await signer.getAddress();
     // sigs need to be deduped + ordered in ascending order and !== to zero address
-    const sigs_ = Array.from(new Set([...sigs, sigAddress]))
+    const sigs_ = Array.from(new Set([...owners, sigAddress]))
       .filter((x) => hexToBigInt(x) !== 0n)
       .sort((a, b) => {
         const bigintA = hexToBigInt(a);

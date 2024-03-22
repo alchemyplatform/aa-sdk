@@ -1,0 +1,4 @@
+export const API_KEY = process.env.API_KEY!;
+export const PAYMASTER_POLICY_ID = process.env.PAYMASTER_POLICY_ID!;
+export const MODULAR_MULTISIG_ACCOUNT_OWNER_MNEMONIC =
+  process.env.MODULAR_MULTISIG_ACCOUNT_OWNER_MNEMONIC!;

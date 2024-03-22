@@ -29,22 +29,32 @@ export { IPluginAbi } from "./msca/abis/IPlugin.js";
 export { IPluginManagerAbi } from "./msca/abis/IPluginManager.js";
 export { IStandardExecutorAbi } from "./msca/abis/IStandardExecutor.js";
 export { MultiOwnerModularAccountFactoryAbi } from "./msca/abis/MultiOwnerModularAccountFactory.js";
+export { MultisigModularAccountFactoryAbi } from "./msca/abis/MultisigModularAccountFactory.js";
 export { UpgradeableModularAccountAbi } from "./msca/abis/UpgradeableModularAccount.js";
 export type * from "./msca/account-loupe/decorator.js";
 export { accountLoupeActions } from "./msca/account-loupe/decorator.js";
 export type * from "./msca/account/multiOwnerAccount.js";
+export type * from "./msca/account/multisigAccount.js";
 export { createMultiOwnerModularAccount } from "./msca/account/multiOwnerAccount.js";
+export { createMultisigModularAccount } from "./msca/account/multisigAccount.js";
 export { standardExecutor } from "./msca/account/standardExecutor.js";
 export { createMultiOwnerModularAccountClient } from "./msca/client.js";
+export { createMultisigModularAccountClient } from "./msca/client.js";
 export type * from "./msca/plugin-manager/decorator.js";
 export { pluginManagerActions } from "./msca/plugin-manager/decorator.js";
 export type * from "./msca/plugins/multi-owner/index.js";
 export { multiOwnerPluginActions } from "./msca/plugins/multi-owner/index.js";
+export { multisigPluginActions } from "./msca/plugins/multisig/index.js";
 export {
   MultiOwnerPlugin,
   MultiOwnerPluginAbi,
   MultiOwnerPluginExecutionFunctionAbi,
 } from "./msca/plugins/multi-owner/plugin.js";
+export {
+  MultisigPlugin,
+  MultisigPluginAbi,
+  MultisigPluginExecutionFunctionAbi,
+} from "./msca/plugins/multisig/plugin.js";
 export type * from "./msca/plugins/session-key/index.js";
 export { sessionKeyPluginActions } from "./msca/plugins/session-key/index.js";
 export type * from "./msca/plugins/session-key/permissions.js";
@@ -62,6 +72,7 @@ export { buildSessionKeysToRemoveStruct } from "./msca/plugins/session-key/utils
 export type * from "./msca/plugins/types.js";
 export {
   getDefaultMultiOwnerModularAccountFactoryAddress,
+  getDefaultMultisigModularAccountFactoryAddress,
   getMAInitializationData,
   getMSCAUpgradeToData,
 } from "./msca/utils.js";

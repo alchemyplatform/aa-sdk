@@ -1,5 +1,5 @@
-//export type * from "./extension.js";
-//export { multisigPluginActions } from "./extension.js";
+export type * from "./extension.js";
+export { multisigPluginActions } from "./extension.js";
 export {
   MultisigPluginAbi,
   MultisigPluginExecutionFunctionAbi,

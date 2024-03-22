@@ -115,8 +115,7 @@ export const formatSignatures = (signatures: Signature[]) => {
       if (sig.signerType === SignerType.EOA) {
         let v = parseInt(sig.signature.slice(130, 132)) + addV;
         eoaSigs += sig.signature.slice(2, 130) + v.toString(16);
-      }
-      else {
+      } else {
         const sigLen = BigInt(sig.signature.slice(2).length / 2);
         eoaSigs +=
           "0x" +

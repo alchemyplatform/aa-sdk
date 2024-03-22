@@ -16,6 +16,11 @@ import {
   type MultiOwnerModularAccount,
 } from "./account/multiOwnerAccount.js";
 import {
+  createMultisigModularAccount,
+  type CreateMultisigModularAccountParams,
+  type MultisigModularAccount,
+} from "./account/multisigAccount.js";
+import {
   pluginManagerActions,
   type PluginManagerActions,
 } from "./plugin-manager/decorator.js";
@@ -23,6 +28,10 @@ import {
   multiOwnerPluginActions,
   type MultiOwnerPluginActions,
 } from "./plugins/multi-owner/index.js";
+import {
+  multisigPluginActions,
+  type MultisigPluginActions,
+} from "./plugins/multisig/index.js";
 
 export type CreateMultiOwnerModularAccountClientParams<
   TTransport extends Transport = Transport,
@@ -31,6 +40,20 @@ export type CreateMultiOwnerModularAccountClientParams<
 > = {
   account: Omit<
     CreateMultiOwnerModularAccountParams<TTransport, TSigner>,
+    "transport" | "chain"
+  >;
+} & Omit<
+  CreateLightAccountClientParams<TTransport, TChain, TSigner>,
+  "account"
+>;
+
+export type CreateMultisigModularAccountClientParams<
+  TTransport extends Transport = Transport,
+  TChain extends Chain | undefined = Chain | undefined,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
+> = {
+  account: Omit<
+    CreateMultisigModularAccountParams<TTransport, TSigner>,
     "transport" | "chain"
   >;
 } & Omit<
@@ -75,5 +98,45 @@ export async function createMultiOwnerModularAccountClient({
   })
     .extend(pluginManagerActions)
     .extend(multiOwnerPluginActions)
+    .extend(accountLoupeActions);
+}
+
+export function createMultisigModularAccountClient<
+  TChain extends Chain | undefined = Chain | undefined,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
+>(
+  args: CreateMultisigModularAccountClientParams<Transport, TChain, TSigner>
+): Promise<
+  SmartAccountClient<
+    CustomTransport,
+    Chain,
+    MultisigModularAccount<TSigner>,
+    SmartAccountClientActions<Chain, MultisigModularAccount<TSigner>> &
+      MultisigPluginActions<MultisigModularAccount<TSigner>> &
+      PluginManagerActions<MultisigModularAccount<TSigner>> &
+      AccountLoupeActions<MultisigModularAccount<TSigner>>
+  >
+>;
+
+export async function createMultisigModularAccountClient({
+  account,
+  transport,
+  chain,
+  ...clientConfig
+}: CreateMultisigModularAccountClientParams): Promise<SmartAccountClient> {
+  const modularAccount = await createMultisigModularAccount({
+    ...account,
+    transport,
+    chain,
+  });
+
+  return createSmartAccountClient({
+    ...clientConfig,
+    transport,
+    chain,
+    account: modularAccount,
+  })
+    .extend(pluginManagerActions)
+    .extend(multisigPluginActions)
     .extend(accountLoupeActions);
 }
