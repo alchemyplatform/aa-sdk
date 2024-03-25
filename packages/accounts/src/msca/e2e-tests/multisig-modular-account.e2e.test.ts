@@ -14,6 +14,7 @@ import {
   type Address,
   type Chain,
   type HDAccount,
+  zeroHash,
 } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import { multisigPluginActions } from "../../index.js";
@@ -46,7 +47,7 @@ describe("Multisig Modular Account Tests", async () => {
       { accountIndex: 2 }
     );
 
-  const threshold = 2n;
+  const threshold = 1n;
 
   const owners = [
     await signer1.getAddress(),
@@ -66,9 +67,40 @@ describe("Multisig Modular Account Tests", async () => {
       threshold,
     });
     expect(address).toMatchInlineSnapshot(
-      '"0x995A7E85E909bA030C755b4955836b40c6772C19"'
+      '"0xEB0baf3Cf45D434AAb74a6C73315965A2612B58f"'
     );
   });
+
+  // it("should sign a hash successfully", async () => {
+  //   const provider = await givenConnectedProvider({ signer: signer1, chain, owners, threshold });
+
+  //   const uoHash = zeroHash;
+
+  //   const signature = await provider.account.signUserOperationHash(uoHash);
+
+  //   console.log("signature", signature);
+  // }, 100000);
+
+  it("should execute successfully", async () => {
+    const provider = await givenConnectedProvider({
+      signer: signer1,
+      chain,
+      owners,
+      threshold,
+    });
+
+    const result = await provider.sendUserOperation({
+      uo: {
+        target: provider.getAddress(),
+        data: "0x",
+      },
+    });
+    const txnHash = provider.waitForUserOperationTransaction({
+      hash: result.hash,
+    });
+
+    await expect(txnHash).resolves.not.toThrowError();
+  }, 100000);
 });
 
 const givenConnectedProvider = async ({

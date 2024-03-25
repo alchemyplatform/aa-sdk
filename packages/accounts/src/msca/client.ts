@@ -101,6 +101,10 @@ export async function createMultiOwnerModularAccountClient({
     .extend(accountLoupeActions);
 }
 
+type ExampleExtendedActions = {
+  test: (a: string) => string;
+};
+
 export function createMultisigModularAccountClient<
   TChain extends Chain | undefined = Chain | undefined,
   TSigner extends SmartAccountSigner = SmartAccountSigner
@@ -114,7 +118,8 @@ export function createMultisigModularAccountClient<
     SmartAccountClientActions<Chain, MultisigModularAccount<TSigner>> &
       MultisigPluginActions<MultisigModularAccount<TSigner>> &
       PluginManagerActions<MultisigModularAccount<TSigner>> &
-      AccountLoupeActions<MultisigModularAccount<TSigner>>
+      AccountLoupeActions<MultisigModularAccount<TSigner>> &
+      ExampleExtendedActions
   >
 >;
 
@@ -124,13 +129,15 @@ export async function createMultisigModularAccountClient({
   chain,
   ...clientConfig
 }: CreateMultisigModularAccountClientParams): Promise<SmartAccountClient> {
+  // todo: load in the threshold here?
+
   const modularAccount = await createMultisigModularAccount({
     ...account,
     transport,
     chain,
   });
 
-  return createSmartAccountClient({
+  const client = createSmartAccountClient({
     ...clientConfig,
     transport,
     chain,
@@ -138,5 +145,17 @@ export async function createMultisigModularAccountClient({
   })
     .extend(pluginManagerActions)
     .extend(multisigPluginActions)
-    .extend(accountLoupeActions);
+    .extend(accountLoupeActions)
+    .extend((_) => {
+      return {
+        test: (a: string) => {
+          return a;
+        },
+      };
+    });
+
+  //update
+  // client.updateOwnership =
+
+  return client;
 }
