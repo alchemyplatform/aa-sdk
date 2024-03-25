@@ -29,7 +29,7 @@ export type AlchemySmartAccountClientConfig<
 } & AlchemyProviderConfig &
   Pick<
     SmartAccountClientConfig<transport, chain, account>,
-    "customMiddleware" | "feeEstimator" | "gasEstimator"
+    "customMiddleware" | "feeEstimator" | "gasEstimator" | "signUserOperation"
   >;
 
 export type BaseAlchemyActions<
@@ -87,6 +87,7 @@ export function createAlchemySmartAccountClient<
   feeEstimator,
   customMiddleware,
   gasEstimator,
+  signUserOperation,
   ...config_
 }: AlchemySmartAccountClientConfig<
   TTransport,
@@ -101,6 +102,7 @@ export function createAlchemySmartAccountClient({
   feeEstimator,
   customMiddleware,
   gasEstimator,
+  signUserOperation,
   ...config_
 }: AlchemySmartAccountClientConfig): AlchemySmartAccountClient {
   const config = AlchemyProviderConfigSchema.parse(config_);
@@ -126,5 +128,6 @@ export function createAlchemySmartAccountClient({
     feeEstimator,
     customMiddleware,
     gasEstimator,
+    signUserOperation,
   });
 }

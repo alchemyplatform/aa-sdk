@@ -6,6 +6,7 @@ import {
   type Address,
   type EntryPointDef,
   type SmartAccountSigner,
+  type SmartContractAccount,
   type SmartContractAccountWithSigner,
   type UserOperationRequest,
 } from "@alchemy/aa-core";
@@ -24,7 +25,9 @@ import { standardExecutor } from "./standardExecutor.js";
 
 export type MultisigModularAccount<
   TSigner extends SmartAccountSigner = SmartAccountSigner
-> = SmartContractAccountWithSigner<"MultisigModularAccount", TSigner>;
+> = SmartContractAccountWithSigner<"MultisigModularAccount", TSigner> & {
+  getLocalThreshold: () => bigint;
+};
 
 export type CreateMultisigModularAccountParams<
   TTransport extends Transport = Transport,
@@ -105,7 +108,7 @@ export async function createMultisigModularAccount({
     chain,
     entryPoint,
     accountAddress,
-    source: `MultisigModularAccount`,
+    source: MULTISIG_ACCOUNT_SOURCE,
     getAccountInitCode,
     ...standardExecutor,
     ...multisigMessageSigner({
@@ -118,7 +121,16 @@ export async function createMultisigModularAccount({
 
   return {
     ...baseAccount,
+    getLocalThreshold: () => threshold,
     publicKey: await signer.getAddress(),
     getSigner: () => signer,
   };
 }
+
+export const MULTISIG_ACCOUNT_SOURCE = "MultisigModularAccount";
+
+export const isMultisigModularAccount = (
+  acct: SmartContractAccount
+): acct is MultisigModularAccount => {
+  return acct.source === MULTISIG_ACCOUNT_SOURCE;
+};

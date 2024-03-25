@@ -1,5 +1,6 @@
 import {
   type HDAccount,
+  type HDOptions,
   type Hex,
   type LocalAccount,
   type PrivateKeyAccount,
@@ -41,8 +42,11 @@ export class LocalAccountSigner<
     return this.inner.address;
   };
 
-  static mnemonicToAccountSigner(key: string): LocalAccountSigner<HDAccount> {
-    const signer = mnemonicToAccount(key);
+  static mnemonicToAccountSigner(
+    key: string,
+    opts?: HDOptions
+  ): LocalAccountSigner<HDAccount> {
+    const signer = mnemonicToAccount(key, opts);
     return new LocalAccountSigner(signer);
   }
 

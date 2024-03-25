@@ -67,6 +67,11 @@ export type UserOperationOverrides = Partial<{
    * one user operation for your account in a bundle
    */
   nonceKey: bigint;
+  /**
+   * The signature override is used in special cases when custom signature middleware is used
+   * This middleware allows you to provide context to your custom signature middleware
+   */
+  signature: UserOperationStruct["signature"];
 }>;
 //#endregion UserOperationOverrides
 

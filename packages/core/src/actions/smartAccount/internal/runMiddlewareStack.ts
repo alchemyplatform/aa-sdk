@@ -39,7 +39,6 @@ export const _runMiddlewareStack: <
   if (!account) {
     throw new AccountNotFoundError();
   }
-
   const result = await asyncPipe(
     client.middleware.dummyPaymasterAndData,
     client.middleware.feeEstimator,
@@ -48,8 +47,9 @@ export const _runMiddlewareStack: <
     overrides?.paymasterAndData
       ? overridePaymasterDataMiddleware
       : client.middleware.paymasterAndData,
-    client.middleware.userOperationSimulator
-  )(uo, { overrides, feeOptions: client.feeOptions, account });
+    client.middleware.userOperationSimulator,
+    client.middleware.signUserOperation
+  )(uo, { overrides, feeOptions: client.feeOptions, account, client });
 
   return resolveProperties<UserOperationStruct>(result);
 };

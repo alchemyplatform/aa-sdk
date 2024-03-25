@@ -179,6 +179,7 @@ export function pick(obj: Record<string, unknown>, keys: string | string[]) {
 }
 
 export * from "./bigint.js";
+export * from "./bytes.js";
 export * from "./defaults.js";
 export * from "./schema.js";
 export type * from "./types.js";

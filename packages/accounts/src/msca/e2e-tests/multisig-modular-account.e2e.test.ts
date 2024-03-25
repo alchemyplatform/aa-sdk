@@ -2,27 +2,13 @@ import {
   LocalAccountSigner,
   LogLevel,
   Logger,
-  createBundlerClient,
-  createSmartAccountClientFromExisting,
   sepolia,
   type SmartAccountSigner,
   type UserOperationFeeOptions,
 } from "@alchemy/aa-core";
-import {
-  http,
-  isAddress,
-  type Address,
-  type Chain,
-  type HDAccount,
-  zeroHash,
-} from "viem";
-import { generatePrivateKey } from "viem/accounts";
-import { multisigPluginActions } from "../../index.js";
+import { http, type Address, type Chain, type HDAccount } from "viem";
 import { createMultisigModularAccountClient } from "../client.js";
-import {
-  API_KEY,
-  MODULAR_MULTISIG_ACCOUNT_OWNER_MNEMONIC,
-} from "./constants.js";
+import { API_KEY, OWNER_MNEMONIC } from "./constants.js";
 
 const chain = sepolia;
 
@@ -30,24 +16,21 @@ Logger.setLogLevel(LogLevel.DEBUG);
 
 describe("Multisig Modular Account Tests", async () => {
   const signer1: SmartAccountSigner<HDAccount> =
-    LocalAccountSigner.mnemonicToAccountSigner(
-      MODULAR_MULTISIG_ACCOUNT_OWNER_MNEMONIC,
-      { accountIndex: 0 }
-    );
+    LocalAccountSigner.mnemonicToAccountSigner(OWNER_MNEMONIC, {
+      accountIndex: 0,
+    });
 
   const signer2: SmartAccountSigner<HDAccount> =
-    LocalAccountSigner.mnemonicToAccountSigner(
-      MODULAR_MULTISIG_ACCOUNT_OWNER_MNEMONIC,
-      { accountIndex: 1 }
-    );
+    LocalAccountSigner.mnemonicToAccountSigner(OWNER_MNEMONIC, {
+      accountIndex: 1,
+    });
 
   const signer3: SmartAccountSigner<HDAccount> =
-    LocalAccountSigner.mnemonicToAccountSigner(
-      MODULAR_MULTISIG_ACCOUNT_OWNER_MNEMONIC,
-      { accountIndex: 2 }
-    );
+    LocalAccountSigner.mnemonicToAccountSigner(OWNER_MNEMONIC, {
+      accountIndex: 2,
+    });
 
-  const threshold = 1n;
+  const threshold = 2n;
 
   const owners = [
     await signer1.getAddress(),
@@ -67,35 +50,45 @@ describe("Multisig Modular Account Tests", async () => {
       threshold,
     });
     expect(address).toMatchInlineSnapshot(
-      '"0xEB0baf3Cf45D434AAb74a6C73315965A2612B58f"'
+      '"0x55BF025f6eF0C5548961cB31b39b1cd2540825ac"'
     );
   });
 
-  // it("should sign a hash successfully", async () => {
-  //   const provider = await givenConnectedProvider({ signer: signer1, chain, owners, threshold });
-
-  //   const uoHash = zeroHash;
-
-  //   const signature = await provider.account.signUserOperationHash(uoHash);
-
-  //   console.log("signature", signature);
-  // }, 100000);
-
   it("should execute successfully", async () => {
-    const provider = await givenConnectedProvider({
+    const initiator = await givenConnectedProvider({
       signer: signer1,
       chain,
       owners,
       threshold,
     });
 
-    const result = await provider.sendUserOperation({
+    const submitter = await givenConnectedProvider({
+      signer: signer2,
+      chain,
+      owners,
+      threshold,
+    });
+
+    expect(initiator.getAddress()).toBe(submitter.getAddress());
+
+    const { aggregatedSignature } = await initiator.proposeUserOperation({
       uo: {
-        target: provider.getAddress(),
+        target: initiator.getAddress(),
         data: "0x",
       },
     });
-    const txnHash = provider.waitForUserOperationTransaction({
+
+    const result = await submitter.sendUserOperation({
+      uo: {
+        target: initiator.getAddress(),
+        data: "0x",
+      },
+      overrides: {
+        signature: aggregatedSignature,
+      },
+    });
+
+    const txnHash = submitter.waitForUserOperationTransaction({
       hash: result.hash,
     });
 

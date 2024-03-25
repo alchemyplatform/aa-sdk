@@ -34,27 +34,32 @@ export { UpgradeableModularAccountAbi } from "./msca/abis/UpgradeableModularAcco
 export type * from "./msca/account-loupe/decorator.js";
 export { accountLoupeActions } from "./msca/account-loupe/decorator.js";
 export type * from "./msca/account/multiOwnerAccount.js";
-export type * from "./msca/account/multisigAccount.js";
 export { createMultiOwnerModularAccount } from "./msca/account/multiOwnerAccount.js";
+export type * from "./msca/account/multisigAccount.js";
 export { createMultisigModularAccount } from "./msca/account/multisigAccount.js";
 export { standardExecutor } from "./msca/account/standardExecutor.js";
-export { createMultiOwnerModularAccountClient } from "./msca/client.js";
-export { createMultisigModularAccountClient } from "./msca/client.js";
+export {
+  createMultiOwnerModularAccountClient,
+  createMultisigModularAccountClient,
+} from "./msca/client.js";
 export type * from "./msca/plugin-manager/decorator.js";
 export { pluginManagerActions } from "./msca/plugin-manager/decorator.js";
 export type * from "./msca/plugins/multi-owner/index.js";
 export { multiOwnerPluginActions } from "./msca/plugins/multi-owner/index.js";
-export { multisigPluginActions } from "./msca/plugins/multisig/index.js";
 export {
   MultiOwnerPlugin,
   MultiOwnerPluginAbi,
   MultiOwnerPluginExecutionFunctionAbi,
 } from "./msca/plugins/multi-owner/plugin.js";
+export type * from "./msca/plugins/multisig/index.js";
 export {
   MultisigPlugin,
   MultisigPluginAbi,
   MultisigPluginExecutionFunctionAbi,
-} from "./msca/plugins/multisig/plugin.js";
+  SignerType,
+  multisigPluginActions,
+  multisigSignatureMiddleware,
+} from "./msca/plugins/multisig/index.js";
 export type * from "./msca/plugins/session-key/index.js";
 export { sessionKeyPluginActions } from "./msca/plugins/session-key/index.js";
 export type * from "./msca/plugins/session-key/permissions.js";
