@@ -5,7 +5,7 @@ const chain = sepolia;
 
 // The private key of your EOA that will be the signer to connect with the Modular Account
 // Our recommendation is to store the private key in an environment variable
-const PRIVATE_KEY = "0xYourEOAPrivateKey" as Hex;
+const PRIVATE_KEY: Hex = "0xYourEOAPrivateKey";
 const signer = LocalAccountSigner.privateKeyToAccountSigner(PRIVATE_KEY);
 
 // Create a smart account client to send user operations from your smart account

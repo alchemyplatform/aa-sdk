@@ -10,7 +10,7 @@ import {
 const chain = sepolia;
 
 // The private key of your EOA that will be the signer to connect with the Modular Account
-const PRIVATE_KEY = "0xYourEOAPrivateKey" as Hex;
+const PRIVATE_KEY: Hex = "0xYourEOAPrivateKey";
 const signer = LocalAccountSigner.privateKeyToAccountSigner(PRIVATE_KEY);
 
 // [!code focus:22]
@@ -27,8 +27,7 @@ const signer = LocalAccountSigner.privateKeyToAccountSigner(PRIVATE_KEY);
   // (e.g. Get Sepolia ETH at https://sepoliafaucet.com)
   console.log("Smart Account Address: ", client.getAddress()); // Log the smart account address
 
-  const vitalikAddress =
-    "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045" as Address;
+  const vitalikAddress: Address = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045";
   // Send a user operation from your smart account to Vitalik that does nothing
   const { hash: uoHash } = await client.sendUserOperation({
     uo: {
