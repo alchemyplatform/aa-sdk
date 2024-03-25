@@ -108,7 +108,12 @@ export async function createMultisigModularAccount({
     source: `MultisigModularAccount`,
     getAccountInitCode,
     ...standardExecutor,
-    ...multisigMessageSigner(client, accountAddress, () => signer),
+    ...multisigMessageSigner({
+      client,
+      accountAddress,
+      threshold,
+      signer: () => signer,
+    }),
   });
 
   return {

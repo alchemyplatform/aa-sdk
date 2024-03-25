@@ -19,15 +19,27 @@ import { MultisigPlugin, MultisigPluginAbi } from "./plugin.js";
 import type { Signature } from "./types.js";
 import { UserOpSignatureType, SignerType } from "./types.js";
 
+type MultisigMessageSignerParams<
+  TTransport extends Transport,
+  TSigner extends SmartAccountSigner
+> = {
+  client: BundlerClient<TTransport>;
+  accountAddress: Address;
+  signer: () => TSigner;
+  threshold: bigint;
+  pluginAddress?: Address;
+};
+
 export const multisigMessageSigner = <
   TTransport extends Transport,
   TSigner extends SmartAccountSigner
->(
-  client: BundlerClient<TTransport>,
-  accountAddress: Address,
-  signer: () => TSigner,
-  pluginAddress: Address = MultisigPlugin.meta.addresses[client.chain.id]
-) => {
+>({
+  client,
+  accountAddress,
+  signer,
+  threshold,
+  pluginAddress = MultisigPlugin.meta.addresses[client.chain.id],
+}: MultisigMessageSignerParams<TTransport, TSigner>) => {
   const signWith712Wrapper = async (msg: Hash): Promise<`0x${string}`> => {
     const [, name, version, chainId, verifyingContract, salt] =
       await client.readContract({
@@ -57,21 +69,23 @@ export const multisigMessageSigner = <
 
   return {
     getDummySignature: async (): Promise<`0x${string}`> => {
-      const [, threshold] = await client.readContract({
+      const [, thresholdRead] = await client.readContract({
         abi: MultisigPluginAbi,
         address: pluginAddress,
         functionName: "ownershipInfoOf",
         args: [accountAddress],
       });
 
+      const actualThreshold = thresholdRead === 0n ? threshold : thresholdRead;
+
       // (uint upperLimitPreVerificationGas, uint upperLimitMaxFeePerGas, uint upperLimitMaxPriorityFeePerGas)
       // all sigs will be on "actual" with v = 32
       return (
         "0x" +
         "FF".repeat(64 * 3) +
-        "FF".repeat(Number(threshold) * 39) +
+        "FF".repeat(Number(actualThreshold) * 39) +
         "20"
-      ).repeat(Number(threshold)) as `0x${string}`;
+      ).repeat(Number(actualThreshold)) as `0x${string}`;
     },
 
     signUserOperationHash: (uoHash: `0x${string}`): Promise<`0x${string}`> => {
