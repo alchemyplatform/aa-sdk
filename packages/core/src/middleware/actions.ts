@@ -14,6 +14,7 @@ import type { ClientMiddlewareConfig } from "../client/types.js";
 import { defaultFeeEstimator } from "./defaults/feeEstimator.js";
 import { defaultGasEstimator } from "./defaults/gasEstimator.js";
 import { defaultPaymasterAndData } from "./defaults/paymasterAndData.js";
+import { defaultUserOpSigner } from "./defaults/useropSigner.js";
 import { noopMiddleware } from "./noopMiddleware.js";
 import type { ClientMiddleware } from "./types.js";
 
@@ -57,5 +58,6 @@ export const middlewareActions =
         overrides.paymasterAndData?.paymasterAndData ?? defaultPaymasterAndData,
       userOperationSimulator:
         overrides.userOperationSimulator ?? noopMiddleware,
+      signUserOperation: overrides.signUserOperation ?? defaultUserOpSigner,
     },
   });

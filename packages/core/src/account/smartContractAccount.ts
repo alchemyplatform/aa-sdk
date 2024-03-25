@@ -60,6 +60,12 @@ export type SmartContractAccountWithSigner<
   getSigner: () => TSigner;
 };
 
+export const isSmartAccountWithSigner = (
+  account: SmartContractAccount
+): account is SmartContractAccountWithSigner => {
+  return "getSigner" in account;
+};
+
 //#region SmartContractAccount
 export type SmartContractAccount<
   Name extends string = string,

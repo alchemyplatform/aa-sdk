@@ -1,5 +1,6 @@
 import {
   createSmartAccountClient,
+  smartAccountClientActions,
   type SmartAccountClient,
   type SmartAccountClientActions,
   type SmartAccountSigner,
@@ -32,6 +33,7 @@ import {
   multisigPluginActions,
   type MultisigPluginActions,
 } from "./plugins/multisig/index.js";
+import { multisigSignatureMiddleware } from "./plugins/multisig/middleware.js";
 
 export type CreateMultiOwnerModularAccountClientParams<
   TTransport extends Transport = Transport,
@@ -101,10 +103,6 @@ export async function createMultiOwnerModularAccountClient({
     .extend(accountLoupeActions);
 }
 
-type ExampleExtendedActions = {
-  test: (a: string) => string;
-};
-
 export function createMultisigModularAccountClient<
   TChain extends Chain | undefined = Chain | undefined,
   TSigner extends SmartAccountSigner = SmartAccountSigner
@@ -118,8 +116,7 @@ export function createMultisigModularAccountClient<
     SmartAccountClientActions<Chain, MultisigModularAccount<TSigner>> &
       MultisigPluginActions<MultisigModularAccount<TSigner>> &
       PluginManagerActions<MultisigModularAccount<TSigner>> &
-      AccountLoupeActions<MultisigModularAccount<TSigner>> &
-      ExampleExtendedActions
+      AccountLoupeActions<MultisigModularAccount<TSigner>>
   >
 >;
 
@@ -142,20 +139,12 @@ export async function createMultisigModularAccountClient({
     transport,
     chain,
     account: modularAccount,
+    signUserOperation: multisigSignatureMiddleware,
   })
+    .extend(smartAccountClientActions)
     .extend(pluginManagerActions)
     .extend(multisigPluginActions)
-    .extend(accountLoupeActions)
-    .extend((_) => {
-      return {
-        test: (a: string) => {
-          return a;
-        },
-      };
-    });
-
-  //update
-  // client.updateOwnership =
+    .extend(accountLoupeActions);
 
   return client;
 }

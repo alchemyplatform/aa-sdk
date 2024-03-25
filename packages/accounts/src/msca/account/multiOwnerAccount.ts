@@ -105,12 +105,7 @@ export async function createMultiOwnerModularAccount({
     source: `MultiOwnerModularAccount`,
     getAccountInitCode,
     ...standardExecutor,
-    ...multiOwnerMessageSigner({
-      client,
-      accountAddress,
-      threshold,
-      signer: () => signer,
-    }),
+    ...multiOwnerMessageSigner(client, accountAddress, () => signer),
   });
 
   return {

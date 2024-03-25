@@ -12,12 +12,8 @@ import {
   type Transport,
   type TypedData,
   type TypedDataDefinition,
-  encodeAbiParameters,
-  hexToBigInt,
 } from "viem";
 import { MultisigPlugin, MultisigPluginAbi } from "./plugin.js";
-import type { Signature } from "./types.js";
-import { UserOpSignatureType, SignerType } from "./types.js";
 
 type MultisigMessageSignerParams<
   TTransport extends Transport,
@@ -80,23 +76,19 @@ export const multisigMessageSigner = <
 
       // (uint upperLimitPreVerificationGas, uint upperLimitMaxFeePerGas, uint upperLimitMaxPriorityFeePerGas)
       // all sigs will be on "actual" with v = 32
-      return (
-        "0x" +
-        "FF".repeat(64 * 3) +
-        "FF".repeat(Number(actualThreshold) * 39) +
-        "20"
-      ).repeat(Number(actualThreshold)) as `0x${string}`;
+      return ("0x" +
+        (
+          "FF".repeat(64 * 3) +
+          "FF".repeat(Number(actualThreshold) * 39) +
+          "20"
+        ).repeat(Number(actualThreshold))) as Hex;
     },
 
-    signUserOperationHash: (uoHash: `0x${string}`): Promise<`0x${string}`> => {
+    signUserOperationHash: (uoHash: Hex): Promise<Hex> => {
       return signer().signMessage({ raw: uoHash });
     },
 
-    signMessage({
-      message,
-    }: {
-      message: SignableMessage;
-    }): Promise<`0x${string}`> {
+    signMessage({ message }: { message: SignableMessage }): Promise<Hex> {
       return signWith712Wrapper(hashMessage(message));
     },
 
@@ -109,39 +101,4 @@ export const multisigMessageSigner = <
       return signWith712Wrapper(hashTypedData(typedDataDefinition));
     },
   };
-};
-
-export const formatSignatures = (signatures: Signature[]) => {
-  let eoaSigs: string = "";
-  let contractSigs: string = "";
-  let offset: bigint = BigInt(65 * signatures.length);
-  signatures
-    .sort((a, b) => {
-      const bigintA = hexToBigInt(a.signer);
-      const bigintB = hexToBigInt(b.signer);
-
-      return bigintA < bigintB ? -1 : bigintA > bigintB ? 1 : 0;
-    })
-    .forEach((sig) => {
-      // add 32 to v if the signature covers the actual gas values
-      const addV = sig.userOpSigType === UserOpSignatureType.Actual ? 32 : 0;
-
-      if (sig.signerType === SignerType.EOA) {
-        let v = parseInt(sig.signature.slice(130, 132)) + addV;
-        eoaSigs += sig.signature.slice(2, 130) + v.toString(16);
-      } else {
-        const sigLen = BigInt(sig.signature.slice(2).length / 2);
-        eoaSigs +=
-          "0x" +
-          encodeAbiParameters(
-            [{ type: "uint256" }, { type: "bytes32" }, { type: "uint8" }],
-            [offset, sig.signer, addV]
-          ).slice(2);
-        contractSigs +=
-          encodeAbiParameters([{ type: "uint256" }], [sigLen]) +
-          sig.signature.slice(2);
-        offset += sigLen;
-      }
-    });
-  return ("0x" + eoaSigs + contractSigs) as `0x${string}`;
 };

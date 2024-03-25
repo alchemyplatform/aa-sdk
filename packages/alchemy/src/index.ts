@@ -12,6 +12,8 @@ export type * from "./client/lightAccountClient.js";
 export { createLightAccountAlchemyClient } from "./client/lightAccountClient.js";
 export type * from "./client/modularAccountClient.js";
 export { createModularAccountAlchemyClient } from "./client/modularAccountClient.js";
+export type * from "./client/multisigAccountClient.js";
+export { createMultisigAccountAlchemyClient } from "./client/multisigAccountClient.js";
 export type * from "./client/rpcClient.js";
 export { createAlchemyPublicRpcClient } from "./client/rpcClient.js";
 export type * from "./client/smartAccountClient.js";
