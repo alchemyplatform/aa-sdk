@@ -1,7 +1,11 @@
 import { type Chain } from "viem";
 import { EntryPointAbi_v6 } from "../abis/EntryPointAbi_v6.js";
 import { EntryPointAbi_v7 } from "../abis/EntryPointAbi_v7.js";
-import { EntryPointNotFoundError } from "../errors/entrypoint.js";
+import {
+  EntryPointNotFoundError,
+  MismatchingEntryPointError,
+} from "../errors/entrypoint.js";
+import type { UserOperationLike } from "../types.js";
 import EntryPoint_v6 from "./0.6.js";
 import EntryPoint_v7 from "./0.7.js";
 import type {
@@ -19,6 +23,22 @@ export const defaultEntryPointVersion: DefaultEntryPointVersion = "0.6.0";
 export const entryPointRegistry: EntryPointRegistry = {
   "0.6.0": EntryPoint_v6,
   "0.7.0": EntryPoint_v7,
+};
+
+export const coerceEntryPointVersion = <
+  TEntryPointVersion extends EntryPointVersion
+>(
+  entryPoint: EntryPointRegistry[EntryPointVersion],
+  userOperation: UserOperationLike,
+  throwable?: boolean
+): UserOperationLike<TEntryPointVersion> | undefined => {
+  if (entryPoint.isUserOpVersion(userOperation)) {
+    return userOperation as UserOperationLike<TEntryPointVersion>;
+  }
+  if (!throwable) {
+    return undefined;
+  }
+  throw new MismatchingEntryPointError(entryPoint.version, userOperation);
 };
 
 export function getEntryPoint<
@@ -71,8 +91,10 @@ export function getEntryPoint<
       abi: v6.abi,
       getUserOperationHash: (r) =>
         v6.getUserOperationHash(r, address, chain.id),
-      packUserOperation: (r) => v6.packUserOperation(r),
-      isUserOperationVersion: v6.isUserOperationVersion,
+      packUserOperation: v6.packUserOperation,
+      isUserOpVersion: v6.isUserOpVersion,
+      coerce: (userOperation, throwable) =>
+        coerceEntryPointVersion(v6, userOperation, throwable),
     } as EntryPointDef<"0.6.0", TChain, typeof EntryPointAbi_v6>;
   } else if (version === "0.7.0") {
     const v7 = entryPoint as SupportedEntryPoint<
@@ -87,8 +109,10 @@ export function getEntryPoint<
       abi: v7.abi,
       getUserOperationHash: (r) =>
         v7.getUserOperationHash(r, address, chain.id),
-      packUserOperation: (r) => v7.packUserOperation(r),
-      isUserOperationVersion: v7.isUserOperationVersion,
+      packUserOperation: v7.packUserOperation,
+      isUserOpVersion: v7.isUserOpVersion,
+      coerce: (userOperation, throwable) =>
+        coerceEntryPointVersion(v7, userOperation, throwable),
     } as EntryPointDef<"0.7.0", TChain, typeof EntryPointAbi_v7>;
   }
 

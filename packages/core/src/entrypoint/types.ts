@@ -10,14 +10,19 @@ import type {
 } from "viem";
 import type { EntryPointAbi_v6 } from "../abis/EntryPointAbi_v6";
 import type { EntryPointAbi_v7 } from "../abis/EntryPointAbi_v7";
-import type { UserOperationRequest, UserOperationStruct } from "../types";
+import type {
+  UserOperationLike,
+  UserOperationOverrides,
+  UserOperationRequest,
+  UserOperationStruct,
+} from "../types";
 import type { EQ, OneOf } from "../utils";
 
-export interface EntryPointRegistryBase {
-  "0.6.0": any;
-  "0.7.0": any;
+export interface EntryPointRegistryBase<T> {
+  "0.6.0": T;
+  "0.7.0": T;
 }
-export type EntryPointVersion = keyof EntryPointRegistryBase;
+export type EntryPointVersion = keyof EntryPointRegistryBase<unknown>;
 export type DefaultEntryPointVersion = OneOf<"0.6.0", EntryPointVersion>;
 
 export type SupportedEntryPoint<
@@ -34,7 +39,6 @@ export type SupportedEntryPoint<
    *
    * @param request - the UserOperation to get the hash for
    * @param entryPointAddress - the entry point address that will be used to execute the UserOperation
-   * @param entryPointVersion - a {@link EntryPointVersion} entry point contract version
    * @param chainId - the chain on which this UserOperation will be executed
    * @returns the hash of the UserOperation
    */
@@ -47,8 +51,8 @@ export type SupportedEntryPoint<
   /**
    * Pack the user operation data into bytes for hashing for entry point version 0.6 onwards
    * Reference:
-   * vv6: https://github.com/eth-infinitism/account-abstraction/blob/releases/v0.6/test/UserOp.ts#L16-L61
-   * vv7: https://github.com/eth-infinitism/account-abstraction/blob/releases/v0.7/test/UserOp.ts#L28-L67
+   * v6: https://github.com/eth-infinitism/account-abstraction/blob/releases/v0.6/test/UserOp.ts#L16-L61
+   * v7: https://github.com/eth-infinitism/account-abstraction/blob/releases/v0.7/test/UserOp.ts#L28-L67
    *
    * @param request - the UserOperation to get the hash for
    * @returns the hash of the UserOperation
@@ -57,13 +61,16 @@ export type SupportedEntryPoint<
     userOperation: UserOperationRequest<TEntryPointVersion>
   ) => Hex;
 
-  isUserOperationVersion: (
-    userOperation: UserOperationStruct | UserOperationRequest
-  ) => boolean;
+  isUserOpVersion: (
+    userOperation: UserOperationLike
+  ) => userOperation is UserOperationStruct<TEntryPointVersion> &
+    UserOperationRequest<TEntryPointVersion>;
 };
 
 export interface EntryPointRegistry<TChain extends Chain = Chain>
-  extends EntryPointRegistryBase {
+  extends EntryPointRegistryBase<
+    SupportedEntryPoint<EntryPointVersion, TChain, Abi>
+  > {
   "0.6.0": SupportedEntryPoint<"0.6.0", TChain, typeof EntryPointAbi_v6>;
   "0.7.0": SupportedEntryPoint<"0.7.0", TChain, typeof EntryPointAbi_v7>;
 }
@@ -72,19 +79,32 @@ export type EntryPointDef<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
   TChain extends Chain = Chain,
   TAbi extends Abi | readonly unknown[] = Abi
-> = Omit<
-  SupportedEntryPoint<TEntryPointVersion, TChain, TAbi>,
-  "address" | "getUserOperationHash"
-> & {
+> = {
+  version: TEntryPointVersion;
   address: Address;
   chain: TChain;
+  overrides: UserOperationOverrides<TEntryPointVersion> | undefined;
+  abi: GetContractParameters<Transport, TChain, Account, TAbi>["abi"];
   getUserOperationHash: (
+    request: UserOperationRequest<TEntryPointVersion>
+  ) => Hex;
+  packUserOperation: (
     userOperation: UserOperationRequest<TEntryPointVersion>
   ) => Hex;
+  isUserOpVersion: (
+    userOperation: UserOperationLike
+  ) => userOperation is UserOperationStruct<TEntryPointVersion> &
+    UserOperationRequest<TEntryPointVersion>;
+  coerce: (
+    userOperation: UserOperationLike,
+    throwable?: boolean
+  ) => UserOperationLike<TEntryPointVersion> | undefined;
 };
 
 export interface EntryPointDefRegistry<TChain extends Chain = Chain>
-  extends EntryPointRegistryBase {
+  extends EntryPointRegistryBase<
+    EntryPointDef<EntryPointVersion, TChain, Abi>
+  > {
   "0.6.0": EntryPointDef<"0.6.0", TChain, typeof EntryPointAbi_v6>;
   "0.7.0": EntryPointDef<"0.7.0", TChain, typeof EntryPointAbi_v7>;
 }

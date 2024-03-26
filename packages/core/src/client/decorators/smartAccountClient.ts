@@ -4,10 +4,13 @@ import type {
   Client,
   Hex,
   SendTransactionParameters,
+  SignMessageParameters,
+  SignTypedDataParameters,
   Transport,
   TypedData,
   WaitForTransactionReceiptParameters,
 } from "viem";
+import { sendTransaction } from "viem/actions";
 import type {
   GetAccountParameter,
   SmartContractAccount,
@@ -18,18 +21,11 @@ import { buildUserOperationFromTxs } from "../../actions/smartAccount/buildUserO
 import { checkGasSponsorshipEligibility } from "../../actions/smartAccount/checkGasSponsorshipEligibility.js";
 import { dropAndReplaceUserOperation } from "../../actions/smartAccount/dropAndReplaceUserOperation.js";
 import { getAddress } from "../../actions/smartAccount/getAddress.js";
-import { sendTransaction } from "../../actions/smartAccount/sendTransaction.js";
 import { sendTransactions } from "../../actions/smartAccount/sendTransactions.js";
 import { sendUserOperation } from "../../actions/smartAccount/sendUserOperation.js";
-import {
-  signMessage,
-  type SignMessageParameters,
-} from "../../actions/smartAccount/signMessage.js";
+import { signMessage } from "../../actions/smartAccount/signMessage.js";
 import { signMessageWith6492 } from "../../actions/smartAccount/signMessageWith6492.js";
-import {
-  signTypedData,
-  type SignTypedDataParameters,
-} from "../../actions/smartAccount/signTypedData.js";
+import { signTypedData } from "../../actions/smartAccount/signTypedData.js";
 import { signTypedDataWith6492 } from "../../actions/smartAccount/signTypedDataWith6492.js";
 import { signUserOperation } from "../../actions/smartAccount/signUserOperation.js";
 import type {
@@ -42,6 +38,7 @@ import type {
 } from "../../actions/smartAccount/types";
 import { upgradeAccount } from "../../actions/smartAccount/upgradeAccount.js";
 import { waitForUserOperationTransaction } from "../../actions/smartAccount/waitForUserOperationTransacation.js";
+import type { EntryPointVersion } from "../../entrypoint/types";
 import type {
   UserOperationOverrides,
   UserOperationRequest,
@@ -55,41 +52,43 @@ export type BaseSmartAccountClientActions<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = {
   buildUserOperation: (
-    args: SendUserOperationParameters<TAccount>
-  ) => Promise<UserOperationStruct>;
+    args: SendUserOperationParameters<TAccount, TEntryPointVersion>
+  ) => Promise<UserOperationStruct<EntryPointVersion>>;
   buildUserOperationFromTx: (
     args: SendTransactionParameters<TChain, TAccount>,
-    overrides?: UserOperationOverrides
-  ) => Promise<UserOperationStruct>;
+    overrides?: UserOperationOverrides<TEntryPointVersion>
+  ) => Promise<UserOperationStruct<EntryPointVersion>>;
   buildUserOperationFromTxs: (
-    args: SendTransactionsParameters<TAccount>
+    args: SendTransactionsParameters<TAccount, TEntryPointVersion>
   ) => Promise<BuildUserOperationFromTransactionsResult>;
   checkGasSponsorshipEligibility: (
-    args: SendUserOperationParameters<TAccount>
+    args: SendUserOperationParameters<TAccount, TEntryPointVersion>
   ) => Promise<boolean>;
   signUserOperation: (
     args: SignUserOperationParameters<TAccount>
   ) => Promise<UserOperationRequest>;
   dropAndReplaceUserOperation: (
-    args: DropAndReplaceUserOperationParameters<TAccount>
-  ) => Promise<SendUserOperationResult>;
+    args: DropAndReplaceUserOperationParameters<TAccount, TEntryPointVersion>
+  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
   sendTransaction: <TChainOverride extends Chain | undefined = undefined>(
-    args: SendTransactionParameters<TChain, TAccount, TChainOverride>,
-    overrides?: UserOperationOverrides
+    args: SendTransactionParameters<TChain, TAccount, TChainOverride>
   ) => Promise<Hex>;
   sendTransactions: (
-    args: SendTransactionsParameters<TAccount>
+    args: SendTransactionsParameters<TAccount, TEntryPointVersion>
   ) => Promise<Hex>;
   sendUserOperation: (
-    args: SendUserOperationParameters<TAccount>
-  ) => Promise<SendUserOperationResult>;
+    args: SendUserOperationParameters<TAccount, TEntryPointVersion>
+  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
   waitForUserOperationTransaction: (
     args: WaitForTransactionReceiptParameters
   ) => Promise<Hex>;
-  upgradeAccount: (args: UpgradeAccountParams<TAccount>) => Promise<Hex>;
+  upgradeAccount: (
+    args: UpgradeAccountParams<TAccount, TEntryPointVersion>
+  ) => Promise<Hex>;
   signMessage: (args: SignMessageParameters<TAccount>) => Promise<Hex>;
   signTypedData: <
     const TTypedData extends TypedData | { [key: string]: unknown },
@@ -116,12 +115,15 @@ export type BaseSmartAccountClientActions<
 export const smartAccountClientActions: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
-    | undefined
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
+  TAccount extends
+    | SmartContractAccount<string, TEntryPointVersion>
+    | undefined = SmartContractAccount<string, TEntryPointVersion> | undefined
 >(
   client: Client<TTransport, TChain, TAccount>
-) => BaseSmartAccountClientActions<TChain, TAccount> = (client) => ({
+) => BaseSmartAccountClientActions<TChain, TAccount, TEntryPointVersion> = (
+  client
+) => ({
   buildUserOperation: (args) => buildUserOperation(client, args),
   buildUserOperationFromTx: (args, overrides) =>
     buildUserOperationFromTx(client, args, overrides),
@@ -131,8 +133,7 @@ export const smartAccountClientActions: <
   signUserOperation: (args) => signUserOperation(client, args),
   dropAndReplaceUserOperation: (args) =>
     dropAndReplaceUserOperation(client, args),
-  sendTransaction: (args, overrides) =>
-    sendTransaction(client, args, overrides),
+  sendTransaction: (args) => sendTransaction(client, args),
   sendTransactions: (args) => sendTransactions(client, args),
   sendUserOperation: (args) => sendUserOperation(client, args),
   waitForUserOperationTransaction: (args) =>

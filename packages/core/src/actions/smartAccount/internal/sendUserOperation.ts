@@ -5,10 +5,9 @@ import type {
 } from "../../../account/smartContractAccount";
 import type { BaseSmartAccountClient } from "../../../client/smartAccountClient";
 import type { SendUserOperationResult } from "../../../client/types";
-import type { EntryPointVersion } from "../../../entrypoint/types";
 import { AccountNotFoundError } from "../../../errors/account.js";
 import { ChainNotFoundError } from "../../../errors/client.js";
-import { InvalidEntryPointError } from "../../../errors/entrypoint.js";
+import { MismatchingEntryPointError } from "../../../errors/entrypoint.js";
 import { InvalidUserOperationError } from "../../../errors/useroperation.js";
 import type { UserOperationRequest, UserOperationStruct } from "../../../types";
 import { deepHexlify, isValidRequest } from "../../../utils/index.js";
@@ -22,7 +21,7 @@ export const _sendUserOperation: <
 >(
   client: BaseSmartAccountClient<TTransport, TChain, TAccount>,
   args: {
-    uoStruct: UserOperationStruct<EntryPointVersion>;
+    uoStruct: UserOperationStruct;
   } & GetAccountParameter<TAccount>
 ) => Promise<SendUserOperationResult> = async (client, args) => {
   const { account = client.account } = args;
@@ -34,27 +33,21 @@ export const _sendUserOperation: <
     throw new ChainNotFoundError();
   }
 
-  const request = deepHexlify(args.uoStruct);
-  if (!isValidRequest(request)) {
+  const entryPoint = account.getEntryPoint();
+  type entryPointVersion = typeof entryPoint.version;
+  if (entryPoint.isUserOpVersion(args.uoStruct)) {
+    throw new MismatchingEntryPointError(entryPoint.version, args.uoStruct);
+  }
+
+  const request = deepHexlify(
+    args.uoStruct
+  ) as UserOperationRequest<entryPointVersion>;
+  if (!isValidRequest<entryPointVersion>(request)) {
     throw new InvalidUserOperationError(args.uoStruct);
   }
 
-  const request_ =
-    account.getEntryPoint().version === "0.6.0"
-      ? (request as UserOperationRequest<"0.6.0">)
-      : account.getEntryPoint().version === "0.7.0"
-      ? (request as UserOperationRequest<"0.7.0">)
-      : undefined;
-
-  if (!request_) {
-    throw new InvalidEntryPointError(
-      client.chain,
-      account.getEntryPoint().version
-    );
-  }
-
   request.signature = await account.signUserOperationHash(
-    account.getEntryPoint().getUserOperationHash(request_)
+    account.getEntryPoint().getUserOperationHash(request)
   );
 
   return {

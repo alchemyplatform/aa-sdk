@@ -29,6 +29,7 @@ import {
 } from "viem/chains";
 import { EntryPointAbi_v7 } from "../abis/EntryPointAbi_v7.js";
 import type {
+  UserOperationLike,
   UserOperationRequest,
   UserOperationRequest_v7,
   UserOperationStruct,
@@ -133,11 +134,11 @@ export default {
 
   packUserOperation,
 
-  isUserOperationVersion: (
-    userOperation: UserOperationRequest | UserOperationStruct
-  ): boolean => {
-    return "paymaster" in userOperation && "factory" in userOperation;
-  },
+  isUserOpVersion: (
+    userOperation: UserOperationLike
+  ): userOperation is UserOperationStruct<"0.7.0"> &
+    UserOperationRequest<"0.7.0"> =>
+    "paymaster" in userOperation && "factory" in userOperation,
 } as SupportedEntryPoint<"0.7.0", Chain, typeof EntryPointAbi_v7>;
 
 export function packAccountGasLimits(

@@ -1,4 +1,5 @@
 import type { Chain } from "viem";
+import type { UserOperationLike } from "../types.js";
 import { BaseError } from "./base.js";
 
 export class EntryPointNotFoundError extends BaseError {
@@ -20,6 +21,18 @@ export class InvalidEntryPointError extends BaseError {
   constructor(chain: Chain, entryPointVersion: any) {
     super(
       `Invalid entry point: unexpected version ${entryPointVersion} for ${chain.name}.`
+    );
+  }
+}
+
+export class MismatchingEntryPointError extends BaseError {
+  override name = "MismatchingEntryPointError";
+
+  constructor(version: any, uo: UserOperationLike) {
+    super(
+      `Mismatching user operation type for entry point version ${version}: ${JSON.stringify(
+        uo
+      )}.`
     );
   }
 }

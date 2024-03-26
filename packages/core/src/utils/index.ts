@@ -1,14 +1,8 @@
 import type { Chain } from "viem";
-import { isAddress, toHex } from "viem";
+import { toHex } from "viem";
 import * as chains from "viem/chains";
 import * as alchemyChains from "../chains/index.js";
-import { entryPointRegistry } from "../entrypoint/index.js";
-import type { EntryPointDef, EntryPointVersion } from "../entrypoint/types.js";
-import type {
-  PromiseOrValue,
-  UserOperationRequest,
-  UserOperationStruct,
-} from "../types.js";
+import type { PromiseOrValue } from "../types.js";
 
 export const AlchemyChainMap = new Map<number, Chain>(
   Object.values(alchemyChains).map((c) => [c.id, c])
@@ -144,53 +138,9 @@ export const allEqual = (...params: any[]): boolean => {
   return params.every((v) => v === params[0]);
 };
 
-export function getEntryPointVersionFromUserOp(
-  op: UserOperationRequest | UserOperationStruct
-) {
-  const filtered = Object.values(entryPointRegistry).filter((ep) =>
-    ep.isUserOperationVersion(op)
-  );
-  if (filtered.length !== 1) {
-    throw new Error(
-      "The user operation does not match a unique entry point version."
-    );
-  }
-  return filtered[0].version;
-}
-
-export const isUserOperationVersion = <
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
->(
-  op: UserOperationStruct,
-  version: TEntryPointVersion
-): op is UserOperationStruct<TEntryPointVersion> => {
-  return getEntryPointVersionFromUserOp(op) === version;
-};
-
-export const isEntryPointDefVersion = <
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
->(
-  ep: Record<keyof EntryPointDef, any>,
-  _version: TEntryPointVersion
-): ep is EntryPointDef<TEntryPointVersion> => {
-  return (
-    ep.version === _version &&
-    !!ep.chain &&
-    !!ep.address &&
-    isAddress(ep.address) &&
-    !!ep.abi &&
-    Array.isArray(ep.abi) &&
-    !!ep.packUserOperation &&
-    typeof ep.packUserOperation === "function" &&
-    !!ep.getUserOperationHash &&
-    typeof ep.getUserOperationHash === "function" &&
-    !!ep.isUserOperationVersion &&
-    typeof ep.isUserOperationVersion === "function"
-  );
-};
-
 export * from "./bigint.js";
 export * from "./defaults.js";
+export * from "./entrypoint.js";
 export * from "./schema.js";
 export type * from "./types.js";
 export * from "./userop.js";

@@ -19,6 +19,7 @@ import type { Omit } from "viem/chains";
 import { createBundlerClient } from "../client/bundlerClient.js";
 import { getEntryPoint } from "../entrypoint/index.js";
 import type {
+  EntryPointDef,
   EntryPointDefRegistry,
   EntryPointVersion,
 } from "../entrypoint/types.js";
@@ -65,28 +66,30 @@ export type SmartContractAccountWithSigner<
 };
 
 //#region SmartContractAccount
-export type SmartContractAccount<Name extends string = string> =
-  LocalAccount<Name> & {
-    source: Name;
-    getDummySignature: () => Hex;
-    encodeExecute: (tx: AccountOp) => Promise<Hex>;
-    encodeBatchExecute: (txs: AccountOp[]) => Promise<Hex>;
-    signUserOperationHash: (uoHash: Hex) => Promise<Hex>;
-    signMessageWith6492: (params: { message: SignableMessage }) => Promise<Hex>;
-    signTypedDataWith6492: <
-      const typedData extends TypedData | Record<string, unknown>,
-      primaryType extends keyof typedData | "EIP712Domain" = keyof typedData
-    >(
-      typedDataDefinition: TypedDataDefinition<typedData, primaryType>
-    ) => Promise<Hex>;
-    encodeUpgradeToAndCall: (params: UpgradeToAndCallParams) => Promise<Hex>;
-    getNonce(nonceKey?: bigint): Promise<bigint>;
-    getInitCode: () => Promise<Hex>;
-    isAccountDeployed: () => Promise<boolean>;
-    getFactoryAddress: () => Address;
-    getEntryPoint: () => EntryPointDefRegistry[EntryPointVersion];
-    getImplementationAddress: () => Promise<NullAddress | Address>;
-  };
+export type SmartContractAccount<
+  Name extends string = string,
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+> = LocalAccount<Name> & {
+  source: Name;
+  getDummySignature: () => Hex;
+  encodeExecute: (tx: AccountOp) => Promise<Hex>;
+  encodeBatchExecute: (txs: AccountOp[]) => Promise<Hex>;
+  signUserOperationHash: (uoHash: Hex) => Promise<Hex>;
+  signMessageWith6492: (params: { message: SignableMessage }) => Promise<Hex>;
+  signTypedDataWith6492: <
+    const typedData extends TypedData | Record<string, unknown>,
+    primaryType extends keyof typedData | "EIP712Domain" = keyof typedData
+  >(
+    typedDataDefinition: TypedDataDefinition<typedData, primaryType>
+  ) => Promise<Hex>;
+  encodeUpgradeToAndCall: (params: UpgradeToAndCallParams) => Promise<Hex>;
+  getNonce(nonceKey?: bigint): Promise<bigint>;
+  getInitCode: () => Promise<Hex>;
+  isAccountDeployed: () => Promise<boolean>;
+  getFactoryAddress: () => Address;
+  getEntryPoint: () => EntryPointDef<TEntryPointVersion>;
+  getImplementationAddress: () => Promise<NullAddress | Address>;
+};
 //#endregion SmartContractAccount
 
 export type ToSmartContractAccountParams<
@@ -183,7 +186,7 @@ export async function toSmartContractAccount<
 }: ToSmartContractAccountParams<Name, TTransport, TChain>): Promise<
   SmartContractAccount<Name>
 > {
-  const client = createBundlerClient({
+  const client = createBundlerClient<TTransport, typeof entryPoint.version>({
     transport,
     chain,
   });
@@ -338,7 +341,8 @@ export async function toSmartContractAccount<
     getDummySignature,
     getInitCode,
     encodeUpgradeToAndCall: encodeUpgradeToAndCall_,
-    getEntryPoint: () => entryPoint,
+    getEntryPoint: () =>
+      entryPoint as EntryPointDefRegistry[typeof entryPoint.version],
     isAccountDeployed,
     getNonce,
     signMessageWith6492,

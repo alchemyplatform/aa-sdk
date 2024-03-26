@@ -6,8 +6,10 @@ import {
 } from "viem";
 import type { SmartContractAccount } from "../../account/smartContractAccount.js";
 import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
+import type { EntryPointVersion } from "../../entrypoint/types.js";
 import { AccountNotFoundError } from "../../errors/account.js";
 import { IncompatibleClientError } from "../../errors/client.js";
+import { MismatchingEntryPointError } from "../../errors/entrypoint.js";
 import { TransactionMissingToParamError } from "../../errors/transaction.js";
 import type {
   UserOperationOverrides,
@@ -18,15 +20,20 @@ import { buildUserOperation } from "./buildUserOperation.js";
 
 export const buildUserOperationFromTx: <
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
-    | undefined,
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
+  TAccount extends
+    | SmartContractAccount<string, TEntryPointVersion>
+    | undefined = SmartContractAccount<string, TEntryPointVersion> | undefined,
   TChainOverride extends Chain | undefined = Chain | undefined
 >(
   client: Client<Transport, TChain, TAccount>,
   args: SendTransactionParameters<TChain, TAccount, TChainOverride>,
-  overrides?: UserOperationOverrides
-) => Promise<UserOperationStruct> = async (client, args, overrides) => {
+  overrides?: UserOperationOverrides<TEntryPointVersion>
+) => Promise<UserOperationStruct<EntryPointVersion>> = async (
+  client,
+  args,
+  overrides
+) => {
   const { account = client.account, ...request } = args;
   if (!account || typeof account === "string") {
     throw new AccountNotFoundError();
@@ -44,7 +51,12 @@ export const buildUserOperationFromTx: <
     );
   }
 
-  const _overrides: UserOperationOverrides = {
+  const entryPoint = (account as SmartContractAccount).getEntryPoint();
+  if (overrides && !entryPoint.isUserOpVersion(overrides)) {
+    throw new MismatchingEntryPointError(entryPoint.version, overrides);
+  }
+
+  const _overrides: UserOperationOverrides<typeof entryPoint.version> = {
     ...overrides,
     maxFeePerGas: request.maxFeePerGas ? request.maxFeePerGas : undefined,
     maxPriorityFeePerGas: request.maxPriorityFeePerGas

@@ -25,7 +25,11 @@ import {
   sepolia,
 } from "viem/chains";
 import { EntryPointAbi_v6 } from "../abis/EntryPointAbi_v6.js";
-import type { UserOperationRequest, UserOperationStruct } from "../types.js";
+import type {
+  UserOperationLike,
+  UserOperationRequest,
+  UserOperationStruct,
+} from "../types.js";
 import type { SupportedEntryPoint } from "./types.js";
 
 const packUserOperation = (request: UserOperationRequest<"0.6.0">): Hex => {
@@ -103,9 +107,9 @@ export default {
 
   packUserOperation,
 
-  isUserOperationVersion: (
-    userOperation: UserOperationRequest | UserOperationStruct
-  ): boolean => {
-    return "paymasterAndData" in userOperation && "initCode" in userOperation;
-  },
+  isUserOpVersion: (
+    userOperation: UserOperationLike
+  ): userOperation is UserOperationStruct<"0.6.0"> &
+    UserOperationRequest<"0.6.0"> =>
+    "paymasterAndData" in userOperation && "initCode" in userOperation,
 } as SupportedEntryPoint<"0.6.0", Chain, typeof EntryPointAbi_v6>;

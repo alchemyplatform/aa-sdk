@@ -2,6 +2,7 @@ import {
   type Address,
   type Hash,
   type Hex,
+  type StateOverride,
   type TransactionReceipt,
 } from "viem";
 import type { z } from "zod";
@@ -13,6 +14,7 @@ import type { EntryPointVersion } from "./entrypoint/types";
 import type {
   BigNumberishRangeSchema,
   BigNumberishSchema,
+  Interface,
   MultiplierSchema,
 } from "./utils";
 
@@ -56,8 +58,8 @@ export type UserOperationOverridesParameter<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
   Required extends boolean = false
 > = Required extends true
-  ? { overrides: TEntryPointVersion }
-  : { overrides?: TEntryPointVersion };
+  ? { overrides: UserOperationOverrides<TEntryPointVersion> }
+  : { overrides?: UserOperationOverrides<TEntryPointVersion> };
 
 //#region UserOperationOverrides
 // Note: entry point version is required for UserOperationOverrides
@@ -82,6 +84,7 @@ export type UserOperationOverrides<
      * one user operation for your account in a bundle
      */
     nonceKey: bigint;
+    stateOverride: StateOverride;
   } & (TEntryPointVersion extends "0.6.0"
     ? {
         paymasterAndData: UserOperationStruct<"0.6.0">["paymasterAndData"];
@@ -91,6 +94,7 @@ export type UserOperationOverrides<
         paymaster: UserOperationStruct<"0.7.0">["paymaster"];
         paymasterData: UserOperationStruct<"0.7.0">["paymasterData"];
         paymasterPostOpGasLimit: UserOperationStruct<"0.7.0">["paymasterPostOpGasLimit"];
+        paymasterVerificationGasLimit: UserOperationStruct<"0.7.0">["paymasterVerificationGasLimit"];
         paymasterGas: UserOperationStruct<"0.7.0">["paymasterPostOpGasLimit"];
       }
     : never)
@@ -361,3 +365,7 @@ export type UserOperationStruct<
   ? UserOperationStruct_v7
   : never;
 //#endregion UserOperationStruct
+
+export type UserOperationLike<
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+> = Interface<UserOperationOverrides<TEntryPointVersion>>;
