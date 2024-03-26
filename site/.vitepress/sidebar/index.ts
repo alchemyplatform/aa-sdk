@@ -10,6 +10,8 @@ export const sidebar: DefaultTheme.Sidebar = [
         link: "/getting-started/overview",
       },
       { text: "Quick start", link: "/getting-started/setup" },
+      // TODO: remove this once the quick start has been refactored
+      { text: "Alchemy Signer", link: "/signers/alchemy-signer/" },
     ],
   },
   {
