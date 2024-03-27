@@ -8,13 +8,13 @@ import type { Deferrable } from "../utils";
 import type { MiddlewareClient } from "./actions";
 
 //#region ClientMiddlewareFn
-export type ClientMiddlewareFn = <
-  TAccount extends SmartContractAccount,
-  C extends MiddlewareClient
->(
+export type ClientMiddlewareFn<
+  TContext extends Record<string, any> = Record<string, any>
+> = <TAccount extends SmartContractAccount, C extends MiddlewareClient>(
   struct: Deferrable<UserOperationStruct>,
   args: {
     overrides?: UserOperationOverrides;
+    context?: TContext;
     feeOptions?: UserOperationFeeOptions;
     account: TAccount;
     client: C;
@@ -23,13 +23,15 @@ export type ClientMiddlewareFn = <
 //#endregion ClientMiddlewareFn
 
 //#region ClientMiddleware
-export type ClientMiddleware = {
-  dummyPaymasterAndData: ClientMiddlewareFn;
-  feeEstimator: ClientMiddlewareFn;
-  gasEstimator: ClientMiddlewareFn;
-  customMiddleware: ClientMiddlewareFn;
-  paymasterAndData: ClientMiddlewareFn;
-  userOperationSimulator: ClientMiddlewareFn;
-  signUserOperation: ClientMiddlewareFn;
+export type ClientMiddleware<
+  TContext extends Record<string, any> = Record<string, any>
+> = {
+  dummyPaymasterAndData: ClientMiddlewareFn<TContext>;
+  feeEstimator: ClientMiddlewareFn<TContext>;
+  gasEstimator: ClientMiddlewareFn<TContext>;
+  customMiddleware: ClientMiddlewareFn<TContext>;
+  paymasterAndData: ClientMiddlewareFn<TContext>;
+  userOperationSimulator: ClientMiddlewareFn<TContext>;
+  signUserOperation: ClientMiddlewareFn<TContext>;
 };
 //#endregion ClientMiddleware

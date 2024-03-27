@@ -71,7 +71,7 @@ export type UserOperationOverrides = Partial<{
    * The signature override is used in special cases when custom signature middleware is used
    * This middleware allows you to provide context to your custom signature middleware
    */
-  signature: UserOperationStruct["signature"];
+  // signature: UserOperationStruct["signature"];
 }>;
 //#endregion UserOperationOverrides
 

@@ -16,6 +16,7 @@ import {
   type MultisigPluginActions as MultisigPluginActions_,
 } from "./plugin.js";
 import {
+  type MultisigUserOperationContext,
   type ProposeUserOperationResult,
   type SignMultisigUserOperationParams,
   type SignMultisigUserOperationResult,
@@ -25,7 +26,7 @@ export type MultisigPluginActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined
-> = MultisigPluginActions_<TAccount> & {
+> = MultisigPluginActions_<TAccount, MultisigUserOperationContext> & {
   readOwners: (
     params: GetPluginAddressParameter & GetAccountParameter<TAccount>
   ) => Promise<ReadonlyArray<Address>>;
@@ -40,7 +41,7 @@ export type MultisigPluginActions<
   ) => Promise<bigint>;
 
   proposeUserOperation: (
-    params: SendUserOperationParameters<TAccount>
+    params: SendUserOperationParameters<TAccount, never>
   ) => Promise<ProposeUserOperationResult>;
 
   signMultisigUserOperation: (
@@ -85,7 +86,7 @@ export const multisigPluginActions: <
     args: GetPluginAddressParameter & GetAccountParameter<TAccount>
   ) => getThreshold(client, args),
 
-  proposeUserOperation: (args: SendUserOperationParameters<TAccount>) =>
+  proposeUserOperation: (args: SendUserOperationParameters<TAccount, {}>) =>
     proposeUserOperation(client, args),
 
   signMultisigUserOperation: (

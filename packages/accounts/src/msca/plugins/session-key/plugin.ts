@@ -34,7 +34,8 @@ import { type FunctionReference } from "../../account-loupe/types.js";
 type ExecutionActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TContext extends Record<string, any> = Record<string, any>
 > = {
   executeWithSessionKey: (
     args: Pick<
@@ -43,7 +44,10 @@ type ExecutionActions<
         "executeWithSessionKey"
       >,
       "args"
-    > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
+    > & {
+      overrides?: UserOperationOverrides;
+      context?: TContext;
+    } & GetAccountParameter<TAccount>
   ) => Promise<SendUserOperationResult>;
 
   addSessionKey: (
@@ -53,7 +57,10 @@ type ExecutionActions<
         "addSessionKey"
       >,
       "args"
-    > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
+    > & {
+      overrides?: UserOperationOverrides;
+      context?: TContext;
+    } & GetAccountParameter<TAccount>
   ) => Promise<SendUserOperationResult>;
 
   removeSessionKey: (
@@ -63,7 +70,10 @@ type ExecutionActions<
         "removeSessionKey"
       >,
       "args"
-    > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
+    > & {
+      overrides?: UserOperationOverrides;
+      context?: TContext;
+    } & GetAccountParameter<TAccount>
   ) => Promise<SendUserOperationResult>;
 
   rotateSessionKey: (
@@ -73,7 +83,10 @@ type ExecutionActions<
         "rotateSessionKey"
       >,
       "args"
-    > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
+    > & {
+      overrides?: UserOperationOverrides;
+      context?: TContext;
+    } & GetAccountParameter<TAccount>
   ) => Promise<SendUserOperationResult>;
 
   updateKeyPermissions: (
@@ -83,7 +96,10 @@ type ExecutionActions<
         "updateKeyPermissions"
       >,
       "args"
-    > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
+    > & {
+      overrides?: UserOperationOverrides;
+      context?: TContext;
+    } & GetAccountParameter<TAccount>
   ) => Promise<SendUserOperationResult>;
 };
 
@@ -102,11 +118,13 @@ export type InstallSessionKeyPluginParams = {
 type ManagementActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TContext extends Record<string, any> = Record<string, any>
 > = {
   installSessionKeyPlugin: (
     args: {
       overrides?: UserOperationOverrides;
+      context?: TContext;
     } & InstallSessionKeyPluginParams &
       GetAccountParameter<TAccount>
   ) => Promise<SendUserOperationResult>;
@@ -167,9 +185,10 @@ type ReadAndEncodeActions = {
 export type SessionKeyPluginActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
-> = ExecutionActions<TAccount> &
-  ManagementActions<TAccount> &
+    | undefined,
+  TContext extends Record<string, any> = Record<string, any>
+> = ExecutionActions<TAccount, TContext> &
+  ManagementActions<TAccount, TContext> &
   ReadAndEncodeActions;
 
 const addresses = {
@@ -217,7 +236,12 @@ export const sessionKeyPluginActions: <
 >(
   client: Client<TTransport, TChain, TAccount>
 ) => SessionKeyPluginActions<TAccount> = (client) => ({
-  executeWithSessionKey({ args, overrides, account = client.account }) {
+  executeWithSessionKey({
+    args,
+    overrides,
+    context,
+    account = client.account,
+  }) {
     if (!account) {
       throw new AccountNotFoundError();
     }
@@ -235,9 +259,9 @@ export const sessionKeyPluginActions: <
       args,
     });
 
-    return client.sendUserOperation({ uo, overrides, account });
+    return client.sendUserOperation({ uo, overrides, account, context });
   },
-  addSessionKey({ args, overrides, account = client.account }) {
+  addSessionKey({ args, overrides, context, account = client.account }) {
     if (!account) {
       throw new AccountNotFoundError();
     }
@@ -255,9 +279,9 @@ export const sessionKeyPluginActions: <
       args,
     });
 
-    return client.sendUserOperation({ uo, overrides, account });
+    return client.sendUserOperation({ uo, overrides, account, context });
   },
-  removeSessionKey({ args, overrides, account = client.account }) {
+  removeSessionKey({ args, overrides, context, account = client.account }) {
     if (!account) {
       throw new AccountNotFoundError();
     }
@@ -275,9 +299,9 @@ export const sessionKeyPluginActions: <
       args,
     });
 
-    return client.sendUserOperation({ uo, overrides, account });
+    return client.sendUserOperation({ uo, overrides, account, context });
   },
-  rotateSessionKey({ args, overrides, account = client.account }) {
+  rotateSessionKey({ args, overrides, context, account = client.account }) {
     if (!account) {
       throw new AccountNotFoundError();
     }
@@ -295,9 +319,9 @@ export const sessionKeyPluginActions: <
       args,
     });
 
-    return client.sendUserOperation({ uo, overrides, account });
+    return client.sendUserOperation({ uo, overrides, account, context });
   },
-  updateKeyPermissions({ args, overrides, account = client.account }) {
+  updateKeyPermissions({ args, overrides, context, account = client.account }) {
     if (!account) {
       throw new AccountNotFoundError();
     }
@@ -315,9 +339,14 @@ export const sessionKeyPluginActions: <
       args,
     });
 
-    return client.sendUserOperation({ uo, overrides, account });
+    return client.sendUserOperation({ uo, overrides, account, context });
   },
-  installSessionKeyPlugin({ account = client.account, overrides, ...params }) {
+  installSessionKeyPlugin({
+    account = client.account,
+    overrides,
+    context,
+    ...params
+  }) {
     if (!account) {
       throw new AccountNotFoundError();
     }
@@ -381,6 +410,7 @@ export const sessionKeyPluginActions: <
       dependencies,
       overrides,
       account,
+      context,
     });
   },
   encodeExecuteWithSessionKey({ args }) {

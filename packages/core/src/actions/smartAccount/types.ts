@@ -14,20 +14,24 @@ import type {
 
 //#region UpgradeAccountParams
 export type UpgradeAccountParams<
-  TAccount extends SmartContractAccount | undefined
+  TAccount extends SmartContractAccount | undefined,
+  TContext extends Record<string, any> = Record<string, any>
 > = {
   upgradeTo: UpgradeToData;
   overrides?: UserOperationOverrides;
   waitForTx?: boolean;
+  context?: TContext;
 } & GetAccountParameter<TAccount>;
 //#endregion UpgradeAccountParams
 
 //#region SendUserOperationParameters
 export type SendUserOperationParameters<
-  TAccount extends SmartContractAccount | undefined
+  TAccount extends SmartContractAccount | undefined,
+  TContext extends Record<string, any> = Record<string, any>
 > = {
   uo: UserOperationCallData | BatchUserOperationCallData;
   overrides?: UserOperationOverrides;
+  context?: TContext;
 } & GetAccountParameter<TAccount>;
 //#endregion SendUserOperationParameters
 
@@ -41,19 +45,23 @@ export type SignUserOperationParameters<
 
 //#region SendTransactionsParameters
 export type SendTransactionsParameters<
-  TAccount extends SmartContractAccount | undefined
+  TAccount extends SmartContractAccount | undefined,
+  TContext extends Record<string, any> = Record<string, any>
 > = {
   requests: RpcTransactionRequest[];
   overrides?: UserOperationOverrides;
+  context?: TContext;
 } & GetAccountParameter<TAccount>;
 //#endregion SendTransactionsParameters
 
 //#region DropAndReplaceUserOperationParameters
 export type DropAndReplaceUserOperationParameters<
-  TAccount extends SmartContractAccount | undefined
+  TAccount extends SmartContractAccount | undefined,
+  TContext extends Record<string, any> = Record<string, any>
 > = {
   uoToDrop: UserOperationRequest;
   overrides?: UserOperationOverrides;
+  context?: TContext;
 } & GetAccountParameter<TAccount>;
 //#endregion DropAndReplaceUserOperationParameters
 

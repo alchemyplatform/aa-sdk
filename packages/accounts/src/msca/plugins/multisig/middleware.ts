@@ -7,6 +7,7 @@ import {
   resolveProperties,
   type ClientMiddlewareFn,
 } from "@alchemy/aa-core";
+import { isHex, type Hex } from "viem";
 import { isMultisigModularAccount } from "../../account/multisigAccount.js";
 import { getThreshold } from "./actions/getThreshold.js";
 import { UserOpSignatureType } from "./types.js";
@@ -16,10 +17,9 @@ import {
   splitAggregatedSignature,
 } from "./utils.js";
 
-export const multisigSignatureMiddleware: ClientMiddlewareFn = async (
-  struct,
-  { overrides, account, client }
-) => {
+export const multisigSignatureMiddleware: ClientMiddlewareFn<{
+  signature: Hex;
+}> = async (struct, { account, client, context }) => {
   if (!isSmartAccountWithSigner(account)) {
     throw new SmartAccountWithSignerRequiredError();
   }
@@ -49,11 +49,16 @@ export const multisigSignatureMiddleware: ClientMiddlewareFn = async (
   const threshold = await getThreshold(client, { account });
 
   // if there is no override, then return the dummy signature
-  if (overrides?.signature == null) {
+  if (context?.signature == null) {
     return {
       ...resolvedStruct,
       signature: account.getDummySignature(),
     };
+  }
+
+  if (!isHex(context.signature)) {
+    // TODO: use error classes
+    throw new Error("Expected context.signature to be a hex string");
   }
 
   const {
@@ -62,7 +67,7 @@ export const multisigSignatureMiddleware: ClientMiddlewareFn = async (
     upperLimitMaxPriorityFeePerGas,
     signatures,
   } = await splitAggregatedSignature({
-    aggregatedSignature: deepHexlify(overrides.signature),
+    aggregatedSignature: context.signature,
     threshold: Number(threshold),
     account,
     request,

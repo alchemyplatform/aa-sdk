@@ -25,7 +25,7 @@ export async function proposeUserOperation<
     uo,
     account = client.account,
     overrides: overrides_,
-  }: SendUserOperationParameters<TAccount>
+  }: SendUserOperationParameters<TAccount, {}>
 ): Promise<ProposeUserOperationResult> {
   // these overrides allow us to set a high max fee and PVG upper bound
   const overrides = {

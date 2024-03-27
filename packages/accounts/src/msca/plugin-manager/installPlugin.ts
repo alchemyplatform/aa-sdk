@@ -24,27 +24,33 @@ import type { FunctionReference } from "../account-loupe/types.js";
 export type InstallPluginParams<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TContext extends Record<string, unknown> = Record<string, unknown>
 > = {
   pluginAddress: Address;
   manifestHash?: Hash;
   pluginInitData?: Hash;
   dependencies?: FunctionReference[];
-} & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>;
+} & {
+  overrides?: UserOperationOverrides;
+  context?: TContext;
+} & GetAccountParameter<TAccount>;
 
 export async function installPlugin<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TContext extends Record<string, unknown> = Record<string, unknown>
 >(
   client: Client<TTransport, TChain, TAccount>,
   {
     overrides,
+    context,
     account = client.account,
     ...params
-  }: InstallPluginParams<TAccount>
+  }: InstallPluginParams<TAccount, TContext>
 ) {
   if (!account) {
     throw new AccountNotFoundError();
