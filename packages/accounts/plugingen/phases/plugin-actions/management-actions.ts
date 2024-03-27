@@ -24,9 +24,12 @@ export const ManagementActionsGenPhase: Phase = async (input) => {
       true
     );
     addType(
-      "ManagementActions<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined>",
+      "ManagementActions<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined, TContext extends Record<string, any> = Record<string,any>>",
       dedent`{
-      install${contract.name}: (args: {overrides?: UserOperationOverrides} & Install${contract.name}Params & GetAccountParameter<TAccount>) => Promise<SendUserOperationResult>
+      install${contract.name}: (args: { 
+        overrides?: UserOperationOverrides; 
+        context?: TContext;
+      } & Install${contract.name}Params & GetAccountParameter<TAccount>) => Promise<SendUserOperationResult>
     }`
     );
 
@@ -49,7 +52,7 @@ export const ManagementActionsGenPhase: Phase = async (input) => {
     const installMethodName = `install${contract.name}`;
 
     input.content.push(dedent`
-    ${installMethodName}({account = client.account, overrides, ...params}) {
+    ${installMethodName}({account = client.account, overrides, context, ...params}) {
       if (!account) {
         throw new AccountNotFoundError();
       }
@@ -84,6 +87,7 @@ export const ManagementActionsGenPhase: Phase = async (input) => {
         dependencies,
         overrides,
         account,
+        context,
       });
     }
   `);

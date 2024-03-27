@@ -83,7 +83,7 @@ describe("Multisig Modular Account Tests", async () => {
         target: initiator.getAddress(),
         data: "0x",
       },
-      overrides: {
+      context: {
         signature: aggregatedSignature,
       },
     });

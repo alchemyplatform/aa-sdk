@@ -2,7 +2,7 @@ import {
   createSmartAccountClient,
   smartAccountClientActions,
   type SmartAccountClient,
-  type SmartAccountClientActions,
+  type SmartAccountClientRpcSchema,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import { type Chain, type CustomTransport, type Transport } from "viem";
@@ -32,6 +32,7 @@ import {
 import {
   multisigPluginActions,
   type MultisigPluginActions,
+  type MultisigUserOperationContext,
 } from "./plugins/multisig/index.js";
 import { multisigSignatureMiddleware } from "./plugins/multisig/middleware.js";
 
@@ -73,8 +74,7 @@ export function createMultiOwnerModularAccountClient<
     CustomTransport,
     Chain,
     MultiOwnerModularAccount<TSigner>,
-    SmartAccountClientActions<Chain, MultiOwnerModularAccount<TSigner>> &
-      MultiOwnerPluginActions<MultiOwnerModularAccount<TSigner>> &
+    MultiOwnerPluginActions<MultiOwnerModularAccount<TSigner>> &
       PluginManagerActions<MultiOwnerModularAccount<TSigner>> &
       AccountLoupeActions<MultiOwnerModularAccount<TSigner>>
   >
@@ -113,10 +113,11 @@ export function createMultisigModularAccountClient<
     CustomTransport,
     Chain,
     MultisigModularAccount<TSigner>,
-    SmartAccountClientActions<Chain, MultisigModularAccount<TSigner>> &
-      MultisigPluginActions<MultisigModularAccount<TSigner>> &
+    MultisigPluginActions<MultisigModularAccount<TSigner>> &
       PluginManagerActions<MultisigModularAccount<TSigner>> &
-      AccountLoupeActions<MultisigModularAccount<TSigner>>
+      AccountLoupeActions<MultisigModularAccount<TSigner>>,
+    SmartAccountClientRpcSchema,
+    MultisigUserOperationContext
   >
 >;
 
@@ -125,7 +126,16 @@ export async function createMultisigModularAccountClient({
   transport,
   chain,
   ...clientConfig
-}: CreateMultisigModularAccountClientParams): Promise<SmartAccountClient> {
+}: CreateMultisigModularAccountClientParams): Promise<
+  SmartAccountClient<
+    Transport,
+    Chain,
+    MultisigModularAccount<SmartAccountSigner>,
+    {},
+    SmartAccountClientRpcSchema,
+    MultisigUserOperationContext
+  >
+> {
   // todo: load in the threshold here?
 
   const modularAccount = await createMultisigModularAccount({

@@ -9,6 +9,7 @@ import {
   type LightAccount,
   type MultiOwnerPluginActions,
   type MultisigModularAccount,
+  type MultisigUserOperationContext,
   type PluginManagerActions,
 } from "@alchemy/aa-accounts";
 import type { SmartAccountSigner } from "@alchemy/aa-core";
@@ -35,7 +36,12 @@ export type AlchemyMultisigAccountClientConfig<
   "transport" | "chain"
 > &
   Omit<
-    AlchemySmartAccountClientConfig<Transport, Chain, LightAccount<TSigner>>,
+    AlchemySmartAccountClientConfig<
+      Transport,
+      Chain,
+      LightAccount<TSigner>,
+      MultisigUserOperationContext
+    >,
     "account"
   >;
 
@@ -51,7 +57,8 @@ export function createMultisigAccountAlchemyClient<
     BaseAlchemyActions<Chain | undefined, MultisigModularAccount<TSigner>> &
       MultiOwnerPluginActions<MultisigModularAccount<TSigner>> &
       PluginManagerActions<MultisigModularAccount<TSigner>> &
-      AccountLoupeActions<MultisigModularAccount<TSigner>>
+      AccountLoupeActions<MultisigModularAccount<TSigner>>,
+    MultisigUserOperationContext
   >
 >;
 
@@ -71,7 +78,11 @@ export async function createMultisigAccountAlchemyClient(
     ...config,
   });
 
-  return createAlchemySmartAccountClientFromRpcClient({
+  return createAlchemySmartAccountClientFromRpcClient<
+    Chain | undefined,
+    MultisigModularAccount<SmartAccountSigner>,
+    MultisigUserOperationContext
+  >({
     ...config,
     client,
     account,

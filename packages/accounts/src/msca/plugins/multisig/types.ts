@@ -42,3 +42,7 @@ export type ProposeUserOperationResult = {
   request: UserOperationRequest;
   aggregatedSignature: Hex;
 };
+
+export type MultisigUserOperationContext = {
+  signature: Hex;
+};

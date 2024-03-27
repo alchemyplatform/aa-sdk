@@ -33,7 +33,8 @@ import { type FunctionReference } from "../../account-loupe/types.js";
 type ExecutionActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TContext extends Record<string, any> = Record<string, any>
 > = {
   updateOwnership: (
     args: Pick<
@@ -42,7 +43,10 @@ type ExecutionActions<
         "updateOwnership"
       >,
       "args"
-    > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
+    > & {
+      overrides?: UserOperationOverrides;
+      context?: TContext;
+    } & GetAccountParameter<TAccount>
   ) => Promise<SendUserOperationResult>;
 };
 
@@ -57,10 +61,14 @@ export type InstallMultisigPluginParams = {
 type ManagementActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TContext extends Record<string, any> = Record<string, any>
 > = {
   installMultisigPlugin: (
-    args: { overrides?: UserOperationOverrides } & InstallMultisigPluginParams &
+    args: {
+      overrides?: UserOperationOverrides;
+      context?: TContext;
+    } & InstallMultisigPluginParams &
       GetAccountParameter<TAccount>
   ) => Promise<SendUserOperationResult>;
 };
@@ -129,9 +137,10 @@ type ReadAndEncodeActions<
 export type MultisigPluginActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
-> = ExecutionActions<TAccount> &
-  ManagementActions<TAccount> &
+    | undefined,
+  TContext extends Record<string, any> = Record<string, any>
+> = ExecutionActions<TAccount, TContext> &
+  ManagementActions<TAccount, TContext> &
   ReadAndEncodeActions<TAccount>;
 
 const addresses = {
@@ -167,7 +176,7 @@ export const multisigPluginActions: <
 >(
   client: Client<TTransport, TChain, TAccount>
 ) => MultisigPluginActions<TAccount> = (client) => ({
-  updateOwnership({ args, overrides, account = client.account }) {
+  updateOwnership({ args, overrides, context, account = client.account }) {
     if (!account) {
       throw new AccountNotFoundError();
     }
@@ -185,9 +194,14 @@ export const multisigPluginActions: <
       args,
     });
 
-    return client.sendUserOperation({ uo, overrides, account });
+    return client.sendUserOperation({ uo, overrides, account, context });
   },
-  installMultisigPlugin({ account = client.account, overrides, ...params }) {
+  installMultisigPlugin({
+    account = client.account,
+    overrides,
+    context,
+    ...params
+  }) {
     if (!account) {
       throw new AccountNotFoundError();
     }
@@ -223,6 +237,7 @@ export const multisigPluginActions: <
       dependencies,
       overrides,
       account,
+      context,
     });
   },
   encodeUpdateOwnership({ args }) {
