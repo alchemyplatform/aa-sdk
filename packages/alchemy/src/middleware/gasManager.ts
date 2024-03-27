@@ -31,6 +31,8 @@ export type RequestGasAndPaymasterAndDataOverrides = Partial<{
 export interface AlchemyGasManagerConfig {
   policyId: string;
   gasEstimationOptions?: AlchemyGasEstimationOptions;
+  paymasterAddress?: Address;
+  dummyData?: Hex;
 }
 
 export interface AlchemyGasEstimationOptions {
@@ -40,10 +42,15 @@ export interface AlchemyGasEstimationOptions {
 }
 
 const dummyPaymasterAndData =
-  <C extends ClientWithAlchemyMethods>(client: C) =>
+  <C extends ClientWithAlchemyMethods>(
+    client: C,
+    config: AlchemyGasManagerConfig
+  ) =>
   () => {
-    const paymasterAddress = getAlchemyPaymasterAddress(client.chain);
+    const paymasterAddress =
+      config.paymasterAddress ?? getAlchemyPaymasterAddress(client.chain);
     const dummyData =
+      config.dummyData ??
       "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
 
     return `${paymasterAddress}${dummyData}` as Address;
@@ -128,7 +135,7 @@ const requestGasAndPaymasterData: <C extends ClientWithAlchemyMethods>(
   client: C,
   config: AlchemyGasManagerConfig
 ) => ClientMiddlewareConfig["paymasterAndData"] = (client, config) => ({
-  dummyPaymasterAndData: dummyPaymasterAndData(client),
+  dummyPaymasterAndData: dummyPaymasterAndData(client, config),
   paymasterAndData: async (struct, { overrides, feeOptions, account }) => {
     const userOperation: UserOperationRequest = deepHexlify(
       await resolveProperties(struct)
@@ -197,7 +204,7 @@ const requestPaymasterAndData: <C extends ClientWithAlchemyMethods>(
   client: C,
   config: AlchemyGasManagerConfig
 ) => ClientMiddlewareConfig["paymasterAndData"] = (client, config) => ({
-  dummyPaymasterAndData: dummyPaymasterAndData(client),
+  dummyPaymasterAndData: dummyPaymasterAndData(client, config),
   paymasterAndData: async (struct, { account }) => {
     const { paymasterAndData } = await client.request({
       method: "alchemy_requestPaymasterAndData",
