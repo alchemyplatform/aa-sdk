@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.7.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.6.1...v3.7.0) (2024-03-27)
+
+### Bug Fixes
+
+- Rename documentation_request to documentation_request.md ([06cc811](https://github.com/alchemyplatform/aa-sdk/commit/06cc8118faba24d7edef658074922a1b5238e7c9))
+- updating import in eoa guide ([#525](https://github.com/alchemyplatform/aa-sdk/issues/525)) ([6c1c28f](https://github.com/alchemyplatform/aa-sdk/commit/6c1c28f69b740132f5ef73605bfd001ade863a8f))
+
+### Features
+
+- update dummy paymaster and data ([#531](https://github.com/alchemyplatform/aa-sdk/issues/531)) ([956873b](https://github.com/alchemyplatform/aa-sdk/commit/956873b768afa63747aacfb6252e5ac3b4655f65))
+
 ## [3.6.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.6.0...v3.6.1) (2024-03-18)
 
 ### Bug Fixes
