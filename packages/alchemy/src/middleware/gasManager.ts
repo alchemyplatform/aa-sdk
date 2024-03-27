@@ -17,6 +17,21 @@ import {
 import { fromHex } from "viem";
 import type { ClientWithAlchemyMethods } from "../client/types";
 import { alchemyFeeEstimator } from "./feeEstimator.js";
+import {
+  arbitrum,
+  arbitrumSepolia,
+  base,
+  baseSepolia,
+  fraxtal,
+  fraxtalTestnet,
+  mainnet,
+  optimism,
+  optimismSepolia,
+  polygon,
+  polygonAmoy,
+  zora,
+  zoraSepolia,
+} from "viem/chains";
 
 export type RequestGasAndPaymasterAndDataOverrides = Partial<{
   maxFeePerGas: UserOperationRequest["maxFeePerGas"] | Multiplier;
@@ -40,14 +55,32 @@ export interface AlchemyGasEstimationOptions {
 const dummyPaymasterAndData =
   <C extends ClientWithAlchemyMethods>(client: C) =>
   () => {
-    switch (client.chain.id) {
-      case 1:
-      case 10:
-      case 137:
-      case 42161:
-        return "0x4Fd9098af9ddcB41DA48A1d78F91F1398965addcfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
+    const paymasterAddress = "0x4Fd9098af9ddcB41DA48A1d78F91F1398965addc";
+    const olderPaymasterAddress = "0xc03aac639bb21233e0139381970328db8bceeb67";
+    const arbSepoliaPaymasterAddress =
+      "0x0804Afe6EEFb73ce7F93CD0d5e7079a5a8068592";
+
+    const dummyData =
+      "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
+
+    switch (client.chain) {
+      case mainnet:
+      case optimism:
+      case polygon:
+      case arbitrum:
+      case polygonAmoy:
+      case optimismSepolia:
+      case base:
+      case baseSepolia:
+      case zora:
+      case zoraSepolia:
+      case fraxtal:
+      case fraxtalTestnet:
+        return `${paymasterAddress}${dummyData}`;
+      case arbitrumSepolia:
+        return `${arbSepoliaPaymasterAddress}${dummyData}`;
       default:
-        return "0xc03aac639bb21233e0139381970328db8bceeb67fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
+        return `${olderPaymasterAddress}${dummyData}`;
     }
   };
 
