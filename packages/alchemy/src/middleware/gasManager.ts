@@ -1,4 +1,5 @@
 import type {
+  Address,
   ClientMiddlewareConfig,
   ClientMiddlewareFn,
 } from "@alchemy/aa-core";
@@ -16,6 +17,7 @@ import {
 } from "@alchemy/aa-core";
 import { fromHex } from "viem";
 import type { ClientWithAlchemyMethods } from "../client/types";
+import { getAlchemyPaymasterAddress } from "../gas-manager.js";
 import { alchemyFeeEstimator } from "./feeEstimator.js";
 
 export type RequestGasAndPaymasterAndDataOverrides = Partial<{
@@ -40,15 +42,11 @@ export interface AlchemyGasEstimationOptions {
 const dummyPaymasterAndData =
   <C extends ClientWithAlchemyMethods>(client: C) =>
   () => {
-    switch (client.chain.id) {
-      case 1:
-      case 10:
-      case 137:
-      case 42161:
-        return "0x4Fd9098af9ddcB41DA48A1d78F91F1398965addcfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
-      default:
-        return "0xc03aac639bb21233e0139381970328db8bceeb67fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
-    }
+    const paymasterAddress = getAlchemyPaymasterAddress(client.chain);
+    const dummyData =
+      "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
+
+    return `${paymasterAddress}${dummyData}` as Address;
   };
 
 export const alchemyGasManagerMiddleware = <C extends ClientWithAlchemyMethods>(
