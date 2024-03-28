@@ -19,7 +19,7 @@ export const buildUserOperation: <
   client: Client<TTransport, TChain, TAccount>,
   args: SendUserOperationParameters<TAccount, TContext>
 ) => Promise<UserOperationStruct> = async (client, args) => {
-  const { account = client.account, overrides, uo } = args;
+  const { account = client.account, overrides, uo, context } = args;
   if (!account) {
     throw new AccountNotFoundError();
   }
@@ -46,5 +46,6 @@ export const buildUserOperation: <
     } as Deferrable<UserOperationStruct>,
     overrides,
     account,
+    context,
   });
 };
