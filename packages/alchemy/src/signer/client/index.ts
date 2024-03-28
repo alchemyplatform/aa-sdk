@@ -113,7 +113,9 @@ export class AlchemySignerClient {
       orgId: result.orgId,
       address: result.address!,
       userId: result.userId!,
+      credentialId: attestation.credentialId,
     };
+    this.initWebauthnStamper(this.user);
 
     return result;
   };
