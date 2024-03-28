@@ -3,6 +3,7 @@ import {
   IncompatibleClientError,
   isSmartAccountClient,
   type GetAccountParameter,
+  type GetContextParameter,
   type SmartContractAccount,
   type UserOperationOverrides,
 } from "@alchemy/aa-core";
@@ -19,18 +20,25 @@ import { IPluginManagerAbi } from "../abis/IPluginManager.js";
 export type UninstallPluginParams<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
     | undefined
 > = {
   pluginAddress: Address;
   config?: Hash;
   pluginUninstallData?: Hash;
-} & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>;
+} & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount> &
+  GetContextParameter<TContext>;
 
 export async function uninstallPlugin<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
@@ -38,7 +46,7 @@ export async function uninstallPlugin<
     overrides,
     account = client.account,
     ...params
-  }: UninstallPluginParams<TAccount>
+  }: UninstallPluginParams<TAccount, TContext>
 ) {
   if (!account) {
     throw new AccountNotFoundError();
@@ -57,7 +65,7 @@ export async function uninstallPlugin<
 }
 
 export async function encodeUninstallPluginUserOperation(
-  params: Omit<UninstallPluginParams, "account" | "overrides">
+  params: Omit<UninstallPluginParams, "account" | "overrides" | "context">
 ) {
   return encodeFunctionData({
     abi: IPluginManagerAbi,

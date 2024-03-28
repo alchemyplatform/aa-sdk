@@ -56,7 +56,9 @@ export type BaseSmartAccountClientActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, any> = Record<string, any>
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
 > = {
   buildUserOperation: (
     args: SendUserOperationParameters<TAccount, TContext>
@@ -70,7 +72,9 @@ export type BaseSmartAccountClientActions<
     args: SendTransactionsParameters<TAccount, TContext>
   ) => Promise<BuildUserOperationFromTransactionsResult>;
   checkGasSponsorshipEligibility: <
-    TContext extends Record<string, any> = Record<string, any>
+    TContext extends Record<string, any> | undefined =
+      | Record<string, any>
+      | undefined
   >(
     args: SendUserOperationParameters<TAccount, TContext>
   ) => Promise<boolean>;
@@ -80,6 +84,8 @@ export type BaseSmartAccountClientActions<
   dropAndReplaceUserOperation: (
     args: DropAndReplaceUserOperationParameters<TAccount, TContext>
   ) => Promise<SendUserOperationResult>;
+  // TODO: for v4 we should combine override and context into an `opts` parameter
+  // which wraps both of these properties so we can use GetContextParamter
   sendTransaction: <TChainOverride extends Chain | undefined = undefined>(
     args: SendTransactionParameters<TChain, TAccount, TChainOverride>,
     overrides?: UserOperationOverrides,
@@ -126,7 +132,9 @@ export const smartAccountClientActions: <
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, any> = Record<string, any>
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
 >(
   client: Client<TTransport, TChain, TAccount>
 ) => BaseSmartAccountClientActions<TChain, TAccount, TContext> = (client) => ({

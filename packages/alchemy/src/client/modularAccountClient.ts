@@ -24,7 +24,6 @@ import { createAlchemyPublicRpcClient } from "./rpcClient.js";
 import type {
   AlchemySmartAccountClient,
   AlchemySmartAccountClientConfig,
-  BaseAlchemyActions,
 } from "./smartAccountClient";
 
 export type AlchemyModularAccountClientConfig<
@@ -47,8 +46,7 @@ export function createModularAccountAlchemyClient<
     CustomTransport,
     Chain | undefined,
     MultiOwnerModularAccount<TSigner>,
-    BaseAlchemyActions<Chain | undefined, MultiOwnerModularAccount<TSigner>> &
-      MultiOwnerPluginActions<MultiOwnerModularAccount<TSigner>> &
+    MultiOwnerPluginActions<MultiOwnerModularAccount<TSigner>> &
       PluginManagerActions<MultiOwnerModularAccount<TSigner>> &
       AccountLoupeActions<MultiOwnerModularAccount<TSigner>>
   >

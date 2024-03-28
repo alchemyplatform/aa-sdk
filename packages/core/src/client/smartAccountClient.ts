@@ -37,7 +37,9 @@ export type SmartAccountClientConfig<
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  context extends Record<string, any> = Record<string, any>
+  context extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
 > = Prettify<
   Pick<
     ClientConfig<transport, chain, account>,
@@ -65,7 +67,9 @@ export type SmartAccountClientActions<
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  context extends Record<string, any> = Record<string, any>
+  context extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
 > = BaseSmartAccountClientActions<chain, account, context> &
   BundlerActions &
   PublicActions;
@@ -80,7 +84,9 @@ export type SmartAccountClient<
     | undefined,
   actions extends Record<string, unknown> = Record<string, unknown>,
   rpcSchema extends RpcSchema = SmartAccountClientRpcSchema,
-  context extends Record<string, any> = Record<string, any>
+  context extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
 > = Prettify<
   Client<
     transport,
@@ -98,7 +104,9 @@ export type BaseSmartAccountClient<
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  context extends Record<string, any> = Record<string, any>
+  context extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
 > = Prettify<
   Client<
     transport,
@@ -117,7 +125,9 @@ export function createSmartAccountClient<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, any> = Record<string, any>
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
 >(
   config: SmartAccountClientConfig<TTransport, TChain, TAccount, TContext>
 ): SmartAccountClient<TTransport, TChain, TAccount>;
@@ -233,7 +243,9 @@ export function createSmartAccountClientFromExisting<
     TContext
   > = SmartAccountClientActions<TChain, TAccount>,
   TRpcSchema extends SmartAccountClientRpcSchema = SmartAccountClientRpcSchema,
-  TContext extends Record<string, any> = Record<string, any>
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
 >(
   config: Omit<
     SmartAccountClientConfig<Transport, TChain, TAccount, TContext>,

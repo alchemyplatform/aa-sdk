@@ -29,7 +29,9 @@ export type UpgradeToData = {
 //#endregion UpgradeToData
 
 export type ClientMiddlewareConfig<
-  TContext extends Record<string, any> = Record<string, any>
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
 > = Omit<
   Partial<ClientMiddleware<TContext>>,
   "dummyPaymasterAndData" | "paymasterAndData"

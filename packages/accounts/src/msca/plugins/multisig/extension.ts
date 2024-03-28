@@ -41,7 +41,7 @@ export type MultisigPluginActions<
   ) => Promise<bigint>;
 
   proposeUserOperation: (
-    params: SendUserOperationParameters<TAccount, never>
+    params: SendUserOperationParameters<TAccount, undefined>
   ) => Promise<ProposeUserOperationResult>;
 
   signMultisigUserOperation: (
@@ -86,8 +86,9 @@ export const multisigPluginActions: <
     args: GetPluginAddressParameter & GetAccountParameter<TAccount>
   ) => getThreshold(client, args),
 
-  proposeUserOperation: (args: SendUserOperationParameters<TAccount, {}>) =>
-    proposeUserOperation(client, args),
+  proposeUserOperation: (
+    args: SendUserOperationParameters<TAccount, undefined>
+  ) => proposeUserOperation(client, args),
 
   signMultisigUserOperation: (
     params: SignMultisigUserOperationParams<TAccount>

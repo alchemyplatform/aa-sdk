@@ -7,8 +7,8 @@ import {
   type AccountLoupeActions,
   type CreateMultisigModularAccountParams,
   type LightAccount,
-  type MultiOwnerPluginActions,
   type MultisigModularAccount,
+  type MultisigPluginActions,
   type MultisigUserOperationContext,
   type PluginManagerActions,
 } from "@alchemy/aa-accounts";
@@ -26,7 +26,6 @@ import { createAlchemyPublicRpcClient } from "./rpcClient.js";
 import type {
   AlchemySmartAccountClient,
   AlchemySmartAccountClientConfig,
-  BaseAlchemyActions,
 } from "./smartAccountClient";
 
 export type AlchemyMultisigAccountClientConfig<
@@ -54,8 +53,7 @@ export function createMultisigAccountAlchemyClient<
     CustomTransport,
     Chain | undefined,
     MultisigModularAccount<TSigner>,
-    BaseAlchemyActions<Chain | undefined, MultisigModularAccount<TSigner>> &
-      MultiOwnerPluginActions<MultisigModularAccount<TSigner>> &
+    MultisigPluginActions<MultisigModularAccount<TSigner>> &
       PluginManagerActions<MultisigModularAccount<TSigner>> &
       AccountLoupeActions<MultisigModularAccount<TSigner>>,
     MultisigUserOperationContext
@@ -64,7 +62,17 @@ export function createMultisigAccountAlchemyClient<
 
 export async function createMultisigAccountAlchemyClient(
   config: AlchemyMultisigAccountClientConfig
-): Promise<AlchemySmartAccountClient> {
+): Promise<
+  AlchemySmartAccountClient<
+    Transport,
+    Chain | undefined,
+    MultisigModularAccount<SmartAccountSigner>,
+    MultisigPluginActions<MultisigModularAccount<SmartAccountSigner>> &
+      PluginManagerActions<MultisigModularAccount<SmartAccountSigner>> &
+      AccountLoupeActions<MultisigModularAccount<SmartAccountSigner>>,
+    MultisigUserOperationContext
+  >
+> {
   const { chain, opts, ...connectionConfig } =
     AlchemyProviderConfigSchema.parse(config);
 

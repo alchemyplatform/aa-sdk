@@ -9,7 +9,9 @@ import type { MiddlewareClient } from "./actions";
 
 //#region ClientMiddlewareFn
 export type ClientMiddlewareFn<
-  TContext extends Record<string, any> = Record<string, any>
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
 > = <TAccount extends SmartContractAccount, C extends MiddlewareClient>(
   struct: Deferrable<UserOperationStruct>,
   args: {
@@ -24,7 +26,9 @@ export type ClientMiddlewareFn<
 
 //#region ClientMiddleware
 export type ClientMiddleware<
-  TContext extends Record<string, any> = Record<string, any>
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
 > = {
   dummyPaymasterAndData: ClientMiddlewareFn<TContext>;
   feeEstimator: ClientMiddlewareFn<TContext>;

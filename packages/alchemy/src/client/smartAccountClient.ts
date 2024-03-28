@@ -22,7 +22,9 @@ export type AlchemySmartAccountClientConfig<
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  context extends Record<string, any> = Record<string, any>
+  context extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
 > = {
   account?: account;
   useSimulation?: boolean;
@@ -38,7 +40,9 @@ export type BaseAlchemyActions<
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  context extends Record<string, any> = Record<string, any>
+  context extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
 > = SmartAccountClientActions<chain, account, context> &
   AlchemySmartAccountClientActions<account, context>;
 
@@ -49,7 +53,9 @@ export type AlchemySmartAccountClient_Base<
     | SmartContractAccount
     | undefined,
   actions extends Record<string, unknown> = Record<string, unknown>,
-  context extends Record<string, any> = Record<string, any>
+  context extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
 > = Prettify<
   SmartAccountClient<
     transport,
@@ -68,7 +74,9 @@ export type AlchemySmartAccountClient<
     | SmartContractAccount
     | undefined,
   actions extends Record<string, unknown> = Record<string, unknown>,
-  context extends Record<string, any> = Record<string, any>
+  context extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
 > = Prettify<
   AlchemySmartAccountClient_Base<transport, chain, account, actions, context>
 >;
@@ -79,7 +87,9 @@ export function createAlchemySmartAccountClient<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, any> = Record<string, any>
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
 >({
   account,
   gasManagerConfig,
@@ -94,7 +104,13 @@ export function createAlchemySmartAccountClient<
   TChain,
   TAccount,
   TContext
->): AlchemySmartAccountClient<TTransport, TChain, TAccount, TContext>;
+>): AlchemySmartAccountClient<
+  TTransport,
+  TChain,
+  TAccount,
+  Record<string, never>,
+  TContext
+>;
 
 export function createAlchemySmartAccountClient({
   account,

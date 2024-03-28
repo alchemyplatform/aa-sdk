@@ -24,12 +24,11 @@ export const ManagementActionsGenPhase: Phase = async (input) => {
       true
     );
     addType(
-      "ManagementActions<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined, TContext extends Record<string, any> = Record<string,any>>",
+      "ManagementActions<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined, TContext extends Record<string, any> | undefined = Record<string,any> | undefined>",
       dedent`{
       install${contract.name}: (args: { 
-        overrides?: UserOperationOverrides; 
-        context?: TContext;
-      } & Install${contract.name}Params & GetAccountParameter<TAccount>) => Promise<SendUserOperationResult>
+        overrides?: UserOperationOverrides;
+      } & Install${contract.name}Params & GetAccountParameter<TAccount> & GetContextParameter<TContext>) => Promise<SendUserOperationResult>
     }`
     );
 
@@ -131,4 +130,5 @@ const addImports = (
     name: "FunctionReference",
     isType: true,
   });
+  addImport("@alchemy/aa-core", { name: "GetContextParameter", isType: true });
 };
