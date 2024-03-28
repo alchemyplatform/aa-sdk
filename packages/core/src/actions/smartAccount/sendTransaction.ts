@@ -20,12 +20,14 @@ export const sendTransaction: <
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TChainOverride extends Chain | undefined = Chain | undefined
+  TChainOverride extends Chain | undefined = Chain | undefined,
+  TContext extends Record<string, any> = Record<string, any>
 >(
   client: Client<Transport, TChain, TAccount>,
   args: SendTransactionParameters<TChain, TAccount, TChainOverride>,
-  overrides?: UserOperationOverrides
-) => Promise<Hex> = async (client, args, overrides) => {
+  overrides?: UserOperationOverrides,
+  context?: TContext
+) => Promise<Hex> = async (client, args, overrides, context) => {
   const { account = client.account } = args;
   if (!account || typeof account === "string") {
     throw new AccountNotFoundError();
@@ -43,7 +45,12 @@ export const sendTransaction: <
     );
   }
 
-  const uoStruct = await buildUserOperationFromTx(client, args, overrides);
+  const uoStruct = await buildUserOperationFromTx(
+    client,
+    args,
+    overrides,
+    context
+  );
   const { hash } = await _sendUserOperation(client, {
     account: account as SmartContractAccount,
     uoStruct,

@@ -82,7 +82,8 @@ export type BaseSmartAccountClientActions<
   ) => Promise<SendUserOperationResult>;
   sendTransaction: <TChainOverride extends Chain | undefined = undefined>(
     args: SendTransactionParameters<TChain, TAccount, TChainOverride>,
-    overrides?: UserOperationOverrides
+    overrides?: UserOperationOverrides,
+    context?: TContext
   ) => Promise<Hex>;
   sendTransactions: (
     args: SendTransactionsParameters<TAccount, TContext>
@@ -93,7 +94,9 @@ export type BaseSmartAccountClientActions<
   waitForUserOperationTransaction: (
     args: WaitForTransactionReceiptParameters
   ) => Promise<Hex>;
-  upgradeAccount: (args: UpgradeAccountParams<TAccount>) => Promise<Hex>;
+  upgradeAccount: (
+    args: UpgradeAccountParams<TAccount, TContext>
+  ) => Promise<Hex>;
   signMessage: (args: SignMessageParameters<TAccount>) => Promise<Hex>;
   signTypedData: <
     const TTypedData extends TypedData | { [key: string]: unknown },
@@ -128,16 +131,16 @@ export const smartAccountClientActions: <
   client: Client<TTransport, TChain, TAccount>
 ) => BaseSmartAccountClientActions<TChain, TAccount, TContext> = (client) => ({
   buildUserOperation: (args) => buildUserOperation(client, args),
-  buildUserOperationFromTx: (args, overrides) =>
-    buildUserOperationFromTx(client, args, overrides),
+  buildUserOperationFromTx: (args, overrides, context) =>
+    buildUserOperationFromTx(client, args, overrides, context),
   buildUserOperationFromTxs: (args) => buildUserOperationFromTxs(client, args),
   checkGasSponsorshipEligibility: (args) =>
     checkGasSponsorshipEligibility(client, args),
   signUserOperation: (args) => signUserOperation(client, args),
   dropAndReplaceUserOperation: (args) =>
     dropAndReplaceUserOperation(client, args),
-  sendTransaction: (args, overrides) =>
-    sendTransaction(client, args, overrides),
+  sendTransaction: (args, overrides, context) =>
+    sendTransaction(client, args, overrides, context),
   sendTransactions: (args) => sendTransactions(client, args),
   sendUserOperation: (args) => sendUserOperation(client, args),
   waitForUserOperationTransaction: (args) =>
