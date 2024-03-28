@@ -48,6 +48,9 @@ export const multisigSignatureMiddleware: ClientMiddlewareFn<{
   // TODO: this needs to actually check the account's installed plugins and fetch the multisig plugin address
   const threshold = await getThreshold(client, { account });
 
+  console.log("context");
+  console.log(context);
+
   // if there is no override, then return the dummy signature
   if (context?.signature == null) {
     return {

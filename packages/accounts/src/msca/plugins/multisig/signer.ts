@@ -74,14 +74,16 @@ export const multisigMessageSigner = <
 
       const actualThreshold = thresholdRead === 0n ? threshold : thresholdRead;
 
+      // todo: revert on account client creation if threshold is zero
+
       // (uint upperLimitPreVerificationGas, uint upperLimitMaxFeePerGas, uint upperLimitMaxPriorityFeePerGas)
       // all sigs will be on "actual" with v = 32
       return ("0x" +
-        (
-          "FF".repeat(64 * 3) +
-          "FF".repeat(Number(actualThreshold) * 39) +
-          "20"
-        ).repeat(Number(actualThreshold))) as Hex;
+        "FF".repeat(64 * 3) +
+        "fffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa3c" +
+        "fffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c".repeat(
+          Number(actualThreshold) - 1
+        )) as Hex;
     },
 
     signUserOperationHash: (uoHash: Hex): Promise<Hex> => {

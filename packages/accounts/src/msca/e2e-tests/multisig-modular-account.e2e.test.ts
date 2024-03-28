@@ -78,6 +78,8 @@ describe("Multisig Modular Account Tests", async () => {
       },
     });
 
+    console.log("aggregatedSignature: ", aggregatedSignature);
+
     const result = await submitter.sendUserOperation({
       uo: {
         target: initiator.getAddress(),
