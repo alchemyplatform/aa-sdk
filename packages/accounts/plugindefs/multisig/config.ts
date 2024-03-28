@@ -7,7 +7,7 @@ export const MultisigPluginGenConfig: PluginGenConfig = {
   name: "MultisigPlugin",
   abi: MultisigPluginAbi,
   addresses: {
-    [sepolia.id]: "0x6571A72DfA6BD4AD779587c968F40f9fD52c57Ef",
+    [sepolia.id]: "0x0b135A12EB2f7b441DCcE5F7DE07DB65AE7c4649",
   },
   chain: sepolia,
   installConfig: {

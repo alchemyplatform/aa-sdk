@@ -144,7 +144,7 @@ export type MultisigPluginActions<
   ReadAndEncodeActions<TAccount>;
 
 const addresses = {
-  11155111: "0x6571A72DfA6BD4AD779587c968F40f9fD52c57Ef" as Address,
+  11155111: "0x0b135A12EB2f7b441DCcE5F7DE07DB65AE7c4649" as Address,
 } as Record<number, Address>;
 
 export const MultisigPlugin: Plugin<typeof MultisigPluginAbi> = {
@@ -310,7 +310,7 @@ export const MultisigPluginExecutionFunctionAbi = [
     inputs: [
       { name: "ownersToAdd", internalType: "address[]", type: "address[]" },
       { name: "ownersToRemove", internalType: "address[]", type: "address[]" },
-      { name: "newThreshold", internalType: "uint256", type: "uint256" },
+      { name: "newThreshold", internalType: "uint128", type: "uint128" },
     ],
     name: "updateOwnership",
     outputs: [],
@@ -346,22 +346,14 @@ export const MultisigPluginAbi = [
   {
     stateMutability: "nonpayable",
     type: "constructor",
-    inputs: [
-      {
-        name: "entryPoint",
-        internalType: "contract IEntryPoint",
-        type: "address",
-      },
-    ],
+    inputs: [{ name: "entryPoint", internalType: "address", type: "address" }],
   },
   {
     stateMutability: "view",
     type: "function",
     inputs: [],
     name: "ENTRYPOINT",
-    outputs: [
-      { name: "", internalType: "contract IEntryPoint", type: "address" },
-    ],
+    outputs: [{ name: "", internalType: "address", type: "address" }],
   },
   {
     stateMutability: "view",
@@ -810,7 +802,7 @@ export const MultisigPluginAbi = [
     inputs: [
       { name: "ownersToAdd", internalType: "address[]", type: "address[]" },
       { name: "ownersToRemove", internalType: "address[]", type: "address[]" },
-      { name: "newThreshold", internalType: "uint256", type: "uint256" },
+      { name: "newThreshold", internalType: "uint128", type: "uint128" },
     ],
     name: "updateOwnership",
     outputs: [],

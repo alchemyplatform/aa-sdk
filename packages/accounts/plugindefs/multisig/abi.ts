@@ -5,7 +5,7 @@ export const MultisigPluginAbi = [
       {
         name: "entryPoint",
         type: "address",
-        internalType: "contract IEntryPoint",
+        internalType: "address",
       },
     ],
     stateMutability: "nonpayable",
@@ -18,7 +18,7 @@ export const MultisigPluginAbi = [
       {
         name: "",
         type: "address",
-        internalType: "contract IEntryPoint",
+        internalType: "address",
       },
     ],
     stateMutability: "view",
@@ -786,8 +786,8 @@ export const MultisigPluginAbi = [
       },
       {
         name: "newThreshold",
-        type: "uint256",
-        internalType: "uint256",
+        type: "uint128",
+        internalType: "uint128",
       },
     ],
     outputs: [],

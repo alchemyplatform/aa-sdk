@@ -79,7 +79,7 @@ export const multisigMessageSigner = <
       // (uint upperLimitPreVerificationGas, uint upperLimitMaxFeePerGas, uint upperLimitMaxPriorityFeePerGas)
       // all sigs will be on "actual" with v = 32
       return ("0x" +
-        "FF".repeat(64 * 3) +
+        "FF".repeat(32 * 3) +
         "fffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa3c" +
         "fffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c".repeat(
           Number(actualThreshold) - 1

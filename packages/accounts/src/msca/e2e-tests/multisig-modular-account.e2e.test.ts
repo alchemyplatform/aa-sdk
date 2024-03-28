@@ -50,7 +50,7 @@ describe("Multisig Modular Account Tests", async () => {
       threshold,
     });
     expect(address).toMatchInlineSnapshot(
-      '"0x55BF025f6eF0C5548961cB31b39b1cd2540825ac"'
+      '"0x4ff93F25764CefC22aeeE111CEf47CD1B5e05370"'
     );
   });
 
@@ -77,8 +77,6 @@ describe("Multisig Modular Account Tests", async () => {
         data: "0x",
       },
     });
-
-    console.log("aggregatedSignature: ", aggregatedSignature);
 
     const result = await submitter.sendUserOperation({
       uo: {
