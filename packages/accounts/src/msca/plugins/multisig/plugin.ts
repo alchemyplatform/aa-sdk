@@ -33,7 +33,8 @@ import { type FunctionReference } from "../../account-loupe/types.js";
 type ExecutionActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TContext extends Record<string, any> = Record<string, any>
 > = {
   updateOwnership: (
     args: Pick<
@@ -42,7 +43,10 @@ type ExecutionActions<
         "updateOwnership"
       >,
       "args"
-    > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
+    > & {
+      overrides?: UserOperationOverrides;
+      context?: TContext;
+    } & GetAccountParameter<TAccount>
   ) => Promise<SendUserOperationResult>;
 };
 
@@ -57,10 +61,14 @@ export type InstallMultisigPluginParams = {
 type ManagementActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TContext extends Record<string, any> = Record<string, any>
 > = {
   installMultisigPlugin: (
-    args: { overrides?: UserOperationOverrides } & InstallMultisigPluginParams &
+    args: {
+      overrides?: UserOperationOverrides;
+      context?: TContext;
+    } & InstallMultisigPluginParams &
       GetAccountParameter<TAccount>
   ) => Promise<SendUserOperationResult>;
 };
@@ -129,13 +137,14 @@ type ReadAndEncodeActions<
 export type MultisigPluginActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
-> = ExecutionActions<TAccount> &
-  ManagementActions<TAccount> &
+    | undefined,
+  TContext extends Record<string, any> = Record<string, any>
+> = ExecutionActions<TAccount, TContext> &
+  ManagementActions<TAccount, TContext> &
   ReadAndEncodeActions<TAccount>;
 
 const addresses = {
-  11155111: "0x6571A72DfA6BD4AD779587c968F40f9fD52c57Ef" as Address,
+  11155111: "0x0b135A12EB2f7b441DCcE5F7DE07DB65AE7c4649" as Address,
 } as Record<number, Address>;
 
 export const MultisigPlugin: Plugin<typeof MultisigPluginAbi> = {
@@ -167,7 +176,7 @@ export const multisigPluginActions: <
 >(
   client: Client<TTransport, TChain, TAccount>
 ) => MultisigPluginActions<TAccount> = (client) => ({
-  updateOwnership({ args, overrides, account = client.account }) {
+  updateOwnership({ args, overrides, context, account = client.account }) {
     if (!account) {
       throw new AccountNotFoundError();
     }
@@ -185,9 +194,14 @@ export const multisigPluginActions: <
       args,
     });
 
-    return client.sendUserOperation({ uo, overrides, account });
+    return client.sendUserOperation({ uo, overrides, account, context });
   },
-  installMultisigPlugin({ account = client.account, overrides, ...params }) {
+  installMultisigPlugin({
+    account = client.account,
+    overrides,
+    context,
+    ...params
+  }) {
     if (!account) {
       throw new AccountNotFoundError();
     }
@@ -223,6 +237,7 @@ export const multisigPluginActions: <
       dependencies,
       overrides,
       account,
+      context,
     });
   },
   encodeUpdateOwnership({ args }) {
@@ -295,7 +310,7 @@ export const MultisigPluginExecutionFunctionAbi = [
     inputs: [
       { name: "ownersToAdd", internalType: "address[]", type: "address[]" },
       { name: "ownersToRemove", internalType: "address[]", type: "address[]" },
-      { name: "newThreshold", internalType: "uint256", type: "uint256" },
+      { name: "newThreshold", internalType: "uint128", type: "uint128" },
     ],
     name: "updateOwnership",
     outputs: [],
@@ -331,22 +346,14 @@ export const MultisigPluginAbi = [
   {
     stateMutability: "nonpayable",
     type: "constructor",
-    inputs: [
-      {
-        name: "entryPoint",
-        internalType: "contract IEntryPoint",
-        type: "address",
-      },
-    ],
+    inputs: [{ name: "entryPoint", internalType: "address", type: "address" }],
   },
   {
     stateMutability: "view",
     type: "function",
     inputs: [],
     name: "ENTRYPOINT",
-    outputs: [
-      { name: "", internalType: "contract IEntryPoint", type: "address" },
-    ],
+    outputs: [{ name: "", internalType: "address", type: "address" }],
   },
   {
     stateMutability: "view",
@@ -795,7 +802,7 @@ export const MultisigPluginAbi = [
     inputs: [
       { name: "ownersToAdd", internalType: "address[]", type: "address[]" },
       { name: "ownersToRemove", internalType: "address[]", type: "address[]" },
-      { name: "newThreshold", internalType: "uint256", type: "uint256" },
+      { name: "newThreshold", internalType: "uint128", type: "uint128" },
     ],
     name: "updateOwnership",
     outputs: [],

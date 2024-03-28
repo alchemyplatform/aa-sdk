@@ -33,7 +33,8 @@ import { type FunctionReference } from "../../account-loupe/types.js";
 type ExecutionActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TContext extends Record<string, any> = Record<string, any>
 > = {
   updateOwners: (
     args: Pick<
@@ -42,7 +43,10 @@ type ExecutionActions<
         "updateOwners"
       >,
       "args"
-    > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
+    > & {
+      overrides?: UserOperationOverrides;
+      context?: TContext;
+    } & GetAccountParameter<TAccount>
   ) => Promise<SendUserOperationResult>;
 };
 
@@ -57,11 +61,13 @@ export type InstallMultiOwnerPluginParams = {
 type ManagementActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TContext extends Record<string, any> = Record<string, any>
 > = {
   installMultiOwnerPlugin: (
     args: {
       overrides?: UserOperationOverrides;
+      context?: TContext;
     } & InstallMultiOwnerPluginParams &
       GetAccountParameter<TAccount>
   ) => Promise<SendUserOperationResult>;
@@ -131,9 +137,10 @@ type ReadAndEncodeActions<
 export type MultiOwnerPluginActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
-> = ExecutionActions<TAccount> &
-  ManagementActions<TAccount> &
+    | undefined,
+  TContext extends Record<string, any> = Record<string, any>
+> = ExecutionActions<TAccount, TContext> &
+  ManagementActions<TAccount, TContext> &
   ReadAndEncodeActions<TAccount>;
 
 const addresses = {
@@ -182,7 +189,7 @@ export const multiOwnerPluginActions: <
 >(
   client: Client<TTransport, TChain, TAccount>
 ) => MultiOwnerPluginActions<TAccount> = (client) => ({
-  updateOwners({ args, overrides, account = client.account }) {
+  updateOwners({ args, overrides, context, account = client.account }) {
     if (!account) {
       throw new AccountNotFoundError();
     }
@@ -200,9 +207,14 @@ export const multiOwnerPluginActions: <
       args,
     });
 
-    return client.sendUserOperation({ uo, overrides, account });
+    return client.sendUserOperation({ uo, overrides, account, context });
   },
-  installMultiOwnerPlugin({ account = client.account, overrides, ...params }) {
+  installMultiOwnerPlugin({
+    account = client.account,
+    overrides,
+    context,
+    ...params
+  }) {
     if (!account) {
       throw new AccountNotFoundError();
     }
@@ -237,6 +249,7 @@ export const multiOwnerPluginActions: <
       dependencies,
       overrides,
       account,
+      context,
     });
   },
   encodeUpdateOwners({ args }) {

@@ -6,6 +6,7 @@ import {
   type Address,
   type EntryPointDef,
   type SmartAccountSigner,
+  type SmartContractAccount,
   type SmartContractAccountWithSigner,
   type UserOperationRequest,
 } from "@alchemy/aa-core";
@@ -24,7 +25,9 @@ import { standardExecutor } from "./standardExecutor.js";
 
 export type MultisigModularAccount<
   TSigner extends SmartAccountSigner = SmartAccountSigner
-> = SmartContractAccountWithSigner<"MultisigModularAccount", TSigner>;
+> = SmartContractAccountWithSigner<"MultisigModularAccount", TSigner> & {
+  getLocalThreshold: () => bigint;
+};
 
 export type CreateMultisigModularAccountParams<
   TTransport extends Transport = Transport,
@@ -36,7 +39,7 @@ export type CreateMultisigModularAccountParams<
   salt?: bigint;
   factoryAddress?: Address;
   threshold: bigint;
-  sigs?: Address[];
+  owners?: Address[];
   entryPoint?: EntryPointDef<UserOperationRequest>;
   accountAddress?: Address;
   initCode?: Hex;
@@ -57,7 +60,7 @@ export async function createMultisigModularAccount({
   initCode,
   entryPoint = getVersion060EntryPoint(chain),
   factoryAddress = getDefaultMultisigModularAccountFactoryAddress(chain),
-  sigs = [],
+  owners = [],
   salt = 0n,
   threshold,
 }: CreateMultisigModularAccountParams): Promise<MultisigModularAccount> {
@@ -74,7 +77,7 @@ export async function createMultisigModularAccount({
     // NOTE: the current signer connected will be one of the sigs as well
     const sigAddress = await signer.getAddress();
     // sigs need to be deduped + ordered in ascending order and !== to zero address
-    const sigs_ = Array.from(new Set([...sigs, sigAddress]))
+    const sigs_ = Array.from(new Set([...owners, sigAddress]))
       .filter((x) => hexToBigInt(x) !== 0n)
       .sort((a, b) => {
         const bigintA = hexToBigInt(a);
@@ -105,15 +108,29 @@ export async function createMultisigModularAccount({
     chain,
     entryPoint,
     accountAddress,
-    source: `MultisigModularAccount`,
+    source: MULTISIG_ACCOUNT_SOURCE,
     getAccountInitCode,
     ...standardExecutor,
-    ...multisigMessageSigner(client, accountAddress, () => signer),
+    ...multisigMessageSigner({
+      client,
+      accountAddress,
+      threshold,
+      signer: () => signer,
+    }),
   });
 
   return {
     ...baseAccount,
+    getLocalThreshold: () => threshold,
     publicKey: await signer.getAddress(),
     getSigner: () => signer,
   };
 }
+
+export const MULTISIG_ACCOUNT_SOURCE = "MultisigModularAccount";
+
+export const isMultisigModularAccount = (
+  acct: SmartContractAccount
+): acct is MultisigModularAccount => {
+  return acct.source === MULTISIG_ACCOUNT_SOURCE;
+};

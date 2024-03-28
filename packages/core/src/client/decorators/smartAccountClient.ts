@@ -55,41 +55,48 @@ export type BaseSmartAccountClientActions<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TContext extends Record<string, any> = Record<string, any>
 > = {
   buildUserOperation: (
-    args: SendUserOperationParameters<TAccount>
+    args: SendUserOperationParameters<TAccount, TContext>
   ) => Promise<UserOperationStruct>;
   buildUserOperationFromTx: (
     args: SendTransactionParameters<TChain, TAccount>,
-    overrides?: UserOperationOverrides
+    overrides?: UserOperationOverrides,
+    context?: TContext
   ) => Promise<UserOperationStruct>;
   buildUserOperationFromTxs: (
-    args: SendTransactionsParameters<TAccount>
+    args: SendTransactionsParameters<TAccount, TContext>
   ) => Promise<BuildUserOperationFromTransactionsResult>;
-  checkGasSponsorshipEligibility: (
-    args: SendUserOperationParameters<TAccount>
+  checkGasSponsorshipEligibility: <
+    TContext extends Record<string, any> = Record<string, any>
+  >(
+    args: SendUserOperationParameters<TAccount, TContext>
   ) => Promise<boolean>;
   signUserOperation: (
     args: SignUserOperationParameters<TAccount>
   ) => Promise<UserOperationRequest>;
   dropAndReplaceUserOperation: (
-    args: DropAndReplaceUserOperationParameters<TAccount>
+    args: DropAndReplaceUserOperationParameters<TAccount, TContext>
   ) => Promise<SendUserOperationResult>;
   sendTransaction: <TChainOverride extends Chain | undefined = undefined>(
     args: SendTransactionParameters<TChain, TAccount, TChainOverride>,
-    overrides?: UserOperationOverrides
+    overrides?: UserOperationOverrides,
+    context?: TContext
   ) => Promise<Hex>;
   sendTransactions: (
-    args: SendTransactionsParameters<TAccount>
+    args: SendTransactionsParameters<TAccount, TContext>
   ) => Promise<Hex>;
   sendUserOperation: (
-    args: SendUserOperationParameters<TAccount>
+    args: SendUserOperationParameters<TAccount, TContext>
   ) => Promise<SendUserOperationResult>;
   waitForUserOperationTransaction: (
     args: WaitForTransactionReceiptParameters
   ) => Promise<Hex>;
-  upgradeAccount: (args: UpgradeAccountParams<TAccount>) => Promise<Hex>;
+  upgradeAccount: (
+    args: UpgradeAccountParams<TAccount, TContext>
+  ) => Promise<Hex>;
   signMessage: (args: SignMessageParameters<TAccount>) => Promise<Hex>;
   signTypedData: <
     const TTypedData extends TypedData | { [key: string]: unknown },
@@ -118,21 +125,22 @@ export const smartAccountClientActions: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TContext extends Record<string, any> = Record<string, any>
 >(
   client: Client<TTransport, TChain, TAccount>
-) => BaseSmartAccountClientActions<TChain, TAccount> = (client) => ({
+) => BaseSmartAccountClientActions<TChain, TAccount, TContext> = (client) => ({
   buildUserOperation: (args) => buildUserOperation(client, args),
-  buildUserOperationFromTx: (args, overrides) =>
-    buildUserOperationFromTx(client, args, overrides),
+  buildUserOperationFromTx: (args, overrides, context) =>
+    buildUserOperationFromTx(client, args, overrides, context),
   buildUserOperationFromTxs: (args) => buildUserOperationFromTxs(client, args),
   checkGasSponsorshipEligibility: (args) =>
     checkGasSponsorshipEligibility(client, args),
   signUserOperation: (args) => signUserOperation(client, args),
   dropAndReplaceUserOperation: (args) =>
     dropAndReplaceUserOperation(client, args),
-  sendTransaction: (args, overrides) =>
-    sendTransaction(client, args, overrides),
+  sendTransaction: (args, overrides, context) =>
+    sendTransaction(client, args, overrides, context),
   sendTransactions: (args) => sendTransactions(client, args),
   sendUserOperation: (args) => sendUserOperation(client, args),
   waitForUserOperationTransaction: (args) =>

@@ -53,7 +53,7 @@ export const getDefaultMultisigModularAccountFactoryAddress = (
 ): Address => {
   switch (chain.id) {
     case sepolia.id:
-      return "0x1FAa26138f710066F6bee390b5e910C8ED4AF089";
+      return "0x3D94D6713B76FBA07283502CfbeA405b44c69865";
   }
   throw new DefaultFactoryNotDefinedError("MultisigModularAccount", chain);
 };

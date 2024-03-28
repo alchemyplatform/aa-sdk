@@ -17,9 +17,10 @@ import type { ClientWithAlchemyMethods } from "../types";
 export type CreateAlchemySmartAccountClientFromRpcClient<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TContext extends Record<string, any> = Record<string, any>
 > = Omit<
-  AlchemySmartAccountClientConfig<Transport, Chain, TAccount>,
+  AlchemySmartAccountClientConfig<Transport, Chain, TAccount, TContext>,
   "rpcUrl" | "chain" | "apiKey" | "jwt"
 > & { client: ClientWithAlchemyMethods };
 
@@ -31,10 +32,11 @@ export function createAlchemySmartAccountClientFromRpcClient<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TContext extends Record<string, any> = Record<string, any>
 >(
-  args: CreateAlchemySmartAccountClientFromRpcClient<TAccount>
-): AlchemySmartAccountClient<CustomTransport, TChain, TAccount>;
+  args: CreateAlchemySmartAccountClientFromRpcClient<TAccount, TContext>
+): AlchemySmartAccountClient<CustomTransport, TChain, TAccount, TContext>;
 
 export function createAlchemySmartAccountClientFromRpcClient({
   opts,

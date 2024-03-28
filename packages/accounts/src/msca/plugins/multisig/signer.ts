@@ -12,22 +12,30 @@ import {
   type Transport,
   type TypedData,
   type TypedDataDefinition,
-  encodeAbiParameters,
-  hexToBigInt,
 } from "viem";
 import { MultisigPlugin, MultisigPluginAbi } from "./plugin.js";
-import type { Signature } from "./types.js";
-import { UserOpSignatureType, SignerType } from "./types.js";
+
+type MultisigMessageSignerParams<
+  TTransport extends Transport,
+  TSigner extends SmartAccountSigner
+> = {
+  client: BundlerClient<TTransport>;
+  accountAddress: Address;
+  signer: () => TSigner;
+  threshold: bigint;
+  pluginAddress?: Address;
+};
 
 export const multisigMessageSigner = <
   TTransport extends Transport,
   TSigner extends SmartAccountSigner
->(
-  client: BundlerClient<TTransport>,
-  accountAddress: Address,
-  signer: () => TSigner,
-  pluginAddress: Address = MultisigPlugin.meta.addresses[client.chain.id]
-) => {
+>({
+  client,
+  accountAddress,
+  signer,
+  threshold,
+  pluginAddress = MultisigPlugin.meta.addresses[client.chain.id],
+}: MultisigMessageSignerParams<TTransport, TSigner>) => {
   const signWith712Wrapper = async (msg: Hash): Promise<`0x${string}`> => {
     const [, name, version, chainId, verifyingContract, salt] =
       await client.readContract({
@@ -57,32 +65,32 @@ export const multisigMessageSigner = <
 
   return {
     getDummySignature: async (): Promise<`0x${string}`> => {
-      const [, threshold] = await client.readContract({
+      const [, thresholdRead] = await client.readContract({
         abi: MultisigPluginAbi,
         address: pluginAddress,
         functionName: "ownershipInfoOf",
         args: [accountAddress],
       });
 
+      const actualThreshold = thresholdRead === 0n ? threshold : thresholdRead;
+
+      // todo: revert on account client creation if threshold is zero
+
       // (uint upperLimitPreVerificationGas, uint upperLimitMaxFeePerGas, uint upperLimitMaxPriorityFeePerGas)
       // all sigs will be on "actual" with v = 32
-      return (
-        "0x" +
-        "FF".repeat(64 * 3) +
-        "FF".repeat(Number(threshold) * 39) +
-        "20"
-      ).repeat(Number(threshold)) as `0x${string}`;
+      return ("0x" +
+        "FF".repeat(32 * 3) +
+        "fffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa3c" +
+        "fffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c".repeat(
+          Number(actualThreshold) - 1
+        )) as Hex;
     },
 
-    signUserOperationHash: (uoHash: `0x${string}`): Promise<`0x${string}`> => {
+    signUserOperationHash: (uoHash: Hex): Promise<Hex> => {
       return signer().signMessage({ raw: uoHash });
     },
 
-    signMessage({
-      message,
-    }: {
-      message: SignableMessage;
-    }): Promise<`0x${string}`> {
+    signMessage({ message }: { message: SignableMessage }): Promise<Hex> {
       return signWith712Wrapper(hashMessage(message));
     },
 
@@ -95,40 +103,4 @@ export const multisigMessageSigner = <
       return signWith712Wrapper(hashTypedData(typedDataDefinition));
     },
   };
-};
-
-export const formatSignatures = (signatures: Signature[]) => {
-  let eoaSigs: string = "";
-  let contractSigs: string = "";
-  let offset: bigint = BigInt(65 * signatures.length);
-  signatures
-    .sort((a, b) => {
-      const bigintA = hexToBigInt(a.signer);
-      const bigintB = hexToBigInt(b.signer);
-
-      return bigintA < bigintB ? -1 : bigintA > bigintB ? 1 : 0;
-    })
-    .forEach((sig) => {
-      // add 32 to v if the signature covers the actual gas values
-      const addV = sig.userOpSigType === UserOpSignatureType.Actual ? 32 : 0;
-
-      if (sig.signerType === SignerType.EOA) {
-        let v = parseInt(sig.signature.slice(130, 132)) + addV;
-        eoaSigs += sig.signature.slice(2, 130) + v.toString(16);
-      }
-      else {
-        const sigLen = BigInt(sig.signature.slice(2).length / 2);
-        eoaSigs +=
-          "0x" +
-          encodeAbiParameters(
-            [{ type: "uint256" }, { type: "bytes32" }, { type: "uint8" }],
-            [offset, sig.signer, addV]
-          ).slice(2);
-        contractSigs +=
-          encodeAbiParameters([{ type: "uint256" }], [sigLen]) +
-          sig.signature.slice(2);
-        offset += sigLen;
-      }
-    });
-  return ("0x" + eoaSigs + contractSigs) as `0x${string}`;
 };

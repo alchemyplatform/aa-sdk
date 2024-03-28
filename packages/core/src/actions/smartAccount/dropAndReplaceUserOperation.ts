@@ -15,10 +15,11 @@ export const dropAndReplaceUserOperation: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TContext extends Record<string, any> = Record<string, any>
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: DropAndReplaceUserOperationParameters<TAccount>
+  args: DropAndReplaceUserOperationParameters<TAccount, TContext>
 ) => Promise<SendUserOperationResult> = async (client, args) => {
   const { account = client.account, uoToDrop, overrides } = args;
   if (!account) {

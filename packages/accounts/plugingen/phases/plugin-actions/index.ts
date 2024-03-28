@@ -45,7 +45,8 @@ export const PluginActionsGenPhase: Phase = async (input) => {
           ? dedent`{ 
                   args, 
                   overrides, 
-                  account = client.account 
+                  context,
+                  account = client.account
               }`
           : dedent`{ 
                   overrides, 
@@ -58,7 +59,10 @@ export const PluginActionsGenPhase: Phase = async (input) => {
             n.name
           )}: (args: Pick<EncodeFunctionDataParameters<typeof ${executionAbiConst}, "${
         n.name
-      }">, "args"> & { overrides?: UserOperationOverrides; } & GetAccountParameter<TAccount>) => Promise<SendUserOperationResult>
+      }">, "args"> & { 
+        overrides?: UserOperationOverrides; 
+        context?: TContext;
+      } & GetAccountParameter<TAccount>) => Promise<SendUserOperationResult>
         `);
       const methodName = camelCase(n.name);
       return dedent`
@@ -76,13 +80,13 @@ export const PluginActionsGenPhase: Phase = async (input) => {
                   ${argsEncodeString}
                 });
   
-                return client.sendUserOperation({ uo, overrides, account });
+                return client.sendUserOperation({ uo, overrides, account, context });
               }
             `;
     });
 
   addType(
-    "ExecutionActions<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined>",
+    "ExecutionActions<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined, TContext extends Record<string, any> = Record<string, any>>",
     dedent`{
         ${providerFunctionDefs.join(";\n\n")}
       }`
@@ -99,9 +103,9 @@ export const PluginActionsGenPhase: Phase = async (input) => {
   addType(
     `${contract.name}Actions<TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined>`,
+    | undefined, TContext extends Record<string, any> = Record<string, any>>`,
     dedent`
-  ExecutionActions<TAccount> & ManagementActions<TAccount> & ReadAndEncodeActions${
+  ExecutionActions<TAccount, TContext> & ManagementActions<TAccount, TContext> & ReadAndEncodeActions${
     hasReadMethods ? "<TAccount>" : ""
   }
   `,

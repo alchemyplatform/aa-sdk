@@ -1,22 +1,32 @@
 import {
-  AccountNotFoundError,
   type GetAccountParameter,
   type IsUndefined,
+  type SendUserOperationParameters,
   type SmartContractAccount,
 } from "@alchemy/aa-core";
 import { type Address, type Chain, type Client, type Transport } from "viem";
 import type { GetPluginAddressParameter } from "../types.js";
+import { getThreshold } from "./actions/getThreshold.js";
+import { isOwnerOf } from "./actions/isOwnerOf.js";
+import { proposeUserOperation } from "./actions/proposeUserOperation.js";
+import { readOwners } from "./actions/readOwners.js";
+import { signMultisigUserOperation } from "./actions/signMultisigUserOperation.js";
 import {
-  MultisigPlugin,
   multisigPluginActions as multisigPluginActions_,
   type MultisigPluginActions as MultisigPluginActions_,
 } from "./plugin.js";
+import {
+  type MultisigUserOperationContext,
+  type ProposeUserOperationResult,
+  type SignMultisigUserOperationParams,
+  type SignMultisigUserOperationResult,
+} from "./types.js";
 
 export type MultisigPluginActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined
-> = MultisigPluginActions_<TAccount> & {
+> = MultisigPluginActions_<TAccount, MultisigUserOperationContext> & {
   readOwners: (
     params: GetPluginAddressParameter & GetAccountParameter<TAccount>
   ) => Promise<ReadonlyArray<Address>>;
@@ -29,6 +39,14 @@ export type MultisigPluginActions<
   getThreshold: (
     params: GetPluginAddressParameter & GetAccountParameter<TAccount>
   ) => Promise<bigint>;
+
+  proposeUserOperation: (
+    params: SendUserOperationParameters<TAccount, never>
+  ) => Promise<ProposeUserOperationResult>;
+
+  signMultisigUserOperation: (
+    params: SignMultisigUserOperationParams<TAccount>
+  ) => Promise<SignMultisigUserOperationResult>;
 } & (IsUndefined<TAccount> extends false
     ? {
         readOwners: (
@@ -55,53 +73,24 @@ export const multisigPluginActions: <
   client: Client<TTransport, TChain, TAccount>
 ) => ({
   ...multisigPluginActions_(client),
-  async readOwners(
+  readOwners: (
     args: GetPluginAddressParameter & GetAccountParameter<TAccount>
-  ) {
-    const account = args?.account ?? client.account;
-    if (!account) {
-      throw new AccountNotFoundError();
-    }
-    // TODO: check if the account actually has the plugin installed
-    // either via account loupe or checking if the supports interface call passes on the account
-    const [owners] = await MultisigPlugin.getContract(
-      client,
-      args?.pluginAddress
-    ).read.ownershipInfoOf([account.address]);
-    return owners;
-  },
+  ) => readOwners(client, args),
 
-  async isOwnerOf(
+  isOwnerOf: (
     args: { address: Address } & GetPluginAddressParameter &
       GetAccountParameter<TAccount>
-  ) {
-    const account = args.account ?? client.account;
-    if (!account) {
-      throw new AccountNotFoundError();
-    }
-    // TODO: check if the account actually has the plugin installed
-    // either via account loupe or checking if the supports interface call passes on the account
-    const contract = await MultisigPlugin.getContract(
-      client,
-      args.pluginAddress
-    );
-    return await contract.read.isOwnerOf([account.address, args.address]);
-  },
+  ) => isOwnerOf(client, args),
 
-  async getThreshold(
+  getThreshold: (
     args: GetPluginAddressParameter & GetAccountParameter<TAccount>
-  ) {
-    const account = args.account ?? client.account;
-    if (!account) {
-      throw new AccountNotFoundError();
-    }
-    const contract = await MultisigPlugin.getContract(
-      client,
-      args.pluginAddress
-    );
-    const [, threshold] = await contract.read.ownershipInfoOf([
-      account.address,
-    ]);
-    return threshold;
-  },
+  ) => getThreshold(client, args),
+
+  proposeUserOperation: (args: SendUserOperationParameters<TAccount, {}>) =>
+    proposeUserOperation(client, args),
+
+  signMultisigUserOperation: (
+    params: SignMultisigUserOperationParams<TAccount>
+  ): Promise<SignMultisigUserOperationResult> =>
+    signMultisigUserOperation(client, params),
 });

@@ -27,19 +27,20 @@ export const _runMiddlewareStack: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TContext extends Record<string, any> = Record<string, any>
 >(
   client: BaseSmartAccountClient<TTransport, TChain, TAccount>,
   args: {
     uo: Deferrable<UserOperationStruct>;
     overrides?: UserOperationOverrides;
+    context?: TContext;
   } & GetAccountParameter<TAccount>
 ) => Promise<UserOperationStruct> = async (client, args) => {
-  const { uo, overrides, account = client.account } = args;
+  const { uo, overrides, account = client.account, context } = args;
   if (!account) {
     throw new AccountNotFoundError();
   }
-
   const result = await asyncPipe(
     client.middleware.dummyPaymasterAndData,
     client.middleware.feeEstimator,
@@ -48,8 +49,9 @@ export const _runMiddlewareStack: <
     overrides?.paymasterAndData
       ? overridePaymasterDataMiddleware
       : client.middleware.paymasterAndData,
-    client.middleware.userOperationSimulator
-  )(uo, { overrides, feeOptions: client.feeOptions, account });
+    client.middleware.userOperationSimulator,
+    client.middleware.signUserOperation
+  )(uo, { overrides, feeOptions: client.feeOptions, account, client, context });
 
   return resolveProperties<UserOperationStruct>(result);
 };
