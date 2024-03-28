@@ -50,10 +50,10 @@ import type { SendUserOperationResult } from "../types";
 //#region SmartAccountClientActions
 export type BaseSmartAccountClientActions<
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
-    | undefined,
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
+  TAccount extends
+    | SmartContractAccount<string, TEntryPointVersion>
+    | undefined = SmartContractAccount<string, TEntryPointVersion> | undefined
 > = {
   buildUserOperation: (
     args: SendUserOperationParameters<TAccount, TEntryPointVersion>
@@ -121,7 +121,7 @@ export const smartAccountClientActions: <
     | undefined = SmartContractAccount<string, TEntryPointVersion> | undefined
 >(
   client: Client<TTransport, TChain, TAccount>
-) => BaseSmartAccountClientActions<TChain, TAccount, TEntryPointVersion> = (
+) => BaseSmartAccountClientActions<TChain, TEntryPointVersion, TAccount> = (
   client
 ) => ({
   buildUserOperation: (args) => buildUserOperation(client, args),

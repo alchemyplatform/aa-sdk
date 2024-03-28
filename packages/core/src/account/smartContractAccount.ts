@@ -92,6 +92,12 @@ export type SmartContractAccount<
 };
 //#endregion SmartContractAccount
 
+export type AccountEntryPointVersion<
+  TAccount extends SmartContractAccount | undefined
+> = TAccount extends SmartContractAccount<string, infer TEntryPointVersion>
+  ? TEntryPointVersion
+  : EntryPointVersion;
+
 export type ToSmartContractAccountParams<
   Name extends string = string,
   TTransport extends Transport = Transport,
@@ -184,7 +190,7 @@ export async function toSmartContractAccount<
   signUserOperationHash,
   encodeUpgradeToAndCall,
 }: ToSmartContractAccountParams<Name, TTransport, TChain>): Promise<
-  SmartContractAccount<Name>
+  SmartContractAccount<Name, typeof entryPoint.version>
 > {
   const client = createBundlerClient<TTransport, typeof entryPoint.version>({
     transport,
