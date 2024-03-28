@@ -25,7 +25,7 @@ export const buildUserOperationFromTxs: <
   client,
   args
 ) => {
-  const { account = client.account, requests, overrides } = args;
+  const { account = client.account, requests, overrides, context } = args;
   if (!account) {
     throw new AccountNotFoundError();
   }
@@ -82,6 +82,7 @@ export const buildUserOperationFromTxs: <
     uo: batch,
     overrides: _overrides,
     account: account as SmartContractAccount,
+    context,
   });
 
   return {

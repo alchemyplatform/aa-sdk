@@ -31,13 +31,12 @@ export const _sendUserOperation: <
   }
 
   const request = deepHexlify(args.uoStruct);
-  if (!isValidRequest(request)) {
+  if (
+    !isValidRequest(request) ||
+    !/^0x[a-fA-F0-9]{130,}$/.test(request.signature)
+  ) {
     throw new InvalidUserOperationError(args.uoStruct);
   }
-
-  request.signature = await account.signUserOperationHash(
-    account.getEntryPoint().getUserOperationHash(request)
-  );
 
   return {
     hash: await client.sendRawUserOperation(

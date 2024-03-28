@@ -125,7 +125,7 @@ class NaniAccount_<
     return decodedCallResult;
   }
 
-  getDummySignature(): Hex {
+  async getDummySignature(): Promise<Hex> {
     return "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
   }
 

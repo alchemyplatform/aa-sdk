@@ -13,10 +13,11 @@ export const sendTransactions: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TContext extends Record<string, any> = Record<string, any>
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: SendTransactionsParameters<TAccount>
+  args: SendTransactionsParameters<TAccount, TContext>
 ) => Promise<Hex> = async (client, args) => {
   const { requests, overrides, account = client.account } = args;
   if (!account) {

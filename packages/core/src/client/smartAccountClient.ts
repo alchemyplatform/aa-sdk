@@ -36,7 +36,8 @@ export type SmartAccountClientConfig<
   chain extends Chain | undefined = Chain | undefined,
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  context extends Record<string, any> = Record<string, any>
 > = Prettify<
   Pick<
     ClientConfig<transport, chain, account>,
@@ -50,7 +51,7 @@ export type SmartAccountClientConfig<
   > & {
     account?: account;
     opts?: z.input<typeof SmartAccountClientOptsSchema>;
-  } & ClientMiddlewareConfig
+  } & ClientMiddlewareConfig<context>
 >;
 
 export type SmartAccountClientRpcSchema = [
@@ -63,8 +64,9 @@ export type SmartAccountClientActions<
   chain extends Chain | undefined = Chain | undefined,
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
-> = BaseSmartAccountClientActions<chain, account> &
+    | undefined,
+  context extends Record<string, any> = Record<string, any>
+> = BaseSmartAccountClientActions<chain, account, context> &
   BundlerActions &
   PublicActions;
 //#endregion SmartAccountClientActions
@@ -76,12 +78,18 @@ export type SmartAccountClient<
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  actions extends SmartAccountClientActions<
+  actions extends Record<string, unknown> = Record<string, unknown>,
+  rpcSchema extends RpcSchema = SmartAccountClientRpcSchema,
+  context extends Record<string, any> = Record<string, any>
+> = Prettify<
+  Client<
+    transport,
     chain,
-    account
-  > = SmartAccountClientActions<chain, account>,
-  rpcSchema extends RpcSchema = SmartAccountClientRpcSchema
-> = Prettify<Client<transport, chain, account, rpcSchema, actions>>;
+    account,
+    rpcSchema,
+    actions & SmartAccountClientActions<chain, account, context>
+  >
+>;
 //#endregion SmartAccountClient
 
 export type BaseSmartAccountClient<
@@ -89,14 +97,15 @@ export type BaseSmartAccountClient<
   chain extends Chain | undefined = Chain | undefined,
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  context extends Record<string, any> = Record<string, any>
 > = Prettify<
   Client<
     transport,
     chain,
     account,
     [...BundlerRpcSchema, ...PublicRpcSchema],
-    { middleware: ClientMiddleware } & SmartAccountClientOpts &
+    { middleware: ClientMiddleware<context> } & SmartAccountClientOpts &
       BundlerActions &
       PublicActions
   >
@@ -107,9 +116,10 @@ export function createSmartAccountClient<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TContext extends Record<string, any> = Record<string, any>
 >(
-  config: SmartAccountClientConfig<TTransport, TChain, TAccount>
+  config: SmartAccountClientConfig<TTransport, TChain, TAccount, TContext>
 ): SmartAccountClient<TTransport, TChain, TAccount>;
 
 export function createSmartAccountClient(
@@ -219,15 +229,24 @@ export function createSmartAccountClientFromExisting<
   TClient extends BundlerClient<TTransport> = BundlerClient<TTransport>,
   TActions extends SmartAccountClientActions<
     TChain,
-    TAccount
+    TAccount,
+    TContext
   > = SmartAccountClientActions<TChain, TAccount>,
-  TRpcSchema extends SmartAccountClientRpcSchema = SmartAccountClientRpcSchema
+  TRpcSchema extends SmartAccountClientRpcSchema = SmartAccountClientRpcSchema,
+  TContext extends Record<string, any> = Record<string, any>
 >(
   config: Omit<
-    SmartAccountClientConfig<Transport, TChain, TAccount>,
+    SmartAccountClientConfig<Transport, TChain, TAccount, TContext>,
     "transport" | "chain"
   > & { client: TClient }
-): SmartAccountClient<CustomTransport, TChain, TAccount, TActions, TRpcSchema>;
+): SmartAccountClient<
+  CustomTransport,
+  TChain,
+  TAccount,
+  TActions,
+  TRpcSchema,
+  TContext
+>;
 
 export function createSmartAccountClientFromExisting(
   config: Omit<SmartAccountClientConfig, "transport" | "chain"> & {

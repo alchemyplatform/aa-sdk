@@ -52,7 +52,7 @@ export const multiOwnerMessageSigner = <
   };
 
   return {
-    getDummySignature: (): `0x${string}` => {
+    getDummySignature: async (): Promise<`0x${string}`> => {
       return "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
     },
 

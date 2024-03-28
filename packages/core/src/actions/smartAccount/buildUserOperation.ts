@@ -13,12 +13,13 @@ export const buildUserOperation: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TContext extends Record<string, any> = Record<string, any>
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: SendUserOperationParameters<TAccount>
+  args: SendUserOperationParameters<TAccount, TContext>
 ) => Promise<UserOperationStruct> = async (client, args) => {
-  const { account = client.account, overrides, uo } = args;
+  const { account = client.account, overrides, uo, context } = args;
   if (!account) {
     throw new AccountNotFoundError();
   }
@@ -45,5 +46,6 @@ export const buildUserOperation: <
     } as Deferrable<UserOperationStruct>,
     overrides,
     account,
+    context,
   });
 };

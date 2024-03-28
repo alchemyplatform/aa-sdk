@@ -70,3 +70,17 @@ export class UpgradeToAndCallNotSupportedError extends BaseError {
     super(`UpgradeToAndCall is not supported by ${accountType}`);
   }
 }
+
+export class IncorrectAccountType extends BaseError {
+  override name = "IncorrectAccountTypeError";
+  constructor(expected: string, actual: string) {
+    super(`Expected account type ${expected}, got ${actual}`);
+  }
+}
+
+export class SmartAccountWithSignerRequiredError extends BaseError {
+  override name = "SmartAccountWithSignerRequiredError";
+  constructor() {
+    super("Smart account requires a signer");
+  }
+}

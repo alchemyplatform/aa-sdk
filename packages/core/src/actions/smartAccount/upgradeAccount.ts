@@ -12,12 +12,19 @@ export const upgradeAccount: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TContext extends Record<string, any> = Record<string, any>
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: UpgradeAccountParams<TAccount>
+  args: UpgradeAccountParams<TAccount, TContext>
 ) => Promise<Hash> = async (client, args) => {
-  const { account = client.account, upgradeTo, overrides, waitForTx } = args;
+  const {
+    account = client.account,
+    upgradeTo,
+    overrides,
+    waitForTx,
+    context,
+  } = args;
 
   if (!account) {
     throw new AccountNotFoundError();
@@ -45,6 +52,7 @@ export const upgradeAccount: <
     },
     account,
     overrides,
+    context,
   });
 
   let hash = result.hash;

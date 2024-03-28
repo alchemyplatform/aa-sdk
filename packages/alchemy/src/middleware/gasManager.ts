@@ -89,6 +89,7 @@ export const alchemyGasManagerMiddleware = <C extends ClientWithAlchemyMethods>(
                 overrides,
                 account,
                 feeOptions,
+                client,
               }),
             };
           }
@@ -113,6 +114,7 @@ export const alchemyGasManagerMiddleware = <C extends ClientWithAlchemyMethods>(
               overrides,
               feeOptions,
               account,
+              client,
             });
             maxFeePerGas = (await result.maxFeePerGas) ?? maxFeePerGas;
             maxPriorityFeePerGas =
