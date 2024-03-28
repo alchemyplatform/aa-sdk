@@ -5,12 +5,15 @@ import {
 import { TurnkeyClient, getWebAuthnAttestation } from "@turnkey/http";
 import { IframeStamper } from "@turnkey/iframe-stamper";
 import { WebauthnStamper } from "@turnkey/webauthn-stamper";
+import EventEmitter from "eventemitter3";
 import { type Hex } from "viem";
 import { z } from "zod";
 import { NotAuthenticatedError } from "../errors.js";
 import { base64UrlEncode } from "../utils/base64UrlEncode.js";
 import { generateRandomBuffer } from "../utils/generateRandomBuffer.js";
 import type {
+  AlchemySignerClientEvent,
+  AlchemySignerClientEvents,
   CreateAccountParams,
   CredentialCreationOptionOverrides,
   EmailAuthParams,
@@ -27,41 +30,35 @@ export const AlchemySignerClientParamsSchema = z.object({
     iframeContainerId: z.string(),
   }),
   rpId: z.string().optional(),
+  rootOrgId: z
+    .string()
+    .optional()
+    .default("24c1acf5-810f-41e0-a503-d5d13fa8e830"),
 });
 
 export type AlchemySignerClientParams = z.input<
   typeof AlchemySignerClientParamsSchema
 >;
 
-// TODO: figure out a better way to do this
-// use this to override the parent org id for suborgs
-// used for whoami passkey requests to figure out the
-// suborg for a user
-const _ENV_ROOT_ORG_ID =
-  typeof process !== "undefined"
-    ? process.env.ROOT_ORG_ID ?? process.env.NEXT_PUBLIC_ROOT_ORG_ID
-    : null;
-const ROOT_ORG_ID = _ENV_ROOT_ORG_ID ?? "24c1acf5-810f-41e0-a503-d5d13fa8e830";
-
 /**
  * A lower level client used by the AlchemySigner used to communicate with
  * Alchemy's signer service.
- *
- * This signer is not yet ready for production use. If you would like to use it
- * please reach out to the Alchemy team -- account-abstraction@alchemy.com
  */
 export class AlchemySignerClient {
-  private user: User | undefined;
+  private _user: User | undefined;
   private connectionConfig: ConnectionConfig;
   private iframeStamper: IframeStamper;
   private webauthnStamper: WebauthnStamper;
   private turnkeyClient: TurnkeyClient;
+  private eventEmitter: EventEmitter<AlchemySignerClientEvents>;
+  private rootOrg: string;
   iframeContainerId: string;
 
   constructor(params: AlchemySignerClientParams) {
-    const { connection, iframeConfig, rpId } =
+    const { connection, iframeConfig, rpId, rootOrgId } =
       AlchemySignerClientParamsSchema.parse(params);
     this.connectionConfig = connection;
+    this.eventEmitter = new EventEmitter<AlchemySignerClientEvents>();
 
     this.iframeStamper = new IframeStamper({
       iframeElementId: iframeConfig.iframeElementId,
@@ -79,9 +76,42 @@ export class AlchemySignerClient {
     this.webauthnStamper = new WebauthnStamper({
       rpId: rpId ?? window.location.hostname,
     });
+
+    this.rootOrg = rootOrgId;
   }
 
+  private get user() {
+    return this._user;
+  }
+
+  private set user(user: User | undefined) {
+    if (user && !this._user) {
+      this.eventEmitter.emit("connected", user);
+    } else if (!user && this._user) {
+      this.eventEmitter.emit("disconnected");
+    }
+
+    this._user = user;
+  }
+
+  /**
+   * Listen to events emitted by the client
+   *
+   * @param event the event you want to listen to
+   * @param listener the callback function to execute when an event is fired
+   * @returns a function that will remove the listener when called
+   */
+  on = <E extends AlchemySignerClientEvent>(
+    event: E,
+    listener: AlchemySignerClientEvents[E]
+  ) => {
+    this.eventEmitter.on(event, listener as any);
+
+    return () => this.eventEmitter.removeListener(event, listener as any);
+  };
+
   public createAccount = async (params: CreateAccountParams) => {
+    this.eventEmitter.emit("authenticating");
     if (params.type === "email") {
       const { email, expirationSeconds } = params;
       const publicKey = await this.initIframeStamper();
@@ -116,6 +146,7 @@ export class AlchemySignerClient {
       credentialId: attestation.credentialId,
     };
     this.initWebauthnStamper(this.user);
+    this.eventEmitter.emit("connectedPasskey", this.user);
 
     return result;
   };
@@ -123,6 +154,7 @@ export class AlchemySignerClient {
   public initEmailAuth = async (
     params: Omit<EmailAuthParams, "targetPublicKey">
   ) => {
+    this.eventEmitter.emit("authenticating");
     const { email, expirationSeconds } = params;
     const publicKey = await this.initIframeStamper();
 
@@ -141,6 +173,7 @@ export class AlchemySignerClient {
     bundle: string;
     orgId: string;
   }) => {
+    this.eventEmitter.emit("authenticating");
     await this.initIframeStamper();
 
     const result = await this.iframeStamper.injectCredentialBundle(bundle);
@@ -150,6 +183,7 @@ export class AlchemySignerClient {
     }
 
     const user = await this.whoami(orgId);
+    this.eventEmitter.emit("connectedEmail", user, bundle);
 
     return user;
   };
@@ -189,14 +223,16 @@ export class AlchemySignerClient {
   };
 
   public lookupUserWithPasskey = async (user: User | undefined = undefined) => {
+    this.eventEmitter.emit("authenticating");
     await this.initWebauthnStamper(user);
     if (user) {
       this.user = user;
       return user;
     }
 
-    const result = await this.whoami(ROOT_ORG_ID);
+    const result = await this.whoami(this.rootOrg);
     await this.initWebauthnStamper(result);
+    this.eventEmitter.emit("connectedPasskey", result);
 
     return result;
   };

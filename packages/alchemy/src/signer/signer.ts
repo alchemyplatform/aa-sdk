@@ -13,6 +13,8 @@ import {
 } from "viem";
 import { toAccount } from "viem/accounts";
 import { z } from "zod";
+import { subscribeWithSelector } from "zustand/middleware";
+import { createStore, type Mutate, type StoreApi } from "zustand/vanilla";
 import {
   AlchemySignerClient,
   AlchemySignerClientParamsSchema,
@@ -23,6 +25,11 @@ import {
   SessionManager,
   SessionManagerParamsSchema,
 } from "./session/manager.js";
+import {
+  AlchemySignerStatus,
+  type AlchemySignerEvent,
+  type AlchemySignerEvents,
+} from "./types.js";
 
 export type AuthParams =
   | { type: "email"; email: string; redirectParams?: URLSearchParams }
@@ -48,11 +55,18 @@ export const AlchemySignerParamsSchema = z
 
 export type AlchemySignerParams = z.input<typeof AlchemySignerParamsSchema>;
 
+type AlchemySignerStore = {
+  user: User | null;
+  status: AlchemySignerStatus;
+};
+
+type InternalStore = Mutate<
+  StoreApi<AlchemySignerStore>,
+  [["zustand/subscribeWithSelector", never]]
+>;
+
 /**
  * A SmartAccountSigner that can be used with any SmartContractAccount
- *
- * This signer is not yet ready for production use. If you would like to use it
- * please reach out to the Alchemy team -- account-abstraction@alchemy.com
  */
 export class AlchemySigner
   implements SmartAccountAuthenticator<AuthParams, User, AlchemySignerClient>
@@ -60,6 +74,7 @@ export class AlchemySigner
   signerType: string = "alchemy-signer";
   inner: AlchemySignerClient;
   private sessionManager: SessionManager;
+  private store: InternalStore;
 
   constructor(params_: AlchemySignerParams) {
     const { sessionConfig, ...params } =
@@ -71,11 +86,67 @@ export class AlchemySigner
       this.inner = params.client;
     }
 
+    // NOTE: it's important that the session manager share a client
+    // with the signer. The SessionManager leverages the Signer's client
+    // to manage session state.
     this.sessionManager = new SessionManager({
       ...sessionConfig,
       client: this.inner,
     });
+    this.store = createStore(
+      subscribeWithSelector(
+        () =>
+          ({
+            user: null,
+            status: AlchemySignerStatus.INITIALIZING,
+          } satisfies AlchemySignerStore)
+      )
+    );
+    // register listeners first
+    this.registerListeners();
+    // then initialize so that we can catch those events
+    this.sessionManager.initialize();
   }
+
+  /**
+   * Allows you to subscribe to events emitted by the signer
+   *
+   * @param event the event to subscribe to
+   * @param listener the function to run when the event is emitted
+   * @returns a function to remove the listener
+   */
+  on = <E extends AlchemySignerEvent>(
+    event: E,
+    listener: AlchemySignerEvents[E]
+  ) => {
+    // NOTE: we're using zustand here to handle this because we are able to use the fireImmediately
+    // option which deals with a possible race condition where the listener is added after the event
+    // is fired. In the Client and SessionManager we use EventEmitter because it's easier to handle internally
+    switch (event) {
+      case "connected":
+        return this.store.subscribe(
+          ({ user }) => user,
+          (user) =>
+            user && (listener as AlchemySignerEvents["connected"])(user),
+          { fireImmediately: true }
+        );
+      case "disconnected":
+        return this.store.subscribe(
+          ({ user }) => user,
+          (user) =>
+            user == null && (listener as AlchemySignerEvents["disconnected"])(),
+          { fireImmediately: true }
+        );
+      case "statusChanged":
+        return this.store.subscribe(
+          ({ status }) => status,
+          listener as AlchemySignerEvents["statusChanged"],
+          { fireImmediately: true }
+        );
+      default:
+        throw new Error(`Uknown event type ${event}`);
+    }
+  };
 
   /**
    * Authenticate a user with either an email or a passkey and create a session for that user
@@ -94,7 +165,6 @@ export class AlchemySigner
    * NOTE: right now this only clears the session locally.
    */
   disconnect: () => Promise<void> = async () => {
-    this.sessionManager.clearSession();
     await this.inner.disconnect();
   };
 
@@ -207,13 +277,16 @@ export class AlchemySigner
 
       this.sessionManager.setTemporarySession({ orgId });
 
-      // this will poll for the user to be commited to session storage in another tab
+      // We wait for the session manager to emit a connected event if
+      // cross tab sessions are permitted
       return new Promise<User>((resolve) => {
-        window.addEventListener("storage", (event) => {
-          if (event.key === this.sessionManager.sessionKey) {
-            resolve(this.sessionManager.getSessionUser().then((x) => x!));
+        const removeListener = this.sessionManager.on(
+          "connected",
+          (session) => {
+            resolve(session.user);
+            removeListener();
           }
-        });
+        );
       });
     } else {
       const temporarySession = params.orgId
@@ -221,18 +294,13 @@ export class AlchemySigner
         : this.sessionManager.getTemporarySession();
 
       if (!temporarySession) {
+        this.store.setState({ status: AlchemySignerStatus.DISCONNECTED });
         throw new Error("Could not find email auth init session!");
       }
 
       const user = await this.inner.completeEmailAuth({
         bundle: params.bundle,
         orgId: temporarySession.orgId,
-      });
-
-      this.sessionManager.setSession({
-        type: "email",
-        bundle: params.bundle,
-        user,
       });
 
       return user;
@@ -282,15 +350,39 @@ export class AlchemySigner
     } else {
       user = await this.inner.lookupUserWithPasskey();
       if (!user) {
+        this.store.setState({ status: AlchemySignerStatus.DISCONNECTED });
         throw new Error("No user found");
       }
     }
 
-    this.sessionManager.setSession({
-      type: "passkey",
-      user,
+    return user;
+  };
+
+  private registerListeners = () => {
+    this.sessionManager.on("connected", (session) => {
+      this.store.setState({
+        user: session.user,
+        status: AlchemySignerStatus.CONNECTED,
+      });
     });
 
-    return user;
+    this.sessionManager.on("disconnected", () => {
+      this.store.setState({
+        user: null,
+        status: AlchemySignerStatus.DISCONNECTED,
+      });
+    });
+
+    this.sessionManager.on("initialized", () => {
+      this.store.setState((state) => ({
+        status: state.user
+          ? AlchemySignerStatus.CONNECTED
+          : AlchemySignerStatus.DISCONNECTED,
+      }));
+    });
+
+    this.inner.on("authenticating", () => {
+      this.store.setState({ status: AlchemySignerStatus.AUTHENTICATING });
+    });
   };
 }

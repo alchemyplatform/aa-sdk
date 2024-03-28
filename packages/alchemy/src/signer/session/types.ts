@@ -8,3 +8,9 @@ export type Session =
       user: User;
     }
   | { type: "passkey"; user: User; expirationDateMs: number };
+
+export type SessionManagerEvents = {
+  connected(session: Session): void;
+  disconnected(): void;
+  initialized(): void;
+};

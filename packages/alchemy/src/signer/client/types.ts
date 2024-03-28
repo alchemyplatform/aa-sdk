@@ -93,3 +93,13 @@ export type SignerEndpoints = [
     };
   }
 ];
+
+export type AlchemySignerClientEvents = {
+  connected(user: User): void;
+  authenticating(): void;
+  connectedEmail(user: User, bundle: string): void;
+  connectedPasskey(user: User): void;
+  disconnected(): void;
+};
+
+export type AlchemySignerClientEvent = keyof AlchemySignerClientEvents;

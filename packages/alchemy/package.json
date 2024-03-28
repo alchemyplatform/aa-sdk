@@ -51,10 +51,12 @@
     "@turnkey/iframe-stamper": "^1.0.0",
     "@turnkey/viem": "^0.4.8",
     "@turnkey/webauthn-stamper": "^0.4.3",
-    "viem": "^2.8.6"
+    "eventemitter3": "^5.0.1",
+    "viem": "2.8.6",
+    "zustand": "^4.5.2"
   },
   "peerDependencies": {
-    "viem": "^2.8.6"
+    "viem": "2.8.6"
   },
   "publishConfig": {
     "access": "public",
