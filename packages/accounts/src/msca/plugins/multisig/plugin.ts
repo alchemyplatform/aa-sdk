@@ -21,6 +21,7 @@ import {
   type UserOperationOverrides,
   type GetAccountParameter,
   type SendUserOperationResult,
+  type GetContextParameter,
 } from "@alchemy/aa-core";
 import { type Plugin } from "../types.js";
 import { installPlugin as installPlugin_ } from "../../plugin-manager/installPlugin.js";
@@ -34,7 +35,9 @@ type ExecutionActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, any> = Record<string, any>
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
 > = {
   updateOwnership: (
     args: Pick<
@@ -45,8 +48,8 @@ type ExecutionActions<
       "args"
     > & {
       overrides?: UserOperationOverrides;
-      context?: TContext;
-    } & GetAccountParameter<TAccount>
+    } & GetAccountParameter<TAccount> &
+      GetContextParameter<TContext>
   ) => Promise<SendUserOperationResult>;
 };
 
@@ -62,14 +65,16 @@ type ManagementActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, any> = Record<string, any>
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
 > = {
   installMultisigPlugin: (
     args: {
       overrides?: UserOperationOverrides;
-      context?: TContext;
     } & InstallMultisigPluginParams &
-      GetAccountParameter<TAccount>
+      GetAccountParameter<TAccount> &
+      GetContextParameter<TContext>
   ) => Promise<SendUserOperationResult>;
 };
 
@@ -138,7 +143,9 @@ export type MultisigPluginActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, any> = Record<string, any>
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
 > = ExecutionActions<TAccount, TContext> &
   ManagementActions<TAccount, TContext> &
   ReadAndEncodeActions<TAccount>;
@@ -172,10 +179,13 @@ export const multisigPluginActions: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>
-) => MultisigPluginActions<TAccount> = (client) => ({
+) => MultisigPluginActions<TAccount, TContext> = (client) => ({
   updateOwnership({ args, overrides, context, account = client.account }) {
     if (!account) {
       throw new AccountNotFoundError();

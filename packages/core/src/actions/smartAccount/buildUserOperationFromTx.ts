@@ -22,7 +22,9 @@ export const buildUserOperationFromTx: <
     | SmartContractAccount
     | undefined,
   TChainOverride extends Chain | undefined = Chain | undefined,
-  TContext extends Record<string, any> = Record<string, any>
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
 >(
   client: Client<Transport, TChain, TAccount>,
   args: SendTransactionParameters<TChain, TAccount, TChainOverride>,
