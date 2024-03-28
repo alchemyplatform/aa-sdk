@@ -1,6 +1,7 @@
 import {
   getContract,
   hexToBytes,
+  toHex,
   trim,
   type Address,
   type Chain,
@@ -14,10 +15,14 @@ import {
   type TypedDataDefinition,
 } from "viem";
 import { toAccount } from "viem/accounts";
-import { EntryPointAbi } from "../abis/EntryPointAbi.js";
+import type { Omit } from "viem/chains";
 import { createBundlerClient } from "../client/bundlerClient.js";
-import { getVersion060EntryPoint } from "../entrypoint/0.6.js";
-import type { EntryPointDef } from "../entrypoint/types.js";
+import { getEntryPoint } from "../entrypoint/index.js";
+import type {
+  EntryPointDef,
+  EntryPointDefRegistry,
+  EntryPointVersion,
+} from "../entrypoint/types.js";
 import {
   BatchExecutionNotSupportedError,
   FailedToGetStorageSlotError,
@@ -29,7 +34,7 @@ import { InvalidRpcUrlError } from "../errors/client.js";
 import { Logger } from "../logger.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import { wrapSignatureWith6492 } from "../signer/utils.js";
-import type { UserOperationRequest } from "../types.js";
+import type { NullAddress } from "../types.js";
 import type { IsUndefined } from "../utils/types.js";
 import { DeploymentState } from "./base.js";
 
@@ -63,7 +68,7 @@ export type SmartContractAccountWithSigner<
 //#region SmartContractAccount
 export type SmartContractAccount<
   Name extends string = string,
-  TUO = UserOperationRequest
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = LocalAccount<Name> & {
   source: Name;
   getDummySignature: () => Hex;
@@ -82,21 +87,26 @@ export type SmartContractAccount<
   getInitCode: () => Promise<Hex>;
   isAccountDeployed: () => Promise<boolean>;
   getFactoryAddress: () => Address;
-  getEntryPoint: () => EntryPointDef<TUO>;
-  getImplementationAddress: () => Promise<"0x0" | Address>;
+  getEntryPoint: () => EntryPointDef<TEntryPointVersion>;
+  getImplementationAddress: () => Promise<NullAddress | Address>;
 };
 //#endregion SmartContractAccount
+
+export type AccountEntryPointVersion<
+  TAccount extends SmartContractAccount | undefined
+> = TAccount extends SmartContractAccount<string, infer TEntryPointVersion>
+  ? TEntryPointVersion
+  : EntryPointVersion;
 
 export type ToSmartContractAccountParams<
   Name extends string = string,
   TTransport extends Transport = Transport,
-  TChain extends Chain = Chain,
-  TUserOperationRequest = UserOperationRequest
+  TChain extends Chain = Chain
 > = {
   source: Name;
   transport: TTransport;
   chain: TChain;
-  entryPoint?: EntryPointDef<TUserOperationRequest>;
+  entryPoint: EntryPointDefRegistry<TChain>[EntryPointVersion];
   accountAddress?: Address;
   getAccountInitCode: () => Promise<Hex>;
   getDummySignature: () => Hex;
@@ -115,20 +125,20 @@ export const parseFactoryAddressFromAccountInitCode = (initCode: Hex) => {
 
 export const getAccountAddress = async ({
   client,
-  entryPointAddress,
+  entryPoint,
   accountAddress,
   getAccountInitCode,
 }: {
   client: PublicClient;
-  entryPointAddress: Address;
+  entryPoint: EntryPointDefRegistry[EntryPointVersion];
   accountAddress?: Address;
   getAccountInitCode: () => Promise<Hex>;
 }) => {
   if (accountAddress) return accountAddress;
 
-  const entryPoint = getContract({
-    address: entryPointAddress,
-    abi: EntryPointAbi,
+  const entryPointContract = getContract({
+    address: entryPoint.address,
+    abi: entryPoint.abi,
     // Need to cast this as PublicClient or else it breaks ABI typing.
     // This is valid because our PublicClient is a subclass of PublicClient
     client: client as PublicClient,
@@ -138,7 +148,7 @@ export const getAccountAddress = async ({
   Logger.verbose("[BaseSmartContractAccount](getAddress) initCode: ", initCode);
 
   try {
-    await entryPoint.simulate.getSenderAddress([initCode]);
+    await entryPointContract.simulate.getSenderAddress([initCode]);
   } catch (err: any) {
     Logger.verbose(
       "[BaseSmartContractAccount](getAddress) getSenderAddress err: ",
@@ -168,8 +178,8 @@ export async function toSmartContractAccount<
 >({
   transport,
   chain,
+  entryPoint = getEntryPoint(chain),
   source,
-  entryPoint = getVersion060EntryPoint(chain),
   accountAddress,
   getAccountInitCode,
   signMessage,
@@ -180,15 +190,16 @@ export async function toSmartContractAccount<
   signUserOperationHash,
   encodeUpgradeToAndCall,
 }: ToSmartContractAccountParams<Name, TTransport, TChain>): Promise<
-  SmartContractAccount<Name>
+  SmartContractAccount<Name, typeof entryPoint.version>
 > {
-  const client = createBundlerClient({
+  const client = createBundlerClient<TTransport, typeof entryPoint.version>({
     transport,
     chain,
   });
+
   const entryPointContract = getContract({
     address: entryPoint.address,
-    abi: EntryPointAbi,
+    abi: entryPoint.abi,
     // Need to cast this as PublicClient or else it breaks ABI typing.
     // This is valid because our PublicClient is a subclass of PublicClient
     client: client as PublicClient,
@@ -196,7 +207,7 @@ export async function toSmartContractAccount<
 
   const accountAddress_ = await getAccountAddress({
     client,
-    entryPointAddress: entryPoint.address,
+    entryPoint,
     accountAddress,
     getAccountInitCode,
   });
@@ -245,12 +256,15 @@ export async function toSmartContractAccount<
     return initCode === "0x";
   };
 
-  const getNonce = async (nonceKey = 0n) => {
+  const getNonce = async (nonceKey = 0n): Promise<bigint> => {
     if (!(await isAccountDeployed())) {
       return 0n;
     }
 
-    return entryPointContract.read.getNonce([accountAddress_, nonceKey]);
+    return entryPointContract.read.getNonce([
+      accountAddress_,
+      nonceKey,
+    ]) as Promise<bigint>;
   };
 
   const account = toAccount({
@@ -300,7 +314,7 @@ export async function toSmartContractAccount<
     return create6492Signature(isDeployed, signature);
   };
 
-  const getImplementationAddress = async (): Promise<"0x0" | Address> => {
+  const getImplementationAddress = async (): Promise<NullAddress | Address> => {
     const storage = await client.getStorageAt({
       address: account.address,
       // This is the default slot for the implementation address for Proxies
@@ -314,7 +328,7 @@ export async function toSmartContractAccount<
       );
     }
 
-    return trim(storage);
+    return toHex(trim(storage));
   };
 
   return {
@@ -333,7 +347,8 @@ export async function toSmartContractAccount<
     getDummySignature,
     getInitCode,
     encodeUpgradeToAndCall: encodeUpgradeToAndCall_,
-    getEntryPoint: () => entryPoint,
+    getEntryPoint: () =>
+      entryPoint as EntryPointDefRegistry[typeof entryPoint.version],
     isAccountDeployed,
     getNonce,
     signMessageWith6492,

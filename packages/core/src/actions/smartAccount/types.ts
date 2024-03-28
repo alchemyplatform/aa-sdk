@@ -1,13 +1,15 @@
 import type { Hex, RpcTransactionRequest } from "viem";
 import type {
+  AccountEntryPointVersion,
   GetAccountParameter,
   SmartContractAccount,
 } from "../../account/smartContractAccount";
 import type { UpgradeToData } from "../../client/types";
+import type { EntryPointVersion } from "../../entrypoint/types";
 import type {
   BatchUserOperationCallData,
   UserOperationCallData,
-  UserOperationOverrides,
+  UserOperationOverridesParameter,
   UserOperationRequest,
   UserOperationStruct,
 } from "../../types";
@@ -17,9 +19,9 @@ export type UpgradeAccountParams<
   TAccount extends SmartContractAccount | undefined
 > = {
   upgradeTo: UpgradeToData;
-  overrides?: UserOperationOverrides;
   waitForTx?: boolean;
-} & GetAccountParameter<TAccount>;
+} & GetAccountParameter<TAccount> &
+  UserOperationOverridesParameter<AccountEntryPointVersion<TAccount>>;
 //#endregion UpgradeAccountParams
 
 //#region SendUserOperationParameters
@@ -27,15 +29,15 @@ export type SendUserOperationParameters<
   TAccount extends SmartContractAccount | undefined
 > = {
   uo: UserOperationCallData | BatchUserOperationCallData;
-  overrides?: UserOperationOverrides;
-} & GetAccountParameter<TAccount>;
+} & GetAccountParameter<TAccount> &
+  UserOperationOverridesParameter<AccountEntryPointVersion<TAccount>>;
 //#endregion SendUserOperationParameters
 
 //#region SignUserOperationParameters
 export type SignUserOperationParameters<
   TAccount extends SmartContractAccount | undefined
 > = {
-  uoStruct: UserOperationStruct;
+  uoStruct: UserOperationStruct<AccountEntryPointVersion<TAccount>>;
 } & GetAccountParameter<TAccount>;
 //#endregion SignUserOperationParameters
 
@@ -44,17 +46,17 @@ export type SendTransactionsParameters<
   TAccount extends SmartContractAccount | undefined
 > = {
   requests: RpcTransactionRequest[];
-  overrides?: UserOperationOverrides;
-} & GetAccountParameter<TAccount>;
+} & GetAccountParameter<TAccount> &
+  UserOperationOverridesParameter<AccountEntryPointVersion<TAccount>>;
 //#endregion SendTransactionsParameters
 
 //#region DropAndReplaceUserOperationParameters
 export type DropAndReplaceUserOperationParameters<
   TAccount extends SmartContractAccount | undefined
 > = {
-  uoToDrop: UserOperationRequest;
-  overrides?: UserOperationOverrides;
-} & GetAccountParameter<TAccount>;
+  uoToDrop: UserOperationRequest<AccountEntryPointVersion<TAccount>>;
+} & GetAccountParameter<TAccount> &
+  UserOperationOverridesParameter<AccountEntryPointVersion<TAccount>>;
 //#endregion DropAndReplaceUserOperationParameters
 
 //#region WaitForUserOperationTxParameters
@@ -64,9 +66,10 @@ export type WaitForUserOperationTxParameters = {
 //#endregion WaitForUserOperationTxParameters
 
 //#region BuildUserOperationFromTransactionsResult
-export type BuildUserOperationFromTransactionsResult = {
-  uoStruct: UserOperationStruct;
+export type BuildUserOperationFromTransactionsResult<
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+> = {
+  uoStruct: UserOperationStruct<TEntryPointVersion>;
   batch: BatchUserOperationCallData;
-  overrides: UserOperationOverrides;
-};
+} & UserOperationOverridesParameter<TEntryPointVersion, true>;
 //#endregion BuildUserOperationFromTransactionsResult

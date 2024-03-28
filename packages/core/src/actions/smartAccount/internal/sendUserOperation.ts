@@ -7,8 +7,9 @@ import type { BaseSmartAccountClient } from "../../../client/smartAccountClient"
 import type { SendUserOperationResult } from "../../../client/types";
 import { AccountNotFoundError } from "../../../errors/account.js";
 import { ChainNotFoundError } from "../../../errors/client.js";
+import { MismatchingEntryPointError } from "../../../errors/entrypoint.js";
 import { InvalidUserOperationError } from "../../../errors/useroperation.js";
-import type { UserOperationStruct } from "../../../types";
+import type { UserOperationRequest, UserOperationStruct } from "../../../types";
 import { deepHexlify, isValidRequest } from "../../../utils/index.js";
 
 export const _sendUserOperation: <
@@ -19,7 +20,9 @@ export const _sendUserOperation: <
     | undefined
 >(
   client: BaseSmartAccountClient<TTransport, TChain, TAccount>,
-  args: { uoStruct: UserOperationStruct } & GetAccountParameter<TAccount>
+  args: {
+    uoStruct: UserOperationStruct;
+  } & GetAccountParameter<TAccount>
 ) => Promise<SendUserOperationResult> = async (client, args) => {
   const { account = client.account } = args;
   if (!account) {
@@ -30,8 +33,16 @@ export const _sendUserOperation: <
     throw new ChainNotFoundError();
   }
 
-  const request = deepHexlify(args.uoStruct);
-  if (!isValidRequest(request)) {
+  const entryPoint = account.getEntryPoint();
+  type entryPointVersion = typeof entryPoint.version;
+  if (entryPoint.isUserOpVersion(args.uoStruct)) {
+    throw new MismatchingEntryPointError(entryPoint.version, args.uoStruct);
+  }
+
+  const request = deepHexlify(
+    args.uoStruct
+  ) as UserOperationRequest<entryPointVersion>;
+  if (!isValidRequest<entryPointVersion>(request)) {
     throw new InvalidUserOperationError(args.uoStruct);
   }
 

@@ -24,7 +24,10 @@ export const createBaseSmartAccountParamsSchema = <
     ),
     initCode: z
       .string()
-      .refine(isHex, "initCode must be a valid hex.")
+      .refine(
+        (x) => isHex(x, { strict: true }),
+        "initCode must be a valid hex."
+      )
       .optional()
       .describe("Optional override for the account init code."),
   });

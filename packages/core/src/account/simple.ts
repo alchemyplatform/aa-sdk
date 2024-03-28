@@ -3,6 +3,7 @@ import {
   concatHex,
   encodeFunctionData,
   isHex,
+  type Chain,
   type FallbackTransport,
   type Hex,
   type Transport,
@@ -10,7 +11,7 @@ import {
 import { SimpleAccountAbi } from "../abis/SimpleAccountAbi.js";
 import { SimpleAccountFactoryAbi } from "../abis/SimpleAccountFactoryAbi.js";
 import { createBundlerClient } from "../client/bundlerClient.js";
-import { getVersion060EntryPoint } from "../entrypoint/0.6.js";
+import { getEntryPoint } from "../entrypoint/index.js";
 import { AccountRequiresOwnerError } from "../errors/account.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import type { BatchUserOperationCallData } from "../types.js";
@@ -105,18 +106,17 @@ export const createSimpleSmartAccount = async <
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >({
   chain,
-  entryPoint = getVersion060EntryPoint(chain),
+  entryPoint = getEntryPoint(chain),
   ...params
 }: Omit<
   SimpleSmartAccountParams<TTransport, TSigner>,
   "rpcClient" | "chain" | "accountAddress" | "entryPointAddress"
 > &
   Pick<
-    ToSmartContractAccountParams,
+    ToSmartContractAccountParams<"SimpleAccount", TTransport, Chain>,
     "chain" | "transport" | "accountAddress" | "entryPoint"
   >): Promise<SimpleSmartAccount<TSigner>> => {
   if (!params.signer) throw new AccountRequiresOwnerError("SimpleAccount");
-
   // @ts-expect-error zod custom type not recognized as required params for signers
   const simpleAccount = new SimpleSmartContractAccount<TTransport>({
     chain,
@@ -141,7 +141,7 @@ export const createSimpleSmartAccount = async <
       ),
     entryPoint,
     getAccountInitCode: async () => {
-      if (parsedParams.initCode) return parsedParams.initCode;
+      if (parsedParams.initCode) return parsedParams.initCode as Hex;
       return simpleAccount.getAccountInitCode();
     },
     getDummySignature: simpleAccount.getDummySignature.bind(simpleAccount),

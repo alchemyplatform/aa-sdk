@@ -11,7 +11,7 @@ export const ChainSchema = z.custom<Chain>(
 );
 
 export const HexSchema = z.custom<`0x${string}` | "0x">((val) => {
-  return isHex(val);
+  return isHex(val, { strict: true });
 });
 
 //#region BigNumberish

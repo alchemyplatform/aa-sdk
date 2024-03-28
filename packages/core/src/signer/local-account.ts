@@ -1,11 +1,11 @@
-import {
-  type HDAccount,
-  type Hex,
-  type LocalAccount,
-  type PrivateKeyAccount,
-  type SignableMessage,
-  type TypedData,
-  type TypedDataDefinition,
+import type {
+  HDAccount,
+  Hex,
+  LocalAccount,
+  PrivateKeyAccount,
+  SignableMessage,
+  TypedData,
+  TypedDataDefinition,
 } from "viem";
 import { mnemonicToAccount, privateKeyToAccount } from "viem/accounts";
 import type { SmartAccountSigner } from "./types.js";

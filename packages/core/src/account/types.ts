@@ -135,6 +135,7 @@ export interface ISmartContractAccount<
   getSigner(): TSigner;
 
   /**
+   *
    * @returns the address of the factory contract for the smart account
    */
   getFactoryAddress(): Address;
