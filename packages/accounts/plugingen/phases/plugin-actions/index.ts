@@ -35,6 +35,7 @@ export const PluginActionsGenPhase: Phase = async (input) => {
   addImport("@alchemy/aa-core", { name: "AccountNotFoundError" });
   addImport("@alchemy/aa-core", { name: "isSmartAccountClient" });
   addImport("@alchemy/aa-core", { name: "IncompatibleClientError" });
+  addImport("@alchemy/aa-core", { name: "GetContextParameter", isType: true });
 
   const providerFunctionDefs: string[] = [];
   const providerFunctions = executionAbi
@@ -60,9 +61,8 @@ export const PluginActionsGenPhase: Phase = async (input) => {
           )}: (args: Pick<EncodeFunctionDataParameters<typeof ${executionAbiConst}, "${
         n.name
       }">, "args"> & { 
-        overrides?: UserOperationOverrides; 
-        context?: TContext;
-      } & GetAccountParameter<TAccount>) => Promise<SendUserOperationResult>
+        overrides?: UserOperationOverrides;
+      } & GetAccountParameter<TAccount> & GetContextParameter<TContext>) => Promise<SendUserOperationResult>
         `);
       const methodName = camelCase(n.name);
       return dedent`
@@ -86,7 +86,7 @@ export const PluginActionsGenPhase: Phase = async (input) => {
     });
 
   addType(
-    "ExecutionActions<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined, TContext extends Record<string, any> = Record<string, any>>",
+    "ExecutionActions<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined, TContext extends Record<string, any> | undefined = Record<string, any> | undefined>",
     dedent`{
         ${providerFunctionDefs.join(";\n\n")}
       }`
@@ -103,7 +103,7 @@ export const PluginActionsGenPhase: Phase = async (input) => {
   addType(
     `${contract.name}Actions<TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined, TContext extends Record<string, any> = Record<string, any>>`,
+    | undefined, TContext extends Record<string, any> | undefined = Record<string, any> | undefined>`,
     dedent`
   ExecutionActions<TAccount, TContext> & ManagementActions<TAccount, TContext> & ReadAndEncodeActions${
     hasReadMethods ? "<TAccount>" : ""
@@ -118,12 +118,15 @@ export const PluginActionsGenPhase: Phase = async (input) => {
         TChain extends Chain | undefined = Chain | undefined,
         TAccount extends SmartContractAccount | undefined =
             | SmartContractAccount
-            | undefined
+            | undefined,
+        TContext extends Record<string, any> | undefined = Record<string, any> | undefined
     >(
         client: Client<TTransport, TChain, TAccount>
     ) => ${
       contract.name
-    }Actions<TAccount> = (client) => ({ ${providerFunctions.join(",\n")} });
+    }Actions<TAccount, TContext> = (client) => ({ ${providerFunctions.join(
+    ",\n"
+  )} });
   `);
 
   return input;

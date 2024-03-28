@@ -21,6 +21,7 @@ import {
   type UserOperationOverrides,
   type GetAccountParameter,
   type SendUserOperationResult,
+  type GetContextParameter,
 } from "@alchemy/aa-core";
 import { type Plugin } from "../types.js";
 import { MultiOwnerPlugin } from "../multi-owner/plugin.js";
@@ -35,7 +36,9 @@ type ExecutionActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, any> = Record<string, any>
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
 > = {
   executeWithSessionKey: (
     args: Pick<
@@ -46,8 +49,8 @@ type ExecutionActions<
       "args"
     > & {
       overrides?: UserOperationOverrides;
-      context?: TContext;
-    } & GetAccountParameter<TAccount>
+    } & GetAccountParameter<TAccount> &
+      GetContextParameter<TContext>
   ) => Promise<SendUserOperationResult>;
 
   addSessionKey: (
@@ -59,8 +62,8 @@ type ExecutionActions<
       "args"
     > & {
       overrides?: UserOperationOverrides;
-      context?: TContext;
-    } & GetAccountParameter<TAccount>
+    } & GetAccountParameter<TAccount> &
+      GetContextParameter<TContext>
   ) => Promise<SendUserOperationResult>;
 
   removeSessionKey: (
@@ -72,8 +75,8 @@ type ExecutionActions<
       "args"
     > & {
       overrides?: UserOperationOverrides;
-      context?: TContext;
-    } & GetAccountParameter<TAccount>
+    } & GetAccountParameter<TAccount> &
+      GetContextParameter<TContext>
   ) => Promise<SendUserOperationResult>;
 
   rotateSessionKey: (
@@ -85,8 +88,8 @@ type ExecutionActions<
       "args"
     > & {
       overrides?: UserOperationOverrides;
-      context?: TContext;
-    } & GetAccountParameter<TAccount>
+    } & GetAccountParameter<TAccount> &
+      GetContextParameter<TContext>
   ) => Promise<SendUserOperationResult>;
 
   updateKeyPermissions: (
@@ -98,8 +101,8 @@ type ExecutionActions<
       "args"
     > & {
       overrides?: UserOperationOverrides;
-      context?: TContext;
-    } & GetAccountParameter<TAccount>
+    } & GetAccountParameter<TAccount> &
+      GetContextParameter<TContext>
   ) => Promise<SendUserOperationResult>;
 };
 
@@ -119,14 +122,16 @@ type ManagementActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, any> = Record<string, any>
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
 > = {
   installSessionKeyPlugin: (
     args: {
       overrides?: UserOperationOverrides;
-      context?: TContext;
     } & InstallSessionKeyPluginParams &
-      GetAccountParameter<TAccount>
+      GetAccountParameter<TAccount> &
+      GetContextParameter<TContext>
   ) => Promise<SendUserOperationResult>;
 };
 
@@ -186,7 +191,9 @@ export type SessionKeyPluginActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, any> = Record<string, any>
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
 > = ExecutionActions<TAccount, TContext> &
   ManagementActions<TAccount, TContext> &
   ReadAndEncodeActions;
@@ -233,10 +240,13 @@ export const sessionKeyPluginActions: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>
-) => SessionKeyPluginActions<TAccount> = (client) => ({
+) => SessionKeyPluginActions<TAccount, TContext> = (client) => ({
   executeWithSessionKey({
     args,
     overrides,

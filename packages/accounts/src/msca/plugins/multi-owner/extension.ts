@@ -16,7 +16,7 @@ export type MultiOwnerPluginActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined
-> = MultiOwnerPluginActions_<TAccount> & {
+> = MultiOwnerPluginActions_<TAccount, undefined> & {
   readOwners: (
     params: GetPluginAddressParameter & GetAccountParameter<TAccount>
   ) => Promise<ReadonlyArray<Address>>;

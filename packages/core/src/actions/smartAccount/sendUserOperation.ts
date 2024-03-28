@@ -14,7 +14,9 @@ export const sendUserOperation: <
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, any> = Record<string, any>
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
   args: SendUserOperationParameters<TAccount, TContext>

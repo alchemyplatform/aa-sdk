@@ -3,6 +3,7 @@ import {
   IncompatibleClientError,
   isSmartAccountClient,
   type GetAccountParameter,
+  type GetContextParameter,
   type SmartAccountClient,
   type SmartContractAccount,
   type UserOperationOverrides,
@@ -25,7 +26,9 @@ export type InstallPluginParams<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, unknown> = Record<string, unknown>
+  TContext extends Record<string, unknown> | undefined =
+    | Record<string, unknown>
+    | undefined
 > = {
   pluginAddress: Address;
   manifestHash?: Hash;
@@ -33,8 +36,8 @@ export type InstallPluginParams<
   dependencies?: FunctionReference[];
 } & {
   overrides?: UserOperationOverrides;
-  context?: TContext;
-} & GetAccountParameter<TAccount>;
+} & GetAccountParameter<TAccount> &
+  GetContextParameter<TContext>;
 
 export async function installPlugin<
   TTransport extends Transport = Transport,
@@ -42,7 +45,9 @@ export async function installPlugin<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, unknown> = Record<string, unknown>
+  TContext extends Record<string, unknown> | undefined =
+    | Record<string, unknown>
+    | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
   {
@@ -76,7 +81,7 @@ export async function encodeInstallPluginUserOperation<
     | undefined
 >(
   client: SmartAccountClient<TTransport, TChain, TAccount>,
-  params: Omit<InstallPluginParams, "overrides" | "account">
+  params: Omit<InstallPluginParams, "overrides" | "account" | "context">
 ) {
   const pluginManifest = await client.readContract({
     abi: IPluginAbi,
