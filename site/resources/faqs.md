@@ -123,13 +123,14 @@ Gas sponsorship is available on testnet for all tiers. For support on mainnet, y
 ### How is gas sponsored? Do I need to fund the Gas Manager?
 
 ::: details Answer
-We front the gas for your application and put the USD equivalent on your bill at the end of the month. No need to worry about pre-funding the Gas Manager or conversions, we’ve got you covered! You can follow [this guide](/using-smart-accounts/sponsoring-gas/gas-manager.html) for more details on how to sponsor `UserOperation`s.
+We front the gas for your application up to your monthly base limit and put the USD equivalent on your bill at the end of the month. If you wish to sponsor gas beyond your monthly base limit, you will need to buy gas credits (in USD) via our [Gas Manager dashboard](https://dashboard.alchemy.com/gas-manager). This will be a one time purchase that will be applied to your bill at the end of the month and will roll over until it is used up. 
+You can follow [this guide](/using-smart-accounts/sponsoring-gas/gas-manager.html) for more details on how to sponsor `UserOperation`s.
 :::
 
-### What are my gas sponsorship limits?
+### What are my gas sponsorship base limits?
 
 ::: details Answer
-You can find details of Gas Manager limits depending on your tier [here](https://docs.alchemy.com/reference/gas-manager-coverage-api-pricing#fee-logic).
+You can find details of Gas Manager monthly base limits depending on your tier [here](https://docs.alchemy.com/reference/gas-manager-coverage-api-pricing#fee-logic).
 :::
 
 ### Do you support ERC-20 or stablecoin paymasters?
