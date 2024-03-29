@@ -44,7 +44,7 @@ Account Kit provide all the tools you need to onboard every user to an invisible
 - **Gas Manager API:** A programmable API to sponsor gas for UserOps that meets your criteria.
 - **Bundler API:** The most reliable ERC-4337 Bundler. Land your UserOps on-chain, batch operations, and sponsor gas at a massive scale.
 
-<img src="/images/account-kit-overview.png" width="400" height="auto" alt="Account Kit Overview" style="display: block; margin: auto;">
+<img src="/images/account-kit-overview.jpg" width="400" height="auto" alt="Account Kit Overview" style="display: block; margin: auto;">
 
 Let’s dive into each component.
 
@@ -54,7 +54,7 @@ The `aa-sdk` is a type-safe and performant TypeScript library built on top of [v
 
 The SDK implements an EIP-1193 provider interface so embedded accounts can drop right into popular app frameworks and wallet connect libraries like RainbowKit, Wagmi, and Web3Modal. It also includes ethers.js adapters to provide full support for ethers.js apps.
 
-[Get started](/getting-started/setup) with `aa-sdk` or browse the [opensource repo](https://github.com/alchemyplatform/aa-sdk).
+Get started with the [quick start](/getting-started/setup) guide or browse the open source [aa-sdk github](https://github.com/alchemyplatform/aa-sdk).
 
 ## Signer API
 
@@ -66,21 +66,15 @@ Account Kit also makes it easy to [bring your own signer](/signers/choosing-a-si
 
 ## Smart Contract Accounts
 
-The smart contract is the heart of the user's account. It holds the user's assets and represents their public address onchain. That's why
+The smart contract is the heart of the user's account. It secures their assets, executes every UserOp, and represents the user's public address onchain, so this is a foundational choice for your apps' security, feature set, and gas costs.
 
 Account Kit provides two smart contract accounts out of the box, and supports any custom contract of your own.
 
-- **ModularAccount**: an extensible 4337 smart account that supports multiple owners, session keys, onchain recovery, and more. ([learn more](https://www.alchemy.com/blog/hello-modular-account), [github](https://github.com/alchemyplatform/modular-account))
+- **Modular Account**: a secure, audited, and extensible 4337 smart account that supports multiple owners, session keys, onchain recovery, and more. ([learn more](https://www.alchemy.com/blog/hello-modular-account), [github](https://github.com/alchemyplatform/modular-account))
 
-- **LightAccount**: a simple 4337 smart account that supports a single owner ([github](https://github.com/alchemyplatform/light-account))
+- **Light Account**: a simple, secure, and audited 4337 smart account that supports a single owner ([github](https://github.com/alchemyplatform/light-account))
 
 - **Bring your own**: you can even build your own account or use another open source implementation of an ERC-4337 account. Follow this guide to [use your own account](/smart-accounts/custom/using-your-own) with Account Kit.
-
-The `ModularAccount` is a secure, audited, and modular ERC-4337 smart account.
-
-- **Purpose built for AA:** modular account was designed and optimized for ERC-4337 account abstraction. It works seamlessly with the Entrypoint contract, Bundlers, and Paymasters.
-- **Extensible:** modular account is the first [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) account, making it infinitely extensible with custom plugins. Plug and play from a selection of existing plugins, including session keys and account recovery, or write your own to customize the account for your app.
-- **Secure:** modular account was developed by Alchemy and audited by both [Spearbit](https://github.com/alchemyplatform/modular-account/blob/develop/audits/2024-01-31_spearbit_0e3fd1e.pdf) and [Quantstamp](https://github.com/alchemyplatform/modular-account/blob/develop/audits/2024-02-20-quantstamp-8ae319e.pdf).
 
 ## Gas Manager API
 
