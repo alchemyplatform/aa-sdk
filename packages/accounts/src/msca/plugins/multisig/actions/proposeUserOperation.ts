@@ -69,17 +69,18 @@ export async function proposeUserOperation<
     signer: account.getSigner(),
   });
 
+  const signatureObj = {
+    signature: request.signature,
+    signer: await account.getSigner().getAddress(),
+    signerType,
+    userOpSigType: UserOpSignatureType.UpperLimit,
+  };
+
   return {
     request,
+    signatureObj,
     aggregatedSignature: combineSignatures({
-      signatures: [
-        {
-          signature: request.signature,
-          signer: await account.getSigner().getAddress(),
-          signerType,
-          userOpSigType: UserOpSignatureType.UpperLimit,
-        },
-      ],
+      signatures: [signatureObj],
       upperLimitMaxFeePerGas: request.maxFeePerGas,
       upperLimitMaxPriorityFeePerGas: request.maxPriorityFeePerGas,
       upperLimitPvg: request.preVerificationGas,

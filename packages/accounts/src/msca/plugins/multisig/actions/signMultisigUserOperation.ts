@@ -57,16 +57,16 @@ export async function signMultisigUserOperation<
     signer: account.getSigner(),
   });
 
-  const aggregatedSignature = formatSignatures(
-    signatures.concat({
-      signerType,
-      signer: signerAddress,
-      signature,
-      userOpSigType: UserOpSignatureType.UpperLimit,
-    })
-  );
+  const signatureObj = {
+    signerType,
+    signer: signerAddress,
+    signature,
+    userOpSigType: UserOpSignatureType.UpperLimit,
+  };
+  const aggregatedSignature = formatSignatures(signatures.concat(signatureObj));
 
   return {
+    signatureObj,
     signature,
     aggregatedSignature: concat([
       userOperationRequest.preVerificationGas,

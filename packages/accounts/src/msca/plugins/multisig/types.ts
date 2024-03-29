@@ -26,6 +26,7 @@ export type Signature = {
 export type SignMultisigUserOperationResult = {
   signature: Hex;
   aggregatedSignature: Hex;
+  signatureObj: Signature;
 };
 
 export type SignMultisigUserOperationParams<
@@ -41,6 +42,7 @@ export type SignMultisigUserOperationParams<
 export type ProposeUserOperationResult = {
   request: UserOperationRequest;
   aggregatedSignature: Hex;
+  signatureObj: Signature;
 };
 
 export type MultisigUserOperationContext = {
