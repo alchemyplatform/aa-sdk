@@ -8,7 +8,7 @@ import {
 } from "@alchemy/aa-core";
 import { concat, type Chain, type Client, type Transport } from "viem";
 import {
-  UserOpSignatureType,
+  type Signature,
   type SignMultisigUserOperationParams,
   type SignMultisigUserOperationResult,
 } from "../types.js";
@@ -57,11 +57,11 @@ export async function signMultisigUserOperation<
     signer: account.getSigner(),
   });
 
-  const signatureObj = {
+  const signatureObj: Signature = {
     signerType,
     signer: signerAddress,
     signature,
-    userOpSigType: UserOpSignatureType.UpperLimit,
+    userOpSigType: "UPPERLIMIT",
   };
   const aggregatedSignature = formatSignatures(signatures.concat(signatureObj));
 

@@ -6,15 +6,9 @@ import type {
 } from "@alchemy/aa-core";
 import type { GetPluginAddressParameter } from "../types";
 
-export enum SignerType {
-  EOA,
-  Contract,
-}
+export type SignerType = "EOA" | "CONTRACT";
 
-export enum UserOpSignatureType {
-  Actual,
-  UpperLimit,
-}
+export type UserOpSignatureType = "ACTUAL" | "UPPERLIMIT";
 
 export type Signature = {
   signerType: SignerType;

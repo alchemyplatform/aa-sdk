@@ -10,7 +10,6 @@ import {
 import { isHex, type Hex } from "viem";
 import { isMultisigModularAccount } from "../../account/multisigAccount.js";
 import { getThreshold } from "./actions/getThreshold.js";
-import { UserOpSignatureType } from "./types.js";
 import {
   combineSignatures,
   getSignerType,
@@ -75,7 +74,7 @@ export const multisigSignatureMiddleware: ClientMiddlewareFn<{
 
   const finalSignature = combineSignatures({
     signatures: signatures.concat({
-      userOpSigType: UserOpSignatureType.Actual,
+      userOpSigType: "ACTUAL",
       signerType,
       signature,
       signer: await account.getSigner().getAddress(),

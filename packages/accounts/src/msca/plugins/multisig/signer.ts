@@ -54,12 +54,12 @@ export const multisigMessageSigner = <
         version,
       },
       types: {
-        AlchemyModularAccountMessage: [{ name: "message", type: "bytes" }],
+        AlchemyMultisigMessage: [{ name: "message", type: "bytes" }],
       },
       message: {
         message: msg,
       },
-      primaryType: "AlchemyModularAccountMessage",
+      primaryType: "AlchemyMultisigMessage",
     });
   };
 

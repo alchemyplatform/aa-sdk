@@ -19,7 +19,7 @@ import {
   type PublicRpcSchema,
   type Transport,
 } from "viem";
-import { SignerType, UserOpSignatureType, type Signature } from "./types.js";
+import { type Signature } from "./types.js";
 
 type GetSignerTypeParams<
   TTransport extends Transport = Transport,
@@ -69,9 +69,9 @@ export const formatSignatures = (signatures: Signature[]) => {
     })
     .forEach((sig) => {
       // add 32 to v if the signature covers the actual gas values
-      const addV = sig.userOpSigType === UserOpSignatureType.Actual ? 32 : 0;
+      const addV = sig.userOpSigType === "ACTUAL" ? 32 : 0;
 
-      if (sig.signerType === SignerType.EOA) {
+      if (sig.signerType === "EOA") {
         let v =
           parseInt(takeBytes(sig.signature, { count: 1, offset: 64 })) + addV;
         eoaSigs += concat([
@@ -173,7 +173,7 @@ export const splitAggregatedSignature = async ({
           signer: await recoverAddress({ hash, signature }),
           signature,
           signerType,
-          userOpSigType: UserOpSignatureType.UpperLimit,
+          userOpSigType: "UPPERLIMIT",
         };
       }
 
@@ -190,7 +190,7 @@ export const splitAggregatedSignature = async ({
       return {
         signer,
         signerType,
-        userOpSigType: UserOpSignatureType.UpperLimit,
+        userOpSigType: "UPPERLIMIT",
         signature: takeBytes(signaturesAndData, {
           count: signatureLength,
           offset: offset + 32,

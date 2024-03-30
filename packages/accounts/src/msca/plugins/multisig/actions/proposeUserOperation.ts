@@ -7,10 +7,7 @@ import {
   type SmartContractAccount,
 } from "@alchemy/aa-core";
 import { type Chain, type Client, type Transport } from "viem";
-import {
-  UserOpSignatureType,
-  type ProposeUserOperationResult,
-} from "../types.js";
+import { type ProposeUserOperationResult } from "../types.js";
 import { combineSignatures, getSignerType } from "../utils.js";
 
 export async function proposeUserOperation<
@@ -73,7 +70,7 @@ export async function proposeUserOperation<
     signature: request.signature,
     signer: await account.getSigner().getAddress(),
     signerType,
-    userOpSigType: UserOpSignatureType.UpperLimit,
+    userOpSigType: "UPPERLIMIT",
   };
 
   return {
