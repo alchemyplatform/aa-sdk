@@ -1,6 +1,5 @@
 import type { Chain, Client, Transport } from "viem";
 import type { SmartContractAccount } from "../account/smartContractAccount";
-import type { EntryPointVersion } from "../entrypoint/types";
 import { smartAccountClientMethodKeys } from "./decorators/smartAccountClient.js";
 import type {
   BaseSmartAccountClient,
@@ -16,20 +15,14 @@ import type {
  * @returns
  */
 export function isSmartAccountClient<
-  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>
-): client is SmartAccountClient<
-  TEntryPointVersion,
-  TTransport,
-  TChain,
-  TAccount
-> {
+): client is SmartAccountClient<TTransport, TChain, TAccount> {
   for (const key of smartAccountClientMethodKeys) {
     if (!(key in client)) {
       return false;
@@ -48,19 +41,13 @@ export function isSmartAccountClient<
  * @returns
  */
 export function isBaseSmartAccountClient<
-  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>
-): client is BaseSmartAccountClient<
-  TEntryPointVersion,
-  TTransport,
-  TChain,
-  TAccount
-> {
+): client is BaseSmartAccountClient<TTransport, TChain, TAccount> {
   return client && "middleware" in client;
 }

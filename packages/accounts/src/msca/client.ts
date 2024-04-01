@@ -1,6 +1,5 @@
 import {
   createSmartAccountClient,
-  type EntryPointVersion,
   type SmartAccountClient,
   type SmartAccountClientActions,
   type SmartAccountSigner,
@@ -26,81 +25,42 @@ import {
 } from "./plugins/multi-owner/index.js";
 
 export type CreateMultiOwnerModularAccountClientParams<
-  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 > = {
   account: Omit<
-    CreateMultiOwnerModularAccountParams<
-      TEntryPointVersion,
-      TTransport,
-      TSigner
-    >,
+    CreateMultiOwnerModularAccountParams<TTransport, TSigner>,
     "transport" | "chain"
   >;
 } & Omit<
-  CreateLightAccountClientParams<TEntryPointVersion, TChain, TSigner>,
+  CreateLightAccountClientParams<TTransport, TChain, TSigner>,
   "account"
 >;
 
 export function createMultiOwnerModularAccountClient<
-  TEntryPointVersion extends EntryPointVersion,
   TChain extends Chain | undefined = Chain | undefined,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  args: CreateMultiOwnerModularAccountClientParams<
-    TEntryPointVersion,
-    Transport,
-    TChain,
-    TSigner
-  >
+  args: CreateMultiOwnerModularAccountClientParams<Transport, TChain, TSigner>
 ): Promise<
   SmartAccountClient<
-    TEntryPointVersion,
     CustomTransport,
     Chain,
-    MultiOwnerModularAccount<TEntryPointVersion, TSigner>,
-    SmartAccountClientActions<
-      TEntryPointVersion,
-      Chain,
-      MultiOwnerModularAccount<TEntryPointVersion, TSigner>
-    > &
-      MultiOwnerPluginActions<
-        TEntryPointVersion,
-        MultiOwnerModularAccount<TEntryPointVersion, TSigner>
-      > &
-      PluginManagerActions<
-        TEntryPointVersion,
-        MultiOwnerModularAccount<TEntryPointVersion, TSigner>
-      > &
-      AccountLoupeActions<
-        TEntryPointVersion,
-        MultiOwnerModularAccount<TEntryPointVersion, TSigner>
-      >
+    MultiOwnerModularAccount<TSigner>,
+    SmartAccountClientActions<Chain, MultiOwnerModularAccount<TSigner>> &
+      MultiOwnerPluginActions<MultiOwnerModularAccount<TSigner>> &
+      PluginManagerActions<MultiOwnerModularAccount<TSigner>> &
+      AccountLoupeActions<MultiOwnerModularAccount<TSigner>>
   >
 >;
 
-export async function createMultiOwnerModularAccountClient<
-  TSigner extends SmartAccountSigner = SmartAccountSigner
->({
+export async function createMultiOwnerModularAccountClient({
   account,
   transport,
   chain,
   ...clientConfig
-}: CreateMultiOwnerModularAccountClientParams<
-  EntryPointVersion,
-  Transport,
-  Chain,
-  TSigner
->): Promise<
-  SmartAccountClient<
-    EntryPointVersion,
-    Transport,
-    Chain,
-    MultiOwnerModularAccount<EntryPointVersion, TSigner>
-  >
-> {
+}: CreateMultiOwnerModularAccountClientParams): Promise<SmartAccountClient> {
   const modularAccount = await createMultiOwnerModularAccount({
     ...account,
     transport,

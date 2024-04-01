@@ -8,7 +8,7 @@ import {
 import type { ClientWithAlchemyMethods } from "../client/types";
 
 export function alchemyUserOperationSimulator<
-  C extends ClientWithAlchemyMethods<TEntryPointVersion>,
+  C extends ClientWithAlchemyMethods,
   TEntryPointVersion extends EntryPointVersion
 >(client: C): ClientMiddlewareFn {
   return async (struct, { account }) => {

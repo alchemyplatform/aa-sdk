@@ -4,19 +4,17 @@ import type {
   GetAccountParameter,
   SmartContractAccount,
 } from "../../account/smartContractAccount";
-import type { EntryPointVersion } from "../../entrypoint/types";
 import { AccountNotFoundError } from "../../errors/account.js";
 
 export const getAddress: <
-  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: GetAccountParameter<TEntryPointVersion, TAccount>
+  args: GetAccountParameter<TAccount>
 ) => Address = (client, args) => {
   const { account } = args ?? { account: client.account };
   if (!account) {

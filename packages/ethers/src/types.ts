@@ -16,15 +16,10 @@ export type EthersProviderAdapterOpts<
   account?: TAccount;
 } & (
   | {
-      rpcProvider: string | BundlerClient<EntryPointVersion, TTransport>;
+      rpcProvider: string | BundlerClient<TTransport>;
       chainId: number;
     }
   | {
-      accountProvider: SmartAccountClient<
-        EntryPointVersion,
-        TTransport,
-        TChain,
-        TAccount
-      >;
+      accountProvider: SmartAccountClient<TTransport, TChain, TAccount>;
     }
 );

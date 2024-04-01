@@ -17,7 +17,6 @@ import {
   type BundlerClient,
 } from "../client/bundlerClient.js";
 import { getEntryPoint } from "../entrypoint/index.js";
-import type { EntryPointVersion } from "../entrypoint/types.js";
 import {
   BatchExecutionNotSupportedError,
   FailedToGetStorageSlotError,
@@ -46,10 +45,9 @@ export enum DeploymentState {
  * @deprecated use `toSmartContractAccount` instead for creating SmartAccountInstances
  */
 export abstract class BaseSmartContractAccount<
-  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner
-> implements ISmartContractAccount<TEntryPointVersion, TTransport, TSigner>
+> implements ISmartContractAccount<TTransport, TSigner>
 {
   protected factoryAddress: Address;
   protected deploymentState: DeploymentState = DeploymentState.UNDEFINED;
@@ -62,12 +60,11 @@ export abstract class BaseSmartContractAccount<
   >;
   protected entryPointAddress: Address;
   readonly rpcProvider:
-    | BundlerClient<TEntryPointVersion, TTransport>
-    | BundlerClient<TEntryPointVersion, HttpTransport>;
+    | BundlerClient<TTransport>
+    | BundlerClient<HttpTransport>;
 
-  constructor(params_: BaseSmartAccountParams<TEntryPointVersion, TTransport>) {
+  constructor(params_: BaseSmartAccountParams<TTransport, TSigner>) {
     const params = createBaseSmartAccountParamsSchema<
-      TEntryPointVersion,
       TTransport,
       TSigner
     >().parse(params_);
@@ -114,7 +111,7 @@ export abstract class BaseSmartContractAccount<
             },
           }),
         })
-      : (params.rpcClient as BundlerClient<TEntryPointVersion, TTransport>);
+      : (params.rpcClient as BundlerClient<TTransport>);
 
     this.accountAddress = params.accountAddress;
     this.factoryAddress = params.factoryAddress;

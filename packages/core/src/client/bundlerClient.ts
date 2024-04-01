@@ -12,7 +12,6 @@ import {
   type PublicRpcSchema,
   type Transport,
 } from "viem";
-import type { EntryPointVersion } from "../entrypoint/types.js";
 import { ChainNotFoundError } from "../errors/client.js";
 import { VERSION } from "../version.js";
 import {
@@ -22,31 +21,22 @@ import {
 } from "./decorators/bundlerClient.js";
 
 //#region BundlerClient
-export type BundlerClient<
-  TEntryPointVersion extends EntryPointVersion,
-  T extends Transport
-> = Client<
+export type BundlerClient<T extends Transport = Transport> = Client<
   T,
   Chain,
   undefined,
-  [...PublicRpcSchema, ...BundlerRpcSchema<TEntryPointVersion>],
-  PublicActions<T, Chain> & BundlerActions<TEntryPointVersion>
+  [...PublicRpcSchema, ...BundlerRpcSchema],
+  PublicActions<T, Chain> & BundlerActions
 >;
 
 export const createBundlerClientFromExisting: <
-  T extends Transport | FallbackTransport = Transport,
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+  T extends Transport | FallbackTransport = Transport
 >(
   client: PublicClient<T, Chain>
-) => BundlerClient<TEntryPointVersion, T> = <
-  T extends Transport | FallbackTransport = Transport,
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
->(
+) => BundlerClient<T> = <T extends Transport | FallbackTransport = Transport>(
   client: PublicClient<T, Chain>
-): BundlerClient<TEntryPointVersion, T> => {
-  return client.extend(
-    bundlerActions<TEntryPointVersion, PublicClient<T, Chain>>
-  );
+): BundlerClient<T> => {
+  return client.extend(bundlerActions);
 };
 //#endregion BundlerClient
 
@@ -54,19 +44,13 @@ export const createBundlerClientFromExisting: <
  * Creates a PublicClient with methods for calling Bundler RPC methods
  * @returns
  */
-export function createBundlerClient<
-  TEntryPointVersion extends EntryPointVersion,
-  TTransport extends Transport
->(
+export function createBundlerClient<TTransport extends Transport>(
   args: PublicClientConfig<TTransport, Chain> & { type?: string }
-): BundlerClient<TEntryPointVersion, TTransport>;
+): BundlerClient<TTransport>;
 
-export function createBundlerClient<
-  TEntryPointVersion extends EntryPointVersion,
-  TTransport extends Transport
->(
-  args: PublicClientConfig<TTransport, Chain> & { type?: string }
-): BundlerClient<TEntryPointVersion, TTransport> {
+export function createBundlerClient(
+  args: PublicClientConfig & { type?: string }
+): BundlerClient {
   if (!args.chain) {
     throw new ChainNotFoundError();
   }
@@ -116,9 +100,5 @@ export function createBundlerClient<
     return createClient<Transport, Chain>(baseParameters);
   })();
 
-  return client
-    .extend(publicActions<TTransport, Chain>)
-    .extend(
-      bundlerActions<TEntryPointVersion, PublicClient<TTransport, Chain>>
-    );
+  return client.extend(publicActions).extend(bundlerActions);
 }

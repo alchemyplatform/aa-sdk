@@ -1,5 +1,5 @@
 import type {
-  EntryPointVersion,
+  GetEntryPointFromAccount,
   SendUserOperationResult,
   SmartContractAccount,
 } from "@alchemy/aa-core";
@@ -14,29 +14,28 @@ export { type InstallPluginParams } from "./installPlugin.js";
 export { type UninstallPluginParams } from "./uninstallPlugin.js";
 
 export type PluginManagerActions<
-  TEntryPointVersion extends EntryPointVersion,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
-    | undefined
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
   installPlugin: (
-    params: InstallPluginParams<TEntryPointVersion, TAccount>
+    params: InstallPluginParams<TAccount>
   ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
   uninstallPlugin: (
-    params: UninstallPluginParams<TEntryPointVersion, TAccount>
+    params: UninstallPluginParams<TAccount>
   ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 };
 
 export const pluginManagerActions: <
-  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>
-) => PluginManagerActions<TEntryPointVersion, TAccount> = (client) => ({
+) => PluginManagerActions<TAccount> = (client) => ({
   installPlugin: async (params) => installPlugin(client, params),
   uninstallPlugin: async (params) => uninstallPlugin(client, params),
 });

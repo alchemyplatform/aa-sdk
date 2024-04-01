@@ -2,7 +2,6 @@ import {
   AccountNotFoundError,
   IncompatibleClientError,
   isSmartAccountClient,
-  type DefaultEntryPointVersion,
   type GetAccountParameter,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
@@ -28,7 +27,7 @@ export const transferOwnership: <
   args: {
     newOwner: TSigner;
     waitForTxn?: boolean;
-  } & GetAccountParameter<DefaultEntryPointVersion, TAccount>
+  } & GetAccountParameter<TAccount>
 ) => Promise<Hex> = async (
   client,
   { newOwner, waitForTxn = false, account: account_ = client.account }

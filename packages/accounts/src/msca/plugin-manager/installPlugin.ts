@@ -2,8 +2,8 @@ import {
   AccountNotFoundError,
   IncompatibleClientError,
   isSmartAccountClient,
-  type EntryPointVersion,
   type GetAccountParameter,
+  type GetEntryPointFromAccount,
   type SmartAccountClient,
   type SmartContractAccount,
   type UserOperationOverridesParameter,
@@ -23,28 +23,27 @@ import { IPluginManagerAbi } from "../abis/IPluginManager.js";
 import type { FunctionReference } from "../account-loupe/types.js";
 
 export type InstallPluginParams<
-  TEntryPointVersion extends EntryPointVersion,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
-    | undefined
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
   pluginAddress: Address;
   manifestHash?: Hash;
   pluginInitData?: Hash;
   dependencies?: FunctionReference[];
 } & UserOperationOverridesParameter<TEntryPointVersion> &
-  GetAccountParameter<TEntryPointVersion, TAccount>;
+  GetAccountParameter<TAccount>;
 
 export async function installPlugin<
-  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: InstallPluginParams<TEntryPointVersion, TAccount>
+  args: InstallPluginParams<TAccount>
 ) {
   const { overrides, account = client.account, ...params } = args;
 
@@ -70,15 +69,14 @@ export async function installPlugin<
 }
 
 export async function encodeInstallPluginUserOperation<
-  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
     | undefined
 >(
-  client: SmartAccountClient<TEntryPointVersion, TTransport, TChain, TAccount>,
-  params: Omit<InstallPluginParams<TEntryPointVersion>, "overrides" | "account">
+  client: SmartAccountClient<TTransport, TChain, TAccount>,
+  params: Omit<InstallPluginParams, "overrides" | "account">
 ) {
   const pluginManifest = await client.readContract({
     abi: IPluginAbi,

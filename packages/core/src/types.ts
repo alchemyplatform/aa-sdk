@@ -370,6 +370,10 @@ export type UserOperationStruct<TEntryPointVersion extends EntryPointVersion> =
     : never;
 //#endregion UserOperationStruct
 
+export type UserOperationStructUnion =
+  | UserOperationStruct_v6
+  | UserOperationStruct_v7;
+
 export type UserOperationLike<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = Interface<UserOperationOverrides<TEntryPointVersion>>;

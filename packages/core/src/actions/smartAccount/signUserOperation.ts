@@ -1,7 +1,9 @@
 import type { Chain, Client, Transport } from "viem";
-import type { SmartContractAccount } from "../../account/smartContractAccount";
+import type {
+  GetEntryPointFromAccount,
+  SmartContractAccount,
+} from "../../account/smartContractAccount";
 import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
-import type { EntryPointVersion } from "../../entrypoint/types";
 import { AccountNotFoundError } from "../../errors/account.js";
 import {
   ChainNotFoundError,
@@ -13,15 +15,15 @@ import { deepHexlify, isValidRequest } from "../../utils/index.js";
 import type { SignUserOperationParameters } from "./types";
 
 export async function signUserOperation<
-  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
-    | undefined
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: SignUserOperationParameters<TEntryPointVersion, TAccount>
+  args: SignUserOperationParameters<TAccount>
 ): Promise<UserOperationRequest<TEntryPointVersion>> {
   const { account = client.account } = args;
 
@@ -48,13 +50,7 @@ export async function signUserOperation<
 
   const entryPoint = account.getEntryPoint();
   request.signature = await account.signUserOperationHash(
-    entryPoint.version === "0.6.0"
-      ? entryPoint.getUserOperationHash(
-          request as UserOperationRequest<"0.6.0">
-        )
-      : entryPoint.getUserOperationHash(
-          request as UserOperationRequest<"0.7.0">
-        )
+    entryPoint.getUserOperationHash(request)
   );
 
   return request as UserOperationRequest<TEntryPointVersion>;

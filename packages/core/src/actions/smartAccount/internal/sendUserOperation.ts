@@ -1,11 +1,11 @@
 import type { Chain, Transport } from "viem";
 import type {
   GetAccountParameter,
+  GetEntryPointFromAccount,
   SmartContractAccount,
 } from "../../../account/smartContractAccount";
 import type { BaseSmartAccountClient } from "../../../client/smartAccountClient";
 import type { SendUserOperationResult } from "../../../client/types";
-import type { EntryPointVersion } from "../../../entrypoint/types";
 import { AccountNotFoundError } from "../../../errors/account.js";
 import { ChainNotFoundError } from "../../../errors/client.js";
 import { MismatchingEntryPointError } from "../../../errors/entrypoint.js";
@@ -14,22 +14,17 @@ import type { UserOperationRequest, UserOperationStruct } from "../../../types";
 import { deepHexlify, isValidRequest } from "../../../utils/index.js";
 
 export async function _sendUserOperation<
-  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
-    | undefined
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
-  client: BaseSmartAccountClient<
-    TEntryPointVersion,
-    TTransport,
-    TChain,
-    TAccount
-  >,
+  client: BaseSmartAccountClient<TTransport, TChain, TAccount>,
   args: {
     uoStruct: UserOperationStruct<TEntryPointVersion>;
-  } & GetAccountParameter<TEntryPointVersion, TAccount>
+  } & GetAccountParameter<TAccount>
 ): Promise<SendUserOperationResult<TEntryPointVersion>> {
   const { account = client.account } = args;
   if (!account) {

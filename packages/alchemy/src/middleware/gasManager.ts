@@ -55,10 +55,7 @@ export interface AlchemyGasEstimationOptions {
 }
 
 const dummyPaymasterAndData =
-  <
-    C extends ClientWithAlchemyMethods<TEntryPointVersion>,
-    TEntryPointVersion extends EntryPointVersion
-  >(
+  <C extends ClientWithAlchemyMethods>(
     client: C,
     config: AlchemyGasManagerConfig
   ) =>
@@ -72,10 +69,7 @@ const dummyPaymasterAndData =
     return `${paymasterAddress}${dummyData}` as Address;
   };
 
-export function alchemyGasManagerMiddleware<
-  C extends ClientWithAlchemyMethods<TEntryPointVersion>,
-  TEntryPointVersion extends EntryPointVersion
->(
+export function alchemyGasManagerMiddleware<C extends ClientWithAlchemyMethods>(
   client: C,
   config: AlchemyGasManagerConfig
 ): Pick<
@@ -86,11 +80,10 @@ export function alchemyGasManagerMiddleware<
   const disableGasEstimation =
     gasEstimationOptions?.disableGasEstimation ?? false;
   const fallbackFeeDataGetter =
-    gasEstimationOptions?.fallbackFeeDataGetter ??
-    alchemyFeeEstimator<C, TEntryPointVersion>(client);
+    gasEstimationOptions?.fallbackFeeDataGetter ?? alchemyFeeEstimator(client);
   const fallbackGasEstimator =
     gasEstimationOptions?.fallbackGasEstimator ??
-    defaultGasEstimator<TEntryPointVersion, C>(client);
+    defaultGasEstimator<C>(client);
 
   return {
     gasEstimator: disableGasEstimation
@@ -165,17 +158,14 @@ export function alchemyGasManagerMiddleware<
   };
 }
 
-function requestGasAndPaymasterData<
-  C extends ClientWithAlchemyMethods<TEntryPointVersion>,
-  TEntryPointVersion extends EntryPointVersion
->(
+function requestGasAndPaymasterData<C extends ClientWithAlchemyMethods>(
   client: C,
   config: AlchemyGasManagerConfig
 ): ClientMiddlewareConfig["paymasterAndData"] {
   return {
     dummyPaymasterAndData: dummyPaymasterAndData(client, config),
     paymasterAndData: async (struct, { overrides, feeOptions, account }) => {
-      const userOperation: UserOperationRequest<TEntryPointVersion> =
+      const userOperation: UserOperationRequest<EntryPointVersion> =
         deepHexlify(await resolveProperties(struct));
 
       const overrideField = (
@@ -208,7 +198,7 @@ function requestGasAndPaymasterData<
         return undefined;
       };
 
-      const _overrides: RequestGasAndPaymasterAndDataOverrides<TEntryPointVersion> =
+      const _overrides: RequestGasAndPaymasterAndDataOverrides<EntryPointVersion> =
         filterUndefined({
           maxFeePerGas: overrideField("maxFeePerGas"),
           maxPriorityFeePerGas: overrideField("maxPriorityFeePerGas"),
@@ -239,10 +229,7 @@ function requestGasAndPaymasterData<
   };
 }
 
-const requestPaymasterAndData: <
-  C extends ClientWithAlchemyMethods<TEntryPointVersion>,
-  TEntryPointVersion extends EntryPointVersion
->(
+const requestPaymasterAndData: <C extends ClientWithAlchemyMethods>(
   client: C,
   config: AlchemyGasManagerConfig
 ) => ClientMiddlewareConfig["paymasterAndData"] = (client, config) => ({
