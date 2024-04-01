@@ -1,11 +1,11 @@
 "use client";
 
-import { LogInCard } from "@/components/LogInCard";
-import { ProfileCard } from "@/components/ProfileCard";
-import { useAuthenticateUser } from "@/queries/authenticateUser";
+import { LogInCard } from "@/components/LogInCard.jsx";
+import { ProfileCard } from "@/components/ProfileCard.jsx";
+import { useAuthenticateUser } from "@/queries/authenticateUser.jsx";
 import { AlchemySigner } from "@alchemy/aa-alchemy";
 import { useState } from "react";
-import { TurnkeyIframe } from "../components/TurnkeyIframe";
+import { TurnkeyIframe } from "../components/TurnkeyIframe.jsx";
 
 export default function Home() {
   const [signer] = useState<AlchemySigner | undefined>(() => {

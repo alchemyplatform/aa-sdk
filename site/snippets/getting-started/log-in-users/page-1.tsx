@@ -1,7 +1,7 @@
 "use client";
 
-import { LogInCard } from "../components/LogInCard";
-import { TurnkeyIframe } from "../components/TurnkeyIframe";
+import { LogInCard } from "../components/LogInCard.jsx";
+import { TurnkeyIframe } from "../components/TurnkeyIframe.jsx";
 
 export default function Home() {
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuthenticateUser } from "@/queries/authenticateUser";
+import { useAuthenticateUser } from "@/queries/authenticateUser.jsx";
 import { AlchemySigner } from "@alchemy/aa-alchemy";
 import { useCallback, useState } from "react";
 
