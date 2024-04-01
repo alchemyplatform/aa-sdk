@@ -60,79 +60,9 @@ From the root of NextJS project’s directory, using the NextJS concept of [rout
 
 ::: code-group
 
-```ts [src/app/api/route.ts]
-import { NextResponse } from "next/server";
+<<< @/snippets/getting-started/setup-app/route.ts [src/app/api/route.ts]
 
-export async function POST(
-  req: Request,
-  { params }: { params: { routes: string[] } }
-) {
-  const apiUrl = "https://api.g.alchemy.com";
-  const apiKey = process.env.ALCHEMY_API_KEY;
-
-  if (apiKey == null) {
-    return NextResponse.json(
-      { error: "ALCHEMY_API_KEY is not set" },
-      { status: 500 }
-    );
-  }
-
-  const body = await req.json();
-
-  const res = await fetch(apiUrl + `/${params.routes.join("/")}`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      ...req.headers,
-    },
-    body: JSON.stringify(body),
-  });
-
-  if (!res.ok) {
-    return NextResponse.json(await res.json().catch((e) => ({})), {
-      status: res.status,
-    });
-  }
-
-  return NextResponse.json(await res.json());
-}
-```
-
-```ts [src/app/api/[...routes]/route.ts]
-import { optimismSepolia } from "@alchemy/aa-core";
-import { NextResponse } from "next/server";
-
-export async function POST(req: Request) {
-  // if you want to handle other or multiple chains, you can change this line
-  const rpcUrl = optimismSepolia.rpcUrls.alchemy.http[0];
-  const apiKey = process.env.ALCHEMY_API_KEY;
-
-  if (apiKey == null) {
-    return NextResponse.json(
-      { error: "ALCHEMY_API_KEY is not set" },
-      { status: 500 }
-    );
-  }
-
-  const body = await req.json();
-
-  const res = await fetch(`${rpcUrl}/${apiKey}`, {
-    method: "POST",
-    headers: {
-      ...req.headers,
-    },
-    body: JSON.stringify(body),
-  });
-
-  if (!res.ok) {
-    return NextResponse.json(await res.json().catch((e) => ({})), {
-      status: res.status,
-    });
-  }
-
-  return NextResponse.json(await res.json());
-}
-```
+<<< @/snippets/getting-started/setup-app/routes.ts [src/app/api/[...routes]-route.ts]
 
 :::
 
@@ -148,50 +78,9 @@ These two files should look as follows:
 
 ::: code-group
 
-```ts [src/app/layout.tsx]
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import { Providers } from "./providers";
+<<< @/snippets/getting-started/setup-app/layout.tsx [src/app/layout.tsx]
 
-const inter = Inter({ subsets: ["latin"] });
-
-export const metadata: Metadata = {
-  title: "Embedded Accounts Getting Started",
-  description: "Embedded Accounts Quickstart Guide",
-};
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en">
-      <body className={inter.className}>
-        <Providers>{children}</Providers>
-      </body>
-    </html>
-  );
-}
-```
-
-```ts [src/app/providers.tsx]
-"use client";
-
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { PropsWithChildren, Suspense } from "react";
-
-export const Providers = (props: PropsWithChildren) => {
-  const queryClient = new QueryClient();
-
-  return (
-    <QueryClientProvider client={queryClient}>
-      <Suspense>{props.children}</Suspense>
-    </QueryClientProvider>
-  );
-};
-```
+<<< @/snippets/getting-started/setup-app/providers.tsx [src/app/providers.tsx]
 
 :::
 
