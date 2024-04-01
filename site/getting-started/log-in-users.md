@@ -60,7 +60,7 @@ pnpm run dev
 
 Your application should look like the below image!
 
-<img src="/images/quickstart/embedded-accounts-ui.png" alt="Embedded Accounts UI" />
+<img src="/images/getting-started/embedded-accounts-ui.png" alt="Embedded Accounts UI" />
 
 In the next step, you’ll add functionality to the “Log In” button to send an email to the user to authenticate them.
 
@@ -84,5 +84,4 @@ Lastly, update the UI in `src/app/page.tsx` to render either the `src/app/compon
 
 You’ve now added the full authentication flow for users to create Embedded Accounts, and the experience should look like the video below!
 
-TODO: REPLACE VIDEO
 <VideoEmbed src="/videos/embedded-accounts-auth.mp4" />

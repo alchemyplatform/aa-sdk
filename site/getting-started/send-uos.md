@@ -38,8 +38,7 @@ Now, incorporate this request on a new `src/components/SendUOButton.tsx` file an
 
 That’s it! You’ve now enabled users to sendUOs from their Embedded Account on your application, and the experience should look like the video below!
 
-TODO: REPLACE VIDEO
-<VideoEmbed src="/videos/embedded-accounts-auth.mp4" />
+<VideoEmbed src="/videos/embedded-accounts-full.mp4" />
 
 Congratulations! Using Account Kit, the Alchemy Signer, and Alchemy Modular Smart Contract Account, you created an application that authenticates a user by email to create their Embedded Account, and then uses that account to send a UserOperation!
 

@@ -48,9 +48,9 @@ pnpm i @alchemy/aa-alchemy @alchemy/aa-accounts @alchemy/aa-core viem @tanstack/
 
 The three Alchemy packages - `@alchemy/aa-alchemy`, `@alchemy/aa-accounts`, and `@alchemy/aa-core` - come from the [Alchemy Account Kit](https://accountkit.alchemy.com/), and will provide the key building blocks for created Embedded Accounts.
 
-`[viem](https://viem.sh/)` is a useful Web3 Utils library and a key dependency of Account Kit.
+[`viem`](https://viem.sh/) is a useful Web3 Utils library and a key dependency of Account Kit.
 
-`[@tanstack/react-query](https://tanstack.com/query/latest)` is a popular library for managing client-side state in NextJS and React applications. You’re welcome to use another state management library or vanilla react, but the rest of this demo will use ReactQuery.
+[`@tanstack/react-query`](https://tanstack.com/query/latest) is a popular library for managing client-side state in NextJS and React applications. You’re welcome to use another state management library or vanilla react, but the rest of this demo will use ReactQuery.
 
 ## Set up your backend
 
@@ -66,7 +66,7 @@ From the root of NextJS project’s directory, using the NextJS concept of [rout
 
 :::
 
-Notice that here, you’ll be using the ALCHEMY_API_KEY environment variable you set in an earlier step. Also note that the backend routes will make requests to Alchemy’s infrastructure for the Optimism Sepolia network.
+Notice that here, you’ll be using the `ALCHEMY_API_KEY` environment variable you set in an earlier step. Also note that the backend routes will make requests to Alchemy’s infrastructure for the Arbitrum Sepolia network.
 
 ## Set up your frontend
 
