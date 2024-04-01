@@ -24,7 +24,7 @@ Gas fees are a significant barrier to entry for new user of your app. With Accou
 
 ## How to sponsor gas
 
-After [installing `aa-sdk`](/getting-started/setup#install-the-packages) in your project, follow these steps to sponsor gas.
+After [installing `aa-sdk`](/getting-started/introduction) in your project, follow these steps to sponsor gas.
 
 ### 1. Create a Gas Manager policy
 
