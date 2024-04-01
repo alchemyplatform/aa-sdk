@@ -18,8 +18,9 @@ import {
   type PublicActions,
   type PublicRpcSchema,
   type Transport,
+  hashMessage,
 } from "viem";
-import { type Signature } from "./types.js";
+import { type Signature, type SignerType } from "./types.js";
 
 type GetSignerTypeParams<
   TTransport extends Transport = Transport,
@@ -52,8 +53,8 @@ export const getSignerType = async <
   const byteCode = await client.getBytecode({ address: signerAddress });
 
   return (byteCode ?? "0x") === "0x" && size(signature) === 65
-    ? SignerType.EOA
-    : SignerType.Contract;
+    ? "EOA"
+    : "CONTRACT";
 };
 
 export const formatSignatures = (signatures: Signature[]) => {
@@ -155,16 +156,19 @@ export const splitAggregatedSignature = async ({
   })();
 
   const signatures: Promise<Signature>[] = signatureHexes.map(
-    async (signature) => {
+    async (signature): Promise<Signature> => {
       // in RSV, v is the last byte of a 65 byte signature
       const v = BigInt(takeBytes(signature, { count: 1, offset: 64 }));
-      const signerType = v === 0n ? SignerType.Contract : SignerType.EOA;
-      if (signerType === SignerType.EOA) {
-        const hash = account.getEntryPoint().getUserOperationHash({
-          ...request,
-          preVerificationGas: pvg,
-          maxFeePerGas,
-          maxPriorityFeePerGas,
+      const signerType = v === 0n ? "CONTRACT" : "EOA";
+      if (signerType === "EOA") {
+        // To recover the signer from just the user op and the raw EOA signature, we need to perform an EC recover. The input hash to recover from should be the original user op hash, with the upper limit gas values, wrapped in the standard EIP-191 wrapper format.
+        const hash = hashMessage({
+          raw: account.getEntryPoint().getUserOperationHash({
+            ...request,
+            preVerificationGas: pvg,
+            maxFeePerGas,
+            maxPriorityFeePerGas,
+          }),
         });
 
         return {

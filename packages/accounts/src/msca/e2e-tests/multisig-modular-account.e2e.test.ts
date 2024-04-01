@@ -14,6 +14,8 @@ import {
   type Chain,
   type HDAccount,
   createPublicClient,
+  fromHex,
+  pad,
 } from "viem";
 import { createMultisigModularAccountClient } from "../client.js";
 import { formatSignatures } from "../plugins/multisig/index.js";
@@ -198,7 +200,85 @@ describe("Multisig Modular Account Tests", async () => {
     ).toBe(true);
   });
 
-  it("should correctly verify 1271 signatures over typed data for an undeployed account", async () => {
+  it("should correctly sign and verify 6492 signatures over messages for an undeployed account", async () => {
+    // Add a fourth signer to change the counterfactual (not yet deployed)
+
+    const signer4: SmartAccountSigner<HDAccount> =
+      LocalAccountSigner.mnemonicToAccountSigner(OWNER_MNEMONIC, {
+        accountIndex: 3,
+      });
+
+    const provider1 = await givenConnectedProvider({
+      signer: signer1,
+      chain,
+      owners: [...owners, await signer4.getAddress()],
+      threshold,
+    });
+    const provider2 = await givenConnectedProvider({
+      signer: signer2,
+      chain,
+      owners: [...owners, await signer4.getAddress()],
+      threshold,
+    });
+
+    const {
+      account: { address },
+    } = provider1;
+    expect(address).toEqual("0xB77423329491BAF4b7B904887627C55Cd53968f8");
+
+    const message = "test";
+
+    const signature1 = await provider1.account.signMessage({ message });
+
+    // console.log("signature1: ", signature1);
+
+    const signature2 = await provider2.account.signMessage({ message });
+
+    // console.log("signature2: ", signature2);
+
+    const combined = formatSignatures([
+      {
+        userOpSigType: "ACTUAL",
+        signerType: "EOA",
+        signature: signature1,
+        signer: await signer1.getAddress(),
+      },
+      {
+        userOpSigType: "ACTUAL",
+        signerType: "EOA",
+        signature: signature2,
+        signer: await signer2.getAddress(),
+      },
+    ]);
+
+    // console.log("combined: ", combined);
+
+    const [, factoryCalldata] = parseFactoryAddressFromAccountInitCode(
+      await provider1.account.getInitCode()
+    );
+
+    const wrappedSig = wrapSignatureWith6492({
+      factoryAddress: provider1.account.getFactoryAddress(),
+      factoryCalldata,
+      signature: combined,
+    });
+
+    // todo: can we override verifyMessage & verifyTypedData to internally only use the public client, to prevent the EIP-684 issue?
+    const publicClient = createPublicClient({
+      transport: http(`${chain.rpcUrls.alchemy.http[0]}/${API_KEY!}`),
+      chain,
+    });
+
+    expect(
+      await publicClient.verifyMessage({
+        address: provider1.getAddress(),
+        message,
+        signature: wrappedSig,
+      })
+    ).toBe(true);
+  });
+
+  it("should correctly sign and verify 6492 signatures over typed data for an undeployed account", async () => {
     // Add a fourth signer to change the counterfactual (not yet deployed)
 
     const signer4: SmartAccountSigner<HDAccount> =
@@ -389,7 +469,76 @@ describe("Multisig Modular Account Tests", async () => {
     await expect(txnHash).resolves.not.toThrowError();
   }, 100000);
 
-  // todo: 3/3 account, use the "middle" signature generating function too.
+  // todo:
+  // Using a paymaster (needs the "alchemy" style client)
+
+  it("should execute successfully with 3/3 signers", async () => {
+    const higherThreshold = 3n;
+
+    const provider1 = await givenConnectedProvider({
+      signer: signer1,
+      chain,
+      owners,
+      threshold: higherThreshold,
+    });
+    const provider2 = await givenConnectedProvider({
+      signer: signer2,
+      chain,
+      owners,
+      threshold: higherThreshold,
+    });
+    const provider3 = await givenConnectedProvider({
+      signer: signer3,
+      chain,
+      owners,
+      threshold: higherThreshold,
+    });
+
+    const {
+      account: { address },
+    } = provider1;
+    expect(address).toEqual("0xE2c5429De9133F03f3D36d2Be3695AB315D65ECa");
+
+    const { request, signatureObj: signature1 } =
+      await provider1.proposeUserOperation({
+        uo: {
+          target: provider1.getAddress(),
+          data: "0x",
+        },
+      });
+
+    // console.log("signature1");
+    // console.log(signature1);
+
+    const { aggregatedSignature } = await provider2.signMultisigUserOperation({
+      account: provider2.account,
+      signatures: [signature1],
+      userOperationRequest: request,
+    });
+
+    // console.log("aggregatedSignature: ", aggregatedSignature);
+
+    // parse the UO request fields into the override format to send to sendUserOperation
+    // todo: helper function to go from UserOperationRequest to SendUserOperationParams?
+
+    const result = await provider3.sendUserOperation({
+      uo: request.callData,
+      overrides: {
+        callGasLimit: request.callGasLimit,
+        verificationGasLimit: request.verificationGasLimit,
+        nonceKey: fromHex(`0x${pad(request.nonce).slice(2, 26)}`, "bigint"), // Nonce key is the first 24 bytes of the nonce
+      },
+      context: {
+        signature: aggregatedSignature,
+      },
+    });
+
+    const txnHash = provider3.waitForUserOperationTransaction({
+      hash: result.hash,
+    });
+
+    await expect(txnHash).resolves.not.toThrowError();
+  }, 100000);
 });
 
 const givenConnectedProvider = async ({

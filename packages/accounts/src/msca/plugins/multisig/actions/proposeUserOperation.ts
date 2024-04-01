@@ -7,7 +7,7 @@ import {
   type SmartContractAccount,
 } from "@alchemy/aa-core";
 import { type Chain, type Client, type Transport } from "viem";
-import { type ProposeUserOperationResult } from "../types.js";
+import { type ProposeUserOperationResult, type Signature } from "../types.js";
 import { combineSignatures, getSignerType } from "../utils.js";
 
 export async function proposeUserOperation<
@@ -66,7 +66,7 @@ export async function proposeUserOperation<
     signer: account.getSigner(),
   });
 
-  const signatureObj = {
+  const signatureObj: Signature = {
     signature: request.signature,
     signer: await account.getSigner().getAddress(),
     signerType,

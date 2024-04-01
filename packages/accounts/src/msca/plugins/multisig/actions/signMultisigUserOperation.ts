@@ -6,13 +6,13 @@ import {
   isSmartAccountWithSigner,
   type SmartContractAccount,
 } from "@alchemy/aa-core";
-import { concat, type Chain, type Client, type Transport } from "viem";
+import { type Chain, type Client, type Transport } from "viem";
 import {
   type Signature,
   type SignMultisigUserOperationParams,
   type SignMultisigUserOperationResult,
 } from "../types.js";
-import { formatSignatures, getSignerType } from "../utils.js";
+import { combineSignatures, getSignerType } from "../utils.js";
 
 export async function signMultisigUserOperation<
   TTransport extends Transport = Transport,
@@ -63,16 +63,15 @@ export async function signMultisigUserOperation<
     signature,
     userOpSigType: "UPPERLIMIT",
   };
-  const aggregatedSignature = formatSignatures(signatures.concat(signatureObj));
 
   return {
     signatureObj,
     signature,
-    aggregatedSignature: concat([
-      userOperationRequest.preVerificationGas,
-      userOperationRequest.maxFeePerGas,
-      userOperationRequest.maxPriorityFeePerGas,
-      aggregatedSignature,
-    ]),
+    aggregatedSignature: combineSignatures({
+      signatures: [...signatures, signatureObj],
+      upperLimitMaxFeePerGas: userOperationRequest.maxFeePerGas,
+      upperLimitMaxPriorityFeePerGas: userOperationRequest.maxPriorityFeePerGas,
+      upperLimitPvg: userOperationRequest.preVerificationGas,
+    }),
   };
 }
