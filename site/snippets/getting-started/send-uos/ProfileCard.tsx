@@ -3,7 +3,7 @@
 import { MultiOwnerModularAccount } from "@alchemy/aa-accounts";
 import { User, createAlchemySmartAccountClient } from "@alchemy/aa-alchemy";
 import { useState } from "react";
-import { optimismSepolia } from "viem/chains";
+import { arbitrumSepolia } from "viem/chains";
 import { SendUOButton } from "./SendUOButton.jsx";
 
 export interface ProfileCardProps {
@@ -25,7 +25,7 @@ export const ProfileCard = ({ user, account }: ProfileCardProps) => {
     }
 
     return createAlchemySmartAccountClient({
-      chain: optimismSepolia,
+      chain: arbitrumSepolia,
       rpcUrl: "/api/rpc",
       account,
       gasManagerConfig: {

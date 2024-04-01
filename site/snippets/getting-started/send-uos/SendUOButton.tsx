@@ -2,7 +2,7 @@ import { useSendUserOperation } from "@/queries/sendUserOperation.jsx";
 import { MultiOwnerModularAccount } from "@alchemy/aa-accounts";
 import { AlchemySmartAccountClient } from "@alchemy/aa-alchemy";
 import { Chain, Transport } from "viem";
-import { optimismSepolia } from "viem/chains";
+import { arbitrumSepolia } from "viem/chains";
 
 export interface SendUOButtonProps {
   provider:
@@ -42,7 +42,7 @@ export const SendUOButton = ({ provider }: SendUOButtonProps) => {
         </button>
       ) : (
         <a
-          href={`${optimismSepolia.blockExplorers.default.url}/tx/${txnHash}`}
+          href={`${arbitrumSepolia.blockExplorers.default.url}/tx/${txnHash}`}
           target="_blank"
           rel="noopener noreferrer"
           className="w-full transform rounded-lg bg-[#363FF9] p-3 font-semibold transition duration-500 ease-in-out hover:scale-105"
