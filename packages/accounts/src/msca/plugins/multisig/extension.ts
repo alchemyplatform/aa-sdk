@@ -1,10 +1,12 @@
 import {
+  AccountNotFoundError,
   type GetAccountParameter,
   type IsUndefined,
   type SendUserOperationParameters,
   type SmartContractAccount,
 } from "@alchemy/aa-core";
 import { type Address, type Chain, type Client, type Transport } from "viem";
+import { isMultisigModularAccount } from "../../account/multisigAccount.js";
 import type { GetPluginAddressParameter } from "../types.js";
 import { getThreshold } from "./actions/getThreshold.js";
 import { isOwnerOf } from "./actions/isOwnerOf.js";
@@ -47,6 +49,11 @@ export type MultisigPluginActions<
   signMultisigUserOperation: (
     params: SignMultisigUserOperationParams<TAccount>
   ) => Promise<SignMultisigUserOperationResult>;
+
+  updateOwnership: MultisigPluginActions_<
+    TAccount,
+    MultisigUserOperationContext
+  >["updateOwnership"];
 } & (IsUndefined<TAccount> extends false
     ? {
         readOwners: (
@@ -71,27 +78,58 @@ export const multisigPluginActions: <
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>
-) => ({
-  ...multisigPluginActions_(client),
-  readOwners: (
-    args: GetPluginAddressParameter & GetAccountParameter<TAccount>
-  ) => readOwners(client, args),
+) => {
+  const { updateOwnership, ...og } = multisigPluginActions_(client);
 
-  isOwnerOf: (
-    args: { address: Address } & GetPluginAddressParameter &
-      GetAccountParameter<TAccount>
-  ) => isOwnerOf(client, args),
+  return {
+    ...og,
+    updateOwnership: async ({
+      args,
+      context,
+      account: account_,
+      overrides,
+    }) => {
+      const account = account_ ?? client.account;
+      if (!account) {
+        throw new AccountNotFoundError();
+      }
 
-  getThreshold: (
-    args: GetPluginAddressParameter & GetAccountParameter<TAccount>
-  ) => getThreshold(client, args),
+      const result = await updateOwnership({
+        args,
+        context,
+        account,
+        overrides,
+      });
 
-  proposeUserOperation: (
-    args: SendUserOperationParameters<TAccount, undefined>
-  ) => proposeUserOperation(client, args),
+      if (!isMultisigModularAccount(account)) {
+        throw new Error("Account is not a multisig account");
+      }
 
-  signMultisigUserOperation: (
-    params: SignMultisigUserOperationParams<TAccount>
-  ): Promise<SignMultisigUserOperationResult> =>
-    signMultisigUserOperation(client, params),
-});
+      // ah wait... we can't do this. what if it reverts?
+      account.threshold = args[2];
+
+      return result;
+    },
+    readOwners: (
+      args: GetPluginAddressParameter & GetAccountParameter<TAccount>
+    ) => readOwners(client, args),
+
+    isOwnerOf: (
+      args: { address: Address } & GetPluginAddressParameter &
+        GetAccountParameter<TAccount>
+    ) => isOwnerOf(client, args),
+
+    getThreshold: (
+      args: GetPluginAddressParameter & GetAccountParameter<TAccount>
+    ) => getThreshold(client, args),
+
+    proposeUserOperation: (
+      args: SendUserOperationParameters<TAccount, undefined>
+    ) => proposeUserOperation(client, args),
+
+    signMultisigUserOperation: (
+      params: SignMultisigUserOperationParams<TAccount>
+    ): Promise<SignMultisigUserOperationResult> =>
+      signMultisigUserOperation(client, params),
+  };
+};

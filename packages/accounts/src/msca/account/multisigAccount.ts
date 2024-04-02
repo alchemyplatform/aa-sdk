@@ -19,6 +19,7 @@ import {
   type Transport,
 } from "viem";
 import { MultisigModularAccountFactoryAbi } from "../abis/MultisigModularAccountFactory.js";
+import { MultisigPlugin } from "../plugins/multisig/plugin.js";
 import { multisigMessageSigner } from "../plugins/multisig/signer.js";
 import { getDefaultMultisigModularAccountFactoryAddress } from "../utils.js";
 import { standardExecutor } from "./standardExecutor.js";
@@ -26,7 +27,8 @@ import { standardExecutor } from "./standardExecutor.js";
 export type MultisigModularAccount<
   TSigner extends SmartAccountSigner = SmartAccountSigner
 > = SmartContractAccountWithSigner<"MultisigModularAccount", TSigner> & {
-  getLocalThreshold: () => bigint;
+  get threshold(): bigint;
+  set threshold(value: bigint);
 };
 
 export type CreateMultisigModularAccountParams<
@@ -43,6 +45,7 @@ export type CreateMultisigModularAccountParams<
   entryPoint?: EntryPointDef<UserOperationRequest>;
   accountAddress?: Address;
   initCode?: Hex;
+  pluginAddress?: Address;
 };
 
 export async function createMultisigModularAccount<
@@ -62,7 +65,8 @@ export async function createMultisigModularAccount({
   factoryAddress = getDefaultMultisigModularAccountFactoryAddress(chain),
   owners = [],
   salt = 0n,
-  threshold,
+  threshold: threshold_,
+  pluginAddress,
 }: CreateMultisigModularAccountParams): Promise<MultisigModularAccount> {
   const client = createBundlerClient({
     transport,
@@ -91,7 +95,7 @@ export async function createMultisigModularAccount({
       encodeFunctionData({
         abi: MultisigModularAccountFactoryAbi,
         functionName: "createAccount",
-        args: [salt, sigs_, threshold],
+        args: [salt, sigs_, threshold_],
       }),
     ]);
   };
@@ -102,6 +106,10 @@ export async function createMultisigModularAccount({
     accountAddress: accountAddress,
     getAccountInitCode,
   });
+
+  let threshold = await MultisigPlugin.getContract(client, pluginAddress)
+    .read.ownershipInfoOf([accountAddress])
+    .then((x) => x[1] ?? threshold_);
 
   const baseAccount = await toSmartContractAccount({
     transport,
@@ -121,7 +129,12 @@ export async function createMultisigModularAccount({
 
   return {
     ...baseAccount,
-    getLocalThreshold: () => threshold,
+    get threshold() {
+      return threshold;
+    },
+    set threshold(value) {
+      threshold = value;
+    },
     publicKey: await signer.getAddress(),
     getSigner: () => signer,
   };
