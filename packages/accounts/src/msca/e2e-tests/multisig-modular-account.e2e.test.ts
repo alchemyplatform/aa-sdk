@@ -49,8 +49,6 @@ describe("Multisig Modular Account Tests", async () => {
     await signer3.getAddress(),
   ];
 
-  // todo: 1271 signature verification
-
   it("should successfully get counterfactual address", async () => {
     const {
       account: { address },

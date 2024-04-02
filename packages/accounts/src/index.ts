@@ -58,7 +58,7 @@ export {
   MultisigPlugin,
   MultisigPluginAbi,
   MultisigPluginExecutionFunctionAbi,
-  SignerType,
+  type SignerType,
   multisigPluginActions,
   multisigSignatureMiddleware,
 } from "./msca/plugins/multisig/index.js";

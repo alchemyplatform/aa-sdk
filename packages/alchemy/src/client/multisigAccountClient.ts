@@ -12,7 +12,10 @@ import {
   type MultisigUserOperationContext,
   type PluginManagerActions,
 } from "@alchemy/aa-accounts";
-import type { SmartAccountSigner } from "@alchemy/aa-core";
+import {
+  smartAccountClientActions,
+  type SmartAccountSigner,
+} from "@alchemy/aa-core";
 import {
   custom,
   type Chain,
@@ -27,6 +30,8 @@ import type {
   AlchemySmartAccountClient,
   AlchemySmartAccountClientConfig,
 } from "./smartAccountClient";
+
+// todo: this file seems somewhat duplicated with ./modularAccountClient.ts, but that file has some multi-owner specific fields. Is there a way to refactor these two to de-dupe?
 
 export type AlchemyMultisigAccountClientConfig<
   TSigner extends SmartAccountSigner = SmartAccountSigner
@@ -97,6 +102,7 @@ export async function createMultisigAccountAlchemyClient(
     opts,
     signUserOperation: multisigSignatureMiddleware,
   })
+    .extend(smartAccountClientActions)
     .extend(multisigPluginActions)
     .extend(pluginManagerActions)
     .extend(accountLoupeActions);

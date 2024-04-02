@@ -12,5 +12,5 @@ export {
   MultisigPluginExecutionFunctionAbi,
 } from "./plugin.js";
 export type * from "./types.js";
-export { SignerType } from "./types.js";
+export { type SignerType } from "./types.js";
 export { formatSignatures, getSignerType } from "./utils.js";
