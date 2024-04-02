@@ -30,4 +30,8 @@ export type { AlchemyProviderConfig } from "./type.js";
 export { getAlchemyPaymasterAddress } from "./gas-manager.js";
 
 export type * from "./signer/index.js";
-export { AlchemySigner, AlchemySignerClient } from "./signer/index.js";
+export {
+  AlchemySigner,
+  AlchemySignerClient,
+  AlchemySignerStatus,
+} from "./signer/index.js";

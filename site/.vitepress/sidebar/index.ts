@@ -9,9 +9,25 @@ export const sidebar: DefaultTheme.Sidebar = [
         text: "Overview",
         link: "/getting-started/overview",
       },
-      { text: "Quick start", link: "/getting-started/setup" },
-      // TODO: remove this once the quick start has been refactored
-      { text: "Alchemy Signer", link: "/signers/alchemy-signer/" },
+      {
+        text: "Quick start (Embedded Accounts)",
+        items: [
+          { text: "Introduction", link: "/getting-started/introduction" },
+          {
+            text: "Configure your Embedded Accounts",
+            link: "/getting-started/configure-eas",
+          },
+          {
+            text: "Setup your application",
+            link: "/getting-started/setup-app",
+          },
+          {
+            text: "Log users into Embedded Accounts",
+            link: "/getting-started/log-in-users",
+          },
+          { text: "Send UserOperations", link: "/getting-started/send-uos" },
+        ],
+      },
     ],
   },
   {
