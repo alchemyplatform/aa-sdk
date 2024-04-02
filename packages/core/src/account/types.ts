@@ -3,7 +3,6 @@ import type { Hash, Hex, HttpTransport, Transport } from "viem";
 import type { SignTypedDataParameters } from "viem/accounts";
 import type { z } from "zod";
 import type { BundlerClient } from "../client/bundlerClient";
-import type { EntryPointVersion } from "../entrypoint/types";
 import type { SmartAccountSigner } from "../signer/types";
 import type { BatchUserOperationCallData } from "../types";
 import type {
@@ -18,38 +17,23 @@ export type SignTypedDataParams = Omit<SignTypedDataParameters, "privateKey">;
  * @deprecated don't use base smart account anymore, migrate to using toSmartContractAccount instead
  */
 export type BaseSmartAccountParams<
-  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 > = z.input<
-  ReturnType<
-    typeof createBaseSmartAccountParamsSchema<
-      TEntryPointVersion,
-      TTransport,
-      TSigner
-    >
-  >
+  ReturnType<typeof createBaseSmartAccountParamsSchema<TTransport, TSigner>>
 >;
 
 export type SimpleSmartAccountParams<
-  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 > = z.input<
-  ReturnType<
-    typeof SimpleSmartAccountParamsSchema<
-      TEntryPointVersion,
-      TTransport,
-      TSigner
-    >
-  >
+  ReturnType<typeof SimpleSmartAccountParamsSchema<TTransport, TSigner>>
 >;
 
 /**
  * @deprecated use `toSmartContractAccount` instead for creating instances of smart accounts
  */
 export interface ISmartContractAccount<
-  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 > {
@@ -57,8 +41,8 @@ export interface ISmartContractAccount<
    * The RPC provider the account uses to make RPC calls
    */
   readonly rpcProvider:
-    | BundlerClient<TEntryPointVersion, TTransport>
-    | BundlerClient<TEntryPointVersion, HttpTransport>;
+    | BundlerClient<TTransport>
+    | BundlerClient<HttpTransport>;
 
   /**
    * @returns the init code for the account

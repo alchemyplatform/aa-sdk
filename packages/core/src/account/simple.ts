@@ -13,12 +13,11 @@ import { SimpleAccountFactoryAbi } from "../abis/SimpleAccountFactoryAbi.js";
 import { createBundlerClient } from "../client/bundlerClient.js";
 import { getEntryPoint } from "../entrypoint/index.js";
 import type {
-  EntryPointDef,
-  EntryPointDefRegistry,
+  DefaultEntryPointVersion,
+  EntryPointParameter,
   EntryPointVersion,
 } from "../entrypoint/types.js";
 import { AccountRequiresOwnerError } from "../errors/account.js";
-import { InvalidEntryPointError } from "../errors/entrypoint.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import type { BatchUserOperationCallData } from "../types.js";
 import { BaseSmartContractAccount } from "./base.js";
@@ -31,24 +30,20 @@ import {
 import type { SimpleSmartAccountParams } from "./types.js";
 
 class SimpleSmartContractAccount<
-  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport | FallbackTransport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner
-> extends BaseSmartContractAccount<TEntryPointVersion, TTransport, TSigner> {
+> extends BaseSmartContractAccount<TTransport, TSigner> {
   protected index: bigint;
 
-  constructor(
-    params: SimpleSmartAccountParams<TEntryPointVersion, TTransport, TSigner>
-  ) {
-    SimpleSmartAccountParamsSchema<TEntryPointVersion, TTransport>().parse(
-      params
-    );
+  constructor(params: SimpleSmartAccountParams<TTransport, TSigner>) {
+    SimpleSmartAccountParamsSchema().parse(params);
 
     // This is a hack for now, we should kill the SimpleSmart Account when we kill Base Account
     const client = createBundlerClient({
       transport: params.transport as TTransport,
       chain: params.chain,
     });
+
     // @ts-expect-error zod custom type not recognized as required params for signers
     super({ ...params, rpcClient: client });
     this.signer = params.signer as TSigner;
@@ -110,144 +105,84 @@ class SimpleSmartContractAccount<
 }
 
 export type SimpleSmartAccount<
-  TEntryPointVersion extends EntryPointVersion,
-  TSigner extends SmartAccountSigner
+  TSigner extends SmartAccountSigner,
+  TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
 > = SmartContractAccountWithSigner<
-  TEntryPointVersion,
   "SimpleAccount",
-  TSigner
+  TSigner,
+  TEntryPointVersion
 >;
 
-export async function createSimpleSmartAccount<
-  TEntryPointDef extends EntryPointDefRegistry[TEntryPointVersion],
-  TEntryPointVersion extends EntryPointVersion = TEntryPointDef extends EntryPointDef<
-    infer U
-  >
-    ? U
-    : never,
+export type CreateSimpleAccountParams<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner
->({
-  chain,
-  entryPoint,
-  ...params
-}: Omit<
-  SimpleSmartAccountParams<TEntryPointVersion, TTransport, TSigner>,
+> = Omit<
+  SimpleSmartAccountParams<TTransport, TSigner>,
   "chain" | "accountAddress" | "entryPointAddress"
 > &
   Pick<
     ToSmartContractAccountParams<
-      TEntryPointVersion,
       "SimpleAccount",
       TTransport,
-      Chain
+      Chain,
+      DefaultEntryPointVersion
     >,
-    "chain" | "transport" | "accountAddress" | "entryPoint"
-  >): Promise<SimpleSmartAccount<TEntryPointVersion, TSigner>>;
+    "chain" | "transport" | "accountAddress"
+  > & {
+    entryPoint?: EntryPointParameter<DefaultEntryPointVersion>["entryPoint"];
+  };
 
 export async function createSimpleSmartAccount<
-  TEntryPointDef extends EntryPointDefRegistry[TEntryPointVersion],
-  TEntryPointVersion extends EntryPointVersion = TEntryPointDef extends EntryPointDef<
-    infer U
-  >
-    ? U
-    : never,
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >({
   chain,
-  entryPoint,
+  entryPoint = getEntryPoint(chain),
   ...params
-}: Omit<
-  SimpleSmartAccountParams<TEntryPointVersion, TTransport, TSigner>,
-  "chain" | "accountAddress" | "entryPointAddress"
-> &
-  Pick<
-    ToSmartContractAccountParams<
-      TEntryPointVersion,
-      "SimpleAccount",
-      TTransport,
-      Chain
-    >,
-    "chain" | "transport" | "accountAddress" | "entryPoint"
-  >): Promise<SimpleSmartAccount<EntryPointVersion, TSigner>> {
+}: CreateSimpleAccountParams<TTransport, TSigner>): Promise<
+  SimpleSmartAccount<TSigner>
+> {
   if (!params.signer) throw new AccountRequiresOwnerError("SimpleAccount");
-  const _entryPoint = entryPoint ?? getEntryPoint(chain);
-  const simpleAccount = new SimpleSmartContractAccount<
-    TEntryPointVersion,
-    TTransport
-    // @ts-expect-error zod custom type not recognized as required params for signers
-  >({
+  const _entryPoint = entryPoint;
+  const simpleAccount = new SimpleSmartContractAccount(
+    SimpleSmartAccountParamsSchema().parse({
+      chain,
+      entryPointAddress: _entryPoint.address,
+      ...params,
+    })
+  );
+
+  const parsedParams = SimpleSmartAccountParamsSchema().parse({
     chain,
     entryPointAddress: _entryPoint.address,
     ...params,
   });
-  const parsedParams = SimpleSmartAccountParamsSchema<
-    TEntryPointVersion,
-    TTransport,
-    TSigner
-  >().parse({ chain, entryPointAddress: _entryPoint.address, ...params });
 
-  const base =
-    _entryPoint.version === "0.6.0"
-      ? await toSmartContractAccount({
-          source: "SimpleAccount",
-          transport: params.transport,
-          chain,
-          encodeBatchExecute:
-            simpleAccount.encodeBatchExecute.bind(simpleAccount),
-          encodeExecute: (tx) =>
-            simpleAccount.encodeExecute.bind(simpleAccount)(
-              tx.target,
-              tx.value ?? 0n,
-              tx.data
-            ),
-          entryPoint: _entryPoint as EntryPointDef<"0.6.0">,
-          getAccountInitCode: async () => {
-            if (parsedParams.initCode) return parsedParams.initCode as Hex;
-            return simpleAccount.getAccountInitCode();
-          },
-          getDummySignature:
-            simpleAccount.getDummySignature.bind(simpleAccount),
-          signMessage: ({ message }) =>
-            simpleAccount.signMessage(
-              typeof message === "string" ? message : message.raw
-            ),
-          // @ts-expect-error these types still represent the same thing, but they are just a little off in there definitions
-          signTypedData: simpleAccount.signTypedData.bind(simpleAccount),
-          accountAddress: parsedParams.accountAddress,
-        })
-      : _entryPoint.version === "0.7.0"
-      ? await toSmartContractAccount({
-          source: "SimpleAccount",
-          transport: params.transport,
-          chain,
-          encodeBatchExecute:
-            simpleAccount.encodeBatchExecute.bind(simpleAccount),
-          encodeExecute: (tx) =>
-            simpleAccount.encodeExecute.bind(simpleAccount)(
-              tx.target,
-              tx.value ?? 0n,
-              tx.data
-            ),
-          entryPoint: _entryPoint as EntryPointDef<"0.7.0">,
-          getAccountInitCode: async () => {
-            if (parsedParams.initCode) return parsedParams.initCode as Hex;
-            return simpleAccount.getAccountInitCode();
-          },
-          getDummySignature:
-            simpleAccount.getDummySignature.bind(simpleAccount),
-          signMessage: ({ message }) =>
-            simpleAccount.signMessage(
-              typeof message === "string" ? message : message.raw
-            ),
-          // @ts-expect-error these types still represent the same thing, but they are just a little off in there definitions
-          signTypedData: simpleAccount.signTypedData.bind(simpleAccount),
-          accountAddress: parsedParams.accountAddress,
-        })
-      : undefined;
-
-  if (!base) throw new InvalidEntryPointError(chain, _entryPoint.version);
+  const base = await toSmartContractAccount({
+    source: "SimpleAccount",
+    transport: params.transport,
+    chain,
+    encodeBatchExecute: simpleAccount.encodeBatchExecute.bind(simpleAccount),
+    encodeExecute: (tx) =>
+      simpleAccount.encodeExecute.bind(simpleAccount)(
+        tx.target,
+        tx.value ?? 0n,
+        tx.data
+      ),
+    entryPoint: _entryPoint,
+    getAccountInitCode: async () => {
+      if (parsedParams.initCode) return parsedParams.initCode as Hex;
+      return simpleAccount.getAccountInitCode();
+    },
+    getDummySignature: simpleAccount.getDummySignature.bind(simpleAccount),
+    signMessage: ({ message }) =>
+      simpleAccount.signMessage(
+        typeof message === "string" ? message : message.raw
+      ),
+    // @ts-expect-error these types still represent the same thing, but they are just a little off in there definitions
+    signTypedData: simpleAccount.signTypedData.bind(simpleAccount),
+    accountAddress: parsedParams.accountAddress,
+  });
 
   return {
     ...base,

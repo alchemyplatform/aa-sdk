@@ -17,7 +17,6 @@ import {
   polygonAmoy,
   polygonMumbai,
   sepolia,
-  type EntryPointVersion,
   type GetAccountParameter,
   type SmartAccountClient,
   type SmartAccountSigner,
@@ -74,25 +73,20 @@ export const getDefaultMultiOwnerModularAccountFactoryAddress = (
 };
 
 export async function getMSCAUpgradeToData<
-  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
   TAccount extends
-    | SmartContractAccountWithSigner<TEntryPointVersion, string, TSigner>
-    | undefined =
-    | SmartContractAccountWithSigner<TEntryPointVersion, string, TSigner>
-    | undefined
+    | SmartContractAccountWithSigner<string, TSigner>
+    | undefined = SmartContractAccountWithSigner<string, TSigner> | undefined
 >(
-  client: SmartAccountClient<TEntryPointVersion, TTransport, TChain, TAccount>,
+  client: SmartAccountClient<TTransport, TChain, TAccount>,
   args: {
     multiOwnerPluginAddress?: Address;
-  } & GetAccountParameter<TEntryPointVersion, TAccount>
+  } & GetAccountParameter<TAccount>
 ): Promise<
   UpgradeToData & {
-    createMAAccount: () => Promise<
-      MultiOwnerModularAccount<TEntryPointVersion, TSigner>
-    >;
+    createMAAccount: () => Promise<MultiOwnerModularAccount<TSigner>>;
   }
 > {
   const { account: account_ = client.account, multiOwnerPluginAddress } = args;
@@ -100,11 +94,7 @@ export async function getMSCAUpgradeToData<
   if (!account_) {
     throw new AccountNotFoundError();
   }
-  const account = account_ as SmartContractAccountWithSigner<
-    TEntryPointVersion,
-    string,
-    TSigner
-  >;
+  const account = account_ as SmartContractAccountWithSigner<string, TSigner>;
 
   const chain = client.chain;
   if (!chain) {
@@ -130,16 +120,18 @@ export async function getMSCAUpgradeToData<
 }
 
 export async function getMAInitializationData<
-  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
-  TChain extends Chain | undefined = Chain | undefined
+  TChain extends Chain | undefined = Chain | undefined,
+  TAccount extends SmartContractAccountWithSigner | undefined =
+    | SmartContractAccountWithSigner
+    | undefined
 >({
   client,
   multiOwnerPluginAddress,
   signerAddress,
 }: {
   multiOwnerPluginAddress?: Address;
-  client: SmartAccountClient<TEntryPointVersion, TTransport, TChain>;
+  client: SmartAccountClient<TTransport, TChain, TAccount>;
   signerAddress: Address | Address[];
 }): Promise<UpgradeToData> {
   if (!client.chain) {

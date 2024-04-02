@@ -2,7 +2,6 @@ import {
   AccountNotFoundError,
   IncompatibleClientError,
   isSmartAccountClient,
-  type EntryPointVersion,
   type GetAccountParameter,
   type SmartContractAccount,
 } from "@alchemy/aa-core";
@@ -16,9 +15,8 @@ import type {
 } from "./types.js";
 
 export type AccountLoupeActions<
-  TEntryPointVersion extends EntryPointVersion,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
     | undefined
 > = {
   /// @notice Gets the validation functions and plugin address for a selector
@@ -26,10 +24,7 @@ export type AccountLoupeActions<
   /// @param selector The selector to get the configuration for
   /// @return The configuration for this selector
   getExecutionFunctionConfig(
-    args: { selector: FunctionReference } & GetAccountParameter<
-      TEntryPointVersion,
-      TAccount
-    >
+    args: { selector: FunctionReference } & GetAccountParameter<TAccount>
   ): Promise<ExecutionFunctionConfig>;
 
   /// @notice Gets the pre and post execution hooks for a selector
@@ -38,7 +33,7 @@ export type AccountLoupeActions<
   getExecutionHooks(
     args: {
       selector: FunctionReference;
-    } & GetAccountParameter<TEntryPointVersion, TAccount>
+    } & GetAccountParameter<TAccount>
   ): Promise<ReadonlyArray<ExecutionHooks>>;
 
   /// @notice Gets the pre user op and runtime validation hooks associated with a selector
@@ -46,26 +41,25 @@ export type AccountLoupeActions<
   /// @return preUserOpValidationHooks The pre user op validation hooks for this selector
   /// @return preRuntimeValidationHooks The pre runtime validation hooks for this selector
   getPreValidationHooks(
-    args: { selector: Hash } & GetAccountParameter<TEntryPointVersion, TAccount>
+    args: { selector: Hash } & GetAccountParameter<TAccount>
   ): Promise<Readonly<PreValidationHooks>>;
 
   /// @notice Gets an array of all installed plugins
   /// @return The addresses of all installed plugins
   getInstalledPlugins(
-    args: GetAccountParameter<TEntryPointVersion, TAccount>
+    args: GetAccountParameter<TAccount>
   ): Promise<ReadonlyArray<Address>>;
 };
 
 export const accountLoupeActions: <
-  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>
-) => AccountLoupeActions<TEntryPointVersion, TAccount> = (client) => ({
+) => AccountLoupeActions<TAccount> = (client) => ({
   getExecutionFunctionConfig: async ({
     selector,
     account = client.account,

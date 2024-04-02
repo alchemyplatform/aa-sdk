@@ -17,11 +17,11 @@ import {
   AccountNotFoundError,
   isSmartAccountClient,
   IncompatibleClientError,
-  type EntryPointVersion,
   type SmartContractAccount,
   type UserOperationOverrides,
   type GetAccountParameter,
   type SendUserOperationResult,
+  type GetEntryPointFromAccount,
 } from "@alchemy/aa-core";
 import { type Plugin } from "../types.js";
 import { installPlugin as installPlugin_ } from "../../plugin-manager/installPlugin.js";
@@ -32,10 +32,10 @@ import { type FunctionReference } from "../../account-loupe/types.js";
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 type ExecutionActions<
-  TEntryPointVersion extends EntryPointVersion,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
-    | undefined
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
   updateOwners: (
     args: Pick<
@@ -46,7 +46,7 @@ type ExecutionActions<
       "args"
     > & {
       overrides?: UserOperationOverrides<TEntryPointVersion>;
-    } & GetAccountParameter<TEntryPointVersion, TAccount>
+    } & GetAccountParameter<TAccount>
   ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 };
 
@@ -59,23 +59,22 @@ export type InstallMultiOwnerPluginParams = {
 };
 
 type ManagementActions<
-  TEntryPointVersion extends EntryPointVersion,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
-    | undefined
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
   installMultiOwnerPlugin: (
     args: {
       overrides?: UserOperationOverrides<TEntryPointVersion>;
     } & InstallMultiOwnerPluginParams &
-      GetAccountParameter<TEntryPointVersion, TAccount>
+      GetAccountParameter<TAccount>
   ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 };
 
 type ReadAndEncodeActions<
-  TEntryPointVersion extends EntryPointVersion,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
     | undefined
 > = {
   encodeUpdateOwners: (
@@ -99,7 +98,7 @@ type ReadAndEncodeActions<
   ) => Hex;
 
   readEip712Domain: (
-    args: GetAccountParameter<TEntryPointVersion, TAccount>
+    args: GetAccountParameter<TAccount>
   ) => Promise<
     ReadContractReturnType<
       typeof MultiOwnerPluginExecutionFunctionAbi,
@@ -125,7 +124,7 @@ type ReadAndEncodeActions<
       >,
       "args"
     > &
-      GetAccountParameter<TEntryPointVersion, TAccount>
+      GetAccountParameter<TAccount>
   ) => Promise<
     ReadContractReturnType<
       typeof MultiOwnerPluginExecutionFunctionAbi,
@@ -135,13 +134,13 @@ type ReadAndEncodeActions<
 };
 
 export type MultiOwnerPluginActions<
-  TEntryPointVersion extends EntryPointVersion,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
-    | undefined
-> = ExecutionActions<TEntryPointVersion, TAccount> &
-  ManagementActions<TEntryPointVersion, TAccount> &
-  ReadAndEncodeActions<TEntryPointVersion, TAccount>;
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+> = ExecutionActions<TAccount, TEntryPointVersion> &
+  ManagementActions<TAccount, TEntryPointVersion> &
+  ReadAndEncodeActions<TAccount>;
 
 const addresses = {
   10: "0xcE0000007B008F50d762D155002600004cD6c647" as Address,
@@ -181,15 +180,15 @@ export const MultiOwnerPlugin: Plugin<typeof MultiOwnerPluginAbi> = {
 };
 
 export const multiOwnerPluginActions: <
-  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
-    | undefined
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
   client: Client<TTransport, TChain, TAccount>
-) => MultiOwnerPluginActions<TEntryPointVersion, TAccount> = (client) => ({
+) => MultiOwnerPluginActions<TAccount, TEntryPointVersion> = (client) => ({
   updateOwners({ args, overrides, account = client.account }) {
     if (!account) {
       throw new AccountNotFoundError();

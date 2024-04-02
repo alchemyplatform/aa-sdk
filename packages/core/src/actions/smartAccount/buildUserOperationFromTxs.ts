@@ -1,7 +1,9 @@
 import { fromHex, type Chain, type Client, type Transport } from "viem";
-import type { SmartContractAccount } from "../../account/smartContractAccount";
+import type {
+  GetEntryPointFromAccount,
+  SmartContractAccount,
+} from "../../account/smartContractAccount";
 import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
-import type { EntryPointVersion } from "../../entrypoint/types";
 import { AccountNotFoundError } from "../../errors/account.js";
 import { IncompatibleClientError } from "../../errors/client.js";
 import { TransactionMissingToParamError } from "../../errors/transaction.js";
@@ -14,16 +16,17 @@ import type {
 } from "./types";
 
 export async function buildUserOperationFromTxs<
-  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: SendTransactionsParameters<TEntryPointVersion, TAccount>
-): Promise<BuildUserOperationFromTransactionsResult<TEntryPointVersion>> {
+  args: SendTransactionsParameters<TAccount>
+): Promise<
+  BuildUserOperationFromTransactionsResult<GetEntryPointFromAccount<TAccount>>
+> {
   const { account = client.account, requests, overrides } = args;
   if (!account) {
     throw new AccountNotFoundError();
@@ -74,13 +77,13 @@ export async function buildUserOperationFromTxs<
   const _overrides = {
     maxFeePerGas,
     maxPriorityFeePerGas,
-  } as UserOperationOverrides<TEntryPointVersion>;
+  } as UserOperationOverrides<GetEntryPointFromAccount<TAccount>>;
   filterUndefined(_overrides);
 
   const uoStruct = await buildUserOperation(client, {
     uo: batch,
     overrides: _overrides,
-    account: account as SmartContractAccount<TEntryPointVersion>,
+    account,
   });
 
   return {

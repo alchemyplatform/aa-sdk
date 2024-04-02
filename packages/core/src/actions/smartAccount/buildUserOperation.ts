@@ -1,10 +1,10 @@
 import type { Address, Chain, Client, Hex, Transport } from "viem";
 import {
   parseFactoryAddressFromAccountInitCode,
+  type GetEntryPointFromAccount,
   type SmartContractAccount,
 } from "../../account/smartContractAccount.js";
 import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
-import type { EntryPointVersion } from "../../entrypoint/types.js";
 import { AccountNotFoundError } from "../../errors/account.js";
 import { IncompatibleClientError } from "../../errors/client.js";
 import { MismatchingEntryPointError } from "../../errors/entrypoint.js";
@@ -14,15 +14,15 @@ import { _runMiddlewareStack } from "./internal/runMiddlewareStack.js";
 import type { SendUserOperationParameters } from "./types";
 
 export async function buildUserOperation<
-  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
-    | undefined
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: SendUserOperationParameters<TEntryPointVersion, TAccount>
+  args: SendUserOperationParameters<TAccount>
 ): Promise<UserOperationStruct<TEntryPointVersion>> {
   const { account = client.account, overrides, uo } = args;
   if (!account) {
@@ -67,7 +67,9 @@ export async function buildUserOperation<
           nonce,
           callData,
           signature,
-        } as Deferrable<UserOperationStruct<"0.6.0">>)
+        } as Deferrable<
+          UserOperationStruct<GetEntryPointFromAccount<TAccount>>
+        >)
       : ({
           factory: getFactoryAndData.then(([factory]) => factory),
           factoryData: getFactoryAndData.then(([, data]) => data),
@@ -75,10 +77,12 @@ export async function buildUserOperation<
           nonce,
           callData,
           signature,
-        } as Deferrable<UserOperationStruct<"0.7.0">>);
+        } as Deferrable<
+          UserOperationStruct<GetEntryPointFromAccount<TAccount>>
+        >);
 
   return _runMiddlewareStack(client, {
-    uo: _uo as Deferrable<UserOperationStruct<TEntryPointVersion>>,
+    uo: _uo,
     overrides,
     account,
   });

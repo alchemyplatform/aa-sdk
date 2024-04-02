@@ -1,4 +1,4 @@
-import type { EntryPointVersion, SmartContractAccount } from "@alchemy/aa-core";
+import type { SmartContractAccount } from "@alchemy/aa-core";
 import type { Alchemy } from "alchemy-sdk";
 import type { Chain, HttpTransport, Transport } from "viem";
 import { AlchemySdkClientSchema } from "../../schema.js";
@@ -17,19 +17,13 @@ export type AlchemyEnhancedApis = {
 export const alchemyEnhancedApiActions: (
   alchemy: Alchemy
 ) => <
-  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
     | undefined
 >(
-  client: AlchemySmartAccountClient<
-    TEntryPointVersion,
-    TTransport,
-    TChain,
-    TAccount
-  >
+  client: AlchemySmartAccountClient<TTransport, TChain, TAccount>
 ) => AlchemyEnhancedApis = (alchemy) => (client) => {
   const alchemySdk = AlchemySdkClientSchema.parse(alchemy);
 

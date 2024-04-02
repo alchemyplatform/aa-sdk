@@ -1,12 +1,8 @@
 import type {
-  EntryPointDef,
-  EntryPointDefRegistry,
   EntryPointParameter,
-  EntryPointVersion,
   ToSmartContractAccountParams,
 } from "@alchemy/aa-core";
 import {
-  InvalidEntryPointError,
   createBundlerClient,
   getAccountAddress,
   getEntryPoint,
@@ -19,6 +15,7 @@ import {
   concatHex,
   encodeFunctionData,
   hexToBigInt,
+  type Chain,
   type Hex,
   type Transport,
 } from "viem";
@@ -28,23 +25,22 @@ import { getDefaultMultiOwnerModularAccountFactoryAddress } from "../utils.js";
 import { standardExecutor } from "./standardExecutor.js";
 
 export type MultiOwnerModularAccount<
-  TEntryPointVersion extends EntryPointVersion,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 > = SmartContractAccountWithSigner<
-  TEntryPointVersion,
   "MultiOwnerModularAccount",
-  TSigner
+  TSigner,
+  "0.6.0"
 >;
 
 export type CreateMultiOwnerModularAccountParams<
-  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 > = Pick<
   ToSmartContractAccountParams<
-    TEntryPointVersion,
     "MultiOwnerModularAccount",
-    TTransport
+    TTransport,
+    Chain,
+    "0.6.0"
   >,
   "transport" | "chain"
 > & {
@@ -54,56 +50,32 @@ export type CreateMultiOwnerModularAccountParams<
   initCode?: Hex;
   owners?: Address[];
   accountAddress?: Address;
-} & EntryPointParameter<TEntryPointVersion>;
+  entryPoint?: EntryPointParameter<"0.6.0">["entryPoint"];
+};
 
 export async function createMultiOwnerModularAccount<
-  TEntryPointDef extends EntryPointDefRegistry[EntryPointVersion],
-  TEntryPointVersion extends EntryPointVersion = TEntryPointDef extends EntryPointDef<
-    infer U
-  >
-    ? U
-    : never,
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  config: CreateMultiOwnerModularAccountParams<
-    TEntryPointVersion,
-    TTransport,
-    TSigner
-  >
-): Promise<MultiOwnerModularAccount<TEntryPointVersion, TSigner>>;
+  config: CreateMultiOwnerModularAccountParams<TTransport, TSigner>
+): Promise<MultiOwnerModularAccount<TSigner>>;
 
-export async function createMultiOwnerModularAccount<
-  TEntryPointDef extends EntryPointDefRegistry[EntryPointVersion],
-  TEntryPointVersion extends EntryPointVersion = TEntryPointDef extends EntryPointDef<
-    infer U
-  >
-    ? U
-    : never,
-  TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
->({
+export async function createMultiOwnerModularAccount({
   transport,
   chain,
   signer,
   accountAddress,
   initCode,
-  entryPoint,
+  entryPoint = getEntryPoint(chain),
   factoryAddress = getDefaultMultiOwnerModularAccountFactoryAddress(chain),
   owners = [],
   salt = 0n,
-}: CreateMultiOwnerModularAccountParams<
-  TEntryPointVersion,
-  TTransport,
-  TSigner
->): Promise<MultiOwnerModularAccount<TEntryPointVersion, TSigner>> {
-  const _entryPoint: EntryPointDef<EntryPointVersion> =
-    entryPoint ?? getEntryPoint(chain);
-
+}: CreateMultiOwnerModularAccountParams): Promise<MultiOwnerModularAccount> {
   const client = createBundlerClient({
     transport,
     chain,
   });
+
   const getAccountInitCode = async () => {
     if (initCode) {
       return initCode;
@@ -133,42 +105,25 @@ export async function createMultiOwnerModularAccount<
 
   const _accountAddress = await getAccountAddress({
     client,
-    entryPoint: _entryPoint,
+    entryPoint,
     accountAddress,
     getAccountInitCode,
   });
 
-  const baseAccount =
-    _entryPoint.version === "0.6.0"
-      ? await toSmartContractAccount({
-          transport,
-          chain,
-          entryPoint: _entryPoint as EntryPointDef<"0.6.0">,
-          accountAddress: _accountAddress,
-          source: `MultiOwnerModularAccount`,
-          getAccountInitCode,
-          ...standardExecutor,
-          ...multiOwnerMessageSigner(client, _accountAddress, () => signer),
-        })
-      : _entryPoint.version === "0.7.0"
-      ? await toSmartContractAccount({
-          transport,
-          chain,
-          entryPoint: _entryPoint as EntryPointDef<"0.7.0">,
-          accountAddress: _accountAddress,
-          source: `MultiOwnerModularAccount`,
-          getAccountInitCode,
-          ...standardExecutor,
-          ...multiOwnerMessageSigner(client, _accountAddress, () => signer),
-        })
-      : undefined;
-
-  if (!baseAccount)
-    throw new InvalidEntryPointError(chain, _entryPoint.version);
+  const baseAccount = await toSmartContractAccount({
+    transport,
+    chain,
+    entryPoint,
+    accountAddress: _accountAddress,
+    source: `MultiOwnerModularAccount`,
+    getAccountInitCode,
+    ...standardExecutor,
+    ...multiOwnerMessageSigner(client, _accountAddress, () => signer),
+  });
 
   return {
     ...baseAccount,
     publicKey: await signer.getAddress(),
     getSigner: () => signer,
-  } as MultiOwnerModularAccount<TEntryPointVersion, TSigner>;
+  };
 }

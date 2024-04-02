@@ -1,7 +1,6 @@
 import type { Chain, Client, Transport } from "viem";
 import type { SmartContractAccount } from "../../account/smartContractAccount.js";
 import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
-import type { EntryPointVersion } from "../../entrypoint/types.js";
 import { AccountNotFoundError } from "../../errors/account.js";
 import { IncompatibleClientError } from "../../errors/client.js";
 import type { UserOperationStruct } from "../../types.js";
@@ -9,15 +8,14 @@ import { buildUserOperation } from "./buildUserOperation.js";
 import type { SendUserOperationParameters } from "./types";
 
 export const checkGasSponsorshipEligibility: <
-  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: SendUserOperationParameters<TEntryPointVersion, TAccount>
+  args: SendUserOperationParameters<TAccount>
 ) => Promise<boolean> = async (client, args) => {
   const { account = client.account } = args;
 

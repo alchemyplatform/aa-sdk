@@ -1,13 +1,9 @@
-import type { EntryPointVersion } from "../../entrypoint/types.js";
 import { deepHexlify, resolveProperties } from "../../utils/index.js";
 import { applyUserOpOverrideOrFeeOption } from "../../utils/userop.js";
 import type { MiddlewareClient } from "../actions.js";
 import type { ClientMiddlewareFn } from "../types.js";
 
-export const defaultGasEstimator: <
-  TEntryPointVersion extends EntryPointVersion,
-  C extends MiddlewareClient<TEntryPointVersion>
->(
+export const defaultGasEstimator: <C extends MiddlewareClient>(
   client: C
 ) => ClientMiddlewareFn =
   (client) =>

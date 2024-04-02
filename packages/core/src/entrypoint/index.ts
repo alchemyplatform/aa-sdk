@@ -69,9 +69,10 @@ export function getEntryPoint<
   chain: TChain,
   options: GetEntryPointOptions<TEntryPointVersion>
 ): EntryPointDefRegistry<TChain>[EntryPointVersion] {
-  const { version, addressOverride } = options ?? {
+  const { version = defaultEntryPointVersion, addressOverride } = options ?? {
     version: defaultEntryPointVersion,
   };
+
   const entryPoint = entryPointRegistry[version ?? defaultEntryPointVersion];
   const address = addressOverride || entryPoint.address[chain.id];
   if (!address) {

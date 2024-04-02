@@ -15,7 +15,6 @@ import {
   polygonAmoy,
   polygonMumbai,
   sepolia,
-  type EntryPointVersion,
   type SmartContractAccount,
 } from "@alchemy/aa-core";
 import { fromHex, type Address, type Chain } from "viem";
@@ -96,10 +95,7 @@ export const LightAccountUnsupported1271Factories = new Set(
   LightAccountUnsupported1271Impls.map((x) => x.factoryAddress)
 );
 
-export const getLightAccountVersion = async <
-  TEntryPointVersion extends EntryPointVersion,
-  A extends SmartContractAccount<TEntryPointVersion>
->(
+export const getLightAccountVersion = async <A extends SmartContractAccount>(
   account: A
 ) => {
   const implAddress = await account.getImplementationAddress();

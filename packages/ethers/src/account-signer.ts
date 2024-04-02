@@ -3,7 +3,7 @@ import {
   resolveProperties,
   type BatchUserOperationCallData,
   type BundlerClient,
-  type EntryPointVersion,
+  type GetEntryPointFromAccount,
   type SmartContractAccount,
   type UserOperationCallData,
   type UserOperationOverrides,
@@ -27,8 +27,8 @@ const hexlifyOptional = (value: any): `0x${string}` | undefined => {
 };
 
 export class AccountSigner<
-  TEntryPointVersion extends EntryPointVersion,
-  TAccount extends SmartContractAccount<TEntryPointVersion> = SmartContractAccount<TEntryPointVersion>
+  TAccount extends SmartContractAccount = SmartContractAccount,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > extends Signer {
   readonly account: TAccount;
 
@@ -102,13 +102,11 @@ export class AccountSigner<
     );
   }
 
-  getPublicErc4337Client(): BundlerClient<TEntryPointVersion, Transport> {
+  getPublicErc4337Client(): BundlerClient<Transport> {
     return this.provider.getBundlerClient();
   }
 
-  connect(
-    provider: EthersProviderAdapter
-  ): AccountSigner<TEntryPointVersion, TAccount> {
+  connect(provider: EthersProviderAdapter): AccountSigner<TAccount> {
     this.provider = provider;
 
     return this;

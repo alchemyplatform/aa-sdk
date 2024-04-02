@@ -30,10 +30,7 @@ import { NaniAccountFactoryAbi } from "./abis/NaniAccountFactoryAbi.js";
 
 export type NaniSmartAccountParams<
   TTransport extends Transport | FallbackTransport = Transport
-> = Omit<
-  BaseSmartAccountParams<DefaultEntryPointVersion, TTransport>,
-  "rpcClient"
-> & {
+> = Omit<BaseSmartAccountParams<TTransport>, "rpcClient"> & {
   signer: SmartAccountSigner;
   index?: bigint;
   salt?: Hex;
@@ -42,9 +39,9 @@ export type NaniSmartAccountParams<
 };
 
 export type NaniAccount = SmartContractAccountWithSigner<
-  DefaultEntryPointVersion,
   "NaniAccount",
-  SmartAccountSigner
+  SmartAccountSigner,
+  "0.6.0"
 > & {
   encodeExecuteDelegate: (delegate: Address, data: Hex) => Hex;
   encodeTransferOwnership: (newOwner: Address) => Hex;
@@ -52,7 +49,7 @@ export type NaniAccount = SmartContractAccountWithSigner<
 
 class NaniAccount_<
   TTransport extends Transport | FallbackTransport = Transport
-> extends BaseSmartContractAccount<DefaultEntryPointVersion, TTransport> {
+> extends BaseSmartContractAccount<TTransport> {
   protected signer: SmartAccountSigner;
   private readonly index: bigint;
   protected salt?: Hex;

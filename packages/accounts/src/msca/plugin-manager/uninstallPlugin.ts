@@ -2,8 +2,8 @@ import {
   AccountNotFoundError,
   IncompatibleClientError,
   isSmartAccountClient,
-  type EntryPointVersion,
   type GetAccountParameter,
+  type GetEntryPointFromAccount,
   type SmartContractAccount,
   type UserOperationOverridesParameter,
 } from "@alchemy/aa-core";
@@ -18,27 +18,26 @@ import {
 import { IPluginManagerAbi } from "../abis/IPluginManager.js";
 
 export type UninstallPluginParams<
-  TEntryPointVersion extends EntryPointVersion,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
-    | undefined
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
   pluginAddress: Address;
   config?: Hash;
   pluginUninstallData?: Hash;
 } & UserOperationOverridesParameter<TEntryPointVersion> &
-  GetAccountParameter<TEntryPointVersion, TAccount>;
+  GetAccountParameter<TAccount>;
 
 export async function uninstallPlugin<
-  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: UninstallPluginParams<TEntryPointVersion, TAccount>
+  args: UninstallPluginParams<TAccount>
 ) {
   const { overrides, account = client.account, ...params } = args;
 
@@ -63,13 +62,8 @@ export async function uninstallPlugin<
   });
 }
 
-export async function encodeUninstallPluginUserOperation<
-  TEntryPointVersion extends EntryPointVersion
->(
-  params: Omit<
-    UninstallPluginParams<TEntryPointVersion>,
-    "account" | "overrides"
-  >
+export async function encodeUninstallPluginUserOperation(
+  params: Omit<UninstallPluginParams, "account" | "overrides">
 ) {
   return encodeFunctionData({
     abi: IPluginManagerAbi,

@@ -4,12 +4,7 @@ import type { EntryPointVersion } from "../../entrypoint/types";
 import type { UserOperationResponse } from "../../types";
 
 export const getUserOperationByHash = async <
-  TClient extends Client<
-    Transport,
-    Chain | undefined,
-    any,
-    BundlerRpcSchema<EntryPointVersion>
-  >
+  TClient extends Client<Transport, Chain | undefined, any, BundlerRpcSchema>
 >(
   client: TClient,
   args: {

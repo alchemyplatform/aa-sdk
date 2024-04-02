@@ -5,9 +5,11 @@ import type {
   SendTransactionParameters,
   Transport,
 } from "viem";
-import type { SmartContractAccount } from "../../account/smartContractAccount.js";
+import type {
+  GetEntryPointFromAccount,
+  SmartContractAccount,
+} from "../../account/smartContractAccount.js";
 import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
-import type { EntryPointVersion } from "../../entrypoint/types.js";
 import { AccountNotFoundError } from "../../errors/account.js";
 import { IncompatibleClientError } from "../../errors/client.js";
 import { TransactionMissingToParamError } from "../../errors/transaction.js";
@@ -20,12 +22,12 @@ import { _sendUserOperation } from "./internal/sendUserOperation.js";
 import { waitForUserOperationTransaction } from "./waitForUserOperationTransacation.js";
 
 export async function sendTransaction<
-  TEntryPointVersion extends EntryPointVersion,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
     | undefined,
-  TChainOverride extends Chain | undefined = Chain | undefined
+  TChainOverride extends Chain | undefined = Chain | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
   client: Client<Transport, TChain, TAccount>,
   args: SendTransactionParameters<TChain, TAccount, TChainOverride>,
@@ -50,7 +52,7 @@ export async function sendTransaction<
 
   const uoStruct = await buildUserOperationFromTx(client, args, overrides);
   const { hash } = await _sendUserOperation(client, {
-    account: account as SmartContractAccount<TEntryPointVersion>,
+    account: account as SmartContractAccount,
     uoStruct: uoStruct as UserOperationStruct<TEntryPointVersion>,
   });
 

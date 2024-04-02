@@ -1,10 +1,10 @@
 import type { Chain, Transport } from "viem";
 import type {
   GetAccountParameter,
+  GetEntryPointFromAccount,
   SmartContractAccount,
 } from "../../../account/smartContractAccount";
 import type { BaseSmartAccountClient } from "../../../client/smartAccountClient";
-import type { EntryPointVersion } from "../../../entrypoint/types";
 import { AccountNotFoundError } from "../../../errors/account.js";
 import { MismatchingEntryPointError } from "../../../errors/entrypoint.js";
 import { overridePaymasterDataMiddleware } from "../../../middleware/defaults/overridePaymasterData.js";
@@ -25,35 +25,26 @@ const asyncPipe =
     return result;
   };
 
-export const _runMiddlewareStack: <
-  TEntryPointVersion extends EntryPointVersion,
+export async function _runMiddlewareStack<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
     | undefined
 >(
-  client: BaseSmartAccountClient<
-    TEntryPointVersion,
-    TTransport,
-    TChain,
-    TAccount
-  >,
+  client: BaseSmartAccountClient<TTransport, TChain, TAccount>,
   args: {
-    uo: Deferrable<UserOperationStruct<TEntryPointVersion>>;
-  } & GetAccountParameter<TEntryPointVersion, TAccount> &
-    UserOperationOverridesParameter<TEntryPointVersion>
-) => Promise<UserOperationStruct<TEntryPointVersion>> = async (
-  client,
-  args
-) => {
+    uo: Deferrable<UserOperationStruct<GetEntryPointFromAccount<TAccount>>>;
+  } & GetAccountParameter<TAccount> &
+    UserOperationOverridesParameter<GetEntryPointFromAccount<TAccount>>
+): Promise<UserOperationStruct<GetEntryPointFromAccount<TAccount>>> {
   const { uo, overrides, account = client.account } = args;
   if (!account) {
     throw new AccountNotFoundError();
   }
 
   const entryPoint = account.getEntryPoint();
-  if (entryPoint.isUserOpVersion(uo)) {
+  if (!entryPoint.isUserOpVersion(uo)) {
     throw new MismatchingEntryPointError(entryPoint.version, uo);
   }
 
@@ -76,5 +67,7 @@ export const _runMiddlewareStack: <
     client.middleware.userOperationSimulator
   )(uo, { overrides, feeOptions: client.feeOptions, account });
 
-  return resolveProperties(result);
-};
+  return resolveProperties(result) as Promise<
+    UserOperationStruct<GetEntryPointFromAccount<TAccount>>
+  >;
+}

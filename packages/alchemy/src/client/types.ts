@@ -54,10 +54,8 @@ export type AlchemyRpcSchema<TEntryPointVersion extends EntryPointVersion> = [
   }
 ];
 
-export type ClientWithAlchemyMethods<
-  TEntryPointVersion extends EntryPointVersion
-> = BundlerClient<TEntryPointVersion, HttpTransport> & {
-  request: BundlerClient<TEntryPointVersion, HttpTransport>["request"] &
+export type ClientWithAlchemyMethods = BundlerClient<HttpTransport> & {
+  request: BundlerClient<HttpTransport>["request"] &
     {
       request(args: {
         method: "alchemy_requestPaymasterAndData";
@@ -65,7 +63,7 @@ export type ClientWithAlchemyMethods<
           {
             policyId: string;
             entryPoint: Address;
-            userOperation: UserOperationRequest<TEntryPointVersion>;
+            userOperation: UserOperationRequest<EntryPointVersion>;
           }
         ];
       }): Promise<{ paymasterAndData: Hex }>;
@@ -76,9 +74,9 @@ export type ClientWithAlchemyMethods<
           {
             policyId: string;
             entryPoint: Address;
-            userOperation: UserOperationRequest<TEntryPointVersion>;
+            userOperation: UserOperationRequest<EntryPointVersion>;
             dummySignature: Hex;
-            overrides?: RequestGasAndPaymasterAndDataOverrides<TEntryPointVersion>;
+            overrides?: RequestGasAndPaymasterAndDataOverrides<EntryPointVersion>;
           }
         ];
       }): Promise<{
@@ -92,7 +90,7 @@ export type ClientWithAlchemyMethods<
 
       request(args: {
         method: "alchemy_simulateUserOperationAssetChanges";
-        params: SimulateUserOperationAssetChangesRequest<TEntryPointVersion>;
+        params: SimulateUserOperationAssetChangesRequest<EntryPointVersion>;
       }): Promise<SimulateUserOperationAssetChangesResponse>;
 
       request(args: {

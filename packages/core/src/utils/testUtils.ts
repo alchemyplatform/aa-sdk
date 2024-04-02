@@ -1,4 +1,4 @@
-import { createPublicClient, custom, type Chain, type Transport } from "viem";
+import { createPublicClient, custom, type Chain } from "viem";
 import {
   toSmartContractAccount,
   type SmartContractAccount,
@@ -10,11 +10,9 @@ import {
 import { getEntryPoint } from "../entrypoint/index.js";
 import type { DefaultEntryPointVersion } from "../entrypoint/types.js";
 
-export const createDummySmartContractAccount = async <
-  C extends BundlerClient<DefaultEntryPointVersion, Transport>
->(
+export const createDummySmartContractAccount = async <C extends BundlerClient>(
   client: C
-): Promise<SmartContractAccount<DefaultEntryPointVersion>> => {
+): Promise<SmartContractAccount<"dummy", DefaultEntryPointVersion>> => {
   return toSmartContractAccount({
     source: "dummy",
     accountAddress: "0x1234567890123456789012345678901234567890",

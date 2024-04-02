@@ -1,8 +1,10 @@
 import type { Chain, Client, Transport } from "viem";
-import type { SmartContractAccount } from "../../account/smartContractAccount";
+import type {
+  GetEntryPointFromAccount,
+  SmartContractAccount,
+} from "../../account/smartContractAccount";
 import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
 import type { SendUserOperationResult } from "../../client/types";
-import type { EntryPointVersion } from "../../entrypoint/types";
 import { AccountNotFoundError } from "../../errors/account.js";
 import { IncompatibleClientError } from "../../errors/client.js";
 import { MismatchingEntryPointError } from "../../errors/entrypoint.js";
@@ -17,15 +19,15 @@ import { _sendUserOperation } from "./internal/sendUserOperation.js";
 import type { DropAndReplaceUserOperationParameters } from "./types";
 
 export async function dropAndReplaceUserOperation<
-  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
-    | undefined
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: DropAndReplaceUserOperationParameters<TEntryPointVersion, TAccount>
+  args: DropAndReplaceUserOperationParameters<TAccount>
 ): Promise<SendUserOperationResult<TEntryPointVersion>> {
   const { account = client.account, uoToDrop, overrides } = args;
   if (!account) {

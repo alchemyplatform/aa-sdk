@@ -1,5 +1,4 @@
 import type {
-  EntryPointVersion,
   SendUserOperationParameters,
   SmartContractAccount,
 } from "@alchemy/aa-core";
@@ -8,28 +7,24 @@ import { simulateUserOperationChanges } from "../../actions/simulateUserOperatio
 import type { SimulateUserOperationAssetChangesResponse } from "../../actions/types.js";
 
 export type AlchemySmartAccountClientActions<
-  TEntryPointVersion extends EntryPointVersion,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
     | undefined
 > = {
   simulateUserOperation: (
-    args: SendUserOperationParameters<TEntryPointVersion, TAccount>
+    args: SendUserOperationParameters<TAccount>
   ) => Promise<SimulateUserOperationAssetChangesResponse>;
 };
 
 export const alchemyActions: <
-  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>
-) => AlchemySmartAccountClientActions<TEntryPointVersion, TAccount> = (
-  client
-) => ({
+) => AlchemySmartAccountClientActions<TAccount> = (client) => ({
   simulateUserOperation: async (args) =>
     simulateUserOperationChanges(client, args),
 });

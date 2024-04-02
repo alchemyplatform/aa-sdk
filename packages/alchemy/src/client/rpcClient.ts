@@ -1,21 +1,15 @@
-import {
-  createBundlerClient,
-  type ConnectionConfig,
-  type EntryPointVersion,
-} from "@alchemy/aa-core";
+import { createBundlerClient, type ConnectionConfig } from "@alchemy/aa-core";
 import { http, type Chain } from "viem";
 import { AlchemyChainSchema } from "../schema.js";
 import type { ClientWithAlchemyMethods } from "./types.js";
 
-export const createAlchemyPublicRpcClient = <
-  TEntryPointVersion extends EntryPointVersion
->({
+export const createAlchemyPublicRpcClient = ({
   chain: chain_,
   connectionConfig,
 }: {
   connectionConfig: ConnectionConfig;
   chain: Chain;
-}): ClientWithAlchemyMethods<TEntryPointVersion> => {
+}): ClientWithAlchemyMethods => {
   const chain = AlchemyChainSchema.parse(chain_);
 
   const rpcUrl =

@@ -124,7 +124,7 @@ export type EntryPointParameter<
   TEntryPointVersion extends EntryPointVersion,
   TChain extends Chain = Chain
 > = {
-  entryPoint?: EntryPointDef<TEntryPointVersion, TChain>;
+  entryPoint: EntryPointDef<TEntryPointVersion, TChain>;
 };
 
 // EQ<TEntryPointVersion, DefaultEntryPointVersion> extends true
