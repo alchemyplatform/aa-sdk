@@ -36,7 +36,7 @@ Traditional wallets make your users jump through hoops like downloading an exten
 
 **Embedded Accounts** use [ERC-4337 Account Abstraction](https://www.youtube.com/watch?v=Vpk_MhY-EeE) to build next-gen wallet UX. Account Abstraction dramatically simplifies the user experience by adding a few new developer components like a smart account, bundler, and paymaster. You can also configure your embedded accounts as a lightweight EOA if you prefer.
 
-Account Kit provide all the tools you need to onboard every user to an invisible wallet. The toolkit includes:
+Account Kit provides all the tools you need to onboard every user to an invisible wallet. The toolkit includes:
 
 - **AA SDK**: A simple SDK to integrate and customize embedded accounts in your app. The `aa-sdk` orchestrates everything from wallet creation to authentication, transaction signing, gas sponsorship, and more.
 - **Signer API:** A secure, non-custodial Signer API to generate and store private keys, powered by Alchemy and [Turnkey](https://www.turnkey.com/). You can also [bring your own signer](/signers/choosing-a-signer) solution.
@@ -54,7 +54,7 @@ The `aa-sdk` is a type-safe and performant TypeScript library built on top of [v
 
 The SDK implements an EIP-1193 provider interface so embedded accounts can drop right into popular app frameworks and wallet connect libraries like RainbowKit, Wagmi, and Web3Modal. It also includes ethers.js adapters to provide full support for ethers.js apps.
 
-Get started with the [quick start](/getting-started/setup) guide or browse the open source [aa-sdk github](https://github.com/alchemyplatform/aa-sdk).
+Get started with the [quick start](/getting-started/introduction) guide or browse the open source [aa-sdk github](https://github.com/alchemyplatform/aa-sdk).
 
 ## Signer API
 
@@ -92,6 +92,6 @@ Check out the open source code in our affectionately named [Rundler github repo]
 
 # Start building
 
-Next, complete the [quick start](/getting-started/setup) guide to make wallets invisible in your onboarding and checkout flows.
+Next, complete the [quick start](/getting-started/introduction) guide to make wallets invisible in your onboarding and checkout flows.
 
 Embedded Accounts make web3 simple so that *anyone* can try your app in seconds with no downloads, no gas tokens, and no seed phrases. It's time to bring the whole world onchain!
