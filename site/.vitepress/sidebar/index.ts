@@ -14,10 +14,6 @@ export const sidebar: DefaultTheme.Sidebar = [
         items: [
           { text: "Introduction", link: "/getting-started/introduction" },
           {
-            text: "Configure your Embedded Accounts",
-            link: "/getting-started/configure-eas",
-          },
-          {
             text: "Setup your application",
             link: "/getting-started/setup-app",
           },

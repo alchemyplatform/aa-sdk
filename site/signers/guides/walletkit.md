@@ -99,7 +99,7 @@ const signer: SmartAccountSigner = new WalletClientSigner(
 
 ### Configure ModularAccountAlchemyClient
 
-Finally, create `createModularAccountAlchemyClient` using the signer we just created to control the modular smart contract wallet.
+Finally, create `createModularAccountAlchemyClient` using the signer we just created to control the modular account.
 
 ```ts
 import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";

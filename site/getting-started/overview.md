@@ -35,19 +35,19 @@ Account Kit makes it easy to onboard users with smart accounts -- account abstra
 
 # What is Account Kit?
 
-**Account Kit** provides all the tools you need to build smart accounts in your web3 app, unlocking powerful features like social login, gas sponsorship, and batched transactions. Integrate [account abstraction](https://www.alchemy.com/overviews/what-is-account-abstraction/?a=ak-docs) with just a few lines of code to deploy your first smart accounts and start sending user operations!
+**Account Kit** provides all the tools you need to build smart accounts in your web3 app, unlocking powerful features like social login, gas sponsorship, and batched transactions. Integrate [account abstraction](https://www.alchemy.com/overviews/what-is-account-abstraction/?a=embedded-accounts-get-started) with just a few lines of code to deploy your first smart accounts and start sending user operations!
 
 Account Kit includes five components:
 
 - **aa-sdk**: A simple, powerful interface to integrate, deploy, and use smart accounts. The `aa-sdk` orchestrates everything under the hood to make development easy.
-- **Modular Account:** Secure, audited, modular smart accounts. It is easy to deploy when your users need them and extend with [EIP-6900](https://eips.ethereum.org/EIPS/eip-6900) plugins.
+- **Modular Account:** Secure, audited, modular accounts. It is easy to deploy when your users need them and extend with [EIP-6900](https://eips.ethereum.org/EIPS/eip-6900) plugins.
 - **Signer:** Integrations with the most popular wallet providers. Secure your accounts with email, social login, passkeys, or a self-custodial wallet Signer.
 - **Gas Manager API:** A programmable API to sponsor gas for UserOps that meets your criteria.
 - **Bundler API:** The most reliable ERC-4337 Bundler. Land your UserOps on-chain, batch operations, and sponsor gas at a massive scale.
 
 <img src="/images/account-kit-overview.png" width="400" height="auto" alt="Account Kit Overview" style="display: block; margin: auto;">
 
-Let’s dive into each component.
+Let's dive into each component.
 
 ## aa-sdk
 
@@ -85,12 +85,12 @@ To learn how to sponsor gas with the Gas Manager API, see the [Sponsoring gas](/
 
 The Bundler submits UserOps from a smart account and executes them onchain. This is a mission-critical operation: if your Bundler is unreliable, then transactions are going to fail or get stuck.
 
-We built our [Bundler in Rust](https://www.alchemy.com/blog/open-sourcing-rundler/?a=ak-docs) to handle the highest loads at production scale. It’s able to handle massive scale because we operate it alongside our fleet of nodes powering the biggest dapps in web3 from Opensea to Circle.
+We built our [Bundler in Rust](https://www.alchemy.com/blog/open-sourcing-rundler/?a=embedded-accounts-get-started) to handle the highest loads at production scale. It's able to handle massive scale because we operate it alongside our fleet of nodes powering the biggest dapps in web3 from Opensea to Circle.
 
 Check out the open source code in our affectionately named [Rundler github repo](https://github.com/alchemyplatform/rundler).
 
 # Start building with Account Kit
 
-Account Kit was designed from the ground up to make account abstraction easy. It’s built on top of industry-leading infrastructure that powers applications at massive scale from Opensea to Shopify.
+Account Kit was designed from the ground up to make account abstraction easy. It's built on top of industry-leading infrastructure that powers applications at massive scale from Opensea to Shopify.
 
 Next, read the [Quick start](/getting-started/introduction) guide to get setup in minutes!

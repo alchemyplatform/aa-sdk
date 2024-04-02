@@ -1,4 +1,4 @@
-import { useSendUserOperation } from "@/queries/sendUserOperation.jsx";
+import { useSendUserOperation } from "@/queries/sendUserOperation";
 import { MultiOwnerModularAccount } from "@alchemy/aa-accounts";
 import { AlchemySmartAccountClient } from "@alchemy/aa-alchemy";
 import { Chain, Transport } from "viem";
