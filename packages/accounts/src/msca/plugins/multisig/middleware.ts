@@ -44,8 +44,6 @@ export const multisigSignatureMiddleware: ClientMiddlewareFn<{
     signer: account.getSigner(),
   });
 
-  console.log("multisig signature middleware running!");
-
   // TODO: this needs to actually check the account's installed plugins and fetch the multisig plugin address
   const threshold = await getThreshold(client, { account });
 

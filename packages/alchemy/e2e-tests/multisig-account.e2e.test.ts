@@ -1,7 +1,4 @@
 import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
-import { Alchemy, Network } from "alchemy-sdk";
-import * as simulateUoActions from "../src/actions/simulateUserOperationChanges.js";
-import { alchemyEnhancedApiActions } from "../src/client/decorators/alchemyEnhancedApis.js";
 import {
   createMultisigAccountAlchemyClient,
   type AlchemyMultisigAccountClientConfig,
@@ -13,13 +10,7 @@ import {
 } from "./constants.js";
 import { fromHex, pad } from "viem";
 
-const simulateUoChangesSpy = vi.spyOn(
-  simulateUoActions,
-  "simulateUserOperationChanges"
-);
-
 const chain = sepolia;
-const network = Network.ETH_SEPOLIA;
 
 describe("Multisig Modular Account Alchemy Client Tests", async () => {
   const signer1 = LocalAccountSigner.mnemonicToAccountSigner(
@@ -118,7 +109,7 @@ describe("Multisig Modular Account Alchemy Client Tests", async () => {
     await expect(txnHash).resolves.not.toThrowError();
   }, 100000);
 
-  it("should successfully execute with alchemy paymaster info", async () => {
+  it.skip("should successfully execute with alchemy paymaster info", async () => {
     const provider1 = await givenConnectedProvider({
       signer: signer1,
       chain,
@@ -150,7 +141,7 @@ describe("Multisig Modular Account Alchemy Client Tests", async () => {
         },
       });
 
-    console.log("aggregated signature", aggregatedSignature);
+    // console.log("aggregated signature", aggregatedSignature);
 
     const result = await provider2.sendUserOperation({
       uo: request.callData,
@@ -167,6 +158,74 @@ describe("Multisig Modular Account Alchemy Client Tests", async () => {
         signature: aggregatedSignature,
       },
     });
+    const txnHash = provider2.waitForUserOperationTransaction(result);
+
+    await expect(txnHash).resolves.not.toThrowError();
+  }, 100000);
+
+  it("should successfully execute 3/3 with alchemy paymaster info", async () => {
+    const higherThreshold = 3n;
+
+    const provider1 = await givenConnectedProvider({
+      signer: signer1,
+      chain,
+      owners,
+      threshold: higherThreshold,
+    });
+    const provider2 = await givenConnectedProvider({
+      signer: signer2,
+      chain,
+      owners,
+      threshold: higherThreshold,
+    });
+    const provider3 = await givenConnectedProvider({
+      signer: signer3,
+      chain,
+      owners,
+      threshold: higherThreshold,
+    });
+
+    const {
+      account: { address },
+    } = provider1;
+    expect(address).toEqual("0xE2c5429De9133F03f3D36d2Be3695AB315D65ECa");
+
+    const { request, signatureObj: signature1 } =
+      await provider1.proposeUserOperation({
+        uo: {
+          target: provider1.getAddress(),
+          data: "0x",
+        },
+        // Must specify realistic overrides when using a paymaster, because the flexible-gas feature for the last signer doesn't work with paymasters.
+        overrides: {
+          maxFeePerGas: { multiplier: 2 },
+          maxPriorityFeePerGas: { multiplier: 3 },
+          preVerificationGas: { multiplier: 1.5 },
+        },
+      });
+
+    const { aggregatedSignature } = await provider2.signMultisigUserOperation({
+      account: provider2.account,
+      signatures: [signature1],
+      userOperationRequest: request,
+    });
+
+    const result = await provider3.sendUserOperation({
+      uo: request.callData,
+      overrides: {
+        callGasLimit: request.callGasLimit,
+        verificationGasLimit: request.verificationGasLimit,
+        preVerificationGas: request.preVerificationGas,
+        maxFeePerGas: request.maxFeePerGas,
+        maxPriorityFeePerGas: request.maxPriorityFeePerGas,
+        nonceKey: fromHex(`0x${pad(request.nonce).slice(2, 26)}`, "bigint"), // Nonce key is the first 24 bytes of the nonce
+        paymasterAndData: request.paymasterAndData,
+      },
+      context: {
+        signature: aggregatedSignature,
+      },
+    });
+
     const txnHash = provider2.waitForUserOperationTransaction(result);
 
     await expect(txnHash).resolves.not.toThrowError();

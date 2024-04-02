@@ -467,9 +467,6 @@ describe("Multisig Modular Account Tests", async () => {
     await expect(txnHash).resolves.not.toThrowError();
   }, 100000);
 
-  // todo:
-  // Using a paymaster (needs the "alchemy" style client)
-
   it("should execute successfully with 3/3 signers", async () => {
     const higherThreshold = 3n;
 

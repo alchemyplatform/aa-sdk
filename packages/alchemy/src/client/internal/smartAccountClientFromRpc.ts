@@ -56,6 +56,7 @@ export function createAlchemySmartAccountClientFromRpcClient({
   feeEstimator,
   gasEstimator,
   customMiddleware,
+  signUserOperation,
   client,
 }: CreateAlchemySmartAccountClientFromRpcClient): AlchemySmartAccountClient {
   const feeOptions =
@@ -91,5 +92,6 @@ export function createAlchemySmartAccountClientFromRpcClient({
             gasEstimator,
         },
       })),
+    signUserOperation,
   }).extend(alchemyActions);
 }
