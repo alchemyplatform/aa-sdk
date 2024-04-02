@@ -1,4 +1,3 @@
-import type { EntryPointParameter } from "@alchemy/aa-core";
 import {
   FailedToGetStorageSlotError,
   InvalidEntryPointError,
@@ -6,9 +5,9 @@ import {
   getAccountAddress,
   getEntryPoint,
   toSmartContractAccount,
-  type Address,
+  type DefaultEntryPointVersion,
   type EntryPointDef,
-  type EntryPointDefRegistry,
+  type EntryPointRegistryBase,
   type EntryPointVersion,
   type SmartAccountSigner,
   type SmartContractAccountWithSigner,
@@ -22,6 +21,7 @@ import {
   hashMessage,
   hashTypedData,
   trim,
+  type Address,
   type Hex,
   type SignTypedDataParameters,
   type Transport,
@@ -49,13 +49,19 @@ export type LightAccount<
   getOwnerAddress: () => Promise<Address>;
 };
 
+export interface LightAccountRegistry<TSigner extends SmartAccountSigner>
+  extends EntryPointRegistryBase<LightAccount<EntryPointVersion, TSigner>> {
+  "0.6.0": LightAccount<"0.6.0", TSigner>;
+  "0.7.0": LightAccount<"0.7.0", TSigner>;
+}
+
 export type CreateLightAccountParams<
   TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 > = Pick<
   ToSmartContractAccountParams<TEntryPointVersion, "LightAccount", TTransport>,
-  "transport" | "chain"
+  "transport" | "chain" | "entryPoint"
 > & {
   signer: TSigner;
   salt?: bigint;
@@ -63,28 +69,58 @@ export type CreateLightAccountParams<
   factoryAddress?: Address;
   initCode?: Hex;
   version?: LightAccountVersion;
-} & EntryPointParameter<TEntryPointVersion>;
+};
 
 export async function createLightAccount<
-  TEntryPointDef extends EntryPointDefRegistry[EntryPointVersion],
-  TEntryPointVersion extends EntryPointVersion = TEntryPointDef extends EntryPointDef<
-    infer U
-  >
-    ? U
-    : never,
+  TEntryPointVersion extends DefaultEntryPointVersion = DefaultEntryPointVersion,
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
   config: CreateLightAccountParams<TEntryPointVersion, TTransport, TSigner>
-): Promise<LightAccount<TEntryPointVersion, TSigner>>;
+): Promise<LightAccountRegistry<TSigner>[DefaultEntryPointVersion]>;
 
 export async function createLightAccount<
-  TEntryPointDef extends EntryPointDefRegistry[EntryPointVersion],
-  TEntryPointVersion extends EntryPointVersion = TEntryPointDef extends EntryPointDef<
-    infer U
-  >
-    ? U
-    : never,
+  TEntryPointDef extends EntryPointDef<TEntryPointVersion>,
+  TEntryPointVersion extends EntryPointVersion = TEntryPointDef["version"],
+  TTransport extends Transport = Transport,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
+>(
+  config: CreateLightAccountParams<TEntryPointVersion, TTransport, TSigner>
+): Promise<LightAccountRegistry<TSigner>[TEntryPointVersion]>;
+
+export async function createLightAccount<
+  TTransport extends Transport = Transport,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
+>({
+  chain,
+  entryPoint,
+  ...params
+}: CreateLightAccountParams<EntryPointVersion, TTransport, TSigner>): Promise<
+  LightAccountRegistry<TSigner>[EntryPointVersion]
+> {
+  const _entryPoint: EntryPointDef<EntryPointVersion> =
+    entryPoint ?? getEntryPoint(chain);
+
+  switch (_entryPoint.version) {
+    case "0.6.0":
+      return (await _createLightAccount<"0.6.0">({
+        chain,
+        entryPoint: _entryPoint as EntryPointDef<"0.6.0">,
+        ...params,
+      })) as LightAccountRegistry<TSigner>["0.6.0"];
+    case "0.7.0":
+      return (await _createLightAccount<"0.7.0">({
+        chain,
+        entryPoint: _entryPoint as EntryPointDef<"0.7.0">,
+        ...params,
+      })) as LightAccountRegistry<TSigner>["0.7.0"];
+    default:
+      throw new InvalidEntryPointError(chain, _entryPoint.version);
+  }
+}
+
+async function _createLightAccount<
+  TEntryPointVersion extends EntryPointVersion,
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >({
@@ -97,13 +133,13 @@ export async function createLightAccount<
   accountAddress,
   factoryAddress = getDefaultLightAccountFactoryAddress(chain, version),
   salt: salt_ = 0n,
-}: CreateLightAccountParams<TEntryPointVersion, TTransport, TSigner>): Promise<
-  LightAccount<TEntryPointVersion>
+}: Omit<
+  CreateLightAccountParams<EntryPointVersion, TTransport, TSigner>,
+  "entryPoint"
+> & { entryPoint: EntryPointDef<TEntryPointVersion> }): Promise<
+  LightAccountRegistry<TSigner>[TEntryPointVersion]
 > {
-  const _entryPoint: EntryPointDef<EntryPointVersion> =
-    entryPoint ?? getEntryPoint(chain);
-
-  const client = createBundlerClient({
+  const client = createBundlerClient<TEntryPointVersion, TTransport>({
     transport,
     chain,
   });
@@ -129,7 +165,7 @@ export async function createLightAccount<
 
   const address = await getAccountAddress({
     client,
-    entryPoint: _entryPoint,
+    entryPoint,
     accountAddress,
     getAccountInitCode,
   });
@@ -192,148 +228,74 @@ export async function createLightAccount<
     });
   };
 
-  const account =
-    _entryPoint.version === "0.6.0"
-      ? await toSmartContractAccount({
-          transport,
-          chain,
-          entryPoint: _entryPoint as EntryPointDef<"0.6.0">,
-          accountAddress: address,
-          source: "LightAccount",
-          getAccountInitCode,
-          encodeExecute: async ({ target, data, value }) => {
-            return encodeFunctionData({
-              abi: LightAccountAbi,
-              functionName: "execute",
-              args: [target, value ?? 0n, data],
-            });
-          },
-          encodeBatchExecute: async (txs) => {
-            const [targets, values, datas] = txs.reduce(
-              (accum, curr) => {
-                accum[0].push(curr.target);
-                accum[1].push(curr.value ?? 0n);
-                accum[2].push(curr.data);
+  const account = await toSmartContractAccount({
+    transport,
+    chain,
+    entryPoint,
+    accountAddress: address,
+    source: "LightAccount",
+    getAccountInitCode,
+    encodeExecute: async ({ target, data, value }) => {
+      return encodeFunctionData({
+        abi: LightAccountAbi,
+        functionName: "execute",
+        args: [target, value ?? 0n, data],
+      });
+    },
+    encodeBatchExecute: async (txs) => {
+      const [targets, values, datas] = txs.reduce(
+        (accum, curr) => {
+          accum[0].push(curr.target);
+          accum[1].push(curr.value ?? 0n);
+          accum[2].push(curr.data);
 
-                return accum;
-              },
-              [[], [], []] as [Address[], bigint[], Hex[]]
-            );
-            return encodeFunctionData({
-              abi: LightAccountAbi,
-              functionName: "executeBatch",
-              args: [targets, values, datas],
-            });
-          },
-          signUserOperationHash: async (uoHash: Hex) => {
-            return signer.signMessage({ raw: uoHash });
-          },
-          async signMessage({ message }) {
-            const version = await getLightAccountVersion(account!);
-            switch (version) {
-              case "v1.0.1":
-                return signer.signMessage(message);
-              case "v1.0.2":
-                throw new Error(
-                  `Version ${version} of LightAccount doesn't support 1271`
-                );
-              default:
-                return signWith1271Wrapper(hashMessage(message));
-            }
-          },
-          async signTypedData(params) {
-            const version = await getLightAccountVersion(account!);
-            switch (version) {
-              case "v1.0.1": {
-                return signer.signTypedData(
-                  params as unknown as SignTypedDataParameters
-                );
-              }
-              case "v1.0.2":
-                throw new Error(
-                  `Version ${version} of LightAccount doesn't support 1271`
-                );
-              default:
-                return signWith1271Wrapper(hashTypedData(params));
-            }
-          },
-          getDummySignature: () => {
-            return "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
-          },
-          encodeUpgradeToAndCall,
-        })
-      : _entryPoint.version === "0.7.0"
-      ? await toSmartContractAccount({
-          transport,
-          chain,
-          entryPoint: _entryPoint as EntryPointDef<"0.7.0">,
-          accountAddress: address,
-          source: "LightAccount",
-          getAccountInitCode,
-          encodeExecute: async ({ target, data, value }) => {
-            return encodeFunctionData({
-              abi: LightAccountAbi,
-              functionName: "execute",
-              args: [target, value ?? 0n, data],
-            });
-          },
-          encodeBatchExecute: async (txs) => {
-            const [targets, values, datas] = txs.reduce(
-              (accum, curr) => {
-                accum[0].push(curr.target);
-                accum[1].push(curr.value ?? 0n);
-                accum[2].push(curr.data);
-
-                return accum;
-              },
-              [[], [], []] as [Address[], bigint[], Hex[]]
-            );
-            return encodeFunctionData({
-              abi: LightAccountAbi,
-              functionName: "executeBatch",
-              args: [targets, values, datas],
-            });
-          },
-          signUserOperationHash: async (uoHash: Hex) => {
-            return signer.signMessage({ raw: uoHash });
-          },
-          async signMessage({ message }) {
-            const version = await getLightAccountVersion(account!);
-            switch (version) {
-              case "v1.0.1":
-                return signer.signMessage(message);
-              case "v1.0.2":
-                throw new Error(
-                  `Version ${version} of LightAccount doesn't support 1271`
-                );
-              default:
-                return signWith1271Wrapper(hashMessage(message));
-            }
-          },
-          async signTypedData(params) {
-            const version = await getLightAccountVersion(account!);
-            switch (version) {
-              case "v1.0.1": {
-                return signer.signTypedData(
-                  params as unknown as SignTypedDataParameters
-                );
-              }
-              case "v1.0.2":
-                throw new Error(
-                  `Version ${version} of LightAccount doesn't support 1271`
-                );
-              default:
-                return signWith1271Wrapper(hashTypedData(params));
-            }
-          },
-          getDummySignature: () => {
-            return "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
-          },
-          encodeUpgradeToAndCall,
-        })
-      : undefined;
-
-  if (!account) throw new InvalidEntryPointError(chain, _entryPoint.version);
+          return accum;
+        },
+        [[], [], []] as [Address[], bigint[], Hex[]]
+      );
+      return encodeFunctionData({
+        abi: LightAccountAbi,
+        functionName: "executeBatch",
+        args: [targets, values, datas],
+      });
+    },
+    signUserOperationHash: async (uoHash: Hex) => {
+      return signer.signMessage({ raw: uoHash });
+    },
+    async signMessage({ message }) {
+      const version = await getLightAccountVersion(account!);
+      switch (version) {
+        case "v1.0.1":
+          return signer.signMessage(message);
+        case "v1.0.2":
+          throw new Error(
+            `Version ${version} of LightAccount doesn't support 1271`
+          );
+        default:
+          return signWith1271Wrapper(hashMessage(message));
+      }
+    },
+    async signTypedData(params) {
+      const version = await getLightAccountVersion(account!);
+      switch (version) {
+        case "v1.0.1": {
+          return signer.signTypedData(
+            params as unknown as SignTypedDataParameters
+          );
+        }
+        case "v1.0.2":
+          throw new Error(
+            `Version ${version} of LightAccount doesn't support 1271`
+          );
+        default:
+          return signWith1271Wrapper(hashTypedData(params));
+      }
+    },
+    getDummySignature: () => {
+      return "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
+    },
+    encodeUpgradeToAndCall,
+  });
 
   return {
     ...account,
@@ -364,5 +326,5 @@ export async function createLightAccount<
       return callResult;
     },
     getSigner: () => signer,
-  } as LightAccount<TEntryPointVersion, TSigner>;
+  } as LightAccountRegistry<TSigner>[TEntryPointVersion];
 }

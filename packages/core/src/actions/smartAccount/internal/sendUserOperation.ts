@@ -53,13 +53,9 @@ export async function _sendUserOperation<
   }
 
   request.signature = await account.signUserOperationHash(
-    entryPoint.version === "0.6.0"
-      ? entryPoint.getUserOperationHash(
-          request as UserOperationRequest<"0.6.0">
-        )
-      : entryPoint.getUserOperationHash(
-          request as UserOperationRequest<"0.7.0">
-        )
+    entryPoint.getUserOperationHash(
+      request as UserOperationRequest<TEntryPointVersion>
+    )
   );
 
   return {

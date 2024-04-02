@@ -2,10 +2,9 @@ import {
   LocalAccountSigner,
   polygonMumbai,
   type Address,
-  type Hex,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
-import { http } from "viem";
+import { http, type Hex } from "viem";
 import { createNaniAccount } from "../account.js";
 import { getDefaultNaniAccountFactoryAddress } from "../utils.js";
 

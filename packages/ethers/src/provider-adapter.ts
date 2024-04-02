@@ -14,23 +14,36 @@ import type { EthersProviderAdapterOpts } from "./types.js";
 
 /** Lightweight Adapter for SmartAccountProvider to enable Signer Creation */
 // TODO: Add support for strong entry point version type
-export class EthersProviderAdapter extends JsonRpcProvider {
-  readonly accountProvider: SmartAccountClient<EntryPointVersion>;
+export class EthersProviderAdapter<
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined,
+  TEntryPointVersion extends EntryPointVersion = TAccount extends SmartContractAccount<
+    infer U
+  >
+    ? U
+    : EntryPointVersion
+> extends JsonRpcProvider {
+  readonly accountProvider: SmartAccountClient<TEntryPointVersion>;
 
-  constructor(opts: EthersProviderAdapterOpts) {
+  constructor(opts: EthersProviderAdapterOpts<TAccount, TEntryPointVersion>) {
     super();
     if ("accountProvider" in opts) {
       this.accountProvider = opts.accountProvider;
     } else {
       const chain = getChain(opts.chainId);
       if (typeof opts.rpcProvider === "string") {
-        this.accountProvider = createSmartAccountClient<EntryPointVersion>({
+        this.accountProvider = createSmartAccountClient<
+          TAccount,
+          TEntryPointVersion
+        >({
           transport: http(opts.rpcProvider),
           chain,
           account: opts.account,
         });
       } else {
-        this.accountProvider = createSmartAccountClient<EntryPointVersion>({
+        this.accountProvider = createSmartAccountClient<
+          TAccount,
+          TEntryPointVersion
+        >({
           transport: custom(opts.rpcProvider.transport),
           chain,
           account: opts.account,
@@ -58,11 +71,10 @@ export class EthersProviderAdapter extends JsonRpcProvider {
    * @param fn - a function that takes the account provider's rpcClient and returns an ISmartContractAccount
    * @returns an {@link AccountSigner} that can be used to sign and send user operations
    */
-  connectToAccount<
-    TEntryPointVersion extends EntryPointVersion,
-    TAccount extends SmartContractAccount<TEntryPointVersion>
-  >(account: TAccount): AccountSigner<TEntryPointVersion, TAccount> {
-    return new AccountSigner<TEntryPointVersion, TAccount>(this, account);
+  connectToAccount(
+    account: TAccount
+  ): AccountSigner<TAccount, TEntryPointVersion> {
+    return new AccountSigner<TAccount, TEntryPointVersion>(this, account);
   }
 
   getBundlerClient(): BundlerClient<EntryPointVersion, Transport> {
@@ -80,8 +92,17 @@ export class EthersProviderAdapter extends JsonRpcProvider {
    * @param provider - the ethers JSON RPC provider to convert
    * @returns an instance of {@link EthersProviderAdapter}
    */
-  static fromEthersProvider(provider: JsonRpcProvider): EthersProviderAdapter {
-    return new EthersProviderAdapter({
+  static fromEthersProvider<
+    TAccount extends SmartContractAccount<TEntryPointVersion> | undefined,
+    TEntryPointVersion extends EntryPointVersion = TAccount extends SmartContractAccount<
+      infer U
+    >
+      ? U
+      : EntryPointVersion
+  >(
+    provider: JsonRpcProvider
+  ): EthersProviderAdapter<TAccount, TEntryPointVersion> {
+    return new EthersProviderAdapter<TAccount, TEntryPointVersion>({
       rpcProvider: provider.connection.url,
       chainId: provider.network.chainId,
     });

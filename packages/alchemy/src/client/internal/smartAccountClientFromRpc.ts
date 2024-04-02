@@ -4,7 +4,7 @@ import {
   type EntryPointVersion,
   type SmartContractAccount,
 } from "@alchemy/aa-core";
-import type { Chain, CustomTransport, Transport } from "viem";
+import type { Chain, CustomTransport, HttpTransport, Transport } from "viem";
 import { alchemyFeeEstimator } from "../../middleware/feeEstimator.js";
 import { alchemyGasManagerMiddleware } from "../../middleware/gasManager.js";
 import { alchemyUserOperationSimulator } from "../../middleware/userOperationSimulator.js";
@@ -35,11 +35,13 @@ export type CreateAlchemySmartAccountClientFromRpcClient<
  * from an existing Alchemy Rpc Client
  */
 export function createAlchemySmartAccountClientFromRpcClient<
-  TEntryPointVersion extends EntryPointVersion,
-  TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
-    | undefined
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined,
+  TEntryPointVersion extends EntryPointVersion = TAccount extends SmartContractAccount<
+    infer U
+  >
+    ? U
+    : EntryPointVersion,
+  TChain extends Chain | undefined = Chain | undefined
 >({
   opts,
   account,
@@ -61,7 +63,13 @@ export function createAlchemySmartAccountClientFromRpcClient<
   const feeOptions =
     opts?.feeOptions ?? getDefaultUserOperationFeeOptions(client.chain);
 
-  return createSmartAccountClientFromExisting({
+  return createSmartAccountClientFromExisting<
+    TAccount,
+    TEntryPointVersion,
+    HttpTransport,
+    TChain,
+    ClientWithAlchemyMethods<TEntryPointVersion>
+  >({
     account,
     client,
     type: "AlchemySmartAccountClient",

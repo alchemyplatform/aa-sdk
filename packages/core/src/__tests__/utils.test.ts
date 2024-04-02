@@ -25,7 +25,7 @@ describe("Utils Tests", () => {
         verificationGasLimit: "0x114c2",
       } as UserOperationRequest<"0.6.0">)
     ).toMatchInlineSnapshot(
-      `"0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b"`
+      `"0xbb5560c1a3983429a6cdb244fa532fb4f2cf0de8ba9ccbf257bff93d069c76a3"`
     );
   });
 

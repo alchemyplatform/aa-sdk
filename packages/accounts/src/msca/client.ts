@@ -1,5 +1,6 @@
 import {
   createSmartAccountClient,
+  type EntryPointDef,
   type EntryPointVersion,
   type SmartAccountClient,
   type SmartAccountClientActions,
@@ -45,7 +46,14 @@ export type CreateMultiOwnerModularAccountClientParams<
 >;
 
 export function createMultiOwnerModularAccountClient<
-  TEntryPointVersion extends EntryPointVersion,
+  TAccount extends
+    | MultiOwnerModularAccount<TEntryPointVersion, TSigner>
+    | undefined,
+  TEntryPointVersion extends EntryPointVersion = TAccount extends MultiOwnerModularAccount<
+    infer U
+  >
+    ? U
+    : EntryPointVersion,
   TChain extends Chain | undefined = Chain | undefined,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
@@ -82,6 +90,14 @@ export function createMultiOwnerModularAccountClient<
 >;
 
 export async function createMultiOwnerModularAccountClient<
+  TAccount extends
+    | MultiOwnerModularAccount<TEntryPointVersion, TSigner>
+    | undefined,
+  TEntryPointVersion extends EntryPointVersion = TAccount extends MultiOwnerModularAccount<
+    infer U
+  >
+    ? U
+    : EntryPointVersion,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >({
   account,
@@ -89,25 +105,35 @@ export async function createMultiOwnerModularAccountClient<
   chain,
   ...clientConfig
 }: CreateMultiOwnerModularAccountClientParams<
-  EntryPointVersion,
+  TEntryPointVersion,
   Transport,
   Chain,
   TSigner
 >): Promise<
   SmartAccountClient<
-    EntryPointVersion,
+    TEntryPointVersion,
     Transport,
     Chain,
-    MultiOwnerModularAccount<EntryPointVersion, TSigner>
+    MultiOwnerModularAccount<TEntryPointVersion, TSigner>
   >
 > {
-  const modularAccount = await createMultiOwnerModularAccount({
+  const modularAccount = (await createMultiOwnerModularAccount<
+    EntryPointDef<TEntryPointVersion>,
+    TEntryPointVersion,
+    Transport,
+    TSigner
+  >({
     ...account,
     transport,
     chain,
-  });
+  })) as MultiOwnerModularAccount<TEntryPointVersion, TSigner>;
 
-  return createSmartAccountClient({
+  return createSmartAccountClient<
+    MultiOwnerModularAccount<TEntryPointVersion, TSigner>,
+    TEntryPointVersion,
+    Transport,
+    Chain
+  >({
     ...clientConfig,
     transport,
     chain,

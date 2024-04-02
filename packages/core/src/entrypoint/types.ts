@@ -126,13 +126,3 @@ export type EntryPointParameter<
 > = {
   entryPoint?: EntryPointDef<TEntryPointVersion, TChain>;
 };
-
-// EQ<TEntryPointVersion, DefaultEntryPointVersion> extends true
-//   ? {
-//       entryPoint?: EntryPointDef<TEntryPointVersion, TChain>;
-//     }
-//   : {
-//       entryPoint: IsOneOf<TEntryPointVersion, EntryPointVersion> extends true
-//         ? EntryPointDef<TEntryPointVersion, TChain>
-//         : never;
-//     };

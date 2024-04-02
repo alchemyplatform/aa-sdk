@@ -108,12 +108,14 @@ export type BaseSmartAccountClient<
 >;
 
 export function createSmartAccountClient<
-  TEntryPointVersion extends EntryPointVersion,
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined,
+  TEntryPointVersion extends EntryPointVersion = TAccount extends SmartContractAccount<
+    infer U
+  >
+    ? U
+    : EntryPointVersion,
   TTransport extends Transport = Transport,
-  TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
-    | undefined
+  TChain extends Chain | undefined = Chain | undefined
 >(
   config: SmartAccountClientConfig<
     TEntryPointVersion,
@@ -127,11 +129,10 @@ export function createSmartAccountClient<
     name = "account provider",
     transport,
     type = "SmartAccountClient",
-    account,
     ...params
   } = config;
 
-  const entryPoint = account?.getEntryPoint();
+  const entryPoint = params.account?.getEntryPoint();
   const _createBundlerClient =
     entryPoint?.version === "0.6.0"
       ? createBundlerClient<"0.6.0", Transport>
@@ -232,12 +233,14 @@ export function createSmartAccountClient<
 }
 
 export function createSmartAccountClientFromExisting<
-  TEntryPointVersion extends EntryPointVersion,
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined,
+  TEntryPointVersion extends EntryPointVersion = TAccount extends SmartContractAccount<
+    infer U
+  >
+    ? U
+    : EntryPointVersion,
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined =
-    | SmartContractAccount<TEntryPointVersion>
-    | undefined,
   TClient extends BundlerClient<TEntryPointVersion, TTransport> = BundlerClient<
     TEntryPointVersion,
     TTransport
@@ -262,10 +265,10 @@ export function createSmartAccountClientFromExisting<
   TRpcSchema
 > {
   return createSmartAccountClient<
+    TAccount,
     TEntryPointVersion,
     CustomTransport,
-    TChain,
-    TAccount
+    TChain
   >({
     ...config,
     chain: config.client.chain,

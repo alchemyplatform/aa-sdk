@@ -7,6 +7,7 @@ import {
   type SmartContractAccount,
   type UserOperationCallData,
   type UserOperationOverrides,
+  type WaitForUserOperationTxParameters,
 } from "@alchemy/aa-core";
 import { Signer } from "@ethersproject/abstract-signer";
 import { hexlify } from "@ethersproject/bytes";
@@ -15,7 +16,7 @@ import {
   type TransactionRequest,
   type TransactionResponse,
 } from "@ethersproject/providers";
-import { isHex, toBytes, type Transport } from "viem";
+import { isHex, toBytes, type Hex, type Transport } from "viem";
 import { EthersProviderAdapter } from "./provider-adapter.js";
 
 const hexlifyOptional = (value: any): `0x${string}` | undefined => {
@@ -27,32 +28,46 @@ const hexlifyOptional = (value: any): `0x${string}` | undefined => {
 };
 
 export class AccountSigner<
-  TEntryPointVersion extends EntryPointVersion,
-  TAccount extends SmartContractAccount<TEntryPointVersion> = SmartContractAccount<TEntryPointVersion>
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined,
+  TEntryPointVersion extends EntryPointVersion = TAccount extends SmartContractAccount<
+    infer U
+  >
+    ? U
+    : EntryPointVersion
 > extends Signer {
   readonly account: TAccount;
 
   sendUserOperation;
   waitForUserOperationTransaction;
 
-  constructor(public provider: EthersProviderAdapter, account: TAccount) {
+  constructor(
+    public provider: EthersProviderAdapter<TAccount, TEntryPointVersion>,
+    account: TAccount
+  ) {
     super();
     this.account = account;
 
     this.sendUserOperation = (
       args: UserOperationCallData | BatchUserOperationCallData,
       overrides?: UserOperationOverrides<TEntryPointVersion>
-    ) =>
-      this.provider.accountProvider.sendUserOperation({
+    ) => {
+      if (!account) {
+        throw new AccountNotFoundError();
+      }
+      return this.provider.accountProvider.sendUserOperation({
         uo: args,
         account,
         overrides,
       });
+    };
 
-    this.waitForUserOperationTransaction =
-      this.provider.accountProvider.waitForUserOperationTransaction.bind(
-        this.provider.accountProvider
+    this.waitForUserOperationTransaction = (
+      args: WaitForUserOperationTxParameters
+    ): Promise<Hex> => {
+      return this.provider.accountProvider.waitForUserOperationTransaction(
+        args
       );
+    };
   }
 
   async getAddress(): Promise<string> {
@@ -107,8 +122,8 @@ export class AccountSigner<
   }
 
   connect(
-    provider: EthersProviderAdapter
-  ): AccountSigner<TEntryPointVersion, TAccount> {
+    provider: EthersProviderAdapter<TAccount, TEntryPointVersion>
+  ): AccountSigner<TAccount, TEntryPointVersion> {
     this.provider = provider;
 
     return this;

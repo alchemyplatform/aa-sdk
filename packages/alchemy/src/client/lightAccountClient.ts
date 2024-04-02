@@ -5,11 +5,12 @@ import {
   type LightAccount,
 } from "@alchemy/aa-accounts";
 import type {
+  EntryPointDef,
   EntryPointVersion,
-  HttpTransport,
   SmartAccountSigner,
 } from "@alchemy/aa-core";
-import { custom, type Chain, type CustomTransport, type Transport } from "viem";
+import { custom, type Chain, type Transport } from "viem";
+import type { CustomTransport } from "viem/_types/clients/transports/custom.js";
 import { AlchemyProviderConfigSchema } from "../schema.js";
 import { createAlchemySmartAccountClientFromRpcClient } from "./internal/smartAccountClientFromRpc.js";
 import { createAlchemyPublicRpcClient } from "./rpcClient.js";
@@ -22,13 +23,13 @@ export type AlchemyLightAccountClientConfig<
   TEntryPointVersion extends EntryPointVersion,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 > = Omit<
-  CreateLightAccountParams<TEntryPointVersion, HttpTransport, TSigner>,
+  CreateLightAccountParams<TEntryPointVersion, Transport, TSigner>,
   "transport" | "chain"
 > &
   Omit<
     AlchemySmartAccountClientConfig<
       TEntryPointVersion,
-      Transport,
+      CustomTransport,
       Chain,
       LightAccount<TEntryPointVersion, TSigner>
     >,
@@ -36,7 +37,12 @@ export type AlchemyLightAccountClientConfig<
   >;
 
 export async function createLightAccountAlchemyClient<
-  TEntryPointVersion extends EntryPointVersion,
+  TAccount extends LightAccount<TEntryPointVersion, TSigner> | undefined,
+  TEntryPointVersion extends EntryPointVersion = TAccount extends LightAccount<
+    infer U
+  >
+    ? U
+    : EntryPointVersion,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
   params: AlchemyLightAccountClientConfig<TEntryPointVersion, TSigner>
@@ -56,10 +62,10 @@ export async function createLightAccountAlchemyClient<
     connectionConfig,
   });
 
-  const account = await createLightAccount({
+  const account = (await createLightAccount<EntryPointDef<TEntryPointVersion>>({
     transport: custom(client),
     ...params,
-  });
+  })) as LightAccount<TEntryPointVersion, TSigner>;
 
   return createAlchemySmartAccountClientFromRpcClient({
     ...params,

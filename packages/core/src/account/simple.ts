@@ -13,8 +13,9 @@ import { SimpleAccountFactoryAbi } from "../abis/SimpleAccountFactoryAbi.js";
 import { createBundlerClient } from "../client/bundlerClient.js";
 import { getEntryPoint } from "../entrypoint/index.js";
 import type {
+  DefaultEntryPointVersion,
   EntryPointDef,
-  EntryPointDefRegistry,
+  EntryPointRegistryBase,
   EntryPointVersion,
 } from "../entrypoint/types.js";
 import { AccountRequiresOwnerError } from "../errors/account.js";
@@ -118,40 +119,16 @@ export type SimpleSmartAccount<
   TSigner
 >;
 
-export async function createSimpleSmartAccount<
-  TEntryPointDef extends EntryPointDefRegistry[TEntryPointVersion],
-  TEntryPointVersion extends EntryPointVersion = TEntryPointDef extends EntryPointDef<
-    infer U
-  >
-    ? U
-    : never,
-  TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
->({
-  chain,
-  entryPoint,
-  ...params
-}: Omit<
-  SimpleSmartAccountParams<TEntryPointVersion, TTransport, TSigner>,
-  "chain" | "accountAddress" | "entryPointAddress"
-> &
-  Pick<
-    ToSmartContractAccountParams<
-      TEntryPointVersion,
-      "SimpleAccount",
-      TTransport,
-      Chain
-    >,
-    "chain" | "transport" | "accountAddress" | "entryPoint"
-  >): Promise<SimpleSmartAccount<TEntryPointVersion, TSigner>>;
+export interface SimpleAccountRegistry<TSigner extends SmartAccountSigner>
+  extends EntryPointRegistryBase<
+    SimpleSmartAccount<EntryPointVersion, TSigner>
+  > {
+  "0.6.0": SimpleSmartAccount<"0.6.0", TSigner>;
+  "0.7.0": SimpleSmartAccount<"0.7.0", TSigner>;
+}
 
 export async function createSimpleSmartAccount<
-  TEntryPointDef extends EntryPointDefRegistry[TEntryPointVersion],
-  TEntryPointVersion extends EntryPointVersion = TEntryPointDef extends EntryPointDef<
-    infer U
-  >
-    ? U
-    : never,
+  TEntryPointVersion extends DefaultEntryPointVersion = DefaultEntryPointVersion,
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >({
@@ -170,87 +147,140 @@ export async function createSimpleSmartAccount<
       Chain
     >,
     "chain" | "transport" | "accountAddress" | "entryPoint"
-  >): Promise<SimpleSmartAccount<EntryPointVersion, TSigner>> {
+  >): Promise<SimpleAccountRegistry<TSigner>[DefaultEntryPointVersion]>;
+
+export async function createSimpleSmartAccount<
+  TEntryPointDef extends EntryPointDef<TEntryPointVersion>,
+  TEntryPointVersion extends EntryPointVersion = TEntryPointDef["version"],
+  TTransport extends Transport = Transport,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
+>({
+  chain,
+  entryPoint,
+  ...params
+}: Omit<
+  SimpleSmartAccountParams<TEntryPointVersion, TTransport, TSigner>,
+  "chain" | "accountAddress" | "entryPointAddress"
+> &
+  Pick<
+    ToSmartContractAccountParams<
+      TEntryPointVersion,
+      "SimpleAccount",
+      TTransport,
+      Chain
+    >,
+    "chain" | "transport" | "accountAddress" | "entryPoint"
+  >): Promise<SimpleAccountRegistry<TSigner>[TEntryPointVersion]>;
+
+export async function createSimpleSmartAccount<
+  TTransport extends Transport = Transport,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
+>({
+  chain,
+  entryPoint,
+  ...params
+}: Omit<
+  SimpleSmartAccountParams<EntryPointVersion, TTransport, TSigner>,
+  "chain" | "accountAddress" | "entryPointAddress"
+> &
+  Pick<
+    ToSmartContractAccountParams<
+      EntryPointVersion,
+      "SimpleAccount",
+      TTransport,
+      Chain
+    >,
+    "chain" | "transport" | "accountAddress" | "entryPoint"
+  >): Promise<SimpleAccountRegistry<TSigner>[EntryPointVersion]> {
   if (!params.signer) throw new AccountRequiresOwnerError("SimpleAccount");
   const _entryPoint = entryPoint ?? getEntryPoint(chain);
+
+  switch (_entryPoint.version) {
+    case "0.6.0":
+      // @ts-expect-error typescript doesn't handle zod types well
+      return _createSimpleSmartAccount<"0.6.0", TTransport, TSigner>({
+        chain,
+        entryPoint: _entryPoint as EntryPointDef<"0.6.0">,
+        ...params,
+      });
+    case "0.7.0":
+      // @ts-expect-error typescript doesn't handle zod types well
+      return _createSimpleSmartAccount<"0.7.0", TTransport, TSigner>({
+        chain,
+        entryPoint: _entryPoint as EntryPointDef<"0.7.0">,
+        ...params,
+      });
+    default:
+      throw new InvalidEntryPointError(chain, _entryPoint);
+  }
+}
+
+export async function _createSimpleSmartAccount<
+  TEntryPointVersion extends EntryPointVersion,
+  TTransport extends Transport = Transport,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
+>({
+  chain,
+  entryPoint,
+  ...params
+}: Omit<
+  SimpleSmartAccountParams<TEntryPointVersion, TTransport, TSigner>,
+  "chain" | "accountAddress" | "entryPointAddress"
+> &
+  Pick<
+    ToSmartContractAccountParams<
+      TEntryPointVersion,
+      "SimpleAccount",
+      TTransport,
+      Chain
+    >,
+    "chain" | "transport" | "accountAddress"
+  > & { entryPoint: EntryPointDef<TEntryPointVersion> }): Promise<
+  SimpleAccountRegistry<TSigner>[TEntryPointVersion]
+> {
   const simpleAccount = new SimpleSmartContractAccount<
     TEntryPointVersion,
     TTransport
     // @ts-expect-error zod custom type not recognized as required params for signers
   >({
     chain,
-    entryPointAddress: _entryPoint.address,
+    entryPointAddress: entryPoint.address,
     ...params,
   });
   const parsedParams = SimpleSmartAccountParamsSchema<
     TEntryPointVersion,
     TTransport,
     TSigner
-  >().parse({ chain, entryPointAddress: _entryPoint.address, ...params });
+  >().parse({ chain, entryPointAddress: entryPoint.address, ...params });
 
-  const base =
-    _entryPoint.version === "0.6.0"
-      ? await toSmartContractAccount({
-          source: "SimpleAccount",
-          transport: params.transport,
-          chain,
-          encodeBatchExecute:
-            simpleAccount.encodeBatchExecute.bind(simpleAccount),
-          encodeExecute: (tx) =>
-            simpleAccount.encodeExecute.bind(simpleAccount)(
-              tx.target,
-              tx.value ?? 0n,
-              tx.data
-            ),
-          entryPoint: _entryPoint as EntryPointDef<"0.6.0">,
-          getAccountInitCode: async () => {
-            if (parsedParams.initCode) return parsedParams.initCode as Hex;
-            return simpleAccount.getAccountInitCode();
-          },
-          getDummySignature:
-            simpleAccount.getDummySignature.bind(simpleAccount),
-          signMessage: ({ message }) =>
-            simpleAccount.signMessage(
-              typeof message === "string" ? message : message.raw
-            ),
-          // @ts-expect-error these types still represent the same thing, but they are just a little off in there definitions
-          signTypedData: simpleAccount.signTypedData.bind(simpleAccount),
-          accountAddress: parsedParams.accountAddress,
-        })
-      : _entryPoint.version === "0.7.0"
-      ? await toSmartContractAccount({
-          source: "SimpleAccount",
-          transport: params.transport,
-          chain,
-          encodeBatchExecute:
-            simpleAccount.encodeBatchExecute.bind(simpleAccount),
-          encodeExecute: (tx) =>
-            simpleAccount.encodeExecute.bind(simpleAccount)(
-              tx.target,
-              tx.value ?? 0n,
-              tx.data
-            ),
-          entryPoint: _entryPoint as EntryPointDef<"0.7.0">,
-          getAccountInitCode: async () => {
-            if (parsedParams.initCode) return parsedParams.initCode as Hex;
-            return simpleAccount.getAccountInitCode();
-          },
-          getDummySignature:
-            simpleAccount.getDummySignature.bind(simpleAccount),
-          signMessage: ({ message }) =>
-            simpleAccount.signMessage(
-              typeof message === "string" ? message : message.raw
-            ),
-          // @ts-expect-error these types still represent the same thing, but they are just a little off in there definitions
-          signTypedData: simpleAccount.signTypedData.bind(simpleAccount),
-          accountAddress: parsedParams.accountAddress,
-        })
-      : undefined;
-
-  if (!base) throw new InvalidEntryPointError(chain, _entryPoint.version);
+  const base = await toSmartContractAccount({
+    source: "SimpleAccount",
+    transport: params.transport,
+    chain,
+    encodeBatchExecute: simpleAccount.encodeBatchExecute.bind(simpleAccount),
+    encodeExecute: (tx) =>
+      simpleAccount.encodeExecute.bind(simpleAccount)(
+        tx.target,
+        tx.value ?? 0n,
+        tx.data
+      ),
+    entryPoint,
+    getAccountInitCode: async () => {
+      if (parsedParams.initCode) return parsedParams.initCode as Hex;
+      return simpleAccount.getAccountInitCode();
+    },
+    getDummySignature: simpleAccount.getDummySignature.bind(simpleAccount),
+    signMessage: ({ message }) =>
+      simpleAccount.signMessage(
+        typeof message === "string" ? message : message.raw
+      ),
+    // @ts-expect-error these types still represent the same thing, but they are just a little off in there definitions
+    signTypedData: simpleAccount.signTypedData.bind(simpleAccount),
+    accountAddress: parsedParams.accountAddress,
+  });
 
   return {
     ...base,
     getSigner: () => simpleAccount.getSigner() as TSigner,
-  };
+  } as SimpleAccountRegistry<TSigner>[TEntryPointVersion];
 }

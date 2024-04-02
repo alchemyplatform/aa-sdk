@@ -8,7 +8,7 @@ export class EntryPointNotFoundError extends BaseError {
   constructor(chain: Chain, entryPointVersion: any) {
     super(
       [
-        `No default entry point v${entryPointVersion} exists for ${chain.name}.`,
+        `No default entry point v.${entryPointVersion} exists for ${chain.name}.`,
         `Supply an override.`,
       ].join("\n")
     );

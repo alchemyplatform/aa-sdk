@@ -7,21 +7,24 @@ import {
 import type { Chain, Transport } from "viem";
 
 export type EthersProviderAdapterOpts<
+  TAccount extends SmartContractAccount<TEntryPointVersion> | undefined,
+  TEntryPointVersion extends EntryPointVersion = TAccount extends SmartContractAccount<
+    infer U
+  >
+    ? U
+    : EntryPointVersion,
   TTransport extends Transport = Transport,
-  TChain extends Chain = Chain,
-  TAccount extends SmartContractAccount<EntryPointVersion> | undefined =
-    | SmartContractAccount<EntryPointVersion>
-    | undefined
+  TChain extends Chain = Chain
 > = {
   account?: TAccount;
 } & (
   | {
-      rpcProvider: string | BundlerClient<EntryPointVersion, TTransport>;
+      rpcProvider: string | BundlerClient<TEntryPointVersion, TTransport>;
       chainId: number;
     }
   | {
       accountProvider: SmartAccountClient<
-        EntryPointVersion,
+        TEntryPointVersion,
         TTransport,
         TChain,
         TAccount

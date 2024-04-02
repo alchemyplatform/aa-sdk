@@ -74,15 +74,17 @@ export const getDefaultMultiOwnerModularAccountFactoryAddress = (
 };
 
 export async function getMSCAUpgradeToData<
-  TEntryPointVersion extends EntryPointVersion,
-  TTransport extends Transport = Transport,
-  TChain extends Chain | undefined = Chain | undefined,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
   TAccount extends
     | SmartContractAccountWithSigner<TEntryPointVersion, string, TSigner>
-    | undefined =
-    | SmartContractAccountWithSigner<TEntryPointVersion, string, TSigner>
-    | undefined
+    | undefined,
+  TEntryPointVersion extends EntryPointVersion = TAccount extends MultiOwnerModularAccount<
+    infer U
+  >
+    ? U
+    : EntryPointVersion,
+  TTransport extends Transport = Transport,
+  TChain extends Chain | undefined = Chain | undefined,
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
   client: SmartAccountClient<TEntryPointVersion, TTransport, TChain, TAccount>,
   args: {
@@ -117,6 +119,7 @@ export async function getMSCAUpgradeToData<
     signerAddress: await account.getSigner().getAddress(),
   });
 
+  const entryPoint = account.getEntryPoint();
   return {
     ...initData,
     createMAAccount: async () =>
@@ -125,7 +128,12 @@ export async function getMSCAUpgradeToData<
         chain: chain as Chain,
         signer: account.getSigner(),
         accountAddress: account.address,
+        entryPoint,
       }),
+  } as UpgradeToData & {
+    createMAAccount: () => Promise<
+      MultiOwnerModularAccount<TEntryPointVersion, TSigner>
+    >;
   };
 }
 

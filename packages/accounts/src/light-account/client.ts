@@ -1,5 +1,6 @@
 import {
   createSmartAccountClient,
+  type EntryPointDef,
   type EntryPointVersion,
   type SmartAccountClient,
   type SmartAccountClientActions,
@@ -43,30 +44,42 @@ export type CreateLightAccountClientParams<
 >;
 
 export function createLightAccountClient<
+  TAccount extends LightAccount<TEntryPointVersion, TSigner> | undefined,
+  TEntryPointVersion extends EntryPointVersion = TAccount extends LightAccount<
+    infer U
+  >
+    ? U
+    : EntryPointVersion,
   TChain extends Chain | undefined = Chain | undefined,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  args: CreateLightAccountClientParams<EntryPointVersion, TChain, TSigner>
+  args: CreateLightAccountClientParams<TEntryPointVersion, TChain, TSigner>
 ): Promise<
   SmartAccountClient<
-    EntryPointVersion,
+    TEntryPointVersion,
     Transport,
     TChain,
-    LightAccount<EntryPointVersion, TSigner>,
+    LightAccount<TEntryPointVersion, TSigner>,
     SmartAccountClientActions<
-      EntryPointVersion,
+      TEntryPointVersion,
       TChain,
-      SmartContractAccount<EntryPointVersion>
+      SmartContractAccount<TEntryPointVersion>
     > &
       LightAccountClientActions<
-        EntryPointVersion,
+        TEntryPointVersion,
         TSigner,
-        LightAccount<EntryPointVersion, TSigner>
+        LightAccount<TEntryPointVersion, TSigner>
       >
   >
 >;
 
 export async function createLightAccountClient<
+  TAccount extends LightAccount<TEntryPointVersion, TSigner> | undefined,
+  TEntryPointVersion extends EntryPointVersion = TAccount extends LightAccount<
+    infer U
+  >
+    ? U
+    : EntryPointVersion,
   TChain extends Chain | undefined = Chain | undefined,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >({
@@ -74,25 +87,34 @@ export async function createLightAccountClient<
   transport,
   chain,
   ...clientConfig
-}: CreateLightAccountClientParams<EntryPointVersion, TChain, TSigner>): Promise<
+}: CreateLightAccountClientParams<
+  TEntryPointVersion,
+  TChain,
+  TSigner
+>): Promise<
   SmartAccountClient<
-    EntryPointVersion,
+    TEntryPointVersion,
     Transport,
     TChain,
-    LightAccount<EntryPointVersion>
+    LightAccount<TEntryPointVersion>
   >
 > {
-  const lightAccount = await createLightAccount({
+  const lightAccount = (await createLightAccount<
+    EntryPointDef<TEntryPointVersion>,
+    TEntryPointVersion,
+    Transport,
+    TSigner
+  >({
     ...account,
     transport,
     chain,
-  });
+  })) as LightAccount<TEntryPointVersion, TSigner>;
 
   return createSmartAccountClient<
-    EntryPointVersion,
+    LightAccount<TEntryPointVersion, TSigner>,
+    TEntryPointVersion,
     Transport,
-    TChain,
-    LightAccount<EntryPointVersion>
+    TChain
   >({
     ...clientConfig,
     transport,

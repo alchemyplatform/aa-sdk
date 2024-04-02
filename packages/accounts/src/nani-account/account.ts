@@ -245,9 +245,7 @@ export const createNaniAccount = async <TTransport extends Transport>(
     transport: params.transport,
     chain: params.chain,
     accountAddress: params.accountAddress as Address | undefined,
-    entryPoint: getEntryPoint(params.chain, {
-      addressOverride: naniAccount.getEntryPointAddress(),
-    }),
+    entryPoint: getEntryPoint(params.chain),
     encodeBatchExecute: naniAccount.encodeBatchExecute.bind(naniAccount),
     encodeExecute: (tx) =>
       naniAccount.encodeExecute(tx.target, tx.value ?? 0n, tx.data),
