@@ -1,9 +1,10 @@
-import { arbitrumSepolia } from "@alchemy/aa-core";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
-  // if you want to handle other or multiple chains, you can change this line
-  const rpcUrl = arbitrumSepolia.rpcUrls.alchemy.http[0];
+export async function POST(
+  req: Request,
+  { params }: { params: { routes: string[] } }
+) {
+  const apiUrl = "https://api.g.alchemy.com";
   const apiKey = process.env.ALCHEMY_API_KEY;
 
   if (apiKey == null) {
@@ -15,9 +16,10 @@ export async function POST(req: Request) {
 
   const body = await req.json();
 
-  const res = await fetch(`${rpcUrl}/${apiKey}`, {
+  const res = await fetch(apiUrl + `/${params.routes.join("/")}`, {
     method: "POST",
     headers: {
+      Authorization: `Bearer ${apiKey}`,
       ...req.headers,
     },
     body: JSON.stringify(body),
