@@ -1,9 +1,17 @@
-import type { EntryPointDef } from "@alchemy/aa-core";
+import type {
+  DefaultEntryPointVersion,
+  EntryPointDef,
+  EntryPointVersion,
+  HttpTransport,
+  OneOf,
+} from "@alchemy/aa-core";
 import {
   FailedToGetStorageSlotError,
+  LocalAccountSigner,
   createBundlerClient,
   getAccountAddress,
   getEntryPoint,
+  sepolia,
   toSmartContractAccount,
   type Address,
   type SmartAccountSigner,
@@ -17,12 +25,15 @@ import {
   fromHex,
   hashMessage,
   hashTypedData,
+  http,
   trim,
   type Chain,
   type Hex,
+  type PrivateKeyAccount,
   type SignTypedDataParameters,
   type Transport,
 } from "viem";
+import { generatePrivateKey } from "viem/accounts";
 import { LightAccountAbi } from "./abis/LightAccountAbi.js";
 import { LightAccountFactoryAbi } from "./abis/LightAccountFactoryAbi.js";
 import {
@@ -35,7 +46,7 @@ import {
 
 export type LightAccount<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TEntryPointVersion extends "0.6.0" = "0.6.0"
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = SmartContractAccountWithSigner<
   "LightAccount",
   TSigner,
@@ -49,7 +60,7 @@ export type LightAccount<
 export type CreateLightAccountParams<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TEntryPointVersion extends "0.6.0" = "0.6.0"
+  TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
 > = Pick<
   ToSmartContractAccountParams<
     "LightAccount",
@@ -65,13 +76,24 @@ export type CreateLightAccountParams<
   factoryAddress?: Address;
   initCode?: Hex;
   version?: LightAccountVersion;
-  entryPoint?: EntryPointDef<TEntryPointVersion, Chain>;
-};
+} & (OneOf<TEntryPointVersion, TEntryPointVersion> extends never
+    ? { entryPoint: never; version?: never }
+    : TEntryPointVersion extends "0.6.0"
+    ? {
+        entryPoint?: EntryPointDef<TEntryPointVersion, Chain>;
+        version?: Extract<LightAccountVersion, `v1${string}`>;
+      }
+    : TEntryPointVersion extends "0.7.0"
+    ? {
+        entryPoint: EntryPointDef<TEntryPointVersion, Chain>;
+        version: Exclude<LightAccountVersion, `v1${string}`>;
+      }
+    : { entryPoint?: never; version?: never });
 
 export async function createLightAccount<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TEntryPointVersion extends "0.6.0" = "0.6.0"
+  TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
 >(
   config: CreateLightAccountParams<TTransport, TSigner, TEntryPointVersion>
 ): Promise<LightAccount<TSigner, TEntryPointVersion>>;
@@ -276,3 +298,46 @@ export async function createLightAccount({
     getSigner: () => signer,
   };
 }
+
+const lightAccount06: LightAccount<
+  LocalAccountSigner<PrivateKeyAccount>,
+  "0.6.0"
+> = await createLightAccount({
+  entryPoint: getEntryPoint(sepolia),
+  transport: http(),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+});
+
+const lightAccountOther = await createLightAccount<
+  HttpTransport,
+  SmartAccountSigner,
+  EntryPointVersion
+>({
+  // @ts-expect-error -- you can't pass in an entrypoint for a union version. entrypoint in this case is never
+  entryPoint: getEntryPoint(sepolia),
+  transport: http(),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+});
+
+const lightAccount062: LightAccount<
+  LocalAccountSigner<PrivateKeyAccount>,
+  "0.6.0"
+> = await createLightAccount({
+  transport: http(),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+});
+
+const lightAccount07: LightAccount<
+  LocalAccountSigner<PrivateKeyAccount>,
+  "0.7.0"
+> = await createLightAccount({
+  entryPoint: getEntryPoint(sepolia, { version: "0.7.0" }),
+  // @ts-expect-error -- version must be not equal to 1, but we dont' support that
+  version: "v2.0.0",
+  transport: http(),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+});
