@@ -40,7 +40,7 @@ Account Kit makes it easy to onboard users with smart accounts -- account abstra
 Account Kit includes five components:
 
 - **aa-sdk**: A simple, powerful interface to integrate, deploy, and use smart accounts. The `aa-sdk` orchestrates everything under the hood to make development easy.
-- **Modular Account:** Secure, audited, modular smart accounts. It is easy to deploy when your users need them and extend with [EIP-6900](https://eips.ethereum.org/EIPS/eip-6900) plugins.
+- **Modular Account:** Secure, audited, modular accounts. It is easy to deploy when your users need them and extend with [EIP-6900](https://eips.ethereum.org/EIPS/eip-6900) plugins.
 - **Signer:** Integrations with the most popular wallet providers. Secure your accounts with email, social login, passkeys, or a self-custodial wallet Signer.
 - **Gas Manager API:** A programmable API to sponsor gas for UserOps that meets your criteria.
 - **Bundler API:** The most reliable ERC-4337 Bundler. Land your UserOps on-chain, batch operations, and sponsor gas at a massive scale.

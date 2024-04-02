@@ -46,7 +46,7 @@ A standard designed for verifying signatures from smart accounts that haven't be
 
 ## ERC-6900
 
-A [standard for modular smart accounts](https://eips.ethereum.org/EIPS/eip-6900) authored by Alchemy and [Yoav](https://github.com/yoavw) (one of the authors of ERC-4337) from the Ethereum Foundation. It defines standard interfaces for Modular Smart Contract Accounts ([`Modular Accounts`](#modular-account)) capable of supporting all standard-conformant [`Plugins`](#plugin).
+A [standard for modular accounts](https://eips.ethereum.org/EIPS/eip-6900) authored by Alchemy and [Yoav](https://github.com/yoavw) (one of the authors of ERC-4337) from the Ethereum Foundation. It defines standard interfaces for Modular Accounts ([`Modular Accounts`](#modular-account)) capable of supporting all standard-conformant [`Plugins`](#plugin).
 
 ## Gas Manager
 
@@ -55,6 +55,10 @@ A [standard for modular smart accounts](https://eips.ethereum.org/EIPS/eip-6900)
 ## Light Account
 
 [Light Account](https://accountkit.alchemy.com/smart-accounts/light-account/.html) is a production-ready [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) [smart account](#smart-account) implementation developed by Alchemy. It builds on top of Ethereum Foundation’s [SimpleAccount](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol) to add key improvements such as support for ownership transfer, ERC-1271 signature support, and gas optimizations. It is [audited by Quantstamp](https://github.com/alchemyplatform/light-account/blob/main/Quantstamp-Audit.pdf).
+
+## Magic Link Authentication
+
+A magic link is a one-time use link sent to a user during the authentication process. After entering their username, the user is sent a URL, either to the user's email address or their mobile phone via text. The user clicks to authenticate themselves without entering a password, and for some, this might seem like "magic," thus the name. Magic links are attractive because it is a simple way to remove the need for a customer to generate and remember a password from the process.
 
 ## Modular Account
 

@@ -6,16 +6,16 @@ head:
       content: Getting started guide
   - - meta
     - name: description
-      content: Learn how to get started with Alchemy's Embedded Accounts using Account Kit and the Alchemy Signer, Modular Smart Contract Account, Rundler and Gas Manager.
+      content: Learn how to get started with Alchemy's Embedded Accounts using Account Kit and the Alchemy Signer, Modular Account, Rundler and Gas Manager.
   - - meta
     - property: og:description
-      content: Learn how to get started with Alchemy's Embedded Accounts using Account Kit and the Alchemy Signer, Modular Smart Contract Account, Rundler and Gas Manager.
+      content: Learn how to get started with Alchemy's Embedded Accounts using Account Kit and the Alchemy Signer, Modular Account, Rundler and Gas Manager.
   - - meta
     - name: twitter:title
       content: Getting started guide
   - - meta
     - name: twitter:description
-      content: Learn how to get started with Alchemy's Embedded Accounts using Account Kit and the Alchemy Signer, Modular Smart Contract Account, Rundler and Gas Manager.
+      content: Learn how to get started with Alchemy's Embedded Accounts using Account Kit and the Alchemy Signer, Modular Account, Rundler and Gas Manager.
 ---
 
 # Setup your application
@@ -50,7 +50,7 @@ Click the API Key button in the top right corner and copy-paste it into the `.en
 
 ### Alchemy Embedded Accounts Config
 
-The Embedded Accounts Config enables magic auth on your app's domain by configuring the Alchemy Signer, which securely stores the user's private key in a non-custodial [secure enclave](https://docs.turnkey.com/security/our-approach). It is responsible for authenticating a user via email or passkey using this config, managing a user's session, and signing messages to send UserOperations. Check out the [AlchemySigner docs](https://accountkit.alchemy.com/packages/aa-alchemy/signer/overview.html) for more details.
+The Embedded Accounts Config enables [magic link authentication](https://accountkit.alchemy.com/resources/terms.html#magic-link-authentication) on your app's domain by configuring the Alchemy Signer, which securely stores the user's private key in a non-custodial [secure enclave](https://docs.turnkey.com/security/our-approach). It is responsible for authenticating a user via email or passkey using this config, managing a user's session, and signing messages to send UserOperations. Check out the [AlchemySigner docs](https://accountkit.alchemy.com/packages/aa-alchemy/signer/overview.html) for more details.
 
 To create an Embedded Accounts Config, go to the [embedded accounts page](https://dashboard.alchemy.com/accounts/?a=embedded-accounts-get-started) of the Alchemy dashboard and click the “New account config” button.
 

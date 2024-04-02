@@ -6,16 +6,16 @@ head:
       content: Getting started guide
   - - meta
     - name: description
-      content: Learn how to get started with Alchemy's Embedded Accounts using Account Kit and the Alchemy Signer, Modular Smart Contract Account, Rundler and Gas Manager.
+      content: Learn how to get started with Alchemy's Embedded Accounts using Account Kit and the Alchemy Signer, Modular Account, Rundler and Gas Manager.
   - - meta
     - property: og:description
-      content: Learn how to get started with Alchemy's Embedded Accounts using Account Kit and the Alchemy Signer, Modular Smart Contract Account, Rundler and Gas Manager.
+      content: Learn how to get started with Alchemy's Embedded Accounts using Account Kit and the Alchemy Signer, Modular Account, Rundler and Gas Manager.
   - - meta
     - name: twitter:title
       content: Getting started guide
   - - meta
     - name: twitter:description
-      content: Learn how to get started with Alchemy's Embedded Accounts using Account Kit and the Alchemy Signer, Modular Smart Contract Account, Rundler and Gas Manager.
+      content: Learn how to get started with Alchemy's Embedded Accounts using Account Kit and the Alchemy Signer, Modular Account, Rundler and Gas Manager.
 ---
 
 # Send UserOperations
@@ -64,7 +64,7 @@ You've now enabled users to sendUOs from their Embedded Account on your applicat
 
 <VideoEmbed src="/videos/embedded-accounts-full.mp4" />
 
-Congratulations! Using Account Kit, the Alchemy Signer, and Alchemy Modular Smart Contract Account, you created an application that authenticates a user by email to create their Embedded Account, and then uses that account to send a UserOperation!
+Congratulations! Using Account Kit, the Alchemy Signer, and Alchemy Modular Account, you created an application that authenticates a user by email to create their Embedded Account, and then uses that account to send a UserOperation!
 
 ## Dive Deeper
 
