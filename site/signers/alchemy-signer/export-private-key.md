@@ -28,7 +28,7 @@ To add export private key functionality to your app, you can use the `exportPriv
 
 ::: code-group
 
-<<< @/snippets/signers/alchemy/ExportPrivateKey.tsx
+<<< @/snippets/signers/alchemy/components/ExportPrivateKey.tsx
 
 <<< @/snippets/signers/alchemy/signer.ts
 

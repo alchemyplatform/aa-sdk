@@ -137,7 +137,7 @@ export const sidebar: DefaultTheme.Sidebar = [
     items: [
       {
         text: "Introduction",
-        link: "/index",
+        link: "/introduction",
       },
       {
         text: "Passkey signup",

@@ -3,33 +3,35 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Alchemy Signer • Export Private Key
+      content: Alchemy Signer • Passkey Signup
   - - meta
     - name: description
-      content: Learn how to enable a user to export their private key with the Alchemy Signer
+      content: Learn how to sign up users with a newly-created passkey using the Alchemy Signer
   - - meta
     - property: og:description
-      content: Learn how to enable a user to export their private key with the Alchemy Signer
+      content: Learn how to sign up users with a newly-created passkey using the Alchemy Signer
   - - meta
     - name: twitter:title
-      content: Alchemy Signer • Export Private Key
+      content: Alchemy Signer • Passkey Signup
   - - meta
     - name: twitter:description
-      content: Learn how to enable a user to export their private key with the Alchemy Signer
+      content: Learn how to sign up users with a newly-created passkey using the Alchemy Signer
 ---
 
-# Export private key
+# Passkey Signup
 
-The Alchemy Signer allows you to export a user's private key, allowing them a right to exit at any time. It is considered a best practice to allow your users to export their private key, as it gives them full control over their account. The private key export method does not rely on Alchemy's infrastructure, so even if Alchemy is down, a user can still export their private key.
+The Alchemy Signer allows you to sign up users to your application using a [passkey](https://accountkit.alchemy.com/resources/terms.html#passkey) on their device.
 
-## Usage
-
-To add export private key functionality to your app, you can use the `exportPrivateKey` method on the signer.
+To add passkey signup functionality to your app, you can use the [`authenticate`](/packages/aa-alchemy/signer/authenticate.html#parameters) method on the Alchemy Signer as follows.
 
 ::: code-group
 
-<<< @/snippets/signers/alchemy/ExportPrivateKey.tsx
+<<< @/snippets/signers/alchemy/passkey-signup.ts
 
 <<< @/snippets/signers/alchemy/signer.ts
 
 :::
+
+## Example
+
+<<< @/snippets/signers/alchemy/components/PasskeySignup.tsx
