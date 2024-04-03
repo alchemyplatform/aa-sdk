@@ -98,11 +98,9 @@ describe("Multisig Modular Account Tests", async () => {
 
     const signature1 = await provider1.account.signMessage({ message });
 
-    // console.log("signature1: ", signature1);
 
     const signature2 = await provider2.account.signMessage({ message });
 
-    // console.log("signature2: ", signature2);
 
     const combined = formatSignatures([
       {
@@ -119,7 +117,6 @@ describe("Multisig Modular Account Tests", async () => {
       },
     ]);
 
-    // console.log("combined: ", combined);
 
     expect(
       await provider1.verifyMessage({
@@ -160,15 +157,11 @@ describe("Multisig Modular Account Tests", async () => {
       message,
     });
 
-    // console.log("signature1: ", signature1);
-
     const signature2 = await provider2.account.signTypedDataWith6492({
       types,
       primaryType,
       message,
     });
-
-    // console.log("signature2: ", signature2);
 
     const combined = formatSignatures([
       {
@@ -184,8 +177,6 @@ describe("Multisig Modular Account Tests", async () => {
         signer: await signer2.getAddress(),
       },
     ]);
-
-    // console.log("combined: ", combined);
 
     expect(
       await provider1.verifyTypedData({
@@ -228,11 +219,7 @@ describe("Multisig Modular Account Tests", async () => {
 
     const signature1 = await provider1.account.signMessage({ message });
 
-    // console.log("signature1: ", signature1);
-
     const signature2 = await provider2.account.signMessage({ message });
-
-    // console.log("signature2: ", signature2);
 
     const combined = formatSignatures([
       {
@@ -248,8 +235,6 @@ describe("Multisig Modular Account Tests", async () => {
         signer: await signer2.getAddress(),
       },
     ]);
-
-    // console.log("combined: ", combined);
 
     const [, factoryCalldata] = parseFactoryAddressFromAccountInitCode(
       await provider1.account.getInitCode()
@@ -318,15 +303,11 @@ describe("Multisig Modular Account Tests", async () => {
       message,
     });
 
-    // console.log("signature1: ", signature1);
-
     const signature2 = await provider2.account.signTypedData({
       types,
       primaryType,
       message,
     });
-
-    // console.log("signature2: ", signature2);
 
     const combined = formatSignatures([
       {
@@ -342,8 +323,6 @@ describe("Multisig Modular Account Tests", async () => {
         signer: await signer2.getAddress(),
       },
     ]);
-
-    // console.log("combined: ", combined);
 
     const [, factoryCalldata] = parseFactoryAddressFromAccountInitCode(
       await provider1.account.getInitCode()
