@@ -194,16 +194,18 @@ describe("Multisig Modular Account Tests", async () => {
         accountIndex: 3,
       });
 
+    const moreOwners = [...owners, await signer4.getAddress()];
+
     const provider1 = await givenConnectedProvider({
       signer: signer1,
       chain,
-      owners: [...owners, await signer4.getAddress()],
+      owners: moreOwners,
       threshold,
     });
     const provider2 = await givenConnectedProvider({
       signer: signer2,
       chain,
-      owners: [...owners, await signer4.getAddress()],
+      owners: moreOwners,
       threshold,
     });
 
