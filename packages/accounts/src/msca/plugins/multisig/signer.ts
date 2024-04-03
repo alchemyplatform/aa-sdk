@@ -15,7 +15,7 @@ import {
 } from "viem";
 import { MultisigPlugin, MultisigPluginAbi } from "./plugin.js";
 
-type MultisigMessageSignerParams<
+type MultisigSignMethodsParams<
   TTransport extends Transport,
   TSigner extends SmartAccountSigner
 > = {
@@ -26,7 +26,7 @@ type MultisigMessageSignerParams<
   pluginAddress?: Address;
 };
 
-export const multisigMessageSigner = <
+export const multisigSignMethods = <
   TTransport extends Transport,
   TSigner extends SmartAccountSigner
 >({
@@ -35,7 +35,7 @@ export const multisigMessageSigner = <
   signer,
   threshold,
   pluginAddress = MultisigPlugin.meta.addresses[client.chain.id],
-}: MultisigMessageSignerParams<TTransport, TSigner>) => {
+}: MultisigSignMethodsParams<TTransport, TSigner>) => {
   const signWith712Wrapper = async (msg: Hash): Promise<`0x${string}`> => {
     const [, name, version, chainId, verifyingContract, salt] =
       await client.readContract({

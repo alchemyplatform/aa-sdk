@@ -19,7 +19,7 @@ import {
   type Transport,
 } from "viem";
 import { MultisigModularAccountFactoryAbi } from "../abis/MultisigModularAccountFactory.js";
-import { multisigMessageSigner } from "../plugins/multisig/signer.js";
+import { multisigSignMethods } from "../plugins/multisig/signer.js";
 import { getDefaultMultisigModularAccountFactoryAddress } from "../utils.js";
 import { standardExecutor } from "./standardExecutor.js";
 
@@ -111,7 +111,7 @@ export async function createMultisigModularAccount({
     source: MULTISIG_ACCOUNT_SOURCE,
     getAccountInitCode,
     ...standardExecutor,
-    ...multisigMessageSigner({
+    ...multisigSignMethods({
       client,
       accountAddress,
       threshold,
