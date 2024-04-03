@@ -66,6 +66,10 @@ A type of smart account enabled by the [ERC-6900](https://eips.ethereum.org/EIPS
 
 <!--@include: ./bbp.md-->
 
+## Passkey
+
+Passkeys are a safer and easier alternative to passwords. With passkeys, users can sign in to apps and websites with a biometric sensor (such as a fingerprint or facial recognition), PIN, or pattern, freeing them from having to remember and manage passwords.
+
 ## Paymaster
 
 A [Paymaster](https://eips.ethereum.org/EIPS/eip-4337#paymasters) is an on-chain contract that allows an entity to sponsor the gas fees for another entity. It can be used by dapps or companies to abstract away the concept of gas from their users. This significantly enhances the UX of dApps and can help onboard the next wave of Web3 users.

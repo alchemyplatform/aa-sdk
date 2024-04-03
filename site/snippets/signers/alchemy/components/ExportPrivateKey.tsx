@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { signer } from "./signer.js";
+import { signer } from "../signer.js";
 
 const TurnkeyExportWalletContainerId = "turnkey-export-wallet-container-id";
 const TurnkeyExportWalletElementId = "turnkey-export-wallet-element-id";

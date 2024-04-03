@@ -11,17 +11,19 @@ export const sidebar: DefaultTheme.Sidebar = [
       },
       {
         text: "Quick start (Embedded Accounts)",
+        collapsed: false,
+        base: "/getting-started",
         items: [
-          { text: "Introduction", link: "/getting-started/introduction" },
+          { text: "Introduction", link: "/introduction" },
           {
             text: "Setup your application",
-            link: "/getting-started/setup-app",
+            link: "/setup-app",
           },
           {
             text: "Log users into Embedded Accounts",
-            link: "/getting-started/log-in-users",
+            link: "/log-in-users",
           },
-          { text: "Send UserOperations", link: "/getting-started/send-uos" },
+          { text: "Send UserOperations", link: "/send-uos" },
         ],
       },
     ],
@@ -78,14 +80,6 @@ export const sidebar: DefaultTheme.Sidebar = [
           { text: "Get account tokens", link: "/token" },
         ],
       },
-      {
-        text: "Export private key",
-        link: "/export-private-key",
-      },
-      {
-        text: "Manage user sessions",
-        link: "/manage-user-sessions",
-      },
     ],
   },
   {
@@ -134,6 +128,33 @@ export const sidebar: DefaultTheme.Sidebar = [
         ],
       },
       { text: "Gas benchmarks", link: "/smart-accounts/gas-benchmarks" },
+    ],
+  },
+  {
+    text: "Using Alchemy Signer",
+    collapsed: false,
+    base: "/signers/alchemy-signer",
+    items: [
+      {
+        text: "Introduction",
+        link: "/introduction",
+      },
+      {
+        text: "Passkey signup",
+        link: "/passkey-signup",
+      },
+      {
+        text: "Passkey authentication",
+        link: "/passkey-auth",
+      },
+      {
+        text: "Manage user sessions",
+        link: "/manage-user-sessions",
+      },
+      {
+        text: "Export private key",
+        link: "/export-private-key",
+      },
     ],
   },
   {
