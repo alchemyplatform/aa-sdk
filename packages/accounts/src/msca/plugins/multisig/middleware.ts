@@ -6,6 +6,7 @@ import {
   isValidRequest,
   resolveProperties,
   InvalidContextSignatureError,
+  MultisigAccountExpectedError,
   type ClientMiddlewareFn,
 } from "@alchemy/aa-core";
 import { isHex, type Hex } from "viem";
@@ -26,7 +27,7 @@ export const multisigSignatureMiddleware: ClientMiddlewareFn<{
 
   if (!isMultisigModularAccount(account)) {
     // TODO: use error classes
-    throw new Error("Expected account to be a multisig modular account");
+    throw new MultisigAccountExpectedError();
   }
 
   const resolvedStruct = await resolveProperties(struct);

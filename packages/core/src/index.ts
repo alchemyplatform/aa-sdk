@@ -88,7 +88,7 @@ export {
   SmartAccountWithSignerRequiredError,
   UpgradeToAndCallNotSupportedError,
   UpgradesNotSupportedError,
-  InvalidContextSignatureError,
+  MultisigAccountExpectedError,
 } from "./errors/account.js";
 export { BaseError } from "./errors/base.js";
 export {
@@ -102,6 +102,7 @@ export {
   FailedToFindTransactionError,
   TransactionMissingToParamError,
 } from "./errors/transaction.js";
+export { InvalidContextSignatureError } from "./errors/types.js";
 export {
   InvalidUserOperationError,
   MultisigMissingSignatureError,

@@ -85,9 +85,9 @@ export class SmartAccountWithSignerRequiredError extends BaseError {
   }
 }
 
-export class InvalidContextSignatureError extends BaseError {
-  override name = "InvalidContextSignatureError";
+export class MultisigAccountExpectedError extends BaseError {
+  override name = "MultisigAccountExpectedError";
   constructor() {
-    super("Expected context.signature to be a hex string");
+    super("Expected account to be a multisig modular account");
   }
 }
