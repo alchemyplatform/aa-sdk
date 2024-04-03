@@ -72,7 +72,7 @@ describe("Multisig Modular Account Tests", async () => {
     });
 
     // .map(...) just to generate a non-readonly copy
-    expect((await provider.readOwners()).slice().sort()).toMatchInlineSnapshot(
+    expect((await provider.readOwners()).slice().sort()).toStrictEqual(
       owners.slice().sort()
     );
 

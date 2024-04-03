@@ -23,9 +23,11 @@ import { multisigSignMethods } from "../plugins/multisig/signer.js";
 import { getDefaultMultisigModularAccountFactoryAddress } from "../utils.js";
 import { standardExecutor } from "./standardExecutor.js";
 
+export const MULTISIG_ACCOUNT_SOURCE = "MultisigModularAccount";
+
 export type MultisigModularAccount<
   TSigner extends SmartAccountSigner = SmartAccountSigner
-> = SmartContractAccountWithSigner<"MultisigModularAccount", TSigner> & {
+> = SmartContractAccountWithSigner<typeof MULTISIG_ACCOUNT_SOURCE, TSigner> & {
   getLocalThreshold: () => bigint;
 };
 
@@ -126,8 +128,6 @@ export async function createMultisigModularAccount({
     getSigner: () => signer,
   };
 }
-
-export const MULTISIG_ACCOUNT_SOURCE = "MultisigModularAccount";
 
 export const isMultisigModularAccount = (
   acct: SmartContractAccount
