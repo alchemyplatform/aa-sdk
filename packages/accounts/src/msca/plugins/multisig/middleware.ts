@@ -51,7 +51,7 @@ export const multisigSignatureMiddleware: ClientMiddlewareFn<{
   if (context?.signature == null) {
     return {
       ...resolvedStruct,
-      signature: account.getDummySignature(),
+      signature: await account.getDummySignature(),
     };
   }
 

@@ -43,7 +43,7 @@ class SimpleSmartContractAccount<
     this.index = params.salt ?? 0n;
   }
 
-  async getDummySignature(): Promise<`0x${string}`> {
+  getDummySignature(): `0x${string}` {
     return "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
   }
 
