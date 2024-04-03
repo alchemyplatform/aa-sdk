@@ -1,100 +1,10 @@
 import {
-  takeBytes,
-  type Hex,
-  type SmartAccountSigner,
   type SmartContractAccount,
   type UserOperationRequest,
+  takeBytes,
 } from "@alchemy/aa-core";
-import {
-  concat,
-  fromHex,
-  hexToBigInt,
-  pad,
-  recoverAddress,
-  size,
-  toHex,
-  type Chain,
-  type Client,
-  type PublicActions,
-  type PublicRpcSchema,
-  type Transport,
-  hashMessage,
-} from "viem";
-import { type Signature, type SignerType } from "./types.js";
-
-type GetSignerTypeParams<
-  TTransport extends Transport = Transport,
-  TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
-    | undefined,
-  TClient extends Client<
-    TTransport,
-    TChain,
-    TAccount,
-    PublicRpcSchema,
-    PublicActions
-  > = Client<TTransport, TChain, TAccount, PublicRpcSchema, PublicActions>
-> = {
-  signer: SmartAccountSigner<any>;
-  signature: Hex;
-  client: TClient;
-};
-
-export const getSignerType = async <
-  TTransport extends Transport = Transport,
-  TChain extends Chain | undefined = Chain | undefined
->({
-  client,
-  signature,
-  signer,
-}: GetSignerTypeParams<TTransport, TChain>): Promise<SignerType> => {
-  const signerAddress = await signer.getAddress();
-  const byteCode = await client.getBytecode({ address: signerAddress });
-
-  return (byteCode ?? "0x") === "0x" && size(signature) === 65
-    ? "EOA"
-    : "CONTRACT";
-};
-
-export const formatSignatures = (signatures: Signature[]) => {
-  let eoaSigs: string = "";
-  let contractSigs: string = "";
-  let offset: bigint = BigInt(65 * signatures.length);
-  signatures
-    .sort((a, b) => {
-      const bigintA = hexToBigInt(a.signer);
-      const bigintB = hexToBigInt(b.signer);
-
-      return bigintA < bigintB ? -1 : bigintA > bigintB ? 1 : 0;
-    })
-    .forEach((sig) => {
-      // add 32 to v if the signature covers the actual gas values
-      const addV = sig.userOpSigType === "ACTUAL" ? 32 : 0;
-
-      if (sig.signerType === "EOA") {
-        let v =
-          parseInt(takeBytes(sig.signature, { count: 1, offset: 64 })) + addV;
-        eoaSigs += concat([
-          takeBytes(sig.signature, { count: 64 }),
-          toHex(v, { size: 1 }),
-        ]).slice(2);
-      } else {
-        const sigLen = BigInt(sig.signature.slice(2).length / 2);
-        eoaSigs += concat([
-          pad(sig.signer),
-          toHex(offset, { size: 32 }),
-          toHex(addV, { size: 1 }),
-        ]).slice(2);
-        contractSigs += concat([
-          toHex(sigLen, { size: 32 }),
-          sig.signature,
-        ]).slice(2);
-        offset += sigLen;
-      }
-    });
-  return ("0x" + eoaSigs + contractSigs) as `0x${string}`;
-};
+import { type Hex, hashMessage, recoverAddress, fromHex } from "viem";
+import type { Signature } from "../types";
 
 export type SplitAggregateSignatureParams = {
   aggregatedSignature: Hex;
@@ -209,23 +119,4 @@ export const splitAggregatedSignature = async ({
     upperLimitMaxPriorityFeePerGas: maxPriorityFeePerGas,
     signatures: await Promise.all(signatures),
   };
-};
-
-export const combineSignatures = ({
-  signatures,
-  upperLimitMaxFeePerGas,
-  upperLimitMaxPriorityFeePerGas,
-  upperLimitPvg,
-}: {
-  upperLimitPvg: Hex;
-  upperLimitMaxFeePerGas: Hex;
-  upperLimitMaxPriorityFeePerGas: Hex;
-  signatures: Signature[];
-}) => {
-  return concat([
-    pad(upperLimitPvg),
-    pad(upperLimitMaxFeePerGas),
-    pad(upperLimitMaxPriorityFeePerGas),
-    formatSignatures(signatures),
-  ]);
 };

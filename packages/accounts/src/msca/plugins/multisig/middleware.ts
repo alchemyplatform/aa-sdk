@@ -14,7 +14,7 @@ import {
   combineSignatures,
   getSignerType,
   splitAggregatedSignature,
-} from "./utils.js";
+} from "./index.js";
 
 export const multisigSignatureMiddleware: ClientMiddlewareFn<{
   signature: Hex;

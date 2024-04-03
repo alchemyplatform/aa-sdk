@@ -12,7 +12,7 @@ import {
   type SignMultisigUserOperationParams,
   type SignMultisigUserOperationResult,
 } from "../types.js";
-import { combineSignatures, getSignerType } from "../utils.js";
+import { combineSignatures, getSignerType } from "../index.js";
 
 export async function signMultisigUserOperation<
   TTransport extends Transport = Transport,

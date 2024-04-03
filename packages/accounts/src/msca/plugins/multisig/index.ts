@@ -13,4 +13,7 @@ export {
 } from "./plugin.js";
 export type * from "./types.js";
 export { type SignerType } from "./types.js";
-export { formatSignatures, getSignerType } from "./utils.js";
+export { combineSignatures } from "./utils/combineSignatures.js";
+export { formatSignatures } from "./utils/formatSignatures.js";
+export { getSignerType } from "./utils/getSignerType.js";
+export { splitAggregatedSignature } from "./utils/splitAggregatedSignature.js";

@@ -68,7 +68,7 @@ describe("Multisig Modular Account Alchemy Client Tests", async () => {
     );
   });
 
-  it.skip("should execute successfully", async () => {
+  it("should execute successfully", async () => {
     const initiator = await givenConnectedProvider({
       signer: signer1,
       chain,
@@ -109,7 +109,7 @@ describe("Multisig Modular Account Alchemy Client Tests", async () => {
     await expect(txnHash).resolves.not.toThrowError();
   }, 100000);
 
-  it.skip("should successfully execute with alchemy paymaster info", async () => {
+  it("should successfully execute with alchemy paymaster info", async () => {
     const provider1 = await givenConnectedProvider({
       signer: signer1,
       chain,

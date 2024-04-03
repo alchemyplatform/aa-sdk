@@ -8,7 +8,7 @@ import {
 } from "@alchemy/aa-core";
 import { type Chain, type Client, type Transport } from "viem";
 import { type ProposeUserOperationResult, type Signature } from "../types.js";
-import { combineSignatures, getSignerType } from "../utils.js";
+import { combineSignatures, getSignerType } from "../index.js";
 
 export async function proposeUserOperation<
   TTransport extends Transport = Transport,
