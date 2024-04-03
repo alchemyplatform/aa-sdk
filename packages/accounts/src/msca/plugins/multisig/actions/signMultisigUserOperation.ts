@@ -4,6 +4,7 @@ import {
   SmartAccountWithSignerRequiredError,
   isSmartAccountClient,
   isSmartAccountWithSigner,
+  MultisigMissingSignatureError,
   type SmartContractAccount,
 } from "@alchemy/aa-core";
 import { type Chain, type Client, type Transport } from "viem";
@@ -43,8 +44,7 @@ export async function signMultisigUserOperation<
   }
 
   if (!signatures.length) {
-    // TODO: need to convert this to one of the strongly typed errors
-    throw new Error("UserOp must have at least one signature already");
+    throw new MultisigMissingSignatureError();
   }
 
   const ep = account.getEntryPoint();

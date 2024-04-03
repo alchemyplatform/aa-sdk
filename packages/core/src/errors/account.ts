@@ -84,3 +84,10 @@ export class SmartAccountWithSignerRequiredError extends BaseError {
     super("Smart account requires a signer");
   }
 }
+
+export class InvalidContextSignatureError extends BaseError {
+  override name = "InvalidContextSignatureError";
+  constructor() {
+    super("Expected context.signature to be a hex string");
+  }
+}

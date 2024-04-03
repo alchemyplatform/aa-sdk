@@ -74,10 +74,8 @@ export const multisigSignMethods = <
 
       const actualThreshold = thresholdRead === 0n ? threshold : thresholdRead;
 
-      // todo: revert on account client creation if threshold is zero
-
       // (uint upperLimitPreVerificationGas, uint upperLimitMaxFeePerGas, uint upperLimitMaxPriorityFeePerGas)
-      // all sigs will be on "actual" with v = 32
+      // the first sig will be on "actual" with v = 32
       return ("0x" +
         "FF".repeat(32 * 3) +
         "fffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa3c" +

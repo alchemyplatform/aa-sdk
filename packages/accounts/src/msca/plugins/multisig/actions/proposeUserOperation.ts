@@ -3,6 +3,7 @@ import {
   IncompatibleClientError,
   isSmartAccountClient,
   isSmartAccountWithSigner,
+  SmartAccountWithSignerRequiredError,
   type SendUserOperationParameters,
   type SmartContractAccount,
 } from "@alchemy/aa-core";
@@ -45,8 +46,7 @@ export async function proposeUserOperation<
   }
 
   if (!isSmartAccountWithSigner(account)) {
-    // TODO: create class error
-    throw new Error("Account must be a SmartAccountWithSigner");
+    throw new SmartAccountWithSignerRequiredError();
   }
 
   const builtUo = await client.buildUserOperation({

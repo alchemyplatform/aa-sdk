@@ -5,6 +5,7 @@ import {
   isSmartAccountWithSigner,
   isValidRequest,
   resolveProperties,
+  InvalidContextSignatureError,
   type ClientMiddlewareFn,
 } from "@alchemy/aa-core";
 import { isHex, type Hex } from "viem";
@@ -56,8 +57,7 @@ export const multisigSignatureMiddleware: ClientMiddlewareFn<{
   }
 
   if (!isHex(context.signature)) {
-    // TODO: use error classes
-    throw new Error("Expected context.signature to be a hex string");
+    throw new InvalidContextSignatureError();
   }
 
   const {
