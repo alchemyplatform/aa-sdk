@@ -136,8 +136,6 @@ export async function createMultisigModularAccountClient({
     MultisigUserOperationContext
   >
 > {
-  // todo: load in the threshold here?
-
   const modularAccount = await createMultisigModularAccount({
     ...account,
     transport,

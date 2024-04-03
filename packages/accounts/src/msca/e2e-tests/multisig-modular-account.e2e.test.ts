@@ -98,9 +98,7 @@ describe("Multisig Modular Account Tests", async () => {
 
     const signature1 = await provider1.account.signMessage({ message });
 
-
     const signature2 = await provider2.account.signMessage({ message });
-
 
     const combined = formatSignatures([
       {
@@ -116,7 +114,6 @@ describe("Multisig Modular Account Tests", async () => {
         signer: await signer2.getAddress(),
       },
     ]);
-
 
     expect(
       await provider1.verifyMessage({
