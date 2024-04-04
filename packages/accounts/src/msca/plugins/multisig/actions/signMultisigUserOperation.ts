@@ -4,10 +4,10 @@ import {
   SmartAccountWithSignerRequiredError,
   isSmartAccountClient,
   isSmartAccountWithSigner,
-  MultisigMissingSignatureError,
   type SmartContractAccount,
 } from "@alchemy/aa-core";
 import { type Chain, type Client, type Transport } from "viem";
+import { MultisigMissingSignatureError } from "../../../errors.js";
 import {
   type Signature,
   type SignMultisigUserOperationParams,

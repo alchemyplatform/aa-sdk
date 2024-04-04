@@ -13,10 +13,3 @@ export class InvalidUserOperationError extends BaseError {
     );
   }
 }
-
-export class MultisigMissingSignatureError extends BaseError {
-  override name = "MultisigMissingSignatureError";
-  constructor() {
-    super("UserOp must have at least one signature already");
-  }
-}

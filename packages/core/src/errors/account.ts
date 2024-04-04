@@ -84,10 +84,3 @@ export class SmartAccountWithSignerRequiredError extends BaseError {
     super("Smart account requires a signer");
   }
 }
-
-export class MultisigAccountExpectedError extends BaseError {
-  override name = "MultisigAccountExpectedError";
-  constructor() {
-    super("Expected account to be a multisig modular account");
-  }
-}

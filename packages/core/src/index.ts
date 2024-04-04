@@ -88,7 +88,6 @@ export {
   SmartAccountWithSignerRequiredError,
   UpgradeToAndCallNotSupportedError,
   UpgradesNotSupportedError,
-  MultisigAccountExpectedError,
 } from "./errors/account.js";
 export { BaseError } from "./errors/base.js";
 export {
@@ -102,11 +101,7 @@ export {
   FailedToFindTransactionError,
   TransactionMissingToParamError,
 } from "./errors/transaction.js";
-export { InvalidContextSignatureError } from "./errors/types.js";
-export {
-  InvalidUserOperationError,
-  MultisigMissingSignatureError,
-} from "./errors/useroperation.js";
+export { InvalidUserOperationError } from "./errors/useroperation.js";
 export { LogLevel, Logger } from "./logger.js";
 export { middlewareActions } from "./middleware/actions.js";
 export { defaultFeeEstimator } from "./middleware/defaults/feeEstimator.js";

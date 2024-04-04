@@ -83,3 +83,14 @@ export {
   getMAInitializationData,
   getMSCAUpgradeToData,
 } from "./msca/utils.js";
+export {
+  combineSignatures,
+  formatSignatures,
+  getSignerType,
+  splitAggregatedSignature,
+} from "./msca/plugins/multisig/utils/index.js";
+export {
+  MultisigMissingSignatureError,
+  InvalidContextSignatureError,
+  MultisigAccountExpectedError,
+} from "./msca/errors.js";

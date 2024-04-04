@@ -5,12 +5,14 @@ import {
   isSmartAccountWithSigner,
   isValidRequest,
   resolveProperties,
-  InvalidContextSignatureError,
-  MultisigAccountExpectedError,
   type ClientMiddlewareFn,
 } from "@alchemy/aa-core";
 import { isHex, type Hex } from "viem";
 import { isMultisigModularAccount } from "../../account/multisigAccount.js";
+import {
+  InvalidContextSignatureError,
+  MultisigAccountExpectedError,
+} from "../../errors.js";
 import { getThreshold } from "./actions/getThreshold.js";
 import {
   combineSignatures,
