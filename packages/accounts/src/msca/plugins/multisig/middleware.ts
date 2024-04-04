@@ -28,7 +28,6 @@ export const multisigSignatureMiddleware: ClientMiddlewareFn<{
   }
 
   if (!isMultisigModularAccount(account)) {
-    // TODO: use error classes
     throw new MultisigAccountExpectedError();
   }
 

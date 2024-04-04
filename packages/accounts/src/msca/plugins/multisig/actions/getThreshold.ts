@@ -7,6 +7,7 @@ import { type Chain, type Client, type Transport } from "viem";
 import { isMultisigModularAccount } from "../../../account/multisigAccount.js";
 import type { GetPluginAddressParameter } from "../../types.js";
 import { MultisigPlugin } from "../plugin.js";
+import { MultisigAccountExpectedError } from "../../../errors.js";
 
 export async function getThreshold<
   TTransport extends Transport = Transport,
@@ -24,7 +25,7 @@ export async function getThreshold<
   }
 
   if (!isMultisigModularAccount(account)) {
-    throw new Error("Account is not a multisig account");
+    throw new MultisigAccountExpectedError();
   }
 
   const [, threshold] = await MultisigPlugin.getContract(

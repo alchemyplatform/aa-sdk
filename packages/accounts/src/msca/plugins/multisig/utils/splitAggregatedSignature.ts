@@ -5,6 +5,7 @@ import {
 } from "@alchemy/aa-core";
 import { type Hex, hashMessage, recoverAddress, fromHex } from "viem";
 import type { Signature } from "../types";
+import { InvalidAggregatedSignatureError } from "../../../errors.js";
 
 export type SplitAggregateSignatureParams = {
   aggregatedSignature: Hex;
@@ -30,8 +31,7 @@ export const splitAggregatedSignature = async ({
   signatures: Signature[];
 }> => {
   if (aggregatedSignature.length < 192 + (65 * threshold - 1)) {
-    // TODO: create typed error for this
-    throw new Error("Invalid aggregated signature");
+    throw new InvalidAggregatedSignatureError();
   }
 
   // UserOp.sig format:

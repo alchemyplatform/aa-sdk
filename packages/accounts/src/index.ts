@@ -90,7 +90,8 @@ export {
   splitAggregatedSignature,
 } from "./msca/plugins/multisig/utils/index.js";
 export {
-  MultisigMissingSignatureError,
   InvalidContextSignatureError,
+  InvalidAggregatedSignatureError,
+  MultisigMissingSignatureError,
   MultisigAccountExpectedError,
 } from "./msca/errors.js";

@@ -1,5 +1,12 @@
 import { BaseError } from "@alchemy/aa-core";
 
+export class InvalidAggregatedSignatureError extends BaseError {
+  override name = "InvalidAggregatedSignatureError";
+  constructor() {
+    super("Invalid aggregated signature");
+  }
+}
+
 export class InvalidContextSignatureError extends BaseError {
   override name = "InvalidContextSignatureError";
   constructor() {
