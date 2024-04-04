@@ -31,10 +31,7 @@ export const _sendUserOperation: <
   }
 
   const request = deepHexlify(args.uoStruct);
-  if (
-    !isValidRequest(request) ||
-    !/^0x[a-fA-F0-9]{130,}$/.test(request.signature)
-  ) {
+  if (!isValidRequest(request)) {
     throw new InvalidUserOperationError(args.uoStruct);
   }
 
