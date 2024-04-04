@@ -1,11 +1,10 @@
-import type { EntryPointDef } from "@alchemy/aa-core";
 import {
   FailedToGetStorageSlotError,
   createBundlerClient,
   getAccountAddress,
   getEntryPoint,
   toSmartContractAccount,
-  type Address,
+  type EntryPointParameter,
   type SmartAccountSigner,
   type SmartContractAccountWithSigner,
   type ToSmartContractAccountParams,
@@ -18,6 +17,7 @@ import {
   hashMessage,
   hashTypedData,
   trim,
+  type Address,
   type Chain,
   type Hex,
   type SignTypedDataParameters,
@@ -65,8 +65,7 @@ export type CreateLightAccountParams<
   factoryAddress?: Address;
   initCode?: Hex;
   version?: LightAccountVersion;
-  entryPoint?: EntryPointDef<TEntryPointVersion, Chain>;
-};
+} & EntryPointParameter<TEntryPointVersion, Chain>;
 
 export async function createLightAccount<
   TTransport extends Transport = Transport,

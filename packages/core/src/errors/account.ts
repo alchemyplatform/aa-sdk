@@ -1,4 +1,5 @@
 import type { Chain } from "viem";
+import type { EntryPointVersion } from "../entrypoint/types.js";
 import { BaseError } from "./base.js";
 
 export class AccountNotFoundError extends BaseError {
@@ -12,10 +13,10 @@ export class AccountNotFoundError extends BaseError {
 
 export class DefaultFactoryNotDefinedError extends BaseError {
   override name = "DefaultFactoryNotDefinedError";
-  constructor(accountType: string, chain: Chain) {
+  constructor(accountType: string, chain: Chain, version: EntryPointVersion) {
     super(
       [
-        `No default factory for ${accountType} found on chain ${chain.name}`,
+        `No default factory for ${accountType} found on chain ${chain.name} for entrypoint version ${version}`,
         "Supply an override via the `factoryAddress` parameter when creating an account",
       ].join("\n")
     );

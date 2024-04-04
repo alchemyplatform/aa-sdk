@@ -18,7 +18,6 @@ import { createBundlerClient } from "../client/bundlerClient.js";
 import type {
   DefaultEntryPointVersion,
   EntryPointDef,
-  EntryPointParameter,
   EntryPointRegistryBase,
   EntryPointVersion,
 } from "../entrypoint/types.js";
@@ -115,11 +114,12 @@ export type ToSmartContractAccountParams<
   Name extends string = string,
   TTransport extends Transport = Transport,
   TChain extends Chain = Chain,
-  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
 > = {
   source: Name;
   transport: TTransport;
   chain: TChain;
+  entryPoint: EntryPointDef<TEntryPointVersion, TChain>;
   accountAddress?: Address;
   getAccountInitCode: () => Promise<Hex>;
   getDummySignature: () => Hex;
@@ -128,8 +128,7 @@ export type ToSmartContractAccountParams<
   // if not provided, will default to just using signMessage over the Hex
   signUserOperationHash?: (uoHash: Hex) => Promise<Hex>;
   encodeUpgradeToAndCall?: (params: UpgradeToAndCallParams) => Promise<Hex>;
-} & EntryPointParameter<TEntryPointVersion, TChain> &
-  Omit<CustomSource, "signTransaction" | "address">;
+} & Omit<CustomSource, "signTransaction" | "address">;
 
 export const parseFactoryAddressFromAccountInitCode = (initCode: Hex) => {
   const factoryAddress = `0x${initCode.substring(2, 42)}` as Address;

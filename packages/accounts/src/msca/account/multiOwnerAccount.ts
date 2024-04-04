@@ -1,5 +1,7 @@
 import type {
   EntryPointParameter,
+  SmartAccountSigner,
+  SmartContractAccountWithSigner,
   ToSmartContractAccountParams,
 } from "@alchemy/aa-core";
 import {
@@ -7,14 +9,12 @@ import {
   getAccountAddress,
   getEntryPoint,
   toSmartContractAccount,
-  type Address,
-  type SmartAccountSigner,
-  type SmartContractAccountWithSigner,
 } from "@alchemy/aa-core";
 import {
   concatHex,
   encodeFunctionData,
   hexToBigInt,
+  type Address,
   type Chain,
   type Hex,
   type Transport,
@@ -34,13 +34,14 @@ export type MultiOwnerModularAccount<
 
 export type CreateMultiOwnerModularAccountParams<
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TEntryPointVersion extends "0.6.0" = "0.6.0"
 > = Pick<
   ToSmartContractAccountParams<
     "MultiOwnerModularAccount",
     TTransport,
     Chain,
-    "0.6.0"
+    TEntryPointVersion
   >,
   "transport" | "chain"
 > & {
@@ -50,8 +51,7 @@ export type CreateMultiOwnerModularAccountParams<
   initCode?: Hex;
   owners?: Address[];
   accountAddress?: Address;
-  entryPoint?: EntryPointParameter<"0.6.0">["entryPoint"];
-};
+} & EntryPointParameter<TEntryPointVersion, Chain>;
 
 export async function createMultiOwnerModularAccount<
   TTransport extends Transport = Transport,

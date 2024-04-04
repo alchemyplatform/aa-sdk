@@ -2,6 +2,8 @@ import { Address } from "abitype/zod";
 import { isHex, type Transport } from "viem";
 import z from "zod";
 import { createPublicErc4337ClientSchema } from "../client/schema.js";
+import { isEntryPointVersion } from "../entrypoint/index.js";
+import type { EntryPointVersion } from "../entrypoint/types.js";
 import { isSigner } from "../signer/schema.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import { ChainSchema } from "../utils/index.js";
@@ -30,6 +32,9 @@ export const createBaseSmartAccountParamsSchema = <
       )
       .optional()
       .describe("Optional override for the account init code."),
+    entryPointVersion: z
+      .custom<EntryPointVersion>(isEntryPointVersion)
+      .optional(),
   });
 
 export const SimpleSmartAccountParamsSchema = <

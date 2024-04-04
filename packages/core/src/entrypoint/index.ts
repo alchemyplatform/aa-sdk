@@ -25,6 +25,12 @@ export const entryPointRegistry: EntryPointRegistry = {
   "0.7.0": EntryPoint_v7,
 };
 
+export const isEntryPointVersion = (
+  value: any
+): value is keyof EntryPointRegistry => {
+  return Object.keys(entryPointRegistry).includes(value);
+};
+
 export const coerceEntryPointVersion = <
   TEntryPointVersion extends EntryPointVersion
 >(

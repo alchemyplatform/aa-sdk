@@ -8,10 +8,14 @@ import {
   type Hex,
   type Transport,
 } from "viem";
-import { SimpleAccountAbi } from "../abis/SimpleAccountAbi.js";
+import { SimpleAccountAbi_v6 } from "../abis/SimpleAccountAbi_v6.js";
+import { SimpleAccountAbi_v7 } from "../abis/SimpleAccountAbi_v7.js";
 import { SimpleAccountFactoryAbi } from "../abis/SimpleAccountFactoryAbi.js";
 import { createBundlerClient } from "../client/bundlerClient.js";
-import { getEntryPoint } from "../entrypoint/index.js";
+import {
+  defaultEntryPointVersion,
+  getEntryPoint,
+} from "../entrypoint/index.js";
 import type {
   DefaultEntryPointVersion,
   EntryPointParameter,
@@ -34,6 +38,7 @@ class SimpleSmartContractAccount<
   TSigner extends SmartAccountSigner = SmartAccountSigner
 > extends BaseSmartContractAccount<TTransport, TSigner> {
   protected index: bigint;
+  protected entryPointVersion: EntryPointVersion;
 
   constructor(params: SimpleSmartAccountParams<TTransport, TSigner>) {
     SimpleSmartAccountParamsSchema().parse(params);
@@ -48,6 +53,8 @@ class SimpleSmartContractAccount<
     super({ ...params, rpcClient: client });
     this.signer = params.signer as TSigner;
     this.index = params.salt ?? 0n;
+    this.entryPointVersion =
+      params.entryPointVersion ?? defaultEntryPointVersion;
   }
 
   getDummySignature(): `0x${string}` {
@@ -60,7 +67,10 @@ class SimpleSmartContractAccount<
     data: Hex
   ): Promise<`0x${string}`> {
     return encodeFunctionData({
-      abi: SimpleAccountAbi,
+      abi:
+        this.entryPointVersion === "0.6.0"
+          ? SimpleAccountAbi_v6
+          : SimpleAccountAbi_v7,
       functionName: "execute",
       args: [target, value, data],
     });
@@ -80,7 +90,10 @@ class SimpleSmartContractAccount<
     );
 
     return encodeFunctionData({
-      abi: SimpleAccountAbi,
+      abi:
+        this.entryPointVersion === "0.6.0"
+          ? SimpleAccountAbi_v6
+          : SimpleAccountAbi_v7,
       functionName: "executeBatch",
       args: [targets, datas],
     });
@@ -105,8 +118,8 @@ class SimpleSmartContractAccount<
 }
 
 export type SimpleSmartAccount<
-  TSigner extends SmartAccountSigner,
-  TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = SmartContractAccountWithSigner<
   "SimpleAccount",
   TSigner,
@@ -115,46 +128,50 @@ export type SimpleSmartAccount<
 
 export type CreateSimpleAccountParams<
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
-> = Omit<
-  SimpleSmartAccountParams<TTransport, TSigner>,
-  "chain" | "accountAddress" | "entryPointAddress"
-> &
-  Pick<
-    ToSmartContractAccountParams<
-      "SimpleAccount",
-      TTransport,
-      Chain,
-      DefaultEntryPointVersion
-    >,
-    "chain" | "transport" | "accountAddress"
-  > & {
-    entryPoint?: EntryPointParameter<DefaultEntryPointVersion>["entryPoint"];
-  };
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
+> = Pick<
+  ToSmartContractAccountParams<
+    "SimpleAccount",
+    TTransport,
+    Chain,
+    TEntryPointVersion
+  >,
+  "chain" | "transport"
+> & {
+  signer: TSigner;
+  salt?: bigint;
+  accountAddress?: Address;
+  factoryAddress?: Address;
+  initCode?: Hex;
+} & EntryPointParameter<TEntryPointVersion, Chain>;
 
 export async function createSimpleSmartAccount<
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner
->({
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
+>(
+  config: CreateSimpleAccountParams<TTransport, TSigner, TEntryPointVersion>
+): Promise<SimpleSmartAccount<TSigner, TEntryPointVersion>>;
+
+export async function createSimpleSmartAccount({
   chain,
   entryPoint = getEntryPoint(chain),
   ...params
-}: CreateSimpleAccountParams<TTransport, TSigner>): Promise<
-  SimpleSmartAccount<TSigner>
-> {
+}: CreateSimpleAccountParams): Promise<SimpleSmartAccount> {
   if (!params.signer) throw new AccountRequiresOwnerError("SimpleAccount");
-  const _entryPoint = entryPoint;
   const simpleAccount = new SimpleSmartContractAccount(
     SimpleSmartAccountParamsSchema().parse({
       chain,
-      entryPointAddress: _entryPoint.address,
+      entryPointAddress: entryPoint.address,
       ...params,
     })
   );
 
   const parsedParams = SimpleSmartAccountParamsSchema().parse({
     chain,
-    entryPointAddress: _entryPoint.address,
+    entryPointAddress: entryPoint.address,
+    entryPointVersion: entryPoint.version,
     ...params,
   });
 
@@ -169,7 +186,7 @@ export async function createSimpleSmartAccount<
         tx.value ?? 0n,
         tx.data
       ),
-    entryPoint: _entryPoint,
+    entryPoint,
     getAccountInitCode: async () => {
       if (parsedParams.initCode) return parsedParams.initCode as Hex;
       return simpleAccount.getAccountInitCode();
@@ -186,6 +203,6 @@ export async function createSimpleSmartAccount<
 
   return {
     ...base,
-    getSigner: () => simpleAccount.getSigner() as TSigner,
+    getSigner: () => simpleAccount.getSigner(),
   };
 }

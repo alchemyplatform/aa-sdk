@@ -4,7 +4,8 @@ export * as chains from "viem/chains";
 
 export { EntryPointAbi_v6 } from "./abis/EntryPointAbi_v6.js";
 export { EntryPointAbi_v7 } from "./abis/EntryPointAbi_v7.js";
-export { SimpleAccountAbi } from "./abis/SimpleAccountAbi.js";
+export { SimpleAccountAbi_v6 } from "./abis/SimpleAccountAbi_v6.js";
+export { SimpleAccountAbi_v7 } from "./abis/SimpleAccountAbi_v7.js";
 export { SimpleAccountFactoryAbi } from "./abis/SimpleAccountFactoryAbi.js";
 export { BaseSmartContractAccount } from "./account/base.js";
 export { createSimpleSmartAccount } from "./account/simple.js";

@@ -15,7 +15,7 @@ import type {
   UserOperationOverrides,
   UserOperationRequest,
 } from "../types";
-import type { EQ, OneOf } from "../utils";
+import type { EQ, IsOneOf, OneOf } from "../utils";
 
 export interface EntryPointRegistryBase<T> {
   "0.6.0": T;
@@ -123,16 +123,12 @@ export type GetEntryPointOptions<
 export type EntryPointParameter<
   TEntryPointVersion extends EntryPointVersion,
   TChain extends Chain = Chain
-> = {
-  entryPoint: EntryPointDef<TEntryPointVersion, TChain>;
-};
-
-// EQ<TEntryPointVersion, DefaultEntryPointVersion> extends true
-//   ? {
-//       entryPoint?: EntryPointDef<TEntryPointVersion, TChain>;
-//     }
-//   : {
-//       entryPoint: IsOneOf<TEntryPointVersion, EntryPointVersion> extends true
-//         ? EntryPointDef<TEntryPointVersion, TChain>
-//         : never;
-//     };
+> = EQ<TEntryPointVersion, DefaultEntryPointVersion> extends true
+  ? {
+      entryPoint?: EntryPointDef<TEntryPointVersion, TChain>;
+    }
+  : {
+      entryPoint: IsOneOf<TEntryPointVersion, EntryPointVersion> extends true
+        ? EntryPointDef<TEntryPointVersion, TChain>
+        : never;
+    };

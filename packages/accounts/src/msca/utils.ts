@@ -69,7 +69,11 @@ export const getDefaultMultiOwnerModularAccountFactoryAddress = (
     case baseGoerli.id:
       return "0x000000e92D78D90000007F0082006FDA09BD5f11";
   }
-  throw new DefaultFactoryNotDefinedError("MultiOwnerModularAccount", chain);
+  throw new DefaultFactoryNotDefinedError(
+    "MultiOwnerModularAccount",
+    chain,
+    "0.6.0"
+  );
 };
 
 export async function getMSCAUpgradeToData<
