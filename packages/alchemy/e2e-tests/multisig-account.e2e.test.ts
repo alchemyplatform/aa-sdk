@@ -58,7 +58,6 @@ describe("Multisig Modular Account Alchemy Client Tests", async () => {
       threshold,
     });
 
-    // .map(...) just to generate a non-readonly copy
     expect((await provider.readOwners()).slice().sort()).toMatchInlineSnapshot(
       owners.slice().sort()
     );
@@ -140,8 +139,6 @@ describe("Multisig Modular Account Alchemy Client Tests", async () => {
           preVerificationGas: { multiplier: 1.5 },
         },
       });
-
-    // console.log("aggregated signature", aggregatedSignature);
 
     const result = await provider2.sendUserOperation({
       uo: request.callData,

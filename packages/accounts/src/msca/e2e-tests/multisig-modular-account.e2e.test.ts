@@ -71,7 +71,6 @@ describe("Multisig Modular Account Tests", async () => {
       threshold,
     });
 
-    // .map(...) just to generate a non-readonly copy
     expect((await provider.readOwners()).slice().sort()).toStrictEqual(
       owners.slice().sort()
     );
@@ -480,16 +479,11 @@ describe("Multisig Modular Account Tests", async () => {
         },
       });
 
-    // console.log("signature1");
-    // console.log(signature1);
-
     const { aggregatedSignature } = await provider2.signMultisigUserOperation({
       account: provider2.account,
       signatures: [signature1],
       userOperationRequest: request,
     });
-
-    // console.log("aggregatedSignature: ", aggregatedSignature);
 
     // parse the UO request fields into the override format to send to sendUserOperation
     // todo: helper function to go from UserOperationRequest to SendUserOperationParams?

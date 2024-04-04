@@ -54,10 +54,7 @@ export {
 export type * from "./client/decorators/bundlerClient.js";
 export { bundlerActions } from "./client/decorators/bundlerClient.js";
 export type * from "./client/decorators/smartAccountClient.js";
-export {
-  smartAccountClientActions,
-  smartAccountClientActions as smartAccountClientDecorator,
-} from "./client/decorators/smartAccountClient.js";
+export { smartAccountClientActions } from "./client/decorators/smartAccountClient.js";
 export { isSmartAccountClient } from "./client/isSmartAccountClient.js";
 export {
   ConnectionConfigSchema,
@@ -108,7 +105,7 @@ export { defaultFeeEstimator } from "./middleware/defaults/feeEstimator.js";
 export { defaultGasEstimator } from "./middleware/defaults/gasEstimator.js";
 export { overridePaymasterDataMiddleware } from "./middleware/defaults/overridePaymasterData.js";
 export { defaultPaymasterAndData } from "./middleware/defaults/paymasterAndData.js";
-export { defaultUserOpSigner } from "./middleware/defaults/useropSigner.js";
+export { defaultUserOpSigner } from "./middleware/defaults/userOpSigner.js";
 export { noopMiddleware } from "./middleware/noopMiddleware.js";
 export type * from "./middleware/types.js";
 export { LocalAccountSigner } from "./signer/local-account.js";

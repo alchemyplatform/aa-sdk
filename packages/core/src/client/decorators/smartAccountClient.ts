@@ -85,7 +85,7 @@ export type BaseSmartAccountClientActions<
     args: DropAndReplaceUserOperationParameters<TAccount, TContext>
   ) => Promise<SendUserOperationResult>;
   // TODO: for v4 we should combine override and context into an `opts` parameter
-  // which wraps both of these properties so we can use GetContextParamter
+  // which wraps both of these properties so we can use GetContextParameter
   sendTransaction: <TChainOverride extends Chain | undefined = undefined>(
     args: SendTransactionParameters<TChain, TAccount, TChainOverride>,
     overrides?: UserOperationOverrides,
