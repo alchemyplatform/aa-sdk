@@ -1,17 +1,13 @@
 import { type Chain } from "viem";
-import { EntryPointAbi_v6 } from "../abis/EntryPointAbi_v6.js";
-import { EntryPointAbi_v7 } from "../abis/EntryPointAbi_v7.js";
 import { EntryPointNotFoundError } from "../errors/entrypoint.js";
 import EntryPoint_v6 from "./0.6.js";
 import EntryPoint_v7 from "./0.7.js";
 import type {
   DefaultEntryPointVersion,
-  EntryPointDef,
   EntryPointDefRegistry,
   EntryPointRegistry,
   EntryPointVersion,
   GetEntryPointOptions,
-  SupportedEntryPoint,
 } from "./types.js";
 
 export const defaultEntryPointVersion: DefaultEntryPointVersion = "0.6.0";
@@ -65,36 +61,32 @@ export function getEntryPoint<
     throw new EntryPointNotFoundError(chain, version);
   }
 
-  if (version === "0.6.0") {
-    const v6 = entryPoint as SupportedEntryPoint<
-      "0.6.0",
-      TChain,
-      typeof EntryPointAbi_v6
-    >;
+  if (entryPoint.version === "0.6.0") {
     return {
-      version: v6.version,
+      version: entryPoint.version,
       address,
       chain,
-      abi: v6.abi,
+      // we should fix this so it's not required
+      // this is why satisfies didn't work before
+      overrides: undefined,
+      abi: entryPoint.abi,
       getUserOperationHash: (r) =>
-        v6.getUserOperationHash(r, address, chain.id),
-      packUserOperation: v6.packUserOperation,
-    } as EntryPointDef<"0.6.0", TChain, typeof EntryPointAbi_v6>;
-  } else if (version === "0.7.0") {
-    const v7 = entryPoint as SupportedEntryPoint<
-      "0.7.0",
-      TChain,
-      typeof EntryPointAbi_v7
-    >;
+        entryPoint.getUserOperationHash(r, address, chain.id),
+      packUserOperation: entryPoint.packUserOperation,
+    };
+  } else if (entryPoint.version === "0.7.0") {
     return {
-      version: v7.version,
+      version: entryPoint.version,
       address,
       chain,
-      abi: v7.abi,
+      // we should fix this so it's not required
+      // this is why satisfies didn't work before
+      overrides: undefined,
+      abi: entryPoint.abi,
       getUserOperationHash: (r) =>
-        v7.getUserOperationHash(r, address, chain.id),
-      packUserOperation: v7.packUserOperation,
-    } as EntryPointDef<"0.7.0", TChain, typeof EntryPointAbi_v7>;
+        entryPoint.getUserOperationHash(r, address, chain.id),
+      packUserOperation: entryPoint.packUserOperation,
+    };
   }
 
   throw new EntryPointNotFoundError(chain, version);
