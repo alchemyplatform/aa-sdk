@@ -108,8 +108,8 @@ export type ToSmartContractAccountParams<
 } & Omit<CustomSource, "signTransaction" | "address">;
 
 export const parseFactoryAddressFromAccountInitCode = (initCode: Hex) => {
-  const factoryAddress = `0x${initCode.substring(2, 42)}` as Address;
-  const factoryCalldata = `0x${initCode.substring(42)}` as Hex;
+  const factoryAddress: Address = `0x${initCode.substring(2, 42)}`;
+  const factoryCalldata: Hex = `0x${initCode.substring(42)}`;
   return [factoryAddress, factoryCalldata];
 };
 
