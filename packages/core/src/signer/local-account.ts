@@ -44,7 +44,7 @@ export class LocalAccountSigner<
 
   static mnemonicToAccountSigner(
     key: string,
-    opts?: HDOptions | undefined
+    opts?: HDOptions
   ): LocalAccountSigner<HDAccount> {
     const signer = mnemonicToAccount(key, opts);
     return new LocalAccountSigner(signer);

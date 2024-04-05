@@ -223,7 +223,7 @@ export async function createLightAccount({
           return signWith1271Wrapper(hashTypedData(params));
       }
     },
-    getDummySignature: () => {
+    getDummySignature: (): Hex => {
       return "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
     },
     encodeUpgradeToAndCall,

@@ -28,12 +28,16 @@ export type UpgradeToData = {
 };
 //#endregion UpgradeToData
 
-export type ClientMiddlewareConfig = Omit<
-  Partial<ClientMiddleware>,
+export type ClientMiddlewareConfig<
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
+> = Omit<
+  Partial<ClientMiddleware<TContext>>,
   "dummyPaymasterAndData" | "paymasterAndData"
 > & {
   paymasterAndData?: {
     dummyPaymasterAndData: () => Hex;
-    paymasterAndData: ClientMiddlewareFn;
+    paymasterAndData: ClientMiddlewareFn<TContext>;
   };
 };

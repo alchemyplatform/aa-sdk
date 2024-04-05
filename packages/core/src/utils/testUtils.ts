@@ -1,4 +1,4 @@
-import { createPublicClient, custom, type Chain } from "viem";
+import { createPublicClient, custom, type Chain, type Hex } from "viem";
 import {
   toSmartContractAccount,
   type SmartContractAccount,
@@ -24,7 +24,7 @@ export const createDummySmartContractAccount = async <C extends BundlerClient>(
       "0x1234567890123456789012345678901234567890deadbeef",
     encodeBatchExecute: async () => "0x",
     encodeExecute: async () => "0x",
-    getDummySignature: () =>
+    getDummySignature: (): Hex =>
       "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c",
   });
 };

@@ -67,7 +67,7 @@ const myAccount = await toSmartContractAccount({
 export type SmartContractAccount<Name extends string = string> =
   LocalAccount<Name> & {
     source: Name;
-    getDummySignature: () => Hex;
+    getDummySignature: () => Hex | Promise<Hex>;
     encodeExecute: (tx: Tx) => Promise<Hex>;
     encodeBatchExecute: (txs: Tx[]) => Promise<Hex>;
     signUserOperationHash: (uoHash: Hex) => Promise<Hex>;

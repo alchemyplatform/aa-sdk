@@ -21,6 +21,7 @@ import {
   type UserOperationOverrides,
   type GetAccountParameter,
   type SendUserOperationResult,
+  type GetContextParameter,
 } from "@alchemy/aa-core";
 import { type Plugin } from "../types.js";
 import { installPlugin as installPlugin_ } from "../../plugin-manager/installPlugin.js";
@@ -33,6 +34,9 @@ import { type FunctionReference } from "../../account-loupe/types.js";
 type ExecutionActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
     | undefined
 > = {
   updateOwners: (
@@ -42,7 +46,10 @@ type ExecutionActions<
         "updateOwners"
       >,
       "args"
-    > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
+    > & {
+      overrides?: UserOperationOverrides;
+    } & GetAccountParameter<TAccount> &
+      GetContextParameter<TContext>
   ) => Promise<SendUserOperationResult>;
 };
 
@@ -57,13 +64,17 @@ export type InstallMultiOwnerPluginParams = {
 type ManagementActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
     | undefined
 > = {
   installMultiOwnerPlugin: (
     args: {
       overrides?: UserOperationOverrides;
     } & InstallMultiOwnerPluginParams &
-      GetAccountParameter<TAccount>
+      GetAccountParameter<TAccount> &
+      GetContextParameter<TContext>
   ) => Promise<SendUserOperationResult>;
 };
 
@@ -131,9 +142,12 @@ type ReadAndEncodeActions<
 export type MultiOwnerPluginActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
     | undefined
-> = ExecutionActions<TAccount> &
-  ManagementActions<TAccount> &
+> = ExecutionActions<TAccount, TContext> &
+  ManagementActions<TAccount, TContext> &
   ReadAndEncodeActions<TAccount>;
 
 const addresses = {
@@ -178,11 +192,14 @@ export const multiOwnerPluginActions: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>
-) => MultiOwnerPluginActions<TAccount> = (client) => ({
-  updateOwners({ args, overrides, account = client.account }) {
+) => MultiOwnerPluginActions<TAccount, TContext> = (client) => ({
+  updateOwners({ args, overrides, context, account = client.account }) {
     if (!account) {
       throw new AccountNotFoundError();
     }
@@ -200,9 +217,14 @@ export const multiOwnerPluginActions: <
       args,
     });
 
-    return client.sendUserOperation({ uo, overrides, account });
+    return client.sendUserOperation({ uo, overrides, account, context });
   },
-  installMultiOwnerPlugin({ account = client.account, overrides, ...params }) {
+  installMultiOwnerPlugin({
+    account = client.account,
+    overrides,
+    context,
+    ...params
+  }) {
     if (!account) {
       throw new AccountNotFoundError();
     }
@@ -237,6 +259,7 @@ export const multiOwnerPluginActions: <
       dependencies,
       overrides,
       account,
+      context,
     });
   },
   encodeUpdateOwners({ args }) {
