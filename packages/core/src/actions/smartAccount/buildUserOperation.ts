@@ -1,4 +1,4 @@
-import type { Chain, Client, Transport } from "viem";
+import { toHex, type Chain, type Client, type Transport } from "viem";
 import {
   type GetEntryPointFromAccount,
   type SmartContractAccount,
@@ -48,7 +48,7 @@ export async function buildUserOperation<
 
   const signature = account.getDummySignature();
 
-  const nonce = account.getNonce(overrides?.nonceKey);
+  const nonce = toHex(await account.getNonce(overrides?.nonceKey));
 
   const _uo =
     entryPoint.version === "0.6.0"
