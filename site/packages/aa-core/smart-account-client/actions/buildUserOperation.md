@@ -48,10 +48,10 @@ const request = await smartAccountClient.signUserOperation({ uoStruct });
 // to send the signed user operation request to the bundler, requesting the bundler to send the signed uo to the
 // EntryPoint contract pointed at the entryPoint address parameter
 const entryPointAddress = client.account.getEntryPoint().address;
-const uoHash = await smartAccountClient.sendRawUserOperation({
+const uoHash = await smartAccountClient.sendRawUserOperation(
   request,
-  entryPoint: entryPointAddress,
-});
+  entryPointAddress,
+);
 
 // build batch
 
@@ -74,16 +74,16 @@ const batchedUoStruct = await smartAccountClient.buildUserOperation({
 
 // signUserOperation signs the above unsigned user operation struct built
 // using the account connected to the smart account client
-const request = await smartAccountClient.signUserOperation({ uoStruct });
+const request = await smartAccountClient.signUserOperation({ batchedUoStruct });
 
 // You can use the BundlerAction `sendRawUserOperation` (packages/core/src/actions/bundler/sendRawUserOperation.ts)
 // to send the signed user operation request to the bundler, requesting the bundler to send the signed uo to the
 // EntryPoint contract pointed at the entryPoint address parameter
 const entryPointAddress = client.account.getEntryPoint().address;
-const uoHash = await smartAccountClient.sendRawUserOperation({
+const uoHash = await smartAccountClient.sendRawUserOperation(
   request,
-  entryPoint: entryPointAddress,
-});
+  entryPointAddress,
+);
 ```
 
 <<< @/snippets/aa-core/smartAccountClient.ts
