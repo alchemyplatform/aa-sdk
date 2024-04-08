@@ -20,6 +20,7 @@ import {
   type Hex,
   type SignTypedDataParameters,
   type Transport,
+  concat,
 } from "viem";
 import {
   AccountVersionRegistry,
@@ -29,6 +30,13 @@ import {
   type LightAccountVersion,
   type LightAccountVersionDef,
 } from "../utils.js";
+import { getErc1271SigningFunctions } from "../../utils/erc1271/erc1271.js";
+
+enum SignatureType {
+  EOA = "0x00",
+  CONTRACT = "0x01",
+  CONTRACT_WITH_ADDR = "0x02",
+}
 
 export type LightAccountBase<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
@@ -111,7 +119,7 @@ export async function createLightAccountBase({
   chain,
   signer,
   abi,
-  version: _version,
+  version: { version, type },
   entryPoint,
   accountAddress,
   getAccountInitCode,
@@ -120,8 +128,6 @@ export async function createLightAccountBase({
     transport,
     chain,
   });
-
-  const { version, type } = _version;
 
   const encodeUpgradeToAndCall = async ({
     upgradeToAddress,
@@ -161,7 +167,7 @@ export async function createLightAccountBase({
     });
   };
 
-  const signWith1271Wrapper = async (msg: Hex): Promise<`0x${string}`> => {
+  const signWith1271WrapperV1 = async (hashedMessage: Hex): Promise<Hex> => {
     return signer.signTypedData({
       // EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)
       // https://github.com/alchemyplatform/light-account/blob/main/src/LightAccount.sol#L236
@@ -169,17 +175,27 @@ export async function createLightAccountBase({
         chainId: Number(client.chain.id),
         name: type,
         verifyingContract: accountAddress,
-        version: version === "v2.0.0" ? "2" : "1",
+        version: "1",
       },
       types: {
         LightAccountMessage: [{ name: "message", type: "bytes" }],
       },
       message: {
-        message: msg,
+        message: hashedMessage,
       },
       primaryType: "LightAccountMessage",
     });
   };
+
+  const { signMessage: signMessageV2, signTypedData: signTypedDataV2 } =
+    getErc1271SigningFunctions({
+      accountAddress,
+      accountName: type,
+      accountVersion: "2",
+      chainId: chain.id,
+      signer,
+      wrapperTypeName: "LightAccountMessage",
+    });
 
   const account = await toSmartContractAccount({
     transport,
@@ -222,12 +238,11 @@ export async function createLightAccountBase({
         case "v1.0.2":
           throw new Error(`${type} ${version} doesn't support 1271`);
         case "v1.1.0":
-          return signWith1271Wrapper(hashMessage(message));
+          return signWith1271WrapperV1(hashMessage(message));
         case "v2.0.0":
-          // TODO: implement 1271 signing for v2.0.0
-          throw new Error(
-            `${type} ${version} 1271 signing not implemented yet`
-          );
+          const signature = await signMessageV2({ message });
+          // TODO: handle case where signer is an SCA.
+          return concat([SignatureType.EOA, signature]);
         default:
           throw new Error(`Unknown version ${type} of ${version}`);
       }
@@ -243,12 +258,11 @@ export async function createLightAccountBase({
             `Version ${version} of LightAccount doesn't support 1271`
           );
         case "v1.1.0":
-          return signWith1271Wrapper(hashTypedData(params));
+          return signWith1271WrapperV1(hashTypedData(params));
         case "v2.0.0":
-          // TODO: implement 1271 signing for v2.0.0
-          throw new Error(
-            `${type} ${version} 1271 signing not implemented yet`
-          );
+          const signature = await signTypedDataV2(params);
+          // TODO: handle case where signer is an SCA.
+          return concat([SignatureType.EOA, signature]);
         default:
           throw new Error(`Unknown version ${version} of LightAccount`);
       }

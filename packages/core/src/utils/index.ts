@@ -148,10 +148,10 @@ export const toRecord = <
   selector: K,
   fn: (item: T) => V
 ): Record<T[K], V> =>
-  array.reduce(
-    (acc, item) => ((acc[item[selector]] = fn(item)), acc),
-    {} as Record<T[K], V>
-  );
+  array.reduce((acc, item) => {
+    acc[item[selector]] = fn(item);
+    return acc;
+  }, {} as Record<T[K], V>);
 
 export * from "./bigint.js";
 export * from "./bytes.js";
