@@ -86,8 +86,6 @@ Then:
 
 Once you create the policy, copy the Policy ID below the policy's header and copy-paste it into the .env file of your application as an environment variable called `NEXT_PUBLIC_ALCHEMY_GAS_MANAGER_POLICY_ID`.
 
-<img src="/images/getting-started/gas-manager-activate.png" alt="Gas Manager Activate" />
-
 ## Install dependencies
 
 In this newly created directory for your app, add the following dependencies:
