@@ -3,25 +3,31 @@ import type { ClientMiddlewareFn } from "../types";
 
 export const overridePaymasterDataMiddleware: ClientMiddlewareFn = async (
   struct,
-  { overrides, account }
+  { overrides = {}, account }
 ) => {
   const entryPoint = account.getEntryPoint();
 
-  if (entryPoint.version === "0.6.0") {
-    const _struct = struct as UserOperationStruct<"0.6.0">;
-    _struct.paymasterAndData =
-      _struct?.paymasterAndData != null ? _struct.paymasterAndData : "0x";
-  } else {
-    const _struct = struct as UserOperationStruct<"0.7.0">;
-    const _overrides = overrides as UserOperationOverrides<"0.7.0">;
-
-    _struct.paymaster =
-      _overrides?.paymaster != null ? _overrides?.paymaster : "0x";
-    _struct.paymasterData =
-      _overrides?.paymasterData != null ? _overrides.paymasterData : "0x";
-    _struct.paymasterPostOpGasLimit = _overrides?.paymasterPostOpGasLimit;
-    _struct.paymasterVerificationGasLimit =
-      _overrides?.paymasterVerificationGasLimit;
+  switch (entryPoint.version) {
+    case "0.6.0":
+      (struct as UserOperationStruct<"0.6.0">).paymasterAndData =
+        (overrides as UserOperationOverrides<"0.6.0">).paymasterAndData != null
+          ? (overrides as UserOperationOverrides<"0.6.0">).paymasterAndData!
+          : (struct as UserOperationStruct<"0.6.0">).paymasterAndData;
+      break;
+    case "0.7.0":
+      const _overrides = overrides as UserOperationOverrides<"0.7.0">;
+      // if paymaster is set, then all other paymaster fields must be set in the overrides
+      if (_overrides.paymaster != null) {
+        struct = {
+          ...struct,
+          paymaster: _overrides.paymaster,
+          paymasterData: _overrides.paymasterData,
+          paymasterPostOpGasLimit: _overrides.paymasterPostOpGasLimit,
+          paymasterVerificationGasLimit:
+            _overrides.paymasterVerificationGasLimit,
+        };
+      }
+      break;
   }
 
   return struct;

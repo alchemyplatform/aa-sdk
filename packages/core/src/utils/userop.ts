@@ -1,4 +1,3 @@
-import { isAddress, toHex } from "viem";
 import type { EntryPointVersion } from "../entrypoint/types";
 import type {
   BigNumberish,
@@ -28,6 +27,7 @@ export function isValidRequest<TEntryPointVersion extends EntryPointVersion>(
     BigInt(request.maxFeePerGas || 0n) > 0n &&
     BigInt(request.preVerificationGas || 0n) > 0n &&
     BigInt(request.verificationGasLimit || 0n) > 0n &&
+    request.maxPriorityFeePerGas != null &&
     isValidPaymasterAndData(request) &&
     isValidFactoryAndData(request)
   );
@@ -44,22 +44,15 @@ export function isValidPaymasterAndData<
   TEntryPointVersion extends EntryPointVersion
 >(request: UserOperationStruct<TEntryPointVersion>): boolean {
   if (!("paymaster" in request)) {
-    const { paymasterAndData } = request as UserOperationStruct_v6;
-    return paymasterAndData != null;
+    return (request as UserOperationStruct_v6).paymasterAndData != null;
   }
 
-  const {
-    paymaster,
-    paymasterData,
-    paymasterPostOpGasLimit,
-    paymasterVerificationGasLimit,
-  } = request as UserOperationStruct_v7;
   // either all exist, or none.
   return allEqual(
-    isAddress(paymaster),
-    toHex(paymasterData || "0x") !== "0x",
-    BigInt(paymasterPostOpGasLimit || 0n) > 0n,
-    BigInt(paymasterVerificationGasLimit || 0n) > 0n
+    (request as UserOperationStruct_v7).paymaster == null,
+    (request as UserOperationStruct_v7).paymasterData == null,
+    (request as UserOperationStruct_v7).paymasterPostOpGasLimit == null,
+    (request as UserOperationStruct_v7).paymasterVerificationGasLimit == null
   );
 }
 
@@ -78,9 +71,11 @@ export function isValidFactoryAndData<
     return initCode != null;
   }
 
-  const { factory, factoryData } = request as UserOperationStruct_v7;
   // either all exist, or none.
-  return allEqual(isAddress(factory), toHex(factoryData || "0x") !== "0x");
+  return allEqual(
+    (request as UserOperationStruct_v7).factory == null,
+    (request as UserOperationStruct_v7).factoryData == null
+  );
 }
 
 export function applyUserOpOverride(
