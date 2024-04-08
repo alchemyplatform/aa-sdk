@@ -1,6 +1,5 @@
-import type { Address, Chain, Client, Hex, Transport } from "viem";
+import type { Chain, Client, Transport } from "viem";
 import {
-  parseFactoryAddressFromAccountInitCode,
   type GetEntryPointFromAccount,
   type SmartContractAccount,
 } from "../../account/smartContractAccount.js";
@@ -40,12 +39,6 @@ export async function buildUserOperation<
   }
 
   const entryPoint = account.getEntryPoint();
-  const getInitCode = account.getInitCode();
-  const getFactoryAndData = getInitCode.then((initCode) =>
-    initCode === "0x"
-      ? ["0x0" as Address, "0x" as Hex]
-      : parseFactoryAddressFromAccountInitCode(initCode)
-  );
 
   const callData = Array.isArray(uo)
     ? account.encodeBatchExecute(uo)
@@ -60,15 +53,23 @@ export async function buildUserOperation<
   const _uo =
     entryPoint.version === "0.6.0"
       ? ({
-          initCode: getInitCode,
+          initCode: account.getInitCode(),
           sender: account.address,
           nonce,
           callData,
           signature,
         } as Deferrable<UserOperationStruct<TEntryPointVersion>>)
       : ({
-          factory: getFactoryAndData.then(([factory]) => factory),
-          factoryData: getFactoryAndData.then(([, data]) => data),
+          factory: account
+            .isAccountDeployed()
+            .then((deployed) =>
+              deployed ? account.getFactoryAddress() : undefined
+            ),
+          factoryData: account
+            .isAccountDeployed()
+            .then((deployed) =>
+              deployed ? account.getFactoryData() : undefined
+            ),
           sender: account.address,
           nonce,
           callData,

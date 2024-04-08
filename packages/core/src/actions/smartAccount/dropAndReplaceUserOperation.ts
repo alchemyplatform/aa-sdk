@@ -55,8 +55,14 @@ export async function dropAndReplaceUserOperation<
           signature: (uoToDrop as UserOperationRequest<"0.6.0">).signature,
         }
       : {
-          factory: (uoToDrop as UserOperationRequest<"0.7.0">).factory,
-          factoryData: (uoToDrop as UserOperationRequest<"0.7.0">).factoryData,
+          ...((uoToDrop as UserOperationRequest<"0.7.0">).factory &&
+          (uoToDrop as UserOperationRequest<"0.7.0">).factoryData
+            ? {
+                factory: (uoToDrop as UserOperationRequest<"0.7.0">).factory,
+                factoryData: (uoToDrop as UserOperationRequest<"0.7.0">)
+                  .factoryData,
+              }
+            : {}),
           sender: (uoToDrop as UserOperationRequest<"0.7.0">).sender,
           nonce: (uoToDrop as UserOperationRequest<"0.7.0">).nonce,
           callData: (uoToDrop as UserOperationRequest<"0.7.0">).callData,

@@ -18,7 +18,7 @@ export const defaultFeeEstimator: <C extends MiddlewareClient>(
     // for more information about maxFeePerGas and maxPriorityFeePerGas
 
     const feeData = await client.estimateFeesPerGas();
-    if (!feeData.maxFeePerGas || !feeData.maxPriorityFeePerGas) {
+    if (!feeData.maxFeePerGas || feeData.maxPriorityFeePerGas == null) {
       throw new Error(
         "feeData is missing maxFeePerGas or maxPriorityFeePerGas"
       );

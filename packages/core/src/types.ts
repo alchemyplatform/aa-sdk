@@ -15,6 +15,7 @@ import type {
   BigNumberishRangeSchema,
   BigNumberishSchema,
   MultiplierSchema,
+  NoUndefined,
 } from "./utils";
 
 export type EmptyHex = `0x`;
@@ -95,13 +96,20 @@ export type UserOperationOverrides<
         paymasterAndData: UserOperationStruct<"0.6.0">["paymasterAndData"];
       }
     : TEntryPointVersion extends "0.7.0"
-    ? {
-        paymaster: UserOperationStruct<"0.7.0">["paymaster"];
-        paymasterData: UserOperationStruct<"0.7.0">["paymasterData"];
-        paymasterPostOpGasLimit: UserOperationStruct<"0.7.0">["paymasterPostOpGasLimit"];
-        paymasterVerificationGasLimit: UserOperationStruct<"0.7.0">["paymasterVerificationGasLimit"];
-        paymasterGas: UserOperationStruct<"0.7.0">["paymasterPostOpGasLimit"];
-      }
+    ?
+        | {
+            paymaster: NoUndefined<UserOperationStruct<"0.7.0">["paymaster"]>;
+            paymasterData: NoUndefined<
+              UserOperationStruct<"0.7.0">["paymasterData"]
+            >;
+            paymasterPostOpGasLimit: NoUndefined<
+              UserOperationStruct<"0.7.0">["paymasterPostOpGasLimit"]
+            >;
+            paymasterVerificationGasLimit: NoUndefined<
+              UserOperationStruct<"0.7.0">["paymasterVerificationGasLimit"]
+            >;
+          }
+        | undefined
     : never)
 >;
 //#endregion UserOperationOverrides
@@ -144,9 +152,9 @@ export interface UserOperationRequest_v7 {
   /* anti-replay parameter. nonce of the transaction, returned from the entry point for this address */
   nonce: Hex;
   /* account factory, only for new accounts */
-  factory: Address | NullAddress;
+  factory?: Address;
   /* data for account factory (only if account factory exists) */
-  factoryData: Hex | EmptyHex;
+  factoryData?: Hex;
   /* the data to pass to the sender during the main execution call */
   callData: Hex;
   /* the amount of gas to allocate the main execution call */
@@ -160,13 +168,13 @@ export interface UserOperationRequest_v7 {
   /* maximum priority fee per gas (similar to EIP-1559 max_priority_fee_per_gas) */
   maxPriorityFeePerGas: Hex;
   /* address of paymaster contract, (or empty, if account pays for itself) */
-  paymaster: Address | NullAddress;
+  paymaster?: Address;
   /* the amount of gas to allocate for the paymaster validation code */
-  paymasterVerificationGasLimit: Hex;
+  paymasterVerificationGasLimit?: Hex;
   /* the amount of gas to allocate for the paymaster post-operation code */
-  paymasterPostOpGasLimit: Hex;
+  paymasterPostOpGasLimit?: Hex;
   /* data for paymaster (only if paymaster exists) */
-  paymasterData: Hex | EmptyHex;
+  paymasterData?: Hex;
   /* data passed into the account to verify authorization */
   signature: Hex;
 }
@@ -332,9 +340,9 @@ export interface UserOperationStruct_v7 {
   /* anti-replay parameter. nonce of the transaction, returned from the entry point for this address */
   nonce: BigNumberish;
   /* account factory, only for new accounts */
-  factory: string | "0x";
+  factory?: string;
   /* data for account factory (only if account factory exists) */
-  factoryData: BytesLike | "0x";
+  factoryData?: BytesLike;
   /* the data to pass to the sender during the main execution call */
   callData: BytesLike;
   /* the amount of gas to allocate the main execution call */
@@ -348,13 +356,13 @@ export interface UserOperationStruct_v7 {
   /* maximum priority fee per gas (similar to EIP-1559 max_priority_fee_per_gas) */
   maxPriorityFeePerGas?: BigNumberish;
   /* address of paymaster contract, (or empty, if account pays for itself) */
-  paymaster: string | "0x";
+  paymaster?: string;
   /* the amount of gas to allocate for the paymaster validation code */
   paymasterVerificationGasLimit?: BigNumberish;
   /* the amount of gas to allocate for the paymaster post-operation code */
   paymasterPostOpGasLimit?: BigNumberish;
   /* data for paymaster (only if paymaster exists) */
-  paymasterData: BytesLike | "0x";
+  paymasterData?: BytesLike;
   /* data passed into the account to verify authorization */
   signature: BytesLike;
 }
