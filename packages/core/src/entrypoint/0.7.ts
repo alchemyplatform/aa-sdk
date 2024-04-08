@@ -35,7 +35,10 @@ import type {
 import type { SupportedEntryPoint } from "./types.js";
 
 const packUserOperation = (request: UserOperationRequest<"0.7.0">): Hex => {
-  const initCode = concat([request.factory, request.factoryData]);
+  const initCode =
+    request.factory && request.factoryData
+      ? concat([request.factory, request.factoryData])
+      : "0x";
   const accountGasLimits = packAccountGasLimits(
     (({ verificationGasLimit, callGasLimit }) => ({
       verificationGasLimit,
@@ -50,21 +53,22 @@ const packUserOperation = (request: UserOperationRequest<"0.7.0">): Hex => {
     }))(request)
   );
 
-  const paymasterAndData = isAddress(request.paymaster)
-    ? packPaymasterData(
-        (({
-          paymaster,
-          paymasterVerificationGasLimit,
-          paymasterPostOpGasLimit,
-          paymasterData,
-        }) => ({
-          paymaster,
-          paymasterVerificationGasLimit,
-          paymasterPostOpGasLimit,
-          paymasterData,
-        }))(request)
-      )
-    : "0x";
+  const paymasterAndData =
+    request.paymaster && isAddress(request.paymaster)
+      ? packPaymasterData(
+          (({
+            paymaster,
+            paymasterVerificationGasLimit,
+            paymasterPostOpGasLimit,
+            paymasterData,
+          }) => ({
+            paymaster,
+            paymasterVerificationGasLimit,
+            paymasterPostOpGasLimit,
+            paymasterData,
+          }))(request)
+        )
+      : "0x";
 
   return encodeAbiParameters(
     [
@@ -153,6 +157,14 @@ export function packPaymasterData({
   | "paymasterPostOpGasLimit"
   | "paymasterData"
 >): Hex {
+  if (
+    !paymaster ||
+    !paymasterVerificationGasLimit ||
+    !paymasterPostOpGasLimit ||
+    !paymasterData
+  ) {
+    return "0x";
+  }
   return concat([
     paymaster,
     pad(paymasterVerificationGasLimit, { size: 16 }),

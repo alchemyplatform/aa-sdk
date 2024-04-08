@@ -23,23 +23,34 @@ import { alchemyFeeEstimator } from "./feeEstimator.js";
 
 export type RequestGasAndPaymasterAndDataOverrides<
   TEntryPointVersion extends EntryPointVersion
-> = Partial<{
-  maxFeePerGas:
-    | UserOperationRequest<TEntryPointVersion>["maxFeePerGas"]
-    | Multiplier;
-  maxPriorityFeePerGas:
-    | UserOperationRequest<TEntryPointVersion>["maxFeePerGas"]
-    | Multiplier;
-  callGasLimit:
-    | UserOperationRequest<TEntryPointVersion>["maxFeePerGas"]
-    | Multiplier;
-  preVerificationGas:
-    | UserOperationRequest<TEntryPointVersion>["maxFeePerGas"]
-    | Multiplier;
-  verificationGasLimit:
-    | UserOperationRequest<TEntryPointVersion>["maxFeePerGas"]
-    | Multiplier;
-}>;
+> = Partial<
+  {
+    maxFeePerGas:
+      | UserOperationRequest<TEntryPointVersion>["maxFeePerGas"]
+      | Multiplier;
+    maxPriorityFeePerGas:
+      | UserOperationRequest<TEntryPointVersion>["maxPriorityFeePerGas"]
+      | Multiplier;
+    callGasLimit:
+      | UserOperationRequest<TEntryPointVersion>["callGasLimit"]
+      | Multiplier;
+    verificationGasLimit:
+      | UserOperationRequest<TEntryPointVersion>["verificationGasLimit"]
+      | Multiplier;
+    preVerificationGas:
+      | UserOperationRequest<TEntryPointVersion>["preVerificationGas"]
+      | Multiplier;
+  } & TEntryPointVersion extends "0.7.0"
+    ? {
+        paymasterVerificationGasLimit:
+          | UserOperationRequest<"0.7.0">["paymasterVerificationGasLimit"]
+          | Multiplier;
+        paymasterPostOpGasLimit:
+          | UserOperationRequest<"0.7.0">["paymasterPostOpGasLimit"]
+          | Multiplier;
+      }
+    : {}
+>;
 
 export interface AlchemyGasManagerConfig {
   policyId: string;

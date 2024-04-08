@@ -103,6 +103,7 @@ export type SmartContractAccount<
   getInitCode: () => Promise<Hex>;
   isAccountDeployed: () => Promise<boolean>;
   getFactoryAddress: () => Address;
+  getFactoryData: () => Hex;
   getEntryPoint: () => EntryPointDef<TEntryPointVersion>;
   getImplementationAddress: () => Promise<NullAddress | Address>;
 };
@@ -278,11 +279,13 @@ export async function toSmartContractAccount({
       return signMessage({ message: { raw: hexToBytes(uoHash) } });
     });
 
-  const [factoryAddress] = parseFactoryAddressFromAccountInitCode(
+  const [factoryAddress, factoryData] = parseFactoryAddressFromAccountInitCode(
     await getAccountInitCode()
   );
 
   const getFactoryAddress = () => factoryAddress;
+
+  const getFactoryData = () => factoryData;
 
   const encodeUpgradeToAndCall_ =
     encodeUpgradeToAndCall ??
@@ -381,6 +384,7 @@ export async function toSmartContractAccount({
     // and allow for generating the UO hash based on the EP version
     signUserOperationHash: signUserOperationHash_,
     getFactoryAddress,
+    getFactoryData,
     encodeBatchExecute:
       encodeBatchExecute ??
       (() => {
