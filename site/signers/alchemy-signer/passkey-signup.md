@@ -20,7 +20,7 @@ head:
 
 # Passkey Signup
 
-The Alchemy Signer allows you to sign up users to your application using a [passkey](https://accountkit.alchemy.com/resources/terms.html#passkey) on their device.
+The Alchemy Signer allows you to sign up users to your application using a [passkey](https://accountkit.alchemy.com/resources/terms.html#passkey) on their device. All subsequent logins can be done with this [passkey authentication](/signers/alchemy-signer/passkey-auth) guide.
 
 To add passkey signup functionality to your app, you can use the [`authenticate`](/packages/aa-alchemy/signer/authenticate.html#parameters) method on the Alchemy Signer as follows.
 

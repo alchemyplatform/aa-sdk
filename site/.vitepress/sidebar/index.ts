@@ -83,6 +83,45 @@ export const sidebar: DefaultTheme.Sidebar = [
     ],
   },
   {
+    text: "Using Alchemy Signer",
+    collapsed: false,
+    base: "/signers/alchemy-signer",
+    items: [
+      {
+        text: "Introduction",
+        link: "/introduction",
+      },
+      {
+        text: "Email signup",
+        link: "/email-signup",
+      },
+      {
+        text: "Email authentication",
+        link: "/email-auth",
+      },
+      {
+        text: "Passkey signup",
+        link: "/passkey-signup",
+      },
+      {
+        text: "Passkey authentication",
+        link: "/passkey-auth",
+      },
+      {
+        text: "Add Passkey",
+        link: "/add-passkey",
+      },
+      {
+        text: "Manage user sessions",
+        link: "/manage-user-sessions",
+      },
+      {
+        text: "Export private key",
+        link: "/export-private-key",
+      },
+    ],
+  },
+  {
     text: "Extending smart accounts",
     base: "/extending-smart-accounts",
     items: [
@@ -128,33 +167,6 @@ export const sidebar: DefaultTheme.Sidebar = [
         ],
       },
       { text: "Gas benchmarks", link: "/smart-accounts/gas-benchmarks" },
-    ],
-  },
-  {
-    text: "Using Alchemy Signer",
-    collapsed: false,
-    base: "/signers/alchemy-signer",
-    items: [
-      {
-        text: "Introduction",
-        link: "/introduction",
-      },
-      {
-        text: "Passkey signup",
-        link: "/passkey-signup",
-      },
-      {
-        text: "Passkey authentication",
-        link: "/passkey-auth",
-      },
-      {
-        text: "Manage user sessions",
-        link: "/manage-user-sessions",
-      },
-      {
-        text: "Export private key",
-        link: "/export-private-key",
-      },
     ],
   },
   {
