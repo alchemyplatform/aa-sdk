@@ -34,6 +34,9 @@ import { signer } from "./signer";
 const user = await signer.authenticate({
   type: "email",
   email: "user@email.com",
+  // optionally, pass in redirect params that will be appended to the magic link url for the user
+  // in this example, a callback=/home param will be added to the final URL
+  redirectParams: new URLSearchParams({ callback: "/home" }),
 });
 
 // OR if you have the bundle the query params
@@ -58,8 +61,8 @@ const user = await signer.authenticate({
 
 ```ts
 export type AuthParams =
-  | { type: "email"; email: string }
-  | { type: "email"; bundle: string }
+  | { type: "email"; email: string; redirectParams?: URLSearchParams }
+  | { type: "email"; bundle: string; orgId?: string }
   | {
       type: "passkey";
       createNew: false;
