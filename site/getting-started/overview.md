@@ -94,4 +94,4 @@ Check out the open source code in our affectionately named [Rundler github repo]
 
 Next, follow the [quick start](/getting-started/introduction) guide to build invisible wallets in your app.
 
-Embedded Accounts make web3 simple so that *anyone* can use your app in seconds with no downloads, no gas tokens, and no seed phrases. It's time to bring the whole world onchain!
+Embedded Accounts make web3 simple so that _anyone_ can use your app in seconds with no downloads, no gas tokens, and no seed phrases. It's time to bring the whole world onchain!
