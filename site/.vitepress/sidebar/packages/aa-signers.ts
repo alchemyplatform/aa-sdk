@@ -135,7 +135,6 @@ export const aaSignersSidebar: DefaultTheme.SidebarItem = {
         { text: "getAuthDetails", link: "/getAuthDetails" },
       ],
     },
-    { text: "Contributing", link: "/contributing" },
     {
       text: "Passport Signer",
       collapsed: true,
@@ -150,5 +149,6 @@ export const aaSignersSidebar: DefaultTheme.SidebarItem = {
         { text: "getAuthDetails", link: "/getAuthDetails" },
       ],
     },
+    { text: "Contributing", link: "/contributing" },
   ],
 };

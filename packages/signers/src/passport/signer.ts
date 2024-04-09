@@ -33,7 +33,7 @@ export class PassportSigner
     }
   }
 
-  readonly signerType = `${signerTypePrefix}web3auth`;
+  readonly signerType = `${signerTypePrefix}passport`;
 
   getAddress = async () => {
     if (!this.inner || !this.signer) {
