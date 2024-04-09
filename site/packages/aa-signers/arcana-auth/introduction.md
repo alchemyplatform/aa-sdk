@@ -19,7 +19,7 @@ head:
 `ArcanaAuthSigner` provides implementations for all methods on `SmartAccountAuthenticator`:
 
 1.  [`authenticate`](/packages/aa-signers/arcana-auth/authenticate) -- supports user authentication.
-2.  [`getAddress`](/packages/aa-signers/arcana-auth/getAddress) -- gets the address of the the smart contract account's connected signer.
+2.  [`getAddress`](/packages/aa-signers/arcana-auth/getAddress) -- gets the address of the smart contract account's connected signer.
 3.  [`signMessage`](/packages/aa-signers/arcana-auth/signMessage) -- supports message signatures.
 4.  [`signTypedData`](/packages/aa-signers/arcana-auth/signTypedData) -- supports typed data signatures.
 5.  [`getAuthDetails`](/packages/aa-signers/arcana-auth/getAuthDetails) -- supports authentication details retrieval.
