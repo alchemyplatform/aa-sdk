@@ -6,42 +6,42 @@ head:
       content: Overview
   - - meta
     - name: description
-      content: Learn what Account Kit is, how it works, and how you can use it to integrate smart accounts in your app.
+      content: Build Embedded Accounts with Account Kit. Build smart accounts powered by Account Abstraction (ERC-4337).
   - - meta
     - property: og:description
-      content: Learn what Account Kit is, how it works, and how you can use it to integrate smart accounts in your app.
+      content: Learn how to build Embedded Accounts with Account Kit. Build smart accounts powered by Account Abstraction (ERC-4337).
   - - meta
     - name: twitter:title
       content: Overview
   - - meta
     - name: twitter:description
-      content: Learn what Account Kit is, how it works, and how you can use it to integrate smart accounts in your app.
+      content: Learn how to build Embedded Accounts with Account Kit. Build smart accounts powered by Account Abstraction (ERC-4337).
 ---
 
 # Why Embedded Accounts?
 
-Onboarding to web3 should be as simple as signing up for any website.
+Web3 onboarding should be as simple as web2 sign up.
 
-Traditional wallets make your users jump through hoops like downloading an extension, backing up a seed phrase, and funding a wallet with ETH. Each of these steps adds friction and cause new users to drop off before they ever reach the magic moment in your app!
+With traditional wallets, your users have to download an extension, back up a seed phrase, and fund a wallet with ETH. Each of these steps adds friction and cause new users to drop off before they reach the magic moment in your app!
 
-*Embedded Accounts* make wallets invisible. Sign up for a non-custodial web3 account with no downloads, transact without gas, and recover without a seed phrase. Bring the next billion users onchain with embedded accounts.
+**Embedded Accounts** make wallets invisible. Sign up for a non-custodial web3 account with no downloads, transact without gas, and recover without a seed phrase. Bring the next billion users onchain with embedded accounts.
 
 - **Your app, your UX:** Design every step natively in your app, from sign up to checkout.
 - **Familiar auth methods:** Sign up with email, social login, passkeys (i.e. biometrics), or self-custodial signers like Metamask.
 - **Sponsor gas:** increase engagement by [sponsoring gas](/using-smart-accounts/sponsoring-gas/gas-manager) fees through an ERC-4337 paymaster.
 - **Batch transactions:** streamline multi-step actions like approve+swap in a single transaction by [batching](/using-smart-accounts/batch-user-operations) with the Bundler API.
-- **Account recovery:** Never lose your keys again. Embedded accounts provide more recovery methods than any other wallet including private key export, email recovery, and onchain recovery plugins.
+- **Account recovery:** Never lose your keys again. Embedded accounts support private key export, email recovery, and onchain recovery plugins.
 
-# How it works
+# Built with Account Kit
 
-**Embedded Accounts** use [ERC-4337 Account Abstraction](https://www.youtube.com/watch?v=Vpk_MhY-EeE) to build next-gen wallet UX. Account Abstraction dramatically simplifies the user experience by adding a few new developer components like a smart account, bundler, and paymaster. You can also configure your embedded accounts as a lightweight EOA if you prefer.
+Embedded Accounts are built with **Account Kit**: a simple and powerful toolkit to build next-gen wallets with [Account Abstraction](https://www.youtube.com/watch?v=Vpk_MhY-EeE). It also supports lightweight [EOA accounts](/signers/alchemy-signer#using-the-signer-as-an-eoa) if you prefer, but AA unlocks superpowers like gas sponsorship, batch transactions, and more.
 
-Account Kit provides all the tools you need to onboard every user to an invisible wallet. The toolkit includes:
+Account Kit provides all the tools you need to build invisible web3 accounts. It includes:
 
 - **AA SDK**: A simple SDK to integrate and customize embedded accounts in your app. The `aa-sdk` orchestrates everything from wallet creation to authentication, transaction signing, gas sponsorship, and more.
 - **Signer API:** A secure, non-custodial Signer API to generate and store private keys, powered by Alchemy and [Turnkey](https://www.turnkey.com/). You can also [bring your own signer](/signers/choosing-a-signer) solution.
 - **Smart Contract Accounts:** Smart contract accounts designed from the ground up for ERC-4337, extensibility through [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900), and low gas costs.
-- **Gas Manager API:** A programmable API to sponsor gas for UserOps that meets your criteria.
+- **Gas Manager API:** A programmable API to sponsor gas for UserOps that meet your criteria.
 - **Bundler API:** The most reliable ERC-4337 Bundler. Land your UserOps on-chain, batch operations, and sponsor gas at a massive scale.
 
 <img src="/images/account-kit-overview.jpg" width="400" height="auto" alt="Account Kit Overview" style="display: block; margin: auto;">
