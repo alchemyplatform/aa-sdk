@@ -21,9 +21,7 @@ export function useAuthenticate() {
           throw new ClientOnlyPropertyError("signer");
         }
 
-        const user = await signer.authenticate(authParams);
-
-        return user;
+        return signer.authenticate(authParams);
       },
     },
     queryClient
