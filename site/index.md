@@ -19,6 +19,9 @@ head:
   - - meta
     - name: twitter:description
       content: Account Kit is a vertically integrated stack for building apps that support ERC-4337 smart accounts, Signer integrations, sponsoring gas, bundlers, and an SDK.
+  - - meta
+    - name: google-site-verification
+      content: W4pmFb0Oe26_OndBLdy5uqNrsl_gfmKfTlHwlHPd4Co
 titleTemplate: :title Documentation
 # you can also add HTML or Markdown components below the --- line to add custom HTML or Markdown content (eg: https://github.com/wagmi-dev/viem/blob/main/site/index.md?plain=1)
 ---
@@ -55,7 +58,7 @@ titleTemplate: :title Documentation
                 Account Kit is a vertically integrated stack for building apps that support ERC-4337: smart accounts, Signer integrations, sponsoring gas, bundlers, and an SDK.
               </div>
               <div class="flex flex-row gap-[8px] justify-start items-center">
-                <a rel="noopener noreferrer" href="./getting-started/setup.html">
+                <a rel="noopener noreferrer" href="./getting-started/introduction.html">
                   <button
                     class="flex items-center rounded-md px-[12px] py-[12px] text-[16px] font-semibold text-white transition duration-300 ease-in-out hover:scale-105 hover:opacity-90 bg-black dark:bg-white dark:text-black"
                   >
@@ -108,7 +111,7 @@ export const smartAccountClient = await createModularAccountAlchemyClient({
               </div>
             </div>
           </a>
-          <a rel="noopener noreferrer" href="./getting-started/setup.html" class="flex-auto basis-1/3 max-lg:max-w-[370px] max-lg:min-w-[370px]">
+          <a rel="noopener noreferrer" href="./getting-started/introduction.html" class="flex-auto basis-1/3 max-lg:max-w-[370px] max-lg:min-w-[370px]">
             <div
               class="flex flex-col flex-auto p-[24px] gap-[24px] rounded-md text-white overflow-auto bg-gradient-4 group hover:scale-105 hover:opacity-90 transition duration-300 ease-in-out"
             >

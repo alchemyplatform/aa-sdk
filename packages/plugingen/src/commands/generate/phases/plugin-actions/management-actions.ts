@@ -24,9 +24,11 @@ export const ManagementActionsGenPhase: Phase = async (input) => {
       true
     );
     addType(
-      "ManagementActions<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined>",
+      "ManagementActions<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined, TContext extends Record<string, any> | undefined = Record<string,any> | undefined>",
       dedent`{
-      install${pluginConfig.name}: (args: {overrides?: UserOperationOverrides} & Install${pluginConfig.name}Params & GetAccountParameter<TAccount>) => Promise<SendUserOperationResult>
+      install${pluginConfig.name}: (args: {
+        overrides?: UserOperationOverrides
+      } & Install${pluginConfig.name}Params & GetAccountParameter<TAccount> & GetContextParameter<TContext>) => Promise<SendUserOperationResult>
     }`
     );
 
@@ -49,7 +51,7 @@ export const ManagementActionsGenPhase: Phase = async (input) => {
     const installMethodName = `install${pluginConfig.name}`;
 
     input.content.push(dedent`
-    ${installMethodName}({account = client.account, overrides, ...params}) {
+    ${installMethodName}({account = client.account, overrides, context, ...params}) {
       if (!account) {
         throw new AccountNotFoundError();
       }
@@ -84,6 +86,7 @@ export const ManagementActionsGenPhase: Phase = async (input) => {
         dependencies,
         overrides,
         account,
+        context,
       });
     }
   `);
@@ -121,4 +124,5 @@ const addImports = (
     name: "FunctionReference",
     isType: true,
   });
+  addImport("@alchemy/aa-core", { name: "GetContextParameter", isType: true });
 };

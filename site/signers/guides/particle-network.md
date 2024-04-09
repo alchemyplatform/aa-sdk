@@ -22,11 +22,11 @@ Leveraging both Particle and Account Kit enables a streamlined onboarding flow, 
 
 ### Sign up for a Particle Account
 
-To configure Particle, you will need to start by quickly signing up for a Particle account, creating a project, and then creating an application. You can learn more about this process within their [quickstart guide](https://docs.particle.network/getting-started/dashboard/manage-projects). Additionally, you can sign up through the [Particle dashboard](https://dashboard.particle.network/#/login).
+To configure Particle, you'll need to start by quickly signing up for a Particle account, creating a project, and then creating an application. You can learn more about this process within their [quickstart guide](https://developers.particle.network/docs/web-desktop-quickstart). Additionally, you can sign up through the [Particle dashboard](https://dashboard.particle.network/#/login).
 
 ### Install the SDK
 
-`ParticleSigner` requires installation of the [`@particle-network/auth`](https://docs.particle.network/developers/auth-service/sdks/web) and [`@particle-network/provider`](https://docs.particle.network/developers/auth-service/sdks/web). `aa-signers` lists them as optional dependencies.
+`ParticleSigner` requires installation of the [`@particle-network/auth`](https://developers.particle.network/docs/building-with-particle-auth) and [`@particle-network/provider`](https://developers.particle.network/reference/auth-web). `aa-signers` lists them as optional dependencies.
 
 ::: code-group
 
@@ -75,4 +75,4 @@ const provider = await createModularAccountAlchemyClient({
 
 ### Video tutorial
 
-Particle Network has also produced a comprehensive step-by-step video tutorial detailing the above process (the utilization of Particle as a signer within Account Kit). This video can be found [here](https://twitter.com/TABASCOweb3/status/1715034613184147721).
+Particle Network has also produced a comprehensive step-by-step video tutorial detailing the above process (the utilization of Particle as a signer within Account Kit). This video can be found [here](https://twitter.com/TABASCOweb3/status/1715034613184147721), and the associated written walkthrough can be found [here](https://developers.particle.network/docs/aa-signers-with-particle-network).

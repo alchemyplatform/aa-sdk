@@ -64,10 +64,15 @@
     "overrides": [
       {
         "files": [
-          "site/snippets/**/*.ts"
+          "site/snippets/**/*.ts",
+          "site/snippets/**/*.tsx"
         ],
         "rules": {
-          "@typescript-eslint/no-unused-vars": "off"
+          "@typescript-eslint/no-unused-vars": "off",
+          "import/extensions": [
+            "off",
+            "ignorePackages"
+          ]
         }
       }
     ]

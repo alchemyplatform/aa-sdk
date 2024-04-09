@@ -9,90 +9,21 @@ export const sidebar: DefaultTheme.Sidebar = [
         text: "Overview",
         link: "/getting-started/overview",
       },
-      { text: "Quick start", link: "/getting-started/setup" },
-    ],
-  },
-  {
-    text: "Choosing a smart account",
-    items: [
-      { text: "Introduction", link: "/smart-accounts/" },
       {
-        text: "Modular Account",
+        text: "Quick start (Embedded Accounts)",
         collapsed: false,
-        base: "/smart-accounts/modular-account",
+        base: "/getting-started",
         items: [
-          { text: "Introduction", link: "/" },
-          { text: "Getting started", link: "/getting-started" },
-          { text: "Deployments", link: "/deployments" },
+          { text: "Introduction", link: "/introduction" },
           {
-            text: "Upgrading to Modular Account",
-            link: "/upgrade-la-to-ma",
-          },
-        ],
-      },
-      {
-        text: "Light Account",
-        link: "/smart-accounts/light-account/",
-      },
-      {
-        text: "Custom accounts",
-        collapsed: true,
-        base: "/smart-accounts/custom",
-        items: [
-          { text: "Use your own", link: "/using-your-own" },
-          { text: "Contribute your account", link: "/contributing" },
-        ],
-      },
-      { text: "Gas benchmarks", link: "/smart-accounts/gas-benchmarks" },
-    ],
-  },
-  {
-    text: "Choosing a signer",
-    base: "/signers",
-    items: [
-      { text: "Introduction", link: "/choosing-a-signer" },
-      {
-        text: "Alchemy signer",
-        items: [
-          { text: "Overview", link: "/index" },
-          { text: "Export private key", link: "/export-private-key" },
-        ],
-        collapsed: false,
-        base: "/signers/alchemy-signer",
-      },
-      {
-        text: "Third-party signers",
-        base: "/signers/guides",
-        collapsed: true,
-        items: [
-          { text: "Magic", link: "/magic" },
-          { text: "Web3Auth", link: "/web3auth" },
-          { text: "Turnkey", link: "/turnkey" },
-          { text: "Privy", link: "/privy" },
-          { text: "Dynamic", link: "/dynamic" },
-          { text: "Fireblocks", link: "/fireblocks" },
-          { text: "Portal", link: "/portal" },
-          { text: "Capsule", link: "/capsule" },
-          { text: "Lit Protocol", link: "/lit" },
-          { text: "Particle Network", link: "/particle-network" },
-          { text: "Arcana Auth", link: "/arcana-auth" },
-          { text: "Dfns", link: "/dfns" },
-          { text: "WalletKit", link: "/walletkit" },
-        ],
-      },
-      { text: "EOA signer", link: "/eoa" },
-      {
-        text: "Custom signer",
-        collapsed: true,
-        items: [
-          {
-            text: "Use your own",
-            link: "/guides/custom-signer",
+            text: "Setup your application",
+            link: "/setup-app",
           },
           {
-            text: "Contribute your signer",
-            link: "/contributing",
+            text: "Log users into Embedded Accounts",
+            link: "/log-in-users",
           },
+          { text: "Send UserOperations", link: "/send-uos" },
         ],
       },
     ],
@@ -165,6 +96,104 @@ export const sidebar: DefaultTheme.Sidebar = [
       },
     ],
   },
+  {
+    text: "Choosing a smart account",
+    items: [
+      { text: "Introduction", link: "/smart-accounts/" },
+      {
+        text: "Modular Account",
+        collapsed: false,
+        base: "/smart-accounts/modular-account",
+        items: [
+          { text: "Introduction", link: "/" },
+          { text: "Getting started", link: "/getting-started" },
+          { text: "Deployments", link: "/deployments" },
+          {
+            text: "Upgrading to Modular Account",
+            link: "/upgrade-la-to-ma",
+          },
+        ],
+      },
+      {
+        text: "Light Account",
+        link: "/smart-accounts/light-account/",
+      },
+      {
+        text: "Custom accounts",
+        collapsed: true,
+        base: "/smart-accounts/custom",
+        items: [
+          { text: "Use your own", link: "/using-your-own" },
+          { text: "Contribute your account", link: "/contributing" },
+        ],
+      },
+      { text: "Gas benchmarks", link: "/smart-accounts/gas-benchmarks" },
+    ],
+  },
+  {
+    text: "Using Alchemy Signer",
+    collapsed: false,
+    base: "/signers/alchemy-signer",
+    items: [
+      {
+        text: "Introduction",
+        link: "/introduction",
+      },
+      {
+        text: "Passkey signup",
+        link: "/passkey-signup",
+      },
+      {
+        text: "Passkey authentication",
+        link: "/passkey-auth",
+      },
+      {
+        text: "Manage user sessions",
+        link: "/manage-user-sessions",
+      },
+      {
+        text: "Export private key",
+        link: "/export-private-key",
+      },
+    ],
+  },
+  {
+    text: "Custom signers",
+    base: "/signers",
+    items: [
+      { text: "Introduction", link: "/choosing-a-signer" },
+      {
+        text: "Third-party signers",
+        base: "/signers/guides",
+        collapsed: true,
+        items: [
+          { text: "Magic", link: "/magic" },
+          { text: "Web3Auth", link: "/web3auth" },
+          { text: "Turnkey", link: "/turnkey" },
+          { text: "Privy", link: "/privy" },
+          { text: "Dynamic", link: "/dynamic" },
+          { text: "Fireblocks", link: "/fireblocks" },
+          { text: "Portal", link: "/portal" },
+          { text: "Capsule", link: "/capsule" },
+          { text: "Lit Protocol", link: "/lit" },
+          { text: "Particle Network", link: "/particle-network" },
+          { text: "Arcana Auth", link: "/arcana-auth" },
+          { text: "Dfns", link: "/dfns" },
+          { text: "WalletKit", link: "/walletkit" },
+        ],
+      },
+      { text: "EOA signer", link: "/eoa" },
+      {
+        text: "Build your own",
+        link: "/guides/custom-signer",
+      },
+      {
+        text: "Contribute your signer",
+        link: "/contributing",
+      },
+    ],
+  },
+
   {
     text: "Custom infra",
     base: "/third-party",

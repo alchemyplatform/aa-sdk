@@ -7,7 +7,13 @@ export class InvalidUserOperationError extends BaseError {
     super(
       `Request is missing parameters. All properties on UserOperationStruct must be set. uo: ${JSON.stringify(
         uo,
-        null,
+        (_key, value) =>
+          typeof value === "bigint"
+            ? {
+                type: "bigint",
+                value: value.toString(),
+              }
+            : value,
         2
       )}`
     );

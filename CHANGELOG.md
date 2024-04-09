@@ -3,6 +3,47 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.7.3](https://github.com/alchemyplatform/aa-sdk/compare/v3.7.2...v3.7.3) (2024-03-28)
+
+### Bug Fixes
+
+- **alchemy-signer:** fix the passkey creation flow ([#534](https://github.com/alchemyplatform/aa-sdk/issues/534)) ([ef50ac4](https://github.com/alchemyplatform/aa-sdk/commit/ef50ac4def125270a99d73402d6f8903dbbf97d6))
+
+## [3.7.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.7.1...v3.7.2) (2024-03-27)
+
+**Note:** Version bump only for package root
+
+## [3.7.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.7.0...v3.7.1) (2024-03-27)
+
+### Bug Fixes
+
+- dummy paymaster and data addresses updates ([#532](https://github.com/alchemyplatform/aa-sdk/issues/532)) ([baab7bd](https://github.com/alchemyplatform/aa-sdk/commit/baab7bd7500157af744fe1c581ac12cbe2e0d8b2))
+
+# [3.7.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.6.1...v3.7.0) (2024-03-27)
+
+### Bug Fixes
+
+- Rename documentation_request to documentation_request.md ([06cc811](https://github.com/alchemyplatform/aa-sdk/commit/06cc8118faba24d7edef658074922a1b5238e7c9))
+- updating import in eoa guide ([#525](https://github.com/alchemyplatform/aa-sdk/issues/525)) ([6c1c28f](https://github.com/alchemyplatform/aa-sdk/commit/6c1c28f69b740132f5ef73605bfd001ade863a8f))
+
+### Features
+
+- update dummy paymaster and data ([#531](https://github.com/alchemyplatform/aa-sdk/issues/531)) ([956873b](https://github.com/alchemyplatform/aa-sdk/commit/956873b768afa63747aacfb6252e5ac3b4655f65))
+
+## [3.6.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.6.0...v3.6.1) (2024-03-18)
+
+### Bug Fixes
+
+- **core:** fix stateoverrides passed to estimation userop gas ([#517](https://github.com/alchemyplatform/aa-sdk/issues/517)) ([2980a35](https://github.com/alchemyplatform/aa-sdk/commit/2980a35226b5e42e4f3aaa77fd53564a3486327b))
+
+# [3.6.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.5.1...v3.6.0) (2024-03-18)
+
+### Features
+
+- add optional stateOverride parameter to eth_estimateUserOperationGas ([#513](https://github.com/alchemyplatform/aa-sdk/issues/513)) ([3e0b88a](https://github.com/alchemyplatform/aa-sdk/commit/3e0b88a5e8adf322e5f5f2c659f57d94bc2cc95c))
+- add polygon amoy default addresses ([#506](https://github.com/alchemyplatform/aa-sdk/issues/506)) ([34f273e](https://github.com/alchemyplatform/aa-sdk/commit/34f273e8b6d89c7c80f9de57e0331090602e776a))
+- create documentation_request issue template ([#515](https://github.com/alchemyplatform/aa-sdk/issues/515)) ([aa5ad21](https://github.com/alchemyplatform/aa-sdk/commit/aa5ad21e659069923acd0939a17bf140cdf10638))
+
 ## [3.5.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.5.0...v3.5.1) (2024-03-14)
 
 **Note:** Version bump only for package root

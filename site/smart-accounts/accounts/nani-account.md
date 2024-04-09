@@ -22,7 +22,7 @@ head:
 
 ## Overview
 
-Nani Account is an [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) smart account. It is built on the the Ethereum Foundation’s canonical [SimpleAccount](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol) and extended to support modular plugins or "validators" using a custom nonce-storage method. It is built on the Solady audited smart contract library, and you can find the audit report [here](https://github.com/Vectorized/solady/pull/639).
+Nani Account is an [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) smart account. It is built on the Ethereum Foundation’s canonical [SimpleAccount](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol) and extended to support modular plugins or "validators" using a custom nonce-storage method. It is built on the Solady audited smart contract library, and you can find the audit report [here](https://github.com/Vectorized/solady/pull/639).
 
 ## Why Nani Account
 

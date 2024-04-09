@@ -55,7 +55,7 @@ export interface ISmartContractAccount<
    *
    * @returns a dummy signature that doesn't cause the account to revert during estimation
    */
-  getDummySignature(): Hex;
+  getDummySignature(): Hex | Promise<Hex>;
 
   /**
    * Encodes a call to the account's execute function.

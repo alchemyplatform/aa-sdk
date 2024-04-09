@@ -46,7 +46,7 @@ Account Kit provides all the tools you need to build invisible web3 accounts. It
 
 <img src="/images/account-kit-overview.jpg" width="400" height="auto" alt="Account Kit Overview" style="display: block; margin: auto;">
 
-Let’s dive into each component.
+Let's dive into each component.
 
 ## aa-sdk
 
@@ -86,12 +86,12 @@ Learn how to [sponsor gas](/using-smart-accounts/sponsoring-gas/gas-manager) wit
 
 The Bundler submits UserOps to the blockchain for execution. This is a mission-critical operation: if your Bundler goes offline, then transactions will fail or get stuck and users will be unable to use your app.
 
-We built our [Bundler in Rust](https://www.alchemy.com/blog/open-sourcing-rundler/?a=ak-docs) to handle the highest loads at production scale. It’s able to handle massive scale because we operate it alongside our fleet of nodes powering the biggest dapps in web3 from Opensea to Circle.
+We built our [Bundler in Rust](https://www.alchemy.com/blog/open-sourcing-rundler/?a=embedded-accounts-get-started) to handle the highest loads at production scale. It's able to handle massive scale because we operate it alongside our fleet of nodes powering the biggest dapps in web3 from Opensea to Circle.
 
 Check out the open source code in our affectionately named [Rundler github repo](https://github.com/alchemyplatform/rundler) and start [sending UserOps](/using-smart-accounts/send-user-operations) today.
 
 # Start building
 
-Next, complete the [quick start](/getting-started/introduction) guide to make wallets invisible in your onboarding and checkout flows.
+Next, follow the [quick start](/getting-started/introduction) guide to build invisible wallets in your app.
 
-Embedded Accounts make web3 simple so that *anyone* can try your app in seconds with no downloads, no gas tokens, and no seed phrases. It's time to bring the whole world onchain!
+Embedded Accounts make web3 simple so that *anyone* can use your app in seconds with no downloads, no gas tokens, and no seed phrases. It's time to bring the whole world onchain!

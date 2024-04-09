@@ -46,7 +46,7 @@ A standard designed for verifying signatures from smart accounts that haven't be
 
 ## ERC-6900
 
-A [standard for modular smart accounts](https://eips.ethereum.org/EIPS/eip-6900) authored by Alchemy and [Yoav](https://github.com/yoavw) (one of the authors of ERC-4337) from the Ethereum Foundation. It defines standard interfaces for Modular Smart Contract Accounts ([`Modular Accounts`](#modular-account)) capable of supporting all standard-conformant [`Plugins`](#plugin).
+A [standard for modular accounts](https://eips.ethereum.org/EIPS/eip-6900) authored by Alchemy and [Yoav](https://github.com/yoavw) (one of the authors of ERC-4337) from the Ethereum Foundation. It defines standard interfaces for Modular Accounts ([`Modular Accounts`](#modular-account)) capable of supporting all standard-conformant [`Plugins`](#plugin).
 
 ## Gas Manager
 
@@ -56,11 +56,19 @@ A [standard for modular smart accounts](https://eips.ethereum.org/EIPS/eip-6900)
 
 [Light Account](https://accountkit.alchemy.com/smart-accounts/light-account/.html) is a production-ready [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) [smart account](#smart-account) implementation developed by Alchemy. It builds on top of Ethereum Foundation’s [SimpleAccount](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol) to add key improvements such as support for ownership transfer, ERC-1271 signature support, and gas optimizations. It is [audited by Quantstamp](https://github.com/alchemyplatform/light-account/blob/main/Quantstamp-Audit.pdf).
 
+## Magic Link Authentication
+
+A magic link is a one-time use link sent to a user during the authentication process. After entering their username, the user is sent a URL, either to the user's email address or their mobile phone via text. The user clicks to authenticate themselves without entering a password, and for some, this might seem like "magic," thus the name. Magic links are attractive because it is a simple way to remove the need for a customer to generate and remember a password from the process.
+
 ## Modular Account
 
 A type of smart account enabled by the [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) standard and characterized by its [modular structure](https://accountkit.alchemy.com/smart-accounts/modular-account/.html). This structure segments different functionalities of the account into distinct, independently upgradeable modules or plugins. Each plugin can have specific functions such as validation, execution, or hooks, enabling the smart account to extend its capabilities or modify its behavior without altering the core account logic. Modular Accounts enhance the flexibility, upgradeability, and interoperability of [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) smart accounts. Modular Account contracts have been audited by both [Spearbit](https://github.com/alchemyplatform/modular-account/blob/develop/audits/2024-01-31_spearbit_0e3fd1e.pdf) and [Quantstamp](https://github.com/alchemyplatform/modular-account/blob/develop/audits/2024-02-20-quantstamp-8ae319e.pdf).
 
 <!--@include: ./bbp.md-->
+
+## Passkey
+
+Passkeys are a safer and easier alternative to passwords. With passkeys, users can sign in to apps and websites with a biometric sensor (such as a fingerprint or facial recognition), PIN, or pattern, freeing them from having to remember and manage passwords.
 
 ## Paymaster
 

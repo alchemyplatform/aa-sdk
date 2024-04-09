@@ -132,7 +132,7 @@ export abstract class BaseSmartContractAccount<
    * This is required for gas estimation so that the gas estimate are accurate.
    *
    */
-  abstract getDummySignature(): Hash;
+  abstract getDummySignature(): Hex | Promise<Hex>;
 
   /**
    * this method should return the abi encoded function data for a call to your contract's `execute` method
@@ -358,8 +358,8 @@ export abstract class BaseSmartContractAccount<
     [Address, Hex]
   > {
     const initCode = await this._getAccountInitCode();
-    const factoryAddress = `0x${initCode.substring(2, 42)}` as Address;
-    const factoryCalldata = `0x${initCode.substring(42)}` as Hex;
+    const factoryAddress: Address = `0x${initCode.substring(2, 42)}`;
+    const factoryCalldata: Hex = `0x${initCode.substring(42)}`;
     return [factoryAddress, factoryCalldata];
   }
 

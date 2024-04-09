@@ -21,7 +21,7 @@ This package contains the `AlchemySmartAccountClient`, an extension of the `Smar
 
 ## Getting started
 
-If you are already using the `@alchemy/aa-core` package, you can simply install this package and start using the `AlchemySmartAccountClient`. If you are not using `@alchemy/aa-core`, you can install it and follow the instructions in the ["Getting started"](/getting-started/setup) docs to get started.
+If you are already using the `@alchemy/aa-core` package, you can simply install this package and start using the `AlchemySmartAccountClient`. If you are not using `@alchemy/aa-core`, you can install it and follow the instructions in the ["Getting started"](/getting-started/introduction) docs to get started.
 
 ::: code-group
 

@@ -11,10 +11,13 @@ export const checkGasSponsorshipEligibility: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: SendUserOperationParameters<TAccount>
+  args: SendUserOperationParameters<TAccount, TContext>
 ) => Promise<boolean> = async (client, args) => {
   if (!isBaseSmartAccountClient(client)) {
     throw new IncompatibleClientError(

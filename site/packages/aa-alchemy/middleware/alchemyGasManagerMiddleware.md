@@ -61,3 +61,5 @@ A set of `ClientMiddlewareFn` that will get the paymaster and data fields from A
 
 - `gasEstimationOptions?: AlchemyGasEstimationOptions` -- optional params for configuring gas estimation during paymaster resolution
   - `disableGasEstimation?: boolean` -- if true, then gas estimation will be done locally instead of requesting it from the paymaster endpoint
+- `paymasterAddress?: Address` -- optional paramter that allows you to override the paymaster address used in dummyPaymasterAndData
+- `dummyData?: Hex` -- optionl parameter that allows you to override the dummy data used in dummyPaymasterAndData

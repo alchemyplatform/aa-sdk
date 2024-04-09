@@ -14,6 +14,7 @@ import {
   optimismGoerli,
   optimismSepolia,
   polygon,
+  polygonAmoy,
   polygonMumbai,
   sepolia,
   type GetAccountParameter,
@@ -41,6 +42,23 @@ import {
 import { MultiOwnerPlugin } from "./plugins/multi-owner/plugin.js";
 
 /**
+ * Utility method returning the default multi sig msca factory address given a {@link Chain} object
+ *
+ * @param chain - a {@link Chain} object
+ * @returns a {@link Address} for the given chain
+ * @throws if the chain doesn't have an address currently deployed
+ */
+export const getDefaultMultisigModularAccountFactoryAddress = (
+  chain: Chain
+): Address => {
+  switch (chain.id) {
+    case sepolia.id:
+      return "0x3D94D6713B76FBA07283502CfbeA405b44c69865";
+  }
+  throw new DefaultFactoryNotDefinedError("MultisigModularAccount", chain);
+};
+
+/**
  * Utility method returning the default multi owner msca factory address given a {@link Chain} object
  *
  * @param chain - a {@link Chain} object
@@ -56,6 +74,7 @@ export const getDefaultMultiOwnerModularAccountFactoryAddress = (
     case polygon.id:
     case mainnet.id:
     case goerli.id:
+    case polygonAmoy.id:
     case polygonMumbai.id:
     case optimism.id:
     case optimismGoerli.id:

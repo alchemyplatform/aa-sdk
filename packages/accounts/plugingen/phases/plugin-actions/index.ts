@@ -35,6 +35,7 @@ export const PluginActionsGenPhase: Phase = async (input) => {
   addImport("@alchemy/aa-core", { name: "AccountNotFoundError" });
   addImport("@alchemy/aa-core", { name: "isSmartAccountClient" });
   addImport("@alchemy/aa-core", { name: "IncompatibleClientError" });
+  addImport("@alchemy/aa-core", { name: "GetContextParameter", isType: true });
 
   const providerFunctionDefs: string[] = [];
   const providerFunctions = executionAbi
@@ -45,7 +46,8 @@ export const PluginActionsGenPhase: Phase = async (input) => {
           ? dedent`{ 
                   args, 
                   overrides, 
-                  account = client.account 
+                  context,
+                  account = client.account
               }`
           : dedent`{ 
                   overrides, 
@@ -58,7 +60,9 @@ export const PluginActionsGenPhase: Phase = async (input) => {
             n.name
           )}: (args: Pick<EncodeFunctionDataParameters<typeof ${executionAbiConst}, "${
         n.name
-      }">, "args"> & { overrides?: UserOperationOverrides; } & GetAccountParameter<TAccount>) => Promise<SendUserOperationResult>
+      }">, "args"> & { 
+        overrides?: UserOperationOverrides;
+      } & GetAccountParameter<TAccount> & GetContextParameter<TContext>) => Promise<SendUserOperationResult>
         `);
       const methodName = camelCase(n.name);
       return dedent`
@@ -76,13 +80,13 @@ export const PluginActionsGenPhase: Phase = async (input) => {
                   ${argsEncodeString}
                 });
   
-                return client.sendUserOperation({ uo, overrides, account });
+                return client.sendUserOperation({ uo, overrides, account, context });
               }
             `;
     });
 
   addType(
-    "ExecutionActions<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined>",
+    "ExecutionActions<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined, TContext extends Record<string, any> | undefined = Record<string, any> | undefined>",
     dedent`{
         ${providerFunctionDefs.join(";\n\n")}
       }`
@@ -99,9 +103,9 @@ export const PluginActionsGenPhase: Phase = async (input) => {
   addType(
     `${contract.name}Actions<TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined>`,
+    | undefined, TContext extends Record<string, any> | undefined = Record<string, any> | undefined>`,
     dedent`
-  ExecutionActions<TAccount> & ManagementActions<TAccount> & ReadAndEncodeActions${
+  ExecutionActions<TAccount, TContext> & ManagementActions<TAccount, TContext> & ReadAndEncodeActions${
     hasReadMethods ? "<TAccount>" : ""
   }
   `,
@@ -114,12 +118,15 @@ export const PluginActionsGenPhase: Phase = async (input) => {
         TChain extends Chain | undefined = Chain | undefined,
         TAccount extends SmartContractAccount | undefined =
             | SmartContractAccount
-            | undefined
+            | undefined,
+        TContext extends Record<string, any> | undefined = Record<string, any> | undefined
     >(
         client: Client<TTransport, TChain, TAccount>
     ) => ${
       contract.name
-    }Actions<TAccount> = (client) => ({ ${providerFunctions.join(",\n")} });
+    }Actions<TAccount, TContext> = (client) => ({ ${providerFunctions.join(
+    ",\n"
+  )} });
   `);
 
   return input;

@@ -60,13 +60,19 @@ export type SmartContractAccountWithSigner<
   getSigner: () => TSigner;
 };
 
+export const isSmartAccountWithSigner = (
+  account: SmartContractAccount
+): account is SmartContractAccountWithSigner => {
+  return "getSigner" in account;
+};
+
 //#region SmartContractAccount
 export type SmartContractAccount<
   Name extends string = string,
   TUO = UserOperationRequest
 > = LocalAccount<Name> & {
   source: Name;
-  getDummySignature: () => Hex;
+  getDummySignature: () => Hex | Promise<Hex>;
   encodeExecute: (tx: AccountOp) => Promise<Hex>;
   encodeBatchExecute: (txs: AccountOp[]) => Promise<Hex>;
   signUserOperationHash: (uoHash: Hex) => Promise<Hex>;
@@ -99,7 +105,7 @@ export type ToSmartContractAccountParams<
   entryPoint?: EntryPointDef<TUserOperationRequest>;
   accountAddress?: Address;
   getAccountInitCode: () => Promise<Hex>;
-  getDummySignature: () => Hex;
+  getDummySignature: () => Hex | Promise<Hex>;
   encodeExecute: (tx: AccountOp) => Promise<Hex>;
   encodeBatchExecute?: (txs: AccountOp[]) => Promise<Hex>;
   // if not provided, will default to just using signMessage over the Hex
@@ -108,8 +114,8 @@ export type ToSmartContractAccountParams<
 } & Omit<CustomSource, "signTransaction" | "address">;
 
 export const parseFactoryAddressFromAccountInitCode = (initCode: Hex) => {
-  const factoryAddress = `0x${initCode.substring(2, 42)}` as Address;
-  const factoryCalldata = `0x${initCode.substring(42)}` as Hex;
+  const factoryAddress: Address = `0x${initCode.substring(2, 42)}`;
+  const factoryCalldata: Hex = `0x${initCode.substring(42)}`;
   return [factoryAddress, factoryCalldata];
 };
 

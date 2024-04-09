@@ -35,10 +35,6 @@ export const _sendUserOperation: <
     throw new InvalidUserOperationError(args.uoStruct);
   }
 
-  request.signature = await account.signUserOperationHash(
-    account.getEntryPoint().getUserOperationHash(request)
-  );
-
   return {
     hash: await client.sendRawUserOperation(
       request,

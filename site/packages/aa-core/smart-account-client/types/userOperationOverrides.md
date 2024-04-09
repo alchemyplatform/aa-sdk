@@ -16,7 +16,7 @@ next:
 
 # UserOperationOverrides
 
-Contains override values to be applied on the user operation request to be constructed or sent. Available fields include `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit`, `paymasterAndData`, or `nonceKey`.
+Contains override values to be applied on the user operation request to be constructed or sent. Available fields include `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit`, `paymasterAndData`, or `nonceKey`. You can also specify a `stateOverride` to be passed into `eth_estimateUserOperationGas` during fee estimation.
 
 These override values are available from each middleware of the `SmartAccountClient`. For example, the default middlewares such as `gasEstimator` or `feeEstimator` apply the override values to the estimated values if the override values are provided.
 

@@ -21,6 +21,9 @@ export type AlchemySmartAccountClientConfig<
   chain extends Chain | undefined = Chain | undefined,
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  context extends Record<string, any> | undefined =
+    | Record<string, any>
     | undefined
 > = {
   account?: account;
@@ -28,17 +31,20 @@ export type AlchemySmartAccountClientConfig<
   gasManagerConfig?: AlchemyGasManagerConfig;
 } & AlchemyProviderConfig &
   Pick<
-    SmartAccountClientConfig<transport, chain, account>,
-    "customMiddleware" | "feeEstimator" | "gasEstimator"
+    SmartAccountClientConfig<transport, chain, account, context>,
+    "customMiddleware" | "feeEstimator" | "gasEstimator" | "signUserOperation"
   >;
 
 export type BaseAlchemyActions<
   chain extends Chain | undefined = Chain | undefined,
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  context extends Record<string, any> | undefined =
+    | Record<string, any>
     | undefined
-> = SmartAccountClientActions<chain, account> &
-  AlchemySmartAccountClientActions<account>;
+> = SmartAccountClientActions<chain, account, context> &
+  AlchemySmartAccountClientActions<account, context>;
 
 export type AlchemySmartAccountClient_Base<
   transport extends Transport = Transport,
@@ -46,17 +52,18 @@ export type AlchemySmartAccountClient_Base<
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  actions extends BaseAlchemyActions<chain, account> = BaseAlchemyActions<
-    chain,
-    account
-  >
+  actions extends Record<string, unknown> = Record<string, unknown>,
+  context extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
 > = Prettify<
   SmartAccountClient<
     transport,
     chain,
     account,
-    actions,
-    [...SmartAccountClientRpcSchema, ...AlchemyRpcSchema]
+    actions & BaseAlchemyActions<chain, account, context>,
+    [...SmartAccountClientRpcSchema, ...AlchemyRpcSchema],
+    context
   >
 >;
 
@@ -66,12 +73,12 @@ export type AlchemySmartAccountClient<
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  actions extends BaseAlchemyActions<chain, account> = BaseAlchemyActions<
-    chain,
-    account
-  >
+  actions extends Record<string, unknown> = Record<string, unknown>,
+  context extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
 > = Prettify<
-  AlchemySmartAccountClient_Base<transport, chain, account, actions>
+  AlchemySmartAccountClient_Base<transport, chain, account, actions, context>
 >;
 
 export function createAlchemySmartAccountClient<
@@ -79,6 +86,9 @@ export function createAlchemySmartAccountClient<
   TChain extends Chain = Chain,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
     | undefined
 >({
   account,
@@ -87,12 +97,20 @@ export function createAlchemySmartAccountClient<
   feeEstimator,
   customMiddleware,
   gasEstimator,
+  signUserOperation,
   ...config_
 }: AlchemySmartAccountClientConfig<
   TTransport,
   TChain,
-  TAccount
->): AlchemySmartAccountClient<TTransport, TChain, TAccount>;
+  TAccount,
+  TContext
+>): AlchemySmartAccountClient<
+  TTransport,
+  TChain,
+  TAccount,
+  Record<string, never>,
+  TContext
+>;
 
 export function createAlchemySmartAccountClient({
   account,
@@ -101,6 +119,7 @@ export function createAlchemySmartAccountClient({
   feeEstimator,
   customMiddleware,
   gasEstimator,
+  signUserOperation,
   ...config_
 }: AlchemySmartAccountClientConfig): AlchemySmartAccountClient {
   const config = AlchemyProviderConfigSchema.parse(config_);
@@ -126,5 +145,6 @@ export function createAlchemySmartAccountClient({
     feeEstimator,
     customMiddleware,
     gasEstimator,
+    signUserOperation,
   });
 }

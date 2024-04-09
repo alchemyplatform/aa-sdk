@@ -3,6 +3,7 @@ import {
   IncompatibleClientError,
   isSmartAccountClient,
   type GetAccountParameter,
+  type GetContextParameter,
   type SmartAccountClient,
   type SmartContractAccount,
   type UserOperationOverrides,
@@ -24,27 +25,37 @@ import type { FunctionReference } from "../account-loupe/types.js";
 export type InstallPluginParams<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  TContext extends Record<string, unknown> | undefined =
+    | Record<string, unknown>
     | undefined
 > = {
   pluginAddress: Address;
   manifestHash?: Hash;
   pluginInitData?: Hash;
   dependencies?: FunctionReference[];
-} & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>;
+} & {
+  overrides?: UserOperationOverrides;
+} & GetAccountParameter<TAccount> &
+  GetContextParameter<TContext>;
 
 export async function installPlugin<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  TContext extends Record<string, unknown> | undefined =
+    | Record<string, unknown>
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
   {
     overrides,
+    context,
     account = client.account,
     ...params
-  }: InstallPluginParams<TAccount>
+  }: InstallPluginParams<TAccount, TContext>
 ) {
   if (!account) {
     throw new AccountNotFoundError();
@@ -70,7 +81,7 @@ export async function encodeInstallPluginUserOperation<
     | undefined
 >(
   client: SmartAccountClient<TTransport, TChain, TAccount>,
-  params: Omit<InstallPluginParams, "overrides" | "account">
+  params: Omit<InstallPluginParams, "overrides" | "account" | "context">
 ) {
   const pluginManifest = await client.readContract({
     abi: IPluginAbi,
