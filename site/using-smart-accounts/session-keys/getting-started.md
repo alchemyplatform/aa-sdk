@@ -35,7 +35,7 @@ Let's take a look at a full example that demonstrates how to use session keys wi
 
 Session keys can be held on the client side or on a backend agent. Client side session keys are useful for skipping confirmations, and agent side keys are useful for automations.
 
-In the above example, we use a client-side key using the the `SessionKeySigner` exported from `@alchemy/aa-accounts`.
+In the above example, we use a client-side key using the `SessionKeySigner` exported from `@alchemy/aa-accounts`.
 
 ```ts
 import { SessionKeySigner } from "@alchemy/aa-accounts";

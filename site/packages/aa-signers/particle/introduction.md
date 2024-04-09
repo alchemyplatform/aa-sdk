@@ -19,7 +19,7 @@ head:
 `ParticleSigner` provides implementations for all methods on `SmartAccountAuthenticator`:
 
 1.  [`authenticate`](/packages/aa-signers/particle/authenticate) -- supports user authentication.
-2.  [`getAddress`](/packages/aa-signers/particle/getAddress) -- gets the address of the the smart contract account's connected EOA signer account.
+2.  [`getAddress`](/packages/aa-signers/particle/getAddress) -- gets the address of the smart contract account's connected EOA signer account.
 3.  [`signMessage`](/packages/aa-signers/particle/signMessage) -- supports message signatures.
 4.  [`signTypedData`](/packages/aa-signers/particle/signTypedData) -- supports typed data signatures.
 5.  [`getAuthDetails`](/packages/aa-signers/particle/getAuthDetails) -- supports authentication details retrieval.
