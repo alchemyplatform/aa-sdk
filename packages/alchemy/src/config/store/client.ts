@@ -120,7 +120,6 @@ const addClientSideStoreListeners = (store?: ClientStore) => {
     ({ signer }) => signer,
     (signer) => {
       signer.on("statusChanged", (status) => {
-        console.log("signer status changed", status);
         store.setState({ signerStatus: getSignerStatus(status) });
       });
       signer.on("connected", (user) => store.setState({ user }));

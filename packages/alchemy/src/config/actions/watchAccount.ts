@@ -18,12 +18,9 @@ export const watchAccount =
       {
         fireImmediately: true,
         equalityFn(a, b) {
-          return (
-            (a?.status === "READY" &&
-              b?.status === "READY" &&
-              a.account.address === b.account.address) ||
-            a?.status === b?.status
-          );
+          return a?.status === "READY" && b?.status === "READY"
+            ? a.account.address === b.account.address
+            : a?.status === b?.status;
         },
       }
     );
