@@ -16,6 +16,7 @@ import { createAlchemySmartAccountClientFromRpcClient } from "./internal/smartAc
 import { createAlchemyPublicRpcClient } from "./rpcClient.js";
 import type { AlchemyRpcSchema } from "./types.js";
 
+// #region AlchemySmartAccountClientConfig
 export type AlchemySmartAccountClientConfig<
   transport extends Transport = Transport,
   chain extends Chain | undefined = Chain | undefined,
@@ -34,6 +35,7 @@ export type AlchemySmartAccountClientConfig<
     SmartAccountClientConfig<transport, chain, account, context>,
     "customMiddleware" | "feeEstimator" | "gasEstimator" | "signUserOperation"
   >;
+// #endregion AlchemySmartAccountClientConfig
 
 export type BaseAlchemyActions<
   chain extends Chain | undefined = Chain | undefined,

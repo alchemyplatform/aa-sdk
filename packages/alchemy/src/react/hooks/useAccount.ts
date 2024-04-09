@@ -21,8 +21,13 @@ export type UseAccountResult<TAccount extends SupportedAccountTypes> = {
   isLoadingAccount: boolean;
 };
 
+export type UseAccountProps<TAccount extends SupportedAccountTypes> =
+  GetAccountParams<TAccount> & {
+    skipCreate?: boolean;
+  };
+
 export function useAccount<TAccount extends SupportedAccountTypes>(
-  params: GetAccountParams<TAccount> & { skipCreate?: boolean }
+  params: UseAccountProps<TAccount>
 ): UseAccountResult<TAccount> {
   const { config, queryClient } = useAlchemyAccountContext();
   const status = useSignerStatus();

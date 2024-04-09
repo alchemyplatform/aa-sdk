@@ -26,6 +26,7 @@ export type MultiOwnerModularAccount<
   TSigner extends SmartAccountSigner = SmartAccountSigner
 > = SmartContractAccountWithSigner<"MultiOwnerModularAccount", TSigner>;
 
+// #region CreateMultiOwnerModularAccountParams
 export type CreateMultiOwnerModularAccountParams<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner
@@ -40,6 +41,7 @@ export type CreateMultiOwnerModularAccountParams<
   accountAddress?: Address;
   initCode?: Hex;
 };
+// #endregion CreateMultiOwnerModularAccountParams
 
 export async function createMultiOwnerModularAccount<
   TTransport extends Transport = Transport,
