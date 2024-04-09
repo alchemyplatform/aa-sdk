@@ -34,7 +34,7 @@ With traditional wallets, your users have to download an extension, back up a se
 
 # Built with Account Kit
 
-Embedded Accounts are built with **Account Kit**: a simple and powerful toolkit to build next-gen wallets with [Account Abstraction](https://www.youtube.com/watch?v=Vpk_MhY-EeE). It also supports lightweight [EOA accounts](/signers/alchemy-signer#using-the-signer-as-an-eoa) if you prefer, but AA unlocks superpowers like gas sponsorship, batch transactions, and more.
+Embedded Accounts are built with **Account Kit**: a simple and powerful toolkit to build next-gen wallets with [Account Abstraction](https://www.youtube.com/watch?v=Vpk_MhY-EeE). It also supports lightweight [EOA accounts](/signers/alchemy-signer/introduction#using-the-signer-as-an-eoa) if you prefer, but AA unlocks superpowers like gas sponsorship, batch transactions, and more.
 
 Account Kit provides all the tools you need to build invisible web3 accounts. It includes:
 
