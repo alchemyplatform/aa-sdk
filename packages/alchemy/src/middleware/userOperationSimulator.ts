@@ -6,6 +6,10 @@ import {
 } from "@alchemy/aa-core";
 import type { ClientWithAlchemyMethods } from "../client/types";
 
+/**
+ *
+ * @returns
+ */
 export const alchemyUserOperationSimulator: <
   C extends ClientWithAlchemyMethods
 >(

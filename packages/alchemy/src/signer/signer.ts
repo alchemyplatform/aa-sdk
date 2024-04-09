@@ -76,6 +76,9 @@ export class AlchemySigner
   private sessionManager: SessionManager;
   private store: InternalStore;
 
+  /**
+   *
+   */
   constructor(params_: AlchemySignerParams) {
     const { sessionConfig, ...params } =
       AlchemySignerParamsSchema.parse(params_);
@@ -151,7 +154,9 @@ export class AlchemySigner
   /**
    * Authenticate a user with either an email or a passkey and create a session for that user
    *
+   * @param params
    * @params params - undefined if passkey login, otherwise an object with email and bundle to resolve
+   * @returns
    */
   authenticate: (params: AuthParams) => Promise<User> = async (params) => {
     if (params.type === "email") {
@@ -239,6 +244,9 @@ export class AlchemySigner
 
   /**
    * Adds a passkey to the user's account
+   *
+   * @param params
+   * @returns
    */
   addPasskey: (params?: CredentialCreationOptions) => Promise<string[]> =
     async (params) => {
@@ -249,6 +257,9 @@ export class AlchemySigner
    * Used to export the wallet for a given user
    * If the user is authenticated with an Email, this will return a seed phrase
    * If the user is authenticated with a Passkey, this will return a private key
+   *
+   * @param params
+   * @returns
    */
   exportWallet: (
     params: Parameters<(typeof this.inner)["exportWallet"]>[0]

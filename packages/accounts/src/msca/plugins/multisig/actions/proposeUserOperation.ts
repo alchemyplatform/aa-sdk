@@ -11,6 +11,15 @@ import { type Chain, type Client, type Transport } from "viem";
 import { type ProposeUserOperationResult, type Signature } from "../types.js";
 import { combineSignatures, getSignerType } from "../index.js";
 
+/**
+ *
+ * @param client
+ * @param root0
+ * @param root0.uo
+ * @param root0.account
+ * @param root0.overrides
+ * @returns
+ */
 export async function proposeUserOperation<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

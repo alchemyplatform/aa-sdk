@@ -8,6 +8,10 @@ import {
 } from "../../utils/index.js";
 import type { ClientMiddlewareFn } from "../types";
 
+/**
+ *
+ * @returns
+ */
 export const defaultUserOpSigner: ClientMiddlewareFn = async (
   struct,
   { client, account = client.account }

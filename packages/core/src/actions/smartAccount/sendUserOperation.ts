@@ -8,6 +8,10 @@ import { buildUserOperation } from "./buildUserOperation.js";
 import { _sendUserOperation } from "./internal/sendUserOperation.js";
 import type { SendUserOperationParameters } from "./types.js";
 
+/**
+ *
+ * @returns
+ */
 export const sendUserOperation: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

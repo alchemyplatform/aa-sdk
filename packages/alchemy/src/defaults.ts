@@ -9,6 +9,10 @@ import {
 } from "@alchemy/aa-core";
 import type { Chain } from "viem";
 
+/**
+ *
+ * @returns
+ */
 export const getDefaultUserOperationFeeOptions = (
   chain: Chain
 ): UserOperationFeeOptions => {

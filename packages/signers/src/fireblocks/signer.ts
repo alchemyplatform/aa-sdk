@@ -24,7 +24,7 @@ import type {
  * This class requires the `@fireblocks/fireblocks-web3-provider` dependency.
  * `@alchemy/aa-signers` lists it as an optional dependency.
  *
- * @see: https://github.com/fireblocks/fireblocks-web3-provider
+ * @see https://github.com/fireblocks/fireblocks-web3-provider
  */
 export class FireblocksSigner
   implements
@@ -37,6 +37,9 @@ export class FireblocksSigner
   inner: FireblocksWeb3Provider;
   private signer: WalletClientSigner | undefined;
 
+  /**
+   *
+   */
   constructor(
     params: FireblocksProviderConfig | { inner: FireblocksWeb3Provider }
   ) {

@@ -33,6 +33,10 @@ export type MultiOwnerPluginActions<
       }
     : {});
 
+/**
+ *
+ * @returns
+ */
 export const multiOwnerPluginActions: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

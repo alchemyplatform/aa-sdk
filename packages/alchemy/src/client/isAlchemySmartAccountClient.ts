@@ -5,6 +5,10 @@ import {
 import type { Chain, Client, Transport } from "viem";
 import type { AlchemySmartAccountClient } from "./smartAccountClient";
 
+/**
+ *
+ * @returns
+ */
 export const isAlchemySmartAccountClient = <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

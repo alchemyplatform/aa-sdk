@@ -52,6 +52,11 @@ export function createModularAccountAlchemyClient<
   >
 >;
 
+/**
+ *
+ * @param config
+ * @returns
+ */
 export async function createModularAccountAlchemyClient(
   config: AlchemyModularAccountClientConfig
 ): Promise<AlchemySmartAccountClient> {

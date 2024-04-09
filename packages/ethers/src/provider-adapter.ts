@@ -15,6 +15,9 @@ import type { EthersProviderAdapterOpts } from "./types.js";
 export class EthersProviderAdapter extends JsonRpcProvider {
   readonly accountProvider: SmartAccountClient;
 
+  /**
+   *
+   */
   constructor(opts: EthersProviderAdapterOpts) {
     super();
     if ("accountProvider" in opts) {
@@ -53,7 +56,7 @@ export class EthersProviderAdapter extends JsonRpcProvider {
   /**
    * Connects the Provider to an Account and returns a Signer
    *
-   * @param fn - a function that takes the account provider's rpcClient and returns an ISmartContractAccount
+   * @param account the account to connect to
    * @returns an {@link AccountSigner} that can be used to sign and send user operations
    */
   connectToAccount<TAccount extends SmartContractAccount>(
@@ -62,6 +65,10 @@ export class EthersProviderAdapter extends JsonRpcProvider {
     return new AccountSigner<TAccount>(this, account);
   }
 
+  /**
+   *
+   * @returns
+   */
   getBundlerClient(): BundlerClient {
     return createBundlerClientFromExisting(
       createPublicClient({

@@ -21,6 +21,10 @@ export type LightAccountClientActions<
   ) => Promise<Hex>;
 };
 
+/**
+ *
+ * @returns
+ */
 export const lightAccountClientActions: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

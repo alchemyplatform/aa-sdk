@@ -3,6 +3,10 @@ import type { SmartContractAccount } from "../../account/smartContractAccount";
 import { AccountNotFoundError } from "../../errors/account.js";
 import type { SignMessageParameters } from "./signMessage";
 
+/**
+ *
+ * @returns
+ */
 export const signMessageWith6492: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

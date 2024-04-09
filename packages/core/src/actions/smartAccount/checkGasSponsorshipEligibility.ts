@@ -6,6 +6,13 @@ import type { UserOperationStruct } from "../../types.js";
 import { buildUserOperation } from "./buildUserOperation.js";
 import type { SendUserOperationParameters } from "./types";
 
+/**
+ * Used to check if a given user operation is eligible for gas sponsorship
+ *
+ * @param client the client used to check the gas sponsorship eligibility
+ * @param args user operation parameters for which to check the gas sponsorship eligibility
+ * @returns a boolean indicating if the useroperation is eligible for gas sponsorship
+ */
 export const checkGasSponsorshipEligibility: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

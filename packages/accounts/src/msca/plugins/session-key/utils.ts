@@ -8,6 +8,10 @@ import { SessionKeyPlugin } from "./plugin.js";
 
 // find predecessors for each keys and returned the struct `ISessionKeyPlugin.SessionKeyToRemove[]`
 // where SessionKeyToRemove = { sessionKey: Address, predecessor: Hex }
+/**
+ *
+ * @returns
+ */
 export const buildSessionKeysToRemoveStruct: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

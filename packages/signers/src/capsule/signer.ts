@@ -23,7 +23,7 @@ import type {
  * This class requires the `@usecapsule/web-sdk` dependency.
  * `@alchemy/aa-signers` lists it as an optional dependency.
  *
- * @see: https://docs.usecapsule.com/getting-started/initial-setup
+ * @see https://docs.usecapsule.com/getting-started/initial-setup
  */
 export class CapsuleSigner
   implements
@@ -37,6 +37,9 @@ export class CapsuleSigner
   private client: WalletClient;
   private signer: WalletClientSigner | undefined;
 
+  /**
+   *
+   */
   constructor(
     params: CapsuleConfig | { inner: Capsule; client: WalletClient }
   ) {

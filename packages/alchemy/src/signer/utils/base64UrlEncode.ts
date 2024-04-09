@@ -1,3 +1,7 @@
+/**
+ *
+ * @returns
+ */
 export const base64UrlEncode = (challenge: ArrayBuffer): string => {
   return Buffer.from(challenge)
     .toString("base64")

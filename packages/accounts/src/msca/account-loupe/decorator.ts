@@ -51,6 +51,10 @@ export type AccountLoupeActions<
   ): Promise<ReadonlyArray<Address>>;
 };
 
+/**
+ *
+ * @returns
+ */
 export const accountLoupeActions: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

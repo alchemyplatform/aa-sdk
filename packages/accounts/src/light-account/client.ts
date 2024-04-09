@@ -48,6 +48,14 @@ export function createLightAccountClient<
   >
 >;
 
+/**
+ *
+ * @param root0
+ * @param root0.account
+ * @param root0.transport
+ * @param root0.chain
+ * @returns
+ */
 export async function createLightAccountClient({
   account,
   transport,

@@ -11,6 +11,10 @@ import { InvalidUserOperationError } from "../../../errors/useroperation.js";
 import type { UserOperationStruct } from "../../../types";
 import { deepHexlify, isValidRequest } from "../../../utils/index.js";
 
+/**
+ *
+ * @returns
+ */
 export const _sendUserOperation: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

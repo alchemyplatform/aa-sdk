@@ -1,6 +1,10 @@
 import dedent from "dedent";
 import type { Phase } from "../../types";
 
+/**
+ *
+ * @returns
+ */
 export const GetContractGenPhase: Phase = async (input) => {
   const { content, contract, addImport } = input;
 

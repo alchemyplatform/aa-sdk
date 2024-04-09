@@ -22,6 +22,10 @@ export type SignTypedDataParameters<
   typedData: TypedDataDefinition<TTypedData, TPrimaryType>;
 } & GetAccountParameter<TAccount>;
 
+/**
+ *
+ * @returns
+ */
 export const signTypedData: <
   const TTypedData extends TypedData | { [key: string]: unknown },
   TPrimaryType extends string = string,

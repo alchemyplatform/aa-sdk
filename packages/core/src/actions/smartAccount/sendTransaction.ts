@@ -15,6 +15,10 @@ import { buildUserOperationFromTx } from "./buildUserOperationFromTx.js";
 import { _sendUserOperation } from "./internal/sendUserOperation.js";
 import { waitForUserOperationTransaction } from "./waitForUserOperationTransacation.js";
 
+/**
+ *
+ * @returns
+ */
 export const sendTransaction: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =

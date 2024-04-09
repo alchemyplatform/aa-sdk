@@ -56,6 +56,10 @@ const dummyPaymasterAndData =
     return `${paymasterAddress}${dummyData}` as Address;
   };
 
+/**
+ *
+ * @returns
+ */
 export const alchemyGasManagerMiddleware = <C extends ClientWithAlchemyMethods>(
   client: C,
   config: AlchemyGasManagerConfig

@@ -29,6 +29,10 @@ export type BundlerClient<T extends Transport = Transport> = Client<
   PublicActions<T, Chain> & BundlerActions
 >;
 
+/**
+ *
+ * @returns
+ */
 export const createBundlerClientFromExisting: <
   T extends Transport | FallbackTransport = Transport
 >(
@@ -42,12 +46,19 @@ export const createBundlerClientFromExisting: <
 
 /**
  * Creates a PublicClient with methods for calling Bundler RPC methods
+ *
+ * @param args
  * @returns
  */
 export function createBundlerClient<TTransport extends Transport>(
   args: PublicClientConfig<TTransport, Chain> & { type?: string }
 ): BundlerClient<TTransport>;
 
+/**
+ *
+ * @param args
+ * @returns
+ */
 export function createBundlerClient(
   args: PublicClientConfig & { type?: string }
 ): BundlerClient {

@@ -39,6 +39,15 @@ export type InstallPluginParams<
 } & GetAccountParameter<TAccount> &
   GetContextParameter<TContext>;
 
+/**
+ *
+ * @param client
+ * @param root0
+ * @param root0.overrides
+ * @param root0.context
+ * @param root0.account
+ * @returns
+ */
 export async function installPlugin<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
@@ -73,6 +82,12 @@ export async function installPlugin<
   return client.sendUserOperation({ uo: callData, overrides, account });
 }
 
+/**
+ *
+ * @param client
+ * @param params
+ * @returns
+ */
 export async function encodeInstallPluginUserOperation<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

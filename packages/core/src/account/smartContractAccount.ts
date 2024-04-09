@@ -60,6 +60,10 @@ export type SmartContractAccountWithSigner<
   getSigner: () => TSigner;
 };
 
+/**
+ *
+ * @returns
+ */
 export const isSmartAccountWithSigner = (
   account: SmartContractAccount
 ): account is SmartContractAccountWithSigner => {
@@ -113,12 +117,20 @@ export type ToSmartContractAccountParams<
   encodeUpgradeToAndCall?: (params: UpgradeToAndCallParams) => Promise<Hex>;
 } & Omit<CustomSource, "signTransaction" | "address">;
 
+/**
+ *
+ * @returns
+ */
 export const parseFactoryAddressFromAccountInitCode = (initCode: Hex) => {
   const factoryAddress: Address = `0x${initCode.substring(2, 42)}`;
   const factoryCalldata: Hex = `0x${initCode.substring(42)}`;
   return [factoryAddress, factoryCalldata];
 };
 
+/**
+ *
+ * @returns
+ */
 export const getAccountAddress = async ({
   client,
   entryPointAddress,
@@ -167,6 +179,24 @@ export const getAccountAddress = async ({
   throw new GetCounterFactualAddressError();
 };
 
+/**
+ *
+ * @param root0
+ * @param root0.transport
+ * @param root0.chain
+ * @param root0.source
+ * @param root0.entryPoint
+ * @param root0.accountAddress
+ * @param root0.getAccountInitCode
+ * @param root0.signMessage
+ * @param root0.signTypedData
+ * @param root0.encodeBatchExecute
+ * @param root0.encodeExecute
+ * @param root0.getDummySignature
+ * @param root0.signUserOperationHash
+ * @param root0.encodeUpgradeToAndCall
+ * @returns
+ */
 export async function toSmartContractAccount<
   Name extends string = string,
   TTransport extends Transport = Transport,

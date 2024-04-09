@@ -57,6 +57,7 @@ export const LightAccountVersions: Record<
  * Utility method returning the default light account factory address given a {@link Chain} object
  *
  * @param chain - a {@link Chain} object
+ * @param version
  * @returns a {@link Address} for the given chain
  * @throws if the chain doesn't have an address currently deployed
  */
@@ -95,6 +96,10 @@ export const LightAccountUnsupported1271Factories = new Set(
   LightAccountUnsupported1271Impls.map((x) => x.factoryAddress)
 );
 
+/**
+ *
+ * @returns
+ */
 export const getLightAccountVersion = async <A extends SmartContractAccount>(
   account: A
 ) => {

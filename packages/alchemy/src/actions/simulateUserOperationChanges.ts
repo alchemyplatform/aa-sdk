@@ -10,6 +10,10 @@ import { isAlchemySmartAccountClient } from "../client/isAlchemySmartAccountClie
 import type { AlchemyRpcSchema } from "../client/types";
 import type { SimulateUserOperationAssetChangesResponse } from "./types";
 
+/**
+ *
+ * @returns
+ */
 export const simulateUserOperationChanges: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =

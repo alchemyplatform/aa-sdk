@@ -16,6 +16,15 @@ import type {
 import { filterUndefined } from "../../utils/index.js";
 import { buildUserOperation } from "./buildUserOperation.js";
 
+/**
+ *  Allows a user operation to be constructed from a traditional transaction object
+ *
+ * @param client the client to use to build the user operation
+ * @param args an ethereum transaction object
+ * @param overrides overrides to apply to the user operation
+ * @param context optional context parameter used by the middleware
+ * @returns a user operation built from the transaction parameters
+ */
 export const buildUserOperationFromTx: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =

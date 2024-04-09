@@ -26,7 +26,7 @@ import type {
  * This class requires the `@particle-network/auth` and `@particle-network/provider` dependencies.
  * `@alchemy/aa-signers` lists thems as an optional dependencies.
  *
- * @see: https://docs.particle.network/developers/auth-service/sdks/web
+ * @see https://docs.particle.network/developers/auth-service/sdks/web
  */
 export class ParticleSigner
   implements
@@ -40,6 +40,9 @@ export class ParticleSigner
   private provider: ParticleProvider;
   private signer: WalletClientSigner | undefined;
 
+  /**
+   *
+   */
   constructor(
     params: Config | { inner: ParticleNetwork; provider?: ParticleProvider }
   ) {

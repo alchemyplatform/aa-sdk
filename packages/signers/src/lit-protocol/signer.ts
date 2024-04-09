@@ -48,6 +48,9 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
   private _authContext: C | undefined;
   public session: SessionSigsMap | undefined;
 
+  /**
+   *
+   */
   constructor(params: LitConfig) {
     this._pkpPublicKey = params.pkpPublicKey;
     this.inner =
@@ -63,9 +66,10 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
   /**
    * if generic type is `LitAuthMethod`, authenticates the supplied authentication material.
    * if type `SessionSigsMap`, this implementation will respect the existing auth and use the session material.
+   *
    * @param props {LitAuthenticateProps} Authentication params, only `context` is required
-   * @returns {Promise<LitSessionSigsMap>} Authenticated session material
-   * @throws {Not Authenticated} if authentication operations fail this error is thrown
+   * @returns Authenticated session material
+   * @throws if authentication operations fail this error is thrown
    */
   authenticate = async (
     props: LitAuthenticateProps<C>
@@ -136,6 +140,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
    * For more information on Lit Authentication see below:
    *
    * https://developer.litprotocol.com/v3/sdk/authentication/overview
+   *
    * @param props {LitAuthenticationProps<C>} properties for configuring authentication operations
    */
   private async _doAuthentication(props: LitAuthenticateProps<C>) {

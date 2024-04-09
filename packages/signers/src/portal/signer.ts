@@ -18,7 +18,7 @@ import type { PortalAuthenticationParams, PortalUserInfo } from "./types.js";
  * This class requires the `@portal-hq/web` dependency.
  * `@alchemy/aa-signers` lists it as an optional dependency.
  *
- * @see: https://docs.portalhq.io/sdk/web-beta
+ * @see https://docs.portalhq.io/sdk/web-beta
  */
 export class PortalSigner
   implements
@@ -31,6 +31,9 @@ export class PortalSigner
   inner: Portal;
   private signer: WalletClientSigner | undefined;
 
+  /**
+   *
+   */
   constructor(params: PortalOptions | { inner: Portal }) {
     if ("inner" in params) {
       this.inner = params.inner;

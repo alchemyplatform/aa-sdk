@@ -95,12 +95,17 @@ export type BundlerActions = {
   /**
    * calls `eth_supportedEntryPoints` and returns the entry points the RPC
    * supports
+   *
    * @returns - {@link Address}[]
    */
   getSupportedEntryPoints(): Promise<Address[]>;
 };
 //#endregion BundlerActions
 
+/**
+ *
+ * @returns
+ */
 export const bundlerActions: <
   TClient extends Client<
     Transport,

@@ -3,6 +3,10 @@ import type { SmartContractAccount } from "../../account/smartContractAccount";
 import { AccountNotFoundError } from "../../errors/account.js";
 import type { SignTypedDataParameters } from "./signTypedData";
 
+/**
+ *
+ * @returns
+ */
 export const signTypedDataWith6492: <
   const TTypedData extends TypedData | { [key: string]: unknown },
   TTransport extends Transport = Transport,

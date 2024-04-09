@@ -2,6 +2,10 @@ import type { Chain, Client, Hex, Transport } from "viem";
 import type { BundlerRpcSchema } from "../../client/decorators/bundlerClient";
 import type { UserOperationReceipt } from "../../types";
 
+/**
+ *
+ * @returns
+ */
 export const getUserOperationReceipt = async <
   TClient extends Client<Transport, Chain | undefined, any, BundlerRpcSchema>
 >(

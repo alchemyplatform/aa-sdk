@@ -26,6 +26,10 @@ type MultisigSignMethodsParams<
   pluginAddress?: Address;
 };
 
+/**
+ *
+ * @returns
+ */
 export const multisigSignMethods = <
   TTransport extends Transport,
   TSigner extends SmartAccountSigner

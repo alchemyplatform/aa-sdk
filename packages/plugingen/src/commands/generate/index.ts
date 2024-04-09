@@ -35,6 +35,11 @@ const GenerateSchema = z.object({
 
 export type GenerateOptions = z.infer<typeof GenerateSchema>;
 
+/**
+ * Generates plugin files from a config
+ *
+ * @param options optional overrides for generate
+ */
 export async function generate(options: GenerateOptions = {}) {
   try {
     options = await GenerateSchema.parseAsync(options);

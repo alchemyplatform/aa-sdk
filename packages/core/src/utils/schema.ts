@@ -43,10 +43,20 @@ export const MultiplierSchema = z
   .strict();
 //#endregion Multiplier
 
+/**
+ *
+ * @param x
+ * @returns
+ */
 export function isBigNumberish(x: any): x is BigNumberish {
   return x != null && BigNumberishSchema.safeParse(x).success;
 }
 
+/**
+ *
+ * @param x
+ * @returns
+ */
 export function isMultiplier(x: any): x is Multiplier {
   return x != null && MultiplierSchema.safeParse(x).success;
 }

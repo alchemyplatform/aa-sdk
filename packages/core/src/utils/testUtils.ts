@@ -9,6 +9,10 @@ import {
 } from "../client/bundlerClient.js";
 import { getVersion060EntryPoint } from "../entrypoint/0.6.js";
 
+/**
+ *
+ * @returns
+ */
 export const createDummySmartContractAccount = async <C extends BundlerClient>(
   client: C
 ): Promise<SmartContractAccount> => {
@@ -29,6 +33,10 @@ export const createDummySmartContractAccount = async <C extends BundlerClient>(
   });
 };
 
+/**
+ *
+ * @returns
+ */
 export const createTestClient = (chain: Chain) => {
   return createBundlerClientFromExisting(
     createPublicClient({

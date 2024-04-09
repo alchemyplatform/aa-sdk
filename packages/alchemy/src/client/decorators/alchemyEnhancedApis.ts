@@ -14,6 +14,10 @@ export type AlchemyEnhancedApis = {
   config: Alchemy["config"];
 };
 
+/**
+ *
+ * @returns
+ */
 export const alchemyEnhancedApiActions: (
   alchemy: Alchemy
 ) => <

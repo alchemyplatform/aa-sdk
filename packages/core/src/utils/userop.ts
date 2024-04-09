@@ -27,6 +27,13 @@ export function isValidRequest(
   );
 }
 
+/**
+ * Applies a user operation override to a value
+ *
+ * @param value the value to apply the override to
+ * @param override the override to apply
+ * @returns the value with the override applied
+ */
 export function applyUserOpOverride(
   value: BigNumberish | undefined,
   override?: BigNumberish | Multiplier
@@ -45,6 +52,13 @@ export function applyUserOpOverride(
   }
 }
 
+/**
+ * Applies a fee option override to a value
+ *
+ * @param value the value to override
+ * @param feeOption the fee option to apply
+ * @returns the value with the fee option applied
+ */
 export function applyUserOpFeeOption(
   value: BigNumberish | undefined,
   feeOption?: UserOperationFeeOptionsField
@@ -63,6 +77,14 @@ export function applyUserOpFeeOption(
     : feeOption.min ?? 0n;
 }
 
+/**
+ * Applies an override or fee option to a value
+ *
+ * @param value the value to override
+ * @param override the override to apply
+ * @param feeOption the fee option to apply
+ * @returns the value with the override or fee option applied
+ */
 export function applyUserOpOverrideOrFeeOption(
   value: BigNumberish | undefined,
   override?: BigNumberish | Multiplier,

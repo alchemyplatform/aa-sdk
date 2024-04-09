@@ -25,6 +25,10 @@ export type PluginManagerActions<
   ) => Promise<SendUserOperationResult>;
 };
 
+/**
+ *
+ * @returns
+ */
 export const pluginManagerActions: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

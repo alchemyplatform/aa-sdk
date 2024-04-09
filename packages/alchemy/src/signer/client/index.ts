@@ -54,6 +54,9 @@ export class AlchemySignerClient {
   private rootOrg: string;
   iframeContainerId: string;
 
+  /**
+   *
+   */
   constructor(params: AlchemySignerClientParams) {
     const { connection, iframeConfig, rpId, rootOrgId } =
       AlchemySignerClientParamsSchema.parse(params);
@@ -247,6 +250,7 @@ export class AlchemySignerClient {
    * that result here.
    *
    * @param msg the hex representation of the bytes to sign
+   * @returns
    */
   public signRawMessage = async (msg: Hex) => {
     if (!this.user) {
@@ -293,6 +297,10 @@ export class AlchemySignerClient {
     return this.exportAsPrivateKey(exportWalletIframeStamper);
   };
 
+  /**
+   *
+   * @returns
+   */
   public getUser(): User | null {
     return this.user ?? null;
   }

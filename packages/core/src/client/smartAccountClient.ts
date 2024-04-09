@@ -132,6 +132,11 @@ export function createSmartAccountClient<
   config: SmartAccountClientConfig<TTransport, TChain, TAccount, TContext>
 ): SmartAccountClient<TTransport, TChain, TAccount>;
 
+/**
+ *
+ * @param config
+ * @returns
+ */
 export function createSmartAccountClient(
   config: SmartAccountClientConfig
 ): SmartAccountClient {
@@ -260,6 +265,11 @@ export function createSmartAccountClientFromExisting<
   TContext
 >;
 
+/**
+ *
+ * @param config
+ * @returns
+ */
 export function createSmartAccountClientFromExisting(
   config: Omit<SmartAccountClientConfig, "transport" | "chain"> & {
     client: BundlerClient;

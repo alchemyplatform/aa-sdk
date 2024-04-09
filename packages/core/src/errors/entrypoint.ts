@@ -1,9 +1,15 @@
 import type { Chain } from "viem";
 import { BaseError } from "./base.js";
 
+/**
+ *
+ */
 export class EntryPointNotFoundError extends BaseError {
   override name = "EntrypointNotFoundError";
 
+  /**
+   *
+   */
   constructor(chain: Chain) {
     super(
       [

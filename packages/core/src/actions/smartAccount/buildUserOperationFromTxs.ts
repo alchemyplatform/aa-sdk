@@ -12,6 +12,13 @@ import type {
   SendTransactionsParameters,
 } from "./types";
 
+/**
+ * Builds a user operation based on the
+ *
+ * @param client the client to use to build the useroperation
+ * @param args the transactions to build the user operation from
+ * @returns a user operation built from the transactions
+ */
 export const buildUserOperationFromTxs: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

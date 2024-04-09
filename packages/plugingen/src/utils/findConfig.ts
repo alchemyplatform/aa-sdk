@@ -21,6 +21,9 @@ type FindConfigParameters = {
 
 /**
  * Resolves path to plugingen CLI config file.
+ *
+ * @param parameters optional parameters to find config
+ * @returns Promise of the resolved config file path or undefined if not found
  */
 export async function findConfig(parameters: FindConfigParameters = {}) {
   const { config, root } = parameters;

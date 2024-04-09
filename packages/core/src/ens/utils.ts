@@ -6,6 +6,10 @@ export const ChainsById: Map<number, chains.Chain> = new Map(
   Object.values(chains).map((x) => [x.id, x])
 );
 
+/**
+ *
+ * @returns
+ */
 export const convertChainIdToCoinType = (chainId: number): number => {
   if (chainId === mainnet.id) {
     // this comes from [ensip-9](https://docs.ens.domains/ens-improvement-proposals/ensip-9-multichain-address-resolution)
@@ -16,6 +20,10 @@ export const convertChainIdToCoinType = (chainId: number): number => {
   return (0x80000000 | chainId) >>> 0;
 };
 
+/**
+ *
+ * @returns
+ */
 export const convertCoinTypeToChainId = (coinType: number): number => {
   if (coinType === 60) {
     // this comes from [ensip-9](https://docs.ens.domains/ens-improvement-proposals/ensip-9-multichain-address-resolution)
@@ -26,6 +34,10 @@ export const convertCoinTypeToChainId = (coinType: number): number => {
   return (0x7fffffff & coinType) >> 0;
 };
 
+/**
+ *
+ * @returns
+ */
 export const convertCoinTypeToChain = (coinType: number): Chain => {
   const chainId = convertCoinTypeToChainId(coinType);
   const chain = ChainsById.get(chainId);

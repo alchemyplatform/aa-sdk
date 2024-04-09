@@ -1,6 +1,12 @@
 import { BaseError } from "@alchemy/aa-core";
 
+/**
+ *
+ */
 export class NotAuthenticatedError extends BaseError {
+  /**
+   *
+   */
   constructor() {
     super(
       [

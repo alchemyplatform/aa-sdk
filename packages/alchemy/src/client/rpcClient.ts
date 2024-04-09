@@ -3,6 +3,10 @@ import { http, type Chain } from "viem";
 import { AlchemyChainSchema } from "../schema.js";
 import type { ClientWithAlchemyMethods } from "./types.js";
 
+/**
+ *
+ * @returns
+ */
 export const createAlchemyPublicRpcClient = ({
   chain: chain_,
   connectionConfig,

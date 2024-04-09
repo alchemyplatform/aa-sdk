@@ -23,8 +23,8 @@ import type {
  * This class requires the `@turnkey/http` and `@turnkey/viem` dependencies.
  * `@alchemy/aa-signers` lists them as optional dependencies.
  *
- * @see: https://github.com/tkhq/sdk/tree/main/packages/http
- * @see: https://github.com/tkhq/sdk/tree/main/packages/viem
+ * @see https://github.com/tkhq/sdk/tree/main/packages/http
+ * @see https://github.com/tkhq/sdk/tree/main/packages/viem
  */
 export class TurnkeySigner
   implements
@@ -38,6 +38,9 @@ export class TurnkeySigner
   private signer: WalletClientSigner | undefined;
   private subOrganization: TurnkeySubOrganization | undefined;
 
+  /**
+   *
+   */
   constructor(params: TurnkeyClientParams | { inner: TurnkeyClient }) {
     if ("inner" in params) {
       this.inner = params.inner;

@@ -16,6 +16,11 @@ class ValidationError extends Error {
 }
 
 // From https://github.com/causaly/zod-validation-error
+/**
+ * Convert a ZodError to a ValidationError
+ *
+ * @returns a ValidationError object
+ */
 export function fromZodError(
   zError: z.ZodError,
   {

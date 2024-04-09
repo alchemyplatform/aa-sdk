@@ -29,6 +29,9 @@ export type CreateAlchemySmartAccountClientFromRpcClient<
 /**
  * Helper method meant to be used internally to create an alchemy smart account client
  * from an existing Alchemy Rpc Client
+ *
+ * @param args
+ * @returns
  */
 export function createAlchemySmartAccountClientFromRpcClient<
   TChain extends Chain | undefined = Chain | undefined,
@@ -48,6 +51,20 @@ export function createAlchemySmartAccountClientFromRpcClient<
   TContext
 >;
 
+/**
+ *
+ * @param root0
+ * @param root0.opts
+ * @param root0.account
+ * @param root0.useSimulation
+ * @param root0.gasManagerConfig
+ * @param root0.feeEstimator
+ * @param root0.gasEstimator
+ * @param root0.customMiddleware
+ * @param root0.signUserOperation
+ * @param root0.client
+ * @returns
+ */
 export function createAlchemySmartAccountClientFromRpcClient({
   opts,
   account,

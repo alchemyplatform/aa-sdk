@@ -3,6 +3,10 @@ import { applyUserOpOverrideOrFeeOption } from "../../utils/userop.js";
 import type { MiddlewareClient } from "../actions.js";
 import type { ClientMiddlewareFn } from "../types.js";
 
+/**
+ *
+ * @returns
+ */
 export const defaultGasEstimator: <C extends MiddlewareClient>(
   client: C
 ) => ClientMiddlewareFn =

@@ -1,7 +1,13 @@
 import { BaseError } from "./base.js";
 
+/**
+ *
+ */
 export class InvalidSignerTypeError extends BaseError {
   override name = "InvalidSignerTypeError";
+  /**
+   *
+   */
   constructor(signerType?: string) {
     super(
       [

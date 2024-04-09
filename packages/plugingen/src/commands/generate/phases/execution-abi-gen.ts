@@ -2,6 +2,10 @@ import dedent from "dedent";
 import type { Phase } from "../types";
 import { executionAbiConst, extractExecutionAbi } from "../utils.js";
 
+/**
+ *
+ * @returns
+ */
 export const ExecutionAbiGenPhase: Phase = async (input) => {
   const { contract, content, pluginConfig } = input;
 

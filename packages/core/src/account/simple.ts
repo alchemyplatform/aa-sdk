@@ -100,6 +100,10 @@ class SimpleSmartContractAccount<
 export type SimpleSmartAccount<TSigner extends SmartAccountSigner> =
   SmartContractAccountWithSigner<"SimpleAccount", TSigner>;
 
+/**
+ *
+ * @returns
+ */
 export const createSimpleSmartAccount = async <
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner

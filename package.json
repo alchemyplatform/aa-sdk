@@ -31,6 +31,7 @@
     "eslint": "^8.39.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsdoc": "^48.2.3",
     "husky": "^8.0.0",
     "lerna": "^8.0.2",
     "lint-staged": "^13.2.2",
@@ -46,7 +47,8 @@
   },
   "eslintConfig": {
     "extends": [
-      "react-app"
+      "react-app",
+      "plugin:jsdoc/recommended-typescript-error"
     ],
     "env": {
       "es2021": true,
@@ -59,6 +61,40 @@
       "import/extensions": [
         "error",
         "ignorePackages"
+      ],
+      "jsdoc/tag-lines": [
+        "error",
+        "any",
+        {
+          "startLines": 1
+        }
+      ],
+      "jsdoc/require-returns": [
+        "error",
+        {
+          "enableFixer": true
+        }
+      ],
+      "jsdoc/require-param": [
+        "warn",
+        {
+          "enableFixer": false
+        }
+      ],
+      "jsdoc/require-jsdoc": [
+        "error",
+        {
+          "publicOnly": {
+            "ancestorsOnly": true
+          },
+          "enableFixer": true,
+          "require": {
+            "FunctionDeclaration": true,
+            "MethodDefinition": true,
+            "ClassDeclaration": true,
+            "ArrowFunctionExpression": true
+          }
+        }
       ]
     },
     "overrides": [
@@ -72,7 +108,8 @@
           "import/extensions": [
             "off",
             "ignorePackages"
-          ]
+          ],
+          "jsdoc/require-jsdoc": "off"
         }
       }
     ]

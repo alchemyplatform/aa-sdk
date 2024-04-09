@@ -6,6 +6,10 @@ import { extractExecutionAbi } from "../../utils.js";
 import { ManagementActionsGenPhase } from "./management-actions.js";
 import { AccountReadActionsGenPhase } from "./read-actions.js";
 
+/**
+ *
+ * @returns
+ */
 export const PluginActionsGenPhase: Phase = async (input) => {
   const { pluginConfig, contract, addImport, addType } = input;
   const { executionFunctions } = await contract.read.pluginManifest();

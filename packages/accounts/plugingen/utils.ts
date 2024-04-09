@@ -1,9 +1,17 @@
 import { type AbiFunction } from "abitype";
 import { getAbiItem, type Abi, type AbiItem, type Address } from "viem";
 
+/**
+ *
+ * @returns
+ */
 export const executionAbiConst = (name: string) =>
   `${name}ExecutionFunctionAbi`;
 
+/**
+ *
+ * @returns
+ */
 export const extractExecutionAbi = (
   executionFunctions: readonly Address[],
   abi: Abi

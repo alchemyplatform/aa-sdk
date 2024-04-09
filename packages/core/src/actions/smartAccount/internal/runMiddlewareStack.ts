@@ -22,6 +22,10 @@ const asyncPipe =
     return result;
   };
 
+/**
+ *
+ * @returns
+ */
 export const _runMiddlewareStack: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

@@ -1,6 +1,10 @@
 import dedent from "dedent";
 import type { Phase } from "../../types";
 
+/**
+ *
+ * @returns
+ */
 export const MetaGenPhase: Phase = async (input) => {
   const { plugin, content } = input;
   const { name, version } = await plugin.read.pluginMetadata();

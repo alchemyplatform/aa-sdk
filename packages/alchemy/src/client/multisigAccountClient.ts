@@ -65,6 +65,11 @@ export function createMultisigAccountAlchemyClient<
   >
 >;
 
+/**
+ *
+ * @param config
+ * @returns
+ */
 export async function createMultisigAccountAlchemyClient(
   config: AlchemyMultisigAccountClientConfig
 ): Promise<

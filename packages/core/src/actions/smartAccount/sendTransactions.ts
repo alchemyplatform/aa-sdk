@@ -8,6 +8,10 @@ import { _sendUserOperation } from "./internal/sendUserOperation.js";
 import type { SendTransactionsParameters } from "./types";
 import { waitForUserOperationTransaction } from "./waitForUserOperationTransacation.js";
 
+/**
+ *
+ * @returns
+ */
 export const sendTransactions: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

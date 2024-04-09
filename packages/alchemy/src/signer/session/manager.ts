@@ -35,6 +35,9 @@ type Store = Mutate<
   [["zustand/subscribeWithSelector", never]]
 >;
 
+/**
+ *
+ */
 export class SessionManager {
   private sessionKey: string;
   private client: AlchemySignerClient;
@@ -42,6 +45,9 @@ export class SessionManager {
   readonly expirationTimeMs: number;
   private store: Store;
 
+  /**
+   *
+   */
   constructor(params: SessionManagerParams) {
     const {
       sessionKey,
@@ -179,6 +185,9 @@ export class SessionManager {
     });
   };
 
+  /**
+   *
+   */
   public initialize() {
     this.getSessionUser()
       .then((user) => {

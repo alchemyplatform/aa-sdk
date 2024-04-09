@@ -112,6 +112,18 @@ export function createAlchemySmartAccountClient<
   TContext
 >;
 
+/**
+ *
+ * @param root0
+ * @param root0.account
+ * @param root0.gasManagerConfig
+ * @param root0.useSimulation
+ * @param root0.feeEstimator
+ * @param root0.customMiddleware
+ * @param root0.gasEstimator
+ * @param root0.signUserOperation
+ * @returns
+ */
 export function createAlchemySmartAccountClient({
   account,
   gasManagerConfig,

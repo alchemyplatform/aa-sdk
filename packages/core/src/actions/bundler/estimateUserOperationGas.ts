@@ -5,6 +5,10 @@ import type {
   UserOperationRequest,
 } from "../../types";
 
+/**
+ *
+ * @returns
+ */
 export const estimateUserOperationGas = async <
   TClient extends Client<Transport, Chain | undefined, any, BundlerRpcSchema>
 >(

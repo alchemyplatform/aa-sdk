@@ -25,6 +25,10 @@ export type AlchemyLightAccountClientConfig<
     "account"
   >;
 
+/**
+ *
+ * @returns
+ */
 export const createLightAccountAlchemyClient: <
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(

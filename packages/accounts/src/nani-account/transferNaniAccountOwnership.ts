@@ -13,9 +13,12 @@ import type { NaniAccount } from "./account";
  * Optionally waits for the transaction to be mined.
  *
  * @param client - the client to use to send the transaction
+ * @param newOwner.newOwner
  * @param newOwner - the new owner of the account
  * @param waitForTxn - whether or not to wait for the transaction to be mined
- * @returns {Hash} the userOperation hash, or transaction hash if `waitForTxn` is true
+ * @param newOwner.waitForTxn
+ * @param newOwner.account
+ * @returns the userOperation hash, or transaction hash if `waitForTxn` is true
  */
 export const transferOwnership: <
   TTransport extends Transport = Transport,

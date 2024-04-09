@@ -53,6 +53,9 @@ export type GasSpendLimit = {
   refreshInterval?: number;
 };
 
+/**
+ *
+ */
 export class SessionKeyPermissionsBuilder {
   private _contractAccessControlType: SessionKeyAccessListType =
     SessionKeyAccessListType.ALLOWLIST;
@@ -64,46 +67,82 @@ export class SessionKeyPermissionsBuilder {
   private _gasSpendLimit?: GasSpendLimit;
   private _requiredPaymaster?: Address;
 
+  /**
+   *
+   * @returns
+   */
   public setContractAccessControlType(aclType: SessionKeyAccessListType) {
     this._contractAccessControlType = aclType;
     return this;
   }
 
+  /**
+   *
+   * @returns
+   */
   public addContractAddressAccessEntry(entry: ContractAccessEntry) {
     this._contractAddressAccessEntrys.push(entry);
     return this;
   }
 
+  /**
+   *
+   * @returns
+   */
   public addContractFunctionAccessEntry(entry: ContractMethodEntry) {
     this._contractMethodAccessEntrys.push(entry);
     return this;
   }
 
+  /**
+   *
+   * @returns
+   */
   public setTimeRange(timeRange: TimeRange) {
     this._timeRange = timeRange;
     return this;
   }
 
+  /**
+   *
+   * @returns
+   */
   public setNativeTokenSpendLimit(limit: NativeTokenLimit) {
     this._nativeTokenSpendLimit = limit;
     return this;
   }
 
+  /**
+   *
+   * @returns
+   */
   public addErc20TokenSpendLimit(limit: Erc20TokenLimit) {
     this._erc20TokenSpendLimits.push(limit);
     return this;
   }
 
+  /**
+   *
+   * @returns
+   */
   public setGasSpendLimit(limit: GasSpendLimit) {
     this._gasSpendLimit = limit;
     return this;
   }
 
+  /**
+   *
+   * @returns
+   */
   public setRequiredPaymaster(paymaster: Address) {
     this._requiredPaymaster = paymaster;
     return this;
   }
 
+  /**
+   *
+   * @returns
+   */
   public encode(): Hex[] {
     return [
       encodeFunctionData({

@@ -6,6 +6,10 @@ import { isSigner } from "../signer/schema.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import { ChainSchema } from "../utils/index.js";
 
+/**
+ *
+ * @returns
+ */
 export const createBaseSmartAccountParamsSchema = <
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner
@@ -29,6 +33,10 @@ export const createBaseSmartAccountParamsSchema = <
       .describe("Optional override for the account init code."),
   });
 
+/**
+ *
+ * @returns
+ */
 export const SimpleSmartAccountParamsSchema = <
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner

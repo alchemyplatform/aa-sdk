@@ -32,6 +32,10 @@ export type MiddlewareClient<
   PublicActions & BundlerActions
 >;
 
+/**
+ *
+ * @returns
+ */
 export const middlewareActions =
   (overrides: ClientMiddlewareConfig) =>
   <

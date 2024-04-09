@@ -25,6 +25,9 @@ const hexlifyOptional = (value: any): `0x${string}` | undefined => {
   return hexlify(value) as `0x${string}`;
 };
 
+/**
+ *
+ */
 export class AccountSigner<
   TAccount extends SmartContractAccount = SmartContractAccount
 > extends Signer {
@@ -33,6 +36,9 @@ export class AccountSigner<
   sendUserOperation;
   waitForUserOperationTransaction;
 
+  /**
+   *
+   */
   constructor(public provider: EthersProviderAdapter, account: TAccount) {
     super();
     this.account = account;
@@ -53,6 +59,10 @@ export class AccountSigner<
       );
   }
 
+  /**
+   *
+   * @returns
+   */
   async getAddress(): Promise<string> {
     if (!this.account) {
       throw new AccountNotFoundError();
@@ -61,6 +71,10 @@ export class AccountSigner<
     return this.account.address;
   }
 
+  /**
+   *
+   * @returns
+   */
   signMessage(message: string | Uint8Array): Promise<string> {
     if (!this.account) {
       throw new AccountNotFoundError();
@@ -74,6 +88,10 @@ export class AccountSigner<
     });
   }
 
+  /**
+   *
+   * @returns
+   */
   async sendTransaction(
     transaction: Deferrable<TransactionRequest>,
     overrides?: UserOperationOverrides
@@ -96,6 +114,9 @@ export class AccountSigner<
     return this.provider.getTransaction(txHash);
   }
 
+  /**
+   *
+   */
   signTransaction(
     _transaction: Deferrable<TransactionRequest>
   ): Promise<string> {
@@ -104,10 +125,18 @@ export class AccountSigner<
     );
   }
 
+  /**
+   *
+   * @returns
+   */
   getPublicErc4337Client(): BundlerClient {
     return this.provider.getBundlerClient();
   }
 
+  /**
+   *
+   * @returns
+   */
   connect(provider: EthersProviderAdapter): AccountSigner<TAccount> {
     this.provider = provider;
 

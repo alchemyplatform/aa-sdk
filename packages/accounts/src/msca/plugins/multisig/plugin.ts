@@ -174,6 +174,10 @@ export const MultisigPlugin: Plugin<typeof MultisigPluginAbi> = {
   },
 };
 
+/**
+ *
+ * @returns
+ */
 export const multisigPluginActions: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

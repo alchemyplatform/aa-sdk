@@ -3,6 +3,10 @@ import dedent from "dedent";
 import type { PluginConfig } from "../../../../config";
 import type { Phase, PhaseInput } from "../../types";
 
+/**
+ *
+ * @returns
+ */
 export const ManagementActionsGenPhase: Phase = async (input) => {
   const { addImport, pluginConfig, addType } = input;
   if (pluginConfig.installConfig != null) {

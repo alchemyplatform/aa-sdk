@@ -4,6 +4,10 @@ import type { Phase } from "../../types";
 import { GetContractGenPhase } from "./get-contract-gen.js";
 import { MetaGenPhase } from "./meta-gen.js";
 
+/**
+ *
+ * @returns
+ */
 export const PluginGeneratorPhase: Phase = async (input) => {
   const pluginPhases: Phase[] = [MetaGenPhase, GetContractGenPhase];
   const { pluginConfig, addImport } = input;

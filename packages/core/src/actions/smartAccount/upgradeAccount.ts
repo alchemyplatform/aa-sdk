@@ -7,6 +7,10 @@ import { sendUserOperation } from "./sendUserOperation.js";
 import type { UpgradeAccountParams } from "./types.js";
 import { waitForUserOperationTransaction } from "./waitForUserOperationTransacation.js";
 
+/**
+ *
+ * @returns
+ */
 export const upgradeAccount: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

@@ -9,6 +9,12 @@ import type { GetPluginAddressParameter } from "../../types.js";
 import { MultisigPlugin } from "../plugin.js";
 import { MultisigAccountExpectedError } from "../../../errors.js";
 
+/**
+ *
+ * @param client
+ * @param args
+ * @returns
+ */
 export async function getThreshold<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

@@ -1,5 +1,9 @@
 import type { ClientMiddlewareFn } from "../types";
 
+/**
+ *
+ * @returns
+ */
 export const overridePaymasterDataMiddleware: ClientMiddlewareFn = async (
   struct,
   { overrides }

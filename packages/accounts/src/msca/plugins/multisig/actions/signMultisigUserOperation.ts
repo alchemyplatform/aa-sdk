@@ -15,6 +15,12 @@ import {
 } from "../types.js";
 import { combineSignatures, getSignerType } from "../index.js";
 
+/**
+ *
+ * @param client
+ * @param params
+ * @returns
+ */
 export async function signMultisigUserOperation<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

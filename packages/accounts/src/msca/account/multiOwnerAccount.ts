@@ -48,6 +48,20 @@ export async function createMultiOwnerModularAccount<
   config: CreateMultiOwnerModularAccountParams<TTransport, TSigner>
 ): Promise<MultiOwnerModularAccount<TSigner>>;
 
+/**
+ *
+ * @param root0
+ * @param root0.transport
+ * @param root0.chain
+ * @param root0.signer
+ * @param root0.accountAddress
+ * @param root0.initCode
+ * @param root0.entryPoint
+ * @param root0.factoryAddress
+ * @param root0.owners
+ * @param root0.salt
+ * @returns
+ */
 export async function createMultiOwnerModularAccount({
   transport,
   chain,

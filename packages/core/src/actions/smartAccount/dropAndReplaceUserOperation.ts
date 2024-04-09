@@ -10,6 +10,15 @@ import { _runMiddlewareStack } from "./internal/runMiddlewareStack.js";
 import { _sendUserOperation } from "./internal/sendUserOperation.js";
 import type { DropAndReplaceUserOperationParameters } from "./types";
 
+/**
+ * Allows you to replace an existing user operation with a new one.
+ * This method computes the new fees for the useroperation and
+ * takes the max of 1.1 x old_fees and the new fees.
+ *
+ * @param client the client used to send the user operation
+ * @param args args containing the user operation to drop and replace
+ * @returns the result of dropping and replacing the UO if successful
+ */
 export const dropAndReplaceUserOperation: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

@@ -25,6 +25,9 @@ export type SessionKeySignerConfig = z.input<typeof SessionKeySignerSchema>;
  */
 
 export const SESSION_KEY_SIGNER_TYPE_PFX = "alchemy:session-key";
+/**
+ *
+ */
 export class SessionKeySigner
   implements SmartAccountSigner<LocalAccountSigner<PrivateKeyAccount>>
 {
@@ -33,6 +36,9 @@ export class SessionKeySigner
   private storageType: "local-storage" | "session-storage";
   private storageKey: string;
 
+  /**
+   *
+   */
   constructor(config_: SessionKeySignerConfig = {}) {
     const config = SessionKeySignerSchema.parse(config_);
     this.signerType = `${SESSION_KEY_SIGNER_TYPE_PFX}`;

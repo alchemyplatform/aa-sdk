@@ -32,6 +32,10 @@ type GetSignerTypeParams<
   client: TClient;
 };
 
+/**
+ *
+ * @returns
+ */
 export const getSignerType = async <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined

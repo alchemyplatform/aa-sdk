@@ -9,10 +9,16 @@ import {
 import { InvalidSignerTypeError } from "../errors/signer.js";
 import type { SmartAccountSigner } from "./types";
 
+/**
+ *
+ */
 export class WalletClientSigner implements SmartAccountSigner<WalletClient> {
   signerType: string;
   inner: WalletClient;
 
+  /**
+   *
+   */
   constructor(client: WalletClient, signerType: string) {
     this.inner = client;
     if (!signerType) {

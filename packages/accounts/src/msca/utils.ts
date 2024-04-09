@@ -89,6 +89,14 @@ export const getDefaultMultiOwnerModularAccountFactoryAddress = (
   throw new DefaultFactoryNotDefinedError("MultiOwnerModularAccount", chain);
 };
 
+/**
+ *
+ * @param client
+ * @param root0
+ * @param root0.multiOwnerPluginAddress
+ * @param root0.account
+ * @returns
+ */
 export async function getMSCAUpgradeToData<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
@@ -137,6 +145,14 @@ export async function getMSCAUpgradeToData<
   };
 }
 
+/**
+ *
+ * @param root0
+ * @param root0.multiOwnerPluginAddress
+ * @param root0.client
+ * @param root0.signerAddress
+ * @returns
+ */
 export async function getMAInitializationData<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined

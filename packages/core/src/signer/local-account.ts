@@ -11,6 +11,9 @@ import {
 import { mnemonicToAccount, privateKeyToAccount } from "viem/accounts";
 import type { SmartAccountSigner } from "./types.js";
 
+/**
+ *
+ */
 export class LocalAccountSigner<
   T extends HDAccount | PrivateKeyAccount | LocalAccount
 > implements SmartAccountSigner<T>
@@ -18,6 +21,9 @@ export class LocalAccountSigner<
   inner: T;
   signerType: string;
 
+  /**
+   *
+   */
   constructor(inner: T) {
     this.inner = inner;
     this.signerType = inner.type; //  type: "local"
@@ -42,6 +48,10 @@ export class LocalAccountSigner<
     return this.inner.address;
   };
 
+  /**
+   *
+   * @returns
+   */
   static mnemonicToAccountSigner(
     key: string,
     opts?: HDOptions
@@ -50,6 +60,10 @@ export class LocalAccountSigner<
     return new LocalAccountSigner(signer);
   }
 
+  /**
+   *
+   * @returns
+   */
   static privateKeyToAccountSigner(
     key: Hex
   ): LocalAccountSigner<PrivateKeyAccount> {

@@ -3,6 +3,10 @@ import dedent from "dedent";
 import type { Phase } from "../../types";
 import { extractExecutionAbi } from "../../utils.js";
 
+/**
+ *
+ * @returns
+ */
 export const AccountReadActionsGenPhase: Phase = async (input) => {
   const { plugin, contract, addImport, addType } = input;
   const { executionFunctions } = await plugin.read.pluginManifest();

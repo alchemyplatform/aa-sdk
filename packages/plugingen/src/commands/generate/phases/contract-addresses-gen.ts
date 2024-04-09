@@ -2,6 +2,10 @@ import dedent from "dedent";
 import type { Address } from "viem";
 import type { Phase } from "../types";
 
+/**
+ *
+ * @returns
+ */
 export const ContractAddressesGenPhase: Phase = async (input) => {
   const { pluginConfig, content, addImport } = input;
 

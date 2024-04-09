@@ -1,6 +1,11 @@
 // https://github.com/wevm/wagmi/blob/main/packages/cli/src/utils/getIsUsingTypeScript.ts
 import { findUp } from "find-up";
 
+/**
+ * Check if the project is using TypeScript
+ *
+ * @returns Promise of whether the project is using TypeScript
+ */
 export async function getIsUsingTypeScript() {
   try {
     const cwd = process.cwd();

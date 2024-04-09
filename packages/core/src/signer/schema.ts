@@ -1,6 +1,10 @@
 import { z } from "zod";
 import type { SmartAccountSigner } from "./types";
 
+/**
+ *
+ * @returns
+ */
 export const isSigner = (signer: any): signer is SmartAccountSigner => {
   return (
     signer != null &&

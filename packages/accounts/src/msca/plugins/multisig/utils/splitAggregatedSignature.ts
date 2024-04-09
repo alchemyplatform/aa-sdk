@@ -16,8 +16,13 @@ export type SplitAggregateSignatureParams = {
 /**
  * Takes an aggregated signature and threshold and splits it into its components
  *
+ * @param aggregatedSignature.aggregatedSignature
  * @param aggregatedSignature - aggregated signature containing PVG || maxFeePerGas || maxPriorityFeePerGas || N-1 Signatures || [0, N-1] Contract Data
  * @param threshold - the account's required threshold of signatures
+ * @param aggregatedSignature.threshold
+ * @param aggregatedSignature.account
+ * @param aggregatedSignature.request
+ * @returns
  */
 export const splitAggregatedSignature = async ({
   aggregatedSignature,

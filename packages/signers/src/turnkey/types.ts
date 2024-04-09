@@ -6,9 +6,15 @@ export interface TurnkeyAuthParams {
   resolveSubOrganization: () => Promise<TurnkeySubOrganization>;
 }
 
+/**
+ *
+ */
 export class TurnkeySubOrganization {
   subOrganizationId: string;
   signWith: string;
+  /**
+   *
+   */
   constructor(params: { subOrganizationId: string; signWith: string }) {
     this.subOrganizationId = params.subOrganizationId;
     this.signWith = params.signWith;

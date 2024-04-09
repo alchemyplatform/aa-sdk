@@ -8,6 +8,13 @@ import type { Deferrable } from "../../utils/index.js";
 import { _runMiddlewareStack } from "./internal/runMiddlewareStack.js";
 import type { SendUserOperationParameters } from "./types";
 
+/**
+ * Builds a user operation without sending it
+ *
+ * @param client the client to use to build the user operation
+ * @param args the parameters to use to build the user operation
+ * @returns a promise containing the built user operation
+ */
 export const buildUserOperation: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

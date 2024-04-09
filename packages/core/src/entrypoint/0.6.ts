@@ -7,6 +7,10 @@ import {
 } from "../utils/index.js";
 import type { EntryPointDef } from "./types";
 
+/**
+ *
+ * @returns
+ */
 export const getVersion060EntryPoint: (
   chain: Chain,
   address?: Address

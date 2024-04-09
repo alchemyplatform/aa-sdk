@@ -54,6 +54,21 @@ export async function createMultisigModularAccount<
   config: CreateMultisigModularAccountParams<TTransport, TSigner>
 ): Promise<MultisigModularAccount<TSigner>>;
 
+/**
+ *
+ * @param root0
+ * @param root0.transport
+ * @param root0.chain
+ * @param root0.signer
+ * @param root0.accountAddress
+ * @param root0.initCode
+ * @param root0.entryPoint
+ * @param root0.factoryAddress
+ * @param root0.owners
+ * @param root0.salt
+ * @param root0.threshold
+ * @returns
+ */
 export async function createMultisigModularAccount({
   transport,
   chain,
@@ -129,6 +144,10 @@ export async function createMultisigModularAccount({
   };
 }
 
+/**
+ *
+ * @returns
+ */
 export const isMultisigModularAccount = (
   acct: SmartContractAccount
 ): acct is MultisigModularAccount => {

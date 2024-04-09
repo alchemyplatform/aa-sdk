@@ -62,6 +62,9 @@ export abstract class BaseSmartContractAccount<
     | BundlerClient<TTransport>
     | BundlerClient<HttpTransport>;
 
+  /**
+   *
+   */
   constructor(params_: BaseSmartAccountParams<TTransport>) {
     const params = createBaseSmartAccountParamsSchema<
       TTransport,
@@ -192,6 +195,7 @@ export abstract class BaseSmartContractAccount<
    * [EIP-6492](https://eips.ethereum.org/EIPS/eip-6492)
    *
    * @param msg -- the message to sign
+   * @returns
    */
   async signMessageWith6492(msg: string | Uint8Array): Promise<`0x${string}`> {
     const [isDeployed, signature] = await Promise.all([
@@ -208,6 +212,7 @@ export abstract class BaseSmartContractAccount<
    * [EIP-6492](https://eips.ethereum.org/EIPS/eip-6492)
    *
    * @param params -- Typed Data params to sign
+   * @returns
    */
   async signTypedDataWith6492(
     params: SignTypedDataParams
@@ -240,6 +245,8 @@ export abstract class BaseSmartContractAccount<
    *
    * @param upgradeToImplAddress -- the implementation address of the contract you want to upgrade to
    * @param upgradeToInitData -- the initialization data required by that account
+   * @param _upgradeToImplAddress
+   * @param _upgradeToInitData
    */
   encodeUpgradeToAndCall = async (
     _upgradeToImplAddress: Address,
@@ -250,6 +257,10 @@ export abstract class BaseSmartContractAccount<
   //#endregion optional-methods
 
   // Extra implementations
+  /**
+   *
+   * @returns
+   */
   async getNonce(): Promise<bigint> {
     if (!(await this.isAccountDeployed())) {
       return 0n;
@@ -258,6 +269,10 @@ export abstract class BaseSmartContractAccount<
     return this.entryPoint.read.getNonce([address, BigInt(0)]);
   }
 
+  /**
+   *
+   * @returns
+   */
   async getInitCode(): Promise<Hex> {
     if (this.deploymentState === DeploymentState.DEPLOYED) {
       return "0x";
@@ -277,6 +292,10 @@ export abstract class BaseSmartContractAccount<
     return this._getAccountInitCode();
   }
 
+  /**
+   *
+   * @returns
+   */
   async getAddress(): Promise<Address> {
     if (!this.accountAddress) {
       const initCode = await this._getAccountInitCode();
@@ -321,22 +340,42 @@ export abstract class BaseSmartContractAccount<
     return Object.assign(this, extended);
   };
 
+  /**
+   *
+   * @returns
+   */
   getSigner(): TSigner {
     return this.signer;
   }
 
+  /**
+   *
+   * @returns
+   */
   getFactoryAddress(): Address {
     return this.factoryAddress;
   }
 
+  /**
+   *
+   * @returns
+   */
   getEntryPointAddress(): Address {
     return this.entryPointAddress;
   }
 
+  /**
+   *
+   * @returns
+   */
   async isAccountDeployed(): Promise<boolean> {
     return (await this.getDeploymentState()) === DeploymentState.DEPLOYED;
   }
 
+  /**
+   *
+   * @returns
+   */
   async getDeploymentState(): Promise<DeploymentState> {
     if (this.deploymentState === DeploymentState.UNDEFINED) {
       const initCode = await this.getInitCode();
@@ -353,6 +392,8 @@ export abstract class BaseSmartContractAccount<
    * The initCode field (if non-zero length) is parsed as a 20-byte address,
    * followed by calldata to pass to this address.
    * The factory address is the first 40 char after the 0x, and the callData is the rest.
+   *
+   * @returns
    */
   protected async parseFactoryAddressFromAccountInitCode(): Promise<
     [Address, Hex]

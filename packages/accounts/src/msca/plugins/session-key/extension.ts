@@ -80,6 +80,10 @@ export type SessionKeyPluginActions<
       }
     : {});
 
+/**
+ *
+ * @returns
+ */
 export const sessionKeyPluginActions: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

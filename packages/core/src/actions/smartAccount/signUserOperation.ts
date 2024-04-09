@@ -11,6 +11,10 @@ import type { UserOperationRequest } from "../../types";
 import { deepHexlify, isValidRequest } from "../../utils/index.js";
 import type { SignUserOperationParameters } from "./types";
 
+/**
+ *
+ * @returns
+ */
 export const signUserOperation: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

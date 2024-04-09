@@ -26,6 +26,10 @@ export const ArbSepoliaPaymasterAddress =
 export const AlchemyPaymasterAddressV1 =
   "0xc03aac639bb21233e0139381970328db8bceeb67";
 
+/**
+ *
+ * @returns
+ */
 export const getAlchemyPaymasterAddress = (chain: Chain): Address => {
   switch (chain.id) {
     case polygonAmoy.id:

@@ -24,6 +24,14 @@ const phases: Phase[] = [
   ContractAbiGenPhase,
 ];
 
+/**
+ *
+ * @param root0
+ * @param root0.chain
+ * @param root0.connectionConfig
+ * @param root0.config
+ * @returns
+ */
 export function plugingen({
   chain,
   connectionConfig,

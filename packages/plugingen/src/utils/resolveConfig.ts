@@ -8,7 +8,12 @@ type ResolveConfigParameters = {
   configPath: string;
 };
 
-/** Bundles and returns wagmi config object from path. */
+/**
+ * Bundles and returns wagmi config object from path.
+ *
+ * @param parameters - Parameters to resolve config
+ * @returns Promise of the resolved config object
+ */
 export async function resolveConfig(
   parameters: ResolveConfigParameters
 ): Promise<MaybeArray<Config>> {

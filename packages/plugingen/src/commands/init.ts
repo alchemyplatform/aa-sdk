@@ -22,6 +22,12 @@ const InitSchema = z.object({
   root: z.string().optional(),
 });
 
+/**
+ * Init the repo and create a config file to be used for plugingen
+ *
+ * @param options optional overrides for init
+ * @returns Promise of the path to the created config file
+ */
 export async function init(options: InitOptions = {}) {
   try {
     options = await InitSchema.parseAsync(options);

@@ -69,6 +69,7 @@ export interface ISmartContractAccount<
   /**
    * Encodes a batch of transactions to the account's batch execute function.
    * NOTE: not all accounts support batching.
+   *
    * @param txs - An Array of objects containing the target, value, and data for each transaction
    * @returns the encoded callData for a UserOperation
    */

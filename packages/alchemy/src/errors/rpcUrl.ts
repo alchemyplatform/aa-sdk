@@ -2,9 +2,15 @@ import { type ConnectionConfig } from "@alchemy/aa-core";
 import { type Chain } from "viem";
 import { BaseError } from "./base.js";
 
+/**
+ *
+ */
 export class InvalidRpcUrlError extends BaseError {
   override name = "InvalidRpcUrlError";
 
+  /**
+   *
+   */
   constructor(context: { chain: Chain; connectionConfig: ConnectionConfig }) {
     super(["RPC Url not provided"].join("\n"), {
       details: [

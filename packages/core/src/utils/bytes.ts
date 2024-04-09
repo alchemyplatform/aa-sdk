@@ -7,9 +7,13 @@ type TakeBytesOpts = {
 
 /**
  * Given a bytes string, returns a slice of the bytes
+ *
  * @param bytes - the hex string representing bytes
+ * @param count.offset
  * @param count - the number of bytes to take
  * @param offset - the offset to start taking bytes from
+ * @param count.count
+ * @returns
  */
 export const takeBytes = (
   bytes: Hex,

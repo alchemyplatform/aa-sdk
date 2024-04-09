@@ -15,6 +15,10 @@ import {
 } from "viem";
 import { MultiOwnerPlugin, MultiOwnerPluginAbi } from "./plugin.js";
 
+/**
+ *
+ * @returns
+ */
 export const multiOwnerMessageSigner = <
   TTransport extends Transport,
   TSigner extends SmartAccountSigner

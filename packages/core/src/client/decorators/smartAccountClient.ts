@@ -126,6 +126,10 @@ export type BaseSmartAccountClientActions<
     });
 //#endregion SmartAccountClientActions
 
+/**
+ *
+ * @returns
+ */
 export const smartAccountClientActions: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

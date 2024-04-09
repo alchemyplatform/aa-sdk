@@ -2,6 +2,10 @@ import { takeBytes } from "@alchemy/aa-core";
 import { hexToBigInt, concat, toHex, pad } from "viem";
 import type { Signature } from "../types";
 
+/**
+ *
+ * @returns
+ */
 export const formatSignatures = (signatures: Signature[]) => {
   let eoaSigs: string = "";
   let contractSigs: string = "";

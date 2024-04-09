@@ -88,6 +88,10 @@ export const minPriorityFeePerBidDefaults = new Map<number, bigint>([
   [arbitrumSepolia.id, 10_000_000n],
 ]);
 
+/**
+ *
+ * @returns
+ */
 export const getDefaultUserOperationFeeOptions = (
   chain: Chain
 ): UserOperationFeeOptions => {

@@ -31,6 +31,14 @@ export type UninstallPluginParams<
 } & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount> &
   GetContextParameter<TContext>;
 
+/**
+ *
+ * @param client
+ * @param root0
+ * @param root0.overrides
+ * @param root0.account
+ * @returns
+ */
 export async function uninstallPlugin<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
@@ -64,6 +72,11 @@ export async function uninstallPlugin<
   return client.sendUserOperation({ uo: callData, overrides, account });
 }
 
+/**
+ *
+ * @param params
+ * @returns
+ */
 export async function encodeUninstallPluginUserOperation(
   params: Omit<UninstallPluginParams, "account" | "overrides" | "context">
 ) {

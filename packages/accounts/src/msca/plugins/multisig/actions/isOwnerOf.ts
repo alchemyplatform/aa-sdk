@@ -8,6 +8,12 @@ import { type Chain, type Client, type Transport } from "viem";
 import type { GetPluginAddressParameter } from "../../types.js";
 import { MultisigPlugin } from "../plugin.js";
 
+/**
+ *
+ * @param client
+ * @param args
+ * @returns
+ */
 export async function isOwnerOf<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

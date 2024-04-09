@@ -73,6 +73,8 @@ export enum RoundingMode {
  *
  * @param a -- the bigint value to multiply
  * @param b -- the number to multiply by
+ * @param base
+ * @param multiplier
  * @param roundingMode -- the rounding mode to use when calculating the percent. defaults to ROUND_UP
  * @returns -- the bigint value of the multiplication with the number rounded by the rounding mode
  */

@@ -6,6 +6,10 @@ import type {
 } from "../../account/smartContractAccount";
 import { AccountNotFoundError } from "../../errors/account.js";
 
+/**
+ *
+ * @returns
+ */
 export const getAddress: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

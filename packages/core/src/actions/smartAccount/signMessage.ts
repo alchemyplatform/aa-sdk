@@ -11,6 +11,10 @@ export type SignMessageParameters<
     | undefined
 > = { message: SignableMessage } & GetAccountParameter<TAccount>;
 
+/**
+ *
+ * @returns
+ */
 export const signMessage: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

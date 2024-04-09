@@ -20,6 +20,10 @@ import {
   splitAggregatedSignature,
 } from "./index.js";
 
+/**
+ *
+ * @returns
+ */
 export const multisigSignatureMiddleware: ClientMiddlewareFn<{
   signature: Hex;
 }> = async (struct, { account, client, context }) => {

@@ -6,6 +6,10 @@ import { FailedToFindTransactionError } from "../../errors/transaction.js";
 import { Logger } from "../../logger.js";
 import type { WaitForUserOperationTxParameters } from "./types.js";
 
+/**
+ *
+ * @returns
+ */
 export const waitForUserOperationTransaction: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined

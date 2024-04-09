@@ -11,7 +11,7 @@ export const AlchemyChainMap = new Map<number, Chain>(
 /**
  * Utility method for converting a chainId to a {@link Chain} object
  *
- * @param chainId
+ * @param chainId the chain id to convert
  * @returns a {@link Chain} object for the given chainId
  * @throws if the chainId is not found
  */
@@ -115,6 +115,10 @@ export function getUserOperationHash(
   return keccak256(encoded);
 }
 
+/**
+ *
+ * @returns
+ */
 export function packUo(request: UserOperationRequest): Hex {
   const hashedInitCode = keccak256(request.initCode);
   const hashedCallData = keccak256(request.callData);
@@ -149,6 +153,9 @@ export function packUo(request: UserOperationRequest): Hex {
 }
 
 // borrowed from ethers.js
+/**
+ *
+ */
 export function defineReadOnly<T, K extends keyof T>(
   object: T,
   key: K,
@@ -161,6 +168,10 @@ export function defineReadOnly<T, K extends keyof T>(
   });
 }
 
+/**
+ *
+ * @returns
+ */
 export function filterUndefined(
   obj: Record<string, unknown>
 ): Record<string, unknown> {
@@ -172,6 +183,10 @@ export function filterUndefined(
   return obj;
 }
 
+/**
+ *
+ * @returns
+ */
 export function pick(obj: Record<string, unknown>, keys: string | string[]) {
   return Object.keys(obj)
     .filter((k) => keys.includes(k))

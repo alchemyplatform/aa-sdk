@@ -4,6 +4,10 @@ import { z } from "zod";
 import { BigNumberishRangeSchema, MultiplierSchema } from "../utils/index.js";
 import type { BundlerClient } from "./bundlerClient.js";
 
+/**
+ *
+ * @returns
+ */
 export const createPublicErc4337ClientSchema = <
   TTransport extends Transport = Transport
 >() =>

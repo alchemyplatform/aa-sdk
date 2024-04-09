@@ -2,6 +2,10 @@ import type { ClientMiddlewareFn } from "@alchemy/aa-core";
 import { applyUserOpOverrideOrFeeOption } from "@alchemy/aa-core";
 import type { ClientWithAlchemyMethods } from "../client/types";
 
+/**
+ *
+ * @returns
+ */
 export const alchemyFeeEstimator: <C extends ClientWithAlchemyMethods>(
   client: C
 ) => ClientMiddlewareFn =

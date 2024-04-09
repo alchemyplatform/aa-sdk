@@ -1,5 +1,9 @@
 import type { Chain } from "viem";
 
+/**
+ *
+ * @returns
+ */
 export const defineAlchemyChain = ({
   chain,
   rpcBaseUrl,

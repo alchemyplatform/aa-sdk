@@ -80,6 +80,14 @@ export function createMultiOwnerModularAccountClient<
   >
 >;
 
+/**
+ *
+ * @param root0
+ * @param root0.account
+ * @param root0.transport
+ * @param root0.chain
+ * @returns
+ */
 export async function createMultiOwnerModularAccountClient({
   account,
   transport,
@@ -121,6 +129,14 @@ export function createMultisigModularAccountClient<
   >
 >;
 
+/**
+ *
+ * @param root0
+ * @param root0.account
+ * @param root0.transport
+ * @param root0.chain
+ * @returns
+ */
 export async function createMultisigModularAccountClient({
   account,
   transport,

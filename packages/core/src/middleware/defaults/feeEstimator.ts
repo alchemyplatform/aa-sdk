@@ -3,6 +3,10 @@ import { applyUserOpOverrideOrFeeOption } from "../../utils/index.js";
 import type { MiddlewareClient } from "../actions";
 import type { ClientMiddlewareFn } from "../types";
 
+/**
+ *
+ * @returns
+ */
 export const defaultFeeEstimator: <C extends MiddlewareClient>(
   client: C
 ) => ClientMiddlewareFn =

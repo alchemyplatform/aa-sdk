@@ -55,6 +55,10 @@ export type MultisigPluginActions<
       }
     : {});
 
+/**
+ *
+ * @returns
+ */
 export const multisigPluginActions: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

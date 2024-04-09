@@ -6,6 +6,13 @@ import { existsSync, readFileSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
 
 // https://github.com/vitejs/vite/blob/main/packages/vite/src/node/env.ts#L7
+/**
+ *
+ * @param config an object containing the mode and envDir
+ * @param config.mode the mode to use
+ * @param config.envDir the directory to look for the .env files
+ * @returns an object containing the parsed environment variables
+ */
 export function loadEnv(
   config: {
     mode?: string;

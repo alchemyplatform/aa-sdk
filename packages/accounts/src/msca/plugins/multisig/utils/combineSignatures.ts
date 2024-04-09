@@ -2,6 +2,10 @@ import { type Hex, concat, pad } from "viem";
 import { formatSignatures } from "./formatSignatures.js";
 import type { Signature } from "../types.js";
 
+/**
+ *
+ * @returns
+ */
 export const combineSignatures = ({
   signatures,
   upperLimitMaxFeePerGas,

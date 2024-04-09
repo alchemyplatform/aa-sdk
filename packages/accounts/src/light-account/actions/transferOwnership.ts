@@ -19,6 +19,10 @@ export type TransferLightAccountOwnershipParams<
   waitForTxn?: boolean;
 } & GetAccountParameter<TAccount, LightAccount>;
 
+/**
+ *
+ * @returns
+ */
 export const transferOwnership: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

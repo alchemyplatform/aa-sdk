@@ -18,10 +18,16 @@ type BaseErrorParameters = {
 
 // This is based on on viem's BaseError type (obviously from the import and extend)
 // we want the errors here to point to our docs if we supply a docsPath though
+/**
+ *
+ */
 export class BaseError extends ViemBaseError {
   override name = "AASDKError";
   override version = VERSION;
 
+  /**
+   *
+   */
   constructor(shortMessage: string, args: BaseErrorParameters = {}) {
     super(shortMessage, args);
 
