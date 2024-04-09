@@ -23,8 +23,8 @@ head:
 ```ts [example.ts]
 import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
-// get owner
-const owner = await smartAccountClient.account.getOwnerAddress();
+// get on-chain account owner address
+const ownerAddress = await smartAccountClient.account.getOwnerAddress();
 ```
 
 <<< @/snippets/aa-core/lightAccountClient.ts

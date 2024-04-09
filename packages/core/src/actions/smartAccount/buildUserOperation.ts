@@ -13,12 +13,15 @@ export const buildUserOperation: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: SendUserOperationParameters<TAccount>
+  args: SendUserOperationParameters<TAccount, TContext>
 ) => Promise<UserOperationStruct> = async (client, args) => {
-  const { account = client.account, overrides, uo } = args;
+  const { account = client.account, overrides, uo, context } = args;
   if (!account) {
     throw new AccountNotFoundError();
   }
@@ -26,7 +29,8 @@ export const buildUserOperation: <
   if (!isBaseSmartAccountClient(client)) {
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
-      "buildUserOperation"
+      "buildUserOperation",
+      client
     );
   }
 
@@ -34,7 +38,7 @@ export const buildUserOperation: <
     uo: {
       initCode: account.getInitCode(),
       sender: account.address,
-      nonce: account.getNonce(),
+      nonce: account.getNonce(overrides?.nonceKey),
       callData: Array.isArray(uo)
         ? account.encodeBatchExecute(uo)
         : typeof uo === "string"
@@ -44,5 +48,6 @@ export const buildUserOperation: <
     } as Deferrable<UserOperationStruct>,
     overrides,
     account,
+    context,
   });
 };

@@ -8,7 +8,7 @@ import {
 import { http } from "viem";
 
 const chain = polygonMumbai;
-const owner: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
+const signer: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
   "YOUR_OWNER_MNEMONIC"
 );
 const rpcTransport = http("https://polygon-mumbai.g.alchemy.com/v2/demo");
@@ -19,6 +19,6 @@ export const smartAccountClient = createSmartAccountClient({
   account: await createMultiOwnerModularAccount({
     transport: rpcTransport,
     chain,
-    owner,
+    signer,
   }),
 });

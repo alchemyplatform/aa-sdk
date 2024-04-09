@@ -23,9 +23,9 @@ Note that `to` field of transaction is required, and among other fields of trans
 ::: code-group
 
 ```ts [example.ts]
-import { signer } from "./ethers-signer";
+import { accountSigner } from "./ethers-signer";
 
-const txHash = await signer.sendTransaction({
+const txHash = await accountSigner.sendTransaction({
   from, // ignored
   to,
   data: encodeFunctionData({
@@ -50,3 +50,7 @@ A Promise containing the ethers.js `TransactionResponse` object
 ### `transaction: Deferrable<TransactionRequest>`
 
 The ethers.js `TransactionRequest` object, where each field may be a Promise or its value
+
+### `overrides?:` [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides.md)
+
+Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` or `paymasterAndData` on the user operation request

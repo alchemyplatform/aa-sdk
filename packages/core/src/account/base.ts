@@ -45,14 +45,14 @@ export enum DeploymentState {
  */
 export abstract class BaseSmartContractAccount<
   TTransport extends Transport = Transport,
-  TOwner extends SmartAccountSigner | undefined = SmartAccountSigner | undefined
-> implements ISmartContractAccount<TTransport, TOwner>
+  TSigner extends SmartAccountSigner = SmartAccountSigner
+> implements ISmartContractAccount<TTransport, TSigner>
 {
   protected factoryAddress: Address;
   protected deploymentState: DeploymentState = DeploymentState.UNDEFINED;
   protected accountAddress?: Address;
   protected accountInitCode?: Hex;
-  protected owner: TOwner;
+  protected signer: TSigner;
   protected entryPoint: GetContractReturnType<
     typeof EntryPointAbi,
     PublicClient
@@ -65,7 +65,7 @@ export abstract class BaseSmartContractAccount<
   constructor(params_: BaseSmartAccountParams<TTransport>) {
     const params = createBaseSmartAccountParamsSchema<
       TTransport,
-      TOwner
+      TSigner
     >().parse(params_);
 
     this.entryPointAddress =
@@ -99,8 +99,13 @@ export abstract class BaseSmartContractAccount<
               ...fetchOptions,
               headers: {
                 ...fetchOptions?.headers,
-                "Alchemy-Aa-Sdk-Signer": params.owner?.signerType || "unknown",
-                "Alchemy-Aa-Sdk-Factory-Address": params.factoryAddress,
+                ...(rpcUrl.toLowerCase().indexOf("alchemy") > -1
+                  ? {
+                      "Alchemy-Aa-Sdk-Signer":
+                        params.signer?.signerType || "unknown",
+                      "Alchemy-Aa-Sdk-Factory-Address": params.factoryAddress,
+                    }
+                  : undefined),
               },
             },
           }),
@@ -109,7 +114,7 @@ export abstract class BaseSmartContractAccount<
 
     this.accountAddress = params.accountAddress;
     this.factoryAddress = params.factoryAddress;
-    this.owner = params.owner as TOwner;
+    this.signer = params.signer as TSigner;
     this.accountInitCode = params.initCode;
 
     this.entryPoint = getContract({
@@ -119,7 +124,7 @@ export abstract class BaseSmartContractAccount<
     });
   }
 
-  // #region abstract-methods
+  //#region abstract-methods
 
   /**
    * This method should return a signature that will not `revert` during validation.
@@ -127,7 +132,7 @@ export abstract class BaseSmartContractAccount<
    * This is required for gas estimation so that the gas estimate are accurate.
    *
    */
-  abstract getDummySignature(): Hash;
+  abstract getDummySignature(): Hex | Promise<Hex>;
 
   /**
    * this method should return the abi encoded function data for a call to your contract's `execute` method
@@ -157,9 +162,9 @@ export abstract class BaseSmartContractAccount<
    */
   protected abstract getAccountInitCode(): Promise<Hash>;
 
-  // #endregion abstract-methods
+  //#endregion abstract-methods
 
-  // #region optional-methods
+  //#region optional-methods
 
   /**
    * If your account handles 1271 signatures of personal_sign differently
@@ -242,7 +247,7 @@ export abstract class BaseSmartContractAccount<
   ): Promise<Hex> => {
     throw new UpgradeToAndCallNotSupportedError("BaseAccount");
   };
-  // #endregion optional-methods
+  //#endregion optional-methods
 
   // Extra implementations
   async getNonce(): Promise<bigint> {
@@ -290,7 +295,7 @@ export abstract class BaseSmartContractAccount<
         if (err.cause?.data?.errorName === "SenderAddressResult") {
           this.accountAddress = err.cause.data.args[0] as Address;
           Logger.verbose(
-            "[BaseSmartContractAccount](getAddress) entrypoint.getSenderAddress result:",
+            "[BaseSmartContractAccount](getAddress) entryPoint.getSenderAddress result:",
             this.accountAddress
           );
           return this.accountAddress;
@@ -316,8 +321,8 @@ export abstract class BaseSmartContractAccount<
     return Object.assign(this, extended);
   };
 
-  getOwner(): TOwner {
-    return this.owner;
+  getSigner(): TSigner {
+    return this.signer;
   }
 
   getFactoryAddress(): Address {
@@ -353,8 +358,8 @@ export abstract class BaseSmartContractAccount<
     [Address, Hex]
   > {
     const initCode = await this._getAccountInitCode();
-    const factoryAddress = `0x${initCode.substring(2, 42)}` as Address;
-    const factoryCalldata = `0x${initCode.substring(42)}` as Hex;
+    const factoryAddress: Address = `0x${initCode.substring(2, 42)}`;
+    const factoryCalldata: Hex = `0x${initCode.substring(42)}`;
     return [factoryAddress, factoryCalldata];
   }
 

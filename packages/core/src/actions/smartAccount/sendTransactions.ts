@@ -4,7 +4,7 @@ import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
 import { AccountNotFoundError } from "../../errors/account.js";
 import { IncompatibleClientError } from "../../errors/client.js";
 import { buildUserOperationFromTxs } from "./buildUserOperationFromTxs.js";
-import { sendUserOperation } from "./sendUserOperation.js";
+import { _sendUserOperation } from "./internal/sendUserOperation.js";
 import type { SendTransactionsParameters } from "./types";
 import { waitForUserOperationTransaction } from "./waitForUserOperationTransacation.js";
 
@@ -13,10 +13,13 @@ export const sendTransactions: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: SendTransactionsParameters<TAccount>
+  args: SendTransactionsParameters<TAccount, TContext>
 ) => Promise<Hex> = async (client, args) => {
   const { requests, overrides, account = client.account } = args;
   if (!account) {
@@ -26,23 +29,20 @@ export const sendTransactions: <
   if (!isBaseSmartAccountClient(client)) {
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
-      "sendTransactions"
+      "sendTransactions",
+      client
     );
   }
 
-  const { batch, overrides: _overrides } = await buildUserOperationFromTxs(
-    client,
-    {
-      requests,
-      overrides,
-      account,
-    }
-  );
-
-  const { hash } = await sendUserOperation(client, {
-    uo: batch,
-    overrides: _overrides,
+  const { uoStruct } = await buildUserOperationFromTxs(client, {
+    requests,
+    overrides,
     account,
+  });
+
+  const { hash } = await _sendUserOperation(client, {
+    account: account as SmartContractAccount,
+    uoStruct,
   });
 
   return waitForUserOperationTransaction(client, { hash });

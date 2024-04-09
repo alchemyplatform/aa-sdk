@@ -6,7 +6,7 @@ export const aaSignersSidebar: DefaultTheme.SidebarItem = {
   base: "/packages/aa-signers",
   items: [
     {
-      text: "Getting Started",
+      text: "Getting started",
       link: "/",
     },
     {

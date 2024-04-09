@@ -23,9 +23,15 @@ export default defineConfig(
     plugins: [
       plugingen({
         chain: config.chain,
-        connectionConfig: config.rpcUrl
-          ? { rpcUrl: config.rpcUrl }
-          : { apiKey: process.env.API_KEY! },
+        connectionConfig: {
+          rpcUrl:
+            config.rpcUrl ||
+            (config.chain.rpcUrls?.default?.http.length > 0
+              ? config.chain.rpcUrls.default.http[0]
+              : `https://${config.chain.name
+                  .toLowerCase()
+                  .replace("-testnet", "")}-rpc.publicnode.com`),
+        },
         config,
       }),
     ],

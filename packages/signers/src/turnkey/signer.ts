@@ -7,6 +7,7 @@ import { createAccount } from "@turnkey/viem";
 import {
   createWalletClient,
   type LocalAccount,
+  type SignableMessage,
   type TypedData,
   type TypedDataDefinition,
 } from "viem";
@@ -54,7 +55,7 @@ export class TurnkeySigner
     return this.signer.getAddress();
   };
 
-  signMessage = async (msg: Uint8Array | string) => {
+  signMessage = async (msg: SignableMessage) => {
     if (!this.signer) throw new Error("Not authenticated");
 
     return this.signer.signMessage(msg);

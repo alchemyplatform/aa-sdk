@@ -3,6 +3,76 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.6.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.6.0...v3.6.1) (2024-03-18)
+
+**Note:** Version bump only for package @alchemy/aa-ethers
+
+# [3.6.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.5.1...v3.6.0) (2024-03-18)
+
+**Note:** Version bump only for package @alchemy/aa-ethers
+
+## [3.5.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.5.0...v3.5.1) (2024-03-14)
+
+**Note:** Version bump only for package @alchemy/aa-ethers
+
+# [3.5.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.4.4...v3.5.0) (2024-03-14)
+
+### Features
+
+- **plugins:** make plugingen a cli tool ([#507](https://github.com/alchemyplatform/aa-sdk/issues/507)) ([53ba81d](https://github.com/alchemyplatform/aa-sdk/commit/53ba81d33422bb3f18134c1dd75e68d64f5cc3f0))
+
+## [3.4.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.4.1...v3.4.2) (2024-03-08)
+
+**Note:** Version bump only for package @alchemy/aa-ethers
+
+# [3.4.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.3.0...v3.4.0) (2024-02-29)
+
+### Features
+
+- sign user op and send raw user op methods added to smart account client ([#486](https://github.com/alchemyplatform/aa-sdk/issues/486)) ([6518d12](https://github.com/alchemyplatform/aa-sdk/commit/6518d12190e9d48263e4776f288245b5a9940b36))
+
+## [3.2.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.2.0...v3.2.1) (2024-02-27)
+
+**Note:** Version bump only for package @alchemy/aa-ethers
+
+## [3.1.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.1.0...v3.1.1) (2024-02-23)
+
+**Note:** Version bump only for package @alchemy/aa-ethers
+
+# [3.1.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.1...v3.1.0) (2024-02-23)
+
+**Note:** Version bump only for package @alchemy/aa-ethers
+
+## [3.0.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0...v3.0.1) (2024-02-21)
+
+**Note:** Version bump only for package @alchemy/aa-ethers
+
+# [3.0.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.13...v3.0.0) (2024-02-21)
+
+**Note:** Version bump only for package @alchemy/aa-ethers
+
+# [3.0.0-alpha.13](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.12...v3.0.0-alpha.13) (2024-02-16)
+
+**Note:** Version bump only for package @alchemy/aa-ethers
+
+# [3.0.0-alpha.10](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.9...v3.0.0-alpha.10) (2024-02-14)
+
+**Note:** Version bump only for package @alchemy/aa-ethers
+
+# [3.0.0-alpha.9](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.8...v3.0.0-alpha.9) (2024-02-13)
+
+### Features
+
+- **amoy:** add amoy from viem update ([#448](https://github.com/alchemyplatform/aa-sdk/issues/448)) ([adae84a](https://github.com/alchemyplatform/aa-sdk/commit/adae84add30536676725dbc8805f3436c8ad395e))
+
+# [3.0.0-alpha.5](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.4...v3.0.0-alpha.5) (2024-02-07)
+
+**Note:** Version bump only for package @alchemy/aa-ethers
+
+# [3.0.0-alpha.4](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.3...v3.0.0-alpha.4) (2024-02-02)
+
+**Note:** Version bump only for package @alchemy/aa-ethers
+
 # [3.0.0-alpha.3](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.2...v3.0.0-alpha.3) (2024-02-02)
 
 **Note:** Version bump only for package @alchemy/aa-ethers

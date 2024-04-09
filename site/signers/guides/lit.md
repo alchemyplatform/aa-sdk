@@ -6,16 +6,16 @@ head:
       content: Lit Protocol Integration Guide
   - - meta
     - name: description
-      content: Follow this integration guide to use PKP Wallet as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use PKP Wallet as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - property: og:description
-      content: Follow this integration guide to use PKP Wallet as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use PKP Wallet as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - name: twitter:title
       content: Lit Protocol Integration Guide
   - - meta
     - name: twitter:description
-      content: Follow this integration guide to use PKP Wallet as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use PKP Wallet as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
 # Lit Protocol Integration Guide
@@ -73,9 +73,10 @@ See documentation [here](https://developer.litprotocol.com/v3/sdk/wallets/mintin
 
 <<< @/snippets/signers/lit.ts
 
-### Use it with Light Account
+### Use it with Modular Account
 
-We can link our `SmartAccountSigner` to a `LightSmartContractAccount` from `aa-accounts`:
+We can link our `SmartAccountSigner` to a Modular Account using `createModularAccountAlchemyClient` from `aa-alchemy`:
+
 ::: code-group
 
 ```ts [example.ts]
@@ -87,7 +88,7 @@ const chain = sepolia;
 const provider = await createModularAccountAlchemyClient({
   apiKey: "ALCHEMY_API_KEY",
   chain,
-  owner: await createLitSigner(AUTH_METHOD),
+  signer: await createLitSigner(AUTH_METHOD),
 });
 ```
 

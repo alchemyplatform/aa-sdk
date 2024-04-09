@@ -20,7 +20,7 @@ export function useLightAccountSigner(): LightSmartAccountSignerResult {
   const signMessage = useCallback(
     (data: string | Uint8Array) =>
       walletClientQuery.data!.request({
-        // ignore the type error here, it's a bug in the viem typing
+        // ignore the type error here, it is a bug in the viem typing
         // @ts-ignore
         method: "personal_sign",
         // @ts-ignore
@@ -31,7 +31,7 @@ export function useLightAccountSigner(): LightSmartAccountSignerResult {
   const signTypedData = useCallback(
     (data: SignTypedDataParams) =>
       walletClientQuery.data!.request({
-        // ignore the type error here, it's a bug in the viem typing
+        // ignore the type error here, it is a bug in the viem typing
         // @ts-ignore
         method: "eth_signTypedData_v4",
         // @ts-ignore

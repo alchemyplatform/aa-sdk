@@ -17,11 +17,11 @@ describe("Simple Account Tests", async () => {
   // demo mnemonic from viem docs
   const dummyMnemonic =
     "legal winner thank year wave sausage worth useful legal winner thank yellow";
-  const owner = Wallet.fromMnemonic(dummyMnemonic);
+  const signer = Wallet.fromMnemonic(dummyMnemonic);
   const alchemyProvider = await alchemy.config.getProvider();
 
   it("should correctly sign the message", async () => {
-    const provider = await givenConnectedProvider({ alchemyProvider, owner });
+    const provider = await givenConnectedProvider({ alchemyProvider, signer });
     expect(
       await provider.signMessage(
         "0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b"
@@ -34,10 +34,10 @@ describe("Simple Account Tests", async () => {
 
 const givenConnectedProvider = async ({
   alchemyProvider,
-  owner,
+  signer,
 }: {
   alchemyProvider: AlchemyProvider;
-  owner: Wallet;
+  signer: Wallet;
 }) => {
   const chain = getChain(alchemyProvider.network.chainId);
 
@@ -46,7 +46,7 @@ const givenConnectedProvider = async ({
   ).connectToAccount(
     await createSimpleSmartAccount({
       chain,
-      owner: convertWalletToAccountSigner(owner),
+      signer: convertWalletToAccountSigner(signer),
       accountAddress: "0x856185aedfab56809e6686d2d6d0c039d615bd9c",
       factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
       transport: http(

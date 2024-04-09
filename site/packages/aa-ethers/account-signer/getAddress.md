@@ -21,10 +21,10 @@ head:
 ::: code-group
 
 ```ts [example.ts]
-import { signer } from "./ethers-signer";
+import { accountSigner } from "./ethers-signer";
 
-// get the signer's smart account address
-const client = await signer.getAddress();
+// get the account signer's account address
+const client = await accountSigner.getAddress();
 ```
 
 <<< @/snippets/aa-ethers/ethers-signer.ts

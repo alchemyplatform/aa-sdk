@@ -1,13 +1,13 @@
 import { encodeFunctionData, type Address, type Hex } from "viem";
 import { SessionKeyPermissionsUpdatesAbi } from "./SessionKeyPermissionsUpdatesAbi.js";
 
-enum SessionKeyAccessListType {
+export enum SessionKeyAccessListType {
   ALLOWLIST = 0,
   DENYLIST = 1,
-  NONE = 2,
+  ALLOW_ALL_ACCESS = 2,
 }
 
-type ContractAccessEntry = {
+export type ContractAccessEntry = {
   // The contract address to add or remove.
   contractAddress: Address;
   // Whether the contract address should be on the list.
@@ -16,7 +16,7 @@ type ContractAccessEntry = {
   checkSelectors: boolean;
 };
 
-type ContractMethodEntry = {
+export type ContractMethodEntry = {
   // The contract address to add or remove.
   contractAddress: Address;
   // The function selector to add or remove.
@@ -25,19 +25,19 @@ type ContractMethodEntry = {
   isOnList: boolean;
 };
 
-type TimeRange = {
+export type TimeRange = {
   validFrom: number;
   validUntil: number;
 };
 
-type NativeTokenLimit = {
+export type NativeTokenLimit = {
   spendLimit: bigint;
   // The time interval over which the spend limit is enforced. If unset, there is no time
   /// interval by which the limit is refreshed.
   refreshInterval?: number;
 };
 
-type Erc20TokenLimit = {
+export type Erc20TokenLimit = {
   tokenAddress: Address;
   spendLimit: bigint;
   // The time interval over which the spend limit is enforced. If unset, there is no time
@@ -46,7 +46,7 @@ type Erc20TokenLimit = {
 };
 
 // uint256 spendLimit, uint48 refreshInterval
-type GasSpendLimit = {
+export type GasSpendLimit = {
   spendLimit: bigint;
   // The time interval over which the spend limit is enforced. If unset, there is no time
   /// interval by which the limit is refreshed.

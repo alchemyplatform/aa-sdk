@@ -14,17 +14,17 @@ head:
 
 # signMessage
 
-`signMessage` is a method on `AccountSigner` that signs messages with the `AccountSigner`'s owner address.
+`signMessage` is a method on `AccountSigner` that signs messages with the `AccountSigner`'s connected EOA signer address.
 
 ## Usage
 
 ::: code-group
 
 ```ts [example.ts]
-import { signer } from "./ethers-signer";
+import { accountSigner } from "./ethers-signer";
 
-// sign message with the signer's owner address
-const signedMessage = await signer.signMessage("test");
+// sign message with the account signer's connected EOA signer address
+const signedMessage = await accountSigner.signMessage("test");
 ```
 
 <<< @/snippets/aa-ethers/ethers-signer.ts
@@ -34,10 +34,10 @@ const signedMessage = await signer.signMessage("test");
 
 ### `Promise<string>`
 
-A Promise containing the hex signture of the message
+A Promise containing the hex signature of the message
 
 ## Parameters
 
-### `msg: string | Uint8Arra`
+### `msg: string | Uint8Array`
 
 The message to sign

@@ -13,8 +13,8 @@ export const getDefaultUserOperationFeeOptions = (
   chain: Chain
 ): UserOperationFeeOptions => {
   const feeOptions: UserOperationFeeOptions = {
-    maxFeePerGas: { percentage: 50 },
-    maxPriorityFeePerGas: { percentage: 5 },
+    maxFeePerGas: { multiplier: 1.5 },
+    maxPriorityFeePerGas: { multiplier: 1.05 },
   };
 
   if (
@@ -27,7 +27,7 @@ export const getDefaultUserOperationFeeOptions = (
       optimismSepolia.id,
     ]).has(chain.id)
   ) {
-    feeOptions.preVerificationGas = { percentage: 5 };
+    feeOptions.preVerificationGas = { multiplier: 1.05 };
   }
 
   return feeOptions;

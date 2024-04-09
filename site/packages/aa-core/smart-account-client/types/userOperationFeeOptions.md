@@ -14,9 +14,9 @@ head:
 
 # UserOperationFeeOptions
 
-Fee options object type used by the [`SmartAccountProvider`](/packages/aa-core/smart-account-client/index.md) during the gas fee calculation middlewares when constructing the user operation to send.
+Fee options object type used by the [`SmartAccountClient`](/packages/aa-core/smart-account-client/index.md) during the gas fee calculation middlewares when constructing the user operation to send.
 
-For example, if the below example `UserOperationFeeOptions` is set on the provider upon initialization, the `maxPriorityFeePerGas` field on the user operation will be set as the max value between the 50% buffered `maxPriorityFeePerGas` estimate and the the min `maxPriorityFeePerGas` value specified here, `100_000_000n`.
+For example, if the below example `UserOperationFeeOptions` is set on the client upon initialization, the `maxPriorityFeePerGas` field on the user operation will be set as the max value between the 50% buffered `maxPriorityFeePerGas` estimate and the min `maxPriorityFeePerGas` value specified here, `100_000_000n`.
 
 ```ts
 type UserOperationFeeOptions {
@@ -33,26 +33,27 @@ type UserOperationFeeOptions {
 ::: code-group
 
 ```ts [example.ts]
-import { sepolia } from "@alchemy/aa-core";
-import { type Chain } from "viem";
-
-import {
-  type UserOperationFeeOptions,
-  type SmartAccountProvider,
-} from "@alchemy/aa-core";
-
-import { API_KEY } from "./constants.js";
+const chain = polygonMumbai;
+const signer: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
+  "YOUR_OWNER_MNEMONIC"
+);
+const rpcTransport = http("https://polygon-mumbai.g.alchemy.com/v2/demo");
 
 const userOperationFeeOptions: UserOperationFeeOptions = {
   maxPriorityFeePerGas: {
     min: 100_000_000n,
-    percentage: 50,
+    multiplier: 1.5,
   },
 };
 
-const provider = const provider = new SmartAccountProvider({
-  rpcProvider: `${sepolia.rpcUrls.alchemy.http[0]}/${API_KEY}`,
-  chain: sepolia,
+export const smartAccountClient = createSmartAccountClient({
+  transport: rpcTransport,
+  chain,
+  account: await createMultiOwnerModularAccount({
+    transport: rpcTransport,
+    chain,
+    signer,
+  }),
   opts: {
     feeOptions: userOperationFeeOptions,
   },

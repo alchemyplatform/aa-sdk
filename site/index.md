@@ -19,6 +19,9 @@ head:
   - - meta
     - name: twitter:description
       content: Account Kit is a vertically integrated stack for building apps that support ERC-4337 smart accounts, Signer integrations, sponsoring gas, bundlers, and an SDK.
+  - - meta
+    - name: google-site-verification
+      content: W4pmFb0Oe26_OndBLdy5uqNrsl_gfmKfTlHwlHPd4Co
 titleTemplate: :title Documentation
 # you can also add HTML or Markdown components below the --- line to add custom HTML or Markdown content (eg: https://github.com/wagmi-dev/viem/blob/main/site/index.md?plain=1)
 ---
@@ -55,14 +58,14 @@ titleTemplate: :title Documentation
                 Account Kit is a vertically integrated stack for building apps that support ERC-4337: smart accounts, Signer integrations, sponsoring gas, bundlers, and an SDK.
               </div>
               <div class="flex flex-row gap-[8px] justify-start items-center">
-                <a rel="noopener noreferrer" href="./getting-started/deploy-an-account.html">
+                <a rel="noopener noreferrer" href="./getting-started/introduction.html">
                   <button
                     class="flex items-center rounded-md px-[12px] py-[12px] text-[16px] font-semibold text-white transition duration-300 ease-in-out hover:scale-105 hover:opacity-90 bg-black dark:bg-white dark:text-black"
                   >
                     Explore the docs
                   </button>
                 </a>
-                <a rel="noopener noreferrer" href="./overview/why-account-kit.html">
+                <a rel="noopener noreferrer" href="./getting-started/overview.html">
                   <button
                     class="flex items-center rounded-md px-[12px] py-[12px] text-[16px] font-semibold transition duration-300 ease-in-out hover:scale-105 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black"
                   >
@@ -84,7 +87,7 @@ import { sepolia } from "@alchemy/aa-core";
 export const smartAccountClient = await createModularAccountAlchemyClient({
   apiKey: "YOUR_API_KEY",
   chain: sepolia,
-  owner,
+  signer,
 });
 ```
 
@@ -94,7 +97,7 @@ export const smartAccountClient = await createModularAccountAlchemyClient({
           </div>
         </div>
         <div class="flex max-lg:flex-wrap justify-center gap-[32px]">
-          <a rel="noopener noreferrer" href="./overview/introduction.html" class="flex-auto basis-1/3 max-lg:max-w-[370px] max-lg:min-w-[370px]">
+          <a rel="noopener noreferrer" href="./getting-started/overview.html" class="flex-auto basis-1/3 max-lg:max-w-[370px] max-lg:min-w-[370px]">
             <div
               class="flex flex-col flex-auto p-[24px] gap-[24px] rounded-md text-white overflow-auto bg-gradient-3 group hover:scale-105 hover:opacity-90 transition duration-300 ease-in-out"
             >
@@ -108,12 +111,12 @@ export const smartAccountClient = await createModularAccountAlchemyClient({
               </div>
             </div>
           </a>
-          <a rel="noopener noreferrer" href="./getting-started/setup.html" class="flex-auto basis-1/3 max-lg:max-w-[370px] max-lg:min-w-[370px]">
+          <a rel="noopener noreferrer" href="./getting-started/introduction.html" class="flex-auto basis-1/3 max-lg:max-w-[370px] max-lg:min-w-[370px]">
             <div
               class="flex flex-col flex-auto p-[24px] gap-[24px] rounded-md text-white overflow-auto bg-gradient-4 group hover:scale-105 hover:opacity-90 transition duration-300 ease-in-out"
             >
               <div class="flex flex-col gap-[8px] items-start">
-                <div class="text-[24px] font-semibold">Getting Started</div>
+                <div class="text-[24px] font-semibold">Getting started</div>
               </div>
               <div
                 class="flex h-[24px] justify-end items-baseline self-stretch transition duration-300 ease-in-out group-hover:translate-x-[5px]"

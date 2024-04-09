@@ -3,9 +3,12 @@ import {
   createMultiOwnerModularAccount,
   multiOwnerPluginActions,
   pluginManagerActions,
+  type AccountLoupeActions,
   type CreateMultiOwnerModularAccountParams,
   type LightAccount,
   type MultiOwnerModularAccount,
+  type MultiOwnerPluginActions,
+  type PluginManagerActions,
 } from "@alchemy/aa-accounts";
 import type { SmartAccountSigner } from "@alchemy/aa-core";
 import {
@@ -24,27 +27,34 @@ import type {
 } from "./smartAccountClient";
 
 export type AlchemyModularAccountClientConfig<
-  TOwner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = Omit<
-  CreateMultiOwnerModularAccountParams<HttpTransport, TOwner>,
+  CreateMultiOwnerModularAccountParams<HttpTransport, TSigner>,
   "transport" | "chain"
 > &
   Omit<
-    AlchemySmartAccountClientConfig<Transport, Chain, LightAccount<TOwner>>,
+    AlchemySmartAccountClientConfig<Transport, Chain, LightAccount<TSigner>>,
     "account"
   >;
 
-export const createModularAccountAlchemyClient: <
-  TOwner extends SmartAccountSigner = SmartAccountSigner
+export function createModularAccountAlchemyClient<
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  params: AlchemyModularAccountClientConfig<TOwner>
-) => Promise<
+  params: AlchemyModularAccountClientConfig<TSigner>
+): Promise<
   AlchemySmartAccountClient<
     CustomTransport,
     Chain | undefined,
-    MultiOwnerModularAccount<TOwner>
+    MultiOwnerModularAccount<TSigner>,
+    MultiOwnerPluginActions<MultiOwnerModularAccount<TSigner>> &
+      PluginManagerActions<MultiOwnerModularAccount<TSigner>> &
+      AccountLoupeActions<MultiOwnerModularAccount<TSigner>>
   >
-> = async (config) => {
+>;
+
+export async function createModularAccountAlchemyClient(
+  config: AlchemyModularAccountClientConfig
+): Promise<AlchemySmartAccountClient> {
   const { chain, opts, ...connectionConfig } =
     AlchemyProviderConfigSchema.parse(config);
 
@@ -67,4 +77,4 @@ export const createModularAccountAlchemyClient: <
     .extend(multiOwnerPluginActions)
     .extend(pluginManagerActions)
     .extend(accountLoupeActions);
-};
+}

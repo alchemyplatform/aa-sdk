@@ -6,12 +6,17 @@ export const aaCoreSidebar: DefaultTheme.SidebarItem = {
   collapsed: true,
   items: [
     {
-      text: "Getting Started",
+      text: "Getting started",
       link: "/",
     },
     {
       text: "Smart Account Client",
       base: "/packages/aa-core/smart-account-client",
+      link: "/index",
+    },
+    {
+      text: "Client Middleware",
+      base: "/packages/aa-core/smart-account-client/middleware",
       link: "/index",
     },
     {
@@ -84,12 +89,16 @@ export const aaCoreSidebar: DefaultTheme.SidebarItem = {
           link: "/getAddress",
         },
         {
+          text: "upgradeAccount",
+          link: "/upgradeAccount",
+        },
+        {
           text: "Types",
           base: "/packages/aa-core/smart-account-client/types",
           collapsed: true,
           items: [
             {
-              text: "userOperationFeeOptions",
+              text: "UserOperationFeeOptions",
               link: "/userOperationFeeOptions",
             },
             {
@@ -112,7 +121,7 @@ export const aaCoreSidebar: DefaultTheme.SidebarItem = {
     {
       text: "Bundler Actions",
       collapsed: true,
-      base: "/packages/aa-core/bundler-client/index/actions",
+      base: "/packages/aa-core/bundler-client/actions",
       items: [
         {
           text: "sendRawUserOperation",
@@ -133,10 +142,6 @@ export const aaCoreSidebar: DefaultTheme.SidebarItem = {
         {
           text: "getSupportedEntryPoints",
           link: "/getSupportedEntryPoints",
-        },
-        {
-          text: "bundlerActions",
-          link: "/bundlerActions",
         },
       ],
     },

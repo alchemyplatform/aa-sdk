@@ -5,7 +5,7 @@ import type { SendUserOperationResult } from "../../client/types";
 import { AccountNotFoundError } from "../../errors/account.js";
 import { IncompatibleClientError } from "../../errors/client.js";
 import type { UserOperationOverrides, UserOperationStruct } from "../../types";
-import { bigIntMax, bigIntPercent } from "../../utils/index.js";
+import { bigIntMax, bigIntMultiply } from "../../utils/index.js";
 import { _runMiddlewareStack } from "./internal/runMiddlewareStack.js";
 import { _sendUserOperation } from "./internal/sendUserOperation.js";
 import type { DropAndReplaceUserOperationParameters } from "./types";
@@ -15,10 +15,13 @@ export const dropAndReplaceUserOperation: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: DropAndReplaceUserOperationParameters<TAccount>
+  args: DropAndReplaceUserOperationParameters<TAccount, TContext>
 ) => Promise<SendUserOperationResult> = async (client, args) => {
   const { account = client.account, uoToDrop, overrides } = args;
   if (!account) {
@@ -27,7 +30,8 @@ export const dropAndReplaceUserOperation: <
   if (!isBaseSmartAccountClient(client)) {
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
-      "dropAndReplaceUserOperation"
+      "dropAndReplaceUserOperation",
+      client
     );
   }
 
@@ -51,13 +55,14 @@ export const dropAndReplaceUserOperation: <
   );
 
   const _overrides: UserOperationOverrides = {
+    ...overrides,
     maxFeePerGas: bigIntMax(
       BigInt(maxFeePerGas ?? 0n),
-      bigIntPercent(uoToDrop.maxFeePerGas, 110n)
+      bigIntMultiply(uoToDrop.maxFeePerGas, 1.1)
     ),
     maxPriorityFeePerGas: bigIntMax(
       BigInt(maxPriorityFeePerGas ?? 0n),
-      bigIntPercent(uoToDrop.maxPriorityFeePerGas, 110n)
+      bigIntMultiply(uoToDrop.maxPriorityFeePerGas, 1.1)
     ),
   };
 

@@ -21,6 +21,7 @@ import {
   type UserOperationOverrides,
   type GetAccountParameter,
   type SendUserOperationResult,
+  type GetContextParameter,
 } from "@alchemy/aa-core";
 import { type Plugin } from "../types.js";
 import { installPlugin as installPlugin_ } from "../../plugin-manager/installPlugin.js";
@@ -33,6 +34,9 @@ import { type FunctionReference } from "../../account-loupe/types.js";
 type ExecutionActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
     | undefined
 > = {
   updateOwners: (
@@ -42,7 +46,10 @@ type ExecutionActions<
         "updateOwners"
       >,
       "args"
-    > & { overrides?: UserOperationOverrides } & GetAccountParameter<TAccount>
+    > & {
+      overrides?: UserOperationOverrides;
+    } & GetAccountParameter<TAccount> &
+      GetContextParameter<TContext>
   ) => Promise<SendUserOperationResult>;
 };
 
@@ -57,13 +64,17 @@ export type InstallMultiOwnerPluginParams = {
 type ManagementActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
     | undefined
 > = {
   installMultiOwnerPlugin: (
     args: {
       overrides?: UserOperationOverrides;
     } & InstallMultiOwnerPluginParams &
-      GetAccountParameter<TAccount>
+      GetAccountParameter<TAccount> &
+      GetContextParameter<TContext>
   ) => Promise<SendUserOperationResult>;
 };
 
@@ -131,13 +142,25 @@ type ReadAndEncodeActions<
 export type MultiOwnerPluginActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
     | undefined
-> = ExecutionActions<TAccount> &
-  ManagementActions<TAccount> &
+> = ExecutionActions<TAccount, TContext> &
+  ManagementActions<TAccount, TContext> &
   ReadAndEncodeActions<TAccount>;
 
 const addresses = {
-  11155111: "0xB76734F322b9f2C8F1dA934252dED3bC3C25b109" as Address,
+  10: "0xcE0000007B008F50d762D155002600004cD6c647" as Address,
+  137: "0xcE0000007B008F50d762D155002600004cD6c647" as Address,
+  8453: "0xcE0000007B008F50d762D155002600004cD6c647" as Address,
+  42161: "0xcE0000007B008F50d762D155002600004cD6c647" as Address,
+  80001: "0xcE0000007B008F50d762D155002600004cD6c647" as Address,
+  80002: "0xcE0000007B008F50d762D155002600004cD6c647" as Address,
+  84532: "0xcE0000007B008F50d762D155002600004cD6c647" as Address,
+  421614: "0xcE0000007B008F50d762D155002600004cD6c647" as Address,
+  11155111: "0xcE0000007B008F50d762D155002600004cD6c647" as Address,
+  11155420: "0xcE0000007B008F50d762D155002600004cD6c647" as Address,
 } as Record<number, Address>;
 
 export const MultiOwnerPlugin: Plugin<typeof MultiOwnerPluginAbi> = {
@@ -169,16 +192,23 @@ export const multiOwnerPluginActions: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>
-) => MultiOwnerPluginActions<TAccount> = (client) => ({
-  updateOwners({ args, overrides, account = client.account }) {
+) => MultiOwnerPluginActions<TAccount, TContext> = (client) => ({
+  updateOwners({ args, overrides, context, account = client.account }) {
     if (!account) {
       throw new AccountNotFoundError();
     }
     if (!isSmartAccountClient(client)) {
-      throw new IncompatibleClientError("SmartAccountClient", "updateOwners");
+      throw new IncompatibleClientError(
+        "SmartAccountClient",
+        "updateOwners",
+        client
+      );
     }
 
     const uo = encodeFunctionData({
@@ -187,9 +217,14 @@ export const multiOwnerPluginActions: <
       args,
     });
 
-    return client.sendUserOperation({ uo, overrides, account });
+    return client.sendUserOperation({ uo, overrides, account, context });
   },
-  installMultiOwnerPlugin({ account = client.account, overrides, ...params }) {
+  installMultiOwnerPlugin({
+    account = client.account,
+    overrides,
+    context,
+    ...params
+  }) {
     if (!account) {
       throw new AccountNotFoundError();
     }
@@ -197,7 +232,8 @@ export const multiOwnerPluginActions: <
     if (!isSmartAccountClient(client)) {
       throw new IncompatibleClientError(
         "SmartAccountClient",
-        "installMultiOwnerPlugin"
+        "installMultiOwnerPlugin",
+        client
       );
     }
 
@@ -223,6 +259,7 @@ export const multiOwnerPluginActions: <
       dependencies,
       overrides,
       account,
+      context,
     });
   },
   encodeUpdateOwners({ args }) {
@@ -247,7 +284,8 @@ export const multiOwnerPluginActions: <
     if (!isSmartAccountClient(client)) {
       throw new IncompatibleClientError(
         "SmartAccountClient",
-        "readEip712Domain"
+        "readEip712Domain",
+        client
       );
     }
 
@@ -273,7 +311,8 @@ export const multiOwnerPluginActions: <
     if (!isSmartAccountClient(client)) {
       throw new IncompatibleClientError(
         "SmartAccountClient",
-        "readIsValidSignature"
+        "readIsValidSignature",
+        client
       );
     }
 

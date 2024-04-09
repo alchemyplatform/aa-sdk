@@ -11,6 +11,7 @@ export type { SimpleSmartAccount } from "./account/simple.js";
 export type * from "./account/smartContractAccount.js";
 export {
   getAccountAddress,
+  isSmartAccountWithSigner,
   parseFactoryAddressFromAccountInitCode,
   toSmartContractAccount,
 } from "./account/smartContractAccount.js";
@@ -41,6 +42,7 @@ export {
   optimismGoerli,
   optimismSepolia,
   polygon,
+  polygonAmoy,
   polygonMumbai,
   sepolia,
 } from "./chains/index.js";
@@ -52,7 +54,7 @@ export {
 export type * from "./client/decorators/bundlerClient.js";
 export { bundlerActions } from "./client/decorators/bundlerClient.js";
 export type * from "./client/decorators/smartAccountClient.js";
-export { smartAccountClientActions as smartAccountClientDecorator } from "./client/decorators/smartAccountClient.js";
+export { smartAccountClientActions } from "./client/decorators/smartAccountClient.js";
 export { isSmartAccountClient } from "./client/isSmartAccountClient.js";
 export {
   ConnectionConfigSchema,
@@ -69,11 +71,20 @@ export {
   convertCoinTypeToChain,
   convertCoinTypeToChainId,
 } from "./ens/utils.js";
+export { getVersion060EntryPoint } from "./entrypoint/0.6.js";
+export { type EntryPointDef } from "./entrypoint/types.js";
 export {
   AccountNotFoundError,
+  AccountRequiresOwnerError,
+  BatchExecutionNotSupportedError,
   DefaultFactoryNotDefinedError,
   FailedToGetStorageSlotError,
   GetCounterFactualAddressError,
+  IncorrectAccountType,
+  SignTransactionNotSupportedError,
+  SmartAccountWithSignerRequiredError,
+  UpgradeToAndCallNotSupportedError,
+  UpgradesNotSupportedError,
 } from "./errors/account.js";
 export { BaseError } from "./errors/base.js";
 export {
@@ -81,7 +92,7 @@ export {
   IncompatibleClientError,
   InvalidRpcUrlError,
 } from "./errors/client.js";
-export { EntrypointNotFoundError } from "./errors/entrypoint.js";
+export { EntryPointNotFoundError as EntrypointNotFoundError } from "./errors/entrypoint.js";
 export { InvalidSignerTypeError } from "./errors/signer.js";
 export {
   FailedToFindTransactionError,
@@ -94,6 +105,7 @@ export { defaultFeeEstimator } from "./middleware/defaults/feeEstimator.js";
 export { defaultGasEstimator } from "./middleware/defaults/gasEstimator.js";
 export { overridePaymasterDataMiddleware } from "./middleware/defaults/overridePaymasterData.js";
 export { defaultPaymasterAndData } from "./middleware/defaults/paymasterAndData.js";
+export { defaultUserOpSigner } from "./middleware/defaults/userOpSigner.js";
 export { noopMiddleware } from "./middleware/noopMiddleware.js";
 export type * from "./middleware/types.js";
 export { LocalAccountSigner } from "./signer/local-account.js";
@@ -117,7 +129,7 @@ export {
   applyUserOpOverrideOrFeeOption,
   asyncPipe,
   bigIntMax,
-  bigIntPercent,
+  bigIntMultiply,
   deepHexlify,
   defineReadOnly,
   filterUndefined,
@@ -127,6 +139,8 @@ export {
   getDefaultUserOperationFeeOptions,
   getUserOperationHash,
   isBigNumberish,
-  isPercentage,
+  isMultiplier,
+  isValidRequest,
   resolveProperties,
+  takeBytes,
 } from "./utils/index.js";

@@ -1,11 +1,13 @@
+import type { EntryPointDef } from "@alchemy/aa-core";
 import {
   createBundlerClient,
   getAccountAddress,
-  getDefaultEntryPointAddress,
+  getVersion060EntryPoint,
   toSmartContractAccount,
   type Address,
-  type OwnedSmartContractAccount,
   type SmartAccountSigner,
+  type SmartContractAccountWithSigner,
+  type UserOperationRequest,
 } from "@alchemy/aa-core";
 import {
   concatHex,
@@ -15,55 +17,48 @@ import {
   type Hex,
   type Transport,
 } from "viem";
-import { MultiOwnerMSCAFactoryAbi } from "../abis/MultiOwnerMSCAFactory.js";
-import { MultiOwnerTokenReceiverMSCAFactoryAbi } from "../abis/MultiOwnerTokenReceiverMSCAFactory.js";
+import { MultiOwnerModularAccountFactoryAbi } from "../abis/MultiOwnerModularAccountFactory.js";
 import { multiOwnerMessageSigner } from "../plugins/multi-owner/signer.js";
-import { getDefaultMultiOwnerMSCAFactoryAddress } from "../utils.js";
+import { getDefaultMultiOwnerModularAccountFactoryAddress } from "../utils.js";
 import { standardExecutor } from "./standardExecutor.js";
 
 export type MultiOwnerModularAccount<
-  TOwner extends SmartAccountSigner = SmartAccountSigner
-> = OwnedSmartContractAccount<
-  "ModularAccountWithTokenReceiver" | "ModularAccountWithoutTokenReceiver",
-  TOwner
->;
+  TSigner extends SmartAccountSigner = SmartAccountSigner
+> = SmartContractAccountWithSigner<"MultiOwnerModularAccount", TSigner>;
 
 export type CreateMultiOwnerModularAccountParams<
   TTransport extends Transport = Transport,
-  TOwner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = {
   transport: TTransport;
   chain: Chain;
-  owner: TOwner;
-  index?: bigint;
+  signer: TSigner;
+  salt?: bigint;
   factoryAddress?: Address;
   owners?: Address[];
-  excludeDefaultTokenReceiverPlugin?: boolean;
-  entrypointAddress?: Address;
+  entryPoint?: EntryPointDef<UserOperationRequest>;
   accountAddress?: Address;
   initCode?: Hex;
 };
 
 export async function createMultiOwnerModularAccount<
   TTransport extends Transport = Transport,
-  TOwner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  config: CreateMultiOwnerModularAccountParams<TTransport, TOwner>
-): Promise<MultiOwnerModularAccount<TOwner>>;
+  config: CreateMultiOwnerModularAccountParams<TTransport, TSigner>
+): Promise<MultiOwnerModularAccount<TSigner>>;
 
 export async function createMultiOwnerModularAccount({
   transport,
   chain,
-  owner: owner_,
+  signer,
   accountAddress,
   initCode,
-  entrypointAddress = getDefaultEntryPointAddress(chain),
-  excludeDefaultTokenReceiverPlugin = false,
-  factoryAddress = getDefaultMultiOwnerMSCAFactoryAddress(chain),
+  entryPoint = getVersion060EntryPoint(chain),
+  factoryAddress = getDefaultMultiOwnerModularAccountFactoryAddress(chain),
   owners = [],
-  index = 0n,
+  salt = 0n,
 }: CreateMultiOwnerModularAccountParams): Promise<MultiOwnerModularAccount> {
-  let owner = owner_;
   const client = createBundlerClient({
     transport,
     chain,
@@ -73,7 +68,8 @@ export async function createMultiOwnerModularAccount({
       return initCode;
     }
 
-    const ownerAddress = await owner.getAddress();
+    // NOTE: the current signer connected will be one of the owners as well
+    const ownerAddress = await signer.getAddress();
     // owners need to be dedupe + ordered in ascending order and not == to zero address
     const owners_ = Array.from(new Set([...owners, ownerAddress]))
       .filter((x) => hexToBigInt(x) !== 0n)
@@ -87,18 +83,16 @@ export async function createMultiOwnerModularAccount({
     return concatHex([
       factoryAddress,
       encodeFunctionData({
-        abi: excludeDefaultTokenReceiverPlugin
-          ? MultiOwnerMSCAFactoryAbi
-          : MultiOwnerTokenReceiverMSCAFactoryAbi,
+        abi: MultiOwnerModularAccountFactoryAbi,
         functionName: "createAccount",
-        args: [index, owners_],
+        args: [salt, owners_],
       }),
     ]);
   };
 
   accountAddress = await getAccountAddress({
     client,
-    entrypointAddress,
+    entryPointAddress: entryPoint.address,
     accountAddress: accountAddress,
     getAccountInitCode,
   });
@@ -106,22 +100,17 @@ export async function createMultiOwnerModularAccount({
   const baseAccount = await toSmartContractAccount({
     transport,
     chain,
-    entrypointAddress,
+    entryPoint,
     accountAddress,
-    source: `ModularAccount${
-      excludeDefaultTokenReceiverPlugin ? "Without" : "With"
-    }TokenReceiver`,
+    source: `MultiOwnerModularAccount`,
     getAccountInitCode,
     ...standardExecutor,
-    ...multiOwnerMessageSigner(client, accountAddress, () => owner),
+    ...multiOwnerMessageSigner(client, accountAddress, () => signer),
   });
 
   return {
     ...baseAccount,
-    publicKey: await owner.getAddress(),
-    getOwner: () => owner,
-    setOwner: (newOwner) => {
-      owner = newOwner;
-    },
+    publicKey: await signer.getAddress(),
+    getSigner: () => signer,
   };
 }

@@ -6,12 +6,12 @@ head:
       content: SmartContractAccount
   - - meta
     - name: description
-      content: Overview of SmartContractAccount interface exported by aa-core accounts
+      content: Overview of SmartContractAccount exported by aa-core
   - - meta
     - property: og:description
-      content: Overview of SmartContractAccount interface exported by aa-core accounts
+      content: Overview of SmartContractAccount exported by aa-core
 prev:
-  text: SmartAccountProvider
+  text: SmartAccountClient
 ---
 
 # SmartContractAccount
@@ -20,12 +20,15 @@ The `SmartContractAccount` interface is an extension of viem's [`CustomAccount`]
 
 ## Custom Smart Contract Accounts
 
-If you have your own smart contract that you'd like to interact with, then you can use the `toSmartContractAccount` method to create a `SmartContractAccount` instance.
+If you have your own smart contract that you would like to interact with, then you can use the `toSmartContractAccount` method to create a `SmartContractAccount` instance.
 
 ### Usage
 
 ```ts
-import { toSmartContractAccount } from "@alchemy/aa-core";
+import {
+  getVersion060EntryPoint,
+  toSmartContractAccount,
+} from "@alchemy/aa-core";
 import { sepolia } from "viem/chains";
 
 const myAccount = await toSmartContractAccount({
@@ -33,8 +36,8 @@ const myAccount = await toSmartContractAccount({
   source: "MyAccount",
   transport: http("RPC_URL"),
   chain: sepolia,
-  // The entrypoint contract that your account is compatible with
-  entrypointAddress: "0x1234...",
+  // The EntryPointDef that your account is compatible with
+  entryPoint: getVersion060EntryPoint(sepolia),
   // This should return a concatenation of your `factoryAddress` and the `callData` for your factory's create account method
   getAccountInitCode: () => "0x{factoryAddress}{callData}",
   // an invalid signature that doesn't cause your account to revert during validation
@@ -64,7 +67,7 @@ const myAccount = await toSmartContractAccount({
 export type SmartContractAccount<Name extends string = string> =
   LocalAccount<Name> & {
     source: Name;
-    getDummySignature: () => Hex;
+    getDummySignature: () => Hex | Promise<Hex>;
     encodeExecute: (tx: Tx) => Promise<Hex>;
     encodeBatchExecute: (txs: Tx[]) => Promise<Hex>;
     signUserOperationHash: (uoHash: Hex) => Promise<Hex>;

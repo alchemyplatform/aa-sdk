@@ -3,6 +3,94 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.6.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.6.0...v3.6.1) (2024-03-18)
+
+### Bug Fixes
+
+- **core:** fix stateoverrides passed to estimation userop gas ([#517](https://github.com/alchemyplatform/aa-sdk/issues/517)) ([2980a35](https://github.com/alchemyplatform/aa-sdk/commit/2980a35226b5e42e4f3aaa77fd53564a3486327b))
+
+# [3.6.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.5.1...v3.6.0) (2024-03-18)
+
+### Features
+
+- add optional stateOverride parameter to eth_estimateUserOperationGas ([#513](https://github.com/alchemyplatform/aa-sdk/issues/513)) ([3e0b88a](https://github.com/alchemyplatform/aa-sdk/commit/3e0b88a5e8adf322e5f5f2c659f57d94bc2cc95c))
+- add polygon amoy default addresses ([#506](https://github.com/alchemyplatform/aa-sdk/issues/506)) ([34f273e](https://github.com/alchemyplatform/aa-sdk/commit/34f273e8b6d89c7c80f9de57e0331090602e776a))
+
+## [3.5.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.5.0...v3.5.1) (2024-03-14)
+
+**Note:** Version bump only for package @alchemy/aa-core
+
+# [3.5.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.4.4...v3.5.0) (2024-03-14)
+
+### Features
+
+- **plugins:** make plugingen a cli tool ([#507](https://github.com/alchemyplatform/aa-sdk/issues/507)) ([53ba81d](https://github.com/alchemyplatform/aa-sdk/commit/53ba81d33422bb3f18134c1dd75e68d64f5cc3f0))
+
+## [3.4.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.4.1...v3.4.2) (2024-03-08)
+
+**Note:** Version bump only for package @alchemy/aa-core
+
+# [3.4.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.3.0...v3.4.0) (2024-02-29)
+
+### Features
+
+- sign user op and send raw user op methods added to smart account client ([#486](https://github.com/alchemyplatform/aa-sdk/issues/486)) ([6518d12](https://github.com/alchemyplatform/aa-sdk/commit/6518d12190e9d48263e4776f288245b5a9940b36))
+
+## [3.2.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.2.0...v3.2.1) (2024-02-27)
+
+### Bug Fixes
+
+- **actions:** drop and replace was not handling overrides ([#490](https://github.com/alchemyplatform/aa-sdk/issues/490)) ([83f5867](https://github.com/alchemyplatform/aa-sdk/commit/83f5867dd72e1daccba12cafd56d6aa070ef17f1))
+
+## [3.1.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.1.0...v3.1.1) (2024-02-23)
+
+### Bug Fixes
+
+- custom headers fix ([#484](https://github.com/alchemyplatform/aa-sdk/issues/484)) ([5baacad](https://github.com/alchemyplatform/aa-sdk/commit/5baacad5e806b111eed86174408c78612b856523))
+
+# [3.1.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.1...v3.1.0) (2024-02-23)
+
+**Note:** Version bump only for package @alchemy/aa-core
+
+## [3.0.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0...v3.0.1) (2024-02-21)
+
+### Bug Fixes
+
+- custom Alchemy-AA-Sdk-Version header fix ([#475](https://github.com/alchemyplatform/aa-sdk/issues/475)) ([bfb4361](https://github.com/alchemyplatform/aa-sdk/commit/bfb4361481a3b12e7d47096f558921a22aa214ee))
+
+# [3.0.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.13...v3.0.0) (2024-02-21)
+
+### Features
+
+- add a nonce key override to support parallel nonces ([#462](https://github.com/alchemyplatform/aa-sdk/issues/462)) ([d48c586](https://github.com/alchemyplatform/aa-sdk/commit/d48c586665858c61e0d1d66e9bd4503f32e47db9))
+
+# [3.0.0-alpha.13](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.12...v3.0.0-alpha.13) (2024-02-16)
+
+**Note:** Version bump only for package @alchemy/aa-core
+
+# [3.0.0-alpha.10](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.9...v3.0.0-alpha.10) (2024-02-14)
+
+**Note:** Version bump only for package @alchemy/aa-core
+
+# [3.0.0-alpha.9](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.8...v3.0.0-alpha.9) (2024-02-13)
+
+### Features
+
+- **amoy:** add amoy from viem update ([#448](https://github.com/alchemyplatform/aa-sdk/issues/448)) ([adae84a](https://github.com/alchemyplatform/aa-sdk/commit/adae84add30536676725dbc8805f3436c8ad395e))
+
+# [3.0.0-alpha.5](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.4...v3.0.0-alpha.5) (2024-02-07)
+
+### Bug Fixes
+
+- **aa-core:** add back eip-1193 method handling to the client ([#425](https://github.com/alchemyplatform/aa-sdk/issues/425)) ([48b5943](https://github.com/alchemyplatform/aa-sdk/commit/48b594375d64fe832cfb06f1fb3a539da3c7b965))
+
+# [3.0.0-alpha.4](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.3...v3.0.0-alpha.4) (2024-02-02)
+
+### Bug Fixes
+
+- alchemy package.json was incorrectly pointing to files ([#423](https://github.com/alchemyplatform/aa-sdk/issues/423)) ([5678def](https://github.com/alchemyplatform/aa-sdk/commit/5678defe4885f1b15724e0208a5813deea07ffa4))
+- some typos in code and change provider -> client in docs ([#422](https://github.com/alchemyplatform/aa-sdk/issues/422)) ([8533744](https://github.com/alchemyplatform/aa-sdk/commit/8533744bda28aff25b3b039d21827ed79a9d36b1))
+
 # [3.0.0-alpha.3](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.2...v3.0.0-alpha.3) (2024-02-02)
 
 **Note:** Version bump only for package @alchemy/aa-core

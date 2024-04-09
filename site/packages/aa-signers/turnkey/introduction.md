@@ -19,12 +19,12 @@ head:
 `TurnkeySigner` provides implementations for all methods on `SmartAccountAuthenticator`:
 
 1.  [`authenticate`](/packages/aa-signers/turnkey/authenticate) -- supports user authentication.
-2.  [`getAddress`](/packages/aa-signers/turnkey/getAddress) -- supports typed data signatures from the smart contract account's owner address.
+2.  [`getAddress`](/packages/aa-signers/turnkey/getAddress) -- gets the address of the smart contract account's connected EOA signer account.
 3.  [`signMessage`](/packages/aa-signers/turnkey/signMessage) -- supports message signatures.
 4.  [`signTypedData`](/packages/aa-signers/turnkey/signTypedData) -- supports typed data signatures.
 5.  [`getAuthDetails`](/packages/aa-signers/turnkey/getAuthDetails) -- supports authentication details retrieval.
 
-## Install Dependencies
+## Install dependencies
 
 `TurnkeySigner` requires installation of the [`@turnkey/http`](https://github.com/tkhq/sdk/tree/main/packages/http) and [`@turnkey/viem`](https://github.com/tkhq/sdk/tree/main/packages/viem) dependencies. `aa-signers` lists them as optional dependencies.
 
@@ -93,7 +93,7 @@ const signTypedData = await turnkeySigner.signTypedData(typedData);
 <<< @/snippets/signers/turnkey.ts
 :::
 
-## Developer Links
+## Developer links
 
 - [Turnkey SDK](https://docs.turnkey.com/category/sdk)
 - [Turnkey Tests](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/signers/src/turnkey/__tests__/signer.test.ts)

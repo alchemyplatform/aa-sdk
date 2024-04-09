@@ -19,7 +19,7 @@ head:
 `Web3AuthSigner` provides implementations for all methods on `SmartAccountAuthenticator`:
 
 1.  [`authenticate`](/packages/aa-signers/web3auth/authenticate) -- supports user authentication.
-2.  [`getAddress`](/packages/aa-signers/web3auth/getAddress) -- supports typed data signatures from the smart contract account's owner address.
+2.  [`getAddress`](/packages/aa-signers/web3auth/getAddress) -- gets the address of the smart contract account's connected EOA signer account.
 3.  [`signMessage`](/packages/aa-signers/web3auth/signMessage) -- supports message signatures.
 4.  [`signTypedData`](/packages/aa-signers/web3auth/signTypedData) -- supports typed data signatures.
 5.  [`getAuthDetails`](/packages/aa-signers/web3auth/getAuthDetails) -- supports authentication details retrieval.

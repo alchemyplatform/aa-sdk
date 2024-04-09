@@ -6,16 +6,16 @@ head:
       content: Magic Link Integration Guide
   - - meta
     - name: description
-      content: Follow this integration guide to use Magic.Link as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Magic.Link as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - property: og:description
-      content: Follow this integration guide to use Magic.Link as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Magic.Link as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - name: twitter:title
       content: Magic Link Integration Guide
   - - meta
     - name: twitter:description
-      content: Follow this integration guide to use Magic.Link as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Magic.Link as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
 # Magic Link Integration Guide
@@ -50,9 +50,10 @@ Next, setup the magic sdk and create an authenticated `MagicSigner` using the `a
 
 <<< @/snippets/signers/magic.ts
 
-### Use it with Light Account
+### Use it with Modular Account
 
-Let's see it in action with `aa-alchemy` and `LightSmartContractAccount` from `aa-accounts`:
+Let's see it in action with `aa-alchemy`:
+
 ::: code-group
 
 ```ts [example.ts]
@@ -67,7 +68,7 @@ const chain = sepolia;
 const provider = await createModularAccountAlchemyClient({
   apiKey: "ALCHEMY_API_KEY",
   chain,
-  owner: await createMagicSigner(),
+  signer: await createMagicSigner(),
 });
 ```
 

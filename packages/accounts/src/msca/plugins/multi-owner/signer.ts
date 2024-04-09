@@ -6,7 +6,6 @@ import type {
 import {
   hashMessage,
   hashTypedData,
-  hexToBytes,
   type Hash,
   type Hex,
   type SignableMessage,
@@ -22,11 +21,10 @@ export const multiOwnerMessageSigner = <
 >(
   client: BundlerClient<TTransport>,
   accountAddress: Address,
-  owner: () => TSigner,
+  signer: () => TSigner,
   pluginAddress: Address = MultiOwnerPlugin.meta.addresses[client.chain.id]
 ) => {
   const signWith712Wrapper = async (msg: Hash): Promise<`0x${string}`> => {
-    // TODO: right now this is hard coded to one Plugin address, but we should make this configurable somehow
     const [, name, version, chainId, verifyingContract, salt] =
       await client.readContract({
         abi: MultiOwnerPluginAbi,
@@ -35,7 +33,7 @@ export const multiOwnerMessageSigner = <
         account: accountAddress,
       });
 
-    return owner().signTypedData({
+    return signer().signTypedData({
       domain: {
         chainId: Number(chainId),
         name,
@@ -54,12 +52,12 @@ export const multiOwnerMessageSigner = <
   };
 
   return {
-    getDummySignature: (): `0x${string}` => {
+    getDummySignature: (): Hex => {
       return "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
     },
 
     signUserOperationHash: (uoHash: `0x${string}`): Promise<`0x${string}`> => {
-      return owner().signMessage(hexToBytes(uoHash));
+      return signer().signMessage({ raw: uoHash });
     },
 
     signMessage({

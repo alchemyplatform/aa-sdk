@@ -6,10 +6,10 @@ head:
       content: sendUserOperation
   - - meta
     - name: description
-      content: Overview of the sendUserOperation method on ISmartAccountProvider
+      content: Overview of the sendUserOperation method on SmartAccountClient
   - - meta
     - property: og:description
-      content: Overview of the sendUserOperation method on ISmartAccountProvider
+      content: Overview of the sendUserOperation method on SmartAccountClient
 ---
 
 # sendUserOperation
@@ -41,6 +41,10 @@ smartAccountClient.sendUserOperation({
 });
 
 // send batch
+
+// NOTE: Not all Smart Contract Accounts support batching.
+// The `SmartContractAccount` implementation must have the `encodeBatchExecute` method
+// implemented for the `SmartAccountClient` to execute the batched user operation successfully.
 smartAccountClient.sendUserOperation({
   uo: [
     {
@@ -69,18 +73,24 @@ A Promise containing the hash of the user operation and the request that was sen
 
 ## Parameters
 
-### `UserOperationCallData | UserOperationCallData[] | Hex`
+## Parameters
 
-`UserOperationCallData` is an object with the following properties:
+### `SendUserOperationParameters<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined>`
 
-- `target: Address` - the target of the call (equivalent to `to` in a transaction)
-- `data: Hex` - can be either `0x` or a call data string
-- `value?: bigint` - optionally, set the value in wei you want to send to the target
+- `uo:` [`UserOperationCallData`](/resources/types#UserOperationCallData) | [`BatchUserOperationCallData`](/resources/types#BatchUserOperationCallData)
 
-### `overrides?:` [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides.md)
+  ::: details UserOperationCallData
+  <<< @/../packages/core/src/types.ts#UserOperationCallData
+  :::
 
-Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` or `paymasterAndData` on the user operation request
+  - `target: Address` - the target of the call (equivalent to `to` in a transaction)
+  - `data: Hex` - can be either `0x` or a call data string
+  - `value?: bigint` - optionally, set the value in wei you want to send to the target
 
-### `account?: SmartContractAccount`
+- `overrides?:` [`UserOperationOverrides`](/resources/types#UserOperationOverrides)
 
-If your client was not instantiated with an account, then you will have to pass the account in to this call.
+Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit`, `paymasterAndData`, or `nonceKey` for the user operation request
+
+- `account?: TAccount extends SmartContractAccount | undefined`
+
+When using this action, if the `SmartContractAccount` has not been connected to the `SmartAccountClient` (e.g. `SmartAccountClient` not instantiated with your `SmartContractAccount` during [`createSmartAccountClient`](/packages/aa-core/smart-account-client/)). You can check if the account is connected to the client by checking the `account` field of `SmartAccountClient`. If the account is not connected, you can specify the `SmartContractAccount` instance to use for the function call.

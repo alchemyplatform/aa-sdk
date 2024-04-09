@@ -1,4 +1,4 @@
-import { polygonMumbai, sepolia } from "@alchemy/aa-core";
+import { sepolia } from "@alchemy/aa-core";
 import {
   createPublicClient,
   custom,
@@ -18,10 +18,10 @@ import { createSimpleSmartAccount } from "../simple.js";
 describe("Account Simple Tests", async () => {
   const dummyMnemonic =
     "test test test test test test test test test test test test";
-  const owner: SmartAccountSigner =
+  const signer: SmartAccountSigner =
     LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
 
-  const chain = polygonMumbai;
+  const chain = sepolia;
   const publicClient = createBundlerClientFromExisting(
     createPublicClient({
       chain,
@@ -37,7 +37,7 @@ describe("Account Simple Tests", async () => {
   );
 
   it("should correctly sign the message", async () => {
-    const provider = await givenConnectedProvider({ owner, chain });
+    const provider = await givenConnectedProvider({ signer, chain });
     expect(
       await provider.account.signMessage({
         message: {
@@ -50,7 +50,7 @@ describe("Account Simple Tests", async () => {
   });
 
   it("should correctly encode batch transaction data", async () => {
-    const provider = await givenConnectedProvider({ owner, chain });
+    const provider = await givenConnectedProvider({ signer, chain });
     const data = [
       {
         target: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
@@ -69,69 +69,13 @@ describe("Account Simple Tests", async () => {
     );
   });
 
-  it("should correctly do base runtime validation when entrypoint are invalid", async () => {
-    await expect(
-      createSimpleSmartAccount({
-        entryPointAddress: 1 as unknown as Address,
-        chain,
-        owner,
-        factoryAddress: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
-        transport: http("ALCHEMY_RPC_URL"),
-      })
-    ).rejects.toThrowErrorMatchingInlineSnapshot(`
-      "[
-        {
-          \\"code\\": \\"invalid_type\\",
-          \\"expected\\": \\"string\\",
-          \\"received\\": \\"number\\",
-          \\"path\\": [
-            \\"entryPointAddress\\"
-          ],
-          \\"message\\": \\"Expected string, received number\\"
-        }
-      ]"
-    `);
-  });
-
-  it("should correctly do base runtime validation when multiple inputs are invalid", async () => {
-    await expect(
-      createSimpleSmartAccount({
-        entryPointAddress: 1 as unknown as Address,
-        chain: "0x1" as unknown as Chain,
-        owner,
-        factoryAddress: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
-        transport: http("ALCHEMY_RPC_URL"),
-      })
-    ).rejects.toThrowErrorMatchingInlineSnapshot(`
-      "[
-        {
-          \\"code\\": \\"invalid_type\\",
-          \\"expected\\": \\"string\\",
-          \\"received\\": \\"number\\",
-          \\"path\\": [
-            \\"entryPointAddress\\"
-          ],
-          \\"message\\": \\"Expected string, received number\\"
-        },
-        {
-          \\"code\\": \\"custom\\",
-          \\"fatal\\": true,
-          \\"path\\": [
-            \\"chain\\"
-          ],
-          \\"message\\": \\"Invalid input\\"
-        }
-      ]"
-    `);
-  });
-
   it("should correctly use the account init code override", async () => {
     const account = await createSimpleSmartAccount({
       chain: sepolia,
-      owner: owner,
+      signer,
       factoryAddress: getDefaultSimpleAccountFactoryAddress(sepolia),
       transport: custom(publicClient),
-      // override the account address here so we don't have to resolve the address from the entrypoint
+      // override the account address here so we don't have to resolve the address from the entry point
       accountAddress: "0x1234567890123456789012345678901234567890",
       initCode: "0xdeadbeef",
     });
@@ -145,10 +89,10 @@ describe("Account Simple Tests", async () => {
   });
 
   const givenConnectedProvider = async ({
-    owner,
+    signer,
     chain,
   }: {
-    owner: SmartAccountSigner;
+    signer: SmartAccountSigner;
     chain: Chain;
   }) =>
     createSmartAccountClient({
@@ -156,7 +100,7 @@ describe("Account Simple Tests", async () => {
       chain: chain,
       account: await createSimpleSmartAccount({
         chain,
-        owner,
+        signer,
         accountAddress: "0x1234567890123456789012345678901234567890",
         factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
         transport: http(`${chain.rpcUrls.alchemy.http[0]}/${"test"}`),

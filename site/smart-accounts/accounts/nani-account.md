@@ -6,23 +6,23 @@ head:
       content: Nani Account Smart Contract
   - - meta
     - name: description
-      content: Follow this guide to use Nani Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to use Nani Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - property: og:description
-      content: Follow this guide to use Nani Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to use Nani Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - name: twitter:title
       content: Nani Account
   - - meta
     - name: twitter:description
-      content: Follow this guide to use Nani Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to use Nani Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
 # Nani Account
 
 ## Overview
 
-Nani Account is an [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) smart account. It is built on the the Ethereum Foundation’s canonical [SimpleAccount](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol) and extended to support modular plugins or "validators" using a custom nonce-storage method. It's fully production-ready, built on the Solady audited smart contract library, and reviewed by active smart account developers from Sound, ZeroDev and Alchemy ([audit](https://github.com/Vectorized/solady/pull/639)).
+Nani Account is an [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) smart account. It is built on the Ethereum Foundation’s canonical [SimpleAccount](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol) and extended to support modular plugins or "validators" using a custom nonce-storage method. It is built on the Solady audited smart contract library, and you can find the audit report [here](https://github.com/Vectorized/solady/pull/639).
 
 ## Why Nani Account
 
@@ -32,7 +32,7 @@ Nani Account is the [the most gas-optimized smart account](https://github.com/ze
 
 ### Fully-featured
 
-Nani Account supports nested [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) contract signatures, calldata compression for greater performance on L2, and a minimal ERC1967 UUPS (upgradeability) path. Nani Account also permits ownership transfers so that users don't get locked into a particular Signer.
+Nani Account supports nested [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) contract signatures, calldata compression for greater performance on L2, and a minimal ERC1967 UUPS (upgradeability) path. Nani Account also permits ownership transfers so that users don't get locked into a particular `Signer`.
 
 #### Benchmarks
 
@@ -49,13 +49,11 @@ Nani Account supports nested [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271)
 
 ### Secure, Audited, Open Source
 
-Nani Account is built on the foundation of the [Solady library](https://github.com/Vectorized/solady), an audited and performant codebase for efficient smart contracts. You can find Solady audit reports [here](https://github.com/Vectorized/solady/tree/main/audits). Nani Account is also fully open source so you can validate the [source code](https://github.com/NaniDAO/accounts).
+Nani Account is built on the foundation of the [Solady library](https://github.com/Vectorized/solady), an audited and performant codebase for efficient smart contracts. Nani Account is also fully open source so you can validate the [source code](https://github.com/NaniDAO/accounts).
 
-### Modular Now
+### Modular
 
 Nani Account supports validator plugins that allow users to add custom logic and authorization flows on Day 1, such as timelocking certain assets or actions, adding multiple signers to their account, as well as planning future transactions on automated schedules. These modular features rely on Nani Accounts' custom nonce-storage system, which improves the visibility and discoverability of plugins and related actions by using the ERC-4337 entry point's own accounting logic. When a user wants to enable or remove a plugin, they simply update their accounts' storage without requiring a delegatecall or full upgrade.
-
-Nani Account is also designed with future compatibility in mind, ready to adapt to [EIP-6900](https://eips.ethereum.org/EIPS/eip-6900) and other potential smart account standards. This allows for seamless upgrades to a 6900-compatible account and the integration of preferences when available.
 
 ## Using Nani Account
 
@@ -67,4 +65,3 @@ The code snippet below demonstrates how to use Nani Account with Account Kit. It
 
 - [Nani Account Deployment Addresses](https://github.com/NaniDAO/accounts#deployments)
 - [Nani Account Github Repo](https://github.com/NaniDAO/accounts)
-- [Audit Reports](https://github.com/Vectorized/solady/tree/main/audits)

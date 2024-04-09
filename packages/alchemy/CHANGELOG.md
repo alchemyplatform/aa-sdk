@@ -3,6 +3,166 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.7.3](https://github.com/alchemyplatform/aa-sdk/compare/v3.7.2...v3.7.3) (2024-03-28)
+
+### Bug Fixes
+
+- **alchemy-signer:** fix the passkey creation flow ([#534](https://github.com/alchemyplatform/aa-sdk/issues/534)) ([ef50ac4](https://github.com/alchemyplatform/aa-sdk/commit/ef50ac4def125270a99d73402d6f8903dbbf97d6))
+
+## [3.7.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.7.1...v3.7.2) (2024-03-27)
+
+**Note:** Version bump only for package @alchemy/aa-alchemy
+
+## [3.7.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.7.0...v3.7.1) (2024-03-27)
+
+### Bug Fixes
+
+- dummy paymaster and data addresses updates ([#532](https://github.com/alchemyplatform/aa-sdk/issues/532)) ([baab7bd](https://github.com/alchemyplatform/aa-sdk/commit/baab7bd7500157af744fe1c581ac12cbe2e0d8b2))
+
+# [3.7.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.6.1...v3.7.0) (2024-03-27)
+
+### Features
+
+- update dummy paymaster and data ([#531](https://github.com/alchemyplatform/aa-sdk/issues/531)) ([956873b](https://github.com/alchemyplatform/aa-sdk/commit/956873b768afa63747aacfb6252e5ac3b4655f65))
+
+## [3.6.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.6.0...v3.6.1) (2024-03-18)
+
+**Note:** Version bump only for package @alchemy/aa-alchemy
+
+# [3.6.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.5.1...v3.6.0) (2024-03-18)
+
+**Note:** Version bump only for package @alchemy/aa-alchemy
+
+## [3.5.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.5.0...v3.5.1) (2024-03-14)
+
+**Note:** Version bump only for package @alchemy/aa-alchemy
+
+# [3.5.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.4.4...v3.5.0) (2024-03-14)
+
+### Bug Fixes
+
+- **alchemy-signer:** check if process is defined before reading env vars ([#508](https://github.com/alchemyplatform/aa-sdk/issues/508)) ([bce8123](https://github.com/alchemyplatform/aa-sdk/commit/bce81239457c05bf1ee3560513bf6c140167ad04))
+
+### Features
+
+- **plugins:** make plugingen a cli tool ([#507](https://github.com/alchemyplatform/aa-sdk/issues/507)) ([53ba81d](https://github.com/alchemyplatform/aa-sdk/commit/53ba81d33422bb3f18134c1dd75e68d64f5cc3f0))
+
+## [3.4.4](https://github.com/alchemyplatform/aa-sdk/compare/v3.4.3...v3.4.4) (2024-03-12)
+
+### Bug Fixes
+
+- **alchemy-signer:** set the user during passkey account creation ([#503](https://github.com/alchemyplatform/aa-sdk/issues/503)) ([a6669c6](https://github.com/alchemyplatform/aa-sdk/commit/a6669c6f35ba04fa1d2d33b79f74ab24af74804c))
+
+## [3.4.3](https://github.com/alchemyplatform/aa-sdk/compare/v3.4.2...v3.4.3) (2024-03-11)
+
+### Bug Fixes
+
+- **alchemy-signer:** allow for org id to be passed with bundle ([#501](https://github.com/alchemyplatform/aa-sdk/issues/501)) ([8c06f4f](https://github.com/alchemyplatform/aa-sdk/commit/8c06f4f42c312e2e14d9854f536b1badf787abe2))
+
+## [3.4.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.4.1...v3.4.2) (2024-03-08)
+
+### Bug Fixes
+
+- **alchemy-signer:** persist temporary session state to localstorage always ([#500](https://github.com/alchemyplatform/aa-sdk/issues/500)) ([fe84685](https://github.com/alchemyplatform/aa-sdk/commit/fe846858da955fa2c316283aabff31aa0d2c2525))
+
+## [3.4.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.4.0...v3.4.1) (2024-03-02)
+
+### Bug Fixes
+
+- allow rpid override in signer ([9dd7818](https://github.com/alchemyplatform/aa-sdk/commit/9dd781887f814a318f4ddabceedefd1298648918))
+
+# [3.4.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.3.0...v3.4.0) (2024-02-29)
+
+### Bug Fixes
+
+- **alchemy-signer:** undo a whoami change ([#495](https://github.com/alchemyplatform/aa-sdk/issues/495)) ([c88a965](https://github.com/alchemyplatform/aa-sdk/commit/c88a965e4a21816450b5baaa5820fa2389ed9199))
+
+# [3.3.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.2.1...v3.3.0) (2024-02-29)
+
+### Features
+
+- **alchemy-signer:** migrate the alchemy signer to use bundle from QP ([#492](https://github.com/alchemyplatform/aa-sdk/issues/492)) ([cd6f491](https://github.com/alchemyplatform/aa-sdk/commit/cd6f491ffb66de3924024420e76e5350f831497c))
+
+## [3.2.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.2.0...v3.2.1) (2024-02-27)
+
+**Note:** Version bump only for package @alchemy/aa-alchemy
+
+# [3.2.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.1.2...v3.2.0) (2024-02-26)
+
+**Note:** Version bump only for package @alchemy/aa-alchemy
+
+## [3.1.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.1.1...v3.1.2) (2024-02-26)
+
+### Bug Fixes
+
+- **alchemy-signer:** missing transports on iOS during passkey creation ([#488](https://github.com/alchemyplatform/aa-sdk/issues/488)) ([740946f](https://github.com/alchemyplatform/aa-sdk/commit/740946f14f5a67b986e136269c564f79811f5d23))
+
+## [3.1.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.1.0...v3.1.1) (2024-02-23)
+
+**Note:** Version bump only for package @alchemy/aa-alchemy
+
+# [3.1.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.1...v3.1.0) (2024-02-23)
+
+### Bug Fixes
+
+- tx signing needs to happen over hash of RLP ([#481](https://github.com/alchemyplatform/aa-sdk/issues/481)) ([e3d7371](https://github.com/alchemyplatform/aa-sdk/commit/e3d737175abab6f4ccb16e4e22e0ec4f58c4e736))
+
+### Features
+
+- support using AlchemySigner as EOA ([#467](https://github.com/alchemyplatform/aa-sdk/issues/467)) ([b620671](https://github.com/alchemyplatform/aa-sdk/commit/b6206717afb51267a406a6d2fd48af5593888fdf))
+
+## [3.0.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0...v3.0.1) (2024-02-21)
+
+**Note:** Version bump only for package @alchemy/aa-alchemy
+
+# [3.0.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.13...v3.0.0) (2024-02-21)
+
+**Note:** Version bump only for package @alchemy/aa-alchemy
+
+# [3.0.0-alpha.13](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.12...v3.0.0-alpha.13) (2024-02-16)
+
+**Note:** Version bump only for package @alchemy/aa-alchemy
+
+# [3.0.0-alpha.10](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.9...v3.0.0-alpha.10) (2024-02-14)
+
+**Note:** Version bump only for package @alchemy/aa-alchemy
+
+# [3.0.0-alpha.9](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.8...v3.0.0-alpha.9) (2024-02-13)
+
+### Features
+
+- **amoy:** add amoy from viem update ([#448](https://github.com/alchemyplatform/aa-sdk/issues/448)) ([adae84a](https://github.com/alchemyplatform/aa-sdk/commit/adae84add30536676725dbc8805f3436c8ad395e))
+
+# [3.0.0-alpha.8](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.7...v3.0.0-alpha.8) (2024-02-11)
+
+### Features
+
+- add alchemy signer to aa-alchemy ([#441](https://github.com/alchemyplatform/aa-sdk/issues/441)) ([d8b17a7](https://github.com/alchemyplatform/aa-sdk/commit/d8b17a7df54b93c5e79c2034afa99e0bb9c6b637))
+
+# [3.0.0-alpha.6](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.5...v3.0.0-alpha.6) (2024-02-08)
+
+### Bug Fixes
+
+- gasmanager config was being ignored when creating alchemy clients ([25c770f](https://github.com/alchemyplatform/aa-sdk/commit/25c770f5e3d45e9986235d7d7dcc43d8e3610580))
+- incorrect entrypoint call ([6e14338](https://github.com/alchemyplatform/aa-sdk/commit/6e143388f68019d5806065fb410927e256bb0259))
+
+### Features
+
+- export the create alchemy client from existing method ([d1c82f8](https://github.com/alchemyplatform/aa-sdk/commit/d1c82f8a1f529f3d098b00fa8b894164eddb665e))
+
+# [3.0.0-alpha.5](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.4...v3.0.0-alpha.5) (2024-02-07)
+
+### Bug Fixes
+
+- **aa-core:** add back eip-1193 method handling to the client ([#425](https://github.com/alchemyplatform/aa-sdk/issues/425)) ([48b5943](https://github.com/alchemyplatform/aa-sdk/commit/48b594375d64fe832cfb06f1fb3a539da3c7b965))
+
+# [3.0.0-alpha.4](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.3...v3.0.0-alpha.4) (2024-02-02)
+
+### Bug Fixes
+
+- **aa-alchemy:** fix a test that was dependent on the current version ([d4e4a8f](https://github.com/alchemyplatform/aa-sdk/commit/d4e4a8f339f44c552913d4a64a29af85de7da430))
+- alchemy package.json was incorrectly pointing to files ([#423](https://github.com/alchemyplatform/aa-sdk/issues/423)) ([5678def](https://github.com/alchemyplatform/aa-sdk/commit/5678defe4885f1b15724e0208a5813deea07ffa4))
+
 # [3.0.0-alpha.3](https://github.com/alchemyplatform/aa-sdk/compare/v3.0.0-alpha.2...v3.0.0-alpha.3) (2024-02-02)
 
 ### Features

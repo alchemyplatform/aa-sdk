@@ -1,4 +1,15 @@
-import { sepolia } from "@alchemy/aa-core";
+import {
+  arbitrum,
+  arbitrumSepolia,
+  base,
+  baseSepolia,
+  optimism,
+  optimismSepolia,
+  polygon,
+  polygonAmoy,
+  polygonMumbai,
+  sepolia,
+} from "@alchemy/aa-core";
 import { parseAbiParameters } from "viem";
 import { MultiOwnerPluginGenConfig } from "../multi-owner/config.js";
 import type { PluginGenConfig } from "../types";
@@ -8,7 +19,17 @@ export const SessionKeyPluginGenConfig: PluginGenConfig = {
   name: "SessionKeyPlugin",
   abi: SessionKeyPluginAbi,
   addresses: {
-    [sepolia.id]: "0x70a64501Fd1398b0A236b69006936009d31C1520",
+    [sepolia.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
+    [baseSepolia.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
+    [polygon.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
+    [polygonAmoy.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
+    [polygonMumbai.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
+    [optimism.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
+    [optimismSepolia.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
+    [arbitrum.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
+    [arbitrumSepolia.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
+    [base.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
+    [baseSepolia.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
   },
   chain: sepolia,
   installConfig: {

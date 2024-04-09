@@ -4,6 +4,7 @@ import {
   type Client,
   type ClientConfig,
   type CustomTransport,
+  type FormattedTransactionRequest,
   type PublicActions,
   type PublicRpcSchema,
   type RpcSchema,
@@ -11,6 +12,8 @@ import {
 } from "viem";
 import { z } from "zod";
 import type { SmartContractAccount } from "../account/smartContractAccount.js";
+import { AccountNotFoundError } from "../errors/account.js";
+import { ChainNotFoundError } from "../errors/client.js";
 import { middlewareActions } from "../middleware/actions.js";
 import type { ClientMiddleware } from "../middleware/types.js";
 import type { Prettify } from "../utils/index.js";
@@ -33,15 +36,24 @@ export type SmartAccountClientConfig<
   chain extends Chain | undefined = Chain | undefined,
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  context extends Record<string, any> | undefined =
+    | Record<string, any>
     | undefined
 > = Prettify<
   Pick<
     ClientConfig<transport, chain, account>,
-    "cacheTime" | "chain" | "key" | "name" | "pollingInterval" | "transport"
+    | "cacheTime"
+    | "chain"
+    | "key"
+    | "name"
+    | "pollingInterval"
+    | "transport"
+    | "type"
   > & {
     account?: account;
     opts?: z.input<typeof SmartAccountClientOptsSchema>;
-  } & ClientMiddlewareConfig
+  } & ClientMiddlewareConfig<context>
 >;
 
 export type SmartAccountClientRpcSchema = [
@@ -49,33 +61,51 @@ export type SmartAccountClientRpcSchema = [
   ...PublicRpcSchema
 ];
 
+//#region SmartAccountClientActions
 export type SmartAccountClientActions<
   chain extends Chain | undefined = Chain | undefined,
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  context extends Record<string, any> | undefined =
+    | Record<string, any>
     | undefined
-> = BaseSmartAccountClientActions<chain, account> &
+> = BaseSmartAccountClientActions<chain, account, context> &
   BundlerActions &
   PublicActions;
+//#endregion SmartAccountClientActions
 
+//#region SmartAccountClient
 export type SmartAccountClient<
   transport extends Transport = Transport,
   chain extends Chain | undefined = Chain | undefined,
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  actions extends SmartAccountClientActions<
+  actions extends Record<string, unknown> = Record<string, unknown>,
+  rpcSchema extends RpcSchema = SmartAccountClientRpcSchema,
+  context extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
+> = Prettify<
+  Client<
+    transport,
     chain,
-    account
-  > = SmartAccountClientActions<chain, account>,
-  rpcSchema extends RpcSchema = SmartAccountClientRpcSchema
-> = Prettify<Client<transport, chain, account, rpcSchema, actions>>;
+    account,
+    rpcSchema,
+    actions & SmartAccountClientActions<chain, account, context>
+  >
+>;
+//#endregion SmartAccountClient
 
 export type BaseSmartAccountClient<
   transport extends Transport = Transport,
   chain extends Chain | undefined = Chain | undefined,
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  context extends Record<string, any> | undefined =
+    | Record<string, any>
     | undefined
 > = Prettify<
   Client<
@@ -83,7 +113,7 @@ export type BaseSmartAccountClient<
     chain,
     account,
     [...BundlerRpcSchema, ...PublicRpcSchema],
-    { middleware: ClientMiddleware } & SmartAccountClientOpts &
+    { middleware: ClientMiddleware<context> } & SmartAccountClientOpts &
       BundlerActions &
       PublicActions
   >
@@ -94,9 +124,12 @@ export function createSmartAccountClient<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
     | undefined
 >(
-  config: SmartAccountClientConfig<TTransport, TChain, TAccount>
+  config: SmartAccountClientConfig<TTransport, TChain, TAccount, TContext>
 ): SmartAccountClient<TTransport, TChain, TAccount>;
 
 export function createSmartAccountClient(
@@ -106,25 +139,95 @@ export function createSmartAccountClient(
     key = "account",
     name = "account provider",
     transport,
+    type = "SmartAccountClient",
     ...params
   } = config;
 
-  const client = createBundlerClient({
+  const client: SmartAccountClient = createBundlerClient({
     ...params,
     key,
     name,
+    // we start out with this because the base methods for a SmartAccountClient
+    // require a smart account client, but once we have completed building everything
+    // we want to override this value with the one passed in by the extender
     type: "SmartAccountClient",
-    // TODO: our OG provider also has handlers for some various RPC methods
-    // we should support those here as well
-    transport,
-  });
+    // TODO: this needs to be tested
+    transport: (opts) => {
+      const rpcTransport = transport(opts);
 
-  return client
+      return custom({
+        async request({ method, params }) {
+          switch (method) {
+            case "eth_sendTransaction":
+              if (!client.account) {
+                throw new AccountNotFoundError();
+              }
+              if (!client.chain) {
+                throw new ChainNotFoundError();
+              }
+              const [tx] = params as [FormattedTransactionRequest];
+              return client.sendTransaction({
+                ...tx,
+                account: client.account,
+                chain: client.chain,
+              });
+            case "eth_sign":
+              if (!client.account) {
+                throw new AccountNotFoundError();
+              }
+              const [address, data] = params!;
+              if (address !== client.account.address) {
+                throw new Error(
+                  "cannot sign for address that is not the current account"
+                );
+              }
+              return client.signMessage(data);
+            case "personal_sign": {
+              if (!client.account) {
+                throw new AccountNotFoundError();
+              }
+              const [data, address] = params!;
+              if (address !== client.account.address) {
+                throw new Error(
+                  "cannot sign for address that is not the current account"
+                );
+              }
+              return client.signMessage(data);
+            }
+            case "eth_signTypedData_v4": {
+              if (!client.account) {
+                throw new AccountNotFoundError();
+              }
+              const [address, dataParams] = params!;
+              if (address !== client.account.address) {
+                throw new Error(
+                  "cannot sign for address that is not the current account"
+                );
+              }
+              return client.signTypedData(dataParams);
+            }
+            case "eth_chainId":
+              if (!opts.chain) {
+                throw new ChainNotFoundError();
+              }
+
+              return opts.chain.id;
+            default:
+              // TODO: there's probably a number of methods we just don't support, will need to test most of them out
+              // first let's get something working though
+              return rpcTransport.request({ method, params });
+          }
+        },
+      })(opts);
+    },
+  })
     .extend(() => ({
       ...SmartAccountClientOptsSchema.parse(config.opts ?? {}),
     }))
     .extend(middlewareActions(config))
     .extend(smartAccountClientActions);
+
+  return { ...client, type };
 }
 
 export function createSmartAccountClientFromExisting<
@@ -136,15 +239,26 @@ export function createSmartAccountClientFromExisting<
   TClient extends BundlerClient<TTransport> = BundlerClient<TTransport>,
   TActions extends SmartAccountClientActions<
     TChain,
-    TAccount
+    TAccount,
+    TContext
   > = SmartAccountClientActions<TChain, TAccount>,
-  TRpcSchema extends SmartAccountClientRpcSchema = SmartAccountClientRpcSchema
+  TRpcSchema extends SmartAccountClientRpcSchema = SmartAccountClientRpcSchema,
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
 >(
   config: Omit<
-    SmartAccountClientConfig<Transport, TChain, TAccount>,
+    SmartAccountClientConfig<Transport, TChain, TAccount, TContext>,
     "transport" | "chain"
   > & { client: TClient }
-): SmartAccountClient<CustomTransport, TChain, TAccount, TActions, TRpcSchema>;
+): SmartAccountClient<
+  CustomTransport,
+  TChain,
+  TAccount,
+  TActions,
+  TRpcSchema,
+  TContext
+>;
 
 export function createSmartAccountClientFromExisting(
   config: Omit<SmartAccountClientConfig, "transport" | "chain"> & {

@@ -2,7 +2,7 @@ import type { Address } from "abitype";
 import {
   concatHex,
   encodeFunctionData,
-  hexToBytes,
+  isHex,
   type FallbackTransport,
   type Hex,
   type Transport,
@@ -10,6 +10,7 @@ import {
 import { SimpleAccountAbi } from "../abis/SimpleAccountAbi.js";
 import { SimpleAccountFactoryAbi } from "../abis/SimpleAccountFactoryAbi.js";
 import { createBundlerClient } from "../client/bundlerClient.js";
+import { getVersion060EntryPoint } from "../entrypoint/0.6.js";
 import { AccountRequiresOwnerError } from "../errors/account.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import type { BatchUserOperationCallData } from "../types.js";
@@ -17,18 +18,18 @@ import { BaseSmartContractAccount } from "./base.js";
 import { SimpleSmartAccountParamsSchema } from "./schema.js";
 import {
   toSmartContractAccount,
-  type OwnedSmartContractAccount,
+  type SmartContractAccountWithSigner,
   type ToSmartContractAccountParams,
 } from "./smartContractAccount.js";
 import type { SimpleSmartAccountParams } from "./types.js";
 
 class SimpleSmartContractAccount<
   TTransport extends Transport | FallbackTransport = Transport,
-  TOwner extends SmartAccountSigner = SmartAccountSigner
-> extends BaseSmartContractAccount<TTransport, TOwner> {
+  TSigner extends SmartAccountSigner = SmartAccountSigner
+> extends BaseSmartContractAccount<TTransport, TSigner> {
   protected index: bigint;
 
-  constructor(params: SimpleSmartAccountParams<TTransport, TOwner>) {
+  constructor(params: SimpleSmartAccountParams<TTransport, TSigner>) {
     SimpleSmartAccountParamsSchema<TTransport>().parse(params);
 
     // This is a hack for now, we should kill the SimpleSmart Account when we kill Base Account
@@ -36,9 +37,10 @@ class SimpleSmartContractAccount<
       transport: params.transport as TTransport,
       chain: params.chain,
     });
+    // @ts-expect-error zod custom type not recognized as required params for signers
     super({ ...params, rpcClient: client });
-    this.owner = params.owner as TOwner;
-    this.index = params.index ?? 0n;
+    this.signer = params.signer as TSigner;
+    this.index = params.salt ?? 0n;
   }
 
   getDummySignature(): `0x${string}` {
@@ -78,17 +80,9 @@ class SimpleSmartContractAccount<
   }
 
   signMessage(msg: Uint8Array | string): Promise<`0x${string}`> {
-    if (typeof msg === "string" && msg.startsWith("0x")) {
-      msg = hexToBytes(msg as Hex);
-    } else if (typeof msg === "string") {
-      msg = new TextEncoder().encode(msg);
-    }
-
-    return this.owner.signMessage(msg);
-  }
-
-  setOwner(owner: TOwner): void {
-    this.owner = owner;
+    return this.signer.signMessage(
+      typeof msg === "string" && !isHex(msg) ? msg : { raw: msg }
+    );
   }
 
   public async getAccountInitCode(): Promise<`0x${string}`> {
@@ -97,38 +91,47 @@ class SimpleSmartContractAccount<
       encodeFunctionData({
         abi: SimpleAccountFactoryAbi,
         functionName: "createAccount",
-        args: [await this.owner.getAddress(), this.index],
+        args: [await this.signer.getAddress(), this.index],
       }),
     ]);
   }
 }
 
-export type SimpleSmartAccount<TOwner extends SmartAccountSigner> =
-  OwnedSmartContractAccount<"SimpleAccount", TOwner>;
+export type SimpleSmartAccount<TSigner extends SmartAccountSigner> =
+  SmartContractAccountWithSigner<"SimpleAccount", TSigner>;
 
 export const createSimpleSmartAccount = async <
   TTransport extends Transport = Transport,
-  TOwner extends SmartAccountSigner = SmartAccountSigner
->(
-  params: Omit<
-    SimpleSmartAccountParams<TTransport, TOwner>,
-    "rpcClient" | "chain"
-  > &
-    Pick<ToSmartContractAccountParams, "chain" | "transport">
-): Promise<SimpleSmartAccount<TOwner>> => {
-  if (!params.owner) throw new AccountRequiresOwnerError("SimpleAccount");
+  TSigner extends SmartAccountSigner = SmartAccountSigner
+>({
+  chain,
+  entryPoint = getVersion060EntryPoint(chain),
+  ...params
+}: Omit<
+  SimpleSmartAccountParams<TTransport, TSigner>,
+  "rpcClient" | "chain" | "accountAddress" | "entryPointAddress"
+> &
+  Pick<
+    ToSmartContractAccountParams,
+    "chain" | "transport" | "accountAddress" | "entryPoint"
+  >): Promise<SimpleSmartAccount<TSigner>> => {
+  if (!params.signer) throw new AccountRequiresOwnerError("SimpleAccount");
 
-  // @ts-expect-error base account allows for optional owners, but simple account requires it
-  const simpleAccount = new SimpleSmartContractAccount<TTransport>(params);
+  // @ts-expect-error zod custom type not recognized as required params for signers
+  const simpleAccount = new SimpleSmartContractAccount<TTransport>({
+    chain,
+    entryPointAddress: entryPoint.address,
+    ...params,
+  });
   const parsedParams = SimpleSmartAccountParamsSchema<
     TTransport,
-    TOwner
-  >().parse(params);
+    TSigner
+  >().parse({ chain, entryPointAddress: entryPoint.address, ...params });
 
   const base = await toSmartContractAccount({
     source: "SimpleAccount",
     transport: params.transport,
-    chain: params.chain,
+    chain,
     encodeBatchExecute: simpleAccount.encodeBatchExecute.bind(simpleAccount),
     encodeExecute: (tx) =>
       simpleAccount.encodeExecute.bind(simpleAccount)(
@@ -136,7 +139,7 @@ export const createSimpleSmartAccount = async <
         tx.value ?? 0n,
         tx.data
       ),
-    entrypointAddress: simpleAccount.getEntryPointAddress(),
+    entryPoint,
     getAccountInitCode: async () => {
       if (parsedParams.initCode) return parsedParams.initCode;
       return simpleAccount.getAccountInitCode();
@@ -146,15 +149,13 @@ export const createSimpleSmartAccount = async <
       simpleAccount.signMessage(
         typeof message === "string" ? message : message.raw
       ),
-    // @ts-expect-error these types still represent the same thing, but they're just a little off in there definitions
+    // @ts-expect-error these types still represent the same thing, but they are just a little off in there definitions
     signTypedData: simpleAccount.signTypedData.bind(simpleAccount),
     accountAddress: parsedParams.accountAddress,
   });
 
   return {
     ...base,
-    getOwner: () => simpleAccount.getOwner() as TOwner,
-    setOwner: (owner: TOwner) =>
-      simpleAccount.setOwner.bind(simpleAccount)(owner),
+    getSigner: () => simpleAccount.getSigner() as TSigner,
   };
 };

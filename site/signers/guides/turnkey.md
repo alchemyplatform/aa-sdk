@@ -6,16 +6,16 @@ head:
       content: Turnkey Integration Guide
   - - meta
     - name: description
-      content: Follow this integration guide to use Turnkey as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Turnkey as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - property: og:description
-      content: Follow this integration guide to use Turnkey as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Turnkey as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - name: twitter:title
       content: Turnkey Integration Guide
   - - meta
     - name: twitter:description
-      content: Follow this integration guide to use Turnkey as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Turnkey as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
 # Turnkey Integration Guide
@@ -71,7 +71,7 @@ const chain = sepolia;
 const provider = await createModularAccountAlchemyClient({
   apiKey: "ALCHEMY_API_KEY",
   chain,
-  owner: await createTurnkeySigner(),
+  signer: await createTurnkeySigner(),
 });
 ```
 

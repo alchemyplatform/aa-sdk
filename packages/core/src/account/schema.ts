@@ -8,7 +8,7 @@ import { ChainSchema } from "../utils/index.js";
 
 export const createBaseSmartAccountParamsSchema = <
   TTransport extends Transport = Transport,
-  TOwner extends SmartAccountSigner | undefined = SmartAccountSigner | undefined
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 >() =>
   z.object({
     rpcClient: z.union([
@@ -16,9 +16,7 @@ export const createBaseSmartAccountParamsSchema = <
       createPublicErc4337ClientSchema<TTransport>(),
     ]),
     factoryAddress: Address,
-    owner: z
-      .custom<TOwner>((owner) => (owner ? isSigner(owner) : undefined))
-      .optional(),
+    signer: z.custom<TSigner>(isSigner),
     entryPointAddress: Address.optional(),
     chain: ChainSchema,
     accountAddress: Address.optional().describe(
@@ -33,14 +31,13 @@ export const createBaseSmartAccountParamsSchema = <
 
 export const SimpleSmartAccountParamsSchema = <
   TTransport extends Transport = Transport,
-  TOwner extends SmartAccountSigner = SmartAccountSigner
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 >() =>
-  createBaseSmartAccountParamsSchema<TTransport, TOwner>()
+  createBaseSmartAccountParamsSchema<TTransport, TSigner>()
     .omit({
       rpcClient: true,
     })
     .extend({
       transport: z.custom<TTransport>(),
-      owner: z.custom<TOwner>(isSigner),
-      index: z.bigint().optional(),
+      salt: z.bigint().optional(),
     });

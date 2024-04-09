@@ -4,6 +4,7 @@ import type {
   Client,
   Hash,
   PublicRpcSchema,
+  StateOverride,
   Transport,
 } from "viem";
 import { estimateUserOperationGas } from "../../actions/bundler/estimateUserOperationGas.js";
@@ -18,6 +19,7 @@ import type {
   UserOperationResponse,
 } from "../../types.js";
 
+// Reference: https://eips.ethereum.org/EIPS/eip-4337#rpc-methods-eth-namespace
 export type BundlerRpcSchema = [
   {
     Method: "eth_sendUserOperation";
@@ -26,7 +28,7 @@ export type BundlerRpcSchema = [
   },
   {
     Method: "eth_estimateUserOperationGas";
-    Parameters: [UserOperationRequest, Address];
+    Parameters: [UserOperationRequest, Address, StateOverride?];
     ReturnType: UserOperationEstimateGasResponse;
   },
   {
@@ -46,24 +48,27 @@ export type BundlerRpcSchema = [
   }
 ];
 
+//#region BundlerActions
 export type BundlerActions = {
   /**
    * calls `eth_estimateUserOperationGas` and  returns the result
    *
    * @param request - the {@link UserOperationRequest} to estimate gas for
-   * @param entryPoint - the entrypoint address the op will be sent to
+   * @param entryPoint - the entry point address the op will be sent to
+   * @params stateOverride - the state override to use for the estimation
    * @returns the gas estimates for the given response (see: {@link UserOperationEstimateGasResponse})
    */
   estimateUserOperationGas(
     request: UserOperationRequest,
-    entryPoint: Address
+    entryPoint: Address,
+    stateOverride?: StateOverride
   ): Promise<UserOperationEstimateGasResponse>;
 
   /**
    * calls `eth_sendUserOperation` and returns the hash of the sent UserOperation
    *
    * @param request - the {@link UserOperationRequest} to send
-   * @param entryPoint - the entrypoint address the op will be sent to
+   * @param entryPoint - the entry point address the op will be sent to
    * @returns the hash of the sent UserOperation
    */
   sendRawUserOperation(
@@ -88,12 +93,13 @@ export type BundlerActions = {
   getUserOperationReceipt(hash: Hash): Promise<UserOperationReceipt | null>;
 
   /**
-   * calls `eth_supportedEntryPoints` and returns the entrypoints the RPC
+   * calls `eth_supportedEntryPoints` and returns the entry points the RPC
    * supports
    * @returns - {@link Address}[]
    */
   getSupportedEntryPoints(): Promise<Address[]>;
 };
+//#endregion BundlerActions
 
 export const bundlerActions: <
   TClient extends Client<
@@ -105,8 +111,8 @@ export const bundlerActions: <
 >(
   client: TClient
 ) => BundlerActions = (client) => ({
-  estimateUserOperationGas: async (request, entryPoint) =>
-    estimateUserOperationGas(client, { request, entryPoint }),
+  estimateUserOperationGas: async (request, entryPoint, stateOverride) =>
+    estimateUserOperationGas(client, { request, entryPoint, stateOverride }),
   sendRawUserOperation: async (request, entryPoint) =>
     sendRawUserOperation(client, { request, entryPoint }),
   getUserOperationByHash: async (hash) =>

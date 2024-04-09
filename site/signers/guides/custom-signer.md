@@ -3,22 +3,22 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: How to Use Your Own Account Signer
+      content: How to use your own Account Signer
   - - meta
     - name: description
-      content: Follow this guide to use any Signer you want with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to use any Signer you want with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - property: og:description
-      content: Follow this guide to use any Signer you want with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to use any Signer you want with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - name: twitter:title
-      content: How to Use Your Own Account Signer
+      content: How to use your own Account Signer
   - - meta
     - name: twitter:description
-      content: Follow this guide to use any Signer you want with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this guide to use any Signer you want with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
-# How to Use Your Own Account Signer
+# How to use your own Account Signer
 
 Account Kit is designed to be flexible and allow you to use any Signer you want. If you don't want to use any Signer implementations in [`aa-signers`](/packages/aa-signers/index), you can either:
 
@@ -39,6 +39,6 @@ Smart accounts in Account Kit expect an implementation of `SmartAccountSigner` t
 
 Viem allows you to create a `WalletClient`, which can be used to wrap local or JSON RPC based wallets. You can see the complete docs for leveraging the `WalletClient` [here](https://viem.sh/docs/clients/wallet.html).
 
-We support a `SmartAccountSigner` implementation called `WalletClientSigner` that makes it really easy to use a viem `WalletClient` as an owner on your Smart Contract Account. If your Signer is [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compliant, it's really easy to use with `WalletClient`. Let's take a look at a simple example:
+We support a `SmartAccountSigner` implementation called `WalletClientSigner` that makes it really easy to use a viem `WalletClient` as a signer on your Smart Contract Account. If your Signer is [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compliant, it is really easy to use with `WalletClient`. Let's take a look at a simple example:
 
 <<< @/snippets/signers/wallet-client-signer.ts

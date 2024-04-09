@@ -21,7 +21,7 @@ import {
   type LightAccountVersion,
 } from "../../index.js";
 import { getMSCAUpgradeToData } from "../../msca/utils.js";
-import { createLightAccountClient } from "../createLightAccountClient.js";
+import { createLightAccountClient } from "../client.js";
 import {
   API_KEY,
   LIGHT_ACCOUNT_OWNER_MNEMONIC,
@@ -33,9 +33,9 @@ const chain = sepolia;
 Logger.setLogLevel(LogLevel.DEBUG);
 
 describe("Light Account Tests", () => {
-  const owner: SmartAccountSigner<HDAccount> =
+  const signer: SmartAccountSigner<HDAccount> =
     LocalAccountSigner.mnemonicToAccountSigner(LIGHT_ACCOUNT_OWNER_MNEMONIC);
-  const undeployedOwner = LocalAccountSigner.mnemonicToAccountSigner(
+  const undeployedAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
     UNDEPLOYED_OWNER_MNEMONIC
   );
 
@@ -46,7 +46,7 @@ describe("Light Account Tests", () => {
   ])(
     "LA version $version should correctly verify 1271 signatures",
     async ({ version, expected, throws }) => {
-      const provider = await givenConnectedProvider({ owner, chain, version });
+      const provider = await givenConnectedProvider({ signer, chain, version });
       const message = "test";
 
       if (!throws) {
@@ -69,7 +69,7 @@ describe("Light Account Tests", () => {
   it("should successfully get counterfactual address", async () => {
     const {
       account: { address },
-    } = await givenConnectedProvider({ owner, chain });
+    } = await givenConnectedProvider({ signer, chain });
     expect(address).toMatchInlineSnapshot(
       '"0x86f3B0211764971Ad0Fc8C8898d31f5d792faD84"'
     );
@@ -77,7 +77,7 @@ describe("Light Account Tests", () => {
 
   it("should sign typed data with 6492 successfully for undeployed account", async () => {
     const { account } = await givenConnectedProvider({
-      owner: undeployedOwner,
+      signer: undeployedAccountSigner,
       chain,
     });
 
@@ -98,7 +98,7 @@ describe("Light Account Tests", () => {
 
   it("should sign message with 6492 successfully for undeployed account", async () => {
     const { account } = await givenConnectedProvider({
-      owner: undeployedOwner,
+      signer: undeployedAccountSigner,
       chain,
     });
     expect(
@@ -113,7 +113,7 @@ describe("Light Account Tests", () => {
    * For current balance, @see: https://sepolia.etherscan.io/address/0x7eDdc16B15259E5541aCfdebC46929873839B872
    */
   it("should execute successfully", async () => {
-    const provider = await givenConnectedProvider({ owner, chain });
+    const provider = await givenConnectedProvider({ signer, chain });
 
     const result = await provider.sendUserOperation({
       uo: {
@@ -131,7 +131,7 @@ describe("Light Account Tests", () => {
   it("should fail to execute if account address is not deployed and not correct", async () => {
     const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
     const newProvider = await givenConnectedProvider({
-      owner,
+      signer,
       chain,
       accountAddress,
     });
@@ -147,42 +147,41 @@ describe("Light Account Tests", () => {
   });
 
   it("should get counterfactual for undeployed account", async () => {
-    const owner = LocalAccountSigner.privateKeyToAccountSigner(
+    const newSigner = LocalAccountSigner.privateKeyToAccountSigner(
       generatePrivateKey()
     );
     const {
       account: { address },
-    } = await givenConnectedProvider({ owner, chain });
+    } = await givenConnectedProvider({ signer: newSigner, chain });
 
     expect(isAddress(address)).toBe(true);
   });
 
-  it("should get owner successfully", async () => {
-    const provider = await givenConnectedProvider({ owner, chain });
+  it("should get on-chain owner address successfully", async () => {
+    const provider = await givenConnectedProvider({ signer, chain });
     expect(await provider.account.getOwnerAddress()).toMatchInlineSnapshot(
       '"0x65eaA2AfDF6c97295bA44C458abb00FebFB3a5FA"'
     );
+    // match with current signer
     expect(await provider.account.getOwnerAddress()).toBe(
-      await owner.getAddress()
+      await signer.getAddress()
     );
   });
 
   it("should transfer ownership successfully", async () => {
     const provider = await givenConnectedProvider({
-      owner,
+      signer,
       chain,
     });
 
     // create a throwaway address
-    const throwawayOwner = LocalAccountSigner.privateKeyToAccountSigner(
+    const throwawaySigner = LocalAccountSigner.privateKeyToAccountSigner(
       generatePrivateKey()
     );
     const throwawayProvider = await givenConnectedProvider({
-      owner: throwawayOwner,
+      signer: throwawaySigner,
       chain,
     });
-
-    const oldOwner = await throwawayOwner.getAddress();
 
     // fund the throwaway address
     await provider.sendTransaction({
@@ -191,41 +190,45 @@ describe("Light Account Tests", () => {
       value: 200000000000000000n,
     });
 
-    // create new owner and transfer ownership
-    const newThrowawayOwner = LocalAccountSigner.privateKeyToAccountSigner(
+    // create new signer and transfer ownership
+    const newOwner = LocalAccountSigner.privateKeyToAccountSigner(
       generatePrivateKey()
     );
 
     await throwawayProvider.transferOwnership({
-      newOwner: newThrowawayOwner,
+      newOwner,
       waitForTxn: true,
     });
 
-    const newOwnerViaProvider =
-      await throwawayProvider.account.getOwnerAddress();
-    const newOwner = await newThrowawayOwner.getAddress();
+    const newOwnerProvider = await givenConnectedProvider({
+      signer: newOwner,
+      chain,
+      accountAddress: throwawayProvider.getAddress(),
+    });
 
-    expect(newOwnerViaProvider).not.toBe(oldOwner);
-    expect(newOwnerViaProvider).toBe(newOwner);
+    const newOwnerAddress = await newOwnerProvider.account.getOwnerAddress();
+
+    expect(newOwnerAddress).not.toBe(await throwawaySigner.getAddress());
+    expect(newOwnerAddress).toBe(await newOwner.getAddress());
   }, 100000);
 
   it("should upgrade a deployed light account to msca successfully", async () => {
     const provider = await givenConnectedProvider({
-      owner,
+      signer,
       chain,
     });
 
-    // create a throwaway address
-    const throwawayOwner = LocalAccountSigner.privateKeyToAccountSigner(
+    // create a owner signer to create the account
+    const throwawaySigner = LocalAccountSigner.privateKeyToAccountSigner(
       generatePrivateKey()
     );
     const throwawayProvider = await givenConnectedProvider({
-      owner: throwawayOwner,
+      signer: throwawaySigner,
       chain,
     });
 
     const accountAddress = throwawayProvider.getAddress();
-    const ownerAddress = await throwawayOwner.getAddress();
+    const ownerAddress = await throwawaySigner.getAddress();
 
     // fund + deploy the throwaway address
     await provider.sendTransaction({
@@ -264,13 +267,13 @@ describe("Light Account Tests", () => {
 });
 
 const givenConnectedProvider = async ({
-  owner,
+  signer,
   chain,
   accountAddress,
   feeOptions,
   version = "v1.1.0",
 }: {
-  owner: SmartAccountSigner;
+  signer: SmartAccountSigner;
   chain: Chain;
   accountAddress?: Address;
   feeOptions?: UserOperationFeeOptions;
@@ -280,15 +283,15 @@ const givenConnectedProvider = async ({
     transport: http(`${chain.rpcUrls.alchemy.http[0]}/${API_KEY!}`),
     chain: chain,
     account: {
-      owner,
+      signer,
       accountAddress,
       version,
     },
     opts: {
       feeOptions: {
         ...feeOptions,
-        maxFeePerGas: { percentage: 50 },
-        maxPriorityFeePerGas: { percentage: 50 },
+        maxFeePerGas: { multiplier: 1.5 },
+        maxPriorityFeePerGas: { multiplier: 1.5 },
       },
       txMaxRetries: 100,
     },

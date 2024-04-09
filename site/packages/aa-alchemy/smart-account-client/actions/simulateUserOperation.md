@@ -3,7 +3,7 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: AlchemyProvider • simulateUserOperation
+      content: AlchemySmartAccountClient • simulateUserOperation
   - - meta
     - name: description
       content: Overview of the simulateUserOperation method on Alchemy Smart Account Client in aa-alchemy
@@ -72,6 +72,6 @@ const uo = await smartAccountClient.sendUserOperation({ uo: uoStruct });
 - `data: Hex` - can be either `0x` or a call data string
 - `value?: bigint` - optionally, set the value in wei you want to send to the target
 
-### `overrides?:` [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides.md)
+### `overrides?:` [`UserOperationOverrides`](/resources/types#UserOperationOverrides)
 
-Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` or `paymasterAndData` on the user operation request
+Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` or `paymasterAndData` on the user operation request. You can also specify a `stateOverride` to be passed into `eth_estimateUserOperationGas` during fee estimation.

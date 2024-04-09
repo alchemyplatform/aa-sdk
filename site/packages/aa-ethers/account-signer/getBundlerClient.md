@@ -21,10 +21,10 @@ head:
 ::: code-group
 
 ```ts [example.ts]
-import { signer } from "./ethers-signer";
+import { accountSigner } from "./ethers-signer";
 
-// get the signer's underlying viem client with EIP-4337 capabilties
-const client = signer.getBundlerClient();
+// get the account signer's underlying viem client with EIP-4337 capabilities
+const client = accountSigner.getBundlerClient();
 ```
 
 <<< @/snippets/aa-ethers/ethers-signer.ts

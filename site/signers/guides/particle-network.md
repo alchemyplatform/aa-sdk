@@ -44,7 +44,7 @@ yarn add @particle-network/provider
 
 ### Create a SmartAccountSigner
 
-With `@particle-network/auth` and `@particle-network/provider` installed, you can move on to creating a `SmartAccountSigner`. To do this, you'll need to ensure you have your `projectId`, `clientKey`, and `appId` from the Particle dashboard to use in the configuration of `ParticleNetwork`.
+With `@particle-network/auth` and `@particle-network/provider` installed, you can move on to creating a `SmartAccountSigner`. To do this, you will need to ensure you have your `projectId`, `clientKey`, and `appId` from the Particle dashboard to use in the configuration of `ParticleNetwork`.
 
 From here, setting up a `SmartAccountSigner` involves the initialization of `ParticleProvider` to be used in a viem wallet client, which then gets passed into our `SmartAccountSigner`.
 
@@ -65,7 +65,7 @@ const chain = polygonMumbai;
 const provider = await createModularAccountAlchemyClient({
   apiKey: process.env.ALCHEMY_API_KEY,
   chain,
-  owner: await createParticleSigner(),
+  signer: await createParticleSigner(),
 });
 ```
 

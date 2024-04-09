@@ -12,15 +12,17 @@ import {
   optimismGoerli,
   optimismSepolia,
   polygon,
+  polygonAmoy,
   polygonMumbai,
   sepolia,
+  type SmartContractAccount,
 } from "@alchemy/aa-core";
-import type { Address, Chain } from "viem";
+import { fromHex, type Address, type Chain } from "viem";
 
 export type LightAccountVersion =
   /** @deprecated This version does not support 1271 signature validation */
   | "v1.0.1"
-  /** @deprecated This version has a known issue with 1271 validation, it's recommended to use v1.1.0 */
+  /** @deprecated This version has a known issue with 1271 validation, it is recommended to use v1.1.0 */
   | "v1.0.2"
   | "v1.1.0";
 
@@ -67,6 +69,7 @@ export const getDefaultLightAccountFactoryAddress = (
     case sepolia.id:
     case goerli.id:
     case polygon.id:
+    case polygonAmoy.id:
     case polygonMumbai.id:
     case optimism.id:
     case optimismGoerli.id:
@@ -91,3 +94,35 @@ export const LightAccountUnsupported1271Impls = [
 export const LightAccountUnsupported1271Factories = new Set(
   LightAccountUnsupported1271Impls.map((x) => x.factoryAddress)
 );
+
+export const getLightAccountVersion = async <A extends SmartContractAccount>(
+  account: A
+) => {
+  const implAddress = await account.getImplementationAddress();
+  const implToVersion = new Map(
+    Object.entries(LightAccountVersions).map(([key, value]) => [
+      value.implAddress,
+      key as LightAccountVersion,
+    ])
+  );
+
+  const factoryToVersion = new Map(
+    Object.entries(LightAccountVersions).map(([key, value]) => [
+      value.factoryAddress,
+      key as LightAccountVersion,
+    ])
+  );
+
+  const version =
+    fromHex(implAddress, "bigint") === 0n
+      ? factoryToVersion.get(
+          account.getFactoryAddress().toLowerCase() as Address
+        )
+      : implToVersion.get(implAddress.toLowerCase() as Address);
+
+  if (!version) {
+    throw new Error("Could not determine LightAccount version");
+  }
+
+  return version;
+};

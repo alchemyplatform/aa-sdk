@@ -1,11 +1,12 @@
+import type { Client } from "viem";
 import { BaseError } from "./base.js";
 
 export class IncompatibleClientError extends BaseError {
   override name = "IncompatibleClientError";
-  constructor(expectedClient: string, method: string) {
+  constructor(expectedClient: string, method: string, client: Client) {
     super(
       [
-        `Client is not a ${expectedClient}.`,
+        `Client of type (${client.type}) is not a ${expectedClient}.`,
         `Create one with \`createSmartAccountClient\` first before using \`${method}\``,
       ].join("\n")
     );

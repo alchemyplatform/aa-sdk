@@ -14,9 +14,9 @@ head:
 
 # constructor
 
-There are two ways to construct `EthersProviderAdapter`. You can provide either the `rpcProvider` and `chainId` to have the `EthersProviderAdapter` constructor, which will initialize the `SmartAccountProvider` using the input parameters internally.
+There are two ways to construct `EthersProviderAdapter`. You can provide either the `rpcProvider` and `chainId` to have the `EthersProviderAdapter` constructor, which will initialize the `SmartAccountClient` using the input parameters internally.
 
-Or you can also input a `SmartAccountProvider` instance already initialized (`AlchemyProvider` for instance) to the `EthersProviderAdapter` constructor.
+Or you can also input a `SmartAccountClient` instance already initialized (`AlchemyProvider` for instance) to the `EthersProviderAdapter` constructor.
 
 ## Usage
 
@@ -35,22 +35,22 @@ export const provider = new EthersProviderAdapter({
 });
 
 // another way to initialize
-const accountProvider = new AlchemyProvider({
+export const accountProvider = createAlchemySmartAccountClient({
   apiKey: "ALCHEMY_API_KEY", // replace with your Alchemy API Key
   chain: sepolia,
-  entryPointAddress: getDefaultEntryPointAddress(sepolia),
   opts: {
     txMaxRetries: 10,
     txRetryIntervalMs: 2_000,
-    txRetryMulitplier: 1.5,
+    txRetryMultiplier: 1.5,
     minPriorityFeePerBid: 100_000_000n,
-  },
-  feeOpts: {
-    baseFeeBufferPercent: 50n,
-    maxPriorityFeeBufferPercent: 5n,
-    preVerificationGasBufferPercent: 5n,
+    feeOpts: {
+      baseFeeBufferMultiplier: 1.5,
+      maxPriorityFeeBufferMultiplier: 1.5,
+      preVerificationGasBufferMultiplier: 1.5,
+    },
   },
 });
+
 export const anotherProvider = new EthersProviderAdapter({
   accountProvider,
 });
@@ -72,8 +72,8 @@ Either:
 
 - `rpcProvider: string | BundlerClient` -- a JSON-RPC URL, or a viem Client that supports ERC-4337 methods and Viem public actions. See [createBundlerClient](/packages/aa-core/bundler-client/index.md).
 
-- `chainId: number` -- the ID of thechain on which to create the provider.
+- `chainId: number` -- the ID of the chain on which to create the provider.
 
 Or:
 
-- `accountProvider: SmartAccountProvider` -- See [SmartAccountProvider](/packages/aa-core/smart-account-client/index.md).
+- `accountProvider: SmartAccountClient` -- See [SmartAccountClient](/packages/aa-core/smart-account-client/index.md).

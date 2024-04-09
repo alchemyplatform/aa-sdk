@@ -12,7 +12,8 @@ export const defaultGasEstimator: <C extends MiddlewareClient>(
 
     const estimates = await client.estimateUserOperationGas(
       request,
-      account.getEntrypoint()
+      account.getEntryPoint().address,
+      overrides?.stateOverride
     );
 
     const callGasLimit = applyUserOpOverrideOrFeeOption(

@@ -2,13 +2,7 @@ import type { Address, Chain, Hash, Hex } from "viem";
 import { encodeAbiParameters, hexToBigInt, keccak256, toHex } from "viem";
 import * as chains from "viem/chains";
 import * as alchemyChains from "../chains/index.js";
-import type {
-  BigNumberish,
-  Percentage,
-  PromiseOrValue,
-  UserOperationRequest,
-} from "../types.js";
-import { BigNumberishSchema, PercentageSchema } from "./schema.js";
+import type { PromiseOrValue, UserOperationRequest } from "../types.js";
 
 export const AlchemyChainMap = new Map<number, Chain>(
   Object.values(alchemyChains).map((c) => [c.id, c])
@@ -101,7 +95,7 @@ export function deepHexlify(obj: any): any {
 }
 
 /**
- * Generates a hash for a UserOperation valid from entrypoint version 0.6 onwards
+ * Generates a hash for a UserOperation valid from entry point version 0.6 onwards
  *
  * @param request - the UserOperation to get the hash for
  * @param entryPointAddress - the entry point address that will be used to execute the UserOperation
@@ -111,17 +105,17 @@ export function deepHexlify(obj: any): any {
 export function getUserOperationHash(
   request: UserOperationRequest,
   entryPointAddress: Address,
-  chainId: bigint
+  chainId: number
 ): Hash {
   const encoded = encodeAbiParameters(
     [{ type: "bytes32" }, { type: "address" }, { type: "uint256" }],
-    [keccak256(packUo(request)), entryPointAddress, chainId]
+    [keccak256(packUo(request)), entryPointAddress, BigInt(chainId)]
   ) as `0x${string}`;
 
   return keccak256(encoded);
 }
 
-function packUo(request: UserOperationRequest): Hex {
+export function packUo(request: UserOperationRequest): Hex {
   const hashedInitCode = keccak256(request.initCode);
   const hashedCallData = keccak256(request.callData);
   const hashedPaymasterAndData = keccak256(request.paymasterAndData);
@@ -167,14 +161,6 @@ export function defineReadOnly<T, K extends keyof T>(
   });
 }
 
-export function isBigNumberish(x: any): x is BigNumberish {
-  return x != null && BigNumberishSchema.safeParse(x).success;
-}
-
-export function isPercentage(x: any): x is Percentage {
-  return x != null && PercentageSchema.safeParse(x).success;
-}
-
 export function filterUndefined(
   obj: Record<string, unknown>
 ): Record<string, unknown> {
@@ -193,6 +179,7 @@ export function pick(obj: Record<string, unknown>, keys: string | string[]) {
 }
 
 export * from "./bigint.js";
+export * from "./bytes.js";
 export * from "./defaults.js";
 export * from "./schema.js";
 export type * from "./types.js";

@@ -24,9 +24,11 @@ export const ManagementActionsGenPhase: Phase = async (input) => {
       true
     );
     addType(
-      "ManagementActions<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined>",
+      "ManagementActions<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined, TContext extends Record<string, any> | undefined = Record<string,any> | undefined>",
       dedent`{
-      install${contract.name}: (args: {overrides?: UserOperationOverrides} & Install${contract.name}Params & GetAccountParameter<TAccount>) => Promise<SendUserOperationResult>
+      install${contract.name}: (args: { 
+        overrides?: UserOperationOverrides;
+      } & Install${contract.name}Params & GetAccountParameter<TAccount> & GetContextParameter<TContext>) => Promise<SendUserOperationResult>
     }`
     );
 
@@ -49,13 +51,13 @@ export const ManagementActionsGenPhase: Phase = async (input) => {
     const installMethodName = `install${contract.name}`;
 
     input.content.push(dedent`
-    ${installMethodName}({account = client.account, overrides, ...params}) {
+    ${installMethodName}({account = client.account, overrides, context, ...params}) {
       if (!account) {
         throw new AccountNotFoundError();
       }
 
       if (!isSmartAccountClient(client)) {
-        throw new IncompatibleClientError("SmartAccountClient", "${installMethodName}");
+        throw new IncompatibleClientError("SmartAccountClient", "${installMethodName}", client);
       }
 
       const chain = client.chain;
@@ -75,7 +77,7 @@ export const ManagementActionsGenPhase: Phase = async (input) => {
           contract.name
         } address for chain " + chain.name);
       }
-      
+
       return installPlugin_(client, {
         pluginAddress,
         pluginInitData: encodeAbiParameters(${JSON.stringify(
@@ -84,6 +86,7 @@ export const ManagementActionsGenPhase: Phase = async (input) => {
         dependencies,
         overrides,
         account,
+        context,
       });
     }
   `);
@@ -99,6 +102,8 @@ const addImports = (
   if (deps != null && deps.length > 0) {
     addImport("viem", { name: "encodePacked" });
     deps.forEach((x) => {
+      // TODO: after plugingen becomes its own cli tool package, this should be changed to
+      // `addImport("@alchemy/aa-accounts", { name: x.name });`
       addImport(
         `../${kebabCase(x.name.replaceAll(/[pP]lugin/g, ""))}/plugin.js`,
         {
@@ -110,6 +115,8 @@ const addImports = (
 
   addImport("@alchemy/aa-core", { name: "ChainNotFoundError" });
   addImport("viem", { name: "encodeAbiParameters" });
+  // TODO: after plugingen becomes its own cli tool package, this should be changed to
+  // `addImport("@alchemy/aa-accounts", { name: "installPlugin as installPlugin_" });`
   addImport("../../plugin-manager/installPlugin.js", {
     name: "installPlugin as installPlugin_",
   });
@@ -117,8 +124,11 @@ const addImports = (
     name: "GetAccountParameter",
     isType: true,
   });
+  // TODO: after plugingen becomes its own cli tool package, this should be changed to
+  // `addImport("@alchemy/aa-accounts", { name: "FunctionReference", isType: true });`
   addImport("../../account-loupe/types.js", {
     name: "FunctionReference",
     isType: true,
   });
+  addImport("@alchemy/aa-core", { name: "GetContextParameter", isType: true });
 };

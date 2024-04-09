@@ -16,7 +16,7 @@ cd aa-sdk/examples/alchemy-daapp
 yarn install
 ```
 
-## Getting Started
+## Getting started
 1. Update the .env file with your Alchemy API key(s):
 ```bash
 MUMBAI_ALCHEMY_API_URL=https://polygon-mumbai.g.alchemy.com/v2/<YOUR_API_KEY>
@@ -60,7 +60,7 @@ yarn dev
 ## How This Works
 The [`onboarding-controller.ts`](https://github.com/alchemyplatform/aa-sdk/blob/master/examples/alchemy-daapp/src/surfaces/onboarding/OnboardingController.ts) file contains the onboarding controller, which handles the onboarding process for new users. The controller uses `aa-sdk` to create a new account and mint an NFT.
 
-In the [`clientConfigs.ts`](https://github.com/alchemyplatform/aa-sdk/blob/main/examples/alchemy-daapp/src/configs/clientConfigs.ts) file, you will find the configuration for the DAApp, including the nft contract address, light account factory address, gas manager policy id, rpc url, and chain. You'll also find an example NFT contract in [`examples/contracts/DAAppNFT`](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/contracts/DAAppNFT)
+In the [`clientConfigs.ts`](https://github.com/alchemyplatform/aa-sdk/blob/main/examples/alchemy-daapp/src/configs/clientConfigs.ts) file, you will find the configuration for the DAApp, including the nft contract address, light account factory address, gas manager policy id, rpc url, and chain. You will also find an example NFT contract in [`examples/contracts/DAAppNFT`](https://github.com/alchemyplatform/aa-sdk/tree/main/examples/contracts/DAAppNFT)
 
 You can replace the default values with your contract addresses and policy ids and add or remove chains as needed.
 

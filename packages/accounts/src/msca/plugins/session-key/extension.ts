@@ -1,12 +1,13 @@
 import {
   AccountNotFoundError,
   type GetAccountParameter,
+  type IsUndefined,
   type SendUserOperationResult,
-  type SmartAccountClient,
   type SmartContractAccount,
   type UserOperationOverrides,
 } from "@alchemy/aa-core";
-import type { Address, Chain, Transport } from "viem";
+import type { Address, Chain, Client, Hex, Transport } from "viem";
+import type { GetPluginAddressParameter } from "../types.js";
 import {
   SessionKeyPlugin,
   sessionKeyPluginActions as sessionKeyPluginActions_,
@@ -18,28 +19,66 @@ export type SessionKeyPluginActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined
-> = Omit<SessionKeyPluginActions_<TAccount>, "removeSessionKey"> & {
+> = Omit<
+  SessionKeyPluginActions_<TAccount>,
+  | "removeSessionKey"
+  | "addSessionKey"
+  | "rotateSessionKey"
+  | "updateKeyPermissions"
+> & {
   isAccountSessionKey: (
-    args: {
-      key: Address;
-      pluginAddress?: Address;
-    } & GetAccountParameter<TAccount>
+    args: { key: Address } & GetPluginAddressParameter &
+      GetAccountParameter<TAccount>
   ) => Promise<boolean>;
 
   getAccountSessionKeys: (
-    args: {
-      pluginAddress?: Address;
-    } & GetAccountParameter<TAccount>
+    args: GetPluginAddressParameter & GetAccountParameter<TAccount>
   ) => Promise<ReadonlyArray<Address>>;
 
   removeSessionKey: (
+    args: { key: Address } & GetPluginAddressParameter &
+      GetAccountParameter<TAccount> & {
+        overrides?: UserOperationOverrides;
+      }
+  ) => Promise<SendUserOperationResult>;
+
+  addSessionKey: (
     args: {
       key: Address;
-      pluginAddress?: Address;
-      overrides: UserOperationOverrides;
-    } & GetAccountParameter<TAccount>
+      permissions: Hex[];
+      tag: Hex;
+    } & GetPluginAddressParameter &
+      GetAccountParameter<TAccount> & {
+        overrides?: UserOperationOverrides;
+      }
   ) => Promise<SendUserOperationResult>;
-};
+
+  rotateSessionKey: (
+    args: {
+      oldKey: Address;
+      newKey: Address;
+    } & GetPluginAddressParameter &
+      GetAccountParameter<TAccount> & {
+        overrides?: UserOperationOverrides;
+      }
+  ) => Promise<SendUserOperationResult>;
+
+  updateSessionKeyPermissions: (
+    args: {
+      key: Address;
+      permissions: Hex[];
+    } & GetPluginAddressParameter &
+      GetAccountParameter<TAccount> & {
+        overrides?: UserOperationOverrides;
+      }
+  ) => Promise<SendUserOperationResult>;
+} & (IsUndefined<TAccount> extends false
+    ? {
+        getAccountSessionKeys: (
+          args?: GetPluginAddressParameter & GetAccountParameter<TAccount>
+        ) => Promise<ReadonlyArray<Address>>;
+      }
+    : {});
 
 export const sessionKeyPluginActions: <
   TTransport extends Transport = Transport,
@@ -48,7 +87,7 @@ export const sessionKeyPluginActions: <
     | SmartContractAccount
     | undefined
 >(
-  client: SmartAccountClient<TTransport, TChain, TAccount>
+  client: Client<TTransport, TChain, TAccount>
 ) => SessionKeyPluginActions<TAccount> = <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
@@ -56,9 +95,15 @@ export const sessionKeyPluginActions: <
     | SmartContractAccount
     | undefined
 >(
-  client: SmartAccountClient<TTransport, TChain, TAccount>
+  client: Client<TTransport, TChain, TAccount>
 ) => {
-  const { removeSessionKey, ...og } = sessionKeyPluginActions_(client);
+  const {
+    removeSessionKey,
+    addSessionKey,
+    rotateSessionKey,
+    updateKeyPermissions,
+    ...og
+  } = sessionKeyPluginActions_(client);
 
   return {
     ...og,
@@ -74,7 +119,63 @@ export const sessionKeyPluginActions: <
       return await contract.read.isSessionKeyOf([account.address, key]);
     },
 
-    getAccountSessionKeys: async ({
+    getAccountSessionKeys: async (
+      args: GetPluginAddressParameter & GetAccountParameter<TAccount>
+    ) => {
+      const account = args?.account ?? client.account;
+      if (!account) throw new AccountNotFoundError();
+
+      const contract = SessionKeyPlugin.getContract(
+        client,
+        args?.pluginAddress
+      );
+
+      return await contract.read.sessionKeysOf([account.address]);
+    },
+
+    removeSessionKey: async ({
+      key,
+      overrides,
+      account = client.account,
+      pluginAddress,
+    }) => {
+      if (!account) throw new AccountNotFoundError();
+
+      const sessionKeysToRemove = await buildSessionKeysToRemoveStruct(client, {
+        keys: [key],
+        account,
+        pluginAddress,
+      });
+
+      return removeSessionKey({
+        args: [key, sessionKeysToRemove[0].predecessor],
+        overrides,
+        account,
+      });
+    },
+
+    addSessionKey: async ({
+      key,
+      tag,
+      permissions,
+      overrides,
+      pluginAddress,
+      account = client.account,
+    }) => {
+      if (!account) throw new AccountNotFoundError();
+
+      return addSessionKey({
+        args: [key, tag, permissions],
+        overrides,
+        account,
+        pluginAddress,
+      });
+    },
+
+    rotateSessionKey: async ({
+      newKey,
+      oldKey,
+      overrides,
       pluginAddress,
       account = client.account,
     }) => {
@@ -82,21 +183,33 @@ export const sessionKeyPluginActions: <
 
       const contract = SessionKeyPlugin.getContract(client, pluginAddress);
 
-      return await contract.read.sessionKeysOf([account.address]);
-    },
+      const predecessor = await contract.read.findPredecessor([
+        account.address,
+        oldKey,
+      ]);
 
-    removeSessionKey: async ({ key, overrides, account = client.account }) => {
-      if (!account) throw new AccountNotFoundError();
-
-      const sessionKeysToRemove = await buildSessionKeysToRemoveStruct(client, {
-        keys: [key],
-        account,
-      });
-
-      return removeSessionKey({
-        args: [key, sessionKeysToRemove[0].predecessor],
+      return rotateSessionKey({
+        args: [oldKey, predecessor, newKey],
         overrides,
         account,
+        pluginAddress,
+      });
+    },
+
+    updateSessionKeyPermissions: async ({
+      key,
+      permissions,
+      overrides,
+      pluginAddress,
+      account = client.account,
+    }) => {
+      if (!account) throw new AccountNotFoundError();
+
+      return updateKeyPermissions({
+        args: [key, permissions],
+        overrides,
+        account,
+        pluginAddress,
       });
     },
   };

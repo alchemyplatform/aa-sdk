@@ -38,7 +38,7 @@ const signature = await wrapSignatureWith6492({
 
 The original signature wrapped in ERC-6492 format
 
-## Paramters
+## Paramaters
 
 ### `SignWith6492Params`
 

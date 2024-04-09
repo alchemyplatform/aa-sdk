@@ -6,16 +6,16 @@ head:
       content: Capsule Integration Guide
   - - meta
     - name: description
-      content: Follow this integration guide to use Capsule as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Capsule as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - property: og:description
-      content: Follow this integration guide to use Capsule as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Capsule as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - name: twitter:title
       content: Capsule Integration Guide
   - - meta
     - name: twitter:description
-      content: Follow this integration guide to use Capsule as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use Capsule as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
 # Capsule Integration Guide
@@ -71,9 +71,10 @@ Next, setup the Capsule SDK and create an authenticated `CapsuleSigner` using th
 
 <<< @/snippets/signers/capsule.ts
 
-### Use it with Light Account
+### Use it with Modular Account
 
-Let's see it in action with `aa-alchemy` and `LightSmartContractAccount` from `aa-accounts`:
+Let's see it in action with `aa-alchemy`:
+
 ::: code-group
 
 ```ts [alchemy.ts]
@@ -86,7 +87,7 @@ const chain = sepolia;
 const provider = await createModularAccountAlchemyClient({
   apiKey: "ALCHEMY_API_KEY",
   chain,
-  owner: await createCapsuleSigner(),
+  signer: await createCapsuleSigner(),
 });
 ```
 

@@ -6,16 +6,16 @@ head:
       content: Web3Auth Integration Guide
   - - meta
     - name: description
-      content: Follow this integration guide to use an EOA as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use an EOA as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - property: og:description
-      content: Follow this integration guide to use an EOA as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use an EOA as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - name: twitter:title
       content: Web3Auth Integration Guide
   - - meta
     - name: twitter:description
-      content: Follow this integration guide to use an EOA as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+      content: Follow this integration guide to use an EOA as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
 # Web3Auth Integration Guide
@@ -50,9 +50,10 @@ Next, setup the web3auth sdk and create a `SmartAccountSigner` using the `aa-sig
 
 <<< @/snippets/signers/web3auth.ts
 
-### Use it with Light Account
+### Use it with Modular Account
 
-Let's see it in action with `aa-alchemy` and `LightSmartContractAccount` from `aa-accounts`:
+Let's see it in action with `aa-alchemy`:
+
 ::: code-group
 
 ```ts [example.ts]
@@ -65,7 +66,7 @@ const chain = sepolia;
 const provider = await createModularAccountAlchemyClient({
   apiKey: "ALCHEMY_API_KEY",
   chain,
-  owner: await createWeb3AuthSigner(),
+  signer: await createWeb3AuthSigner(),
 });
 ```
 

@@ -3,16 +3,16 @@ import { LocalAccountSigner, sepolia, type Hex } from "@alchemy/aa-core";
 
 const chain = sepolia;
 
-// The private key of your EOA that will be the owner of Light Account
-const PRIVATE_KEY = "0xYourEOAPrivateKey" as Hex;
-const owner = LocalAccountSigner.privateKeyToAccountSigner(PRIVATE_KEY);
+// The private key of your EOA that will be the signer of Light Account
+const PRIVATE_KEY: Hex = "0xYourEOAPrivateKey";
+const signer = LocalAccountSigner.privateKeyToAccountSigner(PRIVATE_KEY);
 
 // Create a provider to send user operations from your smart account
 const provider = await createLightAccountAlchemyClient({
   // get your Alchemy API key at https://dashboard.alchemy.com
   apiKey: "ALCHEMY_API_KEY",
   chain,
-  owner,
+  signer,
 });
 
 // Fund your account address with ETH to send for the user operations

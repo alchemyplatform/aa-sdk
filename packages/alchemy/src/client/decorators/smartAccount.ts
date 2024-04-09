@@ -9,10 +9,13 @@ import type { SimulateUserOperationAssetChangesResponse } from "../../actions/ty
 export type AlchemySmartAccountClientActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
     | undefined
 > = {
   simulateUserOperation: (
-    args: SendUserOperationParameters<TAccount>
+    args: SendUserOperationParameters<TAccount, TContext>
   ) => Promise<SimulateUserOperationAssetChangesResponse>;
 };
 
@@ -21,10 +24,13 @@ export const alchemyActions: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>
-) => AlchemySmartAccountClientActions<TAccount> = (client) => ({
+) => AlchemySmartAccountClientActions<TAccount, TContext> = (client) => ({
   simulateUserOperation: async (args) =>
     simulateUserOperationChanges(client, args),
 });

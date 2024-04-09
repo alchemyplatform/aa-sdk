@@ -20,12 +20,12 @@ import type { NaniAccount } from "./account";
 export const transferOwnership: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TOwner extends SmartAccountSigner = SmartAccountSigner,
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
   TAccount extends NaniAccount | undefined = NaniAccount | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
   args: {
-    newOwner: TOwner;
+    newOwner: TSigner;
     waitForTxn?: boolean;
   } & GetAccountParameter<TAccount>
 ) => Promise<Hex> = async (
@@ -39,7 +39,8 @@ export const transferOwnership: <
   if (!isSmartAccountClient(client)) {
     throw new IncompatibleClientError(
       "SmartAccountClient",
-      "transferOwnership"
+      "transferOwnership",
+      client
     );
   }
 

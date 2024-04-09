@@ -17,9 +17,12 @@ import type { ClientWithAlchemyMethods } from "../types";
 export type CreateAlchemySmartAccountClientFromRpcClient<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
     | undefined
 > = Omit<
-  AlchemySmartAccountClientConfig<Transport, Chain, TAccount>,
+  AlchemySmartAccountClientConfig<Transport, Chain, TAccount, TContext>,
   "rpcUrl" | "chain" | "apiKey" | "jwt"
 > & { client: ClientWithAlchemyMethods };
 
@@ -31,10 +34,19 @@ export function createAlchemySmartAccountClientFromRpcClient<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
+    | undefined,
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
     | undefined
 >(
-  args: CreateAlchemySmartAccountClientFromRpcClient<TAccount>
-): AlchemySmartAccountClient<CustomTransport, TChain, TAccount>;
+  args: CreateAlchemySmartAccountClientFromRpcClient<TAccount, TContext>
+): AlchemySmartAccountClient<
+  CustomTransport,
+  TChain,
+  TAccount,
+  Record<string, never>,
+  TContext
+>;
 
 export function createAlchemySmartAccountClientFromRpcClient({
   opts,
@@ -44,14 +56,16 @@ export function createAlchemySmartAccountClientFromRpcClient({
   feeEstimator,
   gasEstimator,
   customMiddleware,
+  signUserOperation,
   client,
 }: CreateAlchemySmartAccountClientFromRpcClient): AlchemySmartAccountClient {
   const feeOptions =
     opts?.feeOptions ?? getDefaultUserOperationFeeOptions(client.chain);
 
-  const alchClient = createSmartAccountClientFromExisting({
+  return createSmartAccountClientFromExisting({
     account,
     client,
+    type: "AlchemySmartAccountClient",
     opts: {
       ...opts,
       feeOptions,
@@ -78,10 +92,6 @@ export function createAlchemySmartAccountClientFromRpcClient({
             gasEstimator,
         },
       })),
+    signUserOperation,
   }).extend(alchemyActions);
-
-  return {
-    ...alchClient,
-    type: "AlchemySmartAccountClient",
-  };
 }

@@ -6,19 +6,19 @@ head:
       content: sendTransactions
   - - meta
     - name: description
-      content: Overview of the sendTransactions method on ISmartAccountProvider
+      content: Overview of the sendTransactions method on SmartAccountClient
   - - meta
     - property: og:description
-      content: Overview of the sendTransactions method on ISmartAccountProvider
+      content: Overview of the sendTransactions method on SmartAccountClient
 ---
 
 # sendTransactions
 
-This takes a set of ethereum transactions and converts them into one single `UserOperation` (UO), sends the UO, and waits on the receipt of that UO (i.e. has it been mined). If you don't want to wait for the UO to mine, it's recommended to user [sendUserOperation](./sendUserOperation) instead.
+This function takes a set of Ethereum transactions and batch converts to one single `UserOperation` (UO) struct, signs and sends that UO request, and waits on the receipt of that UO (i.e., has it been mined). If you don't want to wait for the UO to mine, it is recommended to use [sendUserOperation](./sendUserOperation) instead.
 
-**NOTE**: The account you're sending the transactions _to_ MUST support batch transactions.
+**NOTE**: Not all Smart Contract Accounts support batching. The `SmartContractAccount` implementation must implement the encodeBatchExecute method for the `SmartAccountClient` to execute the batched user operation successfully.
 
-Also note that `to` field of transaction is required, and among other fields of transaction, only `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas` fields are considered and optional.
+Note that `to`, `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas` fields of the transaction request type are considered and used to build the user operation from the transaction, while other fields are not used.
 
 ## Usage
 
@@ -27,7 +27,7 @@ Also note that `to` field of transaction is required, and among other fields of 
 ```ts [example.ts]
 import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
-const txHash = await smartAccountClient.sendTransactions({requests: [
+const requests: RpcTransactionRequest[] = [
   {
     from, // ignored
     to,
@@ -56,7 +56,8 @@ const txHash = await smartAccountClient.sendTransactions({requests: [
       args: [arg1, arg2, ...],
     }),
   },
-]});
+];
+const txHash = await smartAccountClient.sendTransactions({ requests });
 ```
 
 <<< @/snippets/aa-core/smartAccountClient.ts
@@ -67,18 +68,24 @@ const txHash = await smartAccountClient.sendTransactions({requests: [
 
 ### `Promise<Hash | null>`
 
-A Promise containing the transaction hash
+A Promise containing the transaction hash of the batched user operation of the input transactions
 
 ## Parameters
 
-### `requests: RpcTransactionRequest[]`
+### `SendTransactionsParameters<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined>`
 
-An `RpcTransactionRequest` array representing a traditional ethereum transaction
+::: details SendTransactionsParameters
+<<< @/../packages/core/src/actions/smartAccount/types.ts#SendTransactionsParameters
+:::
 
-### `overrides?:` [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides.md)
+- `requests: RpcTransactionRequest[]`
 
-Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` or `paymasterAndData` on the user operation request
+The `viem` [`RpcTransactionRequest`](https://viem.sh/docs/glossary/types#transactionrequest) type representing a traditional ethereum transaction
 
-### `account?: SmartContractAccount`
+- `overrides?:` [`UserOperationOverrides`](/resources/types#UserOperationOverrides)
 
-If your client was not instantiated with an account, then you will have to pass the account in to this call.
+Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit`, `paymasterAndData`, or `nonceKey` for the user operation request
+
+- `account?: TAccount extends SmartContractAccount | undefined`
+
+When using this action, if the `SmartContractAccount` has not been connected to the `SmartAccountClient` (e.g. `SmartAccountClient` not instantiated with your `SmartContractAccount` during [`createSmartAccountClient`](/packages/aa-core/smart-account-client/)). You can check if the account is connected to the client by checking the `account` field of `SmartAccountClient`. If the account is not connected, you can specify the `SmartContractAccount` instance to use for the function call.

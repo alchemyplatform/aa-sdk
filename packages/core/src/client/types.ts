@@ -14,22 +14,30 @@ export type ConnectorData = {
 
 export type ConnectionConfig = z.input<typeof ConnectionConfigSchema>;
 
+//#region SendUserOperationResult
 export type SendUserOperationResult = {
   hash: Hash;
   request: UserOperationRequest;
 };
+//#endregion SendUserOperationResult
 
+//#region UpgradeToData
 export type UpgradeToData = {
   implAddress: Address;
   initializationData: Hex;
 };
+//#endregion UpgradeToData
 
-export type ClientMiddlewareConfig = Omit<
-  Partial<ClientMiddleware>,
+export type ClientMiddlewareConfig<
+  TContext extends Record<string, any> | undefined =
+    | Record<string, any>
+    | undefined
+> = Omit<
+  Partial<ClientMiddleware<TContext>>,
   "dummyPaymasterAndData" | "paymasterAndData"
 > & {
   paymasterAndData?: {
     dummyPaymasterAndData: () => Hex;
-    paymasterAndData: ClientMiddlewareFn;
+    paymasterAndData: ClientMiddlewareFn<TContext>;
   };
 };

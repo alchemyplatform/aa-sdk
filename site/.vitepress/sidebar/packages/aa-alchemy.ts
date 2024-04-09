@@ -6,7 +6,7 @@ export const aaAlchemySidebar: DefaultTheme.SidebarItem = {
   collapsed: true,
   items: [
     {
-      text: "Getting Started",
+      text: "Getting started",
       link: "/",
     },
     {
@@ -52,10 +52,58 @@ export const aaAlchemySidebar: DefaultTheme.SidebarItem = {
       ],
     },
     {
+      text: "Alchemy Signer",
+      base: "/packages/aa-alchemy/signer",
+      collapsed: true,
+      items: [
+        {
+          text: "Overview",
+          link: "/overview",
+        },
+        {
+          text: "authenticate",
+          link: "/authenticate",
+        },
+        {
+          text: "disconnect",
+          link: "/disconnect",
+        },
+        {
+          text: "getAuthDetails",
+          link: "/getAuthDetails",
+        },
+
+        {
+          text: "getAddress",
+          link: "/getAddress",
+        },
+        {
+          text: "signMessage",
+          link: "/signMessage",
+        },
+        {
+          text: "signTypedData",
+          link: "/signTypedData",
+        },
+        {
+          text: "getUser",
+          link: "/getUser",
+        },
+        {
+          text: "addPasskey",
+          link: "/addPasskey",
+        },
+        {
+          text: "exportWallet",
+          link: "/exportWallet",
+        },
+      ],
+    },
+    {
       text: "Utils",
       collapsed: true,
       base: "/packages/aa-alchemy/utils",
-      items: [{ text: "Define Alchemy Chain", link: "/defineAlchemyChain" }],
+      items: [{ text: "defineAlchemyChain", link: "/defineAlchemyChain" }],
     },
   ],
 };

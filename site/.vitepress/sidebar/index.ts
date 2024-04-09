@@ -3,31 +3,101 @@ import { packagesSidebar } from "./packages";
 
 export const sidebar: DefaultTheme.Sidebar = [
   {
-    text: "Getting Started",
+    text: "Getting started",
     items: [
-      { text: "Setup your project", link: "/getting-started/setup" },
       {
-        text: "Deploy your first account",
-        link: "/getting-started/deploy-an-account",
-      },
-      // I'm leaving these here for now because I'm not sure if we still want them
-      // There's good content in here so we may want to keep it somewhere
-      {
-        text: "What is Account Kit?",
-        link: "/overview/introduction",
+        text: "Overview",
+        link: "/getting-started/overview",
       },
       {
-        text: "Why Account Kit?",
-        link: "/overview/why-account-kit",
-      },
-      {
-        text: "FAQs",
-        link: "/faqs",
+        text: "Quick start (Embedded Accounts)",
+        collapsed: false,
+        base: "/getting-started",
+        items: [
+          { text: "Introduction", link: "/introduction" },
+          {
+            text: "Setup your application",
+            link: "/setup-app",
+          },
+          {
+            text: "Log users into Embedded Accounts",
+            link: "/log-in-users",
+          },
+          { text: "Send UserOperations", link: "/send-uos" },
+        ],
       },
     ],
   },
   {
-    text: "Choosing a Smart Account",
+    text: "Using smart accounts",
+    base: "/using-smart-accounts",
+    items: [
+      { text: "Send user operations", link: "/send-user-operations" },
+      { text: "Batch user operations", link: "/batch-user-operations" },
+      {
+        text: "Sponsor gas",
+        collapsed: false,
+        base: "/using-smart-accounts/sponsoring-gas",
+        items: [
+          { text: "Use the Gas Manager", link: "/gas-manager" },
+          { text: "Check eligibility", link: "/checking-eligibility" },
+        ],
+      },
+      { text: "Simulate user operations", link: "/simulate-user-operations" },
+      {
+        text: "Session keys",
+        base: "/using-smart-accounts/session-keys",
+        collapsed: false,
+        items: [
+          {
+            text: "Overview",
+            link: "/",
+          },
+          {
+            text: "Getting started",
+            link: "/getting-started",
+          },
+        ],
+      },
+      {
+        text: "Transfer ownership",
+        base: "/using-smart-accounts/transfer-ownership",
+        collapsed: false,
+        items: [
+          { text: "Modular Account", link: "/modular-account" },
+          { text: "Light Account", link: "/light-account" },
+        ],
+      },
+      {
+        text: "Alchemy enhanced APIs",
+        base: "/using-smart-accounts/enhanced-apis",
+        collapsed: false,
+        items: [
+          {
+            text: "Get account NFTs",
+            link: "/nft",
+          },
+          { text: "Get account tokens", link: "/token" },
+        ],
+      },
+    ],
+  },
+  {
+    text: "Extending smart accounts",
+    base: "/extending-smart-accounts",
+    items: [
+      {
+        text: "Install plugins",
+        link: "/install-plugins",
+      },
+      {
+        text: "Get installed plugins",
+        link: "/get-installed-plugins",
+      },
+    ],
+  },
+  {
+    text: "Choosing a smart account",
     items: [
       { text: "Introduction", link: "/smart-accounts/" },
       {
@@ -38,6 +108,10 @@ export const sidebar: DefaultTheme.Sidebar = [
           { text: "Introduction", link: "/" },
           { text: "Getting started", link: "/getting-started" },
           { text: "Deployments", link: "/deployments" },
+          {
+            text: "Upgrading to Modular Account",
+            link: "/upgrade-la-to-ma",
+          },
         ],
       },
       {
@@ -45,7 +119,7 @@ export const sidebar: DefaultTheme.Sidebar = [
         link: "/smart-accounts/light-account/",
       },
       {
-        text: "Custom Accounts",
+        text: "Custom accounts",
         collapsed: true,
         base: "/smart-accounts/custom",
         items: [
@@ -53,16 +127,43 @@ export const sidebar: DefaultTheme.Sidebar = [
           { text: "Contribute your account", link: "/contributing" },
         ],
       },
-      { text: "Gas Benchmarks", link: "/smart-accounts/gas-benchmarks" },
+      { text: "Gas benchmarks", link: "/smart-accounts/gas-benchmarks" },
     ],
   },
   {
-    text: "Choosing a Signer",
+    text: "Using Alchemy Signer",
+    collapsed: false,
+    base: "/signers/alchemy-signer",
+    items: [
+      {
+        text: "Introduction",
+        link: "/introduction",
+      },
+      {
+        text: "Passkey signup",
+        link: "/passkey-signup",
+      },
+      {
+        text: "Passkey authentication",
+        link: "/passkey-auth",
+      },
+      {
+        text: "Manage user sessions",
+        link: "/manage-user-sessions",
+      },
+      {
+        text: "Export private key",
+        link: "/export-private-key",
+      },
+    ],
+  },
+  {
+    text: "Custom signers",
     base: "/signers",
     items: [
       { text: "Introduction", link: "/choosing-a-signer" },
       {
-        text: "Signer Guides",
+        text: "Third-party signers",
         base: "/signers/guides",
         collapsed: true,
         items: [
@@ -78,88 +179,38 @@ export const sidebar: DefaultTheme.Sidebar = [
           { text: "Particle Network", link: "/particle-network" },
           { text: "Arcana Auth", link: "/arcana-auth" },
           { text: "Dfns", link: "/dfns" },
-          { text: "Externally Owned Account (EOA)", link: "/eoa" },
+          { text: "WalletKit", link: "/walletkit" },
         ],
       },
+      { text: "EOA signer", link: "/eoa" },
       {
-        text: "Custom Signer",
-        collapsed: true,
-        items: [
-          {
-            text: "Using Your Own",
-            link: "/guides/custom-signer",
-          },
-          {
-            text: "Contributing Your Signer",
-            link: "/contributing",
-          },
-        ],
+        text: "Build your own",
+        link: "/guides/custom-signer",
+      },
+      {
+        text: "Contribute your signer",
+        link: "/contributing",
       },
     ],
   },
+
   {
-    text: "Using Smart Accounts",
-    base: "/using-smart-accounts",
-    items: [
-      { text: "Send User Operations", link: "/send-user-operations" },
-      { text: "Batch User Operations", link: "/batch-user-operations" },
-      {
-        text: "Sponsoring Gas",
-        collapsed: false,
-        base: "/using-smart-accounts/sponsoring-gas",
-        items: [
-          { text: "Alchemy Gas Manager", link: "/gas-manager" },
-          { text: "Check Eligibility", link: "/checking-eligibility" },
-        ],
-      },
-      { text: "Simulate User Operations", link: "/simulate-user-operations" },
-      {
-        text: "Transfer Ownership",
-        base: "/using-smart-accounts/transfer-ownership",
-        collapsed: false,
-        items: [
-          { text: "Modular Account", link: "/modular-account" },
-          { text: "Light Account", link: "/light-account" },
-        ],
-      },
-      { text: "Session Keys", link: "/session-keys" },
-      {
-        text: "Alchemy Enhanced Apis",
-        base: "/using-smart-accounts/enhanced-apis",
-        collapsed: true,
-        items: [
-          {
-            text: "Get Account's NFTs",
-            link: "/nft",
-          },
-          { text: "Get Account's Tokens", link: "/token" },
-        ],
-      },
-    ],
-  },
-  {
-    text: "Extending Smart Accounts",
-    items: [
-      { text: "Installing Plugins", link: "/" },
-      { text: "Creating Plugins", link: "/" },
-    ],
-  },
-  {
-    text: "Third Party Integrations",
+    text: "Custom infra",
     base: "/third-party",
     items: [
-      { text: "Bundlers", link: "/bundlers" },
-      { text: "Paymasters", link: "/paymasters" },
+      { text: "Use custom bundler", link: "/bundlers" },
+      { text: "Use custom paymaster", link: "/paymasters" },
     ],
   },
   packagesSidebar,
   {
-    text: "Glossary",
-    base: "/glossary",
-    collapsed: true,
+    text: "Resources",
+    base: "/resources",
     items: [
+      { text: "FAQs", link: "/faqs" },
       { text: "Terms", link: "/terms" },
       { text: "Types", link: "/types" },
+      { text: "Contact us", link: "/contact-us" },
     ],
   },
 ];

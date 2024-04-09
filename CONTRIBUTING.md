@@ -1,8 +1,8 @@
 # Contributing
 
-We're excited to have you contribute to the `aa-sdk`. Here's a step-by-step guide to help you get started.
+We are excited to have you contribute to the `aa-sdk`. Here's a step-by-step guide to help you get started.
 
-## Getting Started
+## Getting started
 
 1. **Fork and Clone**: First, [fork the `aa-sdk` repository](https://github.com/alchemyplatform/aa-sdk/fork). Then, clone your forked repo to your local machine.
 
@@ -14,7 +14,7 @@ We're excited to have you contribute to the `aa-sdk`. Here's a step-by-step guid
    - Build the project with `yarn build`.
    - Run existing tests using `yarn test` to ensure everything is working correctly.
 
-4. **Make Changes**: Now, you can start making changes to the packages or docs. When updating or adding new functionality, update or add a new doc in `site/packages/*` corresponding to the package you've worked on to document the changes.
+4. **Make Changes**: Now, you can start making changes to the packages or docs. When updating or adding new functionality, update or add a new doc in `site/packages/*` corresponding to the package you have worked on to document the changes.
 
 5. **Re-verify Tests**: After making your changes, re-run `yarn test` to ensure all tests still pass.
 

@@ -14,7 +14,7 @@ const chain = polygonMumbai;
 describe("Nani Account Tests", () => {
   const dummyMnemonic =
     "test test test test test test test test test test test test";
-  const owner: SmartAccountSigner =
+  const signer: SmartAccountSigner =
     LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
 
   it("should correctly sign the message", async () => {
@@ -98,7 +98,7 @@ describe("Nani Account Tests", () => {
 
   const givenAccount = async () => {
     return createNaniAccount({
-      owner,
+      signer,
       chain,
       accountAddress: "0x903072d2112412406597eb5DCAA8CeDD71ea141c",
       transport: http(`${chain.rpcUrls.alchemy.http[0]}/test`),

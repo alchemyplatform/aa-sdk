@@ -1,4 +1,5 @@
 import type {
+  Address,
   ClientMiddlewareConfig,
   ClientMiddlewareFn,
 } from "@alchemy/aa-core";
@@ -7,28 +8,31 @@ import {
   defaultGasEstimator,
   filterUndefined,
   isBigNumberish,
-  isPercentage,
+  isMultiplier,
   resolveProperties,
   type Hex,
-  type Percentage,
+  type Multiplier,
   type UserOperationFeeOptions,
   type UserOperationRequest,
 } from "@alchemy/aa-core";
 import { fromHex } from "viem";
 import type { ClientWithAlchemyMethods } from "../client/types";
+import { getAlchemyPaymasterAddress } from "../gas-manager.js";
 import { alchemyFeeEstimator } from "./feeEstimator.js";
 
 export type RequestGasAndPaymasterAndDataOverrides = Partial<{
-  maxFeePerGas: UserOperationRequest["maxFeePerGas"] | Percentage;
-  maxPriorityFeePerGas: UserOperationRequest["maxFeePerGas"] | Percentage;
-  callGasLimit: UserOperationRequest["maxFeePerGas"] | Percentage;
-  preVerificationGas: UserOperationRequest["maxFeePerGas"] | Percentage;
-  verificationGasLimit: UserOperationRequest["maxFeePerGas"] | Percentage;
+  maxFeePerGas: UserOperationRequest["maxFeePerGas"] | Multiplier;
+  maxPriorityFeePerGas: UserOperationRequest["maxFeePerGas"] | Multiplier;
+  callGasLimit: UserOperationRequest["maxFeePerGas"] | Multiplier;
+  preVerificationGas: UserOperationRequest["maxFeePerGas"] | Multiplier;
+  verificationGasLimit: UserOperationRequest["maxFeePerGas"] | Multiplier;
 }>;
 
 export interface AlchemyGasManagerConfig {
   policyId: string;
   gasEstimationOptions?: AlchemyGasEstimationOptions;
+  paymasterAddress?: Address;
+  dummyData?: Hex;
 }
 
 export interface AlchemyGasEstimationOptions {
@@ -38,17 +42,18 @@ export interface AlchemyGasEstimationOptions {
 }
 
 const dummyPaymasterAndData =
-  <C extends ClientWithAlchemyMethods>(client: C) =>
+  <C extends ClientWithAlchemyMethods>(
+    client: C,
+    config: AlchemyGasManagerConfig
+  ) =>
   () => {
-    switch (client.chain.id) {
-      case 1:
-      case 10:
-      case 137:
-      case 42161:
-        return "0x4Fd9098af9ddcB41DA48A1d78F91F1398965addcfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
-      default:
-        return "0xc03aac639bb21233e0139381970328db8bceeb67fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
-    }
+    const paymasterAddress =
+      config.paymasterAddress ?? getAlchemyPaymasterAddress(client.chain);
+    const dummyData =
+      config.dummyData ??
+      "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
+
+    return `${paymasterAddress}${dummyData}` as Address;
   };
 
 export const alchemyGasManagerMiddleware = <C extends ClientWithAlchemyMethods>(
@@ -84,6 +89,7 @@ export const alchemyGasManagerMiddleware = <C extends ClientWithAlchemyMethods>(
                 overrides,
                 account,
                 feeOptions,
+                client,
               }),
             };
           }
@@ -108,6 +114,7 @@ export const alchemyGasManagerMiddleware = <C extends ClientWithAlchemyMethods>(
               overrides,
               feeOptions,
               account,
+              client,
             });
             maxFeePerGas = (await result.maxFeePerGas) ?? maxFeePerGas;
             maxPriorityFeePerGas =
@@ -130,7 +137,7 @@ const requestGasAndPaymasterData: <C extends ClientWithAlchemyMethods>(
   client: C,
   config: AlchemyGasManagerConfig
 ) => ClientMiddlewareConfig["paymasterAndData"] = (client, config) => ({
-  dummyPaymasterAndData: dummyPaymasterAndData(client),
+  dummyPaymasterAndData: dummyPaymasterAndData(client, config),
   paymasterAndData: async (struct, { overrides, feeOptions, account }) => {
     const userOperation: UserOperationRequest = deepHexlify(
       await resolveProperties(struct)
@@ -138,26 +145,24 @@ const requestGasAndPaymasterData: <C extends ClientWithAlchemyMethods>(
 
     const overrideField = (
       field: keyof UserOperationFeeOptions
-    ): Hex | Percentage | undefined => {
+    ): Hex | Multiplier | undefined => {
       if (overrides?.[field] != null) {
         // one-off absolute override
         if (isBigNumberish(overrides[field])) {
           return deepHexlify(overrides[field]);
         }
-        // one-off percentage overrides
+        // one-off multiplier overrides
         else {
           return {
-            percentage:
-              100 + Number((overrides[field] as Percentage).percentage),
+            multiplier: Number((overrides[field] as Multiplier).multiplier),
           };
         }
       }
 
-      // provider level fee options with percentage
-      if (isPercentage(feeOptions?.[field])) {
+      // provider level fee options with multiplier
+      if (isMultiplier(feeOptions?.[field])) {
         return {
-          percentage:
-            100 + Number((feeOptions![field] as Percentage).percentage),
+          multiplier: Number((feeOptions![field] as Multiplier).multiplier),
         };
       }
 
@@ -181,7 +186,7 @@ const requestGasAndPaymasterData: <C extends ClientWithAlchemyMethods>(
       params: [
         {
           policyId: config.policyId,
-          entryPoint: account.getEntrypoint(),
+          entryPoint: account.getEntryPoint().address,
           userOperation: userOperation,
           dummySignature: userOperation.signature,
           overrides:
@@ -201,14 +206,14 @@ const requestPaymasterAndData: <C extends ClientWithAlchemyMethods>(
   client: C,
   config: AlchemyGasManagerConfig
 ) => ClientMiddlewareConfig["paymasterAndData"] = (client, config) => ({
-  dummyPaymasterAndData: dummyPaymasterAndData(client),
+  dummyPaymasterAndData: dummyPaymasterAndData(client, config),
   paymasterAndData: async (struct, { account }) => {
     const { paymasterAndData } = await client.request({
       method: "alchemy_requestPaymasterAndData",
       params: [
         {
           policyId: config.policyId,
-          entryPoint: account.getEntrypoint(),
+          entryPoint: account.getEntryPoint().address,
           userOperation: deepHexlify(await resolveProperties(struct)),
         },
       ],

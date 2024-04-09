@@ -14,7 +14,7 @@ head:
 
 # send
 
-`send` is a method on `EthersProviderAdapter` that uses that adapter's `SmartAccountProvider`'s [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193)-compliant `request` method.
+`send` is a method on `EthersProviderAdapter` that uses that adapter's `SmartAccountClient`'s [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193)-compliant `request` method.
 
 ## Usage
 
