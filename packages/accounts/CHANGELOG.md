@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.8.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.7.3...v3.8.0) (2024-04-10)
+
+### Bug Fixes
+
+- address some of the plugin and session key docs and usability ([#562](https://github.com/alchemyplatform/aa-sdk/issues/562)) ([12c02e9](https://github.com/alchemyplatform/aa-sdk/commit/12c02e97a49651dc452b0920803a4efa0fae2f2e))
+
+### Features
+
+- add alchemy accounts context ([#539](https://github.com/alchemyplatform/aa-sdk/issues/539)) ([f92469e](https://github.com/alchemyplatform/aa-sdk/commit/f92469ee3f1a5bc3e9f8fe72d6067de1f28e24dd)), closes [#561](https://github.com/alchemyplatform/aa-sdk/issues/561)
+- **alchemy-signer:** emit events from the alchemy signer on state changes ([#523](https://github.com/alchemyplatform/aa-sdk/issues/523)) ([8880e6d](https://github.com/alchemyplatform/aa-sdk/commit/8880e6d5bb9c98524c726a841fab5019bd6f0049))
+- **multi-sig:** add multisig plugin ([#519](https://github.com/alchemyplatform/aa-sdk/issues/519)) ([0139ef6](https://github.com/alchemyplatform/aa-sdk/commit/0139ef6de9b593dbe239675485a531122da254c4)), closes [#536](https://github.com/alchemyplatform/aa-sdk/issues/536)
+
 ## [3.6.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.6.0...v3.6.1) (2024-03-18)
 
 **Note:** Version bump only for package @alchemy/aa-accounts

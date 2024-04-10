@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.8.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.7.3...v3.8.0) (2024-04-10)
+
+### Features
+
+- add passport signer to aa-signers ([#550](https://github.com/alchemyplatform/aa-sdk/issues/550)) ([c7857ce](https://github.com/alchemyplatform/aa-sdk/commit/c7857cec047056d56e4b964b7a463fcb7171862d))
+- **alchemy-signer:** emit events from the alchemy signer on state changes ([#523](https://github.com/alchemyplatform/aa-sdk/issues/523)) ([8880e6d](https://github.com/alchemyplatform/aa-sdk/commit/8880e6d5bb9c98524c726a841fab5019bd6f0049))
+
 ## [3.6.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.6.0...v3.6.1) (2024-03-18)
 
 **Note:** Version bump only for package @alchemy/aa-signers
