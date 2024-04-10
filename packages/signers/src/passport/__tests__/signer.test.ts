@@ -1,4 +1,4 @@
-import { Passport } from "@0xpass/passport";
+import { Passport, type PassportConstructorParams } from "@0xpass/passport";
 import { WebauthnSigner } from "@0xpass/webauthn-signer";
 import { PassportSigner } from "../signer.js";
 import { mainnet } from "viem/chains";
@@ -104,8 +104,26 @@ it("should correctly sign typed data if authenticated", async () => {
   expect(signTypedData).toMatchInlineSnapshot('"0xtest"');
 });
 
+class TestPassport extends Passport {
+  constructor(config: PassportConstructorParams) {
+    super(config);
+
+    const ENCRYPTED_AES_KEY =
+      "jCQUpLs717SowbGoH7gdeeRmNE1le0Qg2wORqSIGEWDxuQn7ijOmEQI6gZpdXHgYOKCnLbCl2D1PeG/c3FL3VjquxDiC0/LfrBT4S2JZp0LGSRkT8+l7yR0hhltDUYXjfTj3p1Zdyn13git8WK5mijDZ5jI6r+8t3+IC/VkgIAq6z7eyfh6XQGprgwCcVh7tEcUGpKtHWkwMWExOjUgtIZfn1NFGAb9LwsC/6tGri0jIY3X0fU4XEBzMntA2Pep1/bxGuxgY2QGStiI9gKnXyuB2QyQtQ0SX92oVsjeHHXVIYhRuzV21Udln2QkxURquOhcIuPS+9nI674X2qLC60A==";
+
+    const AES_KEY_ARRAY = [
+      63, 126, 199, 191, 143, 250, 69, 51, 5, 155, 5, 208, 241, 216, 170, 132,
+      244, 43, 103, 155, 145, 171, 155, 160, 202, 110, 173, 134, 179, 13, 145,
+      34,
+    ];
+
+    this.aesKey = new Uint8Array(AES_KEY_ARRAY).buffer;
+    this.encryptedAesKey = ENCRYPTED_AES_KEY;
+  }
+}
+
 const givenSigner = async (auth = true) => {
-  const inner = new Passport({
+  const inner = new TestPassport({
     signer: new WebauthnSigner({
       rpId: "rpId",
       rpName: "rpName",
