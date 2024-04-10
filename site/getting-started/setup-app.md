@@ -106,6 +106,10 @@ pnpm i @alchemy/aa-alchemy @alchemy/aa-accounts @alchemy/aa-core viem @tanstack/
 
 :::
 
+::: warning
+The version of `viem` that's required to be installed is listed as a `peerDependency` of the various `@alchemy/*` packages (`2.8.6` at the time of writing). Due to some breaking changes between patch and minor versions of `viem`, it's recommended to pin your version of `viem` to the listed `peerDependency`.
+:::
+
 The three Alchemy packages - `@alchemy/aa-alchemy`, `@alchemy/aa-accounts`, and `@alchemy/aa-core` - come from the [Alchemy Account Kit](https://accountkit.alchemy.com/), and will provide the key building blocks for created Embedded Accounts.
 
 [`viem`](https://viem.sh/) is a useful Web3 Utils library and a key dependency of Account Kit.
