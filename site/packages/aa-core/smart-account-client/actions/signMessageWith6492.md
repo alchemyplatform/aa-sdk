@@ -41,7 +41,7 @@ A Promise containing the signature of the message, additionally wrapped in EIP-6
 
 ## Parameters
 
-### `msg: string | Uint8Array`
+### `message: string | Uint8Array`
 
 The message to sign
 
