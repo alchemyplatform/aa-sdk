@@ -36,9 +36,9 @@ if (!isPluginInstalled) {
     // this will allow the session key plugin to interact with all addresses
     .setContractAccessControlType(SessionKeyAccessListType.ALLOW_ALL_ACCESS)
     .setTimeRange({
-      validFrom: Date.now() / 1000,
+      validFrom: Math.round(Date.now() / 1000),
       // valid for 1 hour
-      validUntil: Date.now() / 1000 + 60 * 60,
+      validUntil: Math.round(Date.now() / 1000 + 60 * 60),
     });
 
   const { hash } = await client.installSessionKeyPlugin({
