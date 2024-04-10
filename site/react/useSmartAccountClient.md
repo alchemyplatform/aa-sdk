@@ -48,11 +48,11 @@ The underlying account type you want to use
 
 ```ts
   | Omit<CreateLightAccountParams, "signer" | "transport" | "chain">
-  | Omit<CreateMultiOwnerModularAccountParams,"signer" | "transport" | "chain">
+  | Omit<CreateMultiOwnerModularAccountParams, "signer" | "transport" | "chain">
   | undefined
 ```
 
-An optional param object based on the `type` property passed in above. Allows for overriding the default account parameters.
+An optional param object based on the `type` property passed in above. It allows for overriding the default account parameters.
 
 ::: details CreateLightAccountParams
 <<< @/../packages/accounts/src/light-account/account.ts#CreateLightAccountParams
@@ -90,7 +90,7 @@ import { type UseSmartAccountClientResult } from "@alchemy/aa-alchemy/react";
 ### client
 
 `AlchemySmartAccountClient | undefined`
-Once the underlying account is created, this will be an instance of an `AlchemySmartAccountClient` connected to an instance of the account type specified.
+Once the underlying account is created, this will be an instance of an [`AlchemySmartAccountClient`](/packages/aa-alchemy/smart-account-client/index.html) connected to an instance of the account type specified.
 
 ### isLoadingClient
 
