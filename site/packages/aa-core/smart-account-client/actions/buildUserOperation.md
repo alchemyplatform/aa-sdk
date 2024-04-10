@@ -50,7 +50,7 @@ const request = await smartAccountClient.signUserOperation({ uoStruct });
 const entryPointAddress = client.account.getEntryPoint().address;
 const uoHash = await smartAccountClient.sendRawUserOperation(
   request,
-  entryPointAddress,
+  entryPointAddress
 );
 
 // build batch
@@ -82,7 +82,7 @@ const request = await smartAccountClient.signUserOperation({ batchedUoStruct });
 const entryPointAddress = client.account.getEntryPoint().address;
 const uoHash = await smartAccountClient.sendRawUserOperation(
   request,
-  entryPointAddress,
+  entryPointAddress
 );
 ```
 
