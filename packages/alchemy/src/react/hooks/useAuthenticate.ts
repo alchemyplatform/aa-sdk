@@ -1,12 +1,19 @@
 "use client";
 
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
 import { ClientOnlyPropertyError } from "../../config/errors.js";
+import type { User } from "../../signer/index.js";
 import type { AuthParams } from "../../signer/signer.js";
 import { useAlchemyAccountContext } from "../context.js";
 import { useSigner } from "./useSigner.js";
 
-export function useAuthenticate() {
+export type UseAuthenticateResult = {
+  authenticate: UseMutateFunction<User, Error, AuthParams, unknown>;
+  isPending: boolean;
+  error: Error | null;
+};
+
+export function useAuthenticate(): UseAuthenticateResult {
   const { queryClient } = useAlchemyAccountContext();
   const signer = useSigner();
 

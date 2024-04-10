@@ -2,9 +2,10 @@
 
 import { useSyncExternalStore } from "react";
 import { watchSigner } from "../../config/actions/watchSigner.js";
+import type { AlchemySigner } from "../../signer/index.js";
 import { useAlchemyAccountContext } from "../context.js";
 
-export const useSigner = () => {
+export const useSigner = (): AlchemySigner | null => {
   const { config } = useAlchemyAccountContext();
 
   // TODO: figure out how to handle this on the server

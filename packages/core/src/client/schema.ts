@@ -18,6 +18,7 @@ export const createPublicErc4337ClientSchema = <
     );
   });
 
+// #region ConnectionConfigSchema
 export const ConnectionConfigSchema = z.union([
   z.object({
     rpcUrl: z.never().optional(),
@@ -40,6 +41,7 @@ export const ConnectionConfigSchema = z.union([
     jwt: z.string(),
   }),
 ]);
+// #endregion ConnectionConfigSchema
 
 export const UserOperationFeeOptionsFieldSchema =
   BigNumberishRangeSchema.merge(MultiplierSchema).partial();
