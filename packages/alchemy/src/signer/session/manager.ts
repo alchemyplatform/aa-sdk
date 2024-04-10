@@ -232,5 +232,14 @@ export class SessionManager {
 
       this.setSession({ type: "passkey", user });
     });
+
+    window.addEventListener("storage", (e: StorageEvent) => {
+      if (e.key === this.sessionKey) {
+        // @ts-expect-error - the typing isn't working on this but this is correct
+        // https://docs.pmnd.rs/zustand/integrations/persisting-store-data#how-can-i-rehydrate-on-storage-event
+        this.store.persist.rehydrate();
+        this.initialize();
+      }
+    });
   };
 }

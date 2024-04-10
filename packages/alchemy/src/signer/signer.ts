@@ -276,6 +276,7 @@ export class AlchemySigner
           });
 
       this.sessionManager.setTemporarySession({ orgId });
+      this.store.setState({ status: AlchemySignerStatus.AWAITING_EMAIL_AUTH });
 
       // We wait for the session manager to emit a connected event if
       // cross tab sessions are permitted

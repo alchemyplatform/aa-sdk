@@ -124,6 +124,21 @@ export const sidebar: DefaultTheme.Sidebar = [
     ],
   },
   {
+    text: "React Hooks",
+    base: "/react",
+    items: [
+      { text: "Overview", link: "/overview" },
+      { text: "createConfig", link: "/createConfig" },
+      { text: "useAuthenticate", link: "/useAuthenticate" },
+      { text: "useSmartAccountClient", link: "/useSmartAccountClient" },
+      { text: "useAccount", link: "/useAccount" },
+      { text: "useSigner", link: "/useSigner" },
+      { text: "useSignerStatus", link: "/useSignerStatus" },
+      { text: "useUser", link: "/useUser" },
+      { text: "useBundlerClient", link: "/useBundlerClient" },
+    ],
+  },
+  {
     text: "Choosing a smart account",
     items: [
       { text: "Introduction", link: "/smart-accounts/" },

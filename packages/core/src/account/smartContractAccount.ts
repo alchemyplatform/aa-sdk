@@ -189,15 +189,16 @@ export async function toSmartContractAccount<
   SmartContractAccount<Name>
 > {
   const client = createBundlerClient({
-    transport,
+    // we set the retry count to 0 so that viem doesn't retry during
+    // getting the address. That call always reverts and without this
+    // viem will retry 3 times, making this call very slow
+    transport: (opts) => transport({ ...opts, chain, retryCount: 0 }),
     chain,
   });
   const entryPointContract = getContract({
     address: entryPoint.address,
     abi: EntryPointAbi,
-    // Need to cast this as PublicClient or else it breaks ABI typing.
-    // This is valid because our PublicClient is a subclass of PublicClient
-    client: client as PublicClient,
+    client,
   });
 
   const accountAddress_ = await getAccountAddress({

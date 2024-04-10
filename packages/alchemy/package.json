@@ -26,6 +26,16 @@
       "import": "./dist/esm/index.js",
       "default": "./dist/cjs/index.js"
     },
+    "./config": {
+      "types": "./dist/types/config/index.d.ts",
+      "import": "./dist/esm/config/index.js",
+      "default": "./dist/cjs/config/index.js"
+    },
+    "./react": {
+      "types": "./dist/types/react/index.d.ts",
+      "import": "./dist/esm/react/index.js",
+      "default": "./dist/cjs/react/index.js"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {
@@ -41,6 +51,9 @@
   },
   "devDependencies": {
     "@alchemy/aa-accounts": "*",
+    "@tanstack/react-query": "^5.28.9",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "typescript": "^5.0.4",
     "typescript-template": "*",
     "vitest": "^0.31.0"
@@ -56,7 +69,21 @@
     "zustand": "^4.5.2"
   },
   "peerDependencies": {
+    "@tanstack/react-query": "^5.28.9",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "viem": "2.8.6"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    },
+    "@tanstack/react-query": {
+      "optional": true
+    }
   },
   "publishConfig": {
     "access": "public",
