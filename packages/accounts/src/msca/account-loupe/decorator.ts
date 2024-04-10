@@ -139,10 +139,12 @@ export const accountLoupeActions: <
       );
     }
 
-    return client.readContract({
-      address: account.address,
-      abi: IAccountLoupeAbi,
-      functionName: "getInstalledPlugins",
-    });
+    return client
+      .readContract({
+        address: account.address,
+        abi: IAccountLoupeAbi,
+        functionName: "getInstalledPlugins",
+      })
+      .catch(() => []);
   },
 });
