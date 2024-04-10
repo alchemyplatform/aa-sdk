@@ -1,7 +1,9 @@
 import {
   createSmartAccountClientFromExisting,
   getDefaultUserOperationFeeOptions,
+  isSmartAccountWithSigner,
   type SmartContractAccount,
+  type SmartContractAccountWithSigner,
 } from "@alchemy/aa-core";
 import type { Chain, CustomTransport, Transport } from "viem";
 import { alchemyFeeEstimator } from "../../middleware/feeEstimator.js";
@@ -25,6 +27,12 @@ export type CreateAlchemySmartAccountClientFromRpcClient<
   AlchemySmartAccountClientConfig<Transport, Chain, TAccount, TContext>,
   "rpcUrl" | "chain" | "apiKey" | "jwt"
 > & { client: ClientWithAlchemyMethods };
+
+export function getSignerTypeHeader<
+  TAccount extends SmartContractAccountWithSigner
+>(account: TAccount) {
+  return { "Alchemy-Aa-Sdk-Signer": account.getSigner().signerType };
+}
 
 /**
  * Helper method meant to be used internally to create an alchemy smart account client
@@ -62,7 +70,7 @@ export function createAlchemySmartAccountClientFromRpcClient({
   const feeOptions =
     opts?.feeOptions ?? getDefaultUserOperationFeeOptions(client.chain);
 
-  return createSmartAccountClientFromExisting({
+  const scaClient = createSmartAccountClientFromExisting({
     account,
     client,
     type: "AlchemySmartAccountClient",
@@ -70,7 +78,13 @@ export function createAlchemySmartAccountClientFromRpcClient({
       ...opts,
       feeOptions,
     },
-    customMiddleware,
+    customMiddleware: async (struct, args) => {
+      if (isSmartAccountWithSigner(args.account)) {
+        client.updateHeaders(getSignerTypeHeader(args.account));
+      }
+
+      return customMiddleware ? customMiddleware(struct, args) : struct;
+    },
     feeEstimator: feeEstimator ?? alchemyFeeEstimator(client),
     userOperationSimulator: useSimulation
       ? alchemyUserOperationSimulator(client)
@@ -94,4 +108,10 @@ export function createAlchemySmartAccountClientFromRpcClient({
       })),
     signUserOperation,
   }).extend(alchemyActions);
+
+  if (account && isSmartAccountWithSigner(account)) {
+    client.updateHeaders(getSignerTypeHeader(account));
+  }
+
+  return scaClient;
 }

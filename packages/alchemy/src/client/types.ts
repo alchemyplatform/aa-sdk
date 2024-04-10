@@ -97,4 +97,6 @@ export type ClientWithAlchemyMethods = BundlerClient<HttpTransport> & {
         params: [];
       }): Promise<Hex>;
     }["request"];
+} & {
+  updateHeaders: (headers: HeadersInit) => void;
 };

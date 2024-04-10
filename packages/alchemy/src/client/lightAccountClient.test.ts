@@ -23,7 +23,10 @@ describe("Light Account Client Tests", () => {
     expect(spy.mock.results[0].value.transport).toMatchInlineSnapshot(
       {
         fetchOptions: {
-          headers: { "Alchemy-AA-Sdk-Version": expect.any(String) },
+          headers: {
+            "Alchemy-AA-Sdk-Version": expect.any(String),
+            "Alchemy-Aa-Sdk-Signer": "local",
+          },
         },
       },
       `
@@ -31,6 +34,7 @@ describe("Light Account Client Tests", () => {
         "fetchOptions": {
           "headers": {
             "Alchemy-AA-Sdk-Version": Any<String>,
+            "Alchemy-Aa-Sdk-Signer": "local",
             "Authorization": "Bearer test",
           },
         },

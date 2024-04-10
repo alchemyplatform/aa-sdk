@@ -75,24 +75,25 @@ export function createBundlerClient(
 
   const client = (() => {
     if (resolvedTransport.config.type === "http") {
-      const { url, fetchOptions } = resolvedTransport.value as {
+      const { url, fetchOptions: fetchOptions_ } = resolvedTransport.value as {
         fetchOptions: HttpTransportConfig["fetchOptions"];
         url: string;
       };
+
+      const fetchOptions = fetchOptions_ ?? {};
+
+      if (url.toLowerCase().indexOf("alchemy") > -1) {
+        fetchOptions.headers = {
+          ...fetchOptions.headers,
+          "Alchemy-AA-Sdk-Version": VERSION,
+        };
+      }
 
       return createClient<Transport, Chain>({
         ...baseParameters,
         transport: http(url, {
           ...resolvedTransport.config,
-          fetchOptions: {
-            ...fetchOptions,
-            headers: {
-              ...fetchOptions?.headers,
-              ...(url.toLowerCase().indexOf("alchemy") > -1
-                ? { "Alchemy-AA-Sdk-Version": VERSION }
-                : undefined),
-            },
-          },
+          fetchOptions,
         }),
       });
     }
