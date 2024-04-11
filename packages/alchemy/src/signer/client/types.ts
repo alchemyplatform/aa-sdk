@@ -13,6 +13,11 @@ export type User = {
   credentialId?: string;
 };
 
+export type ExportWalletParams = {
+  iframeContainerId: string;
+  iframeElementId?: string;
+};
+
 export type CreateAccountParams =
   | {
       type: "email";
