@@ -17,6 +17,8 @@ export type * from "./hooks/useExportAccount.js";
 export { useExportAccount } from "./hooks/useExportAccount.js";
 export type * from "./hooks/useLogout.js";
 export { useLogout } from "./hooks/useLogout.js";
+export { useSignMessage } from "./hooks/useSignMessage.js";
+export { useSignTypedData } from "./hooks/useSignTypedData.js";
 export type * from "./hooks/useSigner.js";
 export { useSigner } from "./hooks/useSigner.js";
 export type * from "./hooks/useSignerStatus.js";
