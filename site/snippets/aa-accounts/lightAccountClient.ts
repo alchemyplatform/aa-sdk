@@ -5,6 +5,7 @@ import { http } from "viem";
 export const smartAccountClient = await createLightAccountClient({
   transport: http("RPC_URL"),
   chain: sepolia,
-  // or any other SmartAccountSigner
-  signer: LocalAccountSigner.mnemonicToAccountSigner("YOUR_MNEMONIC"),
+  account: {
+    signer: LocalAccountSigner.mnemonicToAccountSigner("OWNER_MNEMONIC"),
+  },
 });
