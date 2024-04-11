@@ -75,16 +75,11 @@ export const alchemyGasManagerMiddleware = <C extends ClientWithAlchemyMethods>(
     gasEstimator: disableGasEstimation
       ? fallbackGasEstimator
       : async (struct, { overrides, account, feeOptions }) => {
-          const zeroEstimates = {
-            callGasLimit: 0n,
-            preVerificationGas: 0n,
-            verificationGasLimit: 0n,
-          };
-
-          if (overrides?.paymasterAndData) {
+          // but if user is bypassing paymaster to fallback to having the account to pay the gas (one-off override),
+          // we cannot delegate gas estimation to the bundler because paymaster middleware will not be called
+          if (overrides?.paymasterAndData === "0x") {
             return {
               ...struct,
-              ...zeroEstimates,
               ...fallbackGasEstimator(struct, {
                 overrides,
                 account,
@@ -94,18 +89,14 @@ export const alchemyGasManagerMiddleware = <C extends ClientWithAlchemyMethods>(
             };
           }
 
-          return {
-            ...struct,
-            callGasLimit: 0n,
-            preVerificationGas: 0n,
-            verificationGasLimit: 0n,
-          };
+          // essentiall noop, because the gas estimation will happen in the backend
+          return struct;
         },
     feeEstimator: disableGasEstimation
       ? fallbackFeeDataGetter
       : async (struct, { overrides, account, feeOptions }) => {
-          let maxFeePerGas = (await struct.maxFeePerGas) ?? 0n;
-          let maxPriorityFeePerGas = (await struct.maxPriorityFeePerGas) ?? 0n;
+          let maxFeePerGas = await struct.maxFeePerGas;
+          let maxPriorityFeePerGas = await struct.maxPriorityFeePerGas;
 
           // but if user is bypassing paymaster to fallback to having the account to pay the gas (one-off override),
           // we cannot delegate gas estimation to the bundler because paymaster middleware will not be called
@@ -166,7 +157,10 @@ const requestGasAndPaymasterData: <C extends ClientWithAlchemyMethods>(
         };
       }
 
-      if (fromHex(userOperation[field], "bigint") > 0n) {
+      if (
+        userOperation[field] != null &&
+        fromHex(userOperation[field], "bigint") > 0n
+      ) {
         return userOperation[field];
       }
 
