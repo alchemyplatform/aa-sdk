@@ -195,6 +195,7 @@ export const sidebar: DefaultTheme.Sidebar = [
           { text: "Arcana Auth", link: "/arcana-auth" },
           { text: "Dfns", link: "/dfns" },
           { text: "WalletKit", link: "/walletkit" },
+          { text: "Passport", link: "/passport" },
         ],
       },
       { text: "EOA signer", link: "/eoa" },
