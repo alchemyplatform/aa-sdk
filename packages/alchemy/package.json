@@ -33,8 +33,8 @@
     },
     "./react": {
       "types": "./dist/types/react/index.d.ts",
-      "import": "./dist/esm/react/index.js",
-      "default": "./dist/cjs/react/index.js"
+      "import": "./dist/esm/react/index.jsx",
+      "default": "./dist/cjs/react/index.jsx"
     },
     "./package.json": "./package.json"
   },
