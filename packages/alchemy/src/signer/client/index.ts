@@ -17,6 +17,7 @@ import type {
   CreateAccountParams,
   CredentialCreationOptionOverrides,
   EmailAuthParams,
+  ExportWalletParams,
   SignerBody,
   SignerResponse,
   SignerRoutes,
@@ -275,10 +276,7 @@ export class AlchemySignerClient {
   public exportWallet = async ({
     iframeContainerId,
     iframeElementId = "turnkey-export-iframe",
-  }: {
-    iframeContainerId: string;
-    iframeElementId?: string;
-  }) => {
+  }: ExportWalletParams) => {
     const exportWalletIframeStamper = new IframeStamper({
       iframeContainer: document.getElementById(iframeContainerId),
       iframeElementId: iframeElementId,
