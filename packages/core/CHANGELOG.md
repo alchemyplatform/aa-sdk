@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.8.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.8.0...v3.8.1) (2024-04-11)
+
+### Bug Fixes
+
+- add the signer header when using aa-alchemy ([#563](https://github.com/alchemyplatform/aa-sdk/issues/563)) ([7cfeaa6](https://github.com/alchemyplatform/aa-sdk/commit/7cfeaa6f093f929f59f1055fc16e07840bf487a0))
+
 # [3.8.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.7.3...v3.8.0) (2024-04-10)
 
 ### Bug Fixes
