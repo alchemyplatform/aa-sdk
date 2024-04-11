@@ -131,6 +131,7 @@ export const sidebar: DefaultTheme.Sidebar = [
       { text: "createConfig", link: "/createConfig" },
       { text: "useAuthenticate", link: "/useAuthenticate" },
       { text: "useSmartAccountClient", link: "/useSmartAccountClient" },
+      { text: "useClientActions", link: "/useClientActions" },
       { text: "useAccount", link: "/useAccount" },
       { text: "useSigner", link: "/useSigner" },
       { text: "useSignerStatus", link: "/useSignerStatus" },
