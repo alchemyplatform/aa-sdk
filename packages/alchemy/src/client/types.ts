@@ -24,17 +24,7 @@ export type AlchemyRpcSchema = [
         userOperation: UserOperationRequest<EntryPointVersion>;
       }
     ];
-    ReturnType:
-      | {
-          paymasterAndData: UserOperationRequest<"0.6.0">["paymasterAndData"];
-        }
-      | Pick<
-          UserOperationRequest<"0.7.0">,
-          | "paymaster"
-          | "paymasterData"
-          | "paymasterPostOpGasLimit"
-          | "paymasterVerificationGasLimit"
-        >;
+    ReturnType: RequestPaymasterAndDataResponse<EntryPointVersion>;
   },
   {
     Method: "alchemy_requestGasAndPaymasterAndData";
@@ -47,26 +37,7 @@ export type AlchemyRpcSchema = [
         overrides?: RequestGasAndPaymasterAndDataOverrides<EntryPointVersion>;
       }
     ];
-    ReturnType: Pick<
-      UserOperationRequest<EntryPointVersion>,
-      | "callGasLimit"
-      | "preVerificationGas"
-      | "verificationGasLimit"
-      | "maxFeePerGas"
-      | "maxPriorityFeePerGas"
-    > &
-      (
-        | {
-            paymasterAndData: UserOperationRequest<"0.6.0">["paymasterAndData"];
-          }
-        | Pick<
-            UserOperationRequest<"0.7.0">,
-            | "paymaster"
-            | "paymasterData"
-            | "paymasterPostOpGasLimit"
-            | "paymasterVerificationGasLimit"
-          >
-      );
+    ReturnType: RequestGasAndPaymasterAndDataResponse<EntryPointVersion>;
   },
   {
     Method: "alchemy_simulateUserOperationAssetChanges";

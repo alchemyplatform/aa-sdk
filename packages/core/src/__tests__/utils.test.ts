@@ -1,6 +1,5 @@
 import { sepolia } from "@alchemy/aa-core";
 import { getEntryPoint } from "../entrypoint/index.js";
-import type { UserOperationRequest } from "../types";
 import { stringToIndex } from "../utils/index.js";
 
 describe("Utils Tests", () => {
@@ -23,9 +22,9 @@ describe("Utils Tests", () => {
         signature:
           "0xd16f93b584fbfdc03a5ee85914a1f29aa35c44fea5144c387ee1040a3c1678252bf323b7e9c3e9b4dfd91cca841fc522f4d3160a1e803f2bf14eb5fa037aae4a1b",
         verificationGasLimit: "0x114c2",
-      } as UserOperationRequest<"0.6.0">)
+      })
     ).toMatchInlineSnapshot(
-      '"0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b"'
+      '"0xbb5560c1a3983429a6cdb244fa532fb4f2cf0de8ba9ccbf257bff93d069c76a3"'
     );
   });
 

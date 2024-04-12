@@ -66,9 +66,6 @@ export function getEntryPoint<
       version: entryPoint.version,
       address,
       chain,
-      // we should fix this so it's not required
-      // this is why satisfies didn't work before
-      overrides: undefined,
       abi: entryPoint.abi,
       getUserOperationHash: (r) =>
         entryPoint.getUserOperationHash(r, address, chain.id),
@@ -79,9 +76,6 @@ export function getEntryPoint<
       version: entryPoint.version,
       address,
       chain,
-      // we should fix this so it's not required
-      // this is why satisfies didn't work before
-      overrides: undefined,
       abi: entryPoint.abi,
       getUserOperationHash: (r) =>
         entryPoint.getUserOperationHash(r, address, chain.id),

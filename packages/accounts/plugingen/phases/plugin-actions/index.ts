@@ -54,8 +54,8 @@ export const PluginActionsGenPhase: Phase = async (input) => {
                   account = client.account
               }`
           : dedent`{
-                  context,
                   overrides,
+                  context,
                   account = client.account
               }`;
       const argsEncodeString = n.inputs.length > 0 ? "args," : "";
