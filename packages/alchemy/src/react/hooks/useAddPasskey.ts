@@ -1,7 +1,6 @@
 "use client";
 
 import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
-import { ClientOnlyPropertyError } from "../../config/errors.js";
 import { useAlchemyAccountContext } from "../context.js";
 import { useSigner } from "./useSigner.js";
 
@@ -27,11 +26,7 @@ export function useAddPasskey(): UseAddPasskeyResult {
   } = useMutation(
     {
       mutationFn: async (params?: CredentialCreationOptions | void) => {
-        if (!signer) {
-          throw new ClientOnlyPropertyError("signer");
-        }
-
-        return signer.addPasskey(params ?? undefined);
+        return signer!.addPasskey(params ?? undefined);
       },
     },
     queryClient

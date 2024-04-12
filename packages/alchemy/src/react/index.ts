@@ -7,6 +7,7 @@ export {
 export { NoAlchemyAccountContextError } from "./errors.js";
 export type * from "./hooks/useAccount.js";
 export { useAccount } from "./hooks/useAccount.js";
+export type * from "./hooks/useAddPasskey.js";
 export { useAddPasskey } from "./hooks/useAddPasskey.js";
 export type * from "./hooks/useAuthenticate.js";
 export { useAuthenticate } from "./hooks/useAuthenticate.js";
