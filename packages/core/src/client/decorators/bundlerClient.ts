@@ -12,10 +12,7 @@ import { getSupportedEntryPoints } from "../../actions/bundler/getSupportedEntry
 import { getUserOperationByHash } from "../../actions/bundler/getUserOperationByHash.js";
 import { getUserOperationReceipt } from "../../actions/bundler/getUserOperationReceipt.js";
 import { sendRawUserOperation } from "../../actions/bundler/sendRawUserOperation.js";
-import type {
-  DefaultEntryPointVersion,
-  EntryPointVersion,
-} from "../../entrypoint/types.js";
+import type { EntryPointVersion } from "../../entrypoint/types.js";
 import type {
   UserOperationEstimateGasResponse,
   UserOperationReceipt,
@@ -69,7 +66,7 @@ export type BundlerActions = {
    * @returns the gas estimates for the given response (see: {@link UserOperationEstimateGasResponse})
    */
   estimateUserOperationGas<
-    TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
+    TEntryPointVersion extends EntryPointVersion = EntryPointVersion
   >(
     request: UserOperationRequest<TEntryPointVersion>,
     entryPoint: Address,
@@ -84,7 +81,7 @@ export type BundlerActions = {
    * @returns the hash of the sent UserOperation
    */
   sendRawUserOperation<
-    TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
+    TEntryPointVersion extends EntryPointVersion = EntryPointVersion
   >(
     request: UserOperationRequest<TEntryPointVersion>,
     entryPoint: Address

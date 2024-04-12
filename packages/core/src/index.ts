@@ -73,7 +73,12 @@ export {
   convertCoinTypeToChain,
   convertCoinTypeToChainId,
 } from "./ens/utils.js";
-export * from "./entrypoint/index.js";
+export {
+  defaultEntryPointVersion,
+  entryPointRegistry,
+  getEntryPoint,
+  isEntryPointVersion,
+} from "./entrypoint/index.js";
 export type * from "./entrypoint/types.js";
 export {
   AccountNotFoundError,
@@ -94,7 +99,10 @@ export {
   IncompatibleClientError,
   InvalidRpcUrlError,
 } from "./errors/client.js";
-export * from "./errors/entrypoint.js";
+export {
+  EntryPointNotFoundError,
+  InvalidEntryPointError,
+} from "./errors/entrypoint.js";
 export { InvalidSignerTypeError } from "./errors/signer.js";
 export {
   FailedToFindTransactionError,

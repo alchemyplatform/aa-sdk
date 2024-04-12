@@ -122,7 +122,6 @@ export const PluginActionsGenPhase: Phase = async (input) => {
 
   input.content.push(dedent`
     export const ${camelCase(pluginConfig.name)}Actions: <
-        TEntryPointVersion extends EntryPointVersion,
         TTransport extends Transport = Transport,
         TChain extends Chain | undefined = Chain | undefined,
         TAccount extends SmartContractAccount | undefined =

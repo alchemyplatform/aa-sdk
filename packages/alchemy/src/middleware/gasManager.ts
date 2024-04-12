@@ -52,6 +52,34 @@ export type RequestGasAndPaymasterAndDataOverrides<
     : {}
 >;
 
+export type RequestPaymasterAndDataResponse<
+  TEntryPointVersion extends EntryPointVersion
+> = TEntryPointVersion extends "0.6.0"
+  ? {
+      paymasterAndData: UserOperationRequest<"0.6.0">["paymasterAndData"];
+    }
+  : TEntryPointVersion extends "0.7.0"
+  ? Pick<
+      UserOperationRequest<"0.7.0">,
+      | "paymaster"
+      | "paymasterData"
+      | "paymasterPostOpGasLimit"
+      | "paymasterVerificationGasLimit"
+    >
+  : {};
+
+export type RequestGasAndPaymasterAndDataResponse<
+  TEntryPointVersion extends EntryPointVersion
+> = Pick<
+  UserOperationRequest<EntryPointVersion>,
+  | "callGasLimit"
+  | "preVerificationGas"
+  | "verificationGasLimit"
+  | "maxFeePerGas"
+  | "maxPriorityFeePerGas"
+> &
+  RequestPaymasterAndDataResponse<TEntryPointVersion>;
+
 export interface AlchemyGasManagerConfig {
   policyId: string;
   gasEstimationOptions?: AlchemyGasEstimationOptions;

@@ -54,6 +54,7 @@ export const PluginActionsGenPhase: Phase = async (input) => {
                   account = client.account
               }`
           : dedent`{
+                  context,
                   overrides,
                   account = client.account
               }`;

@@ -85,18 +85,11 @@ export async function dropAndReplaceUserOperation<
     ...overrides,
     maxFeePerGas: bigIntMax(
       BigInt(maxFeePerGas ?? 0n),
-      bigIntMultiply(
-        (uoToDrop as UserOperationRequest<TEntryPointVersion>).maxFeePerGas,
-        1.1
-      )
+      bigIntMultiply(uoToDrop.maxFeePerGas, 1.1)
     ),
     maxPriorityFeePerGas: bigIntMax(
       BigInt(maxPriorityFeePerGas ?? 0n),
-      bigIntMultiply(
-        (uoToDrop as UserOperationRequest<TEntryPointVersion>)
-          .maxPriorityFeePerGas,
-        1.1
-      )
+      bigIntMultiply(uoToDrop.maxPriorityFeePerGas, 1.1)
     ),
   } as UserOperationOverrides<TEntryPointVersion>;
 

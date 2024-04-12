@@ -2,7 +2,6 @@ import type { Address } from "abitype";
 import {
   getContract,
   http,
-  toHex,
   trim,
   type GetContractReturnType,
   type Hash,
@@ -380,7 +379,7 @@ export abstract class BaseSmartContractAccount<
       );
     }
 
-    return toHex(trim(storage));
+    return trim(storage);
   }
 
   private async _getAccountInitCode(): Promise<Hash> {

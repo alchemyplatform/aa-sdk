@@ -88,7 +88,3 @@ export type IsOneOf<T, Union> = IsMemberOrSubtypeOfAComponent<
 >;
 
 export type OneOf<T1, T2> = IsOneOf<T1, T2> extends true ? T1 : never;
-
-export type Interface<T> = {
-  [K in keyof T]: any;
-};

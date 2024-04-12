@@ -8,7 +8,11 @@ import type {
   SimulateUserOperationAssetChangesRequest,
   SimulateUserOperationAssetChangesResponse,
 } from "../actions/types";
-import type { RequestGasAndPaymasterAndDataOverrides } from "../middleware/gasManager";
+import type {
+  RequestGasAndPaymasterAndDataOverrides,
+  RequestGasAndPaymasterAndDataResponse,
+  RequestPaymasterAndDataResponse,
+} from "../middleware/gasManager";
 
 export type AlchemyRpcSchema = [
   {
@@ -88,18 +92,7 @@ export type ClientWithAlchemyMethods = BundlerClient<HttpTransport> & {
             userOperation: UserOperationRequest<EntryPointVersion>;
           }
         ];
-      }): Promise<
-        | {
-            paymasterAndData: UserOperationRequest<"0.6.0">["paymasterAndData"];
-          }
-        | Pick<
-            UserOperationRequest<"0.7.0">,
-            | "paymaster"
-            | "paymasterData"
-            | "paymasterPostOpGasLimit"
-            | "paymasterVerificationGasLimit"
-          >
-      >;
+      }): Promise<RequestPaymasterAndDataResponse<EntryPointVersion>>;
 
       request(args: {
         method: "alchemy_requestGasAndPaymasterAndData";
@@ -112,28 +105,7 @@ export type ClientWithAlchemyMethods = BundlerClient<HttpTransport> & {
             overrides?: RequestGasAndPaymasterAndDataOverrides<EntryPointVersion>;
           }
         ];
-      }): Promise<
-        Pick<
-          UserOperationRequest<EntryPointVersion>,
-          | "callGasLimit"
-          | "preVerificationGas"
-          | "verificationGasLimit"
-          | "maxFeePerGas"
-          | "maxPriorityFeePerGas"
-        > &
-          (
-            | {
-                paymasterAndData: UserOperationRequest<"0.6.0">["paymasterAndData"];
-              }
-            | Pick<
-                UserOperationRequest<"0.7.0">,
-                | "paymaster"
-                | "paymasterData"
-                | "paymasterPostOpGasLimit"
-                | "paymasterVerificationGasLimit"
-              >
-          )
-      >;
+      }): Promise<RequestGasAndPaymasterAndDataResponse<EntryPointVersion>>;
 
       request(args: {
         method: "alchemy_simulateUserOperationAssetChanges";

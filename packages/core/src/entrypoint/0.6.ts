@@ -102,4 +102,4 @@ export default {
   },
 
   packUserOperation,
-} as SupportedEntryPoint<"0.6.0", Chain, typeof EntryPointAbi_v6>;
+} satisfies SupportedEntryPoint<"0.6.0", Chain, typeof EntryPointAbi_v6>;

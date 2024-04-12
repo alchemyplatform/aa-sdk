@@ -4,7 +4,6 @@ import {
   type CreateLightAccountParams,
   type CreateMultiOwnerModularAccountParams,
 } from "@alchemy/aa-accounts";
-import { getEntryPoint } from "@alchemy/aa-core";
 import { custom } from "viem";
 import { ClientOnlyPropertyError } from "../errors.js";
 import type {
@@ -65,7 +64,6 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
           signer,
           transport: (opts) => transport({ ...opts, retryCount: 0 }),
           chain,
-          entryPoint: getEntryPoint(chain),
         });
       default:
         throw new Error("Unsupported account type");

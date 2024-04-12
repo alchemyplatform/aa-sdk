@@ -4,8 +4,8 @@ import type { EntryPointVersion } from "../../entrypoint/types";
 import type { UserOperationRequest } from "../../types";
 
 export const sendRawUserOperation = async <
-  TEntryPointVersion extends EntryPointVersion,
-  TClient extends Client<Transport, Chain | undefined, any, BundlerRpcSchema>
+  TClient extends Client<Transport, Chain | undefined, any, BundlerRpcSchema>,
+  TEntryPointVersion extends EntryPointVersion
 >(
   client: TClient,
   args: {

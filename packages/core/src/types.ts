@@ -61,6 +61,25 @@ export type UserOperationOverridesParameter<
   ? { overrides: UserOperationOverrides<TEntryPointVersion> }
   : { overrides?: UserOperationOverrides<TEntryPointVersion> };
 
+export type UserOperationPaymasterOverrides<
+  TEntryPointVersion extends EntryPointVersion
+> = TEntryPointVersion extends "0.6.0"
+  ? {
+      paymasterAndData: UserOperationStruct<"0.6.0">["paymasterAndData"];
+    }
+  : TEntryPointVersion extends "0.7.0"
+  ? {
+      paymaster: NoUndefined<UserOperationStruct<"0.7.0">["paymaster"]>;
+      paymasterData: NoUndefined<UserOperationStruct<"0.7.0">["paymasterData"]>;
+      paymasterPostOpGasLimit: NoUndefined<
+        UserOperationStruct<"0.7.0">["paymasterPostOpGasLimit"]
+      >;
+      paymasterVerificationGasLimit: NoUndefined<
+        UserOperationStruct<"0.7.0">["paymasterVerificationGasLimit"]
+      >;
+    }
+  : {};
+
 //#region UserOperationOverrides
 // Note: entry point version is required for UserOperationOverrides
 export type UserOperationOverrides<
@@ -91,26 +110,7 @@ export type UserOperationOverrides<
      */
     nonceKey: bigint;
     stateOverride: StateOverride;
-  } & (TEntryPointVersion extends "0.6.0"
-    ? {
-        paymasterAndData: UserOperationStruct<"0.6.0">["paymasterAndData"];
-      }
-    : TEntryPointVersion extends "0.7.0"
-    ?
-        | {
-            paymaster: NoUndefined<UserOperationStruct<"0.7.0">["paymaster"]>;
-            paymasterData: NoUndefined<
-              UserOperationStruct<"0.7.0">["paymasterData"]
-            >;
-            paymasterPostOpGasLimit: NoUndefined<
-              UserOperationStruct<"0.7.0">["paymasterPostOpGasLimit"]
-            >;
-            paymasterVerificationGasLimit: NoUndefined<
-              UserOperationStruct<"0.7.0">["paymasterVerificationGasLimit"]
-            >;
-          }
-        | undefined
-    : never)
+  } & UserOperationPaymasterOverrides<TEntryPointVersion>
 >;
 //#endregion UserOperationOverrides
 

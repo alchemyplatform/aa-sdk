@@ -69,7 +69,7 @@ export async function _runMiddlewareStack<
     client.middleware.signUserOperation
   )(uo, { overrides, feeOptions: client.feeOptions, account, client, context });
 
-  return resolveProperties(result) as Promise<
+  return resolveProperties<
     UserOperationStruct<GetEntryPointFromAccount<TAccount>>
-  >;
+  >(result);
 }

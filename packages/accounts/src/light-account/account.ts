@@ -58,11 +58,10 @@ export type CreateLightAccountParams<
     Chain,
     TEntryPointVersion
   >,
-  "transport" | "chain"
+  "transport" | "chain" | "accountAddress"
 > & {
   signer: TSigner;
   salt?: bigint;
-  accountAddress?: Address;
   factoryAddress?: Address;
   initCode?: Hex;
   version?: LightAccountVersion;

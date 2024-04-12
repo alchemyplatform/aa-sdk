@@ -135,7 +135,7 @@ export default {
   },
 
   packUserOperation,
-} as SupportedEntryPoint<"0.7.0", Chain, typeof EntryPointAbi_v7>;
+} satisfies SupportedEntryPoint<"0.7.0", Chain, typeof EntryPointAbi_v7>;
 
 export function packAccountGasLimits(
   data:
