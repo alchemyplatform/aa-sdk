@@ -1,7 +1,7 @@
 import { useAddPasskey } from "@alchemy/aa-alchemy/react";
 
 export function ComponentWithUser() {
-  // Assumes you have a signer with an authenticated user
+  // Assumes the app has context of a signer with an authenticated user
   const addPasskey = useAddPasskey();
 
   return (
