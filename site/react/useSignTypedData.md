@@ -38,4 +38,4 @@ import { useSignTypedData } from "@alchemy/aa-alchemy/react";
 import { type useSignTypedDataResult } from "@alchemy/aa-alchemy/react";
 ```
 
-Returns a `Hex` representation of the signed message.
+Returns a `Hex` representation of the signed typed data.
