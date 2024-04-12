@@ -11,7 +11,7 @@ export type UseAddPasskeyParams = CredentialCreationOptions | undefined | void;
 
 export type UseAddPasskeyMutationArgs = BaseHookMutationArgs<
   UseAddPasskeyData,
-  CredentialCreationOptions | void
+  UseAddPasskeyParams
 >;
 
 export type UseAddPasskeyResult = {
