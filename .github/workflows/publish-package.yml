@@ -106,6 +106,11 @@ jobs:
     runs-on: ubuntu-latest
     if: inputs.publish
     steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.ALCHEMY_BOT_PAT }}
+          fetch-depth: "0"
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2

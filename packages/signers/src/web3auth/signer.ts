@@ -21,8 +21,8 @@ import type {
  * This class requires the `@web3auth/modal` and `@web3auth/base dependencies.
  * `@alchemy/aa-signers` lists them as optional dependencies.
  *
- * @see: https://github.com/Web3Auth/web3auth-web/tree/master/packages/modal
- * @see: https://github.com/Web3Auth/web3auth-web/tree/master/packages/base
+ * @see https://github.com/Web3Auth/web3auth-web/tree/master/packages/modal
+ * @see https://github.com/Web3Auth/web3auth-web/tree/master/packages/base
  */
 export class Web3AuthSigner
   implements

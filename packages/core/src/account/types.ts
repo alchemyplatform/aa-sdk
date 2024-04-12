@@ -69,6 +69,7 @@ export interface ISmartContractAccount<
   /**
    * Encodes a batch of transactions to the account's batch execute function.
    * NOTE: not all accounts support batching.
+   *
    * @param txs - An Array of objects containing the target, value, and data for each transaction
    * @returns the encoded callData for a UserOperation
    */
@@ -136,6 +137,7 @@ export interface ISmartContractAccount<
 
   /**
    * The factory address of the smart account created by the factory
+   *
    * @returns the address of the factory contract for the smart account
    */
   getFactoryAddress(): Address;
@@ -143,6 +145,7 @@ export interface ISmartContractAccount<
   /**
    * The entrypoint address is the address ERC 4337 entrypoint singleton contract
    * that this smart account and the connected bundler client use
+   *
    * @returns the address of the entry point contract for the smart account
    */
   getEntryPointAddress(): Address;

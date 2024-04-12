@@ -7,14 +7,15 @@ type TakeBytesOpts = {
 
 /**
  * Given a bytes string, returns a slice of the bytes
+ *
  * @param bytes - the hex string representing bytes
- * @param count - the number of bytes to take
- * @param offset - the offset to start taking bytes from
+ * @param opts - optional parameters for slicing the bytes
+ * @param opts.offset - the offset in bytes to start slicing from
+ * @param opts.count - the number of bytes to slice
+ * @returns the sliced bytes
  */
-export const takeBytes = (
-  bytes: Hex,
-  { offset, count }: TakeBytesOpts
-): Hex => {
+export const takeBytes = (bytes: Hex, opts: TakeBytesOpts = {}): Hex => {
+  const { offset, count } = opts;
   const start = (offset ? offset * 2 : 0) + 2; // add 2 to skip the 0x prefix
   const end = count ? start + count * 2 : undefined;
 

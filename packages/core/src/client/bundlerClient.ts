@@ -42,7 +42,9 @@ export const createBundlerClientFromExisting: <
 
 /**
  * Creates a PublicClient with methods for calling Bundler RPC methods
- * @returns
+ *
+ * @param args - configuration for the client
+ * @returns a PublicClient with methods for calling Bundler RPC methods
  */
 export function createBundlerClient<TTransport extends Transport>(
   args: PublicClientConfig<TTransport, Chain> & { type?: string }

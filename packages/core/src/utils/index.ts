@@ -12,7 +12,7 @@ export const AlchemyChainMap = new Map<number, Chain>(
 /**
  * Utility method for converting a chainId to a {@link Chain} object
  *
- * @param chainId
+ * @param chainId - the chainId to convert
  * @returns a {@link Chain} object for the given chainId
  * @throws if the chainId is not found
  */

@@ -23,7 +23,7 @@ import type {
  * This class requires the `@usecapsule/web-sdk` dependency.
  * `@alchemy/aa-signers` lists it as an optional dependency.
  *
- * @see: https://docs.usecapsule.com/getting-started/initial-setup
+ * @see https://docs.usecapsule.com/getting-started/initial-setup
  */
 export class CapsuleSigner
   implements

@@ -25,6 +25,7 @@ import type { UserOperationFeeOptions } from "../types";
  * Utility method returning the default simple account factory address given a {@link Chain} object
  *
  * @param chain - a {@link Chain} object
+ * @param version the entry point version to use
  * @returns a {@link abi.Address} for the given chain
  * @throws if the chain doesn't have an address currently deployed
  */

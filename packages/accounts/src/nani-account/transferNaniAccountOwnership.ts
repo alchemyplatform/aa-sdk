@@ -13,9 +13,8 @@ import type { NaniAccount } from "./account";
  * Optionally waits for the transaction to be mined.
  *
  * @param client - the client to use to send the transaction
- * @param newOwner - the new owner of the account
- * @param waitForTxn - whether or not to wait for the transaction to be mined
- * @returns {Hash} the userOperation hash, or transaction hash if `waitForTxn` is true
+ * @param args - the arguments for the transfer
+ * @returns the userOperation hash, or transaction hash if `waitForTxn` is true
  */
 export const transferOwnership: <
   TTransport extends Transport = Transport,
@@ -28,10 +27,12 @@ export const transferOwnership: <
     newOwner: TSigner;
     waitForTxn?: boolean;
   } & GetAccountParameter<TAccount>
-) => Promise<Hex> = async (
-  client,
-  { newOwner, waitForTxn = false, account: account_ = client.account }
-): Promise<Hex> => {
+) => Promise<Hex> = async (client, args): Promise<Hex> => {
+  const {
+    newOwner,
+    waitForTxn = false,
+    account: account_ = client.account,
+  } = args;
   if (!account_) {
     throw new AccountNotFoundError();
   }

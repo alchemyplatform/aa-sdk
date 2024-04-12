@@ -60,7 +60,7 @@ export type BundlerActions = {
    *
    * @param request - the {@link UserOperationRequest} to estimate gas for
    * @param entryPoint - the entry point address the op will be sent to
-   * @params stateOverride - the state override to use for the estimation
+   * @param stateOverride - the state override to use for the estimation
    * @returns the gas estimates for the given response (see: {@link UserOperationEstimateGasResponse})
    */
   estimateUserOperationGas<
@@ -105,6 +105,7 @@ export type BundlerActions = {
 
   /**
    * calls `eth_supportedEntryPoints` and returns the entry points the RPC supports
+   *
    * @returns - {@link Address}[]
    */
   getSupportedEntryPoints(): Promise<Address[]>;

@@ -42,15 +42,19 @@ export interface IAccountVersionRegistry {
     /** @deprecated This version has a known issue with 1271 validation */
     "v1.0.2": AccountVersionDef<"LightAccount", "v1.0.2", "0.6.0">;
     "v1.1.0": AccountVersionDef<"LightAccount", "v1.1.0", "0.6.0">;
-    /** LightAccount v2 Changelog.
+    /**
+     * LightAccount v2 Changelog.
      * It is recommended to use v2.0.0
-     * https://alchemotion.notion.site/External-Light-Account-v2-Changelog-725b306ab1e04eb0a3e596521dd8f0bd */
+     * https://alchemotion.notion.site/External-Light-Account-v2-Changelog-725b306ab1e04eb0a3e596521dd8f0bd
+     */
     "v2.0.0": AccountVersionDef<"LightAccount", "v2.0.0", "0.7.0">;
   };
   MultiOwnerLightAccount: {
-    /** MultiOwnerLightAccount v2 Changelog
+    /**
+     * MultiOwnerLightAccount v2 Changelog
      * It is recommended to use v2.0.0
-     * https://alchemotion.notion.site/External-Light-Account-v2-Changelog-725b306ab1e04eb0a3e596521dd8f0bd */
+     * https://alchemotion.notion.site/External-Light-Account-v2-Changelog-725b306ab1e04eb0a3e596521dd8f0bd
+     */
     "v2.0.0": AccountVersionDef<"MultiOwnerLightAccount", "v2.0.0", "0.7.0">;
   };
 }

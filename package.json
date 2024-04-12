@@ -21,7 +21,7 @@
     "test": "lerna run --verbose test:run",
     "test:e2e": "lerna run --verbose test:run-e2e --concurrency=1 --ignore=@alchemy/aa-signers",
     "lint:write": "eslint . --fix && prettier --write --ignore-unknown .",
-    "lint:check": "eslint . && prettier --check .",
+    "lint:check": "eslint . --format github && prettier --check .",
     "prepare": "husky install",
     "version": "yarn build"
   },
@@ -30,7 +30,9 @@
     "@commitlint/config-conventional": "^17.6.3",
     "eslint": "^8.39.0",
     "eslint-config-react-app": "^7.0.1",
+    "eslint-formatter-github": "^1.1.4",
     "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsdoc": "^48.2.3",
     "husky": "^8.0.0",
     "lerna": "^8.0.2",
     "lint-staged": "^13.2.2",
@@ -46,7 +48,8 @@
   },
   "eslintConfig": {
     "extends": [
-      "react-app"
+      "react-app",
+      "plugin:jsdoc/recommended-typescript-error"
     ],
     "env": {
       "es2021": true,
@@ -59,6 +62,40 @@
       "import/extensions": [
         "error",
         "ignorePackages"
+      ],
+      "jsdoc/tag-lines": [
+        "error",
+        "any",
+        {
+          "startLines": 1
+        }
+      ],
+      "jsdoc/require-returns": [
+        "error",
+        {
+          "enableFixer": true
+        }
+      ],
+      "jsdoc/require-param": [
+        "error",
+        {
+          "enableFixer": true
+        }
+      ],
+      "jsdoc/require-jsdoc": [
+        "warn",
+        {
+          "publicOnly": {
+            "ancestorsOnly": true
+          },
+          "enableFixer": false,
+          "require": {
+            "FunctionDeclaration": true,
+            "MethodDefinition": true,
+            "ClassDeclaration": true,
+            "ArrowFunctionExpression": true
+          }
+        }
       ]
     },
     "overrides": [
@@ -72,7 +109,8 @@
           "import/extensions": [
             "off",
             "ignorePackages"
-          ]
+          ],
+          "jsdoc/require-jsdoc": "off"
         }
       }
     ]
