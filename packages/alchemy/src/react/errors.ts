@@ -5,3 +5,9 @@ export class NoAlchemyAccountContextError extends BaseError {
     super(`${hookName} must be used within a AlchemyAccountProvider`);
   }
 }
+
+export class ClientUndefinedError extends BaseError {
+  constructor(hookName: string) {
+    super(`client must be defined in ${hookName}`);
+  }
+}

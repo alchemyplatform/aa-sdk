@@ -1,71 +1,77 @@
 "use client";
 
-import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
+import {
+  useMutation,
+  type UseMutateAsyncFunction,
+  type UseMutateFunction,
+} from "@tanstack/react-query";
 import type { Hex, SignableMessage } from "viem";
 import { useAlchemyAccountContext } from "../context.js";
-import { useBundlerClient } from "./useBundlerClient.js";
+import { ClientUndefinedError } from "../errors.js";
+import type { BaseHookMutationArgs } from "../types.js";
 import { type UseSmartAccountClientResult } from "./useSmartAccountClient.js";
 
-export type SignedMessageInfo = {
-  signature: Hex;
-  isValid: boolean;
-};
+export type UseSignMessageData = Hex;
 
 export type SignMessageArgs = { message: SignableMessage };
 
+export type UseSignMessagedMutationArgs = BaseHookMutationArgs<
+  UseSignMessageData,
+  SignMessageArgs
+>;
+
 export type UseSignMessageArgs = {
   client?: UseSmartAccountClientResult["client"];
-};
+} & UseSignMessagedMutationArgs;
 
 export type UseSignMessageResult = {
   signMessage: UseMutateFunction<
-    SignedMessageInfo,
+    UseSignMessageData,
     Error,
     SignMessageArgs,
     unknown
   >;
-  signedMessageInfo: SignedMessageInfo | undefined;
+  signMessageAsync: UseMutateAsyncFunction<
+    UseSignMessageData,
+    Error,
+    SignMessageArgs,
+    unknown
+  >;
+  signedMessage: UseSignMessageData | undefined;
   isSigningMessage: boolean;
   error: Error | null;
 };
 
 export function useSignMessage({
   client,
+  ...mutationArgs
 }: UseSignMessageArgs): UseSignMessageResult {
   const { queryClient } = useAlchemyAccountContext();
-  const bundlerClient = useBundlerClient();
 
   const {
     mutate: signMessage,
-    data: signedMessageInfo,
+    mutateAsync: signMessageAsync,
+    data: signedMessage,
     isPending: isSigningMessage,
     error,
   } = useMutation(
     {
       mutationFn: async (params: SignMessageArgs) => {
         if (!client) {
-          throw new Error("client must be defined");
+          throw new ClientUndefinedError("useSignMessage");
         }
 
-        const signature = await client.signMessageWith6492(params);
-        const isValid = await bundlerClient.verifyMessage({
-          address: client.getAddress(),
-          message: params.message,
-          signature,
-        });
-
-        return {
-          signature,
-          isValid,
-        };
+        return client.signMessageWith6492(params);
       },
+      ...mutationArgs,
     },
     queryClient
   );
 
   return {
     signMessage,
-    signedMessageInfo,
+    signMessageAsync,
+    signedMessage,
     isSigningMessage,
     error,
   };
