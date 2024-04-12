@@ -2,20 +2,32 @@
 
 import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
 import { useAlchemyAccountContext } from "../context.js";
+import type { BaseHookMutationArgs } from "../types.js";
 import { useSigner } from "./useSigner.js";
+
+export type UseAddPasskeyData = string[];
+
+export type UseAddPasskeyParams = CredentialCreationOptions | undefined | void;
+
+export type UseAddPasskeyMutationArgs = BaseHookMutationArgs<
+  UseAddPasskeyData,
+  CredentialCreationOptions | void
+>;
 
 export type UseAddPasskeyResult = {
   addPasskey: UseMutateFunction<
-    string[],
+    UseAddPasskeyData,
     Error,
-    CredentialCreationOptions | undefined | void,
+    UseAddPasskeyParams,
     unknown
   >;
   isAddingPasskey: boolean;
   error: Error | null;
 };
 
-export function useAddPasskey(): UseAddPasskeyResult {
+export function useAddPasskey(
+  mutationArgs?: UseAddPasskeyMutationArgs
+): UseAddPasskeyResult {
   const { queryClient } = useAlchemyAccountContext();
   const signer = useSigner();
 
@@ -25,9 +37,10 @@ export function useAddPasskey(): UseAddPasskeyResult {
     error,
   } = useMutation(
     {
-      mutationFn: async (params?: CredentialCreationOptions | void) => {
+      mutationFn: async (params: UseAddPasskeyParams) => {
         return signer!.addPasskey(params ?? undefined);
       },
+      ...mutationArgs,
     },
     queryClient
   );
