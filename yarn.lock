@@ -10926,6 +10926,11 @@ eslint-formatter-pretty@^3.0.0:
     string-width "^4.2.0"
     supports-hyperlinks "^2.0.0"
 
+eslint-formatter-rdjson@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/eslint-formatter-rdjson/-/eslint-formatter-rdjson-1.0.6.tgz#c680387f0764b5a00e5f0e843923924340ec4074"
+  integrity sha512-RiBsXfe340Mof5pVkg7u0UXiLTm3cRhF9XYUf4hVHEzpIwk5jAIbkifugPpn51CeNxj00RkJU1MfJYoHbUwLFg==
+
 eslint-import-resolver-node@^0.3.6, eslint-import-resolver-node@^0.3.9:
   version "0.3.9"
   resolved "https://registry.yarnpkg.com/eslint-import-resolver-node/-/eslint-import-resolver-node-0.3.9.tgz#d4eaac52b8a2e7c3cd1903eb00f7e053356118ac"
