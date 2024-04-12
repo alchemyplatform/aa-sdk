@@ -12,7 +12,7 @@ export function ComponentWithExportAccount() {
     <div>
       {!isExported ? (
         <button onClick={() => exportAccount()} disabled={isExporting}>
-          Export Wallet
+          Export Account
         </button>
       ) : (
         <strong>Seed Phrase</strong>
