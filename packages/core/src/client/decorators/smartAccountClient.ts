@@ -1,15 +1,16 @@
-import type {
-  Address,
-  Chain,
-  Client,
-  Hex,
-  SendTransactionParameters,
-  Transport,
-  TypedData,
-  WaitForTransactionReceiptParameters,
+import {
+  type Address,
+  type Chain,
+  type Client,
+  type Hex,
+  type SendTransactionParameters,
+  type Transport,
+  type TypedData,
+  type WaitForTransactionReceiptParameters,
 } from "viem";
 import type {
   GetAccountParameter,
+  GetEntryPointFromAccount,
   SmartContractAccount,
 } from "../../account/smartContractAccount";
 import { buildUserOperation } from "../../actions/smartAccount/buildUserOperation.js";
@@ -58,19 +59,20 @@ export type BaseSmartAccountClientActions<
     | undefined,
   TContext extends Record<string, any> | undefined =
     | Record<string, any>
-    | undefined
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
   buildUserOperation: (
     args: SendUserOperationParameters<TAccount, TContext>
-  ) => Promise<UserOperationStruct>;
+  ) => Promise<UserOperationStruct<TEntryPointVersion>>;
   buildUserOperationFromTx: (
     args: SendTransactionParameters<TChain, TAccount>,
-    overrides?: UserOperationOverrides,
+    overrides?: UserOperationOverrides<TEntryPointVersion>,
     context?: TContext
-  ) => Promise<UserOperationStruct>;
+  ) => Promise<UserOperationStruct<TEntryPointVersion>>;
   buildUserOperationFromTxs: (
     args: SendTransactionsParameters<TAccount, TContext>
-  ) => Promise<BuildUserOperationFromTransactionsResult>;
+  ) => Promise<BuildUserOperationFromTransactionsResult<TEntryPointVersion>>;
   checkGasSponsorshipEligibility: <
     TContext extends Record<string, any> | undefined =
       | Record<string, any>
@@ -80,15 +82,15 @@ export type BaseSmartAccountClientActions<
   ) => Promise<boolean>;
   signUserOperation: (
     args: SignUserOperationParameters<TAccount>
-  ) => Promise<UserOperationRequest>;
+  ) => Promise<UserOperationRequest<TEntryPointVersion>>;
   dropAndReplaceUserOperation: (
     args: DropAndReplaceUserOperationParameters<TAccount, TContext>
-  ) => Promise<SendUserOperationResult>;
+  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
   // TODO: for v4 we should combine override and context into an `opts` parameter
   // which wraps both of these properties so we can use GetContextParameter
   sendTransaction: <TChainOverride extends Chain | undefined = undefined>(
     args: SendTransactionParameters<TChain, TAccount, TChainOverride>,
-    overrides?: UserOperationOverrides,
+    overrides?: UserOperationOverrides<TEntryPointVersion>,
     context?: TContext
   ) => Promise<Hex>;
   sendTransactions: (
@@ -96,7 +98,7 @@ export type BaseSmartAccountClientActions<
   ) => Promise<Hex>;
   sendUserOperation: (
     args: SendUserOperationParameters<TAccount, TContext>
-  ) => Promise<SendUserOperationResult>;
+  ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
   waitForUserOperationTransaction: (
     args: WaitForTransactionReceiptParameters
   ) => Promise<Hex>;
@@ -118,13 +120,11 @@ export type BaseSmartAccountClientActions<
     args: SignTypedDataParameters<TTypedData, TPrimaryType, TAccount>
   ) => Promise<Hex>;
 } & (IsUndefined<TAccount> extends false
-  ? {
-      getAddress: () => Address;
-    }
+  ? { getAddress: () => Address }
   : {
       getAddress: (args: GetAccountParameter<TAccount>) => Address;
     });
-//#endregion SmartAccountClientActions
+// #endregion SmartAccountClientActions
 
 export const smartAccountClientActions: <
   TTransport extends Transport = Transport,

@@ -1,17 +1,23 @@
 import {
+  takeBytes,
+  type GetEntryPointFromAccount,
   type SmartContractAccount,
   type UserOperationRequest,
-  takeBytes,
 } from "@alchemy/aa-core";
-import { type Hex, hashMessage, recoverAddress, fromHex } from "viem";
-import type { Signature } from "../types";
+import { fromHex, hashMessage, recoverAddress, type Hex } from "viem";
 import { InvalidAggregatedSignatureError } from "../../../errors.js";
+import type { Signature } from "../types";
 
-export type SplitAggregateSignatureParams = {
+export type SplitAggregateSignatureParams<
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+> = {
   aggregatedSignature: Hex;
   threshold: number;
   account: SmartContractAccount;
-  request: UserOperationRequest;
+  request: UserOperationRequest<TEntryPointVersion>;
 };
 /**
  * Takes an aggregated signature and threshold and splits it into its components
@@ -19,12 +25,16 @@ export type SplitAggregateSignatureParams = {
  * @param aggregatedSignature - aggregated signature containing PVG || maxFeePerGas || maxPriorityFeePerGas || N-1 Signatures || [0, N-1] Contract Data
  * @param threshold - the account's required threshold of signatures
  */
-export const splitAggregatedSignature = async ({
+export const splitAggregatedSignature = async <
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
+    | undefined
+>({
   aggregatedSignature,
   threshold,
   account,
   request,
-}: SplitAggregateSignatureParams): Promise<{
+}: SplitAggregateSignatureParams<TAccount>): Promise<{
   upperLimitPvg: Hex;
   upperLimitMaxFeePerGas: Hex;
   upperLimitMaxPriorityFeePerGas: Hex;

@@ -12,42 +12,14 @@ import {
   optimismGoerli,
   optimismSepolia,
   polygon,
-  polygonMumbai,
   polygonAmoy,
+  polygonMumbai,
   sepolia,
 } from "../chains/index.js";
+import { defaultEntryPointVersion } from "../entrypoint/index.js";
+import type { EntryPointVersion } from "../entrypoint/types.js";
 import { DefaultFactoryNotDefinedError } from "../errors/account.js";
-import { EntryPointNotFoundError } from "../errors/entrypoint.js";
 import type { UserOperationFeeOptions } from "../types";
-
-/**
- * Utility method returning the entry point contract address given a {@link Chain} object
- *
- * @param chain - a {@link Chain} object
- * @returns a {@link abi.Address} for the given chain
- * @throws if the chain doesn't have an address currently deployed
- */
-export const getDefaultEntryPointAddress = (chain: Chain): Address => {
-  switch (chain.id) {
-    case mainnet.id:
-    case sepolia.id:
-    case goerli.id:
-    case polygon.id:
-    case polygonMumbai.id:
-    case polygonAmoy.id:
-    case optimism.id:
-    case optimismGoerli.id:
-    case optimismSepolia.id:
-    case arbitrum.id:
-    case arbitrumGoerli.id:
-    case arbitrumSepolia.id:
-    case base.id:
-    case baseGoerli.id:
-    case baseSepolia.id:
-      return "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
-  }
-  throw new EntryPointNotFoundError(chain);
-};
 
 /**
  * Utility method returning the default simple account factory address given a {@link Chain} object
@@ -57,29 +29,54 @@ export const getDefaultEntryPointAddress = (chain: Chain): Address => {
  * @throws if the chain doesn't have an address currently deployed
  */
 export const getDefaultSimpleAccountFactoryAddress = (
-  chain: Chain
+  chain: Chain,
+  version: EntryPointVersion = defaultEntryPointVersion
 ): Address => {
-  switch (chain.id) {
-    case mainnet.id:
-    case polygon.id:
-    case optimism.id:
-    case optimismSepolia.id:
-    case arbitrum.id:
-    case base.id:
-    case baseGoerli.id:
-    case baseSepolia.id:
-    case arbitrumSepolia.id:
-      return "0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232";
-    case sepolia.id:
-    case goerli.id:
-    case polygonMumbai.id:
-    case polygonAmoy.id:
-    case optimismGoerli.id:
-    case arbitrumGoerli.id:
-      return "0x9406Cc6185a346906296840746125a0E44976454";
+  switch (version) {
+    case "0.6.0":
+      switch (chain.id) {
+        case mainnet.id:
+        case polygon.id:
+        case optimism.id:
+        case optimismSepolia.id:
+        case arbitrum.id:
+        case base.id:
+        case baseGoerli.id:
+        case baseSepolia.id:
+        case arbitrumSepolia.id:
+          return "0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232";
+        case sepolia.id:
+        case goerli.id:
+        case polygonMumbai.id:
+        case polygonAmoy.id:
+        case optimismGoerli.id:
+        case arbitrumGoerli.id:
+          return "0x9406Cc6185a346906296840746125a0E44976454";
+        default:
+          break;
+      }
+      break;
+    case "0.7.0":
+      switch (chain.id) {
+        case mainnet.id:
+        case polygon.id:
+        case polygonMumbai.id:
+        case polygonAmoy.id:
+        case optimism.id:
+        case optimismSepolia.id:
+        case arbitrum.id:
+        case arbitrumSepolia.id:
+        case base.id:
+        case baseSepolia.id:
+        case sepolia.id:
+          return "0x91E60e0613810449d098b0b5Ec8b51A0FE8c8985";
+        default:
+          break;
+      }
+      break;
   }
 
-  throw new DefaultFactoryNotDefinedError("SimpleAccount", chain);
+  throw new DefaultFactoryNotDefinedError("SimpleAccount", chain, version);
 };
 
 export const minPriorityFeePerBidDefaults = new Map<number, bigint>([

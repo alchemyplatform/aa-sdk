@@ -4,7 +4,10 @@ import {
   type SendTransactionParameters,
   type Transport,
 } from "viem";
-import type { SmartContractAccount } from "../../account/smartContractAccount.js";
+import type {
+  GetEntryPointFromAccount,
+  SmartContractAccount,
+} from "../../account/smartContractAccount.js";
 import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
 import { AccountNotFoundError } from "../../errors/account.js";
 import { IncompatibleClientError } from "../../errors/client.js";
@@ -16,7 +19,7 @@ import type {
 import { filterUndefined } from "../../utils/index.js";
 import { buildUserOperation } from "./buildUserOperation.js";
 
-export const buildUserOperationFromTx: <
+export async function buildUserOperationFromTx<
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
@@ -24,18 +27,14 @@ export const buildUserOperationFromTx: <
   TChainOverride extends Chain | undefined = Chain | undefined,
   TContext extends Record<string, any> | undefined =
     | Record<string, any>
-    | undefined
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
   client: Client<Transport, TChain, TAccount>,
   args: SendTransactionParameters<TChain, TAccount, TChainOverride>,
-  overrides?: UserOperationOverrides,
+  overrides?: UserOperationOverrides<TEntryPointVersion>,
   context?: TContext
-) => Promise<UserOperationStruct> = async (
-  client,
-  args,
-  overrides,
-  context
-) => {
+): Promise<UserOperationStruct<TEntryPointVersion>> {
   const { account = client.account, ...request } = args;
   if (!account || typeof account === "string") {
     throw new AccountNotFoundError();
@@ -53,13 +52,13 @@ export const buildUserOperationFromTx: <
     );
   }
 
-  const _overrides: UserOperationOverrides = {
+  const _overrides = {
     ...overrides,
     maxFeePerGas: request.maxFeePerGas ? request.maxFeePerGas : undefined,
     maxPriorityFeePerGas: request.maxPriorityFeePerGas
       ? request.maxPriorityFeePerGas
       : undefined,
-  };
+  } as UserOperationOverrides<TEntryPointVersion>;
   filterUndefined(_overrides);
 
   return buildUserOperation(client, {
@@ -68,8 +67,8 @@ export const buildUserOperationFromTx: <
       data: request.data ?? "0x",
       value: request.value ? request.value : 0n,
     },
-    overrides: _overrides,
     account: account as SmartContractAccount,
     context,
+    overrides: _overrides,
   });
-};
+}

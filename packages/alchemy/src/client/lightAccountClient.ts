@@ -25,17 +25,21 @@ export type AlchemyLightAccountClientConfig<
     "account"
   >;
 
-export const createLightAccountAlchemyClient: <
+export async function createLightAccountAlchemyClient<
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
   params: AlchemyLightAccountClientConfig<TSigner>
-) => Promise<
+): Promise<
   AlchemySmartAccountClient<
     CustomTransport,
     Chain | undefined,
     LightAccount<TSigner>
   >
-> = async (config) => {
+>;
+
+export async function createLightAccountAlchemyClient(
+  config: AlchemyLightAccountClientConfig
+): Promise<AlchemySmartAccountClient> {
   const { chain, opts, ...connectionConfig } =
     AlchemyProviderConfigSchema.parse(config);
 
@@ -55,4 +59,4 @@ export const createLightAccountAlchemyClient: <
     account,
     opts,
   }).extend(lightAccountClientActions);
-};
+}

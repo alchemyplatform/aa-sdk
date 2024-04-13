@@ -1,11 +1,10 @@
-import type {
-  GetAccountParameter,
-  Hex,
-  SmartAccountSigner,
-} from "@alchemy/aa-core";
-import type { Chain, Client, Transport } from "viem";
+import type { SmartAccountSigner } from "@alchemy/aa-core";
+import type { Chain, Client, Hex, Transport } from "viem";
 import type { LightAccount } from "./account";
-import { transferOwnership } from "./actions/transferOwnership.js";
+import {
+  transferOwnership,
+  type TransferLightAccountOwnershipParams,
+} from "./actions/transferOwnership.js";
 
 export type LightAccountClientActions<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
@@ -14,10 +13,7 @@ export type LightAccountClientActions<
     | undefined
 > = {
   transferOwnership: (
-    args: {
-      newOwner: TSigner;
-      waitForTxn?: boolean;
-    } & GetAccountParameter<TAccount, LightAccount>
+    args: TransferLightAccountOwnershipParams<TSigner, TAccount>
   ) => Promise<Hex>;
 };
 

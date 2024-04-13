@@ -55,7 +55,11 @@ export const getDefaultMultisigModularAccountFactoryAddress = (
     case sepolia.id:
       return "0x3D94D6713B76FBA07283502CfbeA405b44c69865";
   }
-  throw new DefaultFactoryNotDefinedError("MultisigModularAccount", chain);
+  throw new DefaultFactoryNotDefinedError(
+    "MultisigModularAccount",
+    chain,
+    "0.6.0"
+  );
 };
 
 /**
@@ -86,7 +90,11 @@ export const getDefaultMultiOwnerModularAccountFactoryAddress = (
     case baseGoerli.id:
       return "0x000000e92D78D90000007F0082006FDA09BD5f11";
   }
-  throw new DefaultFactoryNotDefinedError("MultiOwnerModularAccount", chain);
+  throw new DefaultFactoryNotDefinedError(
+    "MultiOwnerModularAccount",
+    chain,
+    "0.6.0"
+  );
 };
 
 export async function getMSCAUpgradeToData<
@@ -98,10 +106,7 @@ export async function getMSCAUpgradeToData<
     | undefined = SmartContractAccountWithSigner<string, TSigner> | undefined
 >(
   client: SmartAccountClient<TTransport, TChain, TAccount>,
-  {
-    multiOwnerPluginAddress,
-    account: account_ = client.account,
-  }: {
+  args: {
     multiOwnerPluginAddress?: Address;
   } & GetAccountParameter<TAccount>
 ): Promise<
@@ -109,6 +114,8 @@ export async function getMSCAUpgradeToData<
     createMAAccount: () => Promise<MultiOwnerModularAccount<TSigner>>;
   }
 > {
+  const { account: account_ = client.account, multiOwnerPluginAddress } = args;
+
   if (!account_) {
     throw new AccountNotFoundError();
   }
@@ -139,14 +146,17 @@ export async function getMSCAUpgradeToData<
 
 export async function getMAInitializationData<
   TTransport extends Transport = Transport,
-  TChain extends Chain | undefined = Chain | undefined
+  TChain extends Chain | undefined = Chain | undefined,
+  TAccount extends SmartContractAccountWithSigner | undefined =
+    | SmartContractAccountWithSigner
+    | undefined
 >({
   client,
   multiOwnerPluginAddress,
   signerAddress,
 }: {
   multiOwnerPluginAddress?: Address;
-  client: SmartAccountClient<TTransport, TChain>;
+  client: SmartAccountClient<TTransport, TChain, TAccount>;
   signerAddress: Address | Address[];
 }): Promise<UpgradeToData> {
   if (!client.chain) {

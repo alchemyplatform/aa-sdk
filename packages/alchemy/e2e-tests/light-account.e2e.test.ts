@@ -20,7 +20,7 @@ const simulateUoChangesSpy = vi.spyOn(
 const chain = sepolia;
 const network = Network.ETH_SEPOLIA;
 
-describe("Light Account Tests", () => {
+describe("Light Account Client Tests", () => {
   const signer = LocalAccountSigner.mnemonicToAccountSigner(
     LIGHT_ACCOUNT_OWNER_MNEMONIC
   );

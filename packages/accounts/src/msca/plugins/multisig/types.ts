@@ -1,9 +1,10 @@
 import type {
   GetAccountParameter,
-  Hex,
+  GetEntryPointFromAccount,
   SmartContractAccount,
   UserOperationRequest,
 } from "@alchemy/aa-core";
+import type { Hex } from "viem";
 import type { GetPluginAddressParameter } from "../types";
 
 export type SignerType = "EOA" | "CONTRACT";
@@ -26,15 +27,21 @@ export type SignMultisigUserOperationResult = {
 export type SignMultisigUserOperationParams<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
-  userOperationRequest: UserOperationRequest;
+  userOperationRequest: UserOperationRequest<TEntryPointVersion>;
   signatures: Signature[];
 } & GetAccountParameter<TAccount> &
   GetPluginAddressParameter;
 
-export type ProposeUserOperationResult = {
-  request: UserOperationRequest;
+export type ProposeUserOperationResult<
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+> = {
+  request: UserOperationRequest<TEntryPointVersion>;
   aggregatedSignature: Hex;
   signatureObj: Signature;
 };

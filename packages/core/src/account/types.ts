@@ -135,11 +135,14 @@ export interface ISmartContractAccount<
   getSigner(): TSigner;
 
   /**
+   * The factory address of the smart account created by the factory
    * @returns the address of the factory contract for the smart account
    */
   getFactoryAddress(): Address;
 
   /**
+   * The entrypoint address is the address ERC 4337 entrypoint singleton contract
+   * that this smart account and the connected bundler client use
    * @returns the address of the entry point contract for the smart account
    */
   getEntryPointAddress(): Address;

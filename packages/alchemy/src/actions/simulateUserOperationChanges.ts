@@ -20,7 +20,7 @@ export const simulateUserOperationChanges: <
   args: SendUserOperationParameters<TAccount>
 ) => Promise<SimulateUserOperationAssetChangesResponse> = async (
   client,
-  { account = client.account, ...params }
+  { account = client.account, overrides, ...params }
 ) => {
   if (!account) {
     throw new AccountNotFoundError();
@@ -38,6 +38,7 @@ export const simulateUserOperationChanges: <
     await client.buildUserOperation({
       ...params,
       account,
+      overrides,
     })
   );
 

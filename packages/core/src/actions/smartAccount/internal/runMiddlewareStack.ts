@@ -1,6 +1,7 @@
 import type { Chain, Transport } from "viem";
 import type {
   GetAccountParameter,
+  GetEntryPointFromAccount,
   SmartContractAccount,
 } from "../../../account/smartContractAccount";
 import type { BaseSmartAccountClient } from "../../../client/smartAccountClient";
@@ -8,6 +9,7 @@ import { AccountNotFoundError } from "../../../errors/account.js";
 import { overridePaymasterDataMiddleware } from "../../../middleware/defaults/overridePaymasterData.js";
 import type {
   UserOperationOverrides,
+  UserOperationOverridesParameter,
   UserOperationStruct,
 } from "../../../types";
 import { resolveProperties, type Deferrable } from "../../../utils/index.js";
@@ -22,7 +24,7 @@ const asyncPipe =
     return result;
   };
 
-export const _runMiddlewareStack: <
+export async function _runMiddlewareStack<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
@@ -30,30 +32,44 @@ export const _runMiddlewareStack: <
     | undefined,
   TContext extends Record<string, any> | undefined =
     | Record<string, any>
-    | undefined
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
   client: BaseSmartAccountClient<TTransport, TChain, TAccount>,
   args: {
-    uo: Deferrable<UserOperationStruct>;
-    overrides?: UserOperationOverrides;
+    uo: Deferrable<UserOperationStruct<TEntryPointVersion>>;
     context?: TContext;
-  } & GetAccountParameter<TAccount>
-) => Promise<UserOperationStruct> = async (client, args) => {
+  } & GetAccountParameter<TAccount> &
+    UserOperationOverridesParameter<TEntryPointVersion>
+): Promise<UserOperationStruct<TEntryPointVersion>> {
   const { uo, overrides, account = client.account, context } = args;
   if (!account) {
     throw new AccountNotFoundError();
   }
+
+  const entryPoint = account.getEntryPoint();
+
+  const overridePaymasterData =
+    overrides &&
+    ((entryPoint.version === "0.6.0" &&
+      (overrides as UserOperationOverrides<"0.6.0">).paymasterAndData !=
+        null) ||
+      (entryPoint.version === "0.7.0" &&
+        (overrides as UserOperationOverrides<"0.7.0">).paymasterData != null));
+
   const result = await asyncPipe(
     client.middleware.dummyPaymasterAndData,
     client.middleware.feeEstimator,
     client.middleware.gasEstimator,
     client.middleware.customMiddleware,
-    overrides?.paymasterAndData
+    overridePaymasterData
       ? overridePaymasterDataMiddleware
       : client.middleware.paymasterAndData,
     client.middleware.userOperationSimulator,
     client.middleware.signUserOperation
   )(uo, { overrides, feeOptions: client.feeOptions, account, client, context });
 
-  return resolveProperties<UserOperationStruct>(result);
-};
+  return resolveProperties<
+    UserOperationStruct<GetEntryPointFromAccount<TAccount>>
+  >(result);
+}

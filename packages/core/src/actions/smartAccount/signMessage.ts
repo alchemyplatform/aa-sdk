@@ -24,6 +24,5 @@ export const signMessage: <
   if (!account) {
     throw new AccountNotFoundError();
   }
-
   return account.signMessage({ message });
 };

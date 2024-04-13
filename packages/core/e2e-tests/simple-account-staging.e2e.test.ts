@@ -1,4 +1,3 @@
-import { polygonMumbai } from "@alchemy/aa-core";
 import {
   custom,
   fromHex,
@@ -10,55 +9,57 @@ import {
 } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import {
+  arbitrumSepolia,
   createBundlerClient,
   createSimpleSmartAccount,
   createSmartAccountClientFromExisting,
-  getDefaultSimpleAccountFactoryAddress,
+  getEntryPoint,
   type SmartAccountSigner,
   type UserOperationFeeOptions,
   type UserOperationOverrides,
 } from "../src/index.js";
 import { LocalAccountSigner } from "../src/signer/local-account.js";
-import { API_KEY, OWNER_MNEMONIC } from "./constants.js";
+import { API_KEY, API_KEY_STAGING, OWNER_MNEMONIC } from "./constants.js";
 
-const chain = polygonMumbai;
+const rpcUrl = "https://arb-sepolia.g.alchemypreview.com/v2";
+const chain = arbitrumSepolia;
 
-describe("Simple Account Tests", () => {
+describe("Simple Account Tests on Split RPC", () => {
   const signer: SmartAccountSigner =
     LocalAccountSigner.mnemonicToAccountSigner(OWNER_MNEMONIC);
 
   it("should successfully get counterfactual address", async () => {
-    const provider = await givenConnectedProvider({ signer, chain });
-    expect(provider.getAddress()).toMatchInlineSnapshot(
-      `"0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4"`
+    const client = await givenConnectedClient({ signer, chain });
+    expect(client.getAddress()).toMatchInlineSnapshot(
+      `"0x439663CEb3861f1bCf7F45F1792668fC74fc4b97"`
     );
   });
 
   it("should execute successfully", async () => {
-    const provider = await givenConnectedProvider({ signer, chain });
-    const result = await provider.sendUserOperation({
+    const client = await givenConnectedClient({ signer, chain });
+    const result = await client.sendUserOperation({
       uo: {
-        target: provider.getAddress(),
+        target: client.getAddress(),
         data: "0x",
       },
     });
 
-    const txnHash = provider.waitForUserOperationTransaction(result);
+    const txnHash = client.waitForUserOperationTransaction(result);
 
     await expect(txnHash).resolves.not.toThrowError();
   }, 60000);
 
   it("should fail to execute if account address is not deployed and not correct", async () => {
     const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
-    const provider = await givenConnectedProvider({
+    const client = await givenConnectedClient({
       signer,
       chain,
       accountAddress,
     });
 
-    const result = provider.sendUserOperation({
+    const result = client.sendUserOperation({
       uo: {
-        target: provider.getAddress(),
+        target: client.getAddress(),
         data: "0x",
       },
     });
@@ -70,28 +71,28 @@ describe("Simple Account Tests", () => {
     const signer = LocalAccountSigner.privateKeyToAccountSigner(
       generatePrivateKey()
     );
-    const provider = await givenConnectedProvider({ signer, chain });
+    const client = await givenConnectedClient({ signer, chain });
 
-    const address = provider.getAddress();
+    const address = client.getAddress();
     expect(isAddress(address)).toBe(true);
   });
 
   it("should correctly handle multiplier overrides for buildUserOperation", async () => {
-    const provider = await givenConnectedProvider({
+    const client = await givenConnectedClient({
       signer,
       chain,
     });
 
-    const structPromise = provider.buildUserOperation({
+    const structPromise = client.buildUserOperation({
       uo: {
-        target: provider.getAddress(),
+        target: client.getAddress(),
         data: "0x",
       },
     });
 
     await expect(structPromise).resolves.not.toThrowError();
 
-    const providerWithFeeOptions = await givenConnectedProvider({
+    const clientWithFeeOptions = await givenConnectedClient({
       signer,
       chain,
       feeOptions: {
@@ -99,13 +100,14 @@ describe("Simple Account Tests", () => {
       },
     });
 
-    const structWithFeeOptionsPromise =
-      providerWithFeeOptions.buildUserOperation({
+    const structWithFeeOptionsPromise = clientWithFeeOptions.buildUserOperation(
+      {
         uo: {
-          target: provider.getAddress(),
+          target: client.getAddress(),
           data: "0x",
         },
-      });
+      }
+    );
     await expect(structWithFeeOptionsPromise).resolves.not.toThrowError();
 
     const [struct, structWithFeeOptions] = await Promise.all([
@@ -128,14 +130,14 @@ describe("Simple Account Tests", () => {
   }, 60000);
 
   it("should correctly handle absolute overrides for sendUserOperation", async () => {
-    const provider = await givenConnectedProvider({ signer, chain });
+    const client = await givenConnectedClient({ signer, chain });
 
     const overrides: UserOperationOverrides<"0.6.0"> = {
       preVerificationGas: 100_000_000n,
     };
-    const promise = provider.buildUserOperation({
+    const promise = client.buildUserOperation({
       uo: {
-        target: provider.getAddress(),
+        target: client.getAddress(),
         data: "0x",
       },
       overrides,
@@ -147,7 +149,7 @@ describe("Simple Account Tests", () => {
   }, 60000);
 
   it("should correctly handle multiplier overrides for sendUserOperation", async () => {
-    const provider = await givenConnectedProvider({
+    const client = await givenConnectedClient({
       signer,
       chain,
       feeOptions: {
@@ -155,9 +157,9 @@ describe("Simple Account Tests", () => {
       },
     });
 
-    const struct = provider.sendUserOperation({
+    const struct = client.sendUserOperation({
       uo: {
-        target: provider.getAddress(),
+        target: client.getAddress(),
         data: "0x",
       },
     });
@@ -165,7 +167,7 @@ describe("Simple Account Tests", () => {
   }, 60000);
 });
 
-const givenConnectedProvider = async ({
+const givenConnectedClient = async ({
   signer,
   chain,
   accountAddress,
@@ -178,14 +180,37 @@ const givenConnectedProvider = async ({
 }) => {
   const client = createBundlerClient({
     chain,
-    transport: http(`${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`),
+    transport: (opts) => {
+      const bundlerRpc = http(`${rpcUrl}/${API_KEY_STAGING}`)(opts);
+      const publicRpc = http(`${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`)(
+        opts
+      );
+
+      return custom({
+        request: async (args) => {
+          const bundlerMethods = new Set([
+            "eth_sendUserOperation",
+            "eth_estimateUserOperationGas",
+            "eth_getUserOperationReceipt",
+            "eth_getUserOperationByHash",
+            "eth_supportedEntryPoints",
+          ]);
+
+          if (bundlerMethods.has(args.method)) {
+            return bundlerRpc.request(args);
+          } else {
+            return publicRpc.request(args);
+          }
+        },
+      })(opts);
+    },
   });
   return createSmartAccountClientFromExisting({
     client,
     account: await createSimpleSmartAccount({
       chain,
       signer,
-      factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
+      entryPoint: getEntryPoint(chain),
       transport: custom(client),
       accountAddress,
     }),

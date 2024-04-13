@@ -73,7 +73,10 @@ export const AccountReadActionsGenPhase: Phase = async (input) => {
   });
 
   const typeName = input.hasReadMethods
-    ? "ReadAndEncodeActions<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined>"
+    ? `ReadAndEncodeActions<
+        TAccount extends SmartContractAccount | undefined =
+          SmartContractAccount | undefined,
+      >`
     : "ReadAndEncodeActions";
 
   addType(

@@ -1,16 +1,18 @@
 import type { Address, Chain, Client, StateOverride, Transport } from "viem";
 import type { BundlerRpcSchema } from "../../client/decorators/bundlerClient";
+import type { EntryPointVersion } from "../../entrypoint/types";
 import type {
   UserOperationEstimateGasResponse,
   UserOperationRequest,
 } from "../../types";
 
 export const estimateUserOperationGas = async <
-  TClient extends Client<Transport, Chain | undefined, any, BundlerRpcSchema>
+  TClient extends Client<Transport, Chain | undefined, any, BundlerRpcSchema>,
+  TEntryPointVersion extends EntryPointVersion
 >(
   client: TClient,
   args: {
-    request: UserOperationRequest;
+    request: UserOperationRequest<TEntryPointVersion>;
     entryPoint: Address;
     stateOverride?: StateOverride;
   }

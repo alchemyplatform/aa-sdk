@@ -21,15 +21,19 @@ export const PluginActionsGenPhase: Phase = async (input) => {
     isType: true,
   });
   addImport("@alchemy/aa-core", {
-    name: "UserOperationOverrides",
-    isType: true,
-  });
-  addImport("@alchemy/aa-core", {
     name: "GetAccountParameter",
     isType: true,
   });
   addImport("@alchemy/aa-core", {
     name: "SendUserOperationResult",
+    isType: true,
+  });
+  addImport("@alchemy/aa-core", {
+    name: "GetEntryPointFromAccount",
+    isType: true,
+  });
+  addImport("@alchemy/aa-core", {
+    name: "UserOperationOverridesParameter",
     isType: true,
   });
   addImport("@alchemy/aa-core", { name: "AccountNotFoundError" });
@@ -43,15 +47,16 @@ export const PluginActionsGenPhase: Phase = async (input) => {
     .map((n) => {
       const argsParamString =
         n.inputs.length > 0
-          ? dedent`{ 
-                  args, 
-                  overrides, 
+          ? dedent`{
+                  args,
+                  overrides,
                   context,
                   account = client.account
               }`
-          : dedent`{ 
-                  overrides, 
-                  account = client.account 
+          : dedent`{
+                  overrides,
+                  context,
+                  account = client.account
               }`;
       const argsEncodeString = n.inputs.length > 0 ? "args," : "";
 
@@ -60,33 +65,38 @@ export const PluginActionsGenPhase: Phase = async (input) => {
             n.name
           )}: (args: Pick<EncodeFunctionDataParameters<typeof ${executionAbiConst}, "${
         n.name
-      }">, "args"> & { 
-        overrides?: UserOperationOverrides;
-      } & GetAccountParameter<TAccount> & GetContextParameter<TContext>) => Promise<SendUserOperationResult>
-        `);
+      }">, "args"> & UserOperationOverridesParameter<TEntryPointVersion> &
+        GetAccountParameter<TAccount> & GetContextParameter<TContext>) =>
+          Promise<SendUserOperationResult<TEntryPointVersion>>
+      `);
       const methodName = camelCase(n.name);
       return dedent`
               ${methodName}(${argsParamString}) {
                 if (!account) {
                   throw new AccountNotFoundError();
-                } 
+                }
                 if (!isSmartAccountClient(client)) {
                   throw new IncompatibleClientError("SmartAccountClient", "${methodName}", client);
                 }
-  
+
                 const uo = encodeFunctionData({
                   abi: ${executionAbiConst},
                   functionName: "${n.name}",
                   ${argsEncodeString}
                 });
-  
+
                 return client.sendUserOperation({ uo, overrides, account, context });
               }
             `;
     });
 
   addType(
-    "ExecutionActions<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined, TContext extends Record<string, any> | undefined = Record<string, any> | undefined>",
+    `ExecutionActions<
+      TAccount extends SmartContractAccount | undefined =
+        SmartContractAccount | undefined,
+      TContext extends Record<string, any> | undefined = Record<string, any> | undefined,
+      TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+    >`,
     dedent`{
         ${providerFunctionDefs.join(";\n\n")}
       }`
@@ -101,13 +111,18 @@ export const PluginActionsGenPhase: Phase = async (input) => {
   });
 
   addType(
-    `${contract.name}Actions<TAccount extends SmartContractAccount | undefined =
-    | SmartContractAccount
-    | undefined, TContext extends Record<string, any> | undefined = Record<string, any> | undefined>`,
+    `${contract.name}Actions<
+      TAccount extends SmartContractAccount | undefined =
+          | SmartContractAccount
+          | undefined,
+      TContext extends Record<string, any> | undefined =
+          | Record<string, any>
+          | undefined
+    >`,
     dedent`
-  ExecutionActions<TAccount, TContext> & ManagementActions<TAccount, TContext> & ReadAndEncodeActions${
-    hasReadMethods ? "<TAccount>" : ""
-  }
+      ExecutionActions<TAccount, TContext> & ManagementActions<TAccount, TContext> & ReadAndEncodeActions${
+        hasReadMethods ? "<TAccount>" : ""
+      }
   `,
     true
   );
