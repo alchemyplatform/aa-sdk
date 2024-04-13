@@ -35,6 +35,10 @@ export const PluginActionsGenPhase: Phase = async (input) => {
     name: "EntryPointVersion",
     isType: true,
   });
+  addImport("@alchemy/aa-core", {
+    name: "UserOperationContext",
+    isType: true,
+  });
   addImport("@alchemy/aa-core", { name: "AccountNotFoundError" });
   addImport("@alchemy/aa-core", { name: "isSmartAccountClient" });
   addImport("@alchemy/aa-core", { name: "IncompatibleClientError" });
@@ -92,7 +96,7 @@ export const PluginActionsGenPhase: Phase = async (input) => {
   addType(
     `ExecutionActions<
       TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined,
-      TContext extends Record<string, any> | undefined = Record<string, any> | undefined,
+      TContext extends UserOperationContext | undefined = UserOperationContext | undefined,
       TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
     >`,
     dedent`{
@@ -113,7 +117,7 @@ export const PluginActionsGenPhase: Phase = async (input) => {
       TAccount extends SmartContractAccount | undefined =
           | SmartContractAccount
           | undefined,
-      TContext extends Record<string, any> | undefined = Record<string, any> | undefined>`,
+      TContext extends UserOperationContext | undefined = UserOperationContext | undefined>`,
     dedent`
     ExecutionActions<TAccount, TContext> & ManagementActions<TAccount, TContext> & ReadAndEncodeActions${
       hasReadMethods ? "<TAccount>" : ""
@@ -129,7 +133,7 @@ export const PluginActionsGenPhase: Phase = async (input) => {
         TAccount extends SmartContractAccount | undefined =
             | SmartContractAccount
             | undefined,
-        TContext extends Record<string, any> | undefined = Record<string, any> | undefined
+        TContext extends UserOperationContext | undefined = UserOperationContext | undefined
     >(
       client: Client<TTransport, TChain, TAccount>
     ) => ${

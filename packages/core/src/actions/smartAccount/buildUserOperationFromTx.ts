@@ -18,6 +18,7 @@ import type {
 } from "../../types.js";
 import { filterUndefined } from "../../utils/index.js";
 import { buildUserOperation } from "./buildUserOperation.js";
+import type { UserOperationContext } from "./types.js";
 
 export async function buildUserOperationFromTx<
   TChain extends Chain | undefined = Chain | undefined,
@@ -25,8 +26,8 @@ export async function buildUserOperationFromTx<
     | SmartContractAccount
     | undefined,
   TChainOverride extends Chain | undefined = Chain | undefined,
-  TContext extends Record<string, any> | undefined =
-    | Record<string, any>
+  TContext extends UserOperationContext | undefined =
+    | UserOperationContext
     | undefined,
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(

@@ -9,7 +9,10 @@ import { IncompatibleClientError } from "../../errors/client.js";
 import type { UserOperationStruct } from "../../types.js";
 import type { Deferrable } from "../../utils/index.js";
 import { _runMiddlewareStack } from "./internal/runMiddlewareStack.js";
-import type { SendUserOperationParameters } from "./types";
+import type {
+  SendUserOperationParameters,
+  UserOperationContext,
+} from "./types";
 
 export async function buildUserOperation<
   TTransport extends Transport = Transport,
@@ -17,8 +20,8 @@ export async function buildUserOperation<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, any> | undefined =
-    | Record<string, any>
+  TContext extends UserOperationContext | undefined =
+    | UserOperationContext
     | undefined,
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(

@@ -26,7 +26,7 @@ export const ManagementActionsGenPhase: Phase = async (input) => {
     addType(
       `ManagementActions<
         TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined,
-        TContext extends Record<string, any> | undefined = Record<string,any> | undefined,
+        TContext extends UserOperationContext | undefined = Record<string,any> | undefined,
         TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
       >`,
       dedent`{
@@ -127,6 +127,10 @@ const addImports = (
   });
   addImport("@alchemy/aa-accounts", {
     name: "FunctionReference",
+    isType: true,
+  });
+  addImport("@alchemy/aa-accounts", {
+    name: "UserOperationContext",
     isType: true,
   });
   addImport("@alchemy/aa-core", { name: "GetContextParameter", isType: true });

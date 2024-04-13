@@ -5,6 +5,7 @@ import {
   type SmartAccountClientConfig,
   type SmartAccountClientRpcSchema,
   type SmartContractAccount,
+  type UserOperationContext,
 } from "@alchemy/aa-core";
 import { type Chain, type Transport } from "viem";
 import { getDefaultUserOperationFeeOptions } from "../defaults.js";
@@ -23,8 +24,8 @@ export type AlchemySmartAccountClientConfig<
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  context extends Record<string, any> | undefined =
-    | Record<string, any>
+  context extends UserOperationContext | undefined =
+    | UserOperationContext
     | undefined
 > = {
   account?: account;
@@ -42,8 +43,8 @@ export type BaseAlchemyActions<
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  context extends Record<string, any> | undefined =
-    | Record<string, any>
+  context extends UserOperationContext | undefined =
+    | UserOperationContext
     | undefined
 > = SmartAccountClientActions<chain, account, context> &
   AlchemySmartAccountClientActions<account, context>;
@@ -55,8 +56,8 @@ export type AlchemySmartAccountClient_Base<
     | SmartContractAccount
     | undefined,
   actions extends Record<string, unknown> = Record<string, unknown>,
-  context extends Record<string, any> | undefined =
-    | Record<string, any>
+  context extends UserOperationContext | undefined =
+    | UserOperationContext
     | undefined
 > = Prettify<
   SmartAccountClient<
@@ -76,8 +77,8 @@ export type AlchemySmartAccountClient<
     | SmartContractAccount
     | undefined,
   actions extends Record<string, unknown> = Record<string, unknown>,
-  context extends Record<string, any> | undefined =
-    | Record<string, any>
+  context extends UserOperationContext | undefined =
+    | UserOperationContext
     | undefined
 > = Prettify<
   AlchemySmartAccountClient_Base<transport, chain, account, actions, context>
@@ -89,8 +90,8 @@ export function createAlchemySmartAccountClient<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, any> | undefined =
-    | Record<string, any>
+  TContext extends UserOperationContext | undefined =
+    | UserOperationContext
     | undefined
 >({
   account,

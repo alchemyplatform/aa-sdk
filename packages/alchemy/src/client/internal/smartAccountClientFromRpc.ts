@@ -4,6 +4,7 @@ import {
   isSmartAccountWithSigner,
   type SmartContractAccount,
   type SmartContractAccountWithSigner,
+  type UserOperationContext,
 } from "@alchemy/aa-core";
 import type { Chain, CustomTransport, Transport } from "viem";
 import { alchemyFeeEstimator } from "../../middleware/feeEstimator.js";
@@ -20,8 +21,8 @@ export type CreateAlchemySmartAccountClientFromRpcClient<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, any> | undefined =
-    | Record<string, any>
+  TContext extends UserOperationContext | undefined =
+    | UserOperationContext
     | undefined
 > = Omit<
   AlchemySmartAccountClientConfig<Transport, Chain, TAccount, TContext>,
@@ -43,8 +44,8 @@ export function createAlchemySmartAccountClientFromRpcClient<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, any> | undefined =
-    | Record<string, any>
+  TContext extends UserOperationContext | undefined =
+    | UserOperationContext
     | undefined
 >(
   args: CreateAlchemySmartAccountClientFromRpcClient<TAccount, TContext>

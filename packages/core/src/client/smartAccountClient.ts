@@ -12,6 +12,7 @@ import {
 } from "viem";
 import { z } from "zod";
 import type { SmartContractAccount } from "../account/smartContractAccount.js";
+import type { UserOperationContext } from "../actions/smartAccount/types.js";
 import { AccountNotFoundError } from "../errors/account.js";
 import { ChainNotFoundError } from "../errors/client.js";
 import { middlewareActions } from "../middleware/actions.js";
@@ -37,8 +38,8 @@ export type SmartAccountClientConfig<
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  context extends Record<string, any> | undefined =
-    | Record<string, any>
+  context extends UserOperationContext | undefined =
+    | UserOperationContext
     | undefined
 > = Prettify<
   Pick<
@@ -67,8 +68,8 @@ export type SmartAccountClientActions<
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  context extends Record<string, any> | undefined =
-    | Record<string, any>
+  context extends UserOperationContext | undefined =
+    | UserOperationContext
     | undefined
 > = BaseSmartAccountClientActions<chain, account, context> &
   BundlerActions &
@@ -84,8 +85,8 @@ export type SmartAccountClient<
     | undefined,
   actions extends Record<string, unknown> = Record<string, unknown>,
   rpcSchema extends RpcSchema = SmartAccountClientRpcSchema,
-  context extends Record<string, any> | undefined =
-    | Record<string, any>
+  context extends UserOperationContext | undefined =
+    | UserOperationContext
     | undefined
 > = Prettify<
   Client<
@@ -104,8 +105,8 @@ export type BaseSmartAccountClient<
   account extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  context extends Record<string, any> | undefined =
-    | Record<string, any>
+  context extends UserOperationContext | undefined =
+    | UserOperationContext
     | undefined
 > = Prettify<
   Client<
@@ -125,8 +126,8 @@ export function createSmartAccountClient<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, any> | undefined =
-    | Record<string, any>
+  TContext extends UserOperationContext | undefined =
+    | UserOperationContext
     | undefined
 >(
   config: SmartAccountClientConfig<TTransport, TChain, TAccount, TContext>
@@ -243,8 +244,8 @@ export function createSmartAccountClientFromExisting<
     TContext
   > = SmartAccountClientActions<TChain, TAccount>,
   TRpcSchema extends SmartAccountClientRpcSchema = SmartAccountClientRpcSchema,
-  TContext extends Record<string, any> | undefined =
-    | Record<string, any>
+  TContext extends UserOperationContext | undefined =
+    | UserOperationContext
     | undefined
 >(
   config: Omit<

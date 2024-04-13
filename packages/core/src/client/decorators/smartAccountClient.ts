@@ -40,6 +40,7 @@ import type {
   SendUserOperationParameters,
   SignUserOperationParameters,
   UpgradeAccountParams,
+  UserOperationContext,
 } from "../../actions/smartAccount/types";
 import { upgradeAccount } from "../../actions/smartAccount/upgradeAccount.js";
 import { waitForUserOperationTransaction } from "../../actions/smartAccount/waitForUserOperationTransacation.js";
@@ -57,8 +58,8 @@ export type BaseSmartAccountClientActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, any> | undefined =
-    | Record<string, any>
+  TContext extends UserOperationContext | undefined =
+    | UserOperationContext
     | undefined,
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
@@ -74,8 +75,8 @@ export type BaseSmartAccountClientActions<
     args: SendTransactionsParameters<TAccount, TContext>
   ) => Promise<BuildUserOperationFromTransactionsResult<TEntryPointVersion>>;
   checkGasSponsorshipEligibility: <
-    TContext extends Record<string, any> | undefined =
-      | Record<string, any>
+    TContext extends UserOperationContext | undefined =
+      | UserOperationContext
       | undefined
   >(
     args: SendUserOperationParameters<TAccount, TContext>
@@ -132,8 +133,8 @@ export const smartAccountClientActions: <
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, any> | undefined =
-    | Record<string, any>
+  TContext extends UserOperationContext | undefined =
+    | UserOperationContext
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>

@@ -5,7 +5,10 @@ import { AccountNotFoundError } from "../../errors/account.js";
 import { IncompatibleClientError } from "../../errors/client.js";
 import type { UserOperationStruct } from "../../types.js";
 import { buildUserOperation } from "./buildUserOperation.js";
-import type { SendUserOperationParameters } from "./types";
+import type {
+  SendUserOperationParameters,
+  UserOperationContext,
+} from "./types";
 
 export const checkGasSponsorshipEligibility: <
   TTransport extends Transport = Transport,
@@ -13,8 +16,8 @@ export const checkGasSponsorshipEligibility: <
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, any> | undefined =
-    | Record<string, any>
+  TContext extends UserOperationContext | undefined =
+    | UserOperationContext
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,

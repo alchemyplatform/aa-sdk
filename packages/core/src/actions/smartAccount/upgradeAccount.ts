@@ -4,7 +4,7 @@ import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
 import { AccountNotFoundError } from "../../errors/account.js";
 import { IncompatibleClientError } from "../../errors/client.js";
 import { sendUserOperation } from "./sendUserOperation.js";
-import type { UpgradeAccountParams } from "./types.js";
+import type { UpgradeAccountParams, UserOperationContext } from "./types.js";
 import { waitForUserOperationTransaction } from "./waitForUserOperationTransacation.js";
 
 export const upgradeAccount: <
@@ -13,8 +13,8 @@ export const upgradeAccount: <
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, any> | undefined =
-    | Record<string, any>
+  TContext extends UserOperationContext | undefined =
+    | UserOperationContext
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
