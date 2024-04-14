@@ -89,7 +89,7 @@ const packUserOperation = (request: UserOperationRequest<"0.7.0">): Hex => {
       accountGasLimits,
       hexToBigInt(request.preVerificationGas),
       gasFees,
-      paymasterAndData,
+      keccak256(paymasterAndData),
     ]
   );
 };
@@ -109,7 +109,7 @@ export default {
     [optimismSepolia.id]: "0x0000000071727De22E5E9d8BAf0edAc6f37da032",
     [arbitrum.id]: "0x0000000071727De22E5E9d8BAf0edAc6f37da032",
     [arbitrumGoerli.id]: "0x0000000071727De22E5E9d8BAf0edAc6f37da032",
-    [arbitrumSepolia.id]: "0x000000071727De22E5E9d8BAf0edAc6f37da032",
+    [arbitrumSepolia.id]: "0x0000000071727De22E5E9d8BAf0edAc6f37da032",
     [base.id]: "0x0000000071727De22E5E9d8BAf0edAc6f37da032",
     [baseGoerli.id]: "0x0000000071727De22E5E9d8BAf0edAc6f37da032",
     [baseSepolia.id]: "0x0000000071727De22E5E9d8BAf0edAc6f37da032",

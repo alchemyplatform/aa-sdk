@@ -59,10 +59,12 @@ export async function resolveProperties<T>(object: Deferrable<T>): Promise<T> {
 
   const results = await Promise.all(promises);
 
-  return results.reduce((accum, curr) => {
-    accum[curr.key as keyof T] = curr.value;
-    return accum;
-  }, {} as T);
+  return filterUndefined<T>(
+    results.reduce((accum, curr) => {
+      accum[curr.key as keyof T] = curr.value;
+      return accum;
+    }, {} as T)
+  );
 }
 
 /**
@@ -107,15 +109,13 @@ export function defineReadOnly<T, K extends keyof T>(
   });
 }
 
-export function filterUndefined(
-  obj: Record<string, unknown>
-): Record<string, unknown> {
+export function filterUndefined<T>(obj: Deferrable<T>): T {
   Object.keys(obj).forEach((key) => {
-    if (obj[key] == null) {
-      delete obj[key];
+    if (obj[key as keyof T] == null) {
+      delete obj[key as keyof T];
     }
   });
-  return obj;
+  return obj as T;
 }
 
 export function pick(obj: Record<string, unknown>, keys: string | string[]) {

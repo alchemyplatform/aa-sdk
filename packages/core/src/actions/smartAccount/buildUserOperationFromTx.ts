@@ -16,7 +16,6 @@ import type {
   UserOperationOverrides,
   UserOperationStruct,
 } from "../../types.js";
-import { filterUndefined } from "../../utils/index.js";
 import { buildUserOperation } from "./buildUserOperation.js";
 
 export async function buildUserOperationFromTx<
@@ -59,7 +58,6 @@ export async function buildUserOperationFromTx<
       ? request.maxPriorityFeePerGas
       : undefined,
   } as UserOperationOverrides<TEntryPointVersion>;
-  filterUndefined(_overrides);
 
   return buildUserOperation(client, {
     uo: {

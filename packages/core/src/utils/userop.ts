@@ -43,7 +43,7 @@ export function isValidRequest<TEntryPointVersion extends EntryPointVersion>(
 export function isValidPaymasterAndData<
   TEntryPointVersion extends EntryPointVersion
 >(request: UserOperationStruct<TEntryPointVersion>): boolean {
-  if (!("paymaster" in request)) {
+  if ("paymasterAndData" in request) {
     return (request as UserOperationStruct_v6).paymasterAndData != null;
   }
 
@@ -66,7 +66,7 @@ export function isValidPaymasterAndData<
 export function isValidFactoryAndData<
   TEntryPointVersion extends EntryPointVersion
 >(request: UserOperationStruct<TEntryPointVersion>): boolean {
-  if (!("factory" in request)) {
+  if ("initCode" in request) {
     const { initCode } = request as UserOperationStruct_v6;
     return initCode != null;
   }
