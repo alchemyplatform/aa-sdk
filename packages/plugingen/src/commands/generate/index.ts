@@ -26,6 +26,15 @@ import { PluginActionsGenPhase } from "./phases/plugin-actions/index.js";
 import { PluginGeneratorPhase } from "./phases/plugin-generator/index.js";
 import type { Phase, PhaseInput } from "./types.js";
 
+// Do not reorder
+// In order of preference files are checked
+export const configFiles = [
+  "plugingen.config.ts",
+  "plugingen.config.js",
+  "plugingen.config.mjs",
+  "plugingen.config.mts",
+];
+
 const GenerateSchema = z.object({
   /** Path to config file */
   config: z.string().optional(),
@@ -44,7 +53,10 @@ export async function generate(options: GenerateOptions = {}) {
   }
 
   // Get cli config file
-  const configPath = await findConfig(options);
+  const configPath = await findConfig({
+    ...options,
+    filenames: configFiles,
+  });
   if (!configPath) {
     if (options.config) {
       throw new Error(`Config not found at ${pc.gray(options.config)}`);

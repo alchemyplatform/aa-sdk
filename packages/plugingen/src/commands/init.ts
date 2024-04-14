@@ -58,11 +58,11 @@ export async function init(options: InitOptions = {}) {
     content = dedent(`
       import { defineConfig } from '@alchemy/plugingen';
       import { sepolia } from "viem/chains";
-      
+
       export default defineConfig({
         outDir: "./src/generated",
         chain: sepolia,
-        rpcUrl: "https://ethereum-sepolia.publicnode.com",
+        rpcUrl: "https://ethereum-sepolia-rpc.publicnode.com",
         plugins: [],
       });
     `);
@@ -75,7 +75,7 @@ export async function init(options: InitOptions = {}) {
       {
         outDir: "./src/generated",
         chain: sepolia,
-        rpcUrl: "https://ethereum-sepolia.publicnode.com",
+        rpcUrl: "https://ethereum-sepolia-rpc.publicnode.com",
         plugins: [],
       }
       `.replace(/"(\d*)":/gm, "$1:")}

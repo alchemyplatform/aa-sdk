@@ -2,6 +2,12 @@
 import { cac } from "cac";
 import { generate, type GenerateOptions } from "./commands/generate/index.js";
 import { init, type InitOptions } from "./commands/init.js";
+import {
+  buildUserOperation,
+  sendUserOperation,
+  signUserOperation,
+  type UserOpOptions,
+} from "./commands/userop/index.js";
 import * as logger from "./logger.js";
 import { VERSION } from "./version.js";
 
@@ -23,6 +29,33 @@ cli
   .option("-r, --root <path>", "[string] root path to resolve config from")
   .example((name) => `${name} generate`)
   .action(async (options: GenerateOptions) => generate(options));
+
+cli
+  .command("build-uo", "build a user operation using smart account client")
+  .option("-c, --config <path>", "[string] path to config json file")
+  .option("-r, --root <path>", "[string] root path to resolve config from")
+  .example((name) => `${name} build-uo`)
+  .action(async (options: UserOpOptions) => buildUserOperation(options));
+
+cli
+  .command(
+    "sign-uo",
+    "build and return a signed user operation using smart account client"
+  )
+  .option("-c, --config <path>", "[string] path to config json file")
+  .option("-r, --root <path>", "[string] root path to resolve config from")
+  .example((name) => `${name} sign-uo`)
+  .action(async (options: UserOpOptions) => signUserOperation(options));
+
+cli
+  .command(
+    "send-uo",
+    "build, sign, and send a user operation using smart account client"
+  )
+  .option("-c, --config <path>", "[string] path to config json file")
+  .option("-r, --root <path>", "[string] root path to resolve config from")
+  .example((name) => `${name} send-uo`)
+  .action(async (options: UserOpOptions) => sendUserOperation(options));
 
 cli.help();
 cli.version(VERSION);
