@@ -22,6 +22,10 @@ head:
 
 The `useLogout` hook logs a user out of their Embedded Account on your application.
 
+::: warning
+This requires your user to be logged in. See [`useAuthenticate`](/react/useAuthenticate) for more details.
+:::
+
 ## Import
 
 ```ts
