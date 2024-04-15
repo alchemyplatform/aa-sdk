@@ -1,7 +1,16 @@
 "use client";
 
-import type { SendUserOperationParameters } from "@alchemy/aa-core";
-import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
+import type {
+  DefaultEntryPointVersion,
+  EntryPointVersion,
+  SendUserOperationParameters,
+  SendUserOperationResult,
+} from "@alchemy/aa-core";
+import {
+  useMutation,
+  type UseMutateAsyncFunction,
+  type UseMutateFunction,
+} from "@tanstack/react-query";
 import type { Hash } from "viem";
 import type { SupportedAccounts } from "../../config/types.js";
 import { useAlchemyAccountContext } from "../context.js";
@@ -15,33 +24,39 @@ export type UseSendUserOperationMutationArgs<
 
 export type UseSendUserOperationArgs = {
   client?: UseSmartAccountClientResult["client"];
-  waitForTxn?: boolean;
 } & UseSendUserOperationMutationArgs;
 
 export type UseSendUserOperationResult<
-  TAccount extends SupportedAccounts = SupportedAccounts
+  TAccount extends SupportedAccounts = SupportedAccounts,
+  TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
 > = {
   sendUserOperation: UseMutateFunction<
-    Hash,
+    SendUserOperationResult<TEntryPointVersion>,
     Error,
     SendUserOperationParameters<TAccount>,
     unknown
   >;
-  sendUserOperationResult: Hash | undefined;
+  sendUserOperationAsync: UseMutateAsyncFunction<
+    SendUserOperationResult<TEntryPointVersion>,
+    Error,
+    SendUserOperationParameters<TAccount>,
+    unknown
+  >;
+  sendUserOperationResult:
+    | SendUserOperationResult<TEntryPointVersion>
+    | undefined;
   isSendingUserOperation: boolean;
   error: Error | null;
 };
 
 export function useSendUserOperation<
   TAccount extends SupportedAccounts = SupportedAccounts
->({
-  client,
-  waitForTxn,
-}: UseSendUserOperationArgs): UseSendUserOperationResult<TAccount> {
+>({ client }: UseSendUserOperationArgs): UseSendUserOperationResult<TAccount> {
   const { queryClient } = useAlchemyAccountContext();
 
   const {
     mutate: sendUserOperation,
+    mutateAsync: sendUserOperationAsync,
     data: sendUserOperationResult,
     isPending: isSendingUserOperation,
     error,
@@ -52,13 +67,7 @@ export function useSendUserOperation<
           throw new ClientUndefinedError("useSendUserOperation");
         }
 
-        const { hash } = await client.sendUserOperation(params);
-
-        if (!waitForTxn) {
-          return hash;
-        }
-
-        return client.waitForUserOperationTransaction({ hash });
+        return client.sendUserOperation(params);
       },
     },
     queryClient
@@ -66,6 +75,7 @@ export function useSendUserOperation<
 
   return {
     sendUserOperation,
+    sendUserOperationAsync,
     sendUserOperationResult,
     isSendingUserOperation,
     error,
