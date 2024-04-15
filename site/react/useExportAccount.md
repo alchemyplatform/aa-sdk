@@ -38,7 +38,17 @@ import { useExportAccount } from "@alchemy/aa-alchemy/react";
 
 ## Params
 
-<!--@include: ./BaseHookMutationArgs.md-->
+An object containing the following fields.
+
+### params
+
+An optional config object containing `iframeContainerId` as the container ID for the iframe that reveals the account's recovery details, and an [optional] `iframeElementId`as the element ID for the iframe that reveals the account's recovery details. Defaults to `turnkey-export-iframe`.
+
+If `params` is not passed in, the default iframe config will just have an `iframeContainerId` that defaults to `alchemy-signer-iframe-container`.
+
+### ...mutationArgs
+
+ <!--@include: ./BaseHookMutationArgs.md-->
 
 ## Return Type
 
