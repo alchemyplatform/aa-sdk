@@ -126,7 +126,7 @@ As smart contract accounts are essentially the contract codes that operate on th
 
 ## `User`
 
-`User` is a type that defines the model for the user on a client. It includes identifiers for the user including `email`, `orgId`, `userId`, `userId`, `address` (the EOA signer address corresponding to the user credentials), and `credentialId`. You can use the [`useUser`](../react/useUser.md) react hook to look up a user.
+`User` is a type that defines the model for the details of a user's Embedded Account via an Alchemy Signer. It includes the user's `email`, `orgId`, `userId`, `userId`, `address` (the EOA signer address corresponding to the user credentials), and `credentialId`. You can use the [`useUser`](../react/useUser.md) react hook to look up a user.
 
 ::: details User
 <<< @/../packages/alchemy/src/signer/client/types.ts#User
