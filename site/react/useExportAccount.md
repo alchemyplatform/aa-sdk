@@ -53,7 +53,7 @@ If `params` is not passed in, the default iframe config will just have an `ifram
 ## Return Type
 
 ```ts
-import { type UØseExportAccountResult } from "@alchemy/aa-alchemy/react";
+import { type UseExportAccountResult } from "@alchemy/aa-alchemy/react";
 ```
 
 Returns an object containing the following state.
