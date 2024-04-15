@@ -22,6 +22,10 @@ head:
 
 The `useAddPasskey` hook adds a new passkey to a user's Embedded Account.
 
+::: warning
+This requires your user to be logged in. See [`useAuthenticate`](/react/useAuthenticate) for more details.
+:::
+
 ## Import
 
 ```ts
@@ -32,10 +36,29 @@ import { useAddPasskey } from "@alchemy/aa-alchemy/react";
 
 <<< @/snippets/react/useAddPasskey.tsx
 
+## Params
+
+<!--@include: ./BaseHookMutationArgs.md-->
+
 ## Return Type
 
 ```ts
-import { type useAddPasskeyResult } from "@alchemy/aa-alchemy/react";
+import { type UseAddPasskeyResult } from "@alchemy/aa-alchemy/react";
 ```
 
-Returns a `string[]` list of all passkey authenticatorIds, including the newly added one.
+Returns an object containing the Alchemy Accounts state.
+
+### addPasskey
+
+`UseMutateFunction`
+A React query mutation function that returns a `string[]` list of all passkey authenticatorIds, including the newly added one. It takes in [`CredentialCreationOptions`](https://microsoft.github.io/PowerBI-JavaScript/interfaces/_node_modules_typedoc_node_modules_typescript_lib_lib_dom_d_.credentialcreationoptions.html).
+
+### isAddingPasskey
+
+`boolean`
+A flag that determines whether the mutation is still running or not.
+
+### error
+
+`Error | null`
+A field that relays any errors from the mutation. It is null if there is no error.
