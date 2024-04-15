@@ -1,35 +1,43 @@
 "use client";
 
-import type {
-  SendUserOperationParameters,
-  SendUserOperationResult,
-} from "@alchemy/aa-core";
+import type { SendUserOperationParameters } from "@alchemy/aa-core";
 import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
+import type { Hash } from "viem";
 import type { SupportedAccounts } from "../../config/types.js";
 import { useAlchemyAccountContext } from "../context.js";
+import { ClientUndefinedError } from "../errors.js";
+import type { BaseHookMutationArgs } from "../types.js";
 import { type UseSmartAccountClientResult } from "./useSmartAccountClient.js";
+
+export type UseSendUserOperationMutationArgs<
+  TAccount extends SupportedAccounts = SupportedAccounts
+> = BaseHookMutationArgs<Hash, SendUserOperationParameters<TAccount>>;
 
 export type UseSendUserOperationArgs = {
   client?: UseSmartAccountClientResult["client"];
-};
+  waitForTxn?: boolean;
+} & UseSendUserOperationMutationArgs;
 
 export type UseSendUserOperationResult<
   TAccount extends SupportedAccounts = SupportedAccounts
 > = {
   sendUserOperation: UseMutateFunction<
-    SendUserOperationResult,
+    Hash,
     Error,
     SendUserOperationParameters<TAccount>,
     unknown
   >;
-  sendUserOperationResult: SendUserOperationResult | undefined;
+  sendUserOperationResult: Hash | undefined;
   isSendingUserOperation: boolean;
   error: Error | null;
 };
 
 export function useSendUserOperation<
   TAccount extends SupportedAccounts = SupportedAccounts
->({ client }: UseSendUserOperationArgs): UseSendUserOperationResult<TAccount> {
+>({
+  client,
+  waitForTxn,
+}: UseSendUserOperationArgs): UseSendUserOperationResult<TAccount> {
   const { queryClient } = useAlchemyAccountContext();
 
   const {
@@ -41,10 +49,16 @@ export function useSendUserOperation<
     {
       mutationFn: async (params: SendUserOperationParameters<TAccount>) => {
         if (!client) {
-          throw new Error("client must be defined");
+          throw new ClientUndefinedError("useSendUserOperation");
         }
 
-        return client.sendUserOperation(params);
+        const { hash } = await client.sendUserOperation(params);
+
+        if (!waitForTxn) {
+          return hash;
+        }
+
+        return client.waitForUserOperationTransaction({ hash });
       },
     },
     queryClient
