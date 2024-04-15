@@ -3,10 +3,7 @@ import { useExportAccount } from "@alchemy/aa-alchemy/react";
 export function ComponentWithExportAccount() {
   // Assumes the app has context of a signer with an authenticated user
   const { exportAccount, isExported, isExporting, ExportAccountComponent } =
-    useExportAccount({
-      iframeContainerId: "turnkey-export-wallet-container-id",
-      iframeElementId: "turnkey-export-wallet-element-id",
-    });
+    useExportAccount();
 
   return (
     <div>

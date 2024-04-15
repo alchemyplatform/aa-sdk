@@ -2,6 +2,7 @@
 
 import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
 import { createElement, useCallback } from "react";
+import { DEFAULT_IFRAME_CONTAINER_ID } from "../../config/createConfig.js";
 import type { ExportWalletParams as ExportAccountParams } from "../../index.js";
 import { useAlchemyAccountContext } from "../context.js";
 import type { BaseHookMutationArgs } from "../types.js";
@@ -11,10 +12,9 @@ export type UseExportAccountData = boolean;
 
 export type UseExportAccountParams = void;
 
-export type UseExportAccountMutationArgs = BaseHookMutationArgs<
-  UseExportAccountData,
-  UseExportAccountParams
->;
+export type UseExportAccountMutationArgs = {
+  params?: ExportAccountParams;
+} & BaseHookMutationArgs<UseExportAccountData, UseExportAccountParams>;
 
 export type ExportAccountComponentProps = {
   iframeCss?: string;
@@ -36,11 +36,14 @@ export type UseExportAccountResult = {
 };
 
 export function useExportAccount(
-  params: ExportAccountParams,
-  mutationArgs?: UseExportAccountMutationArgs
+  args?: UseExportAccountMutationArgs
 ): UseExportAccountResult {
+  const { params, ...mutationArgs } = args ?? {};
   const { queryClient } = useAlchemyAccountContext();
   const signer = useSigner();
+  const { iframeContainerId } = params ?? {
+    iframeContainerId: DEFAULT_IFRAME_CONTAINER_ID,
+  };
 
   const {
     mutate: exportAccount,
@@ -49,7 +52,8 @@ export function useExportAccount(
     data,
   } = useMutation(
     {
-      mutationFn: async () => signer!.exportWallet(params),
+      mutationFn: async () =>
+        signer!.exportWallet(params ?? { iframeContainerId }),
       ...mutationArgs,
     },
     queryClient
@@ -62,12 +66,12 @@ export function useExportAccount(
         {
           className,
           style: { display: !isExported ? "none" : "block" },
-          id: params.iframeContainerId,
+          id: iframeContainerId,
         },
         createElement("style", {}, iframeCss)
       );
     },
-    [params.iframeContainerId]
+    [iframeContainerId]
   );
 
   return {
