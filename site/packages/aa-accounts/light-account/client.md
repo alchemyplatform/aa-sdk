@@ -37,6 +37,6 @@ A Promise containing a new `SmartAccountClient` connected to a Light Account.
 
 - `chain: Chain` -- the chain on which to create the client.
 
-- `...accountParams`: CreateLightAccountParams -- additional parameters to pass to the [`createLightAccount`](/packages/aa-accounts/light-account/#createlightaccount). Notably, a `signer` field of type [`SmartAccountSigner`](/resources/types.html#smartaccountsigner)is required.
+- `account`: CreateLightAccountParams -- additional parameters to pass to the [`createLightAccount`](/packages/aa-accounts/light-account/#createlightaccount). Notably, a `signer` field of type [`SmartAccountSigner`](/resources/types.html#smartaccountsigner)is required.
 
 - `...clientParams` -- [optional] additional parameters to pass to the [`SmartAccountClient`](/packages/aa-core/smart-account-client/) constructor.
