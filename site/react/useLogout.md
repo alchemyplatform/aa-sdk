@@ -48,7 +48,7 @@ import { type useLogoutResult } from "@alchemy/aa-alchemy/react";
 
 Returns an object containing the following state.
 
-### logoout
+### logout
 
 `UseMutateFunction`
 A React query mutation function to log the user out.
