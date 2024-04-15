@@ -32,8 +32,29 @@ import { useLogout } from "@alchemy/aa-alchemy/react";
 
 <<< @/snippets/react/useLogout.tsx
 
+## Params
+
+<!--@include: ./BaseHookMutationArgs.md-->
+
 ## Return Type
 
 ```ts
 import { type useLogoutResult } from "@alchemy/aa-alchemy/react";
 ```
+
+Returns an object containing the following state.
+
+### logoout
+
+`UseMutateFunction`
+A React query mutation function to log the user out.
+
+### isLoggingOut
+
+`boolean`
+A flag that determines whether the mutation is still running or not.
+
+### error
+
+`Error | null`
+A field that relays any errors from the mutation. It is null if there is no error.

@@ -137,6 +137,7 @@ export const sidebar: DefaultTheme.Sidebar = [
       { text: "useUser", link: "/useUser" },
       { text: "useBundlerClient", link: "/useBundlerClient" },
       { text: "useAddPasskey", link: "/useAddPasskey" },
+      { text: "useLogout", link: "/useLogout" },
     ],
   },
   {
