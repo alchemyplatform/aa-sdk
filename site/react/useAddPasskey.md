@@ -46,7 +46,7 @@ import { useAddPasskey } from "@alchemy/aa-alchemy/react";
 import { type UseAddPasskeyResult } from "@alchemy/aa-alchemy/react";
 ```
 
-Returns an object containing the Alchemy Accounts state.
+Returns an object containing the following state.
 
 ### addPasskey
 
