@@ -56,12 +56,12 @@ Returns an object containing the following state.
 ### signMessage
 
 `UseMutateFunction`
-A React query mutation function to sign a message. It returns a `Hex` representation of the signed message.
+A React query mutation function to sign a message. It returns a `Hex` representation of the signed message. It takes in an object with a [`SignableMessage`](https://viem.sh/docs/actions/wallet/signMessage.html#message) field called `message`.
 
 ### signMessageAsync
 
 `UseMutateAsyncFunction`
-A React query async mutation function to sign a message. Via an awaitable promise, it returns a `Hex` representation of the signed message.
+A React query async mutation function to sign a message. Via an awaitable promise, it returns a `Hex` representation of the signed message. It takes in an object with a [`SignableMessage`](https://viem.sh/docs/actions/wallet/signMessage.html#message) field called `message`.
 
 ### signedMessage
 

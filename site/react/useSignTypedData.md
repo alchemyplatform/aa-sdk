@@ -53,22 +53,22 @@ import { type UseSignTypedDataResult } from "@alchemy/aa-alchemy/react";
 
 Returns an object containing the following state.
 
-### signMessage
+### signTypedData
 
 `UseMutateFunction`
-A React query mutation function to sign typed data. It returns a `Hex` representation of the signed typed data.
+A React query mutation function to sign typed data. It returns a `Hex` representation of the signed typed data. It takes in an object with a [`TypedDataDefinition`](https://viem.sh/docs/utilities/hashTypedData.html#parameters) field called `typedData`.
 
-### signMessageAsync
+### signTypedDataAsync
 
 `UseMutateAsyncFunction`
-A React query async mutation function to sign typed data. Via an awaitable promise, it returns a `Hex` representation of the signed typed data.
+A React query async mutation function to sign typed data. Via an awaitable promise, it returns a `Hex` representation of the signed typed data. It takes in an object with a [`TypedDataDefinition`](https://viem.sh/docs/utilities/hashTypedData.html#parameters) field called `typedData`.
 
-### signedMessage
+### signedTypedData
 
 `Hex | undefined`
 A flag that determines whether the account recovery details were successfully exported and now viewable in the application.
 
-### isSigningMessage
+### isSigningTypedData
 
 `boolean`
 A flag that determines whether the mutation is still running or not.

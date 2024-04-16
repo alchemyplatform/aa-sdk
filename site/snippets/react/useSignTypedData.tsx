@@ -4,7 +4,7 @@ import {
 } from "@alchemy/aa-alchemy/react";
 import { useState } from "react";
 
-export function ComponentWithAddPasskey() {
+export function ComponentWithSignTypedData() {
   // Assumes the app has context of a signer with an authenticated user
   const [typedDataMessage, setTypedDataMessage] = useState("");
   const client = useSmartAccountClient({

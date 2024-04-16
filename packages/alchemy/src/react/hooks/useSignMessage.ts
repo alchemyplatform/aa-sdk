@@ -11,12 +11,10 @@ import { ClientUndefinedError } from "../errors.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import { type UseSmartAccountClientResult } from "./useSmartAccountClient.js";
 
-export type UseSignMessageData = Hex;
-
 export type SignMessageArgs = { message: SignableMessage };
 
 export type UseSignMessagedMutationArgs = BaseHookMutationArgs<
-  UseSignMessageData,
+  Hex,
   SignMessageArgs
 >;
 
@@ -25,19 +23,14 @@ export type UseSignMessageArgs = {
 } & UseSignMessagedMutationArgs;
 
 export type UseSignMessageResult = {
-  signMessage: UseMutateFunction<
-    UseSignMessageData,
-    Error,
-    SignMessageArgs,
-    unknown
-  >;
+  signMessage: UseMutateFunction<Hex, Error, SignMessageArgs, unknown>;
   signMessageAsync: UseMutateAsyncFunction<
-    UseSignMessageData,
+    Hex,
     Error,
     SignMessageArgs,
     unknown
   >;
-  signedMessage: UseSignMessageData | undefined;
+  signedMessage: Hex | undefined;
   isSigningMessage: boolean;
   error: Error | null;
 };
