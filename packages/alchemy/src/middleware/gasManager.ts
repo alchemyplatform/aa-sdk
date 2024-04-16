@@ -3,7 +3,9 @@ import type {
   ClientMiddlewareConfig,
   ClientMiddlewareFn,
   EntryPointVersion,
+  UserOperationFeeOptions,
   UserOperationOverrides,
+  UserOperationStruct,
 } from "@alchemy/aa-core";
 import {
   deepHexlify,
@@ -13,10 +15,9 @@ import {
   isMultiplier,
   resolveProperties,
   type Multiplier,
-  type UserOperationFeeOptions,
   type UserOperationRequest,
 } from "@alchemy/aa-core";
-import { fromHex, type Hex } from "viem";
+import { fromHex, isHex, type Hex } from "viem";
 import type { ClientWithAlchemyMethods } from "../client/types";
 import { getAlchemyPaymasterAddress } from "../gas-manager.js";
 import { alchemyFeeEstimator } from "./feeEstimator.js";
@@ -59,13 +60,7 @@ export type RequestPaymasterAndDataResponse<
       paymasterAndData: UserOperationRequest<"0.6.0">["paymasterAndData"];
     }
   : TEntryPointVersion extends "0.7.0"
-  ? Pick<
-      UserOperationRequest<"0.7.0">,
-      | "paymaster"
-      | "paymasterData"
-      | "paymasterPostOpGasLimit"
-      | "paymasterVerificationGasLimit"
-    >
+  ? Pick<UserOperationRequest<"0.7.0">, "paymaster" | "paymasterData">
   : {};
 
 export type RequestGasAndPaymasterAndDataResponse<
@@ -190,56 +185,136 @@ export function alchemyGasManagerMiddleware<C extends ClientWithAlchemyMethods>(
   };
 }
 
+const overrideField = <TEntryPointVersion extends EntryPointVersion>(
+  field: keyof UserOperationFeeOptions<TEntryPointVersion>,
+  overrides: UserOperationOverrides<TEntryPointVersion> | undefined,
+  feeOptions: UserOperationFeeOptions<TEntryPointVersion> | undefined,
+  userOperation: UserOperationRequest<TEntryPointVersion>
+): Hex | Multiplier | undefined => {
+  let _field = field as keyof UserOperationOverrides<TEntryPointVersion>;
+
+  if (overrides?.[_field] != null) {
+    // one-off absolute override
+    if (isBigNumberish(overrides[_field])) {
+      return deepHexlify(overrides[_field]);
+    }
+    // one-off multiplier overrides
+    else {
+      return {
+        multiplier: Number((overrides[_field] as Multiplier).multiplier),
+      };
+    }
+  }
+
+  // provider level fee options with multiplier
+  if (isMultiplier(feeOptions?.[field])) {
+    return {
+      multiplier: Number((feeOptions![field] as Multiplier).multiplier),
+    };
+  }
+
+  const userOpField =
+    userOperation[field as keyof UserOperationRequest<TEntryPointVersion>];
+  if (isHex(userOpField) && fromHex(userOpField as Hex, "bigint") > 0n) {
+    return userOpField;
+  }
+  return undefined;
+};
+
 function requestGasAndPaymasterData<C extends ClientWithAlchemyMethods>(
   client: C,
   config: AlchemyGasManagerConfig
 ): ClientMiddlewareConfig["paymasterAndData"] {
   return {
     dummyPaymasterAndData: dummyPaymasterAndData(client, config),
-    paymasterAndData: async (struct, { overrides, feeOptions, account }) => {
+    paymasterAndData: async (
+      struct,
+      { overrides: overrides_, feeOptions, account }
+    ) => {
+      // handle one-off overrides for bypassing paymaster middleware
+      if (
+        account.getEntryPoint().version === "0.6.0" &&
+        (overrides_ as UserOperationOverrides<"0.6.0">)?.paymasterAndData ===
+          "0x"
+      ) {
+        return {
+          ...struct,
+          paymasterAndData: "0x",
+        };
+      } else if (
+        account.getEntryPoint().version === "0.7.0" &&
+        (overrides_ as UserOperationOverrides<"0.7.0">)?.paymasterData === "0x"
+      ) {
+        delete (struct as UserOperationStruct<"0.7.0">).paymaster;
+        delete (struct as UserOperationStruct<"0.7.0">).paymasterData;
+        delete (struct as UserOperationStruct<"0.7.0">)
+          .paymasterVerificationGasLimit;
+        delete (struct as UserOperationStruct<"0.7.0">).paymasterPostOpGasLimit;
+        return struct;
+      }
+
       const userOperation: UserOperationRequest<EntryPointVersion> =
         deepHexlify(await resolveProperties(struct));
 
-      const overrideField = (
-        field: keyof UserOperationFeeOptions
-      ): Hex | Multiplier | undefined => {
-        if (overrides?.[field] != null) {
-          // one-off absolute override
-          if (isBigNumberish(overrides[field])) {
-            return deepHexlify(overrides[field]);
-          }
-          // one-off multiplier overrides
-          else {
-            return {
-              multiplier: Number((overrides[field] as Multiplier).multiplier),
-            };
-          }
-        }
-
-        // provider level fee options with multiplier
-        if (isMultiplier(feeOptions?.[field])) {
-          return {
-            multiplier: Number((feeOptions![field] as Multiplier).multiplier),
-          };
-        }
-
-        if (
-          userOperation[field] != null &&
-          fromHex(userOperation[field], "bigint") > 0n
-        ) {
-          return userOperation[field];
-        }
-        return undefined;
-      };
-
-      const _overrides: RequestGasAndPaymasterAndDataOverrides<EntryPointVersion> =
+      const overrides: RequestGasAndPaymasterAndDataOverrides<EntryPointVersion> =
         filterUndefined({
-          maxFeePerGas: overrideField("maxFeePerGas"),
-          maxPriorityFeePerGas: overrideField("maxPriorityFeePerGas"),
-          callGasLimit: overrideField("callGasLimit"),
-          verificationGasLimit: overrideField("verificationGasLimit"),
-          preVerificationGas: overrideField("preVerificationGas"),
+          maxFeePerGas: overrideField(
+            "maxFeePerGas",
+            overrides_ as UserOperationOverrides<EntryPointVersion>,
+            feeOptions,
+            userOperation
+          ),
+          maxPriorityFeePerGas: overrideField(
+            "maxPriorityFeePerGas",
+            overrides_ as UserOperationOverrides<EntryPointVersion>,
+            feeOptions,
+            userOperation
+          ),
+          callGasLimit: overrideField(
+            "callGasLimit",
+            overrides_ as UserOperationOverrides<EntryPointVersion>,
+            feeOptions,
+            userOperation
+          ),
+          verificationGasLimit: overrideField(
+            "verificationGasLimit",
+            overrides_ as UserOperationOverrides<EntryPointVersion>,
+            feeOptions,
+            userOperation
+          ),
+          preVerificationGas: overrideField(
+            "preVerificationGas",
+            overrides_ as UserOperationOverrides<EntryPointVersion>,
+            feeOptions,
+            userOperation
+          ),
         });
+
+      if (account.getEntryPoint().version === "0.7.0") {
+        const paymasterVerificationGasLimit = overrideField<"0.7.0">(
+          "paymasterVerificationGasLimit",
+          overrides_ as UserOperationOverrides<"0.7.0">,
+          feeOptions,
+          userOperation
+        );
+        if (paymasterVerificationGasLimit != null) {
+          (
+            overrides as RequestGasAndPaymasterAndDataOverrides<"0.7.0">
+          ).paymasterVerificationGasLimit = paymasterVerificationGasLimit;
+        }
+
+        const paymasterPostOpGasLimit = overrideField<"0.7.0">(
+          "paymasterPostOpGasLimit",
+          overrides_ as UserOperationOverrides<"0.7.0">,
+          feeOptions,
+          userOperation
+        );
+        if (paymasterPostOpGasLimit != null) {
+          (
+            overrides as RequestGasAndPaymasterAndDataOverrides<"0.7.0">
+          ).paymasterPostOpGasLimit = paymasterPostOpGasLimit;
+        }
+      }
 
       const result = await client.request({
         method: "alchemy_requestGasAndPaymasterAndData",
@@ -247,10 +322,9 @@ function requestGasAndPaymasterData<C extends ClientWithAlchemyMethods>(
           {
             policyId: config.policyId,
             entryPoint: account.getEntryPoint().address,
-            userOperation: userOperation,
+            userOperation,
             dummySignature: userOperation.signature,
-            overrides:
-              Object.keys(_overrides).length > 0 ? _overrides : undefined,
+            overrides,
           },
         ],
       });

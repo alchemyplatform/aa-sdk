@@ -34,7 +34,7 @@ export type BundlerRpcSchema = [
       Address,
       StateOverride?
     ];
-    ReturnType: UserOperationEstimateGasResponse;
+    ReturnType: UserOperationEstimateGasResponse<EntryPointVersion>;
   },
   {
     Method: "eth_getUserOperationReceipt";
@@ -69,7 +69,7 @@ export type BundlerActions = {
     request: UserOperationRequest<TEntryPointVersion>,
     entryPoint: Address,
     stateOverride?: StateOverride
-  ): Promise<UserOperationEstimateGasResponse>;
+  ): Promise<UserOperationEstimateGasResponse<TEntryPointVersion>>;
 
   /**
    * calls `eth_sendUserOperation` and returns the hash of the sent UserOperation

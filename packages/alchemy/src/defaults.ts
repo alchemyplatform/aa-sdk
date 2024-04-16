@@ -1,4 +1,3 @@
-import type { UserOperationFeeOptions } from "@alchemy/aa-core";
 import {
   arbitrum,
   arbitrumGoerli,
@@ -6,6 +5,7 @@ import {
   optimism,
   optimismGoerli,
   optimismSepolia,
+  type UserOperationFeeOptions,
 } from "@alchemy/aa-core";
 import type { Chain } from "viem";
 
