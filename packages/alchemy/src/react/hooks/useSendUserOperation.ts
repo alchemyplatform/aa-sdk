@@ -1,8 +1,7 @@
 "use client";
 
 import type {
-  DefaultEntryPointVersion,
-  EntryPointVersion,
+  GetEntryPointFromAccount,
   SendUserOperationParameters,
   SendUserOperationResult,
 } from "@alchemy/aa-core";
@@ -18,23 +17,24 @@ import type { BaseHookMutationArgs } from "../types.js";
 import { type UseSmartAccountClientResult } from "./useSmartAccountClient.js";
 
 export type UseSendUserOperationMutationArgs<
-  TAccount extends SupportedAccounts = SupportedAccounts,
-  TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount>,
+  TAccount extends SupportedAccounts = SupportedAccounts
 > = BaseHookMutationArgs<
   SendUserOperationResult<TEntryPointVersion>,
   SendUserOperationParameters<TAccount>
 >;
 
 export type UseSendUserOperationArgs<
-  TAccount extends SupportedAccounts = SupportedAccounts,
-  TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount>,
+  TAccount extends SupportedAccounts = SupportedAccounts
 > = {
   client: UseSmartAccountClientResult["client"] | undefined;
-} & UseSendUserOperationMutationArgs<TAccount, TEntryPointVersion>;
+  waitForTxn?: boolean;
+} & UseSendUserOperationMutationArgs<TEntryPointVersion, TAccount>;
 
 export type UseSendUserOperationResult<
-  TAccount extends SupportedAccounts = SupportedAccounts,
-  TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount>,
+  TAccount extends SupportedAccounts = SupportedAccounts
 > = {
   sendUserOperation: UseMutateFunction<
     SendUserOperationResult<TEntryPointVersion>,
@@ -56,15 +56,16 @@ export type UseSendUserOperationResult<
 };
 
 export function useSendUserOperation<
-  TAccount extends SupportedAccounts = SupportedAccounts,
-  TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount>,
+  TAccount extends SupportedAccounts = SupportedAccounts
 >({
   client,
+  waitForTxn = false,
   ...mutationArgs
 }: UseSendUserOperationArgs<
-  TAccount,
-  TEntryPointVersion
->): UseSendUserOperationResult<TAccount, TEntryPointVersion> {
+  TEntryPointVersion,
+  TAccount
+>): UseSendUserOperationResult<TEntryPointVersion, TAccount> {
   const { queryClient } = useAlchemyAccountContext();
 
   const {
@@ -80,7 +81,17 @@ export function useSendUserOperation<
           throw new ClientUndefinedError("useSendUserOperation");
         }
 
-        return client.sendUserOperation(params);
+        if (!waitForTxn) {
+          return client.sendUserOperation(params);
+        }
+
+        const { hash, request } = await client.sendUserOperation(params);
+        const txnHash = await client.waitForUserOperationTransaction({ hash });
+
+        return {
+          hash: txnHash,
+          request,
+        };
       },
       ...mutationArgs,
     },

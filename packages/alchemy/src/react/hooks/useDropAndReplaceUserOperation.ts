@@ -1,36 +1,35 @@
 "use client";
 
 import type {
-  DefaultEntryPointVersion,
   DropAndReplaceUserOperationParameters,
-  EntryPointVersion,
+  GetEntryPointFromAccount,
   SendUserOperationResult,
 } from "@alchemy/aa-core";
 import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
 import type { SupportedAccounts } from "../../config/types.js";
 import { useAlchemyAccountContext } from "../context.js";
+import { ClientUndefinedError } from "../errors.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import type { UseSmartAccountClientResult } from "./useSmartAccountClient.js";
-import { ClientUndefinedError } from "../errors.js";
 
 export type UseDropAndReplaceUserOperationMutationArgs<
-  TAccount extends SupportedAccounts = SupportedAccounts,
-  TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount>,
+  TAccount extends SupportedAccounts = SupportedAccounts
 > = BaseHookMutationArgs<
   SendUserOperationResult<TEntryPointVersion>,
   DropAndReplaceUserOperationParameters<TAccount>
 >;
 
 export type UseDropAndReplaceUserOperationArgs<
-  TAccount extends SupportedAccounts = SupportedAccounts,
-  TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount>,
+  TAccount extends SupportedAccounts = SupportedAccounts
 > = {
   client: UseSmartAccountClientResult["client"] | undefined;
-} & UseDropAndReplaceUserOperationMutationArgs<TAccount, TEntryPointVersion>;
+} & UseDropAndReplaceUserOperationMutationArgs<TEntryPointVersion, TAccount>;
 
 export type UseDropAndReplaceUserOperationResult<
-  TAccount extends SupportedAccounts = SupportedAccounts,
-  TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount>,
+  TAccount extends SupportedAccounts = SupportedAccounts
 > = {
   dropAndReplaceUserOperation: UseMutateFunction<
     SendUserOperationResult<TEntryPointVersion>,
@@ -46,15 +45,15 @@ export type UseDropAndReplaceUserOperationResult<
 };
 
 export function useDropAndReplaceUserOperation<
-  TAccount extends SupportedAccounts = SupportedAccounts,
-  TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount>,
+  TAccount extends SupportedAccounts = SupportedAccounts
 >({
   client,
   ...mutationArgs
 }: UseDropAndReplaceUserOperationArgs<
-  TAccount,
-  TEntryPointVersion
->): UseDropAndReplaceUserOperationResult<TAccount, TEntryPointVersion> {
+  TEntryPointVersion,
+  TAccount
+>): UseDropAndReplaceUserOperationResult<TEntryPointVersion, TAccount> {
   const { queryClient } = useAlchemyAccountContext();
 
   const {

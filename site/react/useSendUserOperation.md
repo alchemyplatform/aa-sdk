@@ -43,6 +43,11 @@ import { useSendUserOperation } from "@alchemy/aa-alchemy/react";
 `AlchemySmartAccountClient | undefined`
 A `AlchemySmartAccountClient` with methods to interact with an Alchemy smart account.
 
+### waitForTxn
+
+`boolean | undefined`
+An optional flag to additionally wait for the transaction hash in which the send UserOperation lands. Defaults to false.
+
 ### ...mutationArgs
 
 <!--@include: ./BaseHookMutationArgs.md-->
@@ -77,7 +82,7 @@ A React query async mutation function to send a UserOperation. Via an awaitable 
 
 ### sendUserOperationResult
 
-An object of the shown above `SendUserOperationResult` type if the mutation has run successfully, `undefined` otherwise:
+An object of the shown above `SendUserOperationResult` type if the mutation has run successfully, `undefined` otherwise. The `hash` field is the UserOperation hash if `waitForTxn` is false, otherwise it is the hash of the transaction in which the UserOperation lands.
 
 ### isSendingUserOperation
 
