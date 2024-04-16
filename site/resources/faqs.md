@@ -179,3 +179,15 @@ You can mitigate this by defining a more flexible retry period when constructing
 
 If your `UserOperation` continues to be delayed beyond a limit you are willing to wait, you can resubmit the user operation using [`dropAndReplaceUserOperation`](/packages/aa-core/smart-account-client/actions/dropAndReplaceUserOperation.html#usage).
 :::
+
+## Other Support
+
+### Does the aa-sdk repo support React Native?
+
+No, the `aa-sdk` repo does not offically support React Native. **It is on our radar!**
+
+Currently we have a strong dependency on [viem's capability see here.](https://viem.sh/docs/compatibility.html).
+
+However, you can checkout an old [sample project here](https://github.com/alchemyplatform/aa-rn-demo), where we supported React Native. We backported using the [`shim.js`](https://github.com/alchemyplatform/aa-rn-demo/blob/main/shim.js) file. This is how imported it into the React Native app (https://github.com/alchemyplatform/aa-rn-demo/blob/main/index.js).
+
+_Note: This uses an old version of aa-sdk and may not be up to date with the latest features._
