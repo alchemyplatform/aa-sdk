@@ -9,9 +9,23 @@ import type {
 import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
 import type { SupportedAccounts } from "../../config/types.js";
 import { useAlchemyAccountContext } from "../context.js";
-import type { UseSendUserOperationArgs } from "./useSendUserOperation.js";
+import type { BaseHookMutationArgs } from "../types.js";
+import type { UseSmartAccountClientResult } from "./useSmartAccountClient.js";
 
-export type UseDropAndReplaceUserOperationArgs = UseSendUserOperationArgs;
+export type UseDropAndReplaceUserOperationMutationArgs<
+  TAccount extends SupportedAccounts = SupportedAccounts,
+  TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
+> = BaseHookMutationArgs<
+  SendUserOperationResult<TEntryPointVersion>,
+  DropAndReplaceUserOperationParameters<TAccount>
+>;
+
+export type UseDropAndReplaceUserOperationArgs<
+  TAccount extends SupportedAccounts = SupportedAccounts,
+  TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
+> = {
+  client: UseSmartAccountClientResult["client"] | undefined;
+} & UseDropAndReplaceUserOperationMutationArgs<TAccount, TEntryPointVersion>;
 
 export type UseDropAndReplaceUserOperationResult<
   TAccount extends SupportedAccounts = SupportedAccounts,
@@ -35,10 +49,11 @@ export function useDropAndReplaceUserOperation<
   TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
 >({
   client,
-}: UseDropAndReplaceUserOperationArgs): UseDropAndReplaceUserOperationResult<
+  ...mutationArgs
+}: UseDropAndReplaceUserOperationArgs<
   TAccount,
   TEntryPointVersion
-> {
+>): UseDropAndReplaceUserOperationResult<TAccount, TEntryPointVersion> {
   const { queryClient } = useAlchemyAccountContext();
 
   const {
@@ -57,6 +72,7 @@ export function useDropAndReplaceUserOperation<
 
         return client.dropAndReplaceUserOperation(params);
       },
+      ...mutationArgs,
     },
     queryClient
   );

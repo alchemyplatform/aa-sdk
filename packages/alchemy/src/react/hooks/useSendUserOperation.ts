@@ -11,7 +11,6 @@ import {
   type UseMutateAsyncFunction,
   type UseMutateFunction,
 } from "@tanstack/react-query";
-import type { Hash } from "viem";
 import type { SupportedAccounts } from "../../config/types.js";
 import { useAlchemyAccountContext } from "../context.js";
 import { ClientUndefinedError } from "../errors.js";
@@ -19,12 +18,19 @@ import type { BaseHookMutationArgs } from "../types.js";
 import { type UseSmartAccountClientResult } from "./useSmartAccountClient.js";
 
 export type UseSendUserOperationMutationArgs<
-  TAccount extends SupportedAccounts = SupportedAccounts
-> = BaseHookMutationArgs<Hash, SendUserOperationParameters<TAccount>>;
+  TAccount extends SupportedAccounts = SupportedAccounts,
+  TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
+> = BaseHookMutationArgs<
+  SendUserOperationResult<TEntryPointVersion>,
+  SendUserOperationParameters<TAccount>
+>;
 
-export type UseSendUserOperationArgs = {
-  client?: UseSmartAccountClientResult["client"];
-} & UseSendUserOperationMutationArgs;
+export type UseSendUserOperationArgs<
+  TAccount extends SupportedAccounts = SupportedAccounts,
+  TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
+> = {
+  client: UseSmartAccountClientResult["client"] | undefined;
+} & UseSendUserOperationMutationArgs<TAccount, TEntryPointVersion>;
 
 export type UseSendUserOperationResult<
   TAccount extends SupportedAccounts = SupportedAccounts,
@@ -50,8 +56,15 @@ export type UseSendUserOperationResult<
 };
 
 export function useSendUserOperation<
-  TAccount extends SupportedAccounts = SupportedAccounts
->({ client }: UseSendUserOperationArgs): UseSendUserOperationResult<TAccount> {
+  TAccount extends SupportedAccounts = SupportedAccounts,
+  TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
+>({
+  client,
+  ...mutationArgs
+}: UseSendUserOperationArgs<
+  TAccount,
+  TEntryPointVersion
+>): UseSendUserOperationResult<TAccount, TEntryPointVersion> {
   const { queryClient } = useAlchemyAccountContext();
 
   const {
@@ -69,6 +82,7 @@ export function useSendUserOperation<
 
         return client.sendUserOperation(params);
       },
+      ...mutationArgs,
     },
     queryClient
   );

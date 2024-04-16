@@ -141,6 +141,11 @@ export const sidebar: DefaultTheme.Sidebar = [
       { text: "useExportAccount", link: "/useExportAccount" },
       { text: "useSignMessage", link: "/useSignMessage" },
       { text: "useSignTypedData", link: "/useSignTypedData" },
+      { text: "useSendUserOperation", link: "/useSendUserOperation" },
+      {
+        text: "useDropAndReplaceUserOperation",
+        link: "/useDropAndReplaceUserOperation",
+      },
     ],
   },
   {
