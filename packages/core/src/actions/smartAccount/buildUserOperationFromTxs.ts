@@ -8,7 +8,7 @@ import { AccountNotFoundError } from "../../errors/account.js";
 import { IncompatibleClientError } from "../../errors/client.js";
 import { TransactionMissingToParamError } from "../../errors/transaction.js";
 import type { UserOperationOverrides } from "../../types";
-import { bigIntMax, filterUndefined } from "../../utils/index.js";
+import { bigIntMax } from "../../utils/index.js";
 import { buildUserOperation } from "./buildUserOperation.js";
 import type {
   BuildUserOperationFromTransactionsResult,
@@ -77,7 +77,6 @@ export async function buildUserOperationFromTxs<
     maxFeePerGas,
     maxPriorityFeePerGas,
   } as UserOperationOverrides<TEntryPointVersion>;
-  filterUndefined(_overrides);
 
   const uoStruct = await buildUserOperation(client, {
     uo: batch,

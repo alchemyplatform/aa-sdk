@@ -133,7 +133,12 @@ export type * from "./types.js";
 export type * from "./utils/index.js";
 export {
   AlchemyChainMap,
+  BigNumberishRangeSchema,
+  BigNumberishSchema,
   ChainSchema,
+  HexSchema,
+  MultiplierSchema,
+  allEqual,
   applyUserOpFeeOption,
   applyUserOpOverride,
   applyUserOpOverrideOrFeeOption,
@@ -149,6 +154,7 @@ export {
   isBigNumberish,
   isMultiplier,
   isValidRequest,
+  pick,
   resolveProperties,
   takeBytes,
 } from "./utils/index.js";

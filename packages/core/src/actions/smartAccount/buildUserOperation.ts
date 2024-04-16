@@ -63,12 +63,12 @@ export async function buildUserOperation<
           factory: account
             .isAccountDeployed()
             .then((deployed) =>
-              deployed ? account.getFactoryAddress() : undefined
+              !deployed ? account.getFactoryAddress() : undefined
             ),
           factoryData: account
             .isAccountDeployed()
             .then((deployed) =>
-              deployed ? account.getFactoryData() : undefined
+              !deployed ? account.getFactoryData() : undefined
             ),
           sender: account.address,
           nonce,

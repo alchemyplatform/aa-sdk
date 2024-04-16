@@ -29,3 +29,5 @@ examples/contracts/**/out
 site/.vitepress/dist
 site/.vitepress/cache
 site/**/*.js
+
+**/userop.json
