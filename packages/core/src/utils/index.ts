@@ -109,12 +109,12 @@ export function defineReadOnly<T, K extends keyof T>(
   });
 }
 
-export function filterUndefined<T>(obj: Deferrable<T>): T {
-  Object.keys(obj).forEach((key) => {
-    if (obj[key as keyof T] == null) {
-      delete obj[key as keyof T];
+export function filterUndefined<T>(obj: T): T {
+  for (const key in obj) {
+    if (obj[key] == null) {
+      delete obj[key];
     }
-  });
+  }
   return obj as T;
 }
 
