@@ -21,7 +21,7 @@ export type UseSignMessagedMutationArgs = BaseHookMutationArgs<
 >;
 
 export type UseSignMessageArgs = {
-  client?: UseSmartAccountClientResult["client"];
+  client: UseSmartAccountClientResult["client"] | undefined;
 } & UseSignMessagedMutationArgs;
 
 export type UseSignMessageResult = {

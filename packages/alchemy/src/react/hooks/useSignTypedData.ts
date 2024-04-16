@@ -22,7 +22,7 @@ export type UseSignTypedDataMutationArgs = BaseHookMutationArgs<
 >;
 
 export type UseSignTypedDataArgs = {
-  client?: UseSmartAccountClientResult["client"];
+  client: UseSmartAccountClientResult["client"] | undefined;
 } & UseSignTypedDataMutationArgs;
 
 export type UseSignTypedDataResult = {
@@ -45,6 +45,7 @@ export type UseSignTypedDataResult = {
 
 export function useSignTypedData({
   client,
+  ...mutationArgs
 }: UseSignTypedDataArgs): UseSignTypedDataResult {
   const { queryClient } = useAlchemyAccountContext();
 
@@ -62,6 +63,7 @@ export function useSignTypedData({
         }
         return client.signTypedDataWith6492({ ...params });
       },
+      ...mutationArgs,
     },
     queryClient
   );

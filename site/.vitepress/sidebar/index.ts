@@ -139,6 +139,8 @@ export const sidebar: DefaultTheme.Sidebar = [
       { text: "useAddPasskey", link: "/useAddPasskey" },
       { text: "useLogout", link: "/useLogout" },
       { text: "useExportAccount", link: "/useExportAccount" },
+      { text: "useSignMessage", link: "/useSignMessage" },
+      { text: "useSignTypedData", link: "/useSignTypedData" },
     ],
   },
   {

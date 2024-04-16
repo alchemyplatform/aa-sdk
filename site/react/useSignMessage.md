@@ -20,7 +20,7 @@ head:
 
 # useSignMessage
 
-The `useSignMessage` hook enables signing a message on behalf of the user's Embedded Account.
+The `useSignMessage` hook enables signing a message on behalf of the user's Embedded Account. If the account is not yet deployed onchain, this will use [ERC-6492](/resources/terms.html#erc-6492) to sign the message.
 
 ## Import
 
@@ -32,10 +32,44 @@ import { useSignMessage } from "@alchemy/aa-alchemy/react";
 
 <<< @/snippets/react/useSignMessage.tsx
 
+## Params
+
+### client
+
+`AlchemySmartAccountClient | undefined`
+A `AlchemySmartAccountClient` with methods to interact with an Alchemy smart account.
+
+<!--@include: ./BaseHookMutationArgs.md-->
+
 ## Return Type
 
 ```ts
-import { type useSignMessageResult } from "@alchemy/aa-alchemy/react";
+import { type UseSignMessageResult } from "@alchemy/aa-alchemy/react";
 ```
 
-Returns a `Hex` representation of the signed message.
+Returns an object containing the following state.
+
+### signMessage
+
+`UseMutateFunction`
+A React query mutation function to sign a message. It returns a `Hex` representation of the signed message.
+
+### signMessageAsync
+
+`UseMutateAsyncFunction`
+A React query async mutation function to sign a message. Via an awaitable promise, it returns a `Hex` representation of the signed message.
+
+### signedMessage
+
+`Hex | undefined`
+A flag that determines whether the account recovery details were successfully exported and now viewable in the application.
+
+### isSigningMessage
+
+`boolean`
+A flag that determines whether the mutation is still running or not.
+
+### error
+
+`Error | null`
+A field that relays any errors from the mutation. It is null if there is no error.

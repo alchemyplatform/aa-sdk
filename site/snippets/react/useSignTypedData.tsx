@@ -8,10 +8,9 @@ export function ComponentWithAddPasskey() {
   // Assumes the app has context of a signer with an authenticated user
   const [typedDataMessage, setTypedDataMessage] = useState("");
   const client = useSmartAccountClient({
-    type: "MultiOwnerModularAccount", // alternatively pass in "LightAccount",
-    accountParams: {}, // optional param for overriding any account specific properties
+    type: "MultiOwnerModularAccount",
   });
-  const { signTypedData, isSigningTypedData } = useSignTypedData(client);
+  const { signTypedData, isSigningTypedData } = useSignTypedData({ client });
 
   return (
     <div>
