@@ -11,6 +11,7 @@ import type { SupportedAccounts } from "../../config/types.js";
 import { useAlchemyAccountContext } from "../context.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import type { UseSmartAccountClientResult } from "./useSmartAccountClient.js";
+import { ClientUndefinedError } from "../errors.js";
 
 export type UseDropAndReplaceUserOperationMutationArgs<
   TAccount extends SupportedAccounts = SupportedAccounts,
@@ -67,7 +68,7 @@ export function useDropAndReplaceUserOperation<
         params: DropAndReplaceUserOperationParameters<TAccount>
       ) => {
         if (!client) {
-          throw new Error("client must be defined");
+          throw new ClientUndefinedError("useDropAndReplaceUserOperation");
         }
 
         return client.dropAndReplaceUserOperation(params);
