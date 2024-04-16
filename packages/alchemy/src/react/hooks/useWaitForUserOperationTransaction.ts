@@ -1,14 +1,15 @@
 "use client";
 
+import type { WaitForUserOperationTxParameters } from "@alchemy/aa-core";
 import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
-import type { Hash, WaitForTransactionReceiptParameters } from "viem";
+import type { Hash } from "viem";
 import { useAlchemyAccountContext } from "../context.js";
 import { ClientUndefinedError } from "../errors.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import { type UseSmartAccountClientResult } from "./useSmartAccountClient.js";
 
 export type UseWaitForUserOperationTransactionMutationArgs =
-  BaseHookMutationArgs<Hash, WaitForTransactionReceiptParameters>;
+  BaseHookMutationArgs<Hash, WaitForUserOperationTxParameters>;
 
 export type UseWaitForUserOperationTransactionArgs = {
   client?: UseSmartAccountClientResult["client"];
@@ -18,7 +19,7 @@ export type UseWaitForUserOperationTransactionResult = {
   waitForUserOperationTransaction: UseMutateFunction<
     Hash,
     Error,
-    WaitForTransactionReceiptParameters,
+    WaitForUserOperationTxParameters,
     unknown
   >;
   waitForUserOperationTransactionResult: Hash | undefined;
@@ -38,7 +39,7 @@ export function useWaitForUserOperationTransaction({
     error,
   } = useMutation(
     {
-      mutationFn: async (params: WaitForTransactionReceiptParameters) => {
+      mutationFn: async (params: WaitForUserOperationTxParameters) => {
         if (!client) {
           throw new ClientUndefinedError("useWaitForUserOperationTransaction");
         }
