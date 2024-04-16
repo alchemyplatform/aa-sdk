@@ -43,6 +43,8 @@ import { useSignMessage } from "@alchemy/aa-alchemy/react";
 `AlchemySmartAccountClient | undefined`
 A `AlchemySmartAccountClient` with methods to interact with an Alchemy smart account.
 
+### ...mutationArgs
+
 <!--@include: ./BaseHookMutationArgs.md-->
 
 ## Return Type
