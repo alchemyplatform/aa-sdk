@@ -1,4 +1,15 @@
-import { baseSepolia, sepolia, polygon, mainnet, polygonAmoy, optimism, optimismSepolia, arbitrum, arbitrumSepolia, base } from "@alchemy/aa-core";
+import {
+  baseSepolia,
+  sepolia,
+  polygon,
+  mainnet,
+  polygonAmoy,
+  optimism,
+  optimismSepolia,
+  arbitrum,
+  arbitrumSepolia,
+  base,
+} from "@alchemy/aa-core";
 import { parseAbiParameters } from "viem";
 import type { PluginGenConfig } from "../types";
 import { MultisigPluginAbi } from "./abi.js";
