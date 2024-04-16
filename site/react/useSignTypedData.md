@@ -22,6 +22,10 @@ head:
 
 The `useSignTypedData` hook enables signing typed data on behalf of the user's Embedded Account. If the account is not yet deployed onchain, this will use [ERC-6492](/resources/terms.html#erc-6492) to sign the typed data.
 
+::: warning
+This requires your user to be logged in. See [`useAuthenticate`](/react/useAuthenticate) for more details.
+:::
+
 ## Import
 
 ```ts
