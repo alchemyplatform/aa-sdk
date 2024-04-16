@@ -9,6 +9,8 @@ import {
 } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import {
+  LogLevel,
+  Logger,
   arbitrumSepolia,
   createBundlerClient,
   createSimpleSmartAccount,
@@ -17,34 +19,56 @@ import {
   type SmartAccountSigner,
   type UserOperationFeeOptions,
   type UserOperationOverrides,
+  type UserOperationRequest,
 } from "../src/index.js";
 import { LocalAccountSigner } from "../src/signer/local-account.js";
 import { API_KEY, API_KEY_STAGING, OWNER_MNEMONIC } from "./constants.js";
 
+Logger.setLogLevel(LogLevel.DEBUG);
+
 const rpcUrl = "https://arb-sepolia.g.alchemypreview.com/v2";
 const chain = arbitrumSepolia;
 
-describe("Simple Account Tests on Split RPC", () => {
+describe("Simple Account Entrypoint v7 Tests with Split RPC between Bundler and Public RPC", () => {
   const signer: SmartAccountSigner =
     LocalAccountSigner.mnemonicToAccountSigner(OWNER_MNEMONIC);
 
   it("should successfully get counterfactual address", async () => {
     const client = await givenConnectedClient({ signer, chain });
     expect(client.getAddress()).toMatchInlineSnapshot(
-      `"0x439663CEb3861f1bCf7F45F1792668fC74fc4b97"`
+      `"0xf497A8026717FbbA3944c3dd2533c0716b7685e2"`
     );
   });
 
   it("should execute successfully", async () => {
-    const client = await givenConnectedClient({ signer, chain });
-    const result = await client.sendUserOperation({
+    const client = await givenConnectedClient({
+      signer,
+      chain,
+      feeOptions: {
+        preVerificationGas: { multiplier: 2 },
+      },
+    });
+
+    const uoStruct = await client.buildUserOperation({
       uo: {
         target: client.getAddress(),
         data: "0x",
       },
+      overrides: {
+        preVerificationGas: 10_000_000n,
+      },
     });
 
-    const txnHash = client.waitForUserOperationTransaction(result);
+    const request = (await client.signUserOperation({
+      uoStruct,
+    })) as UserOperationRequest<"0.7.0">;
+
+    const entryPointAddress = client.account.getEntryPoint().address;
+    const uoHash = await client.sendRawUserOperation<"0.7.0">(
+      request,
+      entryPointAddress
+    );
+    const txnHash = client.waitForUserOperationTransaction({ hash: uoHash });
 
     await expect(txnHash).resolves.not.toThrowError();
   }, 60000);
@@ -132,8 +156,8 @@ describe("Simple Account Tests on Split RPC", () => {
   it("should correctly handle absolute overrides for sendUserOperation", async () => {
     const client = await givenConnectedClient({ signer, chain });
 
-    const overrides: UserOperationOverrides<"0.6.0"> = {
-      preVerificationGas: 100_000_000n,
+    const overrides: UserOperationOverrides<"0.7.0"> = {
+      preVerificationGas: 10_000_000n,
     };
     const promise = client.buildUserOperation({
       uo: {
@@ -145,7 +169,7 @@ describe("Simple Account Tests on Split RPC", () => {
     await expect(promise).resolves.not.toThrowError();
 
     const struct = await promise;
-    expect(struct.preVerificationGas).toBe(100_000_000n);
+    expect(struct.preVerificationGas).toBe(10_000_000n);
   }, 60000);
 
   it("should correctly handle multiplier overrides for sendUserOperation", async () => {
@@ -210,14 +234,14 @@ const givenConnectedClient = async ({
     account: await createSimpleSmartAccount({
       chain,
       signer,
-      entryPoint: getEntryPoint(chain),
+      entryPoint: getEntryPoint(chain, { version: "0.7.0" }),
       transport: custom(client),
       accountAddress,
     }),
     feeEstimator: async (struct) => ({
       ...struct,
-      maxFeePerGas: 100_000_000_000n,
-      maxPriorityFeePerGas: 100_000_000_000n,
+      maxFeePerGas: 1_000_000_000n,
+      maxPriorityFeePerGas: 500_000_000n,
     }),
     opts: { feeOptions },
   });

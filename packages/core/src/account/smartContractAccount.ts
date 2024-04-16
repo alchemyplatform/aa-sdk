@@ -16,7 +16,6 @@ import {
 import { toAccount } from "viem/accounts";
 import { createBundlerClient } from "../client/bundlerClient.js";
 import type {
-  DefaultEntryPointVersion,
   EntryPointDef,
   EntryPointRegistryBase,
   EntryPointVersion,
@@ -102,8 +101,8 @@ export type SmartContractAccount<
   getNonce(nonceKey?: bigint): Promise<bigint>;
   getInitCode: () => Promise<Hex>;
   isAccountDeployed: () => Promise<boolean>;
-  getFactoryAddress: () => Address;
-  getFactoryData: () => Hex;
+  getFactoryAddress: () => Promise<Address>;
+  getFactoryData: () => Promise<Hex>;
   getEntryPoint: () => EntryPointDef<TEntryPointVersion>;
   getImplementationAddress: () => Promise<NullAddress | Address>;
 };
@@ -121,7 +120,7 @@ export type ToSmartContractAccountParams<
   Name extends string = string,
   TTransport extends Transport = Transport,
   TChain extends Chain = Chain,
-  TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = {
   source: Name;
   transport: TTransport;
@@ -137,7 +136,9 @@ export type ToSmartContractAccountParams<
   encodeUpgradeToAndCall?: (params: UpgradeToAndCallParams) => Promise<Hex>;
 } & Omit<CustomSource, "signTransaction" | "address">;
 
-export const parseFactoryAddressFromAccountInitCode = (initCode: Hex) => {
+export const parseFactoryAddressFromAccountInitCode = (
+  initCode: Hex
+): [Address, Hex] => {
   const factoryAddress: Address = `0x${initCode.substring(2, 42)}`;
   const factoryCalldata: Hex = `0x${initCode.substring(42)}`;
   return [factoryAddress, factoryCalldata];
@@ -159,9 +160,7 @@ export const getAccountAddress = async ({
   const entryPointContract = getContract({
     address: entryPoint.address,
     abi: entryPoint.abi,
-    // Need to cast this as PublicClient or else it breaks ABI typing.
-    // This is valid because our PublicClient is a subclass of PublicClient
-    client: client as PublicClient,
+    client,
   });
 
   const initCode = await getAccountInitCode();
@@ -195,7 +194,7 @@ export async function toSmartContractAccount<
   Name extends string = string,
   TTransport extends Transport = Transport,
   TChain extends Chain = Chain,
-  TEntryPointVersion extends EntryPointVersion = DefaultEntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 >({
   transport,
   chain,
@@ -280,13 +279,11 @@ export async function toSmartContractAccount({
       return signMessage({ message: { raw: hexToBytes(uoHash) } });
     });
 
-  const [factoryAddress, factoryData] = parseFactoryAddressFromAccountInitCode(
-    await getAccountInitCode()
-  );
+  const getFactoryAddress = async (): Promise<Address> =>
+    parseFactoryAddressFromAccountInitCode(await getAccountInitCode())[0];
 
-  const getFactoryAddress = () => factoryAddress;
-
-  const getFactoryData = () => factoryData;
+  const getFactoryData = async (): Promise<Hex> =>
+    parseFactoryAddressFromAccountInitCode(await getAccountInitCode())[1];
 
   const encodeUpgradeToAndCall_ =
     encodeUpgradeToAndCall ??

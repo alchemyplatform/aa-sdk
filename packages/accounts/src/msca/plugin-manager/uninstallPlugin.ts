@@ -49,6 +49,7 @@ export async function uninstallPlugin<
   {
     overrides,
     account = client.account,
+    context,
     ...params
   }: UninstallPluginParams<TAccount, TContext>
 ) {
@@ -68,8 +69,9 @@ export async function uninstallPlugin<
 
   return client.sendUserOperation({
     uo: callData,
-    overrides: overrides,
+    overrides,
     account,
+    context,
   });
 }
 

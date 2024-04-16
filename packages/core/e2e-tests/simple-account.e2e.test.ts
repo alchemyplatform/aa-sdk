@@ -10,6 +10,8 @@ import {
 } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import {
+  LogLevel,
+  Logger,
   createBundlerClient,
   createSimpleSmartAccount,
   createSmartAccountClientFromExisting,
@@ -21,9 +23,11 @@ import {
 import { LocalAccountSigner } from "../src/signer/local-account.js";
 import { API_KEY, OWNER_MNEMONIC } from "./constants.js";
 
+Logger.setLogLevel(LogLevel.DEBUG);
+
 const chain = polygonMumbai;
 
-describe("Simple Account Tests", () => {
+describe("Simple Account Entrypoint v6 Tests", () => {
   const signer: SmartAccountSigner =
     LocalAccountSigner.mnemonicToAccountSigner(OWNER_MNEMONIC);
 

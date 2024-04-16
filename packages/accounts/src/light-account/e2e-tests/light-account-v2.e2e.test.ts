@@ -2,50 +2,60 @@ import {
   LocalAccountSigner,
   LogLevel,
   Logger,
+  arbitrumSepolia,
   createBundlerClient,
   createSmartAccountClientFromExisting,
-  sepolia,
+  getEntryPoint,
   type SmartAccountSigner,
   type UserOperationFeeOptions,
 } from "@alchemy/aa-core";
 import {
+  custom,
   http,
   isAddress,
   type Address,
   type Chain,
   type HDAccount,
+  type Hex,
 } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import {
+  createLightAccount,
+  lightAccountClientActions,
   multiOwnerPluginActions,
   type LightAccountVersion,
 } from "../../index.js";
 import { getMSCAUpgradeToData } from "../../msca/utils.js";
-import { createLightAccountClient } from "../clients/lightAccount.js";
 import {
   API_KEY,
+  API_KEY_STAGING,
   LIGHT_ACCOUNT_OWNER_MNEMONIC,
   UNDEPLOYED_OWNER_MNEMONIC,
 } from "./constants.js";
 
-const chain = sepolia;
+Logger.setLogLevel(LogLevel.VERBOSE);
 
-Logger.setLogLevel(LogLevel.DEBUG);
+const rpcUrl = "https://arb-sepolia.g.alchemypreview.com/v2";
+const chain = arbitrumSepolia;
 
-describe("Light Account v1 Tests", () => {
+describe("Light Account v2 Tests", () => {
   const signer: SmartAccountSigner<HDAccount> =
     LocalAccountSigner.mnemonicToAccountSigner(LIGHT_ACCOUNT_OWNER_MNEMONIC);
   const undeployedAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
     UNDEPLOYED_OWNER_MNEMONIC
   );
 
-  it.each([
-    { version: "v1.0.1" as const, expected: true },
-    { version: "v1.0.2" as const, throws: true },
-    { version: "v1.1.0" as const, expected: true },
-  ])(
+  it.each([{ version: "v2.0.0" as const, expected: true }])(
     "LA version $version 1271 signing support",
-    async ({ version, expected, throws }) => {
+    async ({
+      version,
+      expected,
+      throws,
+    }: {
+      version: LightAccountVersion;
+      expected?: boolean;
+      throws?: boolean;
+    }) => {
       const client = await givenConnectedClient({ signer, chain, version });
       const message = "test";
 
@@ -75,7 +85,7 @@ describe("Light Account v1 Tests", () => {
     );
   });
 
-  it("should sign typed data with 6492 successfully for undeployed account of LA v1", async () => {
+  it("should sign typed data with 6492 successfully for undeployed account", async () => {
     const { account } = await givenConnectedClient({
       signer: undeployedAccountSigner,
       chain,
@@ -185,9 +195,12 @@ describe("Light Account v1 Tests", () => {
 
     // fund the throwaway address
     await client.sendTransaction({
+      chain: client.chain,
       to: throwawayClient.getAddress(),
       data: "0x",
       value: 200000000000000000n,
+      maxFeePerBlobGas: 1000000000n,
+      blobs: [] as Hex[],
     });
 
     // create new signer and transfer ownership
@@ -232,9 +245,12 @@ describe("Light Account v1 Tests", () => {
 
     // fund + deploy the throwaway address
     await client.sendTransaction({
-      to: accountAddress,
+      chain: client.chain,
+      to: throwawayClient.getAddress(),
       data: "0x",
       value: 200000000000000000n,
+      maxFeePerBlobGas: 1000000000n,
+      blobs: [] as Hex[],
     });
 
     const { createMAAccount, ...upgradeToData } = await getMSCAUpgradeToData(
@@ -271,7 +287,7 @@ const givenConnectedClient = async ({
   chain,
   accountAddress,
   feeOptions,
-  version = "v1.1.0",
+  version = "v2.0.0",
 }: {
   signer: SmartAccountSigner;
   chain: Chain;
@@ -279,14 +295,43 @@ const givenConnectedClient = async ({
   feeOptions?: UserOperationFeeOptions;
   version?: LightAccountVersion<"LightAccount">;
 }) => {
-  return createLightAccountClient({
-    transport: http(`${chain.rpcUrls.alchemy.http[0]}/${API_KEY!}`),
+  const client = createBundlerClient({
     chain,
-    account: {
+    transport: (opts) => {
+      const bundlerRpc = http(`${rpcUrl}/${API_KEY_STAGING}`)(opts);
+      const publicRpc = http(`${chain.rpcUrls.alchemy.http[0]}/${API_KEY}`)(
+        opts
+      );
+
+      return custom({
+        request: async (args) => {
+          const bundlerMethods = new Set([
+            "eth_sendUserOperation",
+            "eth_estimateUserOperationGas",
+            "eth_getUserOperationReceipt",
+            "eth_getUserOperationByHash",
+            "eth_supportedEntryPoints",
+          ]);
+
+          if (bundlerMethods.has(args.method)) {
+            return bundlerRpc.request(args);
+          } else {
+            return publicRpc.request(args);
+          }
+        },
+      })(opts);
+    },
+  });
+  return createSmartAccountClientFromExisting({
+    client,
+    account: await createLightAccount({
+      chain,
       signer,
+      entryPoint: getEntryPoint(chain, { version: "0.7.0" }),
+      transport: custom(client),
       accountAddress,
       version,
-    },
+    }),
     opts: {
       feeOptions: {
         ...feeOptions,
@@ -295,5 +340,5 @@ const givenConnectedClient = async ({
       },
       txMaxRetries: 100,
     },
-  });
+  }).extend(lightAccountClientActions);
 };

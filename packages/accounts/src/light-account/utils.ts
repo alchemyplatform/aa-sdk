@@ -1,5 +1,4 @@
 import {
-  DefaultFactoryNotDefinedError,
   arbitrum,
   arbitrumGoerli,
   arbitrumSepolia,
@@ -15,114 +14,187 @@ import {
   polygonAmoy,
   polygonMumbai,
   sepolia,
+  toRecord,
   type SmartContractAccount,
 } from "@alchemy/aa-core";
 import { fromHex, type Address, type Chain } from "viem";
-
-export type LightAccountVersion =
-  /** @deprecated This version does not support 1271 signature validation */
-  | "v1.0.1"
-  /** @deprecated This version has a known issue with 1271 validation, it is recommended to use v1.1.0 */
-  | "v1.0.2"
-  | "v1.1.0";
-
-export const LightAccountVersions: Record<
+import type { LightAccountBase } from "./accounts/base";
+import type {
+  GetLightAccountType,
+  IAccountVersionRegistry,
+  LightAccountType,
   LightAccountVersion,
-  {
-    factoryAddress: Address;
-    implAddress: Address;
-  }
-> = {
-  "v1.0.1": {
-    factoryAddress:
-      "0x000000893A26168158fbeaDD9335Be5bC96592E2".toLowerCase() as Address,
-    implAddress:
-      "0xc1b2fc4197c9187853243e6e4eb5a4af8879a1c0".toLowerCase() as Address,
+  LightAccountVersionDef,
+} from "./types";
+
+export const supportedChains: Chain[] = [
+  mainnet,
+  sepolia,
+  goerli,
+  polygon,
+  polygonAmoy,
+  polygonMumbai,
+  optimism,
+  optimismGoerli,
+  optimismSepolia,
+  arbitrum,
+  arbitrumGoerli,
+  arbitrumSepolia,
+  base,
+  baseGoerli,
+  baseSepolia,
+];
+
+export const AccountVersionRegistry: IAccountVersionRegistry = {
+  LightAccount: {
+    "v1.0.1": {
+      type: "LightAccount",
+      version: "v1.0.1",
+      address: toRecord<Chain, "id", { factory: Address; impl: Address }>(
+        supportedChains,
+        "id",
+        () => ({
+          factory:
+            "0x000000893A26168158fbeaDD9335Be5bC96592E2".toLowerCase() as Address,
+          impl: "0xc1b2fc4197c9187853243e6e4eb5a4af8879a1c0".toLowerCase() as Address,
+        })
+      ),
+      entryPointVersion: "0.6.0",
+    },
+    "v1.0.2": {
+      type: "LightAccount",
+      version: "v1.0.2",
+      address: toRecord<Chain, "id", { factory: Address; impl: Address }>(
+        supportedChains,
+        "id",
+        () => ({
+          factory:
+            "0x00000055C0b4fA41dde26A74435ff03692292FBD".toLowerCase() as Address,
+          impl: "0x5467b1947F47d0646704EB801E075e72aeAe8113".toLowerCase() as Address,
+        })
+      ),
+      entryPointVersion: "0.6.0",
+    },
+    "v1.1.0": {
+      type: "LightAccount",
+      version: "v1.1.0",
+      address: toRecord<Chain, "id", { factory: Address; impl: Address }>(
+        supportedChains,
+        "id",
+        () => ({
+          factory:
+            "0x00004EC70002a32400f8ae005A26081065620D20".toLowerCase() as Address,
+          impl: "0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba".toLowerCase() as Address,
+        })
+      ),
+      entryPointVersion: "0.6.0",
+    },
+    "v2.0.0": {
+      type: "LightAccount",
+      version: "v2.0.0",
+      address: toRecord<Chain, "id", { factory: Address; impl: Address }>(
+        [arbitrumSepolia],
+        "id",
+        () => ({
+          factory:
+            "0x19B486A57C790b47Ee2E967c2aB1b8BbAeAeE7bB".toLowerCase() as Address,
+          impl: "0x118c4EA651e2fE5F5637f5D8A473CB8329251f89".toLowerCase() as Address,
+        })
+      ),
+      entryPointVersion: "0.7.0",
+    },
   },
-  "v1.0.2": {
-    factoryAddress:
-      "0x00000055C0b4fA41dde26A74435ff03692292FBD".toLowerCase() as Address,
-    implAddress:
-      "0x5467b1947F47d0646704EB801E075e72aeAe8113".toLowerCase() as Address,
-  },
-  "v1.1.0": {
-    factoryAddress:
-      "0x00004EC70002a32400f8ae005A26081065620D20".toLowerCase() as Address,
-    implAddress:
-      "0xae8c656ad28F2B59a196AB61815C16A0AE1c3cba".toLowerCase() as Address,
+  MultiOwnerLightAccount: {
+    "v2.0.0": {
+      type: "MultiOwnerLightAccount",
+      version: "v2.0.0",
+      address: toRecord<Chain, "id", { factory: Address; impl: Address }>(
+        [arbitrumSepolia],
+        "id",
+        () => ({
+          factory:
+            "0xEEeB9dD9DA59bD3020C548D3543485E37ee8A50e".toLowerCase() as Address,
+          impl: "0x0C93750D969bdeb51547766680E5CA14A508758e".toLowerCase() as Address,
+        })
+      ),
+      entryPointVersion: "0.7.0",
+    },
   },
 };
 
-/**
- * Utility method returning the default light account factory address given a {@link Chain} object
- *
- * @param chain - a {@link Chain} object
- * @returns a {@link Address} for the given chain
- * @throws if the chain doesn't have an address currently deployed
- */
-export const getDefaultLightAccountFactoryAddress = (
-  chain: Chain,
-  version: LightAccountVersion = "v1.1.0"
-): Address => {
-  switch (chain.id) {
-    case mainnet.id:
-    case sepolia.id:
-    case goerli.id:
-    case polygon.id:
-    case polygonAmoy.id:
-    case polygonMumbai.id:
-    case optimism.id:
-    case optimismGoerli.id:
-    case optimismSepolia.id:
-    case arbitrum.id:
-    case arbitrumGoerli.id:
-    case arbitrumSepolia.id:
-    case base.id:
-    case baseGoerli.id:
-    case baseSepolia.id:
-      return LightAccountVersions[version].factoryAddress;
-  }
-
-  throw new DefaultFactoryNotDefinedError("LightAccount", chain, "0.6.0");
-};
+export const defaultLightAccountVersion = <
+  TLightAccountType extends LightAccountType
+>(
+  type: TLightAccountType
+): LightAccountVersion<TLightAccountType> =>
+  (type === "LightAccount"
+    ? "v1.1.0"
+    : "v2.0.0") as LightAccountVersion<TLightAccountType>;
 
 export const LightAccountUnsupported1271Impls = [
-  LightAccountVersions["v1.0.1"],
-  LightAccountVersions["v1.0.2"],
+  AccountVersionRegistry.LightAccount["v1.0.1"],
+  AccountVersionRegistry.LightAccount["v1.0.2"],
 ];
 
 export const LightAccountUnsupported1271Factories = new Set(
-  LightAccountUnsupported1271Impls.map((x) => x.factoryAddress)
+  LightAccountUnsupported1271Impls.map((x) =>
+    Object.values(x.address).map((addr) => addr.factory)
+  ).flat()
 );
 
-export const getLightAccountVersion = async <A extends SmartContractAccount>(
-  account: A
-) => {
+export async function getLightAccountVersionDef<
+  TAccount extends LightAccountBase,
+  TLightAccountType extends GetLightAccountType<TAccount> = GetLightAccountType<TAccount>
+>(
+  account: TAccount,
+  chain: Chain
+): Promise<LightAccountVersionDef<TLightAccountType>>;
+
+export async function getLightAccountVersionDef(
+  account: SmartContractAccount,
+  chain: Chain
+): Promise<LightAccountVersionDef> {
+  const accountType = account.source as LightAccountType;
+  const factoryAddress = await account.getFactoryAddress();
   const implAddress = await account.getImplementationAddress();
   const implToVersion = new Map(
-    Object.entries(LightAccountVersions).map(([key, value]) => [
-      value.implAddress,
-      key as LightAccountVersion,
-    ])
+    Object.entries(AccountVersionRegistry[accountType])
+      .map((pair) => {
+        const [version, def] = pair as [
+          LightAccountVersion,
+          LightAccountVersionDef
+        ];
+        return chain.id in def.address
+          ? [def.address[chain.id].impl, version]
+          : [null, version];
+      })
+      .filter(([impl]) => impl !== null) as [Address, LightAccountVersion][]
   );
 
   const factoryToVersion = new Map(
-    Object.entries(LightAccountVersions).map(([key, value]) => [
-      value.factoryAddress,
-      key as LightAccountVersion,
-    ])
+    Object.entries(AccountVersionRegistry[accountType])
+      .map((pair) => {
+        const [version, def] = pair as [
+          LightAccountVersion,
+          LightAccountVersionDef
+        ];
+        return chain.id in def.address
+          ? [def.address[chain.id].factory, version]
+          : [null, version];
+      })
+      .filter(([impl]) => impl !== null) as [Address, LightAccountVersion][]
   );
 
   const version =
     fromHex(implAddress, "bigint") === 0n
-      ? factoryToVersion.get(
-          account.getFactoryAddress().toLowerCase() as Address
-        )
+      ? factoryToVersion.get(factoryAddress.toLowerCase() as Address)
       : implToVersion.get(implAddress.toLowerCase() as Address);
 
   if (!version) {
-    throw new Error("Could not determine LightAccount version");
+    throw new Error(
+      `Could not determine ${account.source} version for chain ${chain.id}`
+    );
   }
 
-  return version;
-};
+  return AccountVersionRegistry[accountType][version];
+}

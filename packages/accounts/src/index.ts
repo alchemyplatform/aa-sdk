@@ -1,21 +1,23 @@
 // Add you exports here, make sure to export types separately from impls and use the `type` keyword when exporting them
 // Don't use wildcard exports, instead use named exports
 
+export * from "./light-account/utils.js";
+
 //light-account exports
-export type * from "./light-account/account.js";
-export { createLightAccount } from "./light-account/account.js";
+export type * from "./light-account/accounts/account.js";
+export { createLightAccount } from "./light-account/accounts/account.js";
 export { transferOwnership as transferLightAccountOwnership } from "./light-account/actions/transferOwnership.js";
-export { createLightAccountClient } from "./light-account/client.js";
-export type * from "./light-account/decorator.js";
-export { lightAccountClientActions } from "./light-account/decorator.js";
-export {
-  LightAccountUnsupported1271Factories,
-  LightAccountUnsupported1271Impls,
-  LightAccountVersions,
-  getDefaultLightAccountFactoryAddress,
-  getLightAccountVersion,
-  type LightAccountVersion,
-} from "./light-account/utils.js";
+export { createLightAccountClient } from "./light-account/clients/lightAccount.js";
+export type * from "./light-account/decorators/lightAccount.js";
+export { lightAccountClientActions } from "./light-account/decorators/lightAccount.js";
+
+//multi-owner-light-account exports
+export type * from "./light-account/accounts/multiOwner.js";
+export { createMultiOwnerLightAccount } from "./light-account/accounts/multiOwner.js";
+export { updateOwners as updateMultiOwnerLightAccountOwners } from "./light-account/actions/updateOwners.js";
+export { createMultiOwnerLightAccountClient } from "./light-account/clients/multiOwnerLightAccount.js";
+export type * from "./light-account/decorators/multiOwnerLightAccount.js";
+export { multiOwnerLightAccountClientActions } from "./light-account/decorators/multiOwnerLightAccount.js";
 
 //nani-account exports
 export { createNaniAccount } from "./nani-account/account.js";
@@ -43,6 +45,12 @@ export {
   createMultiOwnerModularAccountClient,
   createMultisigModularAccountClient,
 } from "./msca/client.js";
+export {
+  InvalidAggregatedSignatureError,
+  InvalidContextSignatureError,
+  MultisigAccountExpectedError,
+  MultisigMissingSignatureError,
+} from "./msca/errors.js";
 export type * from "./msca/plugin-manager/decorator.js";
 export { pluginManagerActions } from "./msca/plugin-manager/decorator.js";
 export { installPlugin } from "./msca/plugin-manager/installPlugin.js";
@@ -58,10 +66,16 @@ export {
   MultisigPlugin,
   MultisigPluginAbi,
   MultisigPluginExecutionFunctionAbi,
-  type SignerType,
   multisigPluginActions,
   multisigSignatureMiddleware,
+  type SignerType,
 } from "./msca/plugins/multisig/index.js";
+export {
+  combineSignatures,
+  formatSignatures,
+  getSignerType,
+  splitAggregatedSignature,
+} from "./msca/plugins/multisig/utils/index.js";
 export type * from "./msca/plugins/session-key/index.js";
 export { sessionKeyPluginActions } from "./msca/plugins/session-key/index.js";
 export type * from "./msca/plugins/session-key/permissions.js";
@@ -83,15 +97,3 @@ export {
   getMAInitializationData,
   getMSCAUpgradeToData,
 } from "./msca/utils.js";
-export {
-  combineSignatures,
-  formatSignatures,
-  getSignerType,
-  splitAggregatedSignature,
-} from "./msca/plugins/multisig/utils/index.js";
-export {
-  InvalidContextSignatureError,
-  InvalidAggregatedSignatureError,
-  MultisigMissingSignatureError,
-  MultisigAccountExpectedError,
-} from "./msca/errors.js";

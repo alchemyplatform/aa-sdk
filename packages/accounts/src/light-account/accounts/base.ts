@@ -1,0 +1,284 @@
+import {
+  FailedToGetStorageSlotError,
+  createBundlerClient,
+  toSmartContractAccount,
+  type Abi,
+  type EntryPointDef,
+  type SmartAccountSigner,
+  type SmartContractAccountWithSigner,
+  type ToSmartContractAccountParams,
+  type UpgradeToAndCallParams,
+} from "@alchemy/aa-core";
+import {
+  concat,
+  encodeFunctionData,
+  fromHex,
+  hashMessage,
+  hashTypedData,
+  trim,
+  type Address,
+  type Chain,
+  type Hex,
+  type SignTypedDataParameters,
+  type Transport,
+} from "viem";
+import { getErc1271SigningFunctions } from "../../utils/erc1271/erc1271.js";
+import type {
+  AccountVersionDef,
+  GetEntryPointForLightAccountVersion,
+  LightAccountType,
+  LightAccountVersion,
+  LightAccountVersionDef,
+} from "../types.js";
+import { AccountVersionRegistry } from "../utils.js";
+
+enum SignatureType {
+  EOA = "0x00",
+  CONTRACT = "0x01",
+  CONTRACT_WITH_ADDR = "0x02",
+}
+
+export type LightAccountBase<
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TLightAccountType extends LightAccountType = LightAccountType,
+  TLightAccountVersion extends LightAccountVersion<TLightAccountType> = LightAccountVersion,
+  TEntryPointVersion extends GetEntryPointForLightAccountVersion<
+    TLightAccountType,
+    TLightAccountVersion
+  > = GetEntryPointForLightAccountVersion<
+    TLightAccountType,
+    TLightAccountVersion
+  >
+> = SmartContractAccountWithSigner<
+  LightAccountType,
+  TSigner,
+  TEntryPointVersion
+> & {
+  getLightAccountVersion: () => TLightAccountVersion;
+};
+
+//#region CreateLightAccountBaseParams
+export type CreateLightAccountBaseParams<
+  TTransport extends Transport = Transport,
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TLightAccountType extends LightAccountType = LightAccountType,
+  TLightAccountVersion extends LightAccountVersion<TLightAccountType> = LightAccountVersion<TLightAccountType>,
+  TEntryPointVersion extends GetEntryPointForLightAccountVersion<
+    TLightAccountType,
+    TLightAccountVersion
+  > = GetEntryPointForLightAccountVersion<
+    TLightAccountType,
+    TLightAccountVersion
+  >
+> = Pick<
+  ToSmartContractAccountParams<
+    TLightAccountType,
+    TTransport,
+    Chain,
+    TEntryPointVersion
+  >,
+  "transport" | "chain" | "getAccountInitCode"
+> & {
+  abi: Abi;
+  signer: TSigner;
+  accountAddress: Address;
+  version: LightAccountVersionDef<TLightAccountType, TLightAccountVersion>;
+  entryPoint: EntryPointDef<TEntryPointVersion, Chain>;
+};
+//#endregion CreateLightAccountBaseParams
+
+export async function createLightAccountBase<
+  TTransport extends Transport = Transport,
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TLightAccountType extends LightAccountType = LightAccountType,
+  TLightAccountVersion extends LightAccountVersion<TLightAccountType> = LightAccountVersion<TLightAccountType>,
+  TEntryPointVersion extends GetEntryPointForLightAccountVersion<
+    TLightAccountType,
+    TLightAccountVersion
+  > = GetEntryPointForLightAccountVersion<
+    TLightAccountType,
+    TLightAccountVersion
+  >
+>(
+  config: CreateLightAccountBaseParams<
+    TTransport,
+    TSigner,
+    TLightAccountType,
+    TLightAccountVersion,
+    TEntryPointVersion
+  >
+): Promise<
+  LightAccountBase<
+    TSigner,
+    TLightAccountType,
+    TLightAccountVersion,
+    TEntryPointVersion
+  >
+>;
+
+export async function createLightAccountBase({
+  transport,
+  chain,
+  signer,
+  abi,
+  version: { version, type },
+  entryPoint,
+  accountAddress,
+  getAccountInitCode,
+}: CreateLightAccountBaseParams): Promise<LightAccountBase> {
+  const client = createBundlerClient({
+    transport,
+    chain,
+  });
+
+  const encodeUpgradeToAndCall = async ({
+    upgradeToAddress,
+    upgradeToInitData,
+  }: UpgradeToAndCallParams): Promise<Hex> => {
+    const storage = await client.getStorageAt({
+      address: accountAddress,
+      // the slot at which impl addresses are stored by UUPS
+      slot: "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
+    });
+
+    if (storage == null) {
+      throw new FailedToGetStorageSlotError(
+        "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
+        "Proxy Implementation Address"
+      );
+    }
+
+    const implementationAddresses = Object.values(
+      AccountVersionRegistry[type]
+    ).map((x: AccountVersionDef) => x.address[chain.id].impl);
+
+    // only upgrade undeployed accounts (storage 0) or deployed light accounts, error otherwise
+    if (
+      fromHex(storage, "number") !== 0 &&
+      !implementationAddresses.some((x) => x === trim(storage))
+    ) {
+      throw new Error(
+        `could not determine if smart account implementation is ${type} ${version}`
+      );
+    }
+
+    return encodeFunctionData({
+      abi,
+      functionName: "upgradeToAndCall",
+      args: [upgradeToAddress, upgradeToInitData],
+    });
+  };
+
+  const signWith1271WrapperV1 = async (hashedMessage: Hex): Promise<Hex> => {
+    return signer.signTypedData({
+      // EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)
+      // https://github.com/alchemyplatform/light-account/blob/main/src/LightAccount.sol#L236
+      domain: {
+        chainId: Number(client.chain.id),
+        name: type,
+        verifyingContract: accountAddress,
+        version: "1",
+      },
+      types: {
+        LightAccountMessage: [{ name: "message", type: "bytes" }],
+      },
+      message: {
+        message: hashedMessage,
+      },
+      primaryType: "LightAccountMessage",
+    });
+  };
+
+  const { signMessage: signMessageV2, signTypedData: signTypedDataV2 } =
+    getErc1271SigningFunctions({
+      accountAddress,
+      accountName: type,
+      accountVersion: "2",
+      chainId: chain.id,
+      signer,
+      wrapperTypeName: "LightAccountMessage",
+    });
+
+  const account = await toSmartContractAccount({
+    transport,
+    chain,
+    entryPoint,
+    accountAddress,
+    source: type,
+    getAccountInitCode,
+    encodeExecute: async ({ target, data, value }) => {
+      return encodeFunctionData({
+        abi,
+        functionName: "execute",
+        args: [target, value ?? 0n, data],
+      });
+    },
+    encodeBatchExecute: async (txs) => {
+      const [targets, values, datas] = txs.reduce(
+        (accum, curr) => {
+          accum[0].push(curr.target);
+          accum[1].push(curr.value ?? 0n);
+          accum[2].push(curr.data);
+
+          return accum;
+        },
+        [[], [], []] as [Address[], bigint[], Hex[]]
+      );
+      return encodeFunctionData({
+        abi,
+        functionName: "executeBatch",
+        args: [targets, values, datas],
+      });
+    },
+    signUserOperationHash: async (uoHash: Hex) => {
+      return signer.signMessage({ raw: uoHash });
+    },
+    async signMessage({ message }) {
+      switch (version as string) {
+        case "v1.0.1":
+          return signer.signMessage(message);
+        case "v1.0.2":
+          throw new Error(`${type} ${version} doesn't support 1271`);
+        case "v1.1.0":
+          return signWith1271WrapperV1(hashMessage(message));
+        case "v2.0.0":
+          const signature = await signMessageV2({ message });
+          // TODO: handle case where signer is an SCA.
+          return concat([SignatureType.EOA, signature]);
+        default:
+          throw new Error(`Unknown version ${type} of ${version}`);
+      }
+    },
+    async signTypedData(params) {
+      switch (version as string) {
+        case "v1.0.1":
+          return signer.signTypedData(
+            params as unknown as SignTypedDataParameters
+          );
+        case "v1.0.2":
+          throw new Error(
+            `Version ${version} of LightAccount doesn't support 1271`
+          );
+        case "v1.1.0":
+          return signWith1271WrapperV1(hashTypedData(params));
+        case "v2.0.0":
+          const signature = await signTypedDataV2(params);
+          // TODO: handle case where signer is an SCA.
+          return concat([SignatureType.EOA, signature]);
+        default:
+          throw new Error(`Unknown version ${version} of LightAccount`);
+      }
+    },
+    getDummySignature: (): Hex => {
+      return "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
+    },
+    encodeUpgradeToAndCall,
+  });
+
+  return {
+    ...account,
+    source: type,
+    getLightAccountVersion: () => version,
+    getSigner: () => signer,
+  };
+}

@@ -3,6 +3,7 @@ import { toHex } from "viem";
 import * as chains from "viem/chains";
 import * as alchemyChains from "../chains/index.js";
 import type { PromiseOrValue } from "../types.js";
+import type { RecordableKeys } from "./types.js";
 
 export const AlchemyChainMap = new Map<number, Chain>(
   Object.values(alchemyChains).map((c) => [c.id, c])
@@ -137,6 +138,32 @@ export const allEqual = (...params: any[]): boolean => {
   }
   return params.every((v) => v === params[0]);
 };
+
+/**
+ * Utility method for checking the condition and return the value if condition holds true, undefined if not.
+ *
+ * @param condition - condition to check
+ * @param value - value to return when condition holds true
+ * @returns the value if condition holds true, undefined if not
+ */
+export const conditionalReturn = <T>(
+  condition: Promise<boolean>,
+  value: Promise<T>
+): Promise<T | undefined> => condition.then((t) => (t ? value : undefined));
+
+export const toRecord = <
+  T extends { [K in RecordableKeys<T>]: string | number | symbol },
+  K extends RecordableKeys<T>,
+  V
+>(
+  array: T[],
+  selector: K,
+  fn: (item: T) => V
+): Record<T[K], V> =>
+  array.reduce((acc, item) => {
+    acc[item[selector]] = fn(item);
+    return acc;
+  }, {} as Record<T[K], V>);
 
 export * from "./bigint.js";
 export * from "./bytes.js";

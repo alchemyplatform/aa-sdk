@@ -88,3 +88,7 @@ export type IsOneOf<T, Union> = IsMemberOrSubtypeOfAComponent<
 >;
 
 export type OneOf<T1, T2> = IsOneOf<T1, T2> extends true ? T1 : never;
+
+export type RecordableKeys<T> = {
+  [K in keyof T]: T[K] extends string | number | symbol ? K : never;
+}[keyof T];
