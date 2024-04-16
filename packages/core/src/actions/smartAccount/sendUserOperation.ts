@@ -9,7 +9,10 @@ import { AccountNotFoundError } from "../../errors/account.js";
 import { IncompatibleClientError } from "../../errors/client.js";
 import { buildUserOperation } from "./buildUserOperation.js";
 import { _sendUserOperation } from "./internal/sendUserOperation.js";
-import type { SendUserOperationParameters } from "./types.js";
+import type {
+  SendUserOperationParameters,
+  UserOperationContext,
+} from "./types.js";
 
 export const sendUserOperation: <
   TTransport extends Transport = Transport,
@@ -17,8 +20,8 @@ export const sendUserOperation: <
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, any> | undefined =
-    | Record<string, any>
+  TContext extends UserOperationContext | undefined =
+    | UserOperationContext
     | undefined,
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(

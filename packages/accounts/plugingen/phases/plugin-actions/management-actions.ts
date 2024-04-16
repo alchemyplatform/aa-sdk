@@ -26,7 +26,7 @@ export const ManagementActionsGenPhase: Phase = async (input) => {
     addType(
       `ManagementActions<
         TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined,
-        TContext extends Record<string, any> | undefined = Record<string,any> | undefined,
+        TContext extends UserOperationContext | undefined = UserOperationContext | undefined,
         TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
       >`,
       dedent`{
@@ -130,6 +130,10 @@ const addImports = (
   });
   addImport("@alchemy/aa-core", {
     name: "GetEntryPointFromAccount",
+    isType: true,
+  });
+  addImport("@alchemy/aa-core", {
+    name: "UserOperationContext",
     isType: true,
   });
   // TODO: after plugingen becomes its own cli tool package, this should be changed to

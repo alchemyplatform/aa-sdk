@@ -15,7 +15,10 @@ import type {
 import { bigIntMax, bigIntMultiply } from "../../utils/index.js";
 import { _runMiddlewareStack } from "./internal/runMiddlewareStack.js";
 import { _sendUserOperation } from "./internal/sendUserOperation.js";
-import type { DropAndReplaceUserOperationParameters } from "./types";
+import type {
+  DropAndReplaceUserOperationParameters,
+  UserOperationContext,
+} from "./types";
 
 export async function dropAndReplaceUserOperation<
   TTransport extends Transport = Transport,
@@ -23,8 +26,8 @@ export async function dropAndReplaceUserOperation<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, any> | undefined =
-    | Record<string, any>
+  TContext extends UserOperationContext | undefined =
+    | UserOperationContext
     | undefined,
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(

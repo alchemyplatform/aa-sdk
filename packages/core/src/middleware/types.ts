@@ -2,6 +2,7 @@ import type {
   GetEntryPointFromAccount,
   SmartContractAccount,
 } from "../account/smartContractAccount";
+import type { UserOperationContext } from "../actions/smartAccount/types";
 import type {
   UserOperationFeeOptions,
   UserOperationOverrides,
@@ -12,8 +13,8 @@ import type { MiddlewareClient } from "./actions";
 
 //#region ClientMiddlewareFn
 export type ClientMiddlewareFn<
-  TContext extends Record<string, any> | undefined =
-    | Record<string, any>
+  TContext extends UserOperationContext | undefined =
+    | UserOperationContext
     | undefined
 > = <
   TAccount extends SmartContractAccount,
@@ -33,8 +34,8 @@ export type ClientMiddlewareFn<
 
 //#region ClientMiddleware
 export type ClientMiddleware<
-  TContext extends Record<string, any> | undefined =
-    | Record<string, any>
+  TContext extends UserOperationContext | undefined =
+    | UserOperationContext
     | undefined
 > = {
   dummyPaymasterAndData: ClientMiddlewareFn<TContext>;

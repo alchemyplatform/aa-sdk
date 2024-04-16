@@ -13,6 +13,7 @@ import type {
   UserOperationStruct,
 } from "../../../types";
 import { resolveProperties, type Deferrable } from "../../../utils/index.js";
+import type { UserOperationContext } from "../types";
 
 const asyncPipe =
   <S, Opts>(...fns: ((s: S, opts: Opts) => Promise<S>)[]) =>
@@ -30,8 +31,8 @@ export async function _runMiddlewareStack<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, any> | undefined =
-    | Record<string, any>
+  TContext extends UserOperationContext | undefined =
+    | UserOperationContext
     | undefined,
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(

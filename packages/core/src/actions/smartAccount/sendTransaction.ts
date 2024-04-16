@@ -16,6 +16,7 @@ import { TransactionMissingToParamError } from "../../errors/transaction.js";
 import type { UserOperationOverrides } from "../../types.js";
 import { buildUserOperationFromTx } from "./buildUserOperationFromTx.js";
 import { _sendUserOperation } from "./internal/sendUserOperation.js";
+import type { UserOperationContext } from "./types.js";
 import { waitForUserOperationTransaction } from "./waitForUserOperationTransacation.js";
 
 export async function sendTransaction<
@@ -24,8 +25,8 @@ export async function sendTransaction<
     | SmartContractAccount
     | undefined,
   TChainOverride extends Chain | undefined = Chain | undefined,
-  TContext extends Record<string, any> | undefined =
-    | Record<string, any>
+  TContext extends UserOperationContext | undefined =
+    | UserOperationContext
     | undefined,
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(

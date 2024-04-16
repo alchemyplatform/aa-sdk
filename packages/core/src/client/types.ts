@@ -1,6 +1,7 @@
 import type { Address } from "abitype";
 import type { Hash, Hex } from "viem";
 import type { z } from "zod";
+import type { UserOperationContext } from "../actions/smartAccount/types.js";
 import type { EntryPointVersion } from "../entrypoint/types.js";
 import type {
   ClientMiddleware,
@@ -32,8 +33,8 @@ export type UpgradeToData = {
 //#endregion UpgradeToData
 
 export type ClientMiddlewareConfig<
-  TContext extends Record<string, any> | undefined =
-    | Record<string, any>
+  TContext extends UserOperationContext | undefined =
+    | UserOperationContext
     | undefined
 > = Omit<
   Partial<ClientMiddleware<TContext>>,

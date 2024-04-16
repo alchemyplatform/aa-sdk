@@ -36,6 +36,10 @@ export const PluginActionsGenPhase: Phase = async (input) => {
     name: "UserOperationOverridesParameter",
     isType: true,
   });
+  addImport("@alchemy/aa-core", {
+    name: "UserOperationContext",
+    isType: true,
+  });
   addImport("@alchemy/aa-core", { name: "AccountNotFoundError" });
   addImport("@alchemy/aa-core", { name: "isSmartAccountClient" });
   addImport("@alchemy/aa-core", { name: "IncompatibleClientError" });
@@ -94,7 +98,7 @@ export const PluginActionsGenPhase: Phase = async (input) => {
     `ExecutionActions<
       TAccount extends SmartContractAccount | undefined =
         SmartContractAccount | undefined,
-      TContext extends Record<string, any> | undefined = Record<string, any> | undefined,
+      TContext extends UserOperationContext | undefined = UserOperationContext | undefined,
       TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
     >`,
     dedent`{
@@ -115,8 +119,8 @@ export const PluginActionsGenPhase: Phase = async (input) => {
       TAccount extends SmartContractAccount | undefined =
           | SmartContractAccount
           | undefined,
-      TContext extends Record<string, any> | undefined =
-          | Record<string, any>
+      TContext extends UserOperationContext | undefined =
+          | UserOperationContext
           | undefined
     >`,
     dedent`
@@ -134,7 +138,7 @@ export const PluginActionsGenPhase: Phase = async (input) => {
         TAccount extends SmartContractAccount | undefined =
             | SmartContractAccount
             | undefined,
-        TContext extends Record<string, any> | undefined = Record<string, any> | undefined
+        TContext extends UserOperationContext | undefined = UserOperationContext | undefined
     >(
         client: Client<TTransport, TChain, TAccount>
     ) => ${

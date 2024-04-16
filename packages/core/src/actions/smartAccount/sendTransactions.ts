@@ -5,7 +5,7 @@ import { AccountNotFoundError } from "../../errors/account.js";
 import { IncompatibleClientError } from "../../errors/client.js";
 import { buildUserOperationFromTxs } from "./buildUserOperationFromTxs.js";
 import { _sendUserOperation } from "./internal/sendUserOperation.js";
-import type { SendTransactionsParameters } from "./types";
+import type { SendTransactionsParameters, UserOperationContext } from "./types";
 import { waitForUserOperationTransaction } from "./waitForUserOperationTransacation.js";
 
 export async function sendTransactions<
@@ -14,7 +14,7 @@ export async function sendTransactions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, any> | undefined = Record<string, any>
+  TContext extends UserOperationContext | undefined = UserOperationContext
 >(
   client: Client<TTransport, TChain, TAccount>,
   args: SendTransactionsParameters<TAccount, TContext>

@@ -6,6 +6,7 @@ import {
   type GetContextParameter,
   type GetEntryPointFromAccount,
   type SmartContractAccount,
+  type UserOperationContext,
   type UserOperationOverridesParameter,
 } from "@alchemy/aa-core";
 import {
@@ -22,8 +23,8 @@ export type UninstallPluginParams<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, any> | undefined =
-    | Record<string, any>
+  TContext extends UserOperationContext | undefined =
+    | UserOperationContext
     | undefined,
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
@@ -40,8 +41,8 @@ export async function uninstallPlugin<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
-  TContext extends Record<string, any> | undefined =
-    | Record<string, any>
+  TContext extends UserOperationContext | undefined =
+    | UserOperationContext
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>,
