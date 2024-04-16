@@ -43,7 +43,9 @@ import { useSendUserOperation } from "@alchemy/aa-alchemy/react";
 `AlchemySmartAccountClient | undefined`
 A `AlchemySmartAccountClient` with methods to interact with an Alchemy smart account.
 
-Additionally, <!--@include: ./BaseHookMutationArgs.md-->
+### ...mutationArgs
+
+<!--@include: ./BaseHookMutationArgs.md-->
 
 ## Return Type
 
