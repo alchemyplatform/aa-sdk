@@ -9,9 +9,8 @@ import {
   ChainNotFoundError,
   IncompatibleClientError,
 } from "../../errors/client.js";
-import { InvalidUserOperationError } from "../../errors/useroperation.js";
 import type { UserOperationRequest } from "../../types";
-import { deepHexlify, isValidRequest } from "../../utils/index.js";
+import { deepHexlify, resolveProperties } from "../../utils/index.js";
 import type { SignUserOperationParameters } from "./types";
 
 export async function signUserOperation<
@@ -43,15 +42,12 @@ export async function signUserOperation<
     throw new ChainNotFoundError();
   }
 
-  const request = deepHexlify(args.uoStruct);
-  if (!isValidRequest(request)) {
-    throw new InvalidUserOperationError(args.uoStruct);
-  }
-
-  const entryPoint = account.getEntryPoint();
-  request.signature = await account.signUserOperationHash(
-    entryPoint.getUserOperationHash(request)
-  );
-
-  return request as UserOperationRequest<TEntryPointVersion>;
+  return await client.middleware
+    .signUserOperation(args.uoStruct, {
+      ...args,
+      account,
+      client,
+    })
+    .then(resolveProperties)
+    .then(deepHexlify);
 }

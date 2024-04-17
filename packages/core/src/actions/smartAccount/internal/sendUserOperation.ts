@@ -8,9 +8,8 @@ import type { BaseSmartAccountClient } from "../../../client/smartAccountClient"
 import type { SendUserOperationResult } from "../../../client/types";
 import { AccountNotFoundError } from "../../../errors/account.js";
 import { ChainNotFoundError } from "../../../errors/client.js";
-import { InvalidUserOperationError } from "../../../errors/useroperation.js";
-import type { UserOperationRequest, UserOperationStruct } from "../../../types";
-import { deepHexlify, isValidRequest } from "../../../utils/index.js";
+import type { UserOperationStruct } from "../../../types";
+import { deepHexlify, resolveProperties } from "../../../utils/index.js";
 
 export async function _sendUserOperation<
   TTransport extends Transport = Transport,
@@ -34,21 +33,20 @@ export async function _sendUserOperation<
     throw new ChainNotFoundError();
   }
 
-  const entryPoint = account.getEntryPoint();
-
-  const request = deepHexlify(
-    args.uoStruct
-  ) as UserOperationRequest<TEntryPointVersion>;
-  if (!isValidRequest(request)) {
-    throw new InvalidUserOperationError(args.uoStruct);
-  }
-
-  request.signature = await account.signUserOperationHash(
-    entryPoint.getUserOperationHash(request)
-  );
+  const request = await client.middleware
+    .signUserOperation(args.uoStruct, {
+      ...args,
+      account,
+      client,
+    })
+    .then(resolveProperties)
+    .then(deepHexlify);
 
   return {
-    hash: await client.sendRawUserOperation(request, entryPoint.address),
+    hash: await client.sendRawUserOperation(
+      request,
+      account.getEntryPoint().address
+    ),
     request,
   };
 }
