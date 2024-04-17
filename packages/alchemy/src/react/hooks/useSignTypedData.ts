@@ -7,7 +7,7 @@ import {
 } from "@tanstack/react-query";
 import type { Hex, TypedDataDefinition } from "viem";
 import { useAlchemyAccountContext } from "../context.js";
-import { ClientUndefinedError } from "../errors.js";
+import { ClientUndefinedHookError } from "../errors.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import type { UseSmartAccountClientResult } from "./useSmartAccountClient.js";
 
@@ -51,7 +51,7 @@ export function useSignTypedData({
     {
       mutationFn: async (params: SignTypedDataArgs) => {
         if (!client) {
-          throw new ClientUndefinedError("useSignTypedData");
+          throw new ClientUndefinedHookError("useSignTypedData");
         }
         return client.signTypedDataWith6492({ ...params });
       },

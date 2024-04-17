@@ -5,12 +5,23 @@ import {
 import { useState } from "react";
 
 export function ComponentWithSignTypedData() {
-  // Assumes the app has context of a signer with an authenticated user
+  /**
+   * Assumes the app has context of a signer with an authenticated user
+   * by using the `AlchemyAccountProvider` from `@alchemy/aa-alchemy/react`.
+   */
   const [typedDataMessage, setTypedDataMessage] = useState("");
   const client = useSmartAccountClient({
     type: "MultiOwnerModularAccount",
   });
-  const { signTypedData, isSigningTypedData } = useSignTypedData({ client });
+  const { signTypedData, isSigningTypedData } = useSignTypedData({
+    client,
+    onSuccess: (signature) => {
+      // Do something with the signature
+    },
+    onError: (error) => {
+      // Handle the error
+    },
+  });
 
   return (
     <div>

@@ -5,12 +5,23 @@ import {
 import { useState } from "react";
 
 export function ComponentWithSignMessage() {
-  // Assumes the app has context of a signer with an authenticated user
+  /**
+   * Assumes the app has context of a signer with an authenticated user
+   * by using the `AlchemyAccountProvider` from `@alchemy/aa-alchemy/react`.
+   */
   const [message, setMessage] = useState("");
   const client = useSmartAccountClient({
     type: "MultiOwnerModularAccount",
   });
-  const { signMessage, isSigningMessage } = useSignMessage({ client });
+  const { signMessage, isSigningMessage } = useSignMessage({
+    client,
+    onSuccess: (signature) => {
+      // Do something with the signature
+    },
+    onError: (error) => {
+      // Handle the error
+    },
+  });
 
   return (
     <div>

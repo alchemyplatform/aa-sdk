@@ -7,7 +7,7 @@ import {
 } from "@tanstack/react-query";
 import type { Hex, SignableMessage } from "viem";
 import { useAlchemyAccountContext } from "../context.js";
-import { ClientUndefinedError } from "../errors.js";
+import { ClientUndefinedHookError } from "../errors.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import { type UseSmartAccountClientResult } from "./useSmartAccountClient.js";
 
@@ -51,7 +51,7 @@ export function useSignMessage({
     {
       mutationFn: async (params: SignMessageArgs) => {
         if (!client) {
-          throw new ClientUndefinedError("useSignMessage");
+          throw new ClientUndefinedHookError("useSignMessage");
         }
 
         return client.signMessageWith6492(params);
