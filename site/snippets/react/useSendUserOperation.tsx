@@ -10,6 +10,12 @@ export function ComponentWithSendUserOperation() {
   });
   const { sendUserOperation, isSendingUserOperation } = useSendUserOperation({
     client,
+    onSuccess: ({ hash, request }) => {
+      // [optional] Do something with the hash and request
+    },
+    onError: (error) => {
+      // [optional] Do something with the error
+    },
   });
 
   return (

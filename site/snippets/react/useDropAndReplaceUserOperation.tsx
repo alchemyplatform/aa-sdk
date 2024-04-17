@@ -16,6 +16,12 @@ export function ComponentWithDropAndReplaceUO() {
   const { dropAndReplaceUserOperation, isDroppingAndReplacingUserOperation } =
     useDropAndReplaceUserOperation({
       client,
+      onSuccess: ({ hash, request }) => {
+        // [optional] Do something with the hash and request
+      },
+      onError: (error) => {
+        // [optional] Do something with the error
+      },
     });
 
   return (
