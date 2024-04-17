@@ -12,7 +12,7 @@ import {
 } from "@tanstack/react-query";
 import type { SupportedAccounts } from "../../config/types.js";
 import { useAlchemyAccountContext } from "../context.js";
-import { ClientUndefinedError } from "../errors.js";
+import { ClientUndefinedHookError } from "../errors.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import { type UseSmartAccountClientResult } from "./useSmartAccountClient.js";
 
@@ -78,7 +78,7 @@ export function useSendUserOperation<
     {
       mutationFn: async (params: SendUserOperationParameters<TAccount>) => {
         if (!client) {
-          throw new ClientUndefinedError("useSendUserOperation");
+          throw new ClientUndefinedHookError("useSendUserOperation");
         }
 
         if (!waitForTxn) {
