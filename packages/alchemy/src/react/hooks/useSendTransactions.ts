@@ -1,15 +1,19 @@
 "use client";
 
-import type { SendTransactionsParameters } from "@alchemy/aa-core";
+import {
+  type GetEntryPointFromAccount,
+  type SendTransactionsParameters,
+  type UserOperationContext,
+} from "@alchemy/aa-core";
 import {
   useMutation,
   type UseMutateAsyncFunction,
   type UseMutateFunction,
 } from "@tanstack/react-query";
-import type { Hash, Hex } from "viem";
+import { type Hash, type Hex } from "viem";
 import type { SupportedAccounts } from "../../config/types.js";
 import { useAlchemyAccountContext } from "../context.js";
-import { ClientUndefinedError } from "../errors.js";
+import { ClientUndefinedHookError } from "../errors.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import { type UseSmartAccountClientResult } from "./useSmartAccountClient.js";
 
@@ -18,22 +22,26 @@ export type UseSendTransactionsMutationArgs<
 > = BaseHookMutationArgs<Hash, SendTransactionsParameters<TAccount>>;
 
 export type UseSendTransactionsArgs = {
-  client?: UseSmartAccountClientResult["client"];
+  client: UseSmartAccountClientResult["client"] | undefined;
 } & UseSendTransactionsMutationArgs;
 
 export type UseSendTransactionsResult<
-  TAccount extends SupportedAccounts = SupportedAccounts
+  TAccount extends SupportedAccounts = SupportedAccounts,
+  TContext extends UserOperationContext | undefined =
+    | UserOperationContext
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
   sendTransactions: UseMutateFunction<
     Hex,
     Error,
-    SendTransactionsParameters<TAccount>,
+    SendTransactionsParameters<TAccount, TContext, TEntryPointVersion>,
     unknown
   >;
   sendTransactionsAsync: UseMutateAsyncFunction<
     Hex,
     Error,
-    SendTransactionsParameters<TAccount>,
+    SendTransactionsParameters<TAccount, TContext, TEntryPointVersion>,
     unknown
   >;
   sendTransactionsResult: Hex | undefined;
@@ -42,8 +50,18 @@ export type UseSendTransactionsResult<
 };
 
 export function useSendTransactions<
-  TAccount extends SupportedAccounts = SupportedAccounts
->({ client }: UseSendTransactionsArgs): UseSendTransactionsResult<TAccount> {
+  TAccount extends SupportedAccounts = SupportedAccounts,
+  TContext extends UserOperationContext | undefined =
+    | UserOperationContext
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+>({
+  client,
+}: UseSendTransactionsArgs): UseSendTransactionsResult<
+  TAccount,
+  TContext,
+  TEntryPointVersion
+> {
   const { queryClient } = useAlchemyAccountContext();
 
   const {
@@ -54,9 +72,15 @@ export function useSendTransactions<
     error,
   } = useMutation(
     {
-      mutationFn: async (params: SendTransactionsParameters<TAccount>) => {
+      mutationFn: async (
+        params: SendTransactionsParameters<
+          TAccount,
+          TContext,
+          TEntryPointVersion
+        >
+      ) => {
         if (!client) {
-          throw new ClientUndefinedError("useSendTransactions");
+          throw new ClientUndefinedHookError("useSendTransactions");
         }
 
         return client.sendTransactions(params);

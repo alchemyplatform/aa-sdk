@@ -11,7 +11,7 @@ import {
   type UseMutateFunction,
 } from "@tanstack/react-query";
 import { useAlchemyAccountContext } from "../context.js";
-import { ClientUndefinedError } from "../errors.js";
+import { ClientUndefinedHookError } from "../errors.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import { type UseSmartAccountClientResult } from "./useSmartAccountClient.js";
 
@@ -21,7 +21,7 @@ export type UseSendTransactionMutationArgs = BaseHookMutationArgs<
 >;
 
 export type UseSendTransactionArgs = {
-  client?: UseSmartAccountClientResult["client"];
+  client: UseSmartAccountClientResult["client"] | undefined;
 } & UseSendTransactionMutationArgs;
 
 export type UseSendTransactionResult = {
@@ -57,7 +57,7 @@ export function useSendTransaction({
     {
       mutationFn: async (params: SendTransactionParameters) => {
         if (!client) {
-          throw new ClientUndefinedError("useSendTransaction");
+          throw new ClientUndefinedHookError("useSendTransaction");
         }
 
         return client.sendTransaction(params);
