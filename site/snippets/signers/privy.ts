@@ -2,11 +2,7 @@
  * This example assumes your app is wrapped with the `PrivyProvider` and
  * is configured to create embedded wallets for users upon login.
  */
-import {
-  LightSmartContractAccount,
-  getDefaultLightAccountFactoryAddress,
-} from "@alchemy/aa-accounts";
-import { AlchemyProvider } from "@alchemy/aa-alchemy";
+import { createLightAccountAlchemyClient } from "@alchemy/aa-alchemy";
 import {
   WalletClientSigner,
   sepolia,
@@ -32,7 +28,7 @@ await embeddedWallet.switchChain(sepolia.id);
 // Get a viem client from the embedded wallet
 const eip1193provider = await embeddedWallet.getEthereumProvider();
 const privyClient = createWalletClient({
-  account: embeddedWallet.address,
+  account: embeddedWallet.address as `0x${string}`,
   chain: sepolia,
   transport: custom(eip1193provider),
 });
@@ -43,16 +39,11 @@ const privySigner: SmartAccountSigner = new WalletClientSigner(
   "privy" // signerType
 );
 
-// Create an Alchemy Smart Account Client with the smart account signer
-export const provider = new AlchemyProvider({
-  apiKey: "ALCHEMY_API_KEY",
+// Create an Alchemy Light Account Client with the privy signer
+export const smartAccountClient = await createLightAccountAlchemyClient({
+  account: {
+    signer: privySigner,
+  },
   chain: sepolia,
-}).connect(
-  (rpcClient) =>
-    new LightSmartContractAccount({
-      chain: rpcClient.chain,
-      signer: privySigner,
-      factoryAddress: getDefaultLightAccountFactoryAddress(rpcClient.chain),
-      rpcClient,
-    })
-);
+  apiKey: "YOUR_API_KEY",
+});
