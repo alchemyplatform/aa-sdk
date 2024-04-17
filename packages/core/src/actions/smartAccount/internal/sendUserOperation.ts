@@ -10,6 +10,7 @@ import { AccountNotFoundError } from "../../../errors/account.js";
 import { ChainNotFoundError } from "../../../errors/client.js";
 import type { UserOperationStruct } from "../../../types";
 import { deepHexlify, resolveProperties } from "../../../utils/index.js";
+import type { GetContextParameter, UserOperationContext } from "../types";
 
 export async function _sendUserOperation<
   TTransport extends Transport = Transport,
@@ -17,14 +18,18 @@ export async function _sendUserOperation<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
+  TContext extends UserOperationContext | undefined =
+    | UserOperationContext
+    | undefined,
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
   client: BaseSmartAccountClient<TTransport, TChain, TAccount>,
   args: {
     uoStruct: UserOperationStruct<TEntryPointVersion>;
-  } & GetAccountParameter<TAccount>
+  } & GetAccountParameter<TAccount> &
+    GetContextParameter<TContext>
 ): Promise<SendUserOperationResult<TEntryPointVersion>> {
-  const { account = client.account } = args;
+  const { account = client.account, context } = args;
   if (!account) {
     throw new AccountNotFoundError();
   }
@@ -38,6 +43,7 @@ export async function _sendUserOperation<
       ...args,
       account,
       client,
+      context,
     })
     .then(resolveProperties)
     .then(deepHexlify);

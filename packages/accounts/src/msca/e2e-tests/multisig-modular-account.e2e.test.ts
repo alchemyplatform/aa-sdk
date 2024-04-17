@@ -2,20 +2,20 @@ import {
   LocalAccountSigner,
   LogLevel,
   Logger,
+  parseFactoryAddressFromAccountInitCode,
   sepolia,
   wrapSignatureWith6492,
-  parseFactoryAddressFromAccountInitCode,
   type SmartAccountSigner,
   type UserOperationFeeOptions,
 } from "@alchemy/aa-core";
 import {
+  createPublicClient,
+  fromHex,
   http,
+  pad,
   type Address,
   type Chain,
   type HDAccount,
-  createPublicClient,
-  fromHex,
-  pad,
 } from "viem";
 import { createMultisigModularAccountClient } from "../client.js";
 import { formatSignatures } from "../plugins/multisig/index.js";
@@ -239,7 +239,7 @@ describe("Multisig Modular Account Tests", async () => {
     );
 
     const wrappedSig = wrapSignatureWith6492({
-      factoryAddress: provider1.account.getFactoryAddress(),
+      factoryAddress: await provider1.account.getFactoryAddress(),
       factoryCalldata,
       signature: combined,
     });
@@ -327,7 +327,7 @@ describe("Multisig Modular Account Tests", async () => {
     );
 
     const wrappedSig = wrapSignatureWith6492({
-      factoryAddress: provider1.account.getFactoryAddress(),
+      factoryAddress: await provider1.account.getFactoryAddress(),
       factoryCalldata,
       signature: combined,
     });
@@ -537,6 +537,7 @@ const givenConnectedProvider = async ({
         ...feeOptions,
         maxFeePerGas: { multiplier: 1.5 },
         maxPriorityFeePerGas: { multiplier: 1.5 },
+        preVerificationGas: { multiplier: 1.5 },
       },
       txMaxRetries: 100,
     },

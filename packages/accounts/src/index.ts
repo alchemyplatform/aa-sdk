@@ -1,8 +1,6 @@
 // Add you exports here, make sure to export types separately from impls and use the `type` keyword when exporting them
 // Don't use wildcard exports, instead use named exports
 
-export * from "./light-account/utils.js";
-
 //light-account exports
 export type * from "./light-account/accounts/account.js";
 export { createLightAccount } from "./light-account/accounts/account.js";
@@ -10,6 +8,14 @@ export { transferOwnership as transferLightAccountOwnership } from "./light-acco
 export { createLightAccountClient } from "./light-account/clients/lightAccount.js";
 export type * from "./light-account/decorators/lightAccount.js";
 export { lightAccountClientActions } from "./light-account/decorators/lightAccount.js";
+export type * from "./light-account/types.js";
+export {
+  AccountVersionRegistry,
+  LightAccountUnsupported1271Factories,
+  LightAccountUnsupported1271Impls,
+  defaultLightAccountVersion,
+  getLightAccountVersionDef,
+} from "./light-account/utils.js";
 
 //multi-owner-light-account exports
 export type * from "./light-account/accounts/multiOwner.js";
