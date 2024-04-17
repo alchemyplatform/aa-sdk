@@ -36,13 +36,13 @@ const estimates = await client.estimateUserOperationGas(
 
 ## Returns
 
-### `Promise<UserOperationEstimateGasResponse>`
+### `Promise<UserOperationEstimateGasResponse<EntryPointVersion>`
 
-The result of the estimate including the `callGasLimit`, `verificationGasLimit`, `preVerificationGas`.
+The result of the estimate including the `callGasLimit`, `verificationGasLimit`, `preVerificationGas`, and additionally, `paymasterVerificationGasLimit` for EntryPointVersion v0.7.0 user operations.
 
 ## Parameters
 
-### `request: UserOperationRequest`
+### `request: UserOperationRequest<EntryPointVersion>`
 
 The user operation to send
 

@@ -1,7 +1,7 @@
 import {
   ChainSchema,
   ConnectionConfigSchema,
-  SmartAccountProviderOptsSchema,
+  SmartAccountClientOptsSchema,
   getChain,
 } from "@alchemy/aa-core";
 import { Alchemy } from "alchemy-sdk";
@@ -24,8 +24,8 @@ export const AlchemyChainSchema = z.custom<Chain>((chain) => {
 export const AlchemyProviderConfigSchema = ConnectionConfigSchema.and(
   z.object({
     chain: AlchemyChainSchema,
-    opts: SmartAccountProviderOptsSchema.optional().default(
-      SmartAccountProviderOptsSchema.parse({})
+    opts: SmartAccountClientOptsSchema.optional().default(
+      SmartAccountClientOptsSchema.parse({})
     ),
   })
 );

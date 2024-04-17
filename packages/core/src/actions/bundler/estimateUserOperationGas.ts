@@ -16,7 +16,7 @@ export const estimateUserOperationGas = async <
     entryPoint: Address;
     stateOverride?: StateOverride;
   }
-): Promise<UserOperationEstimateGasResponse> => {
+): Promise<UserOperationEstimateGasResponse<TEntryPointVersion>> => {
   return client.request({
     method: "eth_estimateUserOperationGas",
     params:

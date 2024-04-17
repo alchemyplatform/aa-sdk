@@ -46,7 +46,7 @@ export const ConnectionConfigSchema = z.union([
 export const UserOperationFeeOptionsFieldSchema =
   BigNumberishRangeSchema.merge(MultiplierSchema).partial();
 
-export const UserOperationFeeOptionsSchema = z
+export const UserOperationFeeOptionsSchema_v6 = z
   .object({
     maxFeePerGas: UserOperationFeeOptionsFieldSchema,
     maxPriorityFeePerGas: UserOperationFeeOptionsFieldSchema,
@@ -56,6 +56,16 @@ export const UserOperationFeeOptionsSchema = z
   })
   .partial()
   .strict();
+
+export const UserOperationFeeOptionsSchema_v7 =
+  UserOperationFeeOptionsSchema_v6.extend({
+    paymasterVerificationGasLimit: UserOperationFeeOptionsFieldSchema,
+    paymasterPostOpGasLimit: UserOperationFeeOptionsFieldSchema,
+  })
+    .partial()
+    .strict();
+
+export const UserOperationFeeOptionsSchema = UserOperationFeeOptionsSchema_v7;
 
 export const SmartAccountClientOptsSchema = z
   .object({

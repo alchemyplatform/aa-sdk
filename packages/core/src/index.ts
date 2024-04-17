@@ -60,7 +60,7 @@ export { smartAccountClientActions } from "./client/decorators/smartAccountClien
 export { isSmartAccountClient } from "./client/isSmartAccountClient.js";
 export {
   ConnectionConfigSchema,
-  SmartAccountClientOptsSchema as SmartAccountProviderOptsSchema,
+  SmartAccountClientOptsSchema,
 } from "./client/schema.js";
 export type * from "./client/smartAccountClient.js";
 export {
@@ -113,7 +113,6 @@ export { LogLevel, Logger } from "./logger.js";
 export { middlewareActions } from "./middleware/actions.js";
 export { defaultFeeEstimator } from "./middleware/defaults/feeEstimator.js";
 export { defaultGasEstimator } from "./middleware/defaults/gasEstimator.js";
-export { overridePaymasterDataMiddleware } from "./middleware/defaults/overridePaymasterData.js";
 export { defaultPaymasterAndData } from "./middleware/defaults/paymasterAndData.js";
 export { defaultUserOpSigner } from "./middleware/defaults/userOpSigner.js";
 export { noopMiddleware } from "./middleware/noopMiddleware.js";
