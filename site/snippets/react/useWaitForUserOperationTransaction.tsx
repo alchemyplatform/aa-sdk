@@ -18,6 +18,12 @@ export function ComponentWithWaitForUOTxn() {
     isWaitingForUserOperationTransaction,
   } = useWaitForUserOperationTransaction({
     client,
+    onSuccess: (hash) => {
+      // [optional] Do something with the hash
+    },
+    onError: (error) => {
+      // [optional] Do something with the error
+    },
   });
 
   return (

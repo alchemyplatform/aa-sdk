@@ -4,7 +4,7 @@ import type { WaitForUserOperationTxParameters } from "@alchemy/aa-core";
 import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
 import type { Hash } from "viem";
 import { useAlchemyAccountContext } from "../context.js";
-import { ClientUndefinedError } from "../errors.js";
+import { ClientUndefinedHookError } from "../errors.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import { type UseSmartAccountClientResult } from "./useSmartAccountClient.js";
 
@@ -41,7 +41,9 @@ export function useWaitForUserOperationTransaction({
     {
       mutationFn: async (params: WaitForUserOperationTxParameters) => {
         if (!client) {
-          throw new ClientUndefinedError("useWaitForUserOperationTransaction");
+          throw new ClientUndefinedHookError(
+            "useWaitForUserOperationTransaction"
+          );
         }
 
         return client.waitForUserOperationTransaction(params);
