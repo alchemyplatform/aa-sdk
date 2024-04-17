@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.8.2-alpha.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.8.1...v3.8.2-alpha.0) (2024-04-17)
+
+### Features
+
+- **entrypoint-0.7:** base - all changes in regards to the Entrypoint v6 & v7 support ([#514](https://github.com/alchemyplatform/aa-sdk/issues/514)) ([6cc692e](https://github.com/alchemyplatform/aa-sdk/commit/6cc692edf2ac20adf310b7a0efd99879b6e6f485)), closes [#549](https://github.com/alchemyplatform/aa-sdk/issues/549)
+
 ## [3.8.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.8.0...v3.8.1) (2024-04-11)
 
 **Note:** Version bump only for package @alchemy/aa-ethers
