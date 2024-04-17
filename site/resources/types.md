@@ -124,6 +124,14 @@ As smart contract accounts are essentially the contract codes that operate on th
 <<< @/../packages/core/src/account/smartContractAccount.ts#SmartContractAccount
 :::
 
+## `User`
+
+`User` is a type that defines the model for the details of a user's Embedded Account via an Alchemy Signer. It includes the user's `email`, `orgId`, `userId`, `userId`, `address` (the EOA signer address corresponding to the user credentials), and `credentialId`. You can use the [`useUser`](../react/useUser.md) react hook to look up a user.
+
+::: details User
+<<< @/../packages/alchemy/src/signer/client/types.ts#User
+:::
+
 ## `UserOperationCallData`
 
 `UserOperationCallData` is a type that represents the user's "intent" or the desired outcome representing a specific objective a user aims to accomplish. It includes `target` (the destination address), `data` (the [`Transaction calldata`](./terms#transaction-calldata)), and `value` (the amount value of ETH, or the native token to send). It acts as the input to the `sendUserOperation` method on [`SmartAccountClient`](#smartaccountclient).
