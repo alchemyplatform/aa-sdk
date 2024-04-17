@@ -5,17 +5,10 @@ import { useAlchemyAccountContext } from "../context.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import { useSigner } from "./useSigner.js";
 
-export type UseLogoutData = void;
-
-export type UseLogoutParams = void;
-
-export type UseLogoutMutationArgs = BaseHookMutationArgs<
-  UseLogoutData,
-  UseLogoutParams
->;
+export type UseLogoutMutationArgs = BaseHookMutationArgs<void, void>;
 
 export type UseLogoutResult = {
-  logout: UseMutateFunction<UseLogoutData, Error, UseLogoutParams, unknown>;
+  logout: UseMutateFunction<void, Error, void, unknown>;
   isLoggingOut: boolean;
   error: Error | null;
 };
