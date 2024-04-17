@@ -12,7 +12,7 @@ export type UseWaitForUserOperationTransactionMutationArgs =
   BaseHookMutationArgs<Hash, WaitForUserOperationTxParameters>;
 
 export type UseWaitForUserOperationTransactionArgs = {
-  client?: UseSmartAccountClientResult["client"];
+  client: UseSmartAccountClientResult["client"] | undefined;
 } & UseWaitForUserOperationTransactionMutationArgs;
 
 export type UseWaitForUserOperationTransactionResult = {
