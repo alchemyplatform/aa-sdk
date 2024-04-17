@@ -154,7 +154,16 @@ export type MultisigPluginActions<
   ReadAndEncodeActions<TAccount>;
 
 const addresses = {
-  11155111: "0x0b135A12EB2f7b441DCcE5F7DE07DB65AE7c4649" as Address,
+  1: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7" as Address,
+  10: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7" as Address,
+  137: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7" as Address,
+  8453: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7" as Address,
+  42161: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7" as Address,
+  80002: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7" as Address,
+  84532: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7" as Address,
+  421614: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7" as Address,
+  11155111: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7" as Address,
+  11155420: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7" as Address,
 } as Record<number, Address>;
 
 export const MultisigPlugin: Plugin<typeof MultisigPluginAbi> = {
