@@ -1,34 +1,34 @@
 "use client";
 
 import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
-import { createElement, useCallback } from "react";
+import { createElement, useCallback, type CSSProperties } from "react";
 import { DEFAULT_IFRAME_CONTAINER_ID } from "../../config/createConfig.js";
 import type { ExportWalletParams as ExportAccountParams } from "../../index.js";
 import { useAlchemyAccountContext } from "../context.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import { useSigner } from "./useSigner.js";
 
-export type UseExportAccountData = boolean;
-
-export type UseExportAccountParams = void;
-
 export type UseExportAccountMutationArgs = {
   params?: ExportAccountParams;
-} & BaseHookMutationArgs<UseExportAccountData, UseExportAccountParams>;
+} & BaseHookMutationArgs<boolean, void>;
 
+/**
+ * Props for the `ExportAccountComponent` component. This component is
+ * returned from the `useExportAccount` hook and should be rendered in the
+ * parent component to display the account recovery details in an iframe.
+ *
+ * @property {string} iframeCss [optional] - CSS to apply to the iframe.
+ * @property {string} className [optional] - Class name to apply to the container div.
+ * @property {boolean} isExported - Whether the account has been exported.
+ */
 export type ExportAccountComponentProps = {
-  iframeCss?: string;
+  iframeCss?: CSSProperties;
   className?: string;
   isExported: boolean;
 };
 
 export type UseExportAccountResult = {
-  exportAccount: UseMutateFunction<
-    UseExportAccountData,
-    Error,
-    UseExportAccountParams,
-    unknown
-  >;
+  exportAccount: UseMutateFunction<boolean, Error, void, unknown>;
   isExported: boolean;
   isExporting: boolean;
   error: Error | null;
@@ -61,14 +61,27 @@ export function useExportAccount(
 
   const ExportAccountComponent = useCallback(
     ({ iframeCss, className, isExported }: ExportAccountComponentProps) => {
+      const iframeCssString = Object.entries(iframeCss ?? {}).reduce(
+        (acc, [key, value]) => {
+          const kebabKey = key
+            .replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, "$1-$2")
+            .toLocaleLowerCase();
+
+          return `${acc}\n${kebabKey}: ${value};`;
+        },
+        ""
+      );
+
       return createElement(
         "div",
         {
           className,
-          style: { display: !isExported ? "none" : "block" },
+          style: {
+            display: !isExported ? "none" : "block",
+          },
           id: iframeContainerId,
         },
-        createElement("style", {}, iframeCss)
+        createElement("style", {}, `iframe { ${iframeCssString} } `)
       );
     },
     [iframeContainerId]
