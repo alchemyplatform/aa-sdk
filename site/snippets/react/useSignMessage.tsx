@@ -16,10 +16,10 @@ export function ComponentWithSignMessage() {
   const { signMessage, isSigningMessage } = useSignMessage({
     client,
     onSuccess: (signature) => {
-      // Do something with the signature
+      // [optional] Do something with the signature
     },
     onError: (error) => {
-      // Handle the error
+      // [optional] Handle the error
     },
   });
 
