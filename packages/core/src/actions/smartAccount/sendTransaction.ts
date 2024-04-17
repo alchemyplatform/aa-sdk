@@ -61,6 +61,7 @@ export async function sendTransaction<
   const { hash } = await _sendUserOperation(client, {
     account: account as SmartContractAccount,
     uoStruct,
+    context,
   });
 
   return waitForUserOperationTransaction(client, { hash });

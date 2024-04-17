@@ -34,7 +34,7 @@ export async function dropAndReplaceUserOperation<
   client: Client<TTransport, TChain, TAccount>,
   args: DropAndReplaceUserOperationParameters<TAccount, TContext>
 ): Promise<SendUserOperationResult<TEntryPointVersion>> {
-  const { account = client.account, uoToDrop, overrides } = args;
+  const { account = client.account, uoToDrop, overrides, context } = args;
   if (!account) {
     throw new AccountNotFoundError();
   }
@@ -105,5 +105,6 @@ export async function dropAndReplaceUserOperation<
   return _sendUserOperation(client, {
     uoStruct: uoToSend,
     account,
+    context,
   });
 }

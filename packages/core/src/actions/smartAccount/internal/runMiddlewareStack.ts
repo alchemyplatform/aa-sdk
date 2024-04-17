@@ -66,8 +66,7 @@ export async function _runMiddlewareStack<
     overridePaymasterData
       ? overridePaymasterDataMiddleware
       : client.middleware.paymasterAndData,
-    client.middleware.userOperationSimulator,
-    client.middleware.signUserOperation
+    client.middleware.userOperationSimulator
   )(uo, { overrides, feeOptions: client.feeOptions, account, client, context });
 
   return resolveProperties<
