@@ -54,7 +54,7 @@ A Promise containing the hash of the user operation request sent to the bundler 
 
 A previously submitted `UserOperationRequest` to be dropped and replaced by a new user operation with higher gas to be mined faster
 
-- `overrides?:` [`UserOperationOverrides`](/resources/types#UserOperationOverrides)
+- `overrides?:` [`UserOperationOverrides`](/resources/types#useroperationoverrides)
 
 Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit`, `paymasterAndData`, or `nonceKey` for the user operation request
 

@@ -87,7 +87,7 @@ A Promise containing the hash of the user operation and the request that was sen
   - `data: Hex` - can be either `0x` or a call data string
   - `value?: bigint` - optionally, set the value in wei you want to send to the target
 
-- `overrides?:` [`UserOperationOverrides`](/resources/types#UserOperationOverrides)
+- `overrides?:` [`UserOperationOverrides`](/resources/types#useroperationoverrides)
 
 Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit`, `paymasterAndData`, or `nonceKey` for the user operation request
 

@@ -16,7 +16,7 @@ export type SendTransactionParameters<
 
 Same as `viem` [`TransactionRequest`](https://viem.sh/docs/glossary/types#transactionrequest), but with the `from` field excluded
 
-- `overrides?:` [`UserOperationOverrides`](/resources/types#UserOperationOverrides)
+- `overrides?:` [`UserOperationOverrides`](/resources/types#useroperationoverrides)
 
 Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit`, `paymasterAndData`, or `nonceKey` for the user operation request. You can also specify a `stateOverride` to be passed into `eth_estimateUserOperationGas` during fee estimation.
 
