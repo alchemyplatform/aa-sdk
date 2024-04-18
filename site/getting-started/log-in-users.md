@@ -66,21 +66,21 @@ In the next step, you'll add functionality to the “Log In” button to send an
 
 ## Support Email Auth with Alchemy Signer
 
-To support email authentication using the Alchemy Signer to created Embedded Accounts, create a new folder `src/queries` and add the following in a new file called `src/queries/authenticateUser.tsx`:
+To support email authentication using the Alchemy Signer to created Embedded Accounts:
 
-<<< @/snippets/getting-started/log-in-users/authenticateUser.tsx [src/queries/authenticateUser.tsx]
+1. update your `src/components/LogInCard.tsx` file.
+2. add a UI card called `src/app/components/ProfileCard.tsx` to display a user's Embedded Account address and their authenticated email when they redirect from the email they receive to log into your app.
+3. update the UI in `src/app/page.tsx` to render either the `src/app/components/LogInCard.tsx` or `src/app/components/ProfileCard.tsx` if the user has authenticated upon redirect from email.
 
-This method will request the Alchemy Signer through the app's backend to send an email to the email address they typed in your app. Now, incorporate this method into your `src/components/LogInCard.tsx` file:
+Your app should now contain these code files:
+
+::: code-group
 
 <<< @/snippets/getting-started/log-in-users/LogInCard-2.tsx [src/components/LogInCard.tsx]
-
-You'll also want a new UI to display a user's Embedded Account address and their authenticated email when they redirect from the email they receive to log into your app. Add a UI card called `src/app/components/ProfileCard.tsx` and drop in the following code:
-
 <<< @/snippets/getting-started/log-in-users/ProfileCard.tsx [src/app/components/ProfileCard.tsx]
-
-Lastly, update the UI in `src/app/page.tsx` to render either the `src/app/components/LogInCard.tsx` or `src/app/components/ProfileCard.tsx` if the user has authenticated upon redirect from email.
-
 <<< @/snippets/getting-started/log-in-users/page-2.tsx [src/app/page.tsx]
+
+:::
 
 You've now added the full authentication flow for users to create Embedded Accounts. At this point, run the application using:
 

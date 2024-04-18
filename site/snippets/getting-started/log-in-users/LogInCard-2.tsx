@@ -1,26 +1,23 @@
 "use client";
 
-import { useAuthenticateUser } from "@/queries/authenticateUser";
-import { AlchemySigner } from "@alchemy/aa-alchemy";
+import { useAccount, useAuthenticate } from "@alchemy/aa-alchemy/react";
 import { useCallback, useState } from "react";
 
-export interface LoginCardProps {
-  signer: AlchemySigner | undefined;
-}
-
-export const LogInCard = ({ signer }: LoginCardProps) => {
+export const LogInCard = () => {
   const [email, setEmail] = useState<string>("");
   const onEmailChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value),
     []
   );
-
-  const { isAuthenticatingUser, authenticateUser } =
-    useAuthenticateUser(signer);
+  const { authenticate, isPending: isAuthenticatingUser } = useAuthenticate();
+  const { isLoadingAccount } = useAccount({
+    type: "MultiOwnerModularAccount",
+    skipCreate: true,
+  });
 
   return (
     <div className="flex min-w-80 flex-row justify-center rounded-lg bg-white p-10 dark:bg-[#0F172A]">
-      {isAuthenticatingUser ? (
+      {isAuthenticatingUser || isLoadingAccount ? (
         <div className="text-[18px] font-semibold">Check your email!</div>
       ) : (
         <div className="flex flex-col gap-8">
@@ -37,7 +34,7 @@ export const LogInCard = ({ signer }: LoginCardProps) => {
             />
             <button
               className="w-full transform rounded-lg bg-[#363FF9] p-3 font-semibold text-[#FBFDFF] transition duration-500 ease-in-out hover:scale-105"
-              onClick={() => authenticateUser({ type: "email", email })}
+              onClick={() => authenticate({ type: "email", email })}
             >
               Log in
             </button>

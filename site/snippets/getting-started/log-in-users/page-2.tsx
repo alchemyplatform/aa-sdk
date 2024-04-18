@@ -2,32 +2,18 @@
 
 import { LogInCard } from "@/components/LogInCard";
 import { ProfileCard } from "@/components/ProfileCard";
-import { useAuthenticateUser } from "@/queries/authenticateUser";
-import { AlchemySigner } from "@alchemy/aa-alchemy";
-import { useState } from "react";
+import { useAccount, useUser } from "@alchemy/aa-alchemy/react";
 import { TurnkeyIframe } from "../components/TurnkeyIframe";
 
 export default function Home() {
-  const [signer] = useState<AlchemySigner | undefined>(() => {
-    if (typeof window === "undefined") return undefined;
-
-    return new AlchemySigner({
-      client: {
-        connection: {
-          rpcUrl: "/api/rpc",
-        },
-        iframeConfig: {
-          iframeContainerId: "turnkey-iframe-container-id",
-        },
-      },
-    });
+  const { account, isLoadingAccount } = useAccount({
+    type: "MultiOwnerModularAccount",
   });
-
-  const { user, account, isLoadingUser } = useAuthenticateUser(signer);
+  const user = useUser();
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-24">
-      {isLoadingUser ? (
+      {isLoadingAccount ? (
         // Loading spinner
         <div className="flex items-center justify-center">
           <div
@@ -36,9 +22,9 @@ export default function Home() {
           ></div>
         </div>
       ) : user != null && account != null ? (
-        <ProfileCard user={user} account={account} />
+        <ProfileCard />
       ) : (
-        <LogInCard signer={signer} />
+        <LogInCard />
       )}
       <TurnkeyIframe />
     </main>
