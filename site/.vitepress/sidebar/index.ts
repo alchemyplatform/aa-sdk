@@ -150,6 +150,8 @@ export const sidebar: DefaultTheme.Sidebar = [
         text: "useWaitForUserOperationTransaction",
         link: "/useWaitForUserOperationTransaction",
       },
+      { text: "useSendTransaction", link: "/useSendTransaction" },
+      { text: "useSendTransactions", link: "/useSendTransactions" },
     ],
   },
   {
