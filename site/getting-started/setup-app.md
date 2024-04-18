@@ -107,7 +107,7 @@ pnpm i @alchemy/aa-alchemy @alchemy/aa-accounts @alchemy/aa-core viem@2.8.6 @tan
 :::
 
 ::: warning
-The versions of `viem`and `@tanstack/react-query` that's required to be installed is listed as a `peerDependency` of the various `@alchemy/*` packages (`2.8.6` and `5.28.9`, respectively, at the time of writing). Due to some breaking changes between patch and minor versions of `viem` and `@tanstack/react-query`, it's recommended to pin your version of `viem` to the listed `peerDependency` in the `package.json`.
+The versions of `viem` and `@tanstack/react-query` that's required to be installed is listed as a `peerDependency` of the various `@alchemy/*` packages (`2.8.6` and `5.28.9`, respectively, at the time of writing). Due to some breaking changes between patch and minor versions of `viem` and `@tanstack/react-query`, it's recommended to pin your version of `viem` to the listed `peerDependency` in the `package.json`.
 :::
 
 The three Alchemy packages - `@alchemy/aa-alchemy`, `@alchemy/aa-accounts`, and `@alchemy/aa-core` - come from the [Alchemy Account Kit](https://accountkit.alchemy.com/), and will provide the key building blocks for created Embedded Accounts.
