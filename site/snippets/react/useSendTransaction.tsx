@@ -20,6 +20,7 @@ export function ComponentWithSendTransaction() {
     onError: (error) => {
       // [optional] Do something with the error
     },
+    // [optional] ...additional mutationArgs
   });
 
   return (
