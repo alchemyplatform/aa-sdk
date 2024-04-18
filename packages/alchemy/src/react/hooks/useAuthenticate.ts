@@ -5,7 +5,13 @@ import { ClientOnlyPropertyError } from "../../config/errors.js";
 import type { User } from "../../signer/index.js";
 import type { AuthParams } from "../../signer/signer.js";
 import { useAlchemyAccountContext } from "../context.js";
+import type { BaseHookMutationArgs } from "../types.js";
 import { useSigner } from "./useSigner.js";
+
+export type UseAuthenticateMutationArgs = BaseHookMutationArgs<
+  User,
+  AuthParams
+>;
 
 export type UseAuthenticateResult = {
   authenticate: UseMutateFunction<User, Error, AuthParams, unknown>;
@@ -13,7 +19,9 @@ export type UseAuthenticateResult = {
   error: Error | null;
 };
 
-export function useAuthenticate(): UseAuthenticateResult {
+export function useAuthenticate(
+  mutationArgs?: UseAuthenticateMutationArgs
+): UseAuthenticateResult {
   const { queryClient } = useAlchemyAccountContext();
   const signer = useSigner();
 
@@ -30,6 +38,7 @@ export function useAuthenticate(): UseAuthenticateResult {
 
         return signer.authenticate(authParams);
       },
+      ...mutationArgs,
     },
     queryClient
   );
