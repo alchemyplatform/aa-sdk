@@ -76,9 +76,17 @@ Each middleware is a function that takes in a user operation object, `UserOperat
 <<< @/../packages/core/src/middleware/types.ts#ClientMiddlewareFn
 :::
 
+## `EntryPointDef`
+
+An object type that defines the interface for `EntryPoint` functions for packing the user operation to the optimized data structure to enhance performance and reduce gas costs of transactions, and generating the hash of the user operation for the format compatible to the specified `Chain` and `EntryPointVersion`.
+
+::: details EntryPointDef
+<<< @/../packages/core/src/entrypoint/types.ts#EntryPointDef
+:::
+
 ## `Multiplier`
 
-An object type with a required `multipler` field, which is a `number` that must be within the range of 1 to 1000.
+An object type with a required `multipler` field, which is a `number` value with max precision of 4 decmial places.
 
 ::: details Multiplier
 <<< @/../packages/core/src/utils/schema.ts#Multiplier
@@ -118,10 +126,30 @@ An interface representing a signer capable of signing messages and typed data. I
 
 ## `SmartContractAccount`
 
-As smart contract accounts are essentially the contract codes that operate on the blockchain, `SmartContractAccount` defines the interface with different functionalities for managing and interacting with the contract account. It includes different functionalities for creating, managing, and using your smart account. In addition to supporting all functionalities achieved with a basic [EOA](./terms#wallet) alone, `SmartContractAccount` can have custom capabilities such as automating processes or executing actions based on predefined conditions. Smart contract wallets allow users to customize how they manage their digital assets, offering a more tailored approach to handling funds securely.
+As smart contract accounts are essentially the contract codes that operate on the blockchain, `SmartContractAccount` defines the interface with different functionalities for managing and interacting with the contract account. It includes different functionalities for creating, managing, and using your smart account. In addition to supporting all functionalities achieved with a basic [EOA](./terms#wallet) alone, `SmartContractAccount` can have custom capabilities such as automating processes or executing actions based on predefined conditions. Smart contract wallets allow users to customize how they manage their digital assets, offering a more tailored approach to handling funds securely. `SmartContractAccount` type extends `viem`'s [`Account`](https://viem.sh/docs/accounts/custom), and instantiation of an account is done using the [`toSmartContractAccount`](/packages/aa-core/accounts/) action.
 
 ::: details SmartContractAccount
 <<< @/../packages/core/src/account/smartContractAccount.ts#SmartContractAccount
+:::
+
+## `ToSmartContractAccountParams`
+
+This type defines the parameters to the `SmartContractAccount` instantiation action, [`toSmartContractAccount`](/packages/aa-core/accounts/). You can configure this parameter to specify the [`Transport`](https://viem.sh/docs/clients/intro.html#transports), [`Chain`](https://viem.sh/docs/glossary/types#chain), [`EntryPointDef`](``),
+chain,
+entryPoint,
+source,
+accountAddress,
+getAccountInitCode,
+signMessage,
+signTypedData,
+encodeBatchExecute,
+encodeExecute,
+getDummySignature,
+signUserOperationHash,
+encodeUpgradeToAndCall,
+
+::: details ToSmartContractAccountParams
+<<< @/../packages/core/src/account/smartContractAccount.ts#ToSmartContractAccountParams
 :::
 
 ## `User`

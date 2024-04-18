@@ -116,6 +116,7 @@ export interface AccountEntryPointRegistry<Name extends string = string>
   "0.7.0": SmartContractAccount<Name, "0.7.0">;
 }
 
+//#region ToSmartContractAccountParams
 export type ToSmartContractAccountParams<
   Name extends string = string,
   TTransport extends Transport = Transport,
@@ -135,6 +136,7 @@ export type ToSmartContractAccountParams<
   signUserOperationHash?: (uoHash: Hex) => Promise<Hex>;
   encodeUpgradeToAndCall?: (params: UpgradeToAndCallParams) => Promise<Hex>;
 } & Omit<CustomSource, "signTransaction" | "address">;
+//#endregion ToSmartContractAccountParams
 
 export const parseFactoryAddressFromAccountInitCode = (
   initCode: Hex
@@ -190,6 +192,7 @@ export const getAccountAddress = async ({
   throw new GetCounterFactualAddressError();
 };
 
+//#region toSmartContractAccount
 export async function toSmartContractAccount<
   Name extends string = string,
   TTransport extends Transport = Transport,
@@ -215,6 +218,7 @@ export async function toSmartContractAccount<
   TChain,
   TEntryPointVersion
 >): Promise<SmartContractAccount<Name, TEntryPointVersion>>;
+//#endregion toSmartContractAccount
 
 export async function toSmartContractAccount({
   transport,
