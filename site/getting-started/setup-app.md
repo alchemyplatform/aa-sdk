@@ -93,21 +93,21 @@ In this newly created directory for your app, add the following dependencies:
 ::: code-group
 
 ```bash [npm]
-npm i @alchemy/aa-alchemy @alchemy/aa-accounts @alchemy/aa-core viem @tanstack/react-query
+npm i @alchemy/aa-alchemy @alchemy/aa-accounts @alchemy/aa-core viem@2.8.6 @tanstack/react-query@5.28.9
 ```
 
 ```bash [yarn]
-yarn add @alchemy/aa-alchemy @alchemy/aa-accounts @alchemy/aa-core viem @tanstack/react-query
+yarn add @alchemy/aa-alchemy @alchemy/aa-accounts @alchemy/aa-core viem@2.8.6 @tanstack/react-query@5.28.9
 ```
 
 ```bash [pnpm]
-pnpm i @alchemy/aa-alchemy @alchemy/aa-accounts @alchemy/aa-core viem @tanstack/react-query
+pnpm i @alchemy/aa-alchemy @alchemy/aa-accounts @alchemy/aa-core viem@2.8.6 @tanstack/react-query@5.28.9
 ```
 
 :::
 
 ::: warning
-The version of `viem` that's required to be installed is listed as a `peerDependency` of the various `@alchemy/*` packages (`2.8.6` at the time of writing). Due to some breaking changes between patch and minor versions of `viem`, it's recommended to pin your version of `viem` to the listed `peerDependency`.
+The versions of `viem`and `@tanstack/react-query` that's required to be installed is listed as a `peerDependency` of the various `@alchemy/*` packages (`2.8.6` and `5.28.9`, respectively, at the time of writing). Due to some breaking changes between patch and minor versions of `viem` and `@tanstack/react-query`, it's recommended to pin your version of `viem` to the listed `peerDependency` in the `package.json`.
 :::
 
 The three Alchemy packages - `@alchemy/aa-alchemy`, `@alchemy/aa-accounts`, and `@alchemy/aa-core` - come from the [Alchemy Account Kit](https://accountkit.alchemy.com/), and will provide the key building blocks for created Embedded Accounts.

@@ -66,11 +66,7 @@ In the next step, you'll add functionality to the “Log In” button to send an
 
 ## Support Email Auth with Alchemy Signer
 
-To support email authentication using the Alchemy Signer to created Embedded Accounts, create a new folder `src/queries` and add the following in a new file called `src/queries/authenticateUser.tsx`:
-
-<<< @/snippets/getting-started/log-in-users/authenticateUser.tsx [src/queries/authenticateUser.tsx]
-
-This method will request the Alchemy Signer through the app's backend to send an email to the email address they typed in your app. Now, incorporate this method into your `src/components/LogInCard.tsx` file:
+To support email authentication using the Alchemy Signer to created Embedded Accounts, update your `src/components/LogInCard.tsx` file:
 
 <<< @/snippets/getting-started/log-in-users/LogInCard-2.tsx [src/components/LogInCard.tsx]
 
