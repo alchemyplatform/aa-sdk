@@ -68,7 +68,7 @@ The [`SmartContractClient`](/packages/aa-core/smart-account-client/) instance
 
 - `overrides?:` [`UserOperationOverrides`](/resources/types#useroperationoverrides)
 
-Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit`, `paymasterAndData`, or `nonceKey` for the user operation request
+Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit`, `paymasterAndData`, or `nonceKey` for the user operation request. You can also specify a `stateOverride` to be passed into `eth_estimateUserOperationGas` during gas estimation.
 
 - `waitForTx?: boolean`
 

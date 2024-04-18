@@ -38,7 +38,7 @@ A standardized smart contract that acts as the primary gateway for processing `U
 
 ## ERC-4337
 
-A standard authored by the [Ethereum Foundation](https://ethereum.foundation/) for [account abstraction](https://docs.alchemy.com/docs/introduction-to-account-abstraction), establishing a uniform interface for all smart accounts. This standard also outlines the roles and functionalities of [Bundlers](https://docs.alchemy.com/docs/bundler-services), [Paymasters](https://www.alchemy.com/overviews/what-is-a-paymaster), and [`EntryPoint`](#entrypoint). Reference: https://eips.ethereum.org/EIPS/eip-4337
+A standard authored by the [Ethereum Foundation](https://ethereum.foundation/) for [account abstraction](https://docs.alchemy.com/docs/introduction-to-account-abstraction), establishing a uniform interface for all smart accounts. This standard also outlines the roles and functionalities of [Bundlers](https://docs.alchemy.com/docs/bundler-services), [Paymasters](https://www.alchemy.com/overviews/what-is-a-paymaster), and [`EntryPoint`](#entrypoint). Reference: <https://eips.ethereum.org/EIPS/eip-4337>
 
 ## ERC-6492
 
@@ -95,7 +95,7 @@ A [Smart Contract Account (SCA)](https://accountkit.alchemy.com/smart-accounts/.
 
 `Transactions` in blockchain are cryptographically signed data messages that contain a set of instructions. These instructions can be interpreted to send native tokens from one account to another or interact with a smart contract deployed on the blockchain. A `Transaction` usually consists of the following parameters: `nonce`, `gasPrice`, `gasLimit`, `to`, `value`, `data`, `v`, `r`, `s`. Ethereum and other EVM blockchains have evolved to allow other transaction standards such as [EIP-1559](https://eips.ethereum.org/EIPS/eip-1559), to allow more predictable gas fees and a more efficient transaction market.
 
-# Transaction Calldata
+## Transaction Calldata
 
 Transaction `calldata` refers to the data passed along with a transaction that allows accounts to send messages to other entities or interact with smart contracts. When calling smart contracts on-chain (either from an `EOA` or another contract), the `calldata` is the encoded data within the `Transaction` containing the input parameters (or arguments) of the function being called on the contract.
 
