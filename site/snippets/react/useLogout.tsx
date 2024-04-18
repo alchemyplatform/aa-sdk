@@ -12,6 +12,7 @@ export function ComponentWithLogout() {
     onError: (error) => {
       // [optional] Do something with the error
     },
+    // [optional] ...additional mutationArgs
   });
 
   return (
