@@ -6,7 +6,15 @@ export function ComponentWithExportAccount() {
    * by using the `AlchemyAccountProvider` from `@alchemy/aa-alchemy/react`.
    */
   const { exportAccount, isExported, isExporting, ExportAccountComponent } =
-    useExportAccount();
+    useExportAccount({
+      onSuccess: (hasSuccessfullyExported) => {
+        // [optional] Do something after the account credentials have been exported
+      },
+      onError: (error) => {
+        // [optional] Do something with the error
+      },
+      // [optional] ...additional mutationArgs
+    });
 
   return (
     <div>
