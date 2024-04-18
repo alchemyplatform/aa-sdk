@@ -21,6 +21,7 @@ export function ComponentWithSignTypedData() {
     onError: (error) => {
       // Handle the error
     },
+    // [optional] ...additional mutationArgs
   });
 
   return (

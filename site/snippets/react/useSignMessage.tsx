@@ -21,6 +21,7 @@ export function ComponentWithSignMessage() {
     onError: (error) => {
       // [optional] Handle the error
     },
+    // [optional] ...additional mutationArgs
   });
 
   return (
