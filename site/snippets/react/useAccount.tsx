@@ -5,6 +5,13 @@ export function ComponentUsingAccount() {
   const { isLoadingAccount, account } = useAccount({
     type: "LightAccount", // alternatively pass in "MultiOwnerModularAccount",
     accountParams: {}, // optional param for overriding any account specific properties
+    skipCreate: false, // optional param to skip creating the account
+    onSuccess: (account) => {
+      // [optional] Do something with the account
+    },
+    onError: (error) => {
+      // [optional] Do something with the error
+    },
   });
 
   if (isLoadingAccount || !account) {

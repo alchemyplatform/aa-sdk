@@ -29,17 +29,16 @@ export type UseAccountResult<TAccount extends SupportedAccountTypes> = {
 export type UseAccountProps<TAccount extends SupportedAccountTypes> =
   GetAccountParams<TAccount> & {
     skipCreate?: boolean;
-    mutationArgs?: UseAccountMutationArgs<TAccount>;
-  };
+  } & UseAccountMutationArgs<TAccount>;
 
 export function useAccount<TAccount extends SupportedAccountTypes>(
   params: UseAccountProps<TAccount>
 ): UseAccountResult<TAccount> {
-  const { mutationArgs } = params;
+  const { type, accountParams, skipCreate, ...mutationArgs } = params;
   const { config, queryClient } = useAlchemyAccountContext();
   const status = useSignerStatus();
   const account = useSyncExternalStore(
-    watchAccount(params.type, config),
+    watchAccount(type, config),
     () => getAccount(params, config),
     defaultAccountState<TAccount>
   );
@@ -47,22 +46,17 @@ export function useAccount<TAccount extends SupportedAccountTypes>(
   const { mutate, isPending } = useMutation(
     {
       mutationFn: async () => account?.account ?? createAccount(params, config),
-      mutationKey: ["createAccount", params.type],
+      mutationKey: ["createAccount", type],
       ...mutationArgs,
     },
     queryClient
   );
 
   useEffect(() => {
-    if (
-      !params.skipCreate &&
-      status.isConnected &&
-      !account?.account &&
-      !isPending
-    ) {
+    if (!skipCreate && status.isConnected && !account?.account && !isPending) {
       mutate();
     }
-  }, [account, isPending, mutate, params.skipCreate, status]);
+  }, [account, isPending, mutate, skipCreate, status]);
 
   return {
     account: account.status === "READY" ? account?.account : undefined,
