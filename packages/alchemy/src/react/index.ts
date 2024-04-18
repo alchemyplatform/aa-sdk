@@ -33,3 +33,5 @@ export type * from "./hooks/useSmartAccountClient.js";
 export { useSmartAccountClient } from "./hooks/useSmartAccountClient.js";
 export type * from "./hooks/useUser.js";
 export { useUser } from "./hooks/useUser.js";
+export type * from "./hooks/useWaitForUserOperationTransaction.js";
+export { useWaitForUserOperationTransaction } from "./hooks/useWaitForUserOperationTransaction.js";

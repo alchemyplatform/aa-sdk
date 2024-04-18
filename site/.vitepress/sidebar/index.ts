@@ -146,6 +146,10 @@ export const sidebar: DefaultTheme.Sidebar = [
         text: "useDropAndReplaceUserOperation",
         link: "/useDropAndReplaceUserOperation",
       },
+      {
+        text: "useWaitForUserOperationTransaction",
+        link: "/useWaitForUserOperationTransaction",
+      },
     ],
   },
   {
