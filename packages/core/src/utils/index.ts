@@ -148,8 +148,8 @@ export const allEqual = (...params: any[]): boolean => {
  */
 export const conditionalReturn = <T>(
   condition: Promise<boolean>,
-  value: Promise<T>
-): Promise<T | undefined> => condition.then((t) => (t ? value : undefined));
+  value: () => Promise<T>
+): Promise<T | undefined> => condition.then((t) => (t ? value() : undefined));
 
 export const toRecord = <
   T extends { [K in RecordableKeys<T>]: string | number | symbol },

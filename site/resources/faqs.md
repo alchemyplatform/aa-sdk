@@ -188,6 +188,6 @@ No, the `aa-sdk` repo does not offically support React Native. **It is on our ra
 
 Currently we have a strong dependency on Viem, which requires several global features, such as `TextEncoder` and `crypto`, that are absent in React Native's environment. See more about [Viem's capability here](https://viem.sh/docs/compatibility.html).
 
-However, you can check out an old [sample project here](https://github.com/alchemyplatform/aa-rn-demo), where we supported React Native. We polyfilled using the [`shim.js`](https://github.com/alchemyplatform/aa-rn-demo/blob/main/shim.js) file. This is how we imported it into the React Native app: (https://github.com/alchemyplatform/aa-rn-demo/blob/main/index.js).
+However, you can check out an old [sample project here](https://github.com/alchemyplatform/aa-rn-demo), where we supported React Native. We polyfilled using the [`shim.js`](https://github.com/alchemyplatform/aa-rn-demo/blob/main/shim.js) file. This is how we imported it into the React Native app: (<https://github.com/alchemyplatform/aa-rn-demo/blob/main/index.js>).
 
 _Note: This uses an old version of aa-sdk and may not be up to date with the latest features._

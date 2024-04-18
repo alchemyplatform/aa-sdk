@@ -37,6 +37,10 @@ export const aaCoreSidebar: DefaultTheme.SidebarItem = {
           link: "/signUserOperation",
         },
         {
+          text: "estimateUserOperationGas",
+          link: "/estimateUserOperationGas",
+        },
+        {
           text: "checkGasSponsorshipEligibility",
           link: "/checkGasSponsorshipEligibility",
         },

@@ -84,6 +84,8 @@ export type ClientActionParameters<
  * @param args the arguments for the hook
  * @param args.client the smart account client to use for executing the actions
  * @param args.actions the smart account client decorator actions to execute
+ * @returns a set of functions for executing the actions inlcuding the state of execution see {@link UseClientActionsResult}
+ *
  * @example
  * ```tsx
  * const Foo = () => {
@@ -99,7 +101,6 @@ export type ClientActionParameters<
  *  });
  * };
  * ```
- * @returns a set of functions for executing the actions inlcuding the state of execution see {@link UseClientActionsResult}
  */
 export function useClientActions<
   TTransport extends Transport = Transport,
