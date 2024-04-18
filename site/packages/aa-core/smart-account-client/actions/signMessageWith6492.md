@@ -41,9 +41,9 @@ A Promise containing the signature of the message, additionally wrapped in EIP-6
 
 ## Parameters
 
-### `message: string | Uint8Array`
+### `message: SignableMessage`
 
-The message to sign
+The message to sign, of [this viem type](https://viem.sh/docs/actions/wallet/signMessage.html#message)
 
 ### `account?: SmartContractAccount`
 
