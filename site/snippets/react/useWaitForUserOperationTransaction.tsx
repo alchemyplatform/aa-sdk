@@ -27,6 +27,7 @@ export function ComponentWithWaitForUOTxn() {
     onError: (error) => {
       // [optional] Do something with the error
     },
+    // [optional] ...additional mutationArgs
   });
 
   return (
