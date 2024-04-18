@@ -1,13 +1,13 @@
-import { useAddPasskey } from "@alchemy/aa-alchemy/react";
+import { useLogout } from "@alchemy/aa-alchemy/react";
 
-export function ComponentWithAddPasskey() {
+export function ComponentWithLogout() {
   /**
    * Assumes the app has context of a signer with an authenticated user
    * by using the `AlchemyAccountProvider` from `@alchemy/aa-alchemy/react`.
    */
-  const addPasskey = useAddPasskey({
-    onSuccess: (authenticatorIds) => {
-      // [optional] Do something with the authenticatorIds
+  const { logout } = useLogout({
+    onSuccess: () => {
+      // [optional] Do something after the user has been logged out
     },
     onError: (error) => {
       // [optional] Do something with the error
@@ -17,7 +17,7 @@ export function ComponentWithAddPasskey() {
 
   return (
     <div>
-      <button onClick={() => addPasskey}>Add Passkey</button>
+      <button onClick={() => logout}>Logout</button>
     </div>
   );
 }

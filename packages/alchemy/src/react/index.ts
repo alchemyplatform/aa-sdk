@@ -13,6 +13,8 @@ export type * from "./hooks/useAuthenticate.js";
 export { useAuthenticate } from "./hooks/useAuthenticate.js";
 export type * from "./hooks/useBundlerClient.js";
 export { useBundlerClient } from "./hooks/useBundlerClient.js";
+export type * from "./hooks/useLogout.js";
+export { useLogout } from "./hooks/useLogout.js";
 export type * from "./hooks/useSigner.js";
 export { useSigner } from "./hooks/useSigner.js";
 export type * from "./hooks/useSignerStatus.js";
