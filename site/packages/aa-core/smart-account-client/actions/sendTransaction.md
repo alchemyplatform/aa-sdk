@@ -71,6 +71,6 @@ export type SendTransactionParameters<
 
 The [`SendTransactionParameters`](https://github.com/wevm/viem/blob/6ef4ac131a878bf1dc4b335f5dc127e62618dda0/src/types/transaction.ts#L209) used as the parameter to the `WalletAction` [`sendTransaction`](https://viem.sh/docs/actions/wallet/sendTransaction) method representing a traditional ethereum transaction request.
 
-- `overrides?:` [`UserOperationOverrides`](/resources/types#UserOperationOverrides)
+- `overrides?:` [`UserOperationOverrides`](/resources/types#useroperationoverrides)
 
 Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit`, `paymasterAndData`, or `nonceKey` for the user operation request

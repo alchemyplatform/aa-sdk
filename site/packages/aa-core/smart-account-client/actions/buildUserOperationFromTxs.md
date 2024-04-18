@@ -123,7 +123,7 @@ The batch array of `UserOperationCallData` corresponding to the user operation c
 
 The `viem` [`RpcTransactionRequest`](https://viem.sh/docs/glossary/types#transactionrequest) type representing a traditional ethereum transaction
 
-- `overrides?:` [`UserOperationOverrides`](/resources/types#UserOperationOverrides)
+- `overrides?:` [`UserOperationOverrides`](/resources/types#useroperationoverrides)
 
 Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit`, `paymasterAndData`, or `nonceKey` for the user operation request
 
