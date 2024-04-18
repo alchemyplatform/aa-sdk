@@ -12,9 +12,14 @@ import {
   defaultAccountState,
   type SupportedAccount,
   type SupportedAccountTypes,
+  type SupportedAccounts,
 } from "../../config/index.js";
 import { useAlchemyAccountContext } from "../context.js";
+import type { BaseHookMutationArgs } from "../types.js";
 import { useSignerStatus } from "./useSignerStatus.js";
+
+export type UseAccountMutationArgs<TAccount extends SupportedAccountTypes> =
+  BaseHookMutationArgs<SupportedAccount<TAccount> | SupportedAccounts, void>;
 
 export type UseAccountResult<TAccount extends SupportedAccountTypes> = {
   account?: SupportedAccount<TAccount>;
@@ -24,11 +29,13 @@ export type UseAccountResult<TAccount extends SupportedAccountTypes> = {
 export type UseAccountProps<TAccount extends SupportedAccountTypes> =
   GetAccountParams<TAccount> & {
     skipCreate?: boolean;
+    mutationArgs?: UseAccountMutationArgs<TAccount>;
   };
 
 export function useAccount<TAccount extends SupportedAccountTypes>(
   params: UseAccountProps<TAccount>
 ): UseAccountResult<TAccount> {
+  const { mutationArgs } = params;
   const { config, queryClient } = useAlchemyAccountContext();
   const status = useSignerStatus();
   const account = useSyncExternalStore(
@@ -41,6 +48,7 @@ export function useAccount<TAccount extends SupportedAccountTypes>(
     {
       mutationFn: async () => account?.account ?? createAccount(params, config),
       mutationKey: ["createAccount", params.type],
+      ...mutationArgs,
     },
     queryClient
   );

@@ -3,7 +3,14 @@ import { useState } from "react";
 
 export function Login() {
   const [email, setEmail] = useState("");
-  const { authenticate, isPending } = useAuthenticate();
+  const { authenticate, isPending } = useAuthenticate({
+    onSuccess: (user) => {
+      // [optional] Do something with the user info
+    },
+    onError: (error) => {
+      // [optional] Do something with the error
+    },
+  });
 
   return (
     <div>

@@ -66,6 +66,10 @@ An optional param object based on the `type` property passed in above. It allows
 
 An optional param that allows you to avoid creating a new instance of the account. This is useful if you know your account has already been created and cached locally.
 
+### ...mutationArgs
+
+ <!--@include: ./BaseHookMutationArgs.md-->
+
 ## Return Type
 
 ```ts
