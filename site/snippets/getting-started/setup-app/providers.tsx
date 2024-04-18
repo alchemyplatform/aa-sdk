@@ -9,7 +9,7 @@ import { PropsWithChildren, Suspense } from "react";
 export const Providers = (props: PropsWithChildren) => {
   const queryClient = new QueryClient();
   const config = createConfig({
-    rpcUrl: "/api/rpc",
+    rpcUrl: "/api/rpc", // this will proxy requests through the app's backend via NextJS routing to hide the Alchemy API key
     chain: arbitrumSepolia,
   });
 
