@@ -71,6 +71,11 @@
       "import": "./dist/esm/passport/index.js",
       "default": "./dist/cjs/passport/index.js"
     },
+    "./fordefi": {
+      "types": "./dist/types/fordefi/index.d.ts",
+      "import": "./dist/esm/fordefi/index.js",
+      "default": "./dist/cjs/fordefi/index.js"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {
@@ -90,6 +95,7 @@
     "@0xpass/webauthn-signer": "^1.0.0",
     "@arcana/auth": "^1.0.8",
     "@fireblocks/fireblocks-web3-provider": "^1.2.6",
+    "@fordefi/web3-provider": "^0.1.0",
     "@lit-protocol/crypto": "3.0.24",
     "@lit-protocol/lit-node-client": "3.0.24",
     "@lit-protocol/pkp-ethers": "3.0.24",
@@ -132,6 +138,7 @@
   "optionalDependencies": {
     "@arcana/auth": "^1.0.8",
     "@fireblocks/fireblocks-web3-provider": "^1.2.6",
+    "@fordefi/web3-provider": "^0.1.0",
     "@lit-protocol/crypto": "3.0.24",
     "@lit-protocol/lit-node-client": "3.0.24",
     "@lit-protocol/pkp-ethers": "3.0.24",

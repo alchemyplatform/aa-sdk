@@ -234,6 +234,7 @@ export const sidebar: DefaultTheme.Sidebar = [
           { text: "Dfns", link: "/dfns" },
           { text: "WalletKit", link: "/walletkit" },
           { text: "Passport", link: "/passport" },
+          { text: "Fordefi", link: "/fordefi" },
         ],
       },
       { text: "EOA signer", link: "/eoa" },

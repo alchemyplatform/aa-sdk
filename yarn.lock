@@ -4156,6 +4156,13 @@
     fireblocks-sdk "^3.1.4"
     web3-providers-http "1.8.0"
 
+"@fordefi/web3-provider@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@fordefi/web3-provider/-/web3-provider-0.1.0.tgz#c44b7ed4b56736ab9016a8251b735f7c37c0d58f"
+  integrity sha512-BsZvOJrEOKGlmZo2P4BgpuLm5hXFq1edHuTz4L4TvFTxyHcpEV5kDPwM4ElYNOj9uvkXwPK4xpUj1nO6mhZAHA==
+  dependencies:
+    viem "^2.8.6"
+
 "@github/webauthn-json@^2.1.1":
   version "2.1.1"
   resolved "https://registry.npmjs.org/@github/webauthn-json/-/webauthn-json-2.1.1.tgz"
@@ -18744,6 +18751,20 @@ viem@^1.21.4:
     "@scure/bip32" "1.3.2"
     "@scure/bip39" "1.2.1"
     abitype "0.9.8"
+    isows "1.0.3"
+    ws "8.13.0"
+
+viem@^2.8.6:
+  version "2.9.32"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-2.9.32.tgz#7270beb447d0df5185030172403a67334cb99970"
+  integrity sha512-V2K1kkR+L/JZ1be/3NTsqLhN7BsMXXTTFOH3/LyEALbL8gln7QCHvmI942VbY9l5eYYH1EQ90vwKh24TqDd9gw==
+  dependencies:
+    "@adraffy/ens-normalize" "1.10.0"
+    "@noble/curves" "1.2.0"
+    "@noble/hashes" "1.3.2"
+    "@scure/bip32" "1.3.2"
+    "@scure/bip39" "1.2.1"
+    abitype "1.0.0"
     isows "1.0.3"
     ws "8.13.0"
 

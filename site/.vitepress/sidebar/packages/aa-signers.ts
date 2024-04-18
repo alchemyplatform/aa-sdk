@@ -149,6 +149,20 @@ export const aaSignersSidebar: DefaultTheme.SidebarItem = {
         { text: "getAuthDetails", link: "/getAuthDetails" },
       ],
     },
+    {
+      text: "Fordefi Signer",
+      collapsed: true,
+      base: "/packages/aa-signers/fordefi",
+      items: [
+        { text: "Introduction", link: "/introduction" },
+        { text: "constructor", link: "/constructor" },
+        { text: "authenticate", link: "/authenticate" },
+        { text: "getAddress", link: "/getAddress" },
+        { text: "signMessage", link: "/signMessage" },
+        { text: "signTypedData", link: "/signTypedData" },
+        { text: "getAuthDetails", link: "/getAuthDetails" },
+      ],
+    },
     { text: "Contributing", link: "/contributing" },
   ],
 };
