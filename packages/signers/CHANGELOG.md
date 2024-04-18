@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.8.2-alpha.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.8.1...v3.8.2-alpha.1) (2024-04-18)
+
+### Features
+
+- paymaster middleware update per entrypoint v7 user operation ([#580](https://github.com/alchemyplatform/aa-sdk/issues/580)) ([399479a](https://github.com/alchemyplatform/aa-sdk/commit/399479a38d6eaf0ab6d4d46b38f9d0f5a773cbed))
+
 ## [3.8.2-alpha.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.8.1...v3.8.2-alpha.0) (2024-04-17)
 
 **Note:** Version bump only for package @alchemy/aa-signers

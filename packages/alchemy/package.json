@@ -1,6 +1,6 @@
 {
   "name": "@alchemy/aa-alchemy",
-  "version": "3.8.2-alpha.0",
+  "version": "3.8.2-alpha.1",
   "description": "adapters for @alchemy/aa-core for interacting with alchemy services",
   "author": "Alchemy",
   "license": "MIT",
@@ -59,7 +59,7 @@
     "vitest": "^0.31.0"
   },
   "dependencies": {
-    "@alchemy/aa-core": "^3.8.2-alpha.0",
+    "@alchemy/aa-core": "^3.8.2-alpha.1",
     "@turnkey/http": "^2.6.2",
     "@turnkey/iframe-stamper": "^1.0.0",
     "@turnkey/viem": "^0.4.8",
