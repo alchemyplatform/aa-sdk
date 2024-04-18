@@ -16,6 +16,11 @@ export type User = {
 };
 //#endregion User
 
+export type ExportWalletParams = {
+  iframeContainerId: string;
+  iframeElementId?: string;
+};
+
 export type CreateAccountParams =
   | {
       type: "email";
