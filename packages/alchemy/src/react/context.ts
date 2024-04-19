@@ -31,6 +31,13 @@ export const useAlchemyAccountContext = () => {
   return context;
 };
 
+/**
+ * Provider for Alchemy accounts.
+ * @param config The Alchemy accounts configuration.
+ * @param queryClient The query client.
+ * @param children The children to render.
+ * @returns The element to wrap your application in for Alchemy Accounts context.
+ */
 export const AlchemyAccountProvider = ({
   config,
   queryClient,
