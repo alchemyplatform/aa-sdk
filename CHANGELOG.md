@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.9.0-alpha.4](https://github.com/alchemyplatform/aa-sdk/compare/v3.9.0-alpha.3...v3.9.0-alpha.4) (2024-04-19)
+
+### Features
+
+- add js docs to account provider ([#602](https://github.com/alchemyplatform/aa-sdk/issues/602)) ([2853f5e](https://github.com/alchemyplatform/aa-sdk/commit/2853f5e34eb5d4dab7525b452ddb5af8e020cd46))
+
 # [3.9.0-alpha.3](https://github.com/alchemyplatform/aa-sdk/compare/v3.9.0-alpha.2...v3.9.0-alpha.3) (2024-04-19)
 
 ### Features
