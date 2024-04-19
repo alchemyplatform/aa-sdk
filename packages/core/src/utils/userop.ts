@@ -47,12 +47,16 @@ export function isValidPaymasterAndData<
     return (request as UserOperationStruct_v6).paymasterAndData != null;
   }
 
-  // either all exist, or none.
-  return allEqual(
-    (request as UserOperationStruct_v7).paymaster == null,
-    (request as UserOperationStruct_v7).paymasterData == null,
-    (request as UserOperationStruct_v7).paymasterPostOpGasLimit == null,
-    (request as UserOperationStruct_v7).paymasterVerificationGasLimit == null
+  // When using paymaster, all fields are required except for paymasterPostOpGasLimit, which is optional. Otherwise, do not include any paymaster fields.
+  return (
+    ((request as UserOperationStruct_v7).paymaster != null &&
+      (request as UserOperationStruct_v7).paymasterData != null &&
+      (request as UserOperationStruct_v7).paymasterVerificationGasLimit !=
+        null) ||
+    ((request as UserOperationStruct_v7).paymaster == null &&
+      (request as UserOperationStruct_v7).paymasterData == null &&
+      (request as UserOperationStruct_v7).paymasterPostOpGasLimit == null &&
+      (request as UserOperationStruct_v7).paymasterVerificationGasLimit == null)
   );
 }
 
