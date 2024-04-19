@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.9.0-alpha.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.8.2-alpha.1...v3.9.0-alpha.0) (2024-04-19)
+
+### Features
+
+- add sendTransaction and sendTransactions hooks ([#589](https://github.com/alchemyplatform/aa-sdk/issues/589)) ([184bfa0](https://github.com/alchemyplatform/aa-sdk/commit/184bfa0b8efb20ae95fe751694f35ca88b899cdd))
+- add useExportAccount hook ([#567](https://github.com/alchemyplatform/aa-sdk/issues/567)) ([50770d8](https://github.com/alchemyplatform/aa-sdk/commit/50770d89e88f58709c0de0e4cbd5854482b19359))
+- add useLogout hook ([#566](https://github.com/alchemyplatform/aa-sdk/issues/566)) ([a64cf7f](https://github.com/alchemyplatform/aa-sdk/commit/a64cf7f5fa603f0c55792f61af9ef4f992200a54))
+- add useSendUserOperation and useDropAndReplaceUserOperation hooks ([#581](https://github.com/alchemyplatform/aa-sdk/issues/581)) ([877785d](https://github.com/alchemyplatform/aa-sdk/commit/877785d0bebe5a383045ffab84a498c116d9fbcd))
+- add useSignMessage and useSignTypedData hooks ([#568](https://github.com/alchemyplatform/aa-sdk/issues/568)) ([de5262c](https://github.com/alchemyplatform/aa-sdk/commit/de5262c585260925adfa08e21d008fa8011284a9))
+- add useWaitForUserOperationTransaction hook ([#582](https://github.com/alchemyplatform/aa-sdk/issues/582)) ([176548f](https://github.com/alchemyplatform/aa-sdk/commit/176548f4ae712c7e6d0173c12fc436994ffedb95))
+- update useAuthenticate and useAccount to include mutation args ([#592](https://github.com/alchemyplatform/aa-sdk/issues/592)) ([1508d7d](https://github.com/alchemyplatform/aa-sdk/commit/1508d7dc184600cbd6683fff0d48cd4abdb13839))
+
 ## [3.8.2-alpha.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.8.1...v3.8.2-alpha.1) (2024-04-18)
 
 ### Bug Fixes
