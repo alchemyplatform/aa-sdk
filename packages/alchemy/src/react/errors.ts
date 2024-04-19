@@ -1,5 +1,9 @@
 import { BaseError } from "../errors/base.js";
 
+/**
+ * Error thrown when a hook is called without a AlchemyAccountProvider.
+ * @param hookName The name of the hook.
+ */
 export class NoAlchemyAccountContextError extends BaseError {
   constructor(hookName: string) {
     super(`${hookName} must be used within a AlchemyAccountProvider`);
