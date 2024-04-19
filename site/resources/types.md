@@ -168,7 +168,7 @@ encodeUpgradeToAndCall,
 <<< @/../packages/core/src/types.ts#UserOperationCallData
 :::
 
-## `UserOperationEstimateGasResponse<EntryPointVersion>`
+## `UserOperationEstimateGasResponse`
 
 An interface that defines the structure for the response received from the RPC method [`eth_estimateUserOperationGas`](https://docs.alchemy.com/reference/eth-estimateuseroperationgas). This response provides detailed information about the estimated gas usage for a `UserOperation`.
 

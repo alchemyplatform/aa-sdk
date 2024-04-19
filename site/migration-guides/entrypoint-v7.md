@@ -181,7 +181,7 @@ export type UserOperationOverrides<'0.7.0'> = {
 }
 ```
 
-##### `stateOverride` field added to `UserOperationOverrides` for validating and estimating gas for transactions
+#### `stateOverride` field added to `UserOperationOverrides` for validating and estimating gas for transactions
 
 The state overrides during transaction calls (e.g., [`eth_call`](https://docs.alchemy.com/reference/eth-call) and [`eth_estimateGas`](https://docs.alchemy.com/reference/eth-estimategas)) allow for more flexible testing and gas estimation. However, not all networks support this feature. For networks lacking state overrides, `Entrypoint` v0.7 introduced the `delegateAndRevert()` function to be used as a workaround. It aids in validating and estimating gas for transactions by simulating conditions without permanently changing the on-chain state.
 
