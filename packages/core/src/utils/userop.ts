@@ -48,16 +48,15 @@ export function isValidPaymasterAndData<
   }
 
   // When using paymaster, all fields are required except for paymasterPostOpGasLimit, which is optional. Otherwise, do not include any paymaster fields.
-  return (
-    ((request as UserOperationStruct_v7).paymaster != null &&
-      (request as UserOperationStruct_v7).paymasterData != null &&
-      (request as UserOperationStruct_v7).paymasterVerificationGasLimit !=
-        null) ||
-    ((request as UserOperationStruct_v7).paymaster == null &&
-      (request as UserOperationStruct_v7).paymasterData == null &&
-      (request as UserOperationStruct_v7).paymasterPostOpGasLimit == null &&
-      (request as UserOperationStruct_v7).paymasterVerificationGasLimit == null)
-  );
+  const struct = request as UserOperationStruct_v7;
+  const requiredFieldsWithPaymaster = [
+    struct.paymasterData,
+    struct.paymasterVerificationGasLimit,
+  ];
+  return struct.paymaster != null
+    ? requiredFieldsWithPaymaster.every((field) => field != null)
+    : requiredFieldsWithPaymaster.every((field) => field == null) &&
+        struct.paymasterPostOpGasLimit == null;
 }
 
 /**
