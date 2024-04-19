@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.9.0-alpha.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.9.0-alpha.1...v3.9.0-alpha.2) (2024-04-19)
+
+### Features
+
+- add js docs to client undefined error ([#600](https://github.com/alchemyplatform/aa-sdk/issues/600)) ([7eabe78](https://github.com/alchemyplatform/aa-sdk/commit/7eabe7843acfa3e10d20bb362082a6d159df9747))
+
 # [3.9.0-alpha.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.9.0-alpha.0...v3.9.0-alpha.1) (2024-04-19)
 
 ### Features
