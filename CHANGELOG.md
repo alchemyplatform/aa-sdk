@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.9.0-alpha.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.9.0-alpha.0...v3.9.0-alpha.1) (2024-04-19)
+
+### Bug Fixes
+
+- addes permissions to write to repo for publish ([#598](https://github.com/alchemyplatform/aa-sdk/issues/598)) ([292bebb](https://github.com/alchemyplatform/aa-sdk/commit/292bebb39046e616f096bbeb613a44a98c4303df))
+
+### Features
+
+- add js docs to types ([#599](https://github.com/alchemyplatform/aa-sdk/issues/599)) ([c781e81](https://github.com/alchemyplatform/aa-sdk/commit/c781e811e5d0347953ca0a2d7511fc46747e473b))
+
 # [3.9.0-alpha.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.8.2-alpha.1...v3.9.0-alpha.0) (2024-04-19)
 
 ### Features
