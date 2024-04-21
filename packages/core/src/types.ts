@@ -61,7 +61,7 @@ export type UserOperationFeeOptions<
   : z.input<typeof UserOperationFeeOptionsSchema>;
 
 export type UserOperationOverridesParameter<
-  TEntryPointVersion extends EntryPointVersion,
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
   Required extends boolean = false
 > = Required extends true
   ? { overrides: UserOperationOverrides<TEntryPointVersion> }
@@ -69,7 +69,7 @@ export type UserOperationOverridesParameter<
 
 //#region UserOperationPaymasterOverrides
 export type UserOperationPaymasterOverrides<
-  TEntryPointVersion extends EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = TEntryPointVersion extends "0.6.0"
   ? {
       // paymasterAndData overrides only allows '0x' for bypassing paymaster middleware
@@ -94,7 +94,7 @@ export type UserOperationPaymasterOverrides<
 
 //#region UserOperationOverrides
 export type UserOperationOverrides<
-  TEntryPointVersion extends EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = Partial<
   {
     callGasLimit:
@@ -202,18 +202,19 @@ export interface UserOperationRequest_v7 {
 
 //#region UserOperationRequest
 // Reference: https://eips.ethereum.org/EIPS/eip-4337#definitions
-export type UserOperationRequest<TEntryPointVersion extends EntryPointVersion> =
-  TEntryPointVersion extends "0.6.0"
-    ? UserOperationRequest_v6
-    : TEntryPointVersion extends "0.7.0"
-    ? UserOperationRequest_v7
-    : never;
+export type UserOperationRequest<
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+> = TEntryPointVersion extends "0.6.0"
+  ? UserOperationRequest_v6
+  : TEntryPointVersion extends "0.7.0"
+  ? UserOperationRequest_v7
+  : never;
 
 //#endregion UserOperationRequest
 
 //#region UserOperationEstimateGasResponse
 export interface UserOperationEstimateGasResponse<
-  TEntryPointVersion extends EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > {
   /* Gas overhead of this UserOperation */
   preVerificationGas: BigNumberish;
@@ -234,7 +235,7 @@ export interface UserOperationEstimateGasResponse<
 
 //#region UserOperationResponse
 export interface UserOperationResponse<
-  TEntryPointVersion extends EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > {
   /* the User Operation */
   userOperation: UserOperationRequest<TEntryPointVersion>;
@@ -399,10 +400,11 @@ export interface UserOperationStruct_v7 {
 //#endregion UserOperationStruct_v7
 
 //#region UserOperationStruct
-export type UserOperationStruct<TEntryPointVersion extends EntryPointVersion> =
-  TEntryPointVersion extends "0.6.0"
-    ? UserOperationStruct_v6
-    : TEntryPointVersion extends "0.7.0"
-    ? UserOperationStruct_v7
-    : never;
+export type UserOperationStruct<
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+> = TEntryPointVersion extends "0.6.0"
+  ? UserOperationStruct_v6
+  : TEntryPointVersion extends "0.7.0"
+  ? UserOperationStruct_v7
+  : never;
 //#endregion UserOperationStruct

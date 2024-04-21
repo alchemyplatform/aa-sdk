@@ -5,7 +5,7 @@ import type { UserOperationRequest } from "../../types";
 
 export const sendRawUserOperation = async <
   TClient extends Client<Transport, Chain | undefined, any, BundlerRpcSchema>,
-  TEntryPointVersion extends EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 >(
   client: TClient,
   args: {

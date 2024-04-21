@@ -3,6 +3,7 @@ import {
   type GetAccountParameter,
   type OneOf,
   type SmartAccountSigner,
+  type SmartContractAccount,
 } from "@alchemy/aa-core";
 import { type Address, type Chain } from "viem";
 import type { LightAccountBase } from "./accounts/base";
@@ -90,8 +91,8 @@ export type GetLightAccountVersionDefsForEntryPoint<
 >;
 
 export type GetLightAccountType<
-  TAccount extends LightAccountBase | undefined,
-  TAccountOverride extends LightAccountBase = LightAccountBase
+  TAccount extends SmartContractAccount | undefined,
+  TAccountOverride extends SmartContractAccount = SmartContractAccount
 > = GetAccountParameter<TAccount, TAccountOverride> extends LightAccountBase<
   SmartAccountSigner,
   infer TLightAccountType

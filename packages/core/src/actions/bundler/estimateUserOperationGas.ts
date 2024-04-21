@@ -8,7 +8,7 @@ import type {
 
 export const estimateUserOperationGas = async <
   TClient extends Client<Transport, Chain | undefined, any, BundlerRpcSchema>,
-  TEntryPointVersion extends EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 >(
   client: TClient,
   args: {

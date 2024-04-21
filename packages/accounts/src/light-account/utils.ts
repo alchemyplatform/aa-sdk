@@ -1,4 +1,5 @@
 import {
+  DefaultFactoryNotDefinedError,
   arbitrum,
   arbitrumGoerli,
   arbitrumSepolia,
@@ -18,7 +19,6 @@ import {
   type SmartContractAccount,
 } from "@alchemy/aa-core";
 import { fromHex, type Address, type Chain } from "viem";
-import type { LightAccountBase } from "./accounts/base";
 import type {
   GetLightAccountType,
   IAccountVersionRegistry,
@@ -131,6 +131,25 @@ export const defaultLightAccountVersion = <
     ? "v1.1.0"
     : "v2.0.0") as LightAccountVersion<TLightAccountType>;
 
+/**
+ * Utility method returning the default light account factory address given a {@link Chain} object
+ *
+ * @param chain - a {@link Chain} object
+ * @param version - the version of the light account to get the factory address for
+ * @returns a {@link Address} for the given chain
+ * @throws if the chain doesn't have an address currently deployed
+ */
+export const getDefaultLightAccountFactoryAddress = (
+  chain: Chain,
+  version: LightAccountVersion<"LightAccount"> = "v1.1.0"
+): Address => {
+  const address =
+    AccountVersionRegistry.LightAccount[version].address[chain.id];
+  if (!address)
+    throw new DefaultFactoryNotDefinedError("LightAccount", chain, "0.6.0");
+  return address.factory;
+};
+
 export const LightAccountUnsupported1271Impls = [
   AccountVersionRegistry.LightAccount["v1.0.1"],
   AccountVersionRegistry.LightAccount["v1.0.2"],
@@ -143,7 +162,7 @@ export const LightAccountUnsupported1271Factories = new Set(
 );
 
 export async function getLightAccountVersionDef<
-  TAccount extends LightAccountBase,
+  TAccount extends SmartContractAccount,
   TLightAccountType extends GetLightAccountType<TAccount> = GetLightAccountType<TAccount>
 >(
   account: TAccount,
