@@ -37,4 +37,4 @@ const address = await magicSigner.getAddress();
 
 ### `Promise<Address>`
 
-A Promise containing the address of the Signer.
+A `Promise` containing the address of the Signer.

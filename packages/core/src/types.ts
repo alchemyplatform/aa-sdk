@@ -209,7 +209,7 @@ export interface UserOperationEstimateGasResponse<
   /* Value used by inner account execution */
   callGasLimit: BigNumberish;
   /*
-   * Entrypoint v0.7.0 operations only.
+   * EntryPoint v0.7.0 operations only.
    * The amount of gas to allocate for the paymaster validation code.
    * Note: `eth_estimateUserOperationGas` does not return paymasterPostOpGasLimit.
    */

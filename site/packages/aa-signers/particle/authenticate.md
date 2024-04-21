@@ -43,7 +43,7 @@ await particleSigner.authenticate();
 
 ### `Promise<ParticleUserInfo>`
 
-A Promise containing the `ParticleUserInfo`, an object derived from Particle's [`UserInfo`](https://github.com/Particle-Network/particle-react-native/blob/main/particle-auth/src/Models/LoginInfo.ts#L83) interface.
+A `Promise` containing the `ParticleUserInfo`, an object derived from Particle's [`UserInfo`](https://github.com/Particle-Network/particle-react-native/blob/main/particle-auth/src/Models/LoginInfo.ts#L83) interface.
 
 ## Parameters
 

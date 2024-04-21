@@ -51,7 +51,7 @@ console.log(
 
 ### `Promise<boolean>`
 
-A Promise containing the boolean value indicating whether the UO to be sent is eligible for gas sponsorship or not.
+A `Promise` containing the boolean value indicating whether the UO to be sent is eligible for gas sponsorship or not.
 
 ## Parameters
 

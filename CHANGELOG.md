@@ -53,7 +53,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Features
 
 - add useAddPasskey hook ([#565](https://github.com/alchemyplatform/aa-sdk/issues/565)) ([27b3bde](https://github.com/alchemyplatform/aa-sdk/commit/27b3bde8b9593055f213f15fbefe07e3a010bd60))
-- **entrypoint-0.7:** base - all changes in regards to the Entrypoint v6 & v7 support ([#514](https://github.com/alchemyplatform/aa-sdk/issues/514)) ([6cc692e](https://github.com/alchemyplatform/aa-sdk/commit/6cc692edf2ac20adf310b7a0efd99879b6e6f485)), closes [#549](https://github.com/alchemyplatform/aa-sdk/issues/549)
+- **entrypoint-0.7:** base - all changes in regards to the EntryPoint v6 & v7 support ([#514](https://github.com/alchemyplatform/aa-sdk/issues/514)) ([6cc692e](https://github.com/alchemyplatform/aa-sdk/commit/6cc692edf2ac20adf310b7a0efd99879b6e6f485)), closes [#549](https://github.com/alchemyplatform/aa-sdk/issues/549)
 - light account v2 entrypoint v7 and multi owner update ([#548](https://github.com/alchemyplatform/aa-sdk/issues/548)) ([5f2f5c9](https://github.com/alchemyplatform/aa-sdk/commit/5f2f5c963ecdeb8c7efadb6eda2f2e9e6187f636))
 - move signUserOperation middleware step out of asyncPipe ([#587](https://github.com/alchemyplatform/aa-sdk/issues/587)) ([2685d14](https://github.com/alchemyplatform/aa-sdk/commit/2685d14bd550eec3fbb2185f22feae7028d484c1))
 - paymaster middleware update per entrypoint v7 user operation ([#580](https://github.com/alchemyplatform/aa-sdk/issues/580)) ([399479a](https://github.com/alchemyplatform/aa-sdk/commit/399479a38d6eaf0ab6d4d46b38f9d0f5a773cbed))
@@ -66,7 +66,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-- **entrypoint-0.7:** base - all changes in regards to the Entrypoint v6 & v7 support ([#514](https://github.com/alchemyplatform/aa-sdk/issues/514)) ([6cc692e](https://github.com/alchemyplatform/aa-sdk/commit/6cc692edf2ac20adf310b7a0efd99879b6e6f485)), closes [#549](https://github.com/alchemyplatform/aa-sdk/issues/549)
+- **entrypoint-0.7:** base - all changes in regards to the EntryPoint v6 & v7 support ([#514](https://github.com/alchemyplatform/aa-sdk/issues/514)) ([6cc692e](https://github.com/alchemyplatform/aa-sdk/commit/6cc692edf2ac20adf310b7a0efd99879b6e6f485)), closes [#549](https://github.com/alchemyplatform/aa-sdk/issues/549)
 - light account v2 entrypoint v7 and multi owner update ([#548](https://github.com/alchemyplatform/aa-sdk/issues/548)) ([5f2f5c9](https://github.com/alchemyplatform/aa-sdk/commit/5f2f5c963ecdeb8c7efadb6eda2f2e9e6187f636))
 - paymaster middleware update per entrypoint v7 user operation ([1709533](https://github.com/alchemyplatform/aa-sdk/commit/1709533ba9cd227e2c3c7c9cb848f921bde353f4))
 

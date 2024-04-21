@@ -36,7 +36,7 @@ const signedMessageWith6492 = smartAccountClient.signMessageWith6492({
 
 ### `Promise<Hash>`
 
-A Promise containing the signature of the message, additionally wrapped in EIP-6492 format if the account is undeployed.
+A `Promise` containing the signature of the message, additionally wrapped in EIP-6492 format if the account is undeployed.
 
 ## Parameters
 

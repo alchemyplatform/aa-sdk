@@ -38,7 +38,7 @@ const signedMessage = await litSigner.signMessage("Hello World!");
 
 ### `Promise<Hex>`
 
-A Promise containing the signature of the message.
+A `Promise` containing the signature of the message.
 
 ## Parameters
 

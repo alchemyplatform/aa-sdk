@@ -45,7 +45,7 @@ await passportSigner.authenticate();
 
 ### `Promise<PassportUserInfo>`
 
-A Promise containing the `PassportUserInfo`, an object derived from Particle's [`UserInfo`](https://github.com/Particle-Network/particle-react-native/blob/main/particle-auth/src/Models/LoginInfo.ts#L83) interface.
+A `Promise` containing the `PassportUserInfo`, an object derived from Particle's [`UserInfo`](https://github.com/Particle-Network/particle-react-native/blob/main/particle-auth/src/Models/LoginInfo.ts#L83) interface.
 
 ## Parameters
 

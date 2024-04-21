@@ -41,7 +41,7 @@ await portalSigner.authenticate();
 
 ### `Promise<PortalUserInfo>`
 
-A Promise containing the `PortalUserInfo`, an object with the following fields:
+A `Promise` containing the `PortalUserInfo`, an object with the following fields:
 
 - `id: string` -- ID of the Portal Signer.
 - `address: string` -- EOA address of the Portal Signer.

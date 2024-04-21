@@ -34,7 +34,7 @@ const address = smartAccountClient.getAddress();
 
 ### `Promise<Address>`
 
-A Promise that resolves to the address of the connected account
+A `Promise` that resolves to the address of the connected account
 
 ## Parameters
 

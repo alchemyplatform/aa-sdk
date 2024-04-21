@@ -27,7 +27,7 @@ head:
 
 ### `Promise<SmartAccountClient>`
 
-A Promise containing a new `SmartAccountClient` connected to a Light Account.
+A `Promise` containing a new `SmartAccountClient` connected to a Light Account.
 
 ## Parameters
 

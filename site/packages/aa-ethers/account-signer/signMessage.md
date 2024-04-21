@@ -34,7 +34,7 @@ const signedMessage = await accountSigner.signMessage("test");
 
 ### `Promise<string>`
 
-A Promise containing the hex signature of the message
+A `Promise` containing the hex signature of the message
 
 ## Parameters
 

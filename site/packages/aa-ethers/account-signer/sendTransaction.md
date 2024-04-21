@@ -43,7 +43,7 @@ const txHash = await accountSigner.sendTransaction({
 
 ### `Promise<TransactionResponse>`
 
-A Promise containing the ethers.js `TransactionResponse` object
+A `Promise` containing the ethers.js `TransactionResponse` object
 
 ## Parameters
 

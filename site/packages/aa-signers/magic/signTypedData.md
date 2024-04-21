@@ -67,7 +67,7 @@ const signedTypedData = await magicSigner.signTypedData({
 
 ### `Promise<Hex>`
 
-A Promise containing the signature of the typed data.
+A `Promise` containing the signature of the typed data.
 
 ## Parameters
 
