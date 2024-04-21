@@ -3,19 +3,19 @@ import type {
   ClientMiddlewareConfig,
   ClientMiddlewareFn,
   EntryPointVersion,
+  Multiplier,
   UserOperationFeeOptions,
   UserOperationOverrides,
-  UserOperationStruct,
+  UserOperationRequest,
 } from "@alchemy/aa-core";
 import {
+  bypassPaymasterAndData,
   deepHexlify,
   defaultGasEstimator,
   filterUndefined,
   isBigNumberish,
   isMultiplier,
   resolveProperties,
-  type Multiplier,
-  type UserOperationRequest,
 } from "@alchemy/aa-core";
 import { fromHex, isHex, type Hex } from "viem";
 import type { ClientWithAlchemyMethods } from "../client/types";
@@ -123,15 +123,9 @@ export function alchemyGasManagerMiddleware<C extends ClientWithAlchemyMethods>(
     gasEstimator: disableGasEstimation
       ? fallbackGasEstimator
       : async (struct, { overrides, account, feeOptions }) => {
-          const entryPoint = account.getEntryPoint();
           // if user is bypassing paymaster to fallback to having the account to pay the gas (one-off override),
           // we cannot delegate gas estimation to the bundler because paymaster middleware will not be called
-          if (
-            (entryPoint.version === "0.6.0"
-              ? (overrides as UserOperationOverrides<"0.6.0">)?.paymasterAndData
-              : (overrides as UserOperationOverrides<"0.7.0">)
-                  ?.paymasterData) === "0x"
-          ) {
+          if (overrides && bypassPaymasterAndData(overrides)) {
             return {
               ...struct,
               ...fallbackGasEstimator(struct, {
@@ -152,16 +146,9 @@ export function alchemyGasManagerMiddleware<C extends ClientWithAlchemyMethods>(
           let maxFeePerGas = await struct.maxFeePerGas;
           let maxPriorityFeePerGas = await struct.maxPriorityFeePerGas;
 
-          const entryPoint = account.getEntryPoint();
-          // but if user is bypassing paymaster to fallback to having the account to pay the gas (one-off override),
+          // if user is bypassing paymaster to fallback to having the account to pay the gas (one-off override),
           // we cannot delegate gas estimation to the bundler because paymaster middleware will not be called
-          if (
-            entryPoint.version === "0.6.0"
-              ? (overrides as UserOperationOverrides<"0.6.0">)
-                  ?.paymasterAndData === "0x"
-              : (overrides as UserOperationOverrides<"0.7.0">)
-                  ?.paymasterData === "0x"
-          ) {
+          if (overrides && bypassPaymasterAndData(overrides)) {
             const result = await fallbackFeeDataGetter(struct, {
               overrides,
               feeOptions,
@@ -231,28 +218,6 @@ function requestGasAndPaymasterData<C extends ClientWithAlchemyMethods>(
       struct,
       { overrides: overrides_, feeOptions, account }
     ) => {
-      // handle one-off overrides for bypassing paymaster middleware
-      if (
-        account.getEntryPoint().version === "0.6.0" &&
-        (overrides_ as UserOperationOverrides<"0.6.0">)?.paymasterAndData ===
-          "0x"
-      ) {
-        return {
-          ...struct,
-          paymasterAndData: "0x",
-        };
-      } else if (
-        account.getEntryPoint().version === "0.7.0" &&
-        (overrides_ as UserOperationOverrides<"0.7.0">)?.paymasterData === "0x"
-      ) {
-        delete (struct as UserOperationStruct<"0.7.0">).paymaster;
-        delete (struct as UserOperationStruct<"0.7.0">).paymasterData;
-        delete (struct as UserOperationStruct<"0.7.0">)
-          .paymasterVerificationGasLimit;
-        delete (struct as UserOperationStruct<"0.7.0">).paymasterPostOpGasLimit;
-        return struct;
-      }
-
       const userOperation: UserOperationRequest<EntryPointVersion> =
         deepHexlify(await resolveProperties(struct));
 

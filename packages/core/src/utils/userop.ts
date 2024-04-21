@@ -3,6 +3,7 @@ import type {
   BigNumberish,
   Multiplier,
   UserOperationFeeOptionsField,
+  UserOperationOverrides,
   UserOperationRequest,
   UserOperationStruct,
   UserOperationStruct_v6,
@@ -120,3 +121,11 @@ export function applyUserOpOverrideOrFeeOption(
     ? applyUserOpOverride(value, override)!
     : applyUserOpFeeOption(value, feeOption);
 }
+
+export const bypassPaymasterAndData = <
+  TEntryPointVersion extends EntryPointVersion
+>(
+  overrides: UserOperationOverrides<TEntryPointVersion>
+): boolean =>
+  ("paymasterAndData" in overrides && overrides.paymasterAndData === "0x") ||
+  ("paymasterData" in overrides && overrides.paymasterData === "0x");

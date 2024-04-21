@@ -1,19 +1,20 @@
-import type { UserOperationOverrides, UserOperationStruct } from "../../types";
+import type { UserOperationStruct } from "../../types";
 import type { ClientMiddlewareFn } from "../types";
 
 export const defaultPaymasterAndData: ClientMiddlewareFn = async (
   struct,
-  { account, overrides }
+  { account }
 ) => {
   const entryPoint = account.getEntryPoint();
   if (entryPoint.version === "0.6.0") {
-    (struct as UserOperationStruct<"0.6.0">).paymasterAndData =
-      (overrides as UserOperationOverrides<"0.6.0">)?.paymasterAndData ?? "0x";
+    (struct as UserOperationStruct<"0.6.0">).paymasterAndData = "0x";
   } else {
-    // Remove paymasterVerificationGasLimit field from uo struct
-    // filled during the `eth_estimateUserOperationGas` call from the default gasEstimator
+    // Make sure paymaster fields are unset
+    delete (struct as UserOperationStruct<"0.7.0">).paymaster;
+    delete (struct as UserOperationStruct<"0.7.0">).paymasterData;
     delete (struct as UserOperationStruct<"0.7.0">)
       .paymasterVerificationGasLimit;
+    delete (struct as UserOperationStruct<"0.7.0">).paymasterPostOpGasLimit;
   }
   return struct;
 };

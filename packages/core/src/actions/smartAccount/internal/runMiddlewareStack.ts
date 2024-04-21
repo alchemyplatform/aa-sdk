@@ -6,11 +6,16 @@ import type {
 } from "../../../account/smartContractAccount";
 import type { BaseSmartAccountClient } from "../../../client/smartAccountClient";
 import { AccountNotFoundError } from "../../../errors/account.js";
+import { bypassPaymasterMiddleware } from "../../../middleware/defaults/bypassPaymasterMiddleware.js";
 import type {
   UserOperationOverridesParameter,
   UserOperationStruct,
 } from "../../../types";
-import { resolveProperties, type Deferrable } from "../../../utils/index.js";
+import {
+  bypassPaymasterAndData,
+  resolveProperties,
+  type Deferrable,
+} from "../../../utils/index.js";
 import type { UserOperationContext } from "../types";
 
 const asyncPipe =
@@ -51,7 +56,9 @@ export async function _runMiddlewareStack<
     client.middleware.feeEstimator,
     client.middleware.gasEstimator,
     client.middleware.customMiddleware,
-    client.middleware.paymasterAndData,
+    overrides && bypassPaymasterAndData(overrides)
+      ? bypassPaymasterMiddleware
+      : client.middleware.paymasterAndData,
     client.middleware.userOperationSimulator
   )(uo, { overrides, feeOptions: client.feeOptions, account, client, context });
 
