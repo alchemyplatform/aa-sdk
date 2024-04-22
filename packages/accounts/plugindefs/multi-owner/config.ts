@@ -10,6 +10,7 @@ import {
   polygonMumbai,
   sepolia,
 } from "@alchemy/aa-core";
+import { fraxtal, fraxtalTestnet, zora, zoraSepolia } from "viem/chains";
 import { parseAbiParameters } from "viem";
 import type { PluginGenConfig } from "../types";
 import { MultiOwnerPluginAbi } from "./abi.js";
@@ -29,6 +30,10 @@ export const MultiOwnerPluginGenConfig: PluginGenConfig = {
     [arbitrumSepolia.id]: "0xcE0000007B008F50d762D155002600004cD6c647",
     [base.id]: "0xcE0000007B008F50d762D155002600004cD6c647",
     [baseSepolia.id]: "0xcE0000007B008F50d762D155002600004cD6c647",
+    [fraxtal.id]: "0xcE0000007B008F50d762D155002600004cD6c647",
+    [fraxtalTestnet.id]: "0xcE0000007B008F50d762D155002600004cD6c647",
+    [zora.id]: "0xcE0000007B008F50d762D155002600004cD6c647",
+    [zoraSepolia.id]: "0xcE0000007B008F50d762D155002600004cD6c647",
   },
   chain: sepolia,
   installConfig: {

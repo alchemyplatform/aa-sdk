@@ -10,6 +10,7 @@ import {
   arbitrumSepolia,
   base,
 } from "@alchemy/aa-core";
+import { fraxtal, fraxtalTestnet, zora, zoraSepolia } from "viem/chains";
 import { parseAbiParameters } from "viem";
 import type { PluginGenConfig } from "../types";
 import { MultisigPluginAbi } from "./abi.js";
@@ -28,6 +29,10 @@ export const MultisigPluginGenConfig: PluginGenConfig = {
     [arbitrum.id]: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7",
     [arbitrumSepolia.id]: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7",
     [base.id]: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7",
+    [fraxtal.id]: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7",
+    [fraxtalTestnet.id]: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7",
+    [zora.id]: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7",
+    [zoraSepolia.id]: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7",
   },
   chain: sepolia,
   installConfig: {

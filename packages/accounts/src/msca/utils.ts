@@ -23,6 +23,7 @@ import {
   type SmartContractAccountWithSigner,
   type UpgradeToData,
 } from "@alchemy/aa-core";
+import { fraxtal, fraxtalTestnet, zora, zoraSepolia } from "viem/chains";
 import type { Address, Chain, Transport } from "viem";
 import {
   custom,
@@ -97,6 +98,10 @@ export const getDefaultMultiOwnerModularAccountFactoryAddress = (
     case arbitrumSepolia.id:
     case base.id:
     case baseGoerli.id:
+    case fraxtal.id:
+    case fraxtalTestnet.id:
+    case zora.id:
+    case zoraSepolia.id:
       return "0x000000e92D78D90000007F0082006FDA09BD5f11";
   }
   throw new DefaultFactoryNotDefinedError(
