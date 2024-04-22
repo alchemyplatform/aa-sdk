@@ -128,6 +128,7 @@ export {
   wrapSignatureWith6492,
 } from "./signer/utils.js";
 export { WalletClientSigner } from "./signer/wallet-client.js";
+export { split, type SplitTransportParams } from "./transport/split.js";
 export type * from "./types.js";
 export type * from "./utils/index.js";
 export {
