@@ -124,9 +124,9 @@ From the root of NextJS project's directory, using the NextJS concept of [route 
 
 ::: code-group
 
-<<< @/snippets/getting-started/setup-app/route.ts [src/app/api/route.ts]
+<<< @/snippets/getting-started/setup-app/route.ts [src/app/api/rpc/route.ts]
 
-<<< @/snippets/getting-started/setup-app/routes.ts [src/app/api/[...routes]/route.ts]
+<<< @/snippets/getting-started/setup-app/routes.ts [src/app/api/rpc/[...routes]/route.ts]
 
 :::
 
