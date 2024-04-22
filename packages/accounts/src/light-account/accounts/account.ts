@@ -19,7 +19,7 @@ import { LightAccountFactoryAbi_v1 } from "../abis/LightAccountFactoryAbi_v1.js"
 import { LightAccountFactoryAbi_v2 } from "../abis/LightAccountFactoryAbi_v2.js";
 import type {
   GetEntryPointForLightAccountVersion,
-  LightAccountVersion,
+  GetLightAccountVersion,
 } from "../types.js";
 import {
   AccountVersionRegistry,
@@ -34,7 +34,7 @@ import {
 
 export type LightAccount<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TLightAccountVersion extends LightAccountVersion<"LightAccount"> = LightAccountVersion<"LightAccount">,
+  TLightAccountVersion extends GetLightAccountVersion<"LightAccount"> = GetLightAccountVersion<"LightAccount">,
   TEntryPointVersion extends GetEntryPointForLightAccountVersion<
     "LightAccount",
     TLightAccountVersion
@@ -53,7 +53,7 @@ export type LightAccount<
 export type CreateLightAccountParams<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TLightAccountVersion extends LightAccountVersion<"LightAccount"> = LightAccountVersion<"LightAccount">,
+  TLightAccountVersion extends GetLightAccountVersion<"LightAccount"> = GetLightAccountVersion<"LightAccount">,
   TEntryPointVersion extends GetEntryPointForLightAccountVersion<
     "LightAccount",
     TLightAccountVersion
@@ -80,7 +80,15 @@ export type CreateLightAccountParams<
 export async function createLightAccount<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TLightAccountVersion extends LightAccountVersion<"LightAccount"> = LightAccountVersion<"LightAccount">,
+  TLightAccountVersion extends GetLightAccountVersion<"LightAccount"> = "v1.1.0"
+>(
+  config: CreateLightAccountParams<TTransport, TSigner, TLightAccountVersion>
+): Promise<LightAccount<TSigner, TLightAccountVersion>>;
+
+export async function createLightAccount<
+  TTransport extends Transport = Transport,
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TLightAccountVersion extends GetLightAccountVersion<"LightAccount"> = GetLightAccountVersion<"LightAccount">,
   TEntryPointVersion extends GetEntryPointForLightAccountVersion<
     "LightAccount",
     TLightAccountVersion

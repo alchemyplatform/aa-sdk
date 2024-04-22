@@ -6,6 +6,8 @@ import {
   base,
   baseGoerli,
   baseSepolia,
+  fraxtal,
+  fraxtalTestnet,
   goerli,
   mainnet,
   optimism,
@@ -15,22 +17,27 @@ import {
   polygonAmoy,
   polygonMumbai,
   sepolia,
-  fraxtal,
-  fraxtalTestnet,
+  toRecord,
   zora,
   zoraSepolia,
-  toRecord,
-  type SmartContractAccount,
 } from "@alchemy/aa-core";
 import { fromHex, type Address, type Chain } from "viem";
+import type { LightAccountBase } from "./accounts/base";
 import type {
+  AccountVersionDef,
   GetLightAccountType,
+  GetLightAccountVersion,
+  GetLightAccountVersionFromAccount,
   IAccountVersionRegistry,
   LightAccountType,
   LightAccountVersion,
   LightAccountVersionDef,
 } from "./types";
 
+/**
+ * Light account deployed chains
+ *
+ */
 export const supportedChains: Chain[] = [
   mainnet,
   sepolia,
@@ -53,6 +60,11 @@ export const supportedChains: Chain[] = [
   zoraSepolia,
 ];
 
+/**
+ * Account version registry interface that defines the light account versions
+ * and the version definition for each light account type
+ *
+ */
 export const AccountVersionRegistry: IAccountVersionRegistry = {
   LightAccount: {
     "v1.0.1": {
@@ -130,14 +142,21 @@ export const AccountVersionRegistry: IAccountVersionRegistry = {
   },
 };
 
+/**
+ * Get the default light account version for the given light account type
+ *
+ * @template {LightAccountType} TLightAccountType
+ * @param type - the light account type to get the default version for
+ * @returns the default version for the given light account type
+ */
 export const defaultLightAccountVersion = <
   TLightAccountType extends LightAccountType
 >(
   type: TLightAccountType
-): LightAccountVersion<TLightAccountType> =>
+): GetLightAccountVersion<TLightAccountType> =>
   (type === "LightAccount"
     ? "v1.1.0"
-    : "v2.0.0") as LightAccountVersion<TLightAccountType>;
+    : "v2.0.0") as GetLightAccountVersion<TLightAccountType>;
 
 /**
  * Utility method returning the default light account factory address given a {@link Chain} object
@@ -149,7 +168,7 @@ export const defaultLightAccountVersion = <
  */
 export const getDefaultLightAccountFactoryAddress = (
   chain: Chain,
-  version: LightAccountVersion<"LightAccount"> = "v1.1.0"
+  version: LightAccountVersion = "v1.1.0"
 ): Address => {
   const address =
     AccountVersionRegistry.LightAccount[version].address[chain.id];
@@ -158,29 +177,83 @@ export const getDefaultLightAccountFactoryAddress = (
   return address.factory;
 };
 
+/**
+ * Can be used to check if the account with one of the following implementation addresses
+ * to not support 1271 signing.
+ *
+ * Light accounts with versions v1.0.1 and v1.0.2 do not support 1271 signing.
+ *
+ */
 export const LightAccountUnsupported1271Impls = [
   AccountVersionRegistry.LightAccount["v1.0.1"],
   AccountVersionRegistry.LightAccount["v1.0.2"],
 ];
 
+/**
+ * Can be used to check if the account with one of the following factory addresses
+ * to not support 1271 signing.
+ *
+ * Light accounts with versions v1.0.1 and v1.0.2 do not support 1271 signing.
+ *
+ */
 export const LightAccountUnsupported1271Factories = new Set(
   LightAccountUnsupported1271Impls.map((x) =>
     Object.values(x.address).map((addr) => addr.factory)
   ).flat()
 );
 
+/**
+ * Get the light account version definition for the given light account and chain
+ *
+ * @template {LightAccountBase} TAccount
+ * @template {GetLightAccountType<TAccount>} TLightAccountType
+ * @template {GetLightAccountVersion<TLightAccountType>} TLightAccountVersion
+ * @param account - the light account to get the version for
+ * @param chain - the chain to get the version for
+ * @returns the light account version definition for the given light account and chain
+ */
 export async function getLightAccountVersionDef<
-  TAccount extends SmartContractAccount,
+  TAccount extends LightAccountBase,
+  TLightAccountType extends GetLightAccountType<TAccount> = GetLightAccountType<TAccount>,
+  TLightAccountVersion extends GetLightAccountVersion<TLightAccountType> = GetLightAccountVersion<TLightAccountType>
+>(
+  account: TAccount,
+  chain: Chain
+): Promise<LightAccountVersionDef<TLightAccountType, TLightAccountVersion>>;
+
+/**
+ * Get the light account version definition for the given light account and chain
+ *
+ * @template {LightAccountBase} TAccount
+ * @template {GetLightAccountType<TAccount>} TLightAccountType
+ * @param account - the light account to get the version for
+ * @param chain - the chain to get the version for
+ * @returns the light account version definition for the given light account and chain
+ */
+export async function getLightAccountVersionDef<
+  TAccount extends LightAccountBase,
   TLightAccountType extends GetLightAccountType<TAccount> = GetLightAccountType<TAccount>
 >(
   account: TAccount,
   chain: Chain
-): Promise<LightAccountVersionDef<TLightAccountType>>;
+): Promise<
+  AccountVersionDef<
+    TLightAccountType,
+    GetLightAccountVersion<TLightAccountType>
+  >
+>;
 
-export async function getLightAccountVersionDef(
-  account: SmartContractAccount,
-  chain: Chain
-): Promise<LightAccountVersionDef> {
+/**
+ * Get the light account version definition for the given light account and chain
+ *
+ * @template {LightAccountBase} TAccount
+ * @param account - the light account to get the version for
+ * @param chain - the chain to get the version for
+ * @returns the light account version definition for the given light account and chain
+ */
+export async function getLightAccountVersionDef<
+  TAccount extends LightAccountBase
+>(account: TAccount, chain: Chain): Promise<AccountVersionDef> {
   const accountType = account.source as LightAccountType;
   const factoryAddress = await account.getFactoryAddress();
   const implAddress = await account.getImplementationAddress();
@@ -188,28 +261,34 @@ export async function getLightAccountVersionDef(
     Object.entries(AccountVersionRegistry[accountType])
       .map((pair) => {
         const [version, def] = pair as [
-          LightAccountVersion,
+          GetLightAccountVersionFromAccount<TAccount>,
           LightAccountVersionDef
         ];
         return chain.id in def.address
           ? [def.address[chain.id].impl, version]
           : [null, version];
       })
-      .filter(([impl]) => impl !== null) as [Address, LightAccountVersion][]
+      .filter(([impl]) => impl !== null) as [
+      Address,
+      keyof IAccountVersionRegistry[typeof accountType]
+    ][]
   );
 
   const factoryToVersion = new Map(
     Object.entries(AccountVersionRegistry[accountType])
       .map((pair) => {
         const [version, def] = pair as [
-          LightAccountVersion,
+          keyof IAccountVersionRegistry[typeof accountType],
           LightAccountVersionDef
         ];
         return chain.id in def.address
           ? [def.address[chain.id].factory, version]
           : [null, version];
       })
-      .filter(([impl]) => impl !== null) as [Address, LightAccountVersion][]
+      .filter(([impl]) => impl !== null) as [
+      Address,
+      keyof IAccountVersionRegistry[typeof accountType]
+    ][]
   );
 
   const version =
@@ -224,4 +303,37 @@ export async function getLightAccountVersionDef(
   }
 
   return AccountVersionRegistry[accountType][version];
+}
+
+/**
+ * @param account - the light account to get the version for
+ * @param chain - the chain to get the version for
+ *
+ * @deprecated don't use this function as this function is replaced with getLightAccountVersionDef.
+ *             Migrate to using getLightAccountVersionDef instead
+ *
+ * @returns the light account version for the given light account and chain
+ */
+export async function getLightAccountVersion<
+  TAccount extends LightAccountBase,
+  TLightAccountType extends GetLightAccountType<TAccount> = GetLightAccountType<TAccount>
+>(
+  account: TAccount,
+  chain?: Chain
+): Promise<GetLightAccountVersion<TLightAccountType>>;
+
+/**
+ * Get the light account version for the given light account and chain
+ *
+ * @deprecated don't use this function as this function is replaced with getLightAccountVersionDef.
+ *
+ * @param account - the light account to get the version for
+ * @param chain - the chain to get the version for
+ * @returns the light account version for the given light account and chain
+ */
+export async function getLightAccountVersion(
+  account: LightAccountBase,
+  chain: Chain = supportedChains[0]
+): Promise<LightAccountVersion> {
+  return (await getLightAccountVersionDef(account, chain)).version;
 }

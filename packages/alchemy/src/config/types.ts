@@ -1,8 +1,8 @@
 import type {
+  GetLightAccountVersion,
   LightAccount,
   MultiOwnerModularAccount,
 } from "@alchemy/aa-accounts";
-import type { LightAccountVersion } from "@alchemy/aa-accounts/dist/types/src/light-account/types";
 import type { ConnectionConfig } from "@alchemy/aa-core";
 import type { Chain } from "viem";
 import type { PartialBy } from "viem/chains";
@@ -25,7 +25,7 @@ export type SupportedAccount<T extends SupportedAccountTypes> =
     ? LightAccount<
         AlchemySigner,
         // we only support LightAccount version v1
-        Exclude<LightAccountVersion<"LightAccount">, "v2.0.0">
+        Exclude<GetLightAccountVersion<"LightAccount">, "v2.0.0">
       >
     : T extends "MultiOwnerModularAccount"
     ? MultiOwnerModularAccount<AlchemySigner>

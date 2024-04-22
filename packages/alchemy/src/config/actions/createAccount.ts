@@ -3,8 +3,8 @@ import {
   createMultiOwnerModularAccount,
   type CreateLightAccountParams,
   type CreateMultiOwnerModularAccountParams,
+  type GetLightAccountVersion,
 } from "@alchemy/aa-accounts";
-import type { LightAccountVersion } from "@alchemy/aa-accounts/dist/types/src/light-account/types.js";
 import { type SmartAccountSigner } from "@alchemy/aa-core";
 import { custom, type Transport } from "viem";
 import { ClientOnlyPropertyError } from "../errors.js";
@@ -22,7 +22,7 @@ export type AccountConfig<TAccount extends SupportedAccountTypes> =
           Transport,
           SmartAccountSigner,
           // we only support LightAccount version v1
-          Exclude<LightAccountVersion<"LightAccount">, "v2.0.0">
+          Exclude<GetLightAccountVersion<"LightAccount">, "v2.0.0">
         >,
         "signer" | "transport" | "chain"
       >

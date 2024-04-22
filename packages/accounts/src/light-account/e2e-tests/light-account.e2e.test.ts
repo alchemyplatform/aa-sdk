@@ -18,7 +18,7 @@ import {
 import { generatePrivateKey } from "viem/accounts";
 import {
   multiOwnerPluginActions,
-  type LightAccountVersion,
+  type GetLightAccountVersion,
 } from "../../index.js";
 import { getMSCAUpgradeToData } from "../../msca/utils.js";
 import { createLightAccountClient } from "../clients/lightAccount.js";
@@ -277,7 +277,7 @@ const givenConnectedClient = async ({
   chain: Chain;
   accountAddress?: Address;
   feeOptions?: UserOperationFeeOptions;
-  version?: LightAccountVersion<"LightAccount">;
+  version?: GetLightAccountVersion<"LightAccount">;
 }) => {
   return createLightAccountClient({
     transport: http(`${chain.rpcUrls.alchemy.http[0]}/${API_KEY!}`),

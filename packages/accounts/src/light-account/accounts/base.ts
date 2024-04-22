@@ -25,8 +25,8 @@ import {
 import type {
   AccountVersionDef,
   GetEntryPointForLightAccountVersion,
+  GetLightAccountVersion,
   LightAccountType,
-  LightAccountVersion,
   LightAccountVersionDef,
 } from "../types.js";
 import { AccountVersionRegistry } from "../utils.js";
@@ -40,7 +40,7 @@ enum SignatureType {
 export type LightAccountBase<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
   TLightAccountType extends LightAccountType = LightAccountType,
-  TLightAccountVersion extends LightAccountVersion<TLightAccountType> = LightAccountVersion,
+  TLightAccountVersion extends GetLightAccountVersion<TLightAccountType> = GetLightAccountVersion<TLightAccountType>,
   TEntryPointVersion extends GetEntryPointForLightAccountVersion<
     TLightAccountType,
     TLightAccountVersion
@@ -49,7 +49,7 @@ export type LightAccountBase<
     TLightAccountVersion
   >
 > = SmartContractAccountWithSigner<
-  LightAccountType,
+  TLightAccountType,
   TSigner,
   TEntryPointVersion
 > & {
@@ -61,7 +61,7 @@ export type CreateLightAccountBaseParams<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
   TLightAccountType extends LightAccountType = LightAccountType,
-  TLightAccountVersion extends LightAccountVersion<TLightAccountType> = LightAccountVersion<TLightAccountType>,
+  TLightAccountVersion extends GetLightAccountVersion<TLightAccountType> = GetLightAccountVersion<TLightAccountType>,
   TEntryPointVersion extends GetEntryPointForLightAccountVersion<
     TLightAccountType,
     TLightAccountVersion
@@ -90,7 +90,7 @@ export async function createLightAccountBase<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
   TLightAccountType extends LightAccountType = LightAccountType,
-  TLightAccountVersion extends LightAccountVersion<TLightAccountType> = LightAccountVersion<TLightAccountType>,
+  TLightAccountVersion extends GetLightAccountVersion<TLightAccountType> = GetLightAccountVersion<TLightAccountType>,
   TEntryPointVersion extends GetEntryPointForLightAccountVersion<
     TLightAccountType,
     TLightAccountVersion
