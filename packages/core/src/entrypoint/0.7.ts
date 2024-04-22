@@ -26,7 +26,7 @@ import {
   polygonAmoy,
   polygonMumbai,
   sepolia,
-} from "@alchemy/aa-core";
+} from "../chains/index.js";
 import { fraxtal, fraxtalTestnet, zora, zoraSepolia } from "viem/chains";
 import { EntryPointAbi_v7 } from "../abis/EntryPointAbi_v7.js";
 import type {

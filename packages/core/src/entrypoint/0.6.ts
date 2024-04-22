@@ -23,7 +23,7 @@ import {
   polygonAmoy,
   polygonMumbai,
   sepolia,
-} from "@alchemy/aa-core";
+} from "../chains/index.js";
 import { fraxtal, fraxtalTestnet, zora, zoraSepolia } from "viem/chains";
 import { EntryPointAbi_v6 } from "../abis/EntryPointAbi_v6.js";
 import type { UserOperationRequest } from "../types.js";
