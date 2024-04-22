@@ -10,7 +10,7 @@ import type { UserOperationStruct } from "../../types.js";
 import { _initUserOperation } from "./internal/initUserOperation.js";
 import { _runMiddlewareStack } from "./internal/runMiddlewareStack.js";
 import type {
-  SendUserOperationParameters,
+  BuildUserOperationParameters,
   UserOperationContext,
 } from "./types";
 
@@ -26,7 +26,7 @@ export async function buildUserOperation<
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: SendUserOperationParameters<TAccount, TContext>
+  args: BuildUserOperationParameters<TAccount, TContext, TEntryPointVersion>
 ): Promise<UserOperationStruct<TEntryPointVersion>> {
   const { account = client.account, overrides, context } = args;
   if (!account) {

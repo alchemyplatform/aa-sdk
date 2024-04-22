@@ -4,6 +4,7 @@
     "es2021": true,
     "node": true
   },
+  "plugins": ["import"],
   "parserOptions": {
     "sourceType": "module"
   },

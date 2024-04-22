@@ -46,6 +46,14 @@ export type ProposeUserOperationResult<
   signatureObj: Signature;
 };
 
-export type MultisigUserOperationContext = {
-  signature: Hex;
-};
+export type MultisigUserOperationContext =
+  | {
+      userOpSignatureType: Extract<UserOpSignatureType, "UPPERLIMIT">;
+      aggregatedSignature?: Hex;
+      signatures?: Signature[];
+    }
+  | {
+      aggregatedSignature: Hex;
+      signatures: Signature[];
+      userOpSignatureType: Extract<UserOpSignatureType, "ACTUAL">;
+    };
