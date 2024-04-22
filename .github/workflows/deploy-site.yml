@@ -3,10 +3,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - "site/**"
-      - ".github/workflows/deploy-site.yml"
-      - "!packages/**"
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -21,10 +17,37 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    # Required permissions
+    permissions:
+      pull-requests: read
+    # Set job outputs to values from filter step
+    outputs:
+      docs: ${{ steps.filter.outputs.docs }}
+      code: ${{ steps.filter.outputs.code }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Not needed if lastUpdated is not enabled
+          
+      - name: Filter paths
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            docs:
+              - 'site/**'
+              - '.github/workflows/deploy-site.yml'
+            code:
+              - 'packages/**'
   # Build job
   build:
+    needs: changes
     runs-on: ubuntu-latest
     name: Build
+    if: ${{ needs.changes.outputs.docs == 'true' && needs.changes.outputs.code == 'false' }}
     env:
       NO_BASE_PATH: ${{ inputs.no_base_path }}
     steps:
@@ -61,6 +84,7 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    if: ${{ needs.changes.outputs.docs == 'true' && needs.changes.outputs.code == 'false' }}
     needs: build
     runs-on: ubuntu-latest
     name: Deploy
