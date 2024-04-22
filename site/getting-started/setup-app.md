@@ -120,7 +120,7 @@ The three Alchemy packages - `@alchemy/aa-alchemy`, `@alchemy/aa-accounts`, and 
 
 Using your code editor, open your newly created application directory to add the backend! Your application's backend will serve as an API that your frontend will use to send requests to Alchemy's infrastructure to sign messages, send UserOperations, and track your users' Embedded Account activity.
 
-From the root of NextJS project's directory, using the NextJS concept of [route handlers](https://nextjs.org/docs/app/building-your-application/routing/route-handlers), create new directory `src/app/api/rpc` and add two files: `src/app/api/rpc/[..routes]/route.ts` to handle calls to the Alchemy Signer, and `src/app/api/rpc/route.ts` to handle requests to Alchemy's infrastructure. Copy the following into those files.
+From the root of NextJS project's directory, using the NextJS concept of [route handlers](https://nextjs.org/docs/app/building-your-application/routing/route-handlers), create new directory `src/app/api/rpc` and add two files: `src/app/api/rpc/[...routes]/route.ts` to handle calls to the Alchemy Signer, and `src/app/api/rpc/route.ts` to handle requests to Alchemy's infrastructure. Copy the following into those files.
 
 ::: code-group
 
