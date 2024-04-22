@@ -31,7 +31,7 @@ export const sendUserOperation: <
   client,
   args
 ) => {
-  const { account = client.account, context } = args;
+  const { account = client.account, context, overrides } = args;
 
   if (!account) {
     throw new AccountNotFoundError();
@@ -50,5 +50,6 @@ export const sendUserOperation: <
     account,
     uoStruct,
     context,
+    overrides,
   });
 };

@@ -59,7 +59,7 @@ describe("Multisig Modular Account Tests", async () => {
       threshold,
     });
     expect(address).toMatchInlineSnapshot(
-      '"0x4ff93F25764CefC22aeeE111CEf47CD1B5e05370"'
+      '"0xB717003B9777B894000B89d60B179FDA96a655D3"'
     );
   });
 
@@ -75,9 +75,7 @@ describe("Multisig Modular Account Tests", async () => {
       owners.slice().sort()
     );
 
-    expect(await provider.getThreshold({ account: provider.account })).toBe(
-      threshold
-    );
+    expect(await provider.getThreshold({})).toBe(threshold);
   });
 
   it("should correctly verify 1271 signatures over messages", async () => {
@@ -99,20 +97,23 @@ describe("Multisig Modular Account Tests", async () => {
 
     const signature2 = await provider2.account.signMessage({ message });
 
-    const combined = formatSignatures([
-      {
-        userOpSigType: "ACTUAL",
-        signerType: "EOA",
-        signature: signature1,
-        signer: await signer1.getAddress(),
-      },
-      {
-        userOpSigType: "ACTUAL",
-        signerType: "EOA",
-        signature: signature2,
-        signer: await signer2.getAddress(),
-      },
-    ]);
+    const combined = formatSignatures(
+      [
+        {
+          userOpSigType: "ACTUAL",
+          signerType: "EOA",
+          signature: signature1,
+          signer: await signer1.getAddress(),
+        },
+        {
+          userOpSigType: "ACTUAL",
+          signerType: "EOA",
+          signature: signature2,
+          signer: await signer2.getAddress(),
+        },
+      ],
+      true
+    );
 
     expect(
       await provider1.verifyMessage({
@@ -159,20 +160,23 @@ describe("Multisig Modular Account Tests", async () => {
       message,
     });
 
-    const combined = formatSignatures([
-      {
-        userOpSigType: "ACTUAL",
-        signerType: "EOA",
-        signature: signature1,
-        signer: await signer1.getAddress(),
-      },
-      {
-        userOpSigType: "ACTUAL",
-        signerType: "EOA",
-        signature: signature2,
-        signer: await signer2.getAddress(),
-      },
-    ]);
+    const combined = formatSignatures(
+      [
+        {
+          userOpSigType: "ACTUAL",
+          signerType: "EOA",
+          signature: signature1,
+          signer: await signer1.getAddress(),
+        },
+        {
+          userOpSigType: "ACTUAL",
+          signerType: "EOA",
+          signature: signature2,
+          signer: await signer2.getAddress(),
+        },
+      ],
+      true
+    );
 
     expect(
       await provider1.verifyTypedData({
@@ -211,7 +215,9 @@ describe("Multisig Modular Account Tests", async () => {
     const {
       account: { address },
     } = provider1;
-    expect(address).toEqual("0xB77423329491BAF4b7B904887627C55Cd53968f8");
+    expect(address).toMatchInlineSnapshot(
+      '"0xD605446440A7d09772C909263823189377A503Da"'
+    );
 
     const message = "test";
 
@@ -219,20 +225,23 @@ describe("Multisig Modular Account Tests", async () => {
 
     const signature2 = await provider2.account.signMessage({ message });
 
-    const combined = formatSignatures([
-      {
-        userOpSigType: "ACTUAL",
-        signerType: "EOA",
-        signature: signature1,
-        signer: await signer1.getAddress(),
-      },
-      {
-        userOpSigType: "ACTUAL",
-        signerType: "EOA",
-        signature: signature2,
-        signer: await signer2.getAddress(),
-      },
-    ]);
+    const combined = formatSignatures(
+      [
+        {
+          userOpSigType: "ACTUAL",
+          signerType: "EOA",
+          signature: signature1,
+          signer: await signer1.getAddress(),
+        },
+        {
+          userOpSigType: "ACTUAL",
+          signerType: "EOA",
+          signature: signature2,
+          signer: await signer2.getAddress(),
+        },
+      ],
+      true
+    );
 
     const [, factoryCalldata] = parseFactoryAddressFromAccountInitCode(
       await provider1.account.getInitCode()
@@ -283,7 +292,9 @@ describe("Multisig Modular Account Tests", async () => {
     const {
       account: { address },
     } = provider1;
-    expect(address).toEqual("0xB77423329491BAF4b7B904887627C55Cd53968f8");
+    expect(address).toMatchInlineSnapshot(
+      '"0xD605446440A7d09772C909263823189377A503Da"'
+    );
 
     const types = {
       Request: [{ name: "hello", type: "string" }],
@@ -307,20 +318,23 @@ describe("Multisig Modular Account Tests", async () => {
       message,
     });
 
-    const combined = formatSignatures([
-      {
-        userOpSigType: "ACTUAL",
-        signerType: "EOA",
-        signature: signature1,
-        signer: await signer1.getAddress(),
-      },
-      {
-        userOpSigType: "ACTUAL",
-        signerType: "EOA",
-        signature: signature2,
-        signer: await signer2.getAddress(),
-      },
-    ]);
+    const combined = formatSignatures(
+      [
+        {
+          userOpSigType: "ACTUAL",
+          signerType: "EOA",
+          signature: signature1,
+          signer: await signer1.getAddress(),
+        },
+        {
+          userOpSigType: "ACTUAL",
+          signerType: "EOA",
+          signature: signature2,
+          signer: await signer2.getAddress(),
+        },
+      ],
+      true
+    );
 
     const [, factoryCalldata] = parseFactoryAddressFromAccountInitCode(
       await provider1.account.getInitCode()
@@ -349,7 +363,7 @@ describe("Multisig Modular Account Tests", async () => {
     ).toBe(true);
   });
 
-  it.skip("should execute successfully", async () => {
+  it("should execute successfully", async () => {
     const initiator = await givenConnectedProvider({
       signer: signer1,
       chain,
@@ -390,7 +404,7 @@ describe("Multisig Modular Account Tests", async () => {
     await expect(txnHash).resolves.not.toThrowError();
   }, 100000);
 
-  it.skip("should execute successfully with actual gas values equal to max gas values", async () => {
+  it("should execute successfully with actual gas values equal to max gas values", async () => {
     const initiator = await givenConnectedProvider({
       signer: signer1,
       chain,
@@ -469,7 +483,9 @@ describe("Multisig Modular Account Tests", async () => {
     const {
       account: { address },
     } = provider1;
-    expect(address).toEqual("0xE2c5429De9133F03f3D36d2Be3695AB315D65ECa");
+    expect(address).toMatchInlineSnapshot(
+      '"0xF2dBBB10E1a7406B17B0056357132B0702e184D5"'
+    );
 
     const { request, signatureObj: signature1 } =
       await provider1.proposeUserOperation({
@@ -524,7 +540,9 @@ const givenConnectedProvider = async ({
   threshold: bigint;
 }) => {
   return createMultisigModularAccountClient({
-    transport: http(`${chain.rpcUrls.alchemy.http[0]}/${API_KEY!}`),
+    transport: http(`${chain.rpcUrls.alchemy.http[0]}/${API_KEY!}`, {
+      retryCount: 0,
+    }),
     chain: chain,
     account: {
       signer,

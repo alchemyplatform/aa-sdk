@@ -72,6 +72,7 @@ export async function signMultisigUserOperation<
       upperLimitMaxFeePerGas: userOperationRequest.maxFeePerGas,
       upperLimitMaxPriorityFeePerGas: userOperationRequest.maxPriorityFeePerGas,
       upperLimitPvg: userOperationRequest.preVerificationGas,
+      usingMaxValues: false,
     }),
   };
 }

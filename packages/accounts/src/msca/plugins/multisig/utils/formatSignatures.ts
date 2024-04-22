@@ -1,8 +1,11 @@
 import { takeBytes } from "@alchemy/aa-core";
-import { hexToBigInt, concat, toHex, pad } from "viem";
+import { concat, hexToBigInt, pad, toHex } from "viem";
 import type { Signature } from "../types";
 
-export const formatSignatures = (signatures: Signature[]) => {
+export const formatSignatures = (
+  signatures: Signature[],
+  usingMaxValues: boolean = false
+) => {
   let eoaSigs: string = "";
   let contractSigs: string = "";
   let offset: bigint = BigInt(65 * signatures.length);
@@ -15,7 +18,7 @@ export const formatSignatures = (signatures: Signature[]) => {
     })
     .forEach((sig) => {
       // add 32 to v if the signature covers the actual gas values
-      const addV = sig.userOpSigType === "ACTUAL" ? 32 : 0;
+      const addV = sig.userOpSigType === "ACTUAL" && !usingMaxValues ? 32 : 0;
 
       if (sig.signerType === "EOA") {
         let v =

@@ -1,8 +1,10 @@
 import {
   AccountNotFoundError,
+  deepHexlify,
   IncompatibleClientError,
   isSmartAccountClient,
   isSmartAccountWithSigner,
+  resolveProperties,
   SmartAccountWithSignerRequiredError,
   type GetEntryPointFromAccount,
   type SendUserOperationParameters,
@@ -10,7 +12,11 @@ import {
   type UserOperationOverrides,
 } from "@alchemy/aa-core";
 import { type Chain, type Client, type Transport } from "viem";
-import { combineSignatures, getSignerType } from "../index.js";
+import {
+  combineSignatures,
+  getSignerType,
+  multisigSignatureMiddleware,
+} from "../index.js";
 import { type ProposeUserOperationResult, type Signature } from "../types.js";
 
 export async function proposeUserOperation<
@@ -52,11 +58,15 @@ export async function proposeUserOperation<
     throw new SmartAccountWithSignerRequiredError();
   }
 
-  const builtUo = await client.buildUserOperation({
-    account,
-    uo,
-    overrides,
-  });
+  const builtUo = await client
+    .buildUserOperation({
+      account,
+      uo,
+      overrides,
+    })
+    .then((x) => multisigSignatureMiddleware(x, { account, client, overrides }))
+    .then(resolveProperties)
+    .then(deepHexlify);
 
   const request = await client.signUserOperation({
     uoStruct: builtUo,
@@ -84,6 +94,7 @@ export async function proposeUserOperation<
       upperLimitMaxFeePerGas: request.maxFeePerGas,
       upperLimitMaxPriorityFeePerGas: request.maxPriorityFeePerGas,
       upperLimitPvg: request.preVerificationGas,
+      usingMaxValues: false,
     }),
   };
 }

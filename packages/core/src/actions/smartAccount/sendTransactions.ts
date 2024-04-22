@@ -42,6 +42,7 @@ export async function sendTransactions<
     account,
     uoStruct,
     context,
+    overrides,
   });
 
   return waitForUserOperationTransaction(client, { hash });

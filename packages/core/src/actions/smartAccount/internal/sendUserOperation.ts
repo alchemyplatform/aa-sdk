@@ -8,7 +8,10 @@ import type { BaseSmartAccountClient } from "../../../client/smartAccountClient"
 import type { SendUserOperationResult } from "../../../client/types";
 import { AccountNotFoundError } from "../../../errors/account.js";
 import { ChainNotFoundError } from "../../../errors/client.js";
-import type { UserOperationStruct } from "../../../types";
+import type {
+  UserOperationOverrides,
+  UserOperationStruct,
+} from "../../../types";
 import { deepHexlify, resolveProperties } from "../../../utils/index.js";
 import type { GetContextParameter, UserOperationContext } from "../types";
 
@@ -26,10 +29,11 @@ export async function _sendUserOperation<
   client: BaseSmartAccountClient<TTransport, TChain, TAccount>,
   args: {
     uoStruct: UserOperationStruct<TEntryPointVersion>;
+    overrides?: UserOperationOverrides<TEntryPointVersion>;
   } & GetAccountParameter<TAccount> &
     GetContextParameter<TContext>
 ): Promise<SendUserOperationResult<TEntryPointVersion>> {
-  const { account = client.account, context } = args;
+  const { account = client.account, context, overrides } = args;
   if (!account) {
     throw new AccountNotFoundError();
   }
@@ -40,7 +44,7 @@ export async function _sendUserOperation<
 
   const request = await client.middleware
     .signUserOperation(args.uoStruct, {
-      ...args,
+      overrides,
       account,
       client,
       context,

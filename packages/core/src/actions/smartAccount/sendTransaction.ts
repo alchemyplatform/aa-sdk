@@ -62,6 +62,7 @@ export async function sendTransaction<
     account: account as SmartContractAccount,
     uoStruct,
     context,
+    overrides,
   });
 
   return waitForUserOperationTransaction(client, { hash });

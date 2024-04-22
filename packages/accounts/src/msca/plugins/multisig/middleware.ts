@@ -6,6 +6,8 @@ import {
   isValidRequest,
   resolveProperties,
   type ClientMiddlewareFn,
+  type UserOperationRequest_v6,
+  type UserOperationRequest_v7,
 } from "@alchemy/aa-core";
 import { isHex, type Hex } from "viem";
 import { isMultisigModularAccount } from "../../account/multisigAccount.js";
@@ -84,10 +86,45 @@ export const multisigSignatureMiddleware: ClientMiddlewareFn<{
     upperLimitPvg,
     upperLimitMaxFeePerGas,
     upperLimitMaxPriorityFeePerGas,
+    usingMaxValues: isUsingMaxValues(request, {
+      upperLimitPvg,
+      upperLimitMaxFeePerGas,
+      upperLimitMaxPriorityFeePerGas,
+    }),
   });
 
   return {
     ...resolvedStruct,
     signature: finalSignature,
   };
+};
+
+const isUsingMaxValues = (
+  request: UserOperationRequest_v6 | UserOperationRequest_v7,
+  upperLimits: {
+    upperLimitPvg: Hex;
+    upperLimitMaxFeePerGas: Hex;
+    upperLimitMaxPriorityFeePerGas: Hex;
+  }
+): boolean => {
+  if (
+    BigInt(request.preVerificationGas) !== BigInt(upperLimits.upperLimitPvg)
+  ) {
+    return false;
+  }
+
+  if (
+    BigInt(request.maxFeePerGas) !== BigInt(upperLimits.upperLimitMaxFeePerGas)
+  ) {
+    return false;
+  }
+
+  if (
+    BigInt(request.maxPriorityFeePerGas) !==
+    BigInt(upperLimits.upperLimitMaxPriorityFeePerGas)
+  ) {
+    return false;
+  }
+
+  return true;
 };
