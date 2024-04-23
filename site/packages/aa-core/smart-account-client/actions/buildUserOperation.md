@@ -16,13 +16,7 @@ head:
 
 Builds an _unsigned_ `UserOperation` (UO) struct with all middleware of the `SmartAccountClient` run through the middleware pipeline.
 
-The order of the middlewares is:
-
-1.  `dummyPaymasterDataMiddleware` -- populates a dummy paymaster data to use in estimation (default: "0x")
-2.  `feeDataGetter` -- sets maxfeePerGas and maxPriorityFeePerGas
-3.  `gasEstimator` -- calls eth_estimateUserOperationGas
-4.  `paymasterMiddleware` -- used to set paymasterAndData. (default: "0x")
-5.  `customMiddleware` -- allows you to override any of the results returned by previous middlewares
+Learn more about [`ClientMiddleware`](/packages/aa-core/smart-account-client/middleware/index) to learn more about the internals of `SmartAccountClient` middleware pipeline that builds the user operation request given the user transaction call data and the operating account data.
 
 ## Usage
 
@@ -95,24 +89,4 @@ const uoHash = await smartAccountClient.sendRawUserOperation({
 
 A `Promise` containing the _unsigned_ UO struct resulting from the middleware pipeline
 
-## Parameters
-
-### `SendUserOperationParameters<TAccount extends SmartContractAccount | undefined = SmartContractAccount | undefined>`
-
-- `uo:` [`UserOperationCallData`](/resources/types#UserOperationCallData) | [`BatchUserOperationCallData`](/resources/types#BatchUserOperationCallData)
-
-  ::: details UserOperationCallData
-  <<< @/../packages/core/src/types.ts#UserOperationCallData
-  :::
-
-  - `target: Address` - the target of the call (equivalent to `to` in a transaction)
-  - `data: Hex` - can be either `0x` or a call data string
-  - `value?: bigint` - optionally, set the value in wei you want to send to the target
-
-- `overrides?:` [`UserOperationOverrides`](/resources/types#useroperationoverrides)
-
-Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit`, `paymasterAndData`, or `nonceKey` for the user operation request. You can also specify a `stateOverride` to be passed into `eth_estimateUserOperationGas` during fee estimation.
-
-- `account?: TAccount extends SmartContractAccount | undefined`
-
-When using this action, if the `SmartContractAccount` has not been connected to the `SmartAccountClient` (e.g. `SmartAccountClient` not instantiated with your `SmartContractAccount` during [`createSmartAccountClient`](/packages/aa-core/smart-account-client/)). You can check if the account is connected to the client by checking the `account` field of `SmartAccountClient`. If the account is not connected, you can specify the `SmartContractAccount` instance to use for the function call.
+<!--@include: ../../../../snippets/aa-core/send-uo-param.md-->

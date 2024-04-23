@@ -196,10 +196,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 - **aa-ethers:** aa-ethers has had some functionality removed and apis changed
 
-* inputs to the ProviderAdapter now require a SmartAccountClient
-* with\* methods have been removed, middleware config now exists
+- inputs to the ProviderAdapter now require a SmartAccountClient
+- with\* methods have been removed, middleware config now exists
   on the SmartAccountClient
-* the Account Signer has been updated to take a SmartContractAccount
+- the Account Signer has been updated to take a SmartContractAccount
   as input
 
 - all interfaces now use the new smart account

@@ -14,19 +14,7 @@ head:
 
 # buildUserOperationFromTxs
 
-Converts traditional Ethereum transactions in batch and builds an _unsigned_ `UserOperation` (UO) struct with all middleware of the `SmartAccountClient` run through the middleware pipeline.
-
-The order of the middlewares is:
-
-1.  `dummyPaymasterDataMiddleware` -- populates a dummy paymaster data to use in estimation (default: "0x")
-2.  `feeDataGetter` -- sets maxfeePerGas and maxPriorityFeePerGas
-3.  `gasEstimator` -- calls eth_estimateUserOperationGas
-4.  `paymasterMiddleware` -- used to set paymasterAndData. (default: "0x")
-5.  `customMiddleware` -- allows you to override any of the results returned by previous middlewares
-
-**NOTE**: Not all Smart Contract Accounts support batching. The `SmartContractAccount` implementation must implement the encodeBatchExecute method for the `SmartAccountClient` to execute the batched user operation successfully.
-
-Note that `to`, `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas` fields of the transaction request type are considered and used to build the user operation from the transaction, while other fields are not used.
+Performs [`buildUserOperationFromTx`](./buildUserOperationFromTx.md) in batch and builds into a single, yet to be signed `UserOperation` (UO) struct. The output user operation struct will be filled with all gas fields (and paymaster data if a paymaster is used) based on the transactions data (`to`, `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas`) computed using the configured [`ClientMiddlewares`](/packages/aa-core/smart-account-client/middleware/index) on the `SmartAccountClient`
 
 ## Usage
 

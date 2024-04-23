@@ -67,6 +67,7 @@ export type UserOperationOverridesParameter<
   ? { overrides: UserOperationOverrides<TEntryPointVersion> }
   : { overrides?: UserOperationOverrides<TEntryPointVersion> };
 
+//#region UserOperationPaymasterOverrides
 export type UserOperationPaymasterOverrides<
   TEntryPointVersion extends EntryPointVersion
 > = TEntryPointVersion extends "0.6.0"
@@ -79,14 +80,17 @@ export type UserOperationPaymasterOverrides<
       // paymasterData overrides only allows '0x' for bypassing the paymaster middleware
       // if set to '0x', all paymaster related fields are omitted from the user op request
       paymasterData: EmptyHex;
-      paymasterVerificationGasLimit: NoUndefined<
-        UserOperationStruct<"0.7.0">["paymasterVerificationGasLimit"]
-      >;
-      paymasterPostOpGasLimit: NoUndefined<
-        UserOperationStruct<"0.7.0">["paymasterPostOpGasLimit"]
-      >;
+      paymasterVerificationGasLimit:
+        | NoUndefined<
+            UserOperationStruct<"0.7.0">["paymasterVerificationGasLimit"]
+          >
+        | Multiplier;
+      paymasterPostOpGasLimit:
+        | NoUndefined<UserOperationStruct<"0.7.0">["paymasterPostOpGasLimit"]>
+        | Multiplier;
     }
   : {};
+//#endregion UserOperationOverridesParameter
 
 //#region UserOperationOverrides
 export type UserOperationOverrides<
@@ -116,6 +120,14 @@ export type UserOperationOverrides<
      * one user operation for your account in a bundle
      */
     nonceKey: bigint;
+
+    /** The same state overrides for
+     * [`eth_call`](https://geth.ethereum.org/docs/interacting-with-geth/rpc/ns-eth#eth-call) method.
+     * An address-to-state mapping, where each entry specifies some state to be ephemerally overridden
+     * prior to executing the call. State overrides allow you to customize the network state for
+     * the purpose of the simulation, so this feature is useful when you need to estimate gas
+     * for user operation scenarios under conditions that aren’t currently present on the live network.
+     */
     stateOverride: StateOverride;
   } & UserOperationPaymasterOverrides<TEntryPointVersion>
 >;
@@ -393,7 +405,3 @@ export type UserOperationStruct<TEntryPointVersion extends EntryPointVersion> =
     ? UserOperationStruct_v7
     : never;
 //#endregion UserOperationStruct
-
-export type UserOperationStructUnion =
-  | UserOperationStruct_v6
-  | UserOperationStruct_v7;

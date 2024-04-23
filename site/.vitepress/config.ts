@@ -21,7 +21,7 @@ export default defineConfig({
         items: [
           {
             text: "Migrating to 3.x.x",
-            link: "/migration-guide",
+            link: "/migration-guides/migrating-to-v3",
           },
           {
             text: "Changelog",

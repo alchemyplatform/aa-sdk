@@ -1,3 +1,9 @@
+## Parameters
+
+### `SendTransactionParameters`
+
+Same as `viem` [`TransactionRequest`](https://viem.sh/docs/glossary/types#transactionrequest), but with the `from` field excluded
+
 ```ts
 export type SendTransactionParameters<
   TChain extends Chain | undefined = Chain | undefined,
@@ -10,15 +16,9 @@ export type SendTransactionParameters<
   GetChainParameter<TChain, TChainOverride>;
 ```
 
-## Parameters
-
-### `SendTransactionParameters`
-
-Same as `viem` [`TransactionRequest`](https://viem.sh/docs/glossary/types#transactionrequest), but with the `from` field excluded
-
 - `overrides?:` [`UserOperationOverrides`](/resources/types#useroperationoverrides)
 
-Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit`, `paymasterAndData`, or `nonceKey` for the user operation request. You can also specify a `stateOverride` to be passed into `eth_estimateUserOperationGas` during fee estimation.
+Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit`, `paymasterAndData`, or `nonceKey` for the user operation request. You can also specify a `stateOverride` to be passed into `eth_estimateUserOperationGas` during gas estimation.
 
 - `account?: TAccount extends SmartContractAccount | undefined`
 

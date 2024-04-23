@@ -14,17 +14,13 @@ head:
 
 # buildUserOperationFromTx
 
-Converts a traditional Ethereum transaction and builds an _unsigned_ `UserOperation` (UO) struct with all middleware of the `SmartAccountClient` run through the middleware pipeline.
+Converts a traditional Ethereum transaction and builds an _unsigned_ `UserOperation` (UO) struct with all middleware of the `SmartAccountClient` run through the client middleware pipeline.
 
-The order of the middlewares is:
+Learn more about [`ClientMiddleware`](/packages/aa-core/smart-account-client/middleware/index) to learn more about the internals of `SmartAccountClient` middleware pipeline that builds the user operation request given the user transaction call data and the operating account data.
 
-1.  `dummyPaymasterDataMiddleware` -- populates a dummy paymaster data to use in estimation (default: "0x")
-2.  `feeDataGetter` -- sets maxfeePerGas and maxPriorityFeePerGas
-3.  `gasEstimator` -- calls eth_estimateUserOperationGas
-4.  `paymasterMiddleware` -- used to set paymasterAndData. (default: "0x")
-5.  `customMiddleware` -- allows you to override any of the results returned by previous middlewares
-
+::: tip Note
 Note that `to`, `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas` fields of the transaction request type are considered and used to build the user operation from the transaction, while other fields are not used.
+:::
 
 ## Usage
 
@@ -68,28 +64,4 @@ const uoHash = await smartAccountClient.sendRawUserOperation({ request, entryPoi
 
 A `Promise` containing the _unsigned_ UO struct converted from the input transaction with all the middleware run on the resulting UO
 
-## Parameters
-
-### `args: SendTransactionParameters<TChain, TAccount, TChainOverride>`
-
-::: details SendTransactionParameters
-
-```ts
-export type SendTransactionParameters<
-  TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends Account | undefined = Account | undefined,
-  TChainOverride extends Chain | undefined = Chain | undefined,
-  ///
-  derivedChain extends Chain | undefined = DeriveChain<TChain, TChainOverride>
-> = UnionOmit<FormattedTransactionRequest<derivedChain>, "from"> &
-  GetAccountParameter<TAccount> &
-  GetChainParameter<TChain, TChainOverride>;
-```
-
-:::
-
-The [`SendTransactionParameters`](https://github.com/wevm/viem/blob/6ef4ac131a878bf1dc4b335f5dc127e62618dda0/src/types/transaction.ts#L209) used as the parameter to the `WalletAction` [`sendTransaction`](https://viem.sh/docs/actions/wallet/sendTransaction) method representing a traditional ethereum transaction request.
-
-- `overrides?:` [`UserOperationOverrides`](/resources/types#useroperationoverrides)
-
-Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit`, `paymasterAndData`, or `nonceKey` for the user operation request
+<!--@include: ../../../../snippets/aa-core/send-tx-param.md-->

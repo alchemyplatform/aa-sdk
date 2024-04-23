@@ -3,19 +3,19 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Migration Guide
+      content: Migrating to aa-sdk v3
   - - meta
     - name: description
-      content: How to upgrade through breaking changes of aa-sdk.
+      content: How to upgrade through breaking changes of aa-sdk v3
   - - meta
     - property: og:description
-      content: How to upgrade through breaking changes of aa-sdk.
+      content: How to upgrade through breaking changes of aa-sdk v3.
   - - meta
     - name: twitter:title
       content: Migration Guide
   - - meta
     - name: twitter:description
-      content: How to upgrade through breaking changes of aa-sdk
+      content: How to upgrade through breaking changes of aa-sdk v3.
 ---
 
 # Migration Guide
@@ -24,8 +24,7 @@ Below are the steps to migrate your project from older versions of the `aa-sdk` 
 
 ## Migrating to version 3.x.x
 
-This version update brings a lot of breaking changes. As we began to support Modular Accounts and their interfaces, we realized
-that the previous version of the SDK was not as flexible as it could have been to handle the modularity of the new account interfaces.
+This version update brings a lot of breaking changes. As we began to support Modular Accounts and their interfaces, we realized that the previous version of the SDK was not as flexible as it could have been to handle the modularity of the new account interfaces.
 To address this, version 3.x.x of the SDK switches to an approach more idiomatic to `viem`.
 
 ### Viem Version
@@ -34,8 +33,7 @@ We have updated our dependency to viem v2.x.x. This means you will need to updat
 
 ### Client: `SmartAccountProvider` → `SmartAccountClient`
 
-The biggest change is that the `SmartAccountProvider` class has been removed and replaced with a `SmartAccountClient` type that extends
-`viem`'s [`Client`](https://viem.sh/docs/clients/custom). To get started with the new clients, you can do the following:
+The biggest change is that the `SmartAccountProvider` class has been removed and replaced with a `SmartAccountClient` type that extends `viem`'s [`Client`](https://viem.sh/docs/clients/custom). To get started with the new clients, you can do the following:
 
 ```ts
 import { SmartAccountProvider } from "@alchemy/aa-core"; // [!code --]
@@ -81,7 +79,7 @@ const client = createSmartAccountClient({ // [!code ++]
 
 ### Client: signature changes on methods
 
-To support [the various ways](/migration-guide#account-connecting-to-a-smart-account) of connecting to a smart account, the signatures of the methods on `SmartAccountClient` have changed. Almost all methods now have an optional param for `account` and have been converted into single argument functions that take an object with the their properties instead.
+To support [the various ways](/migration-guides/migrating-to-v3#account-connecting-to-a-smart-account) of connecting to a smart account, the signatures of the methods on `SmartAccountClient` have changed. Almost all methods now have an optional param for `account` and have been converted into single argument functions that take an object with the their properties instead.
 
 ### Account: `BaseSmartContractAccount` → `SmartContractAccount`
 
@@ -113,8 +111,7 @@ const account = await createLightAccount({ // [!code ++]
 
 ### Account: Connecting to a Smart Account
 
-In earlier versions, a provider could not be used with a smart account until it was connected to one using `.connect`. In version 3.x.x,
-you have the option of keeping the two disconnected and passing the account to the client methods directly. You also have the option to hoist the account
+In earlier versions, a provider could not be used with a smart account until it was connected to one using `.connect`. In version 3.x.x, you have the option of keeping the two disconnected and passing the account to the client methods directly. You also have the option to hoist the account
 so that you don't have to pass the account to every method.
 
 #### Option 1: Passing the Account to the Client Methods
@@ -206,8 +203,7 @@ const { hash } = await smartAccountClient.sendUserOperation({
 
 ### Account: Custom Accounts
 
-In prior versions, using your own smart contract account implementations required that you extend `BaseSmartContractAccount`. In version 3.x.x, you can use the
-`toSmartContractAccount` method which will allow you to use any account with `SmartAccountClient`. `toSmartContractAccount` has the form of:
+In prior versions, using your own smart contract account implementations required that you extend `BaseSmartContractAccount`. In version 3.x.x, you can use the `toSmartContractAccount` method which will allow you to use any account with `SmartAccountClient`. `toSmartContractAccount` has the form of:
 
 ```ts
 type toSmartContractAccount = <

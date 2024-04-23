@@ -68,6 +68,14 @@ Middleware represents different operations involved in the [`SmartAccountClient`
 <<< @/../packages/core/src/middleware/types.ts#ClientMiddleware
 :::
 
+## `ClientMiddlewareConfig`
+
+Configuration object to configure `ClientMiddleware` of the [`SmartAccountClient`](/packages/aa-core/smart-account-client/) during the client instantiation. You can configure using this object to configure the middleware of your interest selectively.
+
+::: details ClientMiddlewareFn
+<<< @/../packages/core/src/client/types.ts#ClientMiddlewareConfig
+:::
+
 ## `ClientMiddlewareFn`
 
 Each middleware is a function that takes in a user operation object, `UserOperationStruct`, performs its job to retrieve or compute the data, and populate different fields of the user operation to pass onto the next middleware in the pipeline before being signed and sent to the network. `ClientMiddlewareFn` is the function type that represents each middleware. In optional [`UserOperationOverrides`](#useroperationoverrides), and [`UserOperationFeeOptions`](/packages/aa-core/smart-account-client/types/userOperationFeeOptions), and returns a promise that resolves to a modified `UserOperationStruct`. This function is what you specify as your overridden middleware value for applying custom logic during the `UserOperationStruct` object to be sent to the bundler for on-chain execution.
@@ -76,9 +84,17 @@ Each middleware is a function that takes in a user operation object, `UserOperat
 <<< @/../packages/core/src/middleware/types.ts#ClientMiddlewareFn
 :::
 
+## `EntryPointDef`
+
+An object type that defines the interface for `EntryPoint` functions for packing the user operation to the optimized data structure to enhance performance and reduce gas costs of transactions, and generating the hash of the user operation for the format compatible to the specified `Chain` and `EntryPointVersion`.
+
+::: details EntryPointDef
+<<< @/../packages/core/src/entrypoint/types.ts#EntryPointDef
+:::
+
 ## `Multiplier`
 
-An object type with a required `multipler` field, which is a `number` that must be within the range of 1 to 1000.
+An object type with a required `multipler` field, which is a `number` value with max precision of 4 decimal places.
 
 ::: details Multiplier
 <<< @/../packages/core/src/utils/schema.ts#Multiplier
@@ -94,7 +110,7 @@ An extension of the [`SmartAccountSigner`](#smartaccountsigner) interface, this 
 
 ## `SmartAccountClient`
 
-`SmartAccountClient` is a custom `viem` `Client`, like the [`BundlerClient`](#bundlerclient), which is an intermediary or connector that enables your client application to interact with the `SmartContractAccount`. `SmartAccountClient` is analogous to the [`WalletClient`](https://viem.sh/docs/clients/wallet). The difference is that while `WalletClient` has [`WalletActions`](https://viem.sh/docs/actions/wallet/introduction) that lets your client application interact with an [Externally-owned account (EOA)](https://ethereum.org/developers/docs/accounts) with a [wallet](#wallet), `SmartAccountClient` provides [`SmartAccountClientActions`](#smartaccountclientaction) for client applications to interact with `SmartContractAccounts`.
+`SmartAccountClient` is a custom `viem` `Client`, like the [`BundlerClient`](#bundlerclient), which is an intermediary or connector that enables your client application to interact with the `SmartContractAccount`. `SmartAccountClient` is analogous to the [`WalletClient`](https://viem.sh/docs/clients/wallet). The difference is that while `WalletClient` has [`WalletActions`](https://viem.sh/docs/actions/wallet/introduction) that lets your client application interact with an [Externally-owned account (EOA)](https://ethereum.org/developers/docs/accounts) with a [wallet](./terms#wallet), `SmartAccountClient` provides [`SmartAccountClientActions`](#smartaccountclientaction) for client applications to interact with `SmartContractAccounts`.
 
 ::: details SmartAccountClient
 <<< @/../packages/core/src/client/smartAccountClient.ts#SmartAccountClient
@@ -118,10 +134,23 @@ An interface representing a signer capable of signing messages and typed data. I
 
 ## `SmartContractAccount`
 
-As smart contract accounts are essentially the contract codes that operate on the blockchain, `SmartContractAccount` defines the interface with different functionalities for managing and interacting with the contract account. It includes different functionalities for creating, managing, and using your smart account. In addition to supporting all functionalities achieved with a basic [EOA](./terms#wallet) alone, `SmartContractAccount` can have custom capabilities such as automating processes or executing actions based on predefined conditions. Smart contract wallets allow users to customize how they manage their digital assets, offering a more tailored approach to handling funds securely.
+As smart contract accounts are essentially the contract codes that operate on the blockchain, `SmartContractAccount` defines the interface with different functionalities for managing and interacting with the contract account. It includes different functionalities for creating, managing, and using your smart account. In addition to supporting all functionalities achieved with a basic [EOA](./terms#wallet) alone, `SmartContractAccount` can have custom capabilities such as automating processes or executing actions based on predefined conditions. Smart contract wallets allow users to customize how they manage their digital assets, offering a more tailored approach to handling funds securely. `SmartContractAccount` type extends `viem`'s [`Account`](https://viem.sh/docs/accounts/custom), and instantiation of an account is done using the [`toSmartContractAccount`](/packages/aa-core/accounts/) action.
 
 ::: details SmartContractAccount
 <<< @/../packages/core/src/account/smartContractAccount.ts#SmartContractAccount
+:::
+
+## `StateOverride`
+
+A type defining state overrides for [`eth_call`](https://geth.ethereum.org/docs/interacting-with-geth/rpc/ns-eth#eth-call) method. An optional address-to-state mapping, where each entry specifies some state to be ephemerally overridden prior to executing the call.
+State overrides allow you to customize the network state for the purpose of the simulation, so this feature is useful when you need to test or simulate scenarios under conditions that aren’t currently present on the live network.
+
+## `ToSmartContractAccountParams`
+
+This type defines the parameters to the `SmartContractAccount` instantiation action, [`toSmartContractAccount`](/packages/aa-core/accounts/). You can configure this parameter to specify the [`Transport`](https://viem.sh/docs/clients/intro.html#transports), [`Chain`](https://viem.sh/docs/glossary/types#chain), [`EntryPointDef`](#entrypointdef), and other base functionalities of the smart account that you are creating.
+
+::: details ToSmartContractAccountParams
+<<< @/../packages/core/src/account/smartContractAccount.ts#ToSmartContractAccountParams
 :::
 
 ## `User`
@@ -140,7 +169,7 @@ As smart contract accounts are essentially the contract codes that operate on th
 <<< @/../packages/core/src/types.ts#UserOperationCallData
 :::
 
-## `UserOperationEstimateGasResponse<EntryPointVersion>`
+## `UserOperationEstimateGasResponse`
 
 An interface that defines the structure for the response received from the RPC method [`eth_estimateUserOperationGas`](https://docs.alchemy.com/reference/eth-estimateuseroperationgas). This response provides detailed information about the estimated gas usage for a `UserOperation`.
 
@@ -150,7 +179,7 @@ An interface that defines the structure for the response received from the RPC m
 
 ## `UserOperationOverrides`
 
-Partial structure for overriding default values in a `UserOperationStruct`, such as gas limits and fees. Available fields include `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit`, `paymasterAndData`, or `nonceKey`. You can also specify a `stateOverride` to be passed into `eth_estimateUserOperationGas` during fee estimation. These override values are available from each [`ClientMiddleware`](#clientmiddleware) of the `SmartAccountClient`. Check out [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides) page to learn more.
+Partial structure for overriding default values in a `UserOperationStruct`, such as gas limits and fees. Available fields include `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit`, `paymasterAndData`, or `nonceKey`. You can also specify a `stateOverride` to be passed into `eth_estimateUserOperationGas` during gas estimation. These override values are available from each [`ClientMiddleware`](#clientmiddleware) of the `SmartAccountClient`. Check out [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides) page to learn more.
 
 ::: details UserOperationOverrides
 <<< @/../packages/core/src/types.ts#UserOperationOverrides
