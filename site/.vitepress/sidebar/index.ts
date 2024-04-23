@@ -26,12 +26,6 @@ export const sidebar: DefaultTheme.Sidebar = [
           { text: "Send UserOperations", link: "/send-uos" },
         ],
       },
-      {
-        text: "Migration Guides",
-        collapsed: false,
-        base: "/migration-guides",
-        items: [{ text: "Migrating to v3.x.x", link: "/migrating-to-v3" }],
-      },
     ],
   },
   {
@@ -65,6 +59,10 @@ export const sidebar: DefaultTheme.Sidebar = [
     text: "Using smart accounts",
     base: "/using-smart-accounts",
     items: [
+      {
+        text: "Update to EntryPoint v0.7",
+        link: "/entrypoint-v7",
+      },
       { text: "Send user operations", link: "/send-user-operations" },
       { text: "Batch user operations", link: "/batch-user-operations" },
       {
