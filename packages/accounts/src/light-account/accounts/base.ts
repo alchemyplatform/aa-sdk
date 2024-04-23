@@ -22,7 +22,6 @@ import {
   type SignTypedDataParameters,
   type Transport,
 } from "viem";
-import { getErc1271SigningFunctions } from "../../utils/erc1271/erc1271.js";
 import type {
   AccountVersionDef,
   GetEntryPointForLightAccountVersion,
@@ -189,16 +188,6 @@ export async function createLightAccountBase({
     });
   };
 
-  const { signMessage: signMessageV2, signTypedData: signTypedDataV2 } =
-    getErc1271SigningFunctions({
-      accountAddress,
-      accountName: type,
-      accountVersion: "2",
-      chainId: chain.id,
-      signer,
-      wrapperTypeName: "LightAccountMessage",
-    });
-
   const account = await toSmartContractAccount({
     transport,
     chain,
@@ -242,7 +231,7 @@ export async function createLightAccountBase({
         case "v1.1.0":
           return signWith1271WrapperV1(hashMessage(message));
         case "v2.0.0":
-          const signature = await signMessageV2({ message });
+          const signature = await signWith1271WrapperV1(hashMessage(message));
           // TODO: handle case where signer is an SCA.
           return concat([SignatureType.EOA, signature]);
         default:
@@ -262,7 +251,7 @@ export async function createLightAccountBase({
         case "v1.1.0":
           return signWith1271WrapperV1(hashTypedData(params));
         case "v2.0.0":
-          const signature = await signTypedDataV2(params);
+          const signature = await signWith1271WrapperV1(hashTypedData(params));
           // TODO: handle case where signer is an SCA.
           return concat([SignatureType.EOA, signature]);
         default:
