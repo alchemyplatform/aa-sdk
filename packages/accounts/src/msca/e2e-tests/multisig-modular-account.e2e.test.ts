@@ -380,12 +380,13 @@ describe("Multisig Modular Account Tests", async () => {
 
     expect(initiator.getAddress()).toBe(submitter.getAddress());
 
-    const { aggregatedSignature } = await initiator.proposeUserOperation({
-      uo: {
-        target: initiator.getAddress(),
-        data: "0x",
-      },
-    });
+    const { aggregatedSignature, signatureObj } =
+      await initiator.proposeUserOperation({
+        uo: {
+          target: initiator.getAddress(),
+          data: "0x",
+        },
+      });
 
     const result = await submitter.sendUserOperation({
       uo: {
@@ -393,7 +394,9 @@ describe("Multisig Modular Account Tests", async () => {
         data: "0x",
       },
       context: {
-        signature: aggregatedSignature,
+        aggregatedSignature: aggregatedSignature,
+        signatures: [signatureObj],
+        userOpSignatureType: "ACTUAL",
       },
     });
 
@@ -402,6 +405,47 @@ describe("Multisig Modular Account Tests", async () => {
     });
 
     await expect(txnHash).resolves.not.toThrowError();
+  }, 100000);
+
+  it("should execute successfully when using sendTransaction", async () => {
+    const initiator = await givenConnectedProvider({
+      signer: signer1,
+      chain,
+      owners,
+      threshold,
+    });
+
+    const submitter = await givenConnectedProvider({
+      signer: signer2,
+      chain,
+      owners,
+      threshold,
+    });
+
+    expect(initiator.getAddress()).toBe(submitter.getAddress());
+
+    const { aggregatedSignature, signatureObj } =
+      await initiator.proposeUserOperation({
+        uo: {
+          target: initiator.getAddress(),
+          data: "0x",
+        },
+      });
+
+    const result = submitter.sendTransaction(
+      {
+        to: initiator.getAddress(),
+        data: "0x",
+      },
+      undefined,
+      {
+        aggregatedSignature: aggregatedSignature,
+        signatures: [signatureObj],
+        userOpSignatureType: "ACTUAL",
+      }
+    );
+
+    await expect(result).resolves.not.toThrowError();
   }, 100000);
 
   it("should execute successfully with actual gas values equal to max gas values", async () => {
@@ -421,18 +465,21 @@ describe("Multisig Modular Account Tests", async () => {
 
     expect(initiator.getAddress()).toBe(submitter.getAddress());
 
-    const { aggregatedSignature, request: userOpReq } =
-      await initiator.proposeUserOperation({
-        uo: {
-          target: initiator.getAddress(),
-          data: "0x",
-        },
-        overrides: {
-          maxFeePerGas: { multiplier: 2 },
-          maxPriorityFeePerGas: { multiplier: 3 },
-          preVerificationGas: { multiplier: 1.5 },
-        },
-      });
+    const {
+      aggregatedSignature,
+      request: userOpReq,
+      signatureObj,
+    } = await initiator.proposeUserOperation({
+      uo: {
+        target: initiator.getAddress(),
+        data: "0x",
+      },
+      overrides: {
+        maxFeePerGas: { multiplier: 2 },
+        maxPriorityFeePerGas: { multiplier: 3 },
+        preVerificationGas: { multiplier: 1.5 },
+      },
+    });
 
     const result = await submitter.sendUserOperation({
       uo: {
@@ -440,7 +487,9 @@ describe("Multisig Modular Account Tests", async () => {
         data: "0x",
       },
       context: {
-        signature: aggregatedSignature,
+        signatures: [signatureObj],
+        aggregatedSignature,
+        userOpSignatureType: "ACTUAL",
       },
       overrides: {
         callGasLimit: userOpReq.callGasLimit,
@@ -495,11 +544,12 @@ describe("Multisig Modular Account Tests", async () => {
         },
       });
 
-    const { aggregatedSignature } = await provider2.signMultisigUserOperation({
-      account: provider2.account,
-      signatures: [signature1],
-      userOperationRequest: request,
-    });
+    const { aggregatedSignature, signatureObj: signature2 } =
+      await provider2.signMultisigUserOperation({
+        account: provider2.account,
+        signatures: [signature1],
+        userOperationRequest: request,
+      });
 
     // parse the UO request fields into the override format to send to sendUserOperation
     // todo: helper function to go from UserOperationRequest to SendUserOperationParams?
@@ -512,7 +562,9 @@ describe("Multisig Modular Account Tests", async () => {
         nonceKey: fromHex(`0x${pad(request.nonce).slice(2, 26)}`, "bigint"), // Nonce key is the first 24 bytes of the nonce
       },
       context: {
-        signature: aggregatedSignature,
+        aggregatedSignature,
+        signatures: [signature1, signature2],
+        userOpSignatureType: "ACTUAL",
       },
     });
 

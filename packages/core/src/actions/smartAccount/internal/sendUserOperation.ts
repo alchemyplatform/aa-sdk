@@ -12,9 +12,16 @@ import type {
   UserOperationOverrides,
   UserOperationStruct,
 } from "../../../types";
-import { deepHexlify, resolveProperties } from "../../../utils/index.js";
+import { signUserOperation } from "../signUserOperation.js";
 import type { GetContextParameter, UserOperationContext } from "../types";
 
+/**
+ * Used internally to send a user operation that has **already** been signed
+ *
+ * @param client a base smart account client instance with middleware configured
+ * @param args user operation struct, overrides, account, and context to be used in sending
+ * @returns A Promise containing the send user operation result {@link SendUserOperationResult}
+ */
 export async function _sendUserOperation<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
@@ -33,7 +40,7 @@ export async function _sendUserOperation<
   } & GetAccountParameter<TAccount> &
     GetContextParameter<TContext>
 ): Promise<SendUserOperationResult<TEntryPointVersion>> {
-  const { account = client.account, context, overrides } = args;
+  const { account = client.account, uoStruct, context, overrides } = args;
   if (!account) {
     throw new AccountNotFoundError();
   }
@@ -42,21 +49,16 @@ export async function _sendUserOperation<
     throw new ChainNotFoundError();
   }
 
-  const request = await client.middleware
-    .signUserOperation(args.uoStruct, {
-      overrides,
-      account,
-      client,
-      context,
-    })
-    .then(resolveProperties)
-    .then(deepHexlify);
+  const entryPoint = account.getEntryPoint();
+  const request = await signUserOperation(client, {
+    uoStruct,
+    account,
+    context,
+    overrides,
+  });
 
   return {
-    hash: await client.sendRawUserOperation(
-      request,
-      account.getEntryPoint().address
-    ),
+    hash: await client.sendRawUserOperation(request, entryPoint.address),
     request,
   };
 }

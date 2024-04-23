@@ -81,6 +81,9 @@ export type ClientActionParameters<
  * and await them in your UX. This is particularly useful for using Plugins
  * with Modular Accounts.
  *
+ * @param args the hooks arguments highlighted below
+ * @param args.client the smart account client returned from {@link useSmartAccountClient}
+ * @param args.actions the smart account client decorator you want to execute actions from
  * @example
  * ```tsx
  * const Foo = () => {
@@ -96,6 +99,7 @@ export type ClientActionParameters<
  *  });
  * };
  * ```
+ * @returns an object containing methods to execute the actions as well loading and error states (see: {@link UseClientActionsResult})
  */
 export function useClientActions<
   TTransport extends Transport = Transport,
@@ -103,14 +107,10 @@ export function useClientActions<
   TActions extends { [x: string]: (...args: any[]) => any } = {
     [x: string]: (...args: any[]) => any;
   }
->({
-  client,
-  actions,
-}: UseClientActionsProps<
-  TTransport,
-  TChain,
-  TActions
->): UseClientActionsResult<TActions> {
+>(
+  args: UseClientActionsProps<TTransport, TChain, TActions>
+): UseClientActionsResult<TActions> {
+  const { actions, client } = args;
   const {
     mutate,
     isPending: isExecutingAction,

@@ -1,10 +1,8 @@
 import {
   AccountNotFoundError,
-  deepHexlify,
   IncompatibleClientError,
   isSmartAccountClient,
   isSmartAccountWithSigner,
-  resolveProperties,
   SmartAccountWithSignerRequiredError,
   type GetEntryPointFromAccount,
   type SendUserOperationParameters,
@@ -12,12 +10,8 @@ import {
   type UserOperationOverrides,
 } from "@alchemy/aa-core";
 import { type Chain, type Client, type Transport } from "viem";
-import {
-  combineSignatures,
-  getSignerType,
-  multisigSignatureMiddleware,
-} from "../index.js";
-import { type ProposeUserOperationResult, type Signature } from "../types.js";
+import { splitAggregatedSignature } from "../index.js";
+import { type ProposeUserOperationResult } from "../types.js";
 
 export async function proposeUserOperation<
   TTransport extends Transport = Transport,
@@ -58,43 +52,31 @@ export async function proposeUserOperation<
     throw new SmartAccountWithSignerRequiredError();
   }
 
-  const builtUo = await client
-    .buildUserOperation({
-      account,
-      uo,
-      overrides,
-    })
-    .then((x) => multisigSignatureMiddleware(x, { account, client, overrides }))
-    .then(resolveProperties)
-    .then(deepHexlify);
+  const builtUo = await client.buildUserOperation({
+    account,
+    uo,
+    overrides,
+  });
 
   const request = await client.signUserOperation({
     uoStruct: builtUo,
     account,
+    context: {
+      userOpSignatureType: "UPPERLIMIT",
+    },
   });
 
-  const signerType = await getSignerType({
-    client,
-    signature: request.signature,
-    signer: account.getSigner(),
+  const splitSignatures = await splitAggregatedSignature({
+    request,
+    aggregatedSignature: request.signature,
+    account,
+    // split works on the assumption that we have t - 1 signatures
+    threshold: 2,
   });
-
-  const signatureObj: Signature = {
-    signature: request.signature,
-    signer: await account.getSigner().getAddress(),
-    signerType,
-    userOpSigType: "UPPERLIMIT",
-  };
 
   return {
     request,
-    signatureObj,
-    aggregatedSignature: combineSignatures({
-      signatures: [signatureObj],
-      upperLimitMaxFeePerGas: request.maxFeePerGas,
-      upperLimitMaxPriorityFeePerGas: request.maxPriorityFeePerGas,
-      upperLimitPvg: request.preVerificationGas,
-      usingMaxValues: false,
-    }),
+    signatureObj: splitSignatures.signatures[0],
+    aggregatedSignature: request.signature,
   };
 }

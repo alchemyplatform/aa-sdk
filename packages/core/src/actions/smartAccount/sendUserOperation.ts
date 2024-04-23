@@ -14,7 +14,14 @@ import type {
   UserOperationContext,
 } from "./types.js";
 
-export const sendUserOperation: <
+/**
+ * Sends a user operation or batch of user operations using the connected account. Before executing, sendUserOperation will run the user operation through the middleware pipeline.
+ *
+ * @param client the smart account client to use for RPC requests
+ * @param args {@link SendUserOperationParameters} containg the UO or batch to send, context, overrides, and account if not hoisted on the client
+ * @returns a Promise containing the {@link SendUserOperationResult}
+ */
+export async function sendUserOperation<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
@@ -27,10 +34,7 @@ export const sendUserOperation: <
 >(
   client: Client<TTransport, TChain, TAccount>,
   args: SendUserOperationParameters<TAccount, TContext>
-) => Promise<SendUserOperationResult<TEntryPointVersion>> = async (
-  client,
-  args
-) => {
+): Promise<SendUserOperationResult<TEntryPointVersion>> {
   const { account = client.account, context, overrides } = args;
 
   if (!account) {
@@ -45,11 +49,17 @@ export const sendUserOperation: <
     );
   }
 
-  const uoStruct = await buildUserOperation(client, args);
+  const uoStruct = await buildUserOperation(client, {
+    uo: args.uo,
+    account,
+    context,
+    overrides,
+  });
+
   return _sendUserOperation(client, {
     account,
     uoStruct,
     context,
     overrides,
   });
-};
+}
