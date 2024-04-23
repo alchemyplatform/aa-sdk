@@ -42,7 +42,7 @@ await magicSigner.authenticate(authParams);
 
 ### `Promise<MagicUserMetadata>`
 
-A Promise containing the `MagicUserMetadata`, and object with the following fields:
+A `Promise` containing the `MagicUserMetadata`, and object with the following fields:
 
 - `issuer: string | null` -- the Decentralized ID of the user.
 - `publicAddress: string | null` -- the authenticated user's public address (EOA public key).

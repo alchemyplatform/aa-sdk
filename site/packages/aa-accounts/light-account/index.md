@@ -88,7 +88,7 @@ const transferredClient = await createLightAccountClient({
 
 ### `Promise<LightAccount>`
 
-A Promise containing a new `LightAccount`.
+A `Promise` containing a new `LightAccount`.
 
 ## Parameters
 

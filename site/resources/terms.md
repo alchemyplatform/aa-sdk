@@ -38,7 +38,7 @@ A standardized smart contract that acts as the primary gateway for processing `U
 
 ## ERC-4337
 
-A standard authored by the [Ethereum Foundation](https://ethereum.foundation/) for [account abstraction](https://docs.alchemy.com/docs/introduction-to-account-abstraction), establishing a uniform interface for all smart accounts. This standard also outlines the roles and functionalities of [Bundlers](https://docs.alchemy.com/docs/bundler-services), [Paymasters](https://www.alchemy.com/overviews/what-is-a-paymaster), and [`Entrypoint`](#entrypoint). Reference: https://eips.ethereum.org/EIPS/eip-4337
+A standard authored by the [Ethereum Foundation](https://ethereum.foundation/) for [account abstraction](https://docs.alchemy.com/docs/introduction-to-account-abstraction), establishing a uniform interface for all smart accounts. This standard also outlines the roles and functionalities of [Bundlers](https://docs.alchemy.com/docs/bundler-services), [Paymasters](https://www.alchemy.com/overviews/what-is-a-paymaster), and [`EntryPoint`](#entrypoint). Reference: https://eips.ethereum.org/EIPS/eip-4337
 
 ## ERC-6492
 

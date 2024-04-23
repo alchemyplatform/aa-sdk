@@ -46,7 +46,7 @@ const txHash = await smartAccountClient.waitForUserOperationTransaction({
 
 ### `Promise<Hash>`
 
-A Promise containing the hash of the transaction the user operation was included in.
+A `Promise` containing the hash of the transaction the user operation was included in.
 
 If `txMaxRetries` is exceeded without the user operation included in a block yet, this endpoint will throw an error. You should handle this by retrying with a higher fee and/or changing the retry configurations.
 

@@ -27,7 +27,7 @@ head:
 
 ### `Promise<AlchemySmartAccountClient>`
 
-A Promise containing a new `AlchemySmartAccountClient` connected to a Light Account.
+A `Promise` containing a new `AlchemySmartAccountClient` connected to a Light Account.
 
 ## Parameters
 

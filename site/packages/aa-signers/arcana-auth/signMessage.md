@@ -39,7 +39,7 @@ const signedMessage = await newArcanaAuthSigner.signMessage(
 
 ### `Promise<Hex>`
 
-A Promise containing the signature of the message.
+A `Promise` containing the signature of the message.
 
 ## Parameters
 

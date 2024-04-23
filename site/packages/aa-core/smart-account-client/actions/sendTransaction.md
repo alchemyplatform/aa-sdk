@@ -47,7 +47,7 @@ const txHash = await smartAccountClient.sendTransaction(tx);
 
 ### `Promise<Hash | null>`
 
-A Promise containing the transaction hash
+A `Promise` containing the transaction hash
 
 ## Parameters
 

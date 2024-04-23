@@ -37,7 +37,7 @@ const details = await passportSigner.getAuthDetails();
 
 ### `Promise<PassportUserInfo>`
 
-A Promise containing the `PassportUserInfo`, an object with the following fields:
+A `Promise` containing the `PassportUserInfo`, an object with the following fields:
 
 - `authenticatedHeaders: PassportAuthenticatedHeaders` -- Headers that include encrypted key and session information.
 

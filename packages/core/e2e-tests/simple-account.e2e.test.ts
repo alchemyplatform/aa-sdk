@@ -27,7 +27,7 @@ Logger.setLogLevel(LogLevel.DEBUG);
 
 const chain = arbitrumSepolia;
 
-describe("Simple Account Entrypoint v6 Tests", () => {
+describe("Simple Account EntryPoint v6 Tests", () => {
   const signer: SmartAccountSigner =
     LocalAccountSigner.mnemonicToAccountSigner(OWNER_MNEMONIC);
 

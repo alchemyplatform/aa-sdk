@@ -37,7 +37,7 @@ const details = await web3AuthSigner.getAuthDetails();
 
 ### `Promise<Web3AuthUserInfo>`
 
-A Promise containing the `Web3AuthUserInfo`, an object with the following fields:
+A `Promise` containing the `Web3AuthUserInfo`, an object with the following fields:
 
 - `verifier: string` -- details of the verifier (verifier type, i.e. torus, metamask, openlogin etc.).
 - `verifierId: string` -- id of the verifier.

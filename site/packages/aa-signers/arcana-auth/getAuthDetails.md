@@ -37,7 +37,7 @@ const details = await newArcanaAuthSigner.getAuthDetails();
 
 ### `Promise<UserInfo>`
 
-A Promise containing the `UserInfo`, an object with the following fields:
+A `Promise` containing the `UserInfo`, an object with the following fields:
 
 - `address: string | null` -- the EOA account address associated with the authenticated user's wallet.
 - `email: string | null` -- email address of the authenticated user.

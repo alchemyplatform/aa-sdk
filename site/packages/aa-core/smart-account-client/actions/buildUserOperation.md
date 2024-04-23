@@ -93,7 +93,7 @@ const uoHash = await smartAccountClient.sendRawUserOperation({
 
 ### `Promise<UserOperationStruct>`
 
-A Promise containing the _unsigned_ UO struct resulting from the middleware pipeline
+A `Promise` containing the _unsigned_ UO struct resulting from the middleware pipeline
 
 ## Parameters
 

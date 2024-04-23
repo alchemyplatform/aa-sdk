@@ -34,7 +34,7 @@ smartAccountClient.getUserOperationByHash({ hash: "0xUserOpResultHash" });
 
 ### `Promise<UserOperationResponse | null>`
 
-A Promise containing the UO if found on-chain or null if not found.
+A `Promise` containing the UO if found on-chain or null if not found.
 
 ## Parameters
 

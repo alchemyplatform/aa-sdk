@@ -46,7 +46,7 @@ const upgradedAccount = await createMAAccount();
 
 ### `Promise<Hash>`
 
-A Promise that resolves to the user operation hash (transaction hash if `waitForTx` is true) sent to the network
+A `Promise` that resolves to the user operation hash (transaction hash if `waitForTx` is true) sent to the network
 
 ## Parameters
 

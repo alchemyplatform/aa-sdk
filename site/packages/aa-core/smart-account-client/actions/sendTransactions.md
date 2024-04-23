@@ -68,7 +68,7 @@ const txHash = await smartAccountClient.sendTransactions({ requests });
 
 ### `Promise<Hash | null>`
 
-A Promise containing the transaction hash of the batched user operation of the input transactions
+A `Promise` containing the transaction hash of the batched user operation of the input transactions
 
 ## Parameters
 

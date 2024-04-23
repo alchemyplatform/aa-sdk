@@ -66,7 +66,7 @@ const uoHash = await smartAccountClient.sendRawUserOperation({ request, entryPoi
 
 ### `Promise<BuildUserOperationFromTransactionsResult>`
 
-A Promise containing the _unsigned_ UO struct converted from the input transaction with all the middleware run on the resulting UO
+A `Promise` containing the _unsigned_ UO struct converted from the input transaction with all the middleware run on the resulting UO
 
 ## Parameters
 

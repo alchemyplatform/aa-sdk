@@ -34,7 +34,7 @@ smartAccountClient.getUserOperationReceipt({ hash: "0xUserOpResultHash" });
 
 ### `Promise<UserOperationReceipt | null>`
 
-A Promise containing the UserOperationReceipt if found on-chain or null if not found.
+A `Promise` containing the UserOperationReceipt if found on-chain or null if not found.
 
 ## Parameters
 

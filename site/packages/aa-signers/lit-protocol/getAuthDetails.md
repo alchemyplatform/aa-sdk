@@ -43,7 +43,7 @@ let authDetails = await litSigner.getAuthDetails();
 
 ### `Promise<LitUserMetadata>`
 
-A Promise containing the `LitUserMetadata`, a map of `string -> object` containing the following fields:
+A `Promise` containing the `LitUserMetadata`, a map of `string -> object` containing the following fields:
 
 - `sig: string` -- Signed authentication message of the given network node.
 - `deriviedVia: string` -- How the signature was generated.

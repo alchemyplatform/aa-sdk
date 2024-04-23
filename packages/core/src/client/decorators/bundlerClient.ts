@@ -8,7 +8,7 @@ import type {
   Transport,
 } from "viem";
 import { estimateUserOperationGas } from "../../actions/bundler/estimateUserOperationGas.js";
-import { getSupportedEntryPoints } from "../../actions/bundler/getSupportedEntrypoints.js";
+import { getSupportedEntryPoints } from "../../actions/bundler/getSupportedEntryPoints.js";
 import { getUserOperationByHash } from "../../actions/bundler/getUserOperationByHash.js";
 import { getUserOperationReceipt } from "../../actions/bundler/getUserOperationReceipt.js";
 import { sendRawUserOperation } from "../../actions/bundler/sendRawUserOperation.js";

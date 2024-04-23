@@ -67,7 +67,7 @@ Sends a user operation to the RPC provider to be included in a bundle.
 
 #### Parameters
 
-- `[UserOperationRequest, Address]` - The User Operation Request to be submitted and the address of the Entrypoint to be used for the operation.
+- `[UserOperationRequest, Address]` - The User Operation Request to be submitted and the address of the EntryPoint to be used for the operation.
 
 #### Returns
 
@@ -79,7 +79,7 @@ Sends a user operation to the RPC provider and returns gas estimates for the Use
 
 #### Parameters
 
-- `[UserOperationRequest, Address]` - The User Operation Request to be submitted and the address of the Entrypoint to be used for the operation.
+- `[UserOperationRequest, Address]` - The User Operation Request to be submitted and the address of the EntryPoint to be used for the operation.
 
 #### Returns
 

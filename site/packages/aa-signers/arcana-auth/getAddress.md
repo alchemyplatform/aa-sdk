@@ -37,4 +37,4 @@ const address = await newArcanaAuthSigner.getAddress();
 
 ### `Promise<Address>`
 
-A Promise containing the address of the `ArcanaAuthSigner`.
+A `Promise` containing the address of the `ArcanaAuthSigner`.

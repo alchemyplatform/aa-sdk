@@ -83,7 +83,7 @@ export type SmartContractAccount<Name extends string = string> =
     getInitCode: () => Promise<Hex>;
     isAccountDeployed: () => Promise<boolean>;
     getFactoryAddress: () => Address;
-    getEntrypoint: () => Address;
+    getEntryPoint: () => Address;
     getImplementationAddress: () => Promise<NullAddress | Address>;
   };
 ```

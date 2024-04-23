@@ -107,7 +107,7 @@ await turnkeySigner.authenticate(authParams);
 
 ### `Promise<TurnkeyUserMetadata>`
 
-A Promise containing the `TurnkeyUserMetadata`, and object with the following fields:
+A `Promise` containing the `TurnkeyUserMetadata`, and object with the following fields:
 
 - `organizationId: string` -- unique identifier for the user's organization.
 - `organizationName: string` -- human-readable name for the user's organization.

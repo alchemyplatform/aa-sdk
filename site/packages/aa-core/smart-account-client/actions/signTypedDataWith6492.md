@@ -65,7 +65,7 @@ const signedTypedDataWith6492 = smartAccountClient.signTypedDataWith6492({
 
 ### `Promise<Hash>`
 
-A Promise containing the signature of the typed data, additionally wrapped in ERC-6492 format if the account is undeployed.
+A `Promise` containing the signature of the typed data, additionally wrapped in ERC-6492 format if the account is undeployed.
 
 ## Parameters
 
