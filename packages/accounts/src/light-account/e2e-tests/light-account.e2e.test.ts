@@ -110,7 +110,7 @@ describe("Light Account v1 Tests", () => {
 
   /**
    * Need to add test eth to the counterfactual address for this test to pass.
-   * For current balance, @see: https://sepolia.etherscan.io/address/0x7eDdc16B15259E5541aCfdebC46929873839B872
+   * For current balance, @see https://sepolia.etherscan.io/address/0x7eDdc16B15259E5541aCfdebC46929873839B872
    */
   it("should execute successfully", async () => {
     const client = await givenConnectedClient({ signer, chain });

@@ -12,7 +12,7 @@ import type {
  * smart account client decorators
  *
  * @param client a viem client
- * @returns
+ * @returns true if the client is a SmartAccountClient
  */
 export function isSmartAccountClient<
   TTransport extends Transport = Transport,
@@ -38,7 +38,7 @@ export function isSmartAccountClient<
  * smart account action decorators
  *
  * @param client a viem client
- * @returns
+ * @returns true if the account is a BaseSmartAccountClient
  */
 export function isBaseSmartAccountClient<
   TTransport extends Transport = Transport,

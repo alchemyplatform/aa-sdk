@@ -248,6 +248,7 @@ export class AlchemySignerClient {
    * that result here.
    *
    * @param msg the hex representation of the bytes to sign
+   * @returns the signature over the raw hex
    */
   public signRawMessage = async (msg: Hex) => {
     if (!this.user) {

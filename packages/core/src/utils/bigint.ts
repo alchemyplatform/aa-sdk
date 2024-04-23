@@ -71,10 +71,10 @@ export enum RoundingMode {
  * Given a bigint and a number (which can be a float), returns the bigint value.
  * Note: this function has loss and will round down to the nearest integer.
  *
- * @param a -- the bigint value to multiply
- * @param b -- the number to multiply by
- * @param roundingMode -- the rounding mode to use when calculating the percent. defaults to ROUND_UP
- * @returns -- the bigint value of the multiplication with the number rounded by the rounding mode
+ * @param base - the number to be multiplied
+ * @param multiplier - the amount to multiply by
+ * @param roundingMode - the rounding mode to use when calculating the percent. defaults to ROUND_UP
+ * @returns the bigint value of the multiplication with the number rounded by the rounding mode
  */
 export const bigIntMultiply = (
   base: BigNumberish,

@@ -21,7 +21,7 @@ import type { ArcanaAuthAuthenticationParams } from "./types";
  * This class requires the `@arcana/auth` package as a dependency.
  * `@alchemy/aa-signers` lists it as optional dependencies.
  *
- * @see: https://github.com/arcana-network/auth
+ * @see https://github.com/arcana-network/auth
  */
 export class ArcanaAuthSigner
   implements

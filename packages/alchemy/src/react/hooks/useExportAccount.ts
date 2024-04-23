@@ -17,9 +17,11 @@ export type UseExportAccountMutationArgs = {
  * returned from the `useExportAccount` hook and should be rendered in the
  * parent component to display the account recovery details in an iframe.
  *
- * @property {string} iframeCss [optional] - CSS to apply to the iframe.
- * @property {string} className [optional] - Class name to apply to the container div.
- * @property {boolean} isExported - Whether the account has been exported.
+ * iframeCss [optional] - CSS to apply to the iframe.
+ *
+ * className [optional] - Class name to apply to the container div.
+ *
+ * isExported - Whether the account has been exported.
  */
 export type ExportAccountComponentProps = {
   iframeCss?: CSSProperties;

@@ -22,24 +22,26 @@ export type SplitAggregateSignatureParams<
 /**
  * Takes an aggregated signature and threshold and splits it into its components
  *
- * @param aggregatedSignature - aggregated signature containing PVG || maxFeePerGas || maxPriorityFeePerGas || N-1 Signatures || [0, N-1] Contract Data
- * @param threshold - the account's required threshold of signatures
+ * @param args - the arguments for the split
+ * @param args.aggregateSignature - the aggregated signature to split
+ * @param args.threshold - the threshold for the signature
+ * @param args.account - the account which the signature is valid for
+ * @param args.request - the user operation request that the signature is for
+ * @returns the signature split into its upper limits and current signatures
  */
 export const splitAggregatedSignature = async <
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined
->({
-  aggregatedSignature,
-  threshold,
-  account,
-  request,
-}: SplitAggregateSignatureParams<TAccount>): Promise<{
+>(
+  args: SplitAggregateSignatureParams<TAccount>
+): Promise<{
   upperLimitPvg: Hex;
   upperLimitMaxFeePerGas: Hex;
   upperLimitMaxPriorityFeePerGas: Hex;
   signatures: Signature[];
 }> => {
+  const { aggregatedSignature, threshold, account, request } = args;
   if (aggregatedSignature.length < 192 + (65 * threshold - 1)) {
     throw new InvalidAggregatedSignatureError();
   }

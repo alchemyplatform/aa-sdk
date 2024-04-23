@@ -22,14 +22,20 @@ jobs:
         env:
           TITLE: ${{ github.event.pull_request.title }}
         run: echo "$TITLE" | yarn commitlint
-
-  build_and_lint_and_test:
-    name: Lint and Build and Test
+  
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write 
     env:
-      API_KEY: ${{ secrets.API_KEY }}
+      REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.ALCHEMY_BOT_PAT }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.ALCHEMY_BOT_PAT }}
+          fetch-depth: "0"
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -40,13 +46,37 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Lint
-        run: yarn lint:check
+      - uses: reviewdog/action-setup@v1
+        with:
+          reviewdog_version: latest
+
+      - name: Run eslint with reviewdog
+        run: |
+          npx --no-install -c "eslint -f=rdjson ." | reviewdog -f=rdjson -reporter=github-pr-review -filter-mode=added -tee
+
+  build_and_lint_and_test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    env:
+      API_KEY: ${{ secrets.API_KEY }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: "0"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.16"
+          cache: "yarn"
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
 
       - name: Build
         env:
           API_KEY: ${{ secrets.API_KEY }}
-        run: yarn build:ci
+        run: yarn build
 
       - name: Unit Test
         run: yarn test

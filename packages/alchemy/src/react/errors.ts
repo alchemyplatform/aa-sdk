@@ -2,6 +2,7 @@ import { BaseError } from "../errors/base.js";
 
 /**
  * Error thrown when a hook is called without a AlchemyAccountProvider.
+ *
  * @param hookName The name of the hook.
  */
 export class NoAlchemyAccountContextError extends BaseError {
@@ -12,6 +13,7 @@ export class NoAlchemyAccountContextError extends BaseError {
 
 /**
  * Error thrown when a hook is called without a client.
+ *
  * @param hookName The name of the hook.
  */
 export class ClientUndefinedHookError extends BaseError {

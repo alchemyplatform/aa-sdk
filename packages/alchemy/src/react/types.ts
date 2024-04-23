@@ -2,6 +2,7 @@ import type { UseMutationOptions } from "@tanstack/react-query";
 
 /**
  * Base hook mutation arguments.
+ *
  * @template TData The mutation data type.
  * @template TVariable The mutation variable type.
  */
