@@ -24,7 +24,10 @@ This method must be called before accessing the other methods available on the `
 
 ```ts [example.ts]
 // [!code focus:99]
-import { TurnkeySigner, TurnkeySubOrganization } from "@alchemy/aa-signers/turnkey";
+import {
+  TurnkeySigner,
+  TurnkeySubOrganization,
+} from "@alchemy/aa-signers/turnkey";
 import { TurnkeyClient, createActivityPoller } from "@turnkey/http";
 import { WebauthnStamper } from "@turnkey/webauthn-stamper";
 import { http } from "viem";
@@ -65,7 +68,7 @@ const resolveSubOrganization = async () => {
               attestation: {
                 credentialId: "Y3JlZGVudGlhbElEX2V4YW1wbGU=+",
                 clientDataJson: "eyJ0eXBlIjoiY3JlYXRlIiwiY2hhbGxlbmdlIjoiYzI",
-                attestationObject: "YXR0ZXN0YXRpb25PYmplY3RfZXhhbXBsZQ_F"
+                attestationObject: "YXR0ZXN0YXRpb25PYmplY3RfZXhhbXBsZQ_F",
                 transports: ["AUTHENTICATOR_TRANSPORT_HYBRID"],
               },
             },
@@ -87,7 +90,8 @@ const resolveSubOrganization = async () => {
   });
 
   return new TurnkeySubOrganization({
-    subOrganizationId: activity.result.createSubOrganizationResultV4!.subOrganizationId,
+    subOrganizationId:
+      activity.result.createSubOrganizationResultV4!.subOrganizationId,
     signWith: activity.result.createSubOrganizationResultV4!.wallet!.walletId,
   });
 };
