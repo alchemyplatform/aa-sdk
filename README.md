@@ -20,4 +20,4 @@ The `aa-sdk` is part of [Account Kit](https://accountkit.alchemy.com). Check out
 
 ## Contributing
 
-We welcome contributions to `aa-sdk`. Please see our [contributing guidelines](CONTRIBUTING.md) for more information.
+We welcome contributions to `aa-sdk`. Please see our [contributing guidelines](CONTRIBUTING.md) for more information..
