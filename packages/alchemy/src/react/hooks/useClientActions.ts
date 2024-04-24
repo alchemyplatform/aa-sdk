@@ -88,12 +88,12 @@ export type ClientActionParameters<
  * ```tsx
  * const Foo = () => {
  *  const { client } = useSmartAccountClient({ type: "MultiOwnerModularAccount" });
- *  const { executePluginAction } = useClientActions({
+ *  const { executeAction } = useClientActions({
  *    client,
  *    pluginActions: sessionKeyPluginActions,
  *  });
  *
- *  executePluginAction({
+ *  executeAction({
  *    functionName: "isAccountSessionKey",
  *    args: [{ key: "0x0" }],
  *  });
