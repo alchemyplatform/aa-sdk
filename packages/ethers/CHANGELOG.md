@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.9.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.9.0-alpha.4...v3.9.0) (2024-04-24)
+
+**Note:** Version bump only for package @alchemy/aa-ethers
+
 ## [3.8.2-alpha.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.8.1...v3.8.2-alpha.1) (2024-04-18)
 
 ### Features

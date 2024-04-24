@@ -1,6 +1,6 @@
 {
   "name": "@alchemy/plugingen",
-  "version": "3.8.2-alpha.1",
+  "version": "3.9.0",
   "description": "A CLI tool that enables you to generate TS code for your ERC-6900 plugins",
   "author": "Alchemy",
   "license": "MIT",
@@ -60,8 +60,8 @@
   },
   "homepage": "https://github.com/alchemyplatform/aa-sdk#readme",
   "dependencies": {
-    "@alchemy/aa-accounts": "^3.8.2-alpha.1",
-    "@alchemy/aa-core": "^3.8.2-alpha.1",
+    "@alchemy/aa-accounts": "^3.9.0",
+    "@alchemy/aa-core": "^3.9.0",
     "bundle-require": "^4.0.2",
     "cac": "^6.7.14",
     "change-case": "^5.4.3",

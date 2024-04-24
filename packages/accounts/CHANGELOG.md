@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.9.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.9.0-alpha.4...v3.9.0) (2024-04-24)
+
+### Features
+
+- revised LightAccount v2 1271 sigs ([#614](https://github.com/alchemyplatform/aa-sdk/issues/614)) ([378c83b](https://github.com/alchemyplatform/aa-sdk/commit/378c83b68813e7b393f26c5cf7ba46827fc7a7d0))
+
 ## [3.8.2-alpha.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.8.1...v3.8.2-alpha.1) (2024-04-18)
 
 ### Features

@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.9.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.9.0-alpha.4...v3.9.0) (2024-04-24)
+
+### Features
+
+- add a useClientActions hook ([#571](https://github.com/alchemyplatform/aa-sdk/issues/571)) ([42692e4](https://github.com/alchemyplatform/aa-sdk/commit/42692e4b7c7b5486f8c230157fdb0fc98370a389))
+- add split transport ([#590](https://github.com/alchemyplatform/aa-sdk/issues/590)) ([2d3687f](https://github.com/alchemyplatform/aa-sdk/commit/2d3687f2009a4d0ca7f0dc9fc6f8c420376a35a3))
+- revised LightAccount v2 1271 sigs ([#614](https://github.com/alchemyplatform/aa-sdk/issues/614)) ([378c83b](https://github.com/alchemyplatform/aa-sdk/commit/378c83b68813e7b393f26c5cf7ba46827fc7a7d0))
+
 # [3.9.0-alpha.4](https://github.com/alchemyplatform/aa-sdk/compare/v3.9.0-alpha.3...v3.9.0-alpha.4) (2024-04-19)
 
 ### Features
