@@ -14,10 +14,13 @@ import {
   polygonAmoy,
   polygonMumbai,
   sepolia,
+  fraxtal,
+  fraxtalTestnet,
+  zora,
+  zoraSepolia,
   toRecord,
   type SmartContractAccount,
 } from "@alchemy/aa-core";
-import { fraxtal, fraxtalTestnet, zora, zoraSepolia } from "viem/chains";
 import { fromHex, type Address, type Chain } from "viem";
 import type { LightAccountBase } from "./accounts/base";
 import type {

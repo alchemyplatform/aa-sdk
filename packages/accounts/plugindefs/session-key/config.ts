@@ -9,8 +9,11 @@ import {
   polygonAmoy,
   polygonMumbai,
   sepolia,
+  fraxtal,
+  fraxtalTestnet,
+  zora,
+  zoraSepolia,
 } from "@alchemy/aa-core";
-import { fraxtal, fraxtalTestnet, zora, zoraSepolia } from "viem/chains";
 import { parseAbiParameters } from "viem";
 import { MultiOwnerPluginGenConfig } from "../multi-owner/config.js";
 import type { PluginGenConfig } from "../types";

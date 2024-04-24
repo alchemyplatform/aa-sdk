@@ -17,13 +17,16 @@ import {
   polygonAmoy,
   polygonMumbai,
   sepolia,
+  fraxtal,
+  fraxtalTestnet,
+  zora,
+  zoraSepolia,
   type GetAccountParameter,
   type SmartAccountClient,
   type SmartAccountSigner,
   type SmartContractAccountWithSigner,
   type UpgradeToData,
 } from "@alchemy/aa-core";
-import { fraxtal, fraxtalTestnet, zora, zoraSepolia } from "viem/chains";
 import type { Address, Chain, Transport } from "viem";
 import {
   custom,

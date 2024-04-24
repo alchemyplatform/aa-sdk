@@ -23,8 +23,11 @@ import {
   polygonAmoy,
   polygonMumbai,
   sepolia,
+  fraxtal,
+  fraxtalTestnet,
+  zora,
+  zoraSepolia,
 } from "../chains/index.js";
-import { fraxtal, fraxtalTestnet, zora, zoraSepolia } from "viem/chains";
 import { EntryPointAbi_v6 } from "../abis/EntryPointAbi_v6.js";
 import type { UserOperationRequest } from "../types.js";
 import type { SupportedEntryPoint } from "./types.js";

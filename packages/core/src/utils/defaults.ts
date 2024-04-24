@@ -15,8 +15,11 @@ import {
   polygonAmoy,
   polygonMumbai,
   sepolia,
+  fraxtal,
+  fraxtalTestnet,
+  zora,
+  zoraSepolia,
 } from "../chains/index.js";
-import { fraxtal, fraxtalTestnet, zora, zoraSepolia } from "viem/chains";
 import { defaultEntryPointVersion } from "../entrypoint/index.js";
 import type { EntryPointVersion } from "../entrypoint/types.js";
 import { DefaultFactoryNotDefinedError } from "../errors/account.js";
