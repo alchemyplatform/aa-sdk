@@ -121,7 +121,8 @@ export type UserOperationOverrides<
      */
     nonceKey: bigint;
 
-    /** The same state overrides for
+    /**
+     * The same state overrides for
      * [`eth_call`](https://geth.ethereum.org/docs/interacting-with-geth/rpc/ns-eth#eth-call) method.
      * An address-to-state mapping, where each entry specifies some state to be ephemerally overridden
      * prior to executing the call. State overrides allow you to customize the network state for
