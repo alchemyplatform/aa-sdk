@@ -1,4 +1,3 @@
-import EventEmitter from "eventemitter3";
 import { z } from "zod";
 import {
   createJSONStorage,
@@ -8,7 +7,11 @@ import {
 import { createStore, type Mutate, type StoreApi } from "zustand/vanilla";
 import type { AlchemySignerClient } from "../client";
 import type { User } from "../client/types";
-import type { Session, SessionManagerEvents } from "./types";
+import type {
+  Session,
+  SessionManagerEvents,
+  SessionManagerState,
+} from "./types";
 
 export const DEFAULT_SESSION_MS = 15 * 60 * 1000; // 15 minutes
 
@@ -26,9 +29,15 @@ export const SessionManagerParamsSchema = z.object({
 
 export type SessionManagerParams = z.input<typeof SessionManagerParamsSchema>;
 
-type SessionState = {
-  session: Session | null;
-};
+type SessionState =
+  | {
+      session: Session;
+      status: Extract<SessionManagerState, "CONNECTED">;
+    }
+  | {
+      session: null;
+      status: Exclude<SessionManagerState, "CONNECTED">;
+    };
 
 type Store = Mutate<
   StoreApi<SessionState>,
@@ -38,7 +47,6 @@ type Store = Mutate<
 export class SessionManager {
   private sessionKey: string;
   private client: AlchemySignerClient;
-  private eventEmitter: EventEmitter<SessionManagerEvents>;
   readonly expirationTimeMs: number;
   private store: Store;
 
@@ -54,7 +62,6 @@ export class SessionManager {
       storageType === "localStorage" ? localStorage : sessionStorage;
     this.expirationTimeMs = expirationTimeMs;
     this.client = client;
-    this.eventEmitter = new EventEmitter<SessionManagerEvents>();
 
     this.store = createStore(
       subscribeWithSelector(
@@ -62,16 +69,18 @@ export class SessionManager {
           () => {
             return {
               session: null,
+              status: "INITIALIZING",
             } satisfies SessionState;
           },
           {
+            version: 1,
             name: this.sessionKey,
             storage: createJSONStorage(() => storage),
           }
         )
       )
     );
-
+    this.initialize();
     this.registerEventListeners();
   }
 
@@ -113,7 +122,8 @@ export class SessionManager {
   };
 
   public clearSession = () => {
-    this.store.setState({ session: null });
+    this.store.setState({ session: null, status: "DISCONNECTED" });
+    localStorage.removeItem(`${this.sessionKey}:temporary`);
   };
 
   public setTemporarySession = (session: { orgId: string }) => {
@@ -139,9 +149,32 @@ export class SessionManager {
     event: E,
     listener: SessionManagerEvents[E]
   ) => {
-    this.eventEmitter.on(event, listener as any);
-
-    return () => this.eventEmitter.removeListener(event, listener as any);
+    switch (event) {
+      case "connected":
+        return this.store.subscribe(
+          (state) => state,
+          (state, prevState) => {
+            const handler = listener as SessionManagerEvents["connected"];
+            if (
+              state.status === "CONNECTED" &&
+              prevState.status !== "CONNECTED"
+            ) {
+              handler(state.session);
+            }
+          },
+          { fireImmediately: true }
+        );
+      case "disconnected":
+        return this.store.subscribe(
+          ({ status }) => status,
+          (status) =>
+            status === "DISCONNECTED" &&
+            (listener as SessionManagerEvents["disconnected"])(),
+          { fireImmediately: true }
+        );
+      default:
+        throw new Error(`Unknown event: ${event}`);
+    }
   };
 
   private getSession = (): Session | null => {
@@ -159,7 +192,7 @@ export class SessionManager {
      * We should revisit this later
      */
     if (session.expirationDateMs < Date.now()) {
-      this.store.setState({ session: null });
+      this.clearSession();
       return null;
     }
 
@@ -176,32 +209,18 @@ export class SessionManager {
         ...session,
         expirationDateMs: Date.now() + this.expirationTimeMs,
       },
+      status: "CONNECTED",
     });
   };
 
-  public initialize() {
-    this.getSessionUser()
-      .then((user) => {
-        // once we are authenticated, then we can emit a connected event
-        if (user) this.eventEmitter.emit("connected", this.getSession()!);
-      })
-      .finally(() => {
-        this.eventEmitter.emit("initialized");
-      });
+  private initialize() {
+    this.getSessionUser().then((user) => {
+      // at this point we should know if we have an authenticated user, then we can emit a connected event
+      if (!user) this.store.setState({ status: "DISCONNECTED" });
+    });
   }
 
   private registerEventListeners = () => {
-    this.store.subscribe(
-      ({ session }) => session,
-      (session, prevSession) => {
-        if (session != null && prevSession == null) {
-          this.eventEmitter.emit("connected", session);
-        } else if (session == null && prevSession != null) {
-          this.eventEmitter.emit("disconnected");
-        }
-      }
-    );
-
     this.client.on("disconnected", () => this.clearSession());
 
     this.client.on("connectedEmail", (user, bundle) => {
@@ -231,6 +250,10 @@ export class SessionManager {
       }
 
       this.setSession({ type: "passkey", user });
+    });
+
+    this.client.on("authenticating", () => {
+      this.store.setState({ status: "AUTHENTICATING", session: null });
     });
 
     window.addEventListener("storage", (e: StorageEvent) => {

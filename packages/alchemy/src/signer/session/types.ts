@@ -9,8 +9,14 @@ export type Session =
     }
   | { type: "passkey"; user: User; expirationDateMs: number };
 
+export type SessionManagerState =
+  | "CONNECTED"
+  | "INITIALIZED"
+  | "DISCONNECTED"
+  | "AUTHENTICATING"
+  | "INITIALIZING";
+
 export type SessionManagerEvents = {
   connected(session: Session): void;
   disconnected(): void;
-  initialized(): void;
 };

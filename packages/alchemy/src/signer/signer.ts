@@ -104,8 +104,6 @@ export class AlchemySigner
     );
     // register listeners first
     this.registerListeners();
-    // then initialize so that we can catch those events
-    this.sessionManager.initialize();
   }
 
   /**
@@ -381,16 +379,11 @@ export class AlchemySigner
       });
     });
 
-    this.sessionManager.on("initialized", () => {
-      this.store.setState((state) => ({
-        status: state.user
-          ? AlchemySignerStatus.CONNECTED
-          : AlchemySignerStatus.DISCONNECTED,
-      }));
-    });
-
     this.inner.on("authenticating", () => {
-      this.store.setState({ status: AlchemySignerStatus.AUTHENTICATING });
+      this.store.setState({
+        user: null,
+        status: AlchemySignerStatus.AUTHENTICATING,
+      });
     });
   };
 }

@@ -120,10 +120,15 @@ const addClientSideStoreListeners = (store?: ClientStore) => {
     ({ signer }) => signer,
     (signer) => {
       signer.on("statusChanged", (status) => {
+        console.log("statusChanged", status);
         store.setState({ signerStatus: getSignerStatus(status) });
       });
-      signer.on("connected", (user) => store.setState({ user }));
-      signer.on("disconnected", () =>
+      signer.on("connected", (user) => {
+        console.log("connected", user);
+        store.setState({ user });
+      });
+      signer.on("disconnected", () => {
+        console.log("disconnected");
         store.setState({
           user: undefined,
           accounts: {
@@ -133,8 +138,8 @@ const addClientSideStoreListeners = (store?: ClientStore) => {
               account: undefined,
             },
           },
-        })
-      );
+        });
+      });
     },
     { fireImmediately: true }
   );
