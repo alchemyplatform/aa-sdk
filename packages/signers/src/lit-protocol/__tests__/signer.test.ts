@@ -1,7 +1,7 @@
 import type { PKPEthersWallet } from "@lit-protocol/pkp-ethers";
 import { LitSigner } from "../signer.js";
 import type { LitAuthMethod } from "../index.js";
-import { MOCK_SESSION, TEST_CONTEXT } from "./data.js";
+import { MOCK_SESSION, RPC_MUMBAI_URL, TEST_CONTEXT } from "./data.js";
 import type { LitNodeClient } from "@lit-protocol/lit-node-client";
 
 describe("Lit Protocol Signer Tests", () => {
@@ -32,7 +32,7 @@ describe("Lit Protocol Signer Tests", () => {
   it("should sign typed data if authenticated", async () => {
     const typedData = {
       types: {
-        Request: [{ name: "hello", type: "string" }],
+        Request: { name: "hello", type: "string" },
       },
       primaryType: "Request",
       message: {
@@ -60,7 +60,7 @@ describe("Lit Protocol Signer Tests", () => {
 
 const setup = async () => {
   const signer = new LitSigner<LitAuthMethod>({
-    rpcUrl: "https://endpoints.omniatech.io/v1/matic/mumbai/public",
+    rpcUrl: RPC_MUMBAI_URL,
     pkpPublicKey: TEST_CONTEXT.PKP_INFO.publicKey,
   });
   signer.inner.connect = vi.fn().mockImplementation(() => {

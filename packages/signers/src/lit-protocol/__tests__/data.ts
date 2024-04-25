@@ -67,3 +67,6 @@ export const TEST_CONTEXT = {
       "04f4cd980d2e41d80872b7465cdbfb7ef6dbe5a7354f583ebaf6333194dd2e31d257933cad9bf317ffd7519bab03ada9ede80987732bc889de5066033d57dc5399",
   },
 };
+
+export const RPC_MUMBAI_URL =
+  "https://endpoints.omniatech.io/v1/matic/mumbai/public";
