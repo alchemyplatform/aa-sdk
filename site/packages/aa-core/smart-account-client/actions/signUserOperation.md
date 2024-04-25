@@ -18,13 +18,13 @@ Signs the unsigned `UserOperationStruct` returned from `buildUserOperation`, `bu
 
 ## Usage
 
-<<< @/snippets/aa-core/buildSignSendRawUserOp.md
+<!--@include: ../../../../snippets/aa-core/buildSignSendRawUserOp.md-->
 
 ## Returns
 
 ### `Promise<{ hash: Hash, request: UserOperationRequest }>`
 
-A Promise containing the signed result of the input `UserOperationStruct` using the account connected to the `SmartAccountClient`
+A `Promise` containing the signed result of the input `UserOperationStruct` using the account connected to the `SmartAccountClient`
 
 ## Parameters
 

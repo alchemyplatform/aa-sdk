@@ -59,6 +59,10 @@ export const sidebar: DefaultTheme.Sidebar = [
     text: "Using smart accounts",
     base: "/using-smart-accounts",
     items: [
+      {
+        text: "Update to EntryPoint v0.7",
+        link: "/entrypoint-v7",
+      },
       { text: "Send user operations", link: "/send-user-operations" },
       { text: "Batch user operations", link: "/batch-user-operations" },
       {
@@ -131,12 +135,28 @@ export const sidebar: DefaultTheme.Sidebar = [
       { text: "createConfig", link: "/createConfig" },
       { text: "useAuthenticate", link: "/useAuthenticate" },
       { text: "useSmartAccountClient", link: "/useSmartAccountClient" },
+      { text: "useClientActions", link: "/useClientActions" },
       { text: "useAccount", link: "/useAccount" },
       { text: "useSigner", link: "/useSigner" },
       { text: "useSignerStatus", link: "/useSignerStatus" },
       { text: "useUser", link: "/useUser" },
       { text: "useBundlerClient", link: "/useBundlerClient" },
       { text: "useAddPasskey", link: "/useAddPasskey" },
+      { text: "useLogout", link: "/useLogout" },
+      { text: "useExportAccount", link: "/useExportAccount" },
+      { text: "useSignMessage", link: "/useSignMessage" },
+      { text: "useSignTypedData", link: "/useSignTypedData" },
+      { text: "useSendUserOperation", link: "/useSendUserOperation" },
+      {
+        text: "useDropAndReplaceUserOperation",
+        link: "/useDropAndReplaceUserOperation",
+      },
+      {
+        text: "useWaitForUserOperationTransaction",
+        link: "/useWaitForUserOperationTransaction",
+      },
+      { text: "useSendTransaction", link: "/useSendTransaction" },
+      { text: "useSendTransactions", link: "/useSendTransactions" },
     ],
   },
   {

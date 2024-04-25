@@ -24,15 +24,7 @@ In this last section, you will enable users to send UserOperations through their
 
 ## Add button to Send UserOperations
 
-Create a new file `src/queries/sendUserOperation.tsx` and add the following:
-
-<<< @/snippets/getting-started/send-uos/sendUserOperation.tsx [src/queries/sendUserOperation.tsx]
-
-This method will send a request to Alchemy's infrastructure to send a UserOperation. It uses the `AlchemySmartAccountClient` from the Alchemy Account Kit. Check out the [AlchemySmartAccountClient docs](https://accountkit.alchemy.com/packages/aa-alchemy/smart-account-client/) for more details.
-
-## Update the Profile UI
-
-Now, incorporate this request on a new `src/components/SendUOButton.tsx` file and add it to the `src/components/ProfileCard.tsx` for authenticated users to send a UO. These files should look as follows:
+Add a new `src/components/SendUOButton.tsx` file and incorporate it onto the `src/components/ProfileCard.tsx` for authenticated users to send a UO. These files should now look as follows:
 
 ::: code-group
 

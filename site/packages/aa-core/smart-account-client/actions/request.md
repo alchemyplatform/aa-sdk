@@ -47,7 +47,7 @@ const result = await smartAccountClient.request({
 
 ### `Promise<any>`
 
-A Promise that resolves to the result of the JSON-RPC call
+A `Promise` that resolves to the result of the JSON-RPC call
 
 ## Parameters
 

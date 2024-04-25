@@ -9,6 +9,8 @@ import type { z } from "zod";
 import type {
   UserOperationFeeOptionsFieldSchema,
   UserOperationFeeOptionsSchema,
+  UserOperationFeeOptionsSchema_v6,
+  UserOperationFeeOptionsSchema_v7,
 } from "./client/schema";
 import type { EntryPointVersion } from "./entrypoint/types";
 import type {
@@ -50,9 +52,13 @@ export type UserOperationFeeOptionsField = z.input<
   typeof UserOperationFeeOptionsFieldSchema
 >;
 
-export type UserOperationFeeOptions = z.input<
-  typeof UserOperationFeeOptionsSchema
->;
+export type UserOperationFeeOptions<
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+> = TEntryPointVersion extends "0.6.0"
+  ? z.input<typeof UserOperationFeeOptionsSchema_v6>
+  : TEntryPointVersion extends "0.7.0"
+  ? z.input<typeof UserOperationFeeOptionsSchema_v7>
+  : z.input<typeof UserOperationFeeOptionsSchema>;
 
 export type UserOperationOverridesParameter<
   TEntryPointVersion extends EntryPointVersion,
@@ -61,27 +67,32 @@ export type UserOperationOverridesParameter<
   ? { overrides: UserOperationOverrides<TEntryPointVersion> }
   : { overrides?: UserOperationOverrides<TEntryPointVersion> };
 
+//#region UserOperationPaymasterOverrides
 export type UserOperationPaymasterOverrides<
   TEntryPointVersion extends EntryPointVersion
 > = TEntryPointVersion extends "0.6.0"
   ? {
-      paymasterAndData: UserOperationStruct<"0.6.0">["paymasterAndData"];
+      // paymasterAndData overrides only allows '0x' for bypassing paymaster middleware
+      paymasterAndData: EmptyHex;
     }
   : TEntryPointVersion extends "0.7.0"
   ? {
-      paymaster: NoUndefined<UserOperationStruct<"0.7.0">["paymaster"]>;
-      paymasterData: NoUndefined<UserOperationStruct<"0.7.0">["paymasterData"]>;
-      paymasterPostOpGasLimit: NoUndefined<
-        UserOperationStruct<"0.7.0">["paymasterPostOpGasLimit"]
-      >;
-      paymasterVerificationGasLimit: NoUndefined<
-        UserOperationStruct<"0.7.0">["paymasterVerificationGasLimit"]
-      >;
+      // paymasterData overrides only allows '0x' for bypassing the paymaster middleware
+      // if set to '0x', all paymaster related fields are omitted from the user op request
+      paymasterData: EmptyHex;
+      paymasterVerificationGasLimit:
+        | NoUndefined<
+            UserOperationStruct<"0.7.0">["paymasterVerificationGasLimit"]
+          >
+        | Multiplier;
+      paymasterPostOpGasLimit:
+        | NoUndefined<UserOperationStruct<"0.7.0">["paymasterPostOpGasLimit"]>
+        | Multiplier;
     }
   : {};
+//#endregion UserOperationOverridesParameter
 
 //#region UserOperationOverrides
-// Note: entry point version is required for UserOperationOverrides
 export type UserOperationOverrides<
   TEntryPointVersion extends EntryPointVersion
 > = Partial<
@@ -109,6 +120,15 @@ export type UserOperationOverrides<
      * one user operation for your account in a bundle
      */
     nonceKey: bigint;
+
+    /**
+     * The same state overrides for
+     * [`eth_call`](https://geth.ethereum.org/docs/interacting-with-geth/rpc/ns-eth#eth-call) method.
+     * An address-to-state mapping, where each entry specifies some state to be ephemerally overridden
+     * prior to executing the call. State overrides allow you to customize the network state for
+     * the purpose of the simulation, so this feature is useful when you need to estimate gas
+     * for user operation scenarios under conditions that aren’t currently present on the live network.
+     */
     stateOverride: StateOverride;
   } & UserOperationPaymasterOverrides<TEntryPointVersion>
 >;
@@ -192,13 +212,23 @@ export type UserOperationRequest<TEntryPointVersion extends EntryPointVersion> =
 //#endregion UserOperationRequest
 
 //#region UserOperationEstimateGasResponse
-export interface UserOperationEstimateGasResponse {
+export interface UserOperationEstimateGasResponse<
+  TEntryPointVersion extends EntryPointVersion
+> {
   /* Gas overhead of this UserOperation */
   preVerificationGas: BigNumberish;
   /* Actual gas used by the validation of this UserOperation */
   verificationGasLimit: BigNumberish;
   /* Value used by inner account execution */
   callGasLimit: BigNumberish;
+  /*
+   * EntryPoint v0.7.0 operations only.
+   * The amount of gas to allocate for the paymaster validation code.
+   * Note: `eth_estimateUserOperationGas` does not return paymasterPostOpGasLimit.
+   */
+  paymasterVerificationGasLimit: TEntryPointVersion extends "0.7.0"
+    ? BigNumberish
+    : never;
 }
 //#endregion UserOperationEstimateGasResponse
 
@@ -376,7 +406,3 @@ export type UserOperationStruct<TEntryPointVersion extends EntryPointVersion> =
     ? UserOperationStruct_v7
     : never;
 //#endregion UserOperationStruct
-
-export type UserOperationStructUnion =
-  | UserOperationStruct_v6
-  | UserOperationStruct_v7;

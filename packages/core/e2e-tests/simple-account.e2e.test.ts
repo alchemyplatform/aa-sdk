@@ -1,4 +1,3 @@
-import { polygonMumbai } from "@alchemy/aa-core";
 import {
   custom,
   fromHex,
@@ -12,6 +11,7 @@ import { generatePrivateKey } from "viem/accounts";
 import {
   LogLevel,
   Logger,
+  arbitrumSepolia,
   createBundlerClient,
   createSimpleSmartAccount,
   createSmartAccountClientFromExisting,
@@ -25,16 +25,16 @@ import { API_KEY, OWNER_MNEMONIC } from "./constants.js";
 
 Logger.setLogLevel(LogLevel.DEBUG);
 
-const chain = polygonMumbai;
+const chain = arbitrumSepolia;
 
-describe("Simple Account Entrypoint v6 Tests", () => {
+describe("Simple Account EntryPoint v6 Tests", () => {
   const signer: SmartAccountSigner =
     LocalAccountSigner.mnemonicToAccountSigner(OWNER_MNEMONIC);
 
   it("should successfully get counterfactual address", async () => {
     const provider = await givenConnectedProvider({ signer, chain });
     expect(provider.getAddress()).toMatchInlineSnapshot(
-      `"0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4"`
+      `"0x439663CEb3861f1bCf7F45F1792668fC74fc4b97"`
     );
   });
 

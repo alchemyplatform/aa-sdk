@@ -42,6 +42,6 @@ await fireblocksSigner.authenticate();
 
 ### `Promise<FireblocksUserInfo>`
 
-A Promise containing the `FireblocksUserInfo`, an object with the following fields:
+A `Promise` containing the `FireblocksUserInfo`, an object with the following fields:
 
 - `addresses: Address[]` -- all EOA addresses accessible via the Signer.

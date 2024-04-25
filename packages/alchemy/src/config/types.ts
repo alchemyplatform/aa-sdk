@@ -42,7 +42,8 @@ export type AlchemyAccountsConfig = {
 export type CreateConfigProps = ConnectionConfig & {
   chain: Chain;
   sessionConfig?: AlchemySignerParams["sessionConfig"];
-  /** Optional parameter that allows you to specify a different RPC Url
+  /**
+   * Optional parameter that allows you to specify a different RPC Url
    * or connection to be used specifically by the signer.
    * This is useful if you have a different backend proxy for the signer
    * than for your Bundler or Node RPC calls.

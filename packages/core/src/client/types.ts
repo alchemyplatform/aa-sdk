@@ -32,6 +32,7 @@ export type UpgradeToData = {
 };
 //#endregion UpgradeToData
 
+//#region ClientMiddlewareConfig
 export type ClientMiddlewareConfig<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
@@ -45,3 +46,4 @@ export type ClientMiddlewareConfig<
     paymasterAndData: ClientMiddlewareFn<TContext>;
   };
 };
+//#endregion ClientMiddlewareConfig

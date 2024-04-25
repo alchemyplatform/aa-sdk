@@ -114,7 +114,9 @@ export type BaseSmartAccountClient<
     chain,
     account,
     [...BundlerRpcSchema, ...PublicRpcSchema],
-    { middleware: ClientMiddleware<context> } & SmartAccountClientOpts &
+    {
+      middleware: ClientMiddleware<context>;
+    } & SmartAccountClientOpts &
       BundlerActions &
       PublicActions
   >

@@ -46,11 +46,14 @@ export const middlewareActions =
     middleware: {
       customMiddleware: overrides.customMiddleware ?? noopMiddleware,
       dummyPaymasterAndData: overrides.paymasterAndData?.dummyPaymasterAndData
-        ? async (struct) => ({
-            ...struct,
-            paymasterAndData:
-              overrides.paymasterAndData!.dummyPaymasterAndData(),
-          })
+        ? async (struct, { account }) =>
+            account.getEntryPoint().version === "0.6.0"
+              ? {
+                  ...struct,
+                  paymasterAndData:
+                    overrides.paymasterAndData!.dummyPaymasterAndData(),
+                }
+              : struct
         : defaultPaymasterAndData,
       feeEstimator: overrides.feeEstimator ?? defaultFeeEstimator(client),
       gasEstimator: overrides.gasEstimator ?? defaultGasEstimator(client),

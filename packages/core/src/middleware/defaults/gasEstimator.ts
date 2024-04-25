@@ -1,3 +1,8 @@
+import type {
+  UserOperationFeeOptions,
+  UserOperationOverrides,
+  UserOperationStruct,
+} from "../../types.js";
 import { deepHexlify, resolveProperties } from "../../utils/index.js";
 import { applyUserOpOverrideOrFeeOption } from "../../utils/userop.js";
 import type { MiddlewareClient } from "../actions.js";
@@ -35,5 +40,19 @@ export const defaultGasEstimator: <C extends MiddlewareClient>(
     struct.callGasLimit = callGasLimit;
     struct.verificationGasLimit = verificationGasLimit;
     struct.preVerificationGas = preVerificationGas;
+
+    const entryPoint = account.getEntryPoint();
+    if (entryPoint.version === "0.7.0") {
+      const paymasterVerificationGasLimit = applyUserOpOverrideOrFeeOption(
+        estimates.paymasterVerificationGasLimit,
+        (overrides as UserOperationOverrides<"0.7.0">)
+          ?.paymasterVerificationGasLimit,
+        (feeOptions as UserOperationFeeOptions<"0.7.0">)
+          ?.paymasterVerificationGasLimit
+      );
+      (struct as UserOperationStruct<"0.7.0">).paymasterVerificationGasLimit =
+        paymasterVerificationGasLimit;
+    }
+
     return struct;
   };

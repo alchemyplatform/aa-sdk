@@ -31,7 +31,7 @@ export const BigNumberishRangeSchema = z
 export const MultiplierSchema = z
   .object({
     /**
-     * Multiplier value with max precision of 4 decmial places
+     * Multiplier value with max precision of 4 decimal places
      */
     multiplier: z.number().refine(
       (n) => {

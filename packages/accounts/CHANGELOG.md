@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.9.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.9.0-alpha.4...v3.9.0) (2024-04-24)
+
+### Features
+
+- revised LightAccount v2 1271 sigs ([#614](https://github.com/alchemyplatform/aa-sdk/issues/614)) ([378c83b](https://github.com/alchemyplatform/aa-sdk/commit/378c83b68813e7b393f26c5cf7ba46827fc7a7d0))
+
+## [3.8.2-alpha.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.8.1...v3.8.2-alpha.1) (2024-04-18)
+
+### Features
+
+- **entrypoint-0.7:** base - all changes in regards to the EntryPoint v6 & v7 support ([#514](https://github.com/alchemyplatform/aa-sdk/issues/514)) ([6cc692e](https://github.com/alchemyplatform/aa-sdk/commit/6cc692edf2ac20adf310b7a0efd99879b6e6f485)), closes [#549](https://github.com/alchemyplatform/aa-sdk/issues/549)
+- light account v2 entrypoint v7 and multi owner update ([#548](https://github.com/alchemyplatform/aa-sdk/issues/548)) ([5f2f5c9](https://github.com/alchemyplatform/aa-sdk/commit/5f2f5c963ecdeb8c7efadb6eda2f2e9e6187f636))
+- move signUserOperation middleware step out of asyncPipe ([#587](https://github.com/alchemyplatform/aa-sdk/issues/587)) ([2685d14](https://github.com/alchemyplatform/aa-sdk/commit/2685d14bd550eec3fbb2185f22feae7028d484c1))
+- paymaster middleware update per entrypoint v7 user operation ([#580](https://github.com/alchemyplatform/aa-sdk/issues/580)) ([399479a](https://github.com/alchemyplatform/aa-sdk/commit/399479a38d6eaf0ab6d4d46b38f9d0f5a773cbed))
+
+## [3.8.2-alpha.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.8.1...v3.8.2-alpha.0) (2024-04-17)
+
+### Features
+
+- **entrypoint-0.7:** base - all changes in regards to the EntryPoint v6 & v7 support ([#514](https://github.com/alchemyplatform/aa-sdk/issues/514)) ([6cc692e](https://github.com/alchemyplatform/aa-sdk/commit/6cc692edf2ac20adf310b7a0efd99879b6e6f485)), closes [#549](https://github.com/alchemyplatform/aa-sdk/issues/549)
+- light account v2 entrypoint v7 and multi owner update ([#548](https://github.com/alchemyplatform/aa-sdk/issues/548)) ([5f2f5c9](https://github.com/alchemyplatform/aa-sdk/commit/5f2f5c963ecdeb8c7efadb6eda2f2e9e6187f636))
+- paymaster middleware update per entrypoint v7 user operation ([1709533](https://github.com/alchemyplatform/aa-sdk/commit/1709533ba9cd227e2c3c7c9cb848f921bde353f4))
+
 ## [3.8.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.8.0...v3.8.1) (2024-04-11)
 
 **Note:** Version bump only for package @alchemy/aa-accounts
@@ -179,10 +202,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 - **aa-ethers:** aa-ethers has had some functionality removed and apis changed
 
-* inputs to the ProviderAdapter now require a SmartAccountClient
-* with\* methods have been removed, middleware config now exists
+- inputs to the ProviderAdapter now require a SmartAccountClient
+- with\* methods have been removed, middleware config now exists
   on the SmartAccountClient
-* the Account Signer has been updated to take a SmartContractAccount
+- the Account Signer has been updated to take a SmartContractAccount
   as input
 
 - all interfaces now use the new smart account

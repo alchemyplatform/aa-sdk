@@ -29,7 +29,7 @@ Logger.setLogLevel(LogLevel.DEBUG);
 const rpcUrl = "https://arb-sepolia.g.alchemypreview.com/v2";
 const chain = arbitrumSepolia;
 
-describe("Simple Account Entrypoint v7 Tests with Split RPC between Bundler and Public RPC", () => {
+describe("Simple Account EntryPoint v7 Tests with Split RPC between Bundler and Public RPC", () => {
   const signer: SmartAccountSigner =
     LocalAccountSigner.mnemonicToAccountSigner(OWNER_MNEMONIC);
 

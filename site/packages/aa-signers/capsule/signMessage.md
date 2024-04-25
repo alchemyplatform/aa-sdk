@@ -37,7 +37,7 @@ const signedMessage = await capsuleSigner.signMessage("test");
 
 ### `Promise<Hex>`
 
-A Promise containing the signature of the message.
+A `Promise` containing the signature of the message.
 
 ## Parameters
 

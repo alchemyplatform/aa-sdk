@@ -5,20 +5,16 @@ import { useAlchemyAccountContext } from "../context.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import { useSigner } from "./useSigner.js";
 
-export type UseAddPasskeyData = string[];
-
-export type UseAddPasskeyParams = CredentialCreationOptions | undefined | void;
-
 export type UseAddPasskeyMutationArgs = BaseHookMutationArgs<
-  UseAddPasskeyData,
-  UseAddPasskeyParams
+  string[],
+  CredentialCreationOptions | undefined | void
 >;
 
 export type UseAddPasskeyResult = {
   addPasskey: UseMutateFunction<
-    UseAddPasskeyData,
+    string[],
     Error,
-    UseAddPasskeyParams,
+    CredentialCreationOptions | undefined | void,
     unknown
   >;
   isAddingPasskey: boolean;
@@ -37,7 +33,9 @@ export function useAddPasskey(
     error,
   } = useMutation(
     {
-      mutationFn: async (params: UseAddPasskeyParams) => {
+      mutationFn: async (
+        params: CredentialCreationOptions | undefined | void
+      ) => {
         return signer!.addPasskey(params ?? undefined);
       },
       ...mutationArgs,

@@ -151,7 +151,8 @@ export class AlchemySigner
   /**
    * Authenticate a user with either an email or a passkey and create a session for that user
    *
-   * @params params - undefined if passkey login, otherwise an object with email and bundle to resolve
+   * @param params - undefined if passkey login, otherwise an object with email and bundle to resolve
+   * @returns the user that was authenticated
    */
   authenticate: (params: AuthParams) => Promise<User> = async (params) => {
     if (params.type === "email") {
@@ -220,7 +221,7 @@ export class AlchemySigner
   /**
    * Unauthenticated call to look up a user's organizationId by email
    *
-   * @param email
+   * @param email the email to lookup
    * @returns the organization id for the user if they exist
    */
   getUser: (email: string) => Promise<{ orgId: string } | null> = async (
@@ -239,6 +240,9 @@ export class AlchemySigner
 
   /**
    * Adds a passkey to the user's account
+   *
+   * @param params optional parameters for the passkey creation
+   * @returns an array of the authenticator ids added to the user
    */
   addPasskey: (params?: CredentialCreationOptions) => Promise<string[]> =
     async (params) => {
@@ -249,6 +253,9 @@ export class AlchemySigner
    * Used to export the wallet for a given user
    * If the user is authenticated with an Email, this will return a seed phrase
    * If the user is authenticated with a Passkey, this will return a private key
+   *
+   * @param params export wallet parameters
+   * @returns true if the wallet was exported successfully
    */
   exportWallet: (
     params: Parameters<(typeof this.inner)["exportWallet"]>[0]

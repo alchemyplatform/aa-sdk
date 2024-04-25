@@ -5,8 +5,9 @@ import type { SignableMessage, TypedData, TypedDataDefinition } from "viem";
 
 /**
  * Converts a ethersjs Wallet to a SmartAccountSigner
+ *
  * @param wallet - the Wallet to convert
- * @returns {SmartAccountSigner} - a signer that can be used to sign and send user operations
+ * @returns - a signer that can be used to sign and send user operations
  */
 export const convertWalletToAccountSigner = (
   wallet: Wallet
@@ -37,8 +38,9 @@ export const convertWalletToAccountSigner = (
 
 /**
  * Converts a ethers.js Signer to a SmartAccountSigner
+ *
  * @param signer - the Signer to convert
- * @returns {SmartAccountSigner} - a signer that can be used to sign and send user operations
+ * @returns - a signer that can be used to sign and send user operations
  */
 export const convertEthersSignerToAccountSigner = (
   signer: Signer

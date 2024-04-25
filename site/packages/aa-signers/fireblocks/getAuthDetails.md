@@ -37,6 +37,6 @@ const details = await fireblocksSigner.getAuthDetails();
 
 ### `Promise<FireblocksUserInfo>`
 
-A Promise containing the `FireblocksUserInfo`, an object with the following fields:
+A `Promise` containing the `FireblocksUserInfo`, an object with the following fields:
 
 - `addresses: Address[]` -- all EOA addresses accessible via the user's Fireblocks vault.

@@ -3,6 +3,65 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.9.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.9.0-alpha.4...v3.9.0) (2024-04-24)
+
+### Features
+
+- add a useClientActions hook ([#571](https://github.com/alchemyplatform/aa-sdk/issues/571)) ([42692e4](https://github.com/alchemyplatform/aa-sdk/commit/42692e4b7c7b5486f8c230157fdb0fc98370a389))
+
+# [3.9.0-alpha.4](https://github.com/alchemyplatform/aa-sdk/compare/v3.9.0-alpha.3...v3.9.0-alpha.4) (2024-04-19)
+
+### Features
+
+- add js docs to account provider ([#602](https://github.com/alchemyplatform/aa-sdk/issues/602)) ([2853f5e](https://github.com/alchemyplatform/aa-sdk/commit/2853f5e34eb5d4dab7525b452ddb5af8e020cd46))
+
+# [3.9.0-alpha.3](https://github.com/alchemyplatform/aa-sdk/compare/v3.9.0-alpha.2...v3.9.0-alpha.3) (2024-04-19)
+
+### Features
+
+- add js docs to account provider undefined error ([#601](https://github.com/alchemyplatform/aa-sdk/issues/601)) ([3eb191e](https://github.com/alchemyplatform/aa-sdk/commit/3eb191e7634632b641804afb6e264361c3f664cb))
+
+# [3.9.0-alpha.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.9.0-alpha.1...v3.9.0-alpha.2) (2024-04-19)
+
+### Features
+
+- add js docs to client undefined error ([#600](https://github.com/alchemyplatform/aa-sdk/issues/600)) ([7eabe78](https://github.com/alchemyplatform/aa-sdk/commit/7eabe7843acfa3e10d20bb362082a6d159df9747))
+
+# [3.9.0-alpha.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.9.0-alpha.0...v3.9.0-alpha.1) (2024-04-19)
+
+### Features
+
+- add js docs to types ([#599](https://github.com/alchemyplatform/aa-sdk/issues/599)) ([c781e81](https://github.com/alchemyplatform/aa-sdk/commit/c781e811e5d0347953ca0a2d7511fc46747e473b))
+
+# [3.9.0-alpha.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.8.2-alpha.1...v3.9.0-alpha.0) (2024-04-19)
+
+### Features
+
+- add sendTransaction and sendTransactions hooks ([#589](https://github.com/alchemyplatform/aa-sdk/issues/589)) ([184bfa0](https://github.com/alchemyplatform/aa-sdk/commit/184bfa0b8efb20ae95fe751694f35ca88b899cdd))
+- add useExportAccount hook ([#567](https://github.com/alchemyplatform/aa-sdk/issues/567)) ([50770d8](https://github.com/alchemyplatform/aa-sdk/commit/50770d89e88f58709c0de0e4cbd5854482b19359))
+- add useLogout hook ([#566](https://github.com/alchemyplatform/aa-sdk/issues/566)) ([a64cf7f](https://github.com/alchemyplatform/aa-sdk/commit/a64cf7f5fa603f0c55792f61af9ef4f992200a54))
+- add useSendUserOperation and useDropAndReplaceUserOperation hooks ([#581](https://github.com/alchemyplatform/aa-sdk/issues/581)) ([877785d](https://github.com/alchemyplatform/aa-sdk/commit/877785d0bebe5a383045ffab84a498c116d9fbcd))
+- add useSignMessage and useSignTypedData hooks ([#568](https://github.com/alchemyplatform/aa-sdk/issues/568)) ([de5262c](https://github.com/alchemyplatform/aa-sdk/commit/de5262c585260925adfa08e21d008fa8011284a9))
+- add useWaitForUserOperationTransaction hook ([#582](https://github.com/alchemyplatform/aa-sdk/issues/582)) ([176548f](https://github.com/alchemyplatform/aa-sdk/commit/176548f4ae712c7e6d0173c12fc436994ffedb95))
+- update useAuthenticate and useAccount to include mutation args ([#592](https://github.com/alchemyplatform/aa-sdk/issues/592)) ([1508d7d](https://github.com/alchemyplatform/aa-sdk/commit/1508d7dc184600cbd6683fff0d48cd4abdb13839))
+
+## [3.8.2-alpha.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.8.1...v3.8.2-alpha.1) (2024-04-18)
+
+### Features
+
+- add useAddPasskey hook ([#565](https://github.com/alchemyplatform/aa-sdk/issues/565)) ([27b3bde](https://github.com/alchemyplatform/aa-sdk/commit/27b3bde8b9593055f213f15fbefe07e3a010bd60))
+- **entrypoint-0.7:** base - all changes in regards to the EntryPoint v6 & v7 support ([#514](https://github.com/alchemyplatform/aa-sdk/issues/514)) ([6cc692e](https://github.com/alchemyplatform/aa-sdk/commit/6cc692edf2ac20adf310b7a0efd99879b6e6f485)), closes [#549](https://github.com/alchemyplatform/aa-sdk/issues/549)
+- light account v2 entrypoint v7 and multi owner update ([#548](https://github.com/alchemyplatform/aa-sdk/issues/548)) ([5f2f5c9](https://github.com/alchemyplatform/aa-sdk/commit/5f2f5c963ecdeb8c7efadb6eda2f2e9e6187f636))
+- paymaster middleware update per entrypoint v7 user operation ([#580](https://github.com/alchemyplatform/aa-sdk/issues/580)) ([399479a](https://github.com/alchemyplatform/aa-sdk/commit/399479a38d6eaf0ab6d4d46b38f9d0f5a773cbed))
+
+## [3.8.2-alpha.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.8.1...v3.8.2-alpha.0) (2024-04-17)
+
+### Features
+
+- **entrypoint-0.7:** base - all changes in regards to the EntryPoint v6 & v7 support ([#514](https://github.com/alchemyplatform/aa-sdk/issues/514)) ([6cc692e](https://github.com/alchemyplatform/aa-sdk/commit/6cc692edf2ac20adf310b7a0efd99879b6e6f485)), closes [#549](https://github.com/alchemyplatform/aa-sdk/issues/549)
+- light account v2 entrypoint v7 and multi owner update ([#548](https://github.com/alchemyplatform/aa-sdk/issues/548)) ([5f2f5c9](https://github.com/alchemyplatform/aa-sdk/commit/5f2f5c963ecdeb8c7efadb6eda2f2e9e6187f636))
+- paymaster middleware update per entrypoint v7 user operation ([1709533](https://github.com/alchemyplatform/aa-sdk/commit/1709533ba9cd227e2c3c7c9cb848f921bde353f4))
+
 ## [3.8.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.8.0...v3.8.1) (2024-04-11)
 
 ### Bug Fixes

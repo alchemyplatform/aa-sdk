@@ -15,7 +15,6 @@ import { allEqual, isBigNumberish } from "./index.js";
  * Utility method for asserting a {@link UserOperationStruct} has valid fields for the given entry point version
  *
  * @param request a {@link UserOperationStruct} to validate
- * @param entryPointVersion a {@link EntryPointVersion} entry point version
  * @returns a type guard that asserts the {@link UserOperationRequest} is valid
  */
 export function isValidRequest<TEntryPointVersion extends EntryPointVersion>(
@@ -37,7 +36,6 @@ export function isValidRequest<TEntryPointVersion extends EntryPointVersion>(
  * Utility method for asserting a {@link UserOperationRequest} has valid fields for the paymaster data
  *
  * @param request a {@link UserOperationRequest} to validate
- * @param entryPointVersion a {@link EntryPointVersion} entry point version
  * @returns a type guard that asserts the {@link UserOperationRequest} is a {@link UserOperationRequest}
  */
 export function isValidPaymasterAndData<
@@ -60,7 +58,6 @@ export function isValidPaymasterAndData<
  * Utility method for asserting a {@link UserOperationStruct} has valid fields for the paymaster data
  *
  * @param request a {@link UserOperationRequest} to validate
- * @param entryPointVersion a {@link EntryPointVersion} entry point version
  * @returns a type guard that asserts the {@link UserOperationStruct} is a {@link UserOperationRequest}
  */
 export function isValidFactoryAndData<

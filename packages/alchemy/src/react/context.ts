@@ -31,11 +31,19 @@ export const useAlchemyAccountContext = () => {
   return context;
 };
 
-export const AlchemyAccountProvider = ({
-  config,
-  queryClient,
-  children,
-}: React.PropsWithChildren<AlchemyAccountsProviderProps>) => {
+/**
+ * Provider for Alchemy accounts.
+ *
+ * @param props alchemy accounts provider props
+ * @param props.config the acccount config generated using {@link createConfig}
+ * @param props.queryClient the react-query query client to use
+ * @param props.children react components that should have this accounts context
+ * @returns The element to wrap your application in for Alchemy Accounts context.
+ */
+export const AlchemyAccountProvider = (
+  props: React.PropsWithChildren<AlchemyAccountsProviderProps>
+) => {
+  const { config, queryClient, children } = props;
   // Note: we don't use .tsx because we don't wanna use rollup or similar to bundle this package.
   // This lets us continue to use TSC for building the packages which preserves the "use client" above
   return createElement(

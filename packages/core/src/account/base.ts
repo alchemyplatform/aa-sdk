@@ -192,6 +192,7 @@ export abstract class BaseSmartContractAccount<
    * [EIP-6492](https://eips.ethereum.org/EIPS/eip-6492)
    *
    * @param msg -- the message to sign
+   * @returns the signature wrapped in 6492 format
    */
   async signMessageWith6492(msg: string | Uint8Array): Promise<`0x${string}`> {
     const [isDeployed, signature] = await Promise.all([
@@ -208,6 +209,7 @@ export abstract class BaseSmartContractAccount<
    * [EIP-6492](https://eips.ethereum.org/EIPS/eip-6492)
    *
    * @param params -- Typed Data params to sign
+   * @returns the signature wrapped in 6492 format
    */
   async signTypedDataWith6492(
     params: SignTypedDataParams
@@ -238,8 +240,8 @@ export abstract class BaseSmartContractAccount<
    * If your contract supports UUPS, you can implement this method which can be
    * used to upgrade the implementation of the account.
    *
-   * @param upgradeToImplAddress -- the implementation address of the contract you want to upgrade to
-   * @param upgradeToInitData -- the initialization data required by that account
+   * @param _upgradeToImplAddress -- the implementation address of the contract you want to upgrade to
+   * @param _upgradeToInitData -- the initialization data required by that account
    */
   encodeUpgradeToAndCall = async (
     _upgradeToImplAddress: Address,
@@ -353,6 +355,8 @@ export abstract class BaseSmartContractAccount<
    * The initCode field (if non-zero length) is parsed as a 20-byte address,
    * followed by calldata to pass to this address.
    * The factory address is the first 40 char after the 0x, and the callData is the rest.
+   *
+   * @returns [factoryAddress, factoryCalldata]
    */
   protected async parseFactoryAddressFromAccountInitCode(): Promise<
     [Address, Hex]

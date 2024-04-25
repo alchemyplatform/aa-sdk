@@ -36,7 +36,7 @@ const encodedTransferOwnershipData =
 
 ### `Promise<Hex>`
 
-A Promise containing the encoded Hex of the`transferOwnership` function call with the given parameter
+A `Promise` containing the encoded Hex of the`transferOwnership` function call with the given parameter
 
 ## Parameters
 

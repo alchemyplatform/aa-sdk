@@ -54,7 +54,7 @@ export class EthersProviderAdapter extends JsonRpcProvider {
   /**
    * Connects the Provider to an Account and returns a Signer
    *
-   * @param fn - a function that takes the account provider's rpcClient and returns an ISmartContractAccount
+   * @param account - the account to connect to
    * @returns an {@link AccountSigner} that can be used to sign and send user operations
    */
   connectToAccount<TAccount extends SmartContractAccount>(

@@ -93,21 +93,21 @@ In this newly created directory for your app, add the following dependencies:
 ::: code-group
 
 ```bash [npm]
-npm i @alchemy/aa-alchemy @alchemy/aa-accounts @alchemy/aa-core viem @tanstack/react-query
+npm i @alchemy/aa-alchemy @alchemy/aa-accounts @alchemy/aa-core viem@2.8.6 @tanstack/react-query@5.28.9
 ```
 
 ```bash [yarn]
-yarn add @alchemy/aa-alchemy @alchemy/aa-accounts @alchemy/aa-core viem @tanstack/react-query
+yarn add @alchemy/aa-alchemy @alchemy/aa-accounts @alchemy/aa-core viem@2.8.6 @tanstack/react-query@5.28.9
 ```
 
 ```bash [pnpm]
-pnpm i @alchemy/aa-alchemy @alchemy/aa-accounts @alchemy/aa-core viem @tanstack/react-query
+pnpm i @alchemy/aa-alchemy @alchemy/aa-accounts @alchemy/aa-core viem@2.8.6 @tanstack/react-query@5.28.9
 ```
 
 :::
 
 ::: warning
-The version of `viem` that's required to be installed is listed as a `peerDependency` of the various `@alchemy/*` packages (`2.8.6` at the time of writing). Due to some breaking changes between patch and minor versions of `viem`, it's recommended to pin your version of `viem` to the listed `peerDependency`.
+The versions of `viem` and `@tanstack/react-query` that's required to be installed is listed as a `peerDependency` of the various `@alchemy/*` packages (`2.8.6` and `5.28.9`, respectively, at the time of writing). Due to some breaking changes between patch and minor versions of `viem` and `@tanstack/react-query`, it's recommended to pin your version of `viem` to the listed `peerDependency` in the `package.json`.
 :::
 
 The three Alchemy packages - `@alchemy/aa-alchemy`, `@alchemy/aa-accounts`, and `@alchemy/aa-core` - come from the [Alchemy Account Kit](https://accountkit.alchemy.com/), and will provide the key building blocks for created Embedded Accounts.
@@ -120,13 +120,13 @@ The three Alchemy packages - `@alchemy/aa-alchemy`, `@alchemy/aa-accounts`, and 
 
 Using your code editor, open your newly created application directory to add the backend! Your application's backend will serve as an API that your frontend will use to send requests to Alchemy's infrastructure to sign messages, send UserOperations, and track your users' Embedded Account activity.
 
-From the root of NextJS project's directory, using the NextJS concept of [route handlers](https://nextjs.org/docs/app/building-your-application/routing/route-handlers), create new directory `src/app/api/rpc` and add two files: `src/app/api/rpc/[..routes]/route.ts` to handle calls to the Alchemy Signer, and `src/app/api/rpc/route.ts` to handle requests to Alchemy's infrastructure. Copy the following into those files.
+From the root of NextJS project's directory, using the NextJS concept of [route handlers](https://nextjs.org/docs/app/building-your-application/routing/route-handlers), create new directory `src/app/api/rpc` and add two files: `src/app/api/rpc/[...routes]/route.ts` to handle calls to the Alchemy Signer, and `src/app/api/rpc/route.ts` to handle requests to Alchemy's infrastructure. Copy the following into those files.
 
 ::: code-group
 
-<<< @/snippets/getting-started/setup-app/route.ts [src/app/api/route.ts]
+<<< @/snippets/getting-started/setup-app/route.ts [src/app/api/rpc/route.ts]
 
-<<< @/snippets/getting-started/setup-app/routes.ts [src/app/api/[...routes]/route.ts]
+<<< @/snippets/getting-started/setup-app/routes.ts [src/app/api/rpc/[...routes]/route.ts]
 
 :::
 

@@ -1,14 +1,18 @@
 import { bundleRequire } from "bundle-require";
-
-import type { Config } from "../config.js";
-import type { MaybeArray } from "../types.js";
+import type { Config } from "../config";
+import type { MaybeArray } from "../types";
 
 type ResolveConfigParameters = {
   /** Path to config file */
   configPath: string;
 };
 
-/** Bundles and returns wagmi config object from path. */
+/**
+ * Bundles and returns config object from path.
+ *
+ * @param parameters - Parameters to resolve config
+ * @returns an array of the config objects
+ */
 export async function resolveConfig(
   parameters: ResolveConfigParameters
 ): Promise<MaybeArray<Config>> {

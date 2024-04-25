@@ -38,36 +38,6 @@ with your provider on what the correct logic is.
 
 ## Splitting Bundler traffic and Node RPC traffic
 
-It might be the case that you want to use a different RPC provider for your bundler traffic and your node traffic. This is a common use case, and you can do this by passing in a custom transport function to your `createSmartAccountClient` call. For example:
+It might be the case that you want to use a different RPC provider for your bundler traffic and your node traffic. This is a common use case, and you can do this by leveraging the [`split`](/packages/aa-core/split-transport) transport and passing it to your `createSmartAccountClient` call. For example:
 
-```ts
-import { createSmartAccountClient } from "@alchemy/aa-core";
-import { sepolia } from "viem";
-
-const chain = sepolia;
-const client = createSmartAccountClient({
-  chain,
-  transport: (opts) => {
-    const bundlerRpc = http("BUNDLER_RPC_URL")(opts);
-    const publicRpc = http("OTHER_RPC_URL")(opts);
-
-    return custom({
-      request: async (args) => {
-        const bundlerMethods = new Set([
-          "eth_sendUserOperation",
-          "eth_estimateUserOperationGas",
-          "eth_getUserOperationReceipt",
-          "eth_getUserOperationByHash",
-          "eth_supportedEntryPoints",
-        ]);
-
-        if (bundlerMethods.has(args.method)) {
-          return bundlerRpc.request(args);
-        } else {
-          return publicRpc.request(args);
-        }
-      },
-    })(opts);
-  },
-});
-```
+<<< @/snippets/aa-core/splitTransport.ts

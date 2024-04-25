@@ -17,6 +17,7 @@ import type {
   CreateAccountParams,
   CredentialCreationOptionOverrides,
   EmailAuthParams,
+  ExportWalletParams,
   SignerBody,
   SignerResponse,
   SignerRoutes,
@@ -247,6 +248,7 @@ export class AlchemySignerClient {
    * that result here.
    *
    * @param msg the hex representation of the bytes to sign
+   * @returns the signature over the raw hex
    */
   public signRawMessage = async (msg: Hex) => {
     if (!this.user) {
@@ -275,10 +277,7 @@ export class AlchemySignerClient {
   public exportWallet = async ({
     iframeContainerId,
     iframeElementId = "turnkey-export-iframe",
-  }: {
-    iframeContainerId: string;
-    iframeElementId?: string;
-  }) => {
+  }: ExportWalletParams) => {
     const exportWalletIframeStamper = new IframeStamper({
       iframeContainer: document.getElementById(iframeContainerId),
       iframeElementId: iframeElementId,

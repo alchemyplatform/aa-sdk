@@ -74,7 +74,7 @@ class NaniAccount_<
   /**
    * Returns the on-chain owner address of the account.
    *
-   * @returns {Address} the on-chain owner of the account
+   * @returns the on-chain owner of the account
    */
   async getOwnerAddress(): Promise<Address> {
     const callResult = await this.rpcProvider.call({
@@ -165,7 +165,7 @@ class NaniAccount_<
    *
    * @param delegate - the delegate to execute the function call
    * @param data - the data to be passed to the function call
-   * @returns {Hex} the encoded function call
+   * @returns the encoded function call
    */
   static encodeExecuteDelegate(delegate: Address, data: Hex): Hex {
     return encodeFunctionData({
@@ -179,7 +179,7 @@ class NaniAccount_<
    * Encodes the transferOwnership function call using Nani Account ABI.
    *
    * @param newOwner - the new owner of the account
-   * @returns {Hex} the encoded function call
+   * @returns the encoded function call
    */
   static encodeTransferOwnership(newOwner: Address): Hex {
     return encodeFunctionData({

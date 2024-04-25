@@ -64,7 +64,7 @@ const signedTypedData = smartAccountClient.signTypedData({
 
 ### `Promise<Hash>`
 
-A Promise containing the signature of the typed data.
+A `Promise` containing the signature of the typed data.
 
 ## Parameters
 

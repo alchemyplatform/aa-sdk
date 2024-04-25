@@ -22,6 +22,7 @@
     "test:e2e": "lerna run --verbose test:run-e2e --concurrency=1 --ignore=@alchemy/aa-signers",
     "lint:write": "eslint . --fix && prettier --write --ignore-unknown .",
     "lint:check": "eslint . && prettier --check .",
+    "lint:ci:eslint": "eslint --format github $(git diff --name-only origin/main HEAD | xargs)",
     "prepare": "husky install",
     "version": "yarn build"
   },
@@ -30,7 +31,10 @@
     "@commitlint/config-conventional": "^17.6.3",
     "eslint": "^8.39.0",
     "eslint-config-react-app": "^7.0.1",
+    "eslint-formatter-github": "^1.1.4",
+    "eslint-formatter-rdjson": "^1.0.6",
     "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsdoc": "^48.2.3",
     "husky": "^8.0.0",
     "lerna": "^8.0.2",
     "lint-staged": "^13.2.2",
@@ -42,39 +46,6 @@
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
-    ]
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app"
-    ],
-    "env": {
-      "es2021": true,
-      "node": true
-    },
-    "parserOptions": {
-      "sourceType": "module"
-    },
-    "rules": {
-      "import/extensions": [
-        "error",
-        "ignorePackages"
-      ]
-    },
-    "overrides": [
-      {
-        "files": [
-          "site/snippets/**/*.ts",
-          "site/snippets/**/*.tsx"
-        ],
-        "rules": {
-          "@typescript-eslint/no-unused-vars": "off",
-          "import/extensions": [
-            "off",
-            "ignorePackages"
-          ]
-        }
-      }
     ]
   },
   "husky": {

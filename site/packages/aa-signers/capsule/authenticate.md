@@ -48,7 +48,7 @@ await capsuleSigner.authenticate();
 
 ### `Promise<CapsuleUserInfo>`
 
-A Promise containing the `CapsuleUserInfo`, an `Record<string, Wallet>` where Wallet is an object with the following properties:
+A `Promise` containing the `CapsuleUserInfo`, an `Record<string, Wallet>` where Wallet is an object with the following properties:
 
 - `id: string` -- ID of the Capsule Signer.
 

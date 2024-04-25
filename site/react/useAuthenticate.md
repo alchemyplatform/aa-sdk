@@ -32,6 +32,10 @@ import { useAuthenticate } from "@alchemy/aa-alchemy/react";
 
 <<< @/snippets/react/login.tsx
 
+## Params
+
+<!--@include: ./BaseHookMutationArgs.md-->
+
 ## Return Type
 
 ```ts

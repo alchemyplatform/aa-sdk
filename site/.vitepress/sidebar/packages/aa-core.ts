@@ -33,6 +33,10 @@ export const aaCoreSidebar: DefaultTheme.SidebarItem = {
           link: "/buildUserOperation",
         },
         {
+          text: "signUserOperation",
+          link: "/signUserOperation",
+        },
+        {
           text: "checkGasSponsorshipEligibility",
           link: "/checkGasSponsorshipEligibility",
         },
@@ -174,6 +178,7 @@ export const aaCoreSidebar: DefaultTheme.SidebarItem = {
         },
       ],
     },
+    { text: "Split Transport", link: "/split-transport" },
     {
       text: "Utils",
       base: "/packages/aa-core/utils",

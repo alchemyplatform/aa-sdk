@@ -18,24 +18,17 @@ Middleware represents different operations involved in the [`SmartAccountClient`
 
 Each middleware is a function that takes in a user operation object, performs its job to retrieve or compute the data, and populate different fields of the user operation to pass onto the next middleware in the pipeline before being signed and sent to the network.
 
-```ts
-export type ClientMiddlewareFn = <TAccount extends SmartContractAccount>(
-  struct: Deferrable<UserOperationStruct>,
-  args: {
-    overrides?: UserOperationOverrides;
-    feeOptions?: UserOperationFeeOptions;
-    account: TAccount;
-  }
-) => Promise<Deferrable<UserOperationStruct>>;
+::: details ClientMiddlewareFn
+<<< @/../packages/core/src/middleware/types.ts#ClientMiddlewareFn
+:::
 
-export type ClientMiddleware = {
-  feeEstimator: ClientMiddlewareFn;
-  gasEstimator: ClientMiddlewareFn;
-  customMiddleware: ClientMiddlewareFn;
-  paymasterAndData: ClientMiddlewareFn;
-  userOperationSimulator: ClientMiddlewareFn;
-};
-```
+::: details ClientMiddleware
+<<< @/../packages/core/src/middleware/types.ts#ClientMiddleware
+:::
+
+## Types of ClientMiddlewares
+
+## Types of ClientMiddlewares
 
 ### feeEstimator
 
@@ -57,9 +50,19 @@ This is a no-op middleware, but you can include any custom step during the user 
 
 If you are simulating a user operation using [`simulateUserOperation`](/packages/aa-alchemy/smart-account-client/actions/simulateUserOperation.md), `SmartAccountClient` will include `userOperationSimulator` middleware during the pipeline run to simulate the user operation instead of sending it to the network to be mined.
 
-## Use custom middleware using `ClientMiddlewareConfig` in `SmartAccountClientConfig`
+During the `SmartAccountClient` middleware pipeline run, each middleware is applied to compute certain fields of the [`UserOperationStruct`](/resources/types#useroperationstruct) in the following sequential order:
 
-For each middleware, a default exists that `SmartAccountClient` uses. Still, these defaults can be overridden flexibly with your custom middleware function upon the creation of the client by using `ClientMiddlewareConfig` included in `SmartAccountClientConfig` used as `createSmartAccountClient()` method to create the client. Below is an example of how you can use your version of the gas estimator if you opt out of using the default gas estimator.
+1. `dummyPaymasterDataMiddleware` -- populates dummy paymaster data to use in estimation (default: `0x` for no paymaster)
+2. `feeEstimator` -- sets `maxfeePerGas` and `maxPriorityFeePerGas`
+3. `gasEstimator` -- sets `verificationGasLimit`, `callGasLimit`, `preVerificationGas`, and if EntryPoint v0.7 user operation, `paymasterVerificationGasLimit` fields. The default `gasEstimator` calls `eth_estimateUserOperationGas` on the bundler to query for these gas estimates.
+4. `customMiddleware` -- default no-op middleware, available for any custom operation to be done in addition and override any of the results returned by previous middlewares
+5. `paymasterMiddleware` -- used to set paymaster fields of a user operation. (default: `0x` for no paymaster)
+6. `userOperationSimulator` -- used for the simulation of a user operation instead of sending it to the network to be mined. Refer to [`alchemyUserOperationSimulator`](/packages/aa-alchemy/middleware/alchemyUserOperationSimulator) to learn more about how to enable user operation simulation feature on your smart account client.
+7. `signUserOperation` -- used for the signing the built, but yet to be signed, user operation after all other middlewares are run. Note that `signUserOperation` middleware run is decoupled from the other middlewares pipeline run for building the user operation. Rather, the user operation is signed right before the client sends the user operation to the network.
+
+## Overriding default middlewares with your own
+
+For each middleware, a default middleware is available for the `SmartAccountClient`, which computes user operation fields based on the user input of operation call data. If you are looking to customize certain behaviors of user operation struct construction for your client, you can flexibly override with your own middleware specifying in the [`ClientMiddlewareConfig`](/resources/types.md#clientmiddlewareconfig) during the `SmartAccountClient` instantiation. For example, the following illustrates how you can override the default gas estimation behavior by overriding the default gas estimator with your own.
 
 ```ts
 export type ClientMiddlewareConfig = Omit<

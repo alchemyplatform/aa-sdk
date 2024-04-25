@@ -46,7 +46,7 @@ const upgradedAccount = await createMAAccount();
 
 ### `Promise<Hash>`
 
-A Promise that resolves to the user operation hash (transaction hash if `waitForTx` is true) sent to the network
+A `Promise` that resolves to the user operation hash (transaction hash if `waitForTx` is true) sent to the network
 
 ## Parameters
 
@@ -66,9 +66,9 @@ The [`SmartContractClient`](/packages/aa-core/smart-account-client/) instance
 
   Encoded contract initiation data for the new implementation contract
 
-- `overrides?:` [`UserOperationOverrides`](/resources/types#UserOperationOverrides)
+- `overrides?:` [`UserOperationOverrides`](/resources/types#useroperationoverrides)
 
-Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit`, `paymasterAndData`, or `nonceKey` for the user operation request
+Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit`, `paymasterAndData`, or `nonceKey` for the user operation request. You can also specify a `stateOverride` to be passed into `eth_estimateUserOperationGas` during gas estimation.
 
 - `waitForTx?: boolean`
 

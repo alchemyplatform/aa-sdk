@@ -6,9 +6,7 @@ import type {
 } from "../../../account/smartContractAccount";
 import type { BaseSmartAccountClient } from "../../../client/smartAccountClient";
 import { AccountNotFoundError } from "../../../errors/account.js";
-import { overridePaymasterDataMiddleware } from "../../../middleware/defaults/overridePaymasterData.js";
 import type {
-  UserOperationOverrides,
   UserOperationOverridesParameter,
   UserOperationStruct,
 } from "../../../types";
@@ -48,26 +46,13 @@ export async function _runMiddlewareStack<
     throw new AccountNotFoundError();
   }
 
-  const entryPoint = account.getEntryPoint();
-
-  const overridePaymasterData =
-    overrides &&
-    ((entryPoint.version === "0.6.0" &&
-      (overrides as UserOperationOverrides<"0.6.0">).paymasterAndData !=
-        null) ||
-      (entryPoint.version === "0.7.0" &&
-        (overrides as UserOperationOverrides<"0.7.0">).paymasterData != null));
-
   const result = await asyncPipe(
     client.middleware.dummyPaymasterAndData,
     client.middleware.feeEstimator,
     client.middleware.gasEstimator,
     client.middleware.customMiddleware,
-    overridePaymasterData
-      ? overridePaymasterDataMiddleware
-      : client.middleware.paymasterAndData,
-    client.middleware.userOperationSimulator,
-    client.middleware.signUserOperation
+    client.middleware.paymasterAndData,
+    client.middleware.userOperationSimulator
   )(uo, { overrides, feeOptions: client.feeOptions, account, client, context });
 
   return resolveProperties<

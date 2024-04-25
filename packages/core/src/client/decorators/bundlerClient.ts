@@ -8,7 +8,7 @@ import type {
   Transport,
 } from "viem";
 import { estimateUserOperationGas } from "../../actions/bundler/estimateUserOperationGas.js";
-import { getSupportedEntryPoints } from "../../actions/bundler/getSupportedEntrypoints.js";
+import { getSupportedEntryPoints } from "../../actions/bundler/getSupportedEntryPoints.js";
 import { getUserOperationByHash } from "../../actions/bundler/getUserOperationByHash.js";
 import { getUserOperationReceipt } from "../../actions/bundler/getUserOperationReceipt.js";
 import { sendRawUserOperation } from "../../actions/bundler/sendRawUserOperation.js";
@@ -34,7 +34,7 @@ export type BundlerRpcSchema = [
       Address,
       StateOverride?
     ];
-    ReturnType: UserOperationEstimateGasResponse;
+    ReturnType: UserOperationEstimateGasResponse<EntryPointVersion>;
   },
   {
     Method: "eth_getUserOperationReceipt";
@@ -60,7 +60,7 @@ export type BundlerActions = {
    *
    * @param request - the {@link UserOperationRequest} to estimate gas for
    * @param entryPoint - the entry point address the op will be sent to
-   * @params stateOverride - the state override to use for the estimation
+   * @param stateOverride - the state override to use for the estimation
    * @returns the gas estimates for the given response (see: {@link UserOperationEstimateGasResponse})
    */
   estimateUserOperationGas<
@@ -69,7 +69,7 @@ export type BundlerActions = {
     request: UserOperationRequest<TEntryPointVersion>,
     entryPoint: Address,
     stateOverride?: StateOverride
-  ): Promise<UserOperationEstimateGasResponse>;
+  ): Promise<UserOperationEstimateGasResponse<TEntryPointVersion>>;
 
   /**
    * calls `eth_sendUserOperation` and returns the hash of the sent UserOperation
@@ -105,6 +105,7 @@ export type BundlerActions = {
 
   /**
    * calls `eth_supportedEntryPoints` and returns the entry points the RPC supports
+   *
    * @returns - {@link Address}[]
    */
   getSupportedEntryPoints(): Promise<Address[]>;

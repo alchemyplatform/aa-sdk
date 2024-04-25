@@ -33,6 +33,12 @@ jobs:
   build_and_test_deploy:
     name: Build and Test and Deploy
     runs-on: ubuntu-latest
+
+    # Needed for Publishing
+    permissions:
+      contents: write  
+      packages: write
+
     steps:
       - uses: actions/checkout@v3
         with:
@@ -63,17 +69,6 @@ jobs:
           API_KEY: ${{ secrets.API_KEY }}
         run: yarn build:ci
 
-      - name: Build with VitePress
-        working-directory: site
-        run: |
-          yarn build
-          touch .vitepress/dist/.nojekyll
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
-        with:
-          path: site/.vitepress/dist
-
       - name: E2E tests
         if: inputs.skip-e2e == false
         env:
@@ -91,6 +86,17 @@ jobs:
           API_KEY: ${{ secrets.API_KEY }}
         run: yarn lerna publish --conventional-commits --no-private --yes --no-verify-access
 
+      - name: Build with VitePress
+        working-directory: site
+        run: |
+          yarn build
+          touch .vitepress/dist/.nojekyll
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: site/.vitepress/dist
+
   publish_site:
     name: Publish Docs Site
     environment:
@@ -100,6 +106,11 @@ jobs:
     runs-on: ubuntu-latest
     if: inputs.publish
     steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.ALCHEMY_BOT_PAT }}
+          fetch-depth: "0"
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2

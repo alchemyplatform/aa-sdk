@@ -19,7 +19,7 @@ export async function sendTransactions<
   client: Client<TTransport, TChain, TAccount>,
   args: SendTransactionsParameters<TAccount, TContext>
 ): Promise<Hex> {
-  const { requests, overrides, account = client.account } = args;
+  const { requests, overrides, account = client.account, context } = args;
   if (!account) {
     throw new AccountNotFoundError();
   }
@@ -41,6 +41,7 @@ export async function sendTransactions<
   const { hash } = await _sendUserOperation(client, {
     account,
     uoStruct,
+    context,
   });
 
   return waitForUserOperationTransaction(client, { hash });
