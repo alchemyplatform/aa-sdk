@@ -16,14 +16,14 @@ export const sidebar: DefaultTheme.Sidebar = [
         items: [
           { text: "Introduction", link: "/introduction" },
           {
-            text: "Setup your application",
+            text: "Setup",
             link: "/setup-app",
           },
           {
-            text: "Log users in",
+            text: "Log in users",
             link: "/log-in-users",
           },
-          { text: "Send UserOperations", link: "/send-uos" },
+          { text: "Send User Operations", link: "/send-uos" },
         ],
       },
     ],
