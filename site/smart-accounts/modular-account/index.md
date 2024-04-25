@@ -22,7 +22,7 @@ head:
 
 ## Overview
 
-Modular Account is an ERC-4337 smart account that supports customizable features with ERC-6900 plugins. It is fully production-ready with multiple security audits, two prebuilt plugins in `MultiOwnerPlugin` and `SessionKeyPlugin`, and the capability to support any custom account behavior you need.
+Modular Account is an ERC-4337 smart account that supports customizable features with ERC-6900 plugins. It is fully production-ready with multiple security audits, three prebuilt plugins in `MultiOwnerPlugin`, `SessionKeyPlugin`, and `MultisigPlugin`, and the capability to support any custom account behavior you need.
 
 ## Why Modular Account?
 
@@ -49,6 +49,12 @@ Session keys let you streamline interactions by reducing confirmation steps or a
 
 Read more about installing and using the Session Key plugin [here](/using-smart-accounts/session-keys/)!
 
+### Multisig Plugin
+
+The Multisig plugin allows your account to have multiple ECDSA or SCA signers and require multiple signatures to authorize actions on the account. This is commonly referred to as a k-of-n signature scheme and would create Modular Accounts that are similar to [Gnosis Safe](https://safe.global/) accounts. This plugin is recommended for accounts looking for maximally secure configurations.
+
+Read more about Multisig Plugin [here](/multisig-plugin/index.md)!
+
 ### Full compatibility
 
 Modular Account also supports the same baseline set of account abstraction features as Light Account: sponsoring gas, batching transactions, rotating owners, and checking ERC-1271 signatures.
@@ -61,6 +67,6 @@ Check out the plugin development guide [here](https://www.notion.so/alchemotion/
 
 ### Secure, audited, open source
 
-Modular Account has been audited by Spearbit and Quanstamp. You can find the audit reports [here](https://github.com/alchemyplatform/modular-account/tree/develop/audits). Modular Account is fully open source, so you can validate the [source code](https://github.com/alchemyplatform/modular-account).
+Modular Account has been audited by Spearbit and Quantstamp. You can find the audit reports [here](https://github.com/alchemyplatform/modular-account/tree/develop/audits). Modular Account is fully open source, so you can validate the [source code](https://github.com/alchemyplatform/modular-account).
 
 <!--@include: ../../resources/bbp.md-->
