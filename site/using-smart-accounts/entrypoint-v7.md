@@ -6,16 +6,16 @@ head:
       content: Migration Guide
   - - meta
     - name: description
-      content: How to update from EntryPoint v0.6 to v0.7.
+      content: How to update from EntryPoint v0.6 to v0.7
   - - meta
     - property: og:description
-      content: How to update from EntryPoint v0.6 to v0.7.
+      content: How to update from EntryPoint v0.6 to v0.7
   - - meta
     - name: twitter:title
       content: Migration Guide
   - - meta
     - name: twitter:description
-      content: How to update from EntryPoint v0.6 to v0.7.
+      content: How to update from EntryPoint v0.6 to v0.7
 ---
 
 # EntryPoint v0.7 Update Guide
@@ -47,7 +47,7 @@ With upgrade made for `aa-sdk` version `v3.8.4`, `aa-sdk` now supports both Entr
 Below are the steps to update your project from using EntryPoint `v0.6.0` to `v0.7.0` of the `aa-sdk`.
 
 ::: tip Note
-This migration guide assumes you are already on `aa-sdk` version `^3.x.x`. If you are looking to upgrade from the older versions of `aa-sdk`, you can follow the [Migration Guide](/migration-guides/migrating-to-v3) to first upgrade `aa-sdk` version to `^3.x.x`.
+This guide assumes you are already on `aa-sdk` version `^3.x.x`. If you are looking to upgrade from the older versions of `aa-sdk`, you can follow the [Migration Guide](/migration-guides/migrating-to-v3) to first upgrade `aa-sdk` version to `^3.x.x`.
 :::
 
 Upgrading to the latest version `v3.8.4` of `aa-sdk` does **not** involve breaking changes if you continue to stay on using EntryPoint v0.6.0 for your smart accounts. If you are looking to update to using EntryPoint `v0.7.0`, you can simply do so by specifying in the optional entrypoint version parameter to the version `0.7.0` when instantiating your `SmartContractAccount`. For the initial launch of EntryPoint v0.7 support in `aa-sdk`, the default EntryPoint version will remain as `v0.6.0`, but note that this default version value will be changed to the latest version in the future versions of `aa-sdk`.
@@ -181,11 +181,11 @@ Note that per [`ERC-4337`](https://eips.ethereum.org/EIPS/eip-4337#parameters), 
 
 #### `stateOverride` field added to `UserOperationOverrides` for validating and estimating gas for transactions
 
-The state overrides during transaction calls (e.g., [`eth_call`](https://docs.alchemy.com/reference/eth-call) and [`eth_estimateGas`](https://docs.alchemy.com/reference/eth-estimategas)) allow for more flexible testing and gas estimation. However, not all networks support this feature. For networks lacking state overrides, `EntryPoint` v0.7 introduced the `delegateAndRevert()` function to be used as a workaround. It aids in validating and estimating gas for transactions by simulating conditions without permanently changing the on-chain state.
+The state overrides during transaction calls (e.g., [`eth_call`](https://docs.alchemy.com/reference/eth-call) and [`eth_estimateGas`](https://docs.alchemy.com/reference/eth-estimategas)) allow for more flexible testing and gas estimation. Specifically, `EntryPoint` v0.7 introduced the `delegateAndRevert()` helper in the `EntryPoint` contract to accommodate nodes without state overrides in `eth_call` and `eth_estimateGas` for validating and estimating gas for transactions in simulated conditions without permanently changing the on-chain state.
 
-Although some bundlers, such as Alchemy [`rundler`](https://github.com/alchemyplatform/rundler), does support the `stateOverride` feature for user operation gas estimation for both EntryPoint v0.6 and v0.7 user operations, until Entrypoint v0.6, the [`eth_estimateUserOperationGas`](https://eips.ethereum.org/EIPS/eip-4337#-eth_estimateuseroperationgas) RPC method did not include the optional `stateOverride` parameter per specification. From EntryPoint v0.7, however, `stateOverride` has been added to officially added as an optional parameter to the gas estimation method, thanks to the removal of network requirement to support state override feature.
+Although some bundlers, such as Alchemy [`rundler`](https://github.com/alchemyplatform/rundler), do support the `stateOverride` feature for user operation gas estimation for both EntryPoint v0.6 and v0.7 user operations, until Entrypoint v0.6, the [`eth_estimateUserOperationGas`](https://eips.ethereum.org/EIPS/eip-4337#-eth_estimateuseroperationgas) RPC method did not include the optional `stateOverride` parameter per specification. From EntryPoint v0.7, `stateOverride` has been officially added as an optional parameter to the gas estimation method.
 
-With such update, `aa-sdk` accepts `stateOverride` value as part of the [`UserOperationOverrides`](/resources/types#useroperationoverrides) to be used during the gas estimation.
+To take advantage of such update, `aa-sdk` supports `stateOverride` value as part of the [`UserOperationOverrides`](/resources/types#useroperationoverrides) to be used during the gas estimation of simulated user operation transactions.
 
 ```ts
 export type UserOperationOverrides<'0.6.0' | '0.7.0'> = {
@@ -194,6 +194,8 @@ export type UserOperationOverrides<'0.6.0' | '0.7.0'> = {
   ...
 };
 ```
+
+Learn how to use `stateOverrides` parameter in `UserOperationOverrides` to estimate gas for simulated `UserOperation` by referring to the guide [`How to estimate gas of a user operation involving state overrides`](/using-smart-accounts/estimate-gas/estimate-user-op-gas-state-overrides).
 
 ### [`UserOperationEstimateGasResponse`](/resources/types#useroperationrstimategasresponse)
 

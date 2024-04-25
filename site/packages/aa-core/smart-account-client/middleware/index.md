@@ -28,8 +28,6 @@ Each middleware is a function that takes in a user operation object, performs it
 
 ## Types of ClientMiddlewares
 
-## Types of ClientMiddlewares
-
 ### feeEstimator
 
 `feeEstimator` middleware is responsible for computing `maxFeePerGas` and `maxPriorityFeePerGas` fields of [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337#specification) user operation.

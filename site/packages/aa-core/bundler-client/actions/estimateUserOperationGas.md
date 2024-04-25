@@ -16,6 +16,10 @@ head:
 
 Calls `eth_estimateUserOperationGas` and returns the result.
 
+::: tip Note
+It is recommended to use [`estimateUserOperationGas`](/packages/aa-core/smart-account-client/actions/estimateUserOperationGas) `SmartAccountClientAction` for user operation gas estimation. The smart account client action provides much simpler interface than directly calling the raw bundler actions.
+:::
+
 ## Usage
 
 ::: code-group

@@ -6,15 +6,28 @@ import {
 import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
 import { AccountNotFoundError } from "../../errors/account.js";
 import { IncompatibleClientError } from "../../errors/client.js";
-import type { UserOperationStruct } from "../../types.js";
+import type { UserOperationEstimateGasResponse } from "../../types.js";
+import { deepHexlify, resolveProperties } from "../../utils/index.js";
 import { _initUserOperation } from "./internal/initUserOperation.js";
-import { _runMiddlewareStack } from "./internal/runMiddlewareStack.js";
 import type {
   SendUserOperationParameters,
   UserOperationContext,
-} from "./types";
+} from "./types.js";
 
-export async function buildUserOperation<
+/**
+ * Description SmartAccountClientAction for estimating the gas cost of a user operation
+ *
+ * @async
+ * @template {Transport} TTransport
+ * @template {Chain | undefined} TChain
+ * @template {SmartContractAccount | undefined} TAccount
+ * @template {UserOperationContext | undefined} TContext
+ * @template {GetEntryPointFromAccount<TAccount>} TEntryPointVersion
+ * @param client smart account client
+ * @param args send user operation parameters
+ * @returns user operation gas estimate response
+ */
+export async function estimateUserOperationGas<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
@@ -27,8 +40,8 @@ export async function buildUserOperation<
 >(
   client: Client<TTransport, TChain, TAccount>,
   args: SendUserOperationParameters<TAccount, TContext>
-): Promise<UserOperationStruct<TEntryPointVersion>> {
-  const { account = client.account, overrides, context } = args;
+): Promise<UserOperationEstimateGasResponse<TEntryPointVersion>> {
+  const { account = client.account, overrides } = args;
   if (!account) {
     throw new AccountNotFoundError();
   }
@@ -36,17 +49,17 @@ export async function buildUserOperation<
   if (!isBaseSmartAccountClient(client)) {
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
-      "buildUserOperation",
+      "estimateUserOperationGas",
       client
     );
   }
 
-  return _initUserOperation(client, args).then((_uo) =>
-    _runMiddlewareStack(client, {
-      uo: _uo,
-      overrides,
-      account,
-      context,
-    })
-  );
+  return _initUserOperation(client, args).then(async (struct) => {
+    const request = deepHexlify(await resolveProperties(struct));
+    return client.estimateUserOperationGas(
+      request,
+      account.getEntryPoint().address,
+      overrides?.stateOverride
+    );
+  });
 }
