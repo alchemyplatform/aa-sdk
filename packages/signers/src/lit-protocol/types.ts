@@ -6,6 +6,7 @@ import {
   type SessionSigsMap,
   type SessionKeyPair,
   type AuthSig,
+  type LIT_NETWORKS_KEYS,
 } from "@lit-protocol/types";
 
 export type LitAuthMethod = AuthMethod;
@@ -15,7 +16,7 @@ export interface LitConfig {
   pkpPublicKey: string;
   rpcUrl: string;
   inner?: LitNodeClient;
-  network?: string;
+  network?: LIT_NETWORKS_KEYS;
   debug?: boolean;
 }
 
@@ -48,12 +49,18 @@ export interface LitAuthenticateProps<
   chain?: string;
 
   /**
+   * parameters to pass to {@link capacityCreditNeeded}
+   */
+  capacityCreditNeededParams?: LitCapacityCreditsReq;
+
+  /**
    * Callback to provide a Capacity Delegation AuthSig
    * Only required if not providing a {@link LitSessionSigsMap}
+   *
    * @param params
    * @returns {Promise<LitCapacityCreditsRes>}
    */
-  capacityCreditNeededCallback?: (
+  capacityCreditNeeded?: (
     params: LitCapacityCreditsReq
   ) => Promise<LitCapacityCreditsRes>;
 }

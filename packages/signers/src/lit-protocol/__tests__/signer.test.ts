@@ -66,6 +66,8 @@ const setup = async () => {
   signer.inner.connect = vi.fn().mockImplementation(() => {
     return new Promise<void>((res, _) => res());
   });
+  signer.inner.latestBlockhash =
+    "0xc9198a635a9c2b94c9dd8cafa014106ac07e5dfb1e50f33589b87b11cd902265";
   signer.inner.signSessionKey = vi.fn().mockImplementation(() => {
     return TEST_CONTEXT.AUTH_NEEDED_CB_RES;
   });

@@ -43,19 +43,18 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
   implements LitSmartAccountAuthenticator<C>
 {
   inner: LitNodeClient;
-  public signer: PKPEthersWallet | undefined;
   private _pkpPublicKey: string;
   private _rpcUrl: string;
   private _authContext: C | undefined;
   public session: SessionSigsMap | undefined;
-
+  public signer: PKPEthersWallet | undefined;
   constructor(params: LitConfig) {
     this._pkpPublicKey = params.pkpPublicKey;
     this.inner =
       params.inner ??
       new LitNodeClient({
         litNetwork: params.network ?? "cayenne",
-        debug: params.debug ?? false,
+        debug: true,
       });
     this._rpcUrl = params.rpcUrl;
   }
@@ -156,7 +155,12 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
       const sessionKeypair = props.sessionKeypair || generateSessionKeyPair();
       const chain = props.chain || "ethereum";
       const chainInfo = ALL_LIT_CHAINS[chain];
-      if (props.capacityCreditNeededCallback) {
+      let delegationSignature: any | undefined;
+      if (props.capacityCreditNeeded) {
+        const res = await props.capacityCreditNeeded(
+          props.capacityCreditNeededParams!
+        );
+        delegationSignature = res.capacityDelegationAuthSig;
       }
       const chainId = (chainInfo as LITEVMChain).chainId ?? 1;
       let authNeededCallback: any;
@@ -201,6 +205,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
             new Date(Date.now() + 60 * 60 * 24 * 7).toISOString(),
           resourceAbilityRequests: resourceAbilities,
           authNeededCallback,
+          capacityDelegationAuthSig: delegationSignature,
         })
         .catch((err) => {
           throw err;

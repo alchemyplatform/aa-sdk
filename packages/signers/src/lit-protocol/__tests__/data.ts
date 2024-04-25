@@ -29,7 +29,7 @@ export const MOCK_SESSION: LitSessionSigsMap = {
 
 export const TEST_CONTEXT = {
   CONTROLLER_AUTHSIG: {
-    sig: "0x3c1908bcc0ae121c72c6088eac009ba2054796100eeb4aabfe20478b5f2bd6d7060b4513df2f3a15d5d6f41c54d55dfa952d8dc808fb19aa8f7137ce998199c71b",
+    sig: "0xfba04bf9da7004ea9f30bbb8a40660339cc93aae8fcb7da34deb2b5ae87a2d77106e8507d1c679d6fce7228d245346ac384a772d73cb179a88003ff09974bded1b",
     derivedVia: "web3.eth.personal.sign",
     signedMessage:
       "localhost wants you to sign in with your Ethereum account:\n" +
@@ -40,15 +40,15 @@ export const TEST_CONTEXT = {
       "URI: https://localhost/login\n" +
       "Version: 1\n" +
       "Chain ID: 1\n" +
-      "Nonce: qmpK6b1c2t0Dt3ZU9\n" +
-      "Issued At: 2023-12-10T16:08:16.725Z\n" +
-      "Expiration Time: 2024-06-05T02:28:16.723Z",
+      "Nonce: 0xc9198a635a9c2b94c9dd8cafa014106ac07e5dfb1e50f33589b87b11cd902265\n" +
+      "Issued At: 2024-04-25T21:20:50.724Z\n" +
+      "Expiration Time: 2024-04-25T22:20:50.722Z",
     address: "0xeF71c2604f17Ec6Fc13409DF24EfdC440D240d37",
   },
   PKP_INFO: {
     publicKey:
-      "04f4cd980d2e41d80872b7465cdbfb7ef6dbe5a7354f583ebaf6333194dd2e31d257933cad9bf317ffd7519bab03ada9ede80987732bc889de5066033d57dc5399",
-    ethAddress: "0xfB3b886A3579d2D82F6333E8D84A19F550891E13",
+      "04fdf2d4e3c76c23ac194b45e543c9d10cca9646d62cffe242e19df21e8d6acf79e6b34490ee7f8383ca21a7cf273950b5371e36450976da0895fcbf9b253ca4ea",
+    ethAddress: "0xd3D4e3b881e52d314B6E5591EbA6Debe4b612827",
     authMethod: {
       authMethodId:
         "0x170d13600caea2933912f39a0334eca3d22e472be203f937c4bad0213d92ed71",
