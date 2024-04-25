@@ -10,7 +10,7 @@ export const sidebar: DefaultTheme.Sidebar = [
         link: "/getting-started/overview",
       },
       {
-        text: "Quick start (Embedded Accounts)",
+        text: "Quick start",
         collapsed: false,
         base: "/getting-started",
         items: [
@@ -20,7 +20,7 @@ export const sidebar: DefaultTheme.Sidebar = [
             link: "/setup-app",
           },
           {
-            text: "Log users into Embedded Accounts",
+            text: "Log users in",
             link: "/log-in-users",
           },
           { text: "Send UserOperations", link: "/send-uos" },
