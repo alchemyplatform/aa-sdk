@@ -4,16 +4,38 @@ import type {
   UserOperationStruct,
 } from "../../types.js";
 import { deepHexlify, resolveProperties } from "../../utils/index.js";
-import { applyUserOpOverrideOrFeeOption } from "../../utils/userop.js";
+import {
+  applyUserOpOverrideOrFeeOption,
+  bypassPaymasterAndData,
+} from "../../utils/userop.js";
 import type { MiddlewareClient } from "../actions.js";
 import type { ClientMiddlewareFn } from "../types.js";
 
+/**
+ * Description default gas estimator middleware for `SmartAccountClient`
+ * You can override this middleware with your custom gas estimator middleware
+ * by passing it to the client constructor
+ *
+ * @param client smart account client instance to apply the middleware to
+ * @returns middleware execution function used to estimate gas for user operations
+ */
 export const defaultGasEstimator: <C extends MiddlewareClient>(
   client: C
 ) => ClientMiddlewareFn =
   (client) =>
   async (struct, { account, overrides, feeOptions }) => {
     const request = deepHexlify(await resolveProperties(struct));
+
+    if (
+      overrides &&
+      account.getEntryPoint().version === "0.7.0" &&
+      bypassPaymasterAndData(overrides)
+    ) {
+      // if paymaster middleware is set but bypassed by the user operation overrides,
+      // we don't need the bundler to estimate paymaster gas limits, so we unset the paymaster field
+      // configured for this user operation
+      delete (struct as UserOperationStruct<"0.7.0">).paymaster;
+    }
 
     const estimates = await client.estimateUserOperationGas(
       request,

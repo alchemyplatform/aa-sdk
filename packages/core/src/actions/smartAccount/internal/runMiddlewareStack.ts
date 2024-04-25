@@ -18,6 +18,14 @@ import {
 } from "../../../utils/index.js";
 import type { UserOperationContext } from "../types";
 
+/**
+ * Utility method for running a sequence of async functions as a pipeline
+ *
+ * @template S
+ * @template Opts
+ * @param fns async functions to run in a pipeline sequence
+ * @returns a function that runs the async functions in a pipeline sequence
+ */
 const asyncPipe =
   <S, Opts>(...fns: ((s: S, opts: Opts) => Promise<S>)[]) =>
   async (s: S, opts: Opts) => {
@@ -28,6 +36,20 @@ const asyncPipe =
     return result;
   };
 
+/**
+ * Internal method of {@link SmartAccountClient} running the middleware stack for a user operation
+ *
+ * @async
+ * @template TTransport
+ * @template TChain
+ * @template TAccount
+ * @template TContext the {@link UserOperationContext} passed to the middleware
+ * @template TEntryPointVersion
+ * @param client the smart account client instance that runs the middleware pipeline with
+ * @param args the Deferrable {@link UserOperationStruct} to run the middleware pipeline on
+ *
+ * @returns the resolved {@link UserOperationStruct} after running the middleware pipeline
+ */
 export async function _runMiddlewareStack<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
@@ -56,7 +78,7 @@ export async function _runMiddlewareStack<
     client.middleware.feeEstimator,
     client.middleware.gasEstimator,
     client.middleware.customMiddleware,
-    overrides && bypassPaymasterAndData(overrides)
+    bypassPaymasterAndData(overrides)
       ? bypassPaymasterMiddleware
       : client.middleware.paymasterAndData,
     client.middleware.userOperationSimulator

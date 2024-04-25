@@ -76,6 +76,14 @@ export function isValidFactoryAndData<
   );
 }
 
+/**
+ * Utility method for applying a {@link UserOperationOverrides} field value
+ * over the current value set for the field
+ *
+ * @param value the current value of the field
+ * @param override the override value to apply
+ * @returns the new value of the field after applying the override
+ */
 export function applyUserOpOverride(
   value: BigNumberish | undefined,
   override?: BigNumberish | Multiplier
@@ -94,6 +102,14 @@ export function applyUserOpOverride(
   }
 }
 
+/**
+ * Utility method for applying a {@link UserOperationFeeOptionsField} value
+ * over the current value set for the field
+ *
+ * @param value the current value of the field
+ * @param feeOption the fee option field value to apply
+ * @returns the new value of the field after applying the fee option
+ */
 export function applyUserOpFeeOption(
   value: BigNumberish | undefined,
   feeOption?: UserOperationFeeOptionsField
@@ -112,6 +128,16 @@ export function applyUserOpFeeOption(
     : feeOption.min ?? 0n;
 }
 
+/**
+ * Utility method for applying a {@link UserOperationOverrides} field value and
+ * a {@link UserOperationFeeOptionsField} value over the current value set for the field,
+ * with the override taking precedence over the fee option
+ *
+ * @param value the current value of the field
+ * @param [override] the override value to apply
+ * @param [feeOption] the fee option field value to apply
+ * @returns the new value of the field after applying the override or fee option
+ */
 export function applyUserOpOverrideOrFeeOption(
   value: BigNumberish | undefined,
   override?: BigNumberish | Multiplier,
@@ -122,10 +148,19 @@ export function applyUserOpOverrideOrFeeOption(
     : applyUserOpFeeOption(value, feeOption);
 }
 
+/**
+ * Utility method for checking whether the middleware pipeline should
+ * bypass the paymaster middleware for the user operation with the given overrides
+ *
+ * @template EntryPointVersion TEntryPointVersion
+ * @param overrides the user operation overrides to check
+ * @returns whether the paymaster middleware should be bypassed
+ */
 export const bypassPaymasterAndData = <
   TEntryPointVersion extends EntryPointVersion
 >(
-  overrides: UserOperationOverrides<TEntryPointVersion>
+  overrides: UserOperationOverrides<TEntryPointVersion> | undefined
 ): boolean =>
-  ("paymasterAndData" in overrides && overrides.paymasterAndData === "0x") ||
-  ("paymasterData" in overrides && overrides.paymasterData === "0x");
+  !!overrides &&
+  (("paymasterAndData" in overrides && overrides.paymasterAndData === "0x") ||
+    ("paymasterData" in overrides && overrides.paymasterData === "0x"));
