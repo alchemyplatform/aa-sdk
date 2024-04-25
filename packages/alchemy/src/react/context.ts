@@ -3,7 +3,9 @@
 import type { QueryClient } from "@tanstack/react-query";
 import { createContext, createElement, useContext } from "react";
 import type { AlchemyAccountsConfig } from "../config";
+import type { ClientState } from "../config/store/types";
 import { NoAlchemyAccountContextError } from "./errors.js";
+import { Hydrate } from "./hydrate.js";
 
 export type AlchemyAccountContextProps =
   | {
@@ -18,6 +20,7 @@ export const AlchemyAccountContext = createContext<
 
 export type AlchemyAccountsProviderProps = {
   config: AlchemyAccountsConfig;
+  initialState?: ClientState;
   queryClient: QueryClient;
 };
 
@@ -47,8 +50,12 @@ export const AlchemyAccountProvider = (
   // Note: we don't use .tsx because we don't wanna use rollup or similar to bundle this package.
   // This lets us continue to use TSC for building the packages which preserves the "use client" above
   return createElement(
-    AlchemyAccountContext.Provider,
-    { value: { config, queryClient } },
-    children
+    Hydrate,
+    props,
+    createElement(
+      AlchemyAccountContext.Provider,
+      { value: { config, queryClient } },
+      children
+    )
   );
 };

@@ -1,11 +1,10 @@
-import type { PartialBy } from "viem/chains";
-import { subscribeWithSelector } from "zustand/middleware";
-import { createStore } from "zustand/vanilla";
-import type { AlchemySignerClient } from "../../signer/index.js";
 import {
-  AlchemySigner,
-  type AlchemySignerParams,
-} from "../../signer/signer.js";
+  createJSONStorage,
+  persist,
+  subscribeWithSelector,
+} from "zustand/middleware";
+import { createStore } from "zustand/vanilla";
+import { AlchemySigner } from "../../signer/signer.js";
 import { AlchemySignerStatus } from "../../signer/types.js";
 import { DEFAULT_IFRAME_CONTAINER_ID } from "../createConfig.js";
 import type { SupportedAccountTypes } from "../types.js";
@@ -13,31 +12,51 @@ import type {
   AccountState,
   ClientState,
   ClientStore,
+  CreateClientStoreParams,
   SignerStatus,
 } from "./types.js";
 
-export type CreateClientStoreParams = {
-  client: PartialBy<
-    Exclude<AlchemySignerParams["client"], AlchemySignerClient>,
-    "iframeConfig"
-  >;
-  sessionConfig?: AlchemySignerParams["sessionConfig"];
-};
+export const DEFAULT_STORAGE_KEY = "alchemy-account-state";
 
+/**
+ * Creates a zustand store instance containing the client only state
+ *
+ * @param config the configuration object for the client store
+ * @returns a zustand store instance that maintains the client state
+ */
 export const createClientStore = (config: CreateClientStoreParams) => {
-  const clientStore =
-    typeof window === "undefined"
-      ? undefined
-      : createStore(
-          subscribeWithSelector(() => createInitialClientState(config))
-        );
+  const {
+    storage = typeof window !== "undefined" ? localStorage : undefined,
+    ssr,
+  } = config;
+
+  const clientStore = createStore(
+    subscribeWithSelector(
+      storage
+        ? persist(() => createInitialClientState(config), {
+            name: DEFAULT_STORAGE_KEY,
+            storage: createJSONStorage<ClientState>(() => storage),
+            skipHydration: ssr,
+            partialize: ({ signer, accounts, ...writeableState }) =>
+              writeableState,
+          })
+        : () => createInitialClientState(config)
+    )
+  );
 
   addClientSideStoreListeners(clientStore);
 
   return clientStore;
 };
 
-const createSigner = (params: CreateClientStoreParams) => {
+/**
+ * Given initial client store parameters, it initializes an AlchemySigner instance.
+ * This should only be called on the client.
+ *
+ * @param params {@link CreateClientStoreParams} to configure and create the signer
+ * @returns an instance of the {@link AlchemySigner}
+ */
+export const createSigner = (params: CreateClientStoreParams) => {
   const { client, sessionConfig } = params;
   const { iframeContainerId } = client.iframeConfig ?? {
     iframeContainerId: DEFAULT_IFRAME_CONTAINER_ID,
@@ -73,7 +92,13 @@ const createSigner = (params: CreateClientStoreParams) => {
   return signer;
 };
 
-const getSignerStatus = (
+/**
+ * Converts the AlchemySigner's status to a more readable object
+ *
+ * @param alchemySignerStatus Enum value of the AlchemySigner's status to convert
+ * @returns an object containing the original status as well as booleans to check the current state
+ */
+export const convertSignerStatusToState = (
   alchemySignerStatus: AlchemySignerStatus
 ): SignerStatus => ({
   status: alchemySignerStatus,
@@ -98,34 +123,52 @@ export const defaultAccountState = <
 const createInitialClientState = (
   params: CreateClientStoreParams
 ): ClientState => {
-  const signer = createSigner(params);
+  const baseState = {
+    accountConfigs: {
+      LightAccount: undefined,
+      MultiOwnerModularAccount: undefined,
+    },
+    config: params,
+    signerStatus: convertSignerStatusToState(AlchemySignerStatus.INITIALIZING),
+  };
+
+  if (typeof window === "undefined") {
+    return baseState;
+  }
 
   return {
-    signer,
-    signerStatus: getSignerStatus(AlchemySignerStatus.INITIALIZING),
+    // signer: createSigner(params),
     accounts: {
       LightAccount: defaultAccountState<"LightAccount">(),
       MultiOwnerModularAccount:
         defaultAccountState<"MultiOwnerModularAccount">(),
     },
+    ...baseState,
   };
 };
 
-const addClientSideStoreListeners = (store?: ClientStore) => {
-  if (store == null) {
+const addClientSideStoreListeners = (store: ClientStore) => {
+  if (typeof window === "undefined") {
     return;
   }
 
   store.subscribe(
     ({ signer }) => signer,
     (signer) => {
+      if (!signer) return;
       signer.on("statusChanged", (status) => {
-        store.setState({ signerStatus: getSignerStatus(status) });
+        store.setState({ signerStatus: convertSignerStatusToState(status) });
       });
+
       signer.on("connected", (user) => store.setState({ user }));
-      signer.on("disconnected", () =>
+
+      signer.on("disconnected", () => {
         store.setState({
           user: undefined,
+          accountConfigs: {
+            LightAccount: undefined,
+            MultiOwnerModularAccount: undefined,
+          },
           accounts: {
             LightAccount: { status: "DISCONNECTED", account: undefined },
             MultiOwnerModularAccount: {
@@ -133,8 +176,8 @@ const addClientSideStoreListeners = (store?: ClientStore) => {
               account: undefined,
             },
           },
-        })
-      );
+        });
+      });
     },
     { fireImmediately: true }
   );

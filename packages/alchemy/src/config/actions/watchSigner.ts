@@ -1,15 +1,14 @@
 import type { AlchemySigner } from "../../signer";
-import { ClientOnlyPropertyError } from "../errors.js";
 import type { AlchemyAccountsConfig } from "../types";
 
+/**
+ * Subscribe to changes of the signer instance on the client store.
+ *
+ * @param config the account config containing the client store
+ * @returns a function which accepts an onChange callback that will be fired when the signer changes
+ */
 export const watchSigner =
   (config: AlchemyAccountsConfig) =>
-  (onChange: (signer: AlchemySigner) => void) => {
-    if (config.clientStore == null) {
-      throw new ClientOnlyPropertyError("signer");
-    }
-
-    return config.clientStore.subscribe(({ signer }) => signer, onChange, {
-      fireImmediately: true,
-    });
+  (onChange: (signer?: AlchemySigner) => void) => {
+    return config.clientStore.subscribe(({ signer }) => signer, onChange);
   };

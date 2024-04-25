@@ -25,7 +25,9 @@ export function useLogout(
     error,
   } = useMutation(
     {
-      mutationFn: signer!.disconnect,
+      mutationFn: async () => {
+        return signer?.disconnect();
+      },
       ...mutationArgs,
     },
     queryClient

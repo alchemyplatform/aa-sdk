@@ -125,16 +125,20 @@ export class AlchemySigner
     switch (event) {
       case "connected":
         return this.store.subscribe(
-          ({ user }) => user,
-          (user) =>
-            user && (listener as AlchemySignerEvents["connected"])(user),
+          ({ status }) => status,
+          (status) =>
+            status === AlchemySignerStatus.CONNECTED &&
+            (listener as AlchemySignerEvents["connected"])(
+              this.store.getState().user!
+            ),
           { fireImmediately: true }
         );
       case "disconnected":
         return this.store.subscribe(
-          ({ user }) => user,
-          (user) =>
-            user == null && (listener as AlchemySignerEvents["disconnected"])(),
+          ({ status }) => status,
+          (status) =>
+            status === AlchemySignerStatus.DISCONNECTED &&
+            (listener as AlchemySignerEvents["disconnected"])(),
           { fireImmediately: true }
         );
       case "statusChanged":

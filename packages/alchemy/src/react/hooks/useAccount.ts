@@ -2,6 +2,7 @@
 
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useSyncExternalStore } from "react";
+import type { Address } from "viem";
 import { createAccount } from "../../config/actions/createAccount.js";
 import {
   getAccount,
@@ -9,7 +10,6 @@ import {
 } from "../../config/actions/getAccount.js";
 import { watchAccount } from "../../config/actions/watchAccount.js";
 import {
-  defaultAccountState,
   type SupportedAccount,
   type SupportedAccountTypes,
   type SupportedAccounts,
@@ -23,6 +23,7 @@ export type UseAccountMutationArgs<TAccount extends SupportedAccountTypes> =
 
 export type UseAccountResult<TAccount extends SupportedAccountTypes> = {
   account?: SupportedAccount<TAccount>;
+  address?: Address;
   isLoadingAccount: boolean;
 };
 
@@ -40,12 +41,18 @@ export function useAccount<TAccount extends SupportedAccountTypes>(
   const account = useSyncExternalStore(
     watchAccount(type, config),
     () => getAccount(params, config),
-    defaultAccountState<TAccount>
+    () => getAccount(params, config)
   );
 
   const { mutate, isPending } = useMutation(
     {
-      mutationFn: async () => account?.account ?? createAccount(params, config),
+      mutationFn: async () => {
+        if (account.status !== "RECONNECTING" && account?.account) {
+          return account.account;
+        }
+
+        return createAccount(params, config);
+      },
       mutationKey: ["createAccount", type],
       ...mutationArgs,
     },
@@ -56,13 +63,18 @@ export function useAccount<TAccount extends SupportedAccountTypes>(
     if (!skipCreate && status.isConnected && !account?.account && !isPending) {
       mutate();
     }
-  }, [account, isPending, mutate, skipCreate, status]);
+  }, [account, isPending, mutate, skipCreate, status.isConnected]);
 
   return {
     account: account.status === "READY" ? account?.account : undefined,
+    address:
+      account.status === "RECONNECTING" || account.status === "READY"
+        ? account.account.address
+        : undefined,
     isLoadingAccount:
       isPending ||
       account?.status === "INITIALIZING" ||
+      account?.status === "RECONNECTING" ||
       status.isAuthenticating ||
       status.isInitializing,
   };

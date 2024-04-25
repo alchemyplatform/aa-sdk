@@ -13,6 +13,8 @@ import type {
   SupportedAccountTypes,
   SupportedAccounts,
 } from "../types";
+import { getBundlerClient } from "./getBundlerClient.js";
+import { getSigner } from "./getSigner.js";
 import { getSignerStatus } from "./getSignerStatus.js";
 
 export type AccountConfig<TAccount extends SupportedAccountTypes> =
@@ -41,29 +43,33 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
   config: AlchemyAccountsConfig
 ): Promise<SupportedAccounts> {
   const clientStore = config.clientStore;
-  if (!clientStore) {
+  const accounts = clientStore.getState().accounts;
+  if (!accounts) {
     throw new ClientOnlyPropertyError("account");
   }
 
-  const transport = custom(config.bundlerClient);
-  const chain = config.bundlerClient.chain;
-  const signer = config.signer;
+  const bundlerClient = getBundlerClient(config);
+  const transport = custom(bundlerClient);
+  const chain = bundlerClient.chain;
+  const signer = getSigner(config);
   const signerStatus = getSignerStatus(config);
 
-  if (!signerStatus.isConnected) {
+  if (!signerStatus.isConnected || !signer) {
     throw new Error("Signer not connected");
   }
 
-  const cachedAccount = clientStore.getState().accounts[type];
-  if (cachedAccount?.account) {
+  const cachedAccount = accounts[type];
+  if (cachedAccount.status !== "RECONNECTING" && cachedAccount.account) {
     return cachedAccount.account;
   }
+  const cachedConfig = clientStore.getState().accountConfigs[type];
 
   const accountPromise = (() => {
     switch (type) {
       case "LightAccount":
         return createLightAccount({
           ...params,
+          ...cachedConfig,
           signer,
           transport: (opts) => transport({ ...opts, retryCount: 0 }),
           chain,
@@ -71,6 +77,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
       case "MultiOwnerModularAccount":
         return createMultiOwnerModularAccount({
           ...params,
+          ...cachedConfig,
           signer,
           transport: (opts) => transport({ ...opts, retryCount: 0 }),
           chain,
@@ -80,31 +87,42 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
     }
   })();
 
-  clientStore.setState((state) => ({
-    accounts: {
-      ...state.accounts,
-      [type]: {
-        status: "INITIALIZING",
-        account: accountPromise,
+  if (cachedAccount.status !== "RECONNECTING") {
+    clientStore.setState(() => ({
+      accounts: {
+        ...accounts,
+        [type]: {
+          status: "INITIALIZING",
+          account: accountPromise,
+        },
       },
-    },
-  }));
+    }));
+  }
 
   try {
     const account = await accountPromise;
+    const initCode = await account.getInitCode();
     clientStore.setState((state) => ({
       accounts: {
-        ...state.accounts,
+        ...accounts,
         [type]: {
           status: "READY",
           account,
         },
       },
+      accountConfigs: {
+        ...state.accountConfigs,
+        [type]: {
+          ...params,
+          accountAddress: account.address,
+          initCode,
+        },
+      },
     }));
   } catch (error) {
-    clientStore.setState((state) => ({
+    clientStore.setState(() => ({
       accounts: {
-        ...state.accounts,
+        ...accounts,
         [type]: {
           status: "ERROR",
           error,

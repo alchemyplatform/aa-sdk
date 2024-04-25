@@ -58,16 +58,6 @@ import { type AlchemyAccountsConfig } from "@alchemy/aa-alchemy/config";
 
 Returns an object containing the Alchemy Accounts state.
 
-### bundlerClient
-
-`ClientWithAlchemyMethods`
-A JSON RPC client used to make requests to Alchemy's Nodes and Bundler.
-
-### signer
-
-`AlchemySigner`
-The underlying signer instance used by Embedded Accounts. This property is only available on the client.
-
 ### coreStore
 
 `CoreStore`

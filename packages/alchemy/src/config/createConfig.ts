@@ -1,8 +1,5 @@
-"use client";
-
 import { ConnectionConfigSchema } from "@alchemy/aa-core";
-import { getBundlerClient } from "./actions/getBundlerClient.js";
-import { getSigner } from "./actions/getSigner.js";
+import { DEFAULT_SESSION_MS } from "../signer/session/manager.js";
 import { createClientStore } from "./store/client.js";
 import { createCoreStore } from "./store/core.js";
 import type { AlchemyAccountsConfig, CreateConfigProps } from "./types";
@@ -16,6 +13,8 @@ export const createConfig = ({
   rpId,
   sessionConfig,
   signerConnection,
+  ssr,
+  storage,
   ...connectionConfig
 }: CreateConfigProps): AlchemyAccountsConfig => {
   const connection = ConnectionConfigSchema.parse(connectionConfig);
@@ -30,13 +29,19 @@ export const createConfig = ({
         rpId,
       },
       sessionConfig,
+      storage: storage
+        ? storage(
+            sessionConfig?.expirationTimeMs
+              ? { sessionLength: sessionConfig.expirationTimeMs }
+              : undefined
+          )
+        : undefined,
+      ssr,
     }),
-    // these are just here for convenience right now, but you can do all of this with actions on the stores as well
-    get bundlerClient() {
-      return getBundlerClient(config);
-    },
-    get signer() {
-      return getSigner(config);
+    _internal: {
+      ssr,
+      storageKey: "alchemy-account-state",
+      sessionLength: sessionConfig?.expirationTimeMs ?? DEFAULT_SESSION_MS,
     },
   };
 

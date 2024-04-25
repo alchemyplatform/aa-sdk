@@ -2,6 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 import { watchSigner } from "../../config/actions/watchSigner.js";
+import { getSigner } from "../../config/index.js";
 import type { AlchemySigner } from "../../signer/index.js";
 import { useAlchemyAccountContext } from "../context.js";
 
@@ -13,7 +14,7 @@ export const useSigner = (): AlchemySigner | null => {
   // for all calls
   return useSyncExternalStore(
     watchSigner(config),
-    () => config.signer,
+    () => getSigner(config),
     // We don't want to return null here, should return something of type AlchemySigner
     () => null
   );
