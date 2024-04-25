@@ -90,17 +90,17 @@ A new instance of a `SmartAccountClient`.
 
 ### `config: SmartAccountClientConfig`
 
-#### If using `createSmartAccountClient`:
+#### If using `createSmartAccountClient`
 
 - `transport: Transport` -- a viem [Transport](https://viem.sh/docs/clients/intro#transports) that defines how you want to interact with a JSON-RPC provider.
 
 - `chain: Chain` -- the chain on which to create the client.
 
-#### If using `createSmartAccountClientFromExisting`:
+#### If using `createSmartAccountClientFromExisting`
 
 - `client: BundlerClient` -- a [bundler client](/packages/aa-core/bundler-client/index) instance that will be used to communicate with an RPC provider that supports Ethereum RPC methods.
 
-#### Common to both:
+#### Common to both
 
 - `account?: SmartContractAccount` -- [optional] the smart account to use as context for all of your calls. If not provided, then the account can be provided to each individual call instead.
 
@@ -115,7 +115,7 @@ A new instance of a `SmartAccountClient`.
 - `paymasterAndData?: ClientMiddlewareConfig["paymasterAndData"]` -- [optional] if you would like to use a paymaster, then this config must be supplied.
 
   - `paymasterAndData: ClientMiddlewareFn` -- this middleware function calculates the paymaster and data fields of your User Operation after estimating gas and fees
-  - `dummyPaymasterAndData: () => Hex` -- this just returns a Hex string to be used during gas and fee estimation. This will depend on your paymaster provider and must be a value that accurately resembles the gas cost of using your paymaster and does not revert during validation.
+  - `dummyPaymasterAndData: ClientMiddlewareFn` -- this middleware function sets the paymaster address (for [`Entrypoint v0.7`](/using-smart-accounts/entrypoint-v7) user operations) or the dummy paymasterAndData (for [`Entrypoint v0.6`](/using-smart-accounts/entrypoint-v7) user operations) to be used during gas and fee estimation. This will depend on your paymaster provider and must be a value that accurately resembles the gas cost of using your paymaster and does not revert during validation.
 
 - `opts: SmartAccountClientOpts | undefined` -- [optional] overrides on client config variables having to do with fetching transaction receipts and fee computation.
 

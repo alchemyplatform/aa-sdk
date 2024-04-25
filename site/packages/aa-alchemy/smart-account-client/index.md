@@ -75,6 +75,8 @@ A new instance of an `AlchemySmartAccountClient`.
 
   - `policyId: string` -- the policy id of the gas manager you want to use.
   - `gasEstimationOptions: AlchemyGasEstimationOptions` -- [optional] optional option configurable for the gas estimation portion of the Alchemy gas manager
+  - `paymasterAddress: Address` -- [optional] paymaster address to use for the gas estimation. If not provided, the default paymaster address for the chain will be used.
+  - `dummyData: Hex` -- [optional] dummy paymaster data to use for the gas estimation. If not provided, the default dummy data string will be used.
 
 - `...accountParams`: CreateLightAccountParams -- additional parameters to pass to the [`createLightAccount`](/packages/aa-accounts/light-account/#createlightaccount).
 

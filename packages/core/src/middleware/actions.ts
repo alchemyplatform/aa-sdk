@@ -18,6 +18,14 @@ import { defaultUserOpSigner } from "./defaults/userOpSigner.js";
 import { noopMiddleware } from "./noopMiddleware.js";
 import type { ClientMiddleware } from "./types.js";
 
+/**
+ * MiddlewareClient type definition where the `viem` client is extended with
+ * the public client actions and bundler client actions
+ *
+ * @template TTransport The transport type
+ * @template TChain The chain type
+ * @template TAccount The account type
+ */
 export type MiddlewareClient<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
@@ -32,6 +40,14 @@ export type MiddlewareClient<
   PublicActions & BundlerActions
 >;
 
+/**
+ * middlewareActions function that returns the client middleware object with the
+ * middlewares set using the default middlewares or with the middleware overrides if overriden
+ * during the client creation.
+ *
+ * @param overrides the middleware overrides used during the client creation
+ * @returns the client middleware object
+ */
 export const middlewareActions =
   (overrides: ClientMiddlewareConfig) =>
   <
@@ -45,13 +61,9 @@ export const middlewareActions =
   ): { middleware: ClientMiddleware } => ({
     middleware: {
       customMiddleware: overrides.customMiddleware ?? noopMiddleware,
-      dummyPaymasterAndData: overrides.paymasterAndData?.dummyPaymasterAndData
-        ? async (struct) => ({
-            ...struct,
-            paymasterAndData:
-              overrides.paymasterAndData!.dummyPaymasterAndData(),
-          })
-        : defaultPaymasterAndData,
+      dummyPaymasterAndData:
+        overrides.paymasterAndData?.dummyPaymasterAndData ??
+        defaultPaymasterAndData,
       feeEstimator: overrides.feeEstimator ?? defaultFeeEstimator(client),
       gasEstimator: overrides.gasEstimator ?? defaultGasEstimator(client),
       paymasterAndData:

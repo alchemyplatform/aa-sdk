@@ -38,7 +38,7 @@ Each middleware is a function that takes in a user operation object, performs it
 
 ### paymasterAndData
 
-`paymasterAndData` middleware is responsible for computing `paymasterAndData` fields of user operation after estimating gas and fees. `dummyPaymasterAndData` is a dummy middleware that returns a Hex string for gas and fee estimation. This will depend on your paymaster provider and must be a value that accurately resembles the gas cost of using your paymaster and does not revert during validation.
+`paymasterAndData` middleware is responsible for computing `paymasterAndData` fields of user operation after estimating gas and fees. `dummyPaymasterAndData` is a middleware function that sets the paymaster address (for [`Entrypoint v0.7`](/using-smart-accounts/entrypoint-v7) user operations) or the dummy paymasterAndData (for [`Entrypoint v0.6`](/using-smart-accounts/entrypoint-v7) user operations) to be used during gas and fee estimation. This will depend on your paymaster provider and must be a value that accurately resembles the gas cost of using your paymaster and does not revert during validation.
 
 ### customMiddleware
 
@@ -68,7 +68,7 @@ export type ClientMiddlewareConfig = Omit<
   "dummyPaymasterAndData" | "paymasterAndData"
 > & {
   paymasterAndData?: {
-    dummyPaymasterAndData: () => Hex;
+    dummyPaymasterAndData: ClientMiddlewareFn;
     paymasterAndData: ClientMiddlewareFn;
   };
 };

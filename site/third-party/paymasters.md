@@ -33,16 +33,22 @@ const client = createSmartAccountClient({
   chain,
   transport: http("RPC_URL"),
   paymasterAndData: {
-    paymasterAndData: async (userop, opts) => {
-        // call your paymaster here to sponsor the userop
-        // leverage the `opts` field to apply any overrides
-        return {
-            ...userop,
-            paymasterAndData: "0xresponsefromprovider"
-        }
+    dummyPaymasterAndData: async (userop, opts) => {
+      // sets the dummy paymasterAndData with paymaster address appended with some dummy paymasterData
+      // that looks like a valid paymasterData
+      return {
+        ...userop,
+        paymasterAndData: `<PAYMASTER_ADDRESS><PAYMASTER_DUMMY_DATA>` as Hex,
+      };
     },
-    dummyPaymasterAndData: () => "0xnonrevertingpaymasterandata,
+    paymasterAndData: async (userop, opts) => {
+      // call your paymaster here to sponsor the userop
+      // leverage the `opts` field to apply any overrides
+      return {
+        ...userop,
+        paymasterAndData: "0xresponsefromprovider",
+      };
+    },
   },
 });
-
 ```

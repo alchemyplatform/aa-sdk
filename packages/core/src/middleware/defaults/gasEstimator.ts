@@ -27,7 +27,6 @@ export const defaultGasEstimator: <C extends MiddlewareClient>(
     const request = deepHexlify(await resolveProperties(struct));
 
     if (
-      overrides &&
       account.getEntryPoint().version === "0.7.0" &&
       bypassPaymasterAndData(overrides)
     ) {

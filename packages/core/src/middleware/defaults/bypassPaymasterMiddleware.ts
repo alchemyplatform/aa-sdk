@@ -30,14 +30,13 @@ export const bypassPaymasterMiddleware: ClientMiddlewareFn = async (
     account.getEntryPoint().version === "0.7.0" &&
     (overrides as UserOperationOverrides<"0.7.0">)?.paymasterData === "0x"
   ) {
+    // Make sure paymaster fields are unset
     delete (struct as UserOperationStruct<"0.7.0">).paymaster;
     delete (struct as UserOperationStruct<"0.7.0">).paymasterData;
     delete (struct as UserOperationStruct<"0.7.0">)
       .paymasterVerificationGasLimit;
     delete (struct as UserOperationStruct<"0.7.0">).paymasterPostOpGasLimit;
-    return struct;
   }
 
-  // essentially, no op but should not reach here
   return struct;
 };
