@@ -111,7 +111,6 @@ export {
 export { InvalidUserOperationError } from "./errors/useroperation.js";
 export { LogLevel, Logger } from "./logger.js";
 export { middlewareActions } from "./middleware/actions.js";
-export { bypassPaymasterMiddleware } from "./middleware/defaults/bypassPaymasterMiddleware.js";
 export { defaultFeeEstimator } from "./middleware/defaults/feeEstimator.js";
 export { defaultGasEstimator } from "./middleware/defaults/gasEstimator.js";
 export { defaultPaymasterAndData } from "./middleware/defaults/paymasterAndData.js";
@@ -147,6 +146,7 @@ export {
   bigIntMax,
   bigIntMultiply,
   bypassPaymasterAndData,
+  concatPaymasterAndData,
   deepHexlify,
   defineReadOnly,
   filterUndefined,
@@ -156,6 +156,7 @@ export {
   isBigNumberish,
   isMultiplier,
   isValidRequest,
+  parsePaymasterAndData,
   pick,
   resolveProperties,
   takeBytes,

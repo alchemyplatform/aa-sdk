@@ -6,7 +6,7 @@ import type {
 } from "../../../account/smartContractAccount";
 import type { BaseSmartAccountClient } from "../../../client/smartAccountClient";
 import { AccountNotFoundError } from "../../../errors/account.js";
-import { bypassPaymasterMiddleware } from "../../../middleware/defaults/bypassPaymasterMiddleware.js";
+import { noopMiddleware } from "../../../middleware/noopMiddleware.js";
 import type {
   UserOperationOverridesParameter,
   UserOperationStruct,
@@ -73,14 +73,24 @@ export async function _runMiddlewareStack<
     throw new AccountNotFoundError();
   }
 
+  const { dummyPaymasterAndData, paymasterAndData } = bypassPaymasterAndData(
+    overrides
+  )
+    ? {
+        dummyPaymasterAndData: noopMiddleware,
+        paymasterAndData: noopMiddleware,
+      }
+    : {
+        dummyPaymasterAndData: client.middleware.dummyPaymasterAndData,
+        paymasterAndData: client.middleware.paymasterAndData,
+      };
+
   const result = await asyncPipe(
-    client.middleware.dummyPaymasterAndData,
+    dummyPaymasterAndData,
     client.middleware.feeEstimator,
     client.middleware.gasEstimator,
     client.middleware.customMiddleware,
-    bypassPaymasterAndData(overrides)
-      ? bypassPaymasterMiddleware
-      : client.middleware.paymasterAndData,
+    paymasterAndData,
     client.middleware.userOperationSimulator
   )(uo, { overrides, feeOptions: client.feeOptions, account, client, context });
 

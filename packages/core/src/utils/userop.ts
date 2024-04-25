@@ -1,3 +1,4 @@
+import { concat, type Address, type Hex } from "viem";
 import type { EntryPointVersion } from "../entrypoint/types";
 import type {
   BigNumberish,
@@ -164,3 +165,33 @@ export const bypassPaymasterAndData = <
   !!overrides &&
   (("paymasterAndData" in overrides && overrides.paymasterAndData === "0x") ||
     ("paymasterData" in overrides && overrides.paymasterData === "0x"));
+
+/**
+ * Utility method for parsing the paymaster address and paymasterData from the paymasterAndData hex string
+ *
+ * @param paymasterAndData the paymaster and data hex string to parse.
+ *                         The hex string refers to the paymasterAndData field of entrypoint v0.6 user operation request
+ * @returns the parsed paymaster and paymasterData fields of entrypoint v0.7 user operation request paymaster and paymasterData field
+ */
+export const parsePaymasterAndData = (
+  paymasterAndData: Hex
+): Pick<UserOperationRequest<"0.7.0">, "paymaster" | "paymasterData"> => ({
+  paymaster: paymasterAndData.substring(0, 42) as Address,
+  paymasterData: `0x${paymasterAndData.substring(42)}` as Hex,
+});
+
+/**
+ * Utility method for converting the object containing the paymaster address and paymaster data
+ * to the paymaster and data concatenated hex string
+ *
+ * @param paymasterAndData the object containing the picked paymaster and paymasterData fields of
+ *                         entrypoint v0.7 user operation request
+ * @param paymasterAndData.paymaster the paymaster address
+ * @param paymasterAndData.paymasterData the paymaster data
+ * @returns the paymasterAndData hex value of entrypoint v0.6 user operation request paymasterAndData field
+ */
+export const concatPaymasterAndData = ({
+  paymaster = "0x",
+  paymasterData = "0x",
+}: Pick<UserOperationRequest<"0.7.0">, "paymaster" | "paymasterData">): Hex =>
+  concat([paymaster, paymasterData]);

@@ -38,7 +38,7 @@ Each middleware is a function that takes in a user operation object, performs it
 
 ### paymasterAndData
 
-`paymasterAndData` middleware is responsible for computing `paymasterAndData` fields of user operation after estimating gas and fees. `dummyPaymasterAndData` is a dummy middleware that returns a Hex string for gas and fee estimation. This will depend on your paymaster provider and must be a value that accurately resembles the gas cost of using your paymaster and does not revert during validation.
+`paymasterAndData` middleware is responsible for computing `paymasterAndData` fields of user operation after estimating gas and fees. `dummyPaymasterAndData` is a dummy middleware for seting the `paymaster` address and the `paymasterData` dummy data by either returning the concatenated `Hex` string, or the object containing these fields at the beginning of the middleware pipeline to be used later for gas estimation before the actual paymaster middleware run. This will depend on your paymaster provider and must be a value that accurately resembles the gas cost of using your paymaster and does not revert during validation.
 
 ### customMiddleware
 
@@ -68,7 +68,9 @@ export type ClientMiddlewareConfig = Omit<
   "dummyPaymasterAndData" | "paymasterAndData"
 > & {
   paymasterAndData?: {
-    dummyPaymasterAndData: () => Hex;
+    dummyPaymasterAndData: () =>
+      | UserOperationRequest<"0.6.0">["paymasterAndData"]
+      | Pick<UserOperationRequest<"0.7.0">, "paymaster" | "paymasterData">;
     paymasterAndData: ClientMiddlewareFn;
   };
 };

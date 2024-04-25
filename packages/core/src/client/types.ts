@@ -42,7 +42,9 @@ export type ClientMiddlewareConfig<
   "dummyPaymasterAndData" | "paymasterAndData"
 > & {
   paymasterAndData?: {
-    dummyPaymasterAndData: () => Hex;
+    dummyPaymasterAndData: () =>
+      | UserOperationRequest<"0.6.0">["paymasterAndData"]
+      | Pick<UserOperationRequest<"0.7.0">, "paymaster" | "paymasterData">;
     paymasterAndData: ClientMiddlewareFn<TContext>;
   };
 };
