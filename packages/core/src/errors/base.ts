@@ -1,6 +1,10 @@
 import { BaseError as ViemBaseError } from "viem";
 import { VERSION } from "../version.js";
 
+/**
+ * Description placeholder
+ *
+ */
 type BaseErrorParameters = {
   docsPath?: string;
   docsSlug?: string;
@@ -16,12 +20,28 @@ type BaseErrorParameters = {
     }
 );
 
-// This is based on on viem's BaseError type (obviously from the import and extend)
-// we want the errors here to point to our docs if we supply a docsPath though
+/**
+ * Description
+ * This is based on on viem's BaseError type.
+ * Errors here point to aa-sdk docs with docsPath if supplied.
+ *
+ */
 export class BaseError extends ViemBaseError {
+  /**
+   * @inheritdoc
+   */
   override name = "AASDKError";
+  /**
+   * @inheritdoc
+   */
   override version = VERSION;
 
+  /**
+   * Creates an instance of BaseError.
+   *
+   * @param shortMessage - A short error message to be displayed
+   * @param [args] - BaseErrorParameters arguments
+   */
   constructor(shortMessage: string, args: BaseErrorParameters = {}) {
     super(shortMessage, args);
 
