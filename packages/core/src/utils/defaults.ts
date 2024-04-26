@@ -15,6 +15,10 @@ import {
   polygonAmoy,
   polygonMumbai,
   sepolia,
+  fraxtal,
+  fraxtalTestnet,
+  zora,
+  zoraSepolia,
 } from "../chains/index.js";
 import { defaultEntryPointVersion } from "../entrypoint/index.js";
 import type { EntryPointVersion } from "../entrypoint/types.js";
@@ -38,18 +42,22 @@ export const getDefaultSimpleAccountFactoryAddress = (
       switch (chain.id) {
         case mainnet.id:
         case polygon.id:
+        case polygonAmoy.id:
         case optimism.id:
         case optimismSepolia.id:
         case arbitrum.id:
+        case arbitrumSepolia.id:
         case base.id:
         case baseGoerli.id:
         case baseSepolia.id:
-        case arbitrumSepolia.id:
+        case fraxtal.id:
+        case fraxtalTestnet.id:
+        case zora.id:
+        case zoraSepolia.id:
           return "0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232";
         case sepolia.id:
         case goerli.id:
         case polygonMumbai.id:
-        case polygonAmoy.id:
         case optimismGoerli.id:
         case arbitrumGoerli.id:
           return "0x9406Cc6185a346906296840746125a0E44976454";
@@ -70,6 +78,10 @@ export const getDefaultSimpleAccountFactoryAddress = (
         case base.id:
         case baseSepolia.id:
         case sepolia.id:
+        case fraxtal.id:
+        case fraxtalTestnet.id:
+        case zora.id:
+        case zoraSepolia.id:
           return "0x91E60e0613810449d098b0b5Ec8b51A0FE8c8985";
         default:
           break;

@@ -15,6 +15,10 @@ import {
   polygonAmoy,
   polygonMumbai,
   sepolia,
+  fraxtal,
+  fraxtalTestnet,
+  zora,
+  zoraSepolia,
   toRecord,
   type SmartContractAccount,
 } from "@alchemy/aa-core";
@@ -43,6 +47,10 @@ export const supportedChains: Chain[] = [
   base,
   baseGoerli,
   baseSepolia,
+  fraxtal,
+  fraxtalTestnet,
+  zora,
+  zoraSepolia,
 ];
 
 export const AccountVersionRegistry: IAccountVersionRegistry = {

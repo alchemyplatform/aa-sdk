@@ -15,6 +15,10 @@ import {
   polygonMumbai as vpgm,
   polygonAmoy as vpga,
   sepolia as vsep,
+  fraxtal as vfrax,
+  fraxtalTestnet as vfraxt,
+  zora as vzora,
+  zoraSepolia as vzoras,
 } from "viem/chains";
 
 export const arbitrum: Chain = {
@@ -155,5 +159,33 @@ export const polygon: Chain = {
     alchemy: {
       http: ["https://polygon-mainnet.g.alchemy.com/v2"],
     },
+  },
+};
+
+export const fraxtal: Chain = {
+  ...vfrax,
+  rpcUrls: {
+    ...vfrax.rpcUrls,
+  },
+};
+
+export const fraxtalTestnet: Chain = {
+  ...vfraxt,
+  rpcUrls: {
+    ...vfraxt.rpcUrls,
+  },
+};
+
+export const zora: Chain = {
+  ...vzora,
+  rpcUrls: {
+    ...vzora.rpcUrls,
+  },
+};
+
+export const zoraSepolia: Chain = {
+  ...vzoras,
+  rpcUrls: {
+    ...vzoras.rpcUrls,
   },
 };

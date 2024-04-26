@@ -9,6 +9,10 @@ import {
   polygonAmoy,
   polygonMumbai,
   sepolia,
+  fraxtal,
+  fraxtalTestnet,
+  zora,
+  zoraSepolia,
 } from "@alchemy/aa-core";
 import { parseAbiParameters } from "viem";
 import { MultiOwnerPluginGenConfig } from "../multi-owner/config.js";
@@ -30,6 +34,10 @@ export const SessionKeyPluginGenConfig: PluginGenConfig = {
     [arbitrumSepolia.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
     [base.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
     [baseSepolia.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
+    [fraxtal.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
+    [fraxtalTestnet.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
+    [zora.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
+    [zoraSepolia.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
   },
   chain: sepolia,
   installConfig: {

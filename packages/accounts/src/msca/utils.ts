@@ -17,6 +17,10 @@ import {
   polygonAmoy,
   polygonMumbai,
   sepolia,
+  fraxtal,
+  fraxtalTestnet,
+  zora,
+  zoraSepolia,
   type GetAccountParameter,
   type SmartAccountClient,
   type SmartAccountSigner,
@@ -97,6 +101,10 @@ export const getDefaultMultiOwnerModularAccountFactoryAddress = (
     case arbitrumSepolia.id:
     case base.id:
     case baseGoerli.id:
+    case fraxtal.id:
+    case fraxtalTestnet.id:
+    case zora.id:
+    case zoraSepolia.id:
       return "0x000000e92D78D90000007F0082006FDA09BD5f11";
   }
   throw new DefaultFactoryNotDefinedError(

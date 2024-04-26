@@ -47,6 +47,10 @@ export {
   polygonAmoy,
   polygonMumbai,
   sepolia,
+  fraxtal,
+  fraxtalTestnet,
+  zora,
+  zoraSepolia,
 } from "./chains/index.js";
 export type * from "./client/bundlerClient.js";
 export {

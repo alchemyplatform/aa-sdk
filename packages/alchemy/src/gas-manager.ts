@@ -4,18 +4,18 @@ import {
   arbitrumSepolia,
   base,
   baseSepolia,
-  fraxtal,
-  fraxtalTestnet,
   mainnet,
+  sepolia,
   optimism,
   optimismSepolia,
   polygon,
   polygonAmoy,
   polygonMumbai,
-  sepolia,
+  fraxtal,
+  fraxtalTestnet,
   zora,
   zoraSepolia,
-} from "viem/chains";
+} from "@alchemy/aa-core";
 
 export const AlchemyPaymasterAddressV3 =
   "0x4f84a207A80c39E9e8BaE717c1F25bA7AD1fB08F";
