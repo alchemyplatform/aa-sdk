@@ -18,7 +18,7 @@ export type ConnectionConfig = z.input<typeof ConnectionConfigSchema>;
 
 //#region SendUserOperationResult
 export type SendUserOperationResult<
-  TEntryPointVersion extends EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = {
   hash: Hash;
   request: UserOperationRequest<TEntryPointVersion>;

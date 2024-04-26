@@ -21,7 +21,7 @@ export type EntryPointVersion = keyof EntryPointRegistryBase<unknown>;
 export type DefaultEntryPointVersion = OneOf<"0.6.0", EntryPointVersion>;
 
 export type SupportedEntryPoint<
-  TEntryPointVersion extends EntryPointVersion,
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
   TChain extends Chain = Chain,
   TAbi extends Abi | readonly unknown[] = Abi
 > = {
@@ -67,7 +67,7 @@ export interface EntryPointRegistry<TChain extends Chain = Chain>
 
 //#region EntryPointDef
 export type EntryPointDef<
-  TEntryPointVersion extends EntryPointVersion,
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
   TChain extends Chain = Chain,
   TAbi extends Abi | readonly unknown[] = Abi
 > = {

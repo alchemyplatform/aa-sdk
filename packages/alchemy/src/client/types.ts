@@ -1,6 +1,5 @@
 import {
   type BundlerClient,
-  type EntryPointVersion,
   type UserOperationRequest,
 } from "@alchemy/aa-core";
 import type { Address, Hex, HttpTransport } from "viem";
@@ -21,10 +20,10 @@ export type AlchemyRpcSchema = [
       {
         policyId: string;
         entryPoint: Address;
-        userOperation: UserOperationRequest<EntryPointVersion>;
+        userOperation: UserOperationRequest;
       }
     ];
-    ReturnType: RequestPaymasterAndDataResponse<EntryPointVersion>;
+    ReturnType: RequestPaymasterAndDataResponse;
   },
   {
     Method: "alchemy_requestGasAndPaymasterAndData";
@@ -32,12 +31,12 @@ export type AlchemyRpcSchema = [
       {
         policyId: string;
         entryPoint: Address;
-        userOperation: UserOperationRequest<EntryPointVersion>;
+        userOperation: UserOperationRequest;
         dummySignature: Hex;
-        overrides?: RequestGasAndPaymasterAndDataOverrides<EntryPointVersion>;
+        overrides?: RequestGasAndPaymasterAndDataOverrides;
       }
     ];
-    ReturnType: RequestGasAndPaymasterAndDataResponse<EntryPointVersion>;
+    ReturnType: RequestGasAndPaymasterAndDataResponse;
   },
   {
     Method: "alchemy_simulateUserOperationAssetChanges";
@@ -47,7 +46,7 @@ export type AlchemyRpcSchema = [
   {
     Method: "rundler_maxPriorityFeePerGas";
     Parameters: [];
-    ReturnType: UserOperationRequest<EntryPointVersion>["maxPriorityFeePerGas"];
+    ReturnType: UserOperationRequest["maxPriorityFeePerGas"];
   }
 ];
 
@@ -60,10 +59,10 @@ export type ClientWithAlchemyMethods = BundlerClient<HttpTransport> & {
           {
             policyId: string;
             entryPoint: Address;
-            userOperation: UserOperationRequest<EntryPointVersion>;
+            userOperation: UserOperationRequest;
           }
         ];
-      }): Promise<RequestPaymasterAndDataResponse<EntryPointVersion>>;
+      }): Promise<RequestPaymasterAndDataResponse>;
 
       request(args: {
         method: "alchemy_requestGasAndPaymasterAndData";
@@ -71,12 +70,12 @@ export type ClientWithAlchemyMethods = BundlerClient<HttpTransport> & {
           {
             policyId: string;
             entryPoint: Address;
-            userOperation: UserOperationRequest<EntryPointVersion>;
+            userOperation: UserOperationRequest;
             dummySignature: Hex;
-            overrides?: RequestGasAndPaymasterAndDataOverrides<EntryPointVersion>;
+            overrides?: RequestGasAndPaymasterAndDataOverrides;
           }
         ];
-      }): Promise<RequestGasAndPaymasterAndDataResponse<EntryPointVersion>>;
+      }): Promise<RequestGasAndPaymasterAndDataResponse>;
 
       request(args: {
         method: "alchemy_simulateUserOperationAssetChanges";
@@ -86,9 +85,7 @@ export type ClientWithAlchemyMethods = BundlerClient<HttpTransport> & {
       request(args: {
         method: "rundler_maxPriorityFeePerGas";
         params: [];
-      }): Promise<
-        UserOperationRequest<EntryPointVersion>["maxPriorityFeePerGas"]
-      >;
+      }): Promise<UserOperationRequest["maxPriorityFeePerGas"]>;
     }["request"];
 } & {
   updateHeaders: (headers: HeadersInit) => void;

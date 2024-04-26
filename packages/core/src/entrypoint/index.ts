@@ -146,11 +146,4 @@ export function getEntryPoint<
 //   addressOverride: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
 // });
 
-// // 3. type needs to be only one of EntryPointVersion type not the union type itself
-
-// // === Error ===
-// const ep3_a: EntryPointDef<EntryPointVersion> = getEntryPoint(chain, {
-//   version: "0.6.0",
-// }); // error
-
 // // =================================================================================

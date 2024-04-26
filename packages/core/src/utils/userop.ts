@@ -19,7 +19,9 @@ import { allEqual, isBigNumberish } from "./index.js";
  * @param request a {@link UserOperationStruct} to validate
  * @returns a type guard that asserts the {@link UserOperationRequest} is valid
  */
-export function isValidRequest<TEntryPointVersion extends EntryPointVersion>(
+export function isValidRequest<
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+>(
   request: UserOperationStruct<TEntryPointVersion>
 ): request is UserOperationRequest<TEntryPointVersion> {
   // These are the only ones marked as optional in the interface above
@@ -41,7 +43,7 @@ export function isValidRequest<TEntryPointVersion extends EntryPointVersion>(
  * @returns a type guard that asserts the {@link UserOperationRequest} is a {@link UserOperationRequest}
  */
 export function isValidPaymasterAndData<
-  TEntryPointVersion extends EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 >(request: UserOperationStruct<TEntryPointVersion>): boolean {
   if ("paymasterAndData" in request) {
     return (request as UserOperationStruct_v6).paymasterAndData != null;
@@ -63,7 +65,7 @@ export function isValidPaymasterAndData<
  * @returns a type guard that asserts the {@link UserOperationStruct} is a {@link UserOperationRequest}
  */
 export function isValidFactoryAndData<
-  TEntryPointVersion extends EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 >(request: UserOperationStruct<TEntryPointVersion>): boolean {
   if ("initCode" in request) {
     const { initCode } = request as UserOperationStruct_v6;
@@ -158,7 +160,7 @@ export function applyUserOpOverrideOrFeeOption(
  * @returns whether the paymaster middleware should be bypassed
  */
 export const bypassPaymasterAndData = <
-  TEntryPointVersion extends EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 >(
   overrides: UserOperationOverrides<TEntryPointVersion> | undefined
 ): boolean =>
