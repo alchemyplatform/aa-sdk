@@ -44,4 +44,4 @@ It might be the case that you want to use a different RPC provider for your bund
 
 ## Zora and Fraxtal
 
-Using a split Bundler and Node RPC setup is required for Fraxtal, Fraxtal Testnet, Zora, and Zora Sepolia networks since Alchemy currently only supports Account Abstraction endpoints for those networks.
+Using a split Bundler and Node RPC setup is required for Fraxtal, Fraxtal Testnet, Zora, and Zora Sepolia networks since Alchemy currently only supports Account Abstraction endpoints for those networks. Please refer to documentation from [Frax](https://docs.frax.com/fraxtal/network/network-information) and [Zora](https://docs.zora.co/docs/zora-network/network) about RPC options.
