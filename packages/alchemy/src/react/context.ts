@@ -2,8 +2,7 @@
 
 import type { QueryClient } from "@tanstack/react-query";
 import { createContext, createElement, useContext } from "react";
-import type { AlchemyAccountsConfig } from "../config";
-import type { ClientState } from "../config/store/types";
+import type { AlchemyAccountsConfig, AlchemyClientState } from "../config";
 import { NoAlchemyAccountContextError } from "./errors.js";
 import { Hydrate } from "./hydrate.js";
 
@@ -20,7 +19,7 @@ export const AlchemyAccountContext = createContext<
 
 export type AlchemyAccountsProviderProps = {
   config: AlchemyAccountsConfig;
-  initialState?: ClientState;
+  initialState?: AlchemyClientState;
   queryClient: QueryClient;
 };
 

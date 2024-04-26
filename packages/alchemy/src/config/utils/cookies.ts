@@ -1,7 +1,6 @@
 import { getCookie, removeCookie, setCookie } from "typescript-cookie";
 import { DEFAULT_SESSION_MS } from "../../signer/session/manager.js";
-import type { ClientState } from "../store/types";
-import type { AlchemyAccountsConfig } from "../types";
+import type { AlchemyAccountsConfig, AlchemyClientState } from "../types";
 import { deserialize } from "./deserialize.js";
 
 /**
@@ -56,18 +55,18 @@ export const cookieStorage: (config?: { sessionLength: number }) => Storage = (
  *
  * @param config the account config containing the client store
  * @param cookie optional cookie string
- * @returns the deserialized ClientState if the cookie exists, otherwise undefined
+ * @returns the deserialized AlchemyClientState if the cookie exists, otherwise undefined
  */
 export function cookieToInitialState(
   config: AlchemyAccountsConfig,
   cookie?: string
-): ClientState | undefined {
+): AlchemyClientState | undefined {
   if (!cookie) return;
 
   const state = parseCookie(cookie, config._internal.storageKey);
   if (!state) return;
 
-  return deserialize<{ state: ClientState }>(state).state;
+  return deserialize<{ state: AlchemyClientState }>(state).state;
 }
 
 /**

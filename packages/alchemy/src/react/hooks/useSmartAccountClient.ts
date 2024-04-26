@@ -12,7 +12,7 @@ import {
   type MultiOwnerPluginActions,
   type PluginManagerActions,
 } from "@alchemy/aa-accounts";
-import type { Chain, Transport } from "viem";
+import type { Address, Chain, Transport } from "viem";
 import { createAlchemySmartAccountClientFromRpcClient } from "../../client/internal/smartAccountClientFromRpc.js";
 import type {
   AlchemySmartAccountClient,
@@ -63,6 +63,7 @@ export type UseSmartAccountClientResult<
     TAccount,
     ClientActions<TAccount>
   >;
+  address?: Address;
   isLoadingClient: boolean;
 };
 
@@ -80,13 +81,13 @@ export function useSmartAccountClient({
   ...clientParams
 }: UseSmartAccountClientProps): UseSmartAccountClientResult {
   const bundlerClient = useBundlerClient();
-  const { account, isLoadingAccount } = useAccount({
+  const { account, address, isLoadingAccount } = useAccount({
     type,
     accountParams,
   });
 
   if (!account || isLoadingAccount) {
-    return { client: undefined, isLoadingClient: true };
+    return { client: undefined, address, isLoadingClient: true };
   }
 
   switch (account.source) {
@@ -97,6 +98,7 @@ export function useSmartAccountClient({
           account,
           ...clientParams,
         }).extend(lightAccountClientActions),
+        address: account.address,
         isLoadingClient: false,
       };
     case "MultiOwnerModularAccount":
@@ -109,6 +111,7 @@ export function useSmartAccountClient({
           .extend(multiOwnerPluginActions)
           .extend(pluginManagerActions)
           .extend(accountLoupeActions),
+        address: account.address,
         isLoadingClient: false,
       };
     default:

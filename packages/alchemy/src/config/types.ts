@@ -11,7 +11,7 @@ import type {
   AlchemySignerClient,
   AlchemySignerParams,
 } from "../signer";
-import type { ClientStore, CoreStore } from "./store/types";
+import type { ClientState, ClientStore, CoreStore } from "./store/types";
 
 export type SupportedAccountTypes = "LightAccount" | "MultiOwnerModularAccount";
 
@@ -67,3 +67,5 @@ export type CreateConfigProps = ConnectionConfig & {
     "connection"
   >;
 // #endregion CreateConfigProps
+
+export type AlchemyClientState = Omit<ClientState, "signer" | "accounts">;
