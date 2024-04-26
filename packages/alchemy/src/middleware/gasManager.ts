@@ -3,25 +3,30 @@ import type {
   ClientMiddlewareConfig,
   ClientMiddlewareFn,
   EntryPointVersion,
+  Multiplier,
   UserOperationFeeOptions,
   UserOperationOverrides,
-  UserOperationStruct,
+  UserOperationRequest,
 } from "@alchemy/aa-core";
 import {
+  bypassPaymasterAndData,
   deepHexlify,
   defaultGasEstimator,
   filterUndefined,
   isBigNumberish,
   isMultiplier,
   resolveProperties,
-  type Multiplier,
-  type UserOperationRequest,
 } from "@alchemy/aa-core";
-import { fromHex, isHex, type Hex } from "viem";
+import { concat, fromHex, isHex, type Hex } from "viem";
 import type { ClientWithAlchemyMethods } from "../client/types";
 import { getAlchemyPaymasterAddress } from "../gas-manager.js";
 import { alchemyFeeEstimator } from "./feeEstimator.js";
 
+/**
+ * overrides value for [`alchemy_requestGasAndPaymasterData`](https://docs.alchemy.com/reference/alchemy-requestgasandpaymasteranddata)
+ *
+ * @template {EntryPointVersion} TEntryPointVersion entry point version type
+ */
 export type RequestGasAndPaymasterAndDataOverrides<
   TEntryPointVersion extends EntryPointVersion
 > = Partial<
@@ -53,6 +58,12 @@ export type RequestGasAndPaymasterAndDataOverrides<
     : {}
 >;
 
+/**
+ * [`alchemy-requestpaymasteranddata`](https://docs.alchemy.com/reference/alchemy-requestpaymasteranddata)
+ * response type
+ *
+ * @template {EntryPointVersion} TEntryPointVersion entry point version type
+ */
 export type RequestPaymasterAndDataResponse<
   TEntryPointVersion extends EntryPointVersion
 > = TEntryPointVersion extends "0.6.0"
@@ -63,6 +74,12 @@ export type RequestPaymasterAndDataResponse<
   ? Pick<UserOperationRequest<"0.7.0">, "paymaster" | "paymasterData">
   : {};
 
+/**
+ * [`alchemy_requestGasAndPaymasterData`](https://docs.alchemy.com/reference/alchemy-requestgasandpaymasteranddata)
+ * response type
+ *
+ * @template {EntryPointVersion} TEntryPointVersion entry point version type
+ */
 export type RequestGasAndPaymasterAndDataResponse<
   TEntryPointVersion extends EntryPointVersion
 > = Pick<
@@ -75,34 +92,89 @@ export type RequestGasAndPaymasterAndDataResponse<
 > &
   RequestPaymasterAndDataResponse<TEntryPointVersion>;
 
+/**
+ * Alchemy gas manager configuration with gas policy id and optional gas estimation options
+ *
+ * To create a Gas Manager Policy, go to the [gas manager](https://dashboard.alchemy.com/gas-manager?a=embedded-accounts-get-started)
+ * page of the Alchemy dashboard and click the “Create new policy” button.
+ */
 export interface AlchemyGasManagerConfig {
+  /**
+   * the policy id of the gas manager you want to use.
+   *
+   */
   policyId: string;
+  /**
+   * optional option configurable for the gas estimation portion of the Alchemy gas manager
+   *
+   */
   gasEstimationOptions?: AlchemyGasEstimationOptions;
+  /**
+   * paymaster address to use for the gas estimation.
+   * If not provided, the default paymaster address for the chain will be used.
+   *
+   */
   paymasterAddress?: Address;
+  /**
+   * dummy paymaster data to use for the gas estimation.
+   *
+   */
   dummyData?: Hex;
 }
 
+/**
+ * Alchemy gas manager configuration option configurable for the gas estimation portion of the Alchemy gas manager
+ *
+ */
 export interface AlchemyGasEstimationOptions {
+  /**
+   * disable gas estimation and fallback to the default gas estimation.
+   *
+   */
   disableGasEstimation: boolean;
+  /**
+   * optional fallback gas estimator to use when gas estimation is disabled.
+   *
+   */
   fallbackGasEstimator?: ClientMiddlewareFn;
+  /**
+   * optional fallback fee estimator to use when gas estimation is disabled.
+   *
+   */
   fallbackFeeDataGetter?: ClientMiddlewareFn;
 }
 
+/**
+ * dummy paymaster and data middleware for the alchemy gas manager
+ *
+ * @template {ClientWithAlchemyMethods} C
+ * @param client client with alchemy methods
+ * @param config alchemy gas manager configuration
+ * @returns the dummyPaymasterAndData middleware for Alchemy gas manager
+ */
 const dummyPaymasterAndData =
   <C extends ClientWithAlchemyMethods>(
     client: C,
     config: AlchemyGasManagerConfig
   ) =>
   () => {
-    const paymasterAddress =
+    const paymaster =
       config.paymasterAddress ?? getAlchemyPaymasterAddress(client.chain);
-    const dummyData =
+    const paymasterData =
       config.dummyData ??
-      "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
+      "0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
 
-    return `${paymasterAddress}${dummyData}` as Address;
+    return concat([paymaster, paymasterData]); // or you can also return { paymaster, paymasterData }
   };
 
+/**
+ * Alchemy gas manager middleware used as the paymaster middleware overrides param to the client middleware config
+ *
+ * @template {ClientWithAlchemyMethods} C
+ * @param client client with alchemy methods
+ * @param config alchemy gas manager configuration
+ * @returns the gas estimator, fee estimator, and paymasterAndData middleware for Alchemy gas manager
+ */
 export function alchemyGasManagerMiddleware<C extends ClientWithAlchemyMethods>(
   client: C,
   config: AlchemyGasManagerConfig
@@ -123,15 +195,9 @@ export function alchemyGasManagerMiddleware<C extends ClientWithAlchemyMethods>(
     gasEstimator: disableGasEstimation
       ? fallbackGasEstimator
       : async (struct, { overrides, account, feeOptions }) => {
-          const entryPoint = account.getEntryPoint();
           // if user is bypassing paymaster to fallback to having the account to pay the gas (one-off override),
           // we cannot delegate gas estimation to the bundler because paymaster middleware will not be called
-          if (
-            (entryPoint.version === "0.6.0"
-              ? (overrides as UserOperationOverrides<"0.6.0">)?.paymasterAndData
-              : (overrides as UserOperationOverrides<"0.7.0">)
-                  ?.paymasterData) === "0x"
-          ) {
+          if (bypassPaymasterAndData(overrides)) {
             return {
               ...struct,
               ...fallbackGasEstimator(struct, {
@@ -152,16 +218,9 @@ export function alchemyGasManagerMiddleware<C extends ClientWithAlchemyMethods>(
           let maxFeePerGas = await struct.maxFeePerGas;
           let maxPriorityFeePerGas = await struct.maxPriorityFeePerGas;
 
-          const entryPoint = account.getEntryPoint();
-          // but if user is bypassing paymaster to fallback to having the account to pay the gas (one-off override),
+          // if user is bypassing paymaster to fallback to having the account to pay the gas (one-off override),
           // we cannot delegate gas estimation to the bundler because paymaster middleware will not be called
-          if (
-            entryPoint.version === "0.6.0"
-              ? (overrides as UserOperationOverrides<"0.6.0">)
-                  ?.paymasterAndData === "0x"
-              : (overrides as UserOperationOverrides<"0.7.0">)
-                  ?.paymasterData === "0x"
-          ) {
+          if (bypassPaymasterAndData(overrides)) {
             const result = await fallbackFeeDataGetter(struct, {
               overrides,
               feeOptions,
@@ -185,6 +244,16 @@ export function alchemyGasManagerMiddleware<C extends ClientWithAlchemyMethods>(
   };
 }
 
+/**
+ * Utility function to override a field in the user operation request with the overrides or fee options
+ *
+ * @template {EntryPointVersion} TEntryPointVersion
+ * @param field the field to override
+ * @param overrides the overrides object
+ * @param feeOptions the fee options object from the client
+ * @param userOperation the user operation request
+ * @returns the overridden field value
+ */
 const overrideField = <TEntryPointVersion extends EntryPointVersion>(
   field: keyof UserOperationFeeOptions<TEntryPointVersion>,
   overrides: UserOperationOverrides<TEntryPointVersion> | undefined,
@@ -221,38 +290,26 @@ const overrideField = <TEntryPointVersion extends EntryPointVersion>(
   return undefined;
 };
 
+/**
+ * Alchemy gas manager middleware function that returns the paymaster middleware for the client middleware config
+ * that calls the [`alchemy_requestGasAndPaymasterAndData`](https://docs.alchemy.com/reference/alchemy-requestgasandpaymasteranddata)
+ *
+ * @template {ClientWithAlchemyMethods} C
+ * @param client client with alchemy methods
+ * @param config alchemy gas manager configuration
+ * @returns the paymasterAndData middleware for Alchemy gas manager
+ */
 function requestGasAndPaymasterData<C extends ClientWithAlchemyMethods>(
   client: C,
   config: AlchemyGasManagerConfig
 ): ClientMiddlewareConfig["paymasterAndData"] {
   return {
     dummyPaymasterAndData: dummyPaymasterAndData(client, config),
+
     paymasterAndData: async (
       struct,
       { overrides: overrides_, feeOptions, account }
     ) => {
-      // handle one-off overrides for bypassing paymaster middleware
-      if (
-        account.getEntryPoint().version === "0.6.0" &&
-        (overrides_ as UserOperationOverrides<"0.6.0">)?.paymasterAndData ===
-          "0x"
-      ) {
-        return {
-          ...struct,
-          paymasterAndData: "0x",
-        };
-      } else if (
-        account.getEntryPoint().version === "0.7.0" &&
-        (overrides_ as UserOperationOverrides<"0.7.0">)?.paymasterData === "0x"
-      ) {
-        delete (struct as UserOperationStruct<"0.7.0">).paymaster;
-        delete (struct as UserOperationStruct<"0.7.0">).paymasterData;
-        delete (struct as UserOperationStruct<"0.7.0">)
-          .paymasterVerificationGasLimit;
-        delete (struct as UserOperationStruct<"0.7.0">).paymasterPostOpGasLimit;
-        return struct;
-      }
-
       const userOperation: UserOperationRequest<EntryPointVersion> =
         deepHexlify(await resolveProperties(struct));
 
@@ -337,6 +394,15 @@ function requestGasAndPaymasterData<C extends ClientWithAlchemyMethods>(
   };
 }
 
+/**
+ * Alchemy gas manager middleware function that returns the paymaster middleware for the client middleware config
+ * that calls the [`alchemy_requestPaymasterAndData`](https://docs.alchemy.com/reference/alchemy-requestpaymasteranddata)
+ * with gas estimation disabled.
+ *
+ * @param client client with alchemy methods
+ * @param config alchemy gas manager configuration
+ * @returns the paymasterAndData middleware for Alchemy gas manager with gas estimation disabled
+ */
 const requestPaymasterAndData: <C extends ClientWithAlchemyMethods>(
   client: C,
   config: AlchemyGasManagerConfig

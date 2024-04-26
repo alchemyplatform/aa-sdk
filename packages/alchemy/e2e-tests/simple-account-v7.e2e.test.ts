@@ -1,14 +1,19 @@
 import {
   LocalAccountSigner,
+  createSimpleSmartAccount,
+  getEntryPoint,
   sepolia,
   type UserOperationStruct,
 } from "@alchemy/aa-core";
+import type { CreateSimpleAccountParams } from "@alchemy/aa-core/dist/types/account/simple.js";
 import { Alchemy, Network } from "alchemy-sdk";
+import { custom } from "viem";
 import * as simulateUoActions from "../src/actions/simulateUserOperationChanges.js";
 import { alchemyEnhancedApiActions } from "../src/client/decorators/alchemyEnhancedApis.js";
+import { createAlchemySmartAccountClientFromRpcClient } from "../src/client/internal/smartAccountClientFromRpc.js";
 import {
-  createLightAccountAlchemyClient,
-  type AlchemyLightAccountClientConfig,
+  createAlchemyPublicRpcClient,
+  type AlchemySmartAccountClientConfig,
 } from "../src/index.js";
 import {
   API_KEY,
@@ -24,7 +29,7 @@ const simulateUoChangesSpy = vi.spyOn(
 const chain = sepolia;
 const network = Network.ETH_SEPOLIA;
 
-describe("Light Account Client Tests", () => {
+describe("Simple Account Entrypoint v0.7 with Client Tests", () => {
   const signer = LocalAccountSigner.mnemonicToAccountSigner(
     LIGHT_ACCOUNT_OWNER_MNEMONIC
   );
@@ -32,7 +37,7 @@ describe("Light Account Client Tests", () => {
   it("should successfully get counterfactual address", async () => {
     const provider = await givenConnectedProvider({ signer, chain });
     expect(provider.getAddress()).toMatchInlineSnapshot(
-      '"0x86f3B0211764971Ad0Fc8C8898d31f5d792faD84"'
+      '"0xB9db1056b648FD36338dDFb6aF40E891b0266c0d"'
     );
   });
 
@@ -69,7 +74,7 @@ describe("Light Account Client Tests", () => {
     await expect(result).rejects.toThrowError();
   });
 
-  it("should successfully execute with alchemy paymaster info", async () => {
+  it("simple account v7 should successfully execute with alchemy paymaster info", async () => {
     const provider = await givenConnectedProvider({
       signer,
       chain,
@@ -328,27 +333,30 @@ describe("Light Account Client Tests", () => {
 });
 
 const givenConnectedProvider = async ({
-  signer,
   chain,
+  signer,
   accountAddress,
   opts,
   gasManagerConfig,
   useSimulation = false,
-}: AlchemyLightAccountClientConfig) =>
-  createLightAccountAlchemyClient({
+}: Omit<CreateSimpleAccountParams, "transport"> &
+  Omit<AlchemySmartAccountClientConfig, "transport">) => {
+  const client = createAlchemyPublicRpcClient({
+    chain,
+    connectionConfig: { apiKey: API_KEY! },
+  });
+  const account = await createSimpleSmartAccount({
     chain,
     signer,
+    entryPoint: getEntryPoint(chain, { version: "0.7.0" }),
+    transport: custom(client),
     accountAddress,
-    apiKey: API_KEY!,
+  });
+  return createAlchemySmartAccountClientFromRpcClient({
+    client,
+    account,
+    opts,
     gasManagerConfig,
     useSimulation,
-    opts: {
-      txMaxRetries: 10,
-      ...opts,
-      feeOptions: {
-        maxFeePerGas: { multiplier: 1.5 },
-        maxPriorityFeePerGas: { multiplier: 1.5 },
-        ...opts?.feeOptions,
-      },
-    },
   });
+};
