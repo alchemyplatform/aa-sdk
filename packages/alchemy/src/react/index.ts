@@ -41,3 +41,6 @@ export type * from "./hooks/useUser.js";
 export { useUser } from "./hooks/useUser.js";
 export type * from "./hooks/useWaitForUserOperationTransaction.js";
 export { useWaitForUserOperationTransaction } from "./hooks/useWaitForUserOperationTransaction.js";
+
+// TODO: remove these and only expose the full UI modal
+export { DemoSet } from "./components/button.js";
