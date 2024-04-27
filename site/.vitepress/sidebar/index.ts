@@ -23,7 +23,7 @@ export const sidebar: DefaultTheme.Sidebar = [
             text: "Log in users",
             link: "/log-in-users",
           },
-          { text: "Send User Operations", link: "/send-uos" },
+          { text: "Send user operations", link: "/send-uos" },
         ],
       },
     ],
