@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.10.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.9.0...v3.10.0) (2024-04-29)
+
+### Features
+
+- remove generic entry point version specification requirement for better devex ([#607](https://github.com/alchemyplatform/aa-sdk/issues/607)) ([f3fb619](https://github.com/alchemyplatform/aa-sdk/commit/f3fb619e3cfb2c3a957a259788ae6ab1c530f3d5))
+
 # [3.9.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.9.0-alpha.4...v3.9.0) (2024-04-24)
 
 **Note:** Version bump only for package @alchemy/aa-ethers

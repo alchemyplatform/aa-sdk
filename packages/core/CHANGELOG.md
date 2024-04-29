@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.10.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.9.0...v3.10.0) (2024-04-29)
+
+### Features
+
+- add frax and zora defaults ([#613](https://github.com/alchemyplatform/aa-sdk/issues/613)) ([4950a1d](https://github.com/alchemyplatform/aa-sdk/commit/4950a1df170abcae5a3cc5a32acdb972890d7810))
+- estimate user operation gas smart account client action and how to guide ([#603](https://github.com/alchemyplatform/aa-sdk/issues/603)) ([522a038](https://github.com/alchemyplatform/aa-sdk/commit/522a03864ea0e3f8f1e34b6900c3ca0241b534e8))
+- handle one off bypassing paymaster and data middleware case ([#606](https://github.com/alchemyplatform/aa-sdk/issues/606)) ([b5d8110](https://github.com/alchemyplatform/aa-sdk/commit/b5d8110f629937068d27e059ec89dfaa31ce9dd5))
+- remove generic entry point version specification requirement for better devex ([#607](https://github.com/alchemyplatform/aa-sdk/issues/607)) ([f3fb619](https://github.com/alchemyplatform/aa-sdk/commit/f3fb619e3cfb2c3a957a259788ae6ab1c530f3d5))
+
 # [3.9.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.9.0-alpha.4...v3.9.0) (2024-04-24)
 
 ### Features
