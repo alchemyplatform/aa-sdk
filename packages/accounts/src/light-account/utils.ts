@@ -113,12 +113,12 @@ export const AccountVersionRegistry: IAccountVersionRegistry = {
       type: "LightAccount",
       version: "v2.0.0",
       address: toRecord<Chain, "id", { factory: Address; impl: Address }>(
-        [arbitrumSepolia],
+        supportedChains,
         "id",
         () => ({
           factory:
-            "0x19B486A57C790b47Ee2E967c2aB1b8BbAeAeE7bB".toLowerCase() as Address,
-          impl: "0x118c4EA651e2fE5F5637f5D8A473CB8329251f89".toLowerCase() as Address,
+            "0x0000000000400CdFef5E2714E63d8040b700BC24".toLowerCase() as Address,
+          impl: "0x8E8e658E22B12ada97B402fF0b044D6A325013C7".toLowerCase() as Address,
         })
       ),
       entryPointVersion: "0.7.0",
@@ -129,12 +129,12 @@ export const AccountVersionRegistry: IAccountVersionRegistry = {
       type: "MultiOwnerLightAccount",
       version: "v2.0.0",
       address: toRecord<Chain, "id", { factory: Address; impl: Address }>(
-        [arbitrumSepolia],
+        supportedChains,
         "id",
         () => ({
           factory:
-            "0xEEeB9dD9DA59bD3020C548D3543485E37ee8A50e".toLowerCase() as Address,
-          impl: "0x0C93750D969bdeb51547766680E5CA14A508758e".toLowerCase() as Address,
+            "0x000000000019d2Ee9F2729A65AfE20bb0020AefC".toLowerCase() as Address,
+          impl: "0xd2c27F9eE8E4355f71915ffD5568cB3433b6823D".toLowerCase() as Address,
         })
       ),
       entryPointVersion: "0.7.0",
