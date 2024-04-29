@@ -8,11 +8,22 @@ import {
 import { type Address, type Chain } from "viem";
 import type { LightAccountBase } from "./accounts/base";
 
-export type LightAccountType = "LightAccount" | "MultiOwnerLightAccount";
+/**
+ * Light account types supported: LightAccount, MultiOwnerLightAccount
+ *
+ */
+export type LightAccountType = keyof IAccountVersionRegistry;
 
+/**
+ * Account version definition, which is the base type defining the LightAccountVersionDef interface
+ *
+ * @template {LightAccountType} TLightAccountType type
+ * @template {GetLightAccountVersion<TLightAccountType>} TLightAccountVersion version
+ * @template {EntryPointVersion} TEntryPointVersion entryPointVersion
+ */
 export type AccountVersionDef<
   TLightAccountType extends LightAccountType = LightAccountType,
-  TLightAccountVersion extends LightAccountVersion<TLightAccountType> = LightAccountVersion<TLightAccountType>,
+  TLightAccountVersion extends GetLightAccountVersion<TLightAccountType> = GetLightAccountVersion<TLightAccountType>,
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = {
   type: TLightAccountType;
@@ -27,15 +38,38 @@ export type AccountVersionDef<
   >;
 };
 
-export type LightAccountVersion<
+/**
+ * Light account version type defs for tightly coupled types for smart accounts
+ *
+ */
+export type LightAccountVersion =
+  | keyof IAccountVersionRegistry["LightAccount"]
+  | keyof IAccountVersionRegistry["MultiOwnerLightAccount"];
+
+/**
+ * Get the light account versions available for the given light account type
+ *
+ * @template {LightAccountType} TLightAccountType
+ */
+export type GetLightAccountVersion<
   TLightAccountType extends LightAccountType = LightAccountType
 > = keyof IAccountVersionRegistry[TLightAccountType];
 
+/**
+ * Light account version definition type based on the light account type and version
+ *
+ * @template {LightAccountType} TLightAccountType
+ * @template {GetLightAccountVersion<TLightAccountType>} TLightAccountVersion
+ */
 export type LightAccountVersionDef<
   TLightAccountType extends LightAccountType = LightAccountType,
-  TLightAccountVersion extends LightAccountVersion<TLightAccountType> = LightAccountVersion<TLightAccountType>
+  TLightAccountVersion extends GetLightAccountVersion<TLightAccountType> = GetLightAccountVersion<TLightAccountType>
 > = IAccountVersionRegistry[TLightAccountType][TLightAccountVersion];
 
+/**
+ * Light account version registry interface defining the supported light account versions
+ *
+ */
 export interface IAccountVersionRegistry {
   LightAccount: {
     /** @deprecated This version does not support 1271 signature validation */
@@ -61,6 +95,10 @@ export interface IAccountVersionRegistry {
 }
 
 /**
+ * Get the light account version definitions available for the given light account type
+ *
+ * @template {LightAccountType} TLightAccountType
+ *
  * @example
  * type T1 = GetLightAccountVersionsForType<"LightAccount">;
  * const t1: T1 = AccountVersionRegistry.LightAccount["v1.0.2"];
@@ -71,9 +109,15 @@ export type GetLightAccountVersionDefsForType<TType extends LightAccountType> =
     { type: TType }
   >;
 
+/**
+ * Get the light account version definition for the given light account type and version
+ *
+ * @template {LightAccountType} TType
+ * @template {GetLightAccountVersion<TType>} TLightAccountVersion
+ */
 export type GetLightAccountVersionDef<
   TType extends LightAccountType,
-  TLightAccountVersion extends LightAccountVersion<TType>
+  TLightAccountVersion extends GetLightAccountVersion<TType>
 > = IAccountVersionRegistry[TType][TLightAccountVersion];
 
 /**
@@ -90,6 +134,12 @@ export type GetLightAccountVersionDefsForEntryPoint<
   { entryPointVersion: TEntryPointVersion }
 >;
 
+/**
+ * Get the light account type for the given light account by inferring from its type definition
+ *
+ * @template {SmartContractAccount | undefined} TAccount
+ * @template {SmartContractAccount} TAccountOverride
+ */
 export type GetLightAccountType<
   TAccount extends SmartContractAccount | undefined,
   TAccountOverride extends SmartContractAccount = SmartContractAccount
@@ -100,9 +150,32 @@ export type GetLightAccountType<
   ? OneOf<TLightAccountType, LightAccountType>
   : LightAccountType;
 
+/**
+ * Get the light account version for the given light account by inferring from its type definition
+ *
+ * @template {LightAccountBase | undefined} TAccount
+ * @template {LightAccountBase} TAccountOverride
+ */
+export type GetLightAccountVersionFromAccount<
+  TAccount extends LightAccountBase | undefined,
+  TAccountOverride extends LightAccountBase = LightAccountBase
+> = GetAccountParameter<TAccount, TAccountOverride> extends LightAccountBase<
+  SmartAccountSigner,
+  LightAccountType,
+  infer TLightAccountVersion
+>
+  ? OneOf<TLightAccountVersion, LightAccountVersion>
+  : LightAccountVersion;
+
+/**
+ * Get the entry point version supported for the given light account type and version
+ *
+ * @template {LightAccountType} TLightAccountType
+ * @template {GetLightAccountVersion<TLightAccountType>} TLightAccountVersion
+ */
 export type GetEntryPointForLightAccountVersion<
   TLightAccountType extends LightAccountType = LightAccountType,
-  TLightAccountVersion extends LightAccountVersion<TLightAccountType> = LightAccountVersion<TLightAccountType>
+  TLightAccountVersion extends GetLightAccountVersion<TLightAccountType> = GetLightAccountVersion<TLightAccountType>
 > = GetLightAccountVersionDef<
   TLightAccountType,
   TLightAccountVersion
@@ -114,8 +187,24 @@ export type GetEntryPointForLightAccountVersion<
   ? TEntryPointVersion
   : EntryPointVersion;
 
+/**
+ * Get the light account type for the given light account version by inferring from its type definition
+ *
+ * @template {LightAccountVersion} TLightAccountVersion
+ */
 export type GetLightAccountTypesForVersion<
   TLightAccountVersion extends LightAccountVersion = LightAccountVersion
-> = TLightAccountVersion extends LightAccountVersion<infer TLightAccountType>
+> = TLightAccountVersion extends GetLightAccountVersion<infer TLightAccountType>
   ? TLightAccountType
   : LightAccountType;
+
+/**
+ * Get default light account version for the given light account type
+ *
+ * @template {LightAccountType} TLightAccountType
+ */
+export type GetDefaultLightAccountVersion<
+  TLightAccountType extends LightAccountType = LightAccountType
+> = TLightAccountType extends "MultiOwnerLightAccount"
+  ? "v2.0.0" & LightAccountVersion
+  : "v1.1.0" & LightAccountVersion;
