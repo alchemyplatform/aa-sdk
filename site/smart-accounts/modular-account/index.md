@@ -51,9 +51,9 @@ Read more about installing and using the Session Key plugin [here](/using-smart-
 
 ### Multisig Plugin
 
-The Multisig plugin allows your account to have multiple ECDSA or SCA signers and require multiple signatures to authorize actions on the account. This is commonly referred to as a k-of-n signature scheme and would create Modular Accounts that are similar to [Gnosis Safe](https://safe.global/) accounts. This plugin is recommended for accounts looking for maximally secure configurations.
+The Multisig plugin allows your account to have multiple ECDSA or SCA signers and require multiple signatures to perform actions on the account. This is commonly referred to as a k-of-n signature scheme and would create Modular Accounts that are similar to [Gnosis Safe](https://safe.global/) accounts. This plugin is recommended for accounts looking for the most secure config.
 
-Read more about Multisig Plugin [here](/multisig-plugin/index.md)!
+Read more about Multisig Plugin [here](/smart-accounts/modular-account/multisig-plugin/index.md)!
 
 ### Full compatibility
 
@@ -67,6 +67,6 @@ Check out the plugin development guide [here](https://www.notion.so/alchemotion/
 
 ### Secure, audited, open source
 
-Modular Account has been audited by Spearbit and Quantstamp. You can find the audit reports [here](https://github.com/alchemyplatform/modular-account/tree/develop/audits). Modular Account is fully open source, so you can validate the [source code](https://github.com/alchemyplatform/modular-account).
+Modular Account has been audited by Spearbit and Quanstamp. You can find the audit reports [here](https://github.com/alchemyplatform/modular-account/tree/develop/audits). Modular Account is fully open source, so you can validate the [source code](https://github.com/alchemyplatform/modular-account).
 
 <!--@include: ../../resources/bbp.md-->
