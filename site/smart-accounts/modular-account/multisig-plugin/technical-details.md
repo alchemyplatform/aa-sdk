@@ -22,7 +22,7 @@ head:
 
 ## Storing Signatures
 
-In the usage guide, for a threshold of `k` signatures, we obtain the first signature with `proposeUserOperation` and the next `k-2` signatures with `signMultisigUserOperation`. In practice, since signers would likely use different clients and sign at different times, the client or dapp will have to provide storage for the first `k-1` signatures. This would be loaded and combined with the final signature to be used with `sendUserOperation`.
+In the usage guide, for a threshold of `k` signatures, we obtain the first signature with `proposeUserOperation` and the next `k-2` signatures with `signMultisigUserOperation`. In practice, since signers would likely use different clients and sign at different times, the client or dapp will need to store the first `k-1` signatures. This would be loaded and combined with the final signature to be used with `sendUserOperation`.
 
 ## Variable Gas Feature
 
