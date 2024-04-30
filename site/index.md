@@ -26,7 +26,21 @@ titleTemplate: :title Documentation
 # you can also add HTML or Markdown components below the --- line to add custom HTML or Markdown content (eg: https://github.com/wagmi-dev/viem/blob/main/site/index.md?plain=1)
 ---
 
-<div class="flex flex-col h-screen">
+<style>
+  .vp-doc.container {
+    padding: 0;
+    margin: 0;
+  }
+  
+  .VPHome {
+    margin-bottom: 0 !important;
+  }
+
+  a {
+    text-decoration: none !important;
+  }
+</style>
+<div class="flex flex-col h-screen w-screen">
   <div class="flex flex-grow justify-center bg-hero-light dark:bg-hero-dark bg-cover pb-[48px]">
     <div class="flex grow max-w-[var(--vp-layout-max-width)] w-[100%] px-[32px]">
       <div class="flex flex-col flex-auto min-w-[100%]">
