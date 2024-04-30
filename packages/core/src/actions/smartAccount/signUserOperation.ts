@@ -24,7 +24,7 @@ export async function signUserOperation<
   client: Client<TTransport, TChain, TAccount>,
   args: SignUserOperationParameters<TAccount>
 ): Promise<UserOperationRequest<TEntryPointVersion>> {
-  const { account = client.account } = args;
+  const { account = client.account, context } = args;
 
   if (!account) {
     throw new AccountNotFoundError();
@@ -47,6 +47,7 @@ export async function signUserOperation<
       ...args,
       account,
       client,
+      context,
     })
     .then(resolveProperties)
     .then(deepHexlify);

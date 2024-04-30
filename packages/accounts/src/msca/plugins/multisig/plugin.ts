@@ -392,7 +392,7 @@ export const MultisigPluginAbi = [
     ],
     name: "checkNSignatures",
     outputs: [
-      { name: "failed", internalType: "bool", type: "bool" },
+      { name: "success", internalType: "bool", type: "bool" },
       { name: "firstFailure", internalType: "uint256", type: "uint256" },
     ],
   },
@@ -908,9 +908,10 @@ export const MultisigPluginAbi = [
   { type: "error", inputs: [], name: "ECDSARecoverFailure" },
   { type: "error", inputs: [], name: "EmptyOwnersNotAllowed" },
   { type: "error", inputs: [], name: "InvalidAction" },
-  { type: "error", inputs: [], name: "InvalidGasValues" },
+  { type: "error", inputs: [], name: "InvalidAddress" },
   { type: "error", inputs: [], name: "InvalidMaxFeePerGas" },
   { type: "error", inputs: [], name: "InvalidMaxPriorityFeePerGas" },
+  { type: "error", inputs: [], name: "InvalidNumSigsOnActualGas" },
   {
     type: "error",
     inputs: [{ name: "owner", internalType: "address", type: "address" }],

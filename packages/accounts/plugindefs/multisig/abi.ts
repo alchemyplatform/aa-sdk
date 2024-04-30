@@ -50,7 +50,7 @@ export const MultisigPluginAbi = [
     ],
     outputs: [
       {
-        name: "failed",
+        name: "success",
         type: "bool",
         internalType: "bool",
       },
@@ -932,7 +932,7 @@ export const MultisigPluginAbi = [
   },
   {
     type: "error",
-    name: "InvalidGasValues",
+    name: "InvalidAddress",
     inputs: [],
   },
   {
@@ -943,6 +943,11 @@ export const MultisigPluginAbi = [
   {
     type: "error",
     name: "InvalidMaxPriorityFeePerGas",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "InvalidNumSigsOnActualGas",
     inputs: [],
   },
   {

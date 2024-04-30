@@ -1,8 +1,21 @@
 import { takeBytes } from "@alchemy/aa-core";
-import { hexToBigInt, concat, toHex, pad } from "viem";
+import { concat, hexToBigInt, pad, toHex } from "viem";
 import type { Signature } from "../types";
 
-export const formatSignatures = (signatures: Signature[]) => {
+/**
+ * Formats a collection of Signature objects into a single aggregated signature.
+ * The format is in the form of EOA_SIGS | CONTRACT_SIG_DATAS. The signatures are ordered
+ * by signer address. The EOA SIGS contain the 65 signautre data for EOA signers and 65 bytes containing SIGNER | OFFSET | V for contract signers.
+ * The OFFSET is used to fetch the signature data from the CONTRACT_SIG_DATAS.
+ *
+ * @param signatures the array of {@link Signature} objects to combine into the correct aggregated signature format excluding the upper limits
+ * @param usingMaxValues a boolean indicating wether or not the UserOperation is using the UPPER_LIMIT for the gas and fee values
+ * @returns the Hex representation of the signature
+ */
+export const formatSignatures = (
+  signatures: Signature[],
+  usingMaxValues: boolean = false
+) => {
   let eoaSigs: string = "";
   let contractSigs: string = "";
   let offset: bigint = BigInt(65 * signatures.length);
@@ -15,7 +28,7 @@ export const formatSignatures = (signatures: Signature[]) => {
     })
     .forEach((sig) => {
       // add 32 to v if the signature covers the actual gas values
-      const addV = sig.userOpSigType === "ACTUAL" ? 32 : 0;
+      const addV = sig.userOpSigType === "ACTUAL" && !usingMaxValues ? 32 : 0;
 
       if (sig.signerType === "EOA") {
         let v =

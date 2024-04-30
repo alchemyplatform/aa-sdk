@@ -9,6 +9,7 @@ import { ChainNotFoundError } from "../../../errors/client.js";
 import type { UserOperationStruct } from "../../../types.js";
 import { conditionalReturn, type Deferrable } from "../../../utils/index.js";
 import type {
+  BuildUserOperationParameters,
   SendUserOperationParameters,
   UserOperationContext,
 } from "../types.js";
@@ -39,7 +40,9 @@ export async function _initUserOperation<
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
   client: BaseSmartAccountClient<TTransport, TChain, TAccount>,
-  args: SendUserOperationParameters<TAccount, TContext>
+  args:
+    | SendUserOperationParameters<TAccount, TContext, TEntryPointVersion>
+    | BuildUserOperationParameters<TAccount, TContext, TEntryPointVersion>
 ): Promise<Deferrable<UserOperationStruct<TEntryPointVersion>>> {
   const { account = client.account, uo, overrides } = args;
   if (!account) {
