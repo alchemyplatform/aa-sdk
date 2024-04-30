@@ -16,16 +16,17 @@ export const cookieStorage: (config?: { sessionLength: number }) => Storage = (
   length: 0,
 
   clear: function (): void {
-    if (typeof document === "undefined") return;
-
-    document.cookie = "";
+    throw new Error(
+      "clearing cookies is not supported as this could lead to unexpected behaviour.\n" +
+        " Use removeItem instead or you can manually clear cookies with document.cookie = ''"
+    );
   },
 
   getItem: function (key: string): string | null {
     if (typeof document === "undefined") return null;
 
     const cookieValue = getCookie(key);
-    return cookieValue ? deserialize(cookieValue) : null;
+    return cookieValue ? decodeURIComponent(cookieValue) : null;
   },
 
   // we will not be using this, if we have need for it add it back later

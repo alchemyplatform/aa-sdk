@@ -8,6 +8,8 @@ import { AlchemySigner } from "../../signer/signer.js";
 import { AlchemySignerStatus } from "../../signer/types.js";
 import { DEFAULT_IFRAME_CONTAINER_ID } from "../createConfig.js";
 import type { SupportedAccountTypes } from "../types.js";
+import { bigintMapReplacer } from "../utils/replacer.js";
+import { bigintMapReviver } from "../utils/reviver.js";
 import type {
   AccountState,
   ClientState,
@@ -35,7 +37,10 @@ export const createClientStore = (config: CreateClientStoreParams) => {
       storage
         ? persist(() => createInitialClientState(config), {
             name: DEFAULT_STORAGE_KEY,
-            storage: createJSONStorage<ClientState>(() => storage),
+            storage: createJSONStorage<ClientState>(() => storage, {
+              replacer: bigintMapReplacer,
+              reviver: bigintMapReviver,
+            }),
             skipHydration: ssr,
             partialize: ({ signer, accounts, ...writeableState }) =>
               writeableState,
@@ -137,7 +142,6 @@ const createInitialClientState = (
   }
 
   return {
-    // signer: createSigner(params),
     accounts: {
       LightAccount: defaultAccountState<"LightAccount">(),
       MultiOwnerModularAccount:

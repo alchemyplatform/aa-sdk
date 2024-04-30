@@ -29,13 +29,11 @@ export const createConfig = ({
         rpId,
       },
       sessionConfig,
-      storage: storage
-        ? storage(
-            sessionConfig?.expirationTimeMs
-              ? { sessionLength: sessionConfig.expirationTimeMs }
-              : undefined
-          )
-        : undefined,
+      storage: storage?.(
+        sessionConfig?.expirationTimeMs
+          ? { sessionLength: sessionConfig.expirationTimeMs }
+          : undefined
+      ),
       ssr,
     }),
     _internal: {
