@@ -20,7 +20,7 @@ head:
 
 # How to transfer ownership of a Light Account
 
-Not all smart account implementations support transfering the ownership(e.g. `SimpleAccount`). However, a number of the accounts in this guide and in Account Kit do, including our Light Account! Let's see a few different ways we can transfer ownership of an Account (using Light Account as an example).
+Not all smart account implementations support transferring the ownership (e.g. `SimpleAccount`). However, a number of the accounts in this guide and in Account Kit do, including our Light Account! Let's see a few different ways we can transfer ownership of an Account (using Light Account as an example).
 
 ## Usage
 
@@ -54,7 +54,8 @@ const transferredClient = await createLightAccountClient({
   transport: custom(smartAccountClient),
   chain: smartAccountClient.chain,
   signer: newOwner,
-  accountAddress, // NOTE: you MUST to specify the original smart account address to connect using the new owner/signer
+  accountAddress, // NOTE: you MUST specify the original smart account address to connect using the new owner/signer
+  version: "v2.0.0", // NOTE: if the version of the light account is not v1.1.0, it must be specified here
 });
 ```
 
