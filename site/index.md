@@ -69,14 +69,14 @@ titleTemplate: :title Documentation
                 </div>
               </div>
               <div class="text-[22px] font-normal max-md:text-center">
-                Account Kit is a vertically integrated stack for building apps that support ERC-4337: smart accounts, Signer integrations, sponsoring gas, bundlers, and an SDK.
+                Build zero friction onboarding to web3 with Embedded Accounts! Account Kit makes it simple to embed powerful smart accounts or lightweight EOAs in your app as an embedded wallet.
               </div>
               <div class="flex flex-row gap-[8px] justify-start items-center">
                 <a rel="noopener noreferrer" href="./getting-started/introduction.html">
                   <button
                     class="flex items-center rounded-md px-[12px] py-[12px] text-[16px] font-semibold text-white transition duration-300 ease-in-out hover:scale-105 hover:opacity-90 bg-black dark:bg-white dark:text-black"
                   >
-                    Explore the docs
+                    Quick start
                   </button>
                 </a>
                 <a rel="noopener noreferrer" href="./getting-started/overview.html">
