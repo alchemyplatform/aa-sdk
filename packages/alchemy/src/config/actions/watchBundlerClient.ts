@@ -6,7 +6,6 @@ export const watchBundlerClient =
   (onChange: (bundlerClient: ClientWithAlchemyMethods) => void) => {
     return config.coreStore.subscribe(
       ({ bundlerClient }) => bundlerClient,
-      onChange,
-      { fireImmediately: true }
+      onChange
     );
   };

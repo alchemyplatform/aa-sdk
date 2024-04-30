@@ -4,7 +4,7 @@ import { useSmartAccountClient, useUser } from "@alchemy/aa-alchemy/react";
 
 export const ProfileCard = () => {
   const user = useUser();
-  const { client } = useSmartAccountClient({
+  const { address } = useSmartAccountClient({
     type: "MultiOwnerModularAccount",
   });
 
@@ -16,7 +16,7 @@ export const ProfileCard = () => {
           <div className="flex flex-col gap-2">
             <div>Account address</div>
             <div className="text-wrap rounded-lg p-3 dark:bg-[#1F2937] dark:text-[#CBD5E1]">
-              {client?.account.address}
+              {address}
             </div>
           </div>
           <div className="flex flex-col gap-2">

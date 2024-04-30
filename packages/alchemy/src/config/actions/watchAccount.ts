@@ -8,15 +8,16 @@ export const watchAccount =
     config: AlchemyAccountsConfig
   ) =>
   (onChange: (account: GetAccountResult<TAccount>) => void) => {
-    if (config.clientStore == null) {
+    const accounts = config.clientStore.getState().accounts;
+    if (!accounts) {
       throw new ClientOnlyPropertyError("account");
     }
 
     return config.clientStore.subscribe(
-      ({ accounts }) => accounts[type],
+      // this should be available on the client now because of the check above
+      ({ accounts }) => accounts![type],
       onChange,
       {
-        fireImmediately: true,
         equalityFn(a, b) {
           return a?.status === "READY" && b?.status === "READY"
             ? a.account.address === b.account.address

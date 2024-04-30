@@ -13,10 +13,10 @@ export const getAccount = <TAccount extends SupportedAccountTypes>(
   { type }: GetAccountParams<TAccount>,
   config: AlchemyAccountsConfig
 ): GetAccountResult<TAccount> => {
-  const clientStore = config.clientStore;
-  if (!clientStore) {
+  const accounts = config.clientStore.getState().accounts;
+  if (!accounts) {
     throw new ClientOnlyPropertyError("account");
   }
 
-  return clientStore.getState().accounts[type];
+  return accounts[type];
 };

@@ -3,6 +3,7 @@
 import { useSyncExternalStore } from "react";
 import type { ClientWithAlchemyMethods } from "../../client/types.js";
 import { watchBundlerClient } from "../../config/actions/watchBundlerClient.js";
+import { getBundlerClient } from "../../config/index.js";
 import { useAlchemyAccountContext } from "../context.js";
 
 export type UseBundlerClientResult = ClientWithAlchemyMethods;
@@ -12,7 +13,7 @@ export const useBundlerClient = () => {
 
   return useSyncExternalStore(
     watchBundlerClient(config),
-    () => config.bundlerClient,
-    () => config.bundlerClient
+    () => getBundlerClient(config),
+    () => getBundlerClient(config)
   );
 };

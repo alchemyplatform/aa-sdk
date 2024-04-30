@@ -14,7 +14,10 @@ export const DEFAULT_SESSION_MS = 15 * 60 * 1000; // 15 minutes
 
 export const SessionManagerParamsSchema = z.object({
   sessionKey: z.string().default("alchemy-signer-session"),
-  storage: z.enum(["localStorage", "sessionStorage"]).default("localStorage"),
+  storage: z
+    .enum(["localStorage", "sessionStorage"])
+    .default("localStorage")
+    .or(z.custom<Storage>()),
   expirationTimeMs: z
     .number()
     .default(DEFAULT_SESSION_MS)
@@ -32,7 +35,7 @@ type SessionState = {
 
 type Store = Mutate<
   StoreApi<SessionState>,
-  [["zustand/subscribeWithSelector", never]]
+  [["zustand/subscribeWithSelector", never], ["zustand/persist", SessionState]]
 >;
 
 export class SessionManager {
@@ -51,24 +54,21 @@ export class SessionManager {
     } = SessionManagerParamsSchema.parse(params);
     this.sessionKey = sessionKey;
     const storage =
-      storageType === "localStorage" ? localStorage : sessionStorage;
+      typeof storageType === "string"
+        ? storageType === "localStorage"
+          ? localStorage
+          : sessionStorage
+        : storageType;
     this.expirationTimeMs = expirationTimeMs;
     this.client = client;
     this.eventEmitter = new EventEmitter<SessionManagerEvents>();
 
     this.store = createStore(
       subscribeWithSelector(
-        persist(
-          () => {
-            return {
-              session: null,
-            } satisfies SessionState;
-          },
-          {
-            name: this.sessionKey,
-            storage: createJSONStorage(() => storage),
-          }
-        )
+        persist(this.getInitialState, {
+          name: this.sessionKey,
+          storage: createJSONStorage<SessionState>(() => storage),
+        })
       )
     );
 
@@ -182,12 +182,19 @@ export class SessionManager {
   public initialize() {
     this.getSessionUser()
       .then((user) => {
-        // once we are authenticated, then we can emit a connected event
+        // once we complete auth we can update the state of the session to connected or disconnected
         if (user) this.eventEmitter.emit("connected", this.getSession()!);
+        else this.eventEmitter.emit("disconnected");
       })
       .finally(() => {
         this.eventEmitter.emit("initialized");
       });
+  }
+
+  private getInitialState(): SessionState {
+    return {
+      session: null,
+    };
   }
 
   private registerEventListeners = () => {
@@ -235,8 +242,6 @@ export class SessionManager {
 
     window.addEventListener("storage", (e: StorageEvent) => {
       if (e.key === this.sessionKey) {
-        // @ts-expect-error - the typing isn't working on this but this is correct
-        // https://docs.pmnd.rs/zustand/integrations/persisting-store-data#how-can-i-rehydrate-on-storage-event
         this.store.persist.rehydrate();
         this.initialize();
       }
