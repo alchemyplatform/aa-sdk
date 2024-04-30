@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.11.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.11.0...v3.11.1) (2024-04-30)
+
+### Bug Fixes
+
+- make multisig e2e tests pass ([#615](https://github.com/alchemyplatform/aa-sdk/issues/615)) ([08cf8d8](https://github.com/alchemyplatform/aa-sdk/commit/08cf8d81b3afd7b06c51a3b9fe6a0ee5a0a91d44))
+
 # [3.11.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.10.0...v3.11.0) (2024-04-30)
 
 ### Bug Fixes

@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.11.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.11.0...v3.11.1) (2024-04-30)
+
+### Bug Fixes
+
+- make multisig e2e tests pass ([#615](https://github.com/alchemyplatform/aa-sdk/issues/615)) ([08cf8d8](https://github.com/alchemyplatform/aa-sdk/commit/08cf8d81b3afd7b06c51a3b9fe6a0ee5a0a91d44))
+- when overriding paymaster set fields to 0x initially ([#635](https://github.com/alchemyplatform/aa-sdk/issues/635)) ([2a03c67](https://github.com/alchemyplatform/aa-sdk/commit/2a03c679720e408ff7a56b4c0e545bf2ae47f446))
+
 # [3.11.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.10.0...v3.11.0) (2024-04-30)
 
 ### Bug Fixes
