@@ -7,6 +7,7 @@ import type {
 import type { BaseSmartAccountClient } from "../../../client/smartAccountClient";
 import { AccountNotFoundError } from "../../../errors/account.js";
 import { noopMiddleware } from "../../../middleware/noopMiddleware.js";
+import type { ClientMiddleware } from "../../../middleware/types";
 import type {
   UserOperationOverridesParameter,
   UserOperationStruct,
@@ -73,11 +74,22 @@ export async function _runMiddlewareStack<
     throw new AccountNotFoundError();
   }
 
-  const { dummyPaymasterAndData, paymasterAndData } = bypassPaymasterAndData(
-    overrides
-  )
+  const {
+    dummyPaymasterAndData,
+    paymasterAndData,
+  }: Pick<
+    ClientMiddleware<TContext>,
+    "dummyPaymasterAndData" | "paymasterAndData"
+  > = bypassPaymasterAndData(overrides)
     ? {
-        dummyPaymasterAndData: noopMiddleware,
+        dummyPaymasterAndData: async (uo, overrides) => ({
+          ...uo,
+          ...("paymasterAndData" in overrides
+            ? { paymasterAndData: "0x" }
+            : // At this point, nothing has run so no fields are set
+              // for 0.7 when not using a paymaster, all fields should be undefined
+              undefined),
+        }),
         paymasterAndData: noopMiddleware,
       }
     : {
