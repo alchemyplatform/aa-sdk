@@ -108,7 +108,10 @@ export async function createLightAccount({
   signer,
   initCode,
   version = defaultLightAccountVersion("LightAccount"),
-  entryPoint = getEntryPoint(chain),
+  entryPoint = getEntryPoint(chain, {
+    version: AccountVersionRegistry["LightAccount"][version]
+      .entryPointVersion as any,
+  }),
   accountAddress,
   factoryAddress = AccountVersionRegistry["LightAccount"][version].address[
     chain.id
