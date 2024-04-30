@@ -17,12 +17,12 @@ head:
     - name: twitter:description
       content: Follow this guide to manage ownership of a Modular Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 next:
-  text: How to transfer ownership of a Light Account
+  text: How to manage ownership of a Modular Account
 ---
 
 # How to manage ownership of a Modular Account
 
-The Multi Owner plugin lets your smart accounts have one or more ECDSA or SCA owners. This lets you account integrate with multiple signers at once, and supports recovering your account if one signer is lost.
+The Multi Owner plugin lets your smart accounts have one or more ECDSA or SCA owners. This lets your account integrate with multiple signers at once, and supports recovering your account if one signer is lost.
 
 The Multi-Owner Plugin is able to:
 
@@ -81,7 +81,7 @@ const isOwner = await pluginActionExtendedClient.isOwnerOf({
 
 :::
 
-### 2. Get the all current owners of a Modular Account
+### 2. Get all current owners of a Modular Account
 
 You can use the `readOwners` method on the `multiOwnerPluginActions` extended smart account client to fetch all current owners of the connected Modular Account.
 

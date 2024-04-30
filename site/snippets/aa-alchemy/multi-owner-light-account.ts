@@ -1,20 +1,23 @@
-import { createLightAccountAlchemyClient } from "@alchemy/aa-alchemy";
+import { createMultiOwnerLightAccountAlchemyClient } from "@alchemy/aa-alchemy";
 import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
-import type { Hex } from "viem";
+import type { Address, Hex } from "viem";
 
 const chain = sepolia;
 
 // The private key of your EOA that will be the signer of Light Account
 const PRIVATE_KEY: Hex = "0xYourEOAPrivateKey";
+const SECOND_OWNER_ADDRESS: Address = "0xSomeAddress";
 const signer = LocalAccountSigner.privateKeyToAccountSigner(PRIVATE_KEY);
 
 // Create a provider to send user operations from your smart account
-const provider = await createLightAccountAlchemyClient({
+const provider = await createMultiOwnerLightAccountAlchemyClient({
   // get your Alchemy API key at https://dashboard.alchemy.com
   apiKey: "ALCHEMY_API_KEY",
   chain,
   signer,
-  version: "v2.0.0", // Required if not v1.1.0
+  // The initial owners always include signer. Any additional owners can be
+  // specified here.
+  owners: [SECOND_OWNER_ADDRESS],
 });
 
 // Fund your account address with ETH to send for the user operations

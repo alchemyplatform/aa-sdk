@@ -61,7 +61,7 @@ export const sidebar: DefaultTheme.Sidebar = [
     items: [
       {
         text: "Update to EntryPoint v0.7",
-        link: "/entrypoint-v7",
+        link: "/entry-point-v7",
       },
       { text: "Send user operations", link: "/send-user-operations" },
       { text: "Batch user operations", link: "/batch-user-operations" },
@@ -97,6 +97,10 @@ export const sidebar: DefaultTheme.Sidebar = [
         items: [
           { text: "Modular Account", link: "/modular-account" },
           { text: "Light Account", link: "/light-account" },
+          {
+            text: "Multi-Owner Light Account",
+            link: "/multi-owner-light-account",
+          },
         ],
       },
       {
@@ -180,6 +184,10 @@ export const sidebar: DefaultTheme.Sidebar = [
       {
         text: "Light Account",
         link: "/smart-accounts/light-account/",
+      },
+      {
+        text: "Multi-Owner Light Account",
+        link: "/smart-accounts/multi-owner-light-account/",
       },
       {
         text: "Custom accounts",
