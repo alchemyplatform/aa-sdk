@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.11.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.10.0...v3.11.0) (2024-04-30)
+
+### Bug Fixes
+
+- determine entry point version from light account version ([#632](https://github.com/alchemyplatform/aa-sdk/issues/632)) ([7813de0](https://github.com/alchemyplatform/aa-sdk/commit/7813de0630143ce3e4902a98f8e582c418d0050a))
+
+### Features
+
+- use final LightAccount v2 addresses ([#628](https://github.com/alchemyplatform/aa-sdk/issues/628)) ([7539713](https://github.com/alchemyplatform/aa-sdk/commit/7539713ce8e5b5e86c087866d04299f20e21b448))
+
 # [3.10.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.9.0...v3.10.0) (2024-04-29)
 
 ### Features
