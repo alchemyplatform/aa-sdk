@@ -6,7 +6,6 @@ import {
   type SendTransactionParameters,
   type Transport,
   type TypedData,
-  type WaitForTransactionReceiptParameters,
 } from "viem";
 import type {
   GetAccountParameter,
@@ -41,6 +40,7 @@ import type {
   SignUserOperationParameters,
   UpgradeAccountParams,
   UserOperationContext,
+  WaitForUserOperationTxParameters,
 } from "../../actions/smartAccount/types";
 import { upgradeAccount } from "../../actions/smartAccount/upgradeAccount.js";
 import { waitForUserOperationTransaction } from "../../actions/smartAccount/waitForUserOperationTransacation.js";
@@ -101,7 +101,7 @@ export type BaseSmartAccountClientActions<
     args: SendUserOperationParameters<TAccount, TContext>
   ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
   waitForUserOperationTransaction: (
-    args: WaitForTransactionReceiptParameters
+    args: WaitForUserOperationTxParameters
   ) => Promise<Hex>;
   upgradeAccount: (
     args: UpgradeAccountParams<TAccount, TContext>
