@@ -51,7 +51,7 @@ Read more about installing and using the Session Key plugin [here](/using-smart-
 
 ### Multisig Plugin
 
-The Multisig plugin allows your account to have multiple ECDSA or SCA signers and require multiple signatures to perform actions on the account. This is commonly referred to as a k-of-n signature scheme and would create Modular Accounts that are similar to [Gnosis Safe](https://safe.global/) accounts. This plugin is recommended for accounts looking for the most secure config.
+The Multisig plugin allows your account to have multiple ECDSA or SCA signers and require multiple signatures to perform actions on the account. This is commonly referred to as a k-of-n signature scheme and would create Modular Accounts that are similar to [Gnosis Safe](https://safe.global/) accounts. This plugin is recommended for accounts that require maximum security.
 
 Read more about Multisig Plugin [here](/smart-accounts/modular-account/multisig-plugin/index.md)!
 

@@ -22,7 +22,7 @@ head:
 
 ## Overview
 
-The Multisig plugin allows your account to have multiple ECDSA or SCA signers and require a threshold number of signatures for account transactions. This is commonly referred to as a k-of-n threshold signature scheme and would create Modular Accounts that are similar to [Gnosis Safe](https://safe.global/) accounts. This plugin is recommended for accounts looking for maximally secure configurations.
+The Multisig plugin allows your account to have multiple ECDSA or SCA signers and require a threshold number of signatures for account transactions. This is commonly referred to as a k-of-n threshold signature scheme and would create Modular Accounts that are similar to [Gnosis Safe](https://safe.global/) accounts. This plugin is recommended for accounts that require maximum security.
 
 ## Secure, audited, open source
 
