@@ -31,3 +31,11 @@ For normal User Operations, gas prices and values have to be decided before the 
 This multisig plugin includes a variable gas feature to address this problem. The fee values selected and signed over by the first `k-1` signers are treated as a "maximum fee" and the `k`th signer is able to choose final fee values to use based on the current network conditions. With this feature, there is no longer a risk of overpaying, or having to re-collect the `k` signatures.
 
 However, note that the use of this feature would likely not work with regular paymaster services, including Alchemy's Gas Manager product.
+
+## Gas Estimation
+
+Gas estimations must be performed for user operations before the first signature is obtained. This is done in aa-sdk with a gas and fee estimation middleware.
+
+By default, we perform gas estimation assuming that the k signatures to be obtained are EOAs and not other smart accounts. In the case that smart accounts own a modular account, the validation step could require more gas. If used with the default gas estimation, it would cause the user operation to fail with an insufficient gas error.
+
+In these cases, dapps are expected to implement their own gas estimations and use gas overrides when first calling `proposeUserOperation`.
