@@ -175,6 +175,16 @@ export const sidebar: DefaultTheme.Sidebar = [
             text: "Upgrading to Modular Account",
             link: "/upgrade-la-to-ma",
           },
+          {
+            text: "Multisig Plugin",
+            collapsed: true,
+            base: "/multisig-plugin",
+            items: [
+              { text: "Introduction", link: "/index" },
+              { text: "Usage Guide", link: "/usage-guide" },
+              { text: "Technical Details", link: "/technical-details" },
+            ],
+          },
         ],
       },
       {
