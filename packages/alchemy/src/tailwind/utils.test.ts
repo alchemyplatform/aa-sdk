@@ -22,6 +22,18 @@ describe("tailwind utils test", () => {
               "dark": "#94A3B8",
               "light": "#94A3B8",
             },
+            "bg-surface-default": {
+              "dark": "#020617",
+              "light": "#fff",
+            },
+            "bg-surface-inset": {
+              "dark": "#1F2937",
+              "light": "#EFF4F9",
+            },
+            "bg-surface-subtle": {
+              "dark": "#0F172A",
+              "light": "#FBFDFF",
+            },
             "btn-primary": {
               "dark": "#fff",
               "light": "#000",
@@ -38,6 +50,10 @@ describe("tailwind utils test", () => {
               "dark": "#DC2626",
               "light": "#F87171",
             },
+            "fg-disabled": {
+              "dark": "#475569",
+              "light": "#CBD5E1",
+            },
             "fg-invert": {
               "dark": "#000",
               "light": "#FFF",
@@ -45,6 +61,14 @@ describe("tailwind utils test", () => {
             "fg-primary": {
               "dark": "#fff",
               "light": "#000",
+            },
+            "fg-secondary": {
+              "dark": "#E2E8F0",
+              "light": "#475569",
+            },
+            "fg-tertiary": {
+              "dark": "#94A3B8",
+              "light": "#94A3B8",
             },
             "static": {
               "dark": "#374151",

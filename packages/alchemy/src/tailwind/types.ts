@@ -16,9 +16,15 @@ export interface AccountKitTheme {
 
     // fg colors
     "fg-primary": ColorVariantRecord;
+    "fg-secondary": ColorVariantRecord;
+    "fg-tertiary": ColorVariantRecord;
     "fg-invert": ColorVariantRecord;
+    "fg-disabled": ColorVariantRecord;
 
     // surface colors
+    "bg-surface-default": ColorVariantRecord;
+    "bg-surface-subtle": ColorVariantRecord;
+    "bg-surface-inset": ColorVariantRecord;
   };
 }
 
