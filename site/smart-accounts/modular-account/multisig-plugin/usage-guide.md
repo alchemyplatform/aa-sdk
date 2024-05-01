@@ -87,7 +87,7 @@ const { request, aggregatedSignature, signatureObj: firstSig } = await multisigA
 
 ### Getting the next signatures
 
-The next step is to collect the next k-2 signatures (excluding the first and the last signature). This is done with the `signMultisigUserOperation` method.
+We collect the next k-2 signatures (excluding the first and the last signature) with the `signMultisigUserOperation` method.
 
 ```ts
 import { createMultisigAccountAlchemyClient } from "@alchemy/aa-alchemy";
@@ -132,7 +132,7 @@ const result = await multisigAccountClient.sendUserOperation({
 });
 ```
 
-By default, we use the variable gas feature in the Multisig Plugin smart contract. For this, we need `userOpSignatureType` should be "ACTUAL". If this feature is not used, gas overrides should be passed and `userOpSignatureType` should be set to "UPPERLIMIT"
+By default, we use the variable gas feature in the Multisig Plugin smart contract. For this, we need `userOpSignatureType` to be set to "ACTUAL". If you do not wish to use this feature, gas overrides should be passed in `sendUserOperation`, and `userOpSignatureType` should be set to "UPPERLIMIT".
 
 ```ts
 const result = await multisigAccountClient.sendUserOperation({
