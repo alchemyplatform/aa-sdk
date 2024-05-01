@@ -53,7 +53,7 @@ const multisigAccountClient = createMultisigAccountAlchemyClient({
     signers[0], 
     owners,
     threshold,
-    apiKey: API_KEY!
+    apiKey: "YOUR_API_KEY",
   });
 ```
 
@@ -69,9 +69,9 @@ const multisigAccountClient = createMultisigAccountAlchemyClient({
     signers[0],  // using the first signer
     owners,
     threshold,
-    apiKey: API_KEY!,
+    apiKey: "YOUR_API_KEY",
     gasManagerConfig: {
-      policyId: GAS_MANAGER_POLICY_ID,
+      policyId: PAYMASTER_POLICY_ID,
     }
   });
 
@@ -95,19 +95,19 @@ const multisigAccountClient = createMultisigAccountAlchemyClient({
     signers[1], // using the second signer
     owners,
     threshold,
-    apiKey: API_KEY!
+    apiKey: "YOUR_API_KEY",
   });
 
 const { aggregatedSignature } = await multisigAccountClient.signMultisigUserOperation({
   account: multisigAccountClient.account,
-  signatures: [aggregatedSignature],
+  signatures: [previousAggregatedSignature], // output from step 1, and from this step if k-2 > 1
   userOperationRequest: request,
 });
 ```
 
 ### Sending the User Operation
 
-After collecting k-1 signatures, it's time to collect the last signature and send the user operation. This is done with the `sendUserOperation` method. By default, we reperform gas estimation and use the variable gas feature provided by the Multisig Plugin smart contract.
+After collecting k-1 signatures, it's time to collect the last signature and send the user operation. This is done with the `sendUserOperation` method. `sendUserOperation` also formats the aggregated signature, sorting them in ascending order of owner address as it's expected by the Multisig Plugin smart contract. Lastly, by default, we reperform gas estimation and use the variable gas feature provided by the Multisig Plugin smart contract.
 
 ```ts
 import { createMultisigAccountAlchemyClient } from "@alchemy/aa-alchemy";
@@ -117,12 +117,12 @@ const multisigAccountClient = createMultisigAccountAlchemyClient({
     signers[2], // using the last signer
     owners,
     threshold,
-    apiKey: API_KEY!
+    apiKey: "YOUR_API_KEY",
   });
 
 const result = await multisigAccountClient.sendUserOperation({
   uo: request.callData,
-  context: aggregatedSignature
+  context: aggregatedSignature,
 });
 
 ```

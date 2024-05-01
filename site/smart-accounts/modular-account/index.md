@@ -6,16 +6,16 @@ head:
       content: Modular Account Smart Contract
   - - meta
     - name: description
-      content: Follow this guide to use Modular Accounts with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
+      content: Follow this guide to use the Multisig Plugin on Modular Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - property: og:description
-      content: Follow this guide to use Modular Accounts with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
+      content: Follow this guide to use the Multisig Plugin on Modular Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - name: twitter:title
       content: Modular Account Smart Contract
   - - meta
     - name: twitter:description
-      content: Follow this guide to use Modular Accounts with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
+      content: Follow this guide to use the Multisig Plugin on Modular Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
 # Modular Account
@@ -28,7 +28,7 @@ Modular Account is an ERC-4337 smart account that supports customizable features
 
 ### Make the most of Account Abstraction
 
-Smart accounts unlock lots of customizable ways to improve the wallet experience. Still, it requires writing this behavior into the smart contract for the account, which is difficult and security-critical. Modular Account uses the [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) framework to simplify creating powerful features for smart accounts. We have created two plugins to level up your smart accounts, and we look forward to what new plugins you create!
+Smart accounts unlock lots of customizable ways to improve the wallet experience. Still, it requires writing this behavior into the smart contract for the account, which is difficult and security-critical. Modular Account uses the [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) framework to simplify creating powerful features for smart accounts. We have created three plugins to level up your smart accounts, and we look forward to what new plugins you create!
 
 ### Multi Owner Plugin
 
