@@ -20,6 +20,7 @@ export interface AccountKitTheme {
     "fg-tertiary": ColorVariantRecord;
     "fg-invert": ColorVariantRecord;
     "fg-disabled": ColorVariantRecord;
+    "fg-accent-brand": ColorVariantRecord;
 
     // surface colors
     "bg-surface-default": ColorVariantRecord;
