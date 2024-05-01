@@ -46,7 +46,9 @@ const signers = [LocalAccountSigner.mnemonicToAccountSigner(
 
 const threshold = 3n;
 
-const owners = signers.map(async(s) => await s.getAddress())
+const owners = await Promise.all(
+  signers.map(async (s) => s.getAddress()),
+);
 
 const multisigAccountClient = createMultisigAccountAlchemyClient({
     chain,
