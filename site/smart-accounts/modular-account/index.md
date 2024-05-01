@@ -6,16 +6,16 @@ head:
       content: Modular Account Smart Contract
   - - meta
     - name: description
-      content: Follow this guide to use the Multisig Plugin on Modular Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
+      content: Follow this guide to use Modular Accounts with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - property: og:description
-      content: Follow this guide to use the Multisig Plugin on Modular Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
+      content: Follow this guide to use Modular Accounts with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
   - - meta
     - name: twitter:title
       content: Modular Account Smart Contract
   - - meta
     - name: twitter:description
-      content: Follow this guide to use the Multisig Plugin on Modular Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
+      content: Follow this guide to use Modular Accounts with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
 # Modular Account

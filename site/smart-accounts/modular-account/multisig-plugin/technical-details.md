@@ -34,8 +34,8 @@ However, note that the use of this feature would likely not work with regular pa
 
 ## Gas Estimation
 
-Gas estimations must be performed for user operations before the first signature is obtained. This is done in aa-sdk with a gas and fee estimation middleware.
+Gas estimations must be performed for user operations before the first signature is obtained. This is done in aa-sdk with built in gas and fee estimation middlewares.
 
-By default, we perform gas estimation assuming that the k signatures to be obtained are EOAs and not other smart accounts. In the case that smart accounts own a modular account, the validation step could require more gas. If used with the default gas estimation, it would cause the user operation to fail with an insufficient gas error.
+We perform gas estimation assuming that the k signatures to be obtained are EOAs, and not other smart accounts. In the case that smart accounts own a modular account, the validation step could require more gas. If used with default gas estimation, it would cause the user operation to fail with an insufficient gas error.
 
-In these cases, dapps are expected to implement their own gas estimations and use gas overrides when first calling `proposeUserOperation`.
+In these cases, clients are expected to implement their own gas estimations for the signature validation step, and use gas overrides when first calling `proposeUserOperation`.
