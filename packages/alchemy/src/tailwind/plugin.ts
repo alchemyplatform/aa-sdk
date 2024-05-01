@@ -2,6 +2,8 @@ import type { Config as TailwindConfig } from "tailwindcss";
 import plugin from "tailwindcss/plugin";
 import { buttonComponents } from "./components/buttons.js";
 import { colorVariables } from "./components/colorsvars.js";
+import { formControlComponents } from "./components/form-controls.js";
+import { inputComponents } from "./components/input.js";
 import { createDefaultTheme } from "./theme.js";
 import type { AccountKitThemeOverride } from "./types";
 import { borderUtilities } from "./utilities/borders.js";
@@ -82,6 +84,8 @@ export const accountKitUi: (
       // components
       addComponents(colorVariables(accountKitTheme));
       addComponents(buttonComponents);
+      addComponents(inputComponents);
+      addComponents(formControlComponents);
     },
     {
       theme: {

@@ -20,6 +20,6 @@ export const borderUtilities: UtilityDef = {
   ".critical-border": {
     borderWidth: "1px",
     borderStyle: "solid",
-    borderColor: `var(${getColorVariableName("static")})`,
+    borderColor: `var(${getColorVariableName("critical")})`,
   },
 };
