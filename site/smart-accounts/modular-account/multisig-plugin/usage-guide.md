@@ -61,7 +61,7 @@ const multisigAccountClient = createMultisigAccountAlchemyClient({
 
 ### Proposing a User Operation
 
-The first step to creating and sending a multisig User Operation is the propose step. This performs gas estimates, constructs the user operation struct, and generates a signature using the pre-provided signer.
+The first step to creating and sending a multisig User Operation is the propose step. This performs gas estimates, constructs the user operation struct, and if `gasManagerConfig` is used, will attempt to use a paymaster. Lastly, a signature is generated With the pre-provided signer.
 
 ```ts
 import { createMultisigAccountAlchemyClient } from "@alchemy/aa-alchemy";
@@ -77,7 +77,7 @@ const multisigAccountClient = createMultisigAccountAlchemyClient({
     }
   });
 
-const { request, aggregatedSignature } = await multisigAccountClient.proposeUserOperation({
+const { request, aggregatedSignature, signatureObj: firstSig } = await multisigAccountClient.proposeUserOperation({
     uo: {
       target: targetAddress,
       data: "0x",
@@ -100,7 +100,7 @@ const multisigAccountClient = createMultisigAccountAlchemyClient({
     apiKey: "YOUR_API_KEY",
   });
 
-const { aggregatedSignature } = await multisigAccountClient.signMultisigUserOperation({
+const { aggregatedSignature, signatureObj: secondSig } = await multisigAccountClient.signMultisigUserOperation({
   account: multisigAccountClient.account,
   signatures: [previousAggregatedSignature], // output from step 1, and from this step if k-2 > 1
   userOperationRequest: request,
@@ -109,7 +109,7 @@ const { aggregatedSignature } = await multisigAccountClient.signMultisigUserOper
 
 ### Sending the User Operation
 
-After collecting k-1 signatures, it's time to collect the last signature and send the user operation. This is done with the `sendUserOperation` method. `sendUserOperation` also formats the aggregated signature, sorting them in ascending order of owner address as it's expected by the Multisig Plugin smart contract. Lastly, by default, we reperform gas estimation and use the variable gas feature provided by the Multisig Plugin smart contract.
+After collecting k-1 signatures, it's time to collect the last signature and send the user operation. This is done with the `sendUserOperation` method. `sendUserOperation` also formats this aggregated signature, sorting them in ascending order of owner address as expected by the Multisig Plugin smart contract.
 
 ```ts
 import { createMultisigAccountAlchemyClient } from "@alchemy/aa-alchemy";
@@ -124,7 +124,30 @@ const multisigAccountClient = createMultisigAccountAlchemyClient({
 
 const result = await multisigAccountClient.sendUserOperation({
   uo: request.callData,
-  context: aggregatedSignature,
+  context: {
+    aggregatedSignature,
+    signatures: [firstSig, secondSig],
+    userOpSignatureType: "ACTUAL"
+  }
 });
+```
 
+By default, we use the variable gas feature in the Multisig Plugin smart contract. For this, we need `userOpSignatureType` should be "ACTUAL". If this feature is not used, gas overrides should be passed and `userOpSignatureType` should be set to "UPPERLIMIT"
+
+```ts
+const result = await multisigAccountClient.sendUserOperation({
+  uo: request.callData,
+  overrides: {
+    callGasLimit: request.callGasLimit,
+    verificationGasLimit: request.verificationGasLimit,
+    preVerificationGas: request.preVerificationGas,
+    maxFeePerGas: request.maxFeePerGas,
+    maxPriorityFeePerGas: request.maxPriorityFeePerGas,
+  },
+  context: {
+    aggregatedSignature,
+    signatures: [firstSig, secondSig],
+    userOpSignatureType: "UPPERLIMIT"
+  }
+});
 ```
