@@ -117,20 +117,6 @@ export const sidebar: DefaultTheme.Sidebar = [
     ],
   },
   {
-    text: "Extending smart accounts",
-    base: "/extending-smart-accounts",
-    items: [
-      {
-        text: "Install plugins",
-        link: "/install-plugins",
-      },
-      {
-        text: "Get installed plugins",
-        link: "/get-installed-plugins",
-      },
-    ],
-  },
-  {
     text: "React Hooks",
     base: "/react",
     items: [
@@ -198,6 +184,20 @@ export const sidebar: DefaultTheme.Sidebar = [
         ],
       },
       { text: "Gas benchmarks", link: "/smart-accounts/gas-benchmarks" },
+    ],
+  },
+  {
+    text: "Extending smart accounts",
+    base: "/extending-smart-accounts",
+    items: [
+      {
+        text: "Install plugins",
+        link: "/install-plugins",
+      },
+      {
+        text: "Get installed plugins",
+        link: "/get-installed-plugins",
+      },
     ],
   },
   {
