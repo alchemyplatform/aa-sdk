@@ -26,13 +26,13 @@ To start, follow the guide to set up Modular Account [here](../getting-started.m
 
 ### Creating a Account Client
 
-The first step is to create a Multisig Modular Account client 
+The first step is to create a Multisig Modular Account client
 
 ```ts
 import { LocalAccountSigner } from "@alchemy/aa-core";
 import { createMultisigAccountAlchemyClient } from "@alchemy/aa-alchemy";
 
-// Creating a 3/3 multisig account 
+// Creating a 3/3 multisig account
 const signers = [LocalAccountSigner.mnemonicToAccountSigner(
     MODULAR_MULTISIG_ACCOUNT_OWNER_MNEMONIC,
     { accountIndex: 0 }
@@ -52,7 +52,7 @@ const owners = await Promise.all(
 
 const multisigAccountClient = createMultisigAccountAlchemyClient({
     chain,
-    signers[0], 
+    signers[0],
     owners,
     threshold,
     apiKey: "YOUR_API_KEY",
@@ -147,7 +147,7 @@ const result = await multisigAccountClient.sendUserOperation({
   context: {
     aggregatedSignature,
     signatures: [firstSig, secondSig],
-    userOpSignatureType: "UPPERLIMIT"
-  }
+    userOpSignatureType: "UPPERLIMIT",
+  },
 });
 ```
