@@ -47,7 +47,7 @@ const signers = [LocalAccountSigner.mnemonicToAccountSigner(
 const threshold = 3n;
 
 const owners = await Promise.all(
-  signers.map(async (s) => s.getAddress()),
+  signers.map((s) => s.getAddress()),
 );
 
 const multisigAccountClient = createMultisigAccountAlchemyClient({
@@ -61,7 +61,7 @@ const multisigAccountClient = createMultisigAccountAlchemyClient({
 
 ### Proposing a User Operation
 
-The first step to creating and sending a multisig User Operation is the propose step. This performs gas estimates, constructs the user operation struct, and if `gasManagerConfig` is used, will attempt to use a paymaster. Lastly, a signature is generated With the pre-provided signer.
+The first step to creating and sending a multisig User Operation is with the `proposeUserOperation` method. This performs gas estimates, constructs the user operation struct, and if `gasManagerConfig` is used, attempts to use a paymaster. Lastly, a signature is generated with the pre-provided signer.
 
 ```ts
 import { createMultisigAccountAlchemyClient } from "@alchemy/aa-alchemy";
@@ -109,7 +109,7 @@ const { aggregatedSignature, signatureObj: secondSig } = await multisigAccountCl
 
 ### Sending the User Operation
 
-After collecting k-1 signatures, it's time to collect the last signature and send the user operation. This is done with the `sendUserOperation` method. `sendUserOperation` also formats this aggregated signature, sorting them in ascending order of owner address as expected by the Multisig Plugin smart contract.
+After collecting k-1 signatures, it's time to collect the last signature and send the user operation. This is done with the `sendUserOperation` method. `sendUserOperation` also formats this aggregated signature, sorting its parts in ascending order by owner address as expected by the Multisig Plugin smart contract.
 
 ```ts
 import { createMultisigAccountAlchemyClient } from "@alchemy/aa-alchemy";
