@@ -4,11 +4,11 @@ import { buttonComponents } from "./components/buttons.js";
 import { colorVariables } from "./components/colorsvars.js";
 import { formControlComponents } from "./components/form-controls.js";
 import { inputComponents } from "./components/input.js";
+import { modalComponents } from "./components/modal.js";
 import { createDefaultTheme } from "./theme.js";
-import type { AccountKitThemeOverride } from "./types";
+import type { AccountKitThemeColor, AccountKitThemeOverride } from "./types";
 import { borderUtilities } from "./utilities/borders.js";
-import { buttonUtilities } from "./utilities/buttons.js";
-import { apply } from "./utils.js";
+import { apply, getColorVariableName } from "./utils.js";
 
 type TailWindPlugin = ReturnType<typeof plugin>;
 
@@ -74,11 +74,11 @@ export const accountKitUi: (
 ) => TailWindPlugin = (themeOverride) => {
   const defaultTheme = createDefaultTheme();
   const accountKitTheme = apply(defaultTheme, themeOverride);
+  const { colors, ...rest } = accountKitTheme;
 
   return plugin(
     ({ addComponents, addUtilities }) => {
       // utilities
-      addUtilities(buttonUtilities);
       addUtilities(borderUtilities);
 
       // components
@@ -86,11 +86,21 @@ export const accountKitUi: (
       addComponents(buttonComponents);
       addComponents(inputComponents);
       addComponents(formControlComponents);
+      addComponents(modalComponents);
     },
     {
       theme: {
         extend: {
-          ...accountKitTheme,
+          ...rest,
+          colors: Object.keys(colors).reduce(
+            (acc, key) => ({
+              ...acc,
+              [key]: `var(${getColorVariableName(
+                key as AccountKitThemeColor
+              )})`,
+            }),
+            {} as Record<AccountKitThemeColor, string>
+          ),
         },
       },
     }
@@ -115,5 +125,6 @@ export const withAccountKitUi = (
         ...config.content,
         files: [...config.content.files, getAccountKitContentPath()],
       },
+  // TODO: this isn't good. it means if someone is already using daisy then we'll end up destroying their config
   plugins: [...(config.plugins ?? []), accountKitUi(themeOverride)],
 });
