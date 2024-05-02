@@ -87,10 +87,10 @@ export function isValidFactoryAndData<
  * @param override the override value to apply
  * @returns the new value of the field after applying the override
  */
-export function applyUserOpOverride(
-  value: BigNumberish | undefined,
+export function applyUserOpOverride<TValue extends BigNumberish | undefined>(
+  value: TValue,
   override?: BigNumberish | Multiplier
-): BigNumberish | undefined {
+): TValue | BigNumberish {
   if (override == null) {
     return value;
   }
@@ -113,13 +113,14 @@ export function applyUserOpOverride(
  * @param feeOption the fee option field value to apply
  * @returns the new value of the field after applying the fee option
  */
-export function applyUserOpFeeOption(
-  value: BigNumberish | undefined,
+export function applyUserOpFeeOption<TValue extends BigNumberish | undefined>(
+  value: TValue,
   feeOption?: UserOperationFeeOptionsField
-): BigNumberish {
+): TValue | BigNumberish {
   if (feeOption == null) {
-    return value ?? 0n;
+    return value;
   }
+
   return value != null
     ? bigIntClamp(
         feeOption.multiplier
@@ -141,11 +142,13 @@ export function applyUserOpFeeOption(
  * @param [feeOption] the fee option field value to apply
  * @returns the new value of the field after applying the override or fee option
  */
-export function applyUserOpOverrideOrFeeOption(
-  value: BigNumberish | undefined,
+export function applyUserOpOverrideOrFeeOption<
+  TValue extends BigNumberish | undefined
+>(
+  value: TValue,
   override?: BigNumberish | Multiplier,
   feeOption?: UserOperationFeeOptionsField
-): BigNumberish {
+): TValue | BigNumberish {
   return value != null && override != null
     ? applyUserOpOverride(value, override)!
     : applyUserOpFeeOption(value, feeOption);
