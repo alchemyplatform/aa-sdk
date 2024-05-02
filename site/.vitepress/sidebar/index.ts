@@ -11,7 +11,6 @@ export const sidebar: DefaultTheme.Sidebar = [
       },
       {
         text: "Quick start",
-        collapsed: false,
         base: "/getting-started",
         items: [
           { text: "Introduction", link: "/introduction" },
@@ -46,7 +45,7 @@ export const sidebar: DefaultTheme.Sidebar = [
         link: "/passkey-auth",
       },
       {
-        text: "Manage user sessions",
+        text: "User sessions",
         link: "/manage-user-sessions",
       },
       {
@@ -59,10 +58,6 @@ export const sidebar: DefaultTheme.Sidebar = [
     text: "Using smart accounts",
     base: "/using-smart-accounts",
     items: [
-      {
-        text: "Update to EntryPoint v0.7",
-        link: "/entry-point-v7",
-      },
       { text: "Send user operations", link: "/send-user-operations" },
       { text: "Batch user operations", link: "/batch-user-operations" },
       {
@@ -114,6 +109,10 @@ export const sidebar: DefaultTheme.Sidebar = [
           },
           { text: "Get account tokens", link: "/token" },
         ],
+      },
+      {
+        text: "Update to EntryPoint v0.7",
+        link: "/entry-point-v7",
       },
     ],
   },
