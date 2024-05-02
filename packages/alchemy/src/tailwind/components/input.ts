@@ -1,28 +1,26 @@
 import type { ComponentDef } from "../types";
-import { getColorVariableName } from "../utils.js";
 
 export const inputComponents: ComponentDef = {
   ".input": {
     // container styling
     "@apply p-3 inline-flex gap-2 h-10 items-center": {},
     "@apply static-border": {},
-    [`@apply text-[var(${getColorVariableName("fg-primary")})]`]: {},
+    "@apply text-fg-primary": {},
     "&-disabled, &:disabled, &[disabled]": {
       "@apply static-border pointer-events-none": {},
-      [`@apply bg-[var(${getColorVariableName("bg-surface-inset")})]`]: {},
+      [`@apply bg-bg-surface-inset`]: {},
       input: {
-        [`@apply bg-[var(${getColorVariableName(
-          "bg-surface-inset"
-        )})] cursor-not-allowed`]: {},
-        [`@apply placeholder-[var(${getColorVariableName("fg-disabled")})]`]:
-          {},
+        "@apply bg-bg-surface-inset cursor-not-allowed": {},
+        "@apply placeholder-fg-disabled": {},
       },
       "svg > *": {
-        fill: `var(${getColorVariableName("fg-disabled")}) !important`,
+        "@apply !fill-fg-disabled": {},
+        // fill: `var(${getColorVariableName("fg-disabled")}) !important`,
       },
     },
     "svg > *": {
-      fill: `var(${getColorVariableName("fg-primary")})`,
+      "@apply fill-fg-primary": {},
+      // fill: `var(${getColorVariableName("fg-primary")})`,
     },
     "&:focus, &:focus-visible, &:focus-within, &:active": {
       "@apply active-border": {},
@@ -34,7 +32,7 @@ export const inputComponents: ComponentDef = {
 
     // input field styling
     input: {
-      "@apply appearance-none": {},
+      "@apply appearance-none grow": {},
       "&:focus, &:focus-visible, &:focus-within, &:active": {
         "@apply outline-none": {},
       },
@@ -48,9 +46,9 @@ export const inputComponents: ComponentDef = {
       // this makes a lot of assumptions about how our svgs are structured
       // pretty brittle so fix this later
       "> *": {
-        fill: `var(${getColorVariableName("fg-disabled")}) !important`,
+        "@apply fill-fg-disabled": {},
       },
-      [`@apply text-[var(${getColorVariableName("fg-disabled")})]`]: {},
+      "@apply text-fg-disabled": {},
     },
   },
 };
