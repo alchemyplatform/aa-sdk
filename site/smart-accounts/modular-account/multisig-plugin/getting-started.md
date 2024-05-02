@@ -24,7 +24,7 @@ head:
 
 The Multisig Plugin can be installed on the Modular Account or any ERC-6900 compatible smart account. If you haven't already, please follow the guide to [set up Modular Account](../getting-started.md).
 
-## 2. Create a Account Client
+## 2. Create an Account Client
 
 Next, initialize a Multisig Modular Account client and set the `n` accounts as signers.
 
@@ -83,6 +83,14 @@ const { request, aggregatedSignature, signatureObj: firstSig } = await multisigA
       data: "0x",
     }
   });
+```
+
+```
+::: warning
+
+We are aware of a bug in aa-sdk that prevents multisigs from using a paymaster service. We are working on fixing this, and this feature would be available shortly.
+
+:::
 ```
 
 ## 4. Get the threshold signatures
