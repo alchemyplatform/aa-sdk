@@ -4,7 +4,7 @@ import {
   type DetailedHTMLProps,
   type ReactNode,
 } from "react";
-import { GoogleIcon } from "../logos/google.js";
+import { GoogleIcon } from "../icons/google.js";
 
 type ButtonProps = (
   | {
@@ -22,7 +22,7 @@ type ButtonProps = (
     "type" | "ref"
   >;
 
-export const InternalButton = forwardRef<HTMLButtonElement, ButtonProps>(
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ type, children, icon, ...props }, ref) => {
     switch (type) {
       case "secondary":
@@ -57,22 +57,22 @@ export const DemoSet = (props: ButtonProps) => {
       const Icon = () => <GoogleIcon />;
       return (
         <div className="flex flex-col gap-2">
-          <InternalButton {...props} icon={<Icon />}>
+          <Button {...props} icon={<Icon />}>
             {props.children}
-          </InternalButton>
-          <InternalButton {...props} icon={<Icon />} disabled>
+          </Button>
+          <Button {...props} icon={<Icon />} disabled>
             {props.children}
-          </InternalButton>
+          </Button>
         </div>
       );
     }
     default:
       return (
         <div className="flex flex-col gap-2">
-          <InternalButton {...props}>{props.children}</InternalButton>
-          <InternalButton {...props} disabled>
+          <Button {...props}>{props.children}</Button>
+          <Button {...props} disabled>
             {props.children}
-          </InternalButton>
+          </Button>
         </div>
       );
   }

@@ -6,6 +6,7 @@ export const inputComponents: ComponentDef = {
     "@apply p-3 inline-flex gap-2 h-10 items-center": {},
     "@apply static-border": {},
     "@apply text-fg-primary": {},
+    "@apply bg-bg-surface-default": {},
     "&-disabled, &:disabled, &[disabled]": {
       "@apply static-border pointer-events-none": {},
       [`@apply bg-bg-surface-inset`]: {},
@@ -32,7 +33,7 @@ export const inputComponents: ComponentDef = {
 
     // input field styling
     input: {
-      "@apply appearance-none grow": {},
+      "@apply appearance-none grow bg-inherit": {},
       "&:focus, &:focus-visible, &:focus-within, &:active": {
         "@apply outline-none": {},
       },
