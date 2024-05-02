@@ -4,7 +4,7 @@ export const buttonComponents: ComponentDef = {
   ".btn": {
     "@apply p-3 inline-flex h-10 font-semibold": {},
     "@apply gap-2": {},
-    "@apply items-center": {},
+    "@apply items-center justify-center": {},
     "@apply shrink-0": {},
     "@apply cursor-pointer": {},
     // for w/e reason, using @apply rounded-[8px] doesn't work
@@ -18,13 +18,13 @@ export const buttonComponents: ComponentDef = {
     "@apply active:shadow-none": {},
   },
   ".btn-primary": {
-    "@apply btn-bg-primary": {},
+    "@apply bg-btn-primary text-fg-invert": {},
   },
   ".btn-secondary": {
-    "@apply btn-bg-secondary": {},
+    "@apply bg-btn-secondary text-fg-primary": {},
   },
   ".btn-auth": {
-    "@apply btn-bg-social": {},
+    "@apply bg-btn-social text-fg-primary": {},
     "@apply static-border": {},
   },
 };

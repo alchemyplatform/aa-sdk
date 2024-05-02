@@ -50,6 +50,10 @@ describe("tailwind utils test", () => {
               "dark": "#DC2626",
               "light": "#F87171",
             },
+            "fg-accent-brand": {
+              "dark": "#fff",
+              "light": "#000",
+            },
             "fg-disabled": {
               "dark": "#475569",
               "light": "#CBD5E1",
