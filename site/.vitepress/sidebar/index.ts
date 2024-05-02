@@ -178,7 +178,7 @@ export const sidebar: DefaultTheme.Sidebar = [
           {
             text: "Multisig Plugin",
             collapsed: true,
-            base: "/multisig-plugin",
+            base: "/smart-accounts/modular-account/multisig-plugin",
             items: [
               { text: "Introduction", link: "/index" },
               { text: "Usage Guide", link: "/usage-guide" },
