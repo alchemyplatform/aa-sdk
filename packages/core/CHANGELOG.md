@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.12.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.11.1...v3.12.0) (2024-05-02)
+
+### Bug Fixes
+
+- don't set undefined estimates to 0n ([#641](https://github.com/alchemyplatform/aa-sdk/issues/641)) ([bff8d35](https://github.com/alchemyplatform/aa-sdk/commit/bff8d351a1587589799e515e7373fbcf01a3b6e9))
+
 ## [3.11.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.11.0...v3.11.1) (2024-04-30)
 
 ### Bug Fixes

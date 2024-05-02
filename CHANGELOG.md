@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.12.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.11.1...v3.12.0) (2024-05-02)
+
+### Bug Fixes
+
+- don't set undefined estimates to 0n ([#641](https://github.com/alchemyplatform/aa-sdk/issues/641)) ([bff8d35](https://github.com/alchemyplatform/aa-sdk/commit/bff8d351a1587589799e515e7373fbcf01a3b6e9))
+
+### Features
+
+- add form input stylings ([76e961a](https://github.com/alchemyplatform/aa-sdk/commit/76e961af5f90db2c3c502d244ab16b007d4e0542))
+- prototype the auth modal hook ([#638](https://github.com/alchemyplatform/aa-sdk/issues/638)) ([ebed224](https://github.com/alchemyplatform/aa-sdk/commit/ebed22421c352e0be20f9c28e6aa77abb6ee1e98))
+- start adding the ui component engine ([7368385](https://github.com/alchemyplatform/aa-sdk/commit/736838540b9cd6b5a05c1ee3934e08dc5f7f6fb7))
+
 ## [3.11.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.11.0...v3.11.1) (2024-04-30)
 
 ### Bug Fixes
