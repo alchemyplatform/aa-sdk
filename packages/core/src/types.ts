@@ -228,7 +228,7 @@ export interface UserOperationEstimateGasResponse<
    * Note: `eth_estimateUserOperationGas` does not return paymasterPostOpGasLimit.
    */
   paymasterVerificationGasLimit: TEntryPointVersion extends "0.7.0"
-    ? BigNumberish
+    ? BigNumberish | undefined
     : never;
 }
 //#endregion UserOperationEstimateGasResponse
