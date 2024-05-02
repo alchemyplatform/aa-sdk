@@ -29,7 +29,6 @@ export const sidebar: DefaultTheme.Sidebar = [
   },
   {
     text: "Using Alchemy Signer",
-    collapsed: false,
     base: "/signers/alchemy-signer",
     items: [
       {
