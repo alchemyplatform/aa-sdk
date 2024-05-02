@@ -1,4 +1,4 @@
-import type { Chain } from "viem";
+import { defineChain, type Chain } from "viem";
 import {
   arbitrum as vab,
   arbitrumGoerli as vabg,
@@ -16,7 +16,6 @@ import {
   polygonAmoy as vpga,
   sepolia as vsep,
   fraxtal as vfrax,
-  fraxtalTestnet as vfraxt,
   zora as vzora,
   zoraSepolia as vzoras,
 } from "viem/chains";
@@ -169,12 +168,16 @@ export const fraxtal: Chain = {
   },
 };
 
-export const fraxtalTestnet: Chain = {
-  ...vfraxt,
+export const fraxtalSepolia: Chain = defineChain({
+  id: 2523,
+  name: "Fraxtal Sepolia",
+  nativeCurrency: { name: "Frax Ether", symbol: "frxETH", decimals: 18 },
   rpcUrls: {
-    ...vfraxt.rpcUrls,
+    default: {
+      http: ["https://rpc.testnet-sepolia.frax.com"],
+    },
   },
-};
+});
 
 export const zora: Chain = {
   ...vzora,

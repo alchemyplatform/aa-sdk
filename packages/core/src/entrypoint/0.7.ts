@@ -27,7 +27,7 @@ import {
   polygonMumbai,
   sepolia,
   fraxtal,
-  fraxtalTestnet,
+  fraxtalSepolia,
   zora,
   zoraSepolia,
 } from "../chains/index.js";
@@ -118,7 +118,7 @@ export default {
     [baseGoerli.id]: "0x0000000071727De22E5E9d8BAf0edAc6f37da032",
     [baseSepolia.id]: "0x0000000071727De22E5E9d8BAf0edAc6f37da032",
     [fraxtal.id]: "0x0000000071727De22E5E9d8BAf0edAc6f37da032",
-    [fraxtalTestnet.id]: "0x0000000071727De22E5E9d8BAf0edAc6f37da032",
+    [fraxtalSepolia.id]: "0x0000000071727De22E5E9d8BAf0edAc6f37da032",
     [zora.id]: "0x0000000071727De22E5E9d8BAf0edAc6f37da032",
     [zoraSepolia.id]: "0x0000000071727De22E5E9d8BAf0edAc6f37da032",
   },
