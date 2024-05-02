@@ -181,8 +181,8 @@ export const sidebar: DefaultTheme.Sidebar = [
             base: "/smart-accounts/modular-account/multisig-plugin",
             items: [
               { text: "Introduction", link: "/index" },
-              { text: "Usage Guide", link: "/usage-guide" },
-              { text: "Technical Details", link: "/technical-details" },
+              { text: "Getting started", link: "/getting-started" },
+              { text: "Technical details", link: "/technical-details" },
             ],
           },
         ],

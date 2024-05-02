@@ -22,10 +22,16 @@ head:
 
 ## Overview
 
-The Multisig plugin allows your account to have multiple ECDSA or SCA signers and require a threshold number of signatures for account transactions. This is commonly referred to as a k-of-n threshold signature scheme and would create Modular Accounts that are similar to [Gnosis Safe](https://safe.global/) accounts. This plugin is recommended for accounts that require maximum security.
+The Multisig plugin adds `k of n` threshold signature scheme to your Modular Account, similar to [Gnosis Safe](https://safe.global/) accounts. This is a powerful security layer that is recommended for accounts that require additional security and redundancy beyond a single signer.
+
+The `n` signers can be any combination of ECDSA or SCA signers. A threshold of `k` signatures will be required to execute any user operation on the smart account.
 
 ## Secure, audited, open source
 
-Multisig Plugin has been audited by Quantstamp. You can find the audit reports [here](https://github.com/alchemyplatform/multisig-plugin/blob/develop/audits). Multisig Plugin is fully open source, so you can validate the [source code](https://github.com/alchemyplatform/multisig-plugin).
+The Multisig Plugin has been audited by Quantstamp. You can find the audit reports [here](https://github.com/alchemyplatform/multisig-plugin/blob/develop/audits).
+
+It is also fully open source so you can validate the [source code](https://github.com/alchemyplatform/multisig-plugin).
+
+Now, let's [get started](./getting-started.md) with the multisig plugin!
 
 <!--@include: ../../resources/bbp.md-->

@@ -18,15 +18,15 @@ head:
       content: Getting started with the Modular Account with Multisig Plugin in Account Kit
 ---
 
-# Getting started with Modular Account with Multisig Plugin
+# Getting started with the Multisig Plugin
 
-To start, follow the guide to set up Modular Account [here](../getting-started.md).
+## 1. Set up the Modular Account
 
-## Modular Account with Multisig Plugin Actions
+The Multisig Plugin can be installed on the Modular Account or any ERC-6900 compatible smart account. If you haven't already, please follow the guide to [set up Modular Account](../getting-started.md).
 
-### Creating a Account Client
+## 2. Create a Account Client
 
-The first step is to create a Multisig Modular Account client
+Next, initialize a Multisig Modular Account client and set the `n` accounts as signers.
 
 ```ts
 import { LocalAccountSigner } from "@alchemy/aa-core";
@@ -59,9 +59,9 @@ const multisigAccountClient = createMultisigAccountAlchemyClient({
   });
 ```
 
-### Proposing a User Operation
+## 3. Propose a User Operation
 
-The first step to creating and sending a multisig User Operation is with the `proposeUserOperation` method. This performs gas estimates, constructs the user operation struct, and if `gasManagerConfig` is used, attempts to use a paymaster. Lastly, a signature is generated with the pre-provided signer.
+To propose a new user operation for review by the multisig signers, you will use the `proposeUserOperation` method. This estimates gas, constructs the user operation struct, and if `gasManagerConfig` is used then it attempts to use a paymaster. Lastly, a signature is generated with the pre-provided signer.
 
 ```ts
 import { createMultisigAccountAlchemyClient } from "@alchemy/aa-alchemy";
@@ -85,9 +85,9 @@ const { request, aggregatedSignature, signatureObj: firstSig } = await multisigA
   });
 ```
 
-### Getting the next signatures
+## 4. Get the threshold signatures
 
-We collect the next k-2 signatures (excluding the first and the last signature) with the `signMultisigUserOperation` method.
+Next, you have to collect the next k-2 signatures, excluding the first signature which you already provided and the last signature which we'll deal with in step 5 when we send the user operation. Each member of the multisig can sign with the `signMultisigUserOperation` method.
 
 ```ts
 import { createMultisigAccountAlchemyClient } from "@alchemy/aa-alchemy";
@@ -107,9 +107,9 @@ const { aggregatedSignature, signatureObj: secondSig } = await multisigAccountCl
 });
 ```
 
-### Sending the User Operation
+## 5. Send the User Operation
 
-After collecting k-1 signatures, it's time to collect the last signature and send the user operation. This is done with the `sendUserOperation` method. `sendUserOperation` also formats this aggregated signature, sorting its parts in ascending order by owner address as expected by the Multisig Plugin smart contract.
+After collecting k-1 signatures, you're ready to collect the last signature and send the user operation. This is done with the `sendUserOperation` method. `sendUserOperation` also formats this aggregated signature, sorting its parts in ascending order by owner address as expected by the Multisig Plugin smart contract.
 
 ```ts
 import { createMultisigAccountAlchemyClient } from "@alchemy/aa-alchemy";
@@ -151,3 +151,9 @@ const result = await multisigAccountClient.sendUserOperation({
   },
 });
 ```
+
+## Conclusion
+
+That's it! You've initialized a modular account with three multisig members, proposed a user operation, collected the necessary signatures, and sent the user operation to the bundler.
+
+For more info, check out the [technical details](./technical-details.md) of the multisig plugin.
