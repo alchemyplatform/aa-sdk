@@ -212,10 +212,6 @@ export const aaCoreSidebar: DefaultTheme.SidebarItem = {
           text: "getDefaultSimpleAccountFactoryAddress",
           link: "/getDefaultSimpleAccountFactoryAddress",
         },
-        {
-          text: "getUserOperationHash",
-          link: "/getUserOperationHash",
-        },
         { text: "resolveProperties", link: "/resolveProperties" },
         { text: "stringToIndex", link: "/stringToIndex" },
       ],
