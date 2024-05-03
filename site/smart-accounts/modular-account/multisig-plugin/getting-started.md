@@ -91,7 +91,6 @@ We are aware of a bug in aa-sdk that prevents multisigs from using a paymaster s
 
 :::
 
-
 ## 4. Get the threshold signatures
 
 Next, you have to collect the next k-2 signatures, excluding the first signature which you already provided and the last signature which we'll deal with in step 5 when we send the user operation. Each member of the multisig can sign with the `signMultisigUserOperation` method.

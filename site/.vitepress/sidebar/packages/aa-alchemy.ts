@@ -33,9 +33,9 @@ export const aaAlchemySidebar: DefaultTheme.SidebarItem = {
       link: "/light-account-client/",
     },
     {
-          text: "Multisig Account Client",
-          link: "/packages/aa-alchemy/modular-account-client/multisig-account-client",
-        },
+      text: "Multisig Account Client",
+      link: "/modular-account-client/multisig-account-client",
+    },
     {
       text: "Middleware",
       base: "/packages/aa-alchemy/middleware",
