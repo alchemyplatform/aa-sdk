@@ -11,7 +11,6 @@ export const sidebar: DefaultTheme.Sidebar = [
       },
       {
         text: "Quick start",
-        collapsed: false,
         base: "/getting-started",
         items: [
           { text: "Introduction", link: "/introduction" },
@@ -30,7 +29,6 @@ export const sidebar: DefaultTheme.Sidebar = [
   },
   {
     text: "Using Alchemy Signer",
-    collapsed: false,
     base: "/signers/alchemy-signer",
     items: [
       {
@@ -46,7 +44,7 @@ export const sidebar: DefaultTheme.Sidebar = [
         link: "/passkey-auth",
       },
       {
-        text: "Manage user sessions",
+        text: "User sessions",
         link: "/manage-user-sessions",
       },
       {
@@ -59,10 +57,6 @@ export const sidebar: DefaultTheme.Sidebar = [
     text: "Using smart accounts",
     base: "/using-smart-accounts",
     items: [
-      {
-        text: "Update to EntryPoint v0.7",
-        link: "/entry-point-v7",
-      },
       { text: "Send user operations", link: "/send-user-operations" },
       { text: "Batch user operations", link: "/batch-user-operations" },
       {
@@ -115,19 +109,9 @@ export const sidebar: DefaultTheme.Sidebar = [
           { text: "Get account tokens", link: "/token" },
         ],
       },
-    ],
-  },
-  {
-    text: "Extending smart accounts",
-    base: "/extending-smart-accounts",
-    items: [
       {
-        text: "Install plugins",
-        link: "/install-plugins",
-      },
-      {
-        text: "Get installed plugins",
-        link: "/get-installed-plugins",
+        text: "Update to EntryPoint v0.7",
+        link: "/entry-point-v7",
       },
     ],
   },
@@ -209,6 +193,20 @@ export const sidebar: DefaultTheme.Sidebar = [
         ],
       },
       { text: "Gas benchmarks", link: "/smart-accounts/gas-benchmarks" },
+    ],
+  },
+  {
+    text: "Extending smart accounts",
+    base: "/extending-smart-accounts",
+    items: [
+      {
+        text: "Install plugins",
+        link: "/install-plugins",
+      },
+      {
+        text: "Get installed plugins",
+        link: "/get-installed-plugins",
+      },
     ],
   },
   {
