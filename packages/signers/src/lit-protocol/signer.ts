@@ -172,7 +172,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
             authSig: JSON.parse(props.context.accessToken as string) as AuthSig,
             pkpPublicKey: `0x${this._pkpPublicKey}`,
             expiration: params.expiration,
-            resources: params.resources,
+            resources: resourceAbilities,
             chainId: chainId,
           });
           return response.authSig;
