@@ -261,6 +261,7 @@ export const sidebar: DefaultTheme.Sidebar = [
     base: "/resources",
     items: [
       { text: "FAQs", link: "/faqs" },
+      { text: "React Native", link: "/react-native" },
       { text: "Terms", link: "/terms" },
       { text: "Types", link: "/types" },
       { text: "Contact us", link: "/contact-us" },
