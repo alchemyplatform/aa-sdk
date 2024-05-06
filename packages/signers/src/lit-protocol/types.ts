@@ -1,9 +1,12 @@
 import type { SmartAccountAuthenticator } from "@alchemy/aa-core";
 import type { LitNodeClient } from "@lit-protocol/lit-node-client";
+
 import {
   type AuthMethod,
   type SessionSigsMap,
   type SessionKeyPair,
+  type AuthSig,
+  type LIT_NETWORKS_KEYS,
 } from "@lit-protocol/types";
 
 export type LitAuthMethod = AuthMethod;
@@ -13,8 +16,13 @@ export interface LitConfig {
   pkpPublicKey: string;
   rpcUrl: string;
   inner?: LitNodeClient;
-  network?: string;
+  network?: LIT_NETWORKS_KEYS;
   debug?: boolean;
+}
+
+interface LitCapacityCreditsRes {
+  litResource: any;
+  capacityDelegationAuthSig: AuthSig;
 }
 
 /**
@@ -29,6 +37,15 @@ export interface LitAuthenticateProps<
   expiration?: string;
   sessionKeypair?: SessionKeyPair;
   chain?: string;
+
+  /**
+   * Callback to provide a Capacity Delegation AuthSig
+   * Only required if not providing a {@link LitSessionSigsMap}
+   *
+   * @param params
+   * @returns {Promise<LitCapacityCreditsRes>}
+   */
+  capacityCreditNeeded?: () => Promise<LitCapacityCreditsRes>;
 }
 
 export type LitSmartAccountAuthenticator<

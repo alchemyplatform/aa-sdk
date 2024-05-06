@@ -18,6 +18,7 @@ import {
   type TypedDataDomain,
 } from "viem";
 import { signerTypePrefix } from "../constants.js";
+
 import {
   type LitAuthMethod,
   type LitAuthenticateProps,
@@ -42,26 +43,25 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
   implements LitSmartAccountAuthenticator<C>
 {
   inner: LitNodeClient;
-  public signer: PKPEthersWallet | undefined;
   private _pkpPublicKey: string;
   private _rpcUrl: string;
   private _authContext: C | undefined;
   public session: SessionSigsMap | undefined;
-
+  public signer: PKPEthersWallet | undefined;
   constructor(params: LitConfig) {
     this._pkpPublicKey = params.pkpPublicKey;
     this.inner =
       params.inner ??
       new LitNodeClient({
         litNetwork: params.network ?? "cayenne",
-        debug: params.debug ?? false,
+        debug: true,
       });
     this._rpcUrl = params.rpcUrl;
   }
   signerType: string = SIGNER_TYPE;
 
   /**
-   * if generic type is `LitAuthMethod`, authenticates the supplied authentication material.
+   * If generic type is `LitAuthMethod`, authenticates the supplied authentication material.
    * if type `SessionSigsMap`, this implementation will respect the existing auth and use the session material.
    *
    * @param props {LitAuthenticateProps} Authentication params, only `context` is required
@@ -94,12 +94,10 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
     return this.signer?.getAddress() as Promise<Address>;
   };
 
-  signMessage = async (msg: SignableMessage) => {
+  signMessage = async (msg: string | Uint8Array) => {
     this._checkInternals();
 
-    return this.signer?.signMessage(
-      typeof msg === "string" ? msg : msg.raw
-    ) as Promise<Hex>;
+    return this.signer?.signMessage(msg) as Promise<Hex>;
   };
 
   signTypedData = async <
@@ -147,7 +145,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
      * as the auth material. Otherwise, if a session signature
      * is provided, then we skip this step.
      */
-    if (Object.keys(props.context).indexOf("accessToken") > 0) {
+    if (props.context.accessToken) {
       const resourceAbilities = [
         {
           resource: new LitPKPResource("*"),
@@ -157,7 +155,13 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
       const sessionKeypair = props.sessionKeypair || generateSessionKeyPair();
       const chain = props.chain || "ethereum";
       const chainInfo = ALL_LIT_CHAINS[chain];
-
+      let delegationSignature: any | undefined;
+      if (props.capacityCreditNeeded) {
+        const res = await props.capacityCreditNeeded();
+        delegationSignature = res.capacityDelegationAuthSig;
+      } else {
+        console.warn("Delegation signature provider not called ");
+      }
       const chainId = (chainInfo as LITEVMChain).chainId ?? 1;
       let authNeededCallback: any;
       if (props.context?.authMethodType === 1) {
@@ -168,7 +172,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
             authSig: JSON.parse(props.context.accessToken as string) as AuthSig,
             pkpPublicKey: `0x${this._pkpPublicKey}`,
             expiration: params.expiration,
-            resources: params.resources,
+            resources: resourceAbilities,
             chainId: chainId,
           });
           return response.authSig;
@@ -201,6 +205,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
             new Date(Date.now() + 60 * 60 * 24 * 7).toISOString(),
           resourceAbilityRequests: resourceAbilities,
           authNeededCallback,
+          capacityDelegationAuthSig: delegationSignature ?? undefined,
         })
         .catch((err) => {
           throw err;
