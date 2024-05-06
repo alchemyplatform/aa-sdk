@@ -48,7 +48,7 @@ export {
   polygonMumbai,
   sepolia,
   fraxtal,
-  fraxtalTestnet,
+  fraxtalSepolia,
   zora,
   zoraSepolia,
 } from "./chains/index.js";

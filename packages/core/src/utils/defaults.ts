@@ -16,7 +16,7 @@ import {
   polygonMumbai,
   sepolia,
   fraxtal,
-  fraxtalTestnet,
+  fraxtalSepolia,
   zora,
   zoraSepolia,
 } from "../chains/index.js";
@@ -51,7 +51,7 @@ export const getDefaultSimpleAccountFactoryAddress = (
         case baseGoerli.id:
         case baseSepolia.id:
         case fraxtal.id:
-        case fraxtalTestnet.id:
+        case fraxtalSepolia.id:
         case zora.id:
         case zoraSepolia.id:
           return "0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232";
@@ -79,7 +79,7 @@ export const getDefaultSimpleAccountFactoryAddress = (
         case baseSepolia.id:
         case sepolia.id:
         case fraxtal.id:
-        case fraxtalTestnet.id:
+        case fraxtalSepolia.id:
         case zora.id:
         case zoraSepolia.id:
           return "0x91E60e0613810449d098b0b5Ec8b51A0FE8c8985";

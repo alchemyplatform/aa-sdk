@@ -12,7 +12,7 @@ import {
   polygonAmoy,
   polygonMumbai,
   fraxtal,
-  fraxtalTestnet,
+  fraxtalSepolia,
   zora,
   zoraSepolia,
 } from "@alchemy/aa-core";
@@ -34,7 +34,7 @@ export const getAlchemyPaymasterAddress = (chain: Chain): Address => {
     case zora.id:
     case zoraSepolia.id:
     case fraxtal.id:
-    case fraxtalTestnet.id:
+    case fraxtalSepolia.id:
       return AlchemyPaymasterAddressV3;
     case mainnet.id:
     case arbitrum.id:

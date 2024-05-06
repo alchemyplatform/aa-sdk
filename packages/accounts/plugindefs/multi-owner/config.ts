@@ -10,7 +10,7 @@ import {
   polygonMumbai,
   sepolia,
   fraxtal,
-  fraxtalTestnet,
+  fraxtalSepolia,
   zora,
   zoraSepolia,
 } from "@alchemy/aa-core";
@@ -34,7 +34,7 @@ export const MultiOwnerPluginGenConfig: PluginGenConfig = {
     [base.id]: "0xcE0000007B008F50d762D155002600004cD6c647",
     [baseSepolia.id]: "0xcE0000007B008F50d762D155002600004cD6c647",
     [fraxtal.id]: "0xcE0000007B008F50d762D155002600004cD6c647",
-    [fraxtalTestnet.id]: "0xcE0000007B008F50d762D155002600004cD6c647",
+    [fraxtalSepolia.id]: "0xcE0000007B008F50d762D155002600004cD6c647",
     [zora.id]: "0xcE0000007B008F50d762D155002600004cD6c647",
     [zoraSepolia.id]: "0xcE0000007B008F50d762D155002600004cD6c647",
   },

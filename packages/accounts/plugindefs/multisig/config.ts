@@ -10,7 +10,7 @@ import {
   arbitrumSepolia,
   base,
   fraxtal,
-  fraxtalTestnet,
+  fraxtalSepolia,
   zora,
   zoraSepolia,
 } from "@alchemy/aa-core";
@@ -33,7 +33,7 @@ export const MultisigPluginGenConfig: PluginGenConfig = {
     [arbitrumSepolia.id]: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7",
     [base.id]: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7",
     [fraxtal.id]: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7",
-    [fraxtalTestnet.id]: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7",
+    [fraxtalSepolia.id]: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7",
     [zora.id]: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7",
     [zoraSepolia.id]: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7",
   },

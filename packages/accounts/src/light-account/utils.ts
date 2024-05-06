@@ -7,7 +7,7 @@ import {
   baseGoerli,
   baseSepolia,
   fraxtal,
-  fraxtalTestnet,
+  fraxtalSepolia,
   goerli,
   mainnet,
   optimism,
@@ -55,7 +55,7 @@ export const supportedChains: Chain[] = [
   baseGoerli,
   baseSepolia,
   fraxtal,
-  fraxtalTestnet,
+  fraxtalSepolia,
   zora,
   zoraSepolia,
 ];
