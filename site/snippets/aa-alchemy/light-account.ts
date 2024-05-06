@@ -1,5 +1,6 @@
 import { createLightAccountAlchemyClient } from "@alchemy/aa-alchemy";
-import { LocalAccountSigner, sepolia, type Hex } from "@alchemy/aa-core";
+import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
+import type { Hex } from "viem";
 
 const chain = sepolia;
 
@@ -13,6 +14,7 @@ const provider = await createLightAccountAlchemyClient({
   apiKey: "ALCHEMY_API_KEY",
   chain,
   signer,
+  version: "v2.0.0", // Required if not v1.1.0
 });
 
 // Fund your account address with ETH to send for the user operations

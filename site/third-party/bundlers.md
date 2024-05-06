@@ -41,3 +41,7 @@ with your provider on what the correct logic is.
 It might be the case that you want to use a different RPC provider for your bundler traffic and your node traffic. This is a common use case, and you can do this by leveraging the [`split`](/packages/aa-core/split-transport) transport and passing it to your `createSmartAccountClient` call. For example:
 
 <<< @/snippets/aa-core/splitTransport.ts
+
+## Zora and Fraxtal
+
+Using a split Bundler and Node RPC setup is required for Fraxtal, Fraxtal Testnet, Zora, and Zora Sepolia networks since Alchemy currently only supports Account Abstraction endpoints for those networks. Please refer to documentation from [Frax](https://docs.frax.com/fraxtal/network/network-information) and [Zora](https://docs.zora.co/docs/zora-network/network) about RPC options.

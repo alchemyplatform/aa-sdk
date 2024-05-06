@@ -27,7 +27,11 @@ export const MULTISIG_ACCOUNT_SOURCE = "MultisigModularAccount";
 
 export type MultisigModularAccount<
   TSigner extends SmartAccountSigner = SmartAccountSigner
-> = SmartContractAccountWithSigner<typeof MULTISIG_ACCOUNT_SOURCE, TSigner> & {
+> = SmartContractAccountWithSigner<
+  typeof MULTISIG_ACCOUNT_SOURCE,
+  TSigner,
+  "0.6.0"
+> & {
   getLocalThreshold: () => bigint;
 };
 

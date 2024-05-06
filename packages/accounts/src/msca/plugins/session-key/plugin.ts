@@ -204,14 +204,18 @@ export type SessionKeyPluginActions<
 const addresses = {
   10: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d" as Address,
   137: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d" as Address,
+  252: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d" as Address,
+  2522: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d" as Address,
   8453: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d" as Address,
   42161: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d" as Address,
   80001: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d" as Address,
   80002: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d" as Address,
   84532: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d" as Address,
   421614: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d" as Address,
+  7777777: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d" as Address,
   11155111: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d" as Address,
   11155420: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d" as Address,
+  999999999: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d" as Address,
 } as Record<number, Address>;
 
 export const SessionKeyPlugin: Plugin<typeof SessionKeyPluginAbi> = {

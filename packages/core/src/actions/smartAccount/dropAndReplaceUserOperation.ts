@@ -106,5 +106,6 @@ export async function dropAndReplaceUserOperation<
     uoStruct: uoToSend,
     account,
     context,
+    overrides: _overrides,
   });
 }

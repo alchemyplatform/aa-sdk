@@ -14,6 +14,6 @@ export const useUser = (): UseUserResult => {
   return useSyncExternalStore(
     watchUser(config),
     () => getUser(config) ?? null,
-    () => null
+    () => getUser(config) ?? null
   );
 };

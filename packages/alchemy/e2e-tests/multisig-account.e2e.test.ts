@@ -1,4 +1,5 @@
 import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
+import { fromHex, pad } from "viem";
 import {
   createMultisigAccountAlchemyClient,
   type AlchemyMultisigAccountClientConfig,
@@ -8,7 +9,6 @@ import {
   MODULAR_MULTISIG_ACCOUNT_OWNER_MNEMONIC,
   PAYMASTER_POLICY_ID,
 } from "./constants.js";
-import { fromHex, pad } from "viem";
 
 const chain = sepolia;
 
@@ -46,7 +46,7 @@ describe("Multisig Modular Account Alchemy Client Tests", async () => {
       threshold,
     });
     expect(address).toMatchInlineSnapshot(
-      '"0x4ff93F25764CefC22aeeE111CEf47CD1B5e05370"'
+      '"0xea78315aec5Ff47bF320843A1BaA769C99c8Ae32"'
     );
   });
 
@@ -84,12 +84,13 @@ describe("Multisig Modular Account Alchemy Client Tests", async () => {
 
     expect(initiator.getAddress()).toBe(submitter.getAddress());
 
-    const { aggregatedSignature } = await initiator.proposeUserOperation({
-      uo: {
-        target: initiator.getAddress(),
-        data: "0x",
-      },
-    });
+    const { aggregatedSignature, signatureObj } =
+      await initiator.proposeUserOperation({
+        uo: {
+          target: initiator.getAddress(),
+          data: "0x",
+        },
+      });
 
     const result = await submitter.sendUserOperation({
       uo: {
@@ -97,7 +98,9 @@ describe("Multisig Modular Account Alchemy Client Tests", async () => {
         data: "0x",
       },
       context: {
-        signature: aggregatedSignature,
+        aggregatedSignature,
+        signatures: [signatureObj],
+        userOpSignatureType: "ACTUAL",
       },
     });
 
@@ -126,7 +129,7 @@ describe("Multisig Modular Account Alchemy Client Tests", async () => {
       threshold,
     });
 
-    const { aggregatedSignature, request } =
+    const { aggregatedSignature, request, signatureObj } =
       await provider1.proposeUserOperation({
         uo: {
           target: provider1.getAddress(),
@@ -149,10 +152,13 @@ describe("Multisig Modular Account Alchemy Client Tests", async () => {
         maxFeePerGas: request.maxFeePerGas,
         maxPriorityFeePerGas: request.maxPriorityFeePerGas,
         nonceKey: fromHex(`0x${pad(request.nonce).slice(2, 26)}`, "bigint"), // Nonce key is the first 24 bytes of the nonce
+        // @ts-ignore
         paymasterAndData: request.paymasterAndData,
       },
       context: {
-        signature: aggregatedSignature,
+        aggregatedSignature,
+        signatures: [signatureObj],
+        userOpSignatureType: "ACTUAL",
       },
     });
     const txnHash = provider2.waitForUserOperationTransaction(result);
@@ -185,7 +191,7 @@ describe("Multisig Modular Account Alchemy Client Tests", async () => {
     const {
       account: { address },
     } = provider1;
-    expect(address).toEqual("0xE2c5429De9133F03f3D36d2Be3695AB315D65ECa");
+    expect(address).toBe("0xDAcFC8de3c63579BA8aF72a0b73262a85c176b3F");
 
     const { request, signatureObj: signature1 } =
       await provider1.proposeUserOperation({
@@ -201,11 +207,12 @@ describe("Multisig Modular Account Alchemy Client Tests", async () => {
         },
       });
 
-    const { aggregatedSignature } = await provider2.signMultisigUserOperation({
-      account: provider2.account,
-      signatures: [signature1],
-      userOperationRequest: request,
-    });
+    const { aggregatedSignature, signatureObj } =
+      await provider2.signMultisigUserOperation({
+        account: provider2.account,
+        signatures: [signature1],
+        userOperationRequest: request,
+      });
 
     const result = await provider3.sendUserOperation({
       uo: request.callData,
@@ -216,10 +223,11 @@ describe("Multisig Modular Account Alchemy Client Tests", async () => {
         maxFeePerGas: request.maxFeePerGas,
         maxPriorityFeePerGas: request.maxPriorityFeePerGas,
         nonceKey: fromHex(`0x${pad(request.nonce).slice(2, 26)}`, "bigint"), // Nonce key is the first 24 bytes of the nonce
-        paymasterAndData: request.paymasterAndData,
       },
       context: {
-        signature: aggregatedSignature,
+        aggregatedSignature,
+        signatures: [signatureObj],
+        userOpSignatureType: "ACTUAL",
       },
     });
 

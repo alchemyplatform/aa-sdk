@@ -7,10 +7,10 @@ import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
 import { AccountNotFoundError } from "../../errors/account.js";
 import { IncompatibleClientError } from "../../errors/client.js";
 import type { UserOperationStruct } from "../../types.js";
-import { conditionalReturn, type Deferrable } from "../../utils/index.js";
+import { _initUserOperation } from "./internal/initUserOperation.js";
 import { _runMiddlewareStack } from "./internal/runMiddlewareStack.js";
 import type {
-  SendUserOperationParameters,
+  BuildUserOperationParameters,
   UserOperationContext,
 } from "./types";
 
@@ -26,9 +26,9 @@ export async function buildUserOperation<
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
   client: Client<TTransport, TChain, TAccount>,
-  args: SendUserOperationParameters<TAccount, TContext>
+  args: BuildUserOperationParameters<TAccount, TContext, TEntryPointVersion>
 ): Promise<UserOperationStruct<TEntryPointVersion>> {
-  const { account = client.account, overrides, uo, context } = args;
+  const { account = client.account, overrides, context } = args;
   if (!account) {
     throw new AccountNotFoundError();
   }
@@ -41,46 +41,12 @@ export async function buildUserOperation<
     );
   }
 
-  const entryPoint = account.getEntryPoint();
-
-  const callData = Array.isArray(uo)
-    ? account.encodeBatchExecute(uo)
-    : typeof uo === "string"
-    ? uo
-    : account.encodeExecute(uo);
-
-  const signature = account.getDummySignature();
-
-  const nonce = account.getNonce(overrides?.nonceKey);
-
-  const _uo =
-    entryPoint.version === "0.6.0"
-      ? ({
-          initCode: account.getInitCode(),
-          sender: account.address,
-          nonce,
-          callData,
-          signature,
-        } as Deferrable<UserOperationStruct<TEntryPointVersion>>)
-      : ({
-          factory: conditionalReturn(
-            account.isAccountDeployed().then((deployed) => !deployed),
-            account.getFactoryAddress()
-          ),
-          factoryData: conditionalReturn(
-            account.isAccountDeployed().then((deployed) => !deployed),
-            account.getFactoryData()
-          ),
-          sender: account.address,
-          nonce,
-          callData,
-          signature,
-        } as Deferrable<UserOperationStruct<TEntryPointVersion>>);
-
-  return _runMiddlewareStack(client, {
-    uo: _uo,
-    overrides,
-    account,
-    context,
-  });
+  return _initUserOperation(client, args).then((_uo) =>
+    _runMiddlewareStack(client, {
+      uo: _uo,
+      overrides,
+      account,
+      context,
+    })
+  );
 }

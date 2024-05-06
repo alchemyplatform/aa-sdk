@@ -18,7 +18,7 @@ import { MultiOwnerLightAccountAbi } from "../abis/MultiOwnerLightAccountAbi.js"
 import { MultiOwnerLightAccountFactoryAbi } from "../abis/MultiOwnerLightAccountFactoryAbi.js";
 import type {
   GetEntryPointForLightAccountVersion,
-  LightAccountVersion,
+  GetLightAccountVersion,
 } from "../types.js";
 import {
   AccountVersionRegistry,
@@ -32,7 +32,7 @@ import {
 
 export type MultiOwnerLightAccount<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TLightAccountVersion extends LightAccountVersion<"MultiOwnerLightAccount"> = LightAccountVersion<"MultiOwnerLightAccount">,
+  TLightAccountVersion extends GetLightAccountVersion<"MultiOwnerLightAccount"> = GetLightAccountVersion<"MultiOwnerLightAccount">,
   TEntryPointVersion extends GetEntryPointForLightAccountVersion<
     "MultiOwnerLightAccount",
     TLightAccountVersion
@@ -56,7 +56,7 @@ export type MultiOwnerLightAccount<
 export type CreateMultiOwnerLightAccountParams<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TLightAccountVersion extends LightAccountVersion<"MultiOwnerLightAccount"> = LightAccountVersion<"MultiOwnerLightAccount">,
+  TLightAccountVersion extends GetLightAccountVersion<"MultiOwnerLightAccount"> = GetLightAccountVersion<"MultiOwnerLightAccount">,
   TEntryPointVersion extends GetEntryPointForLightAccountVersion<
     "MultiOwnerLightAccount",
     TLightAccountVersion
@@ -86,7 +86,7 @@ export type CreateMultiOwnerLightAccountParams<
 export async function createMultiOwnerLightAccount<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TLightAccountVersion extends LightAccountVersion<"MultiOwnerLightAccount"> = LightAccountVersion<"MultiOwnerLightAccount">,
+  TLightAccountVersion extends GetLightAccountVersion<"MultiOwnerLightAccount"> = GetLightAccountVersion<"MultiOwnerLightAccount">,
   TEntryPointVersion extends GetEntryPointForLightAccountVersion<
     "MultiOwnerLightAccount",
     TLightAccountVersion

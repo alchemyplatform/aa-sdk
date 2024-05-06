@@ -55,7 +55,7 @@ You can either pass in a constructed `Magic` object, or directly pass into the `
 
 - `options: MagicSDKAdditionalConfiguration` -- [optional]
 
-  - `endpoint: string` -- [optional] a URL pointing to the Magic `<iframe` application.
+  - `endpoint: string` -- [optional] a URL pointing to the Magic `<iframe>` application.
 
   - `locale: string` -- [optional] customize the language of Magic's modal, email and confirmation screen.
 

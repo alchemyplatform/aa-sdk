@@ -37,6 +37,10 @@ export const aaCoreSidebar: DefaultTheme.SidebarItem = {
           link: "/signUserOperation",
         },
         {
+          text: "estimateUserOperationGas",
+          link: "/estimateUserOperationGas",
+        },
+        {
           text: "checkGasSponsorshipEligibility",
           link: "/checkGasSponsorshipEligibility",
         },
@@ -207,10 +211,6 @@ export const aaCoreSidebar: DefaultTheme.SidebarItem = {
         {
           text: "getDefaultSimpleAccountFactoryAddress",
           link: "/getDefaultSimpleAccountFactoryAddress",
-        },
-        {
-          text: "getUserOperationHash",
-          link: "/getUserOperationHash",
         },
         { text: "resolveProperties", link: "/resolveProperties" },
         { text: "stringToIndex", link: "/stringToIndex" },

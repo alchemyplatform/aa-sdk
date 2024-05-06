@@ -1,4 +1,4 @@
-import type { Chain } from "viem";
+import { defineChain, type Chain } from "viem";
 import {
   arbitrum as vab,
   arbitrumGoerli as vabg,
@@ -15,6 +15,9 @@ import {
   polygonMumbai as vpgm,
   polygonAmoy as vpga,
   sepolia as vsep,
+  fraxtal as vfrax,
+  zora as vzora,
+  zoraSepolia as vzoras,
 } from "viem/chains";
 
 export const arbitrum: Chain = {
@@ -155,5 +158,37 @@ export const polygon: Chain = {
     alchemy: {
       http: ["https://polygon-mainnet.g.alchemy.com/v2"],
     },
+  },
+};
+
+export const fraxtal: Chain = {
+  ...vfrax,
+  rpcUrls: {
+    ...vfrax.rpcUrls,
+  },
+};
+
+export const fraxtalSepolia: Chain = defineChain({
+  id: 2523,
+  name: "Fraxtal Sepolia",
+  nativeCurrency: { name: "Frax Ether", symbol: "frxETH", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://rpc.testnet-sepolia.frax.com"],
+    },
+  },
+});
+
+export const zora: Chain = {
+  ...vzora,
+  rpcUrls: {
+    ...vzora.rpcUrls,
+  },
+};
+
+export const zoraSepolia: Chain = {
+  ...vzoras,
+  rpcUrls: {
+    ...vzoras.rpcUrls,
   },
 };

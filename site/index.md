@@ -26,7 +26,21 @@ titleTemplate: :title Documentation
 # you can also add HTML or Markdown components below the --- line to add custom HTML or Markdown content (eg: https://github.com/wagmi-dev/viem/blob/main/site/index.md?plain=1)
 ---
 
-<div class="flex flex-col h-screen">
+<style>
+  .vp-doc.container {
+    padding: 0;
+    margin: 0;
+  }
+  
+  .VPHome {
+    margin-bottom: 0 !important;
+  }
+
+  a {
+    text-decoration: none !important;
+  }
+</style>
+<div class="flex flex-col h-screen w-screen">
   <div class="flex flex-grow justify-center bg-hero-light dark:bg-hero-dark bg-cover pb-[48px]">
     <div class="flex grow max-w-[var(--vp-layout-max-width)] w-[100%] px-[32px]">
       <div class="flex flex-col flex-auto min-w-[100%]">
@@ -55,14 +69,14 @@ titleTemplate: :title Documentation
                 </div>
               </div>
               <div class="text-[22px] font-normal max-md:text-center">
-                Account Kit is a vertically integrated stack for building apps that support ERC-4337: smart accounts, Signer integrations, sponsoring gas, bundlers, and an SDK.
+                Build zero friction onboarding to web3 with Embedded Accounts! Account Kit makes it simple to embed powerful smart accounts or lightweight EOAs in your app as an embedded wallet.
               </div>
               <div class="flex flex-row gap-[8px] justify-start items-center">
                 <a rel="noopener noreferrer" href="./getting-started/introduction.html">
                   <button
                     class="flex items-center rounded-md px-[12px] py-[12px] text-[16px] font-semibold text-white transition duration-300 ease-in-out hover:scale-105 hover:opacity-90 bg-black dark:bg-white dark:text-black"
                   >
-                    Explore the docs
+                    Quick start
                   </button>
                 </a>
                 <a rel="noopener noreferrer" href="./getting-started/overview.html">

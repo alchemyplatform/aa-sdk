@@ -4,18 +4,18 @@ import {
   arbitrumSepolia,
   base,
   baseSepolia,
-  fraxtal,
-  fraxtalTestnet,
   mainnet,
+  sepolia,
   optimism,
   optimismSepolia,
   polygon,
   polygonAmoy,
   polygonMumbai,
-  sepolia,
+  fraxtal,
+  fraxtalSepolia,
   zora,
   zoraSepolia,
-} from "viem/chains";
+} from "@alchemy/aa-core";
 
 export const AlchemyPaymasterAddressV3 =
   "0x4f84a207A80c39E9e8BaE717c1F25bA7AD1fB08F";
@@ -34,7 +34,7 @@ export const getAlchemyPaymasterAddress = (chain: Chain): Address => {
     case zora.id:
     case zoraSepolia.id:
     case fraxtal.id:
-    case fraxtalTestnet.id:
+    case fraxtalSepolia.id:
       return AlchemyPaymasterAddressV3;
     case mainnet.id:
     case arbitrum.id:

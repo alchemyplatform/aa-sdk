@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.12.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.11.1...v3.12.0) (2024-05-02)
+
+### Bug Fixes
+
+- don't set undefined estimates to 0n ([#641](https://github.com/alchemyplatform/aa-sdk/issues/641)) ([bff8d35](https://github.com/alchemyplatform/aa-sdk/commit/bff8d351a1587589799e515e7373fbcf01a3b6e9))
+
+## [3.11.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.11.0...v3.11.1) (2024-04-30)
+
+### Bug Fixes
+
+- make multisig e2e tests pass ([#615](https://github.com/alchemyplatform/aa-sdk/issues/615)) ([08cf8d8](https://github.com/alchemyplatform/aa-sdk/commit/08cf8d81b3afd7b06c51a3b9fe6a0ee5a0a91d44))
+- when overriding paymaster set fields to 0x initially ([#635](https://github.com/alchemyplatform/aa-sdk/issues/635)) ([2a03c67](https://github.com/alchemyplatform/aa-sdk/commit/2a03c679720e408ff7a56b4c0e545bf2ae47f446))
+
+# [3.11.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.10.0...v3.11.0) (2024-04-30)
+
+### Bug Fixes
+
+- waitForUserOperationTx parameters were incorrect ([#634](https://github.com/alchemyplatform/aa-sdk/issues/634)) ([8250c66](https://github.com/alchemyplatform/aa-sdk/commit/8250c660def2c3b8b920b3239d782d1999fd578e))
+
+# [3.10.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.9.0...v3.10.0) (2024-04-29)
+
+### Features
+
+- add frax and zora defaults ([#613](https://github.com/alchemyplatform/aa-sdk/issues/613)) ([4950a1d](https://github.com/alchemyplatform/aa-sdk/commit/4950a1df170abcae5a3cc5a32acdb972890d7810))
+- estimate user operation gas smart account client action and how to guide ([#603](https://github.com/alchemyplatform/aa-sdk/issues/603)) ([522a038](https://github.com/alchemyplatform/aa-sdk/commit/522a03864ea0e3f8f1e34b6900c3ca0241b534e8))
+- handle one off bypassing paymaster and data middleware case ([#606](https://github.com/alchemyplatform/aa-sdk/issues/606)) ([b5d8110](https://github.com/alchemyplatform/aa-sdk/commit/b5d8110f629937068d27e059ec89dfaa31ce9dd5))
+- remove generic entry point version specification requirement for better devex ([#607](https://github.com/alchemyplatform/aa-sdk/issues/607)) ([f3fb619](https://github.com/alchemyplatform/aa-sdk/commit/f3fb619e3cfb2c3a957a259788ae6ab1c530f3d5))
+
 # [3.9.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.9.0-alpha.4...v3.9.0) (2024-04-24)
 
 ### Features

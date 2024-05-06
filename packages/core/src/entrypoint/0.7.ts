@@ -26,7 +26,11 @@ import {
   polygonAmoy,
   polygonMumbai,
   sepolia,
-} from "viem/chains";
+  fraxtal,
+  fraxtalSepolia,
+  zora,
+  zoraSepolia,
+} from "../chains/index.js";
 import { EntryPointAbi_v7 } from "../abis/EntryPointAbi_v7.js";
 import type {
   UserOperationRequest,
@@ -113,6 +117,10 @@ export default {
     [base.id]: "0x0000000071727De22E5E9d8BAf0edAc6f37da032",
     [baseGoerli.id]: "0x0000000071727De22E5E9d8BAf0edAc6f37da032",
     [baseSepolia.id]: "0x0000000071727De22E5E9d8BAf0edAc6f37da032",
+    [fraxtal.id]: "0x0000000071727De22E5E9d8BAf0edAc6f37da032",
+    [fraxtalSepolia.id]: "0x0000000071727De22E5E9d8BAf0edAc6f37da032",
+    [zora.id]: "0x0000000071727De22E5E9d8BAf0edAc6f37da032",
+    [zoraSepolia.id]: "0x0000000071727De22E5E9d8BAf0edAc6f37da032",
   },
 
   abi: EntryPointAbi_v7,

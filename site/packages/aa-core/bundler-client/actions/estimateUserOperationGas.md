@@ -16,6 +16,10 @@ head:
 
 Calls `eth_estimateUserOperationGas` and returns the result.
 
+::: tip Note
+It is recommended to use [`estimateUserOperationGas`](/packages/aa-core/smart-account-client/actions/estimateUserOperationGas) `SmartAccountClientAction` for user operation gas estimation. The smart account client action provides much simpler interface than directly calling the raw bundler actions.
+:::
+
 ## Usage
 
 ::: code-group
@@ -37,13 +41,13 @@ const estimates = await client.estimateUserOperationGas(
 
 ## Returns
 
-### `Promise<UserOperationEstimateGasResponse<EntryPointVersion>`
+### `Promise<UserOperationEstimateGasResponse>`
 
 The result of the estimate including the `callGasLimit`, `verificationGasLimit`, `preVerificationGas`, and additionally, `paymasterVerificationGasLimit` for EntryPointVersion `v0.7.0` user operations.
 
 ## Parameters
 
-### `request: UserOperationRequest<EntryPointVersion>`
+### `request: UserOperationRequest`
 
 The user operation to estimate the gas for sending the user oepration.
 

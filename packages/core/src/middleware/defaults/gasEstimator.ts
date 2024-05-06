@@ -8,6 +8,14 @@ import { applyUserOpOverrideOrFeeOption } from "../../utils/userop.js";
 import type { MiddlewareClient } from "../actions.js";
 import type { ClientMiddlewareFn } from "../types.js";
 
+/**
+ * Description default gas estimator middleware for `SmartAccountClient`
+ * You can override this middleware with your custom gas estimator middleware
+ * by passing it to the client constructor
+ *
+ * @param client smart account client instance to apply the middleware to
+ * @returns middleware execution function used to estimate gas for user operations
+ */
 export const defaultGasEstimator: <C extends MiddlewareClient>(
   client: C
 ) => ClientMiddlewareFn =

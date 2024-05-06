@@ -10,27 +10,25 @@ export const sidebar: DefaultTheme.Sidebar = [
         link: "/getting-started/overview",
       },
       {
-        text: "Quick start (Embedded Accounts)",
-        collapsed: false,
+        text: "Quick start",
         base: "/getting-started",
         items: [
           { text: "Introduction", link: "/introduction" },
           {
-            text: "Setup your application",
+            text: "Setup",
             link: "/setup-app",
           },
           {
-            text: "Log users into Embedded Accounts",
+            text: "Log in users",
             link: "/log-in-users",
           },
-          { text: "Send UserOperations", link: "/send-uos" },
+          { text: "Send user operations", link: "/send-uos" },
         ],
       },
     ],
   },
   {
     text: "Using Alchemy Signer",
-    collapsed: false,
     base: "/signers/alchemy-signer",
     items: [
       {
@@ -46,7 +44,7 @@ export const sidebar: DefaultTheme.Sidebar = [
         link: "/passkey-auth",
       },
       {
-        text: "Manage user sessions",
+        text: "User sessions",
         link: "/manage-user-sessions",
       },
       {
@@ -59,10 +57,6 @@ export const sidebar: DefaultTheme.Sidebar = [
     text: "Using smart accounts",
     base: "/using-smart-accounts",
     items: [
-      {
-        text: "Update to EntryPoint v0.7",
-        link: "/entrypoint-v7",
-      },
       { text: "Send user operations", link: "/send-user-operations" },
       { text: "Batch user operations", link: "/batch-user-operations" },
       {
@@ -97,6 +91,10 @@ export const sidebar: DefaultTheme.Sidebar = [
         items: [
           { text: "Modular Account", link: "/modular-account" },
           { text: "Light Account", link: "/light-account" },
+          {
+            text: "Multi-Owner Light Account",
+            link: "/multi-owner-light-account",
+          },
         ],
       },
       {
@@ -111,19 +109,9 @@ export const sidebar: DefaultTheme.Sidebar = [
           { text: "Get account tokens", link: "/token" },
         ],
       },
-    ],
-  },
-  {
-    text: "Extending smart accounts",
-    base: "/extending-smart-accounts",
-    items: [
       {
-        text: "Install plugins",
-        link: "/install-plugins",
-      },
-      {
-        text: "Get installed plugins",
-        link: "/get-installed-plugins",
+        text: "Update to EntryPoint v0.7",
+        link: "/entry-point-v7",
       },
     ],
   },
@@ -175,11 +163,25 @@ export const sidebar: DefaultTheme.Sidebar = [
             text: "Upgrading to Modular Account",
             link: "/upgrade-la-to-ma",
           },
+          {
+            text: "Multisig Plugin",
+            collapsed: true,
+            base: "/smart-accounts/modular-account/multisig-plugin",
+            items: [
+              { text: "Introduction", link: "/index" },
+              { text: "Getting started", link: "/getting-started" },
+              { text: "Technical details", link: "/technical-details" },
+            ],
+          },
         ],
       },
       {
         text: "Light Account",
         link: "/smart-accounts/light-account/",
+      },
+      {
+        text: "Multi-Owner Light Account",
+        link: "/smart-accounts/multi-owner-light-account/",
       },
       {
         text: "Custom accounts",
@@ -191,6 +193,20 @@ export const sidebar: DefaultTheme.Sidebar = [
         ],
       },
       { text: "Gas benchmarks", link: "/smart-accounts/gas-benchmarks" },
+    ],
+  },
+  {
+    text: "Extending smart accounts",
+    base: "/extending-smart-accounts",
+    items: [
+      {
+        text: "Install plugins",
+        link: "/install-plugins",
+      },
+      {
+        text: "Get installed plugins",
+        link: "/get-installed-plugins",
+      },
     ],
   },
   {
@@ -245,6 +261,7 @@ export const sidebar: DefaultTheme.Sidebar = [
     base: "/resources",
     items: [
       { text: "FAQs", link: "/faqs" },
+      { text: "React Native", link: "/react-native" },
       { text: "Terms", link: "/terms" },
       { text: "Types", link: "/types" },
       { text: "Contact us", link: "/contact-us" },

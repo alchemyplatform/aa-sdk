@@ -157,13 +157,17 @@ const addresses = {
   1: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7" as Address,
   10: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7" as Address,
   137: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7" as Address,
+  252: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7" as Address,
+  2522: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7" as Address,
   8453: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7" as Address,
   42161: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7" as Address,
   80002: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7" as Address,
   84532: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7" as Address,
   421614: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7" as Address,
+  7777777: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7" as Address,
   11155111: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7" as Address,
   11155420: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7" as Address,
+  999999999: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7" as Address,
 } as Record<number, Address>;
 
 export const MultisigPlugin: Plugin<typeof MultisigPluginAbi> = {
@@ -388,7 +392,7 @@ export const MultisigPluginAbi = [
     ],
     name: "checkNSignatures",
     outputs: [
-      { name: "failed", internalType: "bool", type: "bool" },
+      { name: "success", internalType: "bool", type: "bool" },
       { name: "firstFailure", internalType: "uint256", type: "uint256" },
     ],
   },
@@ -904,9 +908,10 @@ export const MultisigPluginAbi = [
   { type: "error", inputs: [], name: "ECDSARecoverFailure" },
   { type: "error", inputs: [], name: "EmptyOwnersNotAllowed" },
   { type: "error", inputs: [], name: "InvalidAction" },
-  { type: "error", inputs: [], name: "InvalidGasValues" },
+  { type: "error", inputs: [], name: "InvalidAddress" },
   { type: "error", inputs: [], name: "InvalidMaxFeePerGas" },
   { type: "error", inputs: [], name: "InvalidMaxPriorityFeePerGas" },
+  { type: "error", inputs: [], name: "InvalidNumSigsOnActualGas" },
   {
     type: "error",
     inputs: [{ name: "owner", internalType: "address", type: "address" }],

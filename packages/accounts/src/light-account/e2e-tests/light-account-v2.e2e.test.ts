@@ -23,6 +23,7 @@ import {
   createLightAccount,
   lightAccountClientActions,
   multiOwnerPluginActions,
+  type GetLightAccountVersion,
   type LightAccountVersion,
 } from "../../index.js";
 import { getMSCAUpgradeToData } from "../../msca/utils.js";
@@ -293,7 +294,7 @@ const givenConnectedClient = async ({
   chain: Chain;
   accountAddress?: Address;
   feeOptions?: UserOperationFeeOptions;
-  version?: LightAccountVersion<"LightAccount">;
+  version?: GetLightAccountVersion<"LightAccount">;
 }) => {
   const client = createBundlerClient({
     chain,

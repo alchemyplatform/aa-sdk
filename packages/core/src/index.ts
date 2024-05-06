@@ -47,6 +47,10 @@ export {
   polygonAmoy,
   polygonMumbai,
   sepolia,
+  fraxtal,
+  fraxtalSepolia,
+  zora,
+  zoraSepolia,
 } from "./chains/index.js";
 export type * from "./client/bundlerClient.js";
 export {
@@ -145,6 +149,8 @@ export {
   asyncPipe,
   bigIntMax,
   bigIntMultiply,
+  bypassPaymasterAndData,
+  concatPaymasterAndData,
   deepHexlify,
   defineReadOnly,
   filterUndefined,
@@ -154,6 +160,7 @@ export {
   isBigNumberish,
   isMultiplier,
   isValidRequest,
+  parsePaymasterAndData,
   pick,
   resolveProperties,
   takeBytes,

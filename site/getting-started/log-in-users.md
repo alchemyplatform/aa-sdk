@@ -24,17 +24,11 @@ In this section of the Embedded Accounts Quickstart, you'll create your app's lo
 
 ## Add Log In User Interface
 
-To create the user log in experience, add a `src/components` folder and create `src/components/LogInCard.tsx` and `src/components/TurnkeyIframe.tsx` with the following:
-
-::: code-group
+To create the user log in experience, add a `src/components` folder and create `src/components/LogInCard.tsx` with the following:
 
 <<< @/snippets/getting-started/log-in-users/LogInCard-1.tsx [src/components/LogInCard.tsx]
 
-<<< @/snippets/getting-started/log-in-users/TurnkeyIframe.tsx [src/components/TurnkeyIframe.tsx]
-
-:::
-
-`src/components/LogInCard.tsx` creates the UI for your app, while `src/components/TurnkeyIframe.tsx` embeds a hidden iframe in your app that the Alchemy Signer will use to send the user an email and authenticate them. You'll configure the Alchemy Signer in the next step.
+`src/components/LogInCard.tsx` creates the initial UI for your app. You'll configure the Alchemy Signer in the next step to send the user an email and authenticate them.
 
 Now, incorporate these components into your app by updating the `src/app/page.tsx` file as follows:
 

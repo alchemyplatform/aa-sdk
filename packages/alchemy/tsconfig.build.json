@@ -10,6 +10,7 @@
   ],
   "include": ["src"],
   "compilerOptions": {
-    "sourceMap": true
+    "sourceMap": true,
+    "jsx": "react-jsx"
   }
 }

@@ -22,13 +22,13 @@ head:
 
 ## Overview
 
-Modular Account is an ERC-4337 smart account that supports customizable features with ERC-6900 plugins. It is fully production-ready with multiple security audits, two prebuilt plugins in `MultiOwnerPlugin` and `SessionKeyPlugin`, and the capability to support any custom account behavior you need.
+Modular Account is an ERC-4337 smart account that supports customizable features with ERC-6900 plugins. It is fully production-ready with multiple security audits, three prebuilt plugins in `MultiOwnerPlugin`, `SessionKeyPlugin`, and `MultisigPlugin`, and the capability to support any custom account behavior you need.
 
 ## Why Modular Account?
 
 ### Make the most of Account Abstraction
 
-Smart accounts unlock lots of customizable ways to improve the wallet experience. Still, it requires writing this behavior into the smart contract for the account, which is difficult and security-critical. Modular Account uses the [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) framework to simplify creating powerful features for smart accounts. We have created two plugins to level up your smart accounts, and we look forward to what new plugins you create!
+Smart accounts unlock lots of customizable ways to improve the wallet experience. Still, it requires writing this behavior into the smart contract for the account, which is difficult and security-critical. Modular Account uses the [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) framework to simplify creating powerful features for smart accounts. We have created three plugins to level up your smart accounts, and we look forward to what new plugins you create!
 
 ### Multi Owner Plugin
 
@@ -48,6 +48,12 @@ Session keys can be customized and configured to:
 Session keys let you streamline interactions by reducing confirmation steps or automating actions on behalf of the account. These features are kept secure through the permission system, which protects the account from malicious use of the session key.
 
 Read more about installing and using the Session Key plugin [here](/using-smart-accounts/session-keys/)!
+
+### Multisig Plugin
+
+The Multisig plugin allows your account to have multiple ECDSA or SCA signers and require multiple signatures to perform actions on the account. This is commonly referred to as a k-of-n signature scheme and would create Modular Accounts that are similar to [Gnosis Safe](https://safe.global/) accounts. This plugin is recommended for accounts that require maximum security.
+
+Read more about Multisig Plugin [here](/smart-accounts/modular-account/multisig-plugin/index.md)!
 
 ### Full compatibility
 

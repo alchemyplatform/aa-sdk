@@ -114,8 +114,8 @@ export const MultisigModularAccountFactoryAbi = [
       },
       {
         name: "threshold",
-        type: "uint256",
-        internalType: "uint256",
+        type: "uint128",
+        internalType: "uint128",
       },
     ],
     outputs: [

@@ -146,6 +146,8 @@ These two files should look as follows:
 
 <<< @/snippets/getting-started/setup-app/providers.tsx [src/app/providers.tsx]
 
+<<< @/snippets/getting-started/setup-app/config.ts [src/app/config.ts]
+
 :::
 
 Now, you have all the pieces in place to build a new web application using Embedded Accounts! In the next step of this guide, you'll integrate the Alchemy Signer to enable your app to sign users into their newly created Embedded Accounts.

@@ -10,8 +10,8 @@ import {
   type UserOperationOverrides,
 } from "@alchemy/aa-core";
 import { type Chain, type Client, type Transport } from "viem";
-import { combineSignatures, getSignerType } from "../index.js";
-import { type ProposeUserOperationResult, type Signature } from "../types.js";
+import { splitAggregatedSignature } from "../index.js";
+import { type ProposeUserOperationResult } from "../types.js";
 
 export async function proposeUserOperation<
   TTransport extends Transport = Transport,
@@ -61,29 +61,22 @@ export async function proposeUserOperation<
   const request = await client.signUserOperation({
     uoStruct: builtUo,
     account,
+    context: {
+      userOpSignatureType: "UPPERLIMIT",
+    },
   });
 
-  const signerType = await getSignerType({
-    client,
-    signature: request.signature,
-    signer: account.getSigner(),
+  const splitSignatures = await splitAggregatedSignature({
+    request,
+    aggregatedSignature: request.signature,
+    account,
+    // split works on the assumption that we have t - 1 signatures
+    threshold: 2,
   });
-
-  const signatureObj: Signature = {
-    signature: request.signature,
-    signer: await account.getSigner().getAddress(),
-    signerType,
-    userOpSigType: "UPPERLIMIT",
-  };
 
   return {
     request,
-    signatureObj,
-    aggregatedSignature: combineSignatures({
-      signatures: [signatureObj],
-      upperLimitMaxFeePerGas: request.maxFeePerGas,
-      upperLimitMaxPriorityFeePerGas: request.maxPriorityFeePerGas,
-      upperLimitPvg: request.preVerificationGas,
-    }),
+    signatureObj: splitSignatures.signatures[0],
+    aggregatedSignature: request.signature,
   };
 }

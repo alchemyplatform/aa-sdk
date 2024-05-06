@@ -18,11 +18,13 @@ head:
       content: Learn how to configure and leverage sessions for you users with the Alchemy Signer
 ---
 
-# Manage user sessions
+# User sessions
 
-By default the `AlchemySigner` leverages `localStorage` to cache user sessions for 15 minutes. You can optionally configure this by passing in a [`sessionConfig`](/packages/aa-alchemy/signer/overview.html#parameters) to your `AlchemySigner` constructor.
+By default, `AlchemySigner` user sessions are cached in `localStorage` for 15 minutes.
 
-You can check if a session exists by doing the following:
+You can customize session length by passing a [`sessionConfig`](/packages/aa-alchemy/signer/overview.html#parameters) to your `AlchemySigner` constructor.
+
+You can check if the user has an active session with the following command:
 ::: code-group
 
 ```ts

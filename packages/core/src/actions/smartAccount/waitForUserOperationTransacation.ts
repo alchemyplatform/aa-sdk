@@ -13,8 +13,6 @@ export const waitForUserOperationTransaction: <
   client: Client<TTransport, TChain, any>,
   args: WaitForUserOperationTxParameters
 ) => Promise<Hex> = async (client, args) => {
-  const { hash } = args;
-
   if (!isBaseSmartAccountClient(client)) {
     throw new IncompatibleClientError(
       "BaseSmartAccountClient",
@@ -23,9 +21,18 @@ export const waitForUserOperationTransaction: <
     );
   }
 
-  for (let i = 0; i < client.txMaxRetries; i++) {
+  const {
+    hash,
+    retries = {
+      maxRetries: client.txMaxRetries,
+      intervalMs: client.txRetryIntervalMs,
+      multiplier: client.txRetryMultiplier,
+    },
+  } = args;
+
+  for (let i = 0; i < retries.maxRetries; i++) {
     const txRetryIntervalWithJitterMs =
-      client.txRetryIntervalMs * Math.pow(client.txRetryMultiplier, i) +
+      retries.intervalMs * Math.pow(retries.multiplier, i) +
       Math.random() * 100;
 
     await new Promise((resolve) =>

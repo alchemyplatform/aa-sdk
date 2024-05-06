@@ -9,11 +9,13 @@ export { createLightAccountClient } from "./light-account/clients/lightAccount.j
 export type * from "./light-account/decorators/lightAccount.js";
 export { lightAccountClientActions } from "./light-account/decorators/lightAccount.js";
 export type * from "./light-account/types.js";
+
 export {
   AccountVersionRegistry,
   LightAccountUnsupported1271Factories,
   LightAccountUnsupported1271Impls,
   defaultLightAccountVersion,
+  getDefaultLightAccountFactoryAddress,
   getLightAccountVersionDef,
 } from "./light-account/utils.js";
 

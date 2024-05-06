@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.12.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.11.1...v3.12.0) (2024-05-02)
+
+**Note:** Version bump only for package @alchemy/aa-accounts
+
+## [3.11.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.11.0...v3.11.1) (2024-04-30)
+
+### Bug Fixes
+
+- make multisig e2e tests pass ([#615](https://github.com/alchemyplatform/aa-sdk/issues/615)) ([08cf8d8](https://github.com/alchemyplatform/aa-sdk/commit/08cf8d81b3afd7b06c51a3b9fe6a0ee5a0a91d44))
+
+# [3.11.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.10.0...v3.11.0) (2024-04-30)
+
+### Bug Fixes
+
+- determine entry point version from light account version ([#632](https://github.com/alchemyplatform/aa-sdk/issues/632)) ([7813de0](https://github.com/alchemyplatform/aa-sdk/commit/7813de0630143ce3e4902a98f8e582c418d0050a))
+
+### Features
+
+- use final LightAccount v2 addresses ([#628](https://github.com/alchemyplatform/aa-sdk/issues/628)) ([7539713](https://github.com/alchemyplatform/aa-sdk/commit/7539713ce8e5b5e86c087866d04299f20e21b448))
+
+# [3.10.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.9.0...v3.10.0) (2024-04-29)
+
+### Features
+
+- add frax and zora defaults ([#613](https://github.com/alchemyplatform/aa-sdk/issues/613)) ([4950a1d](https://github.com/alchemyplatform/aa-sdk/commit/4950a1df170abcae5a3cc5a32acdb972890d7810))
+- make create light account and multi owner light account to be strong type inferred ([#608](https://github.com/alchemyplatform/aa-sdk/issues/608)) ([f2dd460](https://github.com/alchemyplatform/aa-sdk/commit/f2dd460ca937065dac05fd7d64e8f31c1f8d1a74))
+- remove generic entry point version specification requirement for better devex ([#607](https://github.com/alchemyplatform/aa-sdk/issues/607)) ([f3fb619](https://github.com/alchemyplatform/aa-sdk/commit/f3fb619e3cfb2c3a957a259788ae6ab1c530f3d5))
+
 # [3.9.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.9.0-alpha.4...v3.9.0) (2024-04-24)
 
 ### Features

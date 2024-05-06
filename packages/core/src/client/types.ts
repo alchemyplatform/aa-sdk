@@ -18,7 +18,7 @@ export type ConnectionConfig = z.input<typeof ConnectionConfigSchema>;
 
 //#region SendUserOperationResult
 export type SendUserOperationResult<
-  TEntryPointVersion extends EntryPointVersion
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = {
   hash: Hash;
   request: UserOperationRequest<TEntryPointVersion>;
@@ -42,7 +42,9 @@ export type ClientMiddlewareConfig<
   "dummyPaymasterAndData" | "paymasterAndData"
 > & {
   paymasterAndData?: {
-    dummyPaymasterAndData: () => Hex;
+    dummyPaymasterAndData: () =>
+      | UserOperationRequest<"0.6.0">["paymasterAndData"]
+      | Pick<UserOperationRequest<"0.7.0">, "paymaster" | "paymasterData">;
     paymasterAndData: ClientMiddlewareFn<TContext>;
   };
 };

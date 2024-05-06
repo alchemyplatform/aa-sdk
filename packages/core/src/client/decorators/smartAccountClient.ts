@@ -6,7 +6,6 @@ import {
   type SendTransactionParameters,
   type Transport,
   type TypedData,
-  type WaitForTransactionReceiptParameters,
 } from "viem";
 import type {
   GetAccountParameter,
@@ -34,13 +33,16 @@ import {
 import { signTypedDataWith6492 } from "../../actions/smartAccount/signTypedDataWith6492.js";
 import { signUserOperation } from "../../actions/smartAccount/signUserOperation.js";
 import type {
+  BuildTransactionParameters,
   BuildUserOperationFromTransactionsResult,
+  BuildUserOperationParameters,
   DropAndReplaceUserOperationParameters,
   SendTransactionsParameters,
   SendUserOperationParameters,
   SignUserOperationParameters,
   UpgradeAccountParams,
   UserOperationContext,
+  WaitForUserOperationTxParameters,
 } from "../../actions/smartAccount/types";
 import { upgradeAccount } from "../../actions/smartAccount/upgradeAccount.js";
 import { waitForUserOperationTransaction } from "../../actions/smartAccount/waitForUserOperationTransacation.js";
@@ -64,7 +66,7 @@ export type BaseSmartAccountClientActions<
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
   buildUserOperation: (
-    args: SendUserOperationParameters<TAccount, TContext>
+    args: BuildUserOperationParameters<TAccount, TContext>
   ) => Promise<UserOperationStruct<TEntryPointVersion>>;
   buildUserOperationFromTx: (
     args: SendTransactionParameters<TChain, TAccount>,
@@ -72,7 +74,7 @@ export type BaseSmartAccountClientActions<
     context?: TContext
   ) => Promise<UserOperationStruct<TEntryPointVersion>>;
   buildUserOperationFromTxs: (
-    args: SendTransactionsParameters<TAccount, TContext>
+    args: BuildTransactionParameters<TAccount, TContext>
   ) => Promise<BuildUserOperationFromTransactionsResult<TEntryPointVersion>>;
   checkGasSponsorshipEligibility: <
     TContext extends UserOperationContext | undefined =
@@ -82,7 +84,7 @@ export type BaseSmartAccountClientActions<
     args: SendUserOperationParameters<TAccount, TContext>
   ) => Promise<boolean>;
   signUserOperation: (
-    args: SignUserOperationParameters<TAccount>
+    args: SignUserOperationParameters<TAccount, TEntryPointVersion, TContext>
   ) => Promise<UserOperationRequest<TEntryPointVersion>>;
   dropAndReplaceUserOperation: (
     args: DropAndReplaceUserOperationParameters<TAccount, TContext>
@@ -98,10 +100,14 @@ export type BaseSmartAccountClientActions<
     args: SendTransactionsParameters<TAccount, TContext>
   ) => Promise<Hex>;
   sendUserOperation: (
-    args: SendUserOperationParameters<TAccount, TContext>
+    args: SendUserOperationParameters<
+      TAccount,
+      TContext,
+      GetEntryPointFromAccount<TAccount>
+    >
   ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
   waitForUserOperationTransaction: (
-    args: WaitForTransactionReceiptParameters
+    args: WaitForUserOperationTxParameters
   ) => Promise<Hex>;
   upgradeAccount: (
     args: UpgradeAccountParams<TAccount, TContext>

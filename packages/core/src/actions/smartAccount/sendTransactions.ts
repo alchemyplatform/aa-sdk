@@ -36,12 +36,14 @@ export async function sendTransactions<
     requests,
     overrides,
     account,
+    context,
   });
 
   const { hash } = await _sendUserOperation(client, {
     account,
     uoStruct,
     context,
+    overrides,
   });
 
   return waitForUserOperationTransaction(client, { hash });

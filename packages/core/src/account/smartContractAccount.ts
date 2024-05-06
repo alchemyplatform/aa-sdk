@@ -153,7 +153,7 @@ export const getAccountAddress = async ({
   getAccountInitCode,
 }: {
   client: PublicClient;
-  entryPoint: EntryPointDef<EntryPointVersion>;
+  entryPoint: EntryPointDef;
   accountAddress?: Address;
   getAccountInitCode: () => Promise<Hex>;
 }) => {

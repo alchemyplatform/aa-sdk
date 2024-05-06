@@ -24,17 +24,13 @@ import type {
 export type BundlerRpcSchema = [
   {
     Method: "eth_sendUserOperation";
-    Parameters: [UserOperationRequest<EntryPointVersion>, Address];
+    Parameters: [UserOperationRequest, Address];
     ReturnType: Hash;
   },
   {
     Method: "eth_estimateUserOperationGas";
-    Parameters: [
-      UserOperationRequest<EntryPointVersion>,
-      Address,
-      StateOverride?
-    ];
-    ReturnType: UserOperationEstimateGasResponse<EntryPointVersion>;
+    Parameters: [UserOperationRequest, Address, StateOverride?];
+    ReturnType: UserOperationEstimateGasResponse;
   },
   {
     Method: "eth_getUserOperationReceipt";
@@ -44,7 +40,7 @@ export type BundlerRpcSchema = [
   {
     Method: "eth_getUserOperationByHash";
     Parameters: [Hash];
-    ReturnType: UserOperationResponse<EntryPointVersion> | null;
+    ReturnType: UserOperationResponse | null;
   },
   {
     Method: "eth_supportedEntryPoints";
@@ -91,9 +87,7 @@ export type BundlerActions = {
    * @param hash - the hash of the UserOperation to fetch
    * @returns - {@link UserOperationResponse}
    */
-  getUserOperationByHash(
-    hash: Hash
-  ): Promise<UserOperationResponse<EntryPointVersion> | null>;
+  getUserOperationByHash(hash: Hash): Promise<UserOperationResponse | null>;
 
   /**
    * calls `eth_getUserOperationReceipt` and returns the {@link UserOperationReceipt}

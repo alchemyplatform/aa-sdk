@@ -1,5 +1,6 @@
 import {
   type GetAccountParameter,
+  type GetEntryPointFromAccount,
   type IsUndefined,
   type SendUserOperationParameters,
   type SmartContractAccount,
@@ -42,7 +43,9 @@ export type MultisigPluginActions<
 
   proposeUserOperation: (
     params: SendUserOperationParameters<TAccount, undefined>
-  ) => Promise<ProposeUserOperationResult<TAccount>>;
+  ) => Promise<
+    ProposeUserOperationResult<TAccount, GetEntryPointFromAccount<TAccount>>
+  >;
 
   signMultisigUserOperation: (
     params: SignMultisigUserOperationParams<TAccount>
