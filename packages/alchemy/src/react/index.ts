@@ -44,3 +44,8 @@ export { useWaitForUserOperationTransaction } from "./hooks/useWaitForUserOperat
 
 // TODO: remove these and only expose the full UI modal
 export { DemoSet } from "./components/button.js";
+export { Input } from "./components/input.js";
+
+// These are the actual components that should be exported later
+export type * from "./components/AuthModal/types.js";
+export { AuthCard, useAuthModal } from "./components/AuthModal/useAuthModal.js";

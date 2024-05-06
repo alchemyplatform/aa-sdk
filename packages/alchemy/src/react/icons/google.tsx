@@ -1,4 +1,4 @@
-import type { JSX, SVGProps } from "react";
+import type { SVGProps } from "react";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const GoogleIcon = (
