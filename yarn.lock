@@ -6284,6 +6284,13 @@
   dependencies:
     "@t3-oss/env-core" "0.7.1"
 
+"@tanstack/form-core@0.19.4":
+  version "0.19.4"
+  resolved "https://registry.yarnpkg.com/@tanstack/form-core/-/form-core-0.19.4.tgz#3a9085d1e4d1d9bf51516f1ff96d25c1d6b26c9e"
+  integrity sha512-xmmKrffth17qHBC0yb22zF2AYVQALFMYFTko7xpVJrK2B+BFKyDYwSrZlnK260nr31loTNejZOzD6ofpGTLSGA==
+  dependencies:
+    "@tanstack/store" "^0.3.1"
+
 "@tanstack/query-core@4.36.1":
   version "4.36.1"
   resolved "https://registry.npmjs.org/@tanstack/query-core/-/query-core-4.36.1.tgz"
@@ -6308,6 +6315,16 @@
   dependencies:
     "@tanstack/query-persist-client-core" "4.36.1"
 
+"@tanstack/react-form@^0.19.4":
+  version "0.19.4"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-form/-/react-form-0.19.4.tgz#1d7afeccdf03c16dc98ecd59a424ca97b067ab5e"
+  integrity sha512-WlGnRCvJmhwM0/qXaUIkD9nI9ilg1MIN3JX5HuNW1nl2AsqHzVRCFU9r/icrsrfFpc5NJ0OSF8lFi2GqAHVS1Q==
+  dependencies:
+    "@tanstack/form-core" "0.19.4"
+    "@tanstack/react-store" "^0.3.1"
+    decode-formdata "^0.4.0"
+    rehackt "^0.0.3"
+
 "@tanstack/react-query-persist-client@^4.28.0", "@tanstack/react-query-persist-client@^4.29.7":
   version "4.36.1"
   resolved "https://registry.npmjs.org/@tanstack/react-query-persist-client/-/react-query-persist-client-4.36.1.tgz"
@@ -6329,6 +6346,26 @@
   integrity sha512-vwifBkGXsydsLxFOBMe3+f8kvtDoqDRDwUNjPHVDDt+FoBetCbOWAUHgZn4k+CVeZgLmy7bx6aKeDbe3e8koOQ==
   dependencies:
     "@tanstack/query-core" "5.28.9"
+
+"@tanstack/react-store@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-store/-/react-store-0.3.1.tgz#f93896da40f91b4385aca9448d3ccf914b314b50"
+  integrity sha512-PfV271d345It6FdcX4c9gd+llKGddtvau8iJnybTAWmYVyDeFWfIIkiAJ5iNITJmI02AzqgtcV3QLNBBlpBUjA==
+  dependencies:
+    "@tanstack/store" "0.3.1"
+    use-sync-external-store "^1.2.0"
+
+"@tanstack/store@0.3.1", "@tanstack/store@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/store/-/store-0.3.1.tgz#317bfb7eedd8cc4ee32c4e52740abbf1bd311d36"
+  integrity sha512-A49KN8SpLMWaNmZGPa9K982RQ81W+m7W6iStcQVeKeVS70JZRqkF0fDwKByREPq6qz9/kS0aQFOPQ0W6wIeU5g==
+
+"@tanstack/zod-form-adapter@^0.19.4":
+  version "0.19.4"
+  resolved "https://registry.yarnpkg.com/@tanstack/zod-form-adapter/-/zod-form-adapter-0.19.4.tgz#1bfe0d9e091372bfe240f4895f96dff23638bb20"
+  integrity sha512-+kaLOibPBA5d8PUtUdo+0f9sLFrRpLvl6JMjtZa9ylfcBFN56PsKnS7SKQuwUdTnW1YqfQj6xs93IT9eJxHvHQ==
+  dependencies:
+    "@tanstack/form-core" "0.19.4"
 
 "@tootallnate/once@2":
   version "2.0.0"
@@ -10217,6 +10254,11 @@ decimal.js@^10.4.3:
   version "10.4.3"
   resolved "https://registry.npmjs.org/decimal.js/-/decimal.js-10.4.3.tgz"
   integrity sha512-VBBaLc1MgL5XpzgIP7ny5Z6Nx3UrRkIViUkPUdtl9aya5amy3De1gsUUSB1g3+3sExYNjCAsAznmukyxCb1GRA==
+
+decode-formdata@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/decode-formdata/-/decode-formdata-0.4.0.tgz#485715a37417868435a92d2144b39646fe654aae"
+  integrity sha512-/OMUlsRLrSgHPOWCwembsFFTT4DY7Ts9GGlwK8v9yeLOyYZSPKIfn/1oOuV9UmpQ9CZi5JeyT8edunRoBOOl5g==
 
 decode-uri-component@^0.2.0, decode-uri-component@^0.2.2:
   version "0.2.2"
@@ -16770,6 +16812,11 @@ regjsparser@^0.9.1:
   integrity sha512-dQUtn90WanSNl+7mQKcXAgZxvUe7Z0SqXlgzv0za4LwiUhyzBC58yQO3liFoUgu8GiJVInAhJjkj1N0EtQ5nkQ==
   dependencies:
     jsesc "~0.5.0"
+
+rehackt@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/rehackt/-/rehackt-0.0.3.tgz#1ea454620d4641db8342e2db44595cf0e7ac6aa0"
+  integrity sha512-aBRHudKhOWwsTvCbSoinzq+Lej/7R8e8UoPvLZo5HirZIIBLGAgdG7SL9QpdcBoQ7+3QYPi3lRLknAzXBlhZ7g==
 
 require-directory@^2.1.1:
   version "2.1.1"

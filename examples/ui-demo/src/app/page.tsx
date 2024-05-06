@@ -1,9 +1,9 @@
 "use client";
 
-import { AuthCard, AuthType, DemoSet, useAuthModal } from "@alchemy/aa-alchemy/react";
+import { AuthCard, AuthType, DemoSet, useAuthModal, useUser } from "@alchemy/aa-alchemy/react";
 // eslint-disable-next-line import/extensions
-import { ChevronRight } from "@/components/icons/chevron";
-import { MailIcon } from "@/components/icons/mail";
+import { ChevronRight } from "@/src/components/icons/chevron";
+import { MailIcon } from "@/src/components/icons/mail";
 import { Input } from "@alchemy/aa-alchemy/react";
 import { useMemo } from "react";
 
@@ -12,6 +12,7 @@ export default function Home() {
   const { openAuthModal, AuthModal } = useAuthModal({
     sections
   });
+  const user = useUser();
 
   return (
     <>
@@ -54,7 +55,7 @@ export default function Home() {
             <h1 className="text-4xl font-bold">Auth</h1>
             <div className="flex flex-row gap-6">
               <div className="modal w-[368px] shadow-md">
-                <AuthCard sections={sections} />
+                {!user ? <AuthCard sections={sections} /> : <div>Logged in as {user.email ?? "anon"}</div>}
               </div>
               <button className="btn btn-primary" onClick={openAuthModal}>
                 Open Auth Modal
