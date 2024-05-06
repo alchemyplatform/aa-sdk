@@ -20,16 +20,6 @@ export interface LitConfig {
   debug?: boolean;
 }
 
-interface LitCapacityCreditsReq {
-  dAppOwnerWallet: any; // typing as any to avoid ethers import
-  capacityTokenId?: string;
-  delegateeAddresses?: string[];
-  uses?: string;
-  domain?: string;
-  expiration?: string;
-  statement?: string;
-}
-
 interface LitCapacityCreditsRes {
   litResource: any;
   capacityDelegationAuthSig: AuthSig;
@@ -49,20 +39,13 @@ export interface LitAuthenticateProps<
   chain?: string;
 
   /**
-   * parameters to pass to {@link capacityCreditNeeded}
-   */
-  capacityCreditNeededParams?: LitCapacityCreditsReq;
-
-  /**
    * Callback to provide a Capacity Delegation AuthSig
    * Only required if not providing a {@link LitSessionSigsMap}
    *
    * @param params
    * @returns {Promise<LitCapacityCreditsRes>}
    */
-  capacityCreditNeeded?: (
-    params: LitCapacityCreditsReq
-  ) => Promise<LitCapacityCreditsRes>;
+  capacityCreditNeeded?: () => Promise<LitCapacityCreditsRes>;
 }
 
 export type LitSmartAccountAuthenticator<
