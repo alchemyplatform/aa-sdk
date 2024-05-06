@@ -157,10 +157,10 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
       const chainInfo = ALL_LIT_CHAINS[chain];
       let delegationSignature: any | undefined;
       if (props.capacityCreditNeeded) {
-        const res = await props.capacityCreditNeeded(
-          props.capacityCreditNeededParams!
-        );
+        const res = await props.capacityCreditNeeded();
         delegationSignature = res.capacityDelegationAuthSig;
+      } else {
+        console.warn("Delegation signature provider not called ");
       }
       const chainId = (chainInfo as LITEVMChain).chainId ?? 1;
       let authNeededCallback: any;
@@ -205,7 +205,7 @@ export class LitSigner<C extends LitAuthMethod | LitSessionSigsMap>
             new Date(Date.now() + 60 * 60 * 24 * 7).toISOString(),
           resourceAbilityRequests: resourceAbilities,
           authNeededCallback,
-          capacityDelegationAuthSig: delegationSignature,
+          capacityDelegationAuthSig: delegationSignature ?? undefined,
         })
         .catch((err) => {
           throw err;
