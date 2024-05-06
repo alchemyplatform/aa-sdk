@@ -120,6 +120,7 @@ export const sidebar: DefaultTheme.Sidebar = [
     base: "/react",
     items: [
       { text: "Overview", link: "/overview" },
+      { text: "SSR", link: "/ssr" },
       { text: "createConfig", link: "/createConfig" },
       { text: "useAuthenticate", link: "/useAuthenticate" },
       { text: "useSmartAccountClient", link: "/useSmartAccountClient" },
