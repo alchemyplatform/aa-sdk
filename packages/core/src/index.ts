@@ -38,6 +38,8 @@ export {
   base,
   baseGoerli,
   baseSepolia,
+  fraxtal,
+  fraxtalSepolia,
   goerli,
   mainnet,
   optimism,
@@ -47,8 +49,6 @@ export {
   polygonAmoy,
   polygonMumbai,
   sepolia,
-  fraxtal,
-  fraxtalSepolia,
   zora,
   zoraSepolia,
 } from "./chains/index.js";
@@ -112,7 +112,10 @@ export {
   FailedToFindTransactionError,
   TransactionMissingToParamError,
 } from "./errors/transaction.js";
-export { InvalidUserOperationError } from "./errors/useroperation.js";
+export {
+  InvalidUserOperationError,
+  WaitForUserOperationError,
+} from "./errors/useroperation.js";
 export { LogLevel, Logger } from "./logger.js";
 export { middlewareActions } from "./middleware/actions.js";
 export { defaultFeeEstimator } from "./middleware/defaults/feeEstimator.js";

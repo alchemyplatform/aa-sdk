@@ -10,7 +10,7 @@ import {
   type UseMutateAsyncFunction,
   type UseMutateFunction,
 } from "@tanstack/react-query";
-import { type Hash, type Hex } from "viem";
+import { type Chain, type Hash, type Hex, type Transport } from "viem";
 import type { SupportedAccounts } from "../../config/types.js";
 import { useAlchemyAccountContext } from "../context.js";
 import { ClientUndefinedHookError } from "../errors.js";
@@ -21,9 +21,17 @@ export type UseSendTransactionsMutationArgs<
   TAccount extends SupportedAccounts = SupportedAccounts
 > = BaseHookMutationArgs<Hash, SendTransactionsParameters<TAccount>>;
 
-export type UseSendTransactionsArgs = {
-  client: UseSmartAccountClientResult["client"] | undefined;
-} & UseSendTransactionsMutationArgs;
+export type UseSendTransactionsArgs<
+  TAccount extends SupportedAccounts = SupportedAccounts
+> = {
+  client:
+    | UseSmartAccountClientResult<
+        Transport,
+        Chain | undefined,
+        TAccount
+      >["client"]
+    | undefined;
+} & UseSendTransactionsMutationArgs<TAccount>;
 
 export type UseSendTransactionsResult<
   TAccount extends SupportedAccounts = SupportedAccounts,
@@ -49,19 +57,25 @@ export type UseSendTransactionsResult<
   error: Error | null;
 };
 
+/**
+ * @deprecated use useSendUserOperation instead
+ *
+ * Allows you to send a batch of transactions as a single user operation and await
+ * the transaction to be mined.
+ *
+ * @param params - see {@link UseSendTransactionsArgs}
+ * @returns a collection of functions and state for sending transactions {@link UseSendTransactionsResult}
+ */
 export function useSendTransactions<
   TAccount extends SupportedAccounts = SupportedAccounts,
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined,
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
->({
-  client,
-}: UseSendTransactionsArgs): UseSendTransactionsResult<
-  TAccount,
-  TContext,
-  TEntryPointVersion
-> {
+>(
+  params: UseSendTransactionsArgs<TAccount>
+): UseSendTransactionsResult<TAccount, TContext, TEntryPointVersion> {
+  const { client, ...mutationArgs } = params;
   const { queryClient } = useAlchemyAccountContext();
 
   const {
@@ -73,7 +87,7 @@ export function useSendTransactions<
   } = useMutation(
     {
       mutationFn: async (
-        params: SendTransactionsParameters<
+        sendTxParams: SendTransactionsParameters<
           TAccount,
           TContext,
           TEntryPointVersion
@@ -83,8 +97,9 @@ export function useSendTransactions<
           throw new ClientUndefinedHookError("useSendTransactions");
         }
 
-        return client.sendTransactions(params);
+        return client.sendTransactions(sendTxParams);
       },
+      ...mutationArgs,
     },
     queryClient
   );
