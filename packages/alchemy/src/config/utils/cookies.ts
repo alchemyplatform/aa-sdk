@@ -1,4 +1,4 @@
-import { getCookie, removeCookie, setCookie } from "typescript-cookie";
+import Cookies from "js-cookie";
 import { DEFAULT_SESSION_MS } from "../../signer/session/manager.js";
 import type { AlchemyAccountsConfig, AlchemyClientState } from "../types";
 import { deserialize } from "./deserialize.js";
@@ -25,7 +25,7 @@ export const cookieStorage: (config?: { sessionLength: number }) => Storage = (
   getItem: function (key: string): string | null {
     if (typeof document === "undefined") return null;
 
-    const cookieValue = getCookie(key);
+    const cookieValue = Cookies.get(key);
     return cookieValue ? decodeURIComponent(cookieValue) : null;
   },
 
@@ -37,13 +37,13 @@ export const cookieStorage: (config?: { sessionLength: number }) => Storage = (
   removeItem: function (key: string): void {
     if (typeof document === "undefined") return;
 
-    removeCookie(key);
+    Cookies.remove(key);
   },
 
   setItem: function (key: string, value: string): void {
     if (typeof document === "undefined") return;
 
-    setCookie(key, value, {
+    Cookies.set(key, value, {
       expires: new Date(
         Date.now() + (config?.sessionLength ?? DEFAULT_SESSION_MS)
       ),
