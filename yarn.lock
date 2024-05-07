@@ -4156,10 +4156,10 @@
     fireblocks-sdk "^3.1.4"
     web3-providers-http "1.8.0"
 
-"@fordefi/web3-provider@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@fordefi/web3-provider/-/web3-provider-0.1.0.tgz#c44b7ed4b56736ab9016a8251b735f7c37c0d58f"
-  integrity sha512-BsZvOJrEOKGlmZo2P4BgpuLm5hXFq1edHuTz4L4TvFTxyHcpEV5kDPwM4ElYNOj9uvkXwPK4xpUj1nO6mhZAHA==
+"@fordefi/web3-provider@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@fordefi/web3-provider/-/web3-provider-0.2.0.tgz#c48da777410081e29e6ccdae6e40c8dc1558f395"
+  integrity sha512-7zBzg/F8fJgspmjeKbI3QjNKLYmycCtWOuPf225Ye0O+8zRtQr6PgaCh2tDhmFMa3gmAJ+BAhuPqCyYyNw4Y+w==
   dependencies:
     viem "^2.8.6"
 

@@ -4,7 +4,6 @@ import {
 } from "@alchemy/aa-core";
 import {
   type FordefiProviderConfig,
-  type UserInfo,
   FordefiWeb3Provider,
 } from "@fordefi/web3-provider";
 import {
@@ -16,15 +15,21 @@ import {
   type TypedDataDefinition,
 } from "viem";
 import { signerTypePrefix } from "../constants.js";
+import type { FordefiAuthDetails, FordefiAuthParams } from "./types";
 
 /**
  * This class requires the `@fordefi/web3-provider` dependency.
  * `@alchemy/aa-signers` lists it as optional dependency.
  *
- * @see: https://github.com/FordefiHQ/web3-provider
+ * @see https://github.com/FordefiHQ/web3-provider
  */
 export class FordefiSigner
-  implements SmartAccountAuthenticator<void, UserInfo, FordefiWeb3Provider>
+  implements
+    SmartAccountAuthenticator<
+      FordefiAuthParams,
+      FordefiAuthDetails,
+      FordefiWeb3Provider
+    >
 {
   inner: FordefiWeb3Provider;
   private signer: WalletClientSigner | undefined;
@@ -66,7 +71,7 @@ export class FordefiSigner
     return this.signer.signTypedData(params);
   };
 
-  authenticate = async (): Promise<UserInfo> => {
+  authenticate = async (): Promise<FordefiAuthDetails> => {
     if (this.inner == null) throw new Error("No provider found");
 
     await this.inner.connect();
@@ -81,9 +86,7 @@ export class FordefiSigner
     return this.getAuthDetails();
   };
 
-  getAuthDetails = async (): Promise<UserInfo> => {
+  getAuthDetails = async (): Promise<FordefiAuthDetails> => {
     if (!this.signer) throw new Error("Not authenticated");
-
-    return this.inner.getUserInfo();
   };
 }
