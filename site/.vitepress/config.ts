@@ -6,7 +6,6 @@ const pkg = require("../../lerna.json");
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "Account Kit",
-  base: "/alchemy-aa-sdk/",
   description: "Account Abstraction Legos",
   themeConfig: {
     logo: "/kit-logo.svg",

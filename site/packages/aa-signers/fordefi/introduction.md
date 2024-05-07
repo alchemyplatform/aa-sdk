@@ -14,7 +14,7 @@ head:
 
 # Fordefi Signer
 
-`FordefiSigner` is a signer implementation which extends `SmartAccountAuthenticator` to leverage the [Fordefi SDK](https://github.com/FordefiHQ/web3-provider). It supports features such as authentication, message and typed data signing, and authentication details retrieval.
+`FordefiSigner` is a signer implementation which extends `SmartAccountAuthenticator` to leverage the [Fordefi Web3 Provider](https://github.com/FordefiHQ/web3-provider). It supports features such as authentication, message and typed data signing, and authentication details retrieval.
 
 `FordefiSigner` provides implementations for all methods on `SmartAccountAuthenticator`:
 

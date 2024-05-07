@@ -40,8 +40,6 @@ await fordefiSigner.authenticate();
 
 ## Returns
 
-### `Promise<FordefiUserInfo>`
+### `Promise<FordefiAuthDetails>`
 
-A Promise containing the `FordefiUserInfo`, an object with the following fields:
-
-- `addresses: Address[]` -- an array with a single EOA address accessible via the Signer.
+A Promise containing the `FordefiAuthDetails`, which is currently `void`.

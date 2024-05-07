@@ -33,4 +33,4 @@ export {
   ArcanaAuthSigner,
   type ArcanaAuthAuthenticationParams,
 } from "./arcana-auth/index.js";
-export { FordefiSigner } from "./fordefi/index.js";
+export { FordefiSigner, type FordefiAuthParams } from "./fordefi/index.js";

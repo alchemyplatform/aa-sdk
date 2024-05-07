@@ -1,8 +1,7 @@
 import {
+  type FordefiMethodName,
+  type FordefiRpcSchema,
   FordefiWeb3Provider,
-  SignerType,
-  UserType,
-  type Method,
   type MethodReturnType,
   type RequestArgs,
 } from "@fordefi/web3-provider";
@@ -14,10 +13,7 @@ const fixtures = {
   chainId: 11155111,
   message: "test",
   signedMessage: "0xtest",
-  userId: "12345678-abcd-1234-abcd-123456789012",
   apiUserToken: "123-456",
-  userType: UserType.apiUser,
-  signerType: SignerType.apiSigner,
 } as const;
 
 describe("Fordefi Signer Tests", () => {
@@ -41,13 +37,7 @@ describe("Fordefi Signer Tests", () => {
     const signer = await givenSigner();
 
     const details = await signer.getAuthDetails();
-    expect(details).toMatchInlineSnapshot(`
-      {
-        "id": "${fixtures.userId}",
-        "signerType": "${fixtures.signerType}",
-        "userType": "${fixtures.userType}",
-      }
-    `);
+    expect(details).toBeUndefined();
   });
 
   it("should correctly fail to get auth details if unauthenticated", async () => {
@@ -87,42 +77,39 @@ describe("Fordefi Signer Tests", () => {
         hello: "world",
       },
     } satisfies TypedDataDefinition;
+
     const signTypedData = await signer.signTypedData(typedData);
     expect(signTypedData).toMatchInlineSnapshot(`"${fixtures.signedMessage}"`);
   });
 });
 
 const givenSigner = async (auth = true) => {
-  FordefiWeb3Provider.prototype.request = vi.fn((async <M extends Method>(
-    args: RequestArgs<M>
+  FordefiWeb3Provider.prototype.request = vi.fn((async <
+    M extends FordefiMethodName
+  >(
+    args: RequestArgs<FordefiRpcSchema, M>
   ) => {
     switch (args.method) {
       case "eth_accounts":
         return Promise.resolve([fixtures.address]) as Promise<
-          MethodReturnType<"eth_accounts">
+          MethodReturnType<FordefiRpcSchema, "eth_accounts">
         >;
       case "eth_chainId":
         return Promise.resolve(numberToHex(fixtures.chainId)) as Promise<
-          MethodReturnType<"eth_chainId">
+          MethodReturnType<FordefiRpcSchema, "eth_chainId">
         >;
       case "personal_sign":
         return Promise.resolve(fixtures.signedMessage) as Promise<
-          MethodReturnType<"personal_sign">
+          MethodReturnType<FordefiRpcSchema, "personal_sign">
         >;
       case "eth_signTypedData_v4":
         return Promise.resolve(fixtures.signedMessage) as Promise<
-          MethodReturnType<"eth_signTypedData_v4">
+          MethodReturnType<FordefiRpcSchema, "eth_signTypedData_v4">
         >;
       default:
         return Promise.reject(new Error("Method not found"));
     }
   }) as FordefiWeb3Provider["request"]);
-
-  FordefiWeb3Provider.prototype.getUserInfo = vi.fn(() => ({
-    id: fixtures.userId,
-    signerType: fixtures.signerType,
-    userType: fixtures.userType,
-  }));
 
   const inner = new FordefiWeb3Provider({
     chainId: fixtures.chainId,

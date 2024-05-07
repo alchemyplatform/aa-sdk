@@ -14,7 +14,7 @@ head:
 
 # getAuthDetails
 
-`getAuthDetails` returns the details about the authenticated user, specifically all EOA addresses tied to the user's Fordefi vault.
+`getAuthDetails` currently does not have a return value.
 
 This method must be called after [`authenticate`](/packages/aa-signers/fordefi/authenticate). Otherwise, this method will throw an error with the message `Not Authenticated`.
 
@@ -35,8 +35,6 @@ const details = await fordefiSigner.getAuthDetails();
 
 ## Returns
 
-### `Promise<FordefiUserInfo>`
+### `Promise<FordefiAuthDetails>`
 
-A Promise containing the `FordefiUserInfo`, an object with the following fields:
-
-- `addresses: Address[]` -- an array with a single EOA address accessible via the Signer.
+A Promise containing the `FordefiAuthDetails`, which is currently `void`.
