@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.12.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.12.0...v3.12.1) (2024-05-07)
+
+### Bug Fixes
+
+- **alchemy:** remove typescript-cookie because its not cjs compatible ([#652](https://github.com/alchemyplatform/aa-sdk/issues/652)) ([21eeb63](https://github.com/alchemyplatform/aa-sdk/commit/21eeb6373bd11b7bf149ae12dce3c045abefd8e3))
+- replace fraxTestnet with fraxSepolia ([#642](https://github.com/alchemyplatform/aa-sdk/issues/642)) ([320a15d](https://github.com/alchemyplatform/aa-sdk/commit/320a15d049e9ad6125e9e4102a3fc1ebe8f0dd55))
+
 # [3.12.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.11.1...v3.12.0) (2024-05-02)
 
 ### Features
