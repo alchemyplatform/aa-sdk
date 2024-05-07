@@ -22,10 +22,6 @@ head:
 
 If you are using Smart Contract Accounts and building a React application, you can use the React Hooks exported by Account Kit to interact with your Smart Contract Accounts. You're not required to use these hooks to leverage all of the power of Account Kit. The hooks are exported from `@alchemy/aa-alchemy` and can be found within the `@alchemy/aa-alchemy/react` namespace.
 
-::: warning
-React hooks are still being developed and the interfaces could change in the future!
-:::
-
 ## Install the package
 
 To use the React Hooks, you need to install the `@alchemy/aa-alchemy` and `@tanstack/react-query` packages. We use [`react-query`](https://tanstack.com/query/latest/docs/framework/react/overview) to manage async data fetching and mutations in our hooks.
