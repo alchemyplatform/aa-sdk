@@ -24,7 +24,7 @@
     "lint:check": "eslint . && prettier --check .",
     "lint:ci:eslint": "eslint --format github $(git diff --name-only origin/main HEAD | xargs)",
     "prepare": "husky install",
-    "version": "yarn build"
+    "version": "yarn build:ci"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.3",
