@@ -1,6 +1,6 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useSignerStatus } from "../../../hooks/useSignerStatus.js";
-import { AuthModalContext, type AuthContext } from "../context.js";
+import { AuthModalContext, type AuthStep } from "../context.js";
 import type { AuthType } from "../types.js";
 import { LoadingAuth } from "./loading/index.js";
 import { MainAuthContent } from "./main.js";
@@ -11,6 +11,7 @@ export type AuthCardProps = {
   // and separated by an OR divider
   sections?: AuthType[][];
   className?: string;
+  onAuthSuccess?: () => void;
 };
 
 /**
@@ -22,21 +23,25 @@ export type AuthCardProps = {
  * @returns a react component containing the AuthCard
  */
 export const AuthCard = (props: AuthCardProps) => {
-  const [authContext, setAuthContext] = useState<AuthContext | undefined>(
-    undefined
-  );
+  const [authStep, setAuthStep] = useState<AuthStep>({ type: "initial" });
   const { isAuthenticating } = useSignerStatus();
+
+  useEffect(() => {
+    if (authStep.type === "complete") {
+      props.onAuthSuccess?.();
+    }
+  }, [authStep, props]);
 
   return (
     <AuthModalContext.Provider
       value={{
-        authContext,
-        setAuthContext,
+        authStep,
+        setAuthStep,
       }}
     >
       <div className="modal-box flex flex-col items-center gap-5">
         {isAuthenticating ? (
-          <LoadingAuth context={authContext} />
+          <LoadingAuth context={authStep} />
         ) : (
           <MainAuthContent {...props} />
         )}
