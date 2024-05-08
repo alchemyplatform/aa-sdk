@@ -22,6 +22,10 @@ describe("tailwind utils test", () => {
               "dark": "#94A3B8",
               "light": "#94A3B8",
             },
+            "bg-surface-critical": {
+              "dark": "#FEF2F2",
+              "light": "#FEF2F2",
+            },
             "bg-surface-default": {
               "dark": "#020617",
               "light": "#fff",
@@ -53,6 +57,10 @@ describe("tailwind utils test", () => {
             "fg-accent-brand": {
               "dark": "#fff",
               "light": "#000",
+            },
+            "fg-critical": {
+              "dark": "#F87171",
+              "light": "#B91C1C",
             },
             "fg-disabled": {
               "dark": "#475569",
