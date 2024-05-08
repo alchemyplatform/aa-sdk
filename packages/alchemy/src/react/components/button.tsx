@@ -11,7 +11,7 @@ type ButtonProps = (
       type?: "primary";
       icon?: never;
     }
-  | { type: "secondary"; icon?: never }
+  | { type: "secondary" | "link"; icon?: never }
   | { type: "social"; icon?: string | ReactNode }
 ) &
   Omit<
@@ -23,29 +23,31 @@ type ButtonProps = (
   >;
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ type, children, icon, ...props }, ref) => {
-    switch (type) {
-      case "secondary":
-        return (
-          <button className="btn btn-secondary" {...props} ref={ref}>
-            {children}
-          </button>
-        );
-      case "social":
-        return (
-          <button className="btn btn-auth" {...props} ref={ref}>
-            {icon && <span>{icon}</span>}
-            {children}
-          </button>
-        );
-      case "primary":
-      default:
-        return (
-          <button className="btn btn-primary" {...props} ref={ref}>
-            {children}
-          </button>
-        );
-    }
+  ({ type, children, icon, className, ...props }, ref) => {
+    const btnClass = (() => {
+      switch (type) {
+        case "secondary":
+          return "btn-secondary";
+        case "social":
+          return "btn-auth";
+        case "link":
+          return "btn-link";
+        case "primary":
+        default:
+          return "btn-primary";
+      }
+    })();
+
+    return (
+      <button
+        className={`btn ${btnClass} ${className ?? ""}`}
+        {...props}
+        ref={ref}
+      >
+        {icon && <span>{icon}</span>}
+        {children}
+      </button>
+    );
   }
 );
 

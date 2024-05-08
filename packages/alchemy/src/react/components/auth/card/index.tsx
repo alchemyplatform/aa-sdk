@@ -2,7 +2,7 @@ import { useState, type ReactNode } from "react";
 import { useSignerStatus } from "../../../hooks/useSignerStatus.js";
 import { AuthModalContext, type AuthContext } from "../context.js";
 import type { AuthType } from "../types.js";
-import { LoadingAuth } from "./loading.js";
+import { LoadingAuth } from "./loading/index.js";
 import { MainAuthContent } from "./main.js";
 
 export type AuthCardProps = {
