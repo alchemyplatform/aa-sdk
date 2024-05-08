@@ -2,7 +2,7 @@ import type { ComponentDef } from "../types";
 
 export const buttonComponents: ComponentDef = {
   ".btn": {
-    "@apply p-3 inline-flex h-10 font-semibold": {},
+    "@apply p-3 inline-flex h-10 font-semibold text-sm": {},
     "@apply gap-2": {},
     "@apply items-center justify-center": {},
     "@apply shrink-0": {},
@@ -26,5 +26,19 @@ export const buttonComponents: ComponentDef = {
   ".btn-auth": {
     "@apply bg-btn-social text-fg-primary": {},
     "@apply static-border": {},
+  },
+  ".btn-link": {
+    // clear out the default button styles
+    "@apply appearance-none active:appearance-none hover:appearance-none": {},
+    "@apply p-0 h-[unset]": {},
+    "@apply cursor-pointer": {},
+    "@apply text-fg-accent-brand": {},
+    "@apply disabled:cursor-not-allowed disabled:opacity-25 disabled:shadow-none":
+      {},
+    "&:hover": {
+      // this is simpler than using the hover: with apply directive
+      boxShadow: "unset",
+    },
+    "@apply active:opacity-25": {},
   },
 };
