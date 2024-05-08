@@ -6,7 +6,7 @@ import { ChevronRight } from "../../../icons/chevron.js";
 import { MailIcon } from "../../../icons/mail.js";
 import { Button } from "../../button.js";
 import { Input } from "../../input.js";
-import { useAuthModalContext } from "../context.js";
+import { useAuthContext } from "../context.js";
 import type { AuthType } from "../types.js";
 
 type EmailAuthProps = Extract<AuthType, { type: "email" }>;
@@ -18,7 +18,7 @@ export const EmailAuth = ({
   buttonLabel = "Continue",
   placeholder = "Email",
 }: EmailAuthProps) => {
-  const { setAuthContext } = useAuthModalContext();
+  const { setAuthContext } = useAuthContext();
   const { authenticateAsync, error, isPending } = useAuthenticate({
     onMutate: (params) => {
       if ("email" in params) {

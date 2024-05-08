@@ -9,9 +9,7 @@ import { useMemo } from "react";
 
 export default function Home() {
   const sections = useMemo<AuthType[][]>(() => [[{type: "email", hideButton: true}],[{type: "passkey"}]], []);
-  const { openAuthModal, AuthModal } = useAuthModal({
-    sections
-  });
+  const { openAuthModal } = useAuthModal();
   const user = useUser();
 
   return (
@@ -61,7 +59,6 @@ export default function Home() {
                 Open Auth Modal
               </button>
             </div>
-            <AuthModal />
           </div>
         </div>
       </main>
