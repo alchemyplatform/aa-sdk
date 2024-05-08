@@ -3,17 +3,23 @@ import { useAuthenticate } from "../../../../hooks/useAuthenticate.js";
 import { MailIcon } from "../../../../icons/mail.js";
 import { Button } from "../../../button.js";
 import { PoweredBy } from "../../../poweredby.js";
-import type { AuthContext } from "../../context";
+import { useAuthContext, type AuthStep } from "../../context.js";
 
 interface LoadingEmailProps {
-  context: Extract<AuthContext, { type: "email" }>;
+  context: Extract<AuthStep, { type: "email_verify" }>;
 }
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const LoadingEmail = ({ context }: LoadingEmailProps) => {
   // yup, re-sent and resent. I'm not fixing it
   const [emailResent, setEmailResent] = useState(false);
-  const { authenticate } = useAuthenticate();
+  const { setAuthStep } = useAuthContext();
+  const { authenticate } = useAuthenticate({
+    onSuccess: () => {
+      // TODO: we will need to check if the dev has configured the app to allow for passkey as secondary
+      setAuthStep({ type: "complete" });
+    },
+  });
 
   useEffect(() => {
     if (emailResent) {
@@ -43,6 +49,7 @@ export const LoadingEmail = ({ context }: LoadingEmailProps) => {
         </span>
         <Button
           type="link"
+          className="text-xs font-semibold"
           onClick={() => {
             authenticate({
               type: "email",

@@ -1,12 +1,14 @@
 import { createContext, useContext } from "react";
 
-export type AuthContext =
-  | { type: "email"; email: string }
-  | { type: "passkey" };
+export type AuthStep =
+  | { type: "email_verify"; email: string }
+  | { type: "passkey_verify"; error?: Error }
+  | { type: "initial" }
+  | { type: "complete" };
 
 type AuthContextType = {
-  authContext?: AuthContext;
-  setAuthContext: (context: AuthContext | undefined) => void;
+  authStep: AuthStep;
+  setAuthStep: (step: AuthStep) => void;
 };
 
 export const AuthModalContext = createContext<AuthContextType | undefined>(

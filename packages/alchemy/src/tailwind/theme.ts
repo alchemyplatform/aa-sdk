@@ -25,11 +25,13 @@ export function createDefaultTheme(): AccountKitTheme {
       "fg-invert": createColorSet("#FFF", "#000"),
       "fg-disabled": createColorSet("#CBD5E1", "#475569"),
       "fg-accent-brand": createColorSet("#000", "#fff"),
+      "fg-critical": createColorSet("#B91C1C", "#F87171"),
 
       // surface colors
       "bg-surface-default": createColorSet("#fff", "#020617"),
       "bg-surface-subtle": createColorSet("#FBFDFF", "#0F172A"),
       "bg-surface-inset": createColorSet("#EFF4F9", "#1F2937"),
+      "bg-surface-critical": createColorSet("#FEF2F2", "#FEF2F2"),
     },
   };
 }
