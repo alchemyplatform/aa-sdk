@@ -4,17 +4,17 @@ export type AuthContext =
   | { type: "email"; email: string }
   | { type: "passkey" };
 
-type AuthModalContextType = {
+type AuthContextType = {
   authContext?: AuthContext;
   setAuthContext: (context: AuthContext | undefined) => void;
 };
 
-export const AuthModalContext = createContext<AuthModalContextType | undefined>(
+export const AuthModalContext = createContext<AuthContextType | undefined>(
   undefined
 );
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-export const useAuthModalContext = (): AuthModalContextType => {
+export const useAuthContext = (): AuthContextType => {
   const context = useContext(AuthModalContext);
   if (!context) {
     throw new Error(
