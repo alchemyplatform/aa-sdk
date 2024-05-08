@@ -48,5 +48,5 @@ export { Input } from "./components/input.js";
 
 // These are the actual components that should be exported later
 export { AuthCard } from "./components/auth/card/index.js";
-export { useAuthModal } from "./components/auth/modal/useAuthModal.js";
 export type * from "./components/auth/types.js";
+export { useAuthModal } from "./hooks/useAuthModal.js";

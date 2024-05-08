@@ -21,3 +21,17 @@ export class ClientUndefinedHookError extends BaseError {
     super(`client must be defined in ${hookName}`);
   }
 }
+
+/**
+ * An error thrown by hooks that require a uiConfig to be supplied to the AlchemyAccountProvider.
+ */
+export class MissingUiConfigError extends BaseError {
+  /**
+   * @param hookName the name of the hook that is throwing this error
+   */
+  constructor(hookName: string) {
+    super(
+      `${hookName}: uiConfig must be supplied to AlchemyAccountProvider to use this hook`
+    );
+  }
+}

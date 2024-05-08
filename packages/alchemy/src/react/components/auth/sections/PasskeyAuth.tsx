@@ -1,7 +1,7 @@
 import { useAuthenticate } from "../../../hooks/useAuthenticate.js";
 import { PasskeyIcon } from "../../../icons/passkey.js";
 import { Button } from "../../button.js";
-import { useAuthModalContext } from "../context.js";
+import { useAuthContext } from "../context.js";
 
 type Props = {
   label?: string;
@@ -10,7 +10,7 @@ type Props = {
 // Not used externally
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const PasskeyAuth = ({ label = "Passkey" }: Props) => {
-  const { setAuthContext } = useAuthModalContext();
+  const { setAuthContext } = useAuthContext();
   const { authenticate } = useAuthenticate({
     onMutate: () => {
       setAuthContext({ type: "passkey" });
