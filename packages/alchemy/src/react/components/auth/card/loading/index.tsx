@@ -1,4 +1,5 @@
-import type { AuthContext } from "../context";
+import type { AuthContext } from "../../context";
+import { LoadingEmail } from "./email.js";
 
 type LoadingAuthProps = {
   context?: AuthContext;
@@ -8,7 +9,7 @@ type LoadingAuthProps = {
 export const LoadingAuth = ({ context }: LoadingAuthProps) => {
   switch (context?.type) {
     case "email":
-      return <div>Check your email ({context.email})</div>;
+      return <LoadingEmail context={context} />;
     case "passkey":
       return <div>Follow the prompts in your browser?</div>;
     default:

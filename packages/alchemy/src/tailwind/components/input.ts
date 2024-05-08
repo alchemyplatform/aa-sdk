@@ -5,7 +5,7 @@ export const inputComponents: ComponentDef = {
     // container styling
     "@apply p-3 inline-flex gap-2 h-10 items-center": {},
     "@apply static-border": {},
-    "@apply text-fg-primary": {},
+    "@apply text-fg-primary text-sm": {},
     "@apply bg-bg-surface-default": {},
     "&-disabled, &:disabled, &[disabled]": {
       "@apply static-border pointer-events-none": {},

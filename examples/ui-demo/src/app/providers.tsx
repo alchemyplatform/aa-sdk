@@ -9,6 +9,7 @@ const config = createConfig({
   // required
   rpcUrl: "/api/rpc",
   chain: sepolia,
+  ssr: true,
 });
 
 const queryClient = new QueryClient();
