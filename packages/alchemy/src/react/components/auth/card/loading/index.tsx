@@ -1,17 +1,18 @@
-import type { AuthContext } from "../../context";
+import type { AuthStep } from "../../context";
 import { LoadingEmail } from "./email.js";
+import { LoadingPasskeyAuth } from "./passkey.js";
 
 type LoadingAuthProps = {
-  context?: AuthContext;
+  context?: AuthStep;
 };
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const LoadingAuth = ({ context }: LoadingAuthProps) => {
   switch (context?.type) {
-    case "email":
+    case "email_verify":
       return <LoadingEmail context={context} />;
-    case "passkey":
-      return <div>Follow the prompts in your browser?</div>;
+    case "passkey_verify":
+      return <LoadingPasskeyAuth context={context} />;
     default:
       return <div>Logging you in...</div>;
   }

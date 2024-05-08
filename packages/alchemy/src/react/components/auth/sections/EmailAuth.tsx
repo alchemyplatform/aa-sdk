@@ -18,17 +18,18 @@ export const EmailAuth = ({
   buttonLabel = "Continue",
   placeholder = "Email",
 }: EmailAuthProps) => {
-  const { setAuthContext } = useAuthContext();
+  const { setAuthStep } = useAuthContext();
   const { authenticateAsync, error, isPending } = useAuthenticate({
     onMutate: (params) => {
       if ("email" in params) {
-        setAuthContext({ type: "email", email: params.email });
+        setAuthStep({ type: "email_verify", email: params.email });
       }
     },
     onError: (error) => {
       // TODO: need to handle this and show it to the user
       console.error(error);
-      setAuthContext(undefined);
+      // TODO: need to pass this error along
+      setAuthStep({ type: "initial" });
     },
   });
 
