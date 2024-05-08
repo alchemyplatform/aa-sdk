@@ -21,11 +21,13 @@ export interface AccountKitTheme {
     "fg-invert": ColorVariantRecord;
     "fg-disabled": ColorVariantRecord;
     "fg-accent-brand": ColorVariantRecord;
+    "fg-critical": ColorVariantRecord;
 
     // surface colors
     "bg-surface-default": ColorVariantRecord;
     "bg-surface-subtle": ColorVariantRecord;
     "bg-surface-inset": ColorVariantRecord;
+    "bg-surface-critical": ColorVariantRecord;
   };
 }
 

@@ -86,6 +86,7 @@ export const AlchemyAccountProvider = (
             <AuthCard
               header={uiConfig.auth.header}
               sections={uiConfig.auth.sections}
+              onAuthSuccess={() => closeAuthModal()}
             />
             <div
               className="modal-backdrop"
