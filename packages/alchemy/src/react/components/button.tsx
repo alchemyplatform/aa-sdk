@@ -7,11 +7,7 @@ import {
 import { GoogleIcon } from "../icons/google.js";
 
 type ButtonProps = (
-  | {
-      type?: "primary";
-      icon?: never;
-    }
-  | { type: "secondary" | "link"; icon?: never }
+  | { type?: "primary" | "secondary" | "link"; icon?: never }
   | { type: "social"; icon?: string | ReactNode }
 ) &
   Omit<

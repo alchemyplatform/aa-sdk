@@ -18,7 +18,8 @@ const queryClient = new QueryClient();
 // we should export a default uiConfig which has our recommended config
 const uiConfig: AlchemyAccountsProviderProps["uiConfig"] = {
   auth: {
-    sections: [[{type: "email"}], [{type: "passkey"}]]
+    sections: [[{type: "email"}], [{type: "passkey"}]],
+    addPasskeyOnSignup: true,
   }
 };
 
