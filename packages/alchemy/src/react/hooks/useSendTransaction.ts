@@ -42,9 +42,17 @@ export type UseSendTransactionResult = {
   error: Error | null;
 };
 
-export function useSendTransaction({
-  client,
-}: UseSendTransactionArgs): UseSendTransactionResult {
+/**
+ * @deprecated use useSendUserOperation instead
+ * Send a TX request as a user operation and wait for it to be mined
+ *
+ * @param params - see {@link UseSendUserOperationArgs}
+ * @returns functions and state for sending txs {@link UseSendTransactionResult}
+ */
+export function useSendTransaction(
+  params: UseSendTransactionArgs
+): UseSendTransactionResult {
+  const { client, ...mutationArgs } = params;
   const { queryClient } = useAlchemyAccountContext();
 
   const {
@@ -55,6 +63,7 @@ export function useSendTransaction({
     error,
   } = useMutation(
     {
+      ...mutationArgs,
       mutationFn: async (params: SendTransactionParameters) => {
         if (!client) {
           throw new ClientUndefinedHookError("useSendTransaction");

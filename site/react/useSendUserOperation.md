@@ -34,7 +34,15 @@ import { useSendUserOperation } from "@alchemy/aa-alchemy/react";
 
 ## Usage
 
+### Without awaiting the transaction hash
+
 <<< @/snippets/react/useSendUserOperation.tsx
+
+### Await the tx to mine and retry failures
+
+The below example uses the useSendUserOperation with the `waitForTxn` flag set to `true` and makes one drop and replace call if the UserOperation fails to be mined.
+
+<<< @/snippets/react/useSendUserOperationWithRetries.tsx
 
 ## Params
 

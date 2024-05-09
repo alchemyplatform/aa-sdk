@@ -3,6 +3,7 @@ import type { SmartContractAccount } from "../../account/smartContractAccount.js
 import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
 import { AccountNotFoundError } from "../../errors/account.js";
 import { IncompatibleClientError } from "../../errors/client.js";
+import { WaitForUserOperationError } from "../../errors/useroperation.js";
 import { buildUserOperationFromTxs } from "./buildUserOperationFromTxs.js";
 import { _sendUserOperation } from "./internal/sendUserOperation.js";
 import type { SendTransactionsParameters, UserOperationContext } from "./types";
@@ -39,12 +40,14 @@ export async function sendTransactions<
     context,
   });
 
-  const { hash } = await _sendUserOperation(client, {
+  const { hash, request } = await _sendUserOperation(client, {
     account,
     uoStruct,
     context,
     overrides,
   });
 
-  return waitForUserOperationTransaction(client, { hash });
+  return waitForUserOperationTransaction(client, { hash }).catch((e) => {
+    throw new WaitForUserOperationError(request, e);
+  });
 }

@@ -5,6 +5,7 @@ import type {
   SendUserOperationParameters,
   SendUserOperationResult,
 } from "@alchemy/aa-core";
+import { WaitForUserOperationError } from "@alchemy/aa-core";
 import {
   useMutation,
   type UseMutateAsyncFunction,
@@ -55,17 +56,21 @@ export type UseSendUserOperationResult<
   error: Error | null;
 };
 
+/**
+ * A hook that returns functions for sending user operations.
+ * You can also optionally wait for a user operation to be mined before returning.
+ *
+ * @param params the parameters for the hook including the client, a flag to wait for tx mining, and mutation args (see {@link UseSendUserOperationArgs})
+ * @returns functions and state for sending UOs {@link UseSendUserOperationResult}
+ */
 export function useSendUserOperation<
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount>,
   TAccount extends SupportedAccounts = SupportedAccounts
->({
-  client,
-  waitForTxn = false,
-  ...mutationArgs
-}: UseSendUserOperationArgs<
-  TEntryPointVersion,
-  TAccount
->): UseSendUserOperationResult<TEntryPointVersion, TAccount> {
+>(
+  params: UseSendUserOperationArgs<TEntryPointVersion, TAccount>
+): UseSendUserOperationResult<TEntryPointVersion, TAccount> {
+  const { client, waitForTxn = false, ...mutationArgs } = params;
+
   const { queryClient } = useAlchemyAccountContext();
 
   const {
@@ -86,7 +91,11 @@ export function useSendUserOperation<
         }
 
         const { hash, request } = await client.sendUserOperation(params);
-        const txnHash = await client.waitForUserOperationTransaction({ hash });
+        const txnHash = await client
+          .waitForUserOperationTransaction({ hash })
+          .catch((e) => {
+            throw new WaitForUserOperationError(request, e);
+          });
 
         return {
           hash: txnHash,

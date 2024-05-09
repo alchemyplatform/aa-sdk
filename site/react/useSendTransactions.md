@@ -23,6 +23,8 @@ head:
 The `useSendTransactions` hook enables sending a set of transactions as a UserOperation on behalf of the user's Embedded Account.
 
 ::: warning
+This hook is deprecated in favor of [`useSendUserOperation`](/react/useSendUserOperation).
+
 This requires your user to be logged in. See [`useAuthenticate`](/react/useAuthenticate) for more details.
 :::
 
