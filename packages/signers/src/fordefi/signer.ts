@@ -1,20 +1,19 @@
 import {
   WalletClientSigner,
   type SmartAccountAuthenticator,
+  type SignTypedDataParams,
 } from "@alchemy/aa-core";
 import {
   type FordefiProviderConfig,
   FordefiWeb3Provider,
 } from "@fordefi/web3-provider";
 import {
+  type ByteArray,
   createWalletClient,
   custom,
   type Hash,
-  type SignableMessage,
-  type TypedData,
-  type TypedDataDefinition,
+  type Hex,
 } from "viem";
-import { signerTypePrefix } from "../constants.js";
 import type { FordefiAuthDetails, FordefiAuthParams } from "./types";
 
 /**
@@ -43,7 +42,7 @@ export class FordefiSigner
     this.inner = new FordefiWeb3Provider(params);
   }
 
-  readonly signerType = `${signerTypePrefix}fordefi`;
+  readonly signerType = "fordefi";
 
   getAddress = async () => {
     if (!this.signer) throw new Error("Not authenticated");
@@ -54,18 +53,13 @@ export class FordefiSigner
     return address as Hash;
   };
 
-  signMessage = async (msg: SignableMessage) => {
+  signMessage = async (msg: string | Hex | ByteArray) => {
     if (!this.signer) throw new Error("Not authenticated");
 
     return this.signer.signMessage(msg);
   };
 
-  signTypedData = async <
-    const TTypedData extends TypedData | { [key: string]: unknown },
-    TPrimaryType extends string = string
-  >(
-    params: TypedDataDefinition<TTypedData, TPrimaryType>
-  ) => {
+  signTypedData = (params: SignTypedDataParams) => {
     if (!this.signer) throw new Error("Not authenticated");
 
     return this.signer.signTypedData(params);

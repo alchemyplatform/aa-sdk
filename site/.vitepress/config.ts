@@ -104,6 +104,10 @@ export default defineConfig({
                 text: "Arcana Auth",
                 link: "/arcana-auth",
               },
+              {
+                text: "Fordefi",
+                link: "/fordefi",
+              },
               { text: "Externally Owned Account (EOA)", link: "/eoa" },
               {
                 text: "Using Your Own",
