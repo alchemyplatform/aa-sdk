@@ -200,12 +200,12 @@ export function alchemyGasManagerMiddleware<C extends ClientWithAlchemyMethods>(
           if (bypassPaymasterAndData(overrides)) {
             return {
               ...struct,
-              ...fallbackGasEstimator(struct, {
+              ...(await fallbackGasEstimator(struct, {
                 overrides,
                 account,
                 feeOptions,
                 client,
-              }),
+              })),
             };
           }
 
