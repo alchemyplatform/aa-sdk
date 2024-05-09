@@ -1,7 +1,8 @@
 import type { SVGProps } from "react";
 
+// eslint-disable-next-line jsdoc/require-jsdoc
 export const MailIcon = ({
-  fill = "#475569",
+  fill = "currentColor",
   ...props
 }: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => (
   <svg
