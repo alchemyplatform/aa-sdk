@@ -60,6 +60,7 @@ Account Kit is compatible with any EIP-1193 provider. Many of the most popular s
 - [Capsule](/smart-accounts/signers/capsule)
 - [Lit Protocol](/smart-accounts/signers/lit)
 - [Arcana Auth](/smart-accounts/signers/arcana-auth)
+- [Fordefi](/smart-accounts/signers/fordefi)
 - [Self-custodial wallets like MetaMask or Ledger](/smart-accounts/signers/eoa)
 
 If you want to use another Signer, you can integrate any other Signer by wrapping it in an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) provider or using [`SmartAccountSigner`](/smart-accounts/signers/custom-signer#implementing-smartaccountsigner) to adapt non-standard Signer.
@@ -98,7 +99,7 @@ Valid signatures do not always require all shares to sign a transaction. MPC Sig
 
 Some MPC signers provide recovery services in which key share(s) are backed up in the service provider’s cloud, on the end user’s device, or in the end user’s cloud (e.g. iCloud or Google Drive). When evaluating an MPC provider, it’s important to under where each key share is stored.
 
-**Example**: Privy, Fireblocks MPC, Portal, Capsule, Arcana (Embedded Wallet)
+**Example**: Privy, Fireblocks MPC, Portal, Capsule, Arcana (Embedded Wallet), Fordefi
 
 ::: details TSS vs SSSS
 
