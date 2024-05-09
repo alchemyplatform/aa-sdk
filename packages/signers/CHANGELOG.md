@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.12.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.12.1...v3.12.2) (2024-05-09)
+
+**Note:** Version bump only for package @alchemy/aa-signers
+
 ## [3.12.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.12.0...v3.12.1) (2024-05-07)
 
 **Note:** Version bump only for package @alchemy/aa-signers
