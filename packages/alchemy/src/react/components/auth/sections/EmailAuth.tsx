@@ -2,9 +2,11 @@ import { useForm } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { z } from "zod";
 import { useAuthenticate } from "../../../hooks/useAuthenticate.js";
+import { useSigner } from "../../../hooks/useSigner.js";
 import { ChevronRight } from "../../../icons/chevron.js";
 import { MailIcon } from "../../../icons/mail.js";
 import { Button } from "../../button.js";
+import { IS_SIGNUP_QP } from "../../constants.js";
 import { Input } from "../../input.js";
 import { useAuthContext } from "../context.js";
 import type { AuthType } from "../types.js";
@@ -19,11 +21,15 @@ export const EmailAuth = ({
   placeholder = "Email",
 }: EmailAuthProps) => {
   const { setAuthStep } = useAuthContext();
+  const signer = useSigner();
   const { authenticateAsync, error, isPending } = useAuthenticate({
-    onMutate: (params) => {
+    onMutate: async (params) => {
       if ("email" in params) {
         setAuthStep({ type: "email_verify", email: params.email });
       }
+    },
+    onSuccess: () => {
+      setAuthStep({ type: "complete" });
     },
     onError: (error) => {
       // TODO: need to handle this and show it to the user
@@ -38,7 +44,13 @@ export const EmailAuth = ({
       email: "",
     },
     onSubmit: async ({ value: { email } }) => {
-      await authenticateAsync({ type: "email", email });
+      const existingUser = await signer?.getUser(email);
+      const redirectParams = new URLSearchParams();
+      if (existingUser == null) {
+        redirectParams.set(IS_SIGNUP_QP, "true");
+      }
+
+      await authenticateAsync({ type: "email", email, redirectParams });
     },
     validatorAdapter: zodValidator,
   });
