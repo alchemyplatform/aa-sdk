@@ -259,7 +259,18 @@ export async function createLightAccountBase({
       }
     },
     getDummySignature: (): Hex => {
-      return "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
+      const signature =
+        "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
+      switch (version as string) {
+        case "v1.0.1":
+        case "v1.0.2":
+        case "v1.1.0":
+          return signature;
+        case "v2.0.0":
+          return concat([SignatureType.EOA, signature]);
+        default:
+          throw new Error(`Unknown version ${type} of ${version}`);
+      }
     },
     encodeUpgradeToAndCall,
   });
