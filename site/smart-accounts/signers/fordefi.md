@@ -55,7 +55,7 @@ yarn add @fordefi/web3-provider
 
 Next, setup the Fordefi Web3 Provider and create a `SmartAccountSigner` using the `aa-signers` package:
 
-<<< @/snippets/signers/fordefi.ts
+<<< @/snippets/fordefi.ts
 
 ### Use it with Modular Account
 
@@ -77,6 +77,6 @@ const provider = await createModularAccountAlchemyClient({
 });
 ```
 
-<<< @/snippets/signers/fordefi.ts
+<<< @/snippets/fordefi.ts
 
 :::

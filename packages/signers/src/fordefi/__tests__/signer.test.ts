@@ -13,7 +13,6 @@ const fixtures = {
   chainId: 11155111,
   message: "test",
   signedMessage: "0xtest",
-  apiUserToken: "123-456",
 } as const;
 
 describe("Fordefi Signer Tests", () => {
@@ -114,7 +113,7 @@ const givenSigner = async (auth = true) => {
   const inner = new FordefiWeb3Provider({
     chainId: fixtures.chainId,
     address: fixtures.address,
-    apiUserToken: fixtures.apiUserToken,
+    apiUserToken: "123-456",
     apiPayloadSignKey: "fakeApiKey",
   });
 

@@ -30,7 +30,7 @@ const FordefiSigner = await createFordefiSigner();
 const details = await fordefiSigner.getAuthDetails();
 ```
 
-<<< @/snippets/signers/fordefi.ts
+<<< @/snippets/fordefi.ts
 :::
 
 ## Returns

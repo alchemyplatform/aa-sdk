@@ -30,7 +30,7 @@ const fordefiSigner = await createFordefiSigner();
 const signedMessage = await fordefiSigner.signMessage("test");
 ```
 
-<<< @/snippets/signers/fordefi.ts
+<<< @/snippets/fordefi.ts
 :::
 
 ## Returns
