@@ -1,9 +1,9 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useLayoutEffect, useState, type ReactNode } from "react";
 import { useSignerStatus } from "../../../hooks/useSignerStatus.js";
+import { IS_SIGNUP_QP } from "../../constants.js";
 import { AuthModalContext, type AuthStep } from "../context.js";
 import type { AuthType } from "../types.js";
-import { LoadingAuth } from "./loading/index.js";
-import { MainAuthContent } from "./main.js";
+import { Step } from "./steps.js";
 
 export type AuthCardProps = {
   header?: ReactNode;
@@ -23,14 +23,23 @@ export type AuthCardProps = {
  * @returns a react component containing the AuthCard
  */
 export const AuthCard = (props: AuthCardProps) => {
-  const [authStep, setAuthStep] = useState<AuthStep>({ type: "initial" });
-  const { isAuthenticating } = useSignerStatus();
+  const { status, isAuthenticating } = useSignerStatus();
+  const [authStep, setAuthStep] = useState<AuthStep>({
+    type: isAuthenticating ? "email_completing" : "initial",
+  });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (authStep.type === "complete") {
       props.onAuthSuccess?.();
+    } else if (isAuthenticating && authStep.type === "initial") {
+      const urlParams = new URLSearchParams(window.location.search);
+
+      setAuthStep({
+        type: "email_completing",
+        createPasskeyAfter: urlParams.get(IS_SIGNUP_QP) === "true",
+      });
     }
-  }, [authStep, props]);
+  }, [authStep, status, props, isAuthenticating]);
 
   return (
     <AuthModalContext.Provider
@@ -40,11 +49,7 @@ export const AuthCard = (props: AuthCardProps) => {
       }}
     >
       <div className="modal-box flex flex-col items-center gap-5">
-        {isAuthenticating ? (
-          <LoadingAuth context={authStep} />
-        ) : (
-          <MainAuthContent {...props} />
-        )}
+        <Step {...props} />
       </div>
     </AuthModalContext.Provider>
   );

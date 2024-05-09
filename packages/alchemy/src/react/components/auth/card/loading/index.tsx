@@ -1,5 +1,5 @@
 import type { AuthStep } from "../../context";
-import { LoadingEmail } from "./email.js";
+import { CompletingEmailAuth, LoadingEmail } from "./email.js";
 import { LoadingPasskeyAuth } from "./passkey.js";
 
 type LoadingAuthProps = {
@@ -13,7 +13,11 @@ export const LoadingAuth = ({ context }: LoadingAuthProps) => {
       return <LoadingEmail context={context} />;
     case "passkey_verify":
       return <LoadingPasskeyAuth context={context} />;
-    default:
-      return <div>Logging you in...</div>;
+    case "email_completing":
+      return <CompletingEmailAuth context={context} />;
+    default: {
+      console.warn("Unhandled loading state! rendering empty state", context);
+      return null;
+    }
   }
 };
