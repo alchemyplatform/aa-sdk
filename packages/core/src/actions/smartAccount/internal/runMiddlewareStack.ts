@@ -82,14 +82,16 @@ export async function _runMiddlewareStack<
     "dummyPaymasterAndData" | "paymasterAndData"
   > = bypassPaymasterAndData(overrides)
     ? {
-        dummyPaymasterAndData: async (uo, overrides) => ({
-          ...uo,
-          ...("paymasterAndData" in overrides
-            ? { paymasterAndData: "0x" }
-            : // At this point, nothing has run so no fields are set
-              // for 0.7 when not using a paymaster, all fields should be undefined
-              undefined),
-        }),
+        dummyPaymasterAndData: async (uo, { overrides }) => {
+          return {
+            ...uo,
+            ...("paymasterAndData" in overrides!
+              ? { paymasterAndData: "0x" }
+              : // At this point, nothing has run so no fields are set
+                // for 0.7 when not using a paymaster, all fields should be undefined
+                undefined),
+          };
+        },
         paymasterAndData: noopMiddleware,
       }
     : {
