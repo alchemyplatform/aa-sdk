@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.12.4](https://github.com/alchemyplatform/aa-sdk/compare/v3.12.3...v3.12.4) (2024-05-10)
+
+### Bug Fixes
+
+- alchemy paymaster 0x override was not awaiting gas estimates ([#660](https://github.com/alchemyplatform/aa-sdk/issues/660)) ([51d31ff](https://github.com/alchemyplatform/aa-sdk/commit/51d31fff352472ea3f2564f87620d217f9bb2b85))
+
 ## [3.12.3](https://github.com/alchemyplatform/aa-sdk/compare/v3.12.2...v3.12.3) (2024-05-10)
 
 **Note:** Version bump only for package @alchemy/aa-alchemy
