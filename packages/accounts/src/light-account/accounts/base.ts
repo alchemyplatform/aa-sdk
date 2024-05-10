@@ -220,7 +220,14 @@ export async function createLightAccountBase({
       });
     },
     signUserOperationHash: async (uoHash: Hex) => {
-      return signer.signMessage({ raw: uoHash });
+      const signature = await signer.signMessage(uoHash);
+      switch (version) {
+        case "v2.0.0":
+          // TODO: handle case where signer is an SCA.
+          return concat([SignatureType.EOA, signature]);
+        default:
+          return signature;
+      }
     },
     async signMessage({ message }) {
       switch (version as string) {
