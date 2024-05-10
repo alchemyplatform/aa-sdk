@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.12.3](https://github.com/alchemyplatform/aa-sdk/compare/v3.12.2...v3.12.3) (2024-05-10)
+
+### Bug Fixes
+
+- update light account dummy signature for v2 ([#662](https://github.com/alchemyplatform/aa-sdk/issues/662)) ([5ac35a3](https://github.com/alchemyplatform/aa-sdk/commit/5ac35a3707cb5ade6e0a2b2f2bd8d0b61f5ac1e8))
+
 ## [3.12.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.12.1...v3.12.2) (2024-05-09)
 
 ### Bug Fixes
