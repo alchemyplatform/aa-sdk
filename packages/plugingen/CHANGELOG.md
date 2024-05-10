@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.13.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.12.4...v3.13.0) (2024-05-10)
+
+**Note:** Version bump only for package @alchemy/plugingen
+
 ## [3.12.3](https://github.com/alchemyplatform/aa-sdk/compare/v3.12.2...v3.12.3) (2024-05-10)
 
 **Note:** Version bump only for package @alchemy/plugingen

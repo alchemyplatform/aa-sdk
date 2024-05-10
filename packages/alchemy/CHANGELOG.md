@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.13.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.12.4...v3.13.0) (2024-05-10)
+
+### Features
+
+- add email loading state to the modal ([8d0d244](https://github.com/alchemyplatform/aa-sdk/commit/8d0d24408652cbc48ea4cd44ed0c98c1cb68d2f8))
+- add passkey loading state ([b56fe8d](https://github.com/alchemyplatform/aa-sdk/commit/b56fe8d240e58392b15f6a58d79fe580f8118772))
+- add support for adding a passkey on signup ([ab6bad3](https://github.com/alchemyplatform/aa-sdk/commit/ab6bad3a24bd8736e1fbe15881f4b156492b2dae))
+- **ui:** start adding use authenticate calls to the modal ([c2ef8eb](https://github.com/alchemyplatform/aa-sdk/commit/c2ef8ebf437226c41e05bc310b9a7b39459c94c1))
+
 ## [3.12.4](https://github.com/alchemyplatform/aa-sdk/compare/v3.12.3...v3.12.4) (2024-05-10)
 
 ### Bug Fixes

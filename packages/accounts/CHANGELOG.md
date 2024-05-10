@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.13.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.12.4...v3.13.0) (2024-05-10)
+
+### Bug Fixes
+
+- **light-account:** light account v2 signatures should have sig type ([#663](https://github.com/alchemyplatform/aa-sdk/issues/663)) ([54764a9](https://github.com/alchemyplatform/aa-sdk/commit/54764a9215c4d2213905ba301670316f697a4169))
+
 ## [3.12.3](https://github.com/alchemyplatform/aa-sdk/compare/v3.12.2...v3.12.3) (2024-05-10)
 
 ### Bug Fixes
