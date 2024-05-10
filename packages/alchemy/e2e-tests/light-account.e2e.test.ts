@@ -1,6 +1,8 @@
 import {
   LocalAccountSigner,
   sepolia,
+  type UserOperationCallData,
+  type UserOperationOverrides,
   type UserOperationStruct,
 } from "@alchemy/aa-core";
 import { Alchemy, Network } from "alchemy-sdk";
@@ -98,17 +100,24 @@ describe("Light Account Client Tests", () => {
       },
     });
 
-    const uoStruct = (await provider.buildUserOperation({
+    const toSend = {
       uo: {
         target: provider.getAddress(),
         data: "0x",
-      },
+      } as UserOperationCallData,
       overrides: {
         paymasterAndData: "0x", // bypass paymaster
-      },
-    })) as UserOperationStruct<"0.6.0">;
+      } as UserOperationOverrides<"0.6.0">,
+    };
+    const uoStruct = (await provider.buildUserOperation(
+      toSend
+    )) as UserOperationStruct<"0.6.0">;
 
     expect(uoStruct.paymasterAndData).toBe("0x");
+
+    await expect(
+      provider.sendUserOperation(toSend)
+    ).resolves.not.toThrowError();
   }, 100000);
 
   it("should successfully override fees and gas when using paymaster", async () => {
