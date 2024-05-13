@@ -7,6 +7,7 @@ import {
 } from "@alchemy/aa-accounts";
 import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";
 import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
+import { zeroHash } from "viem";
 
 const chain = sepolia;
 // this is the signer to connect with the account, later we will create a new client using a session key signe
@@ -47,7 +48,7 @@ if (!isPluginInstalled) {
     // 3rd arg is the initial set of permissions
     args: [
       [await sessionKeySigner.getAddress()],
-      ["0x0"],
+      [zeroHash],
       [initialPermissions.encode()],
     ],
   });
@@ -69,7 +70,7 @@ const sessionKeyClient = (
 // 4. send a user operation using the session key
 const result = await sessionKeyClient.executeWithSessionKey({
   args: [
-    [{ target: "0x1234", value: 1n, data: "0x" }],
+    [{ target: "0x1234123412341234123412341234123412341234", value: 1n, data: "0x" }],
     await sessionKeySigner.getAddress(),
   ],
 });

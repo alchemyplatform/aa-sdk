@@ -107,7 +107,7 @@ if (!isPluginInstalled) {
     // 3rd arg is the initial set of permissions
     args: [
       [await sessionKeySigner.getAddress()],
-      ["0x0"],
+      [zeroHash],
       [initialPermissions.encode()],
     ],
   });
