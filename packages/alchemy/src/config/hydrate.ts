@@ -62,6 +62,7 @@ export function hydrate(
     async onMount() {
       if (config._internal.ssr) {
         await config.clientStore.persist.rehydrate();
+        await config.coreStore.persist.rehydrate();
       }
 
       await reconnect(config);

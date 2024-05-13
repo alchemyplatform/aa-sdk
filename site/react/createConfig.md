@@ -34,7 +34,12 @@ import { createConfig } from "@alchemy/aa-alchemy/config";
 
 ## Usage
 
-<<< @/snippets/react/config.ts
+::: code-group
+
+<<< @/snippets/react/config.ts [single-chain.ts]
+<<< @/snippets/react/multi-chain-config.ts [multi-chain.ts]
+
+:::
 
 ## Parameters
 
