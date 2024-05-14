@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.13.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.13.0...v3.13.1) (2024-05-14)
+
+### Bug Fixes
+
+- **msca:** fix the generic on getMAInitializationData ([#664](https://github.com/alchemyplatform/aa-sdk/issues/664)) ([9747986](https://github.com/alchemyplatform/aa-sdk/commit/97479862f22a63f3888d8190ccf1693be597df36))
+
 # [3.13.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.12.4...v3.13.0) (2024-05-10)
 
 ### Bug Fixes
