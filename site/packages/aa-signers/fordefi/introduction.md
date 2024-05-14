@@ -38,6 +38,8 @@ npm i -s @fordefi/web3-provider
 yarn add @fordefi/web3-provider
 ```
 
+:::
+
 ## Usage
 
 ::: code-group

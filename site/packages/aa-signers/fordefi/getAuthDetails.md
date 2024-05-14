@@ -25,7 +25,7 @@ This method must be called after [`authenticate`](/packages/aa-signers/fordefi/a
 ```ts [example.ts]
 import { createFordefiSigner } from "./fordefi";
 // [!code focus:99]
-const FordefiSigner = await createFordefiSigner();
+const fordefiSigner = await createFordefiSigner();
 
 const details = await fordefiSigner.getAuthDetails();
 ```
