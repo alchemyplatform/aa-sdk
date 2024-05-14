@@ -15,7 +15,7 @@ import {
   type TypedDataDefinition,
 } from "viem";
 import { signerTypePrefix } from "../constants.js";
-import type { FordefiAuthDetails, FordefiAuthParams } from "./types";
+import type { FordefiAuthDetails, FordefiAuthParams } from "./types.js";
 
 /**
  * This class requires the `@fordefi/web3-provider` dependency.

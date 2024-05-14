@@ -71,4 +71,5 @@ const signTypedData = await fordefiSigner.signTypedData(typedData);
 ## Developer Links
 
 - [Fordefi Web3 Provider](https://github.com/FordefiHQ/web3-provider)
+- [Fordefi Web3 Provider Docs](https://web3provider-docs.fordefi.com/)
 - [FordefiSigner Tests](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/signers/src/fordefi/__tests__/signer.test.ts)

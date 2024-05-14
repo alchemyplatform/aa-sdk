@@ -76,8 +76,7 @@ describe("Fordefi Signer Tests", () => {
       message: {
         hello: "world",
       },
-    } satisfies TypedDataDefinition;
-
+    };
     const signTypedData = await signer.signTypedData(typedData);
     expect(signTypedData).toMatchInlineSnapshot(`"${fixtures.signedMessage}"`);
   });
