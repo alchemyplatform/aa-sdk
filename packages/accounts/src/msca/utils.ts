@@ -8,6 +8,8 @@ import {
   base,
   baseGoerli,
   baseSepolia,
+  fraxtal,
+  fraxtalSepolia,
   goerli,
   mainnet,
   optimism,
@@ -17,13 +19,12 @@ import {
   polygonAmoy,
   polygonMumbai,
   sepolia,
-  fraxtal,
-  fraxtalSepolia,
   zora,
   zoraSepolia,
   type GetAccountParameter,
   type SmartAccountClient,
   type SmartAccountSigner,
+  type SmartContractAccount,
   type SmartContractAccountWithSigner,
   type UpgradeToData,
 } from "@alchemy/aa-core";
@@ -164,8 +165,8 @@ export async function getMSCAUpgradeToData<
 export async function getMAInitializationData<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartContractAccountWithSigner | undefined =
-    | SmartContractAccountWithSigner
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
     | undefined
 >({
   client,
