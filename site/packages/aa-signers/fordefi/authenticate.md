@@ -37,9 +37,3 @@ await fordefiSigner.authenticate();
 ```
 
 :::
-
-## Returns
-
-### `Promise<FordefiAuthDetails>`
-
-A Promise containing the `FordefiAuthDetails`, which is currently `void`.

@@ -35,6 +35,7 @@ const details = await fordefiSigner.getAuthDetails();
 
 ## Returns
 
-### `Promise<FordefiAuthDetails>`
+### `Promise<void>`
 
-A Promise containing the `FordefiAuthDetails`, which is currently `void`.
+Verifies that this signer is authenticated, and throws an error otherwise.
+Authentication details are not available.

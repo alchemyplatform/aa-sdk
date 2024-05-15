@@ -15,7 +15,6 @@ import {
   type TypedDataDefinition,
 } from "viem";
 import { signerTypePrefix } from "../constants.js";
-import type { FordefiAuthDetails, FordefiAuthParams } from "./types.js";
 
 /**
  * This class requires the `@fordefi/web3-provider` dependency.
@@ -24,12 +23,7 @@ import type { FordefiAuthDetails, FordefiAuthParams } from "./types.js";
  * @see https://github.com/FordefiHQ/web3-provider
  */
 export class FordefiSigner
-  implements
-    SmartAccountAuthenticator<
-      FordefiAuthParams,
-      FordefiAuthDetails,
-      FordefiWeb3Provider
-    >
+  implements SmartAccountAuthenticator<void, void, FordefiWeb3Provider>
 {
   inner: FordefiWeb3Provider;
   private signer: WalletClientSigner | undefined;
@@ -45,21 +39,41 @@ export class FordefiSigner
 
   readonly signerType = `${signerTypePrefix}fordefi`;
 
+  /**
+   * Returns the address managed by this signer.
+   *
+   * @returns the address managed by this signer
+   * @throws if the provider is not authenticated, or if the address was not found
+   */
   getAddress = async () => {
     if (!this.signer) throw new Error("Not authenticated");
 
     const address = await this.signer.getAddress();
     if (address == null) throw new Error("No address found");
 
-    return address as Hash;
+    return address satisfies Hash;
   };
 
+  /**
+   * Signs a message with the authenticated account.
+   *
+   * @param msg the message to sign
+   * @returns the address of the authenticated account
+   * @throws if the provider is not authenticated
+   */
   signMessage = async (msg: SignableMessage) => {
     if (!this.signer) throw new Error("Not authenticated");
 
     return this.signer.signMessage(msg);
   };
 
+  /**
+   * Signs a typed data object with the authenticated account.
+   *
+   * @param params the data object to sign
+   * @returns the signed data as a hex string
+   * @throws if the provider is not authenticated
+   */
   signTypedData = async <
     const TTypedData extends TypedData | { [key: string]: unknown },
     TPrimaryType extends string = string
@@ -71,7 +85,15 @@ export class FordefiSigner
     return this.signer.signTypedData(params);
   };
 
-  authenticate = async (): Promise<FordefiAuthDetails> => {
+  /**
+   * Authenticates with the Fordefi platform and verifies that this client
+   * is authorized to manage the account.
+   * This step is required before any signing operations can be performed.
+   *
+   * @returns void
+   * @throws if no provider was found, or if authentication failed
+   */
+  authenticate = async (): Promise<void> => {
     if (this.inner == null) throw new Error("No provider found");
 
     await this.inner.connect();
@@ -86,7 +108,14 @@ export class FordefiSigner
     return this.getAuthDetails();
   };
 
-  getAuthDetails = async (): Promise<FordefiAuthDetails> => {
+  /**
+   * Verifies that this signer is authenticated, and throws an error otherwise.
+   * Authentication details are not available.
+   *
+   * @returns void
+   * @throws Error if this signer is not authenticated
+   */
+  getAuthDetails = async (): Promise<void> => {
     if (!this.signer) throw new Error("Not authenticated");
   };
 }

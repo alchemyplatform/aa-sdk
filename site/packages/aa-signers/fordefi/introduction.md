@@ -22,7 +22,7 @@ head:
 2.  [`getAddress`](/packages/aa-signers/fordefi/getAddress) -- gets the address of the smart contract account's connected EOA signer account.
 3.  [`signMessage`](/packages/aa-signers/fordefi/signMessage) -- supports message signatures.
 4.  [`signTypedData`](/packages/aa-signers/fordefi/signTypedData) -- supports typed data signatures.
-5.  [`getAuthDetails`](/packages/aa-signers/fordefi/getAuthDetails) -- supports authentication details retrieval.
+5.  [`getAuthDetails`](/packages/aa-signers/fordefi/getAuthDetails) -- verifies that this signer is authenticated, it does not return any details.
 
 ## Install Dependencies
 

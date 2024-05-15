@@ -5,7 +5,7 @@ import {
   type MethodReturnType,
   type RequestArgs,
 } from "@fordefi/web3-provider";
-import { numberToHex, type TypedDataDefinition } from "viem";
+import { numberToHex } from "viem";
 import { FordefiSigner } from "../signer.js";
 
 const fixtures = {
