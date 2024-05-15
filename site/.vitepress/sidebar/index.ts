@@ -82,6 +82,10 @@ export const sidebar: DefaultTheme.Sidebar = [
             text: "Getting started",
             link: "/getting-started",
           },
+          {
+            text: "Supported permissions",
+            link: "/supported-permissions",
+          },
         ],
       },
       {

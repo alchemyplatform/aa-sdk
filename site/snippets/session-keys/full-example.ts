@@ -70,7 +70,13 @@ const sessionKeyClient = (
 // 4. send a user operation using the session key
 const result = await sessionKeyClient.executeWithSessionKey({
   args: [
-    [{ target: "0x1234123412341234123412341234123412341234", value: 1n, data: "0x" }],
+    [
+      {
+        target: "0x1234123412341234123412341234123412341234",
+        value: 1n,
+        data: "0x",
+      },
+    ],
     await sessionKeySigner.getAddress(),
   ],
 });

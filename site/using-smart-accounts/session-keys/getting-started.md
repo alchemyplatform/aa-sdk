@@ -120,28 +120,7 @@ if (!isPluginInstalled) {
 
 Session keys are powerful because of permissions that limit what actions they can take. When you add a session key, you should also specify the initial permissions that apply over the key.
 
-**Default Values**
-
-Permissions start with the following default values:
-
-| Permission               | Default Value                                                                                                                                    |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Access control list      | Type: allowlist <br /> The list starts empty. When the allowlist is empty, all calls will be denied.                                             |
-| Time range               | Unlimited                                                                                                                                        |
-| Native token spend limit | 0 <br /> This means all calls spending the native token will be denied, unless the limit is updated or removed.                                  |
-| ERC-20 spend limit       | Unset. If you want to enabled an ERC-20 spend limit, add the ERC-20 token contract to the access control list and set the spending limit amount. |
-| Gas spend limits         | Unset. When defining the session key’s permissions, you should specify either a spending limit or a required paymaster.                          |
-
-Importance of gas limits
-
-Gas spend limits are critically important to protecting the account. If you are using a session key, you should configure either a required paymaster rule or a gas spend limit. Failing to do so could allow a malicious session key to drain the account’s native token balance.
-
-::: details View the full set of supported permissions here
-
-<!-- TODO move this in to the docs section in packages overview --->
-
-<<< @/../packages/accounts/src/msca/plugins/session-key/permissions.ts
-:::
+See the [Supported Permissions](./supported-permissions.md#using-the-permissionsbuilder) page for more information on how to used the permissions builder.
 
 Let's use the permission builder to build a set of permissions that sets a spend limit:
 
@@ -156,7 +135,14 @@ const result = await extendedClient.updateKeyPermissions({
 });
 ```
 
-## Creating, deleting, and editing session keys
+## Managing Session Keys
+
+The Session Key Plugin allows you to:
+
+- Add session keys, and set the key's initial permissions.
+- Remove session keys.
+- Update key permissions.
+- Rotate session keys. This action replaces the previous session key with a new session key, while keeping the existing permissions.
 
 ### Add a Session Key
 
