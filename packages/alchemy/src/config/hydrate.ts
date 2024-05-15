@@ -1,11 +1,12 @@
 import type { Address, NoUndefined } from "@alchemy/aa-core";
+import { hydrate as wagmi_hydrate } from "@wagmi/core";
 import { AlchemySignerStatus } from "../signer/index.js";
 import { reconnect } from "./actions/reconnect.js";
 import {
   convertSignerStatusToState,
   defaultAccountState,
 } from "./store/client.js";
-import type { AccountState, ClientState } from "./store/types";
+import type { AccountState, ClientState, StoredState } from "./store/types";
 import type { AlchemyAccountsConfig, SupportedAccountTypes } from "./types";
 
 /**
@@ -17,10 +18,16 @@ import type { AlchemyAccountsConfig, SupportedAccountTypes } from "./types";
  */
 export function hydrate(
   config: AlchemyAccountsConfig,
-  initialState?: ClientState
+  initialState?: StoredState
 ) {
-  if (initialState && !config.clientStore.persist.hasHydrated()) {
-    const { accounts, accountConfigs, signerStatus, ...rest } = initialState;
+  const initialAlchemyState =
+    initialState != null && "alchemy" in initialState
+      ? initialState.alchemy
+      : initialState;
+
+  if (initialAlchemyState && !config.clientStore.persist.hasHydrated()) {
+    const { accounts, accountConfigs, signerStatus, ...rest } =
+      initialAlchemyState;
     const shouldReconnectAccounts =
       signerStatus.isConnected || signerStatus.isAuthenticating;
 
@@ -34,12 +41,27 @@ export function hydrate(
     });
   }
 
+  const initialWagmiState =
+    initialState != null && "wagmi" in initialState
+      ? initialState.wagmi
+      : undefined;
+
+  const { onMount: wagmi_onMount } = wagmi_hydrate(
+    config._internal.wagmiConfig,
+    {
+      initialState: initialWagmiState,
+      reconnectOnMount: true,
+    }
+  );
+
   return {
     async onMount() {
       if (config._internal.ssr) {
         await config.clientStore.persist.rehydrate();
         await config.coreStore.persist.rehydrate();
       }
+
+      await wagmi_onMount();
 
       await reconnect(config);
     },

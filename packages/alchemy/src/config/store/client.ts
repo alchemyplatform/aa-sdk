@@ -12,15 +12,14 @@ import { DEFAULT_IFRAME_CONTAINER_ID } from "../createConfig.js";
 import type { SupportedAccountTypes } from "../types.js";
 import { bigintMapReplacer } from "../utils/replacer.js";
 import { bigintMapReviver } from "../utils/reviver.js";
-import type {
-  AccountState,
-  ClientState,
-  ClientStore,
-  CreateClientStoreParams,
-  SignerStatus,
+import {
+  DEFAULT_STORAGE_KEY,
+  type AccountState,
+  type ClientState,
+  type ClientStore,
+  type CreateClientStoreParams,
+  type SignerStatus,
 } from "./types.js";
-
-export const DEFAULT_STORAGE_KEY = "alchemy-account-state";
 
 /**
  * Creates a zustand store instance containing the client only state

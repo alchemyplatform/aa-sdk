@@ -1,5 +1,7 @@
+import { cookieToInitialState as wagmiCookieToInitialState } from "@wagmi/core";
 import Cookies from "js-cookie";
 import { DEFAULT_SESSION_MS } from "../../signer/session/manager.js";
+import type { StoredState } from "../store/types.js";
 import type { AlchemyAccountsConfig, AlchemyClientState } from "../types";
 import { deserialize } from "./deserialize.js";
 
@@ -61,13 +63,25 @@ export const cookieStorage: (config?: { sessionLength: number }) => Storage = (
 export function cookieToInitialState(
   config: AlchemyAccountsConfig,
   cookie?: string
-): AlchemyClientState | undefined {
+): StoredState | undefined {
   if (!cookie) return;
 
   const state = parseCookie(cookie, config._internal.storageKey);
   if (!state) return;
 
-  return deserialize<{ state: AlchemyClientState }>(state).state;
+  const alchemyClientState = deserialize<{ state: AlchemyClientState }>(
+    state
+  ).state;
+
+  const wagmiClientState = wagmiCookieToInitialState(
+    config._internal.wagmiConfig,
+    cookie
+  );
+
+  return {
+    alchemy: alchemyClientState,
+    wagmi: wagmiClientState,
+  };
 }
 
 /**
