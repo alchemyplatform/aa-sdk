@@ -41,16 +41,32 @@ export type AlchemyAccountsConfig = {
 };
 
 // #region CreateConfigProps
-export type CreateConfigProps = ConnectionConfig & {
+export type Connection = ConnectionConfig & { chain: Chain };
+
+type RpcConnectionConfig =
+  | (Connection & {
+      /**
+       * Optional parameter that allows you to specify a different RPC Url
+       * or connection to be used specifically by the signer.
+       * This is useful if you have a different backend proxy for the signer
+       * than for your Bundler or Node RPC calls.
+       */
+      signerConnection?: ConnectionConfig;
+      connections?: never;
+    })
+  | {
+      connections: Connection[];
+      chain: Chain;
+      /**
+       * When providing multiple connections, you must specify the signer connection config
+       * to use since the signer is chain agnostic and has a different RPC url.
+       */
+      signerConnection: ConnectionConfig;
+    };
+
+export type CreateConfigProps = RpcConnectionConfig & {
   chain: Chain;
   sessionConfig?: AlchemySignerParams["sessionConfig"];
-  /**
-   * Optional parameter that allows you to specify a different RPC Url
-   * or connection to be used specifically by the signer.
-   * This is useful if you have a different backend proxy for the signer
-   * than for your Bundler or Node RPC calls.
-   */
-  signerConnection?: ConnectionConfig;
   /**
    * Enable this parameter if you are using the config in an SSR setting (eg. NextJS)
    * Turing this setting on will disable automatic hydration of the client store

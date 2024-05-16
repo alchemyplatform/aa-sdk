@@ -146,6 +146,7 @@ export const sidebar: DefaultTheme.Sidebar = [
       },
       { text: "useSendTransaction", link: "/useSendTransaction" },
       { text: "useSendTransactions", link: "/useSendTransactions" },
+      { text: "useChain", link: "/useChain" },
     ],
   },
   {

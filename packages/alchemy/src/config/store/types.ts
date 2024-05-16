@@ -1,4 +1,4 @@
-import type { Address } from "viem";
+import type { Address, Chain } from "viem";
 import type { PartialBy } from "viem/chains";
 import type { Mutate, StoreApi } from "zustand/vanilla";
 import type { ClientWithAlchemyMethods } from "../../client/types";
@@ -10,7 +10,11 @@ import type {
   User,
 } from "../../signer";
 import type { AccountConfig } from "../actions/createAccount";
-import type { SupportedAccount, SupportedAccountTypes } from "../types";
+import type {
+  Connection,
+  SupportedAccount,
+  SupportedAccountTypes,
+} from "../types";
 
 export type AccountState<TAccount extends SupportedAccountTypes> =
   | {
@@ -71,9 +75,13 @@ export type ClientStore = Mutate<
   [["zustand/subscribeWithSelector", never], ["zustand/persist", ClientState]]
 >;
 
-export type CoreState = { bundlerClient: ClientWithAlchemyMethods };
+export type CoreState = {
+  bundlerClient: ClientWithAlchemyMethods;
+  chain: Chain;
+  connections: Map<number, Connection>;
+};
 
 export type CoreStore = Mutate<
   StoreApi<CoreState>,
-  [["zustand/subscribeWithSelector", never]]
+  [["zustand/subscribeWithSelector", never], ["zustand/persist", CoreState]]
 >;

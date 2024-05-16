@@ -1,4 +1,3 @@
-import { ClientOnlyPropertyError } from "../errors.js";
 import type { AccountState } from "../store/types.js";
 import type { AlchemyAccountsConfig, SupportedAccountTypes } from "../types";
 import { type CreateAccountParams } from "./createAccount.js";
@@ -15,7 +14,10 @@ export const getAccount = <TAccount extends SupportedAccountTypes>(
 ): GetAccountResult<TAccount> => {
   const accounts = config.clientStore.getState().accounts;
   if (!accounts) {
-    throw new ClientOnlyPropertyError("account");
+    return {
+      account: undefined,
+      status: "DISCONNECTED",
+    };
   }
 
   return accounts[type];

@@ -2,7 +2,11 @@ import { ConnectionConfigSchema } from "@alchemy/aa-core";
 import { DEFAULT_SESSION_MS } from "../signer/session/manager.js";
 import { createClientStore } from "./store/client.js";
 import { createCoreStore } from "./store/core.js";
-import type { AlchemyAccountsConfig, CreateConfigProps } from "./types";
+import type {
+  AlchemyAccountsConfig,
+  Connection,
+  CreateConfigProps,
+} from "./types";
 
 export const DEFAULT_IFRAME_CONTAINER_ID = "alchemy-signer-iframe-container";
 
@@ -17,13 +21,31 @@ export const createConfig = ({
   storage,
   ...connectionConfig
 }: CreateConfigProps): AlchemyAccountsConfig => {
-  const connection = ConnectionConfigSchema.parse(connectionConfig);
+  const connections: Connection[] = [];
+  if (connectionConfig.connections != null) {
+    connectionConfig.connections.forEach(({ chain, ...config }) => {
+      connections.push({
+        ...ConnectionConfigSchema.parse(config),
+        chain,
+      });
+    });
+  } else {
+    connections.push({
+      ...ConnectionConfigSchema.parse(connectionConfig),
+      chain,
+    });
+  }
 
   const config: AlchemyAccountsConfig = {
-    coreStore: createCoreStore({ connection, chain }),
+    coreStore: createCoreStore({
+      connections,
+      chain,
+      storage: storage?.(),
+      ssr,
+    }),
     clientStore: createClientStore({
       client: {
-        connection: signerConnection ?? connection,
+        connection: signerConnection ?? connections[0],
         iframeConfig,
         rootOrgId,
         rpId,
