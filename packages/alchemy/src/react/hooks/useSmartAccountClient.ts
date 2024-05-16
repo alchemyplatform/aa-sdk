@@ -26,6 +26,7 @@ import type {
 } from "../../config";
 import type { GetAccountParams } from "../../config/actions/getAccount.js";
 import type { AlchemySigner } from "../../signer";
+import { useAlchemyAccountContext } from "../context.js";
 import { useAccount } from "./useAccount.js";
 import { useBundlerClient } from "./useBundlerClient.js";
 import { useConnection } from "./useConnection.js";
@@ -85,11 +86,19 @@ export function useSmartAccountClient({
   const bundlerClient = useBundlerClient();
   const connection = useConnection();
 
+  const {
+    config: {
+      _internal: { wagmiConfig },
+    },
+  } = useAlchemyAccountContext();
+
   const { account, address, isLoadingAccount } = useAccount({
     type,
     accountParams,
   });
-  const { isConnected, address: eoaAddress } = wagmi_useAccount();
+  const { isConnected, address: eoaAddress } = wagmi_useAccount({
+    config: wagmiConfig,
+  });
 
   if (!account || isLoadingAccount || isConnected) {
     if (isConnected) {

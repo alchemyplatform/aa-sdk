@@ -77,8 +77,13 @@ export function useSendTransactions<
   params: UseSendTransactionsArgs<TAccount>
 ): UseSendTransactionsResult<TAccount, TContext, TEntryPointVersion> {
   const { client, ...mutationArgs } = params;
-  const { queryClient } = useAlchemyAccountContext();
-  const { isConnected } = wagmi_useAccount();
+  const {
+    queryClient,
+    config: {
+      _internal: { wagmiConfig },
+    },
+  } = useAlchemyAccountContext();
+  const { isConnected } = wagmi_useAccount({ config: wagmiConfig });
 
   const {
     mutate: sendTransactions,

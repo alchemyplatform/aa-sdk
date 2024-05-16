@@ -3,7 +3,6 @@
 import type { NoUndefined } from "@alchemy/aa-core";
 import type { QueryClient } from "@tanstack/react-query";
 import { createContext, useContext, useEffect, useMemo, useRef } from "react";
-import { WagmiProvider } from "wagmi";
 import type { AlchemyAccountsConfig, AlchemyClientState } from "../config";
 import { AuthCard, type AuthCardProps } from "./components/auth/card/index.js";
 import { IS_SIGNUP_QP } from "./components/constants.js";
@@ -115,28 +114,23 @@ export const AlchemyAccountProvider = (
   return (
     <Hydrate {...props}>
       <AlchemyAccountContext.Provider value={initialContext}>
-        <WagmiProvider
-          config={config._internal.wagmiConfig}
-          initialState={initialWagmiState}
-        >
-          {children}
-          {uiConfig?.auth && (
-            <dialog
-              ref={ref}
-              className={`modal w-[368px] ${uiConfig.auth.className ?? ""}`}
-            >
-              <AuthCard
-                header={uiConfig.auth.header}
-                sections={uiConfig.auth.sections}
-                onAuthSuccess={() => closeAuthModal()}
-              />
-              <div
-                className="modal-backdrop"
-                onClick={() => closeAuthModal()}
-              ></div>
-            </dialog>
-          )}
-        </WagmiProvider>
+        {children}
+        {uiConfig?.auth && (
+          <dialog
+            ref={ref}
+            className={`modal w-[368px] ${uiConfig.auth.className ?? ""}`}
+          >
+            <AuthCard
+              header={uiConfig.auth.header}
+              sections={uiConfig.auth.sections}
+              onAuthSuccess={() => closeAuthModal()}
+            />
+            <div
+              className="modal-backdrop"
+              onClick={() => closeAuthModal()}
+            ></div>
+          </dialog>
+        )}
       </AlchemyAccountContext.Provider>
     </Hydrate>
   );

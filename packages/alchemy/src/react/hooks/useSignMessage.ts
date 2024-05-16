@@ -43,9 +43,16 @@ export function useSignMessage({
   client,
   ...mutationArgs
 }: UseSignMessageArgs): UseSignMessageResult {
-  const { queryClient } = useAlchemyAccountContext();
-  const { isConnected } = wagmi_useAccount();
-  const { signMessageAsync: wagmi_signMessageAsync } = wagmi_useSignMessage();
+  const {
+    queryClient,
+    config: {
+      _internal: { wagmiConfig },
+    },
+  } = useAlchemyAccountContext();
+  const { isConnected } = wagmi_useAccount({ config: wagmiConfig });
+  const { signMessageAsync: wagmi_signMessageAsync } = wagmi_useSignMessage({
+    config: wagmiConfig,
+  });
 
   const {
     mutate: signMessage,

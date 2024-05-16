@@ -86,9 +86,16 @@ export function useSendUserOperation<
 ): UseSendUserOperationResult<TEntryPointVersion, TAccount> {
   const { client, waitForTxn = false, ...mutationArgs } = params;
 
-  const { queryClient } = useAlchemyAccountContext();
-  const { isConnected } = wagmi_useAccount();
-  const { sendTransactionAsync } = wagmi_useSendTransaction();
+  const {
+    queryClient,
+    config: {
+      _internal: { wagmiConfig },
+    },
+  } = useAlchemyAccountContext();
+  const { isConnected } = wagmi_useAccount({ config: wagmiConfig });
+  const { sendTransactionAsync } = wagmi_useSendTransaction({
+    config: wagmiConfig,
+  });
 
   const {
     mutate: sendUserOperation,

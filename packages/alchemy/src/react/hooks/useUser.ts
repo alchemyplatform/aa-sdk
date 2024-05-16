@@ -11,7 +11,11 @@ export type UseUserResult = User | null;
 
 export const useUser = (): UseUserResult => {
   const { config } = useAlchemyAccountContext();
-  const account = wagmi_useAccount();
+  const {
+    _internal: { wagmiConfig },
+  } = config;
+
+  const account = wagmi_useAccount({ config: wagmiConfig });
   const user = useSyncExternalStore(
     watchUser(config),
     () => getUser(config) ?? null,

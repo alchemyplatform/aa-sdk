@@ -57,10 +57,15 @@ export function useSendTransaction(
   params: UseSendTransactionArgs
 ): UseSendTransactionResult {
   const { client, ...mutationArgs } = params;
-  const { queryClient } = useAlchemyAccountContext();
-  const { isConnected } = wagmi_useAccount();
+  const {
+    queryClient,
+    config: {
+      _internal: { wagmiConfig },
+    },
+  } = useAlchemyAccountContext();
+  const { isConnected } = wagmi_useAccount({ config: wagmiConfig });
   const { sendTransactionAsync: wagmi_sendTransactionAsync } =
-    wagmi_useSendTransaction();
+    wagmi_useSendTransaction({ config: wagmiConfig });
 
   const {
     mutate: sendTransaction,

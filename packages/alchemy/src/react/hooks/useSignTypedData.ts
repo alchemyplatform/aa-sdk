@@ -43,10 +43,15 @@ export function useSignTypedData({
   client,
   ...mutationArgs
 }: UseSignTypedDataArgs): UseSignTypedDataResult {
-  const { queryClient } = useAlchemyAccountContext();
-  const { isConnected } = wagmi_useAccount();
+  const {
+    queryClient,
+    config: {
+      _internal: { wagmiConfig },
+    },
+  } = useAlchemyAccountContext();
+  const { isConnected } = wagmi_useAccount({ config: wagmiConfig });
   const { signTypedDataAsync: wagmi_signTypedDataAsync } =
-    wagmi_useSignTypedData();
+    wagmi_useSignTypedData({ config: wagmiConfig });
 
   const {
     mutate: signTypedData,
