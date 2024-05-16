@@ -7,7 +7,7 @@ import { watchUser } from "../../config/actions/watchUser.js";
 import type { User } from "../../signer/index.js";
 import { useAlchemyAccountContext } from "../context.js";
 
-export type UseUserResult = User | null;
+export type UseUserResult = (User & { type: "eoa" | "sca" }) | null;
 
 export const useUser = (): UseUserResult => {
   const { config } = useAlchemyAccountContext();
@@ -25,8 +25,11 @@ export const useUser = (): UseUserResult => {
   if (account.status === "connected") {
     return {
       address: account.address,
+      // for backwards compat
+      // TODO: when we upgrade to v4 we should fix this with a breaking change
       orgId: account.address,
       userId: account.address,
+      type: "eoa",
     };
   }
 
