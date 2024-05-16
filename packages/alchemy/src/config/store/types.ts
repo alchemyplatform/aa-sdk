@@ -95,8 +95,8 @@ export type CoreStore = Mutate<
 >;
 
 export type StoredState =
-  | ClientState
+  | Omit<ClientState, "signer" | "accounts">
   | {
-      alchemy: ClientState;
+      alchemy: Omit<ClientState, "signer" | "accounts">;
       wagmi?: WagmiState;
     };
