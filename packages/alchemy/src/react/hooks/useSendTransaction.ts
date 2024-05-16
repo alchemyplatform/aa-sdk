@@ -10,10 +10,8 @@ import {
   type UseMutateAsyncFunction,
   type UseMutateFunction,
 } from "@tanstack/react-query";
-import {
-  useAccount as wagmi_useAccount,
-  useSendTransaction as wagmi_useSendTransaction,
-} from "wagmi";
+import { sendTransaction as wagmi_sendTransaction } from "@wagmi/core";
+import { useAccount as wagmi_useAccount } from "wagmi";
 import { useAlchemyAccountContext } from "../context.js";
 import { ClientUndefinedHookError } from "../errors.js";
 import type { BaseHookMutationArgs } from "../types.js";
@@ -64,8 +62,6 @@ export function useSendTransaction(
     },
   } = useAlchemyAccountContext();
   const { isConnected } = wagmi_useAccount({ config: wagmiConfig });
-  const { sendTransactionAsync: wagmi_sendTransactionAsync } =
-    wagmi_useSendTransaction({ config: wagmiConfig });
 
   const {
     mutate: sendTransaction,
@@ -83,7 +79,7 @@ export function useSendTransaction(
             throw new Error("to is required");
           }
 
-          return wagmi_sendTransactionAsync({
+          return wagmi_sendTransaction(wagmiConfig, {
             to,
             ...txn,
           });

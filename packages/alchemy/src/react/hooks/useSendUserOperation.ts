@@ -12,11 +12,9 @@ import {
   type UseMutateAsyncFunction,
   type UseMutateFunction,
 } from "@tanstack/react-query";
+import { sendTransaction as wagmi_sendTransaction } from "@wagmi/core";
 import type { Hex } from "viem";
-import {
-  useAccount as wagmi_useAccount,
-  useSendTransaction as wagmi_useSendTransaction,
-} from "wagmi";
+import { useAccount as wagmi_useAccount } from "wagmi";
 import type { SupportedAccounts } from "../../config/types.js";
 import { useAlchemyAccountContext } from "../context.js";
 import { ClientUndefinedHookError } from "../errors.js";
@@ -93,9 +91,6 @@ export function useSendUserOperation<
     },
   } = useAlchemyAccountContext();
   const { isConnected } = wagmi_useAccount({ config: wagmiConfig });
-  const { sendTransactionAsync } = wagmi_useSendTransaction({
-    config: wagmiConfig,
-  });
 
   const {
     mutate: sendUserOperation,
@@ -120,7 +115,7 @@ export function useSendUserOperation<
             throw new Error("Raw data not supported for EOA");
           }
 
-          const tx = await sendTransactionAsync({
+          const tx = await wagmi_sendTransaction(wagmiConfig, {
             to: uo.target,
             data: uo.data,
             value: uo.value,

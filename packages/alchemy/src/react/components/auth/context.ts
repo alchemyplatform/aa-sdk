@@ -1,3 +1,4 @@
+import type { Connector } from "@wagmi/core";
 import { createContext, useContext } from "react";
 
 export type AuthStep =
@@ -6,7 +7,8 @@ export type AuthStep =
   | { type: "passkey_create" }
   | { type: "email_completing"; createPasskeyAfter?: boolean }
   | { type: "initial" }
-  | { type: "complete" };
+  | { type: "complete" }
+  | { type: "eoa_connect"; connector: Connector };
 
 type AuthContextType = {
   authStep: AuthStep;

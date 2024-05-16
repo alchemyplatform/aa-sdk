@@ -17,9 +17,14 @@ export type UseLogoutResult = {
 export function useLogout(
   mutationArgs?: UseLogoutMutationArgs
 ): UseLogoutResult {
-  const { queryClient } = useAlchemyAccountContext();
+  const {
+    queryClient,
+    config: {
+      _internal: { wagmiConfig },
+    },
+  } = useAlchemyAccountContext();
   const signer = useSigner();
-  const { disconnectAsync } = useDisconnect();
+  const { disconnectAsync } = useDisconnect({ config: wagmiConfig });
 
   const {
     mutate: logout,

@@ -84,7 +84,11 @@ export const createConfig = (
     client: () => config.coreStore.getState().bundlerClient,
     storage: createStorage({
       key: `${DEFAULT_STORAGE_KEY}:wagmi`,
-      storage: storage?.(),
+      storage: storage
+        ? storage()
+        : typeof window !== "undefined"
+        ? localStorage
+        : undefined,
     }),
     ssr,
   });
