@@ -11,6 +11,7 @@ import {
   type UseMutateFunction,
 } from "@tanstack/react-query";
 import { type Chain, type Hash, type Hex, type Transport } from "viem";
+import { useAccount as wagmi_useAccount } from "wagmi";
 import type { SupportedAccounts } from "../../config/types.js";
 import { useAlchemyAccountContext } from "../context.js";
 import { ClientUndefinedHookError } from "../errors.js";
@@ -77,6 +78,7 @@ export function useSendTransactions<
 ): UseSendTransactionsResult<TAccount, TContext, TEntryPointVersion> {
   const { client, ...mutationArgs } = params;
   const { queryClient } = useAlchemyAccountContext();
+  const { isConnected } = wagmi_useAccount();
 
   const {
     mutate: sendTransactions,
@@ -93,6 +95,12 @@ export function useSendTransactions<
           TEntryPointVersion
         >
       ) => {
+        if (isConnected) {
+          throw new Error(
+            "useSendTransactions: connected to an EOA, cannot send batch transactions for EOAs"
+          );
+        }
+
         if (!client) {
           throw new ClientUndefinedHookError("useSendTransactions");
         }

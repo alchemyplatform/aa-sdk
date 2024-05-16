@@ -10,6 +10,10 @@ import {
   type UseMutateAsyncFunction,
   type UseMutateFunction,
 } from "@tanstack/react-query";
+import {
+  useAccount as wagmi_useAccount,
+  useSendTransaction as wagmi_useSendTransaction,
+} from "wagmi";
 import { useAlchemyAccountContext } from "../context.js";
 import { ClientUndefinedHookError } from "../errors.js";
 import type { BaseHookMutationArgs } from "../types.js";
@@ -54,6 +58,9 @@ export function useSendTransaction(
 ): UseSendTransactionResult {
   const { client, ...mutationArgs } = params;
   const { queryClient } = useAlchemyAccountContext();
+  const { isConnected } = wagmi_useAccount();
+  const { sendTransactionAsync: wagmi_sendTransactionAsync } =
+    wagmi_useSendTransaction();
 
   const {
     mutate: sendTransaction,
@@ -65,6 +72,18 @@ export function useSendTransaction(
     {
       ...mutationArgs,
       mutationFn: async (params: SendTransactionParameters) => {
+        if (isConnected) {
+          const { to, ...txn } = params;
+          if (to == null) {
+            throw new Error("to is required");
+          }
+
+          return wagmi_sendTransactionAsync({
+            to,
+            ...txn,
+          });
+        }
+
         if (!client) {
           throw new ClientUndefinedHookError("useSendTransaction");
         }

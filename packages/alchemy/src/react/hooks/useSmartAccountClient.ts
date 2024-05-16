@@ -13,6 +13,7 @@ import {
   type PluginManagerActions,
 } from "@alchemy/aa-accounts";
 import type { Address, Chain, Transport } from "viem";
+import { useAccount as wagmi_useAccount } from "wagmi";
 import { createAlchemySmartAccountClientFromRpcClient } from "../../client/internal/smartAccountClientFromRpc.js";
 import type {
   AlchemySmartAccountClient,
@@ -88,9 +89,18 @@ export function useSmartAccountClient({
     type,
     accountParams,
   });
+  const { isConnected, address: eoaAddress } = wagmi_useAccount();
 
-  if (!account || isLoadingAccount) {
-    return { client: undefined, address, isLoadingClient: true };
+  if (!account || isLoadingAccount || isConnected) {
+    if (isConnected) {
+      console.warn("EOA is connected, will not return an SCA client");
+    }
+
+    return {
+      client: undefined,
+      address: isConnected ? eoaAddress : address,
+      isLoadingClient: true,
+    };
   }
 
   switch (account.source) {

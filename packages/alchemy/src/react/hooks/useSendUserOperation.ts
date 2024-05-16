@@ -1,6 +1,7 @@
 "use client";
 
 import type {
+  EntryPointVersion,
   GetEntryPointFromAccount,
   SendUserOperationParameters,
   SendUserOperationResult,
@@ -11,17 +12,31 @@ import {
   type UseMutateAsyncFunction,
   type UseMutateFunction,
 } from "@tanstack/react-query";
+import type { Hex } from "viem";
+import {
+  useAccount as wagmi_useAccount,
+  useSendTransaction as wagmi_useSendTransaction,
+} from "wagmi";
 import type { SupportedAccounts } from "../../config/types.js";
 import { useAlchemyAccountContext } from "../context.js";
 import { ClientUndefinedHookError } from "../errors.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import { type UseSmartAccountClientResult } from "./useSmartAccountClient.js";
 
+export type SendUserOperationWithEOA<
+  TEntryPointVersion extends EntryPointVersion
+> =
+  | SendUserOperationResult<TEntryPointVersion>
+  | {
+      hash: Hex;
+      request?: never;
+    };
+
 export type UseSendUserOperationMutationArgs<
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount>,
   TAccount extends SupportedAccounts = SupportedAccounts
 > = BaseHookMutationArgs<
-  SendUserOperationResult<TEntryPointVersion>,
+  SendUserOperationWithEOA<TEntryPointVersion>,
   SendUserOperationParameters<TAccount>
 >;
 
@@ -38,19 +53,19 @@ export type UseSendUserOperationResult<
   TAccount extends SupportedAccounts = SupportedAccounts
 > = {
   sendUserOperation: UseMutateFunction<
-    SendUserOperationResult<TEntryPointVersion>,
+    SendUserOperationWithEOA<TEntryPointVersion>,
     Error,
     SendUserOperationParameters<TAccount>,
     unknown
   >;
   sendUserOperationAsync: UseMutateAsyncFunction<
-    SendUserOperationResult<TEntryPointVersion>,
+    SendUserOperationWithEOA<TEntryPointVersion>,
     Error,
     SendUserOperationParameters<TAccount>,
     unknown
   >;
   sendUserOperationResult:
-    | SendUserOperationResult<TEntryPointVersion>
+    | SendUserOperationWithEOA<TEntryPointVersion>
     | undefined;
   isSendingUserOperation: boolean;
   error: Error | null;
@@ -72,6 +87,8 @@ export function useSendUserOperation<
   const { client, waitForTxn = false, ...mutationArgs } = params;
 
   const { queryClient } = useAlchemyAccountContext();
+  const { isConnected } = wagmi_useAccount();
+  const { sendTransactionAsync } = wagmi_useSendTransaction();
 
   const {
     mutate: sendUserOperation,
@@ -82,6 +99,31 @@ export function useSendUserOperation<
   } = useMutation(
     {
       mutationFn: async (params: SendUserOperationParameters<TAccount>) => {
+        if (isConnected) {
+          console.warn(
+            "useSendUserOperation: connected to an EOA, sending as a transaction instead"
+          );
+          const { uo } = params;
+
+          if (Array.isArray(uo)) {
+            throw new Error("Batch execute not supported for EOA");
+          }
+
+          if (typeof uo === "string") {
+            throw new Error("Raw data not supported for EOA");
+          }
+
+          const tx = await sendTransactionAsync({
+            to: uo.target,
+            data: uo.data,
+            value: uo.value,
+          });
+
+          return {
+            hash: tx,
+          };
+        }
+
         if (!client) {
           throw new ClientUndefinedHookError("useSendUserOperation");
         }

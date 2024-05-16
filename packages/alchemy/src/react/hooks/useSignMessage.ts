@@ -6,6 +6,10 @@ import {
   type UseMutateFunction,
 } from "@tanstack/react-query";
 import type { Hex, SignableMessage } from "viem";
+import {
+  useAccount as wagmi_useAccount,
+  useSignMessage as wagmi_useSignMessage,
+} from "wagmi";
 import { useAlchemyAccountContext } from "../context.js";
 import { ClientUndefinedHookError } from "../errors.js";
 import type { BaseHookMutationArgs } from "../types.js";
@@ -40,6 +44,8 @@ export function useSignMessage({
   ...mutationArgs
 }: UseSignMessageArgs): UseSignMessageResult {
   const { queryClient } = useAlchemyAccountContext();
+  const { isConnected } = wagmi_useAccount();
+  const { signMessageAsync: wagmi_signMessageAsync } = wagmi_useSignMessage();
 
   const {
     mutate: signMessage,
@@ -50,6 +56,10 @@ export function useSignMessage({
   } = useMutation(
     {
       mutationFn: async (params: SignMessageArgs) => {
+        if (isConnected) {
+          return wagmi_signMessageAsync(params);
+        }
+
         if (!client) {
           throw new ClientUndefinedHookError("useSignMessage");
         }
