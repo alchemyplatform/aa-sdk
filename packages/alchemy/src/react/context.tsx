@@ -90,12 +90,6 @@ export const AlchemyAccountProvider = (
     }),
     [config, queryClient, uiConfig]
   );
-  const initialWagmiState = useMemo(() => {
-    if (props.initialState != null && "wagmi" in props.initialState) {
-      return props.initialState.wagmi;
-    }
-    return undefined;
-  }, [props.initialState]);
 
   const { status } = useSignerStatus(initialContext);
 
