@@ -4,16 +4,23 @@ import { useConnect } from "../../../hooks/useConnect.js";
 import { Button } from "../../button.js";
 import { useAuthContext } from "../context.js";
 
+// eslint-disable-next-line jsdoc/require-jsdoc
 export const InjectedProvidersAuth = () => {
   const { chain } = useChain();
   const { connectors, connect } = useConnect({
     onMutate: ({ connector }) => {
+      // This typecast is ok because the only way this is called is with a Connector (see below)
       setAuthStep({ type: "eoa_connect", connector: connector as Connector });
     },
-    onSettled: (_result, error) => {
+    onSettled: (_result, error, { connector }) => {
       if (error) {
-        // TODO: need to bubble this error up
-        return console.log(error);
+        // This typecast is ok because the only way this is called is with a Connector (see below)
+        setAuthStep({
+          type: "eoa_connect",
+          connector: connector as Connector,
+          error,
+        });
+        return;
       }
 
       setAuthStep({ type: "complete" });

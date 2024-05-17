@@ -17,7 +17,10 @@ import type { Hex } from "viem";
 import { useAccount as wagmi_useAccount } from "wagmi";
 import type { SupportedAccounts } from "../../config/types.js";
 import { useAlchemyAccountContext } from "../context.js";
-import { ClientUndefinedHookError } from "../errors.js";
+import {
+  ClientUndefinedHookError,
+  UnsupportedEOAActionError,
+} from "../errors.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import { type UseSmartAccountClientResult } from "./useSmartAccountClient.js";
 
@@ -108,11 +111,17 @@ export function useSendUserOperation<
           const { uo } = params;
 
           if (Array.isArray(uo)) {
-            throw new Error("Batch execute not supported for EOA");
+            throw new UnsupportedEOAActionError(
+              "useSendUserOperation",
+              "batch execute"
+            );
           }
 
           if (typeof uo === "string") {
-            throw new Error("Raw data not supported for EOA");
+            throw new UnsupportedEOAActionError(
+              "useSendUserOperation",
+              "hex user operation"
+            );
           }
 
           const tx = await wagmi_sendTransaction(wagmiConfig, {

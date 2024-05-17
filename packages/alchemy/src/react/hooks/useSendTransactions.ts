@@ -14,7 +14,10 @@ import { type Chain, type Hash, type Hex, type Transport } from "viem";
 import { useAccount as wagmi_useAccount } from "wagmi";
 import type { SupportedAccounts } from "../../config/types.js";
 import { useAlchemyAccountContext } from "../context.js";
-import { ClientUndefinedHookError } from "../errors.js";
+import {
+  ClientUndefinedHookError,
+  UnsupportedEOAActionError,
+} from "../errors.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import { type UseSmartAccountClientResult } from "./useSmartAccountClient.js";
 
@@ -101,8 +104,9 @@ export function useSendTransactions<
         >
       ) => {
         if (isConnected) {
-          throw new Error(
-            "useSendTransactions: connected to an EOA, cannot send batch transactions for EOAs"
+          throw new UnsupportedEOAActionError(
+            "useSendTransactions",
+            "batch transactions"
           );
         }
 

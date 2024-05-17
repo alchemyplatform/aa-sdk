@@ -13,6 +13,7 @@ interface CardContentProps {
   error?: Error | string;
 }
 
+// eslint-disable-next-line jsdoc/require-jsdoc
 export const CardContent = ({
   header,
   icon,

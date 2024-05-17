@@ -1,6 +1,6 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useMemo, useSyncExternalStore } from "react";
 import { useAccount as wagmi_useAccount } from "wagmi";
 import { getUser } from "../../config/actions/getUser.js";
 import { watchUser } from "../../config/actions/watchUser.js";
@@ -21,17 +21,22 @@ export const useUser = (): UseUserResult => {
     () => getUser(config) ?? null,
     () => getUser(config) ?? null
   );
+  const eoaUser = useMemo(() => {
+    if (account.status !== "connected") {
+      return null;
+    }
 
-  if (account.status === "connected") {
     return {
       address: account.address,
       // for backwards compat
       // TODO: when we upgrade to v4 we should fix this with a breaking change
       orgId: account.address,
       userId: account.address,
-      type: "eoa",
+      type: "eoa" as const,
     };
-  }
+  }, [account.address, account.status]);
+
+  if (eoaUser) return eoaUser;
 
   return user;
 };

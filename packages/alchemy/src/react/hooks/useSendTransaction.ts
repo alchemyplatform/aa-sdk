@@ -5,6 +5,7 @@ import type {
   SendTransactionReturnType,
 } from "viem";
 
+import { TransactionMissingToParamError } from "@alchemy/aa-core";
 import {
   useMutation,
   type UseMutateAsyncFunction,
@@ -76,7 +77,7 @@ export function useSendTransaction(
         if (isConnected) {
           const { to, ...txn } = params;
           if (to == null) {
-            throw new Error("to is required");
+            throw new TransactionMissingToParamError();
           }
 
           return wagmi_sendTransaction(wagmiConfig, {
