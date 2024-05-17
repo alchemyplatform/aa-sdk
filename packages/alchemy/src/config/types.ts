@@ -6,6 +6,7 @@ import type {
 import type { ConnectionConfig } from "@alchemy/aa-core";
 import type { Chain } from "viem";
 import type { PartialBy } from "viem/chains";
+import type { AlchemyGasManagerConfig } from "../middleware/gasManager";
 import type {
   AlchemySigner,
   AlchemySignerClient,
@@ -41,7 +42,10 @@ export type AlchemyAccountsConfig = {
 };
 
 // #region CreateConfigProps
-export type Connection = ConnectionConfig & { chain: Chain };
+export type Connection = ConnectionConfig & {
+  chain: Chain;
+  gasManagerConfig?: AlchemyGasManagerConfig;
+};
 
 type RpcConnectionConfig =
   | (Connection & {

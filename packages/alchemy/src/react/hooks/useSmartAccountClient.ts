@@ -27,6 +27,7 @@ import type { GetAccountParams } from "../../config/actions/getAccount.js";
 import type { AlchemySigner } from "../../signer";
 import { useAccount } from "./useAccount.js";
 import { useBundlerClient } from "./useBundlerClient.js";
+import { useConnection } from "./useConnection.js";
 
 export type UseSmartAccountClientProps<
   TTransport extends Transport = Transport,
@@ -81,6 +82,8 @@ export function useSmartAccountClient({
   ...clientParams
 }: UseSmartAccountClientProps): UseSmartAccountClientResult {
   const bundlerClient = useBundlerClient();
+  const connection = useConnection();
+
   const { account, address, isLoadingAccount } = useAccount({
     type,
     accountParams,
@@ -96,6 +99,7 @@ export function useSmartAccountClient({
         client: createAlchemySmartAccountClientFromRpcClient({
           client: bundlerClient,
           account,
+          gasManagerConfig: connection.gasManagerConfig,
           ...clientParams,
         }).extend(lightAccountClientActions),
         address: account.address,
@@ -106,6 +110,7 @@ export function useSmartAccountClient({
         client: createAlchemySmartAccountClientFromRpcClient({
           client: bundlerClient,
           account,
+          gasManagerConfig: connection.gasManagerConfig,
           ...clientParams,
         })
           .extend(multiOwnerPluginActions)
