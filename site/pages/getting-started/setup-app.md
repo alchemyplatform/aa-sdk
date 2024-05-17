@@ -1,5 +1,6 @@
 ---
 outline: deep
+title: Getting started guide
 head:
   - - meta
     - property: og:title
@@ -38,15 +39,15 @@ The Alchemy API Key will allow you to read and write to blockchains through Alch
 
 To create an API Key, go to https://dashboard.alchemy.com, sign up for an account, and go through the onboarding. Then on the [apps](https://dashboard.alchemy.com/apps/?a=embedded-accounts-get-started) page, click "Create new app" button.
 
-<img src="/images/getting-started/api-key-create.png" alt="API Key Create" />
+![API Key Create](/images/getting-started/api-key-create.png)
 
 When configuring the Alchemy app, select Arbitrum Sepolia for the network.
 
-<img src="/images/getting-started/api-key-configure.png" alt="API Key Configure" />
+![API Key Configure](/images/getting-started/api-key-configure.png)
 
 Click the API Key button in the top right corner and copy-paste it into the `.env` file of your application as an environment variable called `ALCHEMY_API_KEY`.
 
-<img src="/images/getting-started/api-key-view.png" alt="API Key View" />
+![API Key View](/images/getting-started/api-key-view.png)
 
 ### Alchemy Embedded Accounts Config
 
@@ -54,7 +55,7 @@ The Embedded Accounts Config enables [magic link authentication](https://account
 
 To create an Embedded Accounts Config, go to the [embedded accounts page](https://dashboard.alchemy.com/accounts/?a=embedded-accounts-get-started) of the Alchemy dashboard and click the “New account config” button.
 
-<img src="/images/getting-started/accounts-config-create.png" alt="Accounts Config Create" />
+![Accounts Config Create](/images/getting-started/accounts-config-create.png)
 
 Then:
 
@@ -62,11 +63,11 @@ Then:
 2. Set `http://localhost:3000` as the redirect URL. NextJS apps by default are hosted locally at port 3000, and you will want to direct the user back to the URL where your application is hosted to authenticate them.
 3. [optional] Customize the logo, “Sign In” button color, and support URL of the email.
 
-<img src="/images/getting-started/accounts-config-configure-1.png" alt="Accounts Config Configure 1" />
+![Accounts Config Configure 1](/images/getting-started/accounts-config-configure-1.png)
 
 Next, apply this config to the Alchemy App you created in the previous step. Doing this will allow you send requests to Alchemy Signer via the Account Kit SDKs you will install in the next step.
 
-<img src="/images/getting-started/accounts-config-configure-2.png" alt="Accounts Config Configure 2" />
+![Accounts Config Configure 2](/images/getting-started/accounts-config-configure-2.png)
 
 ### Alchemy Gas Manager Policy
 
@@ -74,7 +75,7 @@ The Gas Manager Policy defines a config for Alchemy's ERC-4337 Paymaster impleme
 
 To create a Gas Manager Policy, go to the [gas manager](https://dashboard.alchemy.com/gas-manager?a=embedded-accounts-get-started) page of the Alchemy dashboard and click the “Create new policy” button.
 
-<img src="/images/getting-started/gas-manager-create.png" alt="Gas Manager Create" />
+![Gas Manager Create](/images/getting-started/gas-manager-create.png)
 
 Then:
 
@@ -82,7 +83,7 @@ Then:
 2. Associate the policy with the Alchemy App you created in the last step by selecting it in the “Policy details” section.
 3. Select the default configurations for the remaining sections.
 
-<img src="/images/getting-started/gas-manager-configure.png" alt="Gas Manager Configure" />
+![Gas Manager Configure](/images/getting-started/gas-manager-configure.png)
 
 Once you create the policy, copy the Policy ID below the policy's header and copy-paste it into the .env file of your application as an environment variable called `NEXT_PUBLIC_ALCHEMY_GAS_MANAGER_POLICY_ID`.
 
@@ -90,7 +91,7 @@ Once you create the policy, copy the Policy ID below the policy's header and cop
 
 In this newly created directory for your app, add the following dependencies:
 
-::: code-group
+:::code-group
 
 ```bash [npm]
 npm i @alchemy/aa-alchemy @alchemy/aa-accounts @alchemy/aa-core viem@2.8.6 @tanstack/react-query@5.28.9
@@ -106,7 +107,7 @@ pnpm i @alchemy/aa-alchemy @alchemy/aa-accounts @alchemy/aa-core viem@2.8.6 @tan
 
 :::
 
-::: warning
+:::warning
 The versions of `viem` and `@tanstack/react-query` that's required to be installed is listed as a `peerDependency` of the various `@alchemy/*` packages (`2.8.6` and `5.28.9`, respectively, at the time of writing). Due to some breaking changes between patch and minor versions of `viem` and `@tanstack/react-query`, it's recommended to pin your version of `viem` to the listed `peerDependency` in the `package.json`.
 :::
 
@@ -122,11 +123,15 @@ Using your code editor, open your newly created application directory to add the
 
 From the root of NextJS project's directory, using the NextJS concept of [route handlers](https://nextjs.org/docs/app/building-your-application/routing/route-handlers), create new directory `src/app/api/rpc` and add two files: `src/app/api/rpc/[...routes]/route.ts` to handle calls to the Alchemy Signer, and `src/app/api/rpc/route.ts` to handle requests to Alchemy's infrastructure. Copy the following into those files.
 
-::: code-group
+:::code-group
 
-<<< @/snippets/getting-started/setup-app/route.ts [src/app/api/rpc/route.ts]
+```ts [src/app/api/rpc/route.ts]
+// [!include ~/snippets/getting-started/setup-app/route.ts]
+```
 
-<<< @/snippets/getting-started/setup-app/routes.ts [src/app/api/rpc/[...routes]/route.ts]
+```ts [src/app/api/rpc/[...routes]/route.ts]
+// [!include ~/snippets/getting-started/setup-app/routes.ts]
+```
 
 :::
 
@@ -140,13 +145,19 @@ Then, in the `src/app/layout.tsx` file that came with the NextJS boilerplate, wr
 
 These two files should look as follows:
 
-::: code-group
+:::code-group
 
-<<< @/snippets/getting-started/setup-app/layout.tsx [src/app/layout.tsx]
+```tsx [src/app/layout.tsx]
+// [!include ~/snippets/getting-started/setup-app/layout.tsx]
+```
 
-<<< @/snippets/getting-started/setup-app/providers.tsx [src/app/providers.tsx]
+```tsx [src/app/providers.tsx]
+// [!include ~/snippets/getting-started/setup-app/providers.tsx]
+```
 
-<<< @/snippets/getting-started/setup-app/config.ts [src/app/config.ts]
+```ts [src/app/config.ts]
+// [!include ~/snippets/getting-started/setup-app/config.ts]
+```
 
 :::
 

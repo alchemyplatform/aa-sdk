@@ -26,17 +26,21 @@ In this last section, you will enable users to send UserOperations through their
 
 Add a new `src/components/SendUOButton.tsx` file and incorporate it onto the `src/components/ProfileCard.tsx` for authenticated users to send a UO. These files should now look as follows:
 
-::: code-group
+:::code-group
 
-<<< @/snippets/getting-started/send-uos/ProfileCard.tsx [src/components/ProfileCard.tsx]
+```tsx [src/components/ProfileCard.tsx]
+// [!include ~/snippets/getting-started/send-uos/ProfileCard.tsx]
+```
 
-<<< @/snippets/getting-started/send-uos/SendUOButton.tsx [src/components/SendUOButton.tsx]
+```tsx [src/components/SendUOButton.tsx]
+// [!include ~/snippets/getting-started/send-uos/SendUOButton.tsx]
+```
 
 :::
 
 That's it! At this point, run the application using:
 
-::: code-group
+:::code-group
 
 ```bash [npm]
 npm run dev
@@ -54,7 +58,7 @@ pnpm run dev
 
 You've now enabled users to sendUOs from their Embedded Account on your application, and the experience should look like the video below!
 
-<VideoEmbed src="/videos/embedded-accounts-full.mp4" />
+<video src="/videos/embedded-accounts-full.mp4" controls></video>
 
 Congratulations! Using Account Kit, the Alchemy Signer, and Alchemy Modular Account, you created an application that authenticates a user by email to create their Embedded Account, and then uses that account to send a UserOperation!
 

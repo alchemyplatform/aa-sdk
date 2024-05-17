@@ -26,17 +26,21 @@ In this section of the Embedded Accounts Quickstart, you'll create your app's lo
 
 To create the user log in experience, add a `src/components` folder and create `src/components/LogInCard.tsx` with the following:
 
-<<< @/snippets/getting-started/log-in-users/LogInCard-1.tsx [src/components/LogInCard.tsx]
+```tsx [src/components/LogInCard.tsx]
+// [!include ~/snippets/getting-started/log-in-users/LogInCard-1.tsx]
+```
 
 `src/components/LogInCard.tsx` creates the initial UI for your app. You'll configure the Alchemy Signer in the next step to send the user an email and authenticate them.
 
 Now, incorporate these components into your app by updating the `src/app/page.tsx` file as follows:
 
-<<< @/snippets/getting-started/log-in-users/page-1.tsx [src/app/page.tsx]
+```tsx [src/app/page.tsx]
+// [!include ~/snippets/getting-started/log-in-users/page-1.tsx]
+```
 
 You've now added the UI for your app! At this point, run the application using:
 
-::: code-group
+:::code-group
 
 ```bash [npm]
 npm run dev
@@ -54,7 +58,7 @@ pnpm run dev
 
 Your application should look like the below image!
 
-<img src="/images/getting-started/embedded-accounts-ui.png" alt="Embedded Accounts UI" />
+!["Embedded Accounts UI"](/images/getting-started/embedded-accounts-ui.png)
 
 In the next step, you'll add functionality to the “Log In” button to send an email to the user to authenticate them.
 
@@ -68,17 +72,25 @@ To support email authentication using the Alchemy Signer to created Embedded Acc
 
 Your app should now contain these code files:
 
-::: code-group
+:::code-group
 
-<<< @/snippets/getting-started/log-in-users/LogInCard-2.tsx [src/components/LogInCard.tsx]
-<<< @/snippets/getting-started/log-in-users/ProfileCard.tsx [src/app/components/ProfileCard.tsx]
-<<< @/snippets/getting-started/log-in-users/page-2.tsx [src/app/page.tsx]
+```tsx [src/components/LogInCard.tsx]
+// [!include ~/snippets/getting-started/log-in-users/LogInCard-2.tsx]
+```
+
+```tsx [src/components/ProfileCard.tsx]
+// [!include ~/snippets/getting-started/log-in-users/ProfileCard.tsx]
+```
+
+```tsx [src/app/page.tsx]
+// [!include ~/snippets/getting-started/log-in-users/page-2.tsx]
+```
 
 :::
 
 You've now added the full authentication flow for users to create Embedded Accounts. At this point, run the application using:
 
-::: code-group
+:::code-group
 
 ```bash [npm]
 npm run dev
