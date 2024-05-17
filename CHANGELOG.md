@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.14.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.14.0...v3.14.1) (2024-05-17)
+
+### Bug Fixes
+
+- **light-account:** uo signing should use message raw ([#671](https://github.com/alchemyplatform/aa-sdk/issues/671)) ([89224a8](https://github.com/alchemyplatform/aa-sdk/commit/89224a8e54998726753ca5c6a9a69265859f20b5))
+
 # [3.14.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.13.1...v3.14.0) (2024-05-17)
 
 ### Bug Fixes
