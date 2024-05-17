@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.14.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.13.1...v3.14.0) (2024-05-17)
+
+### Bug Fixes
+
+- **aa-alchemy/config:** export missing actions ([175dc20](https://github.com/alchemyplatform/aa-sdk/commit/175dc200404373686f1654ff72404edd04c31cbd))
+
+### Features
+
+- add multi-chain support to account configs ([#666](https://github.com/alchemyplatform/aa-sdk/issues/666)) ([60994e9](https://github.com/alchemyplatform/aa-sdk/commit/60994e983a93bff97400a565dd755a2e8dab2655))
+
 ## [3.13.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.13.0...v3.13.1) (2024-05-14)
 
 ### Bug Fixes
