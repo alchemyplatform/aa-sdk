@@ -23,14 +23,14 @@ head:
 ```ts [example.ts]
 import {
   alchemyGasManagerMiddleware,
-  createAlchemyRpcClient,
+  createAlchemyPublicRpcClient,
 } from "@alchemy/aa-alchemy";
 import { createSmartAccountClient } from "@alchemy/aa-core";
 import { http } from "viem";
 import { sepolia } from "viem/chains";
 
-const alchemyClient = createAlchemyRpcClient({
-  transport: http("ALCHEMY_RPC_URL"),
+const alchemyClient = createAlchemyPublicRpcClient({
+  connectionConfig: { rpcUrl: "ALCHEMY_RPC_URL" },
   chain: sepolia,
 });
 
