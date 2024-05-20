@@ -150,7 +150,7 @@ const [gasSpendingLimit, shouldReset] =
 
 const {
   hasLimit: hasGasSpendLimit, // Whether or not a gas spending limit is enforced on the session key
-  limit: gasSpendLimit, // The limit's maximum value. If a refresh interval is set, this is the max per interval.
+  limit: gasSpendLimit, // The gas limit's maximum spend amount, in wei. If a refresh interval is set, this is the max per interval.
   limitUsed: gasSpendLimitUsed, // How much of the limit is used. If a refresh interval is set, this is the amount used in the current interval.
   refreshInterval: gasRefreshInterval, // How often to reset the limit and start counting again. If zero, never refresh the limit.
   lastUsedTime: gasLastUsedTime, // The start of the latest interval, if using the refresh interval.
