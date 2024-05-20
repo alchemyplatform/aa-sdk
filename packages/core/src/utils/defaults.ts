@@ -6,6 +6,8 @@ import {
   base,
   baseGoerli,
   baseSepolia,
+  fraxtal,
+  fraxtalSepolia,
   goerli,
   mainnet,
   optimism,
@@ -15,8 +17,6 @@ import {
   polygonAmoy,
   polygonMumbai,
   sepolia,
-  fraxtal,
-  fraxtalSepolia,
   zora,
   zoraSepolia,
 } from "../chains/index.js";
@@ -67,26 +67,9 @@ export const getDefaultSimpleAccountFactoryAddress = (
       break;
     case "0.7.0":
       switch (chain.id) {
-        case mainnet.id:
-        case polygon.id:
-        case polygonMumbai.id:
-        case polygonAmoy.id:
-        case optimism.id:
-        case optimismSepolia.id:
-        case arbitrum.id:
-        case arbitrumSepolia.id:
-        case base.id:
-        case baseSepolia.id:
-        case sepolia.id:
-        case fraxtal.id:
-        case fraxtalSepolia.id:
-        case zora.id:
-        case zoraSepolia.id:
-          return "0x91E60e0613810449d098b0b5Ec8b51A0FE8c8985";
         default:
-          break;
+          return "0x91E60e0613810449d098b0b5Ec8b51A0FE8c8985";
       }
-      break;
   }
 
   throw new DefaultFactoryNotDefinedError("SimpleAccount", chain, version);

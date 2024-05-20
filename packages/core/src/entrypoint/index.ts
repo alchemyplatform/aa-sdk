@@ -56,7 +56,10 @@ export function getEntryPoint<
   };
 
   const entryPoint = entryPointRegistry[version ?? defaultEntryPointVersion];
-  const address = addressOverride || entryPoint.address[chain.id];
+  const address =
+    addressOverride ??
+    entryPoint.address[chain.id] ??
+    entryPoint.address.default;
   if (!address) {
     throw new EntryPointNotFoundError(chain, version);
   }
