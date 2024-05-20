@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.15.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.14.1...v3.15.0) (2024-05-20)
+
+### Bug Fixes
+
+- account state was not syncing across chain changes ([#672](https://github.com/alchemyplatform/aa-sdk/issues/672)) ([c4e47d5](https://github.com/alchemyplatform/aa-sdk/commit/c4e47d5d97d26c4bfb5922a45181f4138eb9dc9c))
+
+### Features
+
+- allow setting gas manager config in the config ([#670](https://github.com/alchemyplatform/aa-sdk/issues/670)) ([38dfa25](https://github.com/alchemyplatform/aa-sdk/commit/38dfa2578e1dccdedca5295b2c2871bafa1aef7c))
+
 ## [3.14.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.14.0...v3.14.1) (2024-05-17)
 
 ### Bug Fixes
