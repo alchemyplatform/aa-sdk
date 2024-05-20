@@ -10,17 +10,28 @@ import type {
 
 export const DEFAULT_IFRAME_CONTAINER_ID = "alchemy-signer-iframe-container";
 
-export const createConfig = ({
-  chain,
-  iframeConfig,
-  rootOrgId,
-  rpId,
-  sessionConfig,
-  signerConnection,
-  ssr,
-  storage,
-  ...connectionConfig
-}: CreateConfigProps): AlchemyAccountsConfig => {
+/**
+ * Creates an AlchemyAccountsConfig object from the provided configuration params.
+ * This method should be called in a static context as it creates state management
+ * objects that are used by hooks (in React) or consumed by the core actions
+ *
+ * @param configProps see {@link CreateConfigProps} for the available configuration options
+ * @returns an AlchemyAccountsConfig that can be used with the actions exported by this package
+ */
+export const createConfig = (
+  configProps: CreateConfigProps
+): AlchemyAccountsConfig => {
+  const {
+    chain,
+    iframeConfig,
+    rootOrgId,
+    rpId,
+    sessionConfig,
+    signerConnection,
+    ssr,
+    storage,
+    ...connectionConfig
+  } = configProps;
   const connections: Connection[] = [];
   if (connectionConfig.connections != null) {
     connectionConfig.connections.forEach(({ chain, ...config }) => {
@@ -50,6 +61,8 @@ export const createConfig = ({
         rootOrgId,
         rpId,
       },
+      // TODO: this is duplicated from the core store
+      chains: connections.map((x) => x.chain),
       sessionConfig,
       storage: storage?.(
         sessionConfig?.expirationTimeMs

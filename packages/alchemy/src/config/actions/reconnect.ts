@@ -1,6 +1,7 @@
 import { createSigner } from "../store/client.js";
 import type { AlchemyAccountsConfig } from "../types";
 import { createAccount } from "./createAccount.js";
+import { getChain } from "./getChain.js";
 
 /**
  * This method will use the current state in the client store and attempt to restore
@@ -14,26 +15,27 @@ export async function reconnect(config: AlchemyAccountsConfig) {
   const accountConfigs = clientStore.getState().accountConfigs;
 
   const signer = createSigner(signerConfig);
+  const chain = getChain(config);
   clientStore.setState({
     signer,
   });
 
   const unsubConnected = signer.on("connected", async () => {
-    if (accountConfigs["LightAccount"]) {
+    if (accountConfigs[chain.id]["LightAccount"]) {
       await createAccount(
         {
           type: "LightAccount",
-          accountParams: accountConfigs["LightAccount"],
+          accountParams: accountConfigs[chain.id]["LightAccount"],
         },
         config
       );
     }
 
-    if (accountConfigs["MultiOwnerModularAccount"]) {
+    if (accountConfigs[chain.id]["MultiOwnerModularAccount"]) {
       await createAccount(
         {
           type: "MultiOwnerModularAccount",
-          accountParams: accountConfigs["MultiOwnerModularAccount"],
+          accountParams: accountConfigs[chain.id]["MultiOwnerModularAccount"],
         },
         config
       );

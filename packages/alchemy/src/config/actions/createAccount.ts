@@ -58,11 +58,11 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
     throw new Error("Signer not connected");
   }
 
-  const cachedAccount = accounts[type];
+  const cachedAccount = accounts[chain.id][type];
   if (cachedAccount.status !== "RECONNECTING" && cachedAccount.account) {
     return cachedAccount.account;
   }
-  const cachedConfig = clientStore.getState().accountConfigs[type];
+  const cachedConfig = clientStore.getState().accountConfigs[chain.id]?.[type];
 
   const accountPromise = (() => {
     switch (type) {
@@ -91,9 +91,12 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
     clientStore.setState(() => ({
       accounts: {
         ...accounts,
-        [type]: {
-          status: "INITIALIZING",
-          account: accountPromise,
+        [chain.id]: {
+          ...accounts[chain.id],
+          [type]: {
+            status: "INITIALIZING",
+            account: accountPromise,
+          },
         },
       },
     }));
@@ -105,17 +108,23 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
     clientStore.setState((state) => ({
       accounts: {
         ...accounts,
-        [type]: {
-          status: "READY",
-          account,
+        [chain.id]: {
+          ...accounts[chain.id],
+          [type]: {
+            status: "READY",
+            account,
+          },
         },
       },
       accountConfigs: {
         ...state.accountConfigs,
-        [type]: {
-          ...params,
-          accountAddress: account.address,
-          initCode,
+        [chain.id]: {
+          ...state.accountConfigs[chain.id],
+          [type]: {
+            ...params,
+            accountAddress: account.address,
+            initCode,
+          },
         },
       },
     }));
@@ -123,9 +132,12 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
     clientStore.setState(() => ({
       accounts: {
         ...accounts,
-        [type]: {
-          status: "ERROR",
-          error,
+        [chain.id]: {
+          ...accounts[chain.id],
+          [type]: {
+            status: "ERROR",
+            error,
+          },
         },
       },
     }));

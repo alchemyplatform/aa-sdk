@@ -1,8 +1,12 @@
+import type { Address, NoUndefined } from "@alchemy/aa-core";
 import { AlchemySignerStatus } from "../signer/index.js";
 import { reconnect } from "./actions/reconnect.js";
-import { convertSignerStatusToState } from "./store/client.js";
+import {
+  convertSignerStatusToState,
+  defaultAccountState,
+} from "./store/client.js";
 import type { AccountState, ClientState } from "./store/types";
-import type { AlchemyAccountsConfig } from "./types";
+import type { AlchemyAccountsConfig, SupportedAccountTypes } from "./types";
 
 /**
  * Will hydrate the client store with the provided initial state if one is provided.
@@ -19,31 +23,6 @@ export function hydrate(
     const { accounts, accountConfigs, signerStatus, ...rest } = initialState;
     const shouldReconnectAccounts =
       signerStatus.isConnected || signerStatus.isAuthenticating;
-    const laState: AccountState<"LightAccount"> =
-      accountConfigs.LightAccount && shouldReconnectAccounts
-        ? {
-            status: "RECONNECTING",
-            account: {
-              address: accountConfigs.LightAccount.accountAddress!,
-            },
-          }
-        : {
-            status: "DISCONNECTED",
-            account: undefined,
-          };
-
-    const maState: AccountState<"MultiOwnerModularAccount"> =
-      accountConfigs.MultiOwnerModularAccount && shouldReconnectAccounts
-        ? {
-            status: "RECONNECTING",
-            account: {
-              address: accountConfigs.MultiOwnerModularAccount.accountAddress!,
-            },
-          }
-        : {
-            status: "DISCONNECTED",
-            account: undefined,
-          };
 
     config.clientStore.setState({
       ...rest,
@@ -51,10 +30,7 @@ export function hydrate(
       signerStatus: convertSignerStatusToState(
         AlchemySignerStatus.INITIALIZING
       ),
-      accounts: {
-        LightAccount: laState,
-        MultiOwnerModularAccount: maState,
-      },
+      accounts: hydrateAccountState(accountConfigs, shouldReconnectAccounts),
     });
   }
 
@@ -69,3 +45,33 @@ export function hydrate(
     },
   };
 }
+
+const reconnectingState = <T extends SupportedAccountTypes>(
+  address: Address
+): AccountState<T> => ({
+  status: "RECONNECTING",
+  account: {
+    address,
+  },
+});
+
+const hydrateAccountState = (
+  accountConfigs: ClientState["accountConfigs"],
+  shouldReconnectAccounts: boolean
+): ClientState["accounts"] => {
+  return Object.entries(accountConfigs).reduce((acc, [chainKey, config]) => {
+    const chainId = Number(chainKey);
+
+    acc[chainId].LightAccount =
+      config.LightAccount && shouldReconnectAccounts
+        ? reconnectingState(config.LightAccount.accountAddress!)
+        : defaultAccountState();
+
+    acc[chainId].MultiOwnerModularAccount =
+      config.MultiOwnerModularAccount && shouldReconnectAccounts
+        ? reconnectingState(config.MultiOwnerModularAccount.accountAddress!)
+        : defaultAccountState();
+
+    return acc;
+  }, {} as NoUndefined<ClientState["accounts"]>);
+};

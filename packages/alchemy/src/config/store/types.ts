@@ -39,6 +39,7 @@ export type CreateClientStoreParams = {
     Exclude<AlchemySignerParams["client"], AlchemySignerClient>,
     "iframeConfig"
   >;
+  chains: Chain[];
   sessionConfig?: AlchemySignerParams["sessionConfig"];
   storage?: Storage;
   ssr?: boolean;
@@ -57,15 +58,19 @@ export type ClientState = {
   // getting this state should throw an error if not on the client
   signer?: AlchemySigner;
   accounts?: {
-    [key in SupportedAccountTypes]: AccountState<key>;
+    [chain: number]: {
+      [key in SupportedAccountTypes]: AccountState<key>;
+    };
   };
   // serializable state
   // NOTE: in some cases this can be serialized to cookie storage
   // be mindful of how big this gets. cookie limit 4KB
   config: CreateClientStoreParams;
-  accountConfigs: Partial<{
-    [key in SupportedAccountTypes]: AccountConfig<key>;
-  }>;
+  accountConfigs: {
+    [chain: number]: Partial<{
+      [key in SupportedAccountTypes]: AccountConfig<key>;
+    }>;
+  };
   user?: User;
   signerStatus: SignerStatus;
 };
