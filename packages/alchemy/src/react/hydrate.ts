@@ -3,11 +3,11 @@
 import { useEffect, useRef, type PropsWithChildren } from "react";
 import type { AlchemyAccountsConfig } from "../config";
 import { hydrate } from "../config/hydrate.js";
-import type { ClientState } from "../config/store/types";
+import type { StoredState } from "../config/store/types";
 
 export type HydrateProps = {
   config: AlchemyAccountsConfig;
-  initialState?: ClientState;
+  initialState?: StoredState;
 };
 
 /**

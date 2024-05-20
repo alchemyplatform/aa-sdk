@@ -6,4 +6,5 @@ export type AuthType =
       buttonLabel?: string;
       placeholder?: string;
     }
-  | { type: "passkey" };
+  | { type: "passkey" }
+  | { type: "injected" };

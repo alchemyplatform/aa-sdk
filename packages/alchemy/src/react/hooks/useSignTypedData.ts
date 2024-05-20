@@ -5,7 +5,9 @@ import {
   type UseMutateAsyncFunction,
   type UseMutateFunction,
 } from "@tanstack/react-query";
+import { signTypedData as wagmi_signTypedData } from "@wagmi/core";
 import type { Hex, TypedDataDefinition } from "viem";
+import { useAccount as wagmi_useAccount } from "wagmi";
 import { useAlchemyAccountContext } from "../context.js";
 import { ClientUndefinedHookError } from "../errors.js";
 import type { BaseHookMutationArgs } from "../types.js";
@@ -39,7 +41,13 @@ export function useSignTypedData({
   client,
   ...mutationArgs
 }: UseSignTypedDataArgs): UseSignTypedDataResult {
-  const { queryClient } = useAlchemyAccountContext();
+  const {
+    queryClient,
+    config: {
+      _internal: { wagmiConfig },
+    },
+  } = useAlchemyAccountContext();
+  const { isConnected } = wagmi_useAccount({ config: wagmiConfig });
 
   const {
     mutate: signTypedData,
@@ -50,6 +58,10 @@ export function useSignTypedData({
   } = useMutation(
     {
       mutationFn: async (params: SignTypedDataArgs) => {
+        if (isConnected) {
+          return wagmi_signTypedData(wagmiConfig, params.typedData);
+        }
+
         if (!client) {
           throw new ClientUndefinedHookError("useSignTypedData");
         }

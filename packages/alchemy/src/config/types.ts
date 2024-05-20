@@ -1,9 +1,10 @@
 import type {
-  GetLightAccountVersion,
   LightAccount,
   MultiOwnerModularAccount,
 } from "@alchemy/aa-accounts";
 import type { ConnectionConfig } from "@alchemy/aa-core";
+import type { CreateConnectorFn } from "@wagmi/core";
+import { type Config as WagmiConfig } from "@wagmi/core";
 import type { Chain } from "viem";
 import type { PartialBy } from "viem/chains";
 import type { AlchemyGasManagerConfig } from "../middleware/gasManager";
@@ -12,7 +13,7 @@ import type {
   AlchemySignerClient,
   AlchemySignerParams,
 } from "../signer";
-import type { ClientState, ClientStore, CoreStore } from "./store/types";
+import type { ClientStore, CoreStore, StoredState } from "./store/types";
 
 export type SupportedAccountTypes = "LightAccount" | "MultiOwnerModularAccount";
 
@@ -22,11 +23,7 @@ export type SupportedAccounts =
 
 export type SupportedAccount<T extends SupportedAccountTypes> =
   T extends "LightAccount"
-    ? LightAccount<
-        AlchemySigner,
-        // we only support LightAccount version v1
-        Exclude<GetLightAccountVersion<"LightAccount">, "v2.0.0">
-      >
+    ? LightAccount<AlchemySigner>
     : T extends "MultiOwnerModularAccount"
     ? MultiOwnerModularAccount<AlchemySigner>
     : never;
@@ -35,6 +32,7 @@ export type AlchemyAccountsConfig = {
   coreStore: CoreStore;
   clientStore: ClientStore;
   _internal: {
+    wagmiConfig: WagmiConfig;
     ssr?: boolean;
     storageKey: string;
     sessionLength: number;
@@ -79,6 +77,8 @@ export type CreateConfigProps = RpcConnectionConfig & {
 
   // TODO: should probably abstract this out into a function
   storage?: (config?: { sessionLength: number }) => Storage;
+
+  connectors?: CreateConnectorFn[];
 } & Omit<
     PartialBy<
       Exclude<AlchemySignerParams["client"], AlchemySignerClient>,
@@ -88,4 +88,4 @@ export type CreateConfigProps = RpcConnectionConfig & {
   >;
 // #endregion CreateConfigProps
 
-export type AlchemyClientState = Omit<ClientState, "signer" | "accounts">;
+export type AlchemyClientState = StoredState;

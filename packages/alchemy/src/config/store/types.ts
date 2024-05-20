@@ -1,3 +1,4 @@
+import type { State as WagmiState } from "@wagmi/core";
 import type { Address, Chain } from "viem";
 import type { PartialBy } from "viem/chains";
 import type { Mutate, StoreApi } from "zustand/vanilla";
@@ -15,6 +16,8 @@ import type {
   SupportedAccount,
   SupportedAccountTypes,
 } from "../types";
+
+export const DEFAULT_STORAGE_KEY = "alchemy-account-state";
 
 export type AccountState<TAccount extends SupportedAccountTypes> =
   | {
@@ -90,3 +93,10 @@ export type CoreStore = Mutate<
   StoreApi<CoreState>,
   [["zustand/subscribeWithSelector", never], ["zustand/persist", CoreState]]
 >;
+
+export type StoredState =
+  | Omit<ClientState, "signer" | "accounts">
+  | {
+      alchemy: Omit<ClientState, "signer" | "accounts">;
+      wagmi?: WagmiState;
+    };
