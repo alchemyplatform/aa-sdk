@@ -41,6 +41,12 @@ export type EmailAuthParams = {
   redirectParams?: URLSearchParams;
 };
 
+export type SignupResponse = {
+  orgId: string;
+  userId?: string;
+  address?: Address;
+};
+
 export type SignerRoutes = SignerEndpoints[number]["Route"];
 export type SignerBody<T extends SignerRoutes> = Extract<
   SignerEndpoints[number],
@@ -62,11 +68,7 @@ export type SignerEndpoints = [
             attestation: Awaited<ReturnType<typeof getWebAuthnAttestation>>;
           };
         };
-    Response: {
-      orgId: string;
-      userId?: string;
-      address?: Address;
-    };
+    Response: SignupResponse;
   },
   {
     Route: "/v1/whoami";
@@ -111,3 +113,9 @@ export type AlchemySignerClientEvents = {
 };
 
 export type AlchemySignerClientEvent = keyof AlchemySignerClientEvents;
+
+export type GetWebAuthnAttestationResult = {
+  attestation: Awaited<ReturnType<typeof getWebAuthnAttestation>>;
+  challenge: ArrayBuffer;
+  authenticatorUserId: ArrayBuffer;
+};

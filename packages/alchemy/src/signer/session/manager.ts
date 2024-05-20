@@ -6,7 +6,7 @@ import {
   subscribeWithSelector,
 } from "zustand/middleware";
 import { createStore, type Mutate, type StoreApi } from "zustand/vanilla";
-import type { AlchemySignerClient } from "../client";
+import type { BaseSignerClient } from "../client/base";
 import type { User } from "../client/types";
 import type { Session, SessionManagerEvents } from "./types";
 
@@ -24,7 +24,7 @@ export const SessionManagerParamsSchema = z.object({
     .describe(
       "The time in milliseconds that a session should last before expiring [default: 15 minutes]"
     ),
-  client: z.custom<AlchemySignerClient>(),
+  client: z.custom<BaseSignerClient>(),
 });
 
 export type SessionManagerParams = z.input<typeof SessionManagerParamsSchema>;
@@ -40,7 +40,7 @@ type Store = Mutate<
 
 export class SessionManager {
   private sessionKey: string;
-  private client: AlchemySignerClient;
+  private client: BaseSignerClient;
   private eventEmitter: EventEmitter<SessionManagerEvents>;
   readonly expirationTimeMs: number;
   private store: Store;
