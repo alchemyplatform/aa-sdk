@@ -38,13 +38,15 @@ Supports limiting how much of the native token, e.g. ETH or MATIC, a key may spe
 
 ### Gas spending limits
 
-Supports limiting how much a session key can spend native token amounts on gas. This may be a total for the key, or refreshing on an interval (e.g. 1 ETH per week).
+Supports limiting how much of the native token (e.g. ETH or MATIC) a session key can spend on gas. This may be a total for the key, or refreshing on an interval (e.g. 1 ETH per week).
 
 Alternatively, you can also require that a session key uses a specific paymaster address, instead of spending the account’s native token for gas.
 
 ## Importance of Gas Limits
 
 Gas spend limits are critically important to protecting the account. If you are using a session key, you should configure either a required paymaster rule or a gas spend limit. Failing to do so could allow a compromised session key to drain the account’s native token balance.
+
+Note that the gas limit is tracked in terms of native token units (wei), not in units of gas. The gas usage of a user operation is considered to be the maximum gas a user operation can spend, i.e. `total gas limit * maxFeePerGas`. This can overestimate when compared to the actual gas cost of each user operation.
 
 ## Default values
 
@@ -56,7 +58,7 @@ Permissions start with the following default values:
 | Time range               | Unlimited                                                                                                                                        |
 | Native token spend limit | 0 <br /> This means all calls spending the native token will be denied, unless the limit is updated or removed.                                  |
 | ERC-20 spend limit       | Unset. If you want to enabled an ERC-20 spend limit, add the ERC-20 token contract to the access control list and set the spending limit amount. |
-| Gas spend limits         | Unset. When defining the session key’s permissions, you should specify either a spending limit or a required paymaster.                          |
+| Gas spend limits         | Unset. When defining the session key’s permissions, you should specify either a gas spending limit or a required paymaster.                      |
 
 ## Using the PermissionsBuilder
 
@@ -179,6 +181,7 @@ function getNativeTokenSpendLimitInfo(address account, address sessionKey)
     returns (SpendLimitInfo memory);
 
 /// @notice Get the gas spend limit for a session key on an account.
+/// Note that this spend limit is measured in wei, not units of gas.
 /// @param account The account to check.
 /// @param sessionKey The session key to check.
 /// @return info A struct with fields describing the state of gas spending limits on this session key.
