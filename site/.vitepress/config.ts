@@ -98,7 +98,4 @@ export default defineConfig({
   sitemap: {
     hostname: "https://accountkit.alchemy.com",
   },
-  rewrites: {
-    "getting-started/overview.md": "overview/getting-started.md",
-  },
 });
