@@ -1,4 +1,4 @@
-import type { SmartAccountAuthenticator } from "@alchemy/aa-core";
+import { takeBytes, type SmartAccountAuthenticator } from "@alchemy/aa-core";
 import {
   hashMessage,
   hashTypedData,
@@ -192,12 +192,22 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     return this.inner.signRawMessage(messageHash);
   };
 
-  signTransaction: CustomSource["signTransaction"] = (tx, args) => {
+  signTransaction: CustomSource["signTransaction"] = async (tx, args) => {
     const serializeFn = args?.serializer ?? serializeTransaction;
     const serializedTx = serializeFn(tx);
+    const signatureHex = await this.inner.signRawMessage(
+      keccak256(serializedTx)
+    );
 
-    return this.inner.signRawMessage(keccak256(serializedTx));
+    const signature = {
+      r: takeBytes(signatureHex, { count: 32 }),
+      s: takeBytes(signatureHex, { count: 32, offset: 32 }),
+      v: BigInt(takeBytes(signatureHex, { count: 1, offset: 64 })),
+    };
+
+    return serializeFn(tx, signature);
   };
+
   /**
    * Unauthenticated call to look up a user's organizationId by email
    *
