@@ -168,8 +168,7 @@ export const bypassPaymasterAndData = <
   overrides: UserOperationOverrides<TEntryPointVersion> | undefined
 ): boolean =>
   !!overrides &&
-  (("paymasterAndData" in overrides && overrides.paymasterAndData === "0x") ||
-    ("paymasterData" in overrides && overrides.paymasterData === "0x"));
+  ("paymasterAndData" in overrides || "paymasterData" in overrides);
 
 /**
  * Utility method for parsing the paymaster address and paymasterData from the paymasterAndData hex string
