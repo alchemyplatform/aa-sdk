@@ -84,7 +84,7 @@ A service or application that manages the private key and signs either arbitrary
 
 - **Custodial**: Managed by a third party, it holds and autonomously uses the private key for transactions, necessitating complete user trust.
 - **Non-custodial**: While a third party manages the private key, user involvement is required for signing transactions. Examples: Metamask.
-- **MPC (Multi-Party Computation)**: Partial or complete key shares are managed by third parties, but user participation is needed for transaction signatures. Examples: Privy, Portal, Fireblocks.
+- **MPC (Multi-Party Computation)**: Partial or complete key shares are managed by third parties, but user participation is needed for transaction signatures. Examples: Privy, Portal, Fireblocks, Fordefi.
 - **Decentralized MPC**: Operated by a decentralized network, it manages key shares and requires node consensus for transaction signatures. Examples: Lit, Web3auth, 0xpass.
 
 ## Smart Contract Account
