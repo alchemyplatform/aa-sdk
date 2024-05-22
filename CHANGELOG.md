@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.16.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.15.0...v3.16.0) (2024-05-22)
+
+### Bug Fixes
+
+- **dropAndReplace:** use dummy signature in drop and replace ([#679](https://github.com/alchemyplatform/aa-sdk/issues/679)) ([2c235f1](https://github.com/alchemyplatform/aa-sdk/commit/2c235f12ddaa6685a5ce5d4b68305bb3c191073f))
+- removing rewrite to fix dashboard link ([#675](https://github.com/alchemyplatform/aa-sdk/issues/675)) ([e8444f9](https://github.com/alchemyplatform/aa-sdk/commit/e8444f97fe8af703290a44cb3a255fca67ca06e5))
+
+### Features
+
+- add EOA support ([#667](https://github.com/alchemyplatform/aa-sdk/issues/667)) ([bc1582a](https://github.com/alchemyplatform/aa-sdk/commit/bc1582afc4aa3cd411573a73ef2a9be6ee0ff247))
+- add fordefi signer to aa-signers ([#665](https://github.com/alchemyplatform/aa-sdk/issues/665)) ([7673fc5](https://github.com/alchemyplatform/aa-sdk/commit/7673fc5a8b6e50f81a6f9ef1d649e3cc0e1d9e97))
+
 # [3.15.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.14.1...v3.15.0) (2024-05-20)
 
 ### Bug Fixes

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.16.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.15.0...v3.16.0) (2024-05-22)
+
+### Features
+
+- add fordefi signer to aa-signers ([#665](https://github.com/alchemyplatform/aa-sdk/issues/665)) ([7673fc5](https://github.com/alchemyplatform/aa-sdk/commit/7673fc5a8b6e50f81a6f9ef1d649e3cc0e1d9e97))
+
 ## [3.12.3](https://github.com/alchemyplatform/aa-sdk/compare/v3.12.2...v3.12.3) (2024-05-10)
 
 **Note:** Version bump only for package @alchemy/aa-signers
