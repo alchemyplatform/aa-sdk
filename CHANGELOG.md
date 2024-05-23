@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.16.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.16.0...v3.16.1) (2024-05-23)
+
+### Bug Fixes
+
+- **alchemy-signer:** fix the sign tx method to return the full tx ([#678](https://github.com/alchemyplatform/aa-sdk/issues/678)) ([86e3c99](https://github.com/alchemyplatform/aa-sdk/commit/86e3c99260a21cd5339d586643be60e3dafefabe))
+
 # [3.16.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.15.0...v3.16.0) (2024-05-22)
 
 ### Bug Fixes
