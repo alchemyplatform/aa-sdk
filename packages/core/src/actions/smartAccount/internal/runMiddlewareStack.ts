@@ -87,6 +87,13 @@ export async function _runMiddlewareStack<
             ...uo,
             ...("paymasterAndData" in overrides!
               ? { paymasterAndData: overrides.paymasterAndData }
+              : "paymasterData" in overrides! &&
+                "paymaster" in overrides &&
+                overrides.paymasterData !== "0x"
+              ? {
+                  paymasterData: overrides.paymasterData,
+                  paymaster: overrides.paymaster,
+                }
               : // At this point, nothing has run so no fields are set
                 // for 0.7 when not using a paymaster, all fields should be undefined
                 undefined),
