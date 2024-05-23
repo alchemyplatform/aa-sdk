@@ -73,13 +73,13 @@ export type UserOperationPaymasterOverrides<
 > = TEntryPointVersion extends "0.6.0"
   ? {
       // paymasterAndData overrides allow either '0x' or the data to overwrite for bypassing paymaster middleware
-      paymasterAndData: BytesLike | EmptyHex;
+      paymasterAndData: Hex;
     }
   : TEntryPointVersion extends "0.7.0"
   ? {
       // paymasterData overrides allow either '0x' or the data to overwrite for bypassing paymaster middleware
       // if set to '0x', all paymaster related fields are omitted from the user op request
-      paymasterData: BytesLike | EmptyHex;
+      paymasterData: Hex;
       paymasterVerificationGasLimit:
         | NoUndefined<
             UserOperationStruct<"0.7.0">["paymasterVerificationGasLimit"]
