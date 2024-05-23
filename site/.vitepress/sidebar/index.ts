@@ -96,7 +96,7 @@ export const sidebar: DefaultTheme.Sidebar = [
           { text: "Modular Account", link: "/modular-account" },
           { text: "Light Account", link: "/light-account" },
           {
-            text: "Multi-Owner Light Account",
+            text: "Light Account (Multi-Owner)",
             link: "/multi-owner-light-account",
           },
         ],
