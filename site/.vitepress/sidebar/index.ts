@@ -162,7 +162,7 @@ export const sidebar: DefaultTheme.Sidebar = [
         collapsed: false,
         base: "/smart-accounts/modular-account",
         items: [
-          { text: "Introduction", link: "/" },
+          { text: "Overview", link: "/" },
           { text: "Getting started", link: "/getting-started" },
           { text: "Deployments", link: "/deployments" },
           {
@@ -174,7 +174,7 @@ export const sidebar: DefaultTheme.Sidebar = [
             collapsed: true,
             base: "/smart-accounts/modular-account/multisig-plugin",
             items: [
-              { text: "Introduction", link: "/index" },
+              { text: "Overview", link: "/" },
               { text: "Getting started", link: "/getting-started" },
               { text: "Technical details", link: "/technical-details" },
             ],
@@ -183,11 +183,13 @@ export const sidebar: DefaultTheme.Sidebar = [
       },
       {
         text: "Light Account",
-        link: "/smart-accounts/light-account/",
-      },
-      {
-        text: "Multi-Owner Light Account",
-        link: "/smart-accounts/multi-owner-light-account/",
+        collapsed: false,
+        base: "/smart-accounts/light-account",
+        items: [
+          { text: "Overview", link: "/" },
+          { text: "Getting started", link: "/getting-started" },
+          { text: "Deployments", link: "/deployments" },
+        ],
       },
       {
         text: "Custom accounts",
