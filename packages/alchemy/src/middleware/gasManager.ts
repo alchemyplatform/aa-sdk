@@ -9,7 +9,7 @@ import type {
   UserOperationRequest,
 } from "@alchemy/aa-core";
 import {
-  bypassPaymasterAndData,
+  bypassPaymasterAndDataEmptyHex,
   deepHexlify,
   defaultGasEstimator,
   filterUndefined,
@@ -197,7 +197,7 @@ export function alchemyGasManagerMiddleware<C extends ClientWithAlchemyMethods>(
       : async (struct, { overrides, account, feeOptions }) => {
           // if user is bypassing paymaster to fallback to having the account to pay the gas (one-off override),
           // we cannot delegate gas estimation to the bundler because paymaster middleware will not be called
-          if (bypassPaymasterAndData(overrides)) {
+          if (bypassPaymasterAndDataEmptyHex(overrides)) {
             return {
               ...struct,
               ...(await fallbackGasEstimator(struct, {
@@ -220,7 +220,7 @@ export function alchemyGasManagerMiddleware<C extends ClientWithAlchemyMethods>(
 
           // if user is bypassing paymaster to fallback to having the account to pay the gas (one-off override),
           // we cannot delegate gas estimation to the bundler because paymaster middleware will not be called
-          if (bypassPaymasterAndData(overrides)) {
+          if (bypassPaymasterAndDataEmptyHex(overrides)) {
             const result = await fallbackFeeDataGetter(struct, {
               overrides,
               feeOptions,

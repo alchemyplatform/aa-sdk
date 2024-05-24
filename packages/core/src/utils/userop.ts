@@ -156,7 +156,8 @@ export function applyUserOpOverrideOrFeeOption<
 
 /**
  * Utility method for checking whether the middleware pipeline should
- * bypass the paymaster middleware for the user operation with the given overrides
+ * bypass the paymaster middleware for the user operation with the given overrides,
+ * either because the UserOp is paying for its own gas, or passing a specific paymaster
  *
  * @template EntryPointVersion TEntryPointVersion
  * @param overrides the user operation overrides to check
@@ -169,6 +170,24 @@ export const bypassPaymasterAndData = <
 ): boolean =>
   !!overrides &&
   ("paymasterAndData" in overrides || "paymasterData" in overrides);
+
+/**
+ * An alternative to `bypassPaymasterAndData` which only returns true if the data parameter
+ * is "0x," this is useful for cases when middleware should be bypassed ONLY IF the UserOp will
+ * pay for its own gas
+ *
+ * @template EntryPointVersion TEntryPointVersion
+ * @param overrides the user operation overrides to check
+ * @returns whether the paymaster middleware should be bypassed
+ */
+export const bypassPaymasterAndDataEmptyHex = <
+  TEntryPointVersion extends EntryPointVersion = EntryPointVersion
+>(
+  overrides: UserOperationOverrides<TEntryPointVersion> | undefined
+): boolean =>
+  overrides !== undefined &&
+  (("paymasterAndData" in overrides && overrides.paymasterAndData === "0x") ||
+    ("paymasterData" in overrides && overrides.paymasterData === "0x"));
 
 /**
  * Utility method for parsing the paymaster address and paymasterData from the paymasterAndData hex string
