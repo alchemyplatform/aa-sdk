@@ -81,16 +81,16 @@ const hydrateAccountState = (
 ): ClientState["accounts"] => {
   return Object.entries(accountConfigs).reduce((acc, [chainKey, config]) => {
     const chainId = Number(chainKey);
-
-    acc[chainId].LightAccount =
-      config.LightAccount && shouldReconnectAccounts
-        ? reconnectingState(config.LightAccount.accountAddress!)
-        : defaultAccountState();
-
-    acc[chainId].MultiOwnerModularAccount =
-      config.MultiOwnerModularAccount && shouldReconnectAccounts
-        ? reconnectingState(config.MultiOwnerModularAccount.accountAddress!)
-        : defaultAccountState();
+    acc[chainId] = {
+      LightAccount:
+        config.LightAccount && shouldReconnectAccounts
+          ? reconnectingState(config.LightAccount.accountAddress!)
+          : defaultAccountState(),
+      MultiOwnerModularAccount:
+        config.MultiOwnerModularAccount && shouldReconnectAccounts
+          ? reconnectingState(config.MultiOwnerModularAccount.accountAddress!)
+          : defaultAccountState(),
+    };
 
     return acc;
   }, {} as NoUndefined<ClientState["accounts"]>);
