@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.16.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.16.1...v3.16.2) (2024-05-26)
+
+### Bug Fixes
+
+- **hydrate:** unhandled undefined case in hydrating account state ([175eaee](https://github.com/alchemyplatform/aa-sdk/commit/175eaee8575b1a0c23c5499f03f883ded64efed6))
+
 ## [3.16.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.16.0...v3.16.1) (2024-05-23)
 
 ### Bug Fixes
