@@ -3,26 +3,26 @@ outline: deep
 head:
   - - meta
     - property: og:title
-      content: Starter app guide
+      content: Getting started guide
   - - meta
     - name: description
-      content: Learn how to get started with Alchemy's Embedded Accounts with a guided walkthrough of our Starter App.
+      content: Learn how to get started with Alchemy's Embedded Accounts using Account Kit and the Alchemy Signer, Modular Account, Rundler and Gas Manager.
   - - meta
     - property: og:description
-      content: Learn how to get started with Alchemy's Embedded Accounts with a guided walkthrough of our Starter App.
+      content: Learn how to get started with Alchemy's Embedded Accounts using Account Kit and the Alchemy Signer, Modular Account, Rundler and Gas Manager.
   - - meta
     - name: twitter:title
-      content: Starter app guide
+      content: Getting started guide
   - - meta
     - name: twitter:description
-      content: Learn how to get started with Alchemy's Embedded Accounts with a guided walkthrough of our Starter App.
+      content: Learn how to get started with Alchemy's Embedded Accounts using Account Kit and the Alchemy Signer, Modular Account, Rundler and Gas Manager.
 ---
 
 # Starter Guide
 
 Let's take a tour of the [starter app repo](https://github.com/alchemyplatform/embedded-accounts-quickstart) to see how easy it is to work with embedded accounts!
 
-## 1. Configuration
+## 1. The config
 
 First, let's do our configuration in a single file called `config.ts`.
 
@@ -96,6 +96,6 @@ We'll get a `client` by using [useSmartAccountClient](../react/useSmartAccountCl
 
 And that's everything!
 
-If you're ready to get started, clone the [starter app repo](https://github.com/alchemyplatform/embedded-accounts-quickstart) and follow the README to setup your environment variables.
+If you're ready to get started, clone the [starter app repo](https://github.com/alchemyplatform/embedded-accounts-quickstart) and follow the the [app configuration](../getting-started/app-configuration.md) to setup your environment variables.
 
 If you need more information or functionality, check out our documentation on [react hooks](../react/overview.md) to see all that is available.

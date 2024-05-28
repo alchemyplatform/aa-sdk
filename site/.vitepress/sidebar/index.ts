@@ -20,6 +20,10 @@ export const sidebar: DefaultTheme.Sidebar = [
             text: "Starter app guide",
             link: "/starter-guide",
           },
+          {
+            text: "App configuration",
+            link: "/app-configuration",
+          },
         ],
       },
     ],
