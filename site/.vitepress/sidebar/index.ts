@@ -9,20 +9,17 @@ export const sidebar: DefaultTheme.Sidebar = [
         text: "Overview",
         link: "/getting-started/overview",
       },
+      // NOTE: we have many old links pointing to /getting-started/setup
+      // if we change this in the future we should still resolve this route
       {
         text: "Quick start",
         base: "/getting-started",
         items: [
-          { text: "Introduction", link: "/introduction" },
+          { text: "Choose your start", link: "/setup" },
           {
-            text: "Setup",
-            link: "/setup-app",
+            text: "Starter app guide",
+            link: "/starter-guide",
           },
-          {
-            text: "Log in users",
-            link: "/log-in-users",
-          },
-          { text: "Send user operations", link: "/send-uos" },
         ],
       },
     ],

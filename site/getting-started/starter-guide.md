@@ -1,0 +1,101 @@
+---
+outline: deep
+head:
+  - - meta
+    - property: og:title
+      content: Starter app guide
+  - - meta
+    - name: description
+      content: Learn how to get started with Alchemy's Embedded Accounts with a guided walkthrough of our Starter App.
+  - - meta
+    - property: og:description
+      content: Learn how to get started with Alchemy's Embedded Accounts with a guided walkthrough of our Starter App.
+  - - meta
+    - name: twitter:title
+      content: Starter app guide
+  - - meta
+    - name: twitter:description
+      content: Learn how to get started with Alchemy's Embedded Accounts with a guided walkthrough of our Starter App.
+---
+
+# Starter Guide
+
+Let's take a tour of the [starter app repo](https://github.com/alchemyplatform/embedded-accounts-quickstart) to see how easy it is to work with embedded accounts!
+
+## 1. Configuration
+
+First, let's do our configuration in a single file called `config.ts`.
+
+::: code-group
+<<< @/../examples/embedded-accounts-quickstart/src/config.ts#create-accounts-config
+:::
+
+:point_up: Let's take notice of three things in this configuration:
+
+1. First you'll notice we chose a specific chain definition here. You can change the `chain` variable and expect this to be reflected everywhere in the application.
+2. You'll also notice the `rpcUrl` points to API endpoints in our app. By doing this, the application does not expose the API key client side. We specify two different endpoints for the [Alchemy Signer](../signers/alchemy-signer/introduction.md) and general chain RPC calls to keep the behavior consistent with an Alchemy API endpoint.
+3. Lastly you'll notice we set Server Side Rendering (`ssr`) to be true for consistent behavior on the client/server in SSR apps. You can learn more about SSR [here](../react/ssr.md).
+
+We set a few additional variables in the configuration so that we can refer to them throughout the application, see them here:
+
+::: details Additional config
+<<< @/../examples/embedded-accounts-quickstart/src/config.ts#other-config-vars
+:::
+
+## 2. Setting up the provider
+
+We're almost up to fun the part! There's just a bit more we need to do to setup our global context so we can use our react hooks everywhere.
+
+First, we'll setup our initial client state in our root layout:
+
+::: code-group
+<<< @/../examples/embedded-accounts-quickstart/src/app/layout.tsx#root-layout
+:::
+
+:point_up: This `initialState` is, again, related to [SSR](../react/ssr.md).
+
+And in the `Providers`, we'll make use of this initial state:
+
+::: code-group
+<<< @/../examples/embedded-accounts-quickstart/src/app/providers.tsx#providers
+:::
+
+Once we wrap the app in a configured `AlchemyAccountProvider`, we're all set to use account kit [react hooks](../react/overview.md) throughout our application!
+
+## 3. Initial render
+
+On the initial render of the application we'll want to know whether the user is already connected. We can make use of the [useSignerStatus](../react/useSignerStatus.md) hook for this:
+
+::: code-group
+<<< @/../examples/embedded-accounts-quickstart/src/app/page.tsx#using-status
+:::
+
+:point_up: In this case, if the user is connected we render the `ProfileCard`, or else we move to the `LoginCard`. Let's take a peek at the key parts of those two components next!
+
+## 4. Authenticating (`LoginCard`)
+
+In the `LoginCard`, we can create a nice UI to capture the user's email. We can make use of the [useAuthenticate](../react/useAuthenticate.md) hook for kicking off the email authentication, and [useSignerStatus](../react/useSignerStatus.md) again for checking to see if we kicked off that process.
+
+::: code-group
+<<< @/../examples/embedded-accounts-quickstart/src/components/login-card.tsx#authenticating
+:::
+
+## 5. Send the user operation (`ProfileCard`)
+
+Once the user is connected, we can send a user operation! :tada:
+
+For this part, we can collect whatever information we need from the user to figure out what parameters to fill in the user operation. In this application we allow the user to specify the `target` address, the `data` to send to the address, as well as the `value` to send.
+
+We'll get a `client` by using [useSmartAccountClient](../react/useSmartAccountClient.md) with values provided from our config. Then we'll pass this `client` to [useSendUserOperation](../react/useSendUserOperation.md) which will provide us everything we need to know about the operations status.
+
+::: code-group
+<<< @/../examples/embedded-accounts-quickstart/src/components/profile-card.tsx#sending-user-op
+:::
+
+## Wrap up
+
+And that's everything!
+
+If you're ready to get started, clone the [starter app repo](https://github.com/alchemyplatform/embedded-accounts-quickstart) and follow the README to setup your environment variables.
+
+If you need more information or functionality, check out our documentation on [react hooks](../react/overview.md) to see all that is available.
