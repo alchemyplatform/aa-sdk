@@ -26,7 +26,7 @@ head:
 
 ## Try out the User Experience
 
-You can build awesome web3 user experiences with embedded accounts. Want to try it out as a user? Check out this [ERC20 Token Minter]().
+You can build awesome web3 user experiences with embedded accounts. Want to try it out as a user? Check out this [ERC20 Token Minter](https://smart-accounts-token-demo.vercel.app/).
 
 In this app each user is provided a smart account tied to their email address. Every onchain action is gas-sponsored so the user can start minting and transferring tokens at the click of a button!
 
