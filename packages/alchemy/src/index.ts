@@ -36,4 +36,6 @@ export {
   AlchemySigner,
   AlchemySignerClient,
   AlchemySignerStatus,
+  AlchemySignerWebClient,
+  AlchemyWebSigner,
 } from "./signer/index.js";
