@@ -12,26 +12,14 @@ head:
       content: Gas benchmarks for Alchemy Accounts
 ---
 
-# Account [gas benchmarks](https://github.com/alchemyplatform/aa-benchmarks)
+# Gas benchmarks
 
-Modular Account provides best-in-class end-user costs on Ethereum Rollups, including Arbitrum, Base, and Optimism. As we continue to push for the [three core transitions](https://vitalik.eth.limo/general/2023/06/09/three_transitions.html) required to onboard mainstream users on-chain, Modular Account aims to provide a fundamental primitive optimized for a rollup-centric future.
+[Light Account](/smart-accounts/light-account/) currently provides best-in-class end-user costs on all of its supported chains, including Ethereum, Arbitrum, Optimism, Base, and Polygon. For those looking for a lightweight, production-ready account that supports ownership transfers, multiple owners, and ERC-1271 signature support, Light Account is a great choice.
 
-Specifically, it often sacrifices call data usage for increased execution costs as to provide end users with cheaper experiences. Additionally, as a durable user account, Modular Accounts contain guardrails for permissionless interoperable usage, extending beyond the per-app embedded account paradigm that is popular today to help drive forward an invisible and interoperable future. The account is heavily optimized for day-to-day usage, with certain security features adding some execution overhead at deployment time.
+[Modular Account](/smart-accounts/modular-account/) is an enterprise-grade smart contract account designed for security and modularity, allowing for customization via ERC-6900 plugins. It is highly optimized for calldata costs, which has historically made up the majority of the fees on Ethereum rollups. As a durable user account, Modular Accounts contain guardrails for permissionless interoperable usage, extending beyond the per-app embedded account paradigm that is popular today to help drive forward an invisible and interoperable future. The account is heavily optimized for day-to-day usage, with certain security features adding some execution overhead at deployment time.
 
-Alternatively, Light Account is an account that sacrifices modularity to save on execution costs, which may be appropriate in alternative environments.
+::: info
+With [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844), calldata costs have gone down significantly. Future versions of Modular Account will be optimized for this environment.
+:::
 
-To measure cost, we built a comprehensive testing suite for smart contract accounts for accurate, transaction-based, fee measurements, and fee calculations. You can find the repository, full methodology, and [full results here](https://github.com/alchemyplatform/aa-benchmarks). The results below were benchmarked on **Optimism on Feb 18, 2024**.
-
-|                                 | Modular Account | Biconomy v2 | Kernel v2.1 | Safe        | Light Account |
-| ------------------------------- | --------------- | ----------- | ----------- | ----------- | ------------- |
-| UO: Account Creation            | $0.59           | $0.67       | $0.69       | $0.89       | $0.57         |
-| UO: Native Transfer             | $0.53           | $0.57       | $0.54       | $0.54       | $0.53         |
-| UO: ERC-20 Transfer             | $0.58           | $0.62       | $0.59       | $0.59       | $0.57         |
-| UO: Session Key Creation        | $0.82           | $0.61       | $0.64       | Unsupported | Unsupported   |
-| UO: Session Key Native Transfer | $0.59           | Unsupported | $0.71       | Unsupported | Unsupported   |
-| UO: Session Key ERC-20 Transfer | $0.63           | $0.82       | $0.78       | Unsupported | Unsupported   |
-| Runtime: Account Creation       | $0.20           | $0.23       | $0.28       | $0.43       | $0.17         |
-| Runtime: Native Transfer        | $0.20           | Unsupported | $0.21       | $0.36       | $0.20         |
-| Runtime: ERC-20 Transfer        | $0.25           | Unsupported | $0.26       | $0.41       | $0.25         |
-
-Note that there is an inverse tradeoff in optimizing for rollups, versus optimizing for layer one Ethereum and side chains. These benchmarks capture performance for the rollup ecosystem.
+To measure cost, we built a comprehensive testing suite for smart contract accounts for accurate, transaction-based fee measurements and calculations. You can find the repository, full methodology, and detailed results on GitHub at [alchemyplatform/aa-benchmarks](https://github.com/alchemyplatform/aa-benchmarks).
