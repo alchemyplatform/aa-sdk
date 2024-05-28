@@ -20,23 +20,23 @@ next:
   text: How to manage ownership of a Multi-Owner Light Account
 ---
 
-# How to manage ownership of a Multi-Owner Light Account
+# How to manage ownership of `MultiOwnerLightAccount`
 
-A Multi-Owner Light Acocunt has one or more ECDSA or SCA owners. This lets your account integrate with multiple signers at once, and supports recovering your account if one signer is lost.
+A `MultiOwnerLightAccount` has one or more ECDSA or SCA owners. This lets your account integrate with multiple signers at once, and supports recovering your account if one signer is lost.
 
-The Multi-Owner Light Account is able to:
+The `MultiOwnerLightAccount` is able to:
 
 - Update (add or remove) owners for an account.
 - Show all owners of an account.
 - Validate signed signatures of ERC-4337 enabled user operations as well as regular transactions.
 
-When you connect your Multi-Owner Light Account to `SmartAccountClient` you can extend the client with `multiOwnerLightAccountClientActions`, which exposes a set of methods available to call the Multi-Owner Light Account with the client connected to the account.
+When you connect your `MultiOwnerLightAccount` to `SmartAccountClient` you can extend the client with `multiOwnerLightAccountClientActions`, which exposes a set of methods available to call the `MultiOwnerLightAccount` with the client connected to the account.
 
 ::: tip Note
 When using `createMultiOwnerLightAccountAlchemyClient` in `@alchemy/aa-alchemy`, the `SmartAccountClient` comes automatically extended with `multiOwnerLightAccountClientActions` as defaults available for use.
 :::
 
-### 1. Get all current owners of a Multi-Owner Light Account
+### 1. Get all current owners of a `MultiOwnerLightAccount`
 
 You can use the `getOwnerAddresses` method on the `MultiOwnerLightAccount` object, which can be accessed from a connected client.
 
@@ -52,9 +52,9 @@ const owners = await smartContractClient.account.getOwnerAddresses();
 :::
 
 
-### 2. Add or remove owners for a Multi-Owner Light Account
+### 2. Add or remove owners for a `MultiOwnerLightAccount`
 
-You can use the `updateOwners` method on the `multiOwnerLightAccountClientActions` extended smart account client to add or remove owners from the Multi-Owner Light Account.
+You can use the `updateOwners` method on the `multiOwnerLightAccountClientActions` extended smart account client to add or remove owners from the `MultiOwnerLightAccount`.
 
 ::: code-group
 

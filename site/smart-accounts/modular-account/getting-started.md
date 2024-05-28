@@ -6,16 +6,16 @@ head:
       content: Modular Account • Getting started
   - - meta
     - name: description
-      content: Getting started with the Modular Account in Account Kit
+      content: Getting started with Modular Account in Account Kit
   - - meta
     - property: og:description
-      content: Getting started with the Modular Account in Account Kit
+      content: Getting started with Modular Account in Account Kit
   - - meta
     - name: twitter:title
       content: Modular Account • Getting started
   - - meta
     - name: twitter:description
-      content: Getting started with the Modular Account in Account Kit
+      content: Getting started with Modular Account in Account Kit
 ---
 
 # Getting started with Modular Account
@@ -49,7 +49,7 @@ Then you can do the following:
 <<< @/snippets/aa-alchemy/connected-client.ts
 
 ::: tip Address calculation
-For the Light Account, the address of the smart account will be calculated as a combination of [the owner and the salt](https://github.com/alchemyplatform/light-account/blob/main/src/LightAccountFactory.sol#L24-L33). You will get the same smart account address each time you supply the same `owner`, the signer used to create the account for the first time. You can also optionally supply `salt` if you want a different address for the same `owner` param (the default salt is `0n`).
+For Modular Account, the address of the smart account will be calculated as a combination of [the owners and the salt](https://github.com/alchemyplatform/modular-account/blob/v1.0.x/src/factory/MultiOwnerModularAccountFactory.sol#L79-L82). You will get the same smart account address each time you supply the same `owners`, the signer(s) used to create the account for the first time. You can also optionally supply `salt` if you want a different address for the same `owners` param (the default salt is `0n`).
 
 If you want to use a signer to connect to an account whose address does not map to the contract-generated address, you can supply the `accountAddress` to connect with the account of interest. In that case, the `signer` address is not used for address calculation, but only for signing the operation.
 :::
