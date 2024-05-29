@@ -32,7 +32,7 @@ Light Account has two variants catered to particular use cases. Both variants in
 
 This is the default variant of Light Account that supports a single ECDSA or SCA owner. It is slightly more gas efficient than `MultiOwnerLightAccount`, and can be useful when you want to maximally optimize for gas spend or ensure that only one signer has access to the account at any given time.
 
-`LightAccount` comes in versions v1.1.0 and v2.0.0, which make use of the v0.6 and v0.7 entry points respectively. For more information about the differences between entry points, see the [EntryPoint v0.7 Upgrade Guide](/using-smart-accounts/entry-point-v7.html).
+`LightAccount` comes in versions v1.1.0 and v2.0.0, which make use of the v0.6 and v0.7 entry points respectively. For more information about the differences between entry points, see the [EntryPoint v0.7 Upgrade Guide](/using-smart-accounts/entry-point-v7).
 
 For backwards compatibility, `LightAccount` defaults to version v1.1.0, but we recommend v2.0.0 for new dapps because of the advantages that come with entry point v0.7. However, once a version is chosen and the Light Account is created, the version must remain consistent in order for the Light Account client to work with the existing Light Account.
 
@@ -40,7 +40,7 @@ For backwards compatibility, `LightAccount` defaults to version v1.1.0, but we r
 
 Multi-Owner Light Account is a variant of Light Account that supports multiple ECDSA or SCA owners at once rather than a single one. Each owner has full control over the account, including the ability to add or remove other owners. This lets your account integrate with multiple signers at once, and supports recovering your account if one signer is lost.
 
-Multi-Owner Light Account uses v0.7 of the entry point. For details about entry point versions, see the [EntryPoint v0.7 Upgrade Guide](/using-smart-accounts/entry-point-v7.html).
+Multi-Owner Light Account uses v0.7 of the entry point. For details about entry point versions, see the [EntryPoint v0.7 Upgrade Guide](/using-smart-accounts/entry-point-v7).
 
 ## Developer links
 

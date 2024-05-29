@@ -60,7 +60,10 @@ const signedTypedData = await passportSigner.signTypedData({
 });
 ```
 
-<<< @/snippets/signers/passport.ts
+```ts [passport.ts]
+// [!include ~/snippets/signers/passport.ts]
+```
+
 :::
 
 ## Returns

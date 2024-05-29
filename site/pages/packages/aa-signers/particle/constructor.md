@@ -18,8 +18,6 @@ To initialize a `ParticleSigner`, you must provide a set of parameters detailed 
 
 ## Usage
 
-:::code-group
-
 ```ts [example.ts]
 import { ParticleSigner } from "@alchemy/aa-signers/particle";
 
@@ -55,8 +53,6 @@ const particle = new ParticleNetwork({
   },
 });
 ```
-
-:::
 
 ## Returns
 

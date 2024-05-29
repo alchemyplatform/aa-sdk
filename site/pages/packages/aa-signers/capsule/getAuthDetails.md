@@ -30,7 +30,10 @@ const capsuleSigner = await createCapsuleSigner();
 const details = await capsuleSigner.getAuthDetails();
 ```
 
-<<< @/snippets/signers/capsule.ts
+```ts [capsule.ts]
+// [!include ~/snippets/signers/capsule.ts]
+```
+
 :::
 
 ## Returns

@@ -18,8 +18,6 @@ To initialize a `CapsuleSigner`, you must provide a set of parameters detailed b
 
 ## Usage
 
-:::code-group
-
 ```ts [example.ts]
 import { CapsuleSigner } from "@alchemy/aa-signers/capsule";
 import { ChainId } from "@capsule/capsule-web3-provider";
@@ -36,8 +34,6 @@ const capsuleSigner = new CapsuleSigner({
 });
 ```
 
-:::
-
 ## Returns
 
 ### `CapsuleSigner`
@@ -48,17 +44,17 @@ A new instance of a `CapsuleSigner`.
 
 ### `params: CapsuleProviderConfig | { inner: CapsuleWeb3Provider }`
 
-You can either pass in a constructed `CapsuleWeb3Provider` object, or directly pass into the `CapsuleSigner` the `CapsuleProviderConfig` used to construct a `CapsuleWeb3Provider` object. These parameters are listed on the [Capsule docs](https://capsule-org.github.io/web-sdk/modules.html) as well.
+You can either pass in a constructed `CapsuleWeb3Provider` object, or directly pass into the `CapsuleSigner` the `CapsuleProviderConfig` used to construct a `CapsuleWeb3Provider` object. These parameters are listed on the [Capsule docs](https://capsule-org.github.io/web-sdk/modules) as well.
 
 `CapsuleProviderConfig` takes in the following parameters:
 
 - `env: Environment` -- a Capsule API Key. You can get one at the [Capsule Developer Dashboard](https://developers.capsule.com/docs/quickstart#api-user-creation).
 
-- `walletConfig: WalletClientConfig`-- Config for Viem Wallet. See type [here](https://viem.sh/docs/clients/wallet.html#parameters).
+- `walletConfig: WalletClientConfig`-- Config for Viem Wallet. See type [here](https://viem.sh/docs/clients/wallet#parameters).
 
 - `apiKey: string`-- Capsule API key for signing requests.
 
-- `opts: ConstructorOpts | undefined`-- [optional] Object with the following properties. See type [here](https://capsule-org.github.io/web-sdk/functions/createCapsuleViemClient.html).
+- `opts: ConstructorOpts | undefined`-- [optional] Object with the following properties. See type [here](https://capsule-org.github.io/web-sdk/functions/createCapsuleViemClient).
 
   - `useStorageOverrides: boolean` -- [optional] Flag to override storage.
 

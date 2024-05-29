@@ -20,7 +20,7 @@ head:
 
 # useSignTypedData
 
-The `useSignTypedData` hook enables signing typed data on behalf of the user's Embedded Account. If the account is not yet deployed onchain, this will use [ERC-6492](/resources/terms.html#erc-6492) to sign the typed data.
+The `useSignTypedData` hook enables signing typed data on behalf of the user's Embedded Account. If the account is not yet deployed onchain, this will use [ERC-6492](/resources/terms#erc-6492) to sign the typed data.
 
 :::warning
 This requires your user to be logged in. See [`useAuthenticate`](/react/useAuthenticate) for more details.
@@ -62,12 +62,12 @@ Returns an object containing the following state.
 ### signTypedData
 
 `UseMutateFunction`
-A React query mutation function to sign typed data. It returns a `Hex` representation of the signed typed data. It takes in an object with a [`TypedDataDefinition`](https://viem.sh/docs/utilities/hashTypedData.html#parameters) field called `typedData`.
+A React query mutation function to sign typed data. It returns a `Hex` representation of the signed typed data. It takes in an object with a [`TypedDataDefinition`](https://viem.sh/docs/utilities/hashTypedData#parameters) field called `typedData`.
 
 ### signTypedDataAsync
 
 `UseMutateAsyncFunction`
-A React query async mutation function to sign typed data. Via an awaitable promise, it returns a `Hex` representation of the signed typed data. It takes in an object with a [`TypedDataDefinition`](https://viem.sh/docs/utilities/hashTypedData.html#parameters) field called `typedData`.
+A React query async mutation function to sign typed data. Via an awaitable promise, it returns a `Hex` representation of the signed typed data. It takes in an object with a [`TypedDataDefinition`](https://viem.sh/docs/utilities/hashTypedData#parameters) field called `typedData`.
 
 ### signedTypedData
 

@@ -30,7 +30,10 @@ const passportSigner = await createPassportSigner();
 const address = await passportSigner.getAddress();
 ```
 
-<<< @/snippets/signers/passport.ts
+```ts [passport.ts]
+// [!include ~/snippets/signers/passport.ts]
+```
+
 :::
 
 ## Returns

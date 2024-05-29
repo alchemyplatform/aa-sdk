@@ -18,8 +18,6 @@ To initialize a `Web3AuthSigner`, you must provide a set of parameters detailed 
 
 ## Usage
 
-:::code-group
-
 ```ts [example.ts]
 import { Web3AuthSigner } from "@alchemy/aa-signers/web3auth";
 
@@ -52,8 +50,6 @@ const web3AuthSigner = new Web3AuthSigner({
   useCoreKitKey: true,
 });
 ```
-
-:::
 
 ## Returns
 

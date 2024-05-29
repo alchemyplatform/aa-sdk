@@ -60,7 +60,10 @@ const signedTypedData = await fordefiSigner.signTypedData({
 });
 ```
 
-<<< @/snippets/signers/fordefi.ts
+```ts [fordefi.ts]
+// [!include ~/snippets/signers/fordefi.ts]
+```
+
 :::
 
 ## Returns

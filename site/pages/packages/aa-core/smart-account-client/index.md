@@ -95,7 +95,7 @@ A new instance of a `SmartAccountClient`.
 
 - `account?: SmartContractAccount` -- [optional] the smart account to use as context for all of your calls. If not provided, then the account can be provided to each individual call instead.
 
-- `entryPoint: EntryPointDef` -- [optional] the entry point contract address. If not provided, the entry point contract address for the client is the connected account's entry point contract, or if not connected, falls back to the default entry point contract for the chain. See [getDefaultEntryPointAddress](/packages/aa-core/utils/getDefaultEntryPointAddress.html#getdefaultentrypointaddress).
+- `entryPoint: EntryPointDef` -- [optional] the entry point contract address. If not provided, the entry point contract address for the client is the connected account's entry point contract, or if not connected, falls back to the default entry point contract for the chain. See [getDefaultEntryPointAddress](/packages/aa-core/utils/getDefaultEntryPointAddress#getdefaultentrypointaddress).
 
 - `feeEstimator?: ClientMiddlewareFn` -- [optional] an override for the fee estimator middleware. The `feeEstimator` middleware function calculates `maxFeePerGas` and `maxPriorityFeePerGas` for your User Operation.
 

@@ -30,8 +30,6 @@ If a `Session Signature` is given then the session will be respected as long as 
 
 ### Auth Method
 
-:::code-group
-
 ```ts [example.ts]
 import {
   LitSigner,
@@ -58,11 +56,7 @@ const authDetails = await litSigner.authenticate({
 });
 ```
 
-:::
-
 ### Session Signatures
-
-:::code-group
 
 ```ts [example.ts]
 import {
@@ -87,8 +81,6 @@ const authDetails = await litSigner.authenticate({
   context: SESSION_SIGS,
 });
 ```
-
-:::
 
 ## Returns
 

@@ -30,7 +30,10 @@ const web3AuthSigner = await createWeb3AuthSigner();
 const signedMessage = await web3AuthSigner.signMessage("test");
 ```
 
-<<< @/snippets/signers/web3auth.ts
+```ts [web3auth.ts]
+// [!include ~/snippets/signers/web3auth.ts]
+```
+
 :::
 
 ## Returns

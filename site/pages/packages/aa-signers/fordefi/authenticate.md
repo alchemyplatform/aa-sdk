@@ -20,8 +20,6 @@ You must call this method before accessing the other methods available on the `F
 
 ## Usage
 
-:::code-group
-
 ```ts [example.ts]
 // [!code focus:99]
 import { FordefiSigner } from "@alchemy/aa-signers/fordefi";
@@ -35,5 +33,3 @@ const fordefiSigner = new FordefiSigner({
 
 await fordefiSigner.authenticate();
 ```
-
-:::

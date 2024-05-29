@@ -18,8 +18,6 @@ To initialize `ArcanaAuthSigner`, you must provide a set of parameters detailed 
 
 ## Usage
 
-:::code-group
-
 ```ts [example.ts]
 import { ArcanaAuthSigner } from "@alchemy/aa-signers";
 
@@ -40,8 +38,6 @@ const newArcanaAuthSigner = new ArcanaAuthSigner({
 ```
 
 For details, see [`AuthProvider ConstructorParams`](https://authsdk-ref-guide.netlify.app/interfaces/constructorparams).
-
-:::
 
 ## Returns
 

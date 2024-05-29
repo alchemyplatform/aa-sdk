@@ -21,8 +21,6 @@ If providing an `LitAuthMethod`, the auth method will be authenticated, creating
 
 A `Session Signature` can be provided and will be used as the active session, and will be returned from `Authenticate` and `AuthDetails`.
 
-:::code-group
-
 ```ts [example.ts]
 import { LitSigner, LitAuthMethod } from "@alchemy/aa-signers";
 // [!code focus:99]
@@ -47,8 +45,6 @@ new LitSigner<LitSessionSigMap>({
   debug: false,
 });
 ```
-
-:::
 
 ## Returns
 

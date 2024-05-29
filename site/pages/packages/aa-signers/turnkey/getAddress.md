@@ -30,7 +30,10 @@ const turnkeySigner = await createTurnkeySigner();
 const address = await turnkeySigner.getAddress();
 ```
 
-<<< @/snippets/signers/turnkey.ts
+```ts [turnkey.ts]
+// [!include ~/snippets/signers/turnkey.ts]
+```
+
 :::
 
 ## Returns

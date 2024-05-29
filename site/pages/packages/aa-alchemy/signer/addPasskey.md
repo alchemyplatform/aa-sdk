@@ -48,4 +48,4 @@ await signer.addPasskey();
 
 ## Parameters
 
-`params?: CredentialCreationOptions` -- overrides for the WebAuthn credential creation options. For more info on the `CredentialCreationOptions` interface, see [here](https://microsoft.github.io/PowerBI-JavaScript/interfaces/_node_modules_typedoc_node_modules_typescript_lib_lib_dom_d_.credentialcreationoptions.html).
+`params?: CredentialCreationOptions` -- overrides for the WebAuthn credential creation options. For more info on the `CredentialCreationOptions` interface, see [here](https://microsoft.github.io/PowerBI-JavaScript/interfaces/_node_modules_typedoc_node_modules_typescript_lib_lib_dom_d_.credentialcreationoptions).

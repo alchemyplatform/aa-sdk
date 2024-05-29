@@ -18,8 +18,6 @@ To initialize a `FireblocksSigner`, you must provide a set of parameters detaile
 
 ## Usage
 
-:::code-group
-
 ```ts [example.ts]
 import { FireblocksSigner } from "@alchemy/aa-signers/fireblocks";
 import { ChainId } from "@fireblocks/fireblocks-web3-provider";
@@ -44,8 +42,6 @@ const fireblocksSigner = new FireblocksSigner({
   gaslessGasTankVaultId: 1,
 });
 ```
-
-:::
 
 ## Returns
 

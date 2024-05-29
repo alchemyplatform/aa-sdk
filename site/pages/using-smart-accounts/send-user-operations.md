@@ -76,7 +76,7 @@ console.log(txHash);
 
 :::
 
-Some other helpful viem methods include: [encodeFunctionData](https://viem.sh/docs/contract/encodeFunctionData.html), [decodeFunctionData](https://viem.sh/docs/contract/decodeFunctionData.html), and [decodeFunctionResult](https://viem.sh/docs/contract/decodeFunctionResult.html).
+Some other helpful viem methods include: [encodeFunctionData](https://viem.sh/docs/contract/encodeFunctionData), [decodeFunctionData](https://viem.sh/docs/contract/decodeFunctionData), and [decodeFunctionResult](https://viem.sh/docs/contract/decodeFunctionResult).
 
 ## 3. Send the User Operation
 

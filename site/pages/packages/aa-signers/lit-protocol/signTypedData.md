@@ -61,7 +61,10 @@ const signedTypedData = await litSigner.signTypedData({
 });
 ```
 
-<<< @/snippets/signers/lit.ts
+```ts [lit.ts]
+// [!include ~/snippets/signers/lit.ts]
+```
+
 :::
 
 ## Returns

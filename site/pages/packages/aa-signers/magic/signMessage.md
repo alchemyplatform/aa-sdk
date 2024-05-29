@@ -30,7 +30,10 @@ const magicSigner = await createMagicSigner();
 const signedMessage = await magicSigner.signMessage("test");
 ```
 
-<<< @/snippets/signers/magic.ts
+```ts [magic.ts]
+// [!include ~/snippets/signers/magic.ts]
+```
+
 :::
 
 ## Returns

@@ -81,7 +81,7 @@ A `Promise` containing a new `AlchemySmartAccountClient` connected to a Modular 
   - `owners: Address[]` -- [optional] the addresses of the owners of the multisig account.
   - `accountAddress: Address` -- [optional] a smart account address override that this object will manage instead of generating its own.
   - `initCode: Hex` -- [optional] the initCode for deploying the smart account with which the client will connect.
-  - `entryPoint: EntryPointDef` -- [optional] the entry point contract address. If not provided, the entry point contract address for the client is the connected account's entry point contract, or if not connected, falls back to the default entry point contract for the chain. See [getDefaultEntryPointAddress](/packages/aa-core/utils/getDefaultEntryPointAddress.html#getdefaultentrypointaddress).
+  - `entryPoint: EntryPointDef` -- [optional] the entry point contract address. If not provided, the entry point contract address for the client is the connected account's entry point contract, or if not connected, falls back to the default entry point contract for the chain. See [getDefaultEntryPointAddress](/packages/aa-core/utils/getDefaultEntryPointAddress#getdefaultentrypointaddress).
   - `factoryAddress: Address` -- [optional] the factory address for the smart account implementation, which is required for creating the account if not already deployed. Defaults to the modular account multisig factory address.
   - `salt: bigint` -- [optional] a value that is added to the address calculation to allow for multiple accounts for the same signer (owner). The default value supplied is `0n`.
 

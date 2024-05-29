@@ -30,7 +30,10 @@ const fireblocksSigner = await createFireblocksSigner();
 const address = await fireblocksSigner.getAddress();
 ```
 
-<<< @/snippets/signers/fireblocks.ts
+```ts [fireblocks.ts]
+// [!include ~/snippets/signers/fireblocks.ts]
+```
+
 :::
 
 ## Returns

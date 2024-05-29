@@ -72,7 +72,10 @@ const typedData = {
 const signTypedData = await signer.signTypedData(typedData);
 ```
 
-<<< @/snippets/signers/magic.ts
+```ts [magic.ts]
+// [!include ~/snippets/signers/magic.ts]
+```
+
 :::
 
 ## Developer links

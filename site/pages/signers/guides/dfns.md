@@ -8,9 +8,9 @@ description: Guide for using Dfns as a Signer
 
 [Dfns](https://www.dfns.co) is an MPC/TSS Wallet-as-a-Service API/SDK provider. Dfns aims to optimize the balance of security and UX by deploying key shares into a decentralized network on the backend while enabling wallet access via biometric open standards on the frontend like Webauthn. Reach out [here](https://www.dfns.co/learn-more) to set up a sandbox environment to get started.
 
-Dfns seamlessly integrates with Account Abstraction by signing `UserOperation`s. See the examples below for initializing a DFNS signer and creating a provider with that signer. You can follow [this](/using-smart-accounts/sponsoring-gas/gas-manager.html) guide to send and sponsor `UserOperation`s with the provider created.
+Dfns seamlessly integrates with Account Abstraction by signing `UserOperation`s. See the examples below for initializing a DFNS signer and creating a provider with that signer. You can follow [this](/using-smart-accounts/sponsoring-gas/gas-manager) guide to send and sponsor `UserOperation`s with the provider created.
 
-Dfns created a full example of a gas-less transaction via a paymaster [in our SDK](https://github.com/dfns/dfns-sdk-ts/tree/m/examples/libs/viem/alchemy-aa-gasless), adapted from our [gas sponsorship example](/using-smart-accounts/sponsoring-gas/gas-manager.html).
+Dfns created a full example of a gas-less transaction via a paymaster [in our SDK](https://github.com/dfns/dfns-sdk-ts/tree/m/examples/libs/viem/alchemy-aa-gasless), adapted from our [gas sponsorship example](/using-smart-accounts/sponsoring-gas/gas-manager).
 
 ## Install Dfns SDK
 

@@ -55,7 +55,9 @@ To use `CapsuleSigner` in your app's client, you must ensure the `window` object
 
 Next, setup the Capsule SDK and create an authenticated `CapsuleSigner` using the `aa-signers` package:
 
-<<< @/snippets/signers/capsule.ts
+```ts [capsule.ts]
+// [!include ~/snippets/signers/capsule.ts]
+```
 
 ### Use it with Modular Account
 

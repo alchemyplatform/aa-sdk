@@ -1,6 +1,9 @@
 import { defineConfig } from "vocs";
+import { aaAccountsSidebar } from "./sidebar/aa-accounts.js";
 import { aaAlchemySidebar } from "./sidebar/aa-alchemy.js";
 import { aaCoreSideBar } from "./sidebar/aa-core.js";
+import { aaEthersSidebar } from "./sidebar/aa-ethers.js";
+import { aaSignersSidebar } from "./sidebar/aa-signers.js";
 
 const pkg = require("../lerna.json");
 
@@ -343,6 +346,9 @@ export default defineConfig({
         { text: "Overview", link: "/packages/" },
         aaCoreSideBar,
         aaAlchemySidebar,
+        aaAccountsSidebar,
+        aaSignersSidebar,
+        aaEthersSidebar,
       ],
     },
     {

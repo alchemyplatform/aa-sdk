@@ -30,7 +30,10 @@ const passportSigner = await createPassportSigner();
 const signedMessage = await passportSigner.signMessage("test");
 ```
 
-<<< @/snippets/signers/passport.ts
+```ts [passport.ts]
+// [!include ~/snippets/signers/passport.ts]
+```
+
 :::
 
 ## Returns

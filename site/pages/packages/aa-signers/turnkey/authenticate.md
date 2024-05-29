@@ -20,8 +20,6 @@ This method must be called before accessing the other methods available on the `
 
 ## Usage
 
-:::code-group
-
 ```ts [example.ts]
 // [!code focus:99]
 import {
@@ -105,8 +103,6 @@ const authParams = {
 await turnkeySigner.authenticate(authParams);
 ```
 
-:::
-
 ## Returns
 
 ### `Promise<TurnkeyUserMetadata>`
@@ -124,5 +120,5 @@ A `Promise` containing the `TurnkeyUserMetadata`, and object with the following 
 
 An object with the following fields:
 
-- `transport` -- a `viem` [Transport](https://viem.sh/docs/clients/intro.html#transports) you can define to execute RPC requests.
+- `transport` -- a `viem` [Transport](https://viem.sh/docs/clients/intro#transports) you can define to execute RPC requests.
 - `resolveSubOrganization: () => Promise<TurnkeySubOrganization>` -- a method you can define as necessary to leverage the `Turnkey` SDK for authenticating a wallet as a [sub-organization](https://docs.turnkey.com/integration-guides/sub-organizations-as-wallets). For instance, in the example above, `authenticate` uses the [`createSubOrganization`](https://docs.turnkey.com/api#tag/Organizations/operation/CreateSubOrganization) method.

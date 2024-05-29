@@ -6,9 +6,9 @@ description: Learn how to authenticate users with their passkey using the Alchem
 
 # Passkey Auth
 
-The Alchemy Signer allows you to authenticate and log in users with a [passkey](https://accountkit.alchemy.com/resources/terms.html#passkey) that they used previously to sign up to your application.
+The Alchemy Signer allows you to authenticate and log in users with a [passkey](https://accountkit.alchemy.com/resources/terms#passkey) that they used previously to sign up to your application.
 
-To add passkey auth functionality to your app, you can use the [`authenticate`](/packages/aa-alchemy/signer/authenticate.html#parameters) method on the Alchemy Signer as follows.
+To add passkey auth functionality to your app, you can use the [`authenticate`](/packages/aa-alchemy/signer/authenticate#parameters) method on the Alchemy Signer as follows.
 
 :::code-group
 

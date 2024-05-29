@@ -18,8 +18,6 @@ To initialize a `FordefiSigner`, you must provide a set of parameters detailed b
 
 ## Usage
 
-:::code-group
-
 ```ts [example.ts]
 import { FordefiSigner } from "@alchemy/aa-signers/fordefi";
 
@@ -31,8 +29,6 @@ const fordefiSigner = new FordefiSigner({
   apiPayloadSignKey: process.env.FORDEFI_API_PAYLOAD_SIGNING_KEY!,
 });
 ```
-
-:::
 
 ## Returns
 

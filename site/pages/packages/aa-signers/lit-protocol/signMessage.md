@@ -31,7 +31,10 @@ const litSigner = new createLitSignerWithAuthMethod();
 const signedMessage = await litSigner.signMessage("Hello World!");
 ```
 
-<<< @/snippets/signers/lit.ts
+```ts [lit.ts]
+// [!include ~/snippets/signers/lit.ts]
+```
+
 :::
 
 ## Returns

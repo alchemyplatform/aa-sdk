@@ -30,7 +30,10 @@ const particleSigner = await createParticleSigner();
 const details = await particleSigner.getAuthDetails();
 ```
 
-<<< @/snippets/signers/particle.ts
+```ts [particle.ts]
+// [!include ~/snippets/signers/particle.ts]
+```
+
 :::
 
 ## Returns

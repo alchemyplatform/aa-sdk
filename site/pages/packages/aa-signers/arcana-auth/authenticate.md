@@ -20,8 +20,6 @@ This method must be called before accessing the other methods available on the `
 
 ## Usage
 
-:::code-group
-
 ```ts [example.ts]
 // [!code focus:99]
 import { ArcanaAuthSigner } from "@alchemy/aa-signers";
@@ -36,8 +34,6 @@ const newArcanaAuthSigner = new ArcanaAuthSigner({
 // const newArcanaAuthSigner = new ArcanaAuthSigner({inner});
 const getUserInfo = await newArcanaAuthSigner.authenticate();
 ```
-
-:::
 
 ## Returns
 

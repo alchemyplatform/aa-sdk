@@ -34,7 +34,9 @@ Use [Arcana Developer Dashboard](https://dashboard.arcana.network) to register y
 
 Use the **clientId** assigned to your app via the dashboard and integrate with the Arcana Auth SDK by creating a `SmartAccountSigner`.
 
-<<< @/snippets/signers/arcana-auth.ts
+```ts [arcana-auth.ts]
+// [!include ~/snippets/signers/arcana-auth.ts]
+```
 
 ### Use it with Modular Account
 

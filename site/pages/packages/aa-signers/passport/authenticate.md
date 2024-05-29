@@ -20,8 +20,6 @@ This method must be called before accessing the other methods available on the `
 
 ## Usage
 
-:::code-group
-
 ```ts [example.ts]
 // [!code focus:99]
 import { PassportSigner } from "@alchemy/aa-signers/passport";
@@ -38,8 +36,6 @@ const passportSigner = new PassportSigner({
 
 await passportSigner.authenticate();
 ```
-
-:::
 
 ## Returns
 

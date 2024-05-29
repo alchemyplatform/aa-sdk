@@ -18,8 +18,6 @@ To initialize a `MagicSigner`, you must provide a set of parameters detailed bel
 
 ## Usage
 
-:::code-group
-
 ```ts [example.ts]
 import { MagicSigner } from "@alchemy/aa-signers/magic";
 
@@ -34,8 +32,6 @@ const magicSigner = new MagicSigner({
   },
 });
 ```
-
-:::
 
 ## Returns
 

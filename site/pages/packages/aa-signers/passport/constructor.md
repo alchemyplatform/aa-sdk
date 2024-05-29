@@ -20,7 +20,7 @@ To initialize a `PassportSigner`, you must provide a set of parameters detailed 
 
 :::code-group
 
-```ts [example.ts]
+```ts [example1.ts]
 import { PassportSigner } from "@alchemy/aa-signers/passport";
 import { Passport } from "@0xpass/passport";
 import { WebAuthnSigner } from "@0xpass/webauthn-signer";
@@ -35,11 +35,7 @@ const passportSigner = new PassportSigner({
 });
 ```
 
-:::
-
-:::code-group
-
-```ts [example.ts]
+```ts [example2.ts]
 import { PassportSigner } from "@alchemy/aa-signers/passport";
 import { Passport } from "@0xpass/passport";
 import { WebAuthnSigner } from "@0xpass/webauthn-signer";

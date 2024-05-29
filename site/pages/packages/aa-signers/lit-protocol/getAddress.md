@@ -31,7 +31,10 @@ const litSigner = new createLitSignerWithAuthMethod();
 const address = await litSigner.getAddress();
 ```
 
-<<< @/snippets/signers/lit.ts
+```ts [lit.ts]
+// [!include ~/snippets/signers/lit.ts]
+```
+
 :::
 
 ## Returns

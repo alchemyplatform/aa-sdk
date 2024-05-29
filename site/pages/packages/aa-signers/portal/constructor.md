@@ -18,8 +18,6 @@ To initialize a `PortalSigner`, you must provide a set of parameters detailed be
 
 ## Usage
 
-:::code-group
-
 ```ts [example.ts]
 import { PortalSigner } from "@alchemy/aa-signers/portal";
 import { ChainId } from "@portal/portal-web3-provider";
@@ -42,8 +40,6 @@ const portalSigner = new PortalSigner({
   featureFlags?: FeatureFlags
 });
 ```
-
-:::
 
 ## Returns
 

@@ -20,8 +20,6 @@ You must call this method before accessing the other methods available on the `P
 
 ## Usage
 
-:::code-group
-
 ```ts [example.ts]
 // [!code focus:99]
 import { PortalSigner } from "@alchemy/aa-signers/portal";
@@ -34,8 +32,6 @@ const portalSigner = new PortalSigner({
 
 await portalSigner.authenticate();
 ```
-
-:::
 
 ## Returns
 

@@ -18,8 +18,6 @@ To initialize a `TurnkeySigner`, you must provide a set of parameters detailed b
 
 ## Usage
 
-:::code-group
-
 ```ts [example.ts]
 import { TurnkeySigner } from "@alchemy/aa-signers/turnkey";
 import { WebauthnStamper } from "@turnkey/webauthn-stamper";
@@ -32,8 +30,6 @@ const turnkeySigner = new TurnkeySigner({
   }),
 });
 ```
-
-:::
 
 ## Returns
 

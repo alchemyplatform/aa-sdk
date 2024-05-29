@@ -65,7 +65,10 @@ const typedData = {
 const signTypedData = await portalSigner.signTypedData(typedData);
 ```
 
-<<< @/snippets/signers/portal.ts
+```ts [portal.ts]
+// [!include ~/snippets/signers/portal.ts]
+```
+
 :::
 
 ## Developer Links

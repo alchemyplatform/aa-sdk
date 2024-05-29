@@ -81,9 +81,9 @@ If the `UserOperation` (meta-transaction for 4337 accounts) is correctly priced 
 :::details[Answer]
 This can happen when `UserOperation`s (UOs) become underpriced, frequently due to fee market movement between when gas and fees are estimations and when the UO is actually submitted.
 
-You may experience this when calling the [`waitForUserOperationTransaction`](/packages/aa-core/smart-account-client/actions/waitForUserOperationTransaction.html#waitForUserOperationTransaction) method. It may throw an error if it does not find the UO in a mined Transaction within its retry limits.
+You may experience this when calling the [`waitForUserOperationTransaction`](/packages/aa-core/smart-account-client/actions/waitForUserOperationTransaction#waitForUserOperationTransaction) method. It may throw an error if it does not find the UO in a mined Transaction within its retry limits.
 
-You can mitigate this by defining a more flexible retry period when constructing a [`Client`](/packages/aa-core/smart-account-client/index.html#usage) (i.e. `txMaxRetries`, `txRetryIntervalMs`, `txRetryMultiplier` in `opts`). If your UO continues to be delayed beyond a limit you are willing to wait, you can resubmit it using [`dropAndReplaceUserOperation`](/packages/aa-core/smart-account-client/actions/dropAndReplaceUserOperation.html#dropandreplaceuseroperation).
+You can mitigate this by defining a more flexible retry period when constructing a [`Client`](/packages/aa-core/smart-account-client/index#usage) (i.e. `txMaxRetries`, `txRetryIntervalMs`, `txRetryMultiplier` in `opts`). If your UO continues to be delayed beyond a limit you are willing to wait, you can resubmit it using [`dropAndReplaceUserOperation`](/packages/aa-core/smart-account-client/actions/dropAndReplaceUserOperation#dropandreplaceuseroperation).
 :::
 
 ### Are `UserOperation`s protected from MEV bots?
@@ -95,7 +95,7 @@ Right now, `UserOperation`s are sent to a private mempool for all networks other
 ### Can I simulate `UserOperation`s the same way I simulate transactions?
 
 :::details[Answer]
-Yes! Check out [this guide](/using-smart-accounts/simulate-user-operations.html).
+Yes! Check out [this guide](/using-smart-accounts/simulate-user-operations).
 :::
 
 ## Gas Estimation
@@ -103,7 +103,7 @@ Yes! Check out [this guide](/using-smart-accounts/simulate-user-operations.html)
 ### How does gas estimation for 4337 smart contract accounts work?
 
 :::details[Answer]
-Our bundler estimates gas and submits `UserOperation`s (UOs) under the hood of the aa-sdk. Our gas estimations are just that, estimations that optimize for UOs landing on chain, and you may need to adjust gas limits based on your needs using [overrides](/packages/aa-core/smart-account-client/types/userOperationOverrides.html).
+Our bundler estimates gas and submits `UserOperation`s (UOs) under the hood of the aa-sdk. Our gas estimations are just that, estimations that optimize for UOs landing on chain, and you may need to adjust gas limits based on your needs using [overrides](/packages/aa-core/smart-account-client/types/userOperationOverrides).
 
 Learn more about gas estimation and how it is implemented in our [Bundler](https://www.alchemy.com/blog/erc-4337-gas-estimation).
 
@@ -123,7 +123,7 @@ Gas sponsorship is available on testnet for all tiers. For support on mainnet, y
 ### How is gas sponsored? Do I need to fund the Gas Manager?
 
 :::details[Answer]
-We front the gas for your application and put the USD equivalent on your bill at the end of the month. No need to worry about pre-funding the Gas Manager or conversions, we’ve got you covered! You can follow [this guide](/using-smart-accounts/sponsoring-gas/gas-manager.html) for more details on how to sponsor `UserOperation`s.
+We front the gas for your application and put the USD equivalent on your bill at the end of the month. No need to worry about pre-funding the Gas Manager or conversions, we’ve got you covered! You can follow [this guide](/using-smart-accounts/sponsoring-gas/gas-manager) for more details on how to sponsor `UserOperation`s.
 :::
 
 ### What are my gas sponsorship limits?
@@ -141,7 +141,7 @@ Currently, we don’t support this, but we are actively exploring. Please [reach
 ### How is the Gas Manager protected from DDOS attacks?
 
 :::details[Answer]
-In your Gas Manager policy, you can configure spending rules per address, per app, and/or policy wide limits. See how to set up these policies [here](/using-smart-accounts/sponsoring-gas/gas-manager.html#_2-create-a-gas-manager-policy).
+In your Gas Manager policy, you can configure spending rules per address, per app, and/or policy wide limits. See how to set up these policies [here](/using-smart-accounts/sponsoring-gas/gas-manager#_2-create-a-gas-manager-policy).
 :::
 
 ## Common Errors {#common-errors}
@@ -175,9 +175,9 @@ Currently our Bundler allows max 10M gas in aggregate between `preVerificationGa
 :::details[Answer]
 [`waitForUserOperationTransaction`](/packages/aa-core/smart-account-client/actions/waitForUserOperationTransaction) may throw this error if it does not find the mined User Operation within its retry limits.
 
-You can mitigate this by defining a more flexible retry period when constructing a [`Client`](/packages/aa-core/smart-account-client/index.html#usage) (i.e. `txMaxRetries`, `txRetryIntervalMs`, `txRetryMultiplier` in `opts`).
+You can mitigate this by defining a more flexible retry period when constructing a [`Client`](/packages/aa-core/smart-account-client/index#usage) (i.e. `txMaxRetries`, `txRetryIntervalMs`, `txRetryMultiplier` in `opts`).
 
-If your `UserOperation` continues to be delayed beyond a limit you are willing to wait, you can resubmit the user operation using [`dropAndReplaceUserOperation`](/packages/aa-core/smart-account-client/actions/dropAndReplaceUserOperation.html#usage).
+If your `UserOperation` continues to be delayed beyond a limit you are willing to wait, you can resubmit the user operation using [`dropAndReplaceUserOperation`](/packages/aa-core/smart-account-client/actions/dropAndReplaceUserOperation#usage).
 :::
 
 ## Other Support
@@ -186,6 +186,6 @@ If your `UserOperation` continues to be delayed beyond a limit you are willing t
 
 No, the `aa-sdk` repo does not offically support React Native. **It is on our radar!**
 
-Currently we have a strong dependency on Viem, which requires several global features, such as `TextEncoder` and `crypto`, that are absent in React Native's environment. See more about [Viem's capability here](https://viem.sh/docs/compatibility.html).
+Currently we have a strong dependency on Viem, which requires several global features, such as `TextEncoder` and `crypto`, that are absent in React Native's environment. See more about [Viem's capability here](https://viem.sh/docs/compatibility).
 
-However, we have created a small PoC using Expo that you can find [here](https://github.com/alchemyplatform/aa-sdk-rn-expo/tree/main). For more information on how to use Account Kit within a React Native application see [the guide](/resources/react-native.html).
+However, we have created a small PoC using Expo that you can find [here](https://github.com/alchemyplatform/aa-sdk-rn-expo/tree/main). For more information on how to use Account Kit within a React Native application see [the guide](/resources/react-native).

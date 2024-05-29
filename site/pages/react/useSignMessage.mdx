@@ -20,7 +20,7 @@ head:
 
 # useSignMessage
 
-The `useSignMessage` hook enables signing a message on behalf of the user's Embedded Account. If the account is not yet deployed onchain, this will use [ERC-6492](/resources/terms.html#erc-6492) to sign the message.
+The `useSignMessage` hook enables signing a message on behalf of the user's Embedded Account. If the account is not yet deployed onchain, this will use [ERC-6492](/resources/terms#erc-6492) to sign the message.
 
 :::warning
 This requires your user to be logged in. See [`useAuthenticate`](/react/useAuthenticate) for more details.
@@ -62,12 +62,12 @@ Returns an object containing the following state.
 ### signMessage
 
 `UseMutateFunction`
-A React query mutation function to sign a message. It returns a `Hex` representation of the signed message. It takes in an object with a [`SignableMessage`](https://viem.sh/docs/actions/wallet/signMessage.html#message) field called `message`.
+A React query mutation function to sign a message. It returns a `Hex` representation of the signed message. It takes in an object with a [`SignableMessage`](https://viem.sh/docs/actions/wallet/signMessage#message) field called `message`.
 
 ### signMessageAsync
 
 `UseMutateAsyncFunction`
-A React query async mutation function to sign a message. Via an awaitable promise, it returns a `Hex` representation of the signed message. It takes in an object with a [`SignableMessage`](https://viem.sh/docs/actions/wallet/signMessage.html#message) field called `message`.
+A React query async mutation function to sign a message. Via an awaitable promise, it returns a `Hex` representation of the signed message. It takes in an object with a [`SignableMessage`](https://viem.sh/docs/actions/wallet/signMessage#message) field called `message`.
 
 ### signedMessage
 

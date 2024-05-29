@@ -30,7 +30,10 @@ const portalSigner = await createPortalSigner();
 const address = await portalSigner.getAddress();
 ```
 
-<<< @/snippets/signers/portal.ts
+```ts [portal.ts]
+// [!include ~/snippets/signers/portal.ts]
+```
+
 :::
 
 ## Returns

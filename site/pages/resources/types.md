@@ -207,7 +207,7 @@ State overrides allow you to customize the network state for the purpose of the 
 
 ## `ToSmartContractAccountParams`
 
-This type defines the parameters to the `SmartContractAccount` instantiation action, [`toSmartContractAccount`](/packages/aa-core/accounts/). You can configure this parameter to specify the [`Transport`](https://viem.sh/docs/clients/intro.html#transports), [`Chain`](https://viem.sh/docs/glossary/types#chain), [`EntryPointDef`](#entrypointdef), and other base functionalities of the smart account that you are creating.
+This type defines the parameters to the `SmartContractAccount` instantiation action, [`toSmartContractAccount`](/packages/aa-core/accounts/). You can configure this parameter to specify the [`Transport`](https://viem.sh/docs/clients/intro#transports), [`Chain`](https://viem.sh/docs/glossary/types#chain), [`EntryPointDef`](#entrypointdef), and other base functionalities of the smart account that you are creating.
 
 :::details[ToSmartContractAccountParams]
 
@@ -219,7 +219,7 @@ This type defines the parameters to the `SmartContractAccount` instantiation act
 
 ## `User`
 
-`User` is a type that defines the model for the details of a user's Embedded Account via an Alchemy Signer. It includes the user's `email`, `orgId`, `userId`, `userId`, `address` (the EOA signer address corresponding to the user credentials), and `credentialId`. You can use the [`useUser`](../react/useUser.md) react hook to look up a user.
+`User` is a type that defines the model for the details of a user's Embedded Account via an Alchemy Signer. It includes the user's `email`, `orgId`, `userId`, `userId`, `address` (the EOA signer address corresponding to the user credentials), and `credentialId`. You can use the [`useUser`](/react/useUser) react hook to look up a user.
 
 :::details[User]
 

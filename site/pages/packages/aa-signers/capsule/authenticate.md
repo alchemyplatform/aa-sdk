@@ -20,8 +20,6 @@ You must call this method before accessing the other methods available on the `C
 
 ## Usage
 
-:::code-group
-
 ```ts [example.ts]
 // [!code focus:99]
 import { CapsuleSigner } from "@alchemy/aa-signers/capsule";
@@ -41,8 +39,6 @@ await capsuleSigner.authenticate();
 // after calling `authenticate`, a user must either be created or logged in to perform any signing operations using `capsuleSigner`
 // follow the documentation at https://docs.usecapsule.com/integration-guide/user-and-wallet-creation using `capsuleSigner.inner` to create or login a user
 ```
-
-:::
 
 ## Returns
 

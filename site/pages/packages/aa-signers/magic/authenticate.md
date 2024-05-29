@@ -20,8 +20,6 @@ This method must be called before accessing the other methods available on the `
 
 ## Usage
 
-:::code-group
-
 ```ts [example.ts]
 // [!code focus:99]
 import { MagicSigner } from "@alchemy/aa-signers/magic";
@@ -35,8 +33,6 @@ const authParams = {
 
 await magicSigner.authenticate(authParams);
 ```
-
-:::
 
 ## Returns
 

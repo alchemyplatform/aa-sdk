@@ -67,7 +67,10 @@ const typedData = {
 const signTypedData = await particleSigner.signTypedData(typedData);
 ```
 
-<<< @/snippets/signers/particle.ts
+```ts [particle.ts]
+// [!include ~/snippets/signers/particle.ts]
+```
+
 :::
 
 ## Developer Links

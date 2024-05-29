@@ -30,7 +30,10 @@ const capsuleSigner = await createCapsuleSigner();
 const address = await capsuleSigner.getAddress();
 ```
 
-<<< @/snippets/signers/capsule.ts
+```ts [capsule.ts]
+// [!include ~/snippets/signers/capsule.ts]
+```
+
 :::
 
 ## Returns

@@ -20,8 +20,6 @@ You must call this method before accessing the other methods available on the `W
 
 ## Usage
 
-:::code-group
-
 ```ts [example.ts]
 // [!code focus:99]
 import { Web3AuthSigner } from "@alchemy/aa-signers/web3auth";
@@ -42,8 +40,6 @@ await web3AuthSigner.authenticate({
   },
 });
 ```
-
-:::
 
 ## Returns
 

@@ -30,7 +30,10 @@ const fordefiSigner = await createFordefiSigner();
 const address = await fordefiSigner.getAddress();
 ```
 
-<<< @/snippets/signers/fordefi.ts
+```ts [fordefi.ts]
+// [!include ~/snippets/signers/fordefi.ts]
+```
+
 :::
 
 ## Returns
