@@ -347,7 +347,10 @@ export default defineConfig({
       ],
     },
   ],
-  // TODO: add head
+  socials: [
+    { icon: "github", link: "https://github.com/alchemyplatform/aa-sdk" },
+  ],
+  // TODO: add head from previous config
   // This is not supported in vocs
   // sitemap: {
   //   hostname: "https://accountkit.alchemy.com",
