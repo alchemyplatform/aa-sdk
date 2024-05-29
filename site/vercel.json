@@ -6,7 +6,7 @@
       "statusCode": 301
     },
     {
-      "source": "/signers/alchemy-signer/index",
+      "source": "/signers/alchemy-signer/",
       "destination": "/signers/alchemy-signer/introduction",
       "statusCode": 301
     }
