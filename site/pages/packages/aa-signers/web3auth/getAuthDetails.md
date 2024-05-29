@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Web3AuthSigner • getAuthDetails
-  - - meta
-    - name: description
-      content: Overview of the getAuthDetails method on Web3AuthSigner
-  - - meta
-    - property: og:description
-      content: Overview of the getAuthDetails method on Web3AuthSigner
+title: Web3AuthSigner • getAuthDetails
+description: Overview of the getAuthDetails method on Web3AuthSigner
 ---
+
 
 # getAuthDetails
 

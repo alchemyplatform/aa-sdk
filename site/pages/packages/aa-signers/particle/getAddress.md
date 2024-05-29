@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: ParticleSigner • getAddress
-  - - meta
-    - name: description
-      content: Overview of the getAddress method on ParticleSigner
-  - - meta
-    - property: og:description
-      content: Overview of the getAddress method on ParticleSigner
+title: ParticleSigner • getAddress
+description: Overview of the getAddress method on ParticleSigner
 ---
+
 
 # getAddress
 

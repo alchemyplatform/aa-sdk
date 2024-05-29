@@ -1,22 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Alchemy Signer • signTransaction
-  - - meta
-    - name: description
-      content: Learn how to use the AlchemySigner.signTransaction method
-  - - meta
-    - property: og:description
-      content: Learn how to use the AlchemySigner.signTransaction method
-  - - meta
-    - name: twitter:title
-      content: Alchemy Signer • signTransaction
-  - - meta
-    - name: twitter:description
-      content: Learn how to use the AlchemySigner.signTransaction method
+title: Alchemy Signer • signTransaction
+description: Learn how to use the AlchemySigner.signTransaction method
 ---
+
 
 # signTransaction
 

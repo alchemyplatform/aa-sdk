@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: FireblocksSigner
-  - - meta
-    - name: description
-      content: Overview of the FireblocksSigner class in aa-signers
-  - - meta
-    - property: og:description
-      content: Overview of the FireblocksSigner class in aa-signers
+title: FireblocksSigner
+description: Overview of the FireblocksSigner class in aa-signers
 ---
+
 
 # Fireblocks Signer
 

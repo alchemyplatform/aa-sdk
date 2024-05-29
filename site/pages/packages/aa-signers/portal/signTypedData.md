@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: PortalSigner • signTypedData
-  - - meta
-    - name: description
-      content: Overview of the signTypedData method on PortalSigner
-  - - meta
-    - property: og:description
-      content: Overview of the signTypedData method on PortalSigner
+title: PortalSigner • signTypedData
+description: Overview of the signTypedData method on PortalSigner
 ---
+
 
 # signTypedData
 

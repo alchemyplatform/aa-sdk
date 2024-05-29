@@ -1,18 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: MagicSigner • getAuthDetails
-  - - meta
-    - name: description
-      content: Overview of the getAuthDetails method on MagicSigner
-  - - meta
-    - property: og:description
-      content: Overview of the getAuthDetails method on MagicSigner
-next:
-  text: Web3auth
+title: MagicSigner • getAuthDetails
+description: Overview of the getAuthDetails method on MagicSigner
 ---
+
 
 # getAuthDetails
 

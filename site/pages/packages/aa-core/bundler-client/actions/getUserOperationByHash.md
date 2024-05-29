@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: getUserOperationByHash
-  - - meta
-    - name: description
-      content: Overview of the getUserOperationByHash action available on the BundlerClient
-  - - meta
-    - property: og:description
-      content: Overview of the getUserOperationByHash action available on the BundlerClient
+title: getUserOperationByHash
+description: Overview of the getUserOperationByHash action available on the BundlerClient
 ---
+
 
 # getUserOperationByHash
 

@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: getUserOperationReceipt
-  - - meta
-    - name: description
-      content: Overview of the getUserOperationReceipt action available on the BundlerClient
-  - - meta
-    - property: og:description
-      content: Overview of the getUserOperationReceipt action available on the BundlerClient
+title: getUserOperationReceipt
+description: Overview of the getUserOperationReceipt action available on the BundlerClient
 ---
+
 
 # getUserOperationReceipt
 

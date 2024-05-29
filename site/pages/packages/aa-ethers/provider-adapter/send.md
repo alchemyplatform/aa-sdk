@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: EthersProviderAdapter • connectToAccount
-  - - meta
-    - name: description
-      content: Overview of the connectToAccount method on EthersProviderAdapter in aa-ethers
-  - - meta
-    - property: og:description
-      content: Overview of the connectToAccount method on EthersProviderAdapter in aa-ethers
+title: EthersProviderAdapter • connectToAccount
+description: Overview of the connectToAccount method on EthersProviderAdapter in aa-ethers
 ---
+
 
 # send
 

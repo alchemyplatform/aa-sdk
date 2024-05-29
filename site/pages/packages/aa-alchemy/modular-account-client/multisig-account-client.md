@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: createMultisigAccountAlchemyClient
-  - - meta
-    - name: description
-      content: Overview of the createMultisigAccountAlchemyClient factory in aa-alchemy
-  - - meta
-    - property: og:description
-      content: Overview of the createMultisigAccountAlchemyClient factory in aa-alchemy
+title: createMultisigAccountAlchemyClient
+description: Overview of the createMultisigAccountAlchemyClient factory in aa-alchemy
 ---
+
 
 # createMultisigAccountAlchemyClient
 

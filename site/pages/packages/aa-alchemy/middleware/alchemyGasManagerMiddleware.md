@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Middleware • alchemyGasManagerMiddleware
-  - - meta
-    - name: description
-      content: Overview of the alchemyGasManagerMiddleware method in aa-alchemy
-  - - meta
-    - property: og:description
-      content: Overview of the alchemyGasManagerMiddleware method in aa-alchemy
+title: Middleware • alchemyGasManagerMiddleware
+description: Overview of the alchemyGasManagerMiddleware method in aa-alchemy
 ---
+
 
 # alchemyGasManagerMiddleware
 

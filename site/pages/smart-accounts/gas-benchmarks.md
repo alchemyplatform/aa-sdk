@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Gas benchmarks
-  - - meta
-    - name: description
-      content: Gas benchmarks for Alchemy Accounts
-  - - meta
-    - property: og:description
-      content: Gas benchmarks for Alchemy Accounts
+title: Gas benchmarks
+description: Gas benchmarks for Alchemy Accounts
 ---
+
 
 # Gas benchmarks
 

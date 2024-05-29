@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: CapsuleSigner
-  - - meta
-    - name: description
-      content: Overview of the CapsuleSigner class in aa-signers
-  - - meta
-    - property: og:description
-      content: Overview of the CapsuleSigner class in aa-signers
+title: CapsuleSigner
+description: Overview of the CapsuleSigner class in aa-signers
 ---
+
 
 # Capsule Signer
 

@@ -1,22 +1,10 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title2
-      content: Extending Smart Accounts • Get installed plugins of a Modular Account
-  - - meta
-    - name: description
-      content: Follow this guide to get installed plugins of a Modular Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - property: og:description
-      content: Follow this guide to get installed plugins of a Modular Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - name: twitter:title
-      content: Extending Smart Accounts • Get installed plugins of a Modular Account
-  - - meta
-    - name: twitter:description
-      content: Follow this guide to get installed plugins of a Modular Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
+title: Extending Smart Accounts • Get installed plugins of a Modular Account
+description: Follow this guide to get installed plugins of a Modular Account
+  with Account Kit, a vertically integrated stack for building apps that support
+  ERC-4337 and ERC-6900.
 ---
+
 
 # How to get the installed plugins of a Modular Account
 

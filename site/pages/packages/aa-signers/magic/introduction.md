@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: MagicSigner
-  - - meta
-    - name: description
-      content: Overview of the MagicSigner class in aa-signers
-  - - meta
-    - property: og:description
-      content: Overview of the MagicSigner class in aa-signers
+title: MagicSigner
+description: Overview of the MagicSigner class in aa-signers
 ---
+
 
 # Magic Signer
 

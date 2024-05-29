@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: TurnkeySigner • signTypedData
-  - - meta
-    - name: description
-      content: Overview of the signTypedData method on TurnkeySigner
-  - - meta
-    - property: og:description
-      content: Overview of the signTypedData method on TurnkeySigner
+title: TurnkeySigner • signTypedData
+description: Overview of the signTypedData method on TurnkeySigner
 ---
+
 
 # signTypedData
 

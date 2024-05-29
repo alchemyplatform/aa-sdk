@@ -1,22 +1,10 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: How to fetch a Smart Account's NFTs
-  - - meta
-    - name: description
-      content: Follow this guide to fetch a smart account's NFTs with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - property: og:description
-      content: Follow this guide to fetch a smart account's NFTs with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - name: twitter:title
-      content: How to fetch a Smart Account's NFTs
-  - - meta
-    - name: twitter:description
-      content: Follow this guide to fetch a smart account's NFTs with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
+title: How to fetch a Smart Account's NFTs
+description: Follow this guide to fetch a smart account's NFTs with Account Kit,
+  a vertically integrated stack for building apps that support ERC-4337 and
+  ERC-6900.
 ---
+
 
 # How to fetch a Smart Account's NFTs
 

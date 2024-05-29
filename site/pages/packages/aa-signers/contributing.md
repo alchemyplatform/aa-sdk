@@ -1,18 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Contributing to aa-signers
-  - - meta
-    - name: description
-      content: How to add your own Signer Implementation to aa-signers
-  - - meta
-    - property: og:description
-      content: How to add your own Signer Implementation to aa-signers
-next:
-  text: aa-ethers
+title: Contributing to aa-signers
+description: How to add your own Signer Implementation to aa-signers
 ---
+
 
 # Contributing to `aa-signers`
 

@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Utils
-  - - meta
-    - name: description
-      content: Overview of the Utils methods in aa-ethers
-  - - meta
-    - property: og:description
-      content: Overview of the Utils methods in aa-ethers
+title: Utils
+description: Overview of the Utils methods in aa-ethers
 ---
+
 
 # Utils
 

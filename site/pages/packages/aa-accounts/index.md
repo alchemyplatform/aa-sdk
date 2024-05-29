@@ -1,21 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: aa-accounts
-  - - meta
-    - name: description
-      content: aa-accounts landing page and getting started guide
-  - - meta
-    - property: og:description
-      content: aa-accounts landing page and getting started guide
-prev:
-  text: aa-alchemy
-  link: /packages/aa-alchemy/index
-next:
-  text: Light Account
+title: aa-accounts
+description: aa-accounts landing page and getting started guide
 ---
+
 
 # `@alchemy/aa-accounts`
 

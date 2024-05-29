@@ -1,22 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Light Account • Deployments
-  - - meta
-    - name: description
-      content: Deployment addresses
-  - - meta
-    - property: og:description
-      content: Deployment addresses
-  - - meta
-    - name: twitter:title
-      content: Light Account • Deployments
-  - - meta
-    - name: twitter:description
-      content: Deployment addresses
+title: Light Account • Deployments
+description: Deployment addresses
 ---
+
 
 # Deployments
 

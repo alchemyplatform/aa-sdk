@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: CapsuleSigner • constructor
-  - - meta
-    - name: description
-      content: Overview of the constructor method on CapsuleSigner in aa-signers
-  - - meta
-    - property: og:description
-      content: Overview of the constructor method on CapsuleSigner in aa-signers
+title: CapsuleSigner • constructor
+description: Overview of the constructor method on CapsuleSigner in aa-signers
 ---
+
 
 # constructor
 

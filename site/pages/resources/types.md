@@ -1,22 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Types
-  - - meta
-    - name: description
-      content: Glossary of types in aa-sdk
-  - - meta
-    - property: og:description
-      content: Glossary of types in aa-sdk
-  - - meta
-    - name: twitter:title
-      content: Types
-  - - meta
-    - name: twitter:description
-      content: Glossary of types in aa-sdk
+title: Types
+description: Glossary of types in aa-sdk
 ---
+
 
 # Types
 

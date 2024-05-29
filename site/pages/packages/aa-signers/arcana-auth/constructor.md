@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: ArcanaAuthSigner • constructor
-  - - meta
-    - name: description
-      content: Overview of the constructor method on ArcanaAuthSigner in aa-signers
-  - - meta
-    - property: og:description
-      content: Overview of the constructor method on ArcanaAuthSigner in aa-signers
+title: ArcanaAuthSigner • constructor
+description: Overview of the constructor method on ArcanaAuthSigner in aa-signers
 ---
+
 
 # constructor
 

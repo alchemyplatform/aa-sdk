@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: AccountSigner
-  - - meta
-    - name: description
-      content: Overview of the AccountSigner class in aa-ethers
-  - - meta
-    - property: og:description
-      content: Overview of the AccountSigner class in aa-ethers
+title: AccountSigner
+description: Overview of the AccountSigner class in aa-ethers
 ---
+
 
 # AccountSigner
 

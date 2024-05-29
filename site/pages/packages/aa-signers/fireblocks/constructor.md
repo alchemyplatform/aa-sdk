@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: FireblocksSigner • constructor
-  - - meta
-    - name: description
-      content: Overview of the constructor method on FireblocksSigner in aa-signers
-  - - meta
-    - property: og:description
-      content: Overview of the constructor method on FireblocksSigner in aa-signers
+title: FireblocksSigner • constructor
+description: Overview of the constructor method on FireblocksSigner in aa-signers
 ---
+
 
 # constructor
 

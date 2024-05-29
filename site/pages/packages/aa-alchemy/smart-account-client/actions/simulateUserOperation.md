@@ -1,16 +1,9 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: AlchemySmartAccountClient • simulateUserOperation
-  - - meta
-    - name: description
-      content: Overview of the simulateUserOperation method on Alchemy Smart Account Client in aa-alchemy
-  - - meta
-    - property: og:description
-      content: Overview of the simulateUserOperation method on Alchemy Smart Account Client in aa-alchemy
+title: AlchemySmartAccountClient • simulateUserOperation
+description: Overview of the simulateUserOperation method on Alchemy Smart
+  Account Client in aa-alchemy
 ---
+
 
 # simulateUserOperation
 

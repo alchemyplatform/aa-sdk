@@ -1,18 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: LocalAccountSigner
-  - - meta
-    - name: description
-      content: Overview of the LocalAccountSigner
-  - - meta
-    - property: og:description
-      content: Overview of the LocalAccountSigner
-next:
-  text: Utils
+title: LocalAccountSigner
+description: Overview of the LocalAccountSigner
 ---
+
 
 # LocalAccountSigner
 

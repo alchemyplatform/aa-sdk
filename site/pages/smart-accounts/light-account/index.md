@@ -1,22 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Light Account
-  - - meta
-    - name: description
-      content: What is Light Account?
-  - - meta
-    - property: og:description
-      content: What is Light Account?
-  - - meta
-    - name: twitter:title
-      content: Light Account
-  - - meta
-    - name: twitter:description
-      content: What is Light Account?
+title: Light Account
+description: What is Light Account?
 ---
+
 
 # Light Account
 

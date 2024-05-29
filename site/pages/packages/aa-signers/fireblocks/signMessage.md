@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: FireblocksSigner • signMessage
-  - - meta
-    - name: description
-      content: Overview of the signMessage method on FireblocksSigner
-  - - meta
-    - property: og:description
-      content: Overview of the signMessage method on FireblocksSigner
+title: FireblocksSigner • signMessage
+description: Overview of the signMessage method on FireblocksSigner
 ---
+
 
 # signMessage
 

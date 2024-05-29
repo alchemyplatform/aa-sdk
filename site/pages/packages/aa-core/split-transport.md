@@ -1,18 +1,9 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Split Transport
-  - - meta
-    - name: description
-      content: Learn how to use a different RPC provider for your bundler traffic and node traffic
-  - - meta
-    - property: og:description
-      content: Learn how to use a different RPC provider for your bundler traffic and node traffic
-next:
-  text: SmartAccountClient
+title: Split Transport
+description: Learn how to use a different RPC provider for your bundler traffic
+  and node traffic
 ---
+
 
 # split
 

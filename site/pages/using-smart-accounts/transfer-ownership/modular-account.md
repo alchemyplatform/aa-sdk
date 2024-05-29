@@ -1,24 +1,10 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title2
-      content: How to manage ownership of a Modular Account
-  - - meta
-    - name: description
-      content: Follow this guide to manage ownership of a Modular Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - property: og:description
-      content: Follow this guide to manage ownership of a Modular Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - name: twitter:title
-      content: How to manage ownership of a Modular Account
-  - - meta
-    - name: twitter:description
-      content: Follow this guide to manage ownership of a Modular Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-next:
-  text: How to manage ownership of a Modular Account
+title: How to manage ownership of a Modular Account
+description: Follow this guide to manage ownership of a Modular Account with
+  Account Kit, a vertically integrated stack for building apps that support
+  ERC-4337 and ERC-6900.
 ---
+
 
 # How to manage ownership of a Modular Account
 

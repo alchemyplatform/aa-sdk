@@ -1,22 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Alchemy Signer • addPasskey
-  - - meta
-    - name: description
-      content: Learn how to use the AlchemySigner.addPasskey method
-  - - meta
-    - property: og:description
-      content: Learn how to use the AlchemySigner.addPasskey method
-  - - meta
-    - name: twitter:title
-      content: Alchemy Signer • addPasskey
-  - - meta
-    - name: twitter:description
-      content: Learn how to use the AlchemySigner.addPasskey method
+title: Alchemy Signer • addPasskey
+description: Learn how to use the AlchemySigner.addPasskey method
 ---
+
 
 # addPasskey
 

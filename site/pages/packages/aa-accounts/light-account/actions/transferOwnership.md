@@ -1,18 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: LightSmartContractAccount • transferOwnership
-  - - meta
-    - name: description
-      content: Overview of the transferOwnership method on LightSmartContractAccount
-  - - meta
-    - property: og:description
-      content: Overview of the transferOwnership method on LightSmartContractAccount
-next:
-  text: Utils
+title: LightSmartContractAccount • transferOwnership
+description: Overview of the transferOwnership method on LightSmartContractAccount
 ---
+
 
 # transferOwnership
 

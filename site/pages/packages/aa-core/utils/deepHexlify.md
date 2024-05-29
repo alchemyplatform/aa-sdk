@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: deepHexlify
-  - - meta
-    - name: description
-      content: Overview of the deepHexlify method in aa-core utils
-  - - meta
-    - property: og:description
-      content: Overview of the deepHexlify method in aa-core utils
+title: deepHexlify
+description: Overview of the deepHexlify method in aa-core utils
 ---
+
 
 # deepHexlify
 

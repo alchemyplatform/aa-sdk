@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: CapsuleSigner • signTypedData
-  - - meta
-    - name: description
-      content: Overview of the signTypedData method on CapsuleSigner
-  - - meta
-    - property: og:description
-      content: Overview of the signTypedData method on CapsuleSigner
+title: CapsuleSigner • signTypedData
+description: Overview of the signTypedData method on CapsuleSigner
 ---
+
 
 # signTypedData
 

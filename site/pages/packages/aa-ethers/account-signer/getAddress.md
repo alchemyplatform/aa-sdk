@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: AccountSigner • getAddress
-  - - meta
-    - name: description
-      content: Overview of the getAddress method on AccountSigner in aa-ethers
-  - - meta
-    - property: og:description
-      content: Overview of the getAddress method on AccountSigner in aa-ethers
+title: AccountSigner • getAddress
+description: Overview of the getAddress method on AccountSigner in aa-ethers
 ---
+
 
 # getAddress
 

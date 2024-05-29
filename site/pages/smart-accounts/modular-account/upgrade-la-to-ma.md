@@ -1,22 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Modular Account • Upgrading to a Modular Account using Account Kit
-  - - meta
-    - name: description
-      content: Upgrading to a Modular Account using Account Kit
-  - - meta
-    - property: og:description
-      content: Upgrading to a Modular Account using Account Kit
-  - - meta
-    - name: twitter:title
-      content: Modular Account • Upgrading to a Modular Account using Account Kit
-  - - meta
-    - name: twitter:description
-      content: Upgrading to a Modular Account using Account Kit
+title: Modular Account • Upgrading to a Modular Account using Account Kit
+description: Upgrading to a Modular Account using Account Kit
 ---
+
 
 # Upgrading to a Modular Account
 

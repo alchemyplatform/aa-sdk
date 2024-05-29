@@ -1,18 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: bundlerActions
-  - - meta
-    - name: description
-      content: Overview of the bundlerActions method in aa-core client
-  - - meta
-    - property: og:description
-      content: Overview of the bundlerActions method in aa-core client
-next:
-  text: Utils
+title: bundlerActions
+description: Overview of the bundlerActions method in aa-core client
 ---
+
 
 # bundlerActions
 

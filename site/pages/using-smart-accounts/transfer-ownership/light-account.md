@@ -1,22 +1,10 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: How to transfer ownership of a Light Account
-  - - meta
-    - name: description
-      content: Follow this guide to transfer ownership of a Light Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - property: og:description
-      content: Follow this guide to transfer ownership of a Light Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - name: twitter:title
-      content: How to transfer ownership of a Light Account
-  - - meta
-    - name: twitter:description
-      content: Follow this guide to transfer ownership of a Light Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
+title: How to transfer ownership of a Light Account
+description: Follow this guide to transfer ownership of a Light Account with
+  Account Kit, a vertically integrated stack for building apps that support
+  ERC-4337 and ERC-6900.
 ---
+
 
 # How to transfer ownership of `LightAccount`
 

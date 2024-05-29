@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: FireblocksSigner • authenticate
-  - - meta
-    - name: description
-      content: Overview of the authenticate method on FireblocksSigner
-  - - meta
-    - property: og:description
-      content: Overview of the authenticate method on FireblocksSigner
+title: FireblocksSigner • authenticate
+description: Overview of the authenticate method on FireblocksSigner
 ---
+
 
 # authenticate
 

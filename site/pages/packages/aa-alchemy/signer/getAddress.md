@@ -1,22 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Alchemy Signer • getAddress
-  - - meta
-    - name: description
-      content: Learn how to use the AlchemySigner.getAddress method
-  - - meta
-    - property: og:description
-      content: Learn how to use the AlchemySigner.getAddress method
-  - - meta
-    - name: twitter:title
-      content: Alchemy Signer • getAddress
-  - - meta
-    - name: twitter:description
-      content: Learn how to use the AlchemySigner.getAddress method
+title: Alchemy Signer • getAddress
+description: Learn how to use the AlchemySigner.getAddress method
 ---
+
 
 # getAddress
 

@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: LitSigner • authenticate
-  - - meta
-    - name: description
-      content: Overview of the authenticate method on LitSigner
-  - - meta
-    - property: og:description
-      content: Overview of the authenticate method on LitSigner
+title: LitSigner • authenticate
+description: Overview of the authenticate method on LitSigner
 ---
+
 
 # authenticate
 

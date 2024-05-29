@@ -1,22 +1,10 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Using your own Smart Account
-  - - meta
-    - name: description
-      content: Follow this guide to use any smart account implementation you want with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - property: og:description
-      content: Follow this guide to use any smart account implementation you want with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - name: twitter:title
-      content: Using your own Smart Account
-  - - meta
-    - name: twitter:description
-      content: Follow this guide to use any smart account implementation you want with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
+title: Using your own Smart Account
+description: Follow this guide to use any smart account implementation you want
+  with Account Kit, a vertically integrated stack for building apps that support
+  ERC-4337 and ERC-6900.
 ---
+
 
 # Using your own Smart Account
 

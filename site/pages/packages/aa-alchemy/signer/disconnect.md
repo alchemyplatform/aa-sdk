@@ -1,22 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Alchemy Signer • disconnect
-  - - meta
-    - name: description
-      content: Learn how to use the AlchemySigner.disconnect method
-  - - meta
-    - property: og:description
-      content: Learn how to use the AlchemySigner.disconnect method
-  - - meta
-    - name: twitter:title
-      content: Alchemy Signer • disconnect
-  - - meta
-    - name: twitter:description
-      content: Learn how to use the AlchemySigner.disconnect method
+title: Alchemy Signer • disconnect
+description: Learn how to use the AlchemySigner.disconnect method
 ---
+
 
 # disconnect
 

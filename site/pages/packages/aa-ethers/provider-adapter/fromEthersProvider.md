@@ -1,18 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: EthersProviderAdapter • fromEthersProvider
-  - - meta
-    - name: description
-      content: Overview of the fromEthersProvider method on EthersProviderAdapter in aa-ethers
-  - - meta
-    - property: og:description
-      content: Overview of the fromEthersProvider class on EthersProviderAdapter in aa-ethers
-next:
-  text: AccountSigner
+title: EthersProviderAdapter • fromEthersProvider
+description: Overview of the fromEthersProvider method on EthersProviderAdapter in aa-ethers
 ---
+
 
 # fromEthersProvider
 

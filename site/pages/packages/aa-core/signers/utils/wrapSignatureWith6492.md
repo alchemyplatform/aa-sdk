@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: wrapSignatureWith6492
-  - - meta
-    - name: description
-      content: Description of the wrapSignatureWith6492 utility method
-  - - meta
-    - property: og:description
-      content: Description of the wrapSignatureWith6492 utility method
+title: wrapSignatureWith6492
+description: Description of the wrapSignatureWith6492 utility method
 ---
+
 
 # wrapSignatureWith6492
 

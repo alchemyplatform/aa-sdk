@@ -1,18 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: resolveProperties
-  - - meta
-    - name: description
-      content: Overview of the resolveProperties method in aa-core utils
-  - - meta
-    - property: og:description
-      content: Overview of the resolveProperties method in aa-core utils
-next:
-  text: aa-alchemy
+title: resolveProperties
+description: Overview of the resolveProperties method in aa-core utils
 ---
+
 
 # `resolveProperties<T>`
 

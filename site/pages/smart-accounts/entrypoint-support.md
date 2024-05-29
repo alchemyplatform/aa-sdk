@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: EntryPoint Support
-  - - meta
-    - name: description
-      content: EntryPoint Support for Alchemy Accounts
-  - - meta
-    - property: og:description
-      content: EntryPoint Support for Alchemy Accounts
+title: EntryPoint Support
+description: EntryPoint Support for Alchemy Accounts
 ---
+
 
 # EntryPoint Support
 

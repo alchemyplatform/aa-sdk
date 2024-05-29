@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: PassportSigner
-  - - meta
-    - name: description
-      content: Overview of the PassportSigner class in aa-signers
-  - - meta
-    - property: og:description
-      content: Overview of the PassportSigner class in aa-signers
+title: PassportSigner
+description: Overview of the PassportSigner class in aa-signers
 ---
+
 
 # Portal Signer
 

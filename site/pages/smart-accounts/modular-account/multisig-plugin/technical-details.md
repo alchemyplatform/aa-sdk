@@ -1,22 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Multisig Plugin Smart Contract Technical Details
-  - - meta
-    - name: description
-      content: What are the technical details for the Multisig Plugin?
-  - - meta
-    - property: og:description
-      content: What are the technical details for the Multisig Plugin?
-  - - meta
-    - name: twitter:title
-      content: Multisig Plugin Smart Contract Technical Details
-  - - meta
-    - name: twitter:description
-      content: What are the technical details for the Multisig Plugin?
+title: Multisig Plugin Smart Contract Technical Details
+description: What are the technical details for the Multisig Plugin?
 ---
+
 
 # Multisig Plugin Technical Details
 

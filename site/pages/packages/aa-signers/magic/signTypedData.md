@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: MagicSigner • signTypedData
-  - - meta
-    - name: description
-      content: Overview of the signTypedData method on MagicSigner
-  - - meta
-    - property: og:description
-      content: Overview of the signTypedData method on MagicSigner
+title: MagicSigner • signTypedData
+description: Overview of the signTypedData method on MagicSigner
 ---
+
 
 # signTypedData
 

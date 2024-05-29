@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: FordefiSigner • getAddress
-  - - meta
-    - name: description
-      content: Overview of the getAddress method on FordefiSigner
-  - - meta
-    - property: og:description
-      content: Overview of the getAddress method on FordefiSigner
+title: FordefiSigner • getAddress
+description: Overview of the getAddress method on FordefiSigner
 ---
+
 
 # getAddress
 

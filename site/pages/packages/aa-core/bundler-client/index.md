@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: BundlerClient
-  - - meta
-    - name: description
-      content: Introduction to BundlerClient exported by aa-core
-  - - meta
-    - property: og:description
-      content: Introduction to BundlerClient exported by aa-core
+title: BundlerClient
+description: Introduction to BundlerClient exported by aa-core
 ---
+
 
 # Bundler Client
 

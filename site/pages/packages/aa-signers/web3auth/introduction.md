@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Web3AuthSigner
-  - - meta
-    - name: description
-      content: Overview of the Web3AuthSigner class in aa-signers
-  - - meta
-    - property: og:description
-      content: Overview of the Web3AuthSigner class in aa-signers
+title: Web3AuthSigner
+description: Overview of the Web3AuthSigner class in aa-signers
 ---
+
 
 # Web3auth Signer
 

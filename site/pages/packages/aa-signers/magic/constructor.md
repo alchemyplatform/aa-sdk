@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: MagicSigner • constructor
-  - - meta
-    - name: description
-      content: Overview of the constructor method on MagicSigner in aa-signers
-  - - meta
-    - property: og:description
-      content: Overview of the constructor method on MagicSigner in aa-signers
+title: MagicSigner • constructor
+description: Overview of the constructor method on MagicSigner in aa-signers
 ---
+
 
 # constructor
 

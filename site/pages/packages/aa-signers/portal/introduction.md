@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: PortalSigner
-  - - meta
-    - name: description
-      content: Overview of the PortalSigner class in aa-signers
-  - - meta
-    - property: og:description
-      content: Overview of the PortalSigner class in aa-signers
+title: PortalSigner
+description: Overview of the PortalSigner class in aa-signers
 ---
+
 
 # Portal Signer
 

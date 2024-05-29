@@ -1,22 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Modular Account with Multisig Plugin • Getting started
-  - - meta
-    - name: description
-      content: Getting started with the Modular Account with Multisig Plugin in Account Kit
-  - - meta
-    - property: og:description
-      content: Getting started with the Modular Account with Multisig Plugin in Account Kit
-  - - meta
-    - name: twitter:title
-      content: Modular Account with Multisig Plugin • Getting started
-  - - meta
-    - name: twitter:description
-      content: Getting started with the Modular Account with Multisig Plugin in Account Kit
+title: Modular Account with Multisig Plugin • Getting started
+description: Getting started with the Modular Account with Multisig Plugin in Account Kit
 ---
+
 
 # Getting started with the Multisig Plugin
 

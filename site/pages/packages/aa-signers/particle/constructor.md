@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: ParticleSigner • constructor
-  - - meta
-    - name: description
-      content: Overview of the constructor method on ParticleSigner in aa-signers
-  - - meta
-    - property: og:description
-      content: Overview of the constructor method on ParticleSigner in aa-signers
+title: ParticleSigner • constructor
+description: Overview of the constructor method on ParticleSigner in aa-signers
 ---
+
 
 # constructor
 

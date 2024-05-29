@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Contact Alchemy
-  - - meta
-    - name: description
-      content: Contact Alchemy about Account Kit
-  - - meta
-    - property: og:description
-      content: Contact Alchemy about Account Kit
+title: Contact Alchemy
+description: Contact Alchemy about Account Kit
 ---
+
 
 # Contact us
 

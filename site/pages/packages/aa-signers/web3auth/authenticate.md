@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Web3AuthSigner • authenticate
-  - - meta
-    - name: description
-      content: Overview of the authenticate method on Web3AuthSigner
-  - - meta
-    - property: og:description
-      content: Overview of the authenticate method on Web3AuthSigner
+title: Web3AuthSigner • authenticate
+description: Overview of the authenticate method on Web3AuthSigner
 ---
+
 
 # authenticate
 

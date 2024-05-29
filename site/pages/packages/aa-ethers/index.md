@@ -1,21 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: aa-ethers
-  - - meta
-    - name: description
-      content: aa-ethers landing page and getting started guide
-  - - meta
-    - property: og:description
-      content: aa-ethers landing page and getting started guide
-prev:
-  text: aa-signers
-  link: /packages/aa-signers/index
-next:
-  text: EthersProviderAdapter
+title: aa-ethers
+description: aa-ethers landing page and getting started guide
 ---
+
 
 # `@alchemy/aa-ethers`
 

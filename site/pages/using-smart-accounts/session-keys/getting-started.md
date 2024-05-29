@@ -1,22 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Getting started with Session Keys
-  - - meta
-    - name: description
-      content: Learn how to use Alchemy's Session Key Plugin.
-  - - meta
-    - property: og:description
-      content: Learn how to use Alchemy's Session Key Plugin.
-  - - meta
-    - name: twitter:title
-      content: Getting started with Session Keys
-  - - meta
-    - name: twitter:description
-      content: Learn how to use Alchemy's Session Key Plugin.
+title: Getting started with Session Keys
+description: Learn how to use Alchemy's Session Key Plugin.
 ---
+
 
 # Getting started with Session Keys
 

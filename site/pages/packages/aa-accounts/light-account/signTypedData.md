@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: LightSmartContractAccount • signTypedData
-  - - meta
-    - name: description
-      content: Overview of the signTypedData method on LightSmartContractAccount
-  - - meta
-    - property: og:description
-      content: Overview of the signTypedData method on LightSmartContractAccount
+title: LightSmartContractAccount • signTypedData
+description: Overview of the signTypedData method on LightSmartContractAccount
 ---
+
 
 # signTypedData
 

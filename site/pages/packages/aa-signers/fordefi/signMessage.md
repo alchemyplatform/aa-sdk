@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: FordefiSigner • signMessage
-  - - meta
-    - name: description
-      content: Overview of the signMessage method on FordefiSigner
-  - - meta
-    - property: og:description
-      content: Overview of the signMessage method on FordefiSigner
+title: FordefiSigner • signMessage
+description: Overview of the signMessage method on FordefiSigner
 ---
+
 
 # signMessage
 

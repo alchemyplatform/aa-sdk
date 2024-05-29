@@ -1,22 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Introduction to using Session Keys
-  - - meta
-    - name: description
-      content: Learn about Alchemy's ERC-6900 Compatible Session Key Plugin.
-  - - meta
-    - property: og:description
-      content: Learn about Alchemy's ERC-6900 Compatible Session Key Plugin.
-  - - meta
-    - name: twitter:title
-      content: Introduction to using Session Keys
-  - - meta
-    - name: twitter:description
-      content: Learn about Alchemy's ERC-6900 Compatible Session Key Plugin.
+title: Introduction to using Session Keys
+description: Learn about Alchemy's ERC-6900 Compatible Session Key Plugin.
 ---
+
 
 # Session Key Plugin overview
 

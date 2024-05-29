@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: convertChainIdToCoinType
-  - - meta
-    - name: description
-      content: Overview of the convertChainIdToCoinType method in aa-core utils
-  - - meta
-    - property: og:description
-      content: Overview of the convertChainIdToCoinType method in aa-core utils
+title: convertChainIdToCoinType
+description: Overview of the convertChainIdToCoinType method in aa-core utils
 ---
+
 
 # convertChainIdToCoinType
 

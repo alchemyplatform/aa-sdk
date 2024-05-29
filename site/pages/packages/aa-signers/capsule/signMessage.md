@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: CapsuleSigner • signMessage
-  - - meta
-    - name: description
-      content: Overview of the signMessage method on CapsuleSigner
-  - - meta
-    - property: og:description
-      content: Overview of the signMessage method on CapsuleSigner
+title: CapsuleSigner • signMessage
+description: Overview of the signMessage method on CapsuleSigner
 ---
+
 
 # signMessage
 

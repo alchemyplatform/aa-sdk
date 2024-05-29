@@ -1,16 +1,9 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: stringToIndex
-  - - meta
-    - name: description
-      content: A utility function to convert a string, such as an email, to salt for SmartAccounts
-  - - meta
-    - property: og:description
-      content: Overview of the stringToIndex function in aa-core utils
+title: stringToIndex
+description: A utility function to convert a string, such as an email, to salt
+  for SmartAccounts
 ---
+
 
 # stringToIndex
 

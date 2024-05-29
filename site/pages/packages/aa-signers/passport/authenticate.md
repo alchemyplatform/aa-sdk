@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: PassportSigner • authenticate
-  - - meta
-    - name: description
-      content: Overview of the authenticate method on PassportSigner
-  - - meta
-    - property: og:description
-      content: Overview of the authenticate method on PassportSigner
+title: PassportSigner • authenticate
+description: Overview of the authenticate method on PassportSigner
 ---
+
 
 # authenticate
 

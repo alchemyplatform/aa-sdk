@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: TurnkeySigner • constructor
-  - - meta
-    - name: description
-      content: Overview of the constructor method on TurnkeySigner in aa-signers
-  - - meta
-    - property: og:description
-      content: Overview of the constructor method on TurnkeySigner in aa-signers
+title: TurnkeySigner • constructor
+description: Overview of the constructor method on TurnkeySigner in aa-signers
 ---
+
 
 # constructor
 

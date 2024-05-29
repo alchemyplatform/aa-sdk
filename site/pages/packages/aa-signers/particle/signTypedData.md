@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: ParticleSigner • signTypedData
-  - - meta
-    - name: description
-      content: Overview of the signTypedData method on ParticleSigner
-  - - meta
-    - property: og:description
-      content: Overview of the signTypedData method on ParticleSigner
+title: ParticleSigner • signTypedData
+description: Overview of the signTypedData method on ParticleSigner
 ---
+
 
 # signTypedData
 

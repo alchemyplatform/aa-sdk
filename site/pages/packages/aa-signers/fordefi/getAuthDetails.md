@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: FordefiSigner • getAuthDetails
-  - - meta
-    - name: description
-      content: Overview of the getAuthDetails method on FordefiSigner
-  - - meta
-    - property: og:description
-      content: Overview of the getAuthDetails method on FordefiSigner
+title: FordefiSigner • getAuthDetails
+description: Overview of the getAuthDetails method on FordefiSigner
 ---
+
 
 # getAuthDetails
 

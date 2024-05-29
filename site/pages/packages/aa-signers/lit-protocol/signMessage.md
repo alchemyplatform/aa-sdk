@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: LitSigner • signMessage
-  - - meta
-    - name: description
-      content: Overview of the signMessage method on LitSigner
-  - - meta
-    - property: og:description
-      content: Overview of the signMessage method on LitSigner
+title: LitSigner • signMessage
+description: Overview of the signMessage method on LitSigner
 ---
+
 
 # signMessage
 

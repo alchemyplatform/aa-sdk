@@ -1,18 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Utils • SupportedChains
-  - - meta
-    - name: description
-      content: Overview of the SupportedChains util method in aa-alchemy
-  - - meta
-    - property: og:description
-      content: Overview of the SupportedChains util method in aa-alchemy
-next:
-  text: aa-accounts
+title: Utils • SupportedChains
+description: Overview of the SupportedChains util method in aa-alchemy
 ---
+
 
 # defineAlchemyChain
 

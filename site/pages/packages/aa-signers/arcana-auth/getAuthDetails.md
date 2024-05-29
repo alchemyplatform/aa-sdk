@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: ArcanaAuthSigner • getAuthDetails
-  - - meta
-    - name: description
-      content: Overview of the getAuthDetails method on ArcanaAuthSigner
-  - - meta
-    - property: og:description
-      content: Overview of the getAuthDetails method on ArcanaAuthSigner
+title: ArcanaAuthSigner • getAuthDetails
+description: Overview of the getAuthDetails method on ArcanaAuthSigner
 ---
+
 
 # getAuthDetails
 

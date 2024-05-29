@@ -1,22 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Alchemy Signer • signTypedData
-  - - meta
-    - name: description
-      content: Learn how to use the AlchemySigner.signTypedData method
-  - - meta
-    - property: og:description
-      content: Learn how to use the AlchemySigner.signTypedData method
-  - - meta
-    - name: twitter:title
-      content: Alchemy Signer • signTypedData
-  - - meta
-    - name: twitter:description
-      content: Learn how to use the AlchemySigner.signTypedData method
+title: Alchemy Signer • signTypedData
+description: Learn how to use the AlchemySigner.signTypedData method
 ---
+
 
 # signTypedData
 

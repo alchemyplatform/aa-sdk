@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Utils • convertWalletToAccountSigner
-  - - meta
-    - name: description
-      content: Overview of the convertWalletToAccountSigner method in aa-ethers
-  - - meta
-    - property: og:description
-      content: Overview of the convertWalletToAccountSigner method in aa-ethers
+title: Utils • convertWalletToAccountSigner
+description: Overview of the convertWalletToAccountSigner method in aa-ethers
 ---
+
 
 # Utils
 

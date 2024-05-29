@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: LitSigner • getAuthDetails
-  - - meta
-    - name: description
-      content: Overview of the getAuthDetails method on LitSigner
-  - - meta
-    - property: og:description
-      content: Overview of the getAuthDetails method on LitSigner
+title: LitSigner • getAuthDetails
+description: Overview of the getAuthDetails method on LitSigner
 ---
+
 
 # getAuthDetails
 

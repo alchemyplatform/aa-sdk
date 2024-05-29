@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: CapsuleSigner • getAddress
-  - - meta
-    - name: description
-      content: Overview of the getAddress method on CapsuleSigner
-  - - meta
-    - property: og:description
-      content: Overview of the getAddress method on CapsuleSigner
+title: CapsuleSigner • getAddress
+description: Overview of the getAddress method on CapsuleSigner
 ---
+
 
 # getAddress
 

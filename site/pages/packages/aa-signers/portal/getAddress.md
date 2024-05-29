@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: PortalSigner • getAddress
-  - - meta
-    - name: description
-      content: Overview of the getAddress method on PortalSigner
-  - - meta
-    - property: og:description
-      content: Overview of the getAddress method on PortalSigner
+title: PortalSigner • getAddress
+description: Overview of the getAddress method on PortalSigner
 ---
+
 
 # getAddress
 

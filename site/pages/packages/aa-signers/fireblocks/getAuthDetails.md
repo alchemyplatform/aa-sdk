@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: FireblocksSigner • getAuthDetails
-  - - meta
-    - name: description
-      content: Overview of the getAuthDetails method on FireblocksSigner
-  - - meta
-    - property: og:description
-      content: Overview of the getAuthDetails method on FireblocksSigner
+title: FireblocksSigner • getAuthDetails
+description: Overview of the getAuthDetails method on FireblocksSigner
 ---
+
 
 # getAuthDetails
 

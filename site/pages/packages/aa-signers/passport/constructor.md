@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: PassportSigner • constructor
-  - - meta
-    - name: description
-      content: Overview of the constructor method on PassportSigner in aa-signers
-  - - meta
-    - property: og:description
-      content: Overview of the constructor method on PassportSigner in aa-signers
+title: PassportSigner • constructor
+description: Overview of the constructor method on PassportSigner in aa-signers
 ---
+
 
 # constructor
 

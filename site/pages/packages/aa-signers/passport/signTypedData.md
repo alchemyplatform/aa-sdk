@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: PassportSigner • signTypedData
-  - - meta
-    - name: description
-      content: Overview of the signTypedData method on PassportSigner
-  - - meta
-    - property: og:description
-      content: Overview of the signTypedData method on PassportSigner
+title: PassportSigner • signTypedData
+description: Overview of the signTypedData method on PassportSigner
 ---
+
 
 # signTypedData
 

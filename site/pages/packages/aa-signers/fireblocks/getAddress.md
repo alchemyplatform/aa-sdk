@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: FireblocksSigner • getAddress
-  - - meta
-    - name: description
-      content: Overview of the getAddress method on FireblocksSigner
-  - - meta
-    - property: og:description
-      content: Overview of the getAddress method on FireblocksSigner
+title: FireblocksSigner • getAddress
+description: Overview of the getAddress method on FireblocksSigner
 ---
+
 
 # getAddress
 

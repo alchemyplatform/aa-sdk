@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: getDefaultSimpleAccountFactoryAddress
-  - - meta
-    - name: description
-      content: Overview of the getDefaultSimpleAccountFactoryAddress method in aa-core utils
-  - - meta
-    - property: og:description
-      content: Overview of the getDefaultSimpleAccountFactoryAddress method in aa-core utils
+title: getDefaultSimpleAccountFactoryAddress
+description: Overview of the getDefaultSimpleAccountFactoryAddress method in aa-core utils
 ---
+
 
 # getDefaultSimpleAccountFactoryAddress
 

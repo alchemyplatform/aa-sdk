@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: LitSigner • signTypedData
-  - - meta
-    - name: description
-      content: Overview of the signTypedData method on LitSigner
-  - - meta
-    - property: og:description
-      content: Overview of the signTypedData method on LitSigner
+title: LitSigner • signTypedData
+description: Overview of the signTypedData method on LitSigner
 ---
+
 
 # signTypedData
 

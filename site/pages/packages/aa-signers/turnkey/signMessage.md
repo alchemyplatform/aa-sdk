@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: TurnkeySigner • signMessage
-  - - meta
-    - name: description
-      content: Overview of the signMessage method on TurnkeySigner
-  - - meta
-    - property: og:description
-      content: Overview of the signMessage method on TurnkeySigner
+title: TurnkeySigner • signMessage
+description: Overview of the signMessage method on TurnkeySigner
 ---
+
 
 # signMessage
 

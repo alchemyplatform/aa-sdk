@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: FordefiSigner • signTypedData
-  - - meta
-    - name: description
-      content: Overview of the signTypedData method on FordefiSigner
-  - - meta
-    - property: og:description
-      content: Overview of the signTypedData method on FordefiSigner
+title: FordefiSigner • signTypedData
+description: Overview of the signTypedData method on FordefiSigner
 ---
+
 
 # signTypedData
 

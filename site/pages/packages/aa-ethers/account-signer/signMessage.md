@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: AccountSigner • signMessage
-  - - meta
-    - name: description
-      content: Overview of the signMessage method on AccountSigner in aa-ethers
-  - - meta
-    - property: og:description
-      content: Overview of the signMessage method on AccountSigner in aa-ethers
+title: AccountSigner • signMessage
+description: Overview of the signMessage method on AccountSigner in aa-ethers
 ---
+
 
 # signMessage
 

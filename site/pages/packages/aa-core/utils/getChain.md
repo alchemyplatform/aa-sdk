@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: getChain
-  - - meta
-    - name: description
-      content: Overview of the getChain method in aa-core utils
-  - - meta
-    - property: og:description
-      content: Overview of the getChain method in aa-core utils
+title: getChain
+description: Overview of the getChain method in aa-core utils
 ---
+
 
 # getChain
 

@@ -1,22 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Alchemy Signer • Overview
-  - - meta
-    - name: description
-      content: Learn how to get started with the Alchemy Signer
-  - - meta
-    - property: og:description
-      content: Learn how to get started with the Alchemy Signer
-  - - meta
-    - name: twitter:title
-      content: Alchemy Signer
-  - - meta
-    - name: twitter:description
-      content: Learn how to get started with the Alchemy Signer
+title: Alchemy Signer • Overview
+description: Learn how to get started with the Alchemy Signer
 ---
+
 
 # AlchemySigner
 

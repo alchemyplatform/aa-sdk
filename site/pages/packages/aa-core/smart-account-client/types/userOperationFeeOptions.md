@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: UserOperationFeeOptions
-  - - meta
-    - name: description
-      content: Overview of the UserOperationFeeOptions type in aa-core types
-  - - meta
-    - property: og:description
-      content: Overview of the UserOperationFeeOptions type in aa-core types
+title: UserOperationFeeOptions
+description: Overview of the UserOperationFeeOptions type in aa-core types
 ---
+
 
 # UserOperationFeeOptions
 

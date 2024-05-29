@@ -1,18 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: UserOperationOverrides
-  - - meta
-    - name: description
-      content: Overview of the UserOperationOverrides type in aa-core types
-  - - meta
-    - property: og:description
-      content: Overview of the UserOperationOverrides type in aa-core types
-next:
-  text: SmartContractAccount
+title: UserOperationOverrides
+description: Overview of the UserOperationOverrides type in aa-core types
 ---
+
 
 # UserOperationOverrides
 

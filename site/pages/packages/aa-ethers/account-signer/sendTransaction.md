@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: AccountSigner • sendTransaction
-  - - meta
-    - name: description
-      content: Overview of the sendTransaction method on AccountSigner in aa-ethers
-  - - meta
-    - property: og:description
-      content: Overview of the sendTransaction method on AccountSigner in aa-ethers
+title: AccountSigner • sendTransaction
+description: Overview of the sendTransaction method on AccountSigner in aa-ethers
 ---
+
 
 # sendTransaction
 

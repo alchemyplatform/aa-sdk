@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: LightSmartContractAccount • encodeTransferOwnership
-  - - meta
-    - name: description
-      content: Overview of the encodeTransferOwnership method on LightSmartContractAccount
-  - - meta
-    - property: og:description
-      content: Overview of the encodeTransferOwnership method on LightSmartContractAccount
+title: LightSmartContractAccount • encodeTransferOwnership
+description: Overview of the encodeTransferOwnership method on LightSmartContractAccount
 ---
+
 
 # encodeTransferOwnership
 

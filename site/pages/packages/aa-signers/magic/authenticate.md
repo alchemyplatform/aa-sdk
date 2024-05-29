@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: MagicSigner • authenticate
-  - - meta
-    - name: description
-      content: Overview of the authenticate method on MagicSigner
-  - - meta
-    - property: og:description
-      content: Overview of the authenticate method on MagicSigner
+title: MagicSigner • authenticate
+description: Overview of the authenticate method on MagicSigner
 ---
+
 
 # authenticate
 

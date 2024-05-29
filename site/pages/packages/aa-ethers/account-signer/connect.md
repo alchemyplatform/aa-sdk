@@ -1,18 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: AccountSigner • connect
-  - - meta
-    - name: description
-      content: Overview of the connect method on AccountSigner in aa-ethers
-  - - meta
-    - property: og:description
-      content: Overview of the connect method on AccountSigner in aa-ethers
-next:
-  text: Utils
+title: AccountSigner • connect
+description: Overview of the connect method on AccountSigner in aa-ethers
 ---
+
 
 # connect
 

@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: EthersProviderAdapter • getBundlerClient
-  - - meta
-    - name: description
-      content: Overview of the getBundlerClient method on EthersProviderAdapter in aa-ethers
-  - - meta
-    - property: og:description
-      content: Overview of the getBundlerClient method on EthersProviderAdapter in aa-ethers
+title: EthersProviderAdapter • getBundlerClient
+description: Overview of the getBundlerClient method on EthersProviderAdapter in aa-ethers
 ---
+
 
 # getBundlerClient
 

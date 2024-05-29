@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: aa-accounts • LightAccountClient
-  - - meta
-    - name: description
-      content: Overview of the LightAccountClient in aa-accounts
-  - - meta
-    - property: og:description
-      content: Overview of the LightAccountClient in aa-accounts
+title: aa-accounts • LightAccountClient
+description: Overview of the LightAccountClient in aa-accounts
 ---
+
 
 # createLightAccountClient
 

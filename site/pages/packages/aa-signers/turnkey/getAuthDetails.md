@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: TurnkeySigner • getAuthDetails
-  - - meta
-    - name: description
-      content: Overview of the getAuthDetails method on TurnkeySigner
-  - - meta
-    - property: og:description
-      content: Overview of the getAuthDetails method on TurnkeySigner
+title: TurnkeySigner • getAuthDetails
+description: Overview of the getAuthDetails method on TurnkeySigner
 ---
+
 
 # getAuthDetails
 

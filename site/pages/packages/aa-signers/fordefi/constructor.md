@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: FordefiSigner • constructor
-  - - meta
-    - name: description
-      content: Overview of the constructor method on FordefiSigner in aa-signers
-  - - meta
-    - property: og:description
-      content: Overview of the constructor method on FordefiSigner in aa-signers
+title: FordefiSigner • constructor
+description: Overview of the constructor method on FordefiSigner in aa-signers
 ---
+
 
 # constructor
 

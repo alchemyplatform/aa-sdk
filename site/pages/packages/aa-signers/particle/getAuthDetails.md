@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: ParticleSigner • getAuthDetails
-  - - meta
-    - name: description
-      content: Overview of the getAuthDetails method on ParticleSigner
-  - - meta
-    - property: og:description
-      content: Overview of the getAuthDetails method on ParticleSigner
+title: ParticleSigner • getAuthDetails
+description: Overview of the getAuthDetails method on ParticleSigner
 ---
+
 
 # getAuthDetails
 

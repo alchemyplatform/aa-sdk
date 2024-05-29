@@ -1,18 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Contributing to aa-accounts
-  - - meta
-    - name: description
-      content: How to add your own Account implementation to aa-accounts
-  - - meta
-    - property: og:description
-      content: How to add your own Account implementation to aa-accounts
-next:
-  text: aa-signers
+title: Contributing to aa-accounts
+description: How to add your own Account implementation to aa-accounts
 ---
+
 
 # Contributing to `aa-accounts`
 

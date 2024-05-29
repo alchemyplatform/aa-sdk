@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: TurnkeySigner • getAddress
-  - - meta
-    - name: description
-      content: Overview of the getAddress method on TurnkeySigner
-  - - meta
-    - property: og:description
-      content: Overview of the getAddress method on TurnkeySigner
+title: TurnkeySigner • getAddress
+description: Overview of the getAddress method on TurnkeySigner
 ---
+
 
 # getAddress
 

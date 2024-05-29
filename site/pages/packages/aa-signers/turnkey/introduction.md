@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: TurnkeySigner
-  - - meta
-    - name: description
-      content: Overview of the TurnkeySigner class in aa-signers
-  - - meta
-    - property: og:description
-      content: Overview of the TurnkeySigner class in aa-signers
+title: TurnkeySigner
+description: Overview of the TurnkeySigner class in aa-signers
 ---
+
 
 # Turnkey Signer
 

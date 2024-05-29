@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: LightSmartContractAccount • getOwnerAddress
-  - - meta
-    - name: description
-      content: Overview of the getOwnerAddress method on LightSmartContractAccount
-  - - meta
-    - property: og:description
-      content: Overview of the getOwnerAddress method on LightSmartContractAccount
+title: LightSmartContractAccount • getOwnerAddress
+description: Overview of the getOwnerAddress method on LightSmartContractAccount
 ---
+
 
 # getOwnerAddress
 

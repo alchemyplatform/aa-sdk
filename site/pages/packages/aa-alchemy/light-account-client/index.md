@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: createLightAccountAlchemyClient
-  - - meta
-    - name: description
-      content: Overview of the createLightAccountAlchemyClient factory in aa-alchemy
-  - - meta
-    - property: og:description
-      content: Overview of the createLightAccountAlchemyClient factory in aa-alchemy
+title: createLightAccountAlchemyClient
+description: Overview of the createLightAccountAlchemyClient factory in aa-alchemy
 ---
+
 
 # createLightAccountAlchemyClient
 

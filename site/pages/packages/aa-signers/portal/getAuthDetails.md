@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: PortalSigner • getAuthDetails
-  - - meta
-    - name: description
-      content: Overview of the getAuthDetails method on PortalSigner
-  - - meta
-    - property: og:description
-      content: Overview of the getAuthDetails method on PortalSigner
+title: PortalSigner • getAuthDetails
+description: Overview of the getAuthDetails method on PortalSigner
 ---
+
 
 # getAuthDetails
 

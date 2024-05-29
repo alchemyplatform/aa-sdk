@@ -1,22 +1,9 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Contributing Your Account
-  - - meta
-    - name: description
-      content: Follow this guide to contribute a new smart account to Account Kit documentation.
-  - - meta
-    - property: og:description
-      content: Follow this guide to contribute a new smart account to Account Kit documentation.
-  - - meta
-    - name: twitter:title
-      content: Contributing Your Account
-  - - meta
-    - name: twitter:description
-      content: Follow this guide to contribute a new smart account to Account Kit documentation.
+title: Contributing Your Account
+description: Follow this guide to contribute a new smart account to Account Kit
+  documentation.
 ---
+
 
 # Contribute your account
 

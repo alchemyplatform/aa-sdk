@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: ParticleSigner • authenticate
-  - - meta
-    - name: description
-      content: Overview of the authenticate method on ParticleSigner
-  - - meta
-    - property: og:description
-      content: Overview of the authenticate method on ParticleSigner
+title: ParticleSigner • authenticate
+description: Overview of the authenticate method on ParticleSigner
 ---
+
 
 # authenticate
 

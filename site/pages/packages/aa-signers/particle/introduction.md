@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: ParticleSigner
-  - - meta
-    - name: description
-      content: Overview of the ParticleSigner class in aa-signers
-  - - meta
-    - property: og:description
-      content: Overview of the ParticleSigner class in aa-signers
+title: ParticleSigner
+description: Overview of the ParticleSigner class in aa-signers
 ---
+
 
 # Particle Signer
 

@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: ArcanaAuthSigner • getAddress
-  - - meta
-    - name: description
-      content: Overview of the getAddress method on ArcanaAuthSigner
-  - - meta
-    - property: og:description
-      content: Overview of the getAddress method on ArcanaAuthSigner
+title: ArcanaAuthSigner • getAddress
+description: Overview of the getAddress method on ArcanaAuthSigner
 ---
+
 
 # getAddress
 

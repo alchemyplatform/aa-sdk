@@ -1,16 +1,9 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: getDefaultLightAccountFactoryAddress
-  - - meta
-    - name: description
-      content: Overview of the getDefaultLightAccountFactoryAddress method in aa-accounts utils
-  - - meta
-    - property: og:description
-      content: Overview of the getDefaultLightAccountFactoryAddress method in aa-accounts utils
+title: getDefaultLightAccountFactoryAddress
+description: Overview of the getDefaultLightAccountFactoryAddress method in
+  aa-accounts utils
 ---
+
 
 # getDefaultLightAccountFactoryAddress
 

@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: MagicSigner • getAddress
-  - - meta
-    - name: description
-      content: Overview of the getAddress method on MagicSigner
-  - - meta
-    - property: og:description
-      content: Overview of the getAddress method on MagicSigner
+title: MagicSigner • getAddress
+description: Overview of the getAddress method on MagicSigner
 ---
+
 
 # getAddress
 

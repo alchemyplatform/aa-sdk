@@ -1,22 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: 3rd Paymasters
-  - - meta
-    - name: description
-      content: Learn how to use a 3rd party Paymaster with Account Kit
-  - - meta
-    - property: og:description
-      content: Learn how to use a 3rd party Paymaster with Account Kit
-  - - meta
-    - name: twitter:title
-      content: 3rd Paymasters
-  - - meta
-    - name: twitter:description
-      content: Learn how to use a 3rd party Paymaster with Account Kit
+title: 3rd Paymasters
+description: Learn how to use a 3rd party Paymaster with Account Kit
 ---
+
 
 # Using a third-party paymaster
 

@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: CapsuleSigner • getAuthDetails
-  - - meta
-    - name: description
-      content: Overview of the getAuthDetails method on CapsuleSigner
-  - - meta
-    - property: og:description
-      content: Overview of the getAuthDetails method on CapsuleSigner
+title: CapsuleSigner • getAuthDetails
+description: Overview of the getAuthDetails method on CapsuleSigner
 ---
+
 
 # getAuthDetails
 

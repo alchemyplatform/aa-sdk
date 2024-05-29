@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: FordefiSigner
-  - - meta
-    - name: description
-      content: Overview of the FordefiSigner class in aa-signers
-  - - meta
-    - property: og:description
-      content: Overview of the FordefiSigner class in aa-signers
+title: FordefiSigner
+description: Overview of the FordefiSigner class in aa-signers
 ---
+
 
 # Fordefi Signer
 

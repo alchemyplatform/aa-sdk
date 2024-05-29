@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: PassportSigner • getAuthDetails
-  - - meta
-    - name: description
-      content: Overview of the getAuthDetails method on PassportSigner
-  - - meta
-    - property: og:description
-      content: Overview of the getAuthDetails method on PassportSigner
+title: PassportSigner • getAuthDetails
+description: Overview of the getAuthDetails method on PassportSigner
 ---
+
 
 # getAuthDetails
 

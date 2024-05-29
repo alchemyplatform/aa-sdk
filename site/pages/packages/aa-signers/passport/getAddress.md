@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: PassportSigner • getAddress
-  - - meta
-    - name: description
-      content: Overview of the getAddress method on PassportSigner
-  - - meta
-    - property: og:description
-      content: Overview of the getAddress method on PassportSigner
+title: PassportSigner • getAddress
+description: Overview of the getAddress method on PassportSigner
 ---
+
 
 # getAddress
 

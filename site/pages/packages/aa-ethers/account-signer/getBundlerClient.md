@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: AccountSigner • getBundlerClient
-  - - meta
-    - name: description
-      content: Overview of the getBundlerClient method on AccountSigner in aa-ethers
-  - - meta
-    - property: og:description
-      content: Overview of the getBundlerClient method on AccountSigner in aa-ethers
+title: AccountSigner • getBundlerClient
+description: Overview of the getBundlerClient method on AccountSigner in aa-ethers
 ---
+
 
 # getBundlerClient
 

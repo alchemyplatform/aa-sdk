@@ -1,22 +1,10 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: How to sponsor gas for a UserOperation
-  - - meta
-    - name: description
-      content: Follow this guide to sponsor gas for UserOperations from any ERC-4337 smart account. Account Kit is a vertically integrated stack for building apps that support ERC-4337.
-  - - meta
-    - property: og:description
-      content: Follow this guide to sponsor gas for UserOperations from any ERC-4337 smart account. Account Kit is a vertically integrated stack for building apps that support ERC-4337.
-  - - meta
-    - name: twitter:title
-      content: How to sponsor gas for a UserOperation
-  - - meta
-    - name: twitter:description
-      content: Follow this guide to sponsor gas for UserOperations from any ERC-4337 smart account. Account Kit is a vertically integrated stack for building apps that support ERC-4337.
+title: How to sponsor gas for a UserOperation
+description: Follow this guide to sponsor gas for UserOperations from any
+  ERC-4337 smart account. Account Kit is a vertically integrated stack for
+  building apps that support ERC-4337.
 ---
+
 
 # How to sponsor gas for a UserOperation
 

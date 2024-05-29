@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: FireblocksSigner • signTypedData
-  - - meta
-    - name: description
-      content: Overview of the signTypedData method on FireblocksSigner
-  - - meta
-    - property: og:description
-      content: Overview of the signTypedData method on FireblocksSigner
+title: FireblocksSigner • signTypedData
+description: Overview of the signTypedData method on FireblocksSigner
 ---
+
 
 # signTypedData
 

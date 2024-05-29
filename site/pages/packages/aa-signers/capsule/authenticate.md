@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: CapsuleSigner • authenticate
-  - - meta
-    - name: description
-      content: Overview of the authenticate method on CapsuleSigner
-  - - meta
-    - property: og:description
-      content: Overview of the authenticate method on CapsuleSigner
+title: CapsuleSigner • authenticate
+description: Overview of the authenticate method on CapsuleSigner
 ---
+
 
 # authenticate
 

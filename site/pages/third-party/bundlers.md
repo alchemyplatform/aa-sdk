@@ -1,22 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: 3rd Party Bundlers
-  - - meta
-    - name: description
-      content: Learn how to use a different RPC provider with Account Kit
-  - - meta
-    - property: og:description
-      content: Learn how to use a different RPC provider with Account Kit
-  - - meta
-    - name: twitter:title
-      content: 3rd Party Bundlers
-  - - meta
-    - name: twitter:description
-      content: Learn how to use a different RPC provider with Account Kit
+title: 3rd Party Bundlers
+description: Learn how to use a different RPC provider with Account Kit
 ---
+
 
 # Using a different RPC Provider
 

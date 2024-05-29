@@ -1,22 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Alchemy Signer • getAuthDetails
-  - - meta
-    - name: description
-      content: Learn how to use the AlchemySigner.getAuthDetails method
-  - - meta
-    - property: og:description
-      content: Learn how to use the AlchemySigner.getAuthDetails method
-  - - meta
-    - name: twitter:title
-      content: Alchemy Signer • getAuthDetails
-  - - meta
-    - name: twitter:description
-      content: Learn how to use the AlchemySigner.getAuthDetails method
+title: Alchemy Signer • getAuthDetails
+description: Learn how to use the AlchemySigner.getAuthDetails method
 ---
+
 
 # getAuthDetails
 

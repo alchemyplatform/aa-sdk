@@ -1,22 +1,10 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Packages Overview
-  - - meta
-    - name: description
-      content: Explore the benefits and tradeoffs of four different packages that can be used with Account Kit namely aa-core, aa-alchemy, aa-accounts, aa-signers, and aa-ethers.
-  - - meta
-    - property: og:description
-      content: Explore the benefits and tradeoffs of four different packages that can be used with Account Kit namely aa-core, aa-alchemy, aa-accounts, aa-signers, and aa-ethers.
-  - - meta
-    - name: twitter:title
-      content: Packages Overview
-  - - meta
-    - name: twitter:description
-      content: Explore the benefits and tradeoffs of four different packages that can be used with Account Kit namely aa-core, aa-alchemy, aa-accounts, aa-signers, and aa-ethers.
+title: Packages Overview
+description: Explore the benefits and tradeoffs of four different packages that
+  can be used with Account Kit namely aa-core, aa-alchemy, aa-accounts,
+  aa-signers, and aa-ethers.
 ---
+
 
 # Package overview
 

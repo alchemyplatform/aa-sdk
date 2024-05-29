@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: getDefaultEntryPointAddress
-  - - meta
-    - name: description
-      content: Overview of the getDefaultEntryPointAddress method in aa-core utils
-  - - meta
-    - property: og:description
-      content: Overview of the getDefaultEntryPointAddress method in aa-core utils
+title: getDefaultEntryPointAddress
+description: Overview of the getDefaultEntryPointAddress method in aa-core utils
 ---
+
 
 # getDefaultEntryPointAddress
 

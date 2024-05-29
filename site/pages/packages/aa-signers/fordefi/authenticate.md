@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: FordefiSigner • authenticate
-  - - meta
-    - name: description
-      content: Overview of the authenticate method on FordefiSigner
-  - - meta
-    - property: og:description
-      content: Overview of the authenticate method on FordefiSigner
+title: FordefiSigner • authenticate
+description: Overview of the authenticate method on FordefiSigner
 ---
+
 
 # authenticate
 

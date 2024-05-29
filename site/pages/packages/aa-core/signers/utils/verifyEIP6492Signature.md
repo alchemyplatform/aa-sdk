@@ -1,18 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: verifyEIP6492Signature
-  - - meta
-    - name: description
-      content: Description of the verifyEIP6492Signature utility method
-  - - meta
-    - property: og:description
-      content: Description of the verifyEIP6492Signature utility method
-next:
-  text: Public ERC-4337 Client
+title: verifyEIP6492Signature
+description: Description of the verifyEIP6492Signature utility method
 ---
+
 
 # verifyEIP6492Signature
 

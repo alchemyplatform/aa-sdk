@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Web3AuthSigner • getAddress
-  - - meta
-    - name: description
-      content: Overview of the getAddress method on Web3AuthSigner
-  - - meta
-    - property: og:description
-      content: Overview of the getAddress method on Web3AuthSigner
+title: Web3AuthSigner • getAddress
+description: Overview of the getAddress method on Web3AuthSigner
 ---
+
 
 # getAddress
 

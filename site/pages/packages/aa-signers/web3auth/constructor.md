@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Web3AuthSigner • constructor
-  - - meta
-    - name: description
-      content: Overview of the constructor method on Web3AuthSigner in aa-signers
-  - - meta
-    - property: og:description
-      content: Overview of the constructor method on Web3AuthSigner in aa-signers
+title: Web3AuthSigner • constructor
+description: Overview of the constructor method on Web3AuthSigner in aa-signers
 ---
+
 
 # constructor
 

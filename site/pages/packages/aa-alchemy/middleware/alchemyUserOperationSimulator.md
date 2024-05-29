@@ -1,18 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Middleware • alchemyUserOperationSimulator
-  - - meta
-    - name: description
-      content: Overview of the alchemyUserOperationSimulator method in aa-alchemy
-  - - meta
-    - property: og:description
-      content: Overview of the alchemyUserOperationSimulator method in aa-alchemy
-next:
-  text: Utils
+title: Middleware • alchemyUserOperationSimulator
+description: Overview of the alchemyUserOperationSimulator method in aa-alchemy
 ---
+
 
 # alchemyUserOperationSimulator
 

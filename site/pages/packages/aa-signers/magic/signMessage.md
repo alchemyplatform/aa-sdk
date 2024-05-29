@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: MagicSigner • signMessage
-  - - meta
-    - name: description
-      content: Overview of the signMessage method on MagicSigner
-  - - meta
-    - property: og:description
-      content: Overview of the signMessage method on MagicSigner
+title: MagicSigner • signMessage
+description: Overview of the signMessage method on MagicSigner
 ---
+
 
 # signMessage
 

@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: TurnkeySigner • authenticate
-  - - meta
-    - name: description
-      content: Overview of the authenticate method on TurnkeySigner
-  - - meta
-    - property: og:description
-      content: Overview of the authenticate method on TurnkeySigner
+title: TurnkeySigner • authenticate
+description: Overview of the authenticate method on TurnkeySigner
 ---
+
 
 # authenticate
 

@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: LightAccount
-  - - meta
-    - name: description
-      content: Overview of the LightAccount class in aa-accounts
-  - - meta
-    - property: og:description
-      content: Overview of the LightAccount class in aa-accounts
+title: LightAccount
+description: Overview of the LightAccount class in aa-accounts
 ---
+
 
 # Light Account
 

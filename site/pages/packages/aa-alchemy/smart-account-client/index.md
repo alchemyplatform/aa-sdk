@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Alchemy Smart Account Client
-  - - meta
-    - name: description
-      content: Overview of the Alchemy Smart Account Client in aa-alchemy
-  - - meta
-    - property: og:description
-      content: Overview of the Alchemy Smart Account Client in aa-alchemy
+title: Alchemy Smart Account Client
+description: Overview of the Alchemy Smart Account Client in aa-alchemy
 ---
+
 
 # Alchemy Smart Account Client
 

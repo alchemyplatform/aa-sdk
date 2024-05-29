@@ -1,22 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Alchemy Signer • exportWallet
-  - - meta
-    - name: description
-      content: Learn how to use the AlchemySigner.exportWallet method
-  - - meta
-    - property: og:description
-      content: Learn how to use the AlchemySigner.exportWallet method
-  - - meta
-    - name: twitter:title
-      content: Alchemy Signer • exportWallet
-  - - meta
-    - name: twitter:description
-      content: Learn how to use the AlchemySigner.exportWallet method
+title: Alchemy Signer • exportWallet
+description: Learn how to use the AlchemySigner.exportWallet method
 ---
+
 
 # exportWallet
 

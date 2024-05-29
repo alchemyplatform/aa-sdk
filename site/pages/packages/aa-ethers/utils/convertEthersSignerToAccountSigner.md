@@ -1,18 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Utils • convertEthersSignerToAccountSigner
-  - - meta
-    - name: description
-      content: Overview of the convertEthersSignerToAccountSigner method in aa-ethers
-  - - meta
-    - property: og:description
-      content: Overview of the convertEthersSignerToAccountSigner method in aa-ethers
-next:
-  text: Glossary
+title: Utils • convertEthersSignerToAccountSigner
+description: Overview of the convertEthersSignerToAccountSigner method in aa-ethers
 ---
+
 
 # Utils
 

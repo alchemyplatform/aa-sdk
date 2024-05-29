@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: ParticleSigner • signMessage
-  - - meta
-    - name: description
-      content: Overview of the signMessage method on ParticleSigner
-  - - meta
-    - property: og:description
-      content: Overview of the signMessage method on ParticleSigner
+title: ParticleSigner • signMessage
+description: Overview of the signMessage method on ParticleSigner
 ---
+
 
 # signMessage
 

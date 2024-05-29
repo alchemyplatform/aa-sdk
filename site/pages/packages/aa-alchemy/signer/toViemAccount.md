@@ -1,22 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Alchemy Signer • toViemAccount
-  - - meta
-    - name: description
-      content: Learn how to use the AlchemySigner.toViemAccount method
-  - - meta
-    - property: og:description
-      content: Learn how to use the AlchemySigner.toViemAccount method
-  - - meta
-    - name: twitter:title
-      content: Alchemy Signer • toViemAccount
-  - - meta
-    - name: twitter:description
-      content: Learn how to use the AlchemySigner.toViemAccount method
+title: Alchemy Signer • toViemAccount
+description: Learn how to use the AlchemySigner.toViemAccount method
 ---
+
 
 # toViemAccount
 

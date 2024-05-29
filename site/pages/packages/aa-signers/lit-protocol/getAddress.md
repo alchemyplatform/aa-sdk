@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: LitSigner • getAddress
-  - - meta
-    - name: description
-      content: Overview of the getAddress method on LitSigner
-  - - meta
-    - property: og:description
-      content: Overview of the getAddress method on LitSigner
+title: LitSigner • getAddress
+description: Overview of the getAddress method on LitSigner
 ---
+
 
 # getAddress
 

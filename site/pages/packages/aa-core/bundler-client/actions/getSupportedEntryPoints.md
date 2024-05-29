@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: getSupportedEntryPoints
-  - - meta
-    - name: description
-      content: Overview of the getSupportedEntryPoints action available on the BundlerClient
-  - - meta
-    - property: og:description
-      content: Overview of the getSupportedEntryPoints action available on the BundlerClient
+title: getSupportedEntryPoints
+description: Overview of the getSupportedEntryPoints action available on the BundlerClient
 ---
+
 
 # getSupportedEntryPoints
 

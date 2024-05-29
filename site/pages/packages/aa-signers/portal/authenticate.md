@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: PortalSigner • authenticate
-  - - meta
-    - name: description
-      content: Overview of the authenticate method on PortalSigner
-  - - meta
-    - property: og:description
-      content: Overview of the authenticate method on PortalSigner
+title: PortalSigner • authenticate
+description: Overview of the authenticate method on PortalSigner
 ---
+
 
 # authenticate
 

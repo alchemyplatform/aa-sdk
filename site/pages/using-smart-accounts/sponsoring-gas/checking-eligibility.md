@@ -1,22 +1,10 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: How to handle User Operations that are not eligible for gas sponsorship
-  - - meta
-    - name: description
-      content: Follow this guide to handle User Operations that are not eligible for gas sponsorship. Account Kit is a vertically integrated stack for building apps that support ERC-4337.
-  - - meta
-    - property: og:description
-      content: Follow this guide to handle User Operations that are not eligible for gas sponsorship. Account Kit is a vertically integrated stack for building apps that support ERC-4337.
-  - - meta
-    - name: twitter:title
-      content: How to handle User Operations that are not eligible for gas sponsorship
-  - - meta
-    - name: twitter:description
-      content: Follow this guide to handle User Operations that are not eligible for gas sponsorship. Account Kit is a vertically integrated stack for building apps that support ERC-4337.
+title: How to handle User Operations that are not eligible for gas sponsorship
+description: Follow this guide to handle User Operations that are not eligible
+  for gas sponsorship. Account Kit is a vertically integrated stack for building
+  apps that support ERC-4337.
 ---
+
 
 # How to handle User Operations that are not eligible for gas sponsorship
 

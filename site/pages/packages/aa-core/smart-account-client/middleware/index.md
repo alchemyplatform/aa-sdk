@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: SmartAccountClient Middleware
-  - - meta
-    - name: description
-      content: Overview of ClientMiddleware exported by aa-core
-  - - meta
-    - property: og:description
-      content: Overview of ClientMiddleware exported by aa-core
+title: SmartAccountClient Middleware
+description: Overview of ClientMiddleware exported by aa-core
 ---
+
 
 # ClientMiddleware
 

@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: ArcanaAuthSigner
-  - - meta
-    - name: description
-      content: Overview of the ArcanaAuthSigner class in aa-signers
-  - - meta
-    - property: og:description
-      content: Overview of the ArcanaAuthSigner class in aa-signers
+title: ArcanaAuthSigner
+description: Overview of the ArcanaAuthSigner class in aa-signers
 ---
+
 
 # Arcana Auth Signer
 

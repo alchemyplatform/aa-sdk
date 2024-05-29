@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: asyncPipe
-  - - meta
-    - name: description
-      content: Overview of the asyncPipe method in aa-core utils
-  - - meta
-    - property: og:description
-      content: Overview of the asyncPipe method in aa-core utils
+title: asyncPipe
+description: Overview of the asyncPipe method in aa-core utils
 ---
+
 
 # `asyncPipe<T>`
 

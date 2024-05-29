@@ -1,22 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Session Key Supported Permissions
-  - - meta
-    - name: description
-      content: All permissions the Alchemy Session Key Plugin supports.
-  - - meta
-    - property: og:description
-      content:
-  - - meta
-    - name: twitter:title
-      content: Session Key Supported Permissions
-  - - meta
-    - name: twitter:description
-      content: All permissions the Alchemy Session Key Plugin supports.
+title: Session Key Supported Permissions
+description: All permissions the Alchemy Session Key Plugin supports.
 ---
+
 
 # Supported Permissions
 

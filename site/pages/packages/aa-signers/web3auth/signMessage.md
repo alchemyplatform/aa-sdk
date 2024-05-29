@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Web3AuthSigner • signMessage
-  - - meta
-    - name: description
-      content: Overview of the signMessage method on Web3AuthSigner
-  - - meta
-    - property: og:description
-      content: Overview of the signMessage method on Web3AuthSigner
+title: Web3AuthSigner • signMessage
+description: Overview of the signMessage method on Web3AuthSigner
 ---
+
 
 # signMessage
 

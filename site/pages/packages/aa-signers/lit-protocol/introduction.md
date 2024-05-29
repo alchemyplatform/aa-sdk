@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: LitSigner
-  - - meta
-    - name: description
-      content: Overview of the LitSigner class in aa-signers
-  - - meta
-    - property: og:description
-      content: Overview of the LitSigner class in aa-signers
+title: LitSigner
+description: Overview of the LitSigner class in aa-signers
 ---
+
 
 # Lit Signer
 

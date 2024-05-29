@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: PortalSigner • constructor
-  - - meta
-    - name: description
-      content: Overview of the constructor method on PortalSigner in aa-signers
-  - - meta
-    - property: og:description
-      content: Overview of the constructor method on PortalSigner in aa-signers
+title: PortalSigner • constructor
+description: Overview of the constructor method on PortalSigner in aa-signers
 ---
+
 
 # constructor
 

@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: ArcanaAuthSigner • authenticate
-  - - meta
-    - name: description
-      content: Overview of the authenticate method on ArcanaAuthSigner
-  - - meta
-    - property: og:description
-      content: Overview of the authenticate method on ArcanaAuthSigner
+title: ArcanaAuthSigner • authenticate
+description: Overview of the authenticate method on ArcanaAuthSigner
 ---
+
 
 # authenticate
 

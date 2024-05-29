@@ -1,22 +1,11 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Extending Smart Accounts • Installing & uninstalling plugins on a Modular Account
-  - - meta
-    - name: description
-      content: Follow this guide to install and uninstall plugins on a Modular Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - property: og:description
-      content: Follow this guide to install and uninstall plugins on a Modular Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - name: twitter:title
-      content: Extending Smart Accounts • Installing & uninstalling plugins on a Modular Account
-  - - meta
-    - name: twitter:description
-      content: Follow this guide to install and uninstall plugins on a Modular Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
+title: Extending Smart Accounts • Installing & uninstalling plugins on a Modular
+  Account
+description: Follow this guide to install and uninstall plugins on a Modular
+  Account with Account Kit, a vertically integrated stack for building apps that
+  support ERC-4337 and ERC-6900.
 ---
+
 
 # How to install and uninstall plugins on a Modular Account
 

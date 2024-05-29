@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: ArcanaAuthSigner • signTypedData
-  - - meta
-    - name: description
-      content: Overview of the signTypedData method on ArcanaAuthSigner
-  - - meta
-    - property: og:description
-      content: Overview of the signTypedData method on ArcanaAuthSigner
+title: ArcanaAuthSigner • signTypedData
+description: Overview of the signTypedData method on ArcanaAuthSigner
 ---
+
 
 # signTypedData
 

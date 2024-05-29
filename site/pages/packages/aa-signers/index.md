@@ -1,21 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: aa-signers
-  - - meta
-    - name: description
-      content: aa-signers landing page and getting started guide
-  - - meta
-    - property: og:description
-      content: aa-signers landing page and getting started guide
-prev:
-  text: aa-accounts
-  link: /packages/aa-accounts/index
-next:
-  text: Magic
+title: aa-signers
+description: aa-signers landing page and getting started guide
 ---
+
 
 # `@alchemy/aa-signers`
 

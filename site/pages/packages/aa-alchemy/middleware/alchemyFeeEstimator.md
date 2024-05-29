@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Middleware • alchemyFeeEstimator
-  - - meta
-    - name: description
-      content: Overview of the alchemyFeeEstimator method in aa-alchemy
-  - - meta
-    - property: og:description
-      content: Overview of the alchemyFeeEstimator method in aa-alchemy
+title: Middleware • alchemyFeeEstimator
+description: Overview of the alchemyFeeEstimator method in aa-alchemy
 ---
+
 
 # alchemyFeeEstimator
 

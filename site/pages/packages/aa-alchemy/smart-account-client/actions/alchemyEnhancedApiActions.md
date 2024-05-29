@@ -1,18 +1,9 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: alchemyEnhancedApiActions
-  - - meta
-    - name: description
-      content: Overview of the alchemyEnhancedApiActions method on Alchemy Smart Account Client in aa-alchemy
-  - - meta
-    - property: og:description
-      content: Overview of the alchemyEnhancedApiActions method on Alchemy Smart Account Client in aa-alchemy
-next:
-  text: Middleware
+title: alchemyEnhancedApiActions
+description: Overview of the alchemyEnhancedApiActions method on Alchemy Smart
+  Account Client in aa-alchemy
 ---
+
 
 # alchemyEnhancedApiActions
 

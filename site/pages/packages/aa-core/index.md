@@ -1,18 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: aa-core
-  - - meta
-    - name: description
-      content: Introduction to the aa-core package
-  - - meta
-    - property: og:description
-      content: Introduction to the aa-core package
-next:
-  text: SmartAccountClient
+title: aa-core
+description: Introduction to the aa-core package
 ---
+
 
 # `@alchemy/aa-core`
 

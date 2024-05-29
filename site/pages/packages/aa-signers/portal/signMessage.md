@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: PortalSigner • signMessage
-  - - meta
-    - name: description
-      content: Overview of the signMessage method on PortalSigner
-  - - meta
-    - property: og:description
-      content: Overview of the signMessage method on PortalSigner
+title: PortalSigner • signMessage
+description: Overview of the signMessage method on PortalSigner
 ---
+
 
 # signMessage
 

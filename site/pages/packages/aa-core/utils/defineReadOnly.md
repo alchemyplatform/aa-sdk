@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: defineReadOnly
-  - - meta
-    - name: description
-      content: Overview of the defineReadOnly method in aa-core utils
-  - - meta
-    - property: og:description
-      content: Overview of the defineReadOnly method in aa-core utils
+title: defineReadOnly
+description: Overview of the defineReadOnly method in aa-core utils
 ---
+
 
 # `defineReadOnly<T, K extends keyof T>`
 

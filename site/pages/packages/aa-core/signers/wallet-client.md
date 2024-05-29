@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: WalletClientSigner
-  - - meta
-    - name: description
-      content: Overview of the WalletClientSigner
-  - - meta
-    - property: og:description
-      content: Overview of the WalletClientSigner
+title: WalletClientSigner
+description: Overview of the WalletClientSigner
 ---
+
 
 # WalletClientSigner
 

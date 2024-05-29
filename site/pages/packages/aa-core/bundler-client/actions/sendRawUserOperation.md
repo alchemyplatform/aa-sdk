@@ -1,18 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: sendRawUserOperation
-  - - meta
-    - name: description
-      content: Overview of the sendRawUserOperation action available on the BundlerClient
-  - - meta
-    - property: og:description
-      content: Overview of the sendRawUserOperation action available on the BundlerClient
-prev:
-  text: Public ERC-4337 Client
+title: sendRawUserOperation
+description: Overview of the sendRawUserOperation action available on the BundlerClient
 ---
+
 
 # sendRawUserOperation
 

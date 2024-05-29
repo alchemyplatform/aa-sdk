@@ -1,16 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: EthersProviderAdapter
-  - - meta
-    - name: description
-      content: Overview of the EthersProviderAdapter class in aa-ethers
-  - - meta
-    - property: og:description
-      content: Overview of the EthersProviderAdapter class in aa-ethers
+title: EthersProviderAdapter
+description: Overview of the EthersProviderAdapter class in aa-ethers
 ---
+
 
 # EthersProviderAdapter
 

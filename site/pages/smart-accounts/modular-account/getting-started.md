@@ -1,22 +1,8 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Modular Account • Getting started
-  - - meta
-    - name: description
-      content: Getting started with Modular Account in Account Kit
-  - - meta
-    - property: og:description
-      content: Getting started with Modular Account in Account Kit
-  - - meta
-    - name: twitter:title
-      content: Modular Account • Getting started
-  - - meta
-    - name: twitter:description
-      content: Getting started with Modular Account in Account Kit
+title: Modular Account • Getting started
+description: Getting started with Modular Account in Account Kit
 ---
+
 
 # Getting started with Modular Account
 
