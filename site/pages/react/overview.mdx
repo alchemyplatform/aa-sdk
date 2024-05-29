@@ -26,17 +26,17 @@ If you are using Smart Contract Accounts and building a React application, you c
 
 To use the React Hooks, you need to install the `@alchemy/aa-alchemy` and `@tanstack/react-query` packages. We use [`react-query`](https://tanstack.com/query/latest/docs/framework/react/overview) to manage async data fetching and mutations in our hooks.
 
-::: code-group
+:::code-group
 
-```bash[npm]
+```bash [npm]
 npm install @alchemy/aa-alchemy @tanstack/react-query
 ```
 
-```bash[yarn]
+```bash [yarn]
 yarn add @alchemy/aa-alchemy @tanstack/react-query
 ```
 
-```bash[pnpm]
+```bash [pnpm]
 pnpm add @alchemy/aa-alchemy @tanstack/react-query
 ```
 
@@ -46,19 +46,24 @@ pnpm add @alchemy/aa-alchemy @tanstack/react-query
 
 In order to get started, you'll first have to define a config object that can be used to create an `AlchemyAccountContext` that will be used by all of the hooks exported by the library.
 
-::: code-group
-<<< @/snippets/react/config.ts
-:::
+```ts [config.ts]
+// [!include ~/snippets/react/config.ts]
+```
 
 ## Wrap app in Context Provider
 
 Next, you'll need to add the `AlchemyAccountProvider` to your application and pass in the config object and an instance of the `react-query` `QueryClient`.
 
-::: code-group
+:::code-group
 
-<<< @/snippets/react/app.tsx
+```tsx [app.tsx]
+// [!include ~/snippets/react/app.tsx]
+```
 
-<<< @/snippets/react/config.ts
+```ts [config.ts]
+// [!include ~/snippets/react/config.ts]
+```
+
 :::
 
 ## Use the hooks

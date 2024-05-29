@@ -22,7 +22,7 @@ head:
 
 The `useSendUserOperation` hook enables sending UserOperations on behalf of the user's Embedded Account.
 
-::: warning
+:::warning
 This requires your user to be logged in. See [`useAuthenticate`](/react/useAuthenticate) for more details.
 :::
 
@@ -36,13 +36,17 @@ import { useSendUserOperation } from "@alchemy/aa-alchemy/react";
 
 ### Without awaiting the transaction hash
 
-<<< @/snippets/react/useSendUserOperation.tsx
+```tsx [useSendUserOperation.tsx]
+// [!include ~/snippets/react/useSendUserOperation.tsx]
+```
 
 ### Await the tx to mine and retry failures
 
 The below example uses the useSendUserOperation with the `waitForTxn` flag set to `true` and makes one drop and replace call if the UserOperation fails to be mined.
 
-<<< @/snippets/react/useSendUserOperationWithRetries.tsx
+```tsx [useSendUserOperationWithRetries.tsx]
+// [!include ~/snippets/react/useSendUserOperationWithRetries.tsx]
+```
 
 ## Params
 
@@ -58,7 +62,9 @@ An optional flag to additionally wait for the transaction hash in which the send
 
 ### ...mutationArgs
 
-<!--@include: ./BaseHookMutationArgs.md-->
+import BaseHookMutationArgs from "./BaseHookMutationArgs.mdx";
+
+<BaseHookMutationArgs />
 
 ## Return Type
 
@@ -73,14 +79,22 @@ Returns an object containing the following state.
 `UseMutateFunction`
 A React query mutation function to send a UserOperation. It returns a `SendUserOperationResult` object.
 
-::: details SendUserOperationResult
-<<< @/../packages/core/src/client/types.ts#SendUserOperationResult
+:::details[SendUserOperationResult]
+
+```ts [types.ts]
+// [!include ~/../packages/core/src/client/types.ts:SendUserOperationResult]
+```
+
 :::
 
 It takes in `SendUserOperationParameters` which has the following type:
 
-::: details SendUserOperationParameters
-<<< @/../packages/core/src/actions/smartAccount/types.ts#SendUserOperationParameters
+:::details[SendUserOperationParameters]
+
+```ts [types.ts]
+// [!include ~/../packages/core/src/actions/smartAccount/types.ts:SendUserOperationParameters]
+```
+
 :::
 
 ### sendUserOperationAsync

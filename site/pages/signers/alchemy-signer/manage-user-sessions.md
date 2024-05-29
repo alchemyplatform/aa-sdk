@@ -22,7 +22,7 @@ const user = await signer.getAuthDetails().catch(() => null);
 ```
 
 ```ts [signer.ts]
-// [!include @/snippets/signers/alchemy/signer.ts]
+// [!include ~/snippets/signers/alchemy/signer.ts]
 ```
 
 :::

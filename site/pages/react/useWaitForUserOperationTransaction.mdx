@@ -22,7 +22,7 @@ head:
 
 The `useWaitForUserOperationTransaction` hook enables waiting until a UserOperation that was sent on behalf of the user's Embedded Account eventually lands in a transaction.
 
-::: warning
+:::warning
 This requires your user to be logged in. See [`useAuthenticate`](/react/useAuthenticate) for more details.
 :::
 
@@ -34,7 +34,9 @@ import { useWaitForUserOperationTransaction } from "@alchemy/aa-alchemy/react";
 
 ## Usage
 
-<<< @/snippets/react/useWaitForUserOperationTransaction.tsx
+```tsx [useWaitForUserOperationTransaction.tsx]
+// [!include ~/snippets/react/useWaitForUserOperationTransaction.tsx]
+```
 
 ## Params
 
@@ -45,7 +47,9 @@ A `AlchemySmartAccountClient` with methods to interact with an Alchemy smart acc
 
 ### ...mutationArgs
 
-<!--@include: ./BaseHookMutationArgs.md-->
+import BaseHookMutationArgs from "./BaseHookMutationArgs.mdx";
+
+<BaseHookMutationArgs />
 
 ## Return Type
 
@@ -62,8 +66,12 @@ A React query mutation function to wait for a UserOperation's Transaction. It re
 
 It takes in `WaitForUserOperationTxParameters` which has the following type:
 
-::: details WaitForUserOperationTxParameters
-<<< @/../packages/core/src/actions/smartAccount/types.ts#WaitForUserOperationTxParameters
+:::details[WaitForUserOperationTxParameters]
+
+```ts [types.ts]
+// [!include ~/../packages/core/src/actions/smartAccount/types.ts:WaitForUserOperationTxParameters]
+```
+
 :::
 
 ### waitForUserOperationTransactionResult

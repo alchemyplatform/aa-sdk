@@ -22,7 +22,7 @@ head:
 
 The `useExportAccount` hook exports the user's Embedded Account's recovery details to be viewable on the application.
 
-::: warning
+:::warning
 This requires your user to be logged in. See [`useAuthenticate`](/react/useAuthenticate) for more details.
 :::
 
@@ -34,7 +34,9 @@ import { useExportAccount } from "@alchemy/aa-alchemy/react";
 
 ## Usage
 
-<<< @/snippets/react/useExportAccount.tsx
+```tsx [useExportAccount.tsx]
+// [!include ~/snippets/react/useExportAccount.tsx]
+```
 
 ## Params
 
@@ -48,7 +50,9 @@ If `params` is not passed in, the default iframe config will just have an `ifram
 
 ### ...mutationArgs
 
- <!--@include: ./BaseHookMutationArgs.md-->
+import BaseHookMutationArgs from "./BaseHookMutationArgs.mdx";
+
+<BaseHookMutationArgs />
 
 ## Return Type
 

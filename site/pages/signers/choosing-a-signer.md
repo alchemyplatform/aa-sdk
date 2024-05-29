@@ -68,7 +68,7 @@ Some MPC signers provide recovery services in which key share(s) are backed up i
 
 **Example**: Privy, Fireblocks MPC, Portal, Capsule, WalletKit
 
-:::details TSS vs SSSS
+:::details[TSS vs SSSS]
 
 There are two common approaches to MPC.
 

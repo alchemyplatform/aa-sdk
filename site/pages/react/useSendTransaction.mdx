@@ -22,7 +22,7 @@ head:
 
 The `useSendTransaction` hook enables sending a transaction as a UserOperation on behalf of the user's Embedded Account.
 
-::: warning
+:::warning
 This hook is deprecated in favor of [`useSendUserOperation`](/react/useSendUserOperation).
 
 This requires your user to be logged in. See [`useAuthenticate`](/react/useAuthenticate) for more details.
@@ -36,7 +36,9 @@ import { useSendTransaction } from "@alchemy/aa-alchemy/react";
 
 ## Usage
 
-<<< @/snippets/react/useSendTransaction.tsx
+```tsx [useSendTransaction.tsx]
+// [!include ~/snippets/react/useSendTransaction.tsx]
+```
 
 ## Params
 
@@ -47,7 +49,9 @@ A `AlchemySmartAccountClient` with methods to interact with an Alchemy smart acc
 
 ### ...mutationArgs
 
-<!--@include: ./BaseHookMutationArgs.md-->
+import BaseHookMutationArgs from "./BaseHookMutationArgs.mdx";
+
+<BaseHookMutationArgs />
 
 ## Return Type
 
@@ -62,8 +66,12 @@ Returns an object containing the following state.
 `UseMutateFunction`
 A React query mutation function to send a transaction as a UserOperation. It returns a `SendTransactionResult` object.
 
-::: details SendTransactionResult
-<<< @/../packages/core/src/client/types.ts#SendTransactionResult
+:::details[SendTransactionResult]
+
+```ts [types.ts]
+// [!include ~/../packages/core/src/client/types.ts:SendTransactionResult]
+```
+
 :::
 
 It takes in `SendTransactionParameters` which has [this type](https://viem.sh/docs/actions/wallet/sendTransaction.html#parameters) from `viem`.

@@ -22,7 +22,7 @@ head:
 
 The `createConfig` method is used to create a configuration object that is used to initialize the `AlchemyAccountProvider`. The output of this function contains all of the state that will be used by the various hooks exported by `@alchemy/aa-alchemy/react`.
 
-::: warning
+:::warning
 It's not recommended to use the resulting config directly. However, if you are not using `React` it is possible to build your own custom hooks using the state contained in the config object.
 :::
 
@@ -34,10 +34,15 @@ import { createConfig } from "@alchemy/aa-alchemy/config";
 
 ## Usage
 
-::: code-group
+:::code-group
 
-<<< @/snippets/react/config.ts [single-chain.ts]
-<<< @/snippets/react/multi-chain-config.ts [multi-chain.ts]
+```ts [single-chain.ts]
+// [!include ~/snippets/react/config.ts]
+```
+
+```ts [multi-chain.ts]
+// [!include ~/snippets/react/multi-chain-config.ts]
+```
 
 :::
 
@@ -47,12 +52,20 @@ import { createConfig } from "@alchemy/aa-alchemy/config";
 import { type CreateConfigProps } from "@alchemy/aa-alchemy/config";
 ```
 
-::: details CreateConfigProps
-<<< @/../packages/alchemy/src/config/types.ts#CreateConfigProps
+:::details[CreateConfigProps]
+
+```ts [types.ts]
+// [!include ~/../packages/alchemy/src/config/types.ts:CreateConfigProps]
+```
+
 :::
 
-::: details ConnectionConfig
-<<< @/../packages/core/src/client/schema.ts#ConnectionConfigSchema
+:::details[ConnectionConfig]
+
+```ts [types.ts]
+// [!include ~/../packages/core/src/client/schema.ts:ConnectionConfigSchema]
+```
+
 :::
 
 ## Return Type

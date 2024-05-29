@@ -22,7 +22,7 @@ head:
 
 The `useDropAndReplaceUserOperation` hook enables dropping and replaicng a User Operation sent from a user's Embedded Account.
 
-::: warning
+:::warning
 This requires your user to be logged in. See [`useAuthenticate`](/react/useAuthenticate) for more details.
 :::
 
@@ -34,7 +34,9 @@ import { useDropAndReplaceUserOperation } from "@alchemy/aa-alchemy/react";
 
 ## Usage
 
-<<< @/snippets/react/useDropAndReplaceUserOperation.tsx
+```tsx [useDropAndReplaceUserOperation.tsx]
+// [!include ~/snippets/react/useDropAndReplaceUserOperation.tsx]
+```
 
 ## Params
 
@@ -45,7 +47,9 @@ A `AlchemySmartAccountClient` with methods to interact with an Alchemy smart acc
 
 ### ...mutationArgs
 
-<!--@include: ./BaseHookMutationArgs.md-->
+import BaseHookMutationArgs from "./BaseHookMutationArgs.mdx";
+
+<BaseHookMutationArgs />
 
 ## Return Type
 
@@ -60,21 +64,33 @@ Returns an object containing the following state.
 `UseMutateFunction`
 A React query mutation function to sign a message. It returns a `SendUserOperationResult` object.
 
-::: details SendUserOperationResult
-<<< @/../packages/core/src/client/types.ts#SendUserOperationResult
+:::details[SendUserOperationResult]
+
+```ts [types.ts]
+// [!include ~/../packages/core/src/client/types.ts:SendUserOperationResult]
+```
+
 :::
 
 It takes in `DropAndReplaceUserOperationParameters` which has the following type:
 
-::: details DropAndReplaceUserOperationParameters
-<<< @/../packages/core/src/actions/smartAccount/types.ts#DropAndReplaceUserOperationParameters
+:::details[DropAndReplaceUserOperationParameters]
+
+```ts [types.ts]
+// [!include ~/../packages/core/src/actions/smartAccount/types.ts:DropAndReplaceUserOperationParameters]
+```
+
 :::
 
 ### dropAndReplaceUserOperationResult
 
 An object of the following `SendUserOperationResult` type if the mutation has run successfully, `undefined` otherwise:
-::: details SendUserOperationResult
-<<< @/../packages/core/src/client/types.ts#SendUserOperationResult
+:::details[SendUserOperationResult]
+
+```ts [types.ts]
+// [!include ~/../packages/core/src/client/types.ts:SendUserOperationResult]
+```
+
 :::
 
 ### isDroppingAndReplacingUserOperation

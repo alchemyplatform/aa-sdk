@@ -30,7 +30,9 @@ import { useSmartAccountClient } from "@alchemy/aa-alchemy/react";
 
 ## Usage
 
-<<< @/snippets/react/useSmartAccountClient.tsx
+```tsx [useSmartAccountClient.tsx]
+// [!include ~/snippets/react/useSmartAccountClient.tsx]
+```
 
 ## Parameters
 
@@ -54,12 +56,20 @@ The underlying account type you want to use
 
 An optional param object based on the `type` property passed in above. It allows for overriding the default account parameters.
 
-::: details CreateLightAccountParams
-<<< @/../packages/accounts/src/light-account/accounts/account.ts#CreateLightAccountParams
+:::details[CreateLightAccountParams]
+
+```ts [types.ts]
+// [!include ~/../packages/accounts/src/light-account/accounts/account.ts:CreateLightAccountParams]
+```
+
 :::
 
-::: details CreateMultiOwnerModularAccountParams
-<<< @/../packages/accounts/src/msca/account/multiOwnerAccount.ts#CreateMultiOwnerModularAccountParams
+:::details[CreateMultiOwnerModularAccountParams]
+
+```ts [types.ts]
+// [!include ~/../packages/accounts/src/msca/account/multiOwnerAccount.ts:CreateMultiOwnerModularAccountParams]
+```
+
 :::
 
 ### ...rest
@@ -77,8 +87,12 @@ Omit<
 
 The remaining parameters that are accepted allow for overriding certain properties of the `AlchemySmartAccountClient`
 
-::: details AlchemySmartAccountClientConfig
-<<< @/../packages/alchemy/src/client/smartAccountClient.ts#AlchemySmartAccountClientConfig
+:::details[AlchemySmartAccountClientConfig]
+
+```ts [types.ts]
+// [!include ~/../packages/alchemy/src/client/smartAccountClient.ts:AlchemySmartAccountClientConfig]
+```
+
 :::
 
 ## Return Type

@@ -28,7 +28,9 @@ import { useClientActions } from "@alchemy/aa-alchemy/react";
 
 ## Usage
 
-<<< @/snippets/react/useClientActions.tsx
+```tsx [useClientActions.tsx]
+// [!include ~/snippets/react/useClientActions.tsx]
+```
 
 ## Params
 
@@ -44,7 +46,9 @@ The SmartAccountClient instance returned from `useSmartAccountClient`
 
 a function that accepts as input the above client and returns an object containing functions that you can call to execute actions on the client.
 
-<!--@include: ./BaseHookMutationArgs.md-->
+import BaseHookMutationArgs from "./BaseHookMutationArgs.mdx";
+
+<BaseHookMutationArgs />
 
 ## Return Type
 

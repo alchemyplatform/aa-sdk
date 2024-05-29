@@ -30,7 +30,9 @@ import { useAccount } from "@alchemy/aa-alchemy/react";
 
 ## Usage
 
-<<< @/snippets/react/useAccount.tsx
+```tsx [useAccount.tsx]
+// [!include ~/snippets/react/useAccount.tsx]
+```
 
 ## Parameters
 
@@ -54,12 +56,20 @@ The underlying account type you want to use
 
 An optional param object based on the `type` property passed in above. It allows for overriding the default account parameters.
 
-::: details CreateLightAccountParams
-<<< @/../packages/accounts/src/light-account/accounts/account.ts#CreateLightAccountParams
+:::details[CreateLightAccountParams]
+
+```ts [types.ts]
+// [!include ~/../packages/accounts/src/light-account/accounts/account.ts:createlightaccountparams]
+```
+
 :::
 
-::: details CreateMultiOwnerModularAccountParams
-<<< @/../packages/accounts/src/msca/account/multiOwnerAccount.ts#CreateMultiOwnerModularAccountParams
+:::details[CreateMultiOwnerModularAccountParams]
+
+```ts [types.ts]
+// [!include ~/../packages/accounts/src/msca/account/multiOwnerAccount.ts:CreateMultiOwnerModularAccountParams]
+```
+
 :::
 
 ### skipCreate
@@ -68,7 +78,9 @@ An optional param that allows you to avoid creating a new instance of the accoun
 
 ### ...mutationArgs
 
- <!--@include: ./BaseHookMutationArgs.md-->
+import BaseHookMutationArgs from "./BaseHookMutationArgs.mdx";
+
+<BaseHookMutationArgs />
 
 ## Return Type
 
