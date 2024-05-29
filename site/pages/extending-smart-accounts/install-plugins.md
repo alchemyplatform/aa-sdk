@@ -68,7 +68,7 @@ await client.waitForUserOperationTransaction({ hash });
 
 :::
 
-Refer to the [Session Key](/using-smart-accounts/session-keys/index.md) section to learn more about using the `SessionKeyPlugin`.
+Refer to the [Session Key](/using-smart-accounts/session-keys/) section to learn more about using the `SessionKeyPlugin`.
 
 ### 2. Uninstalling the Session Key Plugin
 

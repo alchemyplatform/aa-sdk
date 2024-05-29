@@ -8,7 +8,7 @@ description: Follow this integration guide to use Passport Protcol as a Signer w
 
 [Passport](https://0xpass.io) is an MPC-based programmable, distributed, and non-custodial key management system, that allows users to generate wallets, scoped to their application, either via user Passkeys or any developer defined authentication method. Passport also allows users to sign messages, transactions, encrypt data, and more. Using secure multi-party computation (MPC) algorithms Passport splits private keys into shares that are solely distributed among nodes in the network. It also leverages secure enclaves and developer-defined policies, to ensure that the decryption of keys is confined to an enclave and that the signing process adheres to the policy framework established by your application.
 
-Combining Passport with Account Kit allows you to create a seamless user experience for your users, with the security of Passport's MPC-based key management system and the flexibility of Account Abstraction. You can use Passport through the [`aa-signers`](/packages/aa-signers/passport/introduction) package to generate integrated wallets at scale, and then leverage [`aa-alchemy`](/packages/aa-alchemy/index) to create smart accounts for your users.
+Combining Passport with Account Kit allows you to create a seamless user experience for your users, with the security of Passport's MPC-based key management system and the flexibility of Account Abstraction. You can use Passport through the [`aa-signers`](/packages/aa-signers/passport/introduction) package to generate integrated wallets at scale, and then leverage [`aa-alchemy`](/packages/aa-alchemy/) to create smart accounts for your users.
 
 ## Integration
 

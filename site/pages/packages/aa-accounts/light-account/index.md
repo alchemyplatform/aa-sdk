@@ -107,7 +107,7 @@ A `Promise` containing a new `LightAccount`.
 
 - `entryPoint: EntryPointDef` -- [optional] the entry point contract address. If not provided, the entry point contract address for the client is the connected account's entry point contract, or if not connected, falls back to the default entry point contract for the chain. See [getDefaultEntryPointAddress](/packages/aa-core/utils/getDefaultEntryPointAddress#getdefaultentrypointaddress).
 
-- `factoryAddress: Address` -- [optional] the factory address for the smart account implementation, which is required for creating the account if not already deployed. Defaults to the [getDefaultLightAccountFactoryAddress](/packages/aa-accounts/utils/getDefaultLightAccountFactoryAddress.md)
+- `factoryAddress: Address` -- [optional] the factory address for the smart account implementation, which is required for creating the account if not already deployed. Defaults to the [getDefaultLightAccountFactoryAddress](/packages/aa-accounts/utils/getDefaultLightAccountFactoryAddress)
 
 - `initCode: Hex` -- [optional] the initCode for deploying the smart account with which the client will connect.
 

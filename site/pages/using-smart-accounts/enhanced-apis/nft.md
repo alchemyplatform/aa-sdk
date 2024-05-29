@@ -22,13 +22,13 @@ head:
 
 We provide several [Enhanced APIs](https://www.alchemy.com/enhanced-apis/?a=ak-docs), which are especially useful for querying information about the smart accounts you create using Account Kit, such as the account's owned NFTs using the [NFT API](https://www.alchemy.com/nft-api/?a=ak-docs).
 
-For the purposes of our example, we will use the NFT API to query our smart account's data by extending the Alchemy Smart Account Client [with Enhanced APIs](/packages/aa-alchemy/smart-account-client/actions/alchemyEnhancedApiActions.md).
+For the purposes of our example, we will use the NFT API to query our smart account's data by extending the Alchemy Smart Account Client [with Enhanced APIs](/packages/aa-alchemy/smart-account-client/actions/alchemyEnhancedApiActions).
 
 ## 1. Install the [`alchemy-sdk`](https://github.com/alchemyplatform/alchemy-sdk-js)
 
 We have developed a Typescript SDK to make development with the Enhanced APIs simple. The SDK includes ways to leverage Alchemy's Simulation API, Token API, Transact API, NFT API, Webhooks and Websockets, and more across our supported chains. Take a look at the code [here](https://github.com/alchemyplatform/alchemy-sdk-js).
 
-We will use the Alchemy SDK Client to extend our Alchemy Smart Account Client using the client's [`alchemyEnhancedApiActions`](/packages/aa-alchemy/smart-account-client/actions/alchemyEnhancedApiActions.md) method. That way, our client will have direct access to the Enhanced APIs.
+We will use the Alchemy SDK Client to extend our Alchemy Smart Account Client using the client's [`alchemyEnhancedApiActions`](/packages/aa-alchemy/smart-account-client/actions/alchemyEnhancedApiActions) method. That way, our client will have direct access to the Enhanced APIs.
 
 To use the Alchemy SDK in our project directory, we will need to install the required package:
 

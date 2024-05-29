@@ -8,7 +8,7 @@ description: Follow this integration guide to use Turnkey as a Signer with Accou
 
 [Turnkey](https://turnkey.com) is secure, non-custodial wallet infrastructure that allows users to generate wallets scoped to your application via Email or WebAuthn. Turnkey leverages secure enclaves and a proprietary policy engine; this novel security architecture ensures that key material is only decrypted within an enclave and any signing is governed by your application's policies. This is great for enabling a secure, flexible experience for your users that can be powerfully enhanced by the benefits of Account Abstraction (gas sponsorship, batching, etc).
 
-Combining Turnkey with Account Kit allows you to create a magical UX for your users. Use Turnkey via the [`aa-signers`](/packages/aa-signers/turnkey/introduction) package to generate embedded wallets at scale, and then leverage [`aa-alchemy`](/packages/aa-alchemy/index) to create smart accounts for your users!
+Combining Turnkey with Account Kit allows you to create a magical UX for your users. Use Turnkey via the [`aa-signers`](/packages/aa-signers/turnkey/introduction) package to generate embedded wallets at scale, and then leverage [`aa-alchemy`](/packages/aa-alchemy/) to create smart accounts for your users!
 
 ## Integration
 

@@ -66,10 +66,10 @@ A new instance of an `EthersProviderAdapter`.
 
 Either:
 
-- `rpcProvider: string | BundlerClient` -- a JSON-RPC URL, or a viem Client that supports ERC-4337 methods and Viem public actions. See [createBundlerClient](/packages/aa-core/bundler-client/index.md).
+- `rpcProvider: string | BundlerClient` -- a JSON-RPC URL, or a viem Client that supports ERC-4337 methods and Viem public actions. See [createBundlerClient](/packages/aa-core/bundler-client/).
 
 - `chainId: number` -- the ID of the chain on which to create the provider.
 
 Or:
 
-- `accountProvider: SmartAccountClient` -- See [SmartAccountClient](/packages/aa-core/smart-account-client/index.md).
+- `accountProvider: SmartAccountClient` -- See [SmartAccountClient](/packages/aa-core/smart-account-client/).

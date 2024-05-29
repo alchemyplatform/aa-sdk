@@ -14,7 +14,7 @@ head:
 
 # UserOperationFeeOptions
 
-Fee options object type used by the [`SmartAccountClient`](/packages/aa-core/smart-account-client/index.md) during the gas fee calculation middlewares when constructing the user operation to send.
+Fee options object type used by the [`SmartAccountClient`](/packages/aa-core/smart-account-client/) during the gas fee calculation middlewares when constructing the user operation to send.
 
 For example, if the below example `UserOperationFeeOptions` is set on the client upon initialization, the `maxPriorityFeePerGas` field on the user operation will be set as the max value between the 50% buffered `maxPriorityFeePerGas` estimate and the min `maxPriorityFeePerGas` value specified here, `100_000_000n`.
 

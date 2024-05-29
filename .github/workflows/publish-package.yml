@@ -90,12 +90,12 @@ jobs:
         working-directory: site
         run: |
           yarn build
-          touch .vitepress/dist/.nojekyll
+          touch dist/.nojekyll
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          path: site/.vitepress/dist
+          path: site/dist
 
   publish_site:
     name: Publish Docs Site

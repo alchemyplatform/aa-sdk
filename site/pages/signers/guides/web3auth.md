@@ -8,7 +8,7 @@ description: Follow this integration guide to use an EOA as a Signer with Accoun
 
 [Web3Auth](https://web3auth.io/) is an embedded wallet provider that allows users to generate wallets scoped to your application via Social Logins, Email OTP, or Custom Authentication Methods. This is great for enabling a better experience for your users. But ultimately these wallets are not much different from EOA's, so you don't have the benefit of Account Abstraction (gas sponsorship, batching, etc).
 
-Combining Web3Auth with Account Kit allows you to get the best of both worlds. You can use Web3Auth via the [`aa-signers`](/packages/aa-signers/index) package to generate a wallet scoped to your application, and then use [`aa-alchemy`](/packages/aa-alchemy/index) to create smart accounts for your users!
+Combining Web3Auth with Account Kit allows you to get the best of both worlds. You can use Web3Auth via the [`aa-signers`](/packages/aa-signers/) package to generate a wallet scoped to your application, and then use [`aa-alchemy`](/packages/aa-alchemy/) to create smart accounts for your users!
 
 # Integration
 

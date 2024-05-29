@@ -34,7 +34,7 @@ See [Alchemy Smart Account Client](/packages/aa-alchemy/smart-account-client/) f
 
 ## 2. Construct the call data
 
-The best part of Account Kit is that it abstracts the differences between User Operation calldata and standard Transaction calldata, such that you can pass in typical calldata to [sendUserOperation](/packages/aa-core/smart-account-client/actions/waitForUserOperationTransaction.md) as if it was a transaction sent from your smart account, and we will wrap it as necessary to generate calldata as it would be as a User Operation.
+The best part of Account Kit is that it abstracts the differences between User Operation calldata and standard Transaction calldata, such that you can pass in typical calldata to [sendUserOperation](/packages/aa-core/smart-account-client/actions/waitForUserOperationTransaction) as if it was a transaction sent from your smart account, and we will wrap it as necessary to generate calldata as it would be as a User Operation.
 
 The second best part of Account Kit is that it is build atop [viem](https://viem.sh/). This means we can leverage utility methods to easily generate calldata, with type safety, using a smart contract's ABI.
 
@@ -80,11 +80,11 @@ Some other helpful viem methods include: [encodeFunctionData](https://viem.sh/do
 
 ## 3. Send the User Operation
 
-Now, we will use the connected client to send a user operation. We will use the [sendUserOperation](/packages/aa-core/smart-account-client/actions/sendUserOperation.md) method on the client.
+Now, we will use the connected client to send a user operation. We will use the [sendUserOperation](/packages/aa-core/smart-account-client/actions/sendUserOperation) method on the client.
 
-You can either send ETH to the smart account to pay for User Operation's gas, or you can connect your client to our Gas Manager using the [withAlchemyGasManager](/packages/aa-alchemy/middleware/alchemyGasManagerMiddleware.md) method to sponsor the UO's gas. We will use the latter approach below. You can go to the [Alchemy Dashboard](https://dashboard.alchemy.com/gas-manager/?a=ak-docs) to get a Gas Manager policy ID.
+You can either send ETH to the smart account to pay for User Operation's gas, or you can connect your client to our Gas Manager using the [withAlchemyGasManager](/packages/aa-alchemy/middleware/alchemyGasManagerMiddleware) method to sponsor the UO's gas. We will use the latter approach below. You can go to the [Alchemy Dashboard](https://dashboard.alchemy.com/gas-manager/?a=ak-docs) to get a Gas Manager policy ID.
 
-We will also want to wait for the transaction that contains the User Operation so that we know the User Operation is executed on-chain. We can use the [waitForUserOperationTransaction](/packages/aa-core/smart-account-client/actions/waitForUserOperationTransaction.md) method on the client, as seen below.
+We will also want to wait for the transaction that contains the User Operation so that we know the User Operation is executed on-chain. We can use the [waitForUserOperationTransaction](/packages/aa-core/smart-account-client/actions/waitForUserOperationTransaction) method on the client, as seen below.
 
 :::code-group
 

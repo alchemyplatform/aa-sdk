@@ -22,7 +22,7 @@ head:
 
 ## 1. Set up the Modular Account
 
-The Multisig Plugin can be installed on the Modular Account or any ERC-6900 compatible smart account. If you haven't already, please follow the guide to [set up Modular Account](../getting-started.md).
+The Multisig Plugin can be installed on the Modular Account or any ERC-6900 compatible smart account. If you haven't already, please follow the guide to [set up Modular Account](../getting-started).
 
 ## 2. Create an Account Client
 
@@ -162,4 +162,4 @@ const result = await multisigAccountClient.sendUserOperation({
 
 That's it! You've initialized a modular account with three multisig members, proposed a user operation, collected the necessary signatures, and sent the user operation to the bundler.
 
-For more info, check out the [technical details](./technical-details.md) of the multisig plugin.
+For more info, check out the [technical details](./technical-details) of the multisig plugin.

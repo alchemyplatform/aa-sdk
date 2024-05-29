@@ -14,7 +14,7 @@ head:
 
 # buildUserOperationFromTxs
 
-Performs [`buildUserOperationFromTx`](./buildUserOperationFromTx.md) in batch and builds into a single, yet to be signed `UserOperation` (UO) struct. The output user operation struct will be filled with all gas fields (and paymaster data if a paymaster is used) based on the transactions data (`to`, `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas`) computed using the configured [`ClientMiddlewares`](/packages/aa-core/smart-account-client/middleware/index) on the `SmartAccountClient`
+Performs [`buildUserOperationFromTx`](./buildUserOperationFromTx) in batch and builds into a single, yet to be signed `UserOperation` (UO) struct. The output user operation struct will be filled with all gas fields (and paymaster data if a paymaster is used) based on the transactions data (`to`, `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas`) computed using the configured [`ClientMiddlewares`](/packages/aa-core/smart-account-client/middleware/) on the `SmartAccountClient`
 
 ## Usage
 
@@ -99,7 +99,7 @@ The batch array of `UserOperationCallData` corresponding to the user operation c
 - `data: Hex` - can be either `0x` or a call data string
 - `value?: bigint` - optionally, set the value in wei you want to send to the target
 
-- `overrides?:` [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides.md)
+- `overrides?:` [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides)
 
 `UserOperationOverrides` used as an additional parameter to the `SmartAccountClient` middleware pipeline in addition to the passed user operation calldata for constructing the user operation struct (`uoStruct`) returned; generated to contain the `maxFeePerGas` and `maxPriorityFeePerGas` as the max values of the corresponding fields of input transactions, merged with the optional `overrides` parameter passed in as the user input to the function
 

@@ -6,7 +6,7 @@ description: Follow this guide to use any Signer you want with Account Kit, a ve
 
 # How to use your own Account Signer
 
-Account Kit is designed to be flexible and allow you to use any Signer you want. If you don't want to use any Signer implementations in [`aa-signers`](/packages/aa-signers/index), you can either:
+Account Kit is designed to be flexible and allow you to use any Signer you want. If you don't want to use any Signer implementations in [`aa-signers`](/packages/aa-signers/), you can either:
 
 1. Implement [`SmartAccountSigner`](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/core/src/signer/types.ts#L34) (exported in `aa-core`).
 2. If your Signer is an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compliant provider, you can leverage `viem`'s `WalletClient` and the [`WalletClientSigner`](/packages/aa-core/signers/wallet-client) (exported in `aa-core`).

@@ -54,7 +54,7 @@ This is a no-op middleware, but you can include any custom step during the user 
 
 ### userOperationSimulator
 
-If you are simulating a user operation using [`simulateUserOperation`](/packages/aa-alchemy/smart-account-client/actions/simulateUserOperation.md), `SmartAccountClient` will include `userOperationSimulator` middleware during the pipeline run to simulate the user operation instead of sending it to the network to be mined.
+If you are simulating a user operation using [`simulateUserOperation`](/packages/aa-alchemy/smart-account-client/actions/simulateUserOperation), `SmartAccountClient` will include `userOperationSimulator` middleware during the pipeline run to simulate the user operation instead of sending it to the network to be mined.
 
 During the `SmartAccountClient` middleware pipeline run, each middleware is applied to compute certain fields of the [`UserOperationStruct`](/resources/types#useroperationstruct) in the following sequential order:
 

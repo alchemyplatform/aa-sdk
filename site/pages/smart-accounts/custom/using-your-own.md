@@ -20,7 +20,7 @@ head:
 
 # Using your own Smart Account
 
-You are not limited to the accounts defined in `@alchemy/aa-accounts`. The `SmartAccountClient` can be used with any smart account because it only relies on the [`SmartContractAccount`](/packages/aa-core/accounts/index.md) interface. This means you can use your own smart account implementation with Account Kit.
+You are not limited to the accounts defined in `@alchemy/aa-accounts`. The `SmartAccountClient` can be used with any smart account because it only relies on the [`SmartContractAccount`](/packages/aa-core/accounts/) interface. This means you can use your own smart account implementation with Account Kit.
 
 ```ts [my-account.ts]
 // [!include ~/snippets/aa-core/custom-account.ts]

@@ -16,11 +16,11 @@ head:
 
 This function verifies the eligibility of the connected account for gas sponsorship concerning the upcoming `UserOperation` (UO) that is intended to be sent.
 
-Internally, this method invokes [`buildUserOperation`](./buildUserOperation.md), which navigates through the middleware pipeline, including the `PaymasterMiddleware`. Its purpose is to construct the UO struct meant for transmission to the bundler. Following the construction of the UO struct, this function verifies if the resulting structure contains a non-empty `paymasterAndData` field.
+Internally, this method invokes [`buildUserOperation`](./buildUserOperation), which navigates through the middleware pipeline, including the `PaymasterMiddleware`. Its purpose is to construct the UO struct meant for transmission to the bundler. Following the construction of the UO struct, this function verifies if the resulting structure contains a non-empty `paymasterAndData` field.
 
 You can utilize this method before sending the user operation to confirm its eligibility for gas sponsorship. Depending on the outcome, it allows you to tailor the user experience accordingly, based on eligibility.
 
-For a deeper understanding of how to employ this method to provide varied user experiences contingent on gas sponsorship eligibility, please refer to the guide [How to handle User Operations not eligible for gas sponsorship](/using-smart-accounts/sponsoring-gas/checking-eligibility.md).
+For a deeper understanding of how to employ this method to provide varied user experiences contingent on gas sponsorship eligibility, please refer to the guide [How to handle User Operations not eligible for gas sponsorship](/using-smart-accounts/sponsoring-gas/checking-eligibility).
 
 ## Usage
 
