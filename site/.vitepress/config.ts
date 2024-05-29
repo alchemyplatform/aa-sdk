@@ -90,8 +90,7 @@ export default defineConfig({
       "meta",
       {
         name: "twitter:image",
-        content:
-          "https://github-production-user-asset-6210df.s3.amazonaws.com/83442423/274634864-34ec38a9-3de2-4075-9723-e998fa8aa7d8.jpg",
+        content: "/images/og-image.jpg",
       },
     ],
   ],
