@@ -36,11 +36,11 @@ You should first extend the `SmartAccountClient` connected to a Modular Account 
 
 Then, you can use the `installSessionKeyPlugin()` method exposed on `sessionKeyPluginActions` extended smart account client to install the session key plugin for the connected account.
 
-::: tip Note
+:::tip[Note]
 When using `createModularAccountAlchemyClient` in `@alchemy/aa-alchemy`, the `SmartAccountClient` comes automatically extended with `multiOwnerPluginActions`, `pluginManagerActions`, and `accountLoupeActions` decorators as defaults available for use.
 :::
 
-::: code-group
+:::code-group
 
 ```ts [example.ts]
 import { smartAccountClient as modularAccountClient } from "./smartAccountClient";
@@ -62,7 +62,9 @@ const { hash } = await sessionKeyExtendedClient.installSessionKeyPlugin({
 await client.waitForUserOperationTransaction({ hash });
 ```
 
-<<< @/snippets/aa-alchemy/connected-client.ts [smartAccountClient.ts]
+```ts [smartAccountClient.ts]
+// [!include ~/snippets/aa-alchemy/connected-client.ts]
+```
 
 :::
 
@@ -75,7 +77,7 @@ First, extend the `SmartAccountClient` connected to a Modular Account with `plug
 
 Then, you can use the `uninstallPlugin()` method exposed on `pluginManagerActions` extended smart account client to uninstall the session key plugin for the connected account.
 
-::: code-group
+:::code-group
 
 ```ts [example.ts]
 import {
@@ -96,6 +98,8 @@ const { hash } = await pluginManagerExtendedClient.uninstallPlugin({
 await client.waitForUserOperationTransaction({ hash });
 ```
 
-<<< @/snippets/aa-alchemy/connected-client.ts [smartAccountClient.ts]
+```ts [smartAccountClient.ts]
+// [!include ~/snippets/aa-alchemy/connected-client.ts]
+```
 
 :::

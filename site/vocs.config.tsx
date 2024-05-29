@@ -281,11 +281,11 @@ export default defineConfig({
       items: [
         {
           text: "Install plugins",
-          link: "/install-plugins",
+          link: "/extending-smart-accounts/install-plugins",
         },
         {
           text: "Get installed plugins",
-          link: "/get-installed-plugins",
+          link: "/extending-smart-accounts/get-installed-plugins",
         },
       ],
     },

@@ -36,11 +36,11 @@ You should first extend the `SmartAcountClient` connected to a Modular Account, 
 
 Then, you can use the `getInstalledPlugins` method of the `accountLoupeActions` extended smart account client to get the list of installed plugin addresses for the connected Modular Account.
 
-::: tip Note
+:::tip[Note]
 When using `createModularAccountAlchemyClient` in `@alchemy/aa-alchemy`, the `SmartAccountClient` comes automatically extended with `multiOwnerPluginActions`, `pluginManagerActions`, and `accountLoupeActions` decorators as defaults available for use.
 :::
 
-::: code-group
+:::code-group
 
 ```ts [example.ts]
 import { smartAccountClient as modularAccountClient } from "./smartAccountClient";
@@ -76,7 +76,9 @@ console.log(JSON.stringify(metadata, null, 2));
 // }
 ```
 
-<<< @/snippets/aa-alchemy/connected-client.ts [smartAccountClient.ts]
+```ts [smartAccountClient.ts]
+// [!include ~/snippets/aa-alchemy/connected-client.ts]
+```
 
 :::
 
