@@ -211,38 +211,66 @@ export default defineConfig({
           text: "Modular Account",
           collapsed: false,
           items: [
-            { text: "Introduction", link: "/" },
-            { text: "Getting started", link: "/getting-started" },
-            { text: "Deployments", link: "/deployments" },
+            { text: "Introduction", link: "/smart-accounts/modular-account/" },
+            {
+              text: "Getting started",
+              link: "/smart-accounts/modular-account/getting-started",
+            },
+            {
+              text: "Deployments",
+              link: "/smart-accounts/modular-account/deployments",
+            },
             {
               text: "Upgrading to Modular Account",
-              link: "/upgrade-la-to-ma",
+              link: "/smart-accounts/modular-account/upgrade-la-to-ma",
             },
             {
               text: "Multisig Plugin",
               collapsed: true,
               items: [
-                { text: "Introduction", link: "/index" },
-                { text: "Getting started", link: "/getting-started" },
-                { text: "Technical details", link: "/technical-details" },
+                {
+                  text: "Introduction",
+                  link: "/smart-accounts/modular-account/multisig-plugin/",
+                },
+                {
+                  text: "Getting started",
+                  link: "/smart-accounts/modular-account/multisig-plugin/getting-started",
+                },
+                {
+                  text: "Technical details",
+                  link: "/smart-accounts/modular-account/multisig-plugin/technical-details",
+                },
               ],
             },
           ],
         },
         {
           text: "Light Account",
-          link: "/smart-accounts/light-account/",
-        },
-        {
-          text: "Multi-Owner Light Account",
-          link: "/smart-accounts/multi-owner-light-account/",
+          collapsed: false,
+          items: [
+            { text: "Overview", link: "/smart-accounts/light-account/" },
+            {
+              text: "Getting started",
+              link: "/smart-accounts/light-account/getting-started",
+            },
+            {
+              text: "Deployments",
+              link: "/smart-accounts/light-account/deployments",
+            },
+          ],
         },
         {
           text: "Custom accounts",
           collapsed: true,
           items: [
-            { text: "Use your own", link: "/using-your-own" },
-            { text: "Contribute your account", link: "/contributing" },
+            {
+              text: "Use your own",
+              link: "/smart-accounts/custom/using-your-own",
+            },
+            {
+              text: "Contribute your account",
+              link: "/smart-accounts/custom/contributing",
+            },
           ],
         },
         { text: "Gas benchmarks", link: "/smart-accounts/gas-benchmarks" },

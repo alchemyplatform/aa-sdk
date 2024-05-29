@@ -18,7 +18,7 @@ head:
 
 [Modular Account](/smart-accounts/modular-account/) is an enterprise-grade smart contract account designed for security and modularity, allowing for customization via ERC-6900 plugins. It is highly optimized for calldata costs, which has historically made up the majority of the fees on Ethereum rollups. As a durable user account, Modular Accounts contain guardrails for permissionless interoperable usage, extending beyond the per-app embedded account paradigm that is popular today to help drive forward an invisible and interoperable future. The account is heavily optimized for day-to-day usage, with certain security features adding some execution overhead at deployment time.
 
-::: info
+:::info
 With [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844), calldata costs have gone down significantly. Future versions of Modular Account will be optimized for this environment.
 :::
 

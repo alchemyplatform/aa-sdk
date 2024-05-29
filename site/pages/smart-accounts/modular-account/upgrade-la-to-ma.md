@@ -24,7 +24,7 @@ Upgrading a `SmartContractAccount` can be done easily using Account Kit. It just
 
 Using the Light Account as an example, here is an overview of how the upgrade can be executed using a Smart Account Client:
 
-::: code-group
+:::code-group
 
 ```ts [example.ts]
 import { smartAccountClient as lightAccountClient } from "./lightAccountClient";

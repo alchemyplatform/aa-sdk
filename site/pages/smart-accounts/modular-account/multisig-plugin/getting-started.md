@@ -85,7 +85,7 @@ const { request, aggregatedSignature, signatureObj: firstSig } = await multisigA
   });
 ```
 
-::: warning
+:::warning
 
 We are aware of a bug in aa-sdk that prevents multisigs from using a paymaster service. We are working on fixing this and this feature would be available shortly.
 
