@@ -16,7 +16,7 @@ head:
 
 This hasn't been tested extensively, but it is possible to use Account Kit within a React Native application. We've built a simple example using expo [here](https://github.com/alchemyplatform/aa-sdk-rn-expo/tree/main). This guide assumes you're using Expo, but the same principles should apply to a bare React Native app as well.
 
-::: warning
+:::warning
 The Alchemy Signer is not yet supported in React Native applications. For 3rd party signer support in React Native, refer to your signer provider's documentation.
 :::
 
@@ -26,7 +26,7 @@ The Alchemy Signer is not yet supported in React Native applications. For 3rd pa
 
 We first need to get our environment setup. The first thing we need to do is make sure we're on the latest Beta version of Expo. The reason for this is that we need React Native version 0.74 or higher because it has `TextEncoder` natively supported.
 
-::: code-group
+:::code-group
 
 ```bash [npm]
 npx expo install expo@next --fix
@@ -44,7 +44,7 @@ Once we've got that setup, we need to setup a few shims so we can use crypto lib
 
 #### Install shim dependencies
 
-::: code-group
+:::code-group
 
 ```bash [npm]
 npm install --save node-libs-react-native crypto-browserify stream-browserify react-native-get-random-values
@@ -60,7 +60,7 @@ yarn add node-libs-react-native crypto-browserify stream-browserify react-native
 
 Create or edit your `metro.config.js` file in the root of your project so that it includes the following:
 
-::: code-group
+:::code-group
 
 ```js [metro.config.js]
 // Learn more https://docs.expo.io/guides/customizing-metro
@@ -87,11 +87,11 @@ module.exports = config;
 
 Import the following packages at the top of your `App.tsx` file so that libraries that depend on globals like `crypto` have access to them.
 
-::: tip
+:::tip
 If you're using bare React Native, you would add the above imports to your `index.js` file.
 :::
 
-::: code-group
+:::code-group
 
 ```tsx [App.tsx]
 import "node-libs-react-native/globals.js";
@@ -106,7 +106,7 @@ import "react-native-get-random-values";
 
 That's it! Now you can install the packages you want from Account Kit and start building your React Native Account Abstraction app.
 
-::: code-group
+:::code-group
 
 ```bash [npm]
 npm install -s @alchemy/aa-alchemy @alchemy/aa-accounts @alchemy/aa-core
