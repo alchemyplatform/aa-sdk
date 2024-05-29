@@ -60,8 +60,6 @@ yarn add node-libs-react-native crypto-browserify stream-browserify react-native
 
 Create or edit your `metro.config.js` file in the root of your project so that it includes the following:
 
-:::code-group
-
 ```js [metro.config.js]
 // Learn more https://docs.expo.io/guides/customizing-metro
 const { getDefaultConfig } = require("expo/metro-config");
@@ -81,8 +79,6 @@ config.resolver.extraNodeModules = {
 module.exports = config;
 ```
 
-:::
-
 #### Register global shims
 
 Import the following packages at the top of your `App.tsx` file so that libraries that depend on globals like `crypto` have access to them.
@@ -91,16 +87,12 @@ Import the following packages at the top of your `App.tsx` file so that librarie
 If you're using bare React Native, you would add the above imports to your `index.js` file.
 :::
 
-:::code-group
-
 ```tsx [App.tsx]
 import "node-libs-react-native/globals.js";
 import "react-native-get-random-values";
 
 // rest of App.tsx
 ```
-
-:::
 
 ### Install Account Kit and build!
 

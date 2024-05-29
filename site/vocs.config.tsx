@@ -388,6 +388,9 @@ export default defineConfig({
   socials: [
     { icon: "github", link: "https://github.com/alchemyplatform/aa-sdk" },
   ],
+  theme: {
+    accentColor: "#ce26a2",
+  },
   // This is not supported in vocs
   // sitemap: {
   //   hostname: "https://accountkit.alchemy.com",

@@ -15,3 +15,12 @@ footer.vocs_Footer {
 .vocs_Content {
   @apply flex flex-col grow;
 }
+
+.bg-clip-text {
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.transparent-text-fill {
+  -webkit-text-fill-color: transparent;
+}
