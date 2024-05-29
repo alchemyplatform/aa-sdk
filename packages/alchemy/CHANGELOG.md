@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.17.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.16.2...v3.17.0) (2024-05-29)
+
+### Bug Fixes
+
+- **createAccount:** possible uncaught undefined ([e275f5f](https://github.com/alchemyplatform/aa-sdk/commit/e275f5f5edc313ff88aa46a2336fc8cfaab6ca65))
+- export the \*web client and signer in aa-alchemy ([0777b97](https://github.com/alchemyplatform/aa-sdk/commit/0777b97b9a2620be02fffe92e3e46fe6162bae49))
+
 ## [3.16.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.16.1...v3.16.2) (2024-05-26)
 
 ### Bug Fixes
