@@ -331,8 +331,8 @@ export default defineConfig({
     {
       text: "Custom infra",
       items: [
-        { text: "Use custom bundler", link: "/bundlers" },
-        { text: "Use custom paymaster", link: "/paymasters" },
+        { text: "Use custom bundler", link: "/third-party/bundlers" },
+        { text: "Use custom paymaster", link: "/third-party/paymasters" },
       ],
     },
     // packagesSidebar,
