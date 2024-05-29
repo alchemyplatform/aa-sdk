@@ -30,14 +30,16 @@ This method throws if there is no authenticated user.
 
 :::code-group
 
-```ts
+```ts [example.ts]
 import { signer } from "./signer";
 
 const message = "Hello, world!";
 const signature = await signer.signMessage(message);
 ```
 
-<<< @/snippets/signers/alchemy/signer.ts
+```ts [signer.ts]
+// [!include ~/snippets/signers/alchemy/signer.ts]
+```
 
 :::
 

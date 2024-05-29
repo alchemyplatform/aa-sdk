@@ -18,7 +18,7 @@ next:
 
 `alchemyEnhancedApiActions` is a decorator that can be used with a `AlchemySmartAccountClient` that will extend the client with methods that access the Alchemy [Enhanced APIs](https://www.alchemy.com/enhanced-apis/?a=ak-docs) via the [Alchemy SDK](https://github.com/alchemyplatform/alchemy-sdk-js).
 
-:::tip Note
+:::tip[Note]
 This method requires an optional dependency on the [`alchemy-sdk`](https://github.com/alchemyplatform/alchemy-sdk-js) package, as the input to this method is an Alchemy SDK client.
 
 The Alchemy SDK client must be configured with the same API key and network as the `AlchemySmartAccountClient`. This method validates such at runtime.
@@ -43,7 +43,10 @@ const clientWithEnhancedApis = smartAccountClient.extend(
 );
 ```
 
-<<< @/snippets/aa-alchemy/base-client.ts
+```ts [smartAccountClient.ts]
+// [!include ~/snippets/aa-alchemy/base-client.ts]
+```
+
 :::
 
 ## Returns

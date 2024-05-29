@@ -18,8 +18,6 @@ head:
 
 ## Usage
 
-:::code-group
-
 ```ts [example.ts]
 import {
   alchemyGasManagerMiddleware,
@@ -42,8 +40,6 @@ const clientAlchemyGasManager = createSmartAccountClient({
   }),
 });
 ```
-
-:::
 
 ## Returns
 

@@ -1,4 +1,5 @@
 import { defineConfig } from "vocs";
+import { aaAlchemySidebar } from "./sidebar/aa-alchemy.js";
 import { aaCoreSideBar } from "./sidebar/aa-core.js";
 
 const pkg = require("../lerna.json");
@@ -338,7 +339,11 @@ export default defineConfig({
     },
     {
       text: "aa-sdk packages",
-      items: [{ text: "Overview", link: "/packages/" }, aaCoreSideBar],
+      items: [
+        { text: "Overview", link: "/packages/" },
+        aaCoreSideBar,
+        aaAlchemySidebar,
+      ],
     },
     {
       text: "Resources",

@@ -1,18 +1,7 @@
 ---
 outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: aa-alchemy
-  - - meta
-    - name: description
-      content: aa-alchemy landing page and getting started guide
-  - - meta
-    - property: og:description
-      content: aa-alchemy landing page and getting started guide
-prev:
-  text: aa-core
-  link: /packages/aa-core/index
+title: aa-alchemy
+description: aa-alchemy landing page and getting started guide
 ---
 
 # `@alchemy/aa-alchemy`
@@ -40,8 +29,7 @@ pnpm i @alchemy/aa-alchemy
 :::
 
 Then, you can create a client like so:
-:::code-group
 
-<<< @/snippets/aa-alchemy/base-client.ts
-
-:::
+```ts [smartAccountClient.ts]
+// [!include ~/snippets/aa-alchemy/base-client.ts]
+```

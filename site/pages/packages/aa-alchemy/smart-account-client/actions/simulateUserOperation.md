@@ -41,7 +41,10 @@ if (uoSimResult.error) {
 const uo = await smartAccountClient.sendUserOperation({ uo: uoStruct });
 ```
 
-<<< @/snippets/aa-alchemy/connected-client.ts
+```ts [base-client.ts]
+// [!include ~/snippets/aa-alchemy/connected-client.ts]
+```
+
 :::
 
 ## Returns

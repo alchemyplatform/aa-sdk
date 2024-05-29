@@ -26,13 +26,15 @@ The `getUser` method is used to look up if a user already exists for a given ema
 
 :::code-group
 
-```ts
+```ts [example.ts]
 import { signer } from "./signer";
 
 const result = await signer.getUser("moldy@email.com");
 ```
 
-<<< @/snippets/signers/alchemy/signer.ts
+```ts [signer.ts]
+// [!include ~/snippets/signers/alchemy/signer.ts]
+```
 
 :::
 

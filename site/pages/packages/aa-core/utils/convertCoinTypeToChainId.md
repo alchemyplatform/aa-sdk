@@ -16,7 +16,7 @@ head:
 
 Converts a coinType into a chain ID. The conversion follows [ENSIP-11](https://docs.ens.domains/ens-improvement-proposals/ensip-11-evmchain-address-resolution).
 
-:::tip Note
+:::tip[Note]
 For mainnet, the conversion expects `coinType == 60`. This comes from [ENSIP-9](https://docs.ens.domains/ens-improvement-proposals/ensip-9-multichain-address-resolution).
 :::
 

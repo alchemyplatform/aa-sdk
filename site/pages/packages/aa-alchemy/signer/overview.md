@@ -26,7 +26,9 @@ The Alchemy Signer is a `SmartAccountSigner` that is powered by Alchemy's Signer
 
 Once you have enabled the Alchemy Signer in the [dashboard](https://dashboard.alchemy.com/accounts?a=account-kit-docs), getting started is really simple. Install the `@alchemy/aa-alchemy` package and initialize your signer:
 
-<<< @/snippets/signers/alchemy/signer.ts
+```ts
+// [!include ~/snippets/signers/alchemy/signer.ts]
+```
 
 ### Using the Signer with Smart Contract Accounts
 
@@ -34,7 +36,7 @@ Once your signer is authenticated with a user, you can use it to sign User Opera
 
 :::code-group
 
-```ts
+```ts [example.ts]
 import { signer } from "./signer";
 
 export const account = await createMultiOwnerModularAccount({
@@ -44,7 +46,10 @@ export const account = await createMultiOwnerModularAccount({
 });
 ```
 
-<<< @/snippets/signers/alchemy/signer.ts
+```ts [signer.ts]
+// [!include ~/snippets/signers/alchemy/signer.ts]
+```
+
 :::
 
 ### Using the Signer as an EOA
@@ -59,7 +64,7 @@ If you are using viem, then you can use the `toViemAccount` method which will al
 
 :::code-group
 
-```ts
+```ts [walletClient.ts]
 import { signer } from "./signer";
 import { createWalletClient, http } from "viem";
 import { sepolia } from "@alchemy/aa-core";
@@ -71,7 +76,10 @@ export const walletClient = createWalletClient({
 });
 ```
 
-<<< @/snippets/signers/alchemy/signer.ts
+```ts [signer.ts]
+// [!include ~/snippets/signers/alchemy/signer.ts]
+```
+
 :::
 
 ## Returns

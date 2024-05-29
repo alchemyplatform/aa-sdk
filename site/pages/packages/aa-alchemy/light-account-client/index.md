@@ -18,10 +18,9 @@ head:
 
 ## Usage
 
-:::code-group
-
-<<< @/snippets/aa-alchemy/light-account-client.ts
-:::
+```ts [lightAccountClient.ts]
+// [!include ~/snippets/aa-alchemy/light-account-client.ts]
+```
 
 ## Returns
 

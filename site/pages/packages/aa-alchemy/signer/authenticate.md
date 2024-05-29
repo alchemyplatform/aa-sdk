@@ -26,7 +26,7 @@ The `authenticate` method is used to authenticate a user with the Alchemy Signer
 
 :::code-group
 
-```ts
+```ts [example.ts]
 import { signer } from "./signer";
 
 // init the email auth flow
@@ -47,7 +47,9 @@ const user = await signer.authenticate({
 });
 ```
 
-<<< @/snippets/signers/alchemy/signer.ts
+```ts [signer.ts]
+// [!include ~/snippets/signers/alchemy/signer.ts]
+```
 
 :::
 

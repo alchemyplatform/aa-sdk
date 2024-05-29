@@ -1,15 +1,6 @@
 ---
-outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: SmartAccountClient
-  - - meta
-    - name: description
-      content: Introduction to SmartAccountClient exported by aa-core
-  - - meta
-    - property: og:description
-      content: Introduction to SmartAccountClient exported by aa-core
+title: SmartAccountClient
+description: Introduction to SmartAccountClient exported by aa-core
 ---
 
 # Smart Account Client

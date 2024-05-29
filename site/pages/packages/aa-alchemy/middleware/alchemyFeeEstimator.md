@@ -18,8 +18,6 @@ head:
 
 ## Usage
 
-:::code-group
-
 ```ts [example.ts]
 import {
   alchemyFeeEstimator,
@@ -40,8 +38,6 @@ const clientWithGasFeeEstimator = createSmartAccountClient({
   feeEstimator: alchemyFeeEstimator(alchemyClient),
 });
 ```
-
-:::
 
 ## Returns
 

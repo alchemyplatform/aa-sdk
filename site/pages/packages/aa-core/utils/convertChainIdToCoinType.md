@@ -16,7 +16,7 @@ head:
 
 Converts an ethereum chain ID to an ENS coin type as per [ENSIP-11](https://docs.ens.domains/ens-improvement-proposals/ensip-11-evmchain-address-resolution) and assumes this is how mappings are stored for non mainnet chains.
 
-:::tip Note
+:::tip[Note]
 For mainnet, this method will return `60` as the coin type. This comes from [ensip-9](https://docs.ens.domains/ens-improvement-proposals/ensip-9-multichain-address-resolution).
 :::
 

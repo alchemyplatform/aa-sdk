@@ -20,8 +20,6 @@ next:
 
 ## Usage
 
-:::code-group
-
 ```ts [example.ts]
 import {
   alchemyUserOperationSimulator,
@@ -42,8 +40,6 @@ const clientWithUserOpSimulator = createSmartAccountClient({
   userOperationSimulator: alchemyUserOperationSimulator(alchemyClient),
 });
 ```
-
-:::
 
 ## Returns
 
