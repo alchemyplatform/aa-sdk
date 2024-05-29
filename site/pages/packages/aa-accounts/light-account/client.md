@@ -18,10 +18,9 @@ head:
 
 ## Usage
 
-:::code-group
-
-<<< @/snippets/aa-accounts/lightAccountClient.ts
-:::
+```ts [smartAccountClient.ts]
+// [!include ~/snippets/aa-accounts/lightAccountClient.ts]
+```
 
 ## Returns
 

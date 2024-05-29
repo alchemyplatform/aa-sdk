@@ -29,7 +29,10 @@ const encodedTransferOwnershipData =
   smartAccountClient.account.encodeTransferOwnership({ newOwner });
 ```
 
-<<< @/snippets/aa-core/lightAccountClient.ts
+```ts [smartAccountClient.ts]
+// [!include ~/snippets/aa-accounts/lightAccountClient.ts]
+```
+
 :::
 
 ## Returns
