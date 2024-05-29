@@ -1,21 +1,7 @@
 ---
 outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Overview
-  - - meta
-    - name: description
-      content: Build Embedded Accounts with Account Kit. Build smart accounts powered by Account Abstraction (ERC-4337).
-  - - meta
-    - property: og:description
-      content: Learn how to build Embedded Accounts with Account Kit. Build smart accounts powered by Account Abstraction (ERC-4337).
-  - - meta
-    - name: twitter:title
-      content: Overview
-  - - meta
-    - name: twitter:description
-      content: Learn how to build Embedded Accounts with Account Kit. Build smart accounts powered by Account Abstraction (ERC-4337).
+title: Overview
+description: Build Embedded Accounts with Account Kit. Build smart accounts powered by Account Abstraction (ERC-4337).
 ---
 
 # Why Embedded Accounts?

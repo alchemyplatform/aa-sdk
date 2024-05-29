@@ -1,21 +1,7 @@
 ---
 outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Lit Protocol Integration Guide
-  - - meta
-    - name: description
-      content: Follow this integration guide to use PKP Wallet as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - property: og:description
-      content: Follow this integration guide to use PKP Wallet as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - name: twitter:title
-      content: Lit Protocol Integration Guide
-  - - meta
-    - name: twitter:description
-      content: Follow this integration guide to use PKP Wallet as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
+title: Lit Protocol Integration Guide
+description: Follow this integration guide to use PKP Wallet as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
 # Lit Protocol Integration Guide
@@ -24,7 +10,7 @@ head:
 
 Combining Lit Protocol's [pkp wallet](https://www.npmjs.com/package/@lit-protocol/pkp-ethers) with Account Kit allows you to use your Programmable Key Pairs (PKPs) as a smart account for your users.
 
-::: warning
+:::warning
 
 Lit Protocol's pkp network is still in testnet. Backwards compatibility, and data availability will not be guaranteed until mainnet. Do not use PKP wallets to store valuable assets.
 
@@ -34,7 +20,7 @@ Lit Protocol's pkp network is still in testnet. Backwards compatibility, and dat
 
 ### Install the pkp ethers package
 
-::: code-group
+:::code-group
 
 ```bash [npm]
 npm i @lit-protocol/pkp-ethers@cayenne
@@ -48,7 +34,7 @@ yarn add @lit-protocol/pkp-ethers@cayenne
 
 ### Install the LitNodeClient
 
-::: code-group
+:::code-group
 
 ```bash [npm]
 npm i @lit-protocol/lit-node-client@cayenne
@@ -77,7 +63,7 @@ See documentation [here](https://developer.litprotocol.com/v3/sdk/wallets/mintin
 
 We can link our `SmartAccountSigner` to a Modular Account using `createModularAccountAlchemyClient` from `aa-alchemy`:
 
-::: code-group
+:::code-group
 
 ```ts [example.ts]
 import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";

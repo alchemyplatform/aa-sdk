@@ -1,21 +1,7 @@
 ---
 outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Alchemy Signer • Export Private Key
-  - - meta
-    - name: description
-      content: Learn how to enable a user to export their private key with the Alchemy Signer
-  - - meta
-    - property: og:description
-      content: Learn how to enable a user to export their private key with the Alchemy Signer
-  - - meta
-    - name: twitter:title
-      content: Alchemy Signer • Export Private Key
-  - - meta
-    - name: twitter:description
-      content: Learn how to enable a user to export their private key with the Alchemy Signer
+title: Alchemy Signer • Export Private Key
+description: Learn how to enable a user to export their private key with the Alchemy Signer
 ---
 
 # Export private key
@@ -26,10 +12,14 @@ The Alchemy Signer allows you to export a user's private key, allowing them a ri
 
 To add export private key functionality to your app, you can use the `exportPrivateKey` method on the signer.
 
-::: code-group
+:::code-group
 
-<<< @/snippets/signers/alchemy/components/ExportPrivateKey.tsx
+```tsx [ExportPrivateKey.tsx]
+// [!include ~/snippets/signers/alchemy/components/ExportPrivateKey.tsx]
+```
 
-<<< @/snippets/signers/alchemy/signer.ts
+```ts [signer.ts]
+// [!include ~/snippets/signers/alchemy/signer.ts]
+```
 
 :::

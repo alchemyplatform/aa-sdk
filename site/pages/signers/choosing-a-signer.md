@@ -1,21 +1,7 @@
 ---
 outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Choosing a Signer
-  - - meta
-    - name: description
-      content: Explore Account Kit integration guides for signers including Magic.Link, Privy, Web3Auth, EOAs, and many more!
-  - - meta
-    - property: og:description
-      content: Explore Account Kit integration guides for signers including Magic.Link, Privy, Web3Auth, EOAs, and many more!
-  - - meta
-    - name: twitter:title
-      content: Choosing a Signer
-  - - meta
-    - name: twitter:description
-      content: Explore Account Kit integration guides for signers including Magic.Link, Privy, Web3Auth, EOAs, and many more!
+title: Choosing a Signer
+description: Explore Account Kit integration guides for signers including Magic.Link, Privy, Web3Auth, EOAs, and many more!
 ---
 
 # What is a Signer?
@@ -82,7 +68,7 @@ Some MPC signers provide recovery services in which key share(s) are backed up i
 
 **Example**: Privy, Fireblocks MPC, Portal, Capsule, WalletKit
 
-::: details TSS vs SSSS
+:::details TSS vs SSSS
 
 There are two common approaches to MPC.
 

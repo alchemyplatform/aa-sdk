@@ -1,21 +1,7 @@
 ---
 outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Web3Auth Integration Guide
-  - - meta
-    - name: description
-      content: Follow this integration guide to use an EOA as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - property: og:description
-      content: Follow this integration guide to use an EOA as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - name: twitter:title
-      content: Web3Auth Integration Guide
-  - - meta
-    - name: twitter:description
-      content: Follow this integration guide to use an EOA as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
+title: Web3Auth Integration Guide
+description: Follow this integration guide to use an EOA as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
 # Web3Auth Integration Guide
@@ -30,7 +16,7 @@ Combining Web3Auth with Account Kit allows you to get the best of both worlds. Y
 
 `Web3AuthSigner` requires installation of the [`@web3auth/modal`](https://github.com/Web3Auth/web3auth-web/tree/master/packages/modal) and [`@web3auth/base`](https://github.com/Web3Auth/web3auth-web/tree/master/packages/base) SDKs. They are listed as optional dependencies on `aa-signers`. `aa-signers` lists them as optional dependencies.
 
-::: code-group
+:::code-group
 
 ```bash [npm]
 npm i -s @web3auth/modal
@@ -54,7 +40,7 @@ Next, setup the web3auth sdk and create a `SmartAccountSigner` using the `aa-sig
 
 Let's see it in action with `aa-alchemy`:
 
-::: code-group
+:::code-group
 
 ```ts [example.ts]
 import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";

@@ -1,21 +1,7 @@
 ---
 outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Contributing Your Signer
-  - - meta
-    - name: description
-      content: Follow this guide to contribute a new Signer to Account Kit documentation, and enable developers to sign ERC-4337 transactions with your Signer.
-  - - meta
-    - property: og:description
-      content: Follow this guide to contribute a new Signer to Account Kit documentation, and enable developers to sign ERC-4337 transactions with your Signer.
-  - - meta
-    - name: twitter:title
-      content: Contributing Your Signer
-  - - meta
-    - name: twitter:description
-      content: Follow this guide to contribute a new Signer to Account Kit documentation, and enable developers to sign ERC-4337 transactions with your Signer.
+title: Contributing Your Signer
+description: Follow this guide to contribute a new Signer to Account Kit documentation, and enable developers to sign ERC-4337 transactions with your Signer.
 ---
 
 # Contribute your Signer
@@ -32,7 +18,7 @@ In either case, if your `Signer` or library exports an `EIP-1193` compliant prov
 
 Make sure to include unit tests along with your implementation! Take a look at these PRs from [Magic](https://github.com/alchemyplatform/aa-sdk/pull/229) and [Web3Auth](https://github.com/alchemyplatform/aa-sdk/pull/247) for reference.
 
-:::tip Note
+:::tip
 If you your Signer implementation requires adding SDKs as dependencies, you should list them as `optionalDependencies`. Additionaly, `aa-signers` expects those SDKs to be node.js Javascript SDKs to so that all developers can use Account Kit with your Signer.
 
 If your SDK is based on a frontend Javascript framework, such as React.js or Vue.js, you will just have to follow step 2 onwards to submit documentation with an example snippet clarifying that your Signer must be used in said framework.

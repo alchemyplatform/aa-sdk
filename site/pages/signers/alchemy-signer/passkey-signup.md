@@ -1,21 +1,7 @@
 ---
 outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Alchemy Signer • Passkey Signup
-  - - meta
-    - name: description
-      content: Learn how to sign up users with a newly-created passkey using the Alchemy Signer
-  - - meta
-    - property: og:description
-      content: Learn how to sign up users with a newly-created passkey using the Alchemy Signer
-  - - meta
-    - name: twitter:title
-      content: Alchemy Signer • Passkey Signup
-  - - meta
-    - name: twitter:description
-      content: Learn how to sign up users with a newly-created passkey using the Alchemy Signer
+title: Alchemy Signer • Passkey Signup
+description: Learn how to sign up users with a newly-created passkey using the Alchemy Signer
 ---
 
 # Passkey Signup
@@ -24,14 +10,20 @@ The Alchemy Signer allows you to sign up users to your application using a [pass
 
 To add passkey signup functionality to your app, you can use the [`authenticate`](/packages/aa-alchemy/signer/authenticate.html#parameters) method on the Alchemy Signer as follows.
 
-::: code-group
+:::code-group
 
-<<< @/snippets/signers/alchemy/passkey-signup.ts
+```ts [passkey-signup.ts]
+// [!include ~/snippets/signers/alchemy/passkey-signup.ts]
+```
 
-<<< @/snippets/signers/alchemy/signer.ts
+```ts [signer.ts]
+// [!include ~/snippets/signers/alchemy/signer.ts]
+```
 
 :::
 
 ## Example
 
-<<< @/snippets/signers/alchemy/components/PasskeySignup.tsx
+```tsx [PasskeySignup.tsx]
+// [!include ~/snippets/signers/alchemy/components/PasskeySignup.tsx]
+```

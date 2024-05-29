@@ -1,21 +1,7 @@
 ---
 outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Arcana Auth Integration Guide
-  - - meta
-    - name: description
-      content: Follow this integration guide to use Arcana Auth Web3 Wallet Address as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - property: og:description
-      content: Follow this integration guide to use Arcana Auth Web3 Wallet Address as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - name: twitter:title
-      content: Arcana Auth Integration Guide
-  - - meta
-    - name: twitter:description
-      content: Follow this integration guide to use Arcana Auth Web3 Wallet Address as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
+title: Arcana Auth Integration Guide
+description: Follow this integration guide to use Arcana Auth Web3 Wallet Address as a signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
 # Arcana Auth Integration Guide
@@ -28,7 +14,7 @@ Apps using Account Kit can easily onboard users with [social login](https://docs
 
 ### Install the SDK
 
-::: code-group
+:::code-group
 
 ```bash [npm]
 npm i -s @arcana/auth
@@ -54,7 +40,7 @@ Use the **clientId** assigned to your app via the dashboard and integrate with t
 
 Let's see it in action with `aa-alchemy`:
 
-::: code-group
+:::code-group
 
 ```ts [example.ts]
 import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";

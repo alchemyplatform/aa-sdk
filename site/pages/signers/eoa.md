@@ -1,21 +1,7 @@
 ---
 outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: EOA Integration Guide
-  - - meta
-    - name: description
-      content: Follow this integration guide to use an EOA as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - property: og:description
-      content: Follow this integration guide to use an EOA as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - name: twitter:title
-      content: EOA Integration Guide
-  - - meta
-    - name: twitter:description
-      content: Follow this integration guide to use an EOA as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
+title: EOA Integration Guide
+description: Follow this integration guide to use an EOA as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
 # EOA Integration Guide

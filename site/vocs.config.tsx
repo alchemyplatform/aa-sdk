@@ -7,6 +7,14 @@ export default defineConfig({
   description: "Account Abstraction Legos",
   logoUrl: "/kit-logo.svg",
   rootDir: "./",
+  head: (
+    <>
+      <meta
+        name="google-site-verification"
+        content="W4pmFb0Oe26_OndBLdy5uqNrsl_gfmKfTlHwlHPd4Co"
+      />
+    </>
+  ),
   topNav: [
     { text: "Docs", link: "/getting-started/introduction" },
     {
@@ -232,35 +240,38 @@ export default defineConfig({
     {
       text: "Custom signers",
       items: [
-        { text: "Introduction", link: "/choosing-a-signer" },
+        { text: "Introduction", link: "/signers/choosing-a-signer" },
         {
           text: "Third-party signers",
           collapsed: true,
           items: [
-            { text: "Magic", link: "/magic" },
-            { text: "Web3Auth", link: "/web3auth" },
-            { text: "Turnkey", link: "/turnkey" },
-            { text: "Privy", link: "/privy" },
-            { text: "Dynamic", link: "/dynamic" },
-            { text: "Fireblocks", link: "/fireblocks" },
-            { text: "Portal", link: "/portal" },
-            { text: "Capsule", link: "/capsule" },
-            { text: "Lit Protocol", link: "/lit" },
-            { text: "Particle Network", link: "/particle-network" },
-            { text: "Arcana Auth", link: "/arcana-auth" },
-            { text: "Dfns", link: "/dfns" },
-            { text: "WalletKit", link: "/walletkit" },
-            { text: "Passport", link: "/passport" },
+            { text: "Magic", link: "/signers/guides/magic" },
+            { text: "Web3Auth", link: "/signers/guides/web3auth" },
+            { text: "Turnkey", link: "/signers/guides/turnkey" },
+            { text: "Privy", link: "/signers/guides/privy" },
+            { text: "Dynamic", link: "/signers/guides/dynamic" },
+            { text: "Fireblocks", link: "/signers/guides/fireblocks" },
+            { text: "Portal", link: "/signers/guides/portal" },
+            { text: "Capsule", link: "/signers/guides/capsule" },
+            { text: "Lit Protocol", link: "/signers/guides/lit" },
+            {
+              text: "Particle Network",
+              link: "/signers/guides/particle-network",
+            },
+            { text: "Arcana Auth", link: "/signers/guides/arcana-auth" },
+            { text: "Dfns", link: "/signers/guides/dfns" },
+            { text: "WalletKit", link: "/signers/guides/walletkit" },
+            { text: "Passport", link: "/signers/guides/passport" },
           ],
         },
-        { text: "EOA signer", link: "/eoa" },
+        { text: "EOA signer", link: "/signers/eoa" },
         {
           text: "Build your own",
-          link: "/guides/custom-signer",
+          link: "/signers/guides/custom-signer",
         },
         {
           text: "Contribute your signer",
-          link: "/contributing",
+          link: "/signers/contributing",
         },
       ],
     },

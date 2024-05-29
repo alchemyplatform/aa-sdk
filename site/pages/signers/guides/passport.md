@@ -1,21 +1,7 @@
 ---
 outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Passport Protcol Integration Guide
-  - - meta
-    - name: description
-      content: Follow this integration guide to use Passport Protcol as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - property: og:description
-      content: Follow this integration guide to use Passport Protcol as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - name: twitter:title
-      content: Passport Protcol Integration Guide
-  - - meta
-    - name: twitter:description
-      content: Follow this integration guide to use Passport Protcol as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
+title: Passport Protcol Integration Guide
+description: Follow this integration guide to use Passport Protcol as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
 # Passport Integration Guide
@@ -34,7 +20,7 @@ You can get started on Passport by configuring your scope and authentication rul
 
 Using `PassportSigner` in the `aa-signers` package requires installation of the [`@0xpass/passport`](https://github.com/0xpass/passport-sdk/tree/main/packages/passport) and [`@0xpass/webauthn-signer`](https://github.com/0xpass/passport-sdk/tree/main/packages/webauthn-signer).
 
-::: code-group
+:::code-group
 
 ```bash [npm]
 npm i @0xpass/passport
@@ -57,7 +43,7 @@ Next, setup the Passport SDK and create an authenticated `PassportSigner` using 
 ### Use it with Light Account
 
 Let's see it in action with `aa-alchemy` and `ModularAccount` from `aa-accounts`:
-::: code-group
+:::code-group
 
 ```ts [example.ts]
 import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";

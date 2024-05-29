@@ -1,21 +1,7 @@
 ---
 outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Turnkey Integration Guide
-  - - meta
-    - name: description
-      content: Follow this integration guide to use Turnkey as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - property: og:description
-      content: Follow this integration guide to use Turnkey as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - name: twitter:title
-      content: Turnkey Integration Guide
-  - - meta
-    - name: twitter:description
-      content: Follow this integration guide to use Turnkey as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
+title: Turnkey Integration Guide
+description: Follow this integration guide to use Turnkey as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
 # Turnkey Integration Guide
@@ -36,7 +22,7 @@ Using `TurnkeySigner` in the `aa-signers` package requires installation of the [
 
 Every request to Turnkey must be signed using a [stamper](https://docs.turnkey.com/category/api-design). Turnkey supports multiple stampers including [`@turnkey/webauthn-stamper`](https://github.com/tkhq/sdk/tree/main/packages/webauthn-stamper) to sign requests with Passkeys or WebAuthn devices, [`@turnkey/iframe-stamper`](https://github.com/tkhq/sdk/tree/main/packages/iframe-stamper) with Email, and [`@turnkey/api-key-stamper`](https://github.com/tkhq/sdk/tree/main/packages/api-key-stamper) with API keys.
 
-::: code-group
+:::code-group
 
 ```bash [npm]
 npm i -s @turnkey/http
@@ -59,7 +45,7 @@ Next, setup the Turnkey SDK and create an authenticated `TurnkeySigner` using th
 ### Use it with Light Account
 
 Let's see it in action with `aa-alchemy` and `ModularAccount` from `aa-accounts`:
-::: code-group
+:::code-group
 
 ```ts [example.ts]
 import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";

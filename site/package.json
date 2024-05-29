@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vocs dev",
-    "build": "vitepress build",
-    "preview": "vitepress preview"
+    "build": "vocs build",
+    "preview": "vocs preview"
   },
   "devDependencies": {
     "@alchemy/aa-accounts": "*",

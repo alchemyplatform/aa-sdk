@@ -1,21 +1,7 @@
 ---
 outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Privy Integration Guide
-  - - meta
-    - name: description
-      content: Follow this integration guide to use Privy as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - property: og:description
-      content: Follow this integration guide to use Privy as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - name: twitter:title
-      content: Privy Integration Guide
-  - - meta
-    - name: twitter:description
-      content: Follow this integration guide to use Privy as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
+title: Privy Integration Guide
+description: Follow this integration guide to use Privy as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
 # Privy Integration Guide
@@ -30,7 +16,7 @@ Combining Privy with Account Kit allows you to seamlessly generate embedded wall
 
 ### Install the SDK
 
-::: code-group
+:::code-group
 
 ```bash [npm]
 npm i @privy-io/react-auth

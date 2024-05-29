@@ -1,21 +1,7 @@
 ---
 outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Dynamic Integration Guide
-  - - meta
-    - name: description
-      content: Follow this integration guide to use Dynamic as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - property: og:description
-      content: Follow this integration guide to use Dynamic as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - name: twitter:title
-      content: Dynamic Integration Guide
-  - - meta
-    - name: twitter:description
-      content: Follow this integration guide to use Dynamic as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
+title: Dynamic Integration Guide
+description: Follow this integration guide to use Dynamic as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
 # Dynamic
@@ -28,7 +14,7 @@ By default, the latest version of the Dynamic SDK ships with Viem. If you need t
 
 In this example, we are installing only the Ethereum connectors in order to keep bundle size light. If you need any others, you can [find the references here](https://docs.dynamic.xyz/react-sdk/components/dynamiccontextprovider#walletconnectors)
 
-::: code-group
+:::code-group
 
 ```bash [npm]
 npm i -s @dynamic-labs/sdk-react-core @dynamic-labs/ethereum
@@ -79,7 +65,7 @@ Next, inside any component which is wrapped by the above DynamicContextProvider,
 ### Use it with Modular Account
 
 Let's see it in action with `aa-alchemy`:
-::: code-group
+:::code-group
 
 ```ts [example.ts]
 import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";

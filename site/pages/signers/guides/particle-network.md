@@ -1,15 +1,7 @@
 ---
 outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Particle Network
-  - - meta
-    - name: description
-      content: Guide to use Particle Network as a Signer
-  - - meta
-    - property: og:description
-      content: Guide to use Particle Network as a Signer
+title: Particle Network
+description: Guide to use Particle Network as a Signer
 ---
 
 # Particle Network
@@ -28,7 +20,7 @@ To configure Particle, you'll need to start by quickly signing up for a Particle
 
 `ParticleSigner` requires installation of the [`@particle-network/auth`](https://developers.particle.network/docs/building-with-particle-auth) and [`@particle-network/provider`](https://developers.particle.network/reference/auth-web). `aa-signers` lists them as optional dependencies.
 
-::: code-group
+:::code-group
 
 ```bash [npm]
 npm i -s @particle-network/auth
@@ -54,7 +46,7 @@ From here, setting up a `SmartAccountSigner` involves the initialization of `Par
 
 Next, setup the Particle SDK and create an authenticated `ParticleSigner` using the `aa-signers` package:
 
-::: code-group
+:::code-group
 
 ```ts [example.ts]
 import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";

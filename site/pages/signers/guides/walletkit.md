@@ -1,21 +1,7 @@
 ---
 outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: WalletKit Integration Guide
-  - - meta
-    - name: description
-      content: Follow this integration guide to use WalletKit as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
-  - - meta
-    - property: og:description
-      content: Follow this integration guide to use WalletKit as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
-  - - meta
-    - name: twitter:title
-      content: WalletKit Integration Guide
-  - - meta
-    - name: twitter:description
-      content: Follow this integration guide to use WalletKit as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
+title: WalletKit Integration Guide
+description: Follow this integration guide to use WalletKit as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337.
 ---
 
 # WalletKit Integration Guide
@@ -30,7 +16,7 @@ This guide shows you how to use WalletKit's EOA wallets and pre-built onboarding
 
 ### Install the SDK
 
-::: code-group
+:::code-group
 
 ```bash [npm]
 npm i @walletkit/react-link walletkit-js
@@ -65,7 +51,7 @@ export function App() {
 }
 ```
 
-::: tip
+:::tip
 
 If you would like to integrate WalletKit with wagmi, check out
 the [installation docs here](https://docs.walletkit.com/link/installation).

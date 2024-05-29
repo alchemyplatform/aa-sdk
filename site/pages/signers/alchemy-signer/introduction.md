@@ -1,21 +1,7 @@
 ---
 outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Alchemy Signer
-  - - meta
-    - name: description
-      content: Learn how to get started with the Alchemy Signer
-  - - meta
-    - property: og:description
-      content: Learn how to get started with the Alchemy Signer
-  - - meta
-    - name: twitter:title
-      content: Alchemy Signer
-  - - meta
-    - name: twitter:description
-      content: Learn how to get started with the Alchemy Signer
+title: Alchemy Signer
+description: Learn how to get started with the Alchemy Signer
 ---
 
 # Alchemy Signer
@@ -24,7 +10,7 @@ The Alchemy Signer is a `SmartAccountSigner` that is powered by Alchemy's Signer
 
 Learn how to set up your account config, create an `AlchemySigner`, log users in with email auth, and create a embedded account with our signer to enable email, passkeys (i.e. biometrics), and soon social auth flows!
 
-::: tip
+:::tip
 The Alchemy Signer requires the use of an `iframe`, so must be used in the context of an application. You'll need to build your own custom frontend.
 
 See an example of a full Alchemy Embedded Account [here](https://github.com/alchemyplatform/embedded-accounts-demo.git)!
@@ -34,17 +20,19 @@ See an example of a full Alchemy Embedded Account [here](https://github.com/alch
 
 To use the Alchemy Signer, you will need to create a new account config in your [Alchemy Accounts Manager Dashbord](https://dashboard.alchemy.com/accounts) and connect this to your apps.
 
-<img src="/images/alchemy-accounts-dashboard.png" width="auto" height="auto" alt="Create new embedded account config" style="display: block; margin: auto;">
+![Create new embedded account config](/images/alchemy-accounts-dashboard.png)
 
 The account config allows you to customize the signup and login authentication email that will be sent to users when logging in to your dapp. Apply the config to one or more apps.
 
-<img src="/images/create-account-config.png" width="auto" height="auto" alt="Account Kit Overview" style="display: block; margin: auto;">
+![Account Kit Overview](/images/create-account-config.png)
 
 ## Creating an Alchemy Signer
 
 Once you have been granted access to the Alchemy Signer, getting started is really simple. Install the `@alchemy/aa-alchemy` package and initialize your signer:
 
-<<< @/snippets/signers/alchemy/signer.ts
+```ts [signer.ts]
+// [!include ~/snippets/signers/alchemy/signer.ts]
+```
 
 For other configuration options, see the [Alchemy Signer API Reference](/packages/aa-alchemy/signer/overview).
 
@@ -54,11 +42,9 @@ Ensure that the access key used corresponds to the apps connected to the account
 
 Once you have initialized your signer, you can now enable your users to create an account or login to their existing account.
 
-::: code-group
-
-<<< @/snippets/signers/alchemy/SignupLoginComponent.tsx
-
-:::
+```tsx [SignupLoginComponent.tsx]
+// [!include ~/snippets/signers/alchemy/SignupLoginComponent.tsx]
+```
 
 Once your signer is authenticated with a user, you can use it to sign User Operations by creating a `SmartContractAccount` and passing the signer to it.
 
@@ -67,9 +53,9 @@ Once your signer is authenticated with a user, you can use it to sign User Opera
 By default the `AlchemySigner` leverages `localStorage` to cache user sessions for 15 minutes. This can be configured by passing in a `sessionConfig` to your `AlchemySigner` constructor.
 
 You can check if a session exists by doing the following:
-::: code-group
+:::code-group
 
-```ts
+```ts [getAuthDetails.ts]
 import { signer } from "./signer";
 
 // NOTE: this method throws if there is no authenticated user
@@ -77,7 +63,10 @@ import { signer } from "./signer";
 const user = await signer.getAuthDetails().catch(() => null);
 ```
 
-<<< @/snippets/signers/alchemy/signer.ts
+```ts [signer.ts]
+// [!include ~/snippets/signers/alchemy/signer.ts]
+```
+
 :::
 
 If there is an existing session, then your signer is ready for use! If not, see the section above for logging users in.
@@ -86,9 +75,9 @@ If there is an existing session, then your signer is ready for use! If not, see 
 
 Once your signer is authenticated with a user, you can use it to sign User Operations by creating a `SmartContractAccount` and passing the signer to it. For example:
 
-::: code-group
+:::code-group
 
-```ts
+```ts [createAccount.ts]
 import { signer } from "./signer";
 
 export const account = await createMultiOwnerModularAccount({
@@ -98,12 +87,15 @@ export const account = await createMultiOwnerModularAccount({
 });
 ```
 
-<<< @/snippets/signers/alchemy/signer.ts
+```ts [signer.ts]
+// [!include ~/snippets/signers/alchemy/signer.ts]
+```
+
 :::
 
 ## Using the Signer as an EOA
 
-::: warning
+:::warning
 Note that EOA wallets will not have access to smart account features like gas sponsorship, batched transactions, multi-owner, or plugins. If you want to switch from EOA to smart accounts later, then each user will need to transfer their assets from the EOA account to a new smart account. It is not currently possible to "upgrade" and EOA to a smart contract account, although the community is discussing potential [EIPs](https://eips.ethereum.org/EIPS/eip-7377) to do that in the future.
 :::
 
@@ -111,9 +103,9 @@ Because the Alchemy Signer has its own `address` and supports signing messages a
 
 If you are using viem, then you can use the `toViemAccount` method which will allow you to use the signer with a [`WalletClient`](https://viem.sh/docs/clients/wallet#local-accounts-private-key-mnemonic-etc).
 
-::: code-group
+:::code-group
 
-```ts
+```ts [createWalletClient.ts]
 import { signer } from "./signer";
 import { createWalletClient, http } from "viem";
 import { sepolia } from "@alchemy/aa-core";
@@ -125,5 +117,8 @@ export const walletClient = createWalletClient({
 });
 ```
 
-<<< @/snippets/signers/alchemy/signer.ts
+```ts [signer.ts]
+// [!include ~/snippets/signers/alchemy/signer.ts]
+```
+
 :::

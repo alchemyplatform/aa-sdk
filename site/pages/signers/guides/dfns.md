@@ -1,15 +1,7 @@
 ---
 outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Dfns
-  - - meta
-    - name: description
-      content: Guide for using Dfns as a Signer
-  - - meta
-    - property: og:description
-      content: Guide for using Dfns as a Signer
+title: Dfns Integration Guide
+description: Guide for using Dfns as a Signer
 ---
 
 # Dfns Integration Guide
@@ -22,7 +14,7 @@ Dfns created a full example of a gas-less transaction via a paymaster [in our SD
 
 ## Install Dfns SDK
 
-::: code-group
+:::code-group
 
 ```bash [npm]
 npm i @dfns/lib-viem @dfns/sdk @dfns/sdk-keysigner
@@ -42,7 +34,7 @@ Setup the Dfns Web3 Provider and wrap it in an `AlchemyProvider`.
 
 ### Use it with Light Account
 
-::: code-group
+:::code-group
 
 ```ts [example.ts]
 import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";

@@ -1,21 +1,7 @@
 ---
 outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Fireblocks Integration Guide
-  - - meta
-    - name: description
-      content: Follow this integration guide to use Fireblocks as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - property: og:description
-      content: Follow this integration guide to use Fireblocks as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - name: twitter:title
-      content: Fireblocks Integration Guide
-  - - meta
-    - name: twitter:description
-      content: Follow this integration guide to use Fireblocks as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
+title: Fireblocks Integration Guide
+description: Follow this integration guide to use Fireblocks as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
 # Fireblocks
@@ -32,7 +18,7 @@ Fireblocks' MPC wallets are EOA accounts, which in any account abstraction enabl
 
 Using `FireblocksSigner` in the `aa-signers` package requires installation of the [`@fireblocks/fireblocks-web3-provider`](https://github.com/fireblocks/fireblocks-web3-provider) SDK. `aa-signers` lists it as optional dependency.
 
-::: code-group
+:::code-group
 
 ```bash [npm]
 npm i -s @fireblocks/fireblocks-web3-provider
@@ -42,7 +28,7 @@ npm i -s @fireblocks/fireblocks-web3-provider
 yarn add @fireblocks/fireblocks-web3-provider
 ```
 
-::: warning Note
+:::warning Note
 Due to how Fireblocks parses a private key [in their SDK](https://github.com/fireblocks/fireblocks-web3-provider/blob/main/src/provider.ts#L106-L116), you must specific the private key in [PEM Format](https://docs.progress.com/bundle/datadirect-hybrid-data-pipeline-installation-46/page/PEM-file-format.html#:~:text=A%20PEM%20encoded%20file%20includes,%2D%2D%2D%2D%2D%22.) if you chose to use `FireblocksSigner` in your app's client. Otherwise, if you choose `FireblocksSigner` in your app's server, you can also specify a path to a file containing your private key.
 :::
 
@@ -56,7 +42,7 @@ Next, setup the Fireblocks SDK and create an authenticated `FireblocksSigner` us
 
 Let's see it in action with `aa-alchemy`:
 
-::: code-group
+:::code-group
 
 ```ts [example.ts]
 import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";

@@ -1,21 +1,7 @@
 ---
 outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Magic Link Integration Guide
-  - - meta
-    - name: description
-      content: Follow this integration guide to use Magic.Link as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - property: og:description
-      content: Follow this integration guide to use Magic.Link as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - name: twitter:title
-      content: Magic Link Integration Guide
-  - - meta
-    - name: twitter:description
-      content: Follow this integration guide to use Magic.Link as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
+title: Magic Link Integration Guide
+description: Follow this integration guide to use Magic.Link as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
 # Magic Link Integration Guide
@@ -30,7 +16,7 @@ Combining Magic with Account Kit allows you to get the best of both worlds. You 
 
 Using `MagicSigner` in the `aa-signers` package requires installation of the [`magic-sdk`](https://github.com/magiclabs/magic-js) SDK. `aa-signers` lists it as optional dependency.
 
-::: code-group
+:::code-group
 
 ```bash [npm]
 npm i -s magic-sdk
@@ -40,7 +26,7 @@ npm i -s magic-sdk
 yarn add magic-sdk
 ```
 
-::: warning Note
+:::warning Note
 To use `MagicSigner` in your app's client, you must ensure the `window` object is defined.
 :::
 
@@ -54,7 +40,7 @@ Next, setup the magic sdk and create an authenticated `MagicSigner` using the `a
 
 Let's see it in action with `aa-alchemy`:
 
-::: code-group
+:::code-group
 
 ```ts [example.ts]
 import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";

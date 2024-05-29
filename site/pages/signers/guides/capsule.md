@@ -1,21 +1,7 @@
 ---
 outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Capsule Integration Guide
-  - - meta
-    - name: description
-      content: Follow this integration guide to use Capsule as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - property: og:description
-      content: Follow this integration guide to use Capsule as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - name: twitter:title
-      content: Capsule Integration Guide
-  - - meta
-    - name: twitter:description
-      content: Follow this integration guide to use Capsule as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
+title: Capsule Integration Guide
+description: Follow this integration guide to use Capsule as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
 # Capsule Integration Guide
@@ -36,7 +22,7 @@ Follow these steps to begin integrating Capsule:
 Using `CapsuleSigner` in the `aa-signers` package requires installation of the [`@usecapsule/web-sdk`](https://capsule-org.github.io/web-sdk/) SDK. `aa-signers` lists it as optional dependency.
 
 Web
-::: code-group
+:::code-group
 
 ```bash [npm]
 npm i -s @usecapsule/web-sdk
@@ -49,7 +35,7 @@ yarn add @usecapsule/web-sdk
 :::
 
 React Native
-::: code-group
+:::code-group
 
 ```bash [npm]
 npm i -s @usecapsule/react-native-sdk
@@ -61,7 +47,7 @@ yarn add @usecapsule/react-native-sdk
 
 :::
 
-::: warning Note
+:::warning Note
 To use `CapsuleSigner` in your app's client, you must ensure the `window` object is defined.
 :::
 
@@ -75,7 +61,7 @@ Next, setup the Capsule SDK and create an authenticated `CapsuleSigner` using th
 
 Let's see it in action with `aa-alchemy`:
 
-::: code-group
+:::code-group
 
 ```ts [alchemy.ts]
 import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";

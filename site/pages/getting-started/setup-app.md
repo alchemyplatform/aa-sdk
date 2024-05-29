@@ -1,22 +1,7 @@
 ---
 outline: deep
 title: Getting started guide
-head:
-  - - meta
-    - property: og:title
-      content: Getting started guide
-  - - meta
-    - name: description
-      content: Learn how to get started with Alchemy's Embedded Accounts using Account Kit and the Alchemy Signer, Modular Account, Rundler and Gas Manager.
-  - - meta
-    - property: og:description
-      content: Learn how to get started with Alchemy's Embedded Accounts using Account Kit and the Alchemy Signer, Modular Account, Rundler and Gas Manager.
-  - - meta
-    - name: twitter:title
-      content: Getting started guide
-  - - meta
-    - name: twitter:description
-      content: Learn how to get started with Alchemy's Embedded Accounts using Account Kit and the Alchemy Signer, Modular Account, Rundler and Gas Manager.
+description: Learn how to get started with Alchemy's Embedded Accounts using Account Kit and the Alchemy Signer, Modular Account, Rundler and Gas Manager.
 ---
 
 # Setup your application

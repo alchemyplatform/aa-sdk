@@ -1,21 +1,7 @@
 ---
 outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Portal Integration Guide
-  - - meta
-    - name: description
-      content: Follow this integration guide to use Portal as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - property: og:description
-      content: Follow this integration guide to use Portal as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
-  - - meta
-    - name: twitter:title
-      content: Portal Integration Guide
-  - - meta
-    - name: twitter:description
-      content: Follow this integration guide to use Portal as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
+title: Portal Integration Guide
+description: Follow this integration guide to use Portal as a Signer with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
 # Portal Integration Guide
@@ -32,7 +18,7 @@ Check out Portal's developer [docs](https://docs.portalhq.io/) to learn more abo
 
 Using `PortalSigner` in the `aa-signers` package requires installation of the [`@portal-hq/web`](https://docs.portalhq.io/sdk/web-beta) SDK. `aa-signers` lists it as optional dependency.
 
-::: code-group
+:::code-group
 
 ```bash [npm]
 npm install --save @portal-hq/web
@@ -54,7 +40,7 @@ Next, setup the Portal SDK and create an authenticated `PortalSigner` using the 
 
 Let's see it in action with `aa-alchemy`:
 
-::: code-group
+:::code-group
 
 ```ts [example.ts]
 import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";
