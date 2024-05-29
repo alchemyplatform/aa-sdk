@@ -30,7 +30,9 @@ yarn add @dfns/lib-viem @dfns/sdk @dfns/sdk-keysigner
 
 Setup the Dfns Web3 Provider and wrap it in an `AlchemyProvider`.
 
-<<< @/snippets/signers/dfns.ts
+```ts [dfns.ts]
+// [!include ~/snippets/signers/dfns.ts]
+```
 
 ### Use it with Light Account
 
@@ -54,6 +56,8 @@ const createAlchemyProvider = async () => {
 };
 ```
 
-<<< @/snippets/signers/dfns.ts
+```ts [dfns.ts]
+// [!include ~/snippets/signers/dfns.ts]
+```
 
 :::

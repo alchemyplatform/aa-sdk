@@ -32,7 +32,7 @@ yarn add @privy-io/react-auth
 
 First, set up your React app with Privy following the [Privy Quickstart](https://docs.privy.io/guide/quickstart). You should also configure your `PrivyProvider` to create embedded wallets for your users when they login, like below:
 
-```ts [PrivyProvider]
+```tsx [PrivyProvider.tsx]
 
 <PrivyProvider
     appId='insert-your-privy-app-id'
@@ -48,4 +48,6 @@ First, set up your React app with Privy following the [Privy Quickstart](https:/
 
 Then, when a user logs in to your app, Privy will create an embedded wallet for them. You can use this embedded wallet to create a `LightSmartContractAccount` from `aa-accounts`:
 
-<<< @/snippets/signers/privy.ts
+```ts [privy.ts]
+// [!include ~/snippets/signers/privy.ts]
+```

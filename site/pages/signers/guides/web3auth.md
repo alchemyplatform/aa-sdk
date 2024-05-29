@@ -34,7 +34,9 @@ yarn add @web3auth/base
 
 Next, setup the web3auth sdk and create a `SmartAccountSigner` using the `aa-signers` package:
 
-<<< @/snippets/signers/web3auth.ts
+```ts [web3auth.ts]
+// [!include ~/snippets/signers/web3auth.ts]
+```
 
 ### Use it with Modular Account
 
@@ -56,6 +58,8 @@ const provider = await createModularAccountAlchemyClient({
 });
 ```
 
-<<< @/snippets/signers/web3auth.ts
+```ts [web3auth.ts]
+// [!include ~/snippets/signers/web3auth.ts]
+```
 
 :::

@@ -36,7 +36,9 @@ Due to how Fireblocks parses a private key [in their SDK](https://github.com/fir
 
 Next, setup the Fireblocks SDK and create an authenticated `FireblocksSigner` using the `aa-signers` package:
 
-<<< @/snippets/signers/fireblocks.ts
+```ts [fireblocks.ts]
+// [!include ~/snippets/signers/fireblocks.ts]
+```
 
 ### Use it with Modular Account
 
@@ -57,6 +59,8 @@ const provider = await createModularAccountAlchemyClient({
 });
 ```
 
-<<< @/snippets/signers/fireblocks.ts
+```ts [fireblocks.ts]
+// [!include ~/snippets/signers/fireblocks.ts]
+```
 
 :::

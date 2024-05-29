@@ -19,7 +19,9 @@ If you want to add your Signer implementation to Account Kit's codebase, take a 
 
 Smart accounts in Account Kit expect an implementation of `SmartAccountSigner` to work in Account Kit. We also include a `SmartAccountAuthenticator` interface that extends `SmartAccountSigner` and wraps any SDKs you may wish to use as part of the implementation of your own Signer.
 
-<<< @/../packages/core/src/signer/types.ts
+```ts [types.ts]
+// [!include ~/../packages/core/src/signer/types.ts]
+```
 
 ## 2. Using `WalletClientSigner`
 
@@ -27,4 +29,6 @@ Viem allows you to create a `WalletClient`, which can be used to wrap local or J
 
 We support a `SmartAccountSigner` implementation called `WalletClientSigner` that makes it really easy to use a viem `WalletClient` as a signer on your Smart Contract Account. If your Signer is [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compliant, it is really easy to use with `WalletClient`. Let's take a look at a simple example:
 
-<<< @/snippets/signers/wallet-client-signer.ts
+```ts [wallet-client-signer.ts]
+// [!include ~/snippets/signers/wallet-client-signer.ts]
+```

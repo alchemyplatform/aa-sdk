@@ -34,7 +34,9 @@ To use `MagicSigner` in your app's client, you must ensure the `window` object i
 
 Next, setup the magic sdk and create an authenticated `MagicSigner` using the `aa-signers` package:
 
-<<< @/snippets/signers/magic.ts
+```ts [magic.ts]
+// [!include ~/snippets/signers/magic.ts]
+```
 
 ### Use it with Modular Account
 
@@ -58,6 +60,8 @@ const provider = await createModularAccountAlchemyClient({
 });
 ```
 
-<<< @/snippets/signers/magic.ts
+```ts [lit.ts]
+// [!include ~/snippets/signers/lit.ts]
+```
 
 :::

@@ -40,7 +40,9 @@ yarn add @turnkey/viem
 
 Next, setup the Turnkey SDK and create an authenticated `TurnkeySigner` using the `aa-signers` package:
 
-<<< @/snippets/signers/turnkey.ts
+```ts [turnkey.ts]
+// [!include ~/snippets/signers/turnkey.ts]
+```
 
 ### Use it with Light Account
 
@@ -61,6 +63,8 @@ const provider = await createModularAccountAlchemyClient({
 });
 ```
 
-<<< @/snippets/signers/turnkey.ts
+```ts [turnkey.ts]
+// [!include ~/snippets/signers/turnkey.ts]
+```
 
 :::

@@ -57,7 +57,9 @@ See documentation [here](https://developer.litprotocol.com/v3/sdk/wallets/mintin
 
 ### Create A LitSigner
 
-<<< @/snippets/signers/lit.ts
+```ts [lit.ts]
+// [!include ~/snippets/signers/lit.ts]
+```
 
 ### Use it with Modular Account
 
@@ -76,6 +78,10 @@ const provider = await createModularAccountAlchemyClient({
   chain,
   signer: await createLitSigner(AUTH_METHOD),
 });
+```
+
+```ts [lit.ts]
+// [!include ~/snippets/signers/lit.ts]
 ```
 
 :::

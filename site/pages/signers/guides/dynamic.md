@@ -60,7 +60,9 @@ export default App;
 
 Next, inside any component which is wrapped by the above DynamicContextProvider, use the `useDynamicContext` hook to fetch your provider, and create a `SmartAccountSigner`:
 
-<<< @/snippets/signers/dynamic.ts
+```ts [dynamic.ts]
+// [!include ~/snippets/signers/dynamic.ts]
+```
 
 ### Use it with Modular Account
 
@@ -81,6 +83,8 @@ const provider = await createModularAccountAlchemyClient({
 });
 ```
 
-<<< @/snippets/signers/dynamic.ts
+```ts [dynamic.ts]
+// [!include ~/snippets/signers/dynamic.ts]
+```
 
 :::

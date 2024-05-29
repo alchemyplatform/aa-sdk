@@ -38,7 +38,9 @@ yarn add @0xpass/webauthn-signer
 
 Next, setup the Passport SDK and create an authenticated `PassportSigner` using the `aa-signers` package to use an authenticated Passport Signer, you need to register a user account, which is attached to your application scope, following that you can authenticate the user, and and begin combining with Alchemy's Account Kit.
 
-<<< @/snippets/signers/passport.ts
+```ts [passport.ts]
+// [!include ~/snippets/signers/passport.ts]
+```
 
 ### Use it with Light Account
 
@@ -61,6 +63,8 @@ const provider = await createModularAccountAlchemyClient({
 });
 ```
 
-<<< @/snippets/signers/passport.ts
+```ts [passport.ts]
+// [!include ~/snippets/signers/passport.ts]
+```
 
 :::

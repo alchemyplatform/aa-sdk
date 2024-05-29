@@ -59,6 +59,8 @@ export async function getProvider() {
 }
 ```
 
-<<< @/snippets/signers/arcana-auth.ts
+```ts [arcana-auth.ts]
+// [!include ~/snippets/signers/arcana-auth.ts]
+```
 
 :::

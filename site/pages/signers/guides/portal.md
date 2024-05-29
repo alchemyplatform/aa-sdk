@@ -34,7 +34,9 @@ yarn add @portal-hq/web
 
 Next, setup the Portal SDK and create an authenticated `PortalSigner` using the `aa-signers` package:
 
-<<< @/snippets/signers/portal.ts
+```ts [portal.ts]
+// [!include ~/snippets/signers/portal.ts]
+```
 
 ### Use it with Modular Account
 
@@ -56,6 +58,8 @@ const provider = await createModularAccountAlchemyClient({
 });
 ```
 
-<<< @/snippets/signers/portal.ts
+```ts [portal.ts]
+// [!include ~/snippets/signers/portal.ts]
+```
 
 :::
