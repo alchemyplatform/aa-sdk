@@ -98,4 +98,5 @@ export default defineConfig({
   sitemap: {
     hostname: "https://accountkit.alchemy.com",
   },
+  cleanUrls: true
 });
