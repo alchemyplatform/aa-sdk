@@ -27,7 +27,10 @@ import { accountSigner } from "./ethers-signer";
 const client = await accountSigner.getAddress();
 ```
 
-<<< @/snippets/aa-ethers/ethers-signer.ts
+```ts [ethers-signer.ts]
+// [!include ~/snippets/aa-ethers/ethers-signer.ts]
+```
+
 :::
 
 ## Returns

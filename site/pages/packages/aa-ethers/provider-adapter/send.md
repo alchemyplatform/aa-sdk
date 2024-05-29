@@ -27,7 +27,10 @@ import { provider } from "./ethers-provider";
 const chainId = await provider.send("eth_chainId", []);
 ```
 
-<<< @/snippets/aa-ethers/ethers-provider.ts
+```ts [ethers-provider.ts]
+// [!include ~/snippets/aa-ethers/ethers-provider.ts]
+```
+
 :::
 
 ## Returns

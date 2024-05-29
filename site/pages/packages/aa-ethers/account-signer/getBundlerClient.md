@@ -27,7 +27,10 @@ import { accountSigner } from "./ethers-signer";
 const client = accountSigner.getBundlerClient();
 ```
 
-<<< @/snippets/aa-ethers/ethers-signer.ts
+```ts [ethers-signer.ts]
+// [!include ~/snippets/aa-ethers/ethers-signer.ts]
+```
+
 :::
 
 ## Returns

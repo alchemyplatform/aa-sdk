@@ -22,14 +22,10 @@ Note that the `signTypedData` implementation is to throw an error since it is no
 
 ## Usage
 
-:::code-group
-
 ```ts [example.ts]
 // note that `signTypedData` is not supported by the Signer class, and so this util method cannot derive an implementation of said method for LocalAccountSigner
 const accountSigner = convertEthersSignerToAccountSigner(wallet);
 ```
-
-:::
 
 ## Returns
 

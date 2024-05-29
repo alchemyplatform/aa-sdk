@@ -47,5 +47,8 @@ const txn = await accountSigner.sendTransaction({
 const client = accountSigner.getBundlerClient();
 ```
 
-<<< @/snippets/aa-ethers/ethers-signer.ts
+```ts [ethers-signer.ts]
+// [!include ~/snippets/aa-ethers/ethers-signer.ts]
+```
+
 :::

@@ -18,15 +18,11 @@ head:
 
 ## Usage
 
-:::code-group
-
 ```ts [example.ts]
 // Wallet is a subclass of Signer, and so can be used with either convertor method
 const wallet = new Wallet(process.env.PRIVATE_KEY!);
 const accountSigner = convertWalletToAccountSigner(wallet);
 ```
-
-:::
 
 ## Returns
 

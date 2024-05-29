@@ -23,8 +23,6 @@ Notable util methods include:
 
 ## Usage
 
-:::code-group
-
 ```ts [example.ts]
 // Wallet is a subclass of Signer, and so can be used with either convertor method
 const wallet = new Wallet(process.env.PRIVATE_KEY!);
@@ -33,5 +31,3 @@ const accountSigner1 = convertWalletToAccountSigner(wallet);
 // note that `signTypedData` is not supported by the Signer class, and so this util method cannot derive an implementation of said method for LocalAccountSigner
 const accountSigner2 = convertEthersSignerToAccountSigner(wallet);
 ```
-
-:::

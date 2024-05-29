@@ -20,10 +20,9 @@ next:
 
 ## Usage
 
-:::code-group
-
-<<< @/snippets/aa-ethers/ethers-provider.ts
-:::
+```ts [ethers-provider.ts]
+// [!include ~/snippets/aa-ethers/ethers-provider.ts]
+```
 
 ## Returns
 
