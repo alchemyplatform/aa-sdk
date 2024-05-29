@@ -47,7 +47,9 @@ Remember to replace `ALCHEMY_API_KEY` with your Alchemy API key. If you don't ha
 
 Copy it and then replace the `GAS_MANAGER_POLICY_ID` in the snippet below.
 
-<<< @/snippets/aa-alchemy/gas-manager-client.ts
+```ts [gas-manager-client.ts]
+// [!include ~/snippets/aa-alchemy/gas-manager-client.ts]
+```
 
 You have created a gas manager policy and linked it to the client. This guarantees that UOs sent with this client receive sponsorship if and only the UO satisfies the rules defined in your gas policy.
 
@@ -55,7 +57,7 @@ You have created a gas manager policy and linked it to the client. This guarante
 
 Now you are ready to send sponsored UOs! You can send a UO by calling `sendUserOperation` on the client. The Gas Manager will check if this UO satisfies the policy rules defined above and sponsor the gas costs if the rules are met. If the UO does not meet the policy rules, an error will be thrown.
 
-::: code-group
+:::code-group
 
 ```ts [sponsor-gas.ts]
 import { smartAccountClient } from "./smartAccountClient.ts";
@@ -68,7 +70,9 @@ const { hash } = await smartAccountClient.sendUserOperation({
 });
 ```
 
-<<< @/snippets/aa-alchemy/gas-manager-client.ts
+```ts [gas-manager-client.ts]
+// [!include ~/snippets/aa-alchemy/gas-manager-client.ts]
+```
 
 :::
 

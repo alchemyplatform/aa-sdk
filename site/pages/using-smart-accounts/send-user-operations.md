@@ -28,7 +28,9 @@ Using the SDK, we will create an Alchemy Smart Account Client. As it is, the cli
 
 See [Alchemy Smart Account Client](/packages/aa-alchemy/smart-account-client/) for more details.
 
-<<< @/snippets/aa-alchemy/connected-client.ts
+```ts [smartAccountClient.ts]
+// [!include ~/snippets/aa-alchemy/connected-client.ts]
+```
 
 ## 2. Construct the call data
 
@@ -36,9 +38,9 @@ The best part of Account Kit is that it abstracts the differences between User O
 
 The second best part of Account Kit is that it is build atop [viem](https://viem.sh/). This means we can leverage utility methods to easily generate calldata, with type safety, using a smart contract's ABI.
 
-::: code-group
+:::code-group
 
-```ts{5-18} [example.ts]
+```ts [example.ts]
 import { encodeFunctionData } from "viem";
 import { smartAccountClient } from "./smartAccountClient.ts";
 // [!code focus:16]
@@ -68,7 +70,9 @@ const txHash = await smartAccountClient.waitForUserOperationTransaction(uo);
 console.log(txHash);
 ```
 
-<<< @/snippets/aa-alchemy/connected-client.ts [smartAccountClient.ts]
+```ts [smartAccountClient.ts]
+// [!include ~/snippets/aa-alchemy/connected-client.ts]
+```
 
 :::
 
@@ -82,9 +86,9 @@ You can either send ETH to the smart account to pay for User Operation's gas, or
 
 We will also want to wait for the transaction that contains the User Operation so that we know the User Operation is executed on-chain. We can use the [waitForUserOperationTransaction](/packages/aa-core/smart-account-client/actions/waitForUserOperationTransaction.md) method on the client, as seen below.
 
-::: code-group
+:::code-group
 
-```ts{21-31} [example.ts]
+```ts [example.ts]
 import { encodeFunctionData } from "viem";
 import { smartAccountClient } from "./smartAccountClient.ts";
 
@@ -115,7 +119,9 @@ const txHash = await smartAccountClient.waitForUserOperationTransaction(uo);
 console.log(txHash);
 ```
 
-<<< @/snippets/aa-alchemy/connected-client.ts [smartAccountClient.ts]
+```ts [smartAccountClient.ts]
+// [!include ~/snippets/aa-alchemy/connected-client.ts]
+```
 
 :::
 
@@ -123,4 +129,6 @@ console.log(txHash);
 
 And that's it! Let's put it all together. You can copy the following snippet to try it yourself!
 
-<<< @/snippets/send-uo-example/full-example.ts
+```ts [full-example.ts]
+// [!include ~/snippets/send-uo-example/full-example.ts]
+```

@@ -72,27 +72,37 @@ The permissions data may be specified in 3 places:
 
 #### Generating the permissions
 
-<<< @/snippets/session-keys/supported-permissions.ts#generate-permissions
+```ts [generate-permissions.ts]
+// [!include ~/snippets/session-keys/supported-permissions.ts:generatepermissions]
+```
 
 #### Example: Permissions in plugin install data
 
-<<< @/snippets/session-keys/supported-permissions.ts#permissions-in-plugin-install
+```ts [permissions-in-plugin-install.ts]
+// [!include ~/snippets/session-keys/supported-permissions.ts:permissionsinplugininstall]
+```
 
 #### Example: Initial permissions for a new key
 
-<<< @/snippets/session-keys/supported-permissions.ts#permissions-in-add
+```ts [permissions-in-add.ts]
+// [!include ~/snippets/session-keys/supported-permissions.ts:permissionsinadd]
+```
 
 #### Exmaple: Updating a session key's permissions
 
 This example updates a key's time range, but leaves other permissions to their current values.
 
-<<< @/snippets/session-keys/supported-permissions.ts#permissions-in-update
+```ts [permissions-in-update.ts]
+// [!include ~/snippets/session-keys/supported-permissions.ts:permissionsinupdate]
+```
 
 ### Permissions Builder full reference
 
-::: details View the full set of supported permissions here
+:::details[View the full set of supported permissions here]
 
-<<< @/../packages/accounts/src/msca/plugins/session-key/permissions.ts
+```ts
+// [!include ~/../packages/accounts/src/msca/plugins/session-key/permissions.ts]
+```
 
 :::
 
@@ -102,7 +112,9 @@ You may wish to view the current permissions of a given session key. This can be
 
 Here's an example of viewing all permissions in TypeScript:
 
-<<< @/snippets/session-keys/supported-permissions.ts#view-permissions
+```ts [view-permissions.ts]
+// [!include ~/snippets/session-keys/supported-permissions.ts:viewpermissions]
+```
 
 ### Permission View Functions
 

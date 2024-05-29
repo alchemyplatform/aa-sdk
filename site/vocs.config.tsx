@@ -92,28 +92,47 @@ export default defineConfig({
     {
       text: "Using smart accounts",
       items: [
-        { text: "Send user operations", link: "/send-user-operations" },
-        { text: "Batch user operations", link: "/batch-user-operations" },
+        {
+          text: "Send user operations",
+          link: "/using-smart-accounts/send-user-operations",
+        },
+        {
+          text: "Batch user operations",
+          link: "/using-smart-accounts/batch-user-operations",
+        },
         {
           text: "Sponsor gas",
           collapsed: false,
           items: [
-            { text: "Use the Gas Manager", link: "/gas-manager" },
-            { text: "Check eligibility", link: "/checking-eligibility" },
+            {
+              text: "Use the Gas Manager",
+              link: "/using-smart-accounts/sponsoring-gas/gas-manager",
+            },
+            {
+              text: "Check eligibility",
+              link: "/using-smart-accounts/sponsoring-gas/checking-eligibility",
+            },
           ],
         },
-        { text: "Simulate user operations", link: "/simulate-user-operations" },
+        {
+          text: "Simulate user operations",
+          link: "/using-smart-accounts/simulate-user-operations",
+        },
         {
           text: "Session keys",
           collapsed: false,
           items: [
             {
               text: "Overview",
-              link: "/",
+              link: "/using-smart-accounts/session-keys/",
             },
             {
               text: "Getting started",
-              link: "/getting-started",
+              link: "/using-smart-accounts/session-keys/getting-started",
+            },
+            {
+              text: "Supported permissions",
+              link: "/using-smart-accounts/session-keys/supported-permissions",
             },
           ],
         },
@@ -121,11 +140,17 @@ export default defineConfig({
           text: "Transfer ownership",
           collapsed: false,
           items: [
-            { text: "Modular Account", link: "/modular-account" },
-            { text: "Light Account", link: "/light-account" },
+            {
+              text: "Modular Account",
+              link: "/using-smart-accounts/transfer-ownership/modular-account",
+            },
+            {
+              text: "Light Account",
+              link: "/using-smart-accounts/transfer-ownership/light-account",
+            },
             {
               text: "Multi-Owner Light Account",
-              link: "/multi-owner-light-account",
+              link: "/using-smart-accounts/transfer-ownership/multi-owner-light-account",
             },
           ],
         },
@@ -135,14 +160,13 @@ export default defineConfig({
           items: [
             {
               text: "Get account NFTs",
-              link: "/nft",
+              link: "/using-smart-accounts/enhanced-apis/nft",
             },
-            { text: "Get account tokens", link: "/token" },
+            {
+              text: "Get account tokens",
+              link: "/using-smart-accounts/enhanced-apis/token",
+            },
           ],
-        },
-        {
-          text: "Update to EntryPoint v0.7",
-          link: "/entry-point-v7",
         },
       ],
     },

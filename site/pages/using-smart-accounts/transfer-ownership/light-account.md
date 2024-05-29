@@ -34,7 +34,7 @@ There a number of ways you can call this method using Account Kit.
 
 ### 1. Using `transferOwnership` client action
 
-::: code-group
+:::code-group
 
 ```ts [example.ts]
 import { smartAccountClient as lightAccountClient } from "./smartAccountClient";
@@ -59,7 +59,9 @@ const transferredClient = await createLightAccountClient({
 });
 ```
 
-<<< @/snippets/aa-alchemy/light-account-client.ts [smartAccountClient.ts]
+```ts [smartAccountClient.ts]
+// [!include ~/snippets/aa-alchemy/light-account-client.ts]
+```
 
 :::
 
@@ -67,7 +69,7 @@ Since `@alchemy/aa-accounts` exports a `LightAccount` ABI, the above approach ma
 
 ### 2. Using `sendUserOperation`
 
-::: code-group
+:::code-group
 
 ```ts [example.ts]
 import { encodeFunctionData } from "viem";
@@ -86,7 +88,9 @@ const result = await smartAccountClient.sendUserOperation({
 await smartAccountClient.waitForUserOperationTransaction(result);
 ```
 
-<<< @/snippets/aa-alchemy/light-account-client.ts [smartAccountClient.ts]
+```ts [smartAccountClient.ts]
+// [!include ~/snippets/aa-alchemy/light-account-client.ts]
+```
 
 :::
 

@@ -27,7 +27,9 @@ We also export the necessary decorators which can be used to extend your `SmartA
 
 Let's take a look at a full example that demonstrates how to use session keys with a Modular Account.
 
-<<< @/snippets/session-keys/full-example.ts
+```ts [full-example.ts]
+// [!include ~/snippets/session-keys/full-example.ts]
+```
 
 ## Breaking it down
 
@@ -49,7 +51,7 @@ If you are using backend agent controlled session keys, then the agent should ge
 
 The base `SmartAccountClient` and `AlchemySmartAccountClient`, only include base functionality for sending user operations. If you are using a `ModularAccount`, then you will want to extend your client with the various decorators exported by `@alchemy/aa-accounts`.
 
-::: code-group
+:::code-group
 
 ```ts
 import { smartAccountClient } from "./smartAccountClient";
@@ -72,7 +74,10 @@ const extendedClient = smartAccountClient
   .extend(sessionKeyPluginActions);
 ```
 
-<<< @/snippets/aa-alchemy/base-client.ts [smartAccountClient.ts]
+```ts [smartAccountClient.ts]
+// [!include ~/snippets/aa-alchemy/base-client.ts]
+```
+
 :::
 
 ### Check if the Session Key Plugin is installed
@@ -148,22 +153,30 @@ The Session Key Plugin allows you to:
 
 Session keys can be added either during installation, or using the `addSessionKey` function.
 
-<<< @/snippets/session-keys/add-session-key.ts
+```ts [add-session-key.ts]
+// [!include ~/snippets/session-keys/add-session-key.ts]
+```
 
 ### Remove a Session Key
 
 Session keys can be removed using the `removeSessionKey` function.
 
-<<< @/snippets/session-keys/remove-session-key.ts
+```ts [remove-session-key.ts]
+// [!include ~/snippets/session-keys/remove-session-key.ts]
+```
 
 ### Update a Key's permissions
 
 Session key permissions can be edited after creation using the `updateKeyPermissions` function. Note that you should configure initial permissions when the key is added, and not rely on a second user operation to set the permissions.
 
-<<< @/snippets/session-keys/update-session-key.ts
+```ts [update-session-key.ts]
+// [!include ~/snippets/session-keys/update-session-key.ts]
+```
 
 ### Rotate a Session Key
 
 If the key is no longer available, but there exists a tag identifying a previous session key configured for your application, you may instead choose to rotate the previous key’s permissions. This can be performed using `rotateKey` .
 
-<<< @/snippets/session-keys/rotate-session-key.ts
+```ts [rotate-session-key.ts]
+// [!include ~/snippets/session-keys/rotate-session-key.ts]
+```

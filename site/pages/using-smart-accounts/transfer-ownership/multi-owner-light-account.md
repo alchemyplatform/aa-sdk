@@ -32,7 +32,7 @@ The `MultiOwnerLightAccount` is able to:
 
 When you connect your `MultiOwnerLightAccount` to `SmartAccountClient` you can extend the client with `multiOwnerLightAccountClientActions`, which exposes a set of methods available to call the `MultiOwnerLightAccount` with the client connected to the account.
 
-::: tip Note
+:::tip[Note]
 When using `createMultiOwnerLightAccountAlchemyClient` in `@alchemy/aa-alchemy`, the `SmartAccountClient` comes automatically extended with `multiOwnerLightAccountClientActions` as defaults available for use.
 :::
 
@@ -40,26 +40,28 @@ When using `createMultiOwnerLightAccountAlchemyClient` in `@alchemy/aa-alchemy`,
 
 You can use the `getOwnerAddresses` method on the `MultiOwnerLightAccount` object, which can be accessed from a connected client.
 
-::: code-group
+:::code-group
 
-````ts [example.ts]
+```ts [example.ts]
 import { smartAccountClient } from "./smartAccountClient";
 
-const owners = await smartContractClient.account.getOwnerAddresses();
+const owners = await lightAccountClient.account.getOwnerAddresses();
+```
 
-<<< @/snippets/aa-alchemy/multi-owner-light-account-client.ts [smartAccountClient.ts]
+```ts [smartAccountClient.ts]
+// [!include ~/snippets/aa-alchemy/multi-owner-light-account-client.ts]
+```
 
 :::
-
 
 ### 2. Add or remove owners for a `MultiOwnerLightAccount`
 
 You can use the `updateOwners` method on the `multiOwnerLightAccountClientActions` extended smart account client to add or remove owners from the `MultiOwnerLightAccount`.
 
-::: code-group
+:::code-group
 
 ```ts [example.ts]
-import { lightAccountClient } from "./multiOwnerLIghtAcocuntClient";
+import { lightAccountClient } from "./smartAccountClient";
 import { multiOwnerPluginActions } from "@alchemy/aa-accounts";
 import { type Address } from "viem";
 
@@ -71,9 +73,13 @@ const opHash = await lightAccountClient.updateOwners({
   ownersToRemove,
 });
 
-const txHash = await lightAccountClient.waitForUserOperationTransaction({ hash: opHash });
-````
+const txHash = await lightAccountClient.waitForUserOperationTransaction({
+  hash: opHash,
+});
+```
 
-<<< @/snippets/aa-alchemy/multi-owner-light-account-client.ts [multiOwnerLightAccountClient.ts]
+```ts [smartAccountClient.ts]
+// [!include ~/snippets/aa-alchemy/multi-owner-light-account-client.ts]
+```
 
 :::

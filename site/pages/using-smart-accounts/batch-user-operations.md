@@ -27,23 +27,20 @@ There are two ways you can batch transactions using `SmartAccountClient`:
 1. via `sendUserOperation`
 2. via `sendTransactions`
 
-:::tip Note 1: `LightSmartContractAccount`, and `MultiOwnerModularAccount`
-Both `LightSmartContractAccount` and `MultiOwnerModularAccount` implement `encodeBatchExecute`, thus supports batching `UserOperations` out of the box.
-:::
+:::tip
 
-:::tip Note 2: Transactions Batched as a Single User Operation
-When you batch transactions, the transaction actions (`target`s and `calldata`s) are batched into a single UO, where the sender is the account itself.
-:::
+- Both `LightSmartContractAccount` and `MultiOwnerModularAccount` implement `encodeBatchExecute`, thus supports batching `UserOperations` out of the box.
 
-:::tip Note 3: Batched Transactions Ordering
-The batched UO gets executed by the account calling the `executeBatch` method on [`LightAccount`](https://github.com/alchemyplatform/light-account/blob/v1.1.0/src/LightAccount.sol) or [Modular Account](https://github.com/alchemyplatform/modular-account/blob/develop/src/account/UpgradeableModularAccount.sol) smart contracts. `executeBatch` processes the input array of transactions data linearly, guaranteeing the execution order of those transactions to be **sequential**.
-:::
+- When you batch transactions, the transaction actions (`target`s and `calldata`s) are batched into a single UO, where the sender is the account itself.
+
+- The batched UO gets executed by the account calling the `executeBatch` method on [`LightAccount`](https://github.com/alchemyplatform/light-account/blob/v1.1.0/src/LightAccount.sol) or [Modular Account](https://github.com/alchemyplatform/modular-account/blob/develop/src/account/UpgradeableModularAccount.sol) smart contracts. `executeBatch` processes the input array of transactions data linearly, guaranteeing the execution order of those transactions to be **sequential**.
+  :::
 
 ## Batching using [`sendUserOperation`](/packages/aa-core/smart-account-client/actions/sendUserOperation.md)
 
 The `SmartAccountClient` supports passing either a single UO or an array of UOs to `sendUserOperation`. If you pass an array, the client will batch the transactions into a single User Operation and submit it to the bundler. Let's see an example:
 
-::: code-group
+:::code-group
 
 ```ts [example.ts]
 import { smartAccountClient } from "./smartAccountClient";
@@ -63,7 +60,9 @@ const { hash } = await smartAccountClient.sendUserOperation({
 });
 ```
 
-<<< @/snippets/aa-alchemy/connected-client.ts [smartAccountClient.ts]
+```ts [smartAccountClient.ts]
+// [!include ~/snippets/aa-alchemy/connected-client.ts]
+```
 
 :::
 
@@ -71,7 +70,7 @@ const { hash } = await smartAccountClient.sendUserOperation({
 
 The `SmartAccountClient` supports sending UOs and waiting for them to be mined in a transaction via the `sendTransaction` and `sendTransactions` methods. The latter allows for batching in the same way `sendUserOperation`:
 
-::: code-group
+:::code-group
 
 ```ts [example.ts]
 import { smartAccountClient } from "./smartAccountClient";
@@ -91,6 +90,8 @@ const hash = await smartAccountClient.sendTransactions({
 });
 ```
 
-<<< @/snippets/aa-alchemy/connected-client.ts [smartAccountClient.ts]
+```ts [smartAccountClient.ts]
+// [!include ~/snippets/aa-alchemy/connected-client.ts]
+```
 
 :::

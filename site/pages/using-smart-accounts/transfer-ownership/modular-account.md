@@ -51,13 +51,13 @@ When you connect your Modular Account to `SmartAccountClient` you can extend the
 
 You should first extend the `SmartAccountClient` connected to a Modular Account, which already comes with `MultiOwnerPlugin` installed upon creation, with client to `multiOwnerPluginActions` for the client to include the `MultiOwnerPlugin` actions.
 
-::: tip Note
+:::tip[Note]
 When using `createModularAccountAlchemyClient` in `@alchemy/aa-alchemy`, the `SmartAccountClient` comes automatically extended with `multiOwnerPluginActions`, `pluginManagerActions`, and `accountLoupeActions` decorators as defaults available for use.
 :::
 
 Then, you can use the `readOwners` method of the `multiOwnerPluginActions` extended smart account client to check if a given address is one of the current owners of a Modular Account.
 
-::: code-group
+:::code-group
 
 ```ts [example.ts]
 import { smartAccountClient as modularAccountClient } from "./smartAccountClient";
@@ -77,7 +77,9 @@ const isOwner = await pluginActionExtendedClient.isOwnerOf({
 });
 ```
 
-<<< @/snippets/aa-alchemy/connected-client.ts [smartAccountClient.ts]
+```ts [smartAccountClient.ts]
+// [!include ~/snippets/aa-alchemy/connected-client.ts]
+```
 
 :::
 
@@ -85,7 +87,7 @@ const isOwner = await pluginActionExtendedClient.isOwnerOf({
 
 You can use the `readOwners` method on the `multiOwnerPluginActions` extended smart account client to fetch all current owners of the connected Modular Account.
 
-::: code-group
+:::code-group
 
 ```ts [example.ts]
 import { smartAccountClient as modularAccountClient } from "./smartAccountClient";
@@ -101,7 +103,9 @@ const pluginActionExtendedClient = modularAccountClient.extend(
 const owners = await pluginActionExtendedClient.readOwners();
 ```
 
-<<< @/snippets/aa-alchemy/connected-client.ts [smartAccountClient.ts]
+```ts [smartAccountClient.ts]
+// [!include ~/snippets/aa-alchemy/connected-client.ts]
+```
 
 :::
 
@@ -109,7 +113,7 @@ const owners = await pluginActionExtendedClient.readOwners();
 
 You can use the `updateOwners` method on the `multiOwnerPluginActions` extended smart account client to add or remove owners from the Modular Account.
 
-::: code-group
+:::code-group
 
 ```ts [example.ts]
 import { smartAccountClient as modularAccountClient } from "./smartAccountClient";
@@ -134,6 +138,8 @@ const txHash = await pluginActionExtendedClient.waitForUserOperationTransaction(
 );
 ```
 
-<<< @/snippets/aa-alchemy/connected-client.ts [smartAccountClient.ts]
+```ts [smartAccountClient.ts]
+// [!include ~/snippets/aa-alchemy/connected-client.ts]
+```
 
 :::

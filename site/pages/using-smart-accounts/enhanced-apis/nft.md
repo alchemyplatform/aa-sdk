@@ -32,7 +32,7 @@ We will use the Alchemy SDK Client to extend our Alchemy Smart Account Client us
 
 To use the Alchemy SDK in our project directory, we will need to install the required package:
 
-::: code-group
+:::code-group
 
 ```bash [npm]
 npm i alchemy-sdk
@@ -48,9 +48,11 @@ yarn add alchemy-sdk
 
 Then, all we need to do is create an `alchemy` client from the Alchemy SDK, create an `AlchemySmartAccountClient` from Account Kit, and then extend the client with functionality from the SDK client using `alchemyEnhancedApiActions`. We can get the smart account's address from the `AlchemySmartAccountClient` in order to fetch the smart account's NFT in just 1 line of code!
 
-<<< @/snippets/enhanced-apis-example/nft.ts
+```ts [nft.ts]
+// [!include ~/snippets/enhanced-apis-example/nft.ts]
+```
 
-:::tip Note
+:::tip[Note]
 Note that we must configure the Alchemy SDK client to have the same API Key and blockchain network as Alchemy Smart Account Client it is extending via `alchemyEnhancedApiActions`. This method explicitly checks this requirement and will throw an error at runtime if not satisfied.
 
 Additionally, since the Alchemy SDK client does not yet support JWT authentication, an `AlchemySmartAccountClient` initialized with JWTs cannot use this method. We must be initialize the client with an API key or RPC URL.

@@ -21,7 +21,7 @@ head:
 # How to handle User Operations that are not eligible for gas sponsorship
 
 As mentioned from the previous guide on [How to sponsor gas for a User Operation](./gas-manager.md), with Account Kit can sponsor gas fees for transactions via the [Gas Manager](https://docs.alchemy.com/docs/gas-manager-services/?a=ak-docs).
-d
+
 But what happens when the user operation you are sending fails to satisfy the criteria set in the gas manager policy? How do you check if the user operation is eligible for gas sponsorship before sending the user operation?
 
 If you do send the user operation that is not eligible for the gas sponsorship under your Gas Manager policy, [`sendUserOperation`](/packages/aa-core/smart-account-client/actions/sendUserOperation.md) or [`sendTransaction`](/packages/aa-core/smart-account-client/actions/sendTransaction.md) will fail due to the error thrown during the `PaymasterMiddleware` failure. You can follow the guide below to check for gas sponsorship eligibility in advance.
@@ -30,7 +30,9 @@ If you do send the user operation that is not eligible for the gas sponsorship u
 
 First, you can follow the same instructions from the previous guide on [How to sponsorgas for a User Operation](./gas-manager.md) to set up your `AlchemySmartAccountClient` and link your gas policy.
 
-<<< @/snippets/aa-alchemy/gas-manager-client.ts
+```ts [gas-manager-client.ts]
+// [!include ~/snippets/aa-alchemy/gas-manager-client.ts]
+```
 
 Then, before you call `sendUserOperation` on the client, you can use [`checkGasSponsorshipEligibility`](/packages/aa-core/smart-account-client/actions/checkGasSponsorshipEligibility.md) to verify the eligibility of the connected account for gas sponsorship concerning the upcoming `UserOperation` (UO) that is intended to be sent.
 
@@ -38,7 +40,7 @@ Internally, this method invokes [`buildUserOperation`](/packages/aa-core/smart-a
 
 You can utilize this method before sending the user operation to confirm its eligibility for gas sponsorship. Depending on the outcome, it allows you to tailor the user experience accordingly, based on eligibility.
 
-::: code-group
+:::code-group
 
 ```ts [check-gas-sponsorship-eligibility.ts]
 import { smartAccountClient } from "./client";
@@ -56,7 +58,10 @@ console.log(
 );
 ```
 
-<<< @/snippets/aa-alchemy/gas-manager-client.ts [client.ts]
+```ts [gas-manager-client.ts]
+// [!include ~/snippets/aa-alchemy/gas-manager-client.ts]
+```
+
 :::
 
 ## 2. How to bypass the Paymaster Middleware for User Operations not eligible for Gas Sponsorship
@@ -67,7 +72,7 @@ This section of the guide elucidates how you can circumvent the `PaymasterMiddle
 
 When employing various methods on `SmartAccountClient` to send user operations (e.g., [`sendUserOperation`](/packages/aa-core/smart-account-client/actions/sendUserOperation.md) or [`sendTransaction`](/packages/aa-core/smart-account-client/actions/sendTransaction.md)), apart from the `UserOperationCallData` or `BatchUserOperationCallData`, you have the option to include an additional parameter named `overrides`. This parameter allows the specification of override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` or `paymasterAndData`. To bypass the `PaymasterMiddleware`, you can specifically set the `paymasterAndData` override. For example, assigning an empty hex string (`0x`) to the `paymasterAndData` field in the overrides would result in the user operation being sent without the paymaster covering the gas fee, but rather paid from the user's own smart account.
 
-::: code-group
+:::code-group
 
 ```ts [bypass-paymaster-middleware.ts]
 import { smartAccountClient } from "./client";
@@ -101,7 +106,9 @@ const txHash = await smartAccountClient.waitForUserOperationTransaction({
 });
 ```
 
-<<< @/snippets/aa-alchemy/gas-manager-client.ts [client.ts]
+```ts [gas-manager-client.ts]
+// [!include ~/snippets/aa-alchemy/gas-manager-client.ts]
+```
 
 :::
 
