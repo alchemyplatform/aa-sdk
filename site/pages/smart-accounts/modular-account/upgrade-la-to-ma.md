@@ -43,7 +43,9 @@ const hash = await lightAccountClient.upgradeAccount({
 const upgradedAccount = await createMAAccount();
 ```
 
-<<< @/snippets/aa-alchemy/light-account-client.ts [lightAccountClient.ts]
+```ts [lightAccountClient.ts]
+// [!include ~/snippets/aa-alchemy/light-account-client.ts]
+```
 
 :::
 

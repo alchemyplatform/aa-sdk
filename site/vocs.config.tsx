@@ -1,4 +1,5 @@
 import { defineConfig } from "vocs";
+import { aaCoreSideBar } from "./sidebar/aa-core.js";
 
 const pkg = require("../lerna.json");
 
@@ -335,7 +336,10 @@ export default defineConfig({
         { text: "Use custom paymaster", link: "/third-party/paymasters" },
       ],
     },
-    // packagesSidebar,
+    {
+      text: "aa-sdk packages",
+      items: [{ text: "Overview", link: "/packages/" }, aaCoreSideBar],
+    },
     {
       text: "Resources",
       items: [

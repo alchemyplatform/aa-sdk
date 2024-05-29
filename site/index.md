@@ -92,7 +92,7 @@ titleTemplate: :title Documentation
 <!-- needs to be formatted differently to work in markdown -->
 <div class="vp-doc max-lg:hidden">
 
-::: code-group
+:::code-group
 
 ```ts [gettingStarted.ts]
 import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";
