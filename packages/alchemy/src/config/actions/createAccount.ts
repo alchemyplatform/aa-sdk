@@ -58,7 +58,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
     throw new Error("Signer not connected");
   }
 
-  const cachedAccount = accounts[chain.id][type];
+  const cachedAccount = accounts[chain.id]?.[type];
   if (cachedAccount.status !== "RECONNECTING" && cachedAccount.account) {
     return cachedAccount.account;
   }
