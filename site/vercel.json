@@ -4,6 +4,11 @@
       "source": "/getting-started/setup",
       "destination": "/getting-started/introduction",
       "statusCode": 301
+    },
+    {
+      "source": "/signers/alchemy-signer/index",
+      "destination": "/signers/alchemy-signer/introduction",
+      "statusCode": 301
     }
   ],
   "cleanUrls": true
