@@ -3,7 +3,6 @@ title: Alchemy Signer • getAddress
 description: Learn how to use the AlchemySigner.getAddress method
 ---
 
-
 # getAddress
 
 Returns the signer's public address.

@@ -3,7 +3,6 @@ title: LitSigner • getAddress
 description: Overview of the getAddress method on LitSigner
 ---
 
-
 # getAddress
 
 `getAddress` returns the EOA address of the Signer.

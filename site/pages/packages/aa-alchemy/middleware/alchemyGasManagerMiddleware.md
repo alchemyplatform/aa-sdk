@@ -3,7 +3,6 @@ title: Middleware • alchemyGasManagerMiddleware
 description: Overview of the alchemyGasManagerMiddleware method in aa-alchemy
 ---
 
-
 # alchemyGasManagerMiddleware
 
 `alchemyGasManagerMiddleware` is a middleware method you can use to easily leverage our Gas Manager (an [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) Paymaster) for sponsoring user operations.

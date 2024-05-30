@@ -3,7 +3,6 @@ title: deepHexlify
 description: Overview of the deepHexlify method in aa-core utils
 ---
 
-
 # deepHexlify
 
 Utility function that recursively converts all values in an object to hex strings (where applicable).

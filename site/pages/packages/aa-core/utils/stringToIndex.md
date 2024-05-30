@@ -4,7 +4,6 @@ description: A utility function to convert a string, such as an email, to salt
   for SmartAccounts
 ---
 
-
 # stringToIndex
 
 This function can be used to create a unique SmartAccount for a given uuid, email, or any other arbitrary string.

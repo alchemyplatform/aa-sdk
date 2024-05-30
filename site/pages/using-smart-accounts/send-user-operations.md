@@ -5,7 +5,6 @@ description: Follow this guide to send a User Operation with Account Kit, a
   ERC-6900.
 ---
 
-
 # How to send a User Operation
 
 This guide will show you how to send a User Operation with Account Kit by creating an Alchemy Smart Account Client, connecting it to a Light Account (a type of smart account implementation), and sending a User Operation from that client. By the end of this guide, you will have a basic understanding of how to use the SDK.

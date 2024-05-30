@@ -3,7 +3,6 @@ title: TurnkeySigner • signMessage
 description: Overview of the signMessage method on TurnkeySigner
 ---
 
-
 # signMessage
 
 `signMessage` supports signing messages from the `TurnkeySigner`.

@@ -3,7 +3,6 @@ title: CapsuleSigner • signMessage
 description: Overview of the signMessage method on CapsuleSigner
 ---
 
-
 # signMessage
 
 `signMessage` supports signing messages from the `CapsuleSigner`.

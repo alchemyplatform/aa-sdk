@@ -3,7 +3,6 @@ title: MagicSigner • constructor
 description: Overview of the constructor method on MagicSigner in aa-signers
 ---
 
-
 # constructor
 
 To initialize a `MagicSigner`, you must provide a set of parameters detailed below.

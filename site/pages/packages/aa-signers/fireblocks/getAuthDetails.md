@@ -3,7 +3,6 @@ title: FireblocksSigner • getAuthDetails
 description: Overview of the getAuthDetails method on FireblocksSigner
 ---
 
-
 # getAuthDetails
 
 `getAuthDetails` returns the details about the authenticated user, specifically all EOA addresses tied to the user's Fireblocks vault.

@@ -3,7 +3,6 @@ title: getChain
 description: Overview of the getChain method in aa-core utils
 ---
 
-
 # getChain
 
 This is a utility method for converting a chainId to a `viem` `Chain` object

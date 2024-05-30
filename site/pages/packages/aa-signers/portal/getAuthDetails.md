@@ -3,7 +3,6 @@ title: PortalSigner • getAuthDetails
 description: Overview of the getAuthDetails method on PortalSigner
 ---
 
-
 # getAuthDetails
 
 `getAuthDetails` returns the details about the authenticated user, specifically all EOA addresses tied to the user's Portal vault.

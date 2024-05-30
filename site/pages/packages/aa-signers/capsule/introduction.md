@@ -3,7 +3,6 @@ title: CapsuleSigner
 description: Overview of the CapsuleSigner class in aa-signers
 ---
 
-
 # Capsule Signer
 
 `CapsuleSigner` is a signer implementation which extends `SmartAccountAuthenticator` to leverage the [Capsule SDK](https://docs.usecapsule.com/getting-started/initial-setup). It supports features such as authentication, message and typed data signing, and authentication details retrieval.

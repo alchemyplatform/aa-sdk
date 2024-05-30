@@ -3,7 +3,6 @@ title: LightSmartContractAccount • signTypedDataWith6492
 description: Overview of the signTypedDataWith6492 method on LightSmartContractAccount
 ---
 
-
 # signTypedDataWith6492
 
 `signTypedDataWith6492` supports signing typed data for deployed smart accounts, as well as undeployed accounts (counterfactual addresses) using [ERC-6492](https://eips.ethereum.org/EIPS/eip-6492).

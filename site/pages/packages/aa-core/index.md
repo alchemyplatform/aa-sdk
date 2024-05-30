@@ -3,7 +3,6 @@ title: aa-core
 description: Introduction to the aa-core package
 ---
 
-
 # `@alchemy/aa-core`
 
 This package contains the core interfaces and components for interacting with 4337 infrastructure. The primary interfaces that it exports are the `SmartAccountClient` and `SmartContractAccount`.

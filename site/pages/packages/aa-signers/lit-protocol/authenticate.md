@@ -3,7 +3,6 @@ title: LitSigner • authenticate
 description: Overview of the authenticate method on LitSigner
 ---
 
-
 # authenticate
 
 `authenticate` is a method on the `LitSigner` which leverages the Lit Protocol SDK to authenticate a user. Before accessing other methods on the class, such as signing messages or typed data or accessing user details, this method **MUST** be called.

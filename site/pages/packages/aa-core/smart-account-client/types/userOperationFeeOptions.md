@@ -3,7 +3,6 @@ title: UserOperationFeeOptions
 description: Overview of the UserOperationFeeOptions type in aa-core types
 ---
 
-
 # UserOperationFeeOptions
 
 Fee options object type used by the [`SmartAccountClient`](/packages/aa-core/smart-account-client/) during the gas fee calculation middlewares when constructing the user operation to send.

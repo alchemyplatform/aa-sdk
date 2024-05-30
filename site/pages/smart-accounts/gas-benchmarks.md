@@ -3,7 +3,6 @@ title: Gas benchmarks
 description: Gas benchmarks for Alchemy Accounts
 ---
 
-
 # Gas benchmarks
 
 [Light Account](/smart-accounts/light-account/) currently provides best-in-class end-user costs on all of its supported chains, including Ethereum, Arbitrum, Optimism, Base, and Polygon. For those looking for a lightweight, production-ready account that supports ownership transfers, multiple owners, and ERC-1271 signature support, Light Account is a great choice.

@@ -4,7 +4,6 @@ description: Overview of the alchemyEnhancedApiActions method on Alchemy Smart
   Account Client in aa-alchemy
 ---
 
-
 # alchemyEnhancedApiActions
 
 `alchemyEnhancedApiActions` is a decorator that can be used with a `AlchemySmartAccountClient` that will extend the client with methods that access the Alchemy [Enhanced APIs](https://www.alchemy.com/enhanced-apis/?a=ak-docs) via the [Alchemy SDK](https://github.com/alchemyplatform/alchemy-sdk-js).

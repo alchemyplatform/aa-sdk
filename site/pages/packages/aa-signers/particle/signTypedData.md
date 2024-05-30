@@ -3,7 +3,6 @@ title: ParticleSigner • signTypedData
 description: Overview of the signTypedData method on ParticleSigner
 ---
 
-
 # signTypedData
 
 `signTypedData` supports signing typed data from the `ParticleSigner`.

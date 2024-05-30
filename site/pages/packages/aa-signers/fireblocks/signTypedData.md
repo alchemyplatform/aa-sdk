@@ -3,7 +3,6 @@ title: FireblocksSigner • signTypedData
 description: Overview of the signTypedData method on FireblocksSigner
 ---
 
-
 # signTypedData
 
 `signTypedData` supports signing typed data from the `FireblocksSigner`.

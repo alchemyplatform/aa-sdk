@@ -3,7 +3,6 @@ title: wrapSignatureWith6492
 description: Description of the wrapSignatureWith6492 utility method
 ---
 
-
 # wrapSignatureWith6492
 
 Allows you to generate a signature in [ERC-6492](https://eips.ethereum.org/EIPS/eip-6492) format which is useful to verifying signatures of undeployed smart accounts.

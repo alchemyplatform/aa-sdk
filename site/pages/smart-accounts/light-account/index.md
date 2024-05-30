@@ -3,7 +3,6 @@ title: Light Account
 description: What is Light Account?
 ---
 
-
 # Light Account
 
 ## Overview

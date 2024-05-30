@@ -3,7 +3,6 @@ title: CapsuleSigner • signTypedData
 description: Overview of the signTypedData method on CapsuleSigner
 ---
 
-
 # signTypedData
 
 `signTypedData` supports signing typed data from the `CapsuleSigner`.

@@ -3,7 +3,6 @@ title: EthersProviderAdapter • constructor
 description: Overview of the constructor method on EthersProviderAdapter in aa-ethers
 ---
 
-
 # constructor
 
 There are two ways to construct `EthersProviderAdapter`. You can provide either the `rpcProvider` and `chainId` to have the `EthersProviderAdapter` constructor, which will initialize the `SmartAccountClient` using the input parameters internally.

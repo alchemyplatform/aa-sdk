@@ -3,7 +3,6 @@ title: MagicSigner • signTypedData
 description: Overview of the signTypedData method on MagicSigner
 ---
 
-
 # signTypedData
 
 `signTypedData` supports signing typed data from the `MagicSigner`.

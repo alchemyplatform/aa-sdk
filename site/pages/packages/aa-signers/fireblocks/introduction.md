@@ -3,7 +3,6 @@ title: FireblocksSigner
 description: Overview of the FireblocksSigner class in aa-signers
 ---
 
-
 # Fireblocks Signer
 
 `FireblocksSigner` is a signer implementation which extends `SmartAccountAuthenticator` to leverage the [Fireblocks SDK](https://github.com/fireblocks/fireblocks-web3-provider). It supports features such as authentication, message and typed data signing, and authentication details retrieval.

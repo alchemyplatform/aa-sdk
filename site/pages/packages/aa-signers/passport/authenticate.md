@@ -3,7 +3,6 @@ title: PassportSigner • authenticate
 description: Overview of the authenticate method on PassportSigner
 ---
 
-
 # authenticate
 
 `authenticate` is a method on the `PassportSigner` which leverages the `Passport` SDK to initiate login and authenticate a user.

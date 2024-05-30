@@ -4,7 +4,6 @@ description: Overview of the simulateUserOperation method on Alchemy Smart
   Account Client in aa-alchemy
 ---
 
-
 # simulateUserOperation
 
 `simulateUserOperation` is a method you can use to easily leverage the [`alchemy_simulateUserOperationAssetChanges`](https://docs.alchemy.com/reference/alchemy-simulateuseroperationassetchanges/?a=ak-docs) API to simulate asset changes resulting from user operation.

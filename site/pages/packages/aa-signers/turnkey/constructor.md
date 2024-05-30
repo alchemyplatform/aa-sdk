@@ -3,7 +3,6 @@ title: TurnkeySigner • constructor
 description: Overview of the constructor method on TurnkeySigner in aa-signers
 ---
 
-
 # constructor
 
 To initialize a `TurnkeySigner`, you must provide a set of parameters detailed below.

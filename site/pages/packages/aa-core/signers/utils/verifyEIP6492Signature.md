@@ -3,7 +3,6 @@ title: verifyEIP6492Signature
 description: Description of the verifyEIP6492Signature utility method
 ---
 
-
 # verifyEIP6492Signature
 
 Uses a the universal validator defined [here](https://github.com/AmbireTech/signature-validator/blob/main/index.ts#L13C17-L13C17) to verify a signature in the [ERC-6492](https://eips.ethereum.org/EIPS/eip-6492) format.

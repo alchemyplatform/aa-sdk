@@ -3,7 +3,6 @@ title: Alchemy Signer • signMessage
 description: Learn how to use the AlchemySigner.signMessage method
 ---
 
-
 # signMessage
 
 The `signMessage` method is used to sign a message with the Alchemy Signer.

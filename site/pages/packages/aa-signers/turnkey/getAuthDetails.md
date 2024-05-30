@@ -3,7 +3,6 @@ title: TurnkeySigner • getAuthDetails
 description: Overview of the getAuthDetails method on TurnkeySigner
 ---
 
-
 # getAuthDetails
 
 `getAuthDetails` returns the details about the authenticated user, in accordance with the `Turnkey` SDK's [specifications](https://docs.turnkey.com/api#tag/Sessions/operation/GetWhoami).

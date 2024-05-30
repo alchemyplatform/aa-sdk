@@ -3,7 +3,6 @@ title: aa-ethers
 description: aa-ethers landing page and getting started guide
 ---
 
-
 # `@alchemy/aa-ethers`
 
 This package contains `EthersProviderAdapter` and `AccountSigner`, respective extensions of the [`JsonRpcProvider`](https://docs.ethers.org/v5/api/providers/jsonrpc-provider/) and [`Signer`](https://docs.ethers.org/v5/api/signer/) classes defined in [`ethers.js`](https://docs.ethers.org/v5/) external library.

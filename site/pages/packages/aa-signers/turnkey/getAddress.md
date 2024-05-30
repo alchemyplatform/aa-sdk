@@ -3,7 +3,6 @@ title: TurnkeySigner • getAddress
 description: Overview of the getAddress method on TurnkeySigner
 ---
 
-
 # getAddress
 
 `getAddress` returns the EOA address of the Signer.

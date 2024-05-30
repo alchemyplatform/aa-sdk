@@ -3,7 +3,6 @@ title: PortalSigner • authenticate
 description: Overview of the authenticate method on PortalSigner
 ---
 
-
 # authenticate
 
 `authenticate` is a method on the `PortalSigner` which leverages the `Portal` SDK to authenticate a user.

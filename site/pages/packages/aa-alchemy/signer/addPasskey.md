@@ -3,7 +3,6 @@ title: Alchemy Signer • addPasskey
 description: Learn how to use the AlchemySigner.addPasskey method
 ---
 
-
 # addPasskey
 
 The `addPasskey` method is used to add a passkey as an auth method to an already logged in user.

@@ -3,7 +3,6 @@ title: CapsuleSigner • getAddress
 description: Overview of the getAddress method on CapsuleSigner
 ---
 
-
 # getAddress
 
 `getAddress` returns the EOA address of the Signer.

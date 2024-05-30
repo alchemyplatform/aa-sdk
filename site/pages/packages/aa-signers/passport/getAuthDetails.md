@@ -3,7 +3,6 @@ title: PassportSigner • getAuthDetails
 description: Overview of the getAuthDetails method on PassportSigner
 ---
 
-
 # getAuthDetails
 
 `getAuthDetails` returns the details about the authenticated user, specifically the EOA address of the user, and the encrypted headers used to authenticate / manage the user's account.

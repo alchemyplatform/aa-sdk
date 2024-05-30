@@ -3,7 +3,6 @@ title: MagicSigner • signMessage
 description: Overview of the signMessage method on MagicSigner
 ---
 
-
 # signMessage
 
 `signMessage` supports signing messages from the `MagicSigner`.

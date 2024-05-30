@@ -3,7 +3,6 @@ title: PortalSigner • constructor
 description: Overview of the constructor method on PortalSigner in aa-signers
 ---
 
-
 # constructor
 
 To initialize a `PortalSigner`, you must provide a set of parameters detailed below.

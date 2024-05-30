@@ -3,7 +3,6 @@ title: FireblocksSigner • constructor
 description: Overview of the constructor method on FireblocksSigner in aa-signers
 ---
 
-
 # constructor
 
 To initialize a `FireblocksSigner`, you must provide a set of parameters detailed below.

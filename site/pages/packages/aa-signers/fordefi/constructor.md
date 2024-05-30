@@ -3,7 +3,6 @@ title: FordefiSigner • constructor
 description: Overview of the constructor method on FordefiSigner in aa-signers
 ---
 
-
 # constructor
 
 To initialize a `FordefiSigner`, you must provide a set of parameters detailed below.

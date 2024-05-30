@@ -3,7 +3,6 @@ title: Alchemy Signer • signTypedData
 description: Learn how to use the AlchemySigner.signTypedData method
 ---
 
-
 # signTypedData
 
 The `signTypedData` method is used to sign typed data with the Alchemy Signer.

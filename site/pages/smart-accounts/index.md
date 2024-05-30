@@ -5,7 +5,6 @@ description: Learn about different smart account implementations to use with
   ERC-4337 and ERC-6900.
 ---
 
-
 # Choosing a Smart Account
 
 ## What is a Smart Account?

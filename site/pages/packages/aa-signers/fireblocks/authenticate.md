@@ -3,7 +3,6 @@ title: FireblocksSigner • authenticate
 description: Overview of the authenticate method on FireblocksSigner
 ---
 
-
 # authenticate
 
 `authenticate` is a method on the `FireblocksSigner` which leverages the `Fireblocks` SDK to authenticate a user.

@@ -3,7 +3,6 @@ title: ParticleSigner • authenticate
 description: Overview of the authenticate method on ParticleSigner
 ---
 
-
 # authenticate
 
 `authenticate` is a method on the `ParticleSigner` which leverages the `Particle` SDK to initiate login and authenticate a user.

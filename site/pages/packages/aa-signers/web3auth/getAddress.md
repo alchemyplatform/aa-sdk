@@ -3,7 +3,6 @@ title: Web3AuthSigner • getAddress
 description: Overview of the getAddress method on Web3AuthSigner
 ---
 
-
 # getAddress
 
 `getAddress` returns the EOA address of the Signer.

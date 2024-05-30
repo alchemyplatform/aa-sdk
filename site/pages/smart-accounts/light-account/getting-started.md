@@ -3,7 +3,6 @@ title: Light Account • Getting started
 description: Getting started with Light Account in Account Kit
 ---
 
-
 # Getting started with Light Account
 
 It is easy to get started with Light Account! We will show you how to create and send user operations for both `LightAccount` and `MultiOwnerLightAccount` using `@alchemy/aa-alchemy`.

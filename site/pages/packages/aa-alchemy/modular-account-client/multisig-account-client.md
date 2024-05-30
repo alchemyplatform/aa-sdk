@@ -3,7 +3,6 @@ title: createMultisigAccountAlchemyClient
 description: Overview of the createMultisigAccountAlchemyClient factory in aa-alchemy
 ---
 
-
 # createMultisigAccountAlchemyClient
 
 `createMultisigAccountAlchemyClient` is a factory that improves the developer experience of connecting a Modular Account with the multisig plugin to an `AlchemySmartAccountClient` via an optional dependency on the [`@alchemy/aa-accounts`](https://github.com/alchemyplatform/aa-sdk/tree/development/packages/accounts) package. You can use this to directly instantiate an `AlchemySmartAccountClient` already connected to a Modular Account with the multisig plugin in one line of code.

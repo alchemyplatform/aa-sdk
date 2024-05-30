@@ -3,7 +3,6 @@ title: CapsuleSigner • getAuthDetails
 description: Overview of the getAuthDetails method on CapsuleSigner
 ---
 
-
 # getAuthDetails
 
 `getAuthDetails` returns the details about the authenticated user, specifically all EOA addresses tied to the user's Capsule account.

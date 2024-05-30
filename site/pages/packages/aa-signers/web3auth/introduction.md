@@ -3,7 +3,6 @@ title: Web3AuthSigner
 description: Overview of the Web3AuthSigner class in aa-signers
 ---
 
-
 # Web3auth Signer
 
 `Web3AuthSigner` is a signer implementation which extends `SmartAccountAuthenticator` to leverage the [web3auth web modal SDK](https://web3auth.io/docs/sdk/pnp/web/modal). It supports features such as authentication, message and typed data signing, and authentication details retrieval.

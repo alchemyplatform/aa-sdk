@@ -3,7 +3,6 @@ title: Web3AuthSigner • authenticate
 description: Overview of the authenticate method on Web3AuthSigner
 ---
 
-
 # authenticate
 
 `authenticate` is a method on the `Web3AuthSigner` which leverages the `web3auth` web modal SDK to authenticate a user.

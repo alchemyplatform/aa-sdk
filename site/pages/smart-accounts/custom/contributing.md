@@ -4,7 +4,6 @@ description: Follow this guide to contribute a new smart account to Account Kit
   documentation.
 ---
 
-
 # Contribute your account
 
 If you would like to add your smart account to Account Kit, we welcome PRs! You will need to fork the [`aa-sdk`](https://github.com/alchemyplatform/aa-sdk) Github repo, and then follow the below steps.

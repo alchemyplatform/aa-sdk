@@ -3,7 +3,6 @@ title: TurnkeySigner • authenticate
 description: Overview of the authenticate method on TurnkeySigner
 ---
 
-
 # authenticate
 
 `authenticate` is a method on the `TurnkeySigner` which leverages the `Turnkey` SDK to authenticate a user.

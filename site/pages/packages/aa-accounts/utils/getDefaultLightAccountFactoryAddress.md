@@ -4,7 +4,6 @@ description: Overview of the getDefaultLightAccountFactoryAddress method in
   aa-accounts utils
 ---
 
-
 # getDefaultLightAccountFactoryAddress
 
 Utility method that returns the default Light Account Factory contract address for a given chain

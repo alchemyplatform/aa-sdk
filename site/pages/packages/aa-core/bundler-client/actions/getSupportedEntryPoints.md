@@ -3,7 +3,6 @@ title: getSupportedEntryPoints
 description: Overview of the getSupportedEntryPoints action available on the BundlerClient
 ---
 
-
 # getSupportedEntryPoints
 
 calls `eth_supportedEntryPoints` and returns the entry points the RPC supports

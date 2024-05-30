@@ -3,7 +3,6 @@ title: AccountSigner • getAddress
 description: Overview of the getAddress method on AccountSigner in aa-ethers
 ---
 
-
 # getAddress
 
 `getAddress` is a method on `AccountSigner` that gets the `AccountSigner`'s smart account address.

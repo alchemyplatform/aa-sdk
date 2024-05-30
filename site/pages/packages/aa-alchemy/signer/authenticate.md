@@ -3,7 +3,6 @@ title: Alchemy Signer • authenticate
 description: Learn how to use the AlchemySigner.authenticate method
 ---
 
-
 # authenticate
 
 The `authenticate` method is used to authenticate a user with the Alchemy Signer.

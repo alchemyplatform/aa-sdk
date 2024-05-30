@@ -3,7 +3,6 @@ title: Middleware • alchemyUserOperationSimulator
 description: Overview of the alchemyUserOperationSimulator method in aa-alchemy
 ---
 
-
 # alchemyUserOperationSimulator
 
 `alchemyUserOperationSimulator` is a middleware method you can use to easily leverage the [`alchemy_simulateUserOperationAssetChanges`](https://docs.alchemy.com/reference/alchemy-simulateuseroperationassetchanges/?a=ak-docs) API to simulate asset changes resulting from user operation. Having this as part of your middleware stack will ensure `UserOperations` that fail simulation do not get sent unnecessarily.

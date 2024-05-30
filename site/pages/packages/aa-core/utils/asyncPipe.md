@@ -3,7 +3,6 @@ title: asyncPipe
 description: Overview of the asyncPipe method in aa-core utils
 ---
 
-
 # `asyncPipe<T>`
 
 Utility function that allows for piping a series of async functions together that operate on a common type `T`

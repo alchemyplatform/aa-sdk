@@ -3,7 +3,6 @@ title: Utils • convertWalletToAccountSigner
 description: Overview of the convertWalletToAccountSigner method in aa-ethers
 ---
 
-
 # Utils
 
 `convertWalletToAccountSigner` converts your ethers.js `Wallet` object into an `SmartAccountSigner` by deriving implementations of its methods: `getAddress`, `signMessage`, and `signTypedData`.

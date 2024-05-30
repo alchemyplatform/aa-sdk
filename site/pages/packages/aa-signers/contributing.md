@@ -3,7 +3,6 @@ title: Contributing to aa-signers
 description: How to add your own Signer Implementation to aa-signers
 ---
 
-
 # Contributing to `aa-signers`
 
 If you are looking to add a new Signer type, please follow the following structure.

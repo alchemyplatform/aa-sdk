@@ -3,7 +3,6 @@ title: FordefiSigner • signMessage
 description: Overview of the signMessage method on FordefiSigner
 ---
 
-
 # signMessage
 
 `signMessage` supports signing messages from the `FordefiSigner`.

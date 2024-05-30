@@ -3,7 +3,6 @@ title: BundlerClient
 description: Introduction to BundlerClient exported by aa-core
 ---
 
-
 # Bundler Client
 
 The `BundlerClient` is an extension of viem's [`PublicClient`](https://viem.sh/docs/clients/public) that adds methods for interacting with Bundler RPC methods.

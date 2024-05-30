@@ -3,7 +3,6 @@ title: Contributing to aa-accounts
 description: How to add your own Account implementation to aa-accounts
 ---
 
-
 # Contributing to `aa-accounts`
 
 If you are looking to add a new account type, please follow the following structure.

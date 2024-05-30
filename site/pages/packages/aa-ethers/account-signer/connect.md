@@ -3,7 +3,6 @@ title: AccountSigner • connect
 description: Overview of the connect method on AccountSigner in aa-ethers
 ---
 
-
 # connect
 
 `connect` is a method on `AccountSigner` that you can call to connect an `EthersProviderAdapter` to this Signer. This lets the returned `AccountSigner` leverage the provider when signing messages, sending user operations and transactions for the smart account using the signer.

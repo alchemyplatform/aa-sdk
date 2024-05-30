@@ -3,7 +3,6 @@ title: FordefiSigner • getAddress
 description: Overview of the getAddress method on FordefiSigner
 ---
 
-
 # getAddress
 
 `getAddress` returns the EOA address of the Signer.

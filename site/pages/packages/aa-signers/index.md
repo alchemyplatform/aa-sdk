@@ -3,7 +3,6 @@ title: aa-signers
 description: aa-signers landing page and getting started guide
 ---
 
-
 # `@alchemy/aa-signers`
 
 This package contains various implementations of the `SmartAccountSigner` and `SmartAccountAuthenticator` classes defined in `aa-signer`. This repo is community-maintained and we welcome contributions!

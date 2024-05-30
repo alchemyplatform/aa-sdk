@@ -3,7 +3,6 @@ title: getUserOperationReceipt
 description: Overview of the getUserOperationReceipt action available on the BundlerClient
 ---
 
-
 # getUserOperationReceipt
 
 calls `eth_getUserOperationReceipt` and returns `UserOperationReceipt` if found otherwise `null`

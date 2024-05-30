@@ -3,7 +3,6 @@ title: Modular Account • Getting started
 description: Getting started with Modular Account in Account Kit
 ---
 
-
 # Getting started with Modular Account
 
 It is easy to get started with Modular Account! We will show you two different ways using `@alchemy/aa-alchemy` and `@alchemy/aa-core`.

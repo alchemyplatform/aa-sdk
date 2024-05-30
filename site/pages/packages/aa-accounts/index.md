@@ -3,7 +3,6 @@ title: aa-accounts
 description: aa-accounts landing page and getting started guide
 ---
 
-
 # `@alchemy/aa-accounts`
 
 This package contains various implementations of the `BaseSmartContractAccount` class defined in `aa-core`. This repo is community maintained and we welcome contributions!

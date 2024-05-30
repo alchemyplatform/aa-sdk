@@ -3,7 +3,6 @@ title: LightAccount
 description: Overview of the LightAccount class in aa-accounts
 ---
 
-
 # Light Account
 
 `LightAccount` is a simple, secure, and cost-effective smart account implementation which extends `SmartContractAccount`. It supports features such as ownership transfers, [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) message signing, and batched transactions. We recommend using Light Account for most use cases.

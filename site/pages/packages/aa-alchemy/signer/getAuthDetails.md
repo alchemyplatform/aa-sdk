@@ -3,7 +3,6 @@ title: Alchemy Signer • getAuthDetails
 description: Learn how to use the AlchemySigner.getAuthDetails method
 ---
 
-
 # getAuthDetails
 
 The `getAuthDetails` method is used to get the details of the currently authenticated user. This method will also use session storage to get the user's details if they are already authenticated.

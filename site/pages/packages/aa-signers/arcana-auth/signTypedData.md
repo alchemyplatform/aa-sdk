@@ -3,7 +3,6 @@ title: ArcanaAuthSigner • signTypedData
 description: Overview of the signTypedData method on ArcanaAuthSigner
 ---
 
-
 # signTypedData
 
 `signTypedData` supports signing typed data from the `ArcanaAuthSigner`.

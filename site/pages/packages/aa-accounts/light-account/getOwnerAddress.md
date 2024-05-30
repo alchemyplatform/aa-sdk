@@ -3,7 +3,6 @@ title: LightSmartContractAccount • getOwnerAddress
 description: Overview of the getOwnerAddress method on LightSmartContractAccount
 ---
 
-
 # getOwnerAddress
 
 `getOwnerAddress` returns the address of the on-chain owner of the account.

@@ -3,7 +3,6 @@ title: Web3AuthSigner • signMessage
 description: Overview of the signMessage method on Web3AuthSigner
 ---
 
-
 # signMessage
 
 `signMessage` supports signing messages from the `Web3AuthSigner`.

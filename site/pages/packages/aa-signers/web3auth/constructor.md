@@ -3,7 +3,6 @@ title: Web3AuthSigner • constructor
 description: Overview of the constructor method on Web3AuthSigner in aa-signers
 ---
 
-
 # constructor
 
 To initialize a `Web3AuthSigner`, you must provide a set of parameters detailed below.

@@ -3,7 +3,6 @@ title: LitSigner • signMessage
 description: Overview of the signMessage method on LitSigner
 ---
 
-
 # signMessage
 
 `signMessage` supports signing messages from the `LitSigner`.

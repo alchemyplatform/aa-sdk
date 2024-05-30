@@ -3,7 +3,6 @@ title: Alchemy Signer • Overview
 description: Learn how to get started with the Alchemy Signer
 ---
 
-
 # AlchemySigner
 
 The Alchemy Signer is a `SmartAccountSigner` that is powered by Alchemy's Signer Infrastructure. Using the Alchemy Signer, you can get started building embedded accounts with just an Alchemy API key!

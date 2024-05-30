@@ -3,7 +3,6 @@ title: estimateUserOperationGas
 description: Overview of the estimateUserOperationGas action available on the BundlerClient
 ---
 
-
 # estimateUserOperationGas
 
 Calls `eth_estimateUserOperationGas` and returns the result.

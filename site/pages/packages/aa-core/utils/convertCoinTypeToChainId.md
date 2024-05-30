@@ -3,7 +3,6 @@ title: convertCoinTypeToChainId
 description: Overview of the convertCoinTypeToChainId method in aa-core utils
 ---
 
-
 # convertCoinTypeToChainId
 
 Converts a coinType into a chain ID. The conversion follows [ENSIP-11](https://docs.ens.domains/ens-improvement-proposals/ensip-11-evmchain-address-resolution).

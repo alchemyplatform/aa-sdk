@@ -3,7 +3,6 @@ title: AccountSigner • signMessage
 description: Overview of the signMessage method on AccountSigner in aa-ethers
 ---
 
-
 # signMessage
 
 `signMessage` is a method on `AccountSigner` that signs messages with the `AccountSigner`'s connected EOA signer address.

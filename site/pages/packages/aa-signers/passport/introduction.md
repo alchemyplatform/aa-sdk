@@ -3,7 +3,6 @@ title: PassportSigner
 description: Overview of the PassportSigner class in aa-signers
 ---
 
-
 # Portal Signer
 
 `PassportSigner` is a signer implementation which extends `SmartAccountAuthenticator` to leverage the [Passport SDK](https://github.com/0xpass/passport-sdk). It supports features such as authentication, message and typed data signing, and authentication details retrieval.

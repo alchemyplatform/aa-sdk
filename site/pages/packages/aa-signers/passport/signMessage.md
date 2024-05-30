@@ -3,7 +3,6 @@ title: PassportSigner • signMessage
 description: Overview of the signMessage method on PassportSigner
 ---
 
-
 # signMessage
 
 `signMessage` supports signing messages from the `PassportSigner`.

@@ -3,7 +3,6 @@ title: ParticleSigner • constructor
 description: Overview of the constructor method on ParticleSigner in aa-signers
 ---
 
-
 # constructor
 
 To initialize a `ParticleSigner`, you must provide a set of parameters detailed below.

@@ -3,7 +3,6 @@ title: getDefaultEntryPointAddress
 description: Overview of the getDefaultEntryPointAddress method in aa-core utils
 ---
 
-
 # getDefaultEntryPointAddress
 
 Utility method that returns the default EntryPoint contract address for a given chain

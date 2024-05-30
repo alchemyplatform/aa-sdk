@@ -3,7 +3,6 @@ title: MagicSigner • authenticate
 description: Overview of the authenticate method on MagicSigner
 ---
 
-
 # authenticate
 
 `authenticate` is a method on the `MagicSigner` which leverages the `Magic` web SDK to authenticate a user.

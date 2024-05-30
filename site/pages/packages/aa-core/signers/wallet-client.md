@@ -3,7 +3,6 @@ title: WalletClientSigner
 description: Overview of the WalletClientSigner
 ---
 
-
 # WalletClientSigner
 
 The `WalletClientSigner` is useful if you want to convert a `viem` `WalletClient` to a `SmartAccountSigner` which can be used as a signer to use to connect to Smart Contract Accounts

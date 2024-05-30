@@ -3,7 +3,6 @@ title: 3rd Party Bundlers
 description: Learn how to use a different RPC provider with Account Kit
 ---
 
-
 # Using a different RPC Provider
 
 The `SmartAccountClient` within `@alchemy/aa-core` is unopinionated about which bundler you use, so you can connect to any RPC provider really simply.

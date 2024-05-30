@@ -3,7 +3,6 @@ title: Utils • SupportedChains
 description: Overview of the SupportedChains util method in aa-alchemy
 ---
 
-
 # defineAlchemyChain
 
 `defineAlchemyChain` allows you to extend a `viem` chain if it is not configured with Alchemy's RPC Url. This is useful `@alchemy/aa-core` does not export a chain you can use with the Alchemy Client.

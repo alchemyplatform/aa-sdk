@@ -5,7 +5,6 @@ description: Follow this guide to use any smart account implementation you want
   ERC-4337 and ERC-6900.
 ---
 
-
 # Using your own Smart Account
 
 You are not limited to the accounts defined in `@alchemy/aa-accounts`. The `SmartAccountClient` can be used with any smart account because it only relies on the [`SmartContractAccount`](/packages/aa-core/accounts/) interface. This means you can use your own smart account implementation with Account Kit.

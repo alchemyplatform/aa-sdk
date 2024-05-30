@@ -3,7 +3,6 @@ title: ArcanaAuthSigner • constructor
 description: Overview of the constructor method on ArcanaAuthSigner in aa-signers
 ---
 
-
 # constructor
 
 To initialize `ArcanaAuthSigner`, you must provide a set of parameters detailed below.

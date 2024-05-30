@@ -3,7 +3,6 @@ title: UserOperationOverrides
 description: Overview of the UserOperationOverrides type in aa-core types
 ---
 
-
 # UserOperationOverrides
 
 Contains override values to be applied on the user operation request to be constructed or sent. Available fields include `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit`, `paymasterAndData`, or `nonceKey`. You can also specify a `stateOverride` to be passed into `eth_estimateUserOperationGas` during gas estimation.

@@ -5,7 +5,6 @@ description: Follow this guide to get installed plugins of a Modular Account
   ERC-4337 and ERC-6900.
 ---
 
-
 # How to get the installed plugins of a Modular Account
 
 [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) Modular Accounts implements Plugin inspection interface [`IAccountLoupe.sol`](https://eips.ethereum.org/EIPS/eip-6900#iaccountloupesol) to support visibility in plugin configuration on-chain. This contract interface defines the method `getInstalledPlugins()` that clients can use to fetch the currently installed plugins on a Modular Account.

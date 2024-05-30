@@ -3,7 +3,6 @@ title: ArcanaAuthSigner
 description: Overview of the ArcanaAuthSigner class in aa-signers
 ---
 
-
 # Arcana Auth Signer
 
 `ArcanaAuthSigner` is a signer implementation that extends `SmartAccountAuthenticator` to leverage the [Arcana Auth SDK](https://docs.arcana.network). It supports features such as authentication, message and typed data signing, and authentication details retrieval.

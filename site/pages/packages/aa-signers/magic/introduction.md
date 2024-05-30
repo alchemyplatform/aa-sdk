@@ -3,7 +3,6 @@ title: MagicSigner
 description: Overview of the MagicSigner class in aa-signers
 ---
 
-
 # Magic Signer
 
 `MagicSigner` is a signer implementation which extends `SmartAccountAuthenticator` to leverage the [Magic web SDK](https://magic.link/docs/api/client-side-sdks/web). It supports features such as authentication, message and typed data signing, and authentication details retrieval.

@@ -3,7 +3,6 @@ title: LightSmartContractAccount • signMessageWith6492
 description: Overview of the signMessageWith6492 method on LightSmartContractAccount
 ---
 
-
 # signMessageWith6492
 
 `signMessageWith6492` supports signing messages for deployed smart accounts, as well as undeployed accounts (counterfactual addresses) using [ERC-6492](https://eips.ethereum.org/EIPS/eip-6492).

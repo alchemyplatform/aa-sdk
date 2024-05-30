@@ -3,7 +3,6 @@ title: convertCoinTypeToChain
 description: Overview of the convertCoinTypeToChain method in aa-core utils
 ---
 
-
 # convertCoinTypeToChain
 
 Converts a coinType into a viem Chain object. The conversion follows [ENSIP-11](https://docs.ens.domains/ens-improvement-proposals/ensip-11-evmchain-address-resolution).

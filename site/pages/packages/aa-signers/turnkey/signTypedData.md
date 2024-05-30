@@ -3,7 +3,6 @@ title: TurnkeySigner • signTypedData
 description: Overview of the signTypedData method on TurnkeySigner
 ---
 
-
 # signTypedData
 
 `signTypedData` supports signing typed data from the `TurnkeySigner`.

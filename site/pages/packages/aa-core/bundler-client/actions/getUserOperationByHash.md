@@ -3,7 +3,6 @@ title: getUserOperationByHash
 description: Overview of the getUserOperationByHash action available on the BundlerClient
 ---
 
-
 # getUserOperationByHash
 
 calls `eth_getUserOperationByHash` and returns the `UserOperationResponse` if found

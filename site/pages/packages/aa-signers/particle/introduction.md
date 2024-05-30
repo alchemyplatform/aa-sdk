@@ -3,7 +3,6 @@ title: ParticleSigner
 description: Overview of the ParticleSigner class in aa-signers
 ---
 
-
 # Particle Signer
 
 `ParticleSigner` is a signer implementation which extends `SmartAccountAuthenticator` to leverage the [Particle SDK](https://www.npmjs.com/package/@particle-network/auth). It supports features such as authentication, message and typed data signing, and authentication details retrieval.

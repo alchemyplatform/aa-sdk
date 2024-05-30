@@ -4,7 +4,6 @@ description: Learn how to use a different RPC provider for your bundler traffic
   and node traffic
 ---
 
-
 # split
 
 The split transport allows you to provide overrides for specific RPC methods. This is useful, for example, if you want to send bundler traffic to one provider and node traffic to another.

@@ -3,7 +3,6 @@ title: ParticleSigner • getAuthDetails
 description: Overview of the getAuthDetails method on ParticleSigner
 ---
 
-
 # getAuthDetails
 
 `getAuthDetails` returns the details about the authenticated user, specifically all EOA addresses tied to the user's Particle account.

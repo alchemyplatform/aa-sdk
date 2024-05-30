@@ -3,7 +3,6 @@ title: PassportSigner • constructor
 description: Overview of the constructor method on PassportSigner in aa-signers
 ---
 
-
 # constructor
 
 To initialize a `PassportSigner`, you must provide a set of parameters detailed below.

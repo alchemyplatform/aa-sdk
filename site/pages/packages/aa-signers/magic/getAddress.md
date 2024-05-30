@@ -3,7 +3,6 @@ title: MagicSigner • getAddress
 description: Overview of the getAddress method on MagicSigner
 ---
 
-
 # getAddress
 
 `getAddress` returns the EOA address of the Signer.

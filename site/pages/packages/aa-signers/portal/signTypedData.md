@@ -3,7 +3,6 @@ title: PortalSigner • signTypedData
 description: Overview of the signTypedData method on PortalSigner
 ---
 
-
 # signTypedData
 
 `signTypedData` supports signing typed data from the `PortalSigner`.

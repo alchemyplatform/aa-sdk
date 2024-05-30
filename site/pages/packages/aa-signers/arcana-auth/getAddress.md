@@ -3,7 +3,6 @@ title: ArcanaAuthSigner • getAddress
 description: Overview of the getAddress method on ArcanaAuthSigner
 ---
 
-
 # getAddress
 
 `getAddress` returns the EOA address of the `ArcanaAuthSigner`.

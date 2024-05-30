@@ -3,7 +3,6 @@ title: Session Key Supported Permissions
 description: All permissions the Alchemy Session Key Plugin supports.
 ---
 
-
 # Supported Permissions
 
 ### Time range

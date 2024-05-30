@@ -3,7 +3,6 @@ title: FireblocksSigner • signMessage
 description: Overview of the signMessage method on FireblocksSigner
 ---
 
-
 # signMessage
 
 `signMessage` supports signing messages from the `FireblocksSigner`.

@@ -5,7 +5,6 @@ description: Follow this guide to handle User Operations that are not eligible
   apps that support ERC-4337.
 ---
 
-
 # How to handle User Operations that are not eligible for gas sponsorship
 
 As mentioned from the previous guide on [How to sponsor gas for a User Operation](./gas-manager), with Account Kit can sponsor gas fees for transactions via the [Gas Manager](https://docs.alchemy.com/docs/gas-manager-services/?a=ak-docs).

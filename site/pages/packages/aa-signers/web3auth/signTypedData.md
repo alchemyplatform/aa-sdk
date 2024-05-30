@@ -3,7 +3,6 @@ title: Web3AuthSigner • signTypedData
 description: Overview of the signTypedData method on Web3AuthSigner
 ---
 
-
 # signTypedData
 
 `signTypedData` supports signing typed data from the `Web3AuthSigner`.

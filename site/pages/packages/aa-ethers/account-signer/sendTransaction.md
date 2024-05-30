@@ -3,7 +3,6 @@ title: AccountSigner • sendTransaction
 description: Overview of the sendTransaction method on AccountSigner in aa-ethers
 ---
 
-
 # sendTransaction
 
 `sendTransaction` is a method on `AccountSigner` that sends transactions on behalf of the `AccountSigner`'s smart account, with request and response formatted as if you were using the ethers.js library.

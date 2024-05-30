@@ -3,7 +3,6 @@ title: FireblocksSigner • getAddress
 description: Overview of the getAddress method on FireblocksSigner
 ---
 
-
 # getAddress
 
 `getAddress` returns the EOA address of the Signer.

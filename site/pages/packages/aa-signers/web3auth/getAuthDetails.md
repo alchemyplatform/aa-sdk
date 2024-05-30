@@ -3,7 +3,6 @@ title: Web3AuthSigner • getAuthDetails
 description: Overview of the getAuthDetails method on Web3AuthSigner
 ---
 
-
 # getAuthDetails
 
 `getAuthDetails` returns the details about the authenticated user, in accordance with the `Web3AuthSigner` web SDK's [specifications](https://web3auth.io/docs/sdk/pnp/web/modal/usage#getuserinfo).

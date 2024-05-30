@@ -4,7 +4,6 @@ description: Learn how to get started with Alchemy's Account Kit, a vertically
   integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
-
 # Frequently asked questions
 
 ## Smart Accounts - Light Account

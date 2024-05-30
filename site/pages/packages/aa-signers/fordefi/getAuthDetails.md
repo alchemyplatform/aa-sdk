@@ -3,7 +3,6 @@ title: FordefiSigner • getAuthDetails
 description: Overview of the getAuthDetails method on FordefiSigner
 ---
 
-
 # getAuthDetails
 
 `getAuthDetails` currently does not have a return value.

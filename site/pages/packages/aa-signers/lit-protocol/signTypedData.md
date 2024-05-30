@@ -3,7 +3,6 @@ title: LitSigner • signTypedData
 description: Overview of the signTypedData method on LitSigner
 ---
 
-
 # signTypedData
 
 `signTypedData` supports signing typed data from the `LitSigner`.

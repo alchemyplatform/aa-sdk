@@ -3,7 +3,6 @@ title: Multisig Plugin Smart Contract Technical Details
 description: What are the technical details for the Multisig Plugin?
 ---
 
-
 # Multisig Plugin Technical Details
 
 ## Storing Signatures

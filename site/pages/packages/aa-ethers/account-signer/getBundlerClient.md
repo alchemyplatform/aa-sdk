@@ -3,7 +3,6 @@ title: AccountSigner • getBundlerClient
 description: Overview of the getBundlerClient method on AccountSigner in aa-ethers
 ---
 
-
 # getBundlerClient
 
 `getBundlerClient` is a method on `AccountSigner` that gets the underlying viem client which has [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) capability.

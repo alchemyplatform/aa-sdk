@@ -3,7 +3,6 @@ title: CapsuleSigner • authenticate
 description: Overview of the authenticate method on CapsuleSigner
 ---
 
-
 # authenticate
 
 `authenticate` is a method on the `CapsuleSigner` which leverages the `Capsule` SDK to authenticate a user.

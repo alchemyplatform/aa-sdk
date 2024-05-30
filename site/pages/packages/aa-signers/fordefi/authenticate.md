@@ -3,7 +3,6 @@ title: FordefiSigner • authenticate
 description: Overview of the authenticate method on FordefiSigner
 ---
 
-
 # authenticate
 
 `authenticate` is a method on the `FordefiSigner` which leverages the `Fordefi` provider to authenticate a user.

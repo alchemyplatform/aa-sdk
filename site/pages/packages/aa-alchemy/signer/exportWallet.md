@@ -3,7 +3,6 @@ title: Alchemy Signer • exportWallet
 description: Learn how to use the AlchemySigner.exportWallet method
 ---
 
-
 # exportWallet
 
 The `exportWallet` method is used to export the user's private key or seed phrase.

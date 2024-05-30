@@ -3,7 +3,6 @@ title: ArcanaAuthSigner • signMessage
 description: Overview of the signMessage method on ArcanaAuthSigner
 ---
 
-
 # signMessage
 
 `signMessage` supports signing messages from the `ArcanaAuthSigner`.

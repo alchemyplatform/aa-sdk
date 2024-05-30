@@ -3,7 +3,6 @@ title: Utils
 description: Overview of the Utils methods in aa-ethers
 ---
 
-
 # Utils
 
 `aa-ethers` offers util methods to speed up your development with `EthersProviderAdapter` and `AccountSigner`.

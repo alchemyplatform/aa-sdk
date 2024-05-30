@@ -3,7 +3,6 @@ title: FordefiSigner • signTypedData
 description: Overview of the signTypedData method on FordefiSigner
 ---
 
-
 # signTypedData
 
 `signTypedData` supports signing typed data from the `FordefiSigner`.

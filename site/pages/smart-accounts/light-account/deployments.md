@@ -3,7 +3,6 @@ title: Light Account • Deployments
 description: Deployment addresses
 ---
 
-
 # Deployments
 
 The following tables list the deployed factory and account implementation contract addresses for `LightAccount` and `MultiOwnerLightAccount` on different chains. Deployments for prior versions can be found in the [light-account](https://github.com/alchemyplatform/light-account/tree/develop/deployments) repo.

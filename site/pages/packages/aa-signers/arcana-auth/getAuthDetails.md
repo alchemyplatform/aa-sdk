@@ -3,7 +3,6 @@ title: ArcanaAuthSigner • getAuthDetails
 description: Overview of the getAuthDetails method on ArcanaAuthSigner
 ---
 
-
 # getAuthDetails
 
 `getAuthDetails` returns the details about the authenticated user, per the `Arcana Auth` SDK's `getUser` [UserInfo specifications](https://authsdk-ref-guide.netlify.app/interfaces/userinfo.

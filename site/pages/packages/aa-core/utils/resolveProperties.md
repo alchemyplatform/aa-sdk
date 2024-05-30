@@ -3,7 +3,6 @@ title: resolveProperties
 description: Overview of the resolveProperties method in aa-core utils
 ---
 
-
 # `resolveProperties<T>`
 
 Await all of the properties of a Deferrable object. A Deferrable object is an object that has properties that are either a Promise or a value.

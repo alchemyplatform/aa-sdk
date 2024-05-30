@@ -5,7 +5,6 @@ description: Explore the benefits and tradeoffs of four different packages that
   aa-signers, and aa-ethers.
 ---
 
-
 # Package overview
 
 Account Kit consists of a number of SDK packages that you can leverage to interact with [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) infrastructure.

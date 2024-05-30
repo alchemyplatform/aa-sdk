@@ -3,7 +3,6 @@ title: Alchemy Signer • getUser
 description: Learn how to use the AlchemySigner.getUser method
 ---
 
-
 # getUser
 
 The `getUser` method is used to look up if a user already exists for a given email address

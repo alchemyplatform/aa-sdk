@@ -3,7 +3,6 @@ title: bundlerActions
 description: Overview of the bundlerActions method in aa-core client
 ---
 
-
 # bundlerActions
 
 Allows you to extend a viem `Client` with the new 4337 methods.

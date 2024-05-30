@@ -74,9 +74,14 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build
+        uses: nick-fields/retry@v3
         env:
           API_KEY: ${{ secrets.API_KEY }}
-        run: yarn build
+        with:
+          timeout_minutes: 5
+          max_attempts: 2
+          retry_on: error
+          command: yarn build
 
       - name: Unit Test
         run: yarn test

@@ -3,7 +3,6 @@ title: Alchemy Signer • signTransaction
 description: Learn how to use the AlchemySigner.signTransaction method
 ---
 
-
 # signTransaction
 
 The `signTransaction` method is used to sign transactions with the Alchemy Signer when using the Signer as an EOA.

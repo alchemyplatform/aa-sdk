@@ -3,7 +3,6 @@ title: PortalSigner • signMessage
 description: Overview of the signMessage method on PortalSigner
 ---
 
-
 # signMessage
 
 `signMessage` supports signing messages from the `PortalSigner`.

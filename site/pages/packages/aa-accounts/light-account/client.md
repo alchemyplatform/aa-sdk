@@ -3,7 +3,6 @@ title: aa-accounts • LightAccountClient
 description: Overview of the LightAccountClient in aa-accounts
 ---
 
-
 # createLightAccountClient
 
 `createLightAccountClient` is a factory that improves the developer experience of connecting a Light Account to a `SmartAccountClient`. You can use this to directly instantiate a `SmartAccountClient` already connected to a Light Account in one line of code.

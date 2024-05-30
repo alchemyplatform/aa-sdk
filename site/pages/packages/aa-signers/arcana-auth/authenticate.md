@@ -3,7 +3,6 @@ title: ArcanaAuthSigner • authenticate
 description: Overview of the authenticate method on ArcanaAuthSigner
 ---
 
-
 # authenticate
 
 `authenticate` is a method on the `ArcanaAuthSigner` that leverages the `Arcana` Auth Web SDK to authenticate a user.

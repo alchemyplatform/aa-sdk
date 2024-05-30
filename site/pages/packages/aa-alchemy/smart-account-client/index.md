@@ -3,7 +3,6 @@ title: Alchemy Smart Account Client
 description: Overview of the Alchemy Smart Account Client in aa-alchemy
 ---
 
-
 # Alchemy Smart Account Client
 
 To create an `AlchemySmartAccountClient`, you must provide a set of parameters detailed below. For Fraxtal, Fraxtal Testnet, Zora, and Zora Sepolia networks, `apiKey` and `jwt `provide an `rpcUrl` from a RPC provider since Alchemy currently only supports Account Abstraction for these networks. Please refer to documentation from [Frax](https://docs.frax.com/fraxtal/network/network-information) and [Zora](https://docs.zora.co/docs/zora-network/network) about RPC options.

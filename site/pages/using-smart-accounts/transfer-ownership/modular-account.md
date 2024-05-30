@@ -5,7 +5,6 @@ description: Follow this guide to manage ownership of a Modular Account with
   ERC-4337 and ERC-6900.
 ---
 
-
 # How to manage ownership of a Modular Account
 
 The Multi Owner plugin lets your smart accounts have one or more ECDSA or SCA owners. This lets your account integrate with multiple signers at once, and supports recovering your account if one signer is lost.

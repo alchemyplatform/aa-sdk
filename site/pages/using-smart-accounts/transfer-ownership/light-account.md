@@ -5,7 +5,6 @@ description: Follow this guide to transfer ownership of a Light Account with
   ERC-4337 and ERC-6900.
 ---
 
-
 # How to transfer ownership of `LightAccount`
 
 Not all smart account implementations support transferring the ownership (e.g. `SimpleAccount`). However, a number of the accounts in this guide and in Account Kit do, including our `LightAccount`! Let's see a few different ways we can transfer ownership of an Account (using `LightAccount` as an example).

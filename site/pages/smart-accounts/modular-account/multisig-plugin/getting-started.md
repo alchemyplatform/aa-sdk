@@ -3,7 +3,6 @@ title: Modular Account with Multisig Plugin • Getting started
 description: Getting started with the Modular Account with Multisig Plugin in Account Kit
 ---
 
-
 # Getting started with the Multisig Plugin
 
 ## 1. Set up the Modular Account

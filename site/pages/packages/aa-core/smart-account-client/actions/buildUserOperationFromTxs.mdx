@@ -3,7 +3,6 @@ title: buildUserOperationFromTxs
 description: Overview of the buildUserOperationFromTxs method on SmartAccountClient
 ---
 
-
 # buildUserOperationFromTxs
 
 Performs [`buildUserOperationFromTx`](./buildUserOperationFromTx) in batch and builds into a single, yet to be signed `UserOperation` (UO) struct. The output user operation struct will be filled with all gas fields (and paymaster data if a paymaster is used) based on the transactions data (`to`, `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas`) computed using the configured [`ClientMiddlewares`](/packages/aa-core/smart-account-client/middleware/) on the `SmartAccountClient`

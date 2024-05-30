@@ -40,8 +40,7 @@ type ExecutionActions<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined,
-  TEntryPointVersion extends
-    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
   updateOwnership: (
     args: Pick<
@@ -53,7 +52,7 @@ type ExecutionActions<
     > &
       UserOperationOverridesParameter<TEntryPointVersion> &
       GetAccountParameter<TAccount> &
-      GetContextParameter<TContext>,
+      GetContextParameter<TContext>
   ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 };
 
@@ -72,21 +71,20 @@ type ManagementActions<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined,
-  TEntryPointVersion extends
-    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = {
   installMultisigPlugin: (
     args: UserOperationOverridesParameter<TEntryPointVersion> &
       InstallMultisigPluginParams &
       GetAccountParameter<TAccount> &
-      GetContextParameter<TContext>,
+      GetContextParameter<TContext>
   ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 };
 
 type ReadAndEncodeActions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
-    | undefined,
+    | undefined
 > = {
   encodeUpdateOwnership: (
     args: Pick<
@@ -95,7 +93,7 @@ type ReadAndEncodeActions<
         "updateOwnership"
       >,
       "args"
-    >,
+    >
   ) => Hex;
 
   encodeEip712Domain: (
@@ -105,11 +103,11 @@ type ReadAndEncodeActions<
         "eip712Domain"
       >,
       "args"
-    >,
+    >
   ) => Hex;
 
   readEip712Domain: (
-    args: GetAccountParameter<TAccount>,
+    args: GetAccountParameter<TAccount>
   ) => Promise<
     ReadContractReturnType<
       typeof MultisigPluginExecutionFunctionAbi,
@@ -124,7 +122,7 @@ type ReadAndEncodeActions<
         "isValidSignature"
       >,
       "args"
-    >,
+    >
   ) => Hex;
 
   readIsValidSignature: (
@@ -135,7 +133,7 @@ type ReadAndEncodeActions<
       >,
       "args"
     > &
-      GetAccountParameter<TAccount>,
+      GetAccountParameter<TAccount>
   ) => Promise<
     ReadContractReturnType<
       typeof MultisigPluginExecutionFunctionAbi,
@@ -150,7 +148,7 @@ export type MultisigPluginActions<
     | undefined,
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined,
+    | undefined
 > = ExecutionActions<TAccount, TContext> &
   ManagementActions<TAccount, TContext> &
   ReadAndEncodeActions<TAccount>;
@@ -180,7 +178,7 @@ export const MultisigPlugin: Plugin<typeof MultisigPluginAbi> = {
   },
   getContract: <C extends Client>(
     client: C,
-    address?: Address,
+    address?: Address
   ): GetContractReturnType<typeof MultisigPluginAbi, PublicClient, Address> => {
     if (!client.chain) throw new ChainNotFoundError();
 
@@ -200,9 +198,9 @@ export const multisigPluginActions: <
     | undefined,
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined,
+    | undefined
 >(
-  client: Client<TTransport, TChain, TAccount>,
+  client: Client<TTransport, TChain, TAccount>
 ) => MultisigPluginActions<TAccount, TContext> = (client) => ({
   updateOwnership({ args, overrides, context, account = client.account }) {
     if (!account) {
@@ -212,7 +210,7 @@ export const multisigPluginActions: <
       throw new IncompatibleClientError(
         "SmartAccountClient",
         "updateOwnership",
-        client,
+        client
       );
     }
 
@@ -238,7 +236,7 @@ export const multisigPluginActions: <
       throw new IncompatibleClientError(
         "SmartAccountClient",
         "installMultisigPlugin",
-        client,
+        client
       );
     }
 
@@ -260,7 +258,7 @@ export const multisigPluginActions: <
       pluginAddress,
       pluginInitData: encodeAbiParameters(
         [{ type: "address[]" }, { type: "uint256" }],
-        params.args,
+        params.args
       ),
       dependencies,
       overrides,
@@ -291,7 +289,7 @@ export const multisigPluginActions: <
       throw new IncompatibleClientError(
         "SmartAccountClient",
         "readEip712Domain",
-        client,
+        client
       );
     }
 
@@ -318,7 +316,7 @@ export const multisigPluginActions: <
       throw new IncompatibleClientError(
         "SmartAccountClient",
         "readIsValidSignature",
-        client,
+        client
       );
     }
 

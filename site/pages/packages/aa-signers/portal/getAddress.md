@@ -3,7 +3,6 @@ title: PortalSigner • getAddress
 description: Overview of the getAddress method on PortalSigner
 ---
 
-
 # getAddress
 
 `getAddress` returns the EOA address of the Signer.

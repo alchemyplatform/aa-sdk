@@ -3,7 +3,6 @@ title: Introduction to using Session Keys
 description: Learn about Alchemy's ERC-6900 Compatible Session Key Plugin.
 ---
 
-
 # Session Key Plugin overview
 
 The Session Key plugin lets your smart account add additional signers to your Modular Account with specific permissions.

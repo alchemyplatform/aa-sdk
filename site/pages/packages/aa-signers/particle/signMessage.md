@@ -3,7 +3,6 @@ title: ParticleSigner • signMessage
 description: Overview of the signMessage method on ParticleSigner
 ---
 
-
 # signMessage
 
 `signMessage` supports signing messages from the `ParticleSigner`.

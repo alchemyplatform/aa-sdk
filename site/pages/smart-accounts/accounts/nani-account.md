@@ -5,7 +5,6 @@ description: Follow this guide to use Nani Account with Account Kit, a
   ERC-6900.
 ---
 
-
 # Nani Account
 
 ## Overview

@@ -3,7 +3,6 @@ title: PassportSigner • getAddress
 description: Overview of the getAddress method on PassportSigner
 ---
 
-
 # getAddress
 
 `getAddress` returns the EOA address of the Signer.

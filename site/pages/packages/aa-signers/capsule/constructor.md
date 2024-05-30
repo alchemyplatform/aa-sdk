@@ -3,7 +3,6 @@ title: CapsuleSigner • constructor
 description: Overview of the constructor method on CapsuleSigner in aa-signers
 ---
 
-
 # constructor
 
 To initialize a `CapsuleSigner`, you must provide a set of parameters detailed below.

@@ -3,7 +3,6 @@ title: LitSigner • getAuthDetails
 description: Overview of the getAuthDetails method on LitSigner
 ---
 
-
 # getAuthDetails
 
 `getAuthDetails` returns the details about the authenticated user as `LitUserMetadata`, which is a `SessionSigsMap`: the authentication result when successful.

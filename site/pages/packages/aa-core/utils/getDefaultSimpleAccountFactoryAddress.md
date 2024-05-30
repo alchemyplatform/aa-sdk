@@ -3,7 +3,6 @@ title: getDefaultSimpleAccountFactoryAddress
 description: Overview of the getDefaultSimpleAccountFactoryAddress method in aa-core utils
 ---
 
-
 # getDefaultSimpleAccountFactoryAddress
 
 Utility method that returns the default Simple Account Factory contract address for a given chain

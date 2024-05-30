@@ -3,7 +3,6 @@ title: TurnkeySigner
 description: Overview of the TurnkeySigner class in aa-signers
 ---
 
-
 # Turnkey Signer
 
 `TurnkeySigner` is a signer implementation which extends `SmartAccountAuthenticator` to leverage the [Turnkey SDK](https://docs.turnkey.com/category/sdk). It supports features such as authentication, message and typed data signing, and authentication details retrieval.

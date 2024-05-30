@@ -3,7 +3,6 @@ title: sendRawUserOperation
 description: Overview of the sendRawUserOperation action available on the BundlerClient
 ---
 
-
 # sendRawUserOperation
 
 Calls `eth_sendUserOperation` and returns the hash of the sent `UserOperation` (UO).

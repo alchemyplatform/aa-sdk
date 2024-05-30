@@ -3,7 +3,6 @@ title: EntryPoint Support
 description: EntryPoint Support for Alchemy Accounts
 ---
 
-
 # EntryPoint Support
 
 `aa-sdk` supports 4 types of accounts natively (but can easily be extended to support any compatible [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) or [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) account). The below table details which EntryPoints each account is valid for.

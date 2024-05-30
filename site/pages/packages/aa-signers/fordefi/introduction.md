@@ -3,7 +3,6 @@ title: FordefiSigner
 description: Overview of the FordefiSigner class in aa-signers
 ---
 
-
 # Fordefi Signer
 
 `FordefiSigner` is a signer implementation which extends `SmartAccountAuthenticator` to leverage the [Fordefi Web3 Provider](https://github.com/FordefiHQ/web3-provider). It supports features such as authentication, message and typed data signing, and authentication details retrieval.

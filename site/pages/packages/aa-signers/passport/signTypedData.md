@@ -3,7 +3,6 @@ title: PassportSigner • signTypedData
 description: Overview of the signTypedData method on PassportSigner
 ---
 
-
 # signTypedData
 
 `signTypedData` supports signing typed data from the `PassportSigner`.

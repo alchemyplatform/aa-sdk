@@ -3,7 +3,6 @@ title: LightSmartContractAccount • signTypedData
 description: Overview of the signTypedData method on LightSmartContractAccount
 ---
 
-
 # signTypedData
 
 `signTypedData` supports signing typed data from the smart account's currently connnected signer address.

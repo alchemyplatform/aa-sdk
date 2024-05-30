@@ -3,7 +3,6 @@ title: PortalSigner
 description: Overview of the PortalSigner class in aa-signers
 ---
 
-
 # Portal Signer
 
 `PortalSigner` is a signer implementation which extends `SmartAccountAuthenticator` to leverage the [Portal SDK](https://docs.portalhq.io/sdk/web-beta). It supports features such as authentication, message and typed data signing, and authentication details retrieval.

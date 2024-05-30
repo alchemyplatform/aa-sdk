@@ -3,7 +3,6 @@ title: sendTransactions
 description: Overview of the sendTransactions method on SmartAccountClient
 ---
 
-
 # sendTransactions
 
 This function takes a set of Ethereum transactions and batch converts to one single `UserOperation` (UO) struct, signs and sends that UO request, and waits on the receipt of that UO (i.e., has it been mined). If you don't want to wait for the UO to mine, it is recommended to use [sendUserOperation](./sendUserOperation) instead.

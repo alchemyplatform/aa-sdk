@@ -3,7 +3,6 @@ title: MagicSigner • getAuthDetails
 description: Overview of the getAuthDetails method on MagicSigner
 ---
 
-
 # getAuthDetails
 
 `getAuthDetails` returns the details about the authenticated user, in accordance with the `Magic` web SDK's [specifications](https://magic.link/docs/api/client-side-sdks/web#getinfo).

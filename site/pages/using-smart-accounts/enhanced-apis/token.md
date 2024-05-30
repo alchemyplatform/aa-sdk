@@ -5,7 +5,6 @@ description: Follow this guide to fetch a smart account's ERC-20 tokens with
   ERC-4337 and ERC-6900.
 ---
 
-
 # How to fetch a Smart Account's ERC-20 tokens
 
 Alchemy provides several [Enhanced APIs](https://www.alchemy.com/enhanced-apis/?a=ak-docs), which are especially useful for querying information about the smart accounts you create using Account Kit, such as the account's ERC-20 Token balances using the [Token API](https://www.alchemy.com/token-api/?a=ak-docs).

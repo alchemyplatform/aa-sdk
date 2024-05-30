@@ -6,7 +6,6 @@ description: Follow this guide to install and uninstall plugins on a Modular
   support ERC-4337 and ERC-6900.
 ---
 
-
 # How to install and uninstall plugins on a Modular Account
 
 [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) Modular Accounts implements Plugin manager interface [`IPluginManager.sol`](https://eips.ethereum.org/EIPS/eip-6900#ipluginmanagersol) to support installing and uninstalling plugins on a Modular Account. This contract interface defines the method `installPlugin()` and `uninstallPlugin()` that clients can use to install or uninstall plugins on a Modular Account.

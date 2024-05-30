@@ -3,7 +3,6 @@ title: LitSigner • constructor
 description: Overview of the constructor method on LitSigner in aa-signers
 ---
 
-
 # constructor
 
 ## Usage

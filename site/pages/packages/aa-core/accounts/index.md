@@ -3,7 +3,6 @@ title: SmartContractAccount
 description: Overview of SmartContractAccount exported by aa-core
 ---
 
-
 # SmartContractAccount
 
 The `SmartContractAccount` interface is an extension of viem's [`CustomAccount`](https://viem.sh/docs/accounts/custom) with additional methods used for Account Abstraction. It is meant to be used in conjunction with a [`SmartAccountClient`](/packages/aa-core/smart-account-client/).
