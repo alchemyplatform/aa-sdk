@@ -1,26 +1,16 @@
 import {
   AccountNotFoundError,
   ChainNotFoundError,
-  DefaultFactoryNotDefinedError,
   arbitrum,
-  arbitrumGoerli,
   arbitrumSepolia,
   base,
-  baseGoerli,
   baseSepolia,
-  fraxtal,
-  fraxtalSepolia,
-  goerli,
   mainnet,
   optimism,
-  optimismGoerli,
   optimismSepolia,
   polygon,
   polygonAmoy,
-  polygonMumbai,
   sepolia,
-  zora,
-  zoraSepolia,
   type GetAccountParameter,
   type SmartAccountClient,
   type SmartAccountSigner,
@@ -67,13 +57,9 @@ export const getDefaultMultisigModularAccountFactoryAddress = (
     case arbitrum.id:
     case arbitrumSepolia.id:
     case base.id:
+    default:
       return "0x000000000000204327E6669f00901a57CE15aE15";
   }
-  throw new DefaultFactoryNotDefinedError(
-    "MultisigModularAccount",
-    chain,
-    "0.6.0"
-  );
 };
 
 /**
@@ -87,32 +73,9 @@ export const getDefaultMultiOwnerModularAccountFactoryAddress = (
   chain: Chain
 ): Address => {
   switch (chain.id) {
-    case sepolia.id:
-    case baseSepolia.id:
-    case polygon.id:
-    case mainnet.id:
-    case goerli.id:
-    case polygonAmoy.id:
-    case polygonMumbai.id:
-    case optimism.id:
-    case optimismGoerli.id:
-    case optimismSepolia.id:
-    case arbitrum.id:
-    case arbitrumGoerli.id:
-    case arbitrumSepolia.id:
-    case base.id:
-    case baseGoerli.id:
-    case fraxtal.id:
-    case fraxtalSepolia.id:
-    case zora.id:
-    case zoraSepolia.id:
+    default:
       return "0x000000e92D78D90000007F0082006FDA09BD5f11";
   }
-  throw new DefaultFactoryNotDefinedError(
-    "MultiOwnerModularAccount",
-    chain,
-    "0.6.0"
-  );
 };
 
 export async function getMSCAUpgradeToData<

@@ -26,7 +26,7 @@ export type SupportedEntryPoint<
   TAbi extends Abi | readonly unknown[] = Abi
 > = {
   version: TEntryPointVersion;
-  address: Record<TChain["id"], Address>;
+  address: Record<TChain["id"] | "default", Address>;
   abi: GetContractParameters<Transport, TChain, Account, TAbi>["abi"];
 
   /**
