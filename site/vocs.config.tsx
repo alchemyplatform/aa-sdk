@@ -10,7 +10,11 @@ const pkg = require("../lerna.json");
 export default defineConfig({
   title: "Account Kit",
   description: "Account Abstraction Legos",
-  logoUrl: "/kit-logo.svg",
+  logoUrl: {
+    light: "/account-kit-light-mode.svg",
+    dark: "/account-kit-dark-mode.svg",
+  },
+  iconUrl: "kit-icon.svg",
   rootDir: "./",
   head: (
     <>
