@@ -18,13 +18,37 @@ head:
       content: Learn how to get started with Alchemy's Embedded Accounts using Account Kit and the Alchemy Signer, Modular Account, Rundler and Gas Manager.
 ---
 
-# App Configuration
+# Run the starter app
 
-This section will walk you through how to configure your application on the Alchemy dashboard.
+Now that you have seen the starter app, its time to get it running locally for yourself! This section will walk you have you clone, configure and run the starter app.
 
-## Configure the Embedded Accounts
+## Clone the repository
 
-First, create an Alchemy API key, an Embedded Accounts Config, and a Gas Manager Policy. You will use these to send UOs, authenticate logins, and sponsor gas respectively.
+First you can clone the repository with any of these commands:
+
+::: code-group
+
+```bash [https]
+git clone https://github.com/alchemyplatform/embedded-accounts-quickstart.git
+```
+
+```bash [ssh]
+git clone git@github.com:alchemyplatform/embedded-accounts-quickstart.git
+```
+
+```bash [github cli]
+gh repo clone alchemyplatform/embedded-accounts-quickstart
+```
+
+:::
+
+Additionally, you can find the starter app on Github here: https://github.com/alchemyplatform/embedded-accounts-quickstart
+
+## Setup your environment variables
+
+You'll notice that on Github, there is a [`.env.sample`](https://github.com/alchemyplatform/embedded-accounts-quickstart/blob/main/.env.sample) file. Create a copy of this file and call it `.env`. This is where all of your environment variables will go to interact with Alchemy services.
+
+Next, we'll fill out that `.env` with variables. You will create an Alchemy API key, an Embedded Accounts Config, and a Gas Manager Policy. You will use these to send UOs, authenticate logins, and sponsor gas respectively.
 
 ### Alchemy API Key
 
@@ -79,3 +103,19 @@ Then:
 <img src="/images/getting-started/gas-manager-configure.png" alt="Gas Manager Configure" />
 
 Once you create the policy, copy the Policy ID below the policy's header and copy-paste it into the .env file of your application as an environment variable called `NEXT_PUBLIC_ALCHEMY_GAS_MANAGER_POLICY_ID`.
+
+## Run the app
+
+Now it's time to run the app! You will need to install the dependencies and then kickoff the development server.
+
+To do this, we recommend using the [yarn](https://yarnpkg.com/) package manager so you will make use of the lock file we have committed to the repository and ensure you have the same library versions as we did.
+
+Run the app with three steps:
+
+1. Open a terminal to the location of your repository
+2. Install the dependencies by running `yarn`
+3. Run the development server with `yarn dev`
+
+And that's it! Your app should now be running on your [localhost](http://localhost:3000).
+
+Be sure to check out the code and modify it to your satisfaction. And once you're ready to look closer, jump into the next section [learn how it all works](./how-it-works.md).

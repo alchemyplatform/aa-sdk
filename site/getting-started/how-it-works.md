@@ -18,9 +18,9 @@ head:
       content: Learn how to get started with Alchemy's Embedded Accounts using Account Kit and the Alchemy Signer, Modular Account, Rundler and Gas Manager.
 ---
 
-# Starter Guide
+# Learn how it works
 
-Let's take a tour of the [starter app repo](https://github.com/alchemyplatform/embedded-accounts-quickstart) to see how easy it is to work with embedded accounts!
+It's time to learn how it all works! Let's take a tour of the [starter app repository](https://github.com/alchemyplatform/embedded-accounts-quickstart) to see how it integrates with embedded accounts.
 
 ## 1. The config
 
@@ -30,7 +30,7 @@ First, let's do our configuration in a single file called `config.ts`.
 <<< @/../examples/embedded-accounts-quickstart/src/config.ts#create-accounts-config
 :::
 
-:point_up: Let's take notice of three things in this configuration:
+:point_up: Let's take note of three things in this configuration:
 
 1. First you'll notice we chose a specific chain definition here. You can change the `chain` variable and expect this to be reflected everywhere in the application.
 2. You'll also notice the `rpcUrl` points to API endpoints in our app. By doing this, the application does not expose the API key client side. We specify two different endpoints for the [Alchemy Signer](../signers/alchemy-signer/introduction.md) and general chain RPC calls to keep the behavior consistent with an Alchemy API endpoint.
@@ -94,8 +94,8 @@ We'll get a `client` by using [useSmartAccountClient](../react/useSmartAccountCl
 
 ## Wrap up
 
-And that's everything!
+That's everything for this quick start! And yet, there's still so much more to discover.
 
-If you're ready to get started, clone the [starter app repo](https://github.com/alchemyplatform/embedded-accounts-quickstart) and follow the the [app configuration](../getting-started/app-configuration.md) to setup your environment variables.
+In this section we went over how to use just a few of the react hooks that are available to you in your application. If you would like to learn more about all the different react hooks that are available, go to the [react hooks overview](../react/overview.md).
 
-If you need more information or functionality, check out our documentation on [react hooks](../react/overview.md) to see all that is available.
+We also touched on the Alchemy Signer, as the key service that allows you to use embedded accounts. If you would like to learn more about how to use passkeys, configuring the user session or exporting private keys, go to the [alchemy signer introduction](../signers/alchemy-signer/introduction.md).
