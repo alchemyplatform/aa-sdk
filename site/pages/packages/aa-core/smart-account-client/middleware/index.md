@@ -3,7 +3,6 @@ title: SmartAccountClient Middleware
 description: Overview of ClientMiddleware exported by aa-core
 ---
 
-
 # ClientMiddleware
 
 Middleware represents different operations involved in the [`SmartAccountClient`](/packages/aa-core/smart-account-client/) pipeline for constructing a user operation given the user inputs by populating the UO with other data, including gas fees, paymaster data, etc.
@@ -60,7 +59,7 @@ During the `SmartAccountClient` middleware pipeline run, each middleware is appl
 
 ## Overriding default middlewares with your own
 
-For each middleware, a default middleware is available for the `SmartAccountClient`, which computes user operation fields based on the user input of operation call data. If you are looking to customize certain behaviors of user operation struct construction for your client, you can flexibly override with your own middleware specifying in the [`ClientMiddlewareConfig`](/resources/types.md#clientmiddlewareconfig) during the `SmartAccountClient` instantiation. For example, the following illustrates how you can override the default gas estimation behavior by overriding the default gas estimator with your own.
+For each middleware, a default middleware is available for the `SmartAccountClient`, which computes user operation fields based on the user input of operation call data. If you are looking to customize certain behaviors of user operation struct construction for your client, you can flexibly override with your own middleware specifying in the [`ClientMiddlewareConfig`](/resources/types#clientmiddlewareconfig) during the `SmartAccountClient` instantiation. For example, the following illustrates how you can override the default gas estimation behavior by overriding the default gas estimator with your own.
 
 ```ts
 export type ClientMiddlewareConfig = Omit<

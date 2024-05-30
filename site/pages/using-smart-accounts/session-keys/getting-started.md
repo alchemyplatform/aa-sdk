@@ -3,7 +3,6 @@ title: Getting started with Session Keys
 description: Learn how to use Alchemy's Session Key Plugin.
 ---
 
-
 # Getting started with Session Keys
 
 `@alchemy/aa-accounts` exports all of the definitions you need to use session keys with a Modular Account. We provide a simple `SessionKeySigner` class that generates session keys on the client and can be used as the `signer` for the Multi Owner Modular Account.
@@ -111,7 +110,7 @@ if (!isPluginInstalled) {
 
 Session keys are powerful because of permissions that limit what actions they can take. When you add a session key, you should also specify the initial permissions that apply over the key.
 
-See the [Supported Permissions](./supported-permissions.md#using-the-permissionsbuilder) page for more information on how to used the permissions builder.
+See the [Supported Permissions](./supported-permissions#using-the-permissionsbuilder) page for more information on how to used the permissions builder.
 
 Let's use the permission builder to build a set of permissions that sets a spend limit:
 
