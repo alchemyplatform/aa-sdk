@@ -80,7 +80,6 @@ jobs:
         with:
           timeout_minutes: 5
           max_attempts: 2
-          retry_on: error
           command: yarn build
 
       - name: Unit Test

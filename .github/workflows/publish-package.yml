@@ -87,15 +87,15 @@ jobs:
         run: yarn lerna publish --conventional-commits --no-private --yes --no-verify-access
 
       - name: Build with Vocs
-        working-directory: site
         uses: nick-fields/retry@v3
         with:
           timeout_minutes: 5
           max_attempts: 2
           retry_on: error
-          command: |
-            yarn build
-            touch dist/.nojekyll
+          command: yarn build
+
+      - name: Create .nojekyll
+        run: touch site/dist/.nojekyll
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
