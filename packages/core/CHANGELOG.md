@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.17.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.17.1...v3.17.2) (2024-05-31)
+
+### Reverts
+
+- undo vocs deploy ([#690](https://github.com/alchemyplatform/aa-sdk/issues/690)) ([c7cb350](https://github.com/alchemyplatform/aa-sdk/commit/c7cb350f9786fe10d03c62d61a8d2c9f21d4cdc0))
+
 ## [3.17.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.17.0...v3.17.1) (2024-05-31)
 
 **Note:** Version bump only for package @alchemy/aa-core
