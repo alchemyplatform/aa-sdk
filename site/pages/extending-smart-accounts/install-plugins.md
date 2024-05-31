@@ -18,7 +18,7 @@ Account Kit provides a more robust, easier way to install plugins with `pluginAc
 
 This guide will use the `SessionKeyPlugin` as an example to show how you can install `SessionKeyPlugin` easily using the `SmartAccountClient` extended with `sessionKeyPluginActions`.
 
-### 1. Installing the Session Key Plugin
+## 1. Installing the Session Key Plugin
 
 You should first extend the `SmartAccountClient` connected to a Modular Account with `sessionKeyPluginActions`.
 
@@ -58,7 +58,7 @@ await client.waitForUserOperationTransaction({ hash });
 
 Refer to the [Session Key](/using-smart-accounts/session-keys/) section to learn more about using the `SessionKeyPlugin`.
 
-### 2. Uninstalling the Session Key Plugin
+## 2. Uninstalling the Session Key Plugin
 
 On the other hand, uninstalling plugins usually does not involve configuring contract dependencies or function references. You can use the `pluginManagerActions`'s generic `uninstallPlugin` method to uninstall a particular plugin of interest.
 First, extend the `SmartAccountClient` connected to a Modular Account with `pluginManagerActions`.
