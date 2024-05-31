@@ -1,19 +1,19 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "target": "es2021",
-    "lib": ["DOM", "ESNext"],
     "strict": true,
-    "jsx": "preserve",
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "module": "esnext",
-    "moduleResolution": "node",
     "resolveJsonModule": true,
     "noUnusedLocals": true,
     "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
     "types": ["vite/client", "vitepress"],
+    "moduleResolution": "NodeNext",
+    "module": "NodeNext",
+    "target": "ESNext",
+    "lib": ["ESNext", "DOM"],
+    "jsx": "react-jsx",
     "paths": {
       "~/*": ["src/*"]
     }
