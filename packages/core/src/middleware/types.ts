@@ -11,7 +11,7 @@ import type {
 import type { Deferrable } from "../utils";
 import type { MiddlewareClient } from "./actions";
 
-//#region ClientMiddlewareFn
+// [!region ClientMiddlewareFn]
 export type ClientMiddlewareFn<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
@@ -30,9 +30,9 @@ export type ClientMiddlewareFn<
     client: C;
   }
 ) => Promise<Deferrable<UserOperationStruct<TEntryPointVersion>>>;
-//#endregion ClientMiddlewareFn
+// [!endregion ClientMiddlewareFn]
 
-//#region ClientMiddleware
+// [!region ClientMiddleware]
 export type ClientMiddleware<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
@@ -46,4 +46,4 @@ export type ClientMiddleware<
   userOperationSimulator: ClientMiddlewareFn<TContext>;
   signUserOperation: ClientMiddlewareFn<TContext>;
 };
-//#endregion ClientMiddleware
+// [!endregion ClientMiddleware]

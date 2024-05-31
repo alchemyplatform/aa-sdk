@@ -1,0 +1,26 @@
+@layer vocs_preflight {
+  @tailwind base;
+}
+@tailwind components;
+@tailwind utilities;
+
+footer.vocs_Footer {
+  @apply p-0 h-0;
+}
+
+.vocs_DocsLayout_content {
+  @apply flex flex-col;
+}
+
+.vocs_Content {
+  @apply flex flex-col grow;
+}
+
+.bg-clip-text {
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.transparent-text-fill {
+  -webkit-text-fill-color: transparent;
+}
