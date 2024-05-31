@@ -67,7 +67,12 @@ jobs:
       - name: Build
         env:
           API_KEY: ${{ secrets.API_KEY }}
-        run: yarn build:ci
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 5
+          max_attempts: 2
+          retry_on: error
+          command: yarn build:ci
 
       - name: E2E tests
         if: inputs.skip-e2e == false
@@ -85,14 +90,6 @@ jobs:
         env:
           API_KEY: ${{ secrets.API_KEY }}
         run: yarn lerna publish --conventional-commits --no-private --yes --no-verify-access
-
-      - name: Build with Vocs
-        uses: nick-fields/retry@v3
-        with:
-          timeout_minutes: 5
-          max_attempts: 2
-          retry_on: error
-          command: yarn build
 
       - name: Create .nojekyll
         run: touch site/dist/.nojekyll
