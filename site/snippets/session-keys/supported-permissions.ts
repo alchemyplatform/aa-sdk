@@ -1,15 +1,15 @@
 import {
-  SessionKeyPermissionsBuilder,
   SessionKeyAccessListType,
-  SessionKeySigner,
+  SessionKeyPermissionsBuilder,
   SessionKeyPlugin,
+  SessionKeySigner,
 } from "@alchemy/aa-accounts";
-import { zeroHash, keccak256 } from "viem";
+import { keccak256, zeroHash } from "viem";
 import { client } from "./base-client.js";
 
 const sessionKeySigner = new SessionKeySigner();
 
-// #region generate-permissions
+// [!region generatepermissions]
 // Let's create an initial permission set for the session key giving it an eth spend limit
 const keyPermissions = new SessionKeyPermissionsBuilder()
   .setNativeTokenSpendLimit({
@@ -22,10 +22,10 @@ const keyPermissions = new SessionKeyPermissionsBuilder()
     // valid for 1 hour
     validUntil: Math.round(Date.now() / 1000 + 60 * 60),
   });
-// #endregion generate-permissions
+// [!endregion generatepermissions]
 
 {
-  // #region permissions-in-plugin-install
+  // [!region permissionsinplugininstall]
   const result = await client.installSessionKeyPlugin({
     // 1st arg is the initial set of session keys
     // 2nd arg is the tags for the session keys
@@ -36,21 +36,21 @@ const keyPermissions = new SessionKeyPermissionsBuilder()
       [keyPermissions.encode()],
     ],
   });
-  // #endregion permissions-in-plugin-install
+  // [!endregion permissionsinplugininstall]
 }
 
 {
-  // #region permissions-in-add
+  // [!region permissionsinadd]
   const result = await client.addSessionKey({
     key: "0x1234123412341234123412341234123412341234", // Session key address
     tag: keccak256(new TextEncoder().encode("session-key-tag")), // Session key tag
     permissions: keyPermissions.encode(), // Initial permissions
   });
-  // #endregion permissions-in-add
+  // [!endregion permissionsinadd]
 }
 
 {
-  // #region permissions-in-update
+  // [!region permissionsinupdate]
   const result = await client.updateSessionKeyPermissions({
     key: "0x1234123412341234123412341234123412341234", // Session key address
     // add other permissions to the builder, if needed
@@ -62,10 +62,10 @@ const keyPermissions = new SessionKeyPermissionsBuilder()
       })
       .encode(),
   });
-  // #endregion permissions-in-update
+  // [!endregion permissionsinupdate]
 }
 
-// #region view-permissions
+// [!region viewpermissions]
 const sessionKeyPluginView = SessionKeyPlugin.getContract(client).read;
 const accountAddress = client.getAddress();
 const sessionKeyAddress = await sessionKeySigner.getAddress();
@@ -162,7 +162,7 @@ const requiredPaymaster = await sessionKeyPluginView.getRequiredPaymaster([
   accountAddress,
   sessionKeyAddress,
 ]);
-// #endregion view-permissions
+// [!endregion viewpermissions]
 
 // To suppress typescript errors about unused variables from destructuring, "use" the variables here.
 // For some reason, this is an error, and not just a warning. (TS error 6198)
