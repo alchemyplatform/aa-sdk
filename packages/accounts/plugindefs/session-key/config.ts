@@ -13,6 +13,7 @@ import {
   fraxtalSepolia,
   zora,
   zoraSepolia,
+  mainnet,
 } from "@alchemy/aa-core";
 import { parseAbiParameters } from "viem";
 import { MultiOwnerPluginGenConfig } from "../multi-owner/config.js";
@@ -38,6 +39,7 @@ export const SessionKeyPluginGenConfig: PluginGenConfig = {
     [fraxtalSepolia.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
     [zora.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
     [zoraSepolia.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
+    [mainnet.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
   },
   chain: sepolia,
   installConfig: {
