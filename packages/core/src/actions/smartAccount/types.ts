@@ -15,7 +15,7 @@ import type {
 } from "../../types";
 import type { IsUndefined } from "../../utils";
 
-//#region UpgradeAccountParams
+// [!region UpgradeAccountParams]
 export type UpgradeAccountParams<
   TAccount extends SmartContractAccount | undefined,
   TContext extends UserOperationContext | undefined =
@@ -28,9 +28,9 @@ export type UpgradeAccountParams<
 } & GetAccountParameter<TAccount> &
   GetContextParameter<TContext> &
   UserOperationOverridesParameter<TEntryPointVersion>;
-//#endregion UpgradeAccountParams
+// [!endregion UpgradeAccountParams]
 
-//#region SendUserOperationParameters
+// [!region SendUserOperationParameters]
 export type SendUserOperationParameters<
   TAccount extends SmartContractAccount | undefined,
   TContext extends UserOperationContext | undefined =
@@ -42,9 +42,9 @@ export type SendUserOperationParameters<
 } & GetAccountParameter<TAccount> &
   GetContextParameter<TContext> &
   UserOperationOverridesParameter<TEntryPointVersion>;
-//#endregion SendUserOperationParameters
+// [!endregion SendUserOperationParameters]
 
-//#region BuildUserOperationParameters
+// [!region BuildUserOperationParameters]
 export type BuildUserOperationParameters<
   TAccount extends SmartContractAccount | undefined,
   TContext extends UserOperationContext | undefined =
@@ -52,9 +52,9 @@ export type BuildUserOperationParameters<
     | undefined,
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = SendUserOperationParameters<TAccount, TContext, TEntryPointVersion>;
-//#endregion BuildUserOperationParameters
+// [!endregion BuildUserOperationParameters]
 
-//#region SignUserOperationParameters
+// [!region SignUserOperationParameters]
 export type SignUserOperationParameters<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
@@ -67,9 +67,9 @@ export type SignUserOperationParameters<
   uoStruct: UserOperationStruct<TEntryPointVersion>;
 } & GetAccountParameter<TAccount> &
   GetContextParameter<TContext>;
-//#endregion SignUserOperationParameters
+// [!endregion SignUserOperationParameters]
 
-//#region SendTransactionsParameters
+// [!region SendTransactionsParameters]
 export type SendTransactionsParameters<
   TAccount extends SmartContractAccount | undefined,
   TContext extends UserOperationContext | undefined =
@@ -81,9 +81,9 @@ export type SendTransactionsParameters<
 } & GetAccountParameter<TAccount> &
   GetContextParameter<TContext> &
   UserOperationOverridesParameter<TEntryPointVersion>;
-//#endregion SendTransactionsParameters
+// [!endregion SendTransactionsParameters]
 
-//#region BuildTransactionParameters
+// [!region BuildTransactionParameters]
 export type BuildTransactionParameters<
   TAccount extends SmartContractAccount | undefined,
   TContext extends UserOperationContext | undefined =
@@ -91,9 +91,9 @@ export type BuildTransactionParameters<
     | undefined,
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 > = SendTransactionsParameters<TAccount, TContext, TEntryPointVersion>;
-//#endregion BuildTransactionParameters
+// [!endregion BuildTransactionParameters]
 
-//#region DropAndReplaceUserOperationParameters
+// [!region DropAndReplaceUserOperationParameters]
 export type DropAndReplaceUserOperationParameters<
   TAccount extends SmartContractAccount | undefined,
   TContext extends UserOperationContext | undefined =
@@ -105,9 +105,9 @@ export type DropAndReplaceUserOperationParameters<
 } & GetAccountParameter<TAccount> &
   GetContextParameter<TContext> &
   UserOperationOverridesParameter<TEntryPointVersion>;
-//#endregion DropAndReplaceUserOperationParameters
+// [!endregion DropAndReplaceUserOperationParameters]
 
-//#region WaitForUserOperationTxParameters
+// [!region WaitForUserOperationTxParameters]
 export type WaitForUserOperationTxParameters = {
   hash: Hex;
   /**
@@ -130,22 +130,22 @@ export type WaitForUserOperationTxParameters = {
     maxRetries: number;
   };
 };
-//#endregion WaitForUserOperationTxParameters
+// [!endregion WaitForUserOperationTxParameters]
 
-//#region BuildUserOperationFromTransactionsResult
+// [!region BuildUserOperationFromTransactionsResult]
 export type BuildUserOperationFromTransactionsResult<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = {
   uoStruct: UserOperationStruct<TEntryPointVersion>;
   batch: BatchUserOperationCallData;
 } & UserOperationOverridesParameter<TEntryPointVersion, true>;
-//#endregion BuildUserOperationFromTransactionsResult
+// [!endregion BuildUserOperationFromTransactionsResult]
 
-//#region UserOperationContext
+// [!region UserOperationContext]
 export type UserOperationContext = Record<string, any>;
-//#endregion UserOperationContext
+// [!endregion UserOperationContext]
 
-//#region GetContextParameter
+// [!region GetContextParameter]
 export type GetContextParameter<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
@@ -155,4 +155,4 @@ export type GetContextParameter<
       context?: TContext;
     }
   : { context: TContext };
-//#endregion GetContextParameter
+// [!endregion GetContextParameter]

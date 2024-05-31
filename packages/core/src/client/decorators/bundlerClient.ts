@@ -49,7 +49,7 @@ export type BundlerRpcSchema = [
   }
 ];
 
-//#region BundlerActions
+// [!region BundlerActions]
 export type BundlerActions = {
   /**
    * calls `eth_estimateUserOperationGas` and  returns the result
@@ -104,7 +104,7 @@ export type BundlerActions = {
    */
   getSupportedEntryPoints(): Promise<Address[]>;
 };
-//#endregion BundlerActions
+// [!endregion BundlerActions]
 
 export const bundlerActions: <
   TClient extends Client<

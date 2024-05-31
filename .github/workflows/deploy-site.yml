@@ -1,8 +1,9 @@
-name: Deploy VitePress site to Pages
+name: Deploy Vocs site to Pages
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -68,16 +69,21 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-      - name: Build with VitePress
-        working-directory: site
-        run: |
-          yarn build
-          touch .vitepress/dist/.nojekyll
+      - name: Build with Vocs
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 5
+          max_attempts: 2
+          retry_on: error
+          command: yarn build
+
+      - name: Create .nojekyll
+        run: touch site/dist/.nojekyll
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          path: site/.vitepress/dist
+          path: site/dist
 
   # Deployment job
   deploy:
