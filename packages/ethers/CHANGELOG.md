@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.17.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.17.0...v3.17.1) (2024-05-31)
+
+**Note:** Version bump only for package @alchemy/aa-ethers
+
 # [3.16.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.15.0...v3.16.0) (2024-05-22)
 
 **Note:** Version bump only for package @alchemy/aa-ethers
