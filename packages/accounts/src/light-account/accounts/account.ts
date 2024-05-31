@@ -49,7 +49,7 @@ export type LightAccount<
   getOwnerAddress: () => Promise<Address>;
 };
 
-//#region CreateLightAccountParams
+// [!region CreateLightAccountParams]
 export type CreateLightAccountParams<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
@@ -75,7 +75,7 @@ export type CreateLightAccountParams<
   version?: TLightAccountVersion;
   entryPoint?: EntryPointDef<TEntryPointVersion, Chain>;
 };
-//#endregion CreateLightAccountParams
+// [!endregion CreateLightAccountParams]
 
 export async function createLightAccount<
   TTransport extends Transport = Transport,

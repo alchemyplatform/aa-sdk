@@ -39,7 +39,7 @@ export type AlchemyAccountsConfig = {
   };
 };
 
-// #region CreateConfigProps
+// [!region CreateConfigProps]
 export type Connection = ConnectionConfig & {
   chain: Chain;
   gasManagerConfig?: AlchemyGasManagerConfig;
@@ -86,6 +86,6 @@ export type CreateConfigProps = RpcConnectionConfig & {
     >,
     "connection"
   >;
-// #endregion CreateConfigProps
+// [!endregion CreateConfigProps]
 
 export type AlchemyClientState = StoredState;
