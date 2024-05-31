@@ -4,9 +4,9 @@
   "version": "3.8.2-alpha.1",
   "type": "module",
   "scripts": {
-    "dev": "vitepress dev",
-    "build": "vitepress build",
-    "preview": "vitepress preview"
+    "dev": "vocs dev",
+    "build": "vocs build",
+    "preview": "vocs preview"
   },
   "devDependencies": {
     "@alchemy/aa-accounts": "*",
@@ -17,9 +17,9 @@
     "autoprefixer": "^10.4.16",
     "execa": "^8.0.1",
     "tailwindcss": "^3.3.3",
-    "viem": "2.8.6",
-    "vitepress": "^1.1.4",
-    "vue": "^3.2.45"
+    "viem": "2.8.6"
   },
-  "dependencies": {}
+  "dependencies": {
+    "vocs": "^1.0.0-alpha.52"
+  }
 }

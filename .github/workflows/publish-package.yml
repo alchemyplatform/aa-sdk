@@ -86,16 +86,21 @@ jobs:
           API_KEY: ${{ secrets.API_KEY }}
         run: yarn lerna publish --conventional-commits --no-private --yes --no-verify-access
 
-      - name: Build with VitePress
-        working-directory: site
-        run: |
-          yarn build
-          touch .vitepress/dist/.nojekyll
+      - name: Build with Vocs
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 5
+          max_attempts: 2
+          retry_on: error
+          command: yarn build
+
+      - name: Create .nojekyll
+        run: touch site/dist/.nojekyll
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          path: site/.vitepress/dist
+          path: site/dist
 
   publish_site:
     name: Publish Docs Site
