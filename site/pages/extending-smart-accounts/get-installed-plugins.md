@@ -17,7 +17,7 @@ function getInstalledPlugins() external view returns (address[] memory);
 
 Account Kit provides a streamlined experience of interacting with Modular Account AccoutLoupe interface easily by providing `accountLoupeActions` defined in `@alchemy/aa-accounts` package. When you connect your Modular Account to `SmartAccountClient` you can extend the client with `accountLoupeActions`, which exposes a set of methods available to call the account `AccountLoupe` with the client connected to the account.
 
-### Get installed plugins of a Modular Account
+## Get installed plugins of a Modular Account
 
 You should first extend the `SmartAcountClient` connected to a Modular Account, which has `AccountLoupe` implemented, with `accountLoupeActions` for the client to include the `AccountLoupe` actions.
 
