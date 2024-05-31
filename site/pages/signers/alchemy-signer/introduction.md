@@ -18,7 +18,7 @@ See an example of a full Alchemy Embedded Account [here](https://github.com/alch
 
 ## Create an account config
 
-To use the Alchemy Signer, you will need to create a new account config in your [Alchemy Accounts Manager Dashbord](https://dashboard.alchemy.com/accounts) and connect this to your apps.
+To use the Alchemy Signer, you will need to create a new account config in your [Alchemy Accounts Manager Dashboard](https://dashboard.alchemy.com/accounts) and connect this to your apps.
 
 ![Create new embedded account config](/images/alchemy-accounts-dashboard.png)
 

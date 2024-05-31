@@ -14,8 +14,9 @@ export default defineConfig({
     light: "/account-kit-light-mode.svg",
     dark: "/account-kit-dark-mode.svg",
   },
-  iconUrl: "kit-icon.svg",
+  iconUrl: "./kit-icon.svg",
   rootDir: "./",
+  ogImageUrl: "./images/og-image.jpg",
   head: (
     <>
       <script
@@ -33,7 +34,6 @@ export default defineConfig({
         property="og:description"
         content="Account Kit is a framework to embed smart accounts in your web3 app, unlocking powerful features like email/social login, gas sponsorship, batched transactions, and more."
       ></meta>
-      <meta property="og:image" content="/images/og-image.jpg"></meta>
       <meta property="og:image:type" content="image/jpeg"></meta>
       <meta property="og:image:width" content="2400"></meta>
       <meta property="og:image:height" content="1260"></meta>
@@ -44,7 +44,6 @@ export default defineConfig({
         name="twitter:description"
         content="Account Kit is a framework to embed smart accounts in your web3 app, unlocking powerful features like email/social login, gas sponsorship, batched transactions, and more."
       ></meta>
-      <meta name="twitter:image" content="/images/og-image.jpg"></meta>
     </>
   ),
   topNav: [
