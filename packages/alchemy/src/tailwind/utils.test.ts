@@ -38,17 +38,17 @@ describe("tailwind utils test", () => {
               "dark": "#0F172A",
               "light": "#FBFDFF",
             },
+            "btn-auth": {
+              "dark": "argb(255, 255, 255, 0.05)",
+              "light": "#FFF",
+            },
             "btn-primary": {
-              "dark": "#fff",
-              "light": "#000",
+              "dark": "#9AB7FF",
+              "light": "#363FF9",
             },
             "btn-secondary": {
               "dark": "#374151",
               "light": "#E2E8F0",
-            },
-            "btn-social": {
-              "dark": "argb(255, 255, 255, 0.05)",
-              "light": "#FFF",
             },
             "critical": {
               "dark": "#DC2626",
