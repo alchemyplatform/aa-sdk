@@ -24,7 +24,7 @@ export const buttonComponents: ComponentDef = {
     "@apply bg-btn-secondary text-fg-primary": {},
   },
   ".btn-auth": {
-    "@apply bg-btn-social text-fg-primary": {},
+    "@apply bg-btn-auth text-fg-primary": {},
     "@apply static-border": {},
   },
   ".btn-link": {
