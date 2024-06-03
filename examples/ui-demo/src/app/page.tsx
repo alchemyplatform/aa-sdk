@@ -14,6 +14,7 @@ import { Input, useLogout } from "@alchemy/aa-alchemy/react";
 import { useMemo } from "react";
 
 export default function Home() {
+  // const [darkMode, setDarkMode] = useState(false)
   const sections = useMemo<AuthType[][]>(
     () => [[{ type: "email", hideButton: true }], [{ type: "passkey" }]],
     []
@@ -24,7 +25,9 @@ export default function Home() {
 
   return (
     <>
-      <main className="flex min-h-screen p-24 basis-2/4 bg-[#F9F9F9] justify-center">
+      <main
+        className="flex min-h-screen p-24 basis-2/4 light:bg-[#F9F9F9] dark:bg-[#020617] dark:text-white justify-center"
+      >
         <div className="flex flex-col gap-8 max-w-[50%] w-full">
           <div className="flex flex-col gap-4">
             <h1 className="text-4xl font-bold">Buttons</h1>

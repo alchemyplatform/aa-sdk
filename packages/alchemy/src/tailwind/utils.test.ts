@@ -46,7 +46,7 @@ describe("tailwind utils test", () => {
               "dark": "#374151",
               "light": "#E2E8F0",
             },
-            "btn-social": {
+            "btn-auth": {
               "dark": "argb(255, 255, 255, 0.05)",
               "light": "#FFF",
             },
