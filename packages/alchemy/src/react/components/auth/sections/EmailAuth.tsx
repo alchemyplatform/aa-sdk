@@ -85,7 +85,10 @@ export const EmailAuth = ({
               iconLeft={<MailIcon />}
               iconRight={
                 hideButton ? (
-                  <button type="submit" className="match-input cursor-pointer">
+                  <button
+                    type="submit"
+                    className="match-input cursor-pointer focus:outline-none focus:opacity-25"
+                  >
                     <ChevronRight />
                   </button>
                 ) : undefined
