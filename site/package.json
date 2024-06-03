@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vocs dev",
-    "build": "vocs build",
+    "build": "./retry-build.sh",
     "preview": "vocs preview"
   },
   "devDependencies": {
