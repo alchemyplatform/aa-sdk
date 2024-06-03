@@ -79,18 +79,17 @@ export default defineConfig({
           link: "/getting-started/overview",
         },
         {
-          text: "Quick start",
+          text: "Quick start app",
           items: [
-            { text: "Introduction", link: "/getting-started/introduction" },
+            { text: "Demo", link: "/getting-started/introduction" },
             {
-              text: "Setup",
-              link: "/getting-started/setup-app",
+              text: "Run locally",
+              link: "/getting-started/run-locally",
             },
             {
-              text: "Log in users",
-              link: "/getting-started/log-in-users",
+              text: "Walkthrough",
+              link: "/getting-started/walkthrough",
             },
-            { text: "Send user operations", link: "/getting-started/send-uos" },
           ],
         },
       ],
