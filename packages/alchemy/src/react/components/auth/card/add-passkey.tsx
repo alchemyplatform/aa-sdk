@@ -28,7 +28,7 @@ export const AddPasskey = () => {
       </p>
       {error && <ErrorContainer error={error} />}
       <Button
-        type="primary"
+        variant="primary"
         className="w-full"
         onClick={() => addPasskey()}
         disabled={isAddingPasskey}
@@ -36,7 +36,7 @@ export const AddPasskey = () => {
         Continue
       </Button>
       <Button
-        type="secondary"
+        variant="secondary"
         className="w-full"
         onClick={() => setAuthStep({ type: "complete" })}
         disabled={isAddingPasskey}

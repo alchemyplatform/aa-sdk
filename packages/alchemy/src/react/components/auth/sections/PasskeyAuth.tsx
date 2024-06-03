@@ -12,7 +12,7 @@ export const PasskeyAuth = ({ label = "Passkey" }: Props) => {
   const { authenticate } = usePasskeyVerify();
 
   return (
-    <Button type="social" icon={<PasskeyIcon />} onClick={authenticate}>
+    <Button variant="social" icon={<PasskeyIcon />} onClick={authenticate}>
       {label}
     </Button>
   );
