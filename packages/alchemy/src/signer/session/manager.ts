@@ -83,6 +83,7 @@ export class SessionManager {
 
     switch (existingSession.type) {
       case "email": {
+        console.log("getSessionUser calling completeEmailAuth");
         const result = await this.client
           .completeEmailAuth({
             bundle: existingSession.bundle,
@@ -180,6 +181,7 @@ export class SessionManager {
   };
 
   public initialize() {
+    console.log("SessionManager initialize calling getSessionUser");
     this.getSessionUser()
       .then((user) => {
         // once we complete auth we can update the state of the session to connected or disconnected
@@ -240,11 +242,10 @@ export class SessionManager {
       this.setSession({ type: "passkey", user });
     });
 
-    window.addEventListener("storage", (e: StorageEvent) => {
-      if (e.key === this.sessionKey) {
-        this.store.persist.rehydrate();
-        this.initialize();
-      }
+    // sync local state if persisted state has changed from another tab
+    window.addEventListener("focus", () => {
+      this.store.persist.rehydrate();
+      this.initialize();
     });
   };
 }
