@@ -24,7 +24,7 @@ export function createDefaultTheme(): AccountKitTheme {
       "fg-tertiary": createColorSet("#94A3B8", "#94A3B8"),
       "fg-invert": createColorSet("#FFF", "#000"),
       "fg-disabled": createColorSet("#CBD5E1", "#475569"),
-      "fg-accent-brand": createColorSet("#000", "#fff"),
+      "fg-accent-brand": createColorSet("#363FF9", "#9AB7FF"),
       "fg-critical": createColorSet("#B91C1C", "#F87171"),
 
       // surface colors

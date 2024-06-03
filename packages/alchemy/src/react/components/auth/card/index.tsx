@@ -6,6 +6,8 @@ import type { AuthType } from "../types.js";
 import { Step } from "./steps.js";
 import { Notification } from "../../notification.js";
 import { useAuthError } from "../../../hooks/useAuthError.js";
+import { Navigation } from "../../navigation.js";
+import { useAuthModal } from "../../../hooks/useAuthModal.js";
 
 export type AuthCardProps = {
   hideError?: boolean;
@@ -26,6 +28,7 @@ export type AuthCardProps = {
  * @returns a react component containing the AuthCard
  */
 export const AuthCard = (props: AuthCardProps) => {
+  const { closeAuthModal } = useAuthModal();
   const { status, isAuthenticating } = useSignerStatus();
   const { authStep, setAuthStep } = useAuthContext();
   const error = useAuthError();
@@ -53,7 +56,8 @@ export const AuthCard = (props: AuthCardProps) => {
           <Notification message={error.message} type="error" />
         )}
       </div>
-      <div className="modal-box flex flex-col items-center gap-5">
+      <div className="modal-box relative flex flex-col items-center gap-5 text-fg-primary">
+        <Navigation showingBack={false} onClose={closeAuthModal} />
         <Step {...props} />
       </div>
     </div>

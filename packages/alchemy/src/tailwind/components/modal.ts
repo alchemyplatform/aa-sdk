@@ -8,7 +8,7 @@ export const modalComponents: ComponentDef = {
       "@apply bg-black bg-opacity-[0.8]": {},
     },
     ".modal-box": {
-      "@apply z-[1] p-8": {},
+      "@apply z-[1] px-6 py-4": {},
     },
     ".modal-backdrop": {
       "@apply fixed w-screen h-screen top-0 left-0": {},

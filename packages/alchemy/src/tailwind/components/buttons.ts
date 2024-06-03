@@ -7,6 +7,7 @@ export const buttonComponents: ComponentDef = {
     "@apply items-center justify-center": {},
     "@apply shrink-0": {},
     "@apply cursor-pointer": {},
+    "@apply transition-shadow": {},
     // for w/e reason, using @apply rounded-[8px] doesn't work
     borderRadius: "8px",
     "&:hover": {
