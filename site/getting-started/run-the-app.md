@@ -18,7 +18,7 @@ head:
       content: Learn how to get started with Alchemy's Embedded Accounts using Account Kit and the Alchemy Signer, Modular Account, Rundler and Gas Manager.
 ---
 
-# Run the starter app
+# Run locally
 
 Now that you have seen the starter app, its time to get it running locally for yourself! This section will walk you have you clone, configure and run the starter app.
 

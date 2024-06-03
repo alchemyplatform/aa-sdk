@@ -10,16 +10,16 @@ export const sidebar: DefaultTheme.Sidebar = [
         link: "/getting-started/overview",
       },
       {
-        text: "Quick start",
+        text: "Quick start app",
         base: "/getting-started",
         items: [
-          { text: "Try it", link: "/introduction" },
+          { text: "Demo", link: "/introduction" },
           {
-            text: "Run it",
+            text: "Run locally",
             link: "/run-the-app",
           },
           {
-            text: "Learn it",
+            text: "Walkthrough",
             link: "/how-it-works",
           },
         ],

@@ -18,7 +18,7 @@ head:
       content: Learn how to get started with Alchemy's Embedded Accounts using Account Kit and the Alchemy Signer, Modular Account, Rundler and Gas Manager.
 ---
 
-# Learn how it works
+# Walkthrough
 
 It's time to learn how it all works! Let's take a tour of the [starter app repository](https://github.com/alchemyplatform/embedded-accounts-quickstart) to see how it integrates with embedded accounts.
 
