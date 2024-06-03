@@ -240,11 +240,10 @@ export class SessionManager {
       this.setSession({ type: "passkey", user });
     });
 
-    window.addEventListener("storage", (e: StorageEvent) => {
-      if (e.key === this.sessionKey) {
-        this.store.persist.rehydrate();
-        this.initialize();
-      }
+    // sync local state if persisted state has changed from another tab
+    window.addEventListener("focus", () => {
+      this.store.persist.rehydrate();
+      this.initialize();
     });
   };
 }
