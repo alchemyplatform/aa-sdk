@@ -154,6 +154,7 @@ export type MultiOwnerPluginActions<
   ReadAndEncodeActions<TAccount>;
 
 const addresses = {
+  1: "0xcE0000007B008F50d762D155002600004cD6c647" as Address,
   10: "0xcE0000007B008F50d762D155002600004cD6c647" as Address,
   137: "0xcE0000007B008F50d762D155002600004cD6c647" as Address,
   252: "0xcE0000007B008F50d762D155002600004cD6c647" as Address,
