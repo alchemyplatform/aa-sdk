@@ -21,7 +21,6 @@ export default function Home() {
   );
   const { openAuthModal } = useAuthModal();
   const error = useError();
-  console.log("error", error);
   const user = useUser();
   const { logout } = useLogout();
 
