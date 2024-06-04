@@ -1,7 +1,7 @@
 {
   "name": "@alchemy/aa-ethers",
   "license": "MIT",
-  "version": "3.17.2",
+  "version": "3.18.0",
   "description": "Ethers.js wrapper for @alchemy/aa-core",
   "author": "Alchemy",
   "type": "module",
@@ -49,7 +49,7 @@
     "vitest": "^0.31.0"
   },
   "dependencies": {
-    "@alchemy/aa-core": "^3.17.2",
+    "@alchemy/aa-core": "^3.18.0",
     "@ethersproject/abi": "^5.7.0",
     "@ethersproject/abstract-signer": "^5.7.0",
     "@ethersproject/bytes": "^5.7.0",

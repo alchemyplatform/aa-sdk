@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.18.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.17.2...v3.18.0) (2024-06-04)
+
+### Bug Fixes
+
+- account hydration was missing state ([#693](https://github.com/alchemyplatform/aa-sdk/issues/693)) ([9576eab](https://github.com/alchemyplatform/aa-sdk/commit/9576eabd0ec4d9b9e75a249b295f5f2791c90555))
+- plugins were missing mainnet config ([#692](https://github.com/alchemyplatform/aa-sdk/issues/692)) ([5f5fad6](https://github.com/alchemyplatform/aa-sdk/commit/5f5fad6bb9e61874dbf4332e4640a665f0d8eed3))
+
+### Features
+
+- run store hydration on window focus ([#695](https://github.com/alchemyplatform/aa-sdk/issues/695)) ([79abf2f](https://github.com/alchemyplatform/aa-sdk/commit/79abf2fc09cc1ac28aa85b0e90295e1a37cbf15f))
+- update button colors ([#696](https://github.com/alchemyplatform/aa-sdk/issues/696)) ([f07adbc](https://github.com/alchemyplatform/aa-sdk/commit/f07adbc92eb1c1f6a6d0f4f22ea483f1b978a326))
+
 ## [3.17.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.17.1...v3.17.2) (2024-05-31)
 
 ### Reverts
