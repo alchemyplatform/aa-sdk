@@ -153,6 +153,7 @@ export {
   bigIntMax,
   bigIntMultiply,
   bypassPaymasterAndData,
+  bypassPaymasterAndDataEmptyHex,
   concatPaymasterAndData,
   deepHexlify,
   defineReadOnly,
