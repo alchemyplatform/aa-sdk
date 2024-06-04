@@ -10,5 +10,11 @@
       "destination": "/signers/alchemy-signer/introduction",
       "statusCode": 301
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/:path((?!.*\\.html$).*)\\.html",
+      "destination": "/:path"
+    }
   ]
 }
