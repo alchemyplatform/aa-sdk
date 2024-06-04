@@ -166,6 +166,62 @@ describe("Multisig Modular Account Alchemy Client Tests", async () => {
     await expect(txnHash).resolves.not.toThrowError();
   }, 100000);
 
+  it("should successfully execute 3/3", async () => {
+    const higherThreshold = 3n;
+
+    const provider1 = await givenConnectedProvider({
+      signer: signer1,
+      chain,
+      owners,
+      threshold: higherThreshold,
+    });
+    const provider2 = await givenConnectedProvider({
+      signer: signer2,
+      chain,
+      owners,
+      threshold: higherThreshold,
+    });
+    const provider3 = await givenConnectedProvider({
+      signer: signer3,
+      chain,
+      owners,
+      threshold: higherThreshold,
+    });
+
+    const {
+      account: { address },
+    } = provider1;
+    expect(address).toBe("0xDAcFC8de3c63579BA8aF72a0b73262a85c176b3F");
+
+    const { request, signatureObj: signature1 } =
+      await provider1.proposeUserOperation({
+        uo: {
+          target: provider1.getAddress(),
+          data: "0x",
+        },
+      });
+
+    const { aggregatedSignature, signatureObj: signature2 } =
+      await provider2.signMultisigUserOperation({
+        account: provider2.account,
+        signatures: [signature1],
+        userOperationRequest: request,
+      });
+ 
+    const result = await provider3.sendUserOperation({
+      uo: request.callData,
+      context: {
+        aggregatedSignature,
+        signatures: [signature1, signature2],
+        userOpSignatureType: "ACTUAL",
+      },
+    });
+
+    const txnHash = provider2.waitForUserOperationTransaction(result);
+
+    await expect(txnHash).resolves.not.toThrowError();
+  }, 100000);
+
   it("should successfully execute 3/3 with alchemy paymaster info", async () => {
     const higherThreshold = 3n;
 
@@ -174,6 +230,9 @@ describe("Multisig Modular Account Alchemy Client Tests", async () => {
       chain,
       owners,
       threshold: higherThreshold,
+      gasManagerConfig: {
+        policyId: PAYMASTER_POLICY_ID,
+      },
     });
     const provider2 = await givenConnectedProvider({
       signer: signer2,
@@ -207,13 +266,13 @@ describe("Multisig Modular Account Alchemy Client Tests", async () => {
         },
       });
 
-    const { aggregatedSignature, signatureObj } =
+    const { aggregatedSignature, signatureObj: signature2 } =
       await provider2.signMultisigUserOperation({
         account: provider2.account,
         signatures: [signature1],
         userOperationRequest: request,
       });
-
+ 
     const result = await provider3.sendUserOperation({
       uo: request.callData,
       overrides: {
@@ -223,10 +282,12 @@ describe("Multisig Modular Account Alchemy Client Tests", async () => {
         maxFeePerGas: request.maxFeePerGas,
         maxPriorityFeePerGas: request.maxPriorityFeePerGas,
         nonceKey: fromHex(`0x${pad(request.nonce).slice(2, 26)}`, "bigint"), // Nonce key is the first 24 bytes of the nonce
+        // @ts-ignore
+        paymasterAndData: request.paymasterAndData,
       },
       context: {
         aggregatedSignature,
-        signatures: [signatureObj],
+        signatures: [signature1, signature2],
         userOpSignatureType: "ACTUAL",
       },
     });
@@ -236,6 +297,7 @@ describe("Multisig Modular Account Alchemy Client Tests", async () => {
     await expect(txnHash).resolves.not.toThrowError();
   }, 100000);
 });
+
 
 const givenConnectedProvider = async ({
   signer,
