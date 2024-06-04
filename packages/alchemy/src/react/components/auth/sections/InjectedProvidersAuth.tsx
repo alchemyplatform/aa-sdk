@@ -37,7 +37,7 @@ export const InjectedProvidersAuth = () => {
       {connectors.map((connector) => {
         return (
           <Button
-            type="social"
+            variant="social"
             key={connector.id}
             icon={
               connector.icon && (
