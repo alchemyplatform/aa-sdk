@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.18.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.17.2...v3.18.0) (2024-06-04)
+
+### Bug Fixes
+
+- plugins were missing mainnet config ([#692](https://github.com/alchemyplatform/aa-sdk/issues/692)) ([5f5fad6](https://github.com/alchemyplatform/aa-sdk/commit/5f5fad6bb9e61874dbf4332e4640a665f0d8eed3))
+
 ## [3.17.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.17.1...v3.17.2) (2024-05-31)
 
 ### Reverts
