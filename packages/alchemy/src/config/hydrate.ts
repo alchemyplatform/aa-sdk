@@ -1,9 +1,10 @@
-import type { Address, NoUndefined } from "@alchemy/aa-core";
+import type { Address } from "@alchemy/aa-core";
 import { hydrate as wagmi_hydrate } from "@wagmi/core";
 import { AlchemySignerStatus } from "../signer/index.js";
 import { reconnect } from "./actions/reconnect.js";
 import {
   convertSignerStatusToState,
+  createDefaultAccountState,
   defaultAccountState,
 } from "./store/client.js";
 import type { AccountState, ClientState, StoredState } from "./store/types";
@@ -36,7 +37,11 @@ export function hydrate(
       signerStatus: convertSignerStatusToState(
         AlchemySignerStatus.INITIALIZING
       ),
-      accounts: hydrateAccountState(accountConfigs, shouldReconnectAccounts),
+      accounts: hydrateAccountState(
+        accountConfigs,
+        shouldReconnectAccounts,
+        config
+      ),
     });
   }
 
@@ -77,8 +82,14 @@ const reconnectingState = <T extends SupportedAccountTypes>(
 
 const hydrateAccountState = (
   accountConfigs: ClientState["accountConfigs"],
-  shouldReconnectAccounts: boolean
+  shouldReconnectAccounts: boolean,
+  config: AlchemyAccountsConfig
 ): ClientState["accounts"] => {
+  const chains = Array.from(
+    config.coreStore.getState().connections.entries()
+  ).map(([, cnx]) => cnx.chain);
+  const initialState = createDefaultAccountState(chains);
+
   return Object.entries(accountConfigs).reduce((acc, [chainKey, config]) => {
     const chainId = Number(chainKey);
     acc[chainId] = {
@@ -93,5 +104,5 @@ const hydrateAccountState = (
     };
 
     return acc;
-  }, {} as NoUndefined<ClientState["accounts"]>);
+  }, initialState);
 };
