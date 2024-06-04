@@ -16,7 +16,7 @@ export const Navigation = ({
   return (
     <div className="flex items-center justify-between w-full">
       <Button
-        type="link"
+        variant="link"
         onClick={onBack}
         disabled={!showingBack}
         className={showingBack ? "text-fg-primary" : "invisible"}
@@ -24,7 +24,7 @@ export const Navigation = ({
         <BackArrow />
       </Button>
 
-      <Button type="link" onClick={onClose} className="text-fg-primary">
+      <Button variant="link" onClick={onClose} className="text-fg-primary">
         <X />
       </Button>
     </div>
