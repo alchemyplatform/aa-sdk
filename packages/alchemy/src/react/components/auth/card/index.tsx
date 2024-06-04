@@ -48,8 +48,14 @@ export const AuthCard = (props: AuthCardProps) => {
         setAuthStep,
       }}
     >
-      <div className="modal-box flex flex-col items-center gap-5">
-        <Step {...props} />
+      <div className="relative">
+        <div
+          id="akui-default-error-container"
+          className="absolute -top-10 w-full"
+        ></div>
+        <div className="modal-box flex flex-col items-center gap-5">
+          <Step {...props} />
+        </div>
       </div>
     </AuthModalContext.Provider>
   );

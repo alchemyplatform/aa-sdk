@@ -2,13 +2,22 @@
 
 import type { NoUndefined } from "@alchemy/aa-core";
 import { QueryClientProvider, type QueryClient } from "@tanstack/react-query";
-import { createContext, useContext, useEffect, useMemo, useRef } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type { AlchemyAccountsConfig, AlchemyClientState } from "../config";
 import { AuthCard, type AuthCardProps } from "./components/auth/card/index.js";
 import { IS_SIGNUP_QP } from "./components/constants.js";
 import { NoAlchemyAccountContextError } from "./errors.js";
 import { useSignerStatus } from "./hooks/useSignerStatus.js";
 import { Hydrate } from "./hydrate.js";
+import { createPortal } from "react-dom";
+import { Notification } from "./components/notification.js";
 
 export type AlchemyAccountContextProps =
   | {
@@ -17,6 +26,7 @@ export type AlchemyAccountContextProps =
       ui?: {
         openAuthModal: () => void;
         closeAuthModal: () => void;
+        errorContainerId?: string;
       };
     }
   | undefined;
@@ -35,6 +45,11 @@ export type AlchemyAccountsProviderProps = {
      * to the DOM and can be controlled via the `useAuthModal` hook
      */
     auth?: AuthCardProps & { addPasskeyOnSignup?: boolean };
+    /* If errorContainerId is provided, the auth modal will portal the
+       error banner to the container element with this as its `id` instead of to the
+       default error container
+    */
+    errorContainerId?: string;
   };
 };
 
@@ -85,6 +100,7 @@ export const AlchemyAccountProvider = (
         ? {
             openAuthModal,
             closeAuthModal,
+            errorContainerId: uiConfig.errorContainerId,
           }
         : undefined,
     }),
@@ -105,15 +121,39 @@ export const AlchemyAccountProvider = (
     }
   }, [status, uiConfig?.auth]);
 
+  const error = "This is an example error";
+
+  const [errorContainer, setErrorContainer] = useState<
+    Element | DocumentFragment | null
+  >(null);
+  // set error container inside useEffect to guarantee this runs client-side only
+  useEffect(() => {
+    if (uiConfig?.errorContainerId) {
+      setErrorContainer(document.getElementById(uiConfig.errorContainerId));
+      return;
+    }
+
+    setErrorContainer(document.getElementById("akui-default-error-container"));
+  }, [uiConfig?.errorContainerId]);
+
   return (
     <Hydrate {...props}>
       <AlchemyAccountContext.Provider value={initialContext}>
         <QueryClientProvider client={queryClient}>
           {children}
+          {error &&
+            errorContainer &&
+            createPortal(
+              <Notification type="error" message={error} />,
+              errorContainer,
+              "akui-default-error-boundary"
+            )}
           {uiConfig?.auth && (
             <dialog
               ref={ref}
-              className={`modal w-[368px] ${uiConfig.auth.className ?? ""}`}
+              className={`modal overflow-visible relative w-[368px] ${
+                uiConfig.auth.className ?? ""
+              }`}
             >
               <AuthCard
                 header={uiConfig.auth.header}
