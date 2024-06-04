@@ -202,6 +202,7 @@ export type SessionKeyPluginActions<
   ReadAndEncodeActions;
 
 const addresses = {
+  1: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d" as Address,
   10: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d" as Address,
   137: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d" as Address,
   252: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d" as Address,
