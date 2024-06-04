@@ -207,7 +207,7 @@ describe("Multisig Modular Account Alchemy Client Tests", async () => {
         signatures: [signature1],
         userOperationRequest: request,
       });
- 
+
     const result = await provider3.sendUserOperation({
       uo: request.callData,
       context: {
@@ -272,7 +272,7 @@ describe("Multisig Modular Account Alchemy Client Tests", async () => {
         signatures: [signature1],
         userOperationRequest: request,
       });
- 
+
     const result = await provider3.sendUserOperation({
       uo: request.callData,
       overrides: {
@@ -297,7 +297,6 @@ describe("Multisig Modular Account Alchemy Client Tests", async () => {
     await expect(txnHash).resolves.not.toThrowError();
   }, 100000);
 });
-
 
 const givenConnectedProvider = async ({
   signer,

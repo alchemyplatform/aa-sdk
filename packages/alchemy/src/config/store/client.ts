@@ -45,6 +45,7 @@ export const createClientStore = (config: CreateClientStoreParams) => {
             skipHydration: ssr,
             partialize: ({ signer, accounts, ...writeableState }) =>
               writeableState,
+            version: 1,
           })
         : () => createInitialClientState(config)
     )
