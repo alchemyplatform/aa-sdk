@@ -10,7 +10,7 @@ The `useAccount` hook is used to create a new `LightAccount` or `MultiOwnerModul
 ## Import
 
 ```ts
-import { useAccount } from "@alchemy/aa-alchemy/react";
+import { useAccount } from "@account-kit/react";
 ```
 
 ## Usage
@@ -22,7 +22,7 @@ import { useAccount } from "@alchemy/aa-alchemy/react";
 ## Parameters
 
 ```ts
-import { type UseAccountProps } from "@alchemy/aa-alchemy/react";
+import { type UseAccountProps } from "@account-kit/react";
 ```
 
 ### type
@@ -44,7 +44,7 @@ An optional param object based on the `type` property passed in above. It allows
 :::details[CreateLightAccountParams]
 
 ```ts [types.ts]
-// [!include ~/../packages/accounts/src/light-account/accounts/account.ts:createlightaccountparams]
+// [!include ~/../aa-sdk/accounts/src/light-account/accounts/account.ts:createlightaccountparams]
 ```
 
 :::
@@ -52,7 +52,7 @@ An optional param object based on the `type` property passed in above. It allows
 :::details[CreateMultiOwnerModularAccountParams]
 
 ```ts [types.ts]
-// [!include ~/../packages/accounts/src/msca/account/multiOwnerAccount.ts:CreateMultiOwnerModularAccountParams]
+// [!include ~/../aa-sdk/accounts/src/msca/account/multiOwnerAccount.ts:CreateMultiOwnerModularAccountParams]
 ```
 
 :::
@@ -70,7 +70,7 @@ import BaseHookMutationArgs from "./BaseHookMutationArgs.mdx";
 ## Return Type
 
 ```ts
-import { type UseAccountResult } from "@alchemy/aa-alchemy/react";
+import { type UseAccountResult } from "@account-kit/react";
 ```
 
 ### account

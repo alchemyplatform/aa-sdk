@@ -37,7 +37,7 @@ const upgradedAccount = await createMAAccount();
 That is all! Now, you can create a smart account client to connect with the upgraded account as a Modular Account.
 
 ```ts [example.ts]
-import { createAlchemySmartAccountClient } from "@alchemy/aa-alchemy";
+import { createAlchemySmartAccountClient } from "@account-kit/core";
 import { multiOwnerPluginActions } from "@alchemy/aa-accounts";
 
 const upgradedAccountClient = await createAlchemySmartAccountClient({

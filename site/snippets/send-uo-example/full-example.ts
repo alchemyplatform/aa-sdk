@@ -1,4 +1,4 @@
-import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";
+import { createModularAccountAlchemyClient } from "@account-kit/core";
 import {
   LocalAccountSigner,
   sepolia,

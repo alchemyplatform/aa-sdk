@@ -88,7 +88,7 @@ const signer: SmartAccountSigner = new WalletClientSigner(
 Finally, create `createModularAccountAlchemyClient` using the signer we just created to control the modular account.
 
 ```ts
-import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";
+import { createModularAccountAlchemyClient } from "@account-kit/core";
 import { sepolia } from "@alchemy/aa-core";
 
 const client = await createModularAccountAlchemyClient({

@@ -2,7 +2,7 @@
  * This example assumes your app is wrapped with the `PrivyProvider` and
  * is configured to create embedded wallets for users upon login.
  */
-import { createLightAccountAlchemyClient } from "@alchemy/aa-alchemy";
+import { createLightAccountAlchemyClient } from "@account-kit/core";
 import {
   WalletClientSigner,
   sepolia,

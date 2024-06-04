@@ -16,7 +16,7 @@ This requires your user to be logged in. See [`useAuthenticate`](/react/useAuthe
 ## Import
 
 ```ts
-import { useSendTransactions } from "@alchemy/aa-alchemy/react";
+import { useSendTransactions } from "@account-kit/react";
 ```
 
 ## Usage
@@ -41,7 +41,7 @@ import BaseHookMutationArgs from "./BaseHookMutationArgs.mdx";
 ## Return Type
 
 ```ts
-import { type UseSendTransactions } from "@alchemy/aa-alchemy/react";
+import { type UseSendTransactions } from "@account-kit/react";
 ```
 
 Returns an object containing the following state.
@@ -54,7 +54,7 @@ A React query mutation function to send a Transactions as a UserOperation. It re
 :::details[SendTransactionsResult]
 
 ```ts [types.ts]
-// [!include ~/../packages/core/src/client/types.ts:SendTransactionsResult]
+// [!include ~/../aa-sdk/core/src/client/types.ts:SendTransactionsResult]
 ```
 
 :::
@@ -64,7 +64,7 @@ It takes in `SendTransactionsParameters` which has the following type:
 :::details[SendTransactionsParameters]
 
 ```ts [types.ts]
-// [!include ~/../packages/core/src/actions/smartAccount/types.ts:SendTransactionsParameters]
+// [!include ~/../aa-sdk/core/src/actions/smartAccount/types.ts:SendTransactionsParameters]
 ```
 
 :::

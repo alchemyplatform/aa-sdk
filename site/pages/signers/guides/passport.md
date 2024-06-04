@@ -48,7 +48,7 @@ Let's see it in action with `aa-alchemy` and `ModularAccount` from `aa-accounts`
 :::code-group
 
 ```ts [example.ts]
-import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";
+import { createModularAccountAlchemyClient } from "@account-kit/core";
 import { sepolia } from "@alchemy/aa-core";
 import { createPassportSigner } from "./passport";
 

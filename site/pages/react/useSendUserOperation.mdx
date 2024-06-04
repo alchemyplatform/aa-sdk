@@ -14,7 +14,7 @@ This requires your user to be logged in. See [`useAuthenticate`](/react/useAuthe
 ## Import
 
 ```ts
-import { useSendUserOperation } from "@alchemy/aa-alchemy/react";
+import { useSendUserOperation } from "@account-kit/react";
 ```
 
 ## Usage
@@ -54,7 +54,7 @@ import BaseHookMutationArgs from "./BaseHookMutationArgs.mdx";
 ## Return Type
 
 ```ts
-import { type UseSendUserOperation } from "@alchemy/aa-alchemy/react";
+import { type UseSendUserOperation } from "@account-kit/react";
 ```
 
 Returns an object containing the following state.
@@ -67,7 +67,7 @@ A React query mutation function to send a UserOperation. It returns a `SendUserO
 :::details[SendUserOperationResult]
 
 ```ts [types.ts]
-// [!include ~/../packages/core/src/client/types.ts:SendUserOperationResult]
+// [!include ~/../aa-sdk/core/src/client/types.ts:SendUserOperationResult]
 ```
 
 :::
@@ -77,7 +77,7 @@ It takes in `SendUserOperationParameters` which has the following type:
 :::details[SendUserOperationParameters]
 
 ```ts [types.ts]
-// [!include ~/../packages/core/src/actions/smartAccount/types.ts:SendUserOperationParameters]
+// [!include ~/../aa-sdk/core/src/actions/smartAccount/types.ts:SendUserOperationParameters]
 ```
 
 :::

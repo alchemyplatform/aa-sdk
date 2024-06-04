@@ -13,7 +13,7 @@ description: Overview of the alchemyUserOperationSimulator method in aa-alchemy
 import {
   alchemyUserOperationSimulator,
   createAlchemyRpcClient,
-} from "@alchemy/aa-alchemy";
+} from "@account-kit/core";
 import { createSmartAccountClient } from "@alchemy/aa-core";
 import { http } from "viem";
 import { sepolia } from "viem/chains";

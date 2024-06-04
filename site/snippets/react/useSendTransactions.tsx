@@ -1,7 +1,4 @@
-import {
-  useSendTransactions,
-  useSmartAccountClient,
-} from "@alchemy/aa-alchemy/react";
+import { useSendTransactions, useSmartAccountClient } from "@account-kit/react";
 import { toHex } from "viem";
 
 export function ComponentWithSendTransactions() {

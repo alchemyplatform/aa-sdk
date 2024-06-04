@@ -12,7 +12,7 @@ Or you can also input a `SmartAccountClient` instance already initialized (`Alch
 ## Usage
 
 ```ts [example.ts]
-import { AlchemyProvider } from "@alchemy/aa-alchemy";
+import { AlchemyProvider } from "@account-kit/core";
 import { getDefaultEntryPointAddress } from "@alchemy/aa-core";
 import { EthersProviderAdapter } from "@alchemy/aa-ethers";
 import { sepolia } from "@alchemy/aa-core";

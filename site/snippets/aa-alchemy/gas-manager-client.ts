@@ -1,4 +1,4 @@
-import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";
+import { createModularAccountAlchemyClient } from "@account-kit/core";
 import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
 
 // Client with the Gas Manager to sponsor gas.

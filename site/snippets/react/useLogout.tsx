@@ -1,4 +1,4 @@
-import { useLogout } from "@alchemy/aa-alchemy/react";
+import { useLogout } from "@account-kit/react";
 
 export function ComponentWithLogout() {
   /**

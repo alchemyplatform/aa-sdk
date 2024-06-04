@@ -39,7 +39,7 @@ Setup the Dfns Web3 Provider and wrap it in an `AlchemyProvider`.
 :::code-group
 
 ```ts [example.ts]
-import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";
+import { createModularAccountAlchemyClient } from "@account-kit/core";
 import { sepolia } from "@alchemy/aa-core";
 import { createDfnsSigner } from "./dfns";
 

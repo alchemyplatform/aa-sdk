@@ -15,7 +15,7 @@ Next, initialize a Multisig Modular Account client and set the `n` accounts as s
 
 ```ts
 import { LocalAccountSigner } from "@alchemy/aa-core";
-import { createMultisigAccountAlchemyClient } from "@alchemy/aa-alchemy";
+import { createMultisigAccountAlchemyClient } from "@account-kit/core";
 
 // Creating a 3/3 multisig account
 const signers = [LocalAccountSigner.mnemonicToAccountSigner(
@@ -49,7 +49,7 @@ const multisigAccountClient = createMultisigAccountAlchemyClient({
 To propose a new user operation for review by the multisig signers, you will use the `proposeUserOperation` method. This estimates gas, constructs the user operation struct, and if `gasManagerConfig` is used then it attempts to use a paymaster. Lastly, a signature is generated with the pre-provided signer.
 
 ```ts
-import { createMultisigAccountAlchemyClient } from "@alchemy/aa-alchemy";
+import { createMultisigAccountAlchemyClient } from "@account-kit/core";
 
 const multisigAccountClient = createMultisigAccountAlchemyClient({
     chain,
@@ -81,7 +81,7 @@ We are aware of a bug in aa-sdk that prevents multisigs from using a paymaster s
 Next, you have to collect the next k-2 signatures, excluding the first signature which you already provided and the last signature which we'll deal with in step 5 when we send the user operation. Each member of the multisig can sign with the `signMultisigUserOperation` method.
 
 ```ts
-import { createMultisigAccountAlchemyClient } from "@alchemy/aa-alchemy";
+import { createMultisigAccountAlchemyClient } from "@account-kit/core";
 
 const multisigAccountClient = createMultisigAccountAlchemyClient({
     chain,
@@ -103,7 +103,7 @@ const { aggregatedSignature, signatureObj: secondSig } = await multisigAccountCl
 After collecting k-1 signatures, you're ready to collect the last signature and send the user operation. This is done with the `sendUserOperation` method. `sendUserOperation` also formats this aggregated signature, sorting its parts in ascending order by owner address as expected by the Multisig Plugin smart contract.
 
 ```ts
-import { createMultisigAccountAlchemyClient } from "@alchemy/aa-alchemy";
+import { createMultisigAccountAlchemyClient } from "@account-kit/core";
 
 const multisigAccountClient = createMultisigAccountAlchemyClient({
     chain,
