@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.18.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.18.0...v3.18.1) (2024-06-04)
+
+### Bug Fixes
+
+- fix paymaster override for multisig plugin ([#676](https://github.com/alchemyplatform/aa-sdk/issues/676)) ([6db5bfc](https://github.com/alchemyplatform/aa-sdk/commit/6db5bfc7d9003417354df36728323752542d7723))
+- update the version of the store so that we don't have clashes ([#703](https://github.com/alchemyplatform/aa-sdk/issues/703)) ([dc87b2f](https://github.com/alchemyplatform/aa-sdk/commit/dc87b2f313dc8bec806b7301acce4dd07e260903))
+
 # [3.18.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.17.2...v3.18.0) (2024-06-04)
 
 ### Bug Fixes
