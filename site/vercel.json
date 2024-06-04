@@ -16,5 +16,6 @@
       "source": "/:path((?!.*\\.html$).*)\\.html",
       "destination": "/:path"
     }
-  ]
+  ],
+  "cleanUrls": true
 }
