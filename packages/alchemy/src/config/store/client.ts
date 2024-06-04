@@ -183,7 +183,7 @@ const createEmptyAccountConfigState = (chains: Chain[]) => {
   }, {} as ClientState["accountConfigs"]);
 };
 
-const createDefaultAccountState = (chains: Chain[]) => {
+export const createDefaultAccountState = (chains: Chain[]) => {
   return chains.reduce((acc, chain) => {
     acc[chain.id] = {
       LightAccount: defaultAccountState<"LightAccount">(),

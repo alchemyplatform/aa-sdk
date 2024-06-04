@@ -1,12 +1,13 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
-  "version": "3.17.2",
+  "version": "3.18.0",
   "npmClient": "yarn",
   "conventionalCommits": true,
   "changelog": true,
   "command": {
     "version": {
-      "message": "chore(release): publish %s [skip-ci]"
+      "message": "chore(release): publish %s [skip-ci]",
+      "forcePublish": true
     }
   },
   "granularPathspec": false

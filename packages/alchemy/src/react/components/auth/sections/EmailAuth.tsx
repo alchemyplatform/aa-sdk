@@ -85,10 +85,12 @@ export const EmailAuth = ({
               iconLeft={<MailIcon />}
               iconRight={
                 hideButton ? (
-                  <ChevronRight
-                    className="match-input cursor-pointer"
-                    onClick={() => form.handleSubmit()}
-                  />
+                  <button
+                    type="submit"
+                    className="match-input cursor-pointer focus:outline-none focus:opacity-25"
+                  >
+                    <ChevronRight />
+                  </button>
                 ) : undefined
               }
               disabled={isPending}
@@ -101,7 +103,8 @@ export const EmailAuth = ({
           {([canSubmit, isSubmitting]) =>
             !hideButton ? (
               <Button
-                type="primary"
+                type="submit"
+                variant="primary"
                 disabled={isPending || !canSubmit || isSubmitting}
               >
                 {buttonLabel}
