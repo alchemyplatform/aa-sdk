@@ -14,10 +14,10 @@ export default defineConfig({
     light: "/account-kit-light-mode.svg",
     dark: "/account-kit-dark-mode.svg",
   },
-  iconUrl: "./kit-icon.svg",
+  iconUrl: "/kit-icon.svg",
   rootDir: "./",
-  ogImageUrl: "./images/og-image.jpg",
-  head: (
+  ogImageUrl: "/images/og-image.jpg",
+  head: () => (
     <>
       <script
         src="https://static.alchemyapi.io/scripts/anayltics/alchemy-analytics.js"
