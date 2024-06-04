@@ -16,8 +16,7 @@ import { IS_SIGNUP_QP } from "./components/constants.js";
 import { NoAlchemyAccountContextError } from "./errors.js";
 import { useSignerStatus } from "./hooks/useSignerStatus.js";
 import { Hydrate } from "./hydrate.js";
-import { createPortal } from "react-dom";
-import { Notification } from "./components/notification.js";
+import { AuthModalContext, type AuthStep } from "./components/auth/context.js";
 
 export type AlchemyAccountContextProps =
   | {
@@ -26,7 +25,6 @@ export type AlchemyAccountContextProps =
       ui?: {
         openAuthModal: () => void;
         closeAuthModal: () => void;
-        errorContainerId?: string;
       };
     }
   | undefined;
@@ -45,11 +43,11 @@ export type AlchemyAccountsProviderProps = {
      * to the DOM and can be controlled via the `useAuthModal` hook
      */
     auth?: AuthCardProps & { addPasskeyOnSignup?: boolean };
-    /* If errorContainerId is provided, the auth modal will portal the
-       error banner to the container element with this as its `id` instead of to the
-       default error container
-    */
-    errorContainerId?: string;
+    /**
+     * If hideError is true, then the auth component will not
+     * render the global error component
+     */
+    hideError?: boolean;
   };
 };
 
@@ -88,6 +86,7 @@ export const AlchemyAccountProvider = (
   props: React.PropsWithChildren<AlchemyAccountsProviderProps>
 ) => {
   const { config, queryClient, children, uiConfig } = props;
+
   const ref = useRef<HTMLDialogElement>(null);
   const openAuthModal = () => ref.current?.showModal();
   const closeAuthModal = () => ref.current?.close();
@@ -100,14 +99,16 @@ export const AlchemyAccountProvider = (
         ? {
             openAuthModal,
             closeAuthModal,
-            errorContainerId: uiConfig.errorContainerId,
           }
         : undefined,
     }),
     [config, queryClient, uiConfig]
   );
 
-  const { status } = useSignerStatus(initialContext);
+  const { status, isAuthenticating } = useSignerStatus(initialContext);
+  const [authStep, setAuthStep] = useState<AuthStep>({
+    type: isAuthenticating ? "email_completing" : "initial",
+  });
 
   useEffect(() => {
     if (
@@ -121,51 +122,37 @@ export const AlchemyAccountProvider = (
     }
   }, [status, uiConfig?.auth]);
 
-  const error = "This is an example error";
-
-  const [errorContainer, setErrorContainer] = useState<
-    Element | DocumentFragment | null
-  >(null);
-  // set error container inside useEffect to guarantee this runs client-side only
-  useEffect(() => {
-    if (uiConfig?.errorContainerId) {
-      setErrorContainer(document.getElementById(uiConfig.errorContainerId));
-      return;
-    }
-
-    setErrorContainer(document.getElementById("akui-default-error-container"));
-  }, [uiConfig?.errorContainerId]);
-
   return (
     <Hydrate {...props}>
       <AlchemyAccountContext.Provider value={initialContext}>
         <QueryClientProvider client={queryClient}>
-          {children}
-          {error &&
-            errorContainer &&
-            createPortal(
-              <Notification type="error" message={error} />,
-              errorContainer,
-              "akui-default-error-boundary"
+          <AuthModalContext.Provider
+            value={{
+              authStep,
+              setAuthStep,
+            }}
+          >
+            {children}
+            {uiConfig?.auth && (
+              <dialog
+                ref={ref}
+                className={`modal overflow-visible relative w-[368px] ${
+                  uiConfig.auth.className ?? ""
+                }`}
+              >
+                <AuthCard
+                  hideError={uiConfig.hideError}
+                  header={uiConfig.auth.header}
+                  sections={uiConfig.auth.sections}
+                  onAuthSuccess={() => closeAuthModal()}
+                />
+                <div
+                  className="modal-backdrop"
+                  onClick={() => closeAuthModal()}
+                ></div>
+              </dialog>
             )}
-          {uiConfig?.auth && (
-            <dialog
-              ref={ref}
-              className={`modal overflow-visible relative w-[368px] ${
-                uiConfig.auth.className ?? ""
-              }`}
-            >
-              <AuthCard
-                header={uiConfig.auth.header}
-                sections={uiConfig.auth.sections}
-                onAuthSuccess={() => closeAuthModal()}
-              />
-              <div
-                className="modal-backdrop"
-                onClick={() => closeAuthModal()}
-              ></div>
-            </dialog>
-          )}
+          </AuthModalContext.Provider>
         </QueryClientProvider>
       </AlchemyAccountContext.Provider>
     </Hydrate>

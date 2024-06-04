@@ -1,14 +1,13 @@
 import { useAddPasskey } from "../../../hooks/useAddPasskey.js";
 import { PasskeyIcon } from "../../../icons/passkey.js";
 import { Button } from "../../button.js";
-import { ErrorContainer } from "../../error.js";
 import { PoweredBy } from "../../poweredby.js";
 import { useAuthContext } from "../context.js";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const AddPasskey = () => {
   const { setAuthStep } = useAuthContext();
-  const { addPasskey, isAddingPasskey, error } = useAddPasskey({
+  const { addPasskey, isAddingPasskey } = useAddPasskey({
     onSuccess: () => {
       setAuthStep({ type: "complete" });
     },
@@ -26,7 +25,6 @@ export const AddPasskey = () => {
         Passkeys allow for a simple and secure user experience. Login in and
         sign transactions in seconds
       </p>
-      {error && <ErrorContainer error={error} />}
       <Button
         type="primary"
         className="w-full"

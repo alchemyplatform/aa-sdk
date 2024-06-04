@@ -19,6 +19,8 @@ export type * from "./hooks/useClientActions.js";
 export { useClientActions } from "./hooks/useClientActions.js";
 export type * from "./hooks/useDropAndReplaceUserOperation.js";
 export { useDropAndReplaceUserOperation } from "./hooks/useDropAndReplaceUserOperation.js";
+export type * from "./hooks/useError.js";
+export { useError } from "./hooks/useError.js";
 export type * from "./hooks/useExportAccount.js";
 export { useExportAccount } from "./hooks/useExportAccount.js";
 export type * from "./hooks/useLogout.js";
