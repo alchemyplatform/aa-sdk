@@ -7,21 +7,21 @@ import {
 import { GoogleIcon } from "../icons/google.js";
 
 type ButtonProps = (
-  | { type?: "primary" | "secondary" | "link"; icon?: never }
-  | { type: "social"; icon?: string | ReactNode }
+  | { variant?: "primary" | "secondary" | "link"; icon?: never }
+  | { variant: "social"; icon?: string | ReactNode }
 ) &
   Omit<
     DetailedHTMLProps<
       ButtonHTMLAttributes<HTMLButtonElement>,
       HTMLButtonElement
     >,
-    "type" | "ref"
+    "variant" | "ref"
   >;
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ type, children, icon, className, ...props }, ref) => {
+  ({ variant, children, icon, className, ...props }, ref) => {
     const btnClass = (() => {
-      switch (type) {
+      switch (variant) {
         case "secondary":
           return "btn-secondary";
         case "social":
@@ -50,7 +50,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 // this is temporary so not gonna document it
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const DemoSet = (props: ButtonProps) => {
-  switch (props.type) {
+  switch (props.variant) {
     case "social": {
       const Icon = () => <GoogleIcon />;
       return (

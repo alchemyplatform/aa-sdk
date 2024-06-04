@@ -36,7 +36,7 @@ export const LoadingPasskeyAuth = ({
       )}
       <div className="flex flex-row rounded-lg bg-bg-surface-inset justify-between py-2 px-4 w-full items-center text-xs">
         <span className="font-normal text-fg-secondary">Having trouble?</span>
-        <Button type="link" className="text-xs font-semibold">
+        <Button variant="link" className="text-xs font-semibold">
           Contact support
         </Button>
       </div>

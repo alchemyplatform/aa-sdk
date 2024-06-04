@@ -49,7 +49,7 @@ export const LoadingEmail = ({ context }: LoadingEmailProps) => {
           Didn't receive the email?
         </span>
         <Button
-          type="link"
+          variant="link"
           className="text-xs font-semibold"
           onClick={() => {
             authenticate({
