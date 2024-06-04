@@ -5,11 +5,15 @@ import { AuthSection } from "../sections/AuthSection.js";
 import type { AuthCardProps } from "./index.js";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-export const MainAuthContent = ({ header = null, sections }: AuthCardProps) => {
+export const MainAuthContent = ({
+  header = null,
+  showSignInText = true,
+  sections,
+}: AuthCardProps) => {
   return (
     <>
       {header}
-      <h3 className="font-bold text-lg">Sign in</h3>
+      {showSignInText && <h3 className="font-bold text-lg">Sign in</h3>}
       {sections?.map((section, idx) => {
         return (
           <Fragment key={`auth-section-fragment-${idx}`}>
