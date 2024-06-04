@@ -1,5 +1,6 @@
 import { useAuthContext } from "../context.js";
 import { AddPasskey } from "./add-passkey.js";
+import { EoaConnectCard } from "./eoa.js";
 import type { AuthCardProps } from "./index.js";
 import { LoadingAuth } from "./loading/index.js";
 import { MainAuthContent } from "./main.js";
@@ -15,6 +16,8 @@ export const Step = (props: AuthCardProps) => {
       return <LoadingAuth context={authStep} />;
     case "passkey_create":
       return <AddPasskey />;
+    case "eoa_connect":
+      return <EoaConnectCard authStep={authStep} />;
     case "complete":
     case "initial":
     default:

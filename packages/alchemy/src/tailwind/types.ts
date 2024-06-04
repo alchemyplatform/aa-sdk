@@ -12,7 +12,7 @@ export interface AccountKitTheme {
     // button colors
     "btn-primary": ColorVariantRecord;
     "btn-secondary": ColorVariantRecord;
-    "btn-social": ColorVariantRecord;
+    "btn-auth": ColorVariantRecord;
 
     // fg colors
     "fg-primary": ColorVariantRecord;

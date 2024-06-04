@@ -5,7 +5,10 @@ import {
   type UseMutateAsyncFunction,
   type UseMutateFunction,
 } from "@tanstack/react-query";
+import { signMessage as wagmi_signMessage } from "@wagmi/core";
+import { useCallback } from "react";
 import type { Hex, SignableMessage } from "viem";
+import { useAccount as wagmi_useAccount } from "wagmi";
 import { useAlchemyAccountContext } from "../context.js";
 import { ClientUndefinedHookError } from "../errors.js";
 import type { BaseHookMutationArgs } from "../types.js";
@@ -39,7 +42,29 @@ export function useSignMessage({
   client,
   ...mutationArgs
 }: UseSignMessageArgs): UseSignMessageResult {
-  const { queryClient } = useAlchemyAccountContext();
+  const {
+    queryClient,
+    config: {
+      _internal: { wagmiConfig },
+    },
+  } = useAlchemyAccountContext();
+
+  const { isConnected } = wagmi_useAccount({ config: wagmiConfig });
+
+  const mutationFn = useCallback(
+    async (params: SignMessageArgs) => {
+      if (isConnected) {
+        return wagmi_signMessage(wagmiConfig, params);
+      }
+
+      if (!client) {
+        throw new ClientUndefinedHookError("useSignMessage");
+      }
+
+      return client.signMessageWith6492(params);
+    },
+    [client, isConnected, wagmiConfig]
+  );
 
   const {
     mutate: signMessage,
@@ -49,13 +74,8 @@ export function useSignMessage({
     error,
   } = useMutation(
     {
-      mutationFn: async (params: SignMessageArgs) => {
-        if (!client) {
-          throw new ClientUndefinedHookError("useSignMessage");
-        }
-
-        return client.signMessageWith6492(params);
-      },
+      mutationKey: ["signMessage"],
+      mutationFn,
       ...mutationArgs,
     },
     queryClient

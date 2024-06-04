@@ -11,9 +11,13 @@ import {
   type UseMutateFunction,
 } from "@tanstack/react-query";
 import { type Chain, type Hash, type Hex, type Transport } from "viem";
+import { useAccount as wagmi_useAccount } from "wagmi";
 import type { SupportedAccounts } from "../../config/types.js";
 import { useAlchemyAccountContext } from "../context.js";
-import { ClientUndefinedHookError } from "../errors.js";
+import {
+  ClientUndefinedHookError,
+  UnsupportedEOAActionError,
+} from "../errors.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import { type UseSmartAccountClientResult } from "./useSmartAccountClient.js";
 
@@ -76,7 +80,13 @@ export function useSendTransactions<
   params: UseSendTransactionsArgs<TAccount>
 ): UseSendTransactionsResult<TAccount, TContext, TEntryPointVersion> {
   const { client, ...mutationArgs } = params;
-  const { queryClient } = useAlchemyAccountContext();
+  const {
+    queryClient,
+    config: {
+      _internal: { wagmiConfig },
+    },
+  } = useAlchemyAccountContext();
+  const { isConnected } = wagmi_useAccount({ config: wagmiConfig });
 
   const {
     mutate: sendTransactions,
@@ -93,6 +103,13 @@ export function useSendTransactions<
           TEntryPointVersion
         >
       ) => {
+        if (isConnected) {
+          throw new UnsupportedEOAActionError(
+            "useSendTransactions",
+            "batch transactions"
+          );
+        }
+
         if (!client) {
           throw new ClientUndefinedHookError("useSendTransactions");
         }

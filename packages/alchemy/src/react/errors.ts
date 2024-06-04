@@ -35,3 +35,16 @@ export class MissingUiConfigError extends BaseError {
     );
   }
 }
+
+/**
+ * An error thrown when connected to an EOA and trying to execute an action that is not supported.
+ */
+export class UnsupportedEOAActionError extends BaseError {
+  /**
+   * @param hookName the hook that threw the error
+   * @param action the action not supported by an EOA
+   */
+  constructor(hookName: string, action: string) {
+    super(`${hookName}: ${action} is not supported for EOA accounts`);
+  }
+}

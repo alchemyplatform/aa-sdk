@@ -1,7 +1,7 @@
 "use client";
 
 import type { NoUndefined } from "@alchemy/aa-core";
-import type { QueryClient } from "@tanstack/react-query";
+import { QueryClientProvider, type QueryClient } from "@tanstack/react-query";
 import { createContext, useContext, useEffect, useMemo, useRef } from "react";
 import type { AlchemyAccountsConfig, AlchemyClientState } from "../config";
 import { AuthCard, type AuthCardProps } from "./components/auth/card/index.js";
@@ -90,6 +90,7 @@ export const AlchemyAccountProvider = (
     }),
     [config, queryClient, uiConfig]
   );
+
   const { status } = useSignerStatus(initialContext);
 
   useEffect(() => {
@@ -107,23 +108,25 @@ export const AlchemyAccountProvider = (
   return (
     <Hydrate {...props}>
       <AlchemyAccountContext.Provider value={initialContext}>
-        {children}
-        {uiConfig?.auth && (
-          <dialog
-            ref={ref}
-            className={`modal w-[368px] ${uiConfig.auth.className ?? ""}`}
-          >
-            <AuthCard
-              header={uiConfig.auth.header}
-              sections={uiConfig.auth.sections}
-              onAuthSuccess={() => closeAuthModal()}
-            />
-            <div
-              className="modal-backdrop"
-              onClick={() => closeAuthModal()}
-            ></div>
-          </dialog>
-        )}
+        <QueryClientProvider client={queryClient}>
+          {children}
+          {uiConfig?.auth && (
+            <dialog
+              ref={ref}
+              className={`modal w-[368px] ${uiConfig.auth.className ?? ""}`}
+            >
+              <AuthCard
+                header={uiConfig.auth.header}
+                sections={uiConfig.auth.sections}
+                onAuthSuccess={() => closeAuthModal()}
+              />
+              <div
+                className="modal-backdrop"
+                onClick={() => closeAuthModal()}
+              ></div>
+            </dialog>
+          )}
+        </QueryClientProvider>
       </AlchemyAccountContext.Provider>
     </Hydrate>
   );

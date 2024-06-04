@@ -47,6 +47,9 @@ export type Erc20TokenLimit = {
 
 // uint256 spendLimit, uint48 refreshInterval
 export type GasSpendLimit = {
+  // The amount, in wei, of native tokens that a session key can spend on gas.
+  // Note that this is not the same as the gas limit for a user operation, which is measured in units of gas.
+  // This tracks gas units * gas price.
   spendLimit: bigint;
   // The time interval over which the spend limit is enforced. If unset, there is no time
   /// interval by which the limit is refreshed.

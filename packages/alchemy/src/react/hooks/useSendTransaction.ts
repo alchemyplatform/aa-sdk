@@ -5,11 +5,14 @@ import type {
   SendTransactionReturnType,
 } from "viem";
 
+import { TransactionMissingToParamError } from "@alchemy/aa-core";
 import {
   useMutation,
   type UseMutateAsyncFunction,
   type UseMutateFunction,
 } from "@tanstack/react-query";
+import { sendTransaction as wagmi_sendTransaction } from "@wagmi/core";
+import { useAccount as wagmi_useAccount } from "wagmi";
 import { useAlchemyAccountContext } from "../context.js";
 import { ClientUndefinedHookError } from "../errors.js";
 import type { BaseHookMutationArgs } from "../types.js";
@@ -53,7 +56,13 @@ export function useSendTransaction(
   params: UseSendTransactionArgs
 ): UseSendTransactionResult {
   const { client, ...mutationArgs } = params;
-  const { queryClient } = useAlchemyAccountContext();
+  const {
+    queryClient,
+    config: {
+      _internal: { wagmiConfig },
+    },
+  } = useAlchemyAccountContext();
+  const { isConnected } = wagmi_useAccount({ config: wagmiConfig });
 
   const {
     mutate: sendTransaction,
@@ -65,6 +74,18 @@ export function useSendTransaction(
     {
       ...mutationArgs,
       mutationFn: async (params: SendTransactionParameters) => {
+        if (isConnected) {
+          const { to, ...txn } = params;
+          if (to == null) {
+            throw new TransactionMissingToParamError();
+          }
+
+          return wagmi_sendTransaction(wagmiConfig, {
+            to,
+            ...txn,
+          });
+        }
+
         if (!client) {
           throw new ClientUndefinedHookError("useSendTransaction");
         }

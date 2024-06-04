@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useCallback } from "react";
 import type { Chain, Client, Transport } from "viem";
 import type { SupportedAccounts } from "../../config";
+import { ClientUndefinedHookError } from "../errors.js";
 import type { UseSmartAccountClientResult } from "./useSmartAccountClient";
 
 export type UseClientActionsProps<
@@ -129,8 +130,7 @@ export function useClientActions<
       args,
     }: ClientActionParameters<TActions, TFunctionName>) => {
       if (!client) {
-        // TODO: use the strongly typed error here
-        throw new Error("no client");
+        throw new ClientUndefinedHookError("useClientActions");
       }
 
       const actions_ = actions(client);

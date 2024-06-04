@@ -20,5 +20,6 @@
     "viem": "2.8.6",
     "vitepress": "^1.1.4",
     "vue": "^3.2.45"
-  }
+  },
+  "dependencies": {}
 }

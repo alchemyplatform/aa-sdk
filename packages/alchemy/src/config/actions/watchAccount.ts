@@ -1,6 +1,7 @@
 import { ClientOnlyPropertyError } from "../errors.js";
 import type { AlchemyAccountsConfig, SupportedAccountTypes } from "../types";
-import type { GetAccountResult } from "./getAccount";
+import { type GetAccountResult } from "./getAccount.js";
+import { getChain } from "./getChain.js";
 
 export const watchAccount =
   <TAccount extends SupportedAccountTypes>(
@@ -13,9 +14,10 @@ export const watchAccount =
       throw new ClientOnlyPropertyError("account");
     }
 
+    const chain = getChain(config);
     return config.clientStore.subscribe(
       // this should be available on the client now because of the check above
-      ({ accounts }) => accounts![type],
+      ({ accounts }) => accounts![chain.id][type],
       onChange,
       {
         equalityFn(a, b) {

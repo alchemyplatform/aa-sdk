@@ -9,8 +9,11 @@ import { createAlchemyPublicRpcClient } from "../../client/rpcClient.js";
 import type { Connection } from "../types.js";
 import { bigintMapReplacer } from "../utils/replacer.js";
 import { bigintMapReviver } from "../utils/reviver.js";
-import { DEFAULT_STORAGE_KEY } from "./client.js";
-import type { CoreState, CoreStore } from "./types.js";
+import {
+  DEFAULT_STORAGE_KEY,
+  type CoreState,
+  type CoreStore,
+} from "./types.js";
 
 export type CreateCoreStoreParams = {
   connections: Connection[];

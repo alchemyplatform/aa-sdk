@@ -1,6 +1,7 @@
 "use client";
 
 import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
+import { useDisconnect } from "wagmi";
 import { useAlchemyAccountContext } from "../context.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import { useSigner } from "./useSigner.js";
@@ -16,8 +17,14 @@ export type UseLogoutResult = {
 export function useLogout(
   mutationArgs?: UseLogoutMutationArgs
 ): UseLogoutResult {
-  const { queryClient } = useAlchemyAccountContext();
+  const {
+    queryClient,
+    config: {
+      _internal: { wagmiConfig },
+    },
+  } = useAlchemyAccountContext();
   const signer = useSigner();
+  const { disconnectAsync } = useDisconnect({ config: wagmiConfig });
 
   const {
     mutate: logout,
@@ -26,6 +33,7 @@ export function useLogout(
   } = useMutation(
     {
       mutationFn: async () => {
+        await disconnectAsync();
         return signer?.disconnect();
       },
       ...mutationArgs,

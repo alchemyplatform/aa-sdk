@@ -34,7 +34,7 @@ With the ability to delegate specific permissions to session keys, users can aut
 
 ### Enhance security with permissions
 
-By using session keys, the exposure of the main private key is minimized. Even if a session key is compromised, the attacker would not gain access to the user's main account and funds. This layered approach to security helps in mitigating risks associated with key management and exposure.
+By using session keys, the exposure of the main private key is minimized. Even if a session key is compromised, the attacker would not gain access to the user's main account and funds. This layered approach to security helps in mitigating risks associated with key management.
 
 ## Supported permissions
 
@@ -58,6 +58,8 @@ Supports limiting how much of the native token, e.g. ETH or MATIC, a key may spe
 
 ### Gas spending limits
 
-Supports limiting how much a session key can spend native token amounts on gas. This may be a total for the key, or refreshing on an interval (e.g. 1 ETH per week).
+Supports limiting how much of the native token (e.g. ETH or MATIC) a session key can spend on gas. This may be a total for the key, or refreshing on an interval (e.g. 1 ETH per week).
 
 Alternatively, you can also require that a session key uses a specific paymaster address, instead of spending the account’s native token for gas.
+
+Note that the gas limit is tracked in terms of native token units (wei), not in units of gas. The gas usage of a user operation is considered to be the maximum gas a user operation can spend, i.e. `total gas limit * maxFeePerGas`. This can overestimate when compared to the actual gas cost of each user operation.

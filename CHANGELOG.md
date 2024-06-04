@@ -3,6 +3,61 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.17.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.17.1...v3.17.2) (2024-05-31)
+
+### Reverts
+
+- undo vocs deploy ([#690](https://github.com/alchemyplatform/aa-sdk/issues/690)) ([c7cb350](https://github.com/alchemyplatform/aa-sdk/commit/c7cb350f9786fe10d03c62d61a8d2c9f21d4cdc0))
+
+## [3.17.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.17.0...v3.17.1) (2024-05-31)
+
+**Note:** Version bump only for package root
+
+# [3.17.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.16.2...v3.17.0) (2024-05-29)
+
+### Bug Fixes
+
+- **createAccount:** possible uncaught undefined ([e275f5f](https://github.com/alchemyplatform/aa-sdk/commit/e275f5f5edc313ff88aa46a2336fc8cfaab6ca65))
+- export the \*web client and signer in aa-alchemy ([0777b97](https://github.com/alchemyplatform/aa-sdk/commit/0777b97b9a2620be02fffe92e3e46fe6162bae49))
+
+### Features
+
+- add support for passing in your own storage to session key signer ([#682](https://github.com/alchemyplatform/aa-sdk/issues/682)) ([67474c0](https://github.com/alchemyplatform/aa-sdk/commit/67474c0f224a8e56182cd38a99c6de58dd18229b))
+
+## [3.16.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.16.1...v3.16.2) (2024-05-26)
+
+### Bug Fixes
+
+- **hydrate:** unhandled undefined case in hydrating account state ([175eaee](https://github.com/alchemyplatform/aa-sdk/commit/175eaee8575b1a0c23c5499f03f883ded64efed6))
+
+## [3.16.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.16.0...v3.16.1) (2024-05-23)
+
+### Bug Fixes
+
+- **alchemy-signer:** fix the sign tx method to return the full tx ([#678](https://github.com/alchemyplatform/aa-sdk/issues/678)) ([86e3c99](https://github.com/alchemyplatform/aa-sdk/commit/86e3c99260a21cd5339d586643be60e3dafefabe))
+
+# [3.16.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.15.0...v3.16.0) (2024-05-22)
+
+### Bug Fixes
+
+- **dropAndReplace:** use dummy signature in drop and replace ([#679](https://github.com/alchemyplatform/aa-sdk/issues/679)) ([2c235f1](https://github.com/alchemyplatform/aa-sdk/commit/2c235f12ddaa6685a5ce5d4b68305bb3c191073f))
+- removing rewrite to fix dashboard link ([#675](https://github.com/alchemyplatform/aa-sdk/issues/675)) ([e8444f9](https://github.com/alchemyplatform/aa-sdk/commit/e8444f97fe8af703290a44cb3a255fca67ca06e5))
+
+### Features
+
+- add EOA support ([#667](https://github.com/alchemyplatform/aa-sdk/issues/667)) ([bc1582a](https://github.com/alchemyplatform/aa-sdk/commit/bc1582afc4aa3cd411573a73ef2a9be6ee0ff247))
+- add fordefi signer to aa-signers ([#665](https://github.com/alchemyplatform/aa-sdk/issues/665)) ([7673fc5](https://github.com/alchemyplatform/aa-sdk/commit/7673fc5a8b6e50f81a6f9ef1d649e3cc0e1d9e97))
+
+# [3.15.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.14.1...v3.15.0) (2024-05-20)
+
+### Bug Fixes
+
+- account state was not syncing across chain changes ([#672](https://github.com/alchemyplatform/aa-sdk/issues/672)) ([c4e47d5](https://github.com/alchemyplatform/aa-sdk/commit/c4e47d5d97d26c4bfb5922a45181f4138eb9dc9c))
+
+### Features
+
+- allow setting gas manager config in the config ([#670](https://github.com/alchemyplatform/aa-sdk/issues/670)) ([38dfa25](https://github.com/alchemyplatform/aa-sdk/commit/38dfa2578e1dccdedca5295b2c2871bafa1aef7c))
+
 ## [3.14.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.14.0...v3.14.1) (2024-05-17)
 
 ### Bug Fixes

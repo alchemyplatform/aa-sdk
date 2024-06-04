@@ -22,7 +22,7 @@ head:
 
 ## Account Kit
 
-Account Kit is a framework designed to embed smart accounts in web3 applications. It includes a set of tools such as [Signer integrations](https://accountkit.alchemy.com/signers/choosing-a-signer.html), [Gas Manager](https://docs.alchemy.com/docs/gas-manager-services) and [Bundler](https://docs.alchemy.com/docs/bundler-services) utilities that unlock features such as [gas sponsorship](https://accountkit.alchemy.com/using-smart-accounts/sponsoring-gas/gas-manager.html), [batched transactions](https://accountkit.alchemy.com/using-smart-accounts/batch-user-operations.html) and email/social login. With its user-friendly suite of SDKs, known as [aa-sdk](https://github.com/alchemyplatform/aa-sdk), Account Kit makes it easy to deploy smart accounts, manage `UserOperation`s, and handle gas sponsorship, streamlining the entire process with minimal coding effort.
+Account Kit is a framework designed to embed smart accounts in web3 applications. It includes a set of tools such as [Signer integrations](/signers/choosing-a-signer.html), [Gas Manager](https://docs.alchemy.com/docs/gas-manager-services) and [Bundler](https://docs.alchemy.com/docs/bundler-services) utilities that unlock features such as [gas sponsorship](/using-smart-accounts/sponsoring-gas/gas-manager.html), [batched transactions](/using-smart-accounts/batch-user-operations.html) and email/social login. With its user-friendly suite of SDKs, known as [aa-sdk](https://github.com/alchemyplatform/aa-sdk), Account Kit makes it easy to deploy smart accounts, manage `UserOperation`s, and handle gas sponsorship, streamlining the entire process with minimal coding effort.
 
 ## Bundler
 
@@ -54,7 +54,7 @@ A [standard for modular accounts](https://eips.ethereum.org/EIPS/eip-6900) autho
 
 ## Light Account
 
-[Light Account](https://accountkit.alchemy.com/smart-accounts/light-account/.html) is a production-ready [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) [smart account](#smart-account) implementation developed by Alchemy. It builds on top of Ethereum Foundation’s [SimpleAccount](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol) to add key improvements such as support for ownership transfer, ERC-1271 signature support, and gas optimizations. It is [audited by Quantstamp](https://github.com/alchemyplatform/light-account/blob/main/Quantstamp-Audit.pdf).
+[Light Account](/smart-accounts/light-account/) is a collection of lightweight, production-ready [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) smart accounts developed by Alchemy. It builds on top of Ethereum Foundation's canonical [SimpleAccount](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol) to add key improvements such as ownership transfers, multiple owners, ERC-1271 signature support, and gas optimizations. It has been audited [multiple](https://github.com/alchemyplatform/light-account/blob/develop/audits/2024-01-09_quantstamp_aa8196b.pdf) [times](https://github.com/alchemyplatform/light-account/blob/develop/audits/2024-04-26_quantstamp_93f46a2.pdf) by Quantstamp.
 
 ## Magic Link Authentication
 
@@ -62,7 +62,7 @@ A magic link is a one-time use link sent to a user during the authentication pro
 
 ## Modular Account
 
-A type of smart account enabled by the [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) standard and characterized by its [modular structure](https://accountkit.alchemy.com/smart-accounts/modular-account/.html). This structure segments different functionalities of the account into distinct, independently upgradeable modules or plugins. Each plugin can have specific functions such as validation, execution, or hooks, enabling the smart account to extend its capabilities or modify its behavior without altering the core account logic. Modular Accounts enhance the flexibility, upgradeability, and interoperability of [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) smart accounts. Modular Account contracts have been audited by both [Spearbit](https://github.com/alchemyplatform/modular-account/blob/develop/audits/2024-01-31_spearbit_0e3fd1e.pdf) and [Quantstamp](https://github.com/alchemyplatform/modular-account/blob/develop/audits/2024-02-20-quantstamp-8ae319e.pdf).
+A type of smart account enabled by the [ERC-6900](https://eips.ethereum.org/EIPS/eip-6900) standard and characterized by its [modular structure](/smart-accounts/modular-account/). This structure segments different functionalities of the account into distinct, independently upgradeable modules or plugins. Each plugin can have specific functions such as validation, execution, or hooks, enabling the smart account to extend its capabilities or modify its behavior without altering the core account logic. Modular Accounts enhance the flexibility, upgradeability, and interoperability of [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) smart accounts. Modular Account contracts have been audited by both [Spearbit](https://github.com/alchemyplatform/modular-account/blob/develop/audits/2024-01-31_spearbit_0e3fd1e.pdf) and [Quantstamp](https://github.com/alchemyplatform/modular-account/blob/develop/audits/2024-02-19_quantstamp_0e3fd1e.pdf).
 
 <!--@include: ./bbp.md-->
 
@@ -84,12 +84,12 @@ A service or application that manages the private key and signs either arbitrary
 
 - **Custodial**: Managed by a third party, it holds and autonomously uses the private key for transactions, necessitating complete user trust.
 - **Non-custodial**: While a third party manages the private key, user involvement is required for signing transactions. Examples: Metamask.
-- **MPC (Multi-Party Computation)**: Partial or complete key shares are managed by third parties, but user participation is needed for transaction signatures. Examples: Privy, Portal, Fireblocks.
+- **MPC (Multi-Party Computation)**: Partial or complete key shares are managed by third parties, but user participation is needed for transaction signatures. Examples: Privy, Portal, Fireblocks, Fordefi.
 - **Decentralized MPC**: Operated by a decentralized network, it manages key shares and requires node consensus for transaction signatures. Examples: Lit, Web3auth, 0xpass.
 
 ## Smart Contract Account
 
-A [Smart Contract Account (SCA)](https://accountkit.alchemy.com/smart-accounts/.html#what-s-a-smart-accoun), or smart account in short, is an individual on-chain account located at a public address where an ERC-4337 compatible smart account [`contract`](https://ethereum.org/developers/docs/smart-contracts) is deployed to. This address is controlled by one or more owners of the smart contract account. The [aa-sdk](https://github.com/alchemyplatform/aa-sdk) supports different smart account implementations such as [Modular Account](/smart-accounts/modular-account/), [Light Account](/smart-accounts/light-account/), or [Simple Account](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol). You can also [add your own account implementation in aa-sdk](https://accountkit.alchemy.com/smart-accounts/custom/contributing.html).
+A [Smart Contract Account (SCA)](/smart-accounts/#what-is-a-smart-account), or smart account in short, is an individual on-chain account located at a public address where an ERC-4337 compatible smart account [`contract`](https://ethereum.org/developers/docs/smart-contracts) is deployed to. This address is controlled by one or more owners of the smart contract account. The [aa-sdk](https://github.com/alchemyplatform/aa-sdk) supports different smart account implementations such as [Modular Account](/smart-accounts/modular-account/), [Light Account](/smart-accounts/light-account/), or [Simple Account](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol). You can also [add your own account implementation in aa-sdk](/smart-accounts/custom/contributing.html).
 
 ## Transaction
 

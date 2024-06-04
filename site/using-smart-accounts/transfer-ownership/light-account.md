@@ -18,13 +18,13 @@ head:
       content: Follow this guide to transfer ownership of a Light Account with Account Kit, a vertically integrated stack for building apps that support ERC-4337 and ERC-6900.
 ---
 
-# How to transfer ownership of a Light Account
+# How to transfer ownership of `LightAccount`
 
-Not all smart account implementations support transferring the ownership (e.g. `SimpleAccount`). However, a number of the accounts in this guide and in Account Kit do, including our Light Account! Let's see a few different ways we can transfer ownership of an Account (using Light Account as an example).
+Not all smart account implementations support transferring the ownership (e.g. `SimpleAccount`). However, a number of the accounts in this guide and in Account Kit do, including our `LightAccount`! Let's see a few different ways we can transfer ownership of an Account (using `LightAccount` as an example).
 
 ## Usage
 
-Light Account exposes the following method which allows the existing owner to transfer ownership to a new owner address:
+`LightAccount` exposes the following method which allows the existing owner to transfer ownership to a new owner address:
 
 ```solidity
 function transferOwnership(address newOwner) public virtual onlyOwner
@@ -90,4 +90,4 @@ await smartAccountClient.waitForUserOperationTransaction(result);
 
 :::
 
-See the [`LightAccount`](/packages/aa-accounts/light-account/) docs for more details about our Light Account implementation.
+See the [`LightAccount`](/packages/aa-accounts/light-account/) docs for more details about our `LightAccount implementation.

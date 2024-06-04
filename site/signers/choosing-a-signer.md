@@ -80,7 +80,7 @@ Valid signatures do not always require all shares to sign a transaction. MPC Sig
 
 Some MPC signers provide recovery services in which key share(s) are backed up in the service provider’s cloud, on the end user’s device, or in the end user’s cloud (e.g. iCloud or Google Drive). When evaluating an MPC provider, it’s important to under where each key share is stored.
 
-**Example**: Privy, Fireblocks MPC, Portal, Capsule, WalletKit
+**Example**: Privy, Fireblocks MPC, Portal, Capsule, WalletKit, Fordefi
 
 ::: details TSS vs SSSS
 

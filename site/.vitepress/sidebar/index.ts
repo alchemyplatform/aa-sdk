@@ -82,6 +82,10 @@ export const sidebar: DefaultTheme.Sidebar = [
             text: "Getting started",
             link: "/getting-started",
           },
+          {
+            text: "Supported permissions",
+            link: "/supported-permissions",
+          },
         ],
       },
       {
@@ -92,7 +96,7 @@ export const sidebar: DefaultTheme.Sidebar = [
           { text: "Modular Account", link: "/modular-account" },
           { text: "Light Account", link: "/light-account" },
           {
-            text: "Multi-Owner Light Account",
+            text: "Light Account (Multi-Owner)",
             link: "/multi-owner-light-account",
           },
         ],
@@ -158,7 +162,7 @@ export const sidebar: DefaultTheme.Sidebar = [
         collapsed: false,
         base: "/smart-accounts/modular-account",
         items: [
-          { text: "Introduction", link: "/" },
+          { text: "Overview", link: "/" },
           { text: "Getting started", link: "/getting-started" },
           { text: "Deployments", link: "/deployments" },
           {
@@ -170,7 +174,7 @@ export const sidebar: DefaultTheme.Sidebar = [
             collapsed: true,
             base: "/smart-accounts/modular-account/multisig-plugin",
             items: [
-              { text: "Introduction", link: "/index" },
+              { text: "Overview", link: "/" },
               { text: "Getting started", link: "/getting-started" },
               { text: "Technical details", link: "/technical-details" },
             ],
@@ -179,11 +183,13 @@ export const sidebar: DefaultTheme.Sidebar = [
       },
       {
         text: "Light Account",
-        link: "/smart-accounts/light-account/",
-      },
-      {
-        text: "Multi-Owner Light Account",
-        link: "/smart-accounts/multi-owner-light-account/",
+        collapsed: false,
+        base: "/smart-accounts/light-account",
+        items: [
+          { text: "Overview", link: "/" },
+          { text: "Getting started", link: "/getting-started" },
+          { text: "Deployments", link: "/deployments" },
+        ],
       },
       {
         text: "Custom accounts",
@@ -235,6 +241,7 @@ export const sidebar: DefaultTheme.Sidebar = [
           { text: "Dfns", link: "/dfns" },
           { text: "WalletKit", link: "/walletkit" },
           { text: "Passport", link: "/passport" },
+          { text: "Fordefi", link: "/fordefi" },
         ],
       },
       { text: "EOA signer", link: "/eoa" },

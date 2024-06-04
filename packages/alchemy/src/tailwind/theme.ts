@@ -14,9 +14,9 @@ export function createDefaultTheme(): AccountKitTheme {
       critical: createColorSet("#F87171", "#DC2626"),
 
       // button colors
-      "btn-primary": createColorSet("#000", "#fff"),
+      "btn-primary": createColorSet("#363FF9", "#9AB7FF"),
       "btn-secondary": createColorSet("#E2E8F0", "#374151"),
-      "btn-social": createColorSet("#FFF", "argb(255, 255, 255, 0.05)"),
+      "btn-auth": createColorSet("#FFF", "argb(255, 255, 255, 0.05)"),
 
       // fg colors
       "fg-primary": createColorSet("#000", "#fff"),

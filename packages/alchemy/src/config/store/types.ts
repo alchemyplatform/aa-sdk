@@ -1,3 +1,4 @@
+import type { State as WagmiState } from "@wagmi/core";
 import type { Address, Chain } from "viem";
 import type { PartialBy } from "viem/chains";
 import type { Mutate, StoreApi } from "zustand/vanilla";
@@ -15,6 +16,8 @@ import type {
   SupportedAccount,
   SupportedAccountTypes,
 } from "../types";
+
+export const DEFAULT_STORAGE_KEY = "alchemy-account-state";
 
 export type AccountState<TAccount extends SupportedAccountTypes> =
   | {
@@ -39,6 +42,7 @@ export type CreateClientStoreParams = {
     Exclude<AlchemySignerParams["client"], AlchemySignerClient>,
     "iframeConfig"
   >;
+  chains: Chain[];
   sessionConfig?: AlchemySignerParams["sessionConfig"];
   storage?: Storage;
   ssr?: boolean;
@@ -57,15 +61,19 @@ export type ClientState = {
   // getting this state should throw an error if not on the client
   signer?: AlchemySigner;
   accounts?: {
-    [key in SupportedAccountTypes]: AccountState<key>;
+    [chain: number]: {
+      [key in SupportedAccountTypes]: AccountState<key>;
+    };
   };
   // serializable state
   // NOTE: in some cases this can be serialized to cookie storage
   // be mindful of how big this gets. cookie limit 4KB
   config: CreateClientStoreParams;
-  accountConfigs: Partial<{
-    [key in SupportedAccountTypes]: AccountConfig<key>;
-  }>;
+  accountConfigs: {
+    [chain: number]: Partial<{
+      [key in SupportedAccountTypes]: AccountConfig<key>;
+    }>;
+  };
   user?: User;
   signerStatus: SignerStatus;
 };
@@ -85,3 +93,10 @@ export type CoreStore = Mutate<
   StoreApi<CoreState>,
   [["zustand/subscribeWithSelector", never], ["zustand/persist", CoreState]]
 >;
+
+export type StoredState =
+  | Omit<ClientState, "signer" | "accounts">
+  | {
+      alchemy: Omit<ClientState, "signer" | "accounts">;
+      wagmi?: WagmiState;
+    };

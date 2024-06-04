@@ -55,7 +55,7 @@ export async function dropAndReplaceUserOperation<
           sender: (uoToDrop as UserOperationRequest<"0.6.0">).sender,
           nonce: (uoToDrop as UserOperationRequest<"0.6.0">).nonce,
           callData: (uoToDrop as UserOperationRequest<"0.6.0">).callData,
-          signature: (uoToDrop as UserOperationRequest<"0.6.0">).signature,
+          signature: await account.getDummySignature(),
         }
       : {
           ...((uoToDrop as UserOperationRequest<"0.7.0">).factory &&
@@ -69,7 +69,7 @@ export async function dropAndReplaceUserOperation<
           sender: (uoToDrop as UserOperationRequest<"0.7.0">).sender,
           nonce: (uoToDrop as UserOperationRequest<"0.7.0">).nonce,
           callData: (uoToDrop as UserOperationRequest<"0.7.0">).callData,
-          signature: (uoToDrop as UserOperationRequest<"0.7.0">).signature,
+          signature: await account.getDummySignature(),
         }
   ) as UserOperationStruct<TEntryPointVersion>;
 

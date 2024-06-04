@@ -12,6 +12,7 @@ import { z } from "zod";
 export const SessionKeySignerSchema = z.object({
   storageType: z
     .union([z.literal("local-storage"), z.literal("session-storage")])
+    .or(z.custom<Storage>())
     .default("local-storage"),
   storageKey: z.string().default("session-key-signer:session-key"),
 });
@@ -30,7 +31,7 @@ export class SessionKeySigner
 {
   signerType: string;
   inner: LocalAccountSigner<PrivateKeyAccount>;
-  private storageType: "local-storage" | "session-storage";
+  private storageType: "local-storage" | "session-storage" | Storage;
   private storageKey: string;
 
   constructor(config_: SessionKeySignerConfig = {}) {
@@ -41,7 +42,9 @@ export class SessionKeySigner
 
     const sessionKey = (() => {
       const storage =
-        config.storageType === "session-storage"
+        typeof this.storageType !== "string"
+          ? this.storageType
+          : this.storageType === "session-storage"
           ? sessionStorage
           : localStorage;
       const key = storage.getItem(this.storageKey);

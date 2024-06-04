@@ -1,3 +1,5 @@
+import type { NoUndefined } from "@alchemy/aa-core";
+import type { Chain } from "viem";
 import {
   createJSONStorage,
   persist,
@@ -10,15 +12,14 @@ import { DEFAULT_IFRAME_CONTAINER_ID } from "../createConfig.js";
 import type { SupportedAccountTypes } from "../types.js";
 import { bigintMapReplacer } from "../utils/replacer.js";
 import { bigintMapReviver } from "../utils/reviver.js";
-import type {
-  AccountState,
-  ClientState,
-  ClientStore,
-  CreateClientStoreParams,
-  SignerStatus,
+import {
+  DEFAULT_STORAGE_KEY,
+  type AccountState,
+  type ClientState,
+  type ClientStore,
+  type CreateClientStoreParams,
+  type SignerStatus,
 } from "./types.js";
-
-export const DEFAULT_STORAGE_KEY = "alchemy-account-state";
 
 /**
  * Creates a zustand store instance containing the client only state
@@ -128,11 +129,9 @@ export const defaultAccountState = <
 const createInitialClientState = (
   params: CreateClientStoreParams
 ): ClientState => {
+  const accountConfigs = createEmptyAccountConfigState(params.chains);
   const baseState = {
-    accountConfigs: {
-      LightAccount: undefined,
-      MultiOwnerModularAccount: undefined,
-    },
+    accountConfigs,
     config: params,
     signerStatus: convertSignerStatusToState(AlchemySignerStatus.INITIALIZING),
   };
@@ -141,12 +140,9 @@ const createInitialClientState = (
     return baseState;
   }
 
+  const accounts = createDefaultAccountState(params.chains);
   return {
-    accounts: {
-      LightAccount: defaultAccountState<"LightAccount">(),
-      MultiOwnerModularAccount:
-        defaultAccountState<"MultiOwnerModularAccount">(),
-    },
+    accounts,
     ...baseState,
   };
 };
@@ -169,20 +165,31 @@ const addClientSideStoreListeners = (store: ClientStore) => {
       signer.on("disconnected", () => {
         store.setState({
           user: undefined,
-          accountConfigs: {
-            LightAccount: undefined,
-            MultiOwnerModularAccount: undefined,
-          },
-          accounts: {
-            LightAccount: { status: "DISCONNECTED", account: undefined },
-            MultiOwnerModularAccount: {
-              status: "DISCONNECTED",
-              account: undefined,
-            },
-          },
+          accountConfigs: createEmptyAccountConfigState(
+            store.getState().config.chains
+          ),
+          accounts: createDefaultAccountState(store.getState().config.chains),
         });
       });
     },
     { fireImmediately: true }
   );
+};
+
+const createEmptyAccountConfigState = (chains: Chain[]) => {
+  return chains.reduce((acc, chain) => {
+    acc[chain.id] = {};
+    return acc;
+  }, {} as ClientState["accountConfigs"]);
+};
+
+const createDefaultAccountState = (chains: Chain[]) => {
+  return chains.reduce((acc, chain) => {
+    acc[chain.id] = {
+      LightAccount: defaultAccountState<"LightAccount">(),
+      MultiOwnerModularAccount:
+        defaultAccountState<"MultiOwnerModularAccount">(),
+    };
+    return acc;
+  }, {} as NoUndefined<ClientState["accounts"]>);
 };
