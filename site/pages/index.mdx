@@ -6,8 +6,9 @@ content:
   verticalPadding: 0px
 title: Account Kit Documentation
 description: Account Kit is a vertically integrated stack for building apps that support ERC-4337 smart accounts, Signer integrations, sponsoring gas, bundlers, and an SDK.
-# you can also add HTML or Markdown components below the --- line to add custom HTML or Markdown content (eg: https://github.com/wagmi-dev/viem/blob/main/site/index.md?plain=1)
 ---
+
+import { Button } from "vocs/components";
 
 <div className="flex flex-col grow">
   <div className="flex flex-grow justify-center bg-hero-light dark:bg-hero-dark bg-cover pb-[96px]">
@@ -41,20 +42,12 @@ description: Account Kit is a vertically integrated stack for building apps that
                 Build zero friction onboarding to web3 with Embedded Accounts! Account Kit makes it simple to embed powerful smart accounts or lightweight EOAs in your app as an embedded wallet.
               </div>
               <div className="flex flex-row gap-[8px] justify-start items-center">
-                <a rel="noopener noreferrer" href="./getting-started/introduction">
-                  <button
-                    className="flex items-center rounded-md px-[12px] py-[12px] text-[16px] font-semibold text-white transition duration-300 ease-in-out hover:scale-105 hover:opacity-90 bg-black dark:bg-white dark:text-black"
-                  >
+                <Button href="./getting-started/introduction" className="flex items-center rounded-md px-[12px] py-[12px] text-[16px] font-semibold text-white transition duration-300 ease-in-out hover:scale-105 hover:opacity-90 bg-black dark:bg-white dark:text-black">
                     Quick start
-                  </button>
-                </a>
-                <a rel="noopener noreferrer" href="./getting-started/overview">
-                  <button
-                    className="flex items-center rounded-md px-[12px] py-[12px] text-[16px] font-semibold transition duration-300 ease-in-out hover:scale-105 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black"
-                  >
+                </Button>
+                <Button rel="noopener noreferrer" href="./getting-started/overview" className="flex items-center rounded-md px-[12px] py-[12px] text-[16px] font-semibold transition duration-300 ease-in-out hover:scale-105 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black">
                     Why Account Kit?
-                  </button>
-                </a>
+                </Button>
               </div>
             </div>
 
@@ -76,7 +69,7 @@ export const smartAccountClient = await createModularAccountAlchemyClient({
           </div>
         </div>
         <div className="flex max-lg:flex-wrap justify-center gap-[32px]">
-          <a rel="noopener noreferrer" href="./getting-started/overview" className="flex-auto basis-1/3 max-lg:max-w-[370px] max-lg:min-w-[370px]">
+          <Button rel="noopener noreferrer" href="./getting-started/overview" className="flex-auto basis-1/3 max-lg:max-w-[370px] max-lg:min-w-[370px]">
             <div
               className="flex flex-col flex-auto p-[24px] gap-[24px] rounded-md text-white overflow-auto bg-gradient-3 group hover:scale-105 hover:opacity-90 transition duration-300 ease-in-out"
             >
@@ -89,8 +82,8 @@ export const smartAccountClient = await createModularAccountAlchemyClient({
                 <img src="/arrow-right.svg" alt="Click Here" />
               </div>
             </div>
-          </a>
-          <a rel="noopener noreferrer" href="./getting-started/introduction" className="flex-auto basis-1/3 max-lg:max-w-[370px] max-lg:min-w-[370px]">
+          </Button>
+          <Button rel="noopener noreferrer" href="./getting-started/introduction" className="flex-auto basis-1/3 max-lg:max-w-[370px] max-lg:min-w-[370px]">
             <div
               className="flex flex-col flex-auto p-[24px] gap-[24px] rounded-md text-white overflow-auto bg-gradient-4 group hover:scale-105 hover:opacity-90 transition duration-300 ease-in-out"
             >
@@ -103,8 +96,8 @@ export const smartAccountClient = await createModularAccountAlchemyClient({
                 <img src="/arrow-right.svg" alt="Click Here" />
               </div>
             </div>
-          </a>
-          <a rel="noopener noreferrer" target="_blank" href="https://aa-simple-dapp.vercel.app/" className="flex-auto basis-1/3 max-lg:max-w-[370px] max-lg:min-w-[370px]">
+          </Button>
+          <Button rel="noopener noreferrer" target="_blank" href="https://aa-simple-dapp.vercel.app/" className="flex-auto basis-1/3 max-lg:max-w-[370px] max-lg:min-w-[370px]">
             <div
               className="flex flex-col flex-auto p-[24px] gap-[24px] rounded-md text-white overflow-auto bg-gradient-2 group hover:scale-105 hover:opacity-90 transition duration-300 ease-in-out"
             >
@@ -117,7 +110,7 @@ export const smartAccountClient = await createModularAccountAlchemyClient({
                 <img src="/arrow-right.svg" alt="Click Here" />
               </div>
             </div>
-          </a>
+          </Button>
         </div>
       </div>
     </div>
@@ -141,11 +134,11 @@ export const smartAccountClient = await createModularAccountAlchemyClient({
             alt="Facebook Logo"
           />
         </a>
-        <a target="_blank" href="https://www.linkedin.com/company/alchemyinc/">
+        <a target="_blank" href="https://www.Buttonedin.com/company/alchemyinc/">
           <img
             className="hover:scale-110 transition duration-300 ease-in-out"
-            src="/linkedin.svg"
-            alt="LinkedIn Logo"
+            src="/Buttonedin.svg"
+            alt="ButtonedIn Logo"
           />
         </a>
         <a target="_blank" href="https://twitter.com/AlchemyPlatform/">
