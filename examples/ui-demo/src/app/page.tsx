@@ -19,7 +19,6 @@ export default function Home() {
     () => [[{ type: "email", hideButton: true }], [{ type: "passkey" }]],
     []
   );
-  const errorBoundary = useRef<HTMLDivElement>(null);
   const { openAuthModal } = useAuthModal();
   const user = useUser();
   const { logout } = useLogout();
@@ -80,10 +79,7 @@ export default function Home() {
                     </div>
                   )}
                 </div>
-                <div
-                  id="example-custom-error-boundary"
-                  className="*-bg-[pink] *-p-4"
-                />
+                <div id="example-custom-error-boundary" />
               </div>
               <button className="btn btn-primary" onClick={openAuthModal}>
                 Open Auth Modal
