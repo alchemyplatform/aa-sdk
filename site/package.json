@@ -9,8 +9,10 @@
     "preview": "vocs preview"
   },
   "devDependencies": {
+    "@account-kit/core": "*",
+    "@account-kit/react": "*",
+    "@account-kit/state": "*",
     "@alchemy/aa-accounts": "*",
-    "@alchemy/aa-alchemy": "*",
     "@alchemy/aa-core": "*",
     "@alchemy/aa-ethers": "*",
     "@alchemy/aa-signers": "*",

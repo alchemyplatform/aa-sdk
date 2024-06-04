@@ -1,7 +1,4 @@
-import {
-  useSendTransaction,
-  useSmartAccountClient,
-} from "@alchemy/aa-alchemy/react";
+import { useSendTransaction, useSmartAccountClient } from "@account-kit/react";
 import { sepolia } from "@alchemy/aa-core";
 
 export function ComponentWithSendTransaction() {

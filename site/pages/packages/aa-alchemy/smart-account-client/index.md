@@ -10,7 +10,7 @@ To create an `AlchemySmartAccountClient`, you must provide a set of parameters d
 ## Usage
 
 ```ts [example.ts]
-import { createAlchemySmartAccountClient } from "@alchemy/aa-alchemy";
+import { createAlchemySmartAccountClient } from "@account-kit/core";
 import { getDefaultEntryPointAddress } from "@alchemy/aa-core";
 import { sepolia } from "@alchemy/aa-core";
 

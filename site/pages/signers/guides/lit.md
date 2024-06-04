@@ -68,7 +68,7 @@ We can link our `SmartAccountSigner` to a Modular Account using `createModularAc
 :::code-group
 
 ```ts [example.ts]
-import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";
+import { createModularAccountAlchemyClient } from "@account-kit/core";
 import { sepolia } from "@alchemy/aa-core";
 import { createLitSigner } from "./lit";
 const chain = sepolia;

@@ -1,4 +1,4 @@
-import { cookieToInitialState } from "@alchemy/aa-alchemy/config";
+import { cookieToInitialState } from "@account-kit/state";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { headers } from "next/headers";

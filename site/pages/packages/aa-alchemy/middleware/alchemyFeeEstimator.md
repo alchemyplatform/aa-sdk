@@ -10,10 +10,7 @@ description: Overview of the alchemyFeeEstimator method in aa-alchemy
 ## Usage
 
 ```ts [example.ts]
-import {
-  alchemyFeeEstimator,
-  createAlchemyRpcClient,
-} from "@alchemy/aa-alchemy";
+import { alchemyFeeEstimator, createAlchemyRpcClient } from "@account-kit/core";
 import { createSmartAccountClient } from "@alchemy/aa-core";
 import { http } from "viem";
 import { sepolia } from "viem/chains";

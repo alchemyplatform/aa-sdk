@@ -2,7 +2,7 @@ import {
   useSendUserOperation,
   useSmartAccountClient,
   useWaitForUserOperationTransaction,
-} from "@alchemy/aa-alchemy/react";
+} from "@account-kit/react";
 
 export function ComponentWithWaitForUOTxn() {
   /**

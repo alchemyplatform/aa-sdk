@@ -1,4 +1,4 @@
-import { useSignerStatus } from "@alchemy/aa-alchemy/react";
+import { useSignerStatus } from "@account-kit/react";
 
 export function ComponentWithSignerStatus() {
   const { status } = useSignerStatus();

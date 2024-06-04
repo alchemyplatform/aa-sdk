@@ -1,5 +1,5 @@
+import { AlchemyProvider } from "@account-kit/core";
 import { getDefaultNaniAccountFactoryAddress } from "@alchemy/aa-accounts";
-import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import { LocalAccountSigner, sepolia, type Hex } from "@alchemy/aa-core";
 
 const chain = sepolia;

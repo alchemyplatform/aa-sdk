@@ -22,7 +22,7 @@ Additionally, since the Alchemy SDK client does not yet support JWT authenticati
 
 ```ts [example.ts]
 import { smartAccountClient } from "./base-client.ts";
-import { alchemyEnhancedApiActions } from "@alchemy/aa-alchemy";
+import { alchemyEnhancedApiActions } from "@account-kit/core";
 // [!code focus:99]
 
 const alchemy = new Alchemy();
