@@ -5,7 +5,7 @@ import { useAuthContext } from "../context.js";
 import type { AuthType } from "../types.js";
 import { Step } from "./steps.js";
 import { Notification } from "../../notification.js";
-import { useError } from "../../../hooks/useError.js";
+import { useAuthError } from "../../../hooks/useAuthError.js";
 
 export type AuthCardProps = {
   hideError?: boolean;
@@ -28,7 +28,7 @@ export type AuthCardProps = {
 export const AuthCard = (props: AuthCardProps) => {
   const { status, isAuthenticating } = useSignerStatus();
   const { authStep, setAuthStep } = useAuthContext();
-  const error = useError();
+  const error = useAuthError();
 
   useLayoutEffect(() => {
     if (authStep.type === "complete") {

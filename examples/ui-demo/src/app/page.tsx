@@ -5,7 +5,7 @@ import {
   AuthType,
   DemoSet,
   useAuthModal,
-  useError,
+  useAuthError,
   useUser,
 } from "@alchemy/aa-alchemy/react";
 // eslint-disable-next-line import/extensions
@@ -20,7 +20,7 @@ export default function Home() {
     []
   );
   const { openAuthModal } = useAuthModal();
-  const error = useError();
+  const error = useAuthError();
   const user = useUser();
   const { logout } = useLogout();
 
