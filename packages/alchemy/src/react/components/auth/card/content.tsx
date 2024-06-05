@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { ErrorContainer } from "../../error.js";
 import { PoweredBy } from "../../poweredby.js";
 
 interface CardContentProps {
@@ -19,7 +18,6 @@ export const CardContent = ({
   icon,
   description,
   support,
-  error,
 }: CardContentProps) => {
   return (
     <div className="flex flex-col gap-5 items-center">
@@ -36,7 +34,6 @@ export const CardContent = ({
       ) : (
         description
       )}
-      {error && <ErrorContainer error={error} />}
       {support && (
         <div className="flex flex-row gap-2 text-xs font-normal">
           <span className="text-fg-secondary">{support.text}</span>

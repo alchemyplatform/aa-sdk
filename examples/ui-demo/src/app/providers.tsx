@@ -20,7 +20,7 @@ const uiConfig: AlchemyAccountsProviderProps["uiConfig"] = {
   auth: {
     sections: [[{type: "email"}], [{type: "passkey"}]],
     addPasskeyOnSignup: true,
-  }
+  },
 };
 
 export const Providers = (props: PropsWithChildren<{}>) => {

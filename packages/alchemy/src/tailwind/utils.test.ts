@@ -30,6 +30,10 @@ describe("tailwind utils test", () => {
               "dark": "#020617",
               "light": "#fff",
             },
+            "bg-surface-error": {
+              "dark": "#F87171",
+              "light": "#DC2626",
+            },
             "bg-surface-inset": {
               "dark": "#1F2937",
               "light": "#EFF4F9",
@@ -37,6 +41,14 @@ describe("tailwind utils test", () => {
             "bg-surface-subtle": {
               "dark": "#0F172A",
               "light": "#FBFDFF",
+            },
+            "bg-surface-success": {
+              "dark": "#86EFAC",
+              "light": "#16A34A",
+            },
+            "bg-surface-warning": {
+              "dark": "#FDBA74",
+              "light": "#EA580C",
             },
             "btn-auth": {
               "dark": "argb(255, 255, 255, 0.05)",
