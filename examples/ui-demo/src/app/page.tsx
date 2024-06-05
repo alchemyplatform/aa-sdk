@@ -5,6 +5,7 @@ import {
   AuthType,
   DemoSet,
   useAuthModal,
+  useAuthError,
   useUser,
 } from "@alchemy/aa-alchemy/react";
 // eslint-disable-next-line import/extensions
@@ -14,20 +15,18 @@ import { Input, useLogout } from "@alchemy/aa-alchemy/react";
 import { useMemo } from "react";
 
 export default function Home() {
-  // const [darkMode, setDarkMode] = useState(false)
   const sections = useMemo<AuthType[][]>(
     () => [[{ type: "email", hideButton: true }], [{ type: "passkey" }]],
     []
   );
   const { openAuthModal } = useAuthModal();
+  const error = useAuthError();
   const user = useUser();
   const { logout } = useLogout();
 
   return (
     <>
-      <main
-        className="flex min-h-screen p-24 basis-2/4 light:bg-[#F9F9F9] dark:bg-[#020617] dark:text-white justify-center"
-      >
+      <main className="flex min-h-screen p-24 basis-2/4 light:bg-[#F9F9F9] dark:bg-[#020617] dark:text-white justify-center">
         <div className="flex flex-col gap-8 max-w-[50%] w-full">
           <div className="flex flex-col gap-4">
             <h1 className="text-4xl font-bold">Buttons</h1>
@@ -65,20 +64,32 @@ export default function Home() {
           <div className="flex flex-col gap-4">
             <h1 className="text-4xl font-bold">Auth</h1>
             <div className="flex flex-row gap-6">
-              <div className="modal w-[368px] shadow-md">
-                {!user ? (
-                  <AuthCard sections={sections} />
-                ) : (
-                  <div className="flex flex-col gap-2 p-2">
-                    Logged in as {user.email ?? "anon"}
-                    <button
-                      className="btn btn-primary"
-                      onClick={() => logout()}
-                    >
-                      Log out
-                    </button>
+              <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 w-[368px]">
+                  <div className="modal shadow-md">
+                    {!user ? (
+                      <AuthCard hideError sections={sections} />
+                    ) : (
+                      <div className="flex flex-col gap-2 p-2">
+                        Logged in as {user.email ?? "anon"}
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => logout()}
+                        >
+                          Log out
+                        </button>
+                      </div>
+                    )}
                   </div>
-                )}
+                  {error && error.message && (
+                    <div
+                      key="custom-error-boundary"
+                      className="btn-primary text-xs rounded-xl p-2"
+                    >
+                      {error.message}
+                    </div>
+                  )}
+                </div>
               </div>
               <button className="btn btn-primary" onClick={openAuthModal}>
                 Open Auth Modal

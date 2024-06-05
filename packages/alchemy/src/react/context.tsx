@@ -2,13 +2,21 @@
 
 import type { NoUndefined } from "@alchemy/aa-core";
 import { QueryClientProvider, type QueryClient } from "@tanstack/react-query";
-import { createContext, useContext, useEffect, useMemo, useRef } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type { AlchemyAccountsConfig, AlchemyClientState } from "../config";
 import { AuthCard, type AuthCardProps } from "./components/auth/card/index.js";
 import { IS_SIGNUP_QP } from "./components/constants.js";
 import { NoAlchemyAccountContextError } from "./errors.js";
 import { useSignerStatus } from "./hooks/useSignerStatus.js";
 import { Hydrate } from "./hydrate.js";
+import { AuthModalContext, type AuthStep } from "./components/auth/context.js";
 
 export type AlchemyAccountContextProps =
   | {
@@ -35,6 +43,11 @@ export type AlchemyAccountsProviderProps = {
      * to the DOM and can be controlled via the `useAuthModal` hook
      */
     auth?: AuthCardProps & { addPasskeyOnSignup?: boolean };
+    /**
+     * If hideError is true, then the auth component will not
+     * render the global error component
+     */
+    hideError?: boolean;
   };
 };
 
@@ -73,6 +86,7 @@ export const AlchemyAccountProvider = (
   props: React.PropsWithChildren<AlchemyAccountsProviderProps>
 ) => {
   const { config, queryClient, children, uiConfig } = props;
+
   const ref = useRef<HTMLDialogElement>(null);
   const openAuthModal = () => ref.current?.showModal();
   const closeAuthModal = () => ref.current?.close();
@@ -91,7 +105,10 @@ export const AlchemyAccountProvider = (
     [config, queryClient, uiConfig]
   );
 
-  const { status } = useSignerStatus(initialContext);
+  const { status, isAuthenticating } = useSignerStatus(initialContext);
+  const [authStep, setAuthStep] = useState<AuthStep>({
+    type: isAuthenticating ? "email_completing" : "initial",
+  });
 
   useEffect(() => {
     if (
@@ -109,23 +126,33 @@ export const AlchemyAccountProvider = (
     <Hydrate {...props}>
       <AlchemyAccountContext.Provider value={initialContext}>
         <QueryClientProvider client={queryClient}>
-          {children}
-          {uiConfig?.auth && (
-            <dialog
-              ref={ref}
-              className={`modal w-[368px] ${uiConfig.auth.className ?? ""}`}
-            >
-              <AuthCard
-                header={uiConfig.auth.header}
-                sections={uiConfig.auth.sections}
-                onAuthSuccess={() => closeAuthModal()}
-              />
-              <div
-                className="modal-backdrop"
-                onClick={() => closeAuthModal()}
-              ></div>
-            </dialog>
-          )}
+          <AuthModalContext.Provider
+            value={{
+              authStep,
+              setAuthStep,
+            }}
+          >
+            {children}
+            {uiConfig?.auth && (
+              <dialog
+                ref={ref}
+                className={`modal overflow-visible relative w-[368px] ${
+                  uiConfig.auth.className ?? ""
+                }`}
+              >
+                <AuthCard
+                  hideError={uiConfig.hideError}
+                  header={uiConfig.auth.header}
+                  sections={uiConfig.auth.sections}
+                  onAuthSuccess={() => closeAuthModal()}
+                />
+                <div
+                  className="modal-backdrop"
+                  onClick={() => closeAuthModal()}
+                ></div>
+              </dialog>
+            )}
+          </AuthModalContext.Provider>
         </QueryClientProvider>
       </AlchemyAccountContext.Provider>
     </Hydrate>

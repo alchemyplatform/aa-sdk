@@ -12,7 +12,7 @@ export const LoadingAuth = ({ context }: LoadingAuthProps) => {
     case "email_verify":
       return <LoadingEmail context={context} />;
     case "passkey_verify":
-      return <LoadingPasskeyAuth context={context} />;
+      return <LoadingPasskeyAuth />;
     case "email_completing":
       return <CompletingEmailAuth context={context} />;
     default: {

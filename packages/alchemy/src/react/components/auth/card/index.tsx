@@ -1,11 +1,14 @@
-import { useLayoutEffect, useState, type ReactNode } from "react";
+import { useLayoutEffect, type ReactNode } from "react";
 import { useSignerStatus } from "../../../hooks/useSignerStatus.js";
 import { IS_SIGNUP_QP } from "../../constants.js";
-import { AuthModalContext, type AuthStep } from "../context.js";
+import { useAuthContext } from "../context.js";
 import type { AuthType } from "../types.js";
 import { Step } from "./steps.js";
+import { Notification } from "../../notification.js";
+import { useAuthError } from "../../../hooks/useAuthError.js";
 
 export type AuthCardProps = {
+  hideError?: boolean;
   header?: ReactNode;
   // Each section can contain multiple auth types which will be grouped together
   // and separated by an OR divider
@@ -24,9 +27,8 @@ export type AuthCardProps = {
  */
 export const AuthCard = (props: AuthCardProps) => {
   const { status, isAuthenticating } = useSignerStatus();
-  const [authStep, setAuthStep] = useState<AuthStep>({
-    type: isAuthenticating ? "email_completing" : "initial",
-  });
+  const { authStep, setAuthStep } = useAuthContext();
+  const error = useAuthError();
 
   useLayoutEffect(() => {
     if (authStep.type === "complete") {
@@ -39,18 +41,21 @@ export const AuthCard = (props: AuthCardProps) => {
         createPasskeyAfter: urlParams.get(IS_SIGNUP_QP) === "true",
       });
     }
-  }, [authStep, status, props, isAuthenticating]);
+  }, [authStep, status, props, isAuthenticating, setAuthStep]);
 
   return (
-    <AuthModalContext.Provider
-      value={{
-        authStep,
-        setAuthStep,
-      }}
-    >
+    <div className="relative">
+      <div
+        id="akui-default-error-container"
+        className="absolute bottom-[calc(100%+8px)] w-full"
+      >
+        {!props.hideError && error && error.message && (
+          <Notification message={error.message} type="error" />
+        )}
+      </div>
       <div className="modal-box flex flex-col items-center gap-5">
         <Step {...props} />
       </div>
-    </AuthModalContext.Provider>
+    </div>
   );
 };

@@ -32,6 +32,9 @@ export function createDefaultTheme(): AccountKitTheme {
       "bg-surface-subtle": createColorSet("#FBFDFF", "#0F172A"),
       "bg-surface-inset": createColorSet("#EFF4F9", "#1F2937"),
       "bg-surface-critical": createColorSet("#FEF2F2", "#FEF2F2"),
+      "bg-surface-error": createColorSet("#DC2626", "#F87171"),
+      "bg-surface-success": createColorSet("#16A34A", "#86EFAC"),
+      "bg-surface-warning": createColorSet("#EA580C", "#FDBA74"),
     },
   };
 }
