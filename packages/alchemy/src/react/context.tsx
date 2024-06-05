@@ -11,12 +11,13 @@ import {
   useState,
 } from "react";
 import type { AlchemyAccountsConfig, AlchemyClientState } from "../config";
-import { AuthCard, type AuthCardProps } from "./components/auth/card/index.js";
+import type { AuthCardProps } from "./components/auth/card/index.js";
 import { IS_SIGNUP_QP } from "./components/constants.js";
 import { NoAlchemyAccountContextError } from "./errors.js";
 import { useSignerStatus } from "./hooks/useSignerStatus.js";
 import { Hydrate } from "./hydrate.js";
 import { AuthModalContext, type AuthStep } from "./components/auth/context.js";
+import { AuthModal } from "./components/auth/modal.js";
 
 export type AlchemyAccountContextProps =
   | {
@@ -33,22 +34,24 @@ export const AlchemyAccountContext = createContext<
   AlchemyAccountContextProps | undefined
 >(undefined);
 
+export type AlchemyAccountsUIConfig = {
+  auth?: AuthCardProps & { addPasskeyOnSignup?: boolean };
+  /**
+   * If hideError is true, then the auth component will not
+   * render the global error component
+   */
+  hideError?: boolean;
+};
+
 export type AlchemyAccountsProviderProps = {
   config: AlchemyAccountsConfig;
   initialState?: AlchemyClientState;
   queryClient: QueryClient;
-  uiConfig?: {
-    /**
-     * If auth config is provided, then the auth modal will be added
-     * to the DOM and can be controlled via the `useAuthModal` hook
-     */
-    auth?: AuthCardProps & { addPasskeyOnSignup?: boolean };
-    /**
-     * If hideError is true, then the auth component will not
-     * render the global error component
-     */
-    hideError?: boolean;
-  };
+  /**
+   * If auth config is provided, then the auth modal will be added
+   * to the DOM and can be controlled via the `useAuthModal` hook
+   */
+  uiConfig?: AlchemyAccountsUIConfig;
 };
 
 /**
@@ -134,23 +137,7 @@ export const AlchemyAccountProvider = (
           >
             {children}
             {uiConfig?.auth && (
-              <dialog
-                ref={ref}
-                className={`modal overflow-visible relative w-[368px] ${
-                  uiConfig.auth.className ?? ""
-                }`}
-              >
-                <AuthCard
-                  hideError={uiConfig.hideError}
-                  header={uiConfig.auth.header}
-                  sections={uiConfig.auth.sections}
-                  onAuthSuccess={() => closeAuthModal()}
-                />
-                <div
-                  className="modal-backdrop"
-                  onClick={() => closeAuthModal()}
-                ></div>
-              </dialog>
+              <AuthModal auth={uiConfig.auth} hideError={uiConfig.hideError} ref={ref} />
             )}
           </AuthModalContext.Provider>
         </QueryClientProvider>

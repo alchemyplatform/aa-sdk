@@ -8,7 +8,7 @@ type Props = {
 
 // Not used externally
 // eslint-disable-next-line jsdoc/require-jsdoc
-export const PasskeyAuth = ({ label = "Passkey" }: Props) => {
+export const PasskeyAuth = ({ label = "I have a passkey" }: Props) => {
   const { authenticate } = usePasskeyVerify();
 
   return (

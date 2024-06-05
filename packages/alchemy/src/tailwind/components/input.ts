@@ -4,6 +4,7 @@ export const inputComponents: ComponentDef = {
   ".input": {
     // container styling
     "@apply p-3 inline-flex gap-2 h-10 items-center": {},
+    "@apply transition-colors": {},
     "@apply static-border": {},
     "@apply text-fg-primary text-sm": {},
     "@apply bg-bg-surface-default": {},

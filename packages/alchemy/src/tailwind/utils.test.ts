@@ -67,8 +67,8 @@ describe("tailwind utils test", () => {
               "light": "#F87171",
             },
             "fg-accent-brand": {
-              "dark": "#fff",
-              "light": "#000",
+              "dark": "#9AB7FF",
+              "light": "#363FF9",
             },
             "fg-critical": {
               "dark": "#F87171",
