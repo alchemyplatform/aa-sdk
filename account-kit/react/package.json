@@ -61,7 +61,7 @@
     "@wagmi/connectors": "^4.3.9",
     "@wagmi/core": "^2.9.8",
     "tailwindcss": "^3.4.3",
-    "viem": "2.8.6",
+    "viem": "2.13.6",
     "wagmi": "^2.8.8",
     "zod": "^3.22.4"
   },
@@ -70,10 +70,10 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tailwindcss": "^3.4.3",
-    "viem": "2.8.6"
+    "viem": "2.13.6"
   },
   "resolutions": {
-    "viem": "2.8.6"
+    "viem": "2.13.6"
   },
   "publishConfig": {
     "access": "public",

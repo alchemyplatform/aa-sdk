@@ -19,7 +19,7 @@
     "autoprefixer": "^10.4.16",
     "execa": "^8.0.1",
     "tailwindcss": "^3.3.3",
-    "viem": "2.8.6"
+    "viem": "2.13.6"
   },
   "dependencies": {
     "vocs": "^1.0.0-alpha.52"

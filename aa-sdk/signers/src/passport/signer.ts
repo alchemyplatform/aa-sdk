@@ -1,17 +1,17 @@
+import { Passport } from "@0xpass/passport";
+import { createPassportClient } from "@0xpass/passport-viem-alchemy";
 import {
   WalletClientSigner,
   type SmartAccountAuthenticator,
 } from "@alchemy/aa-core";
+import type { SignableMessage, TypedDataDefinition, WalletClient } from "viem";
+import { http } from "viem";
 import { signerTypePrefix } from "../constants.js";
 import type {
   PassportAuthenticationParams,
   PassportClientParams,
   PassportUserInfo,
 } from "./types";
-import { Passport } from "@0xpass/passport";
-import { createPassportClient } from "@0xpass/passport-viem-alchemy";
-import { http } from "viem";
-import type { TypedDataDefinition, WalletClient, SignableMessage } from "viem";
 
 export class PassportSigner
   implements
@@ -74,15 +74,18 @@ export class PassportSigner
 
     const fallbackProvider = http(params.fallbackProvider);
 
+    // @ts-ignore
     const client: WalletClient = params.endpoint
       ? createPassportClient(
           authenticatedHeaders,
+          // @ts-ignore i'll be deleting this anyways
           fallbackProvider,
           params.chain,
           params.endpoint
         )
       : createPassportClient(
           authenticatedHeaders,
+          // @ts-ignore
           fallbackProvider,
           params.chain
         );

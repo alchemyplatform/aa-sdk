@@ -1,26 +1,18 @@
 ---
 outline: deep
-head:
-  - - meta
-    - property: og:title
-      content: Migrating to aa-sdk v3
-  - - meta
-    - name: description
-      content: How to upgrade through breaking changes of aa-sdk v3
-  - - meta
-    - property: og:description
-      content: How to upgrade through breaking changes of aa-sdk v3.
-  - - meta
-    - name: twitter:title
-      content: Migration Guide
-  - - meta
-    - name: twitter:description
-      content: How to upgrade through breaking changes of aa-sdk v3.
+title: Migrating to new versions
+description: How to upgrade through breaking changes of account-kit
 ---
 
 # Migration Guide
 
 Below are the steps to migrate your project from older versions of the `aa-sdk` to the latest version.
+
+## Migrating to version 4.x.x
+
+### Viem Version
+
+We've update the dependency on viem to v2.13.6 in this release. It's possible you're version may clash, so it's recommended to use the same version of viem in your project.
 
 ## Migrating to version 3.x.x
 
@@ -29,7 +21,7 @@ To address this, version 3.x.x of the SDK switches to an approach more idiomatic
 
 ### Viem Version
 
-We have updated our dependency to viem v2.x.x. This means you will need to update your project to use >= v2.5.0 of viem.
+We have updated our dependency to viem v2.x.x. This means you will need to update your project to use v2.8.6 of viem.
 
 ### Client: `SmartAccountProvider` → `SmartAccountClient`
 

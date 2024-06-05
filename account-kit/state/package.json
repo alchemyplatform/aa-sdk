@@ -48,15 +48,15 @@
     "@account-kit/core": "^3.18.0",
     "@wagmi/core": "^2.9.8",
     "js-cookie": "^3.0.5",
-    "viem": "2.8.6",
+    "viem": "2.13.6",
     "zod": "^3.22.4",
     "zustand": "^4.5.2"
   },
   "peerDependencies": {
-    "viem": "2.8.6"
+    "viem": "2.13.6"
   },
   "resolutions": {
-    "viem": "2.8.6"
+    "viem": "2.13.6"
   },
   "publishConfig": {
     "access": "public",

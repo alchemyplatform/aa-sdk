@@ -52,14 +52,14 @@
     "@turnkey/viem": "^0.4.8",
     "@turnkey/webauthn-stamper": "^0.4.3",
     "eventemitter3": "^5.0.1",
-    "viem": "2.8.6",
+    "viem": "2.13.6",
     "zod": "^3.22.4"
   },
   "peerDependencies": {
-    "viem": "2.8.6"
+    "viem": "2.13.6"
   },
   "resolutions": {
-    "viem": "2.8.6"
+    "viem": "2.13.6"
   },
   "publishConfig": {
     "access": "public",
