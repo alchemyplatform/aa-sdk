@@ -13,7 +13,7 @@ export const MainAuthContent = ({
   return (
     <>
       {header}
-      {showSignInText && <h3 className="font-bold text-lg">Sign in</h3>}
+      {showSignInText && <h3 className="font-semibold text-lg">Sign in</h3>}
       {sections?.map((section, idx) => {
         return (
           <Fragment key={`auth-section-fragment-${idx}`}>
@@ -24,8 +24,8 @@ export const MainAuthContent = ({
           </Fragment>
         );
       })}
-      <div className="flex flex-col w-full items-center text-xs gap-3">
-        <span className="text-fg-tertiary text-center">
+      <div className="flex flex-col w-full items-center gap-1">
+        <p className="text-fg-tertiary text-center text-xs py-2">
           By signing in, you agree to the{" "}
           <a
             className="text-fg-accent-brand cursor-pointer underline"
@@ -33,7 +33,7 @@ export const MainAuthContent = ({
           >
             Terms of Service
           </a>
-        </span>
+        </p>
         <PoweredBy />
       </div>
     </>

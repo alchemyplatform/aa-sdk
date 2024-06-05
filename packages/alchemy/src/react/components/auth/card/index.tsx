@@ -1,4 +1,9 @@
-import { useLayoutEffect, type ReactNode } from "react";
+import {
+  useCallback,
+  useLayoutEffect,
+  useMemo,
+  type ReactNode,
+} from "react";
 import { useSignerStatus } from "../../../hooks/useSignerStatus.js";
 import { IS_SIGNUP_QP } from "../../constants.js";
 import { useAuthContext } from "../context.js";
@@ -37,6 +42,20 @@ export const AuthCard = (
   const { authStep, setAuthStep } = useAuthContext();
   const error = useAuthError();
 
+  const canGoBack = useMemo(() => {
+    return ["email_verify"].includes(authStep.type);
+  }, [authStep]);
+
+  const onBack = useCallback(() => {
+    switch (authStep.type) {
+      case "email_verify":
+        setAuthStep({ type: "initial" });
+        break;
+      default:
+        console.warn("Unhandled back action for auth step", authStep);
+    }
+  }, [authStep, setAuthStep]);
+
   useLayoutEffect(() => {
     if (authStep.type === "complete") {
       props.onAuthSuccess?.();
@@ -62,7 +81,11 @@ export const AuthCard = (
       </div>
       <div className="modal-box relative flex flex-col items-center gap-5 text-fg-primary">
         {props.showNavigation && (
-          <Navigation showingBack={false} onClose={closeAuthModal} />
+          <Navigation
+            showingBack={canGoBack}
+            onBack={onBack}
+            onClose={closeAuthModal}
+          />
         )}
         <Step {...props} />
       </div>

@@ -32,8 +32,8 @@ export default function Home() {
             <h1 className="text-4xl font-bold">Buttons</h1>
             <div className="flex flex-row gap-6">
               <DemoSet>Primary</DemoSet>
-              <DemoSet type="secondary">Secondary</DemoSet>
-              <DemoSet type="social">Google</DemoSet>
+              <DemoSet variant="secondary">Secondary</DemoSet>
+              <DemoSet variant="social">Google</DemoSet>
             </div>
           </div>
           <div className="flex flex-col gap-4">
