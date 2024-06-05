@@ -72,6 +72,7 @@ export const createCoreStore = (params: CreateCoreStoreParams): CoreStore => {
                 return bigintMapReviver(key, value);
               },
             }),
+            version: 1,
             skipHydration: ssr,
           })
         : () => createInitialCoreState(connections, chain)
