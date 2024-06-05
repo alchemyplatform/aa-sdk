@@ -23,7 +23,7 @@ import { provider } from "./ethers-provider";
 import {
   LightSmartContractAccount,
   getDefaultLightAccountFactoryAddress,
-} from "@alchemy/aa-accounts";
+} from "@account-kit/accounts";
 import { LocalAccountSigner, type SmartAccountSigner } from "@alchemy/aa-core";
 import { polygonMumbai } from "@alchemy/aa-core";
 import { http } from "viem";

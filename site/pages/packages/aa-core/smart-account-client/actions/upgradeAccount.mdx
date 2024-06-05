@@ -13,7 +13,7 @@ Upgrades smart accounts to a new implementation if the smart contract account su
 
 ```ts [example.ts]
 import { smartAccountClient as lightAccountClient } from "./lightAccountClient";
-import { getMSCAUpgradeToData } from "@alchemy/aa-accounts";
+import { getMSCAUpgradeToData } from "@account-kit/accounts";
 
 const { createMAAccount, ...upgradeToData } = await getMSCAUpgradeToData(
   lightAccountClient,

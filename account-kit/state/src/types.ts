@@ -1,19 +1,17 @@
 import type {
+  AlchemyGasManagerConfig,
+  AlchemySignerParams,
+  AlchemySignerWebClient,
+  AlchemyWebSigner,
   LightAccount,
   MultiOwnerModularAccount,
-} from "@alchemy/aa-accounts";
+} from "@account-kit/core";
 import type { ConnectionConfig } from "@alchemy/aa-core";
 import type { CreateConnectorFn } from "@wagmi/core";
 import { type Config as WagmiConfig } from "@wagmi/core";
 import type { Chain } from "viem";
 import type { PartialBy } from "viem/chains";
 import type { ClientStore, CoreStore, StoredState } from "./store/types";
-import type {
-  AlchemyGasManagerConfig,
-  AlchemyWebSigner,
-  AlchemySignerWebClient,
-  AlchemySignerParams,
-} from "@account-kit/core";
 
 export type SupportedAccountTypes = "LightAccount" | "MultiOwnerModularAccount";
 

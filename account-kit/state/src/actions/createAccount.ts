@@ -1,10 +1,10 @@
 import {
   createLightAccount,
-  createMultiOwnerModularAccount,
+  createModularAccount,
   type CreateLightAccountParams,
   type CreateMultiOwnerModularAccountParams,
   type GetLightAccountVersion,
-} from "@alchemy/aa-accounts";
+} from "@account-kit/core";
 import { type SmartAccountSigner } from "@alchemy/aa-core";
 import { custom, type Transport } from "viem";
 import { ClientOnlyPropertyError } from "../errors.js";
@@ -75,7 +75,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
           chain,
         });
       case "MultiOwnerModularAccount":
-        return createMultiOwnerModularAccount({
+        return createModularAccount({
           ...params,
           ...cachedConfig,
           signer,

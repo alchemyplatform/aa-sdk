@@ -11,7 +11,7 @@ import {
   type MultisigPluginActions,
   type MultisigUserOperationContext,
   type PluginManagerActions,
-} from "@alchemy/aa-accounts";
+} from "@account-kit/accounts";
 import {
   smartAccountClientActions,
   type SmartAccountSigner,

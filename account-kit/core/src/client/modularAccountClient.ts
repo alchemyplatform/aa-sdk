@@ -9,7 +9,7 @@ import {
   type MultiOwnerModularAccount,
   type MultiOwnerPluginActions,
   type PluginManagerActions,
-} from "@alchemy/aa-accounts";
+} from "@account-kit/accounts";
 import type { SmartAccountSigner } from "@alchemy/aa-core";
 import {
   custom,

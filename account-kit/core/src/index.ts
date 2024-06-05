@@ -1,3 +1,4 @@
+// core exports
 export type * from "./actions/simulateUserOperationChanges.js";
 export { simulateUserOperationChanges } from "./actions/simulateUserOperationChanges.js";
 export type * from "./actions/types.js";
@@ -31,10 +32,40 @@ export type * from "./schema.js";
 export { AlchemyProviderConfigSchema } from "./schema.js";
 export type { AlchemyProviderConfig } from "./type.js";
 
+// Accounts
+export type * from "@account-kit/accounts";
+export {
+  MultiOwnerPlugin,
+  MultisigPlugin,
+  MultisigPluginAbi,
+  MultisigPluginExecutionFunctionAbi,
+  SessionKeyAccessListType,
+  SessionKeyPermissionsBuilder,
+  SessionKeyPlugin,
+  SessionKeyPluginAbi,
+  SessionKeyPluginExecutionFunctionAbi,
+  SessionKeySigner,
+  accountLoupeActions,
+  createLightAccount,
+  createMultiOwnerModularAccount as createModularAccount,
+  createMultiOwnerLightAccount,
+  createMultisigModularAccount,
+  getMAInitializationData,
+  getMSCAUpgradeToData,
+  lightAccountClientActions,
+  multiOwnerLightAccountClientActions,
+  multiOwnerPluginActions,
+  multisigPluginActions,
+  multisigSignatureMiddleware,
+  pluginManagerActions,
+  sessionKeyPluginActions,
+} from "@account-kit/accounts";
+
+// Signer
 export type * from "./signer/index.js";
 export {
-  DEFAULT_SESSION_MS,
-  AlchemyWebSigner,
   AlchemySignerStatus,
   AlchemySignerWebClient,
+  AlchemyWebSigner,
+  DEFAULT_SESSION_MS,
 } from "./signer/index.js";

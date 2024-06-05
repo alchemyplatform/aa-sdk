@@ -1,4 +1,4 @@
-import { SessionKeyPermissionsBuilder } from "@alchemy/aa-accounts";
+import { SessionKeyPermissionsBuilder } from "@account-kit/accounts";
 import { client } from "./base-client.js";
 
 const result = await client.updateSessionKeyPermissions({
