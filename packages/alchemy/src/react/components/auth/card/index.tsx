@@ -1,9 +1,4 @@
-import {
-  useCallback,
-  useLayoutEffect,
-  useMemo,
-  type ReactNode,
-} from "react";
+import { useCallback, useLayoutEffect, useMemo, type ReactNode } from "react";
 import { useSignerStatus } from "../../../hooks/useSignerStatus.js";
 import { IS_SIGNUP_QP } from "../../constants.js";
 import { useAuthContext } from "../context.js";
