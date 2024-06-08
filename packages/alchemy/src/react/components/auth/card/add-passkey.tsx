@@ -77,7 +77,6 @@ export const AddPasskey = () => {
       <div className="flex flex-col w-full gap-3">
         <Button
           variant="primary"
-          className=""
           onClick={() => addPasskey()}
           disabled={isAddingPasskey}
         >
@@ -85,7 +84,6 @@ export const AddPasskey = () => {
         </Button>
         <Button
           variant="secondary"
-          className=""
           onClick={() => setAuthStep({ type: "complete" })}
           disabled={isAddingPasskey}
         >

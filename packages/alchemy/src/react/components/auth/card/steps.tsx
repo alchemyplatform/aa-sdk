@@ -9,8 +9,6 @@ import { MainAuthContent } from "./main.js";
 export const Step = (props: AuthCardProps) => {
   const { authStep } = useAuthContext();
 
-  console.log("step", authStep.type);
-
   switch (authStep.type) {
     case "email_verify":
     case "passkey_verify":
