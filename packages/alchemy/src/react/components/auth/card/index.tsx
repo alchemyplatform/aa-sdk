@@ -37,6 +37,7 @@ export const AuthCard = (
   const { authStep, setAuthStep } = useAuthContext();
   const error = useAuthError();
 
+  // TODO: Finalize the steps that allow going back
   const canGoBack = useMemo(() => {
     return ["email_verify"].includes(authStep.type);
   }, [authStep]);
