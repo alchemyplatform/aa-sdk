@@ -1,8 +1,34 @@
 import { useAddPasskey } from "../../../hooks/useAddPasskey.js";
-import { PasskeyIcon } from "../../../icons/passkey.js";
+import {
+  PasskeyCloud,
+  PasskeyIllustration,
+  PasskeyShield,
+  PasskeySmiley,
+} from "../../../icons/passkey.js";
 import { Button } from "../../button.js";
 import { PoweredBy } from "../../poweredby.js";
 import { useAuthContext } from "../context.js";
+import { useCallback, type ReactNode } from "react";
+
+const BENEFITS = [
+  {
+    icon: <PasskeySmiley />,
+    title: "Ease of use",
+    description: "Enable quicker and easier logins with Face ID or Touch ID.",
+  },
+  {
+    icon: <PasskeyShield />,
+    title: "Enhanced security",
+    description:
+      "Prevent phishing and theft as the authentication data remains on the device.",
+  },
+  {
+    icon: <PasskeyCloud />,
+    title: "Cross-platform compatibility",
+    description:
+      "Work seamlessly across various devices and platforms with your device ID.",
+  },
+];
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const AddPasskey = () => {
@@ -13,34 +39,57 @@ export const AddPasskey = () => {
     },
   });
 
+  const renderRow = useCallback(
+    ({
+      icon,
+      title,
+      description,
+    }: {
+      icon: ReactNode;
+      title: string;
+      description: string;
+    }) => {
+      return (
+        <div key={title} className="flex gap-2">
+          <div className="h-5 w-5 flex items-center justify-center">{icon}</div>
+          <div className="flex flex-col">
+            <p className="font-semibold text-sm">{title}</p>
+            <p className="text-fg-secondary text-sm">{description}</p>
+          </div>
+        </div>
+      );
+    },
+    []
+  );
+
   return (
     <div className="flex flex-col gap-5 items-center">
-      <span className="text-lg text-fg-primary font-semibold">
-        Add a passkey?
-      </span>
-      <div className="flex flex-col items-center justify-center border-fg-accent-brand bg-bg-surface-inset rounded-[100%] w-[56px] h-[56px] border">
-        <PasskeyIcon />
+      <div className="flex flex-col items-center justify-center h-12 w-12">
+        <PasskeyIllustration />
       </div>
-      <p className="text-fg-secondary text-center font-normal text-sm">
-        Passkeys allow for a simple and secure user experience. Login in and
-        sign transactions in seconds
-      </p>
-      <Button
-        variant="primary"
-        className="w-full"
-        onClick={() => addPasskey()}
-        disabled={isAddingPasskey}
-      >
-        Continue
-      </Button>
-      <Button
-        variant="secondary"
-        className="w-full"
-        onClick={() => setAuthStep({ type: "complete" })}
-        disabled={isAddingPasskey}
-      >
-        Skip
-      </Button>
+
+      <h3 className="font-semibold text-lg">Add a passkey</h3>
+
+      <div className="flex flex-col w-full gap-3">
+        {BENEFITS.map(renderRow)}
+      </div>
+
+      <div className="flex flex-col w-full gap-3">
+        <Button
+          variant="primary"
+          onClick={() => addPasskey()}
+          disabled={isAddingPasskey}
+        >
+          Continue
+        </Button>
+        <Button
+          variant="secondary"
+          onClick={() => setAuthStep({ type: "complete" })}
+          disabled={isAddingPasskey}
+        >
+          Skip
+        </Button>
+      </div>
       <PoweredBy />
     </div>
   );

@@ -137,7 +137,11 @@ export const AlchemyAccountProvider = (
           >
             {children}
             {uiConfig?.auth && (
-              <AuthModal auth={uiConfig.auth} hideError={uiConfig.hideError} ref={ref} />
+              <AuthModal
+                auth={uiConfig.auth}
+                hideError={uiConfig.hideError}
+                ref={ref}
+              />
             )}
           </AuthModalContext.Provider>
         </QueryClientProvider>

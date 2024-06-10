@@ -13,7 +13,12 @@ export const AuthModal = forwardRef<HTMLDialogElement, AuthModalProps>(
     const { closeAuthModal } = useAuthModal();
 
     return (
-      <dialog ref={ref} className={`modal overflow-visible relative w-[368px] ${auth.className ?? ""}`}>
+      <dialog
+        ref={ref}
+        className={`modal overflow-visible relative w-[368px] ${
+          auth.className ?? ""
+        }`}
+      >
         <AuthCard
           hideError={hideError}
           header={auth.header}
