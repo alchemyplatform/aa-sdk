@@ -4,12 +4,14 @@ import { Button } from "./button.js";
 interface NavigationProps {
   onBack?: () => void;
   onClose: () => void;
-  showingBack: boolean;
+  showBack: boolean;
+  showClose: boolean;
 }
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const Navigation = ({
-  showingBack,
+  showBack,
+  showClose,
   onBack,
   onClose,
 }: NavigationProps) => {
@@ -18,13 +20,17 @@ export const Navigation = ({
       <Button
         variant="link"
         onClick={onBack}
-        disabled={!showingBack}
-        className={showingBack ? "text-fg-primary" : "invisible"}
+        disabled={!showBack}
+        className={showBack ? "text-fg-primary" : "invisible"}
       >
         <BackArrow />
       </Button>
 
-      <Button variant="link" onClick={onClose} className="text-fg-primary">
+      <Button
+        variant="link"
+        onClick={onClose}
+        className={showClose ? "text-fg-primary" : "invisible"}
+      >
         <X />
       </Button>
     </div>
