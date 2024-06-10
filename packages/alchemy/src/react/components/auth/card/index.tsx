@@ -53,9 +53,7 @@ export const AuthCard = (
   }, [authStep, setAuthStep]);
 
   useLayoutEffect(() => {
-    if (authStep.type === "complete") {
-      props.onAuthSuccess?.();
-    } else if (isAuthenticating && authStep.type === "initial") {
+    if (isAuthenticating && authStep.type === "initial") {
       const urlParams = new URLSearchParams(window.location.search);
 
       setAuthStep({
