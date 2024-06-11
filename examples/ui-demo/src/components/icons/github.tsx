@@ -1,6 +1,5 @@
 import { SVGProps } from "react";
 
-// eslint-disable-next-line jsdoc/require-jsdoc
 export const GithubLogo = ({
   fill = "black",
   size = 24,
