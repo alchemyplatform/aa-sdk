@@ -1,4 +1,3 @@
-import { IPluginAbi } from "@alchemy/aa-accounts";
 import { asyncPipe } from "@alchemy/aa-core";
 import { kebabCase } from "change-case";
 import dedent from "dedent";
@@ -14,6 +13,7 @@ import {
 } from "viem";
 import z from "zod";
 import type { Config, PluginConfig } from "../../config.js";
+import { IPluginAbi } from "../../IPlugin.js";
 import * as logger from "../../logger.js";
 import { findConfig } from "../../utils/findConfig.js";
 import { format } from "../../utils/format.js";

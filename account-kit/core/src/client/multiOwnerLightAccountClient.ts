@@ -4,7 +4,7 @@ import {
   type CreateMultiOwnerLightAccountParams,
   type MultiOwnerLightAccount,
   type MultiOwnerLightAccountClientActions,
-} from "@alchemy/aa-accounts";
+} from "@account-kit/accounts";
 import type { HttpTransport, SmartAccountSigner } from "@alchemy/aa-core";
 import { custom, type Chain, type CustomTransport, type Transport } from "viem";
 import { AlchemyProviderConfigSchema } from "../schema.js";

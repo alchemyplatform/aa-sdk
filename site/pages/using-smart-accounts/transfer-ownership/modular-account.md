@@ -46,7 +46,7 @@ Then, you can use the `readOwners` method of the `multiOwnerPluginActions` exten
 
 ```ts [example.ts]
 import { smartAccountClient as modularAccountClient } from "./smartAccountClient";
-import { multiOwnerPluginActions } from "@alchemy/aa-accounts";
+import { multiOwnerPluginActions } from "@account-kit/accounts";
 
 // [!code focus:99]
 // extend smart account client with multiOwnerPluginActions to call MultiOwnerPlugin methods
@@ -76,7 +76,7 @@ You can use the `readOwners` method on the `multiOwnerPluginActions` extended sm
 
 ```ts [example.ts]
 import { smartAccountClient as modularAccountClient } from "./smartAccountClient";
-import { multiOwnerPluginActions } from "@alchemy/aa-accounts";
+import { multiOwnerPluginActions } from "@account-kit/accounts";
 
 // [!code focus:99]
 // extend smart account client with multiOwnerPluginActions to call MultiOwnerPlugin methods
@@ -102,7 +102,7 @@ You can use the `updateOwners` method on the `multiOwnerPluginActions` extended 
 
 ```ts [example.ts]
 import { smartAccountClient as modularAccountClient } from "./smartAccountClient";
-import { multiOwnerPluginActions } from "@alchemy/aa-accounts";
+import { multiOwnerPluginActions } from "@account-kit/accounts";
 import { type Address } from "viem";
 
 // [!code focus:99]

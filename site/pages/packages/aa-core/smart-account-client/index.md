@@ -24,7 +24,7 @@ Initialize a `SmartAccountClient` with your desired Chain and Transport using `c
 
 ```ts [createSmartAccountClient.ts]
 import { createSmartAccountClient } from "@alchemy/aa-core";
-import { createLightAccount } from "@alchemy/aa-accounts";
+import { createLightAccount } from "@account-kit/accounts";
 import { http } from "viem";
 import { sepolia } from "@alchemy/aa-core";
 

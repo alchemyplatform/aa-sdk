@@ -1,6 +1,6 @@
-import type { IPluginAbi } from "@alchemy/aa-accounts";
 import type { GetContractReturnType, PublicClient } from "viem";
 import type { Config, PluginConfig } from "../../config.js";
+import type { IPluginAbi } from "../../IPlugin.js";
 
 export type PhaseInput = {
   content: string[];

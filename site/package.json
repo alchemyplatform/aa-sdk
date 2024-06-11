@@ -12,7 +12,7 @@
     "@account-kit/core": "*",
     "@account-kit/react": "*",
     "@account-kit/state": "*",
-    "@alchemy/aa-accounts": "*",
+    "@account-kit/accounts": "*",
     "@alchemy/aa-core": "*",
     "@alchemy/aa-ethers": "*",
     "@alchemy/aa-signers": "*",

@@ -1,11 +1,11 @@
-import { createModularAccountAlchemyClient } from "@account-kit/core";
 import {
   SessionKeyAccessListType,
   SessionKeyPermissionsBuilder,
   SessionKeyPlugin,
   SessionKeySigner,
   sessionKeyPluginActions,
-} from "@alchemy/aa-accounts";
+} from "@account-kit/accounts";
+import { createModularAccountAlchemyClient } from "@account-kit/core";
 import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
 import { zeroHash } from "viem";
 

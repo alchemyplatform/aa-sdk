@@ -118,19 +118,23 @@ const addImports = (
 
   addImport("@alchemy/aa-core", { name: "ChainNotFoundError" });
   addImport("viem", { name: "encodeAbiParameters" });
-  addImport("@alchemy/aa-accounts", {
+  addImport("@account-kit/accounts", {
     name: "installPlugin as installPlugin_",
   });
   addImport("@alchemy/aa-core", {
     name: "GetAccountParameter",
     isType: true,
   });
-  addImport("@alchemy/aa-accounts", {
-    name: "FunctionReference",
+  addImport("@alchemy/aa-core", {
+    name: "GetEntryPointFromAccount",
     isType: true,
   });
-  addImport("@alchemy/aa-accounts", {
+  addImport("@alchemy/aa-core", {
     name: "UserOperationContext",
+    isType: true,
+  });
+  addImport("@account-kit/accounts", {
+    name: "FunctionReference",
     isType: true,
   });
   addImport("@alchemy/aa-core", { name: "GetContextParameter", isType: true });

@@ -3,7 +3,7 @@ import {
   SessionKeyPermissionsBuilder,
   SessionKeyPlugin,
   SessionKeySigner,
-} from "@alchemy/aa-accounts";
+} from "@account-kit/accounts";
 import { keccak256, zeroHash } from "viem";
 import { client } from "./base-client.js";
 

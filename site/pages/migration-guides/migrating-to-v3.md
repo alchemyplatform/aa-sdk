@@ -90,7 +90,7 @@ import {
   LightSmartContractAccount, // [!code --]
   createLightAccount, // [!code ++]
   getDefaultLightAccountFactoryAddress, // [!code --]
-} from "@alchemy/aa-accounts";
+} from "@account-kit/accounts";
 import {
   LocalAccountSigner,
   type Hex,
@@ -117,7 +117,7 @@ so that you don't have to pass the account to every method.
 #### Option 1: Passing the Account to the Client Methods
 
 ```ts
-import { createLightAccount } from "@alchemy/aa-accounts";
+import { createLightAccount } from "@account-kit/accounts";
 import {
   createBundlerClient,
   createSmartAccountClientFromExisting
@@ -162,7 +162,7 @@ const { hash } = await smartAccountClient.sendUserOperation({
 Hoisting the account is similar to using `.connect` in previous versions. You simply create your client with an account passed in to it.
 
 ```ts
-import { createLightAccount } from "@alchemy/aa-accounts";
+import { createLightAccount } from "@account-kit/accounts";
 import {
   createBundlerClient,
   createSmartAccountClientFromExisting

@@ -32,7 +32,11 @@ export const PluginActionsGenPhase: Phase = async (input) => {
     isType: true,
   });
   addImport("@alchemy/aa-core", {
-    name: "EntryPointVersion",
+    name: "GetEntryPointFromAccount",
+    isType: true,
+  });
+  addImport("@alchemy/aa-core", {
+    name: "UserOperationOverridesParameter",
     isType: true,
   });
   addImport("@alchemy/aa-core", {

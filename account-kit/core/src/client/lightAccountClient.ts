@@ -4,7 +4,7 @@ import {
   type CreateLightAccountParams,
   type LightAccount,
   type LightAccountClientActions,
-} from "@alchemy/aa-accounts";
+} from "@account-kit/accounts";
 import type { HttpTransport, SmartAccountSigner } from "@alchemy/aa-core";
 import { custom, type Chain, type CustomTransport, type Transport } from "viem";
 import { AlchemyProviderConfigSchema } from "../schema.js";

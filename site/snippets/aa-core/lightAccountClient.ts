@@ -1,7 +1,7 @@
 import {
   createLightAccount,
   lightAccountClientActions,
-} from "@alchemy/aa-accounts";
+} from "@account-kit/accounts";
 import {
   LocalAccountSigner,
   SmartAccountSigner,
