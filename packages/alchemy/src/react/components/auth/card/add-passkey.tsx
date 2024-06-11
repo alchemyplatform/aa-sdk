@@ -1,6 +1,5 @@
 import { useAddPasskey } from "../../../hooks/useAddPasskey.js";
 import {
-  PasskeyCloud,
   PasskeyIllustration,
   PasskeyShield,
   PasskeySmiley,
@@ -13,20 +12,15 @@ import { useCallback, type ReactNode } from "react";
 const BENEFITS = [
   {
     icon: <PasskeySmiley />,
-    title: "Ease of use",
-    description: "Enable quicker and easier logins with Face ID or Touch ID.",
+    title: "Simpler login",
+    description:
+      "Create a passkey to enable quick and easy login with Face ID or Touch ID.",
   },
   {
     icon: <PasskeyShield />,
     title: "Enhanced security",
     description:
-      "Prevent phishing and theft as the authentication data remains on the device.",
-  },
-  {
-    icon: <PasskeyCloud />,
-    title: "Cross-platform compatibility",
-    description:
-      "Work seamlessly across various devices and platforms with your device ID.",
+      "Prevent phishing and theft by registering a passkey with your device.",
   },
 ];
 

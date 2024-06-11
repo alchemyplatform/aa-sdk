@@ -21,7 +21,7 @@ export const Navigation = ({
         variant="link"
         onClick={onBack}
         disabled={!showBack}
-        className={showBack ? "text-fg-primary" : "invisible"}
+        className={showBack ? "text-fg-secondary" : "invisible"}
       >
         <BackArrow />
       </Button>
@@ -29,7 +29,7 @@ export const Navigation = ({
       <Button
         variant="link"
         onClick={onClose}
-        className={showClose ? "text-fg-primary" : "invisible"}
+        className={showClose ? "text-fg-secondary" : "invisible"}
       >
         <X />
       </Button>
