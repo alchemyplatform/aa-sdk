@@ -6,6 +6,6 @@ export default defineProject({
     globals: true,
     setupFiles: ["../../.vitest/setupTests.ts"],
     exclude: [...configDefaults.exclude, "**/e2e-tests/**/*.test.ts"],
-    name: "account-kit/state",
+    name: "account-kit/core",
   },
 });

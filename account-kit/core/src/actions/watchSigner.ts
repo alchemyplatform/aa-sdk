@@ -1,4 +1,4 @@
-import type { AlchemyWebSigner } from "@account-kit/infra";
+import type { AlchemyWebSigner } from "@account-kit/signer";
 import type { AlchemyAccountsConfig } from "../types";
 
 /**

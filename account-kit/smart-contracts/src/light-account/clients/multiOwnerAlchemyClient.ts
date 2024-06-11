@@ -1,4 +1,11 @@
 import {
+  AlchemyProviderConfigSchema,
+  createAlchemyPublicRpcClient,
+  createAlchemySmartAccountClientFromExisting,
+  type AlchemySmartAccountClient,
+  type AlchemySmartAccountClientConfig,
+} from "@account-kit/infra";
+import {
   createMultiOwnerLightAccount,
   multiOwnerLightAccountClientActions,
   type CreateMultiOwnerLightAccountParams,
@@ -7,13 +14,6 @@ import {
 } from "@account-kit/smart-contracts";
 import type { HttpTransport, SmartAccountSigner } from "@alchemy/aa-core";
 import { custom, type Chain, type CustomTransport, type Transport } from "viem";
-import { AlchemyProviderConfigSchema } from "../schema.js";
-import { createAlchemySmartAccountClientFromRpcClient } from "./internal/smartAccountClientFromRpc.js";
-import { createAlchemyPublicRpcClient } from "./rpcClient.js";
-import {
-  type AlchemySmartAccountClient,
-  type AlchemySmartAccountClientConfig,
-} from "./smartAccountClient.js";
 
 export type AlchemyMultiOwnerLightAccountClientConfig<
   TSigner extends SmartAccountSigner = SmartAccountSigner
@@ -59,7 +59,7 @@ export async function createMultiOwnerLightAccountAlchemyClient(
     ...config,
   });
 
-  return createAlchemySmartAccountClientFromRpcClient({
+  return createAlchemySmartAccountClientFromExisting({
     ...config,
     client,
     account,
