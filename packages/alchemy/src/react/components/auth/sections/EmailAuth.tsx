@@ -22,7 +22,7 @@ export const EmailAuth = ({
 }: EmailAuthProps) => {
   const { setAuthStep } = useAuthContext();
   const signer = useSigner();
-  const { authenticateAsync, error, isPending } = useAuthenticate({
+  const { authenticateAsync, isPending } = useAuthenticate({
     onMutate: async (params) => {
       if ("email" in params) {
         setAuthStep({ type: "email_verify", email: params.email });
@@ -67,7 +67,7 @@ export const EmailAuth = ({
         <form.Field
           name="email"
           validators={{
-            onBlur: z.string().email("Must provide a valid email."),
+            onChange: z.string().email("Must provide a valid email."),
           }}
         >
           {(field) => (
@@ -77,11 +77,6 @@ export const EmailAuth = ({
               onChange={(e) => field.handleChange(e.target.value)}
               onBlur={field.handleBlur}
               placeholder={placeholder}
-              error={
-                field.state.meta.touchedErrors.length
-                  ? field.state.meta.touchedErrors[0]?.toString()
-                  : error?.message
-              }
               iconLeft={<MailIcon />}
               iconRight={
                 hideButton ? (
@@ -98,14 +93,20 @@ export const EmailAuth = ({
           )}
         </form.Field>
         <form.Subscribe
-          selector={(state) => [state.canSubmit, state.isSubmitting]}
+          selector={(state) => [
+            state.canSubmit,
+            state.isSubmitting,
+            state.values.email,
+          ]}
         >
-          {([canSubmit, isSubmitting]) =>
+          {([canSubmit, isSubmitting, email]) =>
             !hideButton ? (
               <Button
                 type="submit"
                 variant="primary"
-                disabled={isPending || !canSubmit || isSubmitting}
+                disabled={Boolean(
+                  isPending || !canSubmit || isSubmitting || !email
+                )}
               >
                 {buttonLabel}
               </Button>
