@@ -5,7 +5,7 @@ description: Overview of the createLightAccountAlchemyClient factory in aa-alche
 
 # createLightAccountAlchemyClient
 
-`createLightAccountAlchemyClient` is a factory that improves the developer experience of connecting a Light Account to an `AlchemySmartAccountClient` via an optional dependency on the [`@account-kit/accounts`](https://github.com/alchemyplatform/aa-sdk/tree/development/packages/accounts) package. You can use this to directly instantiate an `AlchemySmartAccountClient` already connected to a Light Account in one line of code.
+`createLightAccountAlchemyClient` is a factory that improves the developer experience of connecting a Light Account to an `AlchemySmartAccountClient` via an optional dependency on the [`@account-kit/smart-contracts`](https://github.com/alchemyplatform/aa-sdk/tree/development/packages/accounts) package. You can use this to directly instantiate an `AlchemySmartAccountClient` already connected to a Light Account in one line of code.
 
 ## Usage
 

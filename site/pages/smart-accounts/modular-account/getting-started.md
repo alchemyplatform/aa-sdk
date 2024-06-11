@@ -45,16 +45,16 @@ If you want to use a signer to connect to an account whose address does not map 
 
 ### Install packages
 
-If you are using `@alchemy/aa-core`, you will also want to add `@account-kit/accounts` to get the Smart Account factory for Modular Account.
+If you are using `@alchemy/aa-core`, you will also want to add `@account-kit/smart-contracts` to get the Smart Account factory for Modular Account.
 
 :::code-group
 
 ```bash [npm]
-npm i @alchemy/aa-core @account-kit/accounts viem
+npm i @alchemy/aa-core @account-kit/smart-contracts viem
 ```
 
 ```bash [yarn]
-yarn add @alchemy/aa-core @account-kit/accounts viem
+yarn add @alchemy/aa-core @account-kit/smart-contracts viem
 ```
 
 :::
@@ -73,7 +73,7 @@ Above, we provide an account to our client directly. This allows us to set the a
 
 ### Add decorators
 
-The last step is optional but greatly improves the dev experience of interfacing with Modular Accounts. `@account-kit/accounts` exports several Modular Account decorators that you can extend your client with.
+The last step is optional but greatly improves the dev experience of interfacing with Modular Accounts. `@account-kit/smart-contracts` exports several Modular Account decorators that you can extend your client with.
 
 :::code-group
 
@@ -83,7 +83,7 @@ import {
   accountLoupeActions,
   multiOwnerPluginActions,
   pluginManagerActions,
-} from "@account-kit/accounts";
+} from "@account-kit/smart-contracts";
 
 const decoratedClient = smartAccountClient
   // provides methods for interacting with the multi-owner plugin that is installed by default

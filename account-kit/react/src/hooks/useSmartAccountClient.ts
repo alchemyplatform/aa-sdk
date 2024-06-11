@@ -1,5 +1,11 @@
 "use client";
 
+import type {
+  GetAccountParams,
+  SupportedAccount,
+  SupportedAccounts,
+  SupportedAccountTypes,
+} from "@account-kit/core";
 import {
   accountLoupeActions,
   createAlchemySmartAccountClientFromExisting,
@@ -15,13 +21,7 @@ import {
   type MultiOwnerModularAccount,
   type MultiOwnerPluginActions,
   type PluginManagerActions,
-} from "@account-kit/core";
-import type {
-  GetAccountParams,
-  SupportedAccount,
-  SupportedAccounts,
-  SupportedAccountTypes,
-} from "@account-kit/state";
+} from "@account-kit/infra";
 import { useMemo } from "react";
 import type { Address, Chain, Transport } from "viem";
 import { useAccount as wagmi_useAccount } from "wagmi";

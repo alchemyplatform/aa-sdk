@@ -2,7 +2,7 @@ import {
   getChain,
   setChain as setChainInternal,
   watchChain,
-} from "@account-kit/state";
+} from "@account-kit/core";
 import { useMutation } from "@tanstack/react-query";
 import { useSyncExternalStore } from "react";
 import type { Chain } from "viem";

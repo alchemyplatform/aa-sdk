@@ -1,4 +1,4 @@
-import { cookieToInitialState } from "@account-kit/state";
+import { cookieToInitialState } from "@account-kit/infra";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { headers } from "next/headers";

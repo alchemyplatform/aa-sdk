@@ -1,7 +1,7 @@
 "use client";
 
-import type { ClientWithAlchemyMethods } from "@account-kit/core";
-import { getBundlerClient, watchBundlerClient } from "@account-kit/state";
+import { getBundlerClient, watchBundlerClient } from "@account-kit/core";
+import type { ClientWithAlchemyMethods } from "@account-kit/infra";
 import { useSyncExternalStore } from "react";
 import { useAlchemyAccountContext } from "../context.js";
 

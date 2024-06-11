@@ -52,7 +52,7 @@ const transferredClient = await createLightAccountClient({
 
 :::
 
-Since `@account-kit/accounts` exports a `LightAccount` ABI, the above approach makes it easy to transfer ownership. That said, you can also directly call `sendUserOperation` to execute the ownership transfer. As you will see below, however, it is a bit verbose:
+Since `@account-kit/smart-contracts` exports a `LightAccount` ABI, the above approach makes it easy to transfer ownership. That said, you can also directly call `sendUserOperation` to execute the ownership transfer. As you will see below, however, it is a bit verbose:
 
 ### 2. Using `sendUserOperation`
 

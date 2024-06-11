@@ -1,4 +1,4 @@
-import type { SupportedAccounts } from "@account-kit/state";
+import type { SupportedAccounts } from "@account-kit/core";
 import { useMutation } from "@tanstack/react-query";
 import { useCallback } from "react";
 import type { Chain, Client, Transport } from "viem";

@@ -1,4 +1,4 @@
-import { createLightAccountClient } from "@account-kit/accounts";
+import { createLightAccountClient } from "@account-kit/smart-contracts";
 import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
 import { http } from "viem";
 

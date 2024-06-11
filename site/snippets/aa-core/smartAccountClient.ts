@@ -1,4 +1,4 @@
-import { createMultiOwnerModularAccount } from "@account-kit/accounts";
+import { createMultiOwnerModularAccount } from "@account-kit/smart-contracts";
 import {
   LocalAccountSigner,
   SmartAccountSigner,

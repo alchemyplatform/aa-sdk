@@ -1,7 +1,7 @@
 "use client";
 
-import type { AuthParams, User } from "@account-kit/core";
-import { ClientOnlyPropertyError } from "@account-kit/state";
+import { ClientOnlyPropertyError } from "@account-kit/core";
+import type { AuthParams, User } from "@account-kit/infra";
 import {
   useMutation,
   type UseMutateAsyncFunction,

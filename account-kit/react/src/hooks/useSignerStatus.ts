@@ -1,7 +1,7 @@
 "use client";
 
-import type { SignerStatus } from "@account-kit/state";
-import { getSignerStatus, watchSignerStatus } from "@account-kit/state";
+import type { SignerStatus } from "@account-kit/core";
+import { getSignerStatus, watchSignerStatus } from "@account-kit/core";
 import { useSyncExternalStore } from "react";
 import {
   useAlchemyAccountContext,

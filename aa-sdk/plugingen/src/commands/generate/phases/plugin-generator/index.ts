@@ -13,7 +13,7 @@ export const PluginGeneratorPhase: Phase = async (input) => {
     content: [],
   });
 
-  addImport("@account-kit/accounts", { name: "Plugin", isType: true });
+  addImport("@account-kit/smart-contracts", { name: "Plugin", isType: true });
 
   input.content.push(dedent`
     export const ${pluginConfig.name}: Plugin<typeof ${

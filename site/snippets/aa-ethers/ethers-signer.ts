@@ -1,4 +1,4 @@
-import { createLightAccount } from "@account-kit/accounts";
+import { createLightAccount } from "@account-kit/smart-contracts";
 import {
   LocalAccountSigner,
   SmartAccountSigner,

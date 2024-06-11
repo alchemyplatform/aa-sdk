@@ -1,5 +1,5 @@
-import { sessionKeyPluginActions } from "@account-kit/accounts";
-import { createModularAccountAlchemyClient } from "@account-kit/core";
+import { createModularAccountAlchemyClient } from "@account-kit/infra";
+import { sessionKeyPluginActions } from "@account-kit/smart-contracts";
 import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
 
 export const client = (

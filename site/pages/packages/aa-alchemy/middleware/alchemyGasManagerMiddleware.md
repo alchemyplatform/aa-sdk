@@ -13,7 +13,7 @@ description: Overview of the alchemyGasManagerMiddleware method in aa-alchemy
 import {
   alchemyGasManagerMiddleware,
   createAlchemyPublicRpcClient,
-} from "@account-kit/core";
+} from "@account-kit/infra";
 import { createSmartAccountClient } from "@alchemy/aa-core";
 import { http } from "viem";
 import { sepolia } from "viem/chains";

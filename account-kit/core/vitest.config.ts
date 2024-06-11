@@ -6,6 +6,6 @@ export default defineProject({
     globals: true,
     setupFiles: ["../../.vitest/setupTests.ts"],
     exclude: [...configDefaults.exclude, "**/e2e-tests/**/*.test.ts"],
-    name: "aa-alchemy",
+    name: "account-kit/state",
   },
 });

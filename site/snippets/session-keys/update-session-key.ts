@@ -1,4 +1,4 @@
-import { SessionKeyPermissionsBuilder } from "@account-kit/accounts";
+import { SessionKeyPermissionsBuilder } from "@account-kit/smart-contracts";
 import { client } from "./base-client.js";
 
 const result = await client.updateSessionKeyPermissions({

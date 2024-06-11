@@ -1,4 +1,4 @@
-import { AlchemySigner } from "@account-kit/core";
+import { AlchemySigner } from "@account-kit/infra";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 

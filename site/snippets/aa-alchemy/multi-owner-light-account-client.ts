@@ -1,4 +1,4 @@
-import { createMultiOwnerLightAccountAlchemyClient } from "@account-kit/core";
+import { createMultiOwnerLightAccountAlchemyClient } from "@account-kit/infra";
 import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
 
 export const lightAccountClient =

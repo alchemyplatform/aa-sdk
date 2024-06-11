@@ -90,7 +90,7 @@ import {
   LightSmartContractAccount, // [!code --]
   createLightAccount, // [!code ++]
   getDefaultLightAccountFactoryAddress, // [!code --]
-} from "@account-kit/accounts";
+} from "@account-kit/smart-contracts";
 import {
   LocalAccountSigner,
   type Hex,
@@ -117,7 +117,7 @@ so that you don't have to pass the account to every method.
 #### Option 1: Passing the Account to the Client Methods
 
 ```ts
-import { createLightAccount } from "@account-kit/accounts";
+import { createLightAccount } from "@account-kit/smart-contracts";
 import {
   createBundlerClient,
   createSmartAccountClientFromExisting
@@ -162,7 +162,7 @@ const { hash } = await smartAccountClient.sendUserOperation({
 Hoisting the account is similar to using `.connect` in previous versions. You simply create your client with an account passed in to it.
 
 ```ts
-import { createLightAccount } from "@account-kit/accounts";
+import { createLightAccount } from "@account-kit/smart-contracts";
 import {
   createBundlerClient,
   createSmartAccountClientFromExisting

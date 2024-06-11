@@ -55,7 +55,7 @@
   },
   "dependencies": {
     "@account-kit/core": "^3.18.2",
-    "@account-kit/state": "^3.18.2",
+    "@account-kit/infra": "^3.18.2",
     "@tanstack/react-form": "^0.19.4",
     "@tanstack/zod-form-adapter": "^0.19.4",
     "@wagmi/connectors": "^4.3.9",

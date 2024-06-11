@@ -118,7 +118,7 @@ const addImports = (
 
   addImport("@alchemy/aa-core", { name: "ChainNotFoundError" });
   addImport("viem", { name: "encodeAbiParameters" });
-  addImport("@account-kit/accounts", {
+  addImport("@account-kit/smart-contracts", {
     name: "installPlugin as installPlugin_",
   });
   addImport("@alchemy/aa-core", {
@@ -133,7 +133,7 @@ const addImports = (
     name: "UserOperationContext",
     isType: true,
   });
-  addImport("@account-kit/accounts", {
+  addImport("@account-kit/smart-contracts", {
     name: "FunctionReference",
     isType: true,
   });

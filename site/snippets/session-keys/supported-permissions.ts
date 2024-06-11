@@ -3,7 +3,7 @@ import {
   SessionKeyPermissionsBuilder,
   SessionKeyPlugin,
   SessionKeySigner,
-} from "@account-kit/accounts";
+} from "@account-kit/smart-contracts";
 import { keccak256, zeroHash } from "viem";
 import { client } from "./base-client.js";
 

@@ -86,7 +86,7 @@ This example updates a key's time range, but leaves other permissions to their c
 :::details[View the full set of supported permissions here]
 
 ```ts
-// [!include ~/../account-kit/accounts/src/msca/plugins/session-key/permissions.ts]
+// [!include ~/../account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts]
 ```
 
 :::

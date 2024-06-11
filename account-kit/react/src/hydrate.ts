@@ -4,7 +4,7 @@ import {
   hydrate,
   type AlchemyAccountsConfig,
   type AlchemyClientState,
-} from "@account-kit/state";
+} from "@account-kit/core";
 import { useEffect, useRef, type PropsWithChildren } from "react";
 
 export type HydrateProps = {

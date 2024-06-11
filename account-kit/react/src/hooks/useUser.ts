@@ -1,7 +1,7 @@
 "use client";
 
-import type { User } from "@account-kit/core";
-import { getUser, watchUser } from "@account-kit/state";
+import { getUser, watchUser } from "@account-kit/core";
+import type { User } from "@account-kit/infra";
 import { useMemo, useSyncExternalStore } from "react";
 import { useAccount as wagmi_useAccount } from "wagmi";
 import { useAlchemyAccountContext } from "../context.js";

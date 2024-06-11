@@ -1,7 +1,7 @@
 import {
   createLightAccount,
   lightAccountClientActions,
-} from "@account-kit/accounts";
+} from "@account-kit/smart-contracts";
 import {
   LocalAccountSigner,
   SmartAccountSigner,

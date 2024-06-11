@@ -3,7 +3,7 @@
 import type {
   AlchemyAccountsConfig,
   AlchemyClientState,
-} from "@account-kit/state";
+} from "@account-kit/core";
 import type { NoUndefined } from "@alchemy/aa-core";
 import { QueryClientProvider, type QueryClient } from "@tanstack/react-query";
 import {
@@ -140,7 +140,11 @@ export const AlchemyAccountProvider = (
           >
             {children}
             {uiConfig?.auth && (
-              <AuthModal auth={uiConfig.auth} hideError={uiConfig.hideError} ref={ref} />
+              <AuthModal
+                auth={uiConfig.auth}
+                hideError={uiConfig.hideError}
+                ref={ref}
+              />
             )}
           </AuthModalContext.Provider>
         </QueryClientProvider>

@@ -11,11 +11,10 @@
   "devDependencies": {
     "@account-kit/core": "*",
     "@account-kit/react": "*",
-    "@account-kit/state": "*",
-    "@account-kit/accounts": "*",
+    "@account-kit/infra": "*",
+    "@account-kit/smart-contracts": "*",
     "@alchemy/aa-core": "*",
     "@alchemy/aa-ethers": "*",
-    "@alchemy/aa-signers": "*",
     "autoprefixer": "^10.4.16",
     "execa": "^8.0.1",
     "tailwindcss": "^3.3.3",

@@ -8,7 +8,7 @@ import {
   type SupportedAccount,
   type SupportedAccounts,
   type SupportedAccountTypes,
-} from "@account-kit/state";
+} from "@account-kit/core";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useSyncExternalStore } from "react";
 import type { Address } from "viem";

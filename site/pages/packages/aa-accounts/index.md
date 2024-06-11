@@ -3,7 +3,7 @@ title: aa-accounts
 description: aa-accounts landing page and getting started guide
 ---
 
-# `@account-kit/accounts`
+# `@account-kit/smart-contracts`
 
 This package contains various implementations of the `BaseSmartContractAccount` class defined in `aa-core`. This repo is community maintained and we welcome contributions!
 
@@ -14,15 +14,15 @@ If you are already using the `@alchemy/aa-core` package, you can simply install 
 :::code-group
 
 ```bash [yarn]
-yarn add @account-kit/accounts
+yarn add @account-kit/smart-contracts
 ```
 
 ```bash [npm]
-npm i -s @account-kit/accounts
+npm i -s @account-kit/smart-contracts
 ```
 
 ```bash [pnpm]
-pnpm i @account-kit/accounts
+pnpm i @account-kit/smart-contracts
 ```
 
 :::

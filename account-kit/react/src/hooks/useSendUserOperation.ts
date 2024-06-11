@@ -1,6 +1,6 @@
 "use client";
 
-import type { SupportedAccounts } from "@account-kit/state";
+import type { SupportedAccounts } from "@account-kit/core";
 import type {
   EntryPointVersion,
   GetEntryPointFromAccount,
