@@ -1,0 +1,1 @@
+export const DOCS = 'https://accountkit.alchemy.com/getting-started/introduction.html'
