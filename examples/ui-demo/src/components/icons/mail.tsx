@@ -1,11 +1,10 @@
 import { SVGProps } from "react";
 
 export const MailIcon = ({
-    fill = "#475569",
+    fill = "currentColor",
     ...props
   }: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => (
     <svg
-      className="fill-fg-primary disabled:fill-fg-disabled"
       xmlns="http://www.w3.org/2000/svg"
       width={18}
       height={16}
