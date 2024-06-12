@@ -4,7 +4,7 @@
     "es2021": true,
     "node": true
   },
-  "plugins": ["import"],
+  "plugins": ["import", "eslint-rules"],
   "parserOptions": {
     "sourceType": "module"
   },
@@ -29,21 +29,8 @@
         "enableFixer": true
       }
     ],
-    "jsdoc/require-jsdoc": [
-      "warn",
-      {
-        "publicOnly": {
-          "ancestorsOnly": true
-        },
-        "enableFixer": false,
-        "require": {
-          "FunctionDeclaration": true,
-          "MethodDefinition": true,
-          "ClassDeclaration": true,
-          "ArrowFunctionExpression": true
-        }
-      }
-    ]
+    "jsdoc/require-jsdoc": "off",
+    "eslint-rules/require-jsdoc-on-reexported-functions": "error"
   },
   "overrides": [
     {
