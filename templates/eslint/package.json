@@ -1,0 +1,29 @@
+{
+  "name": "eslint-plugin-eslint-rules",
+  "version": "1.0.0",
+  "description": "custom eslint rules",
+  "private": "false",
+  "type": "module",
+  "main": "./dist/index.js",
+  "files": [
+    "./dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "rm -rf ./dist && tsc --project tsconfig.json --module commonjs --removeComments --verbatimModuleSyntax false && echo > ./dist/package.json '{\"type\":\"commonjs\"}'"
+  },
+  "devDependencies": {
+    "@types/eslint-utils": "^3.0.5",
+    "typescript-template": "*"
+  },
+  "dependencies": {
+    "eslint": "^8.39.0",
+    "typescript": "^5.0.4"
+  }
+}
