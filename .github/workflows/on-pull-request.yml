@@ -46,6 +46,10 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Build eslint plugin
+        run: |
+          cd templates/eslint && yarn build
+
       - uses: reviewdog/action-setup@v1
         with:
           reviewdog_version: latest
@@ -53,6 +57,9 @@ jobs:
       - name: Run eslint with reviewdog
         run: |
           npx --no-install -c "eslint -f=rdjson ." | reviewdog -f=rdjson -reporter=github-pr-review -filter-mode=added -tee
+      
+      - name: Run eslint for errors
+        run: yarn lint
 
   build_and_lint_and_test:
     name: Build and Test
