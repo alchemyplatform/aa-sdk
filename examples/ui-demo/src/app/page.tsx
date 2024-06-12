@@ -46,7 +46,7 @@ export default function Home() {
         <div className="flex flex-col flex-1 px-10 py-6 gap-6 w-full max-w-screen-2xl mx-auto">
           {/* Header */}
           <div className="flex justify-between items-center">
-            <h2 className="font-semibold text-xl">Account Kit Demo</h2>
+            <h2 className="font-semibold text-xl">Demo</h2>
             <div className="flex gap-4">
               <Button>
                 Integration call
