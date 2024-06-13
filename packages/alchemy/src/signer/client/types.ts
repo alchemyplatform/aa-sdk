@@ -6,7 +6,7 @@ export type CredentialCreationOptionOverrides = {
   publicKey?: Partial<CredentialCreationOptions["publicKey"]>;
 } & Pick<CredentialCreationOptions, "signal">;
 
-//#region User
+// [!region User]
 export type User = {
   email?: string;
   orgId: string;
@@ -14,7 +14,7 @@ export type User = {
   address: Address;
   credentialId?: string;
 };
-//#endregion User
+// [!endregion User]
 
 export type ExportWalletParams = {
   iframeContainerId: string;

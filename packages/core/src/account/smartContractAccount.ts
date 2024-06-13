@@ -80,7 +80,7 @@ export const isSmartAccountWithSigner = (
   return "getSigner" in account;
 };
 
-//#region SmartContractAccount
+// [!region SmartContractAccount]
 export type SmartContractAccount<
   Name extends string = string,
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion
@@ -106,7 +106,7 @@ export type SmartContractAccount<
   getEntryPoint: () => EntryPointDef<TEntryPointVersion>;
   getImplementationAddress: () => Promise<NullAddress | Address>;
 };
-//#endregion SmartContractAccount
+// [!endregion SmartContractAccount]
 
 export interface AccountEntryPointRegistry<Name extends string = string>
   extends EntryPointRegistryBase<
@@ -116,7 +116,7 @@ export interface AccountEntryPointRegistry<Name extends string = string>
   "0.7.0": SmartContractAccount<Name, "0.7.0">;
 }
 
-//#region ToSmartContractAccountParams
+// [!region ToSmartContractAccountParams]
 export type ToSmartContractAccountParams<
   Name extends string = string,
   TTransport extends Transport = Transport,
@@ -136,7 +136,7 @@ export type ToSmartContractAccountParams<
   signUserOperationHash?: (uoHash: Hex) => Promise<Hex>;
   encodeUpgradeToAndCall?: (params: UpgradeToAndCallParams) => Promise<Hex>;
 } & Omit<CustomSource, "signTransaction" | "address">;
-//#endregion ToSmartContractAccountParams
+// [!endregion ToSmartContractAccountParams]
 
 export const parseFactoryAddressFromAccountInitCode = (
   initCode: Hex
@@ -192,7 +192,7 @@ export const getAccountAddress = async ({
   throw new GetCounterFactualAddressError();
 };
 
-//#region toSmartContractAccount
+// [!region toSmartContractAccount]
 export async function toSmartContractAccount<
   Name extends string = string,
   TTransport extends Transport = Transport,
@@ -218,7 +218,7 @@ export async function toSmartContractAccount<
   TChain,
   TEntryPointVersion
 >): Promise<SmartContractAccount<Name, TEntryPointVersion>>;
-//#endregion toSmartContractAccount
+// [!endregion toSmartContractAccount]
 
 export async function toSmartContractAccount({
   transport,

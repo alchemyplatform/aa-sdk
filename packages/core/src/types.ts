@@ -31,7 +31,7 @@ export type Multiplier = z.input<typeof MultiplierSchema>;
 export type BigNumberish = z.input<typeof BigNumberishSchema>;
 export type BigNumberishRange = z.input<typeof BigNumberishRangeSchema>;
 
-//#region UserOperationCallData
+// [!region UserOperationCallData]
 export type UserOperationCallData =
   | {
       /* the target of the call */
@@ -42,11 +42,11 @@ export type UserOperationCallData =
       value?: bigint;
     }
   | Hex;
-//#endregion UserOperationCallData
+// [!endregion UserOperationCallData]
 
-//#region BatchUserOperationCallData
+// [!region BatchUserOperationCallData]
 export type BatchUserOperationCallData = Exclude<UserOperationCallData, Hex>[];
-//#endregion BatchUserOperationCallData
+// [!endregion BatchUserOperationCallData]
 
 export type UserOperationFeeOptionsField = z.input<
   typeof UserOperationFeeOptionsFieldSchema
@@ -67,7 +67,7 @@ export type UserOperationOverridesParameter<
   ? { overrides: UserOperationOverrides<TEntryPointVersion> }
   : { overrides?: UserOperationOverrides<TEntryPointVersion> };
 
-//#region UserOperationPaymasterOverrides
+// [!region UserOperationPaymasterOverrides]
 export type UserOperationPaymasterOverrides<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = TEntryPointVersion extends "0.6.0"
@@ -91,9 +91,9 @@ export type UserOperationPaymasterOverrides<
         | Multiplier;
     }
   : {};
-//#endregion UserOperationOverridesParameter
+// [!endregion UserOperationOverridesParameter]
 
-//#region UserOperationOverrides
+// [!region UserOperationOverrides]
 export type UserOperationOverrides<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = Partial<
@@ -133,9 +133,9 @@ export type UserOperationOverrides<
     stateOverride: StateOverride;
   } & UserOperationPaymasterOverrides<TEntryPointVersion>
 >;
-//#endregion UserOperationOverrides
+// [!endregion UserOperationOverrides]
 
-//#region UserOperationRequest_v6
+// [!region UserOperationRequest_v6]
 // represents the request as it needs to be formatted for v0.6 RPC requests
 // Reference: https://github.com/ethereum/ERCs/blob/8dd085d159cb123f545c272c0d871a5339550e79/ERCS/erc-4337.md#definitions
 export interface UserOperationRequest_v6 {
@@ -162,9 +162,9 @@ export interface UserOperationRequest_v6 {
   /* Data passed into the account along with the nonce during the verification step */
   signature: Hex;
 }
-//#endregion UserOperationRequest_v6
+// [!endregion UserOperationRequest_v6]
 
-//#region UserOperationRequest_v7
+// [!region UserOperationRequest_v7]
 // represents the request as it needs to be formatted for v0.7 RPC requests
 // Reference: https://eips.ethereum.org/EIPS/eip-4337#definitions
 export interface UserOperationRequest_v7 {
@@ -199,9 +199,9 @@ export interface UserOperationRequest_v7 {
   /* data passed into the account to verify authorization */
   signature: Hex;
 }
-//#endregion UserOperationRequest_v7
+// [!endregion UserOperationRequest_v7]
 
-//#region UserOperationRequest
+// [!region UserOperationRequest]
 // Reference: https://eips.ethereum.org/EIPS/eip-4337#definitions
 export type UserOperationRequest<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion
@@ -211,9 +211,9 @@ export type UserOperationRequest<
   ? UserOperationRequest_v7
   : never;
 
-//#endregion UserOperationRequest
+// [!endregion UserOperationRequest]
 
-//#region UserOperationEstimateGasResponse
+// [!region UserOperationEstimateGasResponse]
 export interface UserOperationEstimateGasResponse<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > {
@@ -232,9 +232,9 @@ export interface UserOperationEstimateGasResponse<
     ? BigNumberish | undefined
     : never;
 }
-//#endregion UserOperationEstimateGasResponse
+// [!endregion UserOperationEstimateGasResponse]
 
-//#region UserOperationResponse
+// [!region UserOperationResponse]
 export interface UserOperationResponse<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > {
@@ -249,9 +249,9 @@ export interface UserOperationResponse<
   /* the hash of the transaction that included the user operation */
   transactionHash: Hash;
 }
-//#endregion UserOperationResponse
+// [!endregion UserOperationResponse]
 
-//#region UserOperationReceipt
+// [!region UserOperationReceipt]
 export interface UserOperationReceipt {
   /* The request hash of the UserOperation. */
   userOpHash: Hash;
@@ -276,7 +276,7 @@ export interface UserOperationReceipt {
   /* The TransactionReceipt object for the entire bundle, not only for this UserOperation. */
   receipt: TransactionReceipt;
 }
-//#endregion UserOperationReceipt
+// [!endregion UserOperationReceipt]
 
 /** @deprecated use viem type TransactionReceipt instead */
 export interface UserOperationReceiptObject {
@@ -334,7 +334,7 @@ export interface UserOperationReceiptLog {
   transactionHash: Hash;
 }
 
-//#region UserOperationStruct_v6
+// [!region UserOperationStruct_v6]
 // https://github.com/eth-infinitism/account-abstraction/blob/releases/v0.6/test/UserOperation.ts
 // this is used for building requests for v0.6 entry point contract
 export interface UserOperationStruct_v6 {
@@ -361,9 +361,9 @@ export interface UserOperationStruct_v6 {
   /* Data passed into the account along with the nonce during the verification step */
   signature: BytesLike;
 }
-//#endregion UserOperationStruct_v6
+// [!endregion UserOperationStruct_v6]
 
-//#region UserOperationStruct_v7
+// [!region UserOperationStruct_v7]
 // based on https://github.com/eth-infinitism/account-abstraction/blob/releases/v0.7/test/UserOperation.ts
 // this is used for building requests for v0.7 entry point contract
 export interface UserOperationStruct_v7 {
@@ -398,9 +398,9 @@ export interface UserOperationStruct_v7 {
   /* data passed into the account to verify authorization */
   signature: BytesLike;
 }
-//#endregion UserOperationStruct_v7
+// [!endregion UserOperationStruct_v7]
 
-//#region UserOperationStruct
+// [!region UserOperationStruct]
 export type UserOperationStruct<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion
 > = TEntryPointVersion extends "0.6.0"
@@ -408,4 +408,4 @@ export type UserOperationStruct<
   : TEntryPointVersion extends "0.7.0"
   ? UserOperationStruct_v7
   : never;
-//#endregion UserOperationStruct
+// [!endregion UserOperationStruct]
