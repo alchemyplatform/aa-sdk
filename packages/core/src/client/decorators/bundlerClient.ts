@@ -4,6 +4,7 @@ import type {
   Client,
   Hash,
   PublicRpcSchema,
+  RpcStateOverride,
   StateOverride,
   Transport,
 } from "viem";
@@ -29,7 +30,7 @@ export type BundlerRpcSchema = [
   },
   {
     Method: "eth_estimateUserOperationGas";
-    Parameters: [UserOperationRequest, Address, StateOverride?];
+    Parameters: [UserOperationRequest, Address, RpcStateOverride?];
     ReturnType: UserOperationEstimateGasResponse;
   },
   {

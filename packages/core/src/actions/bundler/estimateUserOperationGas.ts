@@ -5,6 +5,7 @@ import type {
   UserOperationEstimateGasResponse,
   UserOperationRequest,
 } from "../../types";
+import { serializeStateOverride } from "../../utils/stateOverride.js";
 
 export const estimateUserOperationGas = async <
   TClient extends Client<Transport, Chain | undefined, any, BundlerRpcSchema>,
@@ -21,7 +22,11 @@ export const estimateUserOperationGas = async <
     method: "eth_estimateUserOperationGas",
     params:
       args.stateOverride != null
-        ? [args.request, args.entryPoint, args.stateOverride]
+        ? [
+            args.request,
+            args.entryPoint,
+            serializeStateOverride(args.stateOverride),
+          ]
         : [args.request, args.entryPoint],
   });
 };
