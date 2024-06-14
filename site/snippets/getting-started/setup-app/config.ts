@@ -1,4 +1,4 @@
-import { cookieStorage, createConfig } from "@alchemy/aa-alchemy/config";
+import { cookieStorage, createConfig } from "@account-kit/infra";
 import { arbitrumSepolia } from "@alchemy/aa-core";
 import { QueryClient } from "@tanstack/react-query";
 

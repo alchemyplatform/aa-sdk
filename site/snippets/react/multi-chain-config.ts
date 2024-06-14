@@ -1,4 +1,4 @@
-import { createConfig } from "@alchemy/aa-alchemy/config";
+import { createConfig } from "@account-kit/react";
 import { base, mainnet, sepolia } from "@alchemy/aa-core";
 
 // the examples use different routes for your chains and signer connection, but you can handle

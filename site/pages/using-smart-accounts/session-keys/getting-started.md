@@ -5,7 +5,7 @@ description: Learn how to use Alchemy's Session Key Plugin.
 
 # Getting started with Session Keys
 
-`@alchemy/aa-accounts` exports all of the definitions you need to use session keys with a Modular Account. We provide a simple `SessionKeySigner` class that generates session keys on the client and can be used as the `signer` for the Multi Owner Modular Account.
+`@account-kit/smart-contracts` exports all of the definitions you need to use session keys with a Modular Account. We provide a simple `SessionKeySigner` class that generates session keys on the client and can be used as the `signer` for the Multi Owner Modular Account.
 We also export the necessary decorators which can be used to extend your `SmartAccountClient` to make interacting with session keys easy.
 
 ## Usage
@@ -22,10 +22,10 @@ Let's take a look at a full example that demonstrates how to use session keys wi
 
 Session keys can be held on the client side or on a backend agent. Client side session keys are useful for skipping confirmations, and agent side keys are useful for automations.
 
-In the above example, we use a client-side key using the `SessionKeySigner` exported from `@alchemy/aa-accounts`.
+In the above example, we use a client-side key using the `SessionKeySigner` exported from `@account-kit/smart-contracts`.
 
 ```ts
-import { SessionKeySigner } from "@alchemy/aa-accounts";
+import { SessionKeySigner } from "@account-kit/smart-contracts";
 
 const sessionKeySigner = new SessionKeySigner();
 ```
@@ -34,7 +34,7 @@ If you are using backend agent controlled session keys, then the agent should ge
 
 ### Extend your client with Modular Account Decorators
 
-The base `SmartAccountClient` and `AlchemySmartAccountClient`, only include base functionality for sending user operations. If you are using a `ModularAccount`, then you will want to extend your client with the various decorators exported by `@alchemy/aa-accounts`.
+The base `SmartAccountClient` and `AlchemySmartAccountClient`, only include base functionality for sending user operations. If you are using a `ModularAccount`, then you will want to extend your client with the various decorators exported by `@account-kit/smart-contracts`.
 
 :::code-group
 
@@ -45,7 +45,7 @@ import {
   multiOwnerPluginActions,
   sessionKeyPluginActions,
   pluginManagerActions,
-} from "@alchemy/aa-accounts";
+} from "@account-kit/smart-contracts";
 
 const extendedClient = smartAccountClient
   .extend()
