@@ -1,4 +1,3 @@
-// core exports
 export type * from "./actions/simulateUserOperationChanges.js";
 export { simulateUserOperationChanges } from "./actions/simulateUserOperationChanges.js";
 export type * from "./actions/types.js";
@@ -9,14 +8,6 @@ export type * from "./client/decorators/smartAccount.js";
 export { alchemyActions } from "./client/decorators/smartAccount.js";
 export { createAlchemySmartAccountClientFromRpcClient as createAlchemySmartAccountClientFromExisting } from "./client/internal/smartAccountClientFromRpc.js";
 export { isAlchemySmartAccountClient } from "./client/isAlchemySmartAccountClient.js";
-export type * from "./client/lightAccountClient.js";
-export { createLightAccountAlchemyClient } from "./client/lightAccountClient.js";
-export type * from "./client/modularAccountClient.js";
-export { createModularAccountAlchemyClient } from "./client/modularAccountClient.js";
-export type * from "./client/multiOwnerLightAccountClient.js";
-export { createMultiOwnerLightAccountAlchemyClient } from "./client/multiOwnerLightAccountClient.js";
-export type * from "./client/multisigAccountClient.js";
-export { createMultisigAccountAlchemyClient } from "./client/multisigAccountClient.js";
 export type * from "./client/rpcClient.js";
 export { createAlchemyPublicRpcClient } from "./client/rpcClient.js";
 export type * from "./client/smartAccountClient.js";
@@ -31,41 +22,3 @@ export { alchemyUserOperationSimulator } from "./middleware/userOperationSimulat
 export type * from "./schema.js";
 export { AlchemyProviderConfigSchema } from "./schema.js";
 export type { AlchemyProviderConfig } from "./type.js";
-
-// Accounts
-export type * from "@account-kit/smart-contracts";
-export {
-  MultiOwnerPlugin,
-  MultisigPlugin,
-  MultisigPluginAbi,
-  MultisigPluginExecutionFunctionAbi,
-  SessionKeyAccessListType,
-  SessionKeyPermissionsBuilder,
-  SessionKeyPlugin,
-  SessionKeyPluginAbi,
-  SessionKeyPluginExecutionFunctionAbi,
-  SessionKeySigner,
-  accountLoupeActions,
-  createLightAccount,
-  createMultiOwnerModularAccount as createModularAccount,
-  createMultiOwnerLightAccount,
-  createMultisigModularAccount,
-  getMAInitializationData,
-  getMSCAUpgradeToData,
-  lightAccountClientActions,
-  multiOwnerLightAccountClientActions,
-  multiOwnerPluginActions,
-  multisigPluginActions,
-  multisigSignatureMiddleware,
-  pluginManagerActions,
-  sessionKeyPluginActions,
-} from "@account-kit/smart-contracts";
-
-// Signer
-export type * from "./signer/index.js";
-export {
-  AlchemySignerStatus,
-  AlchemySignerWebClient,
-  AlchemyWebSigner,
-  DEFAULT_SESSION_MS,
-} from "./signer/index.js";

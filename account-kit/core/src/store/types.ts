@@ -1,11 +1,11 @@
+import type { ClientWithAlchemyMethods } from "@account-kit/infra";
 import type {
   AlchemySignerParams,
   AlchemySignerStatus,
   AlchemySignerWebClient,
   AlchemyWebSigner,
-  ClientWithAlchemyMethods,
   User,
-} from "@account-kit/infra";
+} from "@account-kit/signer";
 import type { State as WagmiState } from "@wagmi/core";
 import type { Address, Chain } from "viem";
 import type { PartialBy } from "viem/chains";

@@ -29,11 +29,50 @@ export type * from "./actions/watchSignerStatus.js";
 export { watchSignerStatus } from "./actions/watchSignerStatus.js";
 export type * from "./actions/watchUser.js";
 export { watchUser } from "./actions/watchUser.js";
-export { DEFAULT_IFRAME_CONTAINER_ID, createConfig } from "./createConfig.js";
 export type * from "./createConfig.js";
+export { DEFAULT_IFRAME_CONTAINER_ID, createConfig } from "./createConfig.js";
 export { ClientOnlyPropertyError } from "./errors.js";
 export { hydrate } from "./hydrate.js";
 export { defaultAccountState } from "./store/client.js";
 export type { SignerStatus } from "./store/types.js";
 export type * from "./types.js";
 export { cookieStorage, cookieToInitialState } from "./utils/cookies.js";
+
+/** Re-export core packages to make it easier to use this package without the lower level packages */
+// Accounts
+export type * from "@account-kit/smart-contracts";
+export {
+  MultiOwnerPlugin,
+  MultisigPlugin,
+  MultisigPluginAbi,
+  MultisigPluginExecutionFunctionAbi,
+  SessionKeyAccessListType,
+  SessionKeyPermissionsBuilder,
+  SessionKeyPlugin,
+  SessionKeyPluginAbi,
+  SessionKeyPluginExecutionFunctionAbi,
+  SessionKeySigner,
+  accountLoupeActions,
+  createLightAccount,
+  createMultiOwnerModularAccount as createModularAccount,
+  createMultiOwnerLightAccount,
+  createMultisigModularAccount,
+  getMAInitializationData,
+  getMSCAUpgradeToData,
+  lightAccountClientActions,
+  multiOwnerLightAccountClientActions,
+  multiOwnerPluginActions,
+  multisigPluginActions,
+  multisigSignatureMiddleware,
+  pluginManagerActions,
+  sessionKeyPluginActions,
+} from "@account-kit/smart-contracts";
+
+// Infra
+export type * from "@account-kit/infra";
+export {
+  createAlchemySmartAccountClient,
+  createAlchemySmartAccountClientFromExisting,
+  type AlchemySmartAccountClient,
+  type AlchemySmartAccountClientConfig,
+} from "@account-kit/infra";
