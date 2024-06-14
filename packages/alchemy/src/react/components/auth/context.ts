@@ -5,6 +5,7 @@ export type AuthStep =
   | { type: "email_verify"; email: string }
   | { type: "passkey_verify"; error?: Error }
   | { type: "passkey_create" }
+  | { type: "passkey_create_success" }
   | { type: "email_completing"; createPasskeyAfter?: boolean }
   | { type: "initial" }
   | { type: "complete" }

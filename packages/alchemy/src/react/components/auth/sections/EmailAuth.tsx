@@ -10,6 +10,7 @@ import { IS_SIGNUP_QP } from "../../constants.js";
 import { Input } from "../../input.js";
 import { useAuthContext } from "../context.js";
 import type { AuthType } from "../types.js";
+import { ls } from "../../../strings.js";
 
 type EmailAuthProps = Extract<AuthType, { type: "email" }>;
 
@@ -17,8 +18,8 @@ type EmailAuthProps = Extract<AuthType, { type: "email" }>;
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const EmailAuth = ({
   hideButton = false,
-  buttonLabel = "Continue",
-  placeholder = "Email",
+  buttonLabel = ls.login.email.button,
+  placeholder = ls.login.email.placeholder,
 }: EmailAuthProps) => {
   const { setAuthStep } = useAuthContext();
   const signer = useSigner();

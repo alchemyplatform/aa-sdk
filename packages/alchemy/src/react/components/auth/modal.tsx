@@ -24,7 +24,7 @@ export const AuthModal = forwardRef<HTMLDialogElement, AuthModalProps>(
           header={auth.header}
           sections={auth.sections}
           onAuthSuccess={() => closeAuthModal()}
-          showNavigation
+          showClose
         />
         <div className="modal-backdrop" onClick={() => closeAuthModal()} />
       </dialog>

@@ -11,15 +11,14 @@ import {
   useUser,
 } from "@alchemy/aa-alchemy/react";
 // eslint-disable-next-line import/extensions
-import { ChevronRight } from "@/src/components/icons/chevron";
-import { MailIcon } from "@/src/components/icons/mail";
-import { Input, useLogout } from "@alchemy/aa-alchemy/react";
+import { useLogout } from "@alchemy/aa-alchemy/react";
 import { useMemo } from "react";
 import { TopNav } from "../components/topnav/TopNav";
 import { Button } from "../components/shared/Button";
 import { PhoneIcon } from "lucide-react";
 import { ArrowUpRightIcon } from "../components/icons/arrow";
 import { Configuration } from "../components/configuration";
+import { useConfig } from "./state";
 
 const publicSans = Public_Sans({
   subsets: ["latin"],
@@ -27,15 +26,18 @@ const publicSans = Public_Sans({
 });
 
 export default function Home() {
-  const sections = useMemo<AuthType[][]>(
-    () => [[{ type: "email", hideButton: true }], [{ type: "passkey" }]],
-    []
-  );
+  const { config } = useConfig();
 
-  const { openAuthModal } = useAuthModal();
-  const error = useAuthError();
-  const user = useUser();
-  const { logout } = useLogout();
+  const sections = useMemo<AuthType[][]>(() => {
+    const output = [];
+    if (config.auth.showEmail) {
+      output.push([{ type: "email" as const, hideButton: true }]);
+    }
+
+    output.push([{ type: "passkey" as const }]);
+
+    return output;
+  }, [config.auth]);
 
   return (
     <>
@@ -64,8 +66,19 @@ export default function Home() {
             <div className="flex flex-col flex-1 bg-white border border-static rounded-lg p-6">
               <Configuration />
             </div>
-            <div className="flex-[2] bg-white border border-static rounded-lg">
-
+            <div
+              className="flex-[2] bg-white border border-static rounded-lg flex flex-col justify-center items-center"
+              style={{
+                backgroundImage: "url(/images/grid.png)",
+                backgroundSize: "100px",
+                backgroundRepeat: "repeat",
+              }}
+            >
+              <div className="flex flex-col gap-2 w-[368px]">
+                <div className="modal bg-white shadow-md">
+                  <AuthCard showNavigation sections={sections} />
+                </div>
+              </div>
             </div>
           </div>
         </div>

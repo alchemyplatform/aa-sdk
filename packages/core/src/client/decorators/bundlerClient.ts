@@ -4,6 +4,7 @@ import type {
   Client,
   Hash,
   PublicRpcSchema,
+  RpcStateOverride,
   StateOverride,
   Transport,
 } from "viem";
@@ -29,7 +30,7 @@ export type BundlerRpcSchema = [
   },
   {
     Method: "eth_estimateUserOperationGas";
-    Parameters: [UserOperationRequest, Address, StateOverride?];
+    Parameters: [UserOperationRequest, Address, RpcStateOverride?];
     ReturnType: UserOperationEstimateGasResponse;
   },
   {
@@ -49,7 +50,7 @@ export type BundlerRpcSchema = [
   }
 ];
 
-//#region BundlerActions
+// [!region BundlerActions]
 export type BundlerActions = {
   /**
    * calls `eth_estimateUserOperationGas` and  returns the result
@@ -104,7 +105,7 @@ export type BundlerActions = {
    */
   getSupportedEntryPoints(): Promise<Address[]>;
 };
-//#endregion BundlerActions
+// [!endregion BundlerActions]
 
 export const bundlerActions: <
   TClient extends Client<

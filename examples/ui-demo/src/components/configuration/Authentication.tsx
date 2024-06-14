@@ -5,11 +5,20 @@ import { MailIcon } from "../icons/mail"
 import { WalletIcon } from "../icons/wallet"
 import { SocialIcon } from "../icons/social"
 import { BiometricIcon } from "../icons/biometric"
+import { Config, useConfig } from "@/src/app/state"
 
 export const Authentication = ({ className }: { className?: string }) => {
-  const [emailActive, setEmailActive] = useState(true)
-  const [walletsActive, setWalletsActive] = useState(false)
-  const [passkeysActive, setPasskeysActive] = useState(false)
+  const { config, setConfig } = useConfig()
+
+  const updateAuthConfig = (key: keyof Config['auth']) => (isActive: boolean) => {
+    setConfig((prev) => ({
+      ...prev,
+      auth: {
+        ...prev.auth,
+        [key]: isActive,
+      }
+    }))
+  }
 
   return (
     <div className={cn('flex flex-col gap-6', className)}>
@@ -18,14 +27,14 @@ export const Authentication = ({ className }: { className?: string }) => {
         <AuthMethod
           icon={<MailIcon />}
           name="Email"
-          active={emailActive}
+          active={config.auth.showEmail}
           disabled
         />
         <AuthMethod
           icon={<WalletIcon />}
           name="External wallets"
-          active={walletsActive}
-          setActive={setWalletsActive}
+          active={config.auth.showExternalWallets}
+          setActive={updateAuthConfig('showExternalWallets')}
         />
         <AuthMethod
           icon={<SocialIcon className="opacity-50" />}
@@ -40,8 +49,8 @@ export const Authentication = ({ className }: { className?: string }) => {
           icon={<BiometricIcon />}
           name="Add passkey on signup"
           details={<p className="text-xs font-secondary-foreground">Prompt users to add a passkey after signing up with <span className="font-bold">email</span> or <span className="font-bold">social auth</span></p>}
-          active={passkeysActive}
-          setActive={setPasskeysActive}
+          active={config.auth.addPasskey}
+          setActive={updateAuthConfig('addPasskey')}
         />
       </div>
     </div>

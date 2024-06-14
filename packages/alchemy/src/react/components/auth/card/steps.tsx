@@ -4,6 +4,7 @@ import { EoaConnectCard } from "./eoa.js";
 import type { AuthCardProps } from "./index.js";
 import { LoadingAuth } from "./loading/index.js";
 import { MainAuthContent } from "./main.js";
+import { PasskeyAdded } from "./passkey-added.js";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const Step = (props: AuthCardProps) => {
@@ -16,6 +17,8 @@ export const Step = (props: AuthCardProps) => {
       return <LoadingAuth context={authStep} />;
     case "passkey_create":
       return <AddPasskey />;
+    case "passkey_create_success":
+      return <PasskeyAdded />;
     case "eoa_connect":
       return <EoaConnectCard authStep={authStep} />;
     case "complete":

@@ -30,8 +30,9 @@ export type AuthCardProps = {
  * @returns a react component containing the AuthCard
  */
 export const AuthCard = (
-  props: AuthCardProps & { showNavigation?: boolean }
+  props: AuthCardProps & { showNavigation?: boolean; showClose?: boolean }
 ) => {
+  const { showClose = false, onAuthSuccess, hideError } = props;
   const { closeAuthModal } = useAuthModal();
   const { status, isAuthenticating } = useSignerStatus();
   const { authStep, setAuthStep } = useAuthContext();
@@ -54,7 +55,7 @@ export const AuthCard = (
 
   useLayoutEffect(() => {
     if (authStep.type === "complete") {
-      props.onAuthSuccess?.();
+      onAuthSuccess?.();
     } else if (isAuthenticating && authStep.type === "initial") {
       const urlParams = new URLSearchParams(window.location.search);
 
@@ -63,7 +64,7 @@ export const AuthCard = (
         createPasskeyAfter: urlParams.get(IS_SIGNUP_QP) === "true",
       });
     }
-  }, [authStep, status, props, isAuthenticating, setAuthStep]);
+  }, [authStep, status, isAuthenticating, setAuthStep, onAuthSuccess]);
 
   return (
     <div className="relative">
@@ -71,14 +72,15 @@ export const AuthCard = (
         id="akui-default-error-container"
         className="absolute bottom-[calc(100%+8px)] w-full"
       >
-        {!props.hideError && error && error.message && (
+        {!hideError && error && error.message && (
           <Notification message={error.message} type="error" />
         )}
       </div>
       <div className="modal-box relative flex flex-col items-center gap-5 text-fg-primary">
-        {props.showNavigation && (
+        {(canGoBack || showClose) && (
           <Navigation
-            showingBack={canGoBack}
+            showClose={showClose}
+            showBack={canGoBack}
             onBack={onBack}
             onClose={closeAuthModal}
           />
