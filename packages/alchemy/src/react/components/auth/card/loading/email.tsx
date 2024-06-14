@@ -6,6 +6,7 @@ import { Button } from "../../../button.js";
 import { PoweredBy } from "../../../poweredby.js";
 import { useAuthContext, type AuthStep } from "../../context.js";
 import { Spinner } from "../../../../icons/spinner.js";
+import { ls } from "../../../../strings.js";
 
 interface LoadingEmailProps {
   context: Extract<AuthStep, { type: "email_verify" }>;
@@ -37,9 +38,9 @@ export const LoadingEmail = ({ context }: LoadingEmailProps) => {
         <MailIllustration />
       </div>
 
-      <h3 className="font-semibold text-lg">Check your email</h3>
+      <h3 className="font-semibold text-lg">{ls.loadingEmail.title}</h3>
       <p className="text-fg-secondary text-center text-sm">
-        We sent a verification link to
+        {ls.loadingEmail.verificationSent}
         <br />
         <span className="font-medium">{context.email}</span>
       </p>
@@ -47,7 +48,7 @@ export const LoadingEmail = ({ context }: LoadingEmailProps) => {
       <div className="flex flex-col w-full items-center gap-1">
         <div className="flex items-center justify-center py-2 gap-x-2">
           <p className="text-fg-tertiary text-xs">
-            Didn&apos;t receive the email?
+            {ls.loadingEmail.emailNotReceived}
           </p>
           <Button
             variant="link"
@@ -60,7 +61,7 @@ export const LoadingEmail = ({ context }: LoadingEmailProps) => {
               setEmailResent(true);
             }}
           >
-            {emailResent ? "Done!" : "Resend"}
+            {emailResent ? ls.loadingEmail.resent : ls.loadingEmail.resend}
           </Button>
         </div>
         <PoweredBy />
@@ -93,8 +94,7 @@ export const CompletingEmailAuth = ({ context }: CompletingEmailAuthProps) => {
       </div>
 
       <p className="text-fg-secondary text-center text-sm">
-        Your email verification is almost complete. Please wait a few seconds
-        for this to screen to update.
+        {ls.completingEmail.body}
       </p>
 
       <PoweredBy />

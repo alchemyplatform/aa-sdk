@@ -3,6 +3,7 @@ import { Divider } from "../../divider.js";
 import { PoweredBy } from "../../poweredby.js";
 import { AuthSection } from "../sections/AuthSection.js";
 import type { AuthCardProps } from "./index.js";
+import { ls } from "../../../strings.js";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const MainAuthContent = ({
@@ -26,12 +27,12 @@ export const MainAuthContent = ({
       })}
       <div className="flex flex-col w-full items-center gap-1">
         <p className="text-fg-tertiary text-center text-xs py-2">
-          By signing in, you agree to the{" "}
+          {`${ls.login.tosPrefix} `}
           <a
             className="text-fg-accent-brand cursor-pointer underline"
             href="https://www.alchemy.com/terms-conditions/end-user-terms"
           >
-            Terms of Service
+            {ls.login.tosLink}
           </a>
         </p>
         <PoweredBy />

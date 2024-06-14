@@ -4,6 +4,7 @@ import {
   PasskeyShield,
   PasskeySmiley,
 } from "../../../icons/passkey.js";
+import { ls } from "../../../strings.js";
 import { Button } from "../../button.js";
 import { PoweredBy } from "../../poweredby.js";
 import { useAuthContext } from "../context.js";
@@ -11,15 +12,13 @@ import { useAuthContext } from "../context.js";
 const BENEFITS = [
   {
     icon: <PasskeySmiley />,
-    title: "Simpler login",
-    description:
-      "Create a passkey to enable quick and easy login with Face ID or Touch ID.",
+    title: ls.addPasskey.simplerLoginTitle,
+    description: ls.addPasskey.simplerLoginDescription,
   },
   {
     icon: <PasskeyShield />,
-    title: "Enhanced security",
-    description:
-      "Prevent phishing and theft by registering a passkey with your device.",
+    title: ls.addPasskey.enhancedSecurityTitle,
+    description: ls.addPasskey.enhancedSecurityDescription,
   },
 ];
 
@@ -38,7 +37,7 @@ export const AddPasskey = () => {
         <PasskeyIllustration />
       </div>
 
-      <h3 className="font-semibold text-lg">Add a passkey</h3>
+      <h3 className="font-semibold text-lg">{ls.addPasskey.title}</h3>
 
       <div className="flex flex-col w-full gap-3">
         {BENEFITS.map(({ title, icon, description }) => (
@@ -60,14 +59,14 @@ export const AddPasskey = () => {
           onClick={() => addPasskey()}
           disabled={isAddingPasskey}
         >
-          Continue
+          {ls.addPasskey.continue}
         </Button>
         <Button
           variant="secondary"
           onClick={() => setAuthStep({ type: "complete" })}
           disabled={isAddingPasskey}
         >
-          Skip
+          {ls.addPasskey.skip}
         </Button>
       </div>
       <PoweredBy />
