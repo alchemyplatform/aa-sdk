@@ -5,7 +5,7 @@ import {
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import { custom, type Chain } from "viem";
-import { createLightAccountClient } from "../clients/lightAccount.js";
+import { createLightAccountClient } from "../clients/client.js";
 import type { LightAccountVersion } from "../types.js";
 import { AccountVersionRegistry } from "../utils.js";
 

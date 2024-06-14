@@ -1,7 +1,7 @@
 "use client";
 
 import { getSigner, watchSigner } from "@account-kit/core";
-import type { AlchemyWebSigner } from "@account-kit/infra";
+import type { AlchemyWebSigner } from "@account-kit/signer";
 import { useSyncExternalStore } from "react";
 import { useAlchemyAccountContext } from "../context.js";
 

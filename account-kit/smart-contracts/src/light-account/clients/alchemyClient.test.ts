@@ -1,21 +1,23 @@
+import {
+  alchemyEnhancedApiActions,
+  createAlchemySmartAccountClient,
+} from "@account-kit/infra";
 import * as AACoreModule from "@alchemy/aa-core";
 import {
-  arbitrumSepolia,
   LocalAccountSigner,
+  polygonMumbai,
   type BatchUserOperationCallData,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import { Alchemy, Network } from "alchemy-sdk";
 import { avalanche, type Chain } from "viem/chains";
-import { alchemyEnhancedApiActions } from "./decorators/alchemyEnhancedApis.js";
-import { createMultiOwnerLightAccountAlchemyClient } from "./multiOwnerLightAccountClient.js";
-import { createAlchemySmartAccountClient } from "./smartAccountClient.js";
+import { createLightAccountAlchemyClient } from "./alchemyClient.js";
 
-describe("MultiOwnerLightAccount Client Tests", () => {
+describe("Light Account Client Tests", () => {
   const dummyMnemonic =
     "test test test test test test test test test test test test";
   const signer = LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
-  const chain = arbitrumSepolia;
+  const chain = polygonMumbai;
 
   it("should have a JWT property", async () => {
     const spy = vi.spyOn(AACoreModule, "createBundlerClient");
@@ -45,7 +47,7 @@ describe("MultiOwnerLightAccount Client Tests", () => {
         "retryDelay": 150,
         "timeout": 10000,
         "type": "http",
-        "url": "https://arb-sepolia.g.alchemy.com/v2/",
+        "url": "https://polygon-mumbai.g.alchemy.com/v2/",
       }
     `
     );
@@ -133,7 +135,7 @@ describe("MultiOwnerLightAccount Client Tests", () => {
     signer: SmartAccountSigner;
     chain: Chain;
   }) =>
-    createMultiOwnerLightAccountAlchemyClient({
+    createLightAccountAlchemyClient({
       jwt: "test",
       signer,
       chain,
