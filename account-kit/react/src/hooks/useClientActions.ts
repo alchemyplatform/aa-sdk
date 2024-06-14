@@ -1,0 +1,168 @@
+import type { SupportedAccounts } from "@account-kit/core";
+import { useMutation } from "@tanstack/react-query";
+import { useCallback } from "react";
+import type { Chain, Client, Transport } from "viem";
+import { ClientUndefinedHookError } from "../errors.js";
+import type { UseSmartAccountClientResult } from "./useSmartAccountClient";
+
+export type UseClientActionsProps<
+  TTransport extends Transport = Transport,
+  TChain extends Chain | undefined = Chain | undefined,
+  TActions extends { [x: string]: (...args: any[]) => unknown } = {
+    [x: string]: (...args: any[]) => unknown;
+  }
+> = {
+  client?: UseSmartAccountClientResult<
+    TTransport,
+    TChain,
+    SupportedAccounts
+  >["client"];
+  actions: (client: Client<TTransport, TChain, SupportedAccounts>) => TActions;
+};
+
+export type UseClientActionsResult<
+  TActions extends { [x: string]: (...args: any[]) => unknown } = {
+    [x: string]: (...args: any[]) => unknown;
+  }
+> = {
+  executeAction: <TFunctionName extends ExecutableFunctionName<TActions>>(
+    params: ClientActionParameters<TActions, TFunctionName>
+  ) => void;
+  executeActionAsync: <TFunctionName extends ExecutableFunctionName<TActions>>(
+    params: ClientActionParameters<TActions, TFunctionName>
+  ) => Promise<ExecuteableFunctionResult<TFunctionName>>;
+  data: ReturnType<TActions[keyof TActions]> | undefined;
+  isExecutingAction: boolean;
+  error?: Error | null;
+};
+
+export type ExecutableFunctionName<
+  TActions extends { [x: string]: (...args: any[]) => unknown } = {
+    [x: string]: (...args: any[]) => unknown;
+  }
+> = keyof TActions extends infer functionName extends string
+  ? [functionName] extends [never]
+    ? string
+    : functionName
+  : string;
+
+export type ExecuteableFunctionResult<
+  TFunctionName extends ExecutableFunctionName<TActions>,
+  TActions extends { [x: string]: (...args: any[]) => unknown } = {
+    [x: string]: (...args: any[]) => unknown;
+  }
+> = ReturnType<TActions[TFunctionName]>;
+
+export type ExecutableFunctionArgs<
+  TActions extends { [x: string]: (...args: any[]) => unknown } = {
+    [x: string]: (...args: any[]) => unknown;
+  },
+  TFunctionName extends ExecutableFunctionName<TActions> = ExecutableFunctionName<TActions>
+> = Parameters<TActions[TFunctionName]>;
+
+// All of this is based one how viem's `encodeFunctionData` works
+export type ClientActionParameters<
+  TActions extends { [x: string]: (...args: any[]) => unknown } = {
+    [x: string]: (...args: any[]) => unknown;
+  },
+  TFunctionName extends ExecutableFunctionName<TActions> = ExecutableFunctionName<TActions>,
+  allArgs = ExecutableFunctionArgs<
+    TActions,
+    TFunctionName extends ExecutableFunctionName<TActions>
+      ? TFunctionName
+      : ExecutableFunctionName<TActions>
+  >
+> = {
+  functionName: TFunctionName;
+  args: allArgs;
+};
+
+/**
+ * A hook that allows you to leverage client decorators to execute actions
+ * and await them in your UX. This is particularly useful for using Plugins
+ * with Modular Accounts.
+ *
+ * @example
+ * ```tsx
+ * const Foo = () => {
+ *  const { client } = useSmartAccountClient({ type: "MultiOwnerModularAccount" });
+ *  const { executeAction } = useClientActions({
+ *    client,
+ *    pluginActions: sessionKeyPluginActions,
+ *  });
+ *
+ *  executeAction({
+ *    functionName: "isAccountSessionKey",
+ *    args: [{ key: "0x0" }],
+ *  });
+ * };
+ * ```
+ *
+ * @param args the hooks arguments highlighted below
+ * @param args.client the smart account client returned from {@link useSmartAccountClient}
+ * @param args.actions the smart account client decorator you want to execute actions from
+ * @returns an object containing methods to execute the actions as well loading and error states (see: {@link UseClientActionsResult})
+ */
+export function useClientActions<
+  TTransport extends Transport = Transport,
+  TChain extends Chain | undefined = Chain | undefined,
+  TActions extends { [x: string]: (...args: any[]) => any } = {
+    [x: string]: (...args: any[]) => any;
+  }
+>(
+  args: UseClientActionsProps<TTransport, TChain, TActions>
+): UseClientActionsResult<TActions> {
+  const { client, actions } = args;
+
+  const {
+    mutate,
+    isPending: isExecutingAction,
+    error,
+    mutateAsync,
+    data,
+  } = useMutation<
+    ReturnType<TActions[keyof TActions]>,
+    Error,
+    ClientActionParameters<TActions, ExecutableFunctionName<TActions>>
+  >({
+    mutationFn: async <TFunctionName extends ExecutableFunctionName<TActions>>({
+      functionName,
+      args,
+    }: ClientActionParameters<TActions, TFunctionName>) => {
+      if (!client) {
+        throw new ClientUndefinedHookError("useClientActions");
+      }
+
+      const actions_ = actions(client);
+      return actions_[functionName](...args);
+    },
+  });
+
+  const executeAction = useCallback(
+    <TFunctionName extends ExecutableFunctionName<TActions>>(
+      params: ClientActionParameters<TActions, TFunctionName>
+    ) => {
+      const { functionName, args } = params;
+      return mutate({ functionName, args });
+    },
+    [mutate]
+  );
+
+  const executeActionAsync = useCallback(
+    async <TFunctionName extends ExecutableFunctionName<TActions>>(
+      params: ClientActionParameters<TActions, TFunctionName>
+    ) => {
+      const { functionName, args } = params;
+      return mutateAsync({ functionName, args });
+    },
+    [mutateAsync]
+  );
+
+  return {
+    executeAction,
+    executeActionAsync,
+    data,
+    isExecutingAction,
+    error,
+  };
+}
