@@ -1,4 +1,4 @@
-import { createMultiOwnerLightAccountAlchemyClient } from "@alchemy/aa-alchemy";
+import { createMultiOwnerLightAccountAlchemyClient } from "@account-kit/infra";
 import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
 import type { Address, Hex } from "viem";
 

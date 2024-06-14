@@ -1,4 +1,4 @@
-import { useExportAccount } from "@alchemy/aa-alchemy/react";
+import { useExportAccount } from "@account-kit/react";
 
 export function ComponentWithExportAccount() {
   /**

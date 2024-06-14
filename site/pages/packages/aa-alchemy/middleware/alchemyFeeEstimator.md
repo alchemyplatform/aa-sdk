@@ -13,7 +13,7 @@ description: Overview of the alchemyFeeEstimator method in aa-alchemy
 import {
   alchemyFeeEstimator,
   createAlchemyRpcClient,
-} from "@alchemy/aa-alchemy";
+} from "@account-kit/infra";
 import { createSmartAccountClient } from "@alchemy/aa-core";
 import { http } from "viem";
 import { sepolia } from "viem/chains";
