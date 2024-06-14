@@ -18,30 +18,34 @@ export const Tabs = ({
   activeTab: string;
   setActive: (tab: string) => void;
 }) => {
-  const renderTab = useCallback(
-    (tab: Tab, isActive: boolean) => {
-      return (
-        <div
-          id={tab.id}
-          className={cn(
-            "flex flex-col items-center justify-center h-9 w-full cursor-pointer border-b-2 -mb-[1.5px]",
-            isActive ? "border-foreground" : "border-transparent"
-          )}
-          onClick={() => setActive(tab.id)}
-        >
-          <div className={cn("flex flex-1 items-center gap-1", isActive ? "text-foreground" : "text-secondary-foreground")}>
-            {tab.icon}
-            <p className={cn("text-lg", isActive && "font-semibold")}>{tab.name}</p>
-          </div>
-        </div>
-      );
-    },
-    [setActive]
-  );
-
   return (
     <div className={cn("flex border-b", className)}>
-      {tabs.map((tab) => renderTab(tab, tab.id === activeTab))}
+      {tabs.map((tab) => {
+        const isActive = tab.id === activeTab;
+        return (
+          <div
+            key={tab.id}
+            id={tab.id}
+            className={cn(
+              "flex flex-col items-center justify-center w-full cursor-pointer border-b-2 -mb-[1.5px] py-4",
+              isActive ? "border-foreground" : "border-transparent"
+            )}
+            onClick={() => setActive(tab.id)}
+          >
+            <div
+              className={cn(
+                "flex flex-1 items-center gap-1",
+                isActive ? "text-foreground" : "text-secondary-foreground"
+              )}
+            >
+              {tab.icon}
+              <p className={cn(isActive && "font-semibold", !isActive && "text-gray-700")}>
+                {tab.name}
+              </p>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 };
