@@ -10,7 +10,7 @@ description: Overview of the SupportedChains util method in aa-alchemy
 ## Usage
 
 ```ts [example.ts]
-import { defineAlchemyChain } from "@alchemy/aa-alchemy";
+import { defineAlchemyChain } from "@account-kit/infra";
 import { mainnet } from "viem";
 
 // eth mainnet

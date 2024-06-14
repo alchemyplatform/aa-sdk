@@ -6,7 +6,8 @@
     "node": ">=18.16"
   },
   "workspaces": [
-    "packages/*",
+    "aa-sdk/*",
+    "account-kit/*",
     "templates/*",
     "examples/*",
     "site"

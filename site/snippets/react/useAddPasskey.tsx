@@ -1,4 +1,4 @@
-import { useAddPasskey } from "@alchemy/aa-alchemy/react";
+import { useAddPasskey } from "@account-kit/react";
 
 export function ComponentWithAddPasskey() {
   /**

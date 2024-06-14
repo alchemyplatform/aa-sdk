@@ -1,8 +1,5 @@
-import { sessionKeyPluginActions } from "@alchemy/aa-accounts";
-import {
-  useClientActions,
-  useSmartAccountClient,
-} from "@alchemy/aa-alchemy/react";
+import { useClientActions, useSmartAccountClient } from "@account-kit/react";
+import { sessionKeyPluginActions } from "@account-kit/smart-contracts";
 import { zeroAddress } from "viem";
 
 export function ComponentWithClientActions() {
