@@ -1,7 +1,4 @@
-import {
-  useSignTypedData,
-  useSmartAccountClient,
-} from "@alchemy/aa-alchemy/react";
+import { useSignTypedData, useSmartAccountClient } from "@account-kit/react";
 import { useState } from "react";
 
 export function ComponentWithSignTypedData() {

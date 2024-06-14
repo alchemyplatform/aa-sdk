@@ -1,4 +1,4 @@
-import { useChain } from "@alchemy/aa-alchemy/react";
+import { useChain } from "@account-kit/react";
 import { optimism } from "@alchemy/aa-core";
 
 export function ComponentWithUseChain() {

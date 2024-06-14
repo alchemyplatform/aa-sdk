@@ -5,7 +5,7 @@ description: Overview of the transferOwnership method on LightSmartContractAccou
 
 # transferOwnership
 
-`transferOwnership` is an action exported by `@alchemy/aa-accounts` which sends a UO that transfers ownership of the account to a new owner, and returns either the UO hash or transaction hash.
+`transferOwnership` is an action exported by `@account-kit/smart-contracts` which sends a UO that transfers ownership of the account to a new owner, and returns either the UO hash or transaction hash.
 
 ## Usage
 

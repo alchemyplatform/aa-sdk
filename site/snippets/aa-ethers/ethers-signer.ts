@@ -1,4 +1,4 @@
-import { createLightAccount } from "@alchemy/aa-accounts";
+import { createLightAccount } from "@account-kit/smart-contracts";
 import {
   LocalAccountSigner,
   SmartAccountSigner,
