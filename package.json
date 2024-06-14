@@ -14,7 +14,8 @@
   "scripts": {
     "generate": "lerna run generate",
     "postgenerate": "yarn lint:write",
-    "build": "lerna run build --verbose --ignore=alchemy-daapp --ignore=aa-simple-dapp --ignore=ui-demo",
+    "postinstall": "git submodule update --init --recursive",
+    "build": "lerna run build --verbose --ignore=alchemy-daapp --ignore=embedded-accounts-quickstart --ignore=aa-simple-dapp --ignore=ui-demo",
     "build:ci": "yarn build && yarn lint:write",
     "build:examples": "lerna run build",
     "clean": "lerna run clean",
