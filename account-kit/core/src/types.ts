@@ -1,11 +1,13 @@
+import type { AlchemyGasManagerConfig } from "@account-kit/infra";
 import type {
-  AlchemyGasManagerConfig,
   AlchemySignerParams,
   AlchemySignerWebClient,
   AlchemyWebSigner,
+} from "@account-kit/signer";
+import type {
   LightAccount,
   MultiOwnerModularAccount,
-} from "@account-kit/infra";
+} from "@account-kit/smart-contracts";
 import type { ConnectionConfig } from "@alchemy/aa-core";
 import type { CreateConnectorFn } from "@wagmi/core";
 import { type Config as WagmiConfig } from "@wagmi/core";

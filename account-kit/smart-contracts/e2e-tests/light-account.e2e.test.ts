@@ -1,10 +1,14 @@
-import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
-import { Alchemy, Network } from "alchemy-sdk";
-import * as simulateUoActions from "../src/actions/simulateUserOperationChanges.js";
-import { alchemyEnhancedApiActions } from "../src/client/decorators/alchemyEnhancedApis.js";
 import {
-  createMultiOwnerLightAccountAlchemyClient,
-  type AlchemyMultiOwnerLightAccountClientConfig,
+  LocalAccountSigner,
+  sepolia,
+  type UserOperationCallData,
+  type UserOperationOverrides,
+  type UserOperationStruct,
+} from "@alchemy/aa-core";
+import { Alchemy, Network } from "alchemy-sdk";
+import {
+  createLightAccountAlchemyClient,
+  type AlchemyLightAccountClientConfig,
 } from "../src/index.js";
 import {
   API_KEY,
@@ -12,15 +16,14 @@ import {
   PAYMASTER_POLICY_ID,
 } from "./constants.js";
 
-const simulateUoChangesSpy = vi.spyOn(
-  simulateUoActions,
-  "simulateUserOperationChanges"
-);
+import * as infra from "@account-kit/infra";
+
+const simulateUoChangesSpy = vi.spyOn(infra, "simulateUserOperationChanges");
 
 const chain = sepolia;
 const network = Network.ETH_SEPOLIA;
 
-describe("MultiOwnerMultiOwnerLightAccount Client Tests", () => {
+describe("Light Account Client Tests", () => {
   const signer = LocalAccountSigner.mnemonicToAccountSigner(
     LIGHT_ACCOUNT_OWNER_MNEMONIC
   );
@@ -83,6 +86,35 @@ describe("MultiOwnerMultiOwnerLightAccount Client Tests", () => {
     const txnHash = provider.waitForUserOperationTransaction(result);
 
     await expect(txnHash).resolves.not.toThrowError();
+  }, 100000);
+
+  it("should bypass paymaster when paymasterAndData of user operation overrides is set to 0x", async () => {
+    const provider = await givenConnectedProvider({
+      signer,
+      chain,
+      gasManagerConfig: {
+        policyId: PAYMASTER_POLICY_ID,
+      },
+    });
+
+    const toSend = {
+      uo: {
+        target: provider.getAddress(),
+        data: "0x",
+      } as UserOperationCallData,
+      overrides: {
+        paymasterAndData: "0x", // bypass paymaster
+      } as UserOperationOverrides<"0.6.0">,
+    };
+    const uoStruct = (await provider.buildUserOperation(
+      toSend
+    )) as UserOperationStruct<"0.6.0">;
+
+    expect(uoStruct.paymasterAndData).toBe("0x");
+
+    await expect(
+      provider.sendUserOperation(toSend)
+    ).resolves.not.toThrowError();
   }, 100000);
 
   it("should successfully override fees and gas when using paymaster", async () => {
@@ -218,7 +250,7 @@ describe("MultiOwnerMultiOwnerLightAccount Client Tests", () => {
       gasManagerConfig: {
         policyId: PAYMASTER_POLICY_ID,
       },
-    }).then((x) => x.extend(alchemyEnhancedApiActions(alchemy)));
+    }).then((x) => x.extend(infra.alchemyEnhancedApiActions(alchemy)));
 
     const address = provider.getAddress();
     const balances = await provider.core.getTokenBalances(address);
@@ -237,7 +269,7 @@ describe("MultiOwnerMultiOwnerLightAccount Client Tests", () => {
       gasManagerConfig: {
         policyId: PAYMASTER_POLICY_ID,
       },
-    }).then((x) => x.extend(alchemyEnhancedApiActions(alchemy)));
+    }).then((x) => x.extend(infra.alchemyEnhancedApiActions(alchemy)));
 
     const address = provider.getAddress();
     const nfts = await provider.nft.getNftsForOwner(address);
@@ -308,8 +340,8 @@ const givenConnectedProvider = async ({
   opts,
   gasManagerConfig,
   useSimulation = false,
-}: AlchemyMultiOwnerLightAccountClientConfig) =>
-  createMultiOwnerLightAccountAlchemyClient({
+}: AlchemyLightAccountClientConfig) =>
+  createLightAccountAlchemyClient({
     chain,
     signer,
     accountAddress,
