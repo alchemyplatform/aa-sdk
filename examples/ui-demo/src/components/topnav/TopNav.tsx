@@ -8,7 +8,7 @@ import { Switch } from "@/components/ui/switch";
 
 export function TopNav() {
   return (
-    <div className="sticky left-0 top-0 right-0 h-[72px] bg-white shadow-sm">
+    <div className="left-0 top-0 right-0 py-5 bg-white shadow-sm">
       <div className="flex items-center justify-between h-full w-full max-w-screen-2xl mx-auto px-10">
         <AlchemyFullLogo />
         <div className="flex gap-4 items-center h-8">
