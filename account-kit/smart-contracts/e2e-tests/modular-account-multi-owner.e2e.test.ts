@@ -1,45 +1,70 @@
-import {
-  LocalAccountSigner,
-  sepolia,
-  type UserOperationCallData,
-  type UserOperationOverrides,
-  type UserOperationStruct,
-} from "@alchemy/aa-core";
+import * as infra from "@account-kit/infra";
+import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
 import { Alchemy, Network } from "alchemy-sdk";
-import * as simulateUoActions from "../src/actions/simulateUserOperationChanges.js";
-import { alchemyEnhancedApiActions } from "../src/client/decorators/alchemyEnhancedApis.js";
 import {
-  createLightAccountAlchemyClient,
-  type AlchemyLightAccountClientConfig,
+  createModularAccountAlchemyClient,
+  type AlchemyModularAccountClientConfig,
 } from "../src/index.js";
 import {
   API_KEY,
-  LIGHT_ACCOUNT_OWNER_MNEMONIC,
+  MODULAR_MULTIOWNER_ACCOUNT_OWNER_MNEMONIC,
   PAYMASTER_POLICY_ID,
 } from "./constants.js";
 
-const simulateUoChangesSpy = vi.spyOn(
-  simulateUoActions,
-  "simulateUserOperationChanges"
-);
+const simulateUoChangesSpy = vi.spyOn(infra, "simulateUserOperationChanges");
 
 const chain = sepolia;
 const network = Network.ETH_SEPOLIA;
 
-describe("Light Account Client Tests", () => {
-  const signer = LocalAccountSigner.mnemonicToAccountSigner(
-    LIGHT_ACCOUNT_OWNER_MNEMONIC
+describe("Modular Account Multi Owner Account Tests", async () => {
+  const signer1 = LocalAccountSigner.mnemonicToAccountSigner(
+    MODULAR_MULTIOWNER_ACCOUNT_OWNER_MNEMONIC,
+    { accountIndex: 0 }
   );
 
+  const signer2 = LocalAccountSigner.mnemonicToAccountSigner(
+    MODULAR_MULTIOWNER_ACCOUNT_OWNER_MNEMONIC,
+    { accountIndex: 1 }
+  );
+
+  const owners = [await signer1.getAddress(), await signer2.getAddress()];
+
   it("should successfully get counterfactual address", async () => {
-    const provider = await givenConnectedProvider({ signer, chain });
+    const provider = await givenConnectedProvider({
+      signer: signer1,
+      chain,
+      owners,
+    });
     expect(provider.getAddress()).toMatchInlineSnapshot(
-      '"0x86f3B0211764971Ad0Fc8C8898d31f5d792faD84"'
+      '"0x3bFeE757554710Dfa87de4F6cB6026329bC51a30"'
     );
   });
 
-  it("should execute successfully", async () => {
-    const provider = await givenConnectedProvider({ signer, chain });
+  it("should execute successfully using the first signer", async () => {
+    const provider = await givenConnectedProvider({
+      signer: signer1,
+      chain,
+      owners,
+    });
+
+    const result = await provider.sendUserOperation({
+      uo: {
+        target: provider.getAddress(),
+        data: "0x",
+      },
+    });
+
+    const txnHash = provider.waitForUserOperationTransaction(result);
+
+    await expect(txnHash).resolves.not.toThrowError();
+  }, 100000);
+
+  it("should execute successfully using the second signer", async () => {
+    const provider = await givenConnectedProvider({
+      signer: signer2,
+      chain,
+      owners,
+    });
 
     const result = await provider.sendUserOperation({
       uo: {
@@ -56,7 +81,7 @@ describe("Light Account Client Tests", () => {
   it("should fail to execute if account address is not deployed and not correct", async () => {
     const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
     const provider = await givenConnectedProvider({
-      signer,
+      signer: signer1,
       chain,
       accountAddress,
     });
@@ -73,7 +98,8 @@ describe("Light Account Client Tests", () => {
 
   it("should successfully execute with alchemy paymaster info", async () => {
     const provider = await givenConnectedProvider({
-      signer,
+      signer: signer1,
+      owners,
       chain,
       gasManagerConfig: {
         policyId: PAYMASTER_POLICY_ID,
@@ -91,38 +117,10 @@ describe("Light Account Client Tests", () => {
     await expect(txnHash).resolves.not.toThrowError();
   }, 100000);
 
-  it("should bypass paymaster when paymasterAndData of user operation overrides is set to 0x", async () => {
-    const provider = await givenConnectedProvider({
-      signer,
-      chain,
-      gasManagerConfig: {
-        policyId: PAYMASTER_POLICY_ID,
-      },
-    });
-
-    const toSend = {
-      uo: {
-        target: provider.getAddress(),
-        data: "0x",
-      } as UserOperationCallData,
-      overrides: {
-        paymasterAndData: "0x", // bypass paymaster
-      } as UserOperationOverrides<"0.6.0">,
-    };
-    const uoStruct = (await provider.buildUserOperation(
-      toSend
-    )) as UserOperationStruct<"0.6.0">;
-
-    expect(uoStruct.paymasterAndData).toBe("0x");
-
-    await expect(
-      provider.sendUserOperation(toSend)
-    ).resolves.not.toThrowError();
-  }, 100000);
-
   it("should successfully override fees and gas when using paymaster", async () => {
     const provider = await givenConnectedProvider({
-      signer,
+      signer: signer1,
+      owners,
       chain,
       gasManagerConfig: {
         policyId: PAYMASTER_POLICY_ID,
@@ -160,19 +158,20 @@ describe("Light Account Client Tests", () => {
           })
         )
     ).resolves.toMatchInlineSnapshot(`
-      {
-        "callGasLimit": "0x1",
-        "maxFeePerGas": "0x1",
-        "maxPriorityFeePerGas": "0x1",
-        "preVerificationGas": "0x1",
-        "verificationGasLimit": "0x1",
-      }
-    `);
+          {
+            "callGasLimit": "0x1",
+            "maxFeePerGas": "0x1",
+            "maxPriorityFeePerGas": "0x1",
+            "preVerificationGas": "0x1",
+            "verificationGasLimit": "0x1",
+          }
+        `);
   }, 100000);
 
   it("should successfully use paymaster with fee opts", async () => {
     const provider = await givenConnectedProvider({
-      signer,
+      signer: signer1,
+      owners,
       chain,
       gasManagerConfig: {
         policyId: PAYMASTER_POLICY_ID,
@@ -199,7 +198,8 @@ describe("Light Account Client Tests", () => {
 
   it("should execute successfully via drop and replace", async () => {
     const provider = await givenConnectedProvider({
-      signer,
+      signer: signer1,
+      owners,
       chain,
     });
 
@@ -219,7 +219,8 @@ describe("Light Account Client Tests", () => {
 
   it("should execute successfully via drop and replace when using paymaster", async () => {
     const provider = await givenConnectedProvider({
-      signer,
+      signer: signer1,
+      owners,
       chain,
       gasManagerConfig: {
         policyId: PAYMASTER_POLICY_ID,
@@ -241,25 +242,6 @@ describe("Light Account Client Tests", () => {
     await expect(txnHash).resolves.not.toThrowError();
   }, 100000);
 
-  it("should get token balances for the smart account", async () => {
-    const alchemy = new Alchemy({
-      apiKey: API_KEY!,
-      network,
-    });
-
-    const provider = await givenConnectedProvider({
-      signer,
-      chain,
-      gasManagerConfig: {
-        policyId: PAYMASTER_POLICY_ID,
-      },
-    }).then((x) => x.extend(alchemyEnhancedApiActions(alchemy)));
-
-    const address = provider.getAddress();
-    const balances = await provider.core.getTokenBalances(address);
-    expect(balances.tokenBalances.length).toMatchInlineSnapshot("1");
-  }, 50000);
-
   it("should get owned nfts for the smart account", async () => {
     const alchemy = new Alchemy({
       apiKey: API_KEY!,
@@ -267,12 +249,13 @@ describe("Light Account Client Tests", () => {
     });
 
     const provider = await givenConnectedProvider({
-      signer,
+      signer: signer1,
+      owners,
       chain,
       gasManagerConfig: {
         policyId: PAYMASTER_POLICY_ID,
       },
-    }).then((x) => x.extend(alchemyEnhancedApiActions(alchemy)));
+    }).then((x) => x.extend(infra.alchemyEnhancedApiActions(alchemy)));
 
     const address = provider.getAddress();
     const nfts = await provider.nft.getNftsForOwner(address);
@@ -281,7 +264,8 @@ describe("Light Account Client Tests", () => {
 
   it("should correctly simulate asset changes for the user operation", async () => {
     const provider = await givenConnectedProvider({
-      signer,
+      signer: signer1,
+      owners,
       chain,
     });
 
@@ -298,28 +282,29 @@ describe("Light Account Client Tests", () => {
         (x) => x.to === "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
       )
     ).toMatchInlineSnapshot(`
-      [
-        {
-          "amount": "0.000000000000000001",
-          "assetType": "NATIVE",
-          "changeType": "TRANSFER",
-          "contractAddress": null,
-          "decimals": 18,
-          "from": "0x86f3b0211764971ad0fc8c8898d31f5d792fad84",
-          "logo": "https://static.alchemyapi.io/images/network-assets/eth.png",
-          "name": "Ethereum",
-          "rawAmount": "1",
-          "symbol": "ETH",
-          "to": "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
-          "tokenId": null,
-        },
-      ]
-    `);
+          [
+            {
+              "amount": "0.000000000000000001",
+              "assetType": "NATIVE",
+              "changeType": "TRANSFER",
+              "contractAddress": null,
+              "decimals": 18,
+              "from": "0x3bfee757554710dfa87de4f6cb6026329bc51a30",
+              "logo": "https://static.alchemyapi.io/images/network-assets/eth.png",
+              "name": "Ethereum",
+              "rawAmount": "1",
+              "symbol": "ETH",
+              "to": "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+              "tokenId": null,
+            },
+          ]
+        `);
   }, 50000);
 
   it("should simulate as part of middleware stack when added to provider", async () => {
     const provider = await givenConnectedProvider({
-      signer,
+      signer: signer1,
+      owners,
       chain,
       useSimulation: true,
     });
@@ -343,10 +328,12 @@ const givenConnectedProvider = async ({
   opts,
   gasManagerConfig,
   useSimulation = false,
-}: AlchemyLightAccountClientConfig) =>
-  createLightAccountAlchemyClient({
+  owners,
+}: AlchemyModularAccountClientConfig) =>
+  createModularAccountAlchemyClient({
     chain,
     signer,
+    owners,
     accountAddress,
     apiKey: API_KEY!,
     gasManagerConfig,

@@ -17,7 +17,7 @@ import {
   type Chain,
   type HDAccount,
 } from "viem";
-import { createMultisigModularAccountClient } from "../client.js";
+import { createMultisigModularAccountClient } from "../client/client.js";
 import { formatSignatures } from "../plugins/multisig/index.js";
 import { API_KEY, OWNER_MNEMONIC } from "./constants.js";
 

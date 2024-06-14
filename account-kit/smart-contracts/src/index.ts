@@ -5,7 +5,15 @@
 export type * from "./light-account/accounts/account.js";
 export { createLightAccount } from "./light-account/accounts/account.js";
 export { transferOwnership as transferLightAccountOwnership } from "./light-account/actions/transferOwnership.js";
-export { createLightAccountClient } from "./light-account/clients/lightAccount.js";
+export {
+  createLightAccountAlchemyClient,
+  type AlchemyLightAccountClientConfig,
+} from "./light-account/clients/alchemyClient.js";
+export { createLightAccountClient } from "./light-account/clients/client.js";
+export {
+  createMultiOwnerLightAccountAlchemyClient,
+  type AlchemyMultiOwnerLightAccountClientConfig,
+} from "./light-account/clients/multiOwnerAlchemyClient.js";
 export type * from "./light-account/decorators/lightAccount.js";
 export { lightAccountClientActions } from "./light-account/decorators/lightAccount.js";
 export type * from "./light-account/types.js";
@@ -44,9 +52,17 @@ export type * from "./msca/account/multisigAccount.js";
 export { createMultisigModularAccount } from "./msca/account/multisigAccount.js";
 export { standardExecutor } from "./msca/account/standardExecutor.js";
 export {
+  createModularAccountAlchemyClient,
+  type AlchemyModularAccountClientConfig,
+} from "./msca/client/alchemyClient.js";
+export {
   createMultiOwnerModularAccountClient,
   createMultisigModularAccountClient,
-} from "./msca/client.js";
+} from "./msca/client/client.js";
+export {
+  createMultisigAccountAlchemyClient,
+  type AlchemyMultisigAccountClientConfig,
+} from "./msca/client/multiSigAlchemyClient.js";
 export {
   InvalidAggregatedSignatureError,
   InvalidContextSignatureError,

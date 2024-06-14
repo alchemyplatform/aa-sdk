@@ -1,4 +1,4 @@
-import type { User } from "@account-kit/infra";
+import type { User } from "@account-kit/signer";
 import type { AlchemyAccountsConfig } from "../types";
 
 /**

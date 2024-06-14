@@ -6,35 +6,35 @@ import {
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import { type Chain, type CustomTransport, type Transport } from "viem";
-import type { CreateLightAccountClientParams } from "../light-account/clients/lightAccount";
+import type { CreateLightAccountClientParams } from "../../light-account/clients/client.js";
 import {
   accountLoupeActions,
   type AccountLoupeActions,
-} from "./account-loupe/decorator.js";
+} from "../account-loupe/decorator.js";
 import {
   createMultiOwnerModularAccount,
   type CreateMultiOwnerModularAccountParams,
   type MultiOwnerModularAccount,
-} from "./account/multiOwnerAccount.js";
+} from "../account/multiOwnerAccount.js";
 import {
   createMultisigModularAccount,
   type CreateMultisigModularAccountParams,
   type MultisigModularAccount,
-} from "./account/multisigAccount.js";
+} from "../account/multisigAccount.js";
 import {
   pluginManagerActions,
   type PluginManagerActions,
-} from "./plugin-manager/decorator.js";
+} from "../plugin-manager/decorator.js";
 import {
   multiOwnerPluginActions,
   type MultiOwnerPluginActions,
-} from "./plugins/multi-owner/index.js";
+} from "../plugins/multi-owner/index.js";
 import {
   multisigPluginActions,
   type MultisigPluginActions,
   type MultisigUserOperationContext,
-} from "./plugins/multisig/index.js";
-import { multisigSignatureMiddleware } from "./plugins/multisig/middleware.js";
+} from "../plugins/multisig/index.js";
+import { multisigSignatureMiddleware } from "../plugins/multisig/middleware.js";
 
 export type CreateMultiOwnerModularAccountClientParams<
   TTransport extends Transport = Transport,
