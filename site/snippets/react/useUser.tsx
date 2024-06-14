@@ -1,4 +1,4 @@
-import { useUser } from "@alchemy/aa-alchemy/react";
+import { useUser } from "@account-kit/react";
 
 export function ComponentWithUser() {
   const user = useUser();

@@ -1,4 +1,4 @@
-import { createAlchemySmartAccountClient } from "@alchemy/aa-alchemy";
+import { createAlchemySmartAccountClient } from "@account-kit/infra";
 import { polygonMumbai } from "@alchemy/aa-core";
 
 const chain = polygonMumbai;

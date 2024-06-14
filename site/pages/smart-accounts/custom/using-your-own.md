@@ -7,7 +7,7 @@ description: Follow this guide to use any smart account implementation you want
 
 # Using your own Smart Account
 
-You are not limited to the accounts defined in `@alchemy/aa-accounts`. The `SmartAccountClient` can be used with any smart account because it only relies on the [`SmartContractAccount`](/packages/aa-core/accounts/) interface. This means you can use your own smart account implementation with Account Kit.
+You are not limited to the accounts defined in `@account-kit/smart-contracts`. The `SmartAccountClient` can be used with any smart account because it only relies on the [`SmartContractAccount`](/packages/aa-core/accounts/) interface. This means you can use your own smart account implementation with Account Kit.
 
 ```ts [my-account.ts]
 // [!include ~/snippets/aa-core/custom-account.ts]
@@ -16,7 +16,7 @@ You are not limited to the accounts defined in `@alchemy/aa-accounts`. The `Smar
 To use your account, you will need to pass it into a `SmartAccountClient`.
 
 ```ts
-import { createAlchemySmartAccountClient } from "@alchemy/aa-alchemy";
+import { createAlchemySmartAccountClient } from "@account-kit/infra";
 import { sepolia } from "@alchemy/aa-core";
 
 const client = createAlchemySmartAccountClient({
@@ -35,7 +35,7 @@ We provide an implementation of `SmartContractAccount` that works with `LightAcc
 :::details[LightSmartContractAccount]
 
 ```ts
-// [!include ~/../packages/accounts/src/light-account/accounts/account.ts]
+// [!include ~/../account-kit/smart-contracts/src/light-account/accounts/account.ts]
 ```
 
 :::
@@ -47,7 +47,7 @@ For your reference, this is the definition of the `toSmartContractAccount` inter
 :::details SmartContractAccount
 
 ```ts
-// [!include ~/../packages/core/src/account/smartContractAccount.ts]
+// [!include ~/../aa-sdk/core/src/account/smartContractAccount.ts]
 ```
 
 :::

@@ -10,7 +10,7 @@ The `useSmartAccountClient` hook is used to create a new [`AlchemySmartAccountCl
 ## Import
 
 ```ts
-import { useSmartAccountClient } from "@alchemy/aa-alchemy/react";
+import { useSmartAccountClient } from "@account-kit/react";
 ```
 
 ## Usage
@@ -22,7 +22,7 @@ import { useSmartAccountClient } from "@alchemy/aa-alchemy/react";
 ## Parameters
 
 ```ts
-import { type UseSmartAccountClientProps } from "@alchemy/aa-alchemy/react";
+import { type UseSmartAccountClientProps } from "@account-kit/react";
 ```
 
 ### type
@@ -44,7 +44,7 @@ An optional param object based on the `type` property passed in above. It allows
 :::details[CreateLightAccountParams]
 
 ```ts [types.ts]
-// [!include ~/../packages/accounts/src/light-account/accounts/account.ts:CreateLightAccountParams]
+// [!include ~/../account-kit/smart-contracts/src/light-account/accounts/account.ts:CreateLightAccountParams]
 ```
 
 :::
@@ -52,7 +52,7 @@ An optional param object based on the `type` property passed in above. It allows
 :::details[CreateMultiOwnerModularAccountParams]
 
 ```ts [types.ts]
-// [!include ~/../packages/accounts/src/msca/account/multiOwnerAccount.ts:CreateMultiOwnerModularAccountParams]
+// [!include ~/../account-kit/smart-contracts/src/msca/account/multiOwnerAccount.ts:CreateMultiOwnerModularAccountParams]
 ```
 
 :::
@@ -75,7 +75,7 @@ The remaining parameters that are accepted allow for overriding certain properti
 :::details[AlchemySmartAccountClientConfig]
 
 ```ts [types.ts]
-// [!include ~/../packages/alchemy/src/client/smartAccountClient.ts:AlchemySmartAccountClientConfig]
+// [!include ~/../account-kit/infra/src/client/smartAccountClient.ts:AlchemySmartAccountClientConfig]
 ```
 
 :::
@@ -83,7 +83,7 @@ The remaining parameters that are accepted allow for overriding certain properti
 ## Return Type
 
 ```ts
-import { type UseSmartAccountClientResult } from "@alchemy/aa-alchemy/react";
+import { type UseSmartAccountClientResult } from "@account-kit/react";
 ```
 
 ### client

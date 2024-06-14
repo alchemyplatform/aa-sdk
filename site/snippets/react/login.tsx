@@ -1,4 +1,4 @@
-import { useAuthenticate } from "@alchemy/aa-alchemy/react";
+import { useAuthenticate } from "@account-kit/react";
 import { useState } from "react";
 
 export function Login() {
