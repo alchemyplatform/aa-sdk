@@ -1,4 +1,5 @@
 import { PasskeyIllustration } from "../../../../icons/passkey.js";
+import { ls } from "../../../../strings.js";
 import { Button } from "../../../button.js";
 import { PoweredBy } from "../../../poweredby.js";
 
@@ -10,16 +11,18 @@ export const LoadingPasskeyAuth = () => {
         <PasskeyIllustration />
       </div>
 
-      <h3 className="font-semibold text-lg">Continue with passkey</h3>
+      <h3 className="font-semibold text-lg">{ls.loadingPasskey.title}</h3>
       <p className="text-fg-secondary text-center text-sm">
-        Follow the prompt to verify your passkey.
+        {ls.loadingPasskey.body}
       </p>
 
       <div className="flex flex-col w-full items-center gap-1">
         <div className="flex items-center justify-center py-2 gap-x-2">
-          <p className="text-fg-tertiary text-xs">Having trouble?</p>
+          <p className="text-fg-tertiary text-xs">
+            {ls.loadingPasskey.supportText}
+          </p>
           <Button variant="link" className="text-xs font-normal underline">
-            Contact support
+            {ls.loadingPasskey.supportLink}
           </Button>
         </div>
         <PoweredBy />

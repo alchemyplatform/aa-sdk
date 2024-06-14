@@ -32,7 +32,7 @@ export type MultiOwnerModularAccount<
   "0.6.0"
 >;
 
-// #region CreateMultiOwnerModularAccountParams
+// [!region CreateMultiOwnerModularAccountParams]
 export type CreateMultiOwnerModularAccountParams<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
@@ -53,7 +53,7 @@ export type CreateMultiOwnerModularAccountParams<
   owners?: Address[];
   accountAddress?: Address;
 } & EntryPointParameter<TEntryPointVersion, Chain>;
-// #endregion CreateMultiOwnerModularAccountParams
+// [!endregion CreateMultiOwnerModularAccountParams]
 
 export async function createMultiOwnerModularAccount<
   TTransport extends Transport = Transport,

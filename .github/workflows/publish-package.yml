@@ -44,6 +44,7 @@ jobs:
         with:
           token: ${{ secrets.ALCHEMY_BOT_PAT }}
           fetch-depth: "0"
+          submodules: "recursive"
 
       - name: Set Node.js 18.x
         uses: actions/setup-node@v3
@@ -67,7 +68,12 @@ jobs:
       - name: Build
         env:
           API_KEY: ${{ secrets.API_KEY }}
-        run: yarn build:ci
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 5
+          max_attempts: 2
+          retry_on: error
+          command: yarn build:ci
 
       - name: E2E tests
         if: inputs.skip-e2e == false
@@ -85,32 +91,3 @@ jobs:
         env:
           API_KEY: ${{ secrets.API_KEY }}
         run: yarn lerna publish --conventional-commits --no-private --yes --no-verify-access
-
-      - name: Build with VitePress
-        working-directory: site
-        run: |
-          yarn build
-          touch .vitepress/dist/.nojekyll
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
-        with:
-          path: site/.vitepress/dist
-
-  publish_site:
-    name: Publish Docs Site
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    needs: build_and_test_deploy
-    runs-on: ubuntu-latest
-    if: inputs.publish
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.ALCHEMY_BOT_PAT }}
-          fetch-depth: "0"
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v2
