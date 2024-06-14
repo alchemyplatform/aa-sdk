@@ -3,6 +3,7 @@ import { Authentication } from "./Authentication";
 import { Tab, Tabs } from "../shared/Tabs";
 import { LockIcon } from "../icons/lock";
 import { PaintIcon } from "../icons/paint";
+import { Styling } from "./Styling";
 
 const TABS: Tab[] = [
   {
@@ -23,7 +24,11 @@ export const Configuration = () => {
   return (
     <div className="flex flex-col">
       <Tabs tabs={TABS} activeTab={tab} setActive={setTab} />
-      {tab === "authentication" ? <Authentication className="pt-6" /> : <div />}
+      {tab === "authentication" ? (
+        <Authentication className="pt-6" />
+      ) : (
+        <Styling />
+      )}
     </div>
   );
 };
