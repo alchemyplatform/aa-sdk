@@ -1,4 +1,4 @@
-import { createLightAccountAlchemyClient } from "@alchemy/aa-alchemy";
+import { createLightAccountAlchemyClient } from "@account-kit/infra";
 import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
 import type { Hex } from "viem";
 

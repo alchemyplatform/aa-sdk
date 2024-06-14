@@ -1,6 +1,6 @@
 "use client";
 
-import { useSmartAccountClient, useUser } from "@alchemy/aa-alchemy/react";
+import { useSmartAccountClient, useUser } from "@account-kit/react";
 
 export const ProfileCard = () => {
   const user = useUser();
