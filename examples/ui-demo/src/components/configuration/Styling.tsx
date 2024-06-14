@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import { ColorPicker } from "./ColorPicker";
 import { useConfig } from "@/src/app/state";
 import { PhotoIcon } from "../icons/photo";
+import { PhotoUploads } from "./PhotoUpload";
 
 export function Styling({ className }: { className?: string }) {
   return (
@@ -103,29 +104,6 @@ export function CornerRadiusOptions() {
           <span className="text-sm font-semibold">{option.label}</span>
         </button>
       ))}
-    </div>
-  );
-}
-
-export function PhotoUploads({ mode }: { mode: "dark" | "light" }) {
-  return (
-    <div className="flex gap-3 flex-1 basis-0">
-      <div
-        className={`flex items-center justify-center h-[56px] w-[56px] rounded-xl ${
-          mode === "light" ? "bg-gray-100" : "bg-gray-500"
-        }`}
-      >
-        <PhotoIcon color={mode === "dark" ? "white" : undefined} />
-      </div>
-      <div className="flex flex-col gap-[2px]">
-        <div className="text-fg-secondary text-xs font-semibold">
-          {mode === "light" ? "Light" : "Dark"} mode
-        </div>
-        <div className="text-xs text-gray-500 font-medium">File name</div>
-        <button className="p-0 text-left text-blue-600 text-xs font-semibold">
-          Upload
-        </button>
-      </div>
     </div>
   );
 }
