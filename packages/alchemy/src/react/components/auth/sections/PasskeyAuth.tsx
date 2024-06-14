@@ -1,4 +1,5 @@
 import { PasskeyIcon } from "../../../icons/passkey.js";
+import { ls } from "../../../strings.js";
 import { Button } from "../../button.js";
 import { usePasskeyVerify } from "../hooks/usePasskeyVerify.js";
 
@@ -8,7 +9,7 @@ type Props = {
 
 // Not used externally
 // eslint-disable-next-line jsdoc/require-jsdoc
-export const PasskeyAuth = ({ label = "I have a passkey" }: Props) => {
+export const PasskeyAuth = ({ label = ls.login.passkey.button }: Props) => {
   const { authenticate } = usePasskeyVerify();
 
   return (
