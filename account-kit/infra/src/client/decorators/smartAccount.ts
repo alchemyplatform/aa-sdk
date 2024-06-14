@@ -2,7 +2,7 @@ import type {
   SendUserOperationParameters,
   SmartContractAccount,
   UserOperationContext,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import type { Chain, Client, Transport } from "viem";
 import { simulateUserOperationChanges } from "../../actions/simulateUserOperationChanges.js";
 import type { SimulateUserOperationAssetChangesResponse } from "../../actions/types.js";

@@ -5,7 +5,7 @@ import {
   type CreateMultiOwnerModularAccountParams,
   type GetLightAccountVersion,
 } from "@account-kit/smart-contracts";
-import { type SmartAccountSigner } from "@alchemy/aa-core";
+import { type SmartAccountSigner } from "@aa-sdk/core";
 import { custom, type Transport } from "viem";
 import { ClientOnlyPropertyError } from "../errors.js";
 import type {

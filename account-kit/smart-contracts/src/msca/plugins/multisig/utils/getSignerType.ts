@@ -1,7 +1,4 @@
-import type {
-  SmartContractAccount,
-  SmartAccountSigner,
-} from "@alchemy/aa-core";
+import type { SmartContractAccount, SmartAccountSigner } from "@aa-sdk/core";
 import {
   type Transport,
   type Chain,

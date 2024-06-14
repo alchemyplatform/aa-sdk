@@ -12,8 +12,8 @@ Utility method that returns the default Simple Account Factory contract address 
 :::code-group
 
 ```ts [example.ts]
-import { sepolia } from "@alchemy/aa-core";
-import { getDefaultSimpleAccountFactoryAddress } from "@alchemy/aa-core";
+import { sepolia } from "@aa-sdk/core";
+import { getDefaultSimpleAccountFactoryAddress } from "@aa-sdk/core";
 
 const chain = sepolia;
 const factoryAddress = getDefaultSimpleAccountFactoryAddress(chain);

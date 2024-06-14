@@ -5,7 +5,7 @@ import {
   isSmartAccountClient,
   isSmartAccountWithSigner,
   type SmartContractAccount,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { type Chain, type Client, type Transport } from "viem";
 import { MultisigMissingSignatureError } from "../../../errors.js";
 import { combineSignatures, splitAggregatedSignature } from "../index.js";

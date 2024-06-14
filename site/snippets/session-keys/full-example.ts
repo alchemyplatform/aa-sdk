@@ -6,7 +6,7 @@ import {
   SessionKeySigner,
   sessionKeyPluginActions,
 } from "@account-kit/smart-contracts";
-import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
+import { LocalAccountSigner, sepolia } from "@aa-sdk/core";
 import { zeroHash } from "viem";
 
 const chain = sepolia;

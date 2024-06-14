@@ -13,9 +13,9 @@ Or you can also input a `SmartAccountClient` instance already initialized (`Alch
 
 ```ts [example.ts]
 import { createAlchemySmartAccountClient } from "@account-kit/infra";
-import { getDefaultEntryPointAddress } from "@alchemy/aa-core";
-import { EthersProviderAdapter } from "@alchemy/aa-ethers";
-import { sepolia } from "@alchemy/aa-core";
+import { getDefaultEntryPointAddress } from "@aa-sdk/core";
+import { EthersProviderAdapter } from "@aa-sdk/ethers";
+import { sepolia } from "@aa-sdk/core";
 
 // one way to initialize
 export const provider = new EthersProviderAdapter({

@@ -17,7 +17,7 @@ import {
   type MultiOwnerPluginActions,
   type PluginManagerActions,
 } from "@account-kit/smart-contracts";
-import type { SmartAccountSigner } from "@alchemy/aa-core";
+import type { SmartAccountSigner } from "@aa-sdk/core";
 import {
   custom,
   type Chain,

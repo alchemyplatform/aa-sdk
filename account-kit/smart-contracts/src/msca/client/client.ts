@@ -4,7 +4,7 @@ import {
   type SmartAccountClient,
   type SmartAccountClientRpcSchema,
   type SmartAccountSigner,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { type Chain, type CustomTransport, type Transport } from "viem";
 import type { CreateLightAccountClientParams } from "../../light-account/clients/client.js";
 import {

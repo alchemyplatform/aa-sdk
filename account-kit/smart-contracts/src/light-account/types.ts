@@ -4,7 +4,7 @@ import {
   type OneOf,
   type SmartAccountSigner,
   type SmartContractAccount,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { type Address, type Chain } from "viem";
 import type { LightAccountBase } from "./accounts/base";
 

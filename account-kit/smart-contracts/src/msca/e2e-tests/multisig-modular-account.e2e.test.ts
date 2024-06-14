@@ -7,7 +7,7 @@ import {
   wrapSignatureWith6492,
   type SmartAccountSigner,
   type UserOperationFeeOptions,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import {
   createPublicClient,
   fromHex,

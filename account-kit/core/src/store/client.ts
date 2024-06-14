@@ -1,5 +1,5 @@
 import { AlchemySignerStatus, AlchemyWebSigner } from "@account-kit/signer";
-import type { NoUndefined } from "@alchemy/aa-core";
+import type { NoUndefined } from "@aa-sdk/core";
 import type { Chain } from "viem";
 import {
   createJSONStorage,

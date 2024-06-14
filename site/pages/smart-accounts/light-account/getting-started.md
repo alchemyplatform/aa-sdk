@@ -12,11 +12,11 @@ It is easy to get started with Light Account! We will show you how to create and
 :::code-group
 
 ```bash [npm]
-npm i @alchemy/aa-alchemy @alchemy/aa-core
+npm i @alchemy/aa-alchemy @aa-sdk/core
 ```
 
 ```bash [yarn]
-yarn add @alchemy/aa-alchemy @alchemy/aa-core
+yarn add @alchemy/aa-alchemy @aa-sdk/core
 ```
 
 :::

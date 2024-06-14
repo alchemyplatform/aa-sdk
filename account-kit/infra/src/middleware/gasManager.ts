@@ -7,7 +7,7 @@ import type {
   UserOperationFeeOptions,
   UserOperationOverrides,
   UserOperationRequest,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import {
   bypassPaymasterAndDataEmptyHex,
   deepHexlify,
@@ -16,7 +16,7 @@ import {
   isBigNumberish,
   isMultiplier,
   resolveProperties,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { concat, fromHex, isHex, type Hex } from "viem";
 import type { ClientWithAlchemyMethods } from "../client/types";
 import { getAlchemyPaymasterAddress } from "../gas-manager.js";

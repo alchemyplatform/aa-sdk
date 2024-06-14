@@ -5,7 +5,7 @@ import type {
   DropAndReplaceUserOperationParameters,
   GetEntryPointFromAccount,
   SendUserOperationResult,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
 import { useAlchemyAccountContext } from "../context.js";
 import { ClientUndefinedHookError } from "../errors.js";

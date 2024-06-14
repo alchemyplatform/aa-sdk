@@ -1,5 +1,5 @@
 import { createAlchemySmartAccountClient } from "@account-kit/infra";
-import { polygonMumbai } from "@alchemy/aa-core";
+import { polygonMumbai } from "@aa-sdk/core";
 
 const chain = polygonMumbai;
 

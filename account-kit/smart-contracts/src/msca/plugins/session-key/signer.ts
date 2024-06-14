@@ -1,4 +1,4 @@
-import { LocalAccountSigner, type SmartAccountSigner } from "@alchemy/aa-core";
+import { LocalAccountSigner, type SmartAccountSigner } from "@aa-sdk/core";
 import type {
   Hex,
   PrivateKeyAccount,

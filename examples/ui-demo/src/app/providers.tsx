@@ -1,7 +1,7 @@
 "use client";
 import { createConfig } from "@alchemy/aa-alchemy/config";
 import { AlchemyAccountProvider, AlchemyAccountsProviderProps } from "@alchemy/aa-alchemy/react";
-import { sepolia } from "@alchemy/aa-core";
+import { sepolia } from "@aa-sdk/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren, Suspense } from "react";
 
