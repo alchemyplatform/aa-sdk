@@ -1,8 +1,13 @@
 import { PropsWithChildren } from "react";
 
-export function Button({ children }: PropsWithChildren<object>) {
+export function Button({
+  children,
+  className,
+}: PropsWithChildren<{ className: string }>) {
   return (
-    <button className="border bg-white border-fg-secondary rounded-lg px-3 text-sm font-semibold h-10 flex items-center">
+    <button
+      className={`border bg-white rounded-lg px-3 text-sm font-semibold h-10 flex items-center ${className}`}
+    >
       {children}
     </button>
   );
