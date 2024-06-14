@@ -1,7 +1,7 @@
 {
-  "name": "@account-kit/core",
+  "name": "@account-kit/signer",
   "version": "3.18.2",
-  "description": "Core library for account kit that provides state management and framework indepednent abstractions across infra, Alchemy Signer, and Smart Contracts",
+  "description": "Core interfaces and clients for interfacing with the Alchemy Signer API",
   "author": "Alchemy",
   "license": "MIT",
   "private": false,
@@ -40,19 +40,22 @@
     "test:run-e2e": "vitest run --config vitest.config.e2e.ts --passWithNoTests"
   },
   "devDependencies": {
+    "@tanstack/react-query": "^5.28.9",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwindcss": "^3.4.3",
     "typescript": "^5.0.4",
     "typescript-template": "*",
     "vitest": "^0.31.0"
   },
   "dependencies": {
-    "@account-kit/infra": "^3.18.2",
-    "@account-kit/signer": "^3.18.2",
-    "@account-kit/smart-contracts": "^3.18.2",
-    "@wagmi/core": "^2.9.8",
-    "js-cookie": "^3.0.5",
+    "@alchemy/aa-core": "^3.18.2",
+    "@turnkey/http": "^2.6.2",
+    "@turnkey/iframe-stamper": "^1.0.0",
+    "@turnkey/viem": "^0.4.8",
+    "@turnkey/webauthn-stamper": "^0.4.3",
     "viem": "2.8.6",
-    "zod": "^3.22.4",
-    "zustand": "^4.5.2"
+    "zod": "^3.22.4"
   },
   "peerDependencies": {
     "viem": "2.8.6"
@@ -72,8 +75,5 @@
     "url": "https://github.com/alchemyplatform/aa-sdk/issues"
   },
   "homepage": "https://github.com/alchemyplatform/aa-sdk#readme",
-  "gitHead": "ee46e8bb857de3b631044fa70714ea706d9e317d",
-  "optionalDependencies": {
-    "alchemy-sdk": "^3.0.0"
-  }
+  "gitHead": "ee46e8bb857de3b631044fa70714ea706d9e317d"
 }

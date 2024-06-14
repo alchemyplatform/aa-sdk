@@ -1,4 +1,4 @@
-import { AlchemySignerStatus } from "@account-kit/infra";
+import { AlchemySignerStatus } from "@account-kit/signer";
 import type { Address } from "@alchemy/aa-core";
 import { hydrate as wagmi_hydrate } from "@wagmi/core";
 import { reconnect } from "./actions/reconnect.js";
