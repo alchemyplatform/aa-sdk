@@ -1,4 +1,11 @@
 import {
+  AlchemyProviderConfigSchema,
+  createAlchemyPublicRpcClient,
+  createAlchemySmartAccountClientFromExisting,
+  type AlchemySmartAccountClient,
+  type AlchemySmartAccountClientConfig,
+} from "@account-kit/infra";
+import {
   accountLoupeActions,
   createMultisigModularAccount,
   multisigPluginActions,
@@ -23,13 +30,6 @@ import {
   type HttpTransport,
   type Transport,
 } from "viem";
-import { AlchemyProviderConfigSchema } from "../schema.js";
-import { createAlchemySmartAccountClientFromRpcClient } from "./internal/smartAccountClientFromRpc.js";
-import { createAlchemyPublicRpcClient } from "./rpcClient.js";
-import type {
-  AlchemySmartAccountClient,
-  AlchemySmartAccountClientConfig,
-} from "./smartAccountClient.js";
 
 // todo: this file seems somewhat duplicated with ./modularAccountClient.ts, but that file has some multi-owner specific fields. Is there a way to refactor these two to de-dupe?
 
@@ -91,7 +91,7 @@ export async function createMultisigAccountAlchemyClient(
     ...config,
   });
 
-  return createAlchemySmartAccountClientFromRpcClient<
+  return createAlchemySmartAccountClientFromExisting<
     Chain | undefined,
     MultisigModularAccount<SmartAccountSigner>,
     MultisigUserOperationContext

@@ -15,13 +15,13 @@ import {
   type AccountLoupeActions,
   type AlchemySmartAccountClient,
   type AlchemySmartAccountClientConfig,
-  type AlchemyWebSigner,
   type LightAccount,
   type LightAccountClientActions,
   type MultiOwnerModularAccount,
   type MultiOwnerPluginActions,
   type PluginManagerActions,
-} from "@account-kit/infra";
+} from "@account-kit/core";
+import type { AlchemyWebSigner } from "@account-kit/signer";
 import { useMemo } from "react";
 import type { Address, Chain, Transport } from "viem";
 import { useAccount as wagmi_useAccount } from "wagmi";

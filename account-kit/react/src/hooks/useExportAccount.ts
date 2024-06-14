@@ -1,7 +1,7 @@
 "use client";
 
 import { DEFAULT_IFRAME_CONTAINER_ID } from "@account-kit/core";
-import type { ExportWalletParams as ExportAccountParams } from "@account-kit/infra";
+import type { ExportWalletParams as ExportAccountParams } from "@account-kit/signer";
 import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
 import { createElement, useCallback, type CSSProperties } from "react";
 import { useAlchemyAccountContext } from "../context.js";
