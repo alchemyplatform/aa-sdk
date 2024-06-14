@@ -30,7 +30,7 @@ const publicSans = Public_Sans({
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
-})
+});
 
 export default function Home() {
   const { config } = useConfig();
@@ -51,7 +51,9 @@ export default function Home() {
       className={`flex bg-gray-50 flex-col h-screen ${publicSans.className}`}
     >
       <TopNav />
-      <div className={`flex flex-col flex-1 px-10 py-6 gap-6 w-full max-w-screen-2xl mx-auto overflow-hidden ${inter.className}`}>
+      <div
+        className={`flex flex-col flex-1 px-10 py-6 gap-6 w-full max-w-screen-2xl mx-auto overflow-hidden ${inter.className}`}
+      >
         {/* Header */}
         <div className="flex justify-between items-center">
           <h2 className="font-semibold text-xl">Demo</h2>
@@ -82,12 +84,33 @@ export default function Home() {
           >
             <div className="flex flex-col gap-2 w-[368px]">
               <div className="modal bg-white shadow-md">
-                <AuthCard showSignInText showNavigation sections={sections} />
+                <AuthCard
+                  header={<AuthCardHeader />}
+                  showSignInText
+                  showNavigation
+                  sections={sections}
+                />
               </div>
             </div>
           </div>
         </div>
       </div>
     </main>
+  );
+}
+
+function AuthCardHeader() {
+  const {
+    config: {
+      ui: { logoDark, logoLight, theme },
+    },
+  } = useConfig();
+
+  const logo = theme === "dark" ? logoDark : logoLight;
+
+  if (!logo) return null;
+
+  return (
+    <img style={{ height: "60px" }} src={logo.fileSrc} alt={logo.fileName} />
   );
 }
