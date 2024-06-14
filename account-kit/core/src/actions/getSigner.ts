@@ -1,6 +1,6 @@
+import type { AlchemyWebSigner } from "@account-kit/signer";
 import type { AlchemyAccountsConfig } from "../types.js";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { AlchemyWebSigner } from "@account-kit/infra";
 import type { hydrate } from "../hydrate.js";
 
 /**

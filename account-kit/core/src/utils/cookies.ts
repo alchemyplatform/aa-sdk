@@ -1,4 +1,4 @@
-import { DEFAULT_SESSION_MS } from "@account-kit/infra";
+import { DEFAULT_SESSION_MS } from "@account-kit/signer";
 import { cookieToInitialState as wagmiCookieToInitialState } from "@wagmi/core";
 import Cookies from "js-cookie";
 import type { ClientState, StoredState } from "../store/types.js";

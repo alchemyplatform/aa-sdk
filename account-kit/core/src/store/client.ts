@@ -1,4 +1,4 @@
-import { AlchemySignerStatus, AlchemyWebSigner } from "@account-kit/infra";
+import { AlchemySignerStatus, AlchemyWebSigner } from "@account-kit/signer";
 import type { NoUndefined } from "@alchemy/aa-core";
 import type { Chain } from "viem";
 import {
