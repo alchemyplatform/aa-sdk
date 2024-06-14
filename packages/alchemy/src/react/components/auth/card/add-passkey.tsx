@@ -8,7 +8,6 @@ import { ls } from "../../../strings.js";
 import { Button } from "../../button.js";
 import { PoweredBy } from "../../poweredby.js";
 import { useAuthContext } from "../context.js";
-import { useCallback, type ReactNode } from "react";
 
 const BENEFITS = [
   {
@@ -28,32 +27,9 @@ export const AddPasskey = () => {
   const { setAuthStep } = useAuthContext();
   const { addPasskey, isAddingPasskey } = useAddPasskey({
     onSuccess: () => {
-      setAuthStep({ type: "complete" });
+      setAuthStep({ type: "passkey_create_success" });
     },
   });
-
-  const renderRow = useCallback(
-    ({
-      icon,
-      title,
-      description,
-    }: {
-      icon: ReactNode;
-      title: string;
-      description: string;
-    }) => {
-      return (
-        <div key={title} className="flex gap-2">
-          <div className="h-5 w-5 flex items-center justify-center">{icon}</div>
-          <div className="flex flex-col">
-            <p className="font-semibold text-sm">{title}</p>
-            <p className="text-fg-secondary text-sm">{description}</p>
-          </div>
-        </div>
-      );
-    },
-    []
-  );
 
   return (
     <div className="flex flex-col gap-5 items-center">
@@ -64,7 +40,17 @@ export const AddPasskey = () => {
       <h3 className="font-semibold text-lg">{ls.addPasskey.title}</h3>
 
       <div className="flex flex-col w-full gap-3">
-        {BENEFITS.map(renderRow)}
+        {BENEFITS.map(({ title, icon, description }) => (
+          <div key={title} className="flex gap-2">
+            <div className="h-5 w-5 flex items-center justify-center">
+              {icon}
+            </div>
+            <div className="flex flex-col">
+              <p className="font-semibold text-sm">{title}</p>
+              <p className="text-fg-secondary text-sm">{description}</p>
+            </div>
+          </div>
+        ))}
       </div>
 
       <div className="flex flex-col w-full gap-3">
