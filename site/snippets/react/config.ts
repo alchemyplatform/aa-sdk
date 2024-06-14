@@ -1,4 +1,4 @@
-import { createConfig } from "@alchemy/aa-alchemy/config";
+import { createConfig } from "@account-kit/react";
 import { sepolia } from "@alchemy/aa-core";
 
 export const config = createConfig({

@@ -1,4 +1,4 @@
-import { AlchemySigner } from "@alchemy/aa-alchemy";
+import { AlchemySigner } from "@account-kit/infra";
 
 export const signer = new AlchemySigner({
   client: {

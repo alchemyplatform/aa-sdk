@@ -1,6 +1,6 @@
 "use client";
 
-import { useAccount, useAuthenticate } from "@alchemy/aa-alchemy/react";
+import { useAccount, useAuthenticate } from "@account-kit/react";
 import { useCallback, useState } from "react";
 
 export const LogInCard = () => {
