@@ -11,6 +11,14 @@ export type Config = {
         primaryColor: string;
         borderRadius: 'none' | 'sm' | 'md' | 'lg';
         illustrationStyle: number;
+        logoLight: {
+            fileName: string;
+            fileSrc: string;
+        } | undefined;
+        logoDark: {
+            fileName: string;
+            fileSrc: string;
+        } | undefined;
     }
 }
 
@@ -27,6 +35,8 @@ export const DEFAULT_CONFIG: Config = {
         primaryColor: '#363FF9',
         borderRadius: 'none',
         illustrationStyle: 0,
+        logoLight: undefined,
+        logoDark: undefined,
     },
 }
 
