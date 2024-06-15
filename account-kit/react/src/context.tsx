@@ -27,7 +27,6 @@ export type AlchemyAccountContextProps =
       config: AlchemyAccountsConfig;
       queryClient: QueryClient;
       ui?: {
-        isModalOpen: boolean;
         openAuthModal: () => void;
         closeAuthModal: () => void;
       };
@@ -95,6 +94,7 @@ export const AlchemyAccountProvider = (
   const { config, queryClient, children, uiConfig } = props;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const openAuthModal = useCallback(() => setIsModalOpen(true), []);
   const closeAuthModal = useCallback(() => setIsModalOpen(false), []);
 
@@ -104,13 +104,12 @@ export const AlchemyAccountProvider = (
       queryClient,
       ui: uiConfig
         ? {
-            isModalOpen,
             openAuthModal,
             closeAuthModal,
           }
         : undefined,
     }),
-    [config, queryClient, uiConfig, openAuthModal, closeAuthModal, isModalOpen],
+    [config, queryClient, uiConfig, openAuthModal, closeAuthModal],
   );
 
   const { status, isAuthenticating } = useSignerStatus(initialContext);
@@ -142,7 +141,11 @@ export const AlchemyAccountProvider = (
           >
             {children}
             {uiConfig?.auth && (
-              <AuthModal auth={uiConfig.auth} hideError={uiConfig.hideError} />
+              <AuthModal
+                open={isModalOpen}
+                auth={uiConfig.auth}
+                hideError={uiConfig.hideError}
+              />
             )}
           </AuthModalContext.Provider>
         </QueryClientProvider>

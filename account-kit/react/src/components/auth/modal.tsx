@@ -4,16 +4,17 @@ import { useAuthModal } from "../../hooks/useAuthModal.js";
 import { Dialog } from "../dialog/dialog.js";
 
 type AuthModalProps = {
+  open: boolean;
   hideError?: boolean;
   auth: NonNullable<AlchemyAccountsUIConfig["auth"]>;
 };
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-export const AuthModal = ({ hideError, auth }: AuthModalProps) => {
-  const { isModalOpen, closeAuthModal } = useAuthModal();
+export const AuthModal = ({ open, hideError, auth }: AuthModalProps) => {
+  const { closeAuthModal } = useAuthModal();
 
   return (
-    <Dialog isOpen={isModalOpen} onClose={closeAuthModal}>
+    <Dialog isOpen={open} onClose={closeAuthModal}>
       <div className="modal w-[368px]">
         <AuthCard
           hideError={hideError}
