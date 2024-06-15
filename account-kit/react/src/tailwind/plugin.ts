@@ -39,7 +39,7 @@ export const getAccountKitContentPath = () => {
   const pathToMe = require.resolve("@account-kit/react");
   const contentPath = `${pathToMe.replace(
     "index.js",
-    ""
+    "",
   )}**/*.{js,ts,jsx,tsx,mdx}`;
 
   return contentPath;
@@ -70,7 +70,7 @@ export const getAccountKitContentPath = () => {
  * @returns a TailwindPlugin to be used within the tailwind.config.js
  */
 export const accountKitUi: (
-  themeOverride?: AccountKitThemeOverride
+  themeOverride?: AccountKitThemeOverride,
 ) => TailWindPlugin = (themeOverride) => {
   const defaultTheme = createDefaultTheme();
   const accountKitTheme = apply(defaultTheme, themeOverride);
@@ -96,14 +96,28 @@ export const accountKitUi: (
             (acc, key) => ({
               ...acc,
               [key]: `var(${getColorVariableName(
-                key as AccountKitThemeColor
+                key as AccountKitThemeColor,
               )})`,
             }),
-            {} as Record<AccountKitThemeColor, string>
+            {} as Record<AccountKitThemeColor, string>,
           ),
+          keyframes: {
+            "fade-in": {
+              "0%": { opacity: "0" },
+              "100%": { opacity: "1" },
+            },
+            "slide-up": {
+              "0%": { transform: "translateY(100%)", opacity: "0" },
+              "100%": { transform: "translateY(0%))", opacity: "1" },
+            },
+          },
+          animation: {
+            "fade-in": "fade-in 150ms ease",
+            "slide-up": "slide-up 350ms cubic-bezier(.15,1.15,0.6,1.00)",
+          },
         },
       },
-    }
+    },
   );
 };
 
@@ -116,7 +130,7 @@ export const accountKitUi: (
  */
 export const withAccountKitUi = (
   config: TailwindConfig,
-  themeOverride?: AccountKitThemeOverride
+  themeOverride?: AccountKitThemeOverride,
 ): TailwindConfig => ({
   ...config,
   content: Array.isArray(config.content)

@@ -1,24 +1,20 @@
-import { forwardRef } from "react";
 import { AuthCard } from "./card/index.js";
 import { type AlchemyAccountsUIConfig } from "../../context.js";
 import { useAuthModal } from "../../hooks/useAuthModal.js";
+import { Dialog } from "../dialog/dialog.js";
 
 type AuthModalProps = {
   hideError?: boolean;
   auth: NonNullable<AlchemyAccountsUIConfig["auth"]>;
 };
 
-export const AuthModal = forwardRef<HTMLDialogElement, AuthModalProps>(
-  function AuthModal({ hideError, auth }, ref) {
-    const { closeAuthModal } = useAuthModal();
+// eslint-disable-next-line jsdoc/require-jsdoc
+export const AuthModal = ({ hideError, auth }: AuthModalProps) => {
+  const { isModalOpen, closeAuthModal } = useAuthModal();
 
-    return (
-      <dialog
-        ref={ref}
-        className={`modal overflow-visible relative w-[368px] ${
-          auth.className ?? ""
-        }`}
-      >
+  return (
+    <Dialog isOpen={isModalOpen} onClose={closeAuthModal}>
+      <div className="modal w-[368px]">
         <AuthCard
           hideError={hideError}
           header={auth.header}
@@ -26,8 +22,7 @@ export const AuthModal = forwardRef<HTMLDialogElement, AuthModalProps>(
           onAuthSuccess={() => closeAuthModal()}
           showClose
         />
-        <div className="modal-backdrop" onClick={() => closeAuthModal()} />
-      </dialog>
-    );
-  }
-);
+      </div>
+    </Dialog>
+  );
+};
