@@ -66,7 +66,7 @@ export type AlchemyAccountsProviderProps = {
  * @throws if used outside of the AlchemyAccountProvider
  */
 export const useAlchemyAccountContext = (
-  override?: AlchemyAccountContextProps,
+  override?: AlchemyAccountContextProps
 ): NoUndefined<AlchemyAccountContextProps> => {
   const context = useContext(AlchemyAccountContext);
   if (override != null) return override;
@@ -89,7 +89,7 @@ export const useAlchemyAccountContext = (
  * @returns The element to wrap your application in for Alchemy Accounts context.
  */
 export const AlchemyAccountProvider = (
-  props: React.PropsWithChildren<AlchemyAccountsProviderProps>,
+  props: React.PropsWithChildren<AlchemyAccountsProviderProps>
 ) => {
   const { config, queryClient, children, uiConfig } = props;
 
@@ -109,7 +109,7 @@ export const AlchemyAccountProvider = (
           }
         : undefined,
     }),
-    [config, queryClient, uiConfig, openAuthModal, closeAuthModal],
+    [config, queryClient, uiConfig, openAuthModal, closeAuthModal]
   );
 
   const { status, isAuthenticating } = useSignerStatus(initialContext);
