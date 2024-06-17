@@ -13,6 +13,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
+    },
+    "./exports": {
+      "types": "./dist/exports/index.d.ts",
+      "import": "./dist/exports/index.js",
+      "default": "./dist/exports/index.js"
     }
   },
   "scripts": {
@@ -23,7 +28,12 @@
     "typescript-template": "*"
   },
   "dependencies": {
+    "dotenv": "^16.4.5",
     "eslint": "^8.39.0",
+    "minimatch": "^9.0.4",
+    "openai": "^4.51.0",
+    "recast": "^0.23.9",
+    "synckit": "^0.9.0",
     "typescript": "^5.0.4"
   }
 }
