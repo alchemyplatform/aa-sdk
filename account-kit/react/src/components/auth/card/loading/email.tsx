@@ -35,7 +35,7 @@ export const LoadingEmail = ({ context }: LoadingEmailProps) => {
   return (
     <div className="flex flex-col gap-5 items-center">
       <div className="flex flex-col items-center justify-center h-12 w-12">
-        <MailIllustration />
+        <MailIllustration className="animate-pulse" />
       </div>
 
       <h3 className="font-semibold text-lg">{ls.loadingEmail.title}</h3>
@@ -90,7 +90,7 @@ export const CompletingEmailAuth = ({ context }: CompletingEmailAuthProps) => {
   return (
     <div className="flex flex-col gap-5 items-center">
       <div className="flex flex-col items-center justify-center h-12 w-12">
-        <Spinner className="animate-spin" />
+        <Spinner />
       </div>
 
       <p className="text-fg-secondary text-center text-sm">
