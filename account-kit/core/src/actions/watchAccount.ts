@@ -3,6 +3,13 @@ import type { AlchemyAccountsConfig, SupportedAccountTypes } from "../types.js";
 import { type GetAccountResult } from "./getAccount.js";
 import { getChain } from "./getChain.js";
 
+/**
+ * Watches an account of the specified type and calls the provided callback on changes.
+ *
+ * @param type the type of account to watch
+ * @param config the Alchemy accounts configuration
+ * @returns a function that subscribes to account changes and calls the provided callback
+ */
 export const watchAccount =
   <TAccount extends SupportedAccountTypes>(
     type: TAccount,

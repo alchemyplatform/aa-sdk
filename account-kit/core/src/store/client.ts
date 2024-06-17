@@ -122,6 +122,11 @@ const staticState: AccountState<SupportedAccountTypes> = {
   account: undefined,
 };
 
+/**
+ * Returns the default account state for the specified account type.
+ *
+ * @returns the default account state for the given supported account type
+ */
 export const defaultAccountState = <
   T extends SupportedAccountTypes
 >(): AccountState<T> => staticState;

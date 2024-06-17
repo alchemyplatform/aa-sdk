@@ -38,6 +38,15 @@ export type CreateAccountParams<TAccount extends SupportedAccountTypes> = {
   accountParams?: AccountConfig<TAccount>;
 };
 
+/**
+ * Creates an account of the specified type using the provided parameters and configuration.
+ *
+ * @param param0 the account creation parameters
+ * @param param0.type the type of account to create
+ * @param param0.accountParams the parameters for account creation
+ * @param config the Alchemy accounts configuration
+ * @returns a promise that resolves to the created account
+ */
 export async function createAccount<TAccount extends SupportedAccountTypes>(
   { type, accountParams: params }: CreateAccountParams<TAccount>,
   config: AlchemyAccountsConfig

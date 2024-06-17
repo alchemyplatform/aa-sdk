@@ -7,6 +7,11 @@ export abstract class BaseError extends CoreBaseError {
   override version = VERSION;
 }
 
+/**
+ * Error thrown when attempting to access a client-only property on the server.
+ *
+ * @param property the name of the property that is client-only
+ */
 export class ClientOnlyPropertyError extends BaseError {
   name: string = "ClientOnlyPropertyError";
 

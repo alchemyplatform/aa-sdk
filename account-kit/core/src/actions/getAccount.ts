@@ -9,6 +9,14 @@ export type GetAccountResult<TAccount extends SupportedAccountTypes> =
 export type GetAccountParams<TAccount extends SupportedAccountTypes> =
   CreateAccountParams<TAccount>;
 
+/**
+ * Retrieves an account of the specified type from the client store using the provided configuration.
+ *
+ * @param param0 the parameters for getting the account
+ * @param param0.type the type of account to retrieve
+ * @param config the Alchemy accounts configuration
+ * @returns the account and its status
+ */
 export const getAccount = <TAccount extends SupportedAccountTypes>(
   { type }: GetAccountParams<TAccount>,
   config: AlchemyAccountsConfig
