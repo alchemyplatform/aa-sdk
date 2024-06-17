@@ -29,8 +29,26 @@
         "enableFixer": true
       }
     ],
+    "jsdoc/no-types": "off",
     "jsdoc/require-jsdoc": "off",
-    "eslint-rules/require-jsdoc-on-reexported-functions": "error"
+    "jsdoc/match-description": [
+      "error",
+      {
+        "tags": {
+          "example": {
+            "message": "Example tags must provide a code block with a language identifier.",
+            "match": "```(js|javascript|ts|tsx)([\\s\\S]*)```"
+          }
+        }
+      }
+    ],
+    "eslint-rules/require-jsdoc-on-reexported-functions": [
+      "error",
+      {
+        "enableFixer": true,
+        "ignore": ["!**/account-kit/core/src/**/*"]
+      }
+    ]
   },
   "overrides": [
     {

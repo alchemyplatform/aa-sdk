@@ -146,6 +146,27 @@ export const parseFactoryAddressFromAccountInitCode = (
   return [factoryAddress, factoryCalldata];
 };
 
+/**
+ * Retrieves the account address. Uses a provided `accountAddress` if available; otherwise, it computes the address using the entry point contract and the initial code.
+ *
+ * @example
+ * ```ts
+ * import { getEntryPoint, getAccountAddress } from "@aa-sdk/core";
+ *
+ * const accountAddress = await getAccountAddress({
+ *  client,
+ *  entryPoint: getEntryPoint(chain),
+ *  getAccountInitCode: async () => "0x{factoryAddress}{factoryCallData}",
+ * });
+ * ```
+ *
+ * @param {object} config The configuration object
+ * @param {PublicClient} config.client A public client instance to interact with the blockchain
+ * @param {EntryPointDef} config.entryPoint The entry point definition which includes the address and ABI
+ * @param {Address} config.accountAddress Optional existing account address
+ * @param {function(): Promise<Hex>} config.getAccountInitCode A function that returns a Promise resolving to a Hex string representing the initial code of the account
+ * @returns {Promise<Address>} A promise that resolves to the account address
+ */
 export const getAccountAddress = async ({
   client,
   entryPoint,
