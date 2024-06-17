@@ -6,24 +6,30 @@ import { PhotoUploads } from "./PhotoUpload";
 import { Switch } from "@/components/ui/switch";
 import { ThemeSwitch } from "../shared/ThemeSwitch";
 import { useState } from "react";
+import Image from "next/image";
+import { FileCode } from "lucide-react";
+import ExternalLink from "../shared/ExternalLink";
 
 export function Styling({ className }: { className?: string }) {
   const { config, setConfig } = useConfig();
 
   const onSwitchTheme = (isDarkMode: boolean) => {
-    setConfig(prev => ({
+    setConfig((prev) => ({
       ...prev,
       ui: {
         ...prev.ui,
-        theme: isDarkMode ? "dark" : "light"
-      }
-    }))
-  }
+        theme: isDarkMode ? "dark" : "light",
+      },
+    }));
+  };
   return (
     <div className={cn("flex flex-col", className)}>
       <div className="flex flex-col gap-4 border-b border-static py-6">
         <p className="font-semibold text-secondary-foreground text-sm">Theme</p>
-        <ThemeSwitch checked={config.ui.theme === 'dark'} onCheckedChange={onSwitchTheme} />
+        <ThemeSwitch
+          checked={config.ui.theme === "dark"}
+          onCheckedChange={onSwitchTheme}
+        />
       </div>
 
       <div className="flex flex-col gap-4 border-b border-static py-6 items-start">
@@ -65,8 +71,11 @@ export function Styling({ className }: { className?: string }) {
           <p className="font-semibold text-secondary-foreground text-sm">
             Illustration style
           </p>
+          <IllustrationStyleOptions />
         </div>
       </div>
+
+      <LearnMore />
     </div>
   );
 }
@@ -119,6 +128,68 @@ export function CornerRadiusOptions() {
           <span className="text-sm font-semibold">{option.label}</span>
         </button>
       ))}
+    </div>
+  );
+}
+
+const options = [
+  "/icons/email-pending-1.svg",
+  "/icons/email-pending-2.svg",
+  "/icons/email-pending-3.svg",
+  "/icons/email-pending-4.svg",
+];
+
+function IllustrationStyleOptions() {
+  const {
+    config: {
+      ui: { illustrationStyle },
+    },
+    setConfig,
+  } = useConfig();
+
+  const onChange = (style: 1 | 2 | 3 | 4) => {
+    setConfig((prev) => ({
+      ...prev,
+      ui: {
+        ...prev.ui,
+        illustrationStyle: style,
+      },
+    }));
+  };
+
+  return (
+    <div className="flex self-stretch gap-3">
+      {options.map((option, i) => (
+        <button
+          key={option}
+          className={cn(
+            "py-2 flex-1 basis-0 rounded-lg border border-[#CBD5E1]",
+            "text-fg-accent-brand hover:opacity-80",
+            "flex items-center justify-center"
+          )}
+          style={{
+            boxShadow:
+              illustrationStyle === i + 1
+                ? "0px 0px 4px 0px rgba(36, 0, 255, 0.7)"
+                : undefined,
+          }}
+          onClick={() => onChange((i + 1) as 1 | 2 | 3 | 4)}
+        >
+          <Image src={option} width={48} height={48} alt="Email icon" />
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function LearnMore() {
+  return (
+    <div className="flex items-center gap-1 text-xs text-center self-center mt-8">
+      <FileCode className="stroke-fg-secondary stroke-1" size={18} />
+      <div className="text-fg-secondary">Want to fully configure the CSS?</div>
+      <ExternalLink className="font-semibold text-blue-600" href="#">
+        Click to learn how
+      </ExternalLink>
     </div>
   );
 }

@@ -5,10 +5,6 @@ import { Public_Sans, Inter } from "next/font/google";
 import {
   AuthCard,
   AuthType,
-  DemoSet,
-  useAuthModal,
-  useAuthError,
-  useUser,
 } from "@alchemy/aa-alchemy/react";
 // eslint-disable-next-line import/extensions
 import { useLogout } from "@alchemy/aa-alchemy/react";
