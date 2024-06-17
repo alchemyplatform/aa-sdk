@@ -147,7 +147,7 @@ function IllustrationStyleOptions() {
     setConfig,
   } = useConfig();
 
-  const onChange = (style: 1 | 2 | 3 | 4) => {
+  const onChange = (style: number) => {
     setConfig((prev) => ({
       ...prev,
       ui: {
@@ -173,7 +173,7 @@ function IllustrationStyleOptions() {
                 ? "0px 0px 4px 0px rgba(36, 0, 255, 0.7)"
                 : undefined,
           }}
-          onClick={() => onChange((i + 1) as 1 | 2 | 3 | 4)}
+          onClick={() => onChange(i + 1)}
         >
           <Image src={option} width={48} height={48} alt="Email icon" />
         </button>

@@ -10,7 +10,7 @@ export type Config = {
         theme: 'light' | 'dark';
         primaryColor: string;
         borderRadius: 'none' | 'sm' | 'md' | 'lg';
-        illustrationStyle: 1 | 2 | 3 | 4;
+        illustrationStyle: number;
         logoLight: {
             fileName: string;
             fileSrc: string;
