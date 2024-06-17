@@ -3,15 +3,30 @@ import { ColorPicker } from "./ColorPicker";
 import { useConfig } from "@/src/app/state";
 import { PhotoIcon } from "../icons/photo";
 import { PhotoUploads } from "./PhotoUpload";
+import { Switch } from "@/components/ui/switch";
+import { ThemeSwitch } from "../shared/ThemeSwitch";
+import { useState } from "react";
 
 export function Styling({ className }: { className?: string }) {
+  const { config, setConfig } = useConfig();
+
+  const onSwitchTheme = (isDarkMode: boolean) => {
+    setConfig(prev => ({
+      ...prev,
+      ui: {
+        ...prev.ui,
+        theme: isDarkMode ? "dark" : "light"
+      }
+    }))
+  }
   return (
     <div className={cn("flex flex-col", className)}>
-      <div className="flex flex-col gap-4 border-b border-static py-4">
+      <div className="flex flex-col gap-4 border-b border-static py-6">
         <p className="font-semibold text-secondary-foreground text-sm">Theme</p>
+        <ThemeSwitch checked={config.ui.theme === 'dark'} onCheckedChange={onSwitchTheme} />
       </div>
 
-      <div className="flex flex-col gap-4 border-b border-static py-4 items-start">
+      <div className="flex flex-col gap-4 border-b border-static py-6 items-start">
         <div className="flex flex-col gap-2">
           <p className="font-semibold text-secondary-foreground text-sm">
             Color
@@ -23,7 +38,7 @@ export function Styling({ className }: { className?: string }) {
         <ColorPicker />
       </div>
 
-      <div className="flex flex-col gap-4 border-b border-static py-4 items-start">
+      <div className="flex flex-col gap-4 border-b border-static py-6 items-start">
         <div className="flex flex-col gap-2">
           <p className="font-semibold text-secondary-foreground text-sm">
             Logo
@@ -36,7 +51,7 @@ export function Styling({ className }: { className?: string }) {
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 border-b border-static py-4 items-start">
+      <div className="flex flex-col gap-4 border-b border-static py-6 items-start">
         <div className="flex flex-col gap-2 self-stretch">
           <p className="font-semibold text-secondary-foreground text-sm">
             Corner radius
@@ -45,7 +60,7 @@ export function Styling({ className }: { className?: string }) {
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 py-4 items-start">
+      <div className="flex flex-col gap-4 py-6 items-start">
         <div className="flex flex-col gap-2 self-stretch">
           <p className="font-semibold text-secondary-foreground text-sm">
             Illustration style
