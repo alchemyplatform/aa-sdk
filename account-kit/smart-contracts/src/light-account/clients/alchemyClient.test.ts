@@ -2,13 +2,13 @@ import {
   alchemyEnhancedApiActions,
   createAlchemySmartAccountClient,
 } from "@account-kit/infra";
-import * as AACoreModule from "@alchemy/aa-core";
+import * as AACoreModule from "@aa-sdk/core";
 import {
   LocalAccountSigner,
   polygonMumbai,
   type BatchUserOperationCallData,
   type SmartAccountSigner,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { Alchemy, Network } from "alchemy-sdk";
 import { avalanche, type Chain } from "viem/chains";
 import { createLightAccountAlchemyClient } from "./alchemyClient.js";
@@ -102,7 +102,7 @@ describe("Light Account Client Tests", () => {
       "[
         {
           \\"code\\": \\"custom\\",
-          \\"message\\": \\"chain must include an alchemy rpc url. See \`createAlchemyChain\` or use the \`AlchemyChainMap\` exported from \`@alchemy/aa-core\`\\",
+          \\"message\\": \\"chain must include an alchemy rpc url. See \`createAlchemyChain\` or use the \`AlchemyChainMap\` exported from \`@aa-sdk/core\`\\",
           \\"fatal\\": true,
           \\"path\\": [
             \\"chain\\"

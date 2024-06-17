@@ -24,8 +24,8 @@ import {
   LightSmartContractAccount,
   getDefaultLightAccountFactoryAddress,
 } from "@account-kit/smart-contracts";
-import { LocalAccountSigner, type SmartAccountSigner } from "@alchemy/aa-core";
-import { polygonMumbai } from "@alchemy/aa-core";
+import { LocalAccountSigner, type SmartAccountSigner } from "@aa-sdk/core";
+import { polygonMumbai } from "@aa-sdk/core";
 import { http } from "viem";
 
 // [!code focus:99]

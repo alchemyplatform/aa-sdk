@@ -12,9 +12,9 @@ The `SmartAccountClient` is also an extension of the `viem` [`Client`](https://v
 ## Import
 
 ```ts
-import { createSmartAccountClient } from "@alchemy/aa-core";
+import { createSmartAccountClient } from "@aa-sdk/core";
 // OR
-import { createSmartAccountClientFromExisting } from "@alchemy/aa-core";
+import { createSmartAccountClientFromExisting } from "@aa-sdk/core";
 ```
 
 ## Usage
@@ -23,10 +23,10 @@ Initialize a `SmartAccountClient` with your desired Chain and Transport using `c
 :::code-group
 
 ```ts [createSmartAccountClient.ts]
-import { createSmartAccountClient } from "@alchemy/aa-core";
+import { createSmartAccountClient } from "@aa-sdk/core";
 import { createLightAccount } from "@account-kit/smart-contracts";
 import { http } from "viem";
-import { sepolia } from "@alchemy/aa-core";
+import { sepolia } from "@aa-sdk/core";
 
 export const smartAccountClient = new createSmartAccountClient({
   transport: http("ALCHEMY_RPC_URL"),
@@ -46,9 +46,9 @@ const result = await smartAccountClient.sendUserOperation({
 import {
   createBundlerClient,
   createSmartAccountClientFromExisting,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { http } from "viem";
-import { sepolia } from "@alchemy/aa-core";
+import { sepolia } from "@aa-sdk/core";
 
 // This client only has methods for directly interacting with public RPC endpoints
 const bundlerClient = createBundlerClient({

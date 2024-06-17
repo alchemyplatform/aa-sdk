@@ -1,8 +1,4 @@
-import type {
-  Address,
-  BundlerClient,
-  SmartAccountSigner,
-} from "@alchemy/aa-core";
+import type { Address, BundlerClient, SmartAccountSigner } from "@aa-sdk/core";
 import {
   hashMessage,
   hashTypedData,

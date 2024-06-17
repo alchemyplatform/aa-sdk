@@ -4,7 +4,7 @@ import {
   getEntryPoint,
   type EntryPointDef,
   type SmartAccountSigner,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import {
   concatHex,
   encodeFunctionData,

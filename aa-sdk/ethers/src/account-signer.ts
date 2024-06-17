@@ -7,7 +7,7 @@ import {
   type SmartContractAccount,
   type UserOperationCallData,
   type UserOperationOverrides,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { Signer } from "@ethersproject/abstract-signer";
 import { hexlify } from "@ethersproject/bytes";
 import type { Deferrable } from "@ethersproject/properties";

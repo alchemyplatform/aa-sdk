@@ -2,7 +2,7 @@ import {
   AccountNotFoundError,
   type GetAccountParameter,
   type SmartContractAccount,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { type Chain, type Client, type Transport } from "viem";
 import { isMultisigModularAccount } from "../../../account/multisigAccount.js";
 import type { GetPluginAddressParameter } from "../../types.js";

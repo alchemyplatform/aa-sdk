@@ -16,7 +16,7 @@ If you have an existing Modular Account (which has multi-owner plugin by default
 :::
 
 ```ts
-import { LocalAccountSigner } from "@alchemy/aa-core";
+import { LocalAccountSigner } from "@aa-sdk/core";
 import { createMultisigAccountAlchemyClient } from "@account-kit/infra";
 
 // Creating a 3/3 multisig account

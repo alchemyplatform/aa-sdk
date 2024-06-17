@@ -3,7 +3,7 @@ import {
   polygonMumbai,
   type BatchUserOperationCallData,
   type SmartAccountSigner,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { custom, type Chain } from "viem";
 import { createLightAccountClient } from "../clients/client.js";
 import type { LightAccountVersion } from "../types.js";

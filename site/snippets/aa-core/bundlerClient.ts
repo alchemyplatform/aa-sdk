@@ -1,4 +1,4 @@
-import { createBundlerClient, mainnet } from "@alchemy/aa-core";
+import { createBundlerClient, mainnet } from "@aa-sdk/core";
 import { http } from "viem";
 
 export const client = createBundlerClient({

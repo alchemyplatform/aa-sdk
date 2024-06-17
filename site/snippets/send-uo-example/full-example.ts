@@ -3,7 +3,7 @@ import {
   LocalAccountSigner,
   sepolia,
   type SmartAccountSigner,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { encodeFunctionData } from "viem";
 
 const PRIVATE_KEY = "0xYourEOAPrivateKey";

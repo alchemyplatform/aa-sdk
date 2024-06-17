@@ -3,7 +3,7 @@ import {
   LocalAccountSigner,
   SmartAccountSigner,
   polygonMumbai,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { http } from "viem";
 import { provider } from "./ethers-provider.js";
 

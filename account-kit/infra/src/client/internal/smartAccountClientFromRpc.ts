@@ -5,7 +5,7 @@ import {
   type SmartContractAccount,
   type SmartContractAccountWithSigner,
   type UserOperationContext,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import type { Chain, CustomTransport, Transport } from "viem";
 import { alchemyFeeEstimator } from "../../middleware/feeEstimator.js";
 import { alchemyGasManagerMiddleware } from "../../middleware/gasManager.js";

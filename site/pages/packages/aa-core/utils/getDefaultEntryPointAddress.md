@@ -12,8 +12,8 @@ Utility method that returns the default EntryPoint contract address for a given 
 :::code-group
 
 ```ts [example.ts]
-import { sepolia } from "@alchemy/aa-core";
-import { getDefaultEntryPointAddress } from "@alchemy/aa-core";
+import { sepolia } from "@aa-sdk/core";
+import { getDefaultEntryPointAddress } from "@aa-sdk/core";
 
 const chain = sepolia;
 const entryPointAddress = getDefaultEntryPointAddress(chain);
