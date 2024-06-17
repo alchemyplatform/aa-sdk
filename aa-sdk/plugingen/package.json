@@ -60,8 +60,7 @@
   },
   "homepage": "https://github.com/alchemyplatform/aa-sdk#readme",
   "dependencies": {
-    "@alchemy/aa-accounts": "^3.19.0",
-    "@alchemy/aa-core": "^3.19.0",
+    "@aa-sdk/core": "^3.18.2",
     "bundle-require": "^4.0.2",
     "cac": "^6.7.14",
     "change-case": "^5.4.3",

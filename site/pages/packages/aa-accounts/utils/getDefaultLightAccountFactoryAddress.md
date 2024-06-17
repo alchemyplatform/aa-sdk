@@ -11,7 +11,7 @@ Utility method that returns the default Light Account Factory contract address f
 ## Usage
 
 ```ts
-import { sepolia } from "@alchemy/aa-core";
+import { sepolia } from "@aa-sdk/core";
 import { getDefaultLightAccountFactoryAddress } from "@account-kit/smart-contracts";
 
 const chain = sepolia;

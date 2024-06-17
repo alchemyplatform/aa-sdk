@@ -1,4 +1,4 @@
-import type { SmartContractAccount } from "@alchemy/aa-core";
+import type { SmartContractAccount } from "@aa-sdk/core";
 import { encodeFunctionData } from "viem";
 import { IStandardExecutorAbi } from "../abis/IStandardExecutor.js";
 

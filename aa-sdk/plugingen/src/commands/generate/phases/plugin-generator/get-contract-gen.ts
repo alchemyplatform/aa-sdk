@@ -10,7 +10,7 @@ export const GetContractGenPhase: Phase = async (input) => {
   addImport("viem", { name: "Transport", isType: true });
   addImport("viem", { name: "PublicClient", isType: true });
   addImport("viem", { name: "Client", isType: true });
-  addImport("@alchemy/aa-core", { name: "ChainNotFoundError" });
+  addImport("@aa-sdk/core", { name: "ChainNotFoundError" });
 
   content.push(dedent`
   getContract: <C extends Client>(

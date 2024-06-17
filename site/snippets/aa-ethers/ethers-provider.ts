@@ -2,11 +2,11 @@ import {
   createSimpleSmartAccount,
   getChain,
   getDefaultSimpleAccountFactoryAddress,
-} from "@alchemy/aa-core";
-import { EthersProviderAdapter } from "@alchemy/aa-ethers";
+} from "@aa-sdk/core";
+import { EthersProviderAdapter } from "@aa-sdk/ethers";
 import { Alchemy, Network } from "alchemy-sdk";
-import { signer } from "snippets/aa-core/lightAccountClient";
 import { http } from "viem";
+import { signer } from "../aa-core/lightAccountClient";
 
 // 1. Create alchemy instance
 const alchemy = new Alchemy({

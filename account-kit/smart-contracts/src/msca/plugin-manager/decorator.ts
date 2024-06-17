@@ -2,7 +2,7 @@ import type {
   GetEntryPointFromAccount,
   SendUserOperationResult,
   SmartContractAccount,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import type { Chain, Client, Transport } from "viem";
 import { installPlugin, type InstallPluginParams } from "./installPlugin.js";
 import {

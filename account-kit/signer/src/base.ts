@@ -1,4 +1,4 @@
-import { takeBytes, type SmartAccountAuthenticator } from "@alchemy/aa-core";
+import { takeBytes, type SmartAccountAuthenticator } from "@aa-sdk/core";
 import {
   hashMessage,
   hashTypedData,

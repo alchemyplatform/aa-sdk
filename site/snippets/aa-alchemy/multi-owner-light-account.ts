@@ -1,5 +1,5 @@
 import { createMultiOwnerLightAccountAlchemyClient } from "@account-kit/infra";
-import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
+import { LocalAccountSigner, sepolia } from "@aa-sdk/core";
 import type { Address, Hex } from "viem";
 
 const chain = sepolia;

@@ -1,7 +1,7 @@
 {
   "name": "@account-kit/infra",
   "version": "3.18.2",
-  "description": "adapters for @alchemy/aa-core for interacting with alchemy services",
+  "description": "adapters for @aa-sdk/core for interacting with alchemy services",
   "author": "Alchemy",
   "license": "MIT",
   "private": false,
@@ -45,7 +45,7 @@
     "vitest": "^0.31.0"
   },
   "dependencies": {
-    "@alchemy/aa-core": "^3.18.2",
+    "@aa-sdk/core": "^3.18.2",
     "eventemitter3": "^5.0.1",
     "viem": "2.8.6",
     "zod": "^3.22.4"

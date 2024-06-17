@@ -17,7 +17,7 @@ To use your account, you will need to pass it into a `SmartAccountClient`.
 
 ```ts
 import { createAlchemySmartAccountClient } from "@account-kit/infra";
-import { sepolia } from "@alchemy/aa-core";
+import { sepolia } from "@aa-sdk/core";
 
 const client = createAlchemySmartAccountClient({
   // created above

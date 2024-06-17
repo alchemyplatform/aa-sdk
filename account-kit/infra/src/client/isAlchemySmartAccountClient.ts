@@ -1,7 +1,4 @@
-import {
-  isSmartAccountClient,
-  type SmartContractAccount,
-} from "@alchemy/aa-core";
+import { isSmartAccountClient, type SmartContractAccount } from "@aa-sdk/core";
 import type { Chain, Client, Transport } from "viem";
 import type { AlchemySmartAccountClient } from "./smartAccountClient";
 

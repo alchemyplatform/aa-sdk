@@ -10,7 +10,7 @@ description: Overview of the createMultisigAccountAlchemyClient factory in aa-al
 ## Usage
 
 ```ts
-import { LocalAccountSigner } from "@alchemy/aa-core";
+import { LocalAccountSigner } from "@aa-sdk/core";
 import { createMultisigAccountAlchemyClient } from "@account-kit/infra";
 
 // Creating a 3/3 multisig account

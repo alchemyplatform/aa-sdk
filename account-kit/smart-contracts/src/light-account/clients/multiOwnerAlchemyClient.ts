@@ -12,7 +12,7 @@ import {
   type MultiOwnerLightAccount,
   type MultiOwnerLightAccountClientActions,
 } from "@account-kit/smart-contracts";
-import type { HttpTransport, SmartAccountSigner } from "@alchemy/aa-core";
+import type { HttpTransport, SmartAccountSigner } from "@aa-sdk/core";
 import { custom, type Chain, type CustomTransport, type Transport } from "viem";
 
 export type AlchemyMultiOwnerLightAccountClientConfig<
