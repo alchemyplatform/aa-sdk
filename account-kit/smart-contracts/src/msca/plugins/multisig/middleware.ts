@@ -8,7 +8,7 @@ import {
   type ClientMiddlewareFn,
   type UserOperationRequest_v6,
   type UserOperationRequest_v7,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { type Hex } from "viem";
 import { isMultisigModularAccount } from "../../account/multisigAccount.js";
 import {

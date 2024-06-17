@@ -1,4 +1,4 @@
-import { takeBytes } from "@alchemy/aa-core";
+import { takeBytes } from "@aa-sdk/core";
 import { concat, hexToBigInt, pad, toHex } from "viem";
 import type { Signature } from "../types";
 

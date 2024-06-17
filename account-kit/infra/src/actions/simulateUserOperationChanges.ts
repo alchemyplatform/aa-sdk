@@ -4,7 +4,7 @@ import {
   deepHexlify,
   type SendUserOperationParameters,
   type SmartContractAccount,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import type { Chain, Client, Transport } from "viem";
 import { isAlchemySmartAccountClient } from "../client/isAlchemySmartAccountClient.js";
 import type { AlchemyRpcSchema } from "../client/types.js";

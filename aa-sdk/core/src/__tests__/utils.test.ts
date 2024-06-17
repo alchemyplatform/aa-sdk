@@ -1,4 +1,4 @@
-import { sepolia } from "@alchemy/aa-core";
+import { sepolia } from "@aa-sdk/core";
 import { getEntryPoint } from "../entrypoint/index.js";
 import { stringToIndex } from "../utils/index.js";
 

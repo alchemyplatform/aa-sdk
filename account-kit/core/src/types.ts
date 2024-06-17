@@ -8,7 +8,7 @@ import type {
   LightAccount,
   MultiOwnerModularAccount,
 } from "@account-kit/smart-contracts";
-import type { ConnectionConfig } from "@alchemy/aa-core";
+import type { ConnectionConfig } from "@aa-sdk/core";
 import type { CreateConnectorFn } from "@wagmi/core";
 import { type Config as WagmiConfig } from "@wagmi/core";
 import type { Chain } from "viem";

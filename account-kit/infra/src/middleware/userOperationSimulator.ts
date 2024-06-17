@@ -2,7 +2,7 @@ import {
   deepHexlify,
   resolveProperties,
   type ClientMiddlewareFn,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import type { ClientWithAlchemyMethods } from "../client/types";
 
 export function alchemyUserOperationSimulator<

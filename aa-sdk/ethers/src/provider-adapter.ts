@@ -5,7 +5,7 @@ import {
   type BundlerClient,
   type SmartAccountClient,
   type SmartContractAccount,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { createPublicClient, custom, http, type Transport } from "viem";
 import { AccountSigner } from "./account-signer.js";

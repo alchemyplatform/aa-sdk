@@ -1,4 +1,4 @@
-import { BaseError } from "@alchemy/aa-core";
+import { BaseError } from "@aa-sdk/core";
 
 export class NotAuthenticatedError extends BaseError {
   constructor() {

@@ -1,4 +1,4 @@
-import type { SmartContractAccount } from "@alchemy/aa-core";
+import type { SmartContractAccount } from "@aa-sdk/core";
 import type { Alchemy } from "alchemy-sdk";
 import type { Chain, HttpTransport, Transport } from "viem";
 import { AlchemySdkClientSchema } from "../../schema.js";

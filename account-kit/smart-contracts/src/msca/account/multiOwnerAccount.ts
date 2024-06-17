@@ -3,13 +3,13 @@ import type {
   SmartAccountSigner,
   SmartContractAccountWithSigner,
   ToSmartContractAccountParams,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import {
   createBundlerClient,
   getAccountAddress,
   getEntryPoint,
   toSmartContractAccount,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import {
   concatHex,
   encodeFunctionData,

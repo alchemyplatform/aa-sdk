@@ -1,4 +1,4 @@
-# `@alchemy/aa-core`
+# `@aa-sdk/core`
 
 This package contains the core interfaces and components for interacting with 4337 infrastructure. The primary interfaces that it exports are the `SmartAccountProvider` and `BaseSmartContractAccount`.
 
@@ -11,15 +11,15 @@ The `BaseSmartContractAccount` interface defines how you would interact with you
 To get started, first install the package:
 
 ```bash [yarn]
-yarn add @alchemy/aa-core
+yarn add @aa-sdk/core
 ```
 
 ```bash [npm]
-npm i -s @alchemy/aa-core
+npm i -s @aa-sdk/core
 ```
 
 ```bash [pnpm]
-pnpm i @alchemy/aa-core
+pnpm i @aa-sdk/core
 ```
 
 ## Usage
@@ -33,7 +33,7 @@ import {
   SmartAccountSigner,
   createSmartAccountClient,
   polygonMumbai,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { http } from "viem";
 
 const chain = polygonMumbai;

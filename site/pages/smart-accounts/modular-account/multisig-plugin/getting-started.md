@@ -14,7 +14,7 @@ The Multisig Plugin can be installed on the Modular Account or any ERC-6900 comp
 Next, initialize a Multisig Modular Account client and set the `n` accounts as signers.
 
 ```ts
-import { LocalAccountSigner } from "@alchemy/aa-core";
+import { LocalAccountSigner } from "@aa-sdk/core";
 import { createMultisigAccountAlchemyClient } from "@account-kit/infra";
 
 // Creating a 3/3 multisig account

@@ -2,7 +2,7 @@ import {
   type BundlerClient,
   type SmartAccountClient,
   type SmartContractAccount,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import type { Chain, Transport } from "viem";
 
 export type EthersProviderAdapterOpts<

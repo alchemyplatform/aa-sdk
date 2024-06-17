@@ -14,7 +14,7 @@ import {
   sepolia,
   zora,
   zoraSepolia,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import type { PluginConfig } from "@alchemy/plugingen";
 import { parseAbiParameters } from "viem";
 import { MultiOwnerPluginGenConfig } from "../multi-owner/config.js";

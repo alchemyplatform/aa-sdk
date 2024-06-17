@@ -5,7 +5,7 @@ import {
   type GetEntryPointFromAccount,
   type SendTransactionsParameters,
   type UserOperationContext,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import {
   useMutation,
   type UseMutateAsyncFunction,
