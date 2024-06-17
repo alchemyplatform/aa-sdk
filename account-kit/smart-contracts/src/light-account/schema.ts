@@ -1,4 +1,4 @@
-import { SignerSchema } from "@alchemy/aa-core";
+import { SignerSchema } from "@aa-sdk/core";
 import { Address } from "abitype/zod";
 import { isHex } from "viem";
 import { z } from "zod";

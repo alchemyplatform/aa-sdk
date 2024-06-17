@@ -3,7 +3,7 @@ import {
   useSendUserOperation,
   useSmartAccountClient,
 } from "@account-kit/react";
-import { WaitForUserOperationError } from "@alchemy/aa-core";
+import { WaitForUserOperationError } from "@aa-sdk/core";
 
 export function ComponentWithSendUserOperation() {
   /**

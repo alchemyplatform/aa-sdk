@@ -4,7 +4,7 @@ import {
   getChain,
   getDefaultSimpleAccountFactoryAddress,
   type Address,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { Wallet } from "@ethersproject/wallet";
 import { Alchemy, Network, type AlchemyProvider } from "alchemy-sdk";
 import { EthersProviderAdapter } from "../src/provider-adapter.js";

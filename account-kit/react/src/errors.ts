@@ -1,4 +1,4 @@
-import { BaseError as CoreBaseError } from "@alchemy/aa-core";
+import { BaseError as CoreBaseError } from "@aa-sdk/core";
 import { VERSION } from "./version.js";
 
 export abstract class BaseError extends CoreBaseError {

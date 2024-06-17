@@ -79,15 +79,15 @@ In this newly created directory for your app, add the following dependencies:
 :::code-group
 
 ```bash [npm]
-npm i @alchemy/aa-alchemy @account-kit/smart-contracts @alchemy/aa-core viem@2.8.6 @tanstack/react-query@5.28.9
+npm i @alchemy/aa-alchemy @account-kit/smart-contracts @aa-sdk/core viem@2.8.6 @tanstack/react-query@5.28.9
 ```
 
 ```bash [yarn]
-yarn add @alchemy/aa-alchemy @account-kit/smart-contracts @alchemy/aa-core viem@2.8.6 @tanstack/react-query@5.28.9
+yarn add @alchemy/aa-alchemy @account-kit/smart-contracts @aa-sdk/core viem@2.8.6 @tanstack/react-query@5.28.9
 ```
 
 ```bash [pnpm]
-pnpm i @alchemy/aa-alchemy @account-kit/smart-contracts @alchemy/aa-core viem@2.8.6 @tanstack/react-query@5.28.9
+pnpm i @alchemy/aa-alchemy @account-kit/smart-contracts @aa-sdk/core viem@2.8.6 @tanstack/react-query@5.28.9
 ```
 
 :::
@@ -96,7 +96,7 @@ pnpm i @alchemy/aa-alchemy @account-kit/smart-contracts @alchemy/aa-core viem@2.
 The versions of `viem` and `@tanstack/react-query` that's required to be installed is listed as a `peerDependency` of the various `@alchemy/*` packages (`2.8.6` and `5.28.9`, respectively, at the time of writing). Due to some breaking changes between patch and minor versions of `viem` and `@tanstack/react-query`, it's recommended to pin your version of `viem` to the listed `peerDependency` in the `package.json`.
 :::
 
-The three Alchemy packages - `@alchemy/aa-alchemy`, `@account-kit/smart-contracts`, and `@alchemy/aa-core` - come from the [Alchemy Account Kit](https://accountkit.alchemy.com/), and will provide the key building blocks for created Embedded Accounts.
+The three Alchemy packages - `@alchemy/aa-alchemy`, `@account-kit/smart-contracts`, and `@aa-sdk/core` - come from the [Alchemy Account Kit](https://accountkit.alchemy.com/), and will provide the key building blocks for created Embedded Accounts.
 
 [`viem`](https://viem.sh/) is a useful Web3 Utils library and a key dependency of Account Kit.
 

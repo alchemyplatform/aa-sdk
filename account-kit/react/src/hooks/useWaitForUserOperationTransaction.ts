@@ -1,6 +1,6 @@
 "use client";
 
-import type { WaitForUserOperationTxParameters } from "@alchemy/aa-core";
+import type { WaitForUserOperationTxParameters } from "@aa-sdk/core";
 import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
 import type { Hash } from "viem";
 import { useAlchemyAccountContext } from "../context.js";

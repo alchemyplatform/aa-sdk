@@ -1,4 +1,4 @@
-import type { UserOperationStruct } from "@alchemy/aa-core";
+import type { UserOperationStruct } from "@aa-sdk/core";
 import type { Address, Hash } from "viem";
 
 export enum SimulateAssetType {

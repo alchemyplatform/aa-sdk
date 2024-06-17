@@ -1,4 +1,4 @@
-import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
+import { LocalAccountSigner, sepolia } from "@aa-sdk/core";
 import { fromHex, pad } from "viem";
 import {
   createMultisigAccountAlchemyClient,

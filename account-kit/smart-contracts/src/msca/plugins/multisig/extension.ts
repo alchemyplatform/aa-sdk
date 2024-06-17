@@ -4,7 +4,7 @@ import {
   type IsUndefined,
   type SendUserOperationParameters,
   type SmartContractAccount,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { type Address, type Chain, type Client, type Transport } from "viem";
 import type { GetPluginAddressParameter } from "../types.js";
 import { getThreshold } from "./actions/getThreshold.js";

@@ -1,7 +1,7 @@
 import type {
   GetEntryPointFromAccount,
   UserOperationOverridesParameter,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import {
   AccountNotFoundError,
   type GetAccountParameter,
@@ -9,7 +9,7 @@ import {
   type SendUserOperationResult,
   type SmartContractAccount,
   type UserOperationOverrides,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import type { Address, Chain, Client, Hex, Transport } from "viem";
 import type { GetPluginAddressParameter } from "../types.js";
 import {

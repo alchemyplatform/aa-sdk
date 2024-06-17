@@ -4,8 +4,8 @@ import {
   getEntryPoint,
   sepolia,
   type UserOperationStruct,
-} from "@alchemy/aa-core";
-import type { CreateSimpleAccountParams } from "@alchemy/aa-core/dist/types/account/simple.js";
+} from "@aa-sdk/core";
+import type { CreateSimpleAccountParams } from "@aa-sdk/core/dist/types/account/simple.js";
 import { Alchemy, Network } from "alchemy-sdk";
 import { custom } from "viem";
 import * as simulateUoActions from "../src/actions/simulateUserOperationChanges.js";

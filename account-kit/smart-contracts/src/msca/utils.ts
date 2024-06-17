@@ -17,7 +17,7 @@ import {
   type SmartContractAccount,
   type SmartContractAccountWithSigner,
   type UpgradeToData,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import type { Address, Chain, Transport } from "viem";
 import {
   custom,

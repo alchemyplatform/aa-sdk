@@ -1,4 +1,4 @@
-import { asyncPipe } from "@alchemy/aa-core";
+import { asyncPipe } from "@aa-sdk/core";
 import dedent from "dedent";
 import type { Phase } from "../../types";
 import { GetContractGenPhase } from "./get-contract-gen.js";

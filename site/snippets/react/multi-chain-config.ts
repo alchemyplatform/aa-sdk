@@ -1,5 +1,5 @@
 import { createConfig } from "@account-kit/react";
-import { base, mainnet, sepolia } from "@alchemy/aa-core";
+import { base, mainnet, sepolia } from "@aa-sdk/core";
 
 // the examples use different routes for your chains and signer connection, but you can handle
 // this in one route if you prefer
