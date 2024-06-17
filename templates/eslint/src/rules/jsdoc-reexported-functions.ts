@@ -1,7 +1,9 @@
 import { type Rule } from "eslint";
-import * as fs from "fs";
+import { minimatch } from "minimatch";
 import * as path from "path";
 import ts from "typescript";
+import { reExportFixer } from "../fixers/re-export-fixer.js";
+import { resolveReExport } from "../resolveReExport.js";
 
 const rule: Rule.RuleModule = {
   meta: {
@@ -16,78 +18,41 @@ const rule: Rule.RuleModule = {
       missingJsdoc:
         'Re-exported entity "{{name}}" from another module must have a JSDoc comment.',
     },
-    schema: [], // no options
+    schema: [
+      {
+        type: "object",
+        properties: {
+          enableFixer: {
+            type: "boolean",
+            default: false,
+          },
+          fixBatchSize: {
+            description:
+              "If fixing is enabled, the number of files to fix at once (0 for all, default 10)",
+            type: "number",
+            default: 10,
+          },
+          ignore: {
+            description: "List of files to exclude from the rule",
+            type: "array",
+            items: {
+              type: "string",
+            },
+            default: [],
+          },
+        },
+        additionalProperties: false,
+      },
+    ],
   },
   create(context) {
+    const enableFixer: boolean = context.options[0]?.enableFixer || false;
+    const fixBatchSize: number = context.options[0]?.fixBatchSize ?? 10;
+    const ignore: string[] = context.options[0]?.ignore || [];
+
     function hasJsDocComment(node: ts.Node): boolean {
       const jsdocComment = ts.getJSDocCommentsAndTags(node).length > 0;
       return jsdocComment;
-    }
-
-    function resolveReExport(
-      filePath: string,
-      importedName: string
-    ): ts.Node | null {
-      if (!fs.existsSync(filePath)) {
-        return null;
-      }
-
-      const fileContent = fs.readFileSync(filePath, "utf-8");
-      const sourceFile = ts.createSourceFile(
-        filePath,
-        fileContent,
-        ts.ScriptTarget.Latest,
-        true
-      );
-
-      let resolvedNode: ts.Node | null = null;
-
-      function visit(node: ts.Node) {
-        if (
-          ts.isExportDeclaration(node) &&
-          node.moduleSpecifier &&
-          ts.isStringLiteral(node.moduleSpecifier)
-        ) {
-          const exportedFilePath = path.resolve(
-            path.dirname(filePath),
-            node.moduleSpecifier.text.replace(".js", ".ts")
-          );
-
-          if (node.exportClause && ts.isNamedExports(node.exportClause)) {
-            node.exportClause.elements.forEach((element) => {
-              if (element.name.text === importedName) {
-                resolvedNode = resolveReExport(
-                  exportedFilePath,
-                  element.propertyName?.text || element.name.text
-                );
-              }
-            });
-          }
-        } else if (
-          (ts.isFunctionDeclaration(node) &&
-            node.name?.text === importedName) ||
-          (ts.isClassDeclaration(node) &&
-            node.name?.escapedText === importedName) ||
-          (ts.isVariableStatement(node) &&
-            node.declarationList.declarations.some(
-              (decl) =>
-                ts.isIdentifier(decl.name) &&
-                decl.name.text === importedName &&
-                decl.initializer &&
-                (ts.isArrowFunction(decl.initializer) ||
-                  ts.isFunctionExpression(decl.initializer))
-            ))
-        ) {
-          resolvedNode = node;
-        }
-
-        if (resolvedNode) return;
-
-        ts.forEachChild(node, visit);
-      }
-
-      visit(sourceFile);
-      return resolvedNode;
     }
 
     function checkSourceFile(filePath: string, importedName: string): boolean {
@@ -100,6 +65,10 @@ const rule: Rule.RuleModule = {
       ExportNamedDeclaration(node) {
         if (!context.filename.endsWith("src/index.ts")) {
           // skip non root files
+          return;
+        }
+        
+        if (ignore.some(pattern => minimatch(context.filename, pattern))) { 
           return;
         }
 
@@ -118,6 +87,9 @@ const rule: Rule.RuleModule = {
                 node: specifier,
                 messageId: "missingJsdoc",
                 data: { name: importedName },
+                fix: enableFixer
+                  ? reExportFixer(sourceFilePath, importedName, fixBatchSize)
+                  : undefined,
               });
             }
           });
