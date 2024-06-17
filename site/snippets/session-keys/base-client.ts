@@ -1,6 +1,6 @@
 import { createModularAccountAlchemyClient } from "@account-kit/infra";
 import { sessionKeyPluginActions } from "@account-kit/smart-contracts";
-import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
+import { LocalAccountSigner, sepolia } from "@aa-sdk/core";
 
 export const client = (
   await createModularAccountAlchemyClient({

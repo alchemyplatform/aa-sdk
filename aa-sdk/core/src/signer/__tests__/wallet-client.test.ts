@@ -1,4 +1,4 @@
-import { polygonMumbai } from "@alchemy/aa-core";
+import { polygonMumbai } from "@aa-sdk/core";
 import { createWalletClient, http } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
 import { WalletClientSigner } from "../wallet-client.js";

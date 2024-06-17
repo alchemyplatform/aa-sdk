@@ -1,5 +1,5 @@
 import { AlchemySignerStatus } from "@account-kit/signer";
-import type { Address } from "@alchemy/aa-core";
+import type { Address } from "@aa-sdk/core";
 import { hydrate as wagmi_hydrate } from "@wagmi/core";
 import { reconnect } from "./actions/reconnect.js";
 import {

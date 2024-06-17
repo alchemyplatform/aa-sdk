@@ -1,5 +1,5 @@
 import { createLightAccountAlchemyClient } from "@account-kit/infra";
-import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
+import { LocalAccountSigner, sepolia } from "@aa-sdk/core";
 import type { Hex } from "viem";
 
 const chain = sepolia;

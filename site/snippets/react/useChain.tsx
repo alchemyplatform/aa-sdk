@@ -1,5 +1,5 @@
 import { useChain } from "@account-kit/react";
-import { optimism } from "@alchemy/aa-core";
+import { optimism } from "@aa-sdk/core";
 
 export function ComponentWithUseChain() {
   const { chain, setChain } = useChain();

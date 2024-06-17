@@ -5,7 +5,7 @@ import type {
   SendTransactionReturnType,
 } from "viem";
 
-import { TransactionMissingToParamError } from "@alchemy/aa-core";
+import { TransactionMissingToParamError } from "@aa-sdk/core";
 import {
   useMutation,
   type UseMutateAsyncFunction,

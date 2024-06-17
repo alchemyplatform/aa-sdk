@@ -8,7 +8,7 @@ import {
   getEntryPoint,
   type SmartAccountSigner,
   type UserOperationFeeOptions,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import {
   custom,
   http,

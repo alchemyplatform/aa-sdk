@@ -4,7 +4,7 @@ import type {
   AlchemyAccountsConfig,
   AlchemyClientState,
 } from "@account-kit/core";
-import type { NoUndefined } from "@alchemy/aa-core";
+import type { NoUndefined } from "@aa-sdk/core";
 import { QueryClientProvider, type QueryClient } from "@tanstack/react-query";
 import {
   createContext,

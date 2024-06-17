@@ -15,7 +15,7 @@ import {
   fraxtalSepolia,
   zora,
   zoraSepolia,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 
 export const AlchemyPaymasterAddressV3 =
   "0x4f84a207A80c39E9e8BaE717c1F25bA7AD1fB08F";

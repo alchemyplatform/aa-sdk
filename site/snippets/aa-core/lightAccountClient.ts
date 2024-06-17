@@ -7,7 +7,7 @@ import {
   SmartAccountSigner,
   createSmartAccountClient,
   polygonMumbai,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { http } from "viem";
 
 export const chain = polygonMumbai;

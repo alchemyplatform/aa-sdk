@@ -16,7 +16,7 @@ export interface SplitTransportParams {
  * @example
  * ```ts
  * import { createPublicClient, http } from "viem";
- * import { split } from "@alchemy/aa-core";
+ * import { split } from "@aa-sdk/core";
  *
  * const bundlerMethods = [
  *  "eth_sendUserOperation",

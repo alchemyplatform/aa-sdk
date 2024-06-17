@@ -1,4 +1,4 @@
-import { asyncPipe } from "@alchemy/aa-core";
+import { asyncPipe } from "@aa-sdk/core";
 import { camelCase } from "change-case";
 import dedent from "dedent";
 import type { Phase } from "../../types";
@@ -19,34 +19,34 @@ export const PluginActionsGenPhase: Phase = async (input) => {
   addImport("viem", { name: "Transport", isType: true });
   addImport("viem", { name: "Chain", isType: true });
   addImport("viem", { name: "Client", isType: true });
-  addImport("@alchemy/aa-core", {
+  addImport("@aa-sdk/core", {
     name: "SmartContractAccount",
     isType: true,
   });
-  addImport("@alchemy/aa-core", {
+  addImport("@aa-sdk/core", {
     name: "GetAccountParameter",
     isType: true,
   });
-  addImport("@alchemy/aa-core", {
+  addImport("@aa-sdk/core", {
     name: "SendUserOperationResult",
     isType: true,
   });
-  addImport("@alchemy/aa-core", {
+  addImport("@aa-sdk/core", {
     name: "GetEntryPointFromAccount",
     isType: true,
   });
-  addImport("@alchemy/aa-core", {
+  addImport("@aa-sdk/core", {
     name: "UserOperationOverridesParameter",
     isType: true,
   });
-  addImport("@alchemy/aa-core", {
+  addImport("@aa-sdk/core", {
     name: "UserOperationContext",
     isType: true,
   });
-  addImport("@alchemy/aa-core", { name: "AccountNotFoundError" });
-  addImport("@alchemy/aa-core", { name: "isSmartAccountClient" });
-  addImport("@alchemy/aa-core", { name: "IncompatibleClientError" });
-  addImport("@alchemy/aa-core", { name: "GetContextParameter", isType: true });
+  addImport("@aa-sdk/core", { name: "AccountNotFoundError" });
+  addImport("@aa-sdk/core", { name: "isSmartAccountClient" });
+  addImport("@aa-sdk/core", { name: "IncompatibleClientError" });
+  addImport("@aa-sdk/core", { name: "GetContextParameter", isType: true });
 
   const providerFunctionDefs: string[] = [];
   const providerFunctions = executionAbi

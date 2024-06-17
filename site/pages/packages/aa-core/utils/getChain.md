@@ -12,7 +12,7 @@ This is a utility method for converting a chainId to a `viem` `Chain` object
 :::code-group
 
 ```ts [example.ts]
-import { getChain } from "@alchemy/aa-core";
+import { getChain } from "@aa-sdk/core";
 
 const result = getChain(1);
 // mainnet

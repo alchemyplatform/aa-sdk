@@ -6,7 +6,7 @@ import {
   type GetEntryPointFromAccount,
   type SmartAccountSigner,
   type UserOperationOverridesParameter,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import type { Chain, Client, Hex, Transport } from "viem";
 import type { LightAccount } from "../accounts/account";
 

@@ -1,4 +1,4 @@
-# `@alchemy/aa-ethers`
+# `@aa-sdk/ethers`
 
 This package contains `EthersProviderAdapter` and `AccountSigner`, respective extensions of the [`JsonRpcProvider`](https://docs.ethers.org/v5/api/providers/jsonrpc-provider/) and [`Signer`](https://docs.ethers.org/v5/api/signer/) classes defined in [`ethers.js`](https://docs.ethers.org/v5/) external library.
 
@@ -8,18 +8,18 @@ This repo is community maintained and we welcome contributions!
 
 ## Getting started
 
-If you are already using the `@alchemy/aa-core` package, you can simply install this package and start using the `EthersProviderAdapter` and `AccountSigner`. If you are not using `@alchemy/aa-core`, you can install it and follow the instructions in the ["Getting started"](https://accountkit.alchemy.com/packages/aa-ethers/) docs to get started.
+If you are already using the `@aa-sdk/core` package, you can simply install this package and start using the `EthersProviderAdapter` and `AccountSigner`. If you are not using `@aa-sdk/core`, you can install it and follow the instructions in the ["Getting started"](https://accountkit.alchemy.com/packages/aa-ethers/) docs to get started.
 
 ```bash [yarn]
-yarn add @alchemy/aa-ethers
+yarn add @aa-sdk/ethers
 ```
 
 ```bash [npm]
-npm i -s @alchemy/aa-ethers
+npm i -s @aa-sdk/ethers
 ```
 
 ```bash [pnpm]
-pnpm i @alchemy/aa-ethers
+pnpm i @aa-sdk/ethers
 ```
 
 ## Usage
@@ -31,10 +31,10 @@ import {
   LightSmartContractAccount,
   getDefaultLightAccountFactoryAddress,
 } from "@alchemy/aa-accounts";
-import { EthersProviderAdapter } from "@alchemy/aa-ethers";
-import { LocalAccountSigner, SmartAccountSigner } from "@alchemy/aa-core";
+import { EthersProviderAdapter } from "@aa-sdk/ethers";
+import { LocalAccountSigner, SmartAccountSigner } from "@aa-sdk/core";
 import { Alchemy, Network } from "alchemy-sdk";
-import { polygonMumbai } from "@alchemy/aa-core";
+import { polygonMumbai } from "@aa-sdk/core";
 
 const chain = polygonMumbai;
 

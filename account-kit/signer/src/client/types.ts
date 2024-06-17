@@ -1,4 +1,4 @@
-import type { Address } from "@alchemy/aa-core";
+import type { Address } from "@aa-sdk/core";
 import type { TSignedRequest, getWebAuthnAttestation } from "@turnkey/http";
 import type { Hex } from "viem";
 
