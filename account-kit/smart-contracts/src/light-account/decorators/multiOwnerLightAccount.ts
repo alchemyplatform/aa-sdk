@@ -1,4 +1,4 @@
-import type { SmartAccountSigner } from "@alchemy/aa-core";
+import type { SmartAccountSigner } from "@aa-sdk/core";
 import type { Chain, Client, Hex, Transport } from "viem";
 import type { MultiOwnerLightAccount } from "../accounts/multiOwner";
 import {

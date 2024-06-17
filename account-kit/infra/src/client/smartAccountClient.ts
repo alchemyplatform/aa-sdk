@@ -6,7 +6,7 @@ import {
   type SmartAccountClientRpcSchema,
   type SmartContractAccount,
   type UserOperationContext,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { type Chain, type Transport } from "viem";
 import { getDefaultUserOperationFeeOptions } from "../defaults.js";
 import { type AlchemyGasManagerConfig } from "../middleware/gasManager.js";

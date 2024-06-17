@@ -1,4 +1,4 @@
-import { ConnectionConfigSchema } from "@alchemy/aa-core";
+import { ConnectionConfigSchema } from "@aa-sdk/core";
 import { getWebAuthnAttestation } from "@turnkey/http";
 import { IframeStamper } from "@turnkey/iframe-stamper";
 import { WebauthnStamper } from "@turnkey/webauthn-stamper";

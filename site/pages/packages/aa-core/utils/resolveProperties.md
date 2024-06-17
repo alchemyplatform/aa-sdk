@@ -12,7 +12,7 @@ Await all of the properties of a Deferrable object. A Deferrable object is an ob
 :::code-group
 
 ```ts [example.ts]
-import { resolveProperties } from "@alchemy/aa-core";
+import { resolveProperties } from "@aa-sdk/core";
 const result = await resolveProperties({
   foo: new Promise((resolve) => resolve("foo")),
   bar: "bar",

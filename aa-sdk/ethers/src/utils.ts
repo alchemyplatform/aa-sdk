@@ -1,4 +1,4 @@
-import type { Address, SmartAccountSigner } from "@alchemy/aa-core";
+import type { Address, SmartAccountSigner } from "@aa-sdk/core";
 import type { Signer } from "@ethersproject/abstract-signer";
 import { Wallet } from "@ethersproject/wallet";
 import type { SignableMessage, TypedData, TypedDataDefinition } from "viem";

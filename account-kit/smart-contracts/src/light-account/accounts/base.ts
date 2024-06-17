@@ -8,7 +8,7 @@ import {
   type SmartContractAccountWithSigner,
   type ToSmartContractAccountParams,
   type UpgradeToAndCallParams,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import {
   concat,
   encodeFunctionData,

@@ -3,7 +3,7 @@ import {
   type GetEntryPointFromAccount,
   type SmartContractAccount,
   type UserOperationRequest,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { fromHex, hashMessage, recoverAddress, type Hex } from "viem";
 import { InvalidAggregatedSignatureError } from "../../../errors.js";
 import type { Signature } from "../types.js";

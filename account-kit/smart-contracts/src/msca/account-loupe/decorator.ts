@@ -4,7 +4,7 @@ import {
   isSmartAccountClient,
   type GetAccountParameter,
   type SmartContractAccount,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import type { Address, Chain, Client, Hash, Transport } from "viem";
 import { IAccountLoupeAbi } from "../abis/IAccountLoupe.js";
 import type {

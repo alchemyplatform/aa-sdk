@@ -14,7 +14,7 @@ import {
   alchemyFeeEstimator,
   createAlchemyRpcClient,
 } from "@account-kit/infra";
-import { createSmartAccountClient } from "@alchemy/aa-core";
+import { createSmartAccountClient } from "@aa-sdk/core";
 import { http } from "viem";
 import { sepolia } from "viem/chains";
 

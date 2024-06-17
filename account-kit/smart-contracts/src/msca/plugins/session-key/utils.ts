@@ -1,8 +1,5 @@
-import type {
-  GetAccountParameter,
-  SmartContractAccount,
-} from "@alchemy/aa-core";
-import { AccountNotFoundError } from "@alchemy/aa-core";
+import type { GetAccountParameter, SmartContractAccount } from "@aa-sdk/core";
+import { AccountNotFoundError } from "@aa-sdk/core";
 import type { Address, Chain, Client, Transport } from "viem";
 import { SessionKeyPlugin } from "./plugin.js";
 

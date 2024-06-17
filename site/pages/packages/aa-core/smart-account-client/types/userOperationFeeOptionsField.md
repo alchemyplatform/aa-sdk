@@ -23,7 +23,7 @@ type UserOperationFeeOptionsFieldSchema = BigNumberishRange & Multiplier;
 ## Usage
 
 ```ts
-import { type UserOperationFeeOptionsField } from "@alchemy/aa-core";
+import { type UserOperationFeeOptionsField } from "@aa-sdk/core";
 
 const userOperationFeeOptionsField: UserOperationFeeOptionsField = {
   min: 100_000_000n,

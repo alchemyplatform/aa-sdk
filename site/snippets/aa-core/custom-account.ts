@@ -1,4 +1,4 @@
-import { getEntryPoint, toSmartContractAccount } from "@alchemy/aa-core";
+import { getEntryPoint, toSmartContractAccount } from "@aa-sdk/core";
 import { http, type SignableMessage } from "viem";
 import { sepolia } from "viem/chains";
 

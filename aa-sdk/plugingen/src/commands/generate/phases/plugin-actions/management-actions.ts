@@ -116,20 +116,20 @@ const addImports = (
     });
   }
 
-  addImport("@alchemy/aa-core", { name: "ChainNotFoundError" });
+  addImport("@aa-sdk/core", { name: "ChainNotFoundError" });
   addImport("viem", { name: "encodeAbiParameters" });
   addImport("@account-kit/smart-contracts", {
     name: "installPlugin as installPlugin_",
   });
-  addImport("@alchemy/aa-core", {
+  addImport("@aa-sdk/core", {
     name: "GetAccountParameter",
     isType: true,
   });
-  addImport("@alchemy/aa-core", {
+  addImport("@aa-sdk/core", {
     name: "GetEntryPointFromAccount",
     isType: true,
   });
-  addImport("@alchemy/aa-core", {
+  addImport("@aa-sdk/core", {
     name: "UserOperationContext",
     isType: true,
   });
@@ -137,5 +137,5 @@ const addImports = (
     name: "FunctionReference",
     isType: true,
   });
-  addImport("@alchemy/aa-core", { name: "GetContextParameter", isType: true });
+  addImport("@aa-sdk/core", { name: "GetContextParameter", isType: true });
 };

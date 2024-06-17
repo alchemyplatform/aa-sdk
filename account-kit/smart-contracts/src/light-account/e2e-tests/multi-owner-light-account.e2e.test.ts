@@ -7,7 +7,7 @@ import {
   createSmartAccountClientFromExisting,
   type SmartAccountSigner,
   type UserOperationFeeOptions,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import {
   http,
   isAddress,

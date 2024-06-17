@@ -1,6 +1,6 @@
 import { AlchemyProvider } from "@account-kit/infra";
 import { getDefaultNaniAccountFactoryAddress } from "@account-kit/smart-contracts";
-import { LocalAccountSigner, sepolia, type Hex } from "@alchemy/aa-core";
+import { LocalAccountSigner, sepolia, type Hex } from "@aa-sdk/core";
 
 const chain = sepolia;
 

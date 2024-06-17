@@ -1,4 +1,4 @@
-import { asyncPipe } from "@alchemy/aa-core";
+import { asyncPipe } from "@aa-sdk/core";
 import { kebabCase } from "change-case";
 import dedent from "dedent";
 import { default as fs } from "fs-extra";

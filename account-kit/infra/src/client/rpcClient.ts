@@ -2,7 +2,7 @@ import {
   createBundlerClient,
   type ConnectionConfig,
   type NoUndefined,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { http, type Chain, type HttpTransportConfig } from "viem";
 import { AlchemyChainSchema } from "../schema.js";
 import { VERSION } from "../version.js";

@@ -3,7 +3,7 @@ import {
   LocalAccountSigner,
   UserOperationCallData,
   sepolia,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 
 export const smartAccountClient = await createModularAccountAlchemyClient({
   apiKey: "YOUR_API_KEY",

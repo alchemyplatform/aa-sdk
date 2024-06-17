@@ -12,7 +12,7 @@ Utility function that allows for piping a series of async functions together tha
 :::code-group
 
 ```ts [example.ts]
-import { asyncPipe } from "@alchemy/aa-core";
+import { asyncPipe } from "@aa-sdk/core";
 
 const addOne = async (num: number) => num + 1;
 const addTwo = async (num: number) => num + 2;

@@ -8,7 +8,7 @@ import {
   type SendUserOperationParameters,
   type SmartContractAccount,
   type UserOperationOverrides,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { type Chain, type Client, type Transport } from "viem";
 import { splitAggregatedSignature } from "../index.js";
 import { type ProposeUserOperationResult } from "../types.js";

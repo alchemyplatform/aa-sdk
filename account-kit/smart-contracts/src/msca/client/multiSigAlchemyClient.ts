@@ -22,7 +22,7 @@ import {
 import {
   smartAccountClientActions,
   type SmartAccountSigner,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import {
   custom,
   type Chain,

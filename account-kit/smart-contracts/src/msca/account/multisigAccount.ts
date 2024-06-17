@@ -9,7 +9,7 @@ import {
   type SmartContractAccount,
   type SmartContractAccountWithSigner,
   type ToSmartContractAccountParams,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import {
   concatHex,
   encodeFunctionData,
