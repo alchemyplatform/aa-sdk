@@ -3,7 +3,7 @@ import type {
   GetEntryPointFromAccount,
   SmartContractAccount,
   UserOperationRequest,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import type { Hex } from "viem";
 import type { GetPluginAddressParameter } from "../types";
 

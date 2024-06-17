@@ -2,7 +2,7 @@ import {
   createSimpleSmartAccount,
   getChain,
   getDefaultSimpleAccountFactoryAddress,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { Wallet } from "@ethersproject/wallet";
 import { Alchemy, Network, type AlchemyProvider } from "alchemy-sdk";
 import { http } from "viem";

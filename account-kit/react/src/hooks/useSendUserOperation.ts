@@ -6,8 +6,8 @@ import type {
   GetEntryPointFromAccount,
   SendUserOperationParameters,
   SendUserOperationResult,
-} from "@alchemy/aa-core";
-import { WaitForUserOperationError } from "@alchemy/aa-core";
+} from "@aa-sdk/core";
+import { WaitForUserOperationError } from "@aa-sdk/core";
 import {
   useMutation,
   type UseMutateAsyncFunction,

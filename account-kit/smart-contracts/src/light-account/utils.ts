@@ -20,7 +20,7 @@ import {
   toRecord,
   zora,
   zoraSepolia,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { fromHex, type Address, type Chain } from "viem";
 import type { LightAccountBase } from "./accounts/base";
 import type {

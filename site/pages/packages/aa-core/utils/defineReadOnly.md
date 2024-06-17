@@ -14,7 +14,7 @@ Borrowed from [ethers](https://github.com/ethers-io/ethers.js/blob/v5.7/packages
 :::code-group
 
 ```ts [example.ts]
-import { defineReadOnly } from "@alchemy/aa-core";
+import { defineReadOnly } from "@aa-sdk/core";
 
 class Test {
   readonly a: number = 1;

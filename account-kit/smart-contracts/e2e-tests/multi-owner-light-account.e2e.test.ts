@@ -1,5 +1,5 @@
 import * as infra from "@account-kit/infra";
-import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
+import { LocalAccountSigner, sepolia } from "@aa-sdk/core";
 import { Alchemy, Network } from "alchemy-sdk";
 import {
   createMultiOwnerLightAccountAlchemyClient,

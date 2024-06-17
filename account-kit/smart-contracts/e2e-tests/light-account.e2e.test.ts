@@ -4,7 +4,7 @@ import {
   type UserOperationCallData,
   type UserOperationOverrides,
   type UserOperationStruct,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { Alchemy, Network } from "alchemy-sdk";
 import {
   createLightAccountAlchemyClient,

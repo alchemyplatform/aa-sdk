@@ -8,7 +8,7 @@ import {
   type SmartAccountClient,
   type SmartContractAccount,
   type UserOperationOverridesParameter,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import {
   encodeFunctionData,
   encodeFunctionResult,

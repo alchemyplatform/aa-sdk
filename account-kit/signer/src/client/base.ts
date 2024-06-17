@@ -1,7 +1,4 @@
-import {
-  type ConnectionConfig,
-  ConnectionConfigSchema,
-} from "@alchemy/aa-core";
+import { type ConnectionConfig, ConnectionConfigSchema } from "@aa-sdk/core";
 import { TurnkeyClient } from "@turnkey/http";
 import EventEmitter from "eventemitter3";
 import type { Hex } from "viem";

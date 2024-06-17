@@ -24,7 +24,7 @@ import {
   type UserOperationOverridesParameter,
   type UserOperationContext,
   type GetContextParameter,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import {
   installPlugin as installPlugin_,
   type Plugin,

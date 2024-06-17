@@ -6,7 +6,7 @@ import {
   optimismGoerli,
   optimismSepolia,
   type UserOperationFeeOptions,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import type { Chain } from "viem";
 
 export const getDefaultUserOperationFeeOptions = (

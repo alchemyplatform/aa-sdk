@@ -1,5 +1,5 @@
 import { DEFAULT_SESSION_MS } from "@account-kit/signer";
-import { ConnectionConfigSchema } from "@alchemy/aa-core";
+import { ConnectionConfigSchema } from "@aa-sdk/core";
 import { createStorage, createConfig as createWagmiConfig } from "@wagmi/core";
 import { createClientStore } from "./store/client.js";
 import { createCoreStore } from "./store/core.js";

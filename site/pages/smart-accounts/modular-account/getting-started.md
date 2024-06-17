@@ -5,7 +5,7 @@ description: Getting started with Modular Account in Account Kit
 
 # Getting started with Modular Account
 
-It is easy to get started with Modular Account! We will show you two different ways using `@alchemy/aa-alchemy` and `@alchemy/aa-core`.
+It is easy to get started with Modular Account! We will show you two different ways using `@alchemy/aa-alchemy` and `@aa-sdk/core`.
 
 :::tip[Choosing your package]
 The [`aa-core`](/packages/aa-core/) package is not opinionated about your RPC provider. As a result, creating a client requires more configuration. As you will see below, [`aa-alchemy`](/packages/aa-alchemy/) is much easier to jump in with if you do not need this extra flexibility.
@@ -18,11 +18,11 @@ The [`aa-core`](/packages/aa-core/) package is not opinionated about your RPC pr
 :::code-group
 
 ```bash [npm]
-npm i @alchemy/aa-alchemy @alchemy/aa-core
+npm i @alchemy/aa-alchemy @aa-sdk/core
 ```
 
 ```bash [yarn]
-yarn add @alchemy/aa-alchemy @alchemy/aa-core
+yarn add @alchemy/aa-alchemy @aa-sdk/core
 ```
 
 :::
@@ -41,20 +41,20 @@ For Modular Account, the address of the smart account will be calculated as a co
 If you want to use a signer to connect to an account whose address does not map to the contract-generated address, you can supply the `accountAddress` to connect with the account of interest. In that case, the `signer` address is not used for address calculation, but only for signing the operation.
 :::
 
-## With `@alchemy/aa-core`
+## With `@aa-sdk/core`
 
 ### Install packages
 
-If you are using `@alchemy/aa-core`, you will also want to add `@account-kit/smart-contracts` to get the Smart Account factory for Modular Account.
+If you are using `@aa-sdk/core`, you will also want to add `@account-kit/smart-contracts` to get the Smart Account factory for Modular Account.
 
 :::code-group
 
 ```bash [npm]
-npm i @alchemy/aa-core @account-kit/smart-contracts viem
+npm i @aa-sdk/core @account-kit/smart-contracts viem
 ```
 
 ```bash [yarn]
-yarn add @alchemy/aa-core @account-kit/smart-contracts viem
+yarn add @aa-sdk/core @account-kit/smart-contracts viem
 ```
 
 :::

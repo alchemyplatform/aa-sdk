@@ -4,7 +4,7 @@ import {
   sepolia,
   type ClientMiddlewareFn,
   type SmartContractAccount,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { http, zeroAddress } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import { createAlchemySmartAccountClient } from "./smartAccountClient.js";

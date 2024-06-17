@@ -100,7 +100,7 @@ export type SmartAccountClientConfig<
 
 ```ts
 import { http } from "viem";
-import { sepolia } from "@alchemy/aa-core";
+import { sepolia } from "@aa-sdk/core";
 
 const client = createSmartAccountClient({
   transport: http("RPC_URL"),
