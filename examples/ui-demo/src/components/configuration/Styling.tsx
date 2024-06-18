@@ -22,6 +22,7 @@ export function Styling({ className }: { className?: string }) {
       },
     }));
   };
+
   return (
     <div className={cn("flex flex-col", className)}>
       <div className="flex flex-col gap-4 border-b border-static py-6">

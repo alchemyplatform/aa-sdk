@@ -11,7 +11,9 @@
   "dependencies": {
     "@account-kit/core": "^4.0.0-alpha.0",
     "@account-kit/react": "^4.0.0-alpha.0",
+    "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-switch": "^1.0.3",
+    "@uiw/react-color": "^2.3.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.394.0",
