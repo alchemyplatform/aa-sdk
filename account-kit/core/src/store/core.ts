@@ -4,7 +4,7 @@ import {
   createJSONStorage,
   persist,
   subscribeWithSelector,
-} from "zustand/middleware.js";
+} from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
 import type { Connection } from "../types.js";
 import { bigintMapReplacer } from "../utils/replacer.js";
