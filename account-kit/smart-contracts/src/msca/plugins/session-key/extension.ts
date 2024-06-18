@@ -4,6 +4,7 @@ import type {
 } from "@aa-sdk/core";
 import {
   AccountNotFoundError,
+  isSmartAccountClient,
   type GetAccountParameter,
   type IsUndefined,
   type SendUserOperationResult,
@@ -104,11 +105,84 @@ export const sessionKeyPluginActions: <
     addSessionKey,
     rotateSessionKey,
     updateKeyPermissions,
+    executeWithSessionKey,
     ...og
   } = sessionKeyPluginActions_<TTransport, TChain, TAccount>(client);
 
+  // The session key plugin returns an opaque error when the permissions check
+  // fails. We want the SDK to return a helpful error instead. After validation
+  // fails, rerun the user op simulation but using state overrides to replace
+  // the code of the session key plugin with a version that produces descriptive
+  // errors.
+  const fixedExecuteWithSessionKey: typeof executeWithSessionKey = async (
+    ...originalArgs
+  ) => {
+    let initialError: unknown;
+    try {
+      return await executeWithSessionKey(...originalArgs);
+    } catch (error) {
+      initialError = error;
+    }
+    const details = getRpcErrorMessageFromViemError(initialError);
+    if (!details?.includes("AA23 reverted (or OOG)")) {
+      throw initialError;
+    }
+    if (!isSmartAccountClient(client) || !client.chain) {
+      throw initialError;
+    }
+    const {
+      args,
+      overrides,
+      context,
+      account = client.account,
+    } = originalArgs[0];
+    if (!account) {
+      throw initialError;
+    }
+    const data = og.encodeExecuteWithSessionKey({ args });
+    const sessionKeyPluginAddress =
+      SessionKeyPlugin.meta.addresses[client.chain.id];
+    // The bytecode is 10kb of hex. Only import it if needed.
+    const { DEBUG_SESSION_KEY_BYTECODE } = await import(
+      "./debug-session-key-bytecode.js"
+    );
+    const updatedOverrides: UserOperationOverrides<TEntryPointVersion> = {
+      ...(overrides as UserOperationOverrides<TEntryPointVersion>),
+      stateOverride: [
+        ...(overrides?.stateOverride ?? []),
+        {
+          address: sessionKeyPluginAddress,
+          code: DEBUG_SESSION_KEY_BYTECODE,
+        },
+      ],
+    };
+    try {
+      await client.buildUserOperation({
+        uo: data,
+        overrides: updatedOverrides,
+        context,
+        account,
+      });
+      // We expect this to fail because we just saw the same user op fail a
+      // moment ago. It could succeed if the state of the chain has changed but
+      // there's not much we can do with a successful result so return the
+      // original error.
+      throw initialError;
+    } catch (improvedError) {
+      const details = getRpcErrorMessageFromViemError(improvedError) ?? "";
+      const reason = details.match(/AA23 reverted: (.+)/)?.[1];
+      if (!reason) {
+        throw initialError;
+      }
+      throw new SessionKeyPermissionError(reason);
+    }
+  };
+
   return {
     ...og,
+
+    executeWithSessionKey: fixedExecuteWithSessionKey,
+
     isAccountSessionKey: async ({
       key,
       pluginAddress,
@@ -218,3 +292,10 @@ export const sessionKeyPluginActions: <
     },
   };
 };
+
+function getRpcErrorMessageFromViemError(error: unknown): string | undefined {
+  const details = (error as any)?.details;
+  return typeof details === "string" ? details : undefined;
+}
+
+class SessionKeyPermissionError extends Error {}
