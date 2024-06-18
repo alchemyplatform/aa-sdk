@@ -2,25 +2,15 @@
 
 import { Public_Sans, Inter } from "next/font/google";
 
-import {
-  AuthCard,
-  AuthType,
-  DemoSet,
-  useAuthError,
-  useAuthModal,
-  useUser,
-} from "@account-kit/react";
-// eslint-disable-next-line import/extensions
-import { ChevronRight } from "@/src/components/icons/chevron";
-import { MailIcon } from "@/src/components/icons/mail";
-import { Input, useLogout } from "@account-kit/react";
-import { useMemo } from "react";
+import { useState } from "react";
 import { TopNav } from "../components/topnav/TopNav";
 import { Button } from "../components/shared/Button";
 import { PhoneIcon } from "lucide-react";
 import { ArrowUpRightIcon } from "../components/icons/arrow";
 import { Configuration } from "../components/configuration";
-import { useConfig } from "./state";
+import { CodePreview } from "../components/preview/CodePreview";
+import { AuthCardWrapper } from "../components/preview/AuthCardWrapper";
+import { CodePreviewSwitch } from "../components/shared/CodePreviewSwitch";
 
 const publicSans = Public_Sans({
   subsets: ["latin"],
@@ -33,18 +23,7 @@ const inter = Inter({
 });
 
 export default function Home() {
-  const { config } = useConfig();
-
-  const sections = useMemo<AuthType[][]>(() => {
-    const output = [];
-    if (config.auth.showEmail) {
-      output.push([{ type: "email" as const }]);
-    }
-
-    output.push([{ type: "passkey" as const }]);
-
-    return output;
-  }, [config.auth]);
+  const [showCode, setShowCode] = useState(false);
 
   return (
     <main
@@ -74,43 +53,22 @@ export default function Home() {
           <div className="flex flex-col  basis-0 flex-1 bg-white border border-static rounded-lg p-6 overflow-y-scroll">
             <Configuration />
           </div>
-          <div
-            className="flex-[2] basis-0 bg-white border border-static rounded-lg flex flex-col justify-center items-center overflow-auto"
-            style={{
-              backgroundImage: "url(/images/grid.png)",
-              backgroundSize: "100px",
-              backgroundRepeat: "repeat",
-            }}
-          >
-            <div className="flex flex-col gap-2 w-[368px]">
-              <div className="modal bg-white shadow-md">
-                <AuthCard
-                  header={<AuthCardHeader />}
-                  showSignInText
-                  showNavigation
-                  sections={sections}
-                />
+          <div className="flex flex-col flex-[2] basis-0 relative bg-white border border-static rounded-lg">
+            <div className="absolute top-6 right-6 flex items-center gap-2">
+              <div className="bg-purple-50 text-[#8B5CF6] px-2 py-1 rounded text-xs font-semibold">
+                Configuration preview
               </div>
+              <CodePreviewSwitch
+                checked={showCode}
+                onCheckedChange={setShowCode}
+              />
             </div>
+            {/* Don't unmount when showing code preview so that the auth card retains its state */}
+            <AuthCardWrapper className={showCode ? "hidden" : ""} />
+            {showCode && <CodePreview />}
           </div>
         </div>
       </div>
     </main>
-  );
-}
-
-function AuthCardHeader() {
-  const {
-    config: {
-      ui: { logoDark, logoLight, theme },
-    },
-  } = useConfig();
-
-  const logo = theme === "dark" ? logoDark : logoLight;
-
-  if (!logo) return null;
-
-  return (
-    <img style={{ height: "60px" }} src={logo.fileSrc} alt={logo.fileName} />
   );
 }
