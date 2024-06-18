@@ -1,4 +1,4 @@
-import { withAccountKitUi } from "@alchemy/aa-alchemy/tailwind";
+import { withAccountKitUi } from "@account-kit/react/tailwind";
 import type { Config } from "tailwindcss";
 import plugin from "tailwindcss/plugin";
 

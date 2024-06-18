@@ -4,14 +4,14 @@ import {
   AuthCard,
   AuthType,
   DemoSet,
-  useAuthModal,
   useAuthError,
+  useAuthModal,
   useUser,
-} from "@alchemy/aa-alchemy/react";
+} from "@account-kit/react";
 // eslint-disable-next-line import/extensions
 import { ChevronRight } from "@/src/components/icons/chevron";
 import { MailIcon } from "@/src/components/icons/mail";
-import { Input, useLogout } from "@alchemy/aa-alchemy/react";
+import { Input, useLogout } from "@account-kit/react";
 import { useMemo } from "react";
 
 export default function Home() {
