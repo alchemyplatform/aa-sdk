@@ -107,6 +107,15 @@ export type BundlerActions = {
 };
 // [!endregion BundlerActions]
 
+/**
+ * A viem client decorator that provides Bundler specific actions. 
+ * These actions include estimating gas for user operations, sending raw user operations, retrieving user operations by hash, getting supported entry points, and getting user operation receipts.
+ * 
+ * NOTE: this is already added to the client returned from `createBundlerClient`
+ * 
+ * @param {TClient} client The client instance that will be used to perform bundler actions
+ * @returns {BundlerActions} An object containing various bundler-related actions that can be executed using the provided client
+ */
 export const bundlerActions: <
   TClient extends Client<
     Transport,
