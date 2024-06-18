@@ -13,13 +13,13 @@ import { apply, getColorVariableName } from "./utils.js";
 type TailWindPlugin = ReturnType<typeof plugin>;
 
 /**
- * Get the path to the aa-alchemy package and the tailwind content.
- * This is used within the tailwind.config.js to include the aa-alchemy content.
+ * Get the path to the @account-kit/react package and the tailwind content.
+ * This is used within the tailwind.config.js to include the @account-kit content.
  *
  * @example
  * ```ts
  *
- * import accountKitUi, { getAccountKitContentPath } from "@alchemy/aa-alchemy/tailwind";
+ * import accountKitUi, { getAccountKitContentPath } from "@account-kit/react/tailwind";
  * import type { Config } from "tailwindcss";
  *
  * const config: Config = {
@@ -33,10 +33,10 @@ type TailWindPlugin = ReturnType<typeof plugin>;
  *
  * export default config;
  * ```
- * @returns The resolved path to the aa-alchemy package and the tailwind content
+ * @returns The resolved path to the @account-kit/react package and the tailwind content
  */
 export const getAccountKitContentPath = () => {
-  const pathToMe = require.resolve("@alchemy/aa-alchemy");
+  const pathToMe = require.resolve("@account-kit/react");
   const contentPath = `${pathToMe.replace(
     "index.js",
     ""
@@ -52,7 +52,7 @@ export const getAccountKitContentPath = () => {
  * @example
  * ```ts
  *
- * import accountKitUi, { getAccountKitContentPath } from "@alchemy/aa-alchemy/tailwind";
+ * import accountKitUi, { getAccountKitContentPath } from "@account-kit/react/tailwind";
  * import type { Config } from "tailwindcss";
  *
  * const config: Config = {
