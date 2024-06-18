@@ -34,7 +34,7 @@ export const DEFAULT_CONFIG: Config = {
         theme: 'light',
         primaryColor: '#363FF9',
         borderRadius: 'none',
-        illustrationStyle: 0,
+        illustrationStyle: 1,
         logoLight: undefined,
         logoDark: undefined,
     },
