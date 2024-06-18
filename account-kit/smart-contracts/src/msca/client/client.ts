@@ -82,14 +82,14 @@ export function createMultiOwnerModularAccountClient<
 
 /**
  * Creates a multi-owner modular account client with the provided parameters including account, transport, chain, and additional client configuration. This function uses a modular account and extends it with various plugin actions.
- * 
+ *
  * @example
  * ```ts
  * import { createMultiOwnerModularAccountClient } from "@account-kit/smart-contracts";
  * import { LocalAccountSigner } from "@aa-sdk/core";
  * import { sepolia } from "viem/chains";
  * import { http, generatePrivateKey } from "viem"
- * 
+ *
  * const accountClient = await createMultiOwnerModularAccountClient({
  *  chain: sepolia,
  *  transport: http("RPC_URL"),
@@ -98,18 +98,16 @@ export function createMultiOwnerModularAccountClient<
  *  }
  * });
  * ```
- * 
+ *
  * @param {CreateMultiOwnerModularAccountClientParams} config The parameters for creating the multi-owner modular account client
  * @returns {Promise<SmartAccountClient>} A promise that resolves to a `SmartAccountClient` instance with extended plugin actions
  */
-export async function createMultiOwnerModularAccountClient(
-  {
-    account,
-    transport,
-    chain,
-    ...clientConfig
-  }: CreateMultiOwnerModularAccountClientParams
-): Promise<SmartAccountClient> {
+export async function createMultiOwnerModularAccountClient({
+  account,
+  transport,
+  chain,
+  ...clientConfig
+}: CreateMultiOwnerModularAccountClientParams): Promise<SmartAccountClient> {
   const modularAccount = await createMultiOwnerModularAccount({
     ...account,
     transport,
@@ -147,36 +145,34 @@ export function createMultisigModularAccountClient<
 
 /**
  * Creates a multisig modular account client using the provided parameters including account details, transport, chain, and additional client configuration. This function constructs the multisig modular account and extends it with various actions to create a comprehensive client.
- * 
+ *
  * @example
  * ```ts
  * import { createMultisigModularAccountClient } from "@account-kit/smart-contracts";
  * import { LocalAccountSigner } from "@aa-sdk/core";
  * import { sepolia } from "viem/chains";
  * import { http, generatePrivateKey } from "viem"
- * 
+ *
  * const accountClient = await createMultisigModularAccountClient({
  *  chain: sepolia,
  *  transport: http("RPC_URL"),
  *  account: {
  *    signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
  *    owners: [...], // other owners on the account
- *    threshold: 2, // 2 of N signatures 
+ *    threshold: 2, // 2 of N signatures
  *  }
  * });
  * ```
- * 
- * @param {CreateMultisigModularAccountClientParams} config the parameters for configuring the multisig modular account client 
+ *
+ * @param {CreateMultisigModularAccountClientParams} config the parameters for configuring the multisig modular account client
  * @returns {Promise<SmartAccountClient<Transport, Chain, MultisigModularAccount<SmartAccountSigner>, {}, SmartAccountClientRpcSchema, MultisigUserOperationContext>>} a promise that resolves to a `SmartAccountClient` object extended with the multisig modular account and additional actions
  */
-export async function createMultisigModularAccountClient(
-  {
-    account,
-    transport,
-    chain,
-    ...clientConfig
-  }: CreateMultisigModularAccountClientParams
-): Promise<
+export async function createMultisigModularAccountClient({
+  account,
+  transport,
+  chain,
+  ...clientConfig
+}: CreateMultisigModularAccountClientParams): Promise<
   SmartAccountClient<
     Transport,
     Chain,

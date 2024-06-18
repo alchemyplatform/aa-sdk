@@ -56,14 +56,14 @@ export function createMultiOwnerLightAccountClient<
 
 /**
  * Creates a multi-owner light account client using the provided parameters. It first creates a multi-owner light account and then creates a smart account client with the provided configurations.
- * 
+ *
  * @example
  * ```ts
  * import { createMultiOwnerLightAccountClient } from "@account-kit/smart-contracts";
  * import { LocalAccountSigner } from "@aa-sdk/core";
  * import { sepolia } from "viem/chains";
  * import { http, generatePrivateKey } from "viem"
- * 
+ *
  * const account = await createMultiOwnerLightAccountClient({
  *  chain: sepolia,
  *  transport: http("RPC_URL"),
@@ -72,19 +72,14 @@ export function createMultiOwnerLightAccountClient<
  *  }
  * });
  * ```
- * 
+ *
  * @param {CreateMultiOwnerLightAccountClientParams} params the configuration for creating the multi-owner light account client
  * @returns {Promise<SmartAccountClient>} a promise that resolves to a `SmartAccountClient` containing the created account client and relevant methods
  */
 export async function createMultiOwnerLightAccountClient(
   params: CreateMultiOwnerLightAccountClientParams
 ): Promise<SmartAccountClient> {
-  const {
-    account,
-    transport,
-    chain,
-    ...clientConfig
-  } = params;
+  const { account, transport, chain, ...clientConfig } = params;
 
   const lightAccount = await createMultiOwnerLightAccount({
     ...account,

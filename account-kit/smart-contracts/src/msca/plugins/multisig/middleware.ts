@@ -15,12 +15,12 @@ import {
   InvalidContextSignatureError,
   MultisigAccountExpectedError,
 } from "../../errors.js";
+import { type MultisigUserOperationContext } from "./types.js";
 import {
   combineSignatures,
   getSignerType,
   splitAggregatedSignature,
-  type MultisigUserOperationContext,
-} from "./index.js";
+} from "./utils/index.js";
 
 /**
  * A signer middleware to be used with Multisig Account Clients.

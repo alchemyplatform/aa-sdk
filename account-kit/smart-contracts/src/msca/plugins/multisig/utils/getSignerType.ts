@@ -1,15 +1,15 @@
 import type {
-  SmartContractAccount,
   SmartAccountSigner,
+  SmartContractAccount,
 } from "@alchemy/aa-core";
 import {
-  type Transport,
   type Chain,
   type Client,
-  type PublicRpcSchema,
-  type PublicActions,
   type Hex,
+  type PublicActions,
+  type PublicRpcSchema,
   size,
+  type Transport,
 } from "viem";
 import type { SignerType } from "../types";
 
@@ -32,6 +32,25 @@ type GetSignerTypeParams<
   client: TClient;
 };
 
+/**
+ * Determines the type of signer (Externally Owned Account (EOA) or CONTRACT) based on the provided client, signature, and signer.
+ *
+ * @example
+ * ```ts
+ * import { getSignerType } from "@account-kit/smart-contracts";
+ * import { LocalAccountSigner } from "@aa-sdk/core";
+ * import { createPublicClient, generatePrivateKey } from "viem";
+ *
+ * const signer = LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
+ * const client = createPublicClient(...);
+ * const signature = signer.signMessage("Hello World");
+ *
+ * const signerType = await getSignerType({ client, signature, signer }); // EOA
+ * ```
+ *
+ * @param {GetSignerTypeParams<TTransport, TChain>} params the parameters including the client, signature, and signer
+ * @returns {Promise<SignerType>} A promise that resolves to the signer type, which is either "EOA" or "CONTRACT"
+ */
 export const getSignerType = async <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined

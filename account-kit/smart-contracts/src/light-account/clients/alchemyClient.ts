@@ -48,7 +48,7 @@ export async function createLightAccountAlchemyClient<
  * import { sepolia } from "@account-kit/infra/chains";
  * import { LocalAccountSigner } from "@aa-sdk/core";
  * import { generatePrivateKey } from "viem"
- * 
+ *
  * const lightAccountClient = await createLightAccountAlchemyClient({
  *  apiKey: "your-api-key",
  *  chain: sepolia,
@@ -59,7 +59,9 @@ export async function createLightAccountAlchemyClient<
  * @param {AlchemyLightAccountClientConfig} config The configuration for setting up the Alchemy Light Account Client
  * @returns {Promise<AlchemySmartAccountClient>} A promise that resolves to an `AlchemySmartAccountClient` object containing the created client
  */
-export async function createLightAccountAlchemyClient(config: AlchemyLightAccountClientConfig): Promise<AlchemySmartAccountClient> {
+export async function createLightAccountAlchemyClient(
+  config: AlchemyLightAccountClientConfig
+): Promise<AlchemySmartAccountClient> {
   const { chain, opts, ...connectionConfig } =
     AlchemyProviderConfigSchema.parse(config);
 

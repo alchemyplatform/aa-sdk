@@ -29,13 +29,13 @@ export type UpdateMultiOwnerLightAccountOwnersParams<
  * @example
  * ```ts
  * import { updateOwners, createLightAccountClient } from "@account-kit/smart-contracts";
- * 
+ *
  * const lightAccountClient = createLightAccountClient({
  *  signer,
  *  transport,
  *  chain,
  * });
- * 
+ *
  * const txHash = await updateOwners(lightAccountClient, {
  *  ownerstoAdd: [newOwnerAddress], // or empty if you just want to remove owners
  *  ownersToRemove: [oldOwnerAddress], // or empty if you just want to add owners
