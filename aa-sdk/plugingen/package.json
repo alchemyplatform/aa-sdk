@@ -36,7 +36,7 @@
   "scripts": {
     "prebuild": "node --loader ts-node/esm ./inject-version.ts",
     "build": "yarn clean && yarn build:esm && yarn build:types",
-    "build:esm": "tsc --project tsconfig.build.json --module es2015 --outDir ./dist/esm --removeComments && echo > ./dist/esm/package.json '{\"type\":\"module\"}'",
+    "build:esm": "tsc --project tsconfig.build.json --module es2020 --outDir ./dist/esm --removeComments && echo > ./dist/esm/package.json '{\"type\":\"module\"}'",
     "build:types": "tsc --project tsconfig.build.json --module esnext --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
     "postbuild": "chmod +x ./dist/esm/cli.js",
     "clean": "rm -rf ./dist"
