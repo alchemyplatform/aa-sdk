@@ -26,6 +26,9 @@ const hexlifyOptional = (value: any): `0x${string}` | undefined => {
   return hexlify(value) as `0x${string}`;
 };
 
+/**
+ * Implementation of the ethers Signer interface to use with Smart Contract Accounts
+ */
 export class AccountSigner<
   TAccount extends SmartContractAccount = SmartContractAccount,
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
@@ -35,6 +38,13 @@ export class AccountSigner<
   sendUserOperation;
   waitForUserOperationTransaction;
 
+  /**
+   * Creates a new AccountSigner with the given ethers Provider and Smart Contract Account
+   *
+   * @template {SmartContractAccount} TAccount the type of the smart contract account
+   * @param {EthersProviderAdapter} provider the ethers provider to use
+   * @param {TAccount} account the smart contract account that will be used to sign user ops and send them
+   */
   constructor(public provider: EthersProviderAdapter, account: TAccount) {
     super();
     this.account = account;

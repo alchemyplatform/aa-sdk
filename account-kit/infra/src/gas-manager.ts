@@ -1,21 +1,21 @@
-import type { Address, Chain } from "viem";
 import {
   arbitrum,
   arbitrumSepolia,
   base,
   baseSepolia,
+  fraxtal,
+  fraxtalSepolia,
   mainnet,
-  sepolia,
   optimism,
   optimismSepolia,
   polygon,
   polygonAmoy,
   polygonMumbai,
-  fraxtal,
-  fraxtalSepolia,
+  sepolia,
   zora,
   zoraSepolia,
 } from "@alchemy/aa-core";
+import type { Address, Chain } from "viem";
 
 export const AlchemyPaymasterAddressV3 =
   "0x4f84a207A80c39E9e8BaE717c1F25bA7AD1fB08F";
@@ -26,6 +26,19 @@ export const ArbSepoliaPaymasterAddress =
 export const AlchemyPaymasterAddressV1 =
   "0xc03aac639bb21233e0139381970328db8bceeb67";
 
+/**
+ * Retrieves the Alchemy paymaster address for the given chain. Returns different addresses based on the chain ID.
+ *
+ * @example
+ * ```ts
+ * import { sepolia, getAlchemyPaymasterAddress } from "@account-kit/infra/chains";
+ *
+ * const paymasterAddress = getAlchemyPaymasterAddress(sepolia);
+ * ```
+ *
+ * @param {Chain} chain The chain for which the paymaster address is required
+ * @returns {Address} The Alchemy paymaster address corresponding to the specified chain
+ */
 export const getAlchemyPaymasterAddress = (chain: Chain): Address => {
   switch (chain.id) {
     case polygonAmoy.id:
