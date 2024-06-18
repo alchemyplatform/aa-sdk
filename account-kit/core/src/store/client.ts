@@ -1,11 +1,11 @@
-import { AlchemySignerStatus, AlchemyWebSigner } from "@account-kit/signer";
 import type { NoUndefined } from "@aa-sdk/core";
+import { AlchemySignerStatus, AlchemyWebSigner } from "@account-kit/signer";
 import type { Chain } from "viem";
 import {
   createJSONStorage,
   persist,
   subscribeWithSelector,
-} from "zustand/middleware.js";
+} from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
 import { DEFAULT_IFRAME_CONTAINER_ID } from "../createConfig.js";
 import type { SupportedAccountTypes } from "../types.js";
