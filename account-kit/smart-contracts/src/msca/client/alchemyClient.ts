@@ -52,9 +52,27 @@ export function createModularAccountAlchemyClient<
   >
 >;
 
-export async function createModularAccountAlchemyClient(
-  config: AlchemyModularAccountClientConfig
-): Promise<AlchemySmartAccountClient> {
+/**
+ * Creates a modular account Alchemy client with the provided configuration.
+ * 
+ * @example
+ * ```ts
+ * import { createModularAccountAlchemyClient } from "@account-kit/smart-contracts";
+ * import { sepolia } from "@account-kit/infra/chains";
+ * import { LocalAccountSigner } from "@aa-sdk/core";
+ * import { generatePrivateKey } from "viem"
+ * 
+ * const alchemyAccountClient = await createModularAccountAlchemyClient({
+ *  apiKey: "your-api-key",
+ *  chain: sepolia,
+ *  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
+ * });
+ * ```
+ * 
+ * @param {AlchemyModularAccountClientConfig} config The configuration for creating the Alchemy client
+ * @returns {Promise<AlchemySmartAccountClient>} A promise that resolves to an `AlchemySmartAccountClient` configured with the desired plugins and actions
+ */
+export async function createModularAccountAlchemyClient(config: AlchemyModularAccountClientConfig): Promise<AlchemySmartAccountClient> {
   const { chain, opts, ...connectionConfig } =
     AlchemyProviderConfigSchema.parse(config);
 
