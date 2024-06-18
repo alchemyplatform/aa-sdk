@@ -27,6 +27,32 @@ export type UseWaitForUserOperationTransactionResult = {
   error: Error | null;
 };
 
+/**
+ * Custom hook to wait for a user operation transaction and manage its state (pending, error, result).
+ *
+ * @example
+ * ```ts
+ * import { useWaitForUserOperationTransaction, useSmartAccountClient } from "@account-kit/react";
+ *
+ * const { client } = useSmartAccountClient({ type: "LightAccount" });
+ * const {
+ *  waitForUserOperationTransaction,
+ *  waitForUserOperationTransactionResult,
+ *  isWaitingForUserOperationTransaction,
+ *  error
+ * } = useWaitForUserOperationTransaction({
+ *  client,
+ *  // these are optional
+ *  onSuccess: (result) => {
+ *    // do something on success
+ *  },
+ *  onError: (error) => console.error(error),
+ * });
+ * ```
+ *
+ * @param {UseWaitForUserOperationTransactionArgs} config Configuration object containing the client
+ * @returns {UseWaitForUserOperationTransactionResult} An object containing methods and state related to waiting for a user operation transaction
+ */
 export function useWaitForUserOperationTransaction({
   client,
 }: UseWaitForUserOperationTransactionArgs): UseWaitForUserOperationTransactionResult {
