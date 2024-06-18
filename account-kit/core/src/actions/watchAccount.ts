@@ -3,6 +3,23 @@ import type { AlchemyAccountsConfig, SupportedAccountTypes } from "../types.js";
 import { type GetAccountResult } from "./getAccount.js";
 import { getChain } from "./getChain.js";
 
+/**
+ * Watches for changes to a specific type of account and triggers the provided callback function when changes occur.
+ *
+ * @example
+ * ```ts
+ * import { watchAccount } from "@account-kit/core";
+ * // see createConfig for more information on how to create a config
+ * import { config } from "./config";
+ *
+ * watchAccount("LightAccount", config)(console.log);
+ * ```
+ *
+ * @template TAccount The type of account to watch
+ * @param {TAccount} type The type of account to watch
+ * @param {AlchemyAccountsConfig} config The configuration containing client store settings
+ * @returns {(onChange: (account: GetAccountResult<TAccount>) => void) => void} A function that accepts a callback to be called when the account changes
+ */
 export const watchAccount =
   <TAccount extends SupportedAccountTypes>(
     type: TAccount,

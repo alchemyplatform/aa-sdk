@@ -41,7 +41,16 @@ export type CreateAccountParams<TAccount extends SupportedAccountTypes> = {
 /**
  * Creates an account of a specified type using the provided parameters and configuration. Supports creating LightAccount and MultiOwnerModularAccount types.
  *
- * @example TODO: IMPLEMENT ME
+ * @example
+ * ```ts
+ * import { createAccount } from "@account-kit/core";
+ * // see createConfig for more information on how to create a config
+ * import { config } from "./config";
+ *
+ * const account = createAccount({
+ *  type: "LightAccount",
+ * }, config);
+ * ```
  *
  * @param {CreateAccountParams<TAccount>} params The parameters required to create the account, including the type and account parameters
  * @param {AlchemyAccountsConfig} config The configuration object for Alchemy accounts
