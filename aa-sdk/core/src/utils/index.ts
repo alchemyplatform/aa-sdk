@@ -97,19 +97,23 @@ export function deepHexlify(obj: any): any {
   );
 }
 
-// borrowed from ethers.js
-export function defineReadOnly<T, K extends keyof T>(
-  object: T,
-  key: K,
-  value: T[K]
-): void {
-  Object.defineProperty(object, key, {
-    enumerable: true,
-    value: value,
-    writable: false,
-  });
-}
-
+/**
+ * Filters out properties with undefined or null values from the provided object.
+ *
+ * @example
+ * ```ts
+ * import { filterUndefined } from "@aa-sdk/core";
+ *
+ * const result = filterUndefined({
+ *  foo: undefined,
+ *  bar: null,
+ *  baz: "baz",
+ * }); // { baz: "baz" }
+ * ```
+ *
+ * @param {T} obj the object from which to remove properties with undefined or null values
+ * @returns {T} the object with undefined or null properties removed
+ */
 export function filterUndefined<T>(obj: T): T {
   for (const key in obj) {
     if (obj[key] == null) {
@@ -119,6 +123,23 @@ export function filterUndefined<T>(obj: T): T {
   return obj as T;
 }
 
+/**
+ * Picks the specified keys from an object and returns a new object containing only those key-value pairs.
+ *
+ * @example
+ * ```ts
+ * import { pick } from "@aa-sdk/core";
+ *
+ * const picked = pick({
+ *  foo: "foo",
+ *  bar: "bar",
+ * }, ["foo"]); // { foo: "foo" }
+ * ```
+ *
+ * @param {Record<string, unknown>} obj The object from which to pick keys
+ * @param {string|string[]} keys A single key or an array of keys to pick from the object
+ * @returns {Record<string, unknown>} A new object containing only the picked key-value pairs
+ */
 export function pick(obj: Record<string, unknown>, keys: string | string[]) {
   return Object.keys(obj)
     .filter((k) => keys.includes(k))
@@ -151,6 +172,26 @@ export const conditionalReturn = <T>(
   value: () => Promise<T>
 ): Promise<T | undefined> => condition.then((t) => (t ? value() : undefined));
 
+/**
+ * Converts an array of objects into a record (object) where each key is determined by the specified selector and the value is determined by the provided function.
+ *
+ * @example
+ * ```ts
+ * import { toRecord } from "@aa-sdk/core";
+ * import { sepolia, mainnet } from "viem/chains";
+ *
+ * const addressesByChain = toRecord(
+ *  [sepolia, mainnet],
+ *  "id",
+ *  () => "0x..."
+ * ); // { [sepolia.id]: "0x...", [mainnet.id]: "0x..." }
+ * ```
+ *
+ * @param {T[]} array The array of objects to convert to a record
+ * @param {K} selector The key used to select the property that will become the record's key
+ * @param {(item: T) => V} fn The function that transforms each item in the array into the record's value
+ * @returns {Record<T[K], V>} The resulting record object
+ */
 export const toRecord = <
   T extends { [K in RecordableKeys<T>]: string | number | symbol },
   K extends RecordableKeys<T>,
