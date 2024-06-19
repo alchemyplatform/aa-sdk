@@ -30,6 +30,9 @@ export type ExportWalletStamper = TurnkeyClient["stamper"] & {
   publicKey(): string | null;
 };
 
+/**
+ * Base class for all Alchemy Signer clients
+ */
 export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   private _user: User | undefined;
   private connectionConfig: ConnectionConfig;
@@ -37,6 +40,11 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   protected rootOrg: string;
   protected eventEmitter: EventEmitter<AlchemySignerClientEvents>;
 
+  /**
+   * Create a new instance of the Alchemy Signer client
+   *
+   * @param {BaseSignerClientParams} params the parameters required to create the client
+   */
   constructor(params: BaseSignerClientParams) {
     const { stamper, connection, rootOrgId } = params;
 

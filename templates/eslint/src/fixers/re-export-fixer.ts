@@ -14,12 +14,7 @@ export function reExportFixer(
   fixBatchSize: number
 ) {
   return () => {
-    // I'm just trying to get this to run only once per run for testing and limiting to one package
-    if (
-      (fixBatchSize > 0 && fixedInBatch === fixBatchSize) ||
-      !sourceFilePath.includes("/account-kit/core/src")
-    )
-      return null;
+    if (fixBatchSize > 0 && fixedInBatch === fixBatchSize) return null;
 
     const node = resolveReExport(sourceFilePath, importedName);
     if (!node) return null;
