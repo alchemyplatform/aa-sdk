@@ -37,6 +37,29 @@ export type UseExportAccountResult = {
   ExportAccountComponent: (props: ExportAccountComponentProps) => JSX.Element;
 };
 
+/**
+ * A hook use to export the private key for an account. It returns the mutation functions to kick off the export process, as well as a component to render the account recovery details in an iframe.
+ *
+ * @example
+ * ```ts
+ * import { useExportAccount } from "@account-kit/react";
+ *
+ * const {
+ *  exportAccount,
+ *  isExported,
+ *  isExporting,
+ *  error,
+ *  ExportAccountComponent
+ * } = useExportAccount({
+ *  params: {
+ *    iframeContainerId: "my-iframe-container",
+ *  },
+ * });
+ * ```
+ *
+ * @param {UseExportAccountMutationArgs} args Optional arguments for the mutation and export parameters
+ * @returns {UseExportAccountResult} An object containing the export state, possible error, and the export account function and component
+ */
 export function useExportAccount(
   args?: UseExportAccountMutationArgs
 ): UseExportAccountResult {
