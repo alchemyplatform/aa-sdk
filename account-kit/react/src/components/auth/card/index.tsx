@@ -1,4 +1,10 @@
-import { useCallback, useLayoutEffect, useMemo, type ReactNode } from "react";
+import {
+  useCallback,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  type ReactNode,
+} from "react";
 import { useSignerStatus } from "../../../hooks/useSignerStatus.js";
 import { IS_SIGNUP_QP } from "../../constants.js";
 import { useAuthContext } from "../context.js";
@@ -8,6 +14,7 @@ import { Notification } from "../../notification.js";
 import { useAuthError } from "../../../hooks/useAuthError.js";
 import { Navigation } from "../../navigation.js";
 import { useAuthModal } from "../../../hooks/useAuthModal.js";
+import { useElementHeight } from "../../../hooks/useElementHeight.js";
 
 export type AuthCardProps = {
   hideError?: boolean;
@@ -36,7 +43,11 @@ export const AuthCard = (
   const { closeAuthModal } = useAuthModal();
   const { status, isAuthenticating } = useSignerStatus();
   const { authStep, setAuthStep } = useAuthContext();
+
   const error = useAuthError();
+
+  const contentRef = useRef<HTMLDivElement>(null);
+  const { height } = useElementHeight(contentRef);
 
   // TODO: Finalize the steps that allow going back
   const canGoBack = useMemo(() => {
@@ -76,16 +87,26 @@ export const AuthCard = (
           <Notification message={error.message} type="error" />
         )}
       </div>
-      <div className="modal-box relative flex flex-col items-center gap-5 text-fg-primary">
-        {(canGoBack || showClose) && (
-          <Navigation
-            showClose={showClose}
-            showBack={canGoBack}
-            onBack={onBack}
-            onClose={closeAuthModal}
-          />
-        )}
-        <Step {...props} />
+
+      {/* Wrapper container that sizes its height dynamically */}
+      <div
+        className="transition-all duration-300 ease-out overflow-y-hidden"
+        style={{ height: height ? `${height}px` : "auto" }}
+      >
+        <div
+          ref={contentRef}
+          className="modal-box relative flex flex-col items-center gap-5 text-fg-primary"
+        >
+          {(canGoBack || showClose) && (
+            <Navigation
+              showClose={showClose}
+              showBack={canGoBack}
+              onBack={onBack}
+              onClose={closeAuthModal}
+            />
+          )}
+          <Step {...props} />
+        </div>
       </div>
     </div>
   );
