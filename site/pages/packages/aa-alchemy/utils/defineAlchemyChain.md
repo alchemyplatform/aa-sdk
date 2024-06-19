@@ -9,8 +9,6 @@ description: Overview of the SupportedChains util method in aa-alchemy
 
 ## Usage
 
-:::code-group
-
 ```ts [example.ts]
 import { defineAlchemyChain } from "@alchemy/aa-alchemy";
 import { mainnet } from "viem";
@@ -21,8 +19,6 @@ const mainnetWithAlch = defineAlchemyChain({
   rpcBaseUrl: "https://eth-mainnet.g.alchemy.com/v2/",
 });
 ```
-
-:::
 
 ## Returns
 
