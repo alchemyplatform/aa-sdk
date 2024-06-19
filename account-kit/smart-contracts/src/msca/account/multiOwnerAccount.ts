@@ -62,17 +62,42 @@ export async function createMultiOwnerModularAccount<
   config: CreateMultiOwnerModularAccountParams<TTransport, TSigner>
 ): Promise<MultiOwnerModularAccount<TSigner>>;
 
-export async function createMultiOwnerModularAccount({
-  transport,
-  chain,
-  signer,
-  accountAddress,
-  initCode,
-  entryPoint = getEntryPoint(chain, { version: "0.6.0" }),
-  factoryAddress = getDefaultMultiOwnerModularAccountFactoryAddress(chain),
-  owners = [],
-  salt = 0n,
-}: CreateMultiOwnerModularAccountParams): Promise<MultiOwnerModularAccount> {
+/**
+ * Creates a multi-owner modular account with the given parameters, including transport, chain, signer, account address, initialization code, entry point, factory address, owners, and salt.
+ * Ensures that the owners are unique, ordered, and non-zero.
+ * 
+ * @example
+ * ```ts
+ * import { createMultiOwnerModularAccount } from "@account-kit/smart-contracts";
+ * import { LocalAccountSigner } from "@aa-sdk/core";
+ * import { sepolia } from "viem/chains";
+ * import { http, generatePrivateKey } from "viem"
+ * 
+ * const account = await createMultiOwnerModularAccount({
+ *  chain: sepolia,
+ *  transport: http("RPC_URL"),
+ *  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
+ * });
+ * ```
+ * 
+ * @param {CreateMultiOwnerModularAccountParams} config Configuration parameters for creating a multi-owner modular account
+ * @returns {Promise<MultiOwnerModularAccount>} A promise that resolves to a `MultiOwnerModularAccount` object containing the created account information and methods
+ */
+export async function createMultiOwnerModularAccount(
+  config: CreateMultiOwnerModularAccountParams
+): Promise<MultiOwnerModularAccount> {
+  const {
+    transport,
+    chain,
+    signer,
+    accountAddress,
+    initCode,
+    entryPoint = getEntryPoint(chain, { version: "0.6.0" }),
+    factoryAddress = getDefaultMultiOwnerModularAccountFactoryAddress(chain),
+    owners = [],
+    salt = 0n,
+  } = config;
+
   const client = createBundlerClient({
     transport,
     chain,
