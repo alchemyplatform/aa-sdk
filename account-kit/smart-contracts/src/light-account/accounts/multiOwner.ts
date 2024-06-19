@@ -105,23 +105,45 @@ export async function createMultiOwnerLightAccount<
   MultiOwnerLightAccount<TSigner, TLightAccountVersion, TEntryPointVersion>
 >;
 
-export async function createMultiOwnerLightAccount({
-  transport,
-  chain,
-  signer,
-  initCode,
-  version = defaultLightAccountVersion("MultiOwnerLightAccount"),
-  entryPoint = getEntryPoint(chain, {
-    version:
-      AccountVersionRegistry["MultiOwnerLightAccount"][version]
-        .entryPointVersion,
-  }),
-  accountAddress,
-  factoryAddress = AccountVersionRegistry["MultiOwnerLightAccount"][version]
-    .address[chain.id].factory,
-  salt: salt_ = 0n,
-  owners = [],
-}: CreateMultiOwnerLightAccountParams): Promise<MultiOwnerLightAccount> {
+/**
+ * Creates a multi-owner light account using the provided parameters, including transport, chain, signer, initialization code, version, account address, factory address, salt, and owners. Ensures the owners list is deduplicated, ordered, and valid.
+ *
+ * @example
+ * ```ts
+ * import { createMultiOwnerLightAccount } from "@account-kit/smart-contracts";
+ * import { LocalAccountSigner } from "@aa-sdk/core";
+ * import { sepolia } from "viem/chains";
+ * import { http, generatePrivateKey } from "viem"
+ * 
+ * const account = await createMultiOwnerLightAccount({
+ *  chain: sepolia,
+ *  transport: http("RPC_URL"),
+ *  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
+ * });
+ * ```
+ * 
+ * @param {CreateMultiOwnerLightAccountParams} config The parameters for creating a multi-owner light account
+ * @returns {Promise<MultiOwnerLightAccount>} A promise that resolves to a `MultiOwnerLightAccount` object containing the created account information and methods
+ */
+export async function createMultiOwnerLightAccount(
+  {
+    transport,
+    chain,
+    signer,
+    initCode,
+    version = defaultLightAccountVersion("MultiOwnerLightAccount"),
+    entryPoint = getEntryPoint(chain, {
+      version:
+        AccountVersionRegistry["MultiOwnerLightAccount"][version]
+          .entryPointVersion,
+    }),
+    accountAddress,
+    factoryAddress = AccountVersionRegistry["MultiOwnerLightAccount"][version]
+      .address[chain.id].factory,
+    salt: salt_ = 0n,
+    owners = [],
+  }: CreateMultiOwnerLightAccountParams
+): Promise<MultiOwnerLightAccount> {
   const client = createBundlerClient({
     transport,
     chain,
