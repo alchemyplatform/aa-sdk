@@ -23,7 +23,7 @@ import {
 /**
  * Creates a zustand store instance containing the client only state
  *
- * @param config the configuration object for the client store
+ * @param {CreateClientStoreParams} config the configuration object for the client store
  * @returns a zustand store instance that maintains the client state
  */
 export const createClientStore = (config: CreateClientStoreParams) => {
@@ -59,7 +59,7 @@ export const createClientStore = (config: CreateClientStoreParams) => {
  * Given initial client store parameters, it initializes an AlchemySigner instance.
  * This should only be called on the client.
  *
- * @param params {@link CreateClientStoreParams} to configure and create the signer
+ * @param {CreateClientStoreParams} params {@link CreateClientStoreParams} to configure and create the signer
  * @returns an instance of the {@link AlchemySigner}
  */
 export const createSigner = (params: CreateClientStoreParams) => {
@@ -101,7 +101,7 @@ export const createSigner = (params: CreateClientStoreParams) => {
 /**
  * Converts the AlchemySigner's status to a more readable object
  *
- * @param alchemySignerStatus Enum value of the AlchemySigner's status to convert
+ * @param {AlchemySignerStatus} alchemySignerStatus Enum value of the AlchemySigner's status to convert
  * @returns an object containing the original status as well as booleans to check the current state
  */
 export const convertSignerStatusToState = (
@@ -122,6 +122,19 @@ const staticState: AccountState<SupportedAccountTypes> = {
   account: undefined,
 };
 
+/**
+ * Returns the default state for an account of a supported type.
+ *
+ * @example
+ * ```ts
+ * import { defaultAccountState } from "@account-kit/core";
+ *
+ * const defaultLightAccountState = defaultAccountState<"LightAccount">();
+ * ```
+ *
+ * @template T
+ * @returns {AccountState<T>} The default state for the specified account type
+ */
 export const defaultAccountState = <
   T extends SupportedAccountTypes
 >(): AccountState<T> => staticState;

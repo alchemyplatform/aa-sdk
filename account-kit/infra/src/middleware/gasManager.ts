@@ -145,7 +145,7 @@ export interface AlchemyGasEstimationOptions {
 }
 
 /**
- * dummy paymaster and data middleware for the alchemy gas manager
+ * Dummy paymaster and data middleware for the alchemy gas manager
  *
  * @template {ClientWithAlchemyMethods} C
  * @param client client with alchemy methods
