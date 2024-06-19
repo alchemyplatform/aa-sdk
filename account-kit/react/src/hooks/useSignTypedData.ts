@@ -37,6 +37,27 @@ export type UseSignTypedDataResult = {
   error: Error | null;
 };
 
+/**
+ * Hook for signing typed data, supporting both connected accounts and clients.
+ *
+ * @example
+ * ```ts
+ * import { useSignTypedData, useSmartAccountClient } from "@account-kit/react";
+ *
+ * const { client } = useSmartAccountClient({ type: "LightAccount" });
+ * const { signTypedData, signTypedDataAsync, signedTypedData, isSigningTypedData, error } = useSignTypedData({
+ *  client,
+ *  // these are optional
+ *  onSuccess: (result) => {
+ *    // do something on success
+ *  },
+ *  onError: (error) => console.error(error),
+ * });
+ * ```
+ *
+ * @param {UseSignTypedDataArgs} args The arguments for the hook, including client and mutation-related arguments
+ * @returns {UseSignTypedDataResult} An object containing methods and state related to the sign typed data mutation process
+ */
 export function useSignTypedData({
   client,
   ...mutationArgs
