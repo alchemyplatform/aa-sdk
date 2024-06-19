@@ -8,6 +8,18 @@ import { useAlchemyAccountContext } from "../context.js";
 
 export type UseUserResult = (User & { type: "eoa" | "sca" }) | null;
 
+/**
+ * A React hook that returns the current user information, either from an External Owned Account (EOA) or from the client store. It uses the Alchemy account context and synchronizes with external store updates.
+ *
+ * @example
+ * ```ts
+ * import { useUser } from "@account-kit/react";
+ *
+ * const user = useUser();
+ * ```
+ *
+ * @returns {UseUserResult} The user information, including address, orgId, userId, and type. If the user is not connected, it returns null.
+ */
 export const useUser = (): UseUserResult => {
   const { config } = useAlchemyAccountContext();
   const {

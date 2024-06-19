@@ -10,6 +10,19 @@ import {
 
 export type UseSignerStatusResult = SignerStatus;
 
+/**
+ * Hook to get the signer status, optionally using an override configuration.
+ *
+ * @example
+ * ```ts
+ * import { useSignerStatus } from "@account-kit/react";
+ *
+ * const signerStatus = useSignerStatus();
+ * ```
+ *
+ * @param {AlchemyAccountContextProps} [override] optional configuration to override the default context
+ * @returns {UseSignerStatusResult} the current state of the signer
+ */
 export const useSignerStatus = (
   override?: AlchemyAccountContextProps
 ): UseSignerStatusResult => {

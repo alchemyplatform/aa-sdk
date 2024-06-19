@@ -18,6 +18,7 @@ const rule: Rule.RuleModule = {
       missingJsdoc:
         'Re-exported entity "{{name}}" from another module must have a JSDoc comment.',
     },
+    fixable: "code", // This rule is fixable
     schema: [
       {
         type: "object",
