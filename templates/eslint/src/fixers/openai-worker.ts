@@ -147,6 +147,24 @@ const sampleResponseTwo = `
  * @returns {Promise<SimpleSmartAccount>} A promise that resolves to a \`SimpleSmartAccount\` object containing the created account information and methods 
 `;
 
+const samplePromptThree = `
+export const watchUser =
+  (config: AlchemyAccountsConfig) => (onChange: (user?: User) => void) => {
+    return config.clientStore.subscribe(({ user }) => user, onChange, {
+      equalityFn: (a, b) => a?.userId === b?.userId,
+    });
+  };
+`;
+
+const sampleResponseThree = `
+ * Watches for changes to the user in the client store and triggers the provided callback when a change is detected.
+ * 
+ * @example TODO: Implement me
+ * 
+ * @param {AlchemyAccountsConfig} config the configuration containing the client store
+ * @returns {(onChange: (user: User) => void) => (() => void)} a function to unsubscribe from the user updates
+`;
+
 runAsWorker(async (codeToComment: string): Promise<string | null> => {
   const completion = await openai.chat.completions.create({
     // 2 shot approach to "train" the model. We should consider training the model on a larger dataset so we can refine it further.
@@ -156,9 +174,11 @@ runAsWorker(async (codeToComment: string): Promise<string | null> => {
       { role: "assistant", content: sampleResponse },
       { role: "user", content: samplePromptTwo },
       { role: "assistant", content: sampleResponseTwo },
+      { role: "user", content: samplePromptThree },
+      { role: "assistant", content: sampleResponseThree },
       { role: "user", content: codeToComment },
     ],
-    model: "gpt-4o",
+    model: "gpt-3.5-turbo",
     stream: false,
   });
 
