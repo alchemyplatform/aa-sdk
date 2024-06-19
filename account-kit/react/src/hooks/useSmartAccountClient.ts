@@ -77,6 +77,22 @@ export function useSmartAccountClient<
   args: UseSmartAccountClientProps<TTransport, TChain, TAccount>
 ): UseSmartAccountClientResult<TTransport, TChain, SupportedAccount<TAccount>>;
 
+/**
+ * Uses the provided smart account client parameters to create or retrieve an existing smart account client, handling different types of accounts including LightAccount and MultiOwnerModularAccount.
+ *
+ * @example
+ * ```ts
+ * import { useSmartAccountClient } from "@account-kit/react";
+ *
+ * const { client, address, isLoadingClient } = useSmartAccountClient({
+ *  type: "LightAccount",
+ *  accountParams: {...}, // optional params to further configure the account
+ * });
+ * ```
+ *
+ * @param {UseSmartAccountClientProps} props The properties required to use the smart account client, including account parameters, type, and additional client parameters.
+ * @returns {UseSmartAccountClientResult} An object containing the smart account client, the address, and a loading state.
+ */
 export function useSmartAccountClient({
   accountParams,
   type,

@@ -44,6 +44,26 @@ export type UseDropAndReplaceUserOperationResult<
   error: Error | null;
 };
 
+/**
+ * Custom hook that handles the drop and replace user operation for a given client and mutation arguments.
+ *
+ * @example
+ * ```ts
+ * import { useDropAndReplaceUserOperation } from "@account-kit/react";
+ *
+ * const { dropAndReplaceUserOperation, dropAndReplaceUserOperationResult, isDroppingAndReplacingUserOperation, error } = useDropAndReplaceUserOperation({
+ *  client,
+ *  // these are optional
+ *  onSuccess: (result) => {
+ *   // do something on success
+ *  },
+ *  onError: (error) => console.error(error),
+ * });
+ * ```
+ *
+ * @param {UseDropAndReplaceUserOperationArgs<TEntryPointVersion, TAccount>} config The configuration parameters including the client and other mutation arguments
+ * @returns {UseDropAndReplaceUserOperationResult<TEntryPointVersion, TAccount>} The result containing the mutation function, result data, loading state, and any error
+ */
 export function useDropAndReplaceUserOperation<
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount>,
   TAccount extends SupportedAccounts = SupportedAccounts
