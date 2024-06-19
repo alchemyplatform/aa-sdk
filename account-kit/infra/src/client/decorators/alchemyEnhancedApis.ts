@@ -15,7 +15,7 @@ export type AlchemyEnhancedApis = {
 };
 
 /**
- * Enhances the Alchemy API actions by parsing the Alchemy SDK client and ensuring the transport URL matches the `AlchemyProvider` JSON-RPC URL, if applicable.
+ * Given an instance of the Alchemy SDK, returns a smart account client decorator which contains actions for interacting Alchemy's enhanced APIs.
  *
  * @example
  * ```ts
