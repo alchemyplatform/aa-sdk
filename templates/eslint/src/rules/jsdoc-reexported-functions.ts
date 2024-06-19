@@ -67,8 +67,8 @@ const rule: Rule.RuleModule = {
           // skip non root files
           return;
         }
-        
-        if (ignore.some(pattern => minimatch(context.filename, pattern))) { 
+
+        if (ignore.some((pattern) => minimatch(context.filename, pattern))) {
           return;
         }
 
