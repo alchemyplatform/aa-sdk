@@ -46,8 +46,7 @@
     "eslint-rules/require-jsdoc-on-reexported-functions": [
       "error",
       {
-        "enableFixer": true,
-        "ignore": ["!**/account-kit/react/src/**/*"]
+        "ignore": ["!**/account-kit/smart-contracts/src/**/*"]
       }
     ]
   },

@@ -22,7 +22,32 @@ export type TransferLightAccountOwnershipParams<
 } & GetAccountParameter<TAccount, LightAccount<TSigner>> &
   UserOperationOverridesParameter<TEntryPointVersion>;
 
-export const transferOwnership: <
+/**
+ * Transfers the ownership of a light account to a new owner. 
+ * This function ensures that the client is a compatible smart acccount client and that a Light Account is provided. 
+ * If the waitForTxn parameter is true, it will wait for the transaction to be completed before returning.
+ * 
+ * @example
+ * ```ts
+ * import { transferOwnership, createLightAccountClient } from "@account-kit/smart-contracts";
+ * 
+ * const lightAccountClient = createLightAccountClient({
+ *  signer,
+ *  transport,
+ *  chain,
+ * });
+ * 
+ * const txHash = await transferOwnership(lightAccountClient, {
+ *  newOwner: newOwnerSigner,
+ *  waitForTxn: true, // set to false to return a uoHash instead
+ * });
+ * ```
+ * 
+ * @param {Client<TTransport, TChain, TAccount>} client The smart account client instance used to execute the transfer
+ * @param {TransferLightAccountOwnershipParams<TSigner, TAccount>} args The parameters for transferring ownership
+ * @returns {Promise<Hex>} The transaction or UO hash as a Hex string
+ */
+export const transferOwnership = async <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
@@ -30,12 +55,10 @@ export const transferOwnership: <
     | LightAccount<TSigner>
     | undefined
 >(
-  client: Client<TTransport, TChain, TAccount>,
-  args: TransferLightAccountOwnershipParams<TSigner, TAccount>
-) => Promise<Hex> = async (
-  client,
-  { newOwner, waitForTxn, overrides, account = client.account }
-) => {
+client: Client<TTransport, TChain, TAccount>,
+args: TransferLightAccountOwnershipParams<TSigner, TAccount>
+): Promise<Hex> => {
+  const { newOwner, waitForTxn, overrides, account = client.account } = args;
   if (!account) {
     throw new AccountNotFoundError();
   }
