@@ -60,7 +60,7 @@ export function PhotoUploads({ mode }: { mode: "dark" | "light" }) {
         )}
       </div>
       <div className="flex flex-col gap-[2px]">
-        <div className="text-fg-secondary text-xs font-semibold">
+        <div className="text-secondary text-xs font-semibold">
           {mode === "light" ? "Light" : "Dark"} mode
         </div>
         <div className="text-xs text-gray-500 font-medium">

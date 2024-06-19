@@ -4,7 +4,6 @@ import ExternalLink from "../shared/ExternalLink";
 import { DOCS } from "@/src/utils/links";
 import { GithubLogo } from "../icons/github";
 import { ArrowUpRightIcon } from "../icons/arrow";
-import { Switch } from "@/components/ui/switch";
 
 export function TopNav() {
   return (

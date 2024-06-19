@@ -26,7 +26,7 @@ export function Styling({ className }: { className?: string }) {
 
   return (
     <div className={cn("flex flex-col", className)}>
-      <div className="flex flex-col gap-4 border-b border-static py-6">
+      <div className="flex flex-col gap-4 border-b border-border py-6">
         <p className="font-semibold text-secondary-foreground text-sm">Theme</p>
         <ThemeSwitch
           checked={config.ui.theme === "dark"}
@@ -34,7 +34,7 @@ export function Styling({ className }: { className?: string }) {
         />
       </div>
 
-      <div className="flex flex-col gap-4 border-b border-static py-6 items-start">
+      <div className="flex flex-col gap-4 border-b border-border py-6 items-start">
         <div className="flex flex-col gap-2">
           <p className="font-semibold text-secondary-foreground text-sm">
             Color
@@ -46,7 +46,7 @@ export function Styling({ className }: { className?: string }) {
         <ColorPicker />
       </div>
 
-      <div className="flex flex-col gap-4 border-b border-static py-6 items-start">
+      <div className="flex flex-col gap-4 border-b border-border py-6 items-start">
         <div className="flex flex-col gap-2">
           <p className="font-semibold text-secondary-foreground text-sm">
             Logo
@@ -59,7 +59,7 @@ export function Styling({ className }: { className?: string }) {
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 border-b border-static py-6 items-start">
+      <div className="flex flex-col gap-4 border-b border-border py-6 items-start">
         <div className="flex flex-col gap-2 self-stretch">
           <p className="font-semibold text-secondary-foreground text-sm">
             Corner radius
