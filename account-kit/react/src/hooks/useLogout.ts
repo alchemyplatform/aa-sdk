@@ -14,6 +14,25 @@ export type UseLogoutResult = {
   error: Error | null;
 };
 
+/**
+ * Provides a hook to log out a user, disconnecting the signer and triggering the disconnectAsync function.
+ *
+ * @example
+ * ```ts
+ * import { useLogout } from "@account-kit/react";
+ *
+ * const { logout, isLoggingOut, error } = useLogout({
+ *  // these are optional
+ *  onSuccess: () => {
+ *   // do something on success
+ *  },
+ *  onError: (error) => console.error(error),
+ * });
+ * ```
+ *
+ * @param {UseLogoutMutationArgs} [mutationArgs] optional arguments to customize the mutation behavior
+ * @returns {UseLogoutResult} an object containing the logout function, a boolean indicating if logout is in progress, and any error encountered during logout
+ */
 export function useLogout(
   mutationArgs?: UseLogoutMutationArgs
 ): UseLogoutResult {
