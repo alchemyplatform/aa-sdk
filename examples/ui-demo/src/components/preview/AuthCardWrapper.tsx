@@ -30,7 +30,7 @@ export function AuthCardWrapper({ className }: { className?: string }) {
       }}
     >
       <div className="flex flex-col gap-2 w-[368px]">
-        <div className="modal bg-white shadow-md">
+        <div className="modal bg-surface-default shadow-md">
           <AuthCard
             header={<AuthCardHeader />}
             showSignInText
