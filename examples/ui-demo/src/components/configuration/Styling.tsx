@@ -187,8 +187,8 @@ function IllustrationStyleOptions() {
 function LearnMore() {
   return (
     <div className="flex items-center gap-1 text-xs text-center self-center mt-8">
-      <FileCode className="stroke-fg-secondary stroke-1" size={18} />
-      <div className="text-fg-secondary">Want to fully configure the CSS?</div>
+      <FileCode className="stroke-secondary stroke-1" size={18} />
+      <div className="text-secondary">Want to fully configure the CSS?</div>
       <ExternalLink className="font-semibold text-blue-600" href="#">
         Click to learn how
       </ExternalLink>
