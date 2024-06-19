@@ -23,6 +23,30 @@ export type UpdateMultiOwnerLightAccountOwnersParams<
 } & GetAccountParameter<TAccount, MultiOwnerLightAccount<TSigner>> &
   UserOperationOverridesParameter<TEntryPointVersion>;
 
+/**
+ * Updates the owners of a multi-owner light account. This includes adding new owners and removing existing ones.
+ *
+ * @example
+ * ```ts
+ * import { updateOwners, createLightAccountClient } from "@account-kit/smart-contracts";
+ * 
+ * const lightAccountClient = createLightAccountClient({
+ *  signer,
+ *  transport,
+ *  chain,
+ * });
+ * 
+ * const txHash = await updateOwners(lightAccountClient, {
+ *  ownerstoAdd: [newOwnerAddress], // or empty if you just want to remove owners
+ *  ownersToRemove: [oldOwnerAddress], // or empty if you just want to add owners
+ *  waitForTxn: true, // set to false to return a uoHash instead
+ * });
+ * ```
+ *
+ * @param {Client<TTransport, TChain, TAccount>} client The client instance used to interact with the account
+ * @param {UpdateMultiOwnerLightAccountOwnersParams<TSigner, TAccount>} args The parameters for updating the account owners
+ * @returns {Promise<Hex>} A promise that resolves to the transaction hash or the full transaction result if `waitForTxn` is `true`
+ */
 export const updateOwners: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
