@@ -23,10 +23,6 @@ const rule: Rule.RuleModule = {
       {
         type: "object",
         properties: {
-          enableFixer: {
-            type: "boolean",
-            default: false,
-          },
           fixBatchSize: {
             description:
               "If fixing is enabled, the number of files to fix at once (0 for all, default 10)",
@@ -47,7 +43,7 @@ const rule: Rule.RuleModule = {
     ],
   },
   create(context) {
-    const enableFixer: boolean = context.options[0]?.enableFixer || false;
+    const enableFixer: boolean = process.argv.some(arg => arg.includes("eslint")) && process.argv.some(x => x === "--fix" || x === "-f");
     const fixBatchSize: number = context.options[0]?.fixBatchSize ?? 10;
     const ignore: string[] = context.options[0]?.ignore || [];
 

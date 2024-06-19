@@ -102,22 +102,44 @@ export async function createLightAccount<
   >
 ): Promise<LightAccount<TSigner, TLightAccountVersion, TEntryPointVersion>>;
 
-export async function createLightAccount({
-  transport,
-  chain,
-  signer,
-  initCode,
-  version = defaultLightAccountVersion("LightAccount"),
-  entryPoint = getEntryPoint(chain, {
-    version: AccountVersionRegistry["LightAccount"][version]
-      .entryPointVersion as any,
-  }),
-  accountAddress,
-  factoryAddress = AccountVersionRegistry["LightAccount"][version].address[
-    chain.id
-  ].factory,
-  salt: salt_ = 0n,
-}: CreateLightAccountParams): Promise<LightAccount> {
+/**
+ * Creates a light account based on the provided parameters such as transport, chain, signer, init code, and more. Ensures that an account is configured and returned with various capabilities, such as transferring ownership and retrieving the owner's address.
+ *
+ * @example
+ * ```ts
+ * import { createLightAccount } from "@account-kit/smart-contracts";
+ * import { LocalAccountSigner } from "@aa-sdk/core";
+ * import { sepolia } from "viem/chains";
+ * import { http, generatePrivateKey } from "viem"
+ * 
+ * const account = await createLightAccount({
+ *  chain: sepolia,
+ *  transport: http("RPC_URL"),
+ *  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
+ * });
+ * ```
+ *
+ * @param {CreateLightAccountParams} config The parameters for creating a light account
+ * @returns {Promise<LightAccount>} A promise that resolves to a `LightAccount` object containing the created account information and methods
+ */
+export async function createLightAccount(
+  {
+    transport,
+    chain,
+    signer,
+    initCode,
+    version = defaultLightAccountVersion("LightAccount"),
+    entryPoint = getEntryPoint(chain, {
+      version: AccountVersionRegistry["LightAccount"][version]
+        .entryPointVersion as any,
+    }),
+    accountAddress,
+    factoryAddress = AccountVersionRegistry["LightAccount"][version].address[
+      chain.id
+    ].factory,
+    salt: salt_ = 0n,
+  }: CreateLightAccountParams
+): Promise<LightAccount> {
   const client = createBundlerClient({
     transport,
     chain,
