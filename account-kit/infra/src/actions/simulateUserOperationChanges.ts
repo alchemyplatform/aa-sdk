@@ -10,6 +10,23 @@ import { isAlchemySmartAccountClient } from "../client/isAlchemySmartAccountClie
 import type { AlchemyRpcSchema } from "../client/types.js";
 import type { SimulateUserOperationAssetChangesResponse } from "./types.js";
 
+/**
+ * Simulates user operation changes including asset changes for a specified user operation and returns the resulting state changes.
+ *
+ * @example
+ * ```ts
+ * import { simulateUserOperationChanges, createAlchemyPublicRpcClient } from "@account-kit/infra";
+ *
+ * const client = createAlchemyPublicRpcClient(...);
+ * const response = await simulateUserOperationChanges(client, {
+ *  uo: ...
+ * });
+ * ```
+ *
+ * @param {Client<Transport, TChain, TAccount, AlchemyRpcSchema>} client The client instance used to send the simulation request
+ * @param {SendUserOperationParameters<TAccount>} args The parameters of the user operation including the account and other overrides
+ * @returns {Promise<SimulateUserOperationAssetChangesResponse>} A promise that resolves to the response of the simulation showing the asset changes
+ */
 export const simulateUserOperationChanges: <
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =

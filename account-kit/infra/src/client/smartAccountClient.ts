@@ -115,6 +115,23 @@ export function createAlchemySmartAccountClient<
   TContext
 >;
 
+/**
+ * Creates an Alchemy smart account client using the provided configuration options, including account details, gas manager configuration, and custom middleware.
+ *
+ * @example
+ * ```ts
+ * import { createAlchemySmartAccountClient } from "@account-kit/infra";
+ * import { sepolia } from "@account-kit/infra/chain";
+ *
+ * const client = createAlchemySmartAccountClient({
+ *  chain: sepolia,
+ *  apiKey: "your-api-key",
+ * });
+ * ```
+ *
+ * @param {AlchemySmartAccountClientConfig} config The configuration for creating the Alchemy smart account client
+ * @returns {AlchemySmartAccountClient} An instance of `AlchemySmartAccountClient` configured based on the provided options
+ */
 export function createAlchemySmartAccountClient({
   account,
   gasManagerConfig,

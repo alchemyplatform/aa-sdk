@@ -17,7 +17,7 @@ import type {
 } from "../smartAccountClient.js";
 import type { ClientWithAlchemyMethods } from "../types.js";
 
-export type CreateAlchemySmartAccountClientFromRpcClient<
+export type CreateAlchemySmartAccountClientFromRpcClientParams<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined,
@@ -51,7 +51,7 @@ export function createAlchemySmartAccountClientFromRpcClient<
     | UserOperationContext
     | undefined
 >(
-  args: CreateAlchemySmartAccountClientFromRpcClient<TAccount, TContext>
+  args: CreateAlchemySmartAccountClientFromRpcClientParams<TAccount, TContext>
 ): AlchemySmartAccountClient<
   CustomTransport,
   TChain,
@@ -60,17 +60,37 @@ export function createAlchemySmartAccountClientFromRpcClient<
   TContext
 >;
 
-export function createAlchemySmartAccountClientFromRpcClient({
-  opts,
-  account,
-  useSimulation,
-  gasManagerConfig,
-  feeEstimator,
-  gasEstimator,
-  customMiddleware,
-  signUserOperation,
-  client,
-}: CreateAlchemySmartAccountClientFromRpcClient): AlchemySmartAccountClient {
+/**
+ * Creates an AlchemySmartAccountClient using the provided RPC client configuration, including options, account, simulation settings, gas management, fee estimation, middleware and user operation signing.
+ *
+ * @example
+ * ```ts
+ * import { createAlchemySmartAccountClientFromRpcClient, createAlchemyPublicRpcClient } from "@account-kit/infra";
+ *
+ * const client = createAlchemyPublicRpcClient(...);
+ * const scaClient = createAlchemySmartAccountClientFromRpcClient({
+ *  client,
+ *  ...
+ * });
+ * ```
+ *
+ * @param {CreateAlchemySmartAccountClientFromRpcClientParams} args The configuration object containing all required parameters
+ * @returns {AlchemySmartAccountClient} An instance of AlchemySmartAccountClient
+ */
+export function createAlchemySmartAccountClientFromRpcClient(
+  args: CreateAlchemySmartAccountClientFromRpcClientParams
+): AlchemySmartAccountClient {
+  const {
+    opts,
+    account,
+    useSimulation,
+    gasManagerConfig,
+    feeEstimator,
+    gasEstimator,
+    customMiddleware,
+    signUserOperation,
+    client,
+  } = args;
   const feeOptions =
     opts?.feeOptions ?? getDefaultUserOperationFeeOptions(client.chain);
 
