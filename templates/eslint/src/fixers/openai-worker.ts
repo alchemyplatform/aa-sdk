@@ -166,21 +166,26 @@ const sampleResponseThree = `
 `;
 
 runAsWorker(async (codeToComment: string): Promise<string | null> => {
-  const completion = await openai.chat.completions.create({
-    // 2 shot approach to "train" the model. We should consider training the model on a larger dataset so we can refine it further.
-    messages: [
-      { role: "system", content: systemPrompt },
-      { role: "user", content: sampleUserPrompt },
-      { role: "assistant", content: sampleResponse },
-      { role: "user", content: samplePromptTwo },
-      { role: "assistant", content: sampleResponseTwo },
-      { role: "user", content: samplePromptThree },
-      { role: "assistant", content: sampleResponseThree },
-      { role: "user", content: codeToComment },
-    ],
-    model: "gpt-3.5-turbo",
-    stream: false,
-  });
+  const completion = await openai.chat.completions
+    .create({
+      // 2 shot approach to "train" the model. We should consider training the model on a larger dataset so we can refine it further.
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: sampleUserPrompt },
+        { role: "assistant", content: sampleResponse },
+        { role: "user", content: samplePromptTwo },
+        { role: "assistant", content: sampleResponseTwo },
+        { role: "user", content: samplePromptThree },
+        { role: "assistant", content: sampleResponseThree },
+        { role: "user", content: codeToComment },
+      ],
+      model: "gpt-4o",
+      stream: false,
+    })
+    .catch((error) => {
+      console.log(error);
+      throw error;
+    });
 
   return completion.choices[0].message.content;
 });
