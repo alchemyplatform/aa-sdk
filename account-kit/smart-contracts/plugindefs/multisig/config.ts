@@ -14,7 +14,7 @@ import {
   zora,
   zoraSepolia,
 } from "@aa-sdk/core";
-import type { PluginConfig } from "@alchemy/plugingen";
+import type { PluginConfig } from "@account-kit/plugingen";
 import { parseAbiParameters } from "viem";
 import { MultisigPluginAbi } from "./abi.js";
 
