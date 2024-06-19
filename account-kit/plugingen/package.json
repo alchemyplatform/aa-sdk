@@ -1,6 +1,6 @@
 {
-  "name": "@alchemy/plugingen",
-  "version": "3.19.0",
+  "name": "@account-kit/plugingen",
+  "version": "3.18.2",
   "description": "A CLI tool that enables you to generate TS code for your ERC-6900 plugins",
   "author": "Alchemy",
   "license": "MIT",

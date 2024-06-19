@@ -56,7 +56,7 @@ export async function init(options: InitOptions = {}) {
   let content: string;
   if (isUsingTypeScript) {
     content = dedent(`
-      import { defineConfig } from '@alchemy/plugingen';
+      import { defineConfig } from '@account-kit/plugingen';
       import { sepolia } from "viem/chains";
       
       export default defineConfig({
@@ -70,7 +70,7 @@ export async function init(options: InitOptions = {}) {
     content = dedent(`
       // @ts-check
 
-      /** @type {import('@alchemy/plugingen').Config} */
+      /** @type {import('@account-kit/plugingen').Config} */
       export default ${dedent`
       {
         outDir: "./src/generated",
