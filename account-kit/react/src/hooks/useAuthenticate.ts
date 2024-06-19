@@ -23,6 +23,25 @@ export type UseAuthenticateResult = {
   error: Error | null;
 };
 
+/**
+ * Provides functions and state for authenticating a user using a signer. It includes methods for both synchronous and asynchronous mutations.
+ *
+ * @example
+ * ```ts
+ * import { useAuthenticate } from "@account-kit/react";
+ *
+ * const { authenticate, authenticateAsync, isPending, error } = useAuthenticate({
+ *  // these are optional
+ *  onSuccess: () => {
+ *    // do something on success
+ *  },
+ *  onError: (error) => console.error(error),
+ * });
+ * ```
+ *
+ * @param {UseAuthenticateMutationArgs} [mutationArgs] Optional mutation arguments to configure the authentication mutation
+ * @returns {UseAuthenticateResult} An object containing functions and state for handling user authentication, including methods for synchronously and asynchronously executing the authentication
+ */
 export function useAuthenticate(
   mutationArgs?: UseAuthenticateMutationArgs
 ): UseAuthenticateResult {
