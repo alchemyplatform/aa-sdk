@@ -6,6 +6,6 @@ export const modalComponents: ComponentDef = {
     "@apply bg-bg-surface-default": {},
     ".modal-box": {
       "@apply z-[1] px-6 py-4": {},
-    }
+    },
   },
 };
