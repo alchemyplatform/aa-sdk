@@ -41,7 +41,7 @@ export type InstallPluginParams<
   GetContextParameter<TContext>;
 
 /**
- * Installs a plugin into a smart account client, sending the user operation with the appropriate parameters.
+ * Installs a plugin on a smart account via the client, sending the user operation with the appropriate parameters.
  * NOTE: it's recommended to just use the installPlugin action returned from generated plugins
  *
  * @example
@@ -57,7 +57,7 @@ export type InstallPluginParams<
  * });
  * ```
  *
- * @param {Client<TTransport, TChain, TAccount>} client The smart account client to which the plugin will be installed
+ * @param {Client<TTransport, TChain, TAccount>} client The client configured to the smart account on which the plugin will be installed
  * @param {InstallPluginParams<TAccount, TContext>} params The parameters required to install the plugin, including overrides, context, and account information
  * @returns {Promise<any>} A promise that resolves once the plugin installation operation is sent
  */

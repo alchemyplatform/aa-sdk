@@ -29,7 +29,7 @@ type BuildSessionKeysToRemoveStructParams<
  * });
  * ```
  *
- * @param {Client<TTransport, TChain, TAccount>} client The client instance used to interact with the smart contract
+ * @param {Client<TTransport, TChain, TAccount>} client The client instance used to interact with the smart account
  * @param {BuildSessionKeysToRemoveStructParams<TAccount>} args Arguments to configure the session key removal process
  * @returns {Promise<{ sessionKey: Address; predecessor: Address }[]>} A promise that resolves to an array of objects each containing a session key and its predecessor
  */

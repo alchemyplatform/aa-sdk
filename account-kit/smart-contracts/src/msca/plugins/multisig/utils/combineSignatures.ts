@@ -18,6 +18,7 @@ export type CombineSignaturesParams = {
  * import { combineSignatures } from "@account-kit/smart-contracts";
  *
  * const combinedSignature = combineSignatures({
+ *  // this is the upper limit pre-verification gas
  *  upperLimitPvg: "0x01",
  *  upperLimitMaxFeePerGas: "0x02",
  *  upperLimitMaxPriorityFeePerGas: "0x03",
