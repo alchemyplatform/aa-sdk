@@ -18,7 +18,7 @@ import { getChain } from "./getChain.js";
  * @template TAccount The type of account to watch
  * @param {TAccount} type The type of account to watch
  * @param {AlchemyAccountsConfig} config The configuration containing client store settings
- * @returns {(onChange: (account: GetAccountResult<TAccount>) => void) => void} A function that accepts a callback to be called when the account changes
+ * @returns {(onChange: (account: GetAccountResult<TAccount>) => void) => (() => void)} A function that accepts a callback to be called when the account changes and returns a function to unsubscribe from the store
  */
 export const watchAccount =
   <TAccount extends SupportedAccountTypes>(

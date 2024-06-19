@@ -2,9 +2,18 @@ import type { AlchemyAccountsConfig, Connection } from "../types";
 
 /**
  * Subscribe to changes to the active connection
+ * 
+ * @example
+ * ```ts
+ * import { watchConnection } from "@account-kit/core";
+ * // see createConfig for more information on how to create a config
+ * import { config } from "./config";
+ * 
+ * watchConnection(config)(console.log);
+ * ```
  *
  * @param config the account config
- * @returns a function which takes an onChange callback and returns an unsubscribe function
+ * @returns {(onChange: (connection: Connection) => void) => (() => void)} a function which accepts an onChange callback that will be fired when the connection changes and returns a function to unsubscribe from the store
  */
 export function watchConnection(config: AlchemyAccountsConfig) {
   return (onChange: (connection: Connection) => void) => {

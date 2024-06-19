@@ -14,7 +14,7 @@ import type { AlchemyAccountsConfig } from "../types";
  * ```
  *
  * @param {AlchemyAccountsConfig} config the configuration containing the client store
- * @returns {(onChange: (user: User) => void) => (() => void)} a function to unsubscribe from the user updates
+ * @returns {(onChange: (user: User) => void) => (() => void)} a function which accepts a callback that fires when the user changes and returns a function to unsubscribe from the user updates
  */
 export const watchUser =
   (config: AlchemyAccountsConfig) => (onChange: (user?: User) => void) => {
