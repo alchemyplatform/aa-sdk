@@ -27,7 +27,7 @@ export default function Home() {
 
   return (
     <main
-      className={`flex bg-gray-50 dark:bg-gray-800 flex-col h-screen ${publicSans.className}`}
+      className={`flex bg-gray-50 flex-col h-screen ${publicSans.className}`}
     >
       <TopNav />
       <div
