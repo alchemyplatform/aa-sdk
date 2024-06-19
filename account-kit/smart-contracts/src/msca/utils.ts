@@ -39,7 +39,7 @@ import { MultiOwnerPlugin } from "./plugins/multi-owner/plugin.js";
 /**
  * Utility method returning the default multi sig msca factory address given a {@link Chain} object
  *
- * @param chain - a {@link Chain} object
+ * @param chain a {@link Chain} object
  * @returns a {@link Address} for the given chain
  * @throws if the chain doesn't have an address currently deployed
  */

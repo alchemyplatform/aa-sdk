@@ -157,9 +157,9 @@ export async function createSimpleSmartAccount<
 
 /**
  * Creates a simple smart account using the provided parameters, including chain, entry point, factory address, and additional parameters. This function also ensures that a signer is provided.
- * 
+ *
  * @param {CreateSimpleAccountParams} config The parameters for creating a simple smart account
- * @returns {Promise<SimpleSmartAccount>} A promise that resolves to a `SimpleSmartAccount` object containing the created account information and methods 
+ * @returns {Promise<SimpleSmartAccount>} A promise that resolves to a `SimpleSmartAccount` object containing the created account information and methods
  */
 export async function createSimpleSmartAccount({
   chain,
