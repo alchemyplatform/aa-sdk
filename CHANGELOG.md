@@ -3,11 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [3.19.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.18.2...v3.19.0) (2024-08-02)
+# [4.0.0-alpha.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.18.2...v4.0.0-alpha.0) (2024-06-19)
 
 ### Bug Fixes
 
 - alchemy signer redirect was broken ([dcc0317](https://github.com/alchemyplatform/aa-sdk/commit/dcc031772364b7972953f2cde6f6cb83a84ab0a7))
+- demo app not building ([#733](https://github.com/alchemyplatform/aa-sdk/issues/733)) ([6afff79](https://github.com/alchemyplatform/aa-sdk/commit/6afff7976153a5bf07187fc0506eec65bbe4c6e4))
+- use updated package path in prettier config ([#741](https://github.com/alchemyplatform/aa-sdk/issues/741)) ([dccda3a](https://github.com/alchemyplatform/aa-sdk/commit/dccda3a738ceabe6ed2703cb66d0aec5e595abcd))
+
+### Code Refactoring
+
+- change the prefix for aa-sdk packages ([#722](https://github.com/alchemyplatform/aa-sdk/issues/722)) ([d2f97c5](https://github.com/alchemyplatform/aa-sdk/commit/d2f97c56fdf63871296dd81b10cbc60b61b34d6c))
+- move plugingen from aa-sdk to account-kit since it depends on smart-contracts ([d90c6f2](https://github.com/alchemyplatform/aa-sdk/commit/d90c6f2834a6356c5dee2403e8fae66b81112ec3))
+- split aa-alchemy into account-kit packages ([#704](https://github.com/alchemyplatform/aa-sdk/issues/704)) ([6c41e22](https://github.com/alchemyplatform/aa-sdk/commit/6c41e22233932ee98c6214f2ffdf3e8f928f880f)), closes [#706](https://github.com/alchemyplatform/aa-sdk/issues/706)
 
 ### Features
 
@@ -21,6 +29,19 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - fix state override parameter type ([#720](https://github.com/alchemyplatform/aa-sdk/issues/720)) ([6c9c720](https://github.com/alchemyplatform/aa-sdk/commit/6c9c7202d14010ab3afa02055ff5006924a4fba3))
 - pull strings out to their own file for future localization ([#715](https://github.com/alchemyplatform/aa-sdk/issues/715)) ([5c0d516](https://github.com/alchemyplatform/aa-sdk/commit/5c0d5163be4cabbfe3b4479fb03345212538ff16))
 - start to bring auth modal styles inline with designs ([#702](https://github.com/alchemyplatform/aa-sdk/issues/702)) ([6e3502b](https://github.com/alchemyplatform/aa-sdk/commit/6e3502b9e73c4c4add4215927d263db8ee5000ce))
+- icon animations ([#717](https://github.com/alchemyplatform/aa-sdk/issues/717)) ([710e647](https://github.com/alchemyplatform/aa-sdk/commit/710e64750c18b46390585e343ca4f1638feb67a5))
+- pull strings out to their own file for future localization ([#715](https://github.com/alchemyplatform/aa-sdk/issues/715)) ([5c0d516](https://github.com/alchemyplatform/aa-sdk/commit/5c0d5163be4cabbfe3b4479fb03345212538ff16))
+- start to bring auth modal styles inline with designs ([#702](https://github.com/alchemyplatform/aa-sdk/issues/702)) ([6e3502b](https://github.com/alchemyplatform/aa-sdk/commit/6e3502b9e73c4c4add4215927d263db8ee5000ce))
+- surface descriptive session key errors ([#718](https://github.com/alchemyplatform/aa-sdk/issues/718)) ([c5465ee](https://github.com/alchemyplatform/aa-sdk/commit/c5465eee5c957afcb02d3e0d82c5821dd7819b5f))
+
+### BREAKING CHANGES
+
+- @alchemy/plugingen has been moved to @account-kit/plugingen
+- @alchemy/aa-_ packages have been renamed to @aa-sdk/_
+- this removes the @alchemy/aa-alchemy package in favor of @account-kit/\*
+- @alchemy/aa-accounts was deleted in favor of @account-kit/accounts
+
+- refactor: further rename packages
 
 ## [3.18.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.18.1...v3.18.2) (2024-06-05)
 
