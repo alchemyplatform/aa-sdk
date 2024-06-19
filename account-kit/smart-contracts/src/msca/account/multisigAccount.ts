@@ -64,18 +64,44 @@ export async function createMultisigModularAccount<
   config: CreateMultisigModularAccountParams<TTransport, TSigner>
 ): Promise<MultisigModularAccount<TSigner>>;
 
-export async function createMultisigModularAccount({
-  transport,
-  chain,
-  signer,
-  accountAddress,
-  initCode,
-  entryPoint = getEntryPoint(chain, { version: "0.6.0" }),
-  factoryAddress = getDefaultMultisigModularAccountFactoryAddress(chain),
-  owners = [],
-  salt = 0n,
-  threshold,
-}: CreateMultisigModularAccountParams): Promise<MultisigModularAccount> {
+/**
+ * Creates a multisig modular account using the provided parameters, including transport, chain, signer, account address, and other account settings. It configures the account with multiple owners and the specified threshold. 
+ *
+ * @example
+ * ```ts
+ * import { createMultisigModularAccount } from "@account-kit/smart-contracts";
+ * import { LocalAccountSigner } from "@aa-sdk/core";
+ * import { sepolia } from "viem/chains";
+ * import { http, generatePrivateKey } from "viem"
+ * 
+ * const account = await createMultisigModularAccount({
+ *  chain: sepolia,
+ *  transport: http("RPC_URL"),
+ *  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+ *  owners: [...], // other owners on the account
+ *  threshold: 2, // 2 of N signatures
+ * });
+ * ```
+ *
+ * @param {CreateMultisigModularAccountParams} config The parameters for creating a multisig modular account.
+ * @returns {Promise<MultisigModularAccount>} A promise that resolves to a `MultisigModularAccount` object containing the created account information and methods.
+ */
+export async function createMultisigModularAccount(
+  config: CreateMultisigModularAccountParams
+): Promise<MultisigModularAccount> {
+  const {
+    transport,
+    chain,
+    signer,
+    accountAddress: accountAddress_,
+    initCode,
+    entryPoint = getEntryPoint(chain, { version: "0.6.0" }),
+    factoryAddress = getDefaultMultisigModularAccountFactoryAddress(chain),
+    owners = [],
+    salt = 0n,
+    threshold,
+  } = config;
+
   const client = createBundlerClient({
     transport,
     chain,
@@ -108,10 +134,10 @@ export async function createMultisigModularAccount({
     ]);
   };
 
-  accountAddress = await getAccountAddress({
+  const accountAddress = await getAccountAddress({
     client,
     entryPoint,
-    accountAddress: accountAddress,
+    accountAddress: accountAddress_,
     getAccountInitCode,
   });
 
