@@ -34,6 +34,7 @@
     "jsdoc/match-description": [
       "error",
       {
+        "matchDescription": "[A-Z].*",
         "tags": {
           "example": {
             "message": "Example tags must provide a code block with a language identifier.",

@@ -51,6 +51,9 @@ export function reExportFixer(
             false
           );
 
+          // the comment block is not properly formatted by recast, it needs a whitespace after the closing block
+          comment.value = comment.value.replace("*/", " */");
+
           if (!pathNode.comments) pathNode.comments = [];
           pathNode.comments.unshift(comment);
         }

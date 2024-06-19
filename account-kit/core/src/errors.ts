@@ -7,9 +7,17 @@ export abstract class BaseError extends CoreBaseError {
   override version = VERSION;
 }
 
+/**
+ * Error thrown when a client only property is accessed on the server
+ */
 export class ClientOnlyPropertyError extends BaseError {
   name: string = "ClientOnlyPropertyError";
 
+  /**
+   * Creates a new ClientOnlyPropertyError
+   *
+   * @param {string} property the name of the property that is only available on the client
+   */
   constructor(property: string) {
     super(`${property} is only available on the client`);
   }
