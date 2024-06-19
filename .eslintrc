@@ -47,7 +47,7 @@
       "error",
       {
         "enableFixer": true,
-        "ignore": ["!**/account-kit/infra/src/**/*"]
+        "ignore": ["!**/account-kit/react/src/**/*"]
       }
     ]
   },
