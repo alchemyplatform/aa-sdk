@@ -21,6 +21,25 @@ export type UseAddPasskeyResult = {
   error: Error | null;
 };
 
+/**
+ * A custom hook to handle the addition of a passkey, which includes executing a mutation with optional parameters.
+ *
+ * @example
+ * ```ts
+ * import { useAddPasskey } from "@account-kit/react";
+ *
+ * const { addPasskey, isAddingPasskey, error } = useAddPasskey({
+ *  // these are optional
+ *  onSuccess: () => {
+ *    // do something on success
+ *  },
+ *  onError: (error) => console.error(error),
+ * });
+ * ```
+ *
+ * @param {UseAddPasskeyMutationArgs} [mutationArgs] Optional arguments for the mutation used for adding a passkey
+ * @returns {UseAddPasskeyResult} An object containing the `addPasskey` function, a boolean `isAddingPasskey` to track the mutation status, and any error encountered
+ */
 export function useAddPasskey(
   mutationArgs?: UseAddPasskeyMutationArgs
 ): UseAddPasskeyResult {

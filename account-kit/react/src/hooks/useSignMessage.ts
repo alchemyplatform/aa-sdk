@@ -38,6 +38,27 @@ export type UseSignMessageResult = {
   error: Error | null;
 };
 
+/**
+ * Custom hook to sign a message using the provided client.
+ *
+ * @example
+ * ```ts
+ * import { useSignMessage, useSmartAccountClient } from "@account-kit/react";
+ *
+ * const { client } = useSmartAccountClient({ type: "LightAccount" });
+ * const { signMessage, signMessageAsync, signedMessage, isSigningMessage, error } = useSignMessage({
+ *  client,
+ *  // these are optional
+ *  onSuccess: (result) => {
+ *    // do something on success
+ *  },
+ *  onError: (error) => console.error(error),
+ * });
+ * ```
+ *
+ * @param {UseSignMessageArgs} config The configuration arguments for the hook, including the client and additional mutation arguments
+ * @returns {UseSignMessageResult} An object containing methods and state for signing messages
+ */
 export function useSignMessage({
   client,
   ...mutationArgs

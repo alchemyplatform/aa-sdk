@@ -30,6 +30,22 @@ export type UseAccountProps<TAccount extends SupportedAccountTypes> =
     skipCreate?: boolean;
   } & UseAccountMutationArgs<TAccount>;
 
+/**
+ * Hook to subscribe to account state and interactions, including creation, connection, and status monitoring. It synchronizes with external store updates and provides status-dependent results.
+ *
+ * @example
+ * ```ts
+ * import { useAccount } from "@account-kit/react";
+ *
+ * const { account, address, isLoadingAccount } = useAccount({
+ *  type: "LightAccount"
+ * });
+ * ```
+ *
+ * @template {SupportedAccountTypes} TAccount The type of account to use
+ * @param {UseAccountProps<TAccount>} params The parameters required for account management, including account type, specific account parameters, and optional mutation arguments
+ * @returns {UseAccountResult<TAccount>} An object containing the account information, address, and loading state
+ */
 export function useAccount<TAccount extends SupportedAccountTypes>(
   params: UseAccountProps<TAccount>
 ): UseAccountResult<TAccount> {

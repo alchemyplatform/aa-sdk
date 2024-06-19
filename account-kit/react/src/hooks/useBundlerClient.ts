@@ -7,6 +7,19 @@ import { useAlchemyAccountContext } from "../context.js";
 
 export type UseBundlerClientResult = ClientWithAlchemyMethods;
 
+/**
+ * Custom hook to get a bundler client using the Alchemy account context.
+ * It uses `useSyncExternalStore` to watch for any changes in the bundler client configuration and provides the updated bundler client.
+ *
+ * @example
+ * ```ts
+ * import { useBundlerClient } from "@account-kit/react";
+ *
+ * const bundlerClient = useBundlerClient();
+ * ```
+ *
+ * @returns {BundlerClient} The bundler client based on the current Alchemy account configuration
+ */
 export const useBundlerClient = () => {
   const { config } = useAlchemyAccountContext();
 
