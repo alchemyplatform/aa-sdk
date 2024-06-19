@@ -1,5 +1,5 @@
-import { PasskeyIllustration } from "../../../../icons/passkey.js";
 import { ls } from "../../../../strings.js";
+import { LoadingPasskey } from "../../../../icons/passkey.js";
 import { Button } from "../../../button.js";
 import { PoweredBy } from "../../../poweredby.js";
 
@@ -7,8 +7,8 @@ import { PoweredBy } from "../../../poweredby.js";
 export const LoadingPasskeyAuth = () => {
   return (
     <div className="flex flex-col gap-5 items-center">
-      <div className="flex flex-col items-center justify-center h-12 w-12">
-        <PasskeyIllustration />
+      <div className="flex flex-col items-center justify-center">
+        <LoadingPasskey />
       </div>
 
       <h3 className="font-semibold text-lg">{ls.loadingPasskey.title}</h3>
