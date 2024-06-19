@@ -40,11 +40,16 @@ export const Dialog = ({ isOpen, onClose, children }: DialogProps) => {
           <div
             aria-modal
             role="dialog"
-            className="fixed -inset-px bg-black/80 flex items-center justify-center z-[100000] animate-fade-in"
+            className="fixed inset-0 bg-black/80 flex items-end md:items-center justify-center z-[100000] animate-fade-in"
             onClick={handleBackgroundClick}
           >
             <FocusTrap>
-              <div className="animate-fade-in animate-slide-up">{children}</div>
+              <div
+                className="animate-fade-in animate-slide-up max-md:w-screen md:max-w-sm"
+                onClick={(event) => event.stopPropagation()}
+              >
+                {children}
+              </div>
             </FocusTrap>
           </div>
         </RemoveScroll>,

@@ -15,7 +15,7 @@ export const AuthModal = ({ open, hideError, auth }: AuthModalProps) => {
 
   return (
     <Dialog isOpen={open} onClose={closeAuthModal}>
-      <div className="modal w-[368px]">
+      <div className="modal md:w-[368px]">
         <AuthCard
           hideError={hideError}
           header={auth.header}

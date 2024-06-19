@@ -26,8 +26,8 @@ export default function Home() {
 
   return (
     <>
-      <main className="flex min-h-screen p-24 basis-2/4 light:bg-[#F9F9F9] dark:bg-[#020617] dark:text-white justify-center">
-        <div className="flex flex-col gap-8 max-w-[50%] w-full">
+      <main className="flex min-h-screen py-6 px-0 md:p-24 basis-2/4 light:bg-[#F9F9F9] dark:bg-[#020617] dark:text-white justify-center">
+        <div className="flex flex-col gap-8 px-5 md:max-w-[50%] w-full">
           <div className="flex flex-col gap-4">
             <h1 className="text-4xl font-bold">Buttons</h1>
             <div className="flex flex-row gap-6">
@@ -63,9 +63,9 @@ export default function Home() {
           </div>
           <div className="flex flex-col gap-4">
             <h1 className="text-4xl font-bold">Auth</h1>
-            <div className="flex flex-row gap-6">
+            <div className="flex flex-col md:flex-row gap-6">
               <div className="flex flex-col gap-2">
-                <div className="flex flex-col gap-2 w-[368px]">
+                <div className="flex flex-col gap-2 mx-auto w-[368px]">
                   <div className="modal shadow-md">
                     {!user ? (
                       <AuthCard hideError sections={sections} />
