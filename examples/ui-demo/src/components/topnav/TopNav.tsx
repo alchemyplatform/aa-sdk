@@ -12,13 +12,13 @@ export function TopNav() {
         <AlchemyFullLogo />
         <div className="flex gap-4 items-center h-8">
           <div className="flex items-center gap-6 font-semibold">
-            <Link className="p-2 bg-gray-100 rounded-lg" href="#">
+            <Link className="p-2 bg-gray-100 dark:bg-gray-900 rounded-lg" href="#">
               Demo
             </Link>
-            <ExternalLink href={DOCS} className="p-2 hover:bg-gray-100 transition-colors rounded-lg">
+            <ExternalLink href={DOCS} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors rounded-lg">
               Docs
             </ExternalLink>
-            <ExternalLink href={DOCS} className="p-2 hover:bg-gray-100 transition-colors rounded-lg flex items-center gap-1 mr-4">
+            <ExternalLink href={DOCS} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors rounded-lg flex items-center gap-1 mr-4">
               Examples
               <ArrowUpRightIcon className="h-4 w-4" />
             </ExternalLink>
