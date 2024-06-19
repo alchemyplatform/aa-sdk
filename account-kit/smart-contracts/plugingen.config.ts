@@ -1,4 +1,4 @@
-import { defineConfig } from "@alchemy/plugingen";
+import { defineConfig } from "@account-kit/plugingen";
 import { sepolia } from "viem/chains";
 import {
   MultiOwnerPluginGenConfig,
