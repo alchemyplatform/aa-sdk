@@ -55,6 +55,6 @@ function AuthCardHeader() {
   if (!logo) return null;
 
   return (
-    <img style={{ height: "60px" }} src={logo.fileSrc} alt={logo.fileName} />
+    <img style={{ height: "60px", objectFit: 'contain' }} src={logo.fileSrc} alt={logo.fileName} />
   );
 }

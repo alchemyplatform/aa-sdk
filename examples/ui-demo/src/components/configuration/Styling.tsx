@@ -9,6 +9,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { FileCode } from "lucide-react";
 import ExternalLink from "../shared/ExternalLink";
+import { IllustrationStyle } from "../icons/illustration-style";
 
 export function Styling({ className }: { className?: string }) {
   const { config, setConfig } = useConfig();
@@ -112,7 +113,7 @@ export function CornerRadiusOptions() {
         <button
           className={`${
             option.className
-          } py-2 flex-1 basis-0 bg-[#EFF4F9] text-fg-accent-brand hover:opacity-80 ${
+          } py-2 flex-1 basis-0 bg-[#EFF4F9] text-[#363FF9] hover:opacity-80 ${
             option.id === borderRadius
               ? "border-2 border-[rgba(0, 0, 0, 0.01)]"
               : "border-2 border-white"
@@ -143,7 +144,7 @@ const options = [
 function IllustrationStyleOptions() {
   const {
     config: {
-      ui: { illustrationStyle },
+      ui: { illustrationStyle, primaryColor },
     },
     setConfig,
   } = useConfig();
@@ -176,7 +177,7 @@ function IllustrationStyleOptions() {
           }}
           onClick={() => onChange(i + 1)}
         >
-          <Image src={option} width={48} height={48} alt="Email icon" />
+          <IllustrationStyle fill={primaryColor} variant={i+1} />
         </button>
       ))}
     </div>

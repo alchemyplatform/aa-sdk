@@ -33,6 +33,9 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
+
+    --akui-fg-accent-brand: #363FF9;
+    --akui-btn-primary: #363FF9;
   }
 
   .dark {
