@@ -9,8 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@account-kit/core": "^3.18.2",
-    "@account-kit/react": "^3.18.2",
+    "@account-kit/core": "^4.0.0-alpha.0",
+    "@account-kit/react": "^4.0.0-alpha.0",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18",
