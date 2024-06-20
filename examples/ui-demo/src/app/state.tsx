@@ -33,7 +33,7 @@ export const DEFAULT_CONFIG: Config = {
     ui: {
         theme: 'light',
         primaryColor: '#363FF9',
-        borderRadius: 'none',
+        borderRadius: 'lg',
         illustrationStyle: 1,
         logoLight: undefined,
         logoDark: undefined,
