@@ -63,7 +63,6 @@ function useTrapFocus() {
   return { ref };
 }
 
-// eslint-disable-next-line jsdoc/require-jsdoc
 export const FocusTrap = ({ children }: PropsWithChildren<{}>) => {
   const { ref } = useTrapFocus();
 

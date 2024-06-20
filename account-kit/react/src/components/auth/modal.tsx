@@ -9,7 +9,6 @@ type AuthModalProps = {
   auth: NonNullable<AlchemyAccountsUIConfig["auth"]>;
 };
 
-// eslint-disable-next-line jsdoc/require-jsdoc
 export const AuthModal = ({ open, hideError, auth }: AuthModalProps) => {
   const { closeAuthModal } = useAuthModal();
 

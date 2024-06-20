@@ -9,7 +9,6 @@ type DialogProps = {
   children: ReactNode;
 };
 
-// eslint-disable-next-line jsdoc/require-jsdoc
 export const Dialog = ({ isOpen, onClose, children }: DialogProps) => {
   const [isScrollLocked, setScrollLocked] = useState(false);
 
