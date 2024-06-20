@@ -37,6 +37,8 @@ export function reExportFixer(
                 decl.id.name === importedName
             )) ||
           (pathNode.declaration?.type === "FunctionDeclaration" &&
+            pathNode.declaration.id?.name === importedName) ||
+          (pathNode.declaration?.type === "ClassDeclaration" &&
             pathNode.declaration.id?.name === importedName)
         ) {
           const jsdocComment = createJsDocComment(node);

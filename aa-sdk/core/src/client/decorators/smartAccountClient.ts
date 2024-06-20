@@ -135,9 +135,9 @@ export type BaseSmartAccountClientActions<
 
 /**
  * Provides a set of smart account client actions to decorate the provided client. These actions include building and signing user operations, sending transactions, and more.
- * 
+ *
  * NOTE: this is already added to clients returned from `createSmartAccountClient`
- * 
+ *
  * @param {Client<TTransport, TChain, TAccount>} client The client to bind the smart account actions to
  * @returns {BaseSmartAccountClientActions<TChain, TAccount, TContext>} An object containing various smart account client actions
  */
