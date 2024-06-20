@@ -3,7 +3,7 @@ import { sepolia } from "@aa-sdk/core";
 import { createConfig } from "@account-kit/core";
 import { AlchemyAccountProvider, AlchemyAccountsProviderProps } from "@account-kit/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { PropsWithChildren, Suspense, useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { PropsWithChildren, Suspense, useEffect, useMemo, useState } from "react";
 import { Config, ConfigContext, DEFAULT_CONFIG } from "./state";
 
 const alchemyConfig = createConfig({
