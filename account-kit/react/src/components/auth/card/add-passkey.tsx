@@ -1,9 +1,9 @@
 import { useAddPasskey } from "../../../hooks/useAddPasskey.js";
+import { AddPasskeyIllustration } from "../../../icons/illustrations/add-passkey.js";
 import {
-  PasskeyIllustration,
-  PasskeyShield,
-  PasskeySmiley,
-} from "../../../icons/passkey.js";
+  PasskeyShieldIllustration,
+  PasskeySmileyIllustration,
+} from "../../../icons/illustrations/passkeys.js";
 import { ls } from "../../../strings.js";
 import { Button } from "../../button.js";
 import { PoweredBy } from "../../poweredby.js";
@@ -11,12 +11,12 @@ import { useAuthContext } from "../context.js";
 
 const BENEFITS = [
   {
-    icon: <PasskeySmiley />,
+    icon: <PasskeySmileyIllustration />,
     title: ls.addPasskey.simplerLoginTitle,
     description: ls.addPasskey.simplerLoginDescription,
   },
   {
-    icon: <PasskeyShield />,
+    icon: <PasskeyShieldIllustration />,
     title: ls.addPasskey.enhancedSecurityTitle,
     description: ls.addPasskey.enhancedSecurityDescription,
   },
@@ -34,7 +34,7 @@ export const AddPasskey = () => {
   return (
     <div className="flex flex-col gap-5 items-center">
       <div className="flex flex-col items-center justify-center h-12 w-12">
-        <PasskeyIllustration />
+        <AddPasskeyIllustration height="48" width="48" />
       </div>
 
       <h3 className="font-semibold text-lg">{ls.addPasskey.title}</h3>

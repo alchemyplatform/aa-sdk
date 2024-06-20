@@ -34,6 +34,7 @@ export const Providers = (props: PropsWithChildren<{}>) => {
     const root = document.querySelector(':root') as HTMLElement;
     root?.style.setProperty("--akui-fg-accent-brand", config.ui.primaryColor)
     root?.style.setProperty("--akui-btn-primary", config.ui.primaryColor)
+    root?.style.setProperty("--akui-illustration-style", config.ui.illustrationStyle)
     
     if (config.ui.theme === 'dark') {
       root.classList.add("dark")
