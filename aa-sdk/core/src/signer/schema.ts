@@ -6,7 +6,7 @@ import type { SmartAccountSigner } from "./types";
  *
  * @example
  * ```ts
- * import { isSigner } from "@aa-sdk/core";
+ * import { isSigner, LocalAccountSigner } from "@aa-sdk/core";
  *
  * const signer = new LocalAccountSigner(...);
  * console.log(isSigner(signer)); // true
