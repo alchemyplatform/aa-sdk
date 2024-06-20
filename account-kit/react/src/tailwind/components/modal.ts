@@ -2,8 +2,6 @@ import type { ComponentDef } from "../types";
 
 export const modalComponents: ComponentDef = {
   ".modal": {
-    "@apply rounded-2xl": {},
-    "@apply bg-bg-surface-default": {},
     "&::backdrop": {
       "@apply bg-black bg-opacity-[0.8]": {},
     },

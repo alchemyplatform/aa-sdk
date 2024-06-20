@@ -32,6 +32,9 @@ export interface AccountKitTheme {
     "bg-surface-warning": ColorVariantRecord;
     "bg-surface-error": ColorVariantRecord;
   };
+  borderRadius: {
+    modal: string;
+  };
 }
 
 export type AccountKitThemeColor = keyof AccountKitTheme["colors"];
