@@ -140,7 +140,7 @@ export function createSmartAccountClient<
  * 
  * @example
  * ```ts
- * import { createSmartAccountClient } from "@aa-sdk/core";
+ * import { createSmartAccountClient, toSmartContractAccount } from "@aa-sdk/core";
  * import { http } from "viem";
  * import { sepolia } from "viem/chains";
  * 
@@ -286,9 +286,11 @@ export function createSmartAccountClientFromExisting<
  * 
  * @example
  * ```ts
- * import { createBundlerClient, createSmartAccountClientFromExisting } from "@aa-sdk/core";
- * import { sepolia } from "viem/chains";
- * import { http } from "viem";
+ * import { 
+ *   createBundlerClient, 
+ *   createSmartAccountClientFromExisting, 
+ *   toSmartContractAccount 
+ * } from "@aa-sdk/core";
  * 
  * const bundlerClient = createBundlerClient(...);
  * const client = createSmartAccountClientFromExisting({

@@ -87,7 +87,7 @@ export type SmartContractAccountWithSigner<
  * ```
  * 
  * @param {SmartContractAccount} account The account to check.
- * @returns {boolean} True if the account has a signer, otherwise false.
+ * @returns {boolean} true if the account has a signer, otherwise false.
  */
 export const isSmartAccountWithSigner = (
   account: SmartContractAccount
@@ -160,7 +160,7 @@ export type ToSmartContractAccountParams<
  * ```ts
  * import { parseFactoryAddressFromAccountInitCode } from "@aa-sdk/core";
  *  
- * const [address, calldata] = parseFactoryAddressFromAccountInitCode("0xAddressCalldata") 
+ * const [address, calldata] = parseFactoryAddressFromAccountInitCode("0xAddressCalldata"); 
  * ```
  * 
  * @param {Hex} initCode The initialization code from which to parse the factory address and calldata
@@ -310,15 +310,15 @@ export async function toSmartContractAccount<
  * @param {Chain} params.chain the blockchain chain used in the account
  * @param {EntryPoint} params.entryPoint the entry point of the smart contract
  * @param {string} params.source the source identifier for the account
- * @param {Address} params.accountAddress the address of the account
+ * @param {Address} [params.accountAddress] the address of the account
  * @param {() => Promise<Hex>} params.getAccountInitCode a function to get the initial state code of the account
  * @param {(message: { message: SignableMessage }) => Promise<Hex>} params.signMessage a function to sign a message
  * @param {(typedDataDefinition: TypedDataDefinition<typedData, primaryType>) => Promise<Hex>} params.signTypedData a function to sign typed data
- * @param {(transactions: Transaction[]) => Hex} params.encodeBatchExecute a function to encode batch transactions
+ * @param {(transactions: Transaction[]) => Hex} [params.encodeBatchExecute] a function to encode batch transactions
  * @param {(tx: Transaction) => Hex} params.encodeExecute a function to encode a single transaction
  * @param {() => Promise<Hex>} params.getDummySignature a function to get a dummy signature
- * @param {(uoHash: Hex) => Promise<Hex>} params.signUserOperationHash a function to sign user operations
- * @param {(implementationAddress: Address, implementationCallData: Hex) => Hex} params.encodeUpgradeToAndCall a function to encode upgrade call
+ * @param {(uoHash: Hex) => Promise<Hex>} [params.signUserOperationHash] a function to sign user operations
+ * @param {(implementationAddress: Address, implementationCallData: Hex) => Hex} [params.encodeUpgradeToAndCall] a function to encode upgrade call
  * @returns {Promise<SmartContractAccount>} a promise that resolves to a SmartContractAccount object with methods and properties for interacting with the smart contract account
  */
 export async function toSmartContractAccount(

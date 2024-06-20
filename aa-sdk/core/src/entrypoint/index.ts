@@ -29,7 +29,7 @@ export const entryPointRegistry: EntryPointRegistry = {
  * ```
  * 
  * @param {*} value The value to be checked
- * @returns {boolean} True if the value is a valid key of EntryPointRegistry, false otherwise
+ * @returns {boolean} true if the value is a valid key of EntryPointRegistry, false otherwise
  */
 export const isEntryPointVersion = (
   value: any
