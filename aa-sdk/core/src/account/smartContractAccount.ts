@@ -159,8 +159,8 @@ export type ToSmartContractAccountParams<
  * @example
  * ```ts
  * import { parseFactoryAddressFromAccountInitCode } from "@aa-sdk/core";
- *  
- * const [address, calldata] = parseFactoryAddressFromAccountInitCode("0xAddressCalldata"); 
+ *
+ * const [address, calldata] = parseFactoryAddressFromAccountInitCode("0xAddressCalldata");
  * ```
  *
  * @param {Hex} initCode The initialization code from which to parse the factory address and calldata

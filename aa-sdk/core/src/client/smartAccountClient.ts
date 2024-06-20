@@ -288,12 +288,12 @@ export function createSmartAccountClientFromExisting<
  *
  * @example
  * ```ts
- * import { 
- *   createBundlerClient, 
- *   createSmartAccountClientFromExisting, 
- *   toSmartContractAccount 
+ * import {
+ *   createBundlerClient,
+ *   createSmartAccountClientFromExisting,
+ *   toSmartContractAccount
  * } from "@aa-sdk/core";
- * 
+ *
  * const bundlerClient = createBundlerClient(...);
  * const client = createSmartAccountClientFromExisting({
  *  client,
