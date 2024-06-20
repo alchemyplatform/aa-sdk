@@ -1,7 +1,21 @@
 ---
 outline: deep
-title: Migration Guide
-description: How to upgrade through breaking changes of the aa-sdk and account-kit
+head:
+  - - meta
+    - property: og:title
+      content: Migrating to aa-sdk v3
+  - - meta
+    - name: description
+      content: How to upgrade through breaking changes of aa-sdk v3
+  - - meta
+    - property: og:description
+      content: How to upgrade through breaking changes of aa-sdk v3.
+  - - meta
+    - name: twitter:title
+      content: Migration Guide
+  - - meta
+    - name: twitter:description
+      content: How to upgrade through breaking changes of aa-sdk v3.
 ---
 
 # Migration Guide
@@ -75,7 +89,7 @@ const client = createSmartAccountClient({ // [!code ++]
 
 ### Client: signature changes on methods
 
-To support [the various ways](/migration-guide#account-connecting-to-a-smart-account) of connecting to a smart account, the signatures of the methods on `SmartAccountClient` have changed. Almost all methods now have an optional param for `account` and have been converted into single argument functions that take an object with the their properties instead.
+To support [the various ways](/migration-guides/migrating-to-v3#account-connecting-to-a-smart-account) of connecting to a smart account, the signatures of the methods on `SmartAccountClient` have changed. Almost all methods now have an optional param for `account` and have been converted into single argument functions that take an object with the their properties instead.
 
 ### Account: `BaseSmartContractAccount` → `SmartContractAccount`
 
