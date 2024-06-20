@@ -10,8 +10,8 @@ import {
   type UserOperationOverrides,
 } from "@aa-sdk/core";
 import { type Chain, type Client, type Transport } from "viem";
-import { splitAggregatedSignature } from "../index.js";
 import { type ProposeUserOperationResult } from "../types.js";
+import { splitAggregatedSignature } from "../utils/splitAggregatedSignature.js";
 
 export async function proposeUserOperation<
   TTransport extends Transport = Transport,

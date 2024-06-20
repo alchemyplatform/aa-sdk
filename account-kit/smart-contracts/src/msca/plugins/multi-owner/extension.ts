@@ -33,6 +33,21 @@ export type MultiOwnerPluginActions<
       }
     : {});
 
+/**
+ * Creates actions for the MultiOwner plugin, including reading owners and checking ownership.
+ * NOTE: this is already added to the client returned from createMultiOwnerModularAccountClient
+ *
+ * @example
+ * ```ts
+ * import { multiOwnerPluginActions } from "@account-kit/smart-contracts";
+ * import { createSmartAccountClient } from "@aa-sdk/core";
+ *
+ * const client = createSmartAccountClient(...).extend(multiOwnerPluginActions);
+ * ```
+ *
+ * @param {Client<TTransport, TChain, TAccount>} client the client instance containing the transport, chain, and account information
+ * @returns {MultiOwnerPluginActions<TAccount>} an object containing the actions for the MultiOwner plugin, such as `readOwners` and `isOwnerOf`
+ */
 export const multiOwnerPluginActions: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
