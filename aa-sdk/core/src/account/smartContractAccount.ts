@@ -74,6 +74,21 @@ export type SmartContractAccountWithSigner<
   getSigner: () => TSigner;
 };
 
+/**
+ * Determines if the given SmartContractAccount has a signer associated with it.
+ * 
+ * @example
+ * ```ts
+ * import { toSmartContractAccount } from "@aa-sdk/core";
+ * 
+ * const account = await toSmartContractAccount(...);
+ * 
+ * console.log(isSmartAccountWithSigner(account)); // false: the base account does not have a publicly accessible signer
+ * ```
+ * 
+ * @param {SmartContractAccount} account The account to check.
+ * @returns {boolean} true if the account has a signer, otherwise false.
+ */
 export const isSmartAccountWithSigner = (
   account: SmartContractAccount
 ): account is SmartContractAccountWithSigner => {
@@ -138,6 +153,19 @@ export type ToSmartContractAccountParams<
 } & Omit<CustomSource, "signTransaction" | "address">;
 // [!endregion ToSmartContractAccountParams]
 
+/**
+ * Parses the factory address and factory calldata from the provided account initialization code (initCode).
+ *
+ * @example
+ * ```ts
+ * import { parseFactoryAddressFromAccountInitCode } from "@aa-sdk/core";
+ *  
+ * const [address, calldata] = parseFactoryAddressFromAccountInitCode("0xAddressCalldata"); 
+ * ```
+ * 
+ * @param {Hex} initCode The initialization code from which to parse the factory address and calldata
+ * @returns {[Address, Hex]} A tuple containing the parsed factory address and factory calldata
+ */
 export const parseFactoryAddressFromAccountInitCode = (
   initCode: Hex
 ): [Address, Hex] => {
@@ -241,21 +269,77 @@ export async function toSmartContractAccount<
 >): Promise<SmartContractAccount<Name, TEntryPointVersion>>;
 // [!endregion toSmartContractAccount]
 
-export async function toSmartContractAccount({
-  transport,
-  chain,
-  entryPoint,
-  source,
-  accountAddress,
-  getAccountInitCode,
-  signMessage,
-  signTypedData,
-  encodeBatchExecute,
-  encodeExecute,
-  getDummySignature,
-  signUserOperationHash,
-  encodeUpgradeToAndCall,
-}: ToSmartContractAccountParams): Promise<SmartContractAccount> {
+/**
+ * Converts an account to a smart contract account and sets up various account-related methods using the provided parameters like transport, chain, entry point, and other utilities.
+ *
+ * @example
+ * ```ts
+ * import { http, type SignableMessage } from "viem";
+ * import { sepolia } from "viem/chains";
+ *
+ * const myAccount = await toSmartContractAccount({
+ *  /// REQUIRED PARAMS ///
+ *  source: "MyAccount",
+ *  transport: http("RPC_URL"),
+ *  chain: sepolia,
+ *  // The EntryPointDef that your account is com"patible with
+ *  entryPoint: getEntryPoint(sepolia, { version: "0.6.0" }),
+ *  // This should return a concatenation of your `factoryAddress` and the `callData` for your factory's create account method
+ *  getAccountInitCode: async () => "0x{factoryAddress}{callData}",
+ *  // an invalid signature that doesn't cause your account to revert during validation
+ *  getDummySignature: () => "0x1234...",
+ *  // given a UO in the form of {target, data, value} should output the calldata for calling your contract's execution method
+ *  encodeExecute: async (uo) => "0xcalldata",
+ *  signMessage: async ({ message }: { message: SignableMessage }) => "0x...",
+ *  signTypedData: async (typedData) => "0x000",
+ *
+ *  /// OPTIONAL PARAMS ///
+ *  // if you already know your account's address, pass that in here to avoid generating a new counterfactual
+ *  accountAddress: "0xaddressoverride",
+ *  // if your account supports batching, this should take an array of UOs and return the calldata for calling your contract's batchExecute method
+ *  encodeBatchExecute: async (uos) => "0x...",
+ *  // if your contract expects a different signing scheme than the default signMessage scheme, you can override that here
+ *  signUserOperationHash: async (hash) => "0x...",
+ *  // allows you to define the calldata for upgrading your account
+ *  encodeUpgradeToAndCall: async (params) => "0x...",
+ * });
+ * ```
+ *
+ * @param {ToSmartContractAccountParams} params the parameters required for converting to a smart contract account
+ * @param {Transport} params.transport the transport mechanism used for communication
+ * @param {Chain} params.chain the blockchain chain used in the account
+ * @param {EntryPoint} params.entryPoint the entry point of the smart contract
+ * @param {string} params.source the source identifier for the account
+ * @param {Address} [params.accountAddress] the address of the account
+ * @param {() => Promise<Hex>} params.getAccountInitCode a function to get the initial state code of the account
+ * @param {(message: { message: SignableMessage }) => Promise<Hex>} params.signMessage a function to sign a message
+ * @param {(typedDataDefinition: TypedDataDefinition<typedData, primaryType>) => Promise<Hex>} params.signTypedData a function to sign typed data
+ * @param {(transactions: Transaction[]) => Hex} [params.encodeBatchExecute] a function to encode batch transactions
+ * @param {(tx: Transaction) => Hex} params.encodeExecute a function to encode a single transaction
+ * @param {() => Promise<Hex>} params.getDummySignature a function to get a dummy signature
+ * @param {(uoHash: Hex) => Promise<Hex>} [params.signUserOperationHash] a function to sign user operations
+ * @param {(implementationAddress: Address, implementationCallData: Hex) => Hex} [params.encodeUpgradeToAndCall] a function to encode upgrade call
+ * @returns {Promise<SmartContractAccount>} a promise that resolves to a SmartContractAccount object with methods and properties for interacting with the smart contract account
+ */
+export async function toSmartContractAccount(
+  params: ToSmartContractAccountParams
+): Promise<SmartContractAccount> {
+  const {
+    transport,
+    chain,
+    entryPoint,
+    source,
+    accountAddress,
+    getAccountInitCode,
+    signMessage,
+    signTypedData,
+    encodeBatchExecute,
+    encodeExecute,
+    getDummySignature,
+    signUserOperationHash,
+    encodeUpgradeToAndCall,
+  } = params;
+  
   const client = createBundlerClient({
     // we set the retry count to 0 so that viem doesn't retry during
     // getting the address. That call always reverts and without this
