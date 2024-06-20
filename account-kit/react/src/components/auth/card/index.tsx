@@ -32,7 +32,7 @@ export type AuthCardProps = {
 export const AuthCard = (
   props: AuthCardProps & { showNavigation?: boolean; showClose?: boolean }
 ) => {
-  const { showClose = false, onAuthSuccess, hideError } = props;
+  const { showClose = false, onAuthSuccess, hideError, className } = props;
   const { closeAuthModal } = useAuthModal();
   const { status, isAuthenticating } = useSignerStatus();
   const { authStep, setAuthStep } = useAuthContext();
@@ -67,7 +67,7 @@ export const AuthCard = (
   }, [authStep, status, isAuthenticating, setAuthStep, onAuthSuccess]);
 
   return (
-    <div className="relative">
+    <div className="modal relative">
       <div
         id="akui-default-error-container"
         className="absolute bottom-[calc(100%+8px)] w-full"
@@ -76,7 +76,11 @@ export const AuthCard = (
           <Notification message={error.message} type="error" />
         )}
       </div>
-      <div className="modal-box relative flex flex-col items-center gap-5 text-fg-primary">
+      <div
+        className={`modal-box rounded-modal bg-surface-default relative flex flex-col items-center gap-5 text-fg-primary ${
+          className ?? ""
+        }`}
+      >
         {(canGoBack || showClose) && (
           <Navigation
             showClose={showClose}

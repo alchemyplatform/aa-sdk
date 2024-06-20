@@ -36,5 +36,8 @@ export function createDefaultTheme(): AccountKitTheme {
       "bg-surface-success": createColorSet("#16A34A", "#86EFAC"),
       "bg-surface-warning": createColorSet("#EA580C", "#FDBA74"),
     },
+    borderRadius: {
+      modal: "1rem",
+    },
   };
 }
