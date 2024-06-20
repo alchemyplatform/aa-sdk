@@ -14,6 +14,29 @@ import type {
   UserOperationContext,
 } from "./types";
 
+/**
+ * Builds a user operation using the provided client and operation parameters. Ensures that the account exists and the client is compatible.
+ * 
+ * @example
+ * ```ts
+ * import { createSmartAccountClient } from "@aa-sdk/core";
+ * 
+ * // smart account client is already extended with buildUserOperation
+ * const client = createSmartAccountClient(...);
+ * const result = await client.buildUserOperation({
+ *  uo: {
+ *    target: "0x...",
+ *    data: "0x...", // or "0x",
+ *    value: 0n, // optional
+ *  },
+ *  account, // only required if the client above is not connected to an account
+ * });
+ * ```
+ * 
+ * @param {Client<TTransport, TChain, TAccount>} client the client instance used to build the user operation
+ * @param {BuildUserOperationParameters<TAccount, TContext, TEntryPointVersion>} args the parameters required to build the user operation, including account, overrides, and context
+ * @returns {Promise<UserOperationStruct<TEntryPointVersion>>} a promise that resolves to a `UserOperationStruct` object containing the built user operation details
+ */
 export async function buildUserOperation<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
