@@ -11,6 +11,9 @@ import {
 import { mnemonicToAccount, privateKeyToAccount } from "viem/accounts";
 import type { SmartAccountSigner } from "./types.js";
 
+/**
+ * Represents a local account signer and provides methods to sign messages and transactions, as well as static methods to create the signer from mnemonic or private key.
+ */
 export class LocalAccountSigner<
   T extends HDAccount | PrivateKeyAccount | LocalAccount
 > implements SmartAccountSigner<T>

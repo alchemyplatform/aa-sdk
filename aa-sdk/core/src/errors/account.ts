@@ -2,6 +2,9 @@ import type { Chain } from "viem";
 import type { EntryPointVersion } from "../entrypoint/types.js";
 import { BaseError } from "./base.js";
 
+/**
+ * This error is thrown when an account could not be found to execute a specific action. It extends the `BaseError` class.
+ */
 export class AccountNotFoundError extends BaseError {
   override name = "AccountNotFoundError";
 
@@ -11,6 +14,10 @@ export class AccountNotFoundError extends BaseError {
   }
 }
 
+/**
+ * Represents an error that is thrown when no default factory is defined for a specific account type on a given chain and entry point version.
+ * This error suggests providing an override via the `factoryAddress` parameter when creating an account.
+ */
 export class DefaultFactoryNotDefinedError extends BaseError {
   override name = "DefaultFactoryNotDefinedError";
   constructor(accountType: string, chain: Chain, version: EntryPointVersion) {
@@ -23,6 +30,9 @@ export class DefaultFactoryNotDefinedError extends BaseError {
   }
 }
 
+/**
+ * Custom error class for handling errors when getting a counterfactual address. This extends the `BaseError` class and provides a custom error message and name.
+ */
 export class GetCounterFactualAddressError extends BaseError {
   override name = "GetCounterFactualAddressError";
   constructor() {
@@ -30,6 +40,9 @@ export class GetCounterFactualAddressError extends BaseError {
   }
 }
 
+/**
+ * An error class representing the condition where upgrades are not supported for a specific account type. This error extends the `BaseError` class and provides a custom error message based on the account type.
+ */
 export class UpgradesNotSupportedError extends BaseError {
   override name = "UpgradesNotSupported";
   constructor(accountType: string) {
@@ -37,6 +50,9 @@ export class UpgradesNotSupportedError extends BaseError {
   }
 }
 
+/**
+ * Error thrown when attempting to sign a transaction that is not supported by smart contracts.
+ */
 export class SignTransactionNotSupportedError extends BaseError {
   override name = "SignTransactionNotSupported";
   constructor() {
@@ -44,6 +60,9 @@ export class SignTransactionNotSupportedError extends BaseError {
   }
 }
 
+/**
+ * Custom error class `FailedToGetStorageSlotError` which is used to signal a failure when attempting to retrieve a storage slot. This error includes the slot and slot descriptor in its message and inherits from `BaseError`.
+ */
 export class FailedToGetStorageSlotError extends BaseError {
   override name = "FailedToGetStorageSlotError";
   constructor(slot: string, slotDescriptor: string) {
@@ -51,6 +70,9 @@ export class FailedToGetStorageSlotError extends BaseError {
   }
 }
 
+/**
+ * Represents an error indicating that batch execution is not supported for a specific account type.
+ */
 export class BatchExecutionNotSupportedError extends BaseError {
   override name = "BatchExecutionNotSupportedError";
   constructor(accountType: string) {
@@ -58,6 +80,9 @@ export class BatchExecutionNotSupportedError extends BaseError {
   }
 }
 
+/**
+ * Represents an error that occurs when an account requires an owner to execute but none is provided.
+ */
 export class AccountRequiresOwnerError extends BaseError {
   override name = "AccountRequiresOwnerError";
   constructor(accountType: string) {
@@ -65,6 +90,9 @@ export class AccountRequiresOwnerError extends BaseError {
   }
 }
 
+/**
+ * Represents an error that occurs when an attempt is made to call `UpgradeToAndCall` on an account type that does not support it. Includes the account type in the error message.
+ */
 export class UpgradeToAndCallNotSupportedError extends BaseError {
   override name = "UpgradeToAndCallNotSupportedError";
   constructor(accountType: string) {
@@ -72,6 +100,9 @@ export class UpgradeToAndCallNotSupportedError extends BaseError {
   }
 }
 
+/**
+ * Represents an error thrown when an account type does not match the expected type.
+ */
 export class IncorrectAccountType extends BaseError {
   override name = "IncorrectAccountTypeError";
   constructor(expected: string, actual: string) {
@@ -79,6 +110,9 @@ export class IncorrectAccountType extends BaseError {
   }
 }
 
+/**
+ * Error class indicating that a smart account operation requires a signer.
+ */
 export class SmartAccountWithSignerRequiredError extends BaseError {
   override name = "SmartAccountWithSignerRequiredError";
   constructor() {
