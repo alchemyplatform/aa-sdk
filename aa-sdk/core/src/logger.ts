@@ -7,6 +7,9 @@ export enum LogLevel {
   NONE = 0,
 }
 
+/**
+ * Logger class provides static methods for logging at different levels such as error, warn, debug, info, and verbose. This class allows setting log levels and log filters to control the logging behavior.
+ */
 export class Logger {
   static logLevel: LogLevel = LogLevel.INFO;
   static logFilter?: string;

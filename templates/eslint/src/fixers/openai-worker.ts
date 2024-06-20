@@ -11,6 +11,8 @@ The @param tags should include the type and a description of the parameter.
 If the function returns something other than void then it should include a @returnstag which includes a description of the return type.
 The jsdoc should also contain an @example tag above the @param tags with a placeholder: TODO: IMPLEMENT ME.
 Don't include the comment delimeters (/**, */).
+
+If the passed in code is a class, the jsdoc should ONLY include the class description
 `;
 
 const sampleUserPrompt = `
