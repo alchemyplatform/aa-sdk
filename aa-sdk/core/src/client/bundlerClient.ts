@@ -29,6 +29,21 @@ export type BundlerClient<T extends Transport = Transport> = Client<
   PublicActions<T, Chain> & BundlerActions
 >;
 
+/**
+ * Creates a bundler client from an existing public client with the provided transport and chain.
+ * 
+ * @example
+ * ```ts
+ * import { createPublicClient } from "viem";
+ * import { createBundlerClientFromExisting } from "@aa-sdk/core";
+ * 
+ * const publicClient = createPublicClient(...);
+ * const bundlerClient = createBundlerClientFromExisting(publicClient);
+ * ```
+ * 
+ * @param {PublicClient<T, Chain>} client The existing public client to be extended with bundler actions
+ * @returns {BundlerClient<T>} A bundler client that extends the functionality of the provided public client
+ */
 export const createBundlerClientFromExisting: <
   T extends Transport | FallbackTransport = Transport
 >(
@@ -50,9 +65,24 @@ export function createBundlerClient<TTransport extends Transport>(
   args: PublicClientConfig<TTransport, Chain> & { type?: string }
 ): BundlerClient<TTransport>;
 
-export function createBundlerClient(
-  args: PublicClientConfig & { type?: string }
-): BundlerClient {
+/**
+ * Creates a Bundler Client using the provided configuration parameters, including chain and optional type.
+ * 
+ * @example
+ * ```ts
+ * import { createBundlerClient } from "@aa-sdk/core";
+ * import { sepolia } from "viem/chains";
+ * 
+ * const client = createBundlerClient({
+ *  chain: sepolia,
+ *  transport: http("RPC_URL"),
+ * });
+ * ```
+ * 
+ * @param {PublicClientConfig & { type?: string }} args Configuration for creating the Bundler Client, including parameters for the chain, transport, and optional type
+ * @returns {BundlerClient} The created Bundler Client with extended public and bundler actions
+ */
+export function createBundlerClient(args: PublicClientConfig & { type?: string }): BundlerClient {
   if (!args.chain) {
     throw new ChainNotFoundError();
   }
