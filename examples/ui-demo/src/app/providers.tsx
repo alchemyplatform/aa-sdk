@@ -3,7 +3,7 @@ import { sepolia } from "@aa-sdk/core";
 import { createConfig } from "@account-kit/core";
 import { AlchemyAccountProvider, AlchemyAccountsProviderProps } from "@account-kit/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { PropsWithChildren, Suspense, useEffect, useMemo, useState } from "react";
+import { PropsWithChildren, Suspense, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { Config, ConfigContext, DEFAULT_CONFIG } from "./state";
 
 const alchemyConfig = createConfig({
@@ -34,11 +34,13 @@ export const Providers = (props: PropsWithChildren<{}>) => {
     const root = document.querySelector(':root') as HTMLElement;
     root?.style.setProperty("--akui-fg-accent-brand", config.ui.primaryColor)
     root?.style.setProperty("--akui-btn-primary", config.ui.primaryColor)
-    
+
     if (config.ui.theme === 'dark') {
+      root.classList.remove("light")
       root.classList.add("dark")
     } else {
       root.classList.remove("dark")
+      root.classList.add("light")
     }
   }, [config])
 
