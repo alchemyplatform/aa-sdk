@@ -6,13 +6,13 @@ description: Learn how to get started with Alchemy's Embedded Accounts using Acc
 
 # Walkthrough
 
-It's time to learn how it all works! Let's take a tour of the [starter app repository](https://github.com/alchemyplatform/embedded-accounts-quickstart) to see how it integrates with embedded accounts.
+It's time to learn how it all works! We recommend opening the [starter app repository](https://github.com/alchemyplatform/embedded-accounts-quickstart) and walking through the components below to understand how it integrates Embedded Accounts.
 
 ## 1. The config
 
-First, let's do our configuration in a single file called `config.ts`.
+First, let's do our configuration in a [file](https://github.com/alchemyplatform/embedded-accounts-quickstart/blob/main/src/config.ts) called `config.ts`.
 
-```ts [config.ts]
+```ts [/src/config.ts]
 // [!include ~/../examples/embedded-accounts-quickstart/src/config.ts:create-accounts-config]
 ```
 
@@ -26,7 +26,7 @@ We set a few additional variables in the configuration so that we can refer to t
 
 :::details[Additional config]
 
-```ts [config.ts]
+```ts [/src/config.ts]
 // [!include ~/../examples/embedded-accounts-quickstart/src/config.ts:other-config-vars]
 ```
 
@@ -38,7 +38,7 @@ We're almost up to fun the part! There's just a bit more we need to do to setup 
 
 First, we'll setup our initial client state in our root layout:
 
-```tsx [layout.tsx]
+```tsx [/src/app/layout.tsx]
 // [!include ~/../examples/embedded-accounts-quickstart/src/app/layout.tsx:root-layout]
 ```
 
@@ -46,7 +46,7 @@ This `initialState` is, again, related to [SSR](/react/ssr).
 
 And in the `Providers`, we'll make use of this initial state:
 
-```tsx [providers.tsx]
+```tsx [/src/app/providers.tsx]
 // [!include ~/../examples/embedded-accounts-quickstart/src/app/providers.tsx:providers]
 ```
 
@@ -56,7 +56,7 @@ Once we wrap the app in a configured `AlchemyAccountProvider`, we're all set to 
 
 On the initial render of the application we'll want to know whether the user is already connected. We can make use of the [useSignerStatus](/react/useSignerStatus) hook for this:
 
-```tsx [page.tsx]
+```tsx [/src/app/page.tsx]
 // [!include ~/../examples/embedded-accounts-quickstart/src/app/page.tsx:using-status]
 ```
 
@@ -66,7 +66,7 @@ In this case, if the user is connected we render the `ProfileCard`, or else we m
 
 In the `LoginCard`, we can create a nice UI to capture the user's email. We can make use of the [useAuthenticate](/react/useAuthenticate) hook for kicking off the email authentication, and [useSignerStatus](/react/useSignerStatus) again for checking to see if we kicked off that process.
 
-```tsx [login-card.tsx]
+```tsx [/src/components/login-card.tsx]
 // [!include ~/../examples/embedded-accounts-quickstart/src/components/login-card.tsx:authenticating]
 ```
 
@@ -78,7 +78,7 @@ For this part, we can collect whatever information we need from the user to figu
 
 We'll get a `client` by using [useSmartAccountClient](/react/useSmartAccountClient) with values provided from our config. Then we'll pass this `client` to [useSendUserOperation](/react/useSendUserOperation) which will provide us everything we need to know about the operations status.
 
-```tsx [profile-card.tsx]
+```tsx [/src/components/profile-card.tsx]
 // [!include ~/../examples/embedded-accounts-quickstart/src/components/profile-card.tsx:sending-user-op]
 ```
 
