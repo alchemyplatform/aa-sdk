@@ -46,7 +46,7 @@
     "eslint-rules/require-jsdoc-on-reexported-functions": [
       "error",
       {
-        "ignore": ["!**/account-kit/smart-contracts/src/**/*"]
+        "ignore": ["!**/account-kit/smart-contracts/**/*"]
       }
     ]
   },

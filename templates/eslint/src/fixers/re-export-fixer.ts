@@ -58,7 +58,7 @@ export function reExportFixer(
     });
 
     fs.writeFileSync(
-      sourceFilePath,
+      sourceFile.fileName,
       recast.print(ast, { reuseWhitespace: true }).code,
       "utf-8"
     );

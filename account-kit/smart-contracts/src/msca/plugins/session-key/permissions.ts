@@ -56,6 +56,9 @@ export type GasSpendLimit = {
   refreshInterval?: number;
 };
 
+/**
+ * A builder for creating the hex-encoded data for updating session key permissions.
+ */
 export class SessionKeyPermissionsBuilder {
   private _contractAccessControlType: SessionKeyAccessListType =
     SessionKeyAccessListType.ALLOWLIST;
