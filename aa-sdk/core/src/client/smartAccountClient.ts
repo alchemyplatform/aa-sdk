@@ -135,9 +135,27 @@ export function createSmartAccountClient<
   config: SmartAccountClientConfig<TTransport, TChain, TAccount, TContext>
 ): SmartAccountClient<TTransport, TChain, TAccount>;
 
-export function createSmartAccountClient(
-  config: SmartAccountClientConfig
-): SmartAccountClient {
+/**
+ * Creates a smart account client using the provided configuration. This client handles various Ethereum transactions and message signing operations.
+ * 
+ * @example
+ * ```ts
+ * import { createSmartAccountClient, toSmartContractAccount } from "@aa-sdk/core";
+ * import { http } from "viem";
+ * import { sepolia } from "viem/chains";
+ * 
+ * const client = createSmartAccountClient({
+ *  chain: sepolia,
+ *  transport: http("RPC_URL"),
+ *  // optionally hoist the account
+ *  account: toSmartContractAccount(...),
+ * });
+ * ```
+ * 
+ * @param {SmartAccountClientConfig} config The configuration for creating the smart account client
+ * @returns {SmartAccountClient} A smart account client capable of handling transactions, message signing, and other operations on a smart account
+ */
+export function createSmartAccountClient(config: SmartAccountClientConfig): SmartAccountClient {
   const {
     key = "account",
     name = "account provider",
@@ -263,6 +281,27 @@ export function createSmartAccountClientFromExisting<
   TContext
 >;
 
+/**
+ * Creates a smart account client using an existing client and specific configuration. This function can be used to reuse a pre-existing BundlerClient while customizing other aspects of the smart account.
+ * 
+ * @example
+ * ```ts
+ * import { 
+ *   createBundlerClient, 
+ *   createSmartAccountClientFromExisting, 
+ *   toSmartContractAccount 
+ * } from "@aa-sdk/core";
+ * 
+ * const bundlerClient = createBundlerClient(...);
+ * const client = createSmartAccountClientFromExisting({
+ *  client,
+ *  account: toSmartContractAccount(...),
+ * })
+ * ```
+ * 
+ * @param {Omit<SmartAccountClientConfig, "transport" | "chain"> & {client: BundlerClient}} config the configuration object which includes the client
+ * @returns {SmartAccountClient} A smart account client created from the existing BundlerClient
+ */
 export function createSmartAccountClientFromExisting(
   config: Omit<SmartAccountClientConfig, "transport" | "chain"> & {
     client: BundlerClient;
