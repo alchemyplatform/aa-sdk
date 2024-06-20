@@ -130,10 +130,7 @@ export type {
   SmartAccountAuthenticator,
   SmartAccountSigner,
 } from "./signer/types.js";
-export {
-  verifyEIP6492Signature,
-  wrapSignatureWith6492,
-} from "./signer/utils.js";
+export { wrapSignatureWith6492 } from "./signer/utils.js";
 export { WalletClientSigner } from "./signer/wallet-client.js";
 export { split, type SplitTransportParams } from "./transport/split.js";
 export type * from "./types.js";
@@ -156,7 +153,6 @@ export {
   bypassPaymasterAndDataEmptyHex,
   concatPaymasterAndData,
   deepHexlify,
-  defineReadOnly,
   filterUndefined,
   getChain,
   getDefaultSimpleAccountFactoryAddress,
