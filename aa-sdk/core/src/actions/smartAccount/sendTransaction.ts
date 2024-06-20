@@ -23,11 +23,11 @@ import { waitForUserOperationTransaction } from "./waitForUserOperationTransacat
 /**
  * Sends a transaction using the provided client, arguments, optional overrides, and context.
  * This sends a UO and then waits for it to be mined
- * 
+ *
  * @example
  * ```ts
  * import { createSmartAccountClient } from "@aa-sdk/core";
- * 
+ *
  * // smart account client is already extended with sendTransaction
  * const client = createSmartAccountClient(...);
  * const result = await client.sendTransaction({
@@ -37,7 +37,7 @@ import { waitForUserOperationTransaction } from "./waitForUserOperationTransacat
  *  account, // only required if the client above is not connected to an account
  * });
  * ```
- * 
+ *
  * @param {Client<Transport, TChain, TAccount>} client The client to send the transaction through
  * @param {SendTransactionParameters<TChain, TAccount, TChainOverride>} args The parameters required to send the transaction
  * @param {UserOperationOverrides<TEntryPointVersion>} [overrides] Optional overrides for the user operation

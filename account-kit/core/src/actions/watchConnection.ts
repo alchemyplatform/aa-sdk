@@ -2,13 +2,13 @@ import type { AlchemyAccountsConfig, Connection } from "../types";
 
 /**
  * Subscribe to changes to the active connection
- * 
+ *
  * @example
  * ```ts
  * import { watchConnection } from "@account-kit/core";
  * // see createConfig for more information on how to create a config
  * import { config } from "./config";
- * 
+ *
  * watchConnection(config)(console.log);
  * ```
  *
