@@ -52,7 +52,7 @@ function CodeBlock({ title, code }: { title: string; code: string }) {
   );
 }
 
-function borderRadiusToRem(borderRadius: Config['ui']['borderRadius']) {
+function borderRadiusToPx(borderRadius: Config['ui']['borderRadius']) {
   switch (borderRadius) {
     case "none":
       return "0";
@@ -78,7 +78,7 @@ export default withAccountKitUi(<your tailwind config>, {
      "fg-accent-brand": createColorSet("${ui.primaryColor}", "${ui.primaryColor}"),
    },${ui.borderRadius !== DEFAULT_CONFIG.ui.borderRadius ? `
    borderRadius: {
-     modal: "${borderRadiusToRem(ui.borderRadius)}",
+     modal: "${borderRadiusToPx(ui.borderRadius)}",
    }` : ""}
  })
 `
