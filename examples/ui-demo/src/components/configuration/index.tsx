@@ -13,7 +13,7 @@ const TABS: Tab[] = [
   },
   {
     id: "style",
-    name: "Styling",
+    name: "Stylize",
     icon: <PaintIcon />,
   },
 ];
