@@ -43,12 +43,7 @@
         }
       }
     ],
-    "eslint-rules/require-jsdoc-on-reexported-functions": [
-      "error",
-      {
-        "ignore": ["!**/account-kit/smart-contracts/**/*"]
-      }
-    ]
+    "eslint-rules/require-jsdoc-on-reexported-functions": ["error", { "fixBatchSize": 20 }]
   },
   "overrides": [
     {
