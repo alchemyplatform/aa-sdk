@@ -27,7 +27,22 @@ export type PluginManagerActions<
   ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 };
 
-export const pluginManagerActions: <
+/**
+ * Provides actions for managing plugins on a given client, including installing and uninstalling plugins.
+ * NOTE: this is provided by default when using a modular account client
+ *
+ * @example
+ * ```ts
+ * import { pluginManagerActions } from "@account-kit/smart-contracts";
+ * import { createSmartAccountClient } from "@aa-sdk/core";
+ *
+ * const client = createSmartAccountClient(...).extend(pluginManagerActions);
+ * ```
+ *
+ * @param {Client<TTransport, TChain, TAccount>} client The client instance on which to manage plugins
+ * @returns {PluginManagerActions<TAccount>} An object containing functions to install and uninstall plugins
+ */
+export function pluginManagerActions<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
@@ -35,7 +50,9 @@ export const pluginManagerActions: <
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>
-) => PluginManagerActions<TAccount> = (client) => ({
-  installPlugin: async (params) => installPlugin(client, params),
-  uninstallPlugin: async (params) => uninstallPlugin(client, params),
-});
+): PluginManagerActions<TAccount> {
+  return {
+    installPlugin: async (params) => installPlugin(client, params),
+    uninstallPlugin: async (params) => uninstallPlugin(client, params),
+  };
+}

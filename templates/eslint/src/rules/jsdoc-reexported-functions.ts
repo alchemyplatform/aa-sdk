@@ -43,7 +43,9 @@ const rule: Rule.RuleModule = {
     ],
   },
   create(context) {
-    const enableFixer: boolean = process.argv.some(arg => arg.includes("eslint")) && process.argv.some(x => x === "--fix" || x === "-f");
+    const enableFixer: boolean =
+      process.argv.some((arg) => arg.includes("eslint")) &&
+      process.argv.some((x) => x === "--fix" || x === "-f");
     const fixBatchSize: number = context.options[0]?.fixBatchSize ?? 10;
     const ignore: string[] = context.options[0]?.ignore || [];
 

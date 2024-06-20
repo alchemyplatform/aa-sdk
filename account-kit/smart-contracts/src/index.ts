@@ -72,8 +72,8 @@ export {
 export type * from "./msca/plugin-manager/decorator.js";
 export { pluginManagerActions } from "./msca/plugin-manager/decorator.js";
 export { installPlugin } from "./msca/plugin-manager/installPlugin.js";
+export { multiOwnerPluginActions } from "./msca/plugins/multi-owner/extension.js";
 export type * from "./msca/plugins/multi-owner/index.js";
-export { multiOwnerPluginActions } from "./msca/plugins/multi-owner/index.js";
 export {
   MultiOwnerPlugin,
   MultiOwnerPluginAbi,
@@ -86,7 +86,6 @@ export {
   MultisigPluginExecutionFunctionAbi,
   multisigPluginActions,
   multisigSignatureMiddleware,
-  type SignerType,
 } from "./msca/plugins/multisig/index.js";
 export {
   combineSignatures,
@@ -94,8 +93,8 @@ export {
   getSignerType,
   splitAggregatedSignature,
 } from "./msca/plugins/multisig/utils/index.js";
+export { sessionKeyPluginActions } from "./msca/plugins/session-key/extension.js";
 export type * from "./msca/plugins/session-key/index.js";
-export { sessionKeyPluginActions } from "./msca/plugins/session-key/index.js";
 export type * from "./msca/plugins/session-key/permissions.js";
 export {
   SessionKeyAccessListType,
