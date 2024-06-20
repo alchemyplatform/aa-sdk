@@ -4,7 +4,6 @@ import ExternalLink from "../shared/ExternalLink";
 import { DOCS } from "@/src/utils/links";
 import { GithubLogo } from "../icons/github";
 import { ArrowUpRightIcon } from "../icons/arrow";
-import { Switch } from "@/components/ui/switch";
 
 export function TopNav() {
   return (
@@ -24,9 +23,6 @@ export function TopNav() {
               <ArrowUpRightIcon className="h-4 w-4" />
             </ExternalLink>
           </div>
-
-          <BarSeparator />
-          <Switch />
           <BarSeparator />
           <GithubLogo />
         </div>
