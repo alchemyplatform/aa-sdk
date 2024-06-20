@@ -18,14 +18,13 @@ export const SessionKeySignerSchema = z.object({
 });
 
 export type SessionKeySignerConfig = z.input<typeof SessionKeySignerSchema>;
+export const SESSION_KEY_SIGNER_TYPE_PFX = "alchemy:session-key";
 
 /**
  * A simple session key signer that uses localStorage or sessionStorage to store
  * a private key. If the key is not found, it will generate a new one and store
  * it in the storage.
  */
-
-export const SESSION_KEY_SIGNER_TYPE_PFX = "alchemy:session-key";
 export class SessionKeySigner
   implements SmartAccountSigner<LocalAccountSigner<PrivateKeyAccount>>
 {
