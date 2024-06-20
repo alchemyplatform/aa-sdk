@@ -3,11 +3,30 @@ import { applyUserOpOverrideOrFeeOption } from "../../utils/index.js";
 import type { MiddlewareClient } from "../actions";
 import type { ClientMiddlewareFn } from "../types";
 
-export const defaultFeeEstimator: <C extends MiddlewareClient>(
+/**
+ * Default fee estimator middleware function that estimates the maximum fee per gas and maximum priority fee per gas for a given client and applies the necessary overrides and fee options.
+ *
+ * @example
+ * ```ts
+ * import { createSmartAccountClient, defaultFeeEstimator, createBundlerClient } from "@aa-sdk/core";
+ *
+ * const bundlerClient = createBundlerClient(...);
+ *
+ * // NOTE: this is already provided by the smart account client
+ * const client = createSmartAccountClient({
+ *  feeEstimator: defaultFeeEstimator(bundlerClient),
+ *  ...otherParams
+ * });
+ * ```
+ *
+ * @template {MiddlewareClient} C The type of the client
+ * @param {C} client The client to perform the fee estimation
+ * @returns {ClientMiddlewareFn} A middleware function that takes in the struct and options, estimates the fees, and updates the struct with the estimated fees
+ */
+export function defaultFeeEstimator<C extends MiddlewareClient>(
   client: C
-) => ClientMiddlewareFn =
-  (client) =>
-  async (struct, { overrides, feeOptions }) => {
+): ClientMiddlewareFn {
+  return async (struct, { overrides, feeOptions }) => {
     // maxFeePerGas must be at least the sum of maxPriorityFeePerGas and baseFee
     // so we need to accommodate for the fee option applied maxPriorityFeePerGas for the maxFeePerGas
     //
@@ -48,3 +67,4 @@ export const defaultFeeEstimator: <C extends MiddlewareClient>(
     struct.maxPriorityFeePerGas = maxPriorityFeePerGas;
     return struct;
   };
+}
