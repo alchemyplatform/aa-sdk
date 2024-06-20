@@ -58,6 +58,19 @@ export type MultisigPluginActions<
       }
     : {});
 
+/**
+ * Provides actions for managing a multisig plugin within the specified client, including reading owners, checking ownership, getting the threshold, proposing user operations, and signing multisig user operations.
+ *
+ * @example
+ * ```ts
+ * import { createModularAccountAlchemyClient, multisigPluginActions } from "@account-kit/smart-contracts";
+ *
+ * const client = createModularAccountAlchemyClient(...).extend(multisigPluginActions);
+ * ```
+ *
+ * @param {Client<TTransport, TChain, TAccount>} client The client instance configured with transport, chain, and account information
+ * @returns {MultisigPluginActions<TAccount>} An object containing methods to perform actions related to the multisig plugin
+ */
 export const multisigPluginActions: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,

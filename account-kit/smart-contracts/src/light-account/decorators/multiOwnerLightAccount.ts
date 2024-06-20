@@ -19,20 +19,20 @@ export type MultiOwnerLightAccountClientActions<
 
 /**
  * Generates client actions for a multi-owner light account, including the ability to update owners.
- * 
+ *
  * @example
  * ```ts
  * import { multiOwnerLightAccountClientActions, createMultiOwnerLightAccount } from "@account-kit/smart-contracts";
  * import { createAlchemySmartAccountClient } from "@account-kit/infra";
  * import { sepolia } from "@account-kit/infra/chains";
- * 
+ *
  * const smartAccountClient = createAlchemySmartAccountClient({
  *  account: await createMultiOwnerLightAccount(...),
  *  apiKey: "your-api-key",
  *  chain: sepolia,
  * }).extend(multiOwnerLightAccountClientActions);
  * ```
- * 
+ *
  * @param {Client<TTransport, TChain, TAccount>} client the client for interacting with the multi-owner light account
  * @returns {MultiOwnerLightAccountClientActions<TSigner, TAccount>} an object containing the client actions specifically for a multi-owner light account
  */

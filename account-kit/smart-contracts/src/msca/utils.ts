@@ -78,6 +78,30 @@ export const getDefaultMultiOwnerModularAccountFactoryAddress = (
   }
 };
 
+export type GetMSCAUpgradeToData<
+  TSigner extends SmartAccountSigner = SmartAccountSigner,
+  TAccount extends
+    | SmartContractAccountWithSigner<string, TSigner>
+    | undefined = SmartContractAccountWithSigner<string, TSigner> | undefined
+> = {
+  multiOwnerPluginAddress?: Address;
+} & GetAccountParameter<TAccount>;
+
+/**
+ * Retrieves the data necessary to upgrade to a Multi-Signature Contract Account (MSCA) and provides a method to create a Multi-Owner Modular Account.
+ *
+ * @example
+ * ```ts
+ * import { createLightAccountClient, getMSCAUpgradeToData } from "@account-kit/smart-contracts";
+ *
+ * const client = createLightAccountClient(...);
+ * const upgradeData = await getMSCAUpgradeToData(client, {});
+ * ```
+ *
+ * @param {SmartAccountClient<TTransport, TChain, TAccount>} client The smart account client
+ * @param {GetMSCAUpgradeToData<TSigner, TAccount>} args The arguments required for the upgrade
+ * @returns {Promise<UpgradeToData & { createMAAccount: () => Promise<MultiOwnerModularAccount<TSigner>>}>} A promise that resolves to upgrade data augmented with a function to create a Multi-Owner Modular Account
+ */
 export async function getMSCAUpgradeToData<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
@@ -87,9 +111,7 @@ export async function getMSCAUpgradeToData<
     | undefined = SmartContractAccountWithSigner<string, TSigner> | undefined
 >(
   client: SmartAccountClient<TTransport, TChain, TAccount>,
-  args: {
-    multiOwnerPluginAddress?: Address;
-  } & GetAccountParameter<TAccount>
+  args: GetMSCAUpgradeToData<TSigner, TAccount>
 ): Promise<
   UpgradeToData & {
     createMAAccount: () => Promise<MultiOwnerModularAccount<TSigner>>;
@@ -125,6 +147,39 @@ export async function getMSCAUpgradeToData<
   };
 }
 
+export type GetMAInitializationDataParams<
+  TTransport extends Transport = Transport,
+  TChain extends Chain | undefined = Chain | undefined,
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
+    | undefined
+> = {
+  multiOwnerPluginAddress?: Address;
+  client: SmartAccountClient<TTransport, TChain, TAccount>;
+  signerAddress: Address | Address[];
+};
+
+/**
+ * Retrieves the initialization data for a multi-owner modular account. Throws an error if the client's chain is not found or if the multi-owner plugin address is not retrievable.
+ *
+ * @example
+ * ```ts
+ * import { getMAInitializationData } from "@account-kit/smart-contracts";
+ * import { createSmartAccountClient } from "@aa-sdk/core";
+ *
+ * const client = createSmartAccountClient(...);
+ * const initializationData = await getMAInitializationData({
+ *  client,
+ *  signerAddress: "0x...", // or array of signers
+ * });
+ * ```
+ *
+ * @param {GetMAInitializationDataParams<TTransport, TChain, TAccount>} params the parameters for getting initialization data
+ * @param {SmartAccountClient<TTransport, TChain, TAccount>} params.client the smart account client
+ * @param {Address | Address[]} params.signerAddress the address of the signer or an array of signer addresses
+ * @param {Address} [params.multiOwnerPluginAddress] optional address of the multi-owner plugin
+ * @returns {Promise<UpgradeToData>} a promise that resolves to the initialization data required for upgrading to a multi-owner modular account
+ */
 export async function getMAInitializationData<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
@@ -135,11 +190,11 @@ export async function getMAInitializationData<
   client,
   multiOwnerPluginAddress,
   signerAddress,
-}: {
-  multiOwnerPluginAddress?: Address;
-  client: SmartAccountClient<TTransport, TChain, TAccount>;
-  signerAddress: Address | Address[];
-}): Promise<UpgradeToData> {
+}: GetMAInitializationDataParams<
+  TTransport,
+  TChain,
+  TAccount
+>): Promise<UpgradeToData> {
   if (!client.chain) {
     throw new ChainNotFoundError();
   }

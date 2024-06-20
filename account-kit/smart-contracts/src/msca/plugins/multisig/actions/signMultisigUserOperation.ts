@@ -8,11 +8,11 @@ import {
 } from "@alchemy/aa-core";
 import { type Chain, type Client, type Transport } from "viem";
 import { MultisigMissingSignatureError } from "../../../errors.js";
-import { combineSignatures, splitAggregatedSignature } from "../index.js";
 import {
   type SignMultisigUserOperationParams,
   type SignMultisigUserOperationResult,
 } from "../types.js";
+import { combineSignatures, splitAggregatedSignature } from "../utils/index.js";
 
 export async function signMultisigUserOperation<
   TTransport extends Transport = Transport,

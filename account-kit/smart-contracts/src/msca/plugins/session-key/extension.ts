@@ -81,6 +81,19 @@ export type SessionKeyPluginActions<
       }
     : {});
 
+/**
+ * Creates actions for managing session keys in a smart contract associated with a client, including adding, removing, rotating, and updating session key permissions.
+ *
+ * @example
+ * ```ts
+ * import { createModularAccountAlchemyClient, sessionKeyPluginActions } from "@account-kit/smart-contracts";
+ *
+ * const client = createModularAccountAlchemyClient(...).extend(sessionKeyPluginActions);
+ * ```
+ *
+ * @param {Client<TTransport, TChain, TAccount>} client The client instance to use for managing session keys
+ * @returns {SessionKeyPluginActions<TAccount>} An object containing methods for session key management and interaction with the smart contract
+ */
 export const sessionKeyPluginActions: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
