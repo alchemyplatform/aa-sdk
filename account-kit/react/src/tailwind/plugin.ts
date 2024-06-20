@@ -118,6 +118,13 @@ export const withAccountKitUi = (
   config: TailwindConfig,
   themeOverride?: AccountKitThemeOverride
 ): TailwindConfig => ({
+  darkMode: [
+    "variant",
+    [
+      "@media (prefers-color-scheme: dark) { &:not(.light, .light *) }",
+      "&:is(.dark, .dark *)",
+    ],
+  ],
   ...config,
   content: Array.isArray(config.content)
     ? [...config.content, getAccountKitContentPath()]
