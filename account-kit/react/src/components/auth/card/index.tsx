@@ -77,7 +77,7 @@ export const AuthCard = (
         )}
       </div>
       <div
-        className={`modal-box rounded-modal bg-surface-default relative flex flex-col items-center gap-5 text-fg-primary ${
+        className={`modal-box rounded-modal bg-bg-surface-default relative flex flex-col items-center gap-5 text-fg-primary ${
           className ?? ""
         }`}
       >

@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import ExternalLink from "../shared/ExternalLink";
 
 import { Roboto_Mono } from "next/font/google";
-import { Config, useConfig } from "@/src/app/state";
+import { Config, DEFAULT_CONFIG, useConfig } from "@/src/app/state";
 const robotoMono = Roboto_Mono({
   subsets: ["latin"],
   display: "swap",
@@ -52,6 +52,18 @@ function CodeBlock({ title, code }: { title: string; code: string }) {
   );
 }
 
+function borderRadiusToRem(borderRadius: Config['ui']['borderRadius']) {
+  switch (borderRadius) {
+    case "none":
+      return "0";
+    case "sm":
+      return "8px";
+    case "md":
+      return "12px";
+    case "lg":
+      return "16px";
+  }
+}
 
 function getTailwindCode(config: Config) {
   const { ui } = config
@@ -64,7 +76,10 @@ export default withAccountKitUi(<your tailwind config>, {
    colors: {
      "btn-primary": createColorSet("${ui.primaryColor}", "${ui.primaryColor}"),
      "fg-accent-brand": createColorSet("${ui.primaryColor}", "${ui.primaryColor}"),
-   },
+   },${ui.borderRadius !== DEFAULT_CONFIG.ui.borderRadius ? `
+   borderRadius: {
+     modal: "${borderRadiusToRem(ui.borderRadius)}",
+   }` : ""}
  })
 `
 }

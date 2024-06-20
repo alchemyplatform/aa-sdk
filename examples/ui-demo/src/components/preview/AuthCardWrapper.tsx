@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import { useConfig } from "@/src/app/state";
 import { AuthCard, AuthType } from "@account-kit/react";
 import { useMemo } from "react";
+import { RADIUS_OPTION_TO_TAILWIND_CLASS } from "../configuration/consts";
 
 export function AuthCardWrapper({ className }: { className?: string }) {
   const { config } = useConfig();
@@ -29,9 +30,9 @@ export function AuthCardWrapper({ className }: { className?: string }) {
         backgroundRepeat: "repeat",
       }}
     >
-      <div className="flex flex-col gap-2 w-[368px]">
+      <div className="flex flex-col w-[368px]">
         <AuthCard
-          className="shadow-md"
+          className={cn("shadow-md", RADIUS_OPTION_TO_TAILWIND_CLASS[config.ui.borderRadius])}
           header={<AuthCardHeader />}
           showSignInText
           showNavigation
