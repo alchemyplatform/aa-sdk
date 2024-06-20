@@ -11,7 +11,7 @@ export function CodePreview() {
   return (
     <div className="flex flex-col gap-6 p-6 overflow-y-auto">
       <div className="flex flex-col gap-2">
-        <div className="font-semibold text-fg-primary text-xl">
+        <div className="font-semibold text-foreground text-xl">
           Export configuration
         </div>
         <div className="text-sm text-gray-600">
@@ -24,11 +24,11 @@ export function CodePreview() {
         </div>
       </div>
       <div className="flex flex-col gap-4">
-        <div className="font-semibold text-fg-secondary">Style</div>
+        <div className="font-semibold text-secondary">Style</div>
         <CodeBlock title="tailwind.config.ts" code={styleCode} />
       </div>
       <div className="flex flex-col gap-4">
-        <div className="font-semibold text-fg-secondary">Config</div>
+        <div className="font-semibold text-secondary">Config</div>
         <CodeBlock title="src/app/page.tsx" code={styleCode} />
       </div>
     </div>
