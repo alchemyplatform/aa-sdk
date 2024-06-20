@@ -67,14 +67,14 @@ export function createMultisigAccountAlchemyClient<
 
 /**
  * Creates an Alchemy client for a multisig account using the provided configuration.
- * 
+ *
  * @example
  * ```ts
  * import { createMultisigAccountAlchemyClient } from "@account-kit/smart-contracts";
  * import { sepolia } from "@account-kit/infra/chains";
  * import { LocalAccountSigner } from "@aa-sdk/core";
  * import { generatePrivateKey } from "viem"
- * 
+ *
  * const alchemyAccountClient = await createMultisigAccountAlchemyClient({
  *  apiKey: "your-api-key",
  *  chain: sepolia,
@@ -83,11 +83,13 @@ export function createMultisigAccountAlchemyClient<
  *  threshold: 2, // 2 of N signatures
  * });
  * ```
- * 
+ *
  * @param {AlchemyMultisigAccountClientConfig} config The configuration for the Alchemy multisig account client
  * @returns {Promise<AlchemySmartAccountClient<Transport, Chain | undefined, MultisigModularAccount<SmartAccountSigner>, MultisigPluginActions<MultisigModularAccount<SmartAccountSigner>> & PluginManagerActions<MultisigModularAccount<SmartAccountSigner>> & AccountLoupeActions<MultisigModularAccount<SmartAccountSigner>>, MultisigUserOperationContext>>} A promise that resolves to an Alchemy Smart Account Client for multisig accounts with extended functionalities.
  */
-export async function createMultisigAccountAlchemyClient(config: AlchemyMultisigAccountClientConfig): Promise<
+export async function createMultisigAccountAlchemyClient(
+  config: AlchemyMultisigAccountClientConfig
+): Promise<
   AlchemySmartAccountClient<
     Transport,
     Chain | undefined,

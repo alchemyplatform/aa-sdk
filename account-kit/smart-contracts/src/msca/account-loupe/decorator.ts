@@ -54,15 +54,15 @@ export type AccountLoupeActions<
 /**
  * Provides a set of actions for account loupe operations using the specified client.
  * NOTE: this is already added to the client when using any of the Modular Account Clients.
- * 
+ *
  * @example
  * ```ts
  * import { accountLoupeActions } from "@account-kit/smart-contracts";
  * import { createSmartAccountClient } from "@aa-sdk/core";
- * 
+ *
  * const client = createSmartAccountClient(...).extend(accountLoupeActions);
  * ```
- * 
+ *
  * @param {Client<TTransport, TChain, TAccount>} client the client to be used for executing the account loupe actions
  * @returns {AccountLoupeActions<TAccount>} an object containing account loupe actions like `getExecutionFunctionConfig`, `getExecutionHooks`, `getPreValidationHooks`, and `getInstalledPlugins`
  */

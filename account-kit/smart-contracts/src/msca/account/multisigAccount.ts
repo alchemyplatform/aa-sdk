@@ -65,7 +65,7 @@ export async function createMultisigModularAccount<
 ): Promise<MultisigModularAccount<TSigner>>;
 
 /**
- * Creates a multisig modular account using the provided parameters, including transport, chain, signer, account address, and other account settings. It configures the account with multiple owners and the specified threshold. 
+ * Creates a multisig modular account using the provided parameters, including transport, chain, signer, account address, and other account settings. It configures the account with multiple owners and the specified threshold.
  *
  * @example
  * ```ts
@@ -73,7 +73,7 @@ export async function createMultisigModularAccount<
  * import { LocalAccountSigner } from "@aa-sdk/core";
  * import { sepolia } from "viem/chains";
  * import { http, generatePrivateKey } from "viem"
- * 
+ *
  * const account = await createMultisigModularAccount({
  *  chain: sepolia,
  *  transport: http("RPC_URL"),
