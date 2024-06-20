@@ -12,7 +12,7 @@ const ThemeSwitch = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SwitchPrimitives.Root
     className={cn(
-      "relative peer inline-flex h-10 w-48 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-gray-500 data-[state=unchecked]:bg-input",
+      "relative peer inline-flex h-10 w-48 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 bg-input",
       className
     )}
     {...props}
@@ -24,7 +24,7 @@ const ThemeSwitch = React.forwardRef<
       )}
     ></SwitchPrimitives.Thumb>
     <div className="absolute flex text-sm items-center right-[2px] left-[2px] top-[2px] bottom-[2px] z-10 justify-between bg-transparent">
-      <div className="flex items-center data-[state=unchecked]:font-medium text-gray-950 justify-center gap-1 flex-1 basis-0">
+      <div className="flex items-center data-[state=unchecked]:font-medium justify-center gap-1 flex-1 basis-0">
         <Sun size={18} /><div className={cn(!props.checked && "font-medium")}>Light</div>
       </div>
       <div className="flex items-center justify-center gap-1 flex-1 basis-0">

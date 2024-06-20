@@ -9,6 +9,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { FileCode } from "lucide-react";
 import ExternalLink from "../shared/ExternalLink";
+import { IllustrationStyle } from "../icons/illustration-style";
 
 export function Styling({ className }: { className?: string }) {
   const { config, setConfig } = useConfig();
@@ -25,7 +26,7 @@ export function Styling({ className }: { className?: string }) {
 
   return (
     <div className={cn("flex flex-col", className)}>
-      <div className="flex flex-col gap-4 border-b border-static py-6">
+      <div className="flex flex-col gap-4 border-b border-border py-6">
         <p className="font-semibold text-secondary-foreground text-sm">Theme</p>
         <ThemeSwitch
           checked={config.ui.theme === "dark"}
@@ -33,7 +34,7 @@ export function Styling({ className }: { className?: string }) {
         />
       </div>
 
-      <div className="flex flex-col gap-4 border-b border-static py-6 items-start">
+      <div className="flex flex-col gap-4 border-b border-border py-6 items-start">
         <div className="flex flex-col gap-2">
           <p className="font-semibold text-secondary-foreground text-sm">
             Color
@@ -45,7 +46,7 @@ export function Styling({ className }: { className?: string }) {
         <ColorPicker />
       </div>
 
-      <div className="flex flex-col gap-4 border-b border-static py-6 items-start">
+      <div className="flex flex-col gap-4 border-b border-border py-6 items-start">
         <div className="flex flex-col gap-2">
           <p className="font-semibold text-secondary-foreground text-sm">
             Logo
@@ -58,7 +59,7 @@ export function Styling({ className }: { className?: string }) {
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 border-b border-static py-6 items-start">
+      <div className="flex flex-col gap-4 border-b border-border py-6 items-start">
         <div className="flex flex-col gap-2 self-stretch">
           <p className="font-semibold text-secondary-foreground text-sm">
             Corner radius
@@ -112,7 +113,7 @@ export function CornerRadiusOptions() {
         <button
           className={`${
             option.className
-          } py-2 flex-1 basis-0 bg-[#EFF4F9] text-fg-accent-brand hover:opacity-80 ${
+          } py-2 flex-1 basis-0 bg-[#EFF4F9] text-[#363FF9] hover:opacity-80 ${
             option.id === borderRadius
               ? "border-2 border-[rgba(0, 0, 0, 0.01)]"
               : "border-2 border-white"
@@ -143,7 +144,7 @@ const options = [
 function IllustrationStyleOptions() {
   const {
     config: {
-      ui: { illustrationStyle },
+      ui: { illustrationStyle, primaryColor },
     },
     setConfig,
   } = useConfig();
@@ -176,7 +177,7 @@ function IllustrationStyleOptions() {
           }}
           onClick={() => onChange(i + 1)}
         >
-          <Image src={option} width={48} height={48} alt="Email icon" />
+          <IllustrationStyle fill={primaryColor} variant={i+1} />
         </button>
       ))}
     </div>
@@ -186,8 +187,8 @@ function IllustrationStyleOptions() {
 function LearnMore() {
   return (
     <div className="flex items-center gap-1 text-xs text-center self-center mt-8">
-      <FileCode className="stroke-fg-secondary stroke-1" size={18} />
-      <div className="text-fg-secondary">Want to fully configure the CSS?</div>
+      <FileCode className="stroke-secondary stroke-1" size={18} />
+      <div className="text-secondary">Want to fully configure the CSS?</div>
       <ExternalLink className="font-semibold text-blue-600" href="#">
         Click to learn how
       </ExternalLink>
