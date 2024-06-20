@@ -9,6 +9,9 @@ import {
 import { InvalidSignerTypeError } from "../errors/signer.js";
 import type { SmartAccountSigner } from "./types";
 
+/**
+ * Represents a wallet client signer for smart accounts, providing methods to get the address, sign messages, and sign typed data.
+ */
 export class WalletClientSigner implements SmartAccountSigner<WalletClient> {
   signerType: string;
   inner: WalletClient;

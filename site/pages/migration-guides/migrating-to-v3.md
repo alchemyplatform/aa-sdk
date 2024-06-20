@@ -20,7 +20,17 @@ head:
 
 # Migration Guide
 
-Below are the steps to migrate your project from older versions of the `aa-sdk` to the latest version.
+Below are the steps to migrate your project from older versions of the `aa-sdk` and `account-kit` to the latest version.
+
+## Migrating to version v4.x.x
+
+### Utils: `verifyEIP6492Signature` removed
+
+This method has been removed. Use [`verifyMessage`](https://viem.sh/docs/actions/public/verifyMessage) from viem.
+
+### Utils: `defineReadOnly` removed
+
+This method is no longer used internally and has been removed. The reference impl can be found within `ethers.js`.
 
 ## Migrating to version 3.x.x
 

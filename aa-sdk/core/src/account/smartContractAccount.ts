@@ -76,16 +76,16 @@ export type SmartContractAccountWithSigner<
 
 /**
  * Determines if the given SmartContractAccount has a signer associated with it.
- * 
+ *
  * @example
  * ```ts
  * import { toSmartContractAccount } from "@aa-sdk/core";
- * 
+ *
  * const account = await toSmartContractAccount(...);
- * 
+ *
  * console.log(isSmartAccountWithSigner(account)); // false: the base account does not have a publicly accessible signer
  * ```
- * 
+ *
  * @param {SmartContractAccount} account The account to check.
  * @returns {boolean} true if the account has a signer, otherwise false.
  */
@@ -159,10 +159,10 @@ export type ToSmartContractAccountParams<
  * @example
  * ```ts
  * import { parseFactoryAddressFromAccountInitCode } from "@aa-sdk/core";
- *  
- * const [address, calldata] = parseFactoryAddressFromAccountInitCode("0xAddressCalldata"); 
+ *
+ * const [address, calldata] = parseFactoryAddressFromAccountInitCode("0xAddressCalldata");
  * ```
- * 
+ *
  * @param {Hex} initCode The initialization code from which to parse the factory address and calldata
  * @returns {[Address, Hex]} A tuple containing the parsed factory address and factory calldata
  */
@@ -339,7 +339,7 @@ export async function toSmartContractAccount(
     signUserOperationHash,
     encodeUpgradeToAndCall,
   } = params;
-  
+
   const client = createBundlerClient({
     // we set the retry count to 0 so that viem doesn't retry during
     // getting the address. That call always reverts and without this

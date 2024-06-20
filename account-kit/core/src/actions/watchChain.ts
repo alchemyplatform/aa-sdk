@@ -3,13 +3,13 @@ import type { AlchemyAccountsConfig } from "../types";
 
 /**
  * Allows you to subscribe to changes of the chain in the client store.
- * 
+ *
  * @example
  * ```ts
  * import { watchChain } from "@account-kit/core";
  * // see createConfig for more information on how to create a config
  * import { config } from "./config";
- * 
+ *
  * watchChain(config)(console.log);
  * ```
  *
