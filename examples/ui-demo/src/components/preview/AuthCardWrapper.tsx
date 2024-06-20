@@ -30,7 +30,7 @@ export function AuthCardWrapper({ className }: { className?: string }) {
       }}
     >
       <div className="flex flex-col gap-2 w-[368px]">
-        <div className="modal bg-white shadow-md">
+        <div className="modal bg-surface-default shadow-md">
           <AuthCard
             header={<AuthCardHeader />}
             showSignInText
@@ -55,6 +55,6 @@ function AuthCardHeader() {
   if (!logo) return null;
 
   return (
-    <img style={{ height: "60px" }} src={logo.fileSrc} alt={logo.fileName} />
+    <img style={{ height: "60px", objectFit: 'contain' }} src={logo.fileSrc} alt={logo.fileName} />
   );
 }
