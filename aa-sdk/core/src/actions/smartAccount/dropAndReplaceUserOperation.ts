@@ -20,6 +20,28 @@ import type {
   UserOperationContext,
 } from "./types";
 
+/**
+ * Drops an existing user operation and replaces it with a new one while ensuring the appropriate fees and overrides are applied.
+ * 
+ * @example
+ * ```ts
+ * import { 
+ *  createSmartAccountClient,
+ * } from "@aa-sdk/core";
+ * 
+ * // smart account client is already extended with dropAndReplaceUserOperation
+ * const client = createSmartAccountClient(...);
+ * const { request } = await client.sendUserOperation(...);
+ * const result = await client.dropAndReplaceUserOperation({
+ *  uoToDrop: request,
+ *  account, // only required if the client above is not connected to an account
+ * });
+ * ```
+ * 
+ * @param {Client<TTransport, TChain, TAccount>} client The client instance with the transport, chain, and account information
+ * @param {DropAndReplaceUserOperationParameters<TAccount, TContext>} args The parameters required for dropping and replacing the user operation including the account, operation to drop, overrides, and context
+ * @returns {Promise<SendUserOperationResult<TEntryPointVersion>>} A promise that resolves to the result of sending the new user operation
+ */
 export async function dropAndReplaceUserOperation<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
