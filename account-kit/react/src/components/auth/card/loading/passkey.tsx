@@ -2,13 +2,16 @@ import { ls } from "../../../../strings.js";
 import { LoadingPasskey } from "../../../../icons/passkey.js";
 import { Button } from "../../../button.js";
 import { PoweredBy } from "../../../poweredby.js";
+import type { AuthCardProps } from "../index.js";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-export const LoadingPasskeyAuth = () => {
+export const LoadingPasskeyAuth = ({ config }: { config: AuthCardProps }) => {
   return (
     <div className="flex flex-col gap-5 items-center">
       <div className="flex flex-col items-center justify-center">
-        <LoadingPasskey />
+        <LoadingPasskey
+          illustrationStyle={config.illustrationStyle ?? "flat"}
+        />
       </div>
 
       <h3 className="font-semibold text-lg">{ls.loadingPasskey.title}</h3>
