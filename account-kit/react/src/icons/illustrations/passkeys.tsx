@@ -1,21 +1,12 @@
-import { useLayoutEffect, useState, type SVGProps } from "react";
-import type { IllustrationStyle } from "./utils";
+import { type SVGProps } from "react";
+import type { IllustrationProps } from "./types.js";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const PasskeySmileyIllustration = ({
   className,
+  illustrationStyle: style,
   ...props
-}: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
-  const [style, setStyle] = useState<IllustrationStyle>("outline");
-
-  useLayoutEffect(() => {
-    setStyle(
-      getComputedStyle(document.documentElement).getPropertyValue(
-        "--akui-illustration-style"
-      ) as IllustrationStyle
-    );
-  }, []);
-
+}: IllustrationProps) => {
   return (
     <>
       {style === "outline" && (
@@ -73,18 +64,9 @@ export const PasskeySmileyIllustration = ({
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const PasskeyShieldIllustration = ({
   className,
+  illustrationStyle: style,
   ...props
-}: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
-  const [style, setStyle] = useState<IllustrationStyle>("outline");
-
-  useLayoutEffect(() => {
-    setStyle(
-      getComputedStyle(document.documentElement).getPropertyValue(
-        "--akui-illustration-style"
-      ) as IllustrationStyle
-    );
-  }, []);
-
+}: IllustrationProps) => {
   return (
     <>
       {style === "outline" && (

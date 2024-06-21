@@ -24,6 +24,7 @@ export const Providers = (props: PropsWithChildren<{}>) => {
       auth: {
         sections: [[{ type: "email" }], [{ type: "passkey" }]],
         addPasskeyOnSignup: config.auth.addPasskey,
+        illustrationStyle: config.ui.illustrationStyle,
       },
     };
   }, [config]);
@@ -34,7 +35,6 @@ export const Providers = (props: PropsWithChildren<{}>) => {
     const root = document.querySelector(':root') as HTMLElement;
     root?.style.setProperty("--akui-fg-accent-brand", config.ui.primaryColor)
     root?.style.setProperty("--akui-btn-primary", config.ui.primaryColor)
-    root?.style.setProperty("--akui-illustration-style", config.ui.illustrationStyle)
     
     if (config.ui.theme === 'dark') {
       root.classList.add("dark")

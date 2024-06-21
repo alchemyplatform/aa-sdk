@@ -8,22 +8,23 @@ import { ls } from "../../../strings.js";
 import { Button } from "../../button.js";
 import { PoweredBy } from "../../poweredby.js";
 import { useAuthContext } from "../context.js";
+import type { AuthCardProps } from "./index.js";
 
 const BENEFITS = [
   {
-    icon: <PasskeySmileyIllustration />,
+    icon: PasskeySmileyIllustration,
     title: ls.addPasskey.simplerLoginTitle,
     description: ls.addPasskey.simplerLoginDescription,
   },
   {
-    icon: <PasskeyShieldIllustration />,
+    icon: PasskeyShieldIllustration,
     title: ls.addPasskey.enhancedSecurityTitle,
     description: ls.addPasskey.enhancedSecurityDescription,
   },
 ];
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-export const AddPasskey = () => {
+export const AddPasskey = ({ config }: { config: AuthCardProps }) => {
   const { setAuthStep } = useAuthContext();
   const { addPasskey, isAddingPasskey } = useAddPasskey({
     onSuccess: () => {
@@ -34,16 +35,20 @@ export const AddPasskey = () => {
   return (
     <div className="flex flex-col gap-5 items-center">
       <div className="flex flex-col items-center justify-center h-12 w-12">
-        <AddPasskeyIllustration height="48" width="48" />
+        <AddPasskeyIllustration
+          illustrationStyle={config.illustrationStyle ?? "flat"}
+          height="48"
+          width="48"
+        />
       </div>
 
       <h3 className="font-semibold text-lg">{ls.addPasskey.title}</h3>
 
       <div className="flex flex-col w-full gap-3">
-        {BENEFITS.map(({ title, icon, description }) => (
+        {BENEFITS.map(({ title, icon: Icon, description }) => (
           <div key={title} className="flex gap-2">
             <div className="h-5 w-5 flex items-center justify-center">
-              {icon}
+              <Icon illustrationStyle={config.illustrationStyle ?? "flat"} />
             </div>
             <div className="flex flex-col">
               <p className="font-semibold text-sm">{title}</p>

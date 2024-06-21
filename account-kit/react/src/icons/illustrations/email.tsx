@@ -1,25 +1,22 @@
-import { useLayoutEffect, useState, type SVGProps } from "react";
-import { type IllustrationStyle } from "./utils.js";
+import { type SVGProps } from "react";
+import type { IllustrationProps } from "./types.js";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const EmailIllustration = ({
   className,
+  illustrationStyle,
   ...props
-}: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
-  const [style, setStyle] = useState<IllustrationStyle>("outline");
-
-  useLayoutEffect(() => {
-    setStyle(
-      getComputedStyle(document.documentElement).getPropertyValue(
-        "--akui-illustration-style"
-      ) as IllustrationStyle
-    );
-  }, []);
-
+}: IllustrationProps) => {
+  console.log("email style", illustrationStyle);
   return (
-    <>
-      {style === "outline" && (
-        <>
+    <div key={illustrationStyle} className={`group ${illustrationStyle}`}>
+      <p>{illustrationStyle}</p>
+      {illustrationStyle === "outline" && (
+        <div
+          key="outline"
+          className={illustrationStyle === "outline" ? "block" : "hidden"}
+        >
+          what the fuck
           <EmailOutlineLight
             className={`dark:hidden ${className ?? ""}`}
             {...props}
@@ -28,10 +25,11 @@ export const EmailIllustration = ({
             className={`hidden dark:block ${className ?? ""}`}
             {...props}
           />
-        </>
+        </div>
       )}
-      {style === "linear" && (
-        <>
+      {illustrationStyle === "linear" && (
+        <div key="linear">
+          fuck me
           <EmailLinearLight
             className={`dark:hidden ${className ?? ""}`}
             {...props}
@@ -40,10 +38,11 @@ export const EmailIllustration = ({
             className={`hidden dark:block ${className ?? ""}`}
             {...props}
           />
-        </>
+        </div>
       )}
-      {style === "filled" && (
-        <>
+      {illustrationStyle === "filled" && (
+        <div key="filled">
+          holy fuck
           <EmailFilledLight
             className={`dark:hidden ${className ?? ""}`}
             {...props}
@@ -52,10 +51,11 @@ export const EmailIllustration = ({
             className={`hidden dark:block ${className ?? ""}`}
             {...props}
           />
-        </>
+        </div>
       )}
-      {style === "flat" && (
-        <>
+      {illustrationStyle === "flat" && (
+        <div key="flat">
+          gm wagmi
           <EmailFlatLight
             className={`dark:hidden ${className ?? ""}`}
             {...props}
@@ -64,9 +64,9 @@ export const EmailIllustration = ({
             className={`hidden dark:block ${className ?? ""}`}
             {...props}
           />
-        </>
+        </div>
       )}
-    </>
+    </div>
   );
 };
 

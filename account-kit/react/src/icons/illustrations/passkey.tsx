@@ -1,21 +1,13 @@
-import { useLayoutEffect, useState, type SVGProps } from "react";
-import type { IllustrationStyle } from "./utils.js";
+import { type SVGProps } from "react";
+import type { IllustrationProps } from "./types.js";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const PasskeyIllustration = ({
   className,
+  illustrationStyle: style,
   ...props
-}: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
-  const [style, setStyle] = useState<IllustrationStyle>("outline");
-
-  useLayoutEffect(() => {
-    setStyle(
-      getComputedStyle(document.documentElement).getPropertyValue(
-        "--akui-illustration-style"
-      ) as IllustrationStyle
-    );
-  }, []);
-
+}: IllustrationProps) => {
+  console.log("illo style in passkey", style);
   return (
     <>
       {style === "outline" && (
