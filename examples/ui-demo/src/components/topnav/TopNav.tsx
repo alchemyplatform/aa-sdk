@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { AlchemyFullLogo } from "../icons/alchemy";
 import ExternalLink from "../shared/ExternalLink";
-import { DOCS } from "@/src/utils/links";
+import { links } from "@/src/utils/links";
 import { GithubLogo } from "../icons/github";
 import { ArrowUpRightIcon } from "../icons/arrow";
 
@@ -15,16 +15,16 @@ export function TopNav() {
             <Link className="p-2 bg-gray-100 rounded-lg" href="#">
               Demo
             </Link>
-            <ExternalLink href={DOCS} className="p-2 hover:bg-gray-100 transition-colors rounded-lg">
+            <ExternalLink href={links.docs} className="p-2 hover:bg-gray-100 transition-colors rounded-lg">
               Docs
             </ExternalLink>
-            <ExternalLink href={DOCS} className="p-2 hover:bg-gray-100 transition-colors rounded-lg flex items-center gap-1 mr-4">
+            <ExternalLink href={links.docs} className="p-2 hover:bg-gray-100 transition-colors rounded-lg flex items-center gap-1 mr-4">
               Examples
               <ArrowUpRightIcon className="h-4 w-4" />
             </ExternalLink>
           </div>
           <BarSeparator />
-          <GithubLogo />
+          <ExternalLink href={links.github}><GithubLogo /></ExternalLink>
         </div>
       </div>
     </div>
