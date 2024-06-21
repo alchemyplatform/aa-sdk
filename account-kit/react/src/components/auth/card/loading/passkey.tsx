@@ -6,8 +6,6 @@ import type { AuthCardProps } from "../index.js";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const LoadingPasskeyAuth = ({ config }: { config: AuthCardProps }) => {
-  console.log("illo style", config.illustrationStyle);
-
   return (
     <div className="flex flex-col gap-5 items-center">
       <div className="flex flex-col items-center justify-center">

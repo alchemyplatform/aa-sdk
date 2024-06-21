@@ -10,8 +10,6 @@ import { PasskeyAdded } from "./passkey-added.js";
 export const Step = (props: AuthCardProps) => {
   const { authStep } = useAuthContext();
 
-  console.log("props", props);
-
   switch (authStep.type) {
     case "email_verify":
     case "passkey_verify":
