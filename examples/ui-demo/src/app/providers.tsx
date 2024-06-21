@@ -24,6 +24,7 @@ export const Providers = (props: PropsWithChildren<{}>) => {
       auth: {
         sections: [[{ type: "email" }], [{ type: "passkey" }]],
         addPasskeyOnSignup: config.auth.addPasskey,
+        illustrationStyle: config.ui.illustrationStyle,
       },
     };
   }, [config]);
