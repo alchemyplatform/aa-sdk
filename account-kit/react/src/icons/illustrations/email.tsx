@@ -1,76 +1,64 @@
-import { useCallback, type SVGProps } from "react";
+import { type SVGProps } from "react";
 import type { IllustrationProps } from "./types.js";
-import type { AuthIllustrationStyle } from "../../components/auth/types.js";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const EmailIllustration = ({
   className,
-  illustrationStyle,
+  illustrationStyle: style,
   ...props
 }: IllustrationProps) => {
-  console.log("email style", illustrationStyle);
-
-  const renderIcon = useCallback(
-    (illustrationStyle: AuthIllustrationStyle) => {
-      switch (illustrationStyle) {
-        case "outline":
-          return (
-            <>
-              <EmailOutlineLight
-                className={`dark:hidden ${className ?? ""}`}
-                {...props}
-              />
-              <EmailOutlineDark
-                className={`hidden dark:block ${className ?? ""}`}
-                {...props}
-              />
-            </>
-          );
-        case "linear":
-          return (
-            <>
-              <EmailLinearLight
-                className={`dark:hidden ${className ?? ""}`}
-                {...props}
-              />
-              <EmailLinearDark
-                className={`hidden dark:block ${className ?? ""}`}
-                {...props}
-              />
-            </>
-          );
-        case "filled":
-          return (
-            <>
-              <EmailFilledLight
-                className={`dark:hidden ${className ?? ""}`}
-                {...props}
-              />
-              <EmailFilledDark
-                className={`hidden dark:block ${className ?? ""}`}
-                {...props}
-              />
-            </>
-          );
-        case "flat":
-          return (
-            <>
-              <EmailFlatLight
-                className={`dark:hidden ${className ?? ""}`}
-                {...props}
-              />
-              <EmailFlatDark
-                className={`hidden dark:block ${className ?? ""}`}
-                {...props}
-              />
-            </>
-          );
-      }
-    },
-    [className, props]
+  return (
+    <>
+      {style === "outline" && (
+        <>
+          <EmailOutlineLight
+            className={`dark:hidden ${className ?? ""}`}
+            {...props}
+          />
+          <EmailOutlineDark
+            className={`hidden dark:block ${className ?? ""}`}
+            {...props}
+          />
+        </>
+      )}
+      {style === "linear" && (
+        <>
+          <EmailLinearLight
+            className={`dark:hidden ${className ?? ""}`}
+            {...props}
+          />
+          <EmailLinearDark
+            className={`hidden dark:block ${className ?? ""}`}
+            {...props}
+          />
+        </>
+      )}
+      {style === "filled" && (
+        <>
+          <EmailFilledLight
+            className={`dark:hidden ${className ?? ""}`}
+            {...props}
+          />
+          <EmailFilledDark
+            className={`hidden dark:block ${className ?? ""}`}
+            {...props}
+          />
+        </>
+      )}
+      {style === "flat" && (
+        <>
+          <EmailFlatLight
+            className={`dark:hidden ${className ?? ""}`}
+            {...props}
+          />
+          <EmailFlatDark
+            className={`hidden dark:block ${className ?? ""}`}
+            {...props}
+          />
+        </>
+      )}
+    </>
   );
-
-  return <div>{renderIcon(illustrationStyle)}</div>;
 };
 
 const EmailOutlineLight = ({

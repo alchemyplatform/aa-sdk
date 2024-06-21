@@ -7,7 +7,6 @@ export const PasskeyIllustration = ({
   illustrationStyle: style,
   ...props
 }: IllustrationProps) => {
-  console.log("illo style in passkey", style);
   return (
     <>
       {style === "outline" && (
