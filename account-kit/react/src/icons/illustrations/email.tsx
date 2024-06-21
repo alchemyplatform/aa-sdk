@@ -1,5 +1,6 @@
-import { type SVGProps } from "react";
+import { useCallback, type SVGProps } from "react";
 import type { IllustrationProps } from "./types.js";
+import type { AuthIllustrationStyle } from "../../components/auth/types.js";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const EmailIllustration = ({
@@ -8,66 +9,68 @@ export const EmailIllustration = ({
   ...props
 }: IllustrationProps) => {
   console.log("email style", illustrationStyle);
-  return (
-    <div key={illustrationStyle} className={`group ${illustrationStyle}`}>
-      <p>{illustrationStyle}</p>
-      {illustrationStyle === "outline" && (
-        <div
-          key="outline"
-          className={illustrationStyle === "outline" ? "block" : "hidden"}
-        >
-          what the fuck
-          <EmailOutlineLight
-            className={`dark:hidden ${className ?? ""}`}
-            {...props}
-          />
-          <EmailOutlineDark
-            className={`hidden dark:block ${className ?? ""}`}
-            {...props}
-          />
-        </div>
-      )}
-      {illustrationStyle === "linear" && (
-        <div key="linear">
-          fuck me
-          <EmailLinearLight
-            className={`dark:hidden ${className ?? ""}`}
-            {...props}
-          />
-          <EmailLinearDark
-            className={`hidden dark:block ${className ?? ""}`}
-            {...props}
-          />
-        </div>
-      )}
-      {illustrationStyle === "filled" && (
-        <div key="filled">
-          holy fuck
-          <EmailFilledLight
-            className={`dark:hidden ${className ?? ""}`}
-            {...props}
-          />
-          <EmailFilledDark
-            className={`hidden dark:block ${className ?? ""}`}
-            {...props}
-          />
-        </div>
-      )}
-      {illustrationStyle === "flat" && (
-        <div key="flat">
-          gm wagmi
-          <EmailFlatLight
-            className={`dark:hidden ${className ?? ""}`}
-            {...props}
-          />
-          <EmailFlatDark
-            className={`hidden dark:block ${className ?? ""}`}
-            {...props}
-          />
-        </div>
-      )}
-    </div>
+
+  const renderIcon = useCallback(
+    (illustrationStyle: AuthIllustrationStyle) => {
+      switch (illustrationStyle) {
+        case "outline":
+          return (
+            <>
+              <EmailOutlineLight
+                className={`dark:hidden ${className ?? ""}`}
+                {...props}
+              />
+              <EmailOutlineDark
+                className={`hidden dark:block ${className ?? ""}`}
+                {...props}
+              />
+            </>
+          );
+        case "linear":
+          return (
+            <>
+              <EmailLinearLight
+                className={`dark:hidden ${className ?? ""}`}
+                {...props}
+              />
+              <EmailLinearDark
+                className={`hidden dark:block ${className ?? ""}`}
+                {...props}
+              />
+            </>
+          );
+        case "filled":
+          return (
+            <>
+              <EmailFilledLight
+                className={`dark:hidden ${className ?? ""}`}
+                {...props}
+              />
+              <EmailFilledDark
+                className={`hidden dark:block ${className ?? ""}`}
+                {...props}
+              />
+            </>
+          );
+        case "flat":
+          return (
+            <>
+              <EmailFlatLight
+                className={`dark:hidden ${className ?? ""}`}
+                {...props}
+              />
+              <EmailFlatDark
+                className={`hidden dark:block ${className ?? ""}`}
+                {...props}
+              />
+            </>
+          );
+      }
+    },
+    [className, props]
   );
+
+  return <div>{renderIcon(illustrationStyle)}</div>;
 };
 
 const EmailOutlineLight = ({
