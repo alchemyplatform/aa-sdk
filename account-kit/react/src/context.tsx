@@ -8,10 +8,10 @@ import type { NoUndefined } from "@aa-sdk/core";
 import { QueryClientProvider, type QueryClient } from "@tanstack/react-query";
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from "react";
 import type { AuthCardProps } from "./components/auth/card/index.js";
@@ -93,9 +93,10 @@ export const AlchemyAccountProvider = (
 ) => {
   const { config, queryClient, children, uiConfig } = props;
 
-  const ref = useRef<HTMLDialogElement>(null);
-  const openAuthModal = () => ref.current?.showModal();
-  const closeAuthModal = () => ref.current?.close();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openAuthModal = useCallback(() => setIsModalOpen(true), []);
+  const closeAuthModal = useCallback(() => setIsModalOpen(false), []);
 
   const initialContext = useMemo(
     () => ({
@@ -108,7 +109,7 @@ export const AlchemyAccountProvider = (
           }
         : undefined,
     }),
-    [config, queryClient, uiConfig]
+    [config, queryClient, uiConfig, openAuthModal, closeAuthModal]
   );
 
   const { status, isAuthenticating } = useSignerStatus(initialContext);
@@ -126,7 +127,7 @@ export const AlchemyAccountProvider = (
 
       openAuthModal();
     }
-  }, [status, uiConfig?.auth]);
+  }, [status, uiConfig?.auth, openAuthModal]);
 
   return (
     <Hydrate {...props}>
@@ -141,9 +142,9 @@ export const AlchemyAccountProvider = (
             {children}
             {uiConfig?.auth && (
               <AuthModal
+                open={isModalOpen}
                 auth={uiConfig.auth}
                 hideError={uiConfig.hideError}
-                ref={ref}
               />
             )}
           </AuthModalContext.Provider>
