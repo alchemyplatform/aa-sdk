@@ -101,6 +101,20 @@ export const accountKitUi: (
             }),
             {} as Record<AccountKitThemeColor, string>
           ),
+          keyframes: {
+            "fade-in": {
+              "0%": { opacity: "0" },
+              "100%": { opacity: "1" },
+            },
+            "slide-up": {
+              "0%": { transform: "translateY(100%)", opacity: "0" },
+              "100%": { transform: "translateY(0%))", opacity: "1" },
+            },
+          },
+          animation: {
+            "fade-in": "fade-in 150ms ease",
+            "slide-up": "slide-up 350ms cubic-bezier(.15,1.15,0.6,1.00)",
+          },
         },
       },
     }
