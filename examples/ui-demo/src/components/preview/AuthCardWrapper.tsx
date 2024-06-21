@@ -1,10 +1,12 @@
 import { cn } from "@/lib/utils";
 import { useConfig } from "@/src/app/state";
-import { AuthCard, AuthType } from "@account-kit/react";
+import { AuthCard, AuthType, useUser, useLogout } from "@account-kit/react";
 import { useMemo } from "react";
 
 export function AuthCardWrapper({ className }: { className?: string }) {
   const { config } = useConfig();
+  const user = useUser();
+  const { logout } = useLogout();
 
   const sections = useMemo<AuthType[][]>(() => {
     const output = [];
@@ -29,8 +31,9 @@ export function AuthCardWrapper({ className }: { className?: string }) {
         backgroundRepeat: "repeat",
       }}
     >
-      <div className="flex flex-col gap-2 w-[368px]">
-        <div className="modal bg-surface-default shadow-md">
+      {!user ? (
+        <div className="flex flex-col gap-2 w-[368px]">
+          <div className="modal bg-surface-default shadow-md">
           <AuthCard
             header={<AuthCardHeader />}
             showSignInText
@@ -38,8 +41,11 @@ export function AuthCardWrapper({ className }: { className?: string }) {
             illustrationStyle={config.ui.illustrationStyle}
             sections={sections}
           />
+          </div>
         </div>
-      </div>
+      ) : (
+        <button className="text-primary font-semibold text-sm px-3 py-[11px] bg-white border border-gray-300 rounded-lg hover:shadow-md" onClick={logout}>Logout</button>
+      )}
     </div>
   );
 }
@@ -56,6 +62,10 @@ function AuthCardHeader() {
   if (!logo) return null;
 
   return (
-    <img style={{ height: "60px", objectFit: 'contain' }} src={logo.fileSrc} alt={logo.fileName} />
+    <img
+      style={{ height: "60px", objectFit: "contain" }}
+      src={logo.fileSrc}
+      alt={logo.fileName}
+    />
   );
 }
