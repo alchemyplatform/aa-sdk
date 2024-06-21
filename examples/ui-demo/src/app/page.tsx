@@ -11,6 +11,8 @@ import { Configuration } from "../components/configuration";
 import { CodePreview } from "../components/preview/CodePreview";
 import { AuthCardWrapper } from "../components/preview/AuthCardWrapper";
 import { CodePreviewSwitch } from "../components/shared/CodePreviewSwitch";
+import ExternalLink from "../components/shared/ExternalLink";
+import { links } from "../utils/links";
 
 const publicSans = Public_Sans({
   subsets: ["latin"],
@@ -37,14 +39,18 @@ export default function Home() {
         <div className="flex justify-between items-center">
           <h2 className="font-semibold text-xl">Demo</h2>
           <div className="flex gap-4 text-secondary">
-            <Button className="border border-gray-400">
-              Integration call
-              <PhoneIcon className="ml-2 h-4 w-4" />
-            </Button>
-            <Button className="border border-gray-400">
-              Quickstart guide
-              <ArrowUpRightIcon className="ml-2 h-4 w-4" />
-            </Button>
+            <ExternalLink href={links.integrationCall}>
+              <Button className="border border-gray-400">
+                Integration call
+                <PhoneIcon className="ml-2 h-4 w-4" />
+              </Button>
+            </ExternalLink>
+            <ExternalLink href={links.quickstartGuide}>
+              <Button className="border border-gray-400">
+                Quickstart guide
+                <ArrowUpRightIcon className="ml-2 h-4 w-4" />
+              </Button>
+            </ExternalLink>
           </div>
         </div>
 
