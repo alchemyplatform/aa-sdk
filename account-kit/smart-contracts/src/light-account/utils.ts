@@ -1,5 +1,5 @@
+import { DefaultFactoryNotDefinedError, toRecord } from "@aa-sdk/core";
 import {
-  DefaultFactoryNotDefinedError,
   arbitrum,
   arbitrumGoerli,
   arbitrumSepolia,
@@ -17,10 +17,9 @@ import {
   polygonAmoy,
   polygonMumbai,
   sepolia,
-  toRecord,
   zora,
   zoraSepolia,
-} from "@aa-sdk/core";
+} from "@account-kit/infra";
 import { fromHex, type Address, type Chain } from "viem";
 import type { LightAccountBase } from "./accounts/base";
 import type {

@@ -2,23 +2,15 @@ import {
   ChainSchema,
   ConnectionConfigSchema,
   SmartAccountClientOptsSchema,
-  getChain,
 } from "@aa-sdk/core";
 import { Alchemy } from "alchemy-sdk";
 import type { Chain } from "viem";
 import z from "zod";
 
 export const AlchemyChainSchema = z.custom<Chain>((chain) => {
-  const _chain = ChainSchema.parse(chain);
+  const chain_ = ChainSchema.parse(chain);
 
-  let chainObject;
-  try {
-    chainObject = getChain(_chain.id);
-  } catch {
-    return false;
-  }
-
-  return chainObject.rpcUrls.alchemy != null;
+  return chain_.rpcUrls.alchemy != null;
 }, "chain must include an alchemy rpc url. See `createAlchemyChain` or use the `AlchemyChainMap` exported from `@aa-sdk/core`");
 
 export const AlchemyProviderConfigSchema = ConnectionConfigSchema.and(
