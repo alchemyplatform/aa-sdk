@@ -135,11 +135,11 @@ export function CornerRadiusOptions() {
 }
 
 const options = [
-  "/icons/email-pending-1.svg",
-  "/icons/email-pending-2.svg",
-  "/icons/email-pending-3.svg",
-  "/icons/email-pending-4.svg",
-];
+  "outline",
+  "linear",
+  "filled",
+  "flat",
+] as const;
 
 function IllustrationStyleOptions() {
   const {
@@ -149,7 +149,7 @@ function IllustrationStyleOptions() {
     setConfig,
   } = useConfig();
 
-  const onChange = (style: number) => {
+  const onChange = (style: "outline" | "linear" | "filled" | "flat") => {
     setConfig((prev) => ({
       ...prev,
       ui: {
@@ -161,9 +161,9 @@ function IllustrationStyleOptions() {
 
   return (
     <div className="flex self-stretch gap-3">
-      {options.map((option, i) => (
+      {options.map((value) => (
         <button
-          key={option}
+          key={value}
           className={cn(
             "py-2 flex-1 basis-0 rounded-lg border border-[#CBD5E1]",
             "text-fg-accent-brand hover:opacity-80",
@@ -171,13 +171,13 @@ function IllustrationStyleOptions() {
           )}
           style={{
             boxShadow:
-              illustrationStyle === i + 1
+              illustrationStyle === value
                 ? "0px 0px 4px 0px rgba(36, 0, 255, 0.7)"
                 : undefined,
           }}
-          onClick={() => onChange(i + 1)}
+          onClick={() => onChange(value)}
         >
-          <IllustrationStyle fill={primaryColor} variant={i+1} />
+          <IllustrationStyle fill={primaryColor} variant={value} />
         </button>
       ))}
     </div>
