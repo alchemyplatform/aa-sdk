@@ -10,7 +10,7 @@ export type Config = {
         theme: 'light' | 'dark';
         primaryColor: string;
         borderRadius: 'none' | 'sm' | 'md' | 'lg';
-        illustrationStyle: number;
+        illustrationStyle: 'outline' | 'linear' | 'filled' | 'flat';
         logoLight: {
             fileName: string;
             fileSrc: string;
@@ -34,7 +34,7 @@ export const DEFAULT_CONFIG: Config = {
         theme: 'light',
         primaryColor: '#363FF9',
         borderRadius: 'none',
-        illustrationStyle: 1,
+        illustrationStyle: 'outline',
         logoLight: undefined,
         logoDark: undefined,
     },

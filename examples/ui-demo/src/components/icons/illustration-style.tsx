@@ -6,9 +6,9 @@ export const IllustrationStyle = ({
   variant,
   ...props
 }: JSX.IntrinsicAttributes &
-  SVGProps<SVGSVGElement> & { size?: number; variant: number }) => {
+  SVGProps<SVGSVGElement> & { size?: number; variant: string }) => {
   switch (variant) {
-    case 1:
+    case "outline":
       return (
         <svg
           width={size}
@@ -38,7 +38,7 @@ export const IllustrationStyle = ({
           />
         </svg>
       );
-    case 2:
+    case "linear":
       return (
         <svg
           width={size + 1}
@@ -73,7 +73,7 @@ export const IllustrationStyle = ({
           />
         </svg>
       );
-    case 3:
+    case "filled":
       return (
         <svg
           width="49"
@@ -111,7 +111,7 @@ export const IllustrationStyle = ({
           />
         </svg>
       );
-    case 4:
+    case "flat":
       return (
         <svg
           width={size}

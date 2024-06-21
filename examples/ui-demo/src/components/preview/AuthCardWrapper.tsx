@@ -35,6 +35,7 @@ export function AuthCardWrapper({ className }: { className?: string }) {
             header={<AuthCardHeader />}
             showSignInText
             showNavigation
+            illustrationStyle={config.ui.illustrationStyle}
             sections={sections}
           />
         </div>
