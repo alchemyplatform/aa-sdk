@@ -19,6 +19,7 @@ export const AuthModal = ({ open, hideError, auth }: AuthModalProps) => {
           hideError={hideError}
           header={auth.header}
           sections={auth.sections}
+          illustrationStyle={auth.illustrationStyle}
           onAuthSuccess={() => closeAuthModal()}
           showClose
         />

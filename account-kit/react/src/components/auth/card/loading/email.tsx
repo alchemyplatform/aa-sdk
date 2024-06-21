@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react";
 import { useAuthenticate } from "../../../../hooks/useAuthenticate.js";
 import { useSignerStatus } from "../../../../hooks/useSignerStatus.js";
-import { MailIllustration } from "../../../../icons/mail.js";
 import { Button } from "../../../button.js";
 import { PoweredBy } from "../../../poweredby.js";
 import { useAuthContext, type AuthStep } from "../../context.js";
 import { Spinner } from "../../../../icons/spinner.js";
 import { ls } from "../../../../strings.js";
+import { EmailIllustration } from "../../../../icons/illustrations/email.js";
+import type { AuthCardProps } from "../index.js";
 
 interface LoadingEmailProps {
+  config: AuthCardProps;
   context: Extract<AuthStep, { type: "email_verify" }>;
 }
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-export const LoadingEmail = ({ context }: LoadingEmailProps) => {
+export const LoadingEmail = ({ config, context }: LoadingEmailProps) => {
   // yup, re-sent and resent. I'm not fixing it
   const [emailResent, setEmailResent] = useState(false);
   const { setAuthStep } = useAuthContext();
@@ -35,7 +37,12 @@ export const LoadingEmail = ({ context }: LoadingEmailProps) => {
   return (
     <div className="flex flex-col gap-5 items-center">
       <div className="flex flex-col items-center justify-center h-12 w-12">
-        <MailIllustration className="animate-pulse" />
+        <EmailIllustration
+          illustrationStyle={config.illustrationStyle ?? "flat"}
+          height="48"
+          width="48"
+          className="animate-pulse"
+        />
       </div>
 
       <h3 className="font-semibold text-lg">{ls.loadingEmail.title}</h3>
