@@ -2,7 +2,7 @@ import { useCallback, useLayoutEffect, useMemo, type ReactNode } from "react";
 import { useSignerStatus } from "../../../hooks/useSignerStatus.js";
 import { IS_SIGNUP_QP } from "../../constants.js";
 import { useAuthContext } from "../context.js";
-import type { AuthType } from "../types.js";
+import type { AuthIllustrationStyle, AuthType } from "../types.js";
 import { Step } from "./steps.js";
 import { Notification } from "../../notification.js";
 import { useAuthError } from "../../../hooks/useAuthError.js";
@@ -13,6 +13,7 @@ export type AuthCardProps = {
   hideError?: boolean;
   header?: ReactNode;
   showSignInText?: boolean;
+  illustrationStyle?: AuthIllustrationStyle;
   // Each section can contain multiple auth types which will be grouped together
   // and separated by an OR divider
   sections?: AuthType[][];

@@ -34,12 +34,13 @@ export function AuthCardWrapper({ className }: { className?: string }) {
       {!user ? (
         <div className="flex flex-col gap-2 w-[368px]">
           <div className="modal bg-surface-default shadow-md">
-            <AuthCard
-              header={<AuthCardHeader />}
-              showSignInText
-              showNavigation
-              sections={sections}
-            />
+          <AuthCard
+            header={<AuthCardHeader />}
+            showSignInText
+            showNavigation
+            illustrationStyle={config.ui.illustrationStyle}
+            sections={sections}
+          />
           </div>
         </div>
       ) : (
