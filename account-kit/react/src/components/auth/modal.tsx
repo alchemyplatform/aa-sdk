@@ -23,6 +23,7 @@ export const AuthModal = forwardRef<HTMLDialogElement, AuthModalProps>(
           hideError={hideError}
           header={auth.header}
           sections={auth.sections}
+          illustrationStyle={auth.illustrationStyle}
           onAuthSuccess={() => closeAuthModal()}
           showClose
         />
