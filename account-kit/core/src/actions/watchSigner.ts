@@ -19,5 +19,5 @@ import type { AlchemyAccountsConfig } from "../types";
 export const watchSigner =
   (config: AlchemyAccountsConfig) =>
   (onChange: (signer?: AlchemyWebSigner) => void) => {
-    return config.clientStore.subscribe(({ signer }) => signer, onChange);
+    return config.store.subscribe(({ signer }) => signer, onChange);
   };

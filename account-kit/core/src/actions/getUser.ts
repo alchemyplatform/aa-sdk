@@ -11,7 +11,7 @@ import type { AlchemyAccountsConfig } from "../types";
 export const getUser = (
   config: AlchemyAccountsConfig
 ): (User & { type: "eoa" | "sca" }) | null => {
-  const user = config.clientStore.getState().user;
+  const user = config.store.getState().user;
   if (user == null) return user ?? null;
 
   // @ts-ignore

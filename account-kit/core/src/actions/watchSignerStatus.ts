@@ -19,7 +19,7 @@ import type { AlchemyAccountsConfig } from "../types.js";
 export const watchSignerStatus =
   (config: AlchemyAccountsConfig) =>
   (onChange: (status: SignerStatus) => void) => {
-    return config.clientStore.subscribe(
+    return config.store.subscribe(
       ({ signerStatus }) => signerStatus,
       onChange,
       { equalityFn: (a, b) => a.status === b.status }

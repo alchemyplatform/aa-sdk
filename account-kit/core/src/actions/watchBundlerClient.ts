@@ -19,7 +19,7 @@ import type { AlchemyAccountsConfig } from "../types";
 export const watchBundlerClient =
   (config: AlchemyAccountsConfig) =>
   (onChange: (bundlerClient: ClientWithAlchemyMethods) => void) => {
-    return config.coreStore.subscribe(
+    return config.store.subscribe(
       ({ bundlerClient }) => bundlerClient,
       onChange
     );

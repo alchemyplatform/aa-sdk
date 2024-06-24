@@ -2,13 +2,13 @@ import { AlchemySignerStatus } from "@account-kit/signer";
 import type { Address } from "@aa-sdk/core";
 import { hydrate as wagmi_hydrate } from "@wagmi/core";
 import { reconnect } from "./actions/reconnect.js";
+import type { AccountState, StoreState, StoredState } from "./store/types.js";
+import type { AlchemyAccountsConfig, SupportedAccountTypes } from "./types.js";
 import {
   convertSignerStatusToState,
   createDefaultAccountState,
   defaultAccountState,
-} from "./store/client.js";
-import type { AccountState, ClientState, StoredState } from "./store/types.js";
-import type { AlchemyAccountsConfig, SupportedAccountTypes } from "./types.js";
+} from "./store/store.js";
 
 /**
  * Will hydrate the client store with the provided initial state if one is provided.
@@ -26,12 +26,12 @@ export function hydrate(
       ? initialState.alchemy
       : initialState;
 
-  if (initialAlchemyState && !config.clientStore.persist.hasHydrated()) {
+  if (initialAlchemyState && !config.store.persist.hasHydrated()) {
     const { accountConfigs, signerStatus, ...rest } = initialAlchemyState;
     const shouldReconnectAccounts =
       signerStatus.isConnected || signerStatus.isAuthenticating;
 
-    config.clientStore.setState({
+    config.store.setState({
       ...rest,
       accountConfigs,
       signerStatus: convertSignerStatusToState(
@@ -60,8 +60,7 @@ export function hydrate(
   return {
     async onMount() {
       if (config._internal.ssr) {
-        await config.clientStore.persist.rehydrate();
-        await config.coreStore.persist.rehydrate();
+        await config.store.persist.rehydrate();
       }
 
       await wagmi_onMount();
@@ -81,13 +80,13 @@ const reconnectingState = <T extends SupportedAccountTypes>(
 });
 
 const hydrateAccountState = (
-  accountConfigs: ClientState["accountConfigs"],
+  accountConfigs: StoreState["accountConfigs"],
   shouldReconnectAccounts: boolean,
   config: AlchemyAccountsConfig
-): ClientState["accounts"] => {
-  const chains = Array.from(
-    config.coreStore.getState().connections.entries()
-  ).map(([, cnx]) => cnx.chain);
+): StoreState["accounts"] => {
+  const chains = Array.from(config.store.getState().connections.entries()).map(
+    ([, cnx]) => cnx.chain
+  );
   const initialState = createDefaultAccountState(chains);
 
   return Object.entries(accountConfigs).reduce((acc, [chainKey, config]) => {
