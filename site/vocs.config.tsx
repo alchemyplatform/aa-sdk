@@ -3,6 +3,7 @@ import { coreSidebar } from "./sidebar/core.js";
 import { infraSidebar } from "./sidebar/infra.js";
 import { introSidebar } from "./sidebar/intro.js";
 import { reactSidebar } from "./sidebar/react.js";
+import { accountKitCoreReferenceSidebar } from "./sidebar/reference/account-kit/core.js";
 import { signerSidebar } from "./sidebar/signer.js";
 import { smartContractsSidebar } from "./sidebar/smart-contracts.js";
 
@@ -108,7 +109,7 @@ export default defineConfig({
     "/signer": signerSidebar,
     "/smart-contracts": smartContractsSidebar,
     "/reference/account-kit/react": [],
-    "/reference/account-kit/core": [],
+    "/reference/account-kit/core": accountKitCoreReferenceSidebar,
     "/reference/account-kit/infra": [],
     "/reference/account-kit/signer": [],
     "/reference/account-kit/smart-contracts": [],

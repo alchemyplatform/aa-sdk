@@ -4,7 +4,9 @@
   "version": "3.8.2-alpha.1",
   "type": "module",
   "scripts": {
+    "predev": "npx tsx ./scripts/prebuild.ts",
     "dev": "vocs dev",
+    "prebuild": "npx tsx ./scripts/prebuild.ts",
     "build": "./retry-build.sh",
     "preview": "vocs preview"
   },
@@ -15,12 +17,19 @@
     "@account-kit/infra": "^4.0.0-alpha.0",
     "@account-kit/react": "^4.0.0-alpha.0",
     "@account-kit/smart-contracts": "^4.0.0-alpha.0",
+    "@types/prettier": "^2.7.3",
     "autoprefixer": "^10.4.16",
+    "change-case": "^5.4.4",
+    "dedent": "^1.5.3",
     "execa": "^8.0.1",
+    "fs-extra": "^11.2.0",
+    "prettier": "^2.8.8",
     "tailwindcss": "^3.3.3",
     "viem": "2.8.6"
   },
   "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "vocs": "^1.0.0-alpha.52"
   }
 }

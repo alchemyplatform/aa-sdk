@@ -5,7 +5,15 @@ import type { AlchemyAccountsConfig } from "../types";
  * Returns the currently logged in user if using an SCA with the AlchemySigner
  * or the connected EOA details.
  *
- * @param config the account config containing app state
+ * @example
+ * ```ts
+ * import { getUser } from "@account-kit/core";
+ * import { config } from "./config";
+ *
+ * const user = getUser(config);
+ * ```
+ *
+ * @param {AlchemyAccountsConfig} config the account config containing app state
  * @returns the user if the signer or an EOA are connected
  */
 export const getUser = (
