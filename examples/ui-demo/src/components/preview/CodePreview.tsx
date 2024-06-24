@@ -3,6 +3,7 @@ import ExternalLink from "../shared/ExternalLink";
 
 import { Roboto_Mono } from "next/font/google";
 import { Config, useConfig } from "@/src/app/state";
+import dedent from "dedent";
 const robotoMono = Roboto_Mono({
   subsets: ["latin"],
   display: "swap",
@@ -56,19 +57,19 @@ function CodeBlock({ title, code }: { title: string; code: string }) {
 function getTailwindCode(config: Config) {
   const { ui } = config
   // TODO: separate primaryColor for light and dark mode
-  return `import { withAccountKitUi, createColorSet } from "@alchemy/aa-alchemy/tailwind";
-import type { Config } from "tailwindcss";
+  return dedent`
+  import { withAccountKitUi, createColorSet } from "@alchemy/aa-alchemy/tailwind";
+  import type { Config } from "tailwindcss";
 
-// wrap your existing tailwind config with 'withAccountKitUi'
-// docs on setting up tailwind here: https://tailwindcss.com/docs/installation
-export default withAccountKitUi(<your tailwind config>, {
-   // override account kit themes
-   colors: {
-     "btn-primary": createColorSet("${ui.primaryColor}", "${ui.primaryColor}"),
-     "fg-accent-brand": createColorSet("${ui.primaryColor}", "${ui.primaryColor}"),
-   },
- })
-`
+  // wrap your existing tailwind config with 'withAccountKitUi'
+  // docs on setting up tailwind here: https://tailwindcss.com/docs/installation
+  export default withAccountKitUi(<your tailwind config>, {
+    // override account kit themes
+    colors: {
+      "btn-primary": createColorSet("${ui.primaryColor}", "${ui.primaryColor}"),
+      "fg-accent-brand": createColorSet("${ui.primaryColor}", "${ui.primaryColor}"),
+    },
+  })`;
 }
 
 function getConfigCode(config: Config) {
@@ -84,18 +85,19 @@ function getConfigCode(config: Config) {
 
   sections.push([{ type: "passkey" }])
 
-  return `const config = createConfig({
-  // required
-  rpcUrl: "/api/rpc",
-  chain: sepolia,
-  ssr: true,
-});
+  return dedent`
+  const config = createConfig({
+    // required
+    rpcUrl: "/api/rpc",
+    chain: sepolia,
+    ssr: true,
+  });
   
-const uiConfig = {
-  auth: {
-    sections: ${JSON.stringify(sections)},
-    addPasskeyOnSignup: ${config.auth.addPasskey},
-  },
-};
-  `
+  const uiConfig = {
+    auth: {
+      sections: ${JSON.stringify(sections)},
+      addPasskeyOnSignup: ${config.auth.addPasskey},
+    },
+  };
+`
 }
