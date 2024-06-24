@@ -59,6 +59,8 @@ function getTailwindCode(config: Config) {
   return `import { withAccountKitUi, createColorSet } from "@alchemy/aa-alchemy/tailwind";
 import type { Config } from "tailwindcss";
 
+// wrap your existing tailwind config with 'withAccountKitUi'
+// docs on setting up tailwind here: https://tailwindcss.com/docs/installation
 export default withAccountKitUi(<your tailwind config>, {
    // override account kit themes
    colors: {
@@ -82,7 +84,14 @@ function getConfigCode(config: Config) {
 
   sections.push([{ type: "passkey" }])
 
-  return `const uiConfig = {
+  return `const config = createConfig({
+  // required
+  rpcUrl: "/api/rpc",
+  chain: sepolia,
+  ssr: true,
+});
+  
+const uiConfig = {
   auth: {
     sections: ${JSON.stringify(sections)},
     addPasskeyOnSignup: ${config.auth.addPasskey},
