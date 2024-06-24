@@ -8,7 +8,10 @@ export type Config = {
     },
     ui: {
         theme: 'light' | 'dark';
-        primaryColor: string;
+        primaryColor: {
+            dark: string;
+            light: string;
+        }
         borderRadius: 'none' | 'sm' | 'md' | 'lg';
         illustrationStyle: 'outline' | 'linear' | 'filled' | 'flat';
         logoLight: {
@@ -32,7 +35,10 @@ export const DEFAULT_CONFIG: Config = {
     },
     ui: {
         theme: 'light',
-        primaryColor: '#363FF9',
+        primaryColor: {
+            light: '#363FF9',
+            dark: '#9AB7FF',
+        },
         borderRadius: 'none',
         illustrationStyle: 'outline',
         logoLight: undefined,

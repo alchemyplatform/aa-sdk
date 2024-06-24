@@ -1,12 +1,8 @@
 import { cn } from "@/lib/utils";
 import { ColorPicker } from "./ColorPicker";
 import { useConfig } from "@/src/app/state";
-import { PhotoIcon } from "../icons/photo";
 import { PhotoUploads } from "./PhotoUpload";
-import { Switch } from "@/components/ui/switch";
 import { ThemeSwitch } from "../shared/ThemeSwitch";
-import { useState } from "react";
-import Image from "next/image";
 import { FileCode } from "lucide-react";
 import ExternalLink from "../shared/ExternalLink";
 import { IllustrationStyle } from "../icons/illustration-style";
@@ -43,7 +39,20 @@ export function Styling({ className }: { className?: string }) {
             Applied to links and buttons and illustrations
           </p>
         </div>
-        <ColorPicker />
+        <div className="flex gap-2 self-stretch">
+          <div className="flex flex-col gap-2 flex-1 basis-0">
+            <div className="text-gray-600 text-xs font-semibold">
+              Light mode
+            </div>
+            <ColorPicker theme="light" />
+          </div>
+          <div className="flex flex-col gap-2 flex-1 basis-0">
+            <div className="text-gray-600 text-xs font-semibold">
+              Dark mode
+            </div>
+            <ColorPicker theme="dark" />
+          </div>
+        </div>
       </div>
 
       <div className="flex flex-col gap-4 border-b border-border py-6 items-start">
@@ -134,17 +143,12 @@ export function CornerRadiusOptions() {
   );
 }
 
-const options = [
-  "outline",
-  "linear",
-  "filled",
-  "flat",
-] as const;
+const options = ["outline", "linear", "filled", "flat"] as const;
 
 function IllustrationStyleOptions() {
   const {
     config: {
-      ui: { illustrationStyle, primaryColor },
+      ui: { illustrationStyle, primaryColor, theme },
     },
     setConfig,
   } = useConfig();
@@ -177,7 +181,7 @@ function IllustrationStyleOptions() {
           }}
           onClick={() => onChange(value)}
         >
-          <IllustrationStyle fill={primaryColor} variant={value} />
+          <IllustrationStyle fill={primaryColor[theme]} variant={value} />
         </button>
       ))}
     </div>
