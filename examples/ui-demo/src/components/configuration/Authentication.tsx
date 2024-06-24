@@ -5,11 +5,30 @@ import { MailIcon } from "../icons/mail"
 import { WalletIcon } from "../icons/wallet"
 import { SocialIcon } from "../icons/social"
 import { BiometricIcon } from "../icons/biometric"
+import { useConfig } from "@/src/app/state"
 
 export const Authentication = ({ className }: { className?: string }) => {
-  const [emailActive, setEmailActive] = useState(true)
-  const [walletsActive, setWalletsActive] = useState(false)
-  const [passkeysActive, setPasskeysActive] = useState(false)
+  const { config, setConfig } = useConfig()
+
+  const setWalletsActive = (active: boolean) => {
+    setConfig((prev) => ({
+      ...prev,
+      auth: {
+        ...prev.auth,
+        showExternalWallets: active
+      }
+    }))
+  }
+
+  const setPasskeysActive = (active: boolean) => {
+    setConfig((prev) => ({
+      ...prev,
+      auth: {
+        ...prev.auth,
+        addPasskey: active
+      }
+    }))
+  }
 
   return (
     <div className={cn('flex flex-col gap-6', className)}>
@@ -18,13 +37,13 @@ export const Authentication = ({ className }: { className?: string }) => {
         <AuthMethod
           icon={<MailIcon />}
           name="Email"
-          active={emailActive}
+          active={config.auth.showEmail}
           disabled
         />
         <AuthMethod
           icon={<WalletIcon />}
           name="External wallets"
-          active={walletsActive}
+          active={config.auth.showExternalWallets}
           setActive={setWalletsActive}
         />
         <AuthMethod
@@ -40,7 +59,7 @@ export const Authentication = ({ className }: { className?: string }) => {
           icon={<BiometricIcon />}
           name="Add passkey on signup"
           details={<p className="text-xs font-secondary-foreground">Prompt users to add a passkey after signing up with <span className="font-bold">email</span> or <span className="font-bold">social auth</span></p>}
-          active={passkeysActive}
+          active={config.auth.addPasskey}
           setActive={setPasskeysActive}
         />
       </div>
