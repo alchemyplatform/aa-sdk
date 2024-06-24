@@ -56,7 +56,6 @@ function CodeBlock({ title, code }: { title: string; code: string }) {
 
 function getTailwindCode(config: Config) {
   const { ui } = config
-  // TODO: separate primaryColor for light and dark mode
   return dedent`
   import { withAccountKitUi, createColorSet } from "@alchemy/aa-alchemy/tailwind";
   import type { Config } from "tailwindcss";
@@ -66,8 +65,8 @@ function getTailwindCode(config: Config) {
   export default withAccountKitUi(<your tailwind config>, {
     // override account kit themes
     colors: {
-      "btn-primary": createColorSet("${ui.primaryColor}", "${ui.primaryColor}"),
-      "fg-accent-brand": createColorSet("${ui.primaryColor}", "${ui.primaryColor}"),
+      "btn-primary": createColorSet("${ui.primaryColor.light}", "${ui.primaryColor.dark}"),
+      "fg-accent-brand": createColorSet("${ui.primaryColor.light}", "${ui.primaryColor.dark}"),
     },
   })`;
 }
