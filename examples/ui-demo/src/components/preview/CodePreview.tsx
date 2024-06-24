@@ -2,12 +2,15 @@ import { cn } from "@/lib/utils";
 import ExternalLink from "../shared/ExternalLink";
 
 import { Roboto_Mono } from "next/font/google";
+import { Config, useConfig } from "@/src/app/state";
+import dedent from "dedent";
 const robotoMono = Roboto_Mono({
   subsets: ["latin"],
   display: "swap",
 });
 
 export function CodePreview() {
+  const { config } = useConfig()
   return (
     <div className="flex flex-col gap-6 p-6 overflow-y-auto">
       <div className="flex flex-col gap-2">
@@ -25,11 +28,11 @@ export function CodePreview() {
       </div>
       <div className="flex flex-col gap-4">
         <div className="font-semibold text-secondary">Style</div>
-        <CodeBlock title="tailwind.config.ts" code={styleCode} />
+        <CodeBlock title="tailwind.config.ts" code={getTailwindCode(config)} />
       </div>
       <div className="flex flex-col gap-4">
         <div className="font-semibold text-secondary">Config</div>
-        <CodeBlock title="src/app/page.tsx" code={styleCode} />
+        <CodeBlock title="src/app/config.ts" code={getConfigCode(config)} />
       </div>
     </div>
   );
@@ -50,9 +53,51 @@ function CodeBlock({ title, code }: { title: string; code: string }) {
   );
 }
 
-const styleCode = `import { withAccountKitUi } from "@alchemy/aa-alchemy/tailwind";
-import type { Config } from "tailwindcss";
 
-const config: Config = <your tailwind config>;
-export default withAccountKitUi(config);
-`;
+function getTailwindCode(config: Config) {
+  const { ui } = config
+  // TODO: separate primaryColor for light and dark mode
+  return dedent`
+  import { withAccountKitUi, createColorSet } from "@alchemy/aa-alchemy/tailwind";
+  import type { Config } from "tailwindcss";
+
+  // wrap your existing tailwind config with 'withAccountKitUi'
+  // docs on setting up tailwind here: https://tailwindcss.com/docs/installation
+  export default withAccountKitUi(<your tailwind config>, {
+    // override account kit themes
+    colors: {
+      "btn-primary": createColorSet("${ui.primaryColor}", "${ui.primaryColor}"),
+      "fg-accent-brand": createColorSet("${ui.primaryColor}", "${ui.primaryColor}"),
+    },
+  })`;
+}
+
+function getConfigCode(config: Config) {
+  const sections = []
+
+  if (config.auth.showEmail) {
+    sections.push([{ type: "email" }])
+  }
+
+  if (config.auth.showExternalWallets) {
+    sections.push([{ type: "injected" }])
+  }
+
+  sections.push([{ type: "passkey" }])
+
+  return dedent`
+  const config = createConfig({
+    // required
+    rpcUrl: "/api/rpc",
+    chain: sepolia,
+    ssr: true,
+  });
+  
+  const uiConfig = {
+    auth: {
+      sections: ${JSON.stringify(sections)},
+      addPasskeyOnSignup: ${config.auth.addPasskey},
+    },
+  };
+`
+}
