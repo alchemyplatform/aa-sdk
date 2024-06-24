@@ -25,7 +25,7 @@ export type Config = {
     }
 }
 
-type ConfigType = { config: Config; setConfig: Dispatch<SetStateAction<Config>>}
+export type ConfigContextType = { config: Config; setConfig: Dispatch<SetStateAction<Config>>}
 
 export const DEFAULT_CONFIG: Config = {
     auth: {
@@ -46,12 +46,12 @@ export const DEFAULT_CONFIG: Config = {
     },
 }
 
-export const ConfigContext = createContext<ConfigType>({
+export const ConfigContext = createContext<ConfigContextType>({
     config: DEFAULT_CONFIG,
     setConfig: () => undefined,
 });
 
-export function useConfig(): ConfigType {
+export function useConfig(): ConfigContextType {
     const configContext = useContext(ConfigContext);
     
     if (!configContext) {
