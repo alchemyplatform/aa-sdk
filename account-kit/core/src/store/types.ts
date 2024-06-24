@@ -37,15 +37,12 @@ export type AccountState<TAccount extends SupportedAccountTypes> =
   | { status: "DISCONNECTED"; account: undefined }
   | { status: "ERROR"; account: undefined; error: Error };
 
-export type CreateClientStoreParams = {
+export type ClientStoreConfig = {
   client: PartialBy<
     Exclude<AlchemySignerParams["client"], AlchemySignerWebClient>,
     "iframeConfig"
   >;
-  chains: Chain[];
   sessionConfig?: AlchemySignerParams["sessionConfig"];
-  storage?: Storage;
-  ssr?: boolean;
 };
 
 export type SignerStatus = {
@@ -56,7 +53,26 @@ export type SignerStatus = {
   isDisconnected: boolean;
 };
 
-export type ClientState = {
+export type StoredState =
+  | Omit<StoreState, "signer" | "accounts">
+  | {
+      alchemy: Omit<StoreState, "signer" | "accounts">;
+      wagmi?: WagmiState;
+    };
+
+export type CreateAccountKitStoreParams = ClientStoreConfig & {
+  connections: Connection[];
+  chain: Chain;
+  client: PartialBy<
+    Exclude<AlchemySignerParams["client"], AlchemySignerWebClient>,
+    "iframeConfig"
+  >;
+  sessionConfig?: AlchemySignerParams["sessionConfig"];
+  storage?: Storage;
+  ssr?: boolean;
+};
+
+export type StoreState = {
   // non-serializable
   // getting this state should throw an error if not on the client
   signer?: AlchemyWebSigner;
@@ -68,7 +84,7 @@ export type ClientState = {
   // serializable state
   // NOTE: in some cases this can be serialized to cookie storage
   // be mindful of how big this gets. cookie limit 4KB
-  config: CreateClientStoreParams;
+  config: ClientStoreConfig;
   accountConfigs: {
     [chain: number]: Partial<{
       [key in SupportedAccountTypes]: AccountConfig<key>;
@@ -76,27 +92,12 @@ export type ClientState = {
   };
   user?: User;
   signerStatus: SignerStatus;
-};
-
-export type ClientStore = Mutate<
-  StoreApi<ClientState>,
-  [["zustand/subscribeWithSelector", never], ["zustand/persist", ClientState]]
->;
-
-export type CoreState = {
   bundlerClient: ClientWithAlchemyMethods;
   chain: Chain;
   connections: Map<number, Connection>;
 };
 
-export type CoreStore = Mutate<
-  StoreApi<CoreState>,
-  [["zustand/subscribeWithSelector", never], ["zustand/persist", CoreState]]
+export type Store = Mutate<
+  StoreApi<StoreState>,
+  [["zustand/subscribeWithSelector", never], ["zustand/persist", StoreState]]
 >;
-
-export type StoredState =
-  | Omit<ClientState, "signer" | "accounts">
-  | {
-      alchemy: Omit<ClientState, "signer" | "accounts">;
-      wagmi?: WagmiState;
-    };

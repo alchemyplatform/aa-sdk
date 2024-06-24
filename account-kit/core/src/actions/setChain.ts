@@ -21,14 +21,14 @@ import type { AlchemyAccountsConfig } from "../types.js";
  * @param {Chain} chain the chain to change to. It must be present in the connections config object
  */
 export async function setChain(config: AlchemyAccountsConfig, chain: Chain) {
-  const connection = config.coreStore.getState().connections.get(chain.id);
+  const connection = config.store.getState().connections.get(chain.id);
   if (connection == null) {
     throw new ChainNotFoundError(chain);
   }
 
   await switchChain(config._internal.wagmiConfig, { chainId: chain.id });
 
-  config.coreStore.setState(() => ({
+  config.store.setState(() => ({
     chain,
     bundlerClient: createAlchemyPublicRpcClient({
       chain,

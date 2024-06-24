@@ -18,7 +18,7 @@ import { getChain } from "./getChain.js";
  */
 export function getConnection(config: AlchemyAccountsConfig): Connection {
   const chain = getChain(config);
-  const connection = config.coreStore.getState().connections.get(chain.id);
+  const connection = config.store.getState().connections.get(chain.id);
   if (!connection) {
     throw new ChainNotFoundError(chain);
   }
