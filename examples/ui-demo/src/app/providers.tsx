@@ -30,11 +30,11 @@ export const Providers = (props: PropsWithChildren<{}>) => {
   }, [config]);
 
   useEffect(() => {
-    if (!config.ui.primaryColor) return 
-
     const root = document.querySelector(':root') as HTMLElement;
-    root?.style.setProperty("--akui-fg-accent-brand", config.ui.primaryColor)
-    root?.style.setProperty("--akui-btn-primary", config.ui.primaryColor)
+
+    const primaryColor = config.ui.primaryColor[config.ui.theme]
+    root?.style.setProperty("--akui-fg-accent-brand", primaryColor)
+    root?.style.setProperty("--akui-btn-primary", primaryColor)
 
     if (config.ui.theme === 'dark') {
       root.classList.remove("light")

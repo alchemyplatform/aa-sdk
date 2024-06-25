@@ -14,7 +14,7 @@ export function TopNav() {
             height={80}
             src="/images/account-kit-logo.png"
             alt="Account Kit by Alchemy"
-            style={{ objectFit: 'contain' }}
+            style={{ objectFit: 'contain', height: 'auto' }}
           />
         <div className="flex gap-4 items-center h-8">
           <div className="flex items-center gap-6 font-semibold">
