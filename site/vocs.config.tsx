@@ -1,3 +1,4 @@
+import { accountKitReactReferenceSidebar } from "sidebar/reference/account-kit/react.js";
 import { defineConfig } from "vocs";
 import { coreSidebar } from "./sidebar/core.js";
 import { infraSidebar } from "./sidebar/infra.js";
@@ -109,7 +110,7 @@ export default defineConfig({
     "/infra": infraSidebar,
     "/signer": signerSidebar,
     "/smart-contracts": smartContractsSidebar,
-    "/reference/account-kit/react": [],
+    "/reference/account-kit/react": accountKitReactReferenceSidebar,
     "/reference/account-kit/core": accountKitCoreReferenceSidebar,
     "/reference/account-kit/infra": accountKitInfraReferenceSidebar,
     "/reference/account-kit/signer": [],
