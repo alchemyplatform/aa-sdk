@@ -168,12 +168,37 @@ export const defaultLightAccountVersion = <
  */
 export const getDefaultLightAccountFactoryAddress = (
   chain: Chain,
-  version: LightAccountVersion = "v1.1.0"
+  version: GetLightAccountVersion<"LightAccount">
 ): Address => {
   const address =
-    AccountVersionRegistry.LightAccount[version].address[chain.id];
+    AccountVersionRegistry.LightAccount[version].address[chain.id] ??
+    AccountVersionRegistry.LightAccount[version].address[supportedChains[0].id];
   if (!address)
     throw new DefaultFactoryNotDefinedError("LightAccount", chain, "0.6.0");
+  return address.factory;
+};
+
+/**
+ * Utility method returning the default multi owner light account factory address given a {@link Chain} object
+ *
+ * @param chain - a {@link Chain} object
+ * @param version - the version of the light account to get the factory address for
+ * @returns a {@link Address} for the given chain
+ * @throws if the chain doesn't have an address currently deployed
+ */
+export const getDefaultMultiOwnerLightAccountFactoryAddress = (
+  chain: Chain,
+  version: GetLightAccountVersion<"MultiOwnerLightAccount">
+) => {
+  const address =
+    AccountVersionRegistry.LightAccount[version].address[chain.id] ??
+    AccountVersionRegistry.LightAccount[version].address[supportedChains[0].id];
+  if (!address)
+    throw new DefaultFactoryNotDefinedError(
+      "MultiOwnerLightAccount",
+      chain,
+      "0.7.0"
+    );
   return address.factory;
 };
 
@@ -182,7 +207,6 @@ export const getDefaultLightAccountFactoryAddress = (
  * to not support 1271 signing.
  *
  * Light accounts with versions v1.0.1 and v1.0.2 do not support 1271 signing.
- *
  */
 export const LightAccountUnsupported1271Impls = [
   AccountVersionRegistry.LightAccount["v1.0.1"],
@@ -194,7 +218,6 @@ export const LightAccountUnsupported1271Impls = [
  * to not support 1271 signing.
  *
  * Light accounts with versions v1.0.1 and v1.0.2 do not support 1271 signing.
- *
  */
 export const LightAccountUnsupported1271Factories = new Set(
   LightAccountUnsupported1271Impls.map((x) =>
@@ -266,7 +289,7 @@ export async function getLightAccountVersionDef<
         ];
         return chain.id in def.address
           ? [def.address[chain.id].impl, version]
-          : [null, version];
+          : [def.address[supportedChains[0].id].impl, version];
       })
       .filter(([impl]) => impl !== null) as [
       Address,
@@ -283,7 +306,7 @@ export async function getLightAccountVersionDef<
         ];
         return chain.id in def.address
           ? [def.address[chain.id].factory, version]
-          : [null, version];
+          : [def.address[supportedChains[0].id].factory, version];
       })
       .filter(([impl]) => impl !== null) as [
       Address,
