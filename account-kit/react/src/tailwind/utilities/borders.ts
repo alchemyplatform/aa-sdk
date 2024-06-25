@@ -1,5 +1,5 @@
 import type { UtilityDef } from "../types.js";
-import { getColorVariableName } from "../utils.js";
+import { getColorVariableName, getScaledBorderRadius } from "../utils.js";
 
 /**
  * A utility function for generating the account kit border utilities
@@ -22,4 +22,25 @@ export const borderUtilities: UtilityDef = {
     borderStyle: "solid",
     borderColor: `var(${getColorVariableName("critical")})`,
   },
+  // default border radius
+  ".radius": {
+    borderRadius: getScaledBorderRadius(1),
+  },
+};
+
+export const borderRadiusValues = {
+  "1": 1,
+  "2": 2,
+  "4": 4,
+};
+
+export const borderRadiusUtilities = {
+  radius: (value: string | number) => ({
+    borderRadius:
+      typeof value === "string" ? value : getScaledBorderRadius(value),
+  }),
+  "radius-t": (value: string | number) => ({
+    borderRadiusTop:
+      typeof value === "string" ? value : getScaledBorderRadius(value),
+  }),
 };

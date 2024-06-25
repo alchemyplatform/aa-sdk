@@ -1,5 +1,6 @@
 import type { Config as TailwindConfig } from "tailwindcss";
 import plugin from "tailwindcss/plugin";
+import { borderRadiusVariables } from "./components/border-vars.js";
 import { buttonComponents } from "./components/buttons.js";
 import { colorVariables } from "./components/colorsvars.js";
 import { formControlComponents } from "./components/form-controls.js";
@@ -7,7 +8,11 @@ import { inputComponents } from "./components/input.js";
 import { modalComponents } from "./components/modal.js";
 import { createDefaultTheme } from "./theme.js";
 import type { AccountKitThemeColor, AccountKitThemeOverride } from "./types.js";
-import { borderUtilities } from "./utilities/borders.js";
+import {
+  borderRadiusUtilities,
+  borderRadiusValues,
+  borderUtilities,
+} from "./utilities/borders.js";
 import { apply, getColorVariableName } from "./utils.js";
 
 type TailWindPlugin = ReturnType<typeof plugin>;
@@ -74,19 +79,23 @@ export const accountKitUi: (
 ) => TailWindPlugin = (themeOverride) => {
   const defaultTheme = createDefaultTheme();
   const accountKitTheme = apply(defaultTheme, themeOverride);
-  const { colors, ...rest } = accountKitTheme;
+  const { colors, borderRadius, ...rest } = accountKitTheme;
 
   return plugin(
-    ({ addComponents, addUtilities }) => {
+    ({ addComponents, addUtilities, matchUtilities }) => {
       // utilities
       addUtilities(borderUtilities);
 
       // components
       addComponents(colorVariables(accountKitTheme));
+      addComponents(borderRadiusVariables(accountKitTheme));
       addComponents(buttonComponents);
       addComponents(inputComponents);
       addComponents(formControlComponents);
       addComponents(modalComponents);
+      matchUtilities(borderRadiusUtilities, {
+        values: borderRadiusValues,
+      });
     },
     {
       theme: {
@@ -146,6 +155,5 @@ export const withAccountKitUi = (
         ...config.content,
         files: [...config.content.files, getAccountKitContentPath()],
       },
-  // TODO: this isn't good. it means if someone is already using daisy then we'll end up destroying their config
   plugins: [...(config.plugins ?? []), accountKitUi(themeOverride)],
 });
