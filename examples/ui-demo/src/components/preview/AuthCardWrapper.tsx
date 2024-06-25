@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { useConfig } from "@/src/app/state";
-import { AuthCard, AuthType, useUser, useLogout } from "@account-kit/react";
+import { AuthCard, AuthType, useLogout, useUser } from "@account-kit/react";
 import { useMemo } from "react";
 
 export function AuthCardWrapper({ className }: { className?: string }) {
@@ -44,7 +44,7 @@ export function AuthCardWrapper({ className }: { className?: string }) {
           </div>
         </div>
       ) : (
-        <button className="text-primary font-semibold text-sm px-3 py-[11px] bg-white border border-gray-300 rounded-lg hover:shadow-md" onClick={logout}>Logout</button>
+        <button className="text-primary font-semibold text-sm px-3 py-[11px] bg-white border border-gray-300 rounded-lg hover:shadow-md" onClick={() => logout()}>Logout</button>
       )}
     </div>
   );
