@@ -17,6 +17,7 @@ describe("tailwind utils test", () => {
 
       expect(apply(theme, override)).toMatchInlineSnapshot(`
         {
+          "borderRadius": "sm",
           "colors": {
             "active": {
               "dark": "#94A3B8",

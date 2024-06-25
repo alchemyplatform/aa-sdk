@@ -32,6 +32,9 @@ export interface AccountKitTheme {
     "bg-surface-warning": ColorVariantRecord;
     "bg-surface-error": ColorVariantRecord;
   };
+  // these define the border radius base for the various components.
+  // the mapped value applies to the smallest value used and everything scales up from there by multiple of 2
+  borderRadius: "none" | "xs" | "sm" | "md" | "lg";
 }
 
 export type AccountKitThemeColor = keyof AccountKitTheme["colors"];

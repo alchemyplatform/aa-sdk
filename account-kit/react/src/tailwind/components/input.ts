@@ -27,7 +27,7 @@ export const inputComponents: ComponentDef = {
     "&:focus, &:focus-visible, &:focus-within, &:active": {
       "@apply active-border": {},
     },
-    borderRadius: "8px",
+    "@apply radius": {},
     "&-error, &[error]": {
       "@apply critical-border": {},
     },
