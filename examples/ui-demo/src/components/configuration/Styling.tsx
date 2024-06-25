@@ -181,7 +181,7 @@ function IllustrationStyleOptions() {
           }}
           onClick={() => onChange(value)}
         >
-          <IllustrationStyle fill={primaryColor[theme]} variant={value} />
+          <IllustrationStyle className="text-fg-accent-brand" variant={value} />
         </button>
       ))}
     </div>
