@@ -19,7 +19,7 @@ export function Notification({ className, type, message }: NotificationProps) {
   })();
   return (
     <div
-      className={`${bgColor} text-sm py-1 px-2 rounded-lg text-white ${
+      className={`${bgColor} text-sm py-1 px-2 radius text-white ${
         className ?? ""
       }`}
     >
