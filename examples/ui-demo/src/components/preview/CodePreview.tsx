@@ -4,6 +4,8 @@ import ExternalLink from "../shared/ExternalLink";
 import { Roboto_Mono } from "next/font/google";
 import { Config, useConfig } from "@/src/app/state";
 import dedent from "dedent";
+import { Check, Copy } from "lucide-react";
+import { useState } from "react";
 const robotoMono = Roboto_Mono({
   subsets: ["latin"],
   display: "swap",
@@ -39,10 +41,21 @@ export function CodePreview() {
 }
 
 function CodeBlock({ title, code }: { title: string; code: string }) {
+  const [copied, setCopied] = useState(false);
+
+  const onCopy = () => {
+    navigator.clipboard.writeText(code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
+
   return (
     <div className="rounded-lg flex flex-col text-sm overflow-hidden">
-      <div className="px-4 py-3 bg-gray-700 text-white font-medium">
-        {title}
+      <div className="flex justify-between px-4 py-3 bg-gray-700 text-white font-medium">
+        <div>{title}</div>
+        <button onClick={onCopy} className="bg-white/10 rounded-lg h-7 w-7 flex justify-center items-center">
+          {copied ? <Check size={16} /> : <Copy size={16} />}
+        </button>
       </div>
       <pre
         className={cn("px-4 py-6 bg-gray-800 text-white", robotoMono.className)}
@@ -56,7 +69,6 @@ function CodeBlock({ title, code }: { title: string; code: string }) {
 
 function getTailwindCode(config: Config) {
   const { ui } = config
-  // TODO: separate primaryColor for light and dark mode
   return dedent`
   import { withAccountKitUi, createColorSet } from "@alchemy/aa-alchemy/tailwind";
   import type { Config } from "tailwindcss";
@@ -66,8 +78,8 @@ function getTailwindCode(config: Config) {
   export default withAccountKitUi(<your tailwind config>, {
     // override account kit themes
     colors: {
-      "btn-primary": createColorSet("${ui.primaryColor}", "${ui.primaryColor}"),
-      "fg-accent-brand": createColorSet("${ui.primaryColor}", "${ui.primaryColor}"),
+      "btn-primary": createColorSet("${ui.primaryColor.light}", "${ui.primaryColor.dark}"),
+      "fg-accent-brand": createColorSet("${ui.primaryColor.light}", "${ui.primaryColor.dark}"),
     },
   })`;
 }
