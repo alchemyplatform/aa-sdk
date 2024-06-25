@@ -58,3 +58,22 @@ export const getColorVariableName = (name: AccountKitThemeColor): string => {
   // add a prefix to the color variable name to avoid conflicts
   return `--akui-${name}`;
 };
+
+/**
+ * Used to get the css variable name for the base border radius
+ *
+ * @returns the css variable name for the base border radius
+ */
+export const getBorderRadiusBaseVariableName = (): string => {
+  return "--akui-border-radius-base";
+};
+
+/**
+ * Returns a css value for scaling the base border radius
+ *
+ * @param scale the scale factor to apply to the base border radius
+ * @returns Returns a css value for scaling the base border radius
+ */
+export const getScaledBorderRadius = (scale: number) => {
+  return `calc(var(${getBorderRadiusBaseVariableName()}) * ${scale})`;
+};

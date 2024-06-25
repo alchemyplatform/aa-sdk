@@ -8,8 +8,7 @@ export const buttonComponents: ComponentDef = {
     "@apply shrink-0": {},
     "@apply cursor-pointer": {},
     "@apply transition-shadow": {},
-    // for w/e reason, using @apply rounded-[8px] doesn't work
-    borderRadius: "8px",
+    "@apply radius": {},
     "&:hover": {
       // this is simpler than using the hover: with apply directive
       boxShadow: "2.8px 2.8px 8.8px 0px rgba(22, 22, 22, 0.14)",
