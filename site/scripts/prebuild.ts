@@ -4,7 +4,11 @@ import fs from "fs-extra";
 import path from "node:path";
 import { format } from "prettier";
 
-const referencePackages = ["@account-kit/core", "@account-kit/infra"];
+const referencePackages = [
+  "@account-kit/core",
+  "@account-kit/infra",
+  "@account-kit/react",
+];
 
 referencePackages.forEach(async (pkg) => {
   const cleanPkg = pkg.replace("@", "");
