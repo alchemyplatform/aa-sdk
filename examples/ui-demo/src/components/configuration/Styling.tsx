@@ -148,7 +148,7 @@ const options = ["outline", "linear", "filled", "flat"] as const;
 function IllustrationStyleOptions() {
   const {
     config: {
-      ui: { illustrationStyle, primaryColor, theme },
+      ui: { illustrationStyle },
     },
     setConfig,
   } = useConfig();
