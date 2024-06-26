@@ -249,9 +249,9 @@ type toSmartContractAccount = <
 The `signTypedData` method found on `SmartAccountSigner` has been updated to match the signature found on `SmartContractAccount` and viem's `Account`.
 
 ```ts
-signTypedData: (params: SignTypedDataParams) => Promise<Hex>; // [!code --]
+(params: SignTypedDataParams) => Promise<Hex>; // [!code --]
 
-signTypedData: <
+<
   const TTypedData extends TypedData | { [key: string]: unknown },
   TPrimaryType extends string = string
 >(
