@@ -1,0 +1,3 @@
+.site/**/*/reference/**/*.md linguist-generated
+site/**/*/reference/**/*.mdx linguist-generated
+site/sidebar/**/*.ts linguist-generated
