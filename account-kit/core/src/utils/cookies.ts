@@ -55,9 +55,9 @@ export const cookieStorage = (config?: { sessionLength: number }): Storage => ({
 /**
  * Converts a cookie into an initial state object
  *
- * @param config the account config containing the client store
- * @param cookie optional cookie string
- * @returns the deserialized AlchemyClientState if the cookie exists, otherwise undefined
+ * @param {AlchemyAccountsConfig} config the account config containing the client store
+ * @param {string | undefined} cookie optional cookie string
+ * @returns {StoredState | undefined} the deserialized AlchemyClientState if the cookie exists, otherwise undefined
  */
 export function cookieToInitialState(
   config: AlchemyAccountsConfig,
