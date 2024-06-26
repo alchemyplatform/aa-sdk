@@ -1,5 +1,5 @@
 import { useAlchemyAccountContext } from "../context.js";
-import { MissingUiConfigError } from "../errors.js";
+import { MissingUiConfigHookError } from "../errors.js";
 
 /**
  * A hook that returns the open and close functions for the Auth Modal if uiConfig
@@ -10,7 +10,7 @@ import { MissingUiConfigError } from "../errors.js";
 export const useAuthModal = () => {
   const { ui } = useAlchemyAccountContext();
   if (ui == null) {
-    throw new MissingUiConfigError("useAuthModal");
+    throw new MissingUiConfigHookError("useAuthModal");
   }
 
   return {

@@ -1,3 +1,4 @@
+import type { AlchemyAccountsUIConfig } from "../../../context.js";
 import { useAddPasskey } from "../../../hooks/useAddPasskey.js";
 import { AddPasskeyIllustration } from "../../../icons/illustrations/add-passkey.js";
 import {
@@ -8,7 +9,6 @@ import { ls } from "../../../strings.js";
 import { Button } from "../../button.js";
 import { PoweredBy } from "../../poweredby.js";
 import { useAuthContext } from "../context.js";
-import type { AuthCardProps } from "./index.js";
 
 const BENEFITS = [
   {
@@ -24,7 +24,7 @@ const BENEFITS = [
 ];
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-export const AddPasskey = ({ config }: { config: AuthCardProps }) => {
+export const AddPasskey = ({ config }: { config: AlchemyAccountsUIConfig }) => {
   const { setAuthStep } = useAuthContext();
   const { addPasskey, isAddingPasskey } = useAddPasskey({
     onSuccess: () => {

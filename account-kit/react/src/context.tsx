@@ -13,14 +13,18 @@ import {
   useEffect,
   useMemo,
   useState,
+  type ReactNode,
 } from "react";
-import type { AuthCardProps } from "./components/auth/card/index.js";
 import { AuthModalContext, type AuthStep } from "./components/auth/context.js";
 import { AuthModal } from "./components/auth/modal.js";
 import { IS_SIGNUP_QP } from "./components/constants.js";
 import { NoAlchemyAccountContextError } from "./errors.js";
 import { useSignerStatus } from "./hooks/useSignerStatus.js";
 import { Hydrate } from "./hydrate.js";
+import type {
+  AuthIllustrationStyle,
+  AuthType,
+} from "./components/auth/types.js";
 
 export type AlchemyAccountContextProps =
   | {
@@ -38,7 +42,20 @@ export const AlchemyAccountContext = createContext<
 >(undefined);
 
 export type AlchemyAccountsUIConfig = {
-  auth?: AuthCardProps & { addPasskeyOnSignup?: boolean };
+  header?: ReactNode;
+  showSignInText?: boolean;
+  illustrationStyle?: AuthIllustrationStyle;
+  /**
+   * Each section can contain multiple auth types which will be grouped together
+   * and separated by an OR divider
+   */
+  sections?: AuthType[][];
+  /**
+   * This class name will be applied to the modal if it is used
+   */
+  modalClassName?: string;
+  onAuthSuccess?: () => void;
+  addPasskeyOnSignup?: boolean;
   /**
    * If hideError is true, then the auth component will not
    * render the global error component
@@ -118,16 +135,13 @@ export const AlchemyAccountProvider = (
   });
 
   useEffect(() => {
-    if (
-      status === "AWAITING_EMAIL_AUTH" &&
-      uiConfig?.auth?.addPasskeyOnSignup
-    ) {
+    if (status === "AWAITING_EMAIL_AUTH" && uiConfig?.addPasskeyOnSignup) {
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get(IS_SIGNUP_QP) !== "true") return;
 
       openAuthModal();
     }
-  }, [status, uiConfig?.auth, openAuthModal]);
+  }, [status, uiConfig, openAuthModal]);
 
   return (
     <Hydrate {...props}>
@@ -137,16 +151,11 @@ export const AlchemyAccountProvider = (
             value={{
               authStep,
               setAuthStep,
+              uiConfig,
             }}
           >
             {children}
-            {uiConfig?.auth && (
-              <AuthModal
-                open={isModalOpen}
-                auth={uiConfig.auth}
-                hideError={uiConfig.hideError}
-              />
-            )}
+            <AuthModal open={isModalOpen} />
           </AuthModalContext.Provider>
         </QueryClientProvider>
       </AlchemyAccountContext.Provider>

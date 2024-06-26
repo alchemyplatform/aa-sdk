@@ -1,10 +1,10 @@
-import type { AuthCardProps } from "..";
-import type { AuthStep } from "../../context";
+import type { AlchemyAccountsUIConfig } from "../../../../context.js";
+import type { AuthStep } from "../../context.js";
 import { CompletingEmailAuth, LoadingEmail } from "./email.js";
 import { LoadingPasskeyAuth } from "./passkey.js";
 
 type LoadingAuthProps = {
-  config: AuthCardProps;
+  config: AlchemyAccountsUIConfig;
   context?: AuthStep;
 };
 

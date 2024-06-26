@@ -7,10 +7,10 @@ import { useAuthContext, type AuthStep } from "../../context.js";
 import { Spinner } from "../../../../icons/spinner.js";
 import { ls } from "../../../../strings.js";
 import { EmailIllustration } from "../../../../icons/illustrations/email.js";
-import type { AuthCardProps } from "../index.js";
+import type { AlchemyAccountsUIConfig } from "../../../../context.js";
 
 interface LoadingEmailProps {
-  config: AuthCardProps;
+  config: AlchemyAccountsUIConfig;
   context: Extract<AuthStep, { type: "email_verify" }>;
 }
 

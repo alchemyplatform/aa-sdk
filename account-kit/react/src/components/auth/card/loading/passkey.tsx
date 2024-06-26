@@ -2,10 +2,14 @@ import { ls } from "../../../../strings.js";
 import { LoadingPasskey } from "../../../../icons/passkey.js";
 import { Button } from "../../../button.js";
 import { PoweredBy } from "../../../poweredby.js";
-import type { AuthCardProps } from "../index.js";
+import type { AlchemyAccountsUIConfig } from "../../../../context.js";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-export const LoadingPasskeyAuth = ({ config }: { config: AuthCardProps }) => {
+export const LoadingPasskeyAuth = ({
+  config,
+}: {
+  config: AlchemyAccountsUIConfig;
+}) => {
   return (
     <div className="flex flex-col gap-5 items-center">
       <div className="flex flex-col items-center justify-center">

@@ -1,12 +1,11 @@
 "use client";
 import { sepolia } from "@aa-sdk/core";
 import { createConfig } from "@account-kit/core";
-import { getBorderRadiusBaseVariableName, getColorVariableName } from "@account-kit/react/tailwind"
-import { AlchemyAccountProvider, AlchemyAccountsProviderProps } from "@account-kit/react";
+import { getBorderRadiusBaseVariableName, getBorderRadiusValue, getColorVariableName } from "@account-kit/react/tailwind"
+import { AlchemyAccountProvider, AlchemyAccountsProviderProps, AuthType } from "@account-kit/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren, Suspense, useEffect, useMemo, useState } from "react";
 import { Config, ConfigContext, DEFAULT_CONFIG } from "./state";
-import { getBorderRadiusValue } from "@account-kit/react/tailwind";
 
 const alchemyConfig = createConfig({
   // required
@@ -20,17 +19,23 @@ const queryClient = new QueryClient();
 export const Providers = (props: PropsWithChildren<{}>) => {
   const [config, setConfig] = useState<Config>(DEFAULT_CONFIG);
 
+  // Sync Alchemy auth UI config
   const uiConfig: AlchemyAccountsProviderProps["uiConfig"] = useMemo(() => {
+    const sections: AuthType[][] = [[{ type: "passkey" as const }]]
+    if (config.auth.showEmail) {
+      sections.unshift([{ type: "email" as const }])
+    }
+
     return {
-      // TODO: read sections fron `config` too
-      auth: {
-        sections: [[{ type: "email" }], [{ type: "passkey" }]],
-        addPasskeyOnSignup: config.auth.addPasskey,
-        illustrationStyle: config.ui.illustrationStyle,
-      },
+      sections,
+      addPasskeyOnSignup: config.auth.addPasskey,
+      illustrationStyle: config.ui.illustrationStyle,
+      showSignInText: true,
+      header: <AuthCardHeader theme={config.ui.theme} logoDark={config.ui.logoDark} logoLight={config.ui.logoLight} />,
     };
   }, [config]);
 
+  // Sync CSS variables
   useEffect(() => {
     const root = document.querySelector(':root') as HTMLElement;
 
@@ -63,5 +68,19 @@ export const Providers = (props: PropsWithChildren<{}>) => {
         </AlchemyAccountProvider>
       </QueryClientProvider>
     </Suspense>
+  );
+};
+
+function AuthCardHeader({ logoDark, logoLight, theme }: Pick<Config['ui'], "theme" | "logoLight" | "logoDark">) {
+  const logo = theme === "dark" ? logoDark : logoLight;
+
+  if (!logo) return null;
+
+  return (
+    <img
+      style={{ height: "60px", objectFit: "contain" }}
+      src={logo.fileSrc}
+      alt={logo.fileName}
+    />
   );
 };
