@@ -23,6 +23,7 @@ import type {
 import {
   AccountVersionRegistry,
   defaultLightAccountVersion,
+  getDefaultMultiOwnerLightAccountFactoryAddress,
 } from "../utils.js";
 import {
   createLightAccountBase,
@@ -132,13 +133,13 @@ export async function createMultiOwnerLightAccount({
   initCode,
   version = defaultLightAccountVersion("MultiOwnerLightAccount"),
   entryPoint = getEntryPoint(chain, {
-    version:
-      AccountVersionRegistry["MultiOwnerLightAccount"][version]
-        .entryPointVersion,
+    version: "0.7.0",
   }),
   accountAddress,
-  factoryAddress = AccountVersionRegistry["MultiOwnerLightAccount"][version]
-    .address[chain.id].factory,
+  factoryAddress = getDefaultMultiOwnerLightAccountFactoryAddress(
+    chain,
+    version
+  ),
   salt: salt_ = 0n,
   owners = [],
 }: CreateMultiOwnerLightAccountParams): Promise<MultiOwnerLightAccount> {
