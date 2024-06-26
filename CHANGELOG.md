@@ -3,6 +3,69 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-alpha.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.18.2...v4.0.0-alpha.1) (2024-06-26)
+
+### Bug Fixes
+
+- demo app not building ([#733](https://github.com/alchemyplatform/aa-sdk/issues/733)) ([b2c229c](https://github.com/alchemyplatform/aa-sdk/commit/b2c229c145b30c42b97a244a94b3b4fc605f93cf))
+- lowercase strings in the UI components ([#784](https://github.com/alchemyplatform/aa-sdk/issues/784)) ([1bd922c](https://github.com/alchemyplatform/aa-sdk/commit/1bd922c68c005134b88e9b7a99aa3065dcea56f4))
+- ui-demo app not building ([d308bcf](https://github.com/alchemyplatform/aa-sdk/commit/d308bcf48de18a1b0e3a9cc47611d65b0dda851b))
+- use updated package path in prettier config ([#741](https://github.com/alchemyplatform/aa-sdk/issues/741)) ([420b9ee](https://github.com/alchemyplatform/aa-sdk/commit/420b9ee1eb768f0b4124ee1f872fabc851ca35b9))
+- yarn.lock had wrong versions of alpha packages ([024e9bc](https://github.com/alchemyplatform/aa-sdk/commit/024e9bc5e21297c23fdf65f45817b08d15731e22))
+
+### Code Refactoring
+
+- change the prefix for aa-sdk packages ([#722](https://github.com/alchemyplatform/aa-sdk/issues/722)) ([9d81aaf](https://github.com/alchemyplatform/aa-sdk/commit/9d81aafe89b2dc49e2ab2c44556c81c3010c1fa2))
+- move plugingen from aa-sdk to account-kit since it depends on smart-contracts ([09e4f33](https://github.com/alchemyplatform/aa-sdk/commit/09e4f33528f4caf0b51e737663851b71bdaf15eb))
+- split aa-alchemy into account-kit packages ([#704](https://github.com/alchemyplatform/aa-sdk/issues/704)) ([c92a07f](https://github.com/alchemyplatform/aa-sdk/commit/c92a07fdb39d652fe5c95326d47a929b3b3278ed)), closes [#706](https://github.com/alchemyplatform/aa-sdk/issues/706)
+
+### Features
+
+- adaptive icons for light and dark UI ([#713](https://github.com/alchemyplatform/aa-sdk/issues/713)) ([61a2960](https://github.com/alchemyplatform/aa-sdk/commit/61a2960cc4209b305e9d76189b5aba26b2f67c97))
+- add border radius to account kit theme config ([#781](https://github.com/alchemyplatform/aa-sdk/issues/781)) ([49d869c](https://github.com/alchemyplatform/aa-sdk/commit/49d869cb665dd508b6426c6efff9f1425bda113a))
+- add code preview snippets ([#760](https://github.com/alchemyplatform/aa-sdk/issues/760)) ([c3d3554](https://github.com/alchemyplatform/aa-sdk/commit/c3d3554f027325a7a3f3bb85b4f90fe01d377027))
+- add color picker ([#732](https://github.com/alchemyplatform/aa-sdk/issues/732)) ([635933f](https://github.com/alchemyplatform/aa-sdk/commit/635933f6f974fb7e5b48e2f1e60efd649a56f038))
+- add custom theme switch component ([#726](https://github.com/alchemyplatform/aa-sdk/issues/726)) ([a0a7422](https://github.com/alchemyplatform/aa-sdk/commit/a0a7422073ab2e47e3b8b60db88b9335e87a0de6))
+- add illustration styles option ([#730](https://github.com/alchemyplatform/aa-sdk/issues/730)) ([d4f7dd3](https://github.com/alchemyplatform/aa-sdk/commit/d4f7dd3ad6e783442b20fe7c1832ff1081ae8441))
+- add links ([#765](https://github.com/alchemyplatform/aa-sdk/issues/765)) ([1a3892c](https://github.com/alchemyplatform/aa-sdk/commit/1a3892c09c04200e8d5a44216df8a67d8796fe44))
+- add new logo ([#762](https://github.com/alchemyplatform/aa-sdk/issues/762)) ([a9f4fe1](https://github.com/alchemyplatform/aa-sdk/commit/a9f4fe11bca3518f5b8b2aa1e44c90452ca06f6c))
+- add passkey success state ([#711](https://github.com/alchemyplatform/aa-sdk/issues/711)) ([a99460d](https://github.com/alchemyplatform/aa-sdk/commit/a99460d65c8258dc4a32082e1f3a18b64cde36af))
+- add photo upload ([b82bdbf](https://github.com/alchemyplatform/aa-sdk/commit/b82bdbf01de466d75de9933bc1832cd657d95b5b))
+- add showBack prop and auto determine navigation ([#712](https://github.com/alchemyplatform/aa-sdk/issues/712)) ([7b1e68c](https://github.com/alchemyplatform/aa-sdk/commit/7b1e68cc464fb9dcaa07e0043ef03bec31a8b60f))
+- add skeleton for ui demo ([9aac15e](https://github.com/alchemyplatform/aa-sdk/commit/9aac15edefb4b22532d1477857afb148d0a9ebbc))
+- add stylize tab ([b7173e1](https://github.com/alchemyplatform/aa-sdk/commit/b7173e1d9bd621a9629d1f0839061a36327b2db1))
+- add tabs and passkey section to demo app ([de59cfa](https://github.com/alchemyplatform/aa-sdk/commit/de59cfa4d4efef5991557ed38abba681ad513f9e))
+- add toggle for code preview mode ([#731](https://github.com/alchemyplatform/aa-sdk/issues/731)) ([ba276b9](https://github.com/alchemyplatform/aa-sdk/commit/ba276b97434fb2b9882c50543bf4f835ac3ba4ce))
+- add updated error UI + custom error rendering ([#705](https://github.com/alchemyplatform/aa-sdk/issues/705)) ([0b23625](https://github.com/alchemyplatform/aa-sdk/commit/0b23625f33a14daacd3317d753aebb07c702740d))
+- bring the rest of the auth flow inline with the designs ([#708](https://github.com/alchemyplatform/aa-sdk/issues/708)) ([993f6e2](https://github.com/alchemyplatform/aa-sdk/commit/993f6e2c5d78ba0a8ccc3c7ca30bedc921d5a258))
+- change email validation rule ([#710](https://github.com/alchemyplatform/aa-sdk/issues/710)) ([f869f5e](https://github.com/alchemyplatform/aa-sdk/commit/f869f5efda54225177760a881ce5c3277dbec69f))
+- color picker for dark mode ([#777](https://github.com/alchemyplatform/aa-sdk/issues/777)) ([3ba3e0b](https://github.com/alchemyplatform/aa-sdk/commit/3ba3e0bdca7df06603e645e5d65298f8e917c646)), closes [#778](https://github.com/alchemyplatform/aa-sdk/issues/778)
+- fix state override parameter type ([#720](https://github.com/alchemyplatform/aa-sdk/issues/720)) ([6c9c720](https://github.com/alchemyplatform/aa-sdk/commit/6c9c7202d14010ab3afa02055ff5006924a4fba3))
+- hook up color and theme variables ([#758](https://github.com/alchemyplatform/aa-sdk/issues/758)) ([897a136](https://github.com/alchemyplatform/aa-sdk/commit/897a136acd519dc6acf17357ae123e311f714f55))
+- icon animations ([#717](https://github.com/alchemyplatform/aa-sdk/issues/717)) ([dab1237](https://github.com/alchemyplatform/aa-sdk/commit/dab1237feaf2d6e11c19f44720090dd830669866))
+- integrate shadcn and start on auth methods in demo app ([b850166](https://github.com/alchemyplatform/aa-sdk/commit/b850166fb3e674f9d1a5b080112263e760293861))
+- logged in state ([#763](https://github.com/alchemyplatform/aa-sdk/issues/763)) ([59ff217](https://github.com/alchemyplatform/aa-sdk/commit/59ff217628c9af81d1fddd12f2a78902b9db429f))
+- new and improved auth modal ([#761](https://github.com/alchemyplatform/aa-sdk/issues/761)) ([2795e69](https://github.com/alchemyplatform/aa-sdk/commit/2795e6938006a853b737fa0404bc21883c416072))
+- pull strings out to their own file for future localization ([#715](https://github.com/alchemyplatform/aa-sdk/issues/715)) ([5c0d516](https://github.com/alchemyplatform/aa-sdk/commit/5c0d5163be4cabbfe3b4479fb03345212538ff16))
+- respect OS or root class for dark mode ([#759](https://github.com/alchemyplatform/aa-sdk/issues/759)) ([ecd5b01](https://github.com/alchemyplatform/aa-sdk/commit/ecd5b0187b1cba9c0f7a9a9777aebac580ad60e0))
+- start to bring auth modal styles inline with designs ([#702](https://github.com/alchemyplatform/aa-sdk/issues/702)) ([6e3502b](https://github.com/alchemyplatform/aa-sdk/commit/6e3502b9e73c4c4add4215927d263db8ee5000ce))
+- support different illustration styles ([#767](https://github.com/alchemyplatform/aa-sdk/issues/767)) ([278e478](https://github.com/alchemyplatform/aa-sdk/commit/278e478bd83aecabc8e74ef122d380a5ce0ef9d8))
+- surface descriptive session key errors ([#718](https://github.com/alchemyplatform/aa-sdk/issues/718)) ([082d363](https://github.com/alchemyplatform/aa-sdk/commit/082d363923684ae3bc45edf544c8536ff3c42379))
+- use brand accent color as icon colors ([#780](https://github.com/alchemyplatform/aa-sdk/issues/780)) ([10fd04d](https://github.com/alchemyplatform/aa-sdk/commit/10fd04d42e11817c67f8903c4ec277fc0163ac1c))
+
+### Reverts
+
+- add base skeleton for docs refactor ([6d1dea9](https://github.com/alchemyplatform/aa-sdk/commit/6d1dea9632193209c88dabd7f2b29cf4fc576750))
+
+### BREAKING CHANGES
+
+- @alchemy/plugingen has been moved to @account-kit/plugingen
+- @alchemy/aa-_ packages have been renamed to @aa-sdk/_
+- this removes the @alchemy/aa-alchemy package in favor of @account-kit/\*
+- @alchemy/aa-accounts was deleted in favor of @account-kit/accounts
+
+- refactor: further rename packages
+
 # [4.0.0-alpha.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.18.2...v4.0.0-alpha.0) (2024-06-19)
 
 ### Bug Fixes
