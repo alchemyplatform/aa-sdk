@@ -2,7 +2,7 @@ const STRINGS = {
   "en-US": {
     login: {
       tosPrefix: "By signing in, you agree to the",
-      tosLink: "Terms of Service",
+      tosLink: "terms of service",
       email: {
         placeholder: "Email",
         button: "Continue",
@@ -10,6 +10,7 @@ const STRINGS = {
       passkey: {
         button: "I have a passkey",
       },
+      or: "or",
     },
     addPasskey: {
       title: "Add a passkey",
