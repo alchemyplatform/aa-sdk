@@ -158,7 +158,7 @@ function IllustrationStyleOptions() {
       ...prev,
       ui: {
         ...prev.ui,
-      illustrationStyle: style,
+        illustrationStyle: style,
       },
     }));
   };
