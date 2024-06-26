@@ -1,4 +1,5 @@
 import { type Rule } from "eslint";
+import fs from "fs-extra";
 import { minimatch } from "minimatch";
 import * as path from "path";
 import ts from "typescript";
@@ -73,10 +74,18 @@ const rule: Rule.RuleModule = {
 
         if (node.source) {
           // This is a re-export from another module, e.g., export { something } from 'somewhere';
-          const sourceFilePath = path.resolve(
+          const sourceFilePathTs = path.resolve(
             path.dirname(context.filename),
             (node.source.value as string).replace(".js", ".ts")
           );
+          const sourceFilePathTsx = path.resolve(
+            path.dirname(context.filename),
+            (node.source.value as string).replace(".js", ".tsx")
+          );
+
+          const sourceFilePath = fs.existsSync(sourceFilePathTsx)
+            ? sourceFilePathTsx
+            : sourceFilePathTs;
 
           node.specifiers.forEach((specifier) => {
             const importedName = specifier.local.name;
