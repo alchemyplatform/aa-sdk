@@ -11,6 +11,21 @@ import type {
 import type { Deferrable } from "../utils";
 import type { MiddlewareClient } from "./actions";
 
+export type ClientMiddlewareArgs<
+  TAccount extends SmartContractAccount,
+  C extends MiddlewareClient,
+  TContext extends UserOperationContext | undefined =
+    | UserOperationContext
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+> = {
+  overrides?: UserOperationOverrides<TEntryPointVersion>;
+  context?: TContext;
+  feeOptions?: UserOperationFeeOptions;
+  account: TAccount;
+  client: C;
+};
+
 // [!region ClientMiddlewareFn]
 export type ClientMiddlewareFn<
   TContext extends UserOperationContext | undefined =
@@ -22,13 +37,7 @@ export type ClientMiddlewareFn<
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
 >(
   struct: Deferrable<UserOperationStruct<TEntryPointVersion>>,
-  args: {
-    overrides?: UserOperationOverrides<TEntryPointVersion>;
-    context?: TContext;
-    feeOptions?: UserOperationFeeOptions;
-    account: TAccount;
-    client: C;
-  }
+  args: ClientMiddlewareArgs<TAccount, C, TContext, TEntryPointVersion>
 ) => Promise<Deferrable<UserOperationStruct<TEntryPointVersion>>>;
 // [!endregion ClientMiddlewareFn]
 
