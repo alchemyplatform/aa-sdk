@@ -10,7 +10,7 @@ import { useAuthModal } from "../../../hooks/useAuthModal.js";
 import { useElementHeight } from "../../../hooks/useElementHeight.js";
 import { MissingUiConfigComponentError } from "../../../errors.js";
 
-export type AlchemyAuthCardProps = {
+export type AuthCardProps = {
   className?: string;
 };
 
@@ -22,7 +22,7 @@ export type AlchemyAuthCardProps = {
  * @param props.className Optional class name to apply to the card
  * @returns a react component containing the AuthCard
  */
-export const AuthCard = (props: AlchemyAuthCardProps) => {
+export const AuthCard = (props: AuthCardProps) => {
   return <AuthCardContent {...props} />;
 };
 
