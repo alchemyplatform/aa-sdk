@@ -148,8 +148,8 @@ export interface AlchemyGasEstimationOptions {
  * Dummy paymaster and data middleware for the alchemy gas manager
  *
  * @template {ClientWithAlchemyMethods} C
- * @param client client with alchemy methods
- * @param config alchemy gas manager configuration
+ * @param {ClientWithAlchemyMethods} client client with alchemy methods
+ * @param {AlchemyGasManagerConfig} config alchemy gas manager configuration
  * @returns the dummyPaymasterAndData middleware for Alchemy gas manager
  */
 const dummyPaymasterAndData =
@@ -171,9 +171,9 @@ const dummyPaymasterAndData =
  * Alchemy gas manager middleware used as the paymaster middleware overrides param to the client middleware config
  *
  * @template {ClientWithAlchemyMethods} C
- * @param client client with alchemy methods
- * @param config alchemy gas manager configuration
- * @returns the gas estimator, fee estimator, and paymasterAndData middleware for Alchemy gas manager
+ * @param {ClientWithAlchemyMethods} client client with alchemy methods
+ * @param {AlchemyGasManagerConfig} config alchemy gas manager configuration
+ * @returns {Pick<ClientMiddlewareConfig,"paymasterAndData" | "feeEstimator" | "gasEstimator">} the gas estimator, fee estimator, and paymasterAndData middleware for Alchemy gas manager
  */
 export function alchemyGasManagerMiddleware<C extends ClientWithAlchemyMethods>(
   client: C,

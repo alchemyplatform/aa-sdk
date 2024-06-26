@@ -13,7 +13,7 @@ import type { AlchemyAccountsConfig } from "../types";
  * watchSigner(config)(console.log);
  * ```
  *
- * @param config the account config containing the client store
+ * @param {AlchemyAccountsConfig} config the account config containing the client store
  * @returns {(onChange: (chain: AlchemyWebSigner) => void) => (() => void)} a function which accepts an onChange callback that will be fired when the signer changes and returns a function to unsubscribe from the store
  */
 export const watchSigner =

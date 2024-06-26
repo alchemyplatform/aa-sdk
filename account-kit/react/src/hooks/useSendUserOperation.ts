@@ -1,6 +1,5 @@
 "use client";
 
-import type { SupportedAccounts } from "@account-kit/core";
 import type {
   EntryPointVersion,
   GetEntryPointFromAccount,
@@ -8,6 +7,7 @@ import type {
   SendUserOperationResult,
 } from "@aa-sdk/core";
 import { WaitForUserOperationError } from "@aa-sdk/core";
+import type { SupportedAccounts } from "@account-kit/core";
 import {
   useMutation,
   type UseMutateAsyncFunction,
@@ -76,8 +76,8 @@ export type UseSendUserOperationResult<
  * A hook that returns functions for sending user operations.
  * You can also optionally wait for a user operation to be mined before returning.
  *
- * @param params the parameters for the hook including the client, a flag to wait for tx mining, and mutation args (see {@link UseSendUserOperationArgs})
- * @returns functions and state for sending UOs {@link UseSendUserOperationResult}
+ * @param {UseSendUserOperationArgs<TEntryPointVersion, TAccount>} params the parameters for the hook including the client, a flag to wait for tx mining, and mutation args
+ * @returns {UseSendUserOperationResult<TEntryPointVersion, TAccount>} functions and state for sending UOs
  */
 export function useSendUserOperation<
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount>,
