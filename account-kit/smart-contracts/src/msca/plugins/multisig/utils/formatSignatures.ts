@@ -8,9 +8,9 @@ import type { Signature } from "../types";
  * by signer address. The EOA SIGS contain the 65 signautre data for EOA signers and 65 bytes containing SIGNER | OFFSET | V for contract signers.
  * The OFFSET is used to fetch the signature data from the CONTRACT_SIG_DATAS.
  *
- * @param signatures the array of {@link Signature} objects to combine into the correct aggregated signature format excluding the upper limits
- * @param usingMaxValues a boolean indicating wether or not the UserOperation is using the UPPER_LIMIT for the gas and fee values
- * @returns the Hex representation of the signature
+ * @param {Signature[]} signatures the array of Signature objects to combine into the correct aggregated signature format excluding the upper limits
+ * @param {boolean} usingMaxValues a boolean indicating wether or not the UserOperation is using the UPPER_LIMIT for the gas and fee values
+ * @returns {Hex} the Hex representation of the signature
  */
 export const formatSignatures = (
   signatures: Signature[],
