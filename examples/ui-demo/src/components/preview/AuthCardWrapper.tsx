@@ -14,6 +14,10 @@ export function AuthCardWrapper({ className }: { className?: string }) {
       output.push([{ type: "email" as const }]);
     }
 
+    if (config.auth.showExternalWallets) {
+      output.push([{ type: 'injected' as const }])
+    }
+
     output.push([{ type: "passkey" as const }]);
 
     return output;
