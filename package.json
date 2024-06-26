@@ -10,7 +10,8 @@
     "account-kit/*",
     "templates/*",
     "examples/*",
-    "site"
+    "site",
+    "doc-gen"
   ],
   "scripts": {
     "generate": "lerna run generate",
@@ -33,6 +34,7 @@
   "devDependencies": {
     "@commitlint/cli": "^17.6.3",
     "@commitlint/config-conventional": "^17.6.3",
+    "ak-docgen": "*",
     "eslint": "^8.39.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-formatter-github": "^1.1.4",
