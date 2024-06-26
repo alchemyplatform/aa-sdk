@@ -11,6 +11,7 @@ const referencePackages = [
   "@account-kit/signer",
   "@account-kit/smart-contracts",
   "@aa-sdk/core",
+  "@aa-sdk/ethers",
 ];
 
 referencePackages.forEach(async (pkg) => {
