@@ -49,8 +49,8 @@ export type UseSendTransactionResult = {
  * @deprecated use useSendUserOperation instead
  * Send a TX request as a user operation and wait for it to be mined
  *
- * @param params - see {@link UseSendUserOperationArgs}
- * @returns functions and state for sending txs {@link UseSendTransactionResult}
+ * @param {UseSendTransactionArgs} params - parameters for sending a transaction
+ * @returns {UseSendTransactionResult} functions and state for sending txs
  */
 export function useSendTransaction(
   params: UseSendTransactionArgs

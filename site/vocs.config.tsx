@@ -1,4 +1,3 @@
-import { accountKitReactReferenceSidebar } from "sidebar/reference/account-kit/react.js";
 import { defineConfig } from "vocs";
 import { coreSidebar } from "./sidebar/core.js";
 import { infraSidebar } from "./sidebar/infra.js";
@@ -6,6 +5,7 @@ import { introSidebar } from "./sidebar/intro.js";
 import { reactSidebar } from "./sidebar/react.js";
 import { accountKitCoreReferenceSidebar } from "./sidebar/reference/account-kit/core.js";
 import { accountKitInfraReferenceSidebar } from "./sidebar/reference/account-kit/infra.js";
+import { accountKitReactReferenceSidebar } from "./sidebar/reference/account-kit/react.js";
 import { signerSidebar } from "./sidebar/signer.js";
 import { smartContractsSidebar } from "./sidebar/smart-contracts.js";
 

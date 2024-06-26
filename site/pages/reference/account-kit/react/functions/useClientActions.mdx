@@ -40,20 +40,20 @@ const Foo = () => {
 
 ### args
 
-`undefined`
+`UseClientActionsProps<TTransport, TChain, TActions>`
 the hooks arguments highlighted below
 
 ### args.client
 
-`undefined`
-[object Object],[object Object]
+`SmartAccountClient`
+the smart account client returned from useSmartAccountClient
 
 ### args.actions
 
-`undefined`
+`object`
 the smart account client decorator you want to execute actions from
 
 ## Returns
 
-`undefined`
-an object containing methods to execute the actions as well loading and error states (see: {@link UseClientActionsResult })
+`UseClientActionsResult<TActions>`
+an object containing methods to execute the actions as well loading and error states
