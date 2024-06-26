@@ -19,15 +19,23 @@ export type SplitAggregateSignatureParams<
   account: SmartContractAccount;
   request: UserOperationRequest<TEntryPointVersion>;
 };
+
+export type SplitAggregateSignatureResult = {
+  upperLimitPvg: Hex;
+  upperLimitMaxFeePerGas: Hex;
+  upperLimitMaxPriorityFeePerGas: Hex;
+  signatures: Signature[];
+};
+
 /**
  * Takes an aggregated signature and threshold and splits it into its components
  *
- * @param args - the arguments for the split
- * @param args.aggregateSignature - the aggregated signature to split
- * @param args.threshold - the threshold for the signature
- * @param args.account - the account which the signature is valid for
- * @param args.request - the user operation request that the signature is for
- * @returns the signature split into its upper limits and current signatures
+ * @param {SplitAggregateSignatureParams<TAccount>} args - the arguments for the split
+ * @param {Hex} args.aggregateSignature - the aggregated signature to split
+ * @param {number} args.threshold - the threshold for the signature
+ * @param {SmartContractAccount} args.account - the account which the signature is valid for
+ * @param {UserOperationRequest<TEntryPointVersion>} args.request - the user operation request that the signature is for
+ * @returns {Promise<SplitAggregateSignatureResult>} the signature split into its upper limits and current signatures
  */
 export const splitAggregatedSignature = async <
   TAccount extends SmartContractAccount | undefined =
@@ -35,12 +43,7 @@ export const splitAggregatedSignature = async <
     | undefined
 >(
   args: SplitAggregateSignatureParams<TAccount>
-): Promise<{
-  upperLimitPvg: Hex;
-  upperLimitMaxFeePerGas: Hex;
-  upperLimitMaxPriorityFeePerGas: Hex;
-  signatures: Signature[];
-}> => {
+): Promise<SplitAggregateSignatureResult> => {
   const { aggregatedSignature, threshold, account, request } = args;
   if (aggregatedSignature.length < 192 + (65 * threshold - 1)) {
     throw new InvalidAggregatedSignatureError();
