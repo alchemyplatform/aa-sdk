@@ -7,7 +7,15 @@ import { getChain } from "./getChain.js";
  * This method will use the current state in the client store and attempt to restore
  * connected instances of previously used accounts and the signer.
  *
- * @param config the account config which contains the client store
+ * @example
+ * ```ts
+ * import { reconnect } from "@account-kit/core";
+ * import { config } from "./config";
+ *
+ * await reconnect(config);
+ * ```
+ *
+ * @param {AlchemyAccountsConfig} config the account config which contains the client store
  */
 export async function reconnect(config: AlchemyAccountsConfig) {
   const { clientStore } = config;
