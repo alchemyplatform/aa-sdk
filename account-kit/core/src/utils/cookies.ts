@@ -8,12 +8,11 @@ import { deserialize } from "./deserialize.js";
 /**
  * Function to create cookie based Storage
  *
- * @param config optional config object that allows you to set the session length
- * @returns an instance of a browser storage object that leverages cookies
+ * @param {{sessionLength: number}} config optional config object that allows you to set the session length
+ * @param {number} config.sessionLength the length of the session in milliseconds
+ * @returns {Storage} an instance of a browser storage object that leverages cookies
  */
-export const cookieStorage: (config?: { sessionLength: number }) => Storage = (
-  config
-) => ({
+export const cookieStorage = (config?: { sessionLength: number }): Storage => ({
   // this is unused for now, we should update this if we do need it
   length: 0,
 
