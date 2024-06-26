@@ -23,6 +23,8 @@
     "build:ci": "yarn build:base && yarn lint:write",
     "build:examples": "lerna run build",
     "clean": "lerna run clean",
+    "docs:gen": "lerna run docs:gen",
+    "postdocs:gen": "eslint ./site --fix && prettier --write --ignore-unknown ./site",
     "test": "lerna run --verbose test:run",
     "test:e2e": "lerna run --verbose test:run-e2e --concurrency=1 --ignore=@alchemy/aa-signers",
     "lint:write": "eslint . --fix && prettier --write --ignore-unknown .",
@@ -34,6 +36,7 @@
   "devDependencies": {
     "@commitlint/cli": "^17.6.3",
     "@commitlint/config-conventional": "^17.6.3",
+    "@types/prettier": "^2.7.3",
     "ak-docgen": "*",
     "eslint": "^8.39.0",
     "eslint-config-react-app": "^7.0.1",

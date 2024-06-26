@@ -1,5 +1,5 @@
-import { DEFAULT_SESSION_MS } from "@account-kit/signer";
 import { ConnectionConfigSchema } from "@aa-sdk/core";
+import { DEFAULT_SESSION_MS } from "@account-kit/signer";
 import { createStorage, createConfig as createWagmiConfig } from "@wagmi/core";
 import { createClientStore } from "./store/client.js";
 import { createCoreStore } from "./store/core.js";
@@ -14,13 +14,24 @@ export const DEFAULT_IFRAME_CONTAINER_ID = "alchemy-signer-iframe-container";
 
 /**
  * Creates an AlchemyAccountsConfig object that can be used in conjunction with
- * the actions exported from `@alchemy/aa-alchemy/config`.
+ * the actions exported from `@account-kit/core`.
  *
  * The config contains core and client stores that can be used to manage account state
  * in your application.
  *
- * @param params {@link CreateConfigProps} to use for creating an alchemy account config
- * @returns an alchemy account config object containing the core and client store
+ * @example
+ * ```ts
+ * import { createConfig } from "@account-kit/core";
+ * import { sepolia } from "@account-kit/infra";
+ *
+ * const config = createConfig({
+ *  chain: sepolia,
+ *  apiKey: "your-api-key",
+ * });
+ * ```
+ *
+ * @param {CreateConfigProps} params The parameters to create the config with
+ * @returns {AlchemyAccountsConfig} An alchemy account config object containing the core and client store
  */
 export const createConfig = (
   params: CreateConfigProps
