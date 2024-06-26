@@ -13,6 +13,15 @@ export const aaSdkEthersReferenceSidebar: SidebarItem[] = [
   },
   {
     text: "Functions",
-    items: [],
+    items: [
+      {
+        text: "convertEthersSignerToAccountSigner",
+        link: "/reference/aa-sdk/ethers/functions/convertEthersSignerToAccountSigner",
+      },
+      {
+        text: "convertWalletToAccountSigner",
+        link: "/reference/aa-sdk/ethers/functions/convertWalletToAccountSigner",
+      },
+    ],
   },
 ];
