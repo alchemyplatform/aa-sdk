@@ -100,10 +100,10 @@ export type ClientActionParameters<
  * };
  * ```
  *
- * @param args the hooks arguments highlighted below
- * @param args.client the smart account client returned from {@link useSmartAccountClient}
- * @param args.actions the smart account client decorator you want to execute actions from
- * @returns an object containing methods to execute the actions as well loading and error states (see: {@link UseClientActionsResult})
+ * @param {UseClientActionsProps<TTransport, TChain, TActions>} args the hooks arguments highlighted below
+ * @param {SmartAccountClient} args.client the smart account client returned from useSmartAccountClient
+ * @param {object} args.actions the smart account client decorator you want to execute actions from
+ * @returns {UseClientActionsResult<TActions>} an object containing methods to execute the actions as well loading and error states
  */
 export function useClientActions<
   TTransport extends Transport = Transport,

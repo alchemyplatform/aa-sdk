@@ -22,8 +22,8 @@ export interface UseChainResult {
 /**
  * A hook that returns the current chain as well as a function to set the chain
  *
- * @param mutationArgs optional properties which contain mutation arg overrides
- * @returns an object containing the current chain and a function to set the chain as well as loading state of setting the chain
+ * @param {UseChainParams} mutationArgs optional properties which contain mutation arg overrides
+ * @returns {UseChainResult} an object containing the current chain and a function to set the chain as well as loading state of setting the chain
  */
 export function useChain(mutationArgs?: UseChainParams) {
   const { config } = useAlchemyAccountContext();
