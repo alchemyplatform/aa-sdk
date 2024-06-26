@@ -5,7 +5,7 @@ export type UseAuthErrorResult = Error | undefined;
 /**
  * Returns the error returned from the current auth step, if it exists
  *
- * @returns the current Error object
+ * @returns {UseAuthErrorResult} the current Error object
  */
 export function useAuthError(): UseAuthErrorResult {
   const { authStep } = useAuthContext();
