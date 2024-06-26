@@ -37,8 +37,8 @@ export interface SplitTransportParams {
  * });
  * ```
  *
- * @param params {@link SplitTransportParams} split transport configuration containing the methods overrides and fallback transport
- * @returns a {@link CustomTransport} that splits traffic
+ * @param {SplitTransportParams} params split transport configuration containing the methods overrides and fallback transport
+ * @returns {CustomTransport} a viem Transport that splits traffic
  */
 export const split = (params: SplitTransportParams): CustomTransport => {
   const overrideMap = params.overrides.reduce((accum, curr) => {
