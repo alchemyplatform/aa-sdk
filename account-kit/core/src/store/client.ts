@@ -102,7 +102,7 @@ export const createSigner = (params: CreateClientStoreParams) => {
  * Converts the AlchemySigner's status to a more readable object
  *
  * @param {AlchemySignerStatus} alchemySignerStatus Enum value of the AlchemySigner's status to convert
- * @returns an object containing the original status as well as booleans to check the current state
+ * @returns {SignerStatus} an object containing the original status as well as booleans to check the current state
  */
 export const convertSignerStatusToState = (
   alchemySignerStatus: AlchemySignerStatus
