@@ -8,6 +8,7 @@ const referencePackages = [
   "@account-kit/core",
   "@account-kit/infra",
   "@account-kit/react",
+  "@account-kit/signer",
 ];
 
 referencePackages.forEach(async (pkg) => {
