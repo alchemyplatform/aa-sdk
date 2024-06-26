@@ -25,6 +25,7 @@ import {
   AccountVersionRegistry,
   LightAccountUnsupported1271Factories,
   defaultLightAccountVersion,
+  getDefaultLightAccountFactoryAddress,
 } from "../utils.js";
 import {
   createLightAccountBase,
@@ -133,9 +134,7 @@ export async function createLightAccount({
       .entryPointVersion as any,
   }),
   accountAddress,
-  factoryAddress = AccountVersionRegistry["LightAccount"][version].address[
-    chain.id
-  ].factory,
+  factoryAddress = getDefaultLightAccountFactoryAddress(chain, version),
   salt: salt_ = 0n,
 }: CreateLightAccountParams): Promise<LightAccount> {
   const client = createBundlerClient({
