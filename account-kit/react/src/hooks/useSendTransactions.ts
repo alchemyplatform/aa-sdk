@@ -1,11 +1,11 @@
 "use client";
 
-import type { SupportedAccounts } from "@account-kit/core";
 import {
   type GetEntryPointFromAccount,
   type SendTransactionsParameters,
   type UserOperationContext,
 } from "@aa-sdk/core";
+import type { SupportedAccounts } from "@account-kit/core";
 import {
   useMutation,
   type UseMutateAsyncFunction,
@@ -67,8 +67,8 @@ export type UseSendTransactionsResult<
  * Allows you to send a batch of transactions as a single user operation and await
  * the transaction to be mined.
  *
- * @param params - see {@link UseSendTransactionsArgs}
- * @returns a collection of functions and state for sending transactions {@link UseSendTransactionsResult}
+ * @param {UseSendTransactionsArgs<TAccount>} params parameters for sending transactions
+ * @returns {UseSendTransactionsResult<TAccount, TContext, TEntryPointVersion>} a collection of functions and state for sending transactions
  */
 export function useSendTransactions<
   TAccount extends SupportedAccounts = SupportedAccounts,
