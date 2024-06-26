@@ -56,6 +56,13 @@
         "import/extensions": ["off", "ignorePackages"],
         "jsdoc/require-jsdoc": "off"
       }
+    },
+    {
+      "files": ["**/*.mdx"],
+      "extends": ["plugin:mdx/recommended"],
+      "settings": {
+        // "mdx/code-blocks": true
+      }
     }
   ]
 }
