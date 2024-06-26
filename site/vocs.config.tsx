@@ -6,6 +6,8 @@ import { reactSidebar } from "./sidebar/react.js";
 import { accountKitCoreReferenceSidebar } from "./sidebar/reference/account-kit/core.js";
 import { accountKitInfraReferenceSidebar } from "./sidebar/reference/account-kit/infra.js";
 import { accountKitReactReferenceSidebar } from "./sidebar/reference/account-kit/react.js";
+import { accountKitSignerReferenceSidebar } from "./sidebar/reference/account-kit/signer.js";
+import { accountKitSmartContractsReferenceSidebar } from "./sidebar/reference/account-kit/smart-contracts.js";
 import { signerSidebar } from "./sidebar/signer.js";
 import { smartContractsSidebar } from "./sidebar/smart-contracts.js";
 
@@ -113,8 +115,9 @@ export default defineConfig({
     "/reference/account-kit/react": accountKitReactReferenceSidebar,
     "/reference/account-kit/core": accountKitCoreReferenceSidebar,
     "/reference/account-kit/infra": accountKitInfraReferenceSidebar,
-    "/reference/account-kit/signer": [],
-    "/reference/account-kit/smart-contracts": [],
+    "/reference/account-kit/signer": accountKitSignerReferenceSidebar,
+    "/reference/account-kit/smart-contracts":
+      accountKitSmartContractsReferenceSidebar,
     "/reference/aa-sdk/core": [],
     "/reference/aa-sdk/ethers": [],
   },
