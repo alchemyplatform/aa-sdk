@@ -2,20 +2,23 @@
 import { sepolia } from "@aa-sdk/core";
 import { createConfig } from "@account-kit/core";
 import { AlchemyAccountProvider, AlchemyAccountsProviderProps } from "@account-kit/react";
-import { walletConnect, coinbaseWallet } from 'wagmi/connectors'
+import { walletConnect, coinbaseWallet, safe } from 'wagmi/connectors'
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren, Suspense, useEffect, useMemo, useState } from "react";
 import { Config, ConfigContext, DEFAULT_CONFIG } from "./state";
-import { mainnet } from "viem/chains";
 
 const alchemyConfig = createConfig({
   // required
   rpcUrl: "/api/rpc",
-  chain: mainnet,
+  chain: sepolia,
   ssr: true,
-  connectors: [walletConnect({
-    projectId: '1f5d87f54280658983b980eb9efeb71a',
-  }), coinbaseWallet()]
+  connectors: [
+    walletConnect({
+      projectId: '1f5d87f54280658983b980eb9efeb71a',
+    }),
+    coinbaseWallet(),
+    safe()
+  ],
 });
 
 const queryClient = new QueryClient();
