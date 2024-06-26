@@ -5,6 +5,7 @@ import { AlchemyAccountProvider, AlchemyAccountsProviderProps } from "@account-k
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren, Suspense, useEffect, useMemo, useState } from "react";
 import { Config, ConfigContext, DEFAULT_CONFIG } from "./state";
+import { getBorderRadiusValue } from "../utils/radius";
 
 const alchemyConfig = createConfig({
   // required
@@ -35,6 +36,8 @@ export const Providers = (props: PropsWithChildren<{}>) => {
     const primaryColor = config.ui.primaryColor[config.ui.theme]
     root?.style.setProperty("--akui-fg-accent-brand", primaryColor)
     root?.style.setProperty("--akui-btn-primary", primaryColor)
+  
+    root?.style.setProperty("--akui-border-radius-base", getBorderRadiusValue(config.ui.borderRadius))
 
     if (config.ui.theme === 'dark') {
       root.classList.remove("light")

@@ -6,6 +6,7 @@ import { ThemeSwitch } from "../shared/ThemeSwitch";
 import { FileCode } from "lucide-react";
 import ExternalLink from "../shared/ExternalLink";
 import { IllustrationStyle } from "../icons/illustration-style";
+import { getBorderRadiusValue } from "@/src/utils/radius";
 
 export function Styling({ className }: { className?: string }) {
   const { config, setConfig } = useConfig();
@@ -92,10 +93,10 @@ export function Styling({ className }: { className?: string }) {
 }
 
 const RADIUS_OPTIONS = [
-  { className: "rounded-none", label: "None", id: "none" as const },
-  { className: "rounded", label: "Small", id: "sm" as const },
-  { className: "rounded-md", label: "Medium", id: "md" as const },
-  { className: "rounded-lg", label: "Large", id: "lg" as const },
+  { label: "None", id: "none" as const },
+  { label: "Small", id: "sm" as const },
+  { label: "Medium", id: "md" as const },
+  { label: "Large", id: "lg" as const },
 ];
 
 export function CornerRadiusOptions() {
@@ -120,14 +121,13 @@ export function CornerRadiusOptions() {
     <div className="flex self-stretch gap-3">
       {RADIUS_OPTIONS.map((option) => (
         <button
-          className={`${
-            option.className
-          } py-2 flex-1 basis-0 bg-[#EFF4F9] text-[#363FF9] hover:opacity-80 ${
+          className={`py-2 flex-1 basis-0 bg-[#EFF4F9] text-[#363FF9] hover:opacity-80 ${
             option.id === borderRadius
               ? "border-2 border-[rgba(0, 0, 0, 0.01)]"
               : "border-2 border-white"
           }`}
           style={{
+            borderRadius: getBorderRadiusValue(option.id),
             boxShadow:
               option.id === borderRadius
                 ? "0px 0px 4px 0px rgba(36, 0, 255, 0.7)"
@@ -158,7 +158,7 @@ function IllustrationStyleOptions() {
       ...prev,
       ui: {
         ...prev.ui,
-        illustrationStyle: style,
+      illustrationStyle: style,
       },
     }));
   };
