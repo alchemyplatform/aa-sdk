@@ -13,7 +13,7 @@ export function AuthCardWrapper({ className }: { className?: string }) {
     if (config.auth.showEmail) {
       output.push([{ type: "email" as const }]);
     }
-
+  
     output.push([{ type: "passkey" as const }]);
 
     return output;

@@ -6,7 +6,7 @@ import { ThemeSwitch } from "../shared/ThemeSwitch";
 import { FileCode } from "lucide-react";
 import ExternalLink from "../shared/ExternalLink";
 import { IllustrationStyle } from "../icons/illustration-style";
-import { getBorderRadiusValue } from "@/src/utils/radius";
+import { getBorderRadiusValue } from "@account-kit/react/tailwind";
 
 export function Styling({ className }: { className?: string }) {
   const { config, setConfig } = useConfig();
