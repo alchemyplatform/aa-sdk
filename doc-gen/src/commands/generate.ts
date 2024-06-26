@@ -71,24 +71,9 @@ async function generateDocumentation(
   if (!node) {
     return;
   }
+
   if (ts.isClassDeclaration(node)) {
     logger.warn("Class declarations are not supported yet");
-    return;
-  }
-
-  const implNode = ts.isFunctionDeclaration(node)
-    ? node
-    : node.declarationList.declarations.find(
-        (decl) =>
-          ts.isIdentifier(decl.name) &&
-          decl.name.text === importedName &&
-          decl.initializer &&
-          (ts.isArrowFunction(decl.initializer) ||
-            ts.isFunctionExpression(decl.initializer))
-      )!.initializer!;
-
-  if (!ts.isFunctionDeclaration(implNode) && !ts.isArrowFunction(implNode)) {
-    // this should never happen given the above check, but we do this to make typescript happy
     return;
   }
 
@@ -98,7 +83,6 @@ async function generateDocumentation(
   const documentation = functionTemplate(
     importedName,
     packageName,
-    implNode,
     jsdocCommentAndTags
   );
 
