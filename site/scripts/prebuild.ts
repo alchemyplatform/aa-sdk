@@ -10,6 +10,7 @@ const referencePackages = [
   "@account-kit/react",
   "@account-kit/signer",
   "@account-kit/smart-contracts",
+  "@aa-sdk/core",
 ];
 
 referencePackages.forEach(async (pkg) => {
