@@ -9,14 +9,15 @@ const referencePackages = [
   "@account-kit/infra",
   "@account-kit/react",
   "@account-kit/signer",
+  "@account-kit/smart-contracts",
 ];
 
 referencePackages.forEach(async (pkg) => {
   const cleanPkg = pkg.replace("@", "");
   const referencePath = `./reference/${cleanPkg}`;
-  const functionFiles = fs.readdirSync(
-    path.resolve("./pages", referencePath, "./functions")
-  );
+  const functionFiles = await fs
+    .readdir(path.resolve("./pages", referencePath, "./functions"))
+    .catch(() => []);
 
   const functionItems = functionFiles.map((file) => {
     const functionName = file.split(".")[0];
