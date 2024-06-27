@@ -1,10 +1,12 @@
 "use client";
 import { sepolia } from "@aa-sdk/core";
 import { createConfig } from "@account-kit/core";
+import { getBorderRadiusBaseVariableName, getColorVariableName } from "@account-kit/react/tailwind"
 import { AlchemyAccountProvider, AlchemyAccountsProviderProps } from "@account-kit/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren, Suspense, useEffect, useMemo, useState } from "react";
 import { Config, ConfigContext, DEFAULT_CONFIG } from "./state";
+import { getBorderRadiusValue } from "@account-kit/react/tailwind";
 
 const alchemyConfig = createConfig({
   // required
@@ -33,8 +35,10 @@ export const Providers = (props: PropsWithChildren<{}>) => {
     const root = document.querySelector(':root') as HTMLElement;
 
     const primaryColor = config.ui.primaryColor[config.ui.theme]
-    root?.style.setProperty("--akui-fg-accent-brand", primaryColor)
-    root?.style.setProperty("--akui-btn-primary", primaryColor)
+    root?.style.setProperty(getColorVariableName("fg-accent-brand"), primaryColor)
+    root?.style.setProperty(getColorVariableName("btn-primary"), primaryColor)
+  
+    root?.style.setProperty(getBorderRadiusBaseVariableName(), getBorderRadiusValue(config.ui.borderRadius))
 
     if (config.ui.theme === 'dark') {
       root.classList.remove("light")

@@ -1,3 +1,4 @@
+import { AccountKitTheme } from "@account-kit/react/tailwind";
 import { Dispatch, SetStateAction, createContext, useContext } from "react";
 
 export type Config = {
@@ -12,7 +13,7 @@ export type Config = {
             dark: string;
             light: string;
         }
-        borderRadius: 'none' | 'sm' | 'md' | 'lg';
+        borderRadius: AccountKitTheme['borderRadius'];
         illustrationStyle: 'outline' | 'linear' | 'filled' | 'flat';
         logoLight: {
             fileName: string;
@@ -39,7 +40,7 @@ export const DEFAULT_CONFIG: Config = {
             light: '#363FF9',
             dark: '#9AB7FF',
         },
-        borderRadius: 'none',
+        borderRadius: 'sm',
         illustrationStyle: 'outline',
         logoLight: undefined,
         logoDark: undefined,

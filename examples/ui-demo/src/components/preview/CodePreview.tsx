@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import ExternalLink from "../shared/ExternalLink";
 
 import { Roboto_Mono } from "next/font/google";
-import { Config, useConfig } from "@/src/app/state";
+import { Config, DEFAULT_CONFIG, useConfig } from "@/src/app/state";
 import dedent from "dedent";
 import { Check, Copy } from "lucide-react";
 import { useState } from "react";
@@ -80,7 +80,8 @@ function getTailwindCode(config: Config) {
     colors: {
       "btn-primary": createColorSet("${ui.primaryColor.light}", "${ui.primaryColor.dark}"),
       "fg-accent-brand": createColorSet("${ui.primaryColor.light}", "${ui.primaryColor.dark}"),
-    },
+    },${ui.borderRadius !== DEFAULT_CONFIG.ui.borderRadius ? `
+    borderRadius: "${ui.borderRadius}",` : ''}
   })`;
 }
 

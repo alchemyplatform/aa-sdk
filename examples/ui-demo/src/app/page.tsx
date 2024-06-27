@@ -56,7 +56,7 @@ export default function Home() {
 
         {/* Content */}
         <div className="flex flex-1 gap-6 overflow-hidden">
-          <div className="flex flex-col  basis-0 flex-1 bg-white border border-border rounded-lg p-6 overflow-y-scroll">
+          <div className="flex flex-col  basis-0 flex-1 bg-white border border-border rounded-lg p-6 overflow-y-auto">
             <Configuration />
           </div>
           <div className="flex flex-col flex-[2] basis-0 relative bg-white border border-border rounded-lg">
