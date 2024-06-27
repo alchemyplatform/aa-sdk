@@ -23,7 +23,8 @@
     "react-dom": "^18",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
-    "viem": "^2.9.28"
+    "viem": "^2.9.28",
+    "wagmi": "^2.10.7"
   },
   "devDependencies": {
     "@t3-oss/env-core": "^0.7.1",
