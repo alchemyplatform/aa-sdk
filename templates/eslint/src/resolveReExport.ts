@@ -1,6 +1,6 @@
 import fs from "node:fs";
-import path from "node:path";
 import ts from "typescript";
+import { getExportedFilePath } from "./utils.js";
 
 /**
  * Takes a given file and returns the ts node that matches the importedName.
@@ -38,9 +38,9 @@ export function resolveReExport(
       node.moduleSpecifier &&
       ts.isStringLiteral(node.moduleSpecifier)
     ) {
-      const exportedFilePath = path.resolve(
-        path.dirname(filePath),
-        node.moduleSpecifier.text.replace(".js", ".ts")
+      const exportedFilePath = getExportedFilePath(
+        filePath,
+        node.moduleSpecifier.text
       );
 
       if (node.exportClause && ts.isNamedExports(node.exportClause)) {
