@@ -10,7 +10,6 @@ If the function takes in parameters it must include @param tags for each paramet
 The @param tags should include the type and a description of the parameter.
 If the function returns something other than void then it should include a @returnstag which includes a description of the return type.
 The jsdoc should also contain an @example tag above the @param tags with a placeholder: TODO: IMPLEMENT ME.
-Don't include the comment delimeters (/**, */).
 
 If the passed in code is a class, the jsdoc should ONLY include the class description
 `;
@@ -72,6 +71,7 @@ export function hydrate(
 `;
 
 const sampleResponse = `
+/**
  * Will hydrate the client store with the provided initial state if one is provided.
  * 
  * @example TODO: IMPLEMENT ME
@@ -79,6 +79,7 @@ const sampleResponse = `
  * @param {AlchemyAccountsConfig} config the config containing the client store
  * @param {StoredState} initialState optional param detailing the initial ClientState
  * @returns {{onMount: () => Promise<void>}} an object containing an onMount function that can be called when your component first renders on the client
+ */
 `;
 
 const samplePromptTwo = `
@@ -143,10 +144,12 @@ export async function createSimpleSmartAccount({
 `;
 
 const sampleResponseTwo = `
+/**
  * Creates a simple smart account using the provided parameters, including chain, entry point, factory address, and additional parameters. This function also ensures that a signer is provided.
  *
  * @param {CreateSimpleAccountParams} config The parameters for creating a simple smart account
- * @returns {Promise<SimpleSmartAccount>} A promise that resolves to a \`SimpleSmartAccount\` object containing the created account information and methods 
+ * @returns {Promise<SimpleSmartAccount>} A promise that resolves to a \`SimpleSmartAccount\` object containing the created account information and methods
+ */
 `;
 
 const samplePromptThree = `
@@ -159,12 +162,14 @@ export const watchUser =
 `;
 
 const sampleResponseThree = `
+/**
  * Watches for changes to the user in the client store and triggers the provided callback when a change is detected.
  * 
  * @example TODO: Implement me
  * 
  * @param {AlchemyAccountsConfig} config the configuration containing the client store
  * @returns {(onChange: (user: User) => void) => (() => void)} a function to unsubscribe from the user updates
+ */
 `;
 
 runAsWorker(async (codeToComment: string): Promise<string | null> => {
