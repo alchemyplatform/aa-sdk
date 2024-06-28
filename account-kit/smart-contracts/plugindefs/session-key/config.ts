@@ -14,7 +14,7 @@ import {
   sepolia,
   zora,
   zoraSepolia,
-} from "@aa-sdk/core";
+} from "@account-kit/infra";
 import type { PluginConfig } from "@account-kit/plugingen";
 import { parseAbiParameters } from "viem";
 import { MultiOwnerPluginGenConfig } from "../multi-owner/config.js";

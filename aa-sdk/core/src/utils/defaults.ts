@@ -7,7 +7,6 @@ import {
   baseGoerli,
   baseSepolia,
   fraxtal,
-  fraxtalSepolia,
   goerli,
   mainnet,
   optimism,
@@ -19,11 +18,11 @@ import {
   sepolia,
   zora,
   zoraSepolia,
-} from "../chains/index.js";
+} from "viem/chains";
 import { defaultEntryPointVersion } from "../entrypoint/index.js";
 import type { EntryPointVersion } from "../entrypoint/types.js";
 import { DefaultFactoryNotDefinedError } from "../errors/account.js";
-import type { UserOperationFeeOptions } from "../types";
+import type { UserOperationFeeOptions } from "../types.js";
 
 /**
  * Utility method returning the default simple account factory address given a {@link Chain} object
@@ -51,7 +50,7 @@ export const getDefaultSimpleAccountFactoryAddress = (
         case baseGoerli.id:
         case baseSepolia.id:
         case fraxtal.id:
-        case fraxtalSepolia.id:
+        case 2523:
         case zora.id:
         case zoraSepolia.id:
           return "0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232";

@@ -1,12 +1,12 @@
-import { createLightAccount } from "@account-kit/smart-contracts";
 import {
   LocalAccountSigner,
-  sepolia,
   type ClientMiddlewareFn,
   type SmartContractAccount,
 } from "@aa-sdk/core";
+import { createLightAccount } from "@account-kit/smart-contracts";
 import { http, zeroAddress } from "viem";
 import { generatePrivateKey } from "viem/accounts";
+import { sepolia } from "../chains.js";
 import { createAlchemySmartAccountClient } from "./smartAccountClient.js";
 
 const headerMatcher = {

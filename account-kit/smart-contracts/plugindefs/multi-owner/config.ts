@@ -14,7 +14,7 @@ import {
   sepolia,
   zora,
   zoraSepolia,
-} from "@aa-sdk/core";
+} from "@account-kit/infra";
 import type { PluginConfig } from "@account-kit/plugingen";
 import { parseAbiParameters } from "viem";
 import { MultiOwnerPluginAbi } from "./abi.js";
@@ -33,7 +33,6 @@ export const MultiOwnerPluginGenConfig: PluginConfig = {
     [arbitrum.id]: "0xcE0000007B008F50d762D155002600004cD6c647",
     [arbitrumSepolia.id]: "0xcE0000007B008F50d762D155002600004cD6c647",
     [base.id]: "0xcE0000007B008F50d762D155002600004cD6c647",
-    [baseSepolia.id]: "0xcE0000007B008F50d762D155002600004cD6c647",
     [fraxtal.id]: "0xcE0000007B008F50d762D155002600004cD6c647",
     [fraxtalSepolia.id]: "0xcE0000007B008F50d762D155002600004cD6c647",
     [zora.id]: "0xcE0000007B008F50d762D155002600004cD6c647",

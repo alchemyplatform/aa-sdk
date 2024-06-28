@@ -2,7 +2,28 @@ export type * from "./actions/simulateUserOperationChanges.js";
 export { simulateUserOperationChanges } from "./actions/simulateUserOperationChanges.js";
 export type * from "./actions/types.js";
 export type * from "./chains.js";
-export { defineAlchemyChain } from "./chains.js";
+export {
+  arbitrum,
+  arbitrumGoerli,
+  arbitrumSepolia,
+  base,
+  baseGoerli,
+  baseSepolia,
+  defineAlchemyChain,
+  fraxtal,
+  fraxtalSepolia,
+  goerli,
+  mainnet,
+  optimism,
+  optimismGoerli,
+  optimismSepolia,
+  polygon,
+  polygonAmoy,
+  polygonMumbai,
+  sepolia,
+  zora,
+  zoraSepolia,
+} from "./chains.js";
 export type * from "./client/decorators/alchemyEnhancedApis.js";
 export { alchemyEnhancedApiActions } from "./client/decorators/alchemyEnhancedApis.js";
 export type * from "./client/decorators/smartAccount.js";

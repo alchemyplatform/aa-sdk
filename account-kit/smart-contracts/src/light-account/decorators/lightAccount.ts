@@ -24,7 +24,7 @@ export type LightAccountClientActions<
  * ```ts
  * import { lightAccountClientActions, createLightAccount } from "@account-kit/smart-contracts";
  * import { createAlchemySmartAccountClient } from "@account-kit/infra";
- * import { sepolia } from "@account-kit/infra/chains";
+ * import { sepolia } from "@account-kit/infra";
  *
  * const smartAccountClient = createAlchemySmartAccountClient({
  *  account: await createLightAccount(...),
