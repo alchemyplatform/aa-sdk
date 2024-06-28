@@ -1,5 +1,6 @@
 import { getJSDocComment } from "@es-joy/jsdoccomment";
 import { type Rule } from "eslint";
+import ESTree from "estree";
 import findUp from "find-up";
 import fs from "fs-extra";
 import * as path from "path";
@@ -41,6 +42,12 @@ const rule: Rule.RuleModule = {
             },
             default: [],
           },
+          fixBatchSize: {
+            description:
+              "Maximum number of fixes to apply in a single run of the rule (0 for unlimited)",
+            type: "number",
+            default: 10,
+          },
         },
         additionalProperties: false,
       },
@@ -50,6 +57,7 @@ const rule: Rule.RuleModule = {
     const enableFixer: boolean =
       process.argv.some((arg) => arg.includes("eslint")) &&
       process.argv.some((x) => x === "--fix" || x === "-f");
+    const fixBatchSize: number = context.options[0]?.fixBatchSize;
     // const ignore: string[] = context.options[0]?.ignore || [];
 
     const packageJsonPath = findUp.sync("package.json", {
@@ -68,6 +76,26 @@ const rule: Rule.RuleModule = {
         minLines: 0,
       });
       return !!comment;
+    }
+
+    function checkArrowFunctionOrFunctionExpression(
+      node: (ESTree.FunctionExpression | ESTree.ArrowFunctionExpression) &
+        Rule.NodeParentExtension
+    ) {
+      if (
+        node.parent.type === "VariableDeclarator" &&
+        node.parent.id.type === "Identifier" &&
+        packageNameToExports.get(packageName)?.has(node.parent.id.name)
+      ) {
+        checkNode(node, node.parent.id.name);
+      } else if (
+        (node.parent.type === "MethodDefinition" ||
+          node.parent.type === "PropertyDefinition") &&
+        node.parent.key.type === "Identifier" &&
+        packageNameToExports.get(packageName)?.has(node.parent.key.name)
+      ) {
+        checkNode(node, node.parent.key.name);
+      }
     }
 
     function checkNode(node: Rule.Node, name: string) {
@@ -90,11 +118,12 @@ const rule: Rule.RuleModule = {
             {
               desc: "Add JSDoc comment",
               data: { name },
-              fix: (fixer) => reExportFixerEslint(fixer, node, context),
+              fix: (fixer) =>
+                reExportFixerEslint(fixer, node, context, fixBatchSize),
             },
           ],
           fix: enableFixer
-            ? (fixer) => reExportFixerEslint(fixer, node, context)
+            ? (fixer) => reExportFixerEslint(fixer, node, context, fixBatchSize)
             : undefined,
         });
       }
@@ -108,22 +137,10 @@ const rule: Rule.RuleModule = {
         checkNode(node, node.id.name);
       },
       FunctionExpression(node) {
-        if (
-          node.parent.type === "VariableDeclarator" &&
-          node.parent.id.type === "Identifier" &&
-          packageNameToExports.get(packageName)?.has(node.parent.id.name)
-        ) {
-          checkNode(node, node.parent.id.name);
-        }
+        checkArrowFunctionOrFunctionExpression(node);
       },
       ArrowFunctionExpression(node) {
-        if (
-          node.parent.type === "VariableDeclarator" &&
-          node.parent.id.type === "Identifier" &&
-          packageNameToExports.get(packageName)?.has(node.parent.id.name)
-        ) {
-          checkNode(node, node.parent.id.name);
-        }
+        checkArrowFunctionOrFunctionExpression(node);
       },
     };
   },
@@ -167,10 +184,18 @@ function populateExports(packageJsonPath: string, packageName: string) {
       const exportedNode = resolveReExport(indexPath, element.name.text);
       if (!exportedNode) return;
 
+      // TODO: for class declarations, we need to add all of the methods to the exports map
+      if (ts.isClassDeclaration(exportedNode)) {
+        registerClassMembers(exportedNode, exportsMap);
+      }
+
       const exportedFrom = getExportedFilePath(
         indexPath,
         exportedNode.getSourceFile().fileName
       );
+      if (!exportedFrom) {
+        return;
+      }
 
       exportsMap.set(element.name.text, {
         importedName: element.name.text,
@@ -178,6 +203,104 @@ function populateExports(packageJsonPath: string, packageName: string) {
       });
     });
   });
+}
+
+function getImportOf(node: ts.Node) {
+  const sourceFile = node.getSourceFile();
+  const nodeName = ts.isExpressionWithTypeArguments(node)
+    ? node.expression.getText()
+    : node.getText();
+
+  let result: string | undefined;
+  sourceFile.forEachChild((node_) => {
+    if (ts.isImportDeclaration(node_)) {
+      const importClause = node_.importClause;
+      const moduleSpecifier = node_.moduleSpecifier
+        .getText()
+        .replace(/['"]/g, "");
+
+      if (importClause && importClause.namedBindings) {
+        const namedBindings = importClause.namedBindings;
+        if (ts.isNamedImports(namedBindings)) {
+          namedBindings.elements.forEach((element) => {
+            if (element.name.getText() === nodeName) {
+              result = moduleSpecifier;
+            }
+          });
+        }
+      }
+    }
+
+    return result != null;
+  });
+
+  return result ?? sourceFile.fileName;
+}
+
+function registerClassMembers(
+  node: ts.Node | null,
+  exportsMap: Map<string, Export>
+) {
+  if (!node || !ts.isClassDeclaration(node)) {
+    return;
+  }
+  const sourceFile = node.getSourceFile();
+
+  // handle super classes
+  for (const heritageClause of node.heritageClauses ?? []) {
+    if (heritageClause.token === ts.SyntaxKind.ExtendsKeyword) {
+      const superClass = heritageClause.types[0];
+      if (superClass && ts.isExpressionWithTypeArguments(superClass)) {
+        const superClassName = superClass.expression.getText();
+        const superClassLocation = getImportOf(superClass);
+        const superClassNode = resolveReExport(
+          superClassLocation,
+          superClassName
+        );
+        const exportedFrom = getExportedFilePath(
+          sourceFile.fileName,
+          superClassLocation
+        );
+
+        if (exportedFrom) {
+          registerClassMembers(superClassNode, exportsMap);
+          exportsMap.set(superClassName, {
+            importedName: superClassName,
+            exportedFrom,
+          });
+        }
+      }
+    }
+  }
+
+  node.members.forEach((member) => {
+    if (ts.isMethodDeclaration(member) && !isPrivateMember(member)) {
+      exportsMap.set(member.name.getText(), {
+        importedName: member.name.getText(),
+        exportedFrom: sourceFile.fileName,
+      });
+    } else if (ts.isConstructorDeclaration(member)) {
+      // yea we probs need to handle this differently since this is just going to match all constructors
+      exportsMap.set("constructor", {
+        importedName: "constructor",
+        exportedFrom: sourceFile.fileName,
+      });
+    } else if (
+      ts.isPropertyDeclaration(member) &&
+      (member.initializer?.kind === ts.SyntaxKind.ArrowFunction ||
+        member.initializer?.kind === ts.SyntaxKind.FunctionExpression) &&
+      !isPrivateMember(member)
+    ) {
+      exportsMap.set(member.name.getText(), {
+        importedName: member.name.getText(),
+        exportedFrom: sourceFile.fileName,
+      });
+    }
+  });
+}
+
+function isPrivateMember(node: ts.PropertyDeclaration | ts.MethodDeclaration) {
+  return node.modifiers?.some((x) => x.kind === ts.SyntaxKind.PrivateKeyword);
 }
 
 export default rule;
