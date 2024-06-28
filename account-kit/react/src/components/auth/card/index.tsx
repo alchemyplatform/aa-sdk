@@ -4,6 +4,7 @@ import { useCallback, useLayoutEffect, useMemo, useRef } from "react";
 import { useAuthError } from "../../../hooks/useAuthError.js";
 import { useAuthModal } from "../../../hooks/useAuthModal.js";
 import { useElementHeight } from "../../../hooks/useElementHeight.js";
+import { useSigner } from "../../../hooks/useSigner.js";
 import { useSignerStatus } from "../../../hooks/useSignerStatus.js";
 import { useUiConfig } from "../../../hooks/useUiConfig.js";
 import { IS_SIGNUP_QP } from "../../constants.js";
@@ -11,7 +12,6 @@ import { Navigation } from "../../navigation.js";
 import { Notification } from "../../notification.js";
 import { useAuthContext } from "../context.js";
 import { Step } from "./steps.js";
-import { useSigner } from "../../../hooks/useSigner.js";
 
 export type AuthCardProps = {
   className?: string;
@@ -21,9 +21,23 @@ export type AuthCardProps = {
  * React component containing an Auth view with configured auth methods
  * and options based on the config passed to the AlchemyAccountProvider
  *
+ * @example
+ * ```tsx
+ * import { AuthCard, useAlchemyAccountContext } from "@account-kit/react";
+ *
+ * function ComponentWithAuthCard() {
+ *  // assumes you've passed in a UI config to the Account Provider
+ *  // you can also directly set the properties on the AuthCard component
+ *  const { uiConfig } = useAlchemyAccountContext();
+ *
+ *  return (
+ *    <AuthCard { ...uiConfig!.auth } />
+ *  );
+ * }
+ * ```
+ *
  * @param {AuthCardProps} props Card Props
- * @param {string} props.className optional class name to apply to the card
- * @returns a react component containing the AuthCard
+ * @returns {JSX.Element} a react component containing the AuthCard
  */
 export const AuthCard = (props: AuthCardProps) => {
   return <AuthCardContent {...props} />;

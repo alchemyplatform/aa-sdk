@@ -30,7 +30,10 @@ function ComponentUsingChain() {
   return (
     <div>
       <p>Current Chain: {chain.id}</p>
-      <button onClick={() => setChain(sepolia)} disabled={isSettingChain}>
+      <button
+        onClick={() => setChain({ chain: sepolia })}
+        disabled={isSettingChain}
+      >
         Set Chain
       </button>
     </div>
