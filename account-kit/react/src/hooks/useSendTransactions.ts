@@ -62,11 +62,59 @@ export type UseSendTransactionsResult<
 };
 
 /**
- * @deprecated use useSendUserOperation instead
- *
  * Allows you to send a batch of transactions as a single user operation and await
  * the transaction to be mined.
  *
+ * @example
+ * ```tsx twoslash
+ * import {
+ *   useSendTransactions,
+ *   useSmartAccountClient,
+ * } from "@account-kit/react";
+ * import { toHex } from "viem";
+ *
+ * function ComponentWithSendTransactions() {
+ *  const { client } = useSmartAccountClient({
+ *    type: "MultiOwnerModularAccount",
+ *  });
+ *
+ *  const { sendTransactions, isSendingTransactions } = useSendTransactions({
+ *    client,
+ *    onSuccess: (hash) => {
+ *      // [optional] Do something with the hash
+ *    },
+ *    onError: (error) => {
+ *      // [optional] Do something with the error
+ *    },
+ *    // [optional] ...additional mutationArgs
+ *  });
+ *
+ *  return (
+ *    <div>
+ *      <button
+ *        onClick={() =>
+ *          sendTransactions({
+ *            requests: [
+ *              {
+ *                from: "0xACCOUNT_ADDRESS",
+ *                to: "0xTARGET_ADDRESS",
+ *                data: "0x",
+ *                value: toHex(0n),
+ *              },
+ *            ],
+ *            // ... other parameters (account, context, overrides)
+ *          })
+ *        }
+ *        disabled={isSendingTransactions}
+ *      >
+ *        {isSendingTransactions ? "Sending..." : "Send Txns"}
+ *      </button>
+ *    </div>
+ *  );
+ * }
+ * ```
+ *
+ * @deprecated use useSendUserOperation instead
  * @param {UseSendTransactionsArgs<TAccount>} params parameters for sending transactions
  * @returns {UseSendTransactionsResult<TAccount, TContext, TEntryPointVersion>} a collection of functions and state for sending transactions
  */

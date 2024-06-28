@@ -3,6 +3,7 @@ import { findUp } from "find-up";
 import { default as fs } from "fs-extra";
 import * as path from "node:path";
 import { resolve } from "pathe";
+import { format } from "prettier";
 import ts from "typescript";
 import * as logger from "../logger.js";
 import { functionTemplate } from "../templates/functionTemplate.js";
@@ -41,17 +42,25 @@ export async function generate(options: GenerateOptions) {
     ) {
       return;
     }
-    const exportedFilePath = path.resolve(
+    const exportedFilePathTs = path.resolve(
       path.dirname(sourceFilePath),
       node.moduleSpecifier.text.replace(".js", ".ts")
     );
+    const exportedFilePathTsx = path.resolve(
+      path.dirname(sourceFilePath),
+      node.moduleSpecifier.text.replace(".js", ".tsx")
+    );
+
+    const isTsx = fs.existsSync(exportedFilePathTsx);
+    const exportedFilePath = isTsx ? exportedFilePathTsx : exportedFilePathTs;
 
     node.exportClause.elements.forEach((element) => {
       generateDocumentation(
         element.name.text,
         exportedFilePath,
         outputFilePath,
-        packageJSON.name
+        packageJSON.name,
+        isTsx
       );
     });
   });
@@ -61,7 +70,8 @@ async function generateDocumentation(
   importedName: string,
   sourceFilePath: string,
   outputFilePath: string,
-  packageName: string
+  packageName: string,
+  isTsx: boolean
 ) {
   const sourceFile = getSourceFile(sourceFilePath);
   if (!sourceFile) {
@@ -86,9 +96,17 @@ async function generateDocumentation(
     jsdocCommentAndTags
   );
 
+  // TODO: need to handle this differently in case we have `use*` methods that aren't hooks
+  const outputLocation = importedName.startsWith("use")
+    ? "./hooks"
+    : isTsx
+    ? "./components"
+    : "./functions";
+
   fs.outputFileSync(
-    path.resolve(outputFilePath, "./functions", `${importedName}.mdx`),
-    documentation
+    path.resolve(outputFilePath, outputLocation, `${importedName}.mdx`),
+    // I have 0 clue why this needs to be formatted twice to get the correct output, but here we are...
+    format(format(documentation, { parser: "mdx" }), { parser: "mdx" })
   );
 }
 
