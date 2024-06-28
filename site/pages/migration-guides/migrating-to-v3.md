@@ -32,6 +32,18 @@ This method has been removed. Use [`verifyMessage`](https://viem.sh/docs/actions
 
 This method is no longer used internally and has been removed. The reference impl can be found within `ethers.js`.
 
+### Utils: `getChain` removed
+
+This method was not super efficient and maintainable because it was importing all the chains from viem. That meant that if you used this method, it risked increasing your bundle size massively. Now all methods require a `Chain` instead of `chainId` in some places.
+
+### Ethers: `Chain` required param
+
+Certain methods required a `chainId` which would be converted into a `Chain` using the above method. This has been removed for the reasons above.
+
+### Alchemy `Chain` defs
+
+The Alchemy `Chain` definitions have been moved from `@aa-sdk/core` to `@account-kit/infra`.
+
 ## Migrating to version 3.x.x
 
 This version update brings a lot of breaking changes. As we began to support Modular Accounts and their interfaces, we realized that the previous version of the SDK was not as flexible as it could have been to handle the modularity of the new account interfaces.

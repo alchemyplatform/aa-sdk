@@ -1,3 +1,4 @@
+import type { SmartAccountSigner } from "@aa-sdk/core";
 import {
   AlchemyProviderConfigSchema,
   createAlchemyPublicRpcClient,
@@ -17,7 +18,6 @@ import {
   type MultiOwnerPluginActions,
   type PluginManagerActions,
 } from "@account-kit/smart-contracts";
-import type { SmartAccountSigner } from "@aa-sdk/core";
 import {
   custom,
   type Chain,
@@ -58,7 +58,7 @@ export function createModularAccountAlchemyClient<
  * @example
  * ```ts
  * import { createModularAccountAlchemyClient } from "@account-kit/smart-contracts";
- * import { sepolia } from "@account-kit/infra/chains";
+ * import { sepolia } from "@account-kit/infra";
  * import { LocalAccountSigner } from "@aa-sdk/core";
  * import { generatePrivateKey } from "viem"
  *

@@ -14,7 +14,7 @@ import type { ClientWithAlchemyMethods } from "./types.js";
  * @example
  * ```ts
  * import { createAlchemyPublicRpcClient } from "@account-kit/infra";
- * import { sepolia } from "@account-kit/infra/chains";
+ * import { sepolia } from "@account-kit/infra";
  *
  * const client = createAlchemyPublicRpcClient({
  *  chain: sepolia,
