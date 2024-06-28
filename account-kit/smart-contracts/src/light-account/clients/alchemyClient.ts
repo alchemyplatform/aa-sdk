@@ -1,3 +1,4 @@
+import type { HttpTransport, SmartAccountSigner } from "@aa-sdk/core";
 import {
   AlchemyProviderConfigSchema,
   createAlchemyPublicRpcClient,
@@ -12,7 +13,6 @@ import {
   type LightAccount,
   type LightAccountClientActions,
 } from "@account-kit/smart-contracts";
-import type { HttpTransport, SmartAccountSigner } from "@aa-sdk/core";
 import { custom, type Chain, type CustomTransport, type Transport } from "viem";
 
 export type AlchemyLightAccountClientConfig<
@@ -45,7 +45,7 @@ export async function createLightAccountAlchemyClient<
  * @example
  * ```ts
  * import { createLightAccountAlchemyClient } from "@account-kit/smart-contracts";
- * import { sepolia } from "@account-kit/infra/chains";
+ * import { sepolia } from "@account-kit/infra";
  * import { LocalAccountSigner } from "@aa-sdk/core";
  * import { generatePrivateKey } from "viem"
  *
