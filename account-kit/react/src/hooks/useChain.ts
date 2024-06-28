@@ -13,7 +13,7 @@ export type UseChainParams = BaseHookMutationArgs<void, { chain: Chain }>;
 
 export interface UseChainResult {
   chain: Chain;
-  setChain: (chain: Chain) => void;
+  setChain: (params: { chain: Chain }) => void;
   isSettingChain: boolean;
 }
 
@@ -34,7 +34,7 @@ export interface UseChainResult {
  *  return (
  *    <div>
  *      <p>Current Chain: {chain.id}</p>
- *      <button onClick={() => setChain(sepolia)} disabled={isSettingChain}>Set Chain</button>
+ *      <button onClick={() => setChain({chain: sepolia})} disabled={isSettingChain}>Set Chain</button>
  *    </div>
  *  );
  * }
@@ -43,7 +43,7 @@ export interface UseChainResult {
  * @param {UseChainParams} mutationArgs optional properties which contain mutation arg overrides
  * @returns {UseChainResult} an object containing the current chain and a function to set the chain as well as loading state of setting the chain
  */
-export function useChain(mutationArgs?: UseChainParams) {
+export function useChain(mutationArgs?: UseChainParams): UseChainResult {
   const { config } = useAlchemyAccountContext();
 
   const chain = useSyncExternalStore(
