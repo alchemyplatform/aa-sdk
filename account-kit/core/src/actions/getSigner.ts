@@ -14,5 +14,5 @@ import type { hydrate } from "../hydrate.js";
 export const getSigner = (
   config: AlchemyAccountsConfig
 ): AlchemyWebSigner | null => {
-  return config.clientStore.getState().signer ?? null;
+  return config.store.getState().signer ?? null;
 };

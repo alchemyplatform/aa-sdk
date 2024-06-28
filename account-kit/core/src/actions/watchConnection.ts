@@ -17,12 +17,10 @@ import type { AlchemyAccountsConfig, Connection } from "../types";
  */
 export function watchConnection(config: AlchemyAccountsConfig) {
   return (onChange: (connection: Connection) => void) => {
-    return config.coreStore.subscribe(
+    return config.store.subscribe(
       ({ chain }) => chain,
       (chain) => {
-        const connection = config.coreStore
-          .getState()
-          .connections.get(chain.id);
+        const connection = config.store.getState().connections.get(chain.id);
 
         if (connection) {
           onChange(connection);

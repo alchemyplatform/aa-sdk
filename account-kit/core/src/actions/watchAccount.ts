@@ -26,13 +26,13 @@ export const watchAccount =
     config: AlchemyAccountsConfig
   ) =>
   (onChange: (account: GetAccountResult<TAccount>) => void) => {
-    const accounts = config.clientStore.getState().accounts;
+    const accounts = config.store.getState().accounts;
     if (!accounts) {
       throw new ClientOnlyPropertyError("account");
     }
 
     const chain = getChain(config);
-    return config.clientStore.subscribe(
+    return config.store.subscribe(
       // this should be available on the client now because of the check above
       ({ accounts }) => accounts![chain.id][type],
       onChange,

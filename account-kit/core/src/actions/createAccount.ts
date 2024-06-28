@@ -60,8 +60,8 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
   { type, accountParams: params }: CreateAccountParams<TAccount>,
   config: AlchemyAccountsConfig
 ): Promise<SupportedAccounts> {
-  const clientStore = config.clientStore;
-  const accounts = clientStore.getState().accounts;
+  const store = config.store;
+  const accounts = store.getState().accounts;
   if (!accounts) {
     throw new ClientOnlyPropertyError("account");
   }
@@ -80,7 +80,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
   if (cachedAccount.status !== "RECONNECTING" && cachedAccount.account) {
     return cachedAccount.account;
   }
-  const cachedConfig = clientStore.getState().accountConfigs[chain.id]?.[type];
+  const cachedConfig = store.getState().accountConfigs[chain.id]?.[type];
 
   const accountPromise = (() => {
     switch (type) {
@@ -106,7 +106,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
   })();
 
   if (cachedAccount.status !== "RECONNECTING") {
-    clientStore.setState(() => ({
+    store.setState(() => ({
       accounts: {
         ...accounts,
         [chain.id]: {
@@ -123,7 +123,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
   try {
     const account = await accountPromise;
     const initCode = await account.getInitCode();
-    clientStore.setState((state) => ({
+    store.setState((state) => ({
       accounts: {
         ...accounts,
         [chain.id]: {
@@ -147,7 +147,7 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
       },
     }));
   } catch (error) {
-    clientStore.setState(() => ({
+    store.setState(() => ({
       accounts: {
         ...accounts,
         [chain.id]: {

@@ -13,7 +13,7 @@ import type { CreateConnectorFn } from "@wagmi/core";
 import { type Config as WagmiConfig } from "@wagmi/core";
 import type { Chain } from "viem";
 import type { PartialBy } from "viem/chains";
-import type { ClientStore, CoreStore, StoredState } from "./store/types";
+import type { Store, StoredState } from "./store/types";
 
 export type SupportedAccountTypes = "LightAccount" | "MultiOwnerModularAccount";
 
@@ -29,8 +29,7 @@ export type SupportedAccount<T extends SupportedAccountTypes> =
     : never;
 
 export type AlchemyAccountsConfig = {
-  coreStore: CoreStore;
-  clientStore: ClientStore;
+  store: Store;
   _internal: {
     wagmiConfig: WagmiConfig;
     ssr?: boolean;

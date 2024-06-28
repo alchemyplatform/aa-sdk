@@ -31,7 +31,7 @@ export const getAccount = <TAccount extends SupportedAccountTypes>(
   { type }: GetAccountParams<TAccount>,
   config: AlchemyAccountsConfig
 ): GetAccountResult<TAccount> => {
-  const accounts = config.clientStore.getState().accounts;
+  const accounts = config.store.getState().accounts;
   const chain = getChain(config);
   const account = accounts?.[chain.id]?.[type];
   if (!account) {
