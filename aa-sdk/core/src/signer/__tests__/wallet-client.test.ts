@@ -1,4 +1,3 @@
-import { polygonMumbai } from "@aa-sdk/core";
 import { createWalletClient, http } from "viem";
 import { mnemonicToAccount } from "viem/accounts";
 import { WalletClientSigner } from "../wallet-client.js";
@@ -10,7 +9,8 @@ describe("Wallet Client Signer Tests", () => {
     const wallet = mnemonicToAccount(dummyMnemonic);
     const walletClient = createWalletClient({
       account: wallet,
-      transport: http(`${polygonMumbai.rpcUrls.alchemy.http[0]}/test`),
+      // just a nonsense URL
+      transport: http(`https://rpc.testnet.viem.io`),
     });
 
     const smartAccountSigner: WalletClientSigner = new WalletClientSigner(

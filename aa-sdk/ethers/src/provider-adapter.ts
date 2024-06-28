@@ -1,13 +1,18 @@
 import {
   createBundlerClientFromExisting,
   createSmartAccountClient,
-  getChain,
   type BundlerClient,
   type SmartAccountClient,
   type SmartContractAccount,
 } from "@aa-sdk/core";
 import { JsonRpcProvider } from "@ethersproject/providers";
-import { createPublicClient, custom, http, type Transport } from "viem";
+import {
+  createPublicClient,
+  custom,
+  http,
+  type Chain,
+  type Transport,
+} from "viem";
 import { AccountSigner } from "./account-signer.js";
 import type { EthersProviderAdapterOpts } from "./types.js";
 
@@ -21,7 +26,8 @@ export class EthersProviderAdapter extends JsonRpcProvider {
     if ("accountProvider" in opts) {
       this.accountProvider = opts.accountProvider;
     } else {
-      const chain = getChain(opts.chainId);
+      const { chain } = opts;
+
       if (typeof opts.rpcProvider === "string") {
         this.accountProvider = createSmartAccountClient({
           transport: http(opts.rpcProvider),
@@ -75,13 +81,17 @@ export class EthersProviderAdapter extends JsonRpcProvider {
   /**
    * Creates an instance of EthersProviderAdapter from an ethers.js JsonRpcProvider.
    *
-   * @param provider - the ethers JSON RPC provider to convert
+   * @param provider the ethers JSON RPC provider to convert
+   * @param chain the chain to connect to
    * @returns an instance of {@link EthersProviderAdapter}
    */
-  static fromEthersProvider(provider: JsonRpcProvider): EthersProviderAdapter {
+  static fromEthersProvider(
+    provider: JsonRpcProvider,
+    chain: Chain
+  ): EthersProviderAdapter {
     return new EthersProviderAdapter({
       rpcProvider: provider.connection.url,
-      chainId: provider.network.chainId,
+      chain,
     });
   }
 }
