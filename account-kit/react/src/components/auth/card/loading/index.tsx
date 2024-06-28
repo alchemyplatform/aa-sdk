@@ -1,20 +1,18 @@
-import type { AlchemyAccountsUIConfig } from "../../../../context.js";
 import type { AuthStep } from "../../context.js";
 import { CompletingEmailAuth, LoadingEmail } from "./email.js";
 import { LoadingPasskeyAuth } from "./passkey.js";
 
 type LoadingAuthProps = {
-  config: AlchemyAccountsUIConfig;
   context?: AuthStep;
 };
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-export const LoadingAuth = ({ context, config }: LoadingAuthProps) => {
+export const LoadingAuth = ({ context }: LoadingAuthProps) => {
   switch (context?.type) {
     case "email_verify":
-      return <LoadingEmail config={config} context={context} />;
+      return <LoadingEmail context={context} />;
     case "passkey_verify":
-      return <LoadingPasskeyAuth config={config} />;
+      return <LoadingPasskeyAuth />;
     case "email_completing":
       return <CompletingEmailAuth context={context} />;
     default: {

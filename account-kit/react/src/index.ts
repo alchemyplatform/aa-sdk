@@ -1,8 +1,5 @@
-export {
-  cookieStorage,
-  createConfig,
-  type CreateConfigProps,
-} from "@account-kit/core";
+export { cookieStorage, type CreateConfigProps } from "@account-kit/core";
+export { createConfig, type CreateConfigWithUIProps } from "./createConfig.js";
 export type * from "./context.js";
 export {
   AlchemyAccountContext,
@@ -10,6 +7,7 @@ export {
   useAlchemyAccountContext,
 } from "./context.js";
 export { NoAlchemyAccountContextError } from "./errors.js";
+export { type AlchemyAccountsUIConfig } from "./types.js";
 export type * from "./hooks/useAccount.js";
 export { useAccount } from "./hooks/useAccount.js";
 export type * from "./hooks/useAddPasskey.js";

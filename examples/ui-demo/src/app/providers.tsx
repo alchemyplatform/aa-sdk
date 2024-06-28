@@ -1,18 +1,10 @@
 "use client";
 import { sepolia } from "@aa-sdk/core";
-import { createConfig } from "@account-kit/core";
 import { getBorderRadiusBaseVariableName, getBorderRadiusValue, getColorVariableName } from "@account-kit/react/tailwind"
-import { AlchemyAccountProvider, AlchemyAccountsProviderProps, AuthType } from "@account-kit/react";
+import { AlchemyAccountProvider, AlchemyAccountsProviderProps, AlchemyAccountsUIConfig, AuthType, createConfig } from "@account-kit/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren, Suspense, useEffect, useMemo, useState } from "react";
 import { Config, ConfigContext, DEFAULT_CONFIG } from "./state";
-
-const alchemyConfig = createConfig({
-  // required
-  rpcUrl: "/api/rpc",
-  chain: sepolia,
-  ssr: true,
-});
 
 const queryClient = new QueryClient();
 
@@ -20,19 +12,27 @@ export const Providers = (props: PropsWithChildren<{}>) => {
   const [config, setConfig] = useState<Config>(DEFAULT_CONFIG);
 
   // Sync Alchemy auth UI config
-  const uiConfig: AlchemyAccountsProviderProps["uiConfig"] = useMemo(() => {
+  const alchemyConfig: AlchemyAccountsProviderProps["config"] = useMemo(() => {
     const sections: AuthType[][] = [[{ type: "passkey" as const }]]
     if (config.auth.showEmail) {
       sections.unshift([{ type: "email" as const }])
     }
 
-    return {
+    const uiConfig: AlchemyAccountsUIConfig = {
       sections,
       addPasskeyOnSignup: config.auth.addPasskey,
       illustrationStyle: config.ui.illustrationStyle,
       showSignInText: true,
       header: <AuthCardHeader theme={config.ui.theme} logoDark={config.ui.logoDark} logoLight={config.ui.logoLight} />,
     };
+
+    return createConfig({
+      // required
+      rpcUrl: "/api/rpc",
+      chain: sepolia,
+      ssr: true,
+      ui: uiConfig,
+    });
   }, [config]);
 
   // Sync CSS variables
@@ -60,7 +60,6 @@ export const Providers = (props: PropsWithChildren<{}>) => {
         <AlchemyAccountProvider
           config={alchemyConfig}
           queryClient={queryClient}
-          uiConfig={uiConfig}
         >
           <ConfigContext.Provider value={{ config, setConfig }}>
             {props.children}

@@ -1,5 +1,5 @@
-import type { AlchemyAccountsUIConfig } from "../../../context.js";
 import { useAddPasskey } from "../../../hooks/useAddPasskey.js";
+import { useUiConfig } from "../../../hooks/useUiConfig.js";
 import { AddPasskeyIllustration } from "../../../icons/illustrations/add-passkey.js";
 import {
   PasskeyShieldIllustration,
@@ -24,7 +24,8 @@ const BENEFITS = [
 ];
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-export const AddPasskey = ({ config }: { config: AlchemyAccountsUIConfig }) => {
+export const AddPasskey = () => {
+  const { illustrationStyle } = useUiConfig();
   const { setAuthStep } = useAuthContext();
   const { addPasskey, isAddingPasskey } = useAddPasskey({
     onSuccess: () => {
@@ -36,7 +37,7 @@ export const AddPasskey = ({ config }: { config: AlchemyAccountsUIConfig }) => {
     <div className="flex flex-col gap-5 items-center">
       <div className="flex flex-col items-center justify-center h-12 w-12">
         <AddPasskeyIllustration
-          illustrationStyle={config.illustrationStyle ?? "flat"}
+          illustrationStyle={illustrationStyle ?? "flat"}
           height="48"
           width="48"
         />
@@ -48,7 +49,7 @@ export const AddPasskey = ({ config }: { config: AlchemyAccountsUIConfig }) => {
         {BENEFITS.map(({ title, icon: Icon, description }) => (
           <div key={title} className="flex gap-2">
             <div className="h-5 w-5 flex items-center justify-center">
-              <Icon illustrationStyle={config.illustrationStyle ?? "flat"} />
+              <Icon illustrationStyle={illustrationStyle ?? "flat"} />
             </div>
             <div className="flex flex-col">
               <p className="font-semibold text-sm">{title}</p>

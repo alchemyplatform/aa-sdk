@@ -8,7 +8,7 @@ import { useAuthError } from "../../../hooks/useAuthError.js";
 import { Navigation } from "../../navigation.js";
 import { useAuthModal } from "../../../hooks/useAuthModal.js";
 import { useElementHeight } from "../../../hooks/useElementHeight.js";
-import { MissingUiConfigComponentError } from "../../../errors.js";
+import { useUiConfig } from "../../../hooks/useUiConfig.js";
 
 export type AuthCardProps = {
   className?: string;
@@ -37,18 +37,14 @@ export const AuthCardContent = ({
 }) => {
   const { closeAuthModal } = useAuthModal();
   const { status, isAuthenticating } = useSignerStatus();
-  const { authStep, setAuthStep, uiConfig } = useAuthContext();
+  const { authStep, setAuthStep } = useAuthContext();
 
   const error = useAuthError();
 
   const contentRef = useRef<HTMLDivElement>(null);
   const { height } = useElementHeight(contentRef);
 
-  if (!uiConfig) {
-    throw new MissingUiConfigComponentError("AuthCard");
-  }
-
-  const { hideError, onAuthSuccess } = uiConfig;
+  const { hideError, onAuthSuccess } = useUiConfig();
 
   // TODO: Finalize the steps that allow going back
   const canGoBack = useMemo(() => {
@@ -116,7 +112,7 @@ export const AuthCardContent = ({
               onClose={closeAuthModal}
             />
           )}
-          <Step config={uiConfig} />
+          <Step />
         </div>
       </div>
     </div>

@@ -13,7 +13,6 @@ import {
   useEffect,
   useMemo,
   useState,
-  type ReactNode,
 } from "react";
 import { AuthModalContext, type AuthStep } from "./components/auth/context.js";
 import { AuthModal } from "./components/auth/modal.js";
@@ -21,18 +20,18 @@ import { IS_SIGNUP_QP } from "./components/constants.js";
 import { NoAlchemyAccountContextError } from "./errors.js";
 import { useSignerStatus } from "./hooks/useSignerStatus.js";
 import { Hydrate } from "./hydrate.js";
-import type {
-  AuthIllustrationStyle,
-  AuthType,
-} from "./components/auth/types.js";
+import type { AlchemyAccountsConfigWithUI } from "./createConfig.js";
+import type { AlchemyAccountsUIConfig } from "./types.js";
 
 export type AlchemyAccountContextProps =
   | {
       config: AlchemyAccountsConfig;
       queryClient: QueryClient;
       ui?: {
+        config: AlchemyAccountsUIConfig;
         openAuthModal: () => void;
         closeAuthModal: () => void;
+        isModalOpen: boolean;
       };
     }
   | undefined;
@@ -41,37 +40,10 @@ export const AlchemyAccountContext = createContext<
   AlchemyAccountContextProps | undefined
 >(undefined);
 
-export type AlchemyAccountsUIConfig = {
-  header?: ReactNode;
-  showSignInText?: boolean;
-  illustrationStyle?: AuthIllustrationStyle;
-  /**
-   * Each section can contain multiple auth types which will be grouped together
-   * and separated by an OR divider
-   */
-  sections?: AuthType[][];
-  /**
-   * This class name will be applied to the modal if it is used
-   */
-  modalClassName?: string;
-  onAuthSuccess?: () => void;
-  addPasskeyOnSignup?: boolean;
-  /**
-   * If hideError is true, then the auth component will not
-   * render the global error component
-   */
-  hideError?: boolean;
-};
-
 export type AlchemyAccountsProviderProps = {
-  config: AlchemyAccountsConfig;
+  config: AlchemyAccountsConfigWithUI;
   initialState?: AlchemyClientState;
   queryClient: QueryClient;
-  /**
-   * If auth config is provided, then the auth modal will be added
-   * to the DOM and can be controlled via the `useAuthModal` hook
-   */
-  uiConfig?: AlchemyAccountsUIConfig;
 };
 
 /**
@@ -108,7 +80,7 @@ export const useAlchemyAccountContext = (
 export const AlchemyAccountProvider = (
   props: React.PropsWithChildren<AlchemyAccountsProviderProps>
 ) => {
-  const { config, queryClient, children, uiConfig } = props;
+  const { config, queryClient, children } = props;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -119,14 +91,16 @@ export const AlchemyAccountProvider = (
     () => ({
       config,
       queryClient,
-      ui: uiConfig
+      ui: config.ui
         ? {
+            config: config.ui,
             openAuthModal,
             closeAuthModal,
+            isModalOpen,
           }
         : undefined,
     }),
-    [config, queryClient, uiConfig, openAuthModal, closeAuthModal]
+    [config, queryClient, openAuthModal, closeAuthModal, isModalOpen]
   );
 
   const { status, isAuthenticating } = useSignerStatus(initialContext);
@@ -135,13 +109,13 @@ export const AlchemyAccountProvider = (
   });
 
   useEffect(() => {
-    if (status === "AWAITING_EMAIL_AUTH" && uiConfig?.addPasskeyOnSignup) {
+    if (status === "AWAITING_EMAIL_AUTH" && config.ui?.addPasskeyOnSignup) {
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get(IS_SIGNUP_QP) !== "true") return;
 
       openAuthModal();
     }
-  }, [status, uiConfig, openAuthModal]);
+  }, [status, config.ui, openAuthModal]);
 
   return (
     <Hydrate {...props}>
@@ -151,11 +125,10 @@ export const AlchemyAccountProvider = (
             value={{
               authStep,
               setAuthStep,
-              uiConfig,
             }}
           >
             {children}
-            <AuthModal open={isModalOpen} />
+            <AuthModal />
           </AuthModalContext.Provider>
         </QueryClientProvider>
       </AlchemyAccountContext.Provider>

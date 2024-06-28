@@ -3,14 +3,12 @@ import { Divider } from "../../divider.js";
 import { PoweredBy } from "../../poweredby.js";
 import { AuthSection } from "../sections/AuthSection.js";
 import { ls } from "../../../strings.js";
-import type { AlchemyAccountsUIConfig } from "../../../context.js";
+import { useUiConfig } from "../../../hooks/useUiConfig.js";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-export const MainAuthContent = ({
-  config: { header, sections, showSignInText },
-}: {
-  config: AlchemyAccountsUIConfig;
-}) => {
+export const MainAuthContent = () => {
+  const { header, showSignInText, sections } = useUiConfig();
+
   return (
     <>
       {header}

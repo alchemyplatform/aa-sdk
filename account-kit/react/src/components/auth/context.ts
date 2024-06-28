@@ -1,6 +1,5 @@
 import type { Connector } from "@wagmi/core";
 import { createContext, useContext } from "react";
-import type { AlchemyAccountsUIConfig } from "../../context.js";
 
 export type AuthStep =
   | { type: "email_verify"; email: string }
@@ -15,7 +14,6 @@ export type AuthStep =
 type AuthContextType = {
   authStep: AuthStep;
   setAuthStep: (step: AuthStep) => void;
-  uiConfig?: AlchemyAccountsUIConfig;
 };
 
 export const AuthModalContext = createContext<AuthContextType | undefined>(
