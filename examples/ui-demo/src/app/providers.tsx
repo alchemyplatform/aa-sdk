@@ -1,10 +1,10 @@
 "use client";
-import { sepolia } from "@aa-sdk/core";
 import { getBorderRadiusBaseVariableName, getBorderRadiusValue, getColorVariableName } from "@account-kit/react/tailwind"
 import { AlchemyAccountProvider, AlchemyAccountsProviderProps, AlchemyAccountsUIConfig, AuthType, createConfig } from "@account-kit/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren, Suspense, useEffect, useMemo, useState } from "react";
 import { Config, ConfigContext, DEFAULT_CONFIG } from "./state";
+import { sepolia } from "viem/chains";
 
 const queryClient = new QueryClient();
 
