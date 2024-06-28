@@ -11,8 +11,4 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
       },
     ],
   },
-  {
-    text: "Functions",
-    items: [],
-  },
 ];
