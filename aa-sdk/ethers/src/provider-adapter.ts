@@ -17,10 +17,34 @@ import { AccountSigner } from "./account-signer.js";
 import type { EthersProviderAdapterOpts } from "./types.js";
 
 /** Lightweight Adapter for SmartAccountProvider to enable Signer Creation */
-// TODO: Add support for strong entry point version type
 export class EthersProviderAdapter extends JsonRpcProvider {
   readonly accountProvider: SmartAccountClient;
 
+  /**
+   * Configures and initializes the account provider based on the given options.
+   *
+   * @example
+   * ```ts
+   * import { AccountSigner, EthersProviderAdapter } from "@aa-sdk/ethers";
+   * import { LocalAccountSigner } from "@aa-sdk/core";
+   * import { sepolia } from "@account-kit/infra";
+   * import { createLightAccount } from "@account-kit/smart-contracts";
+   *
+   * const account = await createLightAccount({
+   *  transport: http("https://rpc.testnet.aepps.com"),
+   *  chain: sepolia,
+   *  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
+   * });
+   *
+   * const provider = new EthersProviderAdapter({
+   *  account,
+   *  chain: sepolia,
+   *  rpcProvider: "https://eth-sepolia.g.alchemy.com/v2/your-api-key"
+   * });
+   * ```
+   *
+   * @param {EthersProviderAdapterOpts} opts The options for setting up the ethers provider adapter
+   */
   constructor(opts: EthersProviderAdapterOpts) {
     super();
     if ("accountProvider" in opts) {
@@ -69,6 +93,33 @@ export class EthersProviderAdapter extends JsonRpcProvider {
     return new AccountSigner<TAccount>(this, account);
   }
 
+  /**
+   * Creates and returns a BundlerClient using the existing account provider's transport and chain.
+   *
+   * @example
+   * ```ts
+   * import { AccountSigner, EthersProviderAdapter } from "@aa-sdk/ethers";
+   * import { LocalAccountSigner } from "@aa-sdk/core";
+   * import { sepolia } from "@account-kit/infra";
+   * import { createLightAccount } from "@account-kit/smart-contracts";
+   *
+   * const account = await createLightAccount({
+   *  transport: http("https://rpc.testnet.aepps.com"),
+   *  chain: sepolia,
+   *  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
+   * });
+   *
+   * const provider = new EthersProviderAdapter({
+   *  account,
+   *  chain: sepolia,
+   *  rpcProvider: "https://eth-sepolia.g.alchemy.com/v2/your-api-key"
+   * });
+   *
+   * const bundlerClient = provider.getBundlerClient();
+   * ```
+   *
+   * @returns {BundlerClient<Transport>} A bundler client configured with the existing account provider.
+   */
   getBundlerClient(): BundlerClient<Transport> {
     return createBundlerClientFromExisting(
       createPublicClient({
