@@ -16,7 +16,7 @@ For mainnet, the conversion expects `coinType == 60`. This comes from [ENSIP-9](
 :::code-group
 
 ```ts [example.ts]
-import { convertCoinTypeToChainId } from "@alchemy/aa-core";
+import { convertCoinTypeToChainId } from "@aa-sdk/core";
 
 const result = convertCoinTypeToChainId(60);
 // 1

@@ -20,7 +20,29 @@ head:
 
 # Migration Guide
 
-Below are the steps to migrate your project from older versions of the `aa-sdk` to the latest version.
+Below are the steps to migrate your project from older versions of the `aa-sdk` and `account-kit` to the latest version.
+
+## Migrating to version v4.x.x
+
+### Utils: `verifyEIP6492Signature` removed
+
+This method has been removed. Use [`verifyMessage`](https://viem.sh/docs/actions/public/verifyMessage) from viem.
+
+### Utils: `defineReadOnly` removed
+
+This method is no longer used internally and has been removed. The reference impl can be found within `ethers.js`.
+
+### Utils: `getChain` removed
+
+This method was not super efficient and maintainable because it was importing all the chains from viem. That meant that if you used this method, it risked increasing your bundle size massively. Now all methods require a `Chain` instead of `chainId` in some places.
+
+### Ethers: `Chain` required param
+
+Certain methods required a `chainId` which would be converted into a `Chain` using the above method. This has been removed for the reasons above.
+
+### Alchemy `Chain` defs
+
+The Alchemy `Chain` definitions have been moved from `@aa-sdk/core` to `@account-kit/infra`.
 
 ## Migrating to version 3.x.x
 
@@ -36,10 +58,10 @@ We have updated our dependency to viem v2.x.x. This means you will need to updat
 The biggest change is that the `SmartAccountProvider` class has been removed and replaced with a `SmartAccountClient` type that extends `viem`'s [`Client`](https://viem.sh/docs/clients/custom). To get started with the new clients, you can do the following:
 
 ```ts
-import { SmartAccountProvider } from "@alchemy/aa-core"; // [!code --]
-import { getDefaultEntryPointAddress } from "@alchemy/aa-core"; // [!code --]
+import { SmartAccountProvider } from "@aa-sdk/core"; // [!code --]
+import { getDefaultEntryPointAddress } from "@aa-sdk/core"; // [!code --]
 import { http } from "viem"; // [!code ++]
-import { sepolia } from "@alchemy/aa-core";
+import { sepolia } from "@aa-sdk/core";
 
 const provider = new SmartAccountProvider({ // [!code --]
 const client = createSmartAccountClient({ // [!code ++]
@@ -56,10 +78,10 @@ The `SmartAccountProvider` in previous versions had a number of `with*` function
 The concept of the middlewares is still present in this version, but their configuration has been moved to the `SmartAccountClient` creator. For example,
 
 ```ts
-import { SmartAccountProvider } from "@alchemy/aa-core"; // [!code --]
-import { getDefaultEntryPointAddress } from "@alchemy/aa-core"; // [!code --]
+import { SmartAccountProvider } from "@aa-sdk/core"; // [!code --]
+import { getDefaultEntryPointAddress } from "@aa-sdk/core"; // [!code --]
 import { http } from "viem"; // [!code ++]
-import { sepolia } from "@alchemy/aa-core";
+import { sepolia } from "@aa-sdk/core";
 
 const provider = new SmartAccountProvider({ // [!code --]
 const client = createSmartAccountClient({ // [!code ++]
@@ -90,12 +112,12 @@ import {
   LightSmartContractAccount, // [!code --]
   createLightAccount, // [!code ++]
   getDefaultLightAccountFactoryAddress, // [!code --]
-} from "@alchemy/aa-accounts";
+} from "@account-kit/smart-contracts";
 import {
   LocalAccountSigner,
   type Hex,
-} from "@alchemy/aa-core";
-import { sepolia } from "@alchemy/aa-core";
+} from "@aa-sdk/core";
+import { sepolia } from "@aa-sdk/core";
 
 const chain = sepolia;
 
@@ -117,14 +139,14 @@ so that you don't have to pass the account to every method.
 #### Option 1: Passing the Account to the Client Methods
 
 ```ts
-import { createLightAccount } from "@alchemy/aa-accounts";
+import { createLightAccount } from "@account-kit/smart-contracts";
 import {
   createBundlerClient,
   createSmartAccountClientFromExisting
   LocalAccountSigner,
   type Hex,
-} from "@alchemy/aa-core";
-import { sepolia } from "@alchemy/aa-core";
+} from "@aa-sdk/core";
+import { sepolia } from "@aa-sdk/core";
 import { custom, http } from "viem";
 
 const chain = sepolia;
@@ -162,14 +184,14 @@ const { hash } = await smartAccountClient.sendUserOperation({
 Hoisting the account is similar to using `.connect` in previous versions. You simply create your client with an account passed in to it.
 
 ```ts
-import { createLightAccount } from "@alchemy/aa-accounts";
+import { createLightAccount } from "@account-kit/smart-contracts";
 import {
   createBundlerClient,
   createSmartAccountClientFromExisting
   LocalAccountSigner,
   type Hex,
-} from "@alchemy/aa-core";
-import { sepolia } from "@alchemy/aa-core";
+} from "@aa-sdk/core";
+import { sepolia } from "@aa-sdk/core";
 import { http, custom } from "viem";
 
 const chain = sepolia;

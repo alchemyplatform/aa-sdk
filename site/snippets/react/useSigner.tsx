@@ -1,4 +1,4 @@
-import { useSigner } from "@alchemy/aa-alchemy/react";
+import { useSigner } from "@account-kit/react";
 
 export function ComponentWithSigner() {
   const signer = useSigner();

@@ -1,4 +1,4 @@
-import { SessionKeyPermissionsBuilder } from "@alchemy/aa-accounts";
+import { SessionKeyPermissionsBuilder } from "@account-kit/smart-contracts";
 import { keccak256 } from "viem";
 import { client } from "./base-client.js";
 

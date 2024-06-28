@@ -29,26 +29,6 @@ This package builds on `aa-core` by exporting an `AlchemySmartAccountClient` whi
 
 For more details on all the utilities exported by `aa-alchemy` see the [aa-alchemy documentation](/packages/aa-alchemy/).
 
-## [`aa-accounts`](/packages/aa-accounts/)
-
-This packages provides various implementations of `SmartContractAccount` for interacting with different smart accounts. This package is not required to use `aa-core` or `aa-alchemy`. If you want to use your own smart account implementation, you can do so by following the guide ["Using your own Account"](/smart-accounts/custom/using-your-own).
-
-If you would like to use a smart account that is not supported by this package, you can implement `SmartContractAccount` yourself and use it with `aa-core` or `aa-alchemy`
-
-For details on contributing your own smart account implementation, see the [aa-accounts contribution guide](/packages/aa-accounts/contributing).
-
-To see all of the smart accounts that are supported by this package, see the [aa-accounts documentation](/packages/aa-accounts/).
-
-## [`aa-signers`](/packages/aa-signers/)
-
-This packages provides various implementations of `SmartAccountSigner` and `SmartAccountAuthenticator` for integrating different Signers of your smart account. This package is not required to use `aa-core` or `aa-alchemy`. If you want to use your own Signer implementation, you can do so by following the guide ["Using your own Signer"](/signers/guides/custom-signer).
-
-If you would like to use a signer that is not supported by this package, you can implement a `SmartAccountSigner` or `SmartAccountAuthenticator` yourself and use it with `aa-core` or `aa-alchemy`.
-
-For details on contributing your own Signer implementation, see the [aa-signers contribution guide](/packages/aa-signers/contributing).
-
-To see all of the Signers that are supported by this package, see the [aa-signers documentation](/packages/aa-signers/).
-
 ## [`aa-ethers`](/packages/aa-ethers/)
 
 This package provides an adapter that allows you to convert a `SmartAccountClient` or `AlchemySmartAccountClient` into an ethers `JsonRpcProvider` and `Signer`. These are primarily for convenience if your codebase expects a `JsonRpcProvider` or `Signer` in places and you want to use `aa-core` or `aa-alchemy` with minimal lift.

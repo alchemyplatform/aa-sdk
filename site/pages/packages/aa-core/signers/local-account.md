@@ -12,14 +12,14 @@ The `LocalAccountSigner` allows you to use accounts for which you already have t
 :::code-group
 
 ```ts [private-key.ts]
-import { LocalAccountSigner } from "@alchemy/aa-core";
+import { LocalAccountSigner } from "@aa-sdk/core";
 
 export const signer =
   LocalAccountSigner.privateKeyToAccountSigner("0xPrivateKey");
 ```
 
 ```ts [mnemonic.ts]
-import { LocalAccountSigner } from "@alchemy/aa-core";
+import { LocalAccountSigner } from "@aa-sdk/core";
 
 export const signer = LocalAccountSigner.mnemonicToAccountSigner("mnemonic");
 ```

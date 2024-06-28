@@ -10,9 +10,9 @@ The `BundlerClient` is an extension of viem's [`PublicClient`](https://viem.sh/d
 ## Import
 
 ```ts
-import { createBundlerClient } from "@alchemy/aa-core";
+import { createBundlerClient } from "@aa-sdk/core";
 // OR
-import { createBundlerClientFromExisting } from "@alchemy/aa-core";
+import { createBundlerClientFromExisting } from "@aa-sdk/core";
 ```
 
 ## Usage
@@ -20,9 +20,9 @@ import { createBundlerClientFromExisting } from "@alchemy/aa-core";
 Initialize a `BundlerClient` in the same way you would initalize a [`PublicClient`](https://viem.sh/docs/clients/public#parameters)
 
 ```ts
-import { createBundlerClient } from "@alchemy/aa-core";
+import { createBundlerClient } from "@aa-sdk/core";
 import { http } from "viem";
-import { sepolia } from "@alchemy/aa-core";
+import { sepolia } from "@aa-sdk/core";
 
 export const smartAccountClient = createBundlerClient({
   transport: http("ALCHEMY_RPC_URL"),
@@ -33,9 +33,9 @@ export const smartAccountClient = createBundlerClient({
 If you already have a [`PublicClient`](https://viem.sh/docs/clients/public) instance, you can use `createBundlerClientFromExisting` to create a `BundlerClient` from it.
 
 ```ts
-import { createBundlerClientFromExisting } from "@alchemy/aa-core";
+import { createBundlerClientFromExisting } from "@aa-sdk/core";
 import { http } from "viem";
-import { sepolia } from "@alchemy/aa-core";
+import { sepolia } from "@aa-sdk/core";
 
 export const smartAccountClient = createBundlerClientFromExisting(publicClient);
 ```

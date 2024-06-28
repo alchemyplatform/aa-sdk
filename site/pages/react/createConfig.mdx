@@ -14,7 +14,7 @@ It's not recommended to use the resulting config directly. However, if you are n
 ## Import
 
 ```ts
-import { createConfig } from "@alchemy/aa-alchemy/config";
+import { createConfig } from "@account-kit/react";
 ```
 
 ## Usage
@@ -34,13 +34,13 @@ import { createConfig } from "@alchemy/aa-alchemy/config";
 ## Parameters
 
 ```ts
-import { type CreateConfigProps } from "@alchemy/aa-alchemy/config";
+import { type CreateConfigProps } from "@account-kit/react";
 ```
 
 :::details[CreateConfigProps]
 
 ```ts [types.ts]
-// [!include ~/../packages/alchemy/src/config/types.ts:CreateConfigProps]
+// [!include ~/../account-kit/core/src/types.ts:CreateConfigProps]
 ```
 
 :::
@@ -48,7 +48,7 @@ import { type CreateConfigProps } from "@alchemy/aa-alchemy/config";
 :::details[ConnectionConfig]
 
 ```ts [types.ts]
-// [!include ~/../packages/core/src/client/schema.ts:ConnectionConfigSchema]
+// [!include ~/../aa-sdk/core/src/client/schema.ts:ConnectionConfigSchema]
 ```
 
 :::
@@ -56,7 +56,7 @@ import { type CreateConfigProps } from "@alchemy/aa-alchemy/config";
 ## Return Type
 
 ```ts
-import { type AlchemyAccountsConfig } from "@alchemy/aa-alchemy/config";
+import { type AlchemyAccountsConfig } from "@account-kit/react";
 ```
 
 Returns an object containing the Alchemy Accounts state.

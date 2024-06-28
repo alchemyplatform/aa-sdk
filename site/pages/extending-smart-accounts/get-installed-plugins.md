@@ -15,7 +15,7 @@ description: Follow this guide to get installed plugins of a Modular Account
 function getInstalledPlugins() external view returns (address[] memory);
 ```
 
-Account Kit provides a streamlined experience of interacting with Modular Account AccoutLoupe interface easily by providing `accountLoupeActions` defined in `@alchemy/aa-accounts` package. When you connect your Modular Account to `SmartAccountClient` you can extend the client with `accountLoupeActions`, which exposes a set of methods available to call the account `AccountLoupe` with the client connected to the account.
+Account Kit provides a streamlined experience of interacting with Modular Account AccoutLoupe interface easily by providing `accountLoupeActions` defined in `@account-kit/smart-contracts` package. When you connect your Modular Account to `SmartAccountClient` you can extend the client with `accountLoupeActions`, which exposes a set of methods available to call the account `AccountLoupe` with the client connected to the account.
 
 ## Get installed plugins of a Modular Account
 
@@ -32,7 +32,7 @@ When using `createModularAccountAlchemyClient` in `@alchemy/aa-alchemy`, the `Sm
 ```ts [example.ts]
 import { smartAccountClient as modularAccountClient } from "./smartAccountClient";
 import { type Address } from "viem";
-import { IPluginAbi, accountLoupeActions } from "@alchemy/aa-accounts";
+import { IPluginAbi, accountLoupeActions } from "@account-kit/smart-contracts";
 
 // [!code focus:99]
 // extend smart account client with accountLoupeActions to call AccountLoupe methods

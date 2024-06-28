@@ -1,13 +1,13 @@
 import {
   createLightAccount,
   lightAccountClientActions,
-} from "@alchemy/aa-accounts";
+} from "@account-kit/smart-contracts";
 import {
   LocalAccountSigner,
   SmartAccountSigner,
   createSmartAccountClient,
   polygonMumbai,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { http } from "viem";
 
 export const chain = polygonMumbai;

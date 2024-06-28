@@ -12,7 +12,7 @@ Utility function that recursively converts all values in an object to hex string
 :::code-group
 
 ```ts [example.ts]
-import { deepHexlify } from "@alchemy/aa-core";
+import { deepHexlify } from "@aa-sdk/core";
 
 const obj = {
     aBigInt: 1n,

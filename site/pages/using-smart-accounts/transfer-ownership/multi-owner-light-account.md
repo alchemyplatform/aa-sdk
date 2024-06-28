@@ -47,7 +47,7 @@ You can use the `updateOwners` method on the `multiOwnerLightAccountClientAction
 
 ```ts [example.ts]
 import { lightAccountClient } from "./smartAccountClient";
-import { multiOwnerPluginActions } from "@alchemy/aa-accounts";
+import { multiOwnerPluginActions } from "@account-kit/smart-contracts";
 import { type Address } from "viem";
 
 const ownersToAdd: Address[] = []; // the addresses of owners to be added

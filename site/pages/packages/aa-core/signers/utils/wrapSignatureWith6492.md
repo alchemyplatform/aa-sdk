@@ -12,7 +12,7 @@ Allows you to generate a signature in [ERC-6492](https://eips.ethereum.org/EIPS/
 :::code-group
 
 ```ts [example.ts]
-import { wrapSignatureWith6492 } from "@alchemy/aa-core";
+import { wrapSignatureWith6492 } from "@aa-sdk/core";
 
 const signature = await wrapSignatureWith6492({
   factoryAddress: "0xAccountFactoryAddress",

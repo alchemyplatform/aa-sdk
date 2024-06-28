@@ -6,7 +6,8 @@
     "node": ">=18.16"
   },
   "workspaces": [
-    "packages/*",
+    "aa-sdk/*",
+    "account-kit/*",
     "templates/*",
     "examples/*",
     "site"
@@ -36,6 +37,7 @@
     "eslint-formatter-rdjson": "^1.0.6",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jsdoc": "^48.2.3",
+    "eslint-plugin-eslint-rules": "*",
     "husky": "^8.0.0",
     "lerna": "^8.0.2",
     "lint-staged": "^13.2.2",

@@ -10,8 +10,8 @@ When using the React hooks exported by Account Kit in a server-side rendered set
 To enable this setting, you can set `ssr: true` when creating a config.
 
 ```ts
-import { createConfig } from "@alchemy/aa-alchemy/config";
-import { sepolia } from "@alchemy/aa-core";
+import { createConfig } from "@account-kit/react";
+import { sepolia } from "@aa-sdk/core";
 
 export const config = createConfig({
   // required
@@ -33,8 +33,8 @@ To consistently pass the state between the server and the client, you can pass i
 import {
   createConfig,
   cookieStorage, // [!code ++]
-} from "@alchemy/aa-alchemy/config";
-import { sepolia } from "@alchemy/aa-core";
+} from "@account-kit/react";
+import { sepolia } from "@aa-sdk/core";
 
 export const config = createConfig({
   // required

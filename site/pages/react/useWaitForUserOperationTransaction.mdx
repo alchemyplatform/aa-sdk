@@ -14,7 +14,7 @@ This requires your user to be logged in. See [`useAuthenticate`](/react/useAuthe
 ## Import
 
 ```ts
-import { useWaitForUserOperationTransaction } from "@alchemy/aa-alchemy/react";
+import { useWaitForUserOperationTransaction } from "@account-kit/react";
 ```
 
 ## Usage
@@ -39,7 +39,7 @@ import BaseHookMutationArgs from "./BaseHookMutationArgs.mdx";
 ## Return Type
 
 ```ts
-import { type UseWaitForUserOperationTransactionResult } from "@alchemy/aa-alchemy/react";
+import { type UseWaitForUserOperationTransactionResult } from "@account-kit/react";
 ```
 
 Returns an object containing the following state.
@@ -54,7 +54,7 @@ It takes in `WaitForUserOperationTxParameters` which has the following type:
 :::details[WaitForUserOperationTxParameters]
 
 ```ts [types.ts]
-// [!include ~/../packages/core/src/actions/smartAccount/types.ts:WaitForUserOperationTxParameters]
+// [!include ~/../aa-sdk/core/src/actions/smartAccount/types.ts:WaitForUserOperationTxParameters]
 ```
 
 :::

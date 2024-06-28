@@ -16,7 +16,7 @@ This requires your user to be logged in. See [`useAuthenticate`](/react/useAuthe
 ## Import
 
 ```ts
-import { useSendTransaction } from "@alchemy/aa-alchemy/react";
+import { useSendTransaction } from "@account-kit/react";
 ```
 
 ## Usage
@@ -41,7 +41,7 @@ import BaseHookMutationArgs from "./BaseHookMutationArgs.mdx";
 ## Return Type
 
 ```ts
-import { type UseSendTransaction } from "@alchemy/aa-alchemy/react";
+import { type UseSendTransaction } from "@account-kit/react";
 ```
 
 Returns an object containing the following state.
@@ -54,7 +54,7 @@ A React query mutation function to send a transaction as a UserOperation. It ret
 :::details[SendTransactionResult]
 
 ```ts [types.ts]
-// [!include ~/../packages/core/src/client/types.ts:SendTransactionResult]
+// [!include ~/../aa-sdk/core/src/client/types.ts:SendTransactionResult]
 ```
 
 :::

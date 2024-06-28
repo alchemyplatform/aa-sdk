@@ -1,7 +1,4 @@
-import {
-  useSignMessage,
-  useSmartAccountClient,
-} from "@alchemy/aa-alchemy/react";
+import { useSignMessage, useSmartAccountClient } from "@account-kit/react";
 import { useState } from "react";
 
 export function ComponentWithSignMessage() {

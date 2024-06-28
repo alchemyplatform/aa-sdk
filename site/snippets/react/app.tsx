@@ -1,4 +1,4 @@
-import { AlchemyAccountProvider } from "@alchemy/aa-alchemy/react";
+import { AlchemyAccountProvider } from "@account-kit/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { config } from "./config";
 

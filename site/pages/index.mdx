@@ -54,8 +54,8 @@ import { Button } from "vocs/components";
 <div className="vp-doc max-lg:hidden">
 
 ```ts [gettingStarted.ts]
-import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";
-import { sepolia } from "@alchemy/aa-core";
+import { createModularAccountAlchemyClient } from "@account-kit/infra";
+import { sepolia } from "@aa-sdk/core";
 
 export const smartAccountClient = await createModularAccountAlchemyClient({
   apiKey: "YOUR_API_KEY",

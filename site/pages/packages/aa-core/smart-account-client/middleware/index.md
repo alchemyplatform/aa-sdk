@@ -12,7 +12,7 @@ Each middleware is a function that takes in a user operation object, performs it
 :::details[ClientMiddlewareFn]
 
 ```ts
-// [!include ~/../packages/core/src/middleware/types.ts:ClientMiddlewareFn]
+// [!include ~/../aa-sdk/core/src/middleware/types.ts:ClientMiddlewareFn]
 ```
 
 :::
@@ -20,7 +20,7 @@ Each middleware is a function that takes in a user operation object, performs it
 :::details[ClientMiddleware]
 
 ```ts
-// [!include ~/../packages/core/src/middleware/types.ts:ClientMiddleware]
+// [!include ~/../aa-sdk/core/src/middleware/types.ts:ClientMiddleware]
 ```
 
 :::
@@ -100,7 +100,7 @@ export type SmartAccountClientConfig<
 
 ```ts
 import { http } from "viem";
-import { sepolia } from "@alchemy/aa-core";
+import { sepolia } from "@aa-sdk/core";
 
 const client = createSmartAccountClient({
   transport: http("RPC_URL"),

@@ -11,7 +11,7 @@ The split transport allows you to provide overrides for specific RPC methods. Th
 ## Import
 
 ```ts
-import { split } from "@alchemy/aa-core";
+import { split } from "@aa-sdk/core";
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ import { split } from "@alchemy/aa-core";
 ## Parameters
 
 ```ts
-import { type SplitTransportProps } from "@alchemy/aa-core";
+import { type SplitTransportProps } from "@aa-sdk/core";
 ```
 
 ### overrides

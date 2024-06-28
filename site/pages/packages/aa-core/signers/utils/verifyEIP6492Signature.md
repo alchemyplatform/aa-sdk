@@ -12,9 +12,9 @@ Uses a the universal validator defined [here](https://github.com/AmbireTech/sign
 :::code-group
 
 ```ts [example.ts]
-import { verifyEIP6492Signature } from "@alchemy/aa-core";
+import { verifyEIP6492Signature } from "@aa-sdk/core";
 import { http } from "viem";
-import { mainnet } from "@alchemy/aa-core";
+import { mainnet } from "@aa-sdk/core";
 
 const signature = await verifyEIP6492Signature({
   signer: "0xAccountAddress",

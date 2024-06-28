@@ -1,4 +1,4 @@
-import { arbitrumSepolia } from "@alchemy/aa-core";
+import { arbitrumSepolia } from "@aa-sdk/core";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {

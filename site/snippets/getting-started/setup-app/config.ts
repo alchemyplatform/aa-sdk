@@ -1,5 +1,5 @@
-import { cookieStorage, createConfig } from "@alchemy/aa-alchemy/config";
-import { arbitrumSepolia } from "@alchemy/aa-core";
+import { cookieStorage, createConfig } from "@account-kit/infra";
+import { arbitrumSepolia } from "@aa-sdk/core";
 import { QueryClient } from "@tanstack/react-query";
 
 export const queryClient = new QueryClient();

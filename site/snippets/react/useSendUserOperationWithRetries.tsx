@@ -2,8 +2,8 @@ import {
   useDropAndReplace,
   useSendUserOperation,
   useSmartAccountClient,
-} from "@alchemy/aa-alchemy/react";
-import { WaitForUserOperationError } from "@alchemy/aa-core";
+} from "@account-kit/react";
+import { WaitForUserOperationError } from "@aa-sdk/core";
 
 export function ComponentWithSendUserOperation() {
   /**

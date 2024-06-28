@@ -1,5 +1,5 @@
-import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";
-import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
+import { createModularAccountAlchemyClient } from "@account-kit/infra";
+import { LocalAccountSigner, sepolia } from "@aa-sdk/core";
 
 // Client with the Gas Manager to sponsor gas.
 // Find your Gas Manager policy id at: dashboard.alchemy.com/gas-manager/policy/create

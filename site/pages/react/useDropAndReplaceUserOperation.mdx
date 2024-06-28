@@ -14,7 +14,7 @@ This requires your user to be logged in. See [`useAuthenticate`](/react/useAuthe
 ## Import
 
 ```ts
-import { useDropAndReplaceUserOperation } from "@alchemy/aa-alchemy/react";
+import { useDropAndReplaceUserOperation } from "@account-kit/react";
 ```
 
 ## Usage
@@ -39,7 +39,7 @@ import BaseHookMutationArgs from "./BaseHookMutationArgs.mdx";
 ## Return Type
 
 ```ts
-import { type UseDropAndReplaceUserOperationResult } from "@alchemy/aa-alchemy/react";
+import { type UseDropAndReplaceUserOperationResult } from "@account-kit/react";
 ```
 
 Returns an object containing the following state.
@@ -52,7 +52,7 @@ A React query mutation function to sign a message. It returns a `SendUserOperati
 :::details[SendUserOperationResult]
 
 ```ts [types.ts]
-// [!include ~/../packages/core/src/client/types.ts:SendUserOperationResult]
+// [!include ~/../aa-sdk/core/src/client/types.ts:SendUserOperationResult]
 ```
 
 :::
@@ -62,7 +62,7 @@ It takes in `DropAndReplaceUserOperationParameters` which has the following type
 :::details[DropAndReplaceUserOperationParameters]
 
 ```ts [types.ts]
-// [!include ~/../packages/core/src/actions/smartAccount/types.ts:DropAndReplaceUserOperationParameters]
+// [!include ~/../aa-sdk/core/src/actions/smartAccount/types.ts:DropAndReplaceUserOperationParameters]
 ```
 
 :::
@@ -73,7 +73,7 @@ An object of the following `SendUserOperationResult` type if the mutation has ru
 :::details[SendUserOperationResult]
 
 ```ts [types.ts]
-// [!include ~/../packages/core/src/client/types.ts:SendUserOperationResult]
+// [!include ~/../aa-sdk/core/src/client/types.ts:SendUserOperationResult]
 ```
 
 :::

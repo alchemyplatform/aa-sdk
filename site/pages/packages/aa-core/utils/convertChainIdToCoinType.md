@@ -16,7 +16,7 @@ For mainnet, this method will return `60` as the coin type. This comes from [ens
 :::code-group
 
 ```ts [example.ts]
-import { convertChainIdToCoinType } from "@alchemy/aa-core";
+import { convertChainIdToCoinType } from "@aa-sdk/core";
 
 const result = convertChainIdToCoinType(1);
 // 60

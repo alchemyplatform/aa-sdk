@@ -52,7 +52,7 @@ If you are using viem, then you can use the `toViemAccount` method which will al
 ```ts [walletClient.ts]
 import { signer } from "./signer";
 import { createWalletClient, http } from "viem";
-import { sepolia } from "@alchemy/aa-core";
+import { sepolia } from "@aa-sdk/core";
 
 export const walletClient = createWalletClient({
   transport: http("alchemy_rpc_url"),

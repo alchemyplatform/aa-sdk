@@ -1,9 +1,9 @@
-import { createLightAccount } from "@alchemy/aa-accounts";
+import { createLightAccount } from "@account-kit/smart-contracts";
 import {
   LocalAccountSigner,
   SmartAccountSigner,
   polygonMumbai,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { http } from "viem";
 import { provider } from "./ethers-provider.js";
 

@@ -1,4 +1,4 @@
-import { createSmartAccountClient, sepolia, split } from "@alchemy/aa-core";
+import { createSmartAccountClient, sepolia, split } from "@aa-sdk/core";
 import { http } from "viem";
 
 const bundlerMethods = [

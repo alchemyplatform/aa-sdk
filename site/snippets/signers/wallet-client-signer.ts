@@ -2,7 +2,7 @@ import {
   WalletClientSigner,
   sepolia,
   type SmartAccountSigner,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { createWalletClient, custom } from "viem";
 
 const externalProvider = window.ethereum; // or anyother EIP-1193 provider

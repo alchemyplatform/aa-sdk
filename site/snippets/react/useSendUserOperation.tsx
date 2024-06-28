@@ -1,7 +1,7 @@
 import {
   useSendUserOperation,
   useSmartAccountClient,
-} from "@alchemy/aa-alchemy/react";
+} from "@account-kit/react";
 
 export function ComponentWithSendUserOperation() {
   /**

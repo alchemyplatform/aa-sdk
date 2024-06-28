@@ -4,7 +4,7 @@
     "es2021": true,
     "node": true
   },
-  "plugins": ["import"],
+  "plugins": ["import", "eslint-rules"],
   "parserOptions": {
     "sourceType": "module"
   },
@@ -29,20 +29,23 @@
         "enableFixer": true
       }
     ],
-    "jsdoc/require-jsdoc": [
-      "warn",
+    "jsdoc/no-types": "off",
+    "jsdoc/require-jsdoc": "off",
+    "jsdoc/match-description": [
+      "error",
       {
-        "publicOnly": {
-          "ancestorsOnly": true
-        },
-        "enableFixer": false,
-        "require": {
-          "FunctionDeclaration": true,
-          "MethodDefinition": true,
-          "ClassDeclaration": true,
-          "ArrowFunctionExpression": true
+        "matchDescription": "[A-Z].*",
+        "tags": {
+          "example": {
+            "message": "Example tags must provide a code block with a language identifier.",
+            "match": "```(js|javascript|ts|tsx)([\\s\\S]*)```"
+          }
         }
       }
+    ],
+    "eslint-rules/require-jsdoc-on-reexported-functions": [
+      "error",
+      { "fixBatchSize": 0 }
     ]
   },
   "overrides": [

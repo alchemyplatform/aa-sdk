@@ -1,12 +1,12 @@
+import { createModularAccountAlchemyClient } from "@account-kit/infra";
 import {
   SessionKeyAccessListType,
   SessionKeyPermissionsBuilder,
   SessionKeyPlugin,
   SessionKeySigner,
   sessionKeyPluginActions,
-} from "@alchemy/aa-accounts";
-import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";
-import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
+} from "@account-kit/smart-contracts";
+import { LocalAccountSigner, sepolia } from "@aa-sdk/core";
 import { zeroHash } from "viem";
 
 const chain = sepolia;

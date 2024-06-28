@@ -1,9 +1,9 @@
-import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy";
+import { createModularAccountAlchemyClient } from "@account-kit/infra";
 import {
   LocalAccountSigner,
   UserOperationCallData,
   sepolia,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 
 export const smartAccountClient = await createModularAccountAlchemyClient({
   apiKey: "YOUR_API_KEY",

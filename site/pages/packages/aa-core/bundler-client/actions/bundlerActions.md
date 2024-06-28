@@ -12,7 +12,7 @@ Allows you to extend a viem `Client` with the new 4337 methods.
 :::code-group
 
 ```ts [example.ts]
-import { bundlerActions } from "@alchemy/aa-core";
+import { bundlerActions } from "@aa-sdk/core";
 import { createPublicClient, http } from "viem";
 
 const client = createPublicClient({

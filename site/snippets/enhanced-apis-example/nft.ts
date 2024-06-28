@@ -1,8 +1,8 @@
 import {
   alchemyEnhancedApiActions,
   createModularAccountAlchemyClient,
-} from "@alchemy/aa-alchemy";
-import { LocalAccountSigner, sepolia } from "@alchemy/aa-core";
+} from "@account-kit/infra";
+import { LocalAccountSigner, sepolia } from "@aa-sdk/core";
 import { Alchemy, Network } from "alchemy-sdk";
 
 const alchemy = new Alchemy({

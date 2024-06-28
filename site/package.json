@@ -9,11 +9,12 @@
     "preview": "vocs preview"
   },
   "devDependencies": {
-    "@alchemy/aa-accounts": "*",
-    "@alchemy/aa-alchemy": "*",
-    "@alchemy/aa-core": "*",
-    "@alchemy/aa-ethers": "*",
-    "@alchemy/aa-signers": "*",
+    "@aa-sdk/core": "^4.0.0-alpha.0",
+    "@aa-sdk/ethers": "^4.0.0-alpha.0",
+    "@account-kit/core": "^4.0.0-alpha.0",
+    "@account-kit/infra": "^4.0.0-alpha.0",
+    "@account-kit/react": "^4.0.0-alpha.0",
+    "@account-kit/smart-contracts": "^4.0.0-alpha.0",
     "autoprefixer": "^10.4.16",
     "execa": "^8.0.1",
     "tailwindcss": "^3.3.3",

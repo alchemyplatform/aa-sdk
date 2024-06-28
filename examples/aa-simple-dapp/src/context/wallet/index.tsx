@@ -5,12 +5,12 @@ import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import { Address } from "@alchemy/aa-core";
 import { MagicSigner } from "@alchemy/aa-signers/magic";
 import {
-  ReactNode,
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
+    ReactNode,
+    createContext,
+    useCallback,
+    useContext,
+    useEffect,
+    useState,
 } from "react";
 
 type WalletContextProps = {

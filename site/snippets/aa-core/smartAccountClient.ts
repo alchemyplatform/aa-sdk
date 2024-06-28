@@ -1,10 +1,10 @@
-import { createMultiOwnerModularAccount } from "@alchemy/aa-accounts";
+import { createMultiOwnerModularAccount } from "@account-kit/smart-contracts";
 import {
   LocalAccountSigner,
   SmartAccountSigner,
   createSmartAccountClient,
   polygonMumbai,
-} from "@alchemy/aa-core";
+} from "@aa-sdk/core";
 import { http } from "viem";
 
 const chain = polygonMumbai;

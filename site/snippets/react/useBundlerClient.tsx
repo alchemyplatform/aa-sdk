@@ -1,4 +1,4 @@
-import { useBundlerClient } from "@alchemy/aa-alchemy/react";
+import { useBundlerClient } from "@account-kit/react";
 import { useQuery } from "@tanstack/react-query";
 
 export function ComponentWithBundlerClient() {

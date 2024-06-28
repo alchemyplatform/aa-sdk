@@ -3,7 +3,7 @@ title: aa-core
 description: Introduction to the aa-core package
 ---
 
-# `@alchemy/aa-core`
+# `@aa-sdk/core`
 
 This package contains the core interfaces and components for interacting with 4337 infrastructure. The primary interfaces that it exports are the `SmartAccountClient` and `SmartContractAccount`.
 
@@ -18,15 +18,15 @@ To get started, first install the package:
 :::code-group
 
 ```bash [yarn]
-yarn add @alchemy/aa-core
+yarn add @aa-sdk/core
 ```
 
 ```bash [npm]
-npm i -s @alchemy/aa-core
+npm i -s @aa-sdk/core
 ```
 
 ```bash [pnpm]
-pnpm i @alchemy/aa-core
+pnpm i @aa-sdk/core
 ```
 
 :::

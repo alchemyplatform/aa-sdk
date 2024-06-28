@@ -1,7 +1,7 @@
 import {
   useSendUserOperation,
   useSmartAccountClient,
-} from "@alchemy/aa-alchemy/react";
+} from "@account-kit/react";
 import { useState } from "react";
 import { Address } from "viem";
 import { arbitrumSepolia } from "viem/chains";

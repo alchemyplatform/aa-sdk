@@ -2,7 +2,7 @@
 
 import { LogInCard } from "@/components/LogInCard";
 import { ProfileCard } from "@/components/ProfileCard";
-import { useAccount, useUser } from "@alchemy/aa-alchemy/react";
+import { useAccount, useUser } from "@account-kit/react";
 
 export default function Home() {
   const { account, address, isLoadingAccount } = useAccount({

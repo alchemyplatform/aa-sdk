@@ -42,7 +42,7 @@ export type UserOperationOverrides = Partial<{
 :::code-group
 
 ```ts [user-operation-override.ts]
-import type { UserOperationOverrides } from "@alchemy/aa-core";
+import type { UserOperationOverrides } from "@aa-sdk/core";
 import { smartAccountClient } from "./smartAccountClient.ts";
 
 // [!code focus:16]
