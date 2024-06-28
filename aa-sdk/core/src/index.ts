@@ -7,9 +7,6 @@ export { EntryPointAbi_v7 } from "./abis/EntryPointAbi_v7.js";
 export { SimpleAccountAbi_v6 } from "./abis/SimpleAccountAbi_v6.js";
 export { SimpleAccountAbi_v7 } from "./abis/SimpleAccountAbi_v7.js";
 export { SimpleAccountFactoryAbi } from "./abis/SimpleAccountFactoryAbi.js";
-export { BaseSmartContractAccount } from "./account/base.js";
-export { createSimpleSmartAccount } from "./account/simple.js";
-export type { SimpleSmartAccount } from "./account/simple.js";
 export type * from "./account/smartContractAccount.js";
 export {
   getAccountAddress,
@@ -17,10 +14,6 @@ export {
   parseFactoryAddressFromAccountInitCode,
   toSmartContractAccount,
 } from "./account/smartContractAccount.js";
-export type {
-  BaseSmartAccountParams,
-  SignTypedDataParams,
-} from "./account/types.js";
 export { buildUserOperation } from "./actions/smartAccount/buildUserOperation.js";
 export { buildUserOperationFromTx } from "./actions/smartAccount/buildUserOperationFromTx.js";
 export { buildUserOperationFromTxs } from "./actions/smartAccount/buildUserOperationFromTxs.js";

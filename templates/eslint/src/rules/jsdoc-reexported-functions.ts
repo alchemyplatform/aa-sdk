@@ -274,7 +274,7 @@ function registerClassMembers(
   }
 
   node.members.forEach((member) => {
-    if (ts.isMethodDeclaration(member) && !isPrivateMember(member)) {
+    if (ts.isMethodDeclaration(member) && !isPrivateOrProtectedMember(member)) {
       exportsMap.set(member.name.getText(), {
         importedName: member.name.getText(),
         exportedFrom: sourceFile.fileName,
@@ -289,7 +289,7 @@ function registerClassMembers(
       ts.isPropertyDeclaration(member) &&
       (member.initializer?.kind === ts.SyntaxKind.ArrowFunction ||
         member.initializer?.kind === ts.SyntaxKind.FunctionExpression) &&
-      !isPrivateMember(member)
+      !isPrivateOrProtectedMember(member)
     ) {
       exportsMap.set(member.name.getText(), {
         importedName: member.name.getText(),
@@ -299,8 +299,14 @@ function registerClassMembers(
   });
 }
 
-function isPrivateMember(node: ts.PropertyDeclaration | ts.MethodDeclaration) {
-  return node.modifiers?.some((x) => x.kind === ts.SyntaxKind.PrivateKeyword);
+function isPrivateOrProtectedMember(
+  node: ts.PropertyDeclaration | ts.MethodDeclaration
+) {
+  return node.modifiers?.some(
+    (x) =>
+      x.kind === ts.SyntaxKind.PrivateKeyword ||
+      x.kind === ts.SyntaxKind.ProtectedKeyword
+  );
 }
 
 export default rule;
