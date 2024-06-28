@@ -1,3 +1,4 @@
+import type { Address, Chain } from "viem";
 import {
   arbitrum,
   arbitrumSepolia,
@@ -14,8 +15,7 @@ import {
   sepolia,
   zora,
   zoraSepolia,
-} from "@aa-sdk/core";
-import type { Address, Chain } from "viem";
+} from "./chains.js";
 
 export const AlchemyPaymasterAddressV3 =
   "0x4f84a207A80c39E9e8BaE717c1F25bA7AD1fB08F";
@@ -31,7 +31,7 @@ export const AlchemyPaymasterAddressV1 =
  *
  * @example
  * ```ts
- * import { sepolia, getAlchemyPaymasterAddress } from "@account-kit/infra/chains";
+ * import { sepolia, getAlchemyPaymasterAddress } from "@account-kit/infra";
  *
  * const paymasterAddress = getAlchemyPaymasterAddress(sepolia);
  * ```

@@ -16,7 +16,7 @@ export type EthersProviderAdapterOpts<
 } & (
   | {
       rpcProvider: string | BundlerClient<TTransport>;
-      chainId: number;
+      chain: Chain;
     }
   | {
       accountProvider: SmartAccountClient<TTransport, TChain, TAccount>;

@@ -1,29 +1,6 @@
-import type { Chain } from "viem";
 import { toHex } from "viem";
-import * as chains from "viem/chains";
-import * as alchemyChains from "../chains/index.js";
 import type { PromiseOrValue } from "../types.js";
 import type { RecordableKeys } from "./types.js";
-
-export const AlchemyChainMap = new Map<number, Chain>(
-  Object.values(alchemyChains).map((c) => [c.id, c])
-);
-
-/**
- * Utility method for converting a chainId to a {@link Chain} object
- *
- * @param chainId - the chainId to convert
- * @returns a {@link Chain} object for the given chainId
- * @throws if the chainId is not found
- */
-export const getChain = (chainId: number): Chain => {
-  for (const chain of Object.values(chains)) {
-    if (chain.id === chainId) {
-      return AlchemyChainMap.get(chain.id) ?? chain;
-    }
-  }
-  throw new Error("could not find chain");
-};
 
 /**
  * Utility function that allows for piping a series of async functions together

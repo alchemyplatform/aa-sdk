@@ -31,27 +31,6 @@ export { sendTransactions } from "./actions/smartAccount/sendTransactions.js";
 export { sendUserOperation } from "./actions/smartAccount/sendUserOperation.js";
 export type * from "./actions/smartAccount/types.js";
 export { waitForUserOperationTransaction } from "./actions/smartAccount/waitForUserOperationTransacation.js";
-export {
-  arbitrum,
-  arbitrumGoerli,
-  arbitrumSepolia,
-  base,
-  baseGoerli,
-  baseSepolia,
-  fraxtal,
-  fraxtalSepolia,
-  goerli,
-  mainnet,
-  optimism,
-  optimismGoerli,
-  optimismSepolia,
-  polygon,
-  polygonAmoy,
-  polygonMumbai,
-  sepolia,
-  zora,
-  zoraSepolia,
-} from "./chains/index.js";
 export type * from "./client/bundlerClient.js";
 export {
   createBundlerClient,
@@ -136,7 +115,6 @@ export { split, type SplitTransportParams } from "./transport/split.js";
 export type * from "./types.js";
 export type * from "./utils/index.js";
 export {
-  AlchemyChainMap,
   BigNumberishRangeSchema,
   BigNumberishSchema,
   ChainSchema,
@@ -154,7 +132,6 @@ export {
   concatPaymasterAndData,
   deepHexlify,
   filterUndefined,
-  getChain,
   getDefaultSimpleAccountFactoryAddress,
   getDefaultUserOperationFeeOptions,
   isBigNumberish,

@@ -1,11 +1,11 @@
 import {
   createSimpleSmartAccount,
-  getChain,
   getDefaultSimpleAccountFactoryAddress,
 } from "@aa-sdk/core";
 import { Wallet } from "@ethersproject/wallet";
 import { Alchemy, Network, type AlchemyProvider } from "alchemy-sdk";
 import { http } from "viem";
+import { polygonMumbai } from "viem/chains";
 import { EthersProviderAdapter } from "../../src/provider-adapter.js";
 import { convertWalletToAccountSigner } from "../utils.js";
 
@@ -39,19 +39,18 @@ const givenConnectedProvider = async ({
   alchemyProvider: AlchemyProvider;
   signer: Wallet;
 }) => {
-  const chain = getChain(alchemyProvider.network.chainId);
+  const chain = polygonMumbai;
 
   return EthersProviderAdapter.fromEthersProvider(
-    alchemyProvider
+    alchemyProvider,
+    chain
   ).connectToAccount(
     await createSimpleSmartAccount({
       chain,
       signer: convertWalletToAccountSigner(signer),
       accountAddress: "0x856185aedfab56809e6686d2d6d0c039d615bd9c",
       factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
-      transport: http(
-        `${chain.rpcUrls.alchemy.http[0]}/${alchemyProvider.apiKey}`
-      ),
+      transport: http(`${alchemyProvider.connection.url}`),
     })
   );
 };
