@@ -42,6 +42,7 @@ export function resolveReExport(
         filePath,
         node.moduleSpecifier.text
       );
+      if (!exportedFilePath) return;
 
       if (node.exportClause && ts.isNamedExports(node.exportClause)) {
         node.exportClause.elements.forEach((element) => {
