@@ -31,27 +31,13 @@ export class ClientUndefinedHookError extends BaseError {
 /**
  * An error thrown by hooks that require a uiConfig to be supplied to the AlchemyAccountProvider.
  */
-export class MissingUiConfigHookError extends BaseError {
+export class MissingUiConfigError extends BaseError {
   /**
    * @param hookName the name of the hook that is throwing this error
    */
   constructor(hookName: string) {
     super(
       `${hookName}: uiConfig must be supplied to AlchemyAccountProvider to use this hook`
-    );
-  }
-}
-
-/**
- * An error thrown by components that require a uiConfig to be supplied to the AlchemyAccountProvider.
- */
-export class MissingUiConfigComponentError extends BaseError {
-  /**
-   * @param componentName the name of the hook that is throwing this error
-   */
-  constructor(componentName: string) {
-    super(
-      `${componentName}: uiConfig must be supplied to AlchemyAccountProvider to use this component`
     );
   }
 }
