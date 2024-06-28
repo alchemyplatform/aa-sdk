@@ -11,6 +11,13 @@ export function getExportedFilePath(baseDir: string, filePath: string) {
     filePath.replace(".js", ".tsx")
   );
 
+  if (
+    !fs.existsSync(exportedFilePathTs) &&
+    !fs.existsSync(exportedFilePathTsx)
+  ) {
+    return null;
+  }
+
   return fs.existsSync(exportedFilePathTsx)
     ? exportedFilePathTsx
     : exportedFilePathTs;
