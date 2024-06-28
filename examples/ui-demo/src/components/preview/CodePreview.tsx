@@ -21,7 +21,7 @@ export function CodePreview() {
         </div>
         <div className="text-sm text-gray-600">
           To get started, simply paste the below code into your environment.
-          You’ll need to add your Alchemy API key and Gas Policy ID too. Login
+          You&apos;ll need to add your Alchemy API key and Gas Policy ID too. Login
           to automatically inject the keys into the code below.{" "}
           <ExternalLink href="#" className="text-blue-600 font-semibold">
             Fully customize CSS here.
@@ -110,6 +110,7 @@ function getConfigCode(config: Config) {
     auth: {
       sections: ${JSON.stringify(sections)},
       addPasskeyOnSignup: ${config.auth.addPasskey},
+      illustrationStyle: ${config.ui.illustrationStyle},
     },
   };
 `

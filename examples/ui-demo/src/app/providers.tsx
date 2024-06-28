@@ -1,36 +1,41 @@
 "use client";
-import { sepolia } from "@aa-sdk/core";
-import { createConfig } from "@account-kit/core";
-import { getBorderRadiusBaseVariableName, getColorVariableName } from "@account-kit/react/tailwind"
-import { AlchemyAccountProvider, AlchemyAccountsProviderProps } from "@account-kit/react";
+import { getBorderRadiusBaseVariableName, getBorderRadiusValue, getColorVariableName } from "@account-kit/react/tailwind"
+import { AlchemyAccountProvider, AlchemyAccountsProviderProps, AlchemyAccountsUIConfig, AuthType, createConfig } from "@account-kit/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren, Suspense, useEffect, useMemo, useState } from "react";
 import { Config, ConfigContext, DEFAULT_CONFIG } from "./state";
-import { getBorderRadiusValue } from "@account-kit/react/tailwind";
-
-const alchemyConfig = createConfig({
-  // required
-  rpcUrl: "/api/rpc",
-  chain: sepolia,
-  ssr: true,
-});
+import { sepolia } from "viem/chains";
 
 const queryClient = new QueryClient();
 
 export const Providers = (props: PropsWithChildren<{}>) => {
   const [config, setConfig] = useState<Config>(DEFAULT_CONFIG);
 
-  const uiConfig: AlchemyAccountsProviderProps["uiConfig"] = useMemo(() => {
-    return {
-      // TODO: read sections fron `config` too
-      auth: {
-        sections: [[{ type: "email" }], [{ type: "passkey" }]],
-        addPasskeyOnSignup: config.auth.addPasskey,
-        illustrationStyle: config.ui.illustrationStyle,
-      },
+  // Sync Alchemy auth UI config
+  const alchemyConfig: AlchemyAccountsProviderProps["config"] = useMemo(() => {
+    const sections: AuthType[][] = [[{ type: "passkey" as const }]]
+    if (config.auth.showEmail) {
+      sections.unshift([{ type: "email" as const }])
+    }
+
+    const uiConfig: AlchemyAccountsUIConfig = {
+      sections,
+      addPasskeyOnSignup: config.auth.addPasskey,
+      illustrationStyle: config.ui.illustrationStyle,
+      showSignInText: true,
+      header: <AuthCardHeader theme={config.ui.theme} logoDark={config.ui.logoDark} logoLight={config.ui.logoLight} />,
     };
+
+    return createConfig({
+      // required
+      rpcUrl: "/api/rpc",
+      chain: sepolia,
+      ssr: true,
+      ui: uiConfig,
+    });
   }, [config]);
 
+  // Sync CSS variables
   useEffect(() => {
     const root = document.querySelector(':root') as HTMLElement;
 
@@ -55,7 +60,6 @@ export const Providers = (props: PropsWithChildren<{}>) => {
         <AlchemyAccountProvider
           config={alchemyConfig}
           queryClient={queryClient}
-          uiConfig={uiConfig}
         >
           <ConfigContext.Provider value={{ config, setConfig }}>
             {props.children}
@@ -63,5 +67,19 @@ export const Providers = (props: PropsWithChildren<{}>) => {
         </AlchemyAccountProvider>
       </QueryClientProvider>
     </Suspense>
+  );
+};
+
+function AuthCardHeader({ logoDark, logoLight, theme }: Pick<Config['ui'], "theme" | "logoLight" | "logoDark">) {
+  const logo = theme === "dark" ? logoDark : logoLight;
+
+  if (!logo) return null;
+
+  return (
+    <img
+      style={{ height: "60px", objectFit: "contain" }}
+      src={logo.fileSrc}
+      alt={logo.fileName}
+    />
   );
 };

@@ -4,13 +4,13 @@ import { Button } from "./button.js";
 interface NavigationProps {
   onBack?: () => void;
   onClose: () => void;
-  showBack: boolean;
+  showBack?: boolean;
   showClose: boolean;
 }
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const Navigation = ({
-  showBack,
+  showBack = false,
   showClose,
   onBack,
   onClose,
