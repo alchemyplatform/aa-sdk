@@ -40,6 +40,31 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
   private webauthnStamper: WebauthnStamper;
   iframeContainerId: string;
 
+  /**
+   * Initializes a new instance with the given parameters, setting up the connection, iframe configuration, and WebAuthn stamper.
+   *
+   * @example
+   * ```ts
+   * import { AlchemySignerWebClient } from "@account-kit/signer";
+   *
+   * const client = new AlchemySignerWebClient({
+   *  connection: {
+   *    apiKey: "your-api-key",
+   *  },
+   *  iframeConfig: {
+   *   iframeContainerId: "signer-iframe-container",
+   *  },
+   * });
+   * ```
+   *
+   * @param {AlchemySignerClientParams} params the parameters required to initialize the client
+   * @param {ConnectionConfig} params.connection The connection details needed to connect to the service
+   * @param {object} params.iframeConfig The configuration details for setting up the iframe stamper
+   * @param {string} params.iframeConfig.iframeElementId The element ID of the iframe
+   * @param {string} params.iframeConfig.iframeContainerId The container ID for the iframe element
+   * @param {string} [params.rpId] The relying party ID, defaulting to the current hostname if not provided
+   * @param {string} params.rootOrgId The root organization ID
+   */
   constructor(params: AlchemySignerClientParams) {
     const { connection, iframeConfig, rpId, rootOrgId } =
       AlchemySignerClientParamsSchema.parse(params);
@@ -64,7 +89,29 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     });
   }
 
-  public createAccount = async (params: CreateAccountParams) => {
+  /**
+   * Authenticates the user by either email or passkey account creation flow. Emits events during the process.
+   *
+   * @example
+   * ```ts
+   * import { AlchemySignerWebClient } from "@account-kit/signer";
+   *
+   * const client = new AlchemySignerWebClient({
+   *  connection: {
+   *    apiKey: "your-api-key",
+   *  },
+   *  iframeConfig: {
+   *   iframeContainerId: "signer-iframe-container",
+   *  },
+   * });
+   *
+   * const account = await client.createAccount({ type: "email", email: "you@mail.com" });
+   * ```
+   *
+   * @param {CreateAccountParams} params The parameters for creating an account, including the type (email or passkey) and additional details.
+   * @returns {Promise<SignupResponse>} A promise that resolves with the response object containing the account creation result.
+   */
+  createAccount = async (params: CreateAccountParams) => {
     this.eventEmitter.emit("authenticating");
     if (params.type === "email") {
       const { email, expirationSeconds } = params;
@@ -105,6 +152,29 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     return result;
   };
 
+  /**
+   * Begin authenticating a user with their email and an expiration time for the authentication request. Initializes the iframe stamper to get the target public key.
+   * This method sends an email to the user to complete their login
+   *
+   * @example
+   * ```ts
+   * import { AlchemySignerWebClient } from "@account-kit/signer";
+   *
+   * const client = new AlchemySignerWebClient({
+   *  connection: {
+   *    apiKey: "your-api-key",
+   *  },
+   *  iframeConfig: {
+   *   iframeContainerId: "signer-iframe-container",
+   *  },
+   * });
+   *
+   * const account = await client.initEmailAuth({ email: "you@mail.com" });
+   * ```
+   *
+   * @param {Omit<EmailAuthParams, "targetPublicKey">} params The parameters for email authentication, excluding the target public key
+   * @returns {Promise<any>} The response from the authentication request
+   */
   public initEmailAuth = async (
     params: Omit<EmailAuthParams, "targetPublicKey">
   ) => {
@@ -120,6 +190,30 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     });
   };
 
+  /**
+   * Completes email auth for the user by injecting a credential bundle and retrieving the user information based on the provided organization ID. Emits events during the process.
+   *
+   * @example
+   * ```ts
+   * import { AlchemySignerWebClient } from "@account-kit/signer";
+   *
+   * const client = new AlchemySignerWebClient({
+   *  connection: {
+   *    apiKey: "your-api-key",
+   *  },
+   *  iframeConfig: {
+   *   iframeContainerId: "signer-iframe-container",
+   *  },
+   * });
+   *
+   * const account = await client.completeEmailAuth({ orgId: "user-org-id", bundle: "bundle-from-email" });
+   * ```
+   *
+   * @param {object} config The configuration object for the authentication function
+   * @param {string} config.bundle The credential bundle to be injected
+   * @param {string} config.orgId The organization ID to retrieve the user information
+   * @returns {Promise<User>} A promise that resolves to the authenticated user information
+   */
   public completeEmailAuth = async ({
     bundle,
     orgId,
@@ -142,6 +236,28 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     return user;
   };
 
+  /**
+   * Asynchronously handles the authentication process using WebAuthn Stamper. If a user is provided, sets the user and returns it. Otherwise, retrieves the current user and initializes the WebAuthn stamper.
+   *
+   * @example
+   * ```ts
+   * import { AlchemySignerWebClient } from "@account-kit/signer";
+   *
+   * const client = new AlchemySignerWebClient({
+   *  connection: {
+   *    apiKey: "your-api-key",
+   *  },
+   *  iframeConfig: {
+   *   iframeContainerId: "signer-iframe-container",
+   *  },
+   * });
+   *
+   * const account = await client.lookupUserWithPasskey();
+   * ```
+   *
+   * @param {User} [user] An optional user object to authenticate
+   * @returns {Promise<User>} A promise that resolves to the authenticated user object
+   */
   public lookupUserWithPasskey = async (user: User | undefined = undefined) => {
     this.eventEmitter.emit("authenticating");
     await this.initWebauthnStamper(user);
@@ -157,6 +273,33 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     return result;
   };
 
+  /**
+   * Initiates the export of a wallet by creating an iframe stamper and calling the appropriate export function.
+   * The export can be based on a seed phrase or a private key.
+   *
+   * @example
+   * ```ts
+   * import { AlchemySignerWebClient } from "@account-kit/signer";
+   *
+   * const client = new AlchemySignerWebClient({
+   *  connection: {
+   *    apiKey: "your-api-key",
+   *  },
+   *  iframeConfig: {
+   *   iframeContainerId: "signer-iframe-container",
+   *  },
+   * });
+   *
+   * const account = await client.exportWallet({
+   *  iframeContainerId: "export-iframe-container",
+   * });
+   * ```
+   *
+   * @param {ExportWalletParams} config The parameters for exporting the wallet
+   * @param {string} config.iframeContainerId The ID of the container element that will hold the iframe stamper
+   * @param {string} [config.iframeElementId] Optional ID for the iframe element
+   * @returns {Promise<void>} A promise that resolves when the export process is complete
+   */
   public exportWallet = async ({
     iframeContainerId,
     iframeElementId = "turnkey-export-iframe",
@@ -181,6 +324,25 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     });
   };
 
+  /**
+   * Asynchronous function that clears the user and resets the iframe stamper.
+   *
+   * @example
+   * ```ts
+   * import { AlchemySignerWebClient } from "@account-kit/signer";
+   *
+   * const client = new AlchemySignerWebClient({
+   *  connection: {
+   *    apiKey: "your-api-key",
+   *  },
+   *  iframeConfig: {
+   *   iframeContainerId: "signer-iframe-container",
+   *  },
+   * });
+   *
+   * const account = await client.disconnect();
+   * ```
+   */
   public disconnect = async () => {
     this.user = undefined;
     this.iframeStamper.clear();
