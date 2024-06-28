@@ -12,91 +12,108 @@ export const accountKitReactReferenceSidebar: SidebarItem[] = [
     ],
   },
   {
-    text: "Functions",
+    text: "Components",
+    items: [
+      {
+        text: "AlchemyAccountProvider",
+        link: "/reference/account-kit/react/components/AlchemyAccountProvider",
+      },
+      {
+        text: "AuthCard",
+        link: "/reference/account-kit/react/components/AuthCard",
+      },
+    ],
+  },
+  {
+    text: "Hooks",
     items: [
       {
         text: "useAccount",
-        link: "/reference/account-kit/react/functions/useAccount",
+        link: "/reference/account-kit/react/hooks/useAccount",
       },
       {
         text: "useAddPasskey",
-        link: "/reference/account-kit/react/functions/useAddPasskey",
+        link: "/reference/account-kit/react/hooks/useAddPasskey",
+      },
+      {
+        text: "useAlchemyAccountContext",
+        link: "/reference/account-kit/react/hooks/useAlchemyAccountContext",
       },
       {
         text: "useAuthError",
-        link: "/reference/account-kit/react/functions/useAuthError",
+        link: "/reference/account-kit/react/hooks/useAuthError",
       },
       {
         text: "useAuthModal",
-        link: "/reference/account-kit/react/functions/useAuthModal",
+        link: "/reference/account-kit/react/hooks/useAuthModal",
       },
       {
         text: "useAuthenticate",
-        link: "/reference/account-kit/react/functions/useAuthenticate",
+        link: "/reference/account-kit/react/hooks/useAuthenticate",
       },
       {
         text: "useBundlerClient",
-        link: "/reference/account-kit/react/functions/useBundlerClient",
+        link: "/reference/account-kit/react/hooks/useBundlerClient",
       },
       {
         text: "useChain",
-        link: "/reference/account-kit/react/functions/useChain",
+        link: "/reference/account-kit/react/hooks/useChain",
       },
       {
         text: "useClientActions",
-        link: "/reference/account-kit/react/functions/useClientActions",
+        link: "/reference/account-kit/react/hooks/useClientActions",
       },
       {
         text: "useDropAndReplaceUserOperation",
-        link: "/reference/account-kit/react/functions/useDropAndReplaceUserOperation",
+        link: "/reference/account-kit/react/hooks/useDropAndReplaceUserOperation",
       },
       {
         text: "useExportAccount",
-        link: "/reference/account-kit/react/functions/useExportAccount",
+        link: "/reference/account-kit/react/hooks/useExportAccount",
       },
       {
         text: "useLogout",
-        link: "/reference/account-kit/react/functions/useLogout",
+        link: "/reference/account-kit/react/hooks/useLogout",
       },
       {
         text: "useSendTransaction",
-        link: "/reference/account-kit/react/functions/useSendTransaction",
+        link: "/reference/account-kit/react/hooks/useSendTransaction",
       },
       {
         text: "useSendTransactions",
-        link: "/reference/account-kit/react/functions/useSendTransactions",
+        link: "/reference/account-kit/react/hooks/useSendTransactions",
       },
       {
         text: "useSendUserOperation",
-        link: "/reference/account-kit/react/functions/useSendUserOperation",
+        link: "/reference/account-kit/react/hooks/useSendUserOperation",
       },
       {
         text: "useSignMessage",
-        link: "/reference/account-kit/react/functions/useSignMessage",
+        link: "/reference/account-kit/react/hooks/useSignMessage",
       },
       {
         text: "useSignTypedData",
-        link: "/reference/account-kit/react/functions/useSignTypedData",
+        link: "/reference/account-kit/react/hooks/useSignTypedData",
       },
       {
         text: "useSigner",
-        link: "/reference/account-kit/react/functions/useSigner",
+        link: "/reference/account-kit/react/hooks/useSigner",
       },
       {
         text: "useSignerStatus",
-        link: "/reference/account-kit/react/functions/useSignerStatus",
+        link: "/reference/account-kit/react/hooks/useSignerStatus",
       },
       {
         text: "useSmartAccountClient",
-        link: "/reference/account-kit/react/functions/useSmartAccountClient",
+        link: "/reference/account-kit/react/hooks/useSmartAccountClient",
       },
       {
         text: "useUser",
-        link: "/reference/account-kit/react/functions/useUser",
+        link: "/reference/account-kit/react/hooks/useUser",
       },
       {
         text: "useWaitForUserOperationTransaction",
-        link: "/reference/account-kit/react/functions/useWaitForUserOperationTransaction",
+        link: "/reference/account-kit/react/hooks/useWaitForUserOperationTransaction",
       },
     ],
   },
