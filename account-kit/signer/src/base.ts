@@ -44,6 +44,10 @@ type InternalStore = Mutate<
   [["zustand/subscribeWithSelector", never]]
 >;
 
+/**
+ * Base class for Alchemy Signer, providing authentication and session management for smart accounts.
+ * Implements the `SmartAccountAuthenticator` interface and handles various signer events.
+ */
 export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   implements SmartAccountAuthenticator<AuthParams, User, TClient>
 {
