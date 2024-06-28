@@ -14,6 +14,20 @@ const referencePackages = [
   "@aa-sdk/ethers",
 ];
 
+const generateItems = (
+  items: string[],
+  referencePath: string,
+  location: "functions" | "hooks" | "components"
+) => {
+  return items.map((file) => {
+    const functionName = file.split(".")[0];
+    return {
+      text: functionName,
+      link: `${referencePath.replace(".", "")}/${location}/${functionName}`,
+    };
+  });
+};
+
 referencePackages.forEach(async (pkg) => {
   const cleanPkg = pkg.replace("@", "");
   const referencePath = `./reference/${cleanPkg}`;
@@ -21,13 +35,34 @@ referencePackages.forEach(async (pkg) => {
     .readdir(path.resolve("./pages", referencePath, "./functions"))
     .catch(() => []);
 
-  const functionItems = functionFiles.map((file) => {
-    const functionName = file.split(".")[0];
-    return {
-      text: functionName,
-      link: `${referencePath.replace(".", "")}/functions/${functionName}`,
-    };
-  });
+  const hookFiles = await fs
+    .readdir(path.resolve("./pages", referencePath, "./hooks"))
+    .catch(() => []);
+  const componentFiles = await fs
+    .readdir(path.resolve("./pages", referencePath, "./components"))
+    .catch(() => []);
+
+  const functionItems = generateItems(
+    functionFiles,
+    referencePath,
+    "functions"
+  );
+  const hookItems = generateItems(hookFiles, referencePath, "hooks");
+  const componentItems = generateItems(
+    componentFiles,
+    referencePath,
+    "components"
+  );
+
+  const hooksSection = hookItems.length
+    ? { text: "Hooks", items: hookItems }
+    : undefined;
+  const componentsSection = componentItems.length
+    ? { text: "Components", items: componentItems }
+    : undefined;
+  const functionsSection = functionItems.length
+    ? { text: "Functions", items: functionItems }
+    : undefined;
 
   const sidebarConst = `${camelCase(
     cleanPkg.split("/").join("-")
@@ -44,15 +79,15 @@ referencePackages.forEach(async (pkg) => {
             link: "${referencePath.replace(".", "")}"
         }],
     },
-    {
-        text: "Functions",
-        items: ${JSON.stringify(functionItems, null, 2)}
-    }
+    ${[componentsSection, hooksSection, functionsSection]
+      .filter((x) => x != null)
+      .map((x) => JSON.stringify(x, null, 2))
+      .join(",\n")}
   ];
   `;
 
   fs.outputFileSync(
     path.resolve("./sidebar", `${referencePath}.ts`),
-    format(sidebarContent)
+    format(sidebarContent, { parser: "typescript" })
   );
 });
