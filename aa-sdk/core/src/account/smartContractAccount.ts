@@ -34,13 +34,18 @@ import type { SmartAccountSigner } from "../signer/types.js";
 import { wrapSignatureWith6492 } from "../signer/utils.js";
 import type { NullAddress } from "../types.js";
 import type { IsUndefined } from "../utils/types.js";
-import { DeploymentState } from "./base.js";
 
 export type AccountOp = {
   target: Address;
   value?: bigint;
   data: Hex | "0x";
 };
+
+export enum DeploymentState {
+  UNDEFINED = "0x0",
+  NOT_DEPLOYED = "0x1",
+  DEPLOYED = "0x2",
+}
 
 export type GetEntryPointFromAccount<
   TAccount extends SmartContractAccount | undefined,
