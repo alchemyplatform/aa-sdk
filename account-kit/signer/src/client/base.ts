@@ -71,10 +71,23 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     this._user = user;
   }
 
+  /**
+   * Sets the stamper of the TurnkeyClient.
+   *
+   * @param {TurnkeyClient["stamper"]} stamper the stamper function to set for the TurnkeyClient
+   */
   protected setStamper(stamper: TurnkeyClient["stamper"]) {
     this.turnkeyClient.stamper = stamper;
   }
 
+  /**
+   * Exports wallet credentials based on the specified type, either as a SEED_PHRASE or PRIVATE_KEY.
+   *
+   * @param {object} params The parameters for exporting the wallet
+   * @param {ExportWalletStamper} params.exportStamper The stamper used for exporting the wallet
+   * @param {"SEED_PHRASE" | "PRIVATE_KEY"} params.exportAs Specifies the format for exporting the wallet, either as a SEED_PHRASE or PRIVATE_KEY
+   * @returns {Promise<boolean>} A promise that resolves to true if the export is successful
+   */
   protected exportWalletInner(params: {
     exportStamper: ExportWalletStamper;
     exportAs: "SEED_PHRASE" | "PRIVATE_KEY";
@@ -133,6 +146,13 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     return () => this.eventEmitter.removeListener(event, listener as any);
   };
 
+  /**
+   * Handles the creation of authenticators using WebAuthn attestation and the provided options. Requires the user to be authenticated.
+   *
+   * @param {CredentialCreationOptions} options The options used to create the WebAuthn attestation
+   * @returns {Promise<string[]>} A promise that resolves to an array of authenticator IDs
+   * @throws {NotAuthenticatedError} If the user is not authenticated
+   */
   public addPasskey = async (options: CredentialCreationOptions) => {
     if (!this.user) {
       throw new NotAuthenticatedError();
@@ -166,6 +186,13 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     return authenticatorIds;
   };
 
+  /**
+   * Retrieves the current user or fetches the user information if not already available.
+   *
+   * @param {string} [orgId] optional organization ID, defaults to the user's organization ID
+   * @returns {Promise<User>} A promise that resolves to the user object
+   * @throws {Error} if no organization ID is provided when there is no current user
+   */
   public whoami = async (orgId = this.user?.orgId): Promise<User> => {
     if (this.user) {
       return this.user;
@@ -200,6 +227,12 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     return this.user;
   };
 
+  /**
+   * Looks up information based on an email address.
+   *
+   * @param {string} email the email address to look up
+   * @returns {Promise<any>} the result of the lookup request
+   */
   public lookupUserByEmail = async (email: string) => {
     return this.request("/v1/lookup", { email });
   };
@@ -236,10 +269,23 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     return signature;
   };
 
+  /**
+   * Returns the current user or null if no user is set.
+   *
+   * @returns {User | null} the current user object or null if no user is available
+   */
   public getUser = (): User | null => {
     return this.user ?? null;
   };
 
+  /**
+   * Sends a POST request to the given signer route with the specified body and returns the response.
+   * Not intended to be used directly, use the specific methods instead on the client instead.
+   *
+   * @param {SignerRoutes} route The route to which the request should be sent
+   * @param {SignerBody<R>} body The request body containing the data to be sent
+   * @returns {Promise<SignerResponse<R>>} A promise that resolves to the response from the signer
+   */
   public request = async <R extends SignerRoutes>(
     route: R,
     body: SignerBody<R>
@@ -356,6 +402,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     return result;
   };
 
+  // eslint-disable-next-line eslint-rules/require-jsdoc-on-reexported-functions
   protected pollActivityCompletion = async <
     T extends keyof Awaited<
       ReturnType<(typeof this.turnkeyClient)["getActivity"]>
