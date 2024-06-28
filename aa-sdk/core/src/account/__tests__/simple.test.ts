@@ -5,8 +5,8 @@ import {
   type Address,
   type Chain,
 } from "viem";
+import { sepolia } from "viem/chains";
 import { describe, it } from "vitest";
-import { sepolia } from "../../chains/index.js";
 import { createBundlerClientFromExisting } from "../../client/bundlerClient.js";
 import { createSmartAccountClient } from "../../client/smartAccountClient.js";
 import { LocalAccountSigner } from "../../signer/local-account.js";
@@ -96,14 +96,14 @@ describe("Account Simple Tests", async () => {
     chain: Chain;
   }) =>
     createSmartAccountClient({
-      transport: http(`${chain.rpcUrls.alchemy.http[0]}/${"test"}`),
+      transport: http(`https://test.com`),
       chain: chain,
       account: await createSimpleSmartAccount({
         chain,
         signer,
         accountAddress: "0x1234567890123456789012345678901234567890",
         factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
-        transport: http(`${chain.rpcUrls.alchemy.http[0]}/${"test"}`),
+        transport: http(`https://test.com`),
       }),
     });
 });

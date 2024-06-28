@@ -1,3 +1,5 @@
+import { type UserOperationFeeOptions } from "@aa-sdk/core";
+import type { Chain } from "viem";
 import {
   arbitrum,
   arbitrumGoerli,
@@ -5,9 +7,7 @@ import {
   optimism,
   optimismGoerli,
   optimismSepolia,
-  type UserOperationFeeOptions,
-} from "@aa-sdk/core";
-import type { Chain } from "viem";
+} from "./chains.js";
 
 /**
  * Retrieves the default user operation fee options for a given chain. Adjusts fees for specific chains like Arbitrum and Optimism.
@@ -15,7 +15,7 @@ import type { Chain } from "viem";
  * @example
  * ```ts
  * import { getDefaultUserOperationFeeOptions } from "@account-kit/infra";
- * import { arbitrum } from "@account-kit/infra/chains";
+ * import { arbitrum } from "@account-kit/infra";
  *
  * const feeOpts = getDefaultUserOperationFeeOptions(arbitrum);
  * ```

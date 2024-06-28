@@ -1,9 +1,9 @@
 import {
   LocalAccountSigner,
-  polygonMumbai,
   type BatchUserOperationCallData,
   type SmartAccountSigner,
 } from "@aa-sdk/core";
+import { polygonMumbai } from "@account-kit/infra";
 import { custom, type Chain } from "viem";
 import { createLightAccountClient } from "../clients/client.js";
 import type { LightAccountVersion } from "../types.js";

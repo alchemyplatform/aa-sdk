@@ -1,4 +1,4 @@
-import { sepolia } from "@aa-sdk/core";
+import { sepolia } from "viem/chains";
 import { getEntryPoint } from "../entrypoint/index.js";
 import { stringToIndex } from "../utils/index.js";
 
