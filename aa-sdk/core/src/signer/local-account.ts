@@ -21,17 +21,42 @@ export class LocalAccountSigner<
   inner: T;
   signerType: string;
 
+  /**
+   * Initializes an instance with the provided inner object, setting up the inner property and signer type.
+   *
+   * @example TODO: IMPLEMENT ME
+   *
+   * @param {T} inner - The inner object containing the type and other properties.
+   */
   constructor(inner: T) {
     this.inner = inner;
     this.signerType = inner.type; //  type: "local"
   }
 
+  /**
+   * A function that signs a given message using the `inner` object.
+   *
+   * @example TODO: IMPLEMENT ME
+   *
+   * @param {string} message The message to be signed
+   * @returns {Promise<string>} A promise that resolves to the signed message
+   */
   readonly signMessage: (message: SignableMessage) => Promise<`0x${string}`> = (
     message
   ) => {
     return this.inner.signMessage({ message });
   };
 
+  /**
+   * Signs typed data using the provided parameters.
+   *
+   * @example TODO: IMPLEMENT ME
+   *
+   * @template TTypedData The type of the typed data
+   * @template TPrimaryType The primary type as a string
+   * @param {TypedDataDefinition<TTypedData, TPrimaryType>} params The parameters for the typed data definition
+   * @returns {Promise<Hex>} A promise that resolves to a hexadecimal representation of the signed typed data
+   */
   readonly signTypedData = async <
     const TTypedData extends TypedData | { [key: string]: unknown },
     TPrimaryType extends string = string
@@ -41,6 +66,13 @@ export class LocalAccountSigner<
     return this.inner.signTypedData(params);
   };
 
+  /**
+   * Asynchronously retrieves the address of the current instance in a hexadecimal string format prefixed with '0x'.
+   *
+   * @example TODO: IMPLEMENT ME
+   *
+   * @returns {Promise<Hex>} A promise that resolves to the address in `0x` prefixed hexadecimal string format.
+   */
   readonly getAddress = async (): Promise<`0x${string}`> => {
     return this.inner.address;
   };

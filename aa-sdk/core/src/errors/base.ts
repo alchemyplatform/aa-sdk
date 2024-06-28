@@ -25,6 +25,12 @@ export class BaseError extends ViemBaseError {
   override name = "AASDKError";
   override version = VERSION;
 
+  /**
+   * Constructs a new error message with additional metadata and documentation links if provided.
+   *
+   * @param {string} shortMessage The main error message
+   * @param {BaseErrorParameters} args Additional parameters for the error, including meta messages, cause, documentation path, and slug
+   */
   constructor(shortMessage: string, args: BaseErrorParameters = {}) {
     super(shortMessage, args);
 

@@ -5,6 +5,10 @@ import { BaseError } from "@aa-sdk/core";
  */
 export class InvalidAggregatedSignatureError extends BaseError {
   override name = "InvalidAggregatedSignatureError";
+
+  /**
+   * Initializes a new instance of the class with a predefined error message.
+   */
   constructor() {
     super("Invalid aggregated signature");
   }
@@ -15,7 +19,10 @@ export class InvalidAggregatedSignatureError extends BaseError {
  */
 export class InvalidContextSignatureError extends BaseError {
   override name = "InvalidContextSignatureError";
-  constructor() {
+
+  /**
+   * Initializes the error with the message "Expected context.signature to be a hex string".
+   */ constructor() {
     super("Expected context.signature to be a hex string");
   }
 }
@@ -25,7 +32,9 @@ export class InvalidContextSignatureError extends BaseError {
  */
 export class MultisigAccountExpectedError extends BaseError {
   override name = "MultisigAccountExpectedError";
-  constructor() {
+  /**
+   * Constructs an error with the message "Expected account to be a multisig modular account".
+   */ constructor() {
     super("Expected account to be a multisig modular account");
   }
 }
@@ -35,6 +44,10 @@ export class MultisigAccountExpectedError extends BaseError {
  */
 export class MultisigMissingSignatureError extends BaseError {
   override name = "MultisigMissingSignatureError";
+
+  /**
+   * Constructs an error indicating that a UserOp must have at least one signature already.
+   */
   constructor() {
     super("UserOp must have at least one signature already");
   }

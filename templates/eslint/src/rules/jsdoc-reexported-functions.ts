@@ -84,17 +84,24 @@ const rule: Rule.RuleModule = {
     ) {
       if (
         node.parent.type === "VariableDeclarator" &&
-        node.parent.id.type === "Identifier" &&
-        packageNameToExports.get(packageName)?.has(node.parent.id.name)
+        node.parent.id.type === "Identifier"
       ) {
         checkNode(node, node.parent.id.name);
       } else if (
         (node.parent.type === "MethodDefinition" ||
           node.parent.type === "PropertyDefinition") &&
-        node.parent.key.type === "Identifier" &&
-        packageNameToExports.get(packageName)?.has(node.parent.key.name)
+        node.parent.key.type === "Identifier"
       ) {
-        checkNode(node, node.parent.key.name);
+        const className = (() => {
+          let parent: Rule.Node & Rule.NodeParentExtension = node.parent;
+          while (parent && parent.type !== "ClassDeclaration") {
+            parent = parent.parent;
+          }
+
+          return parent.id?.name;
+        })();
+
+        checkNode(node, `${className}.${node.parent.key.name}`);
       }
     }
 
@@ -273,16 +280,22 @@ function registerClassMembers(
     }
   }
 
+  const className = node.name?.getText();
+  function getMethodNameKey(methodName: string) {
+    return `${className}.${methodName}`;
+  }
+
   node.members.forEach((member) => {
     if (ts.isMethodDeclaration(member) && !isPrivateOrProtectedMember(member)) {
-      exportsMap.set(member.name.getText(), {
-        importedName: member.name.getText(),
+      const key = getMethodNameKey(member.name.getText());
+      exportsMap.set(key, {
+        importedName: key,
         exportedFrom: sourceFile.fileName,
       });
     } else if (ts.isConstructorDeclaration(member)) {
-      // yea we probs need to handle this differently since this is just going to match all constructors
-      exportsMap.set("constructor", {
-        importedName: "constructor",
+      const key = getMethodNameKey("constructor");
+      exportsMap.set(key, {
+        importedName: key,
         exportedFrom: sourceFile.fileName,
       });
     } else if (
@@ -291,8 +304,9 @@ function registerClassMembers(
         member.initializer?.kind === ts.SyntaxKind.FunctionExpression) &&
       !isPrivateOrProtectedMember(member)
     ) {
-      exportsMap.set(member.name.getText(), {
-        importedName: member.name.getText(),
+      const key = getMethodNameKey(member.name.getText());
+      exportsMap.set(key, {
+        importedName: key,
         exportedFrom: sourceFile.fileName,
       });
     }

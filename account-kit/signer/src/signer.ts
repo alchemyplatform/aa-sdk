@@ -37,6 +37,25 @@ export type AlchemySignerParams = z.input<typeof AlchemySignerParamsSchema>;
  * A SmartAccountSigner that can be used with any SmartContractAccount
  */
 export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> {
+  /**
+   * Parses the Alchemy signer parameters and initializes the Alchemy signer client accordingly.
+   *
+   * @example
+   * ```ts
+   * import { AlchemyWebSigner } from "@account-kit/signer";
+   *
+   * const signer = new AlchemyWebSigner({
+   *  client: {
+   *    connection: { apiKey: "your-api-key" },
+   *    iframeConfig: {
+   *      iframeContainerId: "signer-iframe-container",
+   *    },
+   *  },
+   * });
+   * ```
+   *
+   * @param {AlchemySignerParams} params_ The parameters needed to initialize the Alchemy signer.
+   */
   constructor(params_: AlchemySignerParams) {
     const { sessionConfig, ...params } =
       AlchemySignerParamsSchema.parse(params_);
