@@ -2,37 +2,44 @@
 # yarn lockfile v1
 
 
-"@0xpass/models@1.0.0", "@0xpass/models@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/@0xpass/models/-/models-1.0.0.tgz"
-  integrity sha512-LKrqzvF7m5mVEGp19Mx1JPucdrTRlrIjqcwTVAZHPxxft4BdMc2plLSWznckR+M110/kivDu92sIZXi5ZEAtHQ==
+"@0xpass/key-signer@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@0xpass/key-signer/-/key-signer-2.0.1.tgz#7626105f4065b053253ded2ccff0601a9d220f5d"
+  integrity sha512-xqlkiS3vJFdTVSV2LJsd2cqzp0mxX3bwKJUKmMWF4nf+fp5pmYk4vs8faZTjeFMLKYBEiPehS93I8ijA2oqKrw==
+  dependencies:
+    "@0xpass/models" "2.0.1"
 
-"@0xpass/passport-viem-alchemy@0.0.1":
-  version "0.0.1"
-  resolved "https://registry.npmjs.org/@0xpass/passport-viem-alchemy/-/passport-viem-alchemy-0.0.1.tgz"
-  integrity sha512-CpgaTSBhZx5F5o1yuTGjLSWYPX0KbFSmmza/Tx/kaNpJcYhjC4rGL91jMF7PlBQesvrx2J6in6mGMLQx/9DFJA==
+"@0xpass/models@2.0.1", "@0xpass/models@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@0xpass/models/-/models-2.0.1.tgz#dcf8e924ad80b2b591b693ed522c086fa6ed3a02"
+  integrity sha512-FSczR+ApgJU0JZRdEmmTbxX5p19FVOiOItgnZ+SPD6WS3AbRUQRBw64x2EmH0GFAnKr6oxMccDWsY91Q7SSo+A==
+
+"@0xpass/passport-viem-alchemy@0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@0xpass/passport-viem-alchemy/-/passport-viem-alchemy-0.0.2.tgz#9d9e8d812b83714c61e0c05ee1f1c28707d690c0"
+  integrity sha512-0HwSDvfik90FM05uNmufoHmRlPJnIeeKM+MVxLVT+Hy1Rh3iTTnIN5UsQvbC5S3Q3e5x4F5RcNUCyTdTwqtxUQ==
   dependencies:
     axios "^1.5.0"
     node-forge "^1.3.1"
     viem "2.8.6"
 
-"@0xpass/passport@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/@0xpass/passport/-/passport-1.0.0.tgz"
-  integrity sha512-avMucFDDi92kLs1/hfLoK2lmFai/YHU3rlTGS7GzgyzQ/wm5dxXnrNCpUqZoTXDTD7SJUakNJ7WfvuTfG6wsKA==
+"@0xpass/passport@^2.1.6":
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/@0xpass/passport/-/passport-2.1.6.tgz#cfb8184d4b5de8e77fbcdb70839769647608caa0"
+  integrity sha512-BgIUHZFomEQWZX2CSGrB+0xZgAGC8ZXaNpspOzBJqrGvZMmmcfPE3quw+rmalG+BMOO06g0mzbeT2ZQbyKJN7A==
   dependencies:
-    "@0xpass/models" "1.0.0"
+    "@0xpass/models" "2.0.1"
     axios "^1.5.0"
     elliptic "6.5.4"
     js-sha3 "0.9.3"
     node-forge "^1.3.1"
 
-"@0xpass/webauthn-signer@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/@0xpass/webauthn-signer/-/webauthn-signer-1.0.0.tgz"
-  integrity sha512-SfPrhPvpVakx6ShhS8lWipNiE2U/jqLN5e44SlXojZ7j23UfADa13AEYX94+s4CQDu40DV4pJI0JKadpC5uMMg==
+"@0xpass/webauthn-signer@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@0xpass/webauthn-signer/-/webauthn-signer-2.0.1.tgz#e865b6d277eb09df99035edea7681487bfefa76c"
+  integrity sha512-zIxFnKwPwiN4V7LrU/9Up8s83/6P1xSD9zMisMOyBmA+dBmsUVSWiJiv3LOCm7w6PFTqQaC557VV04VyF80NSQ==
   dependencies:
-    "@0xpass/models" "1.0.0"
+    "@0xpass/models" "2.0.1"
     "@github/webauthn-json" "^2.1.1"
     buffer "^6.0.3"
 
@@ -8362,10 +8369,10 @@
     "@vercel/static-config" "3.0.0"
     ts-morph "12.0.0"
 
-"@vercel/next@4.2.17":
-  version "4.2.17"
-  resolved "https://registry.yarnpkg.com/@vercel/next/-/next-4.2.17.tgz#65160fdf8ff016742b90e31f42a9737cc3b28dcd"
-  integrity sha512-b1ZwH/3sL4+CrrIjncZLAqjd+ts0KyVGL0HEOWU340OI3hXmQQAN+2k0MWlqm8Vu8rFGfk9VEQ9yJG/pmPx6mg==
+"@vercel/next@4.2.18":
+  version "4.2.18"
+  resolved "https://registry.yarnpkg.com/@vercel/next/-/next-4.2.18.tgz#0e173ccc8c0780788c1341c280f1134e0259bec7"
+  integrity sha512-sxm2/lHsM7ZuMPMzo5wIGuVe3bEk9GN4sKJcfe2RfI139Vfl++40sQTTDJ44UYixbulRM5FBQ7zwnVFHgwaAIQ==
   dependencies:
     "@vercel/nft" "0.27.2"
 
@@ -8387,10 +8394,10 @@
     node-gyp-build "^4.2.2"
     resolve-from "^5.0.0"
 
-"@vercel/node@3.1.7":
-  version "3.1.7"
-  resolved "https://registry.yarnpkg.com/@vercel/node/-/node-3.1.7.tgz#7728ff798f7b52a0af35d7f2bbe63fdd92b9e22d"
-  integrity sha512-EYSHEt0Up70cOlawkSzb5CFHyHoOMuJG9Q/hWU+4zIpnXefZSanR/oaZMd+UFoaAKDVryBz35FVV7gNo6HxX9A==
+"@vercel/node@3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@vercel/node/-/node-3.2.0.tgz#f45a9d959d0fa1a81eaca0e75bed23e8372e3be3"
+  integrity sha512-AZ/xcH5/llJ9SHaW5+TLOQmNzMeKgDafAC9fSdPOW8TUkhFLM+D2CPz6OUnRXDnGE21EvTEIqtDY+Z96dnf8Xw==
   dependencies:
     "@edge-runtime/node-utils" "2.3.0"
     "@edge-runtime/primitives" "4.1.0"
@@ -8411,7 +8418,7 @@
     ts-morph "12.0.0"
     ts-node "10.9.1"
     typescript "4.9.5"
-    undici "5.26.5"
+    undici "5.28.4"
 
 "@vercel/python@4.3.0":
   version "4.3.0"
@@ -8427,10 +8434,10 @@
     "@vercel/routing-utils" "3.1.0"
     semver "6.3.1"
 
-"@vercel/remix-builder@2.1.7":
-  version "2.1.7"
-  resolved "https://registry.yarnpkg.com/@vercel/remix-builder/-/remix-builder-2.1.7.tgz#67fc9fda0aa879afb96997951037966a1683741d"
-  integrity sha512-OGd7aod8wz3uMabGGzmDtNQaSz5+8ZJOmUzhMPxqHwmkTOYntIEPCXhAsi26kf+IuDP7Zj2Md7gUAJGsq5QNSg==
+"@vercel/remix-builder@2.1.8":
+  version "2.1.8"
+  resolved "https://registry.yarnpkg.com/@vercel/remix-builder/-/remix-builder-2.1.8.tgz#c5ebac2f15b38c4fb82ea1139664c167a61d2680"
+  integrity sha512-8SyVgKwtIGgxb5w2VLt9tilDmOg6k8KFeqUYL2D6i6z4Ju7qT3OVXqpWG7b6a334lkSvkyqvvMPnPLRhNW/sUg==
   dependencies:
     "@vercel/error-utils" "2.0.2"
     "@vercel/nft" "0.27.2"
@@ -10722,9 +10729,9 @@ caniuse-lite@^1.0.30001406, caniuse-lite@^1.0.30001538, caniuse-lite@^1.0.300015
   integrity sha512-jmZQ1VpmlRwHgdP1/uiKzgiAuGOfLEJsYFP4+GBou/QQ4U6IOJCB4NP1c+1p9RGLpwObcT94jA5/uO+F1vBbog==
 
 caniuse-lite@^1.0.30001599, caniuse-lite@^1.0.30001629:
-  version "1.0.30001636"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001636.tgz#b15f52d2bdb95fad32c2f53c0b68032b85188a78"
-  integrity sha512-bMg2vmr8XBsbL6Lr0UHXy/21m84FTxDLWn2FSqMd5PrlbMxwJlQnC2YWYxVgp66PZE+BBNF2jYQUBKCo1FDeZg==
+  version "1.0.30001638"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001638.tgz#598e1f0c2ac36f37ebc3f5b8887a32ca558e5d56"
+  integrity sha512-5SuJUJ7cZnhPpeLHaH0c/HPAnAHZvS6ElWyHK9GSIbVOQABLzowiI2pjmpvZ1WEbkyz46iFd4UXlOHR5SqgfMQ==
 
 canonicalize@^2.0.0:
   version "2.0.0"
@@ -12156,9 +12163,9 @@ electron-to-chromium@^1.4.601:
   integrity sha512-ZtRpDxrjHapOwxtv+nuth5ByB8clyn8crVynmRNGO3wG3LOp8RTcyZDqwaI6Ng6y8FCK2hVZmJoqwCskKbNMaw==
 
 electron-to-chromium@^1.4.796:
-  version "1.4.805"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.805.tgz#1d526e384c20944a3c68f618f9774edc384c4733"
-  integrity sha512-8W4UJwX/w9T0QSzINJckTKG6CYpAUTqsaWcWIsdud3I1FYJcMgW9QqT1/4CBff/pP/TihWh13OmiyY8neto6vw==
+  version "1.4.812"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.812.tgz#21b78709c5a13af5d5c688d135a22dcea7617acf"
+  integrity sha512-7L8fC2Ey/b6SePDFKR2zHAy4mbdp1/38Yk5TsARO66W3hC5KEaeKMMHoxwtuH+jcu2AYLSn9QX04i95t6Fl1Hg==
 
 elliptic@6.5.4, elliptic@^6.4.0, elliptic@^6.5.2, elliptic@^6.5.3, elliptic@^6.5.4:
   version "6.5.4"
@@ -22084,10 +22091,10 @@ undici-types@~5.26.4:
   resolved "https://registry.npmjs.org/undici-types/-/undici-types-5.26.5.tgz"
   integrity sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==
 
-undici@5.26.5:
-  version "5.26.5"
-  resolved "https://registry.yarnpkg.com/undici/-/undici-5.26.5.tgz#f6dc8c565e3cad8c4475b187f51a13e505092838"
-  integrity sha512-cSb4bPFd5qgR7qr2jYAi0hlX9n5YKK2ONKkLFkxl+v/9BvC0sOpZjBHDBSXc5lWAf5ty9oZdRXytBIHzgUcerw==
+undici@5.28.4:
+  version "5.28.4"
+  resolved "https://registry.yarnpkg.com/undici/-/undici-5.28.4.tgz#6b280408edb6a1a604a9b20340f45b422e373068"
+  integrity sha512-72RFADWFqKmUb2hmmvNODKL3p9hcB6Gt2DOQMis1SEBaV6a4MH8soBvzg+95CYhCKPFedut2JY9bMfrDl9D23g==
   dependencies:
     "@fastify/busboy" "^2.0.0"
 
@@ -22500,19 +22507,19 @@ vary@~1.1.2:
   integrity sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==
 
 vercel@^34.2.3:
-  version "34.2.7"
-  resolved "https://registry.yarnpkg.com/vercel/-/vercel-34.2.7.tgz#9bcb472325b3a1dbf725a2e4058e2e752117d234"
-  integrity sha512-cc6NmaPeLhg7UJuuI6jKu92xppVYbuZRtQib/hDEaEPFSZgiUNw0sbtRfbzvXUZjxzJeLNeSGKLwazBbpXOvkQ==
+  version "34.2.8"
+  resolved "https://registry.yarnpkg.com/vercel/-/vercel-34.2.8.tgz#a5f2bb18e11949c4196edfe07944787fc2bb2fd7"
+  integrity sha512-wz02u/GdG+XyUd09edvTSzVBaph71qRlbMq8zb23J0lPhCm5RJCXEJJcbakseTiHuuQ1KZyETu74AYKyXDOIRA==
   dependencies:
     "@vercel/build-utils" "8.2.2"
     "@vercel/fun" "1.1.0"
     "@vercel/go" "3.1.1"
     "@vercel/hydrogen" "1.0.2"
-    "@vercel/next" "4.2.17"
-    "@vercel/node" "3.1.7"
+    "@vercel/next" "4.2.18"
+    "@vercel/node" "3.2.0"
     "@vercel/python" "4.3.0"
     "@vercel/redwood" "2.0.10"
-    "@vercel/remix-builder" "2.1.7"
+    "@vercel/remix-builder" "2.1.8"
     "@vercel/ruby" "2.1.0"
     "@vercel/static-build" "2.5.11"
     chokidar "3.3.1"

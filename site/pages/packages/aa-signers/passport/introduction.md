@@ -3,7 +3,7 @@ title: PassportSigner
 description: Overview of the PassportSigner class in aa-signers
 ---
 
-# Portal Signer
+# Passport Signer
 
 `PassportSigner` is a signer implementation which extends `SmartAccountAuthenticator` to leverage the [Passport SDK](https://github.com/0xpass/passport-sdk). It supports features such as authentication, message and typed data signing, and authentication details retrieval.
 
@@ -17,7 +17,7 @@ description: Overview of the PassportSigner class in aa-signers
 
 ## Install Dependencies
 
-`PassportSigner` requires installation of the package requires installation of the [`@0xpass/passport`](https://github.com/0xpass/passport-sdk/tree/main/packages/passport) and [`@0xpass/webauthn-signer`](https://github.com/0xpass/passport-sdk/tree/main/packages/webauthn-signer).
+`PassportSigner` requires installation of the package requires installation of the [`@0xpass/passport`](https://github.com/0xpass/passport-sdk/tree/main/packages/passport) and [`@0xpass/webauthn-signer`](https://github.com/0xpass/passport-sdk/tree/main/packages/webauthn-signer). If you'd like to use your own authentication method, you can use the [`@0xpass/key-signer`](https://github.com/0xpass/passport-sdk/tree/main/packages/key-signer) package.
 
 :::code-group
 
@@ -29,6 +29,22 @@ npm i @0xpass/webauthn-signer
 ```bash [yarn]
 yarn add @0xpass/passport
 yarn add @0xpass/webauthn-signer
+```
+
+:::
+
+Alternatively if you'd like to use your own authentication methods you can install the key signer package.
+
+:::code-group
+
+```bash [npm]
+npm i @0xpass/passport
+npm i @0xpass/key-signer
+```
+
+```bash [yarn]
+yarn add @0xpass/passport
+yarn add @0xpass/key-signer
 ```
 
 :::
@@ -60,8 +76,12 @@ const typedData = {
 const signTypedData = await passportSigner.signTypedData(typedData);
 ```
 
-```ts [passport.ts]
-// [!include ~/snippets/signers/passport.ts]
+```ts [passkey-signer.ts]
+// [!include ~/snippets/signers/passport/webauthn-signer.ts]
+```
+
+```ts [doa-signer.ts]
+// [!include ~/snippets/signers/passport/key-signer.ts]
 ```
 
 :::
@@ -71,3 +91,7 @@ const signTypedData = await passportSigner.signTypedData(typedData);
 - [Passport SDK](https://github.com/0xpass/passport-sdk/tree/main/packages/passport)
 - [PassportSigner Tests](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/signers/src/passport/__tests__/signer.test.ts)
 - [Passport Documentation](https://docs.0xpass.io/)
+
+```
+
+```

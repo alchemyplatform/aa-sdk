@@ -14,7 +14,8 @@ This method must be called after [`authenticate`](/packages/aa-signers/passport/
 :::code-group
 
 ```ts [example.ts]
-import { createPassportSigner } from "./passport";
+import { createPassportSigner } from "./webauthn-signer"; // If using passkeys
+import { createPassportSigner } from "./key-signer"; // If using your own authentication methods
 // [!code focus:99]
 const passportSigner = await createPassportSigner();
 
@@ -23,6 +24,10 @@ const address = await passportSigner.getAddress();
 
 ```ts [passport.ts]
 // [!include ~/snippets/signers/passport.ts]
+```
+
+```ts [doa-signer.ts]
+// [!include ~/snippets/signers/passport/key-signer.ts]
 ```
 
 :::

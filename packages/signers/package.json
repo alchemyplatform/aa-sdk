@@ -89,10 +89,11 @@
     "test:run-e2e": "vitest run --config vitest.config.e2e.ts"
   },
   "devDependencies": {
-    "@0xpass/models": "^1.0.0",
-    "@0xpass/passport": "^1.0.0",
-    "@0xpass/passport-viem-alchemy": "0.0.1",
-    "@0xpass/webauthn-signer": "^1.0.0",
+    "@0xpass/models": "^2.0.1",
+    "@0xpass/passport": "^2.1.6",
+    "@0xpass/passport-viem-alchemy": "0.0.2",
+    "@0xpass/webauthn-signer": "^2.0.1",
+    "@0xpass/key-signer": "^2.0.1",
     "@arcana/auth": "^1.0.8",
     "@fireblocks/fireblocks-web3-provider": "^1.2.6",
     "@fordefi/web3-provider": "^0.2.0",

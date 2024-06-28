@@ -1,11 +1,21 @@
 import { Passport, type PassportConstructorParams } from "@0xpass/passport";
 import { WebauthnSigner } from "@0xpass/webauthn-signer";
+import { KeySigner } from "@0xpass/key-signer";
 import { PassportSigner } from "../signer.js";
 import { mainnet } from "viem/chains";
 
 describe("Passport Signer Tests", () => {
   it("should correctly get address if authenticated", async () => {
-    const signer = await givenSigner(true);
+    const signer = await webauthnSigner(true);
+
+    const address = await signer.getAddress();
+    expect(address).toMatchInlineSnapshot(
+      '"0x1234567890123456789012345678901234567890"'
+    );
+  });
+
+  it("should correctly get address if authenticated with keySigner", async () => {
+    const signer = await keySigner(true);
 
     const address = await signer.getAddress();
     expect(address).toMatchInlineSnapshot(
@@ -15,7 +25,7 @@ describe("Passport Signer Tests", () => {
 });
 
 it("should correctly fail to get address if unauthenticated", async () => {
-  const signer = await givenSigner(false);
+  const signer = await webauthnSigner(false);
 
   const address = signer.getAddress();
   await expect(address).rejects.toThrowErrorMatchingInlineSnapshot(
@@ -24,7 +34,7 @@ it("should correctly fail to get address if unauthenticated", async () => {
 });
 
 it("should correctly get auth details if authenticated", async () => {
-  const signer = await givenSigner();
+  const signer = await webauthnSigner();
 
   const details = await signer.getAuthDetails();
   expect(details).toMatchInlineSnapshot(`
@@ -40,8 +50,24 @@ it("should correctly get auth details if authenticated", async () => {
 `);
 });
 
+it("should correctly get auth details if authenticated with keySigner", async () => {
+  const signer = await keySigner();
+
+  const details = await signer.getAuthDetails();
+  expect(details).toMatchInlineSnapshot(`
+  {
+    "addresses": [
+      "0x1234567890123456789012345678901234567890",
+    ],
+    "authenticatedHeaders": {
+      "x-encrypted-key": "encrypted_aes_key",
+    },
+  }
+`);
+});
+
 it("should correctly fail to get auth details if unauthenticated", async () => {
-  const signer = await givenSigner(false);
+  const signer = await webauthnSigner(false);
 
   const details = signer.getAuthDetails();
   await expect(details).rejects.toThrowErrorMatchingInlineSnapshot(
@@ -50,14 +76,21 @@ it("should correctly fail to get auth details if unauthenticated", async () => {
 });
 
 it("should correctly sign message if authenticated", async () => {
-  const signer = await givenSigner();
+  const signer = await webauthnSigner();
+
+  const signMessage = await signer.signMessage("test");
+  expect(signMessage).toMatchInlineSnapshot('"0xtest"');
+});
+
+it("should correctly sign message if authenticated with keySigner", async () => {
+  const signer = await keySigner();
 
   const signMessage = await signer.signMessage("test");
   expect(signMessage).toMatchInlineSnapshot('"0xtest"');
 });
 
 it("should correctly fail to sign message if unauthenticated", async () => {
-  const signer = await givenSigner(false);
+  const signer = await webauthnSigner(false);
 
   const signMessage = signer.signMessage("test");
   await expect(signMessage).rejects.toThrowErrorMatchingInlineSnapshot(
@@ -66,7 +99,46 @@ it("should correctly fail to sign message if unauthenticated", async () => {
 });
 
 it("should correctly sign typed data if authenticated", async () => {
-  const signer = await givenSigner();
+  const signer = await webauthnSigner();
+
+  const typedData = {
+    domain: {
+      name: "Ether Mail",
+      version: "1",
+      chainId: 1,
+      verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
+    },
+    types: {
+      Person: [
+        { name: "name", type: "string" },
+        { name: "wallet", type: "address" },
+      ],
+      Mail: [
+        { name: "from", type: "Person" },
+        { name: "to", type: "Person" },
+        { name: "contents", type: "string" },
+      ],
+    },
+    primaryType: "Mail",
+    message: {
+      from: {
+        name: "Cow",
+        wallet: "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826",
+      },
+      to: {
+        name: "Bob",
+        wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+      },
+      contents: "Hello, Bob!",
+    },
+  };
+
+  const signTypedData = await signer.signTypedData(typedData);
+  expect(signTypedData).toMatchInlineSnapshot('"0xtest"');
+});
+
+it("should correctly sign typed data if authenticated with keySigner", async () => {
+  const signer = await keySigner();
 
   const typedData = {
     domain: {
@@ -122,7 +194,7 @@ class TestPassport extends Passport {
   }
 }
 
-const givenSigner = async (auth = true) => {
+const webauthnSigner = async (auth = true) => {
   const inner = new TestPassport({
     signer: new WebauthnSigner({
       rpId: "rpId",
@@ -144,6 +216,37 @@ const givenSigner = async (auth = true) => {
     await signer.authenticate({
       username: "test",
       userDisplayName: "test",
+      chain: mainnet,
+      fallbackProvider: "fallbackProvider",
+    });
+
+    vi.spyOn(signer, "getAddress").mockResolvedValue(
+      "0x1234567890123456789012345678901234567890"
+    );
+    vi.spyOn(signer, "signMessage").mockResolvedValue("0xtest");
+    vi.spyOn(signer, "signTypedData").mockResolvedValue("0xtest");
+  }
+
+  return signer;
+};
+
+const keySigner = async (auth = true) => {
+  const inner = new TestPassport({
+    signer: new KeySigner(
+      "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQg3lU3ELbjh8Fvsmcf3sYVjb1mGSNaEjx2NMJtO2oiIL6hRANCAATg9bDfsI4j5TPWZMijeyJPQSPcpr9V+GdxAx/5ToNfQAHzQUdaA4AaTeDa1ymsFbOHoUGiskDMfaOMLHlQYC2f",
+      true
+    ),
+  });
+
+  inner.authenticate = vi
+    .fn()
+    .mockResolvedValue([{}, "0x1234567890123456789012345678901234567890"]);
+
+  const signer = new PassportSigner({ inner });
+
+  if (auth) {
+    await signer.authenticate({
+      username: "test",
       chain: mainnet,
       fallbackProvider: "fallbackProvider",
     });

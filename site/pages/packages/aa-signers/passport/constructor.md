@@ -11,22 +11,7 @@ To initialize a `PassportSigner`, you must provide a set of parameters detailed 
 
 :::code-group
 
-```ts [example1.ts]
-import { PassportSigner } from "@alchemy/aa-signers/passport";
-import { Passport } from "@0xpass/passport";
-import { WebAuthnSigner } from "@0xpass/webauthn-signer";
-
-const passportSigner = new PassportSigner({
-  scope_id: "<scope_id>",
-  signer: new WebAuthnSigner({
-    rpId: "<rpId>",
-    rpName: "<rpName>",
-  }),
-  endpoint: "https://tiramisu.0xpass.io",
-});
-```
-
-```ts [example2.ts]
+```ts [example.ts]
 import { PassportSigner } from "@alchemy/aa-signers/passport";
 import { Passport } from "@0xpass/passport";
 import { WebAuthnSigner } from "@0xpass/webauthn-signer";

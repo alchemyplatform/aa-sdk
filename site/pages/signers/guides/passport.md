@@ -18,7 +18,7 @@ You can get started on Passport by configuring your scope and authentication rul
 
 ### Install the SDK
 
-Using `PassportSigner` in the `aa-signers` package requires installation of the [`@0xpass/passport`](https://github.com/0xpass/passport-sdk/tree/main/packages/passport) and [`@0xpass/webauthn-signer`](https://github.com/0xpass/passport-sdk/tree/main/packages/webauthn-signer).
+Using `PassportSigner` in the `aa-signers` package requires installation of the [`@0xpass/passport`](https://github.com/0xpass/passport-sdk/tree/main/packages/passport) and [`@0xpass/webauthn-signer`](https://github.com/0xpass/passport-sdk/tree/main/packages/webauthn-signer), if you'd like to create and use passkeys for your users. If you'd like to use your own authentication method, you can use the [`@0xpass/key-signer`](https://github.com/0xpass/passport-sdk/tree/main/packages/key-signer) package.
 
 :::code-group
 
@@ -34,12 +34,36 @@ yarn add @0xpass/webauthn-signer
 
 :::
 
+Alternatively if you'd like to use your own authentication methods you can install the key signer package.
+
+:::code-group
+
+```bash [npm]
+npm i @0xpass/passport
+npm i @0xpass/key-signer
+```
+
+```bash [yarn]
+yarn add @0xpass/passport
+yarn add @0xpass/key-signer
+```
+
+:::
+
 ### Create a PassportSigner
 
 Next, setup the Passport SDK and create an authenticated `PassportSigner` using the `aa-signers` package to use an authenticated Passport Signer, you need to register a user account, which is attached to your application scope, following that you can authenticate the user, and and begin combining with Alchemy's Account Kit.
 
-```ts [passport.ts]
-// [!include ~/snippets/signers/passport.ts]
+When creating a PassportSigner with passkeys you can build off the following example:
+
+```ts [passkey-signer.ts]
+// [!include ~/snippets/signers/passport/webauthn-signer.ts]
+```
+
+If using your own authentication method you can build off the following example:
+
+```ts [key-signer.ts]
+// [!include ~/snippets/signers/passport/key-signer.ts]
 ```
 
 ### Use it with Light Account

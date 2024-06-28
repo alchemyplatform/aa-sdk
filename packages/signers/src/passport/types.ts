@@ -5,22 +5,27 @@ import type {
   CredentialAssertion,
   CredentialAttestation,
 } from "@0xpass/models";
+import type { Network } from "@0xpass/passport";
 
 export interface PassportAuthenticationParams {
   username: string;
-  userDisplayName: string;
+  userDisplayName?: string;
   chain: Chain;
   fallbackProvider: string;
-  endpoint?: string;
+  network?: Network;
 }
 
-export type PassportAuthenticatedHeaders = {
-  "x-encrypted-key": string;
-  "x-session": string;
+export type PassportHeaders = {
+  "X-Encrypted-Key"?: string;
+  "X-Scope-Id"?: string;
+  "X-Encrypted-User"?: string;
+  "X-Encrypted-Session"?: string;
+  "X-Encrypted-Webauthn-Signature"?: string;
+  "X-Encrypted-Key-Signature"?: string;
 };
 
 export type PassportUserInfo = {
-  authenticatedHeaders: PassportAuthenticatedHeaders;
+  authenticatedHeaders: PassportHeaders;
   addresses: Address[];
 };
 
@@ -33,7 +38,7 @@ export type SignerWithOptionalCreator = CredentialSigner<
 export type PassportClientParams = {
   scope_id: string;
   signer: SignerWithOptionalCreator;
-  endpoint?: string;
-  enclave_public_key?: string;
+  network?: Network;
   fallbackProvider: string;
+  enableSession?: boolean;
 };
