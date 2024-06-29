@@ -39,8 +39,8 @@ export function getSignerTypeHeader<
  * Helper method meant to be used internally to create an alchemy smart account client
  * from an existing Alchemy Rpc Client
  *
- * @param args configuration for the client
- * @returns a smart account client configured to use Alchemy's RPC
+ * @param {CreateAlchemySmartAccountClientFromRpcClientParams<TAccount, TContext>} args configuration for the client
+ * @returns {AlchemySmartAccountClient} a smart account client configured to use Alchemy's RPC
  */
 export function createAlchemySmartAccountClientFromRpcClient<
   TChain extends Chain | undefined = Chain | undefined,

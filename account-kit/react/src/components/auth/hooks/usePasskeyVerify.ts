@@ -2,14 +2,19 @@ import { useCallback } from "react";
 import { useAuthenticate } from "../../../hooks/useAuthenticate.js";
 import { useAuthContext } from "../context.js";
 
+export type UsePasskeyVerifyReturnType = {
+  authenticate: () => void;
+  isPending: boolean;
+};
+
 /**
  * Internal UI component hook used to complete passkey verification.
  *
  * This is used to login with a passkey, not create a new passkey
  *
- * @returns an authenticate function to do passkey verification and a boolean indicating if the operation is pending
+ * @returns {UsePasskeyVerifyReturnType} an authenticate function to do passkey verification and a boolean indicating if the operation is pending
  */
-export const usePasskeyVerify = () => {
+export const usePasskeyVerify = (): UsePasskeyVerifyReturnType => {
   const { setAuthStep } = useAuthContext();
   const { authenticate: authenticate_, isPending } = useAuthenticate({
     onMutate: () => {

@@ -5,6 +5,12 @@ import { BaseError } from "./base.js";
  */
 export class InvalidSignerTypeError extends BaseError {
   override name = "InvalidSignerTypeError";
+
+  /**
+   * Constructs an error message when an invalid signer type is passed to SmartAccountSigner.
+   *
+   * @param {string} [signerType] An optional parameter specifying the signer type. If not provided, a default error message will be used.
+   */
   constructor(signerType?: string) {
     super(
       [

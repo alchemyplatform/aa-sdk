@@ -14,10 +14,10 @@ import { bigIntClamp, bigIntMultiply } from "./bigint.js";
 import { allEqual, isBigNumberish } from "./index.js";
 
 /**
- * Utility method for asserting a {@link UserOperationStruct} has valid fields for the given entry point version
+ * Utility method for asserting a UserOperationStruct has valid fields for the given entry point version
  *
- * @param request a {@link UserOperationStruct} to validate
- * @returns a type guard that asserts the {@link UserOperationRequest} is valid
+ * @param {UserOperationStruct} request a UserOperationStruct to validate
+ * @returns {boolean} a type guard that asserts the UserOperationRequest is valid
  */
 export function isValidRequest<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion
@@ -39,8 +39,8 @@ export function isValidRequest<
 /**
  * Utility method for asserting a {@link UserOperationRequest} has valid fields for the paymaster data
  *
- * @param request a {@link UserOperationRequest} to validate
- * @returns a type guard that asserts the {@link UserOperationRequest} is a {@link UserOperationRequest}
+ * @param {UserOperationRequest} request a {@link UserOperationRequest} to validate
+ * @returns {boolean}  a type guard that asserts the {@link UserOperationRequest} is a {@link UserOperationRequest}
  */
 export function isValidPaymasterAndData<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion
@@ -61,8 +61,8 @@ export function isValidPaymasterAndData<
 /**
  * Utility method for asserting a {@link UserOperationStruct} has valid fields for the paymaster data
  *
- * @param request a {@link UserOperationRequest} to validate
- * @returns a type guard that asserts the {@link UserOperationStruct} is a {@link UserOperationRequest}
+ * @param {UserOperationRequest} request a {@link UserOperationRequest} to validate
+ * @returns {boolean} a type guard that asserts the {@link UserOperationStruct} is a {@link UserOperationRequest}
  */
 export function isValidFactoryAndData<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion
@@ -83,9 +83,9 @@ export function isValidFactoryAndData<
  * Utility method for applying a {@link UserOperationOverrides} field value
  * over the current value set for the field
  *
- * @param value the current value of the field
- * @param override the override value to apply
- * @returns the new value of the field after applying the override
+ * @param {BigNumberish} value the current value of the field
+ * @param {BigNumberish | Multiplier} override the override value to apply
+ * @returns {BigNumberish} the new value of the field after applying the override
  */
 export function applyUserOpOverride<TValue extends BigNumberish | undefined>(
   value: TValue,
@@ -109,9 +109,9 @@ export function applyUserOpOverride<TValue extends BigNumberish | undefined>(
  * Utility method for applying a {@link UserOperationFeeOptionsField} value
  * over the current value set for the field
  *
- * @param value the current value of the field
- * @param feeOption the fee option field value to apply
- * @returns the new value of the field after applying the fee option
+ * @param {BigNumberish} value the current value of the field
+ * @param {UserOperationFeeOptionsField} feeOption the override value to apply
+ * @returns {BigNumberish} the new value of the field after applying the override
  */
 export function applyUserOpFeeOption<TValue extends BigNumberish | undefined>(
   value: TValue,
@@ -137,10 +137,10 @@ export function applyUserOpFeeOption<TValue extends BigNumberish | undefined>(
  * a {@link UserOperationFeeOptionsField} value over the current value set for the field,
  * with the override taking precedence over the fee option
  *
- * @param value the current value of the field
- * @param [override] the override value to apply
- * @param [feeOption] the fee option field value to apply
- * @returns the new value of the field after applying the override or fee option
+ * @param {BigNumberish} value the current value of the field
+ * @param {BigNumberish | Multiplier} [override] the override value to apply
+ * @param {UserOperationFeeOptionsField} [feeOption] the fee option field value to apply
+ * @returns {BigNumberish} the new value of the field after applying the override or fee option
  */
 export function applyUserOpOverrideOrFeeOption<
   TValue extends BigNumberish | undefined
@@ -160,8 +160,8 @@ export function applyUserOpOverrideOrFeeOption<
  * either because the UserOp is paying for its own gas, or passing a specific paymaster
  *
  * @template EntryPointVersion TEntryPointVersion
- * @param overrides the user operation overrides to check
- * @returns whether the paymaster middleware should be bypassed
+ * @param {UserOperationOverrides<TEntryPointVersion> | undefined} overrides the user operation overrides to check
+ * @returns {boolean} whether the paymaster middleware should be bypassed
  */
 export const bypassPaymasterAndData = <
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion
@@ -177,8 +177,8 @@ export const bypassPaymasterAndData = <
  * pay for its own gas
  *
  * @template EntryPointVersion TEntryPointVersion
- * @param overrides the user operation overrides to check
- * @returns whether the paymaster middleware should be bypassed
+ * @param {UserOperationOverrides<TEntryPointVersion> | undefined} overrides the user operation overrides to check
+ * @returns {boolean} whether the paymaster middleware should be bypassed
  */
 export const bypassPaymasterAndDataEmptyHex = <
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion
@@ -192,9 +192,9 @@ export const bypassPaymasterAndDataEmptyHex = <
 /**
  * Utility method for parsing the paymaster address and paymasterData from the paymasterAndData hex string
  *
- * @param paymasterAndData the paymaster and data hex string to parse.
+ * @param {Hex} paymasterAndData the paymaster and data hex string to parse.
  *                         The hex string refers to the paymasterAndData field of entrypoint v0.6 user operation request
- * @returns the parsed paymaster and paymasterData fields of entrypoint v0.7 user operation request paymaster and paymasterData field
+ * @returns {{ paymaster: Hex; paymasterData: Hex}} the parsed paymaster and paymasterData fields of entrypoint v0.7 user operation request paymaster and paymasterData field
  */
 export const parsePaymasterAndData = (
   paymasterAndData: Hex
@@ -207,11 +207,11 @@ export const parsePaymasterAndData = (
  * Utility method for converting the object containing the paymaster address and paymaster data
  * to the paymaster and data concatenated hex string
  *
- * @param paymasterAndData the object containing the picked paymaster and paymasterData fields of
+ * @param {{ paymaster: Hex; paymasterData: Hex}} paymasterAndData the object containing the picked paymaster and paymasterData fields of
  *                         entrypoint v0.7 user operation request
- * @param paymasterAndData.paymaster the paymaster address
- * @param paymasterAndData.paymasterData the paymaster data
- * @returns the paymasterAndData hex value of entrypoint v0.6 user operation request paymasterAndData field
+ * @param {Hex} paymasterAndData.paymaster the paymaster address
+ * @param {Hex} paymasterAndData.paymasterData the paymaster data
+ * @returns {Hex} the paymasterAndData hex value of entrypoint v0.6 user operation request paymasterAndData field
  */
 export const concatPaymasterAndData = ({
   paymaster = "0x",

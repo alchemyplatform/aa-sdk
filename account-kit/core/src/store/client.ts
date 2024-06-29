@@ -20,12 +20,6 @@ import {
   type SignerStatus,
 } from "./types.js";
 
-/**
- * Creates a zustand store instance containing the client only state
- *
- * @param {CreateClientStoreParams} config the configuration object for the client store
- * @returns a zustand store instance that maintains the client state
- */
 export const createClientStore = (config: CreateClientStoreParams) => {
   const {
     storage = typeof window !== "undefined" ? localStorage : undefined,
@@ -55,13 +49,6 @@ export const createClientStore = (config: CreateClientStoreParams) => {
   return clientStore;
 };
 
-/**
- * Given initial client store parameters, it initializes an AlchemySigner instance.
- * This should only be called on the client.
- *
- * @param {CreateClientStoreParams} params {@link CreateClientStoreParams} to configure and create the signer
- * @returns an instance of the {@link AlchemySigner}
- */
 export const createSigner = (params: CreateClientStoreParams) => {
   const { client, sessionConfig } = params;
   const { iframeContainerId } = client.iframeConfig ?? {

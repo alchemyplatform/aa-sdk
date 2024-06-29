@@ -23,9 +23,9 @@ import type {
  * @template {SmartContractAccount | undefined} TAccount
  * @template {UserOperationContext | undefined} TContext
  * @template {GetEntryPointFromAccount<TAccount>} TEntryPointVersion
- * @param client smart account client
- * @param args send user operation parameters
- * @returns user operation gas estimate response
+ * @param {Client<TTransport, TChain, TAccount>} client smart account client
+ * @param {SendUserOperationParameters<TAccount, TContext>} args send user operation parameters
+ * @returns {Promise<UserOperationEstimateGasResponse<TEntryPointVersion>>}user operation gas estimate response
  */
 export async function estimateUserOperationGas<
   TTransport extends Transport = Transport,

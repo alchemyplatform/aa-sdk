@@ -9,7 +9,10 @@ export class AccountNotFoundError extends BaseError {
   override name = "AccountNotFoundError";
 
   // TODO: extend this further using docs path as well
-  constructor() {
+
+  /**
+   * Constructor for initializing an error message indicating that an account could not be found to execute the specified action.
+   */ constructor() {
     super("Could not find an Account to execute with this Action.");
   }
 }
@@ -20,6 +23,14 @@ export class AccountNotFoundError extends BaseError {
  */
 export class DefaultFactoryNotDefinedError extends BaseError {
   override name = "DefaultFactoryNotDefinedError";
+
+  /**
+   * Constructs an error message indicating that no default factory was found for the given account type, chain, and entry point version.
+   *
+   * @param {string} accountType the type of account
+   * @param {Chain} chain the blockchain chain
+   * @param {EntryPointVersion} version the entry point version
+   */
   constructor(accountType: string, chain: Chain, version: EntryPointVersion) {
     super(
       [
@@ -35,7 +46,10 @@ export class DefaultFactoryNotDefinedError extends BaseError {
  */
 export class GetCounterFactualAddressError extends BaseError {
   override name = "GetCounterFactualAddressError";
-  constructor() {
+
+  /**
+   * Constructor for initializing an error message indicating the failure of fetching the counter-factual address.
+   */ constructor() {
     super("getCounterFactualAddress failed");
   }
 }
@@ -45,6 +59,12 @@ export class GetCounterFactualAddressError extends BaseError {
  */
 export class UpgradesNotSupportedError extends BaseError {
   override name = "UpgradesNotSupported";
+
+  /**
+   * Error constructor for indicating that upgrades are not supported by the given account type.
+   *
+   * @param {string} accountType The type of account that does not support upgrades
+   */
   constructor(accountType: string) {
     super(`Upgrades are not supported by ${accountType}`);
   }
@@ -55,7 +75,12 @@ export class UpgradesNotSupportedError extends BaseError {
  */
 export class SignTransactionNotSupportedError extends BaseError {
   override name = "SignTransactionNotSupported";
-  constructor() {
+
+  /**
+   * Throws an error indicating that signing a transaction is not supported by smart contracts.
+   *
+   
+   */ constructor() {
     super(`SignTransaction is not supported by smart contracts`);
   }
 }
@@ -65,6 +90,13 @@ export class SignTransactionNotSupportedError extends BaseError {
  */
 export class FailedToGetStorageSlotError extends BaseError {
   override name = "FailedToGetStorageSlotError";
+
+  /**
+   * Custom error message constructor for failing to get a specific storage slot.
+   *
+   * @param {string} slot The storage slot that failed to be accessed or retrieved
+   * @param {string} slotDescriptor A description of the storage slot, for additional context in the error message
+   */
   constructor(slot: string, slotDescriptor: string) {
     super(`Failed to get storage slot ${slot} (${slotDescriptor})`);
   }
@@ -75,6 +107,12 @@ export class FailedToGetStorageSlotError extends BaseError {
  */
 export class BatchExecutionNotSupportedError extends BaseError {
   override name = "BatchExecutionNotSupportedError";
+
+  /**
+   * Constructs an error message indicating that batch execution is not supported by the specified account type.
+   *
+   * @param {string} accountType the type of account that does not support batch execution
+   */
   constructor(accountType: string) {
     super(`Batch execution is not supported by ${accountType}`);
   }
@@ -85,6 +123,12 @@ export class BatchExecutionNotSupportedError extends BaseError {
  */
 export class AccountRequiresOwnerError extends BaseError {
   override name = "AccountRequiresOwnerError";
+
+  /**
+   * Constructs an error indicating that an account of the specified type requires an owner to execute.
+   *
+   * @param {string} accountType The type of account that requires an owner
+   */
   constructor(accountType: string) {
     super(`Account of type ${accountType} requires an owner to execute`);
   }
@@ -95,6 +139,12 @@ export class AccountRequiresOwnerError extends BaseError {
  */
 export class UpgradeToAndCallNotSupportedError extends BaseError {
   override name = "UpgradeToAndCallNotSupportedError";
+
+  /**
+   * Constructs an error message indicating that `UpgradeToAndCall` is not supported by the specified account type.
+   *
+   * @param {string} accountType The type of account that does not support `UpgradeToAndCall`
+   */
   constructor(accountType: string) {
     super(`UpgradeToAndCall is not supported by ${accountType}`);
   }
@@ -105,6 +155,13 @@ export class UpgradeToAndCallNotSupportedError extends BaseError {
  */
 export class IncorrectAccountType extends BaseError {
   override name = "IncorrectAccountTypeError";
+
+  /**
+   * Constructs an error object indicating that the expected account type does not match the actual account type.
+   *
+   * @param {string} expected the expected account type
+   * @param {string} actual the actual account type that was received
+   */
   constructor(expected: string, actual: string) {
     super(`Expected account type ${expected}, got ${actual}`);
   }
@@ -115,7 +172,10 @@ export class IncorrectAccountType extends BaseError {
  */
 export class SmartAccountWithSignerRequiredError extends BaseError {
   override name = "SmartAccountWithSignerRequiredError";
-  constructor() {
+
+  /**
+   * Initializes a new instance of the error class with a predefined error message indicating that a smart account requires a signer.
+   */ constructor() {
     super("Smart account requires a signer");
   }
 }

@@ -6,9 +6,9 @@ import { getExportedFilePath } from "./utils.js";
  * Takes a given file and returns the ts node that matches the importedName.
  * If the name is re-exported from another file, this recursively follows the re-export.
  *
- * @param filePath the file to find the imported name
- * @param importedName the name of the node to find
- * @returns a ts node that matches the imported name or null if it cannot be found
+ * @param {string} filePath the file to find the imported name
+ * @param {string} importedName the name of the node to find
+ * @returns {ts.FunctionDeclaration | ts.ClassDeclaration | ts.VariableStatement | null} a ts node that matches the imported name or null if it cannot be found
  */
 export function resolveReExport(
   filePath: string,

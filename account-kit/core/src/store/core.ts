@@ -22,17 +22,6 @@ export type CreateCoreStoreParams = {
   ssr?: boolean;
 };
 
-/**
- * Create the core store for alchemy accounts. This store contains the bundler client
- * as well as the chain configs (including the initial chain to use)
- *
- * @param params connections configs
- * @param params.connections a collection of chains and their connection configs
- * @param params.chain the initial chain to use
- * @param params.storage the storage to use for persisting the state
- * @param params.ssr whether the store is being created on the server
- * @returns the core store
- */
 export const createCoreStore = (params: CreateCoreStoreParams): CoreStore => {
   const {
     connections,

@@ -18,7 +18,7 @@ export class InvalidUserOperationError extends BaseError {
    *
    * InvalidUserOperationError constructor
    *
-   * @param uo the invalid user operation struct
+   * @param {UserOperationStruct} uo the invalid user operation struct
    */
   constructor(uo: UserOperationStruct) {
     super(
@@ -45,8 +45,8 @@ export class InvalidUserOperationError extends BaseError {
  */
 export class WaitForUserOperationError extends BaseError {
   /**
-   * @param request the user operation request that failed
-   * @param error the underlying error that caused the failure
+   * @param {UserOperationRequest} request the user operation request that failed
+   * @param {Error} error the underlying error that caused the failure
    */
   constructor(public request: UserOperationRequest, error: Error) {
     super(`Failed to find User Operation: ${error.message}`);

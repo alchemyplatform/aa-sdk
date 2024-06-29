@@ -29,6 +29,8 @@
         "enableFixer": true
       }
     ],
+    "jsdoc/require-param-type": "error",
+    "jsdoc/require-returns-type": "error",
     "jsdoc/no-types": "off",
     "jsdoc/require-jsdoc": "off",
     "jsdoc/match-description": [
