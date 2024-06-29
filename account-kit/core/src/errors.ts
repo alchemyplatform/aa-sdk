@@ -2,6 +2,9 @@ import { BaseError as CoreBaseError } from "@aa-sdk/core";
 import type { Chain } from "viem";
 import { VERSION } from "./version.js";
 
+/**
+ * Represents the base class for custom errors, inheriting from `CoreBaseError` and overriding the version with a specific version number.
+ */
 export abstract class BaseError extends CoreBaseError {
   // This version could be different from the aa-core version so we overwrite this here.
   override version = VERSION;

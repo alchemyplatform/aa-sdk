@@ -1,5 +1,6 @@
 import { getJSDocComment } from "@es-joy/jsdoccomment";
 import { type Rule } from "eslint";
+import ESTree from "estree";
 import findUp from "find-up";
 import fs from "fs-extra";
 import * as path from "path";
@@ -41,6 +42,12 @@ const rule: Rule.RuleModule = {
             },
             default: [],
           },
+          fixBatchSize: {
+            description:
+              "Maximum number of fixes to apply in a single run of the rule (0 for unlimited)",
+            type: "number",
+            default: 10,
+          },
         },
         additionalProperties: false,
       },
@@ -50,6 +57,7 @@ const rule: Rule.RuleModule = {
     const enableFixer: boolean =
       process.argv.some((arg) => arg.includes("eslint")) &&
       process.argv.some((x) => x === "--fix" || x === "-f");
+    const fixBatchSize: number = context.options[0]?.fixBatchSize;
     // const ignore: string[] = context.options[0]?.ignore || [];
 
     const packageJsonPath = findUp.sync("package.json", {
@@ -70,7 +78,43 @@ const rule: Rule.RuleModule = {
       return !!comment;
     }
 
-    function checkNode(node: Rule.Node, name: string) {
+    function checkArrowFunctionOrFunctionExpression(
+      node: (ESTree.FunctionExpression | ESTree.ArrowFunctionExpression) &
+        Rule.NodeParentExtension
+    ) {
+      if (
+        node.parent.type === "VariableDeclarator" &&
+        node.parent.id.type === "Identifier"
+      ) {
+        checkNode(node, node.parent.id.name);
+      } else if (
+        (node.parent.type === "MethodDefinition" ||
+          node.parent.type === "PropertyDefinition") &&
+        node.parent.key.type === "Identifier" &&
+        // @ts-expect-error according to the AST explorer this should be a thing
+        (node.parent.accessibility == null ||
+          // @ts-expect-error according to the AST explorer this should be a thing
+          node.parent.accessibility === "public")
+      ) {
+        // for class methods we want to check the class name is registered
+        const className = (() => {
+          let parent: Rule.Node & Rule.NodeParentExtension = node.parent;
+          while (parent) {
+            if (parent.type === "ClassDeclaration") {
+              return parent.id.name;
+            }
+            parent = parent.parent;
+          }
+          return null;
+        })();
+        if (!className) return;
+
+        checkNode(node, className, node.parent.key.name);
+      }
+    }
+
+    // name override is just used for context
+    function checkNode(node: Rule.Node, name: string, nameOverride?: string) {
       const exportEntry = packageNameToExports.get(packageName)?.get(name);
       if (!exportEntry) {
         return;
@@ -85,16 +129,17 @@ const rule: Rule.RuleModule = {
         context.report({
           node,
           messageId: "missingJsdoc",
-          data: { name },
+          data: { name: nameOverride ?? name },
           suggest: [
             {
               desc: "Add JSDoc comment",
-              data: { name },
-              fix: (fixer) => reExportFixerEslint(fixer, node, context),
+              data: { name: nameOverride ?? name },
+              fix: (fixer) =>
+                reExportFixerEslint(fixer, node, context, fixBatchSize),
             },
           ],
           fix: enableFixer
-            ? (fixer) => reExportFixerEslint(fixer, node, context)
+            ? (fixer) => reExportFixerEslint(fixer, node, context, fixBatchSize)
             : undefined,
         });
       }
@@ -108,22 +153,10 @@ const rule: Rule.RuleModule = {
         checkNode(node, node.id.name);
       },
       FunctionExpression(node) {
-        if (
-          node.parent.type === "VariableDeclarator" &&
-          node.parent.id.type === "Identifier" &&
-          packageNameToExports.get(packageName)?.has(node.parent.id.name)
-        ) {
-          checkNode(node, node.parent.id.name);
-        }
+        checkArrowFunctionOrFunctionExpression(node);
       },
       ArrowFunctionExpression(node) {
-        if (
-          node.parent.type === "VariableDeclarator" &&
-          node.parent.id.type === "Identifier" &&
-          packageNameToExports.get(packageName)?.has(node.parent.id.name)
-        ) {
-          checkNode(node, node.parent.id.name);
-        }
+        checkArrowFunctionOrFunctionExpression(node);
       },
     };
   },
@@ -167,16 +200,96 @@ function populateExports(packageJsonPath: string, packageName: string) {
       const exportedNode = resolveReExport(indexPath, element.name.text);
       if (!exportedNode) return;
 
+      if (ts.isClassDeclaration(exportedNode)) {
+        // note: this already registers the class in the exports map
+        return registerClassMembers(exportedNode, exportsMap);
+      }
+
       const exportedFrom = getExportedFilePath(
         indexPath,
         exportedNode.getSourceFile().fileName
       );
+      if (!exportedFrom) {
+        return;
+      }
 
       exportsMap.set(element.name.text, {
         importedName: element.name.text,
         exportedFrom,
       });
     });
+  });
+}
+
+function getImportOf(node: ts.Node) {
+  const sourceFile = node.getSourceFile();
+  const nodeName = ts.isExpressionWithTypeArguments(node)
+    ? node.expression.getText()
+    : node.getText();
+
+  let result: string | undefined;
+  sourceFile.forEachChild((node_) => {
+    if (ts.isImportDeclaration(node_)) {
+      const importClause = node_.importClause;
+      const moduleSpecifier = node_.moduleSpecifier
+        .getText()
+        .replace(/['"]/g, "");
+
+      if (importClause && importClause.namedBindings) {
+        const namedBindings = importClause.namedBindings;
+        if (ts.isNamedImports(namedBindings)) {
+          namedBindings.elements.forEach((element) => {
+            if (element.name.getText() === nodeName) {
+              result = moduleSpecifier;
+            }
+          });
+        }
+      }
+    }
+
+    return result != null;
+  });
+
+  return result ?? sourceFile.fileName;
+}
+
+function registerClassMembers(
+  node: ts.Node | null,
+  exportsMap: Map<string, Export>
+) {
+  if (!node || !ts.isClassDeclaration(node)) {
+    return;
+  }
+  const sourceFile = node.getSourceFile();
+
+  if (node.name?.getText() === "AlchemyWebSigner") {
+  }
+
+  // handle super classes
+  for (const heritageClause of node.heritageClauses ?? []) {
+    if (heritageClause.token === ts.SyntaxKind.ExtendsKeyword) {
+      const superClass = heritageClause.types[0];
+      if (superClass && ts.isExpressionWithTypeArguments(superClass)) {
+        const superClassName = superClass.expression.getText();
+        const superClassLocation = getImportOf(superClass);
+        const exportedFrom = getExportedFilePath(
+          sourceFile.fileName,
+          superClassLocation
+        );
+        if (!exportedFrom) {
+          return;
+        }
+
+        const superClassNode = resolveReExport(exportedFrom, superClassName);
+
+        registerClassMembers(superClassNode, exportsMap);
+      }
+    }
+  }
+
+  exportsMap.set(node.name!.getText(), {
+    importedName: node.name!.getText(),
+    exportedFrom: sourceFile.fileName,
   });
 }
 
