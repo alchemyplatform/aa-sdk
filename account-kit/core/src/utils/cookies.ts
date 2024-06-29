@@ -86,9 +86,9 @@ export function cookieToInitialState(
 /**
  * Helper function that can be used to parse a cookie string on the server or client
  *
- * @param cookie the cookie string to parse
- * @param key the key of the cookie to parse
- * @returns the value of the cookie given a key if it exists, otherwise undefined
+ * @param {string} cookie the cookie string to parse
+ * @param {string} key the key of the cookie to parse
+ * @returns {string} the value of the cookie given a key if it exists, otherwise undefined
  */
 export function parseCookie(cookie: string, key: string) {
   const keyValue = cookie.split("; ").find((x) => x.startsWith(`${key}=`));
