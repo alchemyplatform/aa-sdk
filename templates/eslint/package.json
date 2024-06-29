@@ -28,8 +28,10 @@
     "typescript-template": "*"
   },
   "dependencies": {
+    "@es-joy/jsdoccomment": "^0.43.1",
     "dotenv": "^16.4.5",
     "eslint": "^8.39.0",
+    "find-up": "^4.1.0",
     "minimatch": "^9.0.4",
     "openai": "^4.51.0",
     "recast": "^0.23.9",

@@ -43,10 +43,7 @@
         }
       }
     ],
-    "eslint-rules/require-jsdoc-on-reexported-functions": [
-      "error",
-      { "fixBatchSize": 0 }
-    ]
+    "eslint-rules/require-jsdoc-on-reexported-functions": ["error"]
   },
   "overrides": [
     {
