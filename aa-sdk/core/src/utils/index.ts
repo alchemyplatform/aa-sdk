@@ -5,8 +5,8 @@ import type { RecordableKeys } from "./types.js";
 /**
  * Utility function that allows for piping a series of async functions together
  *
- * @param fns - functions to pipe
- * @returns result of the pipe
+ * @param {((s: S, o?: O, f?: F) => Promise<S>)[]} fns - functions to pipe
+ * @returns {S} result of the pipe
  */
 export const asyncPipe =
   <S, O, F>(...fns: ((s: S, o?: O, f?: F) => Promise<S>)[]) =>
@@ -24,10 +24,10 @@ export type Deferrable<T> = {
 };
 
 /**
- * Await all of the properties of a {@link Deferrable} object
+ * Await all of the properties of a Deferrable object
  *
- * @param object - a {@link Deferrable} object
- * @returns the object with its properties resolved
+ * @param {Deferrable<T>} object - a Deferrable object
+ * @returns {Promise<T>} the object with its properties resolved
  */
 export async function resolveProperties<T>(object: Deferrable<T>): Promise<T> {
   const promises = Object.keys(object).map((key) => {
@@ -48,8 +48,8 @@ export async function resolveProperties<T>(object: Deferrable<T>): Promise<T> {
 /**
  * Recursively converts all values in an object to hex strings
  *
- * @param obj - obj to deep hexlify
- * @returns object with all of its values hexlified
+ * @param {any} obj - obj to deep hexlify
+ * @returns {any} object with all of its values hexlified
  */
 export function deepHexlify(obj: any): any {
   if (typeof obj === "function") {
@@ -126,8 +126,8 @@ export function pick(obj: Record<string, unknown>, keys: string | string[]) {
 /**
  * Utility method for checking if the passed in values are all equal (strictly)
  *
- * @param params - values to check
- * @returns a boolean indicating if all values are the same
+ * @param {...any[]} params - values to check
+ * @returns {boolean} a boolean indicating if all values are the same
  * @throws if no values are passed in
  */
 export const allEqual = (...params: any[]): boolean => {
@@ -140,9 +140,9 @@ export const allEqual = (...params: any[]): boolean => {
 /**
  * Utility method for checking the condition and return the value if condition holds true, undefined if not.
  *
- * @param condition - condition to check
- * @param value - value to return when condition holds true
- * @returns the value if condition holds true, undefined if not
+ * @param {Promise<boolean>} condition - condition to check
+ * @param {() => Promise<T>} value - value to return when condition holds true
+ * @returns {Promise<T | undefined>} the value if condition holds true, undefined if not
  */
 export const conditionalReturn = <T>(
   condition: Promise<boolean>,

@@ -13,7 +13,7 @@ import type { AlchemyAccountsConfig } from "../types";
  * watchChain(config)(console.log);
  * ```
  *
- * @param config the account config object
+ * @param {AlchemyAccountsConfig} config the account config object
  * @returns {(onChange: (chain: Chain) => void) => (() => void)} a function which accepts an onChange callback that will be fired when the chain changes and returns a function to unsubscribe from the store
  */
 export function watchChain(config: AlchemyAccountsConfig) {

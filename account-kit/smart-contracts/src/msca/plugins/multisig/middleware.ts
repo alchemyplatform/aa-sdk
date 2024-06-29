@@ -27,12 +27,12 @@ import {
  * This middleware handles correctly aggregating signatures passed through
  * as context when sending UserOperations, proposing UserOperations, or adding signatures to a UserOperation.
  *
- * @param struct the user operation struct to be signed
- * @param param the parameters to be passed to the middleware
- * @param param.account the account to be used for signing
- * @param param.client the smart account client that will be used for RPC requests
- * @param param.context the context object containing the signatures to be aggregated {@link MultisigUserOperationContext}
- * @returns a Promise containing a UserOperation with an aggregated signature in the `signature` field
+ * @param {Deferrable<UserOperationStruct<TEntryPointVersion>>} struct the user operation struct to be signed
+ * @param {ClientMiddlewareArgs<TAccount, C, TContext, TEntryPointVersion>} args the parameters to be passed to the middleware
+ * @param {UserOperationOverrides<TEntryPointVersion>} args.account the account to be used for signing
+ * @param {MiddlewareClient} args.client the smart account client that will be used for RPC requests
+ * @param {MultisigUserOperationContext} args.context the context object containing the signatures to be aggregated MultisigUserOperationContext
+ * @returns {Promise<Deferrable<UserOperationStruct<TEntryPointVersion>>>} a Promise containing a UserOperation with an aggregated signature in the `signature` field
  */
 export const multisigSignatureMiddleware: ClientMiddlewareFn<
   MultisigUserOperationContext

@@ -11,8 +11,8 @@ import type {
  * Useful for narrowing the type of the client down when used within the
  * smart account client decorators
  *
- * @param client a viem client
- * @returns true if the client is a SmartAccountClient
+ * @param {Client<TTransport, TChain, TAccount>} client a viem client
+ * @returns {boolean} true if the client is a SmartAccountClient
  */
 export function isSmartAccountClient<
   TTransport extends Transport = Transport,
@@ -37,8 +37,8 @@ export function isSmartAccountClient<
  * Useful for narrowing the type of the client down when used within the
  * smart account action decorators
  *
- * @param client a viem client
- * @returns true if the account is a BaseSmartAccountClient
+ * @param {Client<TTransport, TChain, TAccount>} client a viem client
+ * @returns {boolean} true if the account is a BaseSmartAccountClient
  */
 export function isBaseSmartAccountClient<
   TTransport extends Transport = Transport,

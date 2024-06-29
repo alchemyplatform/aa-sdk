@@ -1,5 +1,5 @@
-import { AlchemySignerStatus } from "@account-kit/signer";
 import type { Address } from "@aa-sdk/core";
+import { AlchemySignerStatus } from "@account-kit/signer";
 import { hydrate as wagmi_hydrate } from "@wagmi/core";
 import { reconnect } from "./actions/reconnect.js";
 import {
@@ -10,17 +10,31 @@ import {
 import type { AccountState, ClientState, StoredState } from "./store/types.js";
 import type { AlchemyAccountsConfig, SupportedAccountTypes } from "./types.js";
 
+export type HydrateResult = {
+  onMount: () => Promise<void>;
+};
+
 /**
  * Will hydrate the client store with the provided initial state if one is provided.
  *
- * @param config the config containing the client store
- * @param initialState optional param detailing the initial ClientState
- * @returns an object containing an onMount function that can be called when your component first renders on the client
+ * @example
+ * ```ts
+ * import { hydrate, cookieToInitialState } from "@account-kit/core";
+ * import { config } from "./config";
+ *
+ * const initialState = cookieToInitialState(document.cookie);
+ * const { onMount } = hydrate(config, initialState);
+ * // call onMount once your component has mounted
+ * ```
+ *
+ * @param {AlchemyAccountsConfig} config the config containing the client store
+ * @param {StoredState} initialState optional param detailing the initial ClientState
+ * @returns {{ onMount: () => Promise<void> }} an object containing an onMount function that can be called when your component first renders on the client
  */
 export function hydrate(
   config: AlchemyAccountsConfig,
   initialState?: StoredState
-) {
+): HydrateResult {
   const initialAlchemyState =
     initialState != null && "alchemy" in initialState
       ? initialState.alchemy

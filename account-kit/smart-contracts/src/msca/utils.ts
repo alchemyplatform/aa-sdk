@@ -39,10 +39,10 @@ import {
 import { MultiOwnerPlugin } from "./plugins/multi-owner/plugin.js";
 
 /**
- * Utility method returning the default multi sig msca factory address given a {@link Chain} object
+ * Utility method returning the default multi sig msca factory address given a chain
  *
- * @param chain a {@link Chain} object
- * @returns a {@link Address} for the given chain
+ * @param {Chain} chain the chain object for which to get the address
+ * @returns {Address} the address for the given chain
  * @throws if the chain doesn't have an address currently deployed
  */
 export const getDefaultMultisigModularAccountFactoryAddress = (
@@ -65,10 +65,10 @@ export const getDefaultMultisigModularAccountFactoryAddress = (
 };
 
 /**
- * Utility method returning the default multi owner msca factory address given a {@link Chain} object
+ * Utility method returning the default multi owner msca factory address given a chain
  *
- * @param chain - a {@link Chain} object
- * @returns a {@link Address} for the given chain
+ * @param {Chain} chain the chain object for which to get the address
+ * @returns {Address} the address for the given chain
  * @throws if the chain doesn't have an address currently deployed
  */
 export const getDefaultMultiOwnerModularAccountFactoryAddress = (

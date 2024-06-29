@@ -8,12 +8,11 @@ import { deserialize } from "./deserialize.js";
 /**
  * Function to create cookie based Storage
  *
- * @param config optional config object that allows you to set the session length
- * @returns an instance of a browser storage object that leverages cookies
+ * @param {{sessionLength: number}} config optional config object that allows you to set the session length
+ * @param {number} config.sessionLength the length of the session in milliseconds
+ * @returns {Storage} an instance of a browser storage object that leverages cookies
  */
-export const cookieStorage: (config?: { sessionLength: number }) => Storage = (
-  config
-) => ({
+export const cookieStorage = (config?: { sessionLength: number }): Storage => ({
   // this is unused for now, we should update this if we do need it
   length: 0,
 
@@ -56,9 +55,9 @@ export const cookieStorage: (config?: { sessionLength: number }) => Storage = (
 /**
  * Converts a cookie into an initial state object
  *
- * @param config the account config containing the client store
- * @param cookie optional cookie string
- * @returns the deserialized AlchemyClientState if the cookie exists, otherwise undefined
+ * @param {AlchemyAccountsConfig} config the account config containing the client store
+ * @param {string | undefined} cookie optional cookie string
+ * @returns {StoredState | undefined} the deserialized AlchemyClientState if the cookie exists, otherwise undefined
  */
 export function cookieToInitialState(
   config: AlchemyAccountsConfig,

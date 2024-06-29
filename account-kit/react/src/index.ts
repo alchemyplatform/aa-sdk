@@ -14,10 +14,10 @@ export type * from "./hooks/useAccount.js";
 export { useAccount } from "./hooks/useAccount.js";
 export type * from "./hooks/useAddPasskey.js";
 export { useAddPasskey } from "./hooks/useAddPasskey.js";
-export type * from "./hooks/useAuthError.js";
-export { useAuthError } from "./hooks/useAuthError.js";
 export type * from "./hooks/useAuthenticate.js";
 export { useAuthenticate } from "./hooks/useAuthenticate.js";
+export type * from "./hooks/useAuthError.js";
+export { useAuthError } from "./hooks/useAuthError.js";
 export type * from "./hooks/useBundlerClient.js";
 export { useBundlerClient } from "./hooks/useBundlerClient.js";
 export type * from "./hooks/useChain.js";
@@ -50,10 +50,6 @@ export type * from "./hooks/useUser.js";
 export { useUser } from "./hooks/useUser.js";
 export type * from "./hooks/useWaitForUserOperationTransaction.js";
 export { useWaitForUserOperationTransaction } from "./hooks/useWaitForUserOperationTransaction.js";
-
-// TODO: remove these and only expose the full UI modal
-export { DemoSet } from "./components/button.js";
-export { Input } from "./components/input.js";
 
 // These are the actual components that should be exported later
 export { AuthCard } from "./components/auth/card/index.js";

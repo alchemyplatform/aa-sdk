@@ -1,6 +1,5 @@
 "use client";
 
-import type { SupportedAccounts } from "@account-kit/core";
 import type {
   EntryPointVersion,
   GetEntryPointFromAccount,
@@ -8,6 +7,7 @@ import type {
   SendUserOperationResult,
 } from "@aa-sdk/core";
 import { WaitForUserOperationError } from "@aa-sdk/core";
+import type { SupportedAccounts } from "@account-kit/core";
 import {
   useMutation,
   type UseMutateAsyncFunction,
@@ -76,8 +76,49 @@ export type UseSendUserOperationResult<
  * A hook that returns functions for sending user operations.
  * You can also optionally wait for a user operation to be mined before returning.
  *
- * @param params the parameters for the hook including the client, a flag to wait for tx mining, and mutation args (see {@link UseSendUserOperationArgs})
- * @returns functions and state for sending UOs {@link UseSendUserOperationResult}
+ * @example
+ * ```tsx
+ * import {
+ *   useSendUserOperation,
+ *   useSmartAccountClient,
+ * } from "@account-kit/react";
+ *
+ * function ComponentWithSendUserOperation() {
+ *   const { client } = useSmartAccountClient({
+ *     type: "MultiOwnerModularAccount",
+ *   });
+ *   const { sendUserOperation, isSendingUserOperation } = useSendUserOperation({
+ *     client,
+ *     onSuccess: ({ hash, request }) => {
+ *       // [optional] Do something with the hash and request
+ *     },
+ *     onError: (error) => {
+ *       // [optional] Do something with the error
+ *     },
+ *     // [optional] ...additional mutationArgs
+ *   });
+ *
+ *   return (
+ *     <div>
+ *       <button
+ *         onClick={() =>
+ *           sendUserOperation({
+ *             target: "0xTARGET_ADDRESS",
+ *             data: "0x",
+ *             value: 0n,
+ *           })
+ *         }
+ *         disabled={isSendingUserOperation}
+ *       >
+ *         {isSendingUserOperation ? "Sending..." : "Send UO"}
+ *       </button>
+ *     </div>
+ *   );
+ * }
+ * ```
+ *
+ * @param {UseSendUserOperationArgs<TEntryPointVersion, TAccount>} params the parameters for the hook including the client, a flag to wait for tx mining, and mutation args
+ * @returns {UseSendUserOperationResult<TEntryPointVersion, TAccount>} functions and state for sending UOs
  */
 export function useSendUserOperation<
   TEntryPointVersion extends GetEntryPointFromAccount<TAccount>,

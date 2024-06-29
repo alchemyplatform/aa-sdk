@@ -45,11 +45,11 @@ export type MiddlewareClient<
 >;
 
 /**
- * export function that takes in {@link ClientMiddlewareConfig} used during client initiation
+ * function that takes in ClientMiddlewareConfig used during client initiation
  * and returns the middleware actions object that the smart account client extends with
  *
- * @param overrides - {@link ClientMiddlewareConfig} used during client initiation for overriding default middlewares
- * @returns middleware actions object
+ * @param {ClientMiddlewareConfig} overrides config used during client initiation for overriding default middlewares
+ * @returns {(client: MiddlewareClient<TTransport, TChain, TAccount>) => { middleware: ClientMiddleware }} middleware actions object
  */
 export const middlewareActions =
   (overrides: ClientMiddlewareConfig) =>

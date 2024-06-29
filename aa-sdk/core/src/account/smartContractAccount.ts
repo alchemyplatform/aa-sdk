@@ -174,6 +174,13 @@ export const parseFactoryAddressFromAccountInitCode = (
   return [factoryAddress, factoryCalldata];
 };
 
+export type GetAccountAddressParams = {
+  client: PublicClient;
+  entryPoint: EntryPointDef;
+  accountAddress?: Address;
+  getAccountInitCode: () => Promise<Hex>;
+};
+
 /**
  * Retrieves the account address. Uses a provided `accountAddress` if available; otherwise, it computes the address using the entry point contract and the initial code.
  *
@@ -188,11 +195,11 @@ export const parseFactoryAddressFromAccountInitCode = (
  * });
  * ```
  *
- * @param {object} config The configuration object
- * @param {PublicClient} config.client A public client instance to interact with the blockchain
- * @param {EntryPointDef} config.entryPoint The entry point definition which includes the address and ABI
- * @param {Address} config.accountAddress Optional existing account address
- * @param {function(): Promise<Hex>} config.getAccountInitCode A function that returns a Promise resolving to a Hex string representing the initial code of the account
+ * @param {GetAccountAddressParams} params The configuration object
+ * @param {PublicClient} params.client A public client instance to interact with the blockchain
+ * @param {EntryPointDef} params.entryPoint The entry point definition which includes the address and ABI
+ * @param {Address} params.accountAddress Optional existing account address
+ * @param {() => Promise<Hex>} params.getAccountInitCode A function that returns a Promise resolving to a Hex string representing the initial code of the account
  * @returns {Promise<Address>} A promise that resolves to the account address
  */
 export const getAccountAddress = async ({
@@ -200,12 +207,7 @@ export const getAccountAddress = async ({
   entryPoint,
   accountAddress,
   getAccountInitCode,
-}: {
-  client: PublicClient;
-  entryPoint: EntryPointDef;
-  accountAddress?: Address;
-  getAccountInitCode: () => Promise<Hex>;
-}) => {
+}: GetAccountAddressParams) => {
   if (accountAddress) return accountAddress;
 
   const entryPointContract = getContract({

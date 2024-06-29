@@ -13,8 +13,8 @@ import type { ClientMiddlewareFn } from "../types.js";
  * You can override this middleware with your custom gas estimator middleware
  * by passing it to the client constructor
  *
- * @param client smart account client instance to apply the middleware to
- * @returns middleware execution function used to estimate gas for user operations
+ * @param {MiddlewareClient} client smart account client instance to apply the middleware to
+ * @returns {ClientMiddlewareFn} middleware execution function used to estimate gas for user operations
  */
 export const defaultGasEstimator: <C extends MiddlewareClient>(
   client: C

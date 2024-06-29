@@ -12,7 +12,7 @@ import type { AlchemyAccountsConfig, Connection } from "../types";
  * watchConnection(config)(console.log);
  * ```
  *
- * @param config the account config
+ * @param {AlchemyAccountsConfig} config the account config
  * @returns {(onChange: (connection: Connection) => void) => (() => void)} a function which accepts an onChange callback that will be fired when the connection changes and returns a function to unsubscribe from the store
  */
 export function watchConnection(config: AlchemyAccountsConfig) {

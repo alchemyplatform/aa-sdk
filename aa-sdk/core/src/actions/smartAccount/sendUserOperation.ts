@@ -17,9 +17,23 @@ import type {
 /**
  * Sends a user operation or batch of user operations using the connected account. Before executing, sendUserOperation will run the user operation through the middleware pipeline.
  *
- * @param client the smart account client to use for RPC requests
- * @param args {@link SendUserOperationParameters} containg the UO or batch to send, context, overrides, and account if not hoisted on the client
- * @returns a Promise containing the {@link SendUserOperationResult}
+ * @example
+ * ```ts
+ * import { createSmartAccountClient, toSmartContractAccount } from "@aa-sdk/core";
+ *
+ * const account = await toSmartContractAccount(...);
+ * const result = await createSmartAccountClient(...).sendUserOperation({
+ *  uo: {
+ *    target: "0x...",
+ *    data: "0x...", // or "0x",
+ *    value: 0n, // optional
+ *  }
+ * });
+ * ```
+ *
+ * @param {Client<TTransport, TChain, TAccount>} client the smart account client to use for RPC requests
+ * @param {SendUserOperationParameters<TAccount, TContext>} args contains the UO or batch to send, context, overrides, and account if not hoisted on the client
+ * @returns {Promise<SendUserOperationResult<TEntryPointVersion>>} a Promise containing the result of the user operation
  */
 export async function sendUserOperation<
   TTransport extends Transport = Transport,
