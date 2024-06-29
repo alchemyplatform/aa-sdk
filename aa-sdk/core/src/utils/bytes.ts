@@ -8,11 +8,11 @@ type TakeBytesOpts = {
 /**
  * Given a bytes string, returns a slice of the bytes
  *
- * @param bytes - the hex string representing bytes
- * @param opts - optional parameters for slicing the bytes
- * @param opts.offset - the offset in bytes to start slicing from
- * @param opts.count - the number of bytes to slice
- * @returns the sliced bytes
+ * @param {Hex} bytes - the hex string representing bytes
+ * @param {TakeBytesOpts} opts - optional parameters for slicing the bytes
+ * @param {number} opts.offset - the offset in bytes to start slicing from
+ * @param {number} opts.count - the number of bytes to slice
+ * @returns {Hex} the sliced bytes
  */
 export const takeBytes = (bytes: Hex, opts: TakeBytesOpts = {}): Hex => {
   const { offset, count } = opts;

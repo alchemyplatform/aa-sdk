@@ -5,8 +5,8 @@ import { isMultiplier } from "./schema.js";
 /**
  * Returns the max bigint in a list of bigints
  *
- * @param args a list of bigints to get the max of
- * @returns the max bigint in the list
+ * @param {bigint[]} args a list of bigints to get the max of
+ * @returns {bigint} the max bigint in the list
  */
 export const bigIntMax = (...args: bigint[]): bigint => {
   if (!args.length) {
@@ -19,8 +19,8 @@ export const bigIntMax = (...args: bigint[]): bigint => {
 /**
  * Returns the min bigint in a list of bigints
  *
- * @param args a list of bigints to get the max of
- * @returns the min bigint in the list
+ * @param {bigint[]} args a list of bigints to get the max of
+ * @returns {bigint} the min bigint in the list
  */
 export const bigIntMin = (...args: bigint[]): bigint => {
   if (!args.length) {
@@ -33,16 +33,16 @@ export const bigIntMin = (...args: bigint[]): bigint => {
 /**
  * Given a bigint and a min-max range, returns the min-max clamped bigint value
  *
- * @param value a bigint value to clamp
- * @param lower lower bound min max tuple value
- * @param upper upper bound min max tuple value
- * @returns the clamped bigint value per given range
+ * @param {BigNumberish} value a bigint value to clamp
+ * @param {BigNumberish | undefined} lower lower bound min max tuple value
+ * @param {BigNumberish | undefined} upper upper bound min max tuple value
+ * @returns {bigint} the clamped bigint value per given range
  */
 export const bigIntClamp = (
   value: BigNumberish,
   lower: BigNumberish | null | undefined,
   upper: BigNumberish | null | undefined
-) => {
+): bigint => {
   lower = lower != null ? BigInt(lower) : null;
   upper = upper != null ? BigInt(upper) : null;
 
@@ -71,10 +71,10 @@ export enum RoundingMode {
  * Given a bigint and a number (which can be a float), returns the bigint value.
  * Note: this function has loss and will round down to the nearest integer.
  *
- * @param base - the number to be multiplied
- * @param multiplier - the amount to multiply by
- * @param roundingMode - the rounding mode to use when calculating the percent. defaults to ROUND_UP
- * @returns the bigint value of the multiplication with the number rounded by the rounding mode
+ * @param {BigNumberish} base - the number to be multiplied
+ * @param {number} multiplier - the amount to multiply by
+ * @param {RoundingMode} roundingMode - the rounding mode to use when calculating the percent. defaults to ROUND_UP
+ * @returns {bigint} the bigint value of the multiplication with the number rounded by the rounding mode
  */
 export const bigIntMultiply = (
   base: BigNumberish,
@@ -111,8 +111,8 @@ export const bigIntMultiply = (
  * });
  * ```
  *
- * @param phrase -- any string value.
- * @returns the bigint value of the hashed string
+ * @param {string} phrase -- any string value.
+ * @returns {bigint} the bigint value of the hashed string
  */
 export const stringToIndex = (phrase: string): bigint =>
   BigInt(keccak256(toHex(phrase)));

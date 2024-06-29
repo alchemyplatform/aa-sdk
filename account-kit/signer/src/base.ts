@@ -8,6 +8,8 @@ import {
   type Hex,
   type LocalAccount,
   type SignableMessage,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  type Transaction,
   type TypedData,
   type TypedDataDefinition,
 } from "viem";
@@ -56,6 +58,17 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   private sessionManager: SessionManager;
   private store: InternalStore;
 
+  /**
+   * Initializes an instance with the provided client and session configuration.
+   * This function sets up the internal store, initializes the session manager,
+   * registers listeners and initializes the session manager to manage session state.
+   *
+   * @example TODO: Implement me
+   *
+   * @param {BaseAlchemySignerParams<TClient>} param0 Object containing the client and session configuration
+   * @param {TClient} param0.client The client instance to be used internally
+   * @param {SessionConfig} param0.sessionConfig Configuration for managing sessions
+   */
   constructor({ client, sessionConfig }: BaseAlchemySignerParams<TClient>) {
     this.inner = client;
     this.store = createStore(
@@ -92,9 +105,9 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   /**
    * Allows you to subscribe to events emitted by the signer
    *
-   * @param event the event to subscribe to
-   * @param listener the function to run when the event is emitted
-   * @returns a function to remove the listener
+   * @param {AlchemySignerEvent} event the event to subscribe to
+   * @param {AlchemySignerEvents[AlchemySignerEvent]} listener the function to run when the event is emitted
+   * @returns {() => void} a function to remove the listener
    */
   on = <E extends AlchemySignerEvent>(
     event: E,
@@ -136,8 +149,8 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   /**
    * Authenticate a user with either an email or a passkey and create a session for that user
    *
-   * @param params - undefined if passkey login, otherwise an object with email and bundle to resolve
-   * @returns the user that was authenticated
+   * @param {AuthParams} params - undefined if passkey login, otherwise an object with email and bundle to resolve
+   * @returns {Promise<User>} the user that was authenticated
    */
   authenticate: (params: AuthParams) => Promise<User> = async (params) => {
     if (params.type === "email") {
@@ -148,7 +161,9 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   };
 
   /**
-   * NOTE: right now this only clears the session locally.
+   * Clear a user session and log them out
+   *
+   * @returns {Promise<void>} a promise that resolves when the user is logged out
    */
   disconnect: () => Promise<void> = async () => {
     await this.inner.disconnect();
@@ -160,9 +175,9 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * try to authenticate
    *
    * @throws if there is no user logged in
-   * @returns the current user
+   * @returns {Promise<User>} the current user
    */
-  getAuthDetails: () => Promise<User> = async () => {
+  getAuthDetails = async (): Promise<User> => {
     const sessionUser = await this.sessionManager.getSessionUser();
     if (sessionUser != null) {
       return sessionUser;
@@ -171,12 +186,27 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     return this.inner.whoami();
   };
 
+  /**
+   * Retrieves the address of the current user by calling the `whoami` method on `this.inner`.
+   *
+   * @example TODO: Implement me
+   *
+   * @returns {Promise<string>} A promise that resolves to the address of the current user.
+   */
   getAddress: () => Promise<`0x${string}`> = async () => {
     const { address } = await this.inner.whoami();
 
     return address;
   };
 
+  /**
+   * Signs a raw message after hashing it.
+   *
+   * @example TODO: IMPLEMENT ME
+   *
+   * @param {string} msg the message to be hashed and then signed
+   * @returns {Promise<string>} a promise that resolves to the signed message
+   */
   signMessage: (msg: SignableMessage) => Promise<`0x${string}`> = async (
     msg
   ) => {
@@ -185,6 +215,14 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     return this.inner.signRawMessage(messageHash);
   };
 
+  /**
+   * Signs a typed message by first hashing it and then signing the hashed message using the `signRawMessage` method.
+   *
+   * @example TODO: Implement me
+   *
+   * @param {TypedDataDefinition<TTypedData, TPrimaryType>} params The parameters for the typed message to be hashed and signed
+   * @returns {Promise<any>} A promise that resolves to the signed message
+   */
   signTypedData: <
     const TTypedData extends TypedData | { [key: string]: unknown },
     TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData
@@ -196,6 +234,16 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     return this.inner.signRawMessage(messageHash);
   };
 
+  /**
+   * Serializes a transaction, signs it with a raw message, and then returns the serialized transaction with the signature.
+   *
+   * @example TODO: Implement me
+   *
+   * @param {Transaction} tx the transaction to be serialized and signed
+   * @param {{serializer?: SerializeTransactionFn}} args options for serialization
+   * @param {() => Hex} [args.serializer] an optional serializer function. If not provided, the default `serializeTransaction` function will be used
+   * @returns {Promise<string>} a promise that resolves to the serialized transaction with the signature
+   */
   signTransaction: CustomSource["signTransaction"] = async (tx, args) => {
     const serializeFn = args?.serializer ?? serializeTransaction;
     const serializedTx = serializeFn(tx);
@@ -215,8 +263,8 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   /**
    * Unauthenticated call to look up a user's organizationId by email
    *
-   * @param email the email to lookup
-   * @returns the organization id for the user if they exist
+   * @param {string} email the email to lookup
+   * @returns {Promise<{orgId: string}>} the organization id for the user if they exist
    */
   getUser: (email: string) => Promise<{ orgId: string } | null> = async (
     email
@@ -235,8 +283,8 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   /**
    * Adds a passkey to the user's account
    *
-   * @param params optional parameters for the passkey creation
-   * @returns an array of the authenticator ids added to the user
+   * @param {CredentialCreationOptions | undefined} params optional parameters for the passkey creation
+   * @returns {Promise<string[]>} an array of the authenticator ids added to the user
    */
   addPasskey: (params?: CredentialCreationOptions) => Promise<string[]> =
     async (params) => {
@@ -248,8 +296,8 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * If the user is authenticated with an Email, this will return a seed phrase
    * If the user is authenticated with a Passkey, this will return a private key
    *
-   * @param params export wallet parameters
-   * @returns true if the wallet was exported successfully
+   * @param {unknown} params export wallet parameters
+   * @returns {boolean} true if the wallet was exported successfully
    */
   exportWallet: (
     params: Parameters<(typeof this.inner)["exportWallet"]>[0]
@@ -262,9 +310,9 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * will let you use the signer as an EOA directly.
    *
    * @throws if your signer is not authenticated
-   * @returns a LocalAccount object that can be used with viem's wallet client
+   * @returns {LocalAccount} a LocalAccount object that can be used with viem's wallet client
    */
-  toViemAccount: () => LocalAccount = () => {
+  toViemAccount = (): LocalAccount => {
     // if we want this method to be synchronous, then we need to do this check here
     // otherwise we can use the sessionManager to get the user
     if (!this.inner.getUser()) {

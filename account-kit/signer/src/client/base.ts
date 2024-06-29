@@ -133,9 +133,9 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   /**
    * Listen to events emitted by the client
    *
-   * @param event the event you want to listen to
-   * @param listener the callback function to execute when an event is fired
-   * @returns a function that will remove the listener when called
+   * @param {AlchemySignerClientEvent} event the event you want to listen to
+   * @param {AlchemySignerClientEvents[AlchemySignerClientEvent]} listener the callback function to execute when an event is fired
+   * @returns {() => void} a function that will remove the listener when called
    */
   public on = <E extends AlchemySignerClientEvent>(
     event: E,
@@ -242,10 +242,10 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    * For SignMessage or SignTypedData, the caller should hash the message before calling this method and pass
    * that result here.
    *
-   * @param msg the hex representation of the bytes to sign
-   * @returns the signature over the raw hex
+   * @param {Hex} msg the hex representation of the bytes to sign
+   * @returns {Promise<Hex>} the signature over the raw hex
    */
-  public signRawMessage = async (msg: Hex) => {
+  public signRawMessage = async (msg: Hex): Promise<Hex> => {
     if (!this.user) {
       throw new NotAuthenticatedError();
     }

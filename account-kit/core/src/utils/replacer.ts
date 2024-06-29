@@ -1,9 +1,9 @@
 /**
  * JSON stringify replacer that correctly handles BigInt and Map types.
  *
- * @param _key the key in the JSON object
- * @param value_ the value to convert if map or bigint
- * @returns the replaced value
+ * @param {string} _key the key in the JSON object
+ * @param {any} value_ the value to convert if map or bigint
+ * @returns {any} the replaced value
  */
 export const bigintMapReplacer = (_key: string, value_: any) => {
   let value = value_;

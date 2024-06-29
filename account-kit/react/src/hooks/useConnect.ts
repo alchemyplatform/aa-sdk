@@ -11,8 +11,8 @@ import { useAlchemyAccountContext } from "../context.js";
  * uses the internal wagmi config though so that the state
  * is in sync with the rest of the Alchemy Account hook state
  *
- * @param params mutation parameters to use for the connect mutation
- * @returns see {@link UseConnectReturnType} from wagmi
+ * @param {UseMutationParameters} params mutation parameters to use for the connect mutation
+ * @returns {UseConnectReturnType} the wagmi useConnect return type
  */
 export const useConnect = (
   params?: UseConnectParameters<Config>["mutation"]
