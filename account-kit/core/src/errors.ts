@@ -26,9 +26,26 @@ export class ClientOnlyPropertyError extends BaseError {
   }
 }
 
+/**
+ * Error thrown when a client does not have a chain configured in the connections object
+ * This is not really meant to be used out of the SDK, but is exported for convenience (ie. matching errors are of an instance of this class)
+ */
 export class ChainNotFoundError extends BaseError {
   name: string = "ChainNotFoundError";
 
+  /**
+   * Constructs a new error indicating that the specified chain was not found in the connections configuration object.
+   *
+   * @example
+   * ```ts
+   * import { ChainNotFoundError } from "@account-kit/core";
+   * import { sepolia } from "@account-kit/infra";
+   *
+   * throw new ChainNotFoundError(sepolia);
+   * ```
+   *
+   * @param {Chain} chain The chain for which the error is being thrown
+   */
   constructor(chain: Chain) {
     super(`Chain (${chain.name}) not found in connections config object`, {
       docsPath: "https://accountkit.alchemy.com/react/createConfig",

@@ -70,46 +70,192 @@ export class SessionKeyPermissionsBuilder {
   private _gasSpendLimit?: GasSpendLimit;
   private _requiredPaymaster?: Address;
 
+  /**
+   * Sets the access control type for the contract and returns the current instance for method chaining.
+   *
+   * @example
+   * ```ts
+   * import { SessionKeyPermissionsBuilder } from "@account-kit/smart-contracts";
+   *
+   * const builder = new SessionKeyPermissionsBuilder();
+   * builder.setContractAccessControlType(SessionKeyAccessListType.ALLOWLIST);
+   * ```
+   *
+   * @param {SessionKeyAccessListType} aclType The access control type for the session key
+   * @returns {SessionKeyPermissionsBuilder} The current instance for method chaining
+   */
   public setContractAccessControlType(aclType: SessionKeyAccessListType) {
     this._contractAccessControlType = aclType;
     return this;
   }
 
+  /**
+   * Adds a contract access entry to the internal list of contract address access entries.
+   *
+   * @example
+   * ```ts
+   * import { SessionKeyPermissionsBuilder } from "@account-kit/smart-contracts";
+   *
+   * const builder = new SessionKeyPermissionsBuilder();
+   * builder.addContractAddressAccessEntry({
+   *  contractAddress: "0x1234",
+   *  isOnList: true,
+   *  checkSelectors: true,
+   * });
+   * ```
+   *
+   * @param {ContractAccessEntry} entry the contract access entry to be added
+   * @returns {SessionKeyPermissionsBuilder} the instance of the current class for chaining
+   */
   public addContractAddressAccessEntry(entry: ContractAccessEntry) {
     this._contractAddressAccessEntrys.push(entry);
     return this;
   }
 
+  /**
+   * Adds a contract method entry to the `_contractMethodAccessEntrys` array.
+   *
+   * @example
+   * ```ts
+   * import { SessionKeyPermissionsBuilder } from "@account-kit/smart-contracts";
+   *
+   * const builder = new SessionKeyPermissionsBuilder();
+   * builder.addContractAddressAccessEntry({
+   *  contractAddress: "0x1234",
+   *  methodSelector: "0x45678",
+   *  isOnList: true,
+   * });
+   * ```
+   *
+   * @param {ContractMethodEntry} entry The contract method entry to be added
+   * @returns {SessionKeyPermissionsBuilder} The instance of the class for method chaining
+   */
   public addContractFunctionAccessEntry(entry: ContractMethodEntry) {
     this._contractMethodAccessEntrys.push(entry);
     return this;
   }
 
+  /**
+   * Sets the time range for an object and returns the object itself for chaining.
+   *
+   * @example
+   * ```ts
+   * import { SessionKeyPermissionsBuilder } from "@account-kit/smart-contracts";
+   *
+   * const builder = new SessionKeyPermissionsBuilder();
+   * builder.setTimeRange({
+   *  validFrom: Date.now(),
+   *  validUntil: Date.now() + (15 * 60 * 1000),
+   * });
+   * ```
+   *
+   * @param {TimeRange} timeRange The time range to be set
+   * @returns {SessionKeyPermissionsBuilder} The current object for method chaining
+   */
   public setTimeRange(timeRange: TimeRange) {
     this._timeRange = timeRange;
     return this;
   }
 
+  /**
+   * Sets the native token spend limit and returns the instance for chaining.
+   *
+   * @example
+   * ```ts
+   * import { SessionKeyPermissionsBuilder } from "@account-kit/smart-contracts";
+   *
+   * const builder = new SessionKeyPermissionsBuilder();
+   * builder.setNativeTokenSpendLimit({
+   *  spendLimit: 1000000000000000000n,
+   *  refreshInterval: 3600,
+   * });
+   * ```
+   *
+   * @param {NativeTokenLimit} limit The limit to set for native token spending
+   * @returns {SessionKeyPermissionsBuilder} The instance for chaining
+   */
   public setNativeTokenSpendLimit(limit: NativeTokenLimit) {
     this._nativeTokenSpendLimit = limit;
     return this;
   }
 
+  /**
+   * Adds an ERC20 token spend limit to the list of limits and returns the updated object.
+   *
+   * @example
+   * ```ts
+   * import { SessionKeyPermissionsBuilder } from "@account-kit/smart-contracts";
+   *
+   * const builder = new SessionKeyPermissionsBuilder();
+   * builder.addErc20TokenSpendLimit({
+   *  tokenAddress: "0x1234",
+   *  spendLimit: 1000000000000000000n,
+   *  refreshInterval: 3600,
+   * });
+   * ```
+   *
+   * @param {Erc20TokenLimit} limit The ERC20 token spend limit to be added
+   * @returns {object} The updated object with the new ERC20 token spend limit
+   */
   public addErc20TokenSpendLimit(limit: Erc20TokenLimit) {
     this._erc20TokenSpendLimits.push(limit);
     return this;
   }
 
-  public setGasSpendLimit(limit: GasSpendLimit) {
+  /**
+   * Sets the gas spend limit and returns the current instance for method chaining.
+   *
+   * @example
+   * ```ts
+   * import { SessionKeyPermissionsBuilder } from "@account-kit/smart-contracts";
+   *
+   * const builder = new SessionKeyPermissionsBuilder();
+   * builder.setGasSpendLimit({
+   *  spendLimit: 1000000000000000000n,
+   *  refreshInterval: 3600,
+   * });
+   * ```
+   *
+   * @param {GasSpendLimit} limit - The gas spend limit to be set
+   * @returns {SessionKeyPermissionsBuilder} The current instance for chaining
+   */ public setGasSpendLimit(limit: GasSpendLimit) {
     this._gasSpendLimit = limit;
     return this;
   }
 
+  /**
+   * Sets the required paymaster address.
+   *
+   * @example
+   * ```ts
+   * import { SessionKeyPermissionsBuilder } from "@account-kit/smart-contracts";
+   *
+   * const builder = new SessionKeyPermissionsBuilder();
+   * builder.setRequiredPaymaster("0x1234");
+   * ```
+   *
+   * @param {Address} paymaster the address of the paymaster to be set
+   * @returns {SessionKeyPermissionsBuilder} the current instance for method chaining
+   */
   public setRequiredPaymaster(paymaster: Address) {
     this._requiredPaymaster = paymaster;
     return this;
   }
 
+  /**
+   * Encodes various function calls into an array of hexadecimal strings based on the provided permissions and limits.
+   *
+   * @example
+   * ```ts
+   * import { SessionKeyPermissionsBuilder } from "@account-kit/smart-contracts";
+   *
+   * const builder = new SessionKeyPermissionsBuilder();
+   * builder.setRequiredPaymaster("0x1234");
+   * const encoded = builder.encode();
+   * ```
+   *
+   * @returns {Hex[]} An array of encoded hexadecimal strings representing the function calls for setting access control, permissions, and limits.
+   */
   public encode(): Hex[] {
     return [
       encodeFunctionData({

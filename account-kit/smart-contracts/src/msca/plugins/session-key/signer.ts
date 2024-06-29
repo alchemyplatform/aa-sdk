@@ -33,6 +33,18 @@ export class SessionKeySigner
   private storageType: "local-storage" | "session-storage" | Storage;
   private storageKey: string;
 
+  /**
+   * Initializes a new instance of a session key signer with the provided configuration. This will set the `signerType`, `storageKey`, and `storageType`. It will also manage the session key, either fetching it from storage or generating a new one if it doesn't exist.
+   *
+   * @example
+   * ```ts
+   * import { SessionKeySigner } from "@account-kit/smart-contracts";
+   *
+   * const signer = new SessionKeySigner();
+   * ```
+   *
+   * @param {SessionKeySignerConfig} config_ the configuration for initializing the session key signer
+   */
   constructor(config_: SessionKeySignerConfig = {}) {
     const config = SessionKeySignerSchema.parse(config_);
     this.signerType = `${SESSION_KEY_SIGNER_TYPE_PFX}`;
@@ -60,16 +72,66 @@ export class SessionKeySigner
     this.inner = LocalAccountSigner.privateKeyToAccountSigner(sessionKey);
   }
 
+  /**
+   * An async function that retrieves the address using the inner object's `getAddress` method.
+   *
+   * @example
+   * ```ts
+   * import { SessionKeySigner } from "@account-kit/smart-contracts";
+   *
+   * const signer = new SessionKeySigner();
+   * const sessionKeyAddress = await signer.getAddress();
+   * ```
+   *
+   * @returns {Promise<string>} A promise that resolves to the address as a string
+   */
   getAddress: () => Promise<`0x${string}`> = async () => {
     return this.inner.getAddress();
   };
 
+  /**
+   * Signs a message using the inner signer.
+   *
+   * @example
+   * ```ts
+   * import { SessionKeySigner } from "@account-kit/smart-contracts";
+   *
+   * const signer = new SessionKeySigner();
+   * const sessionKeyAddress = await signer.signMessage("hello");
+   * ```
+   *
+   * @param {SignableMessage} msg The message to sign
+   * @returns {Promise<Hex>} A promise that resolves to the signed message
+   */
   signMessage: (msg: SignableMessage) => Promise<`0x${string}`> = async (
     msg
   ) => {
     return this.inner.signMessage(msg);
   };
 
+  /**
+   * Signs the provided typed data using the inner signer.
+   *
+   * @example
+   * ```ts
+   * import { SessionKeySigner } from "@account-kit/smart-contracts";
+   *
+   * const signer = new SessionKeySigner();
+   * console.log(await signer.signTypedData({
+   *  types: {
+   *    "Message": [{ name: "content", type: "string" }]
+   *  },
+   *  primaryType: "Message",
+   *  message: { content: "Hello" },
+   * }));
+   * ```
+   *
+   * @template TTypedData - The typed data type, which extends `TypedData` or a record of unknown keys to unknown values.
+   * @template TPrimaryType - The primary type of the typed data.
+   *
+   * @param {TypedDataDefinition<TTypedData, TPrimaryType>} params The parameters containing the typed data definition and primary type.
+   * @returns {Promise<string>} A promise that resolves to the signed typed data as a string.
+   */
   signTypedData = async <
     const TTypedData extends TypedData | { [key: string]: unknown },
     TPrimaryType extends string = string
@@ -81,6 +143,14 @@ export class SessionKeySigner
 
   /**
    * Generates a new private key and stores it in the storage.
+   *
+   * @example
+   * ```ts
+   * import { SessionKeySigner } from "@account-kit/smart-contracts";
+   *
+   * const signer = new SessionKeySigner();
+   * const newSessionKey = signer.generateNewKey();
+   * ```
    *
    * @returns The public address of the new key.
    */

@@ -16,6 +16,11 @@ export abstract class BaseError extends CoreBaseError {
  * @param hookName The name of the hook.
  */
 export class NoAlchemyAccountContextError extends BaseError {
+  /**
+   * Constructs an error message indicating that a specific hook must be used within an AlchemyAccountProvider.
+   *
+   * @param {string} hookName The name of the hook that must be used within the AlchemyAccountProvider
+   */
   constructor(hookName: string) {
     super(`${hookName} must be used within a AlchemyAccountProvider`);
   }
@@ -27,6 +32,11 @@ export class NoAlchemyAccountContextError extends BaseError {
  * @param hookName The name of the hook.
  */
 export class ClientUndefinedHookError extends BaseError {
+  /**
+   * Initializes an error message indicating that the client must be defined for the specified hook name.
+   *
+   * @param {string} hookName The name of the hook where the client is required
+   */
   constructor(hookName: string) {
     super(`client must be defined in ${hookName}`);
   }
