@@ -1,7 +1,7 @@
+import { useConfig } from "@/app/state";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { useConfig } from "@/src/app/state";
-import { Chrome, Sketch } from "@uiw/react-color";
+import { Sketch } from "@uiw/react-color";
 
 export function ColorPicker({ theme }: { theme: 'dark' | 'light'}) {
   const { config, setConfig } = useConfig();
