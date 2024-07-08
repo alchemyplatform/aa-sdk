@@ -37,10 +37,10 @@ export function isValidRequest<
 }
 
 /**
- * Utility method for asserting a {@link UserOperationRequest} has valid fields for the paymaster data
+ * Utility method for asserting a UserOperationRequest has valid fields for the paymaster data
  *
- * @param {UserOperationRequest} request a {@link UserOperationRequest} to validate
- * @returns {boolean}  a type guard that asserts the {@link UserOperationRequest} is a {@link UserOperationRequest}
+ * @param {UserOperationRequest} request a UserOperationRequest to validate
+ * @returns {boolean}  a type guard that asserts the UserOperationRequest is a UserOperationRequest
  */
 export function isValidPaymasterAndData<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion
@@ -59,10 +59,10 @@ export function isValidPaymasterAndData<
 }
 
 /**
- * Utility method for asserting a {@link UserOperationStruct} has valid fields for the paymaster data
+ * Utility method for asserting a UserOperationStruct has valid fields for the paymaster data
  *
- * @param {UserOperationRequest} request a {@link UserOperationRequest} to validate
- * @returns {boolean} a type guard that asserts the {@link UserOperationStruct} is a {@link UserOperationRequest}
+ * @param {UserOperationRequest} request a UserOperationRequest to validate
+ * @returns {boolean} a type guard that asserts the UserOperationStruct is a UserOperationRequest
  */
 export function isValidFactoryAndData<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion
@@ -80,7 +80,7 @@ export function isValidFactoryAndData<
 }
 
 /**
- * Utility method for applying a {@link UserOperationOverrides} field value
+ * Utility method for applying a UserOperationOverrides field value
  * over the current value set for the field
  *
  * @param {BigNumberish} value the current value of the field
@@ -106,7 +106,7 @@ export function applyUserOpOverride<TValue extends BigNumberish | undefined>(
 }
 
 /**
- * Utility method for applying a {@link UserOperationFeeOptionsField} value
+ * Utility method for applying a UserOperationFeeOptionsField value
  * over the current value set for the field
  *
  * @param {BigNumberish} value the current value of the field
@@ -133,8 +133,8 @@ export function applyUserOpFeeOption<TValue extends BigNumberish | undefined>(
 }
 
 /**
- * Utility method for applying a {@link UserOperationOverrides} field value and
- * a {@link UserOperationFeeOptionsField} value over the current value set for the field,
+ * Utility method for applying a UserOperationOverrides field value and
+ * a UserOperationFeeOptionsField value over the current value set for the field,
  * with the override taking precedence over the fee option
  *
  * @param {BigNumberish} value the current value of the field

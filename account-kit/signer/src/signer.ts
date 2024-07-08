@@ -56,17 +56,17 @@ export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> 
    * });
    * ```
    *
-   * @param {AlchemySignerParams} params_ The parameters for the Alchemy signer, including the client and session configuration
+   * @param {AlchemySignerParams} params The parameters for the Alchemy signer, including the client and session configuration
    */
-  constructor(params_: AlchemySignerParams) {
-    const { sessionConfig, ...params } =
-      AlchemySignerParamsSchema.parse(params_);
+  constructor(params: AlchemySignerParams) {
+    const { sessionConfig, ...params_ } =
+      AlchemySignerParamsSchema.parse(params);
 
     let client: AlchemySignerWebClient;
-    if ("connection" in params.client) {
-      client = new AlchemySignerWebClient(params.client);
+    if ("connection" in params_.client) {
+      client = new AlchemySignerWebClient(params_.client);
     } else {
-      client = params.client;
+      client = params_.client;
     }
     super({
       client,
