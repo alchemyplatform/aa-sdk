@@ -1,11 +1,10 @@
-import { Switch } from "@/components/ui/switch"
-import { cn } from "@/lib/utils"
-import { useState } from "react"
 import { MailIcon } from "../icons/mail"
 import { WalletIcon } from "../icons/wallet"
 import { SocialIcon } from "../icons/social"
 import { BiometricIcon } from "../icons/biometric"
-import { useConfig } from "@/src/app/state"
+import { useConfig } from "@/app/state"
+import { cn } from "@/lib/utils"
+import { Switch } from "../ui/switch"
 
 export const Authentication = ({ className }: { className?: string }) => {
   const { config, setConfig } = useConfig()
@@ -58,7 +57,7 @@ export const Authentication = ({ className }: { className?: string }) => {
         <AuthMethod
           icon={<BiometricIcon />}
           name="Add passkey on signup"
-          details={<p className="text-xs font-secondary-foreground">Prompt users to add a passkey after signing up with <span className="font-bold">email</span> or <span className="font-bold">social auth</span></p>}
+          details={<p className="text-xs text-secondary-foreground">Prompt users to add a passkey after signing up with <span className="font-bold">email</span> or <span className="font-bold">social auth</span></p>}
           active={config.auth.addPasskey}
           setActive={setPasskeysActive}
         />
