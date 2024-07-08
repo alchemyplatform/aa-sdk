@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-alpha.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.18.2...v4.0.0-alpha.2) (2024-07-08)
+
+### Code Refactoring
+
+- move plugingen from aa-sdk to account-kit since it depends on smart-contracts ([0afdcae](https://github.com/alchemyplatform/aa-sdk/commit/0afdcae4a1c944bf18e002b418d18f09838c5428))
+
+### BREAKING CHANGES
+
+- @alchemy/plugingen has been moved to @account-kit/plugingen
+
 # [4.0.0-alpha.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.18.2...v4.0.0-alpha.1) (2024-06-26)
 
 ### Code Refactoring

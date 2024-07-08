@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-alpha.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.18.2...v4.0.0-alpha.2) (2024-07-08)
+
+### Bug Fixes
+
+- yarn.lock had wrong versions of alpha packages ([4a538e6](https://github.com/alchemyplatform/aa-sdk/commit/4a538e68f8e3e79c6b18a487f3d167984f4ce772))
+
+### Code Refactoring
+
+- change the prefix for aa-sdk packages ([#722](https://github.com/alchemyplatform/aa-sdk/issues/722)) ([0601453](https://github.com/alchemyplatform/aa-sdk/commit/060145386572026905f5720866722c5a20c9d7db))
+- move plugingen from aa-sdk to account-kit since it depends on smart-contracts ([0afdcae](https://github.com/alchemyplatform/aa-sdk/commit/0afdcae4a1c944bf18e002b418d18f09838c5428))
+- split aa-alchemy into account-kit packages ([#704](https://github.com/alchemyplatform/aa-sdk/issues/704)) ([b2b7cc6](https://github.com/alchemyplatform/aa-sdk/commit/b2b7cc680860f3d416d11b66d626e715fae4cf8b)), closes [#706](https://github.com/alchemyplatform/aa-sdk/issues/706)
+
+- refactor!: move chain definitions out of aa-sdk core (#772) ([dae2ad0](https://github.com/alchemyplatform/aa-sdk/commit/dae2ad08d863f9d25508e475903e042190aad56f)), closes [#772](https://github.com/alchemyplatform/aa-sdk/issues/772)
+
+### Features
+
+- surface descriptive session key errors ([#718](https://github.com/alchemyplatform/aa-sdk/issues/718)) ([4c0b2f1](https://github.com/alchemyplatform/aa-sdk/commit/4c0b2f19a59272940b3fe40c610c06ad8c49d70e))
+
+### BREAKING CHANGES
+
+- moves the chain definitions out of aa-sdk core and into account-kit/infra
+- @alchemy/plugingen has been moved to @account-kit/plugingen
+- @alchemy/aa-_ packages have been renamed to @aa-sdk/_
+- this removes the @alchemy/aa-alchemy package in favor of @account-kit/\*
+- @alchemy/aa-accounts was deleted in favor of @account-kit/accounts
+
+- refactor: further rename packages
+
 # [4.0.0-alpha.1](https://github.com/alchemyplatform/aa-sdk/compare/v3.18.2...v4.0.0-alpha.1) (2024-06-26)
 
 ### Bug Fixes
