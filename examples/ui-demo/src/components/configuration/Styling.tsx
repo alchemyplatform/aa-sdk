@@ -1,12 +1,13 @@
 import { cn } from "@/lib/utils";
 import { ColorPicker } from "./ColorPicker";
-import { useConfig } from "@/src/app/state";
 import { PhotoUploads } from "./PhotoUpload";
 import { ThemeSwitch } from "../shared/ThemeSwitch";
 import { FileCode } from "lucide-react";
 import ExternalLink from "../shared/ExternalLink";
 import { IllustrationStyle } from "../icons/illustration-style";
 import { getBorderRadiusValue } from "@account-kit/react/tailwind";
+import { useConfig } from "@/app/state";
+import { HelpTooltip } from "../shared/HelpTooltip";
 
 export function Styling({ className }: { className?: string }) {
   const { config, setConfig } = useConfig();
@@ -23,23 +24,21 @@ export function Styling({ className }: { className?: string }) {
 
   return (
     <div className={cn("flex flex-col", className)}>
-      <div className="flex flex-col gap-4 border-b border-border py-6">
+      <div className="flex flex-col gap-4 border-b border-border pt-8 pb-5">
         <p className="font-semibold text-secondary-foreground text-sm">Theme</p>
+
         <ThemeSwitch
           checked={config.ui.theme === "dark"}
           onCheckedChange={onSwitchTheme}
         />
       </div>
 
-      <div className="flex flex-col gap-4 border-b border-border py-6 items-start">
-        <div className="flex flex-col gap-2">
-          <p className="font-semibold text-secondary-foreground text-sm">
-            Color
-          </p>
-          <p className="text-gray-500 text-sm">
-            Applied to links and buttons and illustrations
-          </p>
+      <div className="flex flex-col gap-4 border-b border-border pt-4 pb-5 items-start">
+        <div className="flex items-center gap-1">
+          <p className="font-semibold text-secondary-foreground text-sm">Color</p>
+          <HelpTooltip text="Color changes will be applied to buttons, text links and illustrations" />
         </div>
+
         <div className="flex gap-2 self-stretch">
           <div className="flex flex-col gap-2 flex-1 basis-0">
             <div className="text-gray-600 text-xs font-semibold">
@@ -56,35 +55,33 @@ export function Styling({ className }: { className?: string }) {
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 border-b border-border py-6 items-start">
-        <div className="flex flex-col gap-2">
-          <p className="font-semibold text-secondary-foreground text-sm">
-            Logo
-          </p>
-          <p className="text-gray-500 text-sm">PNG, JPG, GIF</p>
+      <div className="flex flex-col gap-4 border-b border-border pt-4 pb-5 items-start">
+        <div className="flex items-center gap-1">
+          <p className="font-semibold text-secondary-foreground text-sm">Logo</p>
+          <HelpTooltip text="PNG, JPG, GIF files accepted" />
         </div>
+
         <div className="flex self-stretch gap-8">
           <PhotoUploads mode="light" />
           <PhotoUploads mode="dark" />
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 border-b border-border py-6 items-start">
-        <div className="flex flex-col gap-2 self-stretch">
-          <p className="font-semibold text-secondary-foreground text-sm">
-            Corner radius
-          </p>
-          <CornerRadiusOptions />
-        </div>
+      <div className="flex flex-col gap-4 border-b border-border pt-4 pb-5 items-start">
+        <p className="font-semibold text-secondary-foreground text-sm">
+          Corner radius
+        </p>
+
+        <CornerRadiusOptions />
       </div>
 
-      <div className="flex flex-col gap-4 py-6 items-start">
-        <div className="flex flex-col gap-2 self-stretch">
-          <p className="font-semibold text-secondary-foreground text-sm">
-            Illustration style
-          </p>
-          <IllustrationStyleOptions />
+      <div className="flex flex-col gap-4 pt-4 pb-5 items-start">
+        <div className="flex items-center gap-1">
+          <p className="font-semibold text-secondary-foreground text-sm">Illustration Style</p>
+          <HelpTooltip text="These will appear as supplementary graphics on certain screens" />
         </div>
+
+        <IllustrationStyleOptions />
       </div>
 
       <LearnMore />
@@ -121,7 +118,7 @@ export function CornerRadiusOptions() {
     <div className="flex self-stretch gap-3">
       {RADIUS_OPTIONS.map((option) => (
         <button
-          className={`py-2 flex-1 basis-0 bg-[#EFF4F9] text-[#363FF9] hover:opacity-80 ${
+          className={`h-9 flex items-center justify-center flex-1 basis-0 bg-[#EFF4F9] text-[#363FF9] hover:opacity-80 ${
             option.id === borderRadius
               ? "border-2 border-[rgba(0, 0, 0, 0.01)]"
               : "border-2 border-white"
@@ -130,7 +127,7 @@ export function CornerRadiusOptions() {
             borderRadius: getBorderRadiusValue(option.id),
             boxShadow:
               option.id === borderRadius
-                ? "0px 0px 4px 0px rgba(36, 0, 255, 0.7)"
+                ? "0px 0px 6px 0px rgba(36, 0, 255, 0.7)"
                 : undefined,
           }}
           key={option.id}
@@ -176,7 +173,7 @@ function IllustrationStyleOptions() {
           style={{
             boxShadow:
               illustrationStyle === value
-                ? "0px 0px 4px 0px rgba(36, 0, 255, 0.7)"
+                ? "0px 0px 6px 0px rgba(36, 0, 255, 0.7)"
                 : undefined,
           }}
           onClick={() => onChange(value)}

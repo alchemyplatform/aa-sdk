@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { env } from "@/env.mjs";
+import { env } from "../../../../env.mjs";
 
 export async function POST(req: Request) {
   const body = await req.json();
