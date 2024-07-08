@@ -1,4 +1,4 @@
-import { useConfig } from "@/src/app/state";
+import { useConfig } from "@/app/state";
 import { PhotoIcon } from "../icons/photo";
 import FileUploadInput from "../shared/FileUploadInput";
 import { ChangeEvent } from "react";

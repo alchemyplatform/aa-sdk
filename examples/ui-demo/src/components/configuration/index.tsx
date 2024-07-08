@@ -13,7 +13,7 @@ const TABS: Tab[] = [
   },
   {
     id: "style",
-    name: "Stylize",
+    name: "Styles",
     icon: <PaintIcon />,
   },
 ];
@@ -25,7 +25,7 @@ export const Configuration = () => {
     <div className="flex flex-col">
       <Tabs tabs={TABS} activeTab={tab} setActive={setTab} />
       {tab === "authentication" ? (
-        <Authentication className="pt-6" />
+        <Authentication className="pt-8" />
       ) : (
         <Styling />
       )}
