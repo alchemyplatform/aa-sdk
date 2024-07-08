@@ -60,6 +60,7 @@
     "@tanstack/zod-form-adapter": "^0.19.4",
     "@wagmi/connectors": "^4.3.9",
     "@wagmi/core": "^2.9.8",
+    "react-remove-scroll": "^2.5.10",
     "tailwindcss": "^3.4.3",
     "viem": "2.8.6",
     "wagmi": "^2.8.8",
