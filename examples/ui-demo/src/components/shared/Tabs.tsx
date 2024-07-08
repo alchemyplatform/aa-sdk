@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils";
-import { useCallback } from "react";
 
 export type Tab = {
   id: string;
@@ -27,7 +26,7 @@ export const Tabs = ({
             key={tab.id}
             id={tab.id}
             className={cn(
-              "flex flex-col items-center justify-center w-full cursor-pointer border-b-2 -mb-[1.5px] py-4",
+              "flex flex-col items-center justify-center w-full cursor-pointer border-b-2 -mb-[1.5px] py-3",
               isActive ? "border-foreground" : "border-transparent"
             )}
             onClick={() => setActive(tab.id)}
