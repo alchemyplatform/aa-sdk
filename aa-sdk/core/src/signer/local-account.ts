@@ -21,17 +21,67 @@ export class LocalAccountSigner<
   inner: T;
   signerType: string;
 
+  /**
+   * A function to initialize an object with an inner parameter and derive a signerType from it.
+   *
+   * @example
+   * ```ts
+   * import { LocalAccountSigner } from "@aa-sdk/core";
+   * import { privateKeyToAccount, generatePrivateKey } from "viem";
+   *
+   * const signer = new LocalAccountSigner(
+   *  privateKeyToAccount(generatePrivateKey()),
+   * );
+   * ```
+   *
+   * @param {T} inner The inner parameter containing the necessary data
+   */
   constructor(inner: T) {
     this.inner = inner;
     this.signerType = inner.type; //  type: "local"
   }
 
+  /**
+   * Signs the provided message using the inner signMessage function.
+   *
+   * @example
+   * ```ts
+   * import { LocalAccountSigner } from "@aa-sdk/core";
+   * import { generatePrivateKey } from "viem";
+   *
+   * const signer = LocalAccountSigner.mnemonicToAccountSigner(generatePrivateKey());
+   * const signature = await signer.signMessage("Hello, world!");
+   * ```
+   *
+   * @param {string} message The message to be signed
+   * @returns {Promise<any>} A promise that resolves to the signed message
+   */
   readonly signMessage: (message: SignableMessage) => Promise<`0x${string}`> = (
     message
   ) => {
     return this.inner.signMessage({ message });
   };
 
+  /**
+   * Signs typed data using the given parameters.
+   *
+   * @example
+   * ```ts
+   * import { LocalAccountSigner } from "@aa-sdk/core";
+   * import { generatePrivateKey } from "viem";
+   *
+   * const signer = LocalAccountSigner.mnemonicToAccountSigner(generatePrivateKey());
+   * const signature = await signer.signTypedData({
+   *  domain: {},
+   *  types: {},
+   *  primaryType: "",
+   *  message: {},
+   * });
+   * ```
+   *
+   * @param {TypedDataDefinition<TTypedData, TPrimaryType>} params The parameters defining the typed data and primary type
+   * @returns {Promise<Hex>} A promise that resolves to the signed data in hexadecimal format
+   */
   readonly signTypedData = async <
     const TTypedData extends TypedData | { [key: string]: unknown },
     TPrimaryType extends string = string
@@ -41,6 +91,20 @@ export class LocalAccountSigner<
     return this.inner.signTypedData(params);
   };
 
+  /**
+   * Returns the address of the inner object in a specific hexadecimal format.
+   *
+   * @example
+   * ```ts
+   * import { LocalAccountSigner } from "@aa-sdk/core";
+   * import { generatePrivateKey } from "viem";
+   *
+   * const signer = LocalAccountSigner.mnemonicToAccountSigner(generatePrivateKey());
+   * const address = await signer.getAddress();
+   * ```
+   *
+   * @returns {Promise<Hex>} A promise that resolves to the address in the format `0x{string}`
+   */
   readonly getAddress = async (): Promise<`0x${string}`> => {
     return this.inner.address;
   };

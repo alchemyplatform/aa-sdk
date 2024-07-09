@@ -207,10 +207,6 @@ export const aaCoreSideBar: SidebarItem = {
           link: "/packages/aa-core/utils/getDefaultEntryPointAddress",
         },
         {
-          text: "getDefaultSimpleAccountFactoryAddress",
-          link: "/packages/aa-core/utils/getDefaultSimpleAccountFactoryAddress",
-        },
-        {
           text: "resolveProperties",
           link: "/packages/aa-core/utils/resolveProperties",
         },
