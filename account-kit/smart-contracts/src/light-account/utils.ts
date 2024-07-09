@@ -29,7 +29,6 @@ import type {
   GetLightAccountVersionFromAccount,
   IAccountVersionRegistry,
   LightAccountType,
-  LightAccountVersion,
   LightAccountVersionDef,
 } from "./types";
 
@@ -178,12 +177,11 @@ export const getDefaultLightAccountFactoryAddress = (
 };
 
 /**
- * Utility method returning the default multi owner light account factory address given a {@link Chain} object
+ * Utility method returning the default multi owner light account factory address given a Chain object
  *
- * @param chain - a {@link Chain} object
- * @param version - the version of the light account to get the factory address for
- * @returns a {@link Address} for the given chain
- * @throws if the chain doesn't have an address currently deployed
+ * @param {Chain} chain - a Chain object
+ * @param {string} version - the version of the light account to get the factory address for
+ * @returns {Address} an Address for the given chain
  */
 export const getDefaultMultiOwnerLightAccountFactoryAddress = (
   chain: Chain,
@@ -325,37 +323,4 @@ export async function getLightAccountVersionDef<
   }
 
   return AccountVersionRegistry[accountType][version];
-}
-
-/**
- * @param account - the light account to get the version for
- * @param chain - the chain to get the version for
- *
- * @deprecated don't use this function as this function is replaced with getLightAccountVersionDef.
- *             Migrate to using getLightAccountVersionDef instead
- *
- * @returns the light account version for the given light account and chain
- */
-export async function getLightAccountVersion<
-  TAccount extends LightAccountBase,
-  TLightAccountType extends GetLightAccountType<TAccount> = GetLightAccountType<TAccount>
->(
-  account: TAccount,
-  chain?: Chain
-): Promise<GetLightAccountVersion<TLightAccountType>>;
-
-/**
- * Get the light account version for the given light account and chain
- *
- * @deprecated don't use this function as this function is replaced with getLightAccountVersionDef.
- *
- * @param account - the light account to get the version for
- * @param chain - the chain to get the version for
- * @returns the light account version for the given light account and chain
- */
-export async function getLightAccountVersion(
-  account: LightAccountBase,
-  chain: Chain = supportedChains[0]
-): Promise<LightAccountVersion> {
-  return (await getLightAccountVersionDef(account, chain)).version;
 }

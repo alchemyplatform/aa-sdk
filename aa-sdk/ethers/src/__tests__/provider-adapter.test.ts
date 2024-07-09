@@ -1,7 +1,4 @@
-import {
-  createSimpleSmartAccount,
-  getDefaultSimpleAccountFactoryAddress,
-} from "@aa-sdk/core";
+import { createLightAccount } from "@account-kit/smart-contracts";
 import { Wallet } from "@ethersproject/wallet";
 import { Alchemy, Network, type AlchemyProvider } from "alchemy-sdk";
 import { http } from "viem";
@@ -27,7 +24,7 @@ describe("Simple Account Tests", async () => {
         "0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b"
       )
     ).toBe(
-      "0xbfe07c95623df55ae939ddf4757563286472ef8c0ebe4b84d5e774a653b7eb67735cb5b63d15bb18510d64a97e6e3001a5f9818f89f2f7f076e559248a7ccf7d1c"
+      "0x7ecc361d63ab82d89faeecfb79d40127f376c1ef3d545aeec3578eadce9d0c405a4d1ae6177bdebdc8413065014f735ee98da9643cc0e25c07a7423b694f8ae71b"
     );
   });
 });
@@ -45,11 +42,10 @@ const givenConnectedProvider = async ({
     alchemyProvider,
     chain
   ).connectToAccount(
-    await createSimpleSmartAccount({
+    await createLightAccount({
       chain,
-      signer: convertWalletToAccountSigner(signer),
       accountAddress: "0x856185aedfab56809e6686d2d6d0c039d615bd9c",
-      factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
+      signer: convertWalletToAccountSigner(signer),
       transport: http(`${alchemyProvider.connection.url}`),
     })
   );

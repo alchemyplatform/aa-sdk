@@ -20,11 +20,11 @@ export type HydrateProps = {
  *
  * based on https://github.com/wevm/wagmi/blob/main/packages/react/src/hydrate.ts
  *
- * @param props component props containing the config and initial state as well as children to render
- * @param props.config the account config containing the client store
- * @param props.initialState optional param detailing the initial ClientState
- * @param props.children the children to render
- * @returns the children to render
+ * @param {PropsWithChildren<HydrateProps>} props component props containing the config and initial state as well as children to render
+ * @param {AlchemyAccountsConfig} props.config the account config containing the client store
+ * @param {AlchemyClientState | undefined} props.initialState optional param detailing the initial ClientState
+ * @param {React.ReactNode} props.children the children to render
+ * @returns {React.ReactNode} the children to render
  */
 export function Hydrate(props: PropsWithChildren<HydrateProps>) {
   const { children, config, initialState } = props;

@@ -47,7 +47,7 @@ export class ClientUndefinedHookError extends BaseError {
  */
 export class MissingUiConfigError extends BaseError {
   /**
-   * @param hookName the name of the hook that is throwing this error
+   * @param {string} hookName the name of the hook that is throwing this error
    */
   constructor(hookName: string) {
     super(
@@ -61,8 +61,8 @@ export class MissingUiConfigError extends BaseError {
  */
 export class UnsupportedEOAActionError extends BaseError {
   /**
-   * @param hookName the hook that threw the error
-   * @param action the action not supported by an EOA
+   * @param {string} hookName the hook that threw the error
+   * @param {string} action the action not supported by an EOA
    */
   constructor(hookName: string, action: string) {
     super(`${hookName}: ${action} is not supported for EOA accounts`);
