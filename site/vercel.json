@@ -9,6 +9,27 @@
       "source": "/signers/alchemy-signer/",
       "destination": "/signers/alchemy-signer/introduction",
       "statusCode": 301
+    },
+    {
+      "source": "/smart-accounts/accounts/guides/light-account",
+      "destination": "/smart-accounts/light-account",
+      "statusCode": 301
+    },
+    {
+      "source": "/overview/getting-started",
+      "destination": "/getting-started/introduction",
+      "statusCode": 301
+    },
+    {
+      "source": "/tutorials/batching-transactions",
+      "destination": "/using-smart-accounts/batch-user-operations",
+      "statusCode": 301
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/:match*.html",
+      "destination": "/:match"
     }
   ],
   "cleanUrls": true
