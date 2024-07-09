@@ -152,7 +152,7 @@ export class SessionKeySigner
    * const newSessionKey = signer.generateNewKey();
    * ```
    *
-   * @returns The public address of the new key.
+   * @returns {Address} The public address of the new key.
    */
   generateNewKey = () => {
     const storage =

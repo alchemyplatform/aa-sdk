@@ -8,8 +8,8 @@ import { getColorVariableName } from "../utils.js";
 /**
  * Converts the color configs in the account kit theme to CSS variables.
  *
- * @param theme the account kit theme
- * @returns a CSS rules object which adds the color variables to the root element
+ * @param {AccountKitTheme} theme the account kit theme
+ * @returns {ComponentDef} a CSS rules object which adds the color variables to the root element
  */
 export const colorVariables = (theme: AccountKitTheme): ComponentDef => {
   // This assumes that the colors object is a flat object of type { [name: string]: ColorVariantRecord }
