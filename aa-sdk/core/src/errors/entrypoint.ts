@@ -7,6 +7,12 @@ import { BaseError } from "./base.js";
 export class EntryPointNotFoundError extends BaseError {
   override name = "EntryPointNotFoundError";
 
+  /**
+   * Constructs an error message indicating that no default entry point exists for the given chain and entry point version.
+   *
+   * @param {Chain} chain The blockchain network for which the entry point is being queried
+   * @param {any} entryPointVersion The version of the entry point for which no default exists
+   */
   constructor(chain: Chain, entryPointVersion: any) {
     super(
       [
@@ -23,6 +29,12 @@ export class EntryPointNotFoundError extends BaseError {
 export class InvalidEntryPointError extends BaseError {
   override name = "InvalidEntryPointError";
 
+  /**
+   * Constructs an error indicating an invalid entry point version for a specific chain.
+   *
+   * @param {Chain} chain The chain object containing information about the blockchain
+   * @param {any} entryPointVersion The entry point version that is invalid
+   */
   constructor(chain: Chain, entryPointVersion: any) {
     super(
       `Invalid entry point: unexpected version ${entryPointVersion} for ${chain.name}.`
