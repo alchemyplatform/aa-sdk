@@ -10,8 +10,8 @@ type ResolveConfigParameters = {
 /**
  * Bundles and returns config object from path.
  *
- * @param parameters - Parameters to resolve config
- * @returns an array of the config objects
+ * @param {ResolveConfigParameters} parameters - Parameters to resolve config
+ * @returns {Promise<MaybeArray<Config>>} an array of the config objects
  */
 export async function resolveConfig(
   parameters: ResolveConfigParameters
