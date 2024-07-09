@@ -40,7 +40,7 @@ const STRINGS = {
       supportLink: "Contact support",
     },
     poweredBy: {
-      title: "powered by",
+      title: "powered by Alchemy",
     },
   },
 };
