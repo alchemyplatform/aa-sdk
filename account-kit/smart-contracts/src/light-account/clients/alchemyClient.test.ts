@@ -102,7 +102,7 @@ describe("Light Account Client Tests", () => {
       "[
         {
           \\"code\\": \\"custom\\",
-          \\"message\\": \\"chain must include an alchemy rpc url. See \`createAlchemyChain\` or use the \`AlchemyChainMap\` exported from \`@aa-sdk/core\`\\",
+          \\"message\\": \\"chain must include an alchemy rpc url. See \`createAlchemyChain\` or import a chain from \`@account-kit/infra\`.\\",
           \\"fatal\\": true,
           \\"path\\": [
             \\"chain\\"
