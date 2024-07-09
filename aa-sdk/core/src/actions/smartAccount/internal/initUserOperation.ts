@@ -18,15 +18,14 @@ import type {
  * Description internal action function of SmartAccountClient for initializing
  * a user operation for the sender account
  *
- * @async
  * @template {Transport} TTransport
  * @template {Chain | undefined} TChain
  * @template {SmartContractAccount | undefined} TAccount
  * @template {UserOperationContext | undefined} TContext
  * @template {GetEntryPointFromAccount} TEntryPointVersion
- * @param client smart account client
- * @param args send user operation parameters
- * @returns initialized user operation struct
+ * @param {BaseSmartAccountClient<TTransport, TChain, TAccount>} client smart account client
+ * @param {SendUserOperationParameters<TAccount, TContext, TEntryPointVersion> | BuildUserOperationParameters<TAccount, TContext, TEntryPointVersion>} args send user operation parameters
+ * @returns {Promise<Deferrable<UserOperationStruct<TEntryPointVersion>>>} initialized user operation struct
  */
 export async function _initUserOperation<
   TTransport extends Transport = Transport,

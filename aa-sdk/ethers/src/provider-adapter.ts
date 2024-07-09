@@ -72,9 +72,9 @@ export class EthersProviderAdapter extends JsonRpcProvider {
    * Rewrites the send method to use the account provider's EIP-1193
    * compliant request method
    *
-   * @param method - the RPC method to call
-   * @param params - the params required by the RPC method
-   * @returns the result of the RPC call
+   * @param {any} method - the RPC method to call
+   * @param {any[]} params - the params required by the RPC method
+   * @returns {Promise<any>} the result of the RPC call
    */
   send(method: any, params: any[]): Promise<any> {
     // @ts-expect-error - viem is strongly typed on the request methods, but ethers is not
@@ -84,8 +84,8 @@ export class EthersProviderAdapter extends JsonRpcProvider {
   /**
    * Connects the Provider to an Account and returns a Signer
    *
-   * @param account - the account to connect to
-   * @returns an {@link AccountSigner} that can be used to sign and send user operations
+   * @param {SmartContractAccount} account - the account to connect to
+   * @returns {AccountSigner} an {@link AccountSigner} that can be used to sign and send user operations
    */
   connectToAccount<TAccount extends SmartContractAccount>(
     account: TAccount
@@ -132,9 +132,9 @@ export class EthersProviderAdapter extends JsonRpcProvider {
   /**
    * Creates an instance of EthersProviderAdapter from an ethers.js JsonRpcProvider.
    *
-   * @param provider the ethers JSON RPC provider to convert
-   * @param chain the chain to connect to
-   * @returns an instance of {@link EthersProviderAdapter}
+   * @param {JsonRpcProvider} provider the ethers JSON RPC provider to convert
+   * @param {Chain} chain the chain to connect to
+   * @returns {EthersProviderAdapter} an instance of EthersProviderAdapter
    */
   static fromEthersProvider(
     provider: JsonRpcProvider,
