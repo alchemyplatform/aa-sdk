@@ -4,7 +4,7 @@ import { createColorSet } from "./utils.js";
 /**
  * Creates a default Tailwind theme object containing the default settings for the Account Kit UI.
  *
- * @returns The default theme object.
+ * @returns {AccountKitTheme}  The default theme object.
  */
 export function createDefaultTheme(): AccountKitTheme {
   return {
