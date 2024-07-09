@@ -18,8 +18,8 @@ export type AuthCardProps = {
  * React component containing an Auth view with configured auth methods
  * and options based on the config passed to the AlchemyAccountProvider
  *
- * @param props Card Props
- * @param props.className Optional class name to apply to the card
+ * @param {AuthCardProps} props Card Props
+ * @param {string} props.className optional class name to apply to the card
  * @returns a react component containing the AuthCard
  */
 export const AuthCard = (props: AuthCardProps) => {
@@ -44,7 +44,9 @@ export const AuthCardContent = ({
   const contentRef = useRef<HTMLDivElement>(null);
   const { height } = useElementHeight(contentRef);
 
-  const { hideError, onAuthSuccess } = useUiConfig();
+  const { auth } = useUiConfig();
+  const hideError = auth?.hideError;
+  const onAuthSuccess = auth?.onAuthSuccess;
 
   // TODO: Finalize the steps that allow going back
   const canGoBack = useMemo(() => {

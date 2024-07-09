@@ -109,7 +109,10 @@ export const AlchemyAccountProvider = (
   });
 
   useEffect(() => {
-    if (status === "AWAITING_EMAIL_AUTH" && config.ui?.addPasskeyOnSignup) {
+    if (
+      status === "AWAITING_EMAIL_AUTH" &&
+      config.ui?.auth?.addPasskeyOnSignup
+    ) {
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get(IS_SIGNUP_QP) !== "true") return;
 

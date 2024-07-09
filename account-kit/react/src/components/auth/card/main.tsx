@@ -7,7 +7,11 @@ import { useUiConfig } from "../../../hooks/useUiConfig.js";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const MainAuthContent = () => {
-  const { header, showSignInText, sections } = useUiConfig();
+  const { auth } = useUiConfig();
+
+  const header = auth?.header ?? null;
+  const sections = auth?.sections;
+  const showSignInText = auth?.showSignInText ?? false;
 
   return (
     <>

@@ -4,12 +4,12 @@ import { Dialog } from "../dialog/dialog.js";
 import { useUiConfig } from "../../hooks/useUiConfig.js";
 
 export const AuthModal = () => {
-  const { modalClassName } = useUiConfig();
+  const { modalBaseClassName } = useUiConfig();
   const { isOpen, closeAuthModal } = useAuthModal();
 
   return (
     <Dialog isOpen={isOpen} onClose={closeAuthModal}>
-      <div className={`modal md:w-[368px] ${modalClassName ?? ""}`}>
+      <div className={`modal md:w-[368px] ${modalBaseClassName ?? ""}`}>
         <AuthCardContent showClose />
       </div>
     </Dialog>

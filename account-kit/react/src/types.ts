@@ -3,25 +3,34 @@ import type { ReactNode } from "react";
 import type { AuthType } from "./components/auth/types.js";
 
 export type AlchemyAccountsUIConfig = {
-  header?: ReactNode;
-  showSignInText?: boolean;
+  auth?: {
+    /**
+     * If this is true, then auth components will prompt users to add
+     * a passkey after signing in for the first time
+     */
+    addPasskeyOnSignup?: boolean;
+    header?: ReactNode;
+    /**
+     * If hideError is true, then the auth component will not
+     * render the global error component
+     */
+    hideError?: boolean;
+    onAuthSuccess?: () => void;
+    /**
+     * Each section can contain multiple auth types which will be grouped together
+     * and separated by an OR divider
+     */
+    sections: AuthType[][];
+    /**
+     * Whether to show the "Sign in" header text in the first auth step
+     */
+    showSignInText?: boolean;
+  };
   illustrationStyle?: "outline" | "linear" | "filled" | "flat";
   /**
-   * Each section can contain multiple auth types which will be grouped together
-   * and separated by an OR divider
+   * This class name will be applied to any modals that are rendered
    */
-  sections?: AuthType[][];
-  /**
-   * This class name will be applied to the modal if it is used
-   */
-  modalClassName?: string;
-  onAuthSuccess?: () => void;
-  addPasskeyOnSignup?: boolean;
-  /**
-   * If hideError is true, then the auth component will not
-   * render the global error component
-   */
-  hideError?: boolean;
+  modalBaseClassName?: string;
 };
 
 export type AuthIllustrationStyle = NonNullable<

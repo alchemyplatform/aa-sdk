@@ -1,11 +1,11 @@
 "use client";
 
+import { sepolia } from "@account-kit/infra"
 import { getBorderRadiusBaseVariableName, getBorderRadiusValue, getColorVariableName } from "@account-kit/react/tailwind"
 import { AlchemyAccountProvider, AlchemyAccountsProviderProps, AlchemyAccountsUIConfig, AuthType, createConfig } from "@account-kit/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren, Suspense, useEffect, useMemo, useState } from "react";
 import { Config, ConfigContext, DEFAULT_CONFIG } from "./state";
-import { sepolia } from "viem/chains";
 
 const queryClient = new QueryClient();
 
@@ -20,11 +20,13 @@ export const Providers = (props: PropsWithChildren<{}>) => {
     }
 
     const uiConfig: AlchemyAccountsUIConfig = {
-      sections,
-      addPasskeyOnSignup: config.auth.addPasskey,
       illustrationStyle: config.ui.illustrationStyle,
-      showSignInText: true,
-      header: <AuthCardHeader theme={config.ui.theme} logoDark={config.ui.logoDark} logoLight={config.ui.logoLight} />,
+      auth: {
+        sections,
+        addPasskeyOnSignup: config.auth.addPasskey,
+        showSignInText: true,
+        header: <AuthCardHeader theme={config.ui.theme} logoDark={config.ui.logoDark} logoLight={config.ui.logoLight} />,
+      },
     };
 
     return createConfig({
@@ -32,8 +34,7 @@ export const Providers = (props: PropsWithChildren<{}>) => {
       rpcUrl: "/api/rpc",
       chain: sepolia,
       ssr: true,
-      ui: uiConfig,
-    });
+    }, uiConfig);
   }, [config]);
 
   // Sync CSS variables
@@ -78,7 +79,7 @@ function AuthCardHeader({ logoDark, logoLight, theme }: Pick<Config['ui'], "them
 
   return (
     <img
-      style={{ height: "60px", objectFit: "contain" }}
+      style={{ height: "60px", objectFit: "cover", objectPosition: "center" }}
       src={logo.fileSrc}
       alt={logo.fileName}
     />

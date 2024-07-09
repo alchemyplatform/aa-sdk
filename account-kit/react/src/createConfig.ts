@@ -5,30 +5,27 @@ import {
 } from "@account-kit/core";
 import type { AlchemyAccountsUIConfig } from "./types";
 
-export type CreateConfigWithUIProps = CreateConfigProps & {
-  ui?: AlchemyAccountsUIConfig;
-};
-
 export type AlchemyAccountsConfigWithUI = AlchemyAccountsConfig & {
   ui?: AlchemyAccountsUIConfig;
 };
 
 /**
  * Wraps the `createConfig` that is exported from `@aa-sdk/core` to allow passing
- * an additional parameter, `ui`, which is the configuration object for the Auth Component UI
+ * an additional argument, the configuration object for the Auth Components UI
  * (the modal and AuthCard).
  *
- * @param params {@link CreateConfigWithUIProps} to use for creating an alchemy account config as well as the UI config
+ * @param {CreateConfigProps} props for creating an alchemy account config
+ * @param {AlchemyAccountsUIConfig} ui the configuration to use for the Auth Components UI
  * @returns an alchemy account config object containing the core and client store, as well as the UI config
  */
 export const createConfig = (
-  params: CreateConfigWithUIProps
+  props: CreateConfigProps,
+  ui: AlchemyAccountsUIConfig
 ): AlchemyAccountsConfigWithUI => {
-  const { ui, ...config } = params;
-  const coreConfig = createCoreConfig(config);
+  const config = createCoreConfig(props);
 
   return {
-    ...coreConfig,
+    ...config,
     ui,
   };
 };
