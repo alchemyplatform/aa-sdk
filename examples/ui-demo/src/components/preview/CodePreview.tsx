@@ -1,27 +1,23 @@
-import { cn } from "@/lib/utils";
 import ExternalLink from "../shared/ExternalLink";
-
-import { Roboto_Mono } from "next/font/google";
-import { Config, DEFAULT_CONFIG, useConfig } from "@/src/app/state";
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { a11yDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import dedent from "dedent";
 import { Check, Copy } from "lucide-react";
 import { useState } from "react";
-const robotoMono = Roboto_Mono({
-  subsets: ["latin"],
-  display: "swap",
-});
+import { Config, DEFAULT_CONFIG, useConfig } from "@/app/state";
+import { twMerge } from "tailwind-merge";
 
-export function CodePreview() {
+export function CodePreview({ className }: { className?: string }) {
   const { config } = useConfig()
   return (
-    <div className="flex flex-col gap-6 p-6 overflow-y-auto">
+    <div className={twMerge("flex flex-col gap-6 p-6 overflow-y-auto scrollbar-none", className)}>
       <div className="flex flex-col gap-2">
         <div className="font-semibold text-foreground text-xl">
           Export configuration
         </div>
         <div className="text-sm text-gray-600">
           To get started, simply paste the below code into your environment.
-          You&apos;ll need to add your Alchemy API key and Gas Policy ID too. Login
+          You&apos;ll need to add your Alchemy API key and Gas Policy ID too. Log in
           to automatically inject the keys into the code below.{" "}
           <ExternalLink href="#" className="text-blue-600 font-semibold">
             Fully customize CSS here.
@@ -57,11 +53,9 @@ function CodeBlock({ title, code }: { title: string; code: string }) {
           {copied ? <Check size={16} /> : <Copy size={16} />}
         </button>
       </div>
-      <pre
-        className={cn("px-4 py-6 bg-gray-800 text-white", robotoMono.className)}
-      >
+      <SyntaxHighlighter showLineNumbers language="typescript" style={a11yDark} customStyle={{ margin: 0, background: '#1F2937', borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
         {code}
-      </pre>
+      </SyntaxHighlighter>
     </div>
   );
 }

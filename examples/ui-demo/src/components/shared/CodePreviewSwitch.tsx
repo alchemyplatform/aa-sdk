@@ -20,7 +20,7 @@ const CodePreviewSwitch = React.forwardRef<
   >
     <SwitchPrimitives.Thumb
       className={cn(
-        "flex items-center justify-center pointer-events-none h-[24px] w-[24px] rounded-full bg-background shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-[22px] data-[state=unchecked]:translate-x-0"
+        "flex items-center justify-center pointer-events-none h-[24px] w-[24px] rounded-full bg-background ring-0 transition-transform data-[state=checked]:translate-x-[22px] data-[state=unchecked]:translate-x-0"
       )}
     >
       <Code />

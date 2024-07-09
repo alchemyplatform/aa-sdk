@@ -1,4 +1,5 @@
 "use client";
+
 import { getBorderRadiusBaseVariableName, getBorderRadiusValue, getColorVariableName } from "@account-kit/react/tailwind"
 import { AlchemyAccountProvider, AlchemyAccountsProviderProps, AlchemyAccountsUIConfig, AuthType, createConfig } from "@account-kit/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
