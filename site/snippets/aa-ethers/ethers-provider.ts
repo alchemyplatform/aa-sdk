@@ -1,9 +1,6 @@
-import {
-  createSimpleSmartAccount,
-  getChain,
-  getDefaultSimpleAccountFactoryAddress,
-} from "@aa-sdk/core";
 import { EthersProviderAdapter } from "@aa-sdk/ethers";
+import { polygonMumbai } from "@account-kit/infra";
+import { createLightAccount } from "@account-kit/smart-contracts";
 import { Alchemy, Network } from "alchemy-sdk";
 import { http } from "viem";
 import { signer } from "../aa-core/lightAccountClient";
@@ -15,16 +12,16 @@ const alchemy = new Alchemy({
 });
 const ethersProvider = await alchemy.config.getProvider();
 
-const chain = getChain(ethersProvider.network.chainId);
+const chain = polygonMumbai;
 
 // 2. smart account client from alchemy's ethers provider and connect with simple smart account
 export const provider = EthersProviderAdapter.fromEthersProvider(
-  ethersProvider
+  ethersProvider,
+  chain
 ).connectToAccount(
-  await createSimpleSmartAccount({
+  await createLightAccount({
     chain,
     signer,
-    factoryAddress: getDefaultSimpleAccountFactoryAddress(chain),
     transport: http(
       `${chain.rpcUrls.alchemy.http[0]}/${ethersProvider.apiKey}`
     ),
