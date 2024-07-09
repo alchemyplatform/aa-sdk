@@ -14,11 +14,14 @@ export async function reconnect(config: AlchemyAccountsConfig) {
   const signerConfig = clientStore.getState().config;
   const accountConfigs = clientStore.getState().accountConfigs;
 
-  const signer = createSigner(signerConfig);
+  const signer = clientStore.getState().signer ?? createSigner(signerConfig);
+  if (!clientStore.getState().signer) {
+    clientStore.setState({
+      signer,
+    });
+  }
+
   const chain = getChain(config);
-  clientStore.setState({
-    signer,
-  });
 
   const unsubConnected = signer.on("connected", async () => {
     if (accountConfigs[chain.id]?.["LightAccount"]) {
