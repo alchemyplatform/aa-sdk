@@ -2,13 +2,13 @@ import {
   LocalAccountSigner,
   LogLevel,
   Logger,
-  arbitrumSepolia,
   createBundlerClient,
   createSmartAccountClientFromExisting,
   getEntryPoint,
   type SmartAccountSigner,
   type UserOperationFeeOptions,
 } from "@aa-sdk/core";
+import { arbitrumSepolia } from "@account-kit/infra";
 import {
   custom,
   http,
