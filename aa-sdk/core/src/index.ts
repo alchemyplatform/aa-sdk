@@ -125,7 +125,6 @@ export {
   concatPaymasterAndData,
   deepHexlify,
   filterUndefined,
-  getDefaultSimpleAccountFactoryAddress,
   getDefaultUserOperationFeeOptions,
   isBigNumberish,
   isMultiplier,

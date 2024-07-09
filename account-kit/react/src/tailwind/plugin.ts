@@ -38,7 +38,7 @@ type TailWindPlugin = ReturnType<typeof plugin>;
  *
  * export default config;
  * ```
- * @returns The resolved path to the @account-kit/react package and the tailwind content
+ * @returns {string} The resolved path to the @account-kit/react package and the tailwind content
  */
 export const getAccountKitContentPath = () => {
   const pathToMe = require.resolve("@account-kit/react");
@@ -71,8 +71,8 @@ export const getAccountKitContentPath = () => {
  *
  * export default config;
  * ```
- * @param themeOverride optional parameter that allows for overriding any of the default account kit theme values
- * @returns a TailwindPlugin to be used within the tailwind.config.js
+ * @param {AccountKitThemeOverride} themeOverride optional parameter that allows for overriding any of the default account kit theme values
+ * @returns {TailWindPlugin} a TailwindPlugin to be used within the tailwind.config.js
  */
 export const accountKitUi: (
   themeOverride?: AccountKitThemeOverride
@@ -133,9 +133,9 @@ export const accountKitUi: (
 /**
  * A utility function for augmenting an existing tailwind config with the account kit ui components
  *
- * @param config the existing tailwind config
- * @param themeOverride optional parameter that allows overrides to Account Kit UI theme styles
- * @returns the augmented tailwind config
+ * @param {TailwindConfig} config the existing tailwind config
+ * @param {AccountKitThemeOverride} themeOverride optional parameter that allows overrides to Account Kit UI theme styles
+ * @returns {TailwindConfig} the augmented tailwind config
  */
 export const withAccountKitUi = (
   config: TailwindConfig,

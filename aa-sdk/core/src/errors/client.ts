@@ -6,6 +6,14 @@ import { BaseError } from "./base.js";
  */
 export class IncompatibleClientError extends BaseError {
   override name = "IncompatibleClientError";
+
+  /**
+   * Throws an error when the client type does not match the expected client type.
+   *
+   * @param {string} expectedClient The expected type of the client.
+   * @param {string} method The method that was called.
+   * @param {Client} client The client instance.
+   */
   constructor(expectedClient: string, method: string, client: Client) {
     super(
       [
@@ -21,6 +29,12 @@ export class IncompatibleClientError extends BaseError {
  */
 export class InvalidRpcUrlError extends BaseError {
   override name = "InvalidRpcUrlError";
+
+  /**
+   * Creates an instance of an error with a message indicating an invalid RPC URL.
+   *
+   * @param {string} [rpcUrl] The invalid RPC URL that caused the error
+   */
   constructor(rpcUrl?: string) {
     super(`Invalid RPC URL ${rpcUrl}`);
   }
@@ -31,6 +45,10 @@ export class InvalidRpcUrlError extends BaseError {
  */
 export class ChainNotFoundError extends BaseError {
   override name = "ChainNotFoundError";
+
+  /**
+   * Initializes a new instance of the error message with a default message indicating that no chain was supplied to the client.
+   */
   constructor() {
     super("No chain supplied to the client");
   }
