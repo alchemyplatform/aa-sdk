@@ -150,7 +150,7 @@ export interface AlchemyGasEstimationOptions {
  * @template {ClientWithAlchemyMethods} C
  * @param {ClientWithAlchemyMethods} client client with alchemy methods
  * @param {AlchemyGasManagerConfig} config alchemy gas manager configuration
- * @returns the dummyPaymasterAndData middleware for Alchemy gas manager
+ * @returns {() => Hex} the dummyPaymasterAndData middleware for Alchemy gas manager
  */
 const dummyPaymasterAndData =
   <C extends ClientWithAlchemyMethods>(
@@ -248,11 +248,11 @@ export function alchemyGasManagerMiddleware<C extends ClientWithAlchemyMethods>(
  * Utility function to override a field in the user operation request with the overrides or fee options
  *
  * @template {EntryPointVersion} TEntryPointVersion
- * @param field the field to override
- * @param overrides the overrides object
- * @param feeOptions the fee options object from the client
- * @param userOperation the user operation request
- * @returns the overridden field value
+ * @param {keyof UserOperationFeeOptions<TEntryPointVersion>} field the field to override
+ * @param {UserOperationOverrides<TEntryPointVersion> | undefined} overrides the overrides object
+ * @param {UserOperationFeeOptions<TEntryPointVersion> | undefined} feeOptions the fee options object from the client
+ * @param {UserOperationRequest<TEntryPointVersion>} userOperation the user operation request
+ * @returns {Hex | Multiplier | undefine} the overridden field value
  */
 const overrideField = <
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion
@@ -297,9 +297,9 @@ const overrideField = <
  * that calls the [`alchemy_requestGasAndPaymasterAndData`](https://docs.alchemy.com/reference/alchemy-requestgasandpaymasteranddata)
  *
  * @template {ClientWithAlchemyMethods} C
- * @param client client with alchemy methods
- * @param config alchemy gas manager configuration
- * @returns the paymasterAndData middleware for Alchemy gas manager
+ * @param {ClientWithAlchemyMethods} client client with alchemy methods
+ * @param {AlchemyGasManagerConfig} config alchemy gas manager configuration
+ * @returns {ClientMiddlewareConfig["paymasterAndData"]} the paymasterAndData middleware for Alchemy gas manager
  */
 function requestGasAndPaymasterData<C extends ClientWithAlchemyMethods>(
   client: C,
@@ -403,9 +403,9 @@ function requestGasAndPaymasterData<C extends ClientWithAlchemyMethods>(
  * that calls the [`alchemy_requestPaymasterAndData`](https://docs.alchemy.com/reference/alchemy-requestpaymasteranddata)
  * with gas estimation disabled.
  *
- * @param client client with alchemy methods
- * @param config alchemy gas manager configuration
- * @returns the paymasterAndData middleware for Alchemy gas manager with gas estimation disabled
+ * @param {ClientWithAlchemyMethods} client client with alchemy methods
+ * @param {AlchemyGasManagerConfig} config alchemy gas manager configuration
+ * @returns {ClientMiddlewareConfig["paymasterAndData"]} the paymasterAndData middleware for Alchemy gas manager with gas estimation disabled
  */
 const requestPaymasterAndData: <C extends ClientWithAlchemyMethods>(
   client: C,
