@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-alpha.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-alpha.3...v4.0.0-alpha.4) (2024-07-10)
+
+### Features
+
+- read auth card props from context, simplify UI config ([#789](https://github.com/alchemyplatform/aa-sdk/issues/789)) ([ac44833](https://github.com/alchemyplatform/aa-sdk/commit/ac448334ed87b3937c5401820d6fec06be80d529))
+- responsive styling for demo app ([#810](https://github.com/alchemyplatform/aa-sdk/issues/810)) ([70961f7](https://github.com/alchemyplatform/aa-sdk/commit/70961f78d862c51e56f617eda5746a48d8444710))
+
 # [4.0.0-alpha.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-alpha.2...v4.0.0-alpha.3) (2024-07-09)
 
 ### Bug Fixes
