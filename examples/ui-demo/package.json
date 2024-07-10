@@ -23,8 +23,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-syntax-highlighter": "^15.5.0",
-    "tailwind-merge": "^2.3.0",
-    "viem": "^2.9.28"
+    "tailwind-merge": "^2.3.0"
   },
   "devDependencies": {
     "@t3-oss/env-core": "^0.7.1",
