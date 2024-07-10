@@ -14,7 +14,7 @@ export function TopNav() {
         </div>
 
         <div className="flex gap-4 items-center h-8">
-          <div className="flex items-center gap-8 font-semibold">
+          <div className="hidden md:flex items-center gap-8 font-semibold">
             <ExternalLink href={links.docs} className="p-2 hover:bg-gray-100 transition-colors rounded-lg">
               Docs
             </ExternalLink>
