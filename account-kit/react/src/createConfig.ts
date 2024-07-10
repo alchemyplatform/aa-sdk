@@ -14,6 +14,26 @@ export type AlchemyAccountsConfigWithUI = AlchemyAccountsConfig & {
  * an additional argument, the configuration object for the Auth Components UI
  * (the modal and AuthCard).
  *
+ * @example
+ * ```ts
+ * import { sepolia } from "@account-kit/infra"
+ * import { createConfig } from "@account-kit/react"
+ *
+ * const uiConfig = {
+ *   illustrationStyle: "linear",
+ *   auth: {
+ *     sections: [[{ type: "email" }], [{ type: "passkey" }]],
+ *     addPasskeyOnSignup: true,
+ *   },
+ * }
+ *
+ * const config = createConfig({
+ *   rpcUrl: "/api/rpc",
+ *   chain: sepolia,
+ *   ssr: true,
+ * }, uiConfig)
+ * ```
+ *
  * @param {CreateConfigProps} props for creating an alchemy account config
  * @param {AlchemyAccountsUIConfig} ui the configuration to use for the Auth Components UI
  * @returns an alchemy account config object containing the core and client store, as well as the UI config

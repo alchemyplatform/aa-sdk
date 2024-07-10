@@ -10,7 +10,7 @@ export function PasskeyAdded() {
     <div className="flex flex-col gap-5 items-center">
       <div className="flex flex-col items-center justify-center h-12 w-12">
         <AddedPasskeyIllustration
-          illustrationStyle={illustrationStyle ?? "flat"}
+          illustrationStyle={illustrationStyle}
           height="48"
           width="48"
         />

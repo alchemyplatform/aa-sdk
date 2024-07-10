@@ -46,9 +46,9 @@ export const AuthCardContent = ({
   const contentRef = useRef<HTMLDivElement>(null);
   const { height } = useElementHeight(contentRef);
 
-  const { auth } = useUiConfig();
-  const hideError = auth?.hideError;
-  const onAuthSuccess = auth?.onAuthSuccess;
+  const {
+    auth: { hideError, onAuthSuccess },
+  } = useUiConfig();
 
   // TODO: Finalize the steps that allow going back
   const canGoBack = useMemo(() => {

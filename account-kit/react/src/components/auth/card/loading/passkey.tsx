@@ -11,7 +11,7 @@ export const LoadingPasskeyAuth = () => {
   return (
     <div className="flex flex-col gap-5 items-center">
       <div className="flex flex-col items-center justify-center">
-        <LoadingPasskey illustrationStyle={illustrationStyle ?? "flat"} />
+        <LoadingPasskey illustrationStyle={illustrationStyle} />
       </div>
 
       <h3 className="font-semibold text-lg">{ls.loadingPasskey.title}</h3>

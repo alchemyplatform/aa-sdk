@@ -39,7 +39,7 @@ export const LoadingEmail = ({ context }: LoadingEmailProps) => {
     <div className="flex flex-col gap-5 items-center">
       <div className="flex flex-col items-center justify-center h-12 w-12">
         <EmailIllustration
-          illustrationStyle={illustrationStyle ?? "flat"}
+          illustrationStyle={illustrationStyle}
           height="48"
           width="48"
           className="animate-pulse"
