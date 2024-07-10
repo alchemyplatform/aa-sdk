@@ -8,5 +8,3 @@ export type AuthType =
     }
   | { type: "passkey" }
   | { type: "injected" };
-
-export type AuthIllustrationStyle = "outline" | "linear" | "filled" | "flat";
