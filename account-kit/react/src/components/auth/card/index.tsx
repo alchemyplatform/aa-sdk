@@ -58,7 +58,7 @@ export const AuthCardContent = ({
     return ["email_verify", "passkey_verify"].includes(authStep.type);
   }, [authStep]);
 
-  const onBack = useCallback(async () => {
+  const onBack = useCallback(() => {
     switch (authStep.type) {
       case "email_verify":
       case "passkey_verify":
