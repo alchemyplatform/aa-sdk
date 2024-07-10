@@ -9,9 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@account-kit/core": "^4.0.0-alpha.4",
-    "@account-kit/infra": "^4.0.0-alpha.4",
-    "@account-kit/react": "^4.0.0-alpha.4",
+    "@account-kit/core": "latest",
+    "@account-kit/infra": "latest",
+    "@account-kit/react": "latest",
     "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-switch": "^1.0.3",
     "@radix-ui/react-tooltip": "^1.1.2",

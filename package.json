@@ -9,7 +9,6 @@
     "aa-sdk/*",
     "account-kit/*",
     "templates/*",
-    "examples/*",
     "site"
   ],
   "scripts": {
