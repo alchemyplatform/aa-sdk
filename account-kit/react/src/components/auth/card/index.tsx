@@ -1,53 +1,52 @@
-import {
-  useCallback,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  type ReactNode,
-} from "react";
+import { useCallback, useLayoutEffect, useMemo, useRef } from "react";
 import { useSignerStatus } from "../../../hooks/useSignerStatus.js";
 import { IS_SIGNUP_QP } from "../../constants.js";
 import { useAuthContext } from "../context.js";
-import type { AuthIllustrationStyle, AuthType } from "../types.js";
 import { Step } from "./steps.js";
 import { Notification } from "../../notification.js";
 import { useAuthError } from "../../../hooks/useAuthError.js";
 import { Navigation } from "../../navigation.js";
 import { useAuthModal } from "../../../hooks/useAuthModal.js";
 import { useElementHeight } from "../../../hooks/useElementHeight.js";
+import { useUiConfig } from "../../../hooks/useUiConfig.js";
 
 export type AuthCardProps = {
-  hideError?: boolean;
-  header?: ReactNode;
-  showSignInText?: boolean;
-  illustrationStyle?: AuthIllustrationStyle;
-  // Each section can contain multiple auth types which will be grouped together
-  // and separated by an OR divider
-  sections?: AuthType[][];
   className?: string;
-  onAuthSuccess?: () => void;
 };
 
 /**
  * React component containing an Auth view with configured auth methods
+ * and options based on the config passed to the AlchemyAccountProvider
  *
- * @param props Card Props
- * @param props.header optional header for the card (good place to put your app name or logo)
- * @param props.showSignInText optional boolean to show the sign in text (defaults to true)
- * @param props.sections array of sections, each containing an array of auth types
+ * @param {AuthCardProps} props Card Props
+ * @param {string} props.className optional class name to apply to the card
  * @returns a react component containing the AuthCard
  */
-export const AuthCard = (
-  props: AuthCardProps & { showNavigation?: boolean; showClose?: boolean }
-) => {
-  const { showClose = false, onAuthSuccess, hideError } = props;
+export const AuthCard = (props: AuthCardProps) => {
+  return <AuthCardContent {...props} />;
+};
+
+// this isn't used externally
+// eslint-disable-next-line jsdoc/require-jsdoc
+export const AuthCardContent = ({
+  className,
+  showClose = false,
+}: {
+  className?: string;
+  showClose?: boolean;
+}) => {
   const { closeAuthModal } = useAuthModal();
   const { status, isAuthenticating } = useSignerStatus();
   const { authStep, setAuthStep } = useAuthContext();
+
   const error = useAuthError();
 
   const contentRef = useRef<HTMLDivElement>(null);
   const { height } = useElementHeight(contentRef);
+
+  const { auth } = useUiConfig();
+  const hideError = auth?.hideError;
+  const onAuthSuccess = auth?.onAuthSuccess;
 
   // TODO: Finalize the steps that allow going back
   const canGoBack = useMemo(() => {
@@ -66,6 +65,7 @@ export const AuthCard = (
 
   useLayoutEffect(() => {
     if (authStep.type === "complete") {
+      closeAuthModal();
       onAuthSuccess?.();
     } else if (isAuthenticating && authStep.type === "initial") {
       const urlParams = new URLSearchParams(window.location.search);
@@ -75,7 +75,14 @@ export const AuthCard = (
         createPasskeyAfter: urlParams.get(IS_SIGNUP_QP) === "true",
       });
     }
-  }, [authStep, status, isAuthenticating, setAuthStep, onAuthSuccess]);
+  }, [
+    authStep,
+    status,
+    isAuthenticating,
+    setAuthStep,
+    onAuthSuccess,
+    closeAuthModal,
+  ]);
 
   return (
     <div className="relative">
@@ -95,7 +102,9 @@ export const AuthCard = (
       >
         <div
           ref={contentRef}
-          className="modal-box relative flex flex-col items-center gap-5 text-fg-primary"
+          className={`modal-box relative flex flex-col items-center gap-5 text-fg-primary ${
+            className ?? ""
+          }`}
         >
           {(canGoBack || showClose) && (
             <Navigation
@@ -105,7 +114,7 @@ export const AuthCard = (
               onClose={closeAuthModal}
             />
           )}
-          <Step {...props} />
+          <Step />
         </div>
       </div>
     </div>

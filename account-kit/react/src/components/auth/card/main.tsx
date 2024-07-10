@@ -2,15 +2,17 @@ import { Fragment } from "react";
 import { Divider } from "../../divider.js";
 import { PoweredBy } from "../../poweredby.js";
 import { AuthSection } from "../sections/AuthSection.js";
-import type { AuthCardProps } from "./index.js";
 import { ls } from "../../../strings.js";
+import { useUiConfig } from "../../../hooks/useUiConfig.js";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-export const MainAuthContent = ({
-  header = null,
-  showSignInText = true,
-  sections,
-}: AuthCardProps) => {
+export const MainAuthContent = () => {
+  const { auth } = useUiConfig();
+
+  const header = auth?.header ?? null;
+  const sections = auth?.sections;
+  const showSignInText = auth?.showSignInText ?? false;
+
   return (
     <>
       {header}

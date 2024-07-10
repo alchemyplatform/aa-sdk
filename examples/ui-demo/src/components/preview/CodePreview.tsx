@@ -25,12 +25,12 @@ export function CodePreview({ className }: { className?: string }) {
         </div>
       </div>
       <div className="flex flex-col gap-4">
-        <div className="font-semibold text-secondary">Style</div>
-        <CodeBlock title="tailwind.config.ts" code={getTailwindCode(config)} />
-      </div>
-      <div className="flex flex-col gap-4">
         <div className="font-semibold text-secondary">Config</div>
         <CodeBlock title="src/app/config.ts" code={getConfigCode(config)} />
+      </div>
+      <div className="flex flex-col gap-4">
+        <div className="font-semibold text-secondary">Style</div>
+        <CodeBlock title="tailwind.config.ts" code={getTailwindCode(config)} />
       </div>
     </div>
   );
@@ -93,18 +93,19 @@ function getConfigCode(config: Config) {
   sections.push([{ type: "passkey" }])
 
   return dedent`
-  const config = createConfig({
-    // required
-    rpcUrl: "/api/rpc",
-    chain: sepolia,
-    ssr: true,
-  });
-  
   const uiConfig = {
+    illustrationStyle: ${config.ui.illustrationStyle},
     auth: {
       sections: ${JSON.stringify(sections)},
       addPasskeyOnSignup: ${config.auth.addPasskey},
     },
   };
+
+  const config = createConfig({
+    // required
+    rpcUrl: "/api/rpc",
+    chain: sepolia,
+    ssr: true,
+  }, uiConfig);
 `
 }
