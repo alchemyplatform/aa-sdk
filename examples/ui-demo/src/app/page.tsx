@@ -30,7 +30,7 @@ export default function Home() {
         className={`flex flex-col flex-1 px-10 py-6 w-full max-w-screen-2xl mx-auto overflow-hidden ${inter.className}`}
       >
         <div className="flex flex-1 gap-6 overflow-hidden">
-          <div className="flex flex-col basis-0 flex-1 bg-white border border-border rounded-lg pt-4 px-6 pb-8 overflow-y-auto scrollbar-none">
+          <div className="flex flex-col basis-0 flex-1 bg-white border border-border rounded-lg pt-2 px-6 pb-8 overflow-y-auto scrollbar-none">
             <Configuration />
           </div>
 

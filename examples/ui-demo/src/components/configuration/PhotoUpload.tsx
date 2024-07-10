@@ -45,7 +45,7 @@ export function PhotoUploads({ mode }: { mode: "dark" | "light" }) {
   }
 
   return (
-    <div className="flex gap-3 flex-1 basis-0">
+    <div className="flex items-center gap-3 flex-1 basis-0">
       <div
         className={`flex items-center justify-center h-[56px] w-[56px] rounded-xl ${
           mode === "light" ? "bg-gray-100" : "bg-gray-500"
@@ -53,6 +53,7 @@ export function PhotoUploads({ mode }: { mode: "dark" | "light" }) {
         style={{
           backgroundImage: logo?.fileSrc ? `url(${logo.fileSrc})` : undefined,
           backgroundSize: "cover",
+          backgroundPosition: "center",
         }}
       >
         {logo?.fileSrc ? null : (
@@ -63,7 +64,7 @@ export function PhotoUploads({ mode }: { mode: "dark" | "light" }) {
         <div className="text-secondary text-xs font-semibold">
           {mode === "light" ? "Light" : "Dark"} mode
         </div>
-        <div className="text-xs text-gray-500 font-medium">
+        <div className={`text-xs text-gray-500 font-medium ${logo?.fileName ? '' : 'hidden'}`}>
           {logo?.fileName ? truncatedFileName(logo.fileName) : "File name"}
         </div>
         {logo ? (
