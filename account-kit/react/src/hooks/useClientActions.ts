@@ -1,3 +1,5 @@
+"use client";
+
 import type { SupportedAccounts } from "@account-kit/core";
 import { useMutation } from "@tanstack/react-query";
 import { useCallback } from "react";

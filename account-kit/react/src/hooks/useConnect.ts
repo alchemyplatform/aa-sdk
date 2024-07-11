@@ -1,3 +1,5 @@
+"use client";
+
 import type { Config } from "@wagmi/core";
 import {
   useConnect as wagmi_useConnect,
