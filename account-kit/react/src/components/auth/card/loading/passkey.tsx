@@ -2,16 +2,13 @@ import { ls } from "../../../../strings.js";
 import { LoadingPasskey } from "../../../../icons/passkey.js";
 import { Button } from "../../../button.js";
 import { PoweredBy } from "../../../poweredby.js";
-import { useUiConfig } from "../../../../hooks/useUiConfig.js";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const LoadingPasskeyAuth = () => {
-  const { illustrationStyle } = useUiConfig();
-
   return (
     <div className="flex flex-col gap-5 items-center">
       <div className="flex flex-col items-center justify-center">
-        <LoadingPasskey illustrationStyle={illustrationStyle} />
+        <LoadingPasskey />
       </div>
 
       <h3 className="font-semibold text-lg">{ls.loadingPasskey.title}</h3>
