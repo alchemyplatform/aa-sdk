@@ -1,5 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+"use client";
+
 import type { RefObject } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Size = {
   width: number | undefined;
