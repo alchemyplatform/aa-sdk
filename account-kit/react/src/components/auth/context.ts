@@ -1,3 +1,5 @@
+"use client";
+
 import type { Connector } from "@wagmi/core";
 import { createContext, useContext } from "react";
 

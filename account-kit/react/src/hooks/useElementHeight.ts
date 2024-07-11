@@ -1,3 +1,5 @@
+"use client";
+
 import { type MutableRefObject, useLayoutEffect, useState } from "react";
 import { useResizeObserver } from "./useResizeObserver.js";
 

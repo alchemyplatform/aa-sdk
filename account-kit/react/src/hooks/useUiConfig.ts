@@ -1,3 +1,5 @@
+"use client";
+
 import { useAlchemyAccountContext } from "../context.js";
 import { MissingUiConfigError } from "../errors.js";
 
