@@ -14,6 +14,7 @@
   "files": [
     "dist",
     "src/**/*.ts",
+    "src/**/*.tsx",
     "!dist/**/*.tsbuildinfo",
     "!vitest.config.ts",
     "!.env",

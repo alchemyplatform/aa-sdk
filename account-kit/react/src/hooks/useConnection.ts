@@ -1,3 +1,5 @@
+"use client";
+
 import { getConnection, watchConnection } from "@account-kit/core";
 import { useSyncExternalStore } from "react";
 import { useAlchemyAccountContext } from "../context.js";
