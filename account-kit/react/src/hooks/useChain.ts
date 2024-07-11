@@ -1,3 +1,5 @@
+"use client";
+
 import {
   getChain,
   setChain as setChainInternal,

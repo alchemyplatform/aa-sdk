@@ -1,14 +1,16 @@
+"use client";
+
 import { useCallback, useLayoutEffect, useMemo, useRef } from "react";
-import { useSignerStatus } from "../../../hooks/useSignerStatus.js";
-import { IS_SIGNUP_QP } from "../../constants.js";
-import { useAuthContext } from "../context.js";
-import { Step } from "./steps.js";
-import { Notification } from "../../notification.js";
 import { useAuthError } from "../../../hooks/useAuthError.js";
-import { Navigation } from "../../navigation.js";
 import { useAuthModal } from "../../../hooks/useAuthModal.js";
 import { useElementHeight } from "../../../hooks/useElementHeight.js";
+import { useSignerStatus } from "../../../hooks/useSignerStatus.js";
 import { useUiConfig } from "../../../hooks/useUiConfig.js";
+import { IS_SIGNUP_QP } from "../../constants.js";
+import { Navigation } from "../../navigation.js";
+import { Notification } from "../../notification.js";
+import { useAuthContext } from "../context.js";
+import { Step } from "./steps.js";
 
 export type AuthCardProps = {
   className?: string;
