@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-alpha.5](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-alpha.4...v4.0.0-alpha.5) (2024-07-11)
+
+### Bug Fixes
+
+- add use client to a bunch of hooks that was misisng it ([#829](https://github.com/alchemyplatform/aa-sdk/issues/829)) ([768505e](https://github.com/alchemyplatform/aa-sdk/commit/768505ef8122991067afbaa1a8977dd900bcea92))
+- **ui-demo-app:** fix the package json to include latest ak pkgs ([#825](https://github.com/alchemyplatform/aa-sdk/issues/825)) ([3bdf66d](https://github.com/alchemyplatform/aa-sdk/commit/3bdf66df0779ac04ce2d3f6f35c68b636338a328))
+
+### Features
+
+- smaller footer in UI components ([#811](https://github.com/alchemyplatform/aa-sdk/issues/811)) ([dfab5c8](https://github.com/alchemyplatform/aa-sdk/commit/dfab5c839dc782b21ba4d05f1892982133606cec))
+
 # [4.0.0-alpha.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-alpha.3...v4.0.0-alpha.4) (2024-07-10)
 
 ### Features
