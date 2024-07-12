@@ -11,6 +11,7 @@ import { Navigation } from "../../navigation.js";
 import { Notification } from "../../notification.js";
 import { useAuthContext } from "../context.js";
 import { Step } from "./steps.js";
+import { useSigner } from "../../../hooks/useSigner.js";
 
 export type AuthCardProps = {
   className?: string;
@@ -41,35 +42,44 @@ export const AuthCardContent = ({
   const { status, isAuthenticating } = useSignerStatus();
   const { authStep, setAuthStep } = useAuthContext();
 
+  const signer = useSigner();
   const error = useAuthError();
 
   const contentRef = useRef<HTMLDivElement>(null);
   const { height } = useElementHeight(contentRef);
 
-  const { auth } = useUiConfig();
-  const hideError = auth?.hideError;
-  const onAuthSuccess = auth?.onAuthSuccess;
+  const didGoBack = useRef(false);
 
-  // TODO: Finalize the steps that allow going back
+  const {
+    auth: { hideError, onAuthSuccess },
+  } = useUiConfig();
+
   const canGoBack = useMemo(() => {
-    return ["email_verify"].includes(authStep.type);
+    return ["email_verify", "passkey_verify"].includes(authStep.type);
   }, [authStep]);
 
   const onBack = useCallback(() => {
     switch (authStep.type) {
       case "email_verify":
+      case "passkey_verify":
+        signer?.disconnect(); // Terminate any inflight authentication
+        didGoBack.current = true;
         setAuthStep({ type: "initial" });
         break;
       default:
         console.warn("Unhandled back action for auth step", authStep);
     }
-  }, [authStep, setAuthStep]);
+  }, [authStep, setAuthStep, signer]);
 
   useLayoutEffect(() => {
     if (authStep.type === "complete") {
+      didGoBack.current = false;
       closeAuthModal();
       onAuthSuccess?.();
-    } else if (isAuthenticating && authStep.type === "initial") {
+    } else if (authStep.type !== "initial") {
+      didGoBack.current = false;
+    } else if (!didGoBack.current && isAuthenticating) {
+      // Auth step must be initial
       const urlParams = new URLSearchParams(window.location.search);
 
       setAuthStep({
