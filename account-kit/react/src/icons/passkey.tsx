@@ -1,14 +1,13 @@
 import type { SVGProps } from "react";
 import { Spinner } from "./spinner.js";
 import { PasskeyIllustration } from "./illustrations/passkey.js";
-import type { IllustrationProps } from "./illustrations/types.js";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-export function LoadingPasskey(props: IllustrationProps) {
+export function LoadingPasskey() {
   return (
     <div className="relative flex flex-col items-center justify-center h-12 w-12">
       <Spinner className="absolute top-0 left-0 right-0 bottom-0" />
-      <PasskeyIllustration width="32" height="32" {...props} />
+      <PasskeyIllustration width="32" height="32" />
     </div>
   );
 }
