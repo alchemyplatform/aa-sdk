@@ -17,7 +17,7 @@ const referencePackages = [
 const generateItems = (
   items: string[],
   referencePath: string,
-  location: "functions" | "hooks" | "components"
+  location: "functions" | "hooks" | "components" | `classes/${string}`
 ) => {
   return items.map((file) => {
     const functionName = file.split(".")[0];
@@ -41,6 +41,25 @@ referencePackages.forEach(async (pkg) => {
   const componentFiles = await fs
     .readdir(path.resolve("./pages", referencePath, "./components"))
     .catch(() => []);
+  const classes = await fs
+    .readdir(path.resolve("./pages", referencePath, "./classes"))
+    .catch(() => []);
+  const classFiles = (
+    await Promise.all(
+      classes.map(async (c) => {
+        const classLocation = `./classes/${c}`;
+        const functions = await fs
+          .readdir(path.resolve("./pages", referencePath, classLocation))
+          .catch(() => [] as string[]);
+        if (!functions.length) return;
+
+        return {
+          className: c,
+          functions,
+        };
+      })
+    )
+  ).filter((x) => x != null);
 
   const functionItems = generateItems(
     functionFiles,
@@ -53,6 +72,18 @@ referencePackages.forEach(async (pkg) => {
     referencePath,
     "components"
   );
+  const classItems = classFiles.map((c) => {
+    const classFunctions = generateItems(
+      c.functions,
+      referencePath,
+      `classes/${c.className}`
+    );
+
+    return {
+      text: c.className,
+      items: classFunctions,
+    };
+  });
 
   const hooksSection = hookItems.length
     ? { text: "Hooks", items: hookItems }
@@ -62,6 +93,9 @@ referencePackages.forEach(async (pkg) => {
     : undefined;
   const functionsSection = functionItems.length
     ? { text: "Functions", items: functionItems }
+    : undefined;
+  const classesSection = classItems.length
+    ? { text: "Classes", items: classItems }
     : undefined;
 
   const sidebarConst = `${camelCase(
@@ -79,7 +113,7 @@ referencePackages.forEach(async (pkg) => {
             link: "${referencePath.replace(".", "")}"
         }],
     },
-    ${[componentsSection, hooksSection, functionsSection]
+    ${[componentsSection, hooksSection, functionsSection, classesSection]
       .filter((x) => x != null)
       .map((x) => JSON.stringify(x, null, 2))
       .join(",\n")}
