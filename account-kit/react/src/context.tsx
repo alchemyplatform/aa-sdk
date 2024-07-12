@@ -151,6 +151,19 @@ export const AlchemyAccountProvider = (
     }
   }, [status, config.ui, openAuthModal]);
 
+  // Force the auth UI back to the initial state when disconnected
+  useEffect(() => {
+    if (status === "DISCONNECTED" && !isAuthenticating) {
+      setAuthStep({ type: "initial" });
+      // Remove the relevant query params (could also do this once connected)
+      const url = new URL(window.location.href);
+      url.searchParams.delete("orgId");
+      url.searchParams.delete("bundle");
+      url.searchParams.delete(IS_SIGNUP_QP);
+      window.history.replaceState({}, "", url.toString());
+    }
+  }, [status, isAuthenticating]);
+
   return (
     <Hydrate {...props}>
       <AlchemyAccountContext.Provider value={initialContext}>
