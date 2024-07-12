@@ -27,10 +27,7 @@ import type {
  * ```ts
  * import type { RpcTransactionRequest } from "viem";
  * import { smartAccountClient } from "./smartAccountClient";
- * // [!code focus:99]
- * // buildUserOperationFromTxs converts traditional Ethereum transactions in batch and returns
- * // the unsigned user operation struct after constructing the user operation struct
- * // through the middleware pipeline
+ *
  * const requests: RpcTransactionRequest[] = [
  *   {
  *     from, // ignored
@@ -41,16 +38,6 @@ import type {
  *       args: [arg1, arg2, ...],
  *     }),
  *   },
- *   {
- *     from, // ignored
- *     to,
- *     data: encodeFunctionData({
- *       abi: ContractABI.abi,
- *       functionName: "func",
- *       args: [arg1, arg2, ...],
- *     }),
- *   },
- *   ...
  *   {
  *     from, // ignored
  *     to,
@@ -80,9 +67,7 @@ import type {
  * ```
  *
  * @param {Client<TTransport, TChain, TAccount>} client the smart account client to use to make RPC calls
- * @param {BuildTransactionParameters} args {@link BuildTransactionParameters} an object containing the requests
- * to build as well as, the account if not hoisted, the context, the overrides, and
- * optionally a flag to enable signing of the UO via the underlying middleware
+ * @param {BuildTransactionParameters} args  an object containing the requests to build as well as, the account if not hoisted, the context, the overrides, and optionally a flag to enable signing of the UO via the underlying middleware
  * @returns {Promise<BuildUserOperationFromTransactionsResult<TEntryPointVersion>>} a Promise containing the built user operation
  */
 export async function buildUserOperationFromTxs<

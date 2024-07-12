@@ -2,21 +2,56 @@ import dedent from "dedent";
 import ts from "typescript";
 
 export function functionTemplate(
-  functionName: string,
-  packageName: string,
-  jsDocCommentAndTags: readonly (ts.JSDoc | ts.JSDocTag)[]
+  node: ts.VariableStatement | ts.FunctionDeclaration | ts.ClassElement,
+  importedName: string,
+  packageName: string
 ) {
+  const jsDocCommentAndTags = ts.getJSDocCommentsAndTags(node);
+  if (!jsDocCommentAndTags.length) return;
+
+  const functionName = ts.isConstructorDeclaration(node)
+    ? importedName
+    : ts.isClassElement(node)
+    ? node.name?.getText() ?? importedName
+    : importedName;
+
+  const importStatement = ts.isClassElement(node)
+    ? (node.parent as ts.ClassDeclaration).name?.getText() ?? functionName
+    : importedName;
+
+  const extendsClause = (() => {
+    if (!ts.isClassElement(node) || !ts.isConstructorDeclaration(node))
+      return "";
+
+    const classDeclaration = node.parent as ts.ClassDeclaration;
+    if (!classDeclaration.heritageClauses) return "";
+
+    const extendsClause = classDeclaration.heritageClauses.find(
+      (x) => x.token === ts.SyntaxKind.ExtendsKeyword
+    );
+    if (!extendsClause) return "";
+
+    const extendsType = extendsClause.types[0];
+    return dedent`
+    :::note
+    \`${importedName}\` extends \`${extendsType.expression.getText()}\`, see the docs for ${extendsType.expression.getText()} for all supported methods.
+    :::
+    `;
+  })();
+
   const comment = jsDocCommentAndTags.find(
     (x) => x.kind === ts.SyntaxKind.JSDoc
   ) as ts.JSDoc;
+
   const exampleTag = comment.tags?.find(
     (x) =>
       x.kind === ts.SyntaxKind.JSDocTag && x.tagName.escapedText === "example"
   );
 
-  const parameterTags = comment.tags?.filter(
-    (x) => x.kind === ts.SyntaxKind.JSDocParameterTag
-  ) as ts.JSDocParameterTag[];
+  const parameterTags =
+    (comment.tags?.filter(
+      (x) => x.kind === ts.SyntaxKind.JSDocParameterTag
+    ) as ts.JSDocParameterTag[]) ?? [];
   const parameters = parameterTags.map((tag) => {
     const type = tag.typeExpression?.type;
     return {
@@ -71,10 +106,11 @@ export function functionTemplate(
 
     # ${functionName}
     ${ts.getTextOfJSDocComment(comment?.comment)}
+    ${extendsClause}
 
     ## Import
     \`\`\`ts
-    import { ${functionName} } from "${packageName}";
+    import { ${importStatement} } from "${packageName}";
     \`\`\`
     ${exampleSection}
     ${parameterSection}

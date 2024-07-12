@@ -24,4 +24,67 @@ export const aaSdkEthersReferenceSidebar: SidebarItem[] = [
       },
     ],
   },
+  {
+    text: "Classes",
+    items: [
+      {
+        text: "AccountSigner",
+        items: [
+          {
+            text: "connect",
+            link: "/reference/aa-sdk/ethers/classes/AccountSigner/connect",
+          },
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/ethers/classes/AccountSigner/constructor",
+          },
+          {
+            text: "getAddress",
+            link: "/reference/aa-sdk/ethers/classes/AccountSigner/getAddress",
+          },
+          {
+            text: "getBundlerClient",
+            link: "/reference/aa-sdk/ethers/classes/AccountSigner/getBundlerClient",
+          },
+          {
+            text: "sendTransaction",
+            link: "/reference/aa-sdk/ethers/classes/AccountSigner/sendTransaction",
+          },
+          {
+            text: "signMessage",
+            link: "/reference/aa-sdk/ethers/classes/AccountSigner/signMessage",
+          },
+          {
+            text: "signTransaction",
+            link: "/reference/aa-sdk/ethers/classes/AccountSigner/signTransaction",
+          },
+        ],
+      },
+      {
+        text: "EthersProviderAdapter",
+        items: [
+          {
+            text: "connectToAccount",
+            link: "/reference/aa-sdk/ethers/classes/EthersProviderAdapter/connectToAccount",
+          },
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/ethers/classes/EthersProviderAdapter/constructor",
+          },
+          {
+            text: "fromEthersProvider",
+            link: "/reference/aa-sdk/ethers/classes/EthersProviderAdapter/fromEthersProvider",
+          },
+          {
+            text: "getBundlerClient",
+            link: "/reference/aa-sdk/ethers/classes/EthersProviderAdapter/getBundlerClient",
+          },
+          {
+            text: "send",
+            link: "/reference/aa-sdk/ethers/classes/EthersProviderAdapter/send",
+          },
+        ],
+      },
+    ],
+  },
 ];
