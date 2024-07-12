@@ -10,7 +10,7 @@
 export type NoUndefined<T> = T extends undefined ? never : T;
 // borrowed from viem
 /**
- * @description Checks if {@link T} is `undefined`
+ * @description Checks if T is `undefined`
  * @param T - Type to check
  * @example
  * type Result = IsUndefined<undefined>
@@ -27,7 +27,7 @@ export type RequiredBy<TType, TKeys extends keyof TType> = Required<
 /**
  * @description Combines members of an intersection into a readable type.
  *
- * @see {@link https://twitter.com/mattpocockuk/status/1622730173446557697?s=20&t=NdpAcmEFXY01xkqU3KO0Mg}
+ * @see https://twitter.com/mattpocockuk/status/1622730173446557697?s=20&t=NdpAcmEFXY01xkqU3KO0Mg
  * @example
  * Prettify<{ a: string } & { b: string } & { c: number, d: bigint }>
  * => { a: string, b: string, c: number, d: bigint }

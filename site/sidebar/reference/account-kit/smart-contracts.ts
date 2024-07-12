@@ -148,4 +148,75 @@ export const accountKitSmartContractsReferenceSidebar: SidebarItem[] = [
       },
     ],
   },
+  {
+    text: "Classes",
+    items: [
+      {
+        text: "SessionKeyPermissionsBuilder",
+        items: [
+          {
+            text: "addContractAddressAccessEntry",
+            link: "/reference/account-kit/smart-contracts/classes/SessionKeyPermissionsBuilder/addContractAddressAccessEntry",
+          },
+          {
+            text: "addContractFunctionAccessEntry",
+            link: "/reference/account-kit/smart-contracts/classes/SessionKeyPermissionsBuilder/addContractFunctionAccessEntry",
+          },
+          {
+            text: "addErc20TokenSpendLimit",
+            link: "/reference/account-kit/smart-contracts/classes/SessionKeyPermissionsBuilder/addErc20TokenSpendLimit",
+          },
+          {
+            text: "encode",
+            link: "/reference/account-kit/smart-contracts/classes/SessionKeyPermissionsBuilder/encode",
+          },
+          {
+            text: "setContractAccessControlType",
+            link: "/reference/account-kit/smart-contracts/classes/SessionKeyPermissionsBuilder/setContractAccessControlType",
+          },
+          {
+            text: "setGasSpendLimit",
+            link: "/reference/account-kit/smart-contracts/classes/SessionKeyPermissionsBuilder/setGasSpendLimit",
+          },
+          {
+            text: "setNativeTokenSpendLimit",
+            link: "/reference/account-kit/smart-contracts/classes/SessionKeyPermissionsBuilder/setNativeTokenSpendLimit",
+          },
+          {
+            text: "setRequiredPaymaster",
+            link: "/reference/account-kit/smart-contracts/classes/SessionKeyPermissionsBuilder/setRequiredPaymaster",
+          },
+          {
+            text: "setTimeRange",
+            link: "/reference/account-kit/smart-contracts/classes/SessionKeyPermissionsBuilder/setTimeRange",
+          },
+        ],
+      },
+      {
+        text: "SessionKeySigner",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/account-kit/smart-contracts/classes/SessionKeySigner/constructor",
+          },
+          {
+            text: "generateNewKey",
+            link: "/reference/account-kit/smart-contracts/classes/SessionKeySigner/generateNewKey",
+          },
+          {
+            text: "getAddress",
+            link: "/reference/account-kit/smart-contracts/classes/SessionKeySigner/getAddress",
+          },
+          {
+            text: "signMessage",
+            link: "/reference/account-kit/smart-contracts/classes/SessionKeySigner/signMessage",
+          },
+          {
+            text: "signTypedData",
+            link: "/reference/account-kit/smart-contracts/classes/SessionKeySigner/signTypedData",
+          },
+        ],
+      },
+    ],
+  },
 ];

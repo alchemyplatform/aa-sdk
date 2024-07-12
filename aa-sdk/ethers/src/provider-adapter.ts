@@ -16,7 +16,7 @@ import {
 import { AccountSigner } from "./account-signer.js";
 import type { EthersProviderAdapterOpts } from "./types.js";
 
-/** Lightweight Adapter for SmartAccountProvider to enable Signer Creation */
+/** Lightweight Adapter for SmtAccountProvider to enable Signer Creation */
 export class EthersProviderAdapter extends JsonRpcProvider {
   readonly accountProvider: SmartAccountClient;
 
@@ -85,7 +85,7 @@ export class EthersProviderAdapter extends JsonRpcProvider {
    * Connects the Provider to an Account and returns a Signer
    *
    * @param {SmartContractAccount} account - the account to connect to
-   * @returns {AccountSigner} an {@link AccountSigner} that can be used to sign and send user operations
+   * @returns {AccountSigner} an AccountSigner that can be used to sign and send user operations
    */
   connectToAccount<TAccount extends SmartContractAccount>(
     account: TAccount

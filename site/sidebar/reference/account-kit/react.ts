@@ -117,4 +117,27 @@ export const accountKitReactReferenceSidebar: SidebarItem[] = [
       },
     ],
   },
+  {
+    text: "Functions",
+    items: [
+      {
+        text: "createConfig",
+        link: "/reference/account-kit/react/functions/createConfig",
+      },
+    ],
+  },
+  {
+    text: "Classes",
+    items: [
+      {
+        text: "NoAlchemyAccountContextError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/account-kit/react/classes/NoAlchemyAccountContextError/constructor",
+          },
+        ],
+      },
+    ],
+  },
 ];
