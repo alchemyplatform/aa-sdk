@@ -7,6 +7,15 @@
   resolved "https://registry.npmjs.org/@aashutoshrathi/word-wrap/-/word-wrap-1.2.6.tgz"
   integrity sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==
 
+"@account-kit/smart-contracts@4.0.0-alpha.4":
+  version "4.0.0-alpha.4"
+  resolved "https://registry.yarnpkg.com/@account-kit/smart-contracts/-/smart-contracts-4.0.0-alpha.4.tgz#11877d402daf243f21c9a2bfbd83f7d64dd50778"
+  integrity sha512-l5ukJpRYN7GU9MXz6lNx6XRcYBSVaVlFLccSLW8NyYjlvPUMHSJ8iHFr5iHwJ+bZZuvQupRGOtL8e5baRLFrSQ==
+  dependencies:
+    "@aa-sdk/core" "^4.0.0-alpha.4"
+    "@account-kit/infra" "^4.0.0-alpha.4"
+    viem "2.8.6"
+
 "@adraffy/ens-normalize@1.10.0":
   version "1.10.0"
   resolved "https://registry.npmjs.org/@adraffy/ens-normalize/-/ens-normalize-1.10.0.tgz"
@@ -15883,14 +15892,7 @@ is-callable@^1.1.3, is-callable@^1.1.4, is-callable@^1.2.7:
   resolved "https://registry.npmjs.org/is-callable/-/is-callable-1.2.7.tgz"
   integrity sha512-1BC0BVFhS/p0qtw6enp8e+8OD0UrK0oFLztSjNzhcKA3WDuJxxAPXzPuPtKkjEY9UUoEWlX/8fgKeu2S8i9JTA==
 
-is-ci@3.0.1:
-  version "3.0.1"
-  resolved "https://registry.npmjs.org/is-ci/-/is-ci-3.0.1.tgz"
-  integrity sha512-ZYvCgrefwqoQ6yTyYUbQu64HsITZ3NfKX1lzaEYdkTDcfKzzCI/wthRRYKkdjHKFVgNiXKAKm65Zo1pk2as/QQ==
-  dependencies:
-    ci-info "^3.2.0"
-
-is-ci@^3.0.1:
+is-ci@3.0.1, is-ci@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/is-ci/-/is-ci-3.0.1.tgz#db6ecbed1bd659c43dac0f45661e7674103d1867"
   integrity sha512-ZYvCgrefwqoQ6yTyYUbQu64HsITZ3NfKX1lzaEYdkTDcfKzzCI/wthRRYKkdjHKFVgNiXKAKm65Zo1pk2as/QQ==
