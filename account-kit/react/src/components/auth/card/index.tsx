@@ -128,7 +128,7 @@ export const AuthCardContent = ({
       >
         <div
           ref={contentRef}
-          className={`modal-box relative flex flex-col items-center gap-5 text-fg-primary ${
+          className={`modal-box relative flex flex-col items-center gap-4 text-fg-primary ${
             className ?? ""
           }`}
         >

@@ -47,13 +47,14 @@ export const LoadingEmail = ({ context }: LoadingEmailProps) => {
       </p>
 
       <div className="flex flex-col w-full items-center gap-1">
-        <div className="flex items-center justify-center py-2 gap-x-2">
+        <div className="flex items-center justify-center py-2 gap-x-1">
           <p className="text-fg-tertiary text-xs">
             {ls.loadingEmail.emailNotReceived}
           </p>
           <Button
             variant="link"
             className="text-xs font-normal underline"
+            disabled={emailResent}
             onClick={() => {
               authenticate({
                 type: "email",
