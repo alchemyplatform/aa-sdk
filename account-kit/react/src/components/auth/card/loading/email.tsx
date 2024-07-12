@@ -7,7 +7,6 @@ import { useAuthContext, type AuthStep } from "../../context.js";
 import { Spinner } from "../../../../icons/spinner.js";
 import { ls } from "../../../../strings.js";
 import { EmailIllustration } from "../../../../icons/illustrations/email.js";
-import { useUiConfig } from "../../../../hooks/useUiConfig.js";
 
 interface LoadingEmailProps {
   context: Extract<AuthStep, { type: "email_verify" }>;
@@ -18,7 +17,6 @@ export const LoadingEmail = ({ context }: LoadingEmailProps) => {
   // yup, re-sent and resent. I'm not fixing it
   const [emailResent, setEmailResent] = useState(false);
 
-  const { illustrationStyle } = useUiConfig();
   const { setAuthStep } = useAuthContext();
   const { authenticate } = useAuthenticate({
     onSuccess: () => {
@@ -38,12 +36,7 @@ export const LoadingEmail = ({ context }: LoadingEmailProps) => {
   return (
     <div className="flex flex-col gap-5 items-center">
       <div className="flex flex-col items-center justify-center h-12 w-12">
-        <EmailIllustration
-          illustrationStyle={illustrationStyle ?? "flat"}
-          height="48"
-          width="48"
-          className="animate-pulse"
-        />
+        <EmailIllustration height="48" width="48" className="animate-pulse" />
       </div>
 
       <h3 className="font-semibold text-lg">{ls.loadingEmail.title}</h3>

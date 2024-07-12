@@ -1,15 +1,16 @@
 import { type SVGProps } from "react";
-import type { IllustrationProps } from "./types.js";
+import { useUiConfig } from "../../hooks/useUiConfig.js";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const SuccessIllustration = ({
   className,
-  illustrationStyle: style,
   ...props
-}: IllustrationProps) => {
+}: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
+  const { illustrationStyle } = useUiConfig();
+
   return (
     <>
-      {style === "outline" && (
+      {illustrationStyle === "outline" && (
         <>
           <SuccessOutlineLight
             className={`dark:hidden text-fg-accent-brand ${className ?? ""}`}
@@ -23,7 +24,7 @@ export const SuccessIllustration = ({
           />
         </>
       )}
-      {style === "linear" && (
+      {illustrationStyle === "linear" && (
         <>
           <SuccessLinearLight
             className={`dark:hidden text-fg-accent-brand ${className ?? ""}`}
@@ -37,7 +38,7 @@ export const SuccessIllustration = ({
           />
         </>
       )}
-      {style === "filled" && (
+      {illustrationStyle === "filled" && (
         <>
           <SuccessFilledLight
             className={`dark:hidden text-fg-accent-brand ${className ?? ""}`}
@@ -51,7 +52,7 @@ export const SuccessIllustration = ({
           />
         </>
       )}
-      {style === "flat" && (
+      {illustrationStyle === "flat" && (
         <>
           <SuccessFlatLight
             className={`dark:hidden text-fg-accent-brand ${className ?? ""}`}
