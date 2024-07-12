@@ -5,6 +5,7 @@ import { useDisconnect } from "wagmi";
 import { useAlchemyAccountContext } from "../context.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import { useSigner } from "./useSigner.js";
+import { useAuthContext } from "../components/auth/context.js";
 
 export type UseLogoutMutationArgs = BaseHookMutationArgs<void, void>;
 
@@ -44,6 +45,7 @@ export function useLogout(
   } = useAlchemyAccountContext();
   const signer = useSigner();
   const { disconnectAsync } = useDisconnect({ config: wagmiConfig });
+  const { resetAuthStep } = useAuthContext();
 
   const {
     mutate: logout,
@@ -53,7 +55,8 @@ export function useLogout(
     {
       mutationFn: async () => {
         await disconnectAsync();
-        return signer?.disconnect();
+        await signer?.disconnect();
+        resetAuthStep();
       },
       ...mutationArgs,
     },

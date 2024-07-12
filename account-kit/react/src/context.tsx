@@ -118,6 +118,19 @@ export const AlchemyAccountProvider = (
   const openAuthModal = useCallback(() => setIsModalOpen(true), []);
   const closeAuthModal = useCallback(() => setIsModalOpen(false), []);
 
+  /**
+   * Reset the auth step to the initial state. This also clears the email auth query params from the URL.
+   */
+  const resetAuthStep = useCallback(() => {
+    setAuthStep({ type: "initial" });
+
+    const url = new URL(window.location.href);
+    url.searchParams.delete("orgId");
+    url.searchParams.delete("bundle");
+    url.searchParams.delete(IS_SIGNUP_QP);
+    window.history.replaceState({}, "", url.toString());
+  }, []);
+
   const initialContext = useMemo(
     () => ({
       config,
@@ -151,19 +164,6 @@ export const AlchemyAccountProvider = (
     }
   }, [status, config.ui, openAuthModal]);
 
-  // Force the auth UI back to the initial state when disconnected
-  useEffect(() => {
-    if (status === "DISCONNECTED" && !isAuthenticating) {
-      setAuthStep({ type: "initial" });
-      // Remove the relevant query params (could also do this once connected)
-      const url = new URL(window.location.href);
-      url.searchParams.delete("orgId");
-      url.searchParams.delete("bundle");
-      url.searchParams.delete(IS_SIGNUP_QP);
-      window.history.replaceState({}, "", url.toString());
-    }
-  }, [status, isAuthenticating]);
-
   return (
     <Hydrate {...props}>
       <AlchemyAccountContext.Provider value={initialContext}>
@@ -172,6 +172,7 @@ export const AlchemyAccountProvider = (
             value={{
               authStep,
               setAuthStep,
+              resetAuthStep,
             }}
           >
             {children}
