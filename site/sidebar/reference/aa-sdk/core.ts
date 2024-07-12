@@ -63,10 +63,6 @@ export const aaSdkCoreReferenceSidebar: SidebarItem[] = [
         link: "/reference/aa-sdk/core/functions/createBundlerClientFromExisting",
       },
       {
-        text: "createSimpleSmartAccount",
-        link: "/reference/aa-sdk/core/functions/createSimpleSmartAccount",
-      },
-      {
         text: "createSmartAccountClient",
         link: "/reference/aa-sdk/core/functions/createSmartAccountClient",
       },
@@ -105,10 +101,6 @@ export const aaSdkCoreReferenceSidebar: SidebarItem[] = [
       {
         text: "getAccountAddress",
         link: "/reference/aa-sdk/core/functions/getAccountAddress",
-      },
-      {
-        text: "getChain",
-        link: "/reference/aa-sdk/core/functions/getChain",
       },
       {
         text: "getEntryPoint",
@@ -185,6 +177,283 @@ export const aaSdkCoreReferenceSidebar: SidebarItem[] = [
       {
         text: "wrapSignatureWith6492",
         link: "/reference/aa-sdk/core/functions/wrapSignatureWith6492",
+      },
+    ],
+  },
+  {
+    text: "Classes",
+    items: [
+      {
+        text: "AccountNotFoundError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/AccountNotFoundError/constructor",
+          },
+        ],
+      },
+      {
+        text: "AccountRequiresOwnerError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/AccountRequiresOwnerError/constructor",
+          },
+        ],
+      },
+      {
+        text: "BatchExecutionNotSupportedError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/BatchExecutionNotSupportedError/constructor",
+          },
+        ],
+      },
+      {
+        text: "ChainNotFoundError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/ChainNotFoundError/constructor",
+          },
+        ],
+      },
+      {
+        text: "DefaultFactoryNotDefinedError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/DefaultFactoryNotDefinedError/constructor",
+          },
+        ],
+      },
+      {
+        text: "EntryPointNotFoundError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/EntryPointNotFoundError/constructor",
+          },
+        ],
+      },
+      {
+        text: "FailedToFindTransactionError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/FailedToFindTransactionError/constructor",
+          },
+        ],
+      },
+      {
+        text: "FailedToGetStorageSlotError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/FailedToGetStorageSlotError/constructor",
+          },
+        ],
+      },
+      {
+        text: "GetCounterFactualAddressError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/GetCounterFactualAddressError/constructor",
+          },
+        ],
+      },
+      {
+        text: "IncompatibleClientError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/IncompatibleClientError/constructor",
+          },
+        ],
+      },
+      {
+        text: "IncorrectAccountType",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/IncorrectAccountType/constructor",
+          },
+        ],
+      },
+      {
+        text: "InvalidEntryPointError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/InvalidEntryPointError/constructor",
+          },
+        ],
+      },
+      {
+        text: "InvalidRpcUrlError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/InvalidRpcUrlError/constructor",
+          },
+        ],
+      },
+      {
+        text: "InvalidSignerTypeError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/InvalidSignerTypeError/constructor",
+          },
+        ],
+      },
+      {
+        text: "InvalidUserOperationError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/InvalidUserOperationError/constructor",
+          },
+        ],
+      },
+      {
+        text: "LocalAccountSigner",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/LocalAccountSigner/constructor",
+          },
+          {
+            text: "getAddress",
+            link: "/reference/aa-sdk/core/classes/LocalAccountSigner/getAddress",
+          },
+          {
+            text: "mnemonicToAccountSigner",
+            link: "/reference/aa-sdk/core/classes/LocalAccountSigner/mnemonicToAccountSigner",
+          },
+          {
+            text: "privateKeyToAccountSigner",
+            link: "/reference/aa-sdk/core/classes/LocalAccountSigner/privateKeyToAccountSigner",
+          },
+          {
+            text: "signMessage",
+            link: "/reference/aa-sdk/core/classes/LocalAccountSigner/signMessage",
+          },
+          {
+            text: "signTypedData",
+            link: "/reference/aa-sdk/core/classes/LocalAccountSigner/signTypedData",
+          },
+        ],
+      },
+      {
+        text: "Logger",
+        items: [
+          {
+            text: "debug",
+            link: "/reference/aa-sdk/core/classes/Logger/debug",
+          },
+          {
+            text: "error",
+            link: "/reference/aa-sdk/core/classes/Logger/error",
+          },
+          {
+            text: "info",
+            link: "/reference/aa-sdk/core/classes/Logger/info",
+          },
+          {
+            text: "setLogFilter",
+            link: "/reference/aa-sdk/core/classes/Logger/setLogFilter",
+          },
+          {
+            text: "setLogLevel",
+            link: "/reference/aa-sdk/core/classes/Logger/setLogLevel",
+          },
+          {
+            text: "verbose",
+            link: "/reference/aa-sdk/core/classes/Logger/verbose",
+          },
+          {
+            text: "warn",
+            link: "/reference/aa-sdk/core/classes/Logger/warn",
+          },
+        ],
+      },
+      {
+        text: "SignTransactionNotSupportedError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/SignTransactionNotSupportedError/constructor",
+          },
+        ],
+      },
+      {
+        text: "SmartAccountWithSignerRequiredError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/SmartAccountWithSignerRequiredError/constructor",
+          },
+        ],
+      },
+      {
+        text: "TransactionMissingToParamError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/TransactionMissingToParamError/constructor",
+          },
+        ],
+      },
+      {
+        text: "UpgradeToAndCallNotSupportedError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/UpgradeToAndCallNotSupportedError/constructor",
+          },
+        ],
+      },
+      {
+        text: "UpgradesNotSupportedError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/UpgradesNotSupportedError/constructor",
+          },
+        ],
+      },
+      {
+        text: "WaitForUserOperationError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/WaitForUserOperationError/constructor",
+          },
+        ],
+      },
+      {
+        text: "WalletClientSigner",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/aa-sdk/core/classes/WalletClientSigner/constructor",
+          },
+          {
+            text: "getAddress",
+            link: "/reference/aa-sdk/core/classes/WalletClientSigner/getAddress",
+          },
+          {
+            text: "signMessage",
+            link: "/reference/aa-sdk/core/classes/WalletClientSigner/signMessage",
+          },
+          {
+            text: "signTypedData",
+            link: "/reference/aa-sdk/core/classes/WalletClientSigner/signTypedData",
+          },
+        ],
       },
     ],
   },
