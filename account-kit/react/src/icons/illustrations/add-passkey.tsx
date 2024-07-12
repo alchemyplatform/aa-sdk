@@ -1,15 +1,16 @@
 import { type SVGProps } from "react";
-import type { IllustrationProps } from "./types.js";
+import { useUiConfig } from "../../hooks/useUiConfig.js";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const AddPasskeyIllustration = ({
   className,
-  illustrationStyle: style,
   ...props
-}: IllustrationProps) => {
+}: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
+  const { illustrationStyle } = useUiConfig();
+
   return (
     <>
-      {style === "outline" && (
+      {illustrationStyle === "outline" && (
         <>
           <AddPasskeyOutlineLight
             className={`dark:hidden text-fg-accent-brand ${className ?? ""}`}
@@ -23,7 +24,7 @@ export const AddPasskeyIllustration = ({
           />
         </>
       )}
-      {style === "linear" && (
+      {illustrationStyle === "linear" && (
         <>
           <AddPasskeyLinearLight
             className={`dark:hidden text-fg-accent-brand ${className ?? ""}`}
@@ -37,7 +38,7 @@ export const AddPasskeyIllustration = ({
           />
         </>
       )}
-      {style === "filled" && (
+      {illustrationStyle === "filled" && (
         <>
           <AddPasskeyFilledLight
             className={`dark:hidden text-fg-accent-brand ${className ?? ""}`}
@@ -51,7 +52,7 @@ export const AddPasskeyIllustration = ({
           />
         </>
       )}
-      {style === "flat" && (
+      {illustrationStyle === "flat" && (
         <>
           <AddPasskeyFlatLight
             className={`dark:hidden text-fg-accent-brand ${className ?? ""}`}

@@ -1,15 +1,16 @@
 import { type SVGProps } from "react";
-import type { IllustrationProps } from "./types.js";
+import { useUiConfig } from "../../hooks/useUiConfig.js";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const PasskeySmileyIllustration = ({
   className,
-  illustrationStyle: style,
   ...props
-}: IllustrationProps) => {
+}: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
+  const { illustrationStyle } = useUiConfig();
+
   return (
     <>
-      {style === "outline" && (
+      {illustrationStyle === "outline" && (
         <>
           <PasskeySmileyOutlineLight
             className={`dark:hidden text-fg-accent-brand ${className ?? ""}`}
@@ -23,7 +24,7 @@ export const PasskeySmileyIllustration = ({
           />
         </>
       )}
-      {style === "linear" && (
+      {illustrationStyle === "linear" && (
         <>
           <PasskeySmileyLinearLight
             className={`dark:hidden text-fg-accent-brand ${className ?? ""}`}
@@ -37,7 +38,7 @@ export const PasskeySmileyIllustration = ({
           />
         </>
       )}
-      {style === "filled" && (
+      {illustrationStyle === "filled" && (
         <>
           <PasskeySmileyFilledLight
             className={`dark:hidden text-fg-accent-brand ${className ?? ""}`}
@@ -51,7 +52,7 @@ export const PasskeySmileyIllustration = ({
           />
         </>
       )}
-      {style === "flat" && (
+      {illustrationStyle === "flat" && (
         <>
           <PasskeySmileyFlatLight
             className={`dark:hidden text-fg-accent-brand ${className ?? ""}`}
@@ -72,12 +73,13 @@ export const PasskeySmileyIllustration = ({
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const PasskeyShieldIllustration = ({
   className,
-  illustrationStyle: style,
   ...props
-}: IllustrationProps) => {
+}: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
+  const { illustrationStyle } = useUiConfig();
+
   return (
     <>
-      {style === "outline" && (
+      {illustrationStyle === "outline" && (
         <>
           <PasskeyShieldOutlineLight
             className={`dark:hidden ${className ?? ""}`}
@@ -89,7 +91,7 @@ export const PasskeyShieldIllustration = ({
           />
         </>
       )}
-      {style === "linear" && (
+      {illustrationStyle === "linear" && (
         <>
           <PasskeyShieldLinearLight
             className={`dark:hidden ${className ?? ""}`}
@@ -101,7 +103,7 @@ export const PasskeyShieldIllustration = ({
           />
         </>
       )}
-      {style === "filled" && (
+      {illustrationStyle === "filled" && (
         <>
           <PasskeyShieldFilledLight
             className={`dark:hidden ${className ?? ""}`}
@@ -113,7 +115,7 @@ export const PasskeyShieldIllustration = ({
           />
         </>
       )}
-      {style === "flat" && (
+      {illustrationStyle === "flat" && (
         <>
           <PasskeyShieldFlatLight
             className={`dark:hidden ${className ?? ""}`}
