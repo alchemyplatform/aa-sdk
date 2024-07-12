@@ -59,10 +59,8 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    *
    * @param {AlchemySignerClientParams} params the parameters required to initialize the client
    * @param {ConnectionConfig} params.connection The connection details needed to connect to the service
-   * @param {object} params.iframeConfig The configuration details for setting up the iframe stamper
-   * @param {string} params.iframeConfig.iframeElementId The element ID of the iframe
-   * @param {string} params.iframeConfig.iframeContainerId The container ID for the iframe element
-   * @param {string} [params.rpId] The relying party ID, defaulting to the current hostname if not provided
+   * @param {{ iframeElementId?: string; iframeContainerId: string }} params.iframeConfig The configuration details for setting up the iframe stamper
+   * @param {string} params.rpId The relying party ID, defaulting to the current hostname if not provided
    * @param {string} params.rootOrgId The root organization ID
    */
   constructor(params: AlchemySignerClientParams) {
@@ -209,9 +207,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * const account = await client.completeEmailAuth({ orgId: "user-org-id", bundle: "bundle-from-email" });
    * ```
    *
-   * @param {object} config The configuration object for the authentication function
-   * @param {string} config.bundle The credential bundle to be injected
-   * @param {string} config.orgId The organization ID to retrieve the user information
+   * @param {{ bundle: string; orgId: string }} config The configuration object for the authentication function containing the credential bundle to inject and the organization id associated with the user
    * @returns {Promise<User>} A promise that resolves to the authenticated user information
    */
   public completeEmailAuth = async ({

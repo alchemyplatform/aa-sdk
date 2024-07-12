@@ -36,7 +36,7 @@ export type AlchemyAccountsConfigWithUI = AlchemyAccountsConfig & {
  *
  * @param {CreateConfigProps} props for creating an alchemy account config
  * @param {AlchemyAccountsUIConfig} ui the configuration to use for the Auth Components UI
- * @returns an alchemy account config object containing the core and client store, as well as the UI config
+ * @returns {AlchemyAccountsConfigWithUI} an alchemy account config object containing the core and client store, as well as the UI config
  */
 export const createConfig = (
   props: CreateConfigProps,
