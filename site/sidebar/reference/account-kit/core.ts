@@ -104,4 +104,18 @@ export const accountKitCoreReferenceSidebar: SidebarItem[] = [
       },
     ],
   },
+  {
+    text: "Classes",
+    items: [
+      {
+        text: "ClientOnlyPropertyError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/account-kit/core/classes/ClientOnlyPropertyError/constructor",
+          },
+        ],
+      },
+    ],
+  },
 ];

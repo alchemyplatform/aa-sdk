@@ -13,6 +13,13 @@ export type GenerateOptions = {
   out: string;
 };
 
+const generatedDirectories = [
+  "./functions",
+  "./hooks",
+  "./components",
+  "./classes",
+];
+
 export async function generate(options: GenerateOptions) {
   const sourceFilePath = path.resolve(process.cwd(), options.in);
   const outputFilePath = path.resolve(process.cwd(), options.out);
@@ -31,6 +38,11 @@ export async function generate(options: GenerateOptions) {
     logger.error(`Could not find package.json for ${sourceFilePath}`);
     return;
   }
+
+  // clean the output directory to account for deleted docs
+  generatedDirectories.forEach((dir) => {
+    fs.emptyDirSync(path.resolve(outputFilePath, dir));
+  });
 
   sourceFile.forEachChild((node) => {
     // for now we only process re-exports
@@ -83,31 +95,16 @@ async function generateDocumentation(
   }
 
   if (ts.isClassDeclaration(node)) {
-    logger.warn("Class declarations are not supported yet");
-    return;
+    generateClassDocs(node, outputFilePath, importedName, packageName);
+  } else {
+    generateFunctionDocs(
+      node,
+      importedName,
+      outputFilePath,
+      packageName,
+      isTsx
+    );
   }
-
-  const jsdocCommentAndTags = ts.getJSDocCommentsAndTags(node);
-  if (jsdocCommentAndTags.length === 0) return;
-
-  const documentation = functionTemplate(
-    importedName,
-    packageName,
-    jsdocCommentAndTags
-  );
-
-  // TODO: need to handle this differently in case we have `use*` methods that aren't hooks
-  const outputLocation = importedName.startsWith("use")
-    ? "./hooks"
-    : isTsx
-    ? "./components"
-    : "./functions";
-
-  fs.outputFileSync(
-    path.resolve(outputFilePath, outputLocation, `${importedName}.mdx`),
-    // I have 0 clue why this needs to be formatted twice to get the correct output, but here we are...
-    format(format(documentation, { parser: "mdx" }), { parser: "mdx" })
-  );
 }
 
 function getSourceFile(filePath: string) {
@@ -134,4 +131,79 @@ async function getPackageJson(
   }
 
   return JSON.parse(fs.readFileSync(path, "utf-8"));
+}
+
+function generateFunctionDocs(
+  node: ts.VariableStatement | ts.FunctionDeclaration | ts.ClassElement,
+  importedName: string,
+  outputFilePath: string,
+  packageName: string,
+  isTsx: boolean
+) {
+  const documentation = functionTemplate(node, importedName, packageName);
+  if (!documentation) {
+    return;
+  }
+
+  // TODO: need to handle this differently in case we have `use*` methods that aren't hooks
+  const outputLocation = ts.isClassElement(node)
+    ? ""
+    : importedName.startsWith("use")
+    ? "./hooks"
+    : isTsx
+    ? "./components"
+    : "./functions";
+
+  const fileName = ts.isClassElement(node)
+    ? node.name?.getText() ?? "constructor"
+    : importedName;
+
+  fs.outputFileSync(
+    path.resolve(outputFilePath, outputLocation, `${fileName}.mdx`),
+    // I have 0 clue why this needs to be formatted twice to get the correct output, but here we are...
+    format(format(documentation, { parser: "mdx" }), { parser: "mdx" })
+  );
+}
+
+function generateClassDocs(
+  node: ts.ClassDeclaration,
+  outputFilePath: string,
+  importedName: string,
+  packageName: string
+) {
+  const classOutputBasePath = path.resolve(
+    outputFilePath,
+    `./classes/${importedName}`
+  );
+
+  node.members.forEach((member) => {
+    if (
+      (ts.isPropertyDeclaration(member) || ts.isMethodDeclaration(member)) &&
+      member.modifiers?.some(
+        (modifier) =>
+          modifier.kind === ts.SyntaxKind.PrivateKeyword ||
+          modifier.kind === ts.SyntaxKind.ProtectedKeyword
+      )
+    ) {
+      // skip properties that aren't public functions
+      return;
+    }
+
+    if (
+      ts.isConstructorDeclaration(member) ||
+      ts.isMethodDeclaration(member) ||
+      (ts.isPropertyDeclaration(member) &&
+        member.initializer &&
+        (ts.isArrowFunction(member.initializer) ||
+          ts.isFunctionExpression(member.initializer)))
+    ) {
+      generateFunctionDocs(
+        member,
+        importedName,
+        classOutputBasePath,
+        packageName,
+        false
+      );
+    }
+  });
 }

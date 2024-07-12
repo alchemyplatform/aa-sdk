@@ -14,7 +14,7 @@ export type HydrateProps = {
 
 /**
  * A react component that can be used to hydrate the client store with the provided initial state.
- * This method will use {@link hydrate} to hydrate the client store with the provided initial state if one is provided.
+ * This method will use `hydrate` to hydrate the client store with the provided initial state if one is provided.
  * If ssr is set on the account config, then it will run the onMount function within a useEffect hook. Otherwise,
  * It will run onMount as soon as the compoonent is rendered.
  *

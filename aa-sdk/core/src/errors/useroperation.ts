@@ -1,10 +1,9 @@
 import type { UserOperationRequest, UserOperationStruct } from "../types.js";
 import { BaseError } from "./base.js";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { dropAndReplaceUserOperation } from "../actions/smartAccount/dropAndReplaceUserOperation.js";
 
 /**
- * Thrown when a {@link UserOperationStruct} is not a valid request
+ * Thrown when a UserOperationStruct is not a valid request
  *
  * extends viem BaseError
  */
@@ -41,7 +40,7 @@ export class InvalidUserOperationError extends BaseError {
  * Error thrown when waiting for user operation request to be mined.
  *
  * Includes the internal error as well as the request that failed. This request
- * can then be used with {@link dropAndReplaceUserOperation} to retry the operation.
+ * can then be used with dropAndReplaceUserOperation to retry the operation.
  */
 export class WaitForUserOperationError extends BaseError {
   /**

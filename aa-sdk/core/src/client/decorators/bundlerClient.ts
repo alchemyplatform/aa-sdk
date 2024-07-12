@@ -55,10 +55,10 @@ export type BundlerActions = {
   /**
    * calls `eth_estimateUserOperationGas` and  returns the result
    *
-   * @param request - the {@link UserOperationRequest} to estimate gas for
+   * @param request - the UserOperationRequest to estimate gas for
    * @param entryPoint - the entry point address the op will be sent to
    * @param stateOverride - the state override to use for the estimation
-   * @returns the gas estimates for the given response (see: {@link UserOperationEstimateGasResponse})
+   * @returns the gas estimates for the given response
    */
   estimateUserOperationGas<
     TEntryPointVersion extends EntryPointVersion = EntryPointVersion
@@ -71,7 +71,7 @@ export type BundlerActions = {
   /**
    * calls `eth_sendUserOperation` and returns the hash of the sent UserOperation
    *
-   * @param request - the {@link UserOperationRequest} to send
+   * @param request - the UserOperationRequest to send
    * @param entryPoint - the entry point address the op will be sent to
    * @returns the hash of the sent UserOperation
    */
@@ -83,25 +83,25 @@ export type BundlerActions = {
   ): Promise<Hash>;
 
   /**
-   * calls `eth_getUserOperationByHash` and returns the {@link UserOperationResponse}
+   * calls `eth_getUserOperationByHash` and returns the UserOperationResponse
    *
    * @param hash - the hash of the UserOperation to fetch
-   * @returns - {@link UserOperationResponse}
+   * @returns - the user operation if found or null
    */
   getUserOperationByHash(hash: Hash): Promise<UserOperationResponse | null>;
 
   /**
-   * calls `eth_getUserOperationReceipt` and returns the {@link UserOperationReceipt}
+   * calls `eth_getUserOperationReceipt` and returns the UserOperationReceipt
    *
    * @param hash - the hash of the UserOperation to get the receipt for
-   * @returns - {@link UserOperationReceipt}
+   * @returns - a user operation receipt or null if not found
    */
   getUserOperationReceipt(hash: Hash): Promise<UserOperationReceipt | null>;
 
   /**
    * calls `eth_supportedEntryPoints` and returns the entry points the RPC supports
    *
-   * @returns - {@link Address}[]
+   * @returns - an array of the entrypoint addresses supported
    */
   getSupportedEntryPoints(): Promise<Address[]>;
 };
