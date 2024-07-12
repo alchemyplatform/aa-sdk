@@ -23,6 +23,8 @@ export {
   sepolia,
   zora,
   zoraSepolia,
+  worldchain,
+  worldChainSepolia,
 } from "./chains.js";
 export type * from "./client/decorators/alchemyEnhancedApis.js";
 export { alchemyEnhancedApiActions } from "./client/decorators/alchemyEnhancedApis.js";

@@ -236,3 +236,39 @@ export const zoraSepolia: Chain = {
     ...vzoras.rpcUrls,
   },
 };
+
+export const worldChainSepolia: Chain = defineChain({
+  id: 4801,
+  name: "World Chain Sepolia",
+  network: "World Chain Sepolia",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://worldchain-sepolia.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://worldchain-sepolia.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://worldchain-sepolia.g.alchemy.com/v2"],
+    },
+  },
+});
+
+export const worldchain: Chain = defineChain({
+  id: 480,
+  name: "World Chain",
+  network: "World Chain",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://worldchain-mainnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://worldchain-mainnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://worldchain-mainnet.g.alchemy.com/v2"],
+    },
+  },
+});
