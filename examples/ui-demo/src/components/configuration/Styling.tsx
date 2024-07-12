@@ -25,7 +25,10 @@ export function Styling({ className }: { className?: string }) {
   return (
     <div className={cn("flex flex-col", className)}>
       <div className="flex flex-col gap-4 border-b border-border pt-8 pb-5">
-        <p className="font-semibold text-secondary-foreground text-sm">Theme</p>
+        <div className="flex items-center gap-1">
+          <p className="font-semibold text-secondary-foreground text-sm">Appearance</p>
+          <HelpTooltip text="Preview how the UI will look in light and dark mode - once integrated, the components will automatically adapt to the OS setting or a .light/.dark class on the root element" />
+        </div>
 
         <ThemeSwitch
           checked={config.ui.theme === "dark"}

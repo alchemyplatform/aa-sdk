@@ -9,16 +9,6 @@ import { Switch } from "../ui/switch"
 export const Authentication = ({ className }: { className?: string }) => {
   const { config, setConfig } = useConfig()
 
-  const setWalletsActive = (active: boolean) => {
-    setConfig((prev) => ({
-      ...prev,
-      auth: {
-        ...prev.auth,
-        showExternalWallets: active
-      }
-    }))
-  }
-
   const setPasskeysActive = (active: boolean) => {
     setConfig((prev) => ({
       ...prev,
@@ -40,10 +30,9 @@ export const Authentication = ({ className }: { className?: string }) => {
           disabled
         />
         <AuthMethod
-          icon={<WalletIcon />}
+          icon={<WalletIcon className="opacity-50" />}
           name="External wallets"
-          active={config.auth.showExternalWallets}
-          setActive={setWalletsActive}
+          unavailable
         />
         <AuthMethod
           icon={<SocialIcon className="opacity-50" />}
