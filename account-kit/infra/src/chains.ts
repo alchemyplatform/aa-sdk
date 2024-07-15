@@ -255,7 +255,7 @@ export const worldChainSepolia: Chain = defineChain({
   },
 });
 
-export const worldchain: Chain = defineChain({
+export const worldChain: Chain = defineChain({
   id: 480,
   name: "World Chain",
   network: "World Chain",
