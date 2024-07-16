@@ -18,8 +18,8 @@ import { LightAccountAbi_v2 } from "../abis/LightAccountAbi_v2.js";
 import { LightAccountFactoryAbi_v1 } from "../abis/LightAccountFactoryAbi_v1.js";
 import { LightAccountFactoryAbi_v2 } from "../abis/LightAccountFactoryAbi_v2.js";
 import type {
-  GetEntryPointForLightAccountVersion,
-  GetLightAccountVersion,
+  LightAccountEntryPointVersion,
+  LightAccountVersion,
 } from "../types.js";
 import {
   AccountVersionRegistry,
@@ -35,17 +35,8 @@ import {
 
 export type LightAccount<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TLightAccountVersion extends GetLightAccountVersion<"LightAccount"> = GetLightAccountVersion<"LightAccount">,
-  TEntryPointVersion extends GetEntryPointForLightAccountVersion<
-    "LightAccount",
-    TLightAccountVersion
-  > = GetEntryPointForLightAccountVersion<"LightAccount", TLightAccountVersion>
-> = LightAccountBase<
-  TSigner,
-  "LightAccount",
-  TLightAccountVersion,
-  TEntryPointVersion
-> & {
+  TLightAccountVersion extends LightAccountVersion<"LightAccount"> = LightAccountVersion<"LightAccount">
+> = LightAccountBase<TSigner, "LightAccount", TLightAccountVersion> & {
   encodeTransferOwnership: (newOwner: Address) => Hex;
   getOwnerAddress: () => Promise<Address>;
 };
@@ -54,54 +45,40 @@ export type LightAccount<
 export type CreateLightAccountParams<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TLightAccountVersion extends GetLightAccountVersion<"LightAccount"> = GetLightAccountVersion<"LightAccount">,
-  TEntryPointVersion extends GetEntryPointForLightAccountVersion<
-    "LightAccount",
-    TLightAccountVersion
-  > = GetEntryPointForLightAccountVersion<"LightAccount", TLightAccountVersion>
+  TLightAccountVersion extends LightAccountVersion<"LightAccount"> = LightAccountVersion<"LightAccount">
 > = Omit<
   CreateLightAccountBaseParams<
-    TTransport,
-    TSigner,
     "LightAccount",
     TLightAccountVersion,
-    TEntryPointVersion
+    TTransport,
+    TSigner
   >,
-  "getAccountInitCode" | "entryPoint" | "version" | "abi" | "accountAddress"
+  | "getAccountInitCode"
+  | "entryPoint"
+  | "version"
+  | "abi"
+  | "accountAddress"
+  | "type"
 > & {
   salt?: bigint;
   initCode?: Hex;
   accountAddress?: Address;
   factoryAddress?: Address;
   version?: TLightAccountVersion;
-  entryPoint?: EntryPointDef<TEntryPointVersion, Chain>;
+  entryPoint?: EntryPointDef<
+    LightAccountEntryPointVersion<"LightAccount", TLightAccountVersion>,
+    Chain
+  >;
 };
 // [!endregion CreateLightAccountParams]
 
 export async function createLightAccount<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TLightAccountVersion extends GetLightAccountVersion<"LightAccount"> = "v1.1.0"
+  TLightAccountVersion extends LightAccountVersion<"LightAccount"> = "v2.0.0"
 >(
   config: CreateLightAccountParams<TTransport, TSigner, TLightAccountVersion>
 ): Promise<LightAccount<TSigner, TLightAccountVersion>>;
-
-export async function createLightAccount<
-  TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TLightAccountVersion extends GetLightAccountVersion<"LightAccount"> = GetLightAccountVersion<"LightAccount">,
-  TEntryPointVersion extends GetEntryPointForLightAccountVersion<
-    "LightAccount",
-    TLightAccountVersion
-  > = GetEntryPointForLightAccountVersion<"LightAccount", TLightAccountVersion>
->(
-  config: CreateLightAccountParams<
-    TTransport,
-    TSigner,
-    TLightAccountVersion,
-    TEntryPointVersion
-  >
-): Promise<LightAccount<TSigner, TLightAccountVersion, TEntryPointVersion>>;
 
 /**
  * Creates a light account based on the provided parameters such as transport, chain, signer, init code, and more. Ensures that an account is configured and returned with various capabilities, such as transferring ownership and retrieving the owner's address.
@@ -128,7 +105,7 @@ export async function createLightAccount({
   chain,
   signer,
   initCode,
-  version = defaultLightAccountVersion("LightAccount"),
+  version = defaultLightAccountVersion(),
   entryPoint = getEntryPoint(chain, {
     version: AccountVersionRegistry["LightAccount"][version]
       .entryPointVersion as any,
@@ -176,15 +153,17 @@ export async function createLightAccount({
   });
 
   const account = await createLightAccountBase<
+    "LightAccount",
+    LightAccountVersion<"LightAccount">,
     Transport,
-    SmartAccountSigner,
-    "LightAccount"
+    SmartAccountSigner
   >({
     transport,
     chain,
     signer,
     abi: accountAbi,
-    version: AccountVersionRegistry["LightAccount"][version],
+    type: "LightAccount",
+    version,
     entryPoint,
     accountAddress: address,
     getAccountInitCode,
