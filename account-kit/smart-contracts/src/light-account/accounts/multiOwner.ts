@@ -17,11 +17,10 @@ import {
 import { MultiOwnerLightAccountAbi } from "../abis/MultiOwnerLightAccountAbi.js";
 import { MultiOwnerLightAccountFactoryAbi } from "../abis/MultiOwnerLightAccountFactoryAbi.js";
 import type {
-  GetEntryPointForLightAccountVersion,
-  GetLightAccountVersion,
+  LightAccountEntryPointVersion,
+  LightAccountVersion,
 } from "../types.js";
 import {
-  AccountVersionRegistry,
   defaultLightAccountVersion,
   getDefaultMultiOwnerLightAccountFactoryAddress,
 } from "../utils.js";
@@ -33,19 +32,11 @@ import {
 
 export type MultiOwnerLightAccount<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TLightAccountVersion extends GetLightAccountVersion<"MultiOwnerLightAccount"> = GetLightAccountVersion<"MultiOwnerLightAccount">,
-  TEntryPointVersion extends GetEntryPointForLightAccountVersion<
-    "MultiOwnerLightAccount",
-    TLightAccountVersion
-  > = GetEntryPointForLightAccountVersion<
-    "MultiOwnerLightAccount",
-    TLightAccountVersion
-  >
+  TLightAccountVersion extends LightAccountVersion<"MultiOwnerLightAccount"> = LightAccountVersion<"MultiOwnerLightAccount">
 > = LightAccountBase<
   TSigner,
   "MultiOwnerLightAccount",
-  TLightAccountVersion,
-  TEntryPointVersion
+  TLightAccountVersion
 > & {
   encodeUpdateOwners: (
     ownersToAdd: Address[],
@@ -57,54 +48,47 @@ export type MultiOwnerLightAccount<
 export type CreateMultiOwnerLightAccountParams<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TLightAccountVersion extends GetLightAccountVersion<"MultiOwnerLightAccount"> = GetLightAccountVersion<"MultiOwnerLightAccount">,
-  TEntryPointVersion extends GetEntryPointForLightAccountVersion<
-    "MultiOwnerLightAccount",
-    TLightAccountVersion
-  > = GetEntryPointForLightAccountVersion<
-    "MultiOwnerLightAccount",
-    TLightAccountVersion
-  >
+  TLightAccountVersion extends LightAccountVersion<"MultiOwnerLightAccount"> = LightAccountVersion<"MultiOwnerLightAccount">
 > = Omit<
   CreateLightAccountBaseParams<
-    TTransport,
-    TSigner,
     "MultiOwnerLightAccount",
     TLightAccountVersion,
-    TEntryPointVersion
+    TTransport,
+    TSigner
   >,
-  "getAccountInitCode" | "entryPoint" | "version" | "abi" | "accountAddress"
+  | "getAccountInitCode"
+  | "entryPoint"
+  | "version"
+  | "abi"
+  | "accountAddress"
+  | "type"
 > & {
   salt?: bigint;
   initCode?: Hex;
   accountAddress?: Address;
   factoryAddress?: Address;
   version?: TLightAccountVersion;
-  entryPoint?: EntryPointDef<TEntryPointVersion, Chain>;
+  entryPoint?: EntryPointDef<
+    LightAccountEntryPointVersion<
+      "MultiOwnerLightAccount",
+      TLightAccountVersion
+    >,
+    Chain
+  >;
   owners?: Address[];
 };
 
 export async function createMultiOwnerLightAccount<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TLightAccountVersion extends GetLightAccountVersion<"MultiOwnerLightAccount"> = GetLightAccountVersion<"MultiOwnerLightAccount">,
-  TEntryPointVersion extends GetEntryPointForLightAccountVersion<
-    "MultiOwnerLightAccount",
-    TLightAccountVersion
-  > = GetEntryPointForLightAccountVersion<
-    "MultiOwnerLightAccount",
-    TLightAccountVersion
-  >
+  TLightAccountVersion extends LightAccountVersion<"MultiOwnerLightAccount"> = LightAccountVersion<"MultiOwnerLightAccount">
 >(
   config: CreateMultiOwnerLightAccountParams<
     TTransport,
     TSigner,
-    TLightAccountVersion,
-    TEntryPointVersion
+    TLightAccountVersion
   >
-): Promise<
-  MultiOwnerLightAccount<TSigner, TLightAccountVersion, TEntryPointVersion>
->;
+): Promise<MultiOwnerLightAccount<TSigner, TLightAccountVersion>>;
 
 /**
  * Creates a multi-owner light account using the provided parameters, including transport, chain, signer, initialization code, version, account address, factory address, salt, and owners. Ensures the owners list is deduplicated, ordered, and valid.
@@ -131,7 +115,7 @@ export async function createMultiOwnerLightAccount({
   chain,
   signer,
   initCode,
-  version = defaultLightAccountVersion("MultiOwnerLightAccount"),
+  version = defaultLightAccountVersion(),
   entryPoint = getEntryPoint(chain, {
     version: "0.7.0",
   }),
@@ -181,15 +165,17 @@ export async function createMultiOwnerLightAccount({
   });
 
   const account = await createLightAccountBase<
+    "MultiOwnerLightAccount",
+    LightAccountVersion<"MultiOwnerLightAccount">,
     Transport,
-    SmartAccountSigner,
-    "MultiOwnerLightAccount"
+    SmartAccountSigner
   >({
     transport,
     chain,
     signer,
     abi: MultiOwnerLightAccountAbi,
-    version: AccountVersionRegistry["MultiOwnerLightAccount"][version],
+    version,
+    type: "MultiOwnerLightAccount",
     entryPoint,
     accountAddress: address,
     getAccountInitCode,

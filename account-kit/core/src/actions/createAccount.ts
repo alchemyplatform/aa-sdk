@@ -1,11 +1,11 @@
+import { type SmartAccountSigner } from "@aa-sdk/core";
 import {
   createLightAccount,
   createMultiOwnerModularAccount,
   type CreateLightAccountParams,
   type CreateMultiOwnerModularAccountParams,
-  type GetLightAccountVersion,
+  type LightAccountVersion,
 } from "@account-kit/smart-contracts";
-import { type SmartAccountSigner } from "@aa-sdk/core";
 import { custom, type Transport } from "viem";
 import { ClientOnlyPropertyError } from "../errors.js";
 import type {
@@ -23,8 +23,7 @@ export type AccountConfig<TAccount extends SupportedAccountTypes> =
         CreateLightAccountParams<
           Transport,
           SmartAccountSigner,
-          // we only support LightAccount version v1
-          Exclude<GetLightAccountVersion<"LightAccount">, "v2.0.0">
+          LightAccountVersion<"LightAccount">
         >,
         "signer" | "transport" | "chain"
       >
@@ -94,8 +93,11 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
         });
       case "MultiOwnerModularAccount":
         return createMultiOwnerModularAccount({
-          ...params,
-          ...cachedConfig,
+          ...(params as AccountConfig<"MultiOwnerModularAccount">),
+          ...(cachedConfig as Omit<
+            CreateMultiOwnerModularAccountParams,
+            "transport" | "chain" | "signer"
+          >),
           signer,
           transport: (opts) => transport({ ...opts, retryCount: 0 }),
           chain,
