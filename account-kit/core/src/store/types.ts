@@ -53,12 +53,10 @@ export type SignerStatus = {
   isDisconnected: boolean;
 };
 
-export type StoredState =
-  | Omit<StoreState, "signer" | "accounts">
-  | {
-      alchemy: Omit<StoreState, "signer" | "accounts">;
-      wagmi?: WagmiState;
-    };
+export type StoredState = {
+  alchemy: Omit<StoreState, "signer" | "accounts">;
+  wagmi?: WagmiState;
+};
 
 export type CreateAccountKitStoreParams = ClientStoreConfig & {
   connections: Connection[];
