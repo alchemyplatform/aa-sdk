@@ -95,8 +95,8 @@ export const accountKitSmartContractsReferenceSidebar: SidebarItem[] = [
         link: "/reference/account-kit/smart-contracts/functions/getDefaultMultisigModularAccountFactoryAddress",
       },
       {
-        text: "getLightAccountVersionDef",
-        link: "/reference/account-kit/smart-contracts/functions/getLightAccountVersionDef",
+        text: "getLightAccountVersionForAccount",
+        link: "/reference/account-kit/smart-contracts/functions/getLightAccountVersionForAccount",
       },
       {
         text: "getMAInitializationData",
