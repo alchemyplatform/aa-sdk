@@ -19,7 +19,7 @@ export type AlchemyMultiOwnerLightAccountClientConfig<
   TSigner extends SmartAccountSigner = SmartAccountSigner
 > = Omit<
   CreateMultiOwnerLightAccountParams<HttpTransport, TSigner>,
-  "transport" | "chain"
+  "transport" | "chain" | "type"
 > &
   Omit<
     AlchemySmartAccountClientConfig<

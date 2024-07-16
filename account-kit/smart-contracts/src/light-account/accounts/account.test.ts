@@ -13,7 +13,7 @@ const chain = polygonMumbai;
 
 const versions = Object.keys(
   AccountVersionRegistry.LightAccount
-) as LightAccountVersion[];
+) as LightAccountVersion<"LightAccount">[];
 
 describe("Light Account Tests", () => {
   const dummyMnemonic =
@@ -170,7 +170,7 @@ const givenConnectedProvider = ({
 }: {
   signer: SmartAccountSigner;
   chain: Chain;
-  version: LightAccountVersion;
+  version: LightAccountVersion<"LightAccount">;
 }) =>
   createLightAccountClient({
     account: {
@@ -181,8 +181,12 @@ const givenConnectedProvider = ({
     transport: custom({
       request: async ({ method }) => {
         if (method === "eth_getStorageAt") {
-          return AccountVersionRegistry.LightAccount[version].address[chain.id]
-            .impl;
+          return (
+            AccountVersionRegistry.LightAccount[version].addresses.overrides?.[
+              chain.id
+            ].impl ??
+            AccountVersionRegistry.LightAccount[version].addresses.default.impl
+          );
         }
         return;
       },

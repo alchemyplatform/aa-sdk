@@ -23,11 +23,9 @@ import {
   type Transport,
 } from "viem";
 import type {
-  AccountVersionDef,
-  GetEntryPointForLightAccountVersion,
-  GetLightAccountVersion,
+  LightAccountEntryPointVersion,
   LightAccountType,
-  LightAccountVersionDef,
+  LightAccountVersion,
 } from "../types.js";
 import { AccountVersionRegistry } from "../utils.js";
 
@@ -40,91 +38,60 @@ enum SignatureType {
 export type LightAccountBase<
   TSigner extends SmartAccountSigner = SmartAccountSigner,
   TLightAccountType extends LightAccountType = LightAccountType,
-  TLightAccountVersion extends GetLightAccountVersion<TLightAccountType> = GetLightAccountVersion<TLightAccountType>,
-  TEntryPointVersion extends GetEntryPointForLightAccountVersion<
-    TLightAccountType,
-    TLightAccountVersion
-  > = GetEntryPointForLightAccountVersion<
-    TLightAccountType,
-    TLightAccountVersion
-  >
+  TLightAccountVersion extends LightAccountVersion<TLightAccountType> = LightAccountVersion<TLightAccountType>
 > = SmartContractAccountWithSigner<
   TLightAccountType,
   TSigner,
-  TEntryPointVersion
+  LightAccountEntryPointVersion<TLightAccountType, TLightAccountVersion>
 > & {
   getLightAccountVersion: () => TLightAccountVersion;
 };
 
 //#region CreateLightAccountBaseParams
 export type CreateLightAccountBaseParams<
+  TLightAccountType extends LightAccountType,
+  TLightAccountVersion extends LightAccountVersion<TLightAccountType> = LightAccountVersion<TLightAccountType>,
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TLightAccountType extends LightAccountType = LightAccountType,
-  TLightAccountVersion extends GetLightAccountVersion<TLightAccountType> = GetLightAccountVersion<TLightAccountType>,
-  TEntryPointVersion extends GetEntryPointForLightAccountVersion<
-    TLightAccountType,
-    TLightAccountVersion
-  > = GetEntryPointForLightAccountVersion<
-    TLightAccountType,
-    TLightAccountVersion
-  >
+  TSigner extends SmartAccountSigner = SmartAccountSigner
 > = Pick<
-  ToSmartContractAccountParams<
-    TLightAccountType,
-    TTransport,
-    Chain,
-    TEntryPointVersion
-  >,
+  ToSmartContractAccountParams<TLightAccountType, TTransport, Chain>,
   "transport" | "chain" | "getAccountInitCode"
 > & {
   abi: Abi;
   signer: TSigner;
   accountAddress: Address;
-  version: LightAccountVersionDef<TLightAccountType, TLightAccountVersion>;
-  entryPoint: EntryPointDef<TEntryPointVersion, Chain>;
+  type: TLightAccountType;
+  version: TLightAccountVersion;
+  entryPoint: EntryPointDef<
+    LightAccountEntryPointVersion<TLightAccountType, TLightAccountVersion>,
+    Chain
+  >;
 };
 //#endregion CreateLightAccountBaseParams
 
 export async function createLightAccountBase<
+  TLightAccountType extends LightAccountType,
+  TLightAccountVersion extends LightAccountVersion<TLightAccountType>,
   TTransport extends Transport = Transport,
-  TSigner extends SmartAccountSigner = SmartAccountSigner,
-  TLightAccountType extends LightAccountType = LightAccountType,
-  TLightAccountVersion extends GetLightAccountVersion<TLightAccountType> = GetLightAccountVersion<TLightAccountType>,
-  TEntryPointVersion extends GetEntryPointForLightAccountVersion<
-    TLightAccountType,
-    TLightAccountVersion
-  > = GetEntryPointForLightAccountVersion<
-    TLightAccountType,
-    TLightAccountVersion
-  >
->(
-  config: CreateLightAccountBaseParams<
-    TTransport,
-    TSigner,
-    TLightAccountType,
-    TLightAccountVersion,
-    TEntryPointVersion
-  >
-): Promise<
-  LightAccountBase<
-    TSigner,
-    TLightAccountType,
-    TLightAccountVersion,
-    TEntryPointVersion
-  >
->;
-
-export async function createLightAccountBase({
+  TSigner extends SmartAccountSigner = SmartAccountSigner
+>({
   transport,
   chain,
   signer,
   abi,
-  version: { version, type },
+  version,
+  type,
   entryPoint,
   accountAddress,
   getAccountInitCode,
-}: CreateLightAccountBaseParams): Promise<LightAccountBase> {
+}: CreateLightAccountBaseParams<
+  TLightAccountType,
+  TLightAccountVersion,
+  TTransport,
+  TSigner
+>): Promise<
+  LightAccountBase<TSigner, TLightAccountType, TLightAccountVersion>
+> {
   const client = createBundlerClient({
     transport,
     chain,
@@ -149,7 +116,9 @@ export async function createLightAccountBase({
 
     const implementationAddresses = Object.values(
       AccountVersionRegistry[type]
-    ).map((x: AccountVersionDef) => x.address[chain.id].impl);
+    ).map(
+      (x) => x.addresses.overrides?.[chain.id]?.impl ?? x.addresses.default.impl
+    );
 
     // only upgrade undeployed accounts (storage 0) or deployed light accounts, error otherwise
     if (
@@ -157,7 +126,9 @@ export async function createLightAccountBase({
       !implementationAddresses.some((x) => x === trim(storage))
     ) {
       throw new Error(
-        `could not determine if smart account implementation is ${type} ${version}`
+        `could not determine if smart account implementation is ${type} ${String(
+          version
+        )}`
       );
     }
 
@@ -234,7 +205,7 @@ export async function createLightAccountBase({
         case "v1.0.1":
           return signer.signMessage(message);
         case "v1.0.2":
-          throw new Error(`${type} ${version} doesn't support 1271`);
+          throw new Error(`${type} ${String(version)} doesn't support 1271`);
         case "v1.1.0":
           return signWith1271WrapperV1(hashMessage(message));
         case "v2.0.0":
@@ -242,7 +213,7 @@ export async function createLightAccountBase({
           // TODO: handle case where signer is an SCA.
           return concat([SignatureType.EOA, signature]);
         default:
-          throw new Error(`Unknown version ${type} of ${version}`);
+          throw new Error(`Unknown version ${type} of ${String(version)}`);
       }
     },
     async signTypedData(params) {
@@ -253,7 +224,7 @@ export async function createLightAccountBase({
           );
         case "v1.0.2":
           throw new Error(
-            `Version ${version} of LightAccount doesn't support 1271`
+            `Version ${String(version)} of LightAccount doesn't support 1271`
           );
         case "v1.1.0":
           return signWith1271WrapperV1(hashTypedData(params));
@@ -262,7 +233,7 @@ export async function createLightAccountBase({
           // TODO: handle case where signer is an SCA.
           return concat([SignatureType.EOA, signature]);
         default:
-          throw new Error(`Unknown version ${version} of LightAccount`);
+          throw new Error(`Unknown version ${String(version)} of LightAccount`);
       }
     },
     getDummySignature: (): Hex => {
@@ -276,7 +247,7 @@ export async function createLightAccountBase({
         case "v2.0.0":
           return concat([SignatureType.EOA, signature]);
         default:
-          throw new Error(`Unknown version ${type} of ${version}`);
+          throw new Error(`Unknown version ${type} of ${String(version)}`);
       }
     },
     encodeUpgradeToAndCall,
