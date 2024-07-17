@@ -24,12 +24,14 @@ export function CodePreview({ className }: { className?: string }) {
           </ExternalLink>
         </div>
       </div>
-      <div className="flex flex-col gap-4">
-        <div className="font-semibold text-secondary">Config</div>
+      <div className="flex flex-col">
+        <div className="mb-2 font-semibold text-secondary">Config</div>
+        <p className="mb-4 text-sm text-secondary-foreground">Pass this config object into the <span className="font-mono">AlchemyAccountProvider</span>.</p>
         <CodeBlock title="src/app/config.ts" code={getConfigCode(config)} />
       </div>
-      <div className="flex flex-col gap-4">
-        <div className="font-semibold text-secondary">Style</div>
+      <div className="flex flex-col">
+        <div className="mb-2 font-semibold text-secondary">Style</div>
+        <p className="mb-4 text-sm text-secondary-foreground">Not using tailwind? <ExternalLink href="https://tailwindcss.com/docs/installation" className="text-blue-600 font-semibold">Follow this guide to get started</ExternalLink>, then add the below code to your config file.</p>
         <CodeBlock title="tailwind.config.ts" code={getTailwindCode(config)} />
       </div>
     </div>
@@ -64,8 +66,7 @@ function CodeBlock({ title, code }: { title: string; code: string }) {
 function getTailwindCode(config: Config) {
   const { ui } = config
   return dedent`
-  import { withAccountKitUi, createColorSet } from "@alchemy/aa-alchemy/tailwind";
-  import type { Config } from "tailwindcss";
+  import { withAccountKitUi, createColorSet } from "@account-kit/react/tailwind";
 
   // wrap your existing tailwind config with 'withAccountKitUi'
   // docs on setting up tailwind here: https://tailwindcss.com/docs/installation
@@ -93,19 +94,21 @@ function getConfigCode(config: Config) {
   sections.push([{ type: "passkey" }])
 
   return dedent`
+  import { createConfig } from "@account-kit/react";
+  import { sepolia } from "@account-kit/infra";
+
   const uiConfig = {
     illustrationStyle: ${config.ui.illustrationStyle},
     auth: {
       sections: ${JSON.stringify(sections)},
-      addPasskeyOnSignup: ${config.auth.addPasskey},
+      addPasskeyOnSignup: ${config.auth.addPasskey},${config.ui.logoLight || config.ui.logoDark ? '\n      header: <img src="path/to/logo.svg" />,' : ''}
     },
   };
 
-  const config = createConfig({
-    // required
+  export const config = createConfig({
     rpcUrl: "/api/rpc",
     chain: sepolia,
-    ssr: true,
+    ssr: true, // set to false if you're not using server-side rendering
   }, uiConfig);
 `
 }
