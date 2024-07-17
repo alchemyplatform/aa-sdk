@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import * as SwitchPrimitives from "@radix-ui/react-switch"
+import * as React from "react";
+import * as SwitchPrimitives from "@radix-ui/react-switch";
 
-import { cn } from "@/lib/utils"
-import { Moon, Sun } from "lucide-react"
+import { cn } from "@/lib/utils";
+import { Moon, Sun } from "lucide-react";
 
 const ThemeSwitch = React.forwardRef<
   React.ElementRef<typeof SwitchPrimitives.Root>,
@@ -25,14 +25,16 @@ const ThemeSwitch = React.forwardRef<
     ></SwitchPrimitives.Thumb>
     <div className="absolute flex text-sm items-center inset-1 z-10 justify-between bg-transparent">
       <div className="flex items-center data-[state=unchecked]:font-medium justify-center gap-1 flex-1 basis-0">
-        <Sun size={18} /><div className={cn(!props.checked && "font-medium")}>Light</div>
+        <Sun size={18} />
+        <div className={cn(!props.checked && "font-medium")}>Light</div>
       </div>
       <div className="flex items-center justify-center gap-1 flex-1 basis-0">
-        <Moon size={18} /><div className={cn(props.checked && "font-medium")}>Dark</div>
+        <Moon size={18} />
+        <div className={cn(props.checked && "font-medium")}>Dark</div>
       </div>
     </div>
   </SwitchPrimitives.Root>
-))
-ThemeSwitch.displayName = SwitchPrimitives.Root.displayName
+));
+ThemeSwitch.displayName = SwitchPrimitives.Root.displayName;
 
-export { ThemeSwitch }
+export { ThemeSwitch };

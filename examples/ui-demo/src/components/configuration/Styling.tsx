@@ -26,7 +26,9 @@ export function Styling({ className }: { className?: string }) {
     <div className={cn("flex flex-col", className)}>
       <div className="flex flex-col gap-4 border-b border-border pt-8 pb-5">
         <div className="flex items-center gap-1">
-          <p className="font-semibold text-secondary-foreground text-sm">Appearance</p>
+          <p className="font-semibold text-secondary-foreground text-sm">
+            Appearance
+          </p>
           <HelpTooltip text="Preview how the UI will look in light and dark mode - once integrated, the components will automatically adapt to the OS setting or a .light/.dark class on the root element" />
         </div>
 
@@ -38,7 +40,9 @@ export function Styling({ className }: { className?: string }) {
 
       <div className="flex flex-col gap-4 border-b border-border pt-4 pb-5 items-start">
         <div className="flex items-center gap-1">
-          <p className="font-semibold text-secondary-foreground text-sm">Color</p>
+          <p className="font-semibold text-secondary-foreground text-sm">
+            Color
+          </p>
           <HelpTooltip text="Color changes will be applied to buttons, text links and illustrations" />
         </div>
 
@@ -50,9 +54,7 @@ export function Styling({ className }: { className?: string }) {
             <ColorPicker theme="light" />
           </div>
           <div className="flex flex-col gap-2 flex-1 basis-0">
-            <div className="text-gray-600 text-xs font-semibold">
-              Dark mode
-            </div>
+            <div className="text-gray-600 text-xs font-semibold">Dark mode</div>
             <ColorPicker theme="dark" />
           </div>
         </div>
@@ -60,7 +62,9 @@ export function Styling({ className }: { className?: string }) {
 
       <div className="flex flex-col gap-4 border-b border-border pt-4 pb-5 items-start">
         <div className="flex items-center gap-1">
-          <p className="font-semibold text-secondary-foreground text-sm">Logo</p>
+          <p className="font-semibold text-secondary-foreground text-sm">
+            Logo
+          </p>
           <HelpTooltip text="PNG, JPG, GIF files accepted" />
         </div>
 
@@ -80,7 +84,9 @@ export function Styling({ className }: { className?: string }) {
 
       <div className="flex flex-col gap-4 pt-4 pb-5 items-start">
         <div className="flex items-center gap-1">
-          <p className="font-semibold text-secondary-foreground text-sm">Illustration Style</p>
+          <p className="font-semibold text-secondary-foreground text-sm">
+            Illustration Style
+          </p>
           <HelpTooltip text="These will appear as supplementary graphics on certain screens" />
         </div>
 
