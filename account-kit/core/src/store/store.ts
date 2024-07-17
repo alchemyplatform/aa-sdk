@@ -1,4 +1,5 @@
 import type { NoUndefined } from "@aa-sdk/core";
+import { createAlchemyPublicRpcClient } from "@account-kit/infra";
 import { AlchemySignerStatus, AlchemyWebSigner } from "@account-kit/signer";
 import type { Chain } from "viem";
 import {
@@ -8,48 +9,121 @@ import {
 } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
 import { DEFAULT_IFRAME_CONTAINER_ID } from "../createConfig.js";
-import type { SupportedAccountTypes } from "../types.js";
+import type { Connection, SupportedAccountTypes } from "../types.js";
 import { bigintMapReplacer } from "../utils/replacer.js";
 import { bigintMapReviver } from "../utils/reviver.js";
 import {
   DEFAULT_STORAGE_KEY,
   type AccountState,
-  type ClientState,
-  type ClientStore,
-  type CreateClientStoreParams,
+  type ClientStoreConfig,
+  type CreateAccountKitStoreParams,
   type SignerStatus,
+  type Store,
+  type StoreState,
 } from "./types.js";
 
-export const createClientStore = (config: CreateClientStoreParams) => {
+export const createAccountKitStore = (
+  params: CreateAccountKitStoreParams
+): Store => {
   const {
+    connections,
     storage = typeof window !== "undefined" ? localStorage : undefined,
     ssr,
-  } = config;
+  } = params;
 
-  const clientStore = createStore(
+  // State defined in here should work either on the server or on the client
+  // bundler client for example can be used in either setting to make RPC calls
+  const store = createStore(
     subscribeWithSelector(
       storage
-        ? persist(() => createInitialClientState(config), {
+        ? persist(() => createInitialStoreState(params), {
             name: DEFAULT_STORAGE_KEY,
-            storage: createJSONStorage<ClientState>(() => storage, {
-              replacer: bigintMapReplacer,
-              reviver: bigintMapReviver,
+            storage: createJSONStorage<StoreState>(() => storage, {
+              replacer: (key, value) => {
+                if (key === "bundlerClient") {
+                  const client = value as StoreState["bundlerClient"];
+                  return {
+                    connection: connections.find(
+                      (x) => x.chain.id === client.chain.id
+                    ),
+                  };
+                }
+                return bigintMapReplacer(key, value);
+              },
+              reviver: (key, value) => {
+                if (key === "bundlerClient") {
+                  const connection = value as Connection;
+                  return createAlchemyPublicRpcClient({
+                    chain: connection.chain,
+                    connectionConfig: connection,
+                  });
+                }
+
+                return bigintMapReviver(key, value);
+              },
             }),
             skipHydration: ssr,
             partialize: ({ signer, accounts, ...writeableState }) =>
               writeableState,
-            version: 1,
+            version: 2,
           })
-        : () => createInitialClientState(config)
+        : () => createInitialStoreState(params)
     )
   );
 
-  addClientSideStoreListeners(clientStore);
+  addClientSideStoreListeners(store);
 
-  return clientStore;
+  return store;
 };
 
-export const createSigner = (params: CreateClientStoreParams) => {
+const createInitialStoreState = (
+  params: CreateAccountKitStoreParams
+): StoreState => {
+  const { connections, chain, client, sessionConfig } = params;
+  const connectionMap = connections.reduce((acc, connection) => {
+    acc.set(connection.chain.id, connection);
+    return acc;
+  }, new Map<number, Connection>());
+
+  if (!connectionMap.has(chain.id)) {
+    throw new Error("Chain not found in connections");
+  }
+
+  const bundlerClient = createAlchemyPublicRpcClient({
+    chain,
+    connectionConfig: connectionMap.get(chain.id)!,
+  });
+  const chains = connections.map((c) => c.chain);
+  const accountConfigs = createEmptyAccountConfigState(chains);
+  const baseState: StoreState = {
+    bundlerClient,
+    chain,
+    connections: connectionMap,
+    accountConfigs,
+    config: { client, sessionConfig },
+    signerStatus: convertSignerStatusToState(AlchemySignerStatus.INITIALIZING),
+  };
+
+  if (typeof window === "undefined") {
+    return baseState;
+  }
+
+  const accounts = createDefaultAccountState(chains);
+
+  return {
+    ...baseState,
+    accounts,
+  };
+};
+
+/**
+ * Given initial client store parameters, it initializes an AlchemySigner instance.
+ * This should only be called on the client.
+ *
+ * @param {CreateClientStoreParams} params to configure and create the signer
+ * @returns {AlchemySigner} an instance of the AlchemySigner
+ */
+export const createSigner = (params: ClientStoreConfig) => {
   const { client, sessionConfig } = params;
   const { iframeContainerId } = client.iframeConfig ?? {
     iframeContainerId: DEFAULT_IFRAME_CONTAINER_ID,
@@ -126,28 +200,7 @@ export const defaultAccountState = <
   T extends SupportedAccountTypes
 >(): AccountState<T> => staticState;
 
-const createInitialClientState = (
-  params: CreateClientStoreParams
-): ClientState => {
-  const accountConfigs = createEmptyAccountConfigState(params.chains);
-  const baseState = {
-    accountConfigs,
-    config: params,
-    signerStatus: convertSignerStatusToState(AlchemySignerStatus.INITIALIZING),
-  };
-
-  if (typeof window === "undefined") {
-    return baseState;
-  }
-
-  const accounts = createDefaultAccountState(params.chains);
-  return {
-    accounts,
-    ...baseState,
-  };
-};
-
-const addClientSideStoreListeners = (store: ClientStore) => {
+const addClientSideStoreListeners = (store: Store) => {
   if (typeof window === "undefined") {
     return;
   }
@@ -163,12 +216,13 @@ const addClientSideStoreListeners = (store: ClientStore) => {
       signer.on("connected", (user) => store.setState({ user }));
 
       signer.on("disconnected", () => {
+        const chains = [...store.getState().connections.values()].map(
+          (c) => c.chain
+        );
         store.setState({
           user: undefined,
-          accountConfigs: createEmptyAccountConfigState(
-            store.getState().config.chains
-          ),
-          accounts: createDefaultAccountState(store.getState().config.chains),
+          accountConfigs: createEmptyAccountConfigState(chains),
+          accounts: createDefaultAccountState(chains),
         });
       });
     },
@@ -180,7 +234,7 @@ const createEmptyAccountConfigState = (chains: Chain[]) => {
   return chains.reduce((acc, chain) => {
     acc[chain.id] = {};
     return acc;
-  }, {} as ClientState["accountConfigs"]);
+  }, {} as StoreState["accountConfigs"]);
 };
 
 export const createDefaultAccountState = (chains: Chain[]) => {
@@ -191,5 +245,5 @@ export const createDefaultAccountState = (chains: Chain[]) => {
         defaultAccountState<"MultiOwnerModularAccount">(),
     };
     return acc;
-  }, {} as NoUndefined<ClientState["accounts"]>);
+  }, {} as NoUndefined<StoreState["accounts"]>);
 };

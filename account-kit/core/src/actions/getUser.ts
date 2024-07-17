@@ -18,8 +18,10 @@ export type GetUserResult = (User & { type: "eoa" | "sca" }) | null;
  * @param {AlchemyAccountsConfig} config the account config containing app state
  * @returns {GetUserResult} the user if the signer or an EOA are connected
  */
-export const getUser = (config: AlchemyAccountsConfig): GetUserResult => {
-  const user = config.clientStore.getState().user;
+export const getUser = (
+  config: AlchemyAccountsConfig
+): (User & { type: "eoa" | "sca" }) | null => {
+  const user = config.store.getState().user;
   if (user == null) return user ?? null;
 
   // @ts-ignore
