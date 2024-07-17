@@ -95,6 +95,10 @@ export const aaSdkCoreReferenceSidebar: SidebarItem[] = [
         link: "/reference/aa-sdk/core/functions/dropAndReplaceUserOperation",
       },
       {
+        text: "erc7677Middleware",
+        link: "/reference/aa-sdk/core/functions/erc7677Middleware",
+      },
+      {
         text: "filterUndefined",
         link: "/reference/aa-sdk/core/functions/filterUndefined",
       },
