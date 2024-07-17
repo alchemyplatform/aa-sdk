@@ -1,5 +1,4 @@
 import {
-  isHex,
   type Chain,
   type Client,
   type PublicActions,
@@ -12,10 +11,6 @@ import type {
   BundlerRpcSchema,
 } from "../client/decorators/bundlerClient.js";
 import type { ClientMiddlewareConfig } from "../client/types.js";
-import {
-  concatPaymasterAndData,
-  parsePaymasterAndData,
-} from "../utils/userop.js";
 import { defaultFeeEstimator } from "./defaults/feeEstimator.js";
 import { defaultGasEstimator } from "./defaults/gasEstimator.js";
 import { defaultPaymasterAndData } from "./defaults/paymasterAndData.js";
@@ -64,27 +59,11 @@ export const middlewareActions =
   ): { middleware: ClientMiddleware } => ({
     middleware: {
       customMiddleware: overrides.customMiddleware ?? noopMiddleware,
-      dummyPaymasterAndData: overrides.paymasterAndData?.dummyPaymasterAndData
-        ? async (struct, { account }) => {
-            const data = overrides.paymasterAndData!.dummyPaymasterAndData();
-            const paymasterOverrides =
-              account.getEntryPoint().version === "0.7.0"
-                ? isHex(data)
-                  ? parsePaymasterAndData(data)
-                  : data
-                : {
-                    paymasterAndData: isHex(data)
-                      ? data
-                      : concatPaymasterAndData(data),
-                  };
-            return { ...struct, ...paymasterOverrides };
-          }
-        : defaultPaymasterAndData,
-
+      dummyPaymasterAndData:
+        overrides.dummyPaymasterAndData ?? defaultPaymasterAndData,
       feeEstimator: overrides.feeEstimator ?? defaultFeeEstimator(client),
       gasEstimator: overrides.gasEstimator ?? defaultGasEstimator(client),
-      paymasterAndData:
-        overrides.paymasterAndData?.paymasterAndData ?? defaultPaymasterAndData,
+      paymasterAndData: overrides.paymasterAndData ?? defaultPaymasterAndData,
       userOperationSimulator:
         overrides.userOperationSimulator ?? noopMiddleware,
       signUserOperation: overrides.signUserOperation ?? defaultUserOpSigner,

@@ -147,6 +147,8 @@ export interface AlchemyGasEstimationOptions {
 /**
  * Dummy paymaster and data middleware for the alchemy gas manager
  *
+ * NOTE: right now, this only really works for 0.6.0 unless you pass in overrides in the config for 0.7.0
+ *
  * @template {ClientWithAlchemyMethods} C
  * @param {ClientWithAlchemyMethods} client client with alchemy methods
  * @param {AlchemyGasManagerConfig} config alchemy gas manager configuration
@@ -156,15 +158,20 @@ const dummyPaymasterAndData =
   <C extends ClientWithAlchemyMethods>(
     client: C,
     config: AlchemyGasManagerConfig
-  ) =>
-  () => {
+  ): ClientMiddlewareFn =>
+  async (uo) => {
     const paymaster =
       config.paymasterAddress ?? getAlchemyPaymasterAddress(client.chain);
     const paymasterData =
       config.dummyData ??
       "0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
 
-    return concat([paymaster, paymasterData]); // or you can also return { paymaster, paymasterData }
+    return {
+      ...uo,
+      paymaster,
+      paymasterData,
+      paymasterAndData: concat([paymaster, paymasterData]),
+    };
   };
 
 /**
@@ -238,9 +245,9 @@ export function alchemyGasManagerMiddleware<C extends ClientWithAlchemyMethods>(
             maxPriorityFeePerGas,
           };
         },
-    paymasterAndData: disableGasEstimation
+    ...(disableGasEstimation
       ? requestPaymasterAndData(client, config)
-      : requestGasAndPaymasterData(client, config),
+      : requestGasAndPaymasterData(client, config)),
   };
 }
 
@@ -304,10 +311,9 @@ const overrideField = <
 function requestGasAndPaymasterData<C extends ClientWithAlchemyMethods>(
   client: C,
   config: AlchemyGasManagerConfig
-): ClientMiddlewareConfig["paymasterAndData"] {
+): Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "paymasterAndData"> {
   return {
     dummyPaymasterAndData: dummyPaymasterAndData(client, config),
-
     paymasterAndData: async (
       struct,
       { overrides: overrides_, feeOptions, account }
@@ -410,7 +416,10 @@ function requestGasAndPaymasterData<C extends ClientWithAlchemyMethods>(
 const requestPaymasterAndData: <C extends ClientWithAlchemyMethods>(
   client: C,
   config: AlchemyGasManagerConfig
-) => ClientMiddlewareConfig["paymasterAndData"] = (client, config) => ({
+) => Pick<
+  ClientMiddlewareConfig,
+  "dummyPaymasterAndData" | "paymasterAndData"
+> = (client, config) => ({
   dummyPaymasterAndData: dummyPaymasterAndData(client, config),
   paymasterAndData: async (struct, { account }) => {
     const result = await client.request({

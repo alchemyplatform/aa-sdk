@@ -2,12 +2,12 @@ import {
   LocalAccountSigner,
   LogLevel,
   Logger,
-  arbitrumSepolia,
   createBundlerClient,
   createSmartAccountClientFromExisting,
   type SmartAccountSigner,
   type UserOperationFeeOptions,
 } from "@aa-sdk/core";
+import { arbitrumSepolia } from "@account-kit/infra";
 import {
   http,
   isAddress,
@@ -18,7 +18,7 @@ import {
 import { generatePrivateKey } from "viem/accounts";
 import {
   multiOwnerPluginActions,
-  type LightAccountVersion,
+  type GetLightAccountVersion,
 } from "../../index.js";
 import { getMSCAUpgradeToData } from "../../msca/utils.js";
 import { createMultiOwnerLightAccountClient } from "../clients/multiOwnerLightAccount.js";
@@ -278,7 +278,7 @@ const givenConnectedClient = async ({
   chain: Chain;
   accountAddress?: Address;
   feeOptions?: UserOperationFeeOptions;
-  version?: LightAccountVersion<"MultiOwnerLightAccount">;
+  version?: GetLightAccountVersion<"MultiOwnerLightAccount">;
 }) => {
   return createMultiOwnerLightAccountClient({
     transport: http(`${chain.rpcUrls.alchemy.http[0]}/${API_KEY!}`),

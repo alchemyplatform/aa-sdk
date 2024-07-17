@@ -3,10 +3,7 @@ import type { Hash, Hex } from "viem";
 import type { z } from "zod";
 import type { UserOperationContext } from "../actions/smartAccount/types.js";
 import type { EntryPointVersion } from "../entrypoint/types.js";
-import type {
-  ClientMiddleware,
-  ClientMiddlewareFn,
-} from "../middleware/types.js";
+import type { ClientMiddleware } from "../middleware/types.js";
 import type { UserOperationRequest } from "../types.js";
 import type { ConnectionConfigSchema } from "./schema.js";
 
@@ -37,15 +34,5 @@ export type ClientMiddlewareConfig<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined
-> = Omit<
-  Partial<ClientMiddleware<TContext>>,
-  "dummyPaymasterAndData" | "paymasterAndData"
-> & {
-  paymasterAndData?: {
-    dummyPaymasterAndData: () =>
-      | UserOperationRequest<"0.6.0">["paymasterAndData"]
-      | Pick<UserOperationRequest<"0.7.0">, "paymaster" | "paymasterData">;
-    paymasterAndData: ClientMiddlewareFn<TContext>;
-  };
-};
+> = Partial<ClientMiddleware<TContext>>;
 // [!endregion ClientMiddlewareConfig]

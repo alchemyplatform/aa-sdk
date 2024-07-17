@@ -1,3 +1,4 @@
+import type { UserOperationContext } from "../actions/smartAccount/types";
 import type { ClientMiddlewareFn } from "./types";
 
 /**
@@ -6,6 +7,8 @@ import type { ClientMiddlewareFn } from "./types";
  * @param {Deferrable<UserOperationStruct<TEntryPointVersion>>} args the client middleware arguments passed to the middleware
  * @returns {Promise<Deferrable<UserOperationStruct<TEntryPointVersion>>>} the arguments passed to the middleware and returned as is without modification
  */
-export const noopMiddleware: ClientMiddlewareFn = async (args) => {
+export const noopMiddleware: ClientMiddlewareFn<
+  UserOperationContext | undefined
+> = async (args) => {
   return args;
 };
