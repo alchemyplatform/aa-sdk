@@ -32,8 +32,8 @@ export function PhotoUploads({ mode }: { mode: "dark" | "light" }) {
   };
 
   const onRemove = () => {
-    if (!logo?.fileSrc) return 
-  
+    if (!logo?.fileSrc) return;
+
     setConfig((prev) => ({
       ...prev,
       ui: {
@@ -41,8 +41,8 @@ export function PhotoUploads({ mode }: { mode: "dark" | "light" }) {
         [mode === "dark" ? "logoDark" : "logoLight"]: undefined,
       },
     }));
-    URL.revokeObjectURL(logo.fileSrc)
-  }
+    URL.revokeObjectURL(logo.fileSrc);
+  };
 
   return (
     <div className="flex items-center gap-3 flex-1 basis-0">
@@ -64,11 +64,20 @@ export function PhotoUploads({ mode }: { mode: "dark" | "light" }) {
         <div className="text-secondary text-xs font-semibold">
           {mode === "light" ? "Light" : "Dark"} mode
         </div>
-        <div className={`text-xs text-gray-500 font-medium ${logo?.fileName ? '' : 'hidden'}`}>
+        <div
+          className={`text-xs text-gray-500 font-medium ${
+            logo?.fileName ? "" : "hidden"
+          }`}
+        >
           {logo?.fileName ? truncatedFileName(logo.fileName) : "File name"}
         </div>
         {logo ? (
-          <button onClick={onRemove} className="text-left text-blue-600 text-xs font-semibold">Remove</button>
+          <button
+            onClick={onRemove}
+            className="text-left text-blue-600 text-xs font-semibold"
+          >
+            Remove
+          </button>
         ) : (
           <FileUploadInput
             className="text-left text-blue-600 text-xs font-semibold"

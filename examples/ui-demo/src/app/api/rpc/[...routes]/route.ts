@@ -7,8 +7,12 @@ export async function POST(
   { params }: { params: { routes: string[] } }
 ) {
   const body = await req.json();
-  const headers: Record<string, string> = {Authorization: `Bearer ${env.API_KEY}`,};
-  req.headers.forEach((value, key) => {headers[key] = value;});
+  const headers: Record<string, string> = {
+    Authorization: `Bearer ${env.API_KEY}`,
+  };
+  req.headers.forEach((value, key) => {
+    headers[key] = value;
+  });
 
   const res = await fetch(env.ALCHEMY_API_URL + `/${params.routes.join("/")}`, {
     method: "POST",
