@@ -1,4 +1,4 @@
-import Link, { LinkProps } from "next/link"
+import Link, { LinkProps } from "next/link";
 
 const ExternalLink = ({
   className,
@@ -14,7 +14,7 @@ const ExternalLink = ({
     >
       {children}
     </Link>
-  )
-}
+  );
+};
 
-export default ExternalLink
+export default ExternalLink;

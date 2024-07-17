@@ -38,7 +38,12 @@ export const Tabs = ({
               )}
             >
               {tab.icon}
-              <p className={cn(isActive && "font-semibold", !isActive && "text-gray-700")}>
+              <p
+                className={cn(
+                  isActive && "font-semibold",
+                  !isActive && "text-gray-700"
+                )}
+              >
                 {tab.name}
               </p>
             </div>

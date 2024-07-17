@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:write": "prettier --no-ignore --write ./src"
   },
   "dependencies": {
     "@account-kit/core": "^4.0.0-alpha.4",
