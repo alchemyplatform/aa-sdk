@@ -19,11 +19,16 @@ export function AuthCardWrapper({ className }: { className?: string }) {
       {!user ? (
         <div className="flex flex-col gap-2 w-[368px]">
           <div className="modal bg-surface-default shadow-md">
-          <AuthCard />
+            <AuthCard />
           </div>
         </div>
       ) : (
-        <button className="text-primary font-semibold text-sm px-3 py-[11px] bg-white border border-gray-300 rounded-lg hover:shadow-md" onClick={() => logout()}>Logout</button>
+        <button
+          className="text-primary font-semibold text-sm px-3 py-[11px] bg-white border border-gray-300 rounded-lg hover:shadow-md"
+          onClick={() => logout()}
+        >
+          Logout
+        </button>
       )}
     </div>
   );

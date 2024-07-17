@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import * as SwitchPrimitives from "@radix-ui/react-switch"
+import * as React from "react";
+import * as SwitchPrimitives from "@radix-ui/react-switch";
 
-import { cn } from "@/lib/utils"
-import { Code } from "../icons/code"
+import { cn } from "@/lib/utils";
+import { Code } from "../icons/code";
 
 const CodePreviewSwitch = React.forwardRef<
   React.ElementRef<typeof SwitchPrimitives.Root>,
@@ -26,7 +26,7 @@ const CodePreviewSwitch = React.forwardRef<
       <Code />
     </SwitchPrimitives.Thumb>
   </SwitchPrimitives.Root>
-))
-CodePreviewSwitch.displayName = SwitchPrimitives.Root.displayName
+));
+CodePreviewSwitch.displayName = SwitchPrimitives.Root.displayName;
 
-export { CodePreviewSwitch }
+export { CodePreviewSwitch };
