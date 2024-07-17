@@ -1,13 +1,13 @@
 import { ConnectionConfigSchema } from "@aa-sdk/core";
 import { DEFAULT_SESSION_MS } from "@account-kit/signer";
 import { createStorage, createConfig as createWagmiConfig } from "@wagmi/core";
+import { createAccountKitStore } from "./store/store.js";
 import { DEFAULT_STORAGE_KEY } from "./store/types.js";
 import type {
   AlchemyAccountsConfig,
   Connection,
   CreateConfigProps,
 } from "./types.js";
-import { createAccountKitStore } from "./store/store.js";
 
 export const DEFAULT_IFRAME_CONTAINER_ID = "alchemy-signer-iframe-container";
 
@@ -53,12 +53,14 @@ export const createConfig = (
     connectionConfig.connections.forEach(({ chain, ...config }) => {
       connections.push({
         ...ConnectionConfigSchema.parse(config),
+        gasManagerConfig: config.gasManagerConfig,
         chain,
       });
     });
   } else {
     connections.push({
       ...ConnectionConfigSchema.parse(connectionConfig),
+      gasManagerConfig: connectionConfig.gasManagerConfig,
       chain,
     });
   }
