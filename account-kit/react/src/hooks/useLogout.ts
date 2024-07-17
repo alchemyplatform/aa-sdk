@@ -2,10 +2,10 @@
 
 import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
 import { useDisconnect } from "wagmi";
+import { useAuthContext } from "../components/auth/context.js";
 import { useAlchemyAccountContext } from "../context.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import { useSigner } from "./useSigner.js";
-import { useAuthContext } from "../components/auth/context.js";
 
 export type UseLogoutMutationArgs = BaseHookMutationArgs<void, void>;
 
