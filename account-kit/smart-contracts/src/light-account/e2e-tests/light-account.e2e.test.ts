@@ -4,10 +4,10 @@ import {
   Logger,
   createBundlerClient,
   createSmartAccountClientFromExisting,
-  sepolia,
   type SmartAccountSigner,
   type UserOperationFeeOptions,
 } from "@aa-sdk/core";
+import { sepolia } from "@account-kit/infra";
 import {
   http,
   isAddress,
