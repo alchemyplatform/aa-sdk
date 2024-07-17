@@ -60,7 +60,7 @@ export type AlchemyAccountsProviderProps = {
  */
 export const useAlchemyAccountContext = (
   override?: AlchemyAccountContextProps
-): Exclude<AlchemyAccountContextProps, undefined> => {
+): AlchemyAccountContextProps => {
   const context = useContext(AlchemyAccountContext);
   if (override != null) return override;
 

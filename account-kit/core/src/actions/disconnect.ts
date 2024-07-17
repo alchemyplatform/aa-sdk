@@ -3,7 +3,7 @@ import type { AlchemyAccountsConfig } from "../types";
 import { getSigner } from "./getSigner.js";
 
 /**
- * Disconnect the current signer, accounts, and clears the store.
+ * Disconnects the current signer, accounts, and clears the store.
  *
  * @example
  * ```ts
