@@ -16,5 +16,5 @@ import type { AlchemyAccountsConfig } from "../types";
  * @returns {SignerStatus} The current signer status from the client store
  */
 export const getSignerStatus = (config: AlchemyAccountsConfig) => {
-  return config.clientStore.getState().signerStatus;
+  return config.store.getState().signerStatus;
 };
