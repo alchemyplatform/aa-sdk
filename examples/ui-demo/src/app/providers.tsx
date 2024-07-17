@@ -77,6 +77,7 @@ function AuthCardHeader({ logoDark, logoLight, theme }: Pick<Config['ui'], "them
   if (!logo) return null;
 
   return (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       style={{ height: "60px", objectFit: "cover", objectPosition: "center" }}
       src={logo.fileSrc}
