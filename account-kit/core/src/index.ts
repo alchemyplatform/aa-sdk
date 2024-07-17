@@ -1,5 +1,6 @@
 export type * from "./actions/createAccount.js";
 export { createAccount } from "./actions/createAccount.js";
+export { disconnect } from "./actions/disconnect.js";
 export type * from "./actions/getAccount.js";
 export { getAccount } from "./actions/getAccount.js";
 export type * from "./actions/getBundlerClient.js";
