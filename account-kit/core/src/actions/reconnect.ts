@@ -1,4 +1,4 @@
-import { createSigner } from "../store/client.js";
+import { createSigner } from "../store/store.js";
 import type { AlchemyAccountsConfig } from "../types.js";
 import { createAccount } from "./createAccount.js";
 import { getChain } from "./getChain.js";
@@ -18,13 +18,13 @@ import { getChain } from "./getChain.js";
  * @param {AlchemyAccountsConfig} config the account config which contains the client store
  */
 export async function reconnect(config: AlchemyAccountsConfig) {
-  const { clientStore } = config;
-  const signerConfig = clientStore.getState().config;
-  const accountConfigs = clientStore.getState().accountConfigs;
+  const { store } = config;
+  const signerConfig = store.getState().config;
+  const accountConfigs = store.getState().accountConfigs;
 
-  const signer = clientStore.getState().signer ?? createSigner(signerConfig);
-  if (!clientStore.getState().signer) {
-    clientStore.setState({
+  const signer = store.getState().signer ?? createSigner(signerConfig);
+  if (!store.getState().signer) {
+    store.setState({
       signer,
     });
   }
@@ -56,7 +56,7 @@ export async function reconnect(config: AlchemyAccountsConfig) {
   });
 
   const unsubDisconnected = signer.on("disconnected", () => {
-    clientStore.setState({
+    store.setState({
       accountConfigs: {},
     });
     unsubDisconnected();
