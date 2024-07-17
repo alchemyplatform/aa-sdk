@@ -18,6 +18,6 @@ import type { AlchemyAccountsConfig } from "../types";
  */
 export function watchChain(config: AlchemyAccountsConfig) {
   return (onChange: (chain: Chain) => void) => {
-    return config.coreStore.subscribe(({ chain }) => chain, onChange);
+    return config.store.subscribe(({ chain }) => chain, onChange);
   };
 }

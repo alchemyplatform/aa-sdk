@@ -8,5 +8,5 @@ import type { AlchemyAccountsConfig } from "../types";
  * @returns {Chain} the currently active chain
  */
 export function getChain(config: AlchemyAccountsConfig): Chain {
-  return config.coreStore.getState().chain;
+  return config.store.getState().chain;
 }

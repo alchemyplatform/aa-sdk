@@ -1,14 +1,13 @@
 import { ConnectionConfigSchema } from "@aa-sdk/core";
 import { DEFAULT_SESSION_MS } from "@account-kit/signer";
 import { createStorage, createConfig as createWagmiConfig } from "@wagmi/core";
-import { createClientStore } from "./store/client.js";
-import { createCoreStore } from "./store/core.js";
 import { DEFAULT_STORAGE_KEY } from "./store/types.js";
 import type {
   AlchemyAccountsConfig,
   Connection,
   CreateConfigProps,
 } from "./types.js";
+import { createAccountKitStore } from "./store/store.js";
 
 export const DEFAULT_IFRAME_CONTAINER_ID = "alchemy-signer-iframe-container";
 
@@ -64,14 +63,9 @@ export const createConfig = (
     });
   }
 
-  const coreStore = createCoreStore({
+  const store = createAccountKitStore({
     connections,
     chain,
-    storage: storage?.(),
-    ssr,
-  });
-
-  const clientStore = createClientStore({
     client: {
       connection: signerConnection ?? connections[0],
       iframeConfig,
@@ -84,15 +78,13 @@ export const createConfig = (
         ? { sessionLength: sessionConfig.expirationTimeMs }
         : undefined
     ),
-    // TODO: this is duplicated from the core store
-    chains: connections.map((x) => x.chain),
     ssr,
   });
 
   const wagmiConfig = createWagmiConfig({
     connectors,
     chains: [chain, ...connections.map((c) => c.chain)],
-    client: () => config.coreStore.getState().bundlerClient,
+    client: () => config.store.getState().bundlerClient,
     storage: createStorage({
       key: `${DEFAULT_STORAGE_KEY}:wagmi`,
       storage: storage
@@ -105,8 +97,7 @@ export const createConfig = (
   });
 
   const config: AlchemyAccountsConfig = {
-    coreStore,
-    clientStore,
+    store: store,
     _internal: {
       ssr,
       wagmiConfig,
