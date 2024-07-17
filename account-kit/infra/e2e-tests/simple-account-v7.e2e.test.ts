@@ -2,7 +2,6 @@ import {
   LocalAccountSigner,
   createSimpleSmartAccount,
   getEntryPoint,
-  sepolia,
   type UserOperationStruct,
 } from "@aa-sdk/core";
 import type { CreateSimpleAccountParams } from "@aa-sdk/core/dist/types/account/simple.js";
@@ -13,6 +12,7 @@ import { alchemyEnhancedApiActions } from "../src/client/decorators/alchemyEnhan
 import { createAlchemySmartAccountClientFromRpcClient } from "../src/client/internal/smartAccountClientFromRpc.js";
 import {
   createAlchemyPublicRpcClient,
+  sepolia,
   type AlchemySmartAccountClientConfig,
 } from "../src/index.js";
 import {

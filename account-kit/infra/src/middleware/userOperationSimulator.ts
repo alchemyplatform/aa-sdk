@@ -2,6 +2,7 @@ import {
   deepHexlify,
   resolveProperties,
   type ClientMiddlewareFn,
+  type UserOperationContext,
 } from "@aa-sdk/core";
 import type { ClientWithAlchemyMethods } from "../client/types";
 
@@ -25,8 +26,11 @@ import type { ClientWithAlchemyMethods } from "../client/types";
  * @returns {ClientMiddlewareFn} A middleware function to simulate and process user operations
  */
 export function alchemyUserOperationSimulator<
-  C extends ClientWithAlchemyMethods
->(client: C): ClientMiddlewareFn {
+  C extends ClientWithAlchemyMethods,
+  TContext extends UserOperationContext | undefined =
+    | UserOperationContext
+    | undefined
+>(client: C): ClientMiddlewareFn<TContext> {
   return async (struct, { account }) => {
     const uoSimResult = await client.request({
       method: "alchemy_simulateUserOperationAssetChanges",
