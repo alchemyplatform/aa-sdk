@@ -1,10 +1,11 @@
 import {
   forwardRef,
+  useLayoutEffect,
+  useState,
   type ButtonHTMLAttributes,
   type DetailedHTMLProps,
   type ReactNode,
 } from "react";
-import { GoogleIcon } from "../icons/google.js";
 
 type ButtonProps = (
   | { variant?: "primary" | "secondary" | "link"; icon?: never }
@@ -20,6 +21,8 @@ type ButtonProps = (
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ variant, children, icon, className, ...props }, ref) => {
+    const [localRef, setLocalRef] = useState<HTMLButtonElement | null>(null);
+
     const btnClass = (() => {
       switch (variant) {
         case "secondary":
@@ -34,44 +37,43 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       }
     })();
 
+    const [hideChildren, setHideChildren] = useState(false);
+
+    useLayoutEffect(() => {
+      if (!localRef) return;
+
+      const parent = localRef.parentElement;
+      if (!parent) return;
+      const siblings = parent.children;
+
+      // this assumes this element is in a button group
+      // in a 3 element button group all buttons have their text shown
+      if (siblings.length <= 3) return;
+
+      const index = Array.from(siblings).indexOf(localRef);
+
+      if (index >= 1) {
+        setHideChildren(true);
+      }
+    }, [localRef]);
+
     return (
       <button
         className={`btn ${btnClass} ${className ?? ""}`}
         {...props}
-        ref={ref}
+        ref={(elem) => {
+          if (typeof ref === "function") {
+            ref(elem);
+          } else if (ref != null) {
+            ref.current = elem;
+          }
+
+          setLocalRef(elem);
+        }}
       >
         {icon && <span>{icon}</span>}
-        {children}
+        {!hideChildren && children}
       </button>
     );
   }
 );
-
-// this is temporary so not gonna document it
-// eslint-disable-next-line jsdoc/require-jsdoc
-export const DemoSet = (props: ButtonProps) => {
-  switch (props.variant) {
-    case "social": {
-      const Icon = () => <GoogleIcon />;
-      return (
-        <div className="flex flex-col gap-2">
-          <Button {...props} icon={<Icon />}>
-            {props.children}
-          </Button>
-          <Button {...props} icon={<Icon />} disabled>
-            {props.children}
-          </Button>
-        </div>
-      );
-    }
-    default:
-      return (
-        <div className="flex flex-col gap-2">
-          <Button {...props}>{props.children}</Button>
-          <Button {...props} disabled>
-            {props.children}
-          </Button>
-        </div>
-      );
-  }
-};

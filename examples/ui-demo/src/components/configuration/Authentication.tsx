@@ -1,9 +1,9 @@
-import { MailIcon } from "../icons/mail";
-import { WalletIcon } from "../icons/wallet";
-import { SocialIcon } from "../icons/social";
-import { BiometricIcon } from "../icons/biometric";
 import { useConfig } from "@/app/state";
 import { cn } from "@/lib/utils";
+import { BiometricIcon } from "../icons/biometric";
+import { MailIcon } from "../icons/mail";
+import { SocialIcon } from "../icons/social";
+import { WalletIcon } from "../icons/wallet";
 import { Switch } from "../ui/switch";
 
 export const Authentication = ({ className }: { className?: string }) => {
@@ -15,6 +15,16 @@ export const Authentication = ({ className }: { className?: string }) => {
       auth: {
         ...prev.auth,
         addPasskey: active,
+      },
+    }));
+  };
+
+  const setWalletsActive = (active: boolean) => {
+    setConfig((prev) => ({
+      ...prev,
+      auth: {
+        ...prev.auth,
+        showExternalWallets: active,
       },
     }));
   };
@@ -34,7 +44,8 @@ export const Authentication = ({ className }: { className?: string }) => {
         <AuthMethod
           icon={<WalletIcon className="opacity-50" />}
           name="External wallets"
-          unavailable
+          active={config.auth.showExternalWallets}
+          setActive={setWalletsActive}
         />
         <AuthMethod
           icon={<SocialIcon className="opacity-50" />}

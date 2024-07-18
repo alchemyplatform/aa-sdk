@@ -4,7 +4,6 @@ import { useConnect } from "../../../hooks/useConnect.js";
 import { Button } from "../../button.js";
 import { useAuthContext } from "../context.js";
 
-// eslint-disable-next-line jsdoc/require-jsdoc
 export const InjectedProvidersAuth = () => {
   const { chain } = useChain();
   const { connectors, connect } = useConnect({
@@ -33,7 +32,7 @@ export const InjectedProvidersAuth = () => {
   }
 
   return (
-    <div className="flex flex-row gap-2 flex-wrap">
+    <>
       {connectors.map((connector) => {
         return (
           <Button
@@ -58,6 +57,6 @@ export const InjectedProvidersAuth = () => {
           </Button>
         );
       })}
-    </div>
+    </>
   );
 };

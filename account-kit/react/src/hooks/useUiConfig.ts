@@ -27,8 +27,8 @@ export const DEFAULT_UI_CONFIG: AlchemyAccountsUIConfigWithDefaults = {
     header: null,
     hideError: false,
     sections: [[{ type: "email" }], [{ type: "passkey" }]],
-    hideSignInText: false,
     onAuthSuccess: () => {},
+    hideSignInText: false,
   },
   modalBaseClassName: "",
 };
