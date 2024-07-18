@@ -1,6 +1,5 @@
 "use client";
 
-import type { NoUndefined } from "@aa-sdk/core";
 import type {
   AlchemyAccountsConfig,
   AlchemyClientState,
@@ -17,24 +16,22 @@ import {
 import { AuthModalContext, type AuthStep } from "./components/auth/context.js";
 import { AuthModal } from "./components/auth/modal.js";
 import { IS_SIGNUP_QP } from "./components/constants.js";
+import type { AlchemyAccountsConfigWithUI } from "./createConfig.js";
 import { NoAlchemyAccountContextError } from "./errors.js";
 import { useSignerStatus } from "./hooks/useSignerStatus.js";
 import { Hydrate } from "./hydrate.js";
-import type { AlchemyAccountsConfigWithUI } from "./createConfig.js";
 import type { AlchemyAccountsUIConfig } from "./types.js";
 
-export type AlchemyAccountContextProps =
-  | {
-      config: AlchemyAccountsConfig;
-      queryClient: QueryClient;
-      ui?: {
-        config: AlchemyAccountsUIConfig;
-        openAuthModal: () => void;
-        closeAuthModal: () => void;
-        isModalOpen: boolean;
-      };
-    }
-  | undefined;
+export type AlchemyAccountContextProps = {
+  config: AlchemyAccountsConfig;
+  queryClient: QueryClient;
+  ui?: {
+    config: AlchemyAccountsUIConfig;
+    openAuthModal: () => void;
+    closeAuthModal: () => void;
+    isModalOpen: boolean;
+  };
+};
 
 export const AlchemyAccountContext = createContext<
   AlchemyAccountContextProps | undefined
@@ -63,7 +60,7 @@ export type AlchemyAccountsProviderProps = {
  */
 export const useAlchemyAccountContext = (
   override?: AlchemyAccountContextProps
-): NoUndefined<AlchemyAccountContextProps> => {
+): AlchemyAccountContextProps => {
   const context = useContext(AlchemyAccountContext);
   if (override != null) return override;
 
@@ -118,6 +115,19 @@ export const AlchemyAccountProvider = (
   const openAuthModal = useCallback(() => setIsModalOpen(true), []);
   const closeAuthModal = useCallback(() => setIsModalOpen(false), []);
 
+  /**
+   * Reset the auth step to the initial state. This also clears the email auth query params from the URL.
+   */
+  const resetAuthStep = useCallback(() => {
+    setAuthStep({ type: "initial" });
+
+    const url = new URL(window.location.href);
+    url.searchParams.delete("orgId");
+    url.searchParams.delete("bundle");
+    url.searchParams.delete(IS_SIGNUP_QP);
+    window.history.replaceState({}, "", url.toString());
+  }, []);
+
   const initialContext = useMemo(
     () => ({
       config,
@@ -159,6 +169,7 @@ export const AlchemyAccountProvider = (
             value={{
               authStep,
               setAuthStep,
+              resetAuthStep,
             }}
           >
             {children}

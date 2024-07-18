@@ -16,6 +16,7 @@ export type AuthStep =
 type AuthContextType = {
   authStep: AuthStep;
   setAuthStep: (step: AuthStep) => void;
+  resetAuthStep: () => void;
 };
 
 export const AuthModalContext = createContext<AuthContextType | undefined>(

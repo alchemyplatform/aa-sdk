@@ -1,3 +1,4 @@
+import type { ConnectionConfig } from "@aa-sdk/core";
 import type { AlchemyGasManagerConfig } from "@account-kit/infra";
 import type {
   AlchemySignerParams,
@@ -8,7 +9,6 @@ import type {
   LightAccount,
   MultiOwnerModularAccount,
 } from "@account-kit/smart-contracts";
-import type { ConnectionConfig } from "@aa-sdk/core";
 import type { CreateConnectorFn } from "@wagmi/core";
 import { type Config as WagmiConfig } from "@wagmi/core";
 import type { Chain } from "viem";
