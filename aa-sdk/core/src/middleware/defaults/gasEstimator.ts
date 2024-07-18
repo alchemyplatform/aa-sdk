@@ -19,7 +19,7 @@ import type { ClientMiddlewareFn } from "../types.js";
 export const defaultGasEstimator: <C extends MiddlewareClient>(
   client: C
 ) => ClientMiddlewareFn =
-  (client) =>
+  (client: MiddlewareClient): ClientMiddlewareFn =>
   async (struct, { account, overrides, feeOptions }) => {
     const request = deepHexlify(await resolveProperties(struct));
 
@@ -58,8 +58,11 @@ export const defaultGasEstimator: <C extends MiddlewareClient>(
         (feeOptions as UserOperationFeeOptions<"0.7.0">)
           ?.paymasterVerificationGasLimit
       );
-      (struct as UserOperationStruct<"0.7.0">).paymasterVerificationGasLimit =
-        paymasterVerificationGasLimit;
+      const uo_v7 = struct as UserOperationStruct<"0.7.0">;
+
+      uo_v7.paymasterVerificationGasLimit = paymasterVerificationGasLimit;
+
+      uo_v7.paymasterPostOpGasLimit = uo_v7.paymasterPostOpGasLimit ?? "0x0";
     }
 
     return struct;
