@@ -5,7 +5,10 @@ export {
   AlchemyAccountProvider,
   useAlchemyAccountContext,
 } from "./context.js";
-export { createConfig } from "./createConfig.js";
+export {
+  createConfig,
+  type AlchemyAccountsConfigWithUI,
+} from "./createConfig.js";
 export { NoAlchemyAccountContextError } from "./errors.js";
 export type * from "./hooks/useAccount.js";
 export { useAccount } from "./hooks/useAccount.js";
@@ -47,6 +50,8 @@ export type * from "./hooks/useSignTypedData.js";
 export { useSignTypedData } from "./hooks/useSignTypedData.js";
 export type * from "./hooks/useSmartAccountClient.js";
 export { useSmartAccountClient } from "./hooks/useSmartAccountClient.js";
+export type * from "./hooks/useUiConfig.js";
+export { DEFAULT_UI_CONFIG, useUiConfig } from "./hooks/useUiConfig.js";
 export type * from "./hooks/useUser.js";
 export { useUser } from "./hooks/useUser.js";
 export type * from "./hooks/useWaitForUserOperationTransaction.js";
