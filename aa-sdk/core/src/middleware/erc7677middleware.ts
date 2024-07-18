@@ -104,6 +104,21 @@ export function erc7677Middleware<
     { client, account, feeOptions, overrides }
   ) => {
     const userOp = deepHexlify(await resolveProperties(uo));
+
+    // Those values will be set after fee estimation.
+    userOp.maxFeePerGas = "0x0";
+    userOp.maxPriorityFeePerGas = "0x0";
+    userOp.callGasLimit = "0x0";
+    userOp.verificationGasLimit = "0x0";
+    userOp.preVerificationGas = "0x0";
+
+    const entrypoint = account.getEntryPoint();
+
+    if (entrypoint.version === "0.7.0") {
+      userOp.paymasterVerificationGasLimit = "0x0";
+      userOp.paymasterPostOpGasLimit = "0x0";
+    }
+
     const context =
       (typeof params?.context === "function"
         ? await params?.context(userOp, { overrides, feeOptions })
@@ -114,7 +129,6 @@ export function erc7677Middleware<
     }
 
     const erc7677client = client as Erc7677Client;
-    const entrypoint = account.getEntryPoint();
     // TODO: probably need to handle the sponsor and isFinal fields
     const {
       paymaster,
