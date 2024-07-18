@@ -116,6 +116,10 @@ export const accountKitReactReferenceSidebar: SidebarItem[] = [
         link: "/reference/account-kit/react/hooks/useSmartAccountClient",
       },
       {
+        text: "useUiConfig",
+        link: "/reference/account-kit/react/hooks/useUiConfig",
+      },
+      {
         text: "useUser",
         link: "/reference/account-kit/react/hooks/useUser",
       },
