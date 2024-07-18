@@ -1,91 +1,37 @@
 "use client";
 
+import { AuthCardHeader } from "@/components/shared/AuthCardHeader";
 import { sepolia } from "@account-kit/infra";
-import {
-  getBorderRadiusBaseVariableName,
-  getBorderRadiusValue,
-  getColorVariableName,
-} from "@account-kit/react/tailwind";
-import {
-  AlchemyAccountProvider,
-  AlchemyAccountsProviderProps,
-  AlchemyAccountsUIConfig,
-  AuthType,
-  createConfig,
-} from "@account-kit/react";
+import { AlchemyAccountProvider, createConfig } from "@account-kit/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-  PropsWithChildren,
-  Suspense,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import { Config, ConfigContext, DEFAULT_CONFIG } from "./state";
+import { PropsWithChildren, Suspense } from "react";
+import { ConfigContextProvider, DEFAULT_CONFIG } from "./state";
 
 const queryClient = new QueryClient();
 
+const alchemyConfig = createConfig(
+  {
+    rpcUrl: "/api/rpc",
+    chain: sepolia,
+    ssr: true,
+  },
+  {
+    illustrationStyle: DEFAULT_CONFIG.ui.illustrationStyle,
+    auth: {
+      sections: [[{ type: "email" as const }], [{ type: "passkey" as const }]],
+      addPasskeyOnSignup: DEFAULT_CONFIG.auth.addPasskey,
+      header: (
+        <AuthCardHeader
+          theme={DEFAULT_CONFIG.ui.theme}
+          logoDark={DEFAULT_CONFIG.ui.logoDark}
+          logoLight={DEFAULT_CONFIG.ui.logoLight}
+        />
+      ),
+    },
+  }
+);
+
 export const Providers = (props: PropsWithChildren<{}>) => {
-  const [config, setConfig] = useState<Config>(DEFAULT_CONFIG);
-
-  // Sync Alchemy auth UI config
-  const alchemyConfig: AlchemyAccountsProviderProps["config"] = useMemo(() => {
-    const sections: AuthType[][] = [[{ type: "passkey" as const }]];
-    if (config.auth.showEmail) {
-      sections.unshift([{ type: "email" as const }]);
-    }
-
-    const uiConfig: AlchemyAccountsUIConfig = {
-      illustrationStyle: config.ui.illustrationStyle,
-      auth: {
-        sections,
-        addPasskeyOnSignup: config.auth.addPasskey,
-        header: (
-          <AuthCardHeader
-            theme={config.ui.theme}
-            logoDark={config.ui.logoDark}
-            logoLight={config.ui.logoLight}
-          />
-        ),
-      },
-    };
-
-    return createConfig(
-      {
-        // required
-        rpcUrl: "/api/rpc",
-        chain: sepolia,
-        ssr: true,
-      },
-      uiConfig
-    );
-  }, [config]);
-
-  // Sync CSS variables
-  useEffect(() => {
-    const root = document.querySelector(":root") as HTMLElement;
-
-    const primaryColor = config.ui.primaryColor[config.ui.theme];
-    root?.style.setProperty(
-      getColorVariableName("fg-accent-brand"),
-      primaryColor
-    );
-    root?.style.setProperty(getColorVariableName("btn-primary"), primaryColor);
-
-    root?.style.setProperty(
-      getBorderRadiusBaseVariableName(),
-      getBorderRadiusValue(config.ui.borderRadius)
-    );
-
-    if (config.ui.theme === "dark") {
-      root.classList.remove("light");
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-      root.classList.add("light");
-    }
-  }, [config]);
-
   return (
     <Suspense>
       <QueryClientProvider client={queryClient}>
@@ -93,30 +39,9 @@ export const Providers = (props: PropsWithChildren<{}>) => {
           config={alchemyConfig}
           queryClient={queryClient}
         >
-          <ConfigContext.Provider value={{ config, setConfig }}>
-            {props.children}
-          </ConfigContext.Provider>
+          <ConfigContextProvider>{props.children}</ConfigContextProvider>
         </AlchemyAccountProvider>
       </QueryClientProvider>
     </Suspense>
   );
 };
-
-function AuthCardHeader({
-  logoDark,
-  logoLight,
-  theme,
-}: Pick<Config["ui"], "theme" | "logoLight" | "logoDark">) {
-  const logo = theme === "dark" ? logoDark : logoLight;
-
-  if (!logo) return null;
-
-  return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      style={{ height: "60px", objectFit: "cover", objectPosition: "center" }}
-      src={logo.fileSrc}
-      alt={logo.fileName}
-    />
-  );
-}

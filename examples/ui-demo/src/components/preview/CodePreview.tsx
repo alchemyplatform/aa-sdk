@@ -147,8 +147,8 @@ function getConfigCode(config: Config) {
   };
 
   export const config = createConfig({
-    // if you don't want to leak api keys, you can proxy to a backend
-    // and set the rpcUrl instead here
+    // if you don't want to leak api keys, you can proxy to a backend and set the rpcUrl instead here
+    // get this from the app config you create at https://dashboard.alchemy.com/accounts
     apiKey: "your-api-key",
     chain: sepolia,
     ssr: true, // set to false if you're not using server-side rendering

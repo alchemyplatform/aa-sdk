@@ -1,5 +1,24 @@
-import { AccountKitTheme } from "@account-kit/react/tailwind";
-import { Dispatch, SetStateAction, createContext, useContext } from "react";
+import { AuthCardHeader } from "@/components/shared/AuthCardHeader";
+import {
+  AlchemyAccountsUIConfig,
+  AuthType,
+  useUiConfig,
+} from "@account-kit/react";
+import {
+  AccountKitTheme,
+  getBorderRadiusBaseVariableName,
+  getBorderRadiusValue,
+  getColorVariableName,
+} from "@account-kit/react/tailwind";
+import {
+  Dispatch,
+  PropsWithChildren,
+  SetStateAction,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 export type Config = {
   auth: {
@@ -62,9 +81,66 @@ export const ConfigContext = createContext<ConfigContextType>({
 export function useConfig(): ConfigContextType {
   const configContext = useContext(ConfigContext);
 
-  if (!configContext) {
-    throw new Error("useConfig must be used within a config context provider");
-  }
-
   return configContext;
+}
+
+export function ConfigContextProvider(props: PropsWithChildren) {
+  const [config, setConfig] = useState<Config>(DEFAULT_CONFIG);
+  const { updateConfig } = useUiConfig();
+
+  // Sync Alchemy auth UI config
+  useEffect(() => {
+    const sections: AuthType[][] = [[{ type: "passkey" as const }]];
+    if (config.auth.showEmail) {
+      sections.unshift([{ type: "email" as const }]);
+    }
+
+    const uiConfig: AlchemyAccountsUIConfig = {
+      illustrationStyle: config.ui.illustrationStyle,
+      auth: {
+        sections,
+        addPasskeyOnSignup: config.auth.addPasskey,
+        header: (
+          <AuthCardHeader
+            theme={config.ui.theme}
+            logoDark={config.ui.logoDark}
+            logoLight={config.ui.logoLight}
+          />
+        ),
+      },
+    };
+
+    updateConfig(uiConfig);
+  }, [config]);
+
+  // Sync CSS variables
+  useEffect(() => {
+    const root = document.querySelector(":root") as HTMLElement;
+
+    const primaryColor = config.ui.primaryColor[config.ui.theme];
+    root?.style.setProperty(
+      getColorVariableName("fg-accent-brand"),
+      primaryColor
+    );
+    root?.style.setProperty(getColorVariableName("btn-primary"), primaryColor);
+
+    root?.style.setProperty(
+      getBorderRadiusBaseVariableName(),
+      getBorderRadiusValue(config.ui.borderRadius)
+    );
+
+    if (config.ui.theme === "dark") {
+      root.classList.remove("light");
+      root.classList.add("dark");
+    } else {
+      root.classList.remove("dark");
+      root.classList.add("light");
+    }
+  }, [config]);
+
+  return (
+    <ConfigContext.Provider value={{ config, setConfig }}>
+      {props.children}
+    </ConfigContext.Provider>
+  );
 }
