@@ -12,6 +12,7 @@ import {
   bypassPaymasterAndDataEmptyHex,
   deepHexlify,
   defaultGasEstimator,
+  erc7677Middleware,
   filterUndefined,
   isBigNumberish,
   isMultiplier,
@@ -182,7 +183,9 @@ const dummyPaymasterAndData =
  * @param {AlchemyGasManagerConfig} config alchemy gas manager configuration
  * @returns {Pick<ClientMiddlewareConfig,"paymasterAndData" | "feeEstimator" | "gasEstimator">} the gas estimator, fee estimator, and paymasterAndData middleware for Alchemy gas manager
  */
-export function alchemyGasManagerMiddleware<C extends ClientWithAlchemyMethods>(
+export function _alchemyGasManagerMiddleware<
+  C extends ClientWithAlchemyMethods
+>(
   client: C,
   config: AlchemyGasManagerConfig
 ): Pick<
@@ -439,3 +442,29 @@ const requestPaymasterAndData: <C extends ClientWithAlchemyMethods>(
     };
   },
 });
+
+/**
+ * Middleware for managing gas fees with Alchemy's gas manager based on the provided configuration.
+ *
+ * @example
+ *  ```ts
+ * import { alchemyGasManagerMiddleware } from "@account-kit/infra";
+ *
+ * const client = createSmartAccountClient({
+ *      ...
+ *      alchemyErc7677Middleware( {
+ *        policyId,
+ *      })
+ *    );
+ * ```
+ *
+ * @param {AlchemyGasManagerConfig} config the configuration for Alchemy's gas manager
+ * @returns {Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "paymasterAndData">} partial client middleware configuration containing `dummyPaymasterAndData` and `paymasterAndData`
+ */
+export function alchemyGasManagerMiddleware(
+  config: AlchemyGasManagerConfig
+): Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "paymasterAndData"> {
+  return erc7677Middleware<{ policyId: string }>({
+    context: { policyId: config.policyId },
+  });
+}

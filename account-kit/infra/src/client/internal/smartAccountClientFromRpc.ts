@@ -102,6 +102,7 @@ export function createAlchemySmartAccountClientFromRpcClient(
       ...opts,
       feeOptions,
     },
+
     customMiddleware: async (struct, args) => {
       if (isSmartAccountWithSigner(args.account)) {
         client.updateHeaders(getSignerTypeHeader(args.account));
@@ -109,33 +110,22 @@ export function createAlchemySmartAccountClientFromRpcClient(
 
       return customMiddleware ? customMiddleware(struct, args) : struct;
     },
+
     feeEstimator: feeEstimator ?? alchemyFeeEstimator(client),
+
     userOperationSimulator: useSimulation
       ? alchemyUserOperationSimulator(client)
       : undefined,
+
     gasEstimator,
-    ...(gasManagerConfig &&
-      alchemyGasManagerMiddleware(client, {
-        ...gasManagerConfig,
-        gasEstimationOptions: {
-          ...gasManagerConfig.gasEstimationOptions,
-          disableGasEstimation:
-            gasManagerConfig.gasEstimationOptions?.disableGasEstimation ??
-            false,
-          fallbackFeeDataGetter:
-            gasManagerConfig.gasEstimationOptions?.fallbackFeeDataGetter ??
-            feeEstimator,
-          fallbackGasEstimator:
-            gasManagerConfig.gasEstimationOptions?.fallbackGasEstimator ??
-            gasEstimator,
-        },
-      })),
+
+    ...(gasManagerConfig && alchemyGasManagerMiddleware(gasManagerConfig)),
+
     signUserOperation,
   }).extend(alchemyActions);
 
   if (account && isSmartAccountWithSigner(account)) {
     client.updateHeaders(getSignerTypeHeader(account));
   }
-
   return scaClient;
 }
