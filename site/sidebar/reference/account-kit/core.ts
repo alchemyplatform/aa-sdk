@@ -35,6 +35,10 @@ export const accountKitCoreReferenceSidebar: SidebarItem[] = [
         link: "/reference/account-kit/core/functions/defaultAccountState",
       },
       {
+        text: "disconnect",
+        link: "/reference/account-kit/core/functions/disconnect",
+      },
+      {
         text: "getAccount",
         link: "/reference/account-kit/core/functions/getAccount",
       },
