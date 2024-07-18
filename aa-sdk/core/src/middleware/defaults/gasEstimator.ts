@@ -60,6 +60,8 @@ export const defaultGasEstimator: <C extends MiddlewareClient>(
       );
       (struct as UserOperationStruct<"0.7.0">).paymasterVerificationGasLimit =
         paymasterVerificationGasLimit;
+
+      (struct as UserOperationStruct<"0.7.0">).paymasterPostOpGasLimit = "0x0";
     }
 
     return struct;
