@@ -13,7 +13,7 @@ type AlchemyAccountsUIConfigWithDefaults = Omit<
   Required<AlchemyAccountsUIConfig>,
   "auth"
 > & {
-  auth: Exclude<Required<AlchemyAccountsUIConfig["auth"]>, undefined>;
+  auth: NonNullable<Required<AlchemyAccountsUIConfig["auth"]>>;
 };
 
 type UiConfigStore = AlchemyAccountsUIConfig & {
