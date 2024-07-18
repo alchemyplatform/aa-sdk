@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/core",
-  "version": "4.0.0-alpha.5",
+  "version": "4.0.0-alpha.6",
   "description": "Core library for account kit that provides state management and framework indepednent abstractions across infra, Alchemy Signer, and Smart Contracts",
   "author": "Alchemy",
   "license": "MIT",
@@ -46,9 +46,9 @@
     "vitest": "^0.31.0"
   },
   "dependencies": {
-    "@account-kit/infra": "^4.0.0-alpha.5",
-    "@account-kit/signer": "^4.0.0-alpha.5",
-    "@account-kit/smart-contracts": "^4.0.0-alpha.5",
+    "@account-kit/infra": "^4.0.0-alpha.6",
+    "@account-kit/signer": "^4.0.0-alpha.6",
+    "@account-kit/smart-contracts": "^4.0.0-alpha.6",
     "@wagmi/core": "^2.9.8",
     "js-cookie": "^3.0.5",
     "viem": "2.8.6",
