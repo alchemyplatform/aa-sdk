@@ -64,6 +64,14 @@ export const accountKitReactReferenceSidebar: SidebarItem[] = [
         link: "/reference/account-kit/react/hooks/useClientActions",
       },
       {
+        text: "useConnect",
+        link: "/reference/account-kit/react/hooks/useConnect",
+      },
+      {
+        text: "useConnection",
+        link: "/reference/account-kit/react/hooks/useConnection",
+      },
+      {
         text: "useDropAndReplaceUserOperation",
         link: "/reference/account-kit/react/hooks/useDropAndReplaceUserOperation",
       },
