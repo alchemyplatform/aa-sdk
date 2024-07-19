@@ -9,7 +9,6 @@ import {
 } from "@aa-sdk/core";
 import { type Chain, type Transport } from "viem";
 import { getDefaultUserOperationFeeOptions } from "../defaults.js";
-import { type AlchemyGasManagerConfig } from "../middleware/gasManager.js";
 import { AlchemyProviderConfigSchema } from "../schema.js";
 import type { AlchemyProviderConfig } from "../type.js";
 import type { AlchemySmartAccountClientActions } from "./decorators/smartAccount.js";
@@ -30,7 +29,7 @@ export type AlchemySmartAccountClientConfig<
 > = {
   account?: account;
   useSimulation?: boolean;
-  gasManagerConfig?: AlchemyGasManagerConfig;
+  policyId?: string;
 } & AlchemyProviderConfig &
   Pick<
     SmartAccountClientConfig<transport, chain, account, context>,
@@ -95,7 +94,7 @@ export function createAlchemySmartAccountClient<
     | undefined
 >({
   account,
-  gasManagerConfig,
+  policyId,
   useSimulation,
   feeEstimator,
   customMiddleware,
@@ -134,7 +133,7 @@ export function createAlchemySmartAccountClient<
  */
 export function createAlchemySmartAccountClient({
   account,
-  gasManagerConfig,
+  policyId,
   useSimulation,
   feeEstimator,
   customMiddleware,
@@ -160,7 +159,7 @@ export function createAlchemySmartAccountClient({
       ...opts,
       feeOptions,
     },
-    gasManagerConfig,
+    policyId,
     useSimulation,
     feeEstimator,
     customMiddleware,

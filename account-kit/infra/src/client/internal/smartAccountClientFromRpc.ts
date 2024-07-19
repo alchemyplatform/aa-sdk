@@ -84,7 +84,7 @@ export function createAlchemySmartAccountClientFromRpcClient(
     opts,
     account,
     useSimulation,
-    gasManagerConfig,
+    policyId,
     feeEstimator,
     gasEstimator,
     customMiddleware,
@@ -106,7 +106,6 @@ export function createAlchemySmartAccountClientFromRpcClient(
       if (isSmartAccountWithSigner(args.account)) {
         client.updateHeaders(getSignerTypeHeader(args.account));
       }
-
       return customMiddleware ? customMiddleware(struct, args) : struct;
     },
     feeEstimator: feeEstimator ?? alchemyFeeEstimator(client),
@@ -114,22 +113,7 @@ export function createAlchemySmartAccountClientFromRpcClient(
       ? alchemyUserOperationSimulator(client)
       : undefined,
     gasEstimator,
-    ...(gasManagerConfig &&
-      alchemyGasManagerMiddleware(client, {
-        ...gasManagerConfig,
-        gasEstimationOptions: {
-          ...gasManagerConfig.gasEstimationOptions,
-          disableGasEstimation:
-            gasManagerConfig.gasEstimationOptions?.disableGasEstimation ??
-            false,
-          fallbackFeeDataGetter:
-            gasManagerConfig.gasEstimationOptions?.fallbackFeeDataGetter ??
-            feeEstimator,
-          fallbackGasEstimator:
-            gasManagerConfig.gasEstimationOptions?.fallbackGasEstimator ??
-            gasEstimator,
-        },
-      })),
+    ...(policyId && alchemyGasManagerMiddleware(policyId)),
     signUserOperation,
   }).extend(alchemyActions);
 

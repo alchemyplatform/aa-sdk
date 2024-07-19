@@ -1,40 +1,11 @@
 import { type BundlerClient, type UserOperationRequest } from "@aa-sdk/core";
-import type { Address, Hex, HttpTransport } from "viem";
+import type { HttpTransport } from "viem";
 import type {
   SimulateUserOperationAssetChangesRequest,
   SimulateUserOperationAssetChangesResponse,
 } from "../actions/types";
-import type {
-  RequestGasAndPaymasterAndDataOverrides,
-  RequestGasAndPaymasterAndDataResponse,
-  RequestPaymasterAndDataResponse,
-} from "../middleware/gasManager";
 
 export type AlchemyRpcSchema = [
-  {
-    Method: "alchemy_requestPaymasterAndData";
-    Parameters: [
-      {
-        policyId: string;
-        entryPoint: Address;
-        userOperation: UserOperationRequest;
-      }
-    ];
-    ReturnType: RequestPaymasterAndDataResponse;
-  },
-  {
-    Method: "alchemy_requestGasAndPaymasterAndData";
-    Parameters: [
-      {
-        policyId: string;
-        entryPoint: Address;
-        userOperation: UserOperationRequest;
-        dummySignature: Hex;
-        overrides?: RequestGasAndPaymasterAndDataOverrides;
-      }
-    ];
-    ReturnType: RequestGasAndPaymasterAndDataResponse;
-  },
   {
     Method: "alchemy_simulateUserOperationAssetChanges";
     Parameters: SimulateUserOperationAssetChangesRequest;
@@ -50,30 +21,6 @@ export type AlchemyRpcSchema = [
 export type ClientWithAlchemyMethods = BundlerClient<HttpTransport> & {
   request: BundlerClient<HttpTransport>["request"] &
     {
-      request(args: {
-        method: "alchemy_requestPaymasterAndData";
-        params: [
-          {
-            policyId: string;
-            entryPoint: Address;
-            userOperation: UserOperationRequest;
-          }
-        ];
-      }): Promise<RequestPaymasterAndDataResponse>;
-
-      request(args: {
-        method: "alchemy_requestGasAndPaymasterAndData";
-        params: [
-          {
-            policyId: string;
-            entryPoint: Address;
-            userOperation: UserOperationRequest;
-            dummySignature: Hex;
-            overrides?: RequestGasAndPaymasterAndDataOverrides;
-          }
-        ];
-      }): Promise<RequestGasAndPaymasterAndDataResponse>;
-
       request(args: {
         method: "alchemy_simulateUserOperationAssetChanges";
         params: SimulateUserOperationAssetChangesRequest;
