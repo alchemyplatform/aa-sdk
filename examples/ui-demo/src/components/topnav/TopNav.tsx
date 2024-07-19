@@ -16,13 +16,13 @@ export function TopNav() {
         <div className="flex gap-4 items-center h-8">
           <div className="hidden md:flex items-center gap-8 font-semibold">
             <ExternalLink
-              href={links.docs}
+              href={links.quickstartGuide}
               className="p-2 hover:bg-gray-100 transition-colors rounded-lg mr-4"
             >
               Quickstart
             </ExternalLink>
             <ExternalLink
-              href={links.docs}
+              href={links.integrationCall}
               className="p-2 hover:bg-gray-100 transition-colors rounded-lg"
             >
               Integration call
