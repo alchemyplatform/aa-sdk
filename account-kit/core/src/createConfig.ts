@@ -53,14 +53,14 @@ export const createConfig = (
     connectionConfig.connections.forEach(({ chain, ...config }) => {
       connections.push({
         ...ConnectionConfigSchema.parse(config),
-        gasManagerConfig: config.gasManagerConfig,
+        policyId: config.policyId,
         chain,
       });
     });
   } else {
     connections.push({
       ...ConnectionConfigSchema.parse(connectionConfig),
-      gasManagerConfig: connectionConfig.gasManagerConfig,
+      policyId: connectionConfig.policyId,
       chain,
     });
   }

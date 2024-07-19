@@ -145,7 +145,7 @@ export function useSmartAccountClient({
         client: createAlchemySmartAccountClientFromExisting({
           client: bundlerClient,
           account,
-          gasManagerConfig: connection.gasManagerConfig,
+          policyId: connection.policyId,
           ...clientParams,
         }).extend(lightAccountClientActions),
         address: account.address,
@@ -156,7 +156,7 @@ export function useSmartAccountClient({
         client: createAlchemySmartAccountClientFromExisting({
           client: bundlerClient,
           account,
-          gasManagerConfig: connection.gasManagerConfig,
+          policyId: connection.policyId,
           ...clientParams,
         })
           .extend(multiOwnerPluginActions)

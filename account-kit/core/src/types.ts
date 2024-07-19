@@ -1,5 +1,4 @@
 import type { ConnectionConfig } from "@aa-sdk/core";
-import type { AlchemyGasManagerConfig } from "@account-kit/infra";
 import type {
   AlchemySignerParams,
   AlchemySignerWebClient,
@@ -41,7 +40,7 @@ export type AlchemyAccountsConfig = {
 // [!region CreateConfigProps]
 export type Connection = ConnectionConfig & {
   chain: Chain;
-  gasManagerConfig?: AlchemyGasManagerConfig;
+  policyId?: string;
 };
 
 type RpcConnectionConfig =
