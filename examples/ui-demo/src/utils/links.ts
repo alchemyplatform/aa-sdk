@@ -1,9 +1,9 @@
 export const links = {
   docs: "https://accountkit.alchemy.com/getting-started/introduction.html",
-  github: "https://github.com/alchemyplatform/aa-sdk",
+  github: "https://github.com/alchemyplatform/aa-sdk/tree/v4.x.x",
   integrationCall:
-    "https://alchemy.chilipiper.com/book/inbound-support-router?ws_support__c=/wallet-services-support",
+    "https://calendly.com/d/cp7s-3yx-2yh/alchemy-account-kit-ui-alpha",
   // TODO: update once we have final links
   quickstartGuide:
-    "https://accountkit.alchemy.com/getting-started/introduction",
+    "https://alchemotion.notion.site/Alchemy-Account-Kit-UI-Components-Alpha-Quickstart-0805fd3fb8ba4c15bfd88846d4ad53ea",
 };
