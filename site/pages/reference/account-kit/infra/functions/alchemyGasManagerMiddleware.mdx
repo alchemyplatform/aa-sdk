@@ -18,10 +18,14 @@ import { alchemyGasManagerMiddleware } from "@account-kit/infra";
 ## Usage
 
 ```ts
+
 import { alchemyGasManagerMiddleware } from "@account-kit/infra";
+import { sepolia } from "@account-kit/infra";
+import { http } from "viem";
 
 const client = createSmartAccountClient({
- ...
+ http("rpc-url"),
+ sepolia,
  alchemyErc7677Middleware( {
    policyId,
  })
@@ -30,10 +34,10 @@ const client = createSmartAccountClient({
 
 ## Parameters
 
-### config
+### policyId
 
-`AlchemyGasManagerConfig`
-the configuration for Alchemy's gas manager
+`string`
+the policyId for Alchemy's gas manager
 
 ## Returns
 

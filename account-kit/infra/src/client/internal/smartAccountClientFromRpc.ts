@@ -102,30 +102,25 @@ export function createAlchemySmartAccountClientFromRpcClient(
       ...opts,
       feeOptions,
     },
-
     customMiddleware: async (struct, args) => {
       if (isSmartAccountWithSigner(args.account)) {
         client.updateHeaders(getSignerTypeHeader(args.account));
       }
-
       return customMiddleware ? customMiddleware(struct, args) : struct;
     },
-
     feeEstimator: feeEstimator ?? alchemyFeeEstimator(client),
-
     userOperationSimulator: useSimulation
       ? alchemyUserOperationSimulator(client)
       : undefined,
-
     gasEstimator,
-
-    ...(gasManagerConfig && alchemyGasManagerMiddleware(gasManagerConfig)),
-
+    ...(gasManagerConfig &&
+      alchemyGasManagerMiddleware(gasManagerConfig.policyId)),
     signUserOperation,
   }).extend(alchemyActions);
 
   if (account && isSmartAccountWithSigner(account)) {
     client.updateHeaders(getSignerTypeHeader(account));
   }
+
   return scaClient;
 }
