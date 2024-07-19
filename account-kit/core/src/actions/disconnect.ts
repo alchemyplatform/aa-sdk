@@ -1,4 +1,6 @@
+import { AlchemySignerStatus } from "@account-kit/signer";
 import { disconnect as wagmi_disconnect } from "@wagmi/core";
+import { convertSignerStatusToState } from "../store/store.js";
 import type { AlchemyAccountsConfig } from "../types";
 import { getSigner } from "./getSigner.js";
 
@@ -25,5 +27,10 @@ export async function disconnect(config: AlchemyAccountsConfig): Promise<void> {
   await wagmi_disconnect(config._internal.wagmiConfig);
   await signer?.disconnect();
   config.store.setState(() => config.store.getInitialState());
+
+  config.store.setState({
+    signerStatus: convertSignerStatusToState(AlchemySignerStatus.DISCONNECTED),
+  });
+
   config.store.persist.clearStorage();
 }

@@ -1,7 +1,7 @@
 import { DEFAULT_SESSION_MS } from "@account-kit/signer";
 import { cookieToInitialState as wagmiCookieToInitialState } from "@wagmi/core";
 import Cookies from "js-cookie";
-import type { StoreState, StoredState } from "../store/types.js";
+import type { StoredState } from "../store/types.js";
 import type { AlchemyAccountsConfig } from "../types.js";
 import { deserialize } from "./deserialize.js";
 
@@ -69,7 +69,7 @@ export function cookieToInitialState(
   if (!state) return;
 
   const alchemyClientState = deserialize<{
-    state: Omit<StoreState, "signer" | "accounts">;
+    state: StoredState["alchemy"];
   }>(state).state;
 
   const wagmiClientState = wagmiCookieToInitialState(
