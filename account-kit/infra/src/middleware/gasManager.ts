@@ -91,7 +91,7 @@ export type RequestGasAndPaymasterAndDataResponse<
   RequestPaymasterAndDataResponse<TEntryPointVersion>;
 
 /**
- * Middleware for managing gas fees with Alchemy's gas manager based on the provided configuration.
+ * Paymaster middleware factory that uses Alchemy's Gas Manager for sponsoring transactions.
  *
  * @example
  *  ```ts
