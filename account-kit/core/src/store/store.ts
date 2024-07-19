@@ -52,7 +52,7 @@ export const createAccountKitStore = (
               },
               reviver: (key, value) => {
                 if (key === "bundlerClient") {
-                  const connection = value as Connection;
+                  const { connection } = value as { connection: Connection };
                   return createAlchemyPublicRpcClient({
                     chain: connection.chain,
                     connectionConfig: connection,
@@ -65,7 +65,7 @@ export const createAccountKitStore = (
             skipHydration: ssr,
             partialize: ({ signer, accounts, ...writeableState }) =>
               writeableState,
-            version: 2,
+            version: 3,
           })
         : () => createInitialStoreState(params)
     )
