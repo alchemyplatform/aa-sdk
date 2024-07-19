@@ -133,10 +133,11 @@ function getConfigCode(config: Config) {
   sections.push([{ type: "passkey" }]);
 
   return dedent`
-  import { createConfig } from "@account-kit/react";
+  import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react";
   import { sepolia } from "@account-kit/infra";
+  import { QueryClient } from "@tanstack/react-query";
 
-  const uiConfig = {
+  const uiConfig: AlchemyAccountsUIConfig = {
     illustrationStyle: "${config.ui.illustrationStyle}",
     auth: {
       sections: ${JSON.stringify(sections)},
@@ -155,5 +156,7 @@ function getConfigCode(config: Config) {
     chain: sepolia,
     ssr: true, // set to false if you're not using server-side rendering
   }, uiConfig);
+
+  export const queryClient = new QueryClient();
 `;
 }
