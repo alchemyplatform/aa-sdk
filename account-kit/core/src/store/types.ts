@@ -54,7 +54,9 @@ export type SignerStatus = {
 };
 
 export type StoredState = {
-  alchemy: Omit<StoreState, "signer" | "accounts">;
+  alchemy: Omit<StoreState, "signer" | "accounts" | "bundlerClient"> & {
+    bundlerClient: { connection: Connection };
+  };
   wagmi?: WagmiState;
 };
 
@@ -72,7 +74,6 @@ export type CreateAccountKitStoreParams = ClientStoreConfig & {
 
 export type StoreState = {
   // non-serializable
-  // getting this state should throw an error if not on the client
   signer?: AlchemyWebSigner;
   accounts?: {
     [chain: number]: {
@@ -82,6 +83,7 @@ export type StoreState = {
   // serializable state
   // NOTE: in some cases this can be serialized to cookie storage
   // be mindful of how big this gets. cookie limit 4KB
+  bundlerClient: ClientWithAlchemyMethods;
   config: ClientStoreConfig;
   accountConfigs: {
     [chain: number]: Partial<{
@@ -90,7 +92,6 @@ export type StoreState = {
   };
   user?: User;
   signerStatus: SignerStatus;
-  bundlerClient: ClientWithAlchemyMethods;
   chain: Chain;
   connections: Map<number, Connection>;
 };
