@@ -84,7 +84,7 @@ export function createAlchemySmartAccountClientFromRpcClient(
     opts,
     account,
     useSimulation,
-    gasManagerConfig,
+    policyId,
     feeEstimator,
     gasEstimator,
     customMiddleware,
@@ -113,8 +113,7 @@ export function createAlchemySmartAccountClientFromRpcClient(
       ? alchemyUserOperationSimulator(client)
       : undefined,
     gasEstimator,
-    ...(gasManagerConfig &&
-      alchemyGasManagerMiddleware(gasManagerConfig.policyId)),
+    ...(policyId && alchemyGasManagerMiddleware(policyId)),
     signUserOperation,
   }).extend(alchemyActions);
 

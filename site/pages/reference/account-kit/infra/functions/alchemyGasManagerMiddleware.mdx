@@ -7,7 +7,7 @@ description: Overview of the alchemyGasManagerMiddleware method
 
 # alchemyGasManagerMiddleware
 
-Middleware for managing gas fees with Alchemy's gas manager based on the provided configuration.
+Paymaster middleware factory that uses Alchemy's Gas Manager for sponsoring transactions.
 
 ## Import
 
@@ -19,16 +19,13 @@ import { alchemyGasManagerMiddleware } from "@account-kit/infra";
 
 ```ts
 
-import { alchemyGasManagerMiddleware } from "@account-kit/infra";
 import { sepolia } from "@account-kit/infra";
 import { http } from "viem";
 
 const client = createSmartAccountClient({
  http("rpc-url"),
  sepolia,
- alchemyErc7677Middleware( {
-   policyId,
- })
+ alchemyErc7677Middleware("policyId")
 );
 ```
 
