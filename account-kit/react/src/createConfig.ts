@@ -25,6 +25,7 @@ export type AlchemyAccountsConfigWithUI = AlchemyAccountsConfig & {
  *   auth: {
  *     sections: [[{ type: "email" }], [{ type: "passkey" }]],
  *     addPasskeyOnSignup: true,
+ *     showSignInText: true,
  *   },
  * }
  *

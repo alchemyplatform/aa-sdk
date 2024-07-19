@@ -101,6 +101,7 @@ export function ConfigContextProvider(props: PropsWithChildren) {
       auth: {
         sections,
         addPasskeyOnSignup: config.auth.addPasskey,
+        showSignInText: true,
         header: (
           <AuthCardHeader
             theme={config.ui.theme}

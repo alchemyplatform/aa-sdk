@@ -141,6 +141,7 @@ function getConfigCode(config: Config) {
     illustrationStyle: "${config.ui.illustrationStyle}",
     auth: {
       sections: ${JSON.stringify(sections)},
+      showSignInText: true,
       addPasskeyOnSignup: ${config.auth.addPasskey},${
     config.ui.logoLight || config.ui.logoDark
       ? '\n      header: <img src="path/to/logo.svg" />,'
