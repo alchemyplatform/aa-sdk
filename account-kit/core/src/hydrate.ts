@@ -2,13 +2,13 @@ import type { Address } from "@aa-sdk/core";
 import { AlchemySignerStatus } from "@account-kit/signer";
 import { hydrate as wagmi_hydrate } from "@wagmi/core";
 import { reconnect } from "./actions/reconnect.js";
-import type { AccountState, StoreState, StoredState } from "./store/types.js";
-import type { AlchemyAccountsConfig, SupportedAccountTypes } from "./types.js";
 import {
   convertSignerStatusToState,
   createDefaultAccountState,
   defaultAccountState,
 } from "./store/store.js";
+import type { AccountState, StoreState, StoredState } from "./store/types.js";
+import type { AlchemyAccountsConfig, SupportedAccountTypes } from "./types.js";
 
 export type HydrateResult = {
   onMount: () => Promise<void>;
@@ -41,7 +41,8 @@ export function hydrate(
       : initialState;
 
   if (initialAlchemyState && !config.store.persist.hasHydrated()) {
-    const { accountConfigs, signerStatus, ...rest } = initialAlchemyState;
+    const { accountConfigs, signerStatus, bundlerClient, ...rest } =
+      initialAlchemyState;
     const shouldReconnectAccounts =
       signerStatus.isConnected || signerStatus.isAuthenticating;
 
