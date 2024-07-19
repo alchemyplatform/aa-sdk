@@ -21,9 +21,10 @@ import { createConfig } from "@account-kit/react";
 
 ```ts
 import { sepolia } from "@account-kit/infra";
-import { createConfig } from "@account-kit/react";
+import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react";
+import { QueryClient } from "@tanstack/react-query";
 
-const uiConfig = {
+const uiConfig: AlchemyAccountsUIConfig = {
   illustrationStyle: "linear",
   auth: {
     sections: [[{ type: "email" }], [{ type: "passkey" }]],
@@ -39,6 +40,8 @@ const config = createConfig(
   },
   uiConfig
 );
+
+export const queryClient = new QueryClient();
 ```
 
 ## Parameters

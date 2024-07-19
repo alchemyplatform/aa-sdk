@@ -17,9 +17,10 @@ export type AlchemyAccountsConfigWithUI = AlchemyAccountsConfig & {
  * @example
  * ```ts
  * import { sepolia } from "@account-kit/infra"
- * import { createConfig } from "@account-kit/react"
+ * import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react"
+ * import { QueryClient } from "@tanstack/react-query";
  *
- * const uiConfig = {
+ * const uiConfig: AlchemyAccountsUIConfig = {
  *   illustrationStyle: "linear",
  *   auth: {
  *     sections: [[{ type: "email" }], [{ type: "passkey" }]],
@@ -32,6 +33,8 @@ export type AlchemyAccountsConfigWithUI = AlchemyAccountsConfig & {
  *   chain: sepolia,
  *   ssr: true,
  * }, uiConfig)
+ *
+ * export const queryClient = new QueryClient();
  * ```
  *
  * @param {CreateConfigProps} props for creating an alchemy account config
