@@ -58,7 +58,7 @@ export const DEFAULT_CONFIG: Config = {
   auth: {
     showEmail: true,
     showExternalWallets: false,
-    addPasskey: false,
+    addPasskey: true,
   },
   ui: {
     theme: "light",
@@ -90,9 +90,10 @@ export function ConfigContextProvider(props: PropsWithChildren) {
 
   // Sync Alchemy auth UI config
   useEffect(() => {
-    const sections: AuthType[][] = [[{ type: "passkey" as const }]];
-    if (config.auth.showEmail) {
-      sections.unshift([{ type: "email" as const }]);
+    const sections: AuthType[][] = [[{ type: "email" }]];
+
+    if (config.auth.addPasskey) {
+      sections.push([{ type: "passkey" }]);
     }
 
     const uiConfig: AlchemyAccountsUIConfig = {

@@ -98,8 +98,10 @@ function getTailwindCode(config: Config) {
   import { withAccountKitUi, createColorSet } from "@account-kit/react/tailwind";
 
   // wrap your existing tailwind config with 'withAccountKitUi'
-  // docs on setting up tailwind here: https://tailwindcss.com/docs/installation/using-postcss
-  export default withAccountKitUi(<your tailwind config>, {
+  export default withAccountKitUi({
+    // your tailwind config here
+    // docs on setting up tailwind here: https://tailwindcss.com/docs/installation/using-postcss
+  }, {
     // override account kit themes
     colors: {
       "btn-primary": createColorSet("${ui.primaryColor.light}", "${
