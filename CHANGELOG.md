@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-alpha.7](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-alpha.6...v4.0.0-alpha.7) (2024-07-19)
+
+### Bug Fixes
+
+- **core:** initial state parsing and disconnect logic ([#842](https://github.com/alchemyplatform/aa-sdk/issues/842)) ([2db4965](https://github.com/alchemyplatform/aa-sdk/commit/2db49655b3b9c5bf2bb434e516f743ddbdd5a3b4))
+- exporting queryClient and typing uiConfig in example ([#844](https://github.com/alchemyplatform/aa-sdk/issues/844)) ([52ca509](https://github.com/alchemyplatform/aa-sdk/commit/52ca5098f6a9e1ebe83db0be43856d2d0e702f00))
+- **ui-demo:** add passkey toggle wasn't working ([#843](https://github.com/alchemyplatform/aa-sdk/issues/843)) ([b415de5](https://github.com/alchemyplatform/aa-sdk/commit/b415de5f576f7ba7d343eeae1f9dce9303d919d9))
+
+### Features
+
+- **erc7677:** create a new middle ware for erc7677 to replace gasManager middleWare ([#840](https://github.com/alchemyplatform/aa-sdk/issues/840)) ([62e2b59](https://github.com/alchemyplatform/aa-sdk/commit/62e2b59579e44f1825ae8224fb182aebd3c4f7e0))
+
 # [4.0.0-alpha.6](https://github.com/alchemyplatform/aa-sdk/compare/v3.18.2...v4.0.0-alpha.6) (2024-07-18)
 
 ### Bug Fixes
