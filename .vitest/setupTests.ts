@@ -13,6 +13,6 @@ global.fetch = fetch;
 
 beforeAll(async () => {
   await setIntervalMining(client, { interval: 0 });
-}, 20_000);
+}, 60_000);
 
 afterAll(async () => {});

@@ -11,7 +11,8 @@
     "templates/*",
     "examples/*",
     "site",
-    "doc-gen"
+    "doc-gen",
+    ".vitest"
   ],
   "scripts": {
     "generate": "lerna run generate",
