@@ -1,11 +1,12 @@
-import { configDefaults, defineProject } from "vitest/config";
+import { defineProject, mergeConfig } from "vitest/config";
+import { sharedConfig } from "../../.vitest/vitest.shared";
 
-export default defineProject({
-  test: {
-    singleThread: true,
-    globals: true,
-    setupFiles: ["../../.vitest/setupTests.ts"],
-    exclude: [...configDefaults.exclude, "**/e2e-tests/**/*.test.ts"],
-    name: "6900-plugingen",
-  },
-});
+export default mergeConfig(
+  // @ts-ignore this does work
+  sharedConfig,
+  defineProject({
+    test: {
+      name: "account-kit/plugingen",
+    },
+  })
+);
