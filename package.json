@@ -3,7 +3,7 @@
   "type": "module",
   "private": true,
   "engines": {
-    "node": ">=18.16"
+    "node": ">=20"
   },
   "workspaces": [
     "aa-sdk/*",
@@ -16,6 +16,7 @@
   "scripts": {
     "generate": "lerna run generate",
     "postgenerate": "yarn lint:write",
+    "preinstall": "yarn config set ignore-engines true",
     "postinstall": "git submodule update --init --recursive",
     "build": "is-ci && yarn build:ci || yarn build:dev",
     "build:base": "lerna run build --verbose --ignore=alchemy-daapp --ignore=embedded-accounts-quickstart --ignore=aa-simple-dapp --ignore=ui-demo",
@@ -52,6 +53,7 @@
     "node-fetch": "^3.3.1",
     "nx": "^17.3.0",
     "prettier": "^2.8.8",
+    "prool": "^0.0.15",
     "vitest": "^0.31.0"
   },
   "commitlint": {
