@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-alpha.8](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-alpha.7...v4.0.0-alpha.8) (2024-07-22)
+
+### Bug Fixes
+
+- **react:** fix sign in header hiding itself ([#851](https://github.com/alchemyplatform/aa-sdk/issues/851)) ([f960fc6](https://github.com/alchemyplatform/aa-sdk/commit/f960fc6afeb39bfb13de920eb6878fe906e4e97e))
+
 # [4.0.0-alpha.7](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-alpha.6...v4.0.0-alpha.7) (2024-07-19)
 
 ### Bug Fixes
