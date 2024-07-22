@@ -24,7 +24,7 @@ export type AlchemyAccountsUIConfig = {
     /**
      * Whether to show the "Sign in" header text in the first auth step
      */
-    showSignInText?: boolean;
+    hideSignInText?: boolean;
   };
   illustrationStyle?: "outline" | "linear" | "filled" | "flat";
   /**
