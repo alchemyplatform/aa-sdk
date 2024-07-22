@@ -8,13 +8,13 @@ import { AuthSection } from "../sections/AuthSection.js";
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const MainAuthContent = () => {
   const {
-    auth: { header, sections, showSignInText },
+    auth: { header, sections, hideSignInText },
   } = useUiConfig();
 
   return (
     <>
       {header}
-      {showSignInText && <h3 className="font-semibold text-lg">Sign in</h3>}
+      {!hideSignInText && <h3 className="font-semibold text-lg">Sign in</h3>}
       {sections?.map((section, idx) => {
         return (
           <Fragment key={`auth-section-fragment-${idx}`}>
