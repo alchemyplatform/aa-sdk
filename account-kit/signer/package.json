@@ -47,7 +47,7 @@
     "tailwindcss": "^3.4.3",
     "typescript": "^5.0.4",
     "typescript-template": "*",
-    "vitest": "^0.31.0"
+    "vitest": "^2.0.4"
   },
   "dependencies": {
     "@aa-sdk/core": "^4.0.0-alpha.8",

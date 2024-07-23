@@ -54,7 +54,7 @@
     "dotenv": "^16.3.1",
     "typescript": "^5.0.4",
     "typescript-template": "*",
-    "vitest": "^0.31.0"
+    "vitest": "^2.0.4"
   },
   "publishConfig": {
     "access": "public",

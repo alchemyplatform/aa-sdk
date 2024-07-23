@@ -3,6 +3,7 @@ import {
   custom,
   encodeAbiParameters,
   encodeFunctionData,
+  encodePacked,
   getContract,
   getContractAddress,
   parseEther,
@@ -20,7 +21,7 @@ import {
 import { type UserOperationRequest } from "../../aa-sdk/core/src/types";
 import { ERC1967ProxyAbi } from "./Proxy";
 import { VerifyingPaymasterAbi } from "./VerifyingPaymaster";
-import { accounts, create2deployer } from "./constants";
+import { accounts, create2deployer, entrypoint060 } from "./constants";
 
 // NOTE: this only assume EP 0.6.0 for now
 export const paymasterTransport = (client: Client & { mode: "anvil" }) =>
@@ -59,8 +60,8 @@ export const paymasterTransport = (client: Client & { mode: "anvil" }) =>
           address,
         });
 
-        const validUntil = BigInt(Date.now() + 1000 * 60 * 60 * 24);
-        const validFrom = BigInt(Date.now());
+        const validUntil = 0n;
+        const validFrom = 0n;
         const expiry =
           (validUntil << BigInt(160)) | (validFrom << BigInt(160 + 48));
 
@@ -69,22 +70,13 @@ export const paymasterTransport = (client: Client & { mode: "anvil" }) =>
         const signature = await accounts.paymasterOwner.signMessage({
           message: { raw: encoding },
         });
-        const paymasterData = encodeAbiParameters(
-          [
-            {
-              name: "address",
-              type: "address",
-            },
-            {
-              name: "expiry",
-              type: "uint256",
-            },
-            { name: "signature", type: "bytes" },
-          ],
-          [address, expiry, signature]
-        );
 
-        return { paymasterAndData: concat([address, paymasterData]) };
+        const paymasterAndData = encodePacked(
+          ["address", "uint256", "bytes"],
+          [address, expiry, signature]
+        ) as Hex;
+
+        return { paymasterAndData };
       }
 
       throw new Error("Method not found");
@@ -97,7 +89,7 @@ export async function deployPaymasterContract(
   // give the owner some ether
   await setBalance(client, {
     address: accounts.paymasterOwner.address,
-    value: parseEther("1"),
+    value: parseEther("10"),
   });
 
   // deploy the paymaster impl
@@ -124,7 +116,7 @@ export async function deployPaymasterContract(
     getPaymasterDetails({
       implAddress,
       // for now we just support 0.6.0
-      entrypoint: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
+      entrypoint: entrypoint060,
     });
 
   const proxyBytecode = await getBytecode(client, { address: proxyAddress });
@@ -142,9 +134,23 @@ export async function deployPaymasterContract(
   }
 
   // give the paymaster some balance too
-  await setBalance(client, {
+  // 0.6 doesn't support direct transfer, so we have to call deposit
+  const contract = getContract({
+    abi: VerifyingPaymasterAbi.abi,
+    client,
     address: proxyAddress,
+  });
+
+  await contract.write.deposit({
+    value: parseEther("5"),
+    account: accounts.paymasterOwner,
+    chain: client.chain,
+  });
+
+  await contract.write.addStake([84600], {
     value: parseEther("1"),
+    account: accounts.paymasterOwner,
+    chain: client.chain,
   });
 
   return proxyAddress;
