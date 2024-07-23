@@ -7,7 +7,7 @@ export function ComponentWithUseChain() {
   return (
     <div>
       <p>{chain.id}</p>
-      <button onClick={() => setChain(optimism)}>
+      <button onClick={() => setChain({ chain: optimism })}>
         Change Chain to Optimism
       </button>
     </div>
