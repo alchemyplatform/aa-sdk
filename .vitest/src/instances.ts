@@ -5,7 +5,7 @@ import { createClient, http, type Chain, type ClientConfig } from "viem";
 import { localhost } from "viem/chains";
 import { split } from "../../aa-sdk/core/src/transport/split";
 import { poolId, rundlerBinaryPath } from "./constants";
-import { paymasterTransport } from "./paymaster";
+import { paymasterTransport } from "./paymaster/transport";
 
 export const localInstance = defineInstance({
   chain: localhost,
@@ -109,14 +109,17 @@ function defineInstance(params: DefineInstanceParams) {
 
   const bundlerServer = createServer({
     instance: (key) =>
-      rundler({
-        binary: rundlerBinaryPath,
-        entryPointVersion: "0.6.0",
-        nodeHttp: `http://127.0.0.1:${anvilPort}/${key}`,
-        rpc: {
-          api: "eth,rundler,debug",
+      rundler(
+        {
+          binary: rundlerBinaryPath,
+          entryPointVersion: "0.6.0",
+          nodeHttp: `http://127.0.0.1:${anvilPort}/${key}`,
+          rpc: {
+            api: "eth,rundler,debug",
+          },
         },
-      }),
+        { messageBuffer: 1000 }
+      ),
     port: bundlerPort,
   });
 
