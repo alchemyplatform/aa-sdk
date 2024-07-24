@@ -199,7 +199,7 @@ function LearnMore() {
     <div className="flex items-center gap-1 text-xs text-center self-center mt-8">
       <FileCode className="stroke-secondary stroke-1" size={18} />
       <div className="text-secondary">Want to fully configure the CSS?</div>
-      <ExternalLink className="font-semibold text-blue-600" href="#">
+      <ExternalLink className="font-semibold text-blue-600" href="https://github.com/alchemyplatform/aa-sdk/blob/v4.x.x/account-kit/react/src/tailwind/types.ts#L6">
         Click to learn how
       </ExternalLink>
     </div>
