@@ -9,14 +9,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 22
-          cache: "yarn"
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+      - name: Setup Node
+        uses: ./.github/actions/setup-node
 
       - name: Use commitlint to check PR title
         env:
@@ -38,14 +32,8 @@ jobs:
           token: ${{ secrets.ALCHEMY_BOT_PAT }}
           fetch-depth: "0"
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 22
-          cache: "yarn"
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+      - name: Setup Node
+        uses: ./.github/actions/setup-node
 
       - name: Build eslint plugin
         run: |
@@ -91,14 +79,8 @@ jobs:
           tag: v0.2.2
           cache: enable
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 22
-          cache: "yarn"
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+      - name: Setup Node
+        uses: ./.github/actions/setup-node
 
       - name: Build
         uses: nick-fields/retry@v3

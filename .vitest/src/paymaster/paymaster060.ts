@@ -42,8 +42,6 @@ export const paymaster060: Paymaster = toPaymaster({
       [address, expiry, signature]
     ) as Hex;
 
-    console.log("got data", paymasterAndData);
-
     return { paymasterAndData };
   },
 });

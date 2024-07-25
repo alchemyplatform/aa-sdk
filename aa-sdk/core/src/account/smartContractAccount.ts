@@ -374,7 +374,6 @@ export async function toSmartContractAccount(
     if (deploymentState === DeploymentState.DEPLOYED) {
       return "0x";
     }
-
     const contractCode = await client.getBytecode({
       address: accountAddress_,
     });
