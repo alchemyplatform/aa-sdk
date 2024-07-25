@@ -4,11 +4,12 @@ import { configDefaults, defineConfig } from "vitest/config";
 export const sharedConfig = defineConfig({
   test: {
     alias: {
-      "~test": join(__dirname, "."),
+      "~test": join(__dirname, "./src"),
     },
     singleThread: true,
     globals: true,
     setupFiles: [join(__dirname, "setupTests.ts")],
+    globalSetup: join(__dirname, "globalSetup.ts"),
     exclude: [
       ...configDefaults.exclude,
       "**/e2e-tests/**/*.test.ts",

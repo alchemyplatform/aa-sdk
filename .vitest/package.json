@@ -1,0 +1,10 @@
+{
+  "name": "local-vitest",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "prool": "^0.0.15",
+    "typescript-template": "*"
+  }
+}

@@ -3,13 +3,13 @@ import {
   type BatchUserOperationCallData,
   type SmartAccountSigner,
 } from "@aa-sdk/core";
-import { polygonMumbai } from "@account-kit/infra";
-import { custom, type Chain } from "viem";
+import { custom } from "viem";
+import { anvilArbSepolia } from "~test/instances.js";
 import { createLightAccountClient } from "../clients/client.js";
 import type { LightAccountVersion } from "../types.js";
 import { AccountVersionRegistry } from "../utils.js";
 
-const chain = polygonMumbai;
+const instance = anvilArbSepolia;
 
 const versions = Object.keys(
   AccountVersionRegistry.LightAccount
@@ -26,7 +26,6 @@ describe("Light Account Tests", () => {
     async (version) => {
       const { account } = await givenConnectedProvider({
         signer,
-        chain,
         version,
       });
       switch (version) {
@@ -51,7 +50,6 @@ describe("Light Account Tests", () => {
   it.each(versions)("should correctly sign the message", async (version) => {
     const { account } = await givenConnectedProvider({
       signer,
-      chain,
       version,
     });
     const message =
@@ -69,12 +67,12 @@ describe("Light Account Tests", () => {
         break;
       case "v1.1.0":
         expect(await account.signMessage({ message })).toBe(
-          "0x394dcd53572e316d1bf7a5f3be71a4189e1ab1269f57691699f7b18b209e340b63d27ae7b314445fd5a9db5a442278fadd3dc022a9e35a1b5ea20e891c22c8b21c"
+          "0x83c1d00d561ba80bf1fe5acb8f47ecd1e796f64d853512f6a60255a973ef56636cb1a0168bf81e986b8480a2f03fe2a3c7b6bcac0ed438eda2600e950694e4bd1c"
         );
         break;
       case "v2.0.0":
         expect(await account.signMessage({ message })).toBe(
-          "0x00394dcd53572e316d1bf7a5f3be71a4189e1ab1269f57691699f7b18b209e340b63d27ae7b314445fd5a9db5a442278fadd3dc022a9e35a1b5ea20e891c22c8b21c"
+          "0x0083c1d00d561ba80bf1fe5acb8f47ecd1e796f64d853512f6a60255a973ef56636cb1a0168bf81e986b8480a2f03fe2a3c7b6bcac0ed438eda2600e950694e4bd1c"
         );
         break;
       default:
@@ -85,7 +83,6 @@ describe("Light Account Tests", () => {
   it.each(versions)("should correctly sign typed data", async (version) => {
     const { account } = await givenConnectedProvider({
       signer,
-      chain,
       version,
     });
     const typedData = {
@@ -110,12 +107,12 @@ describe("Light Account Tests", () => {
         break;
       case "v1.1.0":
         expect(await account.signTypedData(typedData)).toBe(
-          "0xf1b620ac60e03d01ccc737ad02feffe8631c6f9947083d53ef4f5182eb150d187ec9f7be44bd015ca4e0efb235fdc6f130542ebf31aecb1a736e31ef736a67321b"
+          "0x81e2d13cc2f4748be86770e31af4c8d4728887716112f03dea2d533f751dde1d4af37dcf1fa17ff2f54f26815f4e6f91a62dfcb25d7287c49340dc1ec9f4e3481c"
         );
         break;
       case "v2.0.0":
         expect(await account.signTypedData(typedData)).toBe(
-          "0x00f1b620ac60e03d01ccc737ad02feffe8631c6f9947083d53ef4f5182eb150d187ec9f7be44bd015ca4e0efb235fdc6f130542ebf31aecb1a736e31ef736a67321b"
+          "0x0081e2d13cc2f4748be86770e31af4c8d4728887716112f03dea2d533f751dde1d4af37dcf1fa17ff2f54f26815f4e6f91a62dfcb25d7287c49340dc1ec9f4e3481c"
         );
         break;
       default:
@@ -128,7 +125,6 @@ describe("Light Account Tests", () => {
     async (version) => {
       const { account } = await givenConnectedProvider({
         signer,
-        chain,
         version,
       });
       expect(
@@ -144,7 +140,7 @@ describe("Light Account Tests", () => {
   it.each(versions)(
     "should correctly encode batch transaction data",
     async (version) => {
-      const provider = await givenConnectedProvider({ signer, chain, version });
+      const provider = await givenConnectedProvider({ signer, version });
       const data = [
         {
           target: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
@@ -165,11 +161,9 @@ describe("Light Account Tests", () => {
 
 const givenConnectedProvider = ({
   signer,
-  chain,
   version,
 }: {
   signer: SmartAccountSigner;
-  chain: Chain;
   version: LightAccountVersion<"LightAccount">;
 }) =>
   createLightAccountClient({
@@ -179,17 +173,7 @@ const givenConnectedProvider = ({
       version,
     },
     transport: custom({
-      request: async ({ method }) => {
-        if (method === "eth_getStorageAt") {
-          return (
-            AccountVersionRegistry.LightAccount[version].addresses.overrides?.[
-              chain.id
-            ].impl ??
-            AccountVersionRegistry.LightAccount[version].addresses.default.impl
-          );
-        }
-        return;
-      },
+      request: instance.getClient().request,
     }),
-    chain,
+    chain: instance.chain,
   });
