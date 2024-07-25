@@ -24,7 +24,7 @@
     "build:examples": "lerna run build",
     "clean": "lerna run clean",
     "docs:gen": "lerna run docs:gen",
-    "test": "lerna run --verbose test:run",
+    "test": "is-ci && vitest run || vitest dev",
     "test:e2e": "lerna run --verbose test:run-e2e --concurrency=1 --ignore=@alchemy/aa-signers",
     "lint:write": "eslint . --fix && yarn docs:gen && prettier --write --ignore-unknown .",
     "lint:check": "eslint . && prettier --check .",
