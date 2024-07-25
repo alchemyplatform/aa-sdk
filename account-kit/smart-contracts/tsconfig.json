@@ -2,7 +2,8 @@
   "extends": "typescript-template/base.json",
   "compilerOptions": {
     "paths": {
-      "@account-kit/smart-contracts": ["./src/index.ts"]
+      "@account-kit/smart-contracts": ["./src/index.ts"],
+      "~test/*": ["../../.vitest/src/*"]
     }
   }
 }
