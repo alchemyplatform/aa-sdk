@@ -1,96 +1,96 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`MultiOwnerLightAccount Client Tests > should correctly do runtime validation when connection config is invalid 1`] = `
-"[
+[ZodError: [
   {
-    \\"code\\": \\"invalid_union\\",
-    \\"unionErrors\\": [
+    "code": "invalid_union",
+    "unionErrors": [
       {
-        \\"issues\\": [
+        "issues": [
           {
-            \\"code\\": \\"invalid_type\\",
-            \\"expected\\": \\"never\\",
-            \\"received\\": \\"number\\",
-            \\"path\\": [
-              \\"rpcUrl\\"
+            "code": "invalid_type",
+            "expected": "never",
+            "received": "number",
+            "path": [
+              "rpcUrl"
             ],
-            \\"message\\": \\"Expected never, received number\\"
+            "message": "Expected never, received number"
           },
           {
-            \\"code\\": \\"invalid_type\\",
-            \\"expected\\": \\"string\\",
-            \\"received\\": \\"undefined\\",
-            \\"path\\": [
-              \\"apiKey\\"
+            "code": "invalid_type",
+            "expected": "string",
+            "received": "undefined",
+            "path": [
+              "apiKey"
             ],
-            \\"message\\": \\"Required\\"
+            "message": "Required"
           }
         ],
-        \\"name\\": \\"ZodError\\"
+        "name": "ZodError"
       },
       {
-        \\"issues\\": [
+        "issues": [
           {
-            \\"code\\": \\"invalid_type\\",
-            \\"expected\\": \\"never\\",
-            \\"received\\": \\"number\\",
-            \\"path\\": [
-              \\"rpcUrl\\"
+            "code": "invalid_type",
+            "expected": "never",
+            "received": "number",
+            "path": [
+              "rpcUrl"
             ],
-            \\"message\\": \\"Expected never, received number\\"
+            "message": "Expected never, received number"
           },
           {
-            \\"code\\": \\"invalid_type\\",
-            \\"expected\\": \\"string\\",
-            \\"received\\": \\"undefined\\",
-            \\"path\\": [
-              \\"jwt\\"
+            "code": "invalid_type",
+            "expected": "string",
+            "received": "undefined",
+            "path": [
+              "jwt"
             ],
-            \\"message\\": \\"Required\\"
+            "message": "Required"
           }
         ],
-        \\"name\\": \\"ZodError\\"
+        "name": "ZodError"
       },
       {
-        \\"issues\\": [
+        "issues": [
           {
-            \\"code\\": \\"invalid_type\\",
-            \\"expected\\": \\"string\\",
-            \\"received\\": \\"number\\",
-            \\"path\\": [
-              \\"rpcUrl\\"
+            "code": "invalid_type",
+            "expected": "string",
+            "received": "number",
+            "path": [
+              "rpcUrl"
             ],
-            \\"message\\": \\"Expected string, received number\\"
+            "message": "Expected string, received number"
           }
         ],
-        \\"name\\": \\"ZodError\\"
+        "name": "ZodError"
       },
       {
-        \\"issues\\": [
+        "issues": [
           {
-            \\"code\\": \\"invalid_type\\",
-            \\"expected\\": \\"string\\",
-            \\"received\\": \\"number\\",
-            \\"path\\": [
-              \\"rpcUrl\\"
+            "code": "invalid_type",
+            "expected": "string",
+            "received": "number",
+            "path": [
+              "rpcUrl"
             ],
-            \\"message\\": \\"Expected string, received number\\"
+            "message": "Expected string, received number"
           },
           {
-            \\"code\\": \\"invalid_type\\",
-            \\"expected\\": \\"string\\",
-            \\"received\\": \\"undefined\\",
-            \\"path\\": [
-              \\"jwt\\"
+            "code": "invalid_type",
+            "expected": "string",
+            "received": "undefined",
+            "path": [
+              "jwt"
             ],
-            \\"message\\": \\"Required\\"
+            "message": "Required"
           }
         ],
-        \\"name\\": \\"ZodError\\"
+        "name": "ZodError"
       }
     ],
-    \\"path\\": [],
-    \\"message\\": \\"Invalid input\\"
+    "path": [],
+    "message": "Invalid input"
   }
-]"
+]]
 `;
