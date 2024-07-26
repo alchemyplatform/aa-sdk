@@ -99,16 +99,16 @@ describe("Light Account Client Tests", () => {
     await expect(() => {
       return givenConnectedProvider({ signer, chain: avalanche });
     }).rejects.toThrowErrorMatchingInlineSnapshot(`
-      "[
+      [ZodError: [
         {
-          \\"code\\": \\"custom\\",
-          \\"message\\": \\"chain must include an alchemy rpc url. See \`createAlchemyChain\` or import a chain from \`@account-kit/infra\`.\\",
-          \\"fatal\\": true,
-          \\"path\\": [
-            \\"chain\\"
+          "code": "custom",
+          "message": "chain must include an alchemy rpc url. See \`createAlchemyChain\` or import a chain from \`@account-kit/infra\`.",
+          "fatal": true,
+          "path": [
+            "chain"
           ]
         }
-      ]"
+      ]]
     `);
   });
 

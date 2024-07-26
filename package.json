@@ -26,7 +26,8 @@
     "build:examples": "lerna run build",
     "clean": "lerna run clean",
     "docs:gen": "lerna run docs:gen",
-    "test": "is-ci && vitest run || vitest dev",
+    "test": "vitest dev",
+    "test:ci": "vitest run",
     "test:e2e": "lerna run --verbose test:run-e2e --concurrency=1 --ignore=@alchemy/aa-signers",
     "lint:write": "eslint . --fix && yarn docs:gen && prettier --write --ignore-unknown .",
     "lint:check": "eslint . && prettier --check .",
@@ -55,7 +56,7 @@
     "nx": "^17.3.0",
     "prettier": "^2.8.8",
     "prool": "^0.0.15",
-    "vitest": "^0.31.0"
+    "vitest": "^2.0.4"
   },
   "commitlint": {
     "extends": [
