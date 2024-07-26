@@ -12,7 +12,11 @@ export default async function () {
   }
 
   const shutdown = await Promise.all(
-    Object.values(instances).map((instance) => instance.start())
+    Object.values(instances).map(async (instance) => {
+      const shutdown = instance.start();
+
+      return shutdown;
+    })
   );
 
   return async () => {

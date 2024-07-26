@@ -5,6 +5,7 @@ import { createClient, http, type Chain, type ClientConfig } from "viem";
 import { arbitrumSepolia } from "viem/chains";
 import { split } from "../../aa-sdk/core/src/transport/split";
 import { poolId, rundlerBinaryPath } from "./constants";
+import { paymasterTransport } from "./paymaster";
 
 export const anvilArbSepolia = defineInstance({
   chain: arbitrumSepolia,
@@ -57,6 +58,15 @@ function defineInstance(params: DefineInstanceParams) {
           {
             methods: bundlerMethods,
             transport: http(rpcUrls.bundler + `/${poolId}`),
+          },
+          {
+            methods: ["pm_getPaymasterStubData", "pm_getPaymasterData"],
+            transport: paymasterTransport(
+              createClient({
+                chain,
+                transport: http(rpcUrls.anvil + `/${poolId}`),
+              }).extend(() => ({ mode: "anvil" }))
+            ),
           },
         ],
         fallback: http(rpcUrls.anvil + `/${poolId}`),
