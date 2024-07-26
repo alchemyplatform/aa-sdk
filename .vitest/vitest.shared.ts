@@ -6,7 +6,9 @@ export const sharedConfig = defineConfig({
     alias: {
       "~test": join(__dirname, "./src"),
     },
-    singleThread: true,
+    testTimeout: 60_000,
+    hookTimeout: 60_000,
+    teardownTimeout: 60_000,
     globals: true,
     setupFiles: [join(__dirname, "setupTests.ts")],
     globalSetup: join(__dirname, "globalSetup.ts"),

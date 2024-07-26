@@ -2,14 +2,16 @@ import getPort from "get-port";
 import { createServer } from "prool";
 import { anvil, rundler } from "prool/instances";
 import { createClient, http, type Chain, type ClientConfig } from "viem";
-import { arbitrumSepolia } from "viem/chains";
+import { localhost } from "viem/chains";
 import { split } from "../../aa-sdk/core/src/transport/split";
 import { poolId, rundlerBinaryPath } from "./constants";
 import { paymasterTransport } from "./paymaster";
 
-export const anvilArbSepolia = defineInstance({
-  chain: arbitrumSepolia,
-  forkUrl: "https://arbitrum-sepolia-rpc.publicnode.com",
+export const localInstance = defineInstance({
+  chain: localhost,
+  forkUrl:
+    process.env.VITEST_SEPOLIA_FORK_URL ??
+    "https://ethereum-sepolia-rpc.publicnode.com",
   anvilPort: 8545,
   bundlerPort: 8645,
 });
@@ -19,6 +21,7 @@ type DefineInstanceParams = {
   forkUrl: string;
   anvilPort: number;
   bundlerPort: number;
+  useLocalRunningInstance?: boolean;
 };
 
 const bundlerMethods = [
@@ -27,21 +30,35 @@ const bundlerMethods = [
   "eth_getUserOperationReceipt",
   "eth_getUserOperationByHash",
   "eth_supportedEntryPoints",
+  "debug_bundler_sendBundleNow",
+  "debug_bundler_dumpMempool",
+  "debug_bundler_clearState",
+  "debug_bundler_setBundlingMode",
 ];
 
 function defineInstance(params: DefineInstanceParams) {
-  const { anvilPort, bundlerPort, forkUrl, chain: chain_ } = params;
-  const rpcUrls = {
-    bundler: `http://127.0.0.1:${bundlerPort}`,
-    anvil: `http://127.0.0.1:${anvilPort}`,
-  };
+  const {
+    anvilPort,
+    bundlerPort,
+    forkUrl,
+    chain: chain_,
+    useLocalRunningInstance,
+  } = params;
+  const rpcUrls = () => ({
+    bundler: `http://127.0.0.1:${bundlerPort}${
+      useLocalRunningInstance ? "" : `/${poolId}`
+    }`,
+    anvil: `http://127.0.0.1:${anvilPort}${
+      useLocalRunningInstance ? "" : `/${poolId}`
+    }`,
+  });
 
   const chain = {
     ...chain_,
     name: `${chain_.name} (Local)`,
     rpcUrls: {
       default: {
-        http: [rpcUrls.anvil],
+        http: [rpcUrls().anvil],
       },
     },
   } as const satisfies Chain;
@@ -57,26 +74,25 @@ function defineInstance(params: DefineInstanceParams) {
         overrides: [
           {
             methods: bundlerMethods,
-            transport: http(rpcUrls.bundler + `/${poolId}`),
+            transport: http(rpcUrls().bundler),
           },
           {
             methods: ["pm_getPaymasterStubData", "pm_getPaymasterData"],
             transport: paymasterTransport(
               createClient({
                 chain,
-                transport: http(rpcUrls.anvil + `/${poolId}`),
+                transport: http(rpcUrls().anvil),
               }).extend(() => ({ mode: "anvil" }))
             ),
           },
         ],
-        fallback: http(rpcUrls.anvil + `/${poolId}`),
+        fallback: http(rpcUrls().anvil),
       })(args);
 
       return {
         config,
-        request(params) {
-          // Here we can add further custom handling for certain methods, or we can do it above in the split transport config
-          return request_(params);
+        async request(params, opts) {
+          return await request_(params, opts);
         },
         value,
       };
@@ -86,7 +102,7 @@ function defineInstance(params: DefineInstanceParams) {
   const anvilServer = createServer({
     instance: anvil({
       forkUrl: forkUrl,
-      noMining: true,
+      chainId: chain.id,
     }),
     port: anvilPort,
   });
@@ -95,7 +111,11 @@ function defineInstance(params: DefineInstanceParams) {
     instance: (key) =>
       rundler({
         binary: rundlerBinaryPath,
-        nodeHttp: rpcUrls.anvil + `/${key}`,
+        entryPointVersion: "0.6.0",
+        nodeHttp: `http://127.0.0.1:${anvilPort}/${key}`,
+        rpc: {
+          api: "eth,rundler,debug",
+        },
       }),
     port: bundlerPort,
   });
@@ -113,11 +133,13 @@ function defineInstance(params: DefineInstanceParams) {
       }).extend(() => ({ mode: "anvil" }));
     },
     async restart() {
-      await fetch(`${rpcUrls.anvil}/${poolId}/restart`);
-      await bundlerServer.stop();
-      await bundlerServer.start();
+      if (useLocalRunningInstance) return;
+
+      await fetch(`${rpcUrls().anvil}/restart`);
+      await fetch(`${rpcUrls().bundler}/restart`);
     },
     async start() {
+      if (useLocalRunningInstance) return async () => {};
       // We do this because it's possible we're running all workspaces at the same time
       // and we don't want to start the servers multiple times
       // This still gives us isolation because each workspace should have its own pool id
@@ -134,8 +156,19 @@ function defineInstance(params: DefineInstanceParams) {
       };
     },
     async stop() {
+      if (useLocalRunningInstance) return;
+
       await anvilServer.stop();
       await bundlerServer.stop();
+    },
+
+    async getLogs(server: "anvil" | "bundler") {
+      const port = server === "anvil" ? anvilPort : bundlerPort;
+      const url = `http://127.0.0.1:${port}/${poolId}/messages`;
+
+      const response = await fetch(url);
+
+      return await response.json();
     },
   };
 }

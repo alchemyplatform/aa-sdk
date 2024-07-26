@@ -72,9 +72,24 @@ jobs:
         with:
           fetch-depth: "0"
           submodules: "recursive"
+
+      # using your own fork url avoids getting rate limited by the public api
+      # later we'll look at deploying everything we need directly to anvil so
+      # so we don't need a fork url
+      - name: Conditionally set fork url
+        if: ${{ env.API_KEY != '' }}
+        run: echo "VITEST_SEPOLIA_FORK_URL=https://eth-sepolia.g.alchemy.com/v2/${{ env.API_KEY }}" >> $GITHUB_ENV
           
       - name: Set up foundry
         uses: foundry-rs/foundry-toolchain@v1
+
+      - name: Set up Rundler
+        uses: jaxxstorm/action-install-gh-release@v1.12.0
+        with:
+          repo: alchemyplatform/rundler
+          platform: linux
+          tag: v0.2.2
+          cache: enable
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -92,7 +107,8 @@ jobs:
         with:
           timeout_minutes: 5
           max_attempts: 2
-          command: yarn build
+          # it's ok to run the dev build here because the site gets built in vercel for each branch
+          command: yarn build:dev
 
       - name: Unit Test
-        run: yarn test
+        run: yarn test:ci
