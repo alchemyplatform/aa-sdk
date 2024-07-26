@@ -1,10 +1,9 @@
 import dotenv from "dotenv";
 import fetch from "node-fetch";
-import { setIntervalMining } from "viem/actions";
+import { setAutomine } from "viem/actions";
 import { afterAll, beforeAll } from "vitest";
 import * as instances from "./src/instances.js";
-
-const client = instances.anvilArbSepolia.getClient();
+import { deployPaymasterContract } from "./src/paymaster.js";
 
 dotenv.config();
 
@@ -12,7 +11,9 @@ dotenv.config();
 global.fetch = fetch;
 
 beforeAll(async () => {
-  await setIntervalMining(client, { interval: 0 });
+  const client = instances.anvilArbSepolia.getClient();
+  await setAutomine(client, true);
+  await deployPaymasterContract(client);
 }, 60_000);
 
 afterAll(async () => {});
