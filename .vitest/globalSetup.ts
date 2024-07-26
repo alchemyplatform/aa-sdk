@@ -1,3 +1,4 @@
+import isCi from "is-ci";
 import { rundlerBinaryPath } from "./src/constants";
 import * as instances from "./src/instances";
 import {
@@ -7,7 +8,7 @@ import {
 } from "./src/rundler";
 
 export default async function () {
-  if (!(await isRundlerInstalled(rundlerBinaryPath))) {
+  if (!isCi && !(await isRundlerInstalled(rundlerBinaryPath))) {
     await downloadLatestRundlerRelease(rundlerBinaryPath);
   }
 

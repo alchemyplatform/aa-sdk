@@ -1,8 +1,11 @@
+import isCi from "is-ci";
 import { join } from "path";
 import { type Address } from "viem";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 
-export const rundlerBinaryPath = join(__dirname, "../bin/rundler");
+export const rundlerBinaryPath = isCi
+  ? "rundler"
+  : join(__dirname, "../bin/rundler");
 
 export const poolId = Number(process.env.VITEST_POOL_ID ?? 1);
 
@@ -20,3 +23,5 @@ export const accounts = {
     "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
   ),
 };
+
+export const entrypoint060 = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";

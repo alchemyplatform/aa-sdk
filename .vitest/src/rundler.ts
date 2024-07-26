@@ -56,12 +56,21 @@ export async function downloadLatestRundlerRelease(
           (x.name.includes(arch) ||
             (arch === "arm64" &&
               platform === "darwin" &&
-              x.name.includes("aarch64")))
+              x.name.includes("aarch64")) ||
+            (arch === "x64" &&
+              platform === "linux" &&
+              x.name.includes("x86_64")))
         );
       });
 
     if (!asset) {
-      return;
+      throw new Error(
+        `Failed to find a suitable asset for the current platform, ${JSON.stringify(
+          { arch, platform, assets: latestRelease.assets },
+          null,
+          2
+        )}`
+      );
     }
 
     const assetUrl = asset.browser_download_url;

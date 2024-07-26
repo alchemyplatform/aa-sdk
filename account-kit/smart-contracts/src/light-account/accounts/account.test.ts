@@ -1,25 +1,31 @@
 import {
+  erc7677Middleware,
   LocalAccountSigner,
   type BatchUserOperationCallData,
   type SmartAccountSigner,
+  type UserOperationCallData,
+  type UserOperationOverrides,
+  type UserOperationStruct,
 } from "@aa-sdk/core";
-import { custom } from "viem";
-import { anvilArbSepolia } from "~test/instances.js";
+import { custom, parseEther, type Address } from "viem";
+import { setBalance } from "viem/actions";
+import { resetBalance } from "~test/accounts.js";
+import { accounts } from "~test/constants.js";
+import { localInstance } from "~test/instances.js";
 import { createLightAccountClient } from "../clients/client.js";
 import type { LightAccountVersion } from "../types.js";
 import { AccountVersionRegistry } from "../utils.js";
 
-const instance = anvilArbSepolia;
+const instance = localInstance;
 
 const versions = Object.keys(
   AccountVersionRegistry.LightAccount
 ) as LightAccountVersion<"LightAccount">[];
 
 describe("Light Account Tests", () => {
-  const dummyMnemonic =
-    "test test test test test test test test test test test junk";
-  const signer: SmartAccountSigner =
-    LocalAccountSigner.mnemonicToAccountSigner(dummyMnemonic);
+  const signer: SmartAccountSigner = new LocalAccountSigner(
+    accounts.fundedAccountOwner
+  );
 
   it.each(versions)(
     "should return correct dummy signature",
@@ -67,12 +73,12 @@ describe("Light Account Tests", () => {
         break;
       case "v1.1.0":
         expect(await account.signMessage({ message })).toBe(
-          "0x83c1d00d561ba80bf1fe5acb8f47ecd1e796f64d853512f6a60255a973ef56636cb1a0168bf81e986b8480a2f03fe2a3c7b6bcac0ed438eda2600e950694e4bd1c"
+          "0xddb694a4f22cb929476a39f63aae047c2ccd6a12df17c91ff2068d8679f7d2e57b019263691eae350ce53bc6f958d4f2200571614eab8343af9c382aa90579371c"
         );
         break;
       case "v2.0.0":
         expect(await account.signMessage({ message })).toBe(
-          "0x0083c1d00d561ba80bf1fe5acb8f47ecd1e796f64d853512f6a60255a973ef56636cb1a0168bf81e986b8480a2f03fe2a3c7b6bcac0ed438eda2600e950694e4bd1c"
+          "0x00823ee659d8f86abaee06bb36c4d84bfefa2938af2835ff62564e9559bc671d0c0e8603a5aa3ed9603b28a137eaf491b64c55ed73007c12efebcfd9a82cb181221b"
         );
         break;
       default:
@@ -107,12 +113,12 @@ describe("Light Account Tests", () => {
         break;
       case "v1.1.0":
         expect(await account.signTypedData(typedData)).toBe(
-          "0x81e2d13cc2f4748be86770e31af4c8d4728887716112f03dea2d533f751dde1d4af37dcf1fa17ff2f54f26815f4e6f91a62dfcb25d7287c49340dc1ec9f4e3481c"
+          "0x7d42ec333209a34a4a64d5bcb40ba67bc8ed3751f30898be60c1eba78d127e0e06b426a1faef69aa683f92aecc6a8e2292689b03e19f41417dcfa875410bd09d1c"
         );
         break;
       case "v2.0.0":
         expect(await account.signTypedData(typedData)).toBe(
-          "0x0081e2d13cc2f4748be86770e31af4c8d4728887716112f03dea2d533f751dde1d4af37dcf1fa17ff2f54f26815f4e6f91a62dfcb25d7287c49340dc1ec9f4e3481c"
+          "0x00813b860dce6079750e9383e932412620f6bc206261fed24bc450a1c858acb35912eb082c6fe69daf47f662b88941a9f67da425fa7084f2d93eb5bd2d2705905c1b"
         );
         break;
       default:
@@ -157,23 +163,127 @@ describe("Light Account Tests", () => {
       );
     }
   );
+
+  it("should successfully get counterfactual address", async () => {
+    const provider = await givenConnectedProvider({ signer });
+    expect(provider.getAddress()).toMatchInlineSnapshot(
+      '"0x9EfDfCB56390eDd8b2eAE6daBC148CED3491AAf6"'
+    );
+  });
+
+  it("should execute successfully", async () => {
+    const provider = await givenConnectedProvider({ signer });
+
+    await setBalance(instance.getClient(), {
+      address: provider.getAddress(),
+      value: parseEther("1"),
+    });
+
+    const result = await provider.sendUserOperation({
+      uo: {
+        target: provider.getAddress(),
+        data: "0x",
+      },
+    });
+
+    const txnHash = provider.waitForUserOperationTransaction(result);
+
+    await expect(txnHash).resolves.not.toThrowError();
+  }, 10_000);
+
+  it("should fail to execute if account address is not deployed and not correct", async () => {
+    const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
+    const provider = await givenConnectedProvider({
+      signer,
+      accountAddress,
+    });
+
+    const result = provider.sendUserOperation({
+      uo: {
+        target: provider.getAddress(),
+        data: "0x",
+      },
+    });
+
+    await expect(result).rejects.toThrowError();
+  });
+
+  it(
+    "should successfully execute with paymaster info",
+    { retry: 2, timeout: 10_000 },
+    async () => {
+      const provider = await givenConnectedProvider({
+        signer,
+        usePaymaster: true,
+      });
+
+      const result = await provider.sendUserOperation({
+        uo: {
+          target: provider.getAddress(),
+          data: "0x",
+        },
+      });
+
+      // @ts-expect-error this is union type when used generically, but we know it's 0.6.0 for now
+      // TODO: when using multiple versions, we need to check the version and cast accordingly
+      expect(result.request.paymasterAndData).not.toBe("0x");
+
+      const txnHash = provider.waitForUserOperationTransaction(result);
+
+      await expect(txnHash).resolves.not.toThrowError();
+    }
+  );
+
+  it(
+    "should bypass paymaster when paymasterAndData of user operation overrides is set to 0x",
+    { retry: 2 },
+    async () => {
+      const provider = await givenConnectedProvider({
+        signer,
+        usePaymaster: true,
+      });
+
+      // set the value to 0 so that we can capture an error in sending the uo
+      await resetBalance(provider, instance.getClient());
+
+      const toSend = {
+        uo: {
+          target: provider.getAddress(),
+          data: "0x",
+        } as UserOperationCallData,
+        overrides: {
+          paymasterAndData: "0x", // bypass paymaster
+        } as UserOperationOverrides<"0.6.0">,
+      };
+      const uoStruct = (await provider.buildUserOperation(
+        toSend
+      )) as UserOperationStruct<"0.6.0">;
+
+      expect(uoStruct.paymasterAndData).toBe("0x");
+
+      await expect(provider.sendUserOperation(toSend)).rejects.toThrowError();
+    }
+  );
 });
 
 const givenConnectedProvider = ({
   signer,
-  version,
+  version = "v1.1.0",
+  accountAddress,
+  usePaymaster = false,
 }: {
   signer: SmartAccountSigner;
-  version: LightAccountVersion<"LightAccount">;
+  version?: LightAccountVersion<"LightAccount">;
+  usePaymaster?: boolean;
+  accountAddress?: Address;
 }) =>
   createLightAccountClient({
     account: {
       signer,
-      accountAddress: "0xb856DBD4fA1A79a46D426f537455e7d3E79ab7c4",
+      accountAddress,
       version,
     },
-    transport: custom({
-      request: instance.getClient().request,
-    }),
+    transport: custom(instance.getClient()),
     chain: instance.chain,
+    ...(usePaymaster ? erc7677Middleware() : {}),
   });
