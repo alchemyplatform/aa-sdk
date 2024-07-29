@@ -1,7 +1,7 @@
 import { defineConfig } from "vocs";
 import { coreSidebar } from "./sidebar/core.js";
+import { indexSidebar } from "./sidebar/index.js";
 import { infraSidebar } from "./sidebar/infra.js";
-import { introSidebar } from "./sidebar/intro.js";
 import { reactSidebar } from "./sidebar/react.js";
 import { aaSdkCoreReferenceSidebar } from "./sidebar/reference/aa-sdk/core.js";
 import { aaSdkEthersReferenceSidebar } from "./sidebar/reference/aa-sdk/ethers.js";
@@ -55,11 +55,11 @@ export default defineConfig({
     </>
   ),
   topNav: [
-    { text: "React", link: "/react/overview" },
-    { text: "Core", link: "/core/overview" },
     {
-      text: "More",
+      text: "Guides",
       items: [
+        { text: "React", link: "/react/overview" },
+        { text: "Core", link: "/core/overview" },
         {
           text: "Infra",
           link: "/infra/overview",
@@ -108,7 +108,7 @@ export default defineConfig({
     },
   ],
   sidebar: {
-    "/": introSidebar,
+    "/": indexSidebar,
     "/react": reactSidebar,
     "/core": coreSidebar,
     "/infra": infraSidebar,
