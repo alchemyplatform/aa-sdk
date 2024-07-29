@@ -15,7 +15,7 @@ export const sharedConfig = defineConfig({
     exclude: [
       ...configDefaults.exclude,
       "**/e2e-tests/**/*.test.ts",
-      "**/*.test.e2e.ts",
+      "**/*.e2e.test.ts",
     ],
   },
 });
