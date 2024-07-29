@@ -1,5 +1,5 @@
 import type {
-  EntryPointParameter,
+  EntryPointDef,
   SmartAccountSigner,
   SmartContractAccountWithSigner,
   ToSmartContractAccountParams,
@@ -20,23 +20,23 @@ import {
 } from "viem";
 import { AccountFactoryAbi } from "../abis/AccountFactory.js";
 import {
-  getDefaultRIAccountFactoryAddress,
+  getDefaultSingleSignerRIAccountFactoryAddress,
   DEFAULT_OWNER_ENTITY_ID,
 } from "../utils.js";
 import { executor } from "../actions/execute.js";
 import { singleSignerMessageSigner } from "../modules/single-signer-validation/signer.js";
 
-export type SingleOwnerRIAccount<
+export type SingleSignerRIAccount<
   TSigner extends SmartAccountSigner = SmartAccountSigner
-> = SmartContractAccountWithSigner<"SingleOwnerRIAccount", TSigner, "0.7.0">;
+> = SmartContractAccountWithSigner<"SingleSignerRIAccount", TSigner, "0.7.0">;
 
-export type CreateSingleOwnerRIAccountParams<
+export type CreateSingleSignerRIAccountParams<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner,
   TEntryPointVersion extends "0.7.0" = "0.7.0"
 > = Pick<
   ToSmartContractAccountParams<
-    "SingleOwnerRIAccount",
+    "SingleSignerRIAccount",
     TTransport,
     Chain,
     TEntryPointVersion
@@ -49,24 +49,25 @@ export type CreateSingleOwnerRIAccountParams<
   initCode?: Hex;
   initialOwner?: Address;
   accountAddress?: Address;
-} & EntryPointParameter<TEntryPointVersion, Chain>;
+  entryPoint?: EntryPointDef<TEntryPointVersion, Chain>;
+};
 
-export async function createSingleOwnerRIAccount<
+export async function createSingleSignerRIAccount<
   TTransport extends Transport = Transport,
   TSigner extends SmartAccountSigner = SmartAccountSigner
 >(
-  config: CreateSingleOwnerRIAccountParams<TTransport, TSigner>
-): Promise<SingleOwnerRIAccount<TSigner>>;
+  config: CreateSingleSignerRIAccountParams<TTransport, TSigner>
+): Promise<SingleSignerRIAccount<TSigner>>;
 
-export async function createSingleOwnerRIAccount(
-  config: CreateSingleOwnerRIAccountParams
-): Promise<SingleOwnerRIAccount> {
+export async function createSingleSignerRIAccount(
+  config: CreateSingleSignerRIAccountParams
+): Promise<SingleSignerRIAccount> {
   const {
     transport,
     chain,
     signer,
     salt = 0n,
-    factoryAddress = getDefaultRIAccountFactoryAddress(chain),
+    factoryAddress = getDefaultSingleSignerRIAccountFactoryAddress(chain),
     initCode,
     initialOwner,
     accountAddress,
@@ -108,10 +109,10 @@ export async function createSingleOwnerRIAccount(
     chain,
     entryPoint,
     accountAddress: _accountAddress,
-    source: `SingleOwnerRIAccount`,
+    source: `SingleSignerRIAccount`,
     getAccountInitCode,
     ...executor,
-    ...singleSignerMessageSigner(signer),
+    ...singleSignerMessageSigner(signer, chain),
   });
 
   return {

@@ -62,7 +62,9 @@ export const defaultGasEstimator: <C extends MiddlewareClient>(
 
       uo_v7.paymasterVerificationGasLimit = paymasterVerificationGasLimit;
 
-      uo_v7.paymasterPostOpGasLimit = uo_v7.paymasterPostOpGasLimit ?? "0x0";
+      if (uo_v7.paymaster != null) {
+        uo_v7.paymasterPostOpGasLimit = uo_v7.paymasterPostOpGasLimit ?? "0x0";
+      }
     }
 
     return struct;
