@@ -1,6 +1,69 @@
 ---
 title: Account Kit
 description: Account Kit is a vertically integrated stack for building apps that support ERC-4337 smart accounts, Signer integrations, sponsoring gas, bundlers, and an SDK.
+layout: docs
 ---
 
-# TODO -- Julia's Grid Layout
+import { TileButton, SmallTileRow } from "../components/TileButton";
+import { ClockForwardIcon } from "../components/icons/ClockForwardIcon";
+import { PointerIcon } from "../components/icons/PointerIcon";
+import { DotsIcon } from "../components/icons/DotsIcon";
+import { InfraIcon } from "../components/icons/InfraIcon";
+import { SmartContractIcon } from "../components/icons/SmartContractIcon";
+import { SignerIcon } from "../components/icons/SignerIcon";
+
+# Build Embedded Accounts with Account Kit
+
+Build zero friction sign up and transaction flows with smart accounts. Sign up with email, login with passkeys, transact with sponsored gas, and checkout in one click with transaction batching.
+
+<img
+  src="/images/account-kit-doc-overview.png"
+  alt="alchemy account ui overview"
+/>
+
+## React
+
+<div className="flex flex-row gap-4">
+  <TileButton
+    icon={<ClockForwardIcon />}
+    title="Quickstart"
+    description="Start building in minutes with UI components and powerful React hooks."
+    href="/react/quick-start"
+  />
+  <TileButton
+    icon={<PointerIcon />}
+    title="Demo"
+    description="Customize React components, export your config, and start building."
+    href="https://aa-sdk-ui-demo.vercel.app"
+    target="_blank"
+  />
+</div>
+
+## Advanced
+
+<div className="grid grid-cols-2 gap-8">
+  <SmallTileRow
+    icon={<DotsIcon />}
+    title="Vanilla Typescript"
+    description="Other frameworks i.e. svelt, vue, etc."
+    href="/core/overview"
+  />
+  <SmallTileRow
+    icon={<InfraIcon />}
+    title="Infra"
+    description="Integrate with Alchemy's infra"
+    href="/infra/overview"
+  />
+  <SmallTileRow
+    icon={<SmartContractIcon />}
+    title="Smart Contracts"
+    description="Use Alchemy's Smart Contracts"
+    href="/smart-contracts/overview"
+  />
+  <SmallTileRow
+    icon={<SignerIcon />}
+    title="Signer"
+    description="Use Alchemy's Signer"
+    href="/signer/overview"
+  />
+</div>
