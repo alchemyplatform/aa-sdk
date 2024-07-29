@@ -20,7 +20,7 @@ import { buildUserOperation } from "./buildUserOperation.js";
 import type { UserOperationContext } from "./types.js";
 
 /**
- * Performs `buildUserOperationFromTx` in batch and builds into a single, yet to be signed `UserOperation` (UO) struct. The output user operation struct will be filled with all gas fields (and paymaster data if a paymaster is used) based on the transactions data (`to`, `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas`) computed using the configured [`ClientMiddlewares`](/packages/aa-core/smart-account-client/middleware/index) on the `SmartAccountClient`
+ * Performs `buildUserOperationFromTx` in batch and builds into a single, yet to be signed `UserOperation` (UO) struct. The output user operation struct will be filled with all gas fields (and paymaster data if a paymaster is used) based on the transactions data (`to`, `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas`) computed using the configured `ClientMiddlewares` on the `SmartAccountClient`
  *
  * @example
  * ```ts

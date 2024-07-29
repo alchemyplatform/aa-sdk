@@ -1,21 +1,21 @@
 import { SidebarItem } from "vocs";
 
 export const introSidebar: SidebarItem[] = [
-  { text: "Introduction", link: "/intro" },
+  { text: "Overview", link: "/" },
   {
     text: "Concepts",
     items: [
       {
         text: "Smart Account Client",
-        link: "/intro/concepts/smart-account-client",
+        link: "#TODO/concepts/smart-account-client",
       },
       {
         text: "Smart Contract Account",
-        link: "/intro/concepts/smart-contract-account",
+        link: "#TODO/concepts/smart-contract-account",
       },
       {
         text: "Smart Account Signer",
-        link: "/intro/concepts/smart-account-signer",
+        link: "#TODO/concepts/smart-account-signer",
       },
     ],
   },

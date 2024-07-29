@@ -129,8 +129,4 @@ export default defineConfig({
   theme: {
     accentColor: "#ce26a2",
   },
-  // This is not supported in vocs
-  // sitemap: {
-  //   hostname: "https://accountkit.alchemy.com",
-  // },
 });
