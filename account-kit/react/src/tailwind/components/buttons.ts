@@ -9,6 +9,9 @@ export const buttonComponents: ComponentDef = {
     " > .btn:not(:first-child)": {
       "@apply flex-1": {},
     },
+    "&:has(> :nth-child(4)) > .btn:not(:first-child) > .btn-content": {
+      display: "none",
+    },
   },
   ".btn": {
     "@apply max-h-[40px]": {},
