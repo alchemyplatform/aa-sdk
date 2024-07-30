@@ -20,7 +20,7 @@ export const indexSidebar: SidebarItem[] = [
       },
       {
         text: "Smart Account Signer",
-        link: "#TODO/concepts/smart-account-signer",
+        link: "/concepts/smart-account-signer",
       },
       {
         text: "Middleware",
