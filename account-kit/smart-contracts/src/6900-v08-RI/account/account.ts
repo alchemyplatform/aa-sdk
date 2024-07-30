@@ -59,6 +59,29 @@ export async function createSingleSignerRIAccount<
   config: CreateSingleSignerRIAccountParams<TTransport, TSigner>
 ): Promise<SingleSignerRIAccount<TSigner>>;
 
+/**
+ * Creates a single signer RI (Receipt Identifier) account using the provided configuration.
+ * This function sets up a smart contract account and returns it along with a method to retrieve the signer.
+ *
+ * @example
+ * ```ts
+ * import { createSingleSignerRIAccount } from "@account-kit/smart-contracts";
+ *
+ *
+ * ```
+ *
+ * @param {CreateSingleSignerRIAccountParams} config The parameters required to create a single signer RI account.
+ * @param {Transport} config.transport The transport layer for communicating with the blockchain.
+ * @param {Chain} config.chain The blockchain chain configuration.
+ * @param {Signer} config.signer The signer to be used for signing transactions and messages.
+ * @param {bigint} config.salt Optional salt value for creating the account.
+ * @param {string} config.factoryAddress Optional factory address override to create the account.
+ * @param {string} config.initCode Optional initialization code override for the account.
+ * @param {string} config.initialOwner Optional initial owner address for the account, used to calculate the counterfactual address.
+ * @param {string} config.accountAddress Optional existing account address.
+ * @param {EntryPoint} config.entryPoint Optional entry point configuration, defaults to version 0.7.0.
+ * @returns {Promise<SingleSignerRIAccount>} A promise that resolves to a `SingleSignerRIAccount` object.
+ */
 export async function createSingleSignerRIAccount(
   config: CreateSingleSignerRIAccountParams
 ): Promise<SingleSignerRIAccount> {

@@ -12,17 +12,34 @@ import {
 import { packSignature, DEFAULT_OWNER_ENTITY_ID } from "../../utils.js";
 import { Meta } from "./module.js";
 
-export const singleSignerMessageSigner = <
-TSigner extends SmartAccountSigner
->(
+/**
+ * Creates an object with methods for generating a dummy signature, signing user operation hashes, signing messages, and signing typed data.
+ *
+ * @example
+ * ```ts
+ * import { singleSignerMessageSigner } from "@account-kit/smart-contracts";
+ * import { LocalAccountSigner } from "@aa-sdk/core";
+ *
+ * const MNEMONIC = "...":
+ *
+ * const signer = LocalAccountSigner.mnemonicToAccountSigner(MNEMONIC);
+ *
+ * const messageSigner = singleSignerMessageSigner(signer, chain);
+ * ```
+ *
+ * @param {TSigner} signer the signer to use for signing operations
+ * @param {Chain} chain the blockchain network chain
+ * @returns {object} an object with methods for signing operations and managing signatures
+ */
+export const singleSignerMessageSigner = <TSigner extends SmartAccountSigner>(
   signer: TSigner,
   chain: Chain
 ) => {
   return {
     getDummySignature: (): Hex => {
+      const dummyEcdsaSignature =
+        "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
 
-      const dummyEcdsaSignature = "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
-      
       return packSignature({
         validationModule: Meta.addresses[chain.id],
         entityID: DEFAULT_OWNER_ENTITY_ID,
@@ -33,13 +50,15 @@ TSigner extends SmartAccountSigner
     },
 
     signUserOperationHash: (uoHash: `0x${string}`): Promise<`0x${string}`> => {
-      return signer.signMessage({ raw: uoHash }).then((signature: Hex) => packSignature({
-        validationModule: Meta.addresses[chain.id],
-        entityID: DEFAULT_OWNER_ENTITY_ID,
-        isGlobal: true, // todo: make this user-configurable
-        orderedHookData: [],
-        validationSignature: signature,
-      }));
+      return signer.signMessage({ raw: uoHash }).then((signature: Hex) =>
+        packSignature({
+          validationModule: Meta.addresses[chain.id],
+          entityID: DEFAULT_OWNER_ENTITY_ID,
+          isGlobal: true, // todo: make this user-configurable
+          orderedHookData: [],
+          validationSignature: signature,
+        })
+      );
     },
 
     // TODO: we can't implement these methods yet, because the RI at `alpha.0` doesn't have a wrapping type,

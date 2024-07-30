@@ -1,11 +1,17 @@
 import { arbitrumSepolia } from "@account-kit/infra";
 
 import { concat, numberToHex, boolToHex } from "viem";
-import type { Address, Chain, Hex, } from "viem";
+import type { Address, Chain, Hex } from "viem";
 
 export const DEFAULT_OWNER_ENTITY_ID = 0;
 
-export const getDefaultSingleSignerRIAccountFactoryAddress = (
+/**
+ * Returns the address associated with a given chain. Throws an error if the chain is not supported.
+ *
+ * @param {Chain} chain The chain object containing an ID to determine the appropriate address.
+ * @returns {Address} The address associated with the provided chain.
+ * @throws Will throw an error if the chain is not supported.
+ */ export const getDefaultSingleSignerRIAccountFactoryAddress = (
   chain: Chain
 ): Address => {
   switch (chain.id) {
@@ -16,18 +22,17 @@ export const getDefaultSingleSignerRIAccountFactoryAddress = (
   }
 };
 
-
 export type HookData = {
   data: Hex;
   hookIndex: number;
 };
 
 export type PackSignatureParams = {
-    validationModule: Address,
-    entityID: number,
-    isGlobal: boolean,
-    orderedHookData: HookData[],
-    validationSignature: Hex
+  validationModule: Address;
+  entityID: number;
+  isGlobal: boolean;
+  orderedHookData: HookData[];
+  validationSignature: Hex;
 };
 
 // Signature packing utility
@@ -38,7 +43,6 @@ export const packSignature = ({
   orderedHookData,
   validationSignature,
 }: PackSignatureParams): Hex => {
-
   return concat([
     validationModule,
     numberToHex(entityID, { size: 4 }),
@@ -46,9 +50,12 @@ export const packSignature = ({
     ...orderedHookData.map(({ data, hookIndex }) =>
       packValidationDataWithIndex(data, hookIndex)
     ),
-    packValidationDataWithIndex(validationSignature, RESERVED_VALIDATION_DATA_INDEX),
+    packValidationDataWithIndex(
+      validationSignature,
+      RESERVED_VALIDATION_DATA_INDEX
+    ),
   ]);
-}
+};
 
 const packValidationDataWithIndex = (data: Hex, index: number): Hex => {
   const dataLength = (data.length - 2) / 2;
@@ -59,6 +66,6 @@ const packValidationDataWithIndex = (data: Hex, index: number): Hex => {
     numberToHex(index, { size: 1 }),
     data,
   ]);
-}
+};
 
 const RESERVED_VALIDATION_DATA_INDEX = 255;
