@@ -24,7 +24,7 @@ export const indexSidebar: SidebarItem[] = [
       },
       {
         text: "Middleware",
-        link: "#TODO/concepts/middleware",
+        link: "/concepts/middleware",
       },
     ],
   },
