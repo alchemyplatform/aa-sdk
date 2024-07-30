@@ -111,6 +111,11 @@ export const toPaymaster = (args: ToPaymasterArgs): Paymaster => {
         address: proxyAddress,
       });
 
+      await setBalance(client, {
+        address: proxyAddress,
+        value: parseEther("5"),
+      });
+
       await contract.write.deposit({
         value: parseEther("5"),
         account: accounts.paymasterOwner,

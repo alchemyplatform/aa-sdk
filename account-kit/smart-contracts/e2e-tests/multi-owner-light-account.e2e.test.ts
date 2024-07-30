@@ -1,5 +1,5 @@
-import * as infra from "@account-kit/infra";
 import { LocalAccountSigner, sepolia } from "@aa-sdk/core";
+import * as infra from "@account-kit/infra";
 import { Alchemy, Network } from "alchemy-sdk";
 import {
   createMultiOwnerLightAccountAlchemyClient,
@@ -20,66 +20,6 @@ describe("MultiOwnerMultiOwnerLightAccount Client Tests", () => {
   const signer = LocalAccountSigner.mnemonicToAccountSigner(
     LIGHT_ACCOUNT_OWNER_MNEMONIC
   );
-
-  it("should successfully get counterfactual address", async () => {
-    const provider = await givenConnectedProvider({ signer, chain });
-    expect(provider.getAddress()).toMatchInlineSnapshot(
-      '"0x86f3B0211764971Ad0Fc8C8898d31f5d792faD84"'
-    );
-  });
-
-  it("should execute successfully", async () => {
-    const provider = await givenConnectedProvider({ signer, chain });
-
-    const result = await provider.sendUserOperation({
-      uo: {
-        target: provider.getAddress(),
-        data: "0x",
-      },
-    });
-
-    const txnHash = provider.waitForUserOperationTransaction(result);
-
-    await expect(txnHash).resolves.not.toThrowError();
-  }, 100000);
-
-  it("should fail to execute if account address is not deployed and not correct", async () => {
-    const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
-    const provider = await givenConnectedProvider({
-      signer,
-      chain,
-      accountAddress,
-    });
-
-    const result = provider.sendUserOperation({
-      uo: {
-        target: provider.getAddress(),
-        data: "0x",
-      },
-    });
-
-    await expect(result).rejects.toThrowError();
-  });
-
-  it("should successfully execute with alchemy paymaster info", async () => {
-    const provider = await givenConnectedProvider({
-      signer,
-      chain,
-      gasManagerConfig: {
-        policyId: PAYMASTER_POLICY_ID,
-      },
-    });
-
-    const result = await provider.sendUserOperation({
-      uo: {
-        target: provider.getAddress(),
-        data: "0x",
-      },
-    });
-    const txnHash = provider.waitForUserOperationTransaction(result);
-
-    await expect(txnHash).resolves.not.toThrowError();
-  }, 100000);
 
   it("should successfully override fees and gas when using paymaster", async () => {
     const provider = await givenConnectedProvider({

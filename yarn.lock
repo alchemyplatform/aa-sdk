@@ -2,16 +2,6 @@
 # yarn lockfile v1
 
 
-"@aa-sdk/core@^4.0.0-alpha.8":
-  version "4.0.0-alpha.8"
-  resolved "https://registry.yarnpkg.com/@aa-sdk/core/-/core-4.0.0-alpha.8.tgz#a1b8c001d30ed403c33fe389d1796ece9ad807b1"
-  integrity sha512-w9Fm9ZgnfrHEbSyCizxu2QAlVb5dT8y+4RR3WZ02vVdTFGNnunsVPp8wdgQEwz8nmyK6acx5LZloeusKlMp8aw==
-  dependencies:
-    abitype "^0.8.3"
-    eventemitter3 "^5.0.1"
-    viem "2.8.6"
-    zod "^3.22.4"
-
 "@aashutoshrathi/word-wrap@^1.2.3":
   version "1.2.6"
   resolved "https://registry.npmjs.org/@aashutoshrathi/word-wrap/-/word-wrap-1.2.6.tgz"
