@@ -1,0 +1,16 @@
+---
+title: Bundler Client
+description: What is the Bundler Client?
+---
+
+# Bundler Client
+
+The Bundler Client is similar to the [Smart Account Client](/concepts/smart-account-client) but is account agnostic. The Bundler Client only exposes methods for interacting directly with Bundler RPC and ETH RPC
+methods. The client also exposes the same methods as `viem`'s [`PublicClient`](https://viem.sh/docs/actions/public/introduction). In the vast majority of cases, you will not be using this client directly and will instead be using the [Smart Account Client](/concepts/smart-account-client) which wraps an instance of the Bundler Client
+and provides the same actions as the Bundler Client.
+
+The Bundler Client is EIP-1193 compliant, meaning it can easily be swapped out in place of other web3 providers (eg. `window.ethereum`).
+
+## Bundler Client actions
+
+Similarly to the Smart Account Client, the Bundler Client is extended with a set of actions that make it easier to interact with RPC methods. The actions are all defined in [`@aa-sdk/core`](https://github.com/alchemyplatform/aa-sdk/tree/v4.x.x/aa-sdk/core/src/actions/bundler). For detailed documentation on these methods, check out the [SDK Reference Docs](/reference/aa-sdk/core).
