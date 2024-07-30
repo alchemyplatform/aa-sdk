@@ -8,7 +8,7 @@ export const indexSidebar: SidebarItem[] = [
     items: [
       {
         text: "Smart Contract Account",
-        link: "#TODO/concepts/smart-contract-account",
+        link: "/concepts/smart-contract-account",
       },
       {
         text: "Smart Account Client",
