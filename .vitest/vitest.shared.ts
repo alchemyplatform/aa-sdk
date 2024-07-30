@@ -12,6 +12,7 @@ export const sharedConfig = defineConfig({
     globals: true,
     setupFiles: [join(__dirname, "setupTests.ts")],
     globalSetup: join(__dirname, "globalSetup.ts"),
+    pool: "threads",
     exclude: [
       ...configDefaults.exclude,
       "**/e2e-tests/**/*.test.ts",
