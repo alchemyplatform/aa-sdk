@@ -3,7 +3,8 @@ import fetch from "node-fetch";
 import { reset, setAutomine } from "viem/actions";
 import { beforeAll } from "vitest";
 import * as instances from "./src/instances.js";
-import { deployPaymasterContract } from "./src/paymaster.js";
+import { paymaster060 } from "./src/paymaster/paymaster060.js";
+import { paymaster070 } from "./src/paymaster/paymaster070.js";
 
 dotenv.config();
 
@@ -13,7 +14,8 @@ global.fetch = fetch;
 beforeAll(async () => {
   const client = instances.localInstance.getClient();
   await setAutomine(client, true);
-  await deployPaymasterContract(client);
+  await paymaster060.deployPaymasterContract(client);
+  await paymaster070.deployPaymasterContract(client);
 }, 60_000);
 
 afterEach(() => {
