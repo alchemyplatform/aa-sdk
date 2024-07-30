@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import isCi from "is-ci";
 import { rundlerBinaryPath } from "./src/constants";
 import * as instances from "./src/instances";

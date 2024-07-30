@@ -11,18 +11,19 @@ import { custom, parseEther, type Address } from "viem";
 import { setBalance } from "viem/actions";
 import { resetBalance } from "~test/accounts.js";
 import { accounts } from "~test/constants.js";
-import { localInstance } from "~test/instances.js";
+// TODO: update the tests that just use the 060 instance to use versions + 070 instance
+import { local060Instance } from "~test/instances.js";
 import { createLightAccountClient } from "../clients/client.js";
 import type { LightAccountVersion } from "../types.js";
 import { AccountVersionRegistry } from "../utils.js";
-
-const instance = localInstance;
 
 const versions = Object.keys(
   AccountVersionRegistry.LightAccount
 ) as LightAccountVersion<"LightAccount">[];
 
 describe("Light Account Tests", () => {
+  const instance = local060Instance;
+
   const signer: SmartAccountSigner = new LocalAccountSigner(
     accounts.fundedAccountOwner
   );
@@ -264,26 +265,26 @@ describe("Light Account Tests", () => {
       await expect(provider.sendUserOperation(toSend)).rejects.toThrowError();
     }
   );
-});
 
-const givenConnectedProvider = ({
-  signer,
-  version = "v1.1.0",
-  accountAddress,
-  usePaymaster = false,
-}: {
-  signer: SmartAccountSigner;
-  version?: LightAccountVersion<"LightAccount">;
-  usePaymaster?: boolean;
-  accountAddress?: Address;
-}) =>
-  createLightAccountClient({
-    account: {
-      signer,
-      accountAddress,
-      version,
-    },
-    transport: custom(instance.getClient()),
-    chain: instance.chain,
-    ...(usePaymaster ? erc7677Middleware() : {}),
-  });
+  const givenConnectedProvider = ({
+    signer,
+    version = "v1.1.0",
+    accountAddress,
+    usePaymaster = false,
+  }: {
+    signer: SmartAccountSigner;
+    version?: LightAccountVersion<"LightAccount">;
+    usePaymaster?: boolean;
+    accountAddress?: Address;
+  }) =>
+    createLightAccountClient({
+      account: {
+        signer,
+        accountAddress,
+        version,
+      },
+      transport: custom(instance.getClient()),
+      chain: instance.chain,
+      ...(usePaymaster ? erc7677Middleware() : {}),
+    });
+});
