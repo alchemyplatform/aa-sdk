@@ -18,13 +18,13 @@ import {
   type Hex,
   type Transport,
 } from "viem";
-import { AccountFactoryAbi } from "../abis/AccountFactory.js";
+import { AccountFactoryAbi } from "./abis/AccountFactory.js";
 import {
   getDefaultSingleSignerRIAccountFactoryAddress,
   DEFAULT_OWNER_ENTITY_ID,
-} from "../utils.js";
-import { executor } from "../actions/execute.js";
-import { singleSignerMessageSigner } from "../modules/single-signer-validation/signer.js";
+} from "./utils.js";
+import { executor } from "./actions/execute.js";
+import { singleSignerMessageSigner } from "./modules/single-signer-validation/signer.js";
 
 export type SingleSignerRIAccount<
   TSigner extends SmartAccountSigner = SmartAccountSigner

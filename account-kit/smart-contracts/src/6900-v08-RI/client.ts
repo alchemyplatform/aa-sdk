@@ -11,7 +11,7 @@ import {
   createSingleSignerRIAccount,
   type CreateSingleSignerRIAccountParams,
   type SingleSignerRIAccount,
-} from "./account/account.js";
+} from "./account.js";
 
 export type CreateSingleSignerRIAccountClientParams<
   TTransport extends Transport = Transport,

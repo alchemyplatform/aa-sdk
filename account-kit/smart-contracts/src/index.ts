@@ -116,8 +116,8 @@ export {
 } from "./msca/utils.js";
 
 // 6900 RI exports
-export type * from "./6900-v08-RI/account/account.js";
-export { createSingleSignerRIAccount } from "./6900-v08-RI/account/account.js";
+export type * from "./6900-v08-RI/account.js";
+export { createSingleSignerRIAccount } from "./6900-v08-RI/account.js";
 export { getDefaultSingleSignerRIAccountFactoryAddress } from "./6900-v08-RI/utils.js";
 export { singleSignerMessageSigner } from "./6900-v08-RI/modules/single-signer-validation/signer.js";
 export {

@@ -10,7 +10,7 @@ import {
 } from "viem";
 
 import { packSignature, DEFAULT_OWNER_ENTITY_ID } from "../../utils.js";
-import { Meta } from "./module.js";
+import { meta } from "./module.js";
 
 /**
  * Creates an object with methods for generating a dummy signature, signing user operation hashes, signing messages, and signing typed data.
@@ -41,7 +41,7 @@ export const singleSignerMessageSigner = <TSigner extends SmartAccountSigner>(
         "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
 
       return packSignature({
-        validationModule: Meta.addresses[chain.id],
+        validationModule: meta.addresses[chain.id],
         entityID: DEFAULT_OWNER_ENTITY_ID,
         isGlobal: true, // todo: make this user-configurable
         orderedHookData: [],
@@ -52,7 +52,7 @@ export const singleSignerMessageSigner = <TSigner extends SmartAccountSigner>(
     signUserOperationHash: (uoHash: `0x${string}`): Promise<`0x${string}`> => {
       return signer.signMessage({ raw: uoHash }).then((signature: Hex) =>
         packSignature({
-          validationModule: Meta.addresses[chain.id],
+          validationModule: meta.addresses[chain.id],
           entityID: DEFAULT_OWNER_ENTITY_ID,
           isGlobal: true, // todo: make this user-configurable
           orderedHookData: [],
