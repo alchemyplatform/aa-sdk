@@ -12,11 +12,11 @@ export const indexSidebar: SidebarItem[] = [
       },
       {
         text: "Smart Account Client",
-        link: "#TODO/concepts/smart-account-client",
+        link: "/concepts/smart-account-client",
       },
       {
         text: "Bundler Client",
-        link: "#TODO/concepts/bundler-client",
+        link: "/concepts/bundler-client",
       },
       {
         text: "Smart Account Signer",
