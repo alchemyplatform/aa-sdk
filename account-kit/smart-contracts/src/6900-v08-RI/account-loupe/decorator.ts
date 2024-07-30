@@ -5,11 +5,11 @@ import {
   type GetAccountParameter,
   type SmartContractAccount,
 } from "@aa-sdk/core";
-import type { Address, Hex, Chain, Client, Hash, Transport } from "viem";
-import { IAccountLoupeAbi } from "../abis/IAccountLoupe.js";
-import type { ExecutionHooks, ModuleEntity } from "./types.js";
+import type { Address, Hex, Chain, Client, Transport } from "viem";
+import { IAccountLoupeV08Abi } from "../abis/IAccountLoupe.js";
+import type { ExecutionHooksV08, ModuleEntity } from "./types.js";
 
-export type AccountLoupeActions<
+export type AccountLoupeV08Actions<
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined
@@ -33,7 +33,7 @@ export type AccountLoupeActions<
   /// @return The pre and post execution hooks for this selector
   getExecutionHooks(
     args: { selector: Hex } & GetAccountParameter<TAccount>
-  ): Promise<ReadonlyArray<ExecutionHooks>>;
+  ): Promise<ReadonlyArray<ExecutionHooksV08>>;
 
   /// @notice Gets the pre user op and runtime validation hooks associated with a selector
   /// @param selector The selector to get the hooks for
@@ -41,7 +41,7 @@ export type AccountLoupeActions<
   /// @return preRuntimeValidationHooks The pre runtime validation hooks for this selector
   getPermissionHooks(
     args: { validationFunction: ModuleEntity } & GetAccountParameter<TAccount>
-  ): Promise<ReadonlyArray<ExecutionHooks>>;
+  ): Promise<ReadonlyArray<ExecutionHooksV08>>;
 
   /// @notice Gets the pre user op and runtime validation hooks associated with a selector
   /// @param selector The selector to get the hooks for
@@ -67,7 +67,7 @@ export type AccountLoupeActions<
  * @param {Client<TTransport, TChain, TAccount>} client the client to be used for executing the account loupe actions
  * @returns {AccountLoupeActions<TAccount>} an object containing account loupe actions like `getExecutionFunctionConfig`, `getExecutionHooks`, `getPreValidationHooks`, and `getInstalledPlugins`
  */
-export const accountLoupeActions: <
+export const accountLoupeV08Actions: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
@@ -75,7 +75,7 @@ export const accountLoupeActions: <
     | undefined
 >(
   client: Client<TTransport, TChain, TAccount>
-) => AccountLoupeActions<TAccount> = (client) => ({
+) => AccountLoupeV08Actions<TAccount> = (client) => ({
   getExecutionFunctionHandler: async ({
     selector,
     account = client.account,
@@ -94,7 +94,7 @@ export const accountLoupeActions: <
 
     return client.readContract({
       address: account.address,
-      abi: IAccountLoupeAbi,
+      abi: IAccountLoupeV08Abi,
       functionName: "getExecutionFunctionHandler",
       args: [selector],
     });
@@ -115,7 +115,7 @@ export const accountLoupeActions: <
 
     return client.readContract({
       address: account.address,
-      abi: IAccountLoupeAbi,
+      abi: IAccountLoupeV08Abi,
       functionName: "getSelectors",
       args: [validationFunction],
     });
@@ -136,7 +136,7 @@ export const accountLoupeActions: <
 
     return client.readContract({
       address: account.address,
-      abi: IAccountLoupeAbi,
+      abi: IAccountLoupeV08Abi,
       functionName: "getExecutionHooks",
       args: [selector],
     });
@@ -160,7 +160,7 @@ export const accountLoupeActions: <
 
     return client.readContract({
       address: account.address,
-      abi: IAccountLoupeAbi,
+      abi: IAccountLoupeV08Abi,
       functionName: "getPermissionHooks",
       args: [validationFunction],
     });
@@ -184,7 +184,7 @@ export const accountLoupeActions: <
 
     return client.readContract({
       address: account.address,
-      abi: IAccountLoupeAbi,
+      abi: IAccountLoupeV08Abi,
       functionName: "getPreValidationHooks",
       args: [validationFunction],
     });

@@ -1,4 +1,4 @@
-export const IAccountLoupeAbi = [
+export const IAccountLoupeV08Abi = [
   {
     type: "function",
     name: "getExecutionFunctionHandler",
