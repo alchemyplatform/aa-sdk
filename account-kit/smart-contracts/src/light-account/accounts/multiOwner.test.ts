@@ -106,10 +106,6 @@ describe("MultiOwner Light Account Tests", () => {
       },
       transport: custom(client),
       chain: instance.chain,
-      customMiddleware: async (uo) => {
-        console.log(uo);
-        return uo;
-      },
       ...(usePaymaster ? erc7677Middleware() : {}),
     });
 });

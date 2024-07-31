@@ -5,7 +5,11 @@ import fetch from "node-fetch";
 import { setAutomine } from "viem/actions";
 import { beforeAll } from "vitest";
 import { poolId } from "./src/constants.js";
-import { local060Instance, local070Instance, local070InstanceArbSep } from "./src/instances.js";
+import {
+  local060Instance,
+  local070Instance,
+  local070InstanceArbSep,
+} from "./src/instances.js";
 import { paymaster060 } from "./src/paymaster/paymaster060.js";
 import { paymaster070 } from "./src/paymaster/paymaster070.js";
 
