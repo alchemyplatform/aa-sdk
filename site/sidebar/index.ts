@@ -1,4 +1,5 @@
 import { SidebarItem } from "vocs";
+import { resources } from "./shared.js";
 
 export const indexSidebar: SidebarItem[] = [
   { text: "Overview", link: "/" },
@@ -28,4 +29,5 @@ export const indexSidebar: SidebarItem[] = [
       },
     ],
   },
+  resources,
 ];

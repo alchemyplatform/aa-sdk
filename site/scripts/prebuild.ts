@@ -3,6 +3,7 @@ import dedent from "dedent";
 import fs from "fs-extra";
 import path from "node:path";
 import { format } from "prettier";
+import { resources } from "sidebar/shared.js";
 
 const referencePackages = [
   "@account-kit/core",
@@ -116,7 +117,8 @@ referencePackages.forEach(async (pkg) => {
     ${[componentsSection, hooksSection, functionsSection, classesSection]
       .filter((x) => x != null)
       .map((x) => JSON.stringify(x, null, 2))
-      .join(",\n")}
+      .join(",\n")},
+    ${JSON.stringify(resources, null, 2)}
   ];
   `;
 
