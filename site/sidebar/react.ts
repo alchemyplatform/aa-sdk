@@ -1,4 +1,5 @@
 import { SidebarItem } from "vocs";
+import { resources } from "./shared.js";
 
 export const reactSidebar: SidebarItem[] = [
   {
@@ -30,4 +31,5 @@ export const reactSidebar: SidebarItem[] = [
     ],
   },
   { text: "SDK Reference", link: "/reference/account-kit/react" },
+  resources,
 ];

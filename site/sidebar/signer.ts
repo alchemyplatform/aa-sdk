@@ -1,4 +1,5 @@
 import { SidebarItem } from "vocs";
+import { resources } from "./shared.js";
 
 export const signerSidebar: SidebarItem[] = [
   {
@@ -8,4 +9,5 @@ export const signerSidebar: SidebarItem[] = [
       { text: "Getting started", link: "#TODO" },
     ],
   },
+  resources,
 ];
