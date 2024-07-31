@@ -5,12 +5,12 @@ import { useAuthenticate } from "../../../hooks/useAuthenticate.js";
 import { useSigner } from "../../../hooks/useSigner.js";
 import { ChevronRight } from "../../../icons/chevron.js";
 import { MailIcon } from "../../../icons/mail.js";
+import { ls } from "../../../strings.js";
 import { Button } from "../../button.js";
 import { IS_SIGNUP_QP } from "../../constants.js";
 import { Input } from "../../input.js";
 import { useAuthContext } from "../context.js";
 import type { AuthType } from "../types.js";
-import { ls } from "../../../strings.js";
 
 type EmailAuthProps = Extract<AuthType, { type: "email" }>;
 
@@ -58,6 +58,7 @@ export const EmailAuth = ({
 
   return (
     <form
+      className="w-full"
       onSubmit={(e) => {
         e.stopPropagation();
         e.preventDefault();

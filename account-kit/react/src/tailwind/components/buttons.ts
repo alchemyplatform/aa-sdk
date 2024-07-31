@@ -1,7 +1,20 @@
 import type { ComponentDef } from "../types";
 
 export const buttonComponents: ComponentDef = {
+  ".btn-group": {
+    "@apply flex flex-row gap-3 flex-wrap": {},
+    " > .btn:first-child": {
+      "@apply grow shrink-0 min-w-full": {},
+    },
+    " > .btn:not(:first-child)": {
+      "@apply flex-1": {},
+    },
+    "&:has(> :nth-child(4)) > .btn:not(:first-child) > .btn-content": {
+      display: "none",
+    },
+  },
   ".btn": {
+    "@apply max-h-[40px]": {},
     "@apply p-3 inline-flex h-10 font-semibold text-sm": {},
     "@apply gap-2": {},
     "@apply items-center justify-center": {},
