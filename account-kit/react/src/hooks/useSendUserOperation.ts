@@ -103,10 +103,12 @@ export type UseSendUserOperationResult<
  *       <button
  *         onClick={() =>
  *           sendUserOperation({
+ *            uo: {
  *             target: "0xTARGET_ADDRESS",
  *             data: "0x",
  *             value: 0n,
- *           })
+ *           }
+ *          })
  *         }
  *         disabled={isSendingUserOperation}
  *       >
