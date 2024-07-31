@@ -126,11 +126,15 @@ function getConfigCode(config: Config) {
     sections.push([{ type: "email" }]);
   }
 
-  if (config.auth.showExternalWallets) {
-    sections.push([{ type: "injected" }]);
+  if (config.auth.addPasskey) {
+    sections.push([{ type: "passkey" }]);
   }
 
-  sections.push([{ type: "passkey" }]);
+  if (config.auth.showExternalWallets && config.auth.addPasskey) {
+    sections[1].push({ type: "injected" });
+  } else if (config.auth.showExternalWallets) {
+    sections.push([{ type: "injected" }]);
+  }
 
   return dedent`
   import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react";
