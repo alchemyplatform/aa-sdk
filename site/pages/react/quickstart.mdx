@@ -7,9 +7,10 @@ description: Learn how to get started with Alchemy Account Kit in React.
 
 Account Kit React is the easiest way to build with smart accounts. Craft delightful sign up flows with email and passkey to onboard new users, and then checkout with gas sponsorship using built-in AA. For existing EOA users, the modal also support injected wallets!
 
-We have a TON more features coming soon:  WalletConnect, Social OAuth, SMS, and more.
+We have a TON more features coming soon: WalletConnect, Social OAuth, SMS, and more.
 
 This quickstart guide is includes two guides:
+
 1. Starting with a new project using a NextJS template
 2. Integrating Account Kit into an existing project
 
@@ -18,9 +19,11 @@ Both guides will walk you through the process of setting up a project and then i
 ## New NextJS project
 
 ### 1. Create a new NextJS app using our template
+
 For a simple end-to-end example, we will spin up a new NextJS app using the ui components template.
 
 :::code-group
+
 ```bash [yarn]
 yarn create next-app my-smart-app -e https://github.com/avarobinson/embedded-accounts-ui-components-alpha-quickstart-nextjs
 ```
@@ -28,26 +31,29 @@ yarn create next-app my-smart-app -e https://github.com/avarobinson/embedded-acc
 ```bash [npm]
 npx create-next-app my-smart-app -e https://github.com/avarobinson/embedded-accounts-ui-components-alpha-quickstart-nextjs
 ```
+
 :::
 
 ### 2. Get your Alchemy API Key
 
 1. Get your API key by **creating a new app** in your [Alchemy Dashboard](https://dashboard.alchemy.com/apps)
-    :::warning
-    Make sure **Ethereum Sepolia** is enabled (new apps are multi-chain and will have this enabled by default)
-    :::
-    
+   :::warning
+   Make sure **Ethereum Sepolia** is enabled (new apps are multi-chain and will have this enabled by default)
+   :::
 2. Create a **new account config** in your [Alchemy Accounts Manager Dashboard](https://dashboard.alchemy.com/accounts)
-    1. Use [http://localhost:3000](https://localhost:3000/) as the “Redirect URL” for testing (***make sure to set http NOT https for local testing)
-        <img src="/images/new-embedded-account.png" alt="alchemy create new embedded account config highlighting where to set localhost" />
-        
-    2. Optionally, stylize ✨ the auth email with your brand color and logo!
-    3. Apply the config to your app from step 1
-        <img src="/images/apply-config-to-app.png" alt="apply your the config to the app from the first step" />
-        
+   1. Use [http://localhost:3000](https://localhost:3000/) as the “Redirect URL” for testing (\*\*\*make sure to set http NOT https for local testing)
+      <img
+        src="/images/new-embedded-account.png"
+        alt="alchemy create new embedded account config highlighting where to set localhost"
+      />
+   2. Optionally, stylize ✨ the auth email with your brand color and logo!
+   3. Apply the config to your app from step 1
+      <img
+        src="/images/apply-config-to-app.png"
+        alt="apply your the config to the app from the first step"
+      />
 3. Copy the **API Key** found at the end of the URL (you don't need the whole link for this demo)
-    <img src="/images/copy-api-key.png" alt="how to copy the api key" />
-    
+   <img src="/images/copy-api-key.png" alt="how to copy the api key" />
 
 …and paste the API key into `config.ts` where you see `your_api_key`
 
@@ -66,9 +72,11 @@ export const config = createConfig(
 ```
 
 ### 3. Run the app!
+
 That's it! Run the NextJS app to see your new auth flow in action ✨
 
 :::code-group
+
 ```bash [yarn]
 yarn dev
 ```
@@ -76,8 +84,8 @@ yarn dev
 ```bash [npm]
 npm run dev
 ```
-:::
 
+:::
 
 ## Existing project
 
@@ -96,6 +104,7 @@ To integrate in to your existing dapp and better understand the above demo app, 
 Install the React and Infra packages from Account Kit along with [tailwind](https://tailwindcss.com/) for styling and react-query to support react components.
 
 :::code-group
+
 ```bash [yarn]
 yarn add @account-kit/infra @account-kit/react @tanstack/react-query
 yarn add -D tailwindcss postcss autoprefixer
@@ -105,6 +114,7 @@ yarn add -D tailwindcss postcss autoprefixer
 npm install @account-kit/infra @account-kit/react @tanstack/react-query
 npm install -D tailwindcss postcss autoprefixer
 ```
+
 :::
 
 **Tailwind Setup**
@@ -130,88 +140,103 @@ For more on tailwind setup, see these [steps](https://tailwindcss.com/docs/insta
 See the steps above in the NextJS section to get your API key.
 
 ### 3. Configure your UI components
+
 In this step, you'll customize your authentication methods and UI styles.
 
-The [**demo app**](https://aa-sdk-ui-demo.vercel.app/) provides an interactive sandbox to explore combinations. When you’re all done, click the ‘Code preview’ toggle to export your code! You’ll get two files:  
-1. `tailwind.config.ts` 
-2. `config.ts` 
+The [**demo app**](https://aa-sdk-ui-demo.vercel.app/) provides an interactive sandbox to explore combinations. When you’re all done, click the ‘Code preview’ toggle to export your code! You’ll get two files:
 
-***Note:** tailwind.config.ts and config.ts changes are required even if using default styling*
+1. `tailwind.config.ts`
+2. `config.ts`
 
-<img src="/images/ui-component-demo-app.png" alt="Customize styles and auth methods in the demo app" />
+**\*Note:** tailwind.config.ts and config.ts changes are required even if using default styling\*
+
+<img
+  src="/images/ui-component-demo-app.png"
+  alt="Customize styles and auth methods in the demo app"
+/>
 
 #### 3a. Customize styling with tailwind
+
 1. In the demo app, copy your `tailwind.config.ts` code into the file of the same name in your project. This will apply your custom styles: colors, border radius, and illustrations.
-    1. Logo:  logo images are loaded client side for maximum performance, so you’ll need to add the image file to your project and specify the file path in the config where noted.
-    2. Light/Dark mode:
-        1. Light Mode and Dark Mode are set to match the system theme. You can manually override this by following [this](https://tailwindcss.com/docs/dark-mode#toggling-dark-mode-manually) guide. TLDR: update your tailwindcss config to use `selector` mode for dark and then add the `dark` class to the root of your DOM
-    3. You can customize even more [style properties](https://github.com/alchemyplatform/aa-sdk/blob/v4.x.x/account-kit/react/src/tailwind/types.ts#L6).
+   1. Logo: logo images are loaded client side for maximum performance, so you’ll need to add the image file to your project and specify the file path in the config where noted.
+   2. Light/Dark mode:
+      1. Light Mode and Dark Mode are set to match the system theme. You can manually override this by following [this](https://tailwindcss.com/docs/dark-mode#toggling-dark-mode-manually) guide. TLDR: update your tailwindcss config to use `selector` mode for dark and then add the `dark` class to the root of your DOM
+   3. You can customize even more [style properties](https://github.com/alchemyplatform/aa-sdk/blob/v4.x.x/account-kit/react/src/tailwind/types.ts#L6).
 2. Make sure you wrap your existing tailwind config with `withAccountKitUi` :
-    
-    ```ts [tailwind.config.ts]
-    // tailwind.config.ts
-    import { withAccountKitUi } from "@account-kit/react/tailwind";
-    
-    export default withAccountKitUi({
-        // 1. (required) your tailwind config generated in setup or existing config including content, theme, plugins, etc. - https://tailwindcss.com/docs/installation/using-postcss
-    }, {
-    	// 2. (optional) overwrite AccountKit theme
-    })
-    ```
+
+   ```ts [tailwind.config.ts]
+   // tailwind.config.ts
+   import { withAccountKitUi } from "@account-kit/react/tailwind";
+
+   export default withAccountKitUi(
+     {
+       // 1. (required) your tailwind config generated in setup or existing config including content, theme, plugins, etc. - https://tailwindcss.com/docs/installation/using-postcss
+     },
+     {
+       // 2. (optional) overwrite AccountKit theme
+     }
+   );
+   ```
 
 #### 3b. Customize authentication methods
+
 1. In the root of your project, create a `config.ts` file
 2. In the demo app, copy your `config.ts` code into the file of the same name in your project. This will apply your authentication methods (email, passkey, etc.)
-    - `createConfig` is used to initialize the alchemy provider in the next step. It requires 2 params:
-        
-        - `props`: for creating an Alchemy config. Notice the 4 params passed to props in our example:
-            - apiKey (required): Copy-paste your Alchemy API key, from step 2. Note that for production this key should be protected by proxying to the backend and setting rpcUrl instead
-            - chain (required): Chain imported from @account-kit/infra . This chain must match the chain your api key / embedded accounts config is setup for.
-            - ssr (optional): Highly recommended for NextJs applications to keep account state consistent between the server and client
-            - storage (optional): Cookie storage highly recommended for NextJs applications to persist and cache account state across page loads
-        
-        - `ui`: for creating Alchemy Accounts UI components
-        
-        - See [here](https://github.com/alchemyplatform/aa-sdk/blob/dfab5c839dc782b21ba4d05f1892982133606cec/account-kit/react/src/types.ts#L5) for full details on the ui config params including authentication options
-        
+
+   - `createConfig` is used to initialize the alchemy provider in the next step. It requires 2 params:
+
+     - `props`: for creating an Alchemy config. Notice the 4 params passed to props in our example:
+
+       - apiKey (required): Copy-paste your Alchemy API key, from step 2. Note that for production this key should be protected by proxying to the backend and setting rpcUrl instead
+       - chain (required): Chain imported from @account-kit/infra . This chain must match the chain your api key / embedded accounts config is setup for.
+       - ssr (optional): Highly recommended for NextJs applications to keep account state consistent between the server and client
+       - storage (optional): Cookie storage highly recommended for NextJs applications to persist and cache account state across page loads
+
+     - `ui`: for creating Alchemy Accounts UI components
+
+     - See [here](https://github.com/alchemyplatform/aa-sdk/blob/dfab5c839dc782b21ba4d05f1892982133606cec/account-kit/react/src/types.ts#L5) for full details on the ui config params including authentication options
+
 3. Make sure to export your config and queryClient:
 
 **Remember to paste in your API Key from step 2**
-    
+
 ```ts [src/config.ts]
 import { createConfig, cookieStorage } from "@account-kit/react";
 import { QueryClient } from "@tanstack/react-query";
-import { sepolia } from "@account-kit/infra"; 
+import { sepolia } from "@account-kit/infra";
 
 export const config = createConfig(
-    { // alchemy config
-        apiKey: "YOUR_API_KEY", // TODO: add your Alchemy API key - setup your app and embedded account config in the alchemy dashboard (https://dashboard.alchemy.com/accounts)
-        chain: sepolia, // TODO: specify your preferred chain here and update imports from @account-kit/infra 
-        ssr: true, // Defers hydration of the account state to the client after the initial mount solving any inconsistencies between server and client state (read more here: https://accountkit.alchemy.com/react/ssr)
-        storage: cookieStorage, // persist the account state using cookies (read more here: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state)
-    },
-    { // authentication ui config - your customizations here
-        auth: {
-        sections: [
+  {
+    // alchemy config
+    apiKey: "YOUR_API_KEY", // TODO: add your Alchemy API key - setup your app and embedded account config in the alchemy dashboard (https://dashboard.alchemy.com/accounts)
+    chain: sepolia, // TODO: specify your preferred chain here and update imports from @account-kit/infra
+    ssr: true, // Defers hydration of the account state to the client after the initial mount solving any inconsistencies between server and client state (read more here: https://accountkit.alchemy.com/react/ssr)
+    storage: cookieStorage, // persist the account state using cookies (read more here: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state)
+  },
+  {
+    // authentication ui config - your customizations here
+    auth: {
+      sections: [
         [{ type: "email" }],
         [{ type: "passkey" }, { type: "injected" }],
-        ],
-        addPasskeyOnSignup: true,
-        showSignInText: true,
+      ],
+      addPasskeyOnSignup: true,
+      showSignInText: true,
     },
-    }
+  }
 );
 
 export const queryClient = new QueryClient();
 ```
 
 ### 4. Set up the Alchemy Provider
+
 This example assumes you are using the NextJS app [router](https://nextjs.org/docs/getting-started/project-structure#app-routing-conventions).
 
 However, the key pieces are applicable to any React app and you can structure the location of the code as needed.
 
 #### 4a. **Create the provider - app/providers.tsx**
-    
+
 Once you have styling and authentication configs, create a `providers.tsx` file and import the `AlchemyAccountProvider`.
 
 The `QueryClientProvider` is also required to handle React Queries within the Alchemy Account Provider.
@@ -225,25 +250,26 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren } from "react";
 
 export const Providers = (
-    props: PropsWithChildren<{ initialState?: AlchemyClientState }>
+  props: PropsWithChildren<{ initialState?: AlchemyClientState }>
 ) => {
-    return (
+  return (
     <QueryClientProvider client={queryClient}>
-        <AlchemyAccountProvider
+      <AlchemyAccountProvider
         config={config}
         queryClient={queryClient}
         initialState={props.initialState}
-        >
+      >
         {props.children}
-        </AlchemyAccountProvider>
+      </AlchemyAccountProvider>
     </QueryClientProvider>
-    );
+  );
 };
 ```
-    
+
 #### 4b. **Use the provider - layout.tsx**
+
 Any component or page that will use Alchemy React components, must be wrapped by this `Provider`.
-    
+
 Additionally, we recommend using cookies to set the initial state when creating the provider to persist state across reloads (🧠 remember the [cookie storage configured in step 3b](https://www.notion.so/Alchemy-Account-Kit-UI-Components-Alpha-Quickstart-0805fd3fb8ba4c15bfd88846d4ad53ea?pvs=21)).
 
 For example, wrap your app with the created `Provider` by modifying your `layout.tsx` file.
@@ -260,39 +286,45 @@ import { Providers } from "./providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    title: "Embedded Accounts UI Components Quickstart NextJs Template",
-    description: "Embedded Accounts UI Components Quickstart NextJs Template",
+  title: "Embedded Accounts UI Components Quickstart NextJs Template",
+  description: "Embedded Accounts UI Components Quickstart NextJs Template",
 };
 
 export default function RootLayout({
-    children,
+  children,
 }: Readonly<{
-    children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-    // This will allow us to persist state across page boundaries (read more here: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state)
-    const initialState = cookieToInitialState(
+  // This will allow us to persist state across page boundaries (read more here: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state)
+  const initialState = cookieToInitialState(
     config,
     headers().get("cookie") ?? undefined
-    );
+  );
 
-    return (
+  return (
     <html lang="en">
-        <body className={inter.className}>
+      <body className={inter.className}>
         <Providers initialState={initialState}>{children}</Providers>
-        </body>
+      </body>
     </html>
-    );
+  );
 }
 ```
 
 ### 5. Run it
+
 Once you have wrapped your app with the Alchemy Provider, you can now use the pre-built Alchemy react components for auth throughout your app.
 
 All you need to do is `useAuthModal`! For example, pop open the auth modal like so:
 
 ```tsx [app/page.tsx]
 "use client";
-import { useAuthModal, useLogout, useSignerStatus, useUser } from "@account-kit/react";
+import {
+  useAuthModal,
+  useLogout,
+  useSignerStatus,
+  useUser,
+} from "@account-kit/react";
 
 export default function Home() {
   const user = useUser();
@@ -307,8 +339,10 @@ export default function Home() {
       ) : user ? (
         <div className="flex flex-col gap-2 p-2">
           <p className="text-xl font-bold">Success!</p>
-          You're logged in as {user.email ?? "anon"}.
-          <button className="btn btn-primary mt-6" onClick={() => logout()}>
+          You're logged in as {user.email ?? "anon"}.<button
+            className="btn btn-primary mt-6"
+            onClick={() => logout()}
+          >
             Log out
           </button>
         </div>
