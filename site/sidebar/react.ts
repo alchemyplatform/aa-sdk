@@ -11,6 +11,10 @@ export const reactSidebar: SidebarItem[] = [
     link: "/react/quickstart",
   },
   {
+    text: "Server side rendering",
+    link: "/react/ssr",
+  },
+  {
     text: "Using smart accounts",
     items: [
       {
