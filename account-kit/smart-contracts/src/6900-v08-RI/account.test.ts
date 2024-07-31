@@ -6,9 +6,7 @@ import { createSingleSignerRIAccountClient } from "@account-kit/smart-contracts"
 
 import { local070InstanceArbSep } from "~test/instances.js";
 import { setBalance } from "viem/actions";
-import { resetBalance } from "~test/accounts.js";
 import { accounts } from "~test/constants.js";
-import { parse } from "dotenv";
 
 describe("6900 RI Account Tests", async () => {
   const instance = local070InstanceArbSep;
