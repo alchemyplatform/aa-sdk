@@ -96,6 +96,12 @@ export function ConfigContextProvider(props: PropsWithChildren) {
       sections.push([{ type: "passkey" }]);
     }
 
+    if (config.auth.showExternalWallets && config.auth.addPasskey) {
+      sections[1].push({ type: "injected" });
+    } else if (config.auth.showExternalWallets) {
+      sections.push([{ type: "injected" }]);
+    }
+
     const uiConfig: AlchemyAccountsUIConfig = {
       illustrationStyle: config.ui.illustrationStyle,
       auth: {

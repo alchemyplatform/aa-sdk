@@ -4,7 +4,6 @@ import {
   type DetailedHTMLProps,
   type ReactNode,
 } from "react";
-import { GoogleIcon } from "../icons/google.js";
 
 type ButtonProps = (
   | { variant?: "primary" | "secondary" | "link"; icon?: never }
@@ -41,37 +40,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
       >
         {icon && <span>{icon}</span>}
-        {children}
+        <div className="btn-content">{children}</div>
       </button>
     );
   }
 );
-
-// this is temporary so not gonna document it
-// eslint-disable-next-line jsdoc/require-jsdoc
-export const DemoSet = (props: ButtonProps) => {
-  switch (props.variant) {
-    case "social": {
-      const Icon = () => <GoogleIcon />;
-      return (
-        <div className="flex flex-col gap-2">
-          <Button {...props} icon={<Icon />}>
-            {props.children}
-          </Button>
-          <Button {...props} icon={<Icon />} disabled>
-            {props.children}
-          </Button>
-        </div>
-      );
-    }
-    default:
-      return (
-        <div className="flex flex-col gap-2">
-          <Button {...props}>{props.children}</Button>
-          <Button {...props} disabled>
-            {props.children}
-          </Button>
-        </div>
-      );
-  }
-};
