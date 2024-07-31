@@ -19,11 +19,7 @@ export const reactSidebar: SidebarItem[] = [
       },
       {
         text: "Send user operations",
-        link: "#TODO/react/send-user-operations",
-      },
-      {
-        text: "Batch user operations",
-        link: "#TODO/react/batch-user-operations",
+        link: "/react/send-user-operations",
       },
       { text: "Sponsor gas", link: "#TODO/react/sponsor-gas" },
       { text: "Add passkey", link: "#TODO/react/add-passkey" },
