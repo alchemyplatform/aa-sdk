@@ -15,7 +15,7 @@ export const reactSidebar: SidebarItem[] = [
     items: [
       {
         text: "Authenticate users",
-        link: "#TODO/react/authenticate-users",
+        link: "/react/authenticate-users",
       },
       {
         text: "Send user operations",
