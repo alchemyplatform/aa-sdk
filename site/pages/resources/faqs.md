@@ -6,6 +6,8 @@ description: Learn how to get started with Alchemy's Account Kit, a vertically
 
 # Frequently asked questions
 
+Check out our [SDK discussions](https://github.com/alchemyplatform/aa-sdk/discussions) for more FAQs. Feel free to open a new discussion for any other questions, issues, or feature requests and we will be happy to help :)
+
 ## Smart Accounts - Light Account
 
 ### Do accounts have the same address across all chains?
