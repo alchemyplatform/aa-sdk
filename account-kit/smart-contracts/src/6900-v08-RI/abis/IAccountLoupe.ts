@@ -1,28 +1,26 @@
 export const IAccountLoupeV08Abi = [
   {
     type: "function",
-    name: "getExecutionFunctionHandler",
-    inputs: [{ name: "selector", type: "bytes4", internalType: "bytes4" }],
-    outputs: [{ name: "module", type: "address", internalType: "address" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "getExecutionHooks",
+    name: "getExecutionData",
     inputs: [{ name: "selector", type: "bytes4", internalType: "bytes4" }],
     outputs: [
       {
         name: "",
-        type: "tuple[]",
-        internalType: "struct ExecutionHook[]",
+        type: "tuple",
+        internalType: "struct ExecutionDataView",
         components: [
+          { name: "module", type: "address", internalType: "address" },
+          { name: "isPublic", type: "bool", internalType: "bool" },
           {
-            name: "hookFunction",
-            type: "bytes24",
-            internalType: "ModuleEntity",
+            name: "allowGlobalValidation",
+            type: "bool",
+            internalType: "bool",
           },
-          { name: "isPreHook", type: "bool", internalType: "bool" },
-          { name: "isPostHook", type: "bool", internalType: "bool" },
+          {
+            name: "executionHooks",
+            type: "bytes26[]",
+            internalType: "HookConfig[]",
+          },
         ],
       },
     ],
@@ -30,7 +28,7 @@ export const IAccountLoupeV08Abi = [
   },
   {
     type: "function",
-    name: "getPermissionHooks",
+    name: "getValidationData",
     inputs: [
       {
         name: "validationFunction",
@@ -41,51 +39,29 @@ export const IAccountLoupeV08Abi = [
     outputs: [
       {
         name: "",
-        type: "tuple[]",
-        internalType: "struct ExecutionHook[]",
+        type: "tuple",
+        internalType: "struct ValidationDataView",
         components: [
+          { name: "isGlobal", type: "bool", internalType: "bool" },
           {
-            name: "hookFunction",
-            type: "bytes24",
-            internalType: "ModuleEntity",
+            name: "isSignatureValidation",
+            type: "bool",
+            internalType: "bool",
           },
-          { name: "isPreHook", type: "bool", internalType: "bool" },
-          { name: "isPostHook", type: "bool", internalType: "bool" },
+          {
+            name: "preValidationHooks",
+            type: "bytes24[]",
+            internalType: "ModuleEntity[]",
+          },
+          {
+            name: "permissionHooks",
+            type: "bytes26[]",
+            internalType: "HookConfig[]",
+          },
+          { name: "selectors", type: "bytes4[]", internalType: "bytes4[]" },
         ],
       },
     ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "getPreValidationHooks",
-    inputs: [
-      {
-        name: "validationFunction",
-        type: "bytes24",
-        internalType: "ModuleEntity",
-      },
-    ],
-    outputs: [
-      {
-        name: "preValidationHooks",
-        type: "bytes24[]",
-        internalType: "ModuleEntity[]",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "getSelectors",
-    inputs: [
-      {
-        name: "validationFunction",
-        type: "bytes24",
-        internalType: "ModuleEntity",
-      },
-    ],
-    outputs: [{ name: "", type: "bytes4[]", internalType: "bytes4[]" }],
     stateMutability: "view",
   },
 ] as const;
