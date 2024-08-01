@@ -118,6 +118,8 @@ export {
 
 // 6900 RI exports
 export type * from "./6900-v08-RI/account.js";
+export { accountLoupeV08Actions } from "./6900-v08-RI/account-loupe/decorator.js";
+export type * from "./6900-v08-RI/account-loupe/types.js";
 export { createSingleSignerRIAccount } from "./6900-v08-RI/account.js";
 export { getDefaultSingleSignerRIAccountFactoryAddress } from "./6900-v08-RI/utils.js";
 export { singleSignerMessageSigner } from "./6900-v08-RI/modules/single-signer-validation/signer.js";
