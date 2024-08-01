@@ -11,12 +11,6 @@
     "preview": "vocs preview"
   },
   "devDependencies": {
-    "@aa-sdk/core": "^4.0.0-alpha.0",
-    "@aa-sdk/ethers": "^4.0.0-alpha.0",
-    "@account-kit/core": "^4.0.0-alpha.0",
-    "@account-kit/infra": "^4.0.0-alpha.0",
-    "@account-kit/react": "^4.0.0-alpha.0",
-    "@account-kit/smart-contracts": "^4.0.0-alpha.0",
     "@types/prettier": "^2.7.3",
     "autoprefixer": "^10.4.16",
     "change-case": "^5.4.4",
@@ -28,8 +22,13 @@
     "viem": "2.8.6"
   },
   "dependencies": {
+    "@account-kit/core": "latest",
+    "@account-kit/infra": "latest",
+    "@account-kit/react": "latest",
+    "@account-kit/smart-contracts": "latest",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "viem": "2.8.6",
     "vocs": "^1.0.0-alpha.55"
   }
 }
