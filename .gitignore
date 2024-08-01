@@ -33,3 +33,5 @@ site/**/*.js
 **/userop.json
 
 vocs.config.tsx.timestamp-*.mjs
+
+bin

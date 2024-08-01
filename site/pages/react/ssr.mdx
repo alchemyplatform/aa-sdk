@@ -9,9 +9,10 @@ When using the React hooks exported by Account Kit in a server-side rendered set
 
 To enable this setting, you can set `ssr: true` when creating a config.
 
-```ts
-import { createConfig } from "@alchemy/aa-alchemy/config";
-import { sepolia } from "@alchemy/aa-core";
+```ts twoslash [config.ts]
+// @noErrors
+import { createConfig } from "@account-kit/react";
+import { sepolia } from "@account-kit/infra";
 
 export const config = createConfig({
   // required
@@ -29,13 +30,18 @@ This setting will defer hydration of the account state to the client after the i
 
 To consistently pass the state between the server and the client, you can pass in a cookie storage to the `config` object created above. The cookie storage allows the client state to be written serialized to a cookie which can be passed along to the server on each request. This allows the server to have access to certain parts of the account state when rendering, ensuring a consistent render between client and server (eg. user's address displayed in the top nav). Instances which can only be created on the client will still not be available on the server, however. This includes the signer or smart contract account instances.
 
-```ts
+```ts twoslash [config.ts]
+// @noErrors
 import {
   createConfig,
   cookieStorage, // [!code ++]
-} from "@alchemy/aa-alchemy/config";
-import { sepolia } from "@alchemy/aa-core";
+} from "@account-kit/react";
+import { sepolia } from "@account-kit/infra";
+import { QueryClient } from "@tanstack/react-query";
 
+export const queryClient = new QueryClient();
+
+// [!code focus:99]
 export const config = createConfig({
   // required
   rpcUrl: "/api/rpc",
@@ -53,12 +59,89 @@ If you are using NextJS App Directory, you can read the cookie state and pass it
 
 :::code-group
 
-```tsx [layout.tsx]
-// [!include ~/snippets/getting-started/setup-app/layout.tsx]
+```tsx twoslash [layout.tsx]
+// @noErrors
+import React from "react";
+import { cookieToInitialState } from "@account-kit/core";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import { headers } from "next/headers";
+import { config } from "./config";
+import "./globals.css";
+import { Providers } from "./providers";
+
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata: Metadata = {
+  title: "Embedded Accounts Getting Started",
+  description: "Embedded Accounts Quickstart Guide",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  // This will allow us to persist state across page boundaries
+  const initialState = cookieToInitialState(
+    config,
+    headers().get("cookie") ?? undefined
+  );
+
+  return (
+    <html lang="en">
+      <body className={inter.className}>
+        <Providers initialState={initialState}>{children}</Providers>
+      </body>
+    </html>
+  );
+}
 ```
 
-```tsx [providers.tsx]
-// [!include ~/snippets/getting-started/setup-app/providers.tsx]
+```tsx twoslash [providers.tsx]
+// @noErrors
+"use client";
+
+import React from "react";
+import { AlchemyClientState } from "@account-kit/core";
+import { AlchemyAccountProvider } from "@account-kit/react";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { PropsWithChildren, Suspense } from "react";
+import { config, queryClient } from "./config";
+
+export const Providers = (
+  props: PropsWithChildren<{ initialState?: AlchemyClientState }>
+) => {
+  return (
+    <Suspense>
+      <QueryClientProvider client={queryClient}>
+        <AlchemyAccountProvider
+          config={config}
+          queryClient={queryClient}
+          initialState={props.initialState}
+        >
+          {props.children}
+        </AlchemyAccountProvider>
+      </QueryClientProvider>
+    </Suspense>
+  );
+};
+```
+
+```tsx twoslash [config.ts]
+// @noErrors
+import { createConfig, cookieStorage } from "@account-kit/react";
+import { sepolia } from "@account-kit/infra";
+import { QueryClient } from "@tanstack/react-query";
+
+export const queryClient = new QueryClient();
+
+export const config = createConfig({
+  rpcUrl: "/api/rpc",
+  chain: sepolia,
+  ssr: true,
+  storage: cookieStorage,
+});
 ```
 
 :::

@@ -6,22 +6,30 @@
     "node": ">=18.16"
   },
   "workspaces": [
-    "packages/*",
+    "aa-sdk/*",
+    "account-kit/*",
     "templates/*",
     "examples/*",
-    "site"
+    "site",
+    "doc-gen",
+    ".vitest"
   ],
   "scripts": {
     "generate": "lerna run generate",
     "postgenerate": "yarn lint:write",
+    "preinstall": "yarn config set ignore-engines true",
     "postinstall": "git submodule update --init --recursive",
-    "build": "lerna run build --verbose --ignore=alchemy-daapp --ignore=embedded-accounts-quickstart --ignore=aa-simple-dapp --ignore=ui-demo",
-    "build:ci": "yarn build && yarn lint:write",
+    "build": "is-ci && yarn build:ci || yarn build:dev",
+    "build:base": "lerna run build --verbose --ignore=alchemy-daapp --ignore=embedded-accounts-quickstart --ignore=aa-simple-dapp --ignore=ui-demo",
+    "build:dev": "yarn build:base --ignore=docs",
+    "build:ci": "yarn build:base && yarn lint:write",
     "build:examples": "lerna run build",
     "clean": "lerna run clean",
-    "test": "lerna run --verbose test:run",
+    "docs:gen": "lerna run docs:gen",
+    "test": "vitest dev",
+    "test:ci": "vitest run",
     "test:e2e": "lerna run --verbose test:run-e2e --concurrency=1 --ignore=@alchemy/aa-signers",
-    "lint:write": "eslint . --fix && prettier --write --ignore-unknown .",
+    "lint:write": "eslint . --fix && yarn docs:gen && prettier --write --ignore-unknown .",
     "lint:check": "eslint . && prettier --check .",
     "lint:ci:eslint": "eslint --format github $(git diff --name-only origin/main HEAD | xargs)",
     "prepare": "husky install",
@@ -30,19 +38,25 @@
   "devDependencies": {
     "@commitlint/cli": "^17.6.3",
     "@commitlint/config-conventional": "^17.6.3",
+    "@types/prettier": "^2.7.3",
+    "ak-docgen": "*",
     "eslint": "^8.39.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-formatter-github": "^1.1.4",
     "eslint-formatter-rdjson": "^1.0.6",
+    "eslint-plugin-eslint-rules": "*",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jsdoc": "^48.2.3",
+    "eslint-plugin-mdx": "^3.1.5",
     "husky": "^8.0.0",
+    "is-ci": "^3.0.1",
     "lerna": "^8.0.2",
     "lint-staged": "^13.2.2",
     "node-fetch": "^3.3.1",
     "nx": "^17.3.0",
     "prettier": "^2.8.8",
-    "vitest": "^0.31.0"
+    "prool": "^0.0.15",
+    "vitest": "^2.0.4"
   },
   "commitlint": {
     "extends": [

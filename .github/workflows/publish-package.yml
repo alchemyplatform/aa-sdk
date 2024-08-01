@@ -46,10 +46,13 @@ jobs:
           fetch-depth: "0"
           submodules: "recursive"
 
-      - name: Set Node.js 18.x
+      - name: Set up foundry
+        uses: foundry-rs/foundry-toolchain@v1
+
+      - name: Set Node.js 22.x
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 22
           cache: "yarn"
 
       - name: Set Github User Details
@@ -63,7 +66,7 @@ jobs:
         run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
 
       - name: Install dependencies
-        run: yarn
+        run: yarn install --frozen-lockfile
 
       - name: Build
         env:

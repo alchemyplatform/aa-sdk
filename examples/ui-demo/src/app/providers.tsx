@@ -1,34 +1,45 @@
 "use client";
-import { createConfig } from "@alchemy/aa-alchemy/config";
-import { AlchemyAccountProvider, AlchemyAccountsProviderProps } from "@alchemy/aa-alchemy/react";
-import { sepolia } from "@alchemy/aa-core";
+
+import { AuthCardHeader } from "@/components/shared/AuthCardHeader";
+import { sepolia } from "@account-kit/infra";
+import { AlchemyAccountProvider, createConfig } from "@account-kit/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren, Suspense } from "react";
-
-const config = createConfig({
-  // required
-  rpcUrl: "/api/rpc",
-  chain: sepolia,
-  ssr: true,
-});
+import { ConfigContextProvider, DEFAULT_CONFIG } from "./state";
 
 const queryClient = new QueryClient();
 
-// TODO: this is starting to break the "5 lines or less" mentality.
-// we should export a default uiConfig which has our recommended config
-const uiConfig: AlchemyAccountsProviderProps["uiConfig"] = {
-  auth: {
-    sections: [[{type: "email"}], [{type: "passkey"}]],
-    addPasskeyOnSignup: true,
+const alchemyConfig = createConfig(
+  {
+    rpcUrl: "/api/rpc",
+    chain: sepolia,
+    ssr: true,
   },
-};
+  {
+    illustrationStyle: DEFAULT_CONFIG.ui.illustrationStyle,
+    auth: {
+      sections: [[{ type: "email" as const }], [{ type: "passkey" as const }]],
+      addPasskeyOnSignup: DEFAULT_CONFIG.auth.addPasskey,
+      header: (
+        <AuthCardHeader
+          theme={DEFAULT_CONFIG.ui.theme}
+          logoDark={DEFAULT_CONFIG.ui.logoDark}
+          logoLight={DEFAULT_CONFIG.ui.logoLight}
+        />
+      ),
+    },
+  }
+);
 
 export const Providers = (props: PropsWithChildren<{}>) => {
   return (
     <Suspense>
       <QueryClientProvider client={queryClient}>
-        <AlchemyAccountProvider config={config} queryClient={queryClient} uiConfig={uiConfig}>
-          {props.children}
+        <AlchemyAccountProvider
+          config={alchemyConfig}
+          queryClient={queryClient}
+        >
+          <ConfigContextProvider>{props.children}</ConfigContextProvider>
         </AlchemyAccountProvider>
       </QueryClientProvider>
     </Suspense>

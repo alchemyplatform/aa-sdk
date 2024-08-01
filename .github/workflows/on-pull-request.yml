@@ -9,14 +9,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: "yarn"
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+      - name: Setup Node
+        uses: ./.github/actions/setup-node
 
       - name: Use commitlint to check PR title
         env:
@@ -31,20 +25,19 @@ jobs:
       pull-requests: write 
     env:
       REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.ALCHEMY_BOT_PAT }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
     steps:
       - uses: actions/checkout@v3
         with:
           token: ${{ secrets.ALCHEMY_BOT_PAT }}
           fetch-depth: "0"
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: "yarn"
+      - name: Setup Node
+        uses: ./.github/actions/setup-node
 
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+      - name: Build eslint plugin
+        run: |
+          cd templates/eslint && yarn build
 
       - uses: reviewdog/action-setup@v1
         with:
@@ -53,6 +46,9 @@ jobs:
       - name: Run eslint with reviewdog
         run: |
           npx --no-install -c "eslint -f=rdjson ." | reviewdog -f=rdjson -reporter=github-pr-review -filter-mode=added -tee
+      
+      - name: Run eslint for errors
+        run: yarn lint:check
 
   build_and_lint_and_test:
     name: Build and Test
@@ -65,14 +61,26 @@ jobs:
           fetch-depth: "0"
           submodules: "recursive"
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: "yarn"
+      # using your own fork url avoids getting rate limited by the public api
+      # later we'll look at deploying everything we need directly to anvil so
+      # so we don't need a fork url
+      - name: Conditionally set fork url
+        if: ${{ env.API_KEY != '' }}
+        run: echo "VITEST_SEPOLIA_FORK_URL=https://eth-sepolia.g.alchemy.com/v2/${{ env.API_KEY }}" >> $GITHUB_ENV
+          
+      - name: Set up foundry
+        uses: foundry-rs/foundry-toolchain@v1
 
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+      - name: Set up Rundler
+        uses: jaxxstorm/action-install-gh-release@v1.12.0
+        with:
+          repo: alchemyplatform/rundler
+          platform: linux
+          tag: v0.2.2
+          cache: enable
+
+      - name: Setup Node
+        uses: ./.github/actions/setup-node
 
       - name: Build
         uses: nick-fields/retry@v3
@@ -81,7 +89,8 @@ jobs:
         with:
           timeout_minutes: 5
           max_attempts: 2
-          command: yarn build
+          # it's ok to run the dev build here because the site gets built in vercel for each branch
+          command: yarn build:dev
 
       - name: Unit Test
-        run: yarn test
+        run: yarn test:ci

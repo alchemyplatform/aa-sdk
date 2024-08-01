@@ -7,12 +7,12 @@ description: Glossary of types in aa-sdk
 
 ## `BatchUserOperationCallData`
 
-An array of `UserOperationCallData`, representing a sequence of `UserOperations` to be executed in batch by calling the `executeBatch` function on the `SmartContractAccount` contract. Check out our guide on [How to submit batch transactions](/using-smart-accounts/batch-user-operations) to learn more about batching multiple transactions into a single `UserOperation`.
+An array of `UserOperationCallData`, representing a sequence of `UserOperations` to be executed in batch by calling the `executeBatch` function on the `SmartContractAccount` contract. Check out our guide on [How to submit batch transactions](#TODO/using-smart-accounts/batch-user-operations) to learn more about batching multiple transactions into a single `UserOperation`.
 
 :::details[BatchUserOperationCallData]
 
 ```ts
-// [!include ~/../packages/core/src/types.ts:BatchUserOperationCallData]
+// [!include ~/../aa-sdk/core/src/types.ts:BatchUserOperationCallData]
 ```
 
 :::
@@ -24,7 +24,7 @@ A type that can be a hexadecimal string prefixed with [`Hex`](https://viem.sh/do
 :::details[BigNumberish]
 
 ```ts
-// [!include ~/../packages/core/src/utils/schema.ts:BigNumberish]
+// [!include ~/../aa-sdk/core/src/utils/schema.ts:BigNumberish]
 ```
 
 :::
@@ -36,7 +36,7 @@ An object type that may contain optional `min` and `max` fields, each of which a
 :::details[BigNumberishRange]
 
 ```ts
-// [!include ~/../packages/core/src/utils/schema.ts:BigNumberishRange]
+// [!include ~/../aa-sdk/core/src/utils/schema.ts:BigNumberishRange]
 ```
 
 :::
@@ -48,7 +48,7 @@ Bundler Actions are `viem` [`Actions`](https://viem.sh/docs/actions/public/intro
 :::details[BundlerAction]
 
 ```ts
-// [!include ~/../packages/core/src/client/decorators/bundlerClient.ts:BundlerActions]
+// [!include ~/../aa-sdk/core/src/client/decorators/bundlerClient.ts:BundlerActions]
 ```
 
 :::
@@ -60,43 +60,43 @@ Bundler Actions are `viem` [`Actions`](https://viem.sh/docs/actions/public/intro
 :::details[BundlerClient]
 
 ```ts
-// [!include ~/../packages/core/src/client/bundlerClient.ts:BundlerClient]
+// [!include ~/../aa-sdk/core/src/client/bundlerClient.ts:BundlerClient]
 ```
 
 :::
 
 ## `ClientMiddleware`
 
-Middleware represents different operations involved in the [`SmartAccountClient`](/packages/aa-core/smart-account-client/) pipeline for constructing a user operation given the user inputs by populating the UO with other data, including gas fees, paymaster data, etc.
+Middleware represents different operations involved in the [`SmartAccountClient`](/concepts/smart-account-client) pipeline for constructing a user operation given the user inputs by populating the UO with other data, including gas fees, paymaster data, etc.
 
 :::details[ClientMiddleware]
 
 ```ts
-// [!include ~/../packages/core/src/middleware/types.ts:ClientMiddleware]
+// [!include ~/../aa-sdk/core/src/middleware/types.ts:ClientMiddleware]
 ```
 
 :::
 
 ## `ClientMiddlewareConfig`
 
-Configuration object to configure `ClientMiddleware` of the [`SmartAccountClient`](/packages/aa-core/smart-account-client/) during the client instantiation. You can configure using this object to configure the middleware of your interest selectively.
+Configuration object to configure `ClientMiddleware` of the [`SmartAccountClient`](/concepts/smart-account-client) during the client instantiation. You can configure using this object to configure the middleware of your interest selectively.
 
 :::details[ClientMiddlewareFn]
 
 ```ts
-// [!include ~/../packages/core/src/client/types.ts:ClientMiddlewareConfig]
+// [!include ~/../aa-sdk/core/src/client/types.ts:ClientMiddlewareConfig]
 ```
 
 :::
 
 ## `ClientMiddlewareFn`
 
-Each middleware is a function that takes in a user operation object, `UserOperationStruct`, performs its job to retrieve or compute the data, and populate different fields of the user operation to pass onto the next middleware in the pipeline before being signed and sent to the network. `ClientMiddlewareFn` is the function type that represents each middleware. In optional [`UserOperationOverrides`](#useroperationoverrides), and [`UserOperationFeeOptions`](/packages/aa-core/smart-account-client/types/userOperationFeeOptions), and returns a promise that resolves to a modified `UserOperationStruct`. This function is what you specify as your overridden middleware value for applying custom logic during the `UserOperationStruct` object to be sent to the bundler for on-chain execution.
+Each middleware is a function that takes in a user operation object, `UserOperationStruct`, performs its job to retrieve or compute the data, and populate different fields of the user operation to pass onto the next middleware in the pipeline before being signed and sent to the network. `ClientMiddlewareFn` is the function type that represents each middleware. In optional [`UserOperationOverrides`](#useroperationoverrides), and [`UserOperationFeeOptions`](https://github.com/alchemyplatform/aa-sdk/blob/v4.x.x/aa-sdk/core/src/types.ts#L55), and returns a promise that resolves to a modified `UserOperationStruct`. This function is what you specify as your overridden middleware value for applying custom logic during the `UserOperationStruct` object to be sent to the bundler for on-chain execution.
 
 :::details[ClientMiddlewareFn]
 
 ```ts
-// [!include ~/../packages/core/src/middleware/types.ts:ClientMiddlewareFn]
+// [!include ~/../aa-sdk/core/src/middleware/types.ts:ClientMiddlewareFn]
 ```
 
 :::
@@ -108,7 +108,7 @@ An object type that defines the interface for `EntryPoint` functions for packing
 :::details[EntryPointDef]
 
 ```ts
-// [!include ~/../packages/core/src/entrypoint/types.ts:EntryPointDef]
+// [!include ~/../aa-sdk/core/src/entrypoint/types.ts:EntryPointDef]
 ```
 
 :::
@@ -120,7 +120,7 @@ An object type with a required `multipler` field, which is a `number` value with
 :::details[Multiplier]
 
 ```ts
-// [!include ~/../packages/core/src/utils/schema.ts:Multiplier
+// [!include ~/../aa-sdk/core/src/utils/schema.ts:Multiplier
 ```
 
 :::
@@ -132,7 +132,7 @@ An extension of the [`SmartAccountSigner`](#smartaccountsigner) interface, this 
 :::details[SmartAccountAuthenticator]
 
 ```ts
-// [!include ~/../packages/core/src/signer/types.ts:SmartAccountAuthenticator]
+// [!include ~/../aa-sdk/core/src/signer/types.ts:SmartAccountAuthenticator]
 ```
 
 :::
@@ -144,7 +144,7 @@ An extension of the [`SmartAccountSigner`](#smartaccountsigner) interface, this 
 :::details[SmartAccountClient]
 
 ```ts
-// [!include ~/../packages/core/src/client/smartAccountClient.ts:SmartAccountClient]
+// [!include ~/../aa-sdk/core/src/client/smartAccountClient.ts:SmartAccountClient]
 ```
 
 :::
@@ -156,7 +156,7 @@ An extension of the [`SmartAccountSigner`](#smartaccountsigner) interface, this 
 :::details[SmartAccountClientAction]
 
 ```ts
-// [!include ~/../packages/core/src/client/smartAccountClient.ts:SmartAccountClientActions]
+// [!include ~/../aa-sdk/core/src/client/smartAccountClient.ts:SmartAccountClientActions]
 ```
 
 :::
@@ -168,19 +168,19 @@ An interface representing a signer capable of signing messages and typed data. I
 :::details[SmartAccountSigner]
 
 ```ts
-// [!include ~/../packages/core/src/signer/types.ts:SmartAccountSigner]
+// [!include ~/../aa-sdk/core/src/signer/types.ts:SmartAccountSigner]
 ```
 
 :::
 
 ## `SmartContractAccount`
 
-As smart contract accounts are essentially the contract codes that operate on the blockchain, `SmartContractAccount` defines the interface with different functionalities for managing and interacting with the contract account. It includes different functionalities for creating, managing, and using your smart account. In addition to supporting all functionalities achieved with a basic [EOA](./terms#wallet) alone, `SmartContractAccount` can have custom capabilities such as automating processes or executing actions based on predefined conditions. Smart contract wallets allow users to customize how they manage their digital assets, offering a more tailored approach to handling funds securely. `SmartContractAccount` type extends `viem`'s [`Account`](https://viem.sh/docs/accounts/custom), and instantiation of an account is done using the [`toSmartContractAccount`](/packages/aa-core/accounts/) action.
+As smart contract accounts are essentially the contract codes that operate on the blockchain, `SmartContractAccount` defines the interface with different functionalities for managing and interacting with the contract account. It includes different functionalities for creating, managing, and using your smart account. In addition to supporting all functionalities achieved with a basic [EOA](./terms#wallet) alone, `SmartContractAccount` can have custom capabilities such as automating processes or executing actions based on predefined conditions. Smart contract wallets allow users to customize how they manage their digital assets, offering a more tailored approach to handling funds securely. `SmartContractAccount` type extends `viem`'s [`Account`](https://viem.sh/docs/accounts/custom), and instantiation of an account is done using the [`toSmartContractAccount`](/reference/aa-sdk/core/functions/toSmartContractAccount) action.
 
 :::details[SmartContractAccount]
 
 ```ts
-// [!include ~/../packages/core/src/account/smartContractAccount.ts:SmartContractAccount]
+// [!include ~/../aa-sdk/core/src/account/smartContractAccount.ts:SmartContractAccount]
 ```
 
 :::
@@ -192,24 +192,24 @@ State overrides allow you to customize the network state for the purpose of the 
 
 ## `ToSmartContractAccountParams`
 
-This type defines the parameters to the `SmartContractAccount` instantiation action, [`toSmartContractAccount`](/packages/aa-core/accounts/). You can configure this parameter to specify the [`Transport`](https://viem.sh/docs/clients/intro#transports), [`Chain`](https://viem.sh/docs/glossary/types#chain), [`EntryPointDef`](#entrypointdef), and other base functionalities of the smart account that you are creating.
+This type defines the parameters to the `SmartContractAccount` instantiation action, [`toSmartContractAccount`](/reference/aa-sdk/core/functions/toSmartContractAccount). You can configure this parameter to specify the [`Transport`](https://viem.sh/docs/clients/intro#transports), [`Chain`](https://viem.sh/docs/glossary/types#chain), [`EntryPointDef`](#entrypointdef), and other base functionalities of the smart account that you are creating.
 
 :::details[ToSmartContractAccountParams]
 
 ```ts
-// [!include ~/../packages/core/src/account/smartContractAccount.ts:ToSmartContractAccountParams]
+// [!include ~/../aa-sdk/core/src/account/smartContractAccount.ts:ToSmartContractAccountParams]
 ```
 
 :::
 
 ## `User`
 
-`User` is a type that defines the model for the details of a user's Embedded Account via an Alchemy Signer. It includes the user's `email`, `orgId`, `userId`, `userId`, `address` (the EOA signer address corresponding to the user credentials), and `credentialId`. You can use the [`useUser`](/react/useUser) react hook to look up a user.
+`User` is a type that defines the model for the details of a user's Embedded Account via an Alchemy Signer. It includes the user's `email`, `orgId`, `userId`, `userId`, `address` (the EOA signer address corresponding to the user credentials), and `credentialId`. You can use the [`useUser`](/reference/account-kit/react/hooks/useUser) react hook to look up a user.
 
 :::details[User]
 
 ```ts
-// [!include ~/../packages/alchemy/src/signer/client/types.ts:User]
+// [!include ~/../account-kit/signer/src/client/types.ts:User]
 ```
 
 :::
@@ -221,7 +221,7 @@ This type defines the parameters to the `SmartContractAccount` instantiation act
 :::details[UserOperationCallData]
 
 ```ts
-// [!include ~/../packages/core/src/types.ts:UserOperationCallData]
+// [!include ~/../aa-sdk/core/src/types.ts:UserOperationCallData]
 ```
 
 :::
@@ -233,19 +233,19 @@ An interface that defines the structure for the response received from the RPC m
 :::details[UserOperationEstimateGasResponse]
 
 ```ts
-// [!include ~/../packages/core/src/types.ts:UserOperationEstimateGasResponse]
+// [!include ~/../aa-sdk/core/src/types.ts:UserOperationEstimateGasResponse]
 ```
 
 :::
 
 ## `UserOperationOverrides`
 
-Partial structure for overriding default values in a `UserOperationStruct`, such as gas limits and fees. Available fields include `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit`, `paymasterAndData`, or `nonceKey`. You can also specify a `stateOverride` to be passed into `eth_estimateUserOperationGas` during gas estimation. These override values are available from each [`ClientMiddleware`](#clientmiddleware) of the `SmartAccountClient`. Check out [`UserOperationOverrides`](/packages/aa-core/smart-account-client/types/userOperationOverrides) page to learn more.
+Partial structure for overriding default values in a `UserOperationStruct`, such as gas limits and fees. Available fields include `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit`, `paymasterAndData`, or `nonceKey`. You can also specify a `stateOverride` to be passed into `eth_estimateUserOperationGas` during gas estimation. These override values are available from each [`ClientMiddleware`](#clientmiddleware) of the `SmartAccountClient`. Check out [`UserOperationOverrides`](https://github.com/alchemyplatform/aa-sdk/blob/v4.x.x/aa-sdk/core/src/types.ts#L97) page to learn more.
 
 :::details[UserOperationOverrides]
 
 ```ts
-// [!include ~/../packages/core/src/types.ts:UserOperationOverrides]
+// [!include ~/../aa-sdk/core/src/types.ts:UserOperationOverrides]
 ```
 
 :::
@@ -257,7 +257,7 @@ An interface that defines the structure for the response received from the RPC m
 :::details[UserOperationReceipt]
 
 ```ts
-// [!include ~/../packages/core/src/types.ts#UserOperationReceipt
+// [!include ~/../aa-sdk/core/src/types.ts#UserOperationReceipt
 ```
 
 :::
@@ -269,7 +269,7 @@ Interface for the request format required for a JSON-RPC request to `eth_sendUse
 :::details[UserOperationRequest]
 
 ```ts
-// [!include ~/../packages/core/src/types.ts#UserOperationRequest
+// [!include ~/../aa-sdk/core/src/types.ts#UserOperationRequest
 ```
 
 :::
@@ -281,7 +281,7 @@ An interface that defines the structure for the response received from the RPC m
 :::details[UserOperationResponse]
 
 ```ts
-// [!include ~/../packages/core/src/types.ts#UserOperationResponse
+// [!include ~/../aa-sdk/core/src/types.ts#UserOperationResponse
 ```
 
 :::
@@ -293,7 +293,7 @@ Interface for structuring a `UserOperation`, with fields similar to `UserOperati
 :::details[UserOperationStruct]
 
 ```ts
-// [!include ~/../packages/core/src/types.ts#UserOperationStruct
+// [!include ~/../aa-sdk/core/src/types.ts#UserOperationStruct
 ```
 
 :::

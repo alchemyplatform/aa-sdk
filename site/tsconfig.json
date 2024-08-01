@@ -8,7 +8,7 @@
     "noUnusedLocals": true,
     "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["vite/client", "vitepress"],
+    "types": ["vite/client"],
     "moduleResolution": "NodeNext",
     "module": "NodeNext",
     "target": "ESNext",
