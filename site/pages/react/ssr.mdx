@@ -58,6 +58,7 @@ If you are using NextJS App Directory, you can read the cookie state and pass it
 :::code-group
 
 ```tsx twoslash [layout.tsx]
+// @noErrors
 import React from "react";
 import { cookieToInitialState } from "@account-kit/core";
 import type { Metadata } from "next";
@@ -96,6 +97,7 @@ export default function RootLayout({
 ```
 
 ```tsx twoslash [providers.tsx]
+// @noErrors
 "use client";
 
 import React from "react";
