@@ -16,8 +16,6 @@ describe("6900 RI Account Tests", async () => {
   );
 
   it("should successfully get counterfactual address", async () => {
-    // console.log("instance.chain", instance.chain);
-
     const {
       account: { address },
     } = await givenConnectedProvider({
