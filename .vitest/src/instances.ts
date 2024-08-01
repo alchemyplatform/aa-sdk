@@ -32,6 +32,17 @@ export const local070Instance = defineInstance({
   bundlerPort: 8445,
 });
 
+export const local070InstanceArbSep = defineInstance({
+  chain: localhost,
+  forkBlockNumber: 67815074,
+  forkUrl:
+    process.env.VITEST_ARB_SEPOLIA_FORK_URL ??
+    "https://arbitrum-sepolia-rpc.publicnode.com",
+  entryPointVersion: "0.7.0",
+  anvilPort: 8347,
+  bundlerPort: 8447,
+});
+
 type DefineInstanceParams = {
   chain: Chain;
   forkUrl: string;
