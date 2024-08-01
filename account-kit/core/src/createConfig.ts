@@ -57,6 +57,14 @@ export const createConfig = (
         chain,
       });
     });
+  } else if (connectionConfig.chains != null) {
+    connectionConfig.chains.forEach(({ chain, ...config }) => {
+      connections.push({
+        apiKey: connectionConfig.apiKey,
+        policyId: config.policyId,
+        chain,
+      });
+    });
   } else {
     connections.push({
       ...ConnectionConfigSchema.parse(connectionConfig),
