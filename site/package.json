@@ -22,12 +22,12 @@
     "viem": "2.8.6"
   },
   "dependencies": {
-    "@aa-sdk/core": "^4.0.0-alpha.9",
-    "@aa-sdk/ethers": "^4.0.0-alpha.9",
-    "@account-kit/core": "^4.0.0-alpha.9",
-    "@account-kit/infra": "^4.0.0-alpha.9",
-    "@account-kit/react": "^4.0.0-alpha.9",
-    "@account-kit/smart-contracts": "^4.0.0-alpha.9",
+    "@aa-sdk/core": "latest",
+    "@aa-sdk/ethers": "latest",
+    "@account-kit/core": "latest",
+    "@account-kit/infra": "latest",
+    "@account-kit/react": "latest",
+    "@account-kit/smart-contracts": "latest",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "viem": "2.8.6",
