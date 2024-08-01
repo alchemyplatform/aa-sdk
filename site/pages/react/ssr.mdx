@@ -30,6 +30,7 @@ This setting will defer hydration of the account state to the client after the i
 To consistently pass the state between the server and the client, you can pass in a cookie storage to the `config` object created above. The cookie storage allows the client state to be written serialized to a cookie which can be passed along to the server on each request. This allows the server to have access to certain parts of the account state when rendering, ensuring a consistent render between client and server (eg. user's address displayed in the top nav). Instances which can only be created on the client will still not be available on the server, however. This includes the signer or smart contract account instances.
 
 ```ts twoslash [config.ts]
+// @noErrors
 import {
   createConfig,
   cookieStorage, // [!code ++]
@@ -127,6 +128,7 @@ export const Providers = (
 ```
 
 ```tsx twoslash [config.ts]
+// @noErrors
 import { createConfig, cookieStorage } from "@account-kit/react";
 import { sepolia } from "@account-kit/infra";
 import { QueryClient } from "@tanstack/react-query";
