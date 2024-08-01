@@ -16,29 +16,20 @@ import { createConfig } from "@account-kit/react";
 import { sepolia, mainnet } from "@account-kit/infra";
 
 export const config = createConfig({
+  apiKey: "ALCHEMY_API_KEY",
   // this is the default chain
   chain: sepolia,
-  connections: [
+  chains: [
     {
-      chain: mainnet,
-      apiKey: "ALCHEMY_API_KEY",
-      // optional: you can specify a policy ID for this chain, if you want to sponsor gas
+      chain: mainnet, // optional: you can specify a policy ID for this chain, if you want to sponsor gas
       policyId: "MAINNET_GAS_MANAGER_POLICY_ID",
     },
     {
       chain: sepolia,
-      apiKey: "ALCHEMY_API_KEY",
       // optional: you can specify a policy ID for this chain, if you want to sponsor gas
       policyId: "SEPOLIA_GAS_MANAGER_POLICY_ID",
     },
   ],
-  /**
-   * When providing multiple connections, you must specify the signer connection config
-   * to use since the signer is chain agnostic and has a different RPC url.
-   */
-  signerConnection: {
-    apiKey: "ALCHEMY_API_KEY",
-  },
 });
 ```
 

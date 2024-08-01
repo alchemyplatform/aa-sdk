@@ -53,6 +53,7 @@ type RpcConnectionConfig =
        */
       signerConnection?: ConnectionConfig;
       connections?: never;
+      chains?: never;
     })
   | {
       connections: Connection[];
@@ -62,6 +63,20 @@ type RpcConnectionConfig =
        * to use since the signer is chain agnostic and has a different RPC url.
        */
       signerConnection: ConnectionConfig;
+      chains?: never;
+    }
+  | {
+      connections?: never;
+      apiKey: string;
+      chain: Chain;
+      chains: { chain: Chain; policyId?: string }[];
+      /**
+       * Optional parameter that allows you to specify a different RPC Url
+       * or connection to be used specifically by the signer.
+       * This is useful if you have a different backend proxy for the signer
+       * than for your Bundler or Node RPC calls.
+       */
+      signerConnection?: ConnectionConfig;
     };
 
 export type CreateConfigProps = RpcConnectionConfig & {
