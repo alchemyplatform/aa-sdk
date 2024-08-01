@@ -41,7 +41,7 @@ export const singleSignerMessageSigner = <TSigner extends SmartAccountSigner>(
         "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
 
       return packSignature({
-        validationModule: meta.addresses[chain.id],
+        validationModule: meta.addresses[chain.id] ?? meta.addresses.default,
         entityID: DEFAULT_OWNER_ENTITY_ID,
         isGlobal: true, // todo: make this user-configurable
         orderedHookData: [],
@@ -52,7 +52,7 @@ export const singleSignerMessageSigner = <TSigner extends SmartAccountSigner>(
     signUserOperationHash: (uoHash: `0x${string}`): Promise<`0x${string}`> => {
       return signer.signMessage({ raw: uoHash }).then((signature: Hex) =>
         packSignature({
-          validationModule: meta.addresses[chain.id],
+          validationModule: meta.addresses[chain.id] ?? meta.addresses.default,
           entityID: DEFAULT_OWNER_ENTITY_ID,
           isGlobal: true, // todo: make this user-configurable
           orderedHookData: [],
