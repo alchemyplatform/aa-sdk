@@ -115,6 +115,10 @@ const hydrateAccountState = (
         config.MultiOwnerModularAccount && shouldReconnectAccounts
           ? reconnectingState(config.MultiOwnerModularAccount.accountAddress!)
           : defaultAccountState(),
+      MultiOwnerLightAccount:
+        config.MultiOwnerLightAccount && shouldReconnectAccounts
+          ? reconnectingState(config.MultiOwnerLightAccount.accountAddress!)
+          : defaultAccountState(),
     };
 
     return acc;
