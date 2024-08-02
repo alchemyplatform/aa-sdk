@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.19.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.18.2...v3.19.0) (2024-08-02)
+
+### Features
+
+- adaptive icons for light and dark UI ([#713](https://github.com/alchemyplatform/aa-sdk/issues/713)) ([61a2960](https://github.com/alchemyplatform/aa-sdk/commit/61a2960cc4209b305e9d76189b5aba26b2f67c97))
+- add passkey success state ([#711](https://github.com/alchemyplatform/aa-sdk/issues/711)) ([a99460d](https://github.com/alchemyplatform/aa-sdk/commit/a99460d65c8258dc4a32082e1f3a18b64cde36af))
+- add showBack prop and auto determine navigation ([#712](https://github.com/alchemyplatform/aa-sdk/issues/712)) ([7b1e68c](https://github.com/alchemyplatform/aa-sdk/commit/7b1e68cc464fb9dcaa07e0043ef03bec31a8b60f))
+- add updated error UI + custom error rendering ([#705](https://github.com/alchemyplatform/aa-sdk/issues/705)) ([0b23625](https://github.com/alchemyplatform/aa-sdk/commit/0b23625f33a14daacd3317d753aebb07c702740d))
+- bring the rest of the auth flow inline with the designs ([#708](https://github.com/alchemyplatform/aa-sdk/issues/708)) ([993f6e2](https://github.com/alchemyplatform/aa-sdk/commit/993f6e2c5d78ba0a8ccc3c7ca30bedc921d5a258))
+- change email validation rule ([#710](https://github.com/alchemyplatform/aa-sdk/issues/710)) ([f869f5e](https://github.com/alchemyplatform/aa-sdk/commit/f869f5efda54225177760a881ce5c3277dbec69f))
+- pull strings out to their own file for future localization ([#715](https://github.com/alchemyplatform/aa-sdk/issues/715)) ([5c0d516](https://github.com/alchemyplatform/aa-sdk/commit/5c0d5163be4cabbfe3b4479fb03345212538ff16))
+- start to bring auth modal styles inline with designs ([#702](https://github.com/alchemyplatform/aa-sdk/issues/702)) ([6e3502b](https://github.com/alchemyplatform/aa-sdk/commit/6e3502b9e73c4c4add4215927d263db8ee5000ce))
+
 ## [3.18.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.18.1...v3.18.2) (2024-06-05)
 
 **Note:** Version bump only for package @alchemy/aa-alchemy
