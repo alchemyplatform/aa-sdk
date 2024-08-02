@@ -17,7 +17,7 @@ export const DEFAULT_OWNER_ENTITY_ID = 0;
   switch (chain.id) {
     case 1337: // localhost
     case arbitrumSepolia.id:
-      return "0x1c7EF41AA9896b74223a3956c7dDE28F206E8b24";
+      return "0xaA49939f9166c3acfA99c21612C616f81eDC52b1";
     default:
       throw new Error("6900 RI: Chain not supported");
   }
