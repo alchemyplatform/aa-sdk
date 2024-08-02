@@ -24,6 +24,7 @@ export type Config = {
   auth: {
     showEmail: boolean;
     showExternalWallets: boolean;
+    showPasskey: boolean;
     addPasskey: boolean;
   };
   ui: {
@@ -58,6 +59,7 @@ export const DEFAULT_CONFIG: Config = {
   auth: {
     showEmail: true,
     showExternalWallets: false,
+    showPasskey: true,
     addPasskey: true,
   },
   ui: {
@@ -92,11 +94,11 @@ export function ConfigContextProvider(props: PropsWithChildren) {
   useEffect(() => {
     const sections: AuthType[][] = [[{ type: "email" }]];
 
-    if (config.auth.addPasskey) {
+    if (config.auth.showPasskey) {
       sections.push([{ type: "passkey" }]);
     }
 
-    if (config.auth.showExternalWallets && config.auth.addPasskey) {
+    if (config.auth.showExternalWallets && config.auth.showPasskey) {
       sections[1].push({ type: "injected" });
     } else if (config.auth.showExternalWallets) {
       sections.push([{ type: "injected" }]);
@@ -106,7 +108,7 @@ export function ConfigContextProvider(props: PropsWithChildren) {
       illustrationStyle: config.ui.illustrationStyle,
       auth: {
         sections,
-        addPasskeyOnSignup: config.auth.addPasskey,
+        addPasskeyOnSignup: config.auth.addPasskey && config.auth.showPasskey,
         header: (
           <AuthCardHeader
             theme={config.ui.theme}

@@ -1,13 +1,14 @@
+import { useConfig } from "@/app/state";
 import { cn } from "@/lib/utils";
+import { getBorderRadiusValue } from "@account-kit/react/tailwind";
+import { IllustrationStyle } from "../icons/illustration-style";
+import { PaintIcon } from "../icons/paint";
+import { SparkleIcon } from "../icons/sparkle";
+import ExternalLink from "../shared/ExternalLink";
+import { HelpTooltip } from "../shared/HelpTooltip";
+import { ThemeSwitch } from "../shared/ThemeSwitch";
 import { ColorPicker } from "./ColorPicker";
 import { PhotoUploads } from "./PhotoUpload";
-import { ThemeSwitch } from "../shared/ThemeSwitch";
-import { FileCode } from "lucide-react";
-import ExternalLink from "../shared/ExternalLink";
-import { IllustrationStyle } from "../icons/illustration-style";
-import { getBorderRadiusValue } from "@account-kit/react/tailwind";
-import { useConfig } from "@/app/state";
-import { HelpTooltip } from "../shared/HelpTooltip";
 
 export function Styling({ className }: { className?: string }) {
   const { config, setConfig } = useConfig();
@@ -23,66 +24,46 @@ export function Styling({ className }: { className?: string }) {
   };
 
   return (
-    <div className={cn("flex flex-col", className)}>
-      <div className="flex flex-col gap-4 border-b border-border pt-8 pb-5">
-        <div className="flex items-center gap-1">
-          <p className="font-semibold text-secondary-foreground text-sm">
-            Appearance
-          </p>
-          <HelpTooltip text="Preview how the UI will look in light and dark mode - once integrated, the components will automatically adapt to the OS setting or a .light/.dark class on the root element" />
+    <div className={cn("flex flex-col gap-5", className)}>
+      <div className="flex flex-col gap-3">
+        <div className="flex flex-row gap-2">
+          <PaintIcon />
+          <span className="font-semibold">Branding</span>
         </div>
-
-        <ThemeSwitch
-          checked={config.ui.theme === "dark"}
-          onCheckedChange={onSwitchTheme}
-        />
       </div>
-
-      <div className="flex flex-col gap-4 border-b border-border pt-4 pb-5 items-start">
-        <div className="flex items-center gap-1">
-          <p className="font-semibold text-secondary-foreground text-sm">
-            Color
-          </p>
-          <HelpTooltip text="Color changes will be applied to buttons, text links and illustrations" />
+      <div className="flex flex-col gap-4 w-full border-b border-border pb-5">
+        <div className="flex flex-row justify-between grow items-center">
+          <p className="font-medium text-sm">Theme</p>
+          <ThemeSwitch
+            checked={config.ui.theme === "dark"}
+            onCheckedChange={onSwitchTheme}
+          />
         </div>
-
-        <div className="flex gap-2 self-stretch">
-          <div className="flex flex-col gap-2 flex-1 basis-0">
-            <div className="text-gray-600 text-xs font-semibold">
-              Light mode
-            </div>
-            <ColorPicker theme="light" />
+        <div className="flex flex-row justify-between grow items-center">
+          <p className="font-medium text-sm">Brand color</p>
+          <ColorPicker theme={config.ui.theme} />
+        </div>
+        <div className="flex flex-row justify-between grow items-center">
+          <div>
+            <p className="font-medium text-sm">
+              Logo <span className="text-gray-400 font-normal">(optional)</span>
+            </p>
+            <p className="text-gray-400 font-normal text-xs">
+              PNG, JPG, GIF files accepted
+            </p>
           </div>
-          <div className="flex flex-col gap-2 flex-1 basis-0">
-            <div className="text-gray-600 text-xs font-semibold">Dark mode</div>
-            <ColorPicker theme="dark" />
-          </div>
+          <PhotoUploads mode={config.ui.theme} />
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 border-b border-border pt-4 pb-5 items-start">
-        <div className="flex items-center gap-1">
-          <p className="font-semibold text-secondary-foreground text-sm">
-            Logo
-          </p>
-          <HelpTooltip text="PNG, JPG, GIF files accepted" />
-        </div>
-
-        <div className="flex self-stretch gap-8">
-          <PhotoUploads mode="light" />
-          <PhotoUploads mode="dark" />
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-4 border-b border-border pt-4 pb-5 items-start">
+      <div className="flex flex-col gap-4 items-start">
         <p className="font-semibold text-secondary-foreground text-sm">
           Corner radius
         </p>
 
         <CornerRadiusOptions />
       </div>
-
-      <div className="flex flex-col gap-4 pt-4 pb-5 items-start">
+      <div className="flex flex-col gap-4 items-start">
         <div className="flex items-center gap-1">
           <p className="font-semibold text-secondary-foreground text-sm">
             Illustration Style
@@ -127,22 +108,18 @@ export function CornerRadiusOptions() {
     <div className="flex self-stretch gap-3">
       {RADIUS_OPTIONS.map((option) => (
         <button
-          className={`h-9 flex items-center justify-center flex-1 basis-0 bg-[#EFF4F9] text-[#363FF9] hover:opacity-80 ${
+          className={`h-9 flex items-center justify-center flex-1 basis-0 hover:opacity-80 border border-gray-300 ${
             option.id === borderRadius
-              ? "border-2 border-[rgba(0, 0, 0, 0.01)]"
-              : "border-2 border-white"
+              ? "border-[#363FF9] border-[1.5px] bg-[#EFF4F9] font-semibold"
+              : ""
           }`}
           style={{
             borderRadius: getBorderRadiusValue(option.id),
-            boxShadow:
-              option.id === borderRadius
-                ? "0px 0px 6px 0px rgba(36, 0, 255, 0.7)"
-                : undefined,
           }}
           key={option.id}
           onClick={() => onChange(option.id)}
         >
-          <span className="text-sm font-semibold">{option.label}</span>
+          <span className="text-sm font-normal">{option.label}</span>
         </button>
       ))}
     </div>
@@ -175,16 +152,13 @@ function IllustrationStyleOptions() {
         <button
           key={value}
           className={cn(
-            "py-2 flex-1 basis-0 rounded-lg border border-[#CBD5E1]",
+            "py-2 flex-1 basis-0 rounded-lg border border-gray-300",
             "text-fg-accent-brand hover:opacity-80",
-            "flex items-center justify-center"
+            "flex items-center justify-center",
+            illustrationStyle === value
+              ? "border-[#363FF9] border-[1.5px] bg-[#EFF4F9] font-semibold"
+              : ""
           )}
-          style={{
-            boxShadow:
-              illustrationStyle === value
-                ? "0px 0px 6px 0px rgba(36, 0, 255, 0.7)"
-                : undefined,
-          }}
           onClick={() => onChange(value)}
         >
           <IllustrationStyle className="text-fg-accent-brand" variant={value} />
@@ -196,12 +170,18 @@ function IllustrationStyleOptions() {
 
 function LearnMore() {
   return (
-    <div className="flex items-center gap-1 text-xs text-center self-center mt-8">
-      <FileCode className="stroke-secondary stroke-1" size={18} />
-      <div className="text-secondary">Want to fully configure the CSS?</div>
-      <ExternalLink className="font-semibold text-blue-600" href="https://github.com/alchemyplatform/aa-sdk/blob/v4.x.x/account-kit/react/src/tailwind/types.ts#L6">
-        Click to learn how
-      </ExternalLink>
+    <div className="flex items-center gap-1 text-xs flex-1 w-full justify-center">
+      <SparkleIcon />
+      <div className="text-secondary">
+        Customize every pixel with{" "}
+        <ExternalLink
+          className="font-semibold text-blue-600"
+          href="https://github.com/alchemyplatform/aa-sdk/blob/v4.x.x/account-kit/react/src/tailwind/types.ts#L6"
+        >
+          CSS
+        </ExternalLink>{" "}
+        overrides
+      </div>
     </div>
   );
 }

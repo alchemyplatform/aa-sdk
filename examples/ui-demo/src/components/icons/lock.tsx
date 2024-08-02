@@ -5,18 +5,17 @@ export const LockIcon = ({
   ...props
 }: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => (
   <svg
-    width="20"
-    height="20"
-    viewBox="0 0 20 20"
-    fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    width={14}
+    height={18}
+    fill="none"
     {...props}
   >
     <path
-      d="M5.5 7.54667V6.55117C5.5 4.02997 7.50714 2 10 2C12.4929 2 14.5 4.02997 14.5 6.55117V8.04446M10 13.0713V11.0713M16 12.0267C16 15.3258 13.3137 18.0001 10 18.0001C6.68629 18.0001 4 15.3258 4 12.0267C4 8.7277 6.68629 6.05332 10 6.05332C13.3137 6.05332 16 8.7277 16 12.0267Z"
-      stroke={stroke}
-      strokeWidth="1.5"
+      stroke="#020617"
       strokeLinecap="round"
+      strokeWidth={1.5}
+      d="M2.5 6.547V5.55C2.5 3.03 4.507 1 7 1s4.5 2.03 4.5 4.551v1.493M7 12.071v-2m6 .956C13 14.326 10.314 17 7 17s-6-2.674-6-5.973c0-3.3 2.686-5.974 6-5.974s6 2.675 6 5.974Z"
     />
   </svg>
 );

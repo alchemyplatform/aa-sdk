@@ -126,11 +126,11 @@ function getConfigCode(config: Config) {
     sections.push([{ type: "email" }]);
   }
 
-  if (config.auth.addPasskey) {
+  if (config.auth.showPasskey) {
     sections.push([{ type: "passkey" }]);
   }
 
-  if (config.auth.showExternalWallets && config.auth.addPasskey) {
+  if (config.auth.showExternalWallets && config.auth.showPasskey) {
     sections[1].push({ type: "injected" });
   } else if (config.auth.showExternalWallets) {
     sections.push([{ type: "injected" }]);
@@ -145,7 +145,9 @@ function getConfigCode(config: Config) {
     illustrationStyle: "${config.ui.illustrationStyle}",
     auth: {
       sections: ${JSON.stringify(sections)},
-      addPasskeyOnSignup: ${config.auth.addPasskey},${
+      addPasskeyOnSignup: ${
+        config.auth.addPasskey && config.auth.showPasskey
+      },${
     config.ui.logoLight || config.ui.logoDark
       ? '\n      header: <img src="path/to/logo.svg" />,'
       : ""
