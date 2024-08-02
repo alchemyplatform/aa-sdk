@@ -161,6 +161,13 @@ export function createSmartAccountClient(
       return custom({
         async request({ method, params }) {
           switch (method) {
+            case "eth_accounts": {
+              if (!client.account) {
+                throw new AccountNotFoundError();
+              }
+
+              return [client.account.address];
+            }
             case "eth_sendTransaction":
               if (!client.account) {
                 throw new AccountNotFoundError();
