@@ -34,6 +34,10 @@ The Alchemy `Chain` definitions have been moved from `@aa-sdk/core` to `@account
 
 This method on the `AccountSigner` has been renamed.
 
+### Accounts: Default LightAccount version is now v2.0.0
+
+If you were creating LightAccounts for users without explicitly specifying the version (ie. in `createLightAccount` or `useAccount` or `useSmartAccountClient`), you should manually specify the previous default of `v1.1.0`.
+
 ## Migrating to version 3.x.x
 
 This version update brings a lot of breaking changes. As we began to support Modular Accounts and their interfaces, we realized that the previous version of the SDK was not as flexible as it could have been to handle the modularity of the new account interfaces.
