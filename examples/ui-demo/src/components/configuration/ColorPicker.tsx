@@ -29,12 +29,13 @@ export function ColorPicker({ theme }: { theme: "dark" | "light" }) {
     <Popover>
       <PopoverTrigger
         className={cn(
-          "self-start border rounded-lg py-2 px-[10px] gap-2 flex items-center justify-center hover:opacity-80",
-          theme === "light" && "border-gray-300",
-          theme === "dark" && "border-gray-600 bg-[#020617] text-white"
+          "self-start border rounded-lg py-2 px-[10px] gap-2 flex items-center justify-between hover:opacity-80 w-28 h-10 border-gray-300"
         )}
       >
-        <div className="h-6 w-6 rounded" style={{ backgroundColor: color }} />
+        <div
+          className="h-6 w-6 rounded shrink-0"
+          style={{ backgroundColor: color }}
+        />
         <div className="text-sm">{color}</div>
       </PopoverTrigger>
       <PopoverContent
