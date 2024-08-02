@@ -1,6 +1,6 @@
 {
   "name": "@alchemy/aa-accounts",
-  "version": "3.18.2",
+  "version": "3.19.0",
   "description": "A collection of ERC-4337 compliant smart contract account interfaces",
   "author": "Alchemy",
   "license": "MIT",

@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.19.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.18.2...v3.19.0) (2024-08-02)
+
+### Features
+
+- add support for eth_accounts to provider ([#891](https://github.com/alchemyplatform/aa-sdk/issues/891)) ([d067879](https://github.com/alchemyplatform/aa-sdk/commit/d067879431403ce9acdc36841fd66deb2bfc7223))
+- fix state override parameter type ([#720](https://github.com/alchemyplatform/aa-sdk/issues/720)) ([6c9c720](https://github.com/alchemyplatform/aa-sdk/commit/6c9c7202d14010ab3afa02055ff5006924a4fba3))
+
 ## [3.18.2](https://github.com/alchemyplatform/aa-sdk/compare/v3.18.1...v3.18.2) (2024-06-05)
 
 **Note:** Version bump only for package @alchemy/aa-core
