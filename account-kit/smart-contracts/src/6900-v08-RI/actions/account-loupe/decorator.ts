@@ -6,7 +6,7 @@ import {
   type SmartContractAccount,
 } from "@aa-sdk/core";
 import type { Hex, Chain, Client, Transport } from "viem";
-import { IAccountLoupeV08Abi } from "../abis/IAccountLoupe.js";
+import { IAccountLoupeV08Abi } from "../../abis/IAccountLoupe.js";
 import type { ExecutionData, ModuleEntity, ValidationData } from "./types.js";
 
 export type AccountLoupeV08Actions<
