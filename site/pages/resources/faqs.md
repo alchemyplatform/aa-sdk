@@ -6,6 +6,8 @@ description: Learn how to get started with Alchemy's Account Kit, a vertically
 
 # Frequently asked questions
 
+Check out our [SDK discussions](https://github.com/alchemyplatform/aa-sdk/discussions) for more FAQs. Feel free to open a new discussion for any other questions, issues, or feature requests and we will be happy to help :)
+
 ## Smart Accounts - Light Account
 
 ### Do accounts have the same address across all chains?
@@ -141,6 +143,13 @@ Gas Manager policies can only be tied to one app. Make sure you are using the AP
 ### Precheck failed: `{ code: -3200, message: 'precheck failed: ...' }`
 
 :::details[Answer]
+If you are using Alchemy's infra for AA:
+
+1. **(recommended)** use an alchemy client via any of the `create*AlchemyClient` (eg. [`createLightAccountAlchemyClient`](/packages/aa-alchemy/light-account-client/)). This will use the correct fee estimator and middleware by default.
+2. if for some reason you must use `createSmartAccountClient`, you must import the [`alchemyFeeEstimator`](/packages/aa-alchemy/middleware/alchemyFeeEstimator) middleware from @aa-alchemy (v3 SDK) or @account-kit/infra (v4 SDK), and override the [`feeEstimator`](/packages/aa-core/smart-account-client/#parameters) field in your client constructor.
+
+**Why does this error happen?**
+
 Precheck failed errors are often related to gas and/or fees. Our Bundler follows standard [ERC 4337](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-4337.md#client-behavior-upon-receiving-a-useroperation) implementation for gas and fee checks in order to 1) ensure your `UserOperation`s (UOs) land on chain and to 2) protect the Bundler from potential attacks in order to support scalability.
 
 These errors are often related to market movement between the time when gas and fees are estimated and the time when UOs are submitted to the bundler. This fluctuation in the market is especially variant on testnet. To ensure your UO is included in a block, we currently reject sending any UOs that are underpriced compared to the network rate .
