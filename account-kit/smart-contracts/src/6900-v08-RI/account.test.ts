@@ -23,7 +23,7 @@ describe("6900 RI Account Tests", async () => {
     });
 
     expect(address).toMatchInlineSnapshot(
-      '"0xb32077A16FBfA16333dC37483b1eeB546bcBCc1d"'
+      '"0x021Cb36280Fc4c6F891D0994b2CC15F4b43AbE22"'
     );
   });
 

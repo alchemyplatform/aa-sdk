@@ -1,7 +1,7 @@
 import type { Address } from "viem";
 
 const addresses = {
-  default: "0x9DA8c098A483E257dd96022831DF308cB24fCBE6",
+  default: "0xEa3a0b544d517f6Ed3Dc2186C74D869c702C376e",
 } as Record<number | "default", Address>;
 
 export const meta = {
