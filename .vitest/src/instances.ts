@@ -34,7 +34,7 @@ export const local070Instance = defineInstance({
 
 export const local070InstanceArbSep = defineInstance({
   chain: localhost,
-  forkBlockNumber: 67815074,
+  forkBlockNumber: 68528475,
   forkUrl:
     process.env.VITEST_ARB_SEPOLIA_FORK_URL ??
     "https://arbitrum-sepolia-rpc.publicnode.com",

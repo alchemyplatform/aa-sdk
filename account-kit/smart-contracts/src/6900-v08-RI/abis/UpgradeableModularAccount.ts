@@ -200,7 +200,7 @@ export const UpgradeableModularAccountAbi = [
   },
   {
     type: "function",
-    name: "getExecutionFunctionHandler",
+    name: "getExecutionData",
     inputs: [
       {
         name: "selector",
@@ -210,43 +210,29 @@ export const UpgradeableModularAccountAbi = [
     ],
     outputs: [
       {
-        name: "module",
-        type: "address",
-        internalType: "address",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "getExecutionHooks",
-    inputs: [
-      {
-        name: "selector",
-        type: "bytes4",
-        internalType: "bytes4",
-      },
-    ],
-    outputs: [
-      {
-        name: "execHooks",
-        type: "tuple[]",
-        internalType: "struct ExecutionHook[]",
+        name: "data",
+        type: "tuple",
+        internalType: "struct ExecutionDataView",
         components: [
           {
-            name: "hookFunction",
-            type: "bytes24",
-            internalType: "ModuleEntity",
+            name: "module",
+            type: "address",
+            internalType: "address",
           },
           {
-            name: "isPreHook",
+            name: "isPublic",
             type: "bool",
             internalType: "bool",
           },
           {
-            name: "isPostHook",
+            name: "allowGlobalValidation",
             type: "bool",
             internalType: "bool",
+          },
+          {
+            name: "executionHooks",
+            type: "bytes26[]",
+            internalType: "HookConfig[]",
           },
         ],
       },
@@ -268,7 +254,7 @@ export const UpgradeableModularAccountAbi = [
   },
   {
     type: "function",
-    name: "getPermissionHooks",
+    name: "getValidationData",
     inputs: [
       {
         name: "validationFunction",
@@ -278,64 +264,36 @@ export const UpgradeableModularAccountAbi = [
     ],
     outputs: [
       {
-        name: "permissionHooks",
-        type: "tuple[]",
-        internalType: "struct ExecutionHook[]",
+        name: "data",
+        type: "tuple",
+        internalType: "struct ValidationDataView",
         components: [
           {
-            name: "hookFunction",
-            type: "bytes24",
-            internalType: "ModuleEntity",
-          },
-          {
-            name: "isPreHook",
+            name: "isGlobal",
             type: "bool",
             internalType: "bool",
           },
           {
-            name: "isPostHook",
+            name: "isSignatureValidation",
             type: "bool",
             internalType: "bool",
+          },
+          {
+            name: "preValidationHooks",
+            type: "bytes24[]",
+            internalType: "ModuleEntity[]",
+          },
+          {
+            name: "permissionHooks",
+            type: "bytes26[]",
+            internalType: "HookConfig[]",
+          },
+          {
+            name: "selectors",
+            type: "bytes4[]",
+            internalType: "bytes4[]",
           },
         ],
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "getPreValidationHooks",
-    inputs: [
-      {
-        name: "validationFunction",
-        type: "bytes24",
-        internalType: "ModuleEntity",
-      },
-    ],
-    outputs: [
-      {
-        name: "preValidationHooks",
-        type: "bytes24[]",
-        internalType: "ModuleEntity[]",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "getSelectors",
-    inputs: [
-      {
-        name: "validationFunction",
-        type: "bytes24",
-        internalType: "ModuleEntity",
-      },
-    ],
-    outputs: [
-      {
-        name: "",
-        type: "bytes4[]",
-        internalType: "bytes4[]",
       },
     ],
     stateMutability: "view",
@@ -370,7 +328,7 @@ export const UpgradeableModularAccountAbi = [
   },
   {
     type: "function",
-    name: "installModule",
+    name: "installExecution",
     inputs: [
       {
         name: "module",
@@ -380,7 +338,7 @@ export const UpgradeableModularAccountAbi = [
       {
         name: "manifest",
         type: "tuple",
-        internalType: "struct ModuleManifest",
+        internalType: "struct ExecutionManifest",
         components: [
           {
             name: "executionFunctions",
@@ -533,7 +491,7 @@ export const UpgradeableModularAccountAbi = [
   },
   {
     type: "function",
-    name: "uninstallModule",
+    name: "uninstallExecution",
     inputs: [
       {
         name: "module",
@@ -543,7 +501,7 @@ export const UpgradeableModularAccountAbi = [
       {
         name: "manifest",
         type: "tuple",
-        internalType: "struct ModuleManifest",
+        internalType: "struct ExecutionManifest",
         components: [
           {
             name: "executionFunctions",
@@ -729,6 +687,162 @@ export const UpgradeableModularAccountAbi = [
   },
   {
     type: "event",
+    name: "ExecutionInstalled",
+    inputs: [
+      {
+        name: "module",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "manifest",
+        type: "tuple",
+        indexed: false,
+        internalType: "struct ExecutionManifest",
+        components: [
+          {
+            name: "executionFunctions",
+            type: "tuple[]",
+            internalType: "struct ManifestExecutionFunction[]",
+            components: [
+              {
+                name: "executionSelector",
+                type: "bytes4",
+                internalType: "bytes4",
+              },
+              {
+                name: "isPublic",
+                type: "bool",
+                internalType: "bool",
+              },
+              {
+                name: "allowGlobalValidation",
+                type: "bool",
+                internalType: "bool",
+              },
+            ],
+          },
+          {
+            name: "executionHooks",
+            type: "tuple[]",
+            internalType: "struct ManifestExecutionHook[]",
+            components: [
+              {
+                name: "executionSelector",
+                type: "bytes4",
+                internalType: "bytes4",
+              },
+              {
+                name: "entityId",
+                type: "uint32",
+                internalType: "uint32",
+              },
+              {
+                name: "isPreHook",
+                type: "bool",
+                internalType: "bool",
+              },
+              {
+                name: "isPostHook",
+                type: "bool",
+                internalType: "bool",
+              },
+            ],
+          },
+          {
+            name: "interfaceIds",
+            type: "bytes4[]",
+            internalType: "bytes4[]",
+          },
+        ],
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "ExecutionUninstalled",
+    inputs: [
+      {
+        name: "module",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "onUninstallSucceeded",
+        type: "bool",
+        indexed: false,
+        internalType: "bool",
+      },
+      {
+        name: "manifest",
+        type: "tuple",
+        indexed: false,
+        internalType: "struct ExecutionManifest",
+        components: [
+          {
+            name: "executionFunctions",
+            type: "tuple[]",
+            internalType: "struct ManifestExecutionFunction[]",
+            components: [
+              {
+                name: "executionSelector",
+                type: "bytes4",
+                internalType: "bytes4",
+              },
+              {
+                name: "isPublic",
+                type: "bool",
+                internalType: "bool",
+              },
+              {
+                name: "allowGlobalValidation",
+                type: "bool",
+                internalType: "bool",
+              },
+            ],
+          },
+          {
+            name: "executionHooks",
+            type: "tuple[]",
+            internalType: "struct ManifestExecutionHook[]",
+            components: [
+              {
+                name: "executionSelector",
+                type: "bytes4",
+                internalType: "bytes4",
+              },
+              {
+                name: "entityId",
+                type: "uint32",
+                internalType: "uint32",
+              },
+              {
+                name: "isPreHook",
+                type: "bool",
+                internalType: "bool",
+              },
+              {
+                name: "isPostHook",
+                type: "bool",
+                internalType: "bool",
+              },
+            ],
+          },
+          {
+            name: "interfaceIds",
+            type: "bytes4[]",
+            internalType: "bytes4[]",
+          },
+        ],
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
     name: "Initialized",
     inputs: [
       {
@@ -755,38 +869,6 @@ export const UpgradeableModularAccountAbi = [
   },
   {
     type: "event",
-    name: "ModuleInstalled",
-    inputs: [
-      {
-        name: "module",
-        type: "address",
-        indexed: true,
-        internalType: "address",
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: "event",
-    name: "ModuleUninstalled",
-    inputs: [
-      {
-        name: "module",
-        type: "address",
-        indexed: true,
-        internalType: "address",
-      },
-      {
-        name: "onUninstallSucceeded",
-        type: "bool",
-        indexed: true,
-        internalType: "bool",
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: "event",
     name: "Upgraded",
     inputs: [
       {
@@ -794,6 +876,50 @@ export const UpgradeableModularAccountAbi = [
         type: "address",
         indexed: true,
         internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "ValidationInstalled",
+    inputs: [
+      {
+        name: "module",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "entityId",
+        type: "uint32",
+        indexed: true,
+        internalType: "uint32",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "ValidationUninstalled",
+    inputs: [
+      {
+        name: "module",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "entityId",
+        type: "uint32",
+        indexed: true,
+        internalType: "uint32",
+      },
+      {
+        name: "onUninstallSucceeded",
+        type: "bool",
+        indexed: false,
+        internalType: "bool",
       },
     ],
     anonymous: false,
