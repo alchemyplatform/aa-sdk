@@ -66,21 +66,14 @@ export const AccountFactoryAbi = [
   },
   {
     type: "function",
-    name: "UNSTAKE_DELAY",
-    inputs: [],
-    outputs: [
+    name: "addStake",
+    inputs: [
       {
-        name: "",
+        name: "unstakeDelay",
         type: "uint32",
         internalType: "uint32",
       },
     ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "addStake",
-    inputs: [],
     outputs: [],
     stateMutability: "payable",
   },

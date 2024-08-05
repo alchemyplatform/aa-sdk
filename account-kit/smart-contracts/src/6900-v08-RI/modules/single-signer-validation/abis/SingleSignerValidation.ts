@@ -1,75 +1,6 @@
 export const SingleSignerValidationAbi = [
   {
     type: "function",
-    name: "moduleManifest",
-    inputs: [],
-    outputs: [
-      {
-        name: "",
-        type: "tuple",
-        internalType: "struct ModuleManifest",
-        components: [
-          {
-            name: "executionFunctions",
-            type: "tuple[]",
-            internalType: "struct ManifestExecutionFunction[]",
-            components: [
-              {
-                name: "executionSelector",
-                type: "bytes4",
-                internalType: "bytes4",
-              },
-              {
-                name: "isPublic",
-                type: "bool",
-                internalType: "bool",
-              },
-              {
-                name: "allowGlobalValidation",
-                type: "bool",
-                internalType: "bool",
-              },
-            ],
-          },
-          {
-            name: "executionHooks",
-            type: "tuple[]",
-            internalType: "struct ManifestExecutionHook[]",
-            components: [
-              {
-                name: "executionSelector",
-                type: "bytes4",
-                internalType: "bytes4",
-              },
-              {
-                name: "entityId",
-                type: "uint32",
-                internalType: "uint32",
-              },
-              {
-                name: "isPreHook",
-                type: "bool",
-                internalType: "bool",
-              },
-              {
-                name: "isPostHook",
-                type: "bool",
-                internalType: "bool",
-              },
-            ],
-          },
-          {
-            name: "interfaceIds",
-            type: "bytes4[]",
-            internalType: "bytes4[]",
-          },
-        ],
-      },
-    ],
-    stateMutability: "pure",
-  },
-  {
-    type: "function",
     name: "moduleMetadata",
     inputs: [],
     outputs: [
@@ -148,31 +79,7 @@ export const SingleSignerValidationAbi = [
   },
   {
     type: "function",
-    name: "signer",
-    inputs: [
-      {
-        name: "entityId",
-        type: "uint32",
-        internalType: "uint32",
-      },
-      {
-        name: "account",
-        type: "address",
-        internalType: "address",
-      },
-    ],
-    outputs: [
-      {
-        name: "",
-        type: "address",
-        internalType: "address",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "signerOf",
+    name: "signers",
     inputs: [
       {
         name: "entityId",
