@@ -12,7 +12,9 @@ const meta = {
 
 export const SingleSignerValidationModule = {
   meta,
-  encodeOnInstallData: (entityId: number, signer: Address): Hex => {
+  encodeOnInstallData: (args: { entityId: number; signer: Address }): Hex => {
+    const { entityId, signer } = args;
+
     return encodeAbiParameters(
       [
         {
@@ -25,6 +27,19 @@ export const SingleSignerValidationModule = {
         },
       ],
       [entityId, signer]
+    );
+  },
+  encodeOnUninstallData: (args: { entityId: number }): Hex => {
+    const { entityId } = args;
+
+    return encodeAbiParameters(
+      [
+        {
+          type: "uint32",
+          value: entityId,
+        },
+      ],
+      [entityId]
     );
   },
 };

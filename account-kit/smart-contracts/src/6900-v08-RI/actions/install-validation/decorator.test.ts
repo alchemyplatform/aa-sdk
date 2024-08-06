@@ -54,10 +54,10 @@ describe("6900 RI installValidation Tests", async () => {
           isSignatureValidation: true,
         },
         selectors: [],
-        installData: SingleSignerValidationModule.encodeOnInstallData(
+        installData: SingleSignerValidationModule.encodeOnInstallData({
           entityId,
-          await secondarySigner.getAddress()
-        ),
+          signer: await secondarySigner.getAddress(),
+        }),
         hooks: [],
       },
     });
@@ -137,10 +137,10 @@ describe("6900 RI installValidation Tests", async () => {
           isSignatureValidation: true,
         },
         selectors: [],
-        installData: SingleSignerValidationModule.encodeOnInstallData(
+        installData: SingleSignerValidationModule.encodeOnInstallData({
           entityId,
-          await secondarySigner.getAddress()
-        ),
+          signer: await secondarySigner.getAddress(),
+        }),
         hooks: [],
       },
     });
@@ -155,7 +155,9 @@ describe("6900 RI installValidation Tests", async () => {
       args: {
         moduleAddress: SingleSignerValidationModule.meta.addresses.default,
         entityId,
-        uninstallData: "0x",
+        uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
+          entityId,
+        }),
         hookUninstallDatas: [],
       },
     });
