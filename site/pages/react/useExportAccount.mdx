@@ -5,7 +5,9 @@ description: An overview of the useExportAccount hook
 
 # useExportAccount
 
-The `useExportAccount` hook exports the user's Embedded Account's recovery details to be viewable on the application.
+The `useExportAccount` hook exports the user's Embedded Account's recovery details (i.e. account signer/owner) to be viewable on the application.
+
+This will export the signer of the account, not the account itself. To get the signer address of an account, use the [`useUser`](/react/useUser) hook.
 
 :::warning
 This requires your user to be logged in. See [`useAuthenticate`](/react/useAuthenticate) for more details.
@@ -50,7 +52,7 @@ Returns an object containing the following state.
 ### exportAccount
 
 `UseMutateFunction`
-A React query mutation function to export the user's account recovery details. It returns a `boolean` to flag whether or not the account's private key or recovery phrase was correctly exported.
+A React query mutation function to export the user's account recovery details (i.e. account signer/owner details). It returns a `boolean` to flag whether or not the account's private key or recovery phrase was correctly exported.
 
 ### isExported
 
