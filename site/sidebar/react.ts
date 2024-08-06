@@ -2,12 +2,13 @@ import { SidebarItem } from "vocs";
 import { resources } from "./shared.js";
 
 export const reactSidebar: SidebarItem[] = [
+  { text: "React", link: "/" },
   {
-    text: "Overview",
+    text: "React overview",
     link: "/react/overview",
   },
   {
-    text: "Quickstart",
+    text: "React quickstart",
     link: "/react/quickstart",
   },
   {
@@ -30,6 +31,9 @@ export const reactSidebar: SidebarItem[] = [
       { text: "Multi-chain apps", link: "/react/multi-chain-apps" },
     ],
   },
-  { text: "SDK Reference", link: "/reference/account-kit/react" },
+  {
+    text: "SDK Reference - React",
+    link: "/reference/account-kit/react",
+  },
   resources,
 ];

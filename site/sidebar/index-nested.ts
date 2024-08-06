@@ -10,22 +10,32 @@ export const indexSidebar: SidebarItem[] = [
       {
         text: "React",
         link: "/react/overview",
+        items: [],
+        collapsed: true,
       },
       {
         text: "Other JS Frameworks",
         link: "/core/overview",
+        items: [],
+        collapsed: true,
       },
       {
         text: "Infra",
         link: "/infra/overview",
+        items: [],
+        collapsed: true,
       },
       {
         text: "Signer",
         link: "/signer/overview",
+        items: [],
+        collapsed: true,
       },
       {
         text: "Smart Contracts",
         link: "/smart-contracts/overview",
+        items: [],
+        collapsed: true,
       },
     ],
   },
