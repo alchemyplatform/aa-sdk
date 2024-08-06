@@ -101,28 +101,28 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     // is fired. In the Client and SessionManager we use EventEmitter because it's easier to handle internally
     switch (event) {
       case "connected":
-        return this.store.subscribe(
+        return subscribeWithDelayedFireImmediately(
+          this.store,
           ({ status }) => status,
           (status) =>
             status === AlchemySignerStatus.CONNECTED &&
             (listener as AlchemySignerEvents["connected"])(
               this.store.getState().user!
-            ),
-          { fireImmediately: true }
+            )
         );
       case "disconnected":
-        return this.store.subscribe(
+        return subscribeWithDelayedFireImmediately(
+          this.store,
           ({ status }) => status,
           (status) =>
             status === AlchemySignerStatus.DISCONNECTED &&
-            (listener as AlchemySignerEvents["disconnected"])(),
-          { fireImmediately: true }
+            (listener as AlchemySignerEvents["disconnected"])()
         );
       case "statusChanged":
-        return this.store.subscribe(
+        return subscribeWithDelayedFireImmediately(
+          this.store,
           ({ status }) => status,
-          listener as AlchemySignerEvents["statusChanged"],
-          { fireImmediately: true }
+          listener as AlchemySignerEvents["statusChanged"]
         );
       default:
         throw new Error(`Uknown event type ${event}`);
@@ -383,4 +383,49 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       this.store.setState({ status: AlchemySignerStatus.AUTHENTICATING });
     });
   };
+}
+
+// eslint-disable-next-line jsdoc/require-param, jsdoc/require-returns
+/**
+ * Zustand's `fireImmediately` option calls the listener before
+ * `store.subscribe` has returned, which breaks listeners which call
+ * unsubscribe, e.g.
+ *
+ * ```ts
+ * const unsubscribe = store.subscribe(
+ *   selector,
+ *   (update) => {
+ *     handleUpdate(update);
+ *     unsubscribe();
+ *   },
+ *   { fireImmediately: true },
+ * )
+ * ```
+ *
+ * since `unsubscribe` is still undefined at the time the listener is called. To
+ * prevent this, if the listener triggers before `subscribe` has returned, delay
+ * the callback to a later run of the event loop.
+ */
+function subscribeWithDelayedFireImmediately<U>(
+  store: InternalStore,
+  selector: (state: AlchemySignerStore) => U,
+  listener: (selectedState: U, previousSelectedState: U) => void,
+  options?: {
+    equalityFn?: (a: U, b: U) => boolean;
+  }
+): () => void {
+  let subscribeHasReturned = false;
+  const unsubscribe = store.subscribe(
+    selector,
+    (...args) => {
+      if (subscribeHasReturned) {
+        listener(...args);
+      } else {
+        setTimeout(() => listener(...args), 0);
+      }
+    },
+    options
+  );
+  subscribeHasReturned = true;
+  return unsubscribe;
 }
