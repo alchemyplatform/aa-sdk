@@ -19,12 +19,12 @@ import {
 } from "viem";
 
 import { UpgradeableModularAccountAbi } from "../../abis/UpgradeableModularAccount.js";
-import type { ValidationConfig, HookConfig } from "./types.js";
+import type { ValidationConfig, HookConfig } from "../common/types.js";
 import {
   serializeValidationConfig,
   serializeHookConfig,
   serializeModuleEntity,
-} from "./utils.js";
+} from "../common/utils.js";
 
 export type InstallValidationParams<
   TAccount extends SmartContractAccount | undefined =

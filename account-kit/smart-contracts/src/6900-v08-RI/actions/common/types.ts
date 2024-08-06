@@ -1,4 +1,4 @@
-import type { Address } from "viem";
+import type { Address, Hex } from "viem";
 
 export type ModuleEntity = {
   moduleAddress: Address;
@@ -23,4 +23,19 @@ export type HookConfig = {
   hookType: HookType;
   hasPreHooks: boolean;
   hasPostHooks: boolean;
+};
+
+export type ExecutionData = {
+  module: Address;
+  isPublic: boolean;
+  allowGlobalValidation: boolean;
+  executionHooks: HookConfig[];
+};
+
+export type ValidationData = {
+  isGlobal: boolean;
+  isSignatureValidation: boolean;
+  preValidationHooks: ModuleEntity[];
+  permissionHooks: HookConfig[];
+  selectors: Hex[];
 };
