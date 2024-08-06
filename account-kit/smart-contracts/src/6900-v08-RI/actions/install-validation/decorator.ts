@@ -70,6 +70,40 @@ export type InstallValidationActions<
   ) => Promise<SendUserOperationResult>;
 };
 
+/**
+ * The client object containing methods to install and uninstall validation configurations.
+ *
+ * @example
+ * ```ts
+ * import { createSingleSignerRIAccountClient, installValidationActions, SingleSignerValidationModule } from "@account-kit/smart-contracts";
+ *
+ * const accountClient = createSingleSignerRIAccountClient({
+ *    chain,
+ *    signer,
+ *    accountAddress,
+ *    transport,
+ *  }).extend(installValidationActions);
+ *
+ * const secondarySigner = new LocalAccountSigner(privateKeyToAccount(keccak256(toHex("secondarySigner"))));
+ *
+ * const result = accountClient.installValidation({
+ *      args: {
+ *          validationConfig: {
+ *              moduleAddress: SingleSignerValidationModule.meta.addresses.default,
+ *              entityId,
+ *              isGlobal: true,
+ *              isSignatureValidation: true,
+ *          },
+ *          selectors: [],
+ *          installData: SingleSignerValidationModule.encodeOnInstallData(entityId, await secondarySigner.getAddress()),
+ *          hooks: [],
+ *      }});
+ *
+ * ```
+ *
+ * @param {object} client The client object for the SmartAccount.
+ * @returns {object} An object containing two methods: `installValidation` and `uninstallValidation`.
+ */
 export const installValidationActions: <
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
