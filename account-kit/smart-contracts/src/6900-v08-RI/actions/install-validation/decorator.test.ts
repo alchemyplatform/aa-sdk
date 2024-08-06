@@ -114,7 +114,7 @@ describe("6900 RI installValidation Tests", async () => {
     // Generate and add the secondary signer
 
     const secondarySigner = new LocalAccountSigner(
-      privateKeyToAccount(keccak256(toHex("secondarySigner")))
+      privateKeyToAccount(keccak256(toHex("secondarySigner2")))
     );
 
     const provider = (await givenConnectedProvider({ signer })).extend(
@@ -126,7 +126,7 @@ describe("6900 RI installValidation Tests", async () => {
       value: parseEther("2"),
     });
 
-    const entityId = 1;
+    const entityId = 2;
 
     const result1 = await provider.installValidation({
       args: {
