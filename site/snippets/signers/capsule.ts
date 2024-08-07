@@ -4,7 +4,7 @@ import { Environment } from "@usecapsule/web-sdk";
 import { http } from "viem";
 
 export const createCapsuleSigner = async () => {
-  // get an API Key by filling out this form: https://form.typeform.com/to/hLaJeYJW
+  // get an API Key by filling out this form: https://usecapsule.com/api
   const capsuleSigner = new CapsuleSigner({
     env: Environment.DEVELOPMENT,
     apiKey: "CAPSULE_API_KEY",
