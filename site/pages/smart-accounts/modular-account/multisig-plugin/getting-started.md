@@ -5,13 +5,15 @@ description: Getting started with the Modular Account with Multisig Plugin in Ac
 
 # Getting started with the Multisig Plugin
 
-## 1. Set up the Modular Account
+## 1. Create a Multisig Account Client
 
-The Multisig Plugin can be installed on the Modular Account or any ERC-6900 compatible smart account. If you haven't already, please follow the guide to [set up Modular Account](../getting-started).
+Initialize a Multisig Modular Account client and set the `n` accounts as signers.
 
-## 2. Create an Account Client
+:::warning
+It is recommended to use the `createMultisigAccountAlchemyClient` directly to create new accounts with multi-sig ownership, rather than extending the Modular Account client.
 
-Next, initialize a Multisig Modular Account client and set the `n` accounts as signers.
+If you have an existing Modular Account (which has multi-owner plugin by default), please see details [here](/extending-smart-accounts/install-plugins#extend-modular-account-with-multisig) for installing the plugin before proceeding.
+:::
 
 ```ts
 import { LocalAccountSigner } from "@alchemy/aa-core";
@@ -69,12 +71,6 @@ const { request, aggregatedSignature, signatureObj: firstSig } = await multisigA
     }
   });
 ```
-
-:::warning
-
-We are aware of a bug in aa-sdk that prevents multisigs from using a paymaster service. We are working on fixing this and this feature would be available shortly.
-
-:::
 
 ## 4. Get the threshold signatures
 
