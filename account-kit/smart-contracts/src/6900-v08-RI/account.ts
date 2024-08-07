@@ -48,6 +48,8 @@ export type CreateSingleSignerRIAccountParams<
   factoryAddress?: Address;
   initCode?: Hex;
   initialOwner?: Address;
+  entityId?: number;
+  globalValidation?: boolean;
   accountAddress?: Address;
   entryPoint?: EntryPointDef<TEntryPointVersion, Chain>;
 };
@@ -78,6 +80,8 @@ export async function createSingleSignerRIAccount<
  * @param {string} config.factoryAddress Optional factory address override to create the account.
  * @param {string} config.initCode Optional initialization code override for the account.
  * @param {string} config.initialOwner Optional initial owner address for the account, used to calculate the counterfactual address.
+ * @param {number} config.entityId Optional entity ID for the validation, defaults to 0.
+ * @param {boolean} config.globalValidation Optional global validation flag, defaults to true.
  * @param {string} config.accountAddress Optional existing account address.
  * @param {EntryPoint} config.entryPoint Optional entry point configuration, defaults to version 0.7.0.
  * @returns {Promise<SingleSignerRIAccount>} A promise that resolves to a `SingleSignerRIAccount` object.
@@ -93,6 +97,8 @@ export async function createSingleSignerRIAccount(
     factoryAddress = getDefaultSingleSignerRIAccountFactoryAddress(chain),
     initCode,
     initialOwner,
+    entityId = DEFAULT_OWNER_ENTITY_ID,
+    globalValidation = true,
     accountAddress,
     entryPoint = getEntryPoint(chain, { version: "0.7.0" }),
   } = config;
@@ -115,7 +121,7 @@ export async function createSingleSignerRIAccount(
       encodeFunctionData({
         abi: AccountFactoryAbi,
         functionName: "createAccount",
-        args: [ownerAddress, salt, DEFAULT_OWNER_ENTITY_ID],
+        args: [ownerAddress, salt, entityId],
       }),
     ]);
   };
@@ -135,7 +141,7 @@ export async function createSingleSignerRIAccount(
     source: `SingleSignerRIAccount`,
     getAccountInitCode,
     ...executor,
-    ...singleSignerMessageSigner(signer, chain),
+    ...singleSignerMessageSigner(signer, chain, entityId, globalValidation),
   });
 
   return {

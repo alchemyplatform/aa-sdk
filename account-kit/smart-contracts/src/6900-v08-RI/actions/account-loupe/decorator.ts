@@ -6,8 +6,17 @@ import {
   type SmartContractAccount,
 } from "@aa-sdk/core";
 import type { Hex, Chain, Client, Transport } from "viem";
-import { IAccountLoupeV08Abi } from "../abis/IAccountLoupe.js";
-import type { ExecutionData, ModuleEntity, ValidationData } from "./types.js";
+import { IAccountLoupeV08Abi } from "../../abis/IAccountLoupe.js";
+import type {
+  ExecutionData,
+  ModuleEntity,
+  ValidationData,
+} from "../common/types.js";
+import {
+  serializeModuleEntity,
+  deserializeHookConfig,
+  deserializeModuleEntity,
+} from "../common/utils.js";
 
 export type AccountLoupeV08Actions<
   TAccount extends SmartContractAccount | undefined =
@@ -69,7 +78,7 @@ export const accountLoupeV08Actions: <
 
     return {
       ...result,
-      executionHooks: [...result.executionHooks], // Cast to mutable array
+      executionHooks: result.executionHooks.map(deserializeHookConfig),
     };
   },
 
@@ -93,14 +102,16 @@ export const accountLoupeV08Actions: <
       address: account.address,
       abi: IAccountLoupeV08Abi,
       functionName: "getValidationData",
-      args: [validationFunction],
+      args: [serializeModuleEntity(validationFunction)],
     });
 
     return {
       ...result,
-      preValidationHooks: [...result.preValidationHooks],
-      permissionHooks: [...result.permissionHooks],
-      selectors: [...result.selectors],
+      preValidationHooks: result.preValidationHooks.map(
+        deserializeModuleEntity
+      ),
+      permissionHooks: result.permissionHooks.map(deserializeHookConfig),
+      selectors: [...result.selectors], // Cast to mutable array
     };
   },
 });

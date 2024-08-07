@@ -30,7 +30,7 @@ export type HookData = {
 
 export type PackSignatureParams = {
   validationModule: Address;
-  entityID: number;
+  entityId: number;
   isGlobal: boolean;
   orderedHookData: HookData[];
   validationSignature: Hex;
@@ -39,14 +39,14 @@ export type PackSignatureParams = {
 // Signature packing utility
 export const packSignature = ({
   validationModule,
-  entityID,
+  entityId,
   isGlobal,
   orderedHookData,
   validationSignature,
 }: PackSignatureParams): Hex => {
   return concat([
     validationModule,
-    numberToHex(entityID, { size: 4 }),
+    numberToHex(entityId, { size: 4 }),
     boolToHex(isGlobal, { size: 1 }),
     ...orderedHookData.map(({ data, hookIndex }) =>
       packValidationDataWithIndex(data, hookIndex)
