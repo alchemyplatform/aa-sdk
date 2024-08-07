@@ -14,7 +14,7 @@ Combining Capsule with Account Kit allows you to get the best of both on and off
 
 Follow these steps to begin integrating Capsule:
 
-1. Obtain access to the Capsule SDK and an API key by completing [this form](https://form.typeform.com/to/hLaJeYJW).
+1. Obtain access to the Capsule SDK and an API key by completing [this form](https://usecapsule.com/api).
 2. For further assistance or if you wish to add more permissions or automation, consult the [complete Capsule developer documentation](https://docs.usecapsule.com) or contact hello@usecapsule.com.
 
 ### Install the SDK
