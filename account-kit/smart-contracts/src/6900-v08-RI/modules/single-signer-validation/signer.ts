@@ -9,8 +9,8 @@ import {
   type Chain,
 } from "viem";
 
-import { packSignature, DEFAULT_OWNER_ENTITY_ID } from "../../utils.js";
-import { meta } from "./module.js";
+import { packSignature } from "../../utils.js";
+import { SingleSignerValidationModule } from "./module.js";
 
 /**
  * Creates an object with methods for generating a dummy signature, signing user operation hashes, signing messages, and signing typed data.
@@ -29,11 +29,15 @@ import { meta } from "./module.js";
  *
  * @param {TSigner} signer the signer to use for signing operations
  * @param {Chain} chain the blockchain network chain
+ * @param {number} entityId the entity ID to use for signing operations
+ * @param {boolean} globalValidation whether to use global validation
  * @returns {object} an object with methods for signing operations and managing signatures
  */
 export const singleSignerMessageSigner = <TSigner extends SmartAccountSigner>(
   signer: TSigner,
-  chain: Chain
+  chain: Chain,
+  entityId: number,
+  globalValidation: boolean
 ) => {
   return {
     getDummySignature: (): Hex => {
@@ -41,9 +45,11 @@ export const singleSignerMessageSigner = <TSigner extends SmartAccountSigner>(
         "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
 
       return packSignature({
-        validationModule: meta.addresses[chain.id] ?? meta.addresses.default,
-        entityID: DEFAULT_OWNER_ENTITY_ID,
-        isGlobal: true, // todo: make this user-configurable
+        validationModule:
+          SingleSignerValidationModule.meta.addresses[chain.id] ??
+          SingleSignerValidationModule.meta.addresses.default,
+        entityId,
+        isGlobal: globalValidation,
         orderedHookData: [],
         validationSignature: dummyEcdsaSignature,
       });
@@ -52,8 +58,10 @@ export const singleSignerMessageSigner = <TSigner extends SmartAccountSigner>(
     signUserOperationHash: (uoHash: `0x${string}`): Promise<`0x${string}`> => {
       return signer.signMessage({ raw: uoHash }).then((signature: Hex) =>
         packSignature({
-          validationModule: meta.addresses[chain.id] ?? meta.addresses.default,
-          entityID: DEFAULT_OWNER_ENTITY_ID,
+          validationModule:
+            SingleSignerValidationModule.meta.addresses[chain.id] ??
+            SingleSignerValidationModule.meta.addresses.default,
+          entityId,
           isGlobal: true, // todo: make this user-configurable
           orderedHookData: [],
           validationSignature: signature,
