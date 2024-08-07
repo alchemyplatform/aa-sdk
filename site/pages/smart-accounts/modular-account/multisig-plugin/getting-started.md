@@ -12,7 +12,7 @@ Initialize a Multisig Modular Account client and set the `n` accounts as signers
 :::warning
 It is recommended to use the `createMultisigAccountAlchemyClient` directly to create new accounts with multi-sig ownership, rather than extending the Modular Account client.
 
-If you have an existing Modular Account (which has multi-owner plugin by default), please see details [here](../extending-smart-accounts/install-plugins#extend-modular-account-with-multisig-batch-uninstall-and-install-plugins-to-change-validator) for installing the plugin before proceeding.
+If you have an existing Modular Account (which has multi-owner plugin by default), please see details [here](/extending-smart-accounts/install-plugins#extend-modular-account-with-multisig) for installing the plugin before proceeding.
 :::
 
 ```ts

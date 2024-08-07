@@ -108,7 +108,7 @@ await client.waitForUserOperationTransaction({ hash });
 
 :::
 
-## Extend Modular Account with Multisig: batch uninstall and install plugins to change validator
+### Extend Modular Account with Multisig
 
 As mentioned above, you should not uninstall the multiowner plugin from a Modular Account in a single action. This will leave your account without a validator, no owner, and therefore will be unusable.
 
