@@ -18,6 +18,14 @@ Account Kit provides a more robust, easier way to install plugins with `pluginAc
 
 This guide will use the `SessionKeyPlugin` as an example to show how you can install `SessionKeyPlugin` easily using the `SmartAccountClient` extended with `sessionKeyPluginActions`.
 
+:::warning
+**Please use caution when uninstalling plug-ins to avoid "bricking" your account!**
+
+If the account only has 1 plug-in installed and you uninstall it, there will no longer be a validator on the account (no owner) and you will not be able to use or recover it.
+
+For example, do not call uninstall plugin of the multi-owner plugin on a Modular Account in a single action.
+:::
+
 ## 1. Installing the Session Key Plugin
 
 You should first extend the `SmartAccountClient` connected to a Modular Account with `sessionKeyPluginActions`.
@@ -65,6 +73,14 @@ First, extend the `SmartAccountClient` connected to a Modular Account with `plug
 
 Then, you can use the `uninstallPlugin()` method exposed on `pluginManagerActions` extended smart account client to uninstall the session key plugin for the connected account.
 
+:::warning
+**Please use caution when uninstalling plug-ins to avoid "bricking" your account!**
+
+If the account only has 1 plug-in installed and you uninstall it, there will no longer be a validator on the account (no owner) and you will not be able to use or recover it.
+
+For example, do not call uninstall plugin of the multi-owner plugin on a Modular Account in a single action.
+:::
+
 :::code-group
 
 ```ts [example.ts]
@@ -91,3 +107,17 @@ await client.waitForUserOperationTransaction({ hash });
 ```
 
 :::
+
+### Extend Modular Account with Multisig
+
+As mentioned above, you should not uninstall the multiowner plugin from a Modular Account in a single action. This will leave your account without a validator, no owner, and therefore will be unusable.
+
+**Recommended flow today**: Rather than switch ownership post creation, use `createModularAccountAlchemyClient` OR the `createMultisigAccountAlchemyClient` on account creation directly depending on if you want multi-owner or multi-sig ownership respectively.
+
+**Problem**: In order to switch from multi-owner (installed in Modular Account by default) to multi-sig, you will need to batch call an uninstall of the multi-owner plugin and an install of the multi-sig plugin. **It is required to batch these steps!** If you uninstall the multi-owner plugin in a single action, the account will no longer have a validation function, and will be bricked (unusable).
+
+**Solution for extending Modular Account AFTER deployment**: You will need to manually encode 1) the uninstall of the multi-owner plugin and 2) the install of the multi-sig plugin and batch those together in one UO (using `encodeFunctionData` and [batching](/using-smart-accounts/batch-user-operations/) using `sendUserOperation`). We are working to make this workflow easier in the next SDK version.
+
+See a working example in this [discussion](https://github.com/alchemyplatform/aa-sdk/discussions/865#discussioncomment-10206160).
+
+After uninstalling and installing successfully, you will then be able to use the Multisig Account Client to [sign and send UOs](/smart-accounts/modular-account/multisig-plugin/getting-started/).
