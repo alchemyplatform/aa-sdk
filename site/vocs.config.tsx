@@ -129,4 +129,9 @@ export default defineConfig({
   theme: {
     accentColor: "#ce26a2",
   },
+  vite: {
+    build: {
+      target: "esnext",
+    },
+  },
 });
