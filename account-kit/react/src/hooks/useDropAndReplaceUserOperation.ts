@@ -1,11 +1,11 @@
 "use client";
 
-import type { SupportedAccounts } from "@account-kit/core";
 import type {
   DropAndReplaceUserOperationParameters,
   GetEntryPointFromAccount,
   SendUserOperationResult,
 } from "@aa-sdk/core";
+import type { SupportedAccounts } from "@account-kit/core";
 import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
 import { useAlchemyAccountContext } from "../context.js";
 import { ClientUndefinedHookError } from "../errors.js";
@@ -48,17 +48,60 @@ export type UseDropAndReplaceUserOperationResult<
  * Custom hook that handles the drop and replace user operation for a given client and mutation arguments.
  *
  * @example
- * ```ts
- * import { useDropAndReplaceUserOperation } from "@account-kit/react";
+ * ```tsx
+ * import {
+ *   useDropAndReplaceUserOperation,
+ *   useSendUserOperation,
+ *   useSmartAccountClient,
+ * } from "@account-kit/react";
  *
- * const { dropAndReplaceUserOperation, dropAndReplaceUserOperationResult, isDroppingAndReplacingUserOperation, error } = useDropAndReplaceUserOperation({
- *  client,
- *  // these are optional
- *  onSuccess: (result) => {
- *   // do something on success
- *  },
- *  onError: (error) => console.error(error),
- * });
+ * export function ComponentWithDropAndReplaceUO() {
+ *   const { client } = useSmartAccountClient({
+ *     type: "MultiOwnerModularAccount",
+ *   });
+ *   const { sendUserOperationAsync, isSendingUserOperation } =
+ *     useSendUserOperation({
+ *       client,
+ *     });
+ *   const { dropAndReplaceUserOperation, isDroppingAndReplacingUserOperation } =
+ *     useDropAndReplaceUserOperation({
+ *       client,
+ *       onSuccess: ({ hash, request }) => {
+ *         // [optional] Do something with the hash and request
+ *       },
+ *       onError: (error) => {
+ *         // [optional] Do something with the error
+ *       },
+ *       // [optional] ...additional mutationArgs
+ *     });
+ *
+ *   return (
+ *     <div>
+ *       <button
+ *         onClick={async () => {
+ *           const { request } = await sendUserOperationAsync({
+ *             uo: {
+ *              target: "0xTARGET_ADDRESS",
+ *              data: "0x",
+ *              value: 0n,
+ *             },
+ *           });
+ *
+ *           dropAndReplaceUserOperation({
+ *             uoToDrop: request,
+ *           });
+ *         }}
+ *         disabled={isSendingUserOperation || isDroppingAndReplacingUserOperation}
+ *       >
+ *         {isSendingUserOperation
+ *           ? "Sending..."
+ *           : isDroppingAndReplacingUserOperation
+ *           ? "Replacing..."
+ *           : "Send then Replace UO"}
+ *       </button>
+ *     </div>
+ *   );
+ * }
  * ```
  *
  * @param {UseDropAndReplaceUserOperationArgs<TEntryPointVersion, TAccount>} config The configuration parameters including the client and other mutation arguments
