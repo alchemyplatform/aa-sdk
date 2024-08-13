@@ -118,8 +118,12 @@ export {
 
 // 6900 RI exports
 export type * from "./6900-v08-RI/account.js";
-export { accountLoupeV08Actions } from "./6900-v08-RI/actions/account-loupe/decorator.js";
+export {
+  accountLoupeV08Actions,
+  type AccountLoupeV08Actions,
+} from "./6900-v08-RI/actions/account-loupe/decorator.js";
 export type * from "./6900-v08-RI/actions/common/types.js";
+export { HookType } from "./6900-v08-RI/actions/common/types.js";
 export {
   serializeValidationConfig,
   deserializeValidationConfig,
@@ -128,12 +132,18 @@ export {
   serializeHookConfig,
   deserializeHookConfig,
 } from "./6900-v08-RI/actions/common/utils.js";
-export { installValidationActions } from "./6900-v08-RI/actions/install-validation/decorator.js";
+export {
+  installValidationActions,
+  type InstallValidationActions,
+} from "./6900-v08-RI/actions/install-validation/decorator.js";
 export { createSingleSignerRIAccount } from "./6900-v08-RI/account.js";
 export { getDefaultSingleSignerRIAccountFactoryAddress } from "./6900-v08-RI/utils.js";
-export { SingleSignerValidationModule } from "./6900-v08-RI/modules/single-signer-validation/module.js";
 export { singleSignerMessageSigner } from "./6900-v08-RI/modules/single-signer-validation/signer.js";
 export {
   createSingleSignerRIAccountClient,
   type CreateSingleSignerRIAccountClientParams,
 } from "./6900-v08-RI/client.js";
+
+// 6900 v0.8 modules
+export { SingleSignerValidationModule } from "./6900-v08-RI/modules/single-signer-validation/module.js";
+export { AllowlistModule } from "./6900-v08-RI/modules/allowlist/module.js";
