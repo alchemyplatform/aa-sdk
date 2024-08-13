@@ -11,7 +11,16 @@ export const infraSidebar: SidebarItem[] = [
         text: "Send user operations",
         link: "/infra/send-user-operations",
       },
+      {
+        text: "Sponsor gas",
+        link: "/infra/sponsor-gas",
+      },
+      {
+        text: "Retry user operations",
+        link: "/infra/drop-and-replace",
+      },
     ],
   },
+  { text: "SDK Reference", link: "/reference/account-kit/infra" },
   resources,
 ];
