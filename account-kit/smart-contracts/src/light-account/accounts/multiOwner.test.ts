@@ -85,7 +85,7 @@ describe("MultiOwner Light Account Tests", () => {
     const txnHash = provider.waitForUserOperationTransaction(result);
 
     await expect(txnHash).resolves.not.toThrowError();
-  }, 10_000);
+  });
 
   const givenConnectedProvider = ({
     signer,
