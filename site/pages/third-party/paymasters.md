@@ -57,7 +57,7 @@ const stackupClient = createClient({
 });
 
 const alchemyRpcClient = createAlchemyPublicRpcClient({
-  connectionConfig: { rpcUrl: "ALCHEMY_RPC_URL" },
+  connectionConfig: { rpcUrl: "ALCHEMY_RPC_URL" }, // TODO: Replace with your Alchemy API key (https://dashboard.alchemypreview.com/apps)
   chain,
 });
 
@@ -72,8 +72,8 @@ const alchemyClient = await createMultiOwnerModularAccountClient({
     callGasLimit: "0x0",
     preVerificationGas: "0x0",
     verificationGasLimit: "0x0",
-  }), // Stackup gas estimation
-  feeEstimator: alchemyFeeEstimator(alchemyRpcClient), // alchemy fee estimation to comply with bundler
+  }), // Bypasses alchemy gas estimation and instead uses Stackup for gas estimation
+  feeEstimator: alchemyFeeEstimator(alchemyRpcClient), // Uses alchemy fee estimation to comply with bundler
   paymasterAndData: {
     dummyPaymasterAndData: () => {
       return "0x";
