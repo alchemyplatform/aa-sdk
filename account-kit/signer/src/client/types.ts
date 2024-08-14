@@ -30,6 +30,11 @@ export type CreateAccountParams =
     }
   | {
       type: "passkey";
+      email: string;
+      creationOpts?: CredentialCreationOptionOverrides;
+    }
+  | {
+      type: "passkey";
       username: string;
       creationOpts?: CredentialCreationOptionOverrides;
     };

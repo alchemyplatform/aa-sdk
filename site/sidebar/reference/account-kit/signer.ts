@@ -145,6 +145,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             link: "/reference/account-kit/signer/classes/BaseSignerClient/signRawMessage",
           },
           {
+            text: "stampWhoami",
+            link: "/reference/account-kit/signer/classes/BaseSignerClient/stampWhoami",
+          },
+          {
             text: "whoami",
             link: "/reference/account-kit/signer/classes/BaseSignerClient/whoami",
           },
