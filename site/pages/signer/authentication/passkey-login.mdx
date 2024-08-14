@@ -1,0 +1,31 @@
+---
+title: Passkey Login
+description: Authenticate a user using a passkey
+---
+
+# Passkey Login
+
+If a user has added a passkey to their account, or they initially signed up with a passkey, you can easily log them in with that passkey.
+
+## Authenticate a user
+
+:::danger
+TODO: once https://github.com/alchemyplatform/aa-sdk/pull/920 is merged in, update this to cover passkey login with email identifier.
+:::
+
+:::code-group
+
+```ts twoslash [example.ts]
+import { signer } from "./signer";
+
+const result = await signer.authenticate({
+  type: "passkey",
+  createNew: false,
+});
+```
+
+```ts twoslash [signer] filename="signer.ts"
+// [!include ~/shared/signer/signer.ts]
+```
+
+:::
