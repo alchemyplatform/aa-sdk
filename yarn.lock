@@ -138,14 +138,6 @@
     "@alchemy/aa-core" "^3.18.2"
     viem "2.8.6"
 
-"@alchemy/aa-accounts@^3.19.0":
-  version "3.19.0"
-  resolved "https://registry.yarnpkg.com/@alchemy/aa-accounts/-/aa-accounts-3.19.0.tgz#ad433eaecf53dcb0ebd5c793c44f217fccc60d72"
-  integrity sha512-cdR8H9LveeUyBWFkmoqU7hZnFoqmdyPQDYZRtFr9aF+3zWAQYYJ/13Vz7aoVQ4lZ57+JQj7fN5vSVn2gFI47yA==
-  dependencies:
-    "@alchemy/aa-core" "^3.18.2"
-    viem "2.8.6"
-
 "@alchemy/aa-alchemy@3.14.1":
   version "3.14.1"
   resolved "https://registry.yarnpkg.com/@alchemy/aa-alchemy/-/aa-alchemy-3.14.1.tgz#66a12acd95eddbffe69d15330de1f30dc092d28b"
