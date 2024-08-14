@@ -31,7 +31,7 @@ export interface SplitTransportParams {
  *      overrides: [{
  *          methods: bundlerMethods,
  *          transport: http(BUNDLER_RPC_URL)
- *      }]
+ *      }],
  *      fallback: http(OTHER_RPC_URL)
  *  }),
  * });
