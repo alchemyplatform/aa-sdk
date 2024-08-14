@@ -34,6 +34,6 @@ afterEach(() => {
 });
 
 afterAll(async () => {
-  local060Instance.restart();
-  local070Instance.restart();
+  await local060Instance.restart();
+  await local070Instance.restart();
 });
