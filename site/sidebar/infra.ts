@@ -21,6 +21,16 @@ export const infraSidebar: SidebarItem[] = [
       },
     ],
   },
+  {
+    text: "Third party",
+    items: [
+      {
+        text: "Bundlers",
+        link: "/infra/third-party/bundlers",
+      },
+      { text: "Paymaster", link: "/infra/third-party/paymaster" },
+    ],
+  },
   { text: "SDK Reference", link: "/reference/account-kit/infra" },
   concepts,
   guides,
