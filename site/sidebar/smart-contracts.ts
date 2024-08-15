@@ -4,10 +4,7 @@ import { concepts, guides, resources } from "./shared.js";
 export const smartContractsSidebar: SidebarItem[] = [
   {
     text: "Overview",
-    items: [
-      { text: "Introduction", link: "/smart-contracts/overview" },
-      { text: "Getting started", link: "#TODO" },
-    ],
+    items: [{ text: "Introduction", link: "/smart-contracts/overview" }],
   },
   {
     text: "Choosing a smart account",
@@ -111,7 +108,13 @@ export const smartContractsSidebar: SidebarItem[] = [
   },
   {
     text: "Extending smart accounts",
-    items: [],
+    items: [
+      { text: "Install plugins", link: "/smart-contracts/install-plugins" },
+      {
+        text: "Get installed plugins",
+        link: "/smart-contracts/get-installed-plugins",
+      },
+    ],
   },
   concepts,
   guides,
