@@ -5,7 +5,7 @@ export const smartContractsSidebar: SidebarItem[] = [
   {
     text: "Overview",
     items: [
-      { text: "Introduction", link: "/infra/overview" },
+      { text: "Introduction", link: "/smart-contracts/overview" },
       { text: "Getting started", link: "#TODO" },
     ],
   },
@@ -19,7 +19,7 @@ export const smartContractsSidebar: SidebarItem[] = [
       {
         text: "Modular Account",
         items: [
-          { text: "Introduction", link: "/smart-contracts/modular-account" },
+          { text: "Overview", link: "/smart-contracts/modular-account" },
           {
             text: "Getting started",
             link: "/smart-contracts/modular-account/getting-started",
@@ -52,7 +52,20 @@ export const smartContractsSidebar: SidebarItem[] = [
           },
         ],
       },
-      { text: "Light Account", items: [] },
+      {
+        text: "Light Account",
+        items: [
+          { text: "Overview", link: "/smart-contracts/light-account" },
+          {
+            text: "Getting started",
+            link: "/smart-contracts/light-account/getting-started",
+          },
+          {
+            text: "Deployments",
+            link: "/smart-contracts/light-account/deployments",
+          },
+        ],
+      },
       {
         text: "Custom accounts",
         link: "/smart-contracts/custom/using-your-own",
