@@ -13,9 +13,9 @@ import { resetBalance } from "~test/accounts.js";
 import { accounts } from "~test/constants.js";
 // TODO: update the tests that just use the 060 instance to use versions + 070 instance
 import { local060Instance } from "~test/instances.js";
-import { createLightAccountClient } from "../clients/client.js";
 import type { LightAccountVersion } from "../types.js";
 import { AccountVersionRegistry } from "../utils.js";
+import { createLightAccountClient } from "./client.js";
 
 const versions = Object.keys(
   AccountVersionRegistry.LightAccount

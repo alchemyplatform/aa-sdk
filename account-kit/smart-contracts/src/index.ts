@@ -24,6 +24,7 @@ export {
   LightAccountUnsupported1271Impls,
   defaultLightAccountVersion,
   getDefaultLightAccountFactoryAddress,
+  getDefaultMultiOwnerLightAccountFactoryAddress,
   getLightAccountVersionForAccount,
 } from "./light-account/utils.js";
 
