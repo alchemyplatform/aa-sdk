@@ -75,7 +75,39 @@ export const smartContractsSidebar: SidebarItem[] = [
   },
   {
     text: "Using smart accounts",
-    items: [],
+    items: [
+      {
+        text: "Transfer ownership",
+        items: [
+          {
+            text: "Modular Account",
+            link: "/smart-contracts/transfer-ownership/modular-account",
+          },
+          {
+            text: "Light Account",
+            link: "/smart-contracts/transfer-ownership/light-account",
+          },
+          {
+            text: "Multi-Owner LightAccount",
+            link: "/smart-contracts/transfer-ownership/multi-owner-light-account",
+          },
+        ],
+      },
+      {
+        text: "Session keys",
+        items: [
+          { text: "Overview", link: "/smart-contracts/session-keys" },
+          {
+            text: "Getting started",
+            link: "/smart-contracts/session-keys/getting-started",
+          },
+          {
+            text: "Supported permissions",
+            link: "/smart-contracts/session-keys/supported-permissions",
+          },
+        ],
+      },
+    ],
   },
   {
     text: "Extending smart accounts",
