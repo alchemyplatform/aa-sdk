@@ -27,6 +27,7 @@
     "@account-kit/core": "latest",
     "@account-kit/infra": "latest",
     "@account-kit/react": "latest",
+    "@account-kit/signer": "latest",
     "@account-kit/smart-contracts": "latest",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
