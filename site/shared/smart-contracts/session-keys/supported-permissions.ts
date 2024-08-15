@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { sepolia } from "@account-kit/infra";
 import {

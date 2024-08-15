@@ -177,11 +177,9 @@ describe("Modular Account Multi Owner Account Tests", async () => {
     accountAddress?: Address;
   }) =>
     createMultiOwnerModularAccountClient({
-      account: {
-        signer,
-        accountAddress,
-        owners,
-      },
+      signer,
+      accountAddress,
+      owners,
       transport: custom(instance.getClient()),
       chain: instance.chain,
       ...(usePaymaster ? erc7677Middleware() : {}),

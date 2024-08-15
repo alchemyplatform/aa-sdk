@@ -64,9 +64,7 @@ import { generatePrivateKey } from "viem/accounts";
 const accountClient = await createMultiOwnerModularAccountClient({
   chain: sepolia,
   transport: http("RPC_URL"),
-  account: {
-    signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
-  },
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
 });
 ```
 

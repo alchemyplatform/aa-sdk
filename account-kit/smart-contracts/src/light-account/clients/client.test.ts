@@ -1,4 +1,6 @@
 import {
+  createBundlerClient,
+  createSmartAccountClientFromExisting,
   erc7677Middleware,
   LocalAccountSigner,
   type BatchUserOperationCallData,
@@ -12,7 +14,10 @@ import { setBalance } from "viem/actions";
 import { resetBalance } from "~test/accounts.js";
 import { accounts } from "~test/constants.js";
 // TODO: update the tests that just use the 060 instance to use versions + 070 instance
+import { generatePrivateKey } from "viem/accounts";
 import { local060Instance } from "~test/instances.js";
+import { multiOwnerPluginActions } from "../../msca/plugins/multi-owner/index.js";
+import { getMSCAUpgradeToData } from "../../msca/utils.js";
 import type { LightAccountVersion } from "../types.js";
 import { AccountVersionRegistry } from "../utils.js";
 import { createLightAccountClient } from "./client.js";
@@ -23,6 +28,11 @@ const versions = Object.keys(
 
 describe("Light Account Tests", () => {
   const instance = local060Instance;
+  let client: ReturnType<typeof instance.getClient>;
+
+  beforeAll(async () => {
+    client = instance.getClient();
+  });
 
   const signer: SmartAccountSigner = new LocalAccountSigner(
     accounts.fundedAccountOwner
@@ -266,6 +276,92 @@ describe("Light Account Tests", () => {
     }
   );
 
+  it("should transfer ownership successfully", async () => {
+    // create a throwaway address
+    const throwawaySigner = LocalAccountSigner.privateKeyToAccountSigner(
+      generatePrivateKey()
+    );
+    const throwawayClient = await givenConnectedProvider({
+      signer: throwawaySigner,
+    });
+
+    // fund the throwaway address
+    await setBalance(client, {
+      address: throwawayClient.getAddress(),
+      value: 200000000000000000n,
+    });
+
+    // create new signer and transfer ownership
+    const newOwner = LocalAccountSigner.privateKeyToAccountSigner(
+      generatePrivateKey()
+    );
+
+    await throwawayClient.transferOwnership({
+      newOwner,
+      waitForTxn: true,
+    });
+
+    const newOwnerClient = await givenConnectedProvider({
+      signer: newOwner,
+      accountAddress: throwawayClient.getAddress(),
+    });
+
+    const newOwnerAddress = await newOwnerClient.account.getOwnerAddress();
+
+    expect(newOwnerAddress).not.toBe(await throwawaySigner.getAddress());
+    expect(newOwnerAddress).toBe(await newOwner.getAddress());
+  }, 100000);
+
+  it("should upgrade a deployed light account to msca successfully", async () => {
+    // create a owner signer to create the account
+    const throwawaySigner = LocalAccountSigner.privateKeyToAccountSigner(
+      generatePrivateKey()
+    );
+    const throwawayClient = await givenConnectedProvider({
+      signer: throwawaySigner,
+    });
+
+    const accountAddress = throwawayClient.getAddress();
+    const ownerAddress = await throwawaySigner.getAddress();
+
+    // fund + deploy the throwaway address
+    await setBalance(client, {
+      address: accountAddress,
+      value: 200000000000000000n,
+    });
+
+    const { createMAAccount, ...upgradeToData } = await getMSCAUpgradeToData(
+      throwawayClient,
+      {
+        account: throwawayClient.account,
+        multiOwnerPluginAddress: "0xcE0000007B008F50d762D155002600004cD6c647",
+      }
+    );
+
+    await throwawayClient.upgradeAccount({
+      upgradeTo: upgradeToData,
+      waitForTx: true,
+    });
+
+    const upgradedClient = createSmartAccountClientFromExisting({
+      client: createBundlerClient({
+        chain: instance.chain,
+        transport: custom(client),
+      }),
+      account: await createMAAccount(),
+    }).extend(multiOwnerPluginActions);
+
+    const upgradedAccountAddress = upgradedClient.getAddress();
+
+    const owners = await upgradedClient.readOwners({
+      account: upgradedClient.account,
+      pluginAddress: "0xcE0000007B008F50d762D155002600004cD6c647",
+    });
+
+    expect(upgradedAccountAddress).toBe(accountAddress);
+    expect(owners).toContain(ownerAddress);
+  }, 200000);
+
   const givenConnectedProvider = ({
     signer,
     version = "v1.1.0",
@@ -278,11 +374,9 @@ describe("Light Account Tests", () => {
     accountAddress?: Address;
   }) =>
     createLightAccountClient({
-      account: {
-        signer,
-        accountAddress,
-        version,
-      },
+      signer,
+      accountAddress,
+      version,
       transport: custom(instance.getClient()),
       chain: instance.chain,
       ...(usePaymaster ? erc7677Middleware() : {}),

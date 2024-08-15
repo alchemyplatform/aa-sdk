@@ -21,14 +21,13 @@ import { createMultiOwnerModularAccountClient } from "@account-kit/smart-contrac
 import { createMultiOwnerModularAccountClient } from "@account-kit/smart-contracts";
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { sepolia } from "viem/chains";
-import { http, generatePrivateKey } from "viem";
+import { http } from "viem";
+import { generatePrivateKey } from "viem/accounts";
 
 const accountClient = await createMultiOwnerModularAccountClient({
   chain: sepolia,
   transport: http("RPC_URL"),
-  account: {
-    signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
-  },
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
 });
 ```
 
