@@ -1,0 +1,82 @@
+---
+title: Using your own Smart Account
+description: Follow this guide to use any smart account implementation you want
+  with Account Kit, a vertically integrated stack for building apps that support
+  ERC-4337 and ERC-6900.
+---
+
+# Using your own Smart Account
+
+You are not limited to the accounts defined in `@account-kit/smart-contracts`. The `SmartAccountClient` can be used with any smart account because it only relies on the `SmartContractAccount` interface. This means you can use your own smart account implementation with Account Kit.
+
+```ts [my-account.ts] twoslash
+import { getVersion060EntryPoint, toSmartContractAccount } from "@aa-sdk/core";
+import { http, type SignableMessage } from "viem";
+import { sepolia } from "viem/chains";
+
+const myAccount = await toSmartContractAccount({
+  /// REQUIRED PARAMS ///
+  source: "MyAccount",
+  transport: http("RPC_URL"),
+  chain: sepolia,
+  // The EntryPointDef that your account is compatible with
+  entryPoint: getVersion060EntryPoint(sepolia),
+  // This should return a concatenation of your `factoryAddress` and the `callData` for your factory's create account method
+  getAccountInitCode: () => "0x{factoryAddress}{callData}",
+  // an invalid signature that doesn't cause your account to revert during validation
+  getDummySignature: () => "0x1234...",
+  // given a UO in the form of {target, data, value} should output the calldata for calling your contract's execution method
+  encodeExecute: (uo) => "....",
+  signMessage: ({ message }: SignableMessage) => "0x...",
+  signTypedData: (typedData) => "0x000",
+
+  /// OPTIONAL PARAMS ///
+  // if you already know your account's address, pass that in here to avoid generating a new counterfactual
+  accountAddress: Address,
+  // if your account supports batching, this should take an array of UOs and return the calldata for calling your contract's batchExecute method
+  encodeBatchExecute: (uos) => "0x...",
+  // if your contract expects a different signing scheme than the default signMessage scheme, you can override that here
+  signUserOperationHash: (hash) => "0x...",
+  // allows you to define the calldata for upgrading your account
+  encodeUpgradeToAndCall: (params) => "0x...",
+});
+```
+
+To use your account, you will need to pass it into a `SmartAccountClient`.
+
+```ts twoslash
+import { createAlchemySmartAccountClient } from "@account-kit/infra";
+import { sepolia } from "@aa-sdk/core";
+
+const client = createAlchemySmartAccountClient({
+  // created above
+  account: myAccount,
+  chain: sepolia,
+  transport: http("RPC_URL"),
+});
+```
+
+## `LightSmartContractAccount` as an Example
+
+We have built an extension of the eth-infinitism `SimpleAccount` called [LightAccount.sol](https://github.com/alchemyplatform/light-account/blob/main/src/LightAccount.sol). You can learn more about Light Account in the [Light Account documentation](#TODO/smart-accounts/light-account/).
+
+We provide an implementation of `SmartContractAccount` that works with `LightAccount.sol`, which can be used as an example of how to implement your own Smart Contract Account:
+:::details[LightSmartContractAccount]
+
+```ts twoslash
+// [!include ~/../account-kit/smart-contracts/src/light-account/accounts/account.ts]
+```
+
+:::
+
+## The `toSmartContractAccount` Method
+
+For your reference, this is the definition of the `toSmartContractAccount` interface as pulled from the source code:
+
+:::details SmartContractAccount
+
+```ts twoslash
+// [!include ~/../aa-sdk/core/src/account/smartContractAccount.ts]
+```
+
+:::
