@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-alpha.11](https://github.com/alchemyplatform/aa-sdk/compare/v3.19.0...v4.0.0-alpha.11) (2024-08-16)
+
+### Bug Fixes
+
+- merge base into this ([f9a6b2d](https://github.com/alchemyplatform/aa-sdk/commit/f9a6b2d801b909146c0e10bb072369992163ea69))
+
+### Code Refactoring
+
+- change the prefix for aa-sdk packages ([#722](https://github.com/alchemyplatform/aa-sdk/issues/722)) ([b643981](https://github.com/alchemyplatform/aa-sdk/commit/b643981e900d9cabf6e273b5f7e9e75cd0c32c7d))
+
+### Features
+
+- add doc generator for class methods ([#806](https://github.com/alchemyplatform/aa-sdk/issues/806)) ([3cdea84](https://github.com/alchemyplatform/aa-sdk/commit/3cdea8457d0a1fabd63d6d318a7bd1f62883d5b4))
+- allow for passkey + email signup ([#920](https://github.com/alchemyplatform/aa-sdk/issues/920)) ([b196439](https://github.com/alchemyplatform/aa-sdk/commit/b1964397bbfb722bcd306f07a0a3e343af89d1e1))
+- enable linting class methods from exported classes ([4968d83](https://github.com/alchemyplatform/aa-sdk/commit/4968d838e903218d255bff0610babebd37c13413))
+- surface descriptive session key errors ([#718](https://github.com/alchemyplatform/aa-sdk/issues/718)) ([45582b1](https://github.com/alchemyplatform/aa-sdk/commit/45582b14e7116903f9b91cdd4bf2bb04de14ffa4))
+
+### BREAKING CHANGES
+
+- @alchemy/aa-_ packages have been renamed to @aa-sdk/_
+
 # [4.0.0-alpha.10](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-alpha.9...v4.0.0-alpha.10) (2024-08-01)
 
 **Note:** Version bump only for package @account-kit/signer
