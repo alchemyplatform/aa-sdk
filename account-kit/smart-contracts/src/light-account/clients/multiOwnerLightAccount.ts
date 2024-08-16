@@ -27,14 +27,14 @@ export type CreateMultiOwnerLightAccountClientParams<
     TSigner
   >["transport"];
   chain: CreateMultiOwnerLightAccountParams<TTransport, TSigner>["chain"];
-  account: Omit<
-    CreateMultiOwnerLightAccountParams<TTransport, TSigner>,
-    "transport" | "chain"
-  >;
 } & Omit<
-  SmartAccountClientConfig<TTransport, TChain>,
-  "transport" | "account" | "chain"
->;
+  CreateMultiOwnerLightAccountParams<TTransport, TSigner>,
+  "transport" | "chain"
+> &
+  Omit<
+    SmartAccountClientConfig<TTransport, TChain>,
+    "transport" | "account" | "chain"
+  >;
 
 export function createMultiOwnerLightAccountClient<
   TChain extends Chain | undefined = Chain | undefined,
@@ -67,9 +67,7 @@ export function createMultiOwnerLightAccountClient<
  * const account = await createMultiOwnerLightAccountClient({
  *  chain: sepolia,
  *  transport: http("RPC_URL"),
- *  account: {
- *    signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
- *  }
+ *  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
  * });
  * ```
  *
@@ -79,16 +77,16 @@ export function createMultiOwnerLightAccountClient<
 export async function createMultiOwnerLightAccountClient(
   params: CreateMultiOwnerLightAccountClientParams
 ): Promise<SmartAccountClient> {
-  const { account, transport, chain, ...clientConfig } = params;
+  const { transport, chain } = params;
 
   const lightAccount = await createMultiOwnerLightAccount({
-    ...account,
+    ...params,
     transport,
     chain,
   });
 
   return createSmartAccountClient({
-    ...clientConfig,
+    ...params,
     transport,
     chain: chain,
     account: lightAccount,

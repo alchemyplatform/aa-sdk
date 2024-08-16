@@ -21,16 +21,15 @@ import { createMultisigModularAccountClient } from "@account-kit/smart-contracts
 import { createMultisigModularAccountClient } from "@account-kit/smart-contracts";
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { sepolia } from "viem/chains";
-import { http, generatePrivateKey } from "viem"
+import { http } from "viem";
+import { generatePrivateKey } from "viem/accounts";
 
 const accountClient = await createMultisigModularAccountClient({
-chain: sepolia,
-transport: http("RPC_URL"),
-account: {
-signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
-owners: [...], // other owners on the account
-threshold: 2, // 2 of N signatures
-}
+  chain: sepolia,
+  transport: http("RPC_URL"),
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+  owners: [], // other owners on the account
+  threshold: 2, // 2 of N signatures
 });
 ```
 
