@@ -1,8 +1,10 @@
 import { type SmartAccountSigner } from "@aa-sdk/core";
 import {
   createLightAccount,
+  createMultiOwnerLightAccount,
   createMultiOwnerModularAccount,
   type CreateLightAccountParams,
+  type CreateMultiOwnerLightAccountParams,
   type CreateMultiOwnerModularAccountParams,
   type LightAccountVersion,
 } from "@account-kit/smart-contracts";
@@ -24,6 +26,15 @@ export type AccountConfig<TAccount extends SupportedAccountTypes> =
           Transport,
           SmartAccountSigner,
           LightAccountVersion<"LightAccount">
+        >,
+        "signer" | "transport" | "chain"
+      >
+    : TAccount extends "MultiOwnerLightAccount"
+    ? Omit<
+        CreateMultiOwnerLightAccountParams<
+          Transport,
+          SmartAccountSigner,
+          LightAccountVersion<"MultiOwnerLightAccount">
         >,
         "signer" | "transport" | "chain"
       >
@@ -87,6 +98,17 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
         return createLightAccount({
           ...params,
           ...cachedConfig,
+          signer,
+          transport: (opts) => transport({ ...opts, retryCount: 0 }),
+          chain,
+        });
+      case "MultiOwnerLightAccount":
+        return createMultiOwnerLightAccount({
+          ...(params as AccountConfig<"MultiOwnerLightAccount">),
+          ...(cachedConfig as Omit<
+            CreateMultiOwnerLightAccountParams,
+            "transport" | "chain" | "signer"
+          >),
           signer,
           transport: (opts) => transport({ ...opts, retryCount: 0 }),
           chain,
