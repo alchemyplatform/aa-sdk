@@ -1,5 +1,5 @@
-import { type ConnectionConfig, ConnectionConfigSchema } from "@aa-sdk/core";
-import { TurnkeyClient } from "@turnkey/http";
+import { ConnectionConfigSchema, type ConnectionConfig } from "@aa-sdk/core";
+import { TurnkeyClient, type TSignedRequest } from "@turnkey/http";
 import EventEmitter from "eventemitter3";
 import type { Hex } from "viem";
 import { NotAuthenticatedError } from "../errors.js";
@@ -225,6 +225,25 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     };
 
     return this.user;
+  };
+
+  /**
+   * Generates a stamped whoami request for the current user. This request can then be used to call /signer/v1/whoami to get the user information.
+   * This is useful if you want to get the user information in a different context like a server. You can pass the stamped request to the server
+   * and then call our API to get the user information. Using this stamp is the most trusted way to get the user information since a stamp can only
+   * belong to the user who created it.
+   *
+   * @returns {Promise<TSignedRequest>} a promise that resolves to the "whoami" information for the logged in user
+   * @throws {Error} if no organization ID is provided
+   */
+  public stampWhoami = async (): Promise<TSignedRequest> => {
+    if (!this.user) {
+      throw new Error("User must be authenticated to stamp a whoami request");
+    }
+
+    return await this.turnkeyClient.stampGetWhoami({
+      organizationId: this.user.orgId,
+    });
   };
 
   /**
