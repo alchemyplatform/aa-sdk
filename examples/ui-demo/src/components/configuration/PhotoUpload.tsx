@@ -1,7 +1,7 @@
 import { useConfig } from "@/app/state";
+import { ChangeEvent } from "react";
 import { PhotoIcon } from "../icons/photo";
 import FileUploadInput from "../shared/FileUploadInput";
-import { ChangeEvent } from "react";
 
 const LENGTH = 10;
 function truncatedFileName(name: string) {
@@ -45,25 +45,17 @@ export function PhotoUploads({ mode }: { mode: "dark" | "light" }) {
   };
 
   return (
-    <div className="flex items-center gap-3 flex-1 basis-0">
+    <div className="border-gray-300 self-start border rounded-lg py-2 px-[10px] gap-2 flex items-center justify-center hover:opacity-80 w-28 h-10">
       <div
-        className={`flex items-center justify-center h-[56px] w-[56px] rounded-xl ${
-          mode === "light" ? "bg-gray-100" : "bg-gray-500"
-        }`}
         style={{
           backgroundImage: logo?.fileSrc ? `url(${logo.fileSrc})` : undefined,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       >
-        {logo?.fileSrc ? null : (
-          <PhotoIcon color={mode === "dark" ? "white" : undefined} />
-        )}
+        {logo?.fileSrc ? null : <PhotoIcon />}
       </div>
       <div className="flex flex-col gap-[2px]">
-        <div className="text-secondary text-xs font-semibold">
-          {mode === "light" ? "Light" : "Dark"} mode
-        </div>
         <div
           className={`text-xs text-gray-500 font-medium ${
             logo?.fileName ? "" : "hidden"
@@ -74,13 +66,13 @@ export function PhotoUploads({ mode }: { mode: "dark" | "light" }) {
         {logo ? (
           <button
             onClick={onRemove}
-            className="text-left text-blue-600 text-xs font-semibold"
+            className="text-left text-sm font-semibold"
           >
             Remove
           </button>
         ) : (
           <FileUploadInput
-            className="text-left text-blue-600 text-xs font-semibold"
+            className="text-left text-sm font-semibold"
             onChange={onUpload}
           >
             Upload

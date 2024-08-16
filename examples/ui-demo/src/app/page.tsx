@@ -1,12 +1,13 @@
 "use client";
 
-import { Public_Sans, Inter } from "next/font/google";
+import { Authentication } from "@/components/configuration/Authentication";
+import { Styling } from "@/components/configuration/Styling";
+import { Inter, Public_Sans } from "next/font/google";
 import { useState } from "react";
-import { TopNav } from "../components/topnav/TopNav";
-import { Configuration } from "../components/configuration";
-import { CodePreview } from "../components/preview/CodePreview";
 import { AuthCardWrapper } from "../components/preview/AuthCardWrapper";
+import { CodePreview } from "../components/preview/CodePreview";
 import { CodePreviewSwitch } from "../components/shared/CodePreviewSwitch";
+import { TopNav } from "../components/topnav/TopNav";
 
 const publicSans = Public_Sans({
   subsets: ["latin"],
@@ -30,8 +31,9 @@ export default function Home() {
         className={`flex flex-col flex-1 px-4 md:px-6 lg:px-10 py-4 md:py-6 w-full max-w-screen-2xl mx-auto overflow-hidden ${inter.className}`}
       >
         <div className="flex flex-1 gap-6 overflow-hidden">
-          <div className="hidden lg:flex flex-col basis-0 flex-1 bg-white border border-border rounded-lg pt-2 px-6 pb-8 overflow-y-auto scrollbar-none">
-            <Configuration />
+          <div className="hidden lg:flex flex-col basis-0 flex-1 bg-white border border-border rounded-lg p-6 overflow-y-auto scrollbar-none gap-10">
+            <Authentication />
+            <Styling />
           </div>
 
           <div className="flex flex-col flex-[2] basis-0 relative bg-white border border-border rounded-lg overflow-hidden">
