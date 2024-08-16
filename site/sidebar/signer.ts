@@ -1,5 +1,5 @@
 import { SidebarItem } from "vocs";
-import { concepts, guides, resources } from "./shared.js";
+import { sharedSidebar } from "./shared.js";
 
 export const signerSidebar: SidebarItem[] = [
   {
@@ -40,7 +40,9 @@ export const signerSidebar: SidebarItem[] = [
     text: "Third-party signers",
     items: [{ text: "Custom signer", link: "/signer/custom-signer" }],
   },
-  concepts,
-  guides,
-  resources,
+  {
+    text: "SDK Reference",
+    link: "/reference/account-kit/signer",
+  },
+  ...sharedSidebar,
 ];

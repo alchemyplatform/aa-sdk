@@ -62,3 +62,5 @@ export const concepts: SidebarItem = {
     },
   ],
 };
+
+export const sharedSidebar: SidebarItem[] = [guides, concepts, resources];

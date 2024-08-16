@@ -1,5 +1,5 @@
 import { SidebarItem } from "vocs";
-import { concepts, guides, resources } from "./shared.js";
+import { sharedSidebar } from "./shared.js";
 
 export const coreSidebar: SidebarItem[] = [
   {
@@ -9,7 +9,5 @@ export const coreSidebar: SidebarItem[] = [
       { text: "Getting started", link: "#TODO" },
     ],
   },
-  concepts,
-  guides,
-  resources,
+  ...sharedSidebar,
 ];

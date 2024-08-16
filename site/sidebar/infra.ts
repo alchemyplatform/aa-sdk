@@ -1,5 +1,5 @@
 import { SidebarItem } from "vocs";
-import { concepts, guides, resources } from "./shared.js";
+import { sharedSidebar } from "./shared.js";
 
 export const infraSidebar: SidebarItem[] = [
   { text: "Overview", link: "/infra/overview" },
@@ -32,7 +32,5 @@ export const infraSidebar: SidebarItem[] = [
     ],
   },
   { text: "SDK Reference", link: "/reference/account-kit/infra" },
-  concepts,
-  guides,
-  resources,
+  ...sharedSidebar,
 ];
