@@ -40,29 +40,21 @@ export type CreateMultiOwnerModularAccountClientParams<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TSigner extends SmartAccountSigner = SmartAccountSigner
-> = {
-  account: Omit<
-    CreateMultiOwnerModularAccountParams<TTransport, TSigner>,
-    "transport" | "chain"
-  >;
-} & Omit<
-  CreateLightAccountClientParams<TTransport, TChain, TSigner>,
-  "account"
->;
+> = Omit<
+  CreateMultiOwnerModularAccountParams<TTransport, TSigner>,
+  "transport" | "chain"
+> &
+  Omit<CreateLightAccountClientParams<TTransport, TChain, TSigner>, "account">;
 
 export type CreateMultisigModularAccountClientParams<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TSigner extends SmartAccountSigner = SmartAccountSigner
-> = {
-  account: Omit<
-    CreateMultisigModularAccountParams<TTransport, TSigner>,
-    "transport" | "chain"
-  >;
-} & Omit<
-  CreateLightAccountClientParams<TTransport, TChain, TSigner>,
-  "account"
->;
+> = Omit<
+  CreateMultisigModularAccountParams<TTransport, TSigner>,
+  "transport" | "chain"
+> &
+  Omit<CreateLightAccountClientParams<TTransport, TChain, TSigner>, "account">;
 
 export function createMultiOwnerModularAccountClient<
   TChain extends Chain | undefined = Chain | undefined,
@@ -88,14 +80,13 @@ export function createMultiOwnerModularAccountClient<
  * import { createMultiOwnerModularAccountClient } from "@account-kit/smart-contracts";
  * import { LocalAccountSigner } from "@aa-sdk/core";
  * import { sepolia } from "viem/chains";
- * import { http, generatePrivateKey } from "viem"
+ * import { http } from "viem";
+ * import { generatePrivateKey } from "viem/accounts";
  *
  * const accountClient = await createMultiOwnerModularAccountClient({
  *  chain: sepolia,
  *  transport: http("RPC_URL"),
- *  account: {
- *    signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
- *  }
+ *  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
  * });
  * ```
  *
@@ -103,19 +94,18 @@ export function createMultiOwnerModularAccountClient<
  * @returns {Promise<SmartAccountClient>} A promise that resolves to a `SmartAccountClient` instance with extended plugin actions
  */
 export async function createMultiOwnerModularAccountClient({
-  account,
   transport,
   chain,
-  ...clientConfig
+  ...params
 }: CreateMultiOwnerModularAccountClientParams): Promise<SmartAccountClient> {
   const modularAccount = await createMultiOwnerModularAccount({
-    ...account,
+    ...params,
     transport,
     chain,
   });
 
   return createSmartAccountClient({
-    ...clientConfig,
+    ...params,
     transport,
     chain,
     account: modularAccount,
@@ -151,16 +141,15 @@ export function createMultisigModularAccountClient<
  * import { createMultisigModularAccountClient } from "@account-kit/smart-contracts";
  * import { LocalAccountSigner } from "@aa-sdk/core";
  * import { sepolia } from "viem/chains";
- * import { http, generatePrivateKey } from "viem"
+ * import { http } from "viem"
+ * import { generatePrivateKey } from "viem/accounts";
  *
  * const accountClient = await createMultisigModularAccountClient({
  *  chain: sepolia,
  *  transport: http("RPC_URL"),
- *  account: {
- *    signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
- *    owners: [...], // other owners on the account
- *    threshold: 2, // 2 of N signatures
- *  }
+ *  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+ *  owners: [], // other owners on the account
+ *  threshold: 2, // 2 of N signatures
  * });
  * ```
  *
@@ -168,10 +157,9 @@ export function createMultisigModularAccountClient<
  * @returns {Promise<SmartAccountClient<Transport, Chain, MultisigModularAccount<SmartAccountSigner>, {}, SmartAccountClientRpcSchema, MultisigUserOperationContext>>} a promise that resolves to a `SmartAccountClient` object extended with the multisig modular account and additional actions
  */
 export async function createMultisigModularAccountClient({
-  account,
   transport,
   chain,
-  ...clientConfig
+  ...params
 }: CreateMultisigModularAccountClientParams): Promise<
   SmartAccountClient<
     Transport,
@@ -183,13 +171,13 @@ export async function createMultisigModularAccountClient({
   >
 > {
   const modularAccount = await createMultisigModularAccount({
-    ...account,
+    ...params,
     transport,
     chain,
   });
 
   const client = createSmartAccountClient({
-    ...clientConfig,
+    ...params,
     transport,
     chain,
     account: modularAccount,

@@ -24,14 +24,11 @@ export type CreateLightAccountClientParams<
 > = {
   transport: CreateLightAccountParams<TTransport, TSigner>["transport"];
   chain: CreateLightAccountParams<TTransport, TSigner>["chain"];
-  account: Omit<
-    CreateLightAccountParams<TTransport, TSigner>,
-    "transport" | "chain"
+} & Omit<CreateLightAccountParams<TTransport, TSigner>, "transport" | "chain"> &
+  Omit<
+    SmartAccountClientConfig<TTransport, TChain>,
+    "transport" | "account" | "chain"
   >;
-} & Omit<
-  SmartAccountClientConfig<TTransport, TChain>,
-  "transport" | "account" | "chain"
->;
 
 export function createLightAccountClient<
   TChain extends Chain | undefined = Chain | undefined,
@@ -61,9 +58,7 @@ export function createLightAccountClient<
  * const account = await createLightAccountClient({
  *  chain: sepolia,
  *  transport: http("RPC_URL"),
- *  account: {
- *    signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
- *  }
+ *  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
  * });
  * ```
  *
@@ -73,16 +68,16 @@ export function createLightAccountClient<
 export async function createLightAccountClient(
   params: CreateLightAccountClientParams
 ): Promise<SmartAccountClient> {
-  const { account, transport, chain, ...clientConfig } = params;
+  const { transport, chain } = params;
 
   const lightAccount = await createLightAccount({
-    ...account,
+    ...params,
     transport,
     chain,
   });
 
   return createSmartAccountClient({
-    ...clientConfig,
+    ...params,
     transport,
     chain: chain,
     account: lightAccount,
