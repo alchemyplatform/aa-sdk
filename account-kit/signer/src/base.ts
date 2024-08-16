@@ -570,8 +570,22 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     args: Extract<AuthParams, { type: "passkey" }>
   ) => {
     let user: User;
-    if (args.createNew) {
-      const result = await this.inner.createAccount(args);
+    const shouldCreateNew = async () => {
+      if ("email" in args) {
+        const existingUser = await this.getUser(args.email);
+        return existingUser == null;
+      }
+
+      return args.createNew;
+    };
+
+    if (await shouldCreateNew()) {
+      const result = await this.inner.createAccount(
+        args as Extract<
+          AuthParams,
+          { type: "passkey" } & ({ email: string } | { createNew: true })
+        >
+      );
       // account creation for passkeys returns the whoami response so we don't have to
       // call it again after signup
       user = {

@@ -56,6 +56,8 @@ That's it! The user can now input their credentials and complete login. Once the
 
 If you don't want to use our pre-built UI components, you can also use the [`useAuthenticate`](/reference/account-kit/react/hooks/useAuthenticate) hook to build your own custom UI.
 
+### Email authentication
+
 ```tsx twoslash
 import React from "react";
 import {
@@ -77,6 +79,66 @@ export default function MyLoginPage() {
         onChange={(e) => setEmail(e.target.value)}
       />
       <button onClick={() => authenticate({ type: "email", email })}>
+        Login
+      </button>
+    </div>
+  );
+}
+```
+
+### Passkey auth with email backup
+
+This approach will allow you to login or signup users using a passkey as the primary auth mechanism and register an email as a backup.
+
+:::danger
+It's important that you verify this email to be correct first! Otherwise, if a user loses their passkey, they will not be able to recover their account.
+:::
+
+```tsx twoslash
+import React from "react";
+import {
+  type UseAuthenticateResult,
+  useAuthenticate,
+} from "@account-kit/react";
+
+export default function MyLoginPage() {
+  const { authenticate, isPending } = useAuthenticate();
+  const [email, setEmail] = React.useState("");
+
+  return (
+    <div>
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <button onClick={() => authenticate({ type: "passkey", email })}>
+        Login
+      </button>
+    </div>
+  );
+}
+```
+
+### Existing Passkey
+
+If your user already has a passkey, then you can authenticate with that directly. This is useful if you want to use email as a signup mechanism, but provide easier login methods for your users via passkeys.
+
+```tsx twoslash
+import React from "react";
+import {
+  type UseAuthenticateResult,
+  useAuthenticate,
+} from "@account-kit/react";
+
+export default function MyLoginPage() {
+  const { authenticate } = useAuthenticate();
+
+  return (
+    <div>
+      <button
+        onClick={() => authenticate({ type: "passkey", createNew: false })}
+      >
         Login
       </button>
     </div>

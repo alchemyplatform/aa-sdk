@@ -128,7 +128,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     // Passkey account creation flow
     const { attestation, challenge } = await this.getWebAuthnAttestation(
       params.creationOpts,
-      { username: params.username }
+      { username: "email" in params ? params.email : params.username }
     );
 
     const result = await this.request("/v1/signup", {
@@ -136,6 +136,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
         challenge: base64UrlEncode(challenge),
         attestation,
       },
+      email: "email" in params ? params.email : undefined,
     });
 
     this.user = {

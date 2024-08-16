@@ -12,6 +12,11 @@ export type AuthParams =
   | { type: "email"; bundle: string; orgId?: string }
   | {
       type: "passkey";
+      email: string;
+      creationOpts?: CredentialCreationOptionOverrides;
+    }
+  | {
+      type: "passkey";
       createNew: false;
     }
   | {
