@@ -12,7 +12,11 @@ import type {
   UserOperationRequest,
   UserOperationStruct,
 } from "../../types";
-import { bigIntMax, bigIntMultiply } from "../../utils/index.js";
+import {
+  bigIntMax,
+  bigIntMultiply,
+  resolveProperties,
+} from "../../utils/index.js";
 import { _runMiddlewareStack } from "./internal/runMiddlewareStack.js";
 import { _sendUserOperation } from "./internal/sendUserOperation.js";
 import type {
@@ -95,15 +99,11 @@ export async function dropAndReplaceUserOperation<
         }
   ) as UserOperationStruct<TEntryPointVersion>;
 
-  // Run once to get the fee estimates
-  // This can happen at any part of the middleware stack, so we want to run it all
-  const { maxFeePerGas, maxPriorityFeePerGas } = await _runMiddlewareStack(
-    client,
-    {
-      uo: uoToSubmit,
-      overrides,
-      account,
-    }
+  // If the fee estimator is not the one estimating fees, then this won't work
+  // however, we have migrated to using erc7677middleware for alchemy paymaster flows
+  // and most of the other paymasters we've seen don't do fee estimation
+  const { maxFeePerGas, maxPriorityFeePerGas } = await resolveProperties(
+    await client.middleware.feeEstimator(uoToSubmit, { account, client })
   );
 
   const _overrides = {
