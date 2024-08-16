@@ -8,8 +8,8 @@ import { custom, parseEther } from "viem";
 import { mine, setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
 import { local070Instance } from "~test/instances.js";
-import { createMultiOwnerLightAccountClient } from "../clients/multiOwnerLightAccount.js";
 import type { LightAccountVersion } from "../types";
+import { createMultiOwnerLightAccountClient } from "./multiOwnerLightAccount.js";
 
 describe("MultiOwner Light Account Tests", () => {
   const instance = local070Instance;
@@ -106,10 +106,6 @@ describe("MultiOwner Light Account Tests", () => {
       },
       transport: custom(client),
       chain: instance.chain,
-      customMiddleware: async (uo) => {
-        console.log(uo);
-        return uo;
-      },
       ...(usePaymaster ? erc7677Middleware() : {}),
     });
 });
