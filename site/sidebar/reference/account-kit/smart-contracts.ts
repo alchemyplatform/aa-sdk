@@ -87,6 +87,10 @@ export const accountKitSmartContractsReferenceSidebar: SidebarItem[] = [
         link: "/reference/account-kit/smart-contracts/functions/getDefaultLightAccountFactoryAddress",
       },
       {
+        text: "getDefaultMultiOwnerLightAccountFactoryAddress",
+        link: "/reference/account-kit/smart-contracts/functions/getDefaultMultiOwnerLightAccountFactoryAddress",
+      },
+      {
         text: "getDefaultMultiOwnerModularAccountFactoryAddress",
         link: "/reference/account-kit/smart-contracts/functions/getDefaultMultiOwnerModularAccountFactoryAddress",
       },
