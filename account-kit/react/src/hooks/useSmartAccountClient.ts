@@ -2,6 +2,8 @@
 
 import type {
   GetAccountParams,
+  MultiOwnerLightAccount,
+  MultiOwnerLightAccountClientActions,
   SupportedAccount,
   SupportedAccounts,
   SupportedAccountTypes,
@@ -10,6 +12,7 @@ import {
   accountLoupeActions,
   createAlchemySmartAccountClientFromExisting,
   lightAccountClientActions,
+  multiOwnerLightAccountClientActions,
   multiOwnerPluginActions,
   pluginManagerActions,
   type AccountLoupeActions,
@@ -52,6 +55,8 @@ export type ClientActions<
   ? MultiOwnerPluginActions<MultiOwnerModularAccount<AlchemyWebSigner>> &
       PluginManagerActions<MultiOwnerModularAccount<AlchemyWebSigner>> &
       AccountLoupeActions<MultiOwnerModularAccount<AlchemyWebSigner>>
+  : TAccount extends MultiOwnerLightAccount
+  ? MultiOwnerLightAccountClientActions<AlchemyWebSigner>
   : never;
 
 export type UseSmartAccountClientResult<
@@ -78,7 +83,7 @@ export function useSmartAccountClient<
 ): UseSmartAccountClientResult<TTransport, TChain, SupportedAccount<TAccount>>;
 
 /**
- * Uses the provided smart account client parameters to create or retrieve an existing smart account client, handling different types of accounts including LightAccount and MultiOwnerModularAccount.
+ * Uses the provided smart account client parameters to create or retrieve an existing smart account client, handling different types of accounts including LightAccount, MultiOwnerLightAccount, and MultiOwnerModularAccount.
  *
  * @example
  * ```ts
@@ -148,6 +153,17 @@ export function useSmartAccountClient({
           policyId: connection.policyId,
           ...clientParams,
         }).extend(lightAccountClientActions),
+        address: account.address,
+        isLoadingClient: false,
+      };
+    case "MultiOwnerLightAccount":
+      return {
+        client: createAlchemySmartAccountClientFromExisting({
+          client: bundlerClient,
+          account,
+          policyId: connection.policyId,
+          ...clientParams,
+        }).extend(multiOwnerLightAccountClientActions),
         address: account.address,
         isLoadingClient: false,
       };

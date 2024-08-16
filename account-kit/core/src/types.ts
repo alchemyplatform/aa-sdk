@@ -6,6 +6,8 @@ import type {
 } from "@account-kit/signer";
 import type {
   LightAccount,
+  LightAccountVersion,
+  MultiOwnerLightAccount,
   MultiOwnerModularAccount,
 } from "@account-kit/smart-contracts";
 import type { CreateConnectorFn } from "@wagmi/core";
@@ -14,17 +16,26 @@ import type { Chain } from "viem";
 import type { PartialBy } from "viem/chains";
 import type { Store, StoredState } from "./store/types";
 
-export type SupportedAccountTypes = "LightAccount" | "MultiOwnerModularAccount";
+export type SupportedAccountTypes =
+  | "MultiOwnerLightAccount"
+  | "LightAccount"
+  | "MultiOwnerModularAccount";
 
 export type SupportedAccounts =
-  | LightAccount<AlchemyWebSigner>
-  | MultiOwnerModularAccount<AlchemyWebSigner>;
+  | LightAccount<AlchemyWebSigner, LightAccountVersion<"LightAccount">>
+  | MultiOwnerModularAccount<AlchemyWebSigner>
+  | MultiOwnerLightAccount<
+      AlchemyWebSigner,
+      LightAccountVersion<"MultiOwnerLightAccount">
+    >;
 
 export type SupportedAccount<T extends SupportedAccountTypes> =
   T extends "LightAccount"
     ? LightAccount<AlchemyWebSigner>
     : T extends "MultiOwnerModularAccount"
     ? MultiOwnerModularAccount<AlchemyWebSigner>
+    : T extends "MultiOwnerLightAccount"
+    ? MultiOwnerLightAccount<AlchemyWebSigner>
     : never;
 
 export type AlchemyAccountsConfig = {

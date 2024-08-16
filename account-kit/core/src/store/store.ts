@@ -65,7 +65,7 @@ export const createAccountKitStore = (
             skipHydration: ssr,
             partialize: ({ signer, accounts, ...writeableState }) =>
               writeableState,
-            version: 3,
+            version: 4,
           })
         : () => createInitialStoreState(params)
     )
@@ -243,6 +243,7 @@ export const createDefaultAccountState = (chains: Chain[]) => {
       LightAccount: defaultAccountState<"LightAccount">(),
       MultiOwnerModularAccount:
         defaultAccountState<"MultiOwnerModularAccount">(),
+      MultiOwnerLightAccount: defaultAccountState<"MultiOwnerLightAccount">(),
     };
     return acc;
   }, {} as NoUndefined<StoreState["accounts"]>);
