@@ -63,6 +63,10 @@ export const accountKitCoreReferenceSidebar: SidebarItem[] = [
         link: "/reference/account-kit/core/functions/getSignerStatus",
       },
       {
+        text: "getSmartAccountClient",
+        link: "/reference/account-kit/core/functions/getSmartAccountClient",
+      },
+      {
         text: "getUser",
         link: "/reference/account-kit/core/functions/getUser",
       },
@@ -101,6 +105,10 @@ export const accountKitCoreReferenceSidebar: SidebarItem[] = [
       {
         text: "watchSignerStatus",
         link: "/reference/account-kit/core/functions/watchSignerStatus",
+      },
+      {
+        text: "watchSmartAccountClient",
+        link: "/reference/account-kit/core/functions/watchSmartAccountClient",
       },
       {
         text: "watchUser",
