@@ -1,11 +1,7 @@
 import { SidebarItem } from "vocs";
-import { concepts, guides, resources } from "./shared.js";
 
 export const smartContractsSidebar: SidebarItem[] = [
-  {
-    text: "Overview",
-    items: [{ text: "Introduction", link: "/smart-contracts/overview" }],
-  },
+  { text: "Overview", link: "/smart-contracts/overview" },
   {
     text: "Choosing a smart account",
     items: [
@@ -116,7 +112,5 @@ export const smartContractsSidebar: SidebarItem[] = [
       },
     ],
   },
-  concepts,
-  guides,
-  resources,
+  { text: "SDK Reference", link: "/reference/account-kit/smart-contracts" },
 ];

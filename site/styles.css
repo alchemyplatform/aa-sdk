@@ -35,6 +35,10 @@
   @apply flex flex-col grow;
 }
 
+.vocs_Sidebar_sectionHeader > .vocs_Sidebar_item {
+  @apply font-semibold;
+}
+
 .bg-clip-text {
   background-clip: text;
   -webkit-background-clip: text;

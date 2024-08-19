@@ -1,4 +1,9 @@
 import { SidebarItem } from "vocs";
+import { coreSidebar } from "./core.js";
+import { infraSidebar } from "./infra.js";
+import { reactGuides } from "./react.js";
+import { signerSidebar } from "./signer.js";
+import { smartContractsSidebar } from "./smart-contracts.js";
 
 export const resources: SidebarItem = {
   text: "Resources",
@@ -11,31 +16,39 @@ export const resources: SidebarItem = {
   ],
 };
 
-export const guides: SidebarItem = {
+export const guides: (
+  section?: "react" | "core" | "infra" | "signer" | "contracts"
+) => SidebarItem = (section) => ({
   text: "Guides",
   items: [
     {
       text: "React",
-      link: "/react/overview",
+      items: reactGuides,
+      collapsed: section !== "react",
     },
     {
       text: "Other JS Frameworks",
-      link: "/core/overview",
+      items: coreSidebar,
+      collapsed: section !== "core",
     },
     {
       text: "Infra",
-      link: "/infra/overview",
+      items: infraSidebar,
+      collapsed: section !== "infra",
     },
     {
       text: "Signer",
-      link: "/signer/overview",
+      items: signerSidebar,
+      collapsed: section !== "signer",
     },
     {
       text: "Smart Contracts",
-      link: "/smart-contracts/overview",
+      items: smartContractsSidebar,
+      collapsed: section !== "contracts",
     },
   ],
-};
+  collapsed: false,
+});
 
 export const concepts: SidebarItem = {
   text: "Concepts",
@@ -63,4 +76,6 @@ export const concepts: SidebarItem = {
   ],
 };
 
-export const sharedSidebar: SidebarItem[] = [guides, concepts, resources];
+export const sharedSidebar: (
+  section?: "react" | "core" | "infra" | "signer" | "contracts"
+) => SidebarItem[] = (section) => [guides(section), concepts, resources];

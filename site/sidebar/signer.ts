@@ -1,15 +1,9 @@
 import { SidebarItem } from "vocs";
-import { sharedSidebar } from "./shared.js";
 
 export const signerSidebar: SidebarItem[] = [
-  {
-    text: "Overview",
-    items: [
-      { text: "Introduction", link: "/signer/overview" },
-      { text: "What is a signer?", link: "/signer/what-is-a-signer" },
-      { text: "Getting started", link: "/signer/quickstart" },
-    ],
-  },
+  { text: "Overview", link: "/signer/overview" },
+  { text: "What is a signer?", link: "/signer/what-is-a-signer" },
+  { text: "Getting started", link: "/signer/quickstart" },
   {
     text: "Using Alchemy Signer",
     items: [
@@ -44,5 +38,4 @@ export const signerSidebar: SidebarItem[] = [
     text: "SDK Reference",
     link: "/reference/account-kit/signer",
   },
-  ...sharedSidebar,
 ];
