@@ -65,7 +65,7 @@ export const createAccountKitStore = (
             skipHydration: ssr,
             partialize: ({ signer, accounts, ...writeableState }) =>
               writeableState,
-            version: 4,
+            version: 5,
           })
         : () => createInitialStoreState(params)
     )
@@ -102,6 +102,7 @@ const createInitialStoreState = (
     accountConfigs,
     config: { client, sessionConfig },
     signerStatus: convertSignerStatusToState(AlchemySignerStatus.INITIALIZING),
+    smartAccountClients: createEmptySmartAccountClientState(chains),
   };
 
   if (typeof window === "undefined") {
@@ -247,4 +248,12 @@ export const createDefaultAccountState = (chains: Chain[]) => {
     };
     return acc;
   }, {} as NoUndefined<StoreState["accounts"]>);
+};
+
+export const createEmptySmartAccountClientState = (chains: Chain[]) => {
+  return chains.reduce((acc, chain) => {
+    acc[chain.id] = {};
+
+    return acc;
+  }, {} as StoreState["smartAccountClients"]);
 };
