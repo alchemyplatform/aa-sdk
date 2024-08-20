@@ -1,8 +1,5 @@
 import { defineConfig } from "vocs";
-import { coreSidebar } from "./sidebar/core.js";
 import { indexSidebar } from "./sidebar/index.js";
-import { infraSidebar } from "./sidebar/infra.js";
-import { reactSidebar } from "./sidebar/react.js";
 import { aaSdkCoreReferenceSidebar } from "./sidebar/reference/aa-sdk/core.js";
 import { aaSdkEthersReferenceSidebar } from "./sidebar/reference/aa-sdk/ethers.js";
 import { accountKitCoreReferenceSidebar } from "./sidebar/reference/account-kit/core.js";
@@ -10,8 +7,6 @@ import { accountKitInfraReferenceSidebar } from "./sidebar/reference/account-kit
 import { accountKitReactReferenceSidebar } from "./sidebar/reference/account-kit/react.js";
 import { accountKitSignerReferenceSidebar } from "./sidebar/reference/account-kit/signer.js";
 import { accountKitSmartContractsReferenceSidebar } from "./sidebar/reference/account-kit/smart-contracts.js";
-import { signerSidebar } from "./sidebar/signer.js";
-import { smartContractsSidebar } from "./sidebar/smart-contracts.js";
 
 const pkg = require("../lerna.json");
 
@@ -25,7 +20,7 @@ export default defineConfig({
   iconUrl: "/kit-icon.svg",
   rootDir: "./",
   ogImageUrl: "/images/og-image.jpg",
-  head: () => (
+  head: (
     <>
       <script
         src="https://static.alchemyapi.io/scripts/anayltics/alchemy-analytics.js"
@@ -108,20 +103,40 @@ export default defineConfig({
     },
   ],
   sidebar: {
-    "/": indexSidebar,
-    "/react": reactSidebar,
-    "/core": coreSidebar,
-    "/infra": infraSidebar,
-    "/signer": signerSidebar,
-    "/smart-contracts": smartContractsSidebar,
-    "/reference/account-kit/react": accountKitReactReferenceSidebar,
-    "/reference/account-kit/core": accountKitCoreReferenceSidebar,
-    "/reference/account-kit/infra": accountKitInfraReferenceSidebar,
-    "/reference/account-kit/signer": accountKitSignerReferenceSidebar,
-    "/reference/account-kit/smart-contracts":
-      accountKitSmartContractsReferenceSidebar,
-    "/reference/aa-sdk/core": aaSdkCoreReferenceSidebar,
-    "/reference/aa-sdk/ethers": aaSdkEthersReferenceSidebar,
+    "/": indexSidebar(),
+    "/react": indexSidebar("react"),
+    "/core": indexSidebar("core"),
+    "/infra": indexSidebar("infra"),
+    "/signer": indexSidebar("signer"),
+    "/smart-contracts": indexSidebar("contracts"),
+    "/reference/account-kit/react": {
+      items: accountKitReactReferenceSidebar,
+      backLink: true,
+    },
+    "/reference/account-kit/core": {
+      items: accountKitCoreReferenceSidebar,
+      backLink: true,
+    },
+    "/reference/account-kit/infra": {
+      items: accountKitInfraReferenceSidebar,
+      backLink: true,
+    },
+    "/reference/account-kit/signer": {
+      items: accountKitSignerReferenceSidebar,
+      backLink: true,
+    },
+    "/reference/account-kit/smart-contracts": {
+      items: accountKitSmartContractsReferenceSidebar,
+      backLink: true,
+    },
+    "/reference/aa-sdk/core": {
+      items: aaSdkCoreReferenceSidebar,
+      backLink: true,
+    },
+    "/reference/aa-sdk/ethers": {
+      items: aaSdkEthersReferenceSidebar,
+      backLink: true,
+    },
   },
   socials: [
     { icon: "github", link: "https://github.com/alchemyplatform/aa-sdk" },

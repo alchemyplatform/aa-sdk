@@ -1,7 +1,6 @@
 import { SidebarItem } from "vocs";
-import { sharedSidebar } from "./shared.js";
 
-export const reactSidebar: SidebarItem[] = [
+export const reactGuides: SidebarItem[] = [
   {
     text: "Overview",
     link: "/react/overview",
@@ -31,5 +30,4 @@ export const reactSidebar: SidebarItem[] = [
     ],
   },
   { text: "SDK Reference", link: "/reference/account-kit/react" },
-  ...sharedSidebar,
 ];
