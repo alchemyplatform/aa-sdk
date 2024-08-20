@@ -1,78 +1,32 @@
 "use client";
 
 import type {
-  GetAccountParams,
-  MultiOwnerLightAccount,
-  MultiOwnerLightAccountClientActions,
+  GetSmartAccountClientParams,
+  GetSmartAccountClientResult,
   SupportedAccount,
   SupportedAccounts,
   SupportedAccountTypes,
 } from "@account-kit/core";
 import {
-  accountLoupeActions,
-  createAlchemySmartAccountClientFromExisting,
-  lightAccountClientActions,
-  multiOwnerLightAccountClientActions,
-  multiOwnerPluginActions,
-  pluginManagerActions,
-  type AccountLoupeActions,
-  type AlchemySmartAccountClient,
-  type AlchemySmartAccountClientConfig,
-  type LightAccount,
-  type LightAccountClientActions,
-  type MultiOwnerModularAccount,
-  type MultiOwnerPluginActions,
-  type PluginManagerActions,
+  getSmartAccountClient,
+  watchSmartAccountClient,
 } from "@account-kit/core";
-import type { AlchemyWebSigner } from "@account-kit/signer";
-import { useMemo } from "react";
-import type { Address, Chain, Transport } from "viem";
+import { useMemo, useSyncExternalStore } from "react";
+import type { Chain, Transport } from "viem";
 import { useAccount as wagmi_useAccount } from "wagmi";
 import { useAlchemyAccountContext } from "../context.js";
-import { useAccount } from "./useAccount.js";
-import { useBundlerClient } from "./useBundlerClient.js";
-import { useConnection } from "./useConnection.js";
 
 export type UseSmartAccountClientProps<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SupportedAccountTypes = SupportedAccountTypes
-> = Omit<
-  AlchemySmartAccountClientConfig<
-    TTransport,
-    TChain,
-    SupportedAccount<TAccount>
-  >,
-  "rpcUrl" | "chain" | "apiKey" | "jwt" | "account"
-> &
-  GetAccountParams<TAccount>;
-
-export type ClientActions<
-  TAccount extends SupportedAccounts = SupportedAccounts
-> = TAccount extends LightAccount
-  ? LightAccountClientActions<AlchemyWebSigner>
-  : TAccount extends MultiOwnerModularAccount
-  ? MultiOwnerPluginActions<MultiOwnerModularAccount<AlchemyWebSigner>> &
-      PluginManagerActions<MultiOwnerModularAccount<AlchemyWebSigner>> &
-      AccountLoupeActions<MultiOwnerModularAccount<AlchemyWebSigner>>
-  : TAccount extends MultiOwnerLightAccount
-  ? MultiOwnerLightAccountClientActions<AlchemyWebSigner>
-  : never;
+> = GetSmartAccountClientParams<TTransport, TChain, TAccount>;
 
 export type UseSmartAccountClientResult<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SupportedAccounts = SupportedAccounts
-> = {
-  client?: AlchemySmartAccountClient<
-    TTransport,
-    TChain,
-    TAccount,
-    ClientActions<TAccount>
-  >;
-  address?: Address;
-  isLoadingClient: boolean;
-};
+> = GetSmartAccountClientResult<TTransport, TChain, TAccount>;
 
 export function useSmartAccountClient<
   TTransport extends Transport = Transport,
@@ -103,19 +57,20 @@ export function useSmartAccountClient({
   type,
   ...clientParams
 }: UseSmartAccountClientProps): UseSmartAccountClientResult {
-  const bundlerClient = useBundlerClient();
-  const connection = useConnection();
-
   const {
     config: {
       _internal: { wagmiConfig },
     },
+    config,
   } = useAlchemyAccountContext();
 
-  const { account, address, isLoadingAccount } = useAccount({
-    type,
-    accountParams,
-  });
+  const result = useSyncExternalStore(
+    watchSmartAccountClient({ type, accountParams, ...clientParams }, config),
+    () =>
+      getSmartAccountClient({ type, accountParams, ...clientParams }, config),
+    () =>
+      getSmartAccountClient({ type, accountParams, ...clientParams }, config)
+  );
 
   const { isConnected, address: eoaAddress } = wagmi_useAccount({
     config: wagmiConfig,
@@ -136,52 +91,5 @@ export function useSmartAccountClient({
     return eoaClient;
   }
 
-  if (!account || isLoadingAccount) {
-    return {
-      client: undefined,
-      address,
-      isLoadingClient: true,
-    };
-  }
-
-  switch (account.source) {
-    case "LightAccount":
-      return {
-        client: createAlchemySmartAccountClientFromExisting({
-          client: bundlerClient,
-          account,
-          policyId: connection.policyId,
-          ...clientParams,
-        }).extend(lightAccountClientActions),
-        address: account.address,
-        isLoadingClient: false,
-      };
-    case "MultiOwnerLightAccount":
-      return {
-        client: createAlchemySmartAccountClientFromExisting({
-          client: bundlerClient,
-          account,
-          policyId: connection.policyId,
-          ...clientParams,
-        }).extend(multiOwnerLightAccountClientActions),
-        address: account.address,
-        isLoadingClient: false,
-      };
-    case "MultiOwnerModularAccount":
-      return {
-        client: createAlchemySmartAccountClientFromExisting({
-          client: bundlerClient,
-          account,
-          policyId: connection.policyId,
-          ...clientParams,
-        })
-          .extend(multiOwnerPluginActions)
-          .extend(pluginManagerActions)
-          .extend(accountLoupeActions),
-        address: account.address,
-        isLoadingClient: false,
-      };
-    default:
-      throw new Error("Unsupported account type");
-  }
+  return result;
 }

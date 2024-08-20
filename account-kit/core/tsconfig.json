@@ -1,6 +1,9 @@
 {
   "extends": "typescript-template/base.json",
   "compilerOptions": {
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "paths": {
+      "~test/*": ["../../.vitest/src/*"]
+    }
   }
 }
