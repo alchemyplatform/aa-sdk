@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-alpha.12](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-alpha.11...v4.0.0-alpha.12) (2024-08-20)
+
+### Features
+
+- make it easier to start with account-kit/core ([#933](https://github.com/alchemyplatform/aa-sdk/issues/933)) ([b5714b6](https://github.com/alchemyplatform/aa-sdk/commit/b5714b6be15a4d7cb41c45911ca3cb42482aa85f))
+
 # [4.0.0-alpha.11](https://github.com/alchemyplatform/aa-sdk/compare/v3.19.0...v4.0.0-alpha.11) (2024-08-16)
 
 ### Bug Fixes

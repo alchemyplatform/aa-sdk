@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-alpha.12](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-alpha.11...v4.0.0-alpha.12) (2024-08-20)
+
+**Note:** Version bump only for package @account-kit/signer
+
 # [4.0.0-alpha.11](https://github.com/alchemyplatform/aa-sdk/compare/v3.19.0...v4.0.0-alpha.11) (2024-08-16)
 
 ### Bug Fixes
