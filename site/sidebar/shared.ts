@@ -47,7 +47,6 @@ export const guides: (
       collapsed: section !== "contracts",
     },
   ],
-  collapsed: false,
 });
 
 export const concepts: SidebarItem = {
@@ -78,4 +77,4 @@ export const concepts: SidebarItem = {
 
 export const sharedSidebar: (
   section?: "react" | "core" | "infra" | "signer" | "contracts"
-) => SidebarItem[] = (section) => [guides(section), concepts, resources];
+) => SidebarItem[] = (section) => [concepts, guides(section), resources];
