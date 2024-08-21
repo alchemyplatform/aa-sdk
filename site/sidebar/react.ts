@@ -29,5 +29,15 @@ export const reactGuides: SidebarItem[] = [
       { text: "Multi-chain apps", link: "/react/multi-chain-apps" },
     ],
   },
+  {
+    text: "Customizing UI components",
+    items: [
+      { text: "Theme", link: "/react/customization/theme" },
+      {
+        text: "Authentication methods",
+        link: "/react/customization/authentication-methods",
+      },
+    ],
+  },
   { text: "SDK Reference", link: "/reference/account-kit/react" },
 ];
