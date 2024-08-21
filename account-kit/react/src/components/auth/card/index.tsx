@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useLayoutEffect, useMemo, useRef } from "react";
+import { BaseError } from "viem";
 import { useAuthError } from "../../../hooks/useAuthError.js";
 import { useAuthModal } from "../../../hooks/useAuthModal.js";
 import { useElementHeight } from "../../../hooks/useElementHeight.js";
@@ -73,6 +74,7 @@ export const AuthCardContent = ({
       "email_verify",
       "passkey_verify",
       "pick_eoa",
+      "wallet_connect",
       "eoa_connect",
     ].includes(authStep.type);
   }, [authStep]);
@@ -85,6 +87,7 @@ export const AuthCardContent = ({
         didGoBack.current = true;
         setAuthStep({ type: "initial" });
         break;
+      case "wallet_connect":
       case "eoa_connect":
         setAuthStep({ type: "pick_eoa" });
         break;
@@ -128,7 +131,12 @@ export const AuthCardContent = ({
         className="absolute bottom-[calc(100%+8px)] w-full"
       >
         {!hideError && error && error.message && (
-          <Notification message={error.message} type="error" />
+          <Notification
+            message={
+              error instanceof BaseError ? error.shortMessage : error.message
+            }
+            type="error"
+          />
         )}
       </div>
 

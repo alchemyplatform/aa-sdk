@@ -63,7 +63,8 @@ export const Authentication = ({ className }: { className?: string }) => {
           />
           <AuthMethod
             className="flex-0 shrink-0 grow min-w-full"
-            icon={<BiometricIcon />}
+            icon={<BiometricIcon/>}
+            iconClassName="mt-[2px] self-start"
             name="Passkeys"
             details={
               <>
@@ -120,6 +121,7 @@ const AuthMethod = ({
   setActive,
   className,
   callout,
+  iconClassName,
 }: {
   icon: React.ReactNode;
   name: string;
@@ -130,6 +132,7 @@ const AuthMethod = ({
   setActive?: (active: boolean) => void;
   className?: string;
   callout?: React.ReactNode;
+  iconClassName?: string;
 }) => {
   return (
     <div
@@ -139,8 +142,7 @@ const AuthMethod = ({
       )}
     >
       <div className={cn("flex flex-1 items-center")}>
-        <div className="mt-[2px] flex shrink-0 self-start">{icon}</div>
-
+        <div className={cn("flex shrink-0", iconClassName)}>{icon}</div>
         <div className="ml-2 flex-1 flex flex-col gap-3">
           <div className="flex flex-1 min-w-full flex-row justify-between items-center">
             <p

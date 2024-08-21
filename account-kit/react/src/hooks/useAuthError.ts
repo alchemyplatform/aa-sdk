@@ -20,10 +20,9 @@ export type UseAuthErrorResult = Error | undefined;
  */
 export function useAuthError(): UseAuthErrorResult {
   const { authStep } = useAuthContext();
-  // TODO: generalize this, since only passkey_verify and eoa_connect have errors right now
-  return (
-    ((authStep.type === "passkey_verify" || authStep.type === "eoa_connect") &&
-      authStep.error) ||
-    undefined
-  );
+  if ("error" in authStep) {
+    return authStep.error;
+  }
+
+  return undefined;
 }

@@ -1,6 +1,6 @@
 import type { AuthType } from "../types.js";
 import { EmailAuth } from "./EmailAuth.js";
-import { InjectedProvidersAuth } from "./InjectedProvidersAuth.js";
+import { ExternalWalletsAuth } from "./InjectedProvidersAuth.js";
 import { PasskeyAuth } from "./PasskeyAuth.js";
 
 type AuthSectionProps = {
@@ -20,8 +20,8 @@ export const AuthSection = ({ authTypes, ...props }: AuthSectionProps) => {
             return <EmailAuth key={index} {...authType} />;
           case "passkey":
             return <PasskeyAuth key={index} {...authType} />;
-          case "injected":
-            return <InjectedProvidersAuth key={index} />;
+          case "external_wallets":
+            return <ExternalWalletsAuth key={index} />;
           default:
             throw new Error("Not implemented");
         }
