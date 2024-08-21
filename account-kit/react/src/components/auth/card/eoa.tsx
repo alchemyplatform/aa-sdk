@@ -43,9 +43,9 @@ export const WalletConnectCard = ({ authStep }: WalletConnectCardProps) => {
       header={`Connecting to WalletConnect`}
       icon={
         <WalletConnectIcon
-          height={48}
-          width={48}
-          className={authStep.error ? undefined : "animate-pulse"}
+          className={
+            "w-[48px] h-[48px]" + (authStep.error ? "" : " animate-pulse")
+          }
         />
       }
       description="Please follow the instructions in the popup to connect."
@@ -132,7 +132,7 @@ export const EoaPickCard = () => {
               <Button
                 className="justify-start"
                 variant="social"
-                icon={<WalletConnectIcon height={20} width={20} />}
+                icon={<WalletConnectIcon className="w-[20px] h-[20px]" />}
                 onClick={() => {
                   connect({
                     connector: walletConnectConnector,
