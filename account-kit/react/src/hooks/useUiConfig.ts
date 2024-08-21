@@ -18,6 +18,8 @@ type AlchemyAccountsUIConfigWithDefaults = Omit<
 
 type UiConfigStore = AlchemyAccountsUIConfig & {
   updateConfig: (partial: AlchemyAccountsUIConfig) => void;
+  initialize: (partial: AlchemyAccountsUIConfig) => void;
+  _initialized: boolean;
 };
 
 export const DEFAULT_UI_CONFIG: AlchemyAccountsUIConfigWithDefaults = {
@@ -36,6 +38,9 @@ export const DEFAULT_UI_CONFIG: AlchemyAccountsUIConfigWithDefaults = {
 const internal_useUiConfig = create<UiConfigStore>((set) => ({
   ...DEFAULT_UI_CONFIG,
   updateConfig: (config: AlchemyAccountsUIConfig) => set(() => config),
+  initialize: (config: AlchemyAccountsUIConfig) =>
+    set(() => ({ ...config, _initialized: true })),
+  _initialized: false,
 }));
 
 /**
@@ -60,17 +65,18 @@ const internal_useUiConfig = create<UiConfigStore>((set) => ({
  * @returns {AlchemyAccountsUIConfigWithDefaults & {updateConfig: (partial: AlchemyAccountsUIConfig) => void}} the configuration object along with an update function
  */
 export const useUiConfig = () => {
-  const { updateConfig, ...config } = internal_useUiConfig();
+  const { updateConfig, initialize, _initialized, ...config } =
+    internal_useUiConfig();
   // The UI config might actually be null when passed to the provider.
   // This is expected because someone might opt out of using UI components
   // so we don't want to render the modal.
   const { ui } = useAlchemyAccountContext();
 
   useEffect(() => {
-    if (!ui) return;
+    if (!ui || _initialized) return;
 
-    updateConfig(ui.config);
-  }, [ui, updateConfig]);
+    initialize(ui.config);
+  }, [config, initialize, _initialized, ui]);
 
   if (!ui) {
     throw new MissingUiConfigError("useUiConfig");

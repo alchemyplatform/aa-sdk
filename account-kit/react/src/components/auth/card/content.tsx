@@ -10,6 +10,7 @@ interface CardContentProps {
     cta: ReactNode;
   };
   error?: Error | string;
+  className?: string;
 }
 
 // eslint-disable-next-line jsdoc/require-jsdoc
@@ -18,9 +19,10 @@ export const CardContent = ({
   icon,
   description,
   support,
+  className,
 }: CardContentProps) => {
   return (
-    <div className="flex flex-col gap-5 items-center">
+    <div className={`flex flex-col gap-5 items-center ${className}`}>
       {icon && (
         <div className="flex flex-col items-center justify-center w-[56px] h-[56px]">
           {icon}

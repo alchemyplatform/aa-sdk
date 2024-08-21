@@ -26,7 +26,7 @@ export type AlchemyAccountsUIConfig = {
      */
     hideSignInText?: boolean;
   };
-  illustrationStyle?: "outline" | "linear" | "filled" | "flat";
+  illustrationStyle?: "outline" | "linear" | "filled" | "flat" | undefined;
   /**
    * This class name will be applied to any modals that are rendered
    */

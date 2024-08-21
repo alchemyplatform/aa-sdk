@@ -1,6 +1,6 @@
 import { useAuthContext } from "../context.js";
 import { AddPasskey } from "./add-passkey.js";
-import { EoaConnectCard } from "./eoa.js";
+import { EoaConnectCard, EoaPickCard } from "./eoa.js";
 import { LoadingAuth } from "./loading/index.js";
 import { MainAuthContent } from "./main.js";
 import { PasskeyAdded } from "./passkey-added.js";
@@ -20,6 +20,8 @@ export const Step = () => {
       return <PasskeyAdded />;
     case "eoa_connect":
       return <EoaConnectCard authStep={authStep} />;
+    case "pick_eoa":
+      return <EoaPickCard />;
     case "complete":
     case "initial":
     default:

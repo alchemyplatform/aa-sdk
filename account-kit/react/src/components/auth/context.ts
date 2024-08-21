@@ -11,7 +11,8 @@ export type AuthStep =
   | { type: "email_completing"; createPasskeyAfter?: boolean }
   | { type: "initial" }
   | { type: "complete" }
-  | { type: "eoa_connect"; connector: Connector; error?: Error };
+  | { type: "eoa_connect"; connector: Connector; error?: Error }
+  | { type: "pick_eoa" };
 
 type AuthContextType = {
   authStep: AuthStep;
