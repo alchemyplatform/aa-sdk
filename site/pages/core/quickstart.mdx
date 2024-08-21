@@ -94,7 +94,6 @@ Now that you have your config, you can send user operations by leveraging the un
 import { watchSmartAccountClient } from "@account-kit/core";
 import { config } from "./config";
 
-// How you actually store this state variable, depends on the framework you're using
 let clientState;
 
 // The watch smart account client will handle all of the possible state changes
@@ -111,7 +110,7 @@ const clientSubscription = watchSmartAccountClient(
   clientState = clientState_;
 });
 
-if (clientState.isLoading) {
+if (clientState == null || clientState.isLoadingClient) {
   console.log("Loading...");
 }
 

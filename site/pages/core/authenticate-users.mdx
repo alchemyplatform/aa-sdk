@@ -1,0 +1,114 @@
+---
+title: Authenticate Users
+description: Learn how to authenticate users with the Account Kit Core package
+---
+
+# Authenticate users
+
+Most methods on the Smart Account Client and Smart Contract Account require some user context. This context (eg. the `SignerAddress`) is only available once you've authenticated the user. This guide will walk you through how to authenticate users using the `@account-kit/core` package.
+
+## Create your config
+
+Before you can authenticate a user, you'll need to create a static config object. This is outlined in the [Core Quickstart](/core/quickstart).
+
+## Email authentication
+
+Email authentication is a two step process. First, a user inputs their email and initiates the login flow. The user is sent an email which contains a link that redirects them back to your site with an auth credential called a `bundle`. You then complete the authentication with the bundle.
+
+:::code-group
+
+```ts twoslash [example.ts]
+import { config } from "./config";
+import { getSigner } from "@account-kit/core";
+
+const signer = getSigner(config);
+
+if (!signer) {
+  // this can happen if your rendering this on the server
+  // the signer instance is only available on the client
+  throw new Error("Signer not found");
+}
+
+// authenticate the user with email
+await signer.authenticate({
+  type: "email",
+  email: "user@email.com",
+});
+
+// once the user has clicked on the email and been redirected back to your site
+const bundle = new URLSearchParams(window.location.search).get("bundle");
+if (!bundle) {
+  throw new Error("No bundle found in URL");
+}
+await signer.authenticate({ type: "email", bundle });
+```
+
+```ts twoslash [client.ts] filename="client.ts"
+// [!include ~/shared/core/config.ts]
+```
+
+:::
+
+## Passkey auth with email backup
+
+This approach will allow you to login or signup users using a passkey as the primary auth mechanism and register an email as a backup.
+
+:::danger
+It's important that you verify this email to be correct first! Otherwise, if a user loses their passkey, they will not be able to recover their account.
+:::
+
+:::code-group
+
+```ts twoslash [example.ts]
+import { config } from "./config";
+import { getSigner } from "@account-kit/core";
+
+const signer = getSigner(config);
+
+if (!signer) {
+  // this can happen if your rendering this on the server
+  // the signer instance is only available on the client
+  throw new Error("Signer not found");
+}
+
+await signer.authenticate({
+  type: "passkey",
+  email: "name@mail.com",
+});
+```
+
+```ts twoslash [client.ts] filename="client.ts"
+// [!include ~/shared/core/config.ts]
+```
+
+:::
+
+## Existing passkey
+
+If your user already has a passkey, then you can authenticate with that directly. This is useful if you want to use email as a signup mechanism, but provide easier login methods for your users via passkeys.
+
+:::code-group
+
+```ts twoslash [example.ts]
+import { config } from "./config";
+import { getSigner } from "@account-kit/core";
+
+const signer = getSigner(config);
+
+if (!signer) {
+  // this can happen if your rendering this on the server
+  // the signer instance is only available on the client
+  throw new Error("Signer not found");
+}
+
+await signer.authenticate({
+  type: "passkey",
+  createNew: false,
+});
+```
+
+```ts twoslash [client.ts] filename="client.ts"
+// [!include ~/shared/core/config.ts]
+```
+
+:::
