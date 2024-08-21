@@ -99,7 +99,12 @@ export function ConfigContextProvider(props: PropsWithChildren) {
     }
 
     if (config.auth.showExternalWallets) {
-      sections.push([{ type: "injected" }]);
+      sections.push([
+        {
+          type: "external_wallets",
+          walletConnect: { projectId: "30e7ffaff99063e68cc9870c105d905b" },
+        },
+      ]);
     }
 
     const uiConfig: AlchemyAccountsUIConfig = {
