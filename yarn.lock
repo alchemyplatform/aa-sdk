@@ -34,13 +34,13 @@
   integrity sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==
 
 "@account-kit/core@latest":
-  version "4.0.0-alpha.9"
-  resolved "https://registry.yarnpkg.com/@account-kit/core/-/core-4.0.0-alpha.9.tgz#5cd423104460f1d6fc194d88aec63bbd96c21cec"
-  integrity sha512-zRyNQCq+6pyURNnvqOOkOsd27VnAoiu/gJimybVHcxVAzCFXhl5mejqDSsza42IyM0lgceQ2sqz8t3eSjuhCBw==
+  version "4.0.0-alpha.12"
+  resolved "https://registry.yarnpkg.com/@account-kit/core/-/core-4.0.0-alpha.12.tgz#d472c6b0a2424ec868828db9b4011f930bd77fec"
+  integrity sha512-CKKG/SV9LpA1tZrAe+eRkyNWogdNlv1dGRoubsDgdMb6FaFjct35GbZaoLgWpoLiSA/Fz+MvT/WtPcjf/Gk4uQ==
   dependencies:
-    "@account-kit/infra" "^4.0.0-alpha.9"
-    "@account-kit/signer" "^4.0.0-alpha.9"
-    "@account-kit/smart-contracts" "^4.0.0-alpha.9"
+    "@account-kit/infra" "^4.0.0-alpha.12"
+    "@account-kit/signer" "^4.0.0-alpha.12"
+    "@account-kit/smart-contracts" "^4.0.0-alpha.12"
     "@wagmi/core" "^2.9.8"
     js-cookie "^3.0.5"
     viem "2.8.6"
@@ -50,11 +50,11 @@
     alchemy-sdk "^3.0.0"
 
 "@account-kit/infra@latest":
-  version "4.0.0-alpha.9"
-  resolved "https://registry.yarnpkg.com/@account-kit/infra/-/infra-4.0.0-alpha.9.tgz#ba2094ee0c575bbac8f6836e24846eaed03f5b2d"
-  integrity sha512-32YY68t3+ohcjMkGBJ9x0tEFSn22w828EWDkHxyOO9xbTiBg6OhQkjgBo/rjqENYOm+1GBYbITKHCW+PUvqdag==
+  version "4.0.0-alpha.12"
+  resolved "https://registry.yarnpkg.com/@account-kit/infra/-/infra-4.0.0-alpha.12.tgz#cd17c034585ff3999cbbf20e8cc3235457ce58c6"
+  integrity sha512-rXGH/tNzqdh3HGLoPj9bm2F3sjXhp0kHmfOEymAGYQKzFeLcN86nudE53lBlNO5HNjeyrM4KSGxyH8AR2Prrnw==
   dependencies:
-    "@aa-sdk/core" "^4.0.0-alpha.9"
+    "@aa-sdk/core" "^4.0.0-alpha.12"
     eventemitter3 "^5.0.1"
     viem "2.8.6"
     zod "^3.22.4"
@@ -62,12 +62,12 @@
     alchemy-sdk "^3.0.0"
 
 "@account-kit/react@latest":
-  version "4.0.0-alpha.9"
-  resolved "https://registry.yarnpkg.com/@account-kit/react/-/react-4.0.0-alpha.9.tgz#d14efcc916d280fb7ea491abaa1f39cb4a2d4eed"
-  integrity sha512-7iVSUocJKiumhbAUBZRYKtSE4IO47xL/f25PWo3IwJwiN04hXBopzxeioJBgC98Ae5qd86zAGLYAJ/Rz7fc3hQ==
+  version "4.0.0-alpha.12"
+  resolved "https://registry.yarnpkg.com/@account-kit/react/-/react-4.0.0-alpha.12.tgz#a01be6d16f22be47c3fe44f37406255a6b52035f"
+  integrity sha512-Rcwoc2551As/gr/MoeXoaQKDNAczJvUf+l17gS319DhmoqMxoE1RWsnXTlnkx9S2wgWLEIP2TgXYuA/+ZCSHTw==
   dependencies:
-    "@account-kit/core" "^4.0.0-alpha.9"
-    "@account-kit/infra" "^4.0.0-alpha.9"
+    "@account-kit/core" "^4.0.0-alpha.12"
+    "@account-kit/infra" "^4.0.0-alpha.12"
     "@tanstack/react-form" "^0.19.4"
     "@tanstack/zod-form-adapter" "^0.19.4"
     "@wagmi/connectors" "^4.3.9"
@@ -82,11 +82,11 @@
     alchemy-sdk "^3.0.0"
 
 "@account-kit/signer@latest":
-  version "4.0.0-alpha.11"
-  resolved "https://registry.yarnpkg.com/@account-kit/signer/-/signer-4.0.0-alpha.11.tgz#9f1021dc5900e2bf19098065919ec89bb8cf1088"
-  integrity sha512-z5bE+42w40Qndn3XTRtt8t073uok7+Iwf7+41Y3IPNN83sL1RlPNl83/ckabJsJ7yE0yn0GU2MAYkxzYskVuvQ==
+  version "4.0.0-alpha.12"
+  resolved "https://registry.yarnpkg.com/@account-kit/signer/-/signer-4.0.0-alpha.12.tgz#e514f797b41d332d031cf8e84b41ba50bb9458a8"
+  integrity sha512-tgDn5Z4Zwo74zRpCiXCB9Dp9eMlYyMTzlzCe/mEbAyQVcJuDDph7Khfv9K8sm7RsM8TKveQy+vUByBMZ2C2q/g==
   dependencies:
-    "@aa-sdk/core" "^4.0.0-alpha.11"
+    "@aa-sdk/core" "^4.0.0-alpha.12"
     "@turnkey/http" "^2.6.2"
     "@turnkey/iframe-stamper" "^1.0.0"
     "@turnkey/viem" "^0.4.8"
@@ -104,12 +104,12 @@
     viem "2.8.6"
 
 "@account-kit/smart-contracts@latest":
-  version "4.0.0-alpha.9"
-  resolved "https://registry.yarnpkg.com/@account-kit/smart-contracts/-/smart-contracts-4.0.0-alpha.9.tgz#cd2d1a357289900e236946b89650c92c5fe2b3f6"
-  integrity sha512-eg1XSd22Qz1A9pGKshX6lyoB2dRws5nWYCpgwJsi5FKLjgueE7Pp39+peZjemdsCGa8m2atSSKmPwOjMo0Dptw==
+  version "4.0.0-alpha.12"
+  resolved "https://registry.yarnpkg.com/@account-kit/smart-contracts/-/smart-contracts-4.0.0-alpha.12.tgz#91ea8998be308825ff605c16f8d24a53be9b6f08"
+  integrity sha512-zldCL189anDFJLbiVp2BXmO7fI7RgCuEZa6xBPiYRw5vhHOqD47K4qgHh+2cnnNrwyGOs7PSkDdlVMs1EYpXcw==
   dependencies:
-    "@aa-sdk/core" "^4.0.0-alpha.9"
-    "@account-kit/infra" "^4.0.0-alpha.9"
+    "@aa-sdk/core" "^4.0.0-alpha.12"
+    "@account-kit/infra" "^4.0.0-alpha.12"
     viem "2.8.6"
 
 "@adraffy/ens-normalize@1.10.0":
