@@ -1,3 +1,4 @@
+import ts from "typescript";
 import { defineConfig } from "vocs";
 import { indexSidebar } from "./sidebar/index.js";
 import { aaSdkCoreReferenceSidebar } from "./sidebar/reference/aa-sdk/core.js";
@@ -147,6 +148,12 @@ export default defineConfig({
   vite: {
     build: {
       target: "esnext",
+    },
+  },
+  twoslash: {
+    compilerOptions: {
+      module: ts.ModuleKind.NodeNext,
+      moduleResolution: ts.ModuleResolutionKind.NodeNext,
     },
   },
 });
