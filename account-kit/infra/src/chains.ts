@@ -18,6 +18,7 @@ import {
   polygonAmoy as vpga,
   polygonMumbai as vpgm,
   sepolia as vsep,
+  arbitrumNova as vabn,
   zora as vzora,
   zoraSepolia as vzoras,
 } from "viem/chains";
@@ -272,3 +273,46 @@ export const worldChain: Chain = defineChain({
     },
   },
 });
+
+export const shapeSepolia: Chain = defineChain({
+  id: 11011,
+  name: "Shape Sepolia",
+  network: "Shape Sepolia",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://shape-sepolia.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://shape-sepolia.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://shape-sepolia.g.alchemy.com/v2"],
+    },
+  },
+});
+
+export const shape: Chain = defineChain({
+  id: 360,
+  name: "Shape",
+  network: "Shape",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://shape-mainnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://shape-mainnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://shape-mainnet.g.alchemy.com/v2"],
+    },
+  },
+});
+
+export const arbitrumNova: Chain = {
+  ...vabn,
+  rpcUrls: {
+    ...vabn.rpcUrls,
+  },
+};
