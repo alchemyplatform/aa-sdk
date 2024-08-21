@@ -1,3 +1,5 @@
+import type { WalletConnectParameters } from "wagmi/connectors";
+
 export type AuthType =
   | {
       // TODO: this should support setting redirectParams which will be added to the email redirect
@@ -7,4 +9,4 @@ export type AuthType =
       placeholder?: string;
     }
   | { type: "passkey" }
-  | { type: "injected" };
+  | { type: "external_wallets"; walletConnect?: WalletConnectParameters };

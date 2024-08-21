@@ -130,10 +130,8 @@ function getConfigCode(config: Config) {
     sections.push([{ type: "passkey" }]);
   }
 
-  if (config.auth.showExternalWallets && config.auth.showPasskey) {
-    sections[1].push({ type: "injected" });
-  } else if (config.auth.showExternalWallets) {
-    sections.push([{ type: "injected" }]);
+  if (config.auth.showExternalWallets) {
+    sections.push([{ type: "external_wallets", walletConnect: { projectId: "your-project-id" } }]);
   }
 
   return dedent`

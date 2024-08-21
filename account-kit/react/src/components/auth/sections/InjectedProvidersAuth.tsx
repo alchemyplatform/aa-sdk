@@ -2,7 +2,7 @@ import { WalletIcon } from "../../../icons/wallet.js";
 import { Button } from "../../button.js";
 import { useAuthContext } from "../context.js";
 
-export const InjectedProvidersAuth = () => {
+export const ExternalWalletsAuth = () => {
   const { setAuthStep } = useAuthContext();
 
   return (
