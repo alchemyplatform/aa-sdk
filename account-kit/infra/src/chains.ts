@@ -316,4 +316,3 @@ export const arbitrumNova: Chain = {
     ...vabn.rpcUrls,
   },
 };
-
