@@ -51,10 +51,10 @@
   },
   "dependencies": {
     "@aa-sdk/core": "^4.0.0-alpha.12",
-    "@turnkey/http": "^2.6.2",
-    "@turnkey/iframe-stamper": "^1.0.0",
-    "@turnkey/viem": "^0.4.8",
-    "@turnkey/webauthn-stamper": "^0.4.3",
+    "@turnkey/http": "^2.12.2",
+    "@turnkey/iframe-stamper": "^2.0.0",
+    "@turnkey/viem": "^0.4.27",
+    "@turnkey/webauthn-stamper": "^0.5.0",
     "viem": "2.8.6",
     "zod": "^3.22.4"
   },

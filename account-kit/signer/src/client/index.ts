@@ -253,18 +253,64 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * ```
    *
    * @param {User} [user] An optional user object to authenticate
+   * @param {string} [bundle] An optional session bundle to use for authentication
    * @returns {Promise<User>} A promise that resolves to the authenticated user object
    */
-  public lookupUserWithPasskey = async (user: User | undefined = undefined) => {
+  public lookupUserWithPasskey = async (
+    user: User | undefined = undefined,
+    bundle: string | undefined = undefined
+  ) => {
     this.eventEmitter.emit("authenticating");
     await this.initWebauthnStamper(user);
+
+    // TODO: this piece is done when the session manager reinits. so we need to handle this differently, we probs need to pass the session bundle to
+    // the session manager
     if (user) {
       this.user = user;
+
+      if (bundle) {
+        await this.initIframeStamper();
+        await this.iframeStamper
+          .injectCredentialBundle(bundle)
+          .catch(async () => {
+            console.warn(
+              "Failed to inject credential bundle, will default to non-session based passkey login"
+            );
+            await this.initWebauthnStamper(user);
+          });
+      }
+
       return user;
     }
 
-    const result = await this.whoami(this.rootOrg);
-    await this.initWebauthnStamper(result);
+    // TODO: if this works, we need to figure out how to hijack the passkey stamper
+    // to create a new session when signing up with a passkey. This would happen on the first stamp post account creation
+    // get the target public key, which requires initiliaztion of the stamper
+    const targetPublicKey = await this.initIframeStamper();
+    await this.initWebauthnStamper(); // switch back over to this stamper
+    const stampedRequest = await this.turnkeyClient.stampCreateReadWriteSession(
+      {
+        parameters: {
+          email: "anon@mail.com",
+          targetPublicKey,
+          // TODO: need to pass in the expiration time here
+        },
+        type: "ACTIVITY_TYPE_CREATE_READ_WRITE_SESSION",
+        timestampMs: Date.now().toString(),
+        organizationId: this.rootOrg,
+      }
+    );
+    const { details } = await this.request("/v1/create-session", {
+      stampedRequest,
+    });
+
+    // switch back to the iframe stamper
+    await this.initIframeStamper();
+    await this.iframeStamper.injectCredentialBundle(details.credentialBundle);
+
+    const result = await this.whoami(details.organizationId);
+    // await this.initWebauthnStamper(result);
+    // TODO: pass along the bundle to the session manager
     this.eventEmitter.emit("connectedPasskey", result);
 
     return result;

@@ -25,8 +25,14 @@ export interface BaseSignerClientParams {
 }
 
 export type ExportWalletStamper = TurnkeyClient["stamper"] & {
-  injectWalletExportBundle(bundle: string): Promise<boolean>;
-  injectKeyExportBundle(bundle: string): Promise<boolean>;
+  injectWalletExportBundle(
+    bundle: string,
+    organizationId: string
+  ): Promise<boolean>;
+  injectKeyExportBundle(
+    bundle: string,
+    organizationId: string
+  ): Promise<boolean>;
   publicKey(): string | null;
 };
 
@@ -119,7 +125,10 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
 
   public abstract exportWallet(params: TExportWalletParams): Promise<boolean>;
 
-  public abstract lookupUserWithPasskey(user?: User): Promise<User>;
+  public abstract lookupUserWithPasskey(
+    user?: User,
+    bundle?: string
+  ): Promise<User>;
 
   protected abstract getWebAuthnAttestation(
     options: CredentialCreationOptions,
@@ -382,7 +391,10 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       "exportWalletResult"
     );
 
-    const result = await stamper.injectWalletExportBundle(exportBundle);
+    const result = await stamper.injectWalletExportBundle(
+      exportBundle,
+      this.user.orgId
+    );
 
     if (!result) {
       throw new Error("Failed to inject wallet export bundle");
@@ -412,7 +424,10 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       "exportWalletAccountResult"
     );
 
-    const result = await stamper.injectKeyExportBundle(exportBundle);
+    const result = await stamper.injectKeyExportBundle(
+      exportBundle,
+      this.user.orgId
+    );
 
     if (!result) {
       throw new Error("Failed to inject wallet export bundle");

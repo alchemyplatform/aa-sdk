@@ -7,7 +7,7 @@ export type Session =
       expirationDateMs: number;
       user: User;
     }
-  | { type: "passkey"; user: User; expirationDateMs: number };
+  | { type: "passkey"; user: User; expirationDateMs: number; bundle?: string };
 
 export type SessionManagerEvents = {
   connected(session: Session): void;

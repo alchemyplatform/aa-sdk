@@ -106,6 +106,22 @@ export type SignerEndpoints = [
     Response: {
       signature: Hex;
     };
+  },
+  {
+    Route: "/v1/create-session";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: {
+      details: {
+        organizationId: string;
+        organizationName: string;
+        userId: string;
+        username: string;
+        apiKeyId: string;
+        credentialBundle: string;
+      };
+    };
   }
 ];
 
@@ -113,7 +129,7 @@ export type AlchemySignerClientEvents = {
   connected(user: User): void;
   authenticating(): void;
   connectedEmail(user: User, bundle: string): void;
-  connectedPasskey(user: User): void;
+  connectedPasskey(user: User, bundle?: string): void;
   disconnected(): void;
 };
 

@@ -105,7 +105,10 @@ export class SessionManager {
         // this will setup the client with the user context, but
         // requests still have to be signed by the user on first request
         // so this is fine
-        return this.client.lookupUserWithPasskey(existingSession.user);
+        return this.client.lookupUserWithPasskey(
+          existingSession.user,
+          existingSession.bundle
+        );
       }
       default:
         throw new Error("Unknown session type");
@@ -227,7 +230,7 @@ export class SessionManager {
       this.setSession({ type: "email", user, bundle });
     });
 
-    this.client.on("connectedPasskey", (user) => {
+    this.client.on("connectedPasskey", (user, bundle) => {
       const existingSession = this.getSession();
       if (
         existingSession != null &&
@@ -237,7 +240,7 @@ export class SessionManager {
         return;
       }
 
-      this.setSession({ type: "passkey", user });
+      this.setSession({ type: "passkey", user, bundle });
     });
 
     // sync local state if persisted state has changed from another tab
