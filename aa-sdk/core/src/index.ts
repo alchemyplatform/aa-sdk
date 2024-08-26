@@ -1,6 +1,5 @@
 export type { Abi } from "abitype";
 export type { Address, HttpTransport } from "viem";
-export * as chains from "viem/chains";
 
 export { EntryPointAbi_v6 } from "./abis/EntryPointAbi_v6.js";
 export { EntryPointAbi_v7 } from "./abis/EntryPointAbi_v7.js";

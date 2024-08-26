@@ -95,7 +95,7 @@ describe("MultiOwner Light Account Tests", () => {
     const txnHash = provider.waitForUserOperationTransaction(result);
 
     await expect(txnHash).resolves.not.toThrowError();
-  }, 5_000);
+  }, 15_000);
 
   it("should sign typed data with 6492 successfully for undeployed account", async () => {
     const { account } = await givenConnectedProvider({

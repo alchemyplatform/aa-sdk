@@ -237,7 +237,11 @@ export const SessionKeyPlugin: Plugin<typeof SessionKeyPluginAbi> = {
       address: address || addresses[client.chain.id],
       abi: SessionKeyPluginAbi,
       client: client,
-    });
+    }) as GetContractReturnType<
+      typeof SessionKeyPluginAbi,
+      PublicClient,
+      Address
+    >;
   },
 };
 

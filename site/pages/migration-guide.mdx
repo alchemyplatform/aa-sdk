@@ -43,6 +43,18 @@ If you were creating LightAccounts for users without explicitly specifying the v
 Previously, the `create*Client` (ie. `createLightAccountClient`) methods used to have an `account` parameter which took in the params for the underlying account. This is resulted in different APIs for both the corresponding `create*AlchemyClient` (ie. `createLightAccountAlchemyClient`) which had these as top-level parameters.
 If you were using `createLightAccountClient` or similar methods, you should now pass the account parameters as top-level parameters.
 
+### Accounts: `getNonce` -> `getAccountNonce`
+
+Due to a clash in the typing of viem's `Account` type, the `getNonce` method has been renamed to `getAccountNonce`.
+
+### Viem Version
+
+The version of viem has been updated to `2.20.0` and been added as a peer dependency. If you have viem listed as a dependency, make sure it is updated to `2.20.0`.
+
+### Dropped CJS support
+
+Due to our dependency on `wagmi` in the `core` and `react` packages, those packages no longer support `cjs` builds. To keep things consistent across all of our packages, we've dropped CJS support in all the packages in this repo. See [this](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c) guide on how to migrate from CJS to ESM.
+
 ## Migrating to version 3.x.x
 
 This version update brings a lot of breaking changes. As we began to support Modular Accounts and their interfaces, we realized that the previous version of the SDK was not as flexible as it could have been to handle the modularity of the new account interfaces.

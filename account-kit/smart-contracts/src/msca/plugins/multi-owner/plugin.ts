@@ -189,7 +189,11 @@ export const MultiOwnerPlugin: Plugin<typeof MultiOwnerPluginAbi> = {
       address: address || addresses[client.chain.id],
       abi: MultiOwnerPluginAbi,
       client: client,
-    });
+    }) as GetContractReturnType<
+      typeof MultiOwnerPluginAbi,
+      PublicClient,
+      Address
+    >;
   },
 };
 

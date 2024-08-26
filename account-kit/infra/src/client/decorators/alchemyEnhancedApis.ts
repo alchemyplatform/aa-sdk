@@ -31,17 +31,18 @@ export type AlchemyEnhancedApis = {
  * @param {Alchemy} alchemy The Alchemy instance containing the SDK client
  * @returns {(client: AlchemySmartAccountClient) => AlchemyEnhancedApis} A client decorator for Alchemy Smart Account clients that adds the enhanced API methods
  */
-export const alchemyEnhancedApiActions =
-  (alchemy: Alchemy) =>
-  <
-    TTransport extends Transport = Transport,
-    TChain extends Chain | undefined = Chain | undefined,
-    TAccount extends SmartContractAccount | undefined =
-      | SmartContractAccount
-      | undefined
-  >(
-    client: AlchemySmartAccountClient<TTransport, TChain, TAccount>
-  ): AlchemyEnhancedApis => {
+export function alchemyEnhancedApiActions(
+  alchemy: Alchemy
+): <
+  TTransport extends Transport = Transport,
+  TChain extends Chain | undefined = Chain | undefined,
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
+    | undefined
+>(
+  client: AlchemySmartAccountClient<TTransport, TChain, TAccount>
+) => AlchemyEnhancedApis {
+  return (client) => {
     const alchemySdk = AlchemySdkClientSchema.parse(alchemy);
 
     if (client.transport.type === "http") {
@@ -69,3 +70,4 @@ export const alchemyEnhancedApiActions =
       config: alchemySdk.config,
     };
   };
+}
