@@ -40,10 +40,11 @@ const bundle = new URLSearchParams(window.location.search).get("bundle");
 if (!bundle) {
   throw new Error("No bundle found in URL");
 }
+
 await signer.authenticate({ type: "email", bundle });
 ```
 
-```ts twoslash [client.ts] filename="client.ts"
+```ts twoslash [config.ts] filename="config.ts"
 // [!include ~/shared/core/config.ts]
 ```
 
@@ -60,7 +61,7 @@ It's important that you verify this email to be correct first! Otherwise, if a u
 :::code-group
 
 ```ts twoslash [example.ts]
-import { config } from "./config";
+import { config } from "./config.js";
 import { getSigner } from "@account-kit/core";
 
 const signer = getSigner(config);
@@ -77,7 +78,7 @@ await signer.authenticate({
 });
 ```
 
-```ts twoslash [client.ts] filename="client.ts"
+```ts twoslash [config.ts] filename="config.ts"
 // [!include ~/shared/core/config.ts]
 ```
 
