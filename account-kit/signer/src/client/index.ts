@@ -7,12 +7,19 @@ import { base64UrlEncode } from "../utils/base64UrlEncode.js";
 import { generateRandomBuffer } from "../utils/generateRandomBuffer.js";
 import { BaseSignerClient } from "./base.js";
 import type {
+  AlchemySignerClientEvents,
   CreateAccountParams,
   CredentialCreationOptionOverrides,
   EmailAuthParams,
   ExportWalletParams,
+  OauthConfig,
+  OauthParams,
   User,
 } from "./types.js";
+import { getDefaultScopeAndClaims, getOauthNonce } from "../oauth.js";
+import type { AuthParams, OauthMode } from "../signer.js";
+
+const CHECK_CLOSE_INTERVAL = 500;
 
 export const AlchemySignerClientParamsSchema = z.object({
   connection: ConnectionConfigSchema,
@@ -25,11 +32,26 @@ export const AlchemySignerClientParamsSchema = z.object({
     .string()
     .optional()
     .default("24c1acf5-810f-41e0-a503-d5d13fa8e830"),
+  oauthCallbackUrl: z
+    .string()
+    .optional()
+    .default("https://signer.alchemy.com/callback"),
+  enablePopupOauth: z.boolean().optional().default(false),
 });
 
 export type AlchemySignerClientParams = z.input<
   typeof AlchemySignerClientParamsSchema
 >;
+
+type OauthState = {
+  authProviderId: string;
+  isCustomProvider?: boolean;
+  requestKey: string;
+  turnkeyPublicKey: string;
+  expirationSeconds?: number;
+  redirectUrl?: string;
+  openerOrigin?: string;
+};
 
 /**
  * A lower level client used by the AlchemySigner used to communicate with
@@ -38,6 +60,7 @@ export type AlchemySignerClientParams = z.input<
 export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams> {
   private iframeStamper: IframeStamper;
   private webauthnStamper: WebauthnStamper;
+  oauthCallbackUrl: string;
   iframeContainerId: string;
 
   /**
@@ -64,7 +87,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @param {string} params.rootOrgId The root organization ID
    */
   constructor(params: AlchemySignerClientParams) {
-    const { connection, iframeConfig, rpId, rootOrgId } =
+    const { connection, iframeConfig, rpId, rootOrgId, oauthCallbackUrl } =
       AlchemySignerClientParamsSchema.parse(params);
 
     const iframeStamper = new IframeStamper({
@@ -85,6 +108,8 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     this.webauthnStamper = new WebauthnStamper({
       rpId: rpId ?? window.location.hostname,
     });
+
+    this.oauthCallbackUrl = oauthCallbackUrl;
   }
 
   /**
@@ -109,7 +134,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @param {CreateAccountParams} params The parameters for creating an account, including the type (email or passkey) and additional details.
    * @returns {Promise<SignupResponse>} A promise that resolves with the response object containing the account creation result.
    */
-  createAccount = async (params: CreateAccountParams) => {
+  public override createAccount = async (params: CreateAccountParams) => {
     this.eventEmitter.emit("authenticating");
     if (params.type === "email") {
       const { email, expirationSeconds } = params;
@@ -174,7 +199,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @param {Omit<EmailAuthParams, "targetPublicKey">} params The parameters for email authentication, excluding the target public key
    * @returns {Promise<any>} The response from the authentication request
    */
-  public initEmailAuth = async (
+  public override initEmailAuth = async (
     params: Omit<EmailAuthParams, "targetPublicKey">
   ) => {
     this.eventEmitter.emit("authenticating");
@@ -190,7 +215,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
   };
 
   /**
-   * Completes email auth for the user by injecting a credential bundle and retrieving the user information based on the provided organization ID. Emits events during the process.
+   * Completes auth for the user by injecting a credential bundle and retrieving the user information based on the provided organization ID. Emits events during the process.
    *
    * @example
    * ```ts
@@ -205,19 +230,21 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    *  },
    * });
    *
-   * const account = await client.completeEmailAuth({ orgId: "user-org-id", bundle: "bundle-from-email" });
+   * const account = await client.completeAuthWithBundle({ orgId: "user-org-id", bundle: "bundle-from-email", connectedEventName: "connectedEmail" });
    * ```
    *
    * @param {{ bundle: string; orgId: string }} config The configuration object for the authentication function containing the credential bundle to inject and the organization id associated with the user
    * @returns {Promise<User>} A promise that resolves to the authenticated user information
    */
-  public completeEmailAuth = async ({
+  public override completeAuthWithBundle = async ({
     bundle,
     orgId,
+    connectedEventName,
   }: {
     bundle: string;
     orgId: string;
-  }) => {
+    connectedEventName: keyof AlchemySignerClientEvents;
+  }): Promise<User> => {
     this.eventEmitter.emit("authenticating");
     await this.initIframeStamper();
 
@@ -228,7 +255,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     }
 
     const user = await this.whoami(orgId);
-    this.eventEmitter.emit("connectedEmail", user, bundle);
+    this.eventEmitter.emit(connectedEventName, user, bundle);
 
     return user;
   };
@@ -255,7 +282,9 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @param {User} [user] An optional user object to authenticate
    * @returns {Promise<User>} A promise that resolves to the authenticated user object
    */
-  public lookupUserWithPasskey = async (user: User | undefined = undefined) => {
+  public override lookupUserWithPasskey = async (
+    user: User | undefined = undefined
+  ) => {
     this.eventEmitter.emit("authenticating");
     await this.initWebauthnStamper(user);
     if (user) {
@@ -297,7 +326,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @param {string} [config.iframeElementId] Optional ID for the iframe element
    * @returns {Promise<void>} A promise that resolves when the export process is complete
    */
-  public exportWallet = async ({
+  public override exportWallet = async ({
     iframeContainerId,
     iframeElementId = "turnkey-export-iframe",
   }: ExportWalletParams) => {
@@ -340,9 +369,185 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * const account = await client.disconnect();
    * ```
    */
-  public disconnect = async () => {
+  public override disconnect = async () => {
     this.user = undefined;
     this.iframeStamper.clear();
+  };
+
+  /**
+   * Redirects the user to the OAuth provider URL based on the provided arguments. This function will always reject after 1 second if the redirection does not occur.
+   *
+   * @example
+   * ```ts
+   * import { AlchemySignerWebClient } from "@account-kit/signer";
+   *
+   * const client = new AlchemySignerWebClient({
+   *  connection: {
+   *    apiKey: "your-api-key",
+   *  },
+   *  iframeConfig: {
+   *   iframeContainerId: "signer-iframe-container",
+   *  },
+   * });
+   *
+   * await client.oauthWithRedirect({
+   *   type: "oauth",
+   *   authProviderId: "google",
+   *   mode: "redirect",
+   *   redirectUrl: "/",
+   * });
+   * ```
+   *
+   * @param {Extract<AuthParams, { type: "oauth"; mode: "redirect" }>} args The arguments required to obtain the OAuth provider URL
+   * @returns {Promise<never>} A promise that will never resolve, only reject if the redirection fails
+   */
+  public override oauthWithRedirect = async (
+    args: Extract<AuthParams, { type: "oauth"; mode: "redirect" }>
+  ): Promise<never> => {
+    const providerUrl = await this.getOauthProviderUrl(args);
+    window.location.href = providerUrl;
+    return new Promise((_, reject) =>
+      setTimeout(() => reject("Failed to redirect to OAuth provider"), 1000)
+    );
+  };
+
+  /**
+   * Initiates an OAuth authentication flow in a popup window and returns the authenticated user.
+   *
+   * @example
+   * ```ts
+   * import { AlchemySignerWebClient } from "@account-kit/signer";
+   *
+   * const client = new AlchemySignerWebClient({
+   *  connection: {
+   *    apiKey: "your-api-key",
+   *  },
+   *  iframeConfig: {
+   *   iframeContainerId: "signer-iframe-container",
+   *  },
+   * });
+   *
+   * const user = await client.oauthWithPopup({
+   *  type: "oauth",
+   *  authProviderId: "google",
+   *  mode: "popup"
+   * });
+   * ```
+   *
+   * @param {Extract<AuthParams, { type: "oauth"; mode: "popup" }>} args The authentication parameters specifying OAuth type and popup mode
+   * @returns {Promise<User>} A promise that resolves to a `User` object containing the authenticated user information
+   */
+  public override oauthWithPopup = async (
+    args: Extract<AuthParams, { type: "oauth"; mode: "popup" }>
+  ): Promise<User> => {
+    const providerUrl = await this.getOauthProviderUrl(args);
+    const popup = window.open(
+      providerUrl,
+      "_blank",
+      "popup,width=500,height=600"
+    );
+    return new Promise((resolve, reject) => {
+      const handleMessage = (event: MessageEvent) => {
+        if (!event.data) {
+          return;
+        }
+        const { alchemyBundle: bundle, alchemyOrgId: orgId } = event.data;
+        if (bundle && orgId) {
+          cleanup();
+          this.completeAuthWithBundle({
+            bundle,
+            orgId,
+            connectedEventName: "connectedOauth",
+          }).then(resolve, reject);
+        }
+      };
+
+      window.addEventListener("message", handleMessage);
+
+      const checkCloseIntervalId = setInterval(() => {
+        if (popup?.closed) {
+          cleanup();
+          reject(new Error("Oauth cancelled"));
+        }
+      }, CHECK_CLOSE_INTERVAL);
+
+      const cleanup = () => {
+        window.removeEventListener("message", handleMessage);
+        clearInterval(checkCloseIntervalId);
+      };
+    });
+  };
+
+  private getOauthProviderUrl = async (args: OauthParams): Promise<string> => {
+    const {
+      authProviderId,
+      isCustomProvider,
+      scope: providedScope,
+      claims: providedClaims,
+      mode,
+      redirectUrl,
+      expirationSeconds,
+    } = args;
+    const { codeChallenge, requestKey, authProviders } =
+      await this.getOauthConfigForMode(mode);
+    const authProvider = authProviders.find(
+      (provider) =>
+        provider.id === authProviderId &&
+        !!provider.isCustomProvider === !!isCustomProvider
+    );
+    if (!authProvider) {
+      throw new Error(`No auth provider found with id ${authProviderId}`);
+    }
+    let scope: string;
+    let claims: string | undefined;
+    if (providedScope) {
+      scope = providedScope;
+      claims = providedClaims;
+    } else {
+      if (isCustomProvider) {
+        throw new Error("scope must be provided for a custom provider");
+      }
+      const scopeAndClaims = getDefaultScopeAndClaims(authProviderId);
+      if (!scopeAndClaims) {
+        throw new Error(
+          `Default scope not known for provider ${authProviderId}`
+        );
+      }
+      ({ scope, claims } = scopeAndClaims);
+    }
+    const { authEndpoint, clientId } = authProvider;
+    const turnkeyPublicKey = await this.initIframeStamper();
+    const nonce = getOauthNonce(turnkeyPublicKey);
+    const stateObject: OauthState = {
+      authProviderId,
+      isCustomProvider,
+      requestKey,
+      turnkeyPublicKey,
+      expirationSeconds,
+      redirectUrl:
+        mode === "redirect" ? resolveRelativeUrl(redirectUrl) : undefined,
+      openerOrigin: mode === "popup" ? window.location.origin : undefined,
+    };
+    const state = base64UrlEncode(
+      new TextEncoder().encode(JSON.stringify(stateObject))
+    );
+    const authUrl = new URL(authEndpoint);
+    const params: Record<string, string> = {
+      redirect_uri: this.oauthCallbackUrl,
+      response_type: "code",
+      scope,
+      state,
+      code_challenge: codeChallenge,
+      code_challenge_method: "S256",
+      prompt: "select_account",
+      client_id: clientId,
+      nonce,
+    };
+    if (claims) {
+      params.claims = claims;
+    }
+    authUrl.search = new URLSearchParams(params).toString();
+    return authUrl.toString();
   };
 
   private initIframeStamper = async () => {
@@ -369,7 +574,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     }
   };
 
-  protected getWebAuthnAttestation = async (
+  protected override getWebAuthnAttestation = async (
     options?: CredentialCreationOptionOverrides,
     userDetails: { username: string } = {
       username: this.user?.email ?? "anonymous",
@@ -423,4 +628,31 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
 
     return { challenge, authenticatorUserId, attestation };
   };
+
+  protected override getOauthConfig = async (): Promise<OauthConfig> => {
+    const publicKey = await this.initIframeStamper();
+    const nonce = getOauthNonce(publicKey);
+    return this.request("/v1/prepare-oauth", { nonce });
+  };
+
+  private getOauthConfigForMode = async (
+    mode: OauthMode
+  ): Promise<OauthConfig> => {
+    if (this.oauthConfig) {
+      return this.oauthConfig;
+    } else if (mode === "redirect") {
+      return this.initOauth();
+    } else {
+      throw new Error(
+        "enablePopupOauth must be set in configuration or signer.preparePopupOauth must be called before using popup-based OAuth login"
+      );
+    }
+  };
+}
+
+function resolveRelativeUrl(url: string): string {
+  // Funny trick.
+  const a = document.createElement("a");
+  a.href = url;
+  return a.href;
 }

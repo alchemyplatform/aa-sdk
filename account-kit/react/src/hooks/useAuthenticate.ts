@@ -47,6 +47,7 @@ export function useAuthenticate(
 ): UseAuthenticateResult {
   const { queryClient } = useAlchemyAccountContext();
   const signer = useSigner();
+
   const {
     mutate: authenticate,
     mutateAsync: authenticateAsync,

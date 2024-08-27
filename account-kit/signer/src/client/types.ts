@@ -1,6 +1,7 @@
 import type { Address } from "@aa-sdk/core";
 import type { TSignedRequest, getWebAuthnAttestation } from "@turnkey/http";
 import type { Hex } from "viem";
+import type { AuthParams } from "../signer";
 
 export type CredentialCreationOptionOverrides = {
   publicKey?: Partial<CredentialCreationOptions["publicKey"]>;
@@ -46,10 +47,27 @@ export type EmailAuthParams = {
   redirectParams?: URLSearchParams;
 };
 
+export type OauthParams = Extract<AuthParams, { type: "oauth" }> & {
+  expirationSeconds?: number;
+};
+
 export type SignupResponse = {
   orgId: string;
   userId?: string;
   address?: Address;
+};
+
+export type OauthConfig = {
+  codeChallenge: string;
+  requestKey: string;
+  authProviders: AuthProviderConfig[];
+};
+
+export type AuthProviderConfig = {
+  id: string;
+  isCustomProvider?: boolean;
+  clientId: string;
+  authEndpoint: string;
 };
 
 export type SignerRoutes = SignerEndpoints[number]["Route"];
@@ -106,6 +124,13 @@ export type SignerEndpoints = [
     Response: {
       signature: Hex;
     };
+  },
+  {
+    Route: "/v1/prepare-oauth";
+    Body: {
+      nonce: string;
+    };
+    Response: OauthConfig;
   }
 ];
 
@@ -114,6 +139,7 @@ export type AlchemySignerClientEvents = {
   authenticating(): void;
   connectedEmail(user: User, bundle: string): void;
   connectedPasskey(user: User): void;
+  connectedOauth(user: User, bundle: string): void;
   disconnected(): void;
 };
 
