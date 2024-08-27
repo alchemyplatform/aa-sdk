@@ -69,7 +69,12 @@ export const AuthCardContent = ({
   } = useUiConfig();
 
   const canGoBack = useMemo(() => {
-    return ["email_verify", "passkey_verify"].includes(authStep.type);
+    return [
+      "email_verify",
+      "passkey_verify",
+      "pick_eoa",
+      "eoa_connect",
+    ].includes(authStep.type);
   }, [authStep]);
 
   const onBack = useCallback(() => {
@@ -78,6 +83,12 @@ export const AuthCardContent = ({
       case "passkey_verify":
         signer?.disconnect(); // Terminate any inflight authentication
         didGoBack.current = true;
+        setAuthStep({ type: "initial" });
+        break;
+      case "eoa_connect":
+        setAuthStep({ type: "pick_eoa" });
+        break;
+      case "pick_eoa":
         setAuthStep({ type: "initial" });
         break;
       default:
