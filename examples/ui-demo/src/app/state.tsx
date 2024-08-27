@@ -98,9 +98,7 @@ export function ConfigContextProvider(props: PropsWithChildren) {
       sections.push([{ type: "passkey" }]);
     }
 
-    if (config.auth.showExternalWallets && config.auth.showPasskey) {
-      sections[1].push({ type: "injected" });
-    } else if (config.auth.showExternalWallets) {
+    if (config.auth.showExternalWallets) {
       sections.push([{ type: "injected" }]);
     }
 

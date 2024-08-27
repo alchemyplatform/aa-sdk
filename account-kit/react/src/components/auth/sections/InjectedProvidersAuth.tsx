@@ -1,62 +1,17 @@
-import type { Connector } from "@wagmi/core";
-import { useChain } from "../../../hooks/useChain.js";
-import { useConnect } from "../../../hooks/useConnect.js";
+import { WalletIcon } from "../../../icons/wallet.js";
 import { Button } from "../../button.js";
 import { useAuthContext } from "../context.js";
 
 export const InjectedProvidersAuth = () => {
-  const { chain } = useChain();
-  const { connectors, connect } = useConnect({
-    onMutate: ({ connector }) => {
-      // This typecast is ok because the only way this is called is with a Connector (see below)
-      setAuthStep({ type: "eoa_connect", connector: connector as Connector });
-    },
-    onSettled: (_result, error, { connector }) => {
-      if (error) {
-        // This typecast is ok because the only way this is called is with a Connector (see below)
-        setAuthStep({
-          type: "eoa_connect",
-          connector: connector as Connector,
-          error,
-        });
-        return;
-      }
-
-      setAuthStep({ type: "complete" });
-    },
-  });
   const { setAuthStep } = useAuthContext();
 
-  if (!connectors.length) {
-    return null;
-  }
-
   return (
-    <>
-      {connectors.map((connector) => {
-        return (
-          <Button
-            variant="social"
-            key={connector.id}
-            icon={
-              connector.icon && (
-                <img
-                  src={connector.icon}
-                  alt={connector.name}
-                  height={20}
-                  width={20}
-                />
-              )
-            }
-            onClick={() => {
-              connect({ connector, chainId: chain.id });
-              setAuthStep({ type: "eoa_connect", connector });
-            }}
-          >
-            {connector.name}
-          </Button>
-        );
-      })}
-    </>
+    <Button
+      variant="social"
+      icon={<WalletIcon />}
+      onClick={() => setAuthStep({ type: "pick_eoa" })}
+    >
+      Continue with a wallet
+    </Button>
   );
 };
