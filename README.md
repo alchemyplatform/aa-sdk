@@ -1,22 +1,32 @@
-# aa-sdk
+# Account Kit
+Build zero friction sign up and transaction flows with smart accounts. Sign up with email, login with passkeys, transact with sponsored gas, and checkout in one click with transaction batching.
 
+This repo contains all of the packages that make up Account Kit as well as the core AA SDK that Account Kit is built on top of. These packages allow you to build your app on top of Account Abstraction, offering you everything from a fully integrated solution through React Components down to the low level clients and interfaces you need to have full control over development!
+
+## @account-kit/*
+Account Kit packages are all prefixed with `@account-kit` are are broken down into the following packages:
+1. [`@account-kit/react`](https://github.com/alchemyplatform/aa-sdk/tree/main/account-kit/react)
+1. [`@account-kit/core`](https://github.com/alchemyplatform/aa-sdk/tree/main/account-kit/core)
+1. [`@account-kit/infra`](https://github.com/alchemyplatform/aa-sdk/tree/main/account-kit/infra)
+1. [`@account-kit/signer`](https://github.com/alchemyplatform/aa-sdk/tree/main/account-kit/signer)
+1. [`@account-kit/smart-contracts`](https://github.com/alchemyplatform/aa-sdk/tree/main/account-kit/smart-contracts)
+
+## @aa-sdk/*
 The `aa-sdk` is a type-safe and performant suite of TypeScript SDKs built on top of [viem](https://viem.sh/) to provide ergonomic methods for sending user operations, sponsoring gas, and deploying smart accounts. It handles all the complexity of ERC-4337 under the hood to make account abstraction simple.
 
-There are currently 5 SDKs that are part of the `aa-sdk` suite:
+There are currently 2 SDKs that are part of the `aa-sdk` suite:
 
-1. [`aa-core`](https://github.com/alchemyplatform/aa-sdk/tree/main/packages/core)
-2. [`aa-alchemy`](https://github.com/alchemyplatform/aa-sdk/tree/main/packages/alchemy)
-3. [`aa-accounts`](https://github.com/alchemyplatform/aa-sdk/tree/main/packages/accounts)
-4. [`aa-signers`](<(https://github.com/alchemyplatform/aa-sdk/tree/main/packages/signers)>)
-5. [`aa-ethers`](https://github.com/alchemyplatform/aa-sdk/tree/main/packages/ethers)
+1. [`@aa-sdk/core`](https://github.com/alchemyplatform/aa-sdk/tree/main/aa-sdk/core)
+1. [`@aa-sdk/ethers`](https://github.com/alchemyplatform/aa-sdk/tree/main/aa-sdk/ethers)
+
 
 The core SDK also implements an EIP-1193 provider interface to easily plug into any popular dapp or wallet connect libraries such as RainbowKit, Wagmi, and Web3Modal. It also includes [`ethers.js`](https://docs.ethers.org/v5/) adapters to provide full support for `ethers.js`` apps.
 
-The `aa-sdk` is modular at every layer of the stack and can be easily extended to fit your custom needs. You can plug in any [smart account](https://accountkit.alchemy.com/smart-accounts/custom/using-your-own) implementation, [Signer](https://accountkit.alchemy.com/signers/choosing-a-signer.html), [Gas Manager API](https://accountkit.alchemy.com/getting-started/overview.html#gas-manager-api) and RPC Provider.
+The `aa-sdk` is modular at every layer of the stack and can be easily extended to fit your custom needs. You can plug in any [smart account](https://accountkit.alchemy.com/smart-accounts/custom/using-your-own) implementation, [Signer](https://accountkit.alchemy.com/what-is-a-signer), [Gas Manager API](https://accountkit.alchemy.com/react/sponsor-gas) and RPC Provider.
 
 ## Getting started
 
-The `aa-sdk` is part of [Account Kit](https://accountkit.alchemy.com). Check out this [quickstart guide](https://accountkit.alchemy.com/getting-started/setup.html) to get started, or an [overview](https://accountkit.alchemy.com/packages/) of each of the SDKs in this repo.
+Check out this [quickstart guide](https://accountkit.alchemy.com/react/quickstart) to get started.
 
 ## Contributing
 
