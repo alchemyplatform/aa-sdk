@@ -21,7 +21,7 @@
     }
   },
   "scripts": {
-    "build": "rm -rf ./dist && tsc --project tsconfig.json --module commonjs --removeComments --verbatimModuleSyntax false && echo > ./dist/package.json '{\"type\":\"commonjs\"}'"
+    "build": "rm -rf ./dist && tsc --project tsconfig.json --module commonjs --moduleResolution node --removeComments --verbatimModuleSyntax false && echo > ./dist/package.json '{\"type\":\"commonjs\"}'"
   },
   "devDependencies": {
     "@types/eslint-utils": "^3.0.5",

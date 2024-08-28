@@ -6,8 +6,6 @@
     "declaration": true,
     "inlineSources": true,
     "noEmit": false,
-    "sourceMap": true,
-    "module": "NodeNext",
-    "moduleResolution": "node"
+    "sourceMap": true
   }
 }

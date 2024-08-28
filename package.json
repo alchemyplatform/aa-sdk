@@ -5,15 +5,25 @@
   "engines": {
     "node": ">=18.16"
   },
-  "workspaces": [
-    "aa-sdk/*",
-    "account-kit/*",
-    "templates/*",
-    "examples/*",
-    "site",
-    "doc-gen",
-    ".vitest"
-  ],
+  "workspaces": {
+    "packages": [
+      "aa-sdk/*",
+      "account-kit/*",
+      "templates/*",
+      "examples/*",
+      "site",
+      "doc-gen",
+      ".vitest"
+    ],
+    "nohoist": [
+      "**/viem",
+      "**/viem/**"
+    ]
+  },
+  "resolutions": {
+    "wagmi": "2.12.7",
+    "viem": "2.20.0"
+  },
   "scripts": {
     "generate": "lerna run generate",
     "postgenerate": "yarn lint:write",

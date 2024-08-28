@@ -118,7 +118,7 @@ export type SmartContractAccount<
     typedDataDefinition: TypedDataDefinition<typedData, primaryType>
   ) => Promise<Hex>;
   encodeUpgradeToAndCall: (params: UpgradeToAndCallParams) => Promise<Hex>;
-  getNonce(nonceKey?: bigint): Promise<bigint>;
+  getAccountNonce(nonceKey?: bigint): Promise<bigint>;
   getInitCode: () => Promise<Hex>;
   isAccountDeployed: () => Promise<boolean>;
   getFactoryAddress: () => Promise<Address>;
@@ -374,7 +374,7 @@ export async function toSmartContractAccount(
     if (deploymentState === DeploymentState.DEPLOYED) {
       return "0x";
     }
-    const contractCode = await client.getBytecode({
+    const contractCode = await client.getCode({
       address: accountAddress_,
     });
 
@@ -509,7 +509,7 @@ export async function toSmartContractAccount(
     encodeUpgradeToAndCall: encodeUpgradeToAndCall_,
     getEntryPoint: () => entryPoint,
     isAccountDeployed,
-    getNonce,
+    getAccountNonce: getNonce,
     signMessageWith6492,
     signTypedDataWith6492,
     getImplementationAddress,

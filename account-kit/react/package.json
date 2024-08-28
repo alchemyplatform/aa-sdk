@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": false,
   "type": "module",
-  "main": "./dist/cjs/index.js",
+  "main": "./dist/esm/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
   "typings": "./dist/types/index.d.ts",
@@ -25,21 +25,20 @@
     ".": {
       "types": "./dist/types/index.d.ts",
       "import": "./dist/esm/index.js",
-      "default": "./dist/cjs/index.js"
+      "default": "./dist/esm/index.js"
     },
     "./tailwind": {
       "types": "./dist/types/tailwind/index.d.ts",
       "import": "./dist/esm/tailwind/index.js",
-      "default": "./dist/cjs/tailwind/index.js"
+      "default": "./dist/esm/tailwind/index.js"
     },
     "./package.json": "./package.json"
   },
   "scripts": {
-    "prebuild": "node --loader ts-node/esm ./inject-version.ts",
-    "build": "yarn clean && yarn build:cjs && yarn build:esm && yarn build:types",
-    "build:cjs": "tsc --project tsconfig.build.json --module commonjs --outDir ./dist/cjs --removeComments --verbatimModuleSyntax false && echo > ./dist/cjs/package.json '{\"type\":\"commonjs\"}'",
-    "build:esm": "tsc --project tsconfig.build.json --module es2020 --outDir ./dist/esm --removeComments && echo > ./dist/esm/package.json '{\"type\":\"module\"}'",
-    "build:types": "tsc --project tsconfig.build.json --module esnext --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
+    "prebuild": "npx tsx ./inject-version.ts",
+    "build": "yarn clean && yarn build:esm && yarn build:types",
+    "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
+    "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
     "docs:gen": "npx ak-docgen generate --in ./src/index.ts --out ../../site/pages/reference/account-kit/react",
     "clean": "rm -rf ./dist",
     "test": "vitest --passWithNoTests",
@@ -61,11 +60,8 @@
     "@tanstack/react-form": "^0.19.4",
     "@tanstack/zod-form-adapter": "^0.19.4",
     "@wagmi/connectors": "^4.3.9",
-    "@wagmi/core": "^2.9.8",
     "react-remove-scroll": "^2.5.10",
     "tailwindcss": "^3.4.3",
-    "viem": "2.8.6",
-    "wagmi": "^2.8.8",
     "zod": "^3.22.4",
     "zustand": "^4.5.4"
   },
@@ -74,10 +70,11 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tailwindcss": "^3.4.3",
-    "viem": "2.8.6"
+    "wagmi": "2.12.7",
+    "viem": "2.20.0"
   },
   "resolutions": {
-    "viem": "2.8.6"
+    "viem": "2.20.0"
   },
   "publishConfig": {
     "access": "public",
