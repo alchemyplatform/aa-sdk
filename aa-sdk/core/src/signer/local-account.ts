@@ -83,8 +83,8 @@ export class LocalAccountSigner<
    * @returns {Promise<Hex>} A promise that resolves to the signed data in hexadecimal format
    */
   readonly signTypedData = async <
-    const TTypedData extends TypedData | { [key: string]: unknown },
-    TPrimaryType extends string = string
+    const TTypedData extends TypedData | Record<string, unknown>,
+    TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData
   >(
     params: TypedDataDefinition<TTypedData, TPrimaryType>
   ): Promise<Hex> => {

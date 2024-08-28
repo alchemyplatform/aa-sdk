@@ -22,7 +22,7 @@ export const convertWalletToAccountSigner = (
       )) as `0x${string}`,
     signTypedData: async <
       const TTypedData extends TypedData | { [key: string]: unknown },
-      TPrimaryType extends string = string
+      TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData
     >(
       params: TypedDataDefinition<TTypedData, TPrimaryType>
     ) => {
@@ -55,7 +55,7 @@ export const convertEthersSignerToAccountSigner = (
       )) as `0x${string}`,
     signTypedData: async <
       const TTypedData extends TypedData | { [key: string]: unknown },
-      TPrimaryType extends string = string
+      TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData
     >(
       _params: TypedDataDefinition<TTypedData, TPrimaryType>
     ) => {
