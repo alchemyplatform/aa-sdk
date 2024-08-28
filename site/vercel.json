@@ -2,17 +2,32 @@
   "redirects": [
     {
       "source": "/getting-started/setup",
-      "destination": "/getting-started/introduction",
+      "destination": "/react/quickstart",
+      "statusCode": 301
+    },
+    {
+      "source": "/getting-started/overview",
+      "destination": "/react/quickstart",
+      "statusCode": 301
+    },
+    {
+      "source": "/getting-started/introduction",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/packages/aa-alchemy",
+      "destination": "/",
       "statusCode": 301
     },
     {
       "source": "/signers/alchemy-signer",
-      "destination": "/signers/alchemy-signer/introduction",
+      "destination": "/signer/overview",
       "statusCode": 301
     },
     {
       "source": "/smart-accounts/accounts/guides/light-account",
-      "destination": "/smart-accounts/light-account",
+      "destination": "/smart-contracts/light-account",
       "statusCode": 301
     },
     {
@@ -22,7 +37,7 @@
     },
     {
       "source": "/tutorials/batching-transactions",
-      "destination": "/using-smart-accounts/batch-user-operations",
+      "destination": "/react/send-user-operations#batch-user-operation",
       "statusCode": 301
     }
   ],
