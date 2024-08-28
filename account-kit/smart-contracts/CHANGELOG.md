@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-beta.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.19.0...v4.0.0-beta.0) (2024-08-28)
+
+### Bug Fixes
+
+- **core:** the reconnect method was causing an infinite loop ([#808](https://github.com/alchemyplatform/aa-sdk/issues/808)) ([0d094e8](https://github.com/alchemyplatform/aa-sdk/commit/0d094e870c1a0ceb5f8d1c862f4109e32de46097))
+- yarn.lock had wrong versions of alpha packages ([fb3ae94](https://github.com/alchemyplatform/aa-sdk/commit/fb3ae946cb37dbeb9d358de07adc64b0f14f269c))
+
+### Code Refactoring
+
+- change the prefix for aa-sdk packages ([#722](https://github.com/alchemyplatform/aa-sdk/issues/722)) ([02f2f16](https://github.com/alchemyplatform/aa-sdk/commit/02f2f1623803480b8dc496491d2232c6fe5c219c))
+- move plugingen from aa-sdk to account-kit since it depends on smart-contracts ([073e8f6](https://github.com/alchemyplatform/aa-sdk/commit/073e8f6caacf7360fa7a352e2feab6db3b2a7ba1))
+- split aa-alchemy into account-kit packages ([#704](https://github.com/alchemyplatform/aa-sdk/issues/704)) ([55e6632](https://github.com/alchemyplatform/aa-sdk/commit/55e663208aae63e6092cbf2335c58f1448bd0dc3)), closes [#706](https://github.com/alchemyplatform/aa-sdk/issues/706)
+
+- refactor!: move chain definitions out of aa-sdk core (#772) ([1385441](https://github.com/alchemyplatform/aa-sdk/commit/1385441095b559ef506d5b4ae429ada5cc84be0e)), closes [#772](https://github.com/alchemyplatform/aa-sdk/issues/772)
+
+### Features
+
+- **aa-sdk/core:** add erc7677 middleware ([#823](https://github.com/alchemyplatform/aa-sdk/issues/823)) ([4a30808](https://github.com/alchemyplatform/aa-sdk/commit/4a30808fb6df51a59be861dab523dbd45badf26a))
+- surface descriptive session key errors ([#718](https://github.com/alchemyplatform/aa-sdk/issues/718)) ([593e84c](https://github.com/alchemyplatform/aa-sdk/commit/593e84c027a697b757e3fd954564ff40cd1e11b0))
+
+### BREAKING CHANGES
+
+- moves the chain definitions out of aa-sdk core and into account-kit/infra
+- @alchemy/plugingen has been moved to @account-kit/plugingen
+- @alchemy/aa-_ packages have been renamed to @aa-sdk/_
+- this removes the @alchemy/aa-alchemy package in favor of @account-kit/\*
+- @alchemy/aa-accounts was deleted in favor of @account-kit/accounts
+
+- refactor: further rename packages
+
 # [4.0.0-alpha.12](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-alpha.11...v4.0.0-alpha.12) (2024-08-20)
 
 **Note:** Version bump only for package @account-kit/smart-contracts

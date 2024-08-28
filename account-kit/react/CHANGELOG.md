@@ -3,6 +3,56 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-beta.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.19.0...v4.0.0-beta.0) (2024-08-28)
+
+### Bug Fixes
+
+- add missing react-remove-scroll dep ([#804](https://github.com/alchemyplatform/aa-sdk/issues/804)) ([09d9217](https://github.com/alchemyplatform/aa-sdk/commit/09d92176dfa480ef9b9d9e76299a244c48e8bc6f))
+- add use client to a bunch of hooks that was misisng it ([#829](https://github.com/alchemyplatform/aa-sdk/issues/829)) ([9be5834](https://github.com/alchemyplatform/aa-sdk/commit/9be583400cdcdd766048b30788185dc56a895ee2))
+- exporting queryClient and typing uiConfig in example ([#844](https://github.com/alchemyplatform/aa-sdk/issues/844)) ([f6cc40e](https://github.com/alchemyplatform/aa-sdk/commit/f6cc40e8884bab927167099d8116e53494fd355b))
+- lowercase strings in the UI components ([#784](https://github.com/alchemyplatform/aa-sdk/issues/784)) ([58422c3](https://github.com/alchemyplatform/aa-sdk/commit/58422c399daeb342e3f664be4f82c5f500421ea2))
+- merge base into this ([e41b396](https://github.com/alchemyplatform/aa-sdk/commit/e41b396fdf331d2dd7d4e6b608b90dcab37f8386))
+- **react:** fix sign in header hiding itself ([#851](https://github.com/alchemyplatform/aa-sdk/issues/851)) ([90b3e20](https://github.com/alchemyplatform/aa-sdk/commit/90b3e20c073044c3b7af2cc359c8b515f8838b64))
+- **ui-demo:** signer state was being cleared when ui config changed ([#838](https://github.com/alchemyplatform/aa-sdk/issues/838)) ([cc5db85](https://github.com/alchemyplatform/aa-sdk/commit/cc5db859647c3ac434a929ccab52b898f4f04e7f))
+- **ui-modal:** don't render ui modal if no ui config is passed in ([#943](https://github.com/alchemyplatform/aa-sdk/issues/943)) ([65b1584](https://github.com/alchemyplatform/aa-sdk/commit/65b1584c6f3bf5226bcf457d3736bda3543d6219))
+- use updated package path in prettier config ([#741](https://github.com/alchemyplatform/aa-sdk/issues/741)) ([918d65f](https://github.com/alchemyplatform/aa-sdk/commit/918d65f64bd4de40f092b7cf8fb5a2605d376939))
+
+### Code Refactoring
+
+- change the prefix for aa-sdk packages ([#722](https://github.com/alchemyplatform/aa-sdk/issues/722)) ([02f2f16](https://github.com/alchemyplatform/aa-sdk/commit/02f2f1623803480b8dc496491d2232c6fe5c219c))
+- split aa-alchemy into account-kit packages ([#704](https://github.com/alchemyplatform/aa-sdk/issues/704)) ([55e6632](https://github.com/alchemyplatform/aa-sdk/commit/55e663208aae63e6092cbf2335c58f1448bd0dc3)), closes [#706](https://github.com/alchemyplatform/aa-sdk/issues/706)
+
+### Features
+
+- add ability to customize border radius in ui demo ([#785](https://github.com/alchemyplatform/aa-sdk/issues/785)) ([2ce7d2d](https://github.com/alchemyplatform/aa-sdk/commit/2ce7d2d2d0534f50d6a94eb4d210c4ef49e50642))
+- add border radius to account kit theme config ([#781](https://github.com/alchemyplatform/aa-sdk/issues/781)) ([dcd2ac1](https://github.com/alchemyplatform/aa-sdk/commit/dcd2ac194a9bcb4e0de1d7edfcc8b298d3d19cb0))
+- add doc generator for class methods ([#806](https://github.com/alchemyplatform/aa-sdk/issues/806)) ([a389f65](https://github.com/alchemyplatform/aa-sdk/commit/a389f656a6e4feb14e13ecfc84880e4e0d93d786))
+- add injected wallets to the UX ([#841](https://github.com/alchemyplatform/aa-sdk/issues/841)) ([9de08b3](https://github.com/alchemyplatform/aa-sdk/commit/9de08b3ab76471298cd84fc65cc3d5a8dd35ba08))
+- add UI config defaults, better back navigation to auth UI ([#827](https://github.com/alchemyplatform/aa-sdk/issues/827)) ([bf9157c](https://github.com/alchemyplatform/aa-sdk/commit/bf9157ca382b41a2ee28fb3c71c6a4e7789a151f))
+- add wallet connect to injected wallet setup ([e00166d](https://github.com/alchemyplatform/aa-sdk/commit/e00166d2030b5b2f8bf666481a95a33cec9fad9f))
+- clean up UI state on log out ([#832](https://github.com/alchemyplatform/aa-sdk/issues/832)) ([85548c8](https://github.com/alchemyplatform/aa-sdk/commit/85548c86fe52262bfc761a5b3c0eb5d050bd8568))
+- enable linting class methods from exported classes ([1b87a51](https://github.com/alchemyplatform/aa-sdk/commit/1b87a51f5cafada625180b386e9b7e4e58f6e4d7))
+- **erc7677:** create a new middle ware for erc7677 to replace gasManager middleWare ([#840](https://github.com/alchemyplatform/aa-sdk/issues/840)) ([4be87d3](https://github.com/alchemyplatform/aa-sdk/commit/4be87d3147e1cdd70d2034479dcf0973c2820ea8))
+- icon animations ([#717](https://github.com/alchemyplatform/aa-sdk/issues/717)) ([0368570](https://github.com/alchemyplatform/aa-sdk/commit/0368570ff94ba2cf79602085306fbe800e93b0fd))
+- make it easier to start with account-kit/core ([#933](https://github.com/alchemyplatform/aa-sdk/issues/933)) ([6d98643](https://github.com/alchemyplatform/aa-sdk/commit/6d9864334f3c8e98ddb2f5885dbc705dc78587ba))
+- new and improved auth modal ([#761](https://github.com/alchemyplatform/aa-sdk/issues/761)) ([2296917](https://github.com/alchemyplatform/aa-sdk/commit/2296917bf01bba8fb20e58f587ae6aa1ed40ffcb))
+- **react:** enable multi-owner la usage in core and react ([#893](https://github.com/alchemyplatform/aa-sdk/issues/893)) ([43464da](https://github.com/alchemyplatform/aa-sdk/commit/43464daf59e6b653a5332662c4098cb2174f65d3))
+- read auth card props from context, simplify UI config ([#789](https://github.com/alchemyplatform/aa-sdk/issues/789)) ([e7eae44](https://github.com/alchemyplatform/aa-sdk/commit/e7eae44e8f6e6fdf0b01c5c7a920271b248b4022))
+- respect OS or root class for dark mode ([#759](https://github.com/alchemyplatform/aa-sdk/issues/759)) ([66aade5](https://github.com/alchemyplatform/aa-sdk/commit/66aade569c28a94aab58fa941bf3fd9ed2d767a8))
+- smaller footer in UI components ([#811](https://github.com/alchemyplatform/aa-sdk/issues/811)) ([ef89ccd](https://github.com/alchemyplatform/aa-sdk/commit/ef89ccdab0aa3c7af23f160cf77db46f7991d311))
+- some UI component polish from sync with product ([#831](https://github.com/alchemyplatform/aa-sdk/issues/831)) ([37a98c0](https://github.com/alchemyplatform/aa-sdk/commit/37a98c01716e1ade73395eb8b4fecfb3a2f6f4b9))
+- support different illustration styles ([#767](https://github.com/alchemyplatform/aa-sdk/issues/767)) ([37296d3](https://github.com/alchemyplatform/aa-sdk/commit/37296d3003cae6c3d2bb96c34f1c628a4669572c))
+- surface descriptive session key errors ([#718](https://github.com/alchemyplatform/aa-sdk/issues/718)) ([593e84c](https://github.com/alchemyplatform/aa-sdk/commit/593e84c027a697b757e3fd954564ff40cd1e11b0))
+- use brand accent color as icon colors ([#780](https://github.com/alchemyplatform/aa-sdk/issues/780)) ([d3d62b3](https://github.com/alchemyplatform/aa-sdk/commit/d3d62b35232f488fc0202de08922eca10416da5b))
+
+### BREAKING CHANGES
+
+- @alchemy/aa-_ packages have been renamed to @aa-sdk/_
+- this removes the @alchemy/aa-alchemy package in favor of @account-kit/\*
+- @alchemy/aa-accounts was deleted in favor of @account-kit/accounts
+
+- refactor: further rename packages
+
 # [4.0.0-alpha.12](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-alpha.11...v4.0.0-alpha.12) (2024-08-20)
 
 ### Features

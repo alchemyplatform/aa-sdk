@@ -3,6 +3,39 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-beta.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.19.0...v4.0.0-beta.0) (2024-08-28)
+
+### Bug Fixes
+
+- **core:** initial state parsing and disconnect logic ([#842](https://github.com/alchemyplatform/aa-sdk/issues/842)) ([d3e80ad](https://github.com/alchemyplatform/aa-sdk/commit/d3e80ad7ad8f3469a40bc741595719c57374e8b9))
+- **core:** the reconnect method was causing an infinite loop ([#808](https://github.com/alchemyplatform/aa-sdk/issues/808)) ([0d094e8](https://github.com/alchemyplatform/aa-sdk/commit/0d094e870c1a0ceb5f8d1c862f4109e32de46097))
+- demo app not building ([#733](https://github.com/alchemyplatform/aa-sdk/issues/733)) ([2bbf359](https://github.com/alchemyplatform/aa-sdk/commit/2bbf3598a882089ad78c36622cb73607d3737f91))
+- merge base into this ([e41b396](https://github.com/alchemyplatform/aa-sdk/commit/e41b396fdf331d2dd7d4e6b608b90dcab37f8386))
+- passing gas manager to createConfig should use it ([#836](https://github.com/alchemyplatform/aa-sdk/issues/836)) ([53b4e95](https://github.com/alchemyplatform/aa-sdk/commit/53b4e950c4aa153ba7c26d98acc2898591931cb9))
+- **ui-modal:** don't render ui modal if no ui config is passed in ([#943](https://github.com/alchemyplatform/aa-sdk/issues/943)) ([65b1584](https://github.com/alchemyplatform/aa-sdk/commit/65b1584c6f3bf5226bcf457d3736bda3543d6219))
+
+### Code Refactoring
+
+- change the prefix for aa-sdk packages ([#722](https://github.com/alchemyplatform/aa-sdk/issues/722)) ([02f2f16](https://github.com/alchemyplatform/aa-sdk/commit/02f2f1623803480b8dc496491d2232c6fe5c219c))
+- split aa-alchemy into account-kit packages ([#704](https://github.com/alchemyplatform/aa-sdk/issues/704)) ([55e6632](https://github.com/alchemyplatform/aa-sdk/commit/55e663208aae63e6092cbf2335c58f1448bd0dc3)), closes [#706](https://github.com/alchemyplatform/aa-sdk/issues/706)
+
+### Features
+
+- clean up UI state on log out ([#832](https://github.com/alchemyplatform/aa-sdk/issues/832)) ([85548c8](https://github.com/alchemyplatform/aa-sdk/commit/85548c86fe52262bfc761a5b3c0eb5d050bd8568))
+- enable linting class methods from exported classes ([1b87a51](https://github.com/alchemyplatform/aa-sdk/commit/1b87a51f5cafada625180b386e9b7e4e58f6e4d7))
+- **erc7677:** create a new middle ware for erc7677 to replace gasManager middleWare ([#840](https://github.com/alchemyplatform/aa-sdk/issues/840)) ([4be87d3](https://github.com/alchemyplatform/aa-sdk/commit/4be87d3147e1cdd70d2034479dcf0973c2820ea8))
+- make it easier to start with account-kit/core ([#933](https://github.com/alchemyplatform/aa-sdk/issues/933)) ([6d98643](https://github.com/alchemyplatform/aa-sdk/commit/6d9864334f3c8e98ddb2f5885dbc705dc78587ba))
+- **react:** enable multi-owner la usage in core and react ([#893](https://github.com/alchemyplatform/aa-sdk/issues/893)) ([43464da](https://github.com/alchemyplatform/aa-sdk/commit/43464daf59e6b653a5332662c4098cb2174f65d3))
+- surface descriptive session key errors ([#718](https://github.com/alchemyplatform/aa-sdk/issues/718)) ([593e84c](https://github.com/alchemyplatform/aa-sdk/commit/593e84c027a697b757e3fd954564ff40cd1e11b0))
+
+### BREAKING CHANGES
+
+- @alchemy/aa-_ packages have been renamed to @aa-sdk/_
+- this removes the @alchemy/aa-alchemy package in favor of @account-kit/\*
+- @alchemy/aa-accounts was deleted in favor of @account-kit/accounts
+
+- refactor: further rename packages
+
 # [4.0.0-alpha.12](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-alpha.11...v4.0.0-alpha.12) (2024-08-20)
 
 ### Features
