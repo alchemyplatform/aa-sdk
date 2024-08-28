@@ -16,7 +16,7 @@
       "statusCode": 301
     },
     {
-      "source": "/packages/aa-alchemy",
+      "source": "/packages/aa-alchemy/",
       "destination": "/",
       "statusCode": 301
     },
