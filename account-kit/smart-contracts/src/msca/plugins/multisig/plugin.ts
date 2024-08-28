@@ -184,7 +184,11 @@ export const MultisigPlugin: Plugin<typeof MultisigPluginAbi> = {
       address: address || addresses[client.chain.id],
       abi: MultisigPluginAbi,
       client: client,
-    });
+    }) as GetContractReturnType<
+      typeof MultisigPluginAbi,
+      PublicClient,
+      Address
+    >;
   },
 };
 

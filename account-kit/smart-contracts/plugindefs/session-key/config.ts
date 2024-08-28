@@ -1,10 +1,11 @@
+import type { PluginConfig } from "@account-kit/plugingen";
+import { parseAbiParameters } from "viem";
 import {
   arbitrum,
   arbitrumSepolia,
   base,
   baseSepolia,
   fraxtal,
-  fraxtalSepolia,
   mainnet,
   optimism,
   optimismSepolia,
@@ -14,9 +15,7 @@ import {
   sepolia,
   zora,
   zoraSepolia,
-} from "@account-kit/infra";
-import type { PluginConfig } from "@account-kit/plugingen";
-import { parseAbiParameters } from "viem";
+} from "viem/chains";
 import { MultiOwnerPluginGenConfig } from "../multi-owner/config.js";
 import { SessionKeyPluginAbi } from "./abi.js";
 
@@ -34,9 +33,8 @@ export const SessionKeyPluginGenConfig: PluginConfig = {
     [arbitrum.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
     [arbitrumSepolia.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
     [base.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
-    [baseSepolia.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
     [fraxtal.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
-    [fraxtalSepolia.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
+    2523: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
     [zora.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
     [zoraSepolia.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
     [mainnet.id]: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",

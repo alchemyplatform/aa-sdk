@@ -19,7 +19,7 @@
     "fs-extra": "^11.2.0",
     "prettier": "^2.8.8",
     "tailwindcss": "^3.3.3",
-    "viem": "2.8.6"
+    "viem": "2.20.0"
   },
   "dependencies": {
     "@aa-sdk/core": "latest",
@@ -31,7 +31,7 @@
     "@account-kit/smart-contracts": "latest",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "viem": "2.8.6",
+    "viem": "2.20.0",
     "vocs": "^1.0.0-alpha.55"
   }
 }

@@ -23,7 +23,7 @@ export const GetContractGenPhase: Phase = async (input) => {
         address: address || addresses[client.chain.id],
         abi: ${pluginConfig.name}Abi,
         client: client,
-      });
+      }) as GetContractReturnType<typeof ${pluginConfig.name}Abi, PublicClient, Address>;
   }`);
 
   return input;

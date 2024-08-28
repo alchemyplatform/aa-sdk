@@ -62,7 +62,7 @@ export async function _initUserOperation<
 
   const signature = account.getDummySignature();
 
-  const nonce = account.getNonce(overrides?.nonceKey);
+  const nonce = account.getAccountNonce(overrides?.nonceKey);
 
   const struct =
     entryPoint.version === "0.6.0"
