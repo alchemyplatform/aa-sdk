@@ -18,36 +18,33 @@ export const resources: SidebarItem = {
 
 export const guides: (
   section?: "react" | "core" | "infra" | "signer" | "contracts"
-) => SidebarItem = (section) => ({
-  text: "Guides",
-  items: [
-    {
-      text: "React",
-      items: reactGuides,
-      collapsed: section !== "react",
-    },
-    {
-      text: "Other JS Frameworks",
-      items: coreSidebar,
-      collapsed: section !== "core",
-    },
-    {
-      text: "Infra",
-      items: infraSidebar,
-      collapsed: section !== "infra",
-    },
-    {
-      text: "Signer",
-      items: signerSidebar,
-      collapsed: section !== "signer",
-    },
-    {
-      text: "Smart Contracts",
-      items: smartContractsSidebar,
-      collapsed: section !== "contracts",
-    },
-  ],
-});
+) => SidebarItem[] = (section) => [
+  {
+    text: "React",
+    items: reactGuides,
+    collapsed: section !== "react",
+  },
+  {
+    text: "Other JS Frameworks",
+    items: coreSidebar,
+    collapsed: section !== "core",
+  },
+  {
+    text: "Infra",
+    items: infraSidebar,
+    collapsed: section !== "infra",
+  },
+  {
+    text: "Signer",
+    items: signerSidebar,
+    collapsed: section !== "signer",
+  },
+  {
+    text: "Smart Contracts",
+    items: smartContractsSidebar,
+    collapsed: section !== "contracts",
+  },
+];
 
 export const concepts: SidebarItem = {
   text: "Concepts",
@@ -77,4 +74,4 @@ export const concepts: SidebarItem = {
 
 export const sharedSidebar: (
   section?: "react" | "core" | "infra" | "signer" | "contracts"
-) => SidebarItem[] = (section) => [concepts, guides(section), resources];
+) => SidebarItem[] = (section) => [...guides(section), concepts, resources];
