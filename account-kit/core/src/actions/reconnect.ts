@@ -52,13 +52,13 @@ export async function reconnect(config: AlchemyAccountsConfig) {
       );
     }
 
-    unsubConnected();
+    setTimeout(() => unsubConnected(), 1);
   });
 
   const unsubDisconnected = signer.on("disconnected", () => {
     store.setState({
       accountConfigs: {},
     });
-    unsubDisconnected();
+    setTimeout(() => unsubDisconnected(), 1);
   });
 }

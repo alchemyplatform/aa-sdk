@@ -165,16 +165,20 @@ export const AlchemyAccountProvider = (
     <Hydrate {...props}>
       <AlchemyAccountContext.Provider value={initialContext}>
         <QueryClientProvider client={queryClient}>
-          <AuthModalContext.Provider
-            value={{
-              authStep,
-              setAuthStep,
-              resetAuthStep,
-            }}
-          >
-            {children}
-            <AuthModal />
-          </AuthModalContext.Provider>
+          {initialContext.ui ? (
+            <AuthModalContext.Provider
+              value={{
+                authStep,
+                setAuthStep,
+                resetAuthStep,
+              }}
+            >
+              {children}
+              <AuthModal />
+            </AuthModalContext.Provider>
+          ) : (
+            children
+          )}
         </QueryClientProvider>
       </AlchemyAccountContext.Provider>
     </Hydrate>
