@@ -69,7 +69,10 @@
     "postinstall-postinstall": "^2.1.0",
     "prettier": "^2.8.8",
     "prool": "^0.0.15",
-    "vitest": "^2.0.4"
+    "viem": "2.20.0",
+    "vitest": "^2.0.4",
+    "wagmi": "2.12.7",
+    "webauthn-p256": "^0.0.10"
   },
   "commitlint": {
     "extends": [

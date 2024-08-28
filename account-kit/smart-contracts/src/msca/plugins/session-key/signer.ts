@@ -134,7 +134,7 @@ export class SessionKeySigner
    */
   signTypedData = async <
     const TTypedData extends TypedData | { [key: string]: unknown },
-    TPrimaryType extends string = string
+    TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData
   >(
     params: TypedDataDefinition<TTypedData, TPrimaryType>
   ) => {

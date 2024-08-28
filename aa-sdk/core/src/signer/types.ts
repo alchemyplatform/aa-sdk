@@ -37,8 +37,8 @@ export interface SmartAccountSigner<Inner = any> {
   signMessage: (message: SignableMessage) => Promise<Hex>;
 
   signTypedData: <
-    const TTypedData extends TypedData | { [key: string]: unknown },
-    TPrimaryType extends string = string
+    const TTypedData extends TypedData | Record<string, unknown>,
+    TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData
   >(
     params: TypedDataDefinition<TTypedData, TPrimaryType>
   ) => Promise<Hex>;

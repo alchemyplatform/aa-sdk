@@ -40,6 +40,7 @@
     "test:run-e2e": "vitest run --config vitest.config.e2e.ts --passWithNoTests"
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
     "typescript": "^5.0.4",
     "typescript-template": "*",
     "vitest": "^2.0.4"

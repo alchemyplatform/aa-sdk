@@ -10,9 +10,9 @@
     "lint:write": "prettier --no-ignore --write ./src"
   },
   "dependencies": {
-    "@account-kit/core": "^4.0.0-alpha.4",
-    "@account-kit/infra": "^4.0.0-alpha.4",
-    "@account-kit/react": "^4.0.0-alpha.4",
+    "@account-kit/core": "^4.0.0-beta.0",
+    "@account-kit/infra": "^4.0.0-beta.0",
+    "@account-kit/react": "^4.0.0-beta.0",
     "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-switch": "^1.0.3",
     "@radix-ui/react-tooltip": "^1.1.2",
@@ -29,6 +29,7 @@
     "react-dom": "^18",
     "react-syntax-highlighter": "^15.5.0",
     "tailwind-merge": "^2.3.0",
+    "wagmi": "^2.12.7",
     "zod": "^3.0.0"
   },
   "devDependencies": {

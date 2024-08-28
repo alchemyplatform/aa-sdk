@@ -6,6 +6,8 @@ import {
   type TypedDataDefinition,
   type WalletClient,
 } from "viem";
+import type { Account } from "viem/accounts";
+import type { SignTypedDataParameters } from "viem/actions";
 import { InvalidSignerTypeError } from "../errors/signer.js";
 import type { SmartAccountSigner } from "./types";
 
@@ -126,16 +128,18 @@ export class WalletClientSigner implements SmartAccountSigner<WalletClient> {
    * @returns {Promise<Hex>} A promise that resolves to a hex string representing the signed data
    */
   signTypedData = async <
-    const TTypedData extends TypedData | { [key: string]: unknown },
-    TPrimaryType extends string = string
+    const TTypedData extends TypedData | Record<string, unknown>,
+    TPrimaryType extends keyof TTypedData | "EIP712Domain" | string = string
   >(
     typedData: TypedDataDefinition<TTypedData, TPrimaryType>
   ): Promise<Hex> => {
     const account = this.inner.account ?? (await this.getAddress());
 
-    return this.inner.signTypedData({
+    const params = {
       account,
       ...typedData,
-    });
+    } as SignTypedDataParameters<TTypedData, string, Account | undefined>;
+
+    return this.inner.signTypedData<TTypedData, string>(params);
   };
 }
