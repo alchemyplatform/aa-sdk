@@ -54,14 +54,10 @@
     "@turnkey/iframe-stamper": "^1.0.0",
     "@turnkey/viem": "^0.4.8",
     "@turnkey/webauthn-stamper": "^0.4.3",
-    "viem": "2.20.0",
     "zod": "^3.22.4"
   },
   "peerDependencies": {
-    "viem": "2.20.0"
-  },
-  "resolutions": {
-    "viem": "2.20.0"
+    "viem": "^2.20.0"
   },
   "publishConfig": {
     "access": "public",
