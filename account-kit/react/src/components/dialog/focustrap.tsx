@@ -73,7 +73,7 @@ export const FocusTrap = ({ children }: PropsWithChildren<{}>) => {
   }, [ref]);
 
   return (
-    <div ref={ref} tabIndex={0}>
+    <div ref={ref} tabIndex={0} className="focus:outline-none">
       {children}
     </div>
   );
