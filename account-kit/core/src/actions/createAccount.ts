@@ -1,4 +1,4 @@
-import { type SmartAccountSigner } from "@aa-sdk/core";
+import type { AlchemyWebSigner } from "@account-kit/signer";
 import {
   createLightAccount,
   createMultiOwnerLightAccount,
@@ -24,7 +24,7 @@ export type AccountConfig<TAccount extends SupportedAccountTypes> =
     ? Omit<
         CreateLightAccountParams<
           Transport,
-          SmartAccountSigner,
+          AlchemyWebSigner,
           LightAccountVersion<"LightAccount">
         >,
         "signer" | "transport" | "chain"
@@ -33,13 +33,13 @@ export type AccountConfig<TAccount extends SupportedAccountTypes> =
     ? Omit<
         CreateMultiOwnerLightAccountParams<
           Transport,
-          SmartAccountSigner,
+          AlchemyWebSigner,
           LightAccountVersion<"MultiOwnerLightAccount">
         >,
         "signer" | "transport" | "chain"
       >
     : Omit<
-        CreateMultiOwnerModularAccountParams,
+        CreateMultiOwnerModularAccountParams<Transport, AlchemyWebSigner>,
         "signer" | "transport" | "chain"
       >;
 

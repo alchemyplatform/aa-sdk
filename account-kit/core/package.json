@@ -50,17 +50,12 @@
     "@account-kit/signer": "^4.0.0-beta.0",
     "@account-kit/smart-contracts": "^4.0.0-beta.0",
     "js-cookie": "^3.0.5",
-    "viem": "2.20.0",
-    "wagmi": "2.12.7",
     "zod": "^3.22.4",
     "zustand": "^4.5.2"
   },
   "peerDependencies": {
-    "viem": "2.20.0",
-    "wagmi": "2.12.7"
-  },
-  "resolutions": {
-    "viem": "2.20.0"
+    "viem": "^2.20.0",
+    "wagmi": "^2.12.7"
   },
   "publishConfig": {
     "access": "public",

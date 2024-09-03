@@ -14,10 +14,6 @@
       "site",
       "doc-gen",
       ".vitest"
-    ],
-    "nohoist": [
-      "**/viem",
-      "**/viem/**"
     ]
   },
   "resolutions": {
