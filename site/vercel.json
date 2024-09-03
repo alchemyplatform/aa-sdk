@@ -39,6 +39,11 @@
       "source": "/tutorials/batching-transactions",
       "destination": "/react/send-user-operations#batch-user-operation",
       "statusCode": 301
+    },
+    {
+      "source": "/packages",
+      "destination": "/",
+      "statusCode": 301
     }
   ],
   "rewrites": [
