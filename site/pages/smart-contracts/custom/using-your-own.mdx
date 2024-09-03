@@ -10,8 +10,8 @@ description: Follow this guide to use any smart account implementation you want
 You are not limited to the accounts defined in `@account-kit/smart-contracts`. The `SmartAccountClient` can be used with any smart account because it only relies on the `SmartContractAccount` interface. This means you can use your own smart account implementation with Account Kit.
 
 ```ts [my-account.ts] twoslash
-import { getVersion060EntryPoint, toSmartContractAccount } from "@aa-sdk/core";
-import { http, type SignableMessage } from "viem";
+import { getEntryPoint, toSmartContractAccount } from "@aa-sdk/core";
+import { http, type SignableMessage, type Hash } from "viem";
 import { sepolia } from "viem/chains";
 
 const myAccount = await toSmartContractAccount({
@@ -20,33 +20,36 @@ const myAccount = await toSmartContractAccount({
   transport: http("RPC_URL"),
   chain: sepolia,
   // The EntryPointDef that your account is compatible with
-  entryPoint: getVersion060EntryPoint(sepolia),
+  entryPoint: getEntryPoint(sepolia),
   // This should return a concatenation of your `factoryAddress` and the `callData` for your factory's create account method
-  getAccountInitCode: () => "0x{factoryAddress}{callData}",
+  getAccountInitCode: async (): Promise<Hash> => "0x{factoryAddress}{callData}",
   // an invalid signature that doesn't cause your account to revert during validation
-  getDummySignature: () => "0x1234...",
+  getDummySignature: async (): Promise<Hash> => "0x1234...",
   // given a UO in the form of {target, data, value} should output the calldata for calling your contract's execution method
-  encodeExecute: (uo) => "....",
-  signMessage: ({ message }: SignableMessage) => "0x...",
-  signTypedData: (typedData) => "0x000",
+  encodeExecute: async (uo): Promise<Hash> => "0x....",
+  signMessage: async ({ message }): Promise<Hash> => "0x...",
+  signTypedData: async (typedData): Promise<Hash> => "0x000",
 
   /// OPTIONAL PARAMS ///
   // if you already know your account's address, pass that in here to avoid generating a new counterfactual
-  accountAddress: Address,
+  accountAddress: "0x...",
   // if your account supports batching, this should take an array of UOs and return the calldata for calling your contract's batchExecute method
-  encodeBatchExecute: (uos) => "0x...",
+  encodeBatchExecute: async (uos): Promise<Hash> => "0x...",
   // if your contract expects a different signing scheme than the default signMessage scheme, you can override that here
-  signUserOperationHash: (hash) => "0x...",
+  signUserOperationHash: async (hash): Promise<Hash> => "0x...",
   // allows you to define the calldata for upgrading your account
-  encodeUpgradeToAndCall: (params) => "0x...",
+  encodeUpgradeToAndCall: async (params): Promise<Hash> => "0x...",
 });
 ```
 
 To use your account, you will need to pass it into a `SmartAccountClient`.
 
-```ts twoslash
+:::code-group
+
+```ts twoslash [example.ts]
 import { createAlchemySmartAccountClient } from "@account-kit/infra";
-import { sepolia } from "@aa-sdk/core";
+import { sepolia } from "viem/chains";
+import { myAccount } from "./my-account";
 
 const client = createAlchemySmartAccountClient({
   // created above
@@ -56,6 +59,41 @@ const client = createAlchemySmartAccountClient({
 });
 ```
 
+```ts [my-account.ts] twoslash filename="my-account.ts"
+import { getEntryPoint, toSmartContractAccount } from "@aa-sdk/core";
+import { http, type SignableMessage, type Hash } from "viem";
+import { sepolia } from "viem/chains";
+
+export const myAccount = await toSmartContractAccount({
+  /// REQUIRED PARAMS ///
+  source: "MyAccount",
+  transport: http("RPC_URL"),
+  chain: sepolia,
+  // The EntryPointDef that your account is compatible with
+  entryPoint: getEntryPoint(sepolia),
+  // This should return a concatenation of your `factoryAddress` and the `callData` for your factory's create account method
+  getAccountInitCode: async (): Promise<Hash> => "0x{factoryAddress}{callData}",
+  // an invalid signature that doesn't cause your account to revert during validation
+  getDummySignature: async (): Promise<Hash> => "0x1234...",
+  // given a UO in the form of {target, data, value} should output the calldata for calling your contract's execution method
+  encodeExecute: async (uo): Promise<Hash> => "0x....",
+  signMessage: async ({ message }): Promise<Hash> => "0x...",
+  signTypedData: async (typedData): Promise<Hash> => "0x000",
+
+  /// OPTIONAL PARAMS ///
+  // if you already know your account's address, pass that in here to avoid generating a new counterfactual
+  accountAddress: "0x...",
+  // if your account supports batching, this should take an array of UOs and return the calldata for calling your contract's batchExecute method
+  encodeBatchExecute: async (uos): Promise<Hash> => "0x...",
+  // if your contract expects a different signing scheme than the default signMessage scheme, you can override that here
+  signUserOperationHash: async (hash): Promise<Hash> => "0x...",
+  // allows you to define the calldata for upgrading your account
+  encodeUpgradeToAndCall: async (params): Promise<Hash> => "0x...",
+});
+```
+
+:::
+
 ## `LightSmartContractAccount` as an Example
 
 We have built an extension of the eth-infinitism `SimpleAccount` called [LightAccount.sol](https://github.com/alchemyplatform/light-account/blob/main/src/LightAccount.sol). You can learn more about Light Account in the [Light Account documentation](/smart-contracts/light-account/).
@@ -63,7 +101,7 @@ We have built an extension of the eth-infinitism `SimpleAccount` called [LightAc
 We provide an implementation of `SmartContractAccount` that works with `LightAccount.sol`, which can be used as an example of how to implement your own Smart Contract Account:
 :::details[LightSmartContractAccount]
 
-```ts twoslash
+```ts
 // [!include ~/../account-kit/smart-contracts/src/light-account/accounts/account.ts]
 ```
 
@@ -73,9 +111,9 @@ We provide an implementation of `SmartContractAccount` that works with `LightAcc
 
 For your reference, this is the definition of the `toSmartContractAccount` interface as pulled from the source code:
 
-:::details SmartContractAccount
+:::details[SmartContractAccount]
 
-```ts twoslash
+```ts
 // [!include ~/../aa-sdk/core/src/account/smartContractAccount.ts]
 ```
 
