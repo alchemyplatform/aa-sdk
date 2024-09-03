@@ -27,6 +27,11 @@
   }
 }
 
+.vocs_NavLogo_logoImage {
+  width: 113.1px;
+  height: 19.19px;
+}
+
 .vocs_DocsLayout_content {
   @apply flex flex-col;
 }
