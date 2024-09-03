@@ -24,7 +24,7 @@ describe("Simple Account Tests", async () => {
         "0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b"
       )
     ).toBe(
-      "0x7ecc361d63ab82d89faeecfb79d40127f376c1ef3d545aeec3578eadce9d0c405a4d1ae6177bdebdc8413065014f735ee98da9643cc0e25c07a7423b694f8ae71b"
+      "0x007ecc361d63ab82d89faeecfb79d40127f376c1ef3d545aeec3578eadce9d0c405a4d1ae6177bdebdc8413065014f735ee98da9643cc0e25c07a7423b694f8ae71b"
     );
   });
 });

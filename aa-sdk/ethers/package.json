@@ -42,7 +42,7 @@
     "test:run-e2e": "vitest run --config vitest.config.e2e.ts"
   },
   "devDependencies": {
-    "@account-kit/smart-contracts": "4.0.0-alpha.4",
+    "@account-kit/smart-contracts": "^4.0.0-beta.0",
     "alchemy-sdk": "^3.0.0",
     "dotenv": "^16.0.3",
     "typescript": "^5.0.4",
@@ -58,11 +58,10 @@
     "@ethersproject/hash": "^5.7.0",
     "@ethersproject/keccak256": "^5.7.0",
     "@ethersproject/providers": "^5.7.2",
-    "@ethersproject/wallet": "^5.7.0",
-    "viem": "2.20.0"
+    "@ethersproject/wallet": "^5.7.0"
   },
   "peerDependencies": {
-    "viem": "2.20.0"
+    "viem": "^2.20.0"
   },
   "repository": {
     "type": "git",

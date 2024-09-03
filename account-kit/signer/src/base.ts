@@ -313,7 +313,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * @returns {Promise<any>} A promise that resolves to the signed message
    */
   signTypedData: <
-    const TTypedData extends TypedData | { [key: string]: unknown },
+    const TTypedData extends TypedData | Record<string, unknown>,
     TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData
   >(
     params: TypedDataDefinition<TTypedData, TPrimaryType>
