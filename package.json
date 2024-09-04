@@ -60,7 +60,7 @@
     "lerna": "^8.0.2",
     "lint-staged": "^13.2.2",
     "node-fetch": "^3.3.1",
-    "nx": "^17.3.0",
+    "nx": "19.6.5",
     "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0",
     "prettier": "^2.8.8",

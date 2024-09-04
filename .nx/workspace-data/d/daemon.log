@@ -1,0 +1,11 @@
+[NX Daemon Server] - 2024-09-04T20:56:09.952Z - Started listening on: /var/folders/sj/frzx2sjd0591l8y9jrflvd2c0000gn/T/0b7afa2eedb615b789e4/d.sock
+[NX Daemon Server] - 2024-09-04T20:56:09.954Z - [WATCHER]: Subscribed to changes within: /Users/robchang/Projects/aa-sdk (native)
+[NX Daemon Server] - 2024-09-04T20:56:09.954Z - Established a connection. Number of open connections: 1
+[NX Daemon Server] - 2024-09-04T20:56:09.955Z - Established a connection. Number of open connections: 2
+[NX Daemon Server] - 2024-09-04T20:56:09.956Z - Closed a connection. Number of open connections: 1
+[NX Daemon Server] - 2024-09-04T20:56:09.957Z - [REQUEST]: Responding to the client. Shutdown initiated
+[NX Daemon Server] - 2024-09-04T20:56:09.957Z - Done responding to the client Shutdown initiated
+[NX Daemon Server] - 2024-09-04T20:56:09.957Z - Handled FORCE_SHUTDOWN. Handling time: 1. Response time: 0.
+[NX Daemon Server] - 2024-09-04T20:56:09.957Z - [WATCHER]: Stopping the watcher for /Users/robchang/Projects/aa-sdk (sources)
+[NX Daemon Server] - 2024-09-04T20:56:09.958Z - Closed a connection. Number of open connections: 0
+[NX Daemon Server] - 2024-09-04T20:56:09.958Z - [WATCHER]: Stopping the watcher for /Users/robchang/Projects/aa-sdk (outputs)
