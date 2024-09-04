@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-beta.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.0...v4.0.0-beta.1) (2024-09-04)
+
+### Bug Fixes
+
+- remove focus outline on add passkey modal and update dependencies ([#947](https://github.com/alchemyplatform/aa-sdk/issues/947)) ([43367cf](https://github.com/alchemyplatform/aa-sdk/commit/43367cf2ecc369f8d8811ad00cb8ffe42b94d3fe))
+
 # [4.0.0-beta.0](https://github.com/alchemyplatform/aa-sdk/compare/v3.19.0...v4.0.0-beta.0) (2024-08-28)
 
 ### Bug Fixes
