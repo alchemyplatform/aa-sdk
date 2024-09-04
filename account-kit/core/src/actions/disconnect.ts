@@ -26,11 +26,12 @@ export async function disconnect(config: AlchemyAccountsConfig): Promise<void> {
   const signer = getSigner(config);
   await wagmi_disconnect(config._internal.wagmiConfig);
   await signer?.disconnect();
+
+  config.store.persist.clearStorage();
+
   config.store.setState(() => config.store.getInitialState());
 
   config.store.setState({
     signerStatus: convertSignerStatusToState(AlchemySignerStatus.DISCONNECTED),
   });
-
-  config.store.persist.clearStorage();
 }
