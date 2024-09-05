@@ -278,62 +278,6 @@ export interface UserOperationReceipt {
 }
 // [!endregion UserOperationReceipt]
 
-/** @deprecated use viem type TransactionReceipt instead */
-export interface UserOperationReceiptObject {
-  /* 32 Bytes - hash of the block where this log was in. null when its pending. null when its pending log */
-  blockHash: Hash;
-  /* The block number where this log was in. null when its pending. null when its pending log. */
-  blockNumber: BigNumberish;
-  /* The index of the transaction within the block. */
-  transactionIndex: BigNumberish;
-  /* 32 Bytes - hash of the transaction. null when its pending. */
-  transactionHash: Hash;
-  /* 20 Bytes - address of the sender */
-  from: Address;
-  /* 20 Bytes - address of the receiver. null when its a contract creation transaction */
-  to: Address;
-  /* The total amount of gas used when this transaction was executed in the block. */
-  cumulativeGasUsed: BigNumberish;
-  /* The amount of gas used by this specific transaction alone */
-  gasUsed: BigNumberish;
-  /* 20 Bytes - The contract address created, if the transaction was a contract creation, otherwise null */
-  contractAddress: Address;
-  logs: UserOperationReceiptLog[];
-  /* 256 Bytes - Bloom filter for light clients to quickly retrieve related logs */
-  logsBloom: Hex;
-  /* 32 bytes of post-transaction stateroot. (pre Byzantium hard fork at block 4,370,000) */
-  root: Hex;
-  /* Either 1 (success) or 0 (failure). (post Byzantium hard fork at block 4,370,000) */
-  status: number;
-  /* The cumulative gas used in the block containing this UserOperation. */
-  effectiveGasPrice: BigNumberish;
-  /* The type of the recipt object */
-  type: string;
-}
-
-/** @deprecated use viem type Log instead */
-/* https://github.com/wevm/viem/blob/6ef4ac131a878bf1dc4b335f5dc127e62618dda0/src/types/log.ts#L15 */
-export interface UserOperationReceiptLog {
-  /* The hash of the block where the given transaction was included. */
-  blockHash: Hash;
-  /* The number of the block where the given transaction was included. */
-  blockNumber: BigNumberish;
-  /* The index of the transaction within the block. */
-  transactionIndex: BigNumberish;
-  /* 20 Bytes - address from which this log originated. */
-  address: Address;
-  /* Integer of the log index position in the block. null when its pending log. */
-  logIndex: BigNumberish;
-  /* Contains one or more 32 Bytes non-indexed arguments of the log. */
-  data: Hex;
-  /* true when the log was removed, due to a chain reorganization. false if its a valid log. */
-  removed: boolean;
-  /* Array of zero to four 32 Bytes DATA of indexed log arguments. */
-  topics: string[];
-  /* hash of the transaction */
-  transactionHash: Hash;
-}
-
 // [!region UserOperationStruct_v6]
 // https://github.com/eth-infinitism/account-abstraction/blob/releases/v0.6/test/UserOperation.ts
 // this is used for building requests for v0.6 entry point contract
