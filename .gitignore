@@ -35,3 +35,8 @@ site/**/*.js
 vocs.config.tsx.timestamp-*.mjs
 
 bin
+
+.nx
+
+
+storybook-static

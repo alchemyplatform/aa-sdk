@@ -8,7 +8,6 @@
     "is-ci": "^3.0.1",
     "prool": "^0.0.15",
     "tar": "^7.4.1",
-    "typescript-template": "*",
     "viem": "2.20.0"
   },
   "dependencies": {

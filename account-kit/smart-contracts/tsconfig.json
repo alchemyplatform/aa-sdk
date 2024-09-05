@@ -1,5 +1,5 @@
 {
-  "extends": "typescript-template/base.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "paths": {
       "@account-kit/smart-contracts": ["./src/index.ts"],

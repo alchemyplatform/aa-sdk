@@ -1,5 +1,5 @@
 {
-  "extends": "typescript-template/build.json",
+  "extends": "../tsconfig.build.json",
   "exclude": [
     "node_modules",
     "**/*/__tests__",

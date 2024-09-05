@@ -8,7 +8,8 @@
     "dev": "vocs dev",
     "prebuild": "npx tsx ./scripts/prebuild.ts",
     "build": "./retry-build.sh",
-    "preview": "vocs preview"
+    "preview": "vocs preview",
+    "postinstall": "patch-package"
   },
   "devDependencies": {
     "@types/prettier": "^2.7.3",

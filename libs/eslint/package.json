@@ -24,8 +24,7 @@
     "build": "rm -rf ./dist && tsc --project tsconfig.json --module commonjs --moduleResolution node --removeComments --verbatimModuleSyntax false && echo > ./dist/package.json '{\"type\":\"commonjs\"}'"
   },
   "devDependencies": {
-    "@types/eslint-utils": "^3.0.5",
-    "typescript-template": "*"
+    "@types/eslint-utils": "^3.0.5"
   },
   "dependencies": {
     "@es-joy/jsdoccomment": "^0.43.1",

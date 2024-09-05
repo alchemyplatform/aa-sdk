@@ -51,7 +51,6 @@
     "dedent": "^1.5.1",
     "dotenv": "^16.3.1",
     "typescript": "^5.0.4",
-    "typescript-template": "*",
     "vitest": "^2.0.4"
   },
   "publishConfig": {

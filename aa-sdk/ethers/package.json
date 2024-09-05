@@ -46,7 +46,6 @@
     "alchemy-sdk": "^3.0.0",
     "dotenv": "^16.0.3",
     "typescript": "^5.0.4",
-    "typescript-template": "*",
     "vitest": "^2.0.4"
   },
   "dependencies": {

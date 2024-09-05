@@ -37,7 +37,7 @@ jobs:
 
       - name: Build eslint plugin
         run: |
-          cd templates/eslint && yarn build
+          cd ./libs/eslint && yarn build
 
       - uses: reviewdog/action-setup@v1
         with:

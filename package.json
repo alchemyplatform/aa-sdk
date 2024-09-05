@@ -5,11 +5,12 @@
   "engines": {
     "node": ">=18.16"
   },
+  "packageManager": "yarn@1.19.0",
   "workspaces": {
     "packages": [
       "aa-sdk/*",
       "account-kit/*",
-      "templates/*",
+      "libs/*",
       "examples/*",
       "site",
       "doc-gen",
@@ -24,7 +25,7 @@
     "generate": "lerna run generate",
     "postgenerate": "yarn lint:write",
     "preinstall": "yarn config set ignore-engines true",
-    "postinstall": "git submodule update --init --recursive && patch-package",
+    "postinstall": "git submodule update --init --recursive && lerna run postinstall",
     "build": "is-ci && yarn build:ci || yarn build:dev",
     "build:base": "lerna run build --verbose --ignore=alchemy-daapp --ignore=embedded-accounts-quickstart --ignore=aa-simple-dapp --ignore=ui-demo",
     "build:dev": "yarn build:base --ignore=docs",
@@ -39,11 +40,30 @@
     "lint:check": "eslint . && prettier --check .",
     "lint:ci:eslint": "eslint --format github $(git diff --name-only origin/main HEAD | xargs)",
     "prepare": "husky install",
-    "version": "yarn build:ci"
+    "version": "yarn build:ci",
+    "storybook": "nx storybook @account-kit/react",
+    "build-storybook": "nx build-storybook project-name",
+    "test-storybook": "nx test-storybook project-name"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.3",
     "@commitlint/config-conventional": "^17.6.3",
+    "@nx/js": "19.6.5",
+    "@nx/react": "19.6.5",
+    "@nx/storybook": "19.6.5",
+    "@nx/vite": "19.6.5",
+    "@nx/web": "19.6.5",
+    "@storybook/addon-essentials": "^8.2.8",
+    "@storybook/addon-interactions": "^8.2.8",
+    "@storybook/core-server": "^8.2.8",
+    "@storybook/jest": "^0.2.3",
+    "@storybook/react-vite": "^8.2.8",
+    "@storybook/test-runner": "^0.13.0",
+    "@storybook/testing-library": "^0.2.2",
+    "@swc-node/register": "~1.9.1",
+    "@swc/core": "~1.5.7",
+    "@swc/helpers": "~0.5.11",
+    "@tanstack/react-query": "^5.54.1",
     "@types/prettier": "^2.7.3",
     "add": "^2.0.6",
     "ak-docgen": "*",
@@ -57,15 +77,20 @@
     "eslint-plugin-mdx": "^3.1.5",
     "husky": "^8.0.0",
     "is-ci": "^3.0.1",
-    "lerna": "^8.0.2",
+    "lerna": "^8.1.8",
     "lint-staged": "^13.2.2",
     "node-fetch": "^3.3.1",
-    "nx": "^17.3.0",
+    "nx": "^19.6.5",
     "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0",
     "prettier": "^2.8.8",
     "prool": "^0.0.15",
+    "storybook": "^8.2.8",
+    "ts-node": "10.9.1",
+    "tslib": "^2.3.0",
+    "typescript": "^5.0.4",
     "viem": "2.20.0",
+    "vite": "^5.0.0",
     "vitest": "^2.0.4",
     "wagmi": "2.12.7",
     "webauthn-p256": "^0.0.10"
@@ -85,5 +110,9 @@
     "**/src/**/*.{tsx,jsx,ts,js}": [
       "yarn lint:write"
     ]
+  },
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
   }
 }
