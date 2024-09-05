@@ -6,7 +6,9 @@
     "**/*/*.test.ts",
     "**/*/*.e2e.test.ts",
     "vitest.config.ts",
-    "vitest.config.e2e.ts"
+    "vitest.config.e2e.ts",
+    "tailwind.config.js",
+    ".storybook/**/*"
   ],
   "include": ["src"],
   "compilerOptions": {

@@ -36,6 +36,7 @@
   },
   "scripts": {
     "prebuild": "npx tsx ./inject-version.ts",
+    "dev": "storybook dev",
     "build": "yarn clean && yarn build:esm && yarn build:types",
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
@@ -46,10 +47,19 @@
     "test:run-e2e": "vitest run --config vitest.config.e2e.ts --passWithNoTests"
   },
   "devDependencies": {
+    "@storybook/addon-essentials": "^8.2.8",
+    "@storybook/addon-interactions": "^8.2.8",
+    "@storybook/core-server": "^8.2.8",
+    "@storybook/jest": "^0.2.3",
+    "@storybook/react-vite": "^8.2.8",
+    "@storybook/test-runner": "^0.13.0",
+    "@storybook/testing-library": "^0.2.2",
     "@tanstack/react-query": "^5.28.9",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.45",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "tailwindcss": "^3.4.3",
+    "storybook": "^8.2.8",
     "typescript": "^5.0.4",
     "typescript-template": "*",
     "vitest": "^2.0.4"
