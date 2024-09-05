@@ -2,5 +2,11 @@
   "extends": "typescript-template/base.json",
   "compilerOptions": {
     "jsx": "preserve"
-  }
+  },
+  "exclude": ["**/*.stories.ts", "**/*.stories.js"],
+  "references": [
+    {
+      "path": "./tsconfig.storybook.json"
+    }
+  ]
 }
