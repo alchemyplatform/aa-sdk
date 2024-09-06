@@ -16,8 +16,9 @@ import {
   createAlchemyPublicRpcClient,
   zora,
   alchemyFeeEstimator,
+  type ClientWithAlchemyMethods,
 } from "@account-kit/infra";
-import { split, LocalAccountSigner } from "@aa-sdk/core";
+import { split, LocalAccountSigner, createBundlerClient } from "@aa-sdk/core";
 import { http, custom } from "viem";
 
 const alchemyMethods = [
@@ -31,23 +32,21 @@ const alchemyMethods = [
   "pm_getPaymasterStubData",
 ];
 
-const alchemyBundlerClient = createAlchemyPublicRpcClient({
-  // zora is an example of an aa only chain
-  chain: zora,
-  connectionConfig: {
-    apiKey: "YOUR_API_KEY",
-  },
-});
-
 const transport = split({
   overrides: [
     {
       methods: alchemyMethods,
-      transport: custom(alchemyBundlerClient),
+      transport: http("ALCHEMY_RPC_URL"),
     },
   ],
   fallback: http("ZORA_NODE_RPC_URL"),
 });
+
+const alchemyBundlerClient = createBundlerClient({
+  // zora is an example of an aa only chain
+  chain: zora,
+  transport,
+}) as unknown as ClientWithAlchemyMethods;
 
 const smartAccountClient = createLightAccountClient({
   transport,

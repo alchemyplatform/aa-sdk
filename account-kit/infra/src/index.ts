@@ -5,8 +5,8 @@ export type * from "./chains.js";
 export {
   arbitrum,
   arbitrumGoerli,
-  arbitrumSepolia,
   arbitrumNova,
+  arbitrumSepolia,
   base,
   baseGoerli,
   baseSepolia,
@@ -22,12 +22,12 @@ export {
   polygonAmoy,
   polygonMumbai,
   sepolia,
-  zora,
-  zoraSepolia,
-  worldChain,
-  worldChainSepolia,
   shape,
   shapeSepolia,
+  worldChain,
+  worldChainSepolia,
+  zora,
+  zoraSepolia,
 } from "./chains.js";
 export type * from "./client/decorators/alchemyEnhancedApis.js";
 export { alchemyEnhancedApiActions } from "./client/decorators/alchemyEnhancedApis.js";
