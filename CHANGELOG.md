@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-beta.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.1...v4.0.0-beta.2) (2024-09-06)
+
+### Bug Fixes
+
+- aa only chain guides ([5b69139](https://github.com/alchemyplatform/aa-sdk/commit/5b691399d859cd6d7296101e8f9a800e3954d9ea))
+- update store logic on merging and disconnect ([#948](https://github.com/alchemyplatform/aa-sdk/issues/948)) ([1ef808b](https://github.com/alchemyplatform/aa-sdk/commit/1ef808b247ca283b7528306620f4d1200c7c5d5f))
+
 # [4.0.0-beta.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.0...v4.0.0-beta.1) (2024-09-04)
 
 ### Bug Fixes
