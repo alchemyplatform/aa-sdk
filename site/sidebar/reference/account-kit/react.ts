@@ -84,14 +84,6 @@ export const accountKitReactReferenceSidebar: SidebarItem[] = [
         link: "/reference/account-kit/react/hooks/useLogout",
       },
       {
-        text: "useSendTransaction",
-        link: "/reference/account-kit/react/hooks/useSendTransaction",
-      },
-      {
-        text: "useSendTransactions",
-        link: "/reference/account-kit/react/hooks/useSendTransactions",
-      },
-      {
         text: "useSendUserOperation",
         link: "/reference/account-kit/react/hooks/useSendUserOperation",
       },
@@ -156,12 +148,34 @@ export const accountKitReactReferenceSidebar: SidebarItem[] = [
     text: "Resources",
     items: [
       {
-        text: "FAQs",
-        link: "/resources/faqs",
-      },
-      {
         text: "React Native",
         link: "/resources/react-native",
+      },
+      {
+        text: "Third Party",
+        items: [
+          {
+            text: "Bundlers",
+            link: "/third-party/bundlers",
+          },
+          {
+            text: "Chains",
+            link: "/third-party/chains",
+          },
+          {
+            text: "Paymasters",
+            link: "/third-party/paymasters",
+          },
+          {
+            text: "Signers",
+            link: "/third-party/signers",
+          },
+          {
+            text: "Smart Contracts",
+            link: "/third-party/smart-contracts",
+          },
+        ],
+        collapsed: true,
       },
       {
         text: "Terms",
@@ -170,6 +184,10 @@ export const accountKitReactReferenceSidebar: SidebarItem[] = [
       {
         text: "Types",
         link: "/resources/types",
+      },
+      {
+        text: "FAQs",
+        link: "/resources/faqs",
       },
       {
         text: "Contact us",

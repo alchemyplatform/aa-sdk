@@ -1,13 +1,27 @@
 ---
-title: Using your own Smart Account
-description: Follow this guide to use any smart account implementation you want
-  with Account Kit, a vertically integrated stack for building apps that support
-  ERC-4337 and ERC-6900.
+title: 3rd Party Smart Contracts
+description: Learn how to use Smart Contract Accounts not included in Account Kit
 ---
 
 # Using your own Smart Account
 
-You are not limited to the accounts defined in `@account-kit/smart-contracts`. The `SmartAccountClient` can be used with any smart account because it only relies on the `SmartContractAccount` interface. This means you can use your own smart account implementation with Account Kit.
+You are not limited to the accounts defined in `@account-kit/smart-contracts`.
+If you'd like to bring your own smart account, you have a couple options:
+
+1. Use a 3rd party library that exports an `aa-sdk` compatible `SmartContractAccount` interface.
+1. Implement your own `SmartContractAccount` interface using `toSmartContractAccount`.
+
+## Third Party SDKs
+
+:::tip
+If you've built an SDK or Guide that leverages any of the methods above to use as a Smart Contract within Account Kit, we're happy to include you in this list!
+
+Please open a PR to add a link to your content in this section.
+:::
+
+## Using `toSmartContractAccount`
+
+The `SmartAccountClient` can be used with any smart account because it only relies on the `SmartContractAccount` interface. This means you can use your own smart account implementation with Account Kit.
 
 ```ts [my-account.ts] twoslash
 import { getEntryPoint, toSmartContractAccount } from "@aa-sdk/core";
@@ -94,7 +108,7 @@ export const myAccount = await toSmartContractAccount({
 
 :::
 
-## `LightSmartContractAccount` as an Example
+### `LightSmartContractAccount` as an Example
 
 We have built an extension of the eth-infinitism `SimpleAccount` called [LightAccount.sol](https://github.com/alchemyplatform/light-account/blob/main/src/LightAccount.sol). You can learn more about Light Account in the [Light Account documentation](/smart-contracts/light-account/).
 
@@ -107,7 +121,7 @@ We provide an implementation of `SmartContractAccount` that works with `LightAcc
 
 :::
 
-## The `toSmartContractAccount` Method
+### The `toSmartContractAccount` Method
 
 For your reference, this is the definition of the `toSmartContractAccount` interface as pulled from the source code:
 

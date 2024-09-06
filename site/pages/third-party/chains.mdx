@@ -1,0 +1,64 @@
+---
+title: 3rd Party Chains
+description: Learn how to use a 3rd Party Chain
+---
+
+# AA only chains or non-Alchemy chains
+
+If you're using a chain that isn't supported by us or we only support Account Abstraction methods for those chains, then you can use `createSmartAccountClient` or one of non-alchemy `create*Client` methods from `@account-kit/smart-contracts`
+with a `split` transport to route your traffic accordingly.
+
+## AA only chains example
+
+```ts twoslash
+import { createLightAccountClient } from "@account-kit/smart-contracts";
+import {
+  createAlchemyPublicRpcClient,
+  zora,
+  alchemyFeeEstimator,
+} from "@account-kit/infra";
+import { split, LocalAccountSigner } from "@aa-sdk/core";
+import { http, custom } from "viem";
+
+const alchemyMethods = [
+  "eth_sendUserOperation",
+  "eth_estimateUserOperationGas",
+  "eth_getUserOperationReceipt",
+  "eth_getUserOperationByHash",
+  "eth_supportedEntryPoints",
+  "rundler_maxPriorityFeePerGas",
+  "pm_getPaymasterData",
+  "pm_getPaymasterStubData",
+];
+
+const alchemyBundlerClient = createAlchemyPublicRpcClient({
+  // zora is an example of an aa only chain
+  chain: zora,
+  connectionConfig: {
+    apiKey: "YOUR_API_KEY",
+  },
+});
+
+const transport = split({
+  overrides: [
+    {
+      methods: alchemyMethods,
+      transport: custom(alchemyBundlerClient),
+    },
+  ],
+  fallback: http("ZORA_NODE_RPC_URL"),
+});
+
+const smartAccountClient = createLightAccountClient({
+  transport,
+  chain: zora,
+  feeEstimator: alchemyFeeEstimator(alchemyBundlerClient),
+  signer: LocalAccountSigner.generatePrivateKeySigner(),
+});
+```
+
+## Non-Alchemy chains example
+
+To use non-Alchemy supported chains, you can use the `createSmartAccountClient` method from `@aa-sdk/core` or any of the non-Alchemy `create*Client` methods exported from `@account-kit/smart-contracts` with a `chain` definition for your chain and a `transport` pointing to your RPC provider.
+
+See [`createSmartAccountClient`](/reference/aa-sdk/core/functions/createSmartAccountClient) for more information.

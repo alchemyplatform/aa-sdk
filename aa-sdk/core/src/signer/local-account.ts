@@ -8,7 +8,11 @@ import {
   type TypedData,
   type TypedDataDefinition,
 } from "viem";
-import { mnemonicToAccount, privateKeyToAccount } from "viem/accounts";
+import {
+  generatePrivateKey,
+  mnemonicToAccount,
+  privateKeyToAccount,
+} from "viem/accounts";
 import type { SmartAccountSigner } from "./types.js";
 
 /**
@@ -145,10 +149,28 @@ export class LocalAccountSigner<
    *
    * @param {Hex} key The private key in hexadecimal format
    * @returns {LocalAccountSigner<PrivateKeyAccount>} An instance of `LocalAccountSigner` initialized with the provided private key
-   */ static privateKeyToAccountSigner(
+   */
+  static privateKeyToAccountSigner(
     key: Hex
   ): LocalAccountSigner<PrivateKeyAccount> {
     const signer = privateKeyToAccount(key);
+    return new LocalAccountSigner(signer);
+  }
+
+  /**
+   * Generates a new private key and creates a `LocalAccountSigner` for a `PrivateKeyAccount`.
+   *
+   * @example
+   * ```ts
+   * import { LocalAccountSigner } from "@aa-sdk/core";
+   *
+   * const signer = LocalAccountSigner.generatePrivateKeySigner();
+   * ```
+   *
+   * @returns {LocalAccountSigner<PrivateKeyAccount>} A `LocalAccountSigner` instance initialized with the generated private key account
+   */
+  static generatePrivateKeySigner(): LocalAccountSigner<PrivateKeyAccount> {
+    const signer = privateKeyToAccount(generatePrivateKey());
     return new LocalAccountSigner(signer);
   }
 }

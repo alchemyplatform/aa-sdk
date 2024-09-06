@@ -44,6 +44,26 @@
       "source": "/packages",
       "destination": "/",
       "statusCode": 301
+    },
+    {
+      "source": "/infra/third-party/bundlers",
+      "destination": "/third-party/bundlers",
+      "statusCode": 301
+    },
+    {
+      "source": "/infra/third-party/paymasters",
+      "destination": "/third-party/paymasters",
+      "statusCode": 301
+    },
+    {
+      "source": "/signer/custom-signer",
+      "destination": "/third-party/signers",
+      "statusCode": 301
+    },
+    {
+      "source": "/smart-contracts/custom/using-your-own",
+      "destination": "/third-party/smart-contracts",
+      "statusCode": 301
     }
   ],
   "rewrites": [
