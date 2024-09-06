@@ -51,6 +51,10 @@ describe("tailwind utils test", () => {
               "dark": "#FDBA74",
               "light": "#EA580C",
             },
+            ""bg-surface-critical-light": {
+              "dark": "#FEF2F2",
+              "light": "#FEF2F2",
+            },
             "btn-auth": {
               "dark": "argb(255, 255, 255, 0.05)",
               "light": "#FFF",

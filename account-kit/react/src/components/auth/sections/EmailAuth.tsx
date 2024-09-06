@@ -33,10 +33,8 @@ export const EmailAuth = ({
       setAuthStep({ type: "complete" });
     },
     onError: (error) => {
-      // TODO: need to handle this and show it to the user
       console.error(error);
-      // TODO: need to pass this error along
-      setAuthStep({ type: "initial" });
+      setAuthStep({ type: "initial", error });
     },
   });
 
@@ -45,13 +43,24 @@ export const EmailAuth = ({
       email: "",
     },
     onSubmit: async ({ value: { email } }) => {
-      const existingUser = await signer?.getUser(email);
-      const redirectParams = new URLSearchParams();
-      if (existingUser == null) {
-        redirectParams.set(IS_SIGNUP_QP, "true");
-      }
+      try {
+        const existingUser = await signer?.getUser(email);
+        const redirectParams = new URLSearchParams();
 
-      await authenticateAsync({ type: "email", email, redirectParams });
+        if (existingUser == null) {
+          redirectParams.set(IS_SIGNUP_QP, "true");
+        }
+
+        await authenticateAsync({
+          type: "email",
+          email,
+          redirectParams,
+        });
+      } catch (e) {
+        const error = e instanceof Error ? e : new Error("An Unknown error");
+
+        setAuthStep({ type: "initial", error });
+      }
     },
     validatorAdapter: zodValidator,
   });

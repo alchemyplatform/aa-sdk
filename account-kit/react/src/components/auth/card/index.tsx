@@ -1,8 +1,6 @@
 "use client";
 
 import { useCallback, useLayoutEffect, useMemo, useRef } from "react";
-import { BaseError } from "viem";
-import { useAuthError } from "../../../hooks/useAuthError.js";
 import { useAuthModal } from "../../../hooks/useAuthModal.js";
 import { useElementHeight } from "../../../hooks/useElementHeight.js";
 import { useSigner } from "../../../hooks/useSigner.js";
@@ -10,9 +8,9 @@ import { useSignerStatus } from "../../../hooks/useSignerStatus.js";
 import { useUiConfig } from "../../../hooks/useUiConfig.js";
 import { IS_SIGNUP_QP } from "../../constants.js";
 import { Navigation } from "../../navigation.js";
-import { Notification } from "../../notification.js";
 import { useAuthContext } from "../context.js";
 import { Step } from "./steps.js";
+import { Footer } from "../sections/Footer.js";
 
 export type AuthCardProps = {
   className?: string;
@@ -58,7 +56,6 @@ export const AuthCardContent = ({
   const { authStep, setAuthStep } = useAuthContext();
 
   const signer = useSigner();
-  const error = useAuthError();
 
   const contentRef = useRef<HTMLDivElement>(null);
   const { height } = useElementHeight(contentRef);
@@ -66,13 +63,14 @@ export const AuthCardContent = ({
   const didGoBack = useRef(false);
 
   const {
-    auth: { hideError, onAuthSuccess },
+    auth: { onAuthSuccess },
   } = useUiConfig();
 
   const canGoBack = useMemo(() => {
     return [
       "email_verify",
       "passkey_verify",
+      "passkey_create",
       "pick_eoa",
       "wallet_connect",
       "eoa_connect",
@@ -83,6 +81,7 @@ export const AuthCardContent = ({
     switch (authStep.type) {
       case "email_verify":
       case "passkey_verify":
+      case "passkey_create":
         signer?.disconnect(); // Terminate any inflight authentication
         didGoBack.current = true;
         setAuthStep({ type: "initial" });
@@ -126,40 +125,28 @@ export const AuthCardContent = ({
 
   return (
     <div className="relative">
-      <div
-        id="akui-default-error-container"
-        className="absolute bottom-[calc(100%+8px)] w-full"
-      >
-        {!hideError && error && error.message && (
-          <Notification
-            message={
-              error instanceof BaseError ? error.shortMessage : error.message
-            }
-            type="error"
-          />
-        )}
-      </div>
-
       {/* Wrapper container that sizes its height dynamically */}
       <div
         className="transition-all duration-300 ease-out overflow-y-hidden"
         style={{ height: height ? `${height}px` : "auto" }}
       >
-        <div
-          ref={contentRef}
-          className={`modal-box relative flex flex-col items-center gap-4 text-fg-primary ${
-            className ?? ""
-          }`}
-        >
-          {(canGoBack || showClose) && (
-            <Navigation
-              showClose={showClose}
-              showBack={canGoBack}
-              onBack={onBack}
-              onClose={closeAuthModal}
-            />
-          )}
-          <Step />
+        <div className="z-[1]" ref={contentRef}>
+          <div
+            className={`relative flex flex-col items-center gap-4 text-fg-primary px-6 py-4 ${
+              className ?? ""
+            }`}
+          >
+            {(canGoBack || showClose) && (
+              <Navigation
+                showClose={showClose}
+                showBack={canGoBack}
+                onBack={onBack}
+                onClose={closeAuthModal}
+              />
+            )}
+            <Step />
+          </div>
+          <Footer authStep={authStep} />
         </div>
       </div>
     </div>

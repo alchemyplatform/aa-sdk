@@ -1,6 +1,5 @@
 import { ls } from "../../../../strings.js";
 import { LoadingPasskey } from "../../../../icons/passkey.js";
-import { PoweredBy } from "../../../poweredby.js";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const LoadingPasskeyAuth = () => {
@@ -25,7 +24,6 @@ export const LoadingPasskeyAuth = () => {
             {ls.loadingPasskey.supportLink}
           </Button>
         </div> */}
-        <PoweredBy />
       </div>
     </div>
   );
