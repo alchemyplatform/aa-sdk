@@ -227,12 +227,34 @@ export const accountKitSmartContractsReferenceSidebar: SidebarItem[] = [
     text: "Resources",
     items: [
       {
-        text: "FAQs",
-        link: "/resources/faqs",
-      },
-      {
         text: "React Native",
         link: "/resources/react-native",
+      },
+      {
+        text: "Third Party",
+        items: [
+          {
+            text: "Bundlers",
+            link: "/third-party/bundlers",
+          },
+          {
+            text: "Chains",
+            link: "/third-party/chains",
+          },
+          {
+            text: "Paymasters",
+            link: "/third-party/paymasters",
+          },
+          {
+            text: "Signers",
+            link: "/third-party/signers",
+          },
+          {
+            text: "Smart Contracts",
+            link: "/third-party/smart-contracts",
+          },
+        ],
+        collapsed: true,
       },
       {
         text: "Terms",
@@ -241,6 +263,10 @@ export const accountKitSmartContractsReferenceSidebar: SidebarItem[] = [
       {
         text: "Types",
         link: "/resources/types",
+      },
+      {
+        text: "FAQs",
+        link: "/resources/faqs",
       },
       {
         text: "Contact us",

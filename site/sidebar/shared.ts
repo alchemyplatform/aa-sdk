@@ -4,14 +4,46 @@ import { infraSidebar } from "./infra.js";
 import { reactGuides } from "./react.js";
 import { signerSidebar } from "./signer.js";
 import { smartContractsSidebar } from "./smart-contracts.js";
+import { thirdPartySidebar } from "./third-party.js";
+
+export const concepts: SidebarItem = {
+  text: "Concepts",
+  items: [
+    {
+      text: "Smart Contract Account",
+      link: "/concepts/smart-contract-account",
+    },
+    {
+      text: "Smart Account Client",
+      link: "/concepts/smart-account-client",
+    },
+    {
+      text: "Bundler Client",
+      link: "/concepts/bundler-client",
+    },
+    {
+      text: "Smart Account Signer",
+      link: "/concepts/smart-account-signer",
+    },
+    {
+      text: "Middleware",
+      link: "/concepts/middleware",
+    },
+  ],
+};
 
 export const resources: SidebarItem = {
   text: "Resources",
   items: [
-    { text: "FAQs", link: "/resources/faqs" },
     { text: "React Native", link: "/resources/react-native" },
+    {
+      text: "Third Party",
+      items: thirdPartySidebar,
+      collapsed: true,
+    },
     { text: "Terms", link: "/resources/terms" },
     { text: "Types", link: "/resources/types" },
+    { text: "FAQs", link: "/resources/faqs" },
     { text: "Contact us", link: "/resources/contact-us" },
   ],
 };
@@ -45,32 +77,6 @@ export const guides: (
     collapsed: section !== "contracts",
   },
 ];
-
-export const concepts: SidebarItem = {
-  text: "Concepts",
-  items: [
-    {
-      text: "Smart Contract Account",
-      link: "/concepts/smart-contract-account",
-    },
-    {
-      text: "Smart Account Client",
-      link: "/concepts/smart-account-client",
-    },
-    {
-      text: "Bundler Client",
-      link: "/concepts/bundler-client",
-    },
-    {
-      text: "Smart Account Signer",
-      link: "/concepts/smart-account-signer",
-    },
-    {
-      text: "Middleware",
-      link: "/concepts/middleware",
-    },
-  ],
-};
 
 export const sharedSidebar: (
   section?: "react" | "core" | "infra" | "signer" | "contracts"
