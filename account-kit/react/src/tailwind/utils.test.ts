@@ -27,6 +27,10 @@ describe("tailwind utils test", () => {
               "dark": "#FEF2F2",
               "light": "#FEF2F2",
             },
+            "bg-surface-critical-light": {
+              "dark": "#FEE2E2",
+              "light": "#FEE2E2",
+            },
             "bg-surface-default": {
               "dark": "#020617",
               "light": "#fff",

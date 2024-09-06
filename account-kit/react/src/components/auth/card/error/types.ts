@@ -1,7 +1,12 @@
-export type WalletType = "CoinbaseWallet" | "MetaMask" | "WalletConnect";
+export enum EOAWallets {
+	COINBASE_WALLET = "com.coinbase.wallet",
+	METAMASK = "io.metamask",
+	WALLET_CONNECT = "WalletConnect",
+}
+
 export type ConnectionErrorProps = {
-  connectionType: "passkey" | "wallet" | "timeout";
-  walletType?: WalletType;
-  handleTryAgain?: () => void;
-  handleUseAnotherMethod?: () => void;
+	connectionType: "passkey" | "wallet" | "timeout";
+	walletType?: EOAWallets;
+	handleTryAgain?: () => void;
+	handleUseAnotherMethod?: () => void;
 };
