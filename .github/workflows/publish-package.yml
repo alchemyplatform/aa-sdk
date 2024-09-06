@@ -57,17 +57,6 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
 
-      - name: Build
-        env:
-          API_KEY: ${{ secrets.API_KEY }}
-        uses: nick-fields/retry@v3
-        with:
-          timeout_minutes: 5
-          max_attempts: 2
-          retry_on: error
-          # building CI actually builds the site as well, we just want the packages
-          command: yarn build:dev
-
       # Lerna publish will, compute the new version, update files, run precommit hooks, tag, publish, and push change log
       - name: Publish using Lerna
         if: inputs.publish
