@@ -18,7 +18,7 @@ export function AuthCardWrapper({ className }: { className?: string }) {
     >
       {!user ? (
         <div className="flex flex-col gap-2 w-[368px]">
-          <div className="modal bg-surface-default shadow-md">
+          <div className="modal bg-surface-default shadow-md overflow-hidden">
             <AuthCard />
           </div>
         </div>

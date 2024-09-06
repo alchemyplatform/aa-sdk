@@ -6,8 +6,8 @@ import {
 } from "../../../icons/illustrations/passkeys.js";
 import { ls } from "../../../strings.js";
 import { Button } from "../../button.js";
-import { PoweredBy } from "../../poweredby.js";
-import { useAuthContext } from "../context.js";
+import { useAuthContext, type AuthStep } from "../context.js";
+import { ConnectionError } from "./error/connection-error.js";
 
 const BENEFITS = [
   {
@@ -22,14 +22,34 @@ const BENEFITS = [
   },
 ];
 
+type AddPasskeyProps = {
+  authStep: Extract<AuthStep, { type: "passkey_create" }>;
+};
+
 // eslint-disable-next-line jsdoc/require-jsdoc
-export const AddPasskey = () => {
+export const AddPasskey = ({ authStep }: AddPasskeyProps) => {
   const { setAuthStep } = useAuthContext();
   const { addPasskey, isAddingPasskey } = useAddPasskey({
     onSuccess: () => {
       setAuthStep({ type: "passkey_create_success" });
     },
+    onError: () => {
+      setAuthStep({
+        type: "passkey_create",
+        error: new Error("Failed to add passkey"),
+      });
+    },
   });
+
+  if (authStep.error) {
+    return (
+      <ConnectionError
+        connectionType="passkey"
+        handleTryAgain={addPasskey}
+        handleUseAnotherMethod={() => setAuthStep({ type: "complete" })}
+      />
+    );
+  }
 
   return (
     <div className="flex flex-col gap-5 items-center">
@@ -69,7 +89,6 @@ export const AddPasskey = () => {
           {ls.addPasskey.skip}
         </Button>
       </div>
-      <PoweredBy />
     </div>
   );
 };

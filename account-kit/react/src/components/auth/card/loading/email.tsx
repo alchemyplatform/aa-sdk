@@ -2,18 +2,17 @@ import { useEffect, useState } from "react";
 import { useAuthenticate } from "../../../../hooks/useAuthenticate.js";
 import { useSignerStatus } from "../../../../hooks/useSignerStatus.js";
 import { Button } from "../../../button.js";
-import { PoweredBy } from "../../../poweredby.js";
 import { useAuthContext, type AuthStep } from "../../context.js";
 import { Spinner } from "../../../../icons/spinner.js";
 import { ls } from "../../../../strings.js";
 import { EmailIllustration } from "../../../../icons/illustrations/email.js";
 
 interface LoadingEmailProps {
-  context: Extract<AuthStep, { type: "email_verify" }>;
+  authStep: Extract<AuthStep, { type: "email_verify" }>;
 }
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-export const LoadingEmail = ({ context }: LoadingEmailProps) => {
+export const LoadingEmail = ({ authStep }: LoadingEmailProps) => {
   // yup, re-sent and resent. I'm not fixing it
   const [emailResent, setEmailResent] = useState(false);
 
@@ -43,7 +42,7 @@ export const LoadingEmail = ({ context }: LoadingEmailProps) => {
       <p className="text-fg-secondary text-center text-sm">
         {ls.loadingEmail.verificationSent}
         <br />
-        <span className="font-medium">{context.email}</span>
+        <span className="font-medium">{authStep.email}</span>
       </p>
 
       <div className="flex flex-col w-full items-center gap-1">
@@ -58,7 +57,7 @@ export const LoadingEmail = ({ context }: LoadingEmailProps) => {
             onClick={() => {
               authenticate({
                 type: "email",
-                email: context.email,
+                email: authStep.email,
               });
               setEmailResent(true);
             }}
@@ -66,28 +65,27 @@ export const LoadingEmail = ({ context }: LoadingEmailProps) => {
             {emailResent ? ls.loadingEmail.resent : ls.loadingEmail.resend}
           </Button>
         </div>
-        <PoweredBy />
       </div>
     </div>
   );
 };
 
 interface CompletingEmailAuthProps {
-  context: Extract<AuthStep, { type: "email_completing" }>;
+  authStep: Extract<AuthStep, { type: "email_completing" }>;
 }
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-export const CompletingEmailAuth = ({ context }: CompletingEmailAuthProps) => {
+export const CompletingEmailAuth = ({ authStep }: CompletingEmailAuthProps) => {
   const { isConnected } = useSignerStatus();
   const { setAuthStep } = useAuthContext();
 
   useEffect(() => {
-    if (isConnected && context.createPasskeyAfter) {
+    if (isConnected && authStep.createPasskeyAfter) {
       setAuthStep({ type: "passkey_create" });
     } else if (isConnected) {
       setAuthStep({ type: "complete" });
     }
-  }, [context.createPasskeyAfter, isConnected, setAuthStep]);
+  }, [authStep.createPasskeyAfter, isConnected, setAuthStep]);
 
   return (
     <div className="flex flex-col gap-5 items-center">
@@ -98,8 +96,6 @@ export const CompletingEmailAuth = ({ context }: CompletingEmailAuthProps) => {
       <p className="text-fg-secondary text-center text-sm">
         {ls.completingEmail.body}
       </p>
-
-      <PoweredBy />
     </div>
   );
 };

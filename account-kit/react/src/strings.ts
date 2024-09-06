@@ -42,6 +42,25 @@ const STRINGS = {
     poweredBy: {
       title: "powered by",
     },
+    error: {
+      general: {
+        title: "Permission denied",
+        body: "The request is currently not allowed by the agent or the platform. Try again later.",
+      },
+      connection: {
+        passkeyTitle: "Connection failed",
+        passkeyBody:
+          "Passkey request timed out or canceled by the agent. You may have to use another method to register a passkey for your account.",
+        walletTitle: "Couldn't connect to ",
+        walletBody: "The wallet’s connection failed or canceled",
+        timedOutTitle: "Connection timed out",
+        timedOutBody: "The connection timed out, please try again.",
+      },
+      cta: {
+        tryAgain: "Try again",
+        useAnotherMethod: "Use another method",
+      },
+    },
   },
 };
 

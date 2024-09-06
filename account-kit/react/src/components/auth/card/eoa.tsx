@@ -38,6 +38,7 @@ type WalletConnectCardProps = {
 };
 
 export const WalletConnectCard = ({ authStep }: WalletConnectCardProps) => {
+  // If error render the error card here?
   return (
     <CardContent
       header={`Connecting to WalletConnect`}
