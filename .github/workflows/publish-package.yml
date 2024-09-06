@@ -62,4 +62,5 @@ jobs:
         if: inputs.publish
         env:
           API_KEY: ${{ secrets.API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: yarn lerna publish --conventional-commits --no-private --yes --no-verify-access
