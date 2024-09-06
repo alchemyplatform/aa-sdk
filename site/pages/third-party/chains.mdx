@@ -17,6 +17,7 @@ import {
   zora,
   alchemyFeeEstimator,
   type ClientWithAlchemyMethods,
+  alchemyGasManagerMiddleware,
 } from "@account-kit/infra";
 import { split, LocalAccountSigner, createBundlerClient } from "@aa-sdk/core";
 import { http, custom } from "viem";
@@ -53,6 +54,8 @@ const smartAccountClient = createLightAccountClient({
   chain: zora,
   feeEstimator: alchemyFeeEstimator(alchemyBundlerClient),
   signer: LocalAccountSigner.generatePrivateKeySigner(),
+  // if you want to sponsor gas add this
+  ...alchemyGasManagerMiddleware("YOUR_POLICY_ID"),
 });
 ```
 
