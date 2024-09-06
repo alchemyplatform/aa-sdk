@@ -62,6 +62,41 @@ export const createAccountKitStore = (
                 return bigintMapReviver(key, value);
               },
             }),
+            merge: (persisted, current) => {
+              const persistedState = persisted as StoreState;
+              const persistedConnections = Array.from(
+                persistedState.connections.values()
+              );
+
+              const connectionsMatch = () =>
+                connections.every((c) => {
+                  const persistedConnection = persistedState.connections.get(
+                    c.chain.id
+                  );
+                  if (!persistedConnection) return false;
+
+                  return Array.from(Object.entries(c)).every(([key, value]) => {
+                    return (
+                      (persistedConnection as Record<string, any>)[key] ===
+                      value
+                    );
+                  });
+                });
+
+              if (
+                // all chains in the persisted state should be in the passed config
+                !persistedConnections.every((c) =>
+                  connections.some((x) => x.chain.id === c.chain.id)
+                ) ||
+                !connectionsMatch()
+              ) {
+                // reset the state if there's difference between the passed in config and
+                return createInitialStoreState(params);
+              }
+
+              // this is the default merge behavior
+              return { ...current, ...persistedState };
+            },
             skipHydration: ssr,
             partialize: ({ signer, accounts, ...writeableState }) =>
               writeableState,
