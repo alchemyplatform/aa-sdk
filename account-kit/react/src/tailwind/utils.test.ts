@@ -15,7 +15,7 @@ describe("tailwind utils test", () => {
         },
       };
 
-      expect(apply(theme, override)).toEqual(`
+      expect(apply(theme, override)).toMatchInlineSnapshot(`
         {
           "borderRadius": "sm",
           "colors": {
@@ -26,6 +26,10 @@ describe("tailwind utils test", () => {
             "bg-surface-critical": {
               "dark": "#FEF2F2",
               "light": "#FEF2F2",
+            },
+            "bg-surface-critical-light": {
+              "dark": "#FEE2E2",
+              "light": "#FEE2E2",
             },
             "bg-surface-default": {
               "dark": "#020617",
@@ -50,10 +54,6 @@ describe("tailwind utils test", () => {
             "bg-surface-warning": {
               "dark": "#FDBA74",
               "light": "#EA580C",
-            },
-            "bg-surface-critical-light": {
-              "dark": "#FEE2E2",
-              "light": "#FEE2E2",
             },
             "btn-auth": {
               "dark": "argb(255, 255, 255, 0.05)",
