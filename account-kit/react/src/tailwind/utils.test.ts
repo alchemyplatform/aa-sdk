@@ -15,7 +15,7 @@ describe("tailwind utils test", () => {
         },
       };
 
-      expect(apply(theme, override)).toMatchInlineSnapshot(`
+      expect(apply(theme, override)).toEqual(`
         {
           "borderRadius": "sm",
           "colors": {
