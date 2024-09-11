@@ -2,13 +2,17 @@ import { useMemo } from "react";
 import { ls } from "../../../../strings.js";
 import { Button } from "../../../button.js";
 import { PasskeyConnectionFailed } from "../../../../icons/passkeyConnectionFailed.js";
-import { EOAConnectionFailed } from "../../../../icons/EOAConnectionFailed.js";
+import { Timeout } from "../../../../icons/timeout.js";
+import type { ConnectionErrorProps, WalletType } from "./types.js";
+import { WalletIcon } from "./icons/wallet-icon.js";
 
-type ConnectionErrorProps = {
-  connectionType: "passkey" | "wallet" | "timeout";
-  walletType?: "Coinbase Wallet" | "MetaMask" | "WalletConnect";
-  handleTryAgain?: () => void;
-  handleUseAnotherMethod?: () => void;
+export const walletTypeConfig: Record<
+  WalletType,
+  { name: string; key: WalletType }
+> = {
+  CoinbaseWallet: { name: "Coinbase Wallet", key: "CoinbaseWallet" },
+  MetaMask: { name: "MetaMask", key: "MetaMask" },
+  WalletConnect: { name: "Wallet Connect", key: "WalletConnect" },
 };
 
 export const ConnectionError = ({
@@ -22,7 +26,10 @@ export const ConnectionError = ({
       case "passkey":
         return ls.error.connection.passkeyTitle;
       case "wallet":
-        return ls.error.connection.walletTitle + walletType;
+        return (
+          walletType &&
+          ls.error.connection.walletTitle + walletTypeConfig[walletType].name
+        );
       case "timeout":
         return ls.error.connection.timedOutTitle;
     }
@@ -44,11 +51,11 @@ export const ConnectionError = ({
       case "passkey":
         return <PasskeyConnectionFailed />;
       case "wallet":
-        return <EOAConnectionFailed />;
+        return walletType && <WalletIcon walletType={walletType} />;
       case "timeout":
-        return <PasskeyConnectionFailed />;
+        return <Timeout />;
     }
-  }, [connectionType]);
+  }, [connectionType, walletType]);
   return (
     <div className="flex flex-col justify-center content-center gap-3">
       <div className="flex justify-center">
