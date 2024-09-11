@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { ConnectionError } from "./connection-error.jsx";
+import { ConnectionError, walletTypeConfig } from "./connection-error.jsx";
 
 const meta: Meta<typeof ConnectionError> = {
   title: "Errors/ConnectionError",
   component: ConnectionError,
   args: {
     connectionType: "passkey",
-    walletType: "Coinbase Wallet",
+    walletType: walletTypeConfig.CoinbaseWallet.key,
   },
   argTypes: {
     connectionType: {
@@ -19,7 +19,7 @@ const meta: Meta<typeof ConnectionError> = {
     walletType: {
       control: {
         type: "radio",
-        options: ["Coinbase Wallet", "MetaMask", "WalletConnect"],
+        options: Object.keys(walletTypeConfig),
       },
     },
   },
