@@ -9,9 +9,15 @@ export const WalletIcon = ({ walletType }: { walletType: WalletType }) => {
     <div className="relative">
       <EOAConnectionFailed />
       <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center z-[1]">
-        {walletType === "MetaMask" && <MetaMask />}
-        {walletType === "WalletConnect" && <WalletConnectIcon />}
-        {walletType === "CoinbaseWallet" && <CoinbaseWallet />}
+        {walletType === "MetaMask" && (
+          <MetaMask className="w-[25px] h-[25px]" />
+        )}
+        {walletType === "WalletConnect" && (
+          <WalletConnectIcon className="w-[25px] h-[25px]" />
+        )}
+        {walletType === "CoinbaseWallet" && (
+          <CoinbaseWallet className="w-[25px] h-[25px]" />
+        )}
       </div>
     </div>
   );
