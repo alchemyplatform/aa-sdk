@@ -13,7 +13,7 @@ const RenderFooterText = ({ authStep }: FooterProps) => {
     case "initial":
       return <RegistrationDisclaimer />;
     case "email_verify":
-      return <EmailNotReceivedDisclaimer />;
+      return <EmailNotReceivedDisclaimer authStep={authStep} />;
     case "passkey_create":
     case "wallet_connect":
     case "passkey_verify":

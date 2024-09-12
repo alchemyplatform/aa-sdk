@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAuthenticate } from "../../../../hooks/useAuthenticate.js";
 import { useSignerStatus } from "../../../../hooks/useSignerStatus.js";
-import { Button } from "../../../button.js";
 import { useAuthContext, type AuthStep } from "../../context.js";
 import { Spinner } from "../../../../icons/spinner.js";
 import { ls } from "../../../../strings.js";
@@ -15,13 +13,6 @@ interface LoadingEmailProps {
 export const LoadingEmail = ({ authStep }: LoadingEmailProps) => {
   // yup, re-sent and resent. I'm not fixing it
   const [emailResent, setEmailResent] = useState(false);
-
-  const { setAuthStep } = useAuthContext();
-  const { authenticate } = useAuthenticate({
-    onSuccess: () => {
-      setAuthStep({ type: "complete" });
-    },
-  });
 
   useEffect(() => {
     if (emailResent) {
@@ -44,28 +35,6 @@ export const LoadingEmail = ({ authStep }: LoadingEmailProps) => {
         <br />
         <span className="font-medium">{authStep.email}</span>
       </p>
-
-      <div className="flex flex-col w-full items-center gap-1">
-        <div className="flex items-center justify-center py-2 gap-x-1">
-          <p className="text-fg-tertiary text-xs">
-            {ls.loadingEmail.emailNotReceived}
-          </p>
-          <Button
-            variant="link"
-            className="text-xs font-normal underline"
-            disabled={emailResent}
-            onClick={() => {
-              authenticate({
-                type: "email",
-                email: authStep.email,
-              });
-              setEmailResent(true);
-            }}
-          >
-            {emailResent ? ls.loadingEmail.resent : ls.loadingEmail.resend}
-          </Button>
-        </div>
-      </div>
     </div>
   );
 };
