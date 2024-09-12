@@ -2,7 +2,7 @@ const STRINGS = {
   "en-US": {
     login: {
       tosPrefix: "By signing in, you agree to the",
-      tosLink: "terms of service",
+      tosLink: "Terms of Service",
       email: {
         placeholder: "Email",
         button: "Continue",

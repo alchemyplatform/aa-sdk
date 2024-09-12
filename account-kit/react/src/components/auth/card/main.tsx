@@ -31,6 +31,8 @@ export const MainAuthContent = () => {
           <a
             className="text-fg-accent-brand cursor-pointer underline"
             href="https://www.alchemy.com/terms-conditions/end-user-terms"
+            target="_blank"
+            rel="noreferrer noopener"
           >
             {ls.login.tosLink}
           </a>
