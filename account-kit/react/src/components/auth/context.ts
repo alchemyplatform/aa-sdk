@@ -3,12 +3,6 @@
 import type { Connector } from "@wagmi/core";
 import { createContext, useContext } from "react";
 
-// type AuthError = {
-//   header: string;
-//   message: string;
-//   icon: string;
-// };
-
 export type AuthStep =
   | { type: "email_verify"; email: string }
   | { type: "passkey_verify"; error?: Error }
