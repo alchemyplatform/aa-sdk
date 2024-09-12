@@ -6,7 +6,7 @@ const meta: Meta<typeof ConnectionError> = {
   component: ConnectionError,
   args: {
     connectionType: "passkey",
-    walletType: walletTypeConfig.CoinbaseWallet.key,
+    walletType: walletTypeConfig["com.coinbase.wallet"].key,
   },
   argTypes: {
     connectionType: {

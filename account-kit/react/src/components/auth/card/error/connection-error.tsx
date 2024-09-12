@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { ls } from "../../../../strings.js";
 import { Button } from "../../../button.js";
-import { PasskeyConnectionFailed } from "../../../../icons/passkeyConnectionFailed.js";
+import { ConnectionFailed as PasskeyConnectionFailed } from "../../../../icons/passkeyConnectionFailed.js";
 import { Timeout } from "../../../../icons/timeout.js";
 import type { ConnectionErrorProps, WalletType } from "./types.js";
 import { WalletIcon } from "./icons/wallet-icon.js";
@@ -10,8 +10,11 @@ export const walletTypeConfig: Record<
   WalletType,
   { name: string; key: WalletType }
 > = {
-  CoinbaseWallet: { name: "Coinbase Wallet", key: "CoinbaseWallet" },
-  MetaMask: { name: "MetaMask", key: "MetaMask" },
+  "com.coinbase.wallet": {
+    name: "Coinbase Wallet",
+    key: "com.coinbase.wallet",
+  },
+  "io.metamask": { name: "MetaMask", key: "io.metamask" },
   WalletConnect: { name: "Wallet Connect", key: "WalletConnect" },
 };
 
@@ -28,7 +31,8 @@ export const ConnectionError = ({
       case "wallet":
         return (
           walletType &&
-          ls.error.connection.walletTitle + walletTypeConfig[walletType].name
+          ls.error.connection.walletTitle +
+            (walletTypeConfig[walletType]?.name ?? "wallet")
         );
       case "timeout":
         return ls.error.connection.timedOutTitle;

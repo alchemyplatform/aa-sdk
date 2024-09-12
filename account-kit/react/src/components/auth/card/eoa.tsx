@@ -10,6 +10,7 @@ import type { AuthType } from "../types.js";
 import { CardContent } from "./content.js";
 import { Spinner } from "../../../icons/spinner.js";
 import { ConnectionError } from "./error/connection-error.js";
+import type { WalletType } from "./error/types.js";
 
 interface Props {
   authStep: Extract<AuthStep, { type: "eoa_connect" }>;
@@ -17,17 +18,39 @@ interface Props {
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const EoaConnectCard = ({ authStep }: Props) => {
+  const { setAuthStep } = useAuthContext();
+
+  if (authStep.error) {
+    return (
+      <ConnectionError
+        connectionType="wallet"
+        walletType={authStep.connector.id as WalletType}
+        handleTryAgain={() =>
+          setAuthStep({
+            type: "eoa_connect",
+            connector: authStep.connector,
+          })
+        }
+        handleUseAnotherMethod={() => setAuthStep({ type: "pick_eoa" })}
+      />
+    );
+  }
   return (
     <CardContent
       header={`Connecting to ${authStep.connector.name}`}
       icon={
-        <img
-          className={authStep.error ? undefined : "animate-pulse"}
-          src={authStep.connector.icon}
-          alt={authStep.connector.name}
-          height={48}
-          width={48}
-        />
+        <div className="flex relative flex-col items-center justify-center h-[58px] w-[58px]">
+          <img
+            className={authStep.error ? undefined : "animate-pulse"}
+            src={authStep.connector.icon}
+            alt={authStep.connector.name}
+            height={28}
+            width={28}
+          />
+          <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center z-[1]">
+            <Spinner />
+          </div>
+        </div>
       }
       description="Please follow the instructions in your wallet to connect."
       error={authStep.error}
