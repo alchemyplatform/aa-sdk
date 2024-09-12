@@ -53,6 +53,7 @@ const preview: Preview = {
     isLight: true,
   },
   loaders: [mswLoader],
+  tags: ["autodocs"],
 };
 
 export default preview;

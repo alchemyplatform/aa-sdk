@@ -31,6 +31,20 @@ const Test = (props: any) => {
       ],
     ];
   }
+  if (props.authType === "all") {
+    sections = [
+      [{ type: "email" as const }],
+      [{ type: "passkey" as const }],
+      [
+        {
+          type: "external_wallets",
+          walletConnect: {
+            projectId: "30e7ffaff99063e68cc9870c105d905b",
+          },
+        },
+      ],
+    ];
+  }
 
   const ui = {
     theme: "dark",
