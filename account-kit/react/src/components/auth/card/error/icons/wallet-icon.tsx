@@ -2,12 +2,14 @@ import { CoinbaseWallet } from "../../../../../icons/coinbaseWallet.js";
 import { EOAConnectionFailed } from "../../../../../icons/EOAConnectionFailed.js";
 import { MetaMask } from "../../../../../icons/metamask.js";
 import { WalletConnectIcon } from "../../../../../icons/walletConnectIcon.js";
-import type { WalletType } from "../types.js";
+import type { EOAWallets } from "../types.js";
 import { walletTypeConfig } from "../connection-error.js";
 import { ConnectionFailed } from "../../../../../icons/passkeyConnectionFailed.js";
 
-export const WalletIcon = ({ walletType }: { walletType: WalletType }) => {
-  if (walletTypeConfig.hasOwnProperty(walletType)) {
+export const WalletIcon = ({ walletType }: { walletType: EOAWallets }) => {
+  const availableWallets = walletTypeConfig.map((w) => w.key);
+
+  if (availableWallets.includes(walletType)) {
     return (
       <div className="relative">
         <EOAConnectionFailed />

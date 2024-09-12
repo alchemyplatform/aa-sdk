@@ -10,7 +10,7 @@ import type { AuthType } from "../types.js";
 import { CardContent } from "./content.js";
 import { Spinner } from "../../../icons/spinner.js";
 import { ConnectionError } from "./error/connection-error.js";
-import type { WalletType } from "./error/types.js";
+import { EOAWallets } from "./error/types.js";
 
 interface Props {
   authStep: Extract<AuthStep, { type: "eoa_connect" }>;
@@ -24,7 +24,7 @@ export const EoaConnectCard = ({ authStep }: Props) => {
     return (
       <ConnectionError
         connectionType="wallet"
-        walletType={authStep.connector.id as WalletType}
+        walletType={authStep.connector.id as EOAWallets}
         handleTryAgain={() =>
           setAuthStep({
             type: "eoa_connect",
@@ -69,7 +69,7 @@ export const WalletConnectCard = ({ authStep }: WalletConnectCardProps) => {
     return (
       <ConnectionError
         connectionType="wallet"
-        walletType="WalletConnect"
+        walletType={EOAWallets.WALLET_CONNECT}
         handleTryAgain={() => setAuthStep({ type: "wallet_connect" })}
         handleUseAnotherMethod={() => setAuthStep({ type: "pick_eoa" })}
       />

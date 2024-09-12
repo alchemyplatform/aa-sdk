@@ -3,20 +3,14 @@ import { ls } from "../../../../strings.js";
 import { Button } from "../../../button.js";
 import { ConnectionFailed as PasskeyConnectionFailed } from "../../../../icons/passkeyConnectionFailed.js";
 import { Timeout } from "../../../../icons/timeout.js";
-import type { ConnectionErrorProps, WalletType } from "./types.js";
+import { EOAWallets, type ConnectionErrorProps } from "./types.js";
 import { WalletIcon } from "./icons/wallet-icon.js";
 
-export const walletTypeConfig: Record<
-  WalletType,
-  { name: string; key: WalletType }
-> = {
-  "com.coinbase.wallet": {
-    name: "Coinbase Wallet",
-    key: "com.coinbase.wallet",
-  },
-  "io.metamask": { name: "MetaMask", key: "io.metamask" },
-  WalletConnect: { name: "Wallet Connect", key: "WalletConnect" },
-};
+export const walletTypeConfig = [
+  { name: "Coinbase Wallet", key: EOAWallets.COINBASE_WALLET },
+  { name: "MetaMask", key: EOAWallets.METAMASK },
+  { name: "Wallet Connect", key: EOAWallets.WALLET_CONNECT },
+];
 
 export const ConnectionError = ({
   connectionType,
@@ -25,14 +19,18 @@ export const ConnectionError = ({
   handleUseAnotherMethod,
 }: ConnectionErrorProps) => {
   const getHeadingText = useMemo(() => {
+    const walletName =
+      (walletType &&
+        walletTypeConfig.find((w) => w.key === walletType)?.name) ??
+      "";
+
     switch (connectionType) {
       case "passkey":
         return ls.error.connection.passkeyTitle;
       case "wallet":
         return (
           walletType &&
-          ls.error.connection.walletTitle +
-            (walletTypeConfig[walletType]?.name ?? "wallet")
+          ls.error.connection.walletTitle + (walletName ?? "wallet")
         );
       case "timeout":
         return ls.error.connection.timedOutTitle;
