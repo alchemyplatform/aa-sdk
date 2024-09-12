@@ -7,7 +7,7 @@ import { walletTypeConfig } from "../connection-error.js";
 import { ConnectionFailed } from "../../../../../icons/passkeyConnectionFailed.js";
 
 export const WalletIcon = ({ walletType }: { walletType: WalletType }) => {
-  if (Object(walletTypeConfig).hasOwnProperty(walletType)) {
+  if (walletTypeConfig.hasOwnProperty(walletType)) {
     return (
       <div className="relative">
         <EOAConnectionFailed />
