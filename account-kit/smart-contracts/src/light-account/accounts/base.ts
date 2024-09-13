@@ -139,35 +139,18 @@ export async function createLightAccountBase<
     });
   };
 
-  const signWith1271WrapperV1 = async (hashedMessage: Hex): Promise<Hex> => {
+  const signWith1271Wrapper = async (
+    hashedMessage: Hex,
+    version: string
+  ): Promise<Hex> => {
     return signer.signTypedData({
       // EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)
       // https://github.com/alchemyplatform/light-account/blob/main/src/LightAccount.sol#L236
       domain: {
         chainId: Number(client.chain.id),
-        name: "LightAccount",
+        name: type,
         verifyingContract: accountAddress,
-        version: "1",
-      },
-      types: {
-        LightAccountMessage: [{ name: "message", type: "bytes" }],
-      },
-      message: {
-        message: hashedMessage,
-      },
-      primaryType: "LightAccountMessage",
-    });
-  };
-
-  const signWith1271WrapperV2 = async (hashedMessage: Hex): Promise<Hex> => {
-    return signer.signTypedData({
-      // EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)
-      // https://github.com/alchemyplatform/light-account/blob/main/src/LightAccount.sol#L236
-      domain: {
-        chainId: Number(client.chain.id),
-        name: "LightAccount",
-        verifyingContract: accountAddress,
-        version: "2",
+        version,
       },
       types: {
         LightAccountMessage: [{ name: "message", type: "bytes" }],
@@ -227,9 +210,12 @@ export async function createLightAccountBase<
         case "v1.0.2":
           throw new Error(`${type} ${String(version)} doesn't support 1271`);
         case "v1.1.0":
-          return signWith1271WrapperV1(hashMessage(message));
+          return signWith1271Wrapper(hashMessage(message), "1");
         case "v2.0.0":
-          const signature = await signWith1271WrapperV2(hashMessage(message));
+          const signature = await signWith1271Wrapper(
+            hashMessage(message),
+            "2"
+          );
           // TODO: handle case where signer is an SCA.
           return concat([SignatureType.EOA, signature]);
         default:
@@ -247,9 +233,12 @@ export async function createLightAccountBase<
             `Version ${String(version)} of LightAccount doesn't support 1271`
           );
         case "v1.1.0":
-          return signWith1271WrapperV1(hashTypedData(params));
+          return signWith1271Wrapper(hashTypedData(params), "1");
         case "v2.0.0":
-          const signature = await signWith1271WrapperV2(hashTypedData(params));
+          const signature = await signWith1271Wrapper(
+            hashTypedData(params),
+            "2"
+          );
           // TODO: handle case where signer is an SCA.
           return concat([SignatureType.EOA, signature]);
         default:
