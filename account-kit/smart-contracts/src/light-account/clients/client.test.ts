@@ -9,7 +9,7 @@ import {
   type UserOperationOverrides,
   type UserOperationStruct,
 } from "@aa-sdk/core";
-import { custom, parseEther, type Address } from "viem";
+import { custom, parseEther, type Address, publicActions } from "viem";
 import { setBalance } from "viem/actions";
 import { resetBalance } from "~test/accounts.js";
 import { accounts } from "~test/constants.js";
@@ -65,32 +65,37 @@ describe("Light Account Tests", () => {
   );
 
   it.each(versions)("should correctly sign the message", async (version) => {
-    const { account } = await givenConnectedProvider({
+    const provider = await givenConnectedProvider({
       signer,
       version,
     });
-    const message =
-      "0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b";
+
+    const { account } = provider;
+
+    const message = "hello world";
     switch (version) {
-      case "v1.0.1":
-        expect(await account.signMessage({ message })).toBe(
-          "0x53f3169bd14b5ade19a0488bf04ba94a1afa46549014febf3d20d2850a92c98f200c729d723b0592c8b4cb64c0423bb40c5a7fb49f69f4ef5f71ecc672e782e71b"
-        );
-        break;
       case "v1.0.2":
         await expect(account.signMessage({ message })).rejects.toThrowError(
           "LightAccount v1.0.2 doesn't support 1271"
         );
         break;
+      case "v1.0.1":
       case "v1.1.0":
-        expect(await account.signMessage({ message })).toBe(
-          "0xddb694a4f22cb929476a39f63aae047c2ccd6a12df17c91ff2068d8679f7d2e57b019263691eae350ce53bc6f958d4f2200571614eab8343af9c382aa90579371c"
-        );
-        break;
       case "v2.0.0":
-        expect(await account.signMessage({ message })).toBe(
-          "0x00823ee659d8f86abaee06bb36c4d84bfefa2938af2835ff62564e9559bc671d0c0e8603a5aa3ed9603b28a137eaf491b64c55ed73007c12efebcfd9a82cb181221b"
-        );
+        {
+          const signature = await account.signMessageWith6492({
+            message,
+          });
+
+          // We must use a public client, rather than an account client, to verify the message, because AA-SDK incorrectly attaches the account address as a "from" field to all actions taken by that client, including the `eth_call` used internally by viem's signature verifier logic. Per EIP-684, contract creation reverts on non-zero nonce, and the `eth_call`'s from field implicitly increases the nonce of the account contract, causing the contract creation to revert.
+          expect(
+            await client.extend(publicActions).verifyMessage({
+              address: account.address,
+              message,
+              signature,
+            })
+          ).toBe(true);
+        }
         break;
       default:
         throw new Error(`Unknown version ${version}`);
@@ -112,25 +117,26 @@ describe("Light Account Tests", () => {
       },
     } as const;
     switch (version) {
-      case "v1.0.1":
-        expect(await account.signTypedData(typedData)).toBe(
-          "0x974c40bb8038696abf26fc9134676b9afd44bcfbe6821acd523193d80a354cfc7f3e8fdc28358c5551231156cec29e1c234ffe9cad09d51d633736d582d997811b"
-        );
-        break;
       case "v1.0.2":
         await expect(account.signTypedData(typedData)).rejects.toThrowError(
           "Version v1.0.2 of LightAccount doesn't support 1271"
         );
         break;
       case "v1.1.0":
-        expect(await account.signTypedData(typedData)).toBe(
-          "0x7d42ec333209a34a4a64d5bcb40ba67bc8ed3751f30898be60c1eba78d127e0e06b426a1faef69aa683f92aecc6a8e2292689b03e19f41417dcfa875410bd09d1c"
-        );
-        break;
+      case "v1.0.1":
       case "v2.0.0":
-        expect(await account.signTypedData(typedData)).toBe(
-          "0x00813b860dce6079750e9383e932412620f6bc206261fed24bc450a1c858acb35912eb082c6fe69daf47f662b88941a9f67da425fa7084f2d93eb5bd2d2705905c1b"
-        );
+        {
+          const signature = await account.signTypedDataWith6492(typedData);
+
+          // See above comment for context on the duplicate client.
+          expect(
+            await client.extend(publicActions).verifyTypedData({
+              address: account.address,
+              signature,
+              ...typedData,
+            })
+          ).toBe(true);
+        }
         break;
       default:
         throw new Error(`Unknown version ${version}`);

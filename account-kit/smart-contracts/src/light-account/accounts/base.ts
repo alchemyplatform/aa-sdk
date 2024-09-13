@@ -145,9 +145,29 @@ export async function createLightAccountBase<
       // https://github.com/alchemyplatform/light-account/blob/main/src/LightAccount.sol#L236
       domain: {
         chainId: Number(client.chain.id),
-        name: type,
+        name: "LightAccount",
         verifyingContract: accountAddress,
         version: "1",
+      },
+      types: {
+        LightAccountMessage: [{ name: "message", type: "bytes" }],
+      },
+      message: {
+        message: hashedMessage,
+      },
+      primaryType: "LightAccountMessage",
+    });
+  };
+
+  const signWith1271WrapperV2 = async (hashedMessage: Hex): Promise<Hex> => {
+    return signer.signTypedData({
+      // EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)
+      // https://github.com/alchemyplatform/light-account/blob/main/src/LightAccount.sol#L236
+      domain: {
+        chainId: Number(client.chain.id),
+        name: "LightAccount",
+        verifyingContract: accountAddress,
+        version: "2",
       },
       types: {
         LightAccountMessage: [{ name: "message", type: "bytes" }],
@@ -209,7 +229,7 @@ export async function createLightAccountBase<
         case "v1.1.0":
           return signWith1271WrapperV1(hashMessage(message));
         case "v2.0.0":
-          const signature = await signWith1271WrapperV1(hashMessage(message));
+          const signature = await signWith1271WrapperV2(hashMessage(message));
           // TODO: handle case where signer is an SCA.
           return concat([SignatureType.EOA, signature]);
         default:
@@ -229,7 +249,7 @@ export async function createLightAccountBase<
         case "v1.1.0":
           return signWith1271WrapperV1(hashTypedData(params));
         case "v2.0.0":
-          const signature = await signWith1271WrapperV1(hashTypedData(params));
+          const signature = await signWith1271WrapperV2(hashTypedData(params));
           // TODO: handle case where signer is an SCA.
           return concat([SignatureType.EOA, signature]);
         default:
