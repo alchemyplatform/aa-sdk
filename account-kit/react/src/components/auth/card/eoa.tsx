@@ -3,11 +3,13 @@ import { walletConnect } from "wagmi/connectors";
 import { useChain } from "../../../hooks/useChain.js";
 import { useConnect } from "../../../hooks/useConnect.js";
 import { useUiConfig } from "../../../hooks/useUiConfig.js";
-import { WalletConnectIcon } from "../../../icons/walletConnect.js";
+import { WalletConnectIcon } from "../../../icons/walletConnectIcon.js";
 import { Button } from "../../button.js";
 import { useAuthContext, type AuthStep } from "../context.js";
 import type { AuthType } from "../types.js";
 import { CardContent } from "./content.js";
+import { Spinner } from "../../../icons/spinner.js";
+import { ConnectionError } from "./error/connection-error.js";
 
 interface Props {
   authStep: Extract<AuthStep, { type: "eoa_connect" }>;
@@ -38,15 +40,33 @@ type WalletConnectCardProps = {
 };
 
 export const WalletConnectCard = ({ authStep }: WalletConnectCardProps) => {
+  const { setAuthStep } = useAuthContext();
+
+  if (authStep.error) {
+    return (
+      <ConnectionError
+        connectionType="wallet"
+        walletType="WalletConnect"
+        handleTryAgain={() => setAuthStep({ type: "wallet_connect" })}
+        handleUseAnotherMethod={() => setAuthStep({ type: "pick_eoa" })}
+      />
+    );
+  }
+  // If error render the error card here?
   return (
     <CardContent
       header={`Connecting to WalletConnect`}
       icon={
-        <WalletConnectIcon
-          className={
-            "w-[48px] h-[48px]" + (authStep.error ? "" : " animate-pulse")
-          }
-        />
+        <div className="flex relative flex-col items-center justify-center h-[58px] w-[58px]">
+          <WalletConnectIcon
+            className={
+              "w-[32px] h-[32px]" + (authStep.error ? "" : " animate-pulse")
+            }
+          />
+          <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center z-[1]">
+            <Spinner />
+          </div>
+        </div>
       }
       description="Please follow the instructions in the popup to connect."
       error={authStep.error}
@@ -132,7 +152,7 @@ export const EoaPickCard = () => {
               <Button
                 className="justify-start"
                 variant="social"
-                icon={<WalletConnectIcon className="w-[20px] h-[20px]" />}
+                icon={<WalletConnectIcon className="w-[25px] h-[25px]" />}
                 onClick={() => {
                   connect({
                     connector: walletConnectConnector,

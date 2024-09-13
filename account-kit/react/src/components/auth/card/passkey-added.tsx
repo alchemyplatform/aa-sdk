@@ -1,5 +1,4 @@
 import { AddedPasskeyIllustration } from "../../../icons/illustrations/added-passkey.js";
-import { PoweredBy } from "../../poweredby.js";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export function PasskeyAdded() {
@@ -12,7 +11,6 @@ export function PasskeyAdded() {
       <p className="text-fg-secondary text-sm text-center">
         You can use this passkey to sign in next time.
       </p>
-      <PoweredBy />
     </div>
   );
 }

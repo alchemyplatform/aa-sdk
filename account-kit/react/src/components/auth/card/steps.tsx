@@ -1,7 +1,8 @@
 import { useAuthContext } from "../context.js";
 import { AddPasskey } from "./add-passkey.js";
 import { EoaConnectCard, EoaPickCard, WalletConnectCard } from "./eoa.js";
-import { LoadingAuth } from "./loading/index.js";
+import { LoadingEmail, CompletingEmailAuth } from "./loading/email.js";
+import { LoadingPasskeyAuth } from "./loading/passkey.js";
 import { MainAuthContent } from "./main.js";
 import { PasskeyAdded } from "./passkey-added.js";
 
@@ -11,11 +12,13 @@ export const Step = () => {
 
   switch (authStep.type) {
     case "email_verify":
+      return <LoadingEmail authStep={authStep} />;
     case "passkey_verify":
+      return <LoadingPasskeyAuth />;
     case "email_completing":
-      return <LoadingAuth context={authStep} />;
+      return <CompletingEmailAuth authStep={authStep} />;
     case "passkey_create":
-      return <AddPasskey />;
+      return <AddPasskey authStep={authStep} />;
     case "passkey_create_success":
       return <PasskeyAdded />;
     case "eoa_connect":
@@ -27,6 +30,6 @@ export const Step = () => {
     case "complete":
     case "initial":
     default:
-      return <MainAuthContent />;
+      return <MainAuthContent authStep={authStep} />;
   }
 };

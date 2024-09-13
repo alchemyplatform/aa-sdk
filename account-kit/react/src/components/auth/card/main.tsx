@@ -1,12 +1,17 @@
 import { Fragment } from "react";
 import { useUiConfig } from "../../../hooks/useUiConfig.js";
-import { ls } from "../../../strings.js";
 import { Divider } from "../../divider.js";
-import { PoweredBy } from "../../poweredby.js";
 import { AuthSection } from "../sections/AuthSection.js";
+import { GeneralError } from "./error/general-error.js";
+import { type AuthStep } from "../context.js";
+
+type MainAuthContentProps = {
+  authStep: AuthStep;
+};
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-export const MainAuthContent = () => {
+export const MainAuthContent = ({ authStep }: MainAuthContentProps) => {
+  const isError = authStep.type === "initial" && authStep.error;
   const {
     auth: { header, sections, hideSignInText },
   } = useUiConfig();
@@ -15,6 +20,7 @@ export const MainAuthContent = () => {
     <>
       {header}
       {!hideSignInText && <h3 className="font-semibold text-lg">Sign in</h3>}
+      {isError && <GeneralError />}
       {sections?.map((section, idx) => {
         return (
           <Fragment key={`auth-section-fragment-${idx}`}>
@@ -25,20 +31,6 @@ export const MainAuthContent = () => {
           </Fragment>
         );
       })}
-      <div className="flex flex-col w-full items-center gap-1">
-        <p className="text-fg-tertiary text-center text-xs py-2">
-          {`${ls.login.tosPrefix} `}
-          <a
-            className="text-fg-accent-brand cursor-pointer underline"
-            href="https://www.alchemy.com/terms-conditions/end-user-terms"
-            target="_blank"
-            rel="noreferrer noopener"
-          >
-            {ls.login.tosLink}
-          </a>
-        </p>
-        <PoweredBy />
-      </div>
     </>
   );
 };

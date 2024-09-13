@@ -1,14 +1,9 @@
 import type { ReactNode } from "react";
-import { PoweredBy } from "../../poweredby.js";
 
 interface CardContentProps {
   header: ReactNode | string;
   icon?: ReactNode;
   description: ReactNode | string;
-  support?: {
-    text: string;
-    cta: ReactNode;
-  };
   error?: Error | string;
   className?: string;
 }
@@ -18,7 +13,6 @@ export const CardContent = ({
   header,
   icon,
   description,
-  support,
   className,
 }: CardContentProps) => {
   return (
@@ -36,13 +30,6 @@ export const CardContent = ({
       ) : (
         description
       )}
-      {support && (
-        <div className="flex flex-row gap-2 text-xs font-normal">
-          <span className="text-fg-secondary">{support.text}</span>
-          {support.cta}
-        </div>
-      )}
-      <PoweredBy />
     </div>
   );
 };
