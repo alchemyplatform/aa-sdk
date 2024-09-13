@@ -3,7 +3,7 @@ import { ls } from "../../../../strings.js";
 
 export const GeneralError = () => {
   return (
-    <div className="bg-bg-surface-critical-light flex rounded-lg p-2 gap-2">
+    <div className="bg-bg-surface-critical flex rounded-lg p-2 gap-2">
       <Warning />
       <div>
         <h2 className="text-fg-critical text-xs font-medium">
