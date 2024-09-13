@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+
 import { createLightAccount } from "@account-kit/smart-contracts";
 import { Wallet } from "@ethersproject/wallet";
 import { Alchemy, Network, type AlchemyProvider } from "alchemy-sdk";
@@ -5,6 +7,11 @@ import { createPublicClient, http, type Hex } from "viem";
 import { sepolia } from "viem/chains";
 import { EthersProviderAdapter } from "../../src/provider-adapter.js";
 import { convertWalletToAccountSigner } from "../utils.js";
+dotenv.config();
+
+const endpoint =
+  process.env.VITEST_SEPOLIA_FORK_URL ??
+  "https://ethereum-sepolia-rpc.publicnode.com";
 
 describe("Simple Account Tests", async () => {
   const alchemy = new Alchemy({
@@ -26,7 +33,7 @@ describe("Simple Account Tests", async () => {
     // We must use a public client, rather than an account client, to verify the message, because AA-SDK incorrectly attaches the account address as a "from" field to all actions taken by that client, including the `eth_call` used internally by viem's signature verifier logic. Per EIP-684, contract creation reverts on non-zero nonce, and the `eth_call`'s from field implicitly increases the nonce of the account contract, causing the contract creation to revert.
     const publicClient = createPublicClient({
       chain: sepolia,
-      transport: http(`${alchemyProvider.connection.url}`),
+      transport: http(`${endpoint}`),
     });
 
     expect(
@@ -58,7 +65,7 @@ const givenConnectedProvider = async ({
     await createLightAccount({
       chain,
       signer: convertWalletToAccountSigner(signer),
-      transport: http(`${alchemyProvider.connection.url}`),
+      transport: http(`${endpoint}`),
     })
   );
 };
