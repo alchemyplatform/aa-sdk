@@ -32,7 +32,7 @@ export const signerSidebar: SidebarItem[] = [
   },
   {
     text: "Third-party signers",
-    items: [{ text: "Custom signer", link: "/signer/custom-signer" }],
+    items: [{ text: "Custom signer", link: "../third-party/signers" }],
   },
   {
     text: "SDK Reference",
