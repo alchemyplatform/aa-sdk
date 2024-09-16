@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { ls } from "../../../../strings.js";
 import { Button } from "../../../button.js";
-import { ConnectionFailed as PasskeyConnectionFailed } from "../../../../icons/passkeyConnectionFailed.js";
+import { ConnectionFailed as PasskeyConnectionFailed } from "../../../../icons/connectionFailed.js";
 import { Timeout } from "../../../../icons/timeout.js";
 import { EOAWallets, type ConnectionErrorProps } from "./types.js";
 import { WalletIcon } from "./icons/wallet-icon.js";
@@ -20,9 +20,7 @@ export const ConnectionError = ({
 }: ConnectionErrorProps) => {
   const getHeadingText = useMemo(() => {
     const walletName =
-      (walletType &&
-        walletTypeConfig.find((w) => w.key === walletType)?.name) ??
-      "";
+      walletType && walletTypeConfig.find((w) => w.key === walletType)?.name;
 
     switch (connectionType) {
       case "passkey":

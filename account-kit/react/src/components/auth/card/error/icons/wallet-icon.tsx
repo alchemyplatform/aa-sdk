@@ -4,7 +4,7 @@ import { MetaMask } from "../../../../../icons/metamask.js";
 import { WalletConnectIcon } from "../../../../../icons/walletConnectIcon.js";
 import type { EOAWallets } from "../types.js";
 import { walletTypeConfig } from "../connection-error.js";
-import { ConnectionFailed } from "../../../../../icons/passkeyConnectionFailed.js";
+import { ConnectionFailed } from "../../../../../icons/connectionFailed.js";
 
 export const WalletIcon = ({ walletType }: { walletType: EOAWallets }) => {
   const availableWallets = walletTypeConfig.map((w) => w.key);
