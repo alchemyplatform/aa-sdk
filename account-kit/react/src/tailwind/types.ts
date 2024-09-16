@@ -31,7 +31,6 @@ export interface AccountKitTheme {
     "bg-surface-success": ColorVariantRecord;
     "bg-surface-warning": ColorVariantRecord;
     "bg-surface-error": ColorVariantRecord;
-    "bg-surface-critical-light": ColorVariantRecord;
   };
   // these define the border radius base for the various components.
   // the mapped value applies to the smallest value used and everything scales up from there by multiple of 2
