@@ -27,7 +27,6 @@ describe("Simple Account Tests", async () => {
   it("should correctly sign the message", async () => {
     const provider = await givenConnectedProvider({ alchemyProvider, signer });
     const message = "hello world";
-    // todo: why does this provider's version of signMessage return a string, instead of Hex?
     const signature = (await provider.signMessage(message)) as Hex;
 
     // We must use a public client, rather than an account client, to verify the message, because AA-SDK incorrectly attaches the account address as a "from" field to all actions taken by that client, including the `eth_call` used internally by viem's signature verifier logic. Per EIP-684, contract creation reverts on non-zero nonce, and the `eth_call`'s from field implicitly increases the nonce of the account contract, causing the contract creation to revert.
