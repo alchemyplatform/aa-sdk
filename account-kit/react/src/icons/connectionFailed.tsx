@@ -1,4 +1,4 @@
-export const PasskeyConnectionFailed = () => {
+export const ConnectionFailed = () => {
   return (
     <svg
       width="140"
