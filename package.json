@@ -86,5 +86,6 @@
     "**/src/**/*.{tsx,jsx,ts,js}": [
       "yarn lint:write"
     ]
-  }
+  },
+  "version": "0.0.0"
 }
