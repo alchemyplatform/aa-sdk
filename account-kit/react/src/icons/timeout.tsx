@@ -23,9 +23,9 @@ export const Timeout = () => {
         <path
           d="M70 62V72L75.5 76.5"
           stroke="white"
-          stroke-width="3"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
         <rect
           x="48.6155"
@@ -52,9 +52,9 @@ export const Timeout = () => {
           width="215.231"
           height="314.308"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"
@@ -154,8 +154,8 @@ export const Timeout = () => {
           y2="70"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FAE0D1" />
-          <stop offset="1" stop-color="#FDF2CE" />
+          <stop stopColor="#FAE0D1" />
+          <stop offset="1" stopColor="#FDF2CE" />
         </linearGradient>
         <linearGradient
           id="paint1_linear_55_11236"
@@ -165,8 +165,8 @@ export const Timeout = () => {
           y2="108.308"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F5F5F5" />
-          <stop offset="1" stop-color="#EBEBEB" stop-opacity="0.06" />
+          <stop stopColor="#F5F5F5" />
+          <stop offset="1" stopColor="#EBEBEB" stopOpacity="0.06" />
         </linearGradient>
         <linearGradient
           id="paint2_linear_55_11236"
@@ -176,8 +176,8 @@ export const Timeout = () => {
           y2="120.308"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F5F5F5" />
-          <stop offset="1" stop-color="#EBEBEB" stop-opacity="0.06" />
+          <stop stopColor="#F5F5F5" />
+          <stop offset="1" stopColor="#EBEBEB" stopOpacity="0.06" />
         </linearGradient>
         <clipPath id="clip0_55_11236">
           <rect width="140" height="140.308" rx="70" fill="white" />

@@ -26,9 +26,9 @@ export const EOAConnectionFailed = () => {
           width="196"
           height="292"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"
@@ -128,8 +128,8 @@ export const EOAConnectionFailed = () => {
           y2="70"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FAE0D1" />
-          <stop offset="1" stop-color="#FDF2CE" />
+          <stop stopColor="#FAE0D1" />
+          <stop offset="1" stopColor="#FDF2CE" />
         </linearGradient>
         <clipPath id="clip0_49_9053">
           <rect width="140" height="140" rx="70" fill="white" />
