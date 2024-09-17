@@ -39,8 +39,7 @@ export function AuthCardWrapper({ className }: { className?: string }) {
           }}
         >
           Logout
-        </button>
-      )}
+        </button>)} 
     </div>
   );
 }
