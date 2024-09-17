@@ -3,6 +3,18 @@
 import type { Connector } from "@wagmi/core";
 import { createContext, useContext } from "react";
 
+export type AuthstepType =
+  | "email_verify"
+  | "passkey_verify"
+  | "passkey_create"
+  | "passkey_create_success"
+  | "email_completing"
+  | "complete"
+  | "eoa_connect"
+  | "wallet_connect"
+  | "pick_eoa"
+  | "initial";
+
 export type AuthStep =
   | { type: "email_verify"; email: string }
   | { type: "passkey_verify"; error?: Error }

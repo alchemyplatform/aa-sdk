@@ -1,16 +1,16 @@
-export function MintDemoWrapper () {
-    return (
-        <div>
-            <div>
-                {
-                    // Iyk
-                }
-            </div>
-            <div>
-                {
-                    // Rob
-                }
-            </div>
-        </div>
-    )
+export function MintDemoWrapper() {
+	return (
+		<div>
+			<div>
+				{
+					// Iyk
+				}
+			</div>
+			<div>
+				{
+					// Rob
+				}
+			</div>
+		</div>
+	);
 }
