@@ -5,7 +5,6 @@ import {
   useLogout,
   useUser,
 } from "@account-kit/react";
-import { useMemo } from "react";
 
 export function AuthCardWrapper({ className }: { className?: string }) {
   const user = useUser();
