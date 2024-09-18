@@ -103,6 +103,15 @@ export type CreateConfigProps = RpcConnectionConfig & {
   storage?: (config?: { sessionLength: number }) => Storage;
 
   connectors?: CreateConnectorFn[];
+
+  /**
+   * If set, calls `preparePopupOauth` immediately upon initializing the signer.
+   * If you intend to use popup-based OAuth login, you must either set this
+   * option to true or manually ensure that you call
+   * `signer.preparePopupOauth()` at some point before the user interaction that
+   * triggers the OAuth authentication flow.
+   */
+  enablePopupOauth?: boolean;
 } & Omit<
     PartialBy<
       Exclude<AlchemySignerParams["client"], AlchemySignerWebClient>,

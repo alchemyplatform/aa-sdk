@@ -10,12 +10,15 @@ import type {
   CreateAccountParams,
   EmailAuthParams,
   GetWebAuthnAttestationResult,
+  OauthConfig,
+  OauthParams,
   SignerBody,
   SignerResponse,
   SignerRoutes,
   SignupResponse,
   User,
 } from "./types.js";
+import { assertNever } from "../utils/typeAssertions.js";
 
 export interface BaseSignerClientParams {
   stamper: TurnkeyClient["stamper"];
@@ -39,6 +42,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
   protected turnkeyClient: TurnkeyClient;
   protected rootOrg: string;
   protected eventEmitter: EventEmitter<AlchemySignerClientEvents>;
+  protected oauthConfig: OauthConfig | undefined;
 
   /**
    * Create a new instance of the Alchemy Signer client
@@ -47,7 +51,6 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    */
   constructor(params: BaseSignerClientParams) {
     const { stamper, connection, rootOrgId } = params;
-
     this.rootOrg = rootOrgId ?? "24c1acf5-810f-41e0-a503-d5d13fa8e830";
     this.eventEmitter = new EventEmitter<AlchemySignerClientEvents>();
     this.connectionConfig = ConnectionConfigSchema.parse(connection);
@@ -56,6 +59,16 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
       stamper
     );
   }
+
+  /**
+   * Asynchronously fetches and sets the OAuth configuration.
+   *
+   * @returns {Promise<OauthConfig>} A promise that resolves to the OAuth configuration
+   */
+  public initOauth = async (): Promise<OauthConfig> => {
+    this.oauthConfig = await this.getOauthConfig();
+    return this.oauthConfig;
+  };
 
   protected get user() {
     return this._user;
@@ -92,11 +105,14 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     exportStamper: ExportWalletStamper;
     exportAs: "SEED_PHRASE" | "PRIVATE_KEY";
   }): Promise<boolean> {
-    switch (params.exportAs) {
+    const { exportAs } = params;
+    switch (exportAs) {
       case "PRIVATE_KEY":
         return this.exportAsPrivateKey(params.exportStamper);
       case "SEED_PHRASE":
         return this.exportAsSeedPhrase(params.exportStamper);
+      default:
+        assertNever(exportAs, `Unknown export mode: ${exportAs}`);
     }
   }
 
@@ -110,16 +126,27 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     params: Omit<EmailAuthParams, "targetPublicKey">
   ): Promise<{ orgId: string }>;
 
-  public abstract completeEmailAuth(params: {
+  public abstract completeAuthWithBundle(params: {
     bundle: string;
     orgId: string;
+    connectedEventName: keyof AlchemySignerClientEvents;
   }): Promise<User>;
+
+  public abstract oauthWithRedirect(
+    args: Extract<OauthParams, { mode: "redirect" }>
+  ): Promise<never>;
+
+  public abstract oauthWithPopup(
+    args: Extract<OauthParams, { mode: "popup" }>
+  ): Promise<User>;
 
   public abstract disconnect(): Promise<void>;
 
   public abstract exportWallet(params: TExportWalletParams): Promise<boolean>;
 
   public abstract lookupUserWithPasskey(user?: User): Promise<User>;
+
+  protected abstract getOauthConfig(): Promise<OauthConfig>;
 
   protected abstract getWebAuthnAttestation(
     options: CredentialCreationOptions,
@@ -310,6 +337,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     body: SignerBody<R>
   ): Promise<SignerResponse<R>> => {
     const url = this.connectionConfig.rpcUrl ?? "https://api.g.alchemy.com";
+
     const basePath = "/signer";
 
     const headers = new Headers();
