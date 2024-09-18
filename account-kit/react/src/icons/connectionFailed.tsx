@@ -40,19 +40,19 @@ export const ConnectionFailed = () => {
           height="32"
         >
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M70 57.75L53.5 86.25H86.5L70 57.75Z"
             fill="white"
             stroke="white"
-            stroke-width="3"
-            stroke-linejoin="round"
+            strokeWidth="3"
+            strokeLinejoin="round"
           />
           <path
             d="M70 80.25V81M70 68.25L70.006 75.75"
             stroke="black"
-            stroke-width="3"
-            stroke-linecap="round"
+            strokeWidth="3"
+            strokeLinecap="round"
           />
         </mask>
         <g mask="url(#mask1_49_8939)">
@@ -83,9 +83,9 @@ export const ConnectionFailed = () => {
           width="215.231"
           height="314.308"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"
@@ -185,8 +185,8 @@ export const ConnectionFailed = () => {
           y2="70"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FAE0D1" />
-          <stop offset="1" stop-color="#FDF2CE" />
+          <stop stopColor="#FAE0D1" />
+          <stop offset="1" stopColor="#FDF2CE" />
         </linearGradient>
         <linearGradient
           id="paint1_linear_49_8939"
@@ -196,8 +196,8 @@ export const ConnectionFailed = () => {
           y2="108"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F5F5F5" />
-          <stop offset="1" stop-color="#EBEBEB" stop-opacity="0.06" />
+          <stop stopColor="#F5F5F5" />
+          <stop offset="1" stopColor="#EBEBEB" stopOpacity="0.06" />
         </linearGradient>
         <linearGradient
           id="paint2_linear_49_8939"
@@ -207,8 +207,8 @@ export const ConnectionFailed = () => {
           y2="120"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F5F5F5" />
-          <stop offset="1" stop-color="#EBEBEB" stop-opacity="0.06" />
+          <stop stopColor="#F5F5F5" />
+          <stop offset="1" stopColor="#EBEBEB" stopOpacity="0.06" />
         </linearGradient>
       </defs>
     </svg>
