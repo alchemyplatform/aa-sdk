@@ -1,15 +1,22 @@
+import dotenv from "dotenv";
+
 import { createLightAccount } from "@account-kit/smart-contracts";
 import { Wallet } from "@ethersproject/wallet";
 import { Alchemy, Network, type AlchemyProvider } from "alchemy-sdk";
-import { http } from "viem";
-import { polygonMumbai } from "viem/chains";
+import { createPublicClient, http, type Hex } from "viem";
+import { sepolia } from "viem/chains";
 import { EthersProviderAdapter } from "../../src/provider-adapter.js";
 import { convertWalletToAccountSigner } from "../utils.js";
+dotenv.config();
+
+const endpoint =
+  process.env.VITEST_SEPOLIA_FORK_URL ??
+  "https://ethereum-sepolia-rpc.publicnode.com";
 
 describe("Simple Account Tests", async () => {
   const alchemy = new Alchemy({
     apiKey: "test",
-    network: Network.MATIC_MUMBAI,
+    network: Network.ETH_SEPOLIA,
   });
   // demo mnemonic from viem docs
   const dummyMnemonic =
@@ -19,13 +26,25 @@ describe("Simple Account Tests", async () => {
 
   it("should correctly sign the message", async () => {
     const provider = await givenConnectedProvider({ alchemyProvider, signer });
+    const message = "hello world";
+    const signature = (await provider.signMessage(message)) as Hex;
+
+    // We must use a public client, rather than an account client, to verify the message, because AA-SDK incorrectly attaches the account address as a "from" field to all actions taken by that client, including the `eth_call` used internally by viem's signature verifier logic. Per EIP-684, contract creation reverts on non-zero nonce, and the `eth_call`'s from field implicitly increases the nonce of the account contract, causing the contract creation to revert.
+    const publicClient = createPublicClient({
+      chain: sepolia,
+      transport: http(`${endpoint}`),
+    });
+
     expect(
-      await provider.signMessage(
-        "0xa70d0af2ebb03a44dcd0714a8724f622e3ab876d0aa312f0ee04823285d6fb1b"
-      )
-    ).toBe(
-      "0x007ecc361d63ab82d89faeecfb79d40127f376c1ef3d545aeec3578eadce9d0c405a4d1ae6177bdebdc8413065014f735ee98da9643cc0e25c07a7423b694f8ae71b"
-    );
+      await publicClient.verifyMessage({
+        address: provider.account.address,
+        message,
+        signature,
+        // todo: This provider doesn't support signMessageWith6492, so we have to manually provider the factory data to the verifier. Add support here for 6492 signature generation.
+        factory: await provider.account.getFactoryAddress(),
+        factoryData: await provider.account.getFactoryData(),
+      })
+    ).toBe(true);
   });
 });
 
@@ -36,7 +55,7 @@ const givenConnectedProvider = async ({
   alchemyProvider: AlchemyProvider;
   signer: Wallet;
 }) => {
-  const chain = polygonMumbai;
+  const chain = sepolia;
 
   return EthersProviderAdapter.fromEthersProvider(
     alchemyProvider,
@@ -44,9 +63,8 @@ const givenConnectedProvider = async ({
   ).connectToAccount(
     await createLightAccount({
       chain,
-      accountAddress: "0x856185aedfab56809e6686d2d6d0c039d615bd9c",
       signer: convertWalletToAccountSigner(signer),
-      transport: http(`${alchemyProvider.connection.url}`),
+      transport: http(`${endpoint}`),
     })
   );
 };

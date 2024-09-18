@@ -9,6 +9,7 @@ import { createStore, type Mutate, type StoreApi } from "zustand/vanilla";
 import type { BaseSignerClient } from "../client/base";
 import type { User } from "../client/types";
 import type { Session, SessionManagerEvents } from "./types";
+import { assertNever } from "../utils/typeAssertions.js";
 
 export const DEFAULT_SESSION_MS = 15 * 60 * 1000; // 15 minutes
 
@@ -82,11 +83,17 @@ export class SessionManager {
     }
 
     switch (existingSession.type) {
-      case "email": {
+      case "email":
+      case "oauth": {
+        const connectedEventName =
+          existingSession.type === "email"
+            ? "connectedEmail"
+            : "connectedOauth";
         const result = await this.client
-          .completeEmailAuth({
+          .completeAuthWithBundle({
             bundle: existingSession.bundle,
             orgId: existingSession.user.orgId,
+            connectedEventName,
           })
           .catch((e) => {
             console.warn("Failed to load user from session", e);
@@ -108,7 +115,10 @@ export class SessionManager {
         return this.client.lookupUserWithPasskey(existingSession.user);
       }
       default:
-        throw new Error("Unknown session type");
+        assertNever(
+          existingSession,
+          `Unknown session type: ${(existingSession as any).type}`
+        );
     }
   };
 
@@ -168,7 +178,7 @@ export class SessionManager {
 
   private setSession = (
     session:
-      | Omit<Extract<Session, { type: "email" }>, "expirationDateMs">
+      | Omit<Extract<Session, { type: "email" | "oauth" }>, "expirationDateMs">
       | Omit<Extract<Session, { type: "passkey" }>, "expirationDateMs">
   ) => {
     this.store.setState({
@@ -211,21 +221,9 @@ export class SessionManager {
 
     this.client.on("disconnected", () => this.clearSession());
 
-    this.client.on("connectedEmail", (user, bundle) => {
-      const existingSession = this.getSession();
-      if (
-        existingSession != null &&
-        existingSession.type === "email" &&
-        existingSession.user.userId === user.userId &&
-        // if the bundle is different, then we've refreshed the session
-        // so we need to reset the session
-        existingSession.bundle === bundle
-      ) {
-        return;
-      }
-
-      this.setSession({ type: "email", user, bundle });
-    });
+    this.client.on("connectedEmail", (user, bundle) =>
+      this.setSessionWithUserAndBundle({ type: "email", user, bundle })
+    );
 
     this.client.on("connectedPasskey", (user) => {
       const existingSession = this.getSession();
@@ -240,10 +238,38 @@ export class SessionManager {
       this.setSession({ type: "passkey", user });
     });
 
+    this.client.on("connectedOauth", (user, bundle) =>
+      this.setSessionWithUserAndBundle({ type: "oauth", user, bundle })
+    );
+
     // sync local state if persisted state has changed from another tab
     window.addEventListener("focus", () => {
       this.store.persist.rehydrate();
       this.initialize();
     });
+  };
+
+  private setSessionWithUserAndBundle = ({
+    type,
+    user,
+    bundle,
+  }: {
+    type: "email" | "oauth";
+    user: User;
+    bundle: string;
+  }) => {
+    const existingSession = this.getSession();
+    if (
+      existingSession != null &&
+      existingSession.type === type &&
+      existingSession.user.userId === user.userId &&
+      // if the bundle is different, then we've refreshed the session
+      // so we need to reset the session
+      existingSession.bundle === bundle
+    ) {
+      return;
+    }
+
+    this.setSession({ type, user, bundle });
   };
 }

@@ -16,7 +16,7 @@ import type { Mutate, StoreApi } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
 import type { BaseSignerClient } from "./client/base";
-import type { User } from "./client/types";
+import type { OauthConfig, OauthParams, User } from "./client/types";
 import { NotAuthenticatedError } from "./errors.js";
 import {
   SessionManager,
@@ -28,6 +28,7 @@ import {
   type AlchemySignerEvent,
   type AlchemySignerEvents,
 } from "./types.js";
+import { assertNever } from "./utils/typeAssertions.js";
 
 export interface BaseAlchemySignerParams<TClient extends BaseSignerClient> {
   client: TClient;
@@ -138,9 +139,40 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
           { fireImmediately: true }
         );
       default:
-        throw new Error(`Uknown event type ${event}`);
+        throw new Error(`Unknown event type ${event}`);
     }
   };
+
+  /**
+   * Prepares the config needed to use popup-based OAuth login. This must be
+   * called before calling `.authenticate` with params `{ type: "oauth", mode:
+   * "popup" }`, and is recommended to be called on page load.
+   *
+   * This method exists because browsers may prevent popups from opening unless
+   * triggered by user interaction, and so the OAuth config must already have
+   * been fetched at the time a user clicks a social login button.
+   *
+   * @example
+   * ```ts
+   * import { AlchemyWebSigner } from "@account-kit/signer";
+   *
+   * const signer = new AlchemyWebSigner({
+   *  client: {
+   *    connection: {
+   *      rpcUrl: "/api/rpc",
+   *    },
+   *    iframeConfig: {
+   *      iframeContainerId: "alchemy-signer-iframe-container",
+   *    },
+   *  },
+   * });
+   *
+   * await signer.preparePopupOauth();
+   * ```
+   * @returns {Promise<OauthConfig>} the config which must be loaded before
+   * using popup-based OAuth
+   */
+  preparePopupOauth = (): Promise<OauthConfig> => this.inner.initOauth();
 
   /**
    * Authenticate a user with either an email or a passkey and create a session for that user
@@ -170,11 +202,19 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * @returns {Promise<User>} the user that was authenticated
    */
   authenticate: (params: AuthParams) => Promise<User> = async (params) => {
-    if (params.type === "email") {
-      return this.authenticateWithEmail(params);
+    const { type } = params;
+    switch (type) {
+      case "email":
+        return this.authenticateWithEmail(params);
+      case "passkey":
+        return this.authenticateWithPasskey(params);
+      case "oauth":
+        return this.authenticateWithOauth(params);
+      case "oauthReturn":
+        return this.handleOauthReturn(params);
+      default:
+        assertNever(type, `Unknown auth type: ${type}`);
     }
-
-    return this.authenticateWithPasskey(params);
   };
 
   /**
@@ -519,17 +559,20 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   ): Promise<User> => {
     if ("email" in params) {
       const existingUser = await this.getUser(params.email);
+      const expirationSeconds = Math.floor(
+        this.sessionManager.expirationTimeMs / 1000
+      );
 
       const { orgId } = existingUser
         ? await this.inner.initEmailAuth({
             email: params.email,
-            expirationSeconds: this.sessionManager.expirationTimeMs,
+            expirationSeconds,
             redirectParams: params.redirectParams,
           })
         : await this.inner.createAccount({
             type: "email",
             email: params.email,
-            expirationSeconds: this.sessionManager.expirationTimeMs,
+            expirationSeconds,
             redirectParams: params.redirectParams,
           });
 
@@ -557,9 +600,10 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
         throw new Error("Could not find email auth init session!");
       }
 
-      const user = await this.inner.completeEmailAuth({
+      const user = await this.inner.completeAuthWithBundle({
         bundle: params.bundle,
         orgId: temporarySession.orgId,
+        connectedEventName: "connectedEmail",
       });
 
       return user;
@@ -568,7 +612,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
 
   private authenticateWithPasskey = async (
     args: Extract<AuthParams, { type: "passkey" }>
-  ) => {
+  ): Promise<User> => {
     let user: User;
     const shouldCreateNew = async () => {
       if ("email" in args) {
@@ -603,6 +647,32 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
 
     return user;
   };
+
+  private authenticateWithOauth = async (
+    args: Extract<AuthParams, { type: "oauth" }>
+  ): Promise<User> => {
+    const params: OauthParams = {
+      ...args,
+      expirationSeconds: Math.floor(
+        this.sessionManager.expirationTimeMs / 1000
+      ),
+    };
+    if (params.mode === "redirect") {
+      return this.inner.oauthWithRedirect(params);
+    } else {
+      return this.inner.oauthWithPopup(params);
+    }
+  };
+
+  private handleOauthReturn = ({
+    bundle,
+    orgId,
+  }: Extract<AuthParams, { type: "oauthReturn" }>): Promise<User> =>
+    this.inner.completeAuthWithBundle({
+      bundle,
+      orgId,
+      connectedEventName: "connectedOauth",
+    });
 
   private registerListeners = () => {
     this.sessionManager.on("connected", (session) => {
