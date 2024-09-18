@@ -26,6 +26,7 @@ export type Config = {
     showExternalWallets: boolean;
     showPasskey: boolean;
     addPasskey: boolean;
+    isAuthComplete: boolean;
   };
   ui: {
     theme: "light" | "dark";
@@ -61,6 +62,7 @@ export const DEFAULT_CONFIG: Config = {
     showExternalWallets: false,
     showPasskey: true,
     addPasskey: true,
+    isAuthComplete: false,
   },
   ui: {
     theme: "light",
@@ -89,7 +91,7 @@ export function useConfig(): ConfigContextType {
 export function ConfigContextProvider(props: PropsWithChildren) {
   const [config, setConfig] = useState<Config>(DEFAULT_CONFIG);
   const { updateConfig } = useUiConfig();
-
+  
   // Sync Alchemy auth UI config
   useEffect(() => {
     const sections: AuthType[][] = [[{ type: "email" }]];
