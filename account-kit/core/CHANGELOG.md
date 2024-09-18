@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-beta.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.3...v4.0.0-beta.4) (2024-09-18)
+
+### Features
+
+- add support for social login ([#942](https://github.com/alchemyplatform/aa-sdk/issues/942)) ([aa00dc7](https://github.com/alchemyplatform/aa-sdk/commit/aa00dc7d880f6d9cf9ae29e63941a9552faa9dd5))
+
 # [4.0.0-beta.3](https://github.com/alchemyplatform/aa-sdk/compare/v0.0.0...v4.0.0-beta.3) (2024-09-16)
 
 **Note:** Version bump only for package @account-kit/core
