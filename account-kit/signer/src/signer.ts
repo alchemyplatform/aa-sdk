@@ -24,7 +24,21 @@ export type AuthParams =
       createNew: true;
       username: string;
       creationOpts?: CredentialCreationOptionOverrides;
-    };
+    }
+  | ({
+      type: "oauth";
+      authProviderId: string;
+      isCustomProvider?: boolean;
+      scope?: string;
+      claims?: string;
+    } & RedirectConfig)
+  | { type: "oauthReturn"; bundle: string; orgId: string };
+
+export type OauthMode = "redirect" | "popup";
+
+export type RedirectConfig =
+  | { mode: "redirect"; redirectUrl: string }
+  | { mode: "popup"; redirectUrl?: never };
 
 export const AlchemySignerParamsSchema = z
   .object({

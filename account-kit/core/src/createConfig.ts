@@ -45,6 +45,7 @@ export const createConfig = (
     ssr,
     storage,
     connectors,
+    enablePopupOauth,
     ...connectionConfig
   } = params;
 
@@ -81,6 +82,7 @@ export const createConfig = (
       iframeConfig,
       rootOrgId,
       rpId,
+      enablePopupOauth,
     },
     sessionConfig,
     storage: storage?.(

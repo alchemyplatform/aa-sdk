@@ -190,6 +190,16 @@ export const createSigner = (params: ClientStoreConfig) => {
   const search = new URLSearchParams(window.location.search);
   if (search.has("bundle")) {
     signer.authenticate({ type: "email", bundle: search.get("bundle")! });
+  } else if (search.has("alchemy-bundle")) {
+    signer.authenticate({
+      type: "oauthReturn",
+      bundle: search.get("alchemy-bundle")!,
+      orgId: search.get("alchemy-org-id")!,
+    });
+  }
+
+  if (client.enablePopupOauth) {
+    signer.preparePopupOauth();
   }
 
   return signer;
