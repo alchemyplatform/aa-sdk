@@ -1,18 +1,20 @@
 import { useConfig } from "@/app/state";
 import { cn } from "@/lib/utils";
-import { AuthCard, useLogout, useUser } from "@account-kit/react";
-import { useState } from "react";
+import {
+  AuthCard,
+  useAuthenticate,
+  useLogout,
+  useUser,
+} from "@account-kit/react";
 import { MintDemoWrapper } from "./MintDemoWrapper";
+import { useMemo } from "react";
 
 export function AuthCardWrapper({ className }: { className?: string }) {
   const user = useUser();
-  const {config, setConfig} = useConfig();
+  const { config } = useConfig();
   const { logout } = useLogout();
-
-  const handleAuthSuccess = () => {
-    console.log("Auth Success");
-    setConfig((prev) => ({...prev, auth: {...prev.auth, isAuthComplete: true}}));
-  }
+  const { stage } = useAuthenticate();
+  const isAuthComplete = useMemo(() => stage === "complete", [stage]);
   return (
     <div
       className={cn(
@@ -21,25 +23,28 @@ export function AuthCardWrapper({ className }: { className?: string }) {
         className
       )}
     >
-      {!config.auth.isAuthComplete ? (   <>
-             <div className="flex flex-col gap-2 w-[368px]">
-          <div className="modal bg-surface-default shadow-md overflow-hidden">
-            <AuthCard handleAuthSuccess={handleAuthSuccess} />
+      {!isAuthComplete ? (
+        <>
+          <div className="flex flex-col gap-2 w-[368px]">
+            <div className="modal bg-surface-default shadow-md overflow-hidden">
+              <AuthCard />
+            </div>
           </div>
-        </div>
-        
-          </>):
-          <MintDemoWrapper />
-        }
-        {user && (<button
+        </>
+      ) : (
+        <MintDemoWrapper />
+      )}
+      {user && (
+        <button
           className="text-primary font-semibold text-sm px-3 py-[11px] bg-white border border-gray-300 rounded-lg hover:shadow-md"
           onClick={() => {
-            setConfig((prev) => ({...prev, auth: {...prev.auth, isAuthComplete: false}}));
-            logout()}}
-          >
+            logout();
+          }}
+        >
           Logout
-          {config.auth.isAuthComplete && <span> (Auth Complete)</span>}
-        </button>)} 
+          {isAuthComplete && <span> (Auth Complete)</span>}
+        </button>
+      )}
     </div>
   );
 }
