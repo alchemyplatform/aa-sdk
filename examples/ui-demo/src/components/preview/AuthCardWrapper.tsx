@@ -1,6 +1,12 @@
 import { useConfig } from "@/app/state";
 import { cn } from "@/lib/utils";
-import { AuthCard, useLogout, useUser } from "@account-kit/react";
+import {
+  AuthCard,
+  useLogout,
+  useUser,
+} from "@account-kit/react";
+import { MintDemoWrapper } from "./MintDemoWrapper";
+import { useMemo } from "react";
 
 export function AuthCardWrapper({ className }: { className?: string }) {
   const user = useUser();
@@ -23,8 +29,7 @@ export function AuthCardWrapper({ className }: { className?: string }) {
               </div>
             </div>
           </>
-        ) : null
-        // In flight- will be uncommented in the mint pr, a fast follow <MintDemoWrapper />
+        ) : <MintDemoWrapper />
       }
       {user && (
         <button
