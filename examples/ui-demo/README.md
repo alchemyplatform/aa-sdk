@@ -1,17 +1,31 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+# Getting Started
 
-First, run the development server:
+## Setup your Environment
+1. Ensure you have the right node version corresponding to the `/aa-sdk/.nvmrc` file.
+2. Go to Alchemy's Dashboard, and set up an [account config](https://dashboard.alchemy.com/accounts/config/create).
+   1. For local development set the configuration with a redirect url to http://localhost:3000.
+
+## Install Dependencies 
+*In the root `/aa-sdk/` directory*
 
 ```bash
-npm run dev
-# or
+yarn install
+```
+
+## Build the aa-sdk Libraries
+*In the root `/aa-sdk/` directory*
+
+```bash
+yarn build
+```
+
+## Start the Server 
+*In the ui-demo `/aa-sdk/examples/ui-demo` directory*
+
+```bash
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
