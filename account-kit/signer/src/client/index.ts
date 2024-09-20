@@ -467,7 +467,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       const checkCloseIntervalId = setInterval(() => {
         if (popup?.closed) {
           cleanup();
-          reject(new Error("Oauth cancelled"));
+          reject(new Error("OAuth cancelled"));
         }
       }, CHECK_CLOSE_INTERVAL);
 

@@ -27,7 +27,7 @@ export const AuthModalContext = createContext<AuthContextType | undefined>(
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const useAuthContext = (): AuthContextType => {
-  const context = useContext(AuthModalContext);
+  const context = useOptionalAuthContext();
 
   if (!context) {
     throw new Error(
@@ -37,3 +37,7 @@ export const useAuthContext = (): AuthContextType => {
 
   return context;
 };
+
+// eslint-disable-next-line jsdoc/require-jsdoc
+export const useOptionalAuthContext = (): AuthContextType | undefined =>
+  useContext(AuthModalContext);

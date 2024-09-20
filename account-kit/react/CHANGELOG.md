@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-beta.6](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.5...v4.0.0-beta.6) (2024-09-18)
+
+### Bug Fixes
+
+- allow useLogout without authModalContext ([#972](https://github.com/alchemyplatform/aa-sdk/issues/972)) ([8175962](https://github.com/alchemyplatform/aa-sdk/commit/8175962a509cb6e51ced22b1cd199a57fb7305a4))
+- fixed bad svg prop names ([#968](https://github.com/alchemyplatform/aa-sdk/issues/968)) ([fdf7025](https://github.com/alchemyplatform/aa-sdk/commit/fdf7025aec20aca76f4285769d1f650f3636b78e))
+
+# [4.0.0-beta.5](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.4...v4.0.0-beta.5) (2024-09-18)
+
+**Note:** Version bump only for package @account-kit/react
+
 # [4.0.0-beta.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.3...v4.0.0-beta.4) (2024-09-18)
 
 ### Features

@@ -2,7 +2,7 @@
 
 import { disconnect } from "@account-kit/core";
 import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
-import { useAuthContext } from "../components/auth/context.js";
+import { useOptionalAuthContext } from "../components/auth/context.js";
 import { useAlchemyAccountContext } from "../context.js";
 import type { BaseHookMutationArgs } from "../types.js";
 
@@ -37,7 +37,7 @@ export function useLogout(
   mutationArgs?: UseLogoutMutationArgs
 ): UseLogoutResult {
   const { queryClient, config } = useAlchemyAccountContext();
-  const { resetAuthStep } = useAuthContext();
+  const authContext = useOptionalAuthContext();
 
   const {
     mutate: logout,
@@ -47,7 +47,7 @@ export function useLogout(
     {
       mutationFn: async () => {
         await disconnect(config);
-        resetAuthStep();
+        authContext?.resetAuthStep();
       },
       ...mutationArgs,
     },

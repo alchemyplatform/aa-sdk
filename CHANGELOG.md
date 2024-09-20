@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-beta.6](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.5...v4.0.0-beta.6) (2024-09-18)
+
+### Bug Fixes
+
+- allow useLogout without authModalContext ([#972](https://github.com/alchemyplatform/aa-sdk/issues/972)) ([8175962](https://github.com/alchemyplatform/aa-sdk/commit/8175962a509cb6e51ced22b1cd199a57fb7305a4))
+- fixed bad svg prop names ([#968](https://github.com/alchemyplatform/aa-sdk/issues/968)) ([fdf7025](https://github.com/alchemyplatform/aa-sdk/commit/fdf7025aec20aca76f4285769d1f650f3636b78e))
+
+# [4.0.0-beta.5](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.4...v4.0.0-beta.5) (2024-09-18)
+
+### Bug Fixes
+
+- don't ignore oauthCallbackUrl config option ([#971](https://github.com/alchemyplatform/aa-sdk/issues/971)) ([714da46](https://github.com/alchemyplatform/aa-sdk/commit/714da4652f1b55a763d77cc5a509c04054aab384))
+- use same passkey svg from account kit ([#970](https://github.com/alchemyplatform/aa-sdk/issues/970)) ([c723447](https://github.com/alchemyplatform/aa-sdk/commit/c723447094fb351e839b154e3dd123486c784380))
+
 # [4.0.0-beta.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.3...v4.0.0-beta.4) (2024-09-18)
 
 ### Features
