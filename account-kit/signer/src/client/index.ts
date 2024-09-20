@@ -454,6 +454,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
         const { alchemyBundle: bundle, alchemyOrgId: orgId } = event.data;
         if (bundle && orgId) {
           cleanup();
+          popup?.close();
           this.completeAuthWithBundle({
             bundle,
             orgId,
