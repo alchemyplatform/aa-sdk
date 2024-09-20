@@ -1,9 +1,6 @@
 import { UserConnectionAvatarWithPopover } from "@/components/shared/user-connection-avatar/UserConnectionAvatarWithPopover";
-import Image from "next/image";
-import { CheckIcon } from "../icons/check";
-import { GasIcon } from "../icons/gas";
-import { DrawIcon } from "../icons/draw";
-import { ReceiptIcon } from "../icons/receipt";
+
+import { MintCard } from "../shared/MintCard";
 
 export function MintDemoWrapper() {
   return (
@@ -12,9 +9,7 @@ export function MintDemoWrapper() {
         <UserConnectionAvatarWithPopover deploymentStatus={true} />
       </div>
       <div>
-        {
-          // Rob
-        }
+        <MintCard />
       </div>
     </div>
   );
