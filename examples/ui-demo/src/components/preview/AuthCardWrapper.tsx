@@ -5,7 +5,6 @@ import {
   useLogout,
   useUser,
 } from "@account-kit/react";
-import { MintDemoWrapper } from "./MintDemoWrapper";
 import { useMemo } from "react";
 
 export function AuthCardWrapper({ className }: { className?: string }) {
@@ -29,7 +28,8 @@ export function AuthCardWrapper({ className }: { className?: string }) {
           </div>
         </>
       ) : (
-        <MintDemoWrapper />
+        null
+        // In flight- will be uncommented in the mint pr, a fast follow <MintDemoWrapper />
       )}
       {user && (
         <button
