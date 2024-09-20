@@ -5,8 +5,7 @@ import {
   useLogout,
   useUser,
 } from "@account-kit/react";
-import { MintDemoWrapper } from "./MintDemoWrapper";
-import { useMemo } from "react";
+import { MintDemoWrapper } from "@/components/preview/MintDemoWrapper";
 
 export function AuthCardWrapper({ className }: { className?: string }) {
   const user = useUser();

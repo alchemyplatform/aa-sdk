@@ -20,13 +20,14 @@ import { useAuthenticate } from "@account-kit/react";
 ```ts
 import { useAuthenticate } from "@account-kit/react";
 
-const { authenticate, authenticateAsync, isPending, error } = useAuthenticate({
-  // these are optional
-  onSuccess: () => {
-    // do something on success
-  },
-  onError: (error) => console.error(error),
-});
+const { authenticate, authenticateAsync, isPending, error, stage } =
+  useAuthenticate({
+    // these are optional
+    onSuccess: () => {
+      // do something on success
+    },
+    onError: (error) => console.error(error),
+  });
 ```
 
 ## Parameters
