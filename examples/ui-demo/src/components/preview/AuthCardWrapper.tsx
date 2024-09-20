@@ -2,7 +2,6 @@ import { useConfig } from "@/app/state";
 import { cn } from "@/lib/utils";
 import { AuthCard, useLogout, useUser } from "@account-kit/react";
 import { MintDemoWrapper } from "./MintDemoWrapper";
-import { useMemo } from "react";
 
 export function AuthCardWrapper({ className }: { className?: string }) {
   const user = useUser();
