@@ -5,10 +5,14 @@ import { GasIcon } from "../icons/gas";
 import { DrawIcon } from "../icons/draw";
 import { ReceiptIcon } from "../icons/receipt";
 import React, { useCallback, useState } from "react";
-
 import { hexToRGBA } from "../../utils/hexToRGBA";
 import { LoadingIcon } from "../icons/loading";
 import { ExternalLinkIcon } from "../icons/external-link";
+import {
+  useSendUserOperation,
+  useSmartAccountClient,
+} from "@account-kit/react";
+import { nftContractAddress } from "@/utils/config";
 
 type NFTLoadingState = "loading" | "success";
 
@@ -23,6 +27,25 @@ export const MintCard = () => {
     batch: "batch",
   });
   const [hasCollected, setHasCollected] = useState(false);
+  const handleSuccess = () => {
+    setStatus((prev) => ({ ...prev, batch: "success" }));
+    setHasCollected(true);
+  };
+  const { client } = useSmartAccountClient({ type: "LightAccount" });
+
+  const {
+    sendUserOperationResult,
+    // isSendingUserOperation,
+    sendUserOperationAsync,
+  } = useSendUserOperation({
+    client,
+    waitForTxn: true,
+    onSuccess: handleSuccess,
+    onSettled: () => {},
+    onMutate: () => {
+      console.log("mutation - start loading state");
+    },
+  });
 
   const getPrimaryColorRGBA = useCallback(() => {
     if (typeof window === "undefined") return hexToRGBA("#363FF9", 0.1);
@@ -34,6 +57,10 @@ export const MintCard = () => {
   }, []);
 
   const handleCollectNFT = useCallback(async () => {
+    if (!client) {
+      console.error("no client");
+      return;
+    }
     setStatus({
       signing: "loading",
       gas: "loading",
@@ -51,14 +78,17 @@ export const MintCard = () => {
         resolve();
       }, 2000);
     });
-    await new Promise<void>((resolve) => {
-      setTimeout(() => {
-        setStatus((prev) => ({ ...prev, batch: "success" }));
-        resolve();
-      }, 2000);
+    const x = await sendUserOperationAsync({
+      uo: {
+        data: nftContractAddress,
+        target: client.account.address,
+      },
     });
+    console.log(x)
+    setStatus((prev) => ({ ...prev, batch: "success" }));
     setHasCollected(true);
-  }, []);
+  }, [client, sendUserOperationAsync]);
+
   return (
     <div className="flex bg-bg-surface-default radius-1 border-btn-secondary overflow-hidden">
       <div className="p-12">
@@ -117,7 +147,7 @@ export const MintCard = () => {
             </span>
           </p>
         </div>
-        {hasCollected ? (
+        {!hasCollected ? (
           <button
             className="btn btn-primary w-full p-2 radius"
             disabled={Object.values(status).some((x) => x === "loading")}
@@ -127,14 +157,13 @@ export const MintCard = () => {
           </button>
         ) : (
           <div>
-            {/* TODO: get block explorer url */}
             <a
-              href="/"
+              href={`https://sepolia.arbiscan.io/block/${sendUserOperationResult?.hash}`}
               target="_blank"
               rel="noreferrer"
               className="text-fg-secondary mb-6 flex justify-between items-center"
             >
-              View on block explorer
+              View on arbiscan
               <div className="w-5 h-5">
                 <ExternalLinkIcon className="text-fg-primary" />
               </div>
@@ -148,7 +177,7 @@ export const MintCard = () => {
               Build with Account Kit
             </a>
             <a
-              href="https://accountkit.alchemy.com/"
+              href="https://accountkit.alchemy.com/react/quickstart"
               className="btn btn-secondary flex text-center p-2"
               target="_blank"
               rel="noreferrer"

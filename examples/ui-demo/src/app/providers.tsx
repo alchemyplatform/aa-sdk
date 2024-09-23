@@ -1,7 +1,7 @@
 "use client";
 
 import { AuthCardHeader } from "@/components/shared/AuthCardHeader";
-import { sepolia } from "@account-kit/infra";
+import { arbitrumSepolia } from "@account-kit/infra";
 import { AlchemyAccountProvider, createConfig } from "@account-kit/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren, Suspense } from "react";
@@ -12,8 +12,9 @@ const queryClient = new QueryClient();
 const alchemyConfig = createConfig(
   {
     rpcUrl: "/api/rpc",
-    chain: sepolia,
+    chain: arbitrumSepolia,
     ssr: true,
+    policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID
   },
   {
     illustrationStyle: DEFAULT_CONFIG.ui.illustrationStyle,
