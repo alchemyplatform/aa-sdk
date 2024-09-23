@@ -314,7 +314,7 @@ const PasskeyShieldOutlineLight = ({
     width="20"
     height="20"
     viewBox="0 0 20 20"
-    fill="#363FF9"
+    color="#363FF9"
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
@@ -354,7 +354,7 @@ const PasskeyShieldFilledLight = ({
     width="21"
     height="20"
     viewBox="0 0 21 20"
-    fill="#363FF9"
+    color="#363FF9"
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
@@ -374,7 +374,7 @@ const PasskeyShieldFlatLight = ({
     width="20"
     height="20"
     viewBox="0 0 20 20"
-    fill="#363FF9"
+    color="#363FF9"
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
@@ -404,7 +404,7 @@ const PasskeyShieldOutlineDark = ({
     width="20"
     height="20"
     viewBox="0 0 20 20"
-    fill="#9AB7FF"
+    color="#9AB7FF"
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
@@ -444,7 +444,7 @@ const PasskeyShieldFilledDark = ({
     width="21"
     height="20"
     viewBox="0 0 21 20"
-    fill="#9AB7FF"
+    color="#9AB7FF"
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
@@ -464,7 +464,7 @@ const PasskeyShieldFlatDark = ({
     width="20"
     height="20"
     viewBox="0 0 20 20"
-    fill="#9AB7FF"
+    color="#9AB7FF"
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
