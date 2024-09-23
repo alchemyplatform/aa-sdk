@@ -3,7 +3,7 @@
 import type { Connector } from "@wagmi/core";
 import { createContext, useContext } from "react";
 
-export type AuthstepType =
+export type AuthStepType =
   | "email_verify"
   | "passkey_verify"
   | "passkey_create"
