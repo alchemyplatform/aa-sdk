@@ -16,23 +16,32 @@ import { nftContractAddress } from "@/utils/config";
 
 type NFTLoadingState = "loading" | "success";
 
-export const MintCard = () => {
-  const [status, setStatus] = useState<{
+const initialState = {
+  signing: "signing",
+  gas: "gas",
+  batch: "batch",
+} satisfies mintStatus
+
+type mintStatus =  {
     signing: NFTLoadingState | "signing";
     gas: NFTLoadingState | "gas";
     batch: NFTLoadingState | "batch";
-  }>({
-    signing: "signing",
-    gas: "gas",
-    batch: "batch",
-  });
+  }
+
+
+export const MintCard = () => {
+  const [status, setStatus] = useState<mintStatus>(initialState);
+  const [hasError, setHasError] = useState(false);
   const [hasCollected, setHasCollected] = useState(false);
   const handleSuccess = () => {
     setStatus((prev) => ({ ...prev, batch: "success" }));
     setHasCollected(true);
   };
   const { client } = useSmartAccountClient({ type: "LightAccount" });
-
+  const handleError = () => {
+    setStatus(initialState)
+    setHasError(true);
+  }
   const {
     sendUserOperationResult,
     // isSendingUserOperation,
@@ -40,6 +49,7 @@ export const MintCard = () => {
   } = useSendUserOperation({
     client,
     waitForTxn: true,
+    onError: handleError,
     onSuccess: handleSuccess,
     onSettled: () => {},
     onMutate: () => {
