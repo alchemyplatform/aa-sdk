@@ -6,7 +6,7 @@ export const DrawIcon = ({
 }: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
   return (
     <svg
-      width="25"
+      width="24"
       height="24"
       viewBox="0 0 25 24"
       fill="none"
