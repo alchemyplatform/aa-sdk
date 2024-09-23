@@ -5,7 +5,7 @@ import {
   useLogout,
   useUser,
 } from "@account-kit/react";
-import { MintDemoWrapper } from "@/components/preview/MintDemoWrapper";
+import { MintDemoWrapper } from "./MintDemoWrapper";
 
 export function AuthCardWrapper({ className }: { className?: string }) {
   const user = useUser();
@@ -21,13 +21,11 @@ export function AuthCardWrapper({ className }: { className?: string }) {
     >
       {
         !user ? (
-          <>
             <div className="flex flex-col gap-2 w-[368px]">
               <div className="modal bg-surface-default shadow-md overflow-hidden">
                 <AuthCard />
               </div>
             </div>
-          </>
         ) : <MintDemoWrapper />
       }
       {user && (
