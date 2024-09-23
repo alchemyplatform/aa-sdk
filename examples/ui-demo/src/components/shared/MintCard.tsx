@@ -1,19 +1,61 @@
+"use client";
 import Image from "next/image";
 import { CheckIcon } from "../icons/check";
 import { GasIcon } from "../icons/gas";
 import { DrawIcon } from "../icons/draw";
 import { ReceiptIcon } from "../icons/receipt";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
+
+import { hexToRGBA } from "../../utils/hexToRGBA";
+import { LoadingIcon } from "../icons/loading";
+
+type NFTLoadingState = "loading" | "success";
 
 export const MintCard = () => {
-  const getPrimaryColor = useCallback(() => {
+  const [status, setStatus] = useState<{
+    signing: NFTLoadingState | "signing";
+    gas: NFTLoadingState | "gas";
+    batch: NFTLoadingState | "batch";
+  }>({
+    signing: "signing",
+    gas: "gas",
+    batch: "batch",
+  });
+
+  const getPrimaryColorRGBA = useCallback(() => {
+    if (typeof window === "undefined") return hexToRGBA("#363FF9", 0.1);
     const color = getComputedStyle(document.documentElement)
       .getPropertyValue("--akui-fg-accent-brand")
       .trim();
     const rgba = hexToRGBA(color, 0.1);
     return rgba;
   }, []);
-  console.log(getPrimaryColor());
+
+  const handleCollectNFT = useCallback(async () => {
+    setStatus({
+      signing: "loading",
+      gas: "loading",
+      batch: "loading",
+    });
+    await new Promise<void>((resolve) => {
+      setTimeout(() => {
+        setStatus((prev) => ({ ...prev, signing: "success" }));
+        resolve();
+      }, 2000);
+    });
+    await new Promise<void>((resolve) => {
+      setTimeout(() => {
+        setStatus((prev) => ({ ...prev, gas: "success" }));
+        resolve();
+      }, 2000);
+    });
+    await new Promise<void>((resolve) => {
+      setTimeout(() => {
+        setStatus((prev) => ({ ...prev, batch: "success" }));
+        resolve();
+      }, 2000);
+    });
+  }, []);
   return (
     <div className="flex bg-bg-surface-default radius-1 border-btn-secondary overflow-hidden">
       <div className="p-12">
@@ -22,13 +64,13 @@ export const MintCard = () => {
         </h2>
         <ValueProp
           title="Invisible signing"
-          icon="signing"
+          icon={status.signing}
           description="Sign actions in the background with embedded wallets"
         />
 
         <ValueProp
           title="Gas sponsorship"
-          icon="gas"
+          icon={status.gas}
           description={
             <span>
               Sponsor gas fees to remove barriers to adoption. <a>Learn how.</a>
@@ -37,11 +79,11 @@ export const MintCard = () => {
         />
         <ValueProp
           title="Batch transactions"
-          icon="batch"
+          icon={status.batch}
           description="Deploy the user's smart account in their first transaction"
         />
       </div>
-      <div className={`p-12`} style={{ background: getPrimaryColor() }}>
+      <div className={`p-12`} style={{ background: getPrimaryColorRGBA() }}>
         <h3 className="text-fg-secondary text-base font-semibold mb-4">
           NFT Summary
         </h3>
@@ -72,7 +114,13 @@ export const MintCard = () => {
             </span>
           </p>
         </div>
-        <button className="btn-primary w-full p-2 radius">Collect NFT</button>
+        <button
+          className="btn btn-primary w-full p-2 radius"
+          disabled={Object.values(status).some((x) => x === "loading")}
+          onClick={handleCollectNFT}
+        >
+          Collect NFT
+        </button>
       </div>
     </div>
   );
@@ -109,35 +157,8 @@ const getMintIcon = (
     case "batch":
       return <ReceiptIcon className="text-fg-secondary" />;
     case "loading":
-      return "loading.png";
+      return <LoadingIcon />;
     case "success":
       return <CheckIcon stroke="#16A34A" />;
   }
 };
-export function hexToRGBA(hex: string, alpha: number): string {
-  // Remove the leading '#' if present
-  hex = hex.replace(/^#/, "");
-
-  // Validate hex string
-  if (!/^[0-9A-Fa-f]{3}$|^[0-9A-Fa-f]{6}$/.test(hex)) {
-    throw new Error("Invalid hex color format");
-  }
-
-  let r: number, g: number, b: number;
-
-  if (hex.length === 3) {
-    // Expand shorthand form (#RGB to #RRGGBB)
-    r = parseInt(hex[0] + hex[0], 16);
-    g = parseInt(hex[1] + hex[1], 16);
-    b = parseInt(hex[2] + hex[2], 16);
-  } else if (hex.length === 6) {
-    // Parse the RRGGBB format
-    r = parseInt(hex.substring(0, 2), 16);
-    g = parseInt(hex.substring(2, 4), 16);
-    b = parseInt(hex.substring(4, 6), 16);
-  } else {
-    throw new Error("Invalid hex color length");
-  }
-
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-}

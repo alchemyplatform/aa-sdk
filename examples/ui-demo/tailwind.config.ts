@@ -3,11 +3,11 @@ import type { Config } from "tailwindcss";
 
 const config = {
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-	],
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   prefix: "",
   theme: {
     container: {
@@ -68,14 +68,24 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "ui-loading-light": {
+          "0%, 20%, to": { fill: "#cbd5e1" },
+          "10%": { fill: "#363ff9" },
+        },
+        "ui-loading-dark": {
+          "0%, 20%, to": { fill: "#00000080" },
+          "10%": { fill: "#000" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "ui-loading-dark": "ui-loading-dark 0.8s 0ms ease-out infinite both",
+        "ui-loading-light": "ui-loading-light 0.8s 0ms ease-out infinite both",
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require('tailwind-scrollbar')],
-} satisfies Config
+  plugins: [require("tailwindcss-animate"), require("tailwind-scrollbar")],
+} satisfies Config;
 
 export default withAccountKitUi(config);
