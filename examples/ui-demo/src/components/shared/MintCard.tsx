@@ -8,6 +8,7 @@ import React, { useCallback, useState } from "react";
 
 import { hexToRGBA } from "../../utils/hexToRGBA";
 import { LoadingIcon } from "../icons/loading";
+import { ExternalLinkIcon } from "../icons/external-link";
 
 type NFTLoadingState = "loading" | "success";
 
@@ -21,6 +22,7 @@ export const MintCard = () => {
     gas: "gas",
     batch: "batch",
   });
+  const [hasCollected, setHasCollected] = useState(false);
 
   const getPrimaryColorRGBA = useCallback(() => {
     if (typeof window === "undefined") return hexToRGBA("#363FF9", 0.1);
@@ -55,6 +57,7 @@ export const MintCard = () => {
         resolve();
       }, 2000);
     });
+    setHasCollected(true);
   }, []);
   return (
     <div className="flex bg-bg-surface-default radius-1 border-btn-secondary overflow-hidden">
@@ -94,7 +97,7 @@ export const MintCard = () => {
           alt="An NFT"
           className="mb-4"
         />
-        <div className="flex justify-between mb-6">
+        <div className="flex justify-between mb-8">
           <p className="text-fg-secondary text-sm">Gas Fee</p>
           <p>
             <span className="line-through mr-1 text-sm text-fg-primary align-top">
@@ -114,13 +117,46 @@ export const MintCard = () => {
             </span>
           </p>
         </div>
-        <button
-          className="btn btn-primary w-full p-2 radius"
-          disabled={Object.values(status).some((x) => x === "loading")}
-          onClick={handleCollectNFT}
-        >
-          Collect NFT
-        </button>
+        {hasCollected ? (
+          <button
+            className="btn btn-primary w-full p-2 radius"
+            disabled={Object.values(status).some((x) => x === "loading")}
+            onClick={handleCollectNFT}
+          >
+            Collect NFT
+          </button>
+        ) : (
+          <div>
+            {/* TODO: get block explorer url */}
+            <a
+              href="/"
+              target="_blank"
+              rel="noreferrer"
+              className="text-fg-secondary mb-6 flex justify-between items-center"
+            >
+              View on block explorer
+              <div className="w-5 h-5">
+                <ExternalLinkIcon className="text-fg-primary" />
+              </div>
+            </a>
+            <a
+              href="https://dashboard.alchemy.com/"
+              className="btn btn-primary flex text-center mb-4 p-2"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Build with Account Kit
+            </a>
+            <a
+              href="https://accountkit.alchemy.com/"
+              className="btn btn-secondary flex text-center p-2"
+              target="_blank"
+              rel="noreferrer"
+            >
+              View docs
+            </a>
+          </div>
+        )}
       </div>
     </div>
   );
