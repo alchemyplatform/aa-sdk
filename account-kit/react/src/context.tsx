@@ -115,17 +115,21 @@ export const AlchemyAccountProvider = (
   const openAuthModal = useCallback(() => setIsModalOpen(true), []);
   const closeAuthModal = useCallback(() => setIsModalOpen(false), []);
 
+  const clearAuthParams = () => {
+    const url = new URL(window.location.href);
+    url.searchParams.delete("orgId");
+    url.searchParams.delete("bundle");
+    url.searchParams.delete(IS_SIGNUP_QP);
+    window.history.replaceState({}, "", url.toString());
+  };
+
   /**
    * Reset the auth step to the initial state. This also clears the email auth query params from the URL.
    */
   const resetAuthStep = useCallback(() => {
     setAuthStep({ type: "initial" });
 
-    const url = new URL(window.location.href);
-    url.searchParams.delete("orgId");
-    url.searchParams.delete("bundle");
-    url.searchParams.delete(IS_SIGNUP_QP);
-    window.history.replaceState({}, "", url.toString());
+    clearAuthParams();
   }, []);
 
   const initialContext = useMemo(
@@ -144,22 +148,27 @@ export const AlchemyAccountProvider = (
     [config, queryClient, openAuthModal, closeAuthModal, isModalOpen]
   );
 
-  const { status, isAuthenticating } = useSignerStatus(initialContext);
+  const { isAuthenticating, isConnected } = useSignerStatus(initialContext);
   const [authStep, setAuthStep] = useState<AuthStep>({
     type: isAuthenticating ? "email_completing" : "initial",
   });
 
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
     if (
-      status === "AWAITING_EMAIL_AUTH" &&
-      config.ui?.auth?.addPasskeyOnSignup
+      isConnected &&
+      config.ui?.auth?.addPasskeyOnSignup &&
+      urlParams.get(IS_SIGNUP_QP) === "true"
     ) {
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get(IS_SIGNUP_QP) !== "true") return;
-
       openAuthModal();
     }
-  }, [status, config.ui, openAuthModal]);
+  }, [config.ui, isConnected, openAuthModal]);
+
+  useEffect(() => {
+    if (authStep.type === "complete") {
+      clearAuthParams();
+    }
+  }, [authStep]);
 
   return (
     <Hydrate {...props}>
