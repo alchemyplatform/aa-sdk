@@ -1,7 +1,7 @@
-import { polygonMumbai } from "viem/chains";
+import { arbitrumSepolia } from "@account-kit/infra";
 export const entryPointAddress = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789"
-export const nftContractAddress = "0xD8c59f88121Fd7a4dF21E1C8598D41702525FD49";
-export const chain = polygonMumbai;
+export const nftContractAddress = "0xE3aE65fC1bBd58719cc1D2496406B8133578BfF3";
+export const chain = arbitrumSepolia;
 export const AccountKitNftMinterAbi = [
   {
     inputs: [],
