@@ -1,6 +1,16 @@
 await import("./env.mjs");
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+    images: {
+        remotePatterns: [
+            {
+              protocol: 'https',
+              hostname: 'static.alchemyapi.io',
+              port: '',
+              pathname: '/assets/accountkit/**',
+            },
+          ],
+    }
+};
 
 export default nextConfig;

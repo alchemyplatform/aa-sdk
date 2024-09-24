@@ -31,6 +31,7 @@ type mintStatus = {
 
 export const MintCard = () => {
   const [status, setStatus] = useState<mintStatus>(initialState);
+  // To be wired into the toast pr
   const [hasError, setHasError] = useState(false);
   const [hasCollected, setHasCollected] = useState(false);
   const handleSuccess = () => {
@@ -42,19 +43,11 @@ export const MintCard = () => {
     setStatus(initialState);
     setHasError(true);
   };
-  const {
-    sendUserOperationResult,
-    // isSendingUserOperation,
-    sendUserOperation,
-  } = useSendUserOperation({
+  const { sendUserOperationResult, sendUserOperation } = useSendUserOperation({
     client,
     waitForTxn: true,
     onError: handleError,
     onSuccess: handleSuccess,
-    onSettled: () => {},
-    onMutate: () => {
-      console.log("mutation - start loading state");
-    },
   });
 
   const getPrimaryColorRGBA = useCallback(() => {
@@ -142,7 +135,7 @@ export const MintCard = () => {
         <Image
           width="277"
           height="255"
-          src="/images/NFT.png"
+          src="https://static.alchemyapi.io/assets/accountkit/accountkit.jpg"
           alt="An NFT"
           className="mb-4"
         />
