@@ -117,7 +117,15 @@ export const MintCard = () => {
           icon={status.gas}
           description={
             <span>
-              Sponsor gas fees to remove barriers to adoption. <a>Learn how.</a>
+              Sponsor gas fees to remove barriers to adoption.{" "}
+              <a
+                href="https://accountkit.alchemy.com/react/sponsor-gas"
+                target="_blank"
+                referrerPolicy="no-referrer"
+                className="font-medium"
+              >
+                Learn how.
+              </a>
             </span>
           }
         />
