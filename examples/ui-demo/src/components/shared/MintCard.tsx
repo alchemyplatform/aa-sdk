@@ -12,7 +12,8 @@ import {
   useSendUserOperation,
   useSmartAccountClient,
 } from "@account-kit/react";
-import { nftContractAddress } from "@/utils/config";
+import { AccountKitNftMinterABI, nftContractAddress } from "@/utils/config";
+import { encodeFunctionData } from "viem";
 
 type NFTLoadingState = "loading" | "success";
 
@@ -20,14 +21,13 @@ const initialState = {
   signing: "signing",
   gas: "gas",
   batch: "batch",
-} satisfies mintStatus
+} satisfies mintStatus;
 
-type mintStatus =  {
-    signing: NFTLoadingState | "signing";
-    gas: NFTLoadingState | "gas";
-    batch: NFTLoadingState | "batch";
-  }
-
+type mintStatus = {
+  signing: NFTLoadingState | "signing";
+  gas: NFTLoadingState | "gas";
+  batch: NFTLoadingState | "batch";
+};
 
 export const MintCard = () => {
   const [status, setStatus] = useState<mintStatus>(initialState);
@@ -39,13 +39,13 @@ export const MintCard = () => {
   };
   const { client } = useSmartAccountClient({ type: "LightAccount" });
   const handleError = () => {
-    setStatus(initialState)
+    setStatus(initialState);
     setHasError(true);
-  }
+  };
   const {
     sendUserOperationResult,
     // isSendingUserOperation,
-    sendUserOperationAsync,
+    sendUserOperation,
   } = useSendUserOperation({
     client,
     waitForTxn: true,
@@ -88,16 +88,17 @@ export const MintCard = () => {
         resolve();
       }, 2000);
     });
-    const x = await sendUserOperationAsync({
+    sendUserOperation({
       uo: {
-        data: nftContractAddress,
-        target: client.account.address,
+        target: nftContractAddress,
+        data: encodeFunctionData({
+          abi: AccountKitNftMinterABI,
+          functionName: "mintTo",
+          args: [client.getAddress()],
+        }),
       },
     });
-    console.log(x)
-    setStatus((prev) => ({ ...prev, batch: "success" }));
-    setHasCollected(true);
-  }, [client, sendUserOperationAsync]);
+  }, [client, sendUserOperation]);
 
   return (
     <div className="flex bg-bg-surface-default radius-1 border-btn-secondary overflow-hidden">
