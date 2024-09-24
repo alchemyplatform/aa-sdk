@@ -12,7 +12,7 @@ import type { BaseHookMutationArgs } from "../types.js";
 import { useSigner } from "./useSigner.js";
 import {
   useAuthContext,
-  type AuthstepType,
+  type AuthStepType,
 } from "../components/auth/context.js";
 
 export type UseAuthenticateMutationArgs = BaseHookMutationArgs<
@@ -25,7 +25,7 @@ export type UseAuthenticateResult = {
   authenticateAsync: UseMutateAsyncFunction<User, Error, AuthParams, unknown>;
   isPending: boolean;
   error: Error | null;
-  stage: AuthstepType;
+  stage: AuthStepType;
 };
 
 /**
