@@ -14,6 +14,7 @@ import {
 } from "@account-kit/react";
 import { AccountKitNftMinterABI, nftContractAddress } from "@/utils/config";
 import { encodeFunctionData } from "viem";
+import { Toast } from "./Toast";
 
 type NFTLoadingState = "loading" | "success";
 
@@ -31,8 +32,11 @@ type MintStatus = {
 
 export const MintCard = () => {
   const [status, setStatus] = useState<MintStatus>(initialState);
-  // To be wired into the toast pr
-  const [hasError, setHasError] = useState(false);
+  const [toastContent, setToastContent] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
+
   const [hasCollected, setHasCollected] = useState(false);
   const [uri, setURI] = useState<string | null>();
 
@@ -42,11 +46,18 @@ export const MintCard = () => {
       gas: "success",
       signing: "success",
     }));
+    setToastContent({
+      type: "success",
+      text: "You've successfully collected your NFT! Refresh to mint again.",
+    });
     setHasCollected(true);
   };
   const handleError = () => {
     setStatus(initialState);
-    setHasError(true);
+    setToastContent({
+      type: "error",
+      text: "There was a problem with that action",
+    });
   };
 
   const getPrimaryColorRGBA = useCallback(() => {
@@ -114,6 +125,13 @@ export const MintCard = () => {
 
   return (
     <div className="flex bg-bg-surface-default radius-1 border-btn-secondary border-2 overflow-hidden transition-all duration-300 ease-out">
+      <Toast
+        text={toastContent?.text || ""}
+        type={toastContent?.type || "success"}
+        open={!!toastContent}
+        // For auto close of toast
+        setOpen={() => setToastContent(null)}
+      />
       <div className="p-12">
         <h2 className="text-2xl font-semibold tracking-tight leading-10 mb-8 text-fg-primary">
           One-click checkout
@@ -164,7 +182,9 @@ export const MintCard = () => {
             <LoadingIcon />
           </div>
         )}
-        <div className={`flex justify-between ${hasCollected ? 'mb-4': 'mb-6'}`}>
+        <div
+          className={`flex justify-between ${hasCollected ? "mb-4" : "mb-6"}`}
+        >
           <p className="text-fg-secondary text-sm">Gas Fee</p>
           <p>
             <span className="line-through mr-1 text-sm text-fg-primary align-top">
