@@ -11,33 +11,39 @@ type ToastProps = {
   setOpen: (open: boolean) => void;
 };
 
-// TODO: Success dark mode looks bad, consider hard coding.
+// Toast is not themed due to its positioning over the perma-white nav bar.
 
 export const Toast = ({ text, open, setOpen, type }: ToastProps) => {
   const getBGColor = () => {
     switch (type) {
       case "error":
-        return "bg-bg-surface-critical";
+        // "bg-bg-surface-critical"
+        return "bg-[#FEF2F2]";
       case "success":
-        return "bg-bg-surface-success-subtle";
+        // bg-bg-surface-success-subtle
+        return "bg-[#F0FdF4]";
     }
   };
 
   const getTextColor = () => {
     switch (type) {
       case "error":
-        return "text-fg-critical";
+        //  "text-fg-critical";
+        return "text-[#B91C1C]";
       case "success":
-        return "text-bg-surface-success";
+        //  "text-bg-surface-success";
+        return "text-[#15803D]";
     }
   };
 
   const getButtonColor = () => {
     switch (type) {
       case "error":
-        return "bg-surface-error";
+        // "bg-surface-error";
+        return "#DC2626";
       case "success":
-        return "bg-surface-success";
+        // "bg-surface-success";
+        return "#16A34A";
     }
   };
 
@@ -46,18 +52,18 @@ export const Toast = ({ text, open, setOpen, type }: ToastProps) => {
       <Root
         open={open}
         onOpenChange={setOpen}
-        className={`${getBGColor()} rounded-lg shadow-lg px-3 py-2 flex justify-center items-center`}
+        className={`${getBGColor()} align-middle rounded-lg shadow-lg px-3 py-2 flex justify-center items-center`}
       >
-        <p className={`${getTextColor()} text-center pr-2`}>
+        <p className={`${getTextColor()} text-center pr-2 align-middle`}>
           <span
-            className={`bg-${getButtonColor()} px-2 py-1 text-fg-invert text-xs font-semibold rounded mr-2`}
+            className={`bg-[${getButtonColor()}] align-middle px-2 py-1 text-fg-invert text-xs font-semibold rounded mr-2`}
           >
             {type === "success" ? "Success" : "Error"}
           </span>
           {text}
         </p>
         <Close>
-          <XIcon className={`text-${getButtonColor()}`} />
+          <XIcon stroke={getButtonColor()} />
         </Close>
       </Root>
       <Viewport className="fixed top-2 right-1/2 translate-x-1/2 z-50 outline-none" />
