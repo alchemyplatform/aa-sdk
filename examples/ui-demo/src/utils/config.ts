@@ -1,7 +1,4 @@
-import { arbitrumSepolia } from "@account-kit/infra";
-export const entryPointAddress = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
 export const nftContractAddress = "0x92ccF22A61f92d83463b04090A32dA9a6D958f64";
-export const chain = arbitrumSepolia;
 export const AccountKitNftMinterABI = [
   {
     type: "constructor",
