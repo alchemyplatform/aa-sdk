@@ -14,7 +14,6 @@ import { Footer } from "../sections/Footer.js";
 
 export type AuthCardProps = {
   className?: string;
-  handleAuthSuccess?: () => void;
 };
 
 /**
@@ -47,11 +46,9 @@ export const AuthCard = (props: AuthCardProps) => {
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const AuthCardContent = ({
   className,
-  handleAuthSuccess,
   showClose = false,
 }: {
   className?: string;
-  handleAuthSuccess?: () => void;
   showClose?: boolean;
 }) => {
   const { closeAuthModal } = useAuthModal();
@@ -113,7 +110,6 @@ export const AuthCardContent = ({
       didGoBack.current = false;
 
       closeAuthModal();
-      handleAuthSuccess?.();
       onAuthSuccess?.();
     } else if (authStep.type !== "initial") {
       didGoBack.current = false;
@@ -132,7 +128,6 @@ export const AuthCardContent = ({
     isAuthenticating,
     setAuthStep,
     onAuthSuccess,
-    handleAuthSuccess,
     closeAuthModal,
   ]);
 
