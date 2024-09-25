@@ -67,10 +67,10 @@ export const MintCard = () => {
     onMutate: () => {
       setTimeout(() => {
         setStatus((prev) => ({ ...prev, signing: "success" }));
-      }, 250);
+      }, 500);
       setTimeout(() => {
         setStatus((prev) => ({ ...prev, gas: "success" }));
-      }, 500);
+      }, 750);
     },
   });
 
