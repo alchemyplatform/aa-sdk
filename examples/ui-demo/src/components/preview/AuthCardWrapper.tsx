@@ -2,7 +2,6 @@ import { useConfig } from "@/app/state";
 import { cn } from "@/lib/utils";
 import {
   AuthCard,
-  useAuthenticate,
   useLogout,
   useUser,
 } from "@account-kit/react";
@@ -12,8 +11,6 @@ export function AuthCardWrapper({ className }: { className?: string }) {
   const user = useUser();
   const { config } = useConfig();
   const { logout } = useLogout();
-  const { stage } = useAuthenticate();
-  const isAuthComplete = useMemo(() => stage === "complete", [stage]);
   return (
     <div
       className={cn(
@@ -22,7 +19,7 @@ export function AuthCardWrapper({ className }: { className?: string }) {
         className
       )}
     >
-      {!isAuthComplete ? (
+      {!user ? (
         <>
           <div className="flex flex-col gap-2 w-[368px]">
             <div className="modal bg-surface-default shadow-md overflow-hidden">
@@ -42,7 +39,6 @@ export function AuthCardWrapper({ className }: { className?: string }) {
           }}
         >
           Logout
-          {isAuthComplete && <span> (Auth Complete)</span>}
         </button>
       )}
     </div>
