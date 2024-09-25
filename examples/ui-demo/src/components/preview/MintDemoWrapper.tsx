@@ -1,10 +1,10 @@
+import { UserConnectionAvatarWithPopover } from "@/components/shared/user-connection-avatar/UserConnectionAvatarWithPopover";
+
 export function MintDemoWrapper() {
 	return (
 		<div>
 			<div>
-				{
-					// Iyk
-				}
+				<UserConnectionAvatarWithPopover deploymentStatus={true} />
 			</div>
 			<div>
 				{
