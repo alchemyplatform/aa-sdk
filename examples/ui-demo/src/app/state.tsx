@@ -123,7 +123,7 @@ export function ConfigContextProvider(props: PropsWithChildren) {
     };
 
     updateConfig(uiConfig);
-  }, [config]);
+  }, [config, updateConfig]);
 
   // Sync CSS variables
   useEffect(() => {

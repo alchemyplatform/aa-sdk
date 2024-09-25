@@ -38,7 +38,7 @@ export default function Home() {
 
           <div className="flex flex-col flex-[2] basis-0 relative bg-white border border-border rounded-lg overflow-hidden">
             {/* Code toggle header */}
-            <div className="sticky h-7 top-4 flex items-center justify-end pr-4 gap-2">
+            <div className="sticky h-7 top-4 flex items-center justify-end pr-4 gap-2 z-10">
               <div className="bg-purple-50 text-[#8B5CF6] px-2 py-1 rounded text-xs font-semibold">
                 Code preview
               </div>
