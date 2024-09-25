@@ -71,18 +71,12 @@ export const MintCard = () => {
       gas: "loading",
       batch: "loading",
     });
-    await new Promise<void>((resolve) => {
-      setTimeout(() => {
-        setStatus((prev) => ({ ...prev, signing: "success" }));
-        resolve();
-      }, 2000);
-    });
-    await new Promise<void>((resolve) => {
-      setTimeout(() => {
-        setStatus((prev) => ({ ...prev, gas: "success" }));
-        resolve();
-      }, 2000);
-    });
+    setTimeout(() => {
+      setStatus((prev) => ({ ...prev, signing: "success" }));
+    }, 250);
+    setTimeout(() => {
+      setStatus((prev) => ({ ...prev, gas: "success" }));
+    }, 500);
     sendUserOperation({
       uo: {
         target: nftContractAddress,
@@ -95,19 +89,18 @@ export const MintCard = () => {
     });
   }, [client, sendUserOperation]);
 
-  const getContractURI = async () =>{ 
+  const getContractURI = async () => {
     const uri = await client?.readContract({
-    address: nftContractAddress,
-    abi: AccountKitNftMinterABI,
-    functionName: "baseURI",
-  })
-  setURI(uri)
-}
+      address: nftContractAddress,
+      abi: AccountKitNftMinterABI,
+      functionName: "baseURI",
+    });
+    setURI(uri);
+  };
 
-useEffect(() => {
-  getContractURI()
-}, [client])
-
+  useEffect(() => {
+    getContractURI();
+  }, [client]);
 
   return (
     <div className="flex bg-bg-surface-default radius-1 border-btn-secondary overflow-hidden">
@@ -148,13 +141,19 @@ useEffect(() => {
         <h3 className="text-fg-secondary text-base font-semibold mb-4">
           NFT Summary
         </h3>
-        { uri ? <Image
-          width="277"
-          height="255"
-          src={uri}
-          alt="An NFT"
-          className="mb-4"
-        /> : <div className="w-[277px] h-[255px] flex justify-center items-center mb-4"><LoadingIcon /></div>}
+        {uri ? (
+          <Image
+            width="277"
+            height="255"
+            src={uri}
+            alt="An NFT"
+            className="mb-4"
+          />
+        ) : (
+          <div className="w-[277px] h-[255px] flex justify-center items-center mb-4">
+            <LoadingIcon />
+          </div>
+        )}
         <div className="flex justify-between mb-8">
           <p className="text-fg-secondary text-sm">Gas Fee</p>
           <p>
