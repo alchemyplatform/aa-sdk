@@ -101,7 +101,6 @@ export const AuthCardContent = ({
   useLayoutEffect(() => {
     if (authStep.type === "complete") {
       didGoBack.current = false;
-
       closeAuthModal();
       onAuthSuccess?.();
     } else if (authStep.type !== "initial") {
