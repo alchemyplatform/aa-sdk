@@ -10,10 +10,6 @@ import {
 import { useAlchemyAccountContext } from "../context.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import { useSigner } from "./useSigner.js";
-import {
-  useAuthContext,
-  type AuthstepType,
-} from "../components/auth/context.js";
 
 export type UseAuthenticateMutationArgs = BaseHookMutationArgs<
   User,
@@ -25,7 +21,6 @@ export type UseAuthenticateResult = {
   authenticateAsync: UseMutateAsyncFunction<User, Error, AuthParams, unknown>;
   isPending: boolean;
   error: Error | null;
-  stage: AuthstepType;
 };
 
 /**
@@ -35,7 +30,7 @@ export type UseAuthenticateResult = {
  * ```ts
  * import { useAuthenticate } from "@account-kit/react";
  *
- * const { authenticate, authenticateAsync, isPending, error, stage } = useAuthenticate({
+ * const { authenticate, authenticateAsync, isPending, error } = useAuthenticate({
  *  // these are optional
  *  onSuccess: () => {
  *    // do something on success
@@ -52,10 +47,6 @@ export function useAuthenticate(
 ): UseAuthenticateResult {
   const { queryClient } = useAlchemyAccountContext();
   const signer = useSigner();
-
-  const {
-    authStep: { type: stage },
-  } = useAuthContext();
 
   const {
     mutate: authenticate,
@@ -81,6 +72,5 @@ export function useAuthenticate(
     authenticateAsync: authenticateAsync,
     isPending,
     error,
-    stage,
   };
 }

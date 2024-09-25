@@ -29,7 +29,6 @@ export interface AccountKitTheme {
     "bg-surface-inset": ColorVariantRecord;
     "bg-surface-critical": ColorVariantRecord;
     "bg-surface-success": ColorVariantRecord;
-    "bg-surface-success-subtle": ColorVariantRecord;
     "bg-surface-warning": ColorVariantRecord;
     "bg-surface-error": ColorVariantRecord;
   };
