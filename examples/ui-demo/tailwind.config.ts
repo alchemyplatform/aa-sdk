@@ -73,8 +73,8 @@ const config = {
           "10%": { fill: "#363ff9" },
         },
         "ui-loading-dark": {
-          "0%, 20%, to": { fill: "#00000080" },
-          "10%": { fill: "#000" },
+          "0%, 20%, to": { fill: "rgba(255, 255, 255, .5)" },
+          "10%": { fill: "#FFFFFF" },
         },
       },
       animation: {
