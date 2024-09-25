@@ -4,7 +4,7 @@ import { CheckIcon } from "../icons/check";
 import { GasIcon } from "../icons/gas";
 import { DrawIcon } from "../icons/draw";
 import { ReceiptIcon } from "../icons/receipt";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { hexToRGBA } from "../../utils/hexToRGBA";
 import { LoadingIcon } from "../icons/loading";
 import { ExternalLinkIcon } from "../icons/external-link";
@@ -21,19 +21,21 @@ const initialState = {
   signing: "signing",
   gas: "gas",
   batch: "batch",
-} satisfies mintStatus;
+} satisfies MintStatus;
 
-type mintStatus = {
+type MintStatus = {
   signing: NFTLoadingState | "signing";
   gas: NFTLoadingState | "gas";
   batch: NFTLoadingState | "batch";
 };
 
 export const MintCard = () => {
-  const [status, setStatus] = useState<mintStatus>(initialState);
+  const [status, setStatus] = useState<MintStatus>(initialState);
   // To be wired into the toast pr
   const [hasError, setHasError] = useState(false);
   const [hasCollected, setHasCollected] = useState(false);
+  const [uri, setURI] = useState<string | null>();
+
   const handleSuccess = () => {
     setStatus((prev) => ({ ...prev, batch: "success" }));
     setHasCollected(true);
@@ -93,6 +95,20 @@ export const MintCard = () => {
     });
   }, [client, sendUserOperation]);
 
+  const getContractURI = async () =>{ 
+    const uri = await client?.readContract({
+    address: nftContractAddress,
+    abi: AccountKitNftMinterABI,
+    functionName: "baseURI",
+  })
+  setURI(uri)
+}
+
+useEffect(() => {
+  getContractURI()
+}, [client])
+
+
   return (
     <div className="flex bg-bg-surface-default radius-1 border-btn-secondary overflow-hidden">
       <div className="p-12">
@@ -132,13 +148,13 @@ export const MintCard = () => {
         <h3 className="text-fg-secondary text-base font-semibold mb-4">
           NFT Summary
         </h3>
-        <Image
+        { uri ? <Image
           width="277"
           height="255"
-          src="https://static.alchemyapi.io/assets/accountkit/accountkit.jpg"
+          src={uri}
           alt="An NFT"
           className="mb-4"
-        />
+        /> : <div className="w-[277px] h-[255px] flex justify-center items-center mb-4"><LoadingIcon /></div>}
         <div className="flex justify-between mb-8">
           <p className="text-fg-secondary text-sm">Gas Fee</p>
           <p>
