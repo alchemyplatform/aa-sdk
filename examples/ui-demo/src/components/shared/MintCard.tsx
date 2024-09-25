@@ -37,20 +37,17 @@ export const MintCard = () => {
   const [uri, setURI] = useState<string | null>();
 
   const handleSuccess = () => {
-    setStatus((prev) => ({ ...prev, batch: "success" }));
+    setStatus(() => ({
+      batch: "success",
+      gas: "success",
+      signing: "success",
+    }));
     setHasCollected(true);
   };
-  const { client } = useSmartAccountClient({ type: "LightAccount" });
   const handleError = () => {
     setStatus(initialState);
     setHasError(true);
   };
-  const { sendUserOperationResult, sendUserOperation } = useSendUserOperation({
-    client,
-    waitForTxn: true,
-    onError: handleError,
-    onSuccess: handleSuccess,
-  });
 
   const getPrimaryColorRGBA = useCallback(() => {
     if (typeof window === "undefined") return hexToRGBA("#363FF9", 0.1);
@@ -60,6 +57,22 @@ export const MintCard = () => {
     const rgba = hexToRGBA(color, 0.1);
     return rgba;
   }, []);
+
+  const { client } = useSmartAccountClient({ type: "LightAccount" });
+  const { sendUserOperationResult, sendUserOperation } = useSendUserOperation({
+    client,
+    waitForTxn: true,
+    onError: handleError,
+    onSuccess: handleSuccess,
+    onMutate: () => {
+      setTimeout(() => {
+        setStatus((prev) => ({ ...prev, signing: "success" }));
+      }, 250);
+      setTimeout(() => {
+        setStatus((prev) => ({ ...prev, gas: "success" }));
+      }, 500);
+    },
+  });
 
   const handleCollectNFT = useCallback(async () => {
     if (!client) {
@@ -71,12 +84,6 @@ export const MintCard = () => {
       gas: "loading",
       batch: "loading",
     });
-    setTimeout(() => {
-      setStatus((prev) => ({ ...prev, signing: "success" }));
-    }, 250);
-    setTimeout(() => {
-      setStatus((prev) => ({ ...prev, gas: "success" }));
-    }, 500);
     sendUserOperation({
       uo: {
         target: nftContractAddress,
@@ -99,8 +106,11 @@ export const MintCard = () => {
   };
 
   useEffect(() => {
-    getContractURI();
-  }, [client]);
+    if (!uri) {
+      getContractURI();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [client?.readContract]);
 
   return (
     <div className="flex bg-bg-surface-default radius-1 border-btn-secondary overflow-hidden">
