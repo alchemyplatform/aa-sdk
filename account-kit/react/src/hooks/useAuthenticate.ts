@@ -30,7 +30,7 @@ export type UseAuthenticateResult = {
  * ```ts
  * import { useAuthenticate } from "@account-kit/react";
  *
- * const { authenticate, authenticateAsync, isPending, error, stage } = useAuthenticate({
+ * const { authenticate, authenticateAsync, isPending, error } = useAuthenticate({
  *  // these are optional
  *  onSuccess: () => {
  *    // do something on success
