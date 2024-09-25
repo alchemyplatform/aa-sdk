@@ -9,7 +9,11 @@ export const AuthModal = () => {
 
   return (
     <Dialog isOpen={isOpen} onClose={closeAuthModal}>
-      <div className={`modal md:w-[368px] ${modalBaseClassName ?? ""}`}>
+      <div
+        className={`modal md:w-[368px] ${
+          modalBaseClassName ?? ""
+        } overflow-hidden`}
+      >
         <AuthCardContent showClose />
       </div>
     </Dialog>
