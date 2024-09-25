@@ -94,3 +94,34 @@
     --alpha-pointer-box-shadow: rgb(0 0 0 / 37%) 0px 1px 4px 0px !important;
   }
 }
+
+/* Radix Toast Animations */
+@keyframes slideIn {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes hide {
+  from {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+[data-state="open"] {
+  animation: slideIn 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-state="closed"] {
+  animation: hide 100ms ease-in forwards;
+}

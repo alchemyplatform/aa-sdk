@@ -6,6 +6,7 @@ import { AlchemyAccountProvider, createConfig } from "@account-kit/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren, Suspense } from "react";
 import { ConfigContextProvider, DEFAULT_CONFIG } from "./state";
+import { Provider as ToastProvider } from "@radix-ui/react-toast";
 
 const queryClient = new QueryClient();
 
@@ -14,7 +15,7 @@ const alchemyConfig = createConfig(
     rpcUrl: "/api/rpc",
     chain: arbitrumSepolia,
     ssr: true,
-    policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID
+    policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
   },
   {
     illustrationStyle: DEFAULT_CONFIG.ui.illustrationStyle,
@@ -40,7 +41,9 @@ export const Providers = (props: PropsWithChildren<{}>) => {
           config={alchemyConfig}
           queryClient={queryClient}
         >
-          <ConfigContextProvider>{props.children}</ConfigContextProvider>
+          <ToastProvider>
+            <ConfigContextProvider>{props.children}</ConfigContextProvider>
+          </ToastProvider>
         </AlchemyAccountProvider>
       </QueryClientProvider>
     </Suspense>
