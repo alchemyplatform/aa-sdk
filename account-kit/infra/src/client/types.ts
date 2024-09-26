@@ -1,9 +1,9 @@
 import { type BundlerClient, type UserOperationRequest } from "@aa-sdk/core";
-import type { HttpTransport } from "viem";
 import type {
   SimulateUserOperationAssetChangesRequest,
   SimulateUserOperationAssetChangesResponse,
 } from "../actions/types";
+import type { AlchemyTransport } from "../alchemyTransport";
 
 export type AlchemyRpcSchema = [
   {
@@ -18,8 +18,8 @@ export type AlchemyRpcSchema = [
   }
 ];
 
-export type ClientWithAlchemyMethods = BundlerClient<HttpTransport> & {
-  request: BundlerClient<HttpTransport>["request"] &
+export type ClientWithAlchemyMethods = BundlerClient<AlchemyTransport> & {
+  request: BundlerClient<AlchemyTransport>["request"] &
     {
       request(args: {
         method: "alchemy_simulateUserOperationAssetChanges";
@@ -31,6 +31,4 @@ export type ClientWithAlchemyMethods = BundlerClient<HttpTransport> & {
         params: [];
       }): Promise<UserOperationRequest["maxPriorityFeePerGas"]>;
     }["request"];
-} & {
-  updateHeaders: (headers: HeadersInit) => void;
 };

@@ -5,6 +5,7 @@ import {
   type SmartAccountSigner,
 } from "@aa-sdk/core";
 import {
+  alchemy,
   alchemyEnhancedApiActions,
   arbitrumSepolia,
   createAlchemySmartAccountClient,
@@ -33,6 +34,7 @@ describe("MultiOwnerLightAccount Client Tests", () => {
       },
       `
       {
+        "alchemyRpcUrl": "https://arb-sepolia.g.alchemy.com/v2/",
         "fetchOptions": {
           "headers": {
             "Alchemy-AA-Sdk-Version": Any<String>,
@@ -40,14 +42,13 @@ describe("MultiOwnerLightAccount Client Tests", () => {
             "Authorization": "Bearer test",
           },
         },
-        "key": "http",
-        "name": "HTTP JSON-RPC",
+        "key": "alchemy",
+        "name": "Alchemy Transport",
         "request": [Function],
         "retryCount": 3,
         "retryDelay": 150,
-        "timeout": 10000,
-        "type": "http",
-        "url": "https://arb-sepolia.g.alchemy.com/v2/",
+        "timeout": undefined,
+        "type": "alchemy",
       }
     `
     );
@@ -80,7 +81,9 @@ describe("MultiOwnerLightAccount Client Tests", () => {
   ])("should successfully create a provider", (args) => {
     expect(() =>
       createAlchemySmartAccountClient({
-        ...args,
+        transport: alchemy({
+          ...args,
+        }),
         chain,
       })
     ).not.toThrowError();
@@ -89,7 +92,9 @@ describe("MultiOwnerLightAccount Client Tests", () => {
   it("should correctly do runtime validation when connection config is invalid", () => {
     expect(() =>
       createAlchemySmartAccountClient({
-        rpcUrl: 1 as unknown as string,
+        transport: alchemy({
+          rpcUrl: 1 as unknown as string,
+        }),
         chain,
       })
     ).toThrowErrorMatchingSnapshot();
@@ -104,15 +109,13 @@ describe("MultiOwnerLightAccount Client Tests", () => {
           "code": "custom",
           "message": "chain must include an alchemy rpc url. See \`createAlchemyChain\` or import a chain from \`@account-kit/infra\`.",
           "fatal": true,
-          "path": [
-            "chain"
-          ]
+          "path": []
         }
       ]]
     `);
   });
 
-  it("should hanve enhanced api properties on the provider", async () => {
+  it("should have enhanced api properties on the provider", async () => {
     const alchemy = new Alchemy({
       network: Network.MATIC_MUMBAI,
       apiKey: "test",
@@ -136,9 +139,11 @@ describe("MultiOwnerLightAccount Client Tests", () => {
     chain: Chain;
   }) =>
     createMultiOwnerLightAccountAlchemyClient({
-      jwt: "test",
-      signer,
+      transport: alchemy({
+        jwt: "test",
+      }),
       chain,
+      signer,
       accountAddress: "0x86f3B0211764971Ad0Fc8C8898d31f5d792faD84",
     });
 });

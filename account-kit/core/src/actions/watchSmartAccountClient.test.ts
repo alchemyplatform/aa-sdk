@@ -10,6 +10,8 @@ import { setChain } from "./setChain.js";
 import { watchSmartAccountClient } from "./watchSmartAccountClient.js";
 
 describe("watchSmartAccountClient", () => {
+  beforeEach(() => localStorage.clear());
+
   it("should fire the on subscribe callback if signer status changes", () => {
     const config = givenConfig();
     const onChange = vi.fn();

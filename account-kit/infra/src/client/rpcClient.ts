@@ -1,11 +1,6 @@
-import {
-  createBundlerClient,
-  type ConnectionConfig,
-  type NoUndefined,
-} from "@aa-sdk/core";
-import { http, type Chain, type HttpTransportConfig } from "viem";
-import { AlchemyChainSchema } from "../schema.js";
-import { VERSION } from "../version.js";
+import { createBundlerClient } from "@aa-sdk/core";
+import type { Chain } from "viem";
+import type { AlchemyTransport } from "../alchemyTransport.js";
 import type { ClientWithAlchemyMethods } from "./types.js";
 
 /**
@@ -13,14 +8,14 @@ import type { ClientWithAlchemyMethods } from "./types.js";
  *
  * @example
  * ```ts
- * import { createAlchemyPublicRpcClient } from "@account-kit/infra";
+ * import { createAlchemyPublicRpcClient, alchemy } from "@account-kit/infra";
  * import { sepolia } from "@account-kit/infra";
  *
  * const client = createAlchemyPublicRpcClient({
+ *  transport: alchemy({
+ *    apiKey: "ALCHEMY_API_KEY"
+ *  }),
  *  chain: sepolia,
- *  connectionConfig: {
- *    apiKey: "your-api-key",
- *  }
  * });
  * ```
  *
@@ -31,42 +26,14 @@ import type { ClientWithAlchemyMethods } from "./types.js";
  * @returns {ClientWithAlchemyMethods} A client object tailored with Alchemy methods and capabilities to interact with the blockchain
  */
 export const createAlchemyPublicRpcClient = ({
-  chain: chain_,
-  connectionConfig,
-  fetchOptions = {},
+  transport,
+  chain,
 }: {
-  connectionConfig: ConnectionConfig;
-  chain: Chain;
-  fetchOptions?: NoUndefined<HttpTransportConfig["fetchOptions"]>;
+  transport: AlchemyTransport;
+  chain: Chain | undefined;
 }): ClientWithAlchemyMethods => {
-  const chain = AlchemyChainSchema.parse(chain_);
-
-  const rpcUrl =
-    connectionConfig.rpcUrl == null
-      ? `${chain.rpcUrls.alchemy.http[0]}/${connectionConfig.apiKey ?? ""}`
-      : connectionConfig.rpcUrl;
-
-  fetchOptions.headers = {
-    ...fetchOptions.headers,
-    "Alchemy-AA-Sdk-Version": VERSION,
-  };
-
-  if (connectionConfig.jwt != null) {
-    fetchOptions.headers = {
-      ...fetchOptions.headers,
-      Authorization: `Bearer ${connectionConfig.jwt}`,
-    };
-  }
-
   return createBundlerClient({
-    chain: chain,
-    transport: http(rpcUrl, { fetchOptions }),
-  }).extend(() => ({
-    updateHeaders(newHeaders: HeadersInit) {
-      fetchOptions.headers = {
-        ...fetchOptions.headers,
-        ...newHeaders,
-      };
-    },
-  }));
+    chain,
+    transport,
+  });
 };

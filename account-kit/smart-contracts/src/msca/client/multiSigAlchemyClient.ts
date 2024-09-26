@@ -3,9 +3,7 @@ import {
   type SmartAccountSigner,
 } from "@aa-sdk/core";
 import {
-  AlchemyProviderConfigSchema,
-  createAlchemyPublicRpcClient,
-  createAlchemySmartAccountClientFromExisting,
+  createAlchemySmartAccountClient,
   type AlchemySmartAccountClient,
   type AlchemySmartAccountClientConfig,
 } from "@account-kit/infra";
@@ -23,13 +21,7 @@ import {
   type MultisigUserOperationContext,
   type PluginManagerActions,
 } from "@account-kit/smart-contracts";
-import {
-  custom,
-  type Chain,
-  type CustomTransport,
-  type HttpTransport,
-  type Transport,
-} from "viem";
+import { type Chain, type HttpTransport } from "viem";
 
 // todo: this file seems somewhat duplicated with ./modularAccountClient.ts, but that file has some multi-owner specific fields. Is there a way to refactor these two to de-dupe?
 
@@ -37,11 +29,10 @@ export type AlchemyMultisigAccountClientConfig<
   TSigner extends SmartAccountSigner = SmartAccountSigner
 > = Omit<
   CreateMultisigModularAccountParams<HttpTransport, TSigner>,
-  "transport" | "chain"
+  "transport"
 > &
   Omit<
     AlchemySmartAccountClientConfig<
-      Transport,
       Chain,
       LightAccount<TSigner>,
       MultisigUserOperationContext
@@ -55,7 +46,6 @@ export function createMultisigAccountAlchemyClient<
   params: AlchemyMultisigAccountClientConfig<TSigner>
 ): Promise<
   AlchemySmartAccountClient<
-    CustomTransport,
     Chain | undefined,
     MultisigModularAccount<TSigner>,
     MultisigPluginActions<MultisigModularAccount<TSigner>> &
@@ -76,7 +66,7 @@ export function createMultisigAccountAlchemyClient<
  * import { generatePrivateKey } from "viem"
  *
  * const alchemyAccountClient = await createMultisigAccountAlchemyClient({
- *  apiKey: "your-api-key",
+ *  transport: alchemy({ apiKey: "your-api-key" }),
  *  chain: sepolia,
  *  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
  *  owners: [...], // other owners on the account
@@ -91,7 +81,6 @@ export async function createMultisigAccountAlchemyClient(
   config: AlchemyMultisigAccountClientConfig
 ): Promise<
   AlchemySmartAccountClient<
-    Transport,
     Chain | undefined,
     MultisigModularAccount<SmartAccountSigner>,
     MultisigPluginActions<MultisigModularAccount<SmartAccountSigner>> &
@@ -100,26 +89,16 @@ export async function createMultisigAccountAlchemyClient(
     MultisigUserOperationContext
   >
 > {
-  const { chain, opts, ...connectionConfig } =
-    AlchemyProviderConfigSchema.parse(config);
-
-  const client = createAlchemyPublicRpcClient({
-    chain,
-    connectionConfig,
-  });
+  const { transport, opts, chain } = config;
 
   const account = await createMultisigModularAccount({
-    transport: custom(client),
     ...config,
+    transport,
+    chain,
   });
 
-  return createAlchemySmartAccountClientFromExisting<
-    Chain | undefined,
-    MultisigModularAccount<SmartAccountSigner>,
-    MultisigUserOperationContext
-  >({
+  return createAlchemySmartAccountClient({
     ...config,
-    client,
     account,
     opts,
     signUserOperation: multisigSignatureMiddleware,
