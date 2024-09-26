@@ -98,6 +98,13 @@ export const AuthCardContent = ({
     }
   }, [authStep, setAuthStep, signer]);
 
+  const onClose = useCallback(() => {
+    if (authStep.type === "passkey_create") {
+      setAuthStep({ type: "complete" });
+    }
+    closeAuthModal();
+  }, [authStep.type, closeAuthModal, setAuthStep]);
+
   useLayoutEffect(() => {
     if (authStep.type === "complete") {
       didGoBack.current = false;
@@ -141,7 +148,7 @@ export const AuthCardContent = ({
                 showClose={showClose}
                 showBack={canGoBack}
                 onBack={onBack}
-                onClose={closeAuthModal}
+                onClose={onClose}
               />
             )}
             <Step />
