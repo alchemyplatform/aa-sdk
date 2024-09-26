@@ -164,7 +164,7 @@ export const MintCard = () => {
             <LoadingIcon />
           </div>
         )}
-        <div className="flex justify-between mb-8">
+        <div className={`flex justify-between ${hasCollected ? 'mb-4': 'mb-6'}`}>
           <p className="text-fg-secondary text-sm">Gas Fee</p>
           <p>
             <span className="line-through mr-1 text-sm text-fg-primary align-top">
@@ -193,7 +193,7 @@ export const MintCard = () => {
             Collect NFT
           </button>
         ) : (
-          <div>
+          <div className="border-t-2 pt-4">
             <a
               href={`https://sepolia.arbiscan.io/block/${sendUserOperationResult?.hash}`}
               target="_blank"
