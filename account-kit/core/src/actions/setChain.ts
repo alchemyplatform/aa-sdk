@@ -1,4 +1,4 @@
-import { createAlchemyPublicRpcClient } from "@account-kit/infra";
+import { alchemy, createAlchemyPublicRpcClient } from "@account-kit/infra";
 import { switchChain } from "@wagmi/core";
 import type { Chain } from "viem";
 import { ChainNotFoundError } from "../errors.js";
@@ -27,12 +27,14 @@ export async function setChain(config: AlchemyAccountsConfig, chain: Chain) {
   }
 
   await switchChain(config._internal.wagmiConfig, { chainId: chain.id });
+  const transport = alchemy(connection);
 
   config.store.setState(() => ({
     chain,
+    transport,
     bundlerClient: createAlchemyPublicRpcClient({
+      transport,
       chain,
-      connectionConfig: connection,
     }),
   }));
 }

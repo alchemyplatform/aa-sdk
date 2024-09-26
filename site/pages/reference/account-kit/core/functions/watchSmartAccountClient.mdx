@@ -28,7 +28,7 @@ watchSmartAccountClient({ type: "LightAccount" }, config)(console.log);
 
 ### params
 
-`GetSmartAccountClientParams<TTransport, TChain, TAccount>`
+`GetSmartAccountClientParams<TChain, TAccount>`
 the parameters needed to get the smart account client
 
 ### config
@@ -38,5 +38,5 @@ the configuration containing the client store and other settings
 
 ## Returns
 
-`(onChange: (client: GetSmartAccountClientResult<TTransport, TChain, SupportedAccount<TAccount>>) => void) => (() => void)`
+`(onChange: (client: GetSmartAccountClientResult<TChain, SupportedAccount<TAccount>>) => void) => (() => void)`
 a function that accepts a callback to be called when the client changes and returns a function to unsubscribe from the store

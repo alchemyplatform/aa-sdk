@@ -1,5 +1,5 @@
 import type { NoUndefined } from "@aa-sdk/core";
-import { createAlchemyPublicRpcClient } from "@account-kit/infra";
+import { alchemy, createAlchemyPublicRpcClient } from "@account-kit/infra";
 import { AlchemySignerStatus, AlchemyWebSigner } from "@account-kit/signer";
 import type { Chain } from "viem";
 import {
@@ -48,14 +48,17 @@ export const createAccountKitStore = (
                     ),
                   };
                 }
+
                 return bigintMapReplacer(key, value);
               },
               reviver: (key, value) => {
                 if (key === "bundlerClient") {
-                  const { connection } = value as { connection: Connection };
+                  const {
+                    connection: { chain, ...connection },
+                  } = value as { connection: Connection };
                   return createAlchemyPublicRpcClient({
-                    chain: connection.chain,
-                    connectionConfig: connection,
+                    transport: alchemy(connection),
+                    chain,
                   });
                 }
 
@@ -76,10 +79,10 @@ export const createAccountKitStore = (
                   if (!persistedConnection) return false;
 
                   return Array.from(Object.entries(c)).every(([key, value]) => {
-                    return (
-                      (persistedConnection as Record<string, any>)[key] ===
-                      value
-                    );
+                    const pConn = persistedConnection as Record<string, any>;
+                    if (key === "chain") return value.id === pConn.chain.id;
+
+                    return pConn[key] === value;
                   });
                 });
 
@@ -94,13 +97,22 @@ export const createAccountKitStore = (
                 return createInitialStoreState(params);
               }
 
-              // this is the default merge behavior
-              return { ...current, ...persistedState };
+              const { chain, ...connection } = persistedConnections.find(
+                (x) => x.chain.id === persistedState.bundlerClient.chain.id
+              )!;
+
+              return {
+                // this is the default merge behavior
+                ...current,
+                ...persistedState,
+                // we do this since we can't reliable serialize the transport, so instead we just recreate it based on the bundler client
+                transport: alchemy(connection),
+              };
             },
             skipHydration: ssr,
             partialize: ({ signer, accounts, ...writeableState }) =>
               writeableState,
-            version: 5,
+            version: 6,
           })
         : () => createInitialStoreState(params)
     )
@@ -124,13 +136,16 @@ const createInitialStoreState = (
     throw new Error("Chain not found in connections");
   }
 
+  const { chain: _, ...connection } = connectionMap.get(chain.id)!;
+  const transport = alchemy(connection);
   const bundlerClient = createAlchemyPublicRpcClient({
+    transport,
     chain,
-    connectionConfig: connectionMap.get(chain.id)!,
   });
   const chains = connections.map((c) => c.chain);
   const accountConfigs = createEmptyAccountConfigState(chains);
   const baseState: StoreState = {
+    transport,
     bundlerClient,
     chain,
     connections: connectionMap,

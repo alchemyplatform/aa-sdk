@@ -24,7 +24,7 @@ import { LocalAccountSigner } from "@aa-sdk/core";
 import { generatePrivateKey } from "viem"
 
 const alchemyAccountClient = await createMultisigAccountAlchemyClient({
-apiKey: "your-api-key",
+transport: alchemy({ apiKey: "your-api-key" }),
 chain: sepolia,
 signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
 owners: [...], // other owners on the account
