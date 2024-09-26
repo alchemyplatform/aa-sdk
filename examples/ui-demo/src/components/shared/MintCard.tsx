@@ -113,7 +113,7 @@ export const MintCard = () => {
   }, [client?.readContract]);
 
   return (
-    <div className="flex bg-bg-surface-default radius-1 border-btn-secondary overflow-hidden min-h-[630px]">
+    <div className="flex bg-bg-surface-default radius-1 border-btn-secondary overflow-hidden">
       <div className="p-12">
         <h2 className="text-2xl font-semibold tracking-tight leading-10 mb-8 text-fg-primary">
           One-click checkout
