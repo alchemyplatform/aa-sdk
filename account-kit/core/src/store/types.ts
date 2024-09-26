@@ -1,4 +1,7 @@
-import type { ClientWithAlchemyMethods } from "@account-kit/infra";
+import type {
+  AlchemyTransport,
+  ClientWithAlchemyMethods,
+} from "@account-kit/infra";
 import type {
   AlchemySignerParams,
   AlchemySignerStatus,
@@ -7,7 +10,7 @@ import type {
   User,
 } from "@account-kit/signer";
 import type { State as WagmiState } from "@wagmi/core";
-import type { Address, Chain, Transport } from "viem";
+import type { Address, Chain } from "viem";
 import type { PartialBy } from "viem/chains";
 import type { Mutate, StoreApi } from "zustand/vanilla";
 import type { AccountConfig } from "../actions/createAccount";
@@ -87,7 +90,6 @@ export type StoreState = {
   smartAccountClients: {
     [chain: number]: Partial<{
       [key in SupportedAccountTypes]: GetSmartAccountClientResult<
-        Transport,
         Chain,
         SupportedAccount<key>
       >;
@@ -96,6 +98,7 @@ export type StoreState = {
   // serializable state
   // NOTE: in some cases this can be serialized to cookie storage
   // be mindful of how big this gets. cookie limit 4KB
+  transport: AlchemyTransport;
   bundlerClient: ClientWithAlchemyMethods;
   config: ClientStoreConfig;
   accountConfigs: {

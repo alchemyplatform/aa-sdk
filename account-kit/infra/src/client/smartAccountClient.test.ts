@@ -6,6 +6,7 @@ import {
 import { createLightAccount } from "@account-kit/smart-contracts";
 import { http, zeroAddress } from "viem";
 import { generatePrivateKey } from "viem/accounts";
+import { alchemy } from "../alchemyTransport.js";
 import { sepolia } from "../chains.js";
 import { createAlchemySmartAccountClient } from "./smartAccountClient.js";
 
@@ -173,9 +174,11 @@ describe("AlchemySmartAccountClient tests", () => {
     customMiddleware?: ClientMiddlewareFn;
   } = {}) => {
     return createAlchemySmartAccountClient({
-      rpcUrl: "https://localhost:3000",
-      account,
+      transport: alchemy({
+        rpcUrl: "https://localhost:3000",
+      }),
       chain: sepolia,
+      account,
       customMiddleware,
     });
   };

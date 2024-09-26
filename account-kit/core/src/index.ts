@@ -77,7 +77,6 @@ export {
 export type * from "@account-kit/infra";
 export {
   createAlchemySmartAccountClient,
-  createAlchemySmartAccountClientFromExisting,
   type AlchemySmartAccountClient,
   type AlchemySmartAccountClientConfig,
 } from "@account-kit/infra";

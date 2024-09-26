@@ -1,5 +1,5 @@
 import {
-  createAlchemySmartAccountClientFromExisting,
+  createAlchemySmartAccountClient,
   type AlchemySmartAccountClient,
   type AlchemySmartAccountClientConfig,
 } from "@account-kit/infra";
@@ -19,7 +19,7 @@ import {
   type MultiOwnerPluginActions,
   type PluginManagerActions,
 } from "@account-kit/smart-contracts";
-import type { Address, Chain, Transport } from "viem";
+import type { Address, Chain } from "viem";
 import type {
   AlchemyAccountsConfig,
   Connection,
@@ -29,21 +29,16 @@ import type {
 } from "../types";
 import { createAccount } from "./createAccount.js";
 import { getAccount, type GetAccountParams } from "./getAccount.js";
-import { getBundlerClient } from "./getBundlerClient.js";
+import { getAlchemyTransport } from "./getAlchemyTransport.js";
 import { getConnection } from "./getConnection.js";
 import { getSignerStatus } from "./getSignerStatus.js";
 
 export type GetSmartAccountClientParams<
-  TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SupportedAccountTypes = SupportedAccountTypes
 > = Omit<
-  AlchemySmartAccountClientConfig<
-    TTransport,
-    TChain,
-    SupportedAccount<TAccount>
-  >,
-  "rpcUrl" | "chain" | "apiKey" | "jwt" | "account"
+  AlchemySmartAccountClientConfig<TChain, SupportedAccount<TAccount>>,
+  "transport" | "account" | "chain"
 > &
   GetAccountParams<TAccount>;
 
@@ -60,29 +55,22 @@ export type ClientActions<
   : never;
 
 export type GetSmartAccountClientResult<
-  TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SupportedAccounts = SupportedAccounts
 > = {
-  client?: AlchemySmartAccountClient<
-    TTransport,
-    TChain,
-    TAccount,
-    ClientActions<TAccount>
-  >;
+  client?: AlchemySmartAccountClient<TChain, TAccount, ClientActions<TAccount>>;
   address?: Address;
   isLoadingClient: boolean;
   error?: Error;
 };
 
 export function getSmartAccountClient<
-  TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SupportedAccountTypes = SupportedAccountTypes
 >(
-  params: GetSmartAccountClientParams<TTransport, TChain, TAccount>,
+  params: GetSmartAccountClientParams<TChain, TAccount>,
   config: AlchemyAccountsConfig
-): GetSmartAccountClientResult<TTransport, TChain, SupportedAccount<TAccount>>;
+): GetSmartAccountClientResult<TChain, SupportedAccount<TAccount>>;
 
 /**
  * Obtains a smart account client based on the provided parameters and configuration. Supports creating any of the SupportAccountTypes in Account Kit.
@@ -116,7 +104,7 @@ export function getSmartAccountClient(
     config
   );
   const signerStatus = getSignerStatus(config);
-  const bundlerClient = getBundlerClient(config);
+  const transport = getAlchemyTransport(config);
   const connection = getConnection(config);
   const clientState =
     config.store.getState().smartAccountClients[connection.chain.id]?.[type];
@@ -189,8 +177,9 @@ export function getSmartAccountClient(
     switch (account.source) {
       case "LightAccount":
         return {
-          client: createAlchemySmartAccountClientFromExisting({
-            client: bundlerClient,
+          client: createAlchemySmartAccountClient({
+            transport,
+            chain: connection.chain,
             account: account,
             policyId: connection.policyId,
             ...clientParams,
@@ -200,8 +189,9 @@ export function getSmartAccountClient(
         };
       case "MultiOwnerLightAccount":
         return {
-          client: createAlchemySmartAccountClientFromExisting({
-            client: bundlerClient,
+          client: createAlchemySmartAccountClient({
+            transport,
+            chain: connection.chain,
             account: account,
             policyId: connection.policyId,
             ...clientParams,
@@ -211,8 +201,9 @@ export function getSmartAccountClient(
         };
       case "MultiOwnerModularAccount":
         return {
-          client: createAlchemySmartAccountClientFromExisting({
-            client: bundlerClient,
+          client: createAlchemySmartAccountClient({
+            transport,
+            chain: connection.chain,
             account: account,
             policyId: connection.policyId,
             ...clientParams,
