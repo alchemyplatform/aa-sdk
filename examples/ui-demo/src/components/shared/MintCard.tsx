@@ -113,7 +113,7 @@ export const MintCard = () => {
   }, [client?.readContract]);
 
   return (
-    <div className="flex bg-bg-surface-default radius-1 border-btn-secondary overflow-hidden">
+    <div className="flex bg-bg-surface-default radius-1 border-btn-secondary overflow-hidden min-h-[630px]">
       <div className="p-12">
         <h2 className="text-2xl font-semibold tracking-tight leading-10 mb-8 text-fg-primary">
           One-click checkout
@@ -200,9 +200,9 @@ export const MintCard = () => {
               rel="noreferrer"
               className="text-fg-secondary mb-6 flex justify-between items-center"
             >
-              View on arbiscan
-              <div className="w-5 h-5">
-                <ExternalLinkIcon className="text-fg-primary" />
+              View transaction
+              <div className="w-4 h-4">
+                <ExternalLinkIcon className="text-fg-secondary" />
               </div>
             </a>
             <a
