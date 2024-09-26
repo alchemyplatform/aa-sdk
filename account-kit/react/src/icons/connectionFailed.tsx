@@ -71,8 +71,8 @@ const ConnectionFailedFilled = ({
     <path
       d="M18.76 24.3718V25.1432M18.76 12.0289L18.7662 19.7432"
       stroke="white"
-      stroke-width="3"
-      stroke-linecap="round"
+      strokeWidth="3"
+      strokeLinecap="round"
     />
   </svg>
 );
@@ -101,13 +101,13 @@ const ConnectionFailedLinear = ({
       cy="19.6571"
       r="18.0571"
       stroke="#DC2626"
-      stroke-width="2.5"
+      strokeWidth="2.5"
     />
     <path
       d="M19.76 25.3717V26.1432M19.76 13.0289L19.7662 20.7432"
       stroke="#DC2626"
-      stroke-width="3"
-      stroke-linecap="round"
+      strokeWidth="3"
+      strokeLinecap="round"
     />
   </svg>
 );
@@ -135,8 +135,8 @@ const ConnectionFailedFlat = ({
     <path
       d="M18.76 24.3718V25.1432M18.76 12.0289L18.7662 19.7432"
       stroke="#DC2626"
-      stroke-width="3"
-      stroke-linecap="round"
+      strokeWidth="3"
+      strokeLinecap="round"
       className="stroke-[#DC2626] dark:stroke-[#EF4444]"
     />
   </svg>
