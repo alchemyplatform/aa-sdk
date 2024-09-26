@@ -59,7 +59,7 @@ export const ConnectionError = ({
   return (
     <div className="flex flex-col justify-center content-center gap-3">
       <div className="flex justify-center">
-        <div className="w-[140px] h-[140px]">{getFailedIcon}</div>
+        <div className="w-[48px] h-[48px]">{getFailedIcon}</div>
       </div>
       <h2 className="font-semibold text-lg text-center">{getHeadingText}</h2>
       <p className="text-sm text-center text-fg-secondary">{getBodyText}</p>
@@ -69,7 +69,7 @@ export const ConnectionError = ({
       <Button
         onClick={handleUseAnotherMethod}
         variant={"social"}
-        className="border-0 hover:shadow-none"
+        className="border-0 bg-btn-secondary"
       >
         {ls.error.cta.useAnotherMethod}
       </Button>

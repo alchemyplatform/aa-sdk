@@ -54,7 +54,7 @@ const STRINGS = {
         walletTitle: "Couldn't connect to ",
         walletBody: "The wallet’s connection failed or canceled",
         timedOutTitle: "Connection timed out",
-        timedOutBody: "The connection timed out, please try again.",
+        timedOutBody: "It looks like you need more time.",
       },
       cta: {
         tryAgain: "Try again",
