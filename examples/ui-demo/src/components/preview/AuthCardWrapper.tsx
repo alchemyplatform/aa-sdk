@@ -15,7 +15,7 @@ export function AuthCardWrapper({ className }: { className?: string }) {
     <div
       className={cn(
         "flex flex-1 flex-col justify-center items-center overflow-auto relative",
-        config.ui.theme === "dark" ? "bg-black/70" : "bg-[#EFF4F9]",
+        config.ui.theme === "dark" ? "bg-black/70" : "bg-white",
         user ? "justify-start pt-[180px]" : '',
         className
       )}
