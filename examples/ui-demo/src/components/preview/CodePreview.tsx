@@ -131,7 +131,12 @@ function getConfigCode(config: Config) {
   }
 
   if (config.auth.showExternalWallets) {
-    sections.push([{ type: "external_wallets", walletConnect: { projectId: "your-project-id" } }]);
+    sections.push([
+      {
+        type: "external_wallets",
+        walletConnect: { projectId: "your-project-id" },
+      },
+    ]);
   }
 
   return dedent`
