@@ -13,6 +13,7 @@ import {
 } from "@account-kit/react";
 import { AccountKitNftMinterABI, nftContractAddress } from "@/utils/config";
 import { encodeFunctionData } from "viem";
+import { useConfig } from "@/app/state";
 
 type NFTLoadingState = "loading" | "success";
 
@@ -32,7 +33,7 @@ export const MintCard = () => {
   const [status, setStatus] = useState<MintStatus>(initialState);
   // To be wired into the toast pr
   const [hasError, setHasError] = useState(false);
-  const [hasCollected, setHasCollected] = useState(false);
+  const { nftTransfered, setNFTTransfered } = useConfig();
   const [uri, setURI] = useState<string | null>();
 
   const handleSuccess = () => {
@@ -41,7 +42,7 @@ export const MintCard = () => {
       gas: "success",
       signing: "success",
     }));
-    setHasCollected(true);
+    setNFTTransfered(true);
   };
   const handleError = () => {
     setStatus(initialState);
@@ -106,7 +107,7 @@ export const MintCard = () => {
     <div className="flex bg-bg-surface-default radius-1 border-btn-secondary border-2 overflow-hidden h-[532px]">
       <div className="px-10 py-12 h-full w-[428px]">
         <h1 className="text-3xl font-semibold  leading-10 mb-8 text-fg-primary">
-          {!hasCollected ? "One-click checkout" : "You collected your NFT!"}
+          {!nftTransfered ? "One-click checkout" : "You collected your NFT!"}
         </h1>
         <ValueProp
           title="Invisible signing"
@@ -143,7 +144,7 @@ export const MintCard = () => {
         </h3>
         {uri ? (
           <div className="relative">
-            {hasCollected && (
+            {nftTransfered && (
               <div className="absolute top-4 left-4 py-1 px-2 bg-[#F0FDF4] text-[#15803D] radius-1 text-xs font-semibold">
                 Collected
               </div>
@@ -163,7 +164,7 @@ export const MintCard = () => {
           </div>
         )}
         <div
-          className={`flex justify-between ${hasCollected ? "mb-3" : "mb-14"}`}
+          className={`flex justify-between ${nftTransfered ? "mb-3" : "mb-14"}`}
         >
           <p className="text-fg-secondary text-sm">Gas Fee</p>
           <p>
@@ -184,7 +185,7 @@ export const MintCard = () => {
             </span>
           </p>
         </div>
-        {!hasCollected ? (
+        {!nftTransfered ? (
           <button
             className="btn btn-primary w-full p-2 radius mb-4"
             disabled={Object.values(status).some((x) => x === "loading")}

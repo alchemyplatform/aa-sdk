@@ -3,13 +3,14 @@
 import { Authentication } from "@/components/configuration/Authentication";
 import { Styling } from "@/components/configuration/Styling";
 import { Inter, Public_Sans } from "next/font/google";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { AuthCardWrapper } from "../components/preview/AuthCardWrapper";
 import { CodePreview } from "../components/preview/CodePreview";
 import { CodePreviewSwitch } from "../components/shared/CodePreviewSwitch";
 import { TopNav } from "../components/topnav/TopNav";
 import { UserConnectionAvatarWithPopover } from "@/components/shared/user-connection-avatar/UserConnectionAvatarWithPopover";
 import { useUser } from "@account-kit/react";
+import { useConfig } from "./state";
 
 const publicSans = Public_Sans({
   subsets: ["latin"],
@@ -23,6 +24,7 @@ const inter = Inter({
 
 export default function Home() {
   const [showCode, setShowCode] = useState(false);
+  const { nftTransfered } = useConfig();
   const user = useUser();
   return (
     <main
@@ -46,7 +48,9 @@ export default function Home() {
               }  z-10`}
             >
               {!showCode && user && (
-                <UserConnectionAvatarWithPopover deploymentStatus={true} />
+                <UserConnectionAvatarWithPopover
+                  deploymentStatus={nftTransfered}
+                />
               )}
               <div className="flex gap-2">
                 <div className="bg-purple-50 text-[#8B5CF6] px-2 py-1 rounded text-xs font-semibold">
