@@ -154,6 +154,7 @@ export const MintCard = () => {
               src={uri}
               alt="An NFT"
               className="mb-4 rounded-xl"
+              priority
             />
           </div>
         ) : (
