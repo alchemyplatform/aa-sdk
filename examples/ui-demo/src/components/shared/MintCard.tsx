@@ -5,7 +5,6 @@ import { GasIcon } from "../icons/gas";
 import { DrawIcon } from "../icons/draw";
 import { ReceiptIcon } from "../icons/receipt";
 import React, { useCallback, useEffect, useState } from "react";
-import { hexToRGBA } from "../../utils/hexToRGBA";
 import { LoadingIcon } from "../icons/loading";
 import { ExternalLinkIcon } from "../icons/external-link";
 import {
@@ -48,15 +47,6 @@ export const MintCard = () => {
     setStatus(initialState);
     setHasError(true);
   };
-
-  const getPrimaryColorRGBA = useCallback(() => {
-    if (typeof window === "undefined") return hexToRGBA("#363FF9", 0.1);
-    const color = getComputedStyle(document.documentElement)
-      .getPropertyValue("--akui-fg-accent-brand")
-      .trim();
-    const rgba = hexToRGBA(color, 0.1);
-    return rgba;
-  }, []);
 
   const { client } = useSmartAccountClient({ type: "LightAccount" });
   const { sendUserOperationResult, sendUserOperation } = useSendUserOperation({
@@ -148,8 +138,7 @@ export const MintCard = () => {
         />
       </div>
       <div
-        className={`px-10 py-12 h-full`}
-        style={{ background: getPrimaryColorRGBA() }}
+        className={`px-10 py-12 h-full bg-bg-surface-inset`}
       >
         <h3 className="text-fg-secondary text-base font-semibold mb-4">
           NFT Summary
@@ -229,7 +218,7 @@ export const MintCard = () => {
         )}
         <a
           href="https://accountkit.alchemy.com/react/quickstart"
-          className="text-brand flex justify-center text-sm font-semibold"
+          className=" btn-link flex justify-center text-sm font-semibold"
           target="_blank"
           rel="noreferrer"
         >
