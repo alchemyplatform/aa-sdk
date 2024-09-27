@@ -49,7 +49,8 @@ export const Toast = ({ text, open, setOpen, type }: ToastProps) => {
 
   return (
     <>
-      <Root
+      <Root 
+        id="toast"
         open={open}
         onOpenChange={setOpen}
         className={`${getBGColor()} align-middle rounded-lg shadow-lg px-3 py-2 flex justify-center items-center`}

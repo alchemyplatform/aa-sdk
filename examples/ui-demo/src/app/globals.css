@@ -96,8 +96,8 @@
 }
 
 /* Radix Toast Animations */
-@keyframes slideIn {
-  from {
+@keyframes slideInToast {
+  from { 
     transform: translateY(100%);
     opacity: 0;
   }
@@ -107,7 +107,7 @@
   }
 }
 
-@keyframes hide {
+@keyframes hideToast {
   from {
     transform: translateY(0%);
     opacity: 1;
@@ -118,10 +118,10 @@
   }
 }
 
-[data-state="open"] {
-  animation: slideIn 200ms cubic-bezier(0.16, 1, 0.3, 1);
+#toast[data-state="open"] {
+  animation: slideInToast 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-[data-state="closed"] {
-  animation: hide 100ms ease-in forwards;
+#toast[data-state="closed"] {
+  animation: hideToast 100ms ease-in forwards;
 }
