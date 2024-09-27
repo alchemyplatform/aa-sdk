@@ -194,7 +194,7 @@ export const MintCard = () => {
         ) : (
           <div>
             <a
-              href={`${client?.chain?.blockExplorers?.default}?q=${sendUserOperationResult?.hash}`}
+              href={`${client?.chain?.blockExplorers?.default.url}?q=${sendUserOperationResult?.hash}`}
               target="_blank"
               rel="noreferrer"
               className="text-fg-secondary mb-6 flex justify-between items-center"
