@@ -483,6 +483,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     const {
       authProviderId,
       isCustomProvider,
+      auth0Connection,
       scope: providedScope,
       claims: providedClaims,
       mode,
@@ -546,6 +547,9 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     };
     if (claims) {
       params.claims = claims;
+    }
+    if (auth0Connection) {
+      params.connection = auth0Connection;
     }
     authUrl.search = new URLSearchParams(params).toString();
     return authUrl.toString();
