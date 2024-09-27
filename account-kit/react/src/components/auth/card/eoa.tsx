@@ -24,7 +24,7 @@ export const EoaConnectCard = ({ authStep }: Props) => {
     return (
       <ConnectionError
         connectionType="wallet"
-        walletType={authStep.connector.id as EOAWallets}
+        EOAConnector={authStep.connector}
         handleTryAgain={() =>
           setAuthStep({
             type: "eoa_connect",
@@ -69,7 +69,7 @@ export const WalletConnectCard = ({ authStep }: WalletConnectCardProps) => {
     return (
       <ConnectionError
         connectionType="wallet"
-        walletType={EOAWallets.WALLET_CONNECT}
+        EOAConnector={EOAWallets.WALLET_CONNECT}
         handleTryAgain={() => setAuthStep({ type: "wallet_connect" })}
         handleUseAnotherMethod={() => setAuthStep({ type: "pick_eoa" })}
       />
