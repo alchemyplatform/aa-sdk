@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-beta.7](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.6...v4.0.0-beta.7) (2024-09-27)
+
+### Bug Fixes
+
+- close OAuth popup from parent ([#973](https://github.com/alchemyplatform/aa-sdk/issues/973)) ([b67844c](https://github.com/alchemyplatform/aa-sdk/commit/b67844cc7e58eec8de00dd4504a8265a588ca2b6))
+- make add passkey modal icons the same color ([#975](https://github.com/alchemyplatform/aa-sdk/issues/975)) ([bedbc20](https://github.com/alchemyplatform/aa-sdk/commit/bedbc2044fb35c8c80cc305ff3722a1428d227c4))
+- prevent modal from opening if modal is closed ([#985](https://github.com/alchemyplatform/aa-sdk/issues/985)) ([014a9e8](https://github.com/alchemyplatform/aa-sdk/commit/014a9e8ed73c4ed3545612edc1b7944897bce87e))
+- resize email icon in auth methods and fix lint warning ([#966](https://github.com/alchemyplatform/aa-sdk/issues/966)) ([d3b6777](https://github.com/alchemyplatform/aa-sdk/commit/d3b677766884f707ce40d8157bf74551ef450526))
+- **ui-components:** ensure the passkey prompt always shows up when qp is present ([#978](https://github.com/alchemyplatform/aa-sdk/issues/978)) ([81f1580](https://github.com/alchemyplatform/aa-sdk/commit/81f15806e704bcffca6435eccb293923ff64d0e9))
+
+### Features
+
+- add auth0connection param ([#981](https://github.com/alchemyplatform/aa-sdk/issues/981)) ([4fc80e4](https://github.com/alchemyplatform/aa-sdk/commit/4fc80e4e0c675dec51262a761e35d96a30ad100d))
+- add user connection status avatar and dropdown ([#977](https://github.com/alchemyplatform/aa-sdk/issues/977)) ([3f094cb](https://github.com/alchemyplatform/aa-sdk/commit/3f094cb46d98b6870a4436ded88f04f48179c19f))
+- allow passkey flow in demo app ([#969](https://github.com/alchemyplatform/aa-sdk/issues/969)) ([bacf9bd](https://github.com/alchemyplatform/aa-sdk/commit/bacf9bd017b57427e5c601ea86099ad256384b0f))
+- improve OAuth error handling ([#982](https://github.com/alchemyplatform/aa-sdk/issues/982)) ([66e85d6](https://github.com/alchemyplatform/aa-sdk/commit/66e85d620e295eae2644cba03ac1f0a9bcc15941))
+
 # [4.0.0-beta.6](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.5...v4.0.0-beta.6) (2024-09-18)
 
 ### Bug Fixes

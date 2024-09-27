@@ -1,4 +1,5 @@
 import { sha256 } from "viem";
+import type { KnownAuthProvider } from "./signer";
 
 /**
  * Turnkey requires the nonce in the id token to be in this format.
@@ -15,14 +16,11 @@ export type ScopeAndClaims = {
   claims?: string;
 };
 
-const DEFAULT_SCOPE_AND_CLAIMS: Record<string, ScopeAndClaims> = {
+const DEFAULT_SCOPE_AND_CLAIMS: Record<KnownAuthProvider, ScopeAndClaims> = {
   google: { scope: "openid email" },
   apple: { scope: "openid email" },
   facebook: { scope: "openid email" },
-  twitch: {
-    scope: "openid user:read:email",
-    claims: JSON.stringify({ id_token: { email: null } }),
-  },
+  auth0: { scope: "openid email" },
 };
 
 /**
@@ -32,7 +30,7 @@ const DEFAULT_SCOPE_AND_CLAIMS: Record<string, ScopeAndClaims> = {
  * @returns {ScopeAndClaims | undefined} default scope and claims
  */
 export function getDefaultScopeAndClaims(
-  knownAuthProviderId: string
+  knownAuthProviderId: KnownAuthProvider
 ): ScopeAndClaims | undefined {
   return DEFAULT_SCOPE_AND_CLAIMS[knownAuthProviderId];
 }
