@@ -8,6 +8,8 @@ import { AuthCardWrapper } from "../components/preview/AuthCardWrapper";
 import { CodePreview } from "../components/preview/CodePreview";
 import { CodePreviewSwitch } from "../components/shared/CodePreviewSwitch";
 import { TopNav } from "../components/topnav/TopNav";
+import { UserConnectionAvatarWithPopover } from "@/components/shared/user-connection-avatar/UserConnectionAvatarWithPopover";
+import { useUser } from "@account-kit/react";
 
 const publicSans = Public_Sans({
   subsets: ["latin"],
@@ -21,7 +23,7 @@ const inter = Inter({
 
 export default function Home() {
   const [showCode, setShowCode] = useState(false);
-
+  const user = useUser();
   return (
     <main
       className={`flex bg-gray-50 flex-col h-screen ${publicSans.className}`}
@@ -38,14 +40,23 @@ export default function Home() {
 
           <div className="flex flex-col flex-[2] basis-0 relative bg-white border border-border rounded-lg overflow-hidden">
             {/* Code toggle header */}
-            <div className="sticky h-7 top-4 flex items-center justify-end pr-4 gap-2 z-10">
-              <div className="bg-purple-50 text-[#8B5CF6] px-2 py-1 rounded text-xs font-semibold">
-                Code preview
+            <div
+              className={`sticky h-7 top-4 flex items-center ${
+                !user || showCode ? "justify-end" : "justify-between"
+              } p-6 z-10`}
+            >
+              {!showCode && (
+                <UserConnectionAvatarWithPopover deploymentStatus={true} />
+              )}
+              <div className="flex gap-2">
+                <div className="bg-purple-50 text-[#8B5CF6] px-2 py-1 rounded text-xs font-semibold">
+                  Code preview
+                </div>
+                <CodePreviewSwitch
+                  checked={showCode}
+                  onCheckedChange={setShowCode}
+                />
               </div>
-              <CodePreviewSwitch
-                checked={showCode}
-                onCheckedChange={setShowCode}
-              />
             </div>
 
             {/* Don't unmount when showing code preview so that the auth card retains its state */}
