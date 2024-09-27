@@ -113,11 +113,11 @@ export const MintCard = () => {
   }, [client?.readContract]);
 
   return (
-    <div className="flex bg-bg-surface-default radius-1 border-btn-secondary border-2 overflow-hidden transition-all duration-300 ease-out">
-      <div className="p-12">
-        <h2 className="text-2xl font-semibold tracking-tight leading-10 mb-8 text-fg-primary">
-          One-click checkout
-        </h2>
+    <div className="flex bg-bg-surface-default radius-1 border-btn-secondary border-2 overflow-hidden h-[532px]">
+      <div className="px-10 py-12 h-full w-[428px]">
+        <h1 className="text-3xl font-semibold  leading-10 mb-8 text-fg-primary">
+          {!hasCollected ? "One-click checkout" : "You collected your NFT!"}
+        </h1>
         <ValueProp
           title="Invisible signing"
           icon={status.signing}
@@ -147,24 +147,36 @@ export const MintCard = () => {
           description="Deploy the user's smart account in their first transaction"
         />
       </div>
-      <div className={`p-12`} style={{ background: getPrimaryColorRGBA() }}>
+      <div
+        className={`px-10 py-12 h-full`}
+        style={{ background: getPrimaryColorRGBA() }}
+      >
         <h3 className="text-fg-secondary text-base font-semibold mb-4">
           NFT Summary
         </h3>
         {uri ? (
-          <Image
-            width="277"
-            height="255"
-            src={uri}
-            alt="An NFT"
-            className="mb-4"
-          />
+          <div className="relative">
+            {hasCollected && (
+              <div className="absolute top-4 left-4 py-1 px-2 bg-[#F0FDF4] text-[#15803D] radius-1 text-xs font-semibold">
+                Collected
+              </div>
+            )}
+            <Image
+              width="216"
+              height="216"
+              src={uri}
+              alt="An NFT"
+              className="mb-4 rounded-xl"
+            />
+          </div>
         ) : (
-          <div className="w-[277px] h-[255px] flex justify-center items-center mb-4">
+          <div className="w-[216px] h-[216px] flex justify-center items-center mb-4">
             <LoadingIcon />
           </div>
         )}
-        <div className={`flex justify-between ${hasCollected ? 'mb-4': 'mb-6'}`}>
+        <div
+          className={`flex justify-between ${hasCollected ? "mb-3" : "mb-14"}`}
+        >
           <p className="text-fg-secondary text-sm">Gas Fee</p>
           <p>
             <span className="line-through mr-1 text-sm text-fg-primary align-top">
@@ -186,14 +198,14 @@ export const MintCard = () => {
         </div>
         {!hasCollected ? (
           <button
-            className="btn btn-primary w-full p-2 radius"
+            className="btn btn-primary w-full p-2 radius mb-4"
             disabled={Object.values(status).some((x) => x === "loading")}
             onClick={handleCollectNFT}
           >
             Collect NFT
           </button>
         ) : (
-          <div className="border-t-2 pt-4">
+          <div>
             <a
               href={`https://sepolia.arbiscan.io/block/${sendUserOperationResult?.hash}`}
               target="_blank"
@@ -213,16 +225,16 @@ export const MintCard = () => {
             >
               Build with Account Kit
             </a>
-            <a
-              href="https://accountkit.alchemy.com/react/quickstart"
-              className="btn btn-secondary flex text-center p-2"
-              target="_blank"
-              rel="noreferrer"
-            >
-              View docs
-            </a>
           </div>
         )}
+        <a
+          href="https://accountkit.alchemy.com/react/quickstart"
+          className="text-brand flex justify-center text-sm font-semibold"
+          target="_blank"
+          rel="noreferrer"
+        >
+          View docs
+        </a>
       </div>
     </div>
   );
@@ -238,7 +250,7 @@ const ValueProp = ({
   description: string | JSX.Element;
 }) => {
   return (
-    <div className="flex gap-3 mb-8">
+    <div className="flex gap-3 mb-10">
       {getMintIcon(icon)}
       <div className=" max-w-[308px]">
         <h3 className="text-base font-semibold text-fg-secondary">{title}</h3>
