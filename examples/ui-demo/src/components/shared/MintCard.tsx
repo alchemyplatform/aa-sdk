@@ -4,7 +4,7 @@ import { CheckIcon } from "../icons/check";
 import { GasIcon } from "../icons/gas";
 import { DrawIcon } from "../icons/draw";
 import { ReceiptIcon } from "../icons/receipt";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { LoadingIcon } from "../icons/loading";
 import { ExternalLinkIcon } from "../icons/external-link";
 import {
@@ -14,6 +14,7 @@ import {
 import { AccountKitNftMinterABI, nftContractAddress } from "@/utils/config";
 import { encodeFunctionData } from "viem";
 import { useConfig } from "@/app/state";
+import { useQuery } from "@tanstack/react-query";
 
 type NFTLoadingState = "loading" | "success";
 
@@ -34,7 +35,6 @@ export const MintCard = () => {
   // To be wired into the toast pr
   const [hasError, setHasError] = useState(false);
   const { nftTransfered, setNFTTransfered } = useConfig();
-  const [uri, setURI] = useState<string | null>();
 
   const handleSuccess = () => {
     setStatus(() => ({
@@ -86,22 +86,20 @@ export const MintCard = () => {
       },
     });
   }, [client, sendUserOperation]);
+  const { data: uri } = useQuery({
+    queryKey: ["contractURI", nftContractAddress],
+    queryFn: async () => {
+      const uri = await client?.readContract({
+        address: nftContractAddress,
+        abi: AccountKitNftMinterABI,
+        functionName: "baseURI",
+      });
+      console.log("uri", uri);
+      return uri;
 
-  const getContractURI = async () => {
-    const uri = await client?.readContract({
-      address: nftContractAddress,
-      abi: AccountKitNftMinterABI,
-      functionName: "baseURI",
-    });
-    setURI(uri);
-  };
-
-  useEffect(() => {
-    if (!uri) {
-      getContractURI();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [client?.readContract]);
+    },
+    enabled: !!client && !!client?.readContract,
+  });
 
   return (
     <div className="flex bg-bg-surface-default radius-1 border-btn-secondary border-2 overflow-hidden h-[532px]">
@@ -196,7 +194,7 @@ export const MintCard = () => {
         ) : (
           <div>
             <a
-              href={`https://sepolia.arbiscan.io/block/${sendUserOperationResult?.hash}`}
+              href={`${client?.chain?.blockExplorers?.default}?q=${sendUserOperationResult?.hash}`}
               target="_blank"
               rel="noreferrer"
               className="text-fg-secondary mb-6 flex justify-between items-center"
