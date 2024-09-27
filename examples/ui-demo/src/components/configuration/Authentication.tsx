@@ -63,7 +63,7 @@ export const Authentication = ({ className }: { className?: string }) => {
           />
           <AuthMethod
             className="flex-0 shrink-0 grow min-w-full"
-            icon={<BiometricIcon/>}
+            icon={<BiometricIcon />}
             iconClassName="mt-[2px] self-start"
             name="Passkeys"
             details={

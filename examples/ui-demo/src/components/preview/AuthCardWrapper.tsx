@@ -1,11 +1,6 @@
 import { useConfig } from "@/app/state";
 import { cn } from "@/lib/utils";
-import {
-  AuthCard,
-  useLogout,
-  useUser,
-} from "@account-kit/react";
-import { useMemo } from "react";
+import { AuthCard, useLogout, useUser } from "@account-kit/react";
 
 export function AuthCardWrapper({ className }: { className?: string }) {
   const user = useUser();
@@ -19,18 +14,18 @@ export function AuthCardWrapper({ className }: { className?: string }) {
         className
       )}
     >
-      {!user ? (
-        <>
-          <div className="flex flex-col gap-2 w-[368px]">
-            <div className="modal bg-surface-default shadow-md overflow-hidden">
-              <AuthCard />
+      {
+        !user ? (
+          <>
+            <div className="flex flex-col gap-2 w-[368px]">
+              <div className="modal bg-surface-default shadow-md overflow-hidden">
+                <AuthCard />
+              </div>
             </div>
-          </div>
-        </>
-      ) : (
-        null
+          </>
+        ) : null
         // In flight- will be uncommented in the mint pr, a fast follow <MintDemoWrapper />
-      )}
+      }
       {user && (
         <button
           className="text-primary font-semibold text-sm px-3 py-[11px] bg-white border border-gray-300 rounded-lg hover:shadow-md"
