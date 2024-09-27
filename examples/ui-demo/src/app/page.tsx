@@ -41,9 +41,9 @@ export default function Home() {
           <div className="flex flex-col flex-[2] basis-0 relative bg-white border border-border rounded-lg overflow-hidden">
             {/* Code toggle header */}
             <div
-              className={`sticky h-7 top-4 flex items-center ${
+              className={`absolute h-7 top-6 flex items-center left-6 right-6 ${
                 !user || showCode ? "justify-end" : "justify-between"
-              } p-6 z-10`}
+              }  z-10`}
             >
               {!showCode && (
                 <UserConnectionAvatarWithPopover deploymentStatus={true} />
@@ -60,8 +60,8 @@ export default function Home() {
             </div>
 
             {/* Don't unmount when showing code preview so that the auth card retains its state */}
-            <AuthCardWrapper className={showCode ? "hidden" : "-mt-7"} />
-            {showCode && <CodePreview className="-mt-7" />}
+            <AuthCardWrapper className={showCode ? "hidden" : "mt-0"} />
+            {showCode && <CodePreview />}
           </div>
         </div>
       </div>
