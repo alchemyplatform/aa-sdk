@@ -310,6 +310,24 @@ export const shape: Chain = defineChain({
   },
 });
 
+export const beraChainBartio: Chain = defineChain({
+  id: 80084,
+  name: "BeraChain Bartio",
+  network: "BeraChain Bartio",
+  nativeCurrency: { name: "Bera", symbol: "BERA", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://berachain-bartio.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://berachain-bartio.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://berachain-bartio.g.alchemy.com/v2"],
+    },
+  },
+});
+
 export const arbitrumNova: Chain = {
   ...vabn,
   rpcUrls: {
