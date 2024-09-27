@@ -45,7 +45,7 @@ export default function Home() {
                 !user || showCode ? "justify-end" : "justify-between"
               }  z-10`}
             >
-              {!showCode && (
+              {!showCode && user && (
                 <UserConnectionAvatarWithPopover deploymentStatus={true} />
               )}
               <div className="flex gap-2">

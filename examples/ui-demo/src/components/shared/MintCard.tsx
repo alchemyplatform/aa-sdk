@@ -137,9 +137,7 @@ export const MintCard = () => {
           description="Deploy the user's smart account in their first transaction"
         />
       </div>
-      <div
-        className={`px-10 py-12 h-full bg-bg-surface-inset`}
-      >
+      <div className={`px-10 py-12 h-full bg-bg-surface-inset`}>
         <h3 className="text-fg-secondary text-base font-semibold mb-4">
           NFT Summary
         </h3>
