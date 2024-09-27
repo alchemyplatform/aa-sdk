@@ -15,6 +15,7 @@ import { AccountKitNftMinterABI, nftContractAddress } from "@/utils/config";
 import { encodeFunctionData } from "viem";
 import { useConfig } from "@/app/state";
 import { useQuery } from "@tanstack/react-query";
+import { Toast } from "./Toast";
 
 type NFTLoadingState = "loading" | "success";
 
@@ -32,8 +33,11 @@ type MintStatus = {
 
 export const MintCard = () => {
   const [status, setStatus] = useState<MintStatus>(initialState);
-  // To be wired into the toast pr
-  const [hasError, setHasError] = useState(false);
+  const [toastContent, setToastContent] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
+
   const { nftTransfered, setNFTTransfered } = useConfig();
 
   const handleSuccess = () => {
@@ -42,11 +46,18 @@ export const MintCard = () => {
       gas: "success",
       signing: "success",
     }));
+    setToastContent({
+      type: "success",
+      text: "You've successfully collected your NFT! Refresh to mint again.",
+    });
     setNFTTransfered(true);
   };
   const handleError = () => {
     setStatus(initialState);
-    setHasError(true);
+    setToastContent({
+      type: "error",
+      text: "There was a problem with that action",
+    });
   };
 
   const { client } = useSmartAccountClient({ type: "LightAccount" });
@@ -102,6 +113,13 @@ export const MintCard = () => {
 
   return (
     <div className="flex bg-bg-surface-default radius-1 border-btn-secondary border-2 overflow-hidden h-[532px]">
+      <Toast
+        text={toastContent?.text || ""}
+        type={toastContent?.type || "success"}
+        open={!!toastContent}
+        // For auto close of toast
+        setOpen={() => setToastContent(null)}
+      />
       <div className="px-10 py-12 h-full w-[428px]">
         <h1 className="text-3xl font-semibold  leading-10 mb-8 text-fg-primary">
           {!nftTransfered ? "One-click checkout" : "You collected your NFT!"}

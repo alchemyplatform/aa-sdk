@@ -1,0 +1,72 @@
+"use client";
+import React from "react";
+
+import { Root, Viewport, Close } from "@radix-ui/react-toast";
+import { XIcon } from "../icons/x";
+
+type ToastProps = {
+  text: string;
+  type: "success" | "error";
+  open: boolean;
+  setOpen: (open: boolean) => void;
+};
+
+// Toast is not themed due to its positioning over the perma-white nav bar.
+
+export const Toast = ({ text, open, setOpen, type }: ToastProps) => {
+  const getBGColor = () => {
+    switch (type) {
+      case "error":
+        // "bg-bg-surface-critical"
+        return "bg-[#FEF2F2]";
+      case "success":
+        // bg-bg-surface-success-subtle
+        return "bg-[#F0FdF4]";
+    }
+  };
+
+  const getTextColor = () => {
+    switch (type) {
+      case "error":
+        //  "text-fg-critical";
+        return "text-[#B91C1C]";
+      case "success":
+        //  "text-bg-surface-success";
+        return "text-[#15803D]";
+    }
+  };
+
+  const getButtonColor = () => {
+    switch (type) {
+      case "error":
+        // "bg-surface-error";
+        return "#DC2626";
+      case "success":
+        // "bg-surface-success";
+        return "#16A34A";
+    }
+  };
+
+  return (
+    <>
+      <Root
+        open={open}
+        onOpenChange={setOpen}
+        className={`${getBGColor()} align-middle rounded-lg shadow-lg px-3 py-2 flex justify-center items-center`}
+      >
+        <p className={`${getTextColor()} text-center pr-2 align-middle`}>
+          <span
+            className={`bg-[${getButtonColor()}] align-middle px-2 py-1 text-fg-invert text-xs font-semibold rounded mr-2`}
+          >
+            {type === "success" ? "Success" : "Error"}
+          </span>
+          {text}
+        </p>
+        <Close>
+          <XIcon stroke={getButtonColor()} />
+        </Close>
+      </Root>
+      <Viewport className="fixed top-2 right-1/2 translate-x-1/2 z-50 outline-none" />
+    </>
+  );
+};
