@@ -68,7 +68,7 @@ export const ConnectionError = ({
       <Button
         onClick={handleUseAnotherMethod}
         variant={"social"}
-        className="border-0 hover:shadow-none"
+        className="border-0 bg-btn-secondary"
       >
         {ls.error.cta.useAnotherMethod}
       </Button>
