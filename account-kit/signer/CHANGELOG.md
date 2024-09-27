@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-beta.7](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.6...v4.0.0-beta.7) (2024-09-27)
+
+### Bug Fixes
+
+- close OAuth popup from parent ([#973](https://github.com/alchemyplatform/aa-sdk/issues/973)) ([b67844c](https://github.com/alchemyplatform/aa-sdk/commit/b67844cc7e58eec8de00dd4504a8265a588ca2b6))
+- **ui-components:** ensure the passkey prompt always shows up when qp is present ([#978](https://github.com/alchemyplatform/aa-sdk/issues/978)) ([81f1580](https://github.com/alchemyplatform/aa-sdk/commit/81f15806e704bcffca6435eccb293923ff64d0e9))
+
+### Features
+
+- add auth0connection param ([#981](https://github.com/alchemyplatform/aa-sdk/issues/981)) ([4fc80e4](https://github.com/alchemyplatform/aa-sdk/commit/4fc80e4e0c675dec51262a761e35d96a30ad100d))
+- improve OAuth error handling ([#982](https://github.com/alchemyplatform/aa-sdk/issues/982)) ([66e85d6](https://github.com/alchemyplatform/aa-sdk/commit/66e85d620e295eae2644cba03ac1f0a9bcc15941))
+
 # [4.0.0-beta.6](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.5...v4.0.0-beta.6) (2024-09-18)
 
 **Note:** Version bump only for package @account-kit/signer
