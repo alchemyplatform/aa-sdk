@@ -53,6 +53,8 @@ export type Config = {
 export type ConfigContextType = {
   config: Config;
   setConfig: Dispatch<SetStateAction<Config>>;
+  nftTransfered: boolean;
+  setNFTTransfered: Dispatch<SetStateAction<boolean>>;
 };
 
 export const DEFAULT_CONFIG: Config = {
@@ -78,6 +80,8 @@ export const DEFAULT_CONFIG: Config = {
 export const ConfigContext = createContext<ConfigContextType>({
   config: DEFAULT_CONFIG,
   setConfig: () => undefined,
+  nftTransfered: false,
+  setNFTTransfered: () => undefined,
 });
 
 export function useConfig(): ConfigContextType {
@@ -88,6 +92,7 @@ export function useConfig(): ConfigContextType {
 
 export function ConfigContextProvider(props: PropsWithChildren) {
   const [config, setConfig] = useState<Config>(DEFAULT_CONFIG);
+  const [nftTransfered, setNFTTransfered] = useState(false);
   const { updateConfig } = useUiConfig();
 
   // Sync Alchemy auth UI config
@@ -151,7 +156,9 @@ export function ConfigContextProvider(props: PropsWithChildren) {
   }, [config]);
 
   return (
-    <ConfigContext.Provider value={{ config, setConfig }}>
+    <ConfigContext.Provider
+      value={{ config, setConfig, nftTransfered, setNFTTransfered }}
+    >
       {props.children}
     </ConfigContext.Provider>
   );

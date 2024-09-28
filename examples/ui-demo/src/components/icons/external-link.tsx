@@ -1,7 +1,7 @@
 import { SVGProps } from "react";
 
 export const ExternalLinkIcon = ({
-  stroke = "#475569",
+  stroke = "currentColor",
   ...props
 }: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => (
   <svg
