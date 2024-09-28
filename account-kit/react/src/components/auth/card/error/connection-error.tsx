@@ -14,26 +14,25 @@ export const walletTypeConfig = [
 
 export const ConnectionError = ({
   connectionType,
-  walletType,
+  EOAConnector,
   handleTryAgain,
   handleUseAnotherMethod,
 }: ConnectionErrorProps) => {
   const getHeadingText = useMemo(() => {
     const walletName =
-      walletType && walletTypeConfig.find((w) => w.key === walletType)?.name;
+      EOAConnector === EOAWallets.WALLET_CONNECT
+        ? "Wallet Connect"
+        : EOAConnector?.name ?? "";
 
     switch (connectionType) {
       case "passkey":
         return ls.error.connection.passkeyTitle;
       case "wallet":
-        return (
-          walletType &&
-          ls.error.connection.walletTitle + (walletName ?? "wallet")
-        );
+        return ls.error.connection.walletTitle + (walletName ?? "wallet");
       case "timeout":
         return ls.error.connection.timedOutTitle;
     }
-  }, [connectionType, walletType]);
+  }, [connectionType, EOAConnector]);
 
   const getBodyText = useMemo(() => {
     switch (connectionType) {
@@ -51,15 +50,15 @@ export const ConnectionError = ({
       case "passkey":
         return <PasskeyConnectionFailed />;
       case "wallet":
-        return walletType && <WalletIcon walletType={walletType} />;
+        return EOAConnector && <WalletIcon EOAConnector={EOAConnector} />;
       case "timeout":
         return <Timeout />;
     }
-  }, [connectionType, walletType]);
+  }, [connectionType, EOAConnector]);
   return (
     <div className="flex flex-col justify-center content-center gap-3">
       <div className="flex justify-center">
-        <div className="w-[140px] h-[140px]">{getFailedIcon}</div>
+        <div className="w-[48px] h-[48px]">{getFailedIcon}</div>
       </div>
       <h2 className="font-semibold text-lg text-center">{getHeadingText}</h2>
       <p className="text-sm text-center text-fg-secondary">{getBodyText}</p>
@@ -69,7 +68,7 @@ export const ConnectionError = ({
       <Button
         onClick={handleUseAnotherMethod}
         variant={"social"}
-        className="border-0 hover:shadow-none"
+        className="border-0 bg-btn-secondary"
       >
         {ls.error.cta.useAnotherMethod}
       </Button>

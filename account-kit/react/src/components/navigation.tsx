@@ -21,7 +21,11 @@ export const Navigation = ({
         variant="link"
         onClick={onBack}
         disabled={!showBack}
-        className={showBack ? "text-fg-secondary" : "invisible"}
+        className={
+          showBack
+            ? "text-fg-secondary w-[32px] h-[32px] flex items-center justify-center hover:bg-btn-secondary rounded-md transition-all ease-out duration-200"
+            : "invisible"
+        }
       >
         <BackArrow />
       </Button>
@@ -29,7 +33,11 @@ export const Navigation = ({
       <Button
         variant="link"
         onClick={onClose}
-        className={showClose ? "text-fg-secondary" : "invisible"}
+        className={
+          showClose
+            ? "text-fg-secondary w-[32px] h-[32px] flex items-center justify-center hover:bg-btn-secondary rounded-md transition-all ease-out duration-200"
+            : "invisible"
+        }
       >
         <X />
       </Button>

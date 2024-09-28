@@ -134,7 +134,7 @@ export const AuthCardContent = ({
     <div className="relative">
       {/* Wrapper container that sizes its height dynamically */}
       <div
-        className="transition-all duration-300 ease-out overflow-y-hidden"
+        className="transition-all duration-300 ease-out overflow-y-hidden radius-2"
         style={{ height: height ? `${height}px` : "auto" }}
       >
         <div className="z-[1]" ref={contentRef}>

@@ -1,8 +1,29 @@
 import { ls } from "../../../../strings.js";
 import { LoadingPasskey } from "../../../../icons/passkey.js";
+import { useAuthContext, type AuthStep } from "../../context.js";
+import { ConnectionError } from "../error/connection-error.js";
 
+interface LoadingPasskeyAuthProps {
+  authStep: Extract<AuthStep, { type: "passkey_verify" }>;
+}
 // eslint-disable-next-line jsdoc/require-jsdoc
-export const LoadingPasskeyAuth = () => {
+export const LoadingPasskeyAuth = ({ authStep }: LoadingPasskeyAuthProps) => {
+  const { setAuthStep } = useAuthContext();
+
+  if (authStep.error) {
+    return (
+      <ConnectionError
+        connectionType="passkey"
+        handleTryAgain={() =>
+          setAuthStep({
+            type: "initial",
+          })
+        }
+        handleUseAnotherMethod={() => setAuthStep({ type: "initial" })}
+      />
+    );
+  }
+
   return (
     <div className="flex flex-col gap-5 items-center">
       <div className="flex flex-col items-center justify-center">

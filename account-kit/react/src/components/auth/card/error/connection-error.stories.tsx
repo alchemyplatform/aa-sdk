@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { ConnectionError, walletTypeConfig } from "./connection-error.jsx";
+import { ConnectionError } from "./connection-error.jsx";
 import { EOAWallets } from "./types.js";
 
 const meta: Meta<typeof ConnectionError> = {
@@ -7,7 +7,7 @@ const meta: Meta<typeof ConnectionError> = {
   component: ConnectionError,
   args: {
     connectionType: "passkey",
-    walletType: EOAWallets.COINBASE_WALLET,
+    EOAConnector: EOAWallets.WALLET_CONNECT,
   },
   argTypes: {
     connectionType: {
@@ -15,12 +15,6 @@ const meta: Meta<typeof ConnectionError> = {
         type: "radio",
         defaultValue: "passkey",
         options: ["passkey", "wallet"],
-      },
-    },
-    walletType: {
-      control: {
-        type: "radio",
-        options: walletTypeConfig.map((w) => w.key),
       },
     },
   },
