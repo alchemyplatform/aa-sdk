@@ -1,4 +1,8 @@
-import { type BundlerClient, type UserOperationRequest } from "@aa-sdk/core";
+import {
+  type BundlerClient,
+  type Erc7677RpcSchema,
+  type UserOperationRequest,
+} from "@aa-sdk/core";
 import type {
   SimulateUserOperationAssetChangesRequest,
   SimulateUserOperationAssetChangesResponse,
@@ -15,7 +19,8 @@ export type AlchemyRpcSchema = [
     Method: "rundler_maxPriorityFeePerGas";
     Parameters: [];
     ReturnType: UserOperationRequest["maxPriorityFeePerGas"];
-  }
+  },
+  ...Erc7677RpcSchema<{ policyId: string }>
 ];
 
 export type ClientWithAlchemyMethods = BundlerClient<AlchemyTransport> & {

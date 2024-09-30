@@ -6,15 +6,14 @@ import { erc7677Middleware } from "@aa-sdk/core";
  *
  * @example
  *  ```ts
- *
- * import { sepolia } from "@account-kit/infra";
+ * import { sepolia, alchemyErc7677Middleware } from "@account-kit/infra";
  * import { http } from "viem";
  *
  * const client = createSmartAccountClient({
- *      http("rpc-url"),
- *      sepolia,
- *      alchemyErc7677Middleware("policyId")
- *    );
+ *  transport: http("rpc-url"),
+ *  chain: sepolia,
+ *  ...alchemyErc7677Middleware("policyId")
+ * });
  * ```
  *
  * @param {string} policyId the policyId for Alchemy's gas manager

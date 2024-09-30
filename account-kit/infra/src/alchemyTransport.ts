@@ -8,14 +8,15 @@ import {
 import {
   createTransport,
   http,
+  type EIP1193RequestFn,
   type HttpTransportConfig,
+  type PublicRpcSchema,
   type Transport,
   type TransportConfig,
 } from "viem";
+import type { AlchemyRpcSchema } from "./client/types.js";
 import { AlchemyChainSchema } from "./schema.js";
 import { VERSION } from "./version.js";
-
-type EthereumProvider = { request(...args: any): Promise<any> };
 
 type Never<T> = T extends object
   ? {
@@ -56,7 +57,7 @@ type AlchemyTransportBase = Transport<
     alchemyRpcUrl: string;
     fetchOptions?: AlchemyTransportConfig["fetchOptions"];
   },
-  EthereumProvider["request"]
+  EIP1193RequestFn<[...PublicRpcSchema, ...AlchemyRpcSchema]>
 >;
 
 export type AlchemyTransport = AlchemyTransportBase & {

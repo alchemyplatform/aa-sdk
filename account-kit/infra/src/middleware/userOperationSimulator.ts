@@ -4,35 +4,38 @@ import {
   type ClientMiddlewareFn,
   type UserOperationContext,
 } from "@aa-sdk/core";
-import type { ClientWithAlchemyMethods } from "../client/types";
+import type { AlchemyTransport } from "../alchemyTransport";
 
 /**
  * A middleware function to be used during simulation of user operations which leverages Alchemy's RPC uo simulation method.
  *
  * @example
  * ```ts
- * import { alchemyUserOperationSimulator, createAlchemyPublicRpcClient } from "@account-kit/infra";
+ * import { alchemyUserOperationSimulator, alchemy, sepolia } from "@account-kit/infra";
  * import { createSmartAccountClient } from "@aa-sdk/core";
  *
- * const bundlerClient = createAlchemyPublicRpcClient(...);
+ * const alchemyTransport = alchemy({
+ *  chain: sepolia,
+ *  apiKey: "your-api-key"
+ * });
+ *
  * const client = createSmartAccountClient({
- *  userOperationSimulator: alchemyUserOperationSimulator(bundlerClient),
+ *  chain: sepolia,
+ *  userOperationSimulator: alchemyUserOperationSimulator(alchemyTransport),
  *  ...otherParams
  * });
  * ```
  *
- * @template C The client object with Alchemy methods
- * @param {C} client The client object with Alchemy methods
+ * @param {AlchemyTransport} transport An Alchemy Transport that can be used for making RPC calls to alchemy
  * @returns {ClientMiddlewareFn} A middleware function to simulate and process user operations
  */
 export function alchemyUserOperationSimulator<
-  C extends ClientWithAlchemyMethods,
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined
->(client: C): ClientMiddlewareFn<TContext> {
-  return async (struct, { account }) => {
-    const uoSimResult = await client.request({
+>(transport: AlchemyTransport): ClientMiddlewareFn<TContext> {
+  return async (struct, { account, client }) => {
+    const uoSimResult = await transport({ chain: client.chain }).request({
       method: "alchemy_simulateUserOperationAssetChanges",
       params: [
         deepHexlify(await resolveProperties(struct)),

@@ -22,10 +22,12 @@ import {
 } from "../utils/index.js";
 import type { ClientMiddlewareFn } from "./types";
 
-export type Erc7677RpcSchema = [
+export type Erc7677RpcSchema<
+  TContext extends Record<string, any> = Record<string, any>
+> = [
   {
     Method: "pm_getPaymasterStubData";
-    Parameters: [UserOperationRequest, Address, Hex, Record<string, any>];
+    Parameters: [UserOperationRequest, Address, Hex, TContext];
     ReturnType: {
       sponsor?: { name: string; icon?: string }; // Sponsor info
       paymaster?: Address; // Paymaster address (entrypoint v0.7)
@@ -38,7 +40,7 @@ export type Erc7677RpcSchema = [
   },
   {
     Method: "pm_getPaymasterData";
-    Parameters: [UserOperationRequest, Address, Hex, Record<string, any>];
+    Parameters: [UserOperationRequest, Address, Hex, TContext];
     ReturnType: {
       paymaster?: Address; // Paymaster address (entrypoint v0.7)
       paymasterData?: Hex; // Paymaster data (entrypoint v0.7)
@@ -47,12 +49,10 @@ export type Erc7677RpcSchema = [
   }
 ];
 
-export type Erc7677Client<T extends Transport = Transport> = Client<
-  T,
-  Chain,
-  undefined,
-  Erc7677RpcSchema
->;
+export type Erc7677Client<
+  T extends Transport = Transport,
+  TContext extends Record<string, any> = Record<string, any>
+> = Client<T, Chain, undefined, Erc7677RpcSchema<TContext>>;
 
 export type Erc7677MiddlewareParams<
   TContext extends Record<string, any> | undefined =
