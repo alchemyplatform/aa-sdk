@@ -1,4 +1,4 @@
-import { arbitrumSepolia, sepolia } from "@account-kit/infra";
+import { alchemy, arbitrumSepolia, sepolia } from "@account-kit/infra";
 import { AlchemySignerStatus } from "@account-kit/signer";
 import { createConfig } from "../createConfig.js";
 import {
@@ -10,8 +10,6 @@ import { setChain } from "./setChain.js";
 import { watchSmartAccountClient } from "./watchSmartAccountClient.js";
 
 describe("watchSmartAccountClient", () => {
-  beforeEach(() => localStorage.clear());
-
   it("should fire the on subscribe callback if signer status changes", () => {
     const config = givenConfig();
     const onChange = vi.fn();
@@ -101,7 +99,7 @@ describe("watchSmartAccountClient", () => {
     const config = createConfig({
       chain: sepolia,
       chains: [{ chain: sepolia }, { chain: arbitrumSepolia }],
-      apiKey: "AN_API_KEY",
+      transport: alchemy({ apiKey: "AN_API_KEY" }),
     });
 
     config.store.setState({

@@ -1,5 +1,9 @@
 import type { ConnectionConfig } from "@aa-sdk/core";
 import type {
+  AlchemyTransport,
+  AlchemyTransportConfig,
+} from "@account-kit/infra";
+import type {
   AlchemySignerParams,
   AlchemySignerWebClient,
   AlchemyWebSigner,
@@ -49,49 +53,48 @@ export type AlchemyAccountsConfig = {
 };
 
 // [!region CreateConfigProps]
-export type Connection = ConnectionConfig & {
+export type Connection = {
+  transport: AlchemyTransportConfig;
   chain: Chain;
   policyId?: string;
 };
 
 type RpcConnectionConfig =
-  | (Connection & {
-      /**
-       * Optional parameter that allows you to specify a different RPC Url
-       * or connection to be used specifically by the signer.
-       * This is useful if you have a different backend proxy for the signer
-       * than for your Bundler or Node RPC calls.
-       */
-      signerConnection?: ConnectionConfig;
-      connections?: never;
-      chains?: never;
-    })
   | {
-      connections: Connection[];
       chain: Chain;
-      /**
-       * When providing multiple connections, you must specify the signer connection config
-       * to use since the signer is chain agnostic and has a different RPC url.
-       */
-      signerConnection: ConnectionConfig;
-      chains?: never;
+      chains: {
+        chain: Chain;
+        policyId?: string;
+        // optional transport override
+        transport?: AlchemyTransport;
+      }[];
+      // optional global transport to use for all chains
+      transport: AlchemyTransport;
+      // When providing multiple chains and no default transport, the signer connection is required
+      signerConnection?: ConnectionConfig;
+      policyId?: never;
     }
   | {
-      connections?: never;
-      apiKey: string;
       chain: Chain;
-      chains: { chain: Chain; policyId?: string }[];
-      /**
-       * Optional parameter that allows you to specify a different RPC Url
-       * or connection to be used specifically by the signer.
-       * This is useful if you have a different backend proxy for the signer
-       * than for your Bundler or Node RPC calls.
-       */
+      chains: {
+        chain: Chain;
+        policyId?: string;
+        transport: AlchemyTransport;
+      }[];
+      transport?: never;
+      // When providing multiple chains, then the signer connection is required
+      signerConnection: ConnectionConfig;
+      policyId?: never;
+    }
+  | {
+      transport: AlchemyTransport;
+      chain: Chain;
+      policyId?: string;
       signerConnection?: ConnectionConfig;
+      chains?: never;
     };
 
 export type CreateConfigProps = RpcConnectionConfig & {
-  chain: Chain;
   sessionConfig?: AlchemySignerParams["sessionConfig"];
   /**
    * Enable this parameter if you are using the config in an SSR setting (eg. NextJS)

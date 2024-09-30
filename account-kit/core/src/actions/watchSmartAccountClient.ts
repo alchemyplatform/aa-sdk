@@ -48,10 +48,10 @@ import {
     }
 
     return config.store.subscribe(
-      ({ signerStatus, accounts, bundlerClient, chain }) => ({
+      ({ signerStatus, accounts, chain }) => ({
         signerStatus,
         account: accounts![chain.id][params.type],
-        bundlerClient,
+        chain,
       }),
       () => {
         onChange(getSmartAccountClient(params, config));
@@ -61,7 +61,7 @@ import {
           return (
             a.signerStatus === b.signerStatus &&
             a.account === b.account &&
-            a.bundlerClient === b.bundlerClient
+            a.chain === b.chain
           );
         },
       }
