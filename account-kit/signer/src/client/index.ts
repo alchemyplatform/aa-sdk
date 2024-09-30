@@ -511,7 +511,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     let scope: string;
     let claims: string | undefined;
     if (providedScope) {
-      scope = providedScope;
+      scope = addOpenIdIfAbsent(providedScope);
       claims = providedClaims;
     } else {
       if (isCustomProvider) {
@@ -668,6 +668,17 @@ function resolveRelativeUrl(url: string): string {
   const a = document.createElement("a");
   a.href = url;
   return a.href;
+}
+
+/**
+ * "openid" is a required scope in the OIDC protocol. Insert it if the user
+ * forgot.
+ *
+ * @param {string} scope scope param which may be missing "openid"
+ * @returns {string} scope which most definitely contains "openid"
+ */
+function addOpenIdIfAbsent(scope: string): string {
+  return scope.match(/\bopenid\b/) ? scope : `openid ${scope}`;
 }
 
 /**
