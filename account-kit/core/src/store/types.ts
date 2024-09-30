@@ -1,7 +1,4 @@
-import type {
-  AlchemyTransport,
-  ClientWithAlchemyMethods,
-} from "@account-kit/infra";
+import type { ClientWithAlchemyMethods } from "@account-kit/infra";
 import type {
   AlchemySignerParams,
   AlchemySignerStatus,
@@ -95,11 +92,10 @@ export type StoreState = {
       >;
     }>;
   };
+  bundlerClient: ClientWithAlchemyMethods;
   // serializable state
   // NOTE: in some cases this can be serialized to cookie storage
   // be mindful of how big this gets. cookie limit 4KB
-  transport: AlchemyTransport;
-  bundlerClient: ClientWithAlchemyMethods;
   config: ClientStoreConfig;
   accountConfigs: {
     [chain: number]: Partial<{
