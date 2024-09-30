@@ -61,7 +61,7 @@ To use your account, you will need to pass it into a `SmartAccountClient`.
 :::code-group
 
 ```ts twoslash [example.ts]
-import { createAlchemySmartAccountClient } from "@account-kit/infra";
+import { createAlchemySmartAccountClient, alchemy } from "@account-kit/infra";
 import { sepolia } from "viem/chains";
 import { myAccount } from "./my-account";
 
@@ -69,7 +69,9 @@ const client = createAlchemySmartAccountClient({
   // created above
   account: myAccount,
   chain: sepolia,
-  transport: http("RPC_URL"),
+  transport: alchemy({
+    apiKey: "YOUR_API_KEY",
+  }),
 });
 ```
 

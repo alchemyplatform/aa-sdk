@@ -1,5 +1,5 @@
 import { LocalAccountSigner } from "@aa-sdk/core";
-import { sepolia } from "@account-kit/infra";
+import { alchemy, sepolia } from "@account-kit/infra";
 import { createMultisigAccountAlchemyClient } from "@account-kit/smart-contracts";
 
 const MODULAR_MULTISIG_ACCOUNT_OWNER_MNEMONIC = "YOUR MNEMONIC";
@@ -29,5 +29,7 @@ export const multisigAccountClient = await createMultisigAccountAlchemyClient({
   signer: signers[0],
   owners,
   threshold,
-  apiKey: "YOUR_API_KEY",
+  transport: alchemy({
+    apiKey: "YOUR_API_KEY",
+  }),
 });

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { LocalAccountSigner } from "@aa-sdk/core";
-import { sepolia } from "@account-kit/infra";
+import { alchemy, sepolia } from "@account-kit/infra";
 import {
   createModularAccountAlchemyClient,
   SessionKeyAccessListType,
@@ -11,11 +11,12 @@ import {
 } from "@account-kit/smart-contracts";
 import { keccak256, zeroHash } from "viem";
 
+const transport = alchemy({ apiKey: "ALCHEMY_API_KEY" });
 export const client = (
   await createModularAccountAlchemyClient({
     chain: sepolia,
     signer: LocalAccountSigner.mnemonicToAccountSigner("MNEMONIC"),
-    apiKey: "ALCHEMY_API_KEY",
+    transport,
   })
 ).extend(sessionKeyPluginActions);
 
