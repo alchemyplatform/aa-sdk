@@ -9,7 +9,7 @@ import { useToast } from "@/hooks/useToast";
 
 export const Toast = () => {
   const { closeToast, toast } = useToast();
-
+  const { type, text, open } = toast;
   const getBGColor = () => {
     switch (toast?.type) {
       case "error":
@@ -47,17 +47,19 @@ export const Toast = () => {
     <>
       <Root
         id="toast"
-        open={!!toast}
+        open={open}
         onOpenChange={closeToast}
         className={`${getBGColor()} align-middle rounded-lg shadow-lg px-3 py-2 flex justify-center items-center`}
       >
         <p className={`${getTextColor()} text-center pr-2 align-middle`}>
           <span
-            className={`bg-[${getButtonColor()}] align-middle px-2 py-1 text-fg-invert text-xs font-semibold rounded mr-2`}
+            className={`${
+              type === "success" ? "bg-[#16A34A]" : "bg-[#DC2626]"
+            } align-middle px-2 py-1 text-fg-invert text-xs font-semibold rounded mr-2`}
           >
-            {toast?.type === "success" ? "Success" : "Error"}
+            {type === "success" ? "Success" : "Error"}
           </span>
-          {toast?.text}
+          {text}
         </p>
         <Close>
           <XIcon stroke={getButtonColor()} />
