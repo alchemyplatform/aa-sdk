@@ -18,12 +18,12 @@ import { createAlchemySmartAccountClient } from "@account-kit/infra";
 ## Usage
 
 ```ts
-import { createAlchemySmartAccountClient } from "@account-kit/infra";
+import { createAlchemySmartAccountClient, alchemy } from "@account-kit/infra";
 import { sepolia } from "@account-kit/infra/chain";
 
 const client = createAlchemySmartAccountClient({
   chain: sepolia,
-  apiKey: "your-api-key",
+  transport: alchemy({ apiKey: "your-api-key" }),
 });
 ```
 

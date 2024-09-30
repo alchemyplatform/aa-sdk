@@ -34,6 +34,22 @@ with your provider on what the correct logic is.
 
 It might be the case that you want to use a different RPC provider for your bundler traffic and your node traffic. This is a common use case, and you can do this by leveraging the [`split`](/reference/aa-sdk/core/functions/split) transport and passing it to your `createSmartAccountClient` call. For example:
 
+### Using Alchemy Bundler and Gas Manager with 3rd Party Node RPCs
+
+If you want to split your node traffic from Alchemy's Bundler traffic, you can do this with the `alchemyTransport`
+
+```ts twoslash
+import { alchemy } from "@account-kit/infra";
+
+const alchemyTransport = alchemy({
+  alchemyConnection: { apiKey: "your-api-key" },
+  nodeRpcUrl: "YOUR_NODE_RPC_URL",
+});
+// now use this transport in a client
+```
+
+### Using two different 3rd Party Bundler and Node RPCs
+
 ```ts twoslash
 import { split } from "@aa-sdk/core";
 import { createPublicClient, http } from "viem";

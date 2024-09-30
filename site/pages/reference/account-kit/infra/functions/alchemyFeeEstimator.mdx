@@ -19,22 +19,26 @@ import { alchemyFeeEstimator } from "@account-kit/infra";
 ## Usage
 
 ```ts
-import { alchemyFeeEstimator, createAlchemyPublicRpcClient } from "@account-kit/infra";
+import { alchemyFeeEstimator, alchemy } from "@account-kit/infra";
 import { createSmartAccountClient } from "@aa-sdk/core";
 
-const bundlerClient = createAlchemyPublicRpcClient(...);
+const alchemyTransport = alchemy({
+  chain: sepolia,
+  apiKey: "your-api-key",
+});
+
 const client = createSmartAccountClient({
-feeEstimator: alchemyFeeEstimator(bundlerClient),
-...otherParams
+  feeEstimator: alchemyFeeEstimator(alchemyTransport),
+  ...otherParams,
 });
 ```
 
 ## Parameters
 
-### client
+### transport
 
-`ClientWithAlchemyMethods`
-The client with Alchemy methods
+`AlchemyTransport`
+An alchemy transport for making Alchemy specific RPC calls
 
 ## Returns
 
