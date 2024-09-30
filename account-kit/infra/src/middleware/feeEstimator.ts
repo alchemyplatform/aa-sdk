@@ -1,6 +1,6 @@
 import type { ClientMiddlewareFn } from "@aa-sdk/core";
 import { applyUserOpOverrideOrFeeOption } from "@aa-sdk/core";
-import type { ClientWithAlchemyMethods } from "../client/types";
+import type { AlchemyTransport } from "../alchemyTransport";
 
 /**
  * Function that estimates the transaction fees using Alchemy methods for a given client.
@@ -8,28 +8,33 @@ import type { ClientWithAlchemyMethods } from "../client/types";
  *
  * @example
  * ```ts
- * import { alchemyFeeEstimator, createAlchemyPublicRpcClient } from "@account-kit/infra";
+ * import { alchemyFeeEstimator, alchemy } from "@account-kit/infra";
  * import { createSmartAccountClient } from "@aa-sdk/core";
  *
- * const bundlerClient = createAlchemyPublicRpcClient(...);
+ * const alchemyTransport = alchemy({
+ *  chain: sepolia,
+ *  apiKey: "your-api-key"
+ * });
+ *
  * const client = createSmartAccountClient({
- *  feeEstimator: alchemyFeeEstimator(bundlerClient),
+ *  feeEstimator: alchemyFeeEstimator(alchemyTransport),
  *  ...otherParams
  * });
  * ```
  *
- * @param {ClientWithAlchemyMethods} client The client with Alchemy methods
+ * @param {AlchemyTransport} transport An alchemy transport for making Alchemy specific RPC calls
  * @returns {ClientMiddlewareFn} A middleware function that takes a transaction structure and fee options, and returns the augmented structure with estimated fees
  */
-export const alchemyFeeEstimator: <C extends ClientWithAlchemyMethods>(
-  client: C
+export const alchemyFeeEstimator: (
+  transport: AlchemyTransport
 ) => ClientMiddlewareFn =
-  (client) =>
-  async (struct, { overrides, feeOptions }) => {
+  (transport) =>
+  async (struct, { overrides, feeOptions, client }) => {
+    const transport_ = transport({ chain: client.chain });
     let [block, maxPriorityFeePerGasEstimate] = await Promise.all([
       client.getBlock({ blockTag: "latest" }),
       // it is a fair assumption that if someone is using this Alchemy Middleware, then they are using Alchemy RPC
-      client.request({
+      transport_.request({
         method: "rundler_maxPriorityFeePerGas",
         params: [],
       }),

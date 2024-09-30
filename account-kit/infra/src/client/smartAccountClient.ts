@@ -1,4 +1,5 @@
 import {
+  ChainNotFoundError,
   createSmartAccountClient,
   isSmartAccountWithSigner,
   type Prettify,
@@ -20,7 +21,6 @@ import {
   alchemyActions,
   type AlchemySmartAccountClientActions,
 } from "./decorators/smartAccount.js";
-import { createAlchemyPublicRpcClient } from "./rpcClient.js";
 import type { AlchemyRpcSchema } from "./types.js";
 
 export function getSignerTypeHeader<
@@ -113,12 +113,12 @@ export function createAlchemySmartAccountClient<
  *
  * @example
  * ```ts
- * import { createAlchemySmartAccountClient } from "@account-kit/infra";
+ * import { createAlchemySmartAccountClient, alchemy } from "@account-kit/infra";
  * import { sepolia } from "@account-kit/infra/chain";
  *
  * const client = createAlchemySmartAccountClient({
  *  chain: sepolia,
- *  apiKey: "your-api-key",
+ *  transport: alchemy({ apiKey: "your-api-key" }),
  * });
  * ```
  *
@@ -137,13 +137,12 @@ export function createAlchemySmartAccountClient({
   chain,
   opts,
 }: AlchemySmartAccountClientConfig): AlchemySmartAccountClient {
-  const client = createAlchemyPublicRpcClient({
-    transport,
-    chain,
-  });
+  if (!chain) {
+    throw new ChainNotFoundError();
+  }
 
   const feeOptions =
-    opts?.feeOptions ?? getDefaultUserOperationFeeOptions(client.chain);
+    opts?.feeOptions ?? getDefaultUserOperationFeeOptions(chain);
 
   const scaClient = createSmartAccountClient({
     account,
@@ -160,9 +159,9 @@ export function createAlchemySmartAccountClient({
       }
       return customMiddleware ? customMiddleware(struct, args) : struct;
     },
-    feeEstimator: feeEstimator ?? alchemyFeeEstimator(client),
+    feeEstimator: feeEstimator ?? alchemyFeeEstimator(transport),
     userOperationSimulator: useSimulation
-      ? alchemyUserOperationSimulator(client)
+      ? alchemyUserOperationSimulator(transport)
       : undefined,
     gasEstimator,
     ...(policyId && alchemyGasManagerMiddleware(policyId)),
