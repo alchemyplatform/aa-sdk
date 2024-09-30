@@ -6,7 +6,7 @@ import { links } from "@/utils/links";
 export function TopNav() {
   return (
     <div className="sticky left-0 top-0 right-0 py-5 bg-white shadow-sm">
-      <div className="flex items-center justify-between h-full w-full max-w-screen-2xl mx-auto px-10">
+      <div className="flex items-center justify-between h-full w-full max-w-screen-2xl mx-auto px-4 md:px-10">
         <div className="flex items-center gap-2">
           <Wordmark />
           <div className="w-px h-5 bg-gray-500" />
@@ -27,10 +27,13 @@ export function TopNav() {
             >
               Integration call
             </ExternalLink>
+            <ExternalLink href={links.github}>
+              <GithubLogo />
+            </ExternalLink>
           </div>
-          <ExternalLink href={links.github}>
-            <GithubLogo />
-          </ExternalLink>
+          <div className="flex md:hidden">
+            <a className="btn px-3 py-2.5 border border-btn-secondary text-sm" href="https://accountkit.alchemy.com/react/quickstart" target="_blank">Build</a>
+          </div>
         </div>
       </div>
     </div>
