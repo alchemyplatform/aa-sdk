@@ -69,7 +69,7 @@ export const Authentication = ({ className }: { className?: string }) => {
             details={
               <>
                 <div className="flex flex-1 min-w-full flex-row justify-between gap-3 items-center">
-                  <p className={cn("font-medium text-sm")}>
+                  <p className="font-medium text-sm text-secondary-foreground">
                     Add passkey after sign up
                   </p>
                   <Switch

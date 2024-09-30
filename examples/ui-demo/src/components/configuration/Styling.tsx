@@ -2,13 +2,13 @@ import { useConfig } from "@/app/state";
 import { cn } from "@/lib/utils";
 import { getBorderRadiusValue } from "@account-kit/react/tailwind";
 import { IllustrationStyle } from "../icons/illustration-style";
-import { PaintIcon } from "../icons/paint";
 import { SparkleIcon } from "../icons/sparkle";
 import ExternalLink from "../shared/ExternalLink";
 import { HelpTooltip } from "../shared/HelpTooltip";
 import { ThemeSwitch } from "../shared/ThemeSwitch";
 import { ColorPicker } from "./ColorPicker";
 import { PhotoUploads } from "./PhotoUpload";
+import { PaletteIcon } from "../icons/palette";
 
 export function Styling({ className }: { className?: string }) {
   const { config, setConfig } = useConfig();
@@ -27,29 +27,30 @@ export function Styling({ className }: { className?: string }) {
     <div className={cn("flex flex-col gap-5", className)}>
       <div className="flex flex-col gap-3">
         <div className="flex flex-row gap-2">
-          <PaintIcon />
+          <PaletteIcon />
           <span className="font-semibold">Branding</span>
         </div>
       </div>
       <div className="flex flex-col gap-4 w-full border-b border-border pb-5">
         <div className="flex flex-row justify-between grow items-center">
-          <p className="font-medium text-sm">Theme</p>
+          <p className="font-medium text-sm text-secondary-foreground">Theme</p>
           <ThemeSwitch
             checked={config.ui.theme === "dark"}
             onCheckedChange={onSwitchTheme}
           />
         </div>
         <div className="flex flex-row justify-between grow items-center">
-          <p className="font-medium text-sm">Brand color</p>
+          <p className="font-medium text-sm text-secondary-foreground">Color</p>
           <ColorPicker theme={config.ui.theme} />
         </div>
         <div className="flex flex-row justify-between grow items-center">
           <div>
-            <p className="font-medium text-sm">
-              Logo <span className="text-gray-400 font-normal">(optional)</span>
+            <p className="font-medium text-sm text-secondary-foreground">
+              Logo{" "}
+              <span className="text-fg-tertiary font-normal">(optional)</span>
             </p>
-            <p className="text-gray-400 font-normal text-xs">
-              PNG, JPG, GIF files accepted
+            <p className="text-fg-tertiary font-normal text-xs">
+              SVG or PNG, max 320x48 px
             </p>
           </div>
           <PhotoUploads mode={config.ui.theme} />
