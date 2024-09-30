@@ -3,19 +3,15 @@ import React from "react";
 
 import { Root, Viewport, Close } from "@radix-ui/react-toast";
 import { XIcon } from "../icons/x";
-
-type ToastProps = {
-  text: string;
-  type: "success" | "error";
-  open: boolean;
-  setOpen: (open: boolean) => void;
-};
+import { useToast } from "@/hooks/useToast";
 
 // Toast is not themed due to its positioning over the perma-white nav bar.
 
-export const Toast = ({ text, open, setOpen, type }: ToastProps) => {
+export const Toast = () => {
+  const { closeToast, toast } = useToast();
+
   const getBGColor = () => {
-    switch (type) {
+    switch (toast?.type) {
       case "error":
         // "bg-bg-surface-critical"
         return "bg-[#FEF2F2]";
@@ -26,7 +22,7 @@ export const Toast = ({ text, open, setOpen, type }: ToastProps) => {
   };
 
   const getTextColor = () => {
-    switch (type) {
+    switch (toast?.type) {
       case "error":
         //  "text-fg-critical";
         return "text-[#B91C1C]";
@@ -37,7 +33,7 @@ export const Toast = ({ text, open, setOpen, type }: ToastProps) => {
   };
 
   const getButtonColor = () => {
-    switch (type) {
+    switch (toast?.type) {
       case "error":
         // "bg-surface-error";
         return "#DC2626";
@@ -49,19 +45,19 @@ export const Toast = ({ text, open, setOpen, type }: ToastProps) => {
 
   return (
     <>
-      <Root 
+      <Root
         id="toast"
-        open={open}
-        onOpenChange={setOpen}
+        open={!!toast}
+        onOpenChange={closeToast}
         className={`${getBGColor()} align-middle rounded-lg shadow-lg px-3 py-2 flex justify-center items-center`}
       >
         <p className={`${getTextColor()} text-center pr-2 align-middle`}>
           <span
             className={`bg-[${getButtonColor()}] align-middle px-2 py-1 text-fg-invert text-xs font-semibold rounded mr-2`}
           >
-            {type === "success" ? "Success" : "Error"}
+            {toast?.type === "success" ? "Success" : "Error"}
           </span>
-          {text}
+          {toast?.text}
         </p>
         <Close>
           <XIcon stroke={getButtonColor()} />

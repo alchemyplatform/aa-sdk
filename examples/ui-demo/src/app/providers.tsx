@@ -6,7 +6,7 @@ import { AlchemyAccountProvider, createConfig } from "@account-kit/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren, Suspense } from "react";
 import { ConfigContextProvider, DEFAULT_CONFIG } from "./state";
-import { Provider as ToastProvider } from "@radix-ui/react-toast";
+import { ToastProvider } from "@/contexts/ToastProvider";
 
 const queryClient = new QueryClient();
 
@@ -41,9 +41,9 @@ export const Providers = (props: PropsWithChildren<{}>) => {
           config={alchemyConfig}
           queryClient={queryClient}
         >
-        <ToastProvider>
-          <ConfigContextProvider>{props.children}</ConfigContextProvider>
-        </ToastProvider>
+          <ToastProvider>
+            <ConfigContextProvider>{props.children}</ConfigContextProvider>
+          </ToastProvider>
         </AlchemyAccountProvider>
       </QueryClientProvider>
     </Suspense>
