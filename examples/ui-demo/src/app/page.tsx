@@ -31,7 +31,11 @@ export default function Home() {
   const { logout } = useLogout();
   return (
     <main
-      className={`flex bg-gray-50 flex-col h-screen ${publicSans.className}`}
+      className={`flex flex-col h-screen ${publicSans.className}`}
+      style={{
+        background:
+          "linear-gradient(270deg, rgba(239, 244, 249, 0.00) 57.5%, rgba(54, 63, 249, 0.13) 79.86%, rgba(55, 191, 255, 0.13) 100%), #F9F9F9",
+      }}
     >
       <TopNav />
       <div

@@ -49,7 +49,7 @@ export const Authentication = ({ className }: { className?: string }) => {
       </div>
       <div className="flex flex-col gap-4">
         <p className="font-medium text-secondary-foreground text-sm">Login</p>
-        <div className="flex flex-row flex-wrap gap-3">
+        <div className="flex flex-col gap-3">
           <AuthMethod
             icon={<MailIcon />}
             name="Email"

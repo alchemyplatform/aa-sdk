@@ -5,7 +5,7 @@ import { links } from "@/utils/links";
 
 export function TopNav() {
   return (
-    <div className="sticky left-0 top-0 right-0 py-5 bg-white shadow-sm">
+    <div className="sticky left-0 top-0 right-0 py-5 bg-[rgba(255,255,255,0.5)] shadow-sm">
       <div className="flex items-center justify-between h-full w-full max-w-screen-2xl mx-auto px-4 md:px-10">
         <div className="flex items-center gap-2">
           <Wordmark />
