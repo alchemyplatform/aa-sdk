@@ -68,6 +68,10 @@
   ],
   "rewrites": [
     {
+      "source": "/demo",
+      "destination": "https://aa-sdk-ui-demo.vercel.app/"
+    },
+    {
       "source": "/:match*.html",
       "destination": "/:match"
     }
