@@ -123,11 +123,6 @@ const alchemyTransport = alchemy({
   apiKey: "ALCHEMY_API_KEY",
 });
 
-const alchemyRpcClient = createAlchemyPublicRpcClient({
-  transport: alchemyTransport,
-  chain,
-});
-
 const alchemyClient = await createMultiOwnerModularAccountClient({
   chain,
   signer,
@@ -140,7 +135,7 @@ const alchemyClient = await createMultiOwnerModularAccountClient({
     verificationGasLimit: "0x0",
   }),
   // Uses alchemy fee estimation to comply with bundler
-  feeEstimator: alchemyFeeEstimator(alchemyRpcClient),
+  feeEstimator: alchemyFeeEstimator(alchemyTransport),
   paymasterAndData: async (userop, opts) => {
     const pmResponse: any = await stackupClient.request({
       // @ts-ignore
