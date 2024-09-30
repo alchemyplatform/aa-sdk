@@ -9,15 +9,15 @@
 import { useEffect, useRef } from "react";
 
 const useDebounceEffect = (fnc: () => void, deps: any[], delay: number) => {
-	const ref = useRef<NodeJS.Timeout>();
+  const ref = useRef<NodeJS.Timeout>();
 
-	useEffect(() => {
-		clearTimeout(ref.current);
-		ref.current = setTimeout(() => {
-			fnc();
-			clearTimeout(ref.current);
-		}, delay);
-	}, [fnc, deps, delay]);
+  useEffect(() => {
+    clearTimeout(ref.current);
+    ref.current = setTimeout(() => {
+      fnc();
+      clearTimeout(ref.current);
+    }, delay);
+  }, [fnc, deps, delay]);
 };
 
 export { useDebounceEffect };
