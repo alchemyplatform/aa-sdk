@@ -1,7 +1,12 @@
 import type { NoUndefined } from "@aa-sdk/core";
-import { alchemy, createAlchemyPublicRpcClient } from "@account-kit/infra";
+import {
+  alchemy,
+  createAlchemyPublicRpcClient,
+  type AlchemyTransportConfig,
+} from "@account-kit/infra";
 import { AlchemySignerStatus, AlchemyWebSigner } from "@account-kit/signer";
 import type { Chain } from "viem";
+import { deepEqual } from "wagmi";
 import {
   createJSONStorage,
   persist,
@@ -10,8 +15,8 @@ import {
 import { createStore } from "zustand/vanilla";
 import { DEFAULT_IFRAME_CONTAINER_ID } from "../createConfig.js";
 import type { Connection, SupportedAccountTypes } from "../types.js";
-import { bigintMapReplacer } from "../utils/replacer.js";
-import { bigintMapReviver } from "../utils/reviver.js";
+import { storeReplacer } from "../utils/replacer.js";
+import { storeReviver } from "../utils/reviver.js";
 import {
   DEFAULT_STORAGE_KEY,
   type AccountState,
@@ -40,29 +45,12 @@ export const createAccountKitStore = (
             name: DEFAULT_STORAGE_KEY,
             storage: createJSONStorage<StoreState>(() => storage, {
               replacer: (key, value) => {
-                if (key === "bundlerClient") {
-                  const client = value as StoreState["bundlerClient"];
-                  return {
-                    connection: connections.find(
-                      (x) => x.chain.id === client.chain.id
-                    ),
-                  };
-                }
+                if (key === "bundlerClient") return undefined;
 
-                return bigintMapReplacer(key, value);
+                return storeReplacer(key, value);
               },
               reviver: (key, value) => {
-                if (key === "bundlerClient") {
-                  const {
-                    connection: { chain, ...connection },
-                  } = value as { connection: Connection };
-                  return createAlchemyPublicRpcClient({
-                    transport: alchemy(connection),
-                    chain,
-                  });
-                }
-
-                return bigintMapReviver(key, value);
+                return storeReviver(key, value);
               },
             }),
             merge: (persisted, current) => {
@@ -80,8 +68,17 @@ export const createAccountKitStore = (
 
                   return Array.from(Object.entries(c)).every(([key, value]) => {
                     const pConn = persistedConnection as Record<string, any>;
-                    if (key === "chain") return value.id === pConn.chain.id;
 
+                    if (key === "chain") {
+                      return (value as Chain).id === pConn.chain.id;
+                    }
+
+                    if (key === "transport") {
+                      return deepEqual(
+                        value as AlchemyTransportConfig,
+                        pConn.transport
+                      );
+                    }
                     return pConn[key] === value;
                   });
                 });
@@ -97,22 +94,23 @@ export const createAccountKitStore = (
                 return createInitialStoreState(params);
               }
 
-              const { chain, ...connection } = persistedConnections.find(
-                (x) => x.chain.id === persistedState.bundlerClient.chain.id
-              )!;
-
               return {
                 // this is the default merge behavior
                 ...current,
                 ...persistedState,
-                // we do this since we can't reliable serialize the transport, so instead we just recreate it based on the bundler client
-                transport: alchemy(connection),
+                bundlerClient: createAlchemyPublicRpcClient({
+                  chain: persistedState.chain,
+                  transport: alchemy(
+                    persistedState.connections.get(persistedState.chain.id)!
+                      .transport
+                  ),
+                }),
               };
             },
             skipHydration: ssr,
             partialize: ({ signer, accounts, ...writeableState }) =>
               writeableState,
-            version: 6,
+            version: 8,
           })
         : () => createInitialStoreState(params)
     )
@@ -136,17 +134,13 @@ const createInitialStoreState = (
     throw new Error("Chain not found in connections");
   }
 
-  const { chain: _, ...connection } = connectionMap.get(chain.id)!;
-  const transport = alchemy(connection);
-  const bundlerClient = createAlchemyPublicRpcClient({
-    transport,
-    chain,
-  });
   const chains = connections.map((c) => c.chain);
   const accountConfigs = createEmptyAccountConfigState(chains);
   const baseState: StoreState = {
-    transport,
-    bundlerClient,
+    bundlerClient: createAlchemyPublicRpcClient({
+      chain,
+      transport: alchemy(connectionMap.get(chain.id)!.transport),
+    }),
     chain,
     connections: connectionMap,
     accountConfigs,

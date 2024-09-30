@@ -96,7 +96,6 @@ export const MintCard = () => {
       });
       console.log("uri", uri);
       return uri;
-
     },
     enabled: !!client && !!client?.readContract,
   });
