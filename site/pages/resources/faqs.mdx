@@ -136,6 +136,20 @@ In your Gas Manager policy, you can configure spending rules per address, per ap
 
 ## Common Errors
 
+### Replacement underpriced: `"code":-32602,"message":"replacement underpriced","data"...`
+
+:::details[Answer]
+Replacement underpriced errors occur when you attempt to send another user operation (UO) from the same sender before the pending user operation has been confirmed on-chain. Please follow recommendations [here](https://www.alchemy.com/support/how-to-fix-replacement-underpriced-errors).
+:::
+
+### `FailedToFindTransactionError: Failed to find transaction for user operation...`
+
+:::details[Answer]
+Please follow [this](https://www.alchemy.com/support/best-practice-guide-on-how-to-implement-user-operation-retries) guide for best practices on implementing waiting and retries.
+
+This error indicates that your User Operation has not yet landed on chain (assuming it was accepted by the bundler). We recommend you 1) continue waiting or 2) drop and replace and 3) add multiplier to gas esitmates to increase the priority of your transaction.
+:::
+
 ### Invalid policy ID: `{ code: -32602, message: 'Invalid Policy ID' }`
 
 :::details[Answer]
@@ -169,6 +183,11 @@ You can mitigate this by defining a more flexible retry period when constructing
 
 If your `UserOperation` continues to be delayed beyond a limit you are willing to wait, you can resubmit the user operation using [`dropAndReplaceUserOperation`](/reference/aa-sdk/core/functions/dropAndReplaceUserOperation#usage).
 :::
+
+### `Although one or more Error Occurred [execution reverted] Contract Execution Completed` on etherscan
+
+:::details[Answer]
+This revert warning message is expected when using Modular Account v1. In MAv1, we have a checker that enforces that calls made using the account (from `execute` or `executeBatch`) don't target plugin contracts. When the contract being called to isn't a plugin (which is usually the case), the checker reverts, and it shows this message in explorers.
 
 ## Other Support
 
