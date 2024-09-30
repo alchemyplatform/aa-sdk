@@ -1,4 +1,4 @@
-import type { ClientWithAlchemyMethods } from "@account-kit/infra";
+import { type ClientWithAlchemyMethods } from "@account-kit/infra";
 import type { AlchemyAccountsConfig } from "../types";
 
 /**
@@ -21,6 +21,11 @@ export const watchBundlerClient =
   (onChange: (bundlerClient: ClientWithAlchemyMethods) => void) => {
     return config.store.subscribe(
       ({ bundlerClient }) => bundlerClient,
-      onChange
+      onChange,
+      {
+        equalityFn(a, b) {
+          return a.chain.id === b.chain.id;
+        },
+      }
     );
   };

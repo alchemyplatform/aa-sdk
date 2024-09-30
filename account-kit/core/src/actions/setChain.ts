@@ -27,14 +27,13 @@ export async function setChain(config: AlchemyAccountsConfig, chain: Chain) {
   }
 
   await switchChain(config._internal.wagmiConfig, { chainId: chain.id });
-  const transport = alchemy(connection);
+  const transport = connection.transport;
 
   config.store.setState(() => ({
     chain,
-    transport,
     bundlerClient: createAlchemyPublicRpcClient({
-      transport,
       chain,
+      transport: alchemy(transport),
     }),
   }));
 }
