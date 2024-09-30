@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { LocalAccountSigner } from "@aa-sdk/core";
-import { sepolia } from "@account-kit/infra";
+import { alchemy, sepolia } from "@account-kit/infra";
 import {
   SessionKeyAccessListType,
   SessionKeyPermissionsBuilder,
@@ -12,13 +12,15 @@ import {
 import { zeroHash } from "viem";
 
 const chain = sepolia;
+const transport = alchemy({ apiKey: "YOUR_API_KEY" });
+
 // this is the signer to connect with the account, later we will create a new client using a session key signe
 const signer = LocalAccountSigner.mnemonicToAccountSigner("MNEMONIC");
 const sessionKeySigner = new SessionKeySigner();
 const client = (
   await createModularAccountAlchemyClient({
     chain,
-    apiKey: "ALCHEMY_API_KEY",
+    transport,
     signer,
   })
 ).extend(sessionKeyPluginActions);
@@ -63,7 +65,7 @@ const sessionKeyClient = (
   await createModularAccountAlchemyClient({
     chain,
     signer: sessionKeySigner,
-    apiKey: "ALCHEMY_API_KEY",
+    transport,
     // this is important because it tells the client to use our previously deployed account
     accountAddress: client.getAddress(),
   })
