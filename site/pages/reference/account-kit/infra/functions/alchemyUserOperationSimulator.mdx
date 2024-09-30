@@ -18,22 +18,31 @@ import { alchemyUserOperationSimulator } from "@account-kit/infra";
 ## Usage
 
 ```ts
-import { alchemyUserOperationSimulator, createAlchemyPublicRpcClient } from "@account-kit/infra";
+import {
+  alchemyUserOperationSimulator,
+  alchemy,
+  sepolia,
+} from "@account-kit/infra";
 import { createSmartAccountClient } from "@aa-sdk/core";
 
-const bundlerClient = createAlchemyPublicRpcClient(...);
+const alchemyTransport = alchemy({
+  chain: sepolia,
+  apiKey: "your-api-key",
+});
+
 const client = createSmartAccountClient({
-userOperationSimulator: alchemyUserOperationSimulator(bundlerClient),
-...otherParams
+  chain: sepolia,
+  userOperationSimulator: alchemyUserOperationSimulator(alchemyTransport),
+  ...otherParams,
 });
 ```
 
 ## Parameters
 
-### client
+### transport
 
-`C`
-The client object with Alchemy methods
+`AlchemyTransport`
+An Alchemy Transport that can be used for making RPC calls to alchemy
 
 ## Returns
 
