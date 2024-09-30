@@ -101,6 +101,7 @@ import { createMultiOwnerModularAccountClient } from "@account-kit/smart-contrac
 import {
   alchemyFeeEstimator,
   createAlchemyPublicRpcClient,
+  alchemy,
 } from "@account-kit/infra";
 import {
   deepHexlify,
@@ -117,16 +118,20 @@ const stackupClient = createClient({
   transport: http("https://api.stackup.sh/v1/paymaster/STACKUP_API_KEY"),
 });
 
-const alchemyRpcClient = createAlchemyPublicRpcClient({
+const alchemyTransport = alchemy({
   // TODO: Replace with your Alchemy API key (https://dashboard.alchemypreview.com/apps)
-  connectionConfig: { rpcUrl: "ALCHEMY_RPC_URL" },
+  apiKey: "ALCHEMY_API_KEY",
+});
+
+const alchemyRpcClient = createAlchemyPublicRpcClient({
+  transport: alchemyTransport,
   chain,
 });
 
 const alchemyClient = await createMultiOwnerModularAccountClient({
   chain,
   signer,
-  transport: http("ALCHEMY_RPC_URL"),
+  transport: alchemyTransport,
   // Bypasses alchemy gas estimation and instead uses Stackup for gas estimation
   gasEstimator: async (userOp) => ({
     ...userOp,

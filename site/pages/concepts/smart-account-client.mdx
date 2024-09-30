@@ -28,21 +28,25 @@ When creating a Smart Account Client, you have two options:
 Let's see an example:
 
 ```ts twoslash
-import { createAlchemySmartAccountClient, sepolia } from "@account-kit/infra";
+import {
+  createAlchemySmartAccountClient,
+  sepolia,
+  alchemy,
+} from "@account-kit/infra";
 import { createLightAccount } from "@account-kit/smart-contracts";
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { http } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 
 // with account hoisting
-
+const transport = alchemy({ apiKey: "your-api-key" });
 const hoistedClient = createAlchemySmartAccountClient({
-  apiKey: "your-api-key",
+  transport,
   chain: sepolia,
   account: await createLightAccount({
     signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
     chain: sepolia,
-    transport: http(sepolia.rpcUrls.alchemy.http[0]),
+    transport,
   }),
 });
 
@@ -50,14 +54,14 @@ const signature = await hoistedClient.signMessage({ message: "Hello world! " });
 
 // without account hoisting
 const nonHoistedClient = createAlchemySmartAccountClient({
-  apiKey: "your-api-key",
+  transport,
   chain: sepolia,
 });
 
 const lightAccount = await createLightAccount({
   signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
   chain: sepolia,
-  transport: http(sepolia.rpcUrls.alchemy.http[0]),
+  transport,
 });
 
 const signature2 = await nonHoistedClient.signMessage({

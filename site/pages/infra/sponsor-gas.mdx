@@ -81,6 +81,7 @@ import {
   sepolia,
   alchemyFeeEstimator,
   createAlchemyPublicRpcClient,
+  alchemy,
 } from "@account-kit/infra";
 import { createLightAccount } from "@account-kit/smart-contracts";
 // You can replace this with any signer you'd like
@@ -90,11 +91,13 @@ import { http, custom } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 
 // 1. create an alchemy rpc client
+const alchemyTransport = alchemy({
+  apiKey: "API_KEY",
+});
+
 const alchemyRpcClient = createAlchemyPublicRpcClient({
   chain: sepolia,
-  connectionConfig: {
-    apiKey: "API_KEY",
-  },
+  transport: alchemyTransport,
 });
 
 // 2. create a split transport to route traffic between the paymaster and the bundler
@@ -105,7 +108,7 @@ const transport = split({
       transport: http("PAYMASTER_URL"),
     },
   ],
-  fallback: custom(alchemyRpcClient),
+  fallback: alchemyTransport,
 });
 
 // 3. create smart account client
@@ -114,7 +117,7 @@ export const client = createSmartAccountClient({
   chain: sepolia,
   account: await createLightAccount({
     chain: sepolia,
-    transport: http(`${sepolia.rpcUrls.alchemy.http[0]}/YOUR_API_KEY`),
+    transport: alchemyTransport,
     signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
   }),
   // this is required to get correct fee estimates when using our Bundler RPC
@@ -148,6 +151,10 @@ import { http, custom } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 
 // 1. create an alchemy rpc client
+const alchemyTransport = alchemy({
+  apiKey: "API_KEY",
+});
+
 const alchemyRpcClient = createAlchemyPublicRpcClient({
   chain: sepolia,
   connectionConfig: {
@@ -164,7 +171,7 @@ const transport = split({
       transport: http("https://api.stackup.sh/v1/paymaster/STACKUP_API_KEY"),
     },
   ],
-  fallback: custom(alchemyRpcClient),
+  fallback: alchemyTransport,
 });
 
 // 3. create smart account client
@@ -173,7 +180,7 @@ export const client = createSmartAccountClient({
   chain: sepolia,
   account: await createLightAccount({
     chain: sepolia,
-    transport: custom(alchemyRpcClient),
+    transport: alchemyTransport,
     signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
   }),
   // Bypasses alchemy gas estimation and instead uses Stackup for gas estimation

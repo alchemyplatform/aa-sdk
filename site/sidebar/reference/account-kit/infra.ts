@@ -15,6 +15,10 @@ export const accountKitInfraReferenceSidebar: SidebarItem[] = [
     text: "Functions",
     items: [
       {
+        text: "alchemy",
+        link: "/reference/account-kit/infra/functions/alchemy",
+      },
+      {
         text: "alchemyActions",
         link: "/reference/account-kit/infra/functions/alchemyActions",
       },
