@@ -32,7 +32,13 @@ export function TopNav() {
             </ExternalLink>
           </div>
           <div className="flex md:hidden">
-            <a className="btn px-3 py-2.5 border border-btn-secondary text-sm" href="https://accountkit.alchemy.com/react/quickstart" target="_blank">Build</a>
+            <a
+              className="btn px-3 py-2.5 border border-btn-secondary text-sm"
+              href="https://accountkit.alchemy.com/react/quickstart"
+              target="_blank"
+            >
+              Build
+            </a>
           </div>
         </div>
       </div>
