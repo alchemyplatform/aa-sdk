@@ -1,43 +1,42 @@
 import { useState } from "react";
 import {
-	Popover,
-	PopoverTrigger,
-	PopoverContent,
-} from "@/components/ui/popover";
+	Dialog,
+	DialogTrigger,
+	DialogContent,
+} from "@/components/ui/dialog";
 import { UserConnectionAvatar } from "@/components/shared/user-connection-avatar/UserConnectionAvatar";
 import { UserConnectionDetails } from "@/components/shared/user-connection-avatar//UserConnectionDetails";
 
 import { useConfig } from "@/app/state";
 import { cn } from "@/lib/utils";
 
-export const UserConnectionAvatarWithPopover = () => {
-	const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+export const UserConnectionAvatarWithDialog = () => {
+	const [isDialogOpen, setIsDialogOpen] = useState(false);
 
 	const { config } = useConfig();
 
 	const theme = config.ui.theme;
 
 	return (
-		<Popover
-			open={isPopoverOpen}
+		<Dialog
+			open={isDialogOpen}
 			onOpenChange={(open: boolean) => {
-				setIsPopoverOpen(open);
+				setIsDialogOpen(open);
 			}}
 		>
-			<PopoverTrigger>
-				<UserConnectionAvatar isFocused={isPopoverOpen} />
-			</PopoverTrigger>
-			<PopoverContent
+			<DialogTrigger>
+				<UserConnectionAvatar isFocused={isDialogOpen} />
+			</DialogTrigger>
+			<DialogContent
 				onOpenAutoFocus={(e) => e.preventDefault()}
 				onCloseAutoFocus={(e) => e.preventDefault()}
-				align="start"
 				className={cn(
 					"border border-solid border-[#E2E8F0] min-w-[274px] bg-bg-surface-default",
 					theme === "dark" && "border-[#374141]"
 				)}
 			>
 				<UserConnectionDetails />
-			</PopoverContent>
-		</Popover>
+			</DialogContent>
+		</Dialog>
 	);
 };
