@@ -1,0 +1,57 @@
+import { ComponentPropsWithoutRef, PropsWithChildren, useState } from "react";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
+
+import { useConfig } from "@/app/state";
+import { cn } from "@/lib/utils";
+
+const UserConnectionPopoverMenu = ({ children }: PropsWithChildren) => {
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+
+  return (
+    <Popover
+      open={isPopoverOpen}
+      onOpenChange={(open: boolean) => {
+        setIsPopoverOpen(open);
+      }}
+    >
+      {children}
+    </Popover>
+  );
+};
+
+const MenuTrigger = (
+  props: PropsWithChildren & ComponentPropsWithoutRef<typeof PopoverTrigger>
+) => {
+  return <PopoverTrigger {...props}>{props.children}</PopoverTrigger>;
+};
+
+const MenuContent = (
+  props: PropsWithChildren & ComponentPropsWithoutRef<typeof PopoverContent>
+) => {
+  const { config } = useConfig();
+  const theme = config.ui.theme;
+
+  return (
+    <PopoverContent
+      {...props}
+      onOpenAutoFocus={(e) => e.preventDefault()}
+      onCloseAutoFocus={(e) => e.preventDefault()}
+      align="start"
+      className={cn(
+        "border border-solid border-[#E2E8F0] min-w-[274px] bg-bg-surface-default",
+        theme === "dark" && "border-[#374141]"
+      )}
+    >
+      {props.children}
+    </PopoverContent>
+  );
+};
+
+UserConnectionPopoverMenu.Trigger = MenuTrigger;
+UserConnectionPopoverMenu.Content = MenuContent;
+
+export default UserConnectionPopoverMenu;

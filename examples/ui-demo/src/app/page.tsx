@@ -8,9 +8,8 @@ import { AuthCardWrapper } from "../components/preview/AuthCardWrapper";
 import { CodePreview } from "../components/preview/CodePreview";
 import { CodePreviewSwitch } from "../components/shared/CodePreviewSwitch";
 import { TopNav } from "../components/topnav/TopNav";
-import { UserConnectionAvatarWithPopover } from "@/components/shared/user-connection-avatar/UserConnectionAvatarWithPopover";
 import { useUser } from "@account-kit/react";
-import { UserConnectionAvatarWithDialog } from "@/components/shared/user-connection-avatar/UserConnectionAvatarWithDialog";
+import { RenderUserConnectionAvatar } from "@/components/shared/user-connection-avatar/RenderUserConnectionAvatar";
 
 const publicSans = Public_Sans({
   subsets: ["latin"],
@@ -46,16 +45,7 @@ export default function Home() {
                 !user || showCode ? "justify-end" : "justify-between"
               }  z-10`}
             >
-              {!showCode && user && (
-                <div className="flex-1 border-b border-border pb-6 md:border-none md:pb-0">
-                  <div className="hidden md:block">
-                    <UserConnectionAvatarWithPopover />
-                  </div>
-                  <div className="block md:hidden">
-                    <UserConnectionAvatarWithDialog />
-                  </div>
-                </div>
-              )}
+              {!showCode && user && <RenderUserConnectionAvatar />}
               <div className="hidden md:flex gap-2">
                 <div className="bg-purple-50 text-[#8B5CF6] px-2 py-1 rounded text-xs font-semibold">
                   Code preview

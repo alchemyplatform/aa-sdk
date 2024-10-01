@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ComponentPropsWithoutRef, PropsWithChildren, useState } from "react";
 import {
   Dialog,
   DialogTrigger,
@@ -6,10 +6,8 @@ import {
   DialogOverlay,
   DialogPortal,
 } from "@/components/ui/dialog";
-import { UserConnectionAvatar } from "@/components/shared/user-connection-avatar/UserConnectionAvatar";
-import { UserConnectionDetails } from "@/components/shared/user-connection-avatar//UserConnectionDetails";
 
-export const UserConnectionAvatarWithDialog = () => {
+const UserConnectionDialogMenu = ({ children }: PropsWithChildren) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
@@ -19,9 +17,22 @@ export const UserConnectionAvatarWithDialog = () => {
         setIsDialogOpen(open);
       }}
     >
-      <DialogTrigger>
-        <UserConnectionAvatar isFocused={isDialogOpen} />
-      </DialogTrigger>
+      {children}
+    </Dialog>
+  );
+};
+
+export const MenuTrigger = (
+  props: PropsWithChildren & ComponentPropsWithoutRef<typeof DialogTrigger>
+) => {
+  return <DialogTrigger {...props}>{props.children}</DialogTrigger>;
+};
+
+export const MenuContent = (
+  props: PropsWithChildren & ComponentPropsWithoutRef<typeof DialogContent>
+) => {
+  return (
+    <DialogContent {...props}>
       <DialogPortal>
         <DialogOverlay className="absolute top-0 inset-0 bg-black bg-opacity-70 z-10 flex md:hidden" />
         <DialogContent
@@ -33,10 +44,15 @@ export const UserConnectionAvatarWithDialog = () => {
             <p className="text-lg font-semibold text-fg-primary mb-5">
               Profile
             </p>
-            <UserConnectionDetails />
+            {props.children}
           </div>
         </DialogContent>
       </DialogPortal>
-    </Dialog>
+    </DialogContent>
   );
 };
+
+UserConnectionDialogMenu.Trigger = MenuTrigger;
+UserConnectionDialogMenu.Content = MenuContent;
+
+export default UserConnectionDialogMenu;

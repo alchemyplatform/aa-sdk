@@ -17,8 +17,9 @@ const DialogContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Content
+    asChild
     className={cn(
-      "animate-slide-up absolute bottom-0 left-0 flex items-end w-full h-auto z-20 bg-bg-surface-default pb-10 pt-5 rounded-t-2xl px-6",
+      "animate-slide-up absolute bottom-0 left-0 flex flex-col w-full h-auto z-20 bg-bg-surface-default pb-10 pt-5 rounded-t-2xl px-6",
       className
     )}
     ref={ref}
