@@ -3,7 +3,7 @@
 import { Authentication } from "@/components/configuration/Authentication";
 import { Styling } from "@/components/configuration/Styling";
 import { Inter, Public_Sans } from "next/font/google";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { AuthCardWrapper } from "../components/preview/AuthCardWrapper";
 import { CodePreview } from "../components/preview/CodePreview";
 import { CodePreviewSwitch } from "../components/shared/CodePreviewSwitch";
