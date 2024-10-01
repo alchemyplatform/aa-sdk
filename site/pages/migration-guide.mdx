@@ -34,16 +34,17 @@ use the guide above to integrate with any signer of your choice.
 
 ### Alchemy Transport
 
-A new `Transport` type has been added: `AlchemyTransport`. This impacts how Alchemy clients, middleware, and configs are created. The `AlchemyTransport` is a type of `viem` transport that makes it easier to configure your communication with Alchemy RPC.
-It supports splitting traffic between Alchemy's AA infra and other Node providers (if needed). The `AlchemyTransport` has been added to `@account-kit/infra` and is exported as `alchemy`.
+The new `Transport` type: `AlchemyTransport` has been added. This impacts how Alchemy clients, middleware, and configs are created.
 
-For Smart Account Clients, the impact of this change is that every `create*AlchemyClient` method has been updated to take in a `transport` property instead of `rpcUrl` or `apiKey` directly.
+For Smart Account Clients, the `create*AlchemyClient` methods have been updated to take a new `transport` property (of type `AlchemyTrasnport`) instead of `rpcUrl` or `apiKey` directly.
 
-The `alchemyFeeEstimator` and `alchemyUserOperationSimulator` middleware methods no longer take in a `ClientWithAlchemyMethods` (returned by `createAlchemyPublicRpcClient`) and instead take in an `AlchemyTransport`.
+The `alchemyFeeEstimator` and `alchemyUserOperationSimulator` middleware methods now no longer take in a `ClientWithAlchemyMethods` (returned by `createAlchemyPublicRpcClient`) and instead take in an `AlchemyTransport` as well.
 
-Creating a config to be used with `@account-kit/core` or `@account-kit/react` has also been updated to accept an `AlchemyTransport` and the parameters of `createConfig` have been simplified as a result. Replace your `rpcUrl` or `apiKey` params with `transport: alchemy({...})`.
+The `AlchemyTransport` is a type of `viem` transport that makes it easier to configure your communication with Alchemy RPC. It supports splitting traffic between Alchemy's AA infra and other Node providers (if needed). The `AlchemyTransport` has been added to `@account-kit/infra` and is exported as `alchemy`.
 
-For more detailed examples, see the relevant guides, depending on which package you are using.
+Creating a config with `@account-kit/core` or `@account-kit/react` has been updated to accept an `AlchemyTransport` and the parameters of `createConfig` have been simplified as a result. You will now need to replace your `rpcUrl` or `apiKey` params with `transport: alchemy({...})`.
+
+For more detailed examples, see the relevant Quickstart guides, depending on which package you are using. If you don't know where to start, checkout the [React Quickstart](/react/quickstart).
 
 ### Hooks: `useSendTransaction` and `useSendTransactions` removed
 
