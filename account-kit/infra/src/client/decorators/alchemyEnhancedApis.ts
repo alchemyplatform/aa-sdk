@@ -1,6 +1,6 @@
 import type { SmartContractAccount } from "@aa-sdk/core";
 import type { Alchemy } from "alchemy-sdk";
-import type { Chain, HttpTransport, Transport } from "viem";
+import type { Chain } from "viem";
 import { AlchemySdkClientSchema } from "../../schema.js";
 import type { AlchemySmartAccountClient } from "../smartAccountClient.js";
 
@@ -34,30 +34,23 @@ export type AlchemyEnhancedApis = {
 export function alchemyEnhancedApiActions(
   alchemy: Alchemy
 ): <
-  TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SmartContractAccount | undefined =
     | SmartContractAccount
     | undefined
 >(
-  client: AlchemySmartAccountClient<TTransport, TChain, TAccount>
+  client: AlchemySmartAccountClient<TChain, TAccount>
 ) => AlchemyEnhancedApis {
   return (client) => {
     const alchemySdk = AlchemySdkClientSchema.parse(alchemy);
 
-    if (client.transport.type === "http") {
-      const { url } = client.transport as ReturnType<HttpTransport>["config"] &
-        ReturnType<HttpTransport>["value"];
-
-      if (
-        client.transport.type === "http" &&
-        alchemy.config.url &&
-        alchemy.config.url !== url
-      ) {
-        throw new Error(
-          "Alchemy SDK client JSON-RPC URL must match AlchemyProvider JSON-RPC URL"
-        );
-      }
+    if (
+      alchemy.config.url &&
+      alchemy.config.url !== client.transport.alchemyRpcUrl
+    ) {
+      throw new Error(
+        "Alchemy SDK client JSON-RPC URL must match AlchemyProvider JSON-RPC URL"
+      );
     }
 
     return {

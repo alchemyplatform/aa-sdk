@@ -14,11 +14,7 @@ export type UseClientActionsProps<
     [x: string]: (...args: any[]) => unknown;
   }
 > = {
-  client?: UseSmartAccountClientResult<
-    TTransport,
-    TChain,
-    SupportedAccounts
-  >["client"];
+  client?: UseSmartAccountClientResult<TChain, SupportedAccounts>["client"];
   actions: (client: Client<TTransport, TChain, SupportedAccounts>) => TActions;
 };
 

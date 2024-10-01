@@ -1,8 +1,6 @@
 import type { SmartAccountSigner } from "@aa-sdk/core";
 import {
-  AlchemyProviderConfigSchema,
-  createAlchemyPublicRpcClient,
-  createAlchemySmartAccountClientFromExisting,
+  createAlchemySmartAccountClient,
   type AlchemySmartAccountClient,
   type AlchemySmartAccountClientConfig,
 } from "@account-kit/infra";
@@ -18,22 +16,16 @@ import {
   type MultiOwnerPluginActions,
   type PluginManagerActions,
 } from "@account-kit/smart-contracts";
-import {
-  custom,
-  type Chain,
-  type CustomTransport,
-  type HttpTransport,
-  type Transport,
-} from "viem";
+import { type Chain, type HttpTransport } from "viem";
 
 export type AlchemyModularAccountClientConfig<
   TSigner extends SmartAccountSigner = SmartAccountSigner
 > = Omit<
   CreateMultiOwnerModularAccountParams<HttpTransport, TSigner>,
-  "transport" | "chain"
+  "transport"
 > &
   Omit<
-    AlchemySmartAccountClientConfig<Transport, Chain, LightAccount<TSigner>>,
+    AlchemySmartAccountClientConfig<Chain, LightAccount<TSigner>>,
     "account"
   >;
 
@@ -43,7 +35,6 @@ export function createModularAccountAlchemyClient<
   params: AlchemyModularAccountClientConfig<TSigner>
 ): Promise<
   AlchemySmartAccountClient<
-    CustomTransport,
     Chain | undefined,
     MultiOwnerModularAccount<TSigner>,
     MultiOwnerPluginActions<MultiOwnerModularAccount<TSigner>> &
@@ -58,12 +49,12 @@ export function createModularAccountAlchemyClient<
  * @example
  * ```ts
  * import { createModularAccountAlchemyClient } from "@account-kit/smart-contracts";
- * import { sepolia } from "@account-kit/infra";
+ * import { sepolia, alchemy } from "@account-kit/infra";
  * import { LocalAccountSigner } from "@aa-sdk/core";
  * import { generatePrivateKey } from "viem"
  *
  * const alchemyAccountClient = await createModularAccountAlchemyClient({
- *  apiKey: "your-api-key",
+ *  transport: alchemy({ apiKey: "your-api-key" }),
  *  chain: sepolia,
  *  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
  * });
@@ -75,22 +66,16 @@ export function createModularAccountAlchemyClient<
 export async function createModularAccountAlchemyClient(
   config: AlchemyModularAccountClientConfig
 ): Promise<AlchemySmartAccountClient> {
-  const { chain, opts, ...connectionConfig } =
-    AlchemyProviderConfigSchema.parse(config);
-
-  const client = createAlchemyPublicRpcClient({
-    chain,
-    connectionConfig,
-  });
+  const { transport, chain, opts } = config;
 
   const account = await createMultiOwnerModularAccount({
-    transport: custom(client),
     ...config,
+    transport,
+    chain,
   });
 
-  return createAlchemySmartAccountClientFromExisting({
+  return createAlchemySmartAccountClient({
     ...config,
-    client,
     account,
     opts,
   })

@@ -10,52 +10,22 @@ with a `split` transport to route your traffic accordingly.
 
 ## AA only chains example
 
+For AA only chains, the `alchemyTransport` allows you to specify both the Alchemy Connection object as well as pass in a Node RPC URL, allowing you to split traffic between Alchemy's Bundler and Paymaster RPC and your Node RPC provider.
+
 ```ts twoslash
-import { createLightAccountClient } from "@account-kit/smart-contracts";
-import {
-  createAlchemyPublicRpcClient,
-  zora,
-  alchemyFeeEstimator,
-  type ClientWithAlchemyMethods,
-  alchemyGasManagerMiddleware,
-} from "@account-kit/infra";
-import { split, LocalAccountSigner, createBundlerClient } from "@aa-sdk/core";
-import { http, custom } from "viem";
+import { zora, alchemy } from "@account-kit/infra";
+import { createLightAccountAlchemyClient } from "@account-kit/smart-contracts";
+import { LocalAccountSigner } from "@aa-sdk/core";
 
-const alchemyMethods = [
-  "eth_sendUserOperation",
-  "eth_estimateUserOperationGas",
-  "eth_getUserOperationReceipt",
-  "eth_getUserOperationByHash",
-  "eth_supportedEntryPoints",
-  "rundler_maxPriorityFeePerGas",
-  "pm_getPaymasterData",
-  "pm_getPaymasterStubData",
-];
-
-const transport = split({
-  overrides: [
-    {
-      methods: alchemyMethods,
-      transport: http("ALCHEMY_RPC_URL"),
+const smartAccountClient = createLightAccountAlchemyClient({
+  transport: alchemy({
+    alchemyConnection: {
+      apiKey: "ALCHEMY_API_KEY",
     },
-  ],
-  fallback: http("ZORA_NODE_RPC_URL"),
-});
-
-const alchemyBundlerClient = createBundlerClient({
-  // zora is an example of an aa only chain
+    nodeRpcUrl: "ZORA_NODE_RPC_URL",
+  }),
   chain: zora,
-  transport,
-}) as unknown as ClientWithAlchemyMethods;
-
-const smartAccountClient = createLightAccountClient({
-  transport,
-  chain: zora,
-  feeEstimator: alchemyFeeEstimator(alchemyBundlerClient),
   signer: LocalAccountSigner.generatePrivateKeySigner(),
-  // if you want to sponsor gas add this
-  ...alchemyGasManagerMiddleware("YOUR_POLICY_ID"),
 });
 ```
 

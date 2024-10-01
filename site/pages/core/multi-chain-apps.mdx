@@ -13,10 +13,11 @@ In order to support multiple chains in your app, the first thing you need to do 
 
 ```ts twoslash
 import { createConfig } from "@account-kit/core";
-import { sepolia, mainnet } from "@account-kit/infra";
+import { sepolia, mainnet, alchemy } from "@account-kit/infra";
 
 export const config = createConfig({
-  apiKey: "ALCHEMY_API_KEY",
+  // use this transport for all chains
+  transport: alchemy({ apiKey: "ALCHEMY_API_KEY" }),
   // this is the default chain
   chain: sepolia,
   chains: [
@@ -27,6 +28,8 @@ export const config = createConfig({
     },
     {
       chain: sepolia,
+      // optional: override the default transport for this chain
+      transport: alchemy({ apiKey: "OTHER_API_KEY" }),
       // optional: sponsor gas for this chain
       policyId: "SEPOLIA_GAS_MANAGER_POLICY_ID",
     },
@@ -55,10 +58,10 @@ await setChain(config, mainnet);
 
 ```ts twoslash [config.ts] filename="config.ts"
 import { createConfig } from "@account-kit/core";
-import { sepolia, mainnet } from "@account-kit/infra";
+import { sepolia, mainnet, alchemy } from "@account-kit/infra";
 
 export const config = createConfig({
-  apiKey: "ALCHEMY_API_KEY",
+  transport: alchemy({ apiKey: "ALCHEMY_API_KEY" }),
   // this is the default chain
   chain: sepolia,
   chains: [

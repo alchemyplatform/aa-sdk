@@ -29,10 +29,10 @@ Remember to replace `ALCHEMY_API_KEY` with your Alchemy API key. If you don't ha
 
 ```ts twoslash
 import { createConfig } from "@account-kit/core";
-import { sepolia } from "@account-kit/infra";
+import { sepolia, alchemy } from "@account-kit/infra";
 
 export const config = createConfig({
-  apiKey: "ALCHEMY_API_KEY",
+  transport: alchemy({ apiKey: "ALCHEMY_API_KEY" }),
   chain: sepolia,
   policyId: "GAS_MANAGER_POLICY_ID", // [!code ++]
 });
