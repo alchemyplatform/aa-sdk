@@ -10,74 +10,69 @@ import { CodePreviewSwitch } from "../components/shared/CodePreviewSwitch";
 import { TopNav } from "../components/topnav/TopNav";
 import { UserConnectionAvatarWithPopover } from "@/components/shared/user-connection-avatar/UserConnectionAvatarWithPopover";
 import { useUser } from "@account-kit/react";
-import { useConfig } from "./state";
 import { UserConnectionAvatarWithDialog } from "@/components/shared/user-connection-avatar/UserConnectionAvatarWithDialog";
 
 const publicSans = Public_Sans({
-	subsets: ["latin"],
-	display: "swap",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 const inter = Inter({
-	subsets: ["latin"],
-	display: "swap",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 export default function Home() {
-	const [showCode, setShowCode] = useState(false);
-	const user = useUser();
-	return (
-		<main
-			className={`flex bg-gray-50 flex-col h-screen ${publicSans.className}`}
-		>
-			<TopNav />
-			<div
-				className={`flex flex-col flex-1 px-4 md:px-6 lg:px-10 py-4 md:py-6 w-full max-w-screen-2xl mx-auto overflow-hidden ${inter.className}`}
-			>
-				<div className="flex flex-1 gap-6 overflow-hidden">
-					<div className="hidden lg:flex flex-col basis-0 flex-1 bg-white border border-border rounded-lg p-6 overflow-y-auto scrollbar-none gap-10">
-						<Authentication />
-						<Styling />
-					</div>
+  const [showCode, setShowCode] = useState(false);
+  const user = useUser();
+  return (
+    <main
+      className={`flex bg-gray-50 flex-col h-screen ${publicSans.className}`}
+    >
+      <TopNav />
+      <div
+        className={`flex flex-col flex-1 px-4 md:px-6 lg:px-10 py-4 md:py-6 w-full max-w-screen-2xl mx-auto overflow-hidden ${inter.className}`}
+      >
+        <div className="flex flex-1 gap-6 overflow-hidden">
+          <div className="hidden lg:flex flex-col basis-0 flex-1 bg-white border border-border rounded-lg p-6 overflow-y-auto scrollbar-none gap-10">
+            <Authentication />
+            <Styling />
+          </div>
 
-					<div className="flex flex-col flex-[2] basis-0 relative bg-white border border-border rounded-lg overflow-hidden">
-						{/* Code toggle header */}
-						<div
-							className={`relative md:absolute h-auto px-6 pt-6 md:px-0 md:pt-0 md:h-7 md:top-6 flex items-center md:left-6 md:right-6 ${
-								!user || showCode
-									? "justify-end"
-									: "justify-between"
-							}  z-10`}
-						>
-							{!showCode && user && (
-								<div className="flex-1 border-b border-border pb-6 md:border-none md:pb-0">
-									<div className="hidden md:block">
-										<UserConnectionAvatarWithPopover />
-									</div>
-									<div className="block md:hidden">
-										<UserConnectionAvatarWithDialog />
-									</div>
-								</div>
-							)}
-							<div className="hidden md:flex gap-2">
-								<div className="bg-purple-50 text-[#8B5CF6] px-2 py-1 rounded text-xs font-semibold">
-									Code preview
-								</div>
-								<CodePreviewSwitch
-									checked={showCode}
-									onCheckedChange={setShowCode}
-								/>
-							</div>
-						</div>
+          <div className="flex flex-col flex-[2] basis-0 relative bg-white border border-border rounded-lg overflow-hidden">
+            {/* Code toggle header */}
+            <div
+              className={`relative md:absolute h-auto px-6 pt-6 md:px-0 md:pt-0 md:h-7 md:top-6 flex items-center md:left-6 md:right-6 ${
+                !user || showCode ? "justify-end" : "justify-between"
+              }  z-10`}
+            >
+              {!showCode && user && (
+                <div className="flex-1 border-b border-border pb-6 md:border-none md:pb-0">
+                  <div className="hidden md:block">
+                    <UserConnectionAvatarWithPopover />
+                  </div>
+                  <div className="block md:hidden">
+                    <UserConnectionAvatarWithDialog />
+                  </div>
+                </div>
+              )}
+              <div className="hidden md:flex gap-2">
+                <div className="bg-purple-50 text-[#8B5CF6] px-2 py-1 rounded text-xs font-semibold">
+                  Code preview
+                </div>
+                <CodePreviewSwitch
+                  checked={showCode}
+                  onCheckedChange={setShowCode}
+                />
+              </div>
+            </div>
 
-						{/* Don't unmount when showing code preview so that the auth card retains its state */}
-						<AuthCardWrapper
-							className={showCode ? "hidden" : "mt-0"}
-						/>
-						{showCode && <CodePreview />}
-					</div>
-				</div>
-			</div>
-		</main>
-	);
+            {/* Don't unmount when showing code preview so that the auth card retains its state */}
+            <AuthCardWrapper className={showCode ? "hidden" : "mt-0"} />
+            {showCode && <CodePreview />}
+          </div>
+        </div>
+      </div>
+    </main>
+  );
 }
