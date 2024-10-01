@@ -13,10 +13,10 @@ To enable this setting, you can set `ssr: true` when creating a config.
 
 ```ts twoslash
 import { createConfig } from "@account-kit/core";
-import { sepolia } from "@account-kit/infra";
+import { sepolia, alchemy } from "@account-kit/infra";
 
 export const config = createConfig({
-  apiKey: "YOUR_API_KEY",
+  transport: alchemy({ apiKey: "ALCHEMY_API_KEY" }),
   chain: sepolia,
   ssr: true, // [!code ++]
 });
@@ -59,10 +59,10 @@ import {
   createConfig,
   cookieStorage, // [!code ++]
 } from "@account-kit/core";
-import { sepolia } from "@account-kit/infra";
+import { sepolia, alchemy } from "@account-kit/infra";
 
 export const config = createConfig({
-  apiKey: "YOUR_API_KEY",
+  transport: alchemy({ apiKey: "ALCHEMY_API_KEY" }),
   chain: sepolia,
   ssr: true, // [!code ++]
   storage: cookieStorage, // [!code ++]
@@ -90,10 +90,10 @@ if (typeof window !== "undefined") {
 
 ```ts twoslash [config.ts] filename="config.ts"
 import { createConfig, cookieStorage } from "@account-kit/core";
-import { sepolia } from "@account-kit/infra";
+import { sepolia, alchemy } from "@account-kit/infra";
 
 export const config = createConfig({
-  apiKey: "YOUR_API_KEY",
+  transport: alchemy({ apiKey: "ALCHEMY_API_KEY" }),
   chain: sepolia,
   ssr: true,
   storage: cookieStorage,
