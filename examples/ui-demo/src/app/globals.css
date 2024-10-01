@@ -97,7 +97,7 @@
 
 /* Radix Toast Animations */
 @keyframes slideInToast {
-  from { 
+  from {
     transform: translateY(100%);
     opacity: 0;
   }
