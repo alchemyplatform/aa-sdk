@@ -41,8 +41,7 @@ export function hydrate(
       : initialState;
 
   if (initialAlchemyState && !config.store.persist.hasHydrated()) {
-    const { accountConfigs, signerStatus, bundlerClient, ...rest } =
-      initialAlchemyState;
+    const { accountConfigs, signerStatus, ...rest } = initialAlchemyState;
     const shouldReconnectAccounts =
       signerStatus.isConnected || signerStatus.isAuthenticating;
 

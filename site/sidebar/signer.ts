@@ -7,27 +7,27 @@ export const signerSidebar: SidebarItem[] = [
   {
     text: "Using Alchemy Signer",
     items: [
-      {
-        text: "Authentication",
-        items: [
-          {
-            text: "Email magic-link",
-            link: "/signer/authentication/email-magic-link",
-          },
-          {
-            text: "Passkey signup",
-            link: "/signer/authentication/passkey-signup",
-          },
-          {
-            text: "Passkey login",
-            link: "/signer/authentication/passkey-login",
-          },
-          { text: "Add passkey", link: "/signer/authentication/add-passkey" },
-        ],
-      },
       { text: "User sessions", link: "/signer/user-sessions" },
       { text: "Export private key", link: "/signer/export-private-key" },
       { text: "As an EOA", link: "/signer/as-an-eoa" },
+    ],
+  },
+  {
+    text: "Authentication methods",
+    items: [
+      {
+        text: "Email magic-link",
+        link: "/signer/authentication/email-magic-link",
+      },
+      {
+        text: "Passkey signup",
+        link: "/signer/authentication/passkey-signup",
+      },
+      {
+        text: "Passkey login",
+        link: "/signer/authentication/passkey-login",
+      },
+      { text: "Add passkey", link: "/signer/authentication/add-passkey" },
     ],
   },
   {

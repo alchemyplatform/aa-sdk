@@ -58,9 +58,7 @@ export type SignerStatus = {
 };
 
 export type StoredState = {
-  alchemy: Omit<StoreState, "signer" | "accounts" | "bundlerClient"> & {
-    bundlerClient: { connection: Connection };
-  };
+  alchemy: Omit<StoreState, "signer" | "accounts" | "bundlerClient">;
   wagmi?: WagmiState;
 };
 
