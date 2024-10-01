@@ -13,32 +13,34 @@ export function TopNav() {
           <p>Account kit</p>
         </div>
 
-        <div className="flex gap-4 items-center h-8">
-          <div className="hidden md:flex items-center gap-8 font-semibold">
-            <ExternalLink
-              href={links.quickstartGuide}
-              className="p-2 hover:bg-gray-100 transition-colors rounded-lg mr-4"
-            >
-              Quickstart
-            </ExternalLink>
-            <ExternalLink
-              href={links.integrationCall}
-              className="p-2 hover:bg-gray-100 transition-colors rounded-lg"
-            >
-              Integration call
-            </ExternalLink>
-            <ExternalLink href={links.github}>
-              <GithubLogo />
-            </ExternalLink>
-          </div>
+        <div className="flex gap-8 items-center h-8">
+          <ExternalLink
+            href={links.quickstartGuide}
+            className="hidden md:flex p-2 font-semibold hover:bg-gray-100 transition-colors rounded-lg"
+          >
+            Quickstart
+          </ExternalLink>
+          <ExternalLink
+            href={links.integrationCall}
+            className="hidden md:flex p-2 font-semibold hover:bg-gray-100 transition-colors rounded-lg"
+          >
+            Integration call
+          </ExternalLink>
+          <ExternalLink href={links.github}>
+            <GithubLogo className="hidden md:flex" />
+          </ExternalLink>
+          <ExternalLink href={links.dashboard}>
+            <button className="h-10 hidden md:flex justify-center items-center py-[12px] text-sm font-semibold px-3 bg-[#020617] text-[white] radius-1">
+              Get API key
+            </button>
+          </ExternalLink>
           <div className="flex md:hidden">
-            <a
+            <ExternalLink
               className="btn px-3 py-2.5 border border-btn-secondary text-sm"
               href="https://accountkit.alchemy.com/react/quickstart"
-              target="_blank"
             >
               Build
-            </a>
+            </ExternalLink>
           </div>
         </div>
       </div>
