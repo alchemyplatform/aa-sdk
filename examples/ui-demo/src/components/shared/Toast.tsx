@@ -5,7 +5,7 @@ import { Root, Viewport, Close } from "@radix-ui/react-toast";
 import { XIcon } from "../icons/x";
 import { useToast } from "@/hooks/useToast";
 
-// Toast is not themed due to its positioning over the perma-white nav bar.
+// Toast is not themed due to its positioning over the perma-white nav bar
 
 export const Toast = () => {
   const { closeToast, toast } = useToast();
