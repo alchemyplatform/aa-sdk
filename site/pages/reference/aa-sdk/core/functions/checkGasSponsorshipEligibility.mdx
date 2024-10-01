@@ -22,7 +22,7 @@ import { checkGasSponsorshipEligibility } from "@aa-sdk/core";
 ```ts
 import { smartAccountClient } from "./smartAccountClient";
 // [!code focus:99]
-const eligible = await smartAccountClient.checkGasSponsorshipEligibility({
+const { eligible } = await smartAccountClient.checkGasSponsorshipEligibility({
   uo: {
     data: "0xCalldata",
     target: "0xTarget",
@@ -51,5 +51,5 @@ containing the user operation, account, context, and overrides
 
 ## Returns
 
-`Promise<boolean>`
-a Promise containing a boolean indicating if the account is elgibile for sponsorship
+`Promise<CheckGasSponsorshipEligibilityResult<TAccount>>`
+a Promise containing a boolean indicating if the account is elgibile for sponsorship and the sponsored UO
