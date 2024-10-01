@@ -5,6 +5,7 @@ import {
   type SmartAccountSigner,
 } from "@aa-sdk/core";
 import {
+  alchemy,
   alchemyEnhancedApiActions,
   createAlchemySmartAccountClient,
   polygonMumbai,
@@ -33,6 +34,7 @@ describe("Light Account Client Tests", () => {
       },
       `
       {
+        "alchemyRpcUrl": "https://polygon-mumbai.g.alchemy.com/v2/",
         "fetchOptions": {
           "headers": {
             "Alchemy-AA-Sdk-Version": Any<String>,
@@ -40,14 +42,13 @@ describe("Light Account Client Tests", () => {
             "Authorization": "Bearer test",
           },
         },
-        "key": "http",
-        "name": "HTTP JSON-RPC",
+        "key": "alchemy",
+        "name": "Alchemy Transport",
         "request": [Function],
         "retryCount": 3,
         "retryDelay": 150,
-        "timeout": 10000,
-        "type": "http",
-        "url": "https://polygon-mumbai.g.alchemy.com/v2/",
+        "timeout": undefined,
+        "type": "alchemy",
       }
     `
     );
@@ -80,7 +81,9 @@ describe("Light Account Client Tests", () => {
   ])("should successfully create a provider", (args) => {
     expect(() =>
       createAlchemySmartAccountClient({
-        ...args,
+        transport: alchemy({
+          ...args,
+        }),
         chain,
       })
     ).not.toThrowError();
@@ -89,7 +92,7 @@ describe("Light Account Client Tests", () => {
   it("should correctly do runtime validation when connection config is invalid", () => {
     expect(() =>
       createAlchemySmartAccountClient({
-        rpcUrl: 1 as unknown as string,
+        transport: alchemy({ rpcUrl: 1 as unknown as string }),
         chain,
       })
     ).toThrowErrorMatchingSnapshot();
@@ -104,9 +107,7 @@ describe("Light Account Client Tests", () => {
           "code": "custom",
           "message": "chain must include an alchemy rpc url. See \`createAlchemyChain\` or import a chain from \`@account-kit/infra\`.",
           "fatal": true,
-          "path": [
-            "chain"
-          ]
+          "path": []
         }
       ]]
     `);
@@ -136,9 +137,11 @@ describe("Light Account Client Tests", () => {
     chain: Chain;
   }) =>
     createLightAccountAlchemyClient({
-      jwt: "test",
-      signer,
+      transport: alchemy({
+        jwt: "test",
+      }),
       chain,
+      signer,
       accountAddress: "0x86f3B0211764971Ad0Fc8C8898d31f5d792faD84",
     });
 });

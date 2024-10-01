@@ -19,14 +19,16 @@ import { createMultiOwnerLightAccountAlchemyClient } from "@account-kit/smart-co
 
 ```ts
 import { createMultiOwnerLightAccountAlchemyClient } from "@account-kit/smart-contracts";
-import { sepolia } from "@account-kit/infra";
+import { sepolia, alchemy } from "@account-kit/infra";
 import { LocalAccountSigner } from "@aa-sdk/core";
-import { generatePrivateKey } from "viem";
+import { generatePrivateKey } from "viem"
 
 const lightAccountClient = await createMultiOwnerLightAccountAlchemyClient({
-  apiKey: "your-api-key",
-  chain: sepolia,
-  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+transport: alchemy({
+apiKey: "your-api-key",
+}),
+chain: sepolia
+signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
 });
 ```
 
