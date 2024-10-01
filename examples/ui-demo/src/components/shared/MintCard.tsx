@@ -47,6 +47,7 @@ export const MintCard = () => {
     setToast({
       type: "success",
       text: "You've successfully collected your NFT! Refresh to mint again.",
+      open: true,
     });
     setNFTTransfered(true);
   };
@@ -55,6 +56,7 @@ export const MintCard = () => {
     setToast({
       type: "error",
       text: "There was a problem with that action",
+      open: true,
     });
   };
 
