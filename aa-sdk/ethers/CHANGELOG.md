@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-beta.7](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.6...v4.0.0-beta.7) (2024-09-27)
+
+**Note:** Version bump only for package @aa-sdk/ethers
+
+# [4.0.0-beta.6](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.5...v4.0.0-beta.6) (2024-09-18)
+
+**Note:** Version bump only for package @aa-sdk/ethers
+
+# [4.0.0-beta.5](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.4...v4.0.0-beta.5) (2024-09-18)
+
+**Note:** Version bump only for package @aa-sdk/ethers
+
 # [4.0.0-beta.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.3...v4.0.0-beta.4) (2024-09-18)
 
 **Note:** Version bump only for package @aa-sdk/ethers

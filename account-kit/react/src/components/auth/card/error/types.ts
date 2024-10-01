@@ -1,3 +1,4 @@
+import type { Connector } from "@wagmi/core";
 export enum EOAWallets {
   COINBASE_WALLET = "com.coinbase.wallet",
   METAMASK = "io.metamask",
@@ -6,7 +7,7 @@ export enum EOAWallets {
 
 export type ConnectionErrorProps = {
   connectionType: "passkey" | "wallet" | "timeout";
-  walletType?: EOAWallets;
+  EOAConnector?: Connector | EOAWallets.WALLET_CONNECT;
   handleTryAgain?: () => void;
   handleUseAnotherMethod?: () => void;
 };

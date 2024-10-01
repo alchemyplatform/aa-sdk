@@ -98,6 +98,13 @@ export const AuthCardContent = ({
     }
   }, [authStep, setAuthStep, signer]);
 
+  const onClose = useCallback(() => {
+    if (authStep.type === "passkey_create") {
+      setAuthStep({ type: "complete" });
+    }
+    closeAuthModal();
+  }, [authStep.type, closeAuthModal, setAuthStep]);
+
   useLayoutEffect(() => {
     if (authStep.type === "complete") {
       didGoBack.current = false;
@@ -127,7 +134,7 @@ export const AuthCardContent = ({
     <div className="relative">
       {/* Wrapper container that sizes its height dynamically */}
       <div
-        className="transition-all duration-300 ease-out overflow-y-hidden"
+        className="transition-all duration-300 ease-out overflow-y-hidden radius-2"
         style={{ height: height ? `${height}px` : "auto" }}
       >
         <div className="z-[1]" ref={contentRef}>
@@ -141,7 +148,7 @@ export const AuthCardContent = ({
                 showClose={showClose}
                 showBack={canGoBack}
                 onBack={onBack}
-                onClose={closeAuthModal}
+                onClose={onClose}
               />
             )}
             <Step />

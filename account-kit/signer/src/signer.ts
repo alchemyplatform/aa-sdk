@@ -27,18 +27,36 @@ export type AuthParams =
     }
   | ({
       type: "oauth";
-      authProviderId: string;
-      isCustomProvider?: boolean;
       scope?: string;
       claims?: string;
-    } & RedirectConfig)
+    } & OauthProviderConfig &
+      OauthRedirectConfig)
   | { type: "oauthReturn"; bundle: string; orgId: string };
 
-export type OauthMode = "redirect" | "popup";
+export type OauthProviderConfig =
+  | {
+      authProviderId: "auth0";
+      isCustomProvider?: false;
+      auth0Connection?: string;
+    }
+  | {
+      authProviderId: KnownAuthProvider;
+      isCustomProvider?: false;
+      auth0Connection?: never;
+    }
+  | {
+      authProviderId: string;
+      isCustomProvider: true;
+      auth0Connection?: never;
+    };
 
-export type RedirectConfig =
+export type OauthRedirectConfig =
   | { mode: "redirect"; redirectUrl: string }
   | { mode: "popup"; redirectUrl?: never };
+
+export type KnownAuthProvider = "google" | "apple" | "facebook" | "auth0";
+
+export type OauthMode = "redirect" | "popup";
 
 export const AlchemySignerParamsSchema = z
   .object({

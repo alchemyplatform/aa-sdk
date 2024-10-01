@@ -1,4 +1,4 @@
-import { ConnectionConfigSchema } from "@aa-sdk/core";
+import { BaseError, ConnectionConfigSchema } from "@aa-sdk/core";
 import { getWebAuthnAttestation } from "@turnkey/http";
 import { IframeStamper } from "@turnkey/iframe-stamper";
 import { WebauthnStamper } from "@turnkey/webauthn-stamper";
@@ -451,14 +451,23 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
         if (!event.data) {
           return;
         }
-        const { alchemyBundle: bundle, alchemyOrgId: orgId } = event.data;
+        const {
+          alchemyBundle: bundle,
+          alchemyOrgId: orgId,
+          alchemyError,
+        } = event.data;
         if (bundle && orgId) {
           cleanup();
+          popup?.close();
           this.completeAuthWithBundle({
             bundle,
             orgId,
             connectedEventName: "connectedOauth",
           }).then(resolve, reject);
+        } else if (alchemyError) {
+          cleanup();
+          popup?.close();
+          reject(new OauthFailedError(alchemyError));
         }
       };
 
@@ -467,7 +476,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       const checkCloseIntervalId = setInterval(() => {
         if (popup?.closed) {
           cleanup();
-          reject(new Error("Oauth cancelled"));
+          reject(new OauthCancelledError());
         }
       }, CHECK_CLOSE_INTERVAL);
 
@@ -482,6 +491,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     const {
       authProviderId,
       isCustomProvider,
+      auth0Connection,
       scope: providedScope,
       claims: providedClaims,
       mode,
@@ -501,7 +511,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     let scope: string;
     let claims: string | undefined;
     if (providedScope) {
-      scope = providedScope;
+      scope = addOpenIdIfAbsent(providedScope);
       claims = providedClaims;
     } else {
       if (isCustomProvider) {
@@ -545,6 +555,9 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     };
     if (claims) {
       params.claims = claims;
+    }
+    if (auth0Connection) {
+      params.connection = auth0Connection;
     }
     authUrl.search = new URLSearchParams(params).toString();
     return authUrl.toString();
@@ -655,4 +668,38 @@ function resolveRelativeUrl(url: string): string {
   const a = document.createElement("a");
   a.href = url;
   return a.href;
+}
+
+/**
+ * "openid" is a required scope in the OIDC protocol. Insert it if the user
+ * forgot.
+ *
+ * @param {string} scope scope param which may be missing "openid"
+ * @returns {string} scope which most definitely contains "openid"
+ */
+function addOpenIdIfAbsent(scope: string): string {
+  return scope.match(/\bopenid\b/) ? scope : `openid ${scope}`;
+}
+
+/**
+ * This error is thrown when the OAuth flow is cancelled because the auth popup
+ * window was closed.
+ */
+export class OauthCancelledError extends BaseError {
+  override name = "OauthCancelledError";
+
+  /**
+   * Constructor for initializing an error indicating that the OAuth flow was
+   * cancelled.
+   */
+  constructor() {
+    super("OAuth cancelled");
+  }
+}
+
+/**
+ * This error is thrown when an error occurs during the OAuth login flow.
+ */
+export class OauthFailedError extends BaseError {
+  override name = "OauthFailedError";
 }

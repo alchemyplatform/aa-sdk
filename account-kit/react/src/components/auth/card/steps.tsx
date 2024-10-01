@@ -14,7 +14,7 @@ export const Step = () => {
     case "email_verify":
       return <LoadingEmail authStep={authStep} />;
     case "passkey_verify":
-      return <LoadingPasskeyAuth />;
+      return <LoadingPasskeyAuth authStep={authStep} />;
     case "email_completing":
       return <CompletingEmailAuth authStep={authStep} />;
     case "passkey_create":

@@ -28,7 +28,7 @@ const RenderFooterText = ({ authStep }: FooterProps) => {
 };
 export const Footer = ({ authStep }: FooterProps) => {
   return (
-    <div className="bg-bg-surface-subtle p-5 border-bg-surface-inset border-t-[1px]">
+    <div className="p-5 pt-2">
       <RenderFooterText authStep={authStep} />
       <div className="flex justify-center">
         <PoweredBy />

@@ -3,6 +3,37 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-beta.7](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.6...v4.0.0-beta.7) (2024-09-27)
+
+### Bug Fixes
+
+- close OAuth popup from parent ([#973](https://github.com/alchemyplatform/aa-sdk/issues/973)) ([b67844c](https://github.com/alchemyplatform/aa-sdk/commit/b67844cc7e58eec8de00dd4504a8265a588ca2b6))
+- make add passkey modal icons the same color ([#975](https://github.com/alchemyplatform/aa-sdk/issues/975)) ([bedbc20](https://github.com/alchemyplatform/aa-sdk/commit/bedbc2044fb35c8c80cc305ff3722a1428d227c4))
+- prevent modal from opening if modal is closed ([#985](https://github.com/alchemyplatform/aa-sdk/issues/985)) ([014a9e8](https://github.com/alchemyplatform/aa-sdk/commit/014a9e8ed73c4ed3545612edc1b7944897bce87e))
+- resize email icon in auth methods and fix lint warning ([#966](https://github.com/alchemyplatform/aa-sdk/issues/966)) ([d3b6777](https://github.com/alchemyplatform/aa-sdk/commit/d3b677766884f707ce40d8157bf74551ef450526))
+- **ui-components:** ensure the passkey prompt always shows up when qp is present ([#978](https://github.com/alchemyplatform/aa-sdk/issues/978)) ([81f1580](https://github.com/alchemyplatform/aa-sdk/commit/81f15806e704bcffca6435eccb293923ff64d0e9))
+
+### Features
+
+- add auth0connection param ([#981](https://github.com/alchemyplatform/aa-sdk/issues/981)) ([4fc80e4](https://github.com/alchemyplatform/aa-sdk/commit/4fc80e4e0c675dec51262a761e35d96a30ad100d))
+- add user connection status avatar and dropdown ([#977](https://github.com/alchemyplatform/aa-sdk/issues/977)) ([3f094cb](https://github.com/alchemyplatform/aa-sdk/commit/3f094cb46d98b6870a4436ded88f04f48179c19f))
+- allow passkey flow in demo app ([#969](https://github.com/alchemyplatform/aa-sdk/issues/969)) ([bacf9bd](https://github.com/alchemyplatform/aa-sdk/commit/bacf9bd017b57427e5c601ea86099ad256384b0f))
+- improve OAuth error handling ([#982](https://github.com/alchemyplatform/aa-sdk/issues/982)) ([66e85d6](https://github.com/alchemyplatform/aa-sdk/commit/66e85d620e295eae2644cba03ac1f0a9bcc15941))
+
+# [4.0.0-beta.6](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.5...v4.0.0-beta.6) (2024-09-18)
+
+### Bug Fixes
+
+- allow useLogout without authModalContext ([#972](https://github.com/alchemyplatform/aa-sdk/issues/972)) ([8175962](https://github.com/alchemyplatform/aa-sdk/commit/8175962a509cb6e51ced22b1cd199a57fb7305a4))
+- fixed bad svg prop names ([#968](https://github.com/alchemyplatform/aa-sdk/issues/968)) ([fdf7025](https://github.com/alchemyplatform/aa-sdk/commit/fdf7025aec20aca76f4285769d1f650f3636b78e))
+
+# [4.0.0-beta.5](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.4...v4.0.0-beta.5) (2024-09-18)
+
+### Bug Fixes
+
+- don't ignore oauthCallbackUrl config option ([#971](https://github.com/alchemyplatform/aa-sdk/issues/971)) ([714da46](https://github.com/alchemyplatform/aa-sdk/commit/714da4652f1b55a763d77cc5a509c04054aab384))
+- use same passkey svg from account kit ([#970](https://github.com/alchemyplatform/aa-sdk/issues/970)) ([c723447](https://github.com/alchemyplatform/aa-sdk/commit/c723447094fb351e839b154e3dd123486c784380))
+
 # [4.0.0-beta.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.3...v4.0.0-beta.4) (2024-09-18)
 
 ### Features

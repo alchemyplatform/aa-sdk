@@ -93,7 +93,7 @@ const AddedPasskeyOutlineLight = ({
       r="10"
       fill="white"
       stroke="currentColor"
-      stroke-width="2"
+      strokeWidth="2"
     />
     <path
       fillRule="evenodd"
@@ -137,7 +137,7 @@ const AddedPasskeyLinearLight = ({
       r="10"
       fill="currentColor"
       stroke="#020617"
-      stroke-width="2"
+      strokeWidth="2"
     />
     <path
       fillRule="evenodd"
@@ -246,7 +246,7 @@ const AddedPasskeyOutlineDark = ({
       r="10"
       fill="black"
       stroke="currentColor"
-      stroke-width="2"
+      strokeWidth="2"
     />
     <path
       fillRule="evenodd"
@@ -290,7 +290,7 @@ const AddedPasskeyLinearDark = ({
       r="10"
       fill="currentColor"
       stroke="white"
-      stroke-width="2"
+      strokeWidth="2"
     />
     <path
       fillRule="evenodd"

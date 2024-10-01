@@ -1,18 +1,16 @@
 import { useConfig } from "@/app/state";
 import { cn } from "@/lib/utils";
-import { AuthCard, useLogout, useUser } from "@account-kit/react";
+import { AuthCard, useUser } from "@account-kit/react";
+import { MintCard } from "../shared/MintCard";
 
 export function AuthCardWrapper({ className }: { className?: string }) {
   const user = useUser();
-
   const { config } = useConfig();
-  const { logout } = useLogout();
-
   return (
     <div
       className={cn(
-        "flex flex-1 flex-col justify-center items-center overflow-auto",
-        config.ui.theme === "dark" ? "bg-black/70" : "bg-[#EFF4F9]",
+        "flex flex-1 flex-col justify-center items-center overflow-auto relative",
+        config.ui.theme === "dark" ? "bg-black/70" : "bg-white",
         className
       )}
     >
@@ -23,12 +21,7 @@ export function AuthCardWrapper({ className }: { className?: string }) {
           </div>
         </div>
       ) : (
-        <button
-          className="text-primary font-semibold text-sm px-3 py-[11px] bg-white border border-gray-300 rounded-lg hover:shadow-md"
-          onClick={() => logout()}
-        >
-          Logout
-        </button>
+        <MintCard />
       )}
     </div>
   );

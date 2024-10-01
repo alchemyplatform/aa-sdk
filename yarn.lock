@@ -5075,6 +5075,14 @@
     "@parcel/watcher-win32-ia32" "2.3.0"
     "@parcel/watcher-win32-x64" "2.3.0"
 
+"@phun-ky/moebius@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.npmjs.org/@phun-ky/moebius/-/moebius-1.0.6.tgz#6bcd24378dd788af6cc1ec55cf472980a0b705da"
+  integrity sha512-cCbIEZHxwSeoyrqFA6ct+8mqARfdOdIlu/SKXTg29QGnTBm5SRCEIpQU62EFpC3FEsvtYbWZPqx0a+Wz3MTt1A==
+  dependencies:
+    chroma-js "^2.4.2"
+    nearest-color "^0.4.4"
+
 "@pkgjs/parseargs@^0.11.0":
   version "0.11.0"
   resolved "https://registry.npmjs.org/@pkgjs/parseargs/-/parseargs-0.11.0.tgz"
@@ -9441,6 +9449,11 @@ boolbase@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
   integrity sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==
+
+boring-avatars@^1.11.2:
+  version "1.11.2"
+  resolved "https://registry.npmjs.org/boring-avatars/-/boring-avatars-1.11.2.tgz#365e0b765fb0065ca0cb2fd20c200674d0a9ded6"
+  integrity sha512-3+wkwPeObwS4R37FGXMYViqc4iTrIRj5yzfX9Qy4mnpZ26sX41dGMhsAgmKks1r/uufY1pl4vpgzMWHYfJRb2A==
 
 bowser@^2.9.0:
   version "2.11.0"
@@ -17272,6 +17285,11 @@ natural-compare@^1.4.0:
   version "1.4.0"
   resolved "https://registry.npmjs.org/natural-compare/-/natural-compare-1.4.0.tgz"
   integrity sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==
+
+nearest-color@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.npmjs.org/nearest-color/-/nearest-color-0.4.4.tgz#fb812072b511f4f09a0a316903332e09fa5d7f1d"
+  integrity sha512-orhcaIORC10tf41Ld2wwlcC+FaAavHG87JHWB3eHH5p7v2k9Tzym2XNEZzLAm5YJwGv6Q38WWc7SOb+Qfu/4NQ==
 
 negotiator@0.6.3, negotiator@^0.6.3:
   version "0.6.3"
