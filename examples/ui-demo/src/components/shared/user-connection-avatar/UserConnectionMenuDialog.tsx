@@ -1,54 +1,46 @@
-import { ComponentPropsWithoutRef, PropsWithChildren, useState } from "react";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogOverlay,
-  DialogPortal,
-} from "@/components/ui/dialog";
+import { ComponentPropsWithoutRef, PropsWithChildren } from "react";
+import { Dialog } from "@account-kit/react";
 
-const UserConnectionDialogMenu = ({ children }: PropsWithChildren) => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+type UserConnectionDialogMenuProps = {
+  isOpen: boolean;
+  onClose: () => void;
+} & PropsWithChildren &
+  ComponentPropsWithoutRef<typeof Dialog>;
 
+type UserConnectionDialogMenuTriggerProps = {
+  toggleOpenState: () => void;
+} & PropsWithChildren;
+
+const UserConnectionDialogMenu = ({
+  isOpen,
+  onClose,
+  children,
+}: UserConnectionDialogMenuProps) => {
   return (
-    <Dialog
-      open={isDialogOpen}
-      onOpenChange={(open: boolean) => {
-        setIsDialogOpen(open);
-      }}
-    >
-      {children}
-    </Dialog>
+    <div>
+      <Dialog isOpen={isOpen} onClose={onClose}>
+        {children}
+      </Dialog>
+    </div>
   );
 };
 
 export const MenuTrigger = (
-  props: PropsWithChildren & ComponentPropsWithoutRef<typeof DialogTrigger>
+  props: UserConnectionDialogMenuTriggerProps &
+    ComponentPropsWithoutRef<"button">
 ) => {
-  return <DialogTrigger {...props}>{props.children}</DialogTrigger>;
+  return (
+    <button onClick={() => props.toggleOpenState()}>{props.children}</button>
+  );
 };
 
 export const MenuContent = (
-  props: PropsWithChildren & ComponentPropsWithoutRef<typeof DialogContent>
+  props: PropsWithChildren & ComponentPropsWithoutRef<"div">
 ) => {
   return (
-    <DialogContent {...props}>
-      <DialogPortal>
-        <DialogOverlay className="absolute top-0 inset-0 bg-black bg-opacity-70 z-10 flex md:hidden" />
-        <DialogContent
-          onOpenAutoFocus={(e) => e.preventDefault()}
-          onCloseAutoFocus={(e) => e.preventDefault()}
-          className="flex md:hidden"
-        >
-          <div className="w-full">
-            <p className="text-lg font-semibold text-fg-primary mb-5">
-              Profile
-            </p>
-            {props.children}
-          </div>
-        </DialogContent>
-      </DialogPortal>
-    </DialogContent>
+    <div className="w-full bg-bg-surface-default radius-t-2 md:radius-2 md:min-w-96 p-6">
+      {props.children}
+    </div>
   );
 };
 

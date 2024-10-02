@@ -8,7 +8,14 @@ import {
 import { useConfig } from "@/app/state";
 import { cn } from "@/lib/utils";
 
-const UserConnectionPopoverMenu = ({ children }: PropsWithChildren) => {
+type UserConnectionPopoverMenuProps = {
+  onOpenStateChange?: (open: boolean) => void;
+} & PropsWithChildren;
+
+const UserConnectionPopoverMenu = ({
+  children,
+  onOpenStateChange,
+}: UserConnectionPopoverMenuProps) => {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   return (
@@ -16,6 +23,7 @@ const UserConnectionPopoverMenu = ({ children }: PropsWithChildren) => {
       open={isPopoverOpen}
       onOpenChange={(open: boolean) => {
         setIsPopoverOpen(open);
+        onOpenStateChange && onOpenStateChange(open);
       }}
     >
       {children}
