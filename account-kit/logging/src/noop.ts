@@ -1,5 +1,8 @@
 import type { EventLogger } from "./types";
 
 export const noopLogger: EventLogger<any> = {
-  trackEvent: () => {},
+  trackEvent: async () => {},
+  _internal: {
+    ready: Promise.resolve(),
+  },
 };
