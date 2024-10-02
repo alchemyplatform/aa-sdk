@@ -1,12 +1,22 @@
-import { defineProject, mergeConfig } from "vitest/config";
-import { sharedConfig } from "../../.vitest/vitest.shared";
+import { defineProject } from "vitest/config";
 
-export default mergeConfig(
-  // @ts-ignore this does work
-  sharedConfig,
-  defineProject({
-    test: {
-      name: "account-kit/logging",
-    },
-  })
-);
+export default defineProject({
+  test: {
+    environment: "jsdom",
+    name: "account-kit/logging",
+    globals: true,
+  },
+});
+
+// export default mergeConfig(
+//   // @ts-ignore this does work
+//   sharedConfig,
+//   defineProject({
+//     test: {
+//       environment: "jsdom",
+//       name: "account-kit/logging",
+//       setupFiles: [],
+//       globalSetup: [],
+//     },
+//   })
+// );

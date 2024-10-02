@@ -32,9 +32,13 @@
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
     "postbuild": "npx tsx ./postbuild.ts",
-    "clean": "rm -rf ./dist"
+    "clean": "rm -rf ./dist",
+    "test": "vitest --passWithNoTests",
+    "test:run": "vitest run --passWithNoTests"
   },
   "devDependencies": {
+    "@types/jsdom": "^21.1.7",
+    "jsdom": "^25.0.1",
     "typescript": "^5.0.4",
     "typescript-template": "*",
     "vitest": "^2.0.4"
@@ -51,5 +55,8 @@
     "url": "https://github.com/alchemyplatform/aa-sdk/issues"
   },
   "homepage": "https://github.com/alchemyplatform/aa-sdk#readme",
-  "dependencies": {}
+  "dependencies": {
+    "@segment/analytics-next": "^1.74.0",
+    "uuidv4": "^6.2.13"
+  }
 }
