@@ -38,5 +38,5 @@ export const signTypedData: <
     throw new AccountNotFoundError();
   }
 
-  return account.signTypedData(typedData);
+  return account.signTypedDataWith6492(typedData);
 };

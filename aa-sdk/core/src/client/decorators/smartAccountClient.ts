@@ -15,7 +15,10 @@ import type {
 import { buildUserOperation } from "../../actions/smartAccount/buildUserOperation.js";
 import { buildUserOperationFromTx } from "../../actions/smartAccount/buildUserOperationFromTx.js";
 import { buildUserOperationFromTxs } from "../../actions/smartAccount/buildUserOperationFromTxs.js";
-import { checkGasSponsorshipEligibility } from "../../actions/smartAccount/checkGasSponsorshipEligibility.js";
+import {
+  checkGasSponsorshipEligibility,
+  type CheckGasSponsorshipEligibilityResult,
+} from "../../actions/smartAccount/checkGasSponsorshipEligibility.js";
 import { dropAndReplaceUserOperation } from "../../actions/smartAccount/dropAndReplaceUserOperation.js";
 import { getAddress } from "../../actions/smartAccount/getAddress.js";
 import { sendTransaction } from "../../actions/smartAccount/sendTransaction.js";
@@ -25,12 +28,10 @@ import {
   signMessage,
   type SignMessageParameters,
 } from "../../actions/smartAccount/signMessage.js";
-import { signMessageWith6492 } from "../../actions/smartAccount/signMessageWith6492.js";
 import {
   signTypedData,
   type SignTypedDataParameters,
 } from "../../actions/smartAccount/signTypedData.js";
-import { signTypedDataWith6492 } from "../../actions/smartAccount/signTypedDataWith6492.js";
 import { signUserOperation } from "../../actions/smartAccount/signUserOperation.js";
 import type {
   BuildTransactionParameters,
@@ -79,10 +80,13 @@ export type BaseSmartAccountClientActions<
   checkGasSponsorshipEligibility: <
     TContext extends UserOperationContext | undefined =
       | UserOperationContext
-      | undefined
+      | undefined,
+    TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
   >(
     args: SendUserOperationParameters<TAccount, TContext>
-  ) => Promise<boolean>;
+  ) => Promise<
+    CheckGasSponsorshipEligibilityResult<TAccount, TEntryPointVersion>
+  >;
   signUserOperation: (
     args: SignUserOperationParameters<TAccount, TEntryPointVersion, TContext>
   ) => Promise<UserOperationRequest<TEntryPointVersion>>;
@@ -114,13 +118,6 @@ export type BaseSmartAccountClientActions<
   ) => Promise<Hex>;
   signMessage: (args: SignMessageParameters<TAccount>) => Promise<Hex>;
   signTypedData: <
-    const TTypedData extends TypedData | { [key: string]: unknown },
-    TPrimaryType extends string = string
-  >(
-    args: SignTypedDataParameters<TTypedData, TPrimaryType, TAccount>
-  ) => Promise<Hex>;
-  signMessageWith6492: (args: SignMessageParameters<TAccount>) => Promise<Hex>;
-  signTypedDataWith6492: <
     const TTypedData extends TypedData | { [key: string]: unknown },
     TPrimaryType extends string = string
   >(
@@ -172,8 +169,6 @@ export const smartAccountClientActions: <
   getAddress: (args) => getAddress(client, args),
   signMessage: (args) => signMessage(client, args),
   signTypedData: (args) => signTypedData(client, args),
-  signMessageWith6492: (args) => signMessageWith6492(client, args),
-  signTypedDataWith6492: (args) => signTypedDataWith6492(client, args),
 });
 
 export const smartAccountClientMethodKeys = Object.keys(
