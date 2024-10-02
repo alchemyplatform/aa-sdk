@@ -82,7 +82,7 @@ export function useSignMessage({
         throw new ClientUndefinedHookError("useSignMessage");
       }
 
-      return client.signMessageWith6492(params);
+      return client.signMessage(params);
     },
     [client, isConnected, wagmiConfig]
   );
