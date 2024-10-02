@@ -1,5 +1,8 @@
 import type { Chain, Client, Transport } from "viem";
-import type { SmartContractAccount } from "../../account/smartContractAccount.js";
+import type {
+  GetEntryPointFromAccount,
+  SmartContractAccount,
+} from "../../account/smartContractAccount.js";
 import { isBaseSmartAccountClient } from "../../client/isSmartAccountClient.js";
 import { AccountNotFoundError } from "../../errors/account.js";
 import { IncompatibleClientError } from "../../errors/client.js";
@@ -10,6 +13,16 @@ import type {
   UserOperationContext,
 } from "./types";
 
+export type CheckGasSponsorshipEligibilityResult<
+  TAccount extends SmartContractAccount | undefined =
+    | SmartContractAccount
+    | undefined,
+  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+> = {
+  eligible: boolean;
+  request?: UserOperationStruct<TEntryPointVersion>;
+};
+
 /**
  * This function verifies the eligibility of the connected account for gas sponsorship concerning the upcoming `UserOperation` (UO) that is intended to be sent.
  * Internally, this method invokes `buildUserOperation`, which navigates through the middleware pipeline, including the `PaymasterMiddleware`. Its purpose is to construct the UO struct meant for transmission to the bundler. Following the construction of the UO struct, this function verifies if the resulting structure contains a non-empty `paymasterAndData` field.
@@ -19,7 +32,7 @@ import type {
  * ```ts
  * import { smartAccountClient } from "./smartAccountClient";
  * // [!code focus:99]
- * const eligible = await smartAccountClient.checkGasSponsorshipEligibility({
+ * const { eligible } = await smartAccountClient.checkGasSponsorshipEligibility({
  *   uo: {
  *     data: "0xCalldata",
  *     target: "0xTarget",
@@ -36,7 +49,7 @@ import type {
  *
  * @param {Client<TTransport, TChain, TAccount>} client the smart account client to use for making RPC calls
  * @param {SendUserOperationParameters} args containing the user operation, account, context, and overrides
- * @returns {Promise<boolean>} a Promise containing a boolean indicating if the account is elgibile for sponsorship
+ * @returns {Promise<CheckGasSponsorshipEligibilityResult<TAccount>>} a Promise containing a boolean indicating if the account is elgibile for sponsorship and the sponsored UO
  */
 export function checkGasSponsorshipEligibility<
   TTransport extends Transport = Transport,
@@ -50,7 +63,7 @@ export function checkGasSponsorshipEligibility<
 >(
   client: Client<TTransport, TChain, TAccount>,
   args: SendUserOperationParameters<TAccount, TContext>
-): Promise<boolean> {
+): Promise<CheckGasSponsorshipEligibilityResult<TAccount>> {
   const { account = client.account, overrides, context } = args;
 
   if (!account) {
@@ -71,16 +84,20 @@ export function checkGasSponsorshipEligibility<
     overrides,
     context,
   })
-    .then((userOperationStruct) =>
-      account.getEntryPoint().version === "0.6.0"
-        ? (userOperationStruct as UserOperationStruct<"0.6.0">)
-            .paymasterAndData !== "0x" &&
-          (userOperationStruct as UserOperationStruct<"0.6.0">)
-            .paymasterAndData !== null
-        : (userOperationStruct as UserOperationStruct<"0.7.0">)
-            .paymasterData !== "0x" &&
-          (userOperationStruct as UserOperationStruct<"0.7.0">)
-            .paymasterData !== null
-    )
-    .catch(() => false);
+    .then((userOperationStruct) => ({
+      eligible:
+        account.getEntryPoint().version === "0.6.0"
+          ? (userOperationStruct as UserOperationStruct<"0.6.0">)
+              .paymasterAndData !== "0x" &&
+            (userOperationStruct as UserOperationStruct<"0.6.0">)
+              .paymasterAndData !== null
+          : (userOperationStruct as UserOperationStruct<"0.7.0">)
+              .paymasterData !== "0x" &&
+            (userOperationStruct as UserOperationStruct<"0.7.0">)
+              .paymasterData !== null,
+      request: userOperationStruct,
+    }))
+    .catch(() => ({
+      eligible: false,
+    }));
 }

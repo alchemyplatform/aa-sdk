@@ -39,7 +39,8 @@ type ExecutionActions<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined,
-  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+  TEntryPointVersion extends
+    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
 > = {
   executeWithSessionKey: (
     args: Pick<
@@ -51,7 +52,7 @@ type ExecutionActions<
     > &
       UserOperationOverridesParameter<TEntryPointVersion> &
       GetAccountParameter<TAccount> &
-      GetContextParameter<TContext>
+      GetContextParameter<TContext>,
   ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 
   addSessionKey: (
@@ -64,7 +65,7 @@ type ExecutionActions<
     > &
       UserOperationOverridesParameter<TEntryPointVersion> &
       GetAccountParameter<TAccount> &
-      GetContextParameter<TContext>
+      GetContextParameter<TContext>,
   ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 
   removeSessionKey: (
@@ -77,7 +78,7 @@ type ExecutionActions<
     > &
       UserOperationOverridesParameter<TEntryPointVersion> &
       GetAccountParameter<TAccount> &
-      GetContextParameter<TContext>
+      GetContextParameter<TContext>,
   ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 
   rotateSessionKey: (
@@ -90,7 +91,7 @@ type ExecutionActions<
     > &
       UserOperationOverridesParameter<TEntryPointVersion> &
       GetAccountParameter<TAccount> &
-      GetContextParameter<TContext>
+      GetContextParameter<TContext>,
   ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 
   updateKeyPermissions: (
@@ -103,14 +104,14 @@ type ExecutionActions<
     > &
       UserOperationOverridesParameter<TEntryPointVersion> &
       GetAccountParameter<TAccount> &
-      GetContextParameter<TContext>
+      GetContextParameter<TContext>,
   ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 };
 
 type InstallArgs = [
   { type: "address[]"; name: "initialKeys" },
   { type: "bytes32[]"; name: "tags" },
-  { type: "bytes[][]"; name: "initialPermissions" }
+  { type: "bytes[][]"; name: "initialPermissions" },
 ];
 
 export type InstallSessionKeyPluginParams = {
@@ -126,13 +127,14 @@ type ManagementActions<
   TContext extends UserOperationContext | undefined =
     | Record<string, any>
     | undefined,
-  TEntryPointVersion extends GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>
+  TEntryPointVersion extends
+    GetEntryPointFromAccount<TAccount> = GetEntryPointFromAccount<TAccount>,
 > = {
   installSessionKeyPlugin: (
     args: UserOperationOverridesParameter<TEntryPointVersion> &
       InstallSessionKeyPluginParams &
       GetAccountParameter<TAccount> &
-      GetContextParameter<TContext>
+      GetContextParameter<TContext>,
   ) => Promise<SendUserOperationResult<TEntryPointVersion>>;
 };
 
@@ -144,7 +146,7 @@ type ReadAndEncodeActions = {
         "executeWithSessionKey"
       >,
       "args"
-    >
+    >,
   ) => Hex;
 
   encodeAddSessionKey: (
@@ -154,7 +156,7 @@ type ReadAndEncodeActions = {
         "addSessionKey"
       >,
       "args"
-    >
+    >,
   ) => Hex;
 
   encodeRemoveSessionKey: (
@@ -164,7 +166,7 @@ type ReadAndEncodeActions = {
         "removeSessionKey"
       >,
       "args"
-    >
+    >,
   ) => Hex;
 
   encodeRotateSessionKey: (
@@ -174,7 +176,7 @@ type ReadAndEncodeActions = {
         "rotateSessionKey"
       >,
       "args"
-    >
+    >,
   ) => Hex;
 
   encodeUpdateKeyPermissions: (
@@ -184,7 +186,7 @@ type ReadAndEncodeActions = {
         "updateKeyPermissions"
       >,
       "args"
-    >
+    >,
   ) => Hex;
 };
 
@@ -194,7 +196,7 @@ export type SessionKeyPluginActions<
     | undefined,
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined
+    | undefined,
 > = ExecutionActions<TAccount, TContext> &
   ManagementActions<TAccount, TContext> &
   ReadAndEncodeActions;
@@ -225,7 +227,7 @@ export const SessionKeyPlugin: Plugin<typeof SessionKeyPluginAbi> = {
   },
   getContract: <C extends Client>(
     client: C,
-    address?: Address
+    address?: Address,
   ): GetContractReturnType<
     typeof SessionKeyPluginAbi,
     PublicClient,
@@ -253,9 +255,9 @@ export const sessionKeyPluginActions: <
     | undefined,
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
-    | undefined
+    | undefined,
 >(
-  client: Client<TTransport, TChain, TAccount>
+  client: Client<TTransport, TChain, TAccount>,
 ) => SessionKeyPluginActions<TAccount, TContext> = (client) => ({
   executeWithSessionKey({
     args,
@@ -270,7 +272,7 @@ export const sessionKeyPluginActions: <
       throw new IncompatibleClientError(
         "SmartAccountClient",
         "executeWithSessionKey",
-        client
+        client,
       );
     }
 
@@ -290,7 +292,7 @@ export const sessionKeyPluginActions: <
       throw new IncompatibleClientError(
         "SmartAccountClient",
         "addSessionKey",
-        client
+        client,
       );
     }
 
@@ -310,7 +312,7 @@ export const sessionKeyPluginActions: <
       throw new IncompatibleClientError(
         "SmartAccountClient",
         "removeSessionKey",
-        client
+        client,
       );
     }
 
@@ -330,7 +332,7 @@ export const sessionKeyPluginActions: <
       throw new IncompatibleClientError(
         "SmartAccountClient",
         "rotateSessionKey",
-        client
+        client,
       );
     }
 
@@ -350,7 +352,7 @@ export const sessionKeyPluginActions: <
       throw new IncompatibleClientError(
         "SmartAccountClient",
         "updateKeyPermissions",
-        client
+        client,
       );
     }
 
@@ -376,7 +378,7 @@ export const sessionKeyPluginActions: <
       throw new IncompatibleClientError(
         "SmartAccountClient",
         "installSessionKeyPlugin",
-        client
+        client,
       );
     }
 
@@ -390,7 +392,7 @@ export const sessionKeyPluginActions: <
         const pluginAddress = MultiOwnerPlugin.meta.addresses[chain.id];
         if (!pluginAddress) {
           throw new Error(
-            "missing MultiOwnerPlugin address for chain " + chain.name
+            "missing MultiOwnerPlugin address for chain " + chain.name,
           );
         }
 
@@ -401,7 +403,7 @@ export const sessionKeyPluginActions: <
         const pluginAddress = MultiOwnerPlugin.meta.addresses[chain.id];
         if (!pluginAddress) {
           throw new Error(
-            "missing MultiOwnerPlugin address for chain " + chain.name
+            "missing MultiOwnerPlugin address for chain " + chain.name,
           );
         }
 
@@ -414,7 +416,7 @@ export const sessionKeyPluginActions: <
 
     if (!pluginAddress) {
       throw new Error(
-        "missing SessionKeyPlugin address for chain " + chain.name
+        "missing SessionKeyPlugin address for chain " + chain.name,
       );
     }
 
@@ -426,7 +428,7 @@ export const sessionKeyPluginActions: <
           { type: "bytes32[]", name: "tags" },
           { type: "bytes[][]", name: "initialPermissions" },
         ],
-        params.args
+        params.args,
       ),
       dependencies,
       overrides,

@@ -1,11 +1,11 @@
 import "./tailwind.css";
 
+import { alchemy, sepolia } from "@account-kit/infra";
 import type { Preview } from "@storybook/react";
-import { initialize, mswLoader } from "msw-storybook-addon";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AlchemyAccountProvider, createConfig } from "../src";
+import { initialize, mswLoader } from "msw-storybook-addon";
 import React, { useEffect } from "react";
-import { sepolia } from "@account-kit/infra";
+import { AlchemyAccountProvider, createConfig } from "../src";
 
 const queryClient = new QueryClient();
 
@@ -13,7 +13,7 @@ initialize();
 
 const config = createConfig(
   {
-    rpcUrl: "/api/rpc",
+    transport: alchemy({ rpcUrl: "/api/rpc" }),
     chain: sepolia,
     ssr: true,
   },

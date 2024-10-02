@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-beta.8](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.7...v4.0.0-beta.8) (2024-10-02)
+
+### Features
+
+- add mobile splash page with buttons to trigger auth flow ([#1000](https://github.com/alchemyplatform/aa-sdk/issues/1000)) ([aac08ab](https://github.com/alchemyplatform/aa-sdk/commit/aac08abb3abf2a2464407b939deab279d2742339))
+- use updated error state icons in authCard ([#986](https://github.com/alchemyplatform/aa-sdk/issues/986)) ([9d95676](https://github.com/alchemyplatform/aa-sdk/commit/9d95676088c96547b9643c781542ae6dd64319b0))
+
 # [4.0.0-beta.7](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.6...v4.0.0-beta.7) (2024-09-27)
 
 ### Bug Fixes
