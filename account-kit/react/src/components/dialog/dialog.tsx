@@ -9,6 +9,12 @@ type DialogProps = {
   children: ReactNode;
 };
 
+/**
+ * Dialog component that renders a modal dialog.
+ *
+ * @param {DialogProps} props - The props for the Dialog component.
+ * @returns {JSX.Element | null} The rendered Dialog component.
+ */
 export const Dialog = ({ isOpen, onClose, children }: DialogProps) => {
   const [isScrollLocked, setScrollLocked] = useState(false);
 

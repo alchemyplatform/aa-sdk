@@ -16,7 +16,7 @@ export const UserAddressLink = ({ address }: { address: string | null }) => {
   return (
     <a
       target="_blank"
-      className="text-fg-primary underline text-sm"
+      className="text-fg-primary underline text-md md:text-sm"
       href={addressBlockExplorerUrl ?? "#"}
     >
       {truncatedAddress}
