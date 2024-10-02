@@ -5,12 +5,12 @@ import { links } from "@/utils/links";
 
 export function TopNav() {
   return (
-    <div className="sticky left-0 top-0 right-0 py-5 bg-[rgba(255,255,255,0.5)] shadow-sm">
-      <div className="flex items-center justify-between h-full w-full max-w-screen-2xl mx-auto px-4 md:px-10">
-        <div className="flex items-center gap-2">
+    <div className="sticky left-0 top-0 right-0 flex justify-center py-5 bg-[rgba(255,255,255,0.5)]">
+      <div className="flex items-center justify-between h-full w-full max-w-[1440px] mx-10">
+        <div className="flex justify-center items-center gap-2">
           <Wordmark />
           <div className="w-px h-5 bg-gray-500" />
-          <p>Account kit</p>
+          <p className="text-lg align-middle">Account kit</p>
         </div>
 
         <div className="flex gap-8 items-center h-8">

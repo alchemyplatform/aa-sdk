@@ -9,10 +9,10 @@ import { Moon, Sun } from "lucide-react";
 const ThemeSwitch = React.forwardRef<
   React.ElementRef<typeof SwitchPrimitives.Root>,
   React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root>
->(({ className, ...props }, ref) => (
+>(({ className, checked, ...props }, ref) => (
   <SwitchPrimitives.Root
     className={cn(
-      "relative peer inline-flex w-28 h-10 shrink-0 cursor-pointer items-center rounded-lg border border-input transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 bg-input",
+      "relative peer inline-flex w-28 h-10 shrink-0 cursor-pointer items-center rounded-lg border border-input transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-input data-[state=unchecked]:bg-[#94A3B9]",
       className
     )}
     {...props}
@@ -25,10 +25,10 @@ const ThemeSwitch = React.forwardRef<
     ></SwitchPrimitives.Thumb>
     <div className="absolute flex text-sm items-center inset-1 z-10 justify-between bg-transparent">
       <div className="flex items-center data-[state=unchecked]:font-medium justify-center gap-1 flex-1 basis-0">
-        <Sun size={18} />
+        <Sun className={cn(checked && "stroke-[#475569]")} size={18} />
       </div>
       <div className="flex items-center justify-center gap-1 flex-1 basis-0">
-        <Moon size={18} />
+        <Moon className={cn(!checked && "stroke-[#475569]")} size={18} />
       </div>
     </div>
   </SwitchPrimitives.Root>

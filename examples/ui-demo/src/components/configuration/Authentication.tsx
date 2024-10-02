@@ -47,7 +47,7 @@ export const Authentication = ({ className }: { className?: string }) => {
         <LockIcon />
         <span className="font-semibold">Authentication</span>
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
         <p className="font-medium text-secondary-foreground text-sm">Login</p>
         <div className="flex flex-col gap-3">
           <AuthMethod
@@ -69,7 +69,7 @@ export const Authentication = ({ className }: { className?: string }) => {
             details={
               <>
                 <div className="flex flex-1 min-w-full flex-row justify-between gap-3 items-center">
-                  <p className="font-medium text-sm text-secondary-foreground">
+                  <p className="font-normal text-sm text-secondary-foreground">
                     Add passkey after sign up
                   </p>
                   <Switch
@@ -98,10 +98,10 @@ export const Authentication = ({ className }: { className?: string }) => {
         </div>
       </div>
 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
         <p className="font-medium text-secondary-foreground text-sm">Connect</p>
         <AuthMethod
-          icon={<WalletIcon className="opacity-50" />}
+          icon={<WalletIcon />}
           name="External wallets"
           active={config.auth.showExternalWallets}
           setActive={setWalletsActive}

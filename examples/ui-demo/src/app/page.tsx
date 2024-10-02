@@ -13,6 +13,7 @@ import { useUser } from "@account-kit/react";
 import { useConfig } from "./state";
 import { MobileSplashPage } from "@/components/preview/MobileSplashPage";
 import { useLogout } from "@account-kit/react";
+import { cn } from "@/lib/utils";
 
 const publicSans = Public_Sans({
   subsets: ["latin"],
@@ -30,13 +31,7 @@ export default function Home() {
   const user = useUser();
   const { logout } = useLogout();
   return (
-    <main
-      className={`flex flex-col h-screen ${publicSans.className}`}
-      style={{
-        background:
-          "linear-gradient(270deg, rgba(239, 244, 249, 0.00) 57.5%, rgba(54, 63, 249, 0.13) 79.86%, rgba(55, 191, 255, 0.13) 100%), #F9F9F9",
-      }}
-    >
+    <main className={`flex flex-col h-screen ${publicSans.className}`}>
       <TopNav />
       <div
         className={`flex flex-col flex-1 px-4 md:px-6 lg:px-10 py-4 md:py-6 w-full max-w-screen-2xl mx-auto overflow-visible overflow-x-hidden ${inter.className} md:overflow-hidden`}
@@ -59,8 +54,15 @@ export default function Home() {
                   deploymentStatus={nftTransfered}
                 />
               )}
-              <div className="flex gap-2">
-                <div className="bg-purple-50 text-[#8B5CF6] px-2 py-1 rounded text-xs font-semibold">
+              <div className="flex gap-2 items-center">
+                <div
+                  className={cn(
+                    " px-2 py-1 h-5 rounded text-xs font-semibold flex items-center justify-center",
+                    showCode
+                      ? "bg-[#F3F3FF] text-[#8B5CF6]"
+                      : "bg-[#EFF4F9] text-[#374151]"
+                  )}
+                >
                   Code preview
                 </div>
                 <CodePreviewSwitch

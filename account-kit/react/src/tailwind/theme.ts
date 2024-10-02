@@ -19,7 +19,7 @@ export function createDefaultTheme(): AccountKitTheme {
       "btn-auth": createColorSet("#FFF", "argb(255, 255, 255, 0.05)"),
 
       // fg colors
-      "fg-primary": createColorSet("#000", "#fff"),
+      "fg-primary": createColorSet("#020617", "#fff"),
       "fg-secondary": createColorSet("#475569", "#E2E8F0"),
       "fg-tertiary": createColorSet("#94A3B8", "#94A3B8"),
       "fg-invert": createColorSet("#FFF", "#000"),

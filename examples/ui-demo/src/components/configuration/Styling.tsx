@@ -26,7 +26,7 @@ export function Styling({ className }: { className?: string }) {
   return (
     <div className={cn("flex flex-col gap-5", className)}>
       <div className="flex flex-col gap-3">
-        <div className="flex flex-row gap-2">
+        <div className="flex flex-row items-center gap-2">
           <PaletteIcon />
           <span className="font-semibold">Branding</span>
         </div>
@@ -58,7 +58,7 @@ export function Styling({ className }: { className?: string }) {
       </div>
 
       <div className="flex flex-col gap-4 items-start">
-        <p className="font-semibold text-secondary-foreground text-sm">
+        <p className="font-medium text-secondary-foreground text-sm">
           Corner radius
         </p>
 
@@ -66,7 +66,7 @@ export function Styling({ className }: { className?: string }) {
       </div>
       <div className="flex flex-col gap-4 items-start">
         <div className="flex items-center gap-1">
-          <p className="font-semibold text-secondary-foreground text-sm">
+          <p className="font-medium text-secondary-foreground text-sm">
             Illustration Style
           </p>
           <HelpTooltip text="These will appear as supplementary graphics on certain screens" />
@@ -74,7 +74,21 @@ export function Styling({ className }: { className?: string }) {
 
         <IllustrationStyleOptions />
       </div>
-
+      <div className="flex flex-col gap-2 mb-2">
+        {/* TODO: Add support URL to a part of the config */}
+        <label
+          htmlFor="support-url"
+          className="font-medium text-sm text-secondary-foreground"
+        >
+          Support URL{" "}
+          <span className="text-fg-tertiary font-normal">(optional)</span>
+        </label>
+        <input
+          id="support-url"
+          className="w-full border border-border rounded-lg px-[10px] py-[14px] h-10 text-sm"
+          placeholder="website, telegram, or email"
+        />
+      </div>
       <LearnMore />
     </div>
   );
