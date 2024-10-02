@@ -79,13 +79,13 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged",
+      "pre-commit": "is-ci || lint-staged",
       "commit-msg": "npx --no -- commitlint --edit ${1}"
     }
   },
   "lint-staged": {
     "**/src/**/*.{tsx,jsx,ts,js}": [
-      "is-ci || yarn lint:write"
+      "yarn lint:write"
     ]
   }
 }
