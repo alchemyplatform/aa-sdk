@@ -16,5 +16,8 @@ export type TrackEventParameters<Schema extends EventsSchema> = {
 }[number];
 
 export interface EventLogger<Schema extends EventsSchema> {
-  trackEvent(params: TrackEventParameters<Schema>): void;
+  trackEvent(params: TrackEventParameters<Schema>): Promise<void>;
+  _internal: {
+    ready: Promise<unknown>;
+  };
 }
