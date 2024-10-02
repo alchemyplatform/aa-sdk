@@ -5,7 +5,7 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: #020617;
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -93,4 +93,35 @@
     --alpha-pointer-background-color: #6a6a6a !important;
     --alpha-pointer-box-shadow: rgb(0 0 0 / 37%) 0px 1px 4px 0px !important;
   }
+}
+
+/* Radix Toast Animations */
+@keyframes slideInToast {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes hideToast {
+  from {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+#toast[data-state="open"] {
+  animation: slideInToast 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#toast[data-state="closed"] {
+  animation: hideToast 100ms ease-in forwards;
 }

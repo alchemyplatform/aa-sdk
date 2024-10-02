@@ -1,4 +1,4 @@
-import { bigintMapReviver } from "./reviver.js";
+import { storeReviver } from "./reviver.js";
 
 /**
  * JSON parses a string while correctly handling BigInt and Map types.
@@ -10,5 +10,5 @@ import { bigintMapReviver } from "./reviver.js";
  * @returns {T} the parsed object
  */
 export function deserialize<type>(value: string): type {
-  return JSON.parse(decodeURIComponent(value), bigintMapReviver);
+  return JSON.parse(decodeURIComponent(value), storeReviver);
 }

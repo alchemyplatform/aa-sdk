@@ -1,6 +1,9 @@
 **/dist/*
-examples/**/*
 site/.vitepress/cache/**/*
 .nx/*
 .github/*
 /.nx/cache
+
+/examples/*
+!/examples/ui-demo
+/examples/ui-demo/.next/*

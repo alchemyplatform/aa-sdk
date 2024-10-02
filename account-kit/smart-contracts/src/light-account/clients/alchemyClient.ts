@@ -1,8 +1,6 @@
 import type { HttpTransport, SmartAccountSigner } from "@aa-sdk/core";
 import {
-  AlchemyProviderConfigSchema,
-  createAlchemyPublicRpcClient,
-  createAlchemySmartAccountClientFromExisting,
+  createAlchemySmartAccountClient,
   type AlchemySmartAccountClient,
   type AlchemySmartAccountClientConfig,
 } from "@account-kit/infra";
@@ -13,16 +11,13 @@ import {
   type LightAccount,
   type LightAccountClientActions,
 } from "@account-kit/smart-contracts";
-import { custom, type Chain, type CustomTransport, type Transport } from "viem";
+import { type Chain } from "viem";
 
 export type AlchemyLightAccountClientConfig<
   TSigner extends SmartAccountSigner = SmartAccountSigner
-> = Omit<
-  CreateLightAccountParams<HttpTransport, TSigner>,
-  "transport" | "chain"
-> &
+> = Omit<CreateLightAccountParams<HttpTransport, TSigner>, "transport"> &
   Omit<
-    AlchemySmartAccountClientConfig<Transport, Chain, LightAccount<TSigner>>,
+    AlchemySmartAccountClientConfig<Chain, LightAccount<TSigner>>,
     "account"
   >;
 
@@ -32,7 +27,6 @@ export async function createLightAccountAlchemyClient<
   params: AlchemyLightAccountClientConfig<TSigner>
 ): Promise<
   AlchemySmartAccountClient<
-    CustomTransport,
     Chain | undefined,
     LightAccount<TSigner>,
     LightAccountClientActions<TSigner>
@@ -45,12 +39,12 @@ export async function createLightAccountAlchemyClient<
  * @example
  * ```ts
  * import { createLightAccountAlchemyClient } from "@account-kit/smart-contracts";
- * import { sepolia } from "@account-kit/infra";
+ * import { sepolia, alchemy } from "@account-kit/infra";
  * import { LocalAccountSigner } from "@aa-sdk/core";
  * import { generatePrivateKey } from "viem"
  *
  * const lightAccountClient = await createLightAccountAlchemyClient({
- *  apiKey: "your-api-key",
+ *  transport: alchemy({ apiKey: "your-api-key" }),
  *  chain: sepolia,
  *  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
  * });
@@ -59,25 +53,22 @@ export async function createLightAccountAlchemyClient<
  * @param {AlchemyLightAccountClientConfig} config The configuration for setting up the Alchemy Light Account Client
  * @returns {Promise<AlchemySmartAccountClient>} A promise that resolves to an `AlchemySmartAccountClient` object containing the created client
  */
-export async function createLightAccountAlchemyClient(
-  config: AlchemyLightAccountClientConfig
-): Promise<AlchemySmartAccountClient> {
-  const { chain, opts, ...connectionConfig } =
-    AlchemyProviderConfigSchema.parse(config);
-
-  const client = createAlchemyPublicRpcClient({
-    chain,
-    connectionConfig,
-  });
-
+export async function createLightAccountAlchemyClient({
+  opts,
+  transport,
+  chain,
+  ...config
+}: AlchemyLightAccountClientConfig): Promise<AlchemySmartAccountClient> {
   const account = await createLightAccount({
-    transport: custom(client),
     ...config,
+    transport,
+    chain,
   });
 
-  return createAlchemySmartAccountClientFromExisting({
+  return createAlchemySmartAccountClient({
     ...config,
-    client,
+    transport,
+    chain,
     account,
     opts,
   }).extend(lightAccountClientActions);

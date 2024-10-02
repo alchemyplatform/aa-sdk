@@ -15,6 +15,7 @@ import { AccountKitNftMinterABI, nftContractAddress } from "@/utils/config";
 import { encodeFunctionData } from "viem";
 import { useConfig } from "@/app/state";
 import { useQuery } from "@tanstack/react-query";
+import { useToast } from "@/hooks/useToast";
 
 type NFTLoadingState = "loading" | "success";
 
@@ -32,8 +33,9 @@ type MintStatus = {
 
 export const MintCard = () => {
   const [status, setStatus] = useState<MintStatus>(initialState);
-  // To be wired into the toast pr
-  const [hasError, setHasError] = useState(false);
+
+  const { setToast } = useToast();
+
   const { nftTransfered, setNFTTransfered } = useConfig();
 
   const handleSuccess = () => {
@@ -42,11 +44,20 @@ export const MintCard = () => {
       gas: "success",
       signing: "success",
     }));
+    setToast({
+      type: "success",
+      text: "You've successfully collected your NFT! Refresh to mint again.",
+      open: true,
+    });
     setNFTTransfered(true);
   };
   const handleError = () => {
     setStatus(initialState);
-    setHasError(true);
+    setToast({
+      type: "error",
+      text: "There was a problem with that action",
+      open: true,
+    });
   };
 
   const { client } = useSmartAccountClient({ type: "LightAccount" });
@@ -96,7 +107,6 @@ export const MintCard = () => {
       });
       console.log("uri", uri);
       return uri;
-
     },
     enabled: !!client && !!client?.readContract,
   });

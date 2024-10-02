@@ -1,6 +1,6 @@
 import { custom, type Transaction } from "viem";
 import { polygonMumbai } from "viem/chains";
-import type { SpyInstance } from "vitest";
+import type { MockInstance } from "vitest";
 import * as receiptActions from "../actions/bundler/getUserOperationReceipt.js";
 import type { UserOperationReceipt } from "../types.js";
 import {
@@ -110,10 +110,7 @@ describe("SmartAccountClient Tests", async () => {
   const thenExpectRetriesToBe = async (
     expectedRetryMsDelays: number[],
     expectedMockCalls: number,
-    getUserOperationReceiptMock: SpyInstance<
-      any,
-      Promise<UserOperationReceipt | null>
-    >
+    getUserOperationReceiptMock: MockInstance
   ) => {
     expect(retryMsDelays).toEqual(expectedRetryMsDelays);
     expect(getUserOperationReceiptMock).toHaveBeenCalledTimes(

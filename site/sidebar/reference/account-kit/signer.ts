@@ -18,8 +18,8 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
         text: "AlchemySignerWebClient",
         items: [
           {
-            text: "completeEmailAuth",
-            link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/completeEmailAuth",
+            text: "completeAuthWithBundle",
+            link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/completeAuthWithBundle",
           },
           {
             text: "constructor",
@@ -44,6 +44,14 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
           {
             text: "lookupUserWithPasskey",
             link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/lookupUserWithPasskey",
+          },
+          {
+            text: "oauthWithPopup",
+            link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/oauthWithPopup",
+          },
+          {
+            text: "oauthWithRedirect",
+            link: "/reference/account-kit/signer/classes/AlchemySignerWebClient/oauthWithRedirect",
           },
         ],
       },
@@ -96,6 +104,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             link: "/reference/account-kit/signer/classes/BaseAlchemySigner/on",
           },
           {
+            text: "preparePopupOauth",
+            link: "/reference/account-kit/signer/classes/BaseAlchemySigner/preparePopupOauth",
+          },
+          {
             text: "signMessage",
             link: "/reference/account-kit/signer/classes/BaseAlchemySigner/signMessage",
           },
@@ -129,6 +141,10 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
             link: "/reference/account-kit/signer/classes/BaseSignerClient/getUser",
           },
           {
+            text: "initOauth",
+            link: "/reference/account-kit/signer/classes/BaseSignerClient/initOauth",
+          },
+          {
             text: "lookupUserByEmail",
             link: "/reference/account-kit/signer/classes/BaseSignerClient/lookupUserByEmail",
           },
@@ -151,6 +167,15 @@ export const accountKitSignerReferenceSidebar: SidebarItem[] = [
           {
             text: "whoami",
             link: "/reference/account-kit/signer/classes/BaseSignerClient/whoami",
+          },
+        ],
+      },
+      {
+        text: "OauthCancelledError",
+        items: [
+          {
+            text: "constructor",
+            link: "/reference/account-kit/signer/classes/OauthCancelledError/constructor",
           },
         ],
       },

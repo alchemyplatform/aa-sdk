@@ -1,4 +1,4 @@
-import type { Chain, Transport } from "viem";
+import type { Chain } from "viem";
 import { ClientOnlyPropertyError } from "../errors.js";
 import type {
   AlchemyAccountsConfig,
@@ -27,44 +27,41 @@ import {
  * @template TTransport extends Transport = Transport
  * @template TChain extends Chain | undefined = Chain | undefined
  *
- * @param {GetSmartAccountClientParams<TTransport, TChain, TAccount>} params the parameters needed to get the smart account client
+ * @param {GetSmartAccountClientParams<TChain, TAccount>} params the parameters needed to get the smart account client
  * @param {AlchemyAccountsConfig} config the configuration containing the client store and other settings
- * @returns {(onChange: (client: GetSmartAccountClientResult<TTransport, TChain, SupportedAccount<TAccount>>) => void) => (() => void)} a function that accepts a callback to be called when the client changes and returns a function to unsubscribe from the store
+ * @returns {(onChange: (client: GetSmartAccountClientResult<TChain, SupportedAccount<TAccount>>) => void) => (() => void)} a function that accepts a callback to be called when the client changes and returns a function to unsubscribe from the store
  */ export function watchSmartAccountClient<
   TAccount extends SupportedAccountTypes,
-  TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined
 >(
-  params: GetSmartAccountClientParams<TTransport, TChain, TAccount>,
+  params: GetSmartAccountClientParams<TChain, TAccount>,
   config: AlchemyAccountsConfig
 ) {
   return (
     onChange: (
-      client: GetSmartAccountClientResult<
-        TTransport,
-        TChain,
-        SupportedAccount<TAccount>
-      >
+      client: GetSmartAccountClientResult<TChain, SupportedAccount<TAccount>>
     ) => void
   ) => {
-    const accounts = config.store.getState().accounts;
-    if (!accounts) {
+    const accounts_ = config.store.getState().accounts;
+    if (!accounts_) {
       throw new ClientOnlyPropertyError("account");
     }
 
     return config.store.subscribe(
-      ({ signerStatus, accounts, bundlerClient, chain }) => ({
+      ({ signerStatus, accounts, chain }) => ({
         signerStatus,
         account: accounts![chain.id][params.type],
-        bundlerClient,
+        chain,
       }),
-      () => onChange(getSmartAccountClient(params, config)),
+      () => {
+        onChange(getSmartAccountClient(params, config));
+      },
       {
         equalityFn(a, b) {
           return (
             a.signerStatus === b.signerStatus &&
             a.account === b.account &&
-            a.bundlerClient === b.bundlerClient
+            a.chain === b.chain
           );
         },
       }

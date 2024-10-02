@@ -12,29 +12,26 @@ import {
   watchSmartAccountClient,
 } from "@account-kit/core";
 import { useMemo, useSyncExternalStore } from "react";
-import type { Chain, Transport } from "viem";
+import type { Chain } from "viem";
 import { useAccount as wagmi_useAccount } from "wagmi";
 import { useAlchemyAccountContext } from "../context.js";
 
 export type UseSmartAccountClientProps<
-  TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SupportedAccountTypes = SupportedAccountTypes
-> = GetSmartAccountClientParams<TTransport, TChain, TAccount>;
+> = GetSmartAccountClientParams<TChain, TAccount>;
 
 export type UseSmartAccountClientResult<
-  TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SupportedAccounts = SupportedAccounts
-> = GetSmartAccountClientResult<TTransport, TChain, TAccount>;
+> = GetSmartAccountClientResult<TChain, TAccount>;
 
 export function useSmartAccountClient<
-  TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends SupportedAccountTypes = SupportedAccountTypes
 >(
-  args: UseSmartAccountClientProps<TTransport, TChain, TAccount>
-): UseSmartAccountClientResult<TTransport, TChain, SupportedAccount<TAccount>>;
+  args: UseSmartAccountClientProps<TChain, TAccount>
+): UseSmartAccountClientResult<TChain, SupportedAccount<TAccount>>;
 
 /**
  * Uses the provided smart account client parameters to create or retrieve an existing smart account client, handling different types of accounts including LightAccount, MultiOwnerLightAccount, and MultiOwnerModularAccount.

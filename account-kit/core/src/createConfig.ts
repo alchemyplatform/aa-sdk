@@ -1,6 +1,6 @@
-import { ConnectionConfigSchema } from "@aa-sdk/core";
 import { DEFAULT_SESSION_MS } from "@account-kit/signer";
 import { createStorage, createConfig as createWagmiConfig } from "@wagmi/core";
+import { getBundlerClient } from "./actions/getBundlerClient.js";
 import { createAccountKitStore } from "./store/store.js";
 import { DEFAULT_STORAGE_KEY } from "./store/types.js";
 import type {
@@ -25,7 +25,7 @@ export const DEFAULT_IFRAME_CONTAINER_ID = "alchemy-signer-iframe-container";
  *
  * const config = createConfig({
  *  chain: sepolia,
- *  apiKey: "your-api-key",
+ *  transport: alchemy({ apiKey: "your-api-key" }),
  * });
  * ```
  *
@@ -51,35 +51,31 @@ export const createConfig = (
   } = params;
 
   const connections: Connection[] = [];
-  if (connectionConfig.connections != null) {
-    connectionConfig.connections.forEach(({ chain, ...config }) => {
-      connections.push({
-        ...ConnectionConfigSchema.parse(config),
-        policyId: config.policyId,
-        chain,
-      });
-    });
-  } else if (connectionConfig.chains != null) {
-    connectionConfig.chains.forEach(({ chain, ...config }) => {
-      connections.push({
-        apiKey: connectionConfig.apiKey,
-        policyId: config.policyId,
-        chain,
-      });
-    });
-  } else {
+  if (connectionConfig.chains == null) {
     connections.push({
-      ...ConnectionConfigSchema.parse(connectionConfig),
+      transport: connectionConfig.transport.config,
       policyId: connectionConfig.policyId,
       chain,
     });
+  } else {
+    connectionConfig.chains.forEach(({ chain, policyId, transport }) => {
+      connections.push({
+        transport: transport?.config ?? connectionConfig.transport!.config,
+        chain,
+        policyId,
+      });
+    });
   }
 
+  const defaultConnection = connections[0].transport;
   const store = createAccountKitStore({
     connections,
     chain,
     client: {
-      connection: signerConnection ?? connections[0],
+      connection:
+        signerConnection ??
+        defaultConnection.alchemyConnection ??
+        defaultConnection,
       iframeConfig,
       rootOrgId,
       rpId,
@@ -98,7 +94,7 @@ export const createConfig = (
   const wagmiConfig = createWagmiConfig({
     connectors,
     chains: [chain, ...connections.map((c) => c.chain)],
-    client: () => config.store.getState().bundlerClient,
+    client: () => getBundlerClient(config),
     storage: createStorage({
       key: `${DEFAULT_STORAGE_KEY}:wagmi`,
       storage: storage

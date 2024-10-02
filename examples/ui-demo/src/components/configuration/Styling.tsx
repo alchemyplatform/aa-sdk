@@ -2,13 +2,13 @@ import { useConfig } from "@/app/state";
 import { cn } from "@/lib/utils";
 import { getBorderRadiusValue } from "@account-kit/react/tailwind";
 import { IllustrationStyle } from "../icons/illustration-style";
-import { PaintIcon } from "../icons/paint";
 import { SparkleIcon } from "../icons/sparkle";
 import ExternalLink from "../shared/ExternalLink";
 import { HelpTooltip } from "../shared/HelpTooltip";
 import { ThemeSwitch } from "../shared/ThemeSwitch";
 import { ColorPicker } from "./ColorPicker";
 import { PhotoUploads } from "./PhotoUpload";
+import { PaletteIcon } from "../icons/palette";
 
 export function Styling({ className }: { className?: string }) {
   const { config, setConfig } = useConfig();
@@ -26,30 +26,31 @@ export function Styling({ className }: { className?: string }) {
   return (
     <div className={cn("flex flex-col gap-5", className)}>
       <div className="flex flex-col gap-3">
-        <div className="flex flex-row gap-2">
-          <PaintIcon />
+        <div className="flex flex-row items-center gap-2">
+          <PaletteIcon />
           <span className="font-semibold">Branding</span>
         </div>
       </div>
       <div className="flex flex-col gap-4 w-full border-b border-border pb-5">
         <div className="flex flex-row justify-between grow items-center">
-          <p className="font-medium text-sm">Theme</p>
+          <p className="font-medium text-sm text-secondary-foreground">Theme</p>
           <ThemeSwitch
             checked={config.ui.theme === "dark"}
             onCheckedChange={onSwitchTheme}
           />
         </div>
         <div className="flex flex-row justify-between grow items-center">
-          <p className="font-medium text-sm">Brand color</p>
+          <p className="font-medium text-sm text-secondary-foreground">Color</p>
           <ColorPicker theme={config.ui.theme} />
         </div>
         <div className="flex flex-row justify-between grow items-center">
           <div>
-            <p className="font-medium text-sm">
-              Logo <span className="text-gray-400 font-normal">(optional)</span>
+            <p className="font-medium text-sm text-secondary-foreground">
+              Logo{" "}
+              <span className="text-fg-tertiary font-normal">(optional)</span>
             </p>
-            <p className="text-gray-400 font-normal text-xs">
-              PNG, JPG, GIF files accepted
+            <p className="text-fg-tertiary font-normal text-xs">
+              SVG or PNG, max 320x48 px
             </p>
           </div>
           <PhotoUploads mode={config.ui.theme} />
@@ -57,7 +58,7 @@ export function Styling({ className }: { className?: string }) {
       </div>
 
       <div className="flex flex-col gap-4 items-start">
-        <p className="font-semibold text-secondary-foreground text-sm">
+        <p className="font-medium text-secondary-foreground text-sm">
           Corner radius
         </p>
 
@@ -65,7 +66,7 @@ export function Styling({ className }: { className?: string }) {
       </div>
       <div className="flex flex-col gap-4 items-start">
         <div className="flex items-center gap-1">
-          <p className="font-semibold text-secondary-foreground text-sm">
+          <p className="font-medium text-secondary-foreground text-sm">
             Illustration Style
           </p>
           <HelpTooltip text="These will appear as supplementary graphics on certain screens" />
@@ -73,7 +74,21 @@ export function Styling({ className }: { className?: string }) {
 
         <IllustrationStyleOptions />
       </div>
-
+      <div className="flex flex-col gap-2 mb-2">
+        {/* TODO: Add support URL to a part of the config */}
+        <label
+          htmlFor="support-url"
+          className="font-medium text-sm text-secondary-foreground"
+        >
+          Support URL{" "}
+          <span className="text-fg-tertiary font-normal">(optional)</span>
+        </label>
+        <input
+          id="support-url"
+          className="w-full border border-border rounded-lg px-[10px] py-[14px] h-10 text-sm"
+          placeholder="website, telegram, or email"
+        />
+      </div>
       <LearnMore />
     </div>
   );
