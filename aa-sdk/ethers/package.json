@@ -38,8 +38,7 @@
     "docs:gen": "npx ak-docgen generate --in ./src/index.ts --out ../../site/pages/reference/aa-sdk/ethers",
     "clean": "rm -rf ./dist",
     "test": "vitest",
-    "test:run": "vitest run",
-    "test:run-e2e": "vitest run --config vitest.config.e2e.ts"
+    "test:run": "vitest run"
   },
   "devDependencies": {
     "@account-kit/smart-contracts": "^4.0.0-beta.9",
