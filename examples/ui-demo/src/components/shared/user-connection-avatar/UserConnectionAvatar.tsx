@@ -10,17 +10,18 @@ import { DeploymentStatusIndicator } from "@/components/shared/DeploymentStatusI
 
 interface UserConnectionAvatarProps {
   isFocused?: boolean;
-  deploymentStatus: boolean;
+  showDeploymentStatus?: boolean;
 }
 const UserConnectionAvatar = ({
   isFocused,
-  deploymentStatus,
+  showDeploymentStatus = true,
 }: UserConnectionAvatarProps) => {
   const { config } = useConfig();
   const user = useUser();
   const { address: SCAUserAddress } = useAccount({ type: "LightAccount" });
 
   const isEOAUser = user?.type === "eoa";
+  const { nftTransfered: deploymentStatus } = useConfig();
 
   const currentTheme = config.ui.theme;
 
@@ -35,20 +36,24 @@ const UserConnectionAvatar = ({
           address={SCAUserAddress ?? user.address}
           primaryColor={config.ui.primaryColor[currentTheme]}
         />
-        <div
-          className={cn(
-            "bg-[#fff] p-[2px] rounded-full absolute bottom-[-4px] left-[23px]",
-            deploymentStatus && "p-[1px]"
-          )}
-        >
-          <DeploymentStatusIndicator
-            isDeployed={deploymentStatus}
-            showCheckIcon
-          />
-        </div>
+        {showDeploymentStatus && (
+          <div
+            className={cn(
+              "bg-[#fff] p-[2px] rounded-full absolute bottom-[-4px] left-[23px]",
+              deploymentStatus && "p-[1px]"
+            )}
+          >
+            <DeploymentStatusIndicator
+              isDeployed={deploymentStatus}
+              showCheckIcon
+            />
+          </div>
+        )}
       </div>
       <div className="flex flex-col ml-3">
-        <span className="text-fg-secondary text-left text-sm">Hello,</span>
+        <span className="text-fg-secondary text-left text-sm font-semibold">
+          Hello,
+        </span>
         <div className="flex flex-row items-center">
           <h3 className="text-fg-primary font-semibold text-left text-lg">
             {isEOAUser ? truncateAddress(user.address) : user.email}

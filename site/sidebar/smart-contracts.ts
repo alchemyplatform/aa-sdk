@@ -61,7 +61,7 @@ export const smartContractsSidebar: SidebarItem[] = [
       },
       {
         text: "Custom accounts",
-        link: "/smart-contracts/custom/using-your-own",
+        link: "../third-party/smart-contracts",
       },
       { text: "Gas benchmarks", link: "/smart-contracts/gas-benchmarks" },
     ],

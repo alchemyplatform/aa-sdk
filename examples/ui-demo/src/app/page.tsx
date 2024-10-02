@@ -8,11 +8,9 @@ import { AuthCardWrapper } from "../components/preview/AuthCardWrapper";
 import { CodePreview } from "../components/preview/CodePreview";
 import { CodePreviewSwitch } from "../components/shared/CodePreviewSwitch";
 import { TopNav } from "../components/topnav/TopNav";
-import { UserConnectionAvatarWithPopover } from "@/components/shared/user-connection-avatar/UserConnectionAvatarWithPopover";
 import { useUser } from "@account-kit/react";
-import { useConfig } from "./state";
+import { RenderUserConnectionAvatar } from "@/components/shared/user-connection-avatar/RenderUserConnectionAvatar";
 import { MobileSplashPage } from "@/components/preview/MobileSplashPage";
-import { useLogout } from "@account-kit/react";
 import { cn } from "@/lib/utils";
 
 const publicSans = Public_Sans({
@@ -27,9 +25,7 @@ const inter = Inter({
 
 export default function Home() {
   const [showCode, setShowCode] = useState(false);
-  const { nftTransfered } = useConfig();
   const user = useUser();
-  const { logout } = useLogout();
   return (
     <main className={`flex flex-col h-screen ${publicSans.className}`}>
       <TopNav />
@@ -45,15 +41,11 @@ export default function Home() {
           <div className="flex flex-col flex-[2] basis-0 relative bg-white border border-border rounded-lg overflow-hidden">
             {/* Code toggle header */}
             <div
-              className={`absolute h-7 top-6 flex items-center left-6 right-6 ${
+              className={`relative md:absolute h-auto px-6 pt-6 md:px-0 md:pt-0 md:h-7 md:top-6 flex items-center md:left-6 md:right-6 ${
                 !user || showCode ? "justify-end" : "justify-between"
               }  z-10`}
             >
-              {!showCode && user && (
-                <UserConnectionAvatarWithPopover
-                  deploymentStatus={nftTransfered}
-                />
-              )}
+              {!showCode && user && <RenderUserConnectionAvatar />}
               <div className="flex gap-2 items-center">
                 <div
                   className={cn(
@@ -78,21 +70,11 @@ export default function Home() {
           </div>
         </div>
         <div className="flex flex-1 flex-col gap-6 md:hidden">
-          {/* 
-					  	TEMPORARY: Adding a logout button so users can properly logout. 
-						This will be removed once we add the mint functionality to mobile.
-					 */}
           {!user ? (
             <MobileSplashPage />
           ) : (
-            <button
-              className="btn btn-secondary"
-              onClick={() => {
-                logout();
-              }}
-            >
-              Logout
-            </button>
+            <RenderUserConnectionAvatar />
+            // Rest of Mint UI
           )}
         </div>
       </div>
