@@ -48,6 +48,7 @@ export type Config = {
         }
       | undefined;
   };
+  supportURL?: string;
 };
 
 export type ConfigContextType = {

@@ -9,9 +9,17 @@ import { ThemeSwitch } from "../shared/ThemeSwitch";
 import { ColorPicker } from "./ColorPicker";
 import { PhotoUploads } from "./PhotoUpload";
 import { PaletteIcon } from "../icons/palette";
+import { useState } from "react";
 
 export function Styling({ className }: { className?: string }) {
   const { config, setConfig } = useConfig();
+  const [supportURL, setSupportURL] = useState("");
+  const handleChangeSupportURL = () => {
+    setConfig((prev) => ({
+      ...prev,
+      supportURL,
+    }));
+  };
 
   const onSwitchTheme = (isDarkMode: boolean) => {
     setConfig((prev) => ({
@@ -75,7 +83,6 @@ export function Styling({ className }: { className?: string }) {
         <IllustrationStyleOptions />
       </div>
       <div className="flex flex-col gap-2 mb-2">
-        {/* TODO: Add support URL to a part of the config */}
         <label
           htmlFor="support-url"
           className="font-medium text-sm text-secondary-foreground"
@@ -85,6 +92,9 @@ export function Styling({ className }: { className?: string }) {
         </label>
         <input
           id="support-url"
+          value={supportURL}
+          onChange={(e) => setSupportURL(e.target.value)}
+          onBlur={handleChangeSupportURL}
           className="w-full border border-border rounded-lg px-[10px] py-[14px] h-10 text-sm"
           placeholder="website, telegram, or email"
         />
