@@ -5,7 +5,7 @@ import { UserConnectionDetails } from "./UserConnectionDetails";
 
 export const RenderUserConnectionAvatar = () => {
   return (
-    <div className="flex-1 border-b border-border pb-6 md:border-none md:pb-0">
+    <div className="border-b border-border pb-6 md:border-none md:pb-0">
       {/* Popover - Visible on desktop screens */}
       <div className="hidden md:block">
         <PopoverMenu>
