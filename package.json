@@ -85,7 +85,7 @@
   },
   "lint-staged": {
     "**/src/**/*.{tsx,jsx,ts,js}": [
-      "yarn lint:write"
+      "is-ci || yarn lint:write"
     ]
   }
 }
