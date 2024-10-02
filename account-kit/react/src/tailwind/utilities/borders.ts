@@ -40,7 +40,9 @@ export const borderRadiusUtilities = {
       typeof value === "string" ? value : getScaledBorderRadius(value),
   }),
   "radius-t": (value: string | number) => ({
-    borderRadiusTop:
+    borderTopLeftRadius:
+      typeof value === "string" ? value : getScaledBorderRadius(value),
+    borderTopRightRadius:
       typeof value === "string" ? value : getScaledBorderRadius(value),
   }),
 };
