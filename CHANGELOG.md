@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-beta.8](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.7...v4.0.0-beta.8) (2024-10-02)
+
+### Bug Fixes
+
+- ensure openid is included in custom scopes ([#992](https://github.com/alchemyplatform/aa-sdk/issues/992)) ([2492e47](https://github.com/alchemyplatform/aa-sdk/commit/2492e4734ec9eed63624eed15cbc3b50f04faa55))
+- prevent mintcard without client loaded ([#1004](https://github.com/alchemyplatform/aa-sdk/issues/1004)) ([eae673b](https://github.com/alchemyplatform/aa-sdk/commit/eae673b343c59e07bad042076443799e2a21ccf0))
+- side bar polish updates ([#996](https://github.com/alchemyplatform/aa-sdk/issues/996)) ([bc19042](https://github.com/alchemyplatform/aa-sdk/commit/bc190423191f59fcec8e41e8ecff6ae5736e3a4f))
+
+### Features
+
+- add alchemyTransport to use in other places ([98cef3d](https://github.com/alchemyplatform/aa-sdk/commit/98cef3de1bb32abba47efae840203d528c12ed49))
+- add mobile splash page with buttons to trigger auth flow ([#1000](https://github.com/alchemyplatform/aa-sdk/issues/1000)) ([aac08ab](https://github.com/alchemyplatform/aa-sdk/commit/aac08abb3abf2a2464407b939deab279d2742339))
+- **chains:** add berachain bartio ([#989](https://github.com/alchemyplatform/aa-sdk/issues/989)) ([180edad](https://github.com/alchemyplatform/aa-sdk/commit/180edad0f7d93d610e72933cdd98ab1e1905fbbf))
+- toast ([#991](https://github.com/alchemyplatform/aa-sdk/issues/991)) ([6bd4109](https://github.com/alchemyplatform/aa-sdk/commit/6bd410903a317516bd65d3e890d5b6ffe42ccec8))
+- transfer mint in demo app ([#983](https://github.com/alchemyplatform/aa-sdk/issues/983)) ([9995330](https://github.com/alchemyplatform/aa-sdk/commit/9995330834cd4122fd77c093d0cb3e011e49b968))
+- use updated error state icons in authCard ([#986](https://github.com/alchemyplatform/aa-sdk/issues/986)) ([9d95676](https://github.com/alchemyplatform/aa-sdk/commit/9d95676088c96547b9643c781542ae6dd64319b0))
+
 # [4.0.0-beta.7](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.6...v4.0.0-beta.7) (2024-09-27)
 
 ### Bug Fixes

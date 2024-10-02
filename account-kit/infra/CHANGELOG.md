@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-beta.8](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.7...v4.0.0-beta.8) (2024-10-02)
+
+### Features
+
+- add alchemyTransport to use in other places ([98cef3d](https://github.com/alchemyplatform/aa-sdk/commit/98cef3de1bb32abba47efae840203d528c12ed49))
+- **chains:** add berachain bartio ([#989](https://github.com/alchemyplatform/aa-sdk/issues/989)) ([180edad](https://github.com/alchemyplatform/aa-sdk/commit/180edad0f7d93d610e72933cdd98ab1e1905fbbf))
+
 # [4.0.0-beta.7](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.6...v4.0.0-beta.7) (2024-09-27)
 
 ### Bug Fixes

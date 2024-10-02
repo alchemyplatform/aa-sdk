@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-beta.8](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.7...v4.0.0-beta.8) (2024-10-02)
+
+### Bug Fixes
+
+- ensure openid is included in custom scopes ([#992](https://github.com/alchemyplatform/aa-sdk/issues/992)) ([2492e47](https://github.com/alchemyplatform/aa-sdk/commit/2492e4734ec9eed63624eed15cbc3b50f04faa55))
+
 # [4.0.0-beta.7](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.6...v4.0.0-beta.7) (2024-09-27)
 
 ### Bug Fixes
