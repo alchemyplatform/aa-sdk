@@ -1,8 +1,14 @@
 import { useConfig } from "@/app/state";
 import { cn } from "@/lib/utils";
-import { AuthCard, useSmartAccountClient, useUser } from "@account-kit/react";
+import {
+  AuthCard,
+  useSmartAccountClient,
+  useUser,
+  UseUserResult,
+} from "@account-kit/react";
 import { MintCard } from "../shared/MintCard";
 import { LoadingIcon } from "../icons/loading";
+import { EOAPostLogin } from "../shared/EOAPostLogin";
 
 export function AuthCardWrapper({ className }: { className?: string }) {
   const user = useUser();
@@ -17,18 +23,20 @@ export function AuthCardWrapper({ className }: { className?: string }) {
         className
       )}
     >
-      <RenderContent hasUser={!!user} hasClient={!!client} />
+      <RenderContent user={user} hasClient={!!client} />
     </div>
   );
 }
 
 const RenderContent = ({
-  hasUser,
+  user,
   hasClient,
 }: {
-  hasUser: boolean;
+  user: UseUserResult;
   hasClient: boolean;
 }) => {
+  const hasUser = !!user;
+
   if (!hasUser) {
     return (
       <div className="flex flex-col gap-2 w-[368px]">
@@ -39,8 +47,14 @@ const RenderContent = ({
     );
   }
 
+  const isEOAUser = user.type === "eoa";
+
   if (hasClient) {
     return <MintCard />;
+  }
+
+  if (isEOAUser) {
+    return <EOAPostLogin />;
   }
 
   return <LoadingIcon />;
