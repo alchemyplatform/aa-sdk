@@ -36,8 +36,7 @@
     "docs:gen": "npx ak-docgen generate --in ./src/index.ts --out ../../site/pages/reference/account-kit/infra",
     "clean": "rm -rf ./dist",
     "test": "vitest",
-    "test:run": "vitest run",
-    "test:run-e2e": "vitest run --config vitest.config.e2e.ts"
+    "test:run": "vitest run"
   },
   "devDependencies": {
     "typescript": "^5.0.4",
