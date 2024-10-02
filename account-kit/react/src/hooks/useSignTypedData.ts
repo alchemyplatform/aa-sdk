@@ -86,7 +86,7 @@ export function useSignTypedData({
         if (!client) {
           throw new ClientUndefinedHookError("useSignTypedData");
         }
-        return client.signTypedDataWith6492({ ...params });
+        return client.signTypedData({ ...params });
       },
       ...mutationArgs,
     },

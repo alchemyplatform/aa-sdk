@@ -109,6 +109,15 @@ We have updated our dependency to viem v2.x.x. This means you will need to updat
 
 The biggest change is that the `SmartAccountProvider` class has been removed and replaced with a `SmartAccountClient` type that extends `viem`'s [`Client`](https://viem.sh/docs/clients/custom). To get started with the new clients, you can do the following:
 
+### Client: removed `sign*With6492` methods
+
+The `signMessageWith6492` and `signTypedDataWith6492` methods have been removed from the `SmartAccountClient`. Now, all clients will always use 6492 when signing messages. However, if you need to sign messages without 6492, you can still use the `client.account.signMessage` methods.
+
+### Client: `checkGasSponsorshipEligibility` return type updated
+
+The `checkGasSponsorshipEligibility` methods now returns an object that includes the eligibility status of a User Operation as well as the `UserOperationStruct` that the eligibility is for. This now ensures that checking for sponsorhip doesn't cause you to use up your
+gas sponsorship limits. If your User Operation is eligible, then you can sign the UO with `client.signUserOperation` and send it with `client.sendRawUserOperation`.
+
 ```ts
 import { SmartAccountProvider } from "@aa-sdk/core"; // [!code --]
 import { getDefaultEntryPointAddress } from "@aa-sdk/core"; // [!code --]
