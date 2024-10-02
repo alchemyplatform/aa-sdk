@@ -3,26 +3,30 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 # Getting Started
 
 ## Setup your Environment
+
 1. Ensure you have the right node version corresponding to the `/aa-sdk/.nvmrc` file.
 2. Go to Alchemy's Dashboard, and set up an [account config](https://dashboard.alchemy.com/accounts/config/create).
    1. For local development set the configuration with a redirect url to http://localhost:3000.
 
-## Install Dependencies 
-*In the root `/aa-sdk/` directory*
+## Install Dependencies
+
+_In the root `/aa-sdk/` directory_
 
 ```bash
 yarn install
 ```
 
 ## Build the aa-sdk Libraries
-*In the root `/aa-sdk/` directory*
+
+_In the root `/aa-sdk/` directory_
 
 ```bash
 yarn build
 ```
 
-## Start the Server 
-*In the ui-demo `/aa-sdk/examples/ui-demo` directory*
+## Start the Server
+
+_In the ui-demo `/aa-sdk/examples/ui-demo` directory_
 
 ```bash
 yarn dev
