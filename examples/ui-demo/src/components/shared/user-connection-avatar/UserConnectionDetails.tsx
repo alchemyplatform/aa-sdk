@@ -1,5 +1,5 @@
 import { UserAddressLink } from "@/components/shared/user-connection-avatar/UserAddressLink";
-import { useLogout, useSigner, useUser } from "@account-kit/react";
+import { useAccount, useLogout, useSigner, useUser } from "@account-kit/react";
 import { DeploymentStatusIndicator } from "@/components/shared/DeploymentStatusIndicator";
 import { useConfig } from "@/app/state";
 import { ExternalLinkIcon } from "@/components/icons/external-link";
@@ -12,6 +12,7 @@ export function UserConnectionDetails() {
   const signer = useSigner();
   const { logout } = useLogout();
   const { config } = useConfig();
+  const scaAccount = useAccount({ type: "LightAccount" });
 
   const theme = config.ui.theme;
   const primaryColor = config.ui.primaryColor;
@@ -66,7 +67,7 @@ export function UserConnectionDetails() {
         <span className="text-md md:text-sm text-fg-secondary">
           Smart account
         </span>
-        <UserAddressLink address={user?.address} />
+        <UserAddressLink address={scaAccount.address ?? ""} />
       </div>
       {/* Status */}
       <div className="flex flex-row justify-between items-center">
