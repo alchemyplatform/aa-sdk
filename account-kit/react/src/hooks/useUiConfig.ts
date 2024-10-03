@@ -33,6 +33,7 @@ export const DEFAULT_UI_CONFIG: AlchemyAccountsUIConfigWithDefaults = {
     hideSignInText: false,
   },
   modalBaseClassName: "",
+  supportUrl: "",
 };
 
 const internal_useUiConfig = create<UiConfigStore>((set) => ({

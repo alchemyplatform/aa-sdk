@@ -32,6 +32,7 @@ const PasskeyStory = (props: any) => {
         sections,
       },
       ui,
+      supportUrl: "#",
     };
 
     updateConfig(uiConfig);
