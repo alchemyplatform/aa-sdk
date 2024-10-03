@@ -1,14 +1,15 @@
 {
   "name": "@account-kit/logging",
-  "version": "4.0.0-beta.8",
+  "version": "4.0.0-beta.9",
   "description": "Core logging library for Account Kit packages",
   "author": "Alchemy",
   "license": "MIT",
   "private": false,
   "type": "module",
-  "main": "./dist/esm/exports/index.js",
-  "types": "./dist/types/exports/index.d.ts",
-  "typings": "./dist/types/exports/index.d.ts",
+  "main": "./dist/esm/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "typings": "./dist/types/index.d.ts",
   "sideEffects": false,
   "files": [
     "dist",
@@ -21,8 +22,9 @@
   ],
   "exports": {
     ".": {
-      "types": "./dist/types/exports/index.d.ts",
-      "default": "./dist/esm/exports/index.js"
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "default": "./dist/esm/index.js"
     },
     "./package.json": "./package.json"
   },
