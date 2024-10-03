@@ -122,8 +122,6 @@ export function ConfigContextProvider(props: PropsWithChildren) {
       ]);
     }
 
-    console.log(sections);
-
     const uiConfig: AlchemyAccountsUIConfig = {
       illustrationStyle: config.ui.illustrationStyle,
       auth: {

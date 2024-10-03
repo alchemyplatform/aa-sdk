@@ -20,7 +20,16 @@ const alchemyConfig = createConfig(
   {
     illustrationStyle: DEFAULT_CONFIG.ui.illustrationStyle,
     auth: {
-      sections: [[{ type: "email" as const }], [{ type: "passkey" as const }]],
+      sections: [
+        [{ type: "email" as const }],
+        [{ type: "passkey" as const }],
+        [
+          {
+            type: "social" as const,
+            googleAuth: true,
+          },
+        ],
+      ],
       addPasskeyOnSignup: DEFAULT_CONFIG.auth.addPasskey,
       header: (
         <AuthCardHeader
