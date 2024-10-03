@@ -16,7 +16,7 @@ export function AuthCardWrapper({ className }: { className?: string }) {
         className
       )}
     >
-      <div className="flex flex-1 justify-center items-center">
+      <div className="flex flex-1 justify-center items-center px-6">
         <RenderContent />
       </div>
     </div>

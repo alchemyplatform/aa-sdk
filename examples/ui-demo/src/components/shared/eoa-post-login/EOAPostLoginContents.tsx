@@ -20,7 +20,7 @@ export const EOAPostLoginActions = () => {
             logout();
           }}
         >
-          Try it
+          Switch Login
         </button>
         <a
           href="https://accountkit.alchemy.com/"
@@ -39,7 +39,7 @@ export const EOAPostLoginContents = () => {
     <div className="flex flex-col">
       <div className="flex flex-col items-center justify-center">
         <CheckIcon className="w-[48px] h-[48px]" stroke="#16A34A" />
-        <h3 className="text-[32px] tracking-tight font-semibold mt-5 text-fg-primary">{`You're connected!`}</h3>
+        <h3 className="text-[32px] tracking-tight font-semibold mt-5 text-fg-primary whitespace-nowrap">{`You're connected!`}</h3>
       </div>
       <div className="flex flex-col mt-6">
         <Capabilities
