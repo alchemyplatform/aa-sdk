@@ -1,14 +1,45 @@
-import { CheckIcon } from "../icons/check";
-import { GasIcon } from "../icons/gas";
-import { UserIcon } from "../icons/user";
-import { WalletIcon } from "../icons/wallet";
+import React from "react";
+import { CheckIcon } from "../../icons/check";
+import { GasIcon } from "../../icons/gas";
+import { UserIcon } from "../../icons/user";
+import { WalletIcon } from "../../icons/wallet";
+import { useLogout } from "@account-kit/react";
 
-export function EOAPostLogin() {
+export const EOAPostLoginActions = () => {
+  const { logout } = useLogout();
   return (
-    <div className="flex flex-col border-border border radius-2 px-10 py-11 max-w-[486px] w-full">
+    <div className="flex flex-col items-center justify-center">
+      <p className="text-fg-secondary text-sm">
+        Want to experience gasless checkout?
+      </p>
+      <div className="flex flex-col sm:flex-row w-full mt-4">
+        <button
+          className="btn btn-primary w-full sm:w-auto mb-2 sm:mb-0 flex-1 m-0 sm:mr-2"
+          onClick={() => {
+            console.log("openAuthModal");
+            logout();
+          }}
+        >
+          Try it
+        </button>
+        <a
+          href="https://accountkit.alchemy.com/"
+          target="_blank"
+          className="btn btn-secondary w-full sm:w-auto flex-1 m-0 sm:ml-2"
+        >
+          View docs
+        </a>
+      </div>
+    </div>
+  );
+};
+
+export const EOAPostLoginContents = () => {
+  return (
+    <div className="flex flex-col">
       <div className="flex flex-col items-center justify-center">
         <CheckIcon className="w-[48px] h-[48px]" stroke="#16A34A" />
-        <h3 className="text-[32px] tracking-tight font-semibold">{`You're connected!`}</h3>
+        <h3 className="text-[32px] tracking-tight font-semibold mt-5 text-fg-primary">{`You're connected!`}</h3>
       </div>
       <div className="flex flex-col mt-6">
         <Capabilities
@@ -29,7 +60,7 @@ export function EOAPostLogin() {
       </div>
     </div>
   );
-}
+};
 
 type IconType = "connect" | "onboard" | "sponsor";
 

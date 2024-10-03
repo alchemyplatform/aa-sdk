@@ -15,6 +15,7 @@ export function UserConnectionDetails() {
 
   const theme = config.ui.theme;
   const primaryColor = config.ui.primaryColor;
+  const isEOAUser = user?.type === "eoa";
 
   const getSignerAddress = async (): Promise<string | null> => {
     const signerAddress = await signer?.getAddress();
@@ -27,6 +28,36 @@ export function UserConnectionDetails() {
   });
 
   if (!user) return null;
+
+  if (isEOAUser) {
+    return (
+      <div className="flex flex-col gap-2">
+        {/* EOA Address */}
+        <div className="flex flex-row justify-between">
+          <span className="text-md md:text-sm text-fg-secondary">
+            EOA Address
+          </span>
+          <UserAddressLink address={user?.address} />
+        </div>
+
+        {/* Logout */}
+        <button
+          className="flex flex-row justify-start items-center mt-[17px] hover:cursor-pointer active:opacity-70"
+          onClick={() => {
+            logout();
+          }}
+        >
+          <span className="font-semibold text-md md:text-xs text-btn-primary">
+            Logout
+          </span>
+
+          <div className="w-5 md:w-[14px] h-5 md:h-[14px] ml-2">
+            <LogoutIcon stroke={primaryColor[theme]} />
+          </div>
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-2">

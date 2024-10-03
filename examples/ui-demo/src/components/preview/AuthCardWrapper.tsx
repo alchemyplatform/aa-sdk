@@ -8,7 +8,7 @@ import {
 } from "@account-kit/react";
 import { MintCard } from "../shared/MintCard";
 import { LoadingIcon } from "../icons/loading";
-import { EOAPostLogin } from "../shared/EOAPostLogin";
+import { EOAPostLogin } from "../shared/eoa-post-login/EOAPostLogin";
 
 export function AuthCardWrapper({ className }: { className?: string }) {
   const user = useUser();
