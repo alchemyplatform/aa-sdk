@@ -68,6 +68,7 @@
   "dependencies": {
     "@account-kit/core": "^4.0.0-beta.9",
     "@account-kit/infra": "^4.0.0-beta.9",
+    "@account-kit/logging": "^4.0.0-beta.9",
     "@tanstack/react-form": "^0.19.4",
     "@tanstack/zod-form-adapter": "^0.19.4",
     "@wagmi/connectors": "^4.3.9",
