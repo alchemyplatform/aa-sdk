@@ -11,12 +11,14 @@ export function AuthCardWrapper({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "flex flex-1 flex-col justify-center items-center overflow-auto relative",
+        "flex flex-col flex-1 overflow-y-auto scrollbar-none relative h-full w-full",
         config.ui.theme === "dark" ? "bg-black/70" : "bg-white",
         className
       )}
     >
-      <RenderContent />
+      <div className="flex flex-1 justify-center items-center">
+        <RenderContent />
+      </div>
     </div>
   );
 }
@@ -30,7 +32,7 @@ const RenderContent = () => {
 
   if (!hasUser) {
     return (
-      <div className="flex flex-col gap-2 w-[368px]">
+      <div className="flex flex-col py-14 pt-20 gap-2 w-[368px]">
         <div className="modal bg-surface-default shadow-md overflow-hidden">
           <AuthCard />
         </div>
@@ -41,11 +43,19 @@ const RenderContent = () => {
   const isEOAUser = user.type === "eoa";
 
   if (hasClient) {
-    return <MintCard />;
+    return (
+      <div className="py-14 pt-20">
+        <MintCard />
+      </div>
+    );
   }
 
   if (isEOAUser) {
-    return <EOAPostLogin />;
+    return (
+      <div className="py-14 pt-20">
+        <EOAPostLogin />
+      </div>
+    );
   }
 
   return <LoadingIcon />;

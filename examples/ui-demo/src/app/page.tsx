@@ -44,7 +44,7 @@ export default function Home() {
             <Styling />
           </div>
 
-          <div className="flex flex-col flex-[2] basis-0 relative bg-white border border-border rounded-lg overflow-hidden overflow-y-auto">
+          <div className="flex flex-col flex-[2] basis-0 relative bg-white border border-border rounded-lg overflow-hidden overflow-y-auto scrollbar-none">
             {/* Code toggle header */}
             <div
               className={`absolute h-7 top-6 flex items-center left-6 right-6 ${
@@ -71,9 +71,7 @@ export default function Home() {
             </div>
 
             {/* Don't unmount when showing code preview so that the auth card retains its state */}
-            <AuthCardWrapper
-              className={showCode ? "hidden" : "mt-0 py-0 md:py-[50px]"}
-            />
+            <AuthCardWrapper className={showCode ? "hidden" : "mt-0"} />
             {showCode && <CodePreview />}
           </div>
         </div>
