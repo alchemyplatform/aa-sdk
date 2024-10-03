@@ -3,13 +3,6 @@ import { ChangeEvent } from "react";
 import { PhotoIcon } from "../icons/photo";
 import FileUploadInput from "../shared/FileUploadInput";
 
-const LENGTH = 10;
-function truncatedFileName(name: string) {
-  if (name.length < LENGTH) return name;
-
-  return `${name.slice(0, LENGTH - 2)}...`;
-}
-
 export function PhotoUploads({ mode }: { mode: "dark" | "light" }) {
   const { config, setConfig } = useConfig();
 
@@ -56,13 +49,6 @@ export function PhotoUploads({ mode }: { mode: "dark" | "light" }) {
         {logo?.fileSrc ? null : <PhotoIcon />}
       </div>
       <div className="flex flex-col gap-[2px]">
-        <div
-          className={`text-xs text-gray-500 font-medium ${
-            logo?.fileName ? "" : "hidden"
-          }`}
-        >
-          {logo?.fileName ? truncatedFileName(logo.fileName) : "File name"}
-        </div>
         {logo ? (
           <button
             onClick={onRemove}
