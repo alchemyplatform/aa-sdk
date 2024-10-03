@@ -8,6 +8,7 @@ import { WalletIcon } from "../icons/wallet";
 import ExternalLink from "../shared/ExternalLink";
 import { Switch } from "../ui/switch";
 import { ExternalLinkIcon } from "../icons/external-link";
+import { GoogleIcon } from "../icons/google";
 
 export const Authentication = ({ className }: { className?: string }) => {
   const { config, setConfig } = useConfig();
@@ -42,6 +43,26 @@ export const Authentication = ({ className }: { className?: string }) => {
     }));
   };
 
+  const setSocialActive = (active: boolean) => {
+    setConfig((prev) => ({
+      ...prev,
+      auth: {
+        ...prev.auth,
+        showSocial: active,
+      },
+    }));
+  };
+
+  const setAddGoogleAuth = () => {
+    setConfig((prev) => ({
+      ...prev,
+      auth: {
+        ...prev.auth,
+        addGoogleAuth: !prev.auth.addGoogleAuth,
+      },
+    }));
+  };
+
   return (
     <div className={cn("flex flex-col gap-5", className)}>
       <div className="flex flex-row gap-2 items-center">
@@ -58,9 +79,26 @@ export const Authentication = ({ className }: { className?: string }) => {
             disabled
           />
           <AuthMethod
-            icon={<SocialIcon className="opacity-50" />}
+            icon={<SocialIcon />}
             name="Social"
-            unavailable
+            iconClassName="mt-[2px] self-start"
+            details={
+              config.auth.showSocial && (
+                <div className="flex">
+                  <SocialAuthMethod
+                    icon={<GoogleIcon />}
+                    onClick={setAddGoogleAuth}
+                    className={`grow-0 border-2 rounded-lg p-1 ${
+                      config.auth.addGoogleAuth
+                        ? "border-blue-600 bg-blue-100"
+                        : "border-gray-300"
+                    }`}
+                  />
+                </div>
+              )
+            }
+            active={config.auth.showSocial}
+            setActive={setSocialActive}
           />
           <AuthMethod
             className="flex-0 shrink-0 grow min-w-full"
@@ -170,5 +208,21 @@ const AuthMethod = ({
       </div>
       {callout}
     </div>
+  );
+};
+
+const SocialAuthMethod = ({
+  icon,
+  onClick,
+  className,
+}: {
+  icon: React.ReactNode;
+  onClick: () => void;
+  className?: string;
+}) => {
+  return (
+    <button onClick={onClick} className={className}>
+      {icon}
+    </button>
   );
 };

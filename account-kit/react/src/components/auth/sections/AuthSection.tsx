@@ -2,6 +2,7 @@ import type { AuthType } from "../types.js";
 import { EmailAuth } from "./EmailAuth.js";
 import { ExternalWalletsAuth } from "./InjectedProvidersAuth.js";
 import { PasskeyAuth } from "./PasskeyAuth.js";
+import { SocialAuth } from "./SocialAuth.js";
 
 type AuthSectionProps = {
   authTypes: AuthType[];
@@ -20,6 +21,8 @@ export const AuthSection = ({ authTypes, ...props }: AuthSectionProps) => {
             return <EmailAuth key={index} {...authType} />;
           case "passkey":
             return <PasskeyAuth key={index} {...authType} />;
+          case "social":
+            return <SocialAuth key={index} {...authType} />;
           case "external_wallets":
             return <ExternalWalletsAuth key={index} />;
           default:
