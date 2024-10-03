@@ -31,6 +31,10 @@ export type AlchemyAccountsUIConfig = {
    * This class name will be applied to any modals that are rendered
    */
   modalBaseClassName?: string;
+  /**
+   * This is the URL that will be used to link to the support page
+   */
+  supportUrl?: string | undefined;
 };
 
 export type AuthIllustrationStyle = NonNullable<

@@ -48,7 +48,7 @@ export type Config = {
         }
       | undefined;
   };
-  supportURL?: string;
+  supportUrl?: string;
 };
 
 export type ConfigContextType = {

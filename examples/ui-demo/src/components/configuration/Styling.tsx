@@ -13,11 +13,11 @@ import { useState } from "react";
 
 export function Styling({ className }: { className?: string }) {
   const { config, setConfig } = useConfig();
-  const [supportURL, setSupportURL] = useState("");
-  const handleChangeSupportURL = () => {
+  const [supportUrl, setsupportUrl] = useState("");
+  const handleChangesupportUrl = () => {
     setConfig((prev) => ({
       ...prev,
-      supportURL,
+      supportUrl,
     }));
   };
 
@@ -92,9 +92,9 @@ export function Styling({ className }: { className?: string }) {
         </label>
         <input
           id="support-url"
-          value={supportURL}
-          onChange={(e) => setSupportURL(e.target.value)}
-          onBlur={handleChangeSupportURL}
+          value={supportUrl}
+          onChange={(e) => setsupportUrl(e.target.value)}
+          onBlur={handleChangesupportUrl}
           className="w-full border border-border rounded-lg px-[10px] py-[14px] h-10 text-sm"
           placeholder="website, telegram, or email"
         />
