@@ -15,9 +15,34 @@ export type TrackEventParameters<Schema extends EventsSchema> = {
   >;
 }[number];
 
-export interface EventLogger<Schema extends EventsSchema> {
-  trackEvent(params: TrackEventParameters<Schema>): Promise<void>;
+export interface EventLogger<Schema extends EventsSchema = []> {
+  trackEvent(
+    params: TrackEventParameters<[...Schema, PerformanceEvent]>
+  ): Promise<void>;
+  profiled<TArgs extends any[], TRet>(
+    name: string,
+    func: (...args: TArgs) => TRet
+  ): (...args: TArgs) => TRet;
   _internal: {
     ready: Promise<unknown>;
   };
 }
+
+export type InnerLogger<Schema extends EventsSchema> = Omit<
+  EventLogger<Schema>,
+  "profiled"
+>;
+
+export type LoggerContext = {
+  package: string;
+  version: string;
+  [key: string]: string;
+};
+
+export type PerformanceEvent = {
+  EventName: "performance";
+  EventData: {
+    executionTimeMs: number;
+    functionName: string;
+  };
+};
