@@ -1,0 +1,81 @@
+import { MintStatus } from "./MintCard";
+import { LoadingIcon } from "../../icons/loading";
+import { CheckIcon } from "../../icons/check";
+import { GasIcon } from "../../icons/gas";
+import { DrawIcon } from "../../icons/draw";
+import { ReceiptIcon } from "../../icons/receipt";
+
+type Props = {
+  status: MintStatus;
+} & React.HTMLAttributes<HTMLDivElement>;
+
+export function ValueProps({ status, ...props }: Props) {
+  return (
+    <div {...props}>
+      <ValueProp
+        title="Invisible signing"
+        icon={status.signing}
+        description="Sign actions in the background with embedded wallets"
+      />
+
+      <ValueProp
+        title="Gas sponsorship"
+        icon={status.gas}
+        description={
+          <span>
+            Sponsor gas fees to remove barriers to adoption.{" "}
+            <a
+              href="https://accountkit.alchemy.com/react/sponsor-gas"
+              target="_blank"
+              referrerPolicy="no-referrer"
+              className="font-medium"
+            >
+              Learn how.
+            </a>
+          </span>
+        }
+      />
+      <ValueProp
+        title="Batch transactions"
+        icon={status.batch}
+        description="Deploy the user's smart account in their first transaction"
+      />
+    </div>
+  );
+}
+const ValueProp = ({
+  icon,
+  title,
+  description,
+}: {
+  icon: "signing" | "gas" | "batch" | "loading" | "success";
+  title: string;
+  description: string | JSX.Element;
+}) => {
+  return (
+    <div className="flex gap-3 mb-10">
+      {getMintIcon(icon)}
+      <div className=" max-w-[308px]">
+        <h3 className="text-base font-semibold text-fg-secondary">{title}</h3>
+        <p className="text-base leading-6 text-fg-secondary">{description}</p>
+      </div>
+    </div>
+  );
+};
+
+const getMintIcon = (
+  icon: "signing" | "gas" | "batch" | "loading" | "success"
+) => {
+  switch (icon) {
+    case "signing":
+      return <DrawIcon className="text-fg-secondary" />;
+    case "gas":
+      return <GasIcon className="text-fg-secondary" />;
+    case "batch":
+      return <ReceiptIcon className="text-fg-secondary" />;
+    case "loading":
+      return <LoadingIcon />;
+    case "success":
+      return <CheckIcon stroke="#16A34A" />;
+  }
+};

@@ -1,7 +1,7 @@
 import { useConfig } from "@/app/state";
 import { cn } from "@/lib/utils";
 import { AuthCard, useSmartAccountClient, useUser } from "@account-kit/react";
-import { MintCard } from "../shared/MintCard";
+import { MintCard } from "../shared/mint-card/MintCard";
 import { LoadingIcon } from "../icons/loading";
 
 export function AuthCardWrapper({ className }: { className?: string }) {
