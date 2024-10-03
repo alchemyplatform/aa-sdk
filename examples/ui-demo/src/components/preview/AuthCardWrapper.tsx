@@ -1,19 +1,12 @@
 import { useConfig } from "@/app/state";
 import { cn } from "@/lib/utils";
-import {
-  AuthCard,
-  useSmartAccountClient,
-  useUser,
-  UseUserResult,
-} from "@account-kit/react";
+import { AuthCard, useSmartAccountClient, useUser } from "@account-kit/react";
 import { MintCard } from "../shared/MintCard";
 import { LoadingIcon } from "../icons/loading";
 import { EOAPostLogin } from "../shared/eoa-post-login/EOAPostLogin";
 
 export function AuthCardWrapper({ className }: { className?: string }) {
-  const user = useUser();
   const { config } = useConfig();
-  const { client } = useSmartAccountClient({ type: "LightAccount" });
 
   return (
     <div
@@ -23,19 +16,17 @@ export function AuthCardWrapper({ className }: { className?: string }) {
         className
       )}
     >
-      <RenderContent user={user} hasClient={!!client} />
+      <RenderContent />
     </div>
   );
 }
 
-const RenderContent = ({
-  user,
-  hasClient,
-}: {
-  user: UseUserResult;
-  hasClient: boolean;
-}) => {
+const RenderContent = () => {
+  const user = useUser();
+  const { client } = useSmartAccountClient({ type: "LightAccount" });
+
   const hasUser = !!user;
+  const hasClient = !!client;
 
   if (!hasUser) {
     return (
