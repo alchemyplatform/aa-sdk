@@ -5,7 +5,8 @@ import type { Preview } from "@storybook/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { initialize, mswLoader } from "msw-storybook-addon";
 import React, { useEffect } from "react";
-import { AlchemyAccountProvider, createConfig } from "../src";
+import { AlchemyAccountProvider } from "../src/context.js";
+import { createConfig } from "../src/index.js";
 
 const queryClient = new QueryClient();
 
