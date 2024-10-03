@@ -21,6 +21,7 @@ import {
   ClientUndefinedHookError,
   UnsupportedEOAActionError,
 } from "../errors.js";
+import { ReactLogger } from "../metrics.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import { type UseSmartAccountClientResult } from "./useSmartAccountClient.js";
 
@@ -204,8 +205,14 @@ export function useSendUserOperation<
   );
 
   return {
-    sendUserOperation,
-    sendUserOperationAsync,
+    sendUserOperation: ReactLogger.profiled(
+      "sendUserOperation",
+      sendUserOperation
+    ),
+    sendUserOperationAsync: ReactLogger.profiled(
+      "sendUserOperationAsync",
+      sendUserOperationAsync
+    ),
     sendUserOperationResult,
     isSendingUserOperation,
     error,
