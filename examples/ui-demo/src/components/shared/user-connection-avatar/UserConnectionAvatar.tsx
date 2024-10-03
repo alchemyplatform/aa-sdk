@@ -55,7 +55,7 @@ const UserConnectionAvatar = ({
           Hello,
         </span>
         <div className="flex flex-row items-center">
-          <h3 className="text-fg-primary font-semibold text-left text-lg">
+          <h3 className="text-fg-primary font-semibold text-left text-lg whitespace-nowrap">
             {isEOAUser ? truncateAddress(user.address) : user.email}
           </h3>
           <div className="ml-1 w-[20px] h-[20px] flex items-center justify-center">
