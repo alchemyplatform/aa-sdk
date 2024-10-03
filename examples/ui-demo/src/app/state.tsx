@@ -26,6 +26,8 @@ export type Config = {
     showExternalWallets: boolean;
     showPasskey: boolean;
     addPasskey: boolean;
+    showSocial: boolean;
+    addGoogleAuth: boolean;
   };
   ui: {
     theme: "light" | "dark";
@@ -63,6 +65,8 @@ export const DEFAULT_CONFIG: Config = {
     showExternalWallets: false,
     showPasskey: true,
     addPasskey: true,
+    showSocial: true,
+    addGoogleAuth: true,
   },
   ui: {
     theme: "light",
@@ -103,6 +107,12 @@ export function ConfigContextProvider(props: PropsWithChildren) {
       sections.push([{ type: "passkey" }]);
     }
 
+    if (config.auth.showSocial) {
+      sections.push([
+        { type: "social", googleAuth: config.auth.addGoogleAuth },
+      ]);
+    }
+
     if (config.auth.showExternalWallets) {
       sections.push([
         {
@@ -111,6 +121,8 @@ export function ConfigContextProvider(props: PropsWithChildren) {
         },
       ]);
     }
+
+    console.log(sections);
 
     const uiConfig: AlchemyAccountsUIConfig = {
       illustrationStyle: config.ui.illustrationStyle,

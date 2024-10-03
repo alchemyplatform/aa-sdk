@@ -9,4 +9,5 @@ export type AuthType =
       placeholder?: string;
     }
   | { type: "passkey" }
-  | { type: "external_wallets"; walletConnect?: WalletConnectParameters };
+  | { type: "external_wallets"; walletConnect?: WalletConnectParameters }
+  | { type: "social"; googleAuth: boolean };
