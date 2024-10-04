@@ -16,6 +16,7 @@ const alchemyConfig = createConfig(
     chain: arbitrumSepolia,
     ssr: true,
     policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
+    enablePopupOauth: true,
   },
   {
     illustrationStyle: DEFAULT_CONFIG.ui.illustrationStyle,
