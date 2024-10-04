@@ -32,7 +32,7 @@ const RenderContent = () => {
 
   if (!hasUser) {
     return (
-      <div className="flex flex-col py-14 pt-20 gap-2 w-[368px]">
+      <div className="flex flex-col gap-2 w-[368px]">
         <div className="modal bg-surface-default shadow-md overflow-hidden">
           <AuthCard />
         </div>
