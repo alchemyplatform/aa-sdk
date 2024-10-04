@@ -8,10 +8,14 @@ import { AuthCardWrapper } from "../components/preview/AuthCardWrapper";
 import { CodePreview } from "../components/preview/CodePreview";
 import { CodePreviewSwitch } from "../components/shared/CodePreviewSwitch";
 import { TopNav } from "../components/topnav/TopNav";
-import { useUser } from "@account-kit/react";
 import { RenderUserConnectionAvatar } from "@/components/shared/user-connection-avatar/RenderUserConnectionAvatar";
+import { useUser } from "@account-kit/react";
 import { MobileSplashPage } from "@/components/preview/MobileSplashPage";
 import { cn } from "@/lib/utils";
+import {
+  EOAPostLoginContents,
+  EOAPostLoginActions,
+} from "@/components/shared/eoa-post-login/EOAPostLoginContents";
 
 const publicSans = Public_Sans({
   subsets: ["latin"],
@@ -26,6 +30,8 @@ const inter = Inter({
 export default function Home() {
   const [showCode, setShowCode] = useState(false);
   const user = useUser();
+  const isEOAUser = user?.type === "eoa";
+
   return (
     <main className={`flex flex-col h-screen ${publicSans.className}`}>
       <TopNav />
@@ -38,10 +44,10 @@ export default function Home() {
             <Styling />
           </div>
 
-          <div className="flex flex-col flex-[2] basis-0 relative bg-white border border-border rounded-lg overflow-hidden">
+          <div className="flex flex-col flex-[2] basis-0 relative bg-white border border-border rounded-lg overflow-hidden overflow-y-auto scrollbar-none">
             {/* Code toggle header */}
             <div
-              className={`relative md:absolute h-auto px-6 pt-6 md:px-0 md:pt-0 md:h-7 md:top-6 flex items-center md:left-6 md:right-6 ${
+              className={`absolute h-7 top-6 flex items-center left-6 right-6 ${
                 !user || showCode ? "justify-end" : "justify-between"
               }  z-10`}
             >
@@ -70,11 +76,28 @@ export default function Home() {
           </div>
         </div>
         <div className="flex flex-1 flex-col gap-6 md:hidden">
+          {/* 
+					  	TEMPORARY: Adding a logout button so users can properly logout. 
+						This will be removed once we add the mint functionality to mobile.
+					 */}
           {!user ? (
             <MobileSplashPage />
           ) : (
-            <RenderUserConnectionAvatar />
-            // Rest of Mint UI
+            <div className="flex flex-1 flex-col">
+              <div className="border-border border radius-2 px-6 py-6">
+                <RenderUserConnectionAvatar />
+                {isEOAUser && (
+                  <div className="pt-6">
+                    <EOAPostLoginContents />
+                  </div>
+                )}
+              </div>
+              {isEOAUser && (
+                <div className="mt-auto mb-5 pt-10">
+                  <EOAPostLoginActions />
+                </div>
+              )}
+            </div>
           )}
         </div>
       </div>

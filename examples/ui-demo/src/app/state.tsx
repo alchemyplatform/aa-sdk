@@ -50,6 +50,7 @@ export type Config = {
         }
       | undefined;
   };
+  supportUrl?: string;
 };
 
 export type ConfigContextType = {
