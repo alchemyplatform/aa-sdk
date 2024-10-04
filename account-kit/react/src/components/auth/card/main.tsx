@@ -25,9 +25,7 @@ export const MainAuthContent = ({ authStep }: MainAuthContentProps) => {
         return (
           <Fragment key={`auth-section-fragment-${idx}`}>
             <AuthSection key={`auth-section-${idx}`} authTypes={section} />
-            {idx !== sections.length - 1 ? (
-              <Divider key={`divider-${idx}`} />
-            ) : null}
+            {idx === 0 ? <Divider key={`divider-${idx}`} /> : null}
           </Fragment>
         );
       })}
