@@ -193,9 +193,10 @@ function generateClassDocs(
       ts.isConstructorDeclaration(member) ||
       ts.isMethodDeclaration(member) ||
       (ts.isPropertyDeclaration(member) &&
-        member.initializer &&
-        (ts.isArrowFunction(member.initializer) ||
-          ts.isFunctionExpression(member.initializer)))
+        ((member.initializer &&
+          (ts.isArrowFunction(member.initializer) ||
+            ts.isFunctionExpression(member.initializer))) ||
+          (member.type && ts.isFunctionLike(member.type))))
     ) {
       generateFunctionDocs(
         member,
