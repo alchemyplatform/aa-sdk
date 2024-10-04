@@ -8,6 +8,7 @@ import {
   type UseMutateFunction,
 } from "@tanstack/react-query";
 import { useAlchemyAccountContext } from "../context.js";
+import { ReactLogger } from "../metrics.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import { useSigner } from "./useSigner.js";
 
@@ -69,8 +70,11 @@ export function useAuthenticate(
   );
 
   return {
-    authenticate,
-    authenticateAsync: authenticateAsync,
+    authenticate: ReactLogger.profiled("authenticate", authenticate),
+    authenticateAsync: ReactLogger.profiled(
+      "authenticateAsync",
+      authenticateAsync
+    ),
     isPending,
     error,
   };
