@@ -47,7 +47,7 @@ export default function Home() {
           <div className="flex flex-col flex-[2] basis-0 relative bg-white border border-border rounded-lg overflow-hidden overflow-y-auto scrollbar-none">
             {/* Code toggle header */}
             <div
-              className={`absolute h-7 top-6 flex items-center left-6 right-6 ${
+              className={`absolute h-[85px] w-full p-6 top-0 flex items-center left-0 bg-white border-b border-border ${
                 !user || showCode ? "justify-end" : "justify-between"
               }  z-10`}
             >
@@ -55,7 +55,7 @@ export default function Home() {
               <div className="flex gap-2 items-center">
                 <div
                   className={cn(
-                    " px-2 py-1 h-5 rounded text-xs font-semibold flex items-center justify-center",
+                    "px-2 py-1 h-5 rounded text-xs font-semibold hidden lg:flex items-center justify-center ",
                     showCode
                       ? "bg-[#F3F3FF] text-[#8B5CF6]"
                       : "bg-[#EFF4F9] text-[#374151]"
@@ -71,8 +71,10 @@ export default function Home() {
             </div>
 
             {/* Don't unmount when showing code preview so that the auth card retains its state */}
-            <AuthCardWrapper className={showCode ? "hidden" : "mt-0"} />
-            {showCode && <CodePreview />}
+            <AuthCardWrapper
+              className={showCode ? "hidden" : "mt-0 pt-[85px]"}
+            />
+            {showCode && <CodePreview className="pt-[105px]" />}
           </div>
         </div>
         <div className="flex flex-1 flex-col gap-6 md:hidden">
