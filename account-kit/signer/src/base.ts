@@ -4,10 +4,14 @@ import {
   hashTypedData,
   keccak256,
   serializeTransaction,
-  type CustomSource,
+  type GetTransactionType,
   type Hex,
+  type IsNarrowable,
   type LocalAccount,
+  type SerializeTransactionFn,
   type SignableMessage,
+  type TransactionSerializable,
+  type TransactionSerialized,
   type TypedData,
   type TypedDataDefinition,
 } from "viem";
@@ -211,30 +215,33 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * @param {AuthParams} params - undefined if passkey login, otherwise an object with email and bundle to resolve
    * @returns {Promise<User>} the user that was authenticated
    */
-  authenticate: (params: AuthParams) => Promise<User> = async (params) => {
-    const { type } = params;
-    const result = (() => {
-      switch (type) {
-        case "email":
-          return this.authenticateWithEmail(params);
-        case "passkey":
-          return this.authenticateWithPasskey(params);
-        case "oauth":
-          return this.authenticateWithOauth(params);
-        case "oauthReturn":
-          return this.handleOauthReturn(params);
-        default:
-          assertNever(type, `Unknown auth type: ${type}`);
-      }
-    })();
+  authenticate: (params: AuthParams) => Promise<User> = SignerLogger.profiled(
+    "BaseAlchemySigner.authenticate",
+    async (params) => {
+      const { type } = params;
+      const result = (() => {
+        switch (type) {
+          case "email":
+            return this.authenticateWithEmail(params);
+          case "passkey":
+            return this.authenticateWithPasskey(params);
+          case "oauth":
+            return this.authenticateWithOauth(params);
+          case "oauthReturn":
+            return this.handleOauthReturn(params);
+          default:
+            assertNever(type, `Unknown auth type: ${type}`);
+        }
+      })();
 
-    this.trackAuthenticateType(params);
+      this.trackAuthenticateType(params);
 
-    return result.catch((error) => {
-      this.store.setState({ error: toErrorInfo(error) });
-      throw error;
-    });
-  };
+      return result.catch((error) => {
+        this.store.setState({ error: toErrorInfo(error) });
+        throw error;
+      });
+    }
+  );
 
   private trackAuthenticateType = (params: AuthParams) => {
     const { type } = params;
@@ -342,11 +349,14 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    *
    * @returns {Promise<string>} A promise that resolves to the address of the current user.
    */
-  getAddress: () => Promise<`0x${string}`> = async () => {
-    const { address } = await this.inner.whoami();
+  getAddress: () => Promise<`0x${string}`> = SignerLogger.profiled(
+    "BaseAlchemySigner.getAddress",
+    async () => {
+      const { address } = await this.inner.whoami();
 
-    return address;
-  };
+      return address;
+    }
+  );
 
   /**
    * Signs a raw message after hashing it.
@@ -372,19 +382,18 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * @param {string} msg the message to be hashed and then signed
    * @returns {Promise<string>} a promise that resolves to the signed message
    */
-  signMessage: (msg: SignableMessage) => Promise<`0x${string}`> = async (
-    msg
-  ) => {
-    const messageHash = hashMessage(msg);
+  signMessage: (msg: SignableMessage) => Promise<`0x${string}`> =
+    SignerLogger.profiled("BaseAlchemySigner.signMessage", async (msg) => {
+      const messageHash = hashMessage(msg);
 
-    const result = await this.inner.signRawMessage(messageHash);
+      const result = await this.inner.signRawMessage(messageHash);
 
-    SignerLogger.trackEvent({
-      name: "signer_sign_message",
+      SignerLogger.trackEvent({
+        name: "signer_sign_message",
+      });
+
+      return result;
     });
-
-    return result;
-  };
 
   /**
    * Signs a typed message by first hashing it and then signing the hashed message using the `signRawMessage` method.
@@ -420,11 +429,14 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData
   >(
     params: TypedDataDefinition<TTypedData, TPrimaryType>
-  ) => Promise<Hex> = async (params) => {
-    const messageHash = hashTypedData(params);
+  ) => Promise<Hex> = SignerLogger.profiled(
+    "BaseAlchemySigner.signTypedData",
+    async (params) => {
+      const messageHash = hashTypedData(params);
 
-    return this.inner.signRawMessage(messageHash);
-  };
+      return this.inner.signRawMessage(messageHash);
+    }
+  );
 
   /**
    * Serializes a transaction, signs it with a raw message, and then returns the serialized transaction with the signature.
@@ -456,21 +468,41 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * @param {() => Hex} [args.serializer] an optional serializer function. If not provided, the default `serializeTransaction` function will be used
    * @returns {Promise<string>} a promise that resolves to the serialized transaction with the signature
    */
-  signTransaction: CustomSource["signTransaction"] = async (tx, args) => {
-    const serializeFn = args?.serializer ?? serializeTransaction;
-    const serializedTx = serializeFn(tx);
-    const signatureHex = await this.inner.signRawMessage(
-      keccak256(serializedTx)
-    );
+  signTransaction: <
+    serializer extends SerializeTransactionFn<TransactionSerializable> = SerializeTransactionFn<TransactionSerializable>,
+    transaction extends Parameters<serializer>[0] = Parameters<serializer>[0]
+  >(
+    transaction: transaction,
+    options?:
+      | {
+          serializer?: serializer | undefined;
+        }
+      | undefined
+  ) => Promise<
+    IsNarrowable<
+      TransactionSerialized<GetTransactionType<transaction>>,
+      Hex
+    > extends true
+      ? TransactionSerialized<GetTransactionType<transaction>>
+      : Hex
+  > = SignerLogger.profiled(
+    "BaseAlchemySigner.signTransaction",
+    async (tx, args) => {
+      const serializeFn = args?.serializer ?? serializeTransaction;
+      const serializedTx = serializeFn(tx);
+      const signatureHex = await this.inner.signRawMessage(
+        keccak256(serializedTx)
+      );
 
-    const signature = {
-      r: takeBytes(signatureHex, { count: 32 }),
-      s: takeBytes(signatureHex, { count: 32, offset: 32 }),
-      v: BigInt(takeBytes(signatureHex, { count: 1, offset: 64 })),
-    };
+      const signature = {
+        r: takeBytes(signatureHex, { count: 32 }),
+        s: takeBytes(signatureHex, { count: 32, offset: 32 }),
+        v: BigInt(takeBytes(signatureHex, { count: 1, offset: 64 })),
+      };
 
-    return serializeFn(tx, signature);
-  };
+      return serializeFn(tx, signature);
+    }
+  );
 
   /**
    * Unauthenticated call to look up a user's organizationId by email
@@ -496,19 +528,18 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * @param {string} email the email to lookup
    * @returns {Promise<{orgId: string}>} the organization id for the user if they exist
    */
-  getUser: (email: string) => Promise<{ orgId: string } | null> = async (
-    email
-  ) => {
-    const result = await this.inner.lookupUserByEmail(email);
+  getUser: (email: string) => Promise<{ orgId: string } | null> =
+    SignerLogger.profiled("BaseAlchemySigner.getUser", async (email) => {
+      const result = await this.inner.lookupUserByEmail(email);
 
-    if (result.orgId == null) {
-      return null;
-    }
+      if (result.orgId == null) {
+        return null;
+      }
 
-    return {
-      orgId: result.orgId,
-    };
-  };
+      return {
+        orgId: result.orgId,
+      };
+    });
 
   /**
    * Adds a passkey to the user's account
@@ -535,9 +566,9 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * @returns {Promise<string[]>} an array of the authenticator ids added to the user
    */
   addPasskey: (params?: CredentialCreationOptions) => Promise<string[]> =
-    async (params) => {
+    SignerLogger.profiled("BaseAlchemySigner.addPasskey", async (params) => {
       return this.inner.addPasskey(params ?? {});
-    };
+    });
 
   /**
    * Used to export the wallet for a given user
