@@ -37,7 +37,7 @@ export default function Home() {
     <main className={`flex flex-col h-screen ${publicSans.className}`}>
       <TopNav />
       <div
-        className={`flex xl:flex-col gap-6 px-4 md:px-6 xl:px-10 py-4 md:py-6 w-full max-w-screen-2xl mx-auto overflow-visible overflow-x-hidden ${inter.className} md:overflow-hidden`}
+        className={`px-4 md:px-6 xl:px-10 py-4 md:py-6 w-full max-w-screen-2xl mx-auto overflow-visible overflow-x-hidden ${inter.className} md:overflow-hidden`}
       >
         <div className="hidden md:flex gap-6 overflow-hidden">
           <div className=" flex-col w-[392px] bg-white border border-border rounded-lg p-6 overflow-y-auto scrollbar-none gap-10">
@@ -77,22 +77,18 @@ export default function Home() {
           </div>
         </div>
         <div className="flex flex-1 flex-col gap-6 md:hidden">
-          {/* 
-					  	TEMPORARY: Adding a logout button so users can properly logout. 
-						This will be removed once we add the mint functionality to mobile.
-					 */}
           {!user ? (
             <MobileSplashPage />
           ) : (
             <div className="flex flex-1 flex-col">
-              <div className="border-border border radius-2 px-6 py-6">
-                <RenderUserConnectionAvatar />
-                {isEOAUser && (
+              {isEOAUser && (
+                <div className="border-border border radius-2 px-6 py-6">
+                  <RenderUserConnectionAvatar />
                   <div className="pt-6">
                     <EOAPostLoginContents />
                   </div>
-                )}
-              </div>
+                </div>
+              )}
               {isEOAUser && (
                 <div className="mt-auto mb-5 pt-10">
                   <EOAPostLoginActions />
@@ -100,7 +96,7 @@ export default function Home() {
               )}
             </div>
           )}
-          {!user ? <MobileSplashPage /> : <MintCard />}
+          {user && <MintCard />}
         </div>
       </div>
     </main>
