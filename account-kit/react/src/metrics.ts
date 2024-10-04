@@ -9,12 +9,15 @@ export type ReactEventsSchema = readonly [
   },
   {
     EventName: "add_passkey_on_signup_success";
+    EventData: undefined;
   },
   {
     EventName: "add_passkey_on_signup_skip";
+    EventData: undefined;
   },
   {
     EventName: "eoa_connected";
+    EventData: undefined;
   }
 ];
 

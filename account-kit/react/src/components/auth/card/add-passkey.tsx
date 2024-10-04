@@ -4,6 +4,7 @@ import {
   PasskeyShieldIllustration,
   PasskeySmileyIllustration,
 } from "../../../icons/illustrations/passkeys.js";
+import { ReactLogger } from "../../../metrics.js";
 import { ls } from "../../../strings.js";
 import { Button } from "../../button.js";
 import { useAuthContext, type AuthStep } from "../context.js";
@@ -31,6 +32,10 @@ export const AddPasskey = ({ authStep }: AddPasskeyProps) => {
   const { setAuthStep } = useAuthContext();
   const { addPasskey, isAddingPasskey } = useAddPasskey({
     onSuccess: () => {
+      ReactLogger.trackEvent({
+        name: "add_passkey_on_signup_success",
+      });
+
       setAuthStep({ type: "passkey_create_success" });
     },
     onError: () => {
@@ -83,7 +88,12 @@ export const AddPasskey = ({ authStep }: AddPasskeyProps) => {
         </Button>
         <Button
           variant="secondary"
-          onClick={() => setAuthStep({ type: "complete" })}
+          onClick={() => {
+            ReactLogger.trackEvent({
+              name: "add_passkey_on_signup_skip",
+            });
+            setAuthStep({ type: "complete" });
+          }}
           disabled={isAddingPasskey}
         >
           {ls.addPasskey.skip}
