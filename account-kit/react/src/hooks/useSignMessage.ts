@@ -11,6 +11,7 @@ import type { Hex, SignableMessage } from "viem";
 import { useAccount as wagmi_useAccount } from "wagmi";
 import { useAlchemyAccountContext } from "../context.js";
 import { ClientUndefinedHookError } from "../errors.js";
+import { ReactLogger } from "../metrics.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import { type UseSmartAccountClientResult } from "./useSmartAccountClient.js";
 
@@ -103,8 +104,11 @@ export function useSignMessage({
   );
 
   return {
-    signMessage,
-    signMessageAsync,
+    signMessage: ReactLogger.profiled("signMessage", signMessage),
+    signMessageAsync: ReactLogger.profiled(
+      "signMessageAsync",
+      signMessageAsync
+    ),
     signedMessage,
     isSigningMessage,
     error,
