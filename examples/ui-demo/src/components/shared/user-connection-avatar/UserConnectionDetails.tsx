@@ -5,6 +5,7 @@ import { useConfig } from "@/app/state";
 import { ExternalLinkIcon } from "@/components/icons/external-link";
 import { useQuery } from "@tanstack/react-query";
 import { LogoutIcon } from "@/components/icons/logout";
+import { useCallback } from "react";
 
 export function UserConnectionDetails() {
   const user = useUser();
@@ -13,6 +14,12 @@ export function UserConnectionDetails() {
   const { logout } = useLogout();
   const { config } = useConfig();
   const scaAccount = useAccount({ type: "LightAccount" });
+
+  // temporary solution to force a reload in order to allow the user to login again after logout
+  const handleLogout = useCallback(async () => {
+    await logout();
+    window.location.href = "/";
+  }, [logout]);
 
   const theme = config.ui.theme;
   const primaryColor = config.ui.primaryColor;
@@ -107,7 +114,7 @@ export function UserConnectionDetails() {
       <button
         className="flex flex-row justify-start items-center mt-[17px] hover:cursor-pointer active:opacity-70"
         onClick={() => {
-          logout();
+          handleLogout();
         }}
       >
         <span className="font-semibold text-md md:text-xs text-btn-primary">
