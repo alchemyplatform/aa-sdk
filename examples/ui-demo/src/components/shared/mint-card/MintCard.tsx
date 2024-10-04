@@ -14,6 +14,7 @@ import { NFT } from "./NFT";
 import { MintCardActionButtons } from "./MintCardActionButtons";
 import { ValueProps } from "./ValueProps";
 import { RenderUserConnectionAvatar } from "../user-connection-avatar/RenderUserConnectionAvatar";
+import { useBreakpoint } from "@/hooks/useBreakpoint";
 
 type NFTLoadingState = "loading" | "success";
 
@@ -33,6 +34,7 @@ export const MintCard = () => {
   const [status, setStatus] = useState<MintStatus>(initialValuePropState);
   const { setToast } = useToast();
   const { nftTransfered, setNFTTransfered } = useConfig();
+  const breakPoint = useBreakpoint();
   const handleSuccess = () => {
     setStatus(() => ({
       batch: "success",
@@ -41,7 +43,10 @@ export const MintCard = () => {
     }));
     setToast({
       type: "success",
-      text: "You've successfully collected your NFT! Refresh to mint again.",
+      text:
+        breakPoint === "sm"
+          ? "You've collected your NFT! Refresh to mint again."
+          : "You've successfully collected your NFT! Refresh to mint again.",
       open: true,
     });
     setNFTTransfered(true);
@@ -108,7 +113,7 @@ export const MintCard = () => {
             <ValueProps status={status} />
           </div>
           <div
-            className={`p-6 xl:px-10 xl:py-12 h-full bg-white  xl:bg-bg-surface-inset md:min-w-96`}
+            className={`p-6 xl:px-10 xl:py-12 h-full bg-bg-surface-default  xl:bg-bg-surface-inset md:min-w-96`}
           >
             <NFT
               nftTransfered={nftTransfered}
