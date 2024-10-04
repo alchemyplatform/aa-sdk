@@ -12,6 +12,7 @@ import { RenderUserConnectionAvatar } from "@/components/shared/user-connection-
 import { useUser } from "@account-kit/react";
 import { MobileSplashPage } from "@/components/preview/MobileSplashPage";
 import { cn } from "@/lib/utils";
+import { useConfig } from "@/app/state";
 import {
   EOAPostLoginContents,
   EOAPostLoginActions,
@@ -30,6 +31,7 @@ const inter = Inter({
 export default function Home() {
   const [showCode, setShowCode] = useState(false);
   const user = useUser();
+  const { config } = useConfig();
   const isEOAUser = user?.type === "eoa";
 
   return (
@@ -44,18 +46,28 @@ export default function Home() {
             <Styling />
           </div>
 
-          <div className="flex flex-col flex-[2] basis-0 relative bg-white border border-border rounded-lg overflow-hidden overflow-y-auto scrollbar-none">
+          <div
+            className={
+              "flex flex-col flex-[2] basis-0 relative bg-white border border-border rounded-lg overflow-hidden overflow-y-auto scrollbar-none"
+            }
+          >
             {/* Code toggle header */}
             <div
-              className={`absolute h-7 top-6 flex items-center left-6 right-6 ${
-                !user || showCode ? "justify-end" : "justify-between"
-              }  z-10`}
+              className={cn(
+                `absolute h-[85px] w-full p-6 top-0 flex items-center left-0 border-b border-border z-10`,
+                !user || showCode ? "justify-end" : "justify-between",
+                config.ui.theme === "dark"
+                  ? showCode
+                    ? "bg-white"
+                    : "bg-[#4D4D4D]"
+                  : "bg-white"
+              )}
             >
               {!showCode && user && <RenderUserConnectionAvatar />}
               <div className="flex gap-2 items-center">
                 <div
                   className={cn(
-                    " px-2 py-1 h-5 rounded text-xs font-semibold flex items-center justify-center",
+                    "px-2 py-1 h-5 rounded text-xs font-semibold hidden lg:flex items-center justify-center ",
                     showCode
                       ? "bg-[#F3F3FF] text-[#8B5CF6]"
                       : "bg-[#EFF4F9] text-[#374151]"
@@ -71,8 +83,10 @@ export default function Home() {
             </div>
 
             {/* Don't unmount when showing code preview so that the auth card retains its state */}
-            <AuthCardWrapper className={showCode ? "hidden" : "mt-0"} />
-            {showCode && <CodePreview />}
+            <AuthCardWrapper
+              className={showCode ? "hidden" : "mt-0 pt-[85px]"}
+            />
+            {showCode && <CodePreview className="pt-[105px]" />}
           </div>
         </div>
         <div className="flex flex-1 flex-col gap-6 md:hidden">
