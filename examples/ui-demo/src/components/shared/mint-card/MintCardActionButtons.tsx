@@ -1,4 +1,5 @@
 import { ExternalLinkIcon } from "@/components/icons/external-link";
+import { cn } from "@/lib/utils";
 
 type MintCardActionButtonsProps = {
   nftTransfered: boolean;
@@ -12,13 +13,14 @@ export function MintCardActionButtons({
   handleCollectNFT,
   status,
   transactionUrl,
+  className,
   ...props
 }: MintCardActionButtonsProps) {
   return (
-    <div {...props}>
+    <div {...props} className={cn("px-6 xl:px-0", className)}>
       {!nftTransfered ? (
         <button
-          className="btn btn-primary w-full p-2 radius mb-6 md:mb-4"
+          className="btn btn-primary w-full p-2 radius mb-6 lg:mb-4"
           disabled={Object.values(status).some((x) => x === "loading")}
           onClick={handleCollectNFT}
         >
@@ -49,7 +51,7 @@ export function MintCardActionButtons({
       )}
       <a
         href="https://accountkit.alchemy.com/react/quickstart"
-        className=" btn-link text-sm font-semibold hidden md:flex md:justify-center"
+        className=" btn-link text-sm font-semibold hidden md:flex justify-center"
         target="_blank"
         rel="noreferrer"
       >

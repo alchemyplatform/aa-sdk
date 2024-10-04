@@ -9,12 +9,13 @@ import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useState } from "react";
 import { ValueProps } from "./ValueProps";
-import { initialValuePropState } from "./MintCard";
+import { MintStatus } from "./MintCard";
 import { ExternalLinkIcon } from "@/components/icons/external-link";
 
 type NFTProps = {
   nftTransfered: boolean;
   transactionUrl?: string;
+  status: MintStatus;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 const NFT_MOBILE_SIZE = 288;
@@ -22,7 +23,12 @@ const NFT_MOBILE_SIZE = 288;
 const afterBoarder =
   "after:absolute after:bottom-[-16px] after:left-0 after:w-full after:h-[1px] after:bg-border";
 
-export function NFT({ nftTransfered, transactionUrl, ...props }: NFTProps) {
+export function NFT({
+  nftTransfered,
+  transactionUrl,
+  status,
+  ...props
+}: NFTProps) {
   const { client } = useSmartAccountClient({ type: "LightAccount" });
   const [mobileTrayOpen, setMobileTrayOpen] = useState(false);
   const { data: uri } = useQuery({
@@ -41,10 +47,10 @@ export function NFT({ nftTransfered, transactionUrl, ...props }: NFTProps) {
 
   return (
     <div {...props} className="flex flex-col items-center">
-      <h3 className="hidden md:block text-fg-secondary text-base font-semibold mb-4">
+      <h3 className="hidden xl:block text-fg-secondary text-base font-semibold mb-4">
         NFT Summary
       </h3>
-      <h1 className="block md:hidden text-fg-primary text-3xl font-semibold mb-6">
+      <h1 className="block xl:hidden text-fg-primary text-3xl font-semibold mb-6">
         {nftTransfered ? "You collected your NFT!" : "One-click checkout"}
       </h1>
       {uri ? (
@@ -59,19 +65,19 @@ export function NFT({ nftTransfered, transactionUrl, ...props }: NFTProps) {
             height={NFT_MOBILE_SIZE}
             src={uri}
             alt="An NFT"
-            className={cn(`mb-4 rounded-xl md:h-52 md:w-52`)}
+            className={cn(`mb-4 rounded-xl xl:h-52 xl:w-52`)}
             priority
           />
         </div>
       ) : (
-        <div className="w-72 h-72 md:h-52 md:w-52 flex justify-center items-center mb-4">
+        <div className="w-72 h-72 xl:h-52 xl:w-52 flex justify-center items-center mb-4">
           <LoadingIcon />
         </div>
       )}
       <div
         className={cn(
-          `flex justify-between w-72 md:w-52 relative md:after:hidden  mb-8 ${afterBoarder}`,
-          nftTransfered ? "md:mb-3" : "md:mb-14"
+          `flex justify-between w-72 xl:w-52 relative xl:after:hidden  mb-8 ${afterBoarder}`,
+          nftTransfered ? "xl:mb-3" : "xl:mb-14"
         )}
       >
         <p className="text-fg-secondary text-base">Gas Fee</p>
@@ -99,7 +105,7 @@ export function NFT({ nftTransfered, transactionUrl, ...props }: NFTProps) {
           target="_blank"
           rel="noreferrer"
           className={cn(
-            `relative text-fg-secondary mb-8 w-72  flex justify-between items-center ${afterBoarder} md:hidden`
+            `relative text-fg-secondary mb-8 w-72  flex justify-between items-center ${afterBoarder} xl:hidden`
           )}
         >
           View transaction
@@ -109,8 +115,8 @@ export function NFT({ nftTransfered, transactionUrl, ...props }: NFTProps) {
         </a>
       )}
       <button
-        className="text-fg-secondary text-base flex justify-between items-center w-72"
-        onClick={() => setMobileTrayOpen(true)}
+        className="text-fg-secondary text-base flex justify-between items-center w-72 xl:hidden"
+        onClick={() => setMobileTrayOpen((prev) => !prev)}
       >
         How is this working?{" "}
         <ChevronDown
@@ -119,12 +125,17 @@ export function NFT({ nftTransfered, transactionUrl, ...props }: NFTProps) {
           })}
         />
       </button>
+      {mobileTrayOpen && (
+        <div className="w-72 py-4 xl:hidden">
+          <ValueProps status={status} />{" "}
+        </div>
+      )}
       <Dialog isOpen={mobileTrayOpen} onClose={() => setMobileTrayOpen(false)}>
         <div className="bg-bg-surface-default rounded-t-[16px] p-6">
           <p className="text-fg-primary text-lg font-semibold mb-6">
             How is this working?
           </p>
-          <ValueProps status={initialValuePropState} />
+          <ValueProps status={status} />
         </div>
       </Dialog>
     </div>

@@ -31,15 +31,15 @@ export default function Home() {
     <main className={`flex flex-col h-screen ${publicSans.className}`}>
       <TopNav />
       <div
-        className={`flex flex-col flex-1 px-4 md:px-6 lg:px-10 py-4 md:py-6 w-full max-w-screen-2xl mx-auto overflow-visible overflow-x-hidden ${inter.className} md:overflow-hidden`}
+        className={`flex xl:flex-col gap-6 px-4 md:px-6 xl:px-10 py-4 md:py-6 w-full max-w-screen-2xl mx-auto overflow-visible overflow-x-hidden ${inter.className} md:overflow-hidden`}
       >
-        <div className="hidden md:flex flex-1 gap-6 overflow-hidden">
+        <div className="hidden md:flex gap-6 overflow-hidden">
           <div className=" flex-col w-[392px] bg-white border border-border rounded-lg p-6 overflow-y-auto scrollbar-none gap-10">
             <Authentication />
             <Styling />
           </div>
 
-          <div className="flex flex-col flex-[2] basis-0 relative bg-white border border-border rounded-lg overflow-hidden">
+          <div className="hidden xl:flex flex-col flex-[2] basis-0 justify-center relative border border-border rounded-lg overflow-hidden">
             {/* Code toggle header */}
             <div
               className={`relative md:absolute h-auto px-6 pt-6 md:px-0 md:pt-0 md:h-7 md:top-6 flex items-center md:left-6 md:right-6 ${
@@ -70,7 +70,10 @@ export default function Home() {
             {showCode && <CodePreview />}
           </div>
         </div>
-        <div className="flex flex-1 flex-col gap-6 md:hidden">
+        <div className="flex flex-1 flex-col gap-6 xl:hidden md:border radius ">
+          {!showCode && user && (
+            <RenderUserConnectionAvatar className="hidden md:block xl:hidden p-6 border-b" />
+          )}
           {!user ? <MobileSplashPage /> : <MintCard />}
         </div>
       </div>
