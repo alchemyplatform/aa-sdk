@@ -86,7 +86,11 @@ export default function Home() {
 
             {/* Don't unmount when showing code preview so that the auth card retains its state */}
             <AuthCardWrapper
-              className={showCode ? "hidden" : "mt-0 pt-[85px]"}
+              className={cn(
+                showCode && "hidden",
+                "mt-0 xl:pt-0",
+                !user ? "md:pt-0" : "md:pt-[85px]"
+              )}
             />
             {showCode && <CodePreview className="pt-[105px]" />}
           </div>
