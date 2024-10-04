@@ -29,19 +29,8 @@ export function MintCardActionButtons({
       ) : (
         <div>
           <a
-            href={transactionUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="text-fg-secondary mb-6 justify-between items-center hidden md:flex"
-          >
-            View transaction
-            <div className="w-4 h-4">
-              <ExternalLinkIcon className="text-fg-secondary" />
-            </div>
-          </a>
-          <a
             href="https://dashboard.alchemy.com/"
-            className="btn btn-primary flex text-center mb-4 p-2"
+            className="btn btn-primary flex text-center mb-4 p-2 w-52 m-auto"
             target="_blank"
             rel="noreferrer"
           >

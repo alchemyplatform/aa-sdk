@@ -22,7 +22,7 @@ type NFTProps = {
 const NFT_MOBILE_SIZE = 288;
 
 const afterBoarder =
-  "after:absolute after:bottom-[-16px] after:left-0 after:w-full after:h-[1px] after:bg-border";
+  "after:absolute after:bottom-[-16px] after:left-0 after:w-full after:h-[1px] after:bg-border xl:after:hidden";
 
 export function NFT({
   nftTransfered,
@@ -47,7 +47,7 @@ export function NFT({
   });
   return (
     <div {...props} className="flex flex-col items-center">
-      <h3 className="hidden xl:block text-fg-secondary text-base font-semibold mb-4">
+      <h3 className="hidden xl:block text-fg-secondary text-base font-semibold mb-4 w-full pl-12 text-start">
         NFT Summary
       </h3>
       <h1 className="block xl:hidden text-fg-primary text-3xl font-semibold mb-6">
@@ -105,7 +105,7 @@ export function NFT({
           target="_blank"
           rel="noreferrer"
           className={cn(
-            `relative text-fg-secondary mb-8 w-72  flex justify-between items-center ${afterBoarder} xl:hidden`
+            `relative text-fg-secondary mb-8 w-72 xl:w-52  flex justify-between items-center ${afterBoarder} `
           )}
         >
           View transaction
