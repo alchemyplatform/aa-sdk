@@ -9,12 +9,14 @@ export const EOAPostLoginActions = () => {
   const { logout } = useLogout();
   return (
     <div className="flex flex-col items-center justify-center">
-      <p className="text-fg-secondary text-sm">
-        Want to experience gasless checkout?
+      <p className="text-fg-secondary text-sm text-center">
+        <span>Want to experience gasless checkout? </span>
+        <br />
+        <span>Login with an email instead</span>
       </p>
-      <div className="flex flex-col sm:flex-row w-full mt-4">
+      <div className="flex flex-col lg:flex-row w-full mt-4">
         <button
-          className="btn btn-primary w-full sm:w-auto mb-2 sm:mb-0 flex-1 m-0 sm:mr-2"
+          className="btn btn-primary w-full lg:w-auto mb-2 lg:mb-0 flex-1 m-0 lg:mr-2"
           onClick={() => {
             console.log("openAuthModal");
             logout();
@@ -25,7 +27,7 @@ export const EOAPostLoginActions = () => {
         <a
           href="https://accountkit.alchemy.com/"
           target="_blank"
-          className="btn btn-secondary w-full sm:w-auto flex-1 m-0 sm:ml-2"
+          className="btn btn-secondary w-full lg:w-auto flex-1 m-0 lg:ml-2"
         >
           View docs
         </a>
@@ -50,12 +52,12 @@ export const EOAPostLoginContents = () => {
         <Capabilities
           icon="onboard"
           title="Onboard mainstream users"
-          description="Integrate plug-n-play email, social, and passkey login to bring mainstream users onchain"
+          description="Embedded wallets with email, social, and passkey local to bring mainstream users onchain"
         />
         <Capabilities
           icon="sponsor"
           title="Sponsor gas fees"
-          description="Build gasless transaction flows, available now for embedded wallets and coming soon to EOAs"
+          description="Gasless transactions available now for embedded wallets and coming soon to EOAs"
         />
       </div>
     </div>
