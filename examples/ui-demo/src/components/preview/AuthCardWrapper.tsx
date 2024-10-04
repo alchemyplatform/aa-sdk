@@ -3,35 +3,36 @@ import { cn } from "@/lib/utils";
 import { AuthCard, useSmartAccountClient, useUser } from "@account-kit/react";
 import { MintCard } from "../shared/mint-card/MintCard";
 import { LoadingIcon } from "../icons/loading";
+import { EOAPostLogin } from "../shared/eoa-post-login/EOAPostLogin";
 
 export function AuthCardWrapper({ className }: { className?: string }) {
-  const user = useUser();
   const { config } = useConfig();
-  const { client } = useSmartAccountClient({ type: "LightAccount" });
 
   return (
     <div
       className={cn(
-        "flex flex-1 flex-col justify-center items-center overflow-auto relative",
+        "flex flex-col flex-1 overflow-y-auto scrollbar-none relative h-full w-full",
         config.ui.theme === "dark" ? "bg-black/70" : "bg-white",
         className
       )}
     >
-      <RenderContent hasUser={!!user} hasClient={!!client} />
+      <div className="flex flex-1 justify-center items-center px-6">
+        <RenderContent />
+      </div>
     </div>
   );
 }
 
-const RenderContent = ({
-  hasUser,
-  hasClient,
-}: {
-  hasUser: boolean;
-  hasClient: boolean;
-}) => {
+const RenderContent = () => {
+  const user = useUser();
+  const { client } = useSmartAccountClient({ type: "LightAccount" });
+
+  const hasUser = !!user;
+  const hasClient = !!client;
+
   if (!hasUser) {
     return (
-      <div className="flex flex-col gap-2 w-[368px]">
+      <div className="flex flex-col py-14 pt-20 gap-2 w-[368px]">
         <div className="modal bg-surface-default shadow-md overflow-hidden">
           <AuthCard />
         </div>
@@ -39,8 +40,22 @@ const RenderContent = ({
     );
   }
 
+  const isEOAUser = user.type === "eoa";
+
   if (hasClient) {
-    return <MintCard />;
+    return (
+      <div className="py-14 pt-20">
+        <MintCard />
+      </div>
+    );
+  }
+
+  if (isEOAUser) {
+    return (
+      <div className="py-14 pt-20">
+        <EOAPostLogin />
+      </div>
+    );
   }
 
   return <LoadingIcon />;
