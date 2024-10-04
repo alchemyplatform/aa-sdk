@@ -41,7 +41,6 @@ export function NFT({
         abi: AccountKitNftMinterABI,
         functionName: "baseURI",
       });
-      console.log("uri", uri);
       return uri;
     },
     enabled: !!client && !!client?.readContract,
