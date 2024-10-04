@@ -52,12 +52,12 @@ export const EOAPostLoginContents = () => {
         <Capabilities
           icon="onboard"
           title="Onboard mainstream users"
-          description="Integrate plug-n-play email, social, and passkey login to bring mainstream users onchain"
+          description="Embedded wallets with email, social, and passkey local to bring mainstream users onchain"
         />
         <Capabilities
           icon="sponsor"
           title="Sponsor gas fees"
-          description="Build gasless transaction flows, available now for embedded wallets and coming soon to EOAs"
+          description="Gasless transactions available now for embedded wallets and coming soon to EOAs"
         />
       </div>
     </div>
