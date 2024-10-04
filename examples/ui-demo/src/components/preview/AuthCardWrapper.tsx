@@ -52,7 +52,7 @@ const RenderContent = () => {
 
   if (isEOAUser) {
     return (
-      <div className="py-14 pt-20">
+      <div className="py-14 pt-20 h-full lg:h-auto">
         <EOAPostLogin />
       </div>
     );
