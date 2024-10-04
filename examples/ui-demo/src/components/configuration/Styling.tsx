@@ -11,13 +11,6 @@ import { PhotoUploads } from "./PhotoUpload";
 import { PaletteIcon } from "../icons/palette";
 import { useState } from "react";
 
-const LENGTH = 30;
-function truncatedFileName(name: string) {
-  if (name.length < LENGTH) return name;
-
-  return `${name.slice(0, LENGTH - 2)}...`;
-}
-
 export function Styling({ className }: { className?: string }) {
   const { config, setConfig } = useConfig();
   const [supportUrl, setsupportUrl] = useState("");
@@ -67,9 +60,13 @@ export function Styling({ className }: { className?: string }) {
               <span className="text-fg-tertiary font-normal">(optional)</span>
             </p>
             <p className="text-fg-tertiary font-normal text-xs">
-              {logo?.fileName
-                ? truncatedFileName(logo.fileName)
-                : "SVG or PNG, max 320x48 px"}
+              {logo?.fileName ? (
+                <span className="truncate block max-w-[200px]">
+                  {logo.fileName}
+                </span>
+              ) : (
+                "SVG or PNG, max 320x48 px"
+              )}
             </p>
           </div>
           <PhotoUploads mode={config.ui.theme} />
