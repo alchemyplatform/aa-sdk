@@ -18,6 +18,7 @@ import { createStore } from "zustand/vanilla";
 import type { BaseSignerClient } from "./client/base";
 import type { OauthConfig, OauthParams, User } from "./client/types";
 import { NotAuthenticatedError } from "./errors.js";
+import { SignerLogger } from "./metrics.js";
 import {
   SessionManager,
   type SessionManagerParams,
@@ -212,22 +213,64 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    */
   authenticate: (params: AuthParams) => Promise<User> = async (params) => {
     const { type } = params;
-    try {
+    const result = (() => {
       switch (type) {
         case "email":
-          return await this.authenticateWithEmail(params);
+          return this.authenticateWithEmail(params);
         case "passkey":
-          return await this.authenticateWithPasskey(params);
+          return this.authenticateWithPasskey(params);
         case "oauth":
-          return await this.authenticateWithOauth(params);
+          return this.authenticateWithOauth(params);
         case "oauthReturn":
-          return await this.handleOauthReturn(params);
+          return this.handleOauthReturn(params);
         default:
           assertNever(type, `Unknown auth type: ${type}`);
       }
-    } catch (error) {
+    })();
+
+    this.trackAuthenticateType(params);
+
+    return result.catch((error) => {
       this.store.setState({ error: toErrorInfo(error) });
       throw error;
+    });
+  };
+
+  private trackAuthenticateType = (params: AuthParams) => {
+    const { type } = params;
+    switch (type) {
+      case "email": {
+        // we just want to track the start of email auth
+        if ("bundle" in params) return;
+        SignerLogger.trackEvent({
+          name: "signer_authnticate",
+          data: { authType: "email" },
+        });
+        return;
+      }
+      case "passkey": {
+        const isAnon = !("email" in params) && params.createNew == null;
+        SignerLogger.trackEvent({
+          name: "signer_authnticate",
+          data: {
+            authType: isAnon ? "passkey_anon" : "passkey_email",
+          },
+        });
+        return;
+      }
+      case "oauth":
+        SignerLogger.trackEvent({
+          name: "signer_authnticate",
+          data: {
+            authType: "oauth",
+            provider: params.authProviderId,
+          },
+        });
+        break;
+      case "oauthReturn":
+        break;
+      default:
+        assertNever(type, `Unknown auth type: ${type}`);
     }
   };
 
@@ -334,7 +377,13 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   ) => {
     const messageHash = hashMessage(msg);
 
-    return this.inner.signRawMessage(messageHash);
+    const result = await this.inner.signRawMessage(messageHash);
+
+    SignerLogger.trackEvent({
+      name: "signer_sign_message",
+    });
+
+    return result;
   };
 
   /**
