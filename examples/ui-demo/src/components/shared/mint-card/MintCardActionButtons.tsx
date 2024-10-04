@@ -20,7 +20,7 @@ export function MintCardActionButtons({
     <div {...props} className={cn("px-6 xl:px-0", className)}>
       {!nftTransfered ? (
         <button
-          className="btn btn-primary w-full p-2 radius mb-6 lg:mb-4"
+          className="btn btn-primary w-full p-2 radius mb-6 xl:mb-4"
           disabled={Object.values(status).some((x) => x === "loading")}
           onClick={handleCollectNFT}
         >
