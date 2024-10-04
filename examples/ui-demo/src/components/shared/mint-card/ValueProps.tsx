@@ -14,12 +14,14 @@ export function ValueProps({ status, ...props }: Props) {
     <div {...props}>
       <ValueProp
         title="Invisible signing"
+        className="mb-6 md:mb-10"
         icon={status.signing}
         description="Sign actions in the background with embedded wallets"
       />
 
       <ValueProp
         title="Gas sponsorship"
+        className="mb-6 md:mb-10"
         icon={status.gas}
         description={
           <span>
@@ -37,6 +39,7 @@ export function ValueProps({ status, ...props }: Props) {
       />
       <ValueProp
         title="Batch transactions"
+        className="md:mb-10"
         icon={status.batch}
         description="Deploy the user's smart account in their first transaction"
       />
@@ -47,13 +50,15 @@ const ValueProp = ({
   icon,
   title,
   description,
+  className,
 }: {
   icon: "signing" | "gas" | "batch" | "loading" | "success";
   title: string;
   description: string | JSX.Element;
+  className?: string;
 }) => {
   return (
-    <div className="flex gap-3 mb-10">
+    <div className={`flex gap-3 ${className}`}>
       {getMintIcon(icon)}
       <div className=" max-w-[308px]">
         <h3 className="text-base font-semibold text-fg-secondary">{title}</h3>

@@ -4,9 +4,14 @@ import { UserConnectionAvatar } from "./UserConnectionAvatar";
 import { UserConnectionDetails } from "./UserConnectionDetails";
 import React, { useState } from "react";
 
-export const RenderUserConnectionAvatar = () => {
+export const RenderUserConnectionAvatar = (
+  props: React.HTMLAttributes<HTMLDivElement>
+) => {
   return (
-    <div className="border-b border-border pb-6 md:border-none md:pb-0">
+    <div
+      className="border-b border-border pb-6 md:border-none md:pb-0"
+      {...props}
+    >
       {/* Popover - Visible on desktop screens */}
       <div className="hidden md:block">
         <RenderPopoverMenu />

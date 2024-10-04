@@ -12,6 +12,7 @@ import { useUser } from "@account-kit/react";
 import { RenderUserConnectionAvatar } from "@/components/shared/user-connection-avatar/RenderUserConnectionAvatar";
 import { MobileSplashPage } from "@/components/preview/MobileSplashPage";
 import { cn } from "@/lib/utils";
+import { MintCard } from "@/components/shared/mint-card/MintCard";
 
 const publicSans = Public_Sans({
   subsets: ["latin"],
@@ -70,12 +71,7 @@ export default function Home() {
           </div>
         </div>
         <div className="flex flex-1 flex-col gap-6 md:hidden">
-          {!user ? (
-            <MobileSplashPage />
-          ) : (
-            <RenderUserConnectionAvatar />
-            // Rest of Mint UI
-          )}
+          {!user ? <MobileSplashPage /> : <MintCard />}
         </div>
       </div>
     </main>
