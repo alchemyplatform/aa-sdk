@@ -27,17 +27,20 @@ import {
   AlchemySignerStatus,
   type AlchemySignerEvent,
   type AlchemySignerEvents,
+  type ErrorInfo,
 } from "./types.js";
 import { assertNever } from "./utils/typeAssertions.js";
 
 export interface BaseAlchemySignerParams<TClient extends BaseSignerClient> {
   client: TClient;
   sessionConfig?: Omit<SessionManagerParams, "client">;
+  initialError?: ErrorInfo;
 }
 
 type AlchemySignerStore = {
   user: User | null;
   status: AlchemySignerStatus;
+  error: ErrorInfo | null;
 };
 
 type InternalStore = Mutate<
@@ -65,8 +68,13 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * @param {BaseAlchemySignerParams<TClient>} param0 Object containing the client and session configuration
    * @param {TClient} param0.client The client instance to be used internally
    * @param {SessionConfig} param0.sessionConfig Configuration for managing sessions
+   * @param {ErrorInfo | undefined} param0.initialError Error already present on the signer when initialized, if any
    */
-  constructor({ client, sessionConfig }: BaseAlchemySignerParams<TClient>) {
+  constructor({
+    client,
+    sessionConfig,
+    initialError,
+  }: BaseAlchemySignerParams<TClient>) {
     this.inner = client;
     this.store = createStore(
       subscribeWithSelector(
@@ -74,6 +82,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
           ({
             user: null,
             status: AlchemySignerStatus.INITIALIZING,
+            error: initialError ?? null,
           } satisfies AlchemySignerStore)
       )
     );
@@ -84,15 +93,6 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       ...sessionConfig,
       client: this.inner,
     });
-    this.store = createStore(
-      subscribeWithSelector(
-        () =>
-          ({
-            user: null,
-            status: AlchemySignerStatus.INITIALIZING,
-          } satisfies AlchemySignerStore)
-      )
-    );
     // register listeners first
     this.registerListeners();
     // then initialize so that we can catch those events
@@ -138,8 +138,17 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
           listener as AlchemySignerEvents["statusChanged"],
           { fireImmediately: true }
         );
+      case "errorChanged":
+        return this.store.subscribe(
+          ({ error }) => error,
+          (error) =>
+            (listener as AlchemySignerEvents["errorChanged"])(
+              error ?? undefined
+            ),
+          { fireImmediately: true }
+        );
       default:
-        throw new Error(`Unknown event type ${event}`);
+        assertNever(event, `Unknown event type ${event}`);
     }
   };
 
@@ -203,17 +212,22 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    */
   authenticate: (params: AuthParams) => Promise<User> = async (params) => {
     const { type } = params;
-    switch (type) {
-      case "email":
-        return this.authenticateWithEmail(params);
-      case "passkey":
-        return this.authenticateWithPasskey(params);
-      case "oauth":
-        return this.authenticateWithOauth(params);
-      case "oauthReturn":
-        return this.handleOauthReturn(params);
-      default:
-        assertNever(type, `Unknown auth type: ${type}`);
+    try {
+      switch (type) {
+        case "email":
+          return this.authenticateWithEmail(params);
+        case "passkey":
+          return this.authenticateWithPasskey(params);
+        case "oauth":
+          return this.authenticateWithOauth(params);
+        case "oauthReturn":
+          return this.handleOauthReturn(params);
+        default:
+          assertNever(type, `Unknown auth type: ${type}`);
+      }
+    } catch (error) {
+      this.store.setState({ error: toErrorInfo(error) });
+      throw error;
     }
   };
 
@@ -577,7 +591,10 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
           });
 
       this.sessionManager.setTemporarySession({ orgId });
-      this.store.setState({ status: AlchemySignerStatus.AWAITING_EMAIL_AUTH });
+      this.store.setState({
+        status: AlchemySignerStatus.AWAITING_EMAIL_AUTH,
+        error: null,
+      });
 
       // We wait for the session manager to emit a connected event if
       // cross tab sessions are permitted
@@ -679,6 +696,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       this.store.setState({
         user: session.user,
         status: AlchemySignerStatus.CONNECTED,
+        error: null,
       });
     });
 
@@ -694,11 +712,21 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
         status: state.user
           ? AlchemySignerStatus.CONNECTED
           : AlchemySignerStatus.DISCONNECTED,
+        ...(state.user ? { error: null } : undefined),
       }));
     });
 
     this.inner.on("authenticating", () => {
-      this.store.setState({ status: AlchemySignerStatus.AUTHENTICATING });
+      this.store.setState({
+        status: AlchemySignerStatus.AUTHENTICATING,
+        error: null,
+      });
     });
   };
+}
+
+function toErrorInfo(error: unknown): ErrorInfo {
+  return error instanceof Error
+    ? { name: error.name, message: error.message }
+    : { name: "Error", message: "Unknown error" };
 }
