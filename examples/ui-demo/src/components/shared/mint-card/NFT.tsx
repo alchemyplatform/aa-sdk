@@ -11,6 +11,7 @@ import { useState } from "react";
 import { ValueProps } from "./ValueProps";
 import { MintStatus } from "./MintCard";
 import { ExternalLinkIcon } from "@/components/icons/external-link";
+import { useBreakpoint } from "@/hooks/useBreakpoint";
 
 type NFTProps = {
   nftTransfered: boolean;
@@ -31,6 +32,7 @@ export function NFT({
 }: NFTProps) {
   const { client } = useSmartAccountClient({ type: "LightAccount" });
   const [mobileTrayOpen, setMobileTrayOpen] = useState(false);
+  const breakpoint = useBreakpoint();
   const { data: uri } = useQuery({
     queryKey: ["contractURI", nftContractAddress],
     queryFn: async () => {
@@ -44,7 +46,6 @@ export function NFT({
     },
     enabled: !!client && !!client?.readContract,
   });
-
   return (
     <div {...props} className="flex flex-col items-center">
       <h3 className="hidden xl:block text-fg-secondary text-base font-semibold mb-4">
@@ -130,14 +131,19 @@ export function NFT({
           <ValueProps status={status} />{" "}
         </div>
       )}
-      <Dialog isOpen={mobileTrayOpen} onClose={() => setMobileTrayOpen(false)}>
-        <div className="bg-bg-surface-default rounded-t-[16px] p-6">
-          <p className="text-fg-primary text-lg font-semibold mb-6">
-            How is this working?
-          </p>
-          <ValueProps status={status} />
-        </div>
-      </Dialog>
+      {breakpoint === "sm" && (
+        <Dialog
+          isOpen={mobileTrayOpen}
+          onClose={() => setMobileTrayOpen(false)}
+        >
+          <div className="bg-bg-surface-default rounded-t-[16px] p-6">
+            <p className="text-fg-primary text-lg font-semibold mb-6">
+              How is this working?
+            </p>
+            <ValueProps status={status} />
+          </div>
+        </Dialog>
+      )}
     </div>
   );
 }

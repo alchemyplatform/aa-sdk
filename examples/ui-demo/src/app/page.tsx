@@ -56,6 +56,7 @@ export default function Home() {
             <div
               className={cn(
                 `absolute h-[85px] w-full p-6 top-0 flex items-center left-0 border-b border-border z-10`,
+                !user && !showCode && "border-[transparent]",
                 !user || showCode ? "justify-end" : "justify-between",
                 config.ui.theme === "dark"
                   ? showCode

@@ -44,7 +44,7 @@ const RenderContent = () => {
 
   if (hasClient) {
     return (
-      <div className="py-14 pt-20">
+      <div className="py-14 pt-20 md:flex xl:block justify-center h-full w-full md:py-14">
         <MintCard />
       </div>
     );
