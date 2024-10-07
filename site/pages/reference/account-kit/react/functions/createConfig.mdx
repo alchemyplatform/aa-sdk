@@ -20,26 +20,23 @@ import { createConfig } from "@account-kit/react";
 ## Usage
 
 ```ts
-import { sepolia } from "@account-kit/infra";
-import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react";
+import { sepolia, alchemy } from "@account-kit/infra"
+import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react"
 import { QueryClient } from "@tanstack/react-query";
 
 const uiConfig: AlchemyAccountsUIConfig = {
-  illustrationStyle: "linear",
-  auth: {
-    sections: [[{ type: "email" }], [{ type: "passkey" }]],
-    addPasskeyOnSignup: true,
-  },
-};
+illustrationStyle: "linear",
+auth: {
+sections: [[{ type: "email" }], [{ type: "passkey" }]],
+addPasskeyOnSignup: true,
+},
+}
 
-const config = createConfig(
-  {
-    rpcUrl: "/api/rpc",
-    chain: sepolia,
-    ssr: true,
-  },
-  uiConfig
-);
+const config = createConfig({
+transport: alchemy({ apiKey: "your_api_key" })
+chain: sepolia,
+ssr: true,
+}, uiConfig)
 
 export const queryClient = new QueryClient();
 ```
