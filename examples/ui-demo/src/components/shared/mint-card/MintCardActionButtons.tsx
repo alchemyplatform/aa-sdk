@@ -5,6 +5,7 @@ type MintCardActionButtonsProps = {
   handleCollectNFT: () => void;
   status: Record<string, string>;
   transactionUrl: string;
+  disabled?: boolean;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 export function MintCardActionButtons({
@@ -13,14 +14,15 @@ export function MintCardActionButtons({
   status,
   transactionUrl,
   className,
+  disabled,
   ...props
 }: MintCardActionButtonsProps) {
   return (
-    <div {...props} className={cn("px-6 xl:px-0", className)}>
+    <div {...props} className={cn("md:px-6 xl:px-0", className)}>
       {!nftTransfered ? (
         <button
           className="btn btn-primary w-full p-2 radius mb-4 xl:mb-4"
-          disabled={Object.values(status).some((x) => x === "loading")}
+          disabled={disabled}
           onClick={handleCollectNFT}
         >
           Collect NFT
@@ -29,7 +31,7 @@ export function MintCardActionButtons({
         <div>
           <a
             href="https://dashboard.alchemy.com/"
-            className="btn btn-primary flex text-center mb-4 p-2 w-52 m-auto"
+            className="btn btn-primary flex text-center mb-4 p-2 w-full md:w-52 m-auto"
             target="_blank"
             rel="noreferrer"
           >

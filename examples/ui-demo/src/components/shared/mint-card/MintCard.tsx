@@ -14,7 +14,6 @@ import { NFT } from "./NFT";
 import { MintCardActionButtons } from "./MintCardActionButtons";
 import { ValueProps } from "./ValueProps";
 import { RenderUserConnectionAvatar } from "../user-connection-avatar/RenderUserConnectionAvatar";
-import { useBreakpoint } from "@/hooks/useBreakpoint";
 
 type NFTLoadingState = "loading" | "success";
 
@@ -34,7 +33,6 @@ export const MintCard = () => {
   const [status, setStatus] = useState<MintStatus>(initialValuePropState);
   const { setToast } = useToast();
   const { nftTransfered, setNFTTransfered } = useConfig();
-  const breakPoint = useBreakpoint();
   const handleSuccess = () => {
     setStatus(() => ({
       batch: "success",
@@ -43,10 +41,17 @@ export const MintCard = () => {
     }));
     setToast({
       type: "success",
-      text:
-        breakPoint === "sm"
-          ? "You've collected your NFT! Refresh to mint again."
-          : "You've successfully collected your NFT! Refresh to mint again.",
+      text: (
+        <>
+          <span className={"inline-block sm:hidden"}>
+            {`You've collected your NFT! Refresh to mint again.`}
+          </span>
+          <span className={"hidden sm:inline-block"}>
+            {`You've successfully collected your NFT! Refresh to mint
+						again.`}
+          </span>
+        </>
+      ),
       open: true,
     });
     setNFTTransfered(true);
@@ -99,6 +104,10 @@ export const MintCard = () => {
   }, [client, sendUserOperation]);
   const transactionUrl = `${client?.chain?.blockExplorers?.default.url}?q=${sendUserOperationResult?.hash}`;
 
+  const isActionButtonsDisabled = Object.values(status).some(
+    (x) => x === "loading"
+  );
+
   return (
     <div className="flex pb-10 xl:pb-0 xl:justify-center flex-col xl:h-full">
       <div className="md:self-center">
@@ -126,15 +135,17 @@ export const MintCard = () => {
               handleCollectNFT={handleCollectNFT}
               status={status}
               transactionUrl={transactionUrl}
+              disabled={isActionButtonsDisabled}
             />
           </div>
         </div>
         <MintCardActionButtons
-          className="xl:hidden"
+          className="xl:hidden px-0"
           nftTransfered={nftTransfered}
           handleCollectNFT={handleCollectNFT}
           status={status}
           transactionUrl={transactionUrl}
+          disabled={isActionButtonsDisabled}
         />
       </div>
     </div>
