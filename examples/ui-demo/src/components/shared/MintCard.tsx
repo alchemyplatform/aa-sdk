@@ -1,21 +1,21 @@
 "use client";
-import Image from "next/image";
-import { CheckIcon } from "../icons/check";
-import { GasIcon } from "../icons/gas";
-import { DrawIcon } from "../icons/draw";
-import { ReceiptIcon } from "../icons/receipt";
-import React, { useCallback, useState } from "react";
-import { LoadingIcon } from "../icons/loading";
-import { ExternalLinkIcon } from "../icons/external-link";
+import { useConfig } from "@/app/state";
+import { useToast } from "@/hooks/useToast";
+import { AccountKitNftMinterABI, nftContractAddress } from "@/utils/config";
 import {
   useSendUserOperation,
   useSmartAccountClient,
 } from "@account-kit/react";
-import { AccountKitNftMinterABI, nftContractAddress } from "@/utils/config";
-import { encodeFunctionData } from "viem";
-import { useConfig } from "@/app/state";
 import { useQuery } from "@tanstack/react-query";
-import { useToast } from "@/hooks/useToast";
+import Image from "next/image";
+import { useCallback, useState } from "react";
+import { encodeFunctionData } from "viem";
+import { CheckIcon } from "../icons/check";
+import { DrawIcon } from "../icons/draw";
+import { ExternalLinkIcon } from "../icons/external-link";
+import { GasIcon } from "../icons/gas";
+import { LoadingIcon } from "../icons/loading";
+import { ReceiptIcon } from "../icons/receipt";
 
 type NFTLoadingState = "loading" | "success";
 
@@ -60,7 +60,9 @@ export const MintCard = () => {
     });
   };
 
-  const { client } = useSmartAccountClient({ type: "LightAccount" });
+  const { client, isLoadingClient } = useSmartAccountClient({
+    type: "LightAccount",
+  });
   const { sendUserOperationResult, sendUserOperation } = useSendUserOperation({
     client,
     waitForTxn: true,
@@ -196,7 +198,10 @@ export const MintCard = () => {
         {!nftTransfered ? (
           <button
             className="btn btn-primary w-full p-2 radius mb-4"
-            disabled={Object.values(status).some((x) => x === "loading")}
+            disabled={
+              Object.values(status).some((x) => x === "loading") ||
+              isLoadingClient
+            }
             onClick={handleCollectNFT}
           >
             Collect NFT

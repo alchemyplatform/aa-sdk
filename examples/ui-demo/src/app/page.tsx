@@ -1,22 +1,22 @@
 "use client";
 
+import { useConfig } from "@/app/state";
 import { Authentication } from "@/components/configuration/Authentication";
 import { Styling } from "@/components/configuration/Styling";
+import { MobileSplashPage } from "@/components/preview/MobileSplashPage";
+import {
+  EOAPostLoginActions,
+  EOAPostLoginContents,
+} from "@/components/shared/eoa-post-login/EOAPostLoginContents";
+import { RenderUserConnectionAvatar } from "@/components/shared/user-connection-avatar/RenderUserConnectionAvatar";
+import { cn } from "@/lib/utils";
+import { useUser } from "@account-kit/react";
 import { Inter, Public_Sans } from "next/font/google";
 import { useState } from "react";
 import { AuthCardWrapper } from "../components/preview/AuthCardWrapper";
 import { CodePreview } from "../components/preview/CodePreview";
 import { CodePreviewSwitch } from "../components/shared/CodePreviewSwitch";
 import { TopNav } from "../components/topnav/TopNav";
-import { RenderUserConnectionAvatar } from "@/components/shared/user-connection-avatar/RenderUserConnectionAvatar";
-import { useUser } from "@account-kit/react";
-import { MobileSplashPage } from "@/components/preview/MobileSplashPage";
-import { cn } from "@/lib/utils";
-import { useConfig } from "@/app/state";
-import {
-  EOAPostLoginContents,
-  EOAPostLoginActions,
-} from "@/components/shared/eoa-post-login/EOAPostLoginContents";
 
 const publicSans = Public_Sans({
   subsets: ["latin"],

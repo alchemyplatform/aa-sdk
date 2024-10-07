@@ -1,9 +1,10 @@
+"use client";
+
 import { useConfig } from "@/app/state";
 import { cn } from "@/lib/utils";
-import { AuthCard, useSmartAccountClient, useUser } from "@account-kit/react";
-import { MintCard } from "../shared/MintCard";
-import { LoadingIcon } from "../icons/loading";
+import { AuthCard, useUser } from "@account-kit/react";
 import { EOAPostLogin } from "../shared/eoa-post-login/EOAPostLogin";
+import { MintCard } from "../shared/MintCard";
 
 export function AuthCardWrapper({ className }: { className?: string }) {
   const { config } = useConfig();
@@ -25,10 +26,7 @@ export function AuthCardWrapper({ className }: { className?: string }) {
 
 const RenderContent = () => {
   const user = useUser();
-  const { client } = useSmartAccountClient({ type: "LightAccount" });
-
   const hasUser = !!user;
-  const hasClient = !!client;
 
   if (!hasUser) {
     return (
@@ -42,14 +40,6 @@ const RenderContent = () => {
 
   const isEOAUser = user.type === "eoa";
 
-  if (hasClient) {
-    return (
-      <div className="py-14 pt-20">
-        <MintCard />
-      </div>
-    );
-  }
-
   if (isEOAUser) {
     return (
       <div className="py-14 pt-20 h-full lg:h-auto">
@@ -58,5 +48,9 @@ const RenderContent = () => {
     );
   }
 
-  return <LoadingIcon />;
+  return (
+    <div className="py-14 pt-20">
+      <MintCard />
+    </div>
+  );
 };
