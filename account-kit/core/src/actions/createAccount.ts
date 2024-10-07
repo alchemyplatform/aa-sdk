@@ -10,6 +10,7 @@ import {
 } from "@account-kit/smart-contracts";
 import { custom, type Transport } from "viem";
 import { ClientOnlyPropertyError } from "../errors.js";
+import { CoreLogger } from "../metrics.js";
 import type {
   AlchemyAccountsConfig,
   SupportedAccountTypes,
@@ -101,6 +102,16 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
           signer,
           transport: (opts) => transport({ ...opts, retryCount: 0 }),
           chain,
+        }).then((account) => {
+          CoreLogger.trackEvent({
+            name: "account_initialized",
+            data: {
+              accountType: "LightAccount",
+              accountVersion: account.getLightAccountVersion(),
+            },
+          });
+
+          return account;
         });
       case "MultiOwnerLightAccount":
         return createMultiOwnerLightAccount({
@@ -112,6 +123,15 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
           signer,
           transport: (opts) => transport({ ...opts, retryCount: 0 }),
           chain,
+        }).then((account) => {
+          CoreLogger.trackEvent({
+            name: "account_initialized",
+            data: {
+              accountType: "MultiOwnerLightAccount",
+              accountVersion: account.getLightAccountVersion(),
+            },
+          });
+          return account;
         });
       case "MultiOwnerModularAccount":
         return createMultiOwnerModularAccount({
@@ -123,6 +143,16 @@ export async function createAccount<TAccount extends SupportedAccountTypes>(
           signer,
           transport: (opts) => transport({ ...opts, retryCount: 0 }),
           chain,
+        }).then((account) => {
+          CoreLogger.trackEvent({
+            name: "account_initialized",
+            data: {
+              accountType: "MultiOwnerModularAccount",
+              accountVersion: "v1.0.0",
+            },
+          });
+
+          return account;
         });
       default:
         throw new Error("Unsupported account type");

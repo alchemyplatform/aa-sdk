@@ -7,6 +7,7 @@ import {
   type UseConnectReturnType,
 } from "wagmi";
 import { useAlchemyAccountContext } from "../context.js";
+import { ReactLogger } from "../metrics.js";
 
 /**
  * Re-exported wagmi hook for connecting an EOA. This hook
@@ -27,6 +28,14 @@ export const useConnect = (
 
   return wagmi_useConnect({
     config: wagmiConfig,
-    mutation: params,
+    mutation: {
+      ...params,
+      onSuccess: (...args) => {
+        ReactLogger.trackEvent({
+          name: "eoa_connected",
+        });
+        params?.onSuccess?.(...args);
+      },
+    },
   });
 };

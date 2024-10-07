@@ -12,20 +12,6 @@ export type CoreEventsSchema = [
     EventData: ConfigCreatedData;
   },
   {
-    EventName: "signer_authnticate";
-    EventData:
-      | {
-          authType: "email" | "passkey_anon" | "passkey_email";
-        }
-      | { authType: "oauth"; provider: string };
-  },
-  {
-    EventName: "signer_sign_message";
-  },
-  {
-    EventName: "client_send_uo";
-  },
-  {
     EventName: "account_initialized";
     EventData: {
       accountType: string;
