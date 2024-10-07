@@ -1,4 +1,15 @@
 import type { SVGProps } from "react";
+import { Spinner } from "./spinner.js";
+
+// to do: accept a provider prop
+export function ContinueWithOAuth() {
+  return (
+    <div className="relative flex flex-col items-center justify-center h-12 w-12">
+      <Spinner className="absolute top-0 left-0 right-0 bottom-0" />
+      <GoogleIcon />
+    </div>
+  );
+}
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const GoogleIcon = (

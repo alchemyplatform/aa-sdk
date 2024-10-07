@@ -84,7 +84,7 @@ export const Authentication = ({ className }: { className?: string }) => {
             details={
               config.auth.showSocial && (
                 <div className="flex">
-                  <SocialAuthMethod
+                  <OAuthMethod
                     icon={<GoogleIcon />}
                     onClick={setAddGoogleAuth}
                     className={`grow-0 border-2 rounded-lg p-1 ${
@@ -211,7 +211,7 @@ const AuthMethod = ({
   );
 };
 
-const SocialAuthMethod = ({
+const OAuthMethod = ({
   icon,
   onClick,
   className,

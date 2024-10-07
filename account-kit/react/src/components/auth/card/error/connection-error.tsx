@@ -5,6 +5,7 @@ import { ConnectionFailed as PasskeyConnectionFailed } from "../../../../icons/c
 import { Timeout } from "../../../../icons/timeout.js";
 import { EOAWallets, type ConnectionErrorProps } from "./types.js";
 import { WalletIcon } from "./icons/wallet-icon.js";
+import { ContinueWithOAuth } from "../../../../icons/oauth.js";
 
 export const walletTypeConfig = [
   { name: "Coinbase Wallet", key: EOAWallets.COINBASE_WALLET },
@@ -27,6 +28,8 @@ export const ConnectionError = ({
     switch (connectionType) {
       case "passkey":
         return ls.error.connection.passkeyTitle;
+      case "oauth":
+        return ls.error.connection.oauthTitle;
       case "wallet":
         return ls.error.connection.walletTitle + (walletName ?? "wallet");
       case "timeout":
@@ -38,6 +41,8 @@ export const ConnectionError = ({
     switch (connectionType) {
       case "passkey":
         return ls.error.connection.passkeyBody;
+      case "oauth":
+        return ls.error.connection.oauthBody;
       case "wallet":
         return ls.error.connection.walletBody;
       case "timeout":
@@ -49,6 +54,8 @@ export const ConnectionError = ({
     switch (connectionType) {
       case "passkey":
         return <PasskeyConnectionFailed />;
+      case "oauth":
+        return <ContinueWithOAuth />; // placeholder before oauth connection error icon is finalized
       case "wallet":
         return EOAConnector && <WalletIcon EOAConnector={EOAConnector} />;
       case "timeout":

@@ -6,7 +6,7 @@ export enum EOAWallets {
 }
 
 export type ConnectionErrorProps = {
-  connectionType: "passkey" | "wallet" | "timeout";
+  connectionType: "passkey" | "oauth" | "wallet" | "timeout";
   EOAConnector?: Connector | EOAWallets.WALLET_CONNECT;
   handleTryAgain?: () => void;
   handleUseAnotherMethod?: () => void;
