@@ -18,13 +18,18 @@ import { cookieStorage } from "@account-kit/core";
 
 ### config
 
-`{sessionLength: number}`
+`{sessionLength: number; domain?: string}`
 optional config object that allows you to set the session length
 
 ### config.sessionLength
 
 `number`
 the length of the session in milliseconds
+
+### config.domain
+
+`string`
+optional domain to set the cookie on, eg: `example.com` if you want the cookie to work on all subdomains of example.com
 
 ## Returns
 
