@@ -1,4 +1,3 @@
-import { ExternalLinkIcon } from "@/components/icons/external-link";
 import { cn } from "@/lib/utils";
 
 type MintCardActionButtonsProps = {
