@@ -1,12 +1,12 @@
 "use client";
 
 import { AuthCardHeader } from "@/components/shared/AuthCardHeader";
+import { ToastProvider } from "@/contexts/ToastProvider";
 import { alchemy, arbitrumSepolia } from "@account-kit/infra";
 import { AlchemyAccountProvider, createConfig } from "@account-kit/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren, Suspense } from "react";
 import { ConfigContextProvider, DEFAULT_CONFIG } from "./state";
-import { ToastProvider } from "@/contexts/ToastProvider";
 
 const queryClient = new QueryClient();
 
@@ -27,7 +27,8 @@ const alchemyConfig = createConfig(
         [
           {
             type: "social" as const,
-            googleAuth: true,
+            authProviderId: "google",
+            mode: "popup",
           },
         ],
       ],

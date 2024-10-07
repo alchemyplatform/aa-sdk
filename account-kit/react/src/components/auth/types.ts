@@ -1,3 +1,7 @@
+import type {
+  KnownAuthProvider,
+  OauthRedirectConfig,
+} from "@account-kit/signer";
 import type { WalletConnectParameters } from "wagmi/connectors";
 
 export type AuthType =
@@ -10,4 +14,17 @@ export type AuthType =
     }
   | { type: "passkey" }
   | { type: "external_wallets"; walletConnect?: WalletConnectParameters }
-  | { type: "social"; googleAuth: boolean };
+  | ({ type: "social"; scope?: string; claims?: string } & (
+      | {
+          authProviderId: "auth0";
+          isCustomProvider?: false;
+          auth0Connection?: string;
+          logoUrl: string;
+        }
+      | {
+          authProviderId: KnownAuthProvider;
+          isCustomProvider?: false;
+          auth0Connection?: never;
+        }
+    ) &
+      OauthRedirectConfig);
