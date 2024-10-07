@@ -43,21 +43,54 @@ export const EOAPostLoginContents = () => {
         <CheckIcon className="w-[48px] h-[48px]" stroke="#16A34A" />
         <h3 className="text-[32px] tracking-tight font-semibold mt-5 text-fg-primary whitespace-nowrap">{`You're connected!`}</h3>
       </div>
-      <div className="flex flex-col mt-6">
+      <div className="flex flex-col mt-6 mx-3.5 sm:mx-0">
         <Capabilities
           icon="connect"
           title="Connect existing users"
-          description="Reliable wallet connectors make it easy for you to connect all of your existing web3 users"
+          description={
+            <>
+              <p className="hidden sm:block">
+                Reliable wallet connectors make it easy for you to connect all
+                of your existing web3 users
+              </p>
+              <p className="block sm:hidden">
+                Reliable wallet connectors make it easy to connect your existing
+                users
+              </p>
+            </>
+          }
         />
         <Capabilities
           icon="onboard"
           title="Onboard mainstream users"
-          description="Embedded wallets with email, social, and passkey local to bring mainstream users onchain"
+          description={
+            <>
+              <p className="hidden sm:block">
+                Embedded wallets with email, social, and passkey local to bring
+                mainstream users onchain
+              </p>
+              <p className="block sm:hidden">
+                Integrate email, social, and passkey login to bring users
+                onchain
+              </p>
+            </>
+          }
         />
         <Capabilities
           icon="sponsor"
           title="Sponsor gas fees"
-          description="Gasless transactions available now for embedded wallets and coming soon to EOAs"
+          description={
+            <>
+              <p className="hidden sm:block">
+                Gasless transactions available now for embedded wallets and
+                coming soon to EOAs
+              </p>
+              <p className="block sm:hidden">
+                Build gasless transaction flows, available now for embedded
+                wallets
+              </p>
+            </>
+          }
         />
       </div>
     </div>
@@ -76,7 +109,7 @@ const Capabilities = ({
   description: string | JSX.Element;
 }) => {
   return (
-    <div className="flex gap-3 mb-10">
+    <div className="flex gap-3 mb-6 sm:mb-10">
       {getPropIcon(icon)}
       <div className=" w-full">
         <h3 className="text-base font-semibold text-fg-secondary">{title}</h3>
