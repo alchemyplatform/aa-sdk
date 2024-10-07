@@ -4,11 +4,11 @@ import { WRITE_IN_DEV, WRITE_KEY } from "./_writeKey.js";
 import { noopLogger } from "./noop.js";
 import { ContextAllowlistPlugin } from "./plugins/contextAllowlist.js";
 import { DevDestinationPlugin } from "./plugins/devDestination.js";
-import type { EventLogger, EventsSchema } from "./types";
+import type { EventsSchema, InnerLogger, LoggerContext } from "./types";
 
-export function createClientLogger<
-  Schema extends EventsSchema
->(): EventLogger<Schema> {
+export function createClientLogger<Schema extends EventsSchema = []>(
+  context: LoggerContext
+): InnerLogger<Schema> {
   const isDev = window.location.hostname.includes("localhost");
   if (WRITE_KEY == null || (isDev && !WRITE_IN_DEV)) {
     // If we don't have a write key, we don't want to log anything
@@ -37,7 +37,12 @@ export function createClientLogger<
       },
     }
   );
-  const anonId = uuid();
+
+  if (!sessionStorage.getItem("anonId")) {
+    sessionStorage.setItem("anonId", uuid());
+  }
+
+  const anonId = sessionStorage.getItem("anonId")!;
   analytics.setAnonymousId(anonId);
   analytics.register(ContextAllowlistPlugin);
   analytics.debug(isDev);
@@ -54,7 +59,7 @@ export function createClientLogger<
       ready,
     },
     trackEvent: async ({ name, data }) => {
-      await analytics.track(name, data);
+      await analytics.track(name, { ...data, ...context });
     },
   };
 }

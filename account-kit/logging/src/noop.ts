@@ -1,6 +1,6 @@
-import type { EventLogger } from "./types";
+import type { InnerLogger } from "./types";
 
-export const noopLogger: EventLogger<any> = {
+export const noopLogger: InnerLogger<any> = {
   trackEvent: async () => {},
   _internal: {
     ready: Promise.resolve(),
