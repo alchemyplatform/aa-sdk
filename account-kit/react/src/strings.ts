@@ -51,6 +51,8 @@ const STRINGS = {
         passkeyTitle: "Connection failed",
         passkeyBody:
           "Passkey request timed out or canceled by the agent. You may have to use another method to register a passkey for your account.",
+        oauthTitle: "Couldn't connect to <OAuth provider>",
+        oauthBody: "The OAuth provider’s connection failed or canceled",
         walletTitle: "Couldn't connect to ",
         walletBody: "The wallet’s connection failed or canceled",
         timedOutTitle: "Connection timed out",

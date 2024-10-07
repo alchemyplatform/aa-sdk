@@ -1,5 +1,6 @@
 import { EmailNotReceivedDisclaimer } from "../card/footer/email-not-reveived.js";
 import { HelpText } from "../card/footer/help-text.js";
+import { OAuthContactSupport } from "../card/footer/oauth-contact-support.js";
 import { PoweredBy } from "../card/footer/poweredby.js";
 import { RegistrationDisclaimer } from "../card/footer/registration-disclaimer.js";
 import type { AuthStep } from "../context.js";
@@ -18,6 +19,8 @@ const RenderFooterText = ({ authStep }: FooterProps) => {
     case "wallet_connect":
     case "passkey_verify":
       return <HelpText />;
+    case "oauth_completing":
+      return <OAuthContactSupport authStep={authStep} />;
     case "email_completing":
     case "passkey_create_success":
     case "eoa_connect":

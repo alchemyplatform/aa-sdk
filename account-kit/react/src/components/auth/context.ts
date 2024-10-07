@@ -9,6 +9,12 @@ export type AuthStep =
   | { type: "passkey_create"; error?: Error }
   | { type: "passkey_create_success" }
   | { type: "email_completing"; createPasskeyAfter?: boolean }
+  | {
+      type: "oauth_completing";
+      provider: string;
+      supportUrl?: string;
+      error?: Error;
+    }
   | { type: "initial"; error?: Error }
   | { type: "complete" }
   | { type: "eoa_connect"; connector: Connector; error?: Error }
