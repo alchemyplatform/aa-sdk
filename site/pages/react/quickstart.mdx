@@ -47,7 +47,7 @@ npx create-next-app my-smart-app -e https://github.com/avarobinson/embedded-acco
 // ...other stuff in the file
 export const config = createConfig(
   {
-    apiKey: "your_api_key", // TODO: add your Alchemy API key - setup your app and embedded account config in the alchemy dashboard (https://dashboard.alchemy.com/accounts) - if you don't want to leak api keys, you can proxy to a backend and set the rpcUrl instead here
+    transport: alchemy({ apiKey: "your_api_key" }), // TODO: add your Alchemy API key - setup your app and embedded account config in the alchemy dashboard (https://dashboard.alchemy.com/accounts) - if you don't want to leak api keys, you can proxy to a backend and set the rpcUrl instead here
     chain: sepolia,
     ssr: true, // defers hydration of the account state to the client after the initial mount solving any inconsistencies between server and client state (read more here: https://accountkit.alchemy.com/react/ssr)
     storage: cookieStorage, // persist the account state using cookies (read more here: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state)
@@ -196,7 +196,7 @@ import { sepolia } from "@account-kit/infra";
 export const config = createConfig(
   {
     // alchemy config
-    apiKey: "YOUR_API_KEY", // TODO: add your Alchemy API key - setup your app and embedded account config in the alchemy dashboard (https://dashboard.alchemy.com/accounts)
+    transport: alchemy({ apiKey: "your_api_key" }), // TODO: add your Alchemy API key - setup your app and embedded account config in the alchemy dashboard (https://dashboard.alchemy.com/accounts)
     chain: sepolia, // TODO: specify your preferred chain here and update imports from @account-kit/infra
     ssr: true, // Defers hydration of the account state to the client after the initial mount solving any inconsistencies between server and client state (read more here: https://accountkit.alchemy.com/react/ssr)
     storage: cookieStorage, // persist the account state using cookies (read more here: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state)
