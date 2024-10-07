@@ -70,7 +70,7 @@ export const EOAPostLoginContents = () => {
                 mainstream users onchain
               </p>
               <p className="block sm:hidden">
-                Integrate email, social, and passkey login to bring users
+                Embedded wallets with email, social, and passkey to bring users
                 onchain
               </p>
             </>
@@ -86,8 +86,8 @@ export const EOAPostLoginContents = () => {
                 coming soon to EOAs
               </p>
               <p className="block sm:hidden">
-                Build gasless transaction flows, available now for embedded
-                wallets
+                Gasless transactions available now for embedded wallets and
+                coming soon to EOAs
               </p>
             </>
           }
