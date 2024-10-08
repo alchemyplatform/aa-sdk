@@ -12,7 +12,7 @@ const ThemeSwitch = React.forwardRef<
 >(({ className, checked, ...props }, ref) => (
   <SwitchPrimitives.Root
     className={cn(
-      "relative peer inline-flex w-28 h-10 shrink-0 cursor-pointer items-center rounded-[8px] border border-input transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-input data-[state=unchecked]:bg-[#94A3B9]",
+      "relative peer inline-flex w-28 h-10 shrink-0 cursor-pointer items-center rounded-[8px] border border-input transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-input data-[state=unchecked]:bg-[#94A3B8]",
       className
     )}
     {...props}

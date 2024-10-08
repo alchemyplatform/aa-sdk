@@ -20,6 +20,10 @@ export const signerSidebar: SidebarItem[] = [
         link: "/signer/authentication/email-magic-link",
       },
       {
+        text: "Social login",
+        link: "/signer/authentication/social-login",
+      },
+      {
         text: "Passkey signup",
         link: "/signer/authentication/passkey-signup",
       },

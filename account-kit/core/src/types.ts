@@ -95,7 +95,7 @@ type RpcConnectionConfig =
     };
 
 export type CreateConfigProps = RpcConnectionConfig & {
-  sessionConfig?: AlchemySignerParams["sessionConfig"];
+  sessionConfig?: AlchemySignerParams["sessionConfig"] & { domain?: string };
   /**
    * Enable this parameter if you are using the config in an SSR setting (eg. NextJS)
    * Turing this setting on will disable automatic hydration of the client store
@@ -103,7 +103,7 @@ export type CreateConfigProps = RpcConnectionConfig & {
   ssr?: boolean;
 
   // TODO: should probably abstract this out into a function
-  storage?: (config?: { sessionLength: number }) => Storage;
+  storage?: (config?: { sessionLength?: number; domain?: string }) => Storage;
 
   connectors?: CreateConnectorFn[];
 

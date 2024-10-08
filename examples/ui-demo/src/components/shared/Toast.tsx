@@ -51,11 +51,13 @@ export const Toast = () => {
         onOpenChange={closeToast}
         className={`${getBGColor()} align-middle rounded-lg shadow-lg px-3 py-2 flex justify-center items-center`}
       >
-        <p className={`${getTextColor()} text-center pr-2 align-middle`}>
+        <p
+          className={`${getTextColor()} text-center pr-2 align-middle whitespace-nowrap`}
+        >
           <span
             className={`${
               type === "success" ? "bg-[#16A34A]" : "bg-[#DC2626]"
-            } align-middle px-2 py-1 text-[#FFFFFF] text-xs font-semibold rounded mr-2`}
+            } align-middle px-2 py-1 text-[#FFFFFF] text-xs font-semibold rounded mr-2 hidden md:inline`}
           >
             {type === "success" ? "Success" : "Error"}
           </span>

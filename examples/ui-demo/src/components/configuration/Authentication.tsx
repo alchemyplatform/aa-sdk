@@ -8,6 +8,7 @@ import { WalletIcon } from "../icons/wallet";
 import ExternalLink from "../shared/ExternalLink";
 import { Switch } from "../ui/switch";
 import { GoogleIcon } from "../icons/google";
+import { ExternalLinkIcon } from "../icons/external-link";
 
 export const Authentication = ({ className }: { className?: string }) => {
   const { config, setConfig } = useConfig();
@@ -110,6 +111,16 @@ export const Authentication = ({ className }: { className?: string }) => {
                   <p className="font-normal text-sm text-secondary-foreground">
                     Add passkey after sign up
                   </p>
+                  <ExternalLink
+                    href="https://aa-sdk-site-alpha.vercel.app/react/add-passkey?"
+                    className="underline"
+                  >
+                    <ExternalLinkIcon
+                      height={16}
+                      width={16}
+                      className="text-fg-secondary"
+                    />
+                  </ExternalLink>
                   <Switch
                     disabled={!config.auth.showPasskey}
                     checked={config.auth.addPasskey && config.auth.showPasskey}
@@ -117,17 +128,6 @@ export const Authentication = ({ className }: { className?: string }) => {
                     className="ml-auto"
                   />
                 </div>
-                {!config.auth.addPasskey && config.auth.showPasskey && (
-                  <p className="text-sm text-secondary-foreground px-2 py-[6px] bg-blue-50 text-brand rounded-lg">
-                    Learn how to{" "}
-                    <ExternalLink
-                      href="https://aa-sdk-site-alpha.vercel.app/react/add-passkey?_vercel_share=1H4QaNdwBWvMQImVSV9VJ0HCyD9J6Msl"
-                      className="underline"
-                    >
-                      add a passkey later
-                    </ExternalLink>
-                  </p>
-                )}
               </>
             }
             active={config.auth.showPasskey}

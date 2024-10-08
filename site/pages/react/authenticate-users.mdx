@@ -86,6 +86,53 @@ export default function MyLoginPage() {
 }
 ```
 
+### Social Login
+
+You can allow uers to sign in with an OAuth provider like Google, Facebook, or Auth0. There are two login flows that are possible: redirect and popup. The redirect flow redirects the user to the auth provider's login page, then back to a specified page in your application when done. The popup flow opens the auth provider's login page in a popup window without leaving your application, then updates your application when done. If using popup, you need to set the `enablePopupOauth` field to `true` in the [config](/react/quickstart).
+
+```tsx twoslash
+import React from "react";
+import {
+  type UseAuthenticateResult,
+  useAuthenticate,
+} from "@account-kit/react";
+
+// This examples uses social login, specifically Google Sign-In
+export default function MyLoginPage() {
+  const { authenticate, isPending } = useAuthenticate();
+
+  return (
+    <div>
+      <button
+        onClick={() =>
+          authenticate({
+            // redirect login flow
+            type: "oauth",
+            authProviderId: "google",
+            mode: "redirect",
+            redirectUrl: "/", // After logging in, redirect to the index page
+          })
+        }
+      >
+        Login (Redirect)
+      </button>
+      <button
+        onClick={() =>
+          authenticate({
+            // popup login flow
+            type: "oauth",
+            authProviderId: "google",
+            mode: "popup", // remember to set "enablePopupOauth" to "true" in config.ts to enable
+          })
+        }
+      >
+        Login (Popup)
+      </button>
+    </div>
+  );
+}
+```
+
 ### Passkey auth with email backup
 
 This approach will allow you to login or signup users using a passkey as the primary auth mechanism and register an email as a backup.

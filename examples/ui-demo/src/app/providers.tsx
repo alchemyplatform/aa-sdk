@@ -7,6 +7,7 @@ import { AlchemyAccountProvider, createConfig } from "@account-kit/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren, Suspense } from "react";
 import { ConfigContextProvider, DEFAULT_CONFIG } from "./state";
+import { AlchemyClientState } from "@account-kit/core";
 
 const queryClient = new QueryClient();
 
@@ -44,13 +45,16 @@ const alchemyConfig = createConfig(
   }
 );
 
-export const Providers = (props: PropsWithChildren<{}>) => {
+export const Providers = (
+  props: PropsWithChildren<{ initialState?: AlchemyClientState }>
+) => {
   return (
     <Suspense>
       <QueryClientProvider client={queryClient}>
         <AlchemyAccountProvider
           config={alchemyConfig}
           queryClient={queryClient}
+          initialState={props.initialState}
         >
           <ToastProvider>
             <ConfigContextProvider>{props.children}</ConfigContextProvider>

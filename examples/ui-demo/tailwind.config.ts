@@ -83,6 +83,9 @@ const config = {
         "ui-loading-dark": "ui-loading-dark 0.8s 0ms ease-out infinite both",
         "ui-loading-light": "ui-loading-light 0.8s 0ms ease-out infinite both",
       },
+      backgroundImage: {
+        "bg-main": "url('/images/bg-main.svg')",
+      },
     },
   },
   plugins: [require("tailwindcss-animate"), require("tailwind-scrollbar")],
