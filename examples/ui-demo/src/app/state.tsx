@@ -1,3 +1,5 @@
+"use client";
+
 import { AuthCardHeader } from "@/components/shared/AuthCardHeader";
 import {
   AlchemyAccountsUIConfig,
@@ -5,7 +7,6 @@ import {
   useUiConfig,
 } from "@account-kit/react";
 import {
-  AccountKitTheme,
   getBorderRadiusBaseVariableName,
   getBorderRadiusValue,
   getColorVariableName,
@@ -19,63 +20,13 @@ import {
   useEffect,
   useState,
 } from "react";
-
-export type Config = {
-  auth: {
-    showEmail: boolean;
-    showExternalWallets: boolean;
-    showPasskey: boolean;
-    addPasskey: boolean;
-  };
-  ui: {
-    theme: "light" | "dark";
-    primaryColor: {
-      dark: string;
-      light: string;
-    };
-    borderRadius: AccountKitTheme["borderRadius"];
-    illustrationStyle: "outline" | "linear" | "filled" | "flat";
-    logoLight:
-      | {
-          fileName: string;
-          fileSrc: string;
-        }
-      | undefined;
-    logoDark:
-      | {
-          fileName: string;
-          fileSrc: string;
-        }
-      | undefined;
-  };
-  supportUrl?: string;
-};
+import { Config, DEFAULT_CONFIG } from "./config";
 
 export type ConfigContextType = {
   config: Config;
   setConfig: Dispatch<SetStateAction<Config>>;
   nftTransfered: boolean;
   setNFTTransfered: Dispatch<SetStateAction<boolean>>;
-};
-
-export const DEFAULT_CONFIG: Config = {
-  auth: {
-    showEmail: true,
-    showExternalWallets: false,
-    showPasskey: true,
-    addPasskey: true,
-  },
-  ui: {
-    theme: "light",
-    primaryColor: {
-      light: "#363FF9",
-      dark: "#9AB7FF",
-    },
-    borderRadius: "sm",
-    illustrationStyle: "outline",
-    logoLight: undefined,
-    logoDark: undefined,
-  },
 };
 
 export const ConfigContext = createContext<ConfigContextType>({

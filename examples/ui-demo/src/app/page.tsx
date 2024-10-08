@@ -1,22 +1,23 @@
 "use client";
 
+import { useConfig } from "@/app/state";
 import { Authentication } from "@/components/configuration/Authentication";
 import { Styling } from "@/components/configuration/Styling";
+import { MobileSplashPage } from "@/components/preview/MobileSplashPage";
+import {
+  EOAPostLoginActions,
+  EOAPostLoginContents,
+} from "@/components/shared/eoa-post-login/EOAPostLoginContents";
+import { RenderUserConnectionAvatar } from "@/components/shared/user-connection-avatar/RenderUserConnectionAvatar";
+import { cn } from "@/lib/utils";
+import { useUser } from "@account-kit/react";
 import { Inter, Public_Sans } from "next/font/google";
 import { useState } from "react";
 import { AuthCardWrapper } from "../components/preview/AuthCardWrapper";
 import { CodePreview } from "../components/preview/CodePreview";
 import { CodePreviewSwitch } from "../components/shared/CodePreviewSwitch";
 import { TopNav } from "../components/topnav/TopNav";
-import { RenderUserConnectionAvatar } from "@/components/shared/user-connection-avatar/RenderUserConnectionAvatar";
-import { useUser } from "@account-kit/react";
-import { MobileSplashPage } from "@/components/preview/MobileSplashPage";
-import { cn } from "@/lib/utils";
-import { useConfig } from "@/app/state";
-import {
-  EOAPostLoginContents,
-  EOAPostLoginActions,
-} from "@/components/shared/eoa-post-login/EOAPostLoginContents";
+import { MintCard } from "@/components/shared/mint-card/MintCard";
 
 const publicSans = Public_Sans({
   subsets: ["latin"],
@@ -55,6 +56,7 @@ export default function Home() {
             <div
               className={cn(
                 `absolute h-[85px] w-full p-6 top-0 flex items-center left-0 border-b border-border z-10`,
+                !user && !showCode && "border-[transparent]",
                 !user || showCode ? "justify-end" : "justify-between",
                 config.ui.theme === "dark"
                   ? showCode
@@ -84,31 +86,31 @@ export default function Home() {
 
             {/* Don't unmount when showing code preview so that the auth card retains its state */}
             <AuthCardWrapper
-              className={showCode ? "hidden" : "mt-0 pt-[85px]"}
+              className={cn(
+                showCode && "hidden",
+                "mt-0 xl:pt-0",
+                !user ? "md:pt-0" : "md:pt-[85px]"
+              )}
             />
             {showCode && <CodePreview className="pt-[105px]" />}
           </div>
         </div>
         <div className="flex flex-1 flex-col gap-6 sm:hidden">
-          {!user ? (
-            <MobileSplashPage />
-          ) : (
+          {!user && <MobileSplashPage />}
+          {isEOAUser && (
             <div className="flex flex-1 flex-col">
               <div className="border-border border radius-2 px-6 py-6">
                 <RenderUserConnectionAvatar />
-                {isEOAUser && (
-                  <div className="pt-6">
-                    <EOAPostLoginContents />
-                  </div>
-                )}
-              </div>
-              {isEOAUser && (
-                <div className="mt-auto mb-5 pt-10">
-                  <EOAPostLoginActions />
+                <div className="pt-6">
+                  <EOAPostLoginContents />
                 </div>
-              )}
+              </div>
+              <div className="mt-auto mb-5 pt-10">
+                <EOAPostLoginActions />
+              </div>
             </div>
           )}
+          {user && !isEOAUser && <MintCard />}
         </div>
       </div>
     </main>
