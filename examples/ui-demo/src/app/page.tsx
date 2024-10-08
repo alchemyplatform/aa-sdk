@@ -33,7 +33,6 @@ export default function Home() {
   const user = useUser();
   const { config } = useConfig();
   const isEOAUser = user?.type === "eoa";
-
   return (
     <main
       className={`flex flex-col h-screen bg-bg-main ${publicSans.className} bg-cover bg-center`}

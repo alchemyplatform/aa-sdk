@@ -80,12 +80,12 @@ describe("tailwind utils test", () => {
               "light": "#CBD5E1",
             },
             "fg-invert": {
-              "dark": "#000",
+              "dark": "#020617",
               "light": "#FFF",
             },
             "fg-primary": {
               "dark": "#fff",
-              "light": "#000",
+              "light": "#020617",
             },
             "fg-secondary": {
               "dark": "#E2E8F0",

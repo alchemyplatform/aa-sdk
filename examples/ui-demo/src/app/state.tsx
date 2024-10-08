@@ -61,7 +61,7 @@ export type ConfigContextType = {
 export const DEFAULT_CONFIG: Config = {
   auth: {
     showEmail: true,
-    showExternalWallets: false,
+    showExternalWallets: true,
     showPasskey: true,
     addPasskey: true,
   },
@@ -98,6 +98,7 @@ export function ConfigContextProvider(props: PropsWithChildren) {
 
   // Sync Alchemy auth UI config
   useEffect(() => {
+    console.log("config sync", config);
     const sections: AuthType[][] = [[{ type: "email" }]];
 
     if (config.auth.showPasskey) {
