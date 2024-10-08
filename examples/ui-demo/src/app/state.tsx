@@ -115,9 +115,9 @@ export function ConfigContextProvider(props: PropsWithChildren) {
       sections.push([{ type: "passkey" }]);
     }
 
-    if (config.auth.showSocial) {
+    if (config.auth.showSocial && config.auth.addGoogleAuth) {
       sections.push([
-        { type: "social", googleAuth: config.auth.addGoogleAuth },
+        { type: "social", authProviderId: "google", mode: "popup" },
       ]);
     }
 
