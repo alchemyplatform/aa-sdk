@@ -1,41 +1,40 @@
 import { useAuthModal } from "@account-kit/react";
-import Image from "next/image";
 
 export function MobileSplashPage() {
   const { openAuthModal } = useAuthModal();
   return (
-    <div className="flex flex-col flex-1 pb-5">
+    <div className="flex flex-col flex-1 pb-5 mt-2">
       {/* Header Text */}
       <div>
-        <p className="text-[44px] leading-[54px]  font-semibold tracking-tight text-fg-primary">
-          Seamless signup with{" "}
+        <h3 className="text-[56px] leading-[60px] text-center font-semibold tracking-tight text-fg-primary">
+          Web2 UX, <br />
           <span
             className="whitespace-nowrap"
             style={{
               background:
-                "linear-gradient(126deg, #36BEFF 4.59%, #733FF1 108.32%)",
+                "linear-gradient(126deg, #FF9C27 4.59%, #FD48CE 108.32%)",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               WebkitTextFillColor: "transparent",
             }}
           >
-            smart wallets
+            onchain
           </span>
-        </p>
-        <p className="text-2xl text-fg-secondary font-semibold tracking-tight leading-10">
-          Experience the demo
+        </h3>
+        <p className="text-xl text-fg-secondary font-normal tracking-tight text-center mt-3">
+          Zero-friction onboarding, <br />
+          one-click transactions
         </p>
       </div>
       {/* Image Wrapper */}
-      <div className="w-full relative h-auto mt-[55px] flex-grow">
+      <div className="w-full relative h-auto my-[20px] flex-grow">
         {/* Placeholder - Design would provide the actual asset here. */}
-        <Image
-          src="/images/ui-demo-mobile-splash.png"
-          alt="Mobile Splash"
+        <video
+          src="/videos/splash-demo.mov"
           className="object-contain"
-          layout="responsive"
-          width={396} // <--- Width of original image
-          height={389} // <--- Height of original image
+          autoPlay
+          loop
+          muted
         />
       </div>
 
