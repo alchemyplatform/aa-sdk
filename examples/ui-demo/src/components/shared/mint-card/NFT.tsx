@@ -88,8 +88,7 @@ export function NFT({
           <span
             className="text-base align-top"
             style={{
-              background:
-                "linear-gradient(126deg, #36BEFF 4.59%, #733FF1 108.32%)",
+              background: "linear-gradient(132deg, #FF9C27 0%, #FD48CE 100%)",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               WebkitTextFillColor: "transparent",
