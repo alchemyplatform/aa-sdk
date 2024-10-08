@@ -65,7 +65,9 @@ export const MintCard = () => {
     });
   };
 
-  const { client } = useSmartAccountClient({ type: "LightAccount" });
+  const { client, isLoadingClient } = useSmartAccountClient({
+    type: "LightAccount",
+  });
   const { sendUserOperationResult, sendUserOperation } = useSendUserOperation({
     client,
     waitForTxn: true,
@@ -104,9 +106,8 @@ export const MintCard = () => {
   }, [client, sendUserOperation]);
   const transactionUrl = `${client?.chain?.blockExplorers?.default.url}?q=${sendUserOperationResult?.hash}`;
 
-  const isActionButtonsDisabled = Object.values(status).some(
-    (x) => x === "loading"
-  );
+  const isActionButtonsDisabled =
+    Object.values(status).some((x) => x === "loading") || isLoadingClient;
 
   return (
     <div className="flex mt-0 sm:mt-7 pb-10 xl:pb-0 xl:justify-center flex-col xl:h-full">
