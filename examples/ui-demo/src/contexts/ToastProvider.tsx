@@ -2,10 +2,10 @@
 
 import { Toast } from "@/components/shared/Toast";
 import { Provider } from "@radix-ui/react-toast";
-import { createContext, PropsWithChildren, useState } from "react";
+import { createContext, PropsWithChildren, ReactNode, useState } from "react";
 
 export type ToastType = {
-  text: string;
+  text: ReactNode | string;
   type: "success" | "error";
   open: boolean;
 };
