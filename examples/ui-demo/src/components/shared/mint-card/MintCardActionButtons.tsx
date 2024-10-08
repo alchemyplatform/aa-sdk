@@ -3,16 +3,12 @@ import { cn } from "@/lib/utils";
 type MintCardActionButtonsProps = {
   nftTransfered: boolean;
   handleCollectNFT: () => void;
-  status: Record<string, string>;
-  transactionUrl: string;
   disabled?: boolean;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 export function MintCardActionButtons({
   nftTransfered,
   handleCollectNFT,
-  status,
-  transactionUrl,
   className,
   disabled,
   ...props

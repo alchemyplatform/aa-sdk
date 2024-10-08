@@ -134,8 +134,6 @@ export const MintCard = () => {
               className="hidden xl:block"
               nftTransfered={nftTransfered}
               handleCollectNFT={handleCollectNFT}
-              status={status}
-              transactionUrl={transactionUrl}
               disabled={isActionButtonsDisabled}
             />
           </div>
@@ -144,8 +142,6 @@ export const MintCard = () => {
           className="xl:hidden px-0"
           nftTransfered={nftTransfered}
           handleCollectNFT={handleCollectNFT}
-          status={status}
-          transactionUrl={transactionUrl}
           disabled={isActionButtonsDisabled}
         />
       </div>
