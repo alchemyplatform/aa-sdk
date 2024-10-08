@@ -14,7 +14,7 @@ export function createDefaultTheme(): AccountKitTheme {
       critical: createColorSet("#F87171", "#DC2626"),
 
       // button colors
-      "btn-primary": createColorSet("#363FF9", "#9AB7FF"),
+      "btn-primary": createColorSet("#E82594", "#FF66CC"),
       "btn-secondary": createColorSet("#E2E8F0", "#374151"),
       "btn-auth": createColorSet("#FFF", "argb(255, 255, 255, 0.05)"),
 
@@ -24,7 +24,7 @@ export function createDefaultTheme(): AccountKitTheme {
       "fg-tertiary": createColorSet("#94A3B8", "#94A3B8"),
       "fg-invert": createColorSet("#FFF", "#020617"),
       "fg-disabled": createColorSet("#CBD5E1", "#475569"),
-      "fg-accent-brand": createColorSet("#363FF9", "#9AB7FF"),
+      "fg-accent-brand": createColorSet("#E82594", "#FF66CC"),
       "fg-critical": createColorSet("#B91C1C", "#F87171"),
 
       // surface colors
