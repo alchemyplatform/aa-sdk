@@ -38,8 +38,9 @@ export const EoaConnectCard = ({ authStep }: Props) => {
   return (
     <CardContent
       header={`Connecting to ${authStep.connector.name}`}
+      className={"gap-0"}
       icon={
-        <div className="flex relative flex-col items-center justify-center h-[58px] w-[58px]">
+        <div className="flex relative flex-col items-center justify-center h-[58px] w-[58px] mb-5">
           <img
             className={authStep.error ? undefined : "animate-pulse"}
             src={authStep.connector.icon}
@@ -54,6 +55,14 @@ export const EoaConnectCard = ({ authStep }: Props) => {
       }
       description="Please follow the instructions in your wallet to connect."
       error={authStep.error}
+      extraContent={
+        <button
+          className="btn btn-secondary w-full"
+          onClick={() => setAuthStep({ type: "initial" })}
+        >
+          Cancel
+        </button>
+      }
     />
   );
 };
@@ -79,8 +88,9 @@ export const WalletConnectCard = ({ authStep }: WalletConnectCardProps) => {
   return (
     <CardContent
       header={`Connecting to WalletConnect`}
+      className={"gap-0"}
       icon={
-        <div className="flex relative flex-col items-center justify-center h-[58px] w-[58px]">
+        <div className="flex relative flex-col items-center justify-center h-[58px] w-[58px] mb-5">
           <WalletConnectIcon
             className={
               "w-[32px] h-[32px]" + (authStep.error ? "" : " animate-pulse")
@@ -91,8 +101,16 @@ export const WalletConnectCard = ({ authStep }: WalletConnectCardProps) => {
           </div>
         </div>
       }
-      description="Please follow the instructions in the popup to connect."
+      description={"Please follow the instructions in the popup to connect."}
       error={authStep.error}
+      extraContent={
+        <button
+          className="btn btn-secondary w-full"
+          onClick={() => setAuthStep({ type: "initial" })}
+        >
+          Cancel
+        </button>
+      }
     />
   );
 };

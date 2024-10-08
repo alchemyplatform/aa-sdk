@@ -6,6 +6,7 @@ interface CardContentProps {
   description: ReactNode | string;
   error?: Error | string;
   className?: string;
+  extraContent?: ReactNode | string;
 }
 
 // eslint-disable-next-line jsdoc/require-jsdoc
@@ -13,23 +14,27 @@ export const CardContent = ({
   header,
   icon,
   description,
+  extraContent,
   className,
 }: CardContentProps) => {
   return (
-    <div className={`flex flex-col gap-5 items-center ${className}`}>
-      {icon && (
-        <div className="flex flex-col items-center justify-center w-[56px] h-[56px]">
-          {icon}
-        </div>
-      )}
-      <span className="text-lg text-fg-primary font-semibold">{header}</span>
-      {typeof description === "string" ? (
-        <p className="text-fg-secondary text-center font-normal text-sm">
-          {description}
-        </p>
-      ) : (
-        description
-      )}
-    </div>
+    <>
+      <div className={`flex flex-col gap-5 items-center ${className}`}>
+        {icon && (
+          <div className="flex flex-col items-center justify-center w-[56px] h-[56px]">
+            {icon}
+          </div>
+        )}
+        <span className="text-lg text-fg-primary font-semibold">{header}</span>
+        {typeof description === "string" ? (
+          <p className="text-fg-secondary text-center font-normal text-sm">
+            {description}
+          </p>
+        ) : (
+          description
+        )}
+      </div>
+      {extraContent}
+    </>
   );
 };
