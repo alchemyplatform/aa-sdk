@@ -3,10 +3,44 @@
 import * as SelectPrimitives from "@radix-ui/react-select";
 import { cn } from "@/lib/utils";
 import React from "react";
+import { useConfig } from "@/app/state";
+import { hexToRgba } from "@/utils/hex-to-rgba";
 
 const SelectMenu = SelectPrimitives.Root;
 
-const SelectMenuTrigger = SelectPrimitives.Trigger;
+type SelectMenuTriggerProps = React.ComponentPropsWithoutRef<
+  typeof SelectPrimitives.Trigger
+> & {
+  isOpen?: boolean;
+};
+const SelectMenuTrigger = React.forwardRef<
+  React.ElementRef<typeof SelectPrimitives.Trigger>,
+  SelectMenuTriggerProps
+>(({ className, isOpen, ...props }, ref) => {
+  const {
+    config: {
+      ui: { primaryColor, theme },
+    },
+  } = useConfig();
+
+  return (
+    <SelectPrimitives.Trigger
+      ref={ref}
+      className={cn(
+        "w-full radius py-3 px-4 bg-white border border-border flex items-center justify-between transition-colors ease-out active:outline-none",
+        isOpen && `border-[${primaryColor[theme]}]`,
+        className
+      )}
+      style={{
+        backgroundColor: isOpen
+          ? hexToRgba(primaryColor[theme], 0.035)
+          : "white",
+        border: `1px solid ${isOpen ? primaryColor[theme] : "#E5E7EB"}`,
+      }}
+      {...props}
+    />
+  );
+});
 
 const SelectMenuLabel = SelectPrimitives.Label;
 
@@ -32,6 +66,8 @@ const SelectMenuContent = React.forwardRef<
   />
 ));
 
+// Display names
+SelectMenuTrigger.displayName = SelectPrimitives.Trigger.displayName;
 SelectMenuContent.displayName = SelectPrimitives.Content.displayName;
 export {
   SelectMenu,

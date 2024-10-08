@@ -109,12 +109,7 @@ const IllustrationStyleSelectMenu = () => {
       value={selected}
       onValueChange={onChange}
     >
-      <SelectMenuTrigger
-        className={cn(
-          "w-full radius py-3 px-4 bg-white border border-border flex items-center justify-between transition-colors ease-out",
-          menuOpen && `bg-[#FBFDFF] border-[${primaryColor[theme]}]`
-        )}
-      >
+      <SelectMenuTrigger isOpen={menuOpen}>
         <span className="text-sm font-normal block text-left text-secondary-foreground">
           {getIllustrationStyleValue(selected)}
         </span>
@@ -132,7 +127,7 @@ const IllustrationStyleSelectMenu = () => {
               key={option}
               value={option}
               className={cn(
-                "px-4 py-3 hover:bg-[#EFF4F9] transition-colors ease-out outline-none text-sm",
+                "px-4 py-3 hover:bg-[rgba(239,244,249,0.4)] transition-colors ease-out outline-none text-sm",
                 selected === option ? "font-medium bg-[#EFF4F9]" : "font-normal"
               )}
             >
