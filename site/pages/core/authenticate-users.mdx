@@ -52,7 +52,8 @@ await signer.authenticate({ type: "email", bundle });
 
 ## Social Login
 
-You can allow uers to sign in with a Oauth provider like Google, Facebook, or Auth0. There are two login flows that are possible: the redirect flow goes to the auth provider's login page and the popup flow has the auth provider login screen to open as a popup.
+You can allow users to sign in with an OAuth provider like Google, Facebook, or Auth0. There are two login flows that are possible: redirect and popup. The redirect flow redirects the user to the auth provider's login page, then back to a specified page in your application when done. The popup flow opens the auth provider's login page in a popup window without leaving your application, then updates your application when done. If using popup, you need to set the `enablePopupOauth` field to `true` in the [config](/react/quickstart).
+
 
 :::code-group
 
@@ -69,11 +70,17 @@ if (!signer) {
 }
 
 // authenticate the user with a social login provider
-await signer.authenticate({
+await signer.authenticate({ // redirect login flow
   type: "oauth",
   authProviderId: "google",
   mode: "redirect",
   redirectUrl: "/", // After logging in, redirect to the index page
+});
+
+await signer.authenticate({ // popup login flow
+  type: "oauth",
+  authProviderId: "google",
+  mode: "popup", // remember to set "enablePopupOauth" to "true" in config.ts to enable
 });
 
 ```ts twoslash [config.ts] filename="config.ts"
@@ -145,8 +152,3 @@ await signer.authenticate({
 ```
 
 :::
-
-## Social Login
-
-
-
