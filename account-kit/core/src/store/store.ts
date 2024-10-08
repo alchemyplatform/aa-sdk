@@ -110,7 +110,7 @@ export const createAccountKitStore = (
             skipHydration: ssr,
             partialize: ({ signer, accounts, ...writeableState }) =>
               writeableState,
-            version: 8,
+            version: 9,
           })
         : () => createInitialStoreState(params)
     )
