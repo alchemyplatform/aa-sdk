@@ -74,7 +74,7 @@ export const Authentication = ({ className }: { className?: string }) => {
                     Add passkey after sign up
                   </p>
                   <ExternalLink
-                    href="https://aa-sdk-site-alpha.vercel.app/react/add-passkey?_vercel_share=1H4QaNdwBWvMQImVSV9VJ0HCyD9J6Msl"
+                    href="https://aa-sdk-site-alpha.vercel.app/react/add-passkey?"
                     className="underline"
                   >
                     <ExternalLinkIcon
