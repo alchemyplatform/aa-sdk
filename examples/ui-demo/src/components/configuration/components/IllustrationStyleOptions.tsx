@@ -1,0 +1,146 @@
+import { useConfig } from "@/app/state";
+import { ChevronDown } from "@/components/icons/chevron-down";
+import { IllustrationStyle } from "@/components/icons/illustration-style";
+import {
+  SelectMenu,
+  SelectMenuContent,
+  SelectMenuItem,
+  SelectMenuTrigger,
+  SelectMenuViewport,
+} from "@/components/ui/select-menu";
+import { cn } from "@/lib/utils";
+import { useState } from "react";
+
+const ILLUSTRATION_STYLE_OPTIONS = [
+  { label: "Outline", id: "outline" as const },
+  { label: "Linear", id: "linear" as const },
+  { label: "Filled", id: "filled" as const },
+  { label: "Flat", id: "flat" as const },
+];
+
+const options = ["outline", "linear", "filled", "flat"] as const;
+
+export function IllustrationStyleOptions() {
+  const {
+    config: {
+      ui: { illustrationStyle },
+    },
+    setConfig,
+  } = useConfig();
+
+  type IllustrationStyle = typeof illustrationStyle;
+
+  const onChange = (style: IllustrationStyle) => {
+    setConfig((prev) => ({
+      ...prev,
+      ui: {
+        ...prev.ui,
+        illustrationStyle: style,
+      },
+    }));
+  };
+
+  return (
+    <>
+      <div className="hidden md:flex self-stretch gap-3">
+        {options.map((value) => (
+          <button
+            key={value}
+            className={cn(
+              "py-2 flex-1 basis-0 rounded-lg border border-gray-300",
+              "text-fg-accent-brand hover:opacity-80",
+              "flex items-center justify-center",
+              illustrationStyle === value
+                ? "border-[#363FF9] border-[1.5px] bg-[#EFF4F9] font-semibold"
+                : ""
+            )}
+            onClick={() => onChange(value)}
+          >
+            <IllustrationStyle
+              className="text-fg-accent-brand"
+              variant={value}
+            />
+          </button>
+        ))}
+      </div>
+      <div className="flex md:hidden w-full">
+        <IllustrationStyleSelectMenu />
+      </div>
+    </>
+  );
+}
+
+const IllustrationStyleSelectMenu = () => {
+  const {
+    config: {
+      ui: { illustrationStyle, primaryColor, theme },
+    },
+    setConfig,
+  } = useConfig();
+
+  type IllustrationStyle = typeof illustrationStyle;
+  const [selected, setSelected] =
+    useState<IllustrationStyle>(illustrationStyle);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const onChange = (style: IllustrationStyle) => {
+    setSelected(style);
+
+    setConfig((prev) => ({
+      ...prev,
+      ui: {
+        ...prev.ui,
+        illustrationStyle: style,
+      },
+    }));
+  };
+
+  const getIllustrationStyleValue = (style: IllustrationStyle) => {
+    return (
+      ILLUSTRATION_STYLE_OPTIONS.find((option) => option.id === style)?.label ||
+      "None"
+    );
+  };
+
+  return (
+    <SelectMenu
+      open={menuOpen}
+      onOpenChange={setMenuOpen}
+      value={selected}
+      onValueChange={onChange}
+    >
+      <SelectMenuTrigger
+        className={cn(
+          "w-full radius py-3 px-4 bg-white border border-border flex items-center justify-between transition-colors ease-out",
+          menuOpen && `bg-[#FBFDFF] border-[${primaryColor[theme]}]`
+        )}
+      >
+        <span className="text-sm font-normal block text-left text-secondary-foreground">
+          {getIllustrationStyleValue(selected)}
+        </span>
+        <div className="ml-1 w-[20px] h-[20px] flex items-center justify-center">
+          <ChevronDown
+            stroke={primaryColor[theme]}
+            className={cn("transition", menuOpen && "rotate-180")}
+          />
+        </div>
+      </SelectMenuTrigger>
+      <SelectMenuContent position="popper" className="p-0 my-2">
+        <SelectMenuViewport>
+          {options.map((option) => (
+            <SelectMenuItem
+              key={option}
+              value={option}
+              className={cn(
+                "px-4 py-3 hover:bg-[#EFF4F9] transition-colors ease-out outline-none text-sm",
+                selected === option ? "font-medium bg-[#EFF4F9]" : "font-normal"
+              )}
+            >
+              {getIllustrationStyleValue(option)}
+            </SelectMenuItem>
+          ))}
+        </SelectMenuViewport>
+      </SelectMenuContent>
+    </SelectMenu>
+  );
+};
