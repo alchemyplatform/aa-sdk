@@ -17,6 +17,7 @@ import { AuthCardWrapper } from "../components/preview/AuthCardWrapper";
 import { CodePreview } from "../components/preview/CodePreview";
 import { CodePreviewSwitch } from "../components/shared/CodePreviewSwitch";
 import { TopNav } from "../components/topnav/TopNav";
+import { MintCard } from "@/components/shared/mint-card/MintCard";
 
 const publicSans = Public_Sans({
   subsets: ["latin"],
@@ -33,9 +34,10 @@ export default function Home() {
   const user = useUser();
   const { config } = useConfig();
   const isEOAUser = user?.type === "eoa";
-
   return (
-    <main className={`flex flex-col h-screen ${publicSans.className}`}>
+    <main
+      className={`flex flex-col h-screen bg-bg-main ${publicSans.className} bg-cover bg-center`}
+    >
       <TopNav />
       <div
         className={`flex flex-col flex-1 px-4 sm:px-6 lg:px-10 py-4 sm:py-6 w-full max-w-screen-2xl mx-auto overflow-visible overflow-x-hidden ${inter.className} sm:overflow-hidden`}
@@ -55,6 +57,7 @@ export default function Home() {
             <div
               className={cn(
                 `absolute h-[85px] w-full p-6 top-0 flex items-center left-0 border-b border-border z-10`,
+                !user && !showCode && "border-[transparent]",
                 !user || showCode ? "justify-end" : "justify-between",
                 config.ui.theme === "dark"
                   ? showCode
@@ -84,31 +87,31 @@ export default function Home() {
 
             {/* Don't unmount when showing code preview so that the auth card retains its state */}
             <AuthCardWrapper
-              className={showCode ? "hidden" : "mt-0 pt-[85px]"}
+              className={cn(
+                showCode && "hidden",
+                "mt-0 xl:pt-0",
+                !user ? "md:pt-0" : "md:pt-[85px]"
+              )}
             />
             {showCode && <CodePreview className="pt-[105px]" />}
           </div>
         </div>
         <div className="flex flex-1 flex-col gap-6 sm:hidden">
-          {!user ? (
-            <MobileSplashPage />
-          ) : (
+          {!user && <MobileSplashPage />}
+          {isEOAUser && (
             <div className="flex flex-1 flex-col">
               <div className="border-border border radius-2 px-6 py-6">
                 <RenderUserConnectionAvatar />
-                {isEOAUser && (
-                  <div className="pt-6">
-                    <EOAPostLoginContents />
-                  </div>
-                )}
-              </div>
-              {isEOAUser && (
-                <div className="mt-auto mb-5 pt-10">
-                  <EOAPostLoginActions />
+                <div className="pt-6">
+                  <EOAPostLoginContents />
                 </div>
-              )}
+              </div>
+              <div className="mt-auto mb-5 pt-10">
+                <EOAPostLoginActions />
+              </div>
             </div>
           )}
+          {user && !isEOAUser && <MintCard />}
         </div>
       </div>
     </main>

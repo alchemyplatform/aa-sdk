@@ -51,6 +51,7 @@ export const config = createConfig(
     chain: sepolia,
     ssr: true, // defers hydration of the account state to the client after the initial mount solving any inconsistencies between server and client state (read more here: https://accountkit.alchemy.com/react/ssr)
     storage: cookieStorage, // persist the account state using cookies (read more here: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state)
+    enablePopupOauth: true, // must be set to "true" if you plan on using popup rather than redirect in the social login flow
   },
   uiConfig
 );
@@ -178,6 +179,7 @@ The [**demo app**](https://aa-sdk-ui-demo.vercel.app/) provides an interactive s
        - **chain** (required): Chain imported from @account-kit/infra . This chain must match the chain your api key / embedded accounts config is setup for.
        - **ssr** (optional): Highly recommended for NextJs applications to keep account state consistent between the server and client
        - **storage** (optional): Cookie storage highly recommended for NextJs applications to persist and cache account state across page loads
+       - **enablePopupOauth** (optional): If implementing social login, allow for the sign in window to appear as a pop up to your user.
 
      - `ui`: for creating Alchemy Accounts UI components
 
