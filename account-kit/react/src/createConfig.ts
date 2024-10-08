@@ -16,7 +16,7 @@ export type AlchemyAccountsConfigWithUI = AlchemyAccountsConfig & {
  *
  * @example
  * ```ts
- * import { sepolia } from "@account-kit/infra"
+ * import { sepolia, alchemy } from "@account-kit/infra"
  * import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react"
  * import { QueryClient } from "@tanstack/react-query";
  *
@@ -29,7 +29,7 @@ export type AlchemyAccountsConfigWithUI = AlchemyAccountsConfig & {
  * }
  *
  * const config = createConfig({
- *   rpcUrl: "/api/rpc",
+ *   transport: alchemy({ apiKey: "your_api_key" })
  *   chain: sepolia,
  *   ssr: true,
  * }, uiConfig)
