@@ -109,10 +109,10 @@ export const MintCard = () => {
   );
 
   return (
-    <div className="flex pb-10 xl:pb-0 xl:justify-center flex-col xl:h-full">
-      <div className="md:self-center">
+    <div className="flex mt-0 sm:mt-7 pb-10 xl:pb-0 xl:justify-center flex-col xl:h-full">
+      <div className="sm:self-center">
         <div className="flex items-center flex-col justify-center mb-12 xl:mb-0  xl:flex-row xl:justify-center xl:items-start bg-bg-surface-default radius-1 border-btn-secondary border md:mx-6 xl:mx-0 overflow-hidden xl:h-[532px]">
-          <RenderUserConnectionAvatar className="md:hidden w-full p-6 mb-0 pb-6 relative after:absolute after:bottom-0 after:left-6 after:right-6  after:h-[1px] after:bg-border" />
+          <RenderUserConnectionAvatar className="sm:hidden w-full p-6 mb-0 pb-6 relative after:absolute after:bottom-0 after:left-6 after:right-6  after:h-[1px] after:bg-border" />
           <div className="hidden xl:block px-10 py-12 h-full w-[428px]">
             <h1 className="text-3xl font-semibold  leading-10 mb-8 text-fg-primary">
               {!nftTransfered

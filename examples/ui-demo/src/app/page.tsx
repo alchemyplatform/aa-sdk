@@ -96,26 +96,21 @@ export default function Home() {
           </div>
         </div>
         <div className="flex flex-1 flex-col gap-6 sm:hidden">
-          {!user ? (
-            <MobileSplashPage />
-          ) : (
+          {!user && <MobileSplashPage />}
+          {isEOAUser && (
             <div className="flex flex-1 flex-col">
-              {isEOAUser && (
-                <div className="border-border border radius-2 px-6 py-6">
-                  <RenderUserConnectionAvatar />
-                  <div className="pt-6">
-                    <EOAPostLoginContents />
-                  </div>
+              <div className="border-border border radius-2 px-6 py-6">
+                <RenderUserConnectionAvatar />
+                <div className="pt-6">
+                  <EOAPostLoginContents />
                 </div>
-              )}
-              {isEOAUser && (
-                <div className="mt-auto mb-5 pt-10">
-                  <EOAPostLoginActions />
-                </div>
-              )}
+              </div>
+              <div className="mt-auto mb-5 pt-10">
+                <EOAPostLoginActions />
+              </div>
             </div>
           )}
-          {user && <MintCard />}
+          {user && !isEOAUser && <MintCard />}
         </div>
       </div>
     </main>

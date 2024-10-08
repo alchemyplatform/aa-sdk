@@ -9,7 +9,7 @@ export const RenderUserConnectionAvatar = (
 ) => {
   return (
     <div
-      className="border-b border-border pb-6 md:border-none md:pb-0"
+      className="border-b border-border pb-6 sm:border-none sm:pb-0"
       {...props}
     >
       {/* Popover - Visible on desktop screens */}
