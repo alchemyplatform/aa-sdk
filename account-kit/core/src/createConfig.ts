@@ -84,8 +84,11 @@ export const createConfig = (
     },
     sessionConfig,
     storage: storage?.(
-      sessionConfig?.expirationTimeMs
-        ? { sessionLength: sessionConfig.expirationTimeMs }
+      sessionConfig
+        ? {
+            sessionLength: sessionConfig.expirationTimeMs,
+            domain: sessionConfig.domain,
+          }
         : undefined
     ),
     ssr,

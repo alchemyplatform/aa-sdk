@@ -39,10 +39,10 @@ export default function Home() {
     <main className={`flex flex-col h-screen ${publicSans.className}`}>
       <TopNav />
       <div
-        className={`px-4 md:px-6 xl:px-10 py-4 md:py-6 w-full max-w-screen-2xl mx-auto overflow-visible overflow-x-hidden ${inter.className} md:overflow-hidden`}
+        className={`flex flex-col flex-1 px-4 sm:px-6 lg:px-10 py-4 sm:py-6 w-full max-w-screen-2xl mx-auto overflow-visible overflow-x-hidden ${inter.className} sm:overflow-hidden`}
       >
-        <div className="hidden md:flex gap-6 overflow-hidden">
-          <div className=" flex-col w-[272px] xl:w-[392px] bg-white border border-border rounded-lg p-6 overflow-y-auto scrollbar-none gap-10">
+        <div className="hidden sm:flex flex-1 gap-6 overflow-hidden">
+          <div className=" flex-col w-[272px] md:w-[392px] bg-white border border-border rounded-lg p-6 overflow-y-auto scrollbar-none gap-10">
             <Authentication />
             <Styling />
           </div>
@@ -95,7 +95,7 @@ export default function Home() {
             {showCode && <CodePreview className="pt-[105px]" />}
           </div>
         </div>
-        <div className="flex flex-1 flex-col gap-6 md:hidden">
+        <div className="flex flex-1 flex-col gap-6 sm:hidden">
           {!user ? (
             <MobileSplashPage />
           ) : (
