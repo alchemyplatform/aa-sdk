@@ -54,10 +54,9 @@ await signer.authenticate({ type: "email", bundle });
 
 You can allow users to sign in with an OAuth provider like Google, Facebook, or Auth0. There are two login flows that are possible: redirect and popup. The redirect flow redirects the user to the auth provider's login page, then back to a specified page in your application when done. The popup flow opens the auth provider's login page in a popup window without leaving your application, then updates your application when done. If using popup, you need to set the `enablePopupOauth` field to `true` in the [config](/react/quickstart).
 
-
 :::code-group
 
-```ts twoslash [example.ts]
+````ts twoslash [example.ts]
 import { config } from "./config";
 import { getSigner } from "@account-kit/core";
 
@@ -85,7 +84,7 @@ await signer.authenticate({ // popup login flow
 
 ```ts twoslash [config.ts] filename="config.ts"
 // [!include ~/shared/core/config.ts]
-```
+````
 
 :::
 

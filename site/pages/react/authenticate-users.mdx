@@ -103,19 +103,29 @@ export default function MyLoginPage() {
 
   return (
     <div>
-      <button onClick={() => authenticate({ // redirect login flow
-        type: "oauth",
-        authProviderId: "google",
-        mode: "redirect",
-        redirectUrl: "/", // After logging in, redirect to the index page
-      })}>
+      <button
+        onClick={() =>
+          authenticate({
+            // redirect login flow
+            type: "oauth",
+            authProviderId: "google",
+            mode: "redirect",
+            redirectUrl: "/", // After logging in, redirect to the index page
+          })
+        }
+      >
         Login (Redirect)
       </button>
-      <button onClick={() => authenticate({ // popup login flow
-        type: "oauth",
-        authProviderId: "google",
-        mode: "popup", // remember to set "enablePopupOauth" to "true" in config.ts to enable
-      })}>
+      <button
+        onClick={() =>
+          authenticate({
+            // popup login flow
+            type: "oauth",
+            authProviderId: "google",
+            mode: "popup", // remember to set "enablePopupOauth" to "true" in config.ts to enable
+          })
+        }
+      >
         Login (Popup)
       </button>
     </div>
