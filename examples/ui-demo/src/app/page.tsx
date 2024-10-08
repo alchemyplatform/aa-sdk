@@ -17,7 +17,7 @@ import { AuthCardWrapper } from "../components/preview/AuthCardWrapper";
 import { CodePreview } from "../components/preview/CodePreview";
 import { CodePreviewSwitch } from "../components/shared/CodePreviewSwitch";
 import { TopNav } from "../components/topnav/TopNav";
-import { MintCard } from "@/components/shared/MintCard";
+import { MintCard } from "@/components/shared/mint-card/MintCard";
 
 const publicSans = Public_Sans({
   subsets: ["latin"],
