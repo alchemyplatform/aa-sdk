@@ -1,4 +1,4 @@
-import { Config } from "@/app/state";
+import { Config } from "@/app/config";
 
 export function AuthCardHeader({
   logoDark,
