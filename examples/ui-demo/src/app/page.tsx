@@ -35,7 +35,9 @@ export default function Home() {
   const isEOAUser = user?.type === "eoa";
 
   return (
-    <main className={`flex flex-col h-screen ${publicSans.className}`}>
+    <main
+      className={`flex flex-col h-screen bg-bg-main ${publicSans.className} bg-cover bg-center`}
+    >
       <TopNav />
       <div
         className={`flex flex-col flex-1 px-4 sm:px-6 lg:px-10 py-4 sm:py-6 w-full max-w-screen-2xl mx-auto overflow-visible overflow-x-hidden ${inter.className} sm:overflow-hidden`}
