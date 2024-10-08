@@ -86,6 +86,43 @@ export default function MyLoginPage() {
 }
 ```
 
+### Social Login
+
+You can allow uers to sign in with a Oauth provider like Google, Facebook, or Auth0. There are two login flows that are possible: the redirect flow goes to the auth provider's login page and the popup flow has the auth provider login screen to open as a popup.
+
+```tsx twoslash
+import React from "react";
+import {
+  type UseAuthenticateResult,
+  useAuthenticate,
+} from "@account-kit/react";
+
+// This examples uses social login, specifically Google Sign-In
+export default function MyLoginPage() {
+  const { authenticate, isPending } = useAuthenticate();
+
+  return (
+    <div>
+      <button onClick={() => authenticate({ // redirect login flow
+        type: "oauth",
+        authProviderId: "google",
+        mode: "redirect",
+        redirectUrl: "/", // After logging in, redirect to the index page
+      })}>
+        Login (Redirect)
+      </button>
+      <button onClick={() => authenticate({ // popup login flow
+        type: "oauth",
+        authProviderId: "google",
+        mode: "popup",
+      })}>
+        Login (Popup)
+      </button>
+    </div>
+  );
+}
+```
+
 ### Passkey auth with email backup
 
 This approach will allow you to login or signup users using a passkey as the primary auth mechanism and register an email as a backup.

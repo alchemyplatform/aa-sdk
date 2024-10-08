@@ -50,6 +50,38 @@ await signer.authenticate({ type: "email", bundle });
 
 :::
 
+## Social Login
+
+You can allow uers to sign in with a Oauth provider like Google, Facebook, or Auth0. There are two login flows that are possible: the redirect flow goes to the auth provider's login page and the popup flow has the auth provider login screen to open as a popup.
+
+:::code-group
+
+```ts twoslash [example.ts]
+import { config } from "./config";
+import { getSigner } from "@account-kit/core";
+
+const signer = getSigner(config);
+
+if (!signer) {
+  // this can happen if your rendering this on the server
+  // the signer instance is only available on the client
+  throw new Error("Signer not found");
+}
+
+// authenticate the user with a social login provider
+await signer.authenticate({
+  type: "oauth",
+  authProviderId: "google",
+  mode: "redirect",
+  redirectUrl: "/", // After logging in, redirect to the index page
+});
+
+```ts twoslash [config.ts] filename="config.ts"
+// [!include ~/shared/core/config.ts]
+```
+
+:::
+
 ## Passkey auth with email backup
 
 This approach will allow you to login or signup users using a passkey as the primary auth mechanism and register an email as a backup.
@@ -113,3 +145,8 @@ await signer.authenticate({
 ```
 
 :::
+
+## Social Login
+
+
+
