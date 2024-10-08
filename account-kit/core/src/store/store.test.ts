@@ -218,7 +218,157 @@ describe("createConfig tests", () => {
               "421614": {},
             },
           },
-          "version": 8,
+          "version": 9,
+        }
+      `);
+  });
+
+  it("should serialize/deserialize state correctly when using single chain config", async () => {
+    const config = createConfig({
+      chain: sepolia,
+      transport: alchemy({ rpcUrl: "/api/sepolia" }),
+      signerConnection: { rpcUrl: "/api/signer" },
+      sessionConfig: {
+        expirationTimeMs: 1000,
+      },
+      policyId: "test-policy-id",
+      storage: () => localStorage,
+    });
+
+    await config.store.persist.rehydrate();
+
+    config.store.setState({
+      accounts: createDefaultAccountState([sepolia]),
+    });
+
+    expect(JSON.parse(localStorage.getItem(DEFAULT_STORAGE_KEY) ?? "{}"))
+      .toMatchInlineSnapshot(`
+        {
+          "state": {
+            "accountConfigs": {
+              "11155111": {},
+            },
+            "chain": {
+              "blockExplorers": {
+                "default": {
+                  "apiUrl": "https://api-sepolia.etherscan.io/api",
+                  "name": "Etherscan",
+                  "url": "https://sepolia.etherscan.io",
+                },
+              },
+              "contracts": {
+                "ensRegistry": {
+                  "address": "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
+                },
+                "ensUniversalResolver": {
+                  "address": "0xc8Af999e38273D658BE1b921b88A9Ddf005769cC",
+                  "blockCreated": 5317080,
+                },
+                "multicall3": {
+                  "address": "0xca11bde05977b3631167028862be2a173976ca11",
+                  "blockCreated": 751532,
+                },
+              },
+              "id": 11155111,
+              "name": "Sepolia",
+              "nativeCurrency": {
+                "decimals": 18,
+                "name": "Sepolia Ether",
+                "symbol": "ETH",
+              },
+              "rpcUrls": {
+                "alchemy": {
+                  "http": [
+                    "https://eth-sepolia.g.alchemy.com/v2",
+                  ],
+                },
+                "default": {
+                  "http": [
+                    "https://rpc.sepolia.org",
+                  ],
+                },
+              },
+              "testnet": true,
+            },
+            "config": {
+              "client": {
+                "connection": {
+                  "rpcUrl": "/api/signer",
+                },
+              },
+              "sessionConfig": {
+                "expirationTimeMs": 1000,
+              },
+            },
+            "connections": {
+              "__type": "Map",
+              "value": [
+                [
+                  11155111,
+                  {
+                    "chain": {
+                      "blockExplorers": {
+                        "default": {
+                          "apiUrl": "https://api-sepolia.etherscan.io/api",
+                          "name": "Etherscan",
+                          "url": "https://sepolia.etherscan.io",
+                        },
+                      },
+                      "contracts": {
+                        "ensRegistry": {
+                          "address": "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
+                        },
+                        "ensUniversalResolver": {
+                          "address": "0xc8Af999e38273D658BE1b921b88A9Ddf005769cC",
+                          "blockCreated": 5317080,
+                        },
+                        "multicall3": {
+                          "address": "0xca11bde05977b3631167028862be2a173976ca11",
+                          "blockCreated": 751532,
+                        },
+                      },
+                      "id": 11155111,
+                      "name": "Sepolia",
+                      "nativeCurrency": {
+                        "decimals": 18,
+                        "name": "Sepolia Ether",
+                        "symbol": "ETH",
+                      },
+                      "rpcUrls": {
+                        "alchemy": {
+                          "http": [
+                            "https://eth-sepolia.g.alchemy.com/v2",
+                          ],
+                        },
+                        "default": {
+                          "http": [
+                            "https://rpc.sepolia.org",
+                          ],
+                        },
+                      },
+                      "testnet": true,
+                    },
+                    "policyId": "test-policy-id",
+                    "transport": {
+                      "__type": "Transport",
+                      "rpcUrl": "/api/sepolia",
+                    },
+                  },
+                ],
+              ],
+            },
+            "signerStatus": {
+              "isAuthenticating": false,
+              "isConnected": false,
+              "isDisconnected": false,
+              "isInitializing": true,
+              "status": "INITIALIZING",
+            },
+            "smartAccountClients": {
+              "11155111": {},
+            },
+          },
+          "version": 9,
         }
       `);
   });
