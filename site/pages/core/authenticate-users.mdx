@@ -56,7 +56,7 @@ You can allow users to sign in with an OAuth provider like Google, Facebook, or 
 
 :::code-group
 
-````ts twoslash [example.ts]
+```ts twoslash [example.ts]
 import { config } from "./config";
 import { getSigner } from "@account-kit/core";
 
@@ -69,22 +69,25 @@ if (!signer) {
 }
 
 // authenticate the user with a social login provider
-await signer.authenticate({ // redirect login flow
+await signer.authenticate({
+  // redirect login flow
   type: "oauth",
   authProviderId: "google",
   mode: "redirect",
   redirectUrl: "/", // After logging in, redirect to the index page
 });
 
-await signer.authenticate({ // popup login flow
+await signer.authenticate({
+  // popup login flow
   type: "oauth",
   authProviderId: "google",
   mode: "popup", // remember to set "enablePopupOauth" to "true" in config.ts to enable
 });
+```
 
 ```ts twoslash [config.ts] filename="config.ts"
 // [!include ~/shared/core/config.ts]
-````
+```
 
 :::
 
