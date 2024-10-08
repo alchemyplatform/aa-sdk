@@ -3,6 +3,8 @@ import { getWebAuthnAttestation } from "@turnkey/http";
 import { IframeStamper } from "@turnkey/iframe-stamper";
 import { WebauthnStamper } from "@turnkey/webauthn-stamper";
 import { z } from "zod";
+import { getDefaultScopeAndClaims, getOauthNonce } from "../oauth.js";
+import type { AuthParams, OauthMode } from "../signer.js";
 import { base64UrlEncode } from "../utils/base64UrlEncode.js";
 import { generateRandomBuffer } from "../utils/generateRandomBuffer.js";
 import { BaseSignerClient } from "./base.js";
@@ -16,8 +18,6 @@ import type {
   OauthParams,
   User,
 } from "./types.js";
-import { getDefaultScopeAndClaims, getOauthNonce } from "../oauth.js";
-import type { AuthParams, OauthMode } from "../signer.js";
 
 const CHECK_CLOSE_INTERVAL = 500;
 
@@ -372,6 +372,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
   public override disconnect = async () => {
     this.user = undefined;
     this.iframeStamper.clear();
+    await this.iframeStamper.init();
   };
 
   /**
