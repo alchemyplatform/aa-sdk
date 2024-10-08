@@ -12,7 +12,6 @@ export type AuthStep =
   | {
       type: "oauth_completing";
       provider: string;
-      supportUrl?: string;
       error?: Error;
     }
   | { type: "initial"; error?: Error }

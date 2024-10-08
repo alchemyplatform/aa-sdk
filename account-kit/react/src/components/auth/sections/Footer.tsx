@@ -20,7 +20,7 @@ const RenderFooterText = ({ authStep }: FooterProps) => {
     case "passkey_verify":
       return <HelpText />;
     case "oauth_completing":
-      return <OAuthContactSupport authStep={authStep} />;
+      return <OAuthContactSupport />;
     case "email_completing":
     case "passkey_create_success":
     case "eoa_connect":

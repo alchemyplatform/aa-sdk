@@ -1,4 +1,4 @@
-import { GoogleIcon } from "../../../icons/oauth.js";
+import { AppleIcon, FacebookIcon, GoogleIcon } from "../../../icons/oauth.js";
 import { Button } from "../../button.js";
 import { useOAuthVerify } from "../hooks/useOAuthVerify.js";
 import type { AuthType } from "../types.js";
@@ -7,21 +7,45 @@ type Props = Extract<AuthType, { type: "social" }>;
 
 // Not used externally
 // eslint-disable-next-line jsdoc/require-jsdoc
-export const OAuth = ({ authProviderId }: Props) => {
-  const { authenticate } = useOAuthVerify();
+export const OAuth = ({ ...config }: Props) => {
+  const { authenticate } = useOAuthVerify({
+    ...config,
+  });
 
-  // TODO: switch on authProviderId, for all KnownProviderIds, set button icon to GoogleIcon (ex)
-  // for auth0 authProviderId, set button icon to logoUrl in Props
-  if (authProviderId === "google") {
-    return (
-      <Button
-        variant="social"
-        icon={<GoogleIcon />}
-        onClick={authenticate}
-      ></Button>
-    );
+  switch (config.authProviderId) {
+    case "google":
+      return (
+        <Button
+          variant="social"
+          icon={<GoogleIcon />}
+          onClick={authenticate}
+        ></Button>
+      );
+    case "facebook":
+      return (
+        <Button
+          variant="social"
+          icon={<FacebookIcon />}
+          onClick={authenticate}
+        ></Button>
+      );
+    case "apple":
+      return (
+        <Button
+          variant="social"
+          icon={<AppleIcon />}
+          onClick={authenticate}
+        ></Button>
+      );
+    case "auth0":
+      return (
+        "logoUrl" in config && (
+          <Button
+            variant="social"
+            icon={<img src={config.logoUrl} alt={config.auth0Connection} />}
+            onClick={authenticate}
+          ></Button>
+        )
+      );
   }
-
-  // TODO: add the other social providers
-  return null;
 };
