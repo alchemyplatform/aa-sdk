@@ -49,7 +49,6 @@ export function ConfigContextProvider(props: PropsWithChildren) {
 
   // Sync Alchemy auth UI config
   useEffect(() => {
-    console.log("config sync", config);
     const sections: AuthType[][] = [[{ type: "email" }]];
 
     if (config.auth.showPasskey) {
