@@ -14,6 +14,8 @@ import { useState } from "react";
 export function Styling({ className }: { className?: string }) {
   const { config, setConfig } = useConfig();
   const [supportUrl, setsupportUrl] = useState("");
+  const logo =
+    config.ui.theme === "dark" ? config.ui.logoDark : config.ui.logoLight;
   const handleChangesupportUrl = () => {
     setConfig((prev) => ({
       ...prev,
@@ -58,7 +60,13 @@ export function Styling({ className }: { className?: string }) {
               <span className="text-fg-tertiary font-normal">(optional)</span>
             </p>
             <p className="text-fg-tertiary font-normal text-xs">
-              SVG or PNG, max 320x48 px
+              {logo?.fileName ? (
+                <span className="truncate block max-w-[200px]">
+                  {logo.fileName}
+                </span>
+              ) : (
+                "SVG or PNG, max 320x48 px"
+              )}
             </p>
           </div>
           <PhotoUploads mode={config.ui.theme} />
