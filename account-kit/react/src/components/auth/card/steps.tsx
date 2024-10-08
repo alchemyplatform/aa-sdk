@@ -10,7 +10,6 @@ import { PasskeyAdded } from "./passkey-added.js";
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const Step = () => {
   const { authStep } = useAuthContext();
-  console.log(authStep.type);
   switch (authStep.type) {
     case "email_verify":
       return <LoadingEmail authStep={authStep} />;

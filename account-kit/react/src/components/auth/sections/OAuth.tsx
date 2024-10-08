@@ -10,6 +10,8 @@ type Props = Extract<AuthType, { type: "social" }>;
 export const OAuth = ({ authProviderId }: Props) => {
   const { authenticate } = useOAuthVerify();
 
+  // TODO: switch on authProviderId, for all KnownProviderIds, set button icon to GoogleIcon (ex)
+  // for auth0 authProviderId, set button icon to logoUrl in Props
   if (authProviderId === "google") {
     return (
       <Button
