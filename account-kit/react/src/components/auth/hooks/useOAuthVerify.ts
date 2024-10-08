@@ -2,7 +2,6 @@
 import { useCallback } from "react";
 import { useAuthenticate } from "../../../hooks/useAuthenticate.js";
 import { useAuthContext } from "../context.js";
-import { useUiConfig } from "../../../hooks/useUiConfig.js";
 import type { AuthType } from "../types.js";
 
 export type UseOAuthVerifyReturnType = {
@@ -15,26 +14,29 @@ export const useOAuthVerify = ({
   ...config
 }: Extract<AuthType, { type: "social" }>): UseOAuthVerifyReturnType => {
   const { setAuthStep } = useAuthContext();
-  const { supportUrl } = useUiConfig();
 
   const { authenticate: authenticate_, isPending } = useAuthenticate({
     onMutate: () => {
       setAuthStep({
         type: "oauth_completing",
-        provider: "google",
-        // We dont need this here, because of useUiConfig can get this from context
-        supportUrl: supportUrl,
+        provider:
+          config.authProviderId === "auth0"
+            ? config.auth0Connection!
+            : config.authProviderId,
+        ...(config.authProviderId === "auth0" &&
+          "logoUrl" in config && { logoUrl: config.logoUrl }),
       });
     },
     onError: (err) => {
       setAuthStep({
         type: "oauth_completing",
-        // Parse config.authProviderID unless it's Auth0, the check for auth0Connection(?) for the provider name
-        provider: "google",
-        // We dont need this here, because of useUiConfig can get this from context
-        supportUrl: supportUrl,
-        // optionally pass in the logoUrl if Auth0
+        provider:
+          config.authProviderId === "auth0"
+            ? config.auth0Connection!
+            : config.authProviderId,
         error: err,
+        ...(config.authProviderId === "auth0" &&
+          "logoUrl" in config && { logoUrl: config.logoUrl }),
       });
     },
     onSuccess: () => {
@@ -46,10 +48,8 @@ export const useOAuthVerify = ({
     authenticate_({
       type: "oauth",
       ...config,
-      // authProviderId: "google",
-      // mode: "popup",
     });
-  }, [authenticate_]);
+  }, [authenticate_, config]);
 
   return {
     isPending,

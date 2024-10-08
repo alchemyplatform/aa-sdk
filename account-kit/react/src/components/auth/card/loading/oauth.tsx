@@ -27,15 +27,26 @@ export const CompletingOAuth = ({ authStep }: CompletingOAuthProps) => {
     );
   }
 
+  const capitalize = (str: string) => {
+    return str
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
   return (
     <div className="flex flex-col gap-5 items-center">
       <div className="flex flex-col items-center justify-center">
         <ContinueWithOAuth />
       </div>
 
-      <h3 className="font-semibold text-lg">{`Continue with ${authStep.provider}`}</h3>
+      <h3 className="font-semibold text-lg">{`Continue with ${capitalize(
+        authStep.provider
+      )}`}</h3>
       <p className="text-fg-secondary text-center text-sm">
-        {`Follow the steps in the pop up window to sign in with ${authStep.provider}`}
+        {`Follow the steps in the pop up window to sign in with ${capitalize(
+          authStep.provider
+        )}`}
       </p>
 
       <div className="flex flex-col w-full items-center gap-1">
