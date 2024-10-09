@@ -85,20 +85,20 @@ export const Authentication = ({ className }: { className?: string }) => {
             iconClassName="mt-[2px] self-start"
             details={
               config.auth.showSocial && (
-                <div className="flex gap-x-2">
+                <div className="flex gap-x-3">
                   <OAuthMethod
                     icon={<GoogleIcon />}
                     onClick={setAddGoogleAuth}
                     className={`grow-0 border-2 rounded-lg p-1 ${
                       config.auth.addGoogleAuth
-                        ? "border-blue-600 bg-blue-100"
-                        : "border-gray-300"
+                        ? "border-gray-500 bg-gray-100"
+                        : "border-gray-500"
                     }`}
                   />
                   <OAuthMethod
                     icon={<FacebookLogo />}
                     onClick={() => {}}
-                    className="grow-0 border-2 rounded-lg p-1 border-gray-300"
+                    className="grow-0 border-2 rounded-lg p-1 border-gray-500"
                   />
                   {/* TO DO: add "Add provider" button */}
                 </div>
