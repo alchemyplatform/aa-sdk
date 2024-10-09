@@ -18,6 +18,7 @@ import { CodePreview } from "../components/preview/CodePreview";
 import { CodePreviewSwitch } from "../components/shared/CodePreviewSwitch";
 import { TopNav } from "../components/topnav/TopNav";
 import { MintCard } from "@/components/shared/mint-card/MintCard";
+import ExternalLink from "@/components/shared/ExternalLink";
 
 const publicSans = Public_Sans({
   subsets: ["latin"],
@@ -56,9 +57,9 @@ export default function Home() {
             {/* Code toggle header */}
             <div
               className={cn(
-                `absolute h-[85px] w-full p-6 top-0 flex items-center left-0 border-b border-border z-10`,
+                ` w-full p-6 top-0 left-0 border-b border-border z-10`,
                 !user && !showCode && "border-[transparent]",
-                !user || showCode ? "justify-end" : "justify-between",
+                showCode ? "sticky" : "absolute",
                 config.ui.theme === "dark"
                   ? showCode
                     ? "bg-white"
@@ -66,34 +67,56 @@ export default function Home() {
                   : "bg-white"
               )}
             >
-              {!showCode && user && <RenderUserConnectionAvatar />}
-              <div className="flex gap-2 items-center">
-                <div
-                  className={cn(
-                    "px-2 py-1 h-5 rounded text-xs font-semibold hidden lg:flex items-center justify-center ",
-                    showCode
-                      ? "bg-[#F3F3FF] text-[#8B5CF6]"
-                      : "bg-[#EFF4F9] text-[#374151]"
-                  )}
-                >
-                  Code preview
+              <div
+                className={cn(
+                  "flex justify-between items-start",
+
+                  !showCode && !user && "justify-end"
+                )}
+              >
+                {!showCode && user && <RenderUserConnectionAvatar />}
+                {showCode && (
+                  <div className="font-semibold text-foreground text-xl">
+                    Export configuration
+                  </div>
+                )}
+                <div className="flex gap-2 items-center">
+                  <div
+                    className={cn(
+                      "px-2 py-1 h-5 rounded text-xs font-semibold hidden lg:flex items-center justify-center ",
+                      showCode
+                        ? "bg-[#F3F3FF] text-[#8B5CF6]"
+                        : "bg-[#EFF4F9] text-[#374151]"
+                    )}
+                  >
+                    Code preview
+                  </div>
+                  <CodePreviewSwitch
+                    checked={showCode}
+                    onCheckedChange={setShowCode}
+                  />
                 </div>
-                <CodePreviewSwitch
-                  checked={showCode}
-                  onCheckedChange={setShowCode}
-                />
               </div>
+              {showCode && (
+                <p className="text-sm text-[#475569] max-w-[85%]">
+                  To get started, simply paste the below code into your
+                  environment. You&apos;ll need to add your Alchemy API key and
+                  Gas Policy ID.{" "}
+                  <ExternalLink
+                    href="#"
+                    className="font-semibold text-blue-600"
+                  >
+                    Fully customize CSS here.
+                  </ExternalLink>
+                </p>
+              )}
             </div>
 
             {/* Don't unmount when showing code preview so that the auth card retains its state */}
             <AuthCardWrapper
-              className={cn(
-                showCode && "hidden",
-                "mt-0 xl:pt-0",
-                !user ? "md:pt-0" : "md:pt-[85px]"
-              )}
+              className={cn(showCode && "hidden", "mt-0 xl:pt-0")}
             />
-            {showCode && <CodePreview className="pt-[105px]" />}
+            {showCode && <CodePreview />}
           </div>
         </div>
         <div className="flex flex-1 flex-col gap-6 sm:hidden">
