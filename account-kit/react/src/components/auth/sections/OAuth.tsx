@@ -39,13 +39,11 @@ export const OAuth = ({ ...config }: Props) => {
       );
     case "auth0":
       return (
-        "logoUrl" in config && (
-          <Button
-            variant="social"
-            icon={<img src={config.logoUrl} alt={config.auth0Connection} />}
-            onClick={authenticate}
-          ></Button>
-        )
+        <Button
+          variant="social"
+          icon={<img src={config.logoUrl} alt={config.auth0Connection} />}
+          onClick={authenticate}
+        ></Button>
       );
   }
 };
