@@ -49,7 +49,8 @@ export function hydrate(
       ...rest,
       accountConfigs,
       signerStatus: convertSignerStatusToState(
-        AlchemySignerStatus.INITIALIZING
+        AlchemySignerStatus.INITIALIZING,
+        undefined
       ),
       accounts: hydrateAccountState(
         accountConfigs,

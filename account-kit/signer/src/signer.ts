@@ -105,9 +105,57 @@ export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> 
     } else {
       client = params_.client;
     }
-    super({
-      client,
-      sessionConfig,
-    });
+    const { emailBundle, oauthBundle, oauthOrgId, oauthError } =
+      getAndRemoveQueryParams({
+        emailBundle: "bundle",
+        // We don't need this, but we still want to remove it from the URL.
+        emailOrgId: "orgId",
+        oauthBundle: "alchemy-bundle",
+        oauthOrgId: "alchemy-org-id",
+        oauthError: "alchemy-error",
+      });
+
+    const initialError =
+      oauthError != null
+        ? { name: "OauthError", message: oauthError }
+        : undefined;
+
+    super({ client, sessionConfig, initialError });
+
+    if (emailBundle) {
+      this.authenticate({ type: "email", bundle: emailBundle });
+    } else if (oauthBundle && oauthOrgId) {
+      this.authenticate({
+        type: "oauthReturn",
+        bundle: oauthBundle,
+        orgId: oauthOrgId,
+      });
+    }
   }
+}
+
+/**
+ * Reads and removes the specified query params from the URL.
+ *
+ * @param {T} keys object whose values are the query parameter keys to read and
+ * remove
+ * @returns {{ [K in keyof T]: string | undefined }} object with the same keys
+ * as the input whose values are the values of the query params.
+ */
+function getAndRemoveQueryParams<T extends Record<string, string>>(
+  keys: T
+): { [K in keyof T]: string | undefined } {
+  const url = new URL(window.location.href);
+  const result: Record<string, string | undefined> = {};
+  let foundQueryParam = false;
+  for (const [key, param] of Object.entries(keys)) {
+    const value = url.searchParams.get(param) ?? undefined;
+    foundQueryParam ||= value != null;
+    result[key] = value;
+    url.searchParams.delete(param);
+  }
+  if (foundQueryParam) {
+    window.history.replaceState(window.history.state, "", url.toString());
+  }
+  return result as { [K in keyof T]: string | undefined };
 }
