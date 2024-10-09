@@ -1,7 +1,7 @@
 "use client";
 import { useCallback } from "react";
 import { useAuthenticate } from "../../../hooks/useAuthenticate.js";
-import { useAuthContext, type AuthStep } from "../context.js";
+import { useAuthContext } from "../context.js";
 import type { AuthType } from "../types.js";
 
 export type UseOAuthVerifyReturnType = {
@@ -14,8 +14,7 @@ export const useOAuthVerify = ({
 }: {
   config: Extract<AuthType, { type: "social" }>;
 }): UseOAuthVerifyReturnType => {
-  const { authStep: _authStep, setAuthStep } = useAuthContext();
-  const authStep = _authStep as Extract<AuthStep, { type: "oauth_completing" }>;
+  const { setAuthStep } = useAuthContext();
 
   const { authenticate: authenticate_, isPending } = useAuthenticate({
     onMutate: () => {
@@ -27,11 +26,8 @@ export const useOAuthVerify = ({
     onError: (err) => {
       setAuthStep({
         type: "oauth_completing",
-        config: authStep.config,
+        config,
         error: err,
-        ...(authStep.config.authProviderId === "auth0" && {
-          logoUrl: authStep.config.logoUrl,
-        }),
       });
     },
     onSuccess: () => {

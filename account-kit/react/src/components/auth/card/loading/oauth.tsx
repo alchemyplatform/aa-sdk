@@ -2,17 +2,13 @@ import { useEffect } from "react";
 import { useSignerStatus } from "../../../../hooks/useSignerStatus.js";
 import { ContinueWithOAuth } from "../../../../icons/oauth.js";
 import { capitalize } from "../../../../utils.js";
-import { useAuthContext, type AuthStep } from "../../context.js";
+import { useAuthContext } from "../../context.js";
 import { useOAuthVerify } from "../../hooks/useOAuthVerify.js";
 import { ConnectionError } from "../error/connection-error.js";
 
-interface CompletingOAuthProps {
-  authStep: Extract<AuthStep, { type: "oauth_completing" }>;
-}
-
-export const CompletingOAuth = ({ authStep }: CompletingOAuthProps) => {
+export const CompletingOAuth = () => {
   const { isConnected } = useSignerStatus();
-  const { setAuthStep } = useAuthContext();
+  const { setAuthStep, authStep } = useAuthContext("oauth_completing");
   const { authenticate } = useOAuthVerify({ config: authStep.config });
 
   useEffect(() => {
