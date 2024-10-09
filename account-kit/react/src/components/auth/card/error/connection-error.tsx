@@ -5,7 +5,8 @@ import { ConnectionFailed as PasskeyConnectionFailed } from "../../../../icons/c
 import { Timeout } from "../../../../icons/timeout.js";
 import { EOAWallets, type ConnectionErrorProps } from "./types.js";
 import { WalletIcon } from "./icons/wallet-icon.js";
-import { ContinueWithOAuth } from "../../../../icons/oauth.js";
+import { OAuthConnectionFailed } from "../../../../icons/oauth.js";
+import { capitalize } from "../../../../utils.js";
 
 export const walletTypeConfig = [
   { name: "Coinbase Wallet", key: EOAWallets.COINBASE_WALLET },
@@ -15,6 +16,7 @@ export const walletTypeConfig = [
 
 export const ConnectionError = ({
   connectionType,
+  oauthProvider,
   EOAConnector,
   handleTryAgain,
   handleUseAnotherMethod,
@@ -29,13 +31,15 @@ export const ConnectionError = ({
       case "passkey":
         return ls.error.connection.passkeyTitle;
       case "oauth":
-        return ls.error.connection.oauthTitle;
+        return `${ls.error.connection.oauthTitle} ${capitalize(
+          oauthProvider!
+        )}`;
       case "wallet":
         return ls.error.connection.walletTitle + (walletName ?? "wallet");
       case "timeout":
         return ls.error.connection.timedOutTitle;
     }
-  }, [connectionType, EOAConnector]);
+  }, [EOAConnector, connectionType, oauthProvider]);
 
   const getBodyText = useMemo(() => {
     switch (connectionType) {
@@ -55,7 +59,7 @@ export const ConnectionError = ({
       case "passkey":
         return <PasskeyConnectionFailed />;
       case "oauth":
-        return <ContinueWithOAuth />; // placeholder before oauth connection error icon is finalized
+        return <OAuthConnectionFailed />; // TO DO: pass in provider
       case "wallet":
         return EOAConnector && <WalletIcon EOAConnector={EOAConnector} />;
       case "timeout":
