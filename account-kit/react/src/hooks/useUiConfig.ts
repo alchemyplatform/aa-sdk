@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useLayoutEffect, useMemo } from "react";
 import { create } from "zustand";
 import { useAlchemyAccountContext } from "../context.js";
 import { MissingUiConfigError } from "../errors.js";
@@ -73,25 +73,25 @@ export const useUiConfig = () => {
   // so we don't want to render the modal.
   const { ui } = useAlchemyAccountContext();
 
-  useEffect(() => {
-    if (!ui || _initialized) return;
-
-    initialize(ui.config);
-  }, [config, initialize, _initialized, ui]);
-
   if (!ui) {
     throw new MissingUiConfigError("useUiConfig");
   }
 
+  useLayoutEffect(() => {
+    if (ui && !_initialized) {
+      initialize(ui.config);
+    }
+  }, [_initialized, initialize, ui]);
+
   const uiConfig = useMemo(
     () =>
       ({
-        ...config,
+        ...(_initialized ? config : ui.config),
         updateConfig,
       } as AlchemyAccountsUIConfigWithDefaults & {
         updateConfig: (partial: AlchemyAccountsUIConfig) => void;
       }),
-    [config, updateConfig]
+    [_initialized, config, ui, updateConfig]
   );
 
   return uiConfig;

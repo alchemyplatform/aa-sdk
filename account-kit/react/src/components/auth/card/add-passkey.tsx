@@ -6,7 +6,7 @@ import {
 } from "../../../icons/illustrations/passkeys.js";
 import { ls } from "../../../strings.js";
 import { Button } from "../../button.js";
-import { useAuthContext, type AuthStep } from "../context.js";
+import { useAuthContext } from "../context.js";
 import { ConnectionError } from "./error/connection-error.js";
 
 const BENEFITS = [
@@ -22,13 +22,8 @@ const BENEFITS = [
   },
 ];
 
-type AddPasskeyProps = {
-  authStep: Extract<AuthStep, { type: "passkey_create" }>;
-};
-
-// eslint-disable-next-line jsdoc/require-jsdoc
-export const AddPasskey = ({ authStep }: AddPasskeyProps) => {
-  const { setAuthStep } = useAuthContext();
+export const AddPasskey = () => {
+  const { setAuthStep, authStep } = useAuthContext("passkey_create");
   const { addPasskey, isAddingPasskey } = useAddPasskey({
     onSuccess: () => {
       setAuthStep({ type: "passkey_create_success" });

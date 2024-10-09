@@ -57,7 +57,7 @@ export function ConfigContextProvider(props: PropsWithChildren) {
 
     if (config.auth.showSocial && config.auth.addGoogleAuth) {
       if (config.auth.showPasskey) {
-        sections!
+        sections
           .at(-1)!
           .push({ type: "social", authProviderId: "google", mode: "popup" });
       } else {
