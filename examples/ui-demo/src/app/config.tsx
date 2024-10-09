@@ -10,6 +10,8 @@ export type Config = {
     showExternalWallets: boolean;
     showPasskey: boolean;
     addPasskey: boolean;
+    showSocial: boolean;
+    addGoogleAuth: boolean;
   };
   ui: {
     theme: "light" | "dark";
@@ -41,6 +43,8 @@ export const DEFAULT_CONFIG: Config = {
     showExternalWallets: false,
     showPasskey: true,
     addPasskey: true,
+    showSocial: true,
+    addGoogleAuth: true,
   },
   ui: {
     theme: "light",
@@ -64,11 +68,22 @@ export const alchemyConfig = createConfig(
     ssr: true,
     policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
     storage: cookieStorage,
+    enablePopupOauth: true,
   },
   {
     illustrationStyle: DEFAULT_CONFIG.ui.illustrationStyle,
     auth: {
-      sections: [[{ type: "email" as const }], [{ type: "passkey" as const }]],
+      sections: [
+        [{ type: "email" as const }],
+        [
+          { type: "passkey" as const },
+          {
+            type: "social" as const,
+            authProviderId: "google",
+            mode: "popup",
+          },
+        ],
+      ],
       addPasskeyOnSignup: DEFAULT_CONFIG.auth.addPasskey,
       header: (
         <AuthCardHeader

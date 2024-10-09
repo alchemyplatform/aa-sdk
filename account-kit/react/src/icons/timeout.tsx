@@ -41,22 +41,22 @@ const TimedOutIconOutline = ({
       cy="27.5426"
       r="18.0571"
       stroke="#DC2626"
-      stroke-width="2.5"
+      strokeWidth="2.5"
       className="stroke-[#DC2626] dark:stroke-[#EF4444]"
     />
     <path
       d="M24.3999 18.3999L24.3999 28.7999"
       stroke="#DC2626"
-      stroke-width="2.5"
-      stroke-linecap="round"
+      strokeWidth="2.5"
+      strokeLinecap="round"
       stroke-linejoin="round"
       className="stroke-[#DC2626] dark:stroke-[#EF4444]"
     />
     <path
       d="M19.3269 3.19995L29.3587 3.19995"
       stroke="#DC2626"
-      stroke-width="2.5"
-      stroke-linecap="round"
+      strokeWidth="2.5"
+      strokeLinecap="round"
       stroke-linejoin="round"
       className="stroke-[#DC2626] dark:stroke-[#EF4444]"
     />

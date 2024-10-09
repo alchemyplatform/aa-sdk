@@ -55,6 +55,18 @@ export function ConfigContextProvider(props: PropsWithChildren) {
       sections.push([{ type: "passkey" }]);
     }
 
+    if (config.auth.showSocial && config.auth.addGoogleAuth) {
+      if (config.auth.showPasskey) {
+        sections
+          .at(-1)!
+          .push({ type: "social", authProviderId: "google", mode: "popup" });
+      } else {
+        sections.push([
+          { type: "social", authProviderId: "google", mode: "popup" },
+        ]);
+      }
+    }
+
     if (config.auth.showExternalWallets) {
       sections.push([
         {

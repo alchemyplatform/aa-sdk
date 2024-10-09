@@ -1,12 +1,15 @@
 import { ConnectionConfigSchema, type ConnectionConfig } from "@aa-sdk/core";
 import { TurnkeyClient, type TSignedRequest } from "@turnkey/http";
 import EventEmitter from "eventemitter3";
+import { jwtDecode } from "jwt-decode";
 import type { Hex } from "viem";
 import { NotAuthenticatedError } from "../errors.js";
 import { base64UrlEncode } from "../utils/base64UrlEncode.js";
+import { assertNever } from "../utils/typeAssertions.js";
 import type {
   AlchemySignerClientEvent,
   AlchemySignerClientEvents,
+  AuthenticatingEventMetadata,
   CreateAccountParams,
   EmailAuthParams,
   GetWebAuthnAttestationResult,
@@ -18,8 +21,6 @@ import type {
   SignupResponse,
   User,
 } from "./types.js";
-import { assertNever } from "../utils/typeAssertions.js";
-import { jwtDecode } from "jwt-decode";
 
 export interface BaseSignerClientParams {
   stamper: TurnkeyClient["stamper"];
@@ -131,6 +132,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     bundle: string;
     orgId: string;
     connectedEventName: keyof AlchemySignerClientEvents;
+    authenticatingType: AuthenticatingEventMetadata["type"];
     idToken?: string;
   }): Promise<User>;
 
