@@ -14,6 +14,8 @@ export type User = {
   userId: string;
   address: Address;
   credentialId?: string;
+  idToken?: string;
+  claims?: Record<string, unknown>;
 };
 // [!endregion User]
 
