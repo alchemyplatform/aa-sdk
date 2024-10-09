@@ -31,7 +31,13 @@ const RenderContent = () => {
   if (!hasUser) {
     return (
       <div className="flex flex-col gap-2 w-[368px]">
-        <div className="modal bg-surface-default shadow-md overflow-hidden">
+        <div
+          className="radius bg-surface-default overflow-hidden"
+          style={{
+            boxShadow:
+              "0px 290px 81px 0px rgba(0, 0, 0, 0.00), 0px 186px 74px 0px rgba(0, 0, 0, 0.01), 0px 104px 63px 0px rgba(0, 0, 0, 0.05), 0px 46px 46px 0px rgba(0, 0, 0, 0.09), 0px 12px 26px 0px rgba(0, 0, 0, 0.10)",
+          }}
+        >
           <AuthCard />
         </div>
       </div>

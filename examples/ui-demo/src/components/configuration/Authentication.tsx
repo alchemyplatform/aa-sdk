@@ -80,7 +80,7 @@ export const Authentication = ({ className }: { className?: string }) => {
                     <ExternalLinkIcon
                       height={16}
                       width={16}
-                      className="text-fg-secondary"
+                      className="text-[#475569]"
                     />
                   </ExternalLink>
                   <Switch
