@@ -7,7 +7,9 @@ description: Overview of the completeAuthWithBundle method
 
 # completeAuthWithBundle
 
-Completes auth for the user by injecting a credential bundle and retrieving the user information based on the provided organization ID. Emits events during the process.
+Completes auth for the user by injecting a credential bundle and retrieving
+the user information based on the provided organization ID. Emits events
+during the process.
 
 ## Import
 
@@ -40,10 +42,14 @@ const account = await client.completeAuthWithBundle({
 
 ### config
 
-`{ bundle: string; orgId: string }`
-The configuration object for the authentication function containing the credential bundle to inject and the organization id associated with the user
+`{ bundle: string; orgId: string, connectedEventName: keyof AlchemySignerClientEvents, idToken?: string }`
+The configuration object for the authentication function containing the
+credential bundle to inject and the organization id associated with the
+user, as well as the event to be emitted on success and optionally an OIDC
+ID token with extra user information
 
 ## Returns
 
 `Promise<User>`
-A promise that resolves to the authenticated user information
+A promise that resolves to the authenticated user
+information

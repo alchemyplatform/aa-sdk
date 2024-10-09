@@ -31,7 +31,12 @@ export type AuthParams =
       claims?: string;
     } & OauthProviderConfig &
       OauthRedirectConfig)
-  | { type: "oauthReturn"; bundle: string; orgId: string };
+  | {
+      type: "oauthReturn";
+      bundle: string;
+      orgId: string;
+      idToken: string;
+    };
 
 export type OauthProviderConfig =
   | {
@@ -105,7 +110,7 @@ export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> 
     } else {
       client = params_.client;
     }
-    const { emailBundle, oauthBundle, oauthOrgId, oauthError } =
+    const { emailBundle, oauthBundle, oauthOrgId, oauthError, idToken } =
       getAndRemoveQueryParams({
         emailBundle: "bundle",
         // We don't need this, but we still want to remove it from the URL.
@@ -113,6 +118,7 @@ export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> 
         oauthBundle: "alchemy-bundle",
         oauthOrgId: "alchemy-org-id",
         oauthError: "alchemy-error",
+        idToken: "alchemy-id-token",
       });
 
     const initialError =
@@ -124,11 +130,12 @@ export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> 
 
     if (emailBundle) {
       this.authenticate({ type: "email", bundle: emailBundle });
-    } else if (oauthBundle && oauthOrgId) {
+    } else if (oauthBundle && oauthOrgId && idToken) {
       this.authenticate({
         type: "oauthReturn",
         bundle: oauthBundle,
         orgId: oauthOrgId,
+        idToken,
       });
     }
   }

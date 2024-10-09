@@ -684,11 +684,13 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   private handleOauthReturn = ({
     bundle,
     orgId,
+    idToken,
   }: Extract<AuthParams, { type: "oauthReturn" }>): Promise<User> =>
     this.inner.completeAuthWithBundle({
       bundle,
       orgId,
       connectedEventName: "connectedOauth",
+      idToken,
     });
 
   private registerListeners = () => {
