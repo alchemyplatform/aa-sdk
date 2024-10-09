@@ -9,6 +9,7 @@ import ExternalLink from "../shared/ExternalLink";
 import { Switch } from "../ui/switch";
 import { ExternalLinkIcon } from "../icons/external-link";
 import { GoogleIcon } from "../icons/google";
+import { FacebookLogo } from "../icons/facebook";
 
 export const Authentication = ({ className }: { className?: string }) => {
   const { config, setConfig } = useConfig();
@@ -84,7 +85,7 @@ export const Authentication = ({ className }: { className?: string }) => {
             iconClassName="mt-[2px] self-start"
             details={
               config.auth.showSocial && (
-                <div className="flex">
+                <div className="flex gap-x-2">
                   <OAuthMethod
                     icon={<GoogleIcon />}
                     onClick={setAddGoogleAuth}
@@ -94,6 +95,12 @@ export const Authentication = ({ className }: { className?: string }) => {
                         : "border-gray-300"
                     }`}
                   />
+                  <OAuthMethod
+                    icon={<FacebookLogo />}
+                    onClick={() => {}}
+                    className="grow-0 border-2 rounded-lg p-1 border-gray-300"
+                  />
+                  {/* TO DO: add "Add provider" button */}
                 </div>
               )
             }
