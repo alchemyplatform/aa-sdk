@@ -32,7 +32,7 @@ const RenderContent = () => {
     return (
       <div className="flex flex-col gap-2 w-[368px]">
         <div
-          className="radius bg-surface-default overflow-hidden"
+          className="radius bg-bg-surface-default overflow-hidden"
           style={{
             boxShadow:
               "0px 290px 81px 0px rgba(0, 0, 0, 0.00), 0px 186px 74px 0px rgba(0, 0, 0, 0.01), 0px 104px 63px 0px rgba(0, 0, 0, 0.05), 0px 46px 46px 0px rgba(0, 0, 0, 0.09), 0px 12px 26px 0px rgba(0, 0, 0, 0.10)",
