@@ -21,29 +21,29 @@ export function OAuthConnectionFailed() {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <circle cx="24" cy="24" r="22" stroke="#FECACA" stroke-width="2.5" />
+      <circle cx="24" cy="24" r="22" stroke="#FECACA" strokeWidth="2.5" />
       <rect x="32" y="32" width="18" height="18" rx="9" fill="#DC2626" />
       <path
         d="M43 39L39 43M43 43L39 39"
         stroke="white"
-        stroke-width="1.25"
-        stroke-linecap="round"
+        strokeWidth="1.25"
+        strokeLinecap="round"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M35.9692 24.2844C35.9699 23.4294 35.8942 22.576 35.7429 21.7344H23.9998V26.5565H30.7093C30.5708 27.3194 30.279 28.0463 29.8513 28.6931C29.4237 29.3399 28.8693 29.8933 28.2216 30.3196V33.4481H32.2509C34.6083 31.277 35.9685 28.0812 35.9685 24.2844H35.9692Z"
         fill="#3E82F1"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M23.9997 36.4662C27.3657 36.4662 30.1883 35.3498 32.2509 33.4462L28.2216 30.3176C27.1052 31.0656 25.6771 31.5082 23.9997 31.5082C20.7528 31.5082 18.0038 29.3153 17.024 26.3682H12.8589V29.6025C13.8974 31.6666 15.4891 33.4015 17.4564 34.6135C19.4237 35.8255 21.6891 36.467 23.9997 36.4662Z"
         fill="#32A753"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M17.0248 26.3688C16.5028 24.8329 16.5028 23.1675 17.0248 21.6315V18.4014H12.859C11.9872 20.1391 11.5332 22.0564 11.5332 24.0005C11.5332 25.9447 11.9872 27.8619 12.859 29.5997L17.0248 26.3688Z"
         fill="#F9BB00"
       />
@@ -131,8 +131,8 @@ export const FacebookIcon = (
           y2="-0.00442066"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#0062E0" />
-          <stop offset="1" stop-color="#19AFFF" />
+          <stop stopColor="#0062E0" />
+          <stop offset="1" stopColor="#19AFFF" />
         </linearGradient>
         <clipPath id="clip0_2387_27657">
           <rect width="24" height="24" fill="white" />

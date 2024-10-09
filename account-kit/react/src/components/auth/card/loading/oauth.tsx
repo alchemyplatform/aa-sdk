@@ -1,9 +1,10 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useSignerStatus } from "../../../../hooks/useSignerStatus.js";
 import { useAuthContext, type AuthStep } from "../../context.js";
 import { ContinueWithOAuth } from "../../../../icons/oauth.js";
 import { ConnectionError } from "../error/connection-error.js";
 import { capitalize } from "../../../../utils.js";
+import { useOAuthVerify } from "../../hooks/useOAuthVerify.js";
 
 interface CompletingOAuthProps {
   authStep: Extract<AuthStep, { type: "oauth_completing" }>;
@@ -12,6 +13,11 @@ interface CompletingOAuthProps {
 export const CompletingOAuth = ({ authStep }: CompletingOAuthProps) => {
   const { isConnected } = useSignerStatus();
   const { setAuthStep } = useAuthContext();
+  const { authenticate } = useOAuthVerify();
+  const restartFlow = useCallback(
+    () => authenticate(authStep.config),
+    [authenticate, authStep.config]
+  );
 
   useEffect(() => {
     if (isConnected) {
@@ -23,8 +29,9 @@ export const CompletingOAuth = ({ authStep }: CompletingOAuthProps) => {
     return (
       <ConnectionError
         connectionType="oauth"
-        oauthProvider={authStep.provider}
-        handleUseAnotherMethod={() => setAuthStep({ type: "complete" })}
+        oauthProvider={authStep.config.authProviderId}
+        handleTryAgain={restartFlow}
+        handleUseAnotherMethod={() => setAuthStep({ type: "initial" })}
       />
     );
   }
@@ -36,11 +43,11 @@ export const CompletingOAuth = ({ authStep }: CompletingOAuthProps) => {
       </div>
 
       <h3 className="font-semibold text-lg">{`Continue with ${capitalize(
-        authStep.provider
+        authStep.config.authProviderId
       )}`}</h3>
       <p className="text-fg-secondary text-center text-sm">
         {`Follow the steps in the pop up window to sign in with ${capitalize(
-          authStep.provider
+          authStep.config.authProviderId
         )}`}
       </p>
     </div>

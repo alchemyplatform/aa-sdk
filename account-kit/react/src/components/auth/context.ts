@@ -2,6 +2,7 @@
 
 import type { Connector } from "@wagmi/core";
 import { createContext, useContext } from "react";
+import type { AuthType } from "./types";
 
 export type AuthStep =
   | { type: "email_verify"; email: string }
@@ -11,7 +12,7 @@ export type AuthStep =
   | { type: "email_completing"; createPasskeyAfter?: boolean }
   | {
       type: "oauth_completing";
-      provider: string;
+      config: Extract<AuthType, { type: "social" }>;
       error?: Error;
     }
   | { type: "initial"; error?: Error }

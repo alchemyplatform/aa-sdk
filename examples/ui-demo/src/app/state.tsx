@@ -20,42 +20,7 @@ import {
   useEffect,
   useState,
 } from "react";
-<<<<<<< HEAD
 import { Config, DEFAULT_CONFIG } from "./config";
-=======
-
-export type Config = {
-  auth: {
-    showEmail: boolean;
-    showExternalWallets: boolean;
-    showPasskey: boolean;
-    addPasskey: boolean;
-    showSocial: boolean;
-    addGoogleAuth: boolean;
-  };
-  ui: {
-    theme: "light" | "dark";
-    primaryColor: {
-      dark: string;
-      light: string;
-    };
-    borderRadius: AccountKitTheme["borderRadius"];
-    illustrationStyle: "outline" | "linear" | "filled" | "flat";
-    logoLight:
-      | {
-          fileName: string;
-          fileSrc: string;
-        }
-      | undefined;
-    logoDark:
-      | {
-          fileName: string;
-          fileSrc: string;
-        }
-      | undefined;
-  };
-};
->>>>>>> b4025a29 (chore: wip)
 
 export type ConfigContextType = {
   config: Config;
@@ -64,31 +29,6 @@ export type ConfigContextType = {
   setNFTTransfered: Dispatch<SetStateAction<boolean>>;
 };
 
-<<<<<<< HEAD
-=======
-export const DEFAULT_CONFIG: Config = {
-  auth: {
-    showEmail: true,
-    showExternalWallets: false,
-    showPasskey: true,
-    addPasskey: true,
-    showSocial: true,
-    addGoogleAuth: true,
-  },
-  ui: {
-    theme: "light",
-    primaryColor: {
-      light: "#363FF9",
-      dark: "#9AB7FF",
-    },
-    borderRadius: "sm",
-    illustrationStyle: "outline",
-    logoLight: undefined,
-    logoDark: undefined,
-  },
-};
-
->>>>>>> b4025a29 (chore: wip)
 export const ConfigContext = createContext<ConfigContextType>({
   config: DEFAULT_CONFIG,
   setConfig: () => undefined,

@@ -1,35 +1,27 @@
 "use client";
 import { useCallback } from "react";
 import { useAuthenticate } from "../../../hooks/useAuthenticate.js";
-import { useAuthContext } from "../context.js";
+import { useAuthContext, type AuthStep } from "../context.js";
 import type { AuthType } from "../types.js";
 
 export type UseOAuthVerifyReturnType = {
-  authenticate: () => void;
+  authenticate: (config: Extract<AuthType, { type: "social" }>) => void;
   isPending: boolean;
 };
 
-export const useOAuthVerify = ({
-  type,
-  ...config
-}: Extract<AuthType, { type: "social" }>): UseOAuthVerifyReturnType => {
-  const { authStep, setAuthStep } = useAuthContext();
+export const useOAuthVerify = (): UseOAuthVerifyReturnType => {
+  const { authStep: _authStep, setAuthStep } = useAuthContext();
+  const authStep = _authStep as Extract<AuthStep, { type: "oauth_completing" }>;
 
   const { authenticate: authenticate_, isPending } = useAuthenticate({
-    onMutate: () => {
-      setAuthStep({
-        ...authStep,
-      });
-    },
     onError: (err) => {
       setAuthStep({
         type: "oauth_completing",
-        provider:
-          config.authProviderId === "auth0"
-            ? config.auth0Connection!
-            : config.authProviderId,
+        config: authStep.config,
         error: err,
-        ...(config.authProviderId === "auth0" && { logoUrl: config.logoUrl }),
+        ...(authStep.config.authProviderId === "auth0" && {
+          logoUrl: authStep.config.logoUrl,
+        }),
       });
     },
     onSuccess: () => {
@@ -37,12 +29,19 @@ export const useOAuthVerify = ({
     },
   });
 
-  const authenticate = useCallback(() => {
-    authenticate_({
-      type: "oauth",
-      ...config,
-    });
-  }, [authenticate_, config]);
+  const authenticate = useCallback(
+    (config: Extract<AuthType, { type: "social" }>) => {
+      setAuthStep({
+        config,
+        type: "oauth_completing",
+      });
+      authenticate_({
+        ...config,
+        type: "oauth",
+      });
+    },
+    [authenticate_, authStep, setAuthStep]
+  );
 
   return {
     isPending,
