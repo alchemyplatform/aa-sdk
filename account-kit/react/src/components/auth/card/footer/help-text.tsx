@@ -5,7 +5,7 @@ export const HelpText = () => {
   const { supportUrl } = useUiConfig();
   if (!supportUrl) return null;
   return (
-    <div className="flex flex-row gap-2 justify-center mb-2">
+    <div className="flex flex-row gap-1 justify-center mb-2">
       <span className="text-fg-tertiary text-xs">
         {ls.loadingPasskey.supportText}
       </span>
