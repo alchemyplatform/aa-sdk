@@ -24,11 +24,14 @@ const alchemyConfig = createConfig(
     auth: {
       sections: [
         [{ type: "email" as const }],
-        [{ type: "passkey" as const }, {
+        [
+          { type: "passkey" as const },
+          {
             type: "social" as const,
             authProviderId: "google",
             mode: "popup",
-          }],
+          },
+        ],
       ],
       addPasskeyOnSignup: DEFAULT_CONFIG.auth.addPasskey,
       header: (
