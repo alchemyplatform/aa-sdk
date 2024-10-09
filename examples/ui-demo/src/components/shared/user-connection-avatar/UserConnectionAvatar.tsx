@@ -39,8 +39,9 @@ const UserConnectionAvatar = ({
         {showDeploymentStatus && (
           <div
             className={cn(
-              "bg-[#fff] p-[2px] rounded-full absolute bottom-[-4px] left-[23px]",
-              deploymentStatus && "p-[1px]"
+              "p-[2px] rounded-full absolute bottom-[-4px] left-[23px]",
+              deploymentStatus && "p-[1px]",
+              currentTheme === "dark" ? "bg-[#4D4D4D]" : "bg-[white]"
             )}
           >
             <DeploymentStatusIndicator
