@@ -1,4 +1,5 @@
 import { AppleIcon, FacebookIcon, GoogleIcon } from "../../../icons/oauth.js";
+import { assertNever } from "../../../utils.js";
 import { Button } from "../../button.js";
 import { useOAuthVerify } from "../hooks/useOAuthVerify.js";
 import type { AuthType } from "../types.js";
@@ -45,5 +46,7 @@ export const OAuth = ({ ...config }: Props) => {
           onClick={authenticate}
         ></Button>
       );
+    default:
+      assertNever("unhandled authProviderId passed into auth sections");
   }
 };

@@ -4,3 +4,7 @@ export function capitalize(str: string) {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 }
+
+export function assertNever(msg: string) {
+  throw new Error(msg);
+}
