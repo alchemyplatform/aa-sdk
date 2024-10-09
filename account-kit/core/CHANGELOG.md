@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-beta.9](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.8...v4.0.0-beta.9) (2024-10-09)
+
+### Bug Fixes
+
+- persist login state across refreshes ([#1020](https://github.com/alchemyplatform/aa-sdk/issues/1020)) ([73214a0](https://github.com/alchemyplatform/aa-sdk/commit/73214a08e530197338375ecba85d7a683c6c0041))
+
+### Features
+
+- enable specifying the domain that a session is available on (if storage supports it) ([#1022](https://github.com/alchemyplatform/aa-sdk/issues/1022)) ([90d859c](https://github.com/alchemyplatform/aa-sdk/commit/90d859cbcb6e9d9e2ff69794cced6da9a08697c4))
+- expose signer error messages ([#1019](https://github.com/alchemyplatform/aa-sdk/issues/1019)) ([998c75c](https://github.com/alchemyplatform/aa-sdk/commit/998c75c61fcd67741bb8d4e25221423441cdd1d6))
+
 # [4.0.0-beta.8](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.7...v4.0.0-beta.8) (2024-10-02)
 
 **Note:** Version bump only for package @account-kit/core

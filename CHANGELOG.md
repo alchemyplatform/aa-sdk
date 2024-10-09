@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-beta.9](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.8...v4.0.0-beta.9) (2024-10-09)
+
+### Bug Fixes
+
+- allow users to log back in after logout ([#1023](https://github.com/alchemyplatform/aa-sdk/issues/1023)) ([0ff156b](https://github.com/alchemyplatform/aa-sdk/commit/0ff156b172eedc0337f3649c0a4b4c41c3834ca8))
+- change logo upload design ([#1012](https://github.com/alchemyplatform/aa-sdk/issues/1012)) ([9099ccc](https://github.com/alchemyplatform/aa-sdk/commit/9099ccc39f0faead6cd2a32c7f33d64291b9f493))
+- fixing third party broken links ([#965](https://github.com/alchemyplatform/aa-sdk/issues/965)) ([2330596](https://github.com/alchemyplatform/aa-sdk/commit/2330596363e8ce9701f5c594604bfb36e09bfea9))
+- persist login state across refreshes ([#1020](https://github.com/alchemyplatform/aa-sdk/issues/1020)) ([73214a0](https://github.com/alchemyplatform/aa-sdk/commit/73214a08e530197338375ecba85d7a683c6c0041))
+- supportURL wired into config ([#1006](https://github.com/alchemyplatform/aa-sdk/issues/1006)) ([5b9cf48](https://github.com/alchemyplatform/aa-sdk/commit/5b9cf48da9122f1c63ae85f15c43b8b9859217c2))
+- try again button on passkey error screen ([#1030](https://github.com/alchemyplatform/aa-sdk/issues/1030)) ([158b698](https://github.com/alchemyplatform/aa-sdk/commit/158b69865d76f6f4aa9e4f4f7fb9d95fe219550c))
+
+### Features
+
+- add dialog sheet for bottom sheet on mobile ([#1002](https://github.com/alchemyplatform/aa-sdk/issues/1002)) ([566b206](https://github.com/alchemyplatform/aa-sdk/commit/566b20644de425710dcdb6e8871c331016c5fd96))
+- add eoa post login states to demo app ([#1010](https://github.com/alchemyplatform/aa-sdk/issues/1010)) ([416b875](https://github.com/alchemyplatform/aa-sdk/commit/416b875a138dd46f1d520e45d5ae6755e5b7ba7d))
+- add responsive styling to demo ui side bar ([#1025](https://github.com/alchemyplatform/aa-sdk/issues/1025)) ([2585a10](https://github.com/alchemyplatform/aa-sdk/commit/2585a100d37d102b993d1320d7ff5b9c940c2f09))
+- add social auth docs ([#1014](https://github.com/alchemyplatform/aa-sdk/issues/1014)) ([bd92989](https://github.com/alchemyplatform/aa-sdk/commit/bd929897cffcdb4b9fb8c3024f0df407e46651fb))
+- enable specifying the domain that a session is available on (if storage supports it) ([#1022](https://github.com/alchemyplatform/aa-sdk/issues/1022)) ([90d859c](https://github.com/alchemyplatform/aa-sdk/commit/90d859cbcb6e9d9e2ff69794cced6da9a08697c4))
+- expose signer error messages ([#1019](https://github.com/alchemyplatform/aa-sdk/issues/1019)) ([998c75c](https://github.com/alchemyplatform/aa-sdk/commit/998c75c61fcd67741bb8d4e25221423441cdd1d6))
+- make copy changes to EOA Post login ([#1016](https://github.com/alchemyplatform/aa-sdk/issues/1016)) ([9162298](https://github.com/alchemyplatform/aa-sdk/commit/9162298d3c1bc5db2d244b63d7fe8fb27b8b437c))
+- new colors for light theme and sidebar controls ([#1026](https://github.com/alchemyplatform/aa-sdk/issues/1026)) ([ff3b9e8](https://github.com/alchemyplatform/aa-sdk/commit/ff3b9e803761548318ae617d6d44f95d7812e05d))
+- responsive design for mint ([#1018](https://github.com/alchemyplatform/aa-sdk/issues/1018)) ([c4269c8](https://github.com/alchemyplatform/aa-sdk/commit/c4269c8006d652418316c04e1b9760206684257d))
+- return id token and claims on user ([#1031](https://github.com/alchemyplatform/aa-sdk/issues/1031)) ([b6e9ccc](https://github.com/alchemyplatform/aa-sdk/commit/b6e9ccc975f8c75ecfb09140cb755fe43ae41e51))
+- update mobile splash page to have updated animation ([#1028](https://github.com/alchemyplatform/aa-sdk/issues/1028)) ([0630553](https://github.com/alchemyplatform/aa-sdk/commit/063055371d3b024863634c14b1f1c9d20bc60e9b))
+- update post login content on mobile ([#1021](https://github.com/alchemyplatform/aa-sdk/issues/1021)) ([3217f77](https://github.com/alchemyplatform/aa-sdk/commit/3217f779be361209b2fe7aa8381a28b0443fc8a8))
+
 # [4.0.0-beta.8](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.7...v4.0.0-beta.8) (2024-10-02)
 
 ### Bug Fixes

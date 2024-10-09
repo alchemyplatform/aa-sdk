@@ -4,7 +4,11 @@ import {
   createAlchemyPublicRpcClient,
   type AlchemyTransportConfig,
 } from "@account-kit/infra";
-import { AlchemySignerStatus, AlchemyWebSigner } from "@account-kit/signer";
+import {
+  AlchemySignerStatus,
+  AlchemyWebSigner,
+  type ErrorInfo,
+} from "@account-kit/signer";
 import type { Chain } from "viem";
 import { deepEqual } from "wagmi";
 import {
@@ -145,7 +149,10 @@ const createInitialStoreState = (
     connections: connectionMap,
     accountConfigs,
     config: { client, sessionConfig },
-    signerStatus: convertSignerStatusToState(AlchemySignerStatus.INITIALIZING),
+    signerStatus: convertSignerStatusToState(
+      AlchemySignerStatus.INITIALIZING,
+      undefined
+    ),
     smartAccountClients: createEmptySmartAccountClientState(chains),
   };
 
@@ -196,17 +203,6 @@ export const createSigner = (params: ClientStoreConfig) => {
     sessionConfig,
   });
 
-  const search = new URLSearchParams(window.location.search);
-  if (search.has("bundle")) {
-    signer.authenticate({ type: "email", bundle: search.get("bundle")! });
-  } else if (search.has("alchemy-bundle")) {
-    signer.authenticate({
-      type: "oauthReturn",
-      bundle: search.get("alchemy-bundle")!,
-      orgId: search.get("alchemy-org-id")!,
-    });
-  }
-
   if (client.enablePopupOauth) {
     signer.preparePopupOauth();
   }
@@ -218,12 +214,15 @@ export const createSigner = (params: ClientStoreConfig) => {
  * Converts the AlchemySigner's status to a more readable object
  *
  * @param {AlchemySignerStatus} alchemySignerStatus Enum value of the AlchemySigner's status to convert
+ * @param {ErrorInfo | undefined} error the current signer error, if present
  * @returns {SignerStatus} an object containing the original status as well as booleans to check the current state
  */
 export const convertSignerStatusToState = (
-  alchemySignerStatus: AlchemySignerStatus
+  alchemySignerStatus: AlchemySignerStatus,
+  error: ErrorInfo | undefined
 ): SignerStatus => ({
   status: alchemySignerStatus,
+  error,
   isInitializing: alchemySignerStatus === AlchemySignerStatus.INITIALIZING,
   isAuthenticating:
     alchemySignerStatus === AlchemySignerStatus.AUTHENTICATING ||
@@ -265,7 +264,12 @@ const addClientSideStoreListeners = (store: Store) => {
     (signer) => {
       if (!signer) return;
       signer.on("statusChanged", (status) => {
-        store.setState({ signerStatus: convertSignerStatusToState(status) });
+        store.setState((state) => ({
+          signerStatus: convertSignerStatusToState(
+            status,
+            state.signerStatus.error
+          ),
+        }));
       });
 
       signer.on("connected", (user) => store.setState({ user }));
@@ -280,6 +284,15 @@ const addClientSideStoreListeners = (store: Store) => {
           accounts: createDefaultAccountState(chains),
         });
       });
+
+      signer.on("errorChanged", (error) =>
+        store.setState((state) => ({
+          signerStatus: convertSignerStatusToState(
+            state.signerStatus.status,
+            error
+          ),
+        }))
+      );
     },
     { fireImmediately: true }
   );

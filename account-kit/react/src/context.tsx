@@ -115,12 +115,10 @@ export const AlchemyAccountProvider = (
   const openAuthModal = useCallback(() => setIsModalOpen(true), []);
   const closeAuthModal = useCallback(() => setIsModalOpen(false), []);
 
-  const clearAuthParams = () => {
+  const clearSignupParam = () => {
     const url = new URL(window.location.href);
-    url.searchParams.delete("orgId");
-    url.searchParams.delete("bundle");
     url.searchParams.delete(IS_SIGNUP_QP);
-    window.history.replaceState({}, "", url.toString());
+    window.history.replaceState(window.history.state, "", url.toString());
   };
 
   /**
@@ -129,7 +127,7 @@ export const AlchemyAccountProvider = (
   const resetAuthStep = useCallback(() => {
     setAuthStep({ type: "initial" });
 
-    clearAuthParams();
+    clearSignupParam();
   }, []);
 
   const initialContext = useMemo(
@@ -166,7 +164,7 @@ export const AlchemyAccountProvider = (
 
   useEffect(() => {
     if (authStep.type === "complete") {
-      clearAuthParams();
+      clearSignupParam();
     }
   }, [authStep]);
 

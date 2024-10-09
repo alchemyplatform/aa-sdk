@@ -2,6 +2,7 @@ import { ls } from "../../../../strings.js";
 import { LoadingPasskey } from "../../../../icons/passkey.js";
 import { useAuthContext, type AuthStep } from "../../context.js";
 import { ConnectionError } from "../error/connection-error.js";
+import { usePasskeyVerify } from "../../hooks/usePasskeyVerify.js";
 
 interface LoadingPasskeyAuthProps {
   authStep: Extract<AuthStep, { type: "passkey_verify" }>;
@@ -9,16 +10,13 @@ interface LoadingPasskeyAuthProps {
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const LoadingPasskeyAuth = ({ authStep }: LoadingPasskeyAuthProps) => {
   const { setAuthStep } = useAuthContext();
+  const { authenticate } = usePasskeyVerify();
 
   if (authStep.error) {
     return (
       <ConnectionError
         connectionType="passkey"
-        handleTryAgain={() =>
-          setAuthStep({
-            type: "initial",
-          })
-        }
+        handleTryAgain={authenticate}
         handleUseAnotherMethod={() => setAuthStep({ type: "initial" })}
       />
     );

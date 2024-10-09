@@ -18,7 +18,8 @@ describe("watchSmartAccountClient", () => {
 
     config.store.setState({
       signerStatus: convertSignerStatusToState(
-        AlchemySignerStatus.DISCONNECTED
+        AlchemySignerStatus.DISCONNECTED,
+        undefined
       ),
     });
 
