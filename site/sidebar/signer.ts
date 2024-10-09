@@ -23,6 +23,10 @@ export const signerSidebar: SidebarItem[] = [
         text: "Social login",
         link: "/signer/authentication/social-login",
       },
+      { 
+        text: "Custom social providers",
+        link: "/signer/authentication/auth0",
+      },
       {
         text: "Passkey signup",
         link: "/signer/authentication/passkey-signup",
