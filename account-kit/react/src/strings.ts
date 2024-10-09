@@ -63,6 +63,10 @@ const STRINGS = {
         useAnotherMethod: "Use another method",
       },
     },
+    oauthContactSupport: {
+      title: "Need help?",
+      body: "Contact support",
+    },
   },
 };
 
