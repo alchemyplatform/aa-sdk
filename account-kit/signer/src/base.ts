@@ -215,13 +215,13 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     try {
       switch (type) {
         case "email":
-          return this.authenticateWithEmail(params);
+          return await this.authenticateWithEmail(params);
         case "passkey":
-          return this.authenticateWithPasskey(params);
+          return await this.authenticateWithPasskey(params);
         case "oauth":
-          return this.authenticateWithOauth(params);
+          return await this.authenticateWithOauth(params);
         case "oauthReturn":
-          return this.handleOauthReturn(params);
+          return await this.handleOauthReturn(params);
         default:
           assertNever(type, `Unknown auth type: ${type}`);
       }
