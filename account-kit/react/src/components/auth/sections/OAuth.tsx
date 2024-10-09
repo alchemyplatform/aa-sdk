@@ -1,4 +1,3 @@
-import { useCallback } from "react";
 import { AppleIcon, FacebookIcon, GoogleIcon } from "../../../icons/oauth.js";
 import { assertNever } from "../../../utils.js";
 import { Button } from "../../button.js";
@@ -10,28 +9,24 @@ type Props = Extract<AuthType, { type: "social" }>;
 // Not used externally
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const OAuth = ({ ...config }: Props) => {
-  const { authenticate } = useOAuthVerify();
-  const startFlow = useCallback(
-    () => authenticate(config),
-    [authenticate, config]
-  );
+  const { authenticate } = useOAuthVerify({ config });
 
   switch (config.authProviderId) {
     case "google":
       return (
-        <Button variant="social" icon={<GoogleIcon />} onClick={startFlow}>
+        <Button variant="social" icon={<GoogleIcon />} onClick={authenticate}>
           Google
         </Button>
       );
     case "facebook":
       return (
-        <Button variant="social" icon={<FacebookIcon />} onClick={startFlow}>
+        <Button variant="social" icon={<FacebookIcon />} onClick={authenticate}>
           Facebook
         </Button>
       );
     case "apple":
       return (
-        <Button variant="social" icon={<AppleIcon />} onClick={startFlow}>
+        <Button variant="social" icon={<AppleIcon />} onClick={authenticate}>
           Apple
         </Button>
       );
@@ -40,7 +35,7 @@ export const OAuth = ({ ...config }: Props) => {
         <Button
           variant="social"
           icon={<img src={config.logoUrl} alt={config.auth0Connection} />}
-          onClick={startFlow}
+          onClick={authenticate}
         ></Button>
       );
     default:
