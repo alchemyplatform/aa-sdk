@@ -1,10 +1,10 @@
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { useSignerStatus } from "../../../../hooks/useSignerStatus.js";
-import { useAuthContext, type AuthStep } from "../../context.js";
 import { ContinueWithOAuth } from "../../../../icons/oauth.js";
-import { ConnectionError } from "../error/connection-error.js";
 import { capitalize } from "../../../../utils.js";
+import { useAuthContext, type AuthStep } from "../../context.js";
 import { useOAuthVerify } from "../../hooks/useOAuthVerify.js";
+import { ConnectionError } from "../error/connection-error.js";
 
 interface CompletingOAuthProps {
   authStep: Extract<AuthStep, { type: "oauth_completing" }>;
@@ -13,11 +13,7 @@ interface CompletingOAuthProps {
 export const CompletingOAuth = ({ authStep }: CompletingOAuthProps) => {
   const { isConnected } = useSignerStatus();
   const { setAuthStep } = useAuthContext();
-  const { authenticate } = useOAuthVerify();
-  const restartFlow = useCallback(
-    () => authenticate(authStep.config),
-    [authenticate, authStep.config]
-  );
+  const { authenticate } = useOAuthVerify({ config: authStep.config });
 
   useEffect(() => {
     if (isConnected) {
@@ -30,7 +26,7 @@ export const CompletingOAuth = ({ authStep }: CompletingOAuthProps) => {
       <ConnectionError
         connectionType="oauth"
         oauthProvider={authStep.config.authProviderId}
-        handleTryAgain={restartFlow}
+        handleTryAgain={authenticate}
         handleUseAnotherMethod={() => setAuthStep({ type: "initial" })}
       />
     );

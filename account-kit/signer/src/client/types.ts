@@ -136,9 +136,13 @@ export type SignerEndpoints = [
   }
 ];
 
+export type AuthenticatingEventMetadata = {
+  type: "email" | "passkey" | "oauth";
+};
+
 export type AlchemySignerClientEvents = {
   connected(user: User): void;
-  authenticating(): void;
+  authenticating(data: AuthenticatingEventMetadata): void;
   connectedEmail(user: User, bundle: string): void;
   connectedPasskey(user: User): void;
   connectedOauth(user: User, bundle: string): void;

@@ -5,15 +5,25 @@ import { useAuthContext, type AuthStep } from "../context.js";
 import type { AuthType } from "../types.js";
 
 export type UseOAuthVerifyReturnType = {
-  authenticate: (config: Extract<AuthType, { type: "social" }>) => void;
+  authenticate: () => void;
   isPending: boolean;
 };
 
-export const useOAuthVerify = (): UseOAuthVerifyReturnType => {
+export const useOAuthVerify = ({
+  config,
+}: {
+  config: Extract<AuthType, { type: "social" }>;
+}): UseOAuthVerifyReturnType => {
   const { authStep: _authStep, setAuthStep } = useAuthContext();
   const authStep = _authStep as Extract<AuthStep, { type: "oauth_completing" }>;
 
   const { authenticate: authenticate_, isPending } = useAuthenticate({
+    onMutate: () => {
+      setAuthStep({
+        config,
+        type: "oauth_completing",
+      });
+    },
     onError: (err) => {
       setAuthStep({
         type: "oauth_completing",
@@ -29,19 +39,12 @@ export const useOAuthVerify = (): UseOAuthVerifyReturnType => {
     },
   });
 
-  const authenticate = useCallback(
-    (config: Extract<AuthType, { type: "social" }>) => {
-      setAuthStep({
-        config,
-        type: "oauth_completing",
-      });
-      authenticate_({
-        ...config,
-        type: "oauth",
-      });
-    },
-    [authenticate_, authStep, setAuthStep]
-  );
+  const authenticate = useCallback(() => {
+    authenticate_({
+      ...config,
+      type: "oauth",
+    });
+  }, [authenticate_, config]);
 
   return {
     isPending,

@@ -4,6 +4,7 @@ import type {
   AlchemyAccountsConfig,
   AlchemyClientState,
 } from "@account-kit/core";
+import { AlchemySignerStatus } from "@account-kit/signer";
 import { QueryClientProvider, type QueryClient } from "@tanstack/react-query";
 import {
   createContext,
@@ -146,16 +147,26 @@ export const AlchemyAccountProvider = (
     [config, queryClient, openAuthModal, closeAuthModal, isModalOpen]
   );
 
-  const { isAuthenticating, isConnected } = useSignerStatus(initialContext);
-  const [authStep, setAuthStep] = useState<AuthStep>({
-    type: isAuthenticating ? "email_completing" : "initial",
+  const { isConnected, status } = useSignerStatus(initialContext);
+
+  const [authStep, setAuthStep] = useState<AuthStep>(() => {
+    if (status === AlchemySignerStatus.AUTHENTICATING_EMAIL) {
+      return {
+        type: "email_completing",
+      };
+    }
+
+    return {
+      type: "initial",
+    };
   });
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     if (
       isConnected &&
-      config.ui?.auth?.addPasskeyOnSignup &&
+      // TODO: add this back in when we persist the ui-demo config somewhere
+      // config.ui?.auth?.addPasskeyOnSignup &&
       urlParams.get(IS_SIGNUP_QP) === "true"
     ) {
       openAuthModal();
