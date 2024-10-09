@@ -16,27 +16,21 @@ export const OAuth = ({ ...config }: Props) => {
   switch (config.authProviderId) {
     case "google":
       return (
-        <Button
-          variant="social"
-          icon={<GoogleIcon />}
-          onClick={authenticate}
-        ></Button>
+        <Button variant="social" icon={<GoogleIcon />} onClick={authenticate}>
+          Google
+        </Button>
       );
     case "facebook":
       return (
-        <Button
-          variant="social"
-          icon={<FacebookIcon />}
-          onClick={authenticate}
-        ></Button>
+        <Button variant="social" icon={<FacebookIcon />} onClick={authenticate}>
+          Facebook
+        </Button>
       );
     case "apple":
       return (
-        <Button
-          variant="social"
-          icon={<AppleIcon />}
-          onClick={authenticate}
-        ></Button>
+        <Button variant="social" icon={<AppleIcon />} onClick={authenticate}>
+          Apple
+        </Button>
       );
     case "auth0":
       return (
