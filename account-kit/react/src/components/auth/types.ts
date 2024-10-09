@@ -25,6 +25,7 @@ export type AuthType =
           authProviderId: KnownAuthProvider;
           isCustomProvider?: false;
           auth0Connection?: never;
+          logoUrl?: never;
         }
     ) &
       OauthRedirectConfig);

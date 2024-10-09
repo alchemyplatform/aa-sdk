@@ -13,18 +13,12 @@ export const useOAuthVerify = ({
   type,
   ...config
 }: Extract<AuthType, { type: "social" }>): UseOAuthVerifyReturnType => {
-  const { setAuthStep } = useAuthContext();
+  const { authStep, setAuthStep } = useAuthContext();
 
   const { authenticate: authenticate_, isPending } = useAuthenticate({
     onMutate: () => {
       setAuthStep({
-        type: "oauth_completing",
-        provider:
-          config.authProviderId === "auth0"
-            ? config.auth0Connection!
-            : config.authProviderId,
-        ...(config.authProviderId === "auth0" &&
-          "logoUrl" in config && { logoUrl: config.logoUrl }),
+        ...authStep,
       });
     },
     onError: (err) => {
@@ -35,8 +29,7 @@ export const useOAuthVerify = ({
             ? config.auth0Connection!
             : config.authProviderId,
         error: err,
-        ...(config.authProviderId === "auth0" &&
-          "logoUrl" in config && { logoUrl: config.logoUrl }),
+        ...(config.authProviderId === "auth0" && { logoUrl: config.logoUrl }),
       });
     },
     onSuccess: () => {
