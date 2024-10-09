@@ -3,6 +3,7 @@ import { useSignerStatus } from "../../../../hooks/useSignerStatus.js";
 import { useAuthContext, type AuthStep } from "../../context.js";
 import { ContinueWithOAuth } from "../../../../icons/oauth.js";
 import { ConnectionError } from "../error/connection-error.js";
+import { capitalize } from "../../../../utils.js";
 
 interface CompletingOAuthProps {
   authStep: Extract<AuthStep, { type: "oauth_completing" }>;
@@ -22,17 +23,11 @@ export const CompletingOAuth = ({ authStep }: CompletingOAuthProps) => {
     return (
       <ConnectionError
         connectionType="oauth"
+        oauthProvider={authStep.provider}
         handleUseAnotherMethod={() => setAuthStep({ type: "complete" })}
       />
     );
   }
-
-  const capitalize = (str: string) => {
-    return str
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-  };
 
   return (
     <div className="flex flex-col gap-5 items-center">
