@@ -56,8 +56,8 @@ describe("tailwind utils test", () => {
               "light": "#FFF",
             },
             "btn-primary": {
-              "dark": "#9AB7FF",
-              "light": "#363FF9",
+              "dark": "#FF66CC",
+              "light": "#E82594",
             },
             "btn-secondary": {
               "dark": "#374151",
@@ -68,8 +68,8 @@ describe("tailwind utils test", () => {
               "light": "#F87171",
             },
             "fg-accent-brand": {
-              "dark": "#9AB7FF",
-              "light": "#363FF9",
+              "dark": "#FF66CC",
+              "light": "#E82594",
             },
             "fg-critical": {
               "dark": "#F87171",
@@ -80,12 +80,12 @@ describe("tailwind utils test", () => {
               "light": "#CBD5E1",
             },
             "fg-invert": {
-              "dark": "#000",
+              "dark": "#020617",
               "light": "#FFF",
             },
             "fg-primary": {
               "dark": "#fff",
-              "light": "#000",
+              "light": "#020617",
             },
             "fg-secondary": {
               "dark": "#E2E8F0",

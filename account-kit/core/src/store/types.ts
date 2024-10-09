@@ -4,6 +4,7 @@ import type {
   AlchemySignerStatus,
   AlchemySignerWebClient,
   AlchemyWebSigner,
+  ErrorInfo,
   User,
 } from "@account-kit/signer";
 import type { State as WagmiState } from "@wagmi/core";
@@ -51,6 +52,7 @@ export type ClientStoreConfig = {
 
 export type SignerStatus = {
   status: AlchemySignerStatus;
+  error?: ErrorInfo;
   isInitializing: boolean;
   isAuthenticating: boolean;
   isConnected: boolean;

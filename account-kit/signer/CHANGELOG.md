@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-beta.9](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.8...v4.0.0-beta.9) (2024-10-09)
+
+### Bug Fixes
+
+- allow users to log back in after logout ([#1023](https://github.com/alchemyplatform/aa-sdk/issues/1023)) ([0ff156b](https://github.com/alchemyplatform/aa-sdk/commit/0ff156b172eedc0337f3649c0a4b4c41c3834ca8))
+
+### Features
+
+- expose signer error messages ([#1019](https://github.com/alchemyplatform/aa-sdk/issues/1019)) ([998c75c](https://github.com/alchemyplatform/aa-sdk/commit/998c75c61fcd67741bb8d4e25221423441cdd1d6))
+- return id token and claims on user ([#1031](https://github.com/alchemyplatform/aa-sdk/issues/1031)) ([b6e9ccc](https://github.com/alchemyplatform/aa-sdk/commit/b6e9ccc975f8c75ecfb09140cb755fe43ae41e51))
+
 # [4.0.0-beta.8](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.7...v4.0.0-beta.8) (2024-10-02)
 
 ### Bug Fixes

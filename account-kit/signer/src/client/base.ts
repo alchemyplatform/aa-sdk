@@ -19,6 +19,7 @@ import type {
   User,
 } from "./types.js";
 import { assertNever } from "../utils/typeAssertions.js";
+import { jwtDecode } from "jwt-decode";
 
 export interface BaseSignerClientParams {
   stamper: TurnkeyClient["stamper"];
@@ -130,6 +131,7 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     bundle: string;
     orgId: string;
     connectedEventName: keyof AlchemySignerClientEvents;
+    idToken?: string;
   }): Promise<User>;
 
   public abstract oauthWithRedirect(
@@ -217,10 +219,14 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
    * Retrieves the current user or fetches the user information if not already available.
    *
    * @param {string} [orgId] optional organization ID, defaults to the user's organization ID
+   * @param {string} idToken an OIDC ID token containing additional user information
    * @returns {Promise<User>} A promise that resolves to the user object
    * @throws {Error} if no organization ID is provided when there is no current user
    */
-  public whoami = async (orgId = this.user?.orgId): Promise<User> => {
+  public whoami = async (
+    orgId = this.user?.orgId,
+    idToken?: string
+  ): Promise<User> => {
     if (this.user) {
       return this.user;
     }
@@ -236,6 +242,15 @@ export abstract class BaseSignerClient<TExportWalletParams = unknown> {
     const user = await this.request("/v1/whoami", {
       stampedRequest,
     });
+
+    if (idToken) {
+      const claims: Record<string, unknown> = jwtDecode(idToken);
+      user.idToken = idToken;
+      user.claims = claims;
+      if (typeof claims.email === "string") {
+        user.email = claims.email;
+      }
+    }
 
     const credentialId = (() => {
       try {

@@ -215,7 +215,9 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
   };
 
   /**
-   * Completes auth for the user by injecting a credential bundle and retrieving the user information based on the provided organization ID. Emits events during the process.
+   * Completes auth for the user by injecting a credential bundle and retrieving
+   * the user information based on the provided organization ID. Emits events
+   * during the process.
    *
    * @example
    * ```ts
@@ -233,17 +235,24 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * const account = await client.completeAuthWithBundle({ orgId: "user-org-id", bundle: "bundle-from-email", connectedEventName: "connectedEmail" });
    * ```
    *
-   * @param {{ bundle: string; orgId: string }} config The configuration object for the authentication function containing the credential bundle to inject and the organization id associated with the user
-   * @returns {Promise<User>} A promise that resolves to the authenticated user information
+   * @param {{ bundle: string; orgId: string, connectedEventName: keyof AlchemySignerClientEvents, idToken?: string }} config
+   * The configuration object for the authentication function containing the
+   * credential bundle to inject and the organization id associated with the
+   * user, as well as the event to be emitted on success and optionally an OIDC
+   * ID token with extra user information
+   * @returns {Promise<User>} A promise that resolves to the authenticated user
+   * information
    */
   public override completeAuthWithBundle = async ({
     bundle,
     orgId,
     connectedEventName,
+    idToken,
   }: {
     bundle: string;
     orgId: string;
     connectedEventName: keyof AlchemySignerClientEvents;
+    idToken?: string;
   }): Promise<User> => {
     this.eventEmitter.emit("authenticating");
     await this.initIframeStamper();
@@ -254,7 +263,8 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       throw new Error("Failed to inject credential bundle");
     }
 
-    const user = await this.whoami(orgId);
+    const user = await this.whoami(orgId, idToken);
+
     this.eventEmitter.emit(connectedEventName, user, bundle);
 
     return user;
@@ -455,15 +465,17 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
         const {
           alchemyBundle: bundle,
           alchemyOrgId: orgId,
+          alchemyIdToken: idToken,
           alchemyError,
         } = event.data;
-        if (bundle && orgId) {
+        if (bundle && orgId && idToken) {
           cleanup();
           popup?.close();
           this.completeAuthWithBundle({
             bundle,
             orgId,
             connectedEventName: "connectedOauth",
+            idToken,
           }).then(resolve, reject);
         } else if (alchemyError) {
           cleanup();

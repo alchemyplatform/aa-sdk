@@ -31,7 +31,10 @@ export async function disconnect(config: AlchemyAccountsConfig): Promise<void> {
 
   config.store.setState(() => config.store.getInitialState());
 
-  config.store.setState({
-    signerStatus: convertSignerStatusToState(AlchemySignerStatus.DISCONNECTED),
-  });
+  config.store.setState((state) => ({
+    signerStatus: convertSignerStatusToState(
+      AlchemySignerStatus.DISCONNECTED,
+      state.signerStatus.error
+    ),
+  }));
 }

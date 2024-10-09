@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-beta.9](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.8...v4.0.0-beta.9) (2024-10-09)
+
+### Bug Fixes
+
+- allow users to log back in after logout ([#1023](https://github.com/alchemyplatform/aa-sdk/issues/1023)) ([0ff156b](https://github.com/alchemyplatform/aa-sdk/commit/0ff156b172eedc0337f3649c0a4b4c41c3834ca8))
+- supportURL wired into config ([#1006](https://github.com/alchemyplatform/aa-sdk/issues/1006)) ([5b9cf48](https://github.com/alchemyplatform/aa-sdk/commit/5b9cf48da9122f1c63ae85f15c43b8b9859217c2))
+- try again button on passkey error screen ([#1030](https://github.com/alchemyplatform/aa-sdk/issues/1030)) ([158b698](https://github.com/alchemyplatform/aa-sdk/commit/158b69865d76f6f4aa9e4f4f7fb9d95fe219550c))
+
+### Features
+
+- add dialog sheet for bottom sheet on mobile ([#1002](https://github.com/alchemyplatform/aa-sdk/issues/1002)) ([566b206](https://github.com/alchemyplatform/aa-sdk/commit/566b20644de425710dcdb6e8871c331016c5fd96))
+- expose signer error messages ([#1019](https://github.com/alchemyplatform/aa-sdk/issues/1019)) ([998c75c](https://github.com/alchemyplatform/aa-sdk/commit/998c75c61fcd67741bb8d4e25221423441cdd1d6))
+- new colors for light theme and sidebar controls ([#1026](https://github.com/alchemyplatform/aa-sdk/issues/1026)) ([ff3b9e8](https://github.com/alchemyplatform/aa-sdk/commit/ff3b9e803761548318ae617d6d44f95d7812e05d))
+
 # [4.0.0-beta.8](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.7...v4.0.0-beta.8) (2024-10-02)
 
 ### Features
