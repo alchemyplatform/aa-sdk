@@ -9,11 +9,11 @@ export const RenderUserConnectionAvatar = (
 ) => {
   return (
     <div
-      className="border-b border-border pb-6 sm:border-none sm:pb-0"
+      className="border-b border-border overflow-hidden pb-6 sm:border-none sm:pb-0"
       {...props}
     >
       {/* Popover - Visible on desktop screens */}
-      <div className="hidden md:block">
+      <div className="hidden md:block overflow-hidden">
         <RenderPopoverMenu />
       </div>
       {/* Dialog - Visible on mobile screens */}
@@ -29,7 +29,7 @@ const RenderPopoverMenu = () => {
 
   return (
     <PopoverMenu onOpenStateChange={(state) => setPopoverOpen(state)}>
-      <PopoverMenu.Trigger>
+      <PopoverMenu.Trigger className="max-w-full">
         <UserConnectionAvatar isFocused={popoverOpen} />
       </PopoverMenu.Trigger>
       <PopoverMenu.Content>
@@ -43,8 +43,11 @@ const RenderDialogMenu = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
-    <>
-      <DialogMenu.Trigger toggleOpenState={() => setDialogOpen(!dialogOpen)}>
+    <div className="max-w-full">
+      <DialogMenu.Trigger
+        toggleOpenState={() => setDialogOpen(!dialogOpen)}
+        className="max-w-full"
+      >
         <UserConnectionAvatar isFocused={dialogOpen} />
       </DialogMenu.Trigger>
       <DialogMenu isOpen={dialogOpen} onClose={() => setDialogOpen(false)}>
@@ -53,6 +56,6 @@ const RenderDialogMenu = () => {
           <UserConnectionDetails />
         </DialogMenu.Content>
       </DialogMenu>
-    </>
+    </div>
   );
 };
