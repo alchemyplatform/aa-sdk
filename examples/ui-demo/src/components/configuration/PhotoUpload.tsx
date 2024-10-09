@@ -1,4 +1,4 @@
-import { useConfig } from "@/app/state";
+import { useConfig } from "@/state";
 import { ChangeEvent } from "react";
 import { PhotoIcon } from "../icons/photo";
 import FileUploadInput from "../shared/FileUploadInput";
@@ -12,28 +12,26 @@ export function PhotoUploads({ mode }: { mode: "dark" | "light" }) {
     if (!e.target.files || e.target.files.length < 1) return;
 
     const file = e.target.files[0];
-    setConfig((prev) => ({
-      ...prev,
+    setConfig({
       ui: {
-        ...prev.ui,
+        ...config.ui,
         [mode === "dark" ? "logoDark" : "logoLight"]: {
           fileName: file.name,
           fileSrc: URL.createObjectURL(file),
         },
       },
-    }));
+    });
   };
 
   const onRemove = () => {
     if (!logo?.fileSrc) return;
 
-    setConfig((prev) => ({
-      ...prev,
+    setConfig({
       ui: {
-        ...prev.ui,
+        ...config.ui,
         [mode === "dark" ? "logoDark" : "logoLight"]: undefined,
       },
-    }));
+    });
     URL.revokeObjectURL(logo.fileSrc);
   };
 

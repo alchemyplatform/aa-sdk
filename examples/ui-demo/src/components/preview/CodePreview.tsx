@@ -1,5 +1,5 @@
 import { Config, DEFAULT_CONFIG } from "@/app/config";
-import { useConfig } from "@/app/state";
+import { useConfig } from "@/state";
 import dedent from "dedent";
 import { Check, Copy } from "lucide-react";
 import { useState } from "react";
