@@ -50,14 +50,10 @@ export const EoaConnectCard = () => {
       }
       description="Please follow the instructions in your wallet to connect."
       error={authStep.error}
-      extraContent={
-        <button
-          className="btn btn-secondary w-full"
-          onClick={() => setAuthStep({ type: "initial" })}
-        >
-          Cancel
-        </button>
-      }
+      secondaryButton={{
+        title: "Cancel",
+        onClick: () => setAuthStep({ type: "initial" }),
+      }}
     />
   );
 };
@@ -94,14 +90,10 @@ export const WalletConnectCard = () => {
       }
       description={"Please follow the instructions in the popup to connect."}
       error={authStep.error}
-      extraContent={
-        <button
-          className="btn btn-secondary w-full"
-          onClick={() => setAuthStep({ type: "initial" })}
-        >
-          Cancel
-        </button>
-      }
+      secondaryButton={{
+        title: "Cancel",
+        onClick: () => setAuthStep({ type: "initial" }),
+      }}
     />
   );
 };

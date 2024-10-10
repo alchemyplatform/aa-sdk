@@ -6,7 +6,10 @@ interface CardContentProps {
   description: ReactNode | string;
   error?: Error | string;
   className?: string;
-  extraContent?: ReactNode | string;
+  secondaryButton?: {
+    title: string;
+    onClick: () => void;
+  };
 }
 
 // eslint-disable-next-line jsdoc/require-jsdoc
@@ -14,7 +17,7 @@ export const CardContent = ({
   header,
   icon,
   description,
-  extraContent,
+  secondaryButton,
   className,
 }: CardContentProps) => {
   return (
@@ -34,7 +37,14 @@ export const CardContent = ({
           description
         )}
       </div>
-      {extraContent}
+      {secondaryButton && (
+        <button
+          className="btn btn-secondary w-full"
+          onClick={secondaryButton.onClick}
+        >
+          {secondaryButton.title}
+        </button>
+      )}
     </>
   );
 };
