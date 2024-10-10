@@ -37,7 +37,7 @@ export default function Home() {
   const isEOAUser = user?.type === "eoa";
   return (
     <main
-      className={`flex flex-col h-screen bg-bg-main ${publicSans.className} bg-cover bg-center`}
+      className={`flex flex-col h-screen sm:bg-bg-main ${publicSans.className} bg-cover bg-center`}
     >
       <TopNav />
       <div
