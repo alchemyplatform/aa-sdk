@@ -10,6 +10,12 @@ export type Config = {
     showExternalWallets: boolean;
     showPasskey: boolean;
     addPasskey: boolean;
+    showOAuth: boolean;
+    oAuthMethods: {
+      google: boolean;
+      facebook: boolean;
+      auth0: boolean;
+    };
   };
   ui: {
     theme: "light" | "dark";
@@ -41,6 +47,13 @@ export const DEFAULT_CONFIG: Config = {
     showExternalWallets: false,
     showPasskey: true,
     addPasskey: true,
+    showOAuth: true,
+    oAuthMethods: {
+      google: true,
+      facebook: true,
+      auth0: false,
+      // TO DO: extend for BYO auth provider
+    },
   },
   ui: {
     theme: "light",
@@ -64,11 +77,23 @@ export const alchemyConfig = createConfig(
     ssr: true,
     policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
     storage: cookieStorage,
+    enablePopupOauth: true,
   },
   {
     illustrationStyle: DEFAULT_CONFIG.ui.illustrationStyle,
     auth: {
-      sections: [[{ type: "email" as const }], [{ type: "passkey" as const }]],
+      sections: [
+        [{ type: "email" as const }],
+        [
+          { type: "passkey" as const },
+          { type: "social" as const, authProviderId: "google", mode: "popup" },
+          {
+            type: "social" as const,
+            authProviderId: "facebook",
+            mode: "popup",
+          },
+        ],
+      ],
       addPasskeyOnSignup: DEFAULT_CONFIG.auth.addPasskey,
       header: (
         <AuthCardHeader

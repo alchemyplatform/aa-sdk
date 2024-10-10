@@ -8,6 +8,8 @@ import { WalletIcon } from "../icons/wallet";
 import ExternalLink from "../shared/ExternalLink";
 import { Switch } from "../ui/switch";
 import { ExternalLinkIcon } from "../icons/external-link";
+import { GoogleIcon } from "../icons/google";
+import { FacebookLogo } from "../icons/facebook";
 
 export const Authentication = ({ className }: { className?: string }) => {
   const { config, setConfig } = useConfig();
@@ -42,6 +44,42 @@ export const Authentication = ({ className }: { className?: string }) => {
     }));
   };
 
+  const setOAuthActive = (active: boolean) => {
+    setConfig((prev) => ({
+      ...prev,
+      auth: {
+        ...prev.auth,
+        showOAuth: active,
+      },
+    }));
+  };
+
+  const setAddGoogleAuth = () => {
+    setConfig((prev) => ({
+      ...prev,
+      auth: {
+        ...prev.auth,
+        oAuthMethods: {
+          ...prev.auth.oAuthMethods,
+          google: !prev.auth.oAuthMethods.google,
+        },
+      },
+    }));
+  };
+
+  const setAddFacebookAuth = () => {
+    setConfig((prev) => ({
+      ...prev,
+      auth: {
+        ...prev.auth,
+        oAuthMethods: {
+          ...prev.auth.oAuthMethods,
+          facebook: !prev.auth.oAuthMethods.facebook,
+        },
+      },
+    }));
+  };
+
   return (
     <div className={cn("flex flex-col gap-5", className)}>
       <div className="flex flex-row gap-2 items-center">
@@ -58,9 +96,36 @@ export const Authentication = ({ className }: { className?: string }) => {
             disabled
           />
           <AuthMethod
-            icon={<SocialIcon className="opacity-50" />}
+            icon={<SocialIcon />}
             name="Social"
-            unavailable
+            iconClassName="mt-[2px] self-start"
+            details={
+              config.auth.showOAuth && (
+                <div className="flex gap-x-3">
+                  <OAuthMethod
+                    icon={<GoogleIcon />}
+                    onClick={setAddGoogleAuth}
+                    className={`grow-0 border-2 rounded-lg p-1 ${
+                      config.auth.oAuthMethods.google
+                        ? "border-gray-500 bg-gray-100"
+                        : "border-gray-500"
+                    }`}
+                  />
+                  <OAuthMethod
+                    icon={<FacebookLogo />}
+                    onClick={setAddFacebookAuth}
+                    className={`grow-0 border-2 rounded-lg p-1 ${
+                      config.auth.oAuthMethods.facebook
+                        ? "border-gray-500 bg-gray-100"
+                        : "border-gray-500"
+                    }`}
+                  />
+                  {/* TO DO: add "Add provider" button */}
+                </div>
+              )
+            }
+            active={config.auth.showOAuth}
+            setActive={setOAuthActive}
           />
           <AuthMethod
             className="flex-0 shrink-0 grow min-w-full"
@@ -170,5 +235,21 @@ const AuthMethod = ({
       </div>
       {callout}
     </div>
+  );
+};
+
+const OAuthMethod = ({
+  icon,
+  onClick,
+  className,
+}: {
+  icon: React.ReactNode;
+  onClick: () => void;
+  className?: string;
+}) => {
+  return (
+    <button onClick={onClick} className={className}>
+      {icon}
+    </button>
   );
 };

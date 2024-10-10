@@ -90,8 +90,8 @@ const ConnectionFailedLinear = ({
     {...props}
   >
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M2 15.857C1.738 17.0812 1.6001 18.3515 1.6001 19.654C1.6001 20.9565 1.738 22.2267 2 23.451V15.857ZM20 37.7079C29.8145 37.5252 37.7144 29.5122 37.7144 19.654C37.7144 9.79581 29.8145 1.78275 20 1.60004V37.7079Z"
       fill="#FEE2E2"
       className="fill-[#FEE2E2] dark:fill-[rgba(220,38,38,0.2)]"

@@ -1,16 +1,13 @@
 import { useEffect, useState } from "react";
 import { useSignerStatus } from "../../../../hooks/useSignerStatus.js";
-import { useAuthContext, type AuthStep } from "../../context.js";
+import { EmailIllustration } from "../../../../icons/illustrations/email.js";
 import { Spinner } from "../../../../icons/spinner.js";
 import { ls } from "../../../../strings.js";
-import { EmailIllustration } from "../../../../icons/illustrations/email.js";
-
-interface LoadingEmailProps {
-  authStep: Extract<AuthStep, { type: "email_verify" }>;
-}
+import { useAuthContext } from "../../context.js";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-export const LoadingEmail = ({ authStep }: LoadingEmailProps) => {
+export const LoadingEmail = () => {
+  const { authStep } = useAuthContext("email_verify");
   // yup, re-sent and resent. I'm not fixing it
   const [emailResent, setEmailResent] = useState(false);
 
@@ -39,14 +36,10 @@ export const LoadingEmail = ({ authStep }: LoadingEmailProps) => {
   );
 };
 
-interface CompletingEmailAuthProps {
-  authStep: Extract<AuthStep, { type: "email_completing" }>;
-}
-
 // eslint-disable-next-line jsdoc/require-jsdoc
-export const CompletingEmailAuth = ({ authStep }: CompletingEmailAuthProps) => {
+export const CompletingEmailAuth = () => {
   const { isConnected } = useSignerStatus();
-  const { setAuthStep } = useAuthContext();
+  const { setAuthStep, authStep } = useAuthContext("email_completing");
 
   useEffect(() => {
     if (isConnected && authStep.createPasskeyAfter) {

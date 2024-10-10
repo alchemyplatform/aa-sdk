@@ -10,6 +10,7 @@ import { generateRandomBuffer } from "../utils/generateRandomBuffer.js";
 import { BaseSignerClient } from "./base.js";
 import type {
   AlchemySignerClientEvents,
+  AuthenticatingEventMetadata,
   CreateAccountParams,
   CredentialCreationOptionOverrides,
   EmailAuthParams,
@@ -135,8 +136,8 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
    * @returns {Promise<SignupResponse>} A promise that resolves with the response object containing the account creation result.
    */
   public override createAccount = async (params: CreateAccountParams) => {
-    this.eventEmitter.emit("authenticating");
     if (params.type === "email") {
+      this.eventEmitter.emit("authenticating", { type: "email" });
       const { email, expirationSeconds } = params;
       const publicKey = await this.initIframeStamper();
 
@@ -150,6 +151,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       return response;
     }
 
+    this.eventEmitter.emit("authenticating", { type: "passkey" });
     // Passkey account creation flow
     const { attestation, challenge } = await this.getWebAuthnAttestation(
       params.creationOpts,
@@ -202,7 +204,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
   public override initEmailAuth = async (
     params: Omit<EmailAuthParams, "targetPublicKey">
   ) => {
-    this.eventEmitter.emit("authenticating");
+    this.eventEmitter.emit("authenticating", { type: "email" });
     const { email, expirationSeconds } = params;
     const publicKey = await this.initIframeStamper();
 
@@ -248,13 +250,15 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     orgId,
     connectedEventName,
     idToken,
+    authenticatingType,
   }: {
     bundle: string;
     orgId: string;
     connectedEventName: keyof AlchemySignerClientEvents;
+    authenticatingType: AuthenticatingEventMetadata["type"];
     idToken?: string;
   }): Promise<User> => {
-    this.eventEmitter.emit("authenticating");
+    this.eventEmitter.emit("authenticating", { type: authenticatingType });
     await this.initIframeStamper();
 
     const result = await this.iframeStamper.injectCredentialBundle(bundle);
@@ -295,7 +299,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
   public override lookupUserWithPasskey = async (
     user: User | undefined = undefined
   ) => {
-    this.eventEmitter.emit("authenticating");
+    this.eventEmitter.emit("authenticating", { type: "passkey" });
     await this.initWebauthnStamper(user);
     if (user) {
       this.user = user;
@@ -476,6 +480,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
             orgId,
             connectedEventName: "connectedOauth",
             idToken,
+            authenticatingType: "oauth",
           }).then(resolve, reject);
         } else if (alchemyError) {
           cleanup();
