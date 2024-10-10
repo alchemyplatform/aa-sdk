@@ -10,8 +10,12 @@ export type Config = {
     showExternalWallets: boolean;
     showPasskey: boolean;
     addPasskey: boolean;
-    showSocial: boolean;
-    addGoogleAuth: boolean;
+    showOAuth: boolean;
+    oAuthMethods: {
+      google: boolean;
+      facebook: boolean;
+      auth0: boolean;
+    };
   };
   ui: {
     theme: "light" | "dark";
@@ -43,8 +47,13 @@ export const DEFAULT_CONFIG: Config = {
     showExternalWallets: false,
     showPasskey: true,
     addPasskey: true,
-    showSocial: true,
-    addGoogleAuth: true,
+    showOAuth: true,
+    oAuthMethods: {
+      google: true,
+      facebook: true,
+      auth0: false,
+      // TO DO: extend for BYO auth provider
+    },
   },
   ui: {
     theme: "light",
@@ -77,9 +86,10 @@ export const alchemyConfig = createConfig(
         [{ type: "email" as const }],
         [
           { type: "passkey" as const },
+          { type: "social" as const, authProviderId: "google", mode: "popup" },
           {
             type: "social" as const,
-            authProviderId: "google",
+            authProviderId: "facebook",
             mode: "popup",
           },
         ],

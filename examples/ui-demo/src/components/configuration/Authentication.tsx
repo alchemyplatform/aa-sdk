@@ -44,12 +44,12 @@ export const Authentication = ({ className }: { className?: string }) => {
     }));
   };
 
-  const setSocialActive = (active: boolean) => {
+  const setOAuthActive = (active: boolean) => {
     setConfig((prev) => ({
       ...prev,
       auth: {
         ...prev.auth,
-        showSocial: active,
+        showOAuth: active,
       },
     }));
   };
@@ -59,7 +59,23 @@ export const Authentication = ({ className }: { className?: string }) => {
       ...prev,
       auth: {
         ...prev.auth,
-        addGoogleAuth: !prev.auth.addGoogleAuth,
+        oAuthMethods: {
+          ...prev.auth.oAuthMethods,
+          google: !prev.auth.oAuthMethods.google,
+        },
+      },
+    }));
+  };
+
+  const setAddFacebookAuth = () => {
+    setConfig((prev) => ({
+      ...prev,
+      auth: {
+        ...prev.auth,
+        oAuthMethods: {
+          ...prev.auth.oAuthMethods,
+          facebook: !prev.auth.oAuthMethods.facebook,
+        },
       },
     }));
   };
@@ -84,28 +100,32 @@ export const Authentication = ({ className }: { className?: string }) => {
             name="Social"
             iconClassName="mt-[2px] self-start"
             details={
-              config.auth.showSocial && (
+              config.auth.showOAuth && (
                 <div className="flex gap-x-3">
                   <OAuthMethod
                     icon={<GoogleIcon />}
                     onClick={setAddGoogleAuth}
                     className={`grow-0 border-2 rounded-lg p-1 ${
-                      config.auth.addGoogleAuth
+                      config.auth.oAuthMethods.google
                         ? "border-gray-500 bg-gray-100"
                         : "border-gray-500"
                     }`}
                   />
                   <OAuthMethod
                     icon={<FacebookLogo />}
-                    onClick={() => {}}
-                    className="grow-0 border-2 rounded-lg p-1 border-gray-500"
+                    onClick={setAddFacebookAuth}
+                    className={`grow-0 border-2 rounded-lg p-1 ${
+                      config.auth.oAuthMethods.facebook
+                        ? "border-gray-500 bg-gray-100"
+                        : "border-gray-500"
+                    }`}
                   />
                   {/* TO DO: add "Add provider" button */}
                 </div>
               )
             }
-            active={config.auth.showSocial}
-            setActive={setSocialActive}
+            active={config.auth.showOAuth}
+            setActive={setOAuthActive}
           />
           <AuthMethod
             className="flex-0 shrink-0 grow min-w-full"

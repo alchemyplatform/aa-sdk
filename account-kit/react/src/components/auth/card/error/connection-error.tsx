@@ -59,13 +59,13 @@ export const ConnectionError = ({
       case "passkey":
         return <PasskeyConnectionFailed />;
       case "oauth":
-        return <OAuthConnectionFailed />; // TO DO: pass in provider
+        return <OAuthConnectionFailed provider={oauthProvider!} />; // TO DO: extend for BYO auth provider
       case "wallet":
         return EOAConnector && <WalletIcon EOAConnector={EOAConnector} />;
       case "timeout":
         return <Timeout />;
     }
-  }, [connectionType, EOAConnector]);
+  }, [connectionType, oauthProvider, EOAConnector]);
   return (
     <div className="flex flex-col justify-center content-center gap-3">
       <div className="flex justify-center">
