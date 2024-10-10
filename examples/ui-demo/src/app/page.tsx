@@ -99,7 +99,7 @@ export default function Home() {
         <div className="flex flex-1 flex-col gap-6 sm:hidden">
           {!user && <MobileSplashPage />}
           {isEOAUser && (
-            <div className="flex flex-1 flex-col mt-20">
+            <div className="flex flex-1 flex-col mt-16">
               <div className="border-border border radius-2 px-6 py-6">
                 <RenderUserConnectionAvatar />
                 <div className="pt-6">
@@ -112,7 +112,7 @@ export default function Home() {
             </div>
           )}
           {user && !isEOAUser && (
-            <div className="mt-20">
+            <div className="mt-16">
               <MintCard />
             </div>
           )}
