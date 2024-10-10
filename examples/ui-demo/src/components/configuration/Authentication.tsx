@@ -111,7 +111,7 @@ export const Authentication = ({ className }: { className?: string }) => {
                     <ExternalLink href="https://accountkit.alchemy.com/signer/authentication/auth0">
                       <div className="flex flex-1 min-w-full flex-row justify-between gap-3 items-center">
                         <p className="font-normal text-sm text-secondary-foreground">
-                          Add provider
+                          Custom
                         </p>
 
                         <ExternalLinkIcon
