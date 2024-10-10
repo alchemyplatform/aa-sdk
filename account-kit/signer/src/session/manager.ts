@@ -8,8 +8,8 @@ import {
 import { createStore, type Mutate, type StoreApi } from "zustand/vanilla";
 import type { BaseSignerClient } from "../client/base";
 import type { User } from "../client/types";
-import type { Session, SessionManagerEvents } from "./types";
 import { assertNever } from "../utils/typeAssertions.js";
+import type { Session, SessionManagerEvents } from "./types";
 
 export const DEFAULT_SESSION_MS = 15 * 60 * 1000; // 15 minutes
 
@@ -93,6 +93,7 @@ export class SessionManager {
           .completeAuthWithBundle({
             bundle: existingSession.bundle,
             orgId: existingSession.user.orgId,
+            authenticatingType: existingSession.type,
             connectedEventName,
           })
           .catch((e) => {

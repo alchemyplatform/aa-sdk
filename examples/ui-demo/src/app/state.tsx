@@ -21,6 +21,7 @@ import {
   useState,
 } from "react";
 import { Config, DEFAULT_CONFIG } from "./config";
+import { KnownAuthProvider } from "../../../../account-kit/signer/dist/types/signer";
 
 export type ConfigContextType = {
   config: Config;
@@ -53,6 +54,28 @@ export function ConfigContextProvider(props: PropsWithChildren) {
 
     if (config.auth.showPasskey) {
       sections.push([{ type: "passkey" }]);
+    }
+
+    if (config.auth.showOAuth) {
+      for (const [method, enabled] of Object.entries(
+        config.auth.oAuthMethods
+      )) {
+        if (config.auth.showPasskey && enabled) {
+          sections.at(-1)!.push({
+            type: "social",
+            authProviderId: method as KnownAuthProvider, // TO DO: extend for BYO auth provider
+            mode: "popup",
+          });
+        } else if (enabled) {
+          sections.push([
+            {
+              type: "social",
+              authProviderId: method as KnownAuthProvider,
+              mode: "popup",
+            },
+          ]);
+        }
+      }
     }
 
     if (config.auth.showExternalWallets) {
