@@ -1,13 +1,13 @@
-import { useConfig } from "@/app/state";
 import { cn } from "@/lib/utils";
+import { useConfig } from "@/state";
+import { useState } from "react";
+import { PaletteIcon } from "../icons/palette";
 import { SparkleIcon } from "../icons/sparkle";
 import ExternalLink from "../shared/ExternalLink";
 import { HelpTooltip } from "../shared/HelpTooltip";
 import { ThemeSwitch } from "../shared/ThemeSwitch";
 import { ColorPicker } from "./ColorPicker";
 import { PhotoUploads } from "./PhotoUpload";
-import { PaletteIcon } from "../icons/palette";
-import { useState } from "react";
 
 import { CornerRadiusOptions } from "./components/CornerRadiusOptions";
 import { IllustrationStyleOptions } from "./components/IllustrationStyleOptions";
@@ -17,21 +17,20 @@ export function Styling({ className }: { className?: string }) {
   const [supportUrl, setsupportUrl] = useState("");
   const logo =
     config.ui.theme === "dark" ? config.ui.logoDark : config.ui.logoLight;
+
   const handleChangesupportUrl = () => {
-    setConfig((prev) => ({
-      ...prev,
+    setConfig({
       supportUrl,
-    }));
+    });
   };
 
   const onSwitchTheme = (isDarkMode: boolean) => {
-    setConfig((prev) => ({
-      ...prev,
+    setConfig({
       ui: {
-        ...prev.ui,
+        ...config.ui,
         theme: isDarkMode ? "dark" : "light",
       },
-    }));
+    });
   };
 
   return (

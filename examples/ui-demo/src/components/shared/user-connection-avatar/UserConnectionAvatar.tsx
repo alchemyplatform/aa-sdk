@@ -1,10 +1,10 @@
-import { cn } from "@/lib/utils";
-import { useConfig } from "@/app/state";
 import { UserAvatar } from "@/components/shared/UserAvatar";
+import { cn } from "@/lib/utils";
+import { useConfig } from "@/state";
 
-import { useAccount, useUser } from "@account-kit/react";
 import { ChevronDown } from "@/components/icons/chevron-down";
 import truncateAddress from "@/utils/truncate-address";
+import { useAccount, useUser } from "@account-kit/react";
 
 import { DeploymentStatusIndicator } from "@/components/shared/DeploymentStatusIndicator";
 
@@ -21,7 +21,7 @@ const UserConnectionAvatar = ({
   const { address: SCAUserAddress } = useAccount({ type: "LightAccount" });
 
   const isEOAUser = user?.type === "eoa";
-  const { nftTransfered: deploymentStatus } = useConfig();
+  const { nftTransferred: deploymentStatus } = useConfig();
 
   const currentTheme = config.ui.theme;
 

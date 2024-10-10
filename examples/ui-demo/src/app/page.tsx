@@ -1,6 +1,5 @@
 "use client";
 
-import { useConfig } from "@/app/state";
 import { Authentication } from "@/components/configuration/Authentication";
 import { Styling } from "@/components/configuration/Styling";
 import { MobileSplashPage } from "@/components/preview/MobileSplashPage";
@@ -10,6 +9,7 @@ import {
 } from "@/components/shared/eoa-post-login/EOAPostLoginContents";
 import { RenderUserConnectionAvatar } from "@/components/shared/user-connection-avatar/RenderUserConnectionAvatar";
 import { cn } from "@/lib/utils";
+import { useConfig } from "@/state";
 import { useUser } from "@account-kit/react";
 import { Inter, Public_Sans } from "next/font/google";
 import { useState } from "react";

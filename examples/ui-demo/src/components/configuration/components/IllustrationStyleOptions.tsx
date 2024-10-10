@@ -1,4 +1,3 @@
-import { useConfig } from "@/app/state";
 import { ChevronDown } from "@/components/icons/chevron-down";
 import { IllustrationStyle } from "@/components/icons/illustration-style";
 import {
@@ -9,6 +8,7 @@ import {
   SelectMenuViewport,
 } from "@/components/ui/select-menu";
 import { cn } from "@/lib/utils";
+import { useConfig } from "@/state";
 import { useState } from "react";
 
 const ILLUSTRATION_STYLE_OPTIONS = [
@@ -21,23 +21,20 @@ const ILLUSTRATION_STYLE_OPTIONS = [
 const options = ["outline", "linear", "filled", "flat"] as const;
 
 export function IllustrationStyleOptions() {
+  const { config, setConfig } = useConfig();
   const {
-    config: {
-      ui: { illustrationStyle },
-    },
-    setConfig,
-  } = useConfig();
+    ui: { illustrationStyle },
+  } = config;
 
   type IllustrationStyle = typeof illustrationStyle;
 
   const onChange = (style: IllustrationStyle) => {
-    setConfig((prev) => ({
-      ...prev,
+    setConfig({
       ui: {
-        ...prev.ui,
+        ...config.ui,
         illustrationStyle: style,
       },
-    }));
+    });
   };
 
   return (
@@ -71,12 +68,10 @@ export function IllustrationStyleOptions() {
 }
 
 const IllustrationStyleSelectMenu = () => {
+  const { config, setConfig } = useConfig();
   const {
-    config: {
-      ui: { illustrationStyle, primaryColor, theme },
-    },
-    setConfig,
-  } = useConfig();
+    ui: { illustrationStyle, primaryColor, theme },
+  } = config;
 
   type IllustrationStyle = typeof illustrationStyle;
   const [selected, setSelected] =
@@ -86,13 +81,12 @@ const IllustrationStyleSelectMenu = () => {
   const onChange = (style: IllustrationStyle) => {
     setSelected(style);
 
-    setConfig((prev) => ({
-      ...prev,
+    setConfig({
       ui: {
-        ...prev.ui,
+        ...config.ui,
         illustrationStyle: style,
       },
-    }));
+    });
   };
 
   const getIllustrationStyleValue = (style: IllustrationStyle) => {

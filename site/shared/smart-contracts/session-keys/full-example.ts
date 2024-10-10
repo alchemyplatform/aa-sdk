@@ -67,7 +67,7 @@ const sessionKeyClient = (
     signer: sessionKeySigner,
     transport,
     // this is important because it tells the client to use our previously deployed account
-    accountAddress: client.getAddress(),
+    accountAddress: client.getAddress({ account: client.account }),
   })
 ).extend(sessionKeyPluginActions);
 

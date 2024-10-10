@@ -1,7 +1,7 @@
 "use client";
 
-import { useConfig } from "@/app/state";
 import { cn } from "@/lib/utils";
+import { useConfig } from "@/state";
 import { AuthCard, useUser } from "@account-kit/react";
 import { EOAPostLogin } from "../shared/eoa-post-login/EOAPostLogin";
 import { MintCard } from "../shared/mint-card/MintCard";

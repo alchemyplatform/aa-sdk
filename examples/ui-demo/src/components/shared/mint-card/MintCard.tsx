@@ -1,19 +1,19 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 
+import { useToast } from "@/hooks/useToast";
+import { useConfig } from "@/state";
+import { AccountKitNftMinterABI, nftContractAddress } from "@/utils/config";
 import {
   useSendUserOperation,
   useSmartAccountClient,
 } from "@account-kit/react";
-import { AccountKitNftMinterABI, nftContractAddress } from "@/utils/config";
 import { encodeFunctionData } from "viem";
-import { useConfig } from "@/app/state";
-import { useToast } from "@/hooks/useToast";
-import { NFT } from "./NFT";
-import { MintCardActionButtons } from "./MintCardActionButtons";
-import { ValueProps } from "./ValueProps";
 import { RenderUserConnectionAvatar } from "../user-connection-avatar/RenderUserConnectionAvatar";
+import { MintCardActionButtons } from "./MintCardActionButtons";
+import { NFT } from "./NFT";
+import { ValueProps } from "./ValueProps";
 
 type NFTLoadingState = "loading" | "success";
 
@@ -32,7 +32,8 @@ export type MintStatus = {
 export const MintCard = () => {
   const [status, setStatus] = useState<MintStatus>(initialValuePropState);
   const { setToast } = useToast();
-  const { nftTransfered, setNFTTransfered } = useConfig();
+  const { nftTransferred: nftTransfered, setNFTTransferred: setNFTTransfered } =
+    useConfig();
   const handleSuccess = () => {
     setStatus(() => ({
       batch: "success",
