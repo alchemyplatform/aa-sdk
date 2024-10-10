@@ -41,7 +41,11 @@ export { hydrate } from "./hydrate.js";
 export { defaultAccountState } from "./store/store.js";
 export type { SignerStatus } from "./store/types.js";
 export type * from "./types.js";
-export { cookieStorage, cookieToInitialState } from "./utils/cookies.js";
+export {
+  cookieStorage,
+  cookieToInitialState,
+  parseCookie,
+} from "./utils/cookies.js";
 
 /** Re-export core packages to make it easier to use this package without the lower level packages */
 // Accounts
