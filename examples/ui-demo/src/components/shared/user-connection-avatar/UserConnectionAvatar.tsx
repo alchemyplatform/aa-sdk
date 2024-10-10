@@ -30,7 +30,7 @@ const UserConnectionAvatar = ({
   }
 
   return (
-    <div className="flex flex-row items-center">
+    <div className="flex flex-row items-center min-w-0 overflow-hidden">
       <div className="relative w-[40px] h-[40px]">
         <UserAvatar
           address={SCAUserAddress ?? user.address}
@@ -51,13 +51,19 @@ const UserConnectionAvatar = ({
           </div>
         )}
       </div>
-      <div className="flex flex-col ml-3">
+      <div className="flex flex-col ml-3 min-w-0">
         <span className="text-fg-secondary text-left text-sm font-semibold">
           Hello,
         </span>
-        <div className="flex flex-row items-center">
-          <h3 className="text-fg-primary font-semibold text-left text-lg whitespace-nowrap">
-            {isEOAUser ? truncateAddress(user.address) : user.email}
+        <div className="flex flex-row items-center min-w-0">
+          <h3 className="text-fg-primary font-semibold text-left text-lg text-ellipsis w-full">
+            {isEOAUser ? (
+              truncateAddress(user.address)
+            ) : (
+              <span className="block w-full overflow-hidden text-ellipsis">
+                {user.email}
+              </span>
+            )}
           </h3>
           <div className="ml-1 w-[20px] h-[20px] flex items-center justify-center">
             <ChevronDown

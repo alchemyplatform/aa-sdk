@@ -37,11 +37,11 @@ export default function Home() {
   const isEOAUser = user?.type === "eoa";
   return (
     <main
-      className={`flex flex-col h-screen sm:bg-bg-main ${publicSans.className} bg-cover bg-center`}
+      className={`flex flex-col h-auto sm:bg-bg-main min-h-screen sm:min-h-0 sm:h-screen ${publicSans.className} bg-cover bg-center overflow-hidden`}
     >
       <TopNav />
       <div
-        className={`flex flex-col flex-1 px-4 sm:px-6 lg:px-10 py-4 sm:py-6 w-full max-w-screen-2xl mx-auto overflow-visible overflow-x-hidden ${inter.className} sm:overflow-hidden`}
+        className={`flex flex-col flex-1 px-4 sm:px-6 lg:px-10 py-4 sm:py-6 w-full max-w-screen-2xl mx-auto overflow-hidden overflow-x-hidden ${inter.className} sm:overflow-hidden`}
       >
         <div className="hidden sm:flex flex-1 gap-6 overflow-hidden">
           <div className=" flex-col w-[272px] md:w-[392px] bg-white border border-border rounded-lg p-6 overflow-y-auto scrollbar-none gap-10">
@@ -122,7 +122,7 @@ export default function Home() {
         <div className="flex flex-1 flex-col gap-6 sm:hidden">
           {!user && <MobileSplashPage />}
           {isEOAUser && (
-            <div className="flex flex-1 flex-col">
+            <div className="flex flex-1 flex-col mt-16">
               <div className="border-border border radius-2 px-6 py-6">
                 <RenderUserConnectionAvatar />
                 <div className="pt-6">
@@ -134,7 +134,11 @@ export default function Home() {
               </div>
             </div>
           )}
-          {user && !isEOAUser && <MintCard />}
+          {user && !isEOAUser && (
+            <div className="mt-16">
+              <MintCard />
+            </div>
+          )}
         </div>
       </div>
     </main>
