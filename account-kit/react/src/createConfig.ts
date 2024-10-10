@@ -45,6 +45,14 @@ export const createConfig = (
   props: CreateConfigProps,
   ui?: AlchemyAccountsUIConfig
 ): AlchemyAccountsConfigWithUI => {
+  if (
+    ui?.auth?.sections.some((x) =>
+      x.some((y) => y.type === "social" && y.mode === "popup")
+    )
+  ) {
+    props.enablePopupOauth = true;
+  }
+
   const config = createCoreConfig(props);
 
   return {

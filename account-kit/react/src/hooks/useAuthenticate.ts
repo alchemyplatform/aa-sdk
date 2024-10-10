@@ -62,6 +62,7 @@ export function useAuthenticate(
 
         return signer.authenticate(authParams);
       },
+      mutationKey: ["authenticate"],
       ...mutationArgs,
     },
     queryClient
