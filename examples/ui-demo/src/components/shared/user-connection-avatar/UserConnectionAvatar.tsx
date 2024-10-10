@@ -1,10 +1,10 @@
-import { cn } from "@/lib/utils";
-import { useConfig } from "@/app/state";
 import { UserAvatar } from "@/components/shared/UserAvatar";
+import { cn } from "@/lib/utils";
+import { useConfig } from "@/state";
 
-import { useAccount, useUser } from "@account-kit/react";
 import { ChevronDown } from "@/components/icons/chevron-down";
 import truncateAddress from "@/utils/truncate-address";
+import { useAccount, useUser } from "@account-kit/react";
 
 import { DeploymentStatusIndicator } from "@/components/shared/DeploymentStatusIndicator";
 
@@ -21,7 +21,7 @@ const UserConnectionAvatar = ({
   const { address: SCAUserAddress } = useAccount({ type: "LightAccount" });
 
   const isEOAUser = user?.type === "eoa";
-  const { nftTransfered: deploymentStatus } = useConfig();
+  const { nftTransferred: deploymentStatus } = useConfig();
 
   const currentTheme = config.ui.theme;
 
@@ -39,8 +39,9 @@ const UserConnectionAvatar = ({
         {showDeploymentStatus && (
           <div
             className={cn(
-              "bg-[#fff] p-[2px] rounded-full absolute bottom-[-4px] left-[23px]",
-              deploymentStatus && "p-[1px]"
+              "p-[2px] rounded-full absolute bottom-[-4px] left-[23px]",
+              deploymentStatus && "p-[1px]",
+              currentTheme === "dark" ? "bg-[#4D4D4D]" : "bg-[white]"
             )}
           >
             <DeploymentStatusIndicator

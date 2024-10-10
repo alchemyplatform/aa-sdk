@@ -1,26 +1,25 @@
-import { useConfig } from "@/app/state";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { useConfig } from "@/state";
 import { Sketch } from "@uiw/react-color";
 
 export function ColorPicker({ theme }: { theme: "dark" | "light" }) {
   const { config, setConfig } = useConfig();
 
   const onSetThemeColor = (color: string) => {
-    setConfig((prev) => ({
-      ...prev,
+    setConfig({
       ui: {
-        ...prev.ui,
+        ...config.ui,
         primaryColor: {
-          ...prev.ui.primaryColor,
+          ...config.ui.primaryColor,
           [theme]: color,
         },
       },
-    }));
+    });
   };
 
   const color = config.ui.primaryColor[theme];
@@ -29,7 +28,7 @@ export function ColorPicker({ theme }: { theme: "dark" | "light" }) {
     <Popover>
       <PopoverTrigger
         className={cn(
-          "self-start border rounded-lg py-2 px-[10px] gap-2 flex items-center justify-between hover:opacity-80 w-28 h-10 border-gray-300"
+          "self-start border rounded-lg py-2 px-[10px] gap-2 flex items-center justify-between hover:opacity-80 w-28 h-10 border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         )}
       >
         <div

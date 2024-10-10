@@ -1,19 +1,19 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 
+import { useToast } from "@/hooks/useToast";
+import { useConfig } from "@/state";
+import { AccountKitNftMinterABI, nftContractAddress } from "@/utils/config";
 import {
   useSendUserOperation,
   useSmartAccountClient,
 } from "@account-kit/react";
-import { AccountKitNftMinterABI, nftContractAddress } from "@/utils/config";
 import { encodeFunctionData } from "viem";
-import { useConfig } from "@/app/state";
-import { useToast } from "@/hooks/useToast";
-import { NFT } from "./NFT";
-import { MintCardActionButtons } from "./MintCardActionButtons";
-import { ValueProps } from "./ValueProps";
 import { RenderUserConnectionAvatar } from "../user-connection-avatar/RenderUserConnectionAvatar";
+import { MintCardActionButtons } from "./MintCardActionButtons";
+import { NFT } from "./NFT";
+import { ValueProps } from "./ValueProps";
 
 type NFTLoadingState = "loading" | "success";
 
@@ -32,7 +32,8 @@ export type MintStatus = {
 export const MintCard = () => {
   const [status, setStatus] = useState<MintStatus>(initialValuePropState);
   const { setToast } = useToast();
-  const { nftTransfered, setNFTTransfered } = useConfig();
+  const { nftTransferred: nftTransfered, setNFTTransferred: setNFTTransfered } =
+    useConfig();
   const handleSuccess = () => {
     setStatus(() => ({
       batch: "success",
@@ -114,7 +115,7 @@ export const MintCard = () => {
       <div className="sm:self-center">
         <div className="flex items-center flex-col justify-center mb-12 xl:mb-0  xl:flex-row xl:justify-center xl:items-start bg-bg-surface-default radius-1 border-btn-secondary border md:mx-6 xl:mx-0 overflow-hidden xl:h-[532px]">
           <RenderUserConnectionAvatar className="sm:hidden w-full p-6 mb-0 pb-6 relative after:absolute after:bottom-0 after:left-6 after:right-6  after:h-[1px] after:bg-border" />
-          <div className="hidden xl:block px-10 py-12 h-full w-[428px]">
+          <div className="hidden xl:block px-10 py-12 h-full">
             <h1 className="text-3xl font-semibold  leading-10 mb-8 text-fg-primary">
               {!nftTransfered
                 ? "One-click checkout"
@@ -123,7 +124,7 @@ export const MintCard = () => {
             <ValueProps status={status} />
           </div>
           <div
-            className={`p-6 xl:px-10 xl:py-12 h-full bg-bg-surface-default  xl:bg-bg-surface-inset md:min-w-96`}
+            className={`p-6 xl:px-10 xl:py-12 h-full bg-bg-surface-default  xl:bg-bg-surface-inset`}
           >
             <NFT
               nftTransfered={nftTransfered}
@@ -131,7 +132,7 @@ export const MintCard = () => {
               status={status}
             />
             <MintCardActionButtons
-              className="hidden xl:block"
+              className="hidden xl:block w-[208px] m-auto"
               nftTransfered={nftTransfered}
               handleCollectNFT={handleCollectNFT}
               disabled={isActionButtonsDisabled}

@@ -1,14 +1,14 @@
-import { UserAddressLink } from "@/components/shared/user-connection-avatar/UserAddressLink";
-import { useAccount, useLogout, useSigner, useUser } from "@account-kit/react";
-import { DeploymentStatusIndicator } from "@/components/shared/DeploymentStatusIndicator";
-import { useConfig } from "@/app/state";
 import { ExternalLinkIcon } from "@/components/icons/external-link";
-import { useQuery } from "@tanstack/react-query";
 import { LogoutIcon } from "@/components/icons/logout";
+import { DeploymentStatusIndicator } from "@/components/shared/DeploymentStatusIndicator";
+import { UserAddressLink } from "@/components/shared/user-connection-avatar/UserAddressLink";
+import { useConfig } from "@/state";
+import { useAccount, useLogout, useSigner, useUser } from "@account-kit/react";
+import { useQuery } from "@tanstack/react-query";
 
 export function UserConnectionDetails() {
   const user = useUser();
-  const { nftTransfered: deploymentStatus } = useConfig();
+  const { nftTransferred: deploymentStatus } = useConfig();
   const signer = useSigner();
   const { logout } = useLogout();
   const { config } = useConfig();
