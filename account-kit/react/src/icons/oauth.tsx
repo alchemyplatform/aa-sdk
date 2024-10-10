@@ -109,7 +109,7 @@ export const FacebookIcon = (
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      <g clip-path="url(#clip0_2387_27657)">
+      <g clipPath="url(#clip0_2387_27657)">
         <path
           d="M10.02 23.88C4.32 22.86 0 17.94 0 12C0 5.4 5.4 0 12 0C18.6 0 24 5.4 24 12C24 17.94 19.68 22.86 13.98 23.88L13.32 23.34H10.68L10.02 23.88Z"
           fill="url(#paint0_linear_2387_27657)"
