@@ -2,6 +2,7 @@ import { AuthCardHeader } from "@/components/shared/AuthCardHeader";
 import { alchemy, arbitrumSepolia } from "@account-kit/infra";
 import { cookieStorage, createConfig } from "@account-kit/react";
 import { AccountKitTheme } from "@account-kit/react/tailwind";
+import { type KnownAuthProvider } from "@account-kit/signer";
 import { QueryClient } from "@tanstack/react-query";
 
 export type Config = {
@@ -11,11 +12,7 @@ export type Config = {
     showPasskey: boolean;
     addPasskey: boolean;
     showOAuth: boolean;
-    oAuthMethods: {
-      google: boolean;
-      facebook: boolean;
-      auth0: boolean;
-    };
+    oAuthMethods: Record<KnownAuthProvider | "auth0", boolean>;
   };
   ui: {
     theme: "light" | "dark";
@@ -52,6 +49,7 @@ export const DEFAULT_CONFIG: Config = {
       google: true,
       facebook: true,
       auth0: false,
+      apple: false,
       // TO DO: extend for BYO auth provider
     },
   },

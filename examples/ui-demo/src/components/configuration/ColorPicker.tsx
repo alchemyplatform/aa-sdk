@@ -1,26 +1,25 @@
-import { useConfig } from "@/app/state";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { useConfig } from "@/state";
 import { Sketch } from "@uiw/react-color";
 
 export function ColorPicker({ theme }: { theme: "dark" | "light" }) {
   const { config, setConfig } = useConfig();
 
   const onSetThemeColor = (color: string) => {
-    setConfig((prev) => ({
-      ...prev,
+    setConfig({
       ui: {
-        ...prev.ui,
+        ...config.ui,
         primaryColor: {
-          ...prev.ui.primaryColor,
+          ...config.ui.primaryColor,
           [theme]: color,
         },
       },
-    }));
+    });
   };
 
   const color = config.ui.primaryColor[theme];
