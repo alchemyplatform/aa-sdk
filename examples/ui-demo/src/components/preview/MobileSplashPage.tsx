@@ -3,7 +3,7 @@ import { useAuthModal } from "@account-kit/react";
 export function MobileSplashPage() {
   const { openAuthModal } = useAuthModal();
   return (
-    <div className="flex flex-col flex-1 pb-5 mt-2">
+    <div className="flex flex-col flex-1 pb-5 mt-20">
       {/* Header Text */}
       <div>
         <h3 className="text-[56px] leading-[60px] text-center font-semibold tracking-tight text-fg-primary">
@@ -31,10 +31,11 @@ export function MobileSplashPage() {
         {/* Placeholder - Design would provide the actual asset here. */}
         <video
           src="/videos/splash-demo.mov"
-          className="object-contain"
+          className="w-full h-full object-contain"
           autoPlay
           loop
           muted
+          playsInline
         />
       </div>
 
