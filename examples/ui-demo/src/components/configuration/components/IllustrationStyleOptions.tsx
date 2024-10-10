@@ -46,9 +46,9 @@ export function IllustrationStyleOptions() {
             className={cn(
               "py-2 flex-1 basis-0 rounded-lg border border-gray-300",
               "text-fg-accent-brand hover:opacity-80",
-              "flex items-center justify-center",
+              "flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
               illustrationStyle === value
-                ? "border-[#363FF9] border-[1.5px] bg-[#EFF4F9] font-semibold"
+                ? "border-[1.5px] bg-[#EFF4F9] font-semibold"
                 : ""
             )}
             onClick={() => onChange(value)}

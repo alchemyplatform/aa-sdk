@@ -28,7 +28,7 @@ export const EmailNotReceivedDisclaimer = ({
   }, [emailResent]);
 
   return (
-    <div className="flex flex-row gap-2 justify-center mb-3">
+    <div className="flex flex-row gap-2 justify-center mb-2">
       <span className="text-fg-tertiary text-xs">
         {ls.loadingEmail.emailNotReceived}
       </span>

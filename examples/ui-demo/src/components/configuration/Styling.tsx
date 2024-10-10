@@ -118,7 +118,7 @@ function LearnMore() {
       <div className="text-secondary">
         Customize every pixel with{" "}
         <ExternalLink
-          className="font-semibold text-blue-600"
+          className="font-semibold text-btn-primary"
           href="https://github.com/alchemyplatform/aa-sdk/blob/v4.x.x/account-kit/react/src/tailwind/types.ts#L6"
         >
           CSS
