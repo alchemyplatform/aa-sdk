@@ -1,4 +1,4 @@
-import { useConfig } from "@/app/state";
+import { useConfig } from "@/state";
 export const LoadingIcon = () => {
   const {
     config: {

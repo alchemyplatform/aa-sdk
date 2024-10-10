@@ -1,12 +1,12 @@
-import { ComponentPropsWithoutRef, PropsWithChildren, useState } from "react";
 import {
   Popover,
-  PopoverTrigger,
   PopoverContent,
+  PopoverTrigger,
 } from "@/components/ui/popover";
+import { ComponentPropsWithoutRef, PropsWithChildren, useState } from "react";
 
-import { useConfig } from "@/app/state";
 import { cn } from "@/lib/utils";
+import { useConfig } from "@/state";
 
 type UserConnectionPopoverMenuProps = {
   onOpenStateChange?: (open: boolean) => void;

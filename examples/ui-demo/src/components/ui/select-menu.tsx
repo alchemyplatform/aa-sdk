@@ -1,10 +1,10 @@
 "use client";
 
-import * as SelectPrimitives from "@radix-ui/react-select";
 import { cn } from "@/lib/utils";
-import React from "react";
-import { useConfig } from "@/app/state";
+import { useConfig } from "@/state";
 import { hexToRgba } from "@/utils/hex-to-rgba";
+import * as SelectPrimitives from "@radix-ui/react-select";
+import React from "react";
 
 const SelectMenu = SelectPrimitives.Root;
 
@@ -71,11 +71,11 @@ SelectMenuTrigger.displayName = SelectPrimitives.Trigger.displayName;
 SelectMenuContent.displayName = SelectPrimitives.Content.displayName;
 export {
   SelectMenu,
-  SelectMenuTrigger,
   SelectMenuContent,
-  SelectMenuLabel,
-  SelectMenuItem,
-  SelectMenuSeparator,
   SelectMenuGroup,
+  SelectMenuItem,
+  SelectMenuLabel,
+  SelectMenuSeparator,
+  SelectMenuTrigger,
   SelectMenuViewport,
 };
