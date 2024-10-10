@@ -12,9 +12,9 @@ export type Config = {
     addPasskey: boolean;
     showOAuth: boolean;
     oAuthMethods: {
-      google: Boolean;
-      facebook: Boolean;
-      auth0: Boolean;
+      google: boolean;
+      facebook: boolean;
+      auth0: boolean;
     };
   };
   ui: {
