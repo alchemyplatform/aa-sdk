@@ -3,11 +3,11 @@ import { useAuthModal } from "@account-kit/react";
 export function MobileSplashPage() {
   const { openAuthModal } = useAuthModal();
   return (
-    <div className="flex flex-col flex-1 pb-5 mt-2">
+    <div className="flex flex-col flex-1 pb-5 pt-16 h-auto">
       {/* Header Text */}
       <div>
-        <h3 className="text-[56px] leading-[60px] text-center font-semibold tracking-tight text-fg-primary">
-          Web2 UX, <br />
+        <h3 className="text-[36px] min-[430px]:text-[46px] sm:text-[56px] sm:leading-[60px] text-center font-semibold tracking-tight text-fg-primary">
+          Web2 UX,{" "}
           <span
             className="whitespace-nowrap"
             style={{
@@ -21,24 +21,24 @@ export function MobileSplashPage() {
             onchain
           </span>
         </h3>
-        <p className="text-xl text-fg-secondary font-normal tracking-tight text-center mt-3">
-          Zero-friction onboarding, <br />
-          one-click transactions
+        <p className="text-base text-fg-secondary font-normal tracking-tight text-center mt-3">
+          Zero-friction onboarding, one-click transactions
         </p>
       </div>
       {/* Image Wrapper */}
-      <div className="w-full relative h-auto my-[20px] flex-grow">
+      <div className="relative my-[20px] flex items-center justify-center">
         {/* Placeholder - Design would provide the actual asset here. */}
         <video
           src="/videos/splash-demo.mov"
-          className="object-contain"
+          className="w-full h-full object-contain"
           autoPlay
           loop
           muted
+          playsInline
         />
       </div>
 
-      <div className="mt-auto">
+      <div className="sm:mt-auto">
         {/* Bottom action buttons */}
         <div className="flex flex-col sm:flex-row">
           <button
