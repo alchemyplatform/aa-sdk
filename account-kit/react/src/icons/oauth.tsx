@@ -1,12 +1,18 @@
 import type { SVGProps } from "react";
 import { Spinner } from "./spinner.js";
+import type { KnownAuthProvider } from "../../../signer/dist/types/signer.js";
+
+interface ContinueWithOAuthProps {
+  provider: KnownAuthProvider;
+}
 
 // to do: accept a provider prop
-export function ContinueWithOAuth() {
+export function ContinueWithOAuth({ provider }: ContinueWithOAuthProps) {
   return (
     <div className="relative flex flex-col items-center justify-center h-12 w-12">
       <Spinner className="absolute top-0 left-0 right-0 bottom-0" />
-      <GoogleIcon />
+      {(provider === "google" && <GoogleIcon />) ||
+        (provider === "facebook" && <FacebookIcon />)}
     </div>
   );
 }
@@ -56,9 +62,10 @@ export function OAuthConnectionFailed() {
 }
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-export const GoogleIcon = (
-  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>
-) => {
+export const GoogleIcon = ({
+  className,
+  ...props
+}: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

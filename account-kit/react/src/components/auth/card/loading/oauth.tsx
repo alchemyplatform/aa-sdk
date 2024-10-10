@@ -31,7 +31,7 @@ export const CompletingOAuth = () => {
   return (
     <div className="flex flex-col gap-5 items-center">
       <div className="flex flex-col items-center justify-center">
-        <ContinueWithOAuth />
+        <ContinueWithOAuth provider={authStep.config.authProviderId} />
       </div>
 
       <h3 className="font-semibold text-lg">{`Continue with ${capitalize(
