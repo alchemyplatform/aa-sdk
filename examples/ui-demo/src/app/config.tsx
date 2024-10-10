@@ -81,15 +81,11 @@ export const alchemyConfig = createConfig(
     illustrationStyle: DEFAULT_CONFIG.ui.illustrationStyle,
     auth: {
       sections: [
-        [{ type: "email" as const }],
+        [{ type: "email" }],
         [
-          { type: "passkey" as const },
-          { type: "social" as const, authProviderId: "google", mode: "popup" },
-          {
-            type: "social" as const,
-            authProviderId: "facebook",
-            mode: "popup",
-          },
+          { type: "passkey" },
+          { type: "social", authProviderId: "google", mode: "popup" },
+          { type: "social", authProviderId: "facebook", mode: "popup" },
         ],
       ],
       addPasskeyOnSignup: DEFAULT_CONFIG.auth.addPasskey,

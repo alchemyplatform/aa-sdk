@@ -6,10 +6,8 @@ import { AlchemyClientState } from "@account-kit/core";
 import {
   AlchemyAccountProvider,
   AlchemyAccountsUIConfig,
-  AuthType,
   useUiConfig,
 } from "@account-kit/react";
-import { KnownAuthProvider } from "@account-kit/signer";
 import {
   createContext,
   Dispatch,
@@ -27,6 +25,7 @@ import {
   generateClassesForRoot,
   generateStylesForRoot,
 } from "./store";
+import { getSectionsForConfig } from "@/app/sections";
 
 export type ConfigContextType = {
   config: Config;
@@ -50,36 +49,10 @@ export function useConfig(): ConfigContextType {
 }
 
 function convertDemoConfigToUiConfig(config: Config): AlchemyAccountsUIConfig {
-  const sections: AuthType[][] = [[{ type: "email" }]];
-
-  if (config.auth.showPasskey) {
-    sections.push([{ type: "passkey" }]);
-  }
-
-  if (config.auth.showOAuth && !config.auth.showPasskey) {
-    sections.push([]);
-  }
-
-  if (config.auth.showOAuth) {
-    Object.entries(config.auth.oAuthMethods)
-      .filter(([, enabled]) => enabled)
-      .forEach(([method]) => {
-        sections.at(-1)?.push({
-          type: "social",
-          authProviderId: method as KnownAuthProvider,
-          mode: "popup",
-        });
-      });
-  }
-
-  if (config.auth.showExternalWallets) {
-    sections.push([
-      {
-        type: "external_wallets",
-        walletConnect: { projectId: "30e7ffaff99063e68cc9870c105d905b" },
-      },
-    ]);
-  }
+  const sections = getSectionsForConfig(
+    config,
+    "30e7ffaff99063e68cc9870c105d905b"
+  );
 
   return {
     illustrationStyle: config.ui.illustrationStyle,
@@ -94,6 +67,7 @@ function convertDemoConfigToUiConfig(config: Config): AlchemyAccountsUIConfig {
         />
       ),
     },
+    supportUrl: config.supportUrl,
   };
 }
 
