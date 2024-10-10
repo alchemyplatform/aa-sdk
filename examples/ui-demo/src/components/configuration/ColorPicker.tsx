@@ -5,10 +5,13 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { useConfig } from "@/state";
+import { useDebounceEffect } from "@/utils/hooks/useDebounceEffect";
 import { Sketch } from "@uiw/react-color";
+import { useState } from "react";
 
 export function ColorPicker({ theme }: { theme: "dark" | "light" }) {
   const { config, setConfig } = useConfig();
+  const [innerColor, setInnerColor] = useState(config.ui.primaryColor[theme]);
 
   const onSetThemeColor = (color: string) => {
     setConfig({
@@ -22,7 +25,13 @@ export function ColorPicker({ theme }: { theme: "dark" | "light" }) {
     });
   };
 
-  const color = config.ui.primaryColor[theme];
+  useDebounceEffect(
+    () => {
+      onSetThemeColor(innerColor);
+    },
+    [innerColor],
+    250
+  );
 
   return (
     <Popover>
@@ -33,9 +42,9 @@ export function ColorPicker({ theme }: { theme: "dark" | "light" }) {
       >
         <div
           className="h-6 w-6 rounded shrink-0"
-          style={{ backgroundColor: color }}
+          style={{ backgroundColor: innerColor }}
         />
-        <div className="text-sm">{color}</div>
+        <div className="text-sm">{innerColor}</div>
       </PopoverTrigger>
       <PopoverContent
         side="right"
@@ -43,9 +52,9 @@ export function ColorPicker({ theme }: { theme: "dark" | "light" }) {
         className="p-0 w-fit border-0"
       >
         <Sketch
-          color={color}
+          color={innerColor}
           onChange={(color) => {
-            onSetThemeColor(color.hex);
+            setInnerColor(color.hex);
           }}
         />
       </PopoverContent>
