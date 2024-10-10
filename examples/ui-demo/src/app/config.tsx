@@ -52,6 +52,7 @@ export const DEFAULT_CONFIG: Config = {
       google: true,
       facebook: true,
       auth0: false,
+      // TO DO: extend for BYO auth provider
     },
   },
   ui: {

@@ -63,7 +63,7 @@ export function ConfigContextProvider(props: PropsWithChildren) {
         if (config.auth.showPasskey && enabled) {
           sections.at(-1)!.push({
             type: "social",
-            authProviderId: method as KnownAuthProvider,
+            authProviderId: method as KnownAuthProvider, // TO DO: extend for BYO auth provider
             mode: "popup",
           });
         } else if (enabled) {
