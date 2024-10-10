@@ -1,83 +1,77 @@
-import { useConfig } from "@/app/state";
 import { cn } from "@/lib/utils";
+import { useConfig } from "@/state";
 import { BiometricIcon } from "../icons/biometric";
+import { ExternalLinkIcon } from "../icons/external-link";
+import { FacebookLogo } from "../icons/facebook";
+import { GoogleIcon } from "../icons/google";
 import { LockIcon } from "../icons/lock";
 import { MailIcon } from "../icons/mail";
 import { SocialIcon } from "../icons/social";
 import { WalletIcon } from "../icons/wallet";
 import ExternalLink from "../shared/ExternalLink";
 import { Switch } from "../ui/switch";
-import { ExternalLinkIcon } from "../icons/external-link";
-import { GoogleIcon } from "../icons/google";
-import { FacebookLogo } from "../icons/facebook";
 
 export const Authentication = ({ className }: { className?: string }) => {
   const { config, setConfig } = useConfig();
 
   const setPasskeysActive = (active: boolean) => {
-    setConfig((prev) => ({
-      ...prev,
+    setConfig({
       auth: {
-        ...prev.auth,
+        ...config.auth,
         showPasskey: active,
       },
-    }));
+    });
   };
 
   const setAddPasskeyOnSignup = (active: boolean) => {
-    setConfig((prev) => ({
-      ...prev,
+    setConfig({
       auth: {
-        ...prev.auth,
+        ...config.auth,
         addPasskey: active,
       },
-    }));
+    });
   };
 
   const setWalletsActive = (active: boolean) => {
-    setConfig((prev) => ({
-      ...prev,
+    setConfig({
       auth: {
-        ...prev.auth,
+        ...config.auth,
         showExternalWallets: active,
       },
-    }));
+    });
   };
 
   const setOAuthActive = (active: boolean) => {
-    setConfig((prev) => ({
-      ...prev,
+    setConfig({
       auth: {
-        ...prev.auth,
+        ...config.auth,
         showOAuth: active,
       },
-    }));
+    });
   };
 
   const setAddGoogleAuth = () => {
-    setConfig((prev) => ({
-      ...prev,
+    setConfig({
       auth: {
-        ...prev.auth,
+        ...config.auth,
         oAuthMethods: {
-          ...prev.auth.oAuthMethods,
-          google: !prev.auth.oAuthMethods.google,
+          ...config.auth.oAuthMethods,
+          google: !config.auth.oAuthMethods.google,
         },
       },
-    }));
+    });
   };
 
   const setAddFacebookAuth = () => {
-    setConfig((prev) => ({
-      ...prev,
+    setConfig({
       auth: {
-        ...prev.auth,
+        ...config.auth,
         oAuthMethods: {
-          ...prev.auth.oAuthMethods,
-          facebook: !prev.auth.oAuthMethods.facebook,
+          ...config.auth.oAuthMethods,
+          facebook: !config.auth.oAuthMethods.facebook,
         },
       },
-    }));
+    });
   };
 
   return (
@@ -103,22 +97,14 @@ export const Authentication = ({ className }: { className?: string }) => {
               config.auth.showOAuth && (
                 <div className="flex gap-x-3">
                   <OAuthMethod
+                    active={config.auth.oAuthMethods.google}
                     icon={<GoogleIcon />}
                     onClick={setAddGoogleAuth}
-                    className={`grow-0 border-2 rounded-lg p-1 ${
-                      config.auth.oAuthMethods.google
-                        ? "border-gray-500 bg-gray-100"
-                        : "border-gray-500"
-                    }`}
                   />
                   <OAuthMethod
+                    active={config.auth.oAuthMethods.facebook}
                     icon={<FacebookLogo />}
                     onClick={setAddFacebookAuth}
-                    className={`grow-0 border-2 rounded-lg p-1 ${
-                      config.auth.oAuthMethods.facebook
-                        ? "border-gray-500 bg-gray-100"
-                        : "border-gray-500"
-                    }`}
                   />
                   {/* TO DO: add "Add provider" button */}
                 </div>
@@ -145,7 +131,7 @@ export const Authentication = ({ className }: { className?: string }) => {
                     <ExternalLinkIcon
                       height={16}
                       width={16}
-                      className="text-fg-secondary"
+                      className="text-[#475569]"
                     />
                   </ExternalLink>
                   <Switch
@@ -241,14 +227,21 @@ const AuthMethod = ({
 const OAuthMethod = ({
   icon,
   onClick,
-  className,
+  active,
 }: {
   icon: React.ReactNode;
   onClick: () => void;
   className?: string;
+  active: boolean;
 }) => {
   return (
-    <button onClick={onClick} className={className}>
+    <button
+      onClick={onClick}
+      className={cn(
+        "flex grow-0 border border-gray-300 rounded-lg p-1 h-10 w-10 justify-center items-center",
+        active ? "border-[#363FF9] border-[1.5px] bg-[#EFF4F9]" : ""
+      )}
+    >
       {icon}
     </button>
   );

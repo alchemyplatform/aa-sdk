@@ -27,7 +27,7 @@ export function MintCardActionButtons({
         <div>
           <a
             href="https://dashboard.alchemy.com/"
-            className="btn btn-primary flex text-center mb-4 p-2 w-full md:w-52 m-auto"
+            className="btn btn-primary flex text-center mb-4 p-2 w-full  m-auto"
             target="_blank"
             rel="noreferrer"
           >
@@ -43,7 +43,7 @@ export function MintCardActionButtons({
       >
         View docs
       </a>
-      <p className="text-sm text-fg-secondary text-center md:hidden">
+      <p className="text-sm text-fg-secondary text-center  md:hidden">
         Visit desktop site to customize styles and auth methods
       </p>
     </div>

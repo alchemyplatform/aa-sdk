@@ -1,5 +1,5 @@
 import { Config, DEFAULT_CONFIG } from "@/app/config";
-import { useConfig } from "@/app/state";
+import { useConfig } from "@/state";
 import dedent from "dedent";
 import { Check, Copy } from "lucide-react";
 import { useState } from "react";
@@ -17,19 +17,6 @@ export function CodePreview({ className }: { className?: string }) {
         className
       )}
     >
-      <div className="flex flex-col gap-2">
-        <div className="font-semibold text-foreground text-xl">
-          Export configuration
-        </div>
-        <div className="text-sm text-gray-600">
-          To get started, simply paste the below code into your environment.
-          You&apos;ll need to add your Alchemy API key and Gas Policy ID too.
-          Log in to automatically inject the keys into the code below.{" "}
-          <ExternalLink href="#" className="text-blue-600 font-semibold">
-            Fully customize CSS here.
-          </ExternalLink>
-        </div>
-      </div>
       <div className="flex flex-col">
         <div className="mb-2 font-semibold text-secondary">Config</div>
         <p className="mb-4 text-sm text-secondary-foreground">
