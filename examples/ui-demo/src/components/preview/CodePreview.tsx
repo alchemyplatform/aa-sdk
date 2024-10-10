@@ -7,6 +7,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark as syntaxTheme } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { twMerge } from "tailwind-merge";
 import ExternalLink from "../shared/ExternalLink";
+import { getSectionsForConfig } from "@/app/sections";
 
 export function CodePreview({ className }: { className?: string }) {
   const { config } = useConfig();
@@ -108,24 +109,7 @@ function getTailwindCode(config: Config) {
 }
 
 function getConfigCode(config: Config) {
-  const sections = [];
-
-  if (config.auth.showEmail) {
-    sections.push([{ type: "email" }]);
-  }
-
-  if (config.auth.showPasskey) {
-    sections.push([{ type: "passkey" }]);
-  }
-
-  if (config.auth.showExternalWallets) {
-    sections.push([
-      {
-        type: "external_wallets",
-        walletConnect: { projectId: "your-project-id" },
-      },
-    ]);
-  }
+  const sections = getSectionsForConfig(config, "your-project-id");
 
   return dedent`
   import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react";
@@ -143,7 +127,7 @@ function getConfigCode(config: Config) {
       ? '\n      header: <img src="path/to/logo.svg" />,'
       : ""
   }
-    },
+    },${config.supportUrl ? `\n    supportUrl: "${config.supportUrl}"` : ""}
   };
 
   export const config = createConfig({
