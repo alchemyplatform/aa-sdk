@@ -13,7 +13,7 @@ export function TopNav() {
             <Wordmark />
           </a>
           <div className="w-px h-5 bg-gray-500" />
-          <p className="text-lg align-middle whitespace-nowrap">Account kit</p>
+          <p className="text-lg align-middle whitespace-nowrap">Account Kit</p>
         </div>
 
         <div className="flex gap-1 md:gap-8 items-center h-8">
@@ -22,12 +22,6 @@ export function TopNav() {
             className="hidden md:flex p-2 font-semibold hover:bg-gray-100 transition-colors rounded-lg"
           >
             Quickstart
-          </ExternalLink>
-          <ExternalLink
-            href={links.integrationCall}
-            className="hidden md:flex p-2 font-semibold hover:bg-gray-100 transition-colors rounded-lg"
-          >
-            Integration call
           </ExternalLink>
           <ExternalLink href={links.github}>
             <GithubLogo className="hidden md:flex" />
@@ -42,7 +36,7 @@ export function TopNav() {
               className="btn px-3 py-2.5 border border-btn-secondary text-sm"
               href="https://accountkit.alchemy.com/react/quickstart"
             >
-              Build
+              Docs
             </ExternalLink>
           </div>
         </div>
