@@ -1,15 +1,21 @@
 "use client";
 
-import { useCallback, useLayoutEffect, useMemo, useRef } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  type PropsWithChildren,
+} from "react";
+import { useAuthConfig } from "../../../hooks/internal/useAuthConfig.js";
 import { useAuthModal } from "../../../hooks/useAuthModal.js";
 import { useElementHeight } from "../../../hooks/useElementHeight.js";
 import { useSigner } from "../../../hooks/useSigner.js";
 import { useSignerStatus } from "../../../hooks/useSignerStatus.js";
-import { useUiConfig } from "../../../hooks/useUiConfig.js";
 import { Navigation } from "../../navigation.js";
 import { useAuthContext } from "../context.js";
-import { Step } from "./steps.js";
 import { Footer } from "../sections/Footer.js";
+import { Step } from "./steps.js";
 
 export type AuthCardProps = {
   className?: string;
@@ -56,14 +62,14 @@ export const AuthCardContent = ({
 
   const signer = useSigner();
 
-  const contentRef = useRef<HTMLDivElement>(null);
-  const { height } = useElementHeight(contentRef);
-
   const didGoBack = useRef(false);
 
-  const {
-    auth: { onAuthSuccess, addPasskeyOnSignup },
-  } = useUiConfig();
+  const { onAuthSuccess, addPasskeyOnSignup } = useAuthConfig(
+    ({ onAuthSuccess, addPasskeyOnSignup }) => ({
+      onAuthSuccess,
+      addPasskeyOnSignup,
+    })
+  );
 
   const canGoBack = useMemo(() => {
     return [
@@ -106,7 +112,7 @@ export const AuthCardContent = ({
     closeAuthModal();
   }, [authStep.type, closeAuthModal, setAuthStep]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (authStep.type === "complete") {
       didGoBack.current = false;
       closeAuthModal();
@@ -130,30 +136,43 @@ export const AuthCardContent = ({
   ]);
 
   return (
-    <div className="relative">
+    <div className="flex flex-col relative">
       {/* Wrapper container that sizes its height dynamically */}
-      <div
-        className="transition-all duration-300 ease-out overflow-y-hidden radius-2"
-        style={{ height: height ? `${height}px` : "auto" }}
-      >
-        <div className="z-[1]" ref={contentRef}>
-          <div
-            className={`relative flex flex-col items-center gap-4 text-fg-primary px-6 py-4 ${
-              className ?? ""
-            }`}
-          >
-            {(canGoBack || showClose) && (
-              <Navigation
-                showClose={showClose}
-                showBack={canGoBack}
-                onBack={onBack}
-                onClose={onClose}
-              />
-            )}
-            <Step />
-          </div>
-          <Footer authStep={authStep} />
+      <DynamicHeight>
+        <div
+          className={`relative flex flex-col items-center gap-4 text-fg-primary px-6 py-4 ${
+            className ?? ""
+          }`}
+        >
+          {(canGoBack || showClose) && (
+            <Navigation
+              showClose={showClose}
+              showBack={canGoBack}
+              onBack={onBack}
+              onClose={onClose}
+            />
+          )}
+          <Step />
         </div>
+        <Footer authStep={authStep} />
+      </DynamicHeight>
+    </div>
+  );
+};
+
+const DynamicHeight = ({ children }: PropsWithChildren) => {
+  const contentRef = useRef<HTMLDivElement>(null);
+  const { height } = useElementHeight(contentRef);
+
+  return (
+    <div
+      className="transition-[flex-basis] duration-200 ease-out overflow-y-hidden radius-2"
+      style={{
+        flexBasis: height ? `${height}px` : undefined,
+      }}
+    >
+      <div className="z-[1]" ref={contentRef}>
+        {children}
       </div>
     </div>
   );

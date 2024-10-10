@@ -1,8 +1,7 @@
-import { useMemo } from "react";
 import { walletConnect } from "wagmi/connectors";
+import { useAuthConfig } from "../../../hooks/internal/useAuthConfig.js";
 import { useChain } from "../../../hooks/useChain.js";
 import { useConnect } from "../../../hooks/useConnect.js";
-import { useUiConfig } from "../../../hooks/useUiConfig.js";
 import { Spinner } from "../../../icons/spinner.js";
 import { WalletConnectIcon } from "../../../icons/walletConnectIcon.js";
 import { Button } from "../../button.js";
@@ -121,19 +120,15 @@ export const EoaPickCard = () => {
   });
   const { setAuthStep } = useAuthContext();
 
-  const {
-    auth: { sections },
-  } = useUiConfig();
-
-  const walletConnectConfig = useMemo(() => {
-    const externalWalletSection = sections
+  const walletConnectConfig = useAuthConfig((auth) => {
+    const externalWalletSection = auth.sections
       .find((x) => x.some((y) => y.type === "external_wallets"))
       ?.find((x) => x.type === "external_wallets") as
       | Extract<AuthType, { type: "external_wallets" }>
       | undefined;
 
     return externalWalletSection?.walletConnect;
-  }, [sections]);
+  });
 
   const connectorButtons = connectors.map((connector) => {
     return (

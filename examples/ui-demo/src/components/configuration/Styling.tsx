@@ -1,6 +1,5 @@
 import { cn } from "@/lib/utils";
-import { useConfig } from "@/state";
-import { useState } from "react";
+import { useConfigStore } from "@/state";
 import { PaletteIcon } from "../icons/palette";
 import { SparkleIcon } from "../icons/sparkle";
 import ExternalLink from "../shared/ExternalLink";
@@ -13,24 +12,20 @@ import { CornerRadiusOptions } from "./components/CornerRadiusOptions";
 import { IllustrationStyleOptions } from "./components/IllustrationStyleOptions";
 
 export function Styling({ className }: { className?: string }) {
-  const { config, setConfig } = useConfig();
-  const [supportUrl, setsupportUrl] = useState("");
-  const logo =
-    config.ui.theme === "dark" ? config.ui.logoDark : config.ui.logoLight;
-
-  const handleChangesupportUrl = () => {
-    setConfig({
-      supportUrl,
-    });
-  };
+  const { logo, setSupportUrl, setTheme, supportUrl, theme } = useConfigStore(
+    ({ supportUrl, ui, setTheme, setSupportUrl }) => {
+      return {
+        logo: ui.theme === "dark" ? ui.logoDark : ui.logoLight,
+        supportUrl,
+        theme: ui.theme,
+        setTheme,
+        setSupportUrl,
+      };
+    }
+  );
 
   const onSwitchTheme = (isDarkMode: boolean) => {
-    setConfig({
-      ui: {
-        ...config.ui,
-        theme: isDarkMode ? "dark" : "light",
-      },
-    });
+    setTheme(isDarkMode ? "dark" : "light");
   };
 
   return (
@@ -45,13 +40,13 @@ export function Styling({ className }: { className?: string }) {
         <div className="flex flex-row justify-between grow items-center">
           <p className="font-medium text-sm text-secondary-foreground">Theme</p>
           <ThemeSwitch
-            checked={config.ui.theme === "dark"}
+            checked={theme === "dark"}
             onCheckedChange={onSwitchTheme}
           />
         </div>
         <div className="flex flex-row justify-between grow items-center">
           <p className="font-medium text-sm text-secondary-foreground">Color</p>
-          <ColorPicker theme={config.ui.theme} />
+          <ColorPicker theme={theme} />
         </div>
         <div className="flex flex-row justify-between grow items-center">
           <div>
@@ -69,7 +64,7 @@ export function Styling({ className }: { className?: string }) {
               )}
             </p>
           </div>
-          <PhotoUploads mode={config.ui.theme} />
+          <PhotoUploads mode={theme} />
         </div>
       </div>
 
@@ -100,8 +95,8 @@ export function Styling({ className }: { className?: string }) {
         <input
           id="support-url"
           value={supportUrl}
-          onChange={(e) => setsupportUrl(e.target.value)}
-          onBlur={handleChangesupportUrl}
+          onChange={(e) => setSupportUrl(e.target.value)}
+          onBlur={(e) => setSupportUrl(e.target.value)}
           className="w-full border border-border rounded-lg px-[10px] py-[14px] h-10 text-sm"
           placeholder="website, telegram, or email"
         />

@@ -44,6 +44,6 @@ export const useOAuthVerify = ({
 
   return {
     isPending,
-    authenticate: authenticate,
+    authenticate,
   };
 };

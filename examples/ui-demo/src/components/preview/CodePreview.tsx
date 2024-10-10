@@ -1,5 +1,6 @@
 import { Config, DEFAULT_CONFIG } from "@/app/config";
-import { useConfig } from "@/state";
+import { getSectionsForConfig } from "@/app/sections";
+import { useConfigStore } from "@/state";
 import dedent from "dedent";
 import { Check, Copy } from "lucide-react";
 import { useState } from "react";
@@ -7,10 +8,9 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark as syntaxTheme } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { twMerge } from "tailwind-merge";
 import ExternalLink from "../shared/ExternalLink";
-import { getSectionsForConfig } from "@/app/sections";
 
 export function CodePreview({ className }: { className?: string }) {
-  const { config } = useConfig();
+  const config = useConfigStore((state) => state);
   return (
     <div
       className={twMerge(
@@ -38,7 +38,10 @@ export function CodePreview({ className }: { className?: string }) {
           </ExternalLink>
           , then add the below code to your config file.
         </p>
-        <CodeBlock title="tailwind.config.ts" code={getTailwindCode(config)} />
+        <CodeBlock
+          title="tailwind.config.ts"
+          code={getTailwindCode(config.ui)}
+        />
       </div>
     </div>
   );
@@ -81,8 +84,7 @@ function CodeBlock({ title, code }: { title: string; code: string }) {
   );
 }
 
-function getTailwindCode(config: Config) {
-  const { ui } = config;
+function getTailwindCode(ui: Config["ui"]) {
   return dedent`
   import { withAccountKitUi, createColorSet } from "@account-kit/react/tailwind";
 

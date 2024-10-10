@@ -1,74 +1,41 @@
 "use client";
 
-import { alchemyConfig, Config, queryClient } from "@/app/config";
-import { AuthCardHeader } from "@/components/shared/AuthCardHeader";
+import { Config } from "@/app/config";
 import { AlchemyClientState } from "@account-kit/core";
-import {
-  AlchemyAccountProvider,
-  AlchemyAccountsUIConfig,
-  useUiConfig,
-} from "@account-kit/react";
+import { useUiConfig } from "@account-kit/react";
 import {
   createContext,
-  Dispatch,
   PropsWithChildren,
-  SetStateAction,
   useContext,
   useEffect,
-  useMemo,
   useRef,
-  useState,
 } from "react";
-import { useStore } from "zustand";
+import { useStoreWithEqualityFn } from "zustand/traditional";
 import {
+  convertDemoConfigToUiConfig,
   createDemoStore,
+  deepEqual,
+  DemoState,
   generateClassesForRoot,
   generateStylesForRoot,
 } from "./store";
-import { getSectionsForConfig } from "@/app/sections";
 
 export type ConfigContextType = {
-  config: Config;
-  setConfig: (partial: Partial<Config>) => void;
-  nftTransferred: boolean;
-  setNFTTransferred: Dispatch<SetStateAction<boolean>>;
+  store: ReturnType<typeof createDemoStore>;
 };
 
-export const ConfigContext = createContext<ConfigContextType | undefined>(
-  undefined
-);
+export const ConfigContext = createContext<
+  ReturnType<typeof createDemoStore> | undefined
+>(undefined);
 
-export function useConfig(): ConfigContextType {
+export function useConfigStore<T>(selector: (state: DemoState) => T): T {
   const configContext = useContext(ConfigContext);
 
   if (!configContext) {
     throw new Error("config context must be present in root");
   }
 
-  return configContext;
-}
-
-function convertDemoConfigToUiConfig(config: Config): AlchemyAccountsUIConfig {
-  const sections = getSectionsForConfig(
-    config,
-    "30e7ffaff99063e68cc9870c105d905b"
-  );
-
-  return {
-    illustrationStyle: config.ui.illustrationStyle,
-    auth: {
-      sections,
-      addPasskeyOnSignup: config.auth.addPasskey && config.auth.showPasskey,
-      header: (
-        <AuthCardHeader
-          theme={config.ui.theme}
-          logoDark={config.ui.logoDark}
-          logoLight={config.ui.logoLight}
-        />
-      ),
-    },
-    supportUrl: config.supportUrl,
-  };
+  return useStoreWithEqualityFn(configContext, selector, deepEqual);
 }
 
 export function ConfigContextProvider(
@@ -82,51 +49,19 @@ export function ConfigContextProvider(
     storeRef.current = createDemoStore(props.initialConfig);
   }
 
-  const { config, updateConfig: setConfig } = useStore(storeRef.current);
-  const [nftTransfered, setNFTTransfered] = useState(false);
-
-  // Sync Alchemy auth UI config
-  const uiConfig = useMemo(() => {
-    return convertDemoConfigToUiConfig(config);
-  }, [config]);
-
-  const localAlchemyConfig = useMemo(
-    () => ({
-      ...alchemyConfig,
-      ui: uiConfig,
-    }),
-    [uiConfig]
-  );
-
   return (
-    <ConfigContext.Provider
-      value={{
-        config,
-        setConfig,
-        nftTransferred: nftTransfered,
-        setNFTTransferred: setNFTTransfered,
-      }}
-    >
-      <AlchemyAccountProvider
-        config={localAlchemyConfig}
-        queryClient={queryClient}
-        initialState={props.initialState}
-      >
-        {props.children}
-      </AlchemyAccountProvider>
+    <ConfigContext.Provider value={storeRef.current}>
+      {props.children}
     </ConfigContext.Provider>
   );
 }
 
-export function ConfigSync(props: PropsWithChildren) {
-  const { config } = useConfig();
-  const { updateConfig } = useUiConfig();
-
-  // Sync UI config changes
-  useEffect(() => {
-    const uiConfig = convertDemoConfigToUiConfig(config);
-    updateConfig(uiConfig);
-  }, [config, updateConfig]);
+// making this a component so we can use the config store hook from the above provider
+export function ConfigSync() {
+  const config = useConfigStore((config) => config);
+  const { updateConfig } = useUiConfig((state) => ({
+    updateConfig: state.updateConfig,
+  }));
 
   // Sync CSS variables
   useEffect(() => {
@@ -143,7 +78,10 @@ export function ConfigSync(props: PropsWithChildren) {
     });
 
     classes.forEach((x) => root.classList.add(x));
-  }, [config]);
 
-  return props.children;
+    const uiConfig = convertDemoConfigToUiConfig(config);
+    updateConfig(uiConfig);
+  }, [config, updateConfig]);
+
+  return null;
 }

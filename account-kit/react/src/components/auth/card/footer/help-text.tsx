@@ -2,7 +2,8 @@ import { useUiConfig } from "../../../../hooks/useUiConfig.js";
 import { ls } from "../../../../strings.js";
 
 export const HelpText = () => {
-  const { supportUrl } = useUiConfig();
+  const { supportUrl } = useUiConfig(({ supportUrl }) => ({ supportUrl }));
+
   if (!supportUrl) return null;
   return (
     <div className="flex flex-row gap-1 justify-center mb-2">

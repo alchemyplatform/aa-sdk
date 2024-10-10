@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { PasskeyIcon } from "../../../icons/passkey.js";
 import { ls } from "../../../strings.js";
 import { Button } from "../../button.js";
@@ -9,12 +10,14 @@ type Props = {
 
 // Not used externally
 // eslint-disable-next-line jsdoc/require-jsdoc
-export const PasskeyAuth = ({ label = ls.login.passkey.button }: Props) => {
-  const { authenticate } = usePasskeyVerify();
+export const PasskeyAuth = memo(
+  ({ label = ls.login.passkey.button }: Props) => {
+    const { authenticate } = usePasskeyVerify();
 
-  return (
-    <Button variant="social" icon={<PasskeyIcon />} onClick={authenticate}>
-      {label}
-    </Button>
-  );
-};
+    return (
+      <Button variant="social" icon={<PasskeyIcon />} onClick={authenticate}>
+        {label}
+      </Button>
+    );
+  }
+);

@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useConfig } from "@/state";
+import { useConfigStore } from "@/state";
 import { hexToRgba } from "@/utils/hex-to-rgba";
 import * as SelectPrimitives from "@radix-ui/react-select";
 import React from "react";
@@ -17,11 +17,9 @@ const SelectMenuTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitives.Trigger>,
   SelectMenuTriggerProps
 >(({ className, isOpen, ...props }, ref) => {
-  const {
-    config: {
-      ui: { primaryColor, theme },
-    },
-  } = useConfig();
+  const { primaryColor, theme } = useConfigStore(
+    ({ ui: { primaryColor, theme } }) => ({ theme, primaryColor })
+  );
 
   return (
     <SelectPrimitives.Trigger

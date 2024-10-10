@@ -1,5 +1,5 @@
-import { useAlchemyAccountContext } from "../context.js";
-import { MissingUiConfigError } from "../errors.js";
+import { useCallback } from "react";
+import { useUiConfig } from "./useUiConfig.js";
 
 export type UseAuthModalResult = {
   openAuthModal: () => void;
@@ -28,14 +28,16 @@ export type UseAuthModalResult = {
  * @returns {UseAuthModalResult} an object containing methods for opening or closing the auth modal
  */
 export const useAuthModal = () => {
-  const { ui } = useAlchemyAccountContext();
-  if (ui == null) {
-    throw new MissingUiConfigError("useAuthModal");
-  }
+  const { isOpen, setModalOpen } = useUiConfig(
+    ({ isModalOpen, setModalOpen }) => ({ isOpen: isModalOpen, setModalOpen })
+  );
+
+  const openAuthModal = useCallback(() => setModalOpen(true), [setModalOpen]);
+  const closeAuthModal = useCallback(() => setModalOpen(false), [setModalOpen]);
 
   return {
-    isOpen: ui.isModalOpen,
-    openAuthModal: ui.openAuthModal,
-    closeAuthModal: ui.closeAuthModal,
+    isOpen,
+    openAuthModal,
+    closeAuthModal,
   };
 };
