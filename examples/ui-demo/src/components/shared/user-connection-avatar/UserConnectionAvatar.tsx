@@ -1,12 +1,12 @@
 import { UserAvatar } from "@/components/shared/UserAvatar";
 import { cn } from "@/lib/utils";
-import { useConfig } from "@/state";
 
 import { ChevronDown } from "@/components/icons/chevron-down";
 import truncateAddress from "@/utils/truncate-address";
 import { useAccount, useUser } from "@account-kit/react";
 
 import { DeploymentStatusIndicator } from "@/components/shared/DeploymentStatusIndicator";
+import { useConfig, useConfigStore } from "@/state";
 
 interface UserConnectionAvatarProps {
   isFocused?: boolean;
@@ -16,14 +16,18 @@ const UserConnectionAvatar = ({
   isFocused,
   showDeploymentStatus = true,
 }: UserConnectionAvatarProps) => {
-  const { config } = useConfig();
+  const { theme, primaryColor } = useConfigStore(
+    ({
+      config: {
+        ui: { theme, primaryColor },
+      },
+    }) => ({ theme, primaryColor })
+  );
   const user = useUser();
   const { address: SCAUserAddress } = useAccount({ type: "LightAccount" });
 
   const isEOAUser = user?.type === "eoa";
   const { nftTransferred: deploymentStatus } = useConfig();
-
-  const currentTheme = config.ui.theme;
 
   if (!user) {
     return null;
@@ -34,14 +38,14 @@ const UserConnectionAvatar = ({
       <div className="relative w-[40px] h-[40px]">
         <UserAvatar
           address={SCAUserAddress ?? user.address}
-          primaryColor={config.ui.primaryColor[currentTheme]}
+          primaryColor={primaryColor[theme]}
         />
         {showDeploymentStatus && (
           <div
             className={cn(
               "p-[2px] rounded-full absolute bottom-[-4px] left-[23px]",
               deploymentStatus && "p-[1px]",
-              currentTheme === "dark" ? "bg-[#4D4D4D]" : "bg-[white]"
+              theme === "dark" ? "bg-[#4D4D4D]" : "bg-[white]"
             )}
           >
             <DeploymentStatusIndicator
@@ -61,7 +65,7 @@ const UserConnectionAvatar = ({
           </h3>
           <div className="ml-1 w-[20px] h-[20px] flex items-center justify-center">
             <ChevronDown
-              stroke={currentTheme === "dark" ? "#fff" : "#020617"}
+              stroke={theme === "dark" ? "#fff" : "#020617"}
               className={cn("transition-transform", isFocused && "rotate-180")}
             />
           </div>

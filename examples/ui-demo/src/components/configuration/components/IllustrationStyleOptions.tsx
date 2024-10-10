@@ -8,7 +8,7 @@ import {
   SelectMenuViewport,
 } from "@/components/ui/select-menu";
 import { cn } from "@/lib/utils";
-import { useConfig } from "@/state";
+import { useConfigStore } from "@/state";
 import { useState } from "react";
 
 const ILLUSTRATION_STYLE_OPTIONS = [
@@ -21,21 +21,14 @@ const ILLUSTRATION_STYLE_OPTIONS = [
 const options = ["outline", "linear", "filled", "flat"] as const;
 
 export function IllustrationStyleOptions() {
-  const { config, setConfig } = useConfig();
-  const {
-    ui: { illustrationStyle },
-  } = config;
-
-  type IllustrationStyle = typeof illustrationStyle;
-
-  const onChange = (style: IllustrationStyle) => {
-    setConfig({
-      ui: {
-        ...config.ui,
-        illustrationStyle: style,
+  const { illustrationStyle, setIllustrationStyle } = useConfigStore(
+    ({
+      config: {
+        ui: { illustrationStyle },
       },
-    });
-  };
+      setIllustrationStyle,
+    }) => ({ illustrationStyle, setIllustrationStyle })
+  );
 
   return (
     <>
@@ -51,7 +44,7 @@ export function IllustrationStyleOptions() {
                 ? "border-[1.5px] bg-[#EFF4F9] font-semibold"
                 : ""
             )}
-            onClick={() => onChange(value)}
+            onClick={() => setIllustrationStyle(value)}
           >
             <IllustrationStyle
               className="text-fg-accent-brand"
@@ -68,10 +61,15 @@ export function IllustrationStyleOptions() {
 }
 
 const IllustrationStyleSelectMenu = () => {
-  const { config, setConfig } = useConfig();
-  const {
-    ui: { illustrationStyle, primaryColor, theme },
-  } = config;
+  const { illustrationStyle, setIllustrationStyle, primaryColor, theme } =
+    useConfigStore(
+      ({
+        config: {
+          ui: { illustrationStyle, primaryColor, theme },
+        },
+        setIllustrationStyle,
+      }) => ({ illustrationStyle, setIllustrationStyle, primaryColor, theme })
+    );
 
   type IllustrationStyle = typeof illustrationStyle;
   const [selected, setSelected] =
@@ -81,12 +79,7 @@ const IllustrationStyleSelectMenu = () => {
   const onChange = (style: IllustrationStyle) => {
     setSelected(style);
 
-    setConfig({
-      ui: {
-        ...config.ui,
-        illustrationStyle: style,
-      },
-    });
+    setIllustrationStyle(style);
   };
 
   const getIllustrationStyleValue = (style: IllustrationStyle) => {

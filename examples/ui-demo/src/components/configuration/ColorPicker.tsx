@@ -4,25 +4,24 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { useConfig } from "@/state";
+import { useConfigStore } from "@/state";
 import { useDebounceEffect } from "@/utils/hooks/useDebounceEffect";
 import { Sketch } from "@uiw/react-color";
 import { useState } from "react";
 
 export function ColorPicker({ theme }: { theme: "dark" | "light" }) {
-  const { config, setConfig } = useConfig();
-  const [innerColor, setInnerColor] = useState(config.ui.primaryColor[theme]);
+  const { primaryColor, setPrimaryColor } = useConfigStore(
+    ({
+      config: {
+        ui: { primaryColor },
+      },
+      setPrimaryColor,
+    }) => ({ primaryColor, setPrimaryColor })
+  );
+  const [innerColor, setInnerColor] = useState(primaryColor[theme]);
 
   const onSetThemeColor = (color: string) => {
-    setConfig({
-      ui: {
-        ...config.ui,
-        primaryColor: {
-          ...config.ui.primaryColor,
-          [theme]: color,
-        },
-      },
-    });
+    setPrimaryColor(theme, color);
   };
 
   useDebounceEffect(

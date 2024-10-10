@@ -1,10 +1,12 @@
-import { useConfig } from "@/state";
+import { useConfigStore } from "@/state";
 export const LoadingIcon = () => {
-  const {
-    config: {
-      ui: { theme },
-    },
-  } = useConfig();
+  const { theme } = useConfigStore(
+    ({
+      config: {
+        ui: { theme },
+      },
+    }) => ({ theme })
+  );
   const animationClass =
     theme === "dark" ? "animate-ui-loading-dark" : "animate-ui-loading-light";
 

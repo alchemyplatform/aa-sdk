@@ -29,8 +29,7 @@ import {
 } from "./store";
 
 export type ConfigContextType = {
-  config: Config;
-  setConfig: (partial: Partial<Config>) => void;
+  store: ReturnType<typeof createDemoStore>;
   nftTransferred: boolean;
   setNFTTransferred: Dispatch<SetStateAction<boolean>>;
 };
@@ -38,6 +37,17 @@ export type ConfigContextType = {
 export const ConfigContext = createContext<ConfigContextType | undefined>(
   undefined
 );
+
+export function useConfigStore<U extends any | undefined = any | undefined>(
+  selector?: U extends undefined
+    ? never
+    : Parameters<typeof useStore<ReturnType<typeof createDemoStore>, U>>[1]
+): ReturnType<typeof useStore<ReturnType<typeof createDemoStore>, U>>;
+
+export function useConfigStore(selector?: any) {
+  const { store } = useConfig();
+  return useStore(store, selector);
+}
 
 export function useConfig(): ConfigContextType {
   const configContext = useContext(ConfigContext);
@@ -108,7 +118,7 @@ export function ConfigContextProvider(
     storeRef.current = createDemoStore(props.initialConfig);
   }
 
-  const { config, updateConfig: setConfig } = useStore(storeRef.current);
+  const { config } = useStore(storeRef.current);
   const [nftTransfered, setNFTTransfered] = useState(false);
 
   // Sync Alchemy auth UI config
@@ -127,8 +137,7 @@ export function ConfigContextProvider(
   return (
     <ConfigContext.Provider
       value={{
-        config,
-        setConfig,
+        store: storeRef.current,
         nftTransferred: nftTransfered,
         setNFTTransferred: setNFTTransfered,
       }}
@@ -145,7 +154,7 @@ export function ConfigContextProvider(
 }
 
 export function ConfigSync(props: PropsWithChildren) {
-  const { config } = useConfig();
+  const config = useConfigStore(({ config }) => config);
   const { updateConfig } = useUiConfig();
 
   // Sync UI config changes

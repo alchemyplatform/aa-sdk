@@ -1,5 +1,5 @@
 import { Config, DEFAULT_CONFIG } from "@/app/config";
-import { useConfig } from "@/state";
+import { useConfigStore } from "@/state";
 import dedent from "dedent";
 import { Check, Copy } from "lucide-react";
 import { useState } from "react";
@@ -9,7 +9,10 @@ import { twMerge } from "tailwind-merge";
 import ExternalLink from "../shared/ExternalLink";
 
 export function CodePreview({ className }: { className?: string }) {
-  const { config } = useConfig();
+  const { auth, ui } = useConfigStore(({ config: { ui, auth } }) => ({
+    ui,
+    auth,
+  }));
   return (
     <div
       className={twMerge(
@@ -23,7 +26,10 @@ export function CodePreview({ className }: { className?: string }) {
           Pass this config object into the{" "}
           <span className="font-mono">AlchemyAccountProvider</span>.
         </p>
-        <CodeBlock title="src/app/config.ts" code={getConfigCode(config)} />
+        <CodeBlock
+          title="src/app/config.ts"
+          code={getConfigCode({ auth, ui })}
+        />
       </div>
       <div className="flex flex-col">
         <div className="mb-2 font-semibold text-secondary">Style</div>
@@ -37,7 +43,7 @@ export function CodePreview({ className }: { className?: string }) {
           </ExternalLink>
           , then add the below code to your config file.
         </p>
-        <CodeBlock title="tailwind.config.ts" code={getTailwindCode(config)} />
+        <CodeBlock title="tailwind.config.ts" code={getTailwindCode(ui)} />
       </div>
     </div>
   );
@@ -80,8 +86,7 @@ function CodeBlock({ title, code }: { title: string; code: string }) {
   );
 }
 
-function getTailwindCode(config: Config) {
-  const { ui } = config;
+function getTailwindCode(ui: Config["ui"]) {
   return dedent`
   import { withAccountKitUi, createColorSet } from "@account-kit/react/tailwind";
 
@@ -107,7 +112,7 @@ function getTailwindCode(config: Config) {
   })`;
 }
 
-function getConfigCode(config: Config) {
+function getConfigCode(config: Pick<Config, "auth" | "ui">) {
   const sections = [];
 
   if (config.auth.showEmail) {

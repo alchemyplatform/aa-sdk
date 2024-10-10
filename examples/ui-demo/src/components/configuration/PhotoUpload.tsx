@@ -1,37 +1,27 @@
-import { useConfig } from "@/state";
+import { useConfigStore } from "@/state";
 import { ChangeEvent } from "react";
 import { PhotoIcon } from "../icons/photo";
 import FileUploadInput from "../shared/FileUploadInput";
 
 export function PhotoUploads({ mode }: { mode: "dark" | "light" }) {
-  const { config, setConfig } = useConfig();
-
-  const logo = mode === "dark" ? config.ui.logoDark : config.ui.logoLight;
+  const { logo, setLogo } = useConfigStore(({ config: { ui }, setLogo }) => {
+    return { logo: ui[mode === "dark" ? "logoDark" : "logoLight"], setLogo };
+  });
 
   const onUpload = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length < 1) return;
 
     const file = e.target.files[0];
-    setConfig({
-      ui: {
-        ...config.ui,
-        [mode === "dark" ? "logoDark" : "logoLight"]: {
-          fileName: file.name,
-          fileSrc: URL.createObjectURL(file),
-        },
-      },
+    setLogo(mode === "dark" ? "logoDark" : "logoLight", {
+      fileName: file.name,
+      fileSrc: URL.createObjectURL(file),
     });
   };
 
   const onRemove = () => {
     if (!logo?.fileSrc) return;
 
-    setConfig({
-      ui: {
-        ...config.ui,
-        [mode === "dark" ? "logoDark" : "logoLight"]: undefined,
-      },
-    });
+    setLogo(mode === "dark" ? "logoDark" : "logoLight", undefined);
     URL.revokeObjectURL(logo.fileSrc);
   };
 

@@ -1,19 +1,25 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useConfig } from "@/state";
+import { useConfigStore } from "@/state";
 import { AuthCard, useUser } from "@account-kit/react";
 import { EOAPostLogin } from "../shared/eoa-post-login/EOAPostLogin";
 import { MintCard } from "../shared/mint-card/MintCard";
 
 export function AuthCardWrapper({ className }: { className?: string }) {
-  const { config } = useConfig();
+  const { theme } = useConfigStore(
+    ({
+      config: {
+        ui: { theme },
+      },
+    }) => ({ theme })
+  );
 
   return (
     <div
       className={cn(
         "flex flex-col flex-1 overflow-y-auto scrollbar-none relative h-full w-full",
-        config.ui.theme === "dark" ? "bg-black/70" : "bg-white",
+        theme === "dark" ? "bg-black/70" : "bg-white",
         className
       )}
     >

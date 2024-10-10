@@ -2,7 +2,7 @@ import { ExternalLinkIcon } from "@/components/icons/external-link";
 import { LogoutIcon } from "@/components/icons/logout";
 import { DeploymentStatusIndicator } from "@/components/shared/DeploymentStatusIndicator";
 import { UserAddressLink } from "@/components/shared/user-connection-avatar/UserAddressLink";
-import { useConfig } from "@/state";
+import { useConfig, useConfigStore } from "@/state";
 import { useAccount, useLogout, useSigner, useUser } from "@account-kit/react";
 import { useQuery } from "@tanstack/react-query";
 
@@ -11,11 +11,15 @@ export function UserConnectionDetails() {
   const { nftTransferred: deploymentStatus } = useConfig();
   const signer = useSigner();
   const { logout } = useLogout();
-  const { config } = useConfig();
+  const { theme, primaryColor } = useConfigStore(
+    ({
+      config: {
+        ui: { theme, primaryColor },
+      },
+    }) => ({ theme, primaryColor })
+  );
   const scaAccount = useAccount({ type: "LightAccount" });
 
-  const theme = config.ui.theme;
-  const primaryColor = config.ui.primaryColor;
   const isEOAUser = user?.type === "eoa";
 
   const getSignerAddress = async (): Promise<string | null> => {
