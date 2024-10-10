@@ -3,22 +3,17 @@ import { walletConnect } from "wagmi/connectors";
 import { useChain } from "../../../hooks/useChain.js";
 import { useConnect } from "../../../hooks/useConnect.js";
 import { useUiConfig } from "../../../hooks/useUiConfig.js";
+import { Spinner } from "../../../icons/spinner.js";
 import { WalletConnectIcon } from "../../../icons/walletConnectIcon.js";
 import { Button } from "../../button.js";
-import { useAuthContext, type AuthStep } from "../context.js";
+import { useAuthContext } from "../context.js";
 import type { AuthType } from "../types.js";
 import { CardContent } from "./content.js";
-import { Spinner } from "../../../icons/spinner.js";
 import { ConnectionError } from "./error/connection-error.js";
 import { EOAWallets } from "./error/types.js";
 
-interface Props {
-  authStep: Extract<AuthStep, { type: "eoa_connect" }>;
-}
-
-// eslint-disable-next-line jsdoc/require-jsdoc
-export const EoaConnectCard = ({ authStep }: Props) => {
-  const { setAuthStep } = useAuthContext();
+export const EoaConnectCard = () => {
+  const { setAuthStep, authStep } = useAuthContext("eoa_connect");
 
   if (authStep.error) {
     return (
@@ -67,12 +62,8 @@ export const EoaConnectCard = ({ authStep }: Props) => {
   );
 };
 
-type WalletConnectCardProps = {
-  authStep: Extract<AuthStep, { type: "wallet_connect" }>;
-};
-
-export const WalletConnectCard = ({ authStep }: WalletConnectCardProps) => {
-  const { setAuthStep } = useAuthContext();
+export const WalletConnectCard = () => {
+  const { setAuthStep, authStep } = useAuthContext("wallet_connect");
 
   if (authStep.error) {
     return (

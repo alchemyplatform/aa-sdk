@@ -215,13 +215,13 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     try {
       switch (type) {
         case "email":
-          return this.authenticateWithEmail(params);
+          return await this.authenticateWithEmail(params);
         case "passkey":
-          return this.authenticateWithPasskey(params);
+          return await this.authenticateWithPasskey(params);
         case "oauth":
-          return this.authenticateWithOauth(params);
+          return await this.authenticateWithOauth(params);
         case "oauthReturn":
-          return this.handleOauthReturn(params);
+          return await this.handleOauthReturn(params);
         default:
           assertNever(type, `Unknown auth type: ${type}`);
       }
@@ -621,6 +621,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
         bundle: params.bundle,
         orgId: temporarySession.orgId,
         connectedEventName: "connectedEmail",
+        authenticatingType: "email",
       });
 
       return user;
@@ -690,6 +691,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       bundle,
       orgId,
       connectedEventName: "connectedOauth",
+      authenticatingType: "oauth",
       idToken,
     });
 
@@ -718,9 +720,22 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       }));
     });
 
-    this.inner.on("authenticating", () => {
+    this.inner.on("authenticating", ({ type }) => {
+      const status = (() => {
+        switch (type) {
+          case "email":
+            return AlchemySignerStatus.AUTHENTICATING_EMAIL;
+          case "passkey":
+            return AlchemySignerStatus.AUTHENTICATING_PASSKEY;
+          case "oauth":
+            return AlchemySignerStatus.AUTHENTICATING_OAUTH;
+          default:
+            assertNever(type, "unhandled authenticating type");
+        }
+      })();
+
       this.store.setState({
-        status: AlchemySignerStatus.AUTHENTICATING,
+        status,
         error: null,
       });
     });

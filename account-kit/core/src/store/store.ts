@@ -225,7 +225,9 @@ export const convertSignerStatusToState = (
   error,
   isInitializing: alchemySignerStatus === AlchemySignerStatus.INITIALIZING,
   isAuthenticating:
-    alchemySignerStatus === AlchemySignerStatus.AUTHENTICATING ||
+    alchemySignerStatus === AlchemySignerStatus.AUTHENTICATING_EMAIL ||
+    alchemySignerStatus === AlchemySignerStatus.AUTHENTICATING_OAUTH ||
+    alchemySignerStatus === AlchemySignerStatus.AUTHENTICATING_PASSKEY ||
     alchemySignerStatus === AlchemySignerStatus.AWAITING_EMAIL_AUTH,
   isConnected: alchemySignerStatus === AlchemySignerStatus.CONNECTED,
   isDisconnected: alchemySignerStatus === AlchemySignerStatus.DISCONNECTED,

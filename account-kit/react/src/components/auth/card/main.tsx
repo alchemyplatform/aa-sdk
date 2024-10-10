@@ -1,16 +1,12 @@
 import { Fragment } from "react";
 import { useUiConfig } from "../../../hooks/useUiConfig.js";
 import { Divider } from "../../divider.js";
+import { useAuthContext } from "../context.js";
 import { AuthSection } from "../sections/AuthSection.js";
 import { GeneralError } from "./error/general-error.js";
-import { type AuthStep } from "../context.js";
 
-type MainAuthContentProps = {
-  authStep: AuthStep;
-};
-
-// eslint-disable-next-line jsdoc/require-jsdoc
-export const MainAuthContent = ({ authStep }: MainAuthContentProps) => {
+export const MainAuthContent = () => {
+  const { authStep } = useAuthContext();
   const isError = authStep.type === "initial" && authStep.error;
   const {
     auth: { header, sections, hideSignInText },

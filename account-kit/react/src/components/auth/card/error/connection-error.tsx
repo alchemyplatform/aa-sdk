@@ -5,6 +5,8 @@ import { ConnectionFailed as PasskeyConnectionFailed } from "../../../../icons/c
 import { Timeout } from "../../../../icons/timeout.js";
 import { EOAWallets, type ConnectionErrorProps } from "./types.js";
 import { WalletIcon } from "./icons/wallet-icon.js";
+import { OAuthConnectionFailed } from "../../../../icons/oauth.js";
+import { capitalize } from "../../../../utils.js";
 
 export const walletTypeConfig = [
   { name: "Coinbase Wallet", key: EOAWallets.COINBASE_WALLET },
@@ -14,6 +16,7 @@ export const walletTypeConfig = [
 
 export const ConnectionError = ({
   connectionType,
+  oauthProvider,
   EOAConnector,
   handleTryAgain,
   handleUseAnotherMethod,
@@ -27,17 +30,23 @@ export const ConnectionError = ({
     switch (connectionType) {
       case "passkey":
         return ls.error.connection.passkeyTitle;
+      case "oauth":
+        return `${ls.error.connection.oauthTitle} ${capitalize(
+          oauthProvider!
+        )}`;
       case "wallet":
         return ls.error.connection.walletTitle + (walletName ?? "wallet");
       case "timeout":
         return ls.error.connection.timedOutTitle;
     }
-  }, [connectionType, EOAConnector]);
+  }, [EOAConnector, connectionType, oauthProvider]);
 
   const getBodyText = useMemo(() => {
     switch (connectionType) {
       case "passkey":
         return ls.error.connection.passkeyBody;
+      case "oauth":
+        return ls.error.connection.oauthBody;
       case "wallet":
         return ls.error.connection.walletBody;
       case "timeout":
@@ -49,12 +58,14 @@ export const ConnectionError = ({
     switch (connectionType) {
       case "passkey":
         return <PasskeyConnectionFailed />;
+      case "oauth":
+        return <OAuthConnectionFailed provider={oauthProvider!} />; // TO DO: extend for BYO auth provider
       case "wallet":
         return EOAConnector && <WalletIcon EOAConnector={EOAConnector} />;
       case "timeout":
         return <Timeout />;
     }
-  }, [connectionType, EOAConnector]);
+  }, [connectionType, oauthProvider, EOAConnector]);
   return (
     <div className="flex flex-col justify-center content-center gap-3">
       <div className="flex justify-center">
