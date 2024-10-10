@@ -38,7 +38,6 @@
     "docs:gen": "lerna run docs:gen",
     "test": "vitest dev",
     "test:ci": "vitest run",
-    "test:e2e": "lerna run --verbose test:run-e2e --concurrency=1 --ignore=@alchemy/aa-signers",
     "lint:write": "eslint . --fix && yarn docs:gen && prettier --write --ignore-unknown .",
     "lint:check": "eslint . && prettier --check .",
     "lint:ci:eslint": "eslint --format github $(git diff --name-only origin/main HEAD | xargs)",
