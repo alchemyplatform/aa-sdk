@@ -44,12 +44,12 @@ export function IllustrationStyleOptions() {
           <button
             key={value}
             className={cn(
-              "py-2 flex-1 basis-0 rounded-lg border border-gray-300",
+              "py-2 flex-1 basis-0 rounded-lg border border-[#64748B]",
               "text-fg-accent-brand hover:opacity-80",
               "flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
               illustrationStyle === value
-                ? "border border-[#64748B] bg-[#EFF4F9] font-semibold"
-                : ""
+                ? "bg-[#EFF4F9] font-semibold"
+                : "border-gray-300"
             )}
             onClick={() => onChange(value)}
           >
