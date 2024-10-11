@@ -10,6 +10,7 @@ import { SocialIcon } from "../icons/social";
 import { WalletIcon } from "../icons/wallet";
 import ExternalLink from "../shared/ExternalLink";
 import { Switch } from "../ui/switch";
+import { Button } from "../shared/Button";
 
 export const Authentication = ({ className }: { className?: string }) => {
   const { config, setConfig } = useConfig();
@@ -106,7 +107,21 @@ export const Authentication = ({ className }: { className?: string }) => {
                     icon={<FacebookLogo />}
                     onClick={setAddFacebookAuth}
                   />
-                  {/* TO DO: add "Add provider" button */}
+                  <Button className="active:bg-[#EFF4F9]">
+                    <ExternalLink href="https://accountkit.alchemy.com/signer/authentication/auth0">
+                      <div className="flex flex-1 min-w-full flex-row justify-between gap-3 items-center">
+                        <p className="font-normal text-sm text-secondary-foreground">
+                          Custom
+                        </p>
+
+                        <ExternalLinkIcon
+                          height={16}
+                          width={16}
+                          className="text-[#475569]"
+                        />
+                      </div>
+                    </ExternalLink>
+                  </Button>
                 </div>
               )
             }
@@ -238,7 +253,7 @@ const OAuthMethod = ({
     <button
       onClick={onClick}
       className={cn(
-        "flex grow-0 border border-gray-300 rounded-lg p-1 h-10 w-10 justify-center items-center",
+        "flex grow-0 shrink-0 border border-gray-300 rounded-lg p-1 h-10 w-10 justify-center items-center",
         active ? "border-[#363FF9] border-[1.5px] bg-[#EFF4F9]" : ""
       )}
     >
