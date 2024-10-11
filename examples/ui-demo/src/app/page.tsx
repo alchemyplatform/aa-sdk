@@ -41,7 +41,7 @@ export default function Home() {
     >
       <TopNav />
       <div
-        className={`flex flex-col flex-1 px-4 sm:px-6 lg:px-10 py-4 sm:py-6 w-full max-w-screen-2xl mx-auto overflow-hidden overflow-x-hidden ${inter.className} sm:overflow-hidden`}
+        className={`flex flex-col flex-1 sm:px-6 lg:px-10 sm:py-6 w-full max-w-screen-2xl mx-auto overflow-hidden overflow-x-hidden ${inter.className} sm:overflow-hidden`}
       >
         <div className="hidden sm:flex flex-1 gap-6 overflow-hidden">
           <div className=" flex-col w-[272px] md:w-[392px] bg-white border border-border rounded-lg p-6 overflow-y-auto scrollbar-none gap-10">
@@ -122,7 +122,7 @@ export default function Home() {
         <div className="flex flex-1 flex-col gap-6 sm:hidden">
           {!user && <MobileSplashPage />}
           {isEOAUser && (
-            <div className="flex flex-1 flex-col mt-16">
+            <div className="flex flex-1 flex-col mt-16 p-6 sm:p-0">
               <div className="border-border border radius-2 px-6 py-6">
                 <RenderUserConnectionAvatar />
                 <div className="pt-6">
@@ -135,7 +135,7 @@ export default function Home() {
             </div>
           )}
           {user && !isEOAUser && (
-            <div className="mt-16">
+            <div className="mt-16 p-6 sm:p-0">
               <MintCard />
             </div>
           )}
