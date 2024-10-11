@@ -48,7 +48,7 @@ export function IllustrationStyleOptions() {
               "text-fg-accent-brand hover:opacity-80",
               "flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
               illustrationStyle === value
-                ? "border-[1.5px] bg-[#EFF4F9] font-semibold"
+                ? "border border-[#64748B] bg-[#EFF4F9] font-semibold"
                 : ""
             )}
             onClick={() => onChange(value)}

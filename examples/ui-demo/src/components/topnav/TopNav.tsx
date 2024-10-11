@@ -27,7 +27,7 @@ export function TopNav() {
             <GithubLogo className="hidden md:flex" />
           </ExternalLink>
           <ExternalLink href={links.dashboard}>
-            <button className="h-10 hidden md:flex justify-center items-center py-[12px] text-sm font-semibold px-3 bg-[#020617] text-[white] radius-1 text-nowrap">
+            <button className="h-10 hidden md:flex justify-center items-center py-[12px] text-sm font-semibold px-3 bg-[#020617] text-[white] radius-[8px] text-nowrap">
               Get API key
             </button>
           </ExternalLink>
