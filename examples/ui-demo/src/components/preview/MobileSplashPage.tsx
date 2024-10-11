@@ -1,7 +1,19 @@
-import { useAuthModal } from "@account-kit/react";
+import { useAuthModal, useSignerStatus } from "@account-kit/react";
+import { AlchemySignerStatus } from "@account-kit/signer";
+import { useLayoutEffect } from "react";
 
 export function MobileSplashPage() {
   const { openAuthModal } = useAuthModal();
+  const { status } = useSignerStatus();
+
+  // Open the auth modal to show the auth loading phase
+  // Using useLayoutEffect to ensure the modal is opened before the page is painted
+  useLayoutEffect(() => {
+    if (status === AlchemySignerStatus.AUTHENTICATING_EMAIL) {
+      openAuthModal();
+    }
+  }, [status, openAuthModal]);
+
   return (
     <div className="flex flex-col flex-1 pb-5 h-auto max-h-[calc(100svh-100px)] box-content p-4 pt-[78px]">
       {/* Header Text */}
