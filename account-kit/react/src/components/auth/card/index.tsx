@@ -6,7 +6,6 @@ import { useElementHeight } from "../../../hooks/useElementHeight.js";
 import { useSigner } from "../../../hooks/useSigner.js";
 import { useSignerStatus } from "../../../hooks/useSignerStatus.js";
 import { useUiConfig } from "../../../hooks/useUiConfig.js";
-import { IS_SIGNUP_QP } from "../../constants.js";
 import { Navigation } from "../../navigation.js";
 import { useAuthContext } from "../context.js";
 import { Step } from "./steps.js";
@@ -63,7 +62,7 @@ export const AuthCardContent = ({
   const didGoBack = useRef(false);
 
   const {
-    auth: { onAuthSuccess },
+    auth: { onAuthSuccess, addPasskeyOnSignup },
   } = useUiConfig();
 
   const canGoBack = useMemo(() => {
@@ -115,12 +114,9 @@ export const AuthCardContent = ({
     } else if (authStep.type !== "initial") {
       didGoBack.current = false;
     } else if (!didGoBack.current && isAuthenticating) {
-      // Auth step must be initial
-      const urlParams = new URLSearchParams(window.location.search);
-
       setAuthStep({
         type: "email_completing",
-        createPasskeyAfter: urlParams.get(IS_SIGNUP_QP) === "true",
+        createPasskeyAfter: addPasskeyOnSignup,
       });
     }
   }, [
@@ -130,6 +126,7 @@ export const AuthCardContent = ({
     setAuthStep,
     onAuthSuccess,
     closeAuthModal,
+    addPasskeyOnSignup,
   ]);
 
   return (
