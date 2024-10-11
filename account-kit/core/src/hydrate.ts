@@ -47,6 +47,7 @@ export function hydrate(
 
     config.store.setState({
       ...rest,
+      user: initialAlchemyState.user,
       accountConfigs,
       signerStatus: convertSignerStatusToState(
         AlchemySignerStatus.INITIALIZING,
@@ -57,6 +58,11 @@ export function hydrate(
         shouldReconnectAccounts,
         config
       ),
+    });
+  } else if (!config.store.persist.hasHydrated()) {
+    config.store.setState({
+      ...config.store.getInitialState(),
+      user: undefined,
     });
   }
 
