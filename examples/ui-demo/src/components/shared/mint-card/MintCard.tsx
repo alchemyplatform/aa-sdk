@@ -45,7 +45,7 @@ export const MintCard = () => {
       text: (
         <>
           <span className={"inline-block sm:hidden"}>
-            {`You've collected your NFT! Refresh to mint again.`}
+            {`You've collected your NFT!`}
           </span>
           <span className={"hidden sm:inline-block"}>
             {`You've successfully collected your NFT! Refresh to mint
