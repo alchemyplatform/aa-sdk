@@ -101,6 +101,8 @@ export const AuthCardContent = ({
   const onClose = useCallback(() => {
     if (authStep.type === "passkey_create") {
       setAuthStep({ type: "complete" });
+    } else {
+      setAuthStep({ type: "initial" });
     }
     closeAuthModal();
   }, [authStep.type, closeAuthModal, setAuthStep]);
