@@ -41,9 +41,9 @@ export type Config = {
 export const DEFAULT_CONFIG: Config = {
   auth: {
     showEmail: true,
-    showExternalWallets: false,
+    showExternalWallets: true,
     showPasskey: true,
-    addPasskey: true,
+    addPasskey: false,
     showOAuth: true,
     oAuthMethods: {
       google: true,
