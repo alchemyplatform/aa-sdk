@@ -3,7 +3,7 @@ import { useAuthModal } from "@account-kit/react";
 export function MobileSplashPage() {
   const { openAuthModal } = useAuthModal();
   return (
-    <div className="flex flex-col flex-1 pb-5 h-auto max-h-[calc(100vh-100px)] box-content p-4 pt-[78px]">
+    <div className="flex flex-col flex-1 pb-5 h-auto max-h-[calc(100svh-100px)] box-content p-4 pt-[78px]">
       {/* Header Text */}
       <>
         <h3 className="text-[36px] min-[430px]:text-[46px] sm:text-[56px] sm:leading-[60px] text-center font-semibold tracking-tight text-fg-primary">
