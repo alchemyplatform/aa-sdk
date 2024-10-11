@@ -38,10 +38,10 @@ export function CornerRadiusOptions() {
       <div className="hidden md:flex self-stretch gap-3">
         {RADIUS_OPTIONS.map((option) => (
           <button
-            className={`h-9 flex items-center justify-center flex-1 basis-0 hover:opacity-80 border border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+            className={`h-9 flex items-center justify-center flex-1 basis-0 hover:opacity-80 border border-[#64748B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
               option.id === borderRadius
-                ? "border-[#64748B] bg-[#EFF4F9] font-semibold"
-                : ""
+                ? " bg-[#EFF4F9] font-semibold"
+                : "border-gray-300"
             }`}
             style={{
               borderRadius: getBorderRadiusValue(option.id),
