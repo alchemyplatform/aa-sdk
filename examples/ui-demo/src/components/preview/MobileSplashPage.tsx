@@ -28,7 +28,6 @@ export function MobileSplashPage() {
       {/* Image Wrapper */}
       <div className="flex-1 h-auto min-h-0 flex">
         <div className="relative my-[20px] flex items-center justify-center flex-1 ">
-          {/* Placeholder - Design would provide the actual asset here. */}
           <video
             src="/videos/splash-demo.mov"
             className="w-full h-full object-contain"
