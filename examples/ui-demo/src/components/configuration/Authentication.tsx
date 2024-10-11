@@ -250,8 +250,8 @@ const OAuthMethod = ({
     <button
       onClick={onClick}
       className={cn(
-        "flex grow-0 shrink-0 border border-gray-300 rounded-lg p-1 h-10 w-10 justify-center items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-        active ? "border-border border bg-[#EFF4F9]" : ""
+        "flex grow-0 shrink-0 border border-[#64748B]  rounded-lg p-1 h-10 w-10 justify-center items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        active ? "border-[#64748B] bg-[#EFF4F9]" : "border-gray-300"
       )}
     >
       {icon}

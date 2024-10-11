@@ -37,7 +37,7 @@ export function MintCardActionButtons({
       )}
       <a
         href="https://accountkit.alchemy.com/react/quickstart"
-        className="btn-secondary btn md:bg-transparent md:btn-link md:w-auto  text-sm font-semibold flex justify-center mb-6 md:mb-0"
+        className="btn-secondary btn md:bg-transparent md:btn-link md:w-auto font-semibold flex justify-center mb-6 md:mb-0"
         target="_blank"
         rel="noreferrer"
       >
