@@ -1,39 +1,17 @@
-import Moebius from "@phun-ky/moebius";
 import Avatar from "boring-avatars";
-import { useDebounceEffect } from "@/utils/hooks/useDebounceEffect";
-import { useState } from "react";
+import { useMemo } from "react";
 
 type UserAvatarProps = {
   address: string;
   primaryColor: string;
 };
 
-const BASE_COLOR = "#37BCFA";
+const SUB_COLORS = ["#37BCFA", "#6D37FA"];
+
 const UserAvatar = ({ address, primaryColor }: UserAvatarProps) => {
-  const [avatarColors, setAvatarColors] = useState<string[]>([]);
-
-  const getMoebiusColors = async (): Promise<string[]> => {
-    const { MoebiusColor, MoebiusPalettes } = await Moebius();
-
-    const palette = new MoebiusPalettes({
-      baseColor: new MoebiusColor(BASE_COLOR, "primary"),
-      secondaryColor: new MoebiusColor(primaryColor, "secondary"),
-      diverging: true,
-      bezier: true,
-    });
-
-    return palette.colors.interpolate as string[];
-  };
-
-  useDebounceEffect(
-    () => {
-      getMoebiusColors().then((moebius: string[]) => {
-        setAvatarColors(moebius);
-      });
-    },
-    [primaryColor],
-    2000
-  );
+  const avatarColors = useMemo(() => {
+    return shuffleColors([primaryColor, ...SUB_COLORS]);
+  }, [primaryColor]);
 
   return (
     <Avatar
@@ -43,6 +21,10 @@ const UserAvatar = ({ address, primaryColor }: UserAvatarProps) => {
       colors={avatarColors.length > 0 ? avatarColors : [primaryColor]}
     />
   );
+};
+
+const shuffleColors = (colors: string[]) => {
+  return colors.sort(() => Math.random() - 0.5);
 };
 
 export { UserAvatar };

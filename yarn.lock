@@ -4643,14 +4643,6 @@
     "@parcel/watcher-win32-ia32" "2.3.0"
     "@parcel/watcher-win32-x64" "2.3.0"
 
-"@phun-ky/moebius@^1.0.6":
-  version "1.0.6"
-  resolved "https://registry.npmjs.org/@phun-ky/moebius/-/moebius-1.0.6.tgz"
-  integrity sha512-cCbIEZHxwSeoyrqFA6ct+8mqARfdOdIlu/SKXTg29QGnTBm5SRCEIpQU62EFpC3FEsvtYbWZPqx0a+Wz3MTt1A==
-  dependencies:
-    chroma-js "^2.4.2"
-    nearest-color "^0.4.4"
-
 "@pkgjs/parseargs@^0.11.0":
   version "0.11.0"
   resolved "https://registry.npmjs.org/@pkgjs/parseargs/-/parseargs-0.11.0.tgz"
@@ -16939,11 +16931,6 @@ natural-compare@^1.4.0:
   version "1.4.0"
   resolved "https://registry.npmjs.org/natural-compare/-/natural-compare-1.4.0.tgz"
   integrity sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==
-
-nearest-color@^0.4.4:
-  version "0.4.4"
-  resolved "https://registry.npmjs.org/nearest-color/-/nearest-color-0.4.4.tgz"
-  integrity sha512-orhcaIORC10tf41Ld2wwlcC+FaAavHG87JHWB3eHH5p7v2k9Tzym2XNEZzLAm5YJwGv6Q38WWc7SOb+Qfu/4NQ==
 
 negotiator@0.6.3, negotiator@^0.6.3:
   version "0.6.3"
