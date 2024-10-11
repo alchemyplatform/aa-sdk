@@ -88,6 +88,7 @@ export const EmailAuth = ({
               onChange={(e) => field.handleChange(e.target.value)}
               onBlur={field.handleBlur}
               placeholder={placeholder}
+              type="email"
               iconLeft={<MailIcon />}
               iconRight={
                 hideButton ? (
