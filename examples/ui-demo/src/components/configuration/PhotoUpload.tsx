@@ -3,6 +3,8 @@ import { ChangeEvent } from "react";
 import { PhotoIcon } from "../icons/photo";
 import FileUploadInput from "../shared/FileUploadInput";
 
+const sidebarButton = `self-start border rounded-lg py-2 px-[10px] gap-2 flex items-center justify-between hover:opacity-80 w-28 h-10 border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background`;
+
 export function PhotoUploads({ mode }: { mode: "dark" | "light" }) {
   const { config, setConfig } = useConfig();
 
@@ -36,33 +38,17 @@ export function PhotoUploads({ mode }: { mode: "dark" | "light" }) {
   };
 
   return (
-    <div className="border-gray-300 self-start border rounded-lg py-2 px-[10px] gap-2 flex items-center justify-center hover:opacity-80 w-28 h-10">
-      <div
-        style={{
-          backgroundImage: logo?.fileSrc ? `url(${logo.fileSrc})` : undefined,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        {logo?.fileSrc ? null : <PhotoIcon />}
-      </div>
-      <div className="flex flex-col gap-[2px]">
-        {logo ? (
-          <button
-            onClick={onRemove}
-            className="text-left text-sm font-semibold"
-          >
-            Remove
-          </button>
-        ) : (
-          <FileUploadInput
-            className="text-left text-sm font-semibold"
-            onChange={onUpload}
-          >
-            Upload
-          </FileUploadInput>
-        )}
-      </div>
-    </div>
+    <>
+      {logo ? (
+        <button onClick={onRemove} className={sidebarButton}>
+          Remove
+        </button>
+      ) : (
+        <FileUploadInput className={sidebarButton} onChange={onUpload}>
+          <PhotoIcon />
+          Upload
+        </FileUploadInput>
+      )}
+    </>
   );
 }
