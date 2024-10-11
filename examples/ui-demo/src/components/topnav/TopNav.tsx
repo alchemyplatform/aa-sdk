@@ -8,9 +8,12 @@ export function TopNav() {
     <div className="fixed sm:sticky left-0 top-0 right-0 flex justify-center py-5 bg-white sm:bg-[rgba(255,255,255,0.5)] shadow-sm z-10">
       <div className="flex items-center justify-between h-full w-full max-w-[1440px] mx-6 md:mx-7 lg:mx-10">
         <div className="flex justify-center items-center gap-2">
-          <Wordmark />
+          {/* This link is used to refresh the page when the user clicks the logo */}
+          <a href="/">
+            <Wordmark />
+          </a>
           <div className="w-px h-5 bg-gray-500" />
-          <p className="text-lg align-middle whitespace-nowrap">Account kit</p>
+          <p className="text-lg align-middle whitespace-nowrap">Account Kit</p>
         </div>
 
         <div className="flex gap-1 md:gap-8 items-center h-8">
@@ -19,12 +22,6 @@ export function TopNav() {
             className="hidden md:flex p-2 font-semibold hover:bg-gray-100 transition-colors rounded-lg"
           >
             Quickstart
-          </ExternalLink>
-          <ExternalLink
-            href={links.integrationCall}
-            className="hidden md:flex p-2 font-semibold hover:bg-gray-100 transition-colors rounded-lg"
-          >
-            Integration call
           </ExternalLink>
           <ExternalLink href={links.github}>
             <GithubLogo className="hidden md:flex" />
@@ -39,7 +36,7 @@ export function TopNav() {
               className="btn px-3 py-2.5 border border-btn-secondary text-sm"
               href="https://accountkit.alchemy.com/react/quickstart"
             >
-              Build
+              Docs
             </ExternalLink>
           </div>
         </div>
