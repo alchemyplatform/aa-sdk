@@ -14,12 +14,12 @@ export const reactGuides: SidebarItem[] = [
     link: "/react/ssr",
   },
   {
+    text: "Authentication methods",
+    link: "/react/authentication-methods",
+  },
+  {
     text: "Using smart accounts",
     items: [
-      {
-        text: "Authenticate users",
-        link: "/react/authenticate-users",
-      },
       {
         text: "Send user operations",
         link: "/react/send-user-operations",
