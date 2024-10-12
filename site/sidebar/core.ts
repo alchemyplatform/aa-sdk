@@ -8,10 +8,6 @@ export const coreSidebar: SidebarItem[] = [
     text: "Using smart accounts",
     items: [
       {
-        text: "Authenticate users",
-        link: "/core/authenticate-users",
-      },
-      {
         text: "Send user operations",
         link: "/core/send-user-operations",
       },
