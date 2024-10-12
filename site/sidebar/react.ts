@@ -34,8 +34,8 @@ export const reactGuides: SidebarItem[] = [
     items: [
       { text: "Theme", link: "/react/customization/theme" },
       {
-        text: "Authentication methods",
-        link: "/react/customization/authentication-methods",
+        text: "Authentication modal",
+        link: "/react/customization/authentication-modal",
       },
     ],
   },
