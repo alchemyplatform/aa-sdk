@@ -2,7 +2,7 @@ import { useUiConfig } from "../../../../hooks/useUiConfig.js";
 import { ls } from "../../../../strings.js";
 
 export const HelpText = () => {
-  const { supportUrl } = useUiConfig(({ supportUrl }) => ({ supportUrl }));
+  const supportUrl = useUiConfig(({ supportUrl }) => supportUrl);
 
   if (!supportUrl) return null;
   return (

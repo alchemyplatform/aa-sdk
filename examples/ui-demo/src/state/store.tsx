@@ -154,9 +154,7 @@ export function cookieToInitialConfig(cookie?: string | null) {
   const state = parseCookie(cookie, STATE_KEY);
   if (!state) return;
 
-  const config = deserialize<{ state: Config }>(state).state;
-
-  return config;
+  return deserialize<{ state: Config }>(state).state;
 }
 
 export function generateStylesForRoot(config: Config) {
@@ -191,7 +189,13 @@ export function deepEqual(a: any, b: any): boolean {
       }
     }
     return true;
-  } else if (typeof a === "object" && a !== null && b !== null) {
+  } else if (
+    typeof a === "object" &&
+    typeof b === "object" &&
+    a != null &&
+    b != null &&
+    Array.isArray(a) === Array.isArray(b)
+  ) {
     const aKeys = Object.keys(a);
     const bKeys = Object.keys(b);
     if (aKeys.length !== bKeys.length) {

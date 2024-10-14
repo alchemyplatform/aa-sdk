@@ -62,7 +62,7 @@ const UiConfigContext = createContext<StoreApi<UiConfigStore> | undefined>(
   undefined
 );
 
-export function useUiConfig<T extends unknown | undefined = UiConfigStore>(
+export function useUiConfig<T = UiConfigStore>(
   selector?: (state: UiConfigStore) => T
 ): T;
 

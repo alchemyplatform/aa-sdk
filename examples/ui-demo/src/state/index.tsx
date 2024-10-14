@@ -28,14 +28,20 @@ export const ConfigContext = createContext<
   ReturnType<typeof createDemoStore> | undefined
 >(undefined);
 
-export function useConfigStore<T>(selector: (state: DemoState) => T): T {
+export function useConfigStore<T = DemoState>(
+  selector?: (state: DemoState) => T
+): T {
   const configContext = useContext(ConfigContext);
 
   if (!configContext) {
     throw new Error("config context must be present in root");
   }
 
-  return useStoreWithEqualityFn(configContext, selector, deepEqual);
+  return useStoreWithEqualityFn(
+    configContext,
+    selector ?? ((state) => state),
+    deepEqual
+  );
 }
 
 export function ConfigContextProvider(

@@ -77,9 +77,7 @@ export const Authentication = ({ className }: { className?: string }) => {
             name="Social"
             iconClassName="mt-[2px] self-start"
             details={
-              <div
-                className={cn("flex gap-x-3", auth.showOAuth ? "" : "hidden")}
-              >
+              <div className={cn("flex gap-x-3", { hidden: !auth.showOAuth })}>
                 <OAuthMethod
                   active={auth.oAuthMethods.google}
                   icon={<GoogleIcon />}
