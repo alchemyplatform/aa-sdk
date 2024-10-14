@@ -1,58 +1,9 @@
 ---
-title: Authenticate Users
-description: Learn how to authenticate users using Account Kit in a React application.
+title: Using our React hooks
+description: How to embed our authentication into your customized UI
 ---
 
-# Authenticate users
-
-Account Kit makes it really easy to authenticate your users using a number of different authentication methods. If you followed the [quickstart](/react/quickstart), then your app is already setup to authenticate users and you can skip this guide!
-
-In this guide, we'll show you two different ways to authenticate users:
-
-1. Using our UI components to handle the entire authentication flow.
-2. Using our React hooks to build your own custom UI.
-
-## Using our UI components
-
-Account Kit allows you to use pre-built, [highly customizable](https://aa-sdk-ui-demo.vercel.app/) UI components to handle authenticating your users. The way you use them is very flexible since you can use the pre-built modal or even embed the Auth card directly in your application.
-
-### Modal auth
-
-Assuming your application has been [set up](/react/quickstart), using UI components is the easiest way to authenticate users. All you have to do is leverage the [`useAuthModal`](/reference/account-kit/react/hooks/useAuthModal) hook and provide users a CTA to open the modal.
-
-```tsx twoslash
-import React from "react";
-import { useAuthModal } from "@account-kit/react";
-
-export default function MyPage() {
-  const { openAuthModal } = useAuthModal();
-
-  return <button onClick={openAuthModal}>Authenticate</button>;
-}
-```
-
-That's it! When the user clicks that button, the modal will open and they can complete authentication. Once they are authenticated, you can use the [`useAccount`](/reference/account-kit/react/hooks/useAccount) hook to get the logged in user's SCA address
-
-### Embedded auth
-
-The body of the Auth Modal is also exported for you to use directly in your application. This is useful if you don't want a modal flow for login and want a standalone page using the card.
-
-```tsx twoslash
-import React from "react";
-import { AuthCard } from "@account-kit/react";
-
-export default function MyLoginPage() {
-  return (
-    <div className="flex flex-row p-4 bg-white border border-gray-200 rounded-lg">
-      <AuthCard />
-    </div>
-  );
-}
-```
-
-That's it! The user can now input their credentials and complete login. Once they are authenticated, you can use the [`useAccount`](/reference/account-kit/react/hooks/useAccount) hook to get the logged in user's SCA address
-
-## Using our React hooks
+# Using our React hooks
 
 If you don't want to use our pre-built UI components, you can also use the [`useAuthenticate`](/reference/account-kit/react/hooks/useAuthenticate) hook to build your own custom UI.
 
@@ -89,6 +40,8 @@ export default function MyLoginPage() {
 ### Social Login
 
 You can allow uers to sign in with an OAuth provider like Google, Facebook, or Auth0. There are two login flows that are possible: redirect and popup. The redirect flow redirects the user to the auth provider's login page, then back to a specified page in your application when done. The popup flow opens the auth provider's login page in a popup window without leaving your application, then updates your application when done. If using popup, you need to set the `enablePopupOauth` field to `true` in the [config](/react/quickstart).
+
+For the authentication methods that Alchemy supports, authenticate by doing the following
 
 ```tsx twoslash
 import React from "react";
@@ -132,6 +85,8 @@ export default function MyLoginPage() {
   );
 }
 ```
+
+To use your own auth provider, follow the instructions on how to do so with [Auth0](https://accountkit.alchemy.com/signer/authentication/auth0)
 
 ### Passkey auth with email backup
 

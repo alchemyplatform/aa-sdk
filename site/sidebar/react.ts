@@ -14,12 +14,16 @@ export const reactGuides: SidebarItem[] = [
     link: "/react/ssr",
   },
   {
+    text: "Authentication",
+    items: [
+      { text: "Getting Started", link: "/react/getting-started" },
+      { text: "Using UI Components", link: "/react/ui-components" },
+      { text: "Using React Hooks", link: "/react/react-hooks" },
+    ],
+  },
+  {
     text: "Using smart accounts",
     items: [
-      {
-        text: "Authenticate users",
-        link: "/react/authenticate-users",
-      },
       {
         text: "Send user operations",
         link: "/react/send-user-operations",
@@ -34,8 +38,8 @@ export const reactGuides: SidebarItem[] = [
     items: [
       { text: "Theme", link: "/react/customization/theme" },
       {
-        text: "Authentication methods",
-        link: "/react/customization/authentication-methods",
+        text: "Authentication modal",
+        link: "/react/customization/authentication-modal",
       },
     ],
   },

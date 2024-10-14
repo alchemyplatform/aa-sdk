@@ -75,6 +75,10 @@ export const accountKitCoreReferenceSidebar: SidebarItem[] = [
         link: "/reference/account-kit/core/functions/hydrate",
       },
       {
+        text: "parseCookie",
+        link: "/reference/account-kit/core/functions/parseCookie",
+      },
+      {
         text: "reconnect",
         link: "/reference/account-kit/core/functions/reconnect",
       },
