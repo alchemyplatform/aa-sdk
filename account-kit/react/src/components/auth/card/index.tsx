@@ -56,7 +56,7 @@ export const AuthCardContent = ({
   className?: string;
   showClose?: boolean;
 }) => {
-  const { closeAuthModal } = useAuthModal();
+  const { openAuthModal, closeAuthModal } = useAuthModal();
   const { status, isAuthenticating } = useSignerStatus();
   const { authStep, setAuthStep } = useAuthContext();
 
@@ -120,6 +120,7 @@ export const AuthCardContent = ({
     } else if (authStep.type !== "initial") {
       didGoBack.current = false;
     } else if (!didGoBack.current && isAuthenticating) {
+      openAuthModal();
       setAuthStep({
         type: "email_completing",
         createPasskeyAfter: addPasskeyOnSignup,
@@ -131,6 +132,7 @@ export const AuthCardContent = ({
     isAuthenticating,
     setAuthStep,
     onAuthSuccess,
+    openAuthModal,
     closeAuthModal,
     addPasskeyOnSignup,
   ]);

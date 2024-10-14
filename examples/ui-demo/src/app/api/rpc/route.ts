@@ -12,7 +12,7 @@ export async function POST(req: Request) {
   const res = await fetch(env.ALCHEMY_RPC_URL, {
     method: "POST",
     headers: {
-      ...req.headers,
+      ...headers,
     },
     body: JSON.stringify(body),
   });

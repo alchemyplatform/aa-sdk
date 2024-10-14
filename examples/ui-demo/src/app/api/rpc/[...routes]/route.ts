@@ -18,7 +18,7 @@ export async function POST(
     method: "POST",
     headers: {
       Authorization: `Bearer ${env.API_KEY}`,
-      ...req.headers,
+      ...headers,
     },
     body: JSON.stringify(body),
   });
