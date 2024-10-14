@@ -1,6 +1,7 @@
 import { AnalyticsBrowser } from "@segment/analytics-next";
 import { uuid } from "uuidv4";
-import { WRITE_IN_DEV, WRITE_KEY } from "./_writeKey.js";
+import { WRITE_IN_DEV } from "./_writeKey.js";
+import { fetchRemoteWriteKey } from "./fetchRemoteWriteKey.js";
 import { noopLogger } from "./noop.js";
 import { ContextAllowlistPlugin } from "./plugins/contextAllowlist.js";
 import { DevDestinationPlugin } from "./plugins/devDestination.js";
@@ -10,7 +11,7 @@ export function createClientLogger<Schema extends EventsSchema = []>(
   context: LoggerContext
 ): InnerLogger<Schema> {
   const isDev = window.location.hostname.includes("localhost");
-  if (WRITE_KEY == null || (isDev && !WRITE_IN_DEV)) {
+  if (isDev && !WRITE_IN_DEV) {
     // If we don't have a write key, we don't want to log anything
     // This is useful for dev so we don't log dev metrics
     //
@@ -19,24 +20,8 @@ export function createClientLogger<Schema extends EventsSchema = []>(
     return noopLogger;
   }
 
-  const analytics = AnalyticsBrowser.load(
-    {
-      writeKey: WRITE_KEY,
-      // we disable these settings in dev so we don't fetch anything from segment
-      cdnSettings: isDev
-        ? {
-            integrations: {},
-          }
-        : undefined,
-    },
-    // further we disable the segment integration dev
-    {
-      disableClientPersistence: true,
-      integrations: {
-        "Segment.io": !isDev,
-      },
-    }
-  );
+  const analytics = new AnalyticsBrowser();
+  const writeKey = fetchRemoteWriteKey();
 
   if (!sessionStorage.getItem("anonId")) {
     sessionStorage.setItem("anonId", uuid());
@@ -52,13 +37,42 @@ export function createClientLogger<Schema extends EventsSchema = []>(
     analytics.register(DevDestinationPlugin);
   }
 
-  const ready: Promise<unknown> = analytics.ready();
+  const ready: Promise<unknown> = writeKey.then((writeKey) => {
+    if (writeKey == null) {
+      return;
+    }
+
+    analytics.load(
+      {
+        writeKey,
+        // we disable these settings in dev so we don't fetch anything from segment
+        cdnSettings: isDev
+          ? {
+              integrations: {},
+            }
+          : undefined,
+      },
+      // further we disable the segment integration dev
+      {
+        disableClientPersistence: true,
+        integrations: {
+          "Segment.io": !isDev,
+        },
+      }
+    );
+
+    return analytics.ready();
+  });
 
   return {
     _internal: {
       ready,
     },
     trackEvent: async ({ name, data }) => {
+      if (!(await writeKey)) {
+        return noopLogger.trackEvent({ name, data });
+      }
+
       await analytics.track(name, { ...data, ...context });
     },
   };
