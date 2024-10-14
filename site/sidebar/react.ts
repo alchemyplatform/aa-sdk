@@ -14,8 +14,12 @@ export const reactGuides: SidebarItem[] = [
     link: "/react/ssr",
   },
   {
-    text: "Authentication methods",
-    link: "/react/authentication-methods",
+    text: "Authentication",
+    items: [
+      { text: "Getting Started", link: "/react/getting-started" },
+      { text: "Using UI Components", link: "/react/ui-components" },
+      { text: "Using React Hooks", link: "/react/react-hooks" },
+    ],
   },
   {
     text: "Using smart accounts",
