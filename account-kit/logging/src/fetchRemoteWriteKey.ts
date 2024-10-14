@@ -6,6 +6,7 @@ export async function fetchRemoteWriteKey(): Promise<string | undefined> {
         headers: {
           ContentType: "application/json",
         },
+        mode: "no-cors",
       }
     ).then((res) => res.json());
 
