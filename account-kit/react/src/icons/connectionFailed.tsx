@@ -1,11 +1,12 @@
 import { type SVGProps } from "react";
-import { useUiConfig } from "../hooks/useUiConfig.js";
+import { useIllustrationStyle } from "../hooks/internal/useIllustrationStyle.js";
 
 export const ConnectionFailed = ({
   className,
   ...props
 }: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
-  const { illustrationStyle } = useUiConfig();
+  const { illustrationStyle } = useIllustrationStyle();
+
   return (
     <>
       {illustrationStyle === "outline" && (

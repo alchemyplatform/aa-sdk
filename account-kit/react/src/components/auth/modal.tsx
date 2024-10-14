@@ -1,10 +1,12 @@
-import { AuthCardContent } from "./card/index.js";
 import { useAuthModal } from "../../hooks/useAuthModal.js";
-import { Dialog } from "../dialog/dialog.js";
 import { useUiConfig } from "../../hooks/useUiConfig.js";
+import { Dialog } from "../dialog/dialog.js";
+import { AuthCardContent } from "./card/index.js";
 
 export const AuthModal = () => {
-  const { modalBaseClassName } = useUiConfig();
+  const { modalBaseClassName } = useUiConfig(({ modalBaseClassName }) => ({
+    modalBaseClassName,
+  }));
   const { isOpen, closeAuthModal } = useAuthModal();
 
   return (

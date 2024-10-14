@@ -7,7 +7,7 @@ import {
   SelectMenuViewport,
 } from "@/components/ui/select-menu";
 import { cn } from "@/lib/utils";
-import { useConfig } from "@/state";
+import { useConfigStore } from "@/state";
 import { getBorderRadiusValue } from "@account-kit/react/tailwind";
 import { useState } from "react";
 
@@ -18,20 +18,19 @@ const RADIUS_OPTIONS = [
   { label: "Large", id: "lg" as const },
 ];
 
-export function CornerRadiusOptions() {
-  const { config, setConfig } = useConfig();
-  const {
-    ui: { borderRadius },
-  } = config;
+function useBorderRadius() {
+  return useConfigStore(
+    ({ ui: { borderRadius, primaryColor, theme }, setBorderRadius }) => ({
+      setBorderRadius,
+      theme,
+      primaryColor,
+      borderRadius,
+    })
+  );
+}
 
-  const onChange = (borderRadius: "none" | "sm" | "md" | "lg") => {
-    setConfig({
-      ui: {
-        ...config.ui,
-        borderRadius,
-      },
-    });
-  };
+export function CornerRadiusOptions() {
+  const { borderRadius, setBorderRadius } = useBorderRadius();
 
   return (
     <>
@@ -47,7 +46,7 @@ export function CornerRadiusOptions() {
               borderRadius: getBorderRadiusValue(option.id),
             }}
             key={option.id}
-            onClick={() => onChange(option.id)}
+            onClick={() => setBorderRadius(option.id)}
           >
             <span className="text-sm font-normal">{option.label}</span>
           </button>
@@ -61,11 +60,8 @@ export function CornerRadiusOptions() {
 }
 
 function CornerRadiusSelectMenu() {
-  const { config, setConfig } = useConfig();
-
-  const {
-    ui: { borderRadius, primaryColor, theme },
-  } = config;
+  const { borderRadius, primaryColor, theme, setBorderRadius } =
+    useBorderRadius();
 
   type BorderRadius = typeof borderRadius;
   const [selected, setSelected] = useState<BorderRadius>(borderRadius);
@@ -74,12 +70,7 @@ function CornerRadiusSelectMenu() {
   const onChange = (borderRadius: BorderRadius) => {
     setSelected(borderRadius);
 
-    setConfig({
-      ui: {
-        ...config.ui,
-        borderRadius,
-      },
-    });
+    setBorderRadius(borderRadius);
   };
 
   const getRadiusLabel = (borderRadius: BorderRadius) => {
@@ -109,7 +100,7 @@ function CornerRadiusSelectMenu() {
         <div className="ml-1 w-[20px] h-[20px] flex items-center justify-center">
           <ChevronDown
             stroke={primaryColor[theme]}
-            className={cn("transition", menuOpen && "rotate-180")}
+            className={cn("transition-transform", menuOpen && "rotate-180")}
           />
         </div>
       </SelectMenuTrigger>

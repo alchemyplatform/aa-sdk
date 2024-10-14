@@ -3,7 +3,7 @@
 import { useCallback, useState } from "react";
 
 import { useToast } from "@/hooks/useToast";
-import { useConfig } from "@/state";
+import { useConfigStore } from "@/state";
 import { AccountKitNftMinterABI, nftContractAddress } from "@/utils/config";
 import {
   useSendUserOperation,
@@ -33,7 +33,11 @@ export const MintCard = () => {
   const [status, setStatus] = useState<MintStatus>(initialValuePropState);
   const { setToast } = useToast();
   const { nftTransferred: nftTransfered, setNFTTransferred: setNFTTransfered } =
-    useConfig();
+    useConfigStore((state) => ({
+      nftTransferred: state.nftTransferred,
+      setNFTTransferred: state.setNftTransferred,
+    }));
+
   const handleSuccess = () => {
     setStatus(() => ({
       batch: "success",

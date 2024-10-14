@@ -7,9 +7,11 @@ import {
   EOAPostLoginActions,
   EOAPostLoginContents,
 } from "@/components/shared/eoa-post-login/EOAPostLoginContents";
+import ExternalLink from "@/components/shared/ExternalLink";
+import { MintCard } from "@/components/shared/mint-card/MintCard";
 import { RenderUserConnectionAvatar } from "@/components/shared/user-connection-avatar/RenderUserConnectionAvatar";
 import { cn } from "@/lib/utils";
-import { useConfig } from "@/state";
+import { useTheme } from "@/state/useTheme";
 import { useUser } from "@account-kit/react";
 import { Inter, Public_Sans } from "next/font/google";
 import { useState } from "react";
@@ -17,8 +19,6 @@ import { AuthCardWrapper } from "../components/preview/AuthCardWrapper";
 import { CodePreview } from "../components/preview/CodePreview";
 import { CodePreviewSwitch } from "../components/shared/CodePreviewSwitch";
 import { TopNav } from "../components/topnav/TopNav";
-import { MintCard } from "@/components/shared/mint-card/MintCard";
-import ExternalLink from "@/components/shared/ExternalLink";
 
 const publicSans = Public_Sans({
   subsets: ["latin"],
@@ -33,7 +33,7 @@ const inter = Inter({
 export default function Home() {
   const [showCode, setShowCode] = useState(false);
   const user = useUser();
-  const { config } = useConfig();
+  const theme = useTheme();
   const isEOAUser = user?.type === "eoa";
   return (
     <main
@@ -60,7 +60,7 @@ export default function Home() {
                 ` w-full p-6 top-0 left-0 border-b border-border z-10`,
                 !user && !showCode && "border-[transparent]",
                 showCode ? "sticky" : "absolute",
-                config.ui.theme === "dark"
+                theme === "dark"
                   ? showCode
                     ? "bg-white"
                     : "bg-[#4D4D4D]"

@@ -23,7 +23,7 @@ export const Navigation = ({
         disabled={!showBack}
         className={
           showBack
-            ? "text-fg-secondary w-[32px] h-[32px] flex items-center justify-center hover:bg-btn-secondary rounded-md transition-all ease-out duration-200"
+            ? "text-fg-secondary w-[32px] h-[32px] flex items-center justify-center hover:bg-btn-secondary rounded-md"
             : "invisible"
         }
       >
@@ -35,7 +35,7 @@ export const Navigation = ({
         onClick={onClose}
         className={
           showClose
-            ? "text-fg-secondary w-[32px] h-[32px] flex items-center justify-center hover:bg-btn-secondary rounded-md transition-all ease-out duration-200"
+            ? "text-fg-secondary w-[32px] h-[32px] flex items-center justify-center hover:bg-btn-secondary rounded-md"
             : "invisible"
         }
       >

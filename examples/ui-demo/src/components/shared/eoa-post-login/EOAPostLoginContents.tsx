@@ -1,9 +1,8 @@
-import React from "react";
+import { useLogout } from "@account-kit/react";
 import { CheckIcon } from "../../icons/check";
 import { GasIcon } from "../../icons/gas";
 import { UserIcon } from "../../icons/user";
 import { WalletIcon } from "../../icons/wallet";
-import { useLogout } from "@account-kit/react";
 
 export const EOAPostLoginActions = () => {
   const { logout } = useLogout();
@@ -18,7 +17,6 @@ export const EOAPostLoginActions = () => {
         <button
           className="btn btn-primary w-full lg:w-auto mb-2 lg:mb-0 flex-1 m-0 lg:mr-2"
           onClick={() => {
-            console.log("openAuthModal");
             logout();
           }}
         >

@@ -2,20 +2,26 @@ import { ExternalLinkIcon } from "@/components/icons/external-link";
 import { LogoutIcon } from "@/components/icons/logout";
 import { DeploymentStatusIndicator } from "@/components/shared/DeploymentStatusIndicator";
 import { UserAddressLink } from "@/components/shared/user-connection-avatar/UserAddressLink";
-import { useConfig } from "@/state";
+import { useConfigStore } from "@/state";
 import { useAccount, useLogout, useSigner, useUser } from "@account-kit/react";
 import { useQuery } from "@tanstack/react-query";
 
 export function UserConnectionDetails() {
   const user = useUser();
-  const { nftTransferred: deploymentStatus } = useConfig();
   const signer = useSigner();
   const { logout } = useLogout();
-  const { config } = useConfig();
+  const { theme, primaryColor } = useConfigStore(
+    ({ ui: { theme, primaryColor } }) => ({ theme, primaryColor })
+  );
   const scaAccount = useAccount({ type: "LightAccount" });
+  const { data: deploymentStatus } = useQuery({
+    queryKey: ["deploymentStatus"],
+    queryFn: async () => {
+      const initCode = await scaAccount?.account?.getInitCode();
+      return initCode != null && initCode === "0x";
+    },
+  });
 
-  const theme = config.ui.theme;
-  const primaryColor = config.ui.primaryColor;
   const isEOAUser = user?.type === "eoa";
 
   const getSignerAddress = async (): Promise<string | null> => {
@@ -74,7 +80,7 @@ export function UserConnectionDetails() {
         <span className="text-md md:text-sm text-fg-secondary">Status</span>
         <div className="flex flex-row items-center">
           <DeploymentStatusIndicator
-            isDeployed={deploymentStatus}
+            isDeployed={!!deploymentStatus}
             className="w-[12px] h-[12px]"
           />
           <span className="text-fg-primary block ml-1 text-md md:text-sm">

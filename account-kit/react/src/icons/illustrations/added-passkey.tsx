@@ -1,12 +1,12 @@
 import { type SVGProps } from "react";
-import { useUiConfig } from "../../hooks/useUiConfig.js";
+import { useIllustrationStyle } from "../../hooks/internal/useIllustrationStyle.js";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const AddedPasskeyIllustration = ({
   className,
   ...props
 }: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
-  const { illustrationStyle } = useUiConfig();
+  const { illustrationStyle } = useIllustrationStyle();
 
   return (
     <>
