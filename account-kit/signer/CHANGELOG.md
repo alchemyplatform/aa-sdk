@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-beta.10](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.9...v4.0.0-beta.10) (2024-10-15)
+
+### Bug Fixes
+
+- set error state when authentication fails ([#1038](https://github.com/alchemyplatform/aa-sdk/issues/1038)) ([dfb91d2](https://github.com/alchemyplatform/aa-sdk/commit/dfb91d20924a12d14bb80348b1361d3871f96dfd))
+
+### Features
+
+- add google auth components and demo support (extension of linnas pr) ([#1032](https://github.com/alchemyplatform/aa-sdk/issues/1032)) ([cb91914](https://github.com/alchemyplatform/aa-sdk/commit/cb91914c8da0a7c3e7519bf98bc55d2848062e9f)), closes [#1024](https://github.com/alchemyplatform/aa-sdk/issues/1024) [#1035](https://github.com/alchemyplatform/aa-sdk/issues/1035) [#1036](https://github.com/alchemyplatform/aa-sdk/issues/1036)
+- add signer profiling metrics ([b7b0aa3](https://github.com/alchemyplatform/aa-sdk/commit/b7b0aa371e124548c2f2e7693f68e474648ae6c5))
+- log events from signer package ([421d273](https://github.com/alchemyplatform/aa-sdk/commit/421d273240fbbaa8a07303da473e651332577b2e))
+
 # [4.0.0-beta.9](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.8...v4.0.0-beta.9) (2024-10-09)
 
 ### Bug Fixes
