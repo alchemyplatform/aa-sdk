@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.10...v4.0.0) (2024-10-15)
+
+### Bug Fixes
+
+- passkey causes stuck loading state ([#1065](https://github.com/alchemyplatform/aa-sdk/issues/1065)) ([984f34c](https://github.com/alchemyplatform/aa-sdk/commit/984f34ce59ae3edc8f51a8f6a1a10199eaf17987))
+
 # [4.0.0-beta.10](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.9...v4.0.0-beta.10) (2024-10-15)
 
 ### Bug Fixes
