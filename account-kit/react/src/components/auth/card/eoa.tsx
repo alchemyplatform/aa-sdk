@@ -1,4 +1,4 @@
-import { walletConnect } from "wagmi/connectors";
+import { walletConnect, type WalletConnectParameters } from "wagmi/connectors";
 import { useAuthConfig } from "../../../hooks/internal/useAuthConfig.js";
 import { useChain } from "../../../hooks/useChain.js";
 import { useConnect } from "../../../hooks/useConnect.js";
@@ -120,7 +120,7 @@ export const EoaPickCard = () => {
   });
   const { setAuthStep } = useAuthContext();
 
-  const walletConnectConfig = useAuthConfig((auth) => {
+  const walletConnectAuthConfig = useAuthConfig((auth) => {
     const externalWalletSection = auth.sections
       .find((x) => x.some((y) => y.type === "external_wallets"))
       ?.find((x) => x.type === "external_wallets") as
@@ -129,6 +129,20 @@ export const EoaPickCard = () => {
 
     return externalWalletSection?.walletConnect;
   });
+
+  // Add z-index to the wallet connect modal if not already set
+  const walletConnectParams = walletConnectAuthConfig
+    ? ({
+        ...walletConnectAuthConfig,
+        qrModalOptions: {
+          ...walletConnectAuthConfig.qrModalOptions,
+          themeVariables: {
+            "--wcm-z-index": "1000000",
+            ...walletConnectAuthConfig.qrModalOptions?.themeVariables,
+          },
+        },
+      } as WalletConnectParameters)
+    : undefined;
 
   const connectorButtons = connectors.map((connector) => {
     return (
@@ -155,8 +169,8 @@ export const EoaPickCard = () => {
     );
   });
 
-  const walletConnectConnector = walletConnectConfig
-    ? walletConnect(walletConnectConfig)
+  const walletConnectConnector = walletConnectParams
+    ? walletConnect(walletConnectParams)
     : null;
 
   return (
@@ -164,7 +178,7 @@ export const EoaPickCard = () => {
       className="w-full"
       header="Select your wallet"
       description={
-        walletConnectConfig != null || connectors.length ? (
+        walletConnectConnector != null || connectors.length ? (
           <div className="flex flex-col gap-3 w-full">
             {connectorButtons}
             {walletConnectConnector && (
