@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { links } from "@/utils/links";
 
 type MintCardActionButtonsProps = {
   nftTransfered: boolean;
@@ -26,7 +27,7 @@ export function MintCardActionButtons({
       ) : (
         <div>
           <a
-            href="https://dashboard.alchemy.com/"
+            href={links.dashboard}
             className="btn btn-primary flex text-center mb-4 p-2 w-full  m-auto"
             target="_blank"
             rel="noreferrer"

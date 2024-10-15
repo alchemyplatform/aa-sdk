@@ -71,7 +71,7 @@ export const createDemoStore = (initialConfig: Config = DEFAULT_CONFIG) => {
             ...config
           }) => config,
           skipHydration: true,
-          version: 1,
+          version: 2,
         })
   );
 };

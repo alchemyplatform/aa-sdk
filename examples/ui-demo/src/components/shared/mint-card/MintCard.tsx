@@ -109,7 +109,7 @@ export const MintCard = () => {
       },
     });
   }, [client, sendUserOperation]);
-  const transactionUrl = `${client?.chain?.blockExplorers?.default.url}?q=${sendUserOperationResult?.hash}`;
+  const transactionUrl = `${client?.chain?.blockExplorers?.default.url}/tx/${sendUserOperationResult?.hash}`;
 
   const isActionButtonsDisabled =
     Object.values(status).some((x) => x === "loading") || isLoadingClient;
