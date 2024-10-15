@@ -2,9 +2,10 @@ import PopoverMenu from "@/components/shared/user-connection-avatar/UserConnecti
 import DialogMenu from "@/components/shared/user-connection-avatar/UserConnectionMenuDialog";
 import { UserConnectionAvatar } from "./UserConnectionAvatar";
 import { UserConnectionDetails } from "./UserConnectionDetails";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAccount } from "@account-kit/react";
 import { useQuery } from "@tanstack/react-query";
+import { useConfigStore } from "@/state";
 
 type RenderAvatarMenuProps = {
   deploymentStatus: boolean;
@@ -16,7 +17,11 @@ export const RenderUserConnectionAvatar = (
     type: "LightAccount",
   });
 
-  const { data: deploymentStatus = false } = useQuery({
+  const { nftTransferred } = useConfigStore(({ nftTransferred }) => ({
+    nftTransferred,
+  }));
+
+  const { data: deploymentStatus = false, refetch } = useQuery({
     queryKey: ["deploymentStatus"],
     queryFn: async () => {
       const initCode = await account?.getInitCode();
@@ -24,6 +29,14 @@ export const RenderUserConnectionAvatar = (
     },
     enabled: !!account,
   });
+
+  useEffect(() => {
+    // Only refetch if this is a user's first NFT Transfer...
+    // This is to perform query calls when the NFT transferred state changes.
+    if (nftTransferred && !deploymentStatus) {
+      refetch();
+    }
+  }, [nftTransferred, deploymentStatus, refetch]);
 
   return (
     <div
