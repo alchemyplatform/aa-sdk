@@ -31,7 +31,7 @@ export function IllustrationStyleOptions() {
 
   return (
     <>
-      <div className="hidden md:flex self-stretch gap-3">
+      <div className="hidden lg:flex self-stretch gap-3">
         {options.map((value) => (
           <button
             key={value}
@@ -52,7 +52,7 @@ export function IllustrationStyleOptions() {
           </button>
         ))}
       </div>
-      <div className="flex md:hidden w-full">
+      <div className="flex lg:hidden w-full">
         <IllustrationStyleSelectMenu />
       </div>
     </>
