@@ -40,6 +40,8 @@ Smart accounts unlock powerful Account Abstraction features like gas sponsorship
 
 Smart accounts provide flexibility, security, and additional functionality over EOAs. Features like social recovery, two-factor authentication, multi-owner support, and ownership transfer become possible with smart accounts.
 
+In Account Kit, this concept will manifest as a [Smart Contract Account](/concepts/smart-contract-account).
+
 ## Signer: web2 login and key management
 
 <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start" }}>
@@ -58,6 +60,8 @@ Smart accounts provide flexibility, security, and additional functionality over 
 [Using Account Kit](/react/getting-started), you can secure a user’s Smart Account with email, social login, or passkeys, using our non-custodial Signer infrastructure. Smart accounts support advanced use cases, such as multiple owners and ownership transfer, offering more utility than EOAs.
 
 With this setup, users can sign-up, log in, and sign transactions using familiar web2 user experiences.
+
+In Account Kit, this concept will manifest as a [Smart Account Signer](/concepts/smart-account-signer).
 
 ## Bundler: transactions → user operations
 
@@ -78,6 +82,8 @@ With Account Kit, [sending transactions](/react/send-user-operations) is as simp
 A User Operation (UO) is an ABI-encoded struct that describes a transaction to be sent on behalf of a user. Since SCAs cannot initiate transactions on chains without native account abstraction support, they send UOs instead. The Bundler will gather UOs from multiple smart accounts (senders) and bundle them into a single on-chain transaction.
 
 A huge benefit of smart accounts is the ability to [batch transactions](/react/send-user-operations#batch-user-operation) in one UO creating simpler user experiences. For example, you can now approve and swap in one click, rather than signing, waiting, and sending multiple transactions.
+
+In Account Kit, this concept will manifest as a [Bundler Client](/concepts/bundler-client), but for simplicity you may only need a [Smart Account Client](/concepts/smart-account-client).
 
 ## Gas Manager: sponsor gas
 
@@ -104,6 +110,8 @@ Account Kit makes it easy to build a web2 user experience from sign-up to transa
 - **Gas Manage**r to sponsor gas
 - Reliable and scalable **Bundler** to land user operations
 
-Account Abstraction might seem complex, but Account Kit abstracts away the intricacies, allowing you to focus on building great user experiences. Start [building](/react/quickstart) today!
+Account Abstraction might seem complex, but Account Kit abstracts away the intricacies, allowing you to focus on building great user experiences.
 
-Want to dive deeper? Explore our [Account Abstraction education hub](https://www.alchemy.com/learn/account-abstraction).
+**Start [building](/react/quickstart) today!**
+
+Want to dive deeper? Explore our [Account Abstraction education hub](https://www.alchemy.com/learn/account-abstraction)
