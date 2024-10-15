@@ -31,8 +31,8 @@ export const RenderUserConnectionAvatar = (
   });
 
   useEffect(() => {
+    // Refetch the deployment status if the NFT transferred state changes.
     // Only refetch if this is a user's first NFT Transfer...
-    // This is to perform query calls when the NFT transferred state changes.
     if (nftTransferred && !deploymentStatus) {
       refetch();
     }
