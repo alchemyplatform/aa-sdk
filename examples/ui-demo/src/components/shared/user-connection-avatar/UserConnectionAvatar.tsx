@@ -7,15 +7,16 @@ import { useAccount, useUser } from "@account-kit/react";
 
 import { DeploymentStatusIndicator } from "@/components/shared/DeploymentStatusIndicator";
 import { useConfigStore } from "@/state";
-import { useQuery } from "@tanstack/react-query";
 
 interface UserConnectionAvatarProps {
   isFocused?: boolean;
   showDeploymentStatus?: boolean;
+  deploymentStatus: boolean;
 }
 const UserConnectionAvatar = ({
   isFocused,
   showDeploymentStatus = true,
+  deploymentStatus,
 }: UserConnectionAvatarProps) => {
   const { theme, primaryColor } = useConfigStore(
     ({ ui: { theme, primaryColor } }) => ({
@@ -24,16 +25,8 @@ const UserConnectionAvatar = ({
     })
   );
   const user = useUser();
-  const { address: SCAUserAddress, account } = useAccount({
+  const { address: SCAUserAddress } = useAccount({
     type: "LightAccount",
-  });
-
-  const { data: deploymentStatus } = useQuery({
-    queryKey: ["deploymentStatus"],
-    queryFn: async () => {
-      const initCode = await account?.getInitCode();
-      return initCode != null && initCode === "0x";
-    },
   });
 
   const isEOAUser = user?.type === "eoa";

@@ -3,10 +3,28 @@ import DialogMenu from "@/components/shared/user-connection-avatar/UserConnectio
 import { UserConnectionAvatar } from "./UserConnectionAvatar";
 import { UserConnectionDetails } from "./UserConnectionDetails";
 import React, { useState } from "react";
+import { useAccount } from "@account-kit/react";
+import { useQuery } from "@tanstack/react-query";
 
+type RenderAvatarMenuProps = {
+  deploymentStatus: boolean;
+};
 export const RenderUserConnectionAvatar = (
   props: React.HTMLAttributes<HTMLDivElement>
 ) => {
+  const { account } = useAccount({
+    type: "LightAccount",
+  });
+
+  const { data: deploymentStatus = false } = useQuery({
+    queryKey: ["deploymentStatus"],
+    queryFn: async () => {
+      const initCode = await account?.getInitCode();
+      return initCode && initCode === "0x";
+    },
+    enabled: !!account,
+  });
+
   return (
     <div
       className="border-b border-border overflow-hidden pb-6 sm:border-none sm:pb-0"
@@ -14,32 +32,35 @@ export const RenderUserConnectionAvatar = (
     >
       {/* Popover - Visible on desktop screens */}
       <div className="hidden md:block overflow-hidden">
-        <RenderPopoverMenu />
+        <RenderPopoverMenu deploymentStatus={deploymentStatus} />
       </div>
       {/* Dialog - Visible on mobile screens */}
       <div className="block md:hidden">
-        <RenderDialogMenu />
+        <RenderDialogMenu deploymentStatus={deploymentStatus} />
       </div>
     </div>
   );
 };
 
-const RenderPopoverMenu = () => {
+const RenderPopoverMenu = ({ deploymentStatus }: RenderAvatarMenuProps) => {
   const [popoverOpen, setPopoverOpen] = useState(false);
 
   return (
     <PopoverMenu onOpenStateChange={(state) => setPopoverOpen(state)}>
       <PopoverMenu.Trigger className="max-w-full">
-        <UserConnectionAvatar isFocused={popoverOpen} />
+        <UserConnectionAvatar
+          isFocused={popoverOpen}
+          deploymentStatus={deploymentStatus}
+        />
       </PopoverMenu.Trigger>
       <PopoverMenu.Content>
-        <UserConnectionDetails />
+        <UserConnectionDetails deploymentStatus={deploymentStatus} />
       </PopoverMenu.Content>
     </PopoverMenu>
   );
 };
 
-const RenderDialogMenu = () => {
+const RenderDialogMenu = ({ deploymentStatus }: RenderAvatarMenuProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
@@ -48,12 +69,15 @@ const RenderDialogMenu = () => {
         toggleOpenState={() => setDialogOpen(!dialogOpen)}
         className="max-w-full"
       >
-        <UserConnectionAvatar isFocused={dialogOpen} />
+        <UserConnectionAvatar
+          isFocused={dialogOpen}
+          deploymentStatus={deploymentStatus}
+        />
       </DialogMenu.Trigger>
       <DialogMenu isOpen={dialogOpen} onClose={() => setDialogOpen(false)}>
         <DialogMenu.Content>
           <p className="text-lg font-semibold text-fg-primary mb-5">Profile</p>
-          <UserConnectionDetails />
+          <UserConnectionDetails deploymentStatus={deploymentStatus} />
         </DialogMenu.Content>
       </DialogMenu>
     </div>
