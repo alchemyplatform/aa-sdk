@@ -28,11 +28,11 @@ For a simple end-to-end example, we will spin up a new NextJS app using the ui c
 :::code-group
 
 ```bash [yarn]
-yarn create next-app my-smart-app -e https://github.com/avarobinson/embedded-accounts-ui-components-alpha-quickstart-nextjs
+yarn create next-app account-kit-app -e https://github.com/avarobinson/account-kit-quickstart
 ```
 
 ```bash [npm]
-npx create-next-app my-smart-app -e https://github.com/avarobinson/embedded-accounts-ui-components-alpha-quickstart-nextjs
+npx create-next-app account-kit-app -e https://github.com/avarobinson/account-kit-quickstart
 ```
 
 :::
@@ -131,7 +131,7 @@ See the steps above in the NextJS section to get your API key.
 
 In this step, you'll customize your authentication methods and UI styles.
 
-The [**demo app**](https://aa-sdk-ui-demo.vercel.app/) provides an interactive sandbox to explore combinations. When you’re all done, click the ‘Code preview’ toggle to export your code! You’ll get two files:
+The [**demo app**](https://demo.alchemy.com/) provides an interactive sandbox to explore combinations. When you’re all done, click the ‘Code preview’ toggle to export your code! You’ll get two files:
 
 1. `tailwind.config.ts`
 2. `config.ts`
@@ -202,13 +202,24 @@ export const config = createConfig(
     chain: sepolia, // TODO: specify your preferred chain here and update imports from @account-kit/infra
     ssr: true, // Defers hydration of the account state to the client after the initial mount solving any inconsistencies between server and client state (read more here: https://accountkit.alchemy.com/react/ssr)
     storage: cookieStorage, // persist the account state using cookies (read more here: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state)
+    enablePopupOauth: true, // must be set to "true" if you plan on using popup rather than redirect in the social login flow
   },
   {
     // authentication ui config - your customizations here
     auth: {
       sections: [
         [{ type: "email" }],
-        [{ type: "passkey" }, { type: "external_wallets" }],
+        [
+          { type: "passkey" },
+          { type: "social", authProviderId: "google", mode: "popup" },
+          { type: "social", authProviderId: "facebook", mode: "popup" },
+        ],
+        [
+          {
+            type: "external_wallets",
+            walletConnect: { projectId: "your-project-id" },
+          },
+        ],
       ],
       addPasskeyOnSignup: true,
       showSignInText: true,
