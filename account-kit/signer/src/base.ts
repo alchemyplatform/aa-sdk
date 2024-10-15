@@ -237,7 +237,18 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       this.trackAuthenticateType(params);
 
       return result.catch((error) => {
-        this.store.setState({ error: toErrorInfo(error) });
+        /**
+         * 2 things going on here:
+         * 1. for oauth flows we expect the status to remain in authenticating
+         * 2. we do the ternary, because if we explicitly pass in `undefined` for the status, zustand will set the value of status to `undefined`.
+         * However, if we omit it, then it will not override the current value of status.
+         */
+        this.store.setState({
+          error: toErrorInfo(error),
+          ...(type === "oauthReturn" || type === "oauth"
+            ? {}
+            : { status: AlchemySignerStatus.DISCONNECTED }),
+        });
         throw error;
       });
     }
