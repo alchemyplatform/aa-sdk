@@ -137,7 +137,7 @@ import { sepolia } from "@account-kit/infra";
 
 export const confg = createConfig(
   {
-    apiKey: "YOUR_API_KEY",
+    transport: alchemy({ apiKey: "YOUR_KEY" })
     chain: sepolia,
   },
   {
