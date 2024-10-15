@@ -58,11 +58,6 @@ export function MobileSplashPage() {
             View docs
           </a>
         </div>
-        <div className="mt-6 flex justify-center">
-          <span className="text-sm text-center block ">
-            Visit desktop site to customize styles and auth methods
-          </span>
-        </div>
       </div>
     </div>
   );

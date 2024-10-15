@@ -44,7 +44,7 @@ export default function Home() {
         className={`flex flex-col flex-1 sm:px-6 lg:px-10 sm:py-6 w-full max-w-screen-2xl mx-auto overflow-hidden overflow-x-hidden ${inter.className} sm:overflow-hidden`}
       >
         <div className="hidden sm:flex flex-1 gap-6 overflow-hidden">
-          <div className=" flex-col w-[272px] md:w-[392px] bg-white border border-border rounded-lg p-6 overflow-y-auto scrollbar-none gap-10">
+          <div className=" flex-col w-[272px] lg:w-[392px] bg-white border border-border rounded-lg p-6 overflow-y-auto scrollbar-none gap-10">
             <Authentication />
             <Styling />
           </div>
