@@ -51,6 +51,18 @@ export const createAccountKitStore = (
               replacer: (key, value) => {
                 if (key === "bundlerClient") return undefined;
 
+                if (key === "user") {
+                  const user = value as StoreState["user"];
+                  if (!user) return undefined;
+
+                  return {
+                    address: user.address,
+                    orgId: user.orgId,
+                    userId: user.userId,
+                    email: user.email,
+                  } as StoreState["user"];
+                }
+
                 return storeReplacer(key, value);
               },
               reviver: (key, value) => {
@@ -114,7 +126,7 @@ export const createAccountKitStore = (
             skipHydration: ssr,
             partialize: ({ signer, accounts, ...writeableState }) =>
               writeableState,
-            version: 9,
+            version: 10,
           })
         : () => createInitialStoreState(params)
     )
