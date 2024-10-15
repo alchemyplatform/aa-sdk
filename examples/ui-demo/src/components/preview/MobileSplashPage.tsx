@@ -1,7 +1,16 @@
-import { useAuthModal } from "@account-kit/react";
+import { useAuthModal, useSignerStatus } from "@account-kit/react";
+import { useEffect } from "react";
 
 export function MobileSplashPage() {
   const { openAuthModal } = useAuthModal();
+  const { isAuthenticating } = useSignerStatus();
+
+  useEffect(() => {
+    if (isAuthenticating) {
+      openAuthModal();
+    }
+  }, [openAuthModal, isAuthenticating]);
+
   return (
     <div className="flex flex-col flex-1 pb-5 h-auto max-h-[calc(100svh-100px)] box-content p-4 pt-[78px]">
       {/* Header Text */}

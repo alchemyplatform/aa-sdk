@@ -120,7 +120,6 @@ export const AuthCardContent = ({
     } else if (authStep.type !== "initial") {
       didGoBack.current = false;
     } else if (!didGoBack.current && isAuthenticating) {
-      openAuthModal();
       setAuthStep({
         type: "email_completing",
         createPasskeyAfter: addPasskeyOnSignup,
