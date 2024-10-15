@@ -17,8 +17,8 @@ export const reactGuides: SidebarItem[] = [
     text: "Authentication",
     items: [
       { text: "Getting Started", link: "/react/getting-started" },
-      { text: "Using UI Components", link: "/react/ui-components" },
-      { text: "Using React Hooks", link: "/react/react-hooks" },
+      { text: "With UI Components", link: "/react/ui-components" },
+      { text: "With React Hooks", link: "/react/react-hooks" },
     ],
   },
   {
@@ -35,13 +35,7 @@ export const reactGuides: SidebarItem[] = [
   },
   {
     text: "Customizing UI components",
-    items: [
-      { text: "Theme", link: "/react/customization/theme" },
-      {
-        text: "Authentication modal",
-        link: "/react/customization/authentication-modal",
-      },
-    ],
+    items: [{ text: "Theme", link: "/react/customization/theme" }],
   },
   { text: "SDK Reference", link: "/reference/account-kit/react" },
 ];
