@@ -113,6 +113,9 @@ function getTailwindCode(ui: Config["ui"]) {
 
 function getConfigCode(config: Config) {
   const sections = getSectionsForConfig(config, "your-project-id");
+  const socialIsEnabled = Object.values(config.auth.oAuthMethods).some(
+    (enabled) => enabled
+  );
 
   return dedent`
   import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react";
@@ -138,7 +141,9 @@ function getConfigCode(config: Config) {
     // get this from the app config you create at ${links.dashboard}
     transport: alchemy({ apiKey: "your-api-key" }),
     chain: sepolia,
-    ssr: true, // set to false if you're not using server-side rendering
+    ssr: true, // set to false if you're not using server-side rendering${
+      socialIsEnabled ? "\n  enablePopupOauth: true," : ""
+    }
   }, uiConfig);
 
   export const queryClient = new QueryClient();
