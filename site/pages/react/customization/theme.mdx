@@ -107,11 +107,11 @@ Customize the illustration style of various icons used in the components by pass
 
 ```ts twoslash
 import { createConfig } from "@account-kit/react";
-import { sepolia } from "@account-kit/infra";
+import { sepolia, alchemy } from "@account-kit/infra";
 
 const config = createConfig(
   {
-    apiKey: "YOUR_API_KEY",
+    transport: alchemy({ apiKey: "YOUR_KEY" }),
     chain: sepolia,
   },
   {
@@ -133,11 +133,11 @@ In this example, we hide the default header text and replace it with our own.
 ```tsx twoslash
 // @jsx: react-jsx
 import { createConfig } from "@account-kit/react";
-import { sepolia } from "@account-kit/infra";
+import { sepolia, alchemy } from "@account-kit/infra";
 
 export const confg = createConfig(
   {
-    transport: alchemy({ apiKey: "YOUR_KEY" })
+    transport: alchemy({ apiKey: "YOUR_KEY" }),
     chain: sepolia,
   },
   {
@@ -156,11 +156,11 @@ In this example, we leave the `Sign in` text in the modal and add an icon above 
 ```tsx twoslash
 // @jsx: react-jsx
 import { createConfig } from "@account-kit/react";
-import { sepolia } from "@account-kit/infra";
+import { sepolia, alchemy } from "@account-kit/infra";
 
 export const confg = createConfig(
   {
-    apiKey: "YOUR_API_KEY",
+    transport: alchemy({ apiKey: "YOUR_KEY" }),
     chain: sepolia,
   },
   {
