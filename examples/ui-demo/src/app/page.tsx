@@ -124,7 +124,7 @@ export default function Home() {
           {!user && <MobileSplashPage />}
           {isEOAUser && (
             <div className="flex flex-1 flex-col mt-16 p-6 sm:p-0">
-              <div className="border-border border radius-2 px-6 py-6">
+              <div className="border-border border radius-2 px-6 py-6  bg-bg-surface-default">
                 <RenderUserConnectionAvatar />
                 <div className="pt-6">
                   <EOAPostLoginContents />
