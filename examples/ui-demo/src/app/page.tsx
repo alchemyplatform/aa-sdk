@@ -104,10 +104,10 @@ export default function Home() {
                   environment. You&apos;ll need to add your Alchemy API key and
                   Gas Policy ID.{" "}
                   <ExternalLink
-                    href="#"
+                    href="https://accountkit.alchemy.com/react/customization/theme"
                     className="font-semibold text-blue-600"
                   >
-                    Fully customize CSS here.
+                    Fully customize styling here.
                   </ExternalLink>
                 </p>
               )}
