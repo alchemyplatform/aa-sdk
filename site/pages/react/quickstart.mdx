@@ -38,7 +38,7 @@ Check out what you can build using our [Demo App](https://demo.alchemy.com/).
 
 ### 1. Create a new NextJS app using our template
 
-For a simple end-to-end example, we will spin up a new NextJS app using the ui components template.
+For a simple end-to-end example, we will spin up a new NextJS app using our template.
 
 :::code-group
 
@@ -56,16 +56,16 @@ npx create-next-app account-kit-app -e https://github.com/avarobinson/account-ki
 
 <Snippet />
 
-…and paste the API key into `config.ts` where you see `your_api_key`
+…and paste the API key into `config.ts` where you see `ALCHEMY_API_KEY` in the alchemy `transport`
 
 ```ts [config.ts]
 // ...other stuff in the file
 export const config = createConfig(
   {
-    transport: alchemy({ apiKey: "your_api_key" }), // TODO: add your Alchemy API key - setup your app and embedded account config in the alchemy dashboard (https://dashboard.alchemy.com/accounts) - if you don't want to leak api keys, you can proxy to a backend and set the rpcUrl instead here
+    transport: alchemy({ apiKey: "ALCHEMY_API_KEY" }), // TODO: add your Alchemy API key - https://dashboard.alchemy.com/accounts
     chain: sepolia,
-    ssr: true, // defers hydration of the account state to the client after the initial mount solving any inconsistencies between server and client state (read more here: https://accountkit.alchemy.com/react/ssr)
-    storage: cookieStorage, // persist the account state using cookies (read more here: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state)
+    ssr: true, // more about ssr: https://accountkit.alchemy.com/react/ssr
+    storage: cookieStorage, // more about persisting state with cookies: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state
     enablePopupOauth: true, // must be set to "true" if you plan on using popup rather than redirect in the social login flow
   },
   uiConfig

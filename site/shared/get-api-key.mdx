@@ -1,34 +1,52 @@
-1.  Get your API key by **creating a new app** in your [Alchemy Dashboard](https://dashboard.alchemy.com/apps)
+1.  Get your **API key** by creating a new app in your [Alchemy Dashboard](https://dashboard.alchemy.com/apps)
     :::warning
     Make sure **Ethereum Sepolia** is enabled (new apps are multi-chain and will have this enabled by default)
     :::
-2.  Create a **new account config** in your [Alchemy Accounts Manager Dashboard](https://dashboard.alchemy.com/accounts)
+2.  Create a **new account config** in your [Account Kit Dashboard](https://dashboard.alchemy.com/accounts)
 
     1.  Apply the config to your app from step 1
+
         <img
-          src="/images/apply-config-to-app.png"
+          src="/images/getting-started/apply-config-to-app.png"
           alt="apply your the config to the app from the first step"
           style={{ width: "50%" }}
         />
-    2.  Use [http://localhost:3000](https://localhost:3000/) as the “Redirect URL” for testing (\*\*\*make sure to set http NOT https for local testing)
 
-            <img
+    2.  Enable authentication methods you want to support.
 
-        src="/images/redirect-url.png"
-        alt="alchemy create new embedded account config highlighting where to set localhost"
-        style={{ width: "50%" }}
-        />
+        <br />
+        **Email auth**
 
-    3.  Determine the authentication methods you want to support. 1. If you are using email auth, you can optionally stylize ✨ the email with your brand color and logo! 2. If you want to enable social login, toggle which auth providers you want to support, optionally enter your own Oauth credentials or use our defaults, and use [http://localhost:3000](https://localhost:3000/) as a whitelisted origin for testing.
+        If you want to use email auth, toggle on email.
+
+        - Use [http://localhost:3000](https://localhost:3000/)
+          as the “Redirect URL” for testing (Note **http** not https for local testing)
+        - Optionally stylize ✨ the email with your brand color and logo!
+
         <img
-          src="/images/configure-social.png"
-          alt="alchemy create new embedded account config highlighting where to configure social login"
+          src="/images/getting-started/email-auth-setup.png"
+          alt="configure email auth"
           style={{ width: "50%" }}
         />
 
-3.  Copy the **API Key** found at the end of the URL (you don't need the whole link for this demo)
+        <br />
+        **Social auth**
+
+        If you want to enable social login, toggle which auth providers
+        you want to support.
+
+        - Add [http://localhost:3000](https://localhost:3000/) as a "whitelisted origin" for testing.
+        - Optionally enter your own Oauth credentials or use our defaults.
+
+          <img
+            src="/images/getting-started/social-auth-setup.png"
+            alt="configure social auth"
+            style={{ width: "50%" }}
+          />
+
+3.  Create config and copy the **API Key**
     <img
-      src="/images/copy-api-key.png"
+      src="/images/getting-started/get-api-key.png"
       alt="how to copy the api key"
       style={{ width: "50%" }}
     />
