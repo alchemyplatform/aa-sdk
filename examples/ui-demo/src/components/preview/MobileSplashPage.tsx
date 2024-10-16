@@ -17,7 +17,7 @@ export function MobileSplashPage() {
     <div className="flex flex-col flex-1 pb-5 h-auto max-h-[calc(100svh-100px)] box-content p-4 pt-[78px]">
       {/* Header Text */}
       <>
-        <h3 className="text-[36px] min-[430px]:text-[46px] sm:text-[56px] sm:leading-[60px] text-center font-semibold tracking-tight text-fg-primary">
+        <h3 className="text-[36px] min-[430px]:text-[46px] sm:text-[56px] sm:leading-[60px] text-center font-semibold tracking-tight">
           Web2 UX,{" "}
           <span
             className="whitespace-nowrap"
@@ -32,7 +32,7 @@ export function MobileSplashPage() {
             onchain
           </span>
         </h3>
-        <p className="text-base text-fg-secondary font-normal tracking-tight text-center mt-3">
+        <p className="text-base font-normal tracking-tight text-center text-[#475569]">
           Zero-friction onboarding, one-click transactions
         </p>
       </>

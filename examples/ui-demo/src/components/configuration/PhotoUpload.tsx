@@ -7,7 +7,10 @@ const sidebarButton = `self-start border rounded-lg py-2 px-[10px] gap-2 flex it
 
 export function PhotoUploads({ mode }: { mode: "dark" | "light" }) {
   const { logo, setLogo } = useConfigStore(({ ui, setLogo }) => {
-    return { logo: ui[mode === "dark" ? "logoDark" : "logoLight"], setLogo };
+    return {
+      logo: ui[mode === "dark" ? "logoDark" : "logoLight"],
+      setLogo,
+    };
   });
 
   const onUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +39,7 @@ export function PhotoUploads({ mode }: { mode: "dark" | "light" }) {
       ) : (
         <FileUploadInput className={sidebarButton} onChange={onUpload}>
           <PhotoIcon />
-          Upload
+          <span className="text-sm">Upload</span>
         </FileUploadInput>
       )}
     </>
