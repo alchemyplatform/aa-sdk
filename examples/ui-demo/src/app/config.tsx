@@ -68,34 +68,35 @@ export const DEFAULT_CONFIG: Config = {
 
 export const queryClient = new QueryClient();
 
-export const alchemyConfig = createConfig(
-  {
-    transport: alchemy({ rpcUrl: "/api/rpc" }),
-    chain: arbitrumSepolia,
-    ssr: true,
-    policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
-    storage: cookieStorage,
-    enablePopupOauth: true,
-  },
-  {
-    illustrationStyle: DEFAULT_CONFIG.ui.illustrationStyle,
-    auth: {
-      sections: [
-        [{ type: "email" }],
-        [
-          { type: "passkey" },
-          { type: "social", authProviderId: "google", mode: "popup" },
-          { type: "social", authProviderId: "facebook", mode: "popup" },
-        ],
-      ],
-      addPasskeyOnSignup: DEFAULT_CONFIG.auth.addPasskey,
-      header: (
-        <AuthCardHeader
-          theme={DEFAULT_CONFIG.ui.theme}
-          logoDark={DEFAULT_CONFIG.ui.logoDark}
-          logoLight={DEFAULT_CONFIG.ui.logoLight}
-        />
-      ),
+export const alchemyConfig = () =>
+  createConfig(
+    {
+      transport: alchemy({ rpcUrl: "/api/rpc" }),
+      chain: arbitrumSepolia,
+      ssr: true,
+      policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
+      storage: cookieStorage,
+      enablePopupOauth: true,
     },
-  }
-);
+    {
+      illustrationStyle: DEFAULT_CONFIG.ui.illustrationStyle,
+      auth: {
+        sections: [
+          [{ type: "email" }],
+          [
+            { type: "passkey" },
+            { type: "social", authProviderId: "google", mode: "popup" },
+            { type: "social", authProviderId: "facebook", mode: "popup" },
+          ],
+        ],
+        addPasskeyOnSignup: DEFAULT_CONFIG.auth.addPasskey,
+        header: (
+          <AuthCardHeader
+            theme={DEFAULT_CONFIG.ui.theme}
+            logoDark={DEFAULT_CONFIG.ui.logoDark}
+            logoLight={DEFAULT_CONFIG.ui.logoLight}
+          />
+        ),
+      },
+    }
+  );
