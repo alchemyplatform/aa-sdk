@@ -13,7 +13,7 @@ export function AuthCardWrapper({ className }: { className?: string }) {
     <div
       className={cn(
         "flex flex-col flex-1 overflow-y-auto scrollbar-none relative h-full w-full",
-        theme === "dark" ? "bg-black/70" : "bg-white",
+        theme === "dark" ? "bg-[#4D4D4D]" : "bg-white",
         className
       )}
     >
