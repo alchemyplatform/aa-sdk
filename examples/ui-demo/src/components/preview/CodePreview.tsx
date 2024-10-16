@@ -4,7 +4,10 @@ import { useConfigStore } from "@/state";
 import { links } from "@/utils/links";
 import dedent from "dedent";
 import { Check, Copy } from "lucide-react";
-import { useState } from "react";
+import * as parserTypeScript from "prettier/parser-typescript";
+import * as prettierPluginEstree from "prettier/plugins/estree";
+import * as prettier from "prettier/standalone";
+import { useEffect, useState } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark as syntaxTheme } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { twMerge } from "tailwind-merge";
@@ -50,6 +53,16 @@ export function CodePreview({ className }: { className?: string }) {
 
 function CodeBlock({ title, code }: { title: string; code: string }) {
   const [copied, setCopied] = useState(false);
+  const [formattedCode, setFormattedCode] = useState(code);
+
+  useEffect(() => {
+    prettier
+      .format(code, {
+        parser: "typescript",
+        plugins: [parserTypeScript, prettierPluginEstree],
+      })
+      .then(setFormattedCode);
+  }, [code]);
 
   const onCopy = () => {
     navigator.clipboard.writeText(code);
@@ -79,7 +92,7 @@ function CodeBlock({ title, code }: { title: string; code: string }) {
           borderTopRightRadius: 0,
         }}
       >
-        {code}
+        {formattedCode}
       </SyntaxHighlighter>
     </div>
   );
@@ -117,7 +130,7 @@ function getConfigCode(config: Config) {
     (enabled) => enabled
   );
 
-  return dedent`
+  const code = dedent`
   import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react";
   import { sepolia, alchemy } from "@account-kit/infra";
   import { QueryClient } from "@tanstack/react-query";
@@ -148,4 +161,6 @@ function getConfigCode(config: Config) {
 
   export const queryClient = new QueryClient();
 `;
+
+  return code;
 }

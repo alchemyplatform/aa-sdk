@@ -24,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const initialState = cookieToInitialState(
-    alchemyConfig,
+    alchemyConfig(),
     headers().get("cookie") ?? undefined
   );
 
