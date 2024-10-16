@@ -6,7 +6,12 @@ import { useConfigStore } from "@/state";
 import { useAccount, useLogout, useSigner, useUser } from "@account-kit/react";
 import { useQuery } from "@tanstack/react-query";
 
-export function UserConnectionDetails() {
+type UserConnectionDetailsProps = {
+  deploymentStatus: boolean;
+};
+export function UserConnectionDetails({
+  deploymentStatus,
+}: UserConnectionDetailsProps) {
   const user = useUser();
   const signer = useSigner();
   const { logout } = useLogout();
@@ -14,13 +19,6 @@ export function UserConnectionDetails() {
     ({ ui: { theme, primaryColor } }) => ({ theme, primaryColor })
   );
   const scaAccount = useAccount({ type: "LightAccount" });
-  const { data: deploymentStatus } = useQuery({
-    queryKey: ["deploymentStatus"],
-    queryFn: async () => {
-      const initCode = await scaAccount?.account?.getInitCode();
-      return initCode != null && initCode === "0x";
-    },
-  });
 
   const isEOAUser = user?.type === "eoa";
 
