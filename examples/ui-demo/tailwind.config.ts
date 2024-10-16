@@ -84,7 +84,7 @@ const config = {
         "ui-loading-light": "ui-loading-light 0.8s 0ms ease-out infinite both",
       },
       backgroundImage: {
-        "bg-main": "url('/images/bg-main.svg')",
+        "bg-main": "url('/images/bg-main.png')",
       },
     },
   },

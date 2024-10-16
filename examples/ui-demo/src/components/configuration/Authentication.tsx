@@ -113,18 +113,18 @@ export const Authentication = ({ className }: { className?: string }) => {
             name="Passkeys"
             details={
               <>
-                <div className="flex flex-1 min-w-full flex-row justify-between gap-3 items-center">
-                  <p className="font-normal text-sm text-secondary-foreground">
+                <div className="flex flex-1 min-w-full flex-row justify-between gap-3 lg:items-center">
+                  <p className="hidden lg:block font-normal text-sm text-secondary-foreground">
                     Add passkey after sign up
                   </p>
-                  <ExternalLink
-                    href="https://aa-sdk-site-alpha.vercel.app/react/add-passkey?"
-                    className="underline"
-                  >
+                  <ExternalLink href="https://aa-sdk-site-alpha.vercel.app/react/add-passkey?">
+                    <p className=" block lg:hidden font-normal text-sm text-secondary-foreground underline">
+                      Add passkey after sign up
+                    </p>
                     <ExternalLinkIcon
                       height={16}
                       width={16}
-                      className="text-[#475569]"
+                      className="text-[#475569] hidden lg:block"
                     />
                   </ExternalLink>
                   <Switch

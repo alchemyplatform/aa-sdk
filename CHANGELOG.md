@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.10...v4.0.0) (2024-10-15)
+
+### Bug Fixes
+
+- drop id token and claims from user object for now ([#1070](https://github.com/alchemyplatform/aa-sdk/issues/1070)) ([b45fa9f](https://github.com/alchemyplatform/aa-sdk/commit/b45fa9f844589284f8d46849e0265d04ca1f0b61))
+- include `enablePopupOauth` in code preview in demo ([#1064](https://github.com/alchemyplatform/aa-sdk/issues/1064)) ([8e9f98a](https://github.com/alchemyplatform/aa-sdk/commit/8e9f98a179844bca0dcee3cdd51e7586a3906e7c))
+- modal was popping up in all auth state changes ([#1074](https://github.com/alchemyplatform/aa-sdk/issues/1074)) ([5c5f195](https://github.com/alchemyplatform/aa-sdk/commit/5c5f1951502b870f92f762e2041f9e00b57b3967))
+- passkey causes stuck loading state ([#1065](https://github.com/alchemyplatform/aa-sdk/issues/1065)) ([984f34c](https://github.com/alchemyplatform/aa-sdk/commit/984f34ce59ae3edc8f51a8f6a1a10199eaf17987))
+- spacing above eoa, tablet sidebar ([#1063](https://github.com/alchemyplatform/aa-sdk/issues/1063)) ([4617706](https://github.com/alchemyplatform/aa-sdk/commit/4617706bc9656904e8bcbb53cc56948a8c0253ef))
+- **ui-demo:** add favicon to ui demo app ([#1069](https://github.com/alchemyplatform/aa-sdk/issues/1069)) ([3f40e26](https://github.com/alchemyplatform/aa-sdk/commit/3f40e26bc8819d5944b56aa3a3bbbf16b1e9e04e))
+- update svg to png ([#1075](https://github.com/alchemyplatform/aa-sdk/issues/1075)) ([c9cc998](https://github.com/alchemyplatform/aa-sdk/commit/c9cc9989ef1c0fcb272bcd5b6d29b2be8178a98a))
+- update z-indexes of wallet connect and our mobile modal ([#1068](https://github.com/alchemyplatform/aa-sdk/issues/1068)) ([e1963b9](https://github.com/alchemyplatform/aa-sdk/commit/e1963b949ad68f047174356160c7e1fe30bf1e2e))
+
 # [4.0.0-beta.10](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.9...v4.0.0-beta.10) (2024-10-15)
 
 ### Bug Fixes

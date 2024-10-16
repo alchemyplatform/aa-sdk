@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.10...v4.0.0) (2024-10-15)
+
+### Bug Fixes
+
+- update z-indexes of wallet connect and our mobile modal ([#1068](https://github.com/alchemyplatform/aa-sdk/issues/1068)) ([e1963b9](https://github.com/alchemyplatform/aa-sdk/commit/e1963b949ad68f047174356160c7e1fe30bf1e2e))
+
 # [4.0.0-beta.10](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.9...v4.0.0-beta.10) (2024-10-15)
 
 ### Bug Fixes
