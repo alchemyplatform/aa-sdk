@@ -10,20 +10,35 @@ import Snippet from "../../shared/get-api-key.mdx";
 
 # React Quickstart
 
-Account Kit is the easiest way to integrate smart accounts in your React App. In this guide, we'll walk you through crafting a delightful sign-up with email and passkey, and then a seamless checkout with gas sponsorship.
-
-For existing EOA (non-smart contract) users, the Account Kit modal also supports logging in with injected wallets!
+<div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start" }}>
+  <div style={{ flex: "1", marginRight: "10px" }}>
+    In this guide, you'll create an embedded wallet including sign up with
+    email, passkey, and social login for smart accounts, connect wallet for
+    existing EOAs, and seamless transactions with gas sponsorship.
+  </div>
+  <div style={{ flex: "0 0 30%" }}>
+    <img
+      src="/images/example-custom-ui-config.png"
+      alt="Alt text"
+      style={{ width: "60%" }}
+    />
+  </div>
+</div>
 
 Below you'll find guides for:
 
-1. Starting fresh with a new NextJS Template
-2. Integrate Account Kit in an existing React Project
+1. [starting fresh](#new-nextjs-project) with a new NextJS template
+2. [integrating](#existing-project) into an existing React project
+
+:::tip
+Check out what you can build using our [Demo App](https://demo.alchemy.com/).
+:::
 
 ## New NextJS project
 
 ### 1. Create a new NextJS app using our template
 
-For a simple end-to-end example, we will spin up a new NextJS app using the ui components template.
+For a simple end-to-end example, we will spin up a new NextJS app using our template.
 
 :::code-group
 
@@ -41,16 +56,16 @@ npx create-next-app account-kit-app -e https://github.com/avarobinson/account-ki
 
 <Snippet />
 
-…and paste the API key into `config.ts` where you see `your_api_key`
+…and paste the API key into `config.ts` where you see `ALCHEMY_API_KEY` in the alchemy `transport`
 
 ```ts [config.ts]
 // ...other stuff in the file
 export const config = createConfig(
   {
-    transport: alchemy({ apiKey: "your_api_key" }), // TODO: add your Alchemy API key - setup your app and embedded account config in the alchemy dashboard (https://dashboard.alchemy.com/accounts) - if you don't want to leak api keys, you can proxy to a backend and set the rpcUrl instead here
+    transport: alchemy({ apiKey: "ALCHEMY_API_KEY" }), // TODO: add your Alchemy API key - https://dashboard.alchemy.com/accounts
     chain: sepolia,
-    ssr: true, // defers hydration of the account state to the client after the initial mount solving any inconsistencies between server and client state (read more here: https://accountkit.alchemy.com/react/ssr)
-    storage: cookieStorage, // persist the account state using cookies (read more here: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state)
+    ssr: true, // more about ssr: https://accountkit.alchemy.com/react/ssr
+    storage: cookieStorage, // more about persisting state with cookies: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state
     enablePopupOauth: true, // must be set to "true" if you plan on using popup rather than redirect in the social login flow
   },
   uiConfig
@@ -141,6 +156,7 @@ The [**demo app**](https://demo.alchemy.com/) provides an interactive sandbox to
 <img
   src="/images/ui-component-demo-app.png"
   alt="Customize styles and auth methods in the demo app"
+  style={{ width: "70%" }}
 />
 
 #### 3a. Customize styling with tailwind
