@@ -10,7 +10,7 @@ export const concepts: SidebarItem = {
   text: "Concepts",
   collapsed: true,
   items: [
-    { text: "Overview", link: "/concepts/overview" },
+    { text: "Intro to Account Kit", link: "/concepts/intro-to-account-kit" },
     {
       text: "Smart Contract Account",
       link: "/concepts/smart-contract-account",
