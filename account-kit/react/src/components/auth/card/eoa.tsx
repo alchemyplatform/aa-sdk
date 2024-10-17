@@ -9,11 +9,13 @@ import { ConnectionError } from "./error/connection-error.js";
 import { EOAWallets } from "./error/types.js";
 import { useConnectEOA } from "../hooks/useConnectEOA.js";
 import { useWalletConnectAuthConfig } from "../hooks/useWalletConnectAuthConfig.js";
+import { useSigner } from "../../../hooks/useSigner.js";
 
 export const EoaConnectCard = () => {
   const { setAuthStep, authStep } = useAuthContext("eoa_connect");
   const { connect } = useConnectEOA();
   const { chain } = useChain();
+  const signer = useSigner();
 
   if (authStep.error) {
     return (
@@ -58,7 +60,11 @@ export const EoaConnectCard = () => {
       error={authStep.error}
       secondaryButton={{
         title: "Cancel",
-        onClick: () => setAuthStep({ type: "initial" }),
+        onClick: async () => {
+          // Ensure to stop all inflight requests
+          await signer?.disconnect();
+          setAuthStep({ type: "initial" });
+        },
       }}
     />
   );
@@ -68,6 +74,7 @@ export const WalletConnectCard = () => {
   const { setAuthStep, authStep } = useAuthContext("wallet_connect");
   const { walletConnectParams } = useWalletConnectAuthConfig();
   const { chain } = useChain();
+  const signer = useSigner();
   const walletConnectConnector = walletConnectParams
     ? walletConnect(walletConnectParams)
     : null;
@@ -115,7 +122,11 @@ export const WalletConnectCard = () => {
       error={authStep.error}
       secondaryButton={{
         title: "Cancel",
-        onClick: () => setAuthStep({ type: "initial" }),
+        onClick: async () => {
+          // Ensure to stop all inflight requests
+          await signer?.disconnect();
+          setAuthStep({ type: "initial" });
+        },
       }}
     />
   );
