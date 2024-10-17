@@ -12,7 +12,7 @@ export const AuthModal = () => {
   return (
     <Dialog isOpen={isOpen} onClose={closeAuthModal}>
       <div
-        className={`modal md:w-[368px] ${
+        className={`akui-modal md:w-[368px] ${
           modalBaseClassName ?? ""
         } overflow-hidden`}
       >
