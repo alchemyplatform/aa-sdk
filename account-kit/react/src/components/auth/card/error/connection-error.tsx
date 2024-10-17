@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { ls } from "../../../../strings.js";
 import { Button } from "../../../button.js";
 import { ConnectionFailed as PasskeyConnectionFailed } from "../../../../icons/connectionFailed.js";
@@ -7,6 +7,7 @@ import { EOAWallets, type ConnectionErrorProps } from "./types.js";
 import { WalletIcon } from "./icons/wallet-icon.js";
 import { OAuthConnectionFailed } from "../../../../icons/oauth.js";
 import { capitalize } from "../../../../utils.js";
+import { useSigner } from "../../../../hooks/useSigner.js";
 
 export const walletTypeConfig = [
   { name: "Coinbase Wallet", key: EOAWallets.COINBASE_WALLET },
@@ -21,6 +22,15 @@ export const ConnectionError = ({
   handleTryAgain,
   handleUseAnotherMethod,
 }: ConnectionErrorProps) => {
+  const signer = useSigner();
+
+  useEffect(() => {
+    // Terminate any inflight authentication on Error...
+    if (signer) {
+      signer.disconnect();
+    }
+  }, [signer]);
+
   const getHeadingText = useMemo(() => {
     const walletName =
       EOAConnector === EOAWallets.WALLET_CONNECT
