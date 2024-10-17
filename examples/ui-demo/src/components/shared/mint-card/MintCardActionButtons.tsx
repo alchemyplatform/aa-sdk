@@ -18,7 +18,7 @@ export function MintCardActionButtons({
     <div {...props} className={cn("md:px-6 xl:px-0", className)}>
       {!nftTransfered ? (
         <button
-          className="btn btn-primary w-full p-2 radius mb-4 xl:mb-4"
+          className="akui-btn akui-btn-primary w-full p-2 radius mb-4 xl:mb-4"
           disabled={disabled}
           onClick={handleCollectNFT}
         >
@@ -28,7 +28,7 @@ export function MintCardActionButtons({
         <div>
           <a
             href={links.dashboard}
-            className="btn btn-primary flex text-center mb-4 p-2 w-full  m-auto"
+            className="akui-btn akui-btn-primary flex text-center mb-4 p-2 w-full  m-auto"
             target="_blank"
             rel="noreferrer"
           >
@@ -38,7 +38,7 @@ export function MintCardActionButtons({
       )}
       <a
         href="https://accountkit.alchemy.com/react/quickstart"
-        className="btn-secondary btn md:bg-transparent md:btn-link md:w-auto font-semibold flex justify-center mb-6 md:mb-0"
+        className="akui-btn-secondary akui-btn md:bg-transparent md:akui-btn-link md:w-auto font-semibold flex justify-center mb-6 md:mb-0"
         target="_blank"
         rel="noreferrer"
       >
