@@ -18,7 +18,7 @@ const BaseInput = ({
 }: BaseProps) => {
   return (
     <label
-      className={`input ${props.disabled ? "input-disabled" : ""} ${
+      className={`akui-input ${props.disabled ? "input-disabled" : ""} ${
         error ? "input-error" : ""
       } ${className ?? ""}`}
     >
@@ -34,11 +34,11 @@ const BaseInput = ({
 export const Input = ({ label, hint, ...props }: Props) => {
   if (label || hint || props.error) {
     return (
-      <label className="form-controls">
-        {label && <span className="form-label">{label}</span>}
+      <label className="akui-form-controls">
+        {label && <span className="akui-form-label">{label}</span>}
         <BaseInput {...props} />
         {(props.error ?? hint) && (
-          <span className="form-hint">{props.error ?? hint}</span>
+          <span className="akui-form-hint">{props.error ?? hint}</span>
         )}
       </label>
     );
