@@ -54,7 +54,7 @@ export function MobileSplashPage() {
         {/* Bottom action buttons */}
         <div className="flex flex-col sm:flex-row">
           <button
-            className="btn btn-primary w-full sm:w-auto mb-2 sm:mb-0 flex-1 m-0 sm:mr-2"
+            className="akui-btn akui-btn-primary w-full sm:w-auto mb-2 sm:mb-0 flex-1 m-0 sm:mr-2"
             onClick={() => {
               openAuthModal();
             }}
@@ -64,7 +64,7 @@ export function MobileSplashPage() {
           <a
             href="https://accountkit.alchemy.com/"
             target="_blank"
-            className="btn btn-secondary w-full sm:w-auto flex-1 m-0 sm:ml-2"
+            className="akui-btn akui-btn-secondary w-full sm:w-auto flex-1 m-0 sm:ml-2"
           >
             View docs
           </a>
