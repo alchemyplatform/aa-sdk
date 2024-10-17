@@ -13,7 +13,7 @@ export function AuthCardWrapper({ className }: { className?: string }) {
     <div
       className={cn(
         "flex flex-col flex-1 overflow-y-auto scrollbar-none relative h-full w-full",
-        theme === "dark" ? "bg-black/70" : "bg-white",
+        theme === "dark" ? "bg-[#4D4D4D]" : "bg-white",
         className
       )}
     >
@@ -48,8 +48,10 @@ const RenderContent = () => {
 
   if (isEOAUser) {
     return (
-      <div className="py-14 mt-16 pt-24 lg:pt-0 h-full lg:h-auto">
-        <EOAPostLogin />
+      <div className="pt-[104px] h-full w-full">
+        <div className="pb-10 pt-5 w-full h-full flex flex-col justify-center items-center">
+          <EOAPostLogin />
+        </div>
       </div>
     );
   }

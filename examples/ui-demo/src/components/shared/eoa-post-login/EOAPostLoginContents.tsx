@@ -8,7 +8,7 @@ export const EOAPostLoginActions = () => {
   const { logout } = useLogout();
   return (
     <div className="flex flex-col items-center justify-center">
-      <p className="text-fg-secondary text-sm text-center">
+      <p className="text-[#475569] sm:text-fg-secondary text-sm text-center mt-4 lg:mt-0">
         <span>Want to experience gasless checkout? </span>
         <br />
         <span>Login with an email instead</span>
