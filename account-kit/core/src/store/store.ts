@@ -70,11 +70,9 @@ export const createAccountKitStore = (
               },
               reviver: (key, value) => {
                 if (key === "chain") {
-                  return (
-                    connections.find(
-                      (c) => c.chain.id === (value as { id: number }).id
-                    )?.chain ?? connections[0].chain
-                  );
+                  return connections.find(
+                    (c) => c.chain.id === (value as { id: number }).id
+                  )?.chain;
                 }
 
                 return storeReviver(key, value);
@@ -82,6 +80,10 @@ export const createAccountKitStore = (
             }),
             merge: (persisted, current) => {
               const persistedState = persisted as StoreState;
+              if (persistedState.chain == null) {
+                return createInitialStoreState(params);
+              }
+
               const connectionsMap = createConnectionsMap(connections);
               if (!connectionsMap.has(persistedState.chain.id)) {
                 return createInitialStoreState(params);
@@ -107,7 +109,7 @@ export const createAccountKitStore = (
             skipHydration: ssr,
             partialize: ({ signer, accounts, ...writeableState }) =>
               writeableState,
-            version: 12,
+            version: 13,
           })
         : () => createInitialStoreState(params)
     )
