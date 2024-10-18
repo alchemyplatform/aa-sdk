@@ -56,7 +56,9 @@ export const Toast = () => {
         >
           <span
             className={`${
-              type === "success" ? "bg-[#16A34A]" : "bg-[#DC2626]"
+              type === "success"
+                ? "bg-demo-surface-success"
+                : "bg-demo-surface-critical"
             } align-middle px-2 py-1 text-[#FFFFFF] text-xs font-semibold rounded mr-2 hidden md:inline`}
           >
             {type === "success" ? "Success" : "Error"}

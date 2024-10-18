@@ -145,7 +145,7 @@ export const Authentication = ({ className }: { className?: string }) => {
       <div className="flex flex-col gap-2 mb-10">
         <p className="font-medium text-secondary-foreground text-sm">Connect</p>
         <AuthMethod
-          icon={<WalletIcon />}
+          icon={<WalletIcon className="stroke-demo-fg-primary" />}
           name="External wallets"
           active={auth.showExternalWallets}
           setActive={setWalletsActive}
