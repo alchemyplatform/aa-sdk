@@ -79,6 +79,7 @@ export const AuthCardContent = ({
       "pick_eoa",
       "wallet_connect",
       "eoa_connect",
+      "oauth_completing",
     ].includes(authStep.type);
   }, [authStep]);
 
@@ -87,6 +88,7 @@ export const AuthCardContent = ({
       case "email_verify":
       case "passkey_verify":
       case "passkey_create":
+      case "oauth_completing":
         signer?.disconnect(); // Terminate any inflight authentication
         didGoBack.current = true;
         setAuthStep({ type: "initial" });
@@ -104,13 +106,16 @@ export const AuthCardContent = ({
   }, [authStep, setAuthStep, signer]);
 
   const onClose = useCallback(() => {
+    // Terminate any inflight authentication
+    signer?.disconnect();
+
     if (authStep.type === "passkey_create") {
       setAuthStep({ type: "complete" });
     } else {
       setAuthStep({ type: "initial" });
     }
     closeAuthModal();
-  }, [authStep.type, closeAuthModal, setAuthStep]);
+  }, [authStep.type, closeAuthModal, setAuthStep, signer]);
 
   useEffect(() => {
     if (authStep.type === "complete") {
