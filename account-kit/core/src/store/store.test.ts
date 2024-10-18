@@ -104,7 +104,7 @@ describe("createConfig tests", () => {
               "status": "INITIALIZING",
             },
           },
-          "version": 12,
+          "version": 13,
         }
       `);
   });
@@ -173,7 +173,7 @@ describe("createConfig tests", () => {
               "status": "INITIALIZING",
             },
           },
-          "version": 12,
+          "version": 13,
         }
       `);
   });
