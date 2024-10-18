@@ -109,7 +109,7 @@ export function NFT({
         >
           View transaction
           <div className="w-4 h-4">
-            <ExternalLinkIcon className="text-fg-secondary" />
+            <ExternalLinkIcon className="stroke-fg-secondary" />
           </div>
         </a>
       )}

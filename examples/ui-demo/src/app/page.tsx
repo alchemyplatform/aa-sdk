@@ -99,7 +99,7 @@ export default function Home() {
                 </div>
               </div>
               {showCode && (
-                <p className="text-sm text-[#475569] max-w-[85%]">
+                <p className="text-sm text-demo-fg-secondary max-w-[85%]">
                   To get started, simply paste the below code into your
                   environment. You&apos;ll need to add your Alchemy API key and
                   Gas Policy ID.{" "}

@@ -98,7 +98,7 @@ export const Authentication = ({ className }: { className?: string }) => {
                   <ExternalLinkIcon
                     height={16}
                     width={16}
-                    className="text-[#475569]"
+                    className="stroke-demo-fg-secondary"
                   />
                 </ExternalLink>
               </div>
@@ -124,7 +124,7 @@ export const Authentication = ({ className }: { className?: string }) => {
                     <ExternalLinkIcon
                       height={16}
                       width={16}
-                      className="text-[#475569] hidden lg:block"
+                      className="stroke-demo-fg-secondary hidden lg:block"
                     />
                   </ExternalLink>
                   <Switch
