@@ -119,7 +119,7 @@ export function NFT({
       >
         How it works{" "}
         <ChevronDown
-          className={cn(`w-5 h-5 px-1`, {
+          className={cn(`w-5 h-5 px-1 stroke-fg-primary`, {
             "rotate-180": mobileTrayOpen,
           })}
         />

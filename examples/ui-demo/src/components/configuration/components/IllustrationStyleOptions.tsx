@@ -101,8 +101,10 @@ const IllustrationStyleSelectMenu = () => {
         </span>
         <div className="ml-1 w-[20px] h-[20px] flex items-center justify-center">
           <ChevronDown
-            stroke={primaryColor[theme]}
-            className={cn("transition", menuOpen && "rotate-180")}
+            className={cn(
+              "stroke-demo-fg-primary transition",
+              menuOpen && "rotate-180"
+            )}
           />
         </div>
       </SelectMenuTrigger>
