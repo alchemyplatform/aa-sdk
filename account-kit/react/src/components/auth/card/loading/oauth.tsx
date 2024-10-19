@@ -10,14 +10,17 @@ export const CompletingOAuth = () => {
   const { isConnected } = useSignerStatus();
   const { setAuthStep, authStep } = useAuthContext("oauth_completing");
   const { authenticate } = useOAuthVerify({ config: authStep.config });
+  const oauthWasCancelled = authStep.error?.name === "OauthCancelledError";
 
   useEffect(() => {
     if (isConnected) {
       setAuthStep({ type: "complete" });
+    } else if (oauthWasCancelled) {
+      setAuthStep({ type: "initial" });
     }
-  }, [isConnected, setAuthStep]);
+  }, [isConnected, oauthWasCancelled, setAuthStep]);
 
-  if (authStep.error) {
+  if (authStep.error && !oauthWasCancelled) {
     return (
       <ConnectionError
         connectionType="oauth"
