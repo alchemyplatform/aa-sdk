@@ -245,8 +245,16 @@ export class SessionManager {
 
     // sync local state if persisted state has changed from another tab
     window.addEventListener("focus", () => {
+      const oldSession = this.store.getState().session;
       this.store.persist.rehydrate();
-      this.initialize();
+      const newSession = this.store.getState().session;
+      if (
+        oldSession?.user.orgId !== newSession?.user.orgId ||
+        oldSession?.user.userId !== newSession?.user.userId
+      ) {
+        // Initialize if the user has changed.
+        this.initialize();
+      }
     });
   };
 
