@@ -3,6 +3,8 @@ title: Getting started with authentication
 description: Setting up your React application to use Account Kit authentication
 ---
 
+import Snippet from "../../shared/get-api-key.mdx";
+
 # Getting started with authentication
 
 Account Kit makes it really easy to authenticate your users using a number of different authentication methods. If you followed the [quickstart](/react/quickstart), then your app is already setup to authenticate users and you can skip this guide!
@@ -16,29 +18,7 @@ We'll show you two different ways to authenticate users:
 
 If you haven't followed the [quickstart guide](/react/quickstart), make sure to set up the following first:
 
-1.  Create a config in the dashboard
-    Go to the [accounts page of the dashboard](https://dashboard.alchemy.com/accounts). From here you can create a new config or use an existing one.
-
-    1.  To enable email authentication, in the Redirect URL field add the link that the user will be redirected to when they click the magic link in the email.
-
-              <img
-
-        src="/images/redirect-url.png"
-        alt="alchemy create new embedded account config highlighting where to set localhost"
-        />
-
-    2.  To enable social authentication, toggle the respective authentication methods you want to enable. Add the link that your dapp will be running on in the Apply whitelisted origin field. You may also include your own Client ID and Client Secret.
-
-    <img
-      src="/images/configure-social.png"
-      alt="alchemy create new embedded account config highlighting where to configure social login"
-    />
-
-2.  Include config API key in your dapp
-
-Copy the API Key from your account config
-
-<img src="/images/copy-api-key.png" alt="how to copy the api key" />
+<Snippet />
 
 ...and paste the API key into your app's `config.ts`
 
@@ -46,10 +26,10 @@ Copy the API Key from your account config
 // ...other stuff in the file
 export const config = createConfig(
   {
-    transport: alchemy({ apiKey: "your_api_key" }), // TODO: add your Alchemy API key - setup your app and embedded account config in the alchemy dashboard (https://dashboard.alchemy.com/accounts) - if you don't want to leak api keys, you can proxy to a backend and set the rpcUrl instead here
+    transport: alchemy({ apiKey: "ALCHEMY_API_KEY" }), // TODO: add your Alchemy API key - https://dashboard.alchemy.com/accounts
     chain: sepolia,
-    ssr: true, // defers hydration of the account state to the client after the initial mount solving any inconsistencies between server and client state (read more here: https://accountkit.alchemy.com/react/ssr)
-    storage: cookieStorage, // persist the account state using cookies (read more here: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state)
+    ssr: true, // more about ssr: https://accountkit.alchemy.com/react/ssr
+    storage: cookieStorage, // more about persisting state with cookies: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state
     enablePopupOauth: true, // must be set to "true" if you plan on using popup rather than redirect in the social login flow
   },
   uiConfig
@@ -61,5 +41,5 @@ export const config = createConfig(
 
 Now you can setup your application's logic and UI to handle authentication! You'll be able to integrate authentication in one of two ways:
 
-1. [Using our UI components](/react/ui-components) to handle the entire authentication flow.
-2. [Using our React hooks](/react/react-hooks) to build your own custom UI.
+1. [With our UI components](/react/ui-components) to handle the entire authentication flow.
+2. [With our React hooks](/react/react-hooks) to build your own custom UI.
