@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0...v4.0.1) (2024-10-19)
+
+### Bug Fixes
+
+- issue causing recursive depth exception in react ([#1088](https://github.com/alchemyplatform/aa-sdk/issues/1088)) ([7b61fd6](https://github.com/alchemyplatform/aa-sdk/commit/7b61fd664daa256578c092e8feef6e4b1f25931d))
+
 # [4.0.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.10...v4.0.0) (2024-10-15)
 
 ### Bug Fixes
