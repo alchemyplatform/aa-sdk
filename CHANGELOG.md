@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0...v4.0.1) (2024-10-19)
+
+### Bug Fixes
+
+- add passkey link ([#1076](https://github.com/alchemyplatform/aa-sdk/issues/1076)) ([86f9d0c](https://github.com/alchemyplatform/aa-sdk/commit/86f9d0cfe43b292d4e1b085dadf39eaf2235fe80))
+- don't re-initialize unless the user has changed ([#1095](https://github.com/alchemyplatform/aa-sdk/issues/1095)) ([c7768a8](https://github.com/alchemyplatform/aa-sdk/commit/c7768a831b2c9f8e07d36ba940ad81199e4f617c))
+- issue causing recursive depth exception in react ([#1088](https://github.com/alchemyplatform/aa-sdk/issues/1088)) ([7b61fd6](https://github.com/alchemyplatform/aa-sdk/commit/7b61fd664daa256578c092e8feef6e4b1f25931d))
+- select does not use theme token for bg ([#1085](https://github.com/alchemyplatform/aa-sdk/issues/1085)) ([aaeb288](https://github.com/alchemyplatform/aa-sdk/commit/aaeb2883eafaacbb663a2d8ec994b1e197ae5ace))
+- update EOA post login spacing to prevent hidden content ([#1084](https://github.com/alchemyplatform/aa-sdk/issues/1084)) ([51dfdbc](https://github.com/alchemyplatform/aa-sdk/commit/51dfdbc526320d3805462bdb292349032fd5b173))
+- updating css link to theme ([#1079](https://github.com/alchemyplatform/aa-sdk/issues/1079)) ([1e67471](https://github.com/alchemyplatform/aa-sdk/commit/1e674715a9b45c0decd659243cdb4a662bb88a9d))
+
+### Features
+
+- fix deployment status display states ([#1080](https://github.com/alchemyplatform/aa-sdk/issues/1080)) ([4603afa](https://github.com/alchemyplatform/aa-sdk/commit/4603afa8f7e050eaacb20d8faefce46423ceb6dc))
+
 # [4.0.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.10...v4.0.0) (2024-10-15)
 
 ### Bug Fixes
