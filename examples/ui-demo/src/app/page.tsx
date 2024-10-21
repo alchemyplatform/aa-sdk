@@ -84,7 +84,7 @@ export default function Home() {
                 <div className="flex gap-2 items-center">
                   <div
                     className={cn(
-                      "px-2 py-1 h-5 rounded text-xs font-semibold hidden lg:block",
+                      "px-2 py-1 h-5 rounded text-xs font-semibold hidden lg:block lg:leading-none",
                       showCode
                         ? "bg-[#F3F3FF] text-[#8B5CF6]"
                         : "bg-[#EFF4F9] text-[#374151]"
