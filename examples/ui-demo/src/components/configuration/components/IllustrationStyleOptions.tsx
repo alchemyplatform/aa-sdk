@@ -40,7 +40,7 @@ export function IllustrationStyleOptions() {
               "text-fg-accent-brand hover:opacity-80",
               "flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
               illustrationStyle === value
-                ? "bg-[#EFF4F9] font-semibold"
+                ? "bg-demo-surface-secondary font-semibold"
                 : "border-gray-300"
             )}
             onClick={() => setIllustrationStyle(value)}
@@ -101,8 +101,10 @@ const IllustrationStyleSelectMenu = () => {
         </span>
         <div className="ml-1 w-[20px] h-[20px] flex items-center justify-center">
           <ChevronDown
-            stroke={primaryColor[theme]}
-            className={cn("transition", menuOpen && "rotate-180")}
+            className={cn(
+              "stroke-demo-fg-primary transition",
+              menuOpen && "rotate-180"
+            )}
           />
         </div>
       </SelectMenuTrigger>
@@ -114,7 +116,9 @@ const IllustrationStyleSelectMenu = () => {
               value={option}
               className={cn(
                 "px-4 py-3 hover:bg-[rgba(239,244,249,0.4)] transition-colors ease-out outline-none text-sm",
-                selected === option ? "font-medium bg-[#EFF4F9]" : "font-normal"
+                selected === option
+                  ? "font-medium bg-demo-surface-secondary"
+                  : "font-normal"
               )}
             >
               {getIllustrationStyleValue(option)}

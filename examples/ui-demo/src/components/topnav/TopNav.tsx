@@ -5,7 +5,7 @@ import { links } from "@/utils/links";
 
 export function TopNav() {
   return (
-    <div className="fixed sm:sticky left-0 top-0 right-0 flex justify-center py-5 bg-white sm:bg-[rgba(255,255,255,0.5)] shadow-sm z-10">
+    <div className="fixed sm:sticky left-0 top-0 right-0 flex justify-center py-5 bg-demo-bg sm:bg-demo-nav-bg shadow-sm z-10">
       <div className="flex items-center justify-between h-full w-full max-w-[1440px] mx-6 md:mx-7 lg:mx-10">
         <div className="flex justify-center items-center gap-2">
           {/* This link is used to refresh the page when the user clicks the logo */}
@@ -27,7 +27,7 @@ export function TopNav() {
             <GithubLogo className="hidden md:flex" />
           </ExternalLink>
           <ExternalLink href={links.dashboard}>
-            <button className="h-10 hidden md:flex justify-center items-center py-[12px] text-sm font-semibold px-3 bg-[#020617] text-[white] radius-[8px] text-nowrap">
+            <button className="h-10 hidden md:flex justify-center items-center py-[12px] text-sm font-semibold px-3 bg-demo-fg-primary text-demo-bg radius-[8px] text-nowrap">
               Get API key
             </button>
           </ExternalLink>

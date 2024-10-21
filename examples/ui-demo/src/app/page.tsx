@@ -64,7 +64,7 @@ export default function Home() {
                 theme === "dark"
                   ? showCode
                     ? "bg-white"
-                    : "bg-[#4D4D4D]"
+                    : "bg-demo-bg-darkmode"
                   : "bg-white"
               )}
             >
@@ -87,7 +87,7 @@ export default function Home() {
                       "px-2 py-1 h-5 rounded text-xs font-semibold hidden lg:block lg:leading-none",
                       showCode
                         ? "bg-[#F3F3FF] text-[#8B5CF6]"
-                        : "bg-[#EFF4F9] text-[#374151]"
+                        : "bg-demo-surface-secondary text-[#374151]"
                     )}
                   >
                     Code preview
@@ -99,7 +99,7 @@ export default function Home() {
                 </div>
               </div>
               {showCode && (
-                <p className="text-sm text-[#475569] max-w-[85%]">
+                <p className="text-sm text-demo-fg-secondary max-w-[85%]">
                   To get started, simply paste the below code into your
                   environment. You&apos;ll need to add your Alchemy API key and
                   Gas Policy ID.{" "}

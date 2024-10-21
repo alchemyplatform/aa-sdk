@@ -90,7 +90,7 @@ export const Authentication = ({ className }: { className?: string }) => {
                 />
                 <ExternalLink
                   href="https://accountkit.alchemy.com/signer/authentication/auth0"
-                  className=" btn border border-border active:bg-[#EFF4F9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-none"
+                  className=" btn border border-border active:bg-demo-surface-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-none"
                 >
                   <p className="hidden lg:block font-normal text-sm text-secondary-foreground">
                     Custom
@@ -98,7 +98,7 @@ export const Authentication = ({ className }: { className?: string }) => {
                   <ExternalLinkIcon
                     height={16}
                     width={16}
-                    className="text-[#475569]"
+                    className="stroke-demo-fg-secondary"
                   />
                 </ExternalLink>
               </div>
@@ -124,7 +124,7 @@ export const Authentication = ({ className }: { className?: string }) => {
                     <ExternalLinkIcon
                       height={16}
                       width={16}
-                      className="text-[#475569] hidden lg:block"
+                      className="stroke-demo-fg-secondary hidden lg:block"
                     />
                   </ExternalLink>
                   <Switch
@@ -145,7 +145,7 @@ export const Authentication = ({ className }: { className?: string }) => {
       <div className="flex flex-col gap-2 mb-10">
         <p className="font-medium text-secondary-foreground text-sm">Connect</p>
         <AuthMethod
-          icon={<WalletIcon />}
+          icon={<WalletIcon className="stroke-demo-fg-primary" />}
           name="External wallets"
           active={auth.showExternalWallets}
           setActive={setWalletsActive}
@@ -232,7 +232,9 @@ const OAuthMethod = ({
       onClick={onClick}
       className={cn(
         "flex grow-0 shrink-0 border border-[#64748B]  rounded-lg p-1 h-10 w-10 justify-center items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-        active ? "border-[#64748B] bg-[#EFF4F9]" : "border-gray-300"
+        active
+          ? "border-[#64748B] bg-demo-surface-secondary"
+          : "border-gray-300"
       )}
     >
       {icon}
