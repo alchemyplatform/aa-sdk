@@ -87,7 +87,7 @@ export default function Home() {
                       "px-2 py-1 h-5 rounded text-xs font-semibold hidden lg:block",
                       showCode
                         ? "bg-[#F3F3FF] text-[#8B5CF6]"
-                        : "bg-[#EFF4F9] text-[#374151]"
+                        : "bg-demo-surface-secondary text-[#374151]"
                     )}
                   >
                     Code preview

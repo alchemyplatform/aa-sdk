@@ -39,7 +39,7 @@ export function CornerRadiusOptions() {
           <button
             className={`h-9 flex items-center justify-center flex-1 basis-0 hover:opacity-80 border border-[#64748B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
               option.id === borderRadius
-                ? " bg-[#EFF4F9] font-semibold"
+                ? " bg-demo-surface-secondary font-semibold"
                 : "border-gray-300"
             }`}
             style={{
@@ -115,7 +115,7 @@ function CornerRadiusSelectMenu() {
               className={cn(
                 "px-4 py-3 hover:bg-[rgba(239,244,249,0.4)] transition-colors ease-out outline-none text-sm",
                 selected === option.id
-                  ? "font-medium bg-[#EFF4F9]"
+                  ? "font-medium bg-demo-surface-secondary"
                   : "font-normal"
               )}
             >
