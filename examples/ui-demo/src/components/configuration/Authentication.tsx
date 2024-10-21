@@ -90,7 +90,7 @@ export const Authentication = ({ className }: { className?: string }) => {
                 />
                 <ExternalLink
                   href="https://accountkit.alchemy.com/signer/authentication/auth0"
-                  className=" btn border border-border active:bg-[#EFF4F9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-none"
+                  className="akui-btn border border-border active:bg-[#EFF4F9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-none"
                 >
                   <p className="hidden lg:block font-normal text-sm text-secondary-foreground">
                     Custom

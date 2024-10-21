@@ -1,19 +1,20 @@
 import type { ComponentDef } from "../types";
 
 export const buttonComponents: ComponentDef = {
-  ".btn-group": {
+  ".akui-btn-group": {
     "@apply flex flex-row gap-3 flex-wrap": {},
-    " > .btn:first-child": {
+    " > .akui-btn:first-child": {
       "@apply grow shrink-0 min-w-full": {},
     },
-    " > .btn:not(:first-child)": {
+    " > .akui-btn:not(:first-child)": {
       "@apply flex-1": {},
     },
-    "&:has(> :nth-child(4)) > .btn:not(:first-child) > .btn-content": {
-      display: "none",
-    },
+    "&:has(> :nth-child(4)) > .akui-btn:not(:first-child) > .akui-btn-content":
+      {
+        display: "none",
+      },
   },
-  ".btn": {
+  ".akui-btn": {
     "@apply max-h-[40px]": {},
     "@apply p-3 inline-flex h-10 font-semibold text-base sm:text-sm": {},
     "@apply gap-2": {},
@@ -30,17 +31,17 @@ export const buttonComponents: ComponentDef = {
       {},
     "@apply active:shadow-none": {},
   },
-  ".btn-primary": {
+  ".akui-btn-primary": {
     "@apply bg-btn-primary text-fg-invert": {},
   },
-  ".btn-secondary": {
+  ".akui-btn-secondary": {
     "@apply bg-btn-secondary text-fg-primary": {},
   },
-  ".btn-auth": {
+  ".akui-btn-auth": {
     "@apply bg-btn-auth text-fg-primary": {},
     "@apply static-border": {},
   },
-  ".btn-link": {
+  ".akui-btn-link": {
     // clear out the default button styles
     "@apply appearance-none active:appearance-none hover:appearance-none": {},
     "@apply p-0 h-[unset]": {},

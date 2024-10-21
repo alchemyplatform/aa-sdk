@@ -41,15 +41,6 @@
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
-
-@layer base {
   /**
    * For the color picker, see: https://uiwjs.github.io/react-color
    */
