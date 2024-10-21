@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { CheckIcon } from "@/components/icons/check-icon";
+import { CheckCircleFilledIcon } from "@/components/icons/check-circle-filled";
 import { HTMLAttributes } from "react";
 type DeploymentStatusIndicatorProps = {
   isDeployed: boolean;
@@ -29,7 +29,9 @@ const DeploymentStatusIndicator = ({
       )}
       {...props}
     >
-      {displayCheckIcon && <CheckIcon />}
+      {displayCheckIcon && (
+        <CheckCircleFilledIcon className="fill-demo-surface-success" />
+      )}
     </div>
   );
 };

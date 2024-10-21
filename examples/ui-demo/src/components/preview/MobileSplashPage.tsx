@@ -32,7 +32,7 @@ export function MobileSplashPage() {
             onchain
           </span>
         </h3>
-        <p className="text-base font-normal tracking-tight text-center text-[#475569]">
+        <p className="text-base font-normal tracking-tight text-center text-demo-fg-secondary">
           Zero-friction onboarding, one-click transactions
         </p>
       </>

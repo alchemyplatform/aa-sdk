@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0...v4.0.1) (2024-10-19)
+
+### Bug Fixes
+
+- don't re-initialize unless the user has changed ([#1095](https://github.com/alchemyplatform/aa-sdk/issues/1095)) ([c7768a8](https://github.com/alchemyplatform/aa-sdk/commit/c7768a831b2c9f8e07d36ba940ad81199e4f617c))
+
 # [4.0.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.10...v4.0.0) (2024-10-15)
 
 ### Bug Fixes
