@@ -64,7 +64,7 @@ export default function Home() {
                 theme === "dark"
                   ? showCode
                     ? "bg-white"
-                    : "bg-[#4D4D4D]"
+                    : "bg-demo-bg-darkmode"
                   : "bg-white"
               )}
             >

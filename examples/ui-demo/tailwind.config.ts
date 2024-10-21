@@ -57,6 +57,7 @@ const config = {
         "demo-bg-toggle-active": "#020617",
         "demo-bg-toggle-inactive": "#94A3B8",
         "demo-bg": "#FFFFFF",
+        "demo-text-invert": "#FBFDFF",
         "demo-nav-bg": "rgba(255, 255, 255, 0.5)",
         "demo-fg-primary": "#020617",
         "demo-fg-secondary": "#475569",

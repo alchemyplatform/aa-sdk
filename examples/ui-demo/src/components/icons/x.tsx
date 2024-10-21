@@ -1,7 +1,4 @@
-export const XIcon = ({
-  stroke = "currentColor",
-  ...props
-}: React.SVGProps<SVGSVGElement>) => (
+export const XIcon = ({ ...props }: React.SVGProps<SVGSVGElement>) => (
   <svg
     width="16"
     height="16"
@@ -14,7 +11,6 @@ export const XIcon = ({
       <path
         id="Icon"
         d="M12.6668 3.33301L3.3335 12.6663M12.6668 12.6663L3.3335 3.33301"
-        stroke={stroke}
         strokeWidth="2"
         strokeLinecap="round"
       />

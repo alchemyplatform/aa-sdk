@@ -38,7 +38,7 @@ export const EOAPostLoginContents = () => {
   return (
     <div className="flex flex-col">
       <div className="flex flex-col items-center justify-center">
-        <CheckIcon className="w-[48px] h-[48px] fill-demo-surface-success" />
+        <CheckIcon className="w-[48px] h-[48px] stroke-demo-surface-success" />
         <h3 className="text-[32px] tracking-tight font-semibold mt-5 text-fg-primary whitespace-nowrap">{`You're connected!`}</h3>
       </div>
       <div className="flex flex-col mt-6 mx-3.5 sm:mx-0">
