@@ -17,7 +17,7 @@ export function AuthCardWrapper({ className }: { className?: string }) {
         className
       )}
     >
-      <div className="flex flex-1 justify-center items-center px-6">
+      <div className="flex flex-1 justify-center items-center px-6 mt-24 pb-6">
         <RenderContent />
       </div>
     </div>
@@ -48,17 +48,11 @@ const RenderContent = () => {
 
   if (isEOAUser) {
     return (
-      <div className="pt-[104px] h-full w-full">
-        <div className="pb-10 pt-5 w-full h-full flex flex-col justify-center items-center">
-          <EOAPostLogin />
-        </div>
+      <div className="h-full w-full pb-10 pt-5 flex flex-col justify-center items-center">
+        <EOAPostLogin />
       </div>
     );
   }
 
-  return (
-    <div className="py-14 pt-20">
-      <MintCard />
-    </div>
-  );
+  return <MintCard />;
 };
