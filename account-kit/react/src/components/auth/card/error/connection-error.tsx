@@ -26,10 +26,17 @@ export const ConnectionError = ({
 
   useEffect(() => {
     // Terminate any inflight authentication on Error...
+    if (
+      connectionType === "wallet" &&
+      EOAConnector === EOAWallets.WALLET_CONNECT
+    ) {
+      clearWalletConnectStore();
+    }
+
     if (signer) {
       signer.disconnect();
     }
-  }, [signer]);
+  }, [signer, connectionType, EOAConnector]);
 
   const getHeadingText = useMemo(() => {
     const walletName =
@@ -95,4 +102,24 @@ export const ConnectionError = ({
       </Button>
     </div>
   );
+};
+
+const clearWalletConnectStore = () => {
+  // Open Wallet Connect Indexed DB
+  const dbOpenRequest = indexedDB.open("WALLET_CONNECT_V2_INDEXED_DB");
+
+  dbOpenRequest.onsuccess = () => {
+    const db = dbOpenRequest.result;
+
+    const txn = db.transaction(["keyvaluestorage"], "readwrite");
+
+    const store = txn.objectStore("keyvaluestorage");
+
+    // Clear Store
+    store.clear();
+  };
+
+  dbOpenRequest.onerror = () => {
+    console.error("Error opening Wallet Connect DB. Cannot clear store.");
+  };
 };
