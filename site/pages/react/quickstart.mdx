@@ -6,7 +6,7 @@ next:
   link: /react/send-user-operations
 ---
 
-import Snippet from "../../shared/get-api-key.mdx";
+import Snippet from "../../shared/setup-config.mdx";
 
 # React Quickstart
 
@@ -34,25 +34,15 @@ Below you'll find guides for:
 Check out what you can build using our [Demo App](https://demo.alchemy.com/).
 :::
 
-## New NextJS project
+## 1. Set up your Account config
 
-### 1. Create a new NextJS app using our template
+For both new and existing projects, you'll create a new Account config to set your authentication methods.
 
-For a simple end-to-end example, we will spin up a new NextJS app using our template.
+<Snippet />
 
-:::code-group
+## New project
 
-```bash [yarn]
-yarn create next-app account-kit-app -e https://github.com/avarobinson/account-kit-quickstart
-```
-
-```bash [npm]
-npx create-next-app account-kit-app -e https://github.com/avarobinson/account-kit-quickstart
-```
-
-:::
-
-### 2. Get your Alchemy API Key
+### 1. Set up your Account Kit config
 
 <Snippet />
 
@@ -72,6 +62,24 @@ export const config = createConfig(
 );
 // ...other stuff in the file
 ```
+
+### 2. Create a new NextJS app using our Account Kit template
+
+For a simple end-to-end example, we will spin up a new NextJS app using our Account Kit template.
+
+:::code-group
+
+```bash [yarn]
+yarn create next-app account-kit-app -e https://github.com/avarobinson/account-kit-quickstart
+```
+
+```bash [npm]
+npx create-next-app account-kit-app -e https://github.com/avarobinson/account-kit-quickstart
+```
+
+:::
+
+### 3. Replace
 
 ### 3. Run the app!
 
