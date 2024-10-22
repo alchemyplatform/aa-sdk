@@ -6,11 +6,12 @@ import { noopLogger } from "./noop.js";
 import { ContextAllowlistPlugin } from "./plugins/contextAllowlist.js";
 import { DevDestinationPlugin } from "./plugins/devDestination.js";
 import type { EventsSchema, InnerLogger, LoggerContext } from "./types";
+import { isClientDevMode } from "./utils.js";
 
 export function createClientLogger<Schema extends EventsSchema = []>(
   context: LoggerContext
 ): InnerLogger<Schema> {
-  const isDev = window.location.hostname.includes("localhost");
+  const isDev = isClientDevMode();
   if (isDev && !WRITE_IN_DEV) {
     // If we don't have a write key, we don't want to log anything
     // This is useful for dev so we don't log dev metrics
