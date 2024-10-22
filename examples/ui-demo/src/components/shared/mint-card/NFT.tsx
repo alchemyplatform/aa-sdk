@@ -109,7 +109,7 @@ export function NFT({
         >
           View transaction
           <div className="w-4 h-4">
-            <ExternalLinkIcon className="text-fg-secondary" />
+            <ExternalLinkIcon className="stroke-fg-secondary" />
           </div>
         </a>
       )}
@@ -117,9 +117,9 @@ export function NFT({
         className="text-fg-secondary text-base flex justify-between items-center w-72 xl:hidden"
         onClick={() => setMobileTrayOpen((prev) => !prev)}
       >
-        How is this working?{" "}
+        How it works{" "}
         <ChevronDown
-          className={cn(`w-5 h-5 px-1`, {
+          className={cn(`w-5 h-5 px-1 stroke-fg-primary`, {
             "rotate-180": mobileTrayOpen,
           })}
         />

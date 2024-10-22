@@ -10,6 +10,7 @@ import type { Hex, TypedDataDefinition } from "viem";
 import { useAccount as wagmi_useAccount } from "wagmi";
 import { useAlchemyAccountContext } from "../context.js";
 import { ClientUndefinedHookError } from "../errors.js";
+import { ReactLogger } from "../metrics.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import type { UseSmartAccountClientResult } from "./useSmartAccountClient.js";
 
@@ -94,8 +95,11 @@ export function useSignTypedData({
   );
 
   return {
-    signTypedData,
-    signTypedDataAsync,
+    signTypedData: ReactLogger.profiled("signTypedData", signTypedData),
+    signTypedDataAsync: ReactLogger.profiled(
+      "signTypedDataAsync",
+      signTypedDataAsync
+    ),
     signedTypedData,
     isSigningTypedData,
     error,

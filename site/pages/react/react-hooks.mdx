@@ -1,0 +1,149 @@
+---
+title: Authentication with our React hooks
+description: How to embed our authentication into your customized UI
+---
+
+# Authentication with React hooks
+
+If you don't want to use our pre-built UI components, you can build your own custom UI using the [`useAuthenticate`](/reference/account-kit/react/hooks/useAuthenticate) hook.
+
+### Email authentication
+
+```tsx twoslash
+import React from "react";
+import {
+  type UseAuthenticateResult,
+  useAuthenticate,
+} from "@account-kit/react";
+
+// This examples uses email authentication
+// you can also use passkeys if the user has one created
+export default function MyLoginPage() {
+  const { authenticate, isPending } = useAuthenticate();
+  const [email, setEmail] = React.useState("");
+
+  return (
+    <div>
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <button onClick={() => authenticate({ type: "email", email })}>
+        Login
+      </button>
+    </div>
+  );
+}
+```
+
+### Social Login
+
+You can allow uers to sign in with an OAuth provider like Google, Facebook, or Auth0. There are two login flows that are possible: redirect and popup. The redirect flow redirects the user to the auth provider's login page, then back to a specified page in your application when done. The popup flow opens the auth provider's login page in a popup window without leaving your application, then updates your application when done. If using popup, you need to set the `enablePopupOauth` field to `true` in the [config](/react/quickstart).
+
+For the authentication methods that Alchemy supports, authenticate by doing the following
+
+```tsx twoslash
+import React from "react";
+import {
+  type UseAuthenticateResult,
+  useAuthenticate,
+} from "@account-kit/react";
+
+// This examples uses social login, specifically Google Sign-In
+export default function MyLoginPage() {
+  const { authenticate, isPending } = useAuthenticate();
+
+  return (
+    <div>
+      <button
+        onClick={() =>
+          authenticate({
+            // redirect login flow
+            type: "oauth",
+            authProviderId: "google",
+            mode: "redirect",
+            redirectUrl: "/", // After logging in, redirect to the index page
+          })
+        }
+      >
+        Login (Redirect)
+      </button>
+      <button
+        onClick={() =>
+          authenticate({
+            // popup login flow
+            type: "oauth",
+            authProviderId: "google",
+            mode: "popup", // remember to set "enablePopupOauth" to "true" in config.ts to enable
+          })
+        }
+      >
+        Login (Popup)
+      </button>
+    </div>
+  );
+}
+```
+
+To use your own auth provider, follow the instructions on how to do so with [Auth0](https://accountkit.alchemy.com/signer/authentication/auth0)
+
+### Passkey auth with email backup
+
+This approach will allow you to login or signup users using a passkey as the primary auth mechanism and register an email as a backup.
+
+:::danger
+It's important that you verify this email to be correct first! Otherwise, if a user loses their passkey, they will not be able to recover their account.
+:::
+
+```tsx twoslash
+import React from "react";
+import {
+  type UseAuthenticateResult,
+  useAuthenticate,
+} from "@account-kit/react";
+
+export default function MyLoginPage() {
+  const { authenticate, isPending } = useAuthenticate();
+  const [email, setEmail] = React.useState("");
+
+  return (
+    <div>
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <button onClick={() => authenticate({ type: "passkey", email })}>
+        Login
+      </button>
+    </div>
+  );
+}
+```
+
+### Existing Passkey
+
+If your user already has a passkey, then you can authenticate with that directly. This is useful if you want to use email as a signup mechanism, but provide easier login methods for your users via passkeys.
+
+```tsx twoslash
+import React from "react";
+import {
+  type UseAuthenticateResult,
+  useAuthenticate,
+} from "@account-kit/react";
+
+export default function MyLoginPage() {
+  const { authenticate } = useAuthenticate();
+
+  return (
+    <div>
+      <button
+        onClick={() => authenticate({ type: "passkey", createNew: false })}
+      >
+        Login
+      </button>
+    </div>
+  );
+}
+```

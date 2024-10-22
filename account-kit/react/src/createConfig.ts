@@ -3,6 +3,7 @@ import {
   type AlchemyAccountsConfig,
   type CreateConfigProps,
 } from "@account-kit/core";
+import { ReactLogger } from "./metrics.js";
 import type { AlchemyAccountsUIConfig } from "./types";
 
 export type AlchemyAccountsConfigWithUI = AlchemyAccountsConfig & {
@@ -54,6 +55,11 @@ export const createConfig = (
   }
 
   const config = createCoreConfig(props);
+
+  ReactLogger.trackEvent({
+    name: "config_created",
+    data: ui == null ? { noUi: true } : ui,
+  });
 
   return {
     ...config,

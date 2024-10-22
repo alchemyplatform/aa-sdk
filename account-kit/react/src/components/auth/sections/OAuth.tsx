@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { AppleIcon, FacebookIcon, GoogleIcon } from "../../../icons/oauth.js";
 import { assertNever } from "../../../utils.js";
 import { Button } from "../../button.js";
@@ -8,7 +9,7 @@ type Props = Extract<AuthType, { type: "social" }>;
 
 // Not used externally
 // eslint-disable-next-line jsdoc/require-jsdoc
-export const OAuth = ({ ...config }: Props) => {
+export const OAuth = memo(({ ...config }: Props) => {
   const { authenticate } = useOAuthVerify({ config });
 
   switch (config.authProviderId) {
@@ -43,4 +44,4 @@ export const OAuth = ({ ...config }: Props) => {
   }
 
   throw Error("unhandled authProviderId passed into auth sections");
-};
+});

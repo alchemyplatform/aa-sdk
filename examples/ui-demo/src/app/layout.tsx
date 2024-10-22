@@ -1,3 +1,8 @@
+import {
+  cookieToInitialConfig,
+  generateClassesForRoot,
+  generateStylesForRoot,
+} from "@/state/store";
 import { cookieToInitialState } from "@account-kit/core";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -19,14 +24,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const initialState = cookieToInitialState(
-    alchemyConfig,
+    alchemyConfig(),
     headers().get("cookie") ?? undefined
   );
 
+  const initialConfig = cookieToInitialConfig(headers().get("cookie"));
+
+  const classes = initialConfig
+    ? generateClassesForRoot(initialConfig)
+    : ["light"];
+  const styles = initialConfig ? generateStylesForRoot(initialConfig) : [];
+
   return (
-    <html lang="en" className="light">
+    <html
+      lang="en"
+      className={classes.join(" ")}
+      style={Object.fromEntries(styles)}
+    >
       <body className={inter.className}>
-        <Providers initialState={initialState}>{children}</Providers>
+        <Providers initialState={initialState} initialConfig={initialConfig}>
+          {children}
+        </Providers>
       </body>
     </html>
   );

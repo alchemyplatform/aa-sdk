@@ -1,15 +1,20 @@
 import { Config, DEFAULT_CONFIG } from "@/app/config";
-import { useConfig } from "@/app/state";
+import { getSectionsForConfig } from "@/app/sections";
+import { useConfigStore } from "@/state";
+import { links } from "@/utils/links";
 import dedent from "dedent";
 import { Check, Copy } from "lucide-react";
-import { useState } from "react";
+import * as parserTypeScript from "prettier/parser-typescript";
+import * as prettierPluginEstree from "prettier/plugins/estree";
+import * as prettier from "prettier/standalone";
+import { useEffect, useState } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark as syntaxTheme } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { twMerge } from "tailwind-merge";
 import ExternalLink from "../shared/ExternalLink";
 
 export function CodePreview({ className }: { className?: string }) {
-  const { config } = useConfig();
+  const config = useConfigStore((state) => state);
   return (
     <div
       className={twMerge(
@@ -17,19 +22,6 @@ export function CodePreview({ className }: { className?: string }) {
         className
       )}
     >
-      <div className="flex flex-col gap-2">
-        <div className="font-semibold text-foreground text-xl">
-          Export configuration
-        </div>
-        <div className="text-sm text-gray-600">
-          To get started, simply paste the below code into your environment.
-          You&apos;ll need to add your Alchemy API key and Gas Policy ID too.
-          Log in to automatically inject the keys into the code below.{" "}
-          <ExternalLink href="#" className="text-blue-600 font-semibold">
-            Fully customize CSS here.
-          </ExternalLink>
-        </div>
-      </div>
       <div className="flex flex-col">
         <div className="mb-2 font-semibold text-secondary">Config</div>
         <p className="mb-4 text-sm text-secondary-foreground">
@@ -50,7 +42,10 @@ export function CodePreview({ className }: { className?: string }) {
           </ExternalLink>
           , then add the below code to your config file.
         </p>
-        <CodeBlock title="tailwind.config.ts" code={getTailwindCode(config)} />
+        <CodeBlock
+          title="tailwind.config.ts"
+          code={getTailwindCode(config.ui)}
+        />
       </div>
     </div>
   );
@@ -58,6 +53,16 @@ export function CodePreview({ className }: { className?: string }) {
 
 function CodeBlock({ title, code }: { title: string; code: string }) {
   const [copied, setCopied] = useState(false);
+  const [formattedCode, setFormattedCode] = useState(code);
+
+  useEffect(() => {
+    prettier
+      .format(code, {
+        parser: "typescript",
+        plugins: [parserTypeScript, prettierPluginEstree],
+      })
+      .then(setFormattedCode);
+  }, [code]);
 
   const onCopy = () => {
     navigator.clipboard.writeText(code);
@@ -87,14 +92,13 @@ function CodeBlock({ title, code }: { title: string; code: string }) {
           borderTopRightRadius: 0,
         }}
       >
-        {code}
+        {formattedCode}
       </SyntaxHighlighter>
     </div>
   );
 }
 
-function getTailwindCode(config: Config) {
-  const { ui } = config;
+function getTailwindCode(ui: Config["ui"]) {
   return dedent`
   import { withAccountKitUi, createColorSet } from "@account-kit/react/tailwind";
 
@@ -121,26 +125,12 @@ function getTailwindCode(config: Config) {
 }
 
 function getConfigCode(config: Config) {
-  const sections = [];
+  const sections = getSectionsForConfig(config, "your-project-id");
+  const socialIsEnabled = Object.values(config.auth.oAuthMethods).some(
+    (enabled) => enabled
+  );
 
-  if (config.auth.showEmail) {
-    sections.push([{ type: "email" }]);
-  }
-
-  if (config.auth.showPasskey) {
-    sections.push([{ type: "passkey" }]);
-  }
-
-  if (config.auth.showExternalWallets) {
-    sections.push([
-      {
-        type: "external_wallets",
-        walletConnect: { projectId: "your-project-id" },
-      },
-    ]);
-  }
-
-  return dedent`
+  const code = dedent`
   import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react";
   import { sepolia, alchemy } from "@account-kit/infra";
   import { QueryClient } from "@tanstack/react-query";
@@ -156,17 +146,21 @@ function getConfigCode(config: Config) {
       ? '\n      header: <img src="path/to/logo.svg" />,'
       : ""
   }
-    },
+    },${config.supportUrl ? `\n    supportUrl: "${config.supportUrl}"` : ""}
   };
 
   export const config = createConfig({
     // if you don't want to leak api keys, you can proxy to a backend and set the rpcUrl instead here
-    // get this from the app config you create at https://dashboard.alchemy.com/accounts
+    // get this from the app config you create at ${links.dashboard}
     transport: alchemy({ apiKey: "your-api-key" }),
     chain: sepolia,
-    ssr: true, // set to false if you're not using server-side rendering
+    ssr: true, // set to false if you're not using server-side rendering${
+      socialIsEnabled ? "\n  enablePopupOauth: true," : ""
+    }
   }, uiConfig);
 
   export const queryClient = new QueryClient();
 `;
+
+  return code;
 }

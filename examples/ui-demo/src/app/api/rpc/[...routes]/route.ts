@@ -6,11 +6,15 @@ export async function POST(
   req: Request,
   { params }: { params: { routes: string[] } }
 ) {
-  const body = await req.json();
+  const body = await req.text();
+
   const headers: Record<string, string> = {
     Authorization: `Bearer ${env.API_KEY}`,
   };
   req.headers.forEach((value, key) => {
+    // don't pass the cookie because it doesn't get used downstream
+    if (key === "cookie") return;
+
     headers[key] = value;
   });
 
@@ -18,9 +22,9 @@ export async function POST(
     method: "POST",
     headers: {
       Authorization: `Bearer ${env.API_KEY}`,
-      ...req.headers,
+      ...headers,
     },
-    body: JSON.stringify(body),
+    body,
   });
 
   if (!res.ok) {

@@ -4,10 +4,14 @@ import {
   hashTypedData,
   keccak256,
   serializeTransaction,
-  type CustomSource,
+  type GetTransactionType,
   type Hex,
+  type IsNarrowable,
   type LocalAccount,
+  type SerializeTransactionFn,
   type SignableMessage,
+  type TransactionSerializable,
+  type TransactionSerialized,
   type TypedData,
   type TypedDataDefinition,
 } from "viem";
@@ -18,6 +22,7 @@ import { createStore } from "zustand/vanilla";
 import type { BaseSignerClient } from "./client/base";
 import type { OauthConfig, OauthParams, User } from "./client/types";
 import { NotAuthenticatedError } from "./errors.js";
+import { SignerLogger } from "./metrics.js";
 import {
   SessionManager,
   type SessionManagerParams,
@@ -210,24 +215,80 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * @param {AuthParams} params - undefined if passkey login, otherwise an object with email and bundle to resolve
    * @returns {Promise<User>} the user that was authenticated
    */
-  authenticate: (params: AuthParams) => Promise<User> = async (params) => {
+  authenticate: (params: AuthParams) => Promise<User> = SignerLogger.profiled(
+    "BaseAlchemySigner.authenticate",
+    async (params) => {
+      const { type } = params;
+      const result = (() => {
+        switch (type) {
+          case "email":
+            return this.authenticateWithEmail(params);
+          case "passkey":
+            return this.authenticateWithPasskey(params);
+          case "oauth":
+            return this.authenticateWithOauth(params);
+          case "oauthReturn":
+            return this.handleOauthReturn(params);
+          default:
+            assertNever(type, `Unknown auth type: ${type}`);
+        }
+      })();
+
+      this.trackAuthenticateType(params);
+
+      return result.catch((error) => {
+        /**
+         * 2 things going on here:
+         * 1. for oauth flows we expect the status to remain in authenticating
+         * 2. we do the ternary, because if we explicitly pass in `undefined` for the status, zustand will set the value of status to `undefined`.
+         * However, if we omit it, then it will not override the current value of status.
+         */
+        this.store.setState({
+          error: toErrorInfo(error),
+          ...(type === "oauthReturn" || type === "oauth"
+            ? {}
+            : { status: AlchemySignerStatus.DISCONNECTED }),
+        });
+        throw error;
+      });
+    }
+  );
+
+  private trackAuthenticateType = (params: AuthParams) => {
     const { type } = params;
-    try {
-      switch (type) {
-        case "email":
-          return await this.authenticateWithEmail(params);
-        case "passkey":
-          return await this.authenticateWithPasskey(params);
-        case "oauth":
-          return await this.authenticateWithOauth(params);
-        case "oauthReturn":
-          return await this.handleOauthReturn(params);
-        default:
-          assertNever(type, `Unknown auth type: ${type}`);
+    switch (type) {
+      case "email": {
+        // we just want to track the start of email auth
+        if ("bundle" in params) return;
+        SignerLogger.trackEvent({
+          name: "signer_authnticate",
+          data: { authType: "email" },
+        });
+        return;
       }
-    } catch (error) {
-      this.store.setState({ error: toErrorInfo(error) });
-      throw error;
+      case "passkey": {
+        const isAnon = !("email" in params) && params.createNew == null;
+        SignerLogger.trackEvent({
+          name: "signer_authnticate",
+          data: {
+            authType: isAnon ? "passkey_anon" : "passkey_email",
+          },
+        });
+        return;
+      }
+      case "oauth":
+        SignerLogger.trackEvent({
+          name: "signer_authnticate",
+          data: {
+            authType: "oauth",
+            provider: params.authProviderId,
+          },
+        });
+        break;
+      case "oauthReturn":
+        break;
+      default:
+        assertNever(type, `Unknown auth type: ${type}`);
     }
   };
 
@@ -299,11 +360,14 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    *
    * @returns {Promise<string>} A promise that resolves to the address of the current user.
    */
-  getAddress: () => Promise<`0x${string}`> = async () => {
-    const { address } = await this.inner.whoami();
+  getAddress: () => Promise<`0x${string}`> = SignerLogger.profiled(
+    "BaseAlchemySigner.getAddress",
+    async () => {
+      const { address } = await this.inner.whoami();
 
-    return address;
-  };
+      return address;
+    }
+  );
 
   /**
    * Signs a raw message after hashing it.
@@ -329,13 +393,18 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * @param {string} msg the message to be hashed and then signed
    * @returns {Promise<string>} a promise that resolves to the signed message
    */
-  signMessage: (msg: SignableMessage) => Promise<`0x${string}`> = async (
-    msg
-  ) => {
-    const messageHash = hashMessage(msg);
+  signMessage: (msg: SignableMessage) => Promise<`0x${string}`> =
+    SignerLogger.profiled("BaseAlchemySigner.signMessage", async (msg) => {
+      const messageHash = hashMessage(msg);
 
-    return this.inner.signRawMessage(messageHash);
-  };
+      const result = await this.inner.signRawMessage(messageHash);
+
+      SignerLogger.trackEvent({
+        name: "signer_sign_message",
+      });
+
+      return result;
+    });
 
   /**
    * Signs a typed message by first hashing it and then signing the hashed message using the `signRawMessage` method.
@@ -371,11 +440,14 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     TPrimaryType extends keyof TTypedData | "EIP712Domain" = keyof TTypedData
   >(
     params: TypedDataDefinition<TTypedData, TPrimaryType>
-  ) => Promise<Hex> = async (params) => {
-    const messageHash = hashTypedData(params);
+  ) => Promise<Hex> = SignerLogger.profiled(
+    "BaseAlchemySigner.signTypedData",
+    async (params) => {
+      const messageHash = hashTypedData(params);
 
-    return this.inner.signRawMessage(messageHash);
-  };
+      return this.inner.signRawMessage(messageHash);
+    }
+  );
 
   /**
    * Serializes a transaction, signs it with a raw message, and then returns the serialized transaction with the signature.
@@ -407,21 +479,41 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * @param {() => Hex} [args.serializer] an optional serializer function. If not provided, the default `serializeTransaction` function will be used
    * @returns {Promise<string>} a promise that resolves to the serialized transaction with the signature
    */
-  signTransaction: CustomSource["signTransaction"] = async (tx, args) => {
-    const serializeFn = args?.serializer ?? serializeTransaction;
-    const serializedTx = serializeFn(tx);
-    const signatureHex = await this.inner.signRawMessage(
-      keccak256(serializedTx)
-    );
+  signTransaction: <
+    serializer extends SerializeTransactionFn<TransactionSerializable> = SerializeTransactionFn<TransactionSerializable>,
+    transaction extends Parameters<serializer>[0] = Parameters<serializer>[0]
+  >(
+    transaction: transaction,
+    options?:
+      | {
+          serializer?: serializer | undefined;
+        }
+      | undefined
+  ) => Promise<
+    IsNarrowable<
+      TransactionSerialized<GetTransactionType<transaction>>,
+      Hex
+    > extends true
+      ? TransactionSerialized<GetTransactionType<transaction>>
+      : Hex
+  > = SignerLogger.profiled(
+    "BaseAlchemySigner.signTransaction",
+    async (tx, args) => {
+      const serializeFn = args?.serializer ?? serializeTransaction;
+      const serializedTx = serializeFn(tx);
+      const signatureHex = await this.inner.signRawMessage(
+        keccak256(serializedTx)
+      );
 
-    const signature = {
-      r: takeBytes(signatureHex, { count: 32 }),
-      s: takeBytes(signatureHex, { count: 32, offset: 32 }),
-      v: BigInt(takeBytes(signatureHex, { count: 1, offset: 64 })),
-    };
+      const signature = {
+        r: takeBytes(signatureHex, { count: 32 }),
+        s: takeBytes(signatureHex, { count: 32, offset: 32 }),
+        v: BigInt(takeBytes(signatureHex, { count: 1, offset: 64 })),
+      };
 
-    return serializeFn(tx, signature);
-  };
+      return serializeFn(tx, signature);
+    }
+  );
 
   /**
    * Unauthenticated call to look up a user's organizationId by email
@@ -447,19 +539,18 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * @param {string} email the email to lookup
    * @returns {Promise<{orgId: string}>} the organization id for the user if they exist
    */
-  getUser: (email: string) => Promise<{ orgId: string } | null> = async (
-    email
-  ) => {
-    const result = await this.inner.lookupUserByEmail(email);
+  getUser: (email: string) => Promise<{ orgId: string } | null> =
+    SignerLogger.profiled("BaseAlchemySigner.getUser", async (email) => {
+      const result = await this.inner.lookupUserByEmail(email);
 
-    if (result.orgId == null) {
-      return null;
-    }
+      if (result.orgId == null) {
+        return null;
+      }
 
-    return {
-      orgId: result.orgId,
-    };
-  };
+      return {
+        orgId: result.orgId,
+      };
+    });
 
   /**
    * Adds a passkey to the user's account
@@ -486,9 +577,9 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * @returns {Promise<string[]>} an array of the authenticator ids added to the user
    */
   addPasskey: (params?: CredentialCreationOptions) => Promise<string[]> =
-    async (params) => {
+    SignerLogger.profiled("BaseAlchemySigner.addPasskey", async (params) => {
       return this.inner.addPasskey(params ?? {});
-    };
+    });
 
   /**
    * Used to export the wallet for a given user

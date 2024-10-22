@@ -1,13 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { AuthCard } from "./index.jsx";
-import { useUiConfig } from "../../../hooks/useUiConfig.js";
-import type { AuthType } from "../types.js";
-import { useEffect } from "react";
 import { http, HttpResponse } from "msw";
+import { useEffect } from "react";
+import { useUiConfig } from "../../../hooks/useUiConfig.js";
 import { useAuthContext } from "../context.js";
+import type { AuthType } from "../types.js";
+import { AuthCard } from "./index.jsx";
 
 const PasskeyStory = (props: any) => {
-  const { updateConfig } = useUiConfig();
+  const { updateConfig } = useUiConfig(({ updateConfig }) => ({
+    updateConfig,
+  }));
+
   let sections: AuthType[][] = [[{ type: "passkey" as const }]];
 
   const ui = {

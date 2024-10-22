@@ -1,16 +1,11 @@
 import type { NoUndefined } from "@aa-sdk/core";
-import {
-  alchemy,
-  createAlchemyPublicRpcClient,
-  type AlchemyTransportConfig,
-} from "@account-kit/infra";
+import { alchemy, createAlchemyPublicRpcClient } from "@account-kit/infra";
 import {
   AlchemySignerStatus,
   AlchemyWebSigner,
   type ErrorInfo,
 } from "@account-kit/signer";
 import type { Chain } from "viem";
-import { deepEqual } from "wagmi";
 import {
   createJSONStorage,
   persist,
@@ -51,50 +46,46 @@ export const createAccountKitStore = (
               replacer: (key, value) => {
                 if (key === "bundlerClient") return undefined;
 
+                if (key === "user") {
+                  const user = value as StoreState["user"];
+                  if (!user) return undefined;
+
+                  return {
+                    address: user.address,
+                    orgId: user.orgId,
+                    userId: user.userId,
+                    email: user.email,
+                  } as StoreState["user"];
+                }
+
+                if (key === "chain") {
+                  return { id: (value as Chain).id };
+                }
+
+                if (key === "smartAccountClients") {
+                  return undefined;
+                }
+
                 return storeReplacer(key, value);
               },
               reviver: (key, value) => {
+                if (key === "chain") {
+                  return connections.find(
+                    (c) => c.chain.id === (value as { id: number }).id
+                  )?.chain;
+                }
+
                 return storeReviver(key, value);
               },
             }),
             merge: (persisted, current) => {
               const persistedState = persisted as StoreState;
-              const persistedConnections = Array.from(
-                persistedState.connections.values()
-              );
+              if (persistedState.chain == null) {
+                return createInitialStoreState(params);
+              }
 
-              const connectionsMatch = () =>
-                connections.every((c) => {
-                  const persistedConnection = persistedState.connections.get(
-                    c.chain.id
-                  );
-                  if (!persistedConnection) return false;
-
-                  return Array.from(Object.entries(c)).every(([key, value]) => {
-                    const pConn = persistedConnection as Record<string, any>;
-
-                    if (key === "chain") {
-                      return (value as Chain).id === pConn.chain.id;
-                    }
-
-                    if (key === "transport") {
-                      return deepEqual(
-                        value as AlchemyTransportConfig,
-                        pConn.transport
-                      );
-                    }
-                    return pConn[key] === value;
-                  });
-                });
-
-              if (
-                // all chains in the persisted state should be in the passed config
-                !persistedConnections.every((c) =>
-                  connections.some((x) => x.chain.id === c.chain.id)
-                ) ||
-                !connectionsMatch()
-              ) {
-                // reset the state if there's difference between the passed in config and
+              const connectionsMap = createConnectionsMap(connections);
+              if (!connectionsMap.has(persistedState.chain.id)) {
                 return createInitialStoreState(params);
               }
 
@@ -102,6 +93,10 @@ export const createAccountKitStore = (
                 // this is the default merge behavior
                 ...current,
                 ...persistedState,
+                smartAccountClients: createEmptySmartAccountClientState(
+                  connections.map((c) => c.chain)
+                ),
+                connections: connectionsMap,
                 bundlerClient: createAlchemyPublicRpcClient({
                   chain: persistedState.chain,
                   transport: alchemy(
@@ -114,7 +109,7 @@ export const createAccountKitStore = (
             skipHydration: ssr,
             partialize: ({ signer, accounts, ...writeableState }) =>
               writeableState,
-            version: 9,
+            version: 13,
           })
         : () => createInitialStoreState(params)
     )
@@ -129,10 +124,7 @@ const createInitialStoreState = (
   params: CreateAccountKitStoreParams
 ): StoreState => {
   const { connections, chain, client, sessionConfig } = params;
-  const connectionMap = connections.reduce((acc, connection) => {
-    acc.set(connection.chain.id, connection);
-    return acc;
-  }, new Map<number, Connection>());
+  const connectionMap = createConnectionsMap(connections);
 
   if (!connectionMap.has(chain.id)) {
     throw new Error("Chain not found in connections");
@@ -166,6 +158,13 @@ const createInitialStoreState = (
     ...baseState,
     accounts,
   };
+};
+
+const createConnectionsMap = (connections: Connection[]) => {
+  return connections.reduce((acc, connection) => {
+    acc.set(connection.chain.id, connection);
+    return acc;
+  }, new Map<number, Connection>());
 };
 
 /**

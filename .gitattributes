@@ -1,3 +1,4 @@
 .site/**/*/reference/**/*.md linguist-generated
 site/**/*/reference/**/*.mdx linguist-generated
 site/sidebar/**/*.ts linguist-generated
+account-kit/smart-contracts/src/msca/plugins/**/plugin.ts linguist-generated

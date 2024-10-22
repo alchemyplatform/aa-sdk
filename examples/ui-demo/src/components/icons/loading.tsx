@@ -1,10 +1,6 @@
-import { useConfig } from "@/app/state";
+import { useTheme } from "@/state/useTheme";
 export const LoadingIcon = () => {
-  const {
-    config: {
-      ui: { theme },
-    },
-  } = useConfig();
+  const theme = useTheme();
   const animationClass =
     theme === "dark" ? "animate-ui-loading-dark" : "animate-ui-loading-light";
 

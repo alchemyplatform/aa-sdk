@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0...v4.0.1) (2024-10-19)
+
+### Bug Fixes
+
+- issue causing recursive depth exception in react ([#1088](https://github.com/alchemyplatform/aa-sdk/issues/1088)) ([7b61fd6](https://github.com/alchemyplatform/aa-sdk/commit/7b61fd664daa256578c092e8feef6e4b1f25931d))
+
+# [4.0.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.10...v4.0.0) (2024-10-15)
+
+### Bug Fixes
+
+- drop id token and claims from user object for now ([#1070](https://github.com/alchemyplatform/aa-sdk/issues/1070)) ([b45fa9f](https://github.com/alchemyplatform/aa-sdk/commit/b45fa9f844589284f8d46849e0265d04ca1f0b61))
+
+# [4.0.0-beta.10](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.9...v4.0.0-beta.10) (2024-10-15)
+
+### Bug Fixes
+
+- **core:** hydrate wasn't properly handling logged out users ([#1046](https://github.com/alchemyplatform/aa-sdk/issues/1046)) ([987cf88](https://github.com/alchemyplatform/aa-sdk/commit/987cf88bc4cba351663fe3b04dcc12cc39ae93b4))
+
+### Features
+
+- add google auth components and demo support (extension of linnas pr) ([#1032](https://github.com/alchemyplatform/aa-sdk/issues/1032)) ([cb91914](https://github.com/alchemyplatform/aa-sdk/commit/cb91914c8da0a7c3e7519bf98bc55d2848062e9f)), closes [#1024](https://github.com/alchemyplatform/aa-sdk/issues/1024) [#1035](https://github.com/alchemyplatform/aa-sdk/issues/1035) [#1036](https://github.com/alchemyplatform/aa-sdk/issues/1036)
+- add logger schemas to infra, react, core ([65fac7d](https://github.com/alchemyplatform/aa-sdk/commit/65fac7dbf2c63232199607b801db49ee96294b41))
+- **demo:** persist the demo config across refreshes ([#1040](https://github.com/alchemyplatform/aa-sdk/issues/1040)) ([8ce8c36](https://github.com/alchemyplatform/aa-sdk/commit/8ce8c360676d7c2496ef86017f5c24b2d8671341))
+- log events from core package ([eab0ecd](https://github.com/alchemyplatform/aa-sdk/commit/eab0ecd7079b303bef15decca13f8ffac6eccea3))
+
 # [4.0.0-beta.9](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.8...v4.0.0-beta.9) (2024-10-09)
 
 ### Bug Fixes

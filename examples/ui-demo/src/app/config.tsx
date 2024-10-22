@@ -2,6 +2,7 @@ import { AuthCardHeader } from "@/components/shared/AuthCardHeader";
 import { alchemy, arbitrumSepolia } from "@account-kit/infra";
 import { cookieStorage, createConfig } from "@account-kit/react";
 import { AccountKitTheme } from "@account-kit/react/tailwind";
+import { type KnownAuthProvider } from "@account-kit/signer";
 import { QueryClient } from "@tanstack/react-query";
 
 export type Config = {
@@ -11,11 +12,7 @@ export type Config = {
     showPasskey: boolean;
     addPasskey: boolean;
     showOAuth: boolean;
-    oAuthMethods: {
-      google: boolean;
-      facebook: boolean;
-      auth0: boolean;
-    };
+    oAuthMethods: Record<KnownAuthProvider | "auth0", boolean>;
   };
   ui: {
     theme: "light" | "dark";
@@ -44,14 +41,15 @@ export type Config = {
 export const DEFAULT_CONFIG: Config = {
   auth: {
     showEmail: true,
-    showExternalWallets: false,
+    showExternalWallets: true,
     showPasskey: true,
-    addPasskey: true,
+    addPasskey: false,
     showOAuth: true,
     oAuthMethods: {
       google: true,
       facebook: true,
       auth0: false,
+      apple: false,
       // TO DO: extend for BYO auth provider
     },
   },
@@ -70,38 +68,35 @@ export const DEFAULT_CONFIG: Config = {
 
 export const queryClient = new QueryClient();
 
-export const alchemyConfig = createConfig(
-  {
-    transport: alchemy({ rpcUrl: "/api/rpc" }),
-    chain: arbitrumSepolia,
-    ssr: true,
-    policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
-    storage: cookieStorage,
-    enablePopupOauth: true,
-  },
-  {
-    illustrationStyle: DEFAULT_CONFIG.ui.illustrationStyle,
-    auth: {
-      sections: [
-        [{ type: "email" as const }],
-        [
-          { type: "passkey" as const },
-          { type: "social" as const, authProviderId: "google", mode: "popup" },
-          {
-            type: "social" as const,
-            authProviderId: "facebook",
-            mode: "popup",
-          },
-        ],
-      ],
-      addPasskeyOnSignup: DEFAULT_CONFIG.auth.addPasskey,
-      header: (
-        <AuthCardHeader
-          theme={DEFAULT_CONFIG.ui.theme}
-          logoDark={DEFAULT_CONFIG.ui.logoDark}
-          logoLight={DEFAULT_CONFIG.ui.logoLight}
-        />
-      ),
+export const alchemyConfig = () =>
+  createConfig(
+    {
+      transport: alchemy({ rpcUrl: "/api/rpc" }),
+      chain: arbitrumSepolia,
+      ssr: true,
+      policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
+      storage: cookieStorage,
+      enablePopupOauth: true,
     },
-  }
-);
+    {
+      illustrationStyle: DEFAULT_CONFIG.ui.illustrationStyle,
+      auth: {
+        sections: [
+          [{ type: "email" }],
+          [
+            { type: "passkey" },
+            { type: "social", authProviderId: "google", mode: "popup" },
+            { type: "social", authProviderId: "facebook", mode: "popup" },
+          ],
+        ],
+        addPasskeyOnSignup: DEFAULT_CONFIG.auth.addPasskey,
+        header: (
+          <AuthCardHeader
+            theme={DEFAULT_CONFIG.ui.theme}
+            logoDark={DEFAULT_CONFIG.ui.logoDark}
+            logoLight={DEFAULT_CONFIG.ui.logoLight}
+          />
+        ),
+      },
+    }
+  );

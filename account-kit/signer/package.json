@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/signer",
-  "version": "4.0.0-beta.9",
+  "version": "4.0.1",
   "description": "Core interfaces and clients for interfacing with the Alchemy Signer API",
   "author": "Alchemy",
   "license": "MIT",
@@ -36,8 +36,7 @@
     "docs:gen": "npx ak-docgen generate --in ./src/index.ts --out ../../site/pages/reference/account-kit/signer",
     "clean": "rm -rf ./dist",
     "test": "vitest --passWithNoTests",
-    "test:run": "vitest run --passWithNoTests",
-    "test:run-e2e": "vitest run --config vitest.config.e2e.ts --passWithNoTests"
+    "test:run": "vitest run --passWithNoTests"
   },
   "devDependencies": {
     "@tanstack/react-query": "^5.28.9",
@@ -49,7 +48,8 @@
     "vitest": "^2.0.4"
   },
   "dependencies": {
-    "@aa-sdk/core": "^4.0.0-beta.9",
+    "@aa-sdk/core": "^4.0.1",
+    "@account-kit/logging": "^4.0.1",
     "@turnkey/http": "^2.6.2",
     "@turnkey/iframe-stamper": "^1.0.0",
     "@turnkey/viem": "^0.4.8",

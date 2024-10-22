@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0...v4.0.1) (2024-10-19)
+
+**Note:** Version bump only for package @account-kit/react
+
+# [4.0.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.10...v4.0.0) (2024-10-15)
+
+### Bug Fixes
+
+- update z-indexes of wallet connect and our mobile modal ([#1068](https://github.com/alchemyplatform/aa-sdk/issues/1068)) ([e1963b9](https://github.com/alchemyplatform/aa-sdk/commit/e1963b949ad68f047174356160c7e1fe30bf1e2e))
+
+# [4.0.0-beta.10](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.9...v4.0.0-beta.10) (2024-10-15)
+
+### Bug Fixes
+
+- change fontsize on desktop, border radius, border color ([#1053](https://github.com/alchemyplatform/aa-sdk/issues/1053)) ([3270553](https://github.com/alchemyplatform/aa-sdk/commit/3270553e27fa781bcea3dfb82fa293c05a9385d6))
+- design qa feedback ([#1033](https://github.com/alchemyplatform/aa-sdk/issues/1033)) ([c00381a](https://github.com/alchemyplatform/aa-sdk/commit/c00381a7d80a53ec235ad1cdf0b8d0cb2b4fb827))
+- drawer animation, zoom on input, clip path error ([#1042](https://github.com/alchemyplatform/aa-sdk/issues/1042)) ([5571849](https://github.com/alchemyplatform/aa-sdk/commit/5571849c8d932fa25b1ef101bf035c9a5ff98924))
+- fix animation up bug ([#1048](https://github.com/alchemyplatform/aa-sdk/issues/1048)) ([d51bbfd](https://github.com/alchemyplatform/aa-sdk/commit/d51bbfd49079409285568c4d3739418d4a30601f))
+- open the auth modal upon email return ([#1059](https://github.com/alchemyplatform/aa-sdk/issues/1059)) ([bf0915f](https://github.com/alchemyplatform/aa-sdk/commit/bf0915ff42d1f65dbcdef7e6f4a03fec9f02f63d))
+- update default auth ([#1049](https://github.com/alchemyplatform/aa-sdk/issues/1049)) ([81019a2](https://github.com/alchemyplatform/aa-sdk/commit/81019a2fe7e22b81baf12e114e7418f4dbd4255a))
+
+### Features
+
+- add cancel buttons to auth loading states ([#1029](https://github.com/alchemyplatform/aa-sdk/issues/1029)) ([368629f](https://github.com/alchemyplatform/aa-sdk/commit/368629f2abf4c0f13d1eec52242a43c24395b1d9))
+- add google auth components and demo support (extension of linnas pr) ([#1032](https://github.com/alchemyplatform/aa-sdk/issues/1032)) ([cb91914](https://github.com/alchemyplatform/aa-sdk/commit/cb91914c8da0a7c3e7519bf98bc55d2848062e9f)), closes [#1024](https://github.com/alchemyplatform/aa-sdk/issues/1024) [#1035](https://github.com/alchemyplatform/aa-sdk/issues/1035) [#1036](https://github.com/alchemyplatform/aa-sdk/issues/1036)
+- add logger schemas to infra, react, core ([65fac7d](https://github.com/alchemyplatform/aa-sdk/commit/65fac7dbf2c63232199607b801db49ee96294b41))
+- add react events logging ([7a7f230](https://github.com/alchemyplatform/aa-sdk/commit/7a7f2309ab664fc0f3602e85516de2d3f309bf84))
+- enable facebook oauth in ui-demo ([#1041](https://github.com/alchemyplatform/aa-sdk/issues/1041)) ([38bb51a](https://github.com/alchemyplatform/aa-sdk/commit/38bb51a98d15e1342dea02a48386c44768599c23)), closes [#1024](https://github.com/alchemyplatform/aa-sdk/issues/1024) [#1035](https://github.com/alchemyplatform/aa-sdk/issues/1035) [#1036](https://github.com/alchemyplatform/aa-sdk/issues/1036)
+
 # [4.0.0-beta.9](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.8...v4.0.0-beta.9) (2024-10-09)
 
 ### Bug Fixes

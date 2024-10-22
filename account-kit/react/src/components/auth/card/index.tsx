@@ -1,16 +1,21 @@
 "use client";
 
-import { useCallback, useLayoutEffect, useMemo, useRef } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  type PropsWithChildren,
+} from "react";
+import { useAuthConfig } from "../../../hooks/internal/useAuthConfig.js";
 import { useAuthModal } from "../../../hooks/useAuthModal.js";
 import { useElementHeight } from "../../../hooks/useElementHeight.js";
 import { useSigner } from "../../../hooks/useSigner.js";
 import { useSignerStatus } from "../../../hooks/useSignerStatus.js";
-import { useUiConfig } from "../../../hooks/useUiConfig.js";
-import { IS_SIGNUP_QP } from "../../constants.js";
 import { Navigation } from "../../navigation.js";
 import { useAuthContext } from "../context.js";
-import { Step } from "./steps.js";
 import { Footer } from "../sections/Footer.js";
+import { Step } from "./steps.js";
 
 export type AuthCardProps = {
   className?: string;
@@ -51,20 +56,20 @@ export const AuthCardContent = ({
   className?: string;
   showClose?: boolean;
 }) => {
-  const { closeAuthModal } = useAuthModal();
+  const { openAuthModal, closeAuthModal } = useAuthModal();
   const { status, isAuthenticating } = useSignerStatus();
   const { authStep, setAuthStep } = useAuthContext();
 
   const signer = useSigner();
 
-  const contentRef = useRef<HTMLDivElement>(null);
-  const { height } = useElementHeight(contentRef);
-
   const didGoBack = useRef(false);
 
-  const {
-    auth: { onAuthSuccess },
-  } = useUiConfig();
+  const { onAuthSuccess, addPasskeyOnSignup } = useAuthConfig(
+    ({ onAuthSuccess, addPasskeyOnSignup }) => ({
+      onAuthSuccess,
+      addPasskeyOnSignup,
+    })
+  );
 
   const canGoBack = useMemo(() => {
     return [
@@ -74,6 +79,7 @@ export const AuthCardContent = ({
       "pick_eoa",
       "wallet_connect",
       "eoa_connect",
+      "oauth_completing",
     ].includes(authStep.type);
   }, [authStep]);
 
@@ -82,6 +88,7 @@ export const AuthCardContent = ({
       case "email_verify":
       case "passkey_verify":
       case "passkey_create":
+      case "oauth_completing":
         signer?.disconnect(); // Terminate any inflight authentication
         didGoBack.current = true;
         setAuthStep({ type: "initial" });
@@ -99,13 +106,18 @@ export const AuthCardContent = ({
   }, [authStep, setAuthStep, signer]);
 
   const onClose = useCallback(() => {
+    // Terminate any inflight authentication
+    signer?.disconnect();
+
     if (authStep.type === "passkey_create") {
       setAuthStep({ type: "complete" });
+    } else {
+      setAuthStep({ type: "initial" });
     }
     closeAuthModal();
-  }, [authStep.type, closeAuthModal, setAuthStep]);
+  }, [authStep.type, closeAuthModal, setAuthStep, signer]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (authStep.type === "complete") {
       didGoBack.current = false;
       closeAuthModal();
@@ -113,12 +125,9 @@ export const AuthCardContent = ({
     } else if (authStep.type !== "initial") {
       didGoBack.current = false;
     } else if (!didGoBack.current && isAuthenticating) {
-      // Auth step must be initial
-      const urlParams = new URLSearchParams(window.location.search);
-
       setAuthStep({
         type: "email_completing",
-        createPasskeyAfter: urlParams.get(IS_SIGNUP_QP) === "true",
+        createPasskeyAfter: addPasskeyOnSignup,
       });
     }
   }, [
@@ -127,34 +136,49 @@ export const AuthCardContent = ({
     isAuthenticating,
     setAuthStep,
     onAuthSuccess,
+    openAuthModal,
     closeAuthModal,
+    addPasskeyOnSignup,
   ]);
 
   return (
-    <div className="relative">
+    <div className="flex flex-col relative">
       {/* Wrapper container that sizes its height dynamically */}
-      <div
-        className="transition-all duration-300 ease-out overflow-y-hidden radius-2"
-        style={{ height: height ? `${height}px` : "auto" }}
-      >
-        <div className="z-[1]" ref={contentRef}>
-          <div
-            className={`relative flex flex-col items-center gap-4 text-fg-primary px-6 py-4 ${
-              className ?? ""
-            }`}
-          >
-            {(canGoBack || showClose) && (
-              <Navigation
-                showClose={showClose}
-                showBack={canGoBack}
-                onBack={onBack}
-                onClose={onClose}
-              />
-            )}
-            <Step />
-          </div>
-          <Footer authStep={authStep} />
+      <DynamicHeight>
+        <div
+          className={`relative flex flex-col items-center gap-4 text-fg-primary px-6 py-4 ${
+            className ?? ""
+          }`}
+        >
+          {(canGoBack || showClose) && (
+            <Navigation
+              showClose={showClose}
+              showBack={canGoBack}
+              onBack={onBack}
+              onClose={onClose}
+            />
+          )}
+          <Step />
         </div>
+        <Footer authStep={authStep} />
+      </DynamicHeight>
+    </div>
+  );
+};
+
+const DynamicHeight = ({ children }: PropsWithChildren) => {
+  const contentRef = useRef<HTMLDivElement>(null);
+  const { height } = useElementHeight(contentRef);
+
+  return (
+    <div
+      className="transition-[flex-basis] duration-200 ease-out overflow-y-hidden radius-2"
+      style={{
+        flexBasis: height ? `${height}px` : undefined,
+      }}
+    >
+      <div className="z-[1]" ref={contentRef}>
+        {children}
       </div>
     </div>
   );

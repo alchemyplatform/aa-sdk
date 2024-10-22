@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0...v4.0.1) (2024-10-19)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.0.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.10...v4.0.0) (2024-10-15)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.0.0-beta.10](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.9...v4.0.0-beta.10) (2024-10-15)
+
+### Features
+
+- add google auth components and demo support (extension of linnas pr) ([#1032](https://github.com/alchemyplatform/aa-sdk/issues/1032)) ([cb91914](https://github.com/alchemyplatform/aa-sdk/commit/cb91914c8da0a7c3e7519bf98bc55d2848062e9f)), closes [#1024](https://github.com/alchemyplatform/aa-sdk/issues/1024) [#1035](https://github.com/alchemyplatform/aa-sdk/issues/1035) [#1036](https://github.com/alchemyplatform/aa-sdk/issues/1036)
+- add logger schemas to infra, react, core ([65fac7d](https://github.com/alchemyplatform/aa-sdk/commit/65fac7dbf2c63232199607b801db49ee96294b41))
+- log infra events ([4ec1b05](https://github.com/alchemyplatform/aa-sdk/commit/4ec1b0569db7908e67e8da6cc286b20e19d28997))
+
 # [4.0.0-beta.9](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.8...v4.0.0-beta.9) (2024-10-09)
 
 **Note:** Version bump only for package @account-kit/infra

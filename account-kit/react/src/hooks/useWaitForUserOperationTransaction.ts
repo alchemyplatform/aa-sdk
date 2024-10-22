@@ -5,6 +5,7 @@ import { useMutation, type UseMutateFunction } from "@tanstack/react-query";
 import type { Hash } from "viem";
 import { useAlchemyAccountContext } from "../context.js";
 import { ClientUndefinedHookError } from "../errors.js";
+import { ReactLogger } from "../metrics.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import { type UseSmartAccountClientResult } from "./useSmartAccountClient.js";
 
@@ -79,7 +80,10 @@ export function useWaitForUserOperationTransaction({
   );
 
   return {
-    waitForUserOperationTransaction,
+    waitForUserOperationTransaction: ReactLogger.profiled(
+      "waitForUserOperationTransaction",
+      waitForUserOperationTransaction
+    ),
     waitForUserOperationTransactionResult,
     isWaitingForUserOperationTransaction,
     error,

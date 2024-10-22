@@ -1,6 +1,7 @@
 import { DEFAULT_SESSION_MS } from "@account-kit/signer";
 import { createStorage, createConfig as createWagmiConfig } from "@wagmi/core";
 import { getBundlerClient } from "./actions/getBundlerClient.js";
+import { CoreLogger } from "./metrics.js";
 import { createAccountKitStore } from "./store/store.js";
 import { DEFAULT_STORAGE_KEY } from "./store/types.js";
 import type {
@@ -118,6 +119,14 @@ export const createConfig = (
       sessionLength: sessionConfig?.expirationTimeMs ?? DEFAULT_SESSION_MS,
     },
   };
+
+  CoreLogger.trackEvent({
+    name: "config_created",
+    data: {
+      ssr: ssr ?? false,
+      chainIds: connections.map((x) => x.chain.id),
+    },
+  });
 
   return config;
 };

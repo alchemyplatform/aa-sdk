@@ -1,83 +1,60 @@
-import { useConfig } from "@/app/state";
 import { cn } from "@/lib/utils";
+import { useConfigStore } from "@/state";
 import { BiometricIcon } from "../icons/biometric";
+import { ExternalLinkIcon } from "../icons/external-link";
+import { FacebookLogo } from "../icons/facebook";
+import { GoogleIcon } from "../icons/google";
 import { LockIcon } from "../icons/lock";
 import { MailIcon } from "../icons/mail";
 import { SocialIcon } from "../icons/social";
 import { WalletIcon } from "../icons/wallet";
 import ExternalLink from "../shared/ExternalLink";
 import { Switch } from "../ui/switch";
-import { ExternalLinkIcon } from "../icons/external-link";
-import { GoogleIcon } from "../icons/google";
-import { FacebookLogo } from "../icons/facebook";
 
 export const Authentication = ({ className }: { className?: string }) => {
-  const { config, setConfig } = useConfig();
+  const { auth, setAuth } = useConfigStore(({ auth, setAuth }) => ({
+    auth,
+    setAuth,
+  }));
 
   const setPasskeysActive = (active: boolean) => {
-    setConfig((prev) => ({
-      ...prev,
-      auth: {
-        ...prev.auth,
-        showPasskey: active,
-      },
-    }));
+    setAuth({ showPasskey: active });
   };
 
   const setAddPasskeyOnSignup = (active: boolean) => {
-    setConfig((prev) => ({
-      ...prev,
-      auth: {
-        ...prev.auth,
-        addPasskey: active,
-      },
-    }));
+    setAuth({
+      addPasskey: active,
+    });
   };
 
   const setWalletsActive = (active: boolean) => {
-    setConfig((prev) => ({
-      ...prev,
-      auth: {
-        ...prev.auth,
-        showExternalWallets: active,
-      },
-    }));
+    setAuth({
+      showExternalWallets: active,
+    });
   };
 
   const setOAuthActive = (active: boolean) => {
-    setConfig((prev) => ({
-      ...prev,
-      auth: {
-        ...prev.auth,
-        showOAuth: active,
-      },
-    }));
+    setAuth({
+      showOAuth: active,
+    });
   };
 
   const setAddGoogleAuth = () => {
-    setConfig((prev) => ({
-      ...prev,
-      auth: {
-        ...prev.auth,
-        oAuthMethods: {
-          ...prev.auth.oAuthMethods,
-          google: !prev.auth.oAuthMethods.google,
-        },
+    setAuth({
+      oAuthMethods: {
+        ...auth.oAuthMethods,
+        google: !auth.oAuthMethods.google,
       },
-    }));
+    });
   };
 
   const setAddFacebookAuth = () => {
-    setConfig((prev) => ({
-      ...prev,
-      auth: {
-        ...prev.auth,
-        oAuthMethods: {
-          ...prev.auth.oAuthMethods,
-          facebook: !prev.auth.oAuthMethods.facebook,
-        },
+    setAuth({
+      oAuthMethods: {
+        ...auth.oAuthMethods,
+        facebook: !auth.oAuthMethods.facebook,
       },
-    }));
+    });
   };
 
   return (
@@ -92,7 +69,7 @@ export const Authentication = ({ className }: { className?: string }) => {
           <AuthMethod
             icon={<MailIcon />}
             name="Email"
-            active={config.auth.showEmail}
+            active={auth.showEmail}
             disabled
           />
           <AuthMethod
@@ -100,31 +77,33 @@ export const Authentication = ({ className }: { className?: string }) => {
             name="Social"
             iconClassName="mt-[2px] self-start"
             details={
-              config.auth.showOAuth && (
-                <div className="flex gap-x-3">
-                  <OAuthMethod
-                    icon={<GoogleIcon />}
-                    onClick={setAddGoogleAuth}
-                    className={`grow-0 border-2 rounded-lg p-1 ${
-                      config.auth.oAuthMethods.google
-                        ? "border-gray-500 bg-gray-100"
-                        : "border-gray-500"
-                    }`}
+              <div className={cn("flex gap-x-3", { hidden: !auth.showOAuth })}>
+                <OAuthMethod
+                  active={auth.oAuthMethods.google}
+                  icon={<GoogleIcon />}
+                  onClick={setAddGoogleAuth}
+                />
+                <OAuthMethod
+                  active={auth.oAuthMethods.facebook}
+                  icon={<FacebookLogo />}
+                  onClick={setAddFacebookAuth}
+                />
+                <ExternalLink
+                  href="https://accountkit.alchemy.com/signer/authentication/auth0"
+                  className=" btn border border-border active:bg-demo-surface-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-none"
+                >
+                  <p className="hidden lg:block font-normal text-sm text-secondary-foreground">
+                    Custom
+                  </p>
+                  <ExternalLinkIcon
+                    height={16}
+                    width={16}
+                    className="stroke-demo-fg-secondary"
                   />
-                  <OAuthMethod
-                    icon={<FacebookLogo />}
-                    onClick={setAddFacebookAuth}
-                    className={`grow-0 border-2 rounded-lg p-1 ${
-                      config.auth.oAuthMethods.facebook
-                        ? "border-gray-500 bg-gray-100"
-                        : "border-gray-500"
-                    }`}
-                  />
-                  {/* TO DO: add "Add provider" button */}
-                </div>
-              )
+                </ExternalLink>
+              </div>
             }
-            active={config.auth.showOAuth}
+            active={auth.showOAuth}
             setActive={setOAuthActive}
           />
           <AuthMethod
@@ -134,30 +113,30 @@ export const Authentication = ({ className }: { className?: string }) => {
             name="Passkeys"
             details={
               <>
-                <div className="flex flex-1 min-w-full flex-row justify-between gap-3 items-center">
-                  <p className="font-normal text-sm text-secondary-foreground">
+                <div className="flex flex-1 min-w-full flex-row justify-between gap-3 lg:items-center">
+                  <p className="hidden lg:block font-normal text-sm text-secondary-foreground">
                     Add passkey after sign up
                   </p>
-                  <ExternalLink
-                    href="https://aa-sdk-site-alpha.vercel.app/react/add-passkey?"
-                    className="underline"
-                  >
+                  <ExternalLink href="https://aa-sdk-site-alpha.vercel.app/react/add-passkey?">
+                    <p className=" block lg:hidden font-normal text-sm text-secondary-foreground underline">
+                      Add passkey after sign up
+                    </p>
                     <ExternalLinkIcon
                       height={16}
                       width={16}
-                      className="text-fg-secondary"
+                      className="stroke-demo-fg-secondary hidden lg:block"
                     />
                   </ExternalLink>
                   <Switch
-                    disabled={!config.auth.showPasskey}
-                    checked={config.auth.addPasskey && config.auth.showPasskey}
+                    disabled={!auth.showPasskey}
+                    checked={auth.addPasskey && auth.showPasskey}
                     onCheckedChange={setAddPasskeyOnSignup}
                     className="ml-auto"
                   />
                 </div>
               </>
             }
-            active={config.auth.showPasskey}
+            active={auth.showPasskey}
             setActive={setPasskeysActive}
           />
         </div>
@@ -166,9 +145,9 @@ export const Authentication = ({ className }: { className?: string }) => {
       <div className="flex flex-col gap-2 mb-10">
         <p className="font-medium text-secondary-foreground text-sm">Connect</p>
         <AuthMethod
-          icon={<WalletIcon />}
+          icon={<WalletIcon className="stroke-demo-fg-primary" />}
           name="External wallets"
-          active={config.auth.showExternalWallets}
+          active={auth.showExternalWallets}
           setActive={setWalletsActive}
         />
       </div>
@@ -241,14 +220,23 @@ const AuthMethod = ({
 const OAuthMethod = ({
   icon,
   onClick,
-  className,
+  active,
 }: {
   icon: React.ReactNode;
   onClick: () => void;
   className?: string;
+  active: boolean;
 }) => {
   return (
-    <button onClick={onClick} className={className}>
+    <button
+      onClick={onClick}
+      className={cn(
+        "flex grow-0 shrink-0 border border-[#64748B]  rounded-lg p-1 h-10 w-10 justify-center items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        active
+          ? "border-[#64748B] bg-demo-surface-secondary"
+          : "border-gray-300"
+      )}
+    >
       {icon}
     </button>
   );
