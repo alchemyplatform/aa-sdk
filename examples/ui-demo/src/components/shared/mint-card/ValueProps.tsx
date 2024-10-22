@@ -73,14 +73,14 @@ const getMintIcon = (
 ) => {
   switch (icon) {
     case "signing":
-      return <DrawIcon className="text-fg-secondary" />;
+      return <DrawIcon className="fill-fg-secondary" />;
     case "gas":
-      return <GasIcon className="text-fg-secondary" />;
+      return <GasIcon className="fill-fg-secondary" />;
     case "batch":
-      return <ReceiptIcon className="text-fg-secondary" />;
+      return <ReceiptIcon className="fill-fg-secondary" />;
     case "loading":
       return <LoadingIcon />;
     case "success":
-      return <CheckIcon stroke="#16A34A" />;
+      return <CheckIcon className="stroke-demo-surface-success" />;
   }
 };
