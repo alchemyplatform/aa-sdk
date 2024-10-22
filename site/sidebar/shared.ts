@@ -8,7 +8,9 @@ import { thirdPartySidebar } from "./third-party.js";
 
 export const concepts: SidebarItem = {
   text: "Concepts",
+  collapsed: true,
   items: [
+    { text: "Intro to Account Kit", link: "/concepts/intro-to-account-kit" },
     {
       text: "Smart Contract Account",
       link: "/concepts/smart-contract-account",
@@ -80,4 +82,4 @@ export const guides: (
 
 export const sharedSidebar: (
   section?: "react" | "core" | "infra" | "signer" | "contracts"
-) => SidebarItem[] = (section) => [...guides(section), concepts, resources];
+) => SidebarItem[] = (section) => [...guides(section), resources];

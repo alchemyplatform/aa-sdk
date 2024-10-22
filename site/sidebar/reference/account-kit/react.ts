@@ -22,6 +22,10 @@ export const accountKitReactReferenceSidebar: SidebarItem[] = [
         text: "AuthCard",
         link: "/reference/account-kit/react/components/AuthCard",
       },
+      {
+        text: "Dialog",
+        link: "/reference/account-kit/react/components/Dialog",
+      },
     ],
   },
   {

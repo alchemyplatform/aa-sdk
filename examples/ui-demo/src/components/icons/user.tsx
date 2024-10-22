@@ -1,14 +1,12 @@
-import { useConfig } from "@/app/state";
+import { useTheme } from "@/state/useTheme";
 import { SVGProps } from "react";
 
 export const UserIcon = ({
   fill = "currentColor",
   ...props
 }: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
-  const { config } = useConfig();
-
-  const currentTheme = config.ui.theme;
-  const isDark = currentTheme === "dark";
+  const theme = useTheme();
+  const isDark = theme === "dark";
 
   return (
     <svg

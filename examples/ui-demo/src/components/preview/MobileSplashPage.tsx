@@ -1,13 +1,24 @@
-import { useAuthModal } from "@account-kit/react";
+import { useBreakpoint } from "@/hooks/useBreakpoint";
+import { useAuthModal, useSignerStatus } from "@account-kit/react";
+import { useEffect } from "react";
 
 export function MobileSplashPage() {
   const { openAuthModal } = useAuthModal();
+  const { isAuthenticating } = useSignerStatus();
+  const breakpoint = useBreakpoint();
+
+  useEffect(() => {
+    if (breakpoint === "sm" && isAuthenticating) {
+      openAuthModal();
+    }
+  }, [breakpoint, isAuthenticating, openAuthModal]);
+
   return (
-    <div className="flex flex-col flex-1 pb-5 mt-2">
+    <div className="flex flex-col flex-1 pb-5 h-auto max-h-[calc(100svh-100px)] box-content p-4 pt-[78px]">
       {/* Header Text */}
-      <div>
-        <h3 className="text-[56px] leading-[60px] text-center font-semibold tracking-tight text-fg-primary">
-          Web2 UX, <br />
+      <>
+        <h3 className="text-[36px] min-[430px]:text-[46px] sm:text-[56px] sm:leading-[60px] text-center font-semibold tracking-tight">
+          Web2 UX,{" "}
           <span
             className="whitespace-nowrap"
             style={{
@@ -21,30 +32,30 @@ export function MobileSplashPage() {
             onchain
           </span>
         </h3>
-        <p className="text-xl text-fg-secondary font-normal tracking-tight text-center mt-3">
-          Zero-friction onboarding, <br />
-          one-click transactions
+        <p className="text-base font-normal tracking-tight text-center text-demo-fg-secondary">
+          Zero-friction onboarding, one-click transactions
         </p>
-      </div>
+      </>
       {/* Image Wrapper */}
-      <div className="w-full relative h-auto my-[20px] flex-grow">
-        {/* Placeholder - Design would provide the actual asset here. */}
-        <video
-          src="/videos/splash-demo.mov"
-          className="object-contain"
-          autoPlay
-          loop
-          muted
-        />
+      <div className="flex-1 h-auto min-h-0 flex">
+        <div className="relative my-[20px] flex items-center justify-center flex-1 ">
+          <video
+            src="/videos/splash-demo.mov"
+            className="w-full h-full object-contain"
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
+        </div>
       </div>
 
-      <div className="mt-auto">
+      <div className="sm:mt-auto">
         {/* Bottom action buttons */}
         <div className="flex flex-col sm:flex-row">
           <button
             className="btn btn-primary w-full sm:w-auto mb-2 sm:mb-0 flex-1 m-0 sm:mr-2"
             onClick={() => {
-              console.log("openAuthModal");
               openAuthModal();
             }}
           >
@@ -57,11 +68,6 @@ export function MobileSplashPage() {
           >
             View docs
           </a>
-        </div>
-        <div className="mt-6 flex justify-center">
-          <span className="text-sm text-center block">
-            Visit desktop site to customize styles and auth methods
-          </span>
         </div>
       </div>
     </div>

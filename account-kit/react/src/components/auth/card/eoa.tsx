@@ -1,8 +1,7 @@
-import { useMemo } from "react";
-import { walletConnect } from "wagmi/connectors";
+import { walletConnect, type WalletConnectParameters } from "wagmi/connectors";
+import { useAuthConfig } from "../../../hooks/internal/useAuthConfig.js";
 import { useChain } from "../../../hooks/useChain.js";
 import { useConnect } from "../../../hooks/useConnect.js";
-import { useUiConfig } from "../../../hooks/useUiConfig.js";
 import { Spinner } from "../../../icons/spinner.js";
 import { WalletConnectIcon } from "../../../icons/walletConnectIcon.js";
 import { Button } from "../../button.js";
@@ -33,8 +32,9 @@ export const EoaConnectCard = () => {
   return (
     <CardContent
       header={`Connecting to ${authStep.connector.name}`}
+      className={"gap-0"}
       icon={
-        <div className="flex relative flex-col items-center justify-center h-[58px] w-[58px]">
+        <div className="flex relative flex-col items-center justify-center h-[58px] w-[58px] mb-5">
           <img
             className={authStep.error ? undefined : "animate-pulse"}
             src={authStep.connector.icon}
@@ -49,6 +49,10 @@ export const EoaConnectCard = () => {
       }
       description="Please follow the instructions in your wallet to connect."
       error={authStep.error}
+      secondaryButton={{
+        title: "Cancel",
+        onClick: () => setAuthStep({ type: "initial" }),
+      }}
     />
   );
 };
@@ -70,8 +74,9 @@ export const WalletConnectCard = () => {
   return (
     <CardContent
       header={`Connecting to WalletConnect`}
+      className={"gap-0"}
       icon={
-        <div className="flex relative flex-col items-center justify-center h-[58px] w-[58px]">
+        <div className="flex relative flex-col items-center justify-center h-[58px] w-[58px] mb-5">
           <WalletConnectIcon
             className={
               "w-[32px] h-[32px]" + (authStep.error ? "" : " animate-pulse")
@@ -82,8 +87,12 @@ export const WalletConnectCard = () => {
           </div>
         </div>
       }
-      description="Please follow the instructions in the popup to connect."
+      description={"Please follow the instructions in the popup to connect."}
       error={authStep.error}
+      secondaryButton={{
+        title: "Cancel",
+        onClick: () => setAuthStep({ type: "initial" }),
+      }}
     />
   );
 };
@@ -111,19 +120,29 @@ export const EoaPickCard = () => {
   });
   const { setAuthStep } = useAuthContext();
 
-  const {
-    auth: { sections },
-  } = useUiConfig();
-
-  const walletConnectConfig = useMemo(() => {
-    const externalWalletSection = sections
+  const walletConnectAuthConfig = useAuthConfig((auth) => {
+    const externalWalletSection = auth.sections
       .find((x) => x.some((y) => y.type === "external_wallets"))
       ?.find((x) => x.type === "external_wallets") as
       | Extract<AuthType, { type: "external_wallets" }>
       | undefined;
 
     return externalWalletSection?.walletConnect;
-  }, [sections]);
+  });
+
+  // Add z-index to the wallet connect modal if not already set
+  const walletConnectParams = walletConnectAuthConfig
+    ? ({
+        ...walletConnectAuthConfig,
+        qrModalOptions: {
+          ...walletConnectAuthConfig.qrModalOptions,
+          themeVariables: {
+            "--wcm-z-index": "1000000",
+            ...walletConnectAuthConfig.qrModalOptions?.themeVariables,
+          },
+        },
+      } as WalletConnectParameters)
+    : undefined;
 
   const connectorButtons = connectors.map((connector) => {
     return (
@@ -150,8 +169,8 @@ export const EoaPickCard = () => {
     );
   });
 
-  const walletConnectConnector = walletConnectConfig
-    ? walletConnect(walletConnectConfig)
+  const walletConnectConnector = walletConnectParams
+    ? walletConnect(walletConnectParams)
     : null;
 
   return (
@@ -159,7 +178,7 @@ export const EoaPickCard = () => {
       className="w-full"
       header="Select your wallet"
       description={
-        walletConnectConfig != null || connectors.length ? (
+        walletConnectConnector != null || connectors.length ? (
           <div className="flex flex-col gap-3 w-full">
             {connectorButtons}
             {walletConnectConnector && (

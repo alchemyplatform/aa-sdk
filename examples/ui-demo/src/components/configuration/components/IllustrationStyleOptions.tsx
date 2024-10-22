@@ -1,4 +1,3 @@
-import { useConfig } from "@/app/state";
 import { ChevronDown } from "@/components/icons/chevron-down";
 import { IllustrationStyle } from "@/components/icons/illustration-style";
 import {
@@ -9,6 +8,8 @@ import {
   SelectMenuViewport,
 } from "@/components/ui/select-menu";
 import { cn } from "@/lib/utils";
+import { useConfigStore } from "@/state";
+import { useTheme } from "@/state/useTheme";
 import { useState } from "react";
 
 const ILLUSTRATION_STYLE_OPTIONS = [
@@ -21,40 +22,28 @@ const ILLUSTRATION_STYLE_OPTIONS = [
 const options = ["outline", "linear", "filled", "flat"] as const;
 
 export function IllustrationStyleOptions() {
-  const {
-    config: {
-      ui: { illustrationStyle },
-    },
-    setConfig,
-  } = useConfig();
-
-  type IllustrationStyle = typeof illustrationStyle;
-
-  const onChange = (style: IllustrationStyle) => {
-    setConfig((prev) => ({
-      ...prev,
-      ui: {
-        ...prev.ui,
-        illustrationStyle: style,
-      },
-    }));
-  };
+  const { illustrationStyle, setIllustrationStyle } = useConfigStore(
+    ({ ui: { illustrationStyle }, setIllustrationStyle }) => ({
+      illustrationStyle,
+      setIllustrationStyle,
+    })
+  );
 
   return (
     <>
-      <div className="hidden md:flex self-stretch gap-3">
+      <div className="hidden lg:flex self-stretch gap-3">
         {options.map((value) => (
           <button
             key={value}
             className={cn(
-              "py-2 flex-1 basis-0 rounded-lg border border-gray-300",
+              "py-2 flex-1 basis-0 rounded-lg border border-[#64748B]",
               "text-fg-accent-brand hover:opacity-80",
-              "flex items-center justify-center",
+              "flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
               illustrationStyle === value
-                ? "border-[#363FF9] border-[1.5px] bg-[#EFF4F9] font-semibold"
-                : ""
+                ? "bg-demo-surface-secondary font-semibold"
+                : "border-gray-300"
             )}
-            onClick={() => onChange(value)}
+            onClick={() => setIllustrationStyle(value)}
           >
             <IllustrationStyle
               className="text-fg-accent-brand"
@@ -63,7 +52,7 @@ export function IllustrationStyleOptions() {
           </button>
         ))}
       </div>
-      <div className="flex md:hidden w-full">
+      <div className="flex lg:hidden w-full">
         <IllustrationStyleSelectMenu />
       </div>
     </>
@@ -71,12 +60,15 @@ export function IllustrationStyleOptions() {
 }
 
 const IllustrationStyleSelectMenu = () => {
-  const {
-    config: {
-      ui: { illustrationStyle, primaryColor, theme },
-    },
-    setConfig,
-  } = useConfig();
+  const theme = useTheme();
+  const { illustrationStyle, setIllustrationStyle, primaryColor } =
+    useConfigStore(
+      ({ ui: { illustrationStyle, primaryColor }, setIllustrationStyle }) => ({
+        illustrationStyle,
+        setIllustrationStyle,
+        primaryColor,
+      })
+    );
 
   type IllustrationStyle = typeof illustrationStyle;
   const [selected, setSelected] =
@@ -86,13 +78,7 @@ const IllustrationStyleSelectMenu = () => {
   const onChange = (style: IllustrationStyle) => {
     setSelected(style);
 
-    setConfig((prev) => ({
-      ...prev,
-      ui: {
-        ...prev.ui,
-        illustrationStyle: style,
-      },
-    }));
+    setIllustrationStyle(style);
   };
 
   const getIllustrationStyleValue = (style: IllustrationStyle) => {
@@ -115,8 +101,10 @@ const IllustrationStyleSelectMenu = () => {
         </span>
         <div className="ml-1 w-[20px] h-[20px] flex items-center justify-center">
           <ChevronDown
-            stroke={primaryColor[theme]}
-            className={cn("transition", menuOpen && "rotate-180")}
+            className={cn(
+              "stroke-demo-fg-primary transition",
+              menuOpen && "rotate-180"
+            )}
           />
         </div>
       </SelectMenuTrigger>
@@ -128,7 +116,9 @@ const IllustrationStyleSelectMenu = () => {
               value={option}
               className={cn(
                 "px-4 py-3 hover:bg-[rgba(239,244,249,0.4)] transition-colors ease-out outline-none text-sm",
-                selected === option ? "font-medium bg-[#EFF4F9]" : "font-normal"
+                selected === option
+                  ? "font-medium bg-demo-surface-secondary"
+                  : "font-normal"
               )}
             >
               {getIllustrationStyleValue(option)}

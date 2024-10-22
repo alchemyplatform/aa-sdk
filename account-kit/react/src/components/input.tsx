@@ -23,7 +23,7 @@ const BaseInput = ({
       } ${className ?? ""}`}
     >
       {iconLeft}
-      <input {...props}></input>
+      <input {...props} className="text-base sm:text-sm" />
       {iconRight}
     </label>
   );

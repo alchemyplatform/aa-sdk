@@ -2,7 +2,7 @@ import { useUiConfig } from "../../../../hooks/useUiConfig.js";
 import { ls } from "../../../../strings.js";
 
 export const OAuthContactSupport = () => {
-  const { supportUrl } = useUiConfig();
+  const { supportUrl } = useUiConfig(({ supportUrl }) => ({ supportUrl }));
   return (
     supportUrl && (
       <div className="flex flex-row gap-1 justify-center mb-3">

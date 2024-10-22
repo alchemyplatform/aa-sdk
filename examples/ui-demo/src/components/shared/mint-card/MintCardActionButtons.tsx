@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { links } from "@/utils/links";
 
 type MintCardActionButtonsProps = {
   nftTransfered: boolean;
@@ -26,8 +27,8 @@ export function MintCardActionButtons({
       ) : (
         <div>
           <a
-            href="https://dashboard.alchemy.com/"
-            className="btn btn-primary flex text-center mb-4 p-2 w-full md:w-52 m-auto"
+            href={links.dashboard}
+            className="btn btn-primary flex text-center mb-4 p-2 w-full  m-auto"
             target="_blank"
             rel="noreferrer"
           >
@@ -37,15 +38,12 @@ export function MintCardActionButtons({
       )}
       <a
         href="https://accountkit.alchemy.com/react/quickstart"
-        className="btn-secondary btn md:bg-transparent md:btn-link md:w-auto  text-sm font-semibold flex justify-center mb-6 md:mb-0"
+        className="btn-secondary btn md:bg-transparent md:btn-link md:w-auto font-semibold flex justify-center mb-6 md:mb-0"
         target="_blank"
         rel="noreferrer"
       >
         View docs
       </a>
-      <p className="text-sm text-fg-secondary text-center md:hidden">
-        Visit desktop site to customize styles and auth methods
-      </p>
     </div>
   );
 }

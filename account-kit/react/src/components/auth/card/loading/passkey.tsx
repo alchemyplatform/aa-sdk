@@ -19,12 +19,12 @@ export const LoadingPasskeyAuth = () => {
   }
 
   return (
-    <div className="flex flex-col gap-5 items-center">
-      <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col w-full items-center">
+      <div className="flex flex-col items-center justify-center mb-5">
         <LoadingPasskey />
       </div>
 
-      <h3 className="font-semibold text-lg">{ls.loadingPasskey.title}</h3>
+      <h3 className="font-semibold text-lg mb-2">{ls.loadingPasskey.title}</h3>
       <p className="text-fg-secondary text-center text-sm">
         {ls.loadingPasskey.body}
       </p>
@@ -40,6 +40,12 @@ export const LoadingPasskeyAuth = () => {
           </Button>
         </div> */}
       </div>
+      <button
+        className="btn btn-secondary w-full mt-5"
+        onClick={() => setAuthStep({ type: "initial" })}
+      >
+        Cancel
+      </button>
     </div>
   );
 };

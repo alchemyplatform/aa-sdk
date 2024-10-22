@@ -1,12 +1,12 @@
-import { ComponentPropsWithoutRef, PropsWithChildren, useState } from "react";
 import {
   Popover,
-  PopoverTrigger,
   PopoverContent,
+  PopoverTrigger,
 } from "@/components/ui/popover";
+import { ComponentPropsWithoutRef, PropsWithChildren, useState } from "react";
 
-import { useConfig } from "@/app/state";
 import { cn } from "@/lib/utils";
+import { useTheme } from "@/state/useTheme";
 
 type UserConnectionPopoverMenuProps = {
   onOpenStateChange?: (open: boolean) => void;
@@ -40,8 +40,7 @@ const MenuTrigger = (
 const MenuContent = (
   props: PropsWithChildren & ComponentPropsWithoutRef<typeof PopoverContent>
 ) => {
-  const { config } = useConfig();
-  const theme = config.ui.theme;
+  const theme = useTheme();
 
   return (
     <PopoverContent

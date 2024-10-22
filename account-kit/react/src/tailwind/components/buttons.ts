@@ -15,7 +15,7 @@ export const buttonComponents: ComponentDef = {
   },
   ".btn": {
     "@apply max-h-[40px]": {},
-    "@apply p-3 inline-flex h-10 font-semibold text-sm": {},
+    "@apply p-3 inline-flex h-10 font-semibold text-base sm:text-sm": {},
     "@apply gap-2": {},
     "@apply items-center justify-center": {},
     "@apply shrink-0": {},

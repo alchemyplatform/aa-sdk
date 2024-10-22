@@ -1,7 +1,7 @@
 {
   "name": "@aa-sdk/core",
   "license": "MIT",
-  "version": "4.0.0-beta.9",
+  "version": "4.0.1",
   "description": "viem based SDK that enables interactions with ERC-4337 Smart Accounts. ABIs are based off the definitions generated in @account-abstraction/contracts",
   "author": "Alchemy",
   "type": "module",
@@ -39,8 +39,7 @@
     "docs:gen": "npx ak-docgen generate --in ./src/index.ts --out ../../site/pages/reference/aa-sdk/core",
     "clean": "rm -rf ./dist",
     "test": "vitest",
-    "test:run": "vitest run",
-    "test:run-e2e": "vitest run --config vitest.config.e2e.ts"
+    "test:run": "vitest run"
   },
   "devDependencies": {
     "dotenv": "^16.0.3",

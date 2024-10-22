@@ -3,6 +3,72 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0...v4.0.1) (2024-10-19)
+
+### Bug Fixes
+
+- add passkey link ([#1076](https://github.com/alchemyplatform/aa-sdk/issues/1076)) ([86f9d0c](https://github.com/alchemyplatform/aa-sdk/commit/86f9d0cfe43b292d4e1b085dadf39eaf2235fe80))
+- don't re-initialize unless the user has changed ([#1095](https://github.com/alchemyplatform/aa-sdk/issues/1095)) ([c7768a8](https://github.com/alchemyplatform/aa-sdk/commit/c7768a831b2c9f8e07d36ba940ad81199e4f617c))
+- issue causing recursive depth exception in react ([#1088](https://github.com/alchemyplatform/aa-sdk/issues/1088)) ([7b61fd6](https://github.com/alchemyplatform/aa-sdk/commit/7b61fd664daa256578c092e8feef6e4b1f25931d))
+- select does not use theme token for bg ([#1085](https://github.com/alchemyplatform/aa-sdk/issues/1085)) ([aaeb288](https://github.com/alchemyplatform/aa-sdk/commit/aaeb2883eafaacbb663a2d8ec994b1e197ae5ace))
+- update EOA post login spacing to prevent hidden content ([#1084](https://github.com/alchemyplatform/aa-sdk/issues/1084)) ([51dfdbc](https://github.com/alchemyplatform/aa-sdk/commit/51dfdbc526320d3805462bdb292349032fd5b173))
+- updating css link to theme ([#1079](https://github.com/alchemyplatform/aa-sdk/issues/1079)) ([1e67471](https://github.com/alchemyplatform/aa-sdk/commit/1e674715a9b45c0decd659243cdb4a662bb88a9d))
+
+### Features
+
+- fix deployment status display states ([#1080](https://github.com/alchemyplatform/aa-sdk/issues/1080)) ([4603afa](https://github.com/alchemyplatform/aa-sdk/commit/4603afa8f7e050eaacb20d8faefce46423ceb6dc))
+
+# [4.0.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.10...v4.0.0) (2024-10-15)
+
+### Bug Fixes
+
+- drop id token and claims from user object for now ([#1070](https://github.com/alchemyplatform/aa-sdk/issues/1070)) ([b45fa9f](https://github.com/alchemyplatform/aa-sdk/commit/b45fa9f844589284f8d46849e0265d04ca1f0b61))
+- include `enablePopupOauth` in code preview in demo ([#1064](https://github.com/alchemyplatform/aa-sdk/issues/1064)) ([8e9f98a](https://github.com/alchemyplatform/aa-sdk/commit/8e9f98a179844bca0dcee3cdd51e7586a3906e7c))
+- modal was popping up in all auth state changes ([#1074](https://github.com/alchemyplatform/aa-sdk/issues/1074)) ([5c5f195](https://github.com/alchemyplatform/aa-sdk/commit/5c5f1951502b870f92f762e2041f9e00b57b3967))
+- passkey causes stuck loading state ([#1065](https://github.com/alchemyplatform/aa-sdk/issues/1065)) ([984f34c](https://github.com/alchemyplatform/aa-sdk/commit/984f34ce59ae3edc8f51a8f6a1a10199eaf17987))
+- spacing above eoa, tablet sidebar ([#1063](https://github.com/alchemyplatform/aa-sdk/issues/1063)) ([4617706](https://github.com/alchemyplatform/aa-sdk/commit/4617706bc9656904e8bcbb53cc56948a8c0253ef))
+- **ui-demo:** add favicon to ui demo app ([#1069](https://github.com/alchemyplatform/aa-sdk/issues/1069)) ([3f40e26](https://github.com/alchemyplatform/aa-sdk/commit/3f40e26bc8819d5944b56aa3a3bbbf16b1e9e04e))
+- update svg to png ([#1075](https://github.com/alchemyplatform/aa-sdk/issues/1075)) ([c9cc998](https://github.com/alchemyplatform/aa-sdk/commit/c9cc9989ef1c0fcb272bcd5b6d29b2be8178a98a))
+- update z-indexes of wallet connect and our mobile modal ([#1068](https://github.com/alchemyplatform/aa-sdk/issues/1068)) ([e1963b9](https://github.com/alchemyplatform/aa-sdk/commit/e1963b949ad68f047174356160c7e1fe30bf1e2e))
+
+# [4.0.0-beta.10](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.9...v4.0.0-beta.10) (2024-10-15)
+
+### Bug Fixes
+
+- change fontsize on desktop, border radius, border color ([#1053](https://github.com/alchemyplatform/aa-sdk/issues/1053)) ([3270553](https://github.com/alchemyplatform/aa-sdk/commit/3270553e27fa781bcea3dfb82fa293c05a9385d6))
+- **core:** hydrate wasn't properly handling logged out users ([#1046](https://github.com/alchemyplatform/aa-sdk/issues/1046)) ([987cf88](https://github.com/alchemyplatform/aa-sdk/commit/987cf88bc4cba351663fe3b04dcc12cc39ae93b4))
+- design qa feedback ([#1033](https://github.com/alchemyplatform/aa-sdk/issues/1033)) ([c00381a](https://github.com/alchemyplatform/aa-sdk/commit/c00381a7d80a53ec235ad1cdf0b8d0cb2b4fb827))
+- drawer animation, zoom on input, clip path error ([#1042](https://github.com/alchemyplatform/aa-sdk/issues/1042)) ([5571849](https://github.com/alchemyplatform/aa-sdk/commit/5571849c8d932fa25b1ef101bf035c9a5ff98924))
+- fix animation up bug ([#1048](https://github.com/alchemyplatform/aa-sdk/issues/1048)) ([d51bbfd](https://github.com/alchemyplatform/aa-sdk/commit/d51bbfd49079409285568c4d3739418d4a30601f))
+- **logging:** no cors on the static resource ([#1060](https://github.com/alchemyplatform/aa-sdk/issues/1060)) ([6045c48](https://github.com/alchemyplatform/aa-sdk/commit/6045c488dd3f4f7ee18af74c263215a98b5eb301))
+- open the auth modal upon email return ([#1059](https://github.com/alchemyplatform/aa-sdk/issues/1059)) ([bf0915f](https://github.com/alchemyplatform/aa-sdk/commit/bf0915ff42d1f65dbcdef7e6f4a03fec9f02f63d))
+- reduce copy for mobile toast ([#1052](https://github.com/alchemyplatform/aa-sdk/issues/1052)) ([908a0d3](https://github.com/alchemyplatform/aa-sdk/commit/908a0d3e4944583a153620350d713908cdf78461))
+- set error state when authentication fails ([#1038](https://github.com/alchemyplatform/aa-sdk/issues/1038)) ([dfb91d2](https://github.com/alchemyplatform/aa-sdk/commit/dfb91d20924a12d14bb80348b1361d3871f96dfd))
+- **ui-demo:** update the links to the dashboard ([#1061](https://github.com/alchemyplatform/aa-sdk/issues/1061)) ([58dad7a](https://github.com/alchemyplatform/aa-sdk/commit/58dad7a1b9978a10a136b40280af97bb6224cc1e))
+- update default auth ([#1049](https://github.com/alchemyplatform/aa-sdk/issues/1049)) ([81019a2](https://github.com/alchemyplatform/aa-sdk/commit/81019a2fe7e22b81baf12e114e7418f4dbd4255a))
+- upload flatten, social auth overflow, social auth borders ([#1051](https://github.com/alchemyplatform/aa-sdk/issues/1051)) ([204945d](https://github.com/alchemyplatform/aa-sdk/commit/204945dadb23c68846a663a8f0ddda6f335a21e7))
+
+### Features
+
+- add auth0 instructions ([#1034](https://github.com/alchemyplatform/aa-sdk/issues/1034)) ([b918cac](https://github.com/alchemyplatform/aa-sdk/commit/b918cac2fa889c9386499a9ec275f7f0456b90ba))
+- add cancel buttons to auth loading states ([#1029](https://github.com/alchemyplatform/aa-sdk/issues/1029)) ([368629f](https://github.com/alchemyplatform/aa-sdk/commit/368629f2abf4c0f13d1eec52242a43c24395b1d9))
+- add google auth components and demo support (extension of linnas pr) ([#1032](https://github.com/alchemyplatform/aa-sdk/issues/1032)) ([cb91914](https://github.com/alchemyplatform/aa-sdk/commit/cb91914c8da0a7c3e7519bf98bc55d2848062e9f)), closes [#1024](https://github.com/alchemyplatform/aa-sdk/issues/1024) [#1035](https://github.com/alchemyplatform/aa-sdk/issues/1035) [#1036](https://github.com/alchemyplatform/aa-sdk/issues/1036)
+- add logger schemas to infra, react, core ([65fac7d](https://github.com/alchemyplatform/aa-sdk/commit/65fac7dbf2c63232199607b801db49ee96294b41))
+- add provider button and fix size of social auth method buttons to ui-demo ([#1047](https://github.com/alchemyplatform/aa-sdk/issues/1047)) ([d8c81a5](https://github.com/alchemyplatform/aa-sdk/commit/d8c81a5a741ff97b3d4592f956d4cfcfe5d4610b))
+- add react events logging ([7a7f230](https://github.com/alchemyplatform/aa-sdk/commit/7a7f2309ab664fc0f3602e85516de2d3f309bf84))
+- add signer profiling metrics ([b7b0aa3](https://github.com/alchemyplatform/aa-sdk/commit/b7b0aa371e124548c2f2e7693f68e474648ae6c5))
+- add text truncation to user profile component ([#1037](https://github.com/alchemyplatform/aa-sdk/issues/1037)) ([9d4d225](https://github.com/alchemyplatform/aa-sdk/commit/9d4d225c50186d94dcb7220724b126626ff22bad))
+- add the client logger implementation ([4577bbf](https://github.com/alchemyplatform/aa-sdk/commit/4577bbfdf0c1d06bd04f838c192f621eea8c7e93))
+- **demo:** persist the demo config across refreshes ([#1040](https://github.com/alchemyplatform/aa-sdk/issues/1040)) ([8ce8c36](https://github.com/alchemyplatform/aa-sdk/commit/8ce8c360676d7c2496ef86017f5c24b2d8671341))
+- enable facebook oauth in ui-demo ([#1041](https://github.com/alchemyplatform/aa-sdk/issues/1041)) ([38bb51a](https://github.com/alchemyplatform/aa-sdk/commit/38bb51a98d15e1342dea02a48386c44768599c23)), closes [#1024](https://github.com/alchemyplatform/aa-sdk/issues/1024) [#1035](https://github.com/alchemyplatform/aa-sdk/issues/1035) [#1036](https://github.com/alchemyplatform/aa-sdk/issues/1036)
+- ensure mobile landing page doesn't scroll ([#1045](https://github.com/alchemyplatform/aa-sdk/issues/1045)) ([f319280](https://github.com/alchemyplatform/aa-sdk/commit/f319280a1125ee96bcea8a210da88f5a85ce87c8))
+- log events from core package ([eab0ecd](https://github.com/alchemyplatform/aa-sdk/commit/eab0ecd7079b303bef15decca13f8ffac6eccea3))
+- log events from signer package ([421d273](https://github.com/alchemyplatform/aa-sdk/commit/421d273240fbbaa8a07303da473e651332577b2e))
+- log infra events ([4ec1b05](https://github.com/alchemyplatform/aa-sdk/commit/4ec1b0569db7908e67e8da6cc286b20e19d28997))
+- quick patch to properly calculate viewport height on mobile ([#1050](https://github.com/alchemyplatform/aa-sdk/issues/1050)) ([fdf08fb](https://github.com/alchemyplatform/aa-sdk/commit/fdf08fb148167fef428b6a7bb5b93e67ba9657eb))
+- remove the use of moebius to generate avatar colors ([#1054](https://github.com/alchemyplatform/aa-sdk/issues/1054)) ([2bea5b0](https://github.com/alchemyplatform/aa-sdk/commit/2bea5b0b11d520fafccab24628a30f7c6ef3cd70))
+- update demo video, scroll and dimensions on mobile ([#1043](https://github.com/alchemyplatform/aa-sdk/issues/1043)) ([b816f05](https://github.com/alchemyplatform/aa-sdk/commit/b816f0506b8147807a79f971ffff3d75c8b5f47f))
+
 # [4.0.0-beta.9](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0-beta.8...v4.0.0-beta.9) (2024-10-09)
 
 ### Bug Fixes

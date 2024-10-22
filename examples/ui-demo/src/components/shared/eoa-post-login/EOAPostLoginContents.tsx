@@ -1,15 +1,14 @@
-import React from "react";
+import { useLogout } from "@account-kit/react";
 import { CheckIcon } from "../../icons/check";
 import { GasIcon } from "../../icons/gas";
 import { UserIcon } from "../../icons/user";
 import { WalletIcon } from "../../icons/wallet";
-import { useLogout } from "@account-kit/react";
 
 export const EOAPostLoginActions = () => {
   const { logout } = useLogout();
   return (
     <div className="flex flex-col items-center justify-center">
-      <p className="text-fg-secondary text-sm text-center">
+      <p className="text-demo-fg-secondary sm:text-fg-secondary text-sm text-center mt-4 lg:mt-0">
         <span>Want to experience gasless checkout? </span>
         <br />
         <span>Login with an email instead</span>
@@ -18,7 +17,6 @@ export const EOAPostLoginActions = () => {
         <button
           className="btn btn-primary w-full lg:w-auto mb-2 lg:mb-0 flex-1 m-0 lg:mr-2"
           onClick={() => {
-            console.log("openAuthModal");
             logout();
           }}
         >
@@ -40,7 +38,7 @@ export const EOAPostLoginContents = () => {
   return (
     <div className="flex flex-col">
       <div className="flex flex-col items-center justify-center">
-        <CheckIcon className="w-[48px] h-[48px]" stroke="#16A34A" />
+        <CheckIcon className="w-[48px] h-[48px] stroke-demo-surface-success" />
         <h3 className="text-[32px] tracking-tight font-semibold mt-5 text-fg-primary whitespace-nowrap">{`You're connected!`}</h3>
       </div>
       <div className="flex flex-col mt-6 mx-3.5 sm:mx-0">
@@ -122,11 +120,10 @@ const Capabilities = ({
 const getPropIcon = (icon: IconType) => {
   switch (icon) {
     case "connect":
-      return <WalletIcon className="text-fg-secondary w-[24px] h-[24px]" />;
-
+      return <WalletIcon className="stroke-fg-secondary w-[24px] h-[24px]" />;
     case "onboard":
-      return <UserIcon className="text-fg-secondary w-[24px] h-[24px]" />;
+      return <UserIcon className="stroke-fg-secondary w-[24px] h-[24px]" />;
     case "sponsor":
-      return <GasIcon className="text-fg-secondary w-[24px] h-[24px]" />;
+      return <GasIcon className="stroke-fg-secondary w-[24px] h-[24px]" />;
   }
 };

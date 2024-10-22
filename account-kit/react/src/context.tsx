@@ -20,18 +20,12 @@ import { IS_SIGNUP_QP } from "./components/constants.js";
 import type { AlchemyAccountsConfigWithUI } from "./createConfig.js";
 import { NoAlchemyAccountContextError } from "./errors.js";
 import { useSignerStatus } from "./hooks/useSignerStatus.js";
+import { UiConfigProvider } from "./hooks/useUiConfig.js";
 import { Hydrate } from "./hydrate.js";
-import type { AlchemyAccountsUIConfig } from "./types.js";
 
 export type AlchemyAccountContextProps = {
   config: AlchemyAccountsConfig;
   queryClient: QueryClient;
-  ui?: {
-    config: AlchemyAccountsUIConfig;
-    openAuthModal: () => void;
-    closeAuthModal: () => void;
-    isModalOpen: boolean;
-  };
 };
 
 export const AlchemyAccountContext = createContext<
@@ -111,11 +105,6 @@ export const AlchemyAccountProvider = (
 ) => {
   const { config, queryClient, children } = props;
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const openAuthModal = useCallback(() => setIsModalOpen(true), []);
-  const closeAuthModal = useCallback(() => setIsModalOpen(false), []);
-
   const clearSignupParam = () => {
     const url = new URL(window.location.href);
     url.searchParams.delete(IS_SIGNUP_QP);
@@ -135,19 +124,11 @@ export const AlchemyAccountProvider = (
     () => ({
       config,
       queryClient,
-      ui: config.ui
-        ? {
-            config: config.ui,
-            openAuthModal,
-            closeAuthModal,
-            isModalOpen,
-          }
-        : undefined,
     }),
-    [config, queryClient, openAuthModal, closeAuthModal, isModalOpen]
+    [config, queryClient]
   );
 
-  const { isConnected, status } = useSignerStatus(initialContext);
+  const { status } = useSignerStatus(initialContext);
 
   const [authStep, setAuthStep] = useState<AuthStep>(() => {
     if (status === AlchemySignerStatus.AUTHENTICATING_EMAIL) {
@@ -162,18 +143,6 @@ export const AlchemyAccountProvider = (
   });
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (
-      isConnected &&
-      // TODO: add this back in when we persist the ui-demo config somewhere
-      // config.ui?.auth?.addPasskeyOnSignup &&
-      urlParams.get(IS_SIGNUP_QP) === "true"
-    ) {
-      openAuthModal();
-    }
-  }, [config.ui, isConnected, openAuthModal]);
-
-  useEffect(() => {
     if (authStep.type === "complete") {
       clearSignupParam();
     }
@@ -183,17 +152,19 @@ export const AlchemyAccountProvider = (
     <Hydrate {...props}>
       <AlchemyAccountContext.Provider value={initialContext}>
         <QueryClientProvider client={queryClient}>
-          {initialContext.ui ? (
-            <AuthModalContext.Provider
-              value={{
-                authStep,
-                setAuthStep,
-                resetAuthStep,
-              }}
-            >
-              {children}
-              <AuthModal />
-            </AuthModalContext.Provider>
+          {config.ui ? (
+            <UiConfigProvider initialConfig={config.ui}>
+              <AuthModalContext.Provider
+                value={{
+                  authStep,
+                  setAuthStep,
+                  resetAuthStep,
+                }}
+              >
+                {children}
+                <AuthModal />
+              </AuthModalContext.Provider>
+            </UiConfigProvider>
           ) : (
             children
           )}

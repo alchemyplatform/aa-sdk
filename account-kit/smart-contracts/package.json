@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/smart-contracts",
-  "version": "4.0.0-beta.9",
+  "version": "4.0.1",
   "description": "aa-sdk compatible interfaces for Alchemy Smart Accounts",
   "author": "Alchemy",
   "license": "MIT",
@@ -42,11 +42,10 @@
     "docs:gen": "npx ak-docgen generate --in ./src/index.ts --out ../../site/pages/reference/account-kit/smart-contracts",
     "clean": "rm -rf ./dist",
     "test": "vitest",
-    "test:run": "vitest run",
-    "test:run-e2e": "vitest run --config vitest.config.e2e.ts"
+    "test:run": "vitest run"
   },
   "devDependencies": {
-    "@account-kit/plugingen": "^4.0.0-beta.9",
+    "@account-kit/plugingen": "^4.0.1",
     "change-case": "^5.1.2",
     "dedent": "^1.5.1",
     "dotenv": "^16.3.1",
@@ -68,8 +67,8 @@
   "homepage": "https://github.com/alchemyplatform/aa-sdk#readme",
   "gitHead": "ee46e8bb857de3b631044fa70714ea706d9e317d",
   "dependencies": {
-    "@aa-sdk/core": "^4.0.0-beta.9",
-    "@account-kit/infra": "^4.0.0-beta.9"
+    "@aa-sdk/core": "^4.0.1",
+    "@account-kit/infra": "^4.0.1"
   },
   "peerDependencies": {
     "viem": "^2.20.0"

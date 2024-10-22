@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/react",
-  "version": "4.0.0-beta.9",
+  "version": "4.0.1",
   "description": "React components and hooks for using Account Kit",
   "author": "Alchemy",
   "license": "MIT",
@@ -43,8 +43,7 @@
     "docs:gen": "npx ak-docgen generate --in ./src/index.ts --out ../../site/pages/reference/account-kit/react",
     "clean": "rm -rf ./dist",
     "test": "vitest --passWithNoTests",
-    "test:run": "vitest run --passWithNoTests",
-    "test:run-e2e": "vitest run --config vitest.config.e2e.ts --passWithNoTests"
+    "test:run": "vitest run --passWithNoTests"
   },
   "devDependencies": {
     "@storybook/addon-essentials": "^8.2.8",
@@ -67,15 +66,16 @@
     "vitest": "^2.0.4"
   },
   "dependencies": {
-    "@account-kit/core": "^4.0.0-beta.9",
-    "@account-kit/infra": "^4.0.0-beta.9",
-    "@tanstack/react-form": "^0.19.4",
-    "@tanstack/zod-form-adapter": "^0.19.4",
-    "@wagmi/connectors": "^4.3.9",
+    "@account-kit/core": "^4.0.1",
+    "@account-kit/infra": "^4.0.1",
+    "@account-kit/logging": "^4.0.1",
+    "@tanstack/react-form": "^0.33.0",
+    "@tanstack/zod-form-adapter": "^0.33.0",
+    "@wagmi/connectors": "^5.1.15",
     "react-remove-scroll": "^2.5.10",
     "tailwindcss": "^3.4.3",
     "zod": "^3.22.4",
-    "zustand": "^4.5.4"
+    "zustand": "^5.0.0-rc.2"
   },
   "peerDependencies": {
     "@tanstack/react-query": "^5.28.9",

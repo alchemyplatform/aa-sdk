@@ -1,10 +1,10 @@
 "use client";
 
-import * as SelectPrimitives from "@radix-ui/react-select";
 import { cn } from "@/lib/utils";
-import React from "react";
-import { useConfig } from "@/app/state";
+import { useConfigStore } from "@/state";
 import { hexToRgba } from "@/utils/hex-to-rgba";
+import * as SelectPrimitives from "@radix-ui/react-select";
+import React from "react";
 
 const SelectMenu = SelectPrimitives.Root;
 
@@ -17,11 +17,9 @@ const SelectMenuTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitives.Trigger>,
   SelectMenuTriggerProps
 >(({ className, isOpen, ...props }, ref) => {
-  const {
-    config: {
-      ui: { primaryColor, theme },
-    },
-  } = useConfig();
+  const { primaryColor, theme } = useConfigStore(
+    ({ ui: { primaryColor, theme } }) => ({ theme, primaryColor })
+  );
 
   return (
     <SelectPrimitives.Trigger
@@ -59,7 +57,7 @@ const SelectMenuContent = React.forwardRef<
   <SelectPrimitives.Content
     ref={ref}
     className={cn(
-      "z-50 w-72 rounded-md border p-4 text-popover-foreground bg-bg-surface-default shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+      "z-50 w-72 rounded-md border p-4 text-popover-foreground bg-[white] shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
       className
     )}
     {...props}
@@ -71,11 +69,11 @@ SelectMenuTrigger.displayName = SelectPrimitives.Trigger.displayName;
 SelectMenuContent.displayName = SelectPrimitives.Content.displayName;
 export {
   SelectMenu,
-  SelectMenuTrigger,
   SelectMenuContent,
-  SelectMenuLabel,
-  SelectMenuItem,
-  SelectMenuSeparator,
   SelectMenuGroup,
+  SelectMenuItem,
+  SelectMenuLabel,
+  SelectMenuSeparator,
+  SelectMenuTrigger,
   SelectMenuViewport,
 };

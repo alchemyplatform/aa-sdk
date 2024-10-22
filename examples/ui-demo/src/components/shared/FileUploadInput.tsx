@@ -40,7 +40,7 @@ const FileUploadInput: React.FC<FileUploadInputProps> = ({
         {...props}
         ref={ref}
         onChange={onChange}
-        style={{ display: "none" }}
+        className="hidden"
         type="file"
         size={10000}
         accept={accept}

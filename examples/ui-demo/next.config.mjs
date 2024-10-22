@@ -1,5 +1,7 @@
+/* eslint-disable jsdoc/check-tag-names */
 await import("./env.mjs");
 
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
     remotePatterns: [
@@ -10,6 +12,10 @@ const nextConfig = {
         pathname: "/assets/accountkit/**",
       },
     ],
+  },
+  webpack: (config) => {
+    config.externals.push("pino-pretty", "lokijs", "encoding");
+    return config;
   },
 };
 

@@ -1,21 +1,25 @@
-import { UserAddressLink } from "@/components/shared/user-connection-avatar/UserAddressLink";
-import { useAccount, useLogout, useSigner, useUser } from "@account-kit/react";
-import { DeploymentStatusIndicator } from "@/components/shared/DeploymentStatusIndicator";
-import { useConfig } from "@/app/state";
 import { ExternalLinkIcon } from "@/components/icons/external-link";
-import { useQuery } from "@tanstack/react-query";
 import { LogoutIcon } from "@/components/icons/logout";
+import { DeploymentStatusIndicator } from "@/components/shared/DeploymentStatusIndicator";
+import { UserAddressLink } from "@/components/shared/user-connection-avatar/UserAddressLink";
+import { useConfigStore } from "@/state";
+import { useAccount, useLogout, useSigner, useUser } from "@account-kit/react";
+import { useQuery } from "@tanstack/react-query";
 
-export function UserConnectionDetails() {
+type UserConnectionDetailsProps = {
+  deploymentStatus: boolean;
+};
+export function UserConnectionDetails({
+  deploymentStatus,
+}: UserConnectionDetailsProps) {
   const user = useUser();
-  const { nftTransfered: deploymentStatus } = useConfig();
   const signer = useSigner();
   const { logout } = useLogout();
-  const { config } = useConfig();
+  const { theme, primaryColor } = useConfigStore(
+    ({ ui: { theme, primaryColor } }) => ({ theme, primaryColor })
+  );
   const scaAccount = useAccount({ type: "LightAccount" });
 
-  const theme = config.ui.theme;
-  const primaryColor = config.ui.primaryColor;
   const isEOAUser = user?.type === "eoa";
 
   const getSignerAddress = async (): Promise<string | null> => {
@@ -74,7 +78,7 @@ export function UserConnectionDetails() {
         <span className="text-md md:text-sm text-fg-secondary">Status</span>
         <div className="flex flex-row items-center">
           <DeploymentStatusIndicator
-            isDeployed={deploymentStatus}
+            isDeployed={!!deploymentStatus}
             className="w-[12px] h-[12px]"
           />
           <span className="text-fg-primary block ml-1 text-md md:text-sm">
@@ -93,9 +97,7 @@ export function UserConnectionDetails() {
             Signer
           </span>
           <div className="flex flex-row justify-center items-center w-[14px] h-[14px] ml-1">
-            <ExternalLinkIcon
-              stroke={theme === "light" ? "#475569" : "#E2E8F0"}
-            />
+            <ExternalLinkIcon className="stroke-fg-secondary" />
           </div>
         </a>
 

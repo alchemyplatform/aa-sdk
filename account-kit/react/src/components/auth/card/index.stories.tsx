@@ -1,11 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { AuthCard } from "./index.jsx";
+import { http, HttpResponse } from "msw";
+import { useEffect } from "react";
 import { useUiConfig } from "../../../hooks/useUiConfig.js";
 import type { AuthType } from "../types.js";
-import { useEffect } from "react";
-import { http, HttpResponse } from "msw";
+import { AuthCard } from "./index.jsx";
 const Test = (props: any) => {
-  const { updateConfig } = useUiConfig();
+  const { updateConfig } = useUiConfig(({ updateConfig }) => ({
+    updateConfig,
+  }));
+
   let sections: AuthType[][] = [
     [{ type: "email" as const }],
     [{ type: "passkey" as const }],

@@ -1,15 +1,15 @@
-import { useConfig } from "@/app/state";
+import { ChevronDown } from "@/components/icons/chevron-down";
 import {
   SelectMenu,
   SelectMenuContent,
-  SelectMenuTrigger,
   SelectMenuItem,
+  SelectMenuTrigger,
   SelectMenuViewport,
 } from "@/components/ui/select-menu";
 import { cn } from "@/lib/utils";
-import { ChevronDown } from "@/components/icons/chevron-down";
-import { useState } from "react";
+import { useConfigStore } from "@/state";
 import { getBorderRadiusValue } from "@account-kit/react/tailwind";
+import { useState } from "react";
 
 const RADIUS_OPTIONS = [
   { label: "None", id: "none" as const },
@@ -18,45 +18,41 @@ const RADIUS_OPTIONS = [
   { label: "Large", id: "lg" as const },
 ];
 
-export function CornerRadiusOptions() {
-  const {
-    config: {
-      ui: { borderRadius },
-    },
-    setConfig,
-  } = useConfig();
+function useBorderRadius() {
+  return useConfigStore(
+    ({ ui: { borderRadius, primaryColor, theme }, setBorderRadius }) => ({
+      setBorderRadius,
+      theme,
+      primaryColor,
+      borderRadius,
+    })
+  );
+}
 
-  const onChange = (borderRadius: "none" | "sm" | "md" | "lg") => {
-    setConfig((prev) => ({
-      ...prev,
-      ui: {
-        ...prev.ui,
-        borderRadius,
-      },
-    }));
-  };
+export function CornerRadiusOptions() {
+  const { borderRadius, setBorderRadius } = useBorderRadius();
 
   return (
     <>
-      <div className="hidden md:flex self-stretch gap-3">
+      <div className="hidden lg:flex self-stretch gap-3">
         {RADIUS_OPTIONS.map((option) => (
           <button
-            className={`h-9 flex items-center justify-center flex-1 basis-0 hover:opacity-80 border border-gray-300 ${
+            className={`h-9 flex items-center justify-center flex-1 basis-0 hover:opacity-80 border border-[#64748B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
               option.id === borderRadius
-                ? "border-[#363FF9] border-[1.5px] bg-[#EFF4F9] font-semibold"
-                : ""
+                ? " bg-demo-surface-secondary font-semibold"
+                : "border-gray-300"
             }`}
             style={{
               borderRadius: getBorderRadiusValue(option.id),
             }}
             key={option.id}
-            onClick={() => onChange(option.id)}
+            onClick={() => setBorderRadius(option.id)}
           >
             <span className="text-sm font-normal">{option.label}</span>
           </button>
         ))}
       </div>
-      <div className="flex md:hidden w-full">
+      <div className="flex lg:hidden w-full">
         <CornerRadiusSelectMenu />
       </div>
     </>
@@ -64,12 +60,8 @@ export function CornerRadiusOptions() {
 }
 
 function CornerRadiusSelectMenu() {
-  const {
-    config: {
-      ui: { borderRadius, primaryColor, theme },
-    },
-    setConfig,
-  } = useConfig();
+  const { borderRadius, primaryColor, theme, setBorderRadius } =
+    useBorderRadius();
 
   type BorderRadius = typeof borderRadius;
   const [selected, setSelected] = useState<BorderRadius>(borderRadius);
@@ -78,13 +70,7 @@ function CornerRadiusSelectMenu() {
   const onChange = (borderRadius: BorderRadius) => {
     setSelected(borderRadius);
 
-    setConfig((prev) => ({
-      ...prev,
-      ui: {
-        ...prev.ui,
-        borderRadius,
-      },
-    }));
+    setBorderRadius(borderRadius);
   };
 
   const getRadiusLabel = (borderRadius: BorderRadius) => {
@@ -113,8 +99,10 @@ function CornerRadiusSelectMenu() {
         </span>
         <div className="ml-1 w-[20px] h-[20px] flex items-center justify-center">
           <ChevronDown
-            stroke={primaryColor[theme]}
-            className={cn("transition", menuOpen && "rotate-180")}
+            className={cn(
+              "transition-transform stroke-demo-fg-primary",
+              menuOpen && "rotate-180"
+            )}
           />
         </div>
       </SelectMenuTrigger>
@@ -127,7 +115,7 @@ function CornerRadiusSelectMenu() {
               className={cn(
                 "px-4 py-3 hover:bg-[rgba(239,244,249,0.4)] transition-colors ease-out outline-none text-sm",
                 selected === option.id
-                  ? "font-medium bg-[#EFF4F9]"
+                  ? "font-medium bg-demo-surface-secondary"
                   : "font-normal"
               )}
             >

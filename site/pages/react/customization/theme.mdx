@@ -3,19 +3,19 @@ title: Custom theme
 description: Learn how to customize the theme of the Account Kit React components
 ---
 
-# Custom Themes
+# Custom theme
 
-When adding the React components to your App, there are two places where the components can be customized. All but one of the theme customizations options are passed through to the Account Kit Tailwind plugin in your `tailwind.config.js` file.
+When using React components in your app, you can customize both 1) overall [theme](#colors) and 2) [authentication components](#custom-authentication-component).
+
+Most theme customizations are passed through using `withAccountKitUi`, the Account Kit Tailwind plugin, in your `tailwind.config.js` file.
 
 :::tip
-The easiest way to configure your UI components, is using the [Demo App](https://aa-sdk-ui-demo.vercel.app/).
+The easiest way to configure your UI components, is using the [Demo App](https://demo.alchemy.com/).
 :::
 
 ## Colors
 
-The Account Theme object passed to `withAccountKitUi` supports a `colors` object which accepts a set of color values which you can override. Each color is a key-value pair where the key is the name of the color and the value is an object containing the `light` and `dark` mode value to use.
-
-The available colors are:
+The [Account Kit Theme](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/tailwind/types.ts) object passed to `withAccountKitUi` supports an overiddable `colors` object which accepts a set of color values. Each color is a key-value pair where the key is the name of the color and the value is an object containing the `light` and `dark` mode value to use.
 
 ### Border colors
 
@@ -75,7 +75,7 @@ export const tailwindConfig = withAccountKitUi(
 
 ## Borders
 
-The border radius intensity can be configured directly in the Tailwind plugin's theme overrides. The default value is `sm` which is an `8px` border radius.
+Similar to colors, the Account Theme object passed to `withAccountKitUi` supports an overiddable `borderRadius` field to customize the border radius size. The default value is `sm` which is an `8px` border radius.
 
 ```ts twoslash
 import { withAccountKitUi } from "@account-kit/react/tailwind";
@@ -101,20 +101,72 @@ The available options are:
 
 ## Illustration styles
 
-This is the one customization option that is not passed through to the Tailwind plugin. The illustration style of various icons used in the components is customized by passing in one of the enum values to your `uiConfig` when you call `createConfig`.
+Unlike colors and border radius, illustration styles are not passed through the Tailwind plugin.
+
+Customize the illustration style of various icons used in the components by passing one of the [enum values](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/types.ts) to `illustrationStyle` in your `uiConfig` when you call `createConfig`.
 
 ```ts twoslash
 import { createConfig } from "@account-kit/react";
-import { sepolia } from "@account-kit/infra";
+import { sepolia, alchemy } from "@account-kit/infra";
 
 const config = createConfig(
   {
-    apiKey: "YOUR_API_KEY",
+    transport: alchemy({ apiKey: "YOUR_KEY" }),
     chain: sepolia,
   },
   {
     // ... other ui config options
     illustrationStyle: "outline",
+  }
+);
+```
+
+## Custom authentication component
+
+The auth modal, by default, shows a `Sign in` text header. This header is fully cusomizable, allowing you to change the text or add an icon.
+
+### Customize header text
+
+To customize the header text, you can override the `header` or `hideSignInText` options of the [`auth`](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/types.ts) config when calling `createConfig`.
+In this example, we hide the default header text and replace it with our own.
+
+```tsx twoslash
+// @jsx: react-jsx
+import { createConfig } from "@account-kit/react";
+import { sepolia, alchemy } from "@account-kit/infra";
+
+export const confg = createConfig(
+  {
+    transport: alchemy({ apiKey: "YOUR_KEY" }),
+    chain: sepolia,
+  },
+  {
+    auth: {
+      header: "Sign in with your account", // [!code ++]
+      hideSignInText: true, // [!code ++]
+    },
+  }
+);
+```
+
+### Adding an icon
+
+In this example, we leave the `Sign in` text in the modal and add an icon above it.
+
+```tsx twoslash
+// @jsx: react-jsx
+import { createConfig } from "@account-kit/react";
+import { sepolia, alchemy } from "@account-kit/infra";
+
+export const confg = createConfig(
+  {
+    transport: alchemy({ apiKey: "YOUR_KEY" }),
+    chain: sepolia,
+  },
+  {
+    auth: {
+      header: <img src="img.src" />, // [!code ++]
+    },
   }
 );
 ```

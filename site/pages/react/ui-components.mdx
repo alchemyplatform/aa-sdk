@@ -1,0 +1,207 @@
+---
+title: Authentication with UI componenets
+description: How to use our pre-built authentication component in your React app
+---
+
+# Authentication with our UI components
+
+Account Kit allows you to use pre-built, [highly customizable](https://demo.alchemy.com/) UI components to handle authenticating your users. These components provide flexibility to:
+
+- use the pre-built [modal](#modal-auth) or [embed](#embedded-auth) the auth card directly in your app
+- customize [authentication method ui](#customize-authentication-ui)
+- customize [theme](/react/customization/theme)
+
+## Modal auth
+
+Assuming your application has been [set up](/react/quickstart), using UI components is the easiest way to authenticate users. All you have to do is leverage the [`useAuthModal`](/reference/account-kit/react/hooks/useAuthModal) hook and provide users a CTA to open the modal.
+
+```tsx twoslash
+import React from "react";
+import { useAuthModal } from "@account-kit/react";
+
+export default function MyPage() {
+  const { openAuthModal } = useAuthModal();
+
+  return <button onClick={openAuthModal}>Authenticate</button>;
+}
+```
+
+That's it! When the user clicks that button, the modal will open and they can complete authentication. Once they are authenticated, you can use the [`useAccount`](/reference/account-kit/react/hooks/useAccount) hook to get the logged in user's SCA address.
+
+**Want to display a loading state during authentication?** <br/>
+For authentication with redirects in a modal, you may want to add a loading state when users are waiting for authentication to complete.
+To do this, manage the loading state directly using our hooks, as shown below. In embedded authentication and non-redirect flows, such as passkey authentication, we handle the loading state for you.
+
+```tsx twoslash
+import { useAuthModal, useSignerStatus } from "@account-kit/react";
+import { useEffect } from "react";
+
+const { openAuthModal } = useAuthModal();
+const { isAuthenticating } = useSignerStatus();
+
+useEffect(() => {
+  if (isAuthenticating) {
+    openAuthModal();
+  }
+}, [openAuthModal, isAuthenticating]);
+```
+
+## Embedded auth
+
+The body of the Auth Modal is also exported for you to use directly in your application. This is useful if you don't want a modal flow for login and want a standalone page using the card.
+
+```tsx twoslash
+import React from "react";
+import { AuthCard } from "@account-kit/react";
+
+export default function MyLoginPage() {
+  return (
+    <div className="flex flex-row p-4 bg-white border border-gray-200 rounded-lg">
+      <AuthCard />
+    </div>
+  );
+}
+```
+
+That's it! The user can now input their credentials and complete login. Once they are authenticated, you can use the [`useAccount`](/reference/account-kit/react/hooks/useAccount) hook to get the logged in user's SCA address
+
+## Customize authentication UI
+
+When rendering the authentication component to your users, it's possible to customize the various sections a user will see as well as the content of the modal.
+
+:::tip
+The easiest way to configure your UI components, is using the [Demo App](https://demo.alchemy.com/).
+:::
+
+**How does the UI config work?**
+
+- `auth` property accepts a `sections` object
+- `sections` object is an array of arrays representing the various sections in descending order, each section (element in the outer array) separated by a divider in the UI
+- each item within a section is an `AuthTypes` objects containing configuration parameters for that authentication method.
+
+  <br />
+
+**The following [`AuthTypes`](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/components/auth/types.ts)
+can be passed into sections:**
+
+### Email
+
+This adds an email login to a section. The shape of this auth type is:
+
+```ts
+type EmailAuthType = {
+  type: "email";
+  // hides the continue button
+  hideButton?: boolean;
+  // changes the button label
+  buttonLabel?: string;
+  // changes the placeholder text in the input
+  placeholder?: string;
+};
+```
+
+### Passkey
+
+This adds a passkey login method to a section. Passkey login allows users to login with a passkey they've created else where in your app after logging in, or right after sign-up if you've enabled that setting.
+The shape of this auth type is:
+
+```ts
+type PasskeyAuthType = {
+  type: "passkey";
+};
+```
+
+### External wallets
+
+This adds an external wallet login method to a section. This allows users to connect to your app with existing EOAs via browser extension or WalletConnect.
+The shape of this auth type is:
+
+```ts
+type ExternalWalletsAuthType = {
+  type: "external_wallets";
+  // if this is undefined, wallet connect will not be displayed
+  walletConnect?: WalletConnectParameters;
+};
+```
+
+### Social
+
+This adds social authentication methods to a section. Social login authentication allows you to login and signup users using an OAuth provider, such as Google Sign-In or Facebook Login. You can also configure custom providers through Auth0. The shape of this auth type is:
+
+```ts
+type SocialAuthType = {
+  type: "social";
+  // Specifies the requested OAuth scope
+  scope?: string;
+  // Specifies additional claims to be included in the authentication token
+  claims?: string;
+} & (
+  | {
+      // For using the Auth0 authentication provider
+      authProviderId: "auth0";
+      // Indicates whether a custom provider is used (default is false)
+      isCustomProvider?: false;
+      // Auth0-specific connection string
+      auth0Connection?: string;
+      // URL for the provider's logo
+      logoUrl: string;
+    }
+  | {
+      // For using a known authentication provider other than Auth0: "google", "facebook", "apple"
+      authProviderId: KnownAuthProvider;
+      // Indicates whether a custom provider is used (default false)
+      isCustomProvider?: false;
+      // Auth0 connection should not be specified when using other providers
+      auth0Connection?: never;
+      // Logo URL is optional for other providers
+      logoUrl?: never;
+    }
+) &
+  OauthRedirectConfig;
+```
+
+### Example
+
+Here's an example ui configuration which adds 3 sections to the auth modal. The first section contains an email auth, the second section is for passkey login and 2 social auth logins (google and facebook), and the third section is external wallets.
+
+```ts twoslash
+import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react";
+import { sepolia, alchemy } from "@account-kit/infra";
+
+const uiConfig: AlchemyAccountsUIConfig = {
+  illustrationStyle: "outline",
+  auth: {
+    sections: [
+      [{ type: "email" }],
+      [
+        { type: "passkey" },
+        { type: "social", authProviderId: "google", mode: "popup" },
+        { type: "social", authProviderId: "facebook", mode: "popup" },
+      ],
+      [
+        {
+          type: "external_wallets",
+          walletConnect: { projectId: "your-project-id" },
+        },
+      ],
+    ],
+    addPasskeyOnSignup: false,
+  },
+};
+
+export const confg = createConfig(
+  {
+    transport: alchemy({ apiKey: "your-api-key" }),
+    chain: sepolia,
+  },
+  uiConfig
+);
+```
+
+This example would output a modal similar to this image:
+
+<img
+  src="/images/example-custom-ui-config.png"
+  alt="Example custom UI config"
+  style={{ width: "20%" }}
+/>
