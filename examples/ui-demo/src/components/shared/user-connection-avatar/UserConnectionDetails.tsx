@@ -97,9 +97,7 @@ export function UserConnectionDetails({
             Signer
           </span>
           <div className="flex flex-row justify-center items-center w-[14px] h-[14px] ml-1">
-            <ExternalLinkIcon
-              stroke={theme === "light" ? "#475569" : "#E2E8F0"}
-            />
+            <ExternalLinkIcon className="stroke-fg-secondary" />
           </div>
         </a>
 
