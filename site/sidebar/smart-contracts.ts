@@ -22,7 +22,7 @@ export const smartContractsSidebar: SidebarItem[] = [
             link: "/smart-contracts/modular-account/deployments",
           },
           {
-            text: "Upgrading to Modular Account",
+            text: "Upgrade",
             link: "/smart-contracts/modular-account/upgrading-to-modular-account",
           },
           {
