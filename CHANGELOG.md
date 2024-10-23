@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.1.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.1...v4.1.0) (2024-10-23)
+
+### Bug Fixes
+
+- border radius fixed for custom social auth ([#1100](https://github.com/alchemyplatform/aa-sdk/issues/1100)) ([9db4ac6](https://github.com/alchemyplatform/aa-sdk/commit/9db4ac65f5f8df026ae9b78f4268038088aeb092))
+- content wrapper spacing ([#1096](https://github.com/alchemyplatform/aa-sdk/issues/1096)) ([1d02177](https://github.com/alchemyplatform/aa-sdk/commit/1d02177f0b7338df3296f6a089afa98b8ee9232b))
+- demo app tokens instead of hard coded values ([#1097](https://github.com/alchemyplatform/aa-sdk/issues/1097)) ([f07a4b4](https://github.com/alchemyplatform/aa-sdk/commit/f07a4b44baf4076b9783f89521afb3b0c5074b59))
+- **logging:** add better dev mode checking so this works in RN ([#1099](https://github.com/alchemyplatform/aa-sdk/issues/1099)) ([5a15482](https://github.com/alchemyplatform/aa-sdk/commit/5a1548216f8eac6eac33f3c9dbb6f91bc64576c3))
+
+### Features
+
+- add back button to auth authentication screens ([#1094](https://github.com/alchemyplatform/aa-sdk/issues/1094)) ([ef73033](https://github.com/alchemyplatform/aa-sdk/commit/ef7303333830df53a9106ba37ce015675a276cd9))
+
 ## [4.0.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0...v4.0.1) (2024-10-19)
 
 ### Bug Fixes
