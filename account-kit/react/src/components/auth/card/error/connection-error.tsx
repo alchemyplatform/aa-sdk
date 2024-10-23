@@ -21,7 +21,7 @@ export const ConnectionError = ({
   EOAConnector,
   handleTryAgain,
   handleUseAnotherMethod,
-  errorMessage,
+  customErrorMessage,
 }: ConnectionErrorProps) => {
   const signer = useSigner();
 
@@ -40,8 +40,8 @@ export const ConnectionError = ({
   }, [signer, connectionType, EOAConnector]);
 
   const getHeadingText = useMemo(() => {
-    if (errorMessage) {
-      return errorMessage;
+    if (customErrorMessage) {
+      return customErrorMessage.heading;
     }
 
     const walletName =
@@ -61,9 +61,13 @@ export const ConnectionError = ({
       case "timeout":
         return ls.error.connection.timedOutTitle;
     }
-  }, [EOAConnector, connectionType, oauthProvider, errorMessage]);
+  }, [EOAConnector, connectionType, oauthProvider, customErrorMessage]);
 
   const getBodyText = useMemo(() => {
+    if (customErrorMessage) {
+      return customErrorMessage.body;
+    }
+
     switch (connectionType) {
       case "passkey":
         return ls.error.connection.passkeyBody;
@@ -74,7 +78,7 @@ export const ConnectionError = ({
       case "timeout":
         return ls.error.connection.timedOutBody;
     }
-  }, [connectionType]);
+  }, [connectionType, customErrorMessage]);
 
   const getFailedIcon = useMemo(() => {
     switch (connectionType) {
@@ -96,14 +100,15 @@ export const ConnectionError = ({
       <h2 className="font-semibold text-lg text-center">{getHeadingText}</h2>
       <p className="text-sm text-center text-fg-secondary">{getBodyText}</p>
       <Button className="mt-3" onClick={handleTryAgain}>
-        {ls.error.cta.tryAgain}
+        {customErrorMessage?.tryAgainCTA ?? ls.error.cta.tryAgain}
       </Button>
       <Button
         onClick={handleUseAnotherMethod}
         variant={"social"}
         className="border-0 bg-btn-secondary"
       >
-        {ls.error.cta.useAnotherMethod}
+        {customErrorMessage?.useAnotherMethodCTA ??
+          ls.error.cta.useAnotherMethod}
       </Button>
     </div>
   );

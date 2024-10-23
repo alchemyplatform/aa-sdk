@@ -6,6 +6,7 @@ import { Button } from "../../button.js";
 import { useAuthContext } from "../context.js";
 import { CardContent } from "./content.js";
 import { ConnectionError } from "./error/connection-error.js";
+import { type CustomErrorMessage } from "./error/types.js";
 import { EOAWallets } from "./error/types.js";
 import { useConnectEOA } from "../hooks/useConnectEOA.js";
 import { useWalletConnectAuthConfig } from "../hooks/useWalletConnectAuthConfig.js";
@@ -82,12 +83,12 @@ export const WalletConnectCard = () => {
   const { connect } = useConnectEOA();
 
   if (authStep.error) {
-    const errorMessage = getCustomErrorMessage(authStep.error);
+    const customErrorMessage = getCustomErrorMessage(authStep.error);
     return (
       <ConnectionError
         connectionType="wallet"
         EOAConnector={EOAWallets.WALLET_CONNECT}
-        errorMessage={errorMessage}
+        customErrorMessage={customErrorMessage}
         handleTryAgain={() => {
           setAuthStep({ type: "wallet_connect" });
 
@@ -201,9 +202,17 @@ export const EoaPickCard = () => {
   );
 };
 
+const customErrorMessages: Record<string, CustomErrorMessage> = {
+  chainIdNotFound: {
+    heading: "The connected wallet does not support this network",
+    body: "The wallet connection failed.",
+    tryAgainCTA: "Try again with a different wallet",
+  },
+};
+
 const getCustomErrorMessage = (error: Error) => {
   if (error.message.includes("ChainId not found")) {
-    return "The selected wallet is not supported on this network";
+    return customErrorMessages.chainIdNotFound;
   }
 
   // Use default error message
