@@ -82,10 +82,12 @@ export const WalletConnectCard = () => {
   const { connect } = useConnectEOA();
 
   if (authStep.error) {
+    const errorMessage = getCustomErrorMessage(authStep.error);
     return (
       <ConnectionError
         connectionType="wallet"
         EOAConnector={EOAWallets.WALLET_CONNECT}
+        errorMessage={errorMessage}
         handleTryAgain={() => {
           setAuthStep({ type: "wallet_connect" });
 
@@ -197,4 +199,13 @@ export const EoaPickCard = () => {
       }
     />
   );
+};
+
+const getCustomErrorMessage = (error: Error) => {
+  if (error.message.includes("ChainId not found")) {
+    return "The selected wallet is not supported on this network";
+  }
+
+  // Use default error message
+  return null;
 };

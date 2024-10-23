@@ -10,6 +10,7 @@ export type ConnectionErrorProps = {
   connectionType: "passkey" | "oauth" | "wallet" | "timeout";
   oauthProvider?: KnownAuthProvider; // TO DO: extend for BYO auth provider
   EOAConnector?: Connector | EOAWallets.WALLET_CONNECT;
+  errorMessage?: string | null;
   handleTryAgain?: () => void;
   handleUseAnotherMethod?: () => void;
 };

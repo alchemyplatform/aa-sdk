@@ -21,6 +21,7 @@ export const ConnectionError = ({
   EOAConnector,
   handleTryAgain,
   handleUseAnotherMethod,
+  errorMessage,
 }: ConnectionErrorProps) => {
   const signer = useSigner();
 
@@ -39,6 +40,10 @@ export const ConnectionError = ({
   }, [signer, connectionType, EOAConnector]);
 
   const getHeadingText = useMemo(() => {
+    if (errorMessage) {
+      return errorMessage;
+    }
+
     const walletName =
       EOAConnector === EOAWallets.WALLET_CONNECT
         ? "Wallet Connect"
@@ -56,7 +61,7 @@ export const ConnectionError = ({
       case "timeout":
         return ls.error.connection.timedOutTitle;
     }
-  }, [EOAConnector, connectionType, oauthProvider]);
+  }, [EOAConnector, connectionType, oauthProvider, errorMessage]);
 
   const getBodyText = useMemo(() => {
     switch (connectionType) {
