@@ -1,4 +1,5 @@
 import { createClientLogger } from "./client.js";
+import { noopLogger } from "./noop.js";
 import { createServerLogger } from "./server.js";
 import type { EventLogger, EventsSchema, LoggerContext } from "./types";
 
@@ -9,10 +10,16 @@ export function createLogger<Schema extends EventsSchema = []>(
 ): EventLogger<Schema>;
 
 export function createLogger(context: LoggerContext): EventLogger {
-  const innerLogger =
-    typeof window === "undefined"
-      ? createServerLogger(context)
-      : createClientLogger(context);
+  const innerLogger = (() => {
+    try {
+      return typeof window === "undefined"
+        ? createServerLogger(context)
+        : createClientLogger(context);
+    } catch (e) {
+      console.error("[Safe to ignore] failed to initialize metrics", e);
+      return noopLogger;
+    }
+  })();
 
   const logger: EventLogger = {
     ...innerLogger,
