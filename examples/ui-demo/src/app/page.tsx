@@ -120,10 +120,10 @@ export default function Home() {
             {showCode && <CodePreview />}
           </div>
         </div>
-        <div className="flex flex-1 flex-col gap-6 pt-16 xl:hidden">
+        <div className="flex flex-1 flex-col gap-6 p-6 pt-24 xl:hidden">
           {!user && <MobileSplashPage />}
           {isEOAUser && (
-            <div className="flex flex-1 flex-col p-6 xl:p-0">
+            <div className="flex flex-1 flex-col">
               <div className="border-border border radius-2 px-6 py-6  bg-bg-surface-default">
                 <RenderUserConnectionAvatar />
                 <div className="pt-6 max-w-96 mx-auto">
