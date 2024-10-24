@@ -39,7 +39,7 @@ export function ValueProps({ status, ...props }: Props) {
       />
       <ValueProp
         title="Batch transactions"
-        className="xl:mb-6"
+        className="lg:mb-6"
         icon={status.batch}
         description="Deploy the user's smart account in their first transaction"
       />
@@ -59,7 +59,7 @@ const ValueProp = ({
 }) => {
   return (
     <div className={`flex gap-3 ${className}`}>
-      <div className="w-5 xl:w-6">{getMintIcon(icon)}</div>
+      <div className="w-5 lg:w-6">{getMintIcon(icon)}</div>
       <div className=" max-w-[308px]">
         <h3 className="text-base font-semibold text-fg-secondary">{title}</h3>
         <p className="text-base leading-6 text-fg-secondary">{description}</p>

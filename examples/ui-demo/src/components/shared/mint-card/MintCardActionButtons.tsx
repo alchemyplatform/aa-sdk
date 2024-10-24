@@ -18,7 +18,7 @@ export function MintCardActionButtons({
     <div {...props} className={cn(className)}>
       {!nftTransfered ? (
         <button
-          className="btn btn-primary h-10 w-full p-2 radius mb-4 xl:mb-4"
+          className="btn btn-primary h-10 w-full p-2 radius mb-4 lg:mb-4"
           disabled={disabled}
           onClick={handleCollectNFT}
         >
@@ -38,13 +38,13 @@ export function MintCardActionButtons({
       )}
       <a
         href="https://accountkit.alchemy.com/react/quickstart"
-        className="btn-secondary btn xl:bg-transparent xl:btn-link md:w-auto h-10 font-semibold flex justify-center mb-6 xl:mb-0"
+        className="btn-secondary btn lg:bg-transparent lg:btn-link md:w-auto h-10 font-semibold flex justify-center mb-6 lg:mb-0"
         target="_blank"
         rel="noreferrer"
       >
         View docs
       </a>
-      <p className=" xl:hidden text-center text-sm text-fg-secondary">
+      <p className=" lg:hidden text-center text-sm text-fg-secondary">
         Visit desktop site to customize styles <br /> and auth methods
       </p>
     </div>

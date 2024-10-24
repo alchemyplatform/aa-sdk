@@ -8,7 +8,7 @@ export const EOAPostLoginActions = () => {
   const { logout } = useLogout();
   return (
     <div className="flex flex-col items-center justify-center">
-      <p className="text-demo-fg-secondary xl:text-fg-secondary text-sm text-center mt-4 lg:mt-0">
+      <p className="text-demo-fg-secondary lg:text-fg-secondary text-sm text-center mt-4 lg:mt-0">
         <span>
           Want to experience{" "}
           <span
@@ -53,17 +53,17 @@ export const EOAPostLoginContents = () => {
         <CheckIcon className="w-[48px] h-[48px] stroke-demo-surface-success" />
         <h3 className="text-[32px] tracking-tight font-semibold mt-5 text-fg-primary whitespace-nowrap">{`You're connected!`}</h3>
       </div>
-      <div className="flex flex-col mt-6 mx-3.5 xl:mx-0">
+      <div className="flex flex-col mt-6 mx-3.5 lg:mx-0">
         <Capabilities
           icon="connect"
           title="Connect existing users"
           description={
             <>
-              <p className="hidden xl:block">
+              <p className="hidden lg:block">
                 Reliable wallet connectors make it easy for you to connect all
                 of your existing web3 users
               </p>
-              <p className="block xl:hidden">
+              <p className="block lg:hidden">
                 Reliable wallet connectors make it easy to connect your existing
                 users
               </p>
@@ -75,11 +75,11 @@ export const EOAPostLoginContents = () => {
           title="Onboard mainstream users"
           description={
             <>
-              <p className="hidden xl:block">
+              <p className="hidden lg:block">
                 Embedded wallets with email, social, and passkey local to bring
                 mainstream users onchain
               </p>
-              <p className="block xl:hidden">
+              <p className="block lg:hidden">
                 Embedded wallets with email, social, and passkey to bring users
                 onchain
               </p>
@@ -91,11 +91,11 @@ export const EOAPostLoginContents = () => {
           title="Sponsor gas fees"
           description={
             <>
-              <p className="hidden xl:block">
+              <p className="hidden lg:block">
                 Gasless transactions available now for embedded wallets and
                 coming soon to EOAs
               </p>
-              <p className="block xl:hidden">
+              <p className="block lg:hidden">
                 Gasless transactions available now for embedded wallets and
                 coming soon to EOAs
               </p>
@@ -119,7 +119,7 @@ const Capabilities = ({
   description: string | JSX.Element;
 }) => {
   return (
-    <div className="flex gap-3 mb-6 xl:mb-10">
+    <div className="flex gap-3 mb-6 lg:mb-10">
       {getPropIcon(icon)}
       <div className=" w-full">
         <h3 className="text-base font-semibold text-fg-secondary">{title}</h3>

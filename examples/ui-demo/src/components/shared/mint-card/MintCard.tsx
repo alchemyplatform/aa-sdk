@@ -48,10 +48,10 @@ export const MintCard = () => {
       type: "success",
       text: (
         <>
-          <span className={"inline-block xl:hidden"}>
+          <span className={"inline-block lg:hidden"}>
             {`You've collected your NFT!`}
           </span>
-          <span className={"hidden xl:inline-block"}>
+          <span className={"hidden lg:inline-block"}>
             {`You've successfully collected your NFT! Refresh to mint
 						again.`}
           </span>
@@ -115,11 +115,11 @@ export const MintCard = () => {
     Object.values(status).some((x) => x === "loading") || isLoadingClient;
 
   return (
-    <div className="flex mt-0 xl:mt-7 pb-10 xl:pb-0 xl:justify-center flex-col xl:h-full">
-      <div className="xl:self-center">
-        <div className="flex items-center flex-col justify-center mb-12 xl:mb-0  xl:flex-row xl:justify-center xl:items-start bg-bg-surface-default radius-1 border-btn-secondary border md:mx-6 xl:mx-0 overflow-hidden xl:h-[470px]">
-          <RenderUserConnectionAvatar className="xl:hidden w-full p-6 mb-0 pb-6 relative after:absolute after:bottom-0 after:left-6 after:right-6  after:h-[1px] after:bg-border" />
-          <div className="hidden xl:block min-w-[410px] p-8 h-full">
+    <div className="flex mt-0 lg:mt-7 pb-10 lg:pb-0 lg:justify-center flex-col lg:h-full">
+      <div className="lg:self-center">
+        <div className="flex items-center flex-col justify-center mb-12 lg:mb-0  lg:flex-row lg:justify-center lg:items-start bg-bg-surface-default radius-1 border-btn-secondary border md:mx-6 lg:mx-0 overflow-hidden lg:h-[470px]">
+          <RenderUserConnectionAvatar className="lg:hidden w-full p-6 mb-0 pb-6 relative after:absolute after:bottom-0 after:left-6 after:right-6  after:h-[1px] after:bg-border" />
+          <div className="hidden lg:block min-w-[410px] p-8 h-full">
             <h1 className="text-3xl font-semibold  leading-10 mb-8 text-fg-primary">
               {!nftTransfered
                 ? "One-click checkout"
@@ -128,7 +128,7 @@ export const MintCard = () => {
             <ValueProps status={status} />
           </div>
           <div
-            className={`p-6 xl:p-8 h-full bg-bg-surface-default  xl:bg-bg-surface-inset`}
+            className={`p-6 lg:p-8 h-full bg-bg-surface-default  lg:bg-bg-surface-inset`}
           >
             <NFT
               nftTransfered={nftTransfered}
@@ -136,7 +136,7 @@ export const MintCard = () => {
               status={status}
             />
             <MintCardActionButtons
-              className="xl:pt-0 xl:w-[180px] m-auto"
+              className="lg:pt-0 lg:w-[180px] m-auto"
               nftTransfered={nftTransfered}
               handleCollectNFT={handleCollectNFT}
               disabled={isActionButtonsDisabled}

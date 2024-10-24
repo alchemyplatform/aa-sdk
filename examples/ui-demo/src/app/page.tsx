@@ -38,13 +38,13 @@ export default function Home() {
 
   return (
     <main
-      className={`flex flex-col h-auto xl:bg-bg-main min-h-screen xl:min-h-0 xl:h-screen ${publicSans.className} bg-cover bg-center overflow-hidden`}
+      className={`flex flex-col h-auto lg:bg-bg-main min-h-screen lg:min-h-0 lg:h-screen ${publicSans.className} bg-cover bg-center overflow-hidden`}
     >
       <TopNav />
       <div
-        className={`flex flex-col flex-1 xl:px-6 lg:px-10 xl:py-6 w-full max-w-screen-2xl mx-auto overflow-hidden overflow-x-hidden ${inter.className} xl:overflow-hidden`}
+        className={`flex flex-col flex-1 xl:px-6 lg:px-10 lg:py-6 w-full max-w-screen-2xl mx-auto overflow-hidden overflow-x-hidden ${inter.className} lg:overflow-hidden`}
       >
-        <div className="hidden xl:flex flex-1 gap-6 overflow-hidden">
+        <div className="hidden lg:flex flex-1 gap-6 overflow-hidden">
           <div className=" flex-col w-[272px] lg:w-[392px] bg-white border border-border rounded-lg p-6 overflow-y-auto scrollbar-none gap-10">
             <Authentication />
             <Styling />
@@ -115,12 +115,12 @@ export default function Home() {
 
             {/* Don't unmount when showing code preview so that the auth card retains its state */}
             <AuthCardWrapper
-              className={cn(showCode && "hidden", "mt-0 xl:pt-0")}
+              className={cn(showCode && "hidden", "mt-0 lg:pt-0")}
             />
             {showCode && <CodePreview />}
           </div>
         </div>
-        <div className="flex flex-1 flex-col gap-6 p-6 pt-24 xl:hidden">
+        <div className="flex flex-1 flex-col gap-6 p-6 pt-24 lg:hidden">
           {!user && <MobileSplashPage />}
           {isEOAUser && (
             <div className="flex flex-1 flex-col">
