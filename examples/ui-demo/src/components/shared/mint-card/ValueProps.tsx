@@ -14,14 +14,14 @@ export function ValueProps({ status, ...props }: Props) {
     <div {...props}>
       <ValueProp
         title="Invisible signing"
-        className="mb-6 xl:mb-10"
+        className="mb-6"
         icon={status.signing}
         description="Sign actions in the background with embedded wallets"
       />
 
       <ValueProp
         title="Gas sponsorship"
-        className="mb-6 xl:mb-10"
+        className="mb-6"
         icon={status.gas}
         description={
           <span>
@@ -30,7 +30,7 @@ export function ValueProps({ status, ...props }: Props) {
               href="https://accountkit.alchemy.com/react/sponsor-gas"
               target="_blank"
               referrerPolicy="no-referrer"
-              className="font-medium"
+              className="font-medium text-fg-accent-brand"
             >
               Learn how.
             </a>
@@ -39,7 +39,7 @@ export function ValueProps({ status, ...props }: Props) {
       />
       <ValueProp
         title="Batch transactions"
-        className="xl:mb-10"
+        className="xl:mb-6"
         icon={status.batch}
         description="Deploy the user's smart account in their first transaction"
       />
