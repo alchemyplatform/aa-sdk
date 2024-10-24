@@ -44,6 +44,9 @@ export function MintCardActionButtons({
       >
         View docs
       </a>
+      <p className=" xl:hidden text-center text-sm text-fg-secondary">
+        Visit desktop site to customize styles <br /> and auth methods
+      </p>
     </div>
   );
 }

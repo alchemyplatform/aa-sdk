@@ -76,7 +76,7 @@ export function NFT({
       )}
       <div
         className={cn(
-          `flex justify-between w-72 xl:w-[180px] relative xl:after:hidden  mb-8 ${afterBoarder}`,
+          `flex justify-between w-72 xl:w-[180px] relative xl:after:hidden mt-2 mb-8 ${afterBoarder}`,
           nftTransfered ? "xl:mb-3" : "xl:mb-14"
         )}
       >
