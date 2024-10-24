@@ -47,7 +47,7 @@ export function NFT({
   });
   return (
     <div {...props} className="flex flex-col items-center">
-      <h3 className="hidden xl:block text-fg-secondary text-base font-semibold mb-4 w-full pl-12 text-start">
+      <h3 className="hidden xl:block text-fg-secondary text-base font-semibold mb-4 w-full text-start">
         NFT Summary
       </h3>
       <h1 className="block xl:hidden text-fg-primary text-3xl font-semibold mb-6">
@@ -65,18 +65,18 @@ export function NFT({
             height={NFT_MOBILE_SIZE}
             src={uri}
             alt="An NFT"
-            className={cn(`mb-4 rounded-xl xl:h-52 xl:w-52`)}
+            className={cn(`mb-4 rounded-xl xl:h-[180px] xl:w-[180px]`)}
             priority
           />
         </div>
       ) : (
-        <div className="w-72 h-72 xl:h-52 xl:w-52 flex justify-center items-center mb-4">
+        <div className="w-72 h-72 xl:h-[180px] xl:w-[180px] flex justify-center items-center mb-4">
           <LoadingIcon />
         </div>
       )}
       <div
         className={cn(
-          `flex justify-between w-72 xl:w-52 relative xl:after:hidden  mb-8 ${afterBoarder}`,
+          `flex justify-between w-72 xl:w-[180px] relative xl:after:hidden  mb-8 ${afterBoarder}`,
           nftTransfered ? "xl:mb-3" : "xl:mb-14"
         )}
       >
@@ -104,7 +104,7 @@ export function NFT({
           target="_blank"
           rel="noreferrer"
           className={cn(
-            `relative text-fg-secondary mb-8 w-72 xl:w-52  flex justify-between items-center ${afterBoarder} `
+            `relative text-fg-secondary mb-8 w-72 xl:w-[180px]  flex justify-between items-center ${afterBoarder} `
           )}
         >
           View transaction
