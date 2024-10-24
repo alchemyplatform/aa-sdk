@@ -15,10 +15,10 @@ export function MobileSplashPage() {
   }, [breakpoint, isAuthenticating, openAuthModal]);
 
   return (
-    <div className="flex flex-col flex-1 pb-5 h-auto max-h-[calc(100svh-100px)] box-content p-4">
+    <div className="flex flex-col flex-1 h-auto max-h-[calc(100svh-100px)] box-content px-4 pt-0 justify-between">
       {/* Header Text */}
-      <>
-        <h3 className="text-[36px] min-[430px]:text-[46px] xl:text-[56px] xl:leading-[60px] text-center font-semibold tracking-tight mb-4">
+      <div>
+        <h3 className="min-[320px]:text-3xl min-[390px]:text-5xl min-[640px]:text-6xl min-[640px]:mt-12 text-center font-semibold tracking-tight mb-4 leading-none">
           Web2 UX,{" "}
           <span
             className="whitespace-nowrap"
@@ -36,9 +36,9 @@ export function MobileSplashPage() {
         <p className="text-base font-normal tracking-tight text-center text-demo-fg-secondary">
           Zero-friction onboarding, one-click transactions
         </p>
-      </>
+      </div>
       {/* Image Wrapper */}
-      <div className="relative my-[20px] h-[40vh] flex items-center justify-center">
+      <div className="relative my-[20px] h-[40vh] max-[375px]:h-[30vh] flex items-center justify-center">
         <video
           src="/videos/splash-demo.mov"
           className="w-full h-full object-contain"
@@ -68,11 +68,11 @@ export function MobileSplashPage() {
             View docs
           </a>
         </div>
+        <p className="text-center text-sm text-fg-secondary">
+          Visit desktop site to customize <br className="sm:hidden" /> styles
+          and auth methods
+        </p>
       </div>
-      <p className="text-center text-sm text-fg-secondary">
-        Visit desktop site to customize <br className="xl:hidden" /> styles and
-        auth methods
-      </p>
     </div>
   );
 }
