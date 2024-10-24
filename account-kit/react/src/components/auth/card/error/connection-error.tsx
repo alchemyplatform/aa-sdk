@@ -8,6 +8,8 @@ import { WalletIcon } from "./icons/wallet-icon.js";
 import { OAuthConnectionFailed } from "../../../../icons/oauth.js";
 import { capitalize } from "../../../../utils.js";
 import { useSigner } from "../../../../hooks/useSigner.js";
+import { disconnect } from "@account-kit/core";
+import { useAlchemyAccountContext } from "../../../../context.js";
 
 export const walletTypeConfig = [
   { name: "Coinbase Wallet", key: EOAWallets.COINBASE_WALLET },
@@ -23,6 +25,7 @@ export const ConnectionError = ({
   handleUseAnotherMethod,
 }: ConnectionErrorProps) => {
   const signer = useSigner();
+  const { config } = useAlchemyAccountContext();
 
   useEffect(() => {
     // Terminate any inflight authentication on Error...
@@ -30,13 +33,17 @@ export const ConnectionError = ({
       connectionType === "wallet" &&
       EOAConnector === EOAWallets.WALLET_CONNECT
     ) {
-      clearWalletConnectStore();
+      disconnect(config)
+        .then(() => {
+          console.log("Disconnected from Wallet Connect");
+        })
+        .catch(console.error);
     }
 
     if (signer) {
       signer.disconnect();
     }
-  }, [signer, connectionType, EOAConnector]);
+  }, [signer, connectionType, EOAConnector, config]);
 
   const getHeadingText = useMemo(() => {
     const walletName =
@@ -102,24 +109,4 @@ export const ConnectionError = ({
       </Button>
     </div>
   );
-};
-
-const clearWalletConnectStore = () => {
-  // Open Wallet Connect Indexed DB
-  const dbOpenRequest = indexedDB.open("WALLET_CONNECT_V2_INDEXED_DB");
-
-  dbOpenRequest.onsuccess = () => {
-    const db = dbOpenRequest.result;
-
-    const txn = db.transaction(["keyvaluestorage"], "readwrite");
-
-    const store = txn.objectStore("keyvaluestorage");
-
-    // Clear Store
-    store.clear();
-  };
-
-  dbOpenRequest.onerror = () => {
-    console.error("Error opening Wallet Connect DB. Cannot clear store.");
-  };
 };
