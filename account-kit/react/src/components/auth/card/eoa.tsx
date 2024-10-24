@@ -10,13 +10,14 @@ import { type CustomErrorMessage } from "./error/types.js";
 import { EOAWallets } from "./error/types.js";
 import { useConnectEOA } from "../hooks/useConnectEOA.js";
 import { useWalletConnectAuthConfig } from "../hooks/useWalletConnectAuthConfig.js";
-import { useSigner } from "../../../hooks/useSigner.js";
+import { useAlchemyAccountContext } from "../../../context.js";
+import { disconnect } from "@account-kit/core";
 
 export const EoaConnectCard = () => {
   const { setAuthStep, authStep } = useAuthContext("eoa_connect");
   const { connect } = useConnectEOA();
   const { chain } = useChain();
-  const signer = useSigner();
+  const { config } = useAlchemyAccountContext();
 
   if (authStep.error) {
     return (
@@ -63,7 +64,7 @@ export const EoaConnectCard = () => {
         title: "Cancel",
         onClick: async () => {
           // Ensure to stop all inflight requests
-          await signer?.disconnect();
+          await disconnect(config);
           setAuthStep({ type: "initial" });
         },
       }}
@@ -75,7 +76,7 @@ export const WalletConnectCard = () => {
   const { setAuthStep, authStep } = useAuthContext("wallet_connect");
   const { walletConnectParams } = useWalletConnectAuthConfig();
   const { chain } = useChain();
-  const signer = useSigner();
+  const { config } = useAlchemyAccountContext();
   const walletConnectConnector = walletConnectParams
     ? walletConnect(walletConnectParams)
     : null;
@@ -127,7 +128,7 @@ export const WalletConnectCard = () => {
         title: "Cancel",
         onClick: async () => {
           // Ensure to stop all inflight requests
-          await signer?.disconnect();
+          await disconnect(config);
           setAuthStep({ type: "initial" });
         },
       }}

@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.1.0...v4.1.1) (2024-10-24)
+
+**Note:** Version bump only for package @account-kit/react
+
+# [4.1.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.1...v4.1.0) (2024-10-23)
+
+### Features
+
+- add back button to auth authentication screens ([#1094](https://github.com/alchemyplatform/aa-sdk/issues/1094)) ([ef73033](https://github.com/alchemyplatform/aa-sdk/commit/ef7303333830df53a9106ba37ce015675a276cd9))
+
 ## [4.0.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.0...v4.0.1) (2024-10-19)
 
 **Note:** Version bump only for package @account-kit/react

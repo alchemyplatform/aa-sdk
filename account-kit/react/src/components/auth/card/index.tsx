@@ -10,12 +10,13 @@ import {
 import { useAuthConfig } from "../../../hooks/internal/useAuthConfig.js";
 import { useAuthModal } from "../../../hooks/useAuthModal.js";
 import { useElementHeight } from "../../../hooks/useElementHeight.js";
-import { useSigner } from "../../../hooks/useSigner.js";
 import { useSignerStatus } from "../../../hooks/useSignerStatus.js";
 import { Navigation } from "../../navigation.js";
 import { useAuthContext } from "../context.js";
 import { Footer } from "../sections/Footer.js";
 import { Step } from "./steps.js";
+import { disconnect } from "@account-kit/core";
+import { useAlchemyAccountContext } from "../../../context.js";
 
 export type AuthCardProps = {
   className?: string;
@@ -59,8 +60,7 @@ export const AuthCardContent = ({
   const { openAuthModal, closeAuthModal } = useAuthModal();
   const { status, isAuthenticating } = useSignerStatus();
   const { authStep, setAuthStep } = useAuthContext();
-
-  const signer = useSigner();
+  const { config } = useAlchemyAccountContext();
 
   const didGoBack = useRef(false);
 
@@ -79,6 +79,7 @@ export const AuthCardContent = ({
       "pick_eoa",
       "wallet_connect",
       "eoa_connect",
+      "oauth_completing",
     ].includes(authStep.type);
   }, [authStep]);
 
@@ -87,7 +88,8 @@ export const AuthCardContent = ({
       case "email_verify":
       case "passkey_verify":
       case "passkey_create":
-        signer?.disconnect(); // Terminate any inflight authentication
+      case "oauth_completing":
+        disconnect(config); // Terminate any inflight authentication
         didGoBack.current = true;
         setAuthStep({ type: "initial" });
         break;
@@ -101,16 +103,19 @@ export const AuthCardContent = ({
       default:
         console.warn("Unhandled back action for auth step", authStep);
     }
-  }, [authStep, setAuthStep, signer]);
+  }, [authStep, setAuthStep, config]);
 
   const onClose = useCallback(() => {
+    // Terminate any inflight authentication
+    disconnect(config);
+
     if (authStep.type === "passkey_create") {
       setAuthStep({ type: "complete" });
     } else {
       setAuthStep({ type: "initial" });
     }
     closeAuthModal();
-  }, [authStep.type, closeAuthModal, setAuthStep]);
+  }, [authStep.type, closeAuthModal, setAuthStep, config]);
 
   useEffect(() => {
     if (authStep.type === "complete") {
