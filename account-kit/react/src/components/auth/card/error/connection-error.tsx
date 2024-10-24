@@ -7,7 +7,6 @@ import { EOAWallets, type ConnectionErrorProps } from "./types.js";
 import { WalletIcon } from "./icons/wallet-icon.js";
 import { OAuthConnectionFailed } from "../../../../icons/oauth.js";
 import { capitalize } from "../../../../utils.js";
-import { useSigner } from "../../../../hooks/useSigner.js";
 import { disconnect } from "@account-kit/core";
 import { useAlchemyAccountContext } from "../../../../context.js";
 
@@ -24,26 +23,12 @@ export const ConnectionError = ({
   handleTryAgain,
   handleUseAnotherMethod,
 }: ConnectionErrorProps) => {
-  const signer = useSigner();
   const { config } = useAlchemyAccountContext();
 
   useEffect(() => {
     // Terminate any inflight authentication on Error...
-    if (
-      connectionType === "wallet" &&
-      EOAConnector === EOAWallets.WALLET_CONNECT
-    ) {
-      disconnect(config)
-        .then(() => {
-          console.log("Disconnected from Wallet Connect");
-        })
-        .catch(console.error);
-    }
-
-    if (signer) {
-      signer.disconnect();
-    }
-  }, [signer, connectionType, EOAConnector, config]);
+    disconnect(config);
+  }, [config]);
 
   const getHeadingText = useMemo(() => {
     const walletName =
