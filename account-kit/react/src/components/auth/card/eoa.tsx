@@ -6,10 +6,10 @@ import { Button } from "../../button.js";
 import { useAuthContext } from "../context.js";
 import { CardContent } from "./content.js";
 import { ConnectionError } from "./error/connection-error.js";
-import { type CustomErrorMessage } from "./error/types.js";
 import { EOAWallets } from "./error/types.js";
 import { useConnectEOA } from "../hooks/useConnectEOA.js";
 import { useWalletConnectAuthConfig } from "../hooks/useWalletConnectAuthConfig.js";
+import { ls } from "../../../strings.js";
 
 export const EoaConnectCard = () => {
   const { setAuthStep, authStep } = useAuthContext("eoa_connect");
@@ -17,10 +17,16 @@ export const EoaConnectCard = () => {
   const { chain } = useChain();
 
   if (authStep.error) {
+    const errorMessage = getErrorMessage(
+      authStep.error,
+      authStep.connector.name
+    );
+
     return (
       <ConnectionError
         connectionType="wallet"
         EOAConnector={authStep.connector}
+        customErrorMessage={errorMessage}
         handleTryAgain={() => {
           setAuthStep({
             type: "eoa_connect",
@@ -79,12 +85,12 @@ export const WalletConnectCard = () => {
   const { connect } = useConnectEOA();
 
   if (authStep.error) {
-    const customErrorMessage = getCustomErrorMessage(authStep.error);
+    const errorMessage = getErrorMessage(authStep.error, "WalletConnect");
     return (
       <ConnectionError
         connectionType="wallet"
         EOAConnector={EOAWallets.WALLET_CONNECT}
-        customErrorMessage={customErrorMessage}
+        customErrorMessage={errorMessage}
         handleTryAgain={() => {
           setAuthStep({ type: "wallet_connect" });
 
@@ -197,19 +203,14 @@ export const EoaPickCard = () => {
   );
 };
 
-const customErrorMessages: Record<string, CustomErrorMessage> = {
-  chainIdNotFound: {
-    heading: "The connected wallet does not support this network",
-    body: "The wallet connection failed.",
-    tryAgainCTA: "Try again with a different wallet",
-  },
-};
-
-const getCustomErrorMessage = (error: Error) => {
+const getErrorMessage = (error: Error, walletName: string) => {
   if (error.message.includes("ChainId not found")) {
-    return customErrorMessages.chainIdNotFound;
+    return ls.error.customErrorMessages.eoa.walletConnect.chainIdNotFound;
   }
 
   // Use default error message
-  return null;
+  return {
+    ...ls.error.customErrorMessages.eoa.default,
+    heading: `${ls.error.customErrorMessages.eoa.default.heading} ${walletName}`,
+  };
 };
