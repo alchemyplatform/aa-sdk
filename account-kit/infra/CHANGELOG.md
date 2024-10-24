@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.1.0...v4.1.1) (2024-10-24)
+
+### Bug Fixes
+
+- **fee-estimator:** add a 50% buffer to base fee by default in alchemy fee estimator ([#1103](https://github.com/alchemyplatform/aa-sdk/issues/1103)) ([62ec78d](https://github.com/alchemyplatform/aa-sdk/commit/62ec78d9d0055b5fc575f5df8f1c1815355af86c))
+
 # [4.1.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.0.1...v4.1.0) (2024-10-23)
 
 **Note:** Version bump only for package @account-kit/infra
