@@ -10,8 +10,6 @@ import { type CustomErrorMessage } from "./error/types.js";
 import { EOAWallets } from "./error/types.js";
 import { useConnectEOA } from "../hooks/useConnectEOA.js";
 import { useWalletConnectAuthConfig } from "../hooks/useWalletConnectAuthConfig.js";
-import { useAlchemyAccountContext } from "../../../context.js";
-import { disconnect } from "@account-kit/core";
 
 export const EoaConnectCard = () => {
   const { setAuthStep, authStep } = useAuthContext("eoa_connect");
@@ -74,7 +72,6 @@ export const WalletConnectCard = () => {
   const { setAuthStep, authStep } = useAuthContext("wallet_connect");
   const { walletConnectParams } = useWalletConnectAuthConfig();
   const { chain } = useChain();
-  const { config } = useAlchemyAccountContext();
   const walletConnectConnector = walletConnectParams
     ? walletConnect(walletConnectParams)
     : null;
@@ -126,7 +123,6 @@ export const WalletConnectCard = () => {
         title: "Cancel",
         onClick: async () => {
           // Ensure to stop all inflight requests
-
           setAuthStep({ type: "initial" });
         },
       }}
