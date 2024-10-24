@@ -1,5 +1,5 @@
 import type { ClientMiddlewareFn } from "@aa-sdk/core";
-import { applyUserOpOverrideOrFeeOption } from "@aa-sdk/core";
+import { applyUserOpOverrideOrFeeOption, bigIntMultiply } from "@aa-sdk/core";
 import type { AlchemyTransport } from "../alchemyTransport";
 
 /**
@@ -51,7 +51,7 @@ export const alchemyFeeEstimator: (
       feeOptions?.maxPriorityFeePerGas
     );
     const maxFeePerGas = applyUserOpOverrideOrFeeOption(
-      baseFeePerGas + BigInt(maxPriorityFeePerGas),
+      bigIntMultiply(baseFeePerGas, 1.5) + BigInt(maxPriorityFeePerGas),
       overrides?.maxFeePerGas,
       feeOptions?.maxFeePerGas
     );

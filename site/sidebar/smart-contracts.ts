@@ -22,7 +22,7 @@ export const smartContractsSidebar: SidebarItem[] = [
             link: "/smart-contracts/modular-account/deployments",
           },
           {
-            text: "Upgrading to Modular Account",
+            text: "Upgrade",
             link: "/smart-contracts/modular-account/upgrading-to-modular-account",
           },
           {
@@ -63,7 +63,10 @@ export const smartContractsSidebar: SidebarItem[] = [
         text: "Custom accounts",
         link: "../third-party/smart-contracts",
       },
-      { text: "Gas benchmarks", link: "/smart-contracts/gas-benchmarks" },
+      {
+        text: "Gas benchmarks",
+        link: "https://github.com/alchemyplatform/aa-benchmarks",
+      },
     ],
   },
   {

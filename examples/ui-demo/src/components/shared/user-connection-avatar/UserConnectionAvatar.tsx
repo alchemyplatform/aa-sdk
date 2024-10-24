@@ -73,8 +73,10 @@ const UserConnectionAvatar = ({
           </h3>
           <div className="ml-1 w-[20px] h-[20px] flex items-center justify-center">
             <ChevronDown
-              stroke={theme === "dark" ? "#fff" : "#020617"}
-              className={cn("transition-transform", isFocused && "rotate-180")}
+              className={cn(
+                "transition-transform stroke-fg-primary",
+                isFocused && "rotate-180"
+              )}
             />
           </div>
         </div>
