@@ -46,7 +46,7 @@ export function NFT({
     enabled: !!client && !!client?.readContract,
   });
   return (
-    <div {...props} className="flex flex-col items-center">
+    <div {...props} className="flex flex-col items-center pb-8 xl:pb-0">
       <h3 className="hidden xl:block text-fg-secondary text-base font-semibold mb-4 w-full text-start">
         NFT Summary
       </h3>

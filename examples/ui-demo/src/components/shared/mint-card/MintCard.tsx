@@ -136,7 +136,7 @@ export const MintCard = () => {
               status={status}
             />
             <MintCardActionButtons
-              className="pt-20 xl:pt-0 xl:w-[180px] m-auto"
+              className="xl:pt-0 xl:w-[180px] m-auto"
               nftTransfered={nftTransfered}
               handleCollectNFT={handleCollectNFT}
               disabled={isActionButtonsDisabled}
