@@ -38,13 +38,13 @@ export default function Home() {
 
   return (
     <main
-      className={`flex flex-col h-auto sm:bg-bg-main min-h-screen sm:min-h-0 sm:h-screen ${publicSans.className} bg-cover bg-center overflow-hidden`}
+      className={`flex flex-col h-auto xl:bg-bg-main min-h-screen xl:min-h-0 xl:h-screen ${publicSans.className} bg-cover bg-center overflow-hidden`}
     >
       <TopNav />
       <div
-        className={`flex flex-col flex-1 sm:px-6 lg:px-10 sm:py-6 w-full max-w-screen-2xl mx-auto overflow-hidden overflow-x-hidden ${inter.className} sm:overflow-hidden`}
+        className={`flex flex-col flex-1 xl:px-6 lg:px-10 xl:py-6 w-full max-w-screen-2xl mx-auto overflow-hidden overflow-x-hidden ${inter.className} xl:overflow-hidden`}
       >
-        <div className="hidden sm:flex flex-1 gap-6 overflow-hidden">
+        <div className="hidden xl:flex flex-1 gap-6 overflow-hidden">
           <div className=" flex-col w-[272px] lg:w-[392px] bg-white border border-border rounded-lg p-6 overflow-y-auto scrollbar-none gap-10">
             <Authentication />
             <Styling />
@@ -120,26 +120,20 @@ export default function Home() {
             {showCode && <CodePreview />}
           </div>
         </div>
-        <div className="flex flex-1 flex-col gap-6 sm:hidden">
+        <div className="flex flex-1 flex-col gap-6 pt-16 xl:hidden">
           {!user && <MobileSplashPage />}
           {isEOAUser && (
-            <div className="flex flex-1 flex-col mt-16 p-6 sm:p-0">
+            <div className="flex flex-1 flex-col p-6 xl:p-0">
               <div className="border-border border radius-2 px-6 py-6  bg-bg-surface-default">
                 <RenderUserConnectionAvatar />
-                <div className="pt-6">
+                <div className="pt-6 max-w-96 mx-auto">
                   <EOAPostLoginContents />
+                  <EOAPostLoginActions />
                 </div>
               </div>
-              <div className="mt-auto mb-5 pt-10">
-                <EOAPostLoginActions />
-              </div>
             </div>
           )}
-          {user && !isEOAUser && (
-            <div className="mt-16 p-6 sm:p-0">
-              <MintCard />
-            </div>
-          )}
+          {user && !isEOAUser && <MintCard />}
         </div>
       </div>
     </main>

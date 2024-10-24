@@ -9,15 +9,16 @@ export function MobileSplashPage() {
 
   useEffect(() => {
     if (breakpoint === "sm" && isAuthenticating) {
+      console.log("openAuthModal");
       openAuthModal();
     }
   }, [breakpoint, isAuthenticating, openAuthModal]);
 
   return (
-    <div className="flex flex-col flex-1 pb-5 h-auto max-h-[calc(100svh-100px)] box-content p-4 pt-[78px]">
+    <div className="flex flex-col flex-1 pb-5 h-auto max-h-[calc(100svh-100px)] box-content p-4">
       {/* Header Text */}
       <>
-        <h3 className="text-[36px] min-[430px]:text-[46px] sm:text-[56px] sm:leading-[60px] text-center font-semibold tracking-tight">
+        <h3 className="text-[36px] min-[430px]:text-[46px] xl:text-[56px] xl:leading-[60px] text-center font-semibold tracking-tight mb-4">
           Web2 UX,{" "}
           <span
             className="whitespace-nowrap"
@@ -37,24 +38,22 @@ export function MobileSplashPage() {
         </p>
       </>
       {/* Image Wrapper */}
-      <div className="flex-1 h-auto min-h-0 flex">
-        <div className="relative my-[20px] flex items-center justify-center flex-1 ">
-          <video
-            src="/videos/splash-demo.mov"
-            className="w-full h-full object-contain"
-            autoPlay
-            loop
-            muted
-            playsInline
-          />
-        </div>
+      <div className="relative my-[20px] h-[40vh] flex items-center justify-center">
+        <video
+          src="/videos/splash-demo.mov"
+          className="w-full h-full object-contain"
+          autoPlay
+          loop
+          muted
+          playsInline
+        />
       </div>
 
-      <div className="sm:mt-auto">
+      <div className="xl:mt-24">
         {/* Bottom action buttons */}
-        <div className="flex flex-col sm:flex-row">
+        <div className="flex flex-col xl:flex-row">
           <button
-            className="btn btn-primary w-full sm:w-auto mb-2 sm:mb-0 flex-1 m-0 sm:mr-2"
+            className="btn btn-primary h-10 w-full xl:w-auto mb-4 flex-1 m-0 xl:mr-2"
             onClick={() => {
               openAuthModal();
             }}
@@ -64,12 +63,16 @@ export function MobileSplashPage() {
           <a
             href="https://accountkit.alchemy.com/"
             target="_blank"
-            className="btn btn-secondary w-full sm:w-auto flex-1 m-0 sm:ml-2"
+            className="btn btn-secondary mb-6 h-10 w-full xl:w-auto flex-1 m-0 xl:ml-2"
           >
             View docs
           </a>
         </div>
       </div>
+      <p className="text-center text-sm text-fg-secondary">
+        Visit desktop site to customize <br className="xl:hidden" /> styles and
+        auth methods
+      </p>
     </div>
   );
 }
