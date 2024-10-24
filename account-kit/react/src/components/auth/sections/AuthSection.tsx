@@ -12,7 +12,7 @@ type AuthSectionProps = {
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const AuthSection = ({ authTypes, ...props }: AuthSectionProps) => {
   return (
-    <div className="btn-group w-full" {...props}>
+    <div className="akui-btn-group w-full" {...props}>
       {authTypes.map((authType, index) => {
         switch (authType.type) {
           case "email":

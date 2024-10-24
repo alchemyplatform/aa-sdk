@@ -1,7 +1,7 @@
 import type { ComponentDef } from "../types";
 
 export const inputComponents: ComponentDef = {
-  ".input": {
+  ".akui-input": {
     // container styling
     "@apply p-3 inline-flex gap-2 h-10 items-center": {},
     "@apply static-border": {},
@@ -42,7 +42,7 @@ export const inputComponents: ComponentDef = {
     // utility class that matches the input fields state
     // here we use this to style something following the input based
     // on if the placeholder is shown
-    "input:placeholder-shown + .match-input": {
+    ".akui-input:placeholder-shown + .match-input": {
       // for svg we want to set the fill to the disabled color
       // this makes a lot of assumptions about how our svgs are structured
       // pretty brittle so fix this later

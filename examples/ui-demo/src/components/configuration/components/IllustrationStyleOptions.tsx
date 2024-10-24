@@ -60,15 +60,13 @@ export function IllustrationStyleOptions() {
 }
 
 const IllustrationStyleSelectMenu = () => {
-  const theme = useTheme();
-  const { illustrationStyle, setIllustrationStyle, primaryColor } =
-    useConfigStore(
-      ({ ui: { illustrationStyle, primaryColor }, setIllustrationStyle }) => ({
-        illustrationStyle,
-        setIllustrationStyle,
-        primaryColor,
-      })
-    );
+  const { illustrationStyle, setIllustrationStyle } = useConfigStore(
+    ({ ui: { illustrationStyle, primaryColor }, setIllustrationStyle }) => ({
+      illustrationStyle,
+      setIllustrationStyle,
+      primaryColor,
+    })
+  );
 
   type IllustrationStyle = typeof illustrationStyle;
   const [selected, setSelected] =
