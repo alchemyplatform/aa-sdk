@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { ls } from "../../../../strings.js";
 import { Button } from "../../../button.js";
 import { ConnectionFailed as PasskeyConnectionFailed } from "../../../../icons/connectionFailed.js";
@@ -7,6 +7,8 @@ import { EOAWallets, type ConnectionErrorProps } from "./types.js";
 import { WalletIcon } from "./icons/wallet-icon.js";
 import { OAuthConnectionFailed } from "../../../../icons/oauth.js";
 import { capitalize } from "../../../../utils.js";
+import { disconnect } from "@account-kit/core";
+import { useAlchemyAccountContext } from "../../../../context.js";
 
 export const walletTypeConfig = [
   { name: "Coinbase Wallet", key: EOAWallets.COINBASE_WALLET },
@@ -20,8 +22,20 @@ export const ConnectionError = ({
   EOAConnector,
   handleTryAgain,
   handleUseAnotherMethod,
+  customErrorMessage,
 }: ConnectionErrorProps) => {
+  const { config } = useAlchemyAccountContext();
+
+  useEffect(() => {
+    // Terminate any inflight authentication on Error...
+    disconnect(config);
+  }, [config]);
+
   const getHeadingText = useMemo(() => {
+    if (customErrorMessage) {
+      return customErrorMessage.heading;
+    }
+
     const walletName =
       EOAConnector === EOAWallets.WALLET_CONNECT
         ? "Wallet Connect"
@@ -39,9 +53,13 @@ export const ConnectionError = ({
       case "timeout":
         return ls.error.connection.timedOutTitle;
     }
-  }, [EOAConnector, connectionType, oauthProvider]);
+  }, [EOAConnector, connectionType, oauthProvider, customErrorMessage]);
 
   const getBodyText = useMemo(() => {
+    if (customErrorMessage) {
+      return customErrorMessage.body;
+    }
+
     switch (connectionType) {
       case "passkey":
         return ls.error.connection.passkeyBody;
@@ -52,7 +70,7 @@ export const ConnectionError = ({
       case "timeout":
         return ls.error.connection.timedOutBody;
     }
-  }, [connectionType]);
+  }, [connectionType, customErrorMessage]);
 
   const getFailedIcon = useMemo(() => {
     switch (connectionType) {
@@ -74,14 +92,15 @@ export const ConnectionError = ({
       <h2 className="font-semibold text-lg text-center">{getHeadingText}</h2>
       <p className="text-sm text-center text-fg-secondary">{getBodyText}</p>
       <Button className="mt-3" onClick={handleTryAgain}>
-        {ls.error.cta.tryAgain}
+        {customErrorMessage?.tryAgainCTA ?? ls.error.cta.tryAgain}
       </Button>
       <Button
         onClick={handleUseAnotherMethod}
         variant={"social"}
         className="border-0 bg-btn-secondary"
       >
-        {ls.error.cta.useAnotherMethod}
+        {customErrorMessage?.useAnotherMethodCTA ??
+          ls.error.cta.useAnotherMethod}
       </Button>
     </div>
   );

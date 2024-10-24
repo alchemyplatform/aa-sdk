@@ -1,34 +1,49 @@
-import { walletConnect, type WalletConnectParameters } from "wagmi/connectors";
-import { useAuthConfig } from "../../../hooks/internal/useAuthConfig.js";
+import { walletConnect } from "wagmi/connectors";
 import { useChain } from "../../../hooks/useChain.js";
-import { useConnect } from "../../../hooks/useConnect.js";
 import { Spinner } from "../../../icons/spinner.js";
 import { WalletConnectIcon } from "../../../icons/walletConnectIcon.js";
 import { Button } from "../../button.js";
 import { useAuthContext } from "../context.js";
-import type { AuthType } from "../types.js";
 import { CardContent } from "./content.js";
 import { ConnectionError } from "./error/connection-error.js";
 import { EOAWallets } from "./error/types.js";
+import { useConnectEOA } from "../hooks/useConnectEOA.js";
+import { useWalletConnectAuthConfig } from "../hooks/useWalletConnectAuthConfig.js";
+import { ls } from "../../../strings.js";
 
 export const EoaConnectCard = () => {
   const { setAuthStep, authStep } = useAuthContext("eoa_connect");
+  const { connect } = useConnectEOA();
+  const { chain } = useChain();
 
   if (authStep.error) {
+    const errorMessage = getErrorMessage(
+      authStep.error,
+      authStep.connector.name
+    );
+
     return (
       <ConnectionError
         connectionType="wallet"
         EOAConnector={authStep.connector}
-        handleTryAgain={() =>
+        customErrorMessage={errorMessage}
+        handleTryAgain={() => {
           setAuthStep({
             type: "eoa_connect",
             connector: authStep.connector,
-          })
-        }
+          });
+
+          // Re-try connector's connection...
+          connect({
+            connector: authStep.connector,
+            chainId: chain.id,
+          });
+        }}
         handleUseAnotherMethod={() => setAuthStep({ type: "pick_eoa" })}
       />
     );
   }
+
   return (
     <CardContent
       header={`Connecting to ${authStep.connector.name}`}
@@ -51,7 +66,9 @@ export const EoaConnectCard = () => {
       error={authStep.error}
       secondaryButton={{
         title: "Cancel",
-        onClick: () => setAuthStep({ type: "initial" }),
+        onClick: async () => {
+          setAuthStep({ type: "initial" });
+        },
       }}
     />
   );
@@ -59,17 +76,36 @@ export const EoaConnectCard = () => {
 
 export const WalletConnectCard = () => {
   const { setAuthStep, authStep } = useAuthContext("wallet_connect");
+  const { walletConnectParams } = useWalletConnectAuthConfig();
+  const { chain } = useChain();
+  const walletConnectConnector = walletConnectParams
+    ? walletConnect(walletConnectParams)
+    : null;
+
+  const { connect } = useConnectEOA();
 
   if (authStep.error) {
+    const errorMessage = getErrorMessage(authStep.error, "WalletConnect");
     return (
       <ConnectionError
         connectionType="wallet"
         EOAConnector={EOAWallets.WALLET_CONNECT}
-        handleTryAgain={() => setAuthStep({ type: "wallet_connect" })}
+        customErrorMessage={errorMessage}
+        handleTryAgain={() => {
+          setAuthStep({ type: "wallet_connect" });
+
+          // Re-try wallet connect's connection...
+          walletConnectConnector &&
+            connect({
+              connector: walletConnectConnector,
+              chainId: chain.id,
+            });
+        }}
         handleUseAnotherMethod={() => setAuthStep({ type: "pick_eoa" })}
       />
     );
   }
+
   // If error render the error card here?
   return (
     <CardContent
@@ -91,7 +127,10 @@ export const WalletConnectCard = () => {
       error={authStep.error}
       secondaryButton={{
         title: "Cancel",
-        onClick: () => setAuthStep({ type: "initial" }),
+        onClick: async () => {
+          // Ensure to stop all inflight requests
+          setAuthStep({ type: "initial" });
+        },
       }}
     />
   );
@@ -99,50 +138,9 @@ export const WalletConnectCard = () => {
 
 export const EoaPickCard = () => {
   const { chain } = useChain();
-  const { connectors, connect } = useConnect({
-    onMutate: ({ connector }) => {
-      if (typeof connector === "function") {
-        setAuthStep({ type: "wallet_connect" });
-      } else {
-        setAuthStep({ type: "eoa_connect", connector });
-      }
-    },
-    onError: (error, { connector }) => {
-      if (typeof connector === "function") {
-        setAuthStep({ type: "wallet_connect", error });
-      } else {
-        setAuthStep({ type: "eoa_connect", connector, error });
-      }
-    },
-    onSuccess: () => {
-      setAuthStep({ type: "complete" });
-    },
-  });
-  const { setAuthStep } = useAuthContext();
+  const { connectors, connect } = useConnectEOA();
 
-  const walletConnectAuthConfig = useAuthConfig((auth) => {
-    const externalWalletSection = auth.sections
-      .find((x) => x.some((y) => y.type === "external_wallets"))
-      ?.find((x) => x.type === "external_wallets") as
-      | Extract<AuthType, { type: "external_wallets" }>
-      | undefined;
-
-    return externalWalletSection?.walletConnect;
-  });
-
-  // Add z-index to the wallet connect modal if not already set
-  const walletConnectParams = walletConnectAuthConfig
-    ? ({
-        ...walletConnectAuthConfig,
-        qrModalOptions: {
-          ...walletConnectAuthConfig.qrModalOptions,
-          themeVariables: {
-            "--wcm-z-index": "1000000",
-            ...walletConnectAuthConfig.qrModalOptions?.themeVariables,
-          },
-        },
-      } as WalletConnectParameters)
-    : undefined;
+  const { walletConnectParams } = useWalletConnectAuthConfig();
 
   const connectorButtons = connectors.map((connector) => {
     return (
@@ -203,4 +201,16 @@ export const EoaPickCard = () => {
       }
     />
   );
+};
+
+const getErrorMessage = (error: Error, walletName: string) => {
+  if (error.message.includes("ChainId not found")) {
+    return ls.error.customErrorMessages.eoa.walletConnect.chainIdNotFound;
+  }
+
+  // Use default error message
+  return {
+    ...ls.error.customErrorMessages.eoa.default,
+    heading: `${ls.error.customErrorMessages.eoa.default.heading} ${walletName}`,
+  };
 };
