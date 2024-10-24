@@ -17,7 +17,6 @@ export const EoaConnectCard = () => {
   const { setAuthStep, authStep } = useAuthContext("eoa_connect");
   const { connect } = useConnectEOA();
   const { chain } = useChain();
-  const { config } = useAlchemyAccountContext();
 
   if (authStep.error) {
     return (
@@ -40,6 +39,7 @@ export const EoaConnectCard = () => {
       />
     );
   }
+
   return (
     <CardContent
       header={`Connecting to ${authStep.connector.name}`}
@@ -63,8 +63,6 @@ export const EoaConnectCard = () => {
       secondaryButton={{
         title: "Cancel",
         onClick: async () => {
-          // Ensure to stop all inflight requests
-          await disconnect(config);
           setAuthStep({ type: "initial" });
         },
       }}
@@ -128,7 +126,7 @@ export const WalletConnectCard = () => {
         title: "Cancel",
         onClick: async () => {
           // Ensure to stop all inflight requests
-          await disconnect(config);
+
           setAuthStep({ type: "initial" });
         },
       }}
