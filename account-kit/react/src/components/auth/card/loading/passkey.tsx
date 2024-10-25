@@ -41,7 +41,7 @@ export const LoadingPasskeyAuth = () => {
         </div> */}
       </div>
       <button
-        className="btn btn-secondary w-full mt-5"
+        className="akui-btn akui-btn-secondary w-full mt-5"
         onClick={() => setAuthStep({ type: "initial" })}
       >
         Cancel
