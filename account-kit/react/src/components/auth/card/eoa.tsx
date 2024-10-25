@@ -78,6 +78,7 @@ export const WalletConnectCard = () => {
   const { setAuthStep, authStep } = useAuthContext("wallet_connect");
   const { walletConnectParams } = useWalletConnectAuthConfig();
   const { chain } = useChain();
+
   const walletConnectConnector = walletConnectParams
     ? walletConnect(walletConnectParams)
     : null;
@@ -93,6 +94,14 @@ export const WalletConnectCard = () => {
         customErrorMessage={errorMessage}
         handleTryAgain={() => {
           setAuthStep({ type: "wallet_connect" });
+
+          // If walletConnectConnector is not found, set the error and return
+          if (!walletConnectConnector) {
+            return setAuthStep({
+              type: "wallet_connect",
+              error: new Error("WalletConnect params not found"),
+            });
+          }
 
           // Re-try wallet connect's connection...
           walletConnectConnector &&
@@ -139,6 +148,7 @@ export const WalletConnectCard = () => {
 export const EoaPickCard = () => {
   const { chain } = useChain();
   const { connectors, connect } = useConnectEOA();
+  const { setAuthStep } = useAuthContext("pick_eoa");
 
   const { walletConnectParams } = useWalletConnectAuthConfig();
 
@@ -185,6 +195,14 @@ export const EoaPickCard = () => {
                 variant="social"
                 icon={<WalletConnectIcon className="w-[25px] h-[25px]" />}
                 onClick={() => {
+                  // If walletConnectConnector is not found, set the error and return
+                  if (!walletConnectConnector) {
+                    return setAuthStep({
+                      type: "wallet_connect",
+                      error: new Error("WalletConnect params not found"),
+                    });
+                  }
+
                   connect({
                     connector: walletConnectConnector,
                     chainId: chain.id,
@@ -206,6 +224,11 @@ export const EoaPickCard = () => {
 const getErrorMessage = (error: Error, walletName: string) => {
   if (error.message.includes("ChainId not found")) {
     return ls.error.customErrorMessages.eoa.walletConnect.chainIdNotFound;
+  }
+
+  if (error.message.includes("WalletConnect params not found")) {
+    return ls.error.customErrorMessages.eoa.walletConnect
+      .walletConnectParamsNotFound;
   }
 
   // Use default error message
