@@ -10,7 +10,7 @@ export default mergeConfig(
       name: "account-kit/core",
       environment: "jsdom",
       setupFiles: [
-        ...(sharedConfig.test?.setupFiles ?? []),
+        // ...(sharedConfig.test?.setupFiles ?? []),
         join(__dirname, "setupTests.ts"),
       ],
     },
