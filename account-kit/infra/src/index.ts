@@ -31,6 +31,10 @@ export {
   zora,
   zoraSepolia,
   beraChainBartio,
+  opbnbMainnet,
+  opbnbTestnet,
+  soneiumMinato,
+  unichainSepolia,
 } from "./chains.js";
 export type * from "./client/decorators/alchemyEnhancedApis.js";
 export { alchemyEnhancedApiActions } from "./client/decorators/alchemyEnhancedApis.js";
