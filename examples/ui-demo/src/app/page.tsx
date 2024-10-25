@@ -120,7 +120,7 @@ export default function Home() {
             {showCode && <CodePreview />}
           </div>
         </div>
-        <div className="flex flex-1 flex-col gap-6 p-6 pt-24 lg:hidden">
+        <div className="flex flex-1 flex-col gap-6 p-6 pt-24 overflow-auto scrollbar-none lg:hidden">
           {!user && <MobileSplashPage />}
           {isEOAUser && (
             <div className="flex flex-1 flex-col">
