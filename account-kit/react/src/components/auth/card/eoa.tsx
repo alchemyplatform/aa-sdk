@@ -85,8 +85,18 @@ export const WalletConnectCard = () => {
 
   const { connect } = useConnectEOA();
 
+  if (!walletConnectConnector) {
+    setAuthStep({
+      type: "wallet_connect",
+      error: new Error("WalletConnect params not found"),
+    });
+
+    return null;
+  }
+
   if (authStep.error) {
     const errorMessage = getErrorMessage(authStep.error, "WalletConnect");
+
     return (
       <ConnectionError
         connectionType="wallet"
@@ -95,20 +105,11 @@ export const WalletConnectCard = () => {
         handleTryAgain={() => {
           setAuthStep({ type: "wallet_connect" });
 
-          // If walletConnectConnector is not found, set the error and return
-          if (!walletConnectConnector) {
-            return setAuthStep({
-              type: "wallet_connect",
-              error: new Error("WalletConnect params not found"),
-            });
-          }
-
           // Re-try wallet connect's connection...
-          walletConnectConnector &&
-            connect({
-              connector: walletConnectConnector,
-              chainId: chain.id,
-            });
+          connect({
+            connector: walletConnectConnector,
+            chainId: chain.id,
+          });
         }}
         handleUseAnotherMethod={() => setAuthStep({ type: "pick_eoa" })}
       />
