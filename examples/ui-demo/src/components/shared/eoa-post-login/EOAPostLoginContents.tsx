@@ -27,7 +27,7 @@ export const EOAPostLoginActions = () => {
       </p>
       <div className="flex flex-col lg:flex-row w-full mt-4">
         <button
-          className="btn btn-primary w-full lg:w-auto mb-4 lg:mb-0 flex-1 m-0 lg:mr-2"
+          className="akui-btn akui-btn-primary w-full lg:w-auto mb-4 lg:mb-0 flex-1 m-0 lg:mr-2"
           onClick={() => {
             logout();
           }}
@@ -37,7 +37,7 @@ export const EOAPostLoginActions = () => {
         <a
           href="https://accountkit.alchemy.com/"
           target="_blank"
-          className="btn btn-secondary w-full lg:w-auto flex-1 m-0 lg:ml-2"
+          className="akui-btn akui-btn-secondary w-full lg:w-auto flex-1 m-0 lg:ml-2"
         >
           View docs
         </a>

@@ -310,6 +310,78 @@ export const shape: Chain = defineChain({
   },
 });
 
+export const unichainSepolia: Chain = defineChain({
+  id: 1301,
+  name: "Unichain Sepolia",
+  network: "Unichain Sepolia",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://unichain-sepolia.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://unichain-sepolia.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://unichain-sepolia.g.alchemy.com/v2"],
+    },
+  },
+});
+
+export const soneiumMinato: Chain = defineChain({
+  id: 1946,
+  name: "Soneium Minato",
+  network: "Soneium Minato",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://soneium-minato.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://soneium-minato.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://soneium-minato.g.alchemy.com/v2"],
+    },
+  },
+});
+
+export const opbnbTestnet: Chain = defineChain({
+  id: 5611,
+  name: "OPBNB Testnet",
+  network: "OPBNB Testnet",
+  nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://opbnb-testnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://opbnb-testnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://opbnb-testnet.g.alchemy.com/v2"],
+    },
+  },
+});
+
+export const opbnbMainnet: Chain = defineChain({
+  id: 204,
+  name: "OPBNB Mainnet",
+  network: "OPBNB Mainnet",
+  nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://opbnb-mainnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://opbnb-mainnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://opbnb-mainnet.g.alchemy.com/v2"],
+    },
+  },
+});
+
 export const beraChainBartio: Chain = defineChain({
   id: 80084,
   name: "BeraChain Bartio",
