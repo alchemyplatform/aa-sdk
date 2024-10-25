@@ -145,19 +145,19 @@ export const AuthCardContent = ({
     <div className="flex flex-col relative">
       {/* Wrapper container that sizes its height dynamically */}
       <DynamicHeight>
+        {(canGoBack || showClose) && (
+          <Navigation
+            showClose={showClose}
+            showBack={canGoBack}
+            onBack={onBack}
+            onClose={onClose}
+          />
+        )}
         <div
-          className={`relative flex flex-col items-center gap-4 text-fg-primary px-6 py-4 ${
+          className={`max-h-[60vh] overflow-auto relative flex flex-col items-center gap-4 text-fg-primary px-6 py-4 ${
             className ?? ""
           }`}
         >
-          {(canGoBack || showClose) && (
-            <Navigation
-              showClose={showClose}
-              showBack={canGoBack}
-              onBack={onBack}
-              onClose={onClose}
-            />
-          )}
           <Step />
         </div>
         <Footer authStep={authStep} />
