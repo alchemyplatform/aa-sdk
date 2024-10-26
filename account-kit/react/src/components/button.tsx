@@ -26,21 +26,21 @@ export const Button = ({
   const btnClass = (() => {
     switch (variant) {
       case "secondary":
-        return "btn-secondary";
+        return "akui-btn-secondary";
       case "social":
-        return "btn-auth";
+        return "akui-btn-auth";
       case "link":
-        return "btn-link";
+        return "akui-btn-link";
       case "primary":
       default:
-        return "btn-primary";
+        return "akui-btn-primary";
     }
   })();
 
   return (
-    <button className={`btn ${btnClass} ${className ?? ""}`} {...props}>
+    <button className={`akui-btn ${btnClass} ${className ?? ""}`} {...props}>
       {icon && <span>{icon}</span>}
-      <div className="btn-content">{children}</div>
+      <div className="akui-btn-content">{children}</div>
     </button>
   );
 };
