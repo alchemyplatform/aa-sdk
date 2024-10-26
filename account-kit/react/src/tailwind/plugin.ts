@@ -119,10 +119,20 @@ export const accountKitUi: (
               "0%": { transform: "translateY(100%)", opacity: "0" },
               "100%": { transform: "translateY(0%)", opacity: "1" },
             },
+            "fade-out": {
+              "0%": { opacity: "1" },
+              "100%": { opacity: "0" },
+            },
+            "slide-down": {
+              "0%": { transform: "translateY(0%)", opacity: "1" },
+              "100%": { transform: "translateY(100%)", opacity: "0" },
+            },
           },
           animation: {
             "fade-in": "fade-in 150ms ease",
             "slide-up": "slide-up 350ms cubic-bezier(.15,1.15,0.6,1.00)",
+            "fade-out": "fade-out 150ms ease",
+            "slide-down": "slide-down 350ms cubic-bezier(.15,1.15,0.6,1.00)",
           },
         },
       },
