@@ -123,7 +123,9 @@ const Capabilities = ({
       {getPropIcon(icon)}
       <div className=" w-full">
         <h3 className="text-base font-semibold text-fg-secondary">{title}</h3>
-        <p className="text-base leading-6 text-fg-secondary">{description}</p>
+        <div className="text-base leading-6 text-fg-secondary">
+          {description}
+        </div>
       </div>
     </div>
   );
