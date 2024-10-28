@@ -37,11 +37,16 @@ export function PhotoUploads({ mode }: { mode: "dark" | "light" }) {
         <button
           onClick={onRemove}
           className={cn(sidebarButton, "justify-center")}
+          id="logo-remove"
         >
           Remove
         </button>
       ) : (
-        <FileUploadInput className={sidebarButton} onChange={onUpload}>
+        <FileUploadInput
+          className={sidebarButton}
+          onChange={onUpload}
+          id="logo-upload"
+        >
           <PhotoIcon />
           <span className="text-sm">Upload</span>
         </FileUploadInput>

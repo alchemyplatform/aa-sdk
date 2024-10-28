@@ -82,7 +82,7 @@ export default function Home() {
                   </div>
                 )}
                 <div className="flex gap-2 items-center">
-                  <div
+                  <label
                     className={cn(
                       "px-2 py-1 h-5 rounded text-xs font-semibold hidden lg:block lg:leading-none",
                       showCode
@@ -91,8 +91,9 @@ export default function Home() {
                     )}
                   >
                     Code preview
-                  </div>
+                  </label>
                   <CodePreviewSwitch
+                    id="code-preview"
                     checked={showCode}
                     onCheckedChange={setShowCode}
                   />
