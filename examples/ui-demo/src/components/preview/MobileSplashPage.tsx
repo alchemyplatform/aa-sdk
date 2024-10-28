@@ -9,7 +9,6 @@ export function MobileSplashPage() {
 
   useEffect(() => {
     if (breakpoint === "sm" && isAuthenticating) {
-      console.log("openAuthModal");
       openAuthModal();
     }
   }, [breakpoint, isAuthenticating, openAuthModal]);
