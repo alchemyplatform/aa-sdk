@@ -119,8 +119,8 @@ export const MintCard = () => {
       <div className="lg:self-center">
         <div className="flex items-center flex-col justify-center mb-12 lg:mb-0  lg:flex-row lg:justify-center lg:items-start bg-bg-surface-default radius-1 border-btn-secondary border md:mx-6 lg:mx-0 overflow-hidden lg:h-[470px]">
           <RenderUserConnectionAvatar className="lg:hidden w-full p-6 mb-0 pb-6 relative after:absolute after:bottom-0 after:left-6 after:right-6  after:h-[1px] after:bg-border" />
-          <div className="hidden lg:block min-w-[410px] p-8 h-full">
-            <h1 className="text-3xl font-semibold  leading-10 mb-8 text-fg-primary">
+          <div className="hidden lg:block max-w-[410px] overflow-auto p-8 h-full">
+            <h1 className="text-3xl lg:text-2xl font-semibold  leading-10 mb-8 text-fg-primary">
               {!nftTransfered
                 ? "One-click checkout"
                 : "You collected your NFT!"}
