@@ -16,7 +16,7 @@ export const Navigation = ({
   onClose,
 }: NavigationProps) => {
   return (
-    <div className="flex items-center justify-between w-full">
+    <div className="flex items-center justify-between w-full px-6 pt-4">
       <Button
         variant="link"
         onClick={onBack}
