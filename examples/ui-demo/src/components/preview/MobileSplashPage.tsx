@@ -37,7 +37,7 @@ export function MobileSplashPage() {
         </p>
       </div>
       {/* Image Wrapper */}
-      <div className="relative mx-auto max-w-[700px] flex items-center justify-center">
+      <div className="relative mx-auto max-w-[500px] flex items-center justify-center">
         <video
           src="/videos/splash-demo.mov"
           className="w-full h-full object-contain"
