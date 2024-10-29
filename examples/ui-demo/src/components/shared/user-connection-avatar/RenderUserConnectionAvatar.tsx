@@ -40,15 +40,15 @@ export const RenderUserConnectionAvatar = (
 
   return (
     <div
-      className="border-b border-border overflow-hidden pb-6 sm:border-none sm:pb-0"
+      className="border-b border-border overflow-hidden pb-6 lg:border-none lg:pb-0"
       {...props}
     >
       {/* Popover - Visible on desktop screens */}
-      <div className="hidden md:block overflow-hidden">
+      <div className="hidden lg:block overflow-hidden">
         <RenderPopoverMenu deploymentStatus={deploymentStatus} />
       </div>
       {/* Dialog - Visible on mobile screens */}
-      <div className="block md:hidden">
+      <div className="block lg:hidden">
         <RenderDialogMenu deploymentStatus={deploymentStatus} />
       </div>
     </div>

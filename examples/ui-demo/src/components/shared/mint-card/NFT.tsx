@@ -22,7 +22,7 @@ type NFTProps = {
 const NFT_MOBILE_SIZE = 288;
 
 const afterBoarder =
-  "after:absolute after:bottom-[-16px] after:left-0 after:w-full after:h-[1px] after:bg-border xl:after:hidden";
+  "after:absolute after:bottom-[-16px] after:left-0 after:w-full after:h-[1px] after:bg-border lg:after:hidden";
 
 export function NFT({
   nftTransfered,
@@ -46,11 +46,11 @@ export function NFT({
     enabled: !!client && !!client?.readContract,
   });
   return (
-    <div {...props} className="flex flex-col items-center">
-      <h3 className="hidden xl:block text-fg-secondary text-base font-semibold mb-4 w-full pl-12 text-start">
+    <div {...props} className="flex flex-col items-center pb-8 lg:pb-0">
+      <h3 className="hidden lg:block text-fg-secondary text-base font-semibold mb-4 w-full text-start">
         NFT Summary
       </h3>
-      <h1 className="block xl:hidden text-fg-primary text-3xl font-semibold mb-6">
+      <h1 className="block lg:hidden text-fg-primary text-3xl font-semibold mb-6">
         {nftTransfered ? "You collected your NFT!" : "One-click checkout"}
       </h1>
       {uri ? (
@@ -65,19 +65,19 @@ export function NFT({
             height={NFT_MOBILE_SIZE}
             src={uri}
             alt="An NFT"
-            className={cn(`mb-4 rounded-xl xl:h-52 xl:w-52`)}
+            className={cn(`mb-4 rounded-xl lg:h-[180px] lg:w-[180px]`)}
             priority
           />
         </div>
       ) : (
-        <div className="w-72 h-72 xl:h-52 xl:w-52 flex justify-center items-center mb-4">
+        <div className="w-72 h-72 lg:h-[180px] lg:w-[180px] flex justify-center items-center mb-4">
           <LoadingIcon />
         </div>
       )}
       <div
         className={cn(
-          `flex justify-between w-72 xl:w-52 relative xl:after:hidden  mb-8 ${afterBoarder}`,
-          nftTransfered ? "xl:mb-3" : "xl:mb-14"
+          `flex justify-between w-72 lg:w-[180px] relative lg:after:hidden mt-2 mb-8 ${afterBoarder}`,
+          nftTransfered ? "lg:mb-3" : "lg:mb-14"
         )}
       >
         <p className="text-fg-secondary text-base">Gas Fee</p>
@@ -104,7 +104,7 @@ export function NFT({
           target="_blank"
           rel="noreferrer"
           className={cn(
-            `relative text-fg-secondary mb-8 w-72 xl:w-52  flex justify-between items-center ${afterBoarder} `
+            `relative text-fg-secondary mb-8 w-72 lg:w-[180px]  flex justify-between items-center ${afterBoarder} `
           )}
         >
           View transaction
@@ -114,7 +114,7 @@ export function NFT({
         </a>
       )}
       <button
-        className="text-fg-secondary text-base flex justify-between items-center w-72 xl:hidden"
+        className="text-fg-secondary text-base flex justify-between items-center w-72 lg:hidden"
         onClick={() => setMobileTrayOpen((prev) => !prev)}
       >
         How it works{" "}
@@ -125,7 +125,7 @@ export function NFT({
         />
       </button>
       {mobileTrayOpen && (
-        <div className="w-72 py-4 xl:hidden">
+        <div className="w-72 py-4 lg:hidden">
           <ValueProps status={status} />{" "}
         </div>
       )}

@@ -38,13 +38,13 @@ export default function Home() {
 
   return (
     <main
-      className={`flex flex-col h-auto sm:bg-bg-main min-h-screen sm:min-h-0 sm:h-screen ${publicSans.className} bg-cover bg-center overflow-hidden`}
+      className={`flex flex-col h-auto lg:bg-bg-main min-h-screen lg:min-h-0 lg:h-screen ${publicSans.className} bg-cover bg-center overflow-hidden`}
     >
       <TopNav />
       <div
-        className={`flex flex-col flex-1 sm:px-6 lg:px-10 sm:py-6 w-full max-w-screen-2xl mx-auto overflow-hidden overflow-x-hidden ${inter.className} sm:overflow-hidden`}
+        className={`flex flex-col flex-1 xl:px-6 lg:px-10 lg:py-6 w-full max-w-screen-2xl mx-auto overflow-hidden overflow-x-hidden ${inter.className} lg:overflow-hidden`}
       >
-        <div className="hidden sm:flex flex-1 gap-6 overflow-hidden">
+        <div className="hidden lg:flex flex-1 gap-6 overflow-hidden">
           <div className=" flex-col w-[272px] lg:w-[392px] bg-white border border-border rounded-lg p-6 overflow-y-auto scrollbar-none gap-10">
             <Authentication />
             <Styling />
@@ -58,8 +58,20 @@ export default function Home() {
             {/* Code toggle header */}
             <div
               className={cn(
+                "absolute top-6 right-6 z-10",
+                showCode && "hidden",
+                user && "hidden"
+              )}
+            >
+              <CodePreviewSwitch
+                checked={showCode}
+                onCheckedChange={setShowCode}
+              />
+            </div>
+            <div
+              className={cn(
                 ` w-full p-6 top-0 left-0 border-b border-border z-10`,
-                !user && !showCode && "border-[transparent]",
+                !user && !showCode && "hidden",
                 showCode ? "sticky" : "absolute",
                 theme === "dark"
                   ? showCode
@@ -81,22 +93,11 @@ export default function Home() {
                     Export configuration
                   </div>
                 )}
-                <div className="flex gap-2 items-center">
-                  <div
-                    className={cn(
-                      "px-2 py-1 h-5 rounded text-xs font-semibold hidden lg:block lg:leading-none",
-                      showCode
-                        ? "bg-[#F3F3FF] text-[#8B5CF6]"
-                        : "bg-demo-surface-secondary text-[#374151]"
-                    )}
-                  >
-                    Code preview
-                  </div>
-                  <CodePreviewSwitch
-                    checked={showCode}
-                    onCheckedChange={setShowCode}
-                  />
-                </div>
+
+                <CodePreviewSwitch
+                  checked={showCode}
+                  onCheckedChange={setShowCode}
+                />
               </div>
               {showCode && (
                 <p className="text-sm text-demo-fg-secondary max-w-[85%]">
@@ -115,31 +116,25 @@ export default function Home() {
 
             {/* Don't unmount when showing code preview so that the auth card retains its state */}
             <AuthCardWrapper
-              className={cn(showCode && "hidden", "mt-0 xl:pt-0")}
+              className={cn(showCode && "hidden", !user ? "mt-0" : "mt-24")}
             />
             {showCode && <CodePreview />}
           </div>
         </div>
-        <div className="flex flex-1 flex-col gap-6 sm:hidden">
+        <div className="flex flex-1 flex-col gap-6 p-6 pt-24 overflow-auto scrollbar-none lg:hidden">
           {!user && <MobileSplashPage />}
           {isEOAUser && (
-            <div className="flex flex-1 flex-col mt-16 p-6 sm:p-0">
+            <div className="flex flex-1 flex-col">
               <div className="border-border border radius-2 px-6 py-6  bg-bg-surface-default">
                 <RenderUserConnectionAvatar />
-                <div className="pt-6">
+                <div className="pt-6 max-w-96 mx-auto">
                   <EOAPostLoginContents />
+                  <EOAPostLoginActions />
                 </div>
               </div>
-              <div className="mt-auto mb-5 pt-10">
-                <EOAPostLoginActions />
-              </div>
             </div>
           )}
-          {user && !isEOAUser && (
-            <div className="mt-16 p-6 sm:p-0">
-              <MintCard />
-            </div>
-          )}
+          {user && !isEOAUser && <MintCard />}
         </div>
       </div>
     </main>
