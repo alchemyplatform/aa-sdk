@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/select-menu";
 import { cn } from "@/lib/utils";
 import { useConfigStore } from "@/state";
-import { useTheme } from "@/state/useTheme";
 import { useState } from "react";
 
 const ILLUSTRATION_STYLE_OPTIONS = [
