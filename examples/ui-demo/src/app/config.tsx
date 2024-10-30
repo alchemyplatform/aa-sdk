@@ -77,6 +77,7 @@ export const alchemyConfig = () =>
       policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
       storage: cookieStorage,
       enablePopupOauth: true,
+      oauthCallbackUrl: "http://localhost:6288/callback",
     },
     {
       illustrationStyle: DEFAULT_CONFIG.ui.illustrationStyle,
