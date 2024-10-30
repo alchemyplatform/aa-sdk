@@ -154,7 +154,7 @@ export const AuthCardContent = ({
           />
         )}
         <div
-          className={`max-h-[60vh] overflow-auto relative flex flex-col items-center gap-4 text-fg-primary px-6 py-4 pt-0 ${
+          className={`max-h-[60vh] overflow-auto relative flex flex-col items-center gap-4 text-fg-primary px-6 py-4 ${
             className ?? ""
           }`}
         >
