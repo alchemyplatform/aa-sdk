@@ -12,12 +12,12 @@ export function AuthCardWrapper({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "flex flex-col flex-1 overflow-y-auto scrollbar-none relative h-full w-full",
+        "flex flex-col flex-1 overflow-y-auto scrollbar-none relative h-full w-full px-6 pb-6",
         theme === "dark" ? "bg-demo-bg-darkmode" : "bg-white",
         className
       )}
     >
-      <div className="flex flex-1 justify-center items-center px-6 mt-24 pb-6">
+      <div className="flex flex-1 justify-center items-center ">
         <RenderContent />
       </div>
     </div>

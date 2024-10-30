@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.2.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.1.1...v4.2.0) (2024-10-29)
+
+### Features
+
+- **networks:** add new networks ([#1106](https://github.com/alchemyplatform/aa-sdk/issues/1106)) ([569862f](https://github.com/alchemyplatform/aa-sdk/commit/569862f6b9bdca68bc73362e1438de31c691a5f2))
+
 ## [4.1.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.1.0...v4.1.1) (2024-10-24)
 
 ### Bug Fixes

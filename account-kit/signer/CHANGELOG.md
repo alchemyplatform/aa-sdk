@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.2.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.1.1...v4.2.0) (2024-10-29)
+
+### Bug Fixes
+
+- **signer:** expire sessions on focus and on timer after init ([#1112](https://github.com/alchemyplatform/aa-sdk/issues/1112)) ([8f28aa4](https://github.com/alchemyplatform/aa-sdk/commit/8f28aa43381d9850682244b4f705d56659f73e56))
+
 ## [4.1.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.1.0...v4.1.1) (2024-10-24)
 
 **Note:** Version bump only for package @account-kit/signer
