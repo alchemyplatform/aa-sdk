@@ -189,13 +189,15 @@ const AuthMethod = ({
         <div className={cn("flex shrink-0", iconClassName)}>{icon}</div>
         <div className="ml-2 flex-1 flex flex-col gap-3">
           <div className="flex flex-1 min-w-full flex-row justify-between items-center">
-            <p
+            <label
               className={cn("font-medium text-sm", unavailable && "opacity-50")}
+              htmlFor={`${name}-auth-method`}
             >
               {name}
-            </p>
+            </label>
             {!unavailable && (
               <Switch
+                id={`${name}-auth-method`}
                 disabled={disabled}
                 checked={active}
                 onCheckedChange={setActive}

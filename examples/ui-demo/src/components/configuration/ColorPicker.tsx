@@ -41,6 +41,7 @@ export function ColorPicker({ theme }: { theme: "dark" | "light" }) {
         className={cn(
           "self-start border rounded-lg py-2 px-[10px] gap-2 flex items-center justify-between hover:opacity-80 w-28 h-10 border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         )}
+        id="color-picker"
       >
         <div
           className="h-6 w-6 rounded shrink-0"

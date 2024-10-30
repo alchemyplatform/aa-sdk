@@ -11,7 +11,8 @@ const CodePreviewSwitch = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root>
 >(({ className, ...props }, ref) => (
   <div className="flex gap-2 items-center">
-    <div
+    <label
+      htmlFor="code-preview-switch"
       className={cn(
         "px-2 py-1 h-5 rounded text-xs font-semibold hidden lg:block lg:leading-none",
         props.checked
@@ -20,7 +21,7 @@ const CodePreviewSwitch = React.forwardRef<
       )}
     >
       Code preview
-    </div>
+    </label>
     <SwitchPrimitives.Root
       className={cn(
         "peer inline-flex h-[28px] w-[50px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-demo-bg-toggle-active data-[state=unchecked]:bg-demo-bg-toggle-inactive",
@@ -28,6 +29,7 @@ const CodePreviewSwitch = React.forwardRef<
       )}
       {...props}
       ref={ref}
+      id="code-preview-switch"
     >
       <SwitchPrimitives.Thumb
         className={cn(
