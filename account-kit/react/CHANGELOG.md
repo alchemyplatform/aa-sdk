@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.2.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.1.1...v4.2.0) (2024-10-29)
+
+### Bug Fixes
+
+- facebook logo ([#1113](https://github.com/alchemyplatform/aa-sdk/issues/1113)) ([da8f0f5](https://github.com/alchemyplatform/aa-sdk/commit/da8f0f5e3ba3c116270c295173aa0b3b05979c90))
+- new responsive design ([#1104](https://github.com/alchemyplatform/aa-sdk/issues/1104)) ([061ba2a](https://github.com/alchemyplatform/aa-sdk/commit/061ba2a5e1f68c64229234a64a3c66d643e7d7ac))
+
+### Features
+
+- add custom error messages for chainId errors ([#1101](https://github.com/alchemyplatform/aa-sdk/issues/1101)) ([150525a](https://github.com/alchemyplatform/aa-sdk/commit/150525a9245d26029105509de51c175b61d6e4ab))
+- add akui to common class names ([#1107](https://github.com/alchemyplatform/aa-sdk/issues/1107)) ([86e4dfb](https://github.com/alchemyplatform/aa-sdk/commit/86e4dfb6068761606d7aac611c935b6ee18281db))
+
 ## [4.1.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.1.0...v4.1.1) (2024-10-24)
 
 **Note:** Version bump only for package @account-kit/react

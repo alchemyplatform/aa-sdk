@@ -58,11 +58,11 @@ const UserConnectionAvatar = ({
         )}
       </div>
       <div className="flex flex-col ml-3 min-w-0">
-        <span className="text-fg-secondary text-left text-sm font-semibold">
+        <span className="text-fg-secondary tracking-[-0.28px] text-left text-sm font-semibold">
           Hello,
         </span>
         <div className="flex flex-row items-center min-w-0">
-          <h3 className="text-fg-primary font-semibold text-left text-lg text-ellipsis w-full">
+          <h3 className="text-fg-primary font-semibold text-left tracking-[-0.32px] text-base text-ellipsis w-full">
             {isEOAUser ? (
               truncateAddress(user.address)
             ) : (

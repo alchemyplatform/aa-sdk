@@ -14,14 +14,14 @@ export function ValueProps({ status, ...props }: Props) {
     <div {...props}>
       <ValueProp
         title="Invisible signing"
-        className="mb-6 xl:mb-10"
+        className="mb-6"
         icon={status.signing}
         description="Sign actions in the background with embedded wallets"
       />
 
       <ValueProp
         title="Gas sponsorship"
-        className="mb-6 xl:mb-10"
+        className="mb-6"
         icon={status.gas}
         description={
           <span>
@@ -30,7 +30,7 @@ export function ValueProps({ status, ...props }: Props) {
               href="https://accountkit.alchemy.com/react/sponsor-gas"
               target="_blank"
               referrerPolicy="no-referrer"
-              className="font-medium"
+              className="font-medium text-fg-accent-brand"
             >
               Learn how.
             </a>
@@ -39,7 +39,7 @@ export function ValueProps({ status, ...props }: Props) {
       />
       <ValueProp
         title="Batch transactions"
-        className="xl:mb-10"
+        className="lg:mb-6"
         icon={status.batch}
         description="Deploy the user's smart account in their first transaction"
       />
@@ -59,7 +59,7 @@ const ValueProp = ({
 }) => {
   return (
     <div className={`flex gap-3 ${className}`}>
-      <div className="w-5 xl:w-6">{getMintIcon(icon)}</div>
+      <div className="w-5 lg:w-6">{getMintIcon(icon)}</div>
       <div className=" max-w-[308px]">
         <h3 className="text-base font-semibold text-fg-secondary">{title}</h3>
         <p className="text-base leading-6 text-fg-secondary">{description}</p>
