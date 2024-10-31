@@ -62,6 +62,27 @@ const STRINGS = {
         tryAgain: "Try again",
         useAnotherMethod: "Use another method",
       },
+      customErrorMessages: {
+        eoa: {
+          walletConnect: {
+            chainIdNotFound: {
+              heading: "The connected wallet does not support this network",
+              body: "The wallet connection failed.",
+              tryAgainCTA: "Try again with a different wallet",
+            },
+            walletConnectParamsNotFound: {
+              heading: "Couldn't connect to WalletConnect",
+              body: "The WalletConnect configuration is missing or incorrect.",
+              tryAgainCTA: "Try again",
+            },
+          },
+          default: {
+            heading: "Couldn't connect to ",
+            body: "The wallet's connection failed or was canceled.",
+            tryAgainCTA: "Try again",
+          },
+        },
+      },
     },
     oauthContactSupport: {
       title: "Need help?",

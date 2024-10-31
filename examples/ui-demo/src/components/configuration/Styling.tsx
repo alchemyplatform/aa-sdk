@@ -38,22 +38,36 @@ export function Styling({ className }: { className?: string }) {
       </div>
       <div className="flex flex-col gap-4 w-full border-b border-border pb-5">
         <div className="flex flex-row justify-between grow items-center">
-          <p className="font-medium text-sm text-secondary-foreground">Theme</p>
+          <label
+            className="font-medium text-sm text-secondary-foreground"
+            htmlFor="theme-switch"
+          >
+            Theme
+          </label>
           <ThemeSwitch
+            id="theme-switch"
             checked={theme === "dark"}
             onCheckedChange={onSwitchTheme}
           />
         </div>
         <div className="flex flex-row justify-between grow items-center">
-          <p className="font-medium text-sm text-secondary-foreground">Color</p>
+          <label
+            className="font-medium text-sm text-secondary-foreground"
+            htmlFor="color-picker"
+          >
+            Color
+          </label>
           <ColorPicker theme={theme} />
         </div>
         <div className="flex flex-row justify-between grow items-center">
           <div>
-            <p className="font-medium text-sm text-secondary-foreground">
+            <label
+              className="font-medium text-sm text-secondary-foreground"
+              htmlFor="logo-upload"
+            >
               Logo{" "}
               <span className="text-fg-tertiary font-normal">(optional)</span>
-            </p>
+            </label>
             <p className="text-fg-tertiary font-normal text-xs">
               {logo?.fileName ? (
                 <span className="truncate block max-w-[200px]">
