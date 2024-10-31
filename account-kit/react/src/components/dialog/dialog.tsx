@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { RemoveScroll } from "react-remove-scroll";
 import { FocusTrap } from "./focustrap.js";
-import { Transition } from "react-transition-group";
 
 type DialogProps = {
   isOpen: boolean;
@@ -20,10 +19,21 @@ type DialogProps = {
  */
 export const Dialog = ({ isOpen, onClose, children }: DialogProps) => {
   const [isScrollLocked, setScrollLocked] = useState(false);
+  const [showBackdrop, setShowBackdrop] = useState(false);
 
   const handleBackgroundClick = useCallback(() => {
     onClose();
   }, [onClose]);
+
+  useEffect(() => {
+    if (isOpen) {
+      setShowBackdrop(true);
+    } else {
+      setTimeout(() => {
+        setShowBackdrop(false);
+      }, 200);
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
@@ -44,31 +54,27 @@ export const Dialog = ({ isOpen, onClose, children }: DialogProps) => {
   return createPortal(
     <RemoveScroll enabled={isScrollLocked}>
       {/* Overlay */}
-      <Transition in={isOpen} timeout={150} mountOnEnter unmountOnExit>
-        {(state) => {
-          return (
-            <div
-              aria-modal
-              role="dialog"
-              className={`fixed inset-0 bg-black/80 flex items-end md:items-center justify-center z-[999999] ${
-                state === "exited" && "hidden"
-              } ${state === "entered" && "block"}`}
-              onClick={handleBackgroundClick}
-            >
-              <FocusTrap>
-                <div
-                  className={`max-md:w-screen md:max-w-sm block ${
-                    state === "entering" && "animate-slide-up"
-                  } ${state === "exiting" && "animate-slide-down"}`}
-                  onClick={(event) => event.stopPropagation()}
-                >
-                  {children}
-                </div>
-              </FocusTrap>
-            </div>
-          );
-        }}
-      </Transition>
+      <div
+        aria-modal
+        role="dialog"
+        className={`fixed inset-0 bg-black/80 flex items-end md:items-center justify-center z-[999999] ${
+          !showBackdrop
+            ? "animate-fade-out invisible"
+            : "animate-fade-in visible"
+        } ${showBackdrop ? "block" : "hidden"}`}
+        onClick={handleBackgroundClick}
+      >
+        <FocusTrap>
+          <div
+            className={`max-md:w-screen md:max-w-sm block ${
+              isOpen ? "animate-slide-up" : "animate-slide-down"
+            }`}
+            onClick={(event) => event.stopPropagation()}
+          >
+            {children}
+          </div>
+        </FocusTrap>
+      </div>
     </RemoveScroll>,
     document.body
   );

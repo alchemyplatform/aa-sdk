@@ -74,7 +74,6 @@
     "@tanstack/zod-form-adapter": "^0.33.0",
     "@wagmi/connectors": "^5.1.15",
     "react-remove-scroll": "^2.5.10",
-    "react-transition-group": "^4.4.5",
     "tailwindcss": "^3.4.3",
     "zod": "^3.22.4",
     "zustand": "^5.0.0-rc.2"
