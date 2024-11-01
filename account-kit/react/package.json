@@ -37,8 +37,8 @@
   "scripts": {
     "prebuild": "npx tsx ./inject-version.ts",
     "dev": "storybook dev",
-    "dev:build": "lerna watch --scope='@account-kit/react' --include-dependencies -- lerna run build --scope=@account-kit/react",
     "build": "yarn clean && yarn build:esm && yarn build:types",
+    "build:dev": "lerna watch --scope='@account-kit/react' --include-dependencies -- lerna run build --scope=@account-kit/react",
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
     "docs:gen": "npx ak-docgen generate --in ./src/index.ts --out ../../site/pages/reference/account-kit/react",
