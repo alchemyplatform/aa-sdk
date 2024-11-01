@@ -12,6 +12,7 @@ const config: StorybookConfig = {
 
   viteFinal: async (config) =>
     mergeConfig(config, {
+      define: { "process.env": {} },
       plugins: [react()],
     }),
 };
