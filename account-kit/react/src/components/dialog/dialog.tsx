@@ -1,6 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { createPortal } from "react-dom";
 import { RemoveScroll } from "react-remove-scroll";
 import { FocusTrap } from "./focustrap.js";
@@ -19,20 +26,31 @@ type DialogProps = {
  */
 export const Dialog = ({ isOpen, onClose, children }: DialogProps) => {
   const [isScrollLocked, setScrollLocked] = useState(false);
-  const [showBackdrop, setShowBackdrop] = useState(false);
+
+  const [renderPortal, setRenderPortal] = useState(false);
+
+  const backdropRef = useRef<HTMLDivElement>(null);
 
   const handleBackgroundClick = useCallback(() => {
     onClose();
   }, [onClose]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    const backdrop = backdropRef.current;
+
     if (isOpen) {
-      setShowBackdrop(true);
-    } else {
-      setTimeout(() => {
-        setShowBackdrop(false);
-      }, 200);
+      setRenderPortal(true);
     }
+
+    const renderPortalHandler = () => {
+      setRenderPortal(false);
+    };
+
+    backdrop?.addEventListener("animationend", renderPortalHandler);
+
+    return () => {
+      backdrop?.removeEventListener("animationend", renderPortalHandler);
+    };
   }, [isOpen]);
 
   useEffect(() => {
@@ -51,31 +69,32 @@ export const Dialog = ({ isOpen, onClose, children }: DialogProps) => {
     setScrollLocked(getComputedStyle(document.body).overflow !== "hidden");
   }, []);
 
-  return createPortal(
-    <RemoveScroll enabled={isScrollLocked}>
-      {/* Overlay */}
-      <div
-        aria-modal
-        role="dialog"
-        className={`fixed inset-0 bg-black/80 flex items-end md:items-center justify-center z-[999999] ${
-          !showBackdrop
-            ? "animate-fade-out invisible"
-            : "animate-fade-in visible"
-        } ${showBackdrop ? "block" : "hidden"}`}
-        onClick={handleBackgroundClick}
-      >
-        <FocusTrap>
+  return renderPortal
+    ? createPortal(
+        <RemoveScroll enabled={isScrollLocked}>
+          {/* Overlay */}
           <div
-            className={`max-md:w-screen md:max-w-sm block ${
-              isOpen ? "animate-slide-up" : "animate-slide-down"
+            aria-modal
+            role="dialog"
+            ref={backdropRef}
+            className={`fixed inset-0 bg-black/80 flex items-end md:items-center justify-center z-[999999] transition-opacity ${
+              isOpen ? "opacity-100" : "opacity-0 delay-75"
             }`}
-            onClick={(event) => event.stopPropagation()}
+            onClick={handleBackgroundClick}
           >
-            {children}
+            <FocusTrap>
+              <div
+                className={`max-md:w-screen md:max-w-sm block ${
+                  isOpen ? "animate-slide-up" : "animate-slide-down"
+                }`}
+                onClick={(event) => event.stopPropagation()}
+              >
+                {children}
+              </div>
+            </FocusTrap>
           </div>
-        </FocusTrap>
-      </div>
-    </RemoveScroll>,
-    document.body
-  );
+        </RemoveScroll>,
+        document.body
+      )
+    : null;
 };
