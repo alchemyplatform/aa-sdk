@@ -24,6 +24,7 @@ export const useOAuthVerify = ({
       });
     },
     onError: (err) => {
+      console.error(err);
       setAuthStep({
         type: "oauth_completing",
         config,
