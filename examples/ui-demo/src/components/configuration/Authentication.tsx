@@ -17,6 +17,10 @@ export const Authentication = ({ className }: { className?: string }) => {
     setAuth,
   }));
 
+  const setEmailAuth = (active: boolean) => {
+    setAuth({ showEmail: active });
+  };
+
   const setPasskeysActive = (active: boolean) => {
     setAuth({ showPasskey: active });
   };
@@ -70,7 +74,7 @@ export const Authentication = ({ className }: { className?: string }) => {
             icon={<MailIcon />}
             name="Email"
             active={auth.showEmail}
-            disabled
+            setActive={setEmailAuth}
           />
           <AuthMethod
             icon={<SocialIcon />}
