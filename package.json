@@ -15,6 +15,14 @@
       "site",
       "doc-gen",
       ".vitest"
+    ],
+    "nohoist": [
+      "**/react-native",
+      "**/react-native/**",
+      "**/@react-native-community/cli",
+      "**/@react-native-community/cli/**",
+      "**/react-native-test-app",
+      "**/react-native-test-app/**"
     ]
   },
   "resolutions": {
