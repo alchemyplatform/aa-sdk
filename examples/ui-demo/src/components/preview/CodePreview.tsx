@@ -1,5 +1,6 @@
 import { Config, DEFAULT_CONFIG } from "@/app/config";
 import { getSectionsForConfig } from "@/app/sections";
+import { Metrics } from "@/metrics";
 import { useConfigStore } from "@/state";
 import { links } from "@/utils/links";
 import dedent from "dedent";
@@ -15,6 +16,11 @@ import ExternalLink from "../shared/ExternalLink";
 
 export function CodePreview({ className }: { className?: string }) {
   const config = useConfigStore((state) => state);
+
+  useEffect(() => {
+    Metrics.trackEvent({ name: "codepreview_viewed" });
+  }, []);
+
   return (
     <div
       className={twMerge(
@@ -28,7 +34,11 @@ export function CodePreview({ className }: { className?: string }) {
           Pass this config object into the{" "}
           <span className="font-mono">AlchemyAccountProvider</span>.
         </p>
-        <CodeBlock title="src/app/config.ts" code={getConfigCode(config)} />
+        <CodeBlock
+          title="src/app/config.ts"
+          code={getConfigCode(config)}
+          eventName="codepreview_config_copied"
+        />
       </div>
       <div className="flex flex-col">
         <div className="mb-2 font-semibold text-secondary">Style</div>
@@ -36,6 +46,9 @@ export function CodePreview({ className }: { className?: string }) {
           Not using tailwind?{" "}
           <ExternalLink
             href="https://tailwindcss.com/docs/installation/using-postcss"
+            onClick={() =>
+              Metrics.trackEvent({ name: "codepreview_tailwind_setup_clicked" })
+            }
             className="text-blue-600 font-semibold"
           >
             Follow this guide to get started
@@ -45,13 +58,22 @@ export function CodePreview({ className }: { className?: string }) {
         <CodeBlock
           title="tailwind.config.ts"
           code={getTailwindCode(config.ui)}
+          eventName="codepreview_style_copied"
         />
       </div>
     </div>
   );
 }
 
-function CodeBlock({ title, code }: { title: string; code: string }) {
+function CodeBlock({
+  title,
+  code,
+  eventName,
+}: {
+  title: string;
+  code: string;
+  eventName: "codepreview_config_copied" | "codepreview_style_copied";
+}) {
   const [copied, setCopied] = useState(false);
   const [formattedCode, setFormattedCode] = useState(code);
 
@@ -68,6 +90,7 @@ function CodeBlock({ title, code }: { title: string; code: string }) {
     navigator.clipboard.writeText(code);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+    Metrics.trackEvent({ name: eventName });
   };
 
   return (
