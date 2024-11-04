@@ -82,11 +82,13 @@ export const PasskeyShieldIllustration = ({
       {illustrationStyle === "outline" && (
         <>
           <PasskeyShieldOutlineLight
-            className={`dark:hidden ${className ?? ""}`}
+            className={`dark:hidden text-fg-accent-brand ${className ?? ""}`}
             {...props}
           />
           <PasskeyShieldOutlineDark
-            className={`hidden dark:block ${className ?? ""}`}
+            className={`hidden text-fg-accent-brand dark:block ${
+              className ?? ""
+            }`}
             {...props}
           />
         </>
@@ -94,11 +96,13 @@ export const PasskeyShieldIllustration = ({
       {illustrationStyle === "linear" && (
         <>
           <PasskeyShieldLinearLight
-            className={`dark:hidden ${className ?? ""}`}
+            className={`dark:hidden text-fg-accent-brand ${className ?? ""}`}
             {...props}
           />
           <PasskeyShieldLinearDark
-            className={`hidden dark:block ${className ?? ""}`}
+            className={`hidden text-fg-accent-brand dark:block ${
+              className ?? ""
+            }`}
             {...props}
           />
         </>
@@ -106,11 +110,13 @@ export const PasskeyShieldIllustration = ({
       {illustrationStyle === "filled" && (
         <>
           <PasskeyShieldFilledLight
-            className={`dark:hidden ${className ?? ""}`}
+            className={`dark:hidden text-fg-accent-brand ${className ?? ""}`}
             {...props}
           />
           <PasskeyShieldFilledDark
-            className={`hidden dark:block ${className ?? ""}`}
+            className={`hidden text-fg-accent-brand dark:block ${
+              className ?? ""
+            }`}
             {...props}
           />
         </>
@@ -118,11 +124,13 @@ export const PasskeyShieldIllustration = ({
       {illustrationStyle === "flat" && (
         <>
           <PasskeyShieldFlatLight
-            className={`dark:hidden ${className ?? ""}`}
+            className={`dark:hidden text-fg-accent-brand ${className ?? ""}`}
             {...props}
           />
           <PasskeyShieldFlatDark
-            className={`hidden dark:block ${className ?? ""}`}
+            className={`hidden dark:block text-fg-accent-brand ${
+              className ?? ""
+            }`}
             {...props}
           />
         </>
