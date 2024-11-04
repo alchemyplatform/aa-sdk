@@ -79,6 +79,7 @@ export type AlchemySignerParams = z.input<typeof AlchemySignerParamsSchema>;
  * A SmartAccountSigner that can be used with any SmartContractAccount
  */
 export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> {
+  public isSignup: boolean;
   /**
    * Initializes an instance with the provided Alchemy signer parameters after parsing them with a schema.
    *
@@ -110,16 +111,23 @@ export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> 
     } else {
       client = params_.client;
     }
-    const { emailBundle, oauthBundle, oauthOrgId, oauthError, idToken } =
-      getAndRemoveQueryParams({
-        emailBundle: "bundle",
-        // We don't need this, but we still want to remove it from the URL.
-        emailOrgId: "orgId",
-        oauthBundle: "alchemy-bundle",
-        oauthOrgId: "alchemy-org-id",
-        oauthError: "alchemy-error",
-        idToken: "alchemy-id-token",
-      });
+    const {
+      emailBundle,
+      oauthBundle,
+      oauthOrgId,
+      oauthError,
+      idToken,
+      _isSignup,
+    } = getAndRemoveQueryParams({
+      emailBundle: "bundle",
+      // We don't need this, but we still want to remove it from the URL.
+      emailOrgId: "orgId",
+      oauthBundle: "alchemy-bundle",
+      oauthOrgId: "alchemy-org-id",
+      oauthError: "alchemy-error",
+      idToken: "alchemy-id-token",
+      _isSignup: "aa-is-signup",
+    });
 
     const initialError =
       oauthError != null
@@ -127,6 +135,8 @@ export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> 
         : undefined;
 
     super({ client, sessionConfig, initialError });
+
+    this.isSignup = _isSignup === "true" ? true : false;
 
     if (emailBundle) {
       this.authenticate({ type: "email", bundle: emailBundle });

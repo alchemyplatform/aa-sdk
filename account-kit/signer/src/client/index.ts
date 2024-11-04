@@ -672,7 +672,9 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     if (this.oauthConfig) {
       return this.oauthConfig;
     } else if (mode === "redirect") {
-      return this.initOauth();
+      const temp = this.initOauth();
+      console.log("CLIENT ID", (await temp).authProviders[0].clientId);
+      return temp;
     } else {
       throw new Error(
         "enablePopupOauth must be set in configuration or signer.preparePopupOauth must be called before using popup-based OAuth login"

@@ -86,8 +86,18 @@ export const alchemyConfig = () =>
           [{ type: "email" }],
           [
             { type: "passkey" },
-            { type: "social", authProviderId: "google", mode: "popup" },
-            { type: "social", authProviderId: "facebook", mode: "popup" },
+            {
+              type: "social",
+              authProviderId: "google",
+              mode: "redirect",
+              redirectUrl: "http://localhost:3000",
+            },
+            {
+              type: "social",
+              authProviderId: "facebook",
+              mode: "redirect",
+              redirectUrl: "http://localhost:3000",
+            },
           ],
         ],
         addPasskeyOnSignup: DEFAULT_CONFIG.auth.addPasskey,

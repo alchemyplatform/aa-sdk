@@ -5,17 +5,22 @@ import { capitalize } from "../../../../utils.js";
 import { useAuthContext } from "../../context.js";
 import { useOAuthVerify } from "../../hooks/useOAuthVerify.js";
 import { ConnectionError } from "../error/connection-error.js";
+import { useSigner } from "../../../../hooks/useSigner.js";
 
 export const CompletingOAuth = () => {
   const { isConnected } = useSignerStatus();
   const { setAuthStep, authStep } = useAuthContext("oauth_completing");
   const { authenticate } = useOAuthVerify({ config: authStep.config });
+  const signer = useSigner();
 
   useEffect(() => {
-    if (isConnected) {
+    if (isConnected && authStep.createPasskeyAfter && signer!.isSignup) {
+      // TO DO: pull query param to check if isSignup
+      setAuthStep({ type: "passkey_create" });
+    } else if (isConnected) {
       setAuthStep({ type: "complete" });
     }
-  }, [isConnected, setAuthStep]);
+  }, [authStep.createPasskeyAfter, isConnected, setAuthStep, signer]);
 
   if (authStep.error) {
     return (
