@@ -6,10 +6,18 @@ export function getSectionsForConfig(
   config: Config,
   walletConnectProjectId: string
 ): AuthType[][] {
-  const { showPasskey, showOAuth, oAuthMethods, showExternalWallets } =
-    config.auth;
-  const sections: AuthType[][] = [[{ type: "email" }]];
+  const {
+    showEmail,
+    showPasskey,
+    showOAuth,
+    oAuthMethods,
+    showExternalWallets,
+  } = config.auth;
+  const sections: AuthType[][] = [];
   const midSection: AuthType[] = [];
+  if (showEmail) {
+    sections.push([{ type: "email" }]);
+  }
   if (showPasskey) {
     midSection.push({ type: "passkey" });
   }

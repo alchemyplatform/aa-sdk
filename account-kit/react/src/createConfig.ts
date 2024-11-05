@@ -58,7 +58,19 @@ export const createConfig = (
 
   ReactLogger.trackEvent({
     name: "config_created",
-    data: ui == null ? { noUi: true } : ui,
+    data:
+      ui == null
+        ? { noUi: true }
+        : // we can't log react components so we need to strip out the header if it exists
+          {
+            ...ui,
+            auth: ui.auth
+              ? {
+                  ...ui.auth,
+                  header: ui.auth.header ? "custom" : "default",
+                }
+              : undefined,
+          },
   });
 
   return {

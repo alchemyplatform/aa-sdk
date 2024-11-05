@@ -4,6 +4,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { Metrics } from "@/metrics";
 import { useConfigStore } from "@/state";
 import { useDebounceEffect } from "@/utils/hooks/useDebounceEffect";
 import { Sketch } from "@uiw/react-color";
@@ -21,6 +22,10 @@ export function ColorPicker({ theme }: { theme: "dark" | "light" }) {
 
   const onSetThemeColor = (color: string) => {
     setPrimaryColor(theme, color);
+    Metrics.trackEvent({
+      name: "branding_color_changed",
+      data: { theme },
+    });
   };
 
   useLayoutEffect(() => {
