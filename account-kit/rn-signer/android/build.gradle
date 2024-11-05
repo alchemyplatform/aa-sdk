@@ -114,6 +114,7 @@ dependencies {
   implementation "javax.xml.bind:jaxb-api:2.3.1"
   implementation "androidx.security:security-crypto:1.1.0-alpha06"
   implementation "com.google.crypto.tink:tink-android:1.15.0"
+  implementation "org.bitcoinj:bitcoinj-core:0.16.3"
 }
 
 if (isNewArchitectureEnabled()) {
