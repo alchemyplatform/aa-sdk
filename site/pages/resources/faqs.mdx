@@ -201,15 +201,18 @@ However, we have created a small PoC using Expo that you can find [here](https:/
 
 ### How should I protect my api key and policy id in the frontend?
 
-Why is it important to protect my API key and Policy ID?
+**Why is it important to protect my API key and Policy ID?**
 
 To prevent unauthorized use or abuse of your API key and Policy ID, it’s critical to avoid exposing them on the frontend. If these credentials are exposed, they could be misused, leading to unintended usage or sponsorship.
 
 Gas sponsorship requests will only succeed if both the Policy ID and the corresponding API key are used together. While protecting your API key alone renders the Policy ID useless to malicious actors, the best security practice is to protect both.
 
+**How can I protect my API Key?**
+We recommend moving your API key to the backend by routing to a proxy. You can see an [example](https://github.com/alchemyplatform/aa-sdk/blob/ef7303333830df53a9106ba37ce015675a276cd9/examples/ui-demo/src/app/config.tsx#L74) of setting up a transport to a backend rpcUrl in our demo app.
+
 For more information on how to secure your API key, refer to [this guide](https://docs.alchemy.com/docs/best-practices-for-key-security-and-management).
 
-How can I protect my Policy ID?
+**How can I protect my Policy ID?**
 
 Protecting your Policy ID requires some custom work, but it’s similar to safeguarding any key on the backend. One solution is to use a proxy server that holds both the API key and Policy ID. In the frontend, when creating an Alchemy client, pass the proxy server URL as the RPC URL instead of a public Alchemy URL.
 
