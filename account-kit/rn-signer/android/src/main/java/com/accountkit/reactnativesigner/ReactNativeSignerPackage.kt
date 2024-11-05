@@ -9,8 +9,8 @@ import java.util.HashMap
 
 class ReactNativeSignerPackage : TurboReactPackage() {
   override fun getModule(name: String, reactContext: ReactApplicationContext): NativeModule? {
-    return if (name == ReactNativeSignerModule.NAME) {
-      ReactNativeSignerModule(reactContext)
+    return if (name == NativeTEKStamperModule.NAME) {
+      NativeTEKStamperModule(reactContext)
     } else {
       null
     }
@@ -19,9 +19,9 @@ class ReactNativeSignerPackage : TurboReactPackage() {
   override fun getReactModuleInfoProvider(): ReactModuleInfoProvider {
     return ReactModuleInfoProvider {
       val moduleInfos: MutableMap<String, ReactModuleInfo> = HashMap()
-      moduleInfos[ReactNativeSignerModule.NAME] = ReactModuleInfo(
-        ReactNativeSignerModule.NAME,
-        ReactNativeSignerModule.NAME,
+      moduleInfos[NativeTEKStamperModule.NAME] = ReactModuleInfo(
+        NativeTEKStamperModule.NAME,
+        NativeTEKStamperModule.NAME,
         false,  // canOverrideExistingModule
         false,  // needsEagerInit
         true,  // hasConstants

@@ -1,12 +1,9 @@
-import { StyleSheet, View, Text } from "react-native";
-import { multiply } from "@account-kit/react-native-signer";
-
-const result = multiply(3, 7);
+import { StyleSheet, Text, View } from "react-native";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
+      <Text>Result: 0</Text>
     </View>
   );
 }
