@@ -5,12 +5,17 @@ import androidx.security.crypto.MasterKey
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.module.annotations.ReactModule
+import com.google.crypto.tink.BinaryKeysetReader
 import com.google.crypto.tink.BinaryKeysetWriter
+import com.google.crypto.tink.HybridDecrypt
 import com.google.crypto.tink.KeysetHandle
 import com.google.crypto.tink.TinkJsonProtoKeysetFormat
-import com.google.crypto.tink.signature.EcdsaSignKeyManager
-import com.google.crypto.tink.signature.SignatureConfig
+import com.google.crypto.tink.config.TinkConfig
+import com.google.crypto.tink.hybrid.HpkeParameters
+import com.google.crypto.tink.subtle.EllipticCurves
+import org.bitcoinj.core.Base58
 import java.io.ByteArrayOutputStream
+import java.nio.ByteBuffer
 import javax.xml.bind.DatatypeConverter
 
 @ReactModule(name = NativeTEKStamperModule.NAME)
@@ -18,7 +23,14 @@ class NativeTEKStamperModule(reactContext: ReactApplicationContext) :
     NativeTEKStamperSpec(reactContext) {
 
     private val TEK_STORAGE_KEY = "TEK_STORAGE_KEY"
+    private val BUNDLE_KEY = "BUNDLE_KEY"
     private val context = reactContext
+
+    // This is how the docs for EncryptedSharedPreferences recommend creating this setup
+    private val masterKey = MasterKey.Builder(context.applicationContext)
+        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+        .setUserAuthenticationRequired(false)
+        .build();
 
     /**
      * We are using EncryptedSharedPreferences to store 2 pieces of data
@@ -40,11 +52,6 @@ class NativeTEKStamperModule(reactContext: ReactApplicationContext) :
      *
      * The open question is if the storage of the decrypted private key is secure enough though
      */
-    private val masterKey = MasterKey.Builder(context.applicationContext)
-        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-        .setUserAuthenticationRequired(false)
-        .build();
-
     private val sharedPreferences = EncryptedSharedPreferences.create(
         context,
         "tek_stamper_shared_prefs",
@@ -53,21 +60,30 @@ class NativeTEKStamperModule(reactContext: ReactApplicationContext) :
         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )
 
+    init {
+        TinkConfig.register()
+    }
+
     override fun getName(): String {
         return NAME
     }
 
     override fun init(promise: Promise) {
-        // Register the ECDSA manager
-        SignatureConfig.register()
-
         try {
             val existingPublicKey = publicKey()
             if (existingPublicKey != null) {
                 return promise.resolve(existingPublicKey)
             }
+            // This allows us to do the HPKE decryption of the bundle
+            val hpkeParams = HpkeParameters.builder()
+                .setKemId(HpkeParameters.KemId.DHKEM_P256_HKDF_SHA256)
+                .setKdfId(HpkeParameters.KdfId.HKDF_SHA256)
+                .setAeadId(HpkeParameters.AeadId.AES_256_GCM)
+                .setVariant(HpkeParameters.Variant.NO_PREFIX)
+                .build()
+
             // Generate a P256 key
-            val keyHandle = KeysetHandle.generateNew(EcdsaSignKeyManager.ecdsaP256Template())
+            val keyHandle = KeysetHandle.generateNew(hpkeParams)
 
             // Store the ephemeral key in encrypted shared preferences
             sharedPreferences
@@ -93,8 +109,34 @@ class NativeTEKStamperModule(reactContext: ReactApplicationContext) :
         return publicKeyToHex(existingHandle)
     }
 
-    override fun injectCredentialBundle(bundle: String?, promise: Promise) {
-        TODO("Not yet implemented")
+    override fun injectCredentialBundle(bundle: String, promise: Promise) {
+        try {
+            val tekHandle = getRecipientKeyHandle()
+                ?: return promise.reject(Exception("Stamper has not been initialized"))
+
+            val decodedBundle = Base58.decodeChecked(bundle)
+            val buffer = ByteBuffer.wrap(decodedBundle)
+
+            // Turnkey bundle is first 33 bytes as the key and remaining the encrypted private key
+            val ephemeralPublicKeyLength = 33
+            val ephemeralPublicKeyBytes = ByteArray(ephemeralPublicKeyLength)
+            buffer.get(ephemeralPublicKeyBytes)
+            val ciphertext = ByteArray(buffer.remaining())
+            buffer.get(ciphertext)
+
+            val hybridDecrypt = tekHandle.getPrimitive(HybridDecrypt::class.java)
+            val context = ephemeralPublicKeyBytes + publicKeyToHex(tekHandle).toByteArray()
+            val decryptedKey =
+                hybridDecrypt.decrypt(ciphertext, context)
+
+            sharedPreferences.edit()
+                .putString(BUNDLE_KEY, DatatypeConverter.printHexBinary(decryptedKey).uppercase())
+                .apply()
+
+            return promise.resolve(true)
+        } catch (e: Exception) {
+            promise.reject(e)
+        }
     }
 
     override fun stamp(payload: String?, promise: Promise) {
