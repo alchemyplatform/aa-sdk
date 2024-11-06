@@ -10,6 +10,7 @@ dist
 node_modules
 tsconfig*.tsbuildinfo
 .idea/
+.nx
 
 # local env files
 .env

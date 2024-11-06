@@ -39,7 +39,7 @@
   "scripts": {
     "test": "jest",
     "typecheck": "tsc",
-    "build": "bob build && yarn typecheck && yarn build:android",
+    "build:rn": "bob build && yarn typecheck && yarn build:android",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
     "build:android": "cd ./example && react-native build-android --extra-params \"--no-daemon --console=plain -PreactNativeArchitectures=arm64-v8a\"",
     "prepare": "bob build"
@@ -143,7 +143,8 @@
     "version": "0.42.2"
   },
   "dependencies": {
-    "@account-kit/signer": "^4.2.0",
+    "@aa-sdk/core": "^4.3.0",
+    "@account-kit/signer": "^4.3.0",
     "viem": "^2.21.40"
   }
 }

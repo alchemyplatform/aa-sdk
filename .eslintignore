@@ -12,3 +12,5 @@ site/.vitepress/cache/**/*
 account-kit/rn-signer/lib/*
 **/android/generated/*
 **/ios/generated/*
+**/build/*
+**/.cxx/*
