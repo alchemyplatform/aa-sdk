@@ -1488,7 +1488,7 @@
     "@babel/helper-create-regexp-features-plugin" "^7.25.9"
     "@babel/helper-plugin-utils" "^7.25.9"
 
-"@babel/preset-env@^7.16.4", "@babel/preset-env@^7.25.2":
+"@babel/preset-env@^7.16.4", "@babel/preset-env@^7.25.2", "@babel/preset-env@^7.25.3":
   version "7.26.0"
   resolved "https://registry.npmjs.org/@babel/preset-env/-/preset-env-7.26.0.tgz"
   integrity sha512-H84Fxq0CQJNdPFT2DrfnylZ3cf5K43rGfWK4LJGPpjKHiZlk0/RzwEus3PDDZZg+/Er7lCA03MVacueUuXdzfw==
@@ -5733,10 +5733,25 @@
     hermes-parser "0.23.1"
     nullthrows "^1.1.1"
 
+"@react-native/metro-config@0.76.1":
+  version "0.76.1"
+  resolved "https://registry.yarnpkg.com/@react-native/metro-config/-/metro-config-0.76.1.tgz#a58669555d0e0ffbe694e4a4cbeaa12464f437d3"
+  integrity sha512-RvsflPKsQ1tEaHDJksnMWwW5wtv8fskMRviL/jHlEW/ULEQ/MOE2yjuvJlRQkNvfqlJjkc1mczjy4+RO3mDQ6g==
+  dependencies:
+    "@react-native/js-polyfills" "0.76.1"
+    "@react-native/metro-babel-transformer" "0.76.1"
+    metro-config "^0.81.0"
+    metro-runtime "^0.81.0"
+
 "@react-native/normalize-colors@0.76.1":
   version "0.76.1"
   resolved "https://registry.yarnpkg.com/@react-native/normalize-colors/-/normalize-colors-0.76.1.tgz#df8d54d78917a9f075283382fec834f5ccaecefd"
   integrity sha512-/+CUk/wGWIdXbJYVLw/q6Fs8Z0x91zzfXIbNiZUdSW1TNEDmytkF371H8a1/Nx3nWa1RqCMVsaZHCG4zqxeDvg==
+
+"@react-native/typescript-config@0.76.1":
+  version "0.76.1"
+  resolved "https://registry.yarnpkg.com/@react-native/typescript-config/-/typescript-config-0.76.1.tgz#dc3d3f450b2312b65cdd44d8d9127e89fa1d6260"
+  integrity sha512-KcmgsFG/c3WdAqy7/06Zvfkye3XIc/0zItlFMSGMgAjFFuCTomXqpmJdrtTBheCDy+gbKaR/vWf+snL8C+OVvA==
 
 "@react-native/virtualized-lists@0.76.1":
   version "0.76.1"
@@ -22251,6 +22266,11 @@ react-native-builder-bob@^0.30.3:
     which "^2.0.2"
     yargs "^17.5.1"
 
+react-native-config@^1.5.3:
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/react-native-config/-/react-native-config-1.5.3.tgz#1286c0c117adb367a948b31005430146e88c9c2e"
+  integrity sha512-3D05Abgk5DfDw9w258EzXvX5AkU7eqj3u9H0H0L4gUga4nYg/zuupcrpGbpF4QeXBcJ84jjs6g8JaEP6VBT7Pg==
+
 react-native-webview@^11.26.0:
   version "11.26.1"
   resolved "https://registry.npmjs.org/react-native-webview/-/react-native-webview-11.26.1.tgz"
@@ -25775,7 +25795,7 @@ util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   resolved "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz"
   integrity sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==
 
-util@^0.12.3, util@^0.12.4:
+util@^0.12.3, util@^0.12.4, util@^0.12.5:
   version "0.12.5"
   resolved "https://registry.npmjs.org/util/-/util-0.12.5.tgz"
   integrity sha512-kZf/K6hEIrWHI6XqOFUiiMa+79wE/D8Q+NCNAWclkyg3b4d2k7s0QGepNjiABc+aR3N1PAyHL7p6UcLY6LmrnA==
@@ -25953,7 +25973,7 @@ vfile@^6.0.0, vfile@^6.0.1:
     unist-util-stringify-position "^4.0.0"
     vfile-message "^4.0.0"
 
-viem@2.20.0, viem@^2.1.1, viem@^2.20.0, viem@^2.21.40:
+viem@2.20.0, viem@^2.1.1, viem@^2.20.0, viem@^2.21.40, viem@^2.21.41:
   version "2.20.0"
   resolved "https://registry.npmjs.org/viem/-/viem-2.20.0.tgz"
   integrity sha512-cM4vs81HnSNbfceI1MLkx4pCVzbVjl9xiNSv5SCutYjUyFFOVSPDlEyhpg2iHinxx1NM4Qne3END5eLT8rvUdg==
@@ -26776,6 +26796,11 @@ zustand@^5.0.0-rc.2:
   version "5.0.0-rc.2"
   resolved "https://registry.npmjs.org/zustand/-/zustand-5.0.0-rc.2.tgz"
   integrity sha512-o2Nwuvnk8vQBX7CcHL8WfFkZNJdxB/VKeWw0tNglw8p4cypsZ3tRT7rTRTDNeUPFS0qaMBRSKe+fVwL5xpcE3A==
+
+zustand@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/zustand/-/zustand-5.0.1.tgz#2bdca5e4be172539558ce3974fe783174a48fdcf"
+  integrity sha512-pRET7Lao2z+n5R/HduXMio35TncTlSW68WsYBq2Lg1ASspsNGjpwLAsij3RpouyV6+kHMwwwzP0bZPD70/Jx/w==
 
 zwitch@^2.0.0, zwitch@^2.0.4:
   version "2.0.4"

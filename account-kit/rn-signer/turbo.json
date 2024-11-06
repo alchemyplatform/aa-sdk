@@ -1,6 +1,6 @@
 {
-  "$schema": "https://turbo.build/schema.json",
-  "pipeline": {
+  "extends": ["//"],
+  "tasks": {
     "build:android": {
       "env": ["ORG_GRADLE_PROJECT_newArchEnabled"],
       "inputs": [
@@ -31,6 +31,10 @@
         "!example/ios/Pods"
       ],
       "outputs": []
+    },
+    "prepare": {
+      "dependsOn": ["^build"],
+      "outputs": ["android/generate/**", "ios/generated/**", "lib/**"]
     }
   }
 }
