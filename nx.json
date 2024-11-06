@@ -13,6 +13,11 @@
       "dependsOn": ["^build"],
       "outputs": ["{projectRoot}/src/plugins"],
       "cache": true
+    },
+    "prepare": {
+      "dependsOn": ["^build"],
+      "outputs": [],
+      "cache": false
     }
   },
   "namedInputs": {
