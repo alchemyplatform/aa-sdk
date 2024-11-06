@@ -1,3 +1,4 @@
-import NativeTEKStamper from "./NativeTEKStamper.js";
+// eslint-disable-next-line import/extensions
+import NativeTEKStamper from "./NativeTEKStamper";
 
-export default NativeTEKStamper;
+export { NativeTEKStamper };
