@@ -2,28 +2,43 @@ package com.accountkit.reactnativesigner
 
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.module.annotations.ReactModule
-import com.google.crypto.tink.BinaryKeysetReader
 import com.google.crypto.tink.BinaryKeysetWriter
 import com.google.crypto.tink.HybridDecrypt
 import com.google.crypto.tink.KeysetHandle
 import com.google.crypto.tink.TinkJsonProtoKeysetFormat
 import com.google.crypto.tink.config.TinkConfig
 import com.google.crypto.tink.hybrid.HpkeParameters
+import com.google.crypto.tink.subtle.Base64
 import com.google.crypto.tink.subtle.EllipticCurves
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.bitcoinj.core.Base58
+import org.bouncycastle.jce.ECNamedCurveTable
+import org.bouncycastle.jce.provider.BouncyCastleProvider
+import org.bouncycastle.jce.spec.ECPublicKeySpec
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
+import java.security.KeyFactory
+import java.security.Security
+import java.security.Signature
 import javax.xml.bind.DatatypeConverter
+
+
+@Serializable
+data class ApiStamp(val publicKey: String, val scheme: String, val signature: String)
 
 @ReactModule(name = NativeTEKStamperModule.NAME)
 class NativeTEKStamperModule(reactContext: ReactApplicationContext) :
     NativeTEKStamperSpec(reactContext) {
 
     private val TEK_STORAGE_KEY = "TEK_STORAGE_KEY"
-    private val BUNDLE_KEY = "BUNDLE_KEY"
+    private val BUNDLE_PRIVATE_KEY = "BUNDLE_PRIVATE_KEY"
+    private val BUNDLE_PUBLIC_KEY = "BUNDLE_PUBLIC_KEY"
     private val context = reactContext
 
     // This is how the docs for EncryptedSharedPreferences recommend creating this setup
@@ -62,6 +77,10 @@ class NativeTEKStamperModule(reactContext: ReactApplicationContext) :
 
     init {
         TinkConfig.register()
+
+        if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
+            Security.addProvider(BouncyCastleProvider())
+        }
     }
 
     override fun getName(): String {
@@ -100,7 +119,7 @@ class NativeTEKStamperModule(reactContext: ReactApplicationContext) :
     }
 
     override fun clear() {
-        TODO("Not yet implemented")
+        sharedPreferences.edit().clear().apply()
     }
 
     override fun publicKey(): String? {
@@ -118,6 +137,7 @@ class NativeTEKStamperModule(reactContext: ReactApplicationContext) :
             val buffer = ByteBuffer.wrap(decodedBundle)
 
             // Turnkey bundle is first 33 bytes as the key and remaining the encrypted private key
+            // TODO: actually... this might have to be 32 looking at some of the code elsewhere
             val ephemeralPublicKeyLength = 33
             val ephemeralPublicKeyBytes = ByteArray(ephemeralPublicKeyLength)
             buffer.get(ephemeralPublicKeyBytes)
@@ -129,8 +149,20 @@ class NativeTEKStamperModule(reactContext: ReactApplicationContext) :
             val decryptedKey =
                 hybridDecrypt.decrypt(ciphertext, context)
 
+            val (publicKeyBytes, privateKeyBytes) = privateKeyToKeyPair(decryptedKey)
+
             sharedPreferences.edit()
-                .putString(BUNDLE_KEY, DatatypeConverter.printHexBinary(decryptedKey).uppercase())
+                .putString(
+                    BUNDLE_PRIVATE_KEY,
+                    DatatypeConverter.printHexBinary(privateKeyBytes).uppercase()
+                )
+                .apply()
+
+            sharedPreferences.edit()
+                .putString(
+                    BUNDLE_PUBLIC_KEY,
+                    DatatypeConverter.printHexBinary(publicKeyBytes).uppercase()
+                )
                 .apply()
 
             return promise.resolve(true)
@@ -139,8 +171,42 @@ class NativeTEKStamperModule(reactContext: ReactApplicationContext) :
         }
     }
 
-    override fun stamp(payload: String?, promise: Promise) {
-        TODO("Not yet implemented")
+    override fun stamp(payload: String, promise: Promise) {
+        try {
+            val signingKeyHex = sharedPreferences.getString(BUNDLE_PRIVATE_KEY, null)
+                ?: return promise.reject(Exception("No injected bundle, did you complete auth?"))
+
+            val publicSigningKeyHex =
+                sharedPreferences.getString(BUNDLE_PUBLIC_KEY, null) ?: return promise.reject(
+                    Exception("No injected bundle, did you complete auth?")
+                )
+
+            val ecPrivateKey = EllipticCurves.getEcPrivateKey(
+                EllipticCurves.CurveType.NIST_P256,
+                signingKeyHex.toByteArray()
+            )
+
+            val signer = Signature.getInstance("SHA256withECDSA")
+            signer.initSign(ecPrivateKey)
+            signer.update(payload.toByteArray())
+            val signature = signer.sign()
+
+            val apiStamp = ApiStamp(
+                publicSigningKeyHex,
+                "SIGNATURE_SCHEME_TK_API_P256",
+                DatatypeConverter.printHexBinary(signature).uppercase()
+            )
+
+            val stamp = Arguments.createMap()
+            stamp.putString("stampHeaderName", "X-Stamp")
+            stamp.putString(
+                "stampHeaderValue",
+                Base64.encode(Json.encodeToString(apiStamp).toByteArray())
+            )
+            return promise.resolve(stamp)
+        } catch (e: Exception) {
+            promise.reject(e)
+        }
     }
 
     private fun getRecipientKeyHandle(): KeysetHandle? {
@@ -151,9 +217,29 @@ class NativeTEKStamperModule(reactContext: ReactApplicationContext) :
         return TinkJsonProtoKeysetFormat.parseKeysetWithoutSecret(
             sharedPreferences.getString(
                 TEK_STORAGE_KEY,
-                "{}"
+                null
             )
         )
+    }
+
+    private fun privateKeyToKeyPair(privateKey: ByteArray): Pair<ByteArray, ByteArray> {
+        val ecPrivateKey = EllipticCurves.getEcPrivateKey(
+            EllipticCurves.CurveType.NIST_P256,
+            privateKey
+        )
+
+        // compute the public key
+        val s = ecPrivateKey.s
+        val bcSpec = ECNamedCurveTable.getParameterSpec("secp256r1")
+        val pubSpec = ECPublicKeySpec(bcSpec.g.multiply(s).normalize(), bcSpec)
+        val keyFactory =
+            KeyFactory.getInstance("EC", BouncyCastleProvider.PROVIDER_NAME)
+        val ecPublicKey = EllipticCurves.getEcPublicKey(keyFactory.generatePublic(pubSpec).encoded)
+
+        // verify the key pair
+        EllipticCurves.validatePublicKey(ecPublicKey, ecPrivateKey)
+
+        return Pair(ecPublicKey.encoded, ecPrivateKey.encoded)
     }
 
     private fun publicKeyToHex(keyHandle: KeysetHandle): String {
