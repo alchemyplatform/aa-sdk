@@ -14,6 +14,12 @@ buildscript {
   }
 }
 
+plugins {
+  id 'org.jetbrains.kotlin.plugin.serialization' version "$ReactNativeSigner_kotlinVersion"
+}
+
+def kotlin_version = getExtOrDefault("kotlinVersion")
+
 def reactNativeArchitectures() {
   def value = rootProject.getProperties().get("reactNativeArchitectures")
   return value ? value.split(",") : ["armeabi-v7a", "x86", "x86_64", "arm64-v8a"]
@@ -103,8 +109,6 @@ repositories {
   google()
 }
 
-def kotlin_version = getExtOrDefault("kotlinVersion")
-
 dependencies {
   // For < 0.71, this will be from the local maven repo
   // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
@@ -115,6 +119,7 @@ dependencies {
   implementation "androidx.security:security-crypto:1.1.0-alpha06"
   implementation "com.google.crypto.tink:tink-android:1.15.0"
   implementation "org.bitcoinj:bitcoinj-core:0.16.3"
+  implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1"
 }
 
 if (isNewArchitectureEnabled()) {
