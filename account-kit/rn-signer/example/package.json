@@ -10,8 +10,13 @@
     "build:ios": "react-native build-ios --scheme ReactNativeSignerExample --mode Debug --extra-params \"-sdk iphonesimulator CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO\""
   },
   "dependencies": {
+    "@account-kit/signer": "^4.3.0",
     "react": "18.3.1",
-    "react-native": "0.76.1"
+    "react-native": "0.76.1",
+    "react-native-config": "^1.5.3",
+    "util": "^0.12.5",
+    "viem": "^2.21.41",
+    "zustand": "^5.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
