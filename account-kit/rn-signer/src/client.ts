@@ -1,4 +1,5 @@
-import { NativeTEKStamper } from "@account-kit/react-native-signer";
+/* eslint-disable import/extensions */
+import { type ConnectionConfig } from "@aa-sdk/core";
 import {
   BaseSignerClient,
   type AlchemySignerClientEvents,
@@ -11,24 +12,31 @@ import {
   type SignupResponse,
   type User,
 } from "@account-kit/signer";
-import Config from "react-native-config";
+import NativeTEKStamper from "./NativeTEKStamper";
 
-// TODO: move this out of here
+export type RNSignerClientParams = {
+  connection: ConnectionConfig;
+  rootOrgId?: string;
+};
+
 // TODO: need to emit events
-export class SignerClient extends BaseSignerClient<undefined> {
+export class RNSignerClient extends BaseSignerClient<undefined> {
   private stamper = NativeTEKStamper;
-  constructor() {
+  constructor(params: RNSignerClientParams) {
     super({
       stamper: NativeTEKStamper,
-      connection: { apiKey: Config.API_KEY! },
+      rootOrgId: "24c1acf5-810f-41e0-a503-d5d13fa8e830",
+      ...params,
     });
   }
 
-  createAccount(params: CreateAccountParams): Promise<SignupResponse> {
+  override createAccount(
+    _params: CreateAccountParams
+  ): Promise<SignupResponse> {
     throw new Error("Method not implemented.");
   }
 
-  async initEmailAuth(
+  override async initEmailAuth(
     params: Omit<EmailAuthParams, "targetPublicKey">
   ): Promise<{ orgId: string }> {
     let targetPublicKey = await this.stamper.init();
@@ -40,7 +48,7 @@ export class SignerClient extends BaseSignerClient<undefined> {
     });
   }
 
-  async completeAuthWithBundle(params: {
+  override async completeAuthWithBundle(params: {
     bundle: string;
     orgId: string;
     connectedEventName: keyof AlchemySignerClientEvents;
@@ -63,29 +71,31 @@ export class SignerClient extends BaseSignerClient<undefined> {
 
     return user;
   }
-  oauthWithRedirect(
-    args: Extract<OauthParams, { mode: "redirect" }>
+  override oauthWithRedirect(
+    _args: Extract<OauthParams, { mode: "redirect" }>
   ): Promise<never> {
     throw new Error("Method not implemented.");
   }
-  oauthWithPopup(args: Extract<OauthParams, { mode: "popup" }>): Promise<User> {
+  override oauthWithPopup(
+    _args: Extract<OauthParams, { mode: "popup" }>
+  ): Promise<User> {
     throw new Error("Method not implemented.");
   }
-  disconnect(): Promise<void> {
+  override disconnect(): Promise<void> {
     throw new Error("Method not implemented.");
   }
-  exportWallet(params: unknown): Promise<boolean> {
+  override exportWallet(_params: unknown): Promise<boolean> {
     throw new Error("Method not implemented.");
   }
-  lookupUserWithPasskey(user?: User): Promise<User> {
+  override lookupUserWithPasskey(_user?: User): Promise<User> {
     throw new Error("Method not implemented.");
   }
-  protected getOauthConfig(): Promise<OauthConfig> {
+  protected override getOauthConfig(): Promise<OauthConfig> {
     throw new Error("Method not implemented.");
   }
-  protected getWebAuthnAttestation(
-    options: CredentialCreationOptions,
-    userDetails?: { username: string }
+  protected override getWebAuthnAttestation(
+    _options: CredentialCreationOptions,
+    _userDetails?: { username: string }
   ): Promise<GetWebAuthnAttestationResult> {
     throw new Error("Method not implemented.");
   }
