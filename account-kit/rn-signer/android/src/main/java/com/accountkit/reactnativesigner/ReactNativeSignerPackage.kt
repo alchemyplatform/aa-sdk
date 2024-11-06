@@ -24,9 +24,8 @@ class ReactNativeSignerPackage : TurboReactPackage() {
         NativeTEKStamperModule.NAME,
         false,  // canOverrideExistingModule
         false,  // needsEagerInit
-        true,  // hasConstants
         false,  // isCxxModule
-        true // isTurboModule
+        true  // isTurboModule
       )
       moduleInfos
     }

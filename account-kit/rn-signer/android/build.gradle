@@ -116,6 +116,7 @@ dependencies {
   implementation "com.facebook.react:react-native:+"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
   implementation "javax.xml.bind:jaxb-api:2.3.1"
+  implementation "xerces:xercesImpl:2.12.2"
   implementation "androidx.security:security-crypto:1.1.0-alpha06"
   implementation "com.google.crypto.tink:tink-android:1.15.0"
   implementation "org.bitcoinj:bitcoinj-core:0.16.3"

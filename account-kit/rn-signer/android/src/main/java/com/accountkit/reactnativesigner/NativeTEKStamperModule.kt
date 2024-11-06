@@ -1,5 +1,6 @@
 package com.accountkit.reactnativesigner
 
+import android.util.Log
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.facebook.react.bridge.Arguments
@@ -7,13 +8,22 @@ import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.module.annotations.ReactModule
 import com.google.crypto.tink.BinaryKeysetWriter
-import com.google.crypto.tink.HybridDecrypt
+import com.google.crypto.tink.CleartextKeysetHandle
+import com.google.crypto.tink.InsecureSecretKeyAccess
+import com.google.crypto.tink.KeyTemplate
 import com.google.crypto.tink.KeysetHandle
 import com.google.crypto.tink.TinkJsonProtoKeysetFormat
 import com.google.crypto.tink.config.TinkConfig
 import com.google.crypto.tink.hybrid.HpkeParameters
+import com.google.crypto.tink.hybrid.HpkePrivateKey
+import com.google.crypto.tink.hybrid.internal.HpkeContext
+import com.google.crypto.tink.hybrid.internal.HpkeKemKeyFactory
+import com.google.crypto.tink.hybrid.internal.HpkePrimitiveFactory
+import com.google.crypto.tink.proto.HpkePublicKey
 import com.google.crypto.tink.subtle.Base64
 import com.google.crypto.tink.subtle.EllipticCurves
+import com.google.crypto.tink.util.Bytes
+import com.google.crypto.tink.util.SecretBytes
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -26,6 +36,7 @@ import java.nio.ByteBuffer
 import java.security.KeyFactory
 import java.security.Security
 import java.security.Signature
+import java.security.interfaces.ECPublicKey
 import javax.xml.bind.DatatypeConverter
 
 
@@ -55,7 +66,7 @@ class NativeTEKStamperModule(reactContext: ReactApplicationContext) :
      *
      * The reason we are not using the android key store for either of these things is because
      * 1. For us to be able to import the private key in the bundle into the KeyStore, Turnkey
-     * has to return the key in a different format: https://developer.android.com/privacy-and-security/keystore#ImportingEncryptedKeys
+     * has to return the key in a different format (AFAIK): https://developer.android.com/privacy-and-security/keystore#ImportingEncryptedKeys
      * 2. If we store the TEK in the KeyStore, then we have to roll our own HPKE decrypt function
      * as there's no off the shelf solution (that I could find) to do the HPKE decryption. Rolling our own
      * decryption feels wrong given we are not experts on this and don't have a good way to verify our
@@ -75,8 +86,20 @@ class NativeTEKStamperModule(reactContext: ReactApplicationContext) :
         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )
 
+    // This allows us to do the HPKE decryption of the bundle
+    private val hpkeParams = HpkeParameters.builder()
+        .setKemId(HpkeParameters.KemId.DHKEM_P256_HKDF_SHA256)
+        .setKdfId(HpkeParameters.KdfId.HKDF_SHA256)
+        .setAeadId(HpkeParameters.AeadId.AES_256_GCM)
+        .setVariant(HpkeParameters.Variant.NO_PREFIX)
+        .build()
+
     init {
         TinkConfig.register()
+
+        if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME).javaClass != BouncyCastleProvider::class.java) {
+            Security.removeProvider(BouncyCastleProvider.PROVIDER_NAME)
+        }
 
         if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
             Security.addProvider(BouncyCastleProvider())
@@ -93,26 +116,23 @@ class NativeTEKStamperModule(reactContext: ReactApplicationContext) :
             if (existingPublicKey != null) {
                 return promise.resolve(existingPublicKey)
             }
-            // This allows us to do the HPKE decryption of the bundle
-            val hpkeParams = HpkeParameters.builder()
-                .setKemId(HpkeParameters.KemId.DHKEM_P256_HKDF_SHA256)
-                .setKdfId(HpkeParameters.KdfId.HKDF_SHA256)
-                .setAeadId(HpkeParameters.AeadId.AES_256_GCM)
-                .setVariant(HpkeParameters.Variant.NO_PREFIX)
-                .build()
 
             // Generate a P256 key
-            val keyHandle = KeysetHandle.generateNew(hpkeParams)
+            val keyHandle = KeysetHandle.generateNew(KeyTemplate.createFrom(hpkeParams))
 
             // Store the ephemeral key in encrypted shared preferences
             sharedPreferences
                 .edit()
                 .putString(
                     TEK_STORAGE_KEY,
-                    TinkJsonProtoKeysetFormat.serializeKeysetWithoutSecret(keyHandle)
+                    TinkJsonProtoKeysetFormat.serializeKeyset(
+                        keyHandle,
+                        InsecureSecretKeyAccess.get()
+                    )
                 )
                 .apply()
-            return promise.resolve(publicKeyToHex(keyHandle))
+
+            return promise.resolve(tekPublicKeyHex(keyHandle))
         } catch (e: Exception) {
             promise.reject(e)
         }
@@ -125,7 +145,7 @@ class NativeTEKStamperModule(reactContext: ReactApplicationContext) :
     override fun publicKey(): String? {
         val existingHandle = getRecipientKeyHandle() ?: return null
 
-        return publicKeyToHex(existingHandle)
+        return tekPublicKeyHex(existingHandle)
     }
 
     override fun injectCredentialBundle(bundle: String, promise: Promise) {
@@ -135,38 +155,58 @@ class NativeTEKStamperModule(reactContext: ReactApplicationContext) :
 
             val decodedBundle = Base58.decodeChecked(bundle)
             val buffer = ByteBuffer.wrap(decodedBundle)
-
-            // Turnkey bundle is first 33 bytes as the key and remaining the encrypted private key
-            // TODO: actually... this might have to be 32 looking at some of the code elsewhere
             val ephemeralPublicKeyLength = 33
             val ephemeralPublicKeyBytes = ByteArray(ephemeralPublicKeyLength)
             buffer.get(ephemeralPublicKeyBytes)
+            val ephemeralPublicKey = EllipticCurves.getEcPublicKey(
+                EllipticCurves.CurveType.NIST_P256,
+                EllipticCurves.PointFormatType.COMPRESSED,
+                ephemeralPublicKeyBytes,
+            )
+            val uncompressedEphemeralKey = convertToUncompressedPublicKeyBytes(ephemeralPublicKey)
+
             val ciphertext = ByteArray(buffer.remaining())
             buffer.get(ciphertext)
 
-            val hybridDecrypt = tekHandle.getPrimitive(HybridDecrypt::class.java)
-            val context = ephemeralPublicKeyBytes + publicKeyToHex(tekHandle).toByteArray()
-            val decryptedKey =
-                hybridDecrypt.decrypt(ciphertext, context)
+            val aad = uncompressedEphemeralKey + DatatypeConverter.parseHexBinary(
+                tekPublicKeyHex(tekHandle)
+            )
+
+            // Why do we hve to do all this rather than doing:
+            // val hybridDecrypt = tekHandle.getPrimitive(HybridDecrypt::class.java)
+            // val decryptedKey = hybridDecrypt.decrypt(ciphertext, "turnkey_hpke".toByteArray())
+            // the hybridDecrypt.decrypt that google exposes doesn't allow us to pass in
+            // the aad that's needed to complete decryption
+            val recipient = HpkeContext.createRecipientContext(
+                convertToUncompressedPublicKeyBytes(ephemeralPublicKey),
+                HpkeKemKeyFactory.createPrivate(getHpkePrivateKeyFromKeysetHandle(tekHandle)),
+                HpkePrimitiveFactory.createKem(hpkeParams.kemId),
+                HpkePrimitiveFactory.createKdf(hpkeParams.kdfId),
+                HpkePrimitiveFactory.createAead(hpkeParams.aeadId),
+                "turnkey_hpke".toByteArray()
+            )
+
+            val decryptedKey = recipient.open(ciphertext, aad)
 
             val (publicKeyBytes, privateKeyBytes) = privateKeyToKeyPair(decryptedKey)
 
             sharedPreferences.edit()
                 .putString(
                     BUNDLE_PRIVATE_KEY,
-                    DatatypeConverter.printHexBinary(privateKeyBytes).uppercase()
+                    DatatypeConverter.printHexBinary(privateKeyBytes).lowercase()
                 )
                 .apply()
 
             sharedPreferences.edit()
                 .putString(
                     BUNDLE_PUBLIC_KEY,
-                    DatatypeConverter.printHexBinary(publicKeyBytes).uppercase()
+                    DatatypeConverter.printHexBinary(publicKeyBytes).lowercase()
                 )
                 .apply()
 
             return promise.resolve(true)
         } catch (e: Exception) {
+            Log.e("error", "an error happened", e)
             promise.reject(e)
         }
     }
@@ -183,7 +223,7 @@ class NativeTEKStamperModule(reactContext: ReactApplicationContext) :
 
             val ecPrivateKey = EllipticCurves.getEcPrivateKey(
                 EllipticCurves.CurveType.NIST_P256,
-                signingKeyHex.toByteArray()
+                DatatypeConverter.parseHexBinary(signingKeyHex)
             )
 
             val signer = Signature.getInstance("SHA256withECDSA")
@@ -194,14 +234,14 @@ class NativeTEKStamperModule(reactContext: ReactApplicationContext) :
             val apiStamp = ApiStamp(
                 publicSigningKeyHex,
                 "SIGNATURE_SCHEME_TK_API_P256",
-                DatatypeConverter.printHexBinary(signature).uppercase()
+                DatatypeConverter.printHexBinary(signature)
             )
 
             val stamp = Arguments.createMap()
             stamp.putString("stampHeaderName", "X-Stamp")
             stamp.putString(
                 "stampHeaderValue",
-                Base64.encode(Json.encodeToString(apiStamp).toByteArray())
+                Base64.urlSafeEncode(Json.encodeToString(apiStamp).toByteArray())
             )
             return promise.resolve(stamp)
         } catch (e: Exception) {
@@ -214,11 +254,12 @@ class NativeTEKStamperModule(reactContext: ReactApplicationContext) :
             return null;
         }
 
-        return TinkJsonProtoKeysetFormat.parseKeysetWithoutSecret(
+        return TinkJsonProtoKeysetFormat.parseKeyset(
             sharedPreferences.getString(
                 TEK_STORAGE_KEY,
                 null
-            )
+            ),
+            InsecureSecretKeyAccess.get()
         )
     }
 
@@ -234,22 +275,56 @@ class NativeTEKStamperModule(reactContext: ReactApplicationContext) :
         val pubSpec = ECPublicKeySpec(bcSpec.g.multiply(s).normalize(), bcSpec)
         val keyFactory =
             KeyFactory.getInstance("EC", BouncyCastleProvider.PROVIDER_NAME)
+
         val ecPublicKey = EllipticCurves.getEcPublicKey(keyFactory.generatePublic(pubSpec).encoded)
 
         // verify the key pair
         EllipticCurves.validatePublicKey(ecPublicKey, ecPrivateKey)
 
-        return Pair(ecPublicKey.encoded, ecPrivateKey.encoded)
+        // compress it to match turnkey expectations
+        val compressedPublicKey = EllipticCurves.pointEncode(
+            EllipticCurves.CurveType.NIST_P256,
+            EllipticCurves.PointFormatType.COMPRESSED,
+            ecPublicKey.w
+        )
+        return Pair(compressedPublicKey, privateKey)
     }
 
-    private fun publicKeyToHex(keyHandle: KeysetHandle): String {
-        val outputStream = ByteArrayOutputStream()
-        keyHandle.publicKeysetHandle.writeNoSecret(
-            BinaryKeysetWriter.withOutputStream(
-                outputStream
+    private fun tekPublicKeyHex(keyHandle: KeysetHandle): String {
+        val keySet = CleartextKeysetHandle.getKeyset(keyHandle.publicKeysetHandle)
+        val hpkePublicKey = HpkePublicKey.parseFrom(keySet.keyList[0].keyData.value)
+
+        val publicKeyBytes = hpkePublicKey.publicKey.toByteArray()
+        return DatatypeConverter.printHexBinary(publicKeyBytes)
+    }
+
+    private fun getHpkePrivateKeyFromKeysetHandle(keysetHandle: KeysetHandle): HpkePrivateKey {
+        val pkKs = CleartextKeysetHandle.getKeyset(keysetHandle)
+        val pkKeyData = pkKs.keyList[0].keyData
+        if (pkKeyData.typeUrl != "type.googleapis.com/google.crypto.tink.HpkePrivateKey") {
+            throw Error("invalid key type")
+        }
+
+        return HpkePrivateKey.create(
+            com.google.crypto.tink.hybrid.HpkePublicKey.create(
+                hpkeParams,
+                Bytes.copyFrom(DatatypeConverter.parseHexBinary(tekPublicKeyHex(keysetHandle))),
+                null
+            ),
+            SecretBytes.copyFrom(
+                com.google.crypto.tink.proto.HpkePrivateKey.parseFrom(pkKeyData.value).privateKey.toByteArray(),
+                InsecureSecretKeyAccess.get()
             )
         )
-        return DatatypeConverter.printHexBinary(outputStream.toByteArray()).uppercase()
+    }
+
+    private fun convertToUncompressedPublicKeyBytes(ephemeralPublicKey: ECPublicKey): ByteArray {
+        val ecPoint = ephemeralPublicKey.w
+        return EllipticCurves.pointEncode(
+            EllipticCurves.CurveType.NIST_P256,
+            EllipticCurves.PointFormatType.UNCOMPRESSED,
+            ecPoint
+        )
     }
 
     companion object {
