@@ -1,32 +1,18 @@
 /* eslint-disable import/extensions */
-import { NativeTEKStamper } from "@account-kit/react-native-signer";
+import { RNSignerClient } from "@account-kit/react-native-signer";
 import type { User } from "@account-kit/signer";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
-import { SignerClient } from "./signer";
+import Config from "react-native-config";
 
 export default function App() {
-  const [publicKey, setPublicKey] = useState<string | null>(null);
   const [email, setEmail] = useState<string>("");
   const [user, setUser] = useState<User | null>(null);
   const [bundle, setBundle] = useState<string>("");
   const [orgId, setOrgId] = useState<string>("");
-  const signer = new SignerClient();
-
-  useEffect(() => {
-    const init = async () => {
-      console.log("init again");
-
-      await NativeTEKStamper.init()
-        .then((publicKey) => {
-          console.log("publicKey", publicKey);
-          setPublicKey(publicKey);
-        })
-        .catch(console.error);
-    };
-
-    init();
-  }, []);
+  const signer = new RNSignerClient({
+    connection: { apiKey: Config.API_KEY! },
+  });
 
   return (
     <View style={styles.container}>
@@ -58,7 +44,7 @@ export default function App() {
               bundle,
               authenticatingType: "email",
               connectedEventName: "connectedEmail",
-              orgId: orgId,
+              orgId,
             })
             .then(setUser)
             .catch(console.error);

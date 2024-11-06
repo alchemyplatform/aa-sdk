@@ -12,6 +12,7 @@
       "account-kit/*",
       "templates/*",
       "examples/*",
+      "account-kit/rn-signer/example",
       "site",
       "doc-gen",
       ".vitest"
@@ -22,7 +23,9 @@
       "**/@react-native-community/cli",
       "**/@react-native-community/cli/**",
       "**/react-native-test-app",
-      "**/react-native-test-app/**"
+      "**/react-native-test-app/**",
+      "**/react-native-config",
+      "**react-native-config/**"
     ]
   },
   "resolutions": {
@@ -48,7 +51,7 @@
     "test:ci": "vitest run",
     "lint:write": "eslint . --fix && yarn docs:gen && prettier --write --ignore-unknown .",
     "lint:check": "eslint . && prettier --check .",
-    "prepare": "husky install",
+    "prepare": "husky install && yarn turbo run prepare",
     "version": "yarn build:dev"
   },
   "devDependencies": {
