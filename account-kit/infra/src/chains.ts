@@ -310,6 +310,24 @@ export const shape: Chain = defineChain({
   },
 });
 
+export const unichainMainnet: Chain = defineChain({
+  id: 130,
+  name: "Unichain Mainnet",
+  network: "Unichain Mainnet",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://unichain-mainnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://unichain-mainnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://unichain-mainnet.g.alchemy.com/v2"],
+    },
+  },
+});
+
 export const unichainSepolia: Chain = defineChain({
   id: 1301,
   name: "Unichain Sepolia",
