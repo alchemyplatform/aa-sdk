@@ -8,7 +8,7 @@ export const AuthModal = () => {
     modalBaseClassName,
   }));
   const { isOpen, closeAuthModal } = useAuthModal();
-
+  console.trace(isOpen);
   return (
     <Dialog isOpen={isOpen} onClose={closeAuthModal}>
       <div
