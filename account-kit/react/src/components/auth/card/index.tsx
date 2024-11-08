@@ -1,5 +1,6 @@
 "use client";
 
+import { disconnect } from "@account-kit/core";
 import {
   useCallback,
   useEffect,
@@ -7,17 +8,16 @@ import {
   useRef,
   type PropsWithChildren,
 } from "react";
+import { useAlchemyAccountContext } from "../../../context.js";
 import { useAuthConfig } from "../../../hooks/internal/useAuthConfig.js";
 import { useAuthModal } from "../../../hooks/useAuthModal.js";
 import { useElementHeight } from "../../../hooks/useElementHeight.js";
 import { useSignerStatus } from "../../../hooks/useSignerStatus.js";
 import { Navigation } from "../../navigation.js";
 import { useAuthContext } from "../context.js";
+import { usePrevious } from "../hooks/usePrevious.js";
 import { Footer } from "../sections/Footer.js";
 import { Step } from "./steps.js";
-import { disconnect } from "@account-kit/core";
-import { useAlchemyAccountContext } from "../../../context.js";
-import { useSigner } from "../../../hooks/useSigner.js";
 export type AuthCardProps = {
   className?: string;
 };
@@ -58,10 +58,10 @@ export const AuthCardContent = ({
   showClose?: boolean;
 }) => {
   const { openAuthModal, closeAuthModal } = useAuthModal();
-  const { status, isAuthenticating } = useSignerStatus();
+  const { status, isAuthenticating, isConnected } = useSignerStatus();
+  const previousStatus = usePrevious(status);
   const { authStep, setAuthStep } = useAuthContext();
   const { config } = useAlchemyAccountContext();
-  const signer = useSigner();
 
   const didGoBack = useRef(false);
 
@@ -136,17 +136,16 @@ export const AuthCardContent = ({
       });
     } else if (
       !didGoBack.current &&
-      isAuthenticating &&
-      status === "AUTHENTICATING_OAUTH"
+      addPasskeyOnSignup &&
+      isConnected &&
+      previousStatus === "AUTHENTICATING_OAUTH"
     ) {
       console.log(status);
       console.log(isAuthenticating);
       console.log(authStep.type);
       console.log(addPasskeyOnSignup);
       setAuthStep({
-        type: "oauth_completing",
-        createPasskeyAfter:
-          addPasskeyOnSignup
+        type: "passkey_create",
       });
     }
   }, [
@@ -158,7 +157,8 @@ export const AuthCardContent = ({
     openAuthModal,
     closeAuthModal,
     addPasskeyOnSignup,
-    signer?.isSignup,
+    isConnected,
+    previousStatus,
   ]);
 
   return (
