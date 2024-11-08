@@ -9,11 +9,11 @@ import {
 } from "react";
 import { create, useStore, type StoreApi } from "zustand";
 import { useShallow } from "zustand/react/shallow";
-import { IS_SIGNUP_QP } from "../components/constants.js";
 import type {
   AlchemyAccountsUIConfig,
   AuthIllustrationStyle,
 } from "../types.js";
+import { useNewUserSignup } from "./internal/useNewUserSignup.js";
 import { useSignerStatus } from "./useSignerStatus.js";
 
 type AlchemyAccountsUIConfigWithDefaults = Omit<
@@ -110,16 +110,13 @@ export function UiConfigProvider({
     }))
   );
 
+  const isSignup = useNewUserSignup();
+
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (
-      isConnected &&
-      addPasskeyOnSignup &&
-      urlParams.get(IS_SIGNUP_QP) === "true"
-    ) {
+    if (isConnected && addPasskeyOnSignup && isSignup) {
       setModalOpen(true);
     }
-  }, [addPasskeyOnSignup, isConnected, setModalOpen]);
+  }, [addPasskeyOnSignup, isConnected, isSignup, setModalOpen]);
 
   return (
     <UiConfigContext.Provider value={storeRef.current}>

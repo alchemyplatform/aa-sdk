@@ -137,7 +137,6 @@ export const AlchemyAccountProvider = (
       };
     }
 
-
     return {
       type: "initial",
     };
