@@ -1,15 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSigner } from "../useSigner.js";
 
-export function useNewUserSignup(): boolean {
-  const [isSignup, setIsSignup] = useState<boolean>(false);
+export function useNewUserSignupEffect(onSignup: () => void) {
   const signer = useSigner();
 
   useEffect(() => {
     if (!signer) return;
 
-    signer.on("newUserSignup", () => setIsSignup(true));
-  }, [signer]);
-
-  return isSignup;
+    signer.on("newUserSignup", onSignup);
+  }, [onSignup, signer]);
 }
