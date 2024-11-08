@@ -33,4 +33,12 @@ Check out this [quickstart guide](https://accountkit.alchemy.com/react/quickstar
 
 ## Contributing
 
+If you are a member of the Alchemy team, make sure to run:
+
+```
+npx turbo login --sso-team=alchemy-dot-com
+```
+
+so that you can benefit from remote caching in your builds!
+
 We welcome contributions to `aa-sdk`. Please see our [contributing guidelines](CONTRIBUTING.md) for more information.

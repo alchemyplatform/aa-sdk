@@ -7,3 +7,5 @@ site/.vitepress/cache/**/*
 /examples/*
 !/examples/ui-demo
 /examples/ui-demo/.next/*
+
+**/.turbo/*
