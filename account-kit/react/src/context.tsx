@@ -137,11 +137,6 @@ export const AlchemyAccountProvider = (
       };
     }
 
-    if (status === AlchemySignerStatus.AUTHENTICATING_OAUTH) {
-      return {
-        type: "oauth_completing",
-      };
-    }
 
     return {
       type: "initial",

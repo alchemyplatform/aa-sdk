@@ -146,7 +146,7 @@ export const AuthCardContent = ({
       setAuthStep({
         type: "oauth_completing",
         createPasskeyAfter:
-          addPasskeyOnSignup && signer?.isSignup ? true : false,
+          addPasskeyOnSignup
       });
     }
   }, [

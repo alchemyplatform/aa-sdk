@@ -12,7 +12,7 @@ export type AuthStep =
   | { type: "email_completing"; createPasskeyAfter?: boolean }
   | {
       type: "oauth_completing";
-      config?: Extract<AuthType, { type: "social" }>;
+      config: Extract<AuthType, { type: "social" }>;
       createPasskeyAfter?: boolean;
       error?: Error;
     }
