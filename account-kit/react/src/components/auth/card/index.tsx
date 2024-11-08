@@ -17,7 +17,7 @@ import { Footer } from "../sections/Footer.js";
 import { Step } from "./steps.js";
 import { disconnect } from "@account-kit/core";
 import { useAlchemyAccountContext } from "../../../context.js";
-
+import { useSigner } from "../../../hooks/useSigner.js";
 export type AuthCardProps = {
   className?: string;
 };
@@ -61,6 +61,7 @@ export const AuthCardContent = ({
   const { status, isAuthenticating } = useSignerStatus();
   const { authStep, setAuthStep } = useAuthContext();
   const { config } = useAlchemyAccountContext();
+  const signer = useSigner();
 
   const didGoBack = useRef(false);
 
@@ -124,10 +125,28 @@ export const AuthCardContent = ({
       onAuthSuccess?.();
     } else if (authStep.type !== "initial") {
       didGoBack.current = false;
-    } else if (!didGoBack.current && isAuthenticating) {
+    } else if (
+      !didGoBack.current &&
+      isAuthenticating &&
+      status === "AUTHENTICATING_EMAIL"
+    ) {
       setAuthStep({
         type: "email_completing",
         createPasskeyAfter: addPasskeyOnSignup,
+      });
+    } else if (
+      !didGoBack.current &&
+      isAuthenticating &&
+      status === "AUTHENTICATING_OAUTH"
+    ) {
+      console.log(status);
+      console.log(isAuthenticating);
+      console.log(authStep.type);
+      console.log(addPasskeyOnSignup);
+      setAuthStep({
+        type: "oauth_completing",
+        createPasskeyAfter:
+          addPasskeyOnSignup && signer?.isSignup ? true : false,
       });
     }
   }, [
@@ -139,6 +158,7 @@ export const AuthCardContent = ({
     openAuthModal,
     closeAuthModal,
     addPasskeyOnSignup,
+    signer?.isSignup,
   ]);
 
   return (
