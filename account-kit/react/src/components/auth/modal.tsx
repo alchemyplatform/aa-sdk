@@ -20,15 +20,15 @@ export const AuthModal = () => {
   const { isOpen, closeAuthModal, openAuthModal } = useAuthModal();
 
   const handleSignup = useCallback(() => {
-    if (isConnected && addPasskeyOnSignup && !isOpen) {
+    if (addPasskeyOnSignup && !isOpen) {
       openAuthModal();
       setAuthStep({
         type: "passkey_create",
       });
     }
-  }, [addPasskeyOnSignup, isConnected, isOpen, openAuthModal, setAuthStep]);
+  }, [addPasskeyOnSignup, isOpen, openAuthModal, setAuthStep]);
 
-  useNewUserSignupEffect(handleSignup);
+  useNewUserSignupEffect(handleSignup, isConnected);
 
   return (
     <Dialog isOpen={isOpen} onClose={closeAuthModal}>
