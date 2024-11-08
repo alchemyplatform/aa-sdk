@@ -5,6 +5,7 @@ import { useSignerStatus } from "../../hooks/useSignerStatus.js";
 import { useUiConfig } from "../../hooks/useUiConfig.js";
 import { Dialog } from "../dialog/dialog.js";
 import { AuthCardContent } from "./card/index.js";
+import { useAuthContext } from "./context.js";
 
 export const AuthModal = () => {
   const { isConnected } = useSignerStatus();
@@ -15,13 +16,17 @@ export const AuthModal = () => {
     })
   );
 
+  const { setAuthStep } = useAuthContext();
   const { isOpen, closeAuthModal, openAuthModal } = useAuthModal();
 
   const handleSignup = useCallback(() => {
     if (isConnected && addPasskeyOnSignup && !isOpen) {
       openAuthModal();
+      setAuthStep({
+        type: "passkey_create",
+      });
     }
-  }, [addPasskeyOnSignup, isConnected, isOpen, openAuthModal]);
+  }, [addPasskeyOnSignup, isConnected, isOpen, openAuthModal, setAuthStep]);
 
   useNewUserSignupEffect(handleSignup);
 

@@ -10,7 +10,6 @@ import {
 } from "react";
 import { useAlchemyAccountContext } from "../../../context.js";
 import { useAuthConfig } from "../../../hooks/internal/useAuthConfig.js";
-import { useNewUserSignup } from "../../../hooks/internal/useNewUserSignup.js";
 import { useAuthModal } from "../../../hooks/useAuthModal.js";
 import { useElementHeight } from "../../../hooks/useElementHeight.js";
 import { useSignerStatus } from "../../../hooks/useSignerStatus.js";
@@ -121,8 +120,6 @@ export const AuthCardContent = ({
     closeAuthModal();
   }, [isConnected, authStep.type, closeAuthModal, config, setAuthStep]);
 
-  const isNewUserSignup = useNewUserSignup();
-
   useEffect(() => {
     if (authStep.type === "complete") {
       didGoBack.current = false;
@@ -130,10 +127,6 @@ export const AuthCardContent = ({
       onAuthSuccess?.();
     } else if (authStep.type !== "initial") {
       didGoBack.current = false;
-    } else if (!didGoBack.current && isNewUserSignup) {
-      setAuthStep({
-        type: "passkey_create",
-      });
     }
   }, [
     authStep,
@@ -146,7 +139,6 @@ export const AuthCardContent = ({
     addPasskeyOnSignup,
     isConnected,
     previousStatus,
-    isNewUserSignup,
   ]);
 
   return (
