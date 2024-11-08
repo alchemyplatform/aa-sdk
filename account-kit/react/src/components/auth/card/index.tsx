@@ -10,6 +10,7 @@ import {
 } from "react";
 import { useAlchemyAccountContext } from "../../../context.js";
 import { useAuthConfig } from "../../../hooks/internal/useAuthConfig.js";
+import { useNewUserSignup } from "../../../hooks/internal/useNewUserSignup.js";
 import { useAuthModal } from "../../../hooks/useAuthModal.js";
 import { useElementHeight } from "../../../hooks/useElementHeight.js";
 import { useSignerStatus } from "../../../hooks/useSignerStatus.js";
@@ -107,8 +108,10 @@ export const AuthCardContent = ({
   }, [authStep, setAuthStep, config]);
 
   const onClose = useCallback(() => {
-    // Terminate any inflight authentication
-    disconnect(config);
+    if (!isConnected) {
+      // Terminate any inflight authentication
+      disconnect(config);
+    }
 
     if (authStep.type === "passkey_create") {
       setAuthStep({ type: "complete" });
@@ -116,7 +119,9 @@ export const AuthCardContent = ({
       setAuthStep({ type: "initial" });
     }
     closeAuthModal();
-  }, [authStep.type, closeAuthModal, setAuthStep, config]);
+  }, [isConnected, authStep.type, closeAuthModal, config, setAuthStep]);
+
+  const isNewUserSignup = useNewUserSignup();
 
   useEffect(() => {
     if (authStep.type === "complete") {
@@ -125,25 +130,7 @@ export const AuthCardContent = ({
       onAuthSuccess?.();
     } else if (authStep.type !== "initial") {
       didGoBack.current = false;
-    } else if (
-      !didGoBack.current &&
-      isAuthenticating &&
-      status === "AUTHENTICATING_EMAIL"
-    ) {
-      setAuthStep({
-        type: "email_completing",
-        createPasskeyAfter: addPasskeyOnSignup,
-      });
-    } else if (
-      !didGoBack.current &&
-      addPasskeyOnSignup &&
-      isConnected &&
-      previousStatus === "AUTHENTICATING_OAUTH"
-    ) {
-      console.log(status);
-      console.log(isAuthenticating);
-      console.log(authStep.type);
-      console.log(addPasskeyOnSignup);
+    } else if (!didGoBack.current && isNewUserSignup) {
       setAuthStep({
         type: "passkey_create",
       });
@@ -159,6 +146,7 @@ export const AuthCardContent = ({
     addPasskeyOnSignup,
     isConnected,
     previousStatus,
+    isNewUserSignup,
   ]);
 
   return (
