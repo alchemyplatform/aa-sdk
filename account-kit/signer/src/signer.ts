@@ -9,7 +9,7 @@ import { SessionManagerParamsSchema } from "./session/manager.js";
 
 export type AuthParams =
   | { type: "email"; email: string; redirectParams?: URLSearchParams }
-  | { type: "email"; bundle: string; orgId?: string }
+  | { type: "email"; bundle: string; orgId?: string; isNewUser?: boolean }
   | {
       type: "passkey";
       email: string;
@@ -36,6 +36,7 @@ export type AuthParams =
       bundle: string;
       orgId: string;
       idToken: string;
+      isNewUser?: boolean;
     };
 
 export type OauthProviderConfig =
@@ -79,7 +80,6 @@ export type AlchemySignerParams = z.input<typeof AlchemySignerParamsSchema>;
  * A SmartAccountSigner that can be used with any SmartContractAccount
  */
 export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> {
-  public isSignup: boolean;
   /**
    * Initializes an instance with the provided Alchemy signer parameters after parsing them with a schema.
    *
@@ -117,7 +117,7 @@ export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> 
       oauthOrgId,
       oauthError,
       idToken,
-      _isSignup,
+      isSignup,
     } = getAndRemoveQueryParams({
       emailBundle: "bundle",
       // We don't need this, but we still want to remove it from the URL.
@@ -126,7 +126,7 @@ export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> 
       oauthOrgId: "alchemy-org-id",
       oauthError: "alchemy-error",
       idToken: "alchemy-id-token",
-      _isSignup: "aa-is-signup",
+      isSignup: "aa-is-signup",
     });
 
     const initialError =
@@ -136,16 +136,21 @@ export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> 
 
     super({ client, sessionConfig, initialError });
 
-    this.isSignup = _isSignup === "true" ? true : false;
+    const isNewUser = isSignup === "true";
 
     if (emailBundle) {
-      this.authenticate({ type: "email", bundle: emailBundle });
+      this.authenticate({
+        type: "email",
+        bundle: emailBundle,
+        isNewUser,
+      });
     } else if (oauthBundle && oauthOrgId && idToken) {
       this.authenticate({
         type: "oauthReturn",
         bundle: oauthBundle,
         orgId: oauthOrgId,
         idToken,
+        isNewUser,
       });
     }
   }

@@ -273,6 +273,8 @@ const addClientSideStoreListeners = (store: Store) => {
         }));
       });
 
+      signer.on("newUserSignup", () => console.log("got new user signup"));
+
       signer.on("connected", (user) => store.setState({ user }));
 
       signer.on("disconnected", () => {
