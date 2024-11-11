@@ -7,6 +7,7 @@ import {
   SelectMenuViewport,
 } from "@/components/ui/select-menu";
 import { cn } from "@/lib/utils";
+import { Metrics } from "@/metrics";
 import { useConfigStore } from "@/state";
 import { getBorderRadiusValue } from "@account-kit/react/tailwind";
 import { useState } from "react";
@@ -46,7 +47,13 @@ export function CornerRadiusOptions() {
               borderRadius: getBorderRadiusValue(option.id),
             }}
             key={option.id}
-            onClick={() => setBorderRadius(option.id)}
+            onClick={() => {
+              setBorderRadius(option.id);
+              Metrics.trackEvent({
+                name: "branding_corner_radius_changed",
+                data: { corner_radius: option.id },
+              });
+            }}
           >
             <span className="text-sm font-normal">{option.label}</span>
           </button>

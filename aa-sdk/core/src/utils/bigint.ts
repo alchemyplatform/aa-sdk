@@ -91,9 +91,9 @@ export const bigIntMultiply = (
   const decimalPlaces = multiplier.toString().split(".")[1]?.length ?? 0;
   const val =
     roundingMode === RoundingMode.ROUND_UP
-      ? BigInt(base) * BigInt(multiplier * 10 ** decimalPlaces) +
+      ? BigInt(base) * BigInt(Math.round(multiplier * 10 ** decimalPlaces)) +
         BigInt(10 ** decimalPlaces - 1)
-      : BigInt(base) * BigInt(multiplier * 10 ** decimalPlaces);
+      : BigInt(base) * BigInt(Math.round(multiplier * 10 ** decimalPlaces));
 
   return val / BigInt(10 ** decimalPlaces);
 };

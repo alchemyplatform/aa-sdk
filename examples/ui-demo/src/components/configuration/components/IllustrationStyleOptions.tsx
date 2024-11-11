@@ -8,6 +8,7 @@ import {
   SelectMenuViewport,
 } from "@/components/ui/select-menu";
 import { cn } from "@/lib/utils";
+import { Metrics } from "@/metrics";
 import { useConfigStore } from "@/state";
 import { useState } from "react";
 
@@ -42,7 +43,13 @@ export function IllustrationStyleOptions() {
                 ? "bg-demo-surface-secondary font-semibold"
                 : "border-gray-300"
             )}
-            onClick={() => setIllustrationStyle(value)}
+            onClick={() => {
+              setIllustrationStyle(value);
+              Metrics.trackEvent({
+                name: "branding_illustration_style_changed",
+                data: { variant: value },
+              });
+            }}
           >
             <IllustrationStyle
               className="text-fg-accent-brand"

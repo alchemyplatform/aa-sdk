@@ -27,7 +27,7 @@ export const Navigation = ({
             : "invisible"
         }
       >
-        <BackArrow />
+        <BackArrow className="w-[24px] h-[24px] lg:w-[16px] lg:h-[16px]" />
       </Button>
 
       <Button
@@ -39,7 +39,7 @@ export const Navigation = ({
             : "invisible"
         }
       >
-        <X />
+        <X className="w-[24px] h-[24px] lg:w-[16px] lg:h-[16px]" />
       </Button>
     </div>
   );

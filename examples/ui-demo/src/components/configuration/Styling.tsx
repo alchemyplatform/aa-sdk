@@ -8,6 +8,7 @@ import { ThemeSwitch } from "../shared/ThemeSwitch";
 import { ColorPicker } from "./ColorPicker";
 import { PhotoUploads } from "./PhotoUpload";
 
+import { Metrics } from "@/metrics";
 import { CornerRadiusOptions } from "./components/CornerRadiusOptions";
 import { IllustrationStyleOptions } from "./components/IllustrationStyleOptions";
 
@@ -110,7 +111,10 @@ export function Styling({ className }: { className?: string }) {
           id="support-url"
           value={supportUrl}
           onChange={(e) => setSupportUrl(e.target.value)}
-          onBlur={(e) => setSupportUrl(e.target.value)}
+          onBlur={(e) => {
+            setSupportUrl(e.target.value);
+            Metrics.trackEvent({ name: "branding_support_url_added" });
+          }}
           className="w-full border border-border rounded-lg px-[10px] py-[14px] h-10 text-sm"
           placeholder="website, telegram, or email"
         />
@@ -128,6 +132,11 @@ function LearnMore() {
         Customize every pixel with{" "}
         <ExternalLink
           className="font-semibold text-btn-primary"
+          onClick={() =>
+            Metrics.trackEvent({
+              name: "customize_css_clicked",
+            })
+          }
           href="https://github.com/alchemyplatform/aa-sdk/blob/v4.x.x/account-kit/react/src/tailwind/types.ts#L6"
         >
           CSS
