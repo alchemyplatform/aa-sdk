@@ -30,12 +30,12 @@ const upgradedAccount = await createMAAccount();
 
 ```ts [lightAccountClient.ts] twoslash filename="lightAccountClient.ts"
 import { createLightAccountAlchemyClient } from "@account-kit/smart-contracts";
-import { sepolia } from "@account-kit/infra";
+import { sepolia, alchemy } from "@account-kit/infra";
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { generatePrivateKey } from "viem/accounts";
 
 export const lightAccountClient = await createLightAccountAlchemyClient({
-  apiKey: "YOUR_API_KEY",
+  transport: alchemy({ apiKey: "YOUR_API_KEY" }),
   chain: sepolia,
   signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
 });
@@ -48,12 +48,12 @@ That is all! Now, you can create a smart account client to connect with the upgr
 :::code-group
 
 ```ts twoslash [example.ts]
-import { createAlchemySmartAccountClient } from "@account-kit/infra";
+import { createAlchemySmartAccountClient, alchemy } from "@account-kit/infra";
 import { multiOwnerPluginActions } from "@account-kit/smart-contracts";
 import { upgradedAccount } from "./upgradedAccount";
 
 const upgradedAccountClient = await createAlchemySmartAccountClient({
-  apiKey: "YOUR_API_KEY",
+  transport: alchemy({ apiKey: "YOUR_API_KEY" }),
   chain: lightAccountClient.chain,
   account: upgradedAccount,
 }).extend(multiOwnerPluginActions);
@@ -80,12 +80,12 @@ export const upgradedAccount = await createMAAccount();
 
 ```ts [lightAccountClient.ts] twoslash filename="lightAccountClient.ts"
 import { createLightAccountAlchemyClient } from "@account-kit/smart-contracts";
-import { sepolia } from "@account-kit/infra";
+import { sepolia, alchemy } from "@account-kit/infra";
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { generatePrivateKey } from "viem/accounts";
 
 export const lightAccountClient = await createLightAccountAlchemyClient({
-  apiKey: "YOUR_API_KEY",
+  transport: alchemy({ apiKey: "YOUR_API_KEY" }),
   chain: sepolia,
   signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
 });
