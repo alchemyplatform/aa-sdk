@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { Metrics } from "@/metrics";
 import { useConfigStore } from "@/state";
 import { BiometricIcon } from "../icons/biometric";
 import { ExternalLinkIcon } from "../icons/external-link";
@@ -19,15 +20,27 @@ export const Authentication = ({ className }: { className?: string }) => {
 
   const setEmailAuth = (active: boolean) => {
     setAuth({ showEmail: active });
+    Metrics.trackEvent({
+      name: "authentication_toggled",
+      data: { auth_type: "email", enabled: active },
+    });
   };
 
   const setPasskeysActive = (active: boolean) => {
     setAuth({ showPasskey: active });
+    Metrics.trackEvent({
+      name: "authentication_toggled",
+      data: { auth_type: "passkeys", enabled: active },
+    });
   };
 
   const setAddPasskeyOnSignup = (active: boolean) => {
     setAuth({
       addPasskey: active,
+    });
+    Metrics.trackEvent({
+      name: "authentication_toggled",
+      data: { auth_type: "add_passkey_on_signup", enabled: active },
     });
   };
 
@@ -35,11 +48,19 @@ export const Authentication = ({ className }: { className?: string }) => {
     setAuth({
       showExternalWallets: active,
     });
+    Metrics.trackEvent({
+      name: "authentication_toggled",
+      data: { auth_type: "external_wallets", enabled: active },
+    });
   };
 
   const setOAuthActive = (active: boolean) => {
     setAuth({
       showOAuth: active,
+    });
+    Metrics.trackEvent({
+      name: "authentication_toggled",
+      data: { auth_type: "oauth", enabled: active },
     });
   };
 
@@ -50,6 +71,10 @@ export const Authentication = ({ className }: { className?: string }) => {
         google: !auth.oAuthMethods.google,
       },
     });
+    Metrics.trackEvent({
+      name: "authentication_toggled",
+      data: { auth_type: "oauth_google", enabled: !auth.oAuthMethods.google },
+    });
   };
 
   const setAddFacebookAuth = () => {
@@ -57,6 +82,13 @@ export const Authentication = ({ className }: { className?: string }) => {
       oAuthMethods: {
         ...auth.oAuthMethods,
         facebook: !auth.oAuthMethods.facebook,
+      },
+    });
+    Metrics.trackEvent({
+      name: "authentication_toggled",
+      data: {
+        auth_type: "oauth_facebook",
+        enabled: !auth.oAuthMethods.facebook,
       },
     });
   };
@@ -94,6 +126,9 @@ export const Authentication = ({ className }: { className?: string }) => {
                 />
                 <ExternalLink
                   href="https://accountkit.alchemy.com/signer/authentication/auth0"
+                  onClick={() => {
+                    Metrics.trackEvent({ name: "clicked_custom_oauth_link" });
+                  }}
                   className="akui-btn rounded-lg border border-border active:bg-demo-surface-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-none"
                 >
                   <p className="hidden lg:block font-normal text-sm text-secondary-foreground">

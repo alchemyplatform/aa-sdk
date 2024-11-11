@@ -1,5 +1,5 @@
 import { AnalyticsBrowser } from "@segment/analytics-next";
-import { uuid } from "uuidv4";
+import { v4 as uuid } from "uuid";
 import { WRITE_IN_DEV } from "./_writeKey.js";
 import { fetchRemoteWriteKey } from "./fetchRemoteWriteKey.js";
 import { noopLogger } from "./noop.js";
@@ -32,6 +32,12 @@ export function createClientLogger<Schema extends EventsSchema = []>(
   analytics.setAnonymousId(anonId);
   analytics.register(ContextAllowlistPlugin);
   analytics.debug(isDev);
+
+  if (isDev) {
+    // Super weird behaviour, but if I don't add some kind of log here,
+    // then I don't actually get logs in the console
+    console.log(`[Metrics] metrics initialized for ${context.package}`);
+  }
 
   // This lets us log events in the console
   if (isDev) {
@@ -68,10 +74,15 @@ export function createClientLogger<Schema extends EventsSchema = []>(
   return {
     _internal: {
       ready,
+      anonId,
     },
     trackEvent: async ({ name, data }) => {
       if (!(await writeKey)) {
-        return noopLogger.trackEvent({ name, data });
+        return noopLogger.trackEvent({
+          name,
+          // @ts-expect-error
+          data,
+        });
       }
 
       await analytics.track(name, { ...data, ...context });

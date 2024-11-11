@@ -80,7 +80,7 @@ describe("Client Logger", () => {
     await logger.trackEvent({ name: "test", data: { test: true } });
     expect(fetchSpy).toHaveBeenCalledTimes(0);
 
-    expect(JSON.parse(consoleSpy.mock.calls[0][0])).toMatchInlineSnapshot(
+    expect(JSON.parse(consoleSpy.mock.calls[1][0])).toMatchInlineSnapshot(
       {
         timestamp: expect.any(String),
         messageId: expect.any(String),

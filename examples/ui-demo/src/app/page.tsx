@@ -11,6 +11,7 @@ import ExternalLink from "@/components/shared/ExternalLink";
 import { MintCard } from "@/components/shared/mint-card/MintCard";
 import { RenderUserConnectionAvatar } from "@/components/shared/user-connection-avatar/RenderUserConnectionAvatar";
 import { cn } from "@/lib/utils";
+import { Metrics } from "@/metrics";
 import { useTheme } from "@/state/useTheme";
 import { useUser } from "@account-kit/react";
 import { Inter, Public_Sans } from "next/font/google";
@@ -105,6 +106,11 @@ export default function Home() {
                   environment. You&apos;ll need to add your Alchemy API key and
                   Gas Policy ID.{" "}
                   <ExternalLink
+                    onClick={() =>
+                      Metrics.trackEvent({
+                        name: "codepreview_theme_customization_clicked",
+                      })
+                    }
                     href="https://accountkit.alchemy.com/react/customization/theme"
                     className="font-semibold text-blue-600"
                   >

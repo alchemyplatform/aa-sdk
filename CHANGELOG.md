@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.3.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.3.0...v4.3.1) (2024-11-07)
+
+### Bug Fixes
+
+- bigint multiply was sometimes generating floats ([#1135](https://github.com/alchemyplatform/aa-sdk/issues/1135)) ([217443f](https://github.com/alchemyplatform/aa-sdk/commit/217443f33a46e99e1712dcf368a582d4dc3ac2ef))
+
+# [4.3.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.2.0...v4.3.0) (2024-11-05)
+
+### Bug Fixes
+
+- button nav size ([#1114](https://github.com/alchemyplatform/aa-sdk/issues/1114)) ([2ddd4fc](https://github.com/alchemyplatform/aa-sdk/commit/2ddd4fc11e311610707365bdb0ccf19d9c301e24))
+- define process.env for storybook ([#1116](https://github.com/alchemyplatform/aa-sdk/issues/1116)) ([509827a](https://github.com/alchemyplatform/aa-sdk/commit/509827a77ed7c5e0a6284fa37526f66202ba9904))
+- **logging:** check process is defined ([#1124](https://github.com/alchemyplatform/aa-sdk/issues/1124)) ([337c012](https://github.com/alchemyplatform/aa-sdk/commit/337c01264c7479328dc8f9e75a231f7493c9c22d))
+- minor a11y enhancements ([#1110](https://github.com/alchemyplatform/aa-sdk/issues/1110)) ([41af20e](https://github.com/alchemyplatform/aa-sdk/commit/41af20e17dbf73950529c3c62ca2b524144c67e4))
+- passkey icon is now using brand color ([#1123](https://github.com/alchemyplatform/aa-sdk/issues/1123)) ([a3238ec](https://github.com/alchemyplatform/aa-sdk/commit/a3238ecf5d1f4a8d402377444d773376bffd5f58))
+- repair pt on maincard ([#1117](https://github.com/alchemyplatform/aa-sdk/issues/1117)) ([711bed5](https://github.com/alchemyplatform/aa-sdk/commit/711bed54c7f7990162ab031eb91f40ab4ac3aac9))
+- show Oauth errors in from UI components ([#1118](https://github.com/alchemyplatform/aa-sdk/issues/1118)) ([8331372](https://github.com/alchemyplatform/aa-sdk/commit/833137251afad161f1fd982f6062160232b8340c))
+
+### Features
+
+- added dev:build script to improve dev experience ([#1120](https://github.com/alchemyplatform/aa-sdk/issues/1120)) ([0f024e7](https://github.com/alchemyplatform/aa-sdk/commit/0f024e75876c82addf8a389658b42dadc36ecefe))
+- allow email to be toggled ([#1121](https://github.com/alchemyplatform/aa-sdk/issues/1121)) ([1ed988c](https://github.com/alchemyplatform/aa-sdk/commit/1ed988c4e76dd04a8db8d7d6cd2b68b46f122bf8))
+
 # [4.2.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.1.1...v4.2.0) (2024-10-29)
 
 ### Bug Fixes

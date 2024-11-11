@@ -34,6 +34,7 @@ export {
   opbnbMainnet,
   opbnbTestnet,
   soneiumMinato,
+  unichainMainnet,
   unichainSepolia,
 } from "./chains.js";
 export type * from "./client/decorators/alchemyEnhancedApis.js";
