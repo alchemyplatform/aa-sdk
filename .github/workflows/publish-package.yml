@@ -28,6 +28,9 @@ jobs:
   build_and_test_deploy:
     name: Build and Publish
     runs-on: ubuntu-latest
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 
     # Needed for Publishing
     permissions:

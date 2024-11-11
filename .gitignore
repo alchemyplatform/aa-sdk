@@ -35,3 +35,7 @@ site/**/*.js
 vocs.config.tsx.timestamp-*.mjs
 
 bin
+**/.turbo
+
+# Turborepo
+.turbo
