@@ -518,6 +518,11 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     } = args;
     const { codeChallenge, requestKey, authProviders } =
       await this.getOauthConfigForMode(mode);
+    if (!authProviders) {
+      throw new Error(
+        "No auth providers found, please enable auth providers on the alchemy dashboard here: https://dashboard.alchemy.com/accounts"
+      );
+    }
     const authProvider = authProviders.find(
       (provider) =>
         provider.id === authProviderId &&
@@ -670,8 +675,10 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     mode: OauthMode
   ): Promise<OauthConfig> => {
     if (this.oauthConfig) {
+      console.log("oauthConfig", this.oauthConfig);
       return this.oauthConfig;
     } else if (mode === "redirect") {
+      console.log("initOauth");
       return this.initOauth();
     } else {
       throw new Error(
