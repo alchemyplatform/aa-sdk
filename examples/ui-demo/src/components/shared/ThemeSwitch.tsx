@@ -26,7 +26,10 @@ const ThemeSwitch = React.forwardRef<
     ></SwitchPrimitives.Thumb>
     <div className="absolute flex text-sm items-center inset-1 z-10 justify-between bg-transparent">
       <div className="flex items-center data-[state=unchecked]:font-medium justify-center gap-1 flex-1 basis-0">
-        <Sun className={cn(checked && "stroke-demo-fg-secondary")} size={18} />
+        <Sun
+          className={cn(checked && "stroke-demo-fg-toggle-icon")}
+          size={18}
+        />
       </div>
       <div className="flex items-center justify-center gap-1 flex-1 basis-0">
         <Moon
