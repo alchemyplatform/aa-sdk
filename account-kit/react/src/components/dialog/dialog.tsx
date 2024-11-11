@@ -1,6 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { createPortal } from "react-dom";
 import { RemoveScroll } from "react-remove-scroll";
 import { FocusTrap } from "./focustrap.js";
@@ -20,9 +27,32 @@ type DialogProps = {
 export const Dialog = ({ isOpen, onClose, children }: DialogProps) => {
   const [isScrollLocked, setScrollLocked] = useState(false);
 
+  const [renderPortal, setRenderPortal] = useState(false);
+
+  const dialogCardRef = useRef<HTMLDivElement>(null);
+
   const handleBackgroundClick = useCallback(() => {
     onClose();
   }, [onClose]);
+
+  useLayoutEffect(() => {
+    const dialogCard = dialogCardRef.current;
+
+    if (isOpen) {
+      setRenderPortal(true);
+      return;
+    }
+
+    const renderPortalHandler = () => {
+      setRenderPortal(false);
+    };
+
+    dialogCard?.addEventListener("animationend", renderPortalHandler);
+
+    return () => {
+      dialogCard?.removeEventListener("animationend", renderPortalHandler);
+    };
+  }, [isOpen]);
 
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
@@ -40,19 +70,24 @@ export const Dialog = ({ isOpen, onClose, children }: DialogProps) => {
     setScrollLocked(getComputedStyle(document.body).overflow !== "hidden");
   }, []);
 
-  return isOpen
+  return renderPortal
     ? createPortal(
         <RemoveScroll enabled={isScrollLocked}>
           {/* Overlay */}
           <div
             aria-modal
             role="dialog"
-            className="fixed inset-0 bg-black/80 flex items-end md:items-center justify-center z-[999999] animate-fade-in"
+            className={`fixed inset-0 bg-black/80 flex items-end md:items-center justify-center z-[999999] transition-opacity ${
+              isOpen ? "opacity-100" : "opacity-0 delay-75"
+            }`}
             onClick={handleBackgroundClick}
           >
             <FocusTrap>
               <div
-                className="animate-fade-in animate-slide-up max-md:w-screen md:max-w-sm"
+                ref={dialogCardRef}
+                className={`max-md:w-screen md:max-w-sm block ${
+                  isOpen ? "animate-slide-up" : "animate-slide-down"
+                }`}
                 onClick={(event) => event.stopPropagation()}
               >
                 {children}
