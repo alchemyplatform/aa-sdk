@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useNewUserSignupEffect } from "../../hooks/internal/useNewUserSignup.js";
+import { useNewUserSignup } from "../../hooks/internal/useNewUserSignup.js";
 import { useAuthModal } from "../../hooks/useAuthModal.js";
 import { useSignerStatus } from "../../hooks/useSignerStatus.js";
 import { useUiConfig } from "../../hooks/useUiConfig.js";
@@ -28,7 +28,7 @@ export const AuthModal = () => {
     }
   }, [addPasskeyOnSignup, isOpen, openAuthModal, setAuthStep]);
 
-  useNewUserSignupEffect(handleSignup, isConnected);
+  useNewUserSignup(handleSignup, isConnected);
 
   return (
     <Dialog isOpen={isOpen} onClose={closeAuthModal}>
