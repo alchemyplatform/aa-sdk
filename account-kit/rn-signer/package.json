@@ -39,9 +39,8 @@
   "scripts": {
     "test": "jest",
     "typecheck": "tsc",
-    "build:rn": "bob build && yarn typecheck && yarn build:android",
+    "build:rn": "bob build && yarn typecheck && yarn turbo run build:android",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
-    "build:android": "cd ./example && react-native build-android --extra-params \"--no-daemon --console=plain -PreactNativeArchitectures=arm64-v8a\"",
     "prepare": "bob build"
   },
   "keywords": [
