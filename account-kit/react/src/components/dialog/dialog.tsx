@@ -29,27 +29,28 @@ export const Dialog = ({ isOpen, onClose, children }: DialogProps) => {
 
   const [renderPortal, setRenderPortal] = useState(false);
 
-  const backdropRef = useRef<HTMLDivElement>(null);
+  const dialogCardRef = useRef<HTMLDivElement>(null);
 
   const handleBackgroundClick = useCallback(() => {
     onClose();
   }, [onClose]);
 
   useLayoutEffect(() => {
-    const backdrop = backdropRef.current;
+    const dialogCard = dialogCardRef.current;
 
     if (isOpen) {
       setRenderPortal(true);
+      return;
     }
 
     const renderPortalHandler = () => {
       setRenderPortal(false);
     };
 
-    backdrop?.addEventListener("animationend", renderPortalHandler);
+    dialogCard?.addEventListener("animationend", renderPortalHandler);
 
     return () => {
-      backdrop?.removeEventListener("animationend", renderPortalHandler);
+      dialogCard?.removeEventListener("animationend", renderPortalHandler);
     };
   }, [isOpen]);
 
@@ -76,7 +77,6 @@ export const Dialog = ({ isOpen, onClose, children }: DialogProps) => {
           <div
             aria-modal
             role="dialog"
-            ref={backdropRef}
             className={`fixed inset-0 bg-black/80 flex items-end md:items-center justify-center z-[999999] transition-opacity ${
               isOpen ? "opacity-100" : "opacity-0 delay-75"
             }`}
@@ -84,6 +84,7 @@ export const Dialog = ({ isOpen, onClose, children }: DialogProps) => {
           >
             <FocusTrap>
               <div
+                ref={dialogCardRef}
                 className={`max-md:w-screen md:max-w-sm block ${
                   isOpen ? "animate-slide-up" : "animate-slide-down"
                 }`}
