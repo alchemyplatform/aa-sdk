@@ -26,6 +26,8 @@ jobs:
     env:
       REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.ALCHEMY_BOT_PAT }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -55,6 +57,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       API_KEY: ${{ secrets.API_KEY }}
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -83,14 +87,9 @@ jobs:
         uses: ./.github/actions/setup-node
 
       - name: Build
-        uses: nick-fields/retry@v3
         env:
           API_KEY: ${{ secrets.API_KEY }}
-        with:
-          timeout_minutes: 5
-          max_attempts: 2
-          # it's ok to run the dev build here because the site gets built in vercel for each branch
-          command: yarn build:dev
+        run: yarn build:dev
 
       - name: Unit Test
         run: yarn test:ci

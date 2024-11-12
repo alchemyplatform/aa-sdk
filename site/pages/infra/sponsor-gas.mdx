@@ -142,6 +142,7 @@ import {
   sepolia,
   alchemyFeeEstimator,
   createAlchemyPublicRpcClient,
+  alchemy,
 } from "@account-kit/infra";
 import { createLightAccount } from "@account-kit/smart-contracts";
 // You can replace this with any signer you'd like
@@ -157,9 +158,7 @@ const alchemyTransport = alchemy({
 
 const alchemyRpcClient = createAlchemyPublicRpcClient({
   chain: sepolia,
-  connectionConfig: {
-    apiKey: "API_KEY",
-  },
+  transport: alchemyTransport,
 });
 
 // 2. create a split transport to route traffic between the paymaster and the bundler
