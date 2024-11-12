@@ -1,5 +1,4 @@
 import { AnalyticsBrowser } from "@segment/analytics-next";
-import { v4 as uuid } from "uuid";
 import { WRITE_IN_DEV } from "./_writeKey.js";
 import { fetchRemoteWriteKey } from "./fetchRemoteWriteKey.js";
 import { noopLogger } from "./noop.js";
@@ -25,7 +24,7 @@ export function createClientLogger<Schema extends EventsSchema = []>(
   const writeKey = fetchRemoteWriteKey();
 
   if (!sessionStorage.getItem("anonId")) {
-    sessionStorage.setItem("anonId", uuid());
+    sessionStorage.setItem("anonId", crypto.randomUUID());
   }
 
   const anonId = sessionStorage.getItem("anonId")!;
