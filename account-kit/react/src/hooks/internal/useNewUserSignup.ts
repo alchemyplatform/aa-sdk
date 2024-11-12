@@ -8,11 +8,15 @@ export function useNewUserSignup(onSignup: () => void, enabled?: boolean) {
   useEffect(() => {
     if (!enabled) return;
     if (!signer) return;
-    if (hasHandled.current) return;
 
-    signer.on("newUserSignup", () => {
-      onSignup();
-      hasHandled.current = true;
-    });
+    const handleSignup = () => {
+      if (!hasHandled.current) {
+        hasHandled.current = true;
+        onSignup();
+      }
+    };
+
+    const stopListening = signer.on("newUserSignup", handleSignup);
+    return stopListening;
   }, [enabled, onSignup, signer]);
 }
