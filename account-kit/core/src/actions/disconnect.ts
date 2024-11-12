@@ -49,14 +49,21 @@ const clearWalletConnectStore = () => {
   const dbOpenRequest = indexedDB.open("WALLET_CONNECT_V2_INDEXED_DB");
 
   dbOpenRequest.onsuccess = () => {
-    const db = dbOpenRequest.result;
+    try {
+      const db = dbOpenRequest.result;
 
-    const txn = db.transaction(["keyvaluestorage"], "readwrite");
+      const txn = db.transaction(["keyvaluestorage"], "readwrite");
 
-    const store = txn.objectStore("keyvaluestorage");
+      const store = txn.objectStore("keyvaluestorage");
 
-    // Clear Store
-    store.clear();
+      // Clear Store
+      store.clear();
+    } catch (error) {
+      console.error(
+        "Error clearing Wallet Connect DB. Cannot clear store.",
+        error
+      );
+    }
   };
 
   dbOpenRequest.onerror = () => {
