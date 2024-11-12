@@ -15,7 +15,6 @@ import { useElementHeight } from "../../../hooks/useElementHeight.js";
 import { useSignerStatus } from "../../../hooks/useSignerStatus.js";
 import { Navigation } from "../../navigation.js";
 import { useAuthContext } from "../context.js";
-import { usePrevious } from "../hooks/usePrevious.js";
 import { Footer } from "../sections/Footer.js";
 import { Step } from "./steps.js";
 export type AuthCardProps = {
@@ -59,7 +58,6 @@ export const AuthCardContent = ({
 }) => {
   const { openAuthModal, closeAuthModal } = useAuthModal();
   const { status, isAuthenticating, isConnected } = useSignerStatus();
-  const previousStatus = usePrevious(status);
   const { authStep, setAuthStep } = useAuthContext();
   const { config } = useAlchemyAccountContext();
 
@@ -138,7 +136,6 @@ export const AuthCardContent = ({
     closeAuthModal,
     addPasskeyOnSignup,
     isConnected,
-    previousStatus,
   ]);
 
   return (
