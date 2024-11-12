@@ -41,7 +41,7 @@
     "build:dev": "lerna watch --scope='@account-kit/react' --include-dependencies -- lerna run build --scope=@account-kit/react",
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
-    "docs:gen": "npx ak-docgen generate --in ./src/index.ts --out ../../site/pages/reference/account-kit/react",
+    "docs:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../site/pages/reference/account-kit/react",
     "clean": "rm -rf ./dist",
     "test": "vitest --passWithNoTests",
     "test:run": "vitest run --passWithNoTests"
