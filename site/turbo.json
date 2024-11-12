@@ -2,8 +2,9 @@
   "extends": ["//"],
   "tasks": {
     "build": {
-      "outputs": ["dist/**/*", "sidebar/**/*"],
-      "dependsOn": ["^build", "^docs:gen"]
+      "outputs": ["dist/**", "sidebar/**"],
+      "dependsOn": ["^build", "^docs:gen"],
+      "cache": false
     }
   }
 }
