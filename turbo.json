@@ -10,14 +10,18 @@
       "cache": false
     },
     "test": {
+      "env": ["VITEST_SEPOLIA_FORK_URL"],
       "dependsOn": ["^build"],
       "cache": false,
       "persistent": true
     },
     "test:ci": {
-      "dependsOn": ["^build"]
+      "env": ["VITEST_SEPOLIA_FORK_URL"],
+      "dependsOn": ["^build"],
+      "cache": false
     },
     "docs:gen": {
+      "dependsOn": ["ak-docgen#build"],
       "outputs": ["../../site/pages/reference/**"]
     },
     "generate": {
