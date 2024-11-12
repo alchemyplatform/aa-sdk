@@ -725,8 +725,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       });
 
       // fire new user event
-      if (params.isNewUser)
-        this.store.setState({ isNewUser: params.isNewUser });
+      this.emitNewUserEvent(params.isNewUser!);
 
       return user;
     }
@@ -800,7 +799,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       idToken,
     });
 
-    if (isNewUser) this.store.setState({ isNewUser });
+    this.emitNewUserEvent(isNewUser!);
 
     return user;
   };
@@ -849,6 +848,10 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
         error: null,
       });
     });
+  };
+
+  private emitNewUserEvent = (isNewUser: boolean) => {
+    if (isNewUser) this.store.setState({ isNewUser });
   };
 }
 
