@@ -46,9 +46,21 @@ export async function disconnect(config: AlchemyAccountsConfig): Promise<void> {
 // Persistence of Wallet Connect connection state on error.
 const clearWalletConnectStore = () => {
   // Open Wallet Connect Indexed DB
+  let walletConnectDBExists = true;
   const dbOpenRequest = indexedDB.open("WALLET_CONNECT_V2_INDEXED_DB");
 
+  dbOpenRequest.onupgradeneeded = () => {
+    if (dbOpenRequest.result.version === 1) {
+      walletConnectDBExists = false;
+
+      // Remove the Database created from the indexedDB.open() call above.
+      indexedDB.deleteDatabase("WALLET_CONNECT_V2_INDEXED_DB");
+    }
+  };
+
   dbOpenRequest.onsuccess = () => {
+    if (!walletConnectDBExists) return;
+
     try {
       const db = dbOpenRequest.result;
 
