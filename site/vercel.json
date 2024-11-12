@@ -1,4 +1,6 @@
 {
+  "installCommand": "cd .. && yarn install --ignore-engines",
+  "buildCommand": "cd .. && yarn build:site",
   "redirects": [
     {
       "source": "/getting-started/setup",

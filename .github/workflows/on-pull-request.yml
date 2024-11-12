@@ -86,10 +86,10 @@ jobs:
       - name: Setup Node
         uses: ./.github/actions/setup-node
 
-      - name: Build
+      - name: Build Libraries
         env:
           API_KEY: ${{ secrets.API_KEY }}
-        run: yarn build:dev
+        run: yarn build:libs
 
       - name: Unit Test
         run: yarn test:ci
