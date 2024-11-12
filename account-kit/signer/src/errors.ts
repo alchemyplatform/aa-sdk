@@ -13,3 +13,9 @@ export class NotAuthenticatedError extends BaseError {
     );
   }
 }
+
+export class OAuthProvidersError extends BaseError {
+  constructor() {
+    super("OAuth providers not found", { docsPath: "/react/getting-started" });
+  }
+}
