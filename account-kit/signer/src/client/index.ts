@@ -471,9 +471,11 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
           alchemyBundle: bundle,
           alchemyOrgId: orgId,
           alchemyIdToken: idToken,
+          alchemyIsSignup: isSignup,
           alchemyError,
         } = event.data;
         if (bundle && orgId && idToken) {
+          if (isSignup === true) this.eventEmitter.emit("newUserSignupClient");
           cleanup();
           popup?.close();
           this.completeAuthWithBundle({

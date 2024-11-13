@@ -843,6 +843,11 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
         }
       })();
 
+      // trigger new user event on signer from client
+      this.inner.on("newUserSignupClient", () => {
+        this.emitNewUserEvent(true);
+      });
+
       this.store.setState({
         status,
         error: null,
