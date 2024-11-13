@@ -27,8 +27,7 @@ export function getSectionsForConfig(
         midSection.push({
           type: "social",
           authProviderId: method as KnownAuthProvider, // TODO: extend for BYO auth provider
-          mode: "redirect",
-          redirectUrl: "http://localhost:3000",
+          mode: "popup",
         });
       }
     }
