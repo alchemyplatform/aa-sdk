@@ -61,7 +61,7 @@ jobs:
         run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
 
       - name: Build all packages
-        run: yarn build:dev
+        run: yarn build:libs
 
       # Lerna publish will, compute the new version, update files, run precommit hooks, tag, publish, and push change log
       - name: Publish using Lerna
