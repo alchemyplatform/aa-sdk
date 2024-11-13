@@ -1,0 +1,10 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**"],
+      "env": ["API_KEY", "ALCHEMY_API_URL", "ALCHEMY_RPC_URL"]
+    }
+  }
+}
