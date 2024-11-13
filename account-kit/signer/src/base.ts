@@ -725,7 +725,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       });
 
       // fire new user event
-      this.emitNewUserEvent(params.isNewUser!);
+      this.emitNewUserEvent(params.isNewUser);
 
       return user;
     }
@@ -799,7 +799,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       idToken,
     });
 
-    this.emitNewUserEvent(isNewUser!);
+    this.emitNewUserEvent(isNewUser);
 
     return user;
   };
@@ -850,7 +850,8 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     });
   };
 
-  private emitNewUserEvent = (isNewUser: boolean) => {
+  private emitNewUserEvent = (isNewUser?: boolean) => {
+    // assumes that if isNewUser is undefined it is a returning user
     if (isNewUser) this.store.setState({ isNewUser });
   };
 }
