@@ -41,7 +41,7 @@
     "lint:write": "eslint . --fix && yarn docs:gen && prettier --write --ignore-unknown .",
     "lint:check": "eslint . && prettier --check .",
     "prepare": "husky install",
-    "version": "yarn build:dev"
+    "version": "yarn build:libs"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.3",
