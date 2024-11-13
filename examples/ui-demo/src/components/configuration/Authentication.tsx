@@ -156,7 +156,7 @@ export const Authentication = ({ className }: { className?: string }) => {
                   <p className="hidden lg:block font-normal text-sm text-secondary-foreground">
                     Add passkey after sign up
                   </p>
-                  <ExternalLink href="https://aa-sdk-site-alpha.vercel.app/react/add-passkey?">
+                  <ExternalLink href="https://accountkit.alchemy.com/core/add-passkey">
                     <p className=" block lg:hidden font-normal text-sm text-secondary-foreground underline">
                       Add passkey after sign up
                     </p>
