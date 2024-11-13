@@ -1,5 +1,6 @@
 "use client";
 
+import { disconnect } from "@account-kit/core";
 import {
   useCallback,
   useEffect,
@@ -7,6 +8,7 @@ import {
   useRef,
   type PropsWithChildren,
 } from "react";
+import { useAlchemyAccountContext } from "../../../context.js";
 import { useAuthConfig } from "../../../hooks/internal/useAuthConfig.js";
 import { useAuthModal } from "../../../hooks/useAuthModal.js";
 import { useElementHeight } from "../../../hooks/useElementHeight.js";
@@ -15,9 +17,6 @@ import { Navigation } from "../../navigation.js";
 import { useAuthContext } from "../context.js";
 import { Footer } from "../sections/Footer.js";
 import { Step } from "./steps.js";
-import { disconnect } from "@account-kit/core";
-import { useAlchemyAccountContext } from "../../../context.js";
-
 export type AuthCardProps = {
   className?: string;
 };
@@ -58,7 +57,7 @@ export const AuthCardContent = ({
   showClose?: boolean;
 }) => {
   const { openAuthModal, closeAuthModal } = useAuthModal();
-  const { status, isAuthenticating } = useSignerStatus();
+  const { status, isAuthenticating, isConnected } = useSignerStatus();
   const { authStep, setAuthStep } = useAuthContext();
   const { config } = useAlchemyAccountContext();
 
@@ -106,8 +105,10 @@ export const AuthCardContent = ({
   }, [authStep, setAuthStep, config]);
 
   const onClose = useCallback(() => {
-    // Terminate any inflight authentication
-    disconnect(config);
+    if (!isConnected) {
+      // Terminate any inflight authentication
+      disconnect(config);
+    }
 
     if (authStep.type === "passkey_create") {
       setAuthStep({ type: "complete" });
@@ -115,7 +116,7 @@ export const AuthCardContent = ({
       setAuthStep({ type: "initial" });
     }
     closeAuthModal();
-  }, [authStep.type, closeAuthModal, setAuthStep, config]);
+  }, [isConnected, authStep.type, closeAuthModal, config, setAuthStep]);
 
   useEffect(() => {
     if (authStep.type === "complete") {
@@ -124,11 +125,6 @@ export const AuthCardContent = ({
       onAuthSuccess?.();
     } else if (authStep.type !== "initial") {
       didGoBack.current = false;
-    } else if (!didGoBack.current && isAuthenticating) {
-      setAuthStep({
-        type: "email_completing",
-        createPasskeyAfter: addPasskeyOnSignup,
-      });
     }
   }, [
     authStep,
@@ -139,6 +135,7 @@ export const AuthCardContent = ({
     openAuthModal,
     closeAuthModal,
     addPasskeyOnSignup,
+    isConnected,
   ]);
 
   return (

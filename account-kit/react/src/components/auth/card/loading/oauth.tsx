@@ -13,9 +13,13 @@ export const CompletingOAuth = () => {
 
   useEffect(() => {
     if (isConnected) {
-      setAuthStep({ type: "complete" });
+      if (authStep.createPasskeyAfter) {
+        setAuthStep({ type: "passkey_create" });
+      } else {
+        setAuthStep({ type: "complete" });
+      }
     }
-  }, [isConnected, setAuthStep]);
+  }, [authStep.createPasskeyAfter, isConnected, setAuthStep]);
 
   if (authStep.error) {
     return (
