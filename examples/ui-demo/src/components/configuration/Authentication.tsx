@@ -11,6 +11,7 @@ import { SocialIcon } from "../icons/social";
 import { WalletIcon } from "../icons/wallet";
 import ExternalLink from "../shared/ExternalLink";
 import { Switch } from "../ui/switch";
+import { links } from "@/utils/links";
 
 export const Authentication = ({ className }: { className?: string }) => {
   const { auth, setAuth } = useConfigStore(({ auth, setAuth }) => ({
@@ -125,7 +126,7 @@ export const Authentication = ({ className }: { className?: string }) => {
                   onClick={setAddFacebookAuth}
                 />
                 <ExternalLink
-                  href="https://accountkit.alchemy.com/signer/authentication/auth0"
+                  href={links.auth0}
                   onClick={() => {
                     Metrics.trackEvent({ name: "clicked_custom_oauth_link" });
                   }}
@@ -156,7 +157,7 @@ export const Authentication = ({ className }: { className?: string }) => {
                   <p className="hidden lg:block font-normal text-sm text-secondary-foreground">
                     Add passkey after sign up
                   </p>
-                  <ExternalLink href="https://accountkit.alchemy.com/core/add-passkey">
+                  <ExternalLink href={links.passkey}>
                     <p className=" block lg:hidden font-normal text-sm text-secondary-foreground underline">
                       Add passkey after sign up
                     </p>
