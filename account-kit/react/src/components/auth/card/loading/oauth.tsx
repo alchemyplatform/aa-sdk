@@ -25,7 +25,7 @@ export const CompletingOAuth = () => {
     return (
       <ConnectionError
         connectionType="oauth"
-        oauthProvider={authStep.config!.authProviderId}
+        oauthProvider={authStep.config.authProviderId}
         handleTryAgain={authenticate}
         handleUseAnotherMethod={() => setAuthStep({ type: "initial" })}
       />
