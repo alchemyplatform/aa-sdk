@@ -46,6 +46,7 @@ type AlchemySignerStore = {
   user: User | null;
   status: AlchemySignerStatus;
   error: ErrorInfo | null;
+  isNewUser?: boolean;
 };
 
 type InternalStore = Mutate<
@@ -150,6 +151,14 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
             (listener as AlchemySignerEvents["errorChanged"])(
               error ?? undefined
             ),
+          { fireImmediately: true }
+        );
+      case "newUserSignup":
+        return this.store.subscribe(
+          ({ isNewUser }) => isNewUser,
+          (isNewUser) => {
+            if (isNewUser) (listener as AlchemySignerEvents["newUserSignup"])();
+          },
           { fireImmediately: true }
         );
       default:
@@ -715,6 +724,9 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
         authenticatingType: "email",
       });
 
+      // fire new user event
+      this.emitNewUserEvent(params.isNewUser);
+
       return user;
     }
   };
@@ -777,14 +789,20 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
     bundle,
     orgId,
     idToken,
-  }: Extract<AuthParams, { type: "oauthReturn" }>): Promise<User> =>
-    this.inner.completeAuthWithBundle({
+    isNewUser,
+  }: Extract<AuthParams, { type: "oauthReturn" }>): Promise<User> => {
+    const user = this.inner.completeAuthWithBundle({
       bundle,
       orgId,
       connectedEventName: "connectedOauth",
       authenticatingType: "oauth",
       idToken,
     });
+
+    this.emitNewUserEvent(isNewUser);
+
+    return user;
+  };
 
   private registerListeners = () => {
     this.sessionManager.on("connected", (session) => {
@@ -830,6 +848,11 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
         error: null,
       });
     });
+  };
+
+  private emitNewUserEvent = (isNewUser?: boolean) => {
+    // assumes that if isNewUser is undefined it is a returning user
+    if (isNewUser) this.store.setState({ isNewUser });
   };
 }
 
