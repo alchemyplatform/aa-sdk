@@ -47,7 +47,6 @@ export function createUiConfigStore(
     ...initialConfig,
     isModalOpen: false,
     setModalOpen: (isOpen: boolean) => {
-      console.trace(isOpen);
       set({ isModalOpen: isOpen });
     },
     updateConfig: (config: AlchemyAccountsUIConfig) => {
