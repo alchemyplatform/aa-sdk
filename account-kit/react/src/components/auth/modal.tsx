@@ -21,6 +21,7 @@ export const AuthModal = () => {
 
   const handleSignup = useCallback(() => {
     if (addPasskeyOnSignup && !isOpen) {
+      console.log("handling sign up");
       openAuthModal();
       setAuthStep({
         type: "passkey_create",

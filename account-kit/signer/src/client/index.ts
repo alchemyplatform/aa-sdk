@@ -2,7 +2,6 @@ import { BaseError, ConnectionConfigSchema } from "@aa-sdk/core";
 import { getWebAuthnAttestation } from "@turnkey/http";
 import { IframeStamper } from "@turnkey/iframe-stamper";
 import { WebauthnStamper } from "@turnkey/webauthn-stamper";
-import { z } from "zod";
 import { getDefaultScopeAndClaims, getOauthNonce } from "../oauth.js";
 import type { AuthParams, OauthMode } from "../signer.js";
 import { base64UrlEncode } from "../utils/base64UrlEncode.js";
@@ -20,6 +19,7 @@ import type {
   User,
 } from "./types.js";
 import { OAuthProvidersError } from "../errors.js";
+import { z } from "zod";
 
 const CHECK_CLOSE_INTERVAL = 500;
 
@@ -475,7 +475,10 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
           alchemyError,
         } = event.data;
         if (bundle && orgId && idToken) {
-          if (isSignup === true) this.eventEmitter.emit("newUserSignupClient");
+          if (isSignup || true) {
+            this.eventEmitter.emit("newUserSignupClient");
+            console.log("we emitted an event from the client!");
+          }
           cleanup();
           popup?.close();
           this.completeAuthWithBundle({
