@@ -2,6 +2,8 @@ import { BaseError, ConnectionConfigSchema } from "@aa-sdk/core";
 import { getWebAuthnAttestation } from "@turnkey/http";
 import { IframeStamper } from "@turnkey/iframe-stamper";
 import { WebauthnStamper } from "@turnkey/webauthn-stamper";
+import { z } from "zod";
+import { OAuthProvidersError } from "../errors.js";
 import { getDefaultScopeAndClaims, getOauthNonce } from "../oauth.js";
 import type { AuthParams, OauthMode } from "../signer.js";
 import { base64UrlEncode } from "../utils/base64UrlEncode.js";
@@ -18,8 +20,6 @@ import type {
   OauthParams,
   User,
 } from "./types.js";
-import { OAuthProvidersError } from "../errors.js";
-import { z } from "zod";
 
 const CHECK_CLOSE_INTERVAL = 500;
 
@@ -462,6 +462,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       "_blank",
       "popup,width=500,height=600"
     );
+    const eventEmitter = this.eventEmitter;
     return new Promise((resolve, reject) => {
       const handleMessage = (event: MessageEvent) => {
         if (!event.data) {
@@ -475,10 +476,6 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
           alchemyError,
         } = event.data;
         if (bundle && orgId && idToken) {
-          if (isSignup || true) {
-            this.eventEmitter.emit("newUserSignupClient");
-            console.log("we emitted an event from the client!");
-          }
           cleanup();
           popup?.close();
           this.completeAuthWithBundle({
@@ -487,7 +484,13 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
             connectedEventName: "connectedOauth",
             idToken,
             authenticatingType: "oauth",
-          }).then(resolve, reject);
+          }).then((user) => {
+            if (isSignup) {
+              eventEmitter.emit("newUserSignupClient");
+            }
+
+            resolve(user);
+          }, reject);
         } else if (alchemyError) {
           cleanup();
           popup?.close();
