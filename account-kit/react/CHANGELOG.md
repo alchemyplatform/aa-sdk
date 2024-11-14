@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.4.0...v4.4.1) (2024-11-14)
+
+### Bug Fixes
+
+- don't show error view when cancelling oauth ([#1087](https://github.com/alchemyplatform/aa-sdk/issues/1087)) ([e1fddd8](https://github.com/alchemyplatform/aa-sdk/commit/e1fddd8a4e7818bc163efceda15d95ee9d6a37c3))
+
 # [4.4.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.3.1...v4.4.0) (2024-11-13)
 
 ### Features

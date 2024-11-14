@@ -5,6 +5,11 @@
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**"],
       "env": ["API_KEY", "ALCHEMY_API_URL", "ALCHEMY_RPC_URL"]
+    },
+    "dev": {
+      "dependsOn": ["^build"],
+      "interruptible": false,
+      "persistent": true
     }
   }
 }
