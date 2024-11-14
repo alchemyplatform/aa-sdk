@@ -3,6 +3,7 @@ import { getWebAuthnAttestation } from "@turnkey/http";
 import { IframeStamper } from "@turnkey/iframe-stamper";
 import { WebauthnStamper } from "@turnkey/webauthn-stamper";
 import { z } from "zod";
+import { OAuthProvidersError } from "../errors.js";
 import { getDefaultScopeAndClaims, getOauthNonce } from "../oauth.js";
 import type { AuthParams, OauthMode } from "../signer.js";
 import { base64UrlEncode } from "../utils/base64UrlEncode.js";
@@ -19,7 +20,6 @@ import type {
   OauthParams,
   User,
 } from "./types.js";
-import { OAuthProvidersError } from "../errors.js";
 
 const CHECK_CLOSE_INTERVAL = 500;
 
@@ -304,6 +304,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     await this.initWebauthnStamper(user);
     if (user) {
       this.user = user;
+      this.eventEmitter.emit("connectedPasskey", user);
       return user;
     }
 
@@ -665,7 +666,11 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
   };
 
   protected override getOauthConfig = async (): Promise<OauthConfig> => {
+    const currentStamper = this.turnkeyClient.stamper;
     const publicKey = await this.initIframeStamper();
+
+    // swap the stamper back in case the user logged in with a different stamper (passkeys)
+    this.setStamper(currentStamper);
     const nonce = getOauthNonce(publicKey);
     return this.request("/v1/prepare-oauth", { nonce });
   };
