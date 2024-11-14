@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.4.0...v4.4.1) (2024-11-14)
+
+### Bug Fixes
+
+- **signer:** passkey sessions were being wiped by oauth prep ([#1154](https://github.com/alchemyplatform/aa-sdk/issues/1154)) ([9f0543f](https://github.com/alchemyplatform/aa-sdk/commit/9f0543f0dc3a6a67c725921389778873923ead6c))
+
 # [4.4.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.3.1...v4.4.0) (2024-11-13)
 
 ### Bug Fixes

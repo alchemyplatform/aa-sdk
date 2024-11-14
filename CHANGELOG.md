@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.4.0...v4.4.1) (2024-11-14)
+
+### Bug Fixes
+
+- add check to ensure WC indexedDB store had been previously initialized on disconnect ([#1149](https://github.com/alchemyplatform/aa-sdk/issues/1149)) ([4377920](https://github.com/alchemyplatform/aa-sdk/commit/43779201f64e559e47e3f4e0f97670a13d520edf))
+- don't show error view when cancelling oauth ([#1087](https://github.com/alchemyplatform/aa-sdk/issues/1087)) ([e1fddd8](https://github.com/alchemyplatform/aa-sdk/commit/e1fddd8a4e7818bc163efceda15d95ee9d6a37c3))
+- **signer:** passkey sessions were being wiped by oauth prep ([#1154](https://github.com/alchemyplatform/aa-sdk/issues/1154)) ([9f0543f](https://github.com/alchemyplatform/aa-sdk/commit/9f0543f0dc3a6a67c725921389778873923ead6c))
+
 # [4.4.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.3.1...v4.4.0) (2024-11-13)
 
 ### Bug Fixes
