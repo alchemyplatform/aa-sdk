@@ -486,7 +486,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
             authenticatingType: "oauth",
           }).then((user) => {
             if (isSignup) {
-              eventEmitter.emit("newUserSignupClient");
+              eventEmitter.emit("newUserSignup");
             }
 
             resolve(user);

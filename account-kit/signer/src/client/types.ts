@@ -142,7 +142,7 @@ export type AuthenticatingEventMetadata = {
 
 export type AlchemySignerClientEvents = {
   connected(user: User): void;
-  newUserSignupClient(): void;
+  newUserSignup(): void;
   authenticating(data: AuthenticatingEventMetadata): void;
   connectedEmail(user: User, bundle: string): void;
   connectedPasskey(user: User): void;
