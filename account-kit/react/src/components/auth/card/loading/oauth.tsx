@@ -5,11 +5,13 @@ import { capitalize } from "../../../../utils.js";
 import { useAuthContext } from "../../context.js";
 import { useOAuthVerify } from "../../hooks/useOAuthVerify.js";
 import { ConnectionError } from "../error/connection-error.js";
+import { OauthCancelledError } from "@account-kit/signer";
 
 export const CompletingOAuth = () => {
   const { isConnected } = useSignerStatus();
   const { setAuthStep, authStep } = useAuthContext("oauth_completing");
   const { authenticate } = useOAuthVerify({ config: authStep.config });
+  const oauthWasCancelled = authStep.error instanceof OauthCancelledError;
 
   useEffect(() => {
     if (isConnected) {
@@ -18,10 +20,17 @@ export const CompletingOAuth = () => {
       } else {
         setAuthStep({ type: "complete" });
       }
+    } else if (oauthWasCancelled) {
+      setAuthStep({ type: "initial" });
     }
-  }, [authStep.createPasskeyAfter, isConnected, setAuthStep]);
+  }, [
+    authStep.createPasskeyAfter,
+    isConnected,
+    oauthWasCancelled,
+    setAuthStep,
+  ]);
 
-  if (authStep.error) {
+  if (authStep.error && !oauthWasCancelled) {
     return (
       <ConnectionError
         connectionType="oauth"
