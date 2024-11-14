@@ -23,11 +23,6 @@
     "docs:gen": {
       "dependsOn": ["ak-docgen#build"],
       "outputs": ["../../site/pages/reference/**"]
-    },
-    "dev": {
-      "dependsOn": ["^build"],
-      "persistent": true,
-      "cache": false
     }
   }
 }
