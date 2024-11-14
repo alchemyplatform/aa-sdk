@@ -13,6 +13,7 @@ export type AuthStep =
   | {
       type: "oauth_completing";
       config: Extract<AuthType, { type: "social" }>;
+      createPasskeyAfter?: boolean;
       error?: Error;
     }
   | { type: "initial"; error?: Error }

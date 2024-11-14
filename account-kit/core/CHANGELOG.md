@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.4.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.3.1...v4.4.0) (2024-11-13)
+
+### Features
+
+- oauth add passkey after signup (redirect flow) ([#1140](https://github.com/alchemyplatform/aa-sdk/issues/1140)) ([6d5e229](https://github.com/alchemyplatform/aa-sdk/commit/6d5e229e24402344b214df9689ca18d8f5954922))
+
 ## [4.3.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.3.0...v4.3.1) (2024-11-07)
 
 **Note:** Version bump only for package @account-kit/core

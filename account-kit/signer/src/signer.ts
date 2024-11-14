@@ -9,7 +9,7 @@ import { SessionManagerParamsSchema } from "./session/manager.js";
 
 export type AuthParams =
   | { type: "email"; email: string; redirectParams?: URLSearchParams }
-  | { type: "email"; bundle: string; orgId?: string }
+  | { type: "email"; bundle: string; orgId?: string; isNewUser?: boolean }
   | {
       type: "passkey";
       email: string;
@@ -36,6 +36,7 @@ export type AuthParams =
       bundle: string;
       orgId: string;
       idToken: string;
+      isNewUser?: boolean;
     };
 
 export type OauthProviderConfig =
@@ -110,16 +111,23 @@ export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> 
     } else {
       client = params_.client;
     }
-    const { emailBundle, oauthBundle, oauthOrgId, oauthError, idToken } =
-      getAndRemoveQueryParams({
-        emailBundle: "bundle",
-        // We don't need this, but we still want to remove it from the URL.
-        emailOrgId: "orgId",
-        oauthBundle: "alchemy-bundle",
-        oauthOrgId: "alchemy-org-id",
-        oauthError: "alchemy-error",
-        idToken: "alchemy-id-token",
-      });
+    const {
+      emailBundle,
+      oauthBundle,
+      oauthOrgId,
+      oauthError,
+      idToken,
+      isSignup,
+    } = getAndRemoveQueryParams({
+      emailBundle: "bundle",
+      // We don't need this, but we still want to remove it from the URL.
+      emailOrgId: "orgId",
+      oauthBundle: "alchemy-bundle",
+      oauthOrgId: "alchemy-org-id",
+      oauthError: "alchemy-error",
+      idToken: "alchemy-id-token",
+      isSignup: "aa-is-signup",
+    });
 
     const initialError =
       oauthError != null
@@ -128,14 +136,21 @@ export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> 
 
     super({ client, sessionConfig, initialError });
 
+    const isNewUser = isSignup === "true";
+
     if (emailBundle) {
-      this.authenticate({ type: "email", bundle: emailBundle });
+      this.authenticate({
+        type: "email",
+        bundle: emailBundle,
+        isNewUser,
+      });
     } else if (oauthBundle && oauthOrgId && idToken) {
       this.authenticate({
         type: "oauthReturn",
         bundle: oauthBundle,
         orgId: oauthOrgId,
         idToken,
+        isNewUser,
       });
     }
   }

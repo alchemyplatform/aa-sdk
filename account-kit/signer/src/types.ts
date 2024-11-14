@@ -2,6 +2,7 @@ import type { User } from "./client/types";
 
 export type AlchemySignerEvents = {
   connected(user: User): void;
+  newUserSignup(): void;
   disconnected(): void;
   statusChanged(status: AlchemySignerStatus): void;
   errorChanged(error: ErrorInfo | undefined): void;

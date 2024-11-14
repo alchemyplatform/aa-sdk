@@ -19,6 +19,7 @@ import type {
   OauthParams,
   User,
 } from "./types.js";
+import { OAuthProvidersError } from "../errors.js";
 
 const CHECK_CLOSE_INTERVAL = 500;
 
@@ -518,6 +519,9 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     } = args;
     const { codeChallenge, requestKey, authProviders } =
       await this.getOauthConfigForMode(mode);
+    if (!authProviders) {
+      throw new OAuthProvidersError();
+    }
     const authProvider = authProviders.find(
       (provider) =>
         provider.id === authProviderId &&
