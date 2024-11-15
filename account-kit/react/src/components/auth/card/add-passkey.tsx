@@ -9,6 +9,7 @@ import { ls } from "../../../strings.js";
 import { Button } from "../../button.js";
 import { useAuthContext } from "../context.js";
 import { ConnectionError } from "./error/connection-error.js";
+import { ConnectionFailed as PasskeyConnectionFailed } from "../../../icons/connectionFailed.js";
 
 const BENEFITS = [
   {
@@ -44,7 +45,10 @@ export const AddPasskey = () => {
   if (authStep.error) {
     return (
       <ConnectionError
-        connectionType="passkey"
+        headerText={ls.error.connection.passkeyTitle}
+        bodyText={ls.error.connection.passkeyBody}
+        icon={<PasskeyConnectionFailed />}
+        shouldDisconnect={false}
         handleTryAgain={addPasskey}
         handleUseAnotherMethod={() => setAuthStep({ type: "complete" })}
       />

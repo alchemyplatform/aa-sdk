@@ -1,6 +1,3 @@
-import type { KnownAuthProvider } from "@account-kit/signer";
-import type { Connector } from "@wagmi/core";
-
 export type CustomErrorMessage = {
   heading?: string;
   body?: string;
@@ -15,10 +12,11 @@ export enum EOAWallets {
 }
 
 export type ConnectionErrorProps = {
-  connectionType: "passkey" | "oauth" | "wallet" | "timeout";
-  oauthProvider?: KnownAuthProvider; // TO DO: extend for BYO auth provider
-  EOAConnector?: Connector | EOAWallets.WALLET_CONNECT;
-  customErrorMessage?: CustomErrorMessage | null;
+  headerText: string;
+  bodyText: string;
+  tryAgainCTA?: string;
+  icon: React.ReactNode;
   handleTryAgain?: () => void;
   handleUseAnotherMethod?: () => void;
+  shouldDisconnect?: boolean;
 };

@@ -10,6 +10,7 @@ import { EOAWallets } from "./error/types.js";
 import { useConnectEOA } from "../hooks/useConnectEOA.js";
 import { useWalletConnectAuthConfig } from "../hooks/useWalletConnectAuthConfig.js";
 import { ls } from "../../../strings.js";
+import { WalletIcon } from "./error/icons/wallet-icon.js";
 
 export const EoaConnectCard = () => {
   const { setAuthStep, authStep } = useAuthContext("eoa_connect");
@@ -21,12 +22,12 @@ export const EoaConnectCard = () => {
       authStep.error,
       authStep.connector.name
     );
-
     return (
       <ConnectionError
-        connectionType="wallet"
-        EOAConnector={authStep.connector}
-        customErrorMessage={errorMessage}
+        icon={<WalletIcon connector={authStep.connector} />}
+        headerText={errorMessage.heading}
+        bodyText={errorMessage.body}
+        tryAgainCTA={errorMessage.tryAgainCTA}
         handleTryAgain={() => {
           setAuthStep({
             type: "eoa_connect",
@@ -99,12 +100,12 @@ export const WalletConnectCard = () => {
 
     return (
       <ConnectionError
-        connectionType="wallet"
-        EOAConnector={EOAWallets.WALLET_CONNECT}
-        customErrorMessage={errorMessage}
+        headerText={errorMessage.heading}
+        bodyText={errorMessage.body}
+        tryAgainCTA={errorMessage.tryAgainCTA}
+        icon={<WalletIcon connector={EOAWallets.WALLET_CONNECT} />}
         handleTryAgain={() => {
           setAuthStep({ type: "wallet_connect" });
-
           // Re-try wallet connect's connection...
           connect({
             connector: walletConnectConnector,

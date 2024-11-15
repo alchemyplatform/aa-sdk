@@ -1,14 +1,13 @@
 import { EOAConnectionFailed } from "../../../../../icons/EOAConnectionFailed.js";
 import { WalletConnectIcon } from "../../../../../icons/walletConnectIcon.js";
-import { EOAWallets, type ConnectionErrorProps } from "../types.js";
 
+import type { Connector } from "@wagmi/core";
 export const WalletIcon = ({
-  EOAConnector,
+  connector,
 }: {
-  EOAConnector: ConnectionErrorProps["EOAConnector"];
+  connector: Connector | "WalletConnect";
 }) => {
-  const isWalletConnect = EOAConnector === EOAWallets.WALLET_CONNECT;
-
+  const isWalletConnect = connector === "WalletConnect";
   return (
     <div className="relative flex justify-center items-center">
       <EOAConnectionFailed.Ring />
@@ -17,8 +16,8 @@ export const WalletIcon = ({
           <WalletConnectIcon className="w-[24px] h-[24px]" />
         ) : (
           <img
-            src={EOAConnector?.icon}
-            alt={EOAConnector?.name}
+            src={connector?.icon}
+            alt={connector?.name}
             height={24}
             width={24}
           />
