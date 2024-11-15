@@ -31,18 +31,33 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
     });
   }
 
-  override createAccount(
-    _params: CreateAccountParams
+  override async createAccount(
+    params: CreateAccountParams
   ): Promise<SignupResponse> {
-    throw new Error("Method not implemented.");
+    if (params.type !== "email") {
+      throw new Error("Only email account creation is supported");
+    }
+
+    this.eventEmitter.emit("authenticating", { type: "email" });
+    const { email, expirationSeconds } = params;
+    const publicKey = await this.stamper.init();
+
+    const response = await this.request("/v1/signup", {
+      email,
+      targetPublicKey: publicKey,
+      expirationSeconds,
+      redirectParams: params.redirectParams?.toString(),
+    });
+
+    return response;
   }
 
   override async initEmailAuth(
     params: Omit<EmailAuthParams, "targetPublicKey">
   ): Promise<{ orgId: string }> {
+    this.eventEmitter.emit("authenticating", { type: "email" });
     let targetPublicKey = await this.stamper.init();
 
-    console.log(params, targetPublicKey);
     return this.request("/v1/auth", {
       email: params.email,
       targetPublicKey,
@@ -60,6 +75,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
       throw new Error("Unsupported authenticating type");
     }
 
+    this.eventEmitter.emit("authenticating", { type: "email" });
     await this.stamper.init();
 
     const result = await this.stamper.injectCredentialBundle(params.bundle);
@@ -70,6 +86,7 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
 
     const user = await this.whoami(params.orgId, params.idToken);
 
+    this.eventEmitter.emit(params.connectedEventName, user, params.bundle);
     return user;
   }
   override oauthWithRedirect(
@@ -82,8 +99,11 @@ export class RNSignerClient extends BaseSignerClient<undefined> {
   ): Promise<User> {
     throw new Error("Method not implemented.");
   }
-  override disconnect(): Promise<void> {
-    throw new Error("Method not implemented.");
+
+  override async disconnect(): Promise<void> {
+    this.user = undefined;
+    this.stamper.clear();
+    await this.stamper.init();
   }
   override exportWallet(_params: unknown): Promise<boolean> {
     throw new Error("Method not implemented.");
