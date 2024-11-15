@@ -33,7 +33,9 @@ export const useAuthModal = () => {
   );
 
   const openAuthModal = useCallback(() => setModalOpen(true), [setModalOpen]);
-  const closeAuthModal = useCallback(() => setModalOpen(false), [setModalOpen]);
+  const closeAuthModal = useCallback(() => {
+    setModalOpen(false);
+  }, [setModalOpen]);
 
   return {
     isOpen,

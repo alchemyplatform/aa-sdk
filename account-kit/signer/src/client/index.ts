@@ -463,6 +463,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       "_blank",
       "popup,width=500,height=600"
     );
+    const eventEmitter = this.eventEmitter;
     return new Promise((resolve, reject) => {
       const handleMessage = (event: MessageEvent) => {
         if (!event.data) {
@@ -472,6 +473,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
           alchemyBundle: bundle,
           alchemyOrgId: orgId,
           alchemyIdToken: idToken,
+          alchemyIsSignup: isSignup,
           alchemyError,
         } = event.data;
         if (bundle && orgId && idToken) {
@@ -483,7 +485,13 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
             connectedEventName: "connectedOauth",
             idToken,
             authenticatingType: "oauth",
-          }).then(resolve, reject);
+          }).then((user) => {
+            if (isSignup) {
+              eventEmitter.emit("newUserSignup");
+            }
+
+            resolve(user);
+          }, reject);
         } else if (alchemyError) {
           cleanup();
           popup?.close();
