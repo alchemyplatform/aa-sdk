@@ -1,4 +1,5 @@
 /* eslint-disable import/extensions */
+import "./utils/mmkv-localstorage-polyfill";
 import { type ConnectionConfig } from "@aa-sdk/core";
 import {
   BaseSignerClient,
