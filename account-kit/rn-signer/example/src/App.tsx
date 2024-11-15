@@ -14,6 +14,11 @@ export default function App() {
     connection: { apiKey: Config.API_KEY! },
   });
 
+  // Test the localstorage polyfill
+  localStorage.setItem("test", "This is from localstorage polyfill");
+
+  const test = localStorage.getItem("test");
+
   return (
     <View style={styles.container}>
       <Text>User: {user ? JSON.stringify(user) : "none"}</Text>
@@ -50,6 +55,7 @@ export default function App() {
             .catch(console.error);
         }}
       ></Button>
+      <Text>{test}</Text>
     </View>
   );
 }
