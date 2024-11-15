@@ -35,7 +35,7 @@ class MMKVLocalStorage {
   }
 }
 
-if (typeof window !== "undefined" && !global.localStorage) {
+if (!global.localStorage) {
   const mmkvLocalStorage = new MMKVLocalStorage();
   global.localStorage = mmkvLocalStorage;
 }
