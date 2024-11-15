@@ -61,7 +61,8 @@ export const MintCard = () => {
     });
     setNFTTransfered(true);
   };
-  const handleError = () => {
+  const handleError = (error: Error) => {
+    console.error(error);
     setStatus(initialValuePropState);
     setToast({
       type: "error",

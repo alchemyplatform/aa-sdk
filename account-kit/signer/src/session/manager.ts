@@ -96,6 +96,7 @@ export class SessionManager {
             orgId: existingSession.user.orgId,
             authenticatingType: existingSession.type,
             connectedEventName,
+            idToken: existingSession.user.idToken,
           })
           .catch((e) => {
             console.warn("Failed to load user from session", e);

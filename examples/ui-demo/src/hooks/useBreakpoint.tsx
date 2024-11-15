@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 
 // Define the breakpoints based on Tailwind CSS defaults (or your custom Tailwind configuration)
 const breakpoints = {
@@ -16,10 +16,10 @@ type Breakpoint = keyof typeof breakpoints;
  *
  * @returns {Breakpoint} The current active breakpoint
  */
-export const useBreakpoint = (): Breakpoint => {
-  const [currentBreakpoint, setCurrentBreakpoint] = useState<Breakpoint>("sm");
+export const useBreakpoint = (): Breakpoint | undefined => {
+  const [currentBreakpoint, setCurrentBreakpoint] = useState<Breakpoint>();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const getBreakpoint = (width: number): Breakpoint => {
       if (width >= breakpoints["2xl"]) return "2xl";
       if (width >= breakpoints.xl) return "xl";

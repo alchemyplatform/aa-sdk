@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.4.0...v4.4.1) (2024-11-14)
+
+### Bug Fixes
+
+- don't show error view when cancelling oauth ([#1087](https://github.com/alchemyplatform/aa-sdk/issues/1087)) ([e1fddd8](https://github.com/alchemyplatform/aa-sdk/commit/e1fddd8a4e7818bc163efceda15d95ee9d6a37c3))
+
+# [4.4.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.3.1...v4.4.0) (2024-11-13)
+
+### Features
+
+- add exit animation to mobile dialog drawer ([#1108](https://github.com/alchemyplatform/aa-sdk/issues/1108)) ([afa37ea](https://github.com/alchemyplatform/aa-sdk/commit/afa37ea15bc5f911b405af5b82ebcc747359ef69))
+- change auth card navigation sizes on mobile ([#1122](https://github.com/alchemyplatform/aa-sdk/issues/1122)) ([eae2877](https://github.com/alchemyplatform/aa-sdk/commit/eae28776b55fe7cb436edba9b462ff195ad9a238))
+- oauth add passkey after signup (redirect flow) ([#1140](https://github.com/alchemyplatform/aa-sdk/issues/1140)) ([6d5e229](https://github.com/alchemyplatform/aa-sdk/commit/6d5e229e24402344b214df9689ca18d8f5954922))
+
 ## [4.3.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.3.0...v4.3.1) (2024-11-07)
 
 **Note:** Version bump only for package @account-kit/react

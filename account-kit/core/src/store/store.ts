@@ -273,6 +273,9 @@ const addClientSideStoreListeners = (store: Store) => {
         }));
       });
 
+      // TODO: handle this appropriately, see https://github.com/alchemyplatform/aa-sdk/pull/1140#discussion_r1837265706
+      // signer.on("newUserSignup", () => console.log("got new user signup"));
+
       signer.on("connected", (user) => store.setState({ user }));
 
       signer.on("disconnected", () => {

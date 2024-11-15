@@ -15,6 +15,7 @@ export default function App() {
   });
 
   // Test the localstorage polyfill
+  // TODO: remove this before merging
   localStorage.setItem("test", "This is from localstorage polyfill");
 
   const test = localStorage.getItem("test");

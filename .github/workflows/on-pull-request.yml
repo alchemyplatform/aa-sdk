@@ -59,6 +59,7 @@ jobs:
     name: Build and Test
     runs-on: ubuntu-latest
     env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       API_KEY: ${{ secrets.API_KEY }}
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ vars.TURBO_TEAM }}

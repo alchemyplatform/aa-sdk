@@ -29,6 +29,7 @@ jobs:
     name: Build and Publish
     runs-on: ubuntu-latest
     env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 
@@ -61,12 +62,11 @@ jobs:
         run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
 
       - name: Build all packages
-        run: yarn build:dev
+        run: yarn build:libs
 
       # Lerna publish will, compute the new version, update files, run precommit hooks, tag, publish, and push change log
       - name: Publish using Lerna
         if: inputs.publish
         env:
           API_KEY: ${{ secrets.API_KEY }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: yarn install --force && yarn lerna publish --conventional-commits --no-private --yes --no-verify-access

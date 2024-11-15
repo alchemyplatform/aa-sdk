@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.4.0...v4.4.1) (2024-11-14)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.4.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.3.1...v4.4.0) (2024-11-13)
+
+### Features
+
+- add unichain mainnet ([#1136](https://github.com/alchemyplatform/aa-sdk/issues/1136)) ([de9ba7c](https://github.com/alchemyplatform/aa-sdk/commit/de9ba7c6e6c37a0be9b10af78927ba0cf2841cac))
+
 ## [4.3.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.3.0...v4.3.1) (2024-11-07)
 
 **Note:** Version bump only for package @account-kit/infra
