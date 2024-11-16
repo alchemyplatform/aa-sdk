@@ -1,3 +1,4 @@
+import { OauthCancelledError } from "@account-kit/signer";
 import { useEffect } from "react";
 import { useSignerStatus } from "../../../../hooks/useSignerStatus.js";
 import {
@@ -8,7 +9,6 @@ import { capitalize } from "../../../../utils.js";
 import { useAuthContext } from "../../context.js";
 import { useOAuthVerify } from "../../hooks/useOAuthVerify.js";
 import { ConnectionError } from "../error/connection-error.js";
-import { OauthCancelledError } from "@account-kit/signer";
 import { ls } from "../../../../strings.js";
 
 export const CompletingOAuth = () => {
@@ -19,11 +19,7 @@ export const CompletingOAuth = () => {
 
   useEffect(() => {
     if (isConnected) {
-      if (authStep.createPasskeyAfter) {
-        setAuthStep({ type: "passkey_create" });
-      } else {
-        setAuthStep({ type: "complete" });
-      }
+      setAuthStep({ type: "complete" });
     } else if (oauthWasCancelled) {
       setAuthStep({ type: "initial" });
     }
