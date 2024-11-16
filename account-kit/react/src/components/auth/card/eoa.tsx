@@ -6,11 +6,16 @@ import { Button } from "../../button.js";
 import { useAuthContext } from "../context.js";
 import { CardContent } from "./content.js";
 import { ConnectionError } from "./error/connection-error.js";
-import { EOAWallets } from "./error/types.js";
 import { useConnectEOA } from "../hooks/useConnectEOA.js";
 import { useWalletConnectAuthConfig } from "../hooks/useWalletConnectAuthConfig.js";
 import { ls } from "../../../strings.js";
 import { WalletIcon } from "./error/icons/wallet-icon.js";
+
+enum EOAWallets {
+  COINBASE_WALLET = "com.coinbase.wallet",
+  METAMASK = "io.metamask",
+  WALLET_CONNECT = "WalletConnect",
+}
 
 export const EoaConnectCard = () => {
   const { setAuthStep, authStep } = useAuthContext("eoa_connect");

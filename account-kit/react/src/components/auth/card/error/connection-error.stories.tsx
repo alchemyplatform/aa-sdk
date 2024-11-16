@@ -25,6 +25,7 @@ export const OAuthGoogle: Story = {
     headerText: `${ls.error.connection.oauthTitle} Google`,
     bodyText: ls.error.connection.oauthBody,
     icon: <OAuthConnectionFailed provider={"google"} />,
+    handleUseAnotherMethod: () => {},
   },
 };
 
@@ -33,6 +34,7 @@ export const OAuthFacebook: Story = {
     headerText: `${ls.error.connection.oauthTitle} Apple`,
     bodyText: ls.error.connection.oauthBody,
     icon: <OAuthConnectionFailed provider={"facebook"} />,
+    handleUseAnotherMethod: () => {},
   },
 };
 
@@ -41,6 +43,7 @@ export const EOAWalletConnect: Story = {
     headerText: ls.error.connection.walletTitle,
     bodyText: ls.error.connection.walletBody,
     icon: <WalletIcon connector="WalletConnect" />,
+    handleUseAnotherMethod: () => {},
   },
 };
 
@@ -58,5 +61,6 @@ export const EOAMetamask: Story = {
         }
       />
     ),
+    handleUseAnotherMethod: () => {},
   },
 };

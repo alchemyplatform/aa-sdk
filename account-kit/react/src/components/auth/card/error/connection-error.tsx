@@ -1,9 +1,18 @@
 import { useEffect } from "react";
 import { ls } from "../../../../strings.js";
 import { Button } from "../../../button.js";
-import type { ConnectionErrorProps } from "./types.js";
 import { disconnect } from "@account-kit/core";
 import { useAlchemyAccountContext } from "../../../../context.js";
+
+type ConnectionErrorProps = {
+  headerText: string;
+  bodyText: string;
+  tryAgainCTA?: string;
+  icon: React.ReactNode;
+  handleTryAgain?: () => void;
+  handleUseAnotherMethod?: () => void;
+  shouldDisconnect?: boolean;
+};
 
 export const ConnectionError = ({
   headerText,
@@ -35,13 +44,15 @@ export const ConnectionError = ({
       <Button className="mt-3" onClick={handleTryAgain}>
         {tryAgainCTA ?? ls.error.cta.tryAgain}
       </Button>
-      <Button
-        onClick={handleUseAnotherMethod}
-        variant={"social"}
-        className="border-0 bg-btn-secondary"
-      >
-        {ls.error.cta.useAnotherMethod}
-      </Button>
+      {handleUseAnotherMethod && (
+        <Button
+          onClick={handleUseAnotherMethod}
+          variant={"social"}
+          className="border-0 bg-btn-secondary"
+        >
+          {ls.error.cta.useAnotherMethod}
+        </Button>
+      )}
     </div>
   );
 };

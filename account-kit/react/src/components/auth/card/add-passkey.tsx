@@ -50,7 +50,6 @@ export const AddPasskey = () => {
         icon={<PasskeyConnectionFailed />}
         shouldDisconnect={false}
         handleTryAgain={addPasskey}
-        handleUseAnotherMethod={() => setAuthStep({ type: "complete" })}
       />
     );
   }
