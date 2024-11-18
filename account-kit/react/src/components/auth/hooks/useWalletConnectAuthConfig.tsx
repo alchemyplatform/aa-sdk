@@ -2,6 +2,7 @@
 
 import type { WalletConnectParameters } from "wagmi/connectors";
 import { useAuthConfig } from "../../../hooks/internal/useAuthConfig.js";
+import { getWalletConnectParams } from "../../../utils.js";
 import type { AuthType } from "../types.js";
 
 export const useWalletConnectAuthConfig = (): {
@@ -21,18 +22,7 @@ export const useWalletConnectAuthConfig = (): {
   });
 
   // Add z-index to the wallet connect modal if not already set
-  const walletConnectParams = walletConnectAuthConfig
-    ? ({
-        ...walletConnectAuthConfig,
-        qrModalOptions: {
-          ...walletConnectAuthConfig.qrModalOptions,
-          themeVariables: {
-            "--wcm-z-index": "1000000",
-            ...walletConnectAuthConfig.qrModalOptions?.themeVariables,
-          },
-        },
-      } as WalletConnectParameters)
-    : undefined;
+  const walletConnectParams = getWalletConnectParams(walletConnectAuthConfig);
 
   return {
     walletConnectParams,
