@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.5.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.4.1...v4.5.0) (2024-11-18)
+
+### Bug Fixes
+
+- **wc:** wc connection should persist across refreshes ([#1162](https://github.com/alchemyplatform/aa-sdk/issues/1162)) ([a22f3d9](https://github.com/alchemyplatform/aa-sdk/commit/a22f3d92e5daaee46c6da7fe6a51488ea70f334f))
+
+### Features
+
+- oauth add passkey after signup (popup flow) ([#1151](https://github.com/alchemyplatform/aa-sdk/issues/1151)) ([844a481](https://github.com/alchemyplatform/aa-sdk/commit/844a48123ce8d74a877f23ccbf10d367a9a9551b))
+
 ## [4.4.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.4.0...v4.4.1) (2024-11-14)
 
 ### Bug Fixes
