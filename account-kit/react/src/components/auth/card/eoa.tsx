@@ -2,14 +2,14 @@ import { walletConnect } from "wagmi/connectors";
 import { useChain } from "../../../hooks/useChain.js";
 import { Spinner } from "../../../icons/spinner.js";
 import { WalletConnectIcon } from "../../../icons/walletConnectIcon.js";
+import { ls } from "../../../strings.js";
 import { Button } from "../../button.js";
 import { useAuthContext } from "../context.js";
+import { useConnectEOA } from "../hooks/useConnectEOA.js";
+import { useWalletConnectAuthConfig } from "../hooks/useWalletConnectAuthConfig.js";
 import { CardContent } from "./content.js";
 import { ConnectionError } from "./error/connection-error.js";
 import { EOAWallets } from "./error/types.js";
-import { useConnectEOA } from "../hooks/useConnectEOA.js";
-import { useWalletConnectAuthConfig } from "../hooks/useWalletConnectAuthConfig.js";
-import { ls } from "../../../strings.js";
 
 export const EoaConnectCard = () => {
   const { setAuthStep, authStep } = useAuthContext("eoa_connect");
@@ -153,30 +153,32 @@ export const EoaPickCard = () => {
 
   const { walletConnectParams } = useWalletConnectAuthConfig();
 
-  const connectorButtons = connectors.map((connector) => {
-    return (
-      <Button
-        className="justify-start"
-        variant="social"
-        key={connector.id}
-        icon={
-          connector.icon && (
-            <img
-              src={connector.icon}
-              alt={connector.name}
-              height={20}
-              width={20}
-            />
-          )
-        }
-        onClick={() => {
-          connect({ connector, chainId: chain.id });
-        }}
-      >
-        {connector.name}
-      </Button>
-    );
-  });
+  const connectorButtons = connectors
+    .filter((x) => x.type !== "walletConnect")
+    .map((connector) => {
+      return (
+        <Button
+          className="justify-start"
+          variant="social"
+          key={connector.id}
+          icon={
+            connector.icon && (
+              <img
+                src={connector.icon}
+                alt={connector.name}
+                height={20}
+                width={20}
+              />
+            )
+          }
+          onClick={() => {
+            connect({ connector, chainId: chain.id });
+          }}
+        >
+          {connector.name}
+        </Button>
+      );
+    });
 
   const walletConnectConnector = walletConnectParams
     ? walletConnect(walletConnectParams)

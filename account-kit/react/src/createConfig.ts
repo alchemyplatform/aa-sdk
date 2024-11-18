@@ -3,8 +3,11 @@ import {
   type AlchemyAccountsConfig,
   type CreateConfigProps,
 } from "@account-kit/core";
+import { walletConnect } from "wagmi/connectors";
+import type { AuthType } from "./components/auth/types.js";
 import { ReactLogger } from "./metrics.js";
 import type { AlchemyAccountsUIConfig } from "./types";
+import { getWalletConnectParams } from "./utils.js";
 
 export type AlchemyAccountsConfigWithUI = AlchemyAccountsConfig & {
   ui?: AlchemyAccountsUIConfig;
@@ -52,6 +55,25 @@ export const createConfig = (
     )
   ) {
     props.enablePopupOauth = true;
+  }
+
+  const externalWalletSection = ui?.auth?.sections
+    .find((x) => x.some((y) => y.type === "external_wallets"))
+    ?.find((x) => x.type === "external_wallets") as
+    | Extract<AuthType, { type: "external_wallets" }>
+    | undefined;
+
+  if (
+    externalWalletSection?.walletConnect &&
+    !props.connectors?.some((x) => "type" in x && x.type === "walletConnect")
+  ) {
+    const walletConnectAuthConfig = externalWalletSection?.walletConnect;
+    const walletConnectParams = getWalletConnectParams(
+      walletConnectAuthConfig
+    )!;
+
+    props.connectors ??= [];
+    props.connectors.push(walletConnect(walletConnectParams));
   }
 
   const config = createCoreConfig(props);

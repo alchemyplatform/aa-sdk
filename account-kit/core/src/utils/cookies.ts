@@ -79,7 +79,7 @@ export function cookieToInitialState(
 
   const wagmiClientState = wagmiCookieToInitialState(
     config._internal.wagmiConfig,
-    cookie
+    decodeURIComponent(cookie)
   );
 
   return {

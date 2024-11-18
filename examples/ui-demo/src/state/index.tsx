@@ -86,6 +86,7 @@ export function ConfigSync() {
     classes.forEach((x) => root.classList.add(x));
 
     const uiConfig = convertDemoConfigToUiConfig(config);
+
     updateConfig(uiConfig);
   }, [config, updateConfig]);
 
