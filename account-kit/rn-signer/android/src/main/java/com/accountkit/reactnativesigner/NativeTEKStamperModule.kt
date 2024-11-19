@@ -44,7 +44,7 @@ class NativeTEKStamperModule(reactContext: ReactApplicationContext) :
         MasterKey.Builder(context.applicationContext)
             .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
             // requires that the phone be unlocked
-            .setUserAuthenticationRequired(true)
+            .setUserAuthenticationRequired(false)
             .build()
 
     /**
