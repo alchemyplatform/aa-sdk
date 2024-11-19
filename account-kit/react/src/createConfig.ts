@@ -8,7 +8,7 @@ import type { AuthType } from "./components/auth/types.js";
 import { ReactLogger } from "./metrics.js";
 import type { AlchemyAccountsUIConfig } from "./types";
 import { getWalletConnectParams } from "./utils.js";
-import { WALLET_CONNECT } from "./components/auth/card/eoa.jsx";
+import { WALLET_CONNECT } from "./components/auth/card/eoa.js";
 
 export type AlchemyAccountsConfigWithUI = AlchemyAccountsConfig & {
   ui?: AlchemyAccountsUIConfig;
