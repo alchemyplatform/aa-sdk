@@ -5,7 +5,7 @@ const pkg = require("../package.json");
 
 const root = path.resolve(__dirname, "..");
 // handles the hoisted modules
-const repoRoot = path.resolve(__dirname, "../../../node_modules");
+const repoRoot = path.resolve(__dirname, "../../..");
 
 /**
  * Metro configuration

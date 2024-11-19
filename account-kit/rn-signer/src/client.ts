@@ -14,20 +14,25 @@ import {
   type User,
 } from "@account-kit/signer";
 import NativeTEKStamper from "./NativeTEKStamper";
+import { z } from "zod";
 
-export type RNSignerClientParams = {
-  connection: ConnectionConfig;
-  rootOrgId?: string;
-};
+export const RNSignerClientParamsSchema = z.object({
+  connection: z.custom<ConnectionConfig>(),
+  rootOrgId: z.string().optional(),
+});
+
+export type RNSignerClientParams = z.input<typeof RNSignerClientParamsSchema>;
 
 // TODO: need to emit events
 export class RNSignerClient extends BaseSignerClient<undefined> {
   private stamper = NativeTEKStamper;
   constructor(params: RNSignerClientParams) {
+    const { connection, rootOrgId } = RNSignerClientParamsSchema.parse(params);
+
     super({
       stamper: NativeTEKStamper,
-      rootOrgId: "24c1acf5-810f-41e0-a503-d5d13fa8e830",
-      ...params,
+      rootOrgId: rootOrgId ?? "24c1acf5-810f-41e0-a503-d5d13fa8e830",
+      connection,
     });
   }
 
