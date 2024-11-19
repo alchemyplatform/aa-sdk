@@ -39,8 +39,8 @@ const STRINGS = {
       supportText: "Having trouble?",
       supportLink: "Contact support",
     },
-    poweredBy: {
-      title: "powered by",
+    protectedBy: {
+      title: "protected by",
     },
     error: {
       general: {
