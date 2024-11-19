@@ -5,6 +5,7 @@ import { ls } from "../../../../strings.js";
 import { OAuthConnectionFailed } from "../../../../icons/oauth.jsx";
 import { WalletIcon } from "./icons/wallet-icon.jsx";
 import type { Connector } from "wagmi";
+import { WALLET_CONNECT } from "../eoa.jsx";
 
 const meta: Meta<typeof ConnectionError> = {
   title: "Errors/ConnectionError",
@@ -42,7 +43,7 @@ export const EOAWalletConnect: Story = {
   args: {
     headerText: ls.error.connection.walletTitle,
     bodyText: ls.error.connection.walletBody,
-    icon: <WalletIcon connector="WalletConnect" />,
+    icon: <WalletIcon connector={WALLET_CONNECT} />,
     handleUseAnotherMethod: () => {},
   },
 };

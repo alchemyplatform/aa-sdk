@@ -8,6 +8,7 @@ import type { AuthType } from "./components/auth/types.js";
 import { ReactLogger } from "./metrics.js";
 import type { AlchemyAccountsUIConfig } from "./types";
 import { getWalletConnectParams } from "./utils.js";
+import { WALLET_CONNECT } from "./components/auth/card/eoa.jsx";
 
 export type AlchemyAccountsConfigWithUI = AlchemyAccountsConfig & {
   ui?: AlchemyAccountsUIConfig;
@@ -65,7 +66,7 @@ export const createConfig = (
 
   if (
     externalWalletSection?.walletConnect &&
-    !props.connectors?.some((x) => "type" in x && x.type === "walletConnect")
+    !props.connectors?.some((x) => "type" in x && x.type === WALLET_CONNECT)
   ) {
     const walletConnectAuthConfig = externalWalletSection?.walletConnect;
     const walletConnectParams = getWalletConnectParams(

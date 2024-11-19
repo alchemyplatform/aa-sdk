@@ -2,12 +2,13 @@ import { EOAConnectionFailed } from "../../../../../icons/EOAConnectionFailed.js
 import { WalletConnectIcon } from "../../../../../icons/walletConnectIcon.js";
 
 import type { Connector } from "@wagmi/core";
+import { WALLET_CONNECT } from "../../eoa.jsx";
 export const WalletIcon = ({
   connector,
 }: {
-  connector: Connector | "WalletConnect";
+  connector: Connector | typeof WALLET_CONNECT;
 }) => {
-  const isWalletConnect = connector === "WalletConnect";
+  const isWalletConnect = connector === WALLET_CONNECT;
   return (
     <div className="relative flex justify-center items-center">
       <EOAConnectionFailed.Ring />

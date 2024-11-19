@@ -11,11 +11,7 @@ import { CardContent } from "./content.js";
 import { ConnectionError } from "./error/connection-error.js";
 import { WalletIcon } from "./error/icons/wallet-icon.js";
 
-enum EOAWallets {
-  COINBASE_WALLET = "com.coinbase.wallet",
-  METAMASK = "io.metamask",
-  WALLET_CONNECT = "WalletConnect",
-}
+export const WALLET_CONNECT = "walletConnect";
 
 export const EoaConnectCard = () => {
   const { setAuthStep, authStep } = useAuthContext("eoa_connect");
@@ -101,14 +97,14 @@ export const WalletConnectCard = () => {
   }
 
   if (authStep.error) {
-    const errorMessage = getErrorMessage(authStep.error, "WalletConnect");
+    const errorMessage = getErrorMessage(authStep.error, WALLET_CONNECT);
 
     return (
       <ConnectionError
         headerText={errorMessage.heading}
         bodyText={errorMessage.body}
         tryAgainCTA={errorMessage.tryAgainCTA}
-        icon={<WalletIcon connector={EOAWallets.WALLET_CONNECT} />}
+        icon={<WalletIcon connector={WALLET_CONNECT} />}
         handleTryAgain={() => {
           setAuthStep({ type: "wallet_connect" });
           // Re-try wallet connect's connection...
@@ -160,7 +156,7 @@ export const EoaPickCard = () => {
   const { walletConnectParams } = useWalletConnectAuthConfig();
 
   const connectorButtons = connectors
-    .filter((x) => x.type !== "walletConnect")
+    .filter((x) => x.type !== WALLET_CONNECT)
     .map((connector) => {
       return (
         <Button
