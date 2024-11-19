@@ -28,7 +28,7 @@ export const EmailAuth = memo(
     const { authenticateAsync, isPending } = useAuthenticate({
       onMutate: async (params) => {
         if ("email" in params) {
-          setAuthStep({ type: "email_verify", email: params.email });
+          setAuthStep({ type: "otp_verify", email: params.email });
         }
       },
       onSuccess: () => {
@@ -57,6 +57,7 @@ export const EmailAuth = memo(
             type: "email",
             email,
             redirectParams,
+            mode: "otp",
           });
         } catch (e) {
           const error = e instanceof Error ? e : new Error("An Unknown error");

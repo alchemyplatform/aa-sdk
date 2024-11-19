@@ -40,8 +40,6 @@ export const OAuth = memo(({ ...config }: Props) => {
         ></Button>
       );
     default:
-      assertNever("unhandled authProviderId passed into auth sections");
+      assertNever(config, "unhandled authProviderId passed into auth sections");
   }
-
-  throw Error("unhandled authProviderId passed into auth sections");
 });

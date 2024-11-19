@@ -6,6 +6,7 @@ import type { AuthType } from "./types";
 
 export type AuthStep =
   | { type: "email_verify"; email: string }
+  | { type: "otp_verify"; email: string }
   | { type: "passkey_verify"; error?: Error }
   | { type: "passkey_create"; error?: Error }
   | { type: "passkey_create_success" }
@@ -13,6 +14,12 @@ export type AuthStep =
   | {
       type: "oauth_completing";
       config: Extract<AuthType, { type: "social" }>;
+      createPasskeyAfter?: boolean;
+      error?: Error;
+    }
+  | {
+      type: "otp_completing";
+      email: string;
       createPasskeyAfter?: boolean;
       error?: Error;
     }

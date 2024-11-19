@@ -15,7 +15,7 @@ export enum EOAWallets {
 }
 
 export type ConnectionErrorProps = {
-  connectionType: "passkey" | "oauth" | "wallet" | "timeout";
+  connectionType: "passkey" | "oauth" | "otp" | "wallet" | "timeout";
   oauthProvider?: KnownAuthProvider; // TO DO: extend for BYO auth provider
   EOAConnector?: Connector | EOAWallets.WALLET_CONNECT;
   customErrorMessage?: CustomErrorMessage | null;

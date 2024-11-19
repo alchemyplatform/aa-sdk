@@ -7,8 +7,8 @@ export function capitalize(str: string) {
     .join(" ");
 }
 
-export function assertNever(msg: string) {
-  throw new Error(msg);
+export function assertNever(_: never, message: string): never {
+  throw new Error(message);
 }
 
 export function getWalletConnectParams(
