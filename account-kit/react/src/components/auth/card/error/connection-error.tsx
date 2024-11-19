@@ -1,3 +1,4 @@
+"use client";
 import { useEffect } from "react";
 import { ls } from "../../../../strings.js";
 import { Button } from "../../../button.js";
@@ -12,6 +13,7 @@ type ConnectionErrorProps = {
   handleTryAgain?: () => void;
   handleUseAnotherMethod?: () => void;
   shouldDisconnect?: boolean;
+  handleSkip?: () => void;
 };
 
 export const ConnectionError = ({
@@ -22,6 +24,7 @@ export const ConnectionError = ({
   handleTryAgain,
   handleUseAnotherMethod,
   shouldDisconnect = true,
+  handleSkip,
 }: ConnectionErrorProps) => {
   const { config } = useAlchemyAccountContext();
 
@@ -51,6 +54,15 @@ export const ConnectionError = ({
           className="border-0 bg-btn-secondary"
         >
           {ls.error.cta.useAnotherMethod}
+        </Button>
+      )}
+      {handleSkip && (
+        <Button
+          onClick={handleSkip}
+          variant={"social"}
+          className="border-0 bg-btn-secondary"
+        >
+          {ls.error.cta.skip}
         </Button>
       )}
     </div>
