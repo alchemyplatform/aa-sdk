@@ -8,7 +8,12 @@ import type { CredentialCreationOptionOverrides } from "./client/types.js";
 import { SessionManagerParamsSchema } from "./session/manager.js";
 
 export type AuthParams =
-  | { type: "email"; email: string; redirectParams?: URLSearchParams }
+  | {
+      type: "email";
+      email: string;
+      emailMode: "magicLink" | "otp";
+      redirectParams?: URLSearchParams;
+    }
   | { type: "email"; bundle: string; orgId?: string; isNewUser?: boolean }
   | {
       type: "passkey";
@@ -37,6 +42,10 @@ export type AuthParams =
       orgId: string;
       idToken: string;
       isNewUser?: boolean;
+    }
+  | {
+      type: "otp";
+      otpCode: string;
     };
 
 export type OauthProviderConfig =
