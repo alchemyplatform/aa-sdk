@@ -70,6 +70,7 @@ export function hydrate(
     initialState != null && "wagmi" in initialState
       ? initialState.wagmi
       : undefined;
+
   const { onMount: wagmi_onMount } = wagmi_hydrate(
     config._internal.wagmiConfig,
     {
