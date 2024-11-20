@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 export type OTPCodeType = [string, string, string, string, string];
 export const initialValue: OTPCodeType = ["", "", "", "", ""];
-
+const OTP_LENGTH = 5;
 type OTPInputProps = {
   errorText?: string;
   value: OTPCodeType;
@@ -16,7 +16,7 @@ const isOTPCodeType = (arg: string[]): arg is OTPCodeType => {
   return (
     Array.isArray(arg) &&
     arg.every((item: string) => typeof item === "string") &&
-    arg.length === 5
+    arg.length === OTP_LENGTH
   );
 };
 
@@ -34,10 +34,8 @@ export const OTPInput: React.FC<OTPInputProps> = ({
   const refs = useRef<Array<HTMLInputElement | null>>([]);
   // Initialize refs
   useEffect(() => {
-    refs.current = refs.current.slice(0, initialValue.length);
-    if (refs.current[0]) {
-      refs.current[0].focus();
-    }
+    refs.current = refs.current.slice(0, OTP_LENGTH);
+    refs.current[0]?.focus();
   }, []);
   // Select active element when active element value changes
   useEffect(() => {
@@ -56,7 +54,7 @@ export const OTPInput: React.FC<OTPInputProps> = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, i: number) => {
     //Fix for ios chrome autocomplete
-    if (e.target.value.length === 5) {
+    if (e.target.value.length === OTP_LENGTH) {
       const chromeIOSAutocomplete = e.target.value.split("");
       if (isOTPCodeType(chromeIOSAutocomplete)) {
         setValue(chromeIOSAutocomplete);
@@ -100,25 +98,24 @@ export const OTPInput: React.FC<OTPInputProps> = ({
   };
 
   const handleKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (activeElement === null) return;
     switch (e.key) {
       case "Backspace":
-        if (activeElement !== null) {
-          e.preventDefault();
-          focusPreviousElement();
-        }
+        e.preventDefault();
+        const newValue = [...value] as OTPCodeType;
+        newValue.splice(activeElement, 1, "");
+        setValue(newValue);
+        focusPreviousElement();
         break;
       case "ArrowLeft":
-        if (activeElement !== null) {
-          e.preventDefault();
-          focusPreviousElement();
-        }
+        e.preventDefault();
+        focusPreviousElement();
         break;
       case "ArrowRight":
         e.preventDefault();
-        if (activeElement !== null && activeElement < 4) focusNextElement();
+        if (activeElement < OTP_LENGTH - 1) focusNextElement();
         break;
       case "Spacebar": {
-        e.preventDefault();
         break;
       }
     }
@@ -150,7 +147,7 @@ export const OTPInput: React.FC<OTPInputProps> = ({
             inputMode="numeric"
             pattern="[0-9]*"
             //Fix for ios chrome autocomplete
-            maxLength={i === 0 ? 5 : 1}
+            maxLength={i === 0 ? OTP_LENGTH : 1}
             onFocus={() => setActiveElement(i)}
             onPaste={handlePaste}
             onChange={(e) => handleChange(e, i)}
