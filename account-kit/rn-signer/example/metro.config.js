@@ -13,10 +13,10 @@ const repoRoot = path.resolve(__dirname, "../../..");
  *
  */
 module.exports = {
-	...getConfig(getDefaultConfig(__dirname), {
-		root,
-		pkg,
-		project: __dirname,
-	}),
-	watchFolders: [root, repoRoot],
+  ...getConfig(getDefaultConfig(__dirname), {
+    root,
+    pkg,
+    project: __dirname,
+  }),
+  watchFolders: [root, repoRoot],
 };
