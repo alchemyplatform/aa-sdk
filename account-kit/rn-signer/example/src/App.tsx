@@ -1,7 +1,9 @@
 /* eslint-disable import/extensions */
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import HomeScreen from "./screens/Home";
 import { createStaticNavigation } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+
+import HomeScreen from "./screens/Home";
 
 const linking = {
   enabled: "auto" as const /* Automatically generate paths for all screens */,
@@ -9,6 +11,7 @@ const linking = {
 };
 
 const RootStack = createNativeStackNavigator({
+  initialRouteName: "Home",
   screens: {
     Home: {
       screen: HomeScreen,
@@ -17,8 +20,11 @@ const RootStack = createNativeStackNavigator({
   },
 });
 
-const Navigation = createStaticNavigation(RootStack);
-
 export default function App() {
-  return <Navigation linking={linking} />;
+  const Navigation = createStaticNavigation(RootStack);
+  return (
+    <SafeAreaProvider>
+      <Navigation linking={linking} />
+    </SafeAreaProvider>
+  );
 }
