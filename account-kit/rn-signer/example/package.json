@@ -23,7 +23,6 @@
     "react-native-mmkv": "3.1.0",
     "react-native-safe-area-context": "4.14.0",
     "react-native-screens": "4.2.0",
-    "tsx": "^4.19.2",
     "util": "^0.12.5",
     "viem": "^2.21.41",
     "zustand": "^5.0.1"
@@ -43,7 +42,8 @@
     "@react-native/babel-preset": "0.76.1",
     "@react-native/metro-config": "0.76.1",
     "@react-native/typescript-config": "0.76.1",
-    "react-native-builder-bob": "^0.30.3"
+    "react-native-builder-bob": "^0.30.3",
+    "tsx": "^4.19.2"
   },
   "engines": {
     "node": ">=18"
