@@ -27,8 +27,12 @@ export const AuthModal = () => {
       });
     }
   }, [addPasskeyOnSignup, openAuthModal, setAuthStep]);
-
-  useNewUserSignup(handleSignup, isConnected && authStep.type === "complete");
+  useNewUserSignup(
+    handleSignup,
+    isConnected &&
+      (authStep.type === "complete" || authStep.type === "initial") &&
+      !isOpen
+  );
 
   return (
     <Dialog isOpen={isOpen} onClose={closeAuthModal}>
