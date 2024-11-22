@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
+import { ls } from "../../strings.js";
 
-export type OTPCodeType = [string, string, string, string, string];
-export const initialValue: OTPCodeType = ["", "", "", "", ""];
-const OTP_LENGTH = 5;
+export type OTPCodeType = [string, string, string, string, string, string];
+export const initialValue: OTPCodeType = ["", "", "", "", "", ""];
+const OTP_LENGTH = 6;
 type OTPInputProps = {
   errorText?: string;
   value: OTPCodeType;
@@ -91,9 +92,7 @@ export const OTPInput: React.FC<OTPInputProps> = ({
     if (isOTPCodeType(pasteData)) {
       setValue(pasteData);
     } else {
-      setErrorText(
-        "Paste does not match the code structure, please copy the entire code"
-      );
+      setErrorText(ls.error.otp.invalid);
     }
   };
 
@@ -122,7 +121,7 @@ export const OTPInput: React.FC<OTPInputProps> = ({
   };
 
   return (
-    <div>
+    <div className="flex flex-col gap-2 items-center">
       {/* Input for autocomplete, visibility hidden */}
       <input
         className="invisible h-0 w-0 p-[0] m-[-1px]"
@@ -133,13 +132,12 @@ export const OTPInput: React.FC<OTPInputProps> = ({
         onChange={(e) => setAutoComplete(e.target.value)}
         onClick={handleReset}
       />
-      <div>
-        <label>Code</label>
-      </div>
-      <div className="flex gap-2">
+      <div className="flex gap-2.5">
         {initialValue.map((_, i) => (
           <input
-            className="border h-7 w-7 rounded text-center"
+            className={`border w-8 bg-bg-surface-default h-10 rounded text-center focus:outline-active ${
+              !!errorText && "border-fg-critical"
+            }`}
             ref={(el) => (refs.current[i] = el)}
             tabIndex={i + 1}
             type="text"
@@ -161,7 +159,9 @@ export const OTPInput: React.FC<OTPInputProps> = ({
           />
         ))}
       </div>
-      {errorText && <p className="text-red-500">{errorText}</p>}
+      {errorText && (
+        <p className="text-fg-critical text-sm text-center">{errorText}</p>
+      )}
     </div>
   );
 };

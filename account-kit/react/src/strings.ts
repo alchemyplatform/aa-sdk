@@ -84,6 +84,9 @@ const STRINGS = {
           },
         },
       },
+      otp: {
+        invalid: "The code you entered is incorrect",
+      },
     },
     oauthContactSupport: {
       title: "Need help?",

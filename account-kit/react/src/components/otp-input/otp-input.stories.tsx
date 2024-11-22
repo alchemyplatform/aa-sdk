@@ -42,6 +42,7 @@ export const TestTyping: Story = {
     await userEvent.type(inputs[2], "3");
     await userEvent.type(inputs[3], "4");
     await userEvent.type(inputs[4], "5");
+    await userEvent.type(inputs[5], "6");
 
     // Verify values
     expect(inputs[0]).toHaveValue("1");
@@ -49,6 +50,7 @@ export const TestTyping: Story = {
     expect(inputs[2]).toHaveValue("3");
     expect(inputs[3]).toHaveValue("4");
     expect(inputs[4]).toHaveValue("5");
+    expect(inputs[5]).toHaveValue("6");
   },
 };
 
@@ -59,7 +61,7 @@ export const TestPasting: Story = {
 
     // Simulate paste event
     const clipboardData = new DataTransfer();
-    clipboardData.setData("text/plain", "12345");
+    clipboardData.setData("text/plain", "123456");
 
     const pasteEvent = new ClipboardEvent("paste", {
       clipboardData,
@@ -75,6 +77,7 @@ export const TestPasting: Story = {
       expect(inputs[2]).toHaveValue("3");
       expect(inputs[3]).toHaveValue("4");
       expect(inputs[4]).toHaveValue("5");
+      expect(inputs[5]).toHaveValue("6");
     });
   },
 };
@@ -99,8 +102,11 @@ export const TestKeyboardNavigation: Story = {
     // Test backspace
     await userEvent.type(inputs[0], "1");
     await userEvent.keyboard("{Backspace}");
+    await userEvent.keyboard("{Backspace}");
     expect(inputs[0]).toHaveValue("");
     expect(document.activeElement).toBe(inputs[0]);
+    await userEvent.type(inputs[0], "1");
+    await userEvent.keyboard("23456");
   },
 };
 
@@ -134,7 +140,7 @@ export const TestErrorState: Story = {
     // Check for error message
     await waitFor(() => {
       const errorMessage = canvas.getByText(
-        /Paste does not match the code structure/i
+        /The code you entered is incorrect/i
       );
       expect(errorMessage).toBeInTheDocument();
     });
