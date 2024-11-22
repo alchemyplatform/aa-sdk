@@ -1,2 +1,2 @@
 // eslint-disable-next-line import/extensions
-export { RNSignerClient } from "./client";
+export { RNAlchemySigner } from "./signer";
