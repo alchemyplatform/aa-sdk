@@ -61,6 +61,7 @@ const STRINGS = {
       cta: {
         tryAgain: "Try again",
         useAnotherMethod: "Use another method",
+        skip: "Skip",
       },
       customErrorMessages: {
         eoa: {

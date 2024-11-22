@@ -1,11 +1,15 @@
 import { OauthCancelledError } from "@account-kit/signer";
 import { useEffect } from "react";
 import { useSignerStatus } from "../../../../hooks/useSignerStatus.js";
-import { ContinueWithOAuth } from "../../../../icons/oauth.js";
+import {
+  ContinueWithOAuth,
+  OAuthConnectionFailed,
+} from "../../../../icons/oauth.js";
 import { capitalize } from "../../../../utils.js";
 import { useAuthContext } from "../../context.js";
 import { useOAuthVerify } from "../../hooks/useOAuthVerify.js";
 import { ConnectionError } from "../error/connection-error.js";
+import { ls } from "../../../../strings.js";
 
 export const CompletingOAuth = () => {
   const { isConnected } = useSignerStatus();
@@ -29,10 +33,15 @@ export const CompletingOAuth = () => {
   if (authStep.error && !oauthWasCancelled) {
     return (
       <ConnectionError
-        connectionType="oauth"
-        oauthProvider={authStep.config.authProviderId}
+        headerText={`${ls.error.connection.oauthTitle} ${capitalize(
+          authStep.config.authProviderId
+        )}`}
+        bodyText={ls.error.connection.oauthBody}
         handleTryAgain={authenticate}
         handleUseAnotherMethod={() => setAuthStep({ type: "initial" })}
+        icon={
+          <OAuthConnectionFailed provider={authStep.config.authProviderId} />
+        }
       />
     );
   }
