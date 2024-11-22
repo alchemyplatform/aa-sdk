@@ -9,7 +9,9 @@ import { useConnectEOA } from "../hooks/useConnectEOA.js";
 import { useWalletConnectAuthConfig } from "../hooks/useWalletConnectAuthConfig.js";
 import { CardContent } from "./content.js";
 import { ConnectionError } from "./error/connection-error.js";
-import { EOAWallets } from "./error/types.js";
+import { WalletIcon } from "./error/icons/wallet-icon.js";
+
+export const WALLET_CONNECT = "walletConnect";
 
 export const EoaConnectCard = () => {
   const { setAuthStep, authStep } = useAuthContext("eoa_connect");
@@ -21,12 +23,12 @@ export const EoaConnectCard = () => {
       authStep.error,
       authStep.connector.name
     );
-
     return (
       <ConnectionError
-        connectionType="wallet"
-        EOAConnector={authStep.connector}
-        customErrorMessage={errorMessage}
+        icon={<WalletIcon connector={authStep.connector} />}
+        headerText={errorMessage.heading}
+        bodyText={errorMessage.body}
+        tryAgainCTA={errorMessage.tryAgainCTA}
         handleTryAgain={() => {
           setAuthStep({
             type: "eoa_connect",
@@ -95,16 +97,16 @@ export const WalletConnectCard = () => {
   }
 
   if (authStep.error) {
-    const errorMessage = getErrorMessage(authStep.error, "WalletConnect");
+    const errorMessage = getErrorMessage(authStep.error, WALLET_CONNECT);
 
     return (
       <ConnectionError
-        connectionType="wallet"
-        EOAConnector={EOAWallets.WALLET_CONNECT}
-        customErrorMessage={errorMessage}
+        headerText={errorMessage.heading}
+        bodyText={errorMessage.body}
+        tryAgainCTA={errorMessage.tryAgainCTA}
+        icon={<WalletIcon connector={WALLET_CONNECT} />}
         handleTryAgain={() => {
           setAuthStep({ type: "wallet_connect" });
-
           // Re-try wallet connect's connection...
           connect({
             connector: walletConnectConnector,
@@ -154,7 +156,7 @@ export const EoaPickCard = () => {
   const { walletConnectParams } = useWalletConnectAuthConfig();
 
   const connectorButtons = connectors
-    .filter((x) => x.type !== "walletConnect")
+    .filter((x) => x.type !== WALLET_CONNECT)
     .map((connector) => {
       return (
         <Button

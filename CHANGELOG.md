@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.5.0...v4.5.1) (2024-11-22)
+
+### Bug Fixes
+
+- changing protected by to powered by alchemy footer ([#1164](https://github.com/alchemyplatform/aa-sdk/issues/1164)) ([7c08a66](https://github.com/alchemyplatform/aa-sdk/commit/7c08a66b718aefce80629824d58893898c757b41))
+- oauth working, email still broken ([#1170](https://github.com/alchemyplatform/aa-sdk/issues/1170)) ([196905d](https://github.com/alchemyplatform/aa-sdk/commit/196905d4abbfd07ccb83e38484bab6eb0ea0d502))
+
 # [4.5.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.4.1...v4.5.0) (2024-11-18)
 
 ### Bug Fixes
