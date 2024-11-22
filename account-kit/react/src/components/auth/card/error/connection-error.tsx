@@ -6,7 +6,7 @@ import { Timeout } from "../../../../icons/timeout.js";
 import { EOAWallets, type ConnectionErrorProps } from "./types.js";
 import { WalletIcon } from "./icons/wallet-icon.js";
 import { OAuthConnectionFailed } from "../../../../icons/oauth.js";
-import { capitalize } from "../../../../utils.js";
+import { assertNever, capitalize } from "../../../../utils.js";
 import { disconnect } from "@account-kit/core";
 import { useAlchemyAccountContext } from "../../../../context.js";
 
@@ -48,10 +48,17 @@ export const ConnectionError = ({
         return `${ls.error.connection.oauthTitle} ${capitalize(
           oauthProvider!
         )}`;
+      case "otp":
+        return ls.error.connection.otpTitle;
       case "wallet":
         return ls.error.connection.walletTitle + (walletName ?? "wallet");
       case "timeout":
         return ls.error.connection.timedOutTitle;
+      default:
+        assertNever(
+          connectionType,
+          `Unknown connection type: ${connectionType}`
+        );
     }
   }, [EOAConnector, connectionType, oauthProvider, customErrorMessage]);
 
@@ -65,10 +72,17 @@ export const ConnectionError = ({
         return ls.error.connection.passkeyBody;
       case "oauth":
         return ls.error.connection.oauthBody;
+      case "otp":
+        return ls.error.connection.otpBody;
       case "wallet":
         return ls.error.connection.walletBody;
       case "timeout":
         return ls.error.connection.timedOutBody;
+      default:
+        assertNever(
+          connectionType,
+          `Unknown connection type: ${connectionType}`
+        );
     }
   }, [connectionType, customErrorMessage]);
 
@@ -78,10 +92,18 @@ export const ConnectionError = ({
         return <PasskeyConnectionFailed />;
       case "oauth":
         return <OAuthConnectionFailed provider={oauthProvider!} />; // TO DO: extend for BYO auth provider
+      case "otp":
+        // TODO: Placeholder icon, replace with design when ready.
+        return <PasskeyConnectionFailed />;
       case "wallet":
         return EOAConnector && <WalletIcon EOAConnector={EOAConnector} />;
       case "timeout":
         return <Timeout />;
+      default:
+        assertNever(
+          connectionType,
+          `Unknown connection type: ${connectionType}`
+        );
     }
   }, [connectionType, oauthProvider, EOAConnector]);
   return (
