@@ -36,6 +36,7 @@ jobs:
         with:
           token: ${{ secrets.ALCHEMY_BOT_PAT }}
           fetch-depth: "0"
+          submodules: "recursive"
 
       - name: Setup Node
         uses: ./.github/actions/setup-node
