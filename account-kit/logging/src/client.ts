@@ -8,6 +8,27 @@ import { DevDestinationPlugin } from "./plugins/devDestination.js";
 import type { EventsSchema, InnerLogger, LoggerContext } from "./types";
 import { isClientDevMode } from "./utils.js";
 
+const ANON_ID_STORAGE_KEY = "account-kit:anonId";
+
+type AnonId = { id: string; expiresMs: number };
+
+function getOrCreateAnonId(): AnonId {
+  let anon: AnonId | null = JSON.parse(
+    localStorage.getItem(ANON_ID_STORAGE_KEY) ?? "null"
+  );
+
+  if (!anon || anon.expiresMs < Date.now()) {
+    anon = {
+      id: uuid(),
+      // expires a month from now (30days * 24hrs/day * 60min/hr * 60sec/min * 1000ms/sec)
+      expiresMs: Date.now() + 30 * 24 * 60 * 60 * 1000,
+    };
+    localStorage.setItem(ANON_ID_STORAGE_KEY, JSON.stringify(anon));
+  }
+
+  return anon;
+}
+
 export function createClientLogger<Schema extends EventsSchema = []>(
   context: LoggerContext
 ): InnerLogger<Schema> {
@@ -24,11 +45,7 @@ export function createClientLogger<Schema extends EventsSchema = []>(
   const analytics = new AnalyticsBrowser();
   const writeKey = fetchRemoteWriteKey();
 
-  if (!sessionStorage.getItem("anonId")) {
-    sessionStorage.setItem("anonId", uuid());
-  }
-
-  const anonId = sessionStorage.getItem("anonId")!;
+  const { id: anonId } = getOrCreateAnonId();
   analytics.setAnonymousId(anonId);
   analytics.register(ContextAllowlistPlugin);
   analytics.debug(isDev);
