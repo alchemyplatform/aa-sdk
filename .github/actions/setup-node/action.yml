@@ -21,7 +21,7 @@ runs:
       with:
         path: |
           **/node_modules
-          !examples/embedded-accounts-quickstart/node_modules
+          !examples/embedded-accounts-quickstart
           .yarn/install-state.gz
         key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}-${{ hashFiles('**/package.json', '!node_modules/**') }}
         restore-keys: |
