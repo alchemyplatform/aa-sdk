@@ -1,12 +1,27 @@
-# @account-kit/react-native-signer
+# @account-kit/react-native-signer (Alpha)
 
 React Native compatible Alchemy signer impl
+
+## ⚠️ Alpha ⚠️
+
+This is an alpha release of the library. Only the **Android** platform is supported at this time.
 
 ## Installation
 
 ```sh
 npm install @account-kit/react-native-signer
 ```
+
+## Usage
+
+This package requires the `react-native-mmkv` package installed in your project. Check out their [docs](https://github.com/mrousavy/react-native-mmkv) for installation instructions.
+
+#### Deep Linking.
+
+Your app will need to be configured to handle deep linking. Check out the React Native [docs](https://reactnative.dev/docs/linking#enabling-deep-links) for more information.
+You will also need a way to trigger the deep link via a http or https url. This can be done in a viarety of ways ranging from universal links to setting up a custom redirect server.
+
+See the [example app](./example) for usage information.
 
 ## Contributing
 
